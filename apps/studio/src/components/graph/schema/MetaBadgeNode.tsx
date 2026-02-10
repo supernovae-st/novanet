@@ -3,365 +3,277 @@
 /**
  * MetaBadgeNode - Unified card design for Realm & Layer badges
  *
- * v11.0: Redesigned to match NodeCard style from sidebar:
- * - Same glow effect with colored border
- * - Same glassmorphism background
- * - Same badge + title + subtitle layout
- * - Consistent with the rest of the UI
- *
- * Two variants:
- * - Realm (larger): GLOBAL, TENANT
- * - Layer (smaller): CONFIG, LOCALE KNOWLEDGE, etc.
+ * v11.3 Design - matches SchemaNode exactly:
+ * - Wider card (240px), taller (140px min)
+ * - Large icon top-left with glow
+ * - Stacked badges on right
+ * - Glow pulsé + gradient badges
  */
 
 import { memo, useMemo } from 'react';
 import { type NodeProps, type Node, Handle, Position } from '@xyflow/react';
 import { cn } from '@/lib/utils';
 import { useNodeInteractions } from '@/hooks';
-import { Globe, Building2 } from 'lucide-react';
-import { LayerIcon } from '@/components/ui/CategoryIcon';
+import { LayerIcon, RealmIcon } from '@/components/ui/CategoryIcon';
+import { BlueprintOverlay } from '../nodes/BlueprintOverlay';
+import { NODE_BG, NODE_DESIGN } from '@/config/constants';
 import type { Realm, Layer } from '@novanet/core/types';
+
+// =============================================================================
+// Design System Colors (from taxonomy.yaml)
+// =============================================================================
+
+const REALM_COLORS: Record<string, string> = {
+  shared: '#2aa198',
+  org: '#6c71c4',
+};
+
+// v11.4 Layer colors (from taxonomy.yaml)
+// SHARED: config, locale, geography, knowledge
+// ORG: config, semantic, foundation, structure, instruction, output
+// Note: seo/geo layers REMOVED in v11.4 - nodes moved to shared/knowledge
+const LAYER_COLORS: Record<string, string> = {
+  // Shared layers (4)
+  config: '#64748b',
+  locale: '#64748b',
+  geography: '#10b981',
+  knowledge: '#8b5cf6',
+  // Org layers (6)
+  semantic: '#f97316',
+  foundation: '#3b82f6',
+  structure: '#06b6d4',
+  instruction: '#eab308',
+  output: '#22c55e',
+};
 
 // =============================================================================
 // Types
 // =============================================================================
 
 export interface MetaBadgeNodeData extends Record<string, unknown> {
-  /** Display label */
   label: string;
-  /** Description */
   description: string;
-  /** Meta type: 'realm' or 'layer' */
   metaType: 'realm' | 'layer';
-  /** Accent color (hex) */
   color: string;
-  /** Count of child types */
   typeCount?: number;
-  /** Realm key for icon selection (for realms) */
   realmKey?: Realm;
-  /** Layer key for icon selection (for layers) */
   layerKey?: Layer;
 }
 
 export type MetaBadgeNodeType = Node<MetaBadgeNodeData, 'metaBadge'>;
 
 // =============================================================================
-// Realm Icons
+// GlowBadge - Badge with glow + gradient effect (matches SchemaNode)
 // =============================================================================
 
-const REALM_ICONS: Record<Realm, typeof Globe> = {
-  shared: Globe,
-  org: Building2,
-};
-
-// =============================================================================
-// Shared Styles (matching NodeCard)
-// =============================================================================
-
-const getGlowStyle = (color: string, selected: boolean, isHovered: boolean) => ({
-  boxShadow: selected
-    ? `0 0 30px ${color}50, 0 0 60px ${color}25, inset 0 0 20px ${color}10`
-    : isHovered
-      ? `0 0 25px ${color}40, 0 0 50px ${color}20`
-      : `0 0 20px ${color}30, 0 0 40px ${color}15`,
-  borderColor: selected ? color : `${color}60`,
-});
-
-const getBadgeStyle = (color: string) => ({
-  background: `linear-gradient(135deg, ${color}35, ${color}25)`,
-  borderColor: `${color}50`,
-  color: color,
-  boxShadow: `0 0 12px ${color}30`,
-});
-
-// =============================================================================
-// Realm Node - Larger card for GLOBAL, TENANT
-// =============================================================================
-
-const RealmNode = memo(function RealmNode({
-  data,
-  selected,
-  isHovered,
-  handlers,
+const GlowBadge = memo(function GlowBadge({
+  label,
+  icon,
+  color,
 }: {
-  data: MetaBadgeNodeData;
-  selected: boolean;
-  isHovered: boolean;
-  handlers: {
-    onMouseEnter: () => void;
-    onMouseLeave: () => void;
-    onMouseDown: () => void;
-    onMouseUp: () => void;
-  };
+  label: string;
+  icon?: React.ReactNode;
+  color: string;
 }) {
-  const { label, color, typeCount = 0, realmKey = 'shared', description } = data;
-  const RealmIconComponent = REALM_ICONS[realmKey as Realm] || Globe;
-
-  const glowStyle = useMemo(
-    () => getGlowStyle(color, selected, isHovered),
-    [color, selected, isHovered]
-  );
-
-  const badgeStyle = useMemo(() => getBadgeStyle(color), [color]);
-
   return (
-    <div
-      className={cn(
-        'relative transition-all duration-300',
-        selected && 'scale-[1.02]',
-        isHovered && !selected && 'scale-[1.01]'
-      )}
-      style={{ width: 220 }}
-      onMouseEnter={handlers.onMouseEnter}
-      onMouseLeave={handlers.onMouseLeave}
-      onMouseDown={handlers.onMouseDown}
-      onMouseUp={handlers.onMouseUp}
+    <span
+      className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wide px-2.5 py-1.5 rounded-md"
+      style={{
+        background: `linear-gradient(135deg, ${color}40, ${color}20)`,
+        color: color,
+        border: `1px solid ${color}60`,
+        boxShadow: `0 0 12px ${color}35, inset 0 1px 0 ${color}25`,
+      }}
     >
-      {/* Handles */}
-      <Handle
-        type="target"
-        position={Position.Left}
-        className="!w-3 !h-3 !border-2 !rounded-full"
-        style={{
-          left: -6,
-          backgroundColor: `${color}40`,
-          borderColor: color,
-        }}
-      />
-      <Handle
-        type="source"
-        position={Position.Right}
-        className="!w-3 !h-3 !border-2 !rounded-full"
-        style={{
-          right: -6,
-          backgroundColor: `${color}40`,
-          borderColor: color,
-        }}
-      />
-
-      {/* Main Card - NodeCard style */}
-      <div
-        className={cn(
-          'relative flex flex-col rounded-xl border-2 transition-all duration-300',
-          'bg-[#0d0d12]/90 backdrop-blur-sm',
-          'p-4',
-          selected && 'ring-2 ring-offset-2 ring-offset-[#0d0d12]'
-        )}
-        style={{
-          ...glowStyle,
-          '--tw-ring-color': selected ? color : undefined,
-        } as React.CSSProperties}
-      >
-        {/* Badge - Realm type */}
-        <div
-          className="inline-flex items-center self-start px-2.5 py-1 rounded-full text-[10px] font-bold border mb-3 gap-1.5"
-          style={badgeStyle}
-        >
-          <RealmIconComponent
-            size={12}
-            strokeWidth={2.5}
-            style={{ color }}
-          />
-          REALM
-        </div>
-
-        {/* Title with icon */}
-        <div className="flex items-center gap-3 mb-1">
-          <div
-            className="flex items-center justify-center w-10 h-10 rounded-lg"
-            style={{
-              background: `${color}20`,
-              border: `1.5px solid ${color}40`,
-            }}
-          >
-            <RealmIconComponent
-              size={20}
-              strokeWidth={2}
-              style={{ color }}
-            />
-          </div>
-          <h3 className="text-lg font-bold text-white uppercase tracking-wide">
-            {label}
-          </h3>
-        </div>
-
-        {/* Subtitle - count */}
-        <p className="text-white/50 text-xs">
-          {typeCount} node types
-        </p>
-      </div>
-    </div>
+      {icon}
+      {label}
+    </span>
   );
 });
 
 // =============================================================================
-// Layer Node - Compact card for CONFIG, LOCALE KNOWLEDGE, etc.
-// =============================================================================
-
-const LayerNode = memo(function LayerNode({
-  data,
-  selected,
-  isHovered,
-  handlers,
-}: {
-  data: MetaBadgeNodeData;
-  selected: boolean;
-  isHovered: boolean;
-  handlers: {
-    onMouseEnter: () => void;
-    onMouseLeave: () => void;
-    onMouseDown: () => void;
-    onMouseUp: () => void;
-  };
-}) {
-  const { label, color, typeCount = 0, layerKey = 'foundation' } = data;
-
-  const glowStyle = useMemo(
-    () => getGlowStyle(color, selected, isHovered),
-    [color, selected, isHovered]
-  );
-
-  const badgeStyle = useMemo(() => getBadgeStyle(color), [color]);
-
-  return (
-    <div
-      className={cn(
-        'relative transition-all duration-300',
-        selected && 'scale-[1.02]',
-        isHovered && !selected && 'scale-[1.01]'
-      )}
-      style={{ width: 180 }}
-      onMouseEnter={handlers.onMouseEnter}
-      onMouseLeave={handlers.onMouseLeave}
-      onMouseDown={handlers.onMouseDown}
-      onMouseUp={handlers.onMouseUp}
-    >
-      {/* Handles */}
-      <Handle
-        type="target"
-        position={Position.Left}
-        className="!w-2.5 !h-2.5 !border-2 !rounded-full"
-        style={{
-          left: -5,
-          backgroundColor: `${color}30`,
-          borderColor: color,
-        }}
-      />
-      <Handle
-        type="source"
-        position={Position.Right}
-        className="!w-2.5 !h-2.5 !border-2 !rounded-full"
-        style={{
-          right: -5,
-          backgroundColor: `${color}30`,
-          borderColor: color,
-        }}
-      />
-
-      {/* Main Card - NodeCard style */}
-      <div
-        className={cn(
-          'relative flex flex-col rounded-xl border-2 transition-all duration-300',
-          'bg-[#0d0d12]/90 backdrop-blur-sm',
-          'p-3',
-          selected && 'ring-2 ring-offset-2 ring-offset-[#0d0d12]'
-        )}
-        style={{
-          ...glowStyle,
-          '--tw-ring-color': selected ? color : undefined,
-        } as React.CSSProperties}
-      >
-        {/* Badge - Layer type */}
-        <div
-          className="inline-flex items-center self-start px-2 py-0.5 rounded-full text-[9px] font-bold border mb-2 gap-1"
-          style={badgeStyle}
-        >
-          <LayerIcon
-            layer={layerKey as Layer}
-            size={10}
-            strokeWidth={2.5}
-            style={{ color }}
-          />
-          LAYER
-        </div>
-
-        {/* Title with icon */}
-        <div className="flex items-center gap-2 mb-0.5">
-          <div
-            className="flex items-center justify-center w-7 h-7 rounded-md"
-            style={{
-              background: `${color}20`,
-              border: `1px solid ${color}40`,
-            }}
-          >
-            <LayerIcon
-              layer={layerKey as Layer}
-              size={14}
-              strokeWidth={2}
-              style={{ color }}
-            />
-          </div>
-          <h3
-            className="text-sm font-semibold text-white uppercase tracking-wide truncate"
-            style={{ maxWidth: 110 }}
-          >
-            {label}
-          </h3>
-        </div>
-
-        {/* Subtitle - count */}
-        <p className="text-white/50 text-[11px]">
-          {typeCount} types
-        </p>
-      </div>
-    </div>
-  );
-});
-
-// =============================================================================
-// Main Component - Routes to Realm or Layer
+// Main Component
 // =============================================================================
 
 export const MetaBadgeNode = memo(function MetaBadgeNode({
   data,
   selected = false,
 }: NodeProps<MetaBadgeNodeType>) {
-  const { metaType } = data;
+  const { metaType, label, typeCount = 0, realmKey = 'shared', layerKey = 'foundation' } = data;
 
-  // Shared interaction state
+  // Get design system color based on meta type
+  const isRealm = metaType === 'realm';
+  const primaryColor = isRealm
+    ? REALM_COLORS[realmKey] || '#2aa198'
+    : LAYER_COLORS[layerKey] || '#64748b';
+
   const {
     isHovered,
     handleMouseEnter,
     handleMouseLeave,
     handleMouseDown,
     handleMouseUp,
+    containerClassName,
+    containerStyle,
   } = useNodeInteractions({ selected });
 
-  const handlers = useMemo(() => ({
-    onMouseEnter: handleMouseEnter,
-    onMouseLeave: handleMouseLeave,
-    onMouseDown: handleMouseDown,
-    onMouseUp: handleMouseUp,
-  }), [handleMouseEnter, handleMouseLeave, handleMouseDown, handleMouseUp]);
+  const gradientBorderStyle = useMemo(() => ({
+    background: selected
+      ? NODE_DESIGN.gradients.borderSelected(primaryColor, primaryColor)
+      : isHovered
+        ? NODE_DESIGN.gradients.borderHover(primaryColor, primaryColor)
+        : NODE_DESIGN.gradients.borderDefault(primaryColor, primaryColor),
+    boxShadow: selected
+      ? NODE_DESIGN.shadows.glowSelected(primaryColor)
+      : isHovered
+        ? NODE_DESIGN.shadows.glowHover(primaryColor)
+        : NODE_DESIGN.shadows.glow(primaryColor),
+  }), [primaryColor, selected, isHovered]);
 
-  // Route to appropriate component
-  if (metaType === 'realm') {
-    return (
-      <RealmNode
-        data={data}
-        selected={selected}
-        isHovered={isHovered}
-        handlers={handlers}
-      />
-    );
-  }
+  const traitBorderStyle = useMemo(() => ({
+    borderStyle: 'solid' as const,
+    borderWidth: '2px',
+    borderColor: `${primaryColor}60`,
+  }), [primaryColor]);
 
   return (
-    <LayerNode
-      data={data}
-      selected={selected}
-      isHovered={isHovered}
-      handlers={handlers}
-    />
+    <div
+      className={containerClassName}
+      style={{ ...containerStyle, width: 280 }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+    >
+      {/* Hidden handles for edges */}
+      <Handle type="target" position={Position.Left} className="!opacity-0 !w-1 !h-1" />
+      <Handle type="source" position={Position.Right} className="!opacity-0 !w-1 !h-1" />
+
+      {/* Gradient border wrapper */}
+      <div
+        className={cn(
+          'relative transition-all duration-300',
+          selected && 'animate-gradient-rotate',
+          isHovered && !selected && 'animate-glow-pulse'
+        )}
+        style={{
+          borderRadius: NODE_DESIGN.radius.outer,
+          padding: selected ? NODE_DESIGN.border.selected : NODE_DESIGN.border.default,
+          ...gradientBorderStyle,
+        }}
+      >
+        {/* Inner card - premium sizing with breathing room */}
+        <div
+          className={cn(
+            'relative overflow-hidden transition-all duration-300',
+            isHovered && !selected && 'animate-shimmer-sweep'
+          )}
+          style={{
+            minHeight: 160,
+            borderRadius: selected ? NODE_DESIGN.radius.innerSelected : NODE_DESIGN.radius.inner,
+            backgroundColor: selected ? NODE_DESIGN.selectedBg : NODE_BG.default,
+            ...(selected
+              ? { border: `${NODE_DESIGN.border.innerSelected}px solid ${primaryColor}` }
+              : traitBorderStyle),
+            boxShadow: selected ? NODE_DESIGN.shadows.skeuomorphic(primaryColor) : undefined,
+            // CSS variable for animation color
+            '--pulse-color': `${primaryColor}60`,
+            '--glow-color': primaryColor,
+            '--scan-color': `${primaryColor}80`,
+          } as React.CSSProperties}
+        >
+          <BlueprintOverlay
+            color={primaryColor}
+            selected={selected}
+            borderRadius={selected ? NODE_DESIGN.radius.innerSelected : NODE_DESIGN.radius.inner}
+            showBadge={false}
+          />
+
+          {/* Content - more breathing room */}
+          <div className="relative px-6 py-5">
+            {/* Top row: Large icon left, Badges right */}
+            <div className="flex justify-between items-start mb-5">
+              {/* Large icon with premium gradient glow + animation */}
+              <div
+                className={cn(
+                  'flex items-center justify-center w-14 h-14 rounded-xl transition-all duration-300',
+                  isHovered && 'animate-icon-glow'
+                )}
+                style={{
+                  background: `
+                    radial-gradient(ellipse at 30% 20%, ${primaryColor}50 0%, transparent 50%),
+                    radial-gradient(ellipse at 70% 80%, ${primaryColor}30 0%, transparent 50%),
+                    linear-gradient(135deg, ${primaryColor}35, ${primaryColor}15, ${primaryColor}25)
+                  `,
+                  border: `1.5px solid ${primaryColor}50`,
+                  boxShadow: isHovered
+                    ? `0 0 30px ${primaryColor}50, 0 0 50px ${primaryColor}25, inset 0 0 20px ${primaryColor}20`
+                    : `0 0 25px ${primaryColor}35, inset 0 0 15px ${primaryColor}15`,
+                  '--glow-color': primaryColor,
+                } as React.CSSProperties}
+              >
+                {isRealm ? (
+                  <RealmIcon
+                    realm={realmKey}
+                    size={28}
+                    strokeWidth={1.5}
+                    style={{ color: primaryColor }}
+                  />
+                ) : (
+                  <LayerIcon
+                    layer={layerKey}
+                    size={28}
+                    strokeWidth={1.5}
+                    style={{ color: primaryColor }}
+                  />
+                )}
+              </div>
+
+              {/* Stacked badges on right */}
+              <div className="flex flex-col gap-2 items-end">
+                {isRealm ? (
+                  <>
+                    <GlowBadge
+                      label="REALM"
+                      icon={<RealmIcon realm={realmKey} size={12} strokeWidth={2} style={{ color: primaryColor }} />}
+                      color={primaryColor}
+                    />
+                    <GlowBadge
+                      label={realmKey.toUpperCase()}
+                      color={primaryColor}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <GlowBadge
+                      label="LAYER"
+                      icon={<LayerIcon layer={layerKey} size={12} strokeWidth={2} style={{ color: primaryColor }} />}
+                      color={primaryColor}
+                    />
+                    <GlowBadge
+                      label={layerKey.toUpperCase().replace(/-/g, ' ')}
+                      color={primaryColor}
+                    />
+                  </>
+                )}
+              </div>
+            </div>
+
+            {/* Title - larger */}
+            <h3 className="text-lg font-bold text-white truncate mb-1">
+              {label}
+            </h3>
+
+            {/* Subtitle - bolder, primary color */}
+            <p
+              className="text-sm font-semibold truncate"
+              style={{ color: primaryColor }}
+            >
+              {isRealm ? `${typeCount} node types` : `${typeCount} types`}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 });

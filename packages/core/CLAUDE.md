@@ -8,7 +8,7 @@ NovaNet is a **native content generation system** (NOT translation) using Neo4j 
 
 **Target Application**: QR Code AI (https://qrcode-ai.com) - a multilingual SaaS for QR code generation.
 **Supported Locales**: 200+ locales (fr-FR, en-US, es-MX, ja-JP, etc.)
-**Current Version**: v11.0.0
+**Current Version**: v11.3.0
 
 ## CRITICAL: Generation, NOT Translation
 
@@ -23,23 +23,24 @@ Each locale content is **generated natively** from the invariant Entity, NOT tra
 
 For complete graph schema, node categories, and relations, see: **`models/_index.yaml`**
 
-## v11.0 Architecture
+## v11.3 Architecture
 
-v11.0 establishes 2-Realm Architecture with naming convention refactor:
+v11.3 establishes 2-Realm Architecture with layer reorganization:
 
 | Axis | Values |
 |------|--------|
-| **Realm** | global / tenant |
-| **Layer** | 9 functional layers (2 global + 7 tenant) |
-| **Trait** | invariant / localized / knowledge / derived / job |
+| **Realm** | shared / org |
+| **Layer** | 11 functional layers (3 shared + 8 org) |
+| **Trait** | invariant / localized / knowledge / generated / aggregated |
 | **ArcFamily** | ownership / localization / semantic / generation / mining |
 
-**Key v11.0 changes:**
-- Renamed nodes: EntityL10n → EntityContent, ProjectL10n → ProjectContent, PageL10n → PageGenerated
-- Renamed arcs: HAS_L10N → HAS_CONTENT, HAS_OUTPUT → HAS_GENERATED
-- GLOBAL (2 layers): config, locale-knowledge — universal, READ-ONLY
-- TENANT (7 layers): config, foundation, structure, semantic, seo, instruction, output
-- 62 node types, 124 arc types (v11.2: 62 nodes (shared/org realms), +BELONGS_TO)
+**Key v11.3 changes:**
+- Layer split: `locale-knowledge` → `locale`, `geography`, `knowledge` (3 layers)
+- New layer: `geo` added to org realm for GEO intelligence
+- Node merge: Organization + Tenant → OrgConfig
+- SHARED (3 layers): locale, geography, knowledge — universal, READ-ONLY (32 nodes)
+- ORG (8 layers): config, foundation, structure, semantic, instruction, seo, geo, output (29 nodes)
+- 61 node types, 116 arc types
 
 **Boundary rule:** TypeScript (this package) generates code artifacts. Rust (`tools/novanet/`) executes at runtime.
 
@@ -74,7 +75,7 @@ pnpm test
 pnpm lint
 
 # Validate schemas
-pnpm schema:validate
+cargo run -- schema validate
 ```
 
 ### Useful Cypher Queries
@@ -96,15 +97,15 @@ MATCH (l)-[:HAS_LEXICON]->(lex:LocaleLexicon)-[:HAS_EXPRESSION]->(e:Expression)
 WHERE e.semantic_field IN ['urgency', 'value']
 RETURN b.instructions, e.key, el.title, bt.rules, v.formality_score, collect(ex.text) AS expressions;
 
--- v10.9: Navigate meta-graph (Realm -> Layer -> Kind)
-MATCH (r:Realm {key: "tenant"})-[:HAS_LAYER]->(l:Layer)-[:HAS_KIND]->(k:Kind)
+-- v11.3: Navigate meta-graph (Realm -> Layer -> Kind)
+MATCH (r:Realm {key: "org"})-[:HAS_LAYER]->(l:Layer)-[:HAS_KIND]->(k:Kind)
 RETURN r.key, l.key, collect(k.label) AS kinds;
 
--- v9: Find all Kinds with a specific Trait
-MATCH (k:Kind)-[:HAS_TRAIT]->(t:Trait {key: "localized"})
+-- v11.3: Find all Kinds with a specific Trait
+MATCH (k:Kind)-[:HAS_TRAIT]->(t:Trait {key: "generated"})
 RETURN k.label, t.key;
 
--- v9: Arc schema for a Kind
+-- v11.3: Arc schema for a Kind
 MATCH (ak:ArcKind)-[:FROM_KIND]->(k:Kind {label: "Block"})
 MATCH (ak)-[:TO_KIND]->(target:Kind)
 MATCH (ak)-[:IN_FAMILY]->(af:ArcFamily)
@@ -117,21 +118,22 @@ RETURN ak.key, af.key AS family, target.label AS target_kind;
 core/
 ├── models/                    # YAML schema definitions (SOURCE OF TRUTH)
 │   ├── _index.yaml            # MODEL INDEX (graph structure, node categories)
-│   ├── taxonomy.yaml          # v11.0: 2 Realms (global/tenant), 9 Layers
-│   ├── relations.yaml         # Legacy format (kept for parser compatibility)
+│   ├── taxonomy.yaml          # v11.3: 2 Realms (shared/org), 11 Layers
 │   ├── node-kinds/            # ONE FILE PER NODE TYPE
-│   │   ├── global/            # Realm: global (31 nodes)
-│   │   │   ├── config/        #   Layer: config (Locale + geographic nodes)
-│   │   │   └── locale-knowledge/  #   Layer: locale-knowledge (Knowledge Atoms)
-│   │   └── tenant/            # Realm: tenant (33 nodes)
-│   │       ├── config/        #   Layer: config (Organization, Tenant)
-│   │       ├── foundation/    #   Layer: foundation (Project, Brand, ProjectContent)
+│   │   ├── shared/            # Realm: shared (32 nodes)
+│   │   │   ├── locale/        #   Layer: locale (7 nodes)
+│   │   │   ├── geography/     #   Layer: geography (6 nodes)
+│   │   │   └── knowledge/     #   Layer: knowledge (19 nodes)
+│   │   └── org/               # Realm: org (29 nodes)
+│   │       ├── config/        #   Layer: config (OrgConfig)
+│   │       ├── foundation/    #   Layer: foundation (Project, BrandIdentity, ProjectContent)
 │   │       ├── structure/     #   Layer: structure (Page, Block, ContentSlot)
-│   │       ├── semantic/      #   Layer: semantic (Entity, EntityContent, Persona)
-│   │       ├── seo/           #   Layer: seo (SEOKeyword, Metrics, GEO nodes)
+│   │       ├── semantic/      #   Layer: semantic (Entity, EntityContent, etc.)
 │   │       ├── instruction/   #   Layer: instruction (Prompts, BlockRules)
+│   │       ├── seo/           #   Layer: seo (SEOKeyword, Metrics)
+│   │       ├── geo/           #   Layer: geo (GEOQuery, GEOAnswer, GEOMetrics)
 │   │       └── output/        #   Layer: output (PageGenerated, BlockGenerated)
-│   ├── arc-kinds/             # ONE FILE PER ARC TYPE (64 files)
+│   ├── arc-kinds/             # ONE FILE PER ARC TYPE (116 files)
 │   └── views/                 # YAML view definitions
 ├── src/                       # TypeScript source
 │   ├── config/                # Locale codes configuration
@@ -144,25 +146,24 @@ core/
 
 > **Note:** `parsers/`, `services/`, `db/`, and `scripts/` were absorbed into the Rust binary (`tools/novanet/`) in v9.0.0.
 
-## Nomenclature (v11.0.0)
+## Nomenclature (v11.3.0)
 
 ```
 *Content suffix = Human-curated localized content (EntityContent)
 *Generated      = LLM-generated output content (PageGenerated, BlockGenerated)
 :HAS_CONTENT    = Human-curated content arc (Entity→EntityContent)
 :HAS_GENERATED  = LLM-generated content arc (Page→PageGenerated, Block→BlockGenerated)
-ProjectContent  = Localized project content (renamed from ProjectL10n)
+ProjectContent  = Localized project content
 Locale*         = Locale Knowledge nodes (LocaleVoice, LocaleCulture, etc.)
-*Metrics        = Time-series observations (SEOKeywordMetrics)
-*MiningRun      = Batch operations (SEOMiningRun)
+*Metrics        = Time-series observations (SEOKeywordMetrics, GEOMetrics)
 ```
 
-**v11.0 meta-graph terminology:**
+**v11.3 meta-graph terminology:**
 ```
-Realm           = WHERE? (global / tenant)
-Layer           = WHAT? (9 functional layers)
+Realm           = WHERE? (shared / org)
+Layer           = WHAT? (11 functional layers: 3 shared + 8 org)
 Kind            = Neo4j label as meta-node
-Trait           = HOW? (invariant / localized / knowledge / derived / job)
+Trait           = HOW? (invariant / localized / knowledge / generated / aggregated)
 ArcFamily       = Relationship classification (ownership / localization / semantic / generation / mining)
 ArcKind         = Individual relationship type as meta-node
 :Meta           = Double-label on all meta-nodes

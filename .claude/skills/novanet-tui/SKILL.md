@@ -27,58 +27,59 @@ cd tools/novanet && cargo run -- tui
 The TUI provides an immersive terminal experience for exploring the NovaNet knowledge graph:
 
 ```
-╔═══════════════════════════════════════════════════════════════════════════════════════╗
-║  NOVANET TUI — Galaxy-Themed Mission Control                                          ║
-╚═══════════════════════════════════════════════════════════════════════════════════════╝
++=======================================================================================+
+|  NOVANET TUI - Galaxy-Themed Mission Control (v11.3)                                  |
++=======================================================================================+
 
-┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│  PANELS                                                                                  │
-├─────────────────────────────────────────────────────────────────────────────────────────┤
-│                                                                                          │
-│   ┌──────────────────────┐  ┌──────────────────────────────────────────────────────┐   │
-│   │  TAXONOMY TREE       │  │  DETAIL PANEL                                         │   │
-│   │  (Left 40%)          │  │  (Right 60%)                                          │   │
-│   │                      │  │                                                       │   │
-│   │  Realm > Layer > Kind│  │  • YAML definition                                    │   │
-│   │  hierarchy           │  │  • Properties with types                              │   │
-│   │                      │  │  • Relationships (from/to)                            │   │
-│   │  ▼ global            │  │  • Statistics                                         │   │
-│   │    ▼ knowledge       │  │  • Cypher syntax highlighting                         │   │
-│   │      • LocaleVoice   │  │                                                       │   │
-│   │      • LocaleCulture │  │                                                       │   │
-│   │    ▶ config          │  │                                                       │   │
-│   │  ▼ tenant            │  │                                                       │   │
-│   │                      │  │                                                       │   │
-│   └──────────────────────┘  └──────────────────────────────────────────────────────┘   │
-│                                                                                          │
-│   ┌──────────────────────────────────────────────────────────────────────────────────┐  │
-│   │  STATUS BAR                                                                       │  │
-│   │  [NavMode: META] [Kind: LocaleVoice] [?=Help] [Ctrl+P=Palette] [/=Search]        │  │
-│   └──────────────────────────────────────────────────────────────────────────────────┘  │
-│                                                                                          │
-└─────────────────────────────────────────────────────────────────────────────────────────┘
++----------------------------------------------------------------------------------------+
+|  PANELS                                                                                |
++----------------------------------------------------------------------------------------+
+|                                                                                        |
+|   +----------------------+  +------------------------------------------------------+   |
+|   |  TAXONOMY TREE       |  |  DETAIL PANEL                                        |   |
+|   |  (Left 40%)          |  |  (Right 60%)                                         |   |
+|   |                      |  |                                                      |   |
+|   |  Realm > Layer > Kind|  |  - YAML definition                                   |   |
+|   |  hierarchy           |  |  - Properties with types                             |   |
+|   |                      |  |  - Relationships (from/to)                           |   |
+|   |  v shared            |  |  - Statistics                                        |   |
+|   |    v knowledge       |  |  - Cypher syntax highlighting                        |   |
+|   |      - LocaleVoice   |  |                                                      |   |
+|   |      - LocaleCulture |  |                                                      |   |
+|   |    > config          |  |                                                      |   |
+|   |  v org               |  |                                                      |   |
+|   |                      |  |                                                      |   |
+|   +----------------------+  +------------------------------------------------------+   |
+|                                                                                        |
+|   +------------------------------------------------------------------------------------+|
+|   |  STATUS BAR                                                                       ||
+|   |  [Mode: Graph] [View: Taxonomy] [Kind: LocaleVoice] [?=Help] [/=Search]           ||
+|   +------------------------------------------------------------------------------------+|
+|                                                                                        |
++----------------------------------------------------------------------------------------+
 ```
 
 ## Keybindings
 
-### Navigation Mode
+### Mode Switching (v11.3: 3 modes)
 
 | Key | Action |
 |-----|--------|
-| `1` | Switch to META mode (meta-graph only) |
-| `2` | Switch to DATA mode (real instances) |
-| `3` | Switch to OVERLAY mode (data + meta) |
-| `4` | Switch to QUERY mode (faceted filters) |
-| `Tab` | Cycle NavMode forward |
+| `1` | Switch to Graph mode (Taxonomy/Instances toggle with `t`) |
+| `2` | Switch to Audit mode (schema validation) |
+| `3` | Switch to Nexus mode (gamified learning hub) |
+| `t` | Toggle GraphView: Taxonomy <-> Instances (Graph mode only) |
+| `N` | Cycle through all 3 modes |
+| `Tab` | Cycle focus: Tree -> Info -> Graph -> YAML |
 
 ### Tree Navigation
 
 | Key | Action |
 |-----|--------|
-| `j` / `↓` | Move cursor down |
-| `k` / `↑` | Move cursor up |
-| `h` / `←` | Collapse node |
-| `l` / `→` / `Space` / `Enter` | Expand node |
+| `j` / `Down` | Move cursor down |
+| `k` / `Up` | Move cursor up |
+| `h` / `Left` | Collapse node |
+| `l` / `Right` / `Space` / `Enter` | Expand node |
 | `d` | Page down in tree |
 | `u` | Page up in tree |
 
@@ -97,18 +98,31 @@ The TUI provides an immersive terminal experience for exploring the NovaNet know
 |-----|--------|
 | `?` | Toggle help overlay |
 | `Ctrl+P` | Open command palette |
-| `/` | Open fuzzy search |
+| `/` or `f` | Open fuzzy search |
+| `F1` | Open color legend overlay |
 | `Esc` | Close current overlay |
 | `q` | Quit (or close overlay) |
+
+### Nexus Mode (Mode 3)
+
+| Key | Action |
+|-----|--------|
+| `1-4` | Switch tabs (Traits/Layers/Arcs/Pipeline) |
+| `gi` | Jump to invariant trait |
+| `gl` | Jump to localized trait |
+| `gk` | Jump to knowledge trait |
+| `gg` | Jump to generated trait |
+| `ga` | Jump to aggregated trait |
+| `g0` | Reset all cursors to top |
+| `n` | Next "Did you know?" tip |
 
 ### Command Palette Commands
 
 | Command | Description |
 |---------|-------------|
-| `Switch to Meta` | NavMode: meta-graph |
-| `Switch to Data` | NavMode: real instances |
-| `Switch to Overlay` | NavMode: combined |
-| `Switch to Query` | NavMode: faceted |
+| `Switch to Graph` | Graph mode (taxonomy/instances) |
+| `Switch to Audit` | Schema validation mode |
+| `Switch to Nexus` | Gamified learning hub |
 | `Dashboard` | Show Neo4j statistics |
 | `Search Kind` | Fuzzy search kinds |
 | `Toggle Effects` | CRT/glitch effects |
@@ -120,9 +134,10 @@ The TUI provides an immersive terminal experience for exploring the NovaNet know
 ### Galaxy Theme
 
 - **SuperNovae color palette**: Deep space blues, nebula purples, star golds
-- **Realm colors**: Global (emerald), Tenant (violet)
-- **Layer colors**: 9 distinct colors for each functional layer
+- **Realm colors**: Shared (emerald), Org (sky blue)
+- **Layer colors**: 11 distinct colors for each functional layer
 - **ArcFamily colors**: 5 relationship type colors
+- **Trait styles**: solid (invariant), dashed (localized), dotted (knowledge), double (generated), thin-dotted (aggregated)
 
 ### Boot Animation (First Launch)
 
@@ -146,7 +161,7 @@ The TUI provides an immersive terminal experience for exploring the NovaNet know
 2. Guided tour through 5 key areas:
    - Taxonomy tree navigation
    - Detail panel exploration
-   - NavMode switching
+   - Mode switching
    - Search and command palette
    - Keyboard shortcuts
 

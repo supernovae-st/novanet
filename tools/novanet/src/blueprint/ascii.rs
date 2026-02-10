@@ -208,7 +208,11 @@ impl Default for BoxBuilder {
 /// // Returns: "█████████████░░░░░░░ 67%"
 /// ```
 pub fn progress_bar(value: usize, max: usize, width: usize) -> String {
-    let pct = if max == 0 { 0.0 } else { value as f64 / max as f64 };
+    let pct = if max == 0 {
+        0.0
+    } else {
+        value as f64 / max as f64
+    };
     let filled = (pct * width as f64).round() as usize;
     let empty = width.saturating_sub(filled);
 
@@ -222,7 +226,11 @@ pub fn progress_bar(value: usize, max: usize, width: usize) -> String {
 
 /// Render a compact progress bar (no percentage).
 pub fn progress_bar_compact(value: usize, max: usize, width: usize) -> String {
-    let pct = if max == 0 { 0.0 } else { value as f64 / max as f64 };
+    let pct = if max == 0 {
+        0.0
+    } else {
+        value as f64 / max as f64
+    };
     let filled = (pct * width as f64).round() as usize;
     let empty = width.saturating_sub(filled);
 
@@ -394,14 +402,14 @@ pub fn horizontal_rule(width: usize) -> String {
     chars::HORIZONTAL.to_string().repeat(width)
 }
 
-/// Trait symbols for display.
+/// Trait symbols for display (v11.2: 5 traits - derived split, job removed).
 pub fn trait_symbol(trait_key: &str) -> &'static str {
     match trait_key {
         "invariant" => "■",
         "localized" => "□",
         "knowledge" => "◊",
-        "derived" => "◇",
-        "job" => "○",
+        "generated" => "★",
+        "aggregated" => "▪",
         _ => "?",
     }
 }
@@ -471,8 +479,7 @@ mod tests {
     fn test_tree_node() {
         let tree = TreeNode::new("Root")
             .child(TreeNode::new("Child 1"))
-            .child(TreeNode::new("Child 2")
-                .child(TreeNode::new("Grandchild")));
+            .child(TreeNode::new("Child 2").child(TreeNode::new("Grandchild")));
 
         let rendered = tree.render();
         assert!(rendered.contains("Root"));

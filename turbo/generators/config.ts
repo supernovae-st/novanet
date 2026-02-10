@@ -1,12 +1,12 @@
 import type { PlopTypes } from '@turbo/gen';
 
 // =============================================================================
-// NOVANET TURBOREPO GENERATORS
+// NOVANET TURBOREPO GENERATORS (v11.3)
 // =============================================================================
 // Usage:
-//   turbo gen node     - Create a new node type (YAML + TypeScript)
-//   turbo gen view     - Create a new view definition
-//   turbo gen relation - Create a new relation type
+//   turbo gen node - Create a new node type (YAML + TypeScript)
+//   turbo gen view - Create a new view definition
+//   turbo gen arc  - Create a new arc type (replaces 'relation')
 // =============================================================================
 
 export default function generator(plop: PlopTypes.NodePlopAPI): void {
@@ -31,7 +31,7 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
   });
 
   // ===========================================================================
-  // NODE GENERATOR
+  // NODE GENERATOR (v11.3)
   // ===========================================================================
   plop.setGenerator('node', {
     description: 'Create a new NovaNet node type with YAML schema and TypeScript types',
@@ -53,9 +53,9 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
         name: 'realm',
         message: 'Realm (where does this node live?):',
         choices: [
-          // v11.0: 2 realms (GLOBAL + TENANT)
-          { name: 'global - Universal locale knowledge (READ-ONLY)', value: 'global' },
-          { name: 'tenant - Business-specific content (Page, Block, Entity)', value: 'tenant' },
+          // v11.3: 2 realms (SHARED + ORG)
+          { name: 'shared - Universal locale knowledge (READ-ONLY)', value: 'shared' },
+          { name: 'org - Organization-specific content (Page, Block, Entity)', value: 'org' },
         ],
       },
       {
@@ -63,17 +63,19 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
         name: 'layer',
         message: 'Layer:',
         choices: [
-          // GLOBAL (2 layers)
-          { name: 'config (global)', value: 'config' },
-          { name: 'locale-knowledge (global)', value: 'locale-knowledge' },
-          // TENANT (7 layers)
-          { name: 'config (tenant)', value: 'config' },
-          { name: 'foundation (tenant)', value: 'foundation' },
-          { name: 'structure (tenant)', value: 'structure' },
-          { name: 'semantic (tenant)', value: 'semantic' },
-          { name: 'instruction (tenant)', value: 'instruction' },
-          { name: 'seo (tenant - v11.0)', value: 'seo' },
-          { name: 'output (tenant)', value: 'output' },
+          // SHARED (3 layers) - v11.3
+          { name: 'locale (shared) - Locale definitions', value: 'locale' },
+          { name: 'geography (shared) - Geographic regions', value: 'geography' },
+          { name: 'knowledge (shared) - Terms, expressions, patterns', value: 'knowledge' },
+          // ORG (8 layers) - v11.3
+          { name: 'config (org) - Organization config', value: 'config' },
+          { name: 'foundation (org) - Project, content roots', value: 'foundation' },
+          { name: 'structure (org) - Page, Block structure', value: 'structure' },
+          { name: 'semantic (org) - Entity, meaning', value: 'semantic' },
+          { name: 'instruction (org) - Prompts, rules', value: 'instruction' },
+          { name: 'seo (org) - SEO keywords', value: 'seo' },
+          { name: 'geo (org) - GEO intelligence', value: 'geo' },
+          { name: 'output (org) - Generated content', value: 'output' },
         ],
       },
       {
@@ -91,18 +93,18 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
     actions: (answers) => {
       const actions: PlopTypes.ActionType[] = [];
 
-      // 1. Create YAML schema file
+      // 1. Create YAML schema file (v11.3 path: node-kinds/{realm}/{layer}/)
       actions.push({
         type: 'add',
-        path: 'packages/core/models/nodes/{{realm}}/{{layer}}/{{kebabCase name}}.yaml',
+        path: 'packages/core/models/node-kinds/{{realm}}/{{layer}}/{{kebabCase name}}.yaml',
         templateFile: 'templates/node.yaml.hbs',
       });
 
-      // 2. If hasContent, create Content variant (v11.0: EntityContent pattern)
+      // 2. If hasContent, create Content variant (v10.9: EntityContent pattern)
       if (answers?.hasContent) {
         actions.push({
           type: 'add',
-          path: 'packages/core/models/nodes/{{realm}}/{{layer}}/{{kebabCase name}}-content.yaml',
+          path: 'packages/core/models/node-kinds/{{realm}}/{{layer}}/{{kebabCase name}}-content.yaml',
           templateFile: 'templates/node-content.yaml.hbs',
         });
       }
@@ -111,10 +113,10 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
       actions.push(() => {
         return `
 Node created! Next steps:
-  1. Edit packages/core/models/nodes/${answers?.realm}/${answers?.layer}/${plop.getHelper('kebabCase')(answers?.name || '')}.yaml
+  1. Edit packages/core/models/node-kinds/${answers?.realm}/${answers?.layer}/${plop.getHelper('kebabCase')(answers?.name || '')}.yaml
   2. Add properties specific to your node
-  3. Run: pnpm --filter=@novanet/core build
-  4. Update types in packages/core/src/types/nodes.ts if needed
+  3. Run: cargo run -- schema generate
+  4. Run: cargo run -- schema validate
 `;
       });
 
@@ -175,23 +177,23 @@ Node created! Next steps:
 View created! Next steps:
   1. Edit packages/core/models/views/{{name}}.yaml
   2. Customize the Cypher query
-  3. Test with: pnpm novanet export-view {{name}}
+  3. Test with: cargo run -- doc generate --view={{name}}
 `,
     ],
   });
 
   // ===========================================================================
-  // RELATION GENERATOR
+  // ARC GENERATOR (v11.3 - replaces 'relation' generator)
   // ===========================================================================
-  plop.setGenerator('relation', {
-    description: 'Add a new relation type to NovaNet schema',
+  plop.setGenerator('arc', {
+    description: 'Add a new arc type to NovaNet schema (v11.3)',
     prompts: [
       {
         type: 'input',
         name: 'name',
-        message: 'Relation name (UPPER_SNAKE_CASE, e.g., "HAS_AUDIENCE"):',
+        message: 'Arc name (UPPER_SNAKE_CASE, e.g., "HAS_AUDIENCE"):',
         validate: (input: string) => {
-          if (!input) return 'Relation name is required';
+          if (!input) return 'Arc name is required';
           if (!/^[A-Z][A-Z0-9_]*$/.test(input)) {
             return 'Must be UPPER_SNAKE_CASE (e.g., "HAS_AUDIENCE")';
           }
@@ -199,51 +201,64 @@ View created! Next steps:
         },
       },
       {
-        type: 'input',
-        name: 'from',
-        message: 'From node type (e.g., "Project"):',
+        type: 'list',
+        name: 'family',
+        message: 'Arc family:',
+        choices: [
+          { name: 'ownership - Parent owns child', value: 'ownership' },
+          { name: 'localization - Locale relationships', value: 'localization' },
+          { name: 'semantic - Meaning connections', value: 'semantic' },
+          { name: 'generation - LLM output links', value: 'generation' },
+          { name: 'mining - SEO/GEO data links', value: 'mining' },
+        ],
       },
       {
         type: 'input',
-        name: 'to',
-        message: 'To node type (e.g., "Audience"):',
+        name: 'source',
+        message: 'Source node type (e.g., "Project"):',
+      },
+      {
+        type: 'input',
+        name: 'target',
+        message: 'Target node type (e.g., "Audience"):',
+      },
+      {
+        type: 'list',
+        name: 'cardinality',
+        message: 'Cardinality:',
+        choices: [
+          { name: '1:1 (one to one)', value: 'one_to_one' },
+          { name: '1:N (one to many)', value: 'one_to_many' },
+          { name: 'N:1 (many to one)', value: 'many_to_one' },
+          { name: 'N:M (many to many)', value: 'many_to_many' },
+        ],
       },
       {
         type: 'input',
         name: 'description',
-        message: 'Relation description:',
-      },
-      {
-        type: 'confirm',
-        name: 'hasProperties',
-        message: 'Does this relation have properties?',
-        default: false,
+        message: 'Arc description (for llm_context):',
       },
     ],
     actions: [
       {
-        type: 'append',
-        path: 'packages/core/models/relations.yaml',
-        template: `
-# {{name}}
-- name: {{name}}
-  from: {{from}}
-  to: {{to}}
-  description: "{{description}}"
-  cardinality: "1:N"
-{{#if hasProperties}}
-  properties:
-    - name: created_at
-      type: datetime
-      description: "When the relation was created"
-{{/if}}
+        type: 'add',
+        path: 'packages/core/models/arc-kinds/{{family}}/{{kebabCase name}}.yaml',
+        template: `arc:
+  name: {{name}}
+  family: {{family}}
+  scope: intra_realm
+  source: {{source}}
+  target: {{target}}
+  cardinality: {{cardinality}}
+  llm_context: "{{description}}"
 `,
       },
       () => `
-Relation added to relations.yaml! Next steps:
-  1. Review packages/core/models/relations.yaml
-  2. Add any additional properties
-  3. Update TypeScript types if needed
+Arc created! Next steps:
+  1. Review packages/core/models/arc-kinds/{{family}}/{{kebabCase name}}.yaml
+  2. Verify scope (intra_realm or cross_realm)
+  3. Run: cargo run -- schema generate
+  4. Run: cargo run -- schema validate
 `,
     ],
   });

@@ -13,22 +13,22 @@
 //! - `coverage` — Locale completion status
 //! - `stats` — Raw numbers for CI/scripts
 
-pub mod default;
-pub mod tree;
-pub mod flow;
 pub mod arcs;
-pub mod stats;
-pub mod glossary;
 pub mod cardinality;
+pub mod default;
+pub mod flow;
+pub mod glossary;
+pub mod stats;
+pub mod tree;
 // TODO: Add remaining views
 // pub mod content;
 // pub mod audit;
 // pub mod deps;
 // pub mod coverage;
 
-use clap::ValueEnum;
 use crate::blueprint::BlueprintData;
 use crate::output::OutputFormat;
+use clap::ValueEnum;
 
 /// Available blueprint views.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, ValueEnum)]

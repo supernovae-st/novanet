@@ -7,22 +7,39 @@ use crate::parsers::arcs::Cardinality;
 pub fn render(data: &BlueprintData) -> String {
     let mut out = String::new();
 
-    out.push_str("╭──────────────────────────────────────────────────────────────────────────────╮\n");
-    out.push_str("│  ◉ NOVANET CARDINALITY                                                      │\n");
-    out.push_str("│                                                                              │\n");
-    out.push_str("│  Relationship constraints: 1:1, 1:N, N:M                                     │\n");
-    out.push_str("╰──────────────────────────────────────────────────────────────────────────────╯\n\n");
+    out.push_str(
+        "╭──────────────────────────────────────────────────────────────────────────────╮\n",
+    );
+    out.push_str(
+        "│  ◉ NOVANET CARDINALITY                                                      │\n",
+    );
+    out.push_str(
+        "│                                                                              │\n",
+    );
+    out.push_str(
+        "│  Relationship constraints: 1:1, 1:N, N:M                                     │\n",
+    );
+    out.push_str(
+        "╰──────────────────────────────────────────────────────────────────────────────╯\n\n",
+    );
 
     let by_cardinality = data.arcs_by_cardinality();
 
     // 1:1 relationships
-    out.push_str("┌──────────────────────────────────────────────────────────────────────────────┐\n");
-    let one_to_one = by_cardinality.get(&Cardinality::OneToOne).map(|v| v.len()).unwrap_or(0);
+    out.push_str(
+        "┌──────────────────────────────────────────────────────────────────────────────┐\n",
+    );
+    let one_to_one = by_cardinality
+        .get(&Cardinality::OneToOne)
+        .map(|v| v.len())
+        .unwrap_or(0);
     out.push_str(&format!(
         "│  1:1 (One-to-One) — Exclusive pairing                          ({} arcs)    │\n",
         one_to_one
     ));
-    out.push_str("├──────────────────────────────────────────────────────────────────────────────┤\n");
+    out.push_str(
+        "├──────────────────────────────────────────────────────────────────────────────┤\n",
+    );
     if let Some(arcs) = by_cardinality.get(&Cardinality::OneToOne) {
         for arc in arcs.iter().take(10) {
             let source = arc.source.labels().join("|");
@@ -47,20 +64,35 @@ pub fn render(data: &BlueprintData) -> String {
             ));
         }
     } else {
-        out.push_str("│  (none)                                                                      │\n");
+        out.push_str(
+            "│  (none)                                                                      │\n",
+        );
     }
-    out.push_str("│                                                                              │\n");
-    out.push_str("│  ═══ means exactly one on each side (per locale for localized nodes)         │\n");
-    out.push_str("└──────────────────────────────────────────────────────────────────────────────┘\n\n");
+    out.push_str(
+        "│                                                                              │\n",
+    );
+    out.push_str(
+        "│  ═══ means exactly one on each side (per locale for localized nodes)         │\n",
+    );
+    out.push_str(
+        "└──────────────────────────────────────────────────────────────────────────────┘\n\n",
+    );
 
     // 1:N relationships
-    out.push_str("┌──────────────────────────────────────────────────────────────────────────────┐\n");
-    let one_to_many = by_cardinality.get(&Cardinality::OneToMany).map(|v| v.len()).unwrap_or(0);
+    out.push_str(
+        "┌──────────────────────────────────────────────────────────────────────────────┐\n",
+    );
+    let one_to_many = by_cardinality
+        .get(&Cardinality::OneToMany)
+        .map(|v| v.len())
+        .unwrap_or(0);
     out.push_str(&format!(
         "│  1:N (One-to-Many) — Parent owns children                       ({} arcs)   │\n",
         one_to_many
     ));
-    out.push_str("├──────────────────────────────────────────────────────────────────────────────┤\n");
+    out.push_str(
+        "├──────────────────────────────────────────────────────────────────────────────┤\n",
+    );
     if let Some(arcs) = by_cardinality.get(&Cardinality::OneToMany) {
         for arc in arcs.iter().take(10) {
             let source = arc.source.labels().join("|");
@@ -85,20 +117,35 @@ pub fn render(data: &BlueprintData) -> String {
             ));
         }
     } else {
-        out.push_str("│  (none)                                                                      │\n");
+        out.push_str(
+            "│  (none)                                                                      │\n",
+        );
     }
-    out.push_str("│                                                                              │\n");
-    out.push_str("│  ───► means one parent, many children (ownership semantics)                  │\n");
-    out.push_str("└──────────────────────────────────────────────────────────────────────────────┘\n\n");
+    out.push_str(
+        "│                                                                              │\n",
+    );
+    out.push_str(
+        "│  ───► means one parent, many children (ownership semantics)                  │\n",
+    );
+    out.push_str(
+        "└──────────────────────────────────────────────────────────────────────────────┘\n\n",
+    );
 
     // N:M relationships
-    out.push_str("┌──────────────────────────────────────────────────────────────────────────────┐\n");
-    let many_to_many = by_cardinality.get(&Cardinality::ManyToMany).map(|v| v.len()).unwrap_or(0);
+    out.push_str(
+        "┌──────────────────────────────────────────────────────────────────────────────┐\n",
+    );
+    let many_to_many = by_cardinality
+        .get(&Cardinality::ManyToMany)
+        .map(|v| v.len())
+        .unwrap_or(0);
     out.push_str(&format!(
         "│  N:M (Many-to-Many) — Flexible associations                     ({} arcs)   │\n",
         many_to_many
     ));
-    out.push_str("├──────────────────────────────────────────────────────────────────────────────┤\n");
+    out.push_str(
+        "├──────────────────────────────────────────────────────────────────────────────┤\n",
+    );
     if let Some(arcs) = by_cardinality.get(&Cardinality::ManyToMany) {
         for arc in arcs.iter().take(10) {
             let source = arc.source.labels().join("|");
@@ -123,29 +170,55 @@ pub fn render(data: &BlueprintData) -> String {
             ));
         }
     } else {
-        out.push_str("│  (none)                                                                      │\n");
+        out.push_str(
+            "│  (none)                                                                      │\n",
+        );
     }
-    out.push_str("│                                                                              │\n");
-    out.push_str("│  ◄───► means many on both sides (junction table semantics)                   │\n");
-    out.push_str("└──────────────────────────────────────────────────────────────────────────────┘\n\n");
+    out.push_str(
+        "│                                                                              │\n",
+    );
+    out.push_str(
+        "│  ◄───► means many on both sides (junction table semantics)                   │\n",
+    );
+    out.push_str(
+        "└──────────────────────────────────────────────────────────────────────────────┘\n\n",
+    );
 
     // Summary
     let total = one_to_one + one_to_many + many_to_many;
     let with_cardinality = total;
     let without = data.arc_count() - with_cardinality;
 
-    out.push_str("───────────────────────────────────────────────────────────────────────────────\n");
+    out.push_str(
+        "───────────────────────────────────────────────────────────────────────────────\n",
+    );
     out.push_str("SUMMARY\n");
-    out.push_str(&format!("├── 1:1 arcs:  {} ({:.0}%)\n", one_to_one, pct(one_to_one, total)));
-    out.push_str(&format!("├── 1:N arcs:  {} ({:.0}%)\n", one_to_many, pct(one_to_many, total)));
-    out.push_str(&format!("├── N:M arcs:  {} ({:.0}%)\n", many_to_many, pct(many_to_many, total)));
+    out.push_str(&format!(
+        "├── 1:1 arcs:  {} ({:.0}%)\n",
+        one_to_one,
+        pct(one_to_one, total)
+    ));
+    out.push_str(&format!(
+        "├── 1:N arcs:  {} ({:.0}%)\n",
+        one_to_many,
+        pct(one_to_many, total)
+    ));
+    out.push_str(&format!(
+        "├── N:M arcs:  {} ({:.0}%)\n",
+        many_to_many,
+        pct(many_to_many, total)
+    ));
     out.push_str(&format!("└── Unspecified: {}\n", without));
 
     out
 }
 
 fn pct(value: usize, total: usize) -> f64 {
-    if total == 0 { 0.0 } else { (value as f64 / total as f64) * 100.0 }
+    if total == 0 {
+        0.0
+    } else {
+        (value as f64 / total as f64) * 100.0
+    }
 }
 
 /// Pad string to width with spaces on the right.

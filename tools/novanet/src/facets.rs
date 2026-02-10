@@ -119,10 +119,7 @@ mod tests {
     #[test]
     fn parse_csv_multiple_trimmed() {
         // v10.6: 2 realms (shared, org)
-        assert_eq!(
-            parse_csv(Some(" shared , org ")),
-            vec!["shared", "org"]
-        );
+        assert_eq!(parse_csv(Some(" shared , org ")), vec!["shared", "org"]);
     }
 
     #[test]

@@ -341,7 +341,13 @@ impl NexusState {
         match self.tab {
             NexusTab::Traits => {
                 // Yank the current trait name (v11.2: 5 traits, split derived → generated + aggregated)
-                let traits = ["invariant", "localized", "knowledge", "generated", "aggregated"];
+                let traits = [
+                    "invariant",
+                    "localized",
+                    "knowledge",
+                    "generated",
+                    "aggregated",
+                ];
                 traits.get(self.trait_cursor).map(|s| s.to_string())
             }
             NexusTab::Layers => {
@@ -366,7 +372,13 @@ impl NexusState {
             }
             NexusTab::Arcs => {
                 // Yank the current arc family
-                let families = ["ownership", "localization", "semantic", "generation", "mining"];
+                let families = [
+                    "ownership",
+                    "localization",
+                    "semantic",
+                    "generation",
+                    "mining",
+                ];
                 families.get(self.arc_cursor).map(|s| s.to_string())
             }
             NexusTab::Pipeline => {
@@ -796,9 +808,7 @@ fn render_tips_bar(f: &mut Frame, area: Rect, app: &App) {
         // Show clipboard message (green for success, red for error)
         let is_error = clipboard_msg.starts_with("Error:");
         let style = if is_error {
-            Style::default()
-                .fg(Color::Red)
-                .add_modifier(Modifier::BOLD)
+            Style::default().fg(Color::Red).add_modifier(Modifier::BOLD)
         } else {
             Style::default()
                 .fg(Color::Green)
@@ -807,10 +817,7 @@ fn render_tips_bar(f: &mut Frame, area: Rect, app: &App) {
 
         let prefix = Span::styled(" \u{f0c5} ", style); // 📋 clipboard icon area
         let message = Span::styled(clipboard_msg.clone(), style);
-        let hint = Span::styled(
-            "  [y: yank]",
-            Style::default().fg(Color::DarkGray),
-        );
+        let hint = Span::styled("  [y: yank]", Style::default().fg(Color::DarkGray));
 
         let line = Line::from(vec![prefix, message, hint]);
         let paragraph = Paragraph::new(vec![Line::from(""), line]);
@@ -1798,7 +1805,10 @@ mod tests {
         assert_eq!(state.get_current_yank_text(), Some("generated".to_string()));
 
         state.trait_cursor = 4;
-        assert_eq!(state.get_current_yank_text(), Some("aggregated".to_string()));
+        assert_eq!(
+            state.get_current_yank_text(),
+            Some("aggregated".to_string())
+        );
 
         // Index 5 now returns None
         state.trait_cursor = 5;
@@ -1816,16 +1826,10 @@ mod tests {
         assert_eq!(state.get_current_yank_text(), Some("locale".to_string()));
 
         state.layer_cursor = 1;
-        assert_eq!(
-            state.get_current_yank_text(),
-            Some("geography".to_string())
-        );
+        assert_eq!(state.get_current_yank_text(), Some("geography".to_string()));
 
         state.layer_cursor = 2;
-        assert_eq!(
-            state.get_current_yank_text(),
-            Some("knowledge".to_string())
-        );
+        assert_eq!(state.get_current_yank_text(), Some("knowledge".to_string()));
     }
 
     #[test]

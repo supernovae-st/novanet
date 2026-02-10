@@ -474,7 +474,7 @@ impl Icons {
         icons.traits.insert("invariant".into(), "■".into());
         icons.traits.insert("localized".into(), "□".into());
         icons.traits.insert("knowledge".into(), "◊".into());
-        icons.traits.insert("generated".into(), "★".into());  // star for LLM-generated
+        icons.traits.insert("generated".into(), "★".into()); // star for LLM-generated
         icons.traits.insert("aggregated".into(), "▪".into()); // small square for computed
 
         // Arc families
@@ -1355,10 +1355,7 @@ mod tests {
         let color_low = heatmap_color(10, 100);
         let color_high = heatmap_color(90, 100);
         if let (Color::Rgb(_, g_low, _), Color::Rgb(_, g_high, _)) = (color_low, color_high) {
-            assert!(
-                g_high > g_low,
-                "higher count should have higher intensity"
-            );
+            assert!(g_high > g_low, "higher count should have higher intensity");
         }
     }
 }

@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🪽 NovaNet DB
+# NovaNet DB
 
 **Neo4j infrastructure for NovaNet knowledge graph**
 
@@ -10,7 +10,7 @@
 
 ---
 
-*Part of the [🪽 NovaNet Monorepo](../../README.md)*
+*Part of the [NovaNet Monorepo](../../README.md)*
 
 </div>
 
@@ -20,9 +20,9 @@
 
 This package provides Neo4j infrastructure for the NovaNet knowledge graph:
 
-- **Docker Compose** — Neo4j 5.26 + APOC configuration
-- **Seed Scripts** — Initial data (constraints + sample data)
-- **Cypher Queries** — Reusable query templates
+- **Docker Compose** - Neo4j 5.26 + APOC configuration
+- **Seed Scripts** - Initial data (constraints + sample data)
+- **Cypher Queries** - Reusable query templates
 
 ---
 
@@ -59,47 +59,44 @@ docker exec -it novanet-neo4j cypher-shell -u neo4j -p novanetpassword
 
 ```
 db/
-├── docker-compose.yml    # Neo4j 5.26 + APOC
-├── seed.sh               # Seed runner script
-├── seed/                 # Cypher seed files
-│   ├── 00-constraints.cypher
-│   └── *.cypher
-└── README.md             # This file
++-- docker-compose.yml    # Neo4j 5.26 + APOC
++-- seed.sh               # Seed runner script
++-- seed/                 # Cypher seed files
+|   +-- 00-constraints.cypher
+|   +-- *.cypher
++-- README.md             # This file
 ```
 
 ---
 
-## Graph Schema (v10.6.0)
+## Graph Schema (v11.3.0)
 
 | Realm | Nodes | Description |
 |-------|-------|-------------|
-| **🌍 Global** | 23 | Locale + locale-knowledge atoms + SEO (READ-ONLY) |
-| **🏢 Tenant** | 23 | Organization + Project structure, content, generation |
+| **Shared** | 32 | Locale, geography, knowledge atoms (READ-ONLY) |
+| **Org** | 29 | Organization structure, content, generation |
 
-Total: **46 node types**, **51 arc types**, **~130 meta-nodes** (Realm/Layer/Kind/Trait/ArcFamily/ArcKind)
+Total: **61 node types**, **125 arc types**, **~200 meta-nodes** (Realm/Layer/Kind/Trait/ArcFamily/ArcKind)
 
 ---
 
-## Locale Knowledge Architecture (v9.9 Tiered Model)
+## Locale Knowledge Architecture (v11.3)
 
 ```
 Locale {key: "fr-FR"}
-    │
-    │   TECHNICAL TIER
-    ├──[:HAS_FORMATTING]───▶ Formatting
-    ├──[:HAS_SLUGIFICATION]─▶ Slugification
-    ├──[:HAS_ADAPTATION]────▶ Adaptation
-    │
-    │   STYLE TIER
-    ├──[:HAS_STYLE]─────────▶ Style
-    │
-    │   SEMANTIC TIER
-    ├──[:HAS_TERMS]─────────▶ TermSet
-    ├──[:HAS_EXPRESSIONS]───▶ ExpressionSet
-    ├──[:HAS_PATTERNS]──────▶ PatternSet
-    ├──[:HAS_CULTURE]───────▶ CultureSet
-    ├──[:HAS_TABOOS]────────▶ TabooSet
-    └──[:HAS_AUDIENCE]──────▶ AudienceSet
+    |
+    |   LOCALE LAYER
+    +--[:HAS_VOICE]----------> LocaleVoice
+    +--[:HAS_GRAMMAR]--------> LocaleGrammar
+    +--[:HAS_FORMATS]--------> LocaleFormats
+    |
+    |   KNOWLEDGE LAYER
+    +--[:HAS_TERMS]----------> TermSet
+    +--[:HAS_EXPRESSIONS]----> ExpressionSet
+    +--[:HAS_PATTERNS]-------> PatternSet
+    +--[:HAS_CULTURE]--------> CultureSet
+    +--[:HAS_TABOOS]---------> TabooSet
+    +--[:HAS_AUDIENCE]-------> AudienceSet
 ```
 
 ---
@@ -114,24 +111,22 @@ RETURN labels(n)[0] AS label, count(*) AS count
 ORDER BY count DESC;
 ```
 
-### Load Locale with Knowledge (v9.9 Tiered Model)
+### Load Locale with Knowledge (v11.3)
 
 ```cypher
 MATCH (l:Locale {key: $locale})
-// Technical tier
-OPTIONAL MATCH (l)-[:HAS_FORMATTING]->(fmt:Formatting)
-OPTIONAL MATCH (l)-[:HAS_SLUGIFICATION]->(slug:Slugification)
-OPTIONAL MATCH (l)-[:HAS_ADAPTATION]->(adapt:Adaptation)
-// Style tier
-OPTIONAL MATCH (l)-[:HAS_STYLE]->(style:Style)
-// Semantic tier
+// Locale layer
+OPTIONAL MATCH (l)-[:HAS_VOICE]->(voice:LocaleVoice)
+OPTIONAL MATCH (l)-[:HAS_GRAMMAR]->(grammar:LocaleGrammar)
+OPTIONAL MATCH (l)-[:HAS_FORMATS]->(formats:LocaleFormats)
+// Knowledge layer
 OPTIONAL MATCH (l)-[:HAS_TERMS]->(terms:TermSet)
 OPTIONAL MATCH (l)-[:HAS_EXPRESSIONS]->(expr:ExpressionSet)
 OPTIONAL MATCH (l)-[:HAS_PATTERNS]->(pat:PatternSet)
 OPTIONAL MATCH (l)-[:HAS_CULTURE]->(cult:CultureSet)
 OPTIONAL MATCH (l)-[:HAS_TABOOS]->(taboo:TabooSet)
 OPTIONAL MATCH (l)-[:HAS_AUDIENCE]->(aud:AudienceSet)
-RETURN l, fmt, slug, adapt, style, terms, expr, pat, cult, taboo, aud
+RETURN l, voice, grammar, formats, terms, expr, pat, cult, taboo, aud
 ```
 
 ### Spreading Activation
@@ -159,6 +154,6 @@ ORDER BY activation DESC
 
 <div align="center">
 
-**[🪽 NovaNet](../../README.md)** · [SuperNovae Studio](https://github.com/supernovae-st)
+**[NovaNet](../../README.md)** - [SuperNovae Studio](https://github.com/supernovae-st)
 
 </div>

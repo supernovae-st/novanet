@@ -1329,10 +1329,7 @@ RETURN total,
             .await?;
 
         // Get total count from first row (all rows have same total)
-        let total_count: i64 = rows
-            .first()
-            .and_then(|r| r.get("total").ok())
-            .unwrap_or(0);
+        let total_count: i64 = rows.first().and_then(|r| r.get("total").ok()).unwrap_or(0);
 
         let mut instances = Vec::with_capacity(rows.len());
 
@@ -1428,9 +1425,9 @@ RETURN p.key as page_key,
        p.prompt as prompt,
        coalesce(proj.key, 'unknown') as project_key,
        coalesce(proj.display_name, proj.key, 'Unknown') as project_name,
-       pg.title as l10n_title,
-       pg.slug as l10n_slug,
-       pg.meta_description as l10n_meta
+       pg.title as generated_title,
+       pg.slug as generated_slug,
+       pg.meta_description as generated_meta
 "#;
 
         // Query 2: Blocks with generated output (v10.9.0)
@@ -1455,8 +1452,8 @@ OPTIONAL MATCH (e)-[:HAS_CONTENT]->(ec:EntityContent)-[:FOR_LOCALE]->(loc:Locale
 WITH e, ec, collect(b.key) as connected_blocks
 RETURN e.key as entity_key,
        coalesce(e.display_name, e.key) as entity_name,
-       ec.display_name as l10n_name,
-       substring(coalesce(ec.description, ''), 0, 80) as l10n_desc,
+       ec.display_name as content_name,
+       substring(coalesce(ec.description, ''), 0, 80) as content_desc,
        connected_blocks
 "#;
 
@@ -1487,18 +1484,17 @@ RETURN kw.keyword as keyword,
             return Ok(PageCompositionData::default());
         };
 
-        // v10.9: renamed page_l10n → page_generated
         let page_generated = if page_row
-            .get::<Option<String>>("l10n_title")
+            .get::<Option<String>>("generated_title")
             .ok()
             .flatten()
             .is_some()
         {
             Some(PageGeneratedData {
                 locale: locale.to_string(),
-                title: page_row.get("l10n_title").ok(),
-                slug: page_row.get("l10n_slug").ok(),
-                meta_description: page_row.get("l10n_meta").ok(),
+                title: page_row.get("generated_title").ok(),
+                slug: page_row.get("generated_slug").ok(),
+                meta_description: page_row.get("generated_meta").ok(),
             })
         } else {
             None
@@ -1530,9 +1526,8 @@ RETURN kw.keyword as keyword,
 
         let mut entities = Vec::with_capacity(entity_rows.len());
         for row in entity_rows {
-            // v10.9: renamed l10n_* → content_* (db aliases unchanged for compatibility)
-            let content_name: Option<String> = row.get("l10n_name").ok();
-            let content_desc: String = row.get("l10n_desc").unwrap_or_default();
+            let content_name: Option<String> = row.get("content_name").ok();
+            let content_desc: String = row.get("content_desc").unwrap_or_default();
             let content = if content_name.is_some() || !content_desc.is_empty() {
                 Some(EntityContentData {
                     locale: locale.to_string(),
@@ -2271,7 +2266,12 @@ pub enum TreeItem<'a> {
     ArcFamily(&'a ArcFamilyInfo),
     ArcKind(&'a ArcFamilyInfo, &'a ArcKindInfo),
     // Data view: Entity categories (between Kind and instances for Entity only)
-    EntityCategory(&'a RealmInfo, &'a LayerInfo, &'a KindInfo, &'a EntityCategory),
+    EntityCategory(
+        &'a RealmInfo,
+        &'a LayerInfo,
+        &'a KindInfo,
+        &'a EntityCategory,
+    ),
     // Data view: instances under Kinds (or under EntityCategory for Entity)
     Instance(&'a RealmInfo, &'a LayerInfo, &'a KindInfo, &'a InstanceInfo),
 }
@@ -2281,7 +2281,7 @@ pub enum TreeItem<'a> {
 fn realm_icon(key: &str) -> &'static str {
     match key {
         "shared" => "◉", // filled circle - universal/shared
-        "org" => "◎", // circle with dot - scoped/owned
+        "org" => "◎",    // circle with dot - scoped/owned
         _ => "○",        // empty circle - unknown
     }
 }
@@ -2790,17 +2790,17 @@ mod tests {
     }
 
     #[test]
-    fn test_mock_tree_global_realm() {
+    fn test_mock_tree_shared_realm() {
         let tree = create_test_tree();
-        let global = tree.realms.iter().find(|r| r.key == "shared");
-        assert!(global.is_some(), "Tree should have a global realm");
+        let shared = tree.realms.iter().find(|r| r.key == "shared");
+        assert!(shared.is_some(), "Tree should have a shared realm");
     }
 
     #[test]
-    fn test_mock_tree_tenant_realm() {
+    fn test_mock_tree_org_realm() {
         let tree = create_test_tree();
-        let tenant = tree.realms.iter().find(|r| r.key == "org");
-        assert!(tenant.is_some(), "Tree should have a tenant realm");
+        let org = tree.realms.iter().find(|r| r.key == "org");
+        assert!(org.is_some(), "Tree should have an org realm");
     }
 
     #[test]
@@ -2945,11 +2945,11 @@ mod tests {
         assert!(!tree.realms.is_empty(), "Should load realms from Neo4j");
         assert!(
             tree.realms.iter().any(|r| r.key == "shared"),
-            "Should have global realm"
+            "Should have shared realm"
         );
         assert!(
             tree.realms.iter().any(|r| r.key == "org"),
-            "Should have tenant realm"
+            "Should have org realm"
         );
     }
 

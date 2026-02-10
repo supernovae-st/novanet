@@ -44,14 +44,15 @@ export const NODE_TYPES = [
 export type NodeType = typeof NODE_TYPES[number];
 
 // =============================================================================
-// v11.3 TAXONOMY TYPES (2 realms, 11 layers: 3 shared + 8 org)
+// v11.4 TAXONOMY TYPES (2 realms, 10 layers: 4 shared + 6 org)
+// SEO/GEO nodes moved to shared/knowledge (Knowledge Atoms pattern)
 // =============================================================================
 
 export type Realm = 'shared' | 'org';
 
 export type Layer =
-  | 'locale' | 'geography' | 'knowledge'  // shared realm layers (3)
-  | 'config' | 'foundation' | 'structure' | 'semantic' | 'instruction' | 'seo' | 'geo' | 'output';  // org realm layers (8)
+  | 'config' | 'locale' | 'geography' | 'knowledge'  // shared realm layers (4)
+  | 'foundation' | 'structure' | 'semantic' | 'instruction' | 'output';  // org realm layers (6) — note: 'config' shared with shared realm
 
 export type Trait = 'invariant' | 'localized' | 'knowledge' | 'generated' | 'aggregated';
 

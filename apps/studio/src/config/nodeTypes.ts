@@ -532,83 +532,85 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
 
   // ==========================================================================
-  // ORG REALM — SEO LAYER (5 nodes)
+  // SHARED REALM — KNOWLEDGE LAYER — SEO nodes (5 nodes)
+  // v11.4: Moved from org/seo to shared/knowledge (Knowledge Atoms pattern)
   // ==========================================================================
   SEOKeyword: {
     type: 'SEOKeyword',
     label: 'SEO Keyword',
     icon: '🔍',
-    color: '#ef4444',
-    colorClass: 'bg-red-500',
+    color: '#8b5cf6',
+    colorClass: 'bg-violet-500',
     size: 16,
-    layer: 'seo',
+    layer: 'knowledge',
   },
   SEOKeywordMetrics: {
     type: 'SEOKeywordMetrics',
     label: 'SEO Metrics',
     icon: '📊',
-    color: '#f87171',
-    colorClass: 'bg-red-400',
+    color: '#a78bfa',
+    colorClass: 'bg-violet-400',
     size: 10,
-    layer: 'seo',
+    layer: 'knowledge',
   },
   SEOComparison: {
     type: 'SEOComparison',
     label: 'SEO Comparison',
     icon: '⚖️',
-    color: '#dc2626',
-    colorClass: 'bg-red-600',
+    color: '#8b5cf6',
+    colorClass: 'bg-violet-500',
     size: 12,
-    layer: 'seo',
+    layer: 'knowledge',
   },
   SEOPreposition: {
     type: 'SEOPreposition',
     label: 'SEO Preposition',
     icon: '🔗',
-    color: '#b91c1c',
-    colorClass: 'bg-red-700',
+    color: '#7c3aed',
+    colorClass: 'bg-violet-600',
     size: 12,
-    layer: 'seo',
+    layer: 'knowledge',
   },
   SEOQuestion: {
     type: 'SEOQuestion',
     label: 'SEO Question',
     icon: '❓',
-    color: '#991b1b',
-    colorClass: 'bg-red-800',
+    color: '#6d28d9',
+    colorClass: 'bg-violet-700',
     size: 12,
-    layer: 'seo',
+    layer: 'knowledge',
   },
 
   // ==========================================================================
-  // ORG REALM — GEO LAYER (3 nodes) — v11.3: split from SEO
+  // SHARED REALM — KNOWLEDGE LAYER — GEO nodes (3 nodes)
+  // v11.4: Moved from org/geo to shared/knowledge (Knowledge Atoms pattern)
   // ==========================================================================
   GEOQuery: {
     type: 'GEOQuery',
     label: 'GEO Query',
     icon: '🤖',
-    color: '#6366f1',
-    colorClass: 'bg-indigo-500',
+    color: '#8b5cf6',
+    colorClass: 'bg-violet-500',
     size: 16,
-    layer: 'geo',
+    layer: 'knowledge',
   },
   GEOAnswer: {
     type: 'GEOAnswer',
     label: 'GEO Answer',
     icon: '💬',
-    color: '#8b5cf6',
-    colorClass: 'bg-violet-500',
+    color: '#a78bfa',
+    colorClass: 'bg-violet-400',
     size: 14,
-    layer: 'geo',
+    layer: 'knowledge',
   },
   GEOMetrics: {
     type: 'GEOMetrics',
     label: 'GEO Metrics',
     icon: '📊',
-    color: '#a78bfa',
-    colorClass: 'bg-violet-400',
+    color: '#c4b5fd',
+    colorClass: 'bg-violet-300',
     size: 10,
-    layer: 'geo',
+    layer: 'knowledge',
   },
 
   // ==========================================================================
@@ -757,22 +759,7 @@ export const NODE_VISUAL_LAYERS: LayerConfig[] = [
     colorLight: '#5eead4',
     nodeTypes: getNodeTypesByLayer('instruction'),
   },
-  {
-    id: 'seo',
-    label: 'SEO',
-    icon: '🔍',
-    color: '#cb4b16',
-    colorLight: '#fb923c',
-    nodeTypes: getNodeTypesByLayer('seo'),
-  },
-  {
-    id: 'geo',
-    label: 'GEO',
-    icon: '🤖',
-    color: '#6366f1',
-    colorLight: '#818cf8',
-    nodeTypes: getNodeTypesByLayer('geo'),
-  },
+  // v11.4: seo and geo layers REMOVED - nodes moved to shared/knowledge
   {
     id: 'output',
     label: 'Output',

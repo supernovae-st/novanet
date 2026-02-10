@@ -18,8 +18,8 @@ use ratatui::widgets::{Block, Borders, Paragraph, Wrap};
 
 use crate::tui::app::App;
 use crate::tui::data::TaxonomyTree;
-use crate::tui::theme::heatmap_color;
 use crate::tui::theme::Theme;
+use crate::tui::theme::heatmap_color;
 
 // =============================================================================
 // LAYER DEFINITIONS
@@ -40,21 +40,21 @@ pub struct LayerCardInfo {
 
 /// Shared realm layers (3 layers) — v11.3: locale, geography, knowledge.
 pub const SHARED_LAYERS: [(&str, &str, &str); 3] = [
-    ("locale", "\u{1f310}", "Locale definitions"),     // 🌐
-    ("geography", "\u{1f5fa}", "Geographic data"),     // 🗺️
-    ("knowledge", "\u{1f4da}", "Terms, Patterns"),     // 📚
+    ("locale", "\u{1f310}", "Locale definitions"), // 🌐
+    ("geography", "\u{1f5fa}", "Geographic data"), // 🗺️
+    ("knowledge", "\u{1f4da}", "Terms, Patterns"), // 📚
 ];
 
 /// Org realm layers (8 layers) — v11.3: +geo for AI visibility.
 pub const ORG_LAYERS: [(&str, &str, &str); 8] = [
-    ("config", "\u{2699}", "OrgConfig root"),          // ⚙
-    ("foundation", "\u{25c7}", "Project, Brand"),      // ◇
-    ("structure", "\u{25c6}", "Pages, Blocks"),        // ◆
-    ("semantic", "\u{25c6}", "Entities, Personas"),    // ◆
-    ("instruction", "\u{270e}", "Prompts, Rules"),     // ✎
-    ("seo", "\u{1f50d}", "SEO Keywords"),              // 🔍
-    ("geo", "\u{1f916}", "GEO AI Visibility"),         // 🤖
-    ("output", "\u{25cf}", "Generated content"),       // ●
+    ("config", "\u{2699}", "OrgConfig root"),       // ⚙
+    ("foundation", "\u{25c7}", "Project, Brand"),   // ◇
+    ("structure", "\u{25c6}", "Pages, Blocks"),     // ◆
+    ("semantic", "\u{25c6}", "Entities, Personas"), // ◆
+    ("instruction", "\u{270e}", "Prompts, Rules"),  // ✎
+    ("seo", "\u{1f50d}", "SEO Keywords"),           // 🔍
+    ("geo", "\u{1f916}", "GEO AI Visibility"),      // 🤖
+    ("output", "\u{25cf}", "Generated content"),    // ●
 ];
 
 impl TaxonomyTree {
@@ -326,7 +326,15 @@ mod tests {
     fn test_build_layer_card() {
         let theme = Theme::new();
         // max_count=20 for heatmap scaling
-        let lines = build_layer_card("config", "\u{2699}", "System settings", 5, 20, false, &theme);
+        let lines = build_layer_card(
+            "config",
+            "\u{2699}",
+            "System settings",
+            5,
+            20,
+            false,
+            &theme,
+        );
         assert_eq!(lines.len(), 5); // top border + 3 rows + bottom border
     }
 

@@ -30,16 +30,17 @@ fn render_header() -> String {
      │  ◉ NOVANET FLOWS                                                             │\n\
      │                                                                              │\n\
      │  6 data flow diagrams showing how content moves through the graph            │\n\
-     ╰──────────────────────────────────────────────────────────────────────────────╯".to_string()
+     ╰──────────────────────────────────────────────────────────────────────────────╯"
+        .to_string()
 }
 
 fn render_ownership_flow() -> String {
-    // v11.0: ProjectL10n → ProjectContent, HAS_L10N → HAS_CONTENT
+    // v11.3: Organization + Tenant → OrgConfig, ProjectL10n → ProjectContent
     "┌──────────────────────────────────────────────────────────────────────────────┐\n\
-     │  1. OWNERSHIP FLOW — Who owns what (tenant hierarchy)                        │\n\
+     │  1. OWNERSHIP FLOW — Who owns what (org hierarchy)                           │\n\
      ├──────────────────────────────────────────────────────────────────────────────┤\n\
      │                                                                              │\n\
-     │  Org                                                                      │\n\
+     │  OrgConfig                                                                   │\n\
      │    │                                                                         │\n\
      │    ├──[HAS_PROJECT]──► Project ──[HAS_CONTENT]──► ProjectContent             │\n\
      │    │                      │                                                  │\n\
@@ -47,11 +48,12 @@ fn render_ownership_flow() -> String {
      │    │                      │                                                  │\n\
      │    │                      └──[HAS_ENTITY]──► Entity                          │\n\
      │    │                                                                         │\n\
-     │    └──[HAS_CONFIG]──► OrgConfig                                           │\n\
+     │    └──[HAS_BRAND]──► Brand                                                   │\n\
      │                                                                              │\n\
      │  💡 Ownership = parent controls lifecycle. Delete Project = delete Pages.    │\n\
      │                                                                              │\n\
-     └──────────────────────────────────────────────────────────────────────────────┘".to_string()
+     └──────────────────────────────────────────────────────────────────────────────┘"
+        .to_string()
 }
 
 fn render_localization_flow() -> String {
@@ -73,7 +75,8 @@ fn render_localization_flow() -> String {
      │                                                                              │\n\
      │  💡 NOT translation! Native generation. fr-FR content born French.           │\n\
      │                                                                              │\n\
-     └──────────────────────────────────────────────────────────────────────────────┘".to_string()
+     └──────────────────────────────────────────────────────────────────────────────┘"
+        .to_string()
 }
 
 fn render_knowledge_flow() -> String {
@@ -101,10 +104,12 @@ fn render_knowledge_flow() -> String {
      │                                                                              │\n\
      │  💡 Atoms are LOCALE-NATIVE. fr-FR has 20K terms, sw-KE has 500.             │\n\
      │                                                                              │\n\
-     └──────────────────────────────────────────────────────────────────────────────┘".to_string()
+     └──────────────────────────────────────────────────────────────────────────────┘"
+        .to_string()
 }
 
 fn render_generation_flow() -> String {
+    // v11.2: GenerationJob removed, generation now handled by instruction layer
     "┌──────────────────────────────────────────────────────────────────────────────┐\n\
      │  4. GENERATION FLOW — LLM pipeline from content to output                    │\n\
      ├──────────────────────────────────────────────────────────────────────────────┤\n\
@@ -113,8 +118,8 @@ fn render_generation_flow() -> String {
      │  ┌─────────────────┐          ┌─────────────────┐       ┌─────────────────┐  │\n\
      │  │                 │          │                 │       │                 │  │\n\
      │  │ EntityContent   │─────────►│                 │       │ PageGenerated   │  │\n\
-     │  │ (semantic)      │          │   GenerationJob │──────►│ (output layer)  │  │\n\
-     │  │                 │          │   ○ job trait   │       │                 │  │\n\
+     │  │ (semantic)      │          │   LLM Pipeline  │──────►│ ★ generated     │  │\n\
+     │  │                 │          │                 │       │                 │  │\n\
      │  │ Term ◊          │─────────►│                 │       │ BlockGenerated  │  │\n\
      │  │ Expression ◊    │          │   Uses:         │       │                 │  │\n\
      │  │ Pattern ◊       │─────────►│   - LLM model   │       └─────────────────┘  │\n\
@@ -128,32 +133,36 @@ fn render_generation_flow() -> String {
      │                                                                              │\n\
      │  💡 Selective loading: LLM gets 50 relevant Terms, not 20K JSON blob.        │\n\
      │                                                                              │\n\
-     └──────────────────────────────────────────────────────────────────────────────┘".to_string()
+     └──────────────────────────────────────────────────────────────────────────────┘"
+        .to_string()
 }
 
 fn render_seo_flow() -> String {
+    // v11.3: SEO and GEO are now separate layers in org realm
     "┌──────────────────────────────────────────────────────────────────────────────┐\n\
-     │  5. SEO FLOW — Keywords and geo-targeting                                    │\n\
+     │  5. SEO + GEO FLOW — Keywords and AI search optimization                     │\n\
      ├──────────────────────────────────────────────────────────────────────────────┤\n\
      │                                                                              │\n\
      │  SEOKeyword ◄──[HAS_SEO_KEYWORDS]── Page                                     │\n\
      │      │                                │                                      │\n\
-     │      │                                ├──[HAS_GEO_QUERIES]──► GeoQuery       │\n\
-     │      │                                │                                      │\n\
+     │      │                                ├──[HAS_GEO_QUERIES]──► GEOQuery       │\n\
+     │      │                                │                        (geo layer)   │\n\
      │      ▼                                └──[HAS_SEARCH_INTENT]──► SearchIntent │\n\
      │  SEOCluster                                                                  │\n\
      │      │                                                                       │\n\
      │      └──[TARGETS_LOCALE]──► Locale                                           │\n\
      │                                                                              │\n\
-     │  💡 SEO is tenant-specific (v11.0). Keywords for qrcode-ai.com,              │\n\
-     │     not universal knowledge.                                                 │\n\
+     │  💡 SEO is org-specific (v11.3). Keywords for qrcode-ai.com,                 │\n\
+     │     not universal knowledge. GEO is AI search optimization.                  │\n\
      │                                                                              │\n\
-     └──────────────────────────────────────────────────────────────────────────────┘".to_string()
+     └──────────────────────────────────────────────────────────────────────────────┘"
+        .to_string()
 }
 
 fn render_cross_realm_flow() -> String {
+    // v11.2: global → shared, tenant → org
     "┌──────────────────────────────────────────────────────────────────────────────┐\n\
-     │  6. CROSS-REALM FLOW — Shared knowledge used by tenant content               │\n\
+     │  6. CROSS-REALM FLOW — Shared knowledge used by org content                  │\n\
      ├──────────────────────────────────────────────────────────────────────────────┤\n\
      │                                                                              │\n\
      │  ╔═══════════════════════════════════════════════════════════════════════╗   │\n\
@@ -167,22 +176,24 @@ fn render_cross_realm_flow() -> String {
      │                    [USES_TERM]  (cross-realm arc)                            │\n\
      │                              ║                                               │\n\
      │  ╔═══════════════════════════▼═══════════════════════════════════════════╗   │\n\
-     │  ║  ORG REALM (read-write)                                            ║   │\n\
+     │  ║  ORG REALM (read-write)                                               ║   │\n\
      │  ║                                                                       ║   │\n\
-     │  ║  EntityContent ─────────────────► uses global Terms                   ║   │\n\
-     │  ║  (tenant-specific meaning)        (universal vocabulary)              ║   │\n\
+     │  ║  EntityContent ─────────────────► uses shared Terms                   ║   │\n\
+     │  ║  (org-specific meaning)           (universal vocabulary)              ║   │\n\
      │  ║                                                                       ║   │\n\
      │  ╚═══════════════════════════════════════════════════════════════════════╝   │\n\
      │                                                                              │\n\
-     │  💡 Shared = shared across all tenants. Org = your business data.         │\n\
+     │  💡 Shared = shared across all orgs. Org = your business data.               │\n\
      │                                                                              │\n\
-     └──────────────────────────────────────────────────────────────────────────────┘".to_string()
+     └──────────────────────────────────────────────────────────────────────────────┘"
+        .to_string()
 }
 
 fn render_footer() -> String {
     "╭──────────────────────────────────────────────────────────────────────────────╮\n\
      │  📖 Other views: --view=tree | arcs | content | cardinality | glossary      │\n\
-     ╰──────────────────────────────────────────────────────────────────────────────╯".to_string()
+     ╰──────────────────────────────────────────────────────────────────────────────╯"
+        .to_string()
 }
 
 #[cfg(test)]
@@ -197,11 +208,29 @@ mod tests {
         let output = render(&data);
 
         assert!(output.contains("NOVANET FLOWS"), "Should have header");
-        assert!(output.contains("OWNERSHIP FLOW"), "Should have ownership flow");
-        assert!(output.contains("LOCALIZATION FLOW"), "Should have localization flow");
-        assert!(output.contains("KNOWLEDGE FLOW"), "Should have knowledge flow");
-        assert!(output.contains("GENERATION FLOW"), "Should have generation flow");
-        assert!(output.contains("SEO FLOW"), "Should have SEO flow");
-        assert!(output.contains("CROSS-REALM FLOW"), "Should have cross-realm flow");
+        assert!(
+            output.contains("OWNERSHIP FLOW"),
+            "Should have ownership flow"
+        );
+        assert!(
+            output.contains("LOCALIZATION FLOW"),
+            "Should have localization flow"
+        );
+        assert!(
+            output.contains("KNOWLEDGE FLOW"),
+            "Should have knowledge flow"
+        );
+        assert!(
+            output.contains("GENERATION FLOW"),
+            "Should have generation flow"
+        );
+        assert!(
+            output.contains("SEO + GEO FLOW"),
+            "Should have SEO + GEO flow"
+        );
+        assert!(
+            output.contains("CROSS-REALM FLOW"),
+            "Should have cross-realm flow"
+        );
     }
 }

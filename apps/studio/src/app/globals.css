@@ -700,6 +700,124 @@ body {
 }
 
 /* ============================================================================
+   GALAXY / MISSION CONTROL ANIMATIONS - Schema Node Effects
+   ============================================================================ */
+
+/* Data pulse - glow expansion on hover */
+@keyframes data-pulse {
+  0%, 100% {
+    box-shadow: 0 0 15px var(--pulse-color, rgba(59, 130, 246, 0.3));
+  }
+  50% {
+    box-shadow: 0 0 25px var(--pulse-color, rgba(59, 130, 246, 0.5)),
+                0 0 40px var(--pulse-color, rgba(59, 130, 246, 0.2));
+  }
+}
+
+.animate-data-pulse {
+  animation: data-pulse 2s ease-in-out infinite;
+}
+
+/* Orbital scan - sweeping highlight */
+@keyframes orbital-scan {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-orbital-scan {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 75%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: orbital-scan 3s ease-in-out infinite;
+}
+
+/* Icon glow - subtle pulsing glow for icons */
+@keyframes icon-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 4px var(--glow-color, rgba(59, 130, 246, 0.4)));
+  }
+  50% {
+    filter: drop-shadow(0 0 8px var(--glow-color, rgba(59, 130, 246, 0.6)))
+           drop-shadow(0 0 12px var(--glow-color, rgba(59, 130, 246, 0.3)));
+  }
+}
+
+.animate-icon-glow {
+  animation: icon-glow 2s ease-in-out infinite;
+}
+
+/* Shimmer sweep - premium card shine effect */
+@keyframes shimmer-sweep {
+  0% {
+    transform: translateX(-100%) rotate(15deg);
+  }
+  100% {
+    transform: translateX(200%) rotate(15deg);
+  }
+}
+
+.animate-shimmer-sweep::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 45%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.05) 55%,
+    transparent 100%
+  );
+  animation: shimmer-sweep 4s ease-in-out infinite;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Scan line - horizontal sweep */
+@keyframes scan-line {
+  0% {
+    top: -10%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    top: 110%;
+    opacity: 0;
+  }
+}
+
+.animate-scan-line::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--scan-color, rgba(59, 130, 246, 0.5)),
+    transparent
+  );
+  animation: scan-line 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ============================================================================
    NODE MICRO-INTERACTIONS - Hover, Press, Tooltip
    ============================================================================ */
 

@@ -130,12 +130,18 @@ impl ValidationResult {
 
     /// Count of errors.
     pub fn error_count(&self) -> usize {
-        self.issues.iter().filter(|i| i.severity == Severity::Error).count()
+        self.issues
+            .iter()
+            .filter(|i| i.severity == Severity::Error)
+            .count()
     }
 
     /// Count of warnings.
     pub fn warning_count(&self) -> usize {
-        self.issues.iter().filter(|i| i.severity == Severity::Warning).count()
+        self.issues
+            .iter()
+            .filter(|i| i.severity == Severity::Warning)
+            .count()
     }
 
     /// Total issue count.
@@ -149,31 +155,38 @@ impl ValidationResult {
 
     /// Check that YAML and Neo4j are in sync.
     fn check_yaml_neo4j_sync(&mut self, data: &BlueprintData) {
-        let Some(ref neo4j) = data.neo4j_counts else { return };
+        let Some(ref neo4j) = data.neo4j_counts else {
+            return;
+        };
 
-        let yaml_kinds: HashSet<&str> = data.node_kinds.iter()
+        let yaml_kinds: HashSet<&str> = data
+            .node_kinds
+            .iter()
             .map(|n| n.def.name.as_str())
             .collect();
-        let neo4j_kinds: HashSet<&str> = neo4j.node_kind_names.iter()
-            .map(|s| s.as_str())
-            .collect();
+        let neo4j_kinds: HashSet<&str> = neo4j.node_kind_names.iter().map(|s| s.as_str()).collect();
 
         // Check for kinds in YAML but not in Neo4j
         let missing_in_neo4j: Vec<&str> = yaml_kinds.difference(&neo4j_kinds).copied().collect();
         if !missing_in_neo4j.is_empty() {
             self.checks.push(ValidationCheck::fail(
                 "YAML kinds exist in Neo4j",
-                format!("Missing in Neo4j: {}", missing_in_neo4j.join(", "))
+                format!("Missing in Neo4j: {}", missing_in_neo4j.join(", ")),
             ));
             self.issues.push(
-                ValidationIssue::warning("sync", format!(
-                    "{} kinds in YAML but not in Neo4j: {}",
-                    missing_in_neo4j.len(),
-                    missing_in_neo4j.join(", ")
-                )).with_hint("Run: novanet db seed")
+                ValidationIssue::warning(
+                    "sync",
+                    format!(
+                        "{} kinds in YAML but not in Neo4j: {}",
+                        missing_in_neo4j.len(),
+                        missing_in_neo4j.join(", ")
+                    ),
+                )
+                .with_hint("Run: novanet db seed"),
             );
         } else {
-            self.checks.push(ValidationCheck::pass("YAML kinds exist in Neo4j"));
+            self.checks
+                .push(ValidationCheck::pass("YAML kinds exist in Neo4j"));
         }
 
         // Check for kinds in Neo4j but not in YAML
@@ -181,45 +194,51 @@ impl ValidationResult {
         if !orphan_in_neo4j.is_empty() {
             self.checks.push(ValidationCheck::fail(
                 "Neo4j kinds defined in YAML",
-                format!("Orphan in Neo4j: {}", orphan_in_neo4j.join(", "))
+                format!("Orphan in Neo4j: {}", orphan_in_neo4j.join(", ")),
             ));
             self.issues.push(
-                ValidationIssue::warning("sync", format!(
-                    "{} kinds in Neo4j but not in YAML: {}",
-                    orphan_in_neo4j.len(),
-                    orphan_in_neo4j.join(", ")
-                )).with_hint("These may be legacy nodes. Consider removing from Neo4j.")
+                ValidationIssue::warning(
+                    "sync",
+                    format!(
+                        "{} kinds in Neo4j but not in YAML: {}",
+                        orphan_in_neo4j.len(),
+                        orphan_in_neo4j.join(", ")
+                    ),
+                )
+                .with_hint("These may be legacy nodes. Consider removing from Neo4j."),
             );
         } else {
-            self.checks.push(ValidationCheck::pass("Neo4j kinds defined in YAML"));
+            self.checks
+                .push(ValidationCheck::pass("Neo4j kinds defined in YAML"));
         }
 
         // ─────────────────────────────────────────────────────────────────────────
         // ArcKind sync validation (YAML ↔ Neo4j)
         // ─────────────────────────────────────────────────────────────────────────
-        let yaml_arcs: HashSet<&str> = data.arc_defs.iter()
-            .map(|a| a.arc_type.as_str())
-            .collect();
-        let neo4j_arcs: HashSet<&str> = neo4j.arc_kind_names.iter()
-            .map(|s| s.as_str())
-            .collect();
+        let yaml_arcs: HashSet<&str> = data.arc_defs.iter().map(|a| a.arc_type.as_str()).collect();
+        let neo4j_arcs: HashSet<&str> = neo4j.arc_kind_names.iter().map(|s| s.as_str()).collect();
 
         // Check for arc kinds in YAML but not in Neo4j
         let missing_arcs: Vec<&str> = yaml_arcs.difference(&neo4j_arcs).copied().collect();
         if !missing_arcs.is_empty() {
             self.checks.push(ValidationCheck::fail(
                 "YAML arc kinds exist in Neo4j",
-                format!("Missing in Neo4j: {}", missing_arcs.join(", "))
+                format!("Missing in Neo4j: {}", missing_arcs.join(", ")),
             ));
             self.issues.push(
-                ValidationIssue::warning("sync", format!(
-                    "{} arc kinds in YAML but not in Neo4j: {}",
-                    missing_arcs.len(),
-                    missing_arcs.join(", ")
-                )).with_hint("Run: novanet db seed")
+                ValidationIssue::warning(
+                    "sync",
+                    format!(
+                        "{} arc kinds in YAML but not in Neo4j: {}",
+                        missing_arcs.len(),
+                        missing_arcs.join(", ")
+                    ),
+                )
+                .with_hint("Run: novanet db seed"),
             );
         } else {
-            self.checks.push(ValidationCheck::pass("YAML arc kinds exist in Neo4j"));
+            self.checks
+                .push(ValidationCheck::pass("YAML arc kinds exist in Neo4j"));
         }
 
         // Check for arc kinds in Neo4j but not in YAML
@@ -227,23 +246,30 @@ impl ValidationResult {
         if !orphan_arcs.is_empty() {
             self.checks.push(ValidationCheck::fail(
                 "Neo4j arc kinds defined in YAML",
-                format!("Orphan in Neo4j: {}", orphan_arcs.join(", "))
+                format!("Orphan in Neo4j: {}", orphan_arcs.join(", ")),
             ));
             self.issues.push(
-                ValidationIssue::warning("sync", format!(
-                    "{} arc kinds in Neo4j but not in YAML: {}",
-                    orphan_arcs.len(),
-                    orphan_arcs.join(", ")
-                )).with_hint("These may be legacy relationships. Consider removing from Neo4j.")
+                ValidationIssue::warning(
+                    "sync",
+                    format!(
+                        "{} arc kinds in Neo4j but not in YAML: {}",
+                        orphan_arcs.len(),
+                        orphan_arcs.join(", ")
+                    ),
+                )
+                .with_hint("These may be legacy relationships. Consider removing from Neo4j."),
             );
         } else {
-            self.checks.push(ValidationCheck::pass("Neo4j arc kinds defined in YAML"));
+            self.checks
+                .push(ValidationCheck::pass("Neo4j arc kinds defined in YAML"));
         }
     }
 
     /// Check that arc source/target types exist in node kinds.
     fn check_arc_coherence(&mut self, data: &BlueprintData) {
-        let valid_kinds: HashSet<&str> = data.node_kinds.iter()
+        let valid_kinds: HashSet<&str> = data
+            .node_kinds
+            .iter()
             .map(|n| n.def.name.as_str())
             .collect();
 
@@ -267,13 +293,15 @@ impl ValidationResult {
         if !invalid_refs.is_empty() {
             self.checks.push(ValidationCheck::fail(
                 "Arc source/target types match",
-                format!("{} invalid references", invalid_refs.len())
+                format!("{} invalid references", invalid_refs.len()),
             ));
             for ref_err in &invalid_refs {
-                self.issues.push(ValidationIssue::error("arc_coherence", ref_err.clone()));
+                self.issues
+                    .push(ValidationIssue::error("arc_coherence", ref_err.clone()));
             }
         } else {
-            self.checks.push(ValidationCheck::pass("Arc source/target types match"));
+            self.checks
+                .push(ValidationCheck::pass("Arc source/target types match"));
         }
     }
 
@@ -305,13 +333,16 @@ impl ValidationResult {
         if !mismatches.is_empty() {
             self.checks.push(ValidationCheck::fail(
                 "Realm/Layer paths match YAML content",
-                format!("{} mismatches", mismatches.len())
+                format!("{} mismatches", mismatches.len()),
             ));
             for mismatch in &mismatches {
-                self.issues.push(ValidationIssue::error("path_mismatch", mismatch.clone()));
+                self.issues
+                    .push(ValidationIssue::error("path_mismatch", mismatch.clone()));
             }
         } else {
-            self.checks.push(ValidationCheck::pass("Realm/Layer paths match YAML content"));
+            self.checks.push(ValidationCheck::pass(
+                "Realm/Layer paths match YAML content",
+            ));
         }
     }
 
@@ -360,13 +391,13 @@ impl ValidationResult {
             }
 
             // Check if source and target realms match
-            let is_cross_realm = source_realms.iter().any(|sr| {
-                target_realms.iter().any(|tr| sr != tr)
-            });
+            let is_cross_realm = source_realms
+                .iter()
+                .any(|sr| target_realms.iter().any(|tr| sr != tr));
 
-            let is_intra_realm = source_realms.iter().all(|sr| {
-                target_realms.iter().all(|tr| sr == tr)
-            });
+            let is_intra_realm = source_realms
+                .iter()
+                .all(|sr| target_realms.iter().all(|tr| sr == tr));
 
             match declared_scope.as_str() {
                 "intra_realm" => {
@@ -400,13 +431,14 @@ impl ValidationResult {
                 format!("{} scope mismatches", scope_errors.len()),
             ));
             for err in &scope_errors {
-                self.issues.push(
-                    ValidationIssue::error("arc_scope", err.clone())
-                        .with_hint("Update scope in arc-kind YAML to match actual source/target realms"),
-                );
+                self.issues
+                    .push(ValidationIssue::error("arc_scope", err.clone()).with_hint(
+                        "Update scope in arc-kind YAML to match actual source/target realms",
+                    ));
             }
         } else {
-            self.checks.push(ValidationCheck::pass("Arc scope coherence"));
+            self.checks
+                .push(ValidationCheck::pass("Arc scope coherence"));
         }
 
         // Report arcs without scope declarations
@@ -416,7 +448,9 @@ impl ValidationResult {
                     "arc_scope",
                     format!("{} arcs have no scope declaration", missing_scope_count),
                 )
-                .with_hint("Add 'scope: intra_realm' or 'scope: cross_realm' to arc-kind YAML files"),
+                .with_hint(
+                    "Add 'scope: intra_realm' or 'scope: cross_realm' to arc-kind YAML files",
+                ),
             );
         }
     }
@@ -460,7 +494,8 @@ impl ValidationResult {
                 .with_hint("Add arcs for these nodes or remove them if unused"),
             );
         } else {
-            self.checks.push(ValidationCheck::pass("All nodes used in arcs"));
+            self.checks
+                .push(ValidationCheck::pass("All nodes used in arcs"));
         }
     }
 
@@ -473,10 +508,8 @@ impl ValidationResult {
             *counts.entry(arc.arc_type.as_str()).or_insert(0) += 1;
         }
 
-        let duplicates: Vec<(&str, usize)> = counts
-            .into_iter()
-            .filter(|(_, count)| *count > 1)
-            .collect();
+        let duplicates: Vec<(&str, usize)> =
+            counts.into_iter().filter(|(_, count)| *count > 1).collect();
 
         if !duplicates.is_empty() {
             self.checks.push(ValidationCheck::fail(
@@ -522,13 +555,15 @@ impl ValidationResult {
         if !missing.is_empty() {
             self.checks.push(ValidationCheck::fail(
                 "Required fields present",
-                format!("{} missing fields", missing.len())
+                format!("{} missing fields", missing.len()),
             ));
             for m in &missing {
-                self.issues.push(ValidationIssue::error("required_field", m.clone()));
+                self.issues
+                    .push(ValidationIssue::error("required_field", m.clone()));
             }
         } else {
-            self.checks.push(ValidationCheck::pass("Required fields present"));
+            self.checks
+                .push(ValidationCheck::pass("Required fields present"));
         }
     }
 }
@@ -549,7 +584,10 @@ mod tests {
         // Print all issues for debugging
         println!("\n=== ALL VALIDATION ISSUES ===");
         for issue in &result.issues {
-            println!("[{:?}] {}: {}", issue.severity, issue.category, issue.message);
+            println!(
+                "[{:?}] {}: {}",
+                issue.severity, issue.category, issue.message
+            );
         }
         println!("=== END ISSUES ===\n");
 
@@ -564,8 +602,7 @@ mod tests {
 
     #[test]
     fn test_validation_issue_creation() {
-        let issue = ValidationIssue::error("test", "Test message")
-            .with_hint("Fix this");
+        let issue = ValidationIssue::error("test", "Test message").with_hint("Fix this");
 
         assert_eq!(issue.severity, Severity::Error);
         assert_eq!(issue.category, "test");
@@ -592,12 +629,30 @@ mod tests {
         // Should have all expected check categories
         let check_names: Vec<&str> = result.checks.iter().map(|c| c.name.as_str()).collect();
 
-        assert!(check_names.contains(&"Arc source/target types match"), "Should check arc coherence");
-        assert!(check_names.contains(&"Arc scope coherence"), "Should check scope coherence");
-        assert!(check_names.contains(&"All nodes used in arcs"), "Should check orphan nodes");
-        assert!(check_names.contains(&"Unique arc types"), "Should check duplicate arcs");
-        assert!(check_names.contains(&"Realm/Layer paths match YAML content"), "Should check path match");
-        assert!(check_names.contains(&"Required fields present"), "Should check required fields");
+        assert!(
+            check_names.contains(&"Arc source/target types match"),
+            "Should check arc coherence"
+        );
+        assert!(
+            check_names.contains(&"Arc scope coherence"),
+            "Should check scope coherence"
+        );
+        assert!(
+            check_names.contains(&"All nodes used in arcs"),
+            "Should check orphan nodes"
+        );
+        assert!(
+            check_names.contains(&"Unique arc types"),
+            "Should check duplicate arcs"
+        );
+        assert!(
+            check_names.contains(&"Realm/Layer paths match YAML content"),
+            "Should check path match"
+        );
+        assert!(
+            check_names.contains(&"Required fields present"),
+            "Should check required fields"
+        );
     }
 
     #[test]
@@ -607,7 +662,9 @@ mod tests {
         let result = ValidationResult::validate(&data);
 
         // Check that INFO-level issues are being generated for missing scopes
-        let info_issues: Vec<_> = result.issues.iter()
+        let info_issues: Vec<_> = result
+            .issues
+            .iter()
             .filter(|i| i.severity == Severity::Info)
             .collect();
 

@@ -27,5 +27,5 @@ pub mod validation;
 pub mod views;
 
 pub use sources::BlueprintData;
-pub use validation::{ValidationIssue, ValidationResult, Severity};
+pub use validation::{Severity, ValidationIssue, ValidationResult};
 pub use views::BlueprintView;

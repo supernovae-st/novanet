@@ -406,8 +406,8 @@ mod tests {
                 .count()
         };
 
-        assert_eq!(count_merges("Realm"), 2, "expected 2 Realm nodes"); // v11.3: shared + org
-        assert_eq!(count_merges("Layer"), 11, "expected 11 Layer nodes"); // v11.3: 3 shared + 8 org
+        assert_eq!(count_merges("Realm"), 2, "expected 2 Realm nodes"); // v11.4: shared + org
+        assert_eq!(count_merges("Layer"), 10, "expected 10 Layer nodes"); // v11.4: 4 shared + 6 org
         assert_eq!(count_merges("Trait"), 5, "expected 5 Trait nodes"); // v11.2: split derived → generated + aggregated
         assert_eq!(count_merges("ArcFamily"), 5, "expected 5 ArcFamily nodes");
         assert_eq!(count_merges("ArcScope"), 2, "expected 2 ArcScope nodes");
@@ -422,18 +422,18 @@ mod tests {
             .lines()
             .filter(|l: &&str| l.contains("[:HAS_LAYER]"))
             .count();
-        assert_eq!(has_layer_count, 11, "expected 11 HAS_LAYER relationships"); // v11.3: 3 shared + 8 org
+        assert_eq!(has_layer_count, 10, "expected 10 HAS_LAYER relationships"); // v11.4: 4 shared + 6 org
 
-        // Spot checks — specific nodes exist (v11.3: 2 realms, 11 layers)
+        // Spot checks — specific nodes exist (v11.4: 2 realms, 10 layers)
         assert!(cypher.contains("r_shared:Meta:Realm {key: 'shared'}"));
         assert!(cypher.contains("r_org:Meta:Realm {key: 'org'}")); // v11.2: org realm
+        assert!(cypher.contains("l_config:Meta:Layer {key: 'config'}")); // v11.4: shared.config
         assert!(cypher.contains("l_locale:Meta:Layer {key: 'locale'}")); // v11.3: shared.locale
         assert!(cypher.contains("l_geography:Meta:Layer {key: 'geography'}")); // v11.3: shared.geography
         assert!(cypher.contains("l_knowledge:Meta:Layer {key: 'knowledge'}")); // v11.3: shared.knowledge
         assert!(cypher.contains("l_foundation:Meta:Layer {key: 'foundation'}"));
-        assert!(cypher.contains("l_seo:Meta:Layer {key: 'seo'}"));
-        assert!(cypher.contains("l_geo:Meta:Layer {key: 'geo'}")); // v11.3: org.geo
         assert!(cypher.contains("l_semantic:Meta:Layer {key: 'semantic'}")); // v10.6: tenant.semantic
+        // v11.4: seo/geo layers removed (nodes moved to shared/knowledge)
         assert!(cypher.contains("t_localized:Meta:Trait {key: 'localized'}"));
         assert!(cypher.contains("t_invariant:Meta:Trait {key: 'invariant'}"));
         assert!(cypher.contains("af_semantic:Meta:ArcFamily {key: 'semantic'}"));
@@ -456,16 +456,17 @@ mod tests {
         assert!(cypher.contains("as_intra_realm:Meta:ArcScope {key: 'intra_realm'}"));
         assert!(cypher.contains("ac_one_to_many:Meta:ArcCardinality {key: 'one_to_many'}"));
 
-        // Header mentions v11.3.0
-        assert!(cypher.contains("v11.3.0"));
+        // Header mentions v11.4.0
+        assert!(cypher.contains("v11.4.0"));
 
-        // HAS_LAYER wiring — specific pairs (v11.3: shared has locale, geography, knowledge)
+        // HAS_LAYER wiring — specific pairs (v11.4: shared has config, locale, geography, knowledge)
+        assert!(cypher.contains("(r:Realm {key: 'shared'}), (l:Layer {key: 'config'})"));
         assert!(cypher.contains("(r:Realm {key: 'shared'}), (l:Layer {key: 'locale'})"));
         assert!(cypher.contains("(r:Realm {key: 'shared'}), (l:Layer {key: 'geography'})"));
         assert!(cypher.contains("(r:Realm {key: 'shared'}), (l:Layer {key: 'knowledge'})"));
         assert!(cypher.contains("(r:Realm {key: 'org'}), (l:Layer {key: 'foundation'})"));
-        assert!(cypher.contains("(r:Realm {key: 'org'}), (l:Layer {key: 'geo'})"));
         assert!(cypher.contains("(r:Realm {key: 'org'}), (l:Layer {key: 'output'})"));
+        // v11.4: seo/geo removed from org
     }
 
     /// Snapshot test for a minimal taxonomy document.

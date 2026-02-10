@@ -144,28 +144,28 @@ pnpm test            # Tests
 
 ---
 
-## Neo4j Schema (v10.9.0)
+## Neo4j Schema (v11.3.0)
 
-### Meta-Graph (v10.9 — 2-Realm Architecture)
+### Meta-Graph (v11.3 - 2-Realm Architecture)
 
-v10.9 establishes faceted classification with 6 meta-node types:
+v11.3 establishes faceted classification with 6 meta-node types:
 
 | Meta-Type | Count | Purpose |
 |-----------|-------|---------|
-| **Realm** | 2 | WHERE? (global / tenant) — one-way traversal |
-| **Layer** | 9 | WHAT? (functional classification by realm) |
-| **Trait** | 5 | HOW? (invariant / localized / knowledge / derived / job) |
+| **Realm** | 2 | WHERE? (shared / org) |
+| **Layer** | 11 | WHAT? (functional classification: 3 shared + 8 org) |
+| **Trait** | 5 | HOW? (invariant / localized / knowledge / generated / aggregated) |
 | **ArcFamily** | 5 | Relationship classification |
 | **ArcKind** | varies | Individual relationship type |
 
 All meta-nodes carry `:Meta` double-label.
 
-### Realm Architecture (v10.9)
+### Realm Architecture (v11.3)
 
 | Realm | Layers | Description |
 |-------|--------|-------------|
-| **Global** | config, locale-knowledge, seo | Universal locale knowledge (READ-ONLY) |
-| **Tenant** | config, foundation, structure, semantic, instruction, output | Business-specific content |
+| **Shared** | locale, geography, knowledge | Universal locale knowledge (READ-ONLY) - 32 nodes |
+| **Org** | config, foundation, structure, semantic, instruction, seo, geo, output | Business-specific content - 29 nodes |
 
 ### Key Relations (grouped by ArcFamily)
 - **Ownership:** `HAS_PAGE`, `HAS_BLOCK`, `OF_TYPE`, `SUPPORTS_LOCALE`, `BELONGS_TO_ORG`, `HAS_PROJECT`
