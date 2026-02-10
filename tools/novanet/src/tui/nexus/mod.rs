@@ -1,10 +1,12 @@
 //! Nexus Mode - Gamified learning hub for NovaNet taxonomy.
 //!
-//! Nexus Mode provides 4 tabs for understanding NovaNet's core concepts:
+//! Nexus Mode provides 6 tabs for understanding NovaNet's core concepts:
 //! - Traits: 5-trait constellation (invariant, localized, knowledge, generated, aggregated)
 //! - Layers: 2-realm split view (Shared 4 layers | Org 6 layers)
 //! - Arcs: Arc families and scope visualization
 //! - Pipeline: Animated generation flow (not translation)
+//! - Quiz: Interactive taxonomy quiz
+//! - Views: Schema views explorer (Query-First architecture)
 //!
 //! v11.5: 60 nodes (39 shared + 21 org), 10 layers (4 shared + 6 org).
 
@@ -13,6 +15,7 @@ pub mod layers;
 pub mod pipeline;
 pub mod quiz;
 pub mod traits;
+pub mod views;
 
 use std::time::Instant;
 
@@ -63,10 +66,12 @@ pub enum NexusTab {
     Pipeline,
     /// Interactive quiz about NovaNet taxonomy
     Quiz,
+    /// Schema views explorer (Query-First architecture)
+    Views,
 }
 
 impl NexusTab {
-    /// Get the shortcut key for this tab (1-5 when in Nexus mode).
+    /// Get the shortcut key for this tab (1-6 when in Nexus mode).
     pub fn shortcut(&self) -> char {
         match self {
             NexusTab::Traits => '1',
@@ -74,6 +79,7 @@ impl NexusTab {
             NexusTab::Arcs => '3',
             NexusTab::Pipeline => '4',
             NexusTab::Quiz => '5',
+            NexusTab::Views => '6',
         }
     }
 
@@ -85,6 +91,7 @@ impl NexusTab {
             NexusTab::Arcs => "Arcs",
             NexusTab::Pipeline => "Pipeline",
             NexusTab::Quiz => "Quiz",
+            NexusTab::Views => "Views",
         }
     }
 
@@ -96,6 +103,7 @@ impl NexusTab {
             NexusTab::Arcs,
             NexusTab::Pipeline,
             NexusTab::Quiz,
+            NexusTab::Views,
         ]
     }
 
@@ -106,18 +114,20 @@ impl NexusTab {
             NexusTab::Layers => NexusTab::Arcs,
             NexusTab::Arcs => NexusTab::Pipeline,
             NexusTab::Pipeline => NexusTab::Quiz,
-            NexusTab::Quiz => NexusTab::Traits,
+            NexusTab::Quiz => NexusTab::Views,
+            NexusTab::Views => NexusTab::Traits,
         }
     }
 
     /// Cycle to previous tab.
     pub fn prev(&self) -> Self {
         match self {
-            NexusTab::Traits => NexusTab::Quiz,
+            NexusTab::Traits => NexusTab::Views,
             NexusTab::Layers => NexusTab::Traits,
             NexusTab::Arcs => NexusTab::Layers,
             NexusTab::Pipeline => NexusTab::Arcs,
             NexusTab::Quiz => NexusTab::Pipeline,
+            NexusTab::Views => NexusTab::Quiz,
         }
     }
 }
@@ -151,6 +161,10 @@ pub struct NexusState {
     // === Quiz tab state ===
     /// Quiz state (current question, score, etc.).
     pub quiz: quiz::QuizState,
+
+    // === Views tab state ===
+    /// Views state (category cursor, view cursor, concept panel).
+    pub views: views::ViewsState,
 
     // === Drill-down state ===
     /// Drill depth (0=overview, 1=kinds, 2=instances).
@@ -191,6 +205,7 @@ impl NexusState {
             pipeline_stage: 0,
             pipeline_animating: false,
             quiz: quiz::QuizState::new(),
+            views: views::ViewsState::new(),
             drill_depth: 0,
             drill_cursor: 0,
             pending_g: false,
@@ -284,10 +299,25 @@ impl NexusState {
                 }
             }
 
-            // Escape for drill-up (also clears pending_g)
+            // Escape for drill-up (also clears pending_g, closes concept panel)
             KeyCode::Esc => {
                 self.pending_g = false;
+                // In Views tab, close concept panel first
+                if self.tab == NexusTab::Views && self.views.show_concept {
+                    self.views.show_concept = false;
+                    return true;
+                }
                 self.drill_up()
+            }
+
+            // '?' to toggle Query-First concept panel (Views tab only)
+            KeyCode::Char('?') => {
+                if self.tab == NexusTab::Views {
+                    self.views.toggle_concept();
+                    true
+                } else {
+                    false
+                }
             }
 
             // Space for pipeline animation toggle
@@ -405,6 +435,10 @@ impl NexusState {
                     .get(self.quiz.current_question)
                     .map(|q| q.question.to_string())
             }
+            NexusTab::Views => {
+                // Yank the current view ID
+                self.views.get_yank_text()
+            }
         }
     }
 
@@ -490,6 +524,10 @@ impl NexusState {
                 self.quiz.select_up();
                 true
             }
+            NexusTab::Views => {
+                self.views.navigate_up();
+                true
+            }
         }
     }
 
@@ -540,10 +578,14 @@ impl NexusState {
                 self.quiz.select_down();
                 true
             }
+            NexusTab::Views => {
+                self.views.navigate_down();
+                true
+            }
         }
     }
 
-    /// Navigate left (realm switching in Layers, drill-out elsewhere).
+    /// Navigate left (realm switching in Layers, category in Views, drill-out elsewhere).
     fn navigate_left(&mut self) -> bool {
         match self.tab {
             NexusTab::Layers => {
@@ -556,6 +598,11 @@ impl NexusState {
                     false
                 }
             }
+            NexusTab::Views => {
+                // Switch to previous category
+                self.views.prev_category();
+                true
+            }
             _ => {
                 // Drill up as alternative to Escape
                 self.drill_up()
@@ -563,7 +610,7 @@ impl NexusState {
         }
     }
 
-    /// Navigate right (realm switching in Layers, drill-in elsewhere).
+    /// Navigate right (realm switching in Layers, category in Views, drill-in elsewhere).
     fn navigate_right(&mut self) -> bool {
         match self.tab {
             NexusTab::Layers => {
@@ -575,6 +622,11 @@ impl NexusState {
                 } else {
                     false
                 }
+            }
+            NexusTab::Views => {
+                // Switch to next category
+                self.views.next_category();
+                true
             }
             _ => {
                 // Drill down as alternative to Enter
@@ -602,6 +654,10 @@ impl NexusState {
             }
             NexusTab::Quiz => {
                 // Quiz doesn't have drill-down
+                false
+            }
+            NexusTab::Views => {
+                // Views doesn't have drill-down
                 false
             }
         }
@@ -703,6 +759,18 @@ impl NexusState {
                     )
                 }
             }
+            NexusTab::Views => {
+                if self.views.show_concept {
+                    format!("Nexus > {} > Query-First", tab_name)
+                } else {
+                    let cat = self.views.current_category();
+                    if let Some(view) = self.views.current_view() {
+                        format!("Nexus > {} > {} > {}", tab_name, cat.label(), view.name)
+                    } else {
+                        format!("Nexus > {} > {}", tab_name, cat.label())
+                    }
+                }
+            }
         }
     }
 
@@ -745,6 +813,7 @@ pub fn render_nexus(f: &mut Frame, area: Rect, app: &App) {
         NexusTab::Arcs => arcs::render_arcs_tab(f, app, chunks[2]),
         NexusTab::Pipeline => pipeline::render_pipeline_tab(f, app, chunks[2]),
         NexusTab::Quiz => quiz::render_quiz_tab(f, app, chunks[2]),
+        NexusTab::Views => views::render_views_tab(f, app, chunks[2]),
     }
 
     // Render "Did you know?" tips bar
@@ -772,6 +841,7 @@ fn render_tab_bar(f: &mut Frame, area: Rect, app: &App) {
                 NexusTab::Arcs => "\u{21c4}",     // ⇄
                 NexusTab::Pipeline => "\u{26a1}", // ⚡
                 NexusTab::Quiz => "\u{2753}",     // ❓
+                NexusTab::Views => "\u{25b6}",    // ▶
             };
 
             Span::styled(format!("[{}]{} {} ", idx + 1, symbol, tab.label()), style)
@@ -1169,18 +1239,22 @@ mod tests {
         assert_eq!(state.tab, NexusTab::Quiz);
 
         state.handle_key(key_event(KeyCode::Tab));
+        assert_eq!(state.tab, NexusTab::Views);
+
+        state.handle_key(key_event(KeyCode::Tab));
         assert_eq!(state.tab, NexusTab::Traits); // Wraps around
     }
 
     #[test]
     fn test_guide_tab_all() {
         let all = NexusTab::all();
-        assert_eq!(all.len(), 5);
+        assert_eq!(all.len(), 6);
         assert_eq!(all[0], NexusTab::Traits);
         assert_eq!(all[1], NexusTab::Layers);
         assert_eq!(all[2], NexusTab::Arcs);
         assert_eq!(all[3], NexusTab::Pipeline);
         assert_eq!(all[4], NexusTab::Quiz);
+        assert_eq!(all[5], NexusTab::Views);
     }
 
     #[test]
@@ -1190,6 +1264,7 @@ mod tests {
         assert_eq!(NexusTab::Arcs.shortcut(), '3');
         assert_eq!(NexusTab::Pipeline.shortcut(), '4');
         assert_eq!(NexusTab::Quiz.shortcut(), '5');
+        assert_eq!(NexusTab::Views.shortcut(), '6');
     }
 
     #[test]
@@ -1199,6 +1274,7 @@ mod tests {
         assert_eq!(NexusTab::Arcs.label(), "Arcs");
         assert_eq!(NexusTab::Pipeline.label(), "Pipeline");
         assert_eq!(NexusTab::Quiz.label(), "Quiz");
+        assert_eq!(NexusTab::Views.label(), "Views");
     }
 
     // ==========================================================================
@@ -1243,6 +1319,9 @@ mod tests {
         state.handle_key(key_event(KeyCode::Char(']')));
         assert_eq!(state.tab, NexusTab::Quiz);
 
+        state.handle_key(key_event(KeyCode::Char(']')));
+        assert_eq!(state.tab, NexusTab::Views);
+
         // Wrap around
         state.handle_key(key_event(KeyCode::Char(']')));
         assert_eq!(state.tab, NexusTab::Traits);
@@ -1253,10 +1332,10 @@ mod tests {
         let mut state = NexusState::new();
         assert_eq!(state.tab, NexusTab::Traits);
 
-        // [ from Traits wraps to Quiz (now last tab)
+        // [ from Traits wraps to Views (now last tab)
         let changed = state.handle_key(key_event(KeyCode::Char('[')));
         assert!(changed);
-        assert_eq!(state.tab, NexusTab::Quiz);
+        assert_eq!(state.tab, NexusTab::Views);
     }
 
     #[test]
@@ -1280,7 +1359,10 @@ mod tests {
         assert_eq!(state.tab, NexusTab::Traits);
 
         state.handle_key(key_event(KeyCode::BackTab));
-        assert_eq!(state.tab, NexusTab::Quiz); // Wraps to end (Quiz is now last)
+        assert_eq!(state.tab, NexusTab::Views); // Wraps to end (Views is now last)
+
+        state.handle_key(key_event(KeyCode::BackTab));
+        assert_eq!(state.tab, NexusTab::Quiz);
 
         state.handle_key(key_event(KeyCode::BackTab));
         assert_eq!(state.tab, NexusTab::Pipeline);
