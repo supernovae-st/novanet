@@ -5,7 +5,7 @@
 arc:
   name: IN_SUBREGION
   family: localization
-  scope: intra_realm  # Fixed: Both Locale and GeoRegion are in global realm
+  scope: intra_realm  # Both Locale and GeoRegion are in shared realm
 
   source: Locale
   target: GeoRegion  # Or GeoSubRegion if intermediate level exists

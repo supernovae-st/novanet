@@ -114,8 +114,7 @@ impl NodeRef {
 /// Top-level arcs document (from relations.yaml).
 #[derive(Debug, Deserialize)]
 pub struct ArcsDocument {
-    /// The 77 arc definitions.
-    #[serde(alias = "relations")]
+    /// The 116 arc definitions (v11.3).
     pub arcs: Vec<ArcDef>,
 
     /// SEMANTIC_LINK subtypes (10 entries: is_action_on, includes, etc.).
@@ -201,8 +200,6 @@ pub struct ArcKindYaml {
 #[derive(Debug, Clone, Deserialize)]
 pub struct ArcKindDef {
     /// Arc type name (SCREAMING_SNAKE_CASE), e.g., "HAS_PAGE".
-    /// Supports both `name:` and `type:` fields for compatibility.
-    #[serde(alias = "type")]
     pub name: String,
 
     /// Arc family classification.
@@ -491,7 +488,7 @@ mod tests {
     #[test]
     fn parse_single_arc() {
         let yaml = r#"
-relations:
+arcs:
   - type: HAS_PAGE
     family: ownership
     source: Project
@@ -515,7 +512,7 @@ relations:
     #[test]
     fn parse_arc_with_properties() {
         let yaml = r#"
-relations:
+arcs:
   - type: HAS_BLOCK
     family: ownership
     source: Page
@@ -534,7 +531,7 @@ relations:
     #[test]
     fn parse_multi_source_target() {
         let yaml = r#"
-relations:
+arcs:
   - type: OF_TYPE
     family: ownership
     source:
@@ -555,7 +552,7 @@ relations:
     #[test]
     fn parse_inverse_arc() {
         let yaml = r#"
-relations:
+arcs:
   - type: BLOCK_OF
     family: ownership
     source: Block
@@ -573,7 +570,7 @@ relations:
     #[test]
     fn parse_self_referential_arc() {
         let yaml = r#"
-relations:
+arcs:
   - type: FALLBACK_TO
     family: localization
     source: Locale
@@ -603,15 +600,34 @@ relations:
 
         // v11.0: Total arc count from individual arc-kind files
         // Should have a reasonable number of arcs (more than legacy relations.yaml)
-        assert!(doc.arcs.len() > 50, "expected at least 50 arcs, got {}", doc.arcs.len());
+        assert!(
+            doc.arcs.len() > 50,
+            "expected at least 50 arcs, got {}",
+            doc.arcs.len()
+        );
 
         // All 5 families should be represented
         let family_count = |f: ArcFamily| doc.arcs.iter().filter(|a| a.family == f).count();
-        assert!(family_count(ArcFamily::Ownership) > 0, "should have ownership arcs");
-        assert!(family_count(ArcFamily::Localization) > 0, "should have localization arcs");
-        assert!(family_count(ArcFamily::Semantic) > 0, "should have semantic arcs");
-        assert!(family_count(ArcFamily::Generation) > 0, "should have generation arcs");
-        assert!(family_count(ArcFamily::Mining) > 0, "should have mining arcs");
+        assert!(
+            family_count(ArcFamily::Ownership) > 0,
+            "should have ownership arcs"
+        );
+        assert!(
+            family_count(ArcFamily::Localization) > 0,
+            "should have localization arcs"
+        );
+        assert!(
+            family_count(ArcFamily::Semantic) > 0,
+            "should have semantic arcs"
+        );
+        assert!(
+            family_count(ArcFamily::Generation) > 0,
+            "should have generation arcs"
+        );
+        assert!(
+            family_count(ArcFamily::Mining) > 0,
+            "should have mining arcs"
+        );
 
         // All arcs have non-empty type
         for arc in &doc.arcs {

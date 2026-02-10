@@ -391,12 +391,10 @@ impl App {
     /// - Graph mode + Instances → Instance section
     pub fn yaml_active_section(&self) -> YamlViewSection {
         match self.mode {
-            NavMode::Graph => {
-                match self.graph_view {
-                    GraphView::Taxonomy => YamlViewSection::Kind,
-                    GraphView::Instances => YamlViewSection::Instance,
-                }
-            }
+            NavMode::Graph => match self.graph_view {
+                GraphView::Taxonomy => YamlViewSection::Kind,
+                GraphView::Instances => YamlViewSection::Instance,
+            },
             // Audit/Nexus default to Kind
             _ => YamlViewSection::Kind,
         }
@@ -1727,7 +1725,11 @@ impl App {
                 }
                 // When expanding an EntityCategory, load instances for that category
                 else if let Some(category_key) = key.strip_prefix("category:") {
-                    if !self.tree.entity_category_instances.contains_key(category_key) {
+                    if !self
+                        .tree
+                        .entity_category_instances
+                        .contains_key(category_key)
+                    {
                         self.pending_category_instances_load = Some(category_key.to_string());
                     }
                 }

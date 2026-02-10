@@ -5,12 +5,12 @@
 //! - taxonomy.yaml
 //! - Neo4j meta nodes (optional)
 
-use crate::parsers::arcs::{ArcDef, ArcFamily, Cardinality};
-use crate::parsers::taxonomy::{TaxonomyDoc, NodeRealmDef, NodeTraitDef, ArcFamilyDef};
-use crate::parsers::yaml_node::{ParsedNode, NodeTrait};
 use crate::db::Db;
-use std::path::Path;
+use crate::parsers::arcs::{ArcDef, ArcFamily, Cardinality};
+use crate::parsers::taxonomy::{ArcFamilyDef, NodeRealmDef, NodeTraitDef, TaxonomyDoc};
+use crate::parsers::yaml_node::{NodeTrait, ParsedNode};
 use std::collections::HashMap;
+use std::path::Path;
 
 /// Aggregated data from all sources for blueprint rendering.
 #[derive(Debug)]
@@ -107,7 +107,9 @@ impl BlueprintData {
 
     /// Total layer count across all realms.
     pub fn layer_count(&self) -> usize {
-        self.taxonomy.node_realms.iter()
+        self.taxonomy
+            .node_realms
+            .iter()
             .map(|r| r.layers.len())
             .sum()
     }
@@ -184,8 +186,14 @@ mod tests {
 
         assert!(data.node_kind_count() > 0, "Should have node kinds");
         assert!(data.arc_count() > 0, "Should have arc definitions");
-        assert!(data.realm_count() == 2, "Should have 2 realms (shared, org)");
-        assert!(data.layer_count() == 11, "Should have 11 layers (v11.3: 3 shared + 8 org)");
+        assert!(
+            data.realm_count() == 2,
+            "Should have 2 realms (shared, org)"
+        );
+        assert!(
+            data.layer_count() == 10,
+            "Should have 10 layers (v11.4: 4 shared + 6 org)"
+        );
     }
 
     #[test]
@@ -194,8 +202,8 @@ mod tests {
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
 
         let by_realm = data.nodes_by_realm();
-        assert!(by_realm.contains_key("shared"), "Should have global realm");
-        assert!(by_realm.contains_key("org"), "Should have tenant realm");
+        assert!(by_realm.contains_key("shared"), "Should have shared realm");
+        assert!(by_realm.contains_key("org"), "Should have org realm");
     }
 
     #[test]
@@ -204,6 +212,9 @@ mod tests {
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
 
         let by_family = data.arcs_by_family();
-        assert!(by_family.contains_key(&ArcFamily::Ownership), "Should have ownership arcs");
+        assert!(
+            by_family.contains_key(&ArcFamily::Ownership),
+            "Should have ownership arcs"
+        );
     }
 }

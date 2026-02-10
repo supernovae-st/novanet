@@ -35,7 +35,7 @@ Generate culturally-native content across 200+ locales — not translation, but 
 |  |  |  |  |
 |:---:|:---:|:---:|:---:|
 | **Knowledge Graph** | **200+ Locales** | **Graph Studio** | **AI-Powered** |
-| 62 node types, 124 arcs | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
+| 61 node types, 116 arcs | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
 | Neo4j with APOC | Locale knowledge layer | React Flow + ELK.js layouts | Cypher generation from text |
 
 ---
@@ -54,10 +54,10 @@ Generate culturally-native content across 200+ locales — not translation, but 
 flowchart TB
     subgraph MONO["NovaNet Monorepo"]
         direction TB
-        CORE["@novanet/core v11.2.0\nTypes · Schemas · Filters"]
+        CORE["@novanet/core v11.3.0\nTypes · Schemas · Filters"]
         DB["@novanet/db v1.0.0\nDocker · Seeds · Migrations"]
-        STUDIO["@novanet/studio v11.2.0\nNext.js 16 · React 19"]
-        RUST["novanet CLI v11.2.0\nRust · 13 commands · TUI"]
+        STUDIO["@novanet/studio v11.3.0\nNext.js 16 · React 19"]
+        RUST["novanet CLI v11.3.0\nRust · 13 commands · TUI"]
     end
 
     CORE --> STUDIO
@@ -117,7 +117,7 @@ novanet-hq/
 ├── packages/
 │   ├── core/                  # @novanet/core — types, schemas, filters
 │   │   ├── models/            # YAML schema definitions (source of truth)
-│   │   │   ├── taxonomy.yaml  # 2 realms (shared 2 + org 7), 9 layers, 5 traits
+│   │   │   ├── taxonomy.yaml  # 2 realms (shared 3 + org 8), 11 layers, 5 traits
 │   │   │   ├── node-kinds/    # node definitions by realm/layer
 │   │   │   └── arc-kinds/     # arc definitions by family
 │   │   └── src/               # TypeScript implementation
@@ -128,7 +128,7 @@ novanet-hq/
 ├── tools/
 │   └── novanet/               # Rust CLI + TUI binary
 │       ├── src/               # Rust source (13 commands, 8 generators)
-│       └── Cargo.toml         # 929 tests, zero clippy warnings
+│       └── Cargo.toml         # 950 tests, zero clippy warnings
 └── apps/
     └── studio/                # @novanet/studio — web visualization
         ├── src/app/           # Next.js App Router
@@ -143,10 +143,10 @@ novanet-hq/
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| **@novanet/core** | `11.2.0` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
+| **@novanet/core** | `11.3.0` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
 | **@novanet/db** | `1.0.0` | Docker Compose for Neo4j, Cypher seeds, migrations |
-| **@novanet/studio** | `11.2.0` | Interactive graph visualization with AI chat |
-| **tools/novanet** | `11.2.0` | Rust CLI + TUI for schema generation, validation, queries |
+| **@novanet/studio** | `11.3.0` | Interactive graph visualization with AI chat |
+| **tools/novanet** | `11.3.0` | Rust CLI + TUI for schema generation, validation, queries |
 
 ---
 
@@ -182,7 +182,7 @@ cargo run -- schema validate        # Validate YAML coherence
 cargo run -- meta                   # Mode 1: Meta-graph only
 cargo run -- data                   # Mode 2: Data nodes only
 cargo run -- overlay                # Mode 3: Data + Meta combined
-cargo run -- query --realm=tenant   # Mode 4: Faceted query
+cargo run -- query --realm=org      # Mode 4: Faceted query
 
 # CRUD operations
 cargo run -- node create --kind=Page --key=my-page
@@ -215,12 +215,12 @@ Password: (see NEO4J_PASSWORD env var)
 
 ## Graph Schema
 
-NovaNet models content as a knowledge graph with **2 Realms** and **9 Layers** (v11.2.0):
+NovaNet models content as a knowledge graph with **2 Realms** and **11 Layers** (v11.3.0):
 
 | Realm | Layers | Description |
 |-------|--------|-------------|
-| **Shared** | config, locale-knowledge | Universal locale knowledge (READ-ONLY) |
-| **Org** | config, foundation, structure, semantic, instruction, seo, output | Organization-specific content |
+| **Shared** | locale, geography, knowledge | Universal locale knowledge (READ-ONLY) — 32 nodes |
+| **Org** | config, foundation, structure, semantic, instruction, seo, geo, output | Organization-specific content — 29 nodes |
 
 Each node type has a **Trait** (invariant / localized / knowledge / generated / aggregated) and arcs are classified by **ArcFamily**.
 

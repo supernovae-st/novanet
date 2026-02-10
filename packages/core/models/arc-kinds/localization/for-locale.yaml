@@ -5,7 +5,7 @@
 arc:
   name: FOR_LOCALE
   family: localization
-  scope: cross_realm  # tenant nodes → Locale (global)
+  scope: cross_realm  # org nodes → Locale (shared)
   source:
     - EntityContent
     - ProjectContent

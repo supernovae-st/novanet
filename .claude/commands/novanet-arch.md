@@ -13,11 +13,11 @@ Generate accurate ASCII diagrams of the NovaNet meta-graph **from YAML source of
 ## CRITICAL: Source of Truth Protocol
 
 ```
-╔═══════════════════════════════════════════════════════════════════════════════╗
-║  RULE #1: NEVER GENERATE FROM MEMORY                                          ║
-║  RULE #2: ALWAYS READ YAML FILES FIRST                                        ║
-║  RULE #3: EXTRACT DATA FROM YAML, THEN DRAW                                   ║
-╚═══════════════════════════════════════════════════════════════════════════════╝
++===============================================================================+
+|  RULE #1: NEVER GENERATE FROM MEMORY                                          |
+|  RULE #2: ALWAYS READ YAML FILES FIRST                                        |
+|  RULE #3: EXTRACT DATA FROM YAML, THEN DRAW                                   |
++===============================================================================+
 ```
 
 **WHY:** Training data is outdated. YAML is the single source of truth.
@@ -33,7 +33,7 @@ Diagrams from memory WILL contain errors (wrong realms, missing nodes, incorrect
 cargo run --quiet -- schema validate
 ```
 
-If validation fails → run `cargo run -- schema generate` first.
+If validation fails -> run `cargo run -- schema generate` first.
 
 ### Step 2: Read Source Files (REQUIRED)
 
@@ -44,9 +44,11 @@ If validation fails → run `cargo run -- schema generate` first.
 | `all` | taxonomy.yaml + ALL node-kinds + ALL arc-kinds |
 | `nodes` | taxonomy.yaml + node-kinds/**/*.yaml |
 | `arcs` | taxonomy.yaml + arc-kinds/**/*.yaml |
-| `seo` | node-kinds/global/seo/*.yaml |
-| `knowledge` | node-kinds/global/knowledge/*.yaml |
-| `layers` | meta/layers/*.yaml |
+| `seo` | node-kinds/org/seo/*.yaml |
+| `geo` | node-kinds/org/geo/*.yaml |
+| `knowledge` | node-kinds/shared/knowledge/*.yaml |
+| `locale` | node-kinds/shared/locale/*.yaml |
+| `geography` | node-kinds/shared/geography/*.yaml |
 
 **Quick commands to list files:**
 
@@ -65,9 +67,9 @@ find packages/core/models/node-kinds -name "*.yaml" | xargs -I{} dirname {} | so
 
 From YAML files, extract:
 - **Node names** from `node.name`
-- **Realms** from `node.realm` (global | tenant)
-- **Layers** from `node.layer` (config | knowledge | seo | foundation | structure | semantic | instruction | output)
-- **Traits** from `node.trait` (invariant | localized | knowledge | derived | job)
+- **Realms** from `node.realm` (shared | org)
+- **Layers** from `node.layer` (11 layers: locale, geography, knowledge | config, foundation, structure, semantic, instruction, seo, geo, output)
+- **Traits** from `node.trait` (invariant | localized | knowledge | generated | aggregated)
 - **Colors** from taxonomy.yaml `node_realms[].color`, `node_layers[].color`
 
 ### Step 4: Generate ASCII Diagram
@@ -94,10 +96,13 @@ Use `$ARGUMENTS` to focus on specific section:
 | `all` or empty | Complete meta-graph taxonomy (default) |
 | `nodes` | Node taxonomy by realm/layer |
 | `arcs` | Arc taxonomy by family/scope |
-| `seo` | SEO layer nodes and arcs |
-| `locale-knowledge` | Locale-knowledge layer (Sets, Atoms) |
-| `tenant` | Tenant realm (Organization + Projects + business content) |
-| `pipeline` | YAML → TypeScript → Neo4j sync flow |
+| `seo` | SEO layer nodes and arcs (org/seo) |
+| `geo` | GEO layer nodes (org/geo) |
+| `knowledge` | Knowledge layer (Sets, Atoms) (shared/knowledge) |
+| `locale` | Locale layer (shared/locale) |
+| `geography` | Geography layer (shared/geography) |
+| `org` | Org realm (all business content) |
+| `pipeline` | YAML -> TypeScript -> Neo4j sync flow |
 | `visual` | Visual encoding (colors, borders, strokes) |
 
 ---
@@ -107,27 +112,27 @@ Use `$ARGUMENTS` to focus on specific section:
 Use this structure for consistency:
 
 ```
-╔═══════════════════════════════════════════════════════════════════════════════╗
-║                           TITLE (from YAML version)                           ║
-╚═══════════════════════════════════════════════════════════════════════════════╝
++===============================================================================+
+|                           TITLE (from YAML version)                           |
++===============================================================================+
 
-┌───────────────────────────────────────────────────────────────────────────────┐
-│  SECTION TITLE                                                    color      │
-├───────────────────────────────────────────────────────────────────────────────┤
-│                                                                               │
-│  LAYER NAME ──────────────────────────────────────────────────── color       │
-│  ├── NodeName ▣ (trait)        description                                   │
-│  └── NodeName ▢ (trait)        description                                   │
-│                                                                               │
-└───────────────────────────────────────────────────────────────────────────────┘
++-------------------------------------------------------------------------------+
+|  SECTION TITLE                                                    color       |
++-------------------------------------------------------------------------------+
+|                                                                               |
+|  LAYER NAME ---------------------------------------------- color              |
+|  +-- NodeName (trait)        description                                      |
+|  +-- NodeName (trait)        description                                      |
+|                                                                               |
++-------------------------------------------------------------------------------+
 
-┌───────────────────────────────────────────────────────────────────────────────┐
-│  TRAIT LEGEND (from taxonomy.yaml node_traits)                                │
-├───────────────────────────────────────────────────────────────────────────────┤
-│  ▣ invariant   ─── solid        ▢ localized   ┄┄┄ dashed                     │
-│  ┈ knowledge   ┈┈┈ dotted       ═ derived     ═══ double                     │
-│    job             none                                                       │
-└───────────────────────────────────────────────────────────────────────────────┘
++-------------------------------------------------------------------------------+
+|  TRAIT LEGEND (from taxonomy.yaml node_traits)                                |
++-------------------------------------------------------------------------------+
+|  solid     = invariant       dashed   = localized                             |
+|  dotted    = knowledge       double   = generated                             |
+|  thin-dot  = aggregated                                                       |
++-------------------------------------------------------------------------------+
 ```
 
 ---
@@ -135,24 +140,24 @@ Use this structure for consistency:
 ## Section: nodes
 
 **Required reads:**
-1. `packages/core/models/taxonomy.yaml` → realms, layers, colors
-2. `packages/core/models/node-kinds/**/*.yaml` → all node definitions
+1. `packages/core/models/taxonomy.yaml` -> realms, layers, colors
+2. `packages/core/models/node-kinds/**/*.yaml` -> all node definitions
 
 **Extract from each YAML:**
 ```yaml
 node:
-  name: SEOKeyword      # ← Node name
-  realm: global         # ← WHERE (global | tenant)
-  layer: seo            # ← WHAT layer
-  trait: knowledge      # ← HOW (invariant | localized | knowledge | derived | job)
+  name: SEOKeyword      # <- Node name
+  realm: org            # <- WHERE (shared | org)
+  layer: seo            # <- WHAT layer
+  trait: knowledge      # <- HOW (invariant | localized | knowledge | generated | aggregated)
 ```
 
 **Output format:**
 ```
-REALM (count) ──────────────────────────────────────────── realm_color
-  LAYER (count) ────────────────────────────────────────── layer_color
-    ├── NodeName (trait)    description
-    └── NodeName (trait)    description
+REALM (count) -------------------------------------------- realm_color
+  LAYER (count) ------------------------------------------ layer_color
+    +-- NodeName (trait)    description
+    +-- NodeName (trait)    description
 ```
 
 ---
@@ -160,15 +165,15 @@ REALM (count) ──────────────────────
 ## Section: arcs
 
 **Required reads:**
-1. `packages/core/models/taxonomy.yaml` → arc_families, arc_scopes
-2. `packages/core/models/arc-kinds/**/*.yaml` → all arc definitions
+1. `packages/core/models/taxonomy.yaml` -> arc_families, arc_scopes
+2. `packages/core/models/arc-kinds/**/*.yaml` -> all arc definitions
 
 **Extract from each YAML:**
 ```yaml
 arc:
-  name: EXPRESSES       # ← Arc name (UPPER_SNAKE_CASE)
-  family: semantic      # ← ownership | localization | semantic | generation | mining
-  scope: cross_realm    # ← intra_realm | cross_realm
+  name: EXPRESSES       # <- Arc name (UPPER_SNAKE_CASE)
+  family: semantic      # <- ownership | localization | semantic | generation | mining
+  scope: cross_realm    # <- intra_realm | cross_realm
   source: SEOKeyword
   target: Entity
   cardinality: many_to_one
@@ -179,20 +184,29 @@ arc:
 ## Section: seo
 
 **Required reads:**
-- `packages/core/models/node-kinds/global/seo/*.yaml`
+- `packages/core/models/node-kinds/org/seo/*.yaml`
 - `packages/core/models/arc-kinds/mining/*.yaml`
 
-Show: SEOKeyword, SEOKeywordMetrics, SEOMiningRun and their relationships.
+Show: SEOKeyword, SEOKeywordMetrics, SEOCluster, etc. and their relationships.
+
+---
+
+## Section: geo
+
+**Required reads:**
+- `packages/core/models/node-kinds/org/geo/*.yaml`
+
+Show: GEOQuery, GEOAnswer, GEOMetrics and their relationships.
 
 ---
 
 ## Section: knowledge
 
 **Required reads:**
-- `packages/core/models/node-kinds/global/locale-knowledge/*.yaml`
-- `packages/core/models/node-kinds/tenant/semantic/*.yaml` (Entity, EntityContent)
+- `packages/core/models/node-kinds/shared/knowledge/*.yaml`
+- `packages/core/models/node-kinds/org/semantic/*.yaml` (Entity, EntityContent)
 
-Show: All Sets (TermSet, etc.), all Atoms (Term, etc.), Entity/EntityContent from tenant realm.
+Show: All Sets (TermSet, etc.), all Atoms (Term, etc.), Entity/EntityContent from org realm.
 
 ---
 
@@ -202,9 +216,11 @@ Show: All Sets (TermSet, etc.), all Atoms (Term, etc.), Entity/EntityContent fro
 /novanet-arch              # Full architecture (reads ALL YAML)
 /novanet-arch nodes        # Node taxonomy from node-kinds/**
 /novanet-arch arcs         # Arc taxonomy from arc-kinds/**
-/novanet-arch seo          # SEO layer from global/seo/
-/novanet-arch locale-knowledge  # Locale-knowledge layer from global/locale-knowledge/
-/novanet-arch tenant       # Tenant realm (v10.6)
+/novanet-arch seo          # SEO layer from org/seo/
+/novanet-arch geo          # GEO layer from org/geo/
+/novanet-arch knowledge    # Knowledge layer from shared/knowledge/
+/novanet-arch locale       # Locale layer from shared/locale/
+/novanet-arch org          # Org realm (v11.3)
 ```
 
 ---
@@ -225,14 +241,14 @@ Before presenting the diagram:
 
 ```
 PRE-FLIGHT
-──────────
+----------
 [x] Ran schema validate (passed)
 [x] Read taxonomy.yaml
 [x] Read relevant node-kinds/**/*.yaml
 [x] Read relevant arc-kinds/**/*.yaml
 
 ACCURACY
-────────
+--------
 [ ] Every node in diagram has a YAML file
 [ ] Realm matches YAML (not assumed)
 [ ] Layer matches YAML (not assumed)
@@ -241,7 +257,7 @@ ACCURACY
 [ ] Node count matches file count
 
 OUTPUT
-──────
+------
 [ ] Used standard ASCII template
 [ ] Included trait legend
 [ ] Included statistics

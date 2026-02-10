@@ -1,14 +1,17 @@
-# packages/core/models/node-kinds/global/config/entity-category.yaml
+# packages/core/models/node-kinds/shared/config/entity-category.yaml
 # EntityCategory - Semantic classification for Entity nodes
+#
+# v11.4: Moved to shared/config (classification nodes layer)
+#        - layer: config (was knowledge)
 #
 # v11.0: Global config node for categorizing entities by purpose
 # Enables: filtering, grouping, and LLM context selection by category
-# Source: Universal taxonomy (applies to all tenants)
+# Source: Universal taxonomy (applies to all orgs)
 
 node:
   name: EntityCategory
   realm: shared
-  layer: knowledge
+  layer: config
   trait: invariant
   icon: "📂"
   description: "Semantic category for classifying Entity nodes by their purpose"

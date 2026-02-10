@@ -304,8 +304,8 @@ mod tests {
 
         let doc = load_visual_encoding(root).expect("should load visual-encoding.yaml");
 
-        // Version (v11.2: realm renames shared/org + trait split)
-        assert_eq!(doc.version, "11.3.0");
+        // Version (v11.4: SEO/GEO to shared/knowledge)
+        assert_eq!(doc.version, "11.4.0");
 
         // Channel mapping
         assert_eq!(doc.channel_mapping.node.fill_color, "layer");

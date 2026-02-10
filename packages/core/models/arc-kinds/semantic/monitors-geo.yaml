@@ -5,7 +5,7 @@
 #        - Semantic link from EntityContent to GEOQuery
 #        - Parallel to TARGETS (EntityContent → SEOKeyword) for SEO
 #        - Enables tracking which entities care about which AI queries
-#        - Cross-realm: tenant (EntityContent) → global (GEOQuery)
+#        - EntityContent and GEOQuery both in org realm (intra_realm)
 
 arc:
   name: MONITORS_GEO

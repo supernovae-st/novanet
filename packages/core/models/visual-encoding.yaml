@@ -1,6 +1,6 @@
 # packages/core/models/visual-encoding.yaml
 # Visual presentation rules for NovaNet graph elements
-# v11.3.0 — 2-Realm Architecture (SHARED / ORG)
+# v11.4.0 — SEO/GEO to Shared Knowledge
 #
 # IMPORTANT: Colors are NOT defined here.
 # Colors come from taxonomy.yaml (node_realms, node_layers, node_traits, arc_families)
@@ -11,7 +11,7 @@
 # - apps/studio/src/design/visual-encoding.json (runtime config)
 # - tools/novanet/src/generated/visual_encoding.rs (TUI compile-time)
 
-version: "11.3.0"
+version: "11.4.0"
 
 # =============================================================================
 # CHANNEL MAPPING — Which visual channel encodes which facet

@@ -11,25 +11,27 @@ argument-hint: [validate|generate|status]
 
 Synchronize generated artifacts with YAML source of truth.
 
-## Source of Truth (v11.0)
+## Source of Truth (v11.3)
 
 ```
 packages/core/models/
-├── node-kinds/                   ← 65 YAML files (one per NodeKind)
-│   ├── global/                   ← Realm: global (18 nodes)
-│   │   ├── config/               ←   Layer: config (Locale + utilities)
-│   │   └── locale-knowledge/     ←   Layer: locale-knowledge (Knowledge Atom types)
-│   └── tenant/                   ← Realm: tenant (47 nodes)
-│       ├── config/               ←   Layer: config (Organization)
-│       ├── foundation/           ←   Layer: foundation
-│       ├── structure/            ←   Layer: structure
-│       ├── semantic/             ←   Layer: semantic (Entity, EntityContent)
-│       ├── instruction/          ←   Layer: instruction
-│       ├── seo/                  ←   Layer: seo (SEOKeyword, GEO - v11.0 moved from global)
-│       └── output/               ←   Layer: output
-├── arc-kinds/                    ← 125 YAML files (one per ArcKind)
-├── relations.yaml                ← Legacy format (kept for parser compatibility)
-└── taxonomy.yaml                 ← v11.0: 2 Realms, 9 Layers, 5 Traits
++-- node-kinds/                   <- 61 YAML files (one per NodeKind)
+|   +-- shared/                   <- Realm: shared (32 nodes)
+|   |   +-- locale/               <-   Layer: locale (7 nodes)
+|   |   +-- geography/            <-   Layer: geography (6 nodes)
+|   |   +-- knowledge/            <-   Layer: knowledge (19 nodes)
+|   +-- org/                      <- Realm: org (29 nodes)
+|       +-- config/               <-   Layer: config (OrgConfig)
+|       +-- foundation/           <-   Layer: foundation
+|       +-- structure/            <-   Layer: structure
+|       +-- semantic/             <-   Layer: semantic (Entity, EntityContent)
+|       +-- instruction/          <-   Layer: instruction
+|       +-- seo/                  <-   Layer: seo (SEOKeyword)
+|       +-- geo/                  <-   Layer: geo (GEOQuery, GEOAnswer, GEOMetrics)
+|       +-- output/               <-   Layer: output
++-- arc-kinds/                    <- 125 YAML files (one per ArcKind)
++-- relations.yaml                <- Legacy format (kept for parser compatibility)
++-- taxonomy.yaml                 <- v11.3: 2 Realms, 11 Layers, 5 Traits
 ```
 
 ## Generated Artifacts
@@ -51,7 +53,7 @@ packages/core/models/
 | views/*.yaml | ViewsGenerator | src/filters/views.generated.ts |
 | visual-encoding.yaml | TuiIconsGenerator | tools/novanet/src/tui/icons.rs |
 
-`novanet doc generate` produces 12 view-specific Mermaid diagrams from `models/views/`.
+`novanet doc generate` produces 11 view-specific Mermaid diagrams from `models/views/`.
 
 ## Commands
 
@@ -129,7 +131,7 @@ git commit -m "chore: regenerate from YAML sources"
 ## Technical Details
 
 All generators live in `tools/novanet/src/generators/` (Rust-first architecture).
-`@novanet/schema-tools` has been eliminated — the Rust binary handles all generation.
+`@novanet/schema-tools` has been eliminated - the Rust binary handles all generation.
 
 **LayerGenerator (`generators/layer.rs`):**
 - Scans folder structure: `models/node-kinds/{realm}/{layer}/*.yaml`
@@ -138,6 +140,6 @@ All generators live in `tools/novanet/src/generators/` (Rust-first architecture)
 
 **MermaidGenerator (`generators/mermaid.rs`):**
 - Reads `models/node-kinds/` and `models/arc-kinds/`
-- Generates Mermaid flowchart with all 64 Kinds and 120 arcs
-- Groups by Realm (Global, Tenant)
-- Colors by Layer (9 distinct colors)
+- Generates Mermaid flowchart with all 61 Kinds and 125 arcs
+- Groups by Realm (Shared, Org)
+- Colors by Layer (11 distinct colors)

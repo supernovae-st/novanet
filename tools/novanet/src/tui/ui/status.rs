@@ -501,7 +501,11 @@ mod tests {
         // Ensure all focus panels produce valid shortcuts for Graph mode
         for focus in [Focus::Tree, Focus::Info, Focus::Graph, Focus::Yaml] {
             let result = get_contextual_shortcuts(NavMode::Graph, focus, false, false);
-            assert!(!result.is_empty(), "Focus {:?} should have shortcuts", focus);
+            assert!(
+                !result.is_empty(),
+                "Focus {:?} should have shortcuts",
+                focus
+            );
         }
     }
 
