@@ -1,6 +1,7 @@
 'use client';
 
 import { memo } from 'react';
+import { Boxes } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { iconSizes, gapTokens } from '@/design/tokens';
 import { GRAPH_ICONS, ICON_COLORS } from '@/config/iconSystem';
@@ -63,7 +64,34 @@ export const StatsCounter = memo(function StatsCounter({
         className
       )}
     >
-      {/* Meta badge removed - 2D/3D toggle at bottom center handles view mode */}
+      {/* Mode badge - Always visible: Meta (blue) or Data (emerald) */}
+      <button
+        type="button"
+        onClick={onMetaClick}
+        className={cn(
+          'flex items-center rounded-xl px-3 py-1.5 cursor-pointer',
+          gapTokens.default,
+          // Colors and typography - monospace code style
+          'font-mono font-medium text-xs uppercase tracking-wider',
+          // Mode-specific colors
+          isMetaMode
+            ? 'bg-blue-500/15 text-blue-300 border-2 border-blue-400/40 hover:border-blue-400/60 hover:bg-blue-500/20 hover:text-blue-200 hover:shadow-[0_0_16px_rgba(59,130,246,0.4),0_0_32px_rgba(59,130,246,0.15)]'
+            : 'bg-emerald-500/15 text-emerald-300 border-2 border-emerald-400/40 hover:border-emerald-400/60 hover:bg-emerald-500/20 hover:text-emerald-200 hover:shadow-[0_0_16px_rgba(16,185,129,0.4),0_0_32px_rgba(16,185,129,0.15)]',
+          // Subtle animated glow pulse (only in meta mode)
+          isMetaMode && 'animate-[glow-pulse_4s_ease-in-out_infinite]',
+          // Transition
+          'transition-all duration-300',
+          // Active: scale down
+          'active:scale-95'
+        )}
+        onMouseEnter={() => onMetaHoverChange?.(true)}
+        onMouseLeave={() => onMetaHoverChange?.(false)}
+        title={isMetaMode ? "Schema Mode - Click for surprise..." : "Data Mode"}
+      >
+        <Boxes className="w-4 h-4" />
+        <span>{isMetaMode ? 'Meta' : 'Data'}</span>
+      </button>
+      <span className="text-white/20 group-hover/stats:text-white/40 transition-colors">·</span>
 
       {/* Nodes/Types - Emerald theme */}
       <span

@@ -122,7 +122,7 @@ export const SHORTCUTS: Shortcut[] = [
     id: 'cycle-trait',
     keys: 't',
     label: 'Cycle Trait',
-    description: 'Cycle through Invariant → Localized → Knowledge → Derived → Job → None',
+    description: 'Cycle through Invariant → Localized → Knowledge → Generated → Aggregated → None',
     category: 'filter',
     icon: 'Fingerprint',
     when: ['input-not-focused'],

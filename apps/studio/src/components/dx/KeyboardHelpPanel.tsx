@@ -12,10 +12,11 @@
  * - Keyboard navigation (Escape to close)
  * - Focus trap via Modal.Root
  * - Raycast-style spring animation (animate-overlay-enter)
+ * - Visual encoding reference for 2D/3D views
  */
 
 import { memo, useState, useEffect, useRef, useMemo } from 'react';
-import { Search, X } from 'lucide-react';
+import { Search, X, Circle, Square, Triangle, Hexagon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SHORTCUTS } from '@/config/shortcuts';
 import { KeyboardKey, KeyboardShortcut } from '@/components/ui/KeyboardKey';
@@ -148,6 +149,145 @@ const CategorySection = memo(function CategorySection({
 });
 
 /**
+ * Visual encoding row - for displaying visual channel mappings
+ */
+const VisualEncodingRow = memo(function VisualEncodingRow({
+  channel,
+  maps,
+  visual,
+}: {
+  channel: string;
+  maps: string;
+  visual: React.ReactNode;
+}) {
+  return (
+    <div className={cn(
+      overlayClasses.rowBase,
+      overlayClasses.rowIdle,
+      'justify-between',
+      gapTokens.spacious,
+    )}>
+      <div className="flex flex-col gap-0.5 min-w-0">
+        <span className="text-sm font-medium text-white/80">{channel}</span>
+        <span className="text-xs text-white/40">{maps}</span>
+      </div>
+      <div className="flex items-center gap-2">
+        {visual}
+      </div>
+    </div>
+  );
+});
+
+/**
+ * Visual Encoding Section - shows how visual channels map to graph properties
+ */
+const VisualEncodingSection = memo(function VisualEncodingSection() {
+  return (
+    <div className="mb-2">
+      <div className={overlayClasses.sectionHeader}>
+        Visual Encoding (2D)
+      </div>
+      <div className="space-y-0.5">
+        <VisualEncodingRow
+          channel="Fill Color"
+          maps="Layer (config, locale, geography, knowledge, semantic, output...)"
+          visual={
+            <div className="flex gap-1">
+              <div className="w-3 h-3 rounded-sm bg-[#6366f1]" title="config" />
+              <div className="w-3 h-3 rounded-sm bg-[#a855f7]" title="locale" />
+              <div className="w-3 h-3 rounded-sm bg-[#14b8a6]" title="knowledge" />
+              <div className="w-3 h-3 rounded-sm bg-[#f97316]" title="output" />
+            </div>
+          }
+        />
+        <VisualEncodingRow
+          channel="Border Color"
+          maps="Realm (shared = teal, org = blue)"
+          visual={
+            <div className="flex gap-1">
+              <div className="w-3 h-3 rounded-sm border-2 border-[#2aa198]" title="shared" />
+              <div className="w-3 h-3 rounded-sm border-2 border-[#0ea5e9]" title="org" />
+            </div>
+          }
+        />
+        <VisualEncodingRow
+          channel="Border Style"
+          maps="Trait (invariant, localized, knowledge, generated, aggregated)"
+          visual={
+            <div className="flex gap-1.5 text-[10px] font-mono text-white/60">
+              <span className="border-b-2 border-solid border-white/60 px-1">solid</span>
+              <span className="border-b-2 border-dashed border-white/60 px-1">dash</span>
+              <span className="border-b-2 border-dotted border-white/60 px-1">dot</span>
+            </div>
+          }
+        />
+        <VisualEncodingRow
+          channel="Arc Color"
+          maps="ArcFamily (ownership, localization, semantic, generation, mining)"
+          visual={
+            <div className="flex gap-1">
+              <div className="w-6 h-0.5 bg-[#6366f1]" title="ownership" />
+              <div className="w-6 h-0.5 bg-[#06b6d4]" title="localization" />
+              <div className="w-6 h-0.5 bg-[#f59e0b]" title="semantic" />
+            </div>
+          }
+        />
+      </div>
+
+      <div className={cn(overlayClasses.sectionHeader, 'mt-3')}>
+        Visual Encoding (3D)
+      </div>
+      <div className="space-y-0.5">
+        <VisualEncodingRow
+          channel="Shape"
+          maps="Layer (sphere, box, octahedron, tetrahedron, torus...)"
+          visual={
+            <div className="flex gap-1.5 text-white/60">
+              <Circle className="w-4 h-4" />
+              <Square className="w-4 h-4" />
+              <Hexagon className="w-4 h-4" />
+              <Triangle className="w-4 h-4" />
+            </div>
+          }
+        />
+        <VisualEncodingRow
+          channel="Material"
+          maps="Trait (glass=invariant, metal=localized, glow=knowledge, pulse=generated)"
+          visual={
+            <div className="flex gap-1.5 text-[10px] font-mono text-white/60">
+              <span className="text-cyan-300">glass</span>
+              <span className="text-amber-300">metal</span>
+              <span className="text-emerald-300">glow</span>
+            </div>
+          }
+        />
+        <VisualEncodingRow
+          channel="Outline"
+          maps="Realm (teal glow = shared, blue glow = org)"
+          visual={
+            <div className="flex gap-1.5">
+              <div className="w-4 h-4 rounded-full bg-[#2aa198]/30 ring-2 ring-[#2aa198]" />
+              <div className="w-4 h-4 rounded-full bg-[#0ea5e9]/30 ring-2 ring-[#0ea5e9]" />
+            </div>
+          }
+        />
+        <VisualEncodingRow
+          channel="Arc Particles"
+          maps="ArcFamily (particle color & density match arc family)"
+          visual={
+            <div className="flex gap-1 text-[10px]">
+              <span className="text-indigo-400">●●●</span>
+              <span className="text-cyan-400">●●</span>
+              <span className="text-amber-400">●</span>
+            </div>
+          }
+        />
+      </div>
+    </div>
+  );
+});
+
+/**
  * Keyboard Help Panel - unified overlay modal
  */
 export const KeyboardHelpPanel = memo(function KeyboardHelpPanel({
@@ -191,19 +331,12 @@ export const KeyboardHelpPanel = memo(function KeyboardHelpPanel({
     });
   }, [filteredShortcuts]);
 
-  // Handle key press in search
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      e.preventDefault();
-      onClose();
-    }
-  };
-
   return (
     <Modal.Root
       isOpen={isOpen}
       onClose={onClose}
-      closeOnEscape={false}
+      closeOnEscape={true}
+      closeOnOutsideClick={true}
       containerClassName={overlayClasses.position}
     >
       <Modal.Content
@@ -219,7 +352,6 @@ export const KeyboardHelpPanel = memo(function KeyboardHelpPanel({
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            onKeyDown={handleKeyDown}
             placeholder="Search shortcuts…"
             aria-label="Search shortcuts"
             className={overlayClasses.searchInput}
@@ -246,9 +378,13 @@ export const KeyboardHelpPanel = memo(function KeyboardHelpPanel({
                 No shortcuts found for &ldquo;{search}&rdquo;
               </div>
             ) : (
-              groupedShortcuts.map(([category, shortcuts]) => (
-                <CategorySection key={category} category={category} shortcuts={shortcuts} />
-              ))
+              <>
+                {groupedShortcuts.map(([category, shortcuts]) => (
+                  <CategorySection key={category} category={category} shortcuts={shortcuts} />
+                ))}
+                {/* Visual Encoding Reference - only show when not searching */}
+                {!search.trim() && <VisualEncodingSection />}
+              </>
             )}
           </div>
         </Modal.Body>
