@@ -25,6 +25,7 @@ pub mod atlas;
 mod audit;
 pub mod clipboard;
 mod data;
+mod handlers;
 pub mod nexus;
 mod schema;
 pub mod theme;

@@ -15,6 +15,7 @@ use super::data::{
 };
 use super::nexus::NexusState;
 use super::schema::{CoverageStats, MatchedProperty, ValidatedProperty, ValidationStats};
+use super::handlers::dispatch_mode_handler;
 use super::theme::Theme;
 use super::yaml::{YamlSections, YamlViewSection};
 
@@ -841,66 +842,10 @@ impl App {
             }
         }
 
-        // Audit mode: handle mode-specific keys (navigation handled globally below)
-        if self.mode == NavMode::Audit {
-            match key.code {
-                // Navigation in Audit mode
-                KeyCode::Up | KeyCode::Char('k') => {
-                    if self.audit_cursor > 0 {
-                        self.audit_cursor -= 1;
-                    }
-                    return true;
-                }
-                KeyCode::Down | KeyCode::Char('j') => {
-                    if let Some(stats) = &self.audit_stats {
-                        let max = stats.kinds.len().saturating_sub(1);
-                        if self.audit_cursor < max {
-                            self.audit_cursor += 1;
-                        }
-                    }
-                    return true;
-                }
-                // Refresh audit stats
-                KeyCode::Char('r') => {
-                    self.pending_audit_load = true;
-                    self.audit_cursor = 0;
-                    self.set_status("Refreshing audit data...");
-                    return true;
-                }
-                KeyCode::Char('?') => {
-                    self.help_active = true;
-                    return true;
-                }
-                // Fall through to global key handling (mode switching 1-4)
-                _ => {}
-            }
-        }
-
-        // Nexus mode: delegates to guide state (gamified learning hub)
-        // Keys 1-4 switch modes globally, [ ] switch Nexus tabs
-        if self.mode == NavMode::Nexus {
-            match key.code {
-                KeyCode::Char('?') => {
-                    self.help_active = true;
-                    return true;
-                }
-                KeyCode::Char('/') | KeyCode::Char('f') => {
-                    self.search.active = true;
-                    return true;
-                }
-                KeyCode::F(1) => {
-                    self.legend_active = true;
-                    return true;
-                }
-                // Keys 1-5 fall through to global mode switching below
-                KeyCode::Char('1')
-                | KeyCode::Char('2')
-                | KeyCode::Char('3')
-                | KeyCode::Char('4')
-                | KeyCode::Char('5') => {}
-                // All other keys handled by nexus ([ ] for tabs, j/k for nav, etc.)
-                _ => return self.nexus.handle_key(key),
-            }
+        // Mode-specific key handling (Audit, Nexus, Atlas)
+        // Returns early if handled, falls through to global handlers otherwise
+        if let Some(result) = dispatch_mode_handler(self, key) {
+            return result;
         }
 
         match key.code {
