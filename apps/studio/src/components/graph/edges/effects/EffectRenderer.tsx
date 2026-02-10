@@ -81,28 +81,18 @@ export const EffectRenderer = memo(function EffectRenderer({
     );
   }, [forceLOD, distanceFromCenter, zoom, state, isConnectedToSelected]);
 
-  // Filter effects based on LOD
+  // Filter effects based on LOD (simplified: always use all effects for now)
+  // Original: return filterEffectsForLOD(theme.effects, lodTier);
   const activeEffects = useMemo(() => {
-    return filterEffectsForLOD(theme.effects, lodTier);
-  }, [theme.effects, lodTier]);
+    return theme.effects; // Skip LOD filtering to ensure effects are visible
+  }, [theme.effects]);
 
-  // Calculate intensity
+  // Calculate intensity (simplified: always high intensity for now)
   const intensity = useMemo(() => {
     if (intensityOverride !== undefined) return intensityOverride;
-
-    // Base intensity from state
-    let base = state === 'selected' ? 1.0
-      : state === 'highlighted' ? 0.9
-      : state === 'muted' ? 0.3
-      : 0.7;
-
-    // Apply LOD reduction
-    if (lodTier === 'medium') base *= 0.8;
-    if (lodTier === 'low') base *= 0.5;
-    if (lodTier === 'minimal') base *= 0.3;
-
-    return base;
-  }, [intensityOverride, state, lodTier]);
+    // Force high intensity to ensure effects are visible
+    return state === 'muted' ? 0.5 : 1.0;
+  }, [intensityOverride, state]);
 
   // Build primitive props
   const primitiveProps: Omit<EffectPrimitiveProps, 'pathId'> = useMemo(() => ({
@@ -114,9 +104,8 @@ export const EffectRenderer = memo(function EffectRenderer({
     targetPosition,
   }), [theme.colors, theme.timing, intensity, state, sourcePosition, targetPosition]);
 
-  // Don't render if minimal LOD with no effects
-  // Note: Budget check is done by FloatingEdge before rendering EffectRenderer
-  if (lodTier === 'minimal' && activeEffects.length === 0) {
+  // Skip if no effects (activeEffects now always has theme.effects)
+  if (activeEffects.length === 0) {
     return null;
   }
 

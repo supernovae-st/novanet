@@ -17,10 +17,10 @@
  */
 
 import * as THREE from 'three';
-import type { Layer, NodeRealm, NodeTrait } from '@novanet/core/types';
+import type { Layer, Realm, Trait } from '@novanet/core/types';
 
 // Trait animation speeds (ring rotation rad/s)
-export const TRAIT_RING_SPEEDS: Record<NodeTrait, number> = {
+export const TRAIT_RING_SPEEDS: Record<Trait, number> = {
   invariant: 0.2,    // Slow, stable
   localized: 0.4,    // Medium
   knowledge: 0.3,    // Gentle
@@ -29,7 +29,7 @@ export const TRAIT_RING_SPEEDS: Record<NodeTrait, number> = {
 };
 
 // Trait glow intensities
-export const TRAIT_GLOW_INTENSITY: Record<NodeTrait, number> = {
+export const TRAIT_GLOW_INTENSITY: Record<Trait, number> = {
   invariant: 0.2,    // Subtle
   localized: 0.4,    // Medium
   knowledge: 0.6,    // Higher (knowledge glows)
@@ -43,8 +43,8 @@ export const PARTICLE_PER_CONNECTION = 2;
 
 export interface CompositeNodeConfig {
   layer: Layer;
-  realm: NodeRealm;
-  trait: NodeTrait;
+  realm: Realm;
+  trait: Trait;
   layerColor: string;
   realmColor: string;
   connectionCount?: number;

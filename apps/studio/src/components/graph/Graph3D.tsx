@@ -38,7 +38,7 @@ import {
   type ForceGraphNode,
   type ForceGraphLink,
 } from '@/lib/graph3d';
-import type { Layer, NodeRealm, NodeTrait } from '@novanet/core/types';
+import type { Layer, Realm, Trait } from '@novanet/core/types';
 import { Graph3DLegend } from './Graph3DLegend';
 
 // Layer Z-axis positions for visual separation
@@ -384,8 +384,8 @@ export const Graph3D = memo(function Graph3D({
     // Create composite node (Core + Rings + Particles)
     const composite = createCompositeNode({
       layer: node.layer as Layer,
-      realm: node.realm as NodeRealm,
-      trait: node.trait as NodeTrait,
+      realm: node.realm as Realm,
+      trait: node.trait as Trait,
       layerColor,
       realmColor,
       connectionCount,
