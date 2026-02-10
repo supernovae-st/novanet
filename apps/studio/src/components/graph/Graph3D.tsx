@@ -581,14 +581,14 @@ export const Graph3D = memo(function Graph3D({
   }, [selectedNodeId, hoveredNodeId, selectionBurst, getNodeOpacity, getNodeScale]);
 
   // Smooth camera zoom to selected node — larger distance for bigger nodes
-  const zoomToNode = useCallback((node: ForceGraphNode) => {
-    if (!fgRef.current?.cameraPosition) return;
+  const zoomToNode = useCallback((node: ForceGraphNode | null | undefined) => {
+    if (!fgRef.current?.cameraPosition || !node) return;
 
-    // Get node position
+    // Get node position (defensive - node may not have position yet)
     const nodePos = {
-      x: node.x || 0,
-      y: node.y || 0,
-      z: node.z || 0,
+      x: node.x ?? 0,
+      y: node.y ?? 0,
+      z: node.z ?? 0,
     };
 
     // Calculate camera position at larger distance for bigger nodes
@@ -603,9 +603,11 @@ export const Graph3D = memo(function Graph3D({
     fgRef.current.cameraPosition(cameraPos, nodePos, 1500);
   }, []);
 
-  // Node click handler with zoom
+  // Node click handler with zoom (defensive null check)
   const handleNodeClick = useCallback(
-    (node: ForceGraphNode) => {
+    (node: ForceGraphNode | null | undefined) => {
+      if (!node?.id) return;  // Defensive: node may be undefined from library
+
       setSelectedNode(node.id);
       zoomToNode(node);
 
@@ -618,27 +620,28 @@ export const Graph3D = memo(function Graph3D({
     [setSelectedNode, zoomToNode, onNodeClick]
   );
 
-  // Node double-click handler
+  // Node double-click handler (defensive null check)
   const handleNodeDoubleClick = useCallback(
-    (node: ForceGraphNode) => {
+    (node: ForceGraphNode | null | undefined) => {
+      if (!node?.id) return;
       onNodeDoubleClick?.(node.id);
     },
     [onNodeDoubleClick]
   );
 
-  // Node hover handler with scale effect
+  // Node hover handler with scale effect (defensive null checks)
   const handleNodeHover = useCallback(
-    (node: ForceGraphNode | null, prevNode: ForceGraphNode | null) => {
+    (node: ForceGraphNode | null | undefined, prevNode: ForceGraphNode | null | undefined) => {
       // Update hover scale (using ref)
       const scales = hoverScalesRef.current;
-      if (prevNode) {
+      if (prevNode?.id) {
         scales.set(prevNode.id, 1.0);
       }
-      if (node) {
+      if (node?.id) {
         scales.set(node.id, 1.15);
       }
 
-      setHoveredNode(node?.id || null);
+      setHoveredNode(node?.id ?? null);
 
       // Change cursor
       if (typeof document !== 'undefined') {
