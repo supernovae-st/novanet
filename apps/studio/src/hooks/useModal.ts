@@ -68,8 +68,9 @@ export function useModal(
   const [mounted, setMounted] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
 
-  // Client-side mounting check for SSR
+  // Client-side mounting check for SSR hydration
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Required for SSR hydration
     setMounted(true);
   }, []);
 

@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable @typescript-eslint/no-explicit-any -- Three.js/ForceGraph library interop requires any casts */
+
 /**
  * Graph3D Component - 3D Knowledge Graph Visualization
  *
@@ -30,12 +32,31 @@ import {
   createGeometryForLayer,
   getArcParticleConfig,
   createStarfield,
-  createBloomComposer,
+  createEnhancedComposer,
   updateComposerSize,
   type ForceGraphNode,
   type ForceGraphLink,
 } from '@/lib/graph3d';
 import { Graph3DLegend } from './Graph3DLegend';
+
+// Layer Z-axis positions for visual separation
+const LAYER_Z_POSITIONS: Record<string, number> = {
+  config: 0,
+  locale: 30,
+  geography: 60,
+  knowledge: 90,
+  foundation: 130,
+  structure: 170,
+  semantic: 210,
+  instruction: 250,
+  output: 290,
+};
+
+// Realm X-axis offsets
+const REALM_X_OFFSETS: Record<string, number> = {
+  shared: -60,
+  org: 60,
+};
 
 // Force graph ref type (minimal typing for dynamic import)
 interface ForceGraphMethods {
@@ -133,13 +154,14 @@ function createTraitMaterial(trait: string, layerColor: string): THREE.Material 
       break;
 
     case 'generated':
-      // Emissive glow for generated content
+      // Emissive glow for generated content - bloom compatible
       material = new THREE.MeshStandardMaterial({
         color: layerColor,
         emissive: layerColor,
-        emissiveIntensity: 0.5,
+        emissiveIntensity: 1.5,  // Increased for bloom
         transparent: true,
         opacity: 0.95,
+        toneMapped: false,  // Required for bloom to work
       });
       break;
 
@@ -179,9 +201,13 @@ export const Graph3D = memo(function Graph3D({
 }: Graph3DProps) {
   const fgRef = useRef<ForceGraphMethods | null>(null);
   const starfieldRef = useRef<THREE.Points | null>(null);
-  const composerRef = useRef<ReturnType<typeof createBloomComposer> | null>(null);
+  const composerRef = useRef<ReturnType<typeof createEnhancedComposer> | null>(null);
   const [legendCollapsed, setLegendCollapsed] = useState(false);
   const [isGraphReady, setIsGraphReady] = useState(false);
+  const [neighborIds, setNeighborIds] = useState<Set<string>>(new Set());
+  const [highlightedLinks, setHighlightedLinks] = useState<Set<string>>(new Set());
+  const [bootPhase, setBootPhase] = useState<'loading' | 'spawning' | 'ready'>('loading');
+  const [selectionBurst, setSelectionBurst] = useState<string | null>(null);
 
   // Get filtered graph data
   const { nodes, edges } = useFilteredGraph();
@@ -230,11 +256,14 @@ export const Graph3D = memo(function Graph3D({
 
     if (!renderer || !scene || !camera) return;
 
-    // Create bloom composer
-    const composer = createBloomComposer(renderer, scene, camera, {
+    // Create enhanced composer (bloom + vignette)
+    const composer = createEnhancedComposer(renderer, scene, camera, {
       strength: 1.2,
       radius: 0.5,
       threshold: 0.7,
+    }, {
+      offset: 0.5,
+      darkness: 0.4,
     });
     composerRef.current = composer;
 
@@ -252,6 +281,108 @@ export const Graph3D = memo(function Graph3D({
     };
   }, [isGraphReady]);
 
+  // Configure camera controls for constrained orbit
+  useEffect(() => {
+    if (!isGraphReady || !fgRef.current) return;
+
+    const controls = (fgRef.current as any).controls?.();
+    if (!controls) return;
+
+    // Constrain orbit to prevent disorientation
+    controls.minPolarAngle = Math.PI * 0.15;  // Don't go fully overhead
+    controls.maxPolarAngle = Math.PI * 0.85;  // Don't go fully underneath
+    controls.minDistance = 50;                 // Prevent clipping into nodes
+    controls.maxDistance = 600;                // Keep graph visible
+    controls.enableDamping = true;             // Smooth deceleration
+    controls.dampingFactor = 0.08;             // Damping strength
+  }, [isGraphReady]);
+
+  // Configure D3 forces for layer/realm positioning
+  useEffect(() => {
+    if (!isGraphReady || !fgRef.current) return;
+
+    const fg = fgRef.current as any;
+
+    // Reduce charge for less repulsion
+    fg.d3Force?.('charge')?.strength?.(-60);
+
+    // Reheat simulation to apply new forces
+    fg.d3ReheatSimulation?.();
+  }, [isGraphReady]);
+
+  // Galaxy boot animation - nodes spiral in from center
+  useEffect(() => {
+    if (!isGraphReady || bootPhase !== 'loading' || graphData.nodes.length === 0) return;
+
+    setBootPhase('spawning');
+
+    // Animate nodes from center with stagger
+    // fx/fy/fz are D3 force properties added at runtime
+    graphData.nodes.forEach((node, index) => {
+      const n = node as ForceGraphNode & { fx?: number; fy?: number; fz?: number };
+      // Start all nodes at center
+      n.fx = 0;
+      n.fy = 0;
+      n.fz = 0;
+
+      // Release with stagger
+      const delay = index * 30;  // 30ms stagger
+      setTimeout(() => {
+        n.fx = undefined;
+        n.fy = undefined;
+        n.fz = undefined;
+      }, delay);
+    });
+
+    // Mark as ready after all nodes released
+    const totalDelay = graphData.nodes.length * 30 + 1500;
+    setTimeout(() => setBootPhase('ready'), totalDelay);
+  }, [isGraphReady, bootPhase, graphData.nodes]);
+
+  // Compute neighbors and highlighted links when selection changes
+  useEffect(() => {
+    if (!selectedNodeId) {
+      setNeighborIds(new Set());
+      setHighlightedLinks(new Set());
+      return;
+    }
+
+    const neighbors = new Set<string>();
+    const links = new Set<string>();
+
+    graphData.links.forEach((link) => {
+      // source/target can be string (initial) or object (after d3 simulation)
+      const source = link.source as string | { id: string };
+      const target = link.target as string | { id: string };
+      const sourceId = typeof source === 'object' ? source.id : source;
+      const targetId = typeof target === 'object' ? target.id : target;
+
+      if (sourceId === selectedNodeId || targetId === selectedNodeId) {
+        neighbors.add(sourceId === selectedNodeId ? targetId : sourceId);
+        links.add(`${sourceId}-${targetId}`);
+      }
+    });
+
+    setNeighborIds(neighbors);
+    setHighlightedLinks(links);
+  }, [selectedNodeId, graphData.links]);
+
+  // Calculate node opacity based on selection context
+  const getNodeOpacity = useCallback((nodeId: string): number => {
+    if (!selectedNodeId) return 1.0;  // No selection = all visible
+    if (nodeId === selectedNodeId) return 1.0;  // Selected = full
+    if (neighborIds.has(nodeId)) return 0.7;  // Neighbors = visible
+    return 0.15;  // Others = ghosted
+  }, [selectedNodeId, neighborIds]);
+
+  // Calculate node scale based on selection context
+  const getNodeScale = useCallback((nodeId: string): number => {
+    if (!selectedNodeId) return 1.0;
+    if (nodeId === selectedNodeId) return 1.3;  // Selected = larger
+    if (neighborIds.has(nodeId)) return 1.0;  // Neighbors = normal
+    return 0.7;  // Others = smaller
+  }, [selectedNodeId, neighborIds]);
+
   // Custom node rendering with Three.js
   const renderNode = useCallback((node: ForceGraphNode) => {
     const group = new THREE.Group();
@@ -267,12 +398,37 @@ export const Graph3D = memo(function Graph3D({
     // Create material based on trait
     const material = createTraitMaterial(node.trait, layerColor);
 
+    // Apply focus+context opacity
+    const contextOpacity = getNodeOpacity(node.id);
+    if (material instanceof THREE.MeshStandardMaterial ||
+        material instanceof THREE.MeshPhysicalMaterial ||
+        material instanceof THREE.MeshBasicMaterial) {
+      material.transparent = true;
+      material.opacity = Math.min(material.opacity || 1, contextOpacity);
+    }
+
+    // Add emissive for selected/burst node (bloom effect)
+    if (material instanceof THREE.MeshStandardMaterial) {
+      if (node.id === selectionBurst) {
+        // Burst effect - extra bright supernova
+        material.emissive = new THREE.Color(layerColor);
+        material.emissiveIntensity = 5.0;
+        material.toneMapped = false;
+      } else if (node.id === selectedNodeId) {
+        // Selected - bright glow
+        material.emissive = new THREE.Color(layerColor);
+        material.emissiveIntensity = 2.0;
+        material.toneMapped = false;
+      }
+    }
+
     // Create mesh
     const mesh = new THREE.Mesh(geometry, material);
 
-    // Apply hover scale
+    // Apply focus+context scale with hover
+    const contextScale = getNodeScale(node.id);
     const hoverScale = hoverScales.get(node.id) || 1.0;
-    mesh.scale.setScalar(hoverScale);
+    mesh.scale.setScalar(contextScale * hoverScale);
 
     group.add(mesh);
 
@@ -282,7 +438,7 @@ export const Graph3D = memo(function Graph3D({
     const ringMaterial = new THREE.MeshBasicMaterial({
       color: realmColor,
       transparent: true,
-      opacity: 0.7,
+      opacity: contextOpacity * 0.7,
     });
     const ring = new THREE.Mesh(ringGeometry, ringMaterial);
     ring.rotation.x = Math.PI / 2;
@@ -328,9 +484,9 @@ export const Graph3D = memo(function Graph3D({
     group.userData = { nodeId: node.id, nodeType: node.type };
 
     return group;
-  }, [selectedNodeId, hoveredNodeId]);
+  }, [selectedNodeId, hoveredNodeId, selectionBurst, getNodeOpacity, getNodeScale]);
 
-  // Camera zoom to node
+  // Smooth camera zoom to selected node
   const zoomToNode = useCallback((node: ForceGraphNode) => {
     if (!fgRef.current?.cameraPosition) return;
 
@@ -341,16 +497,16 @@ export const Graph3D = memo(function Graph3D({
       z: node.z || 0,
     };
 
-    // Calculate camera position (zoom to a distance based on node size)
-    const distance = (node.val || 4) * 15;
+    // Calculate camera position at fixed distance for consistency
+    const distance = 100;
     const cameraPos = {
-      x: nodePos.x + distance * 0.7,
-      y: nodePos.y + distance * 0.5,
+      x: nodePos.x + distance * 0.6,
+      y: nodePos.y + distance * 0.4,
       z: nodePos.z + distance * 0.7,
     };
 
-    // Animate camera
-    fgRef.current.cameraPosition(cameraPos, nodePos, 1000);
+    // Smooth 1.5s animation (longer = more cinematic)
+    fgRef.current.cameraPosition(cameraPos, nodePos, 1500);
   }, []);
 
   // Node click handler with zoom
@@ -358,6 +514,11 @@ export const Graph3D = memo(function Graph3D({
     (node: ForceGraphNode) => {
       setSelectedNode(node.id);
       zoomToNode(node);
+
+      // Trigger selection burst effect
+      setSelectionBurst(node.id);
+      setTimeout(() => setSelectionBurst(null), 400);
+
       onNodeClick?.(node.id);
     },
     [setSelectedNode, zoomToNode, onNodeClick]
@@ -413,8 +574,33 @@ export const Graph3D = memo(function Graph3D({
 
   const getLinkWidth = useCallback((link: ForceGraphLink) => {
     const config = getArcParticleConfig(link.type);
-    return config.linkWidth;
-  }, []);
+    const baseWidth = config.linkWidth;
+
+    // Highlight connected links
+    const source = link.source as string | { id: string };
+    const target = link.target as string | { id: string };
+    const sourceId = typeof source === 'object' ? source.id : source;
+    const targetId = typeof target === 'object' ? target.id : target;
+    const linkKey = `${sourceId}-${targetId}`;
+
+    if (highlightedLinks.has(linkKey)) {
+      return baseWidth * 3;  // 3x wider when highlighted
+    }
+
+    return selectedNodeId ? baseWidth * 0.5 : baseWidth;  // Dim when selection exists
+  }, [highlightedLinks, selectedNodeId]);
+
+  const getLinkOpacity = useCallback((link: ForceGraphLink) => {
+    const source = link.source as string | { id: string };
+    const target = link.target as string | { id: string };
+    const sourceId = typeof source === 'object' ? source.id : source;
+    const targetId = typeof target === 'object' ? target.id : target;
+    const linkKey = `${sourceId}-${targetId}`;
+
+    if (!selectedNodeId) return 0.5;  // Default opacity
+    if (highlightedLinks.has(linkKey)) return 0.9;  // Highlighted
+    return 0.1;  // Dimmed
+  }, [highlightedLinks, selectedNodeId]);
 
   const getLinkParticles = useCallback((link: ForceGraphLink) => {
     const config = getArcParticleConfig(link.type);
@@ -471,7 +657,7 @@ export const Graph3D = memo(function Graph3D({
         onEngineTick={handleEngineTick}
         linkColor={getLinkColor as any}
         linkWidth={getLinkWidth as any}
-        linkOpacity={0.5}
+        linkOpacity={getLinkOpacity as any}
         linkDirectionalParticles={getLinkParticles as any}
         linkDirectionalParticleSpeed={getLinkParticleSpeed as any}
         linkDirectionalParticleWidth={getLinkParticleWidth as any}

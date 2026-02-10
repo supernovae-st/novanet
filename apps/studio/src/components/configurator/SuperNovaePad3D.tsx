@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable @typescript-eslint/no-explicit-any -- Three.js/gesture library interop requires any casts */
+
 /**
  * SuperNovaePad3D - Main 3D canvas for the macropad configurator
  *
