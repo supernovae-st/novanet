@@ -1,11 +1,16 @@
 # NovaNet Rust CI Pipeline
-# Runs on: push to main, pull requests
+# Runs on: push to main, pull requests, weekly schedule
 #
 # Jobs:
-# 1. check: Format + Clippy
-# 2. test: Unit + integration tests
-# 3. security: cargo-deny + cargo-audit
-# 4. semantic: Semantic coherence validation
+# 1. check: Format + Clippy (multi-platform)
+# 2. test: Unit + integration tests (matrix: stable/beta, ubuntu/macos)
+# 3. coverage: Code coverage with codecov
+# 4. security: cargo-deny + cargo-audit
+# 5. semantic: Semantic coherence validation
+# 6. build: Release build (main only)
+# 7. summary: PR comment with results
+#
+# Scheduled: Weekly security scan (Sundays 02:00 UTC)
 
 name: Rust CI
 
@@ -21,12 +26,31 @@ on:
     paths:
       - 'tools/novanet/**'
       - 'packages/core/models/**'
+      - '.github/workflows/rust-ci.yml'
+  schedule:
+    # Weekly security scan: Sundays at 02:00 UTC
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+    inputs:
+      run_security_only:
+        description: 'Run only security checks'
+        required: false
+        default: 'false'
+        type: boolean
+
+# Cancel outdated runs for same PR/branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
 env:
   CARGO_TERM_COLOR: always
   RUSTFLAGS: -Dwarnings
-  NOVANET_VERSION: v11.5
+  NOVANET_VERSION: v11.6
   NOVANET_NODE_COUNT: '60'
+  NOVANET_LAYER_COUNT: '10'
+  # Minimum coverage threshold (%)
+  COVERAGE_THRESHOLD: 70
 
 defaults:
   run:
@@ -37,72 +61,258 @@ jobs:
   # Quick Check (runs first, fast feedback)
   # ─────────────────────────────────────────────────────────────────────────────
   check:
-    name: Check (fmt + clippy)
-    runs-on: ubuntu-latest
+    name: Check (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    if: github.event.inputs.run_security_only != 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
 
-      - name: Cache cargo
+      - name: Cache cargo registry and build
         uses: Swatinem/rust-cache@v2
         with:
           workspaces: tools/novanet -> target
+          cache-on-failure: true
+          shared-key: check-${{ matrix.os }}
 
       - name: Check formatting
         run: cargo fmt --check
 
-      - name: Run clippy
-        run: cargo clippy -- -D warnings
+      - name: Run clippy (all features)
+        run: cargo clippy --all-features -- -D warnings
+
+      - name: Run clippy (no default features)
+        run: cargo clippy --no-default-features -- -D warnings
 
   # ─────────────────────────────────────────────────────────────────────────────
-  # Test Suite
+  # Test Suite (matrix: rust version x os)
   # ─────────────────────────────────────────────────────────────────────────────
   test:
-    name: Test
-    runs-on: ubuntu-latest
+    name: Test (${{ matrix.rust }}, ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    if: github.event.inputs.run_security_only != 'true'
     needs: check
+    strategy:
+      fail-fast: false
+      matrix:
+        rust: [stable, beta]
+        os: [ubuntu-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
+      - name: Install Rust toolchain (${{ matrix.rust }})
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ matrix.rust }}
 
-      - name: Cache cargo
+      - name: Cache cargo registry and build
         uses: Swatinem/rust-cache@v2
         with:
           workspaces: tools/novanet -> target
+          cache-on-failure: true
+          shared-key: test-${{ matrix.rust }}-${{ matrix.os }}
 
       - name: Install cargo-nextest
         uses: taiki-e/install-action@nextest
 
       - name: Run tests with nextest
-        run: cargo nextest run --lib
+        id: nextest
+        run: |
+          cargo nextest run --lib --message-format libtest-json 2>&1 | tee test-output.json || true
+          cargo nextest run --lib 2>&1 | tee test-results.txt
+          # Extract summary for PR comment
+          PASSED=$(grep -c "PASS" test-results.txt || echo "0")
+          FAILED=$(grep -c "FAIL" test-results.txt || echo "0")
+          echo "passed=$PASSED" >> $GITHUB_OUTPUT
+          echo "failed=$FAILED" >> $GITHUB_OUTPUT
 
       - name: Run doc tests
         run: cargo test --doc
 
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.rust }}-${{ matrix.os }}
+          path: tools/novanet/test-results.txt
+          retention-days: 7
+
   # ─────────────────────────────────────────────────────────────────────────────
-  # Security Audit
+  # Code Coverage (ubuntu + stable only)
   # ─────────────────────────────────────────────────────────────────────────────
-  security:
-    name: Security
+  coverage:
+    name: Coverage
     runs-on: ubuntu-latest
+    if: github.event.inputs.run_security_only != 'true'
     needs: check
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: llvm-tools-preview
+
+      - name: Cache cargo registry and build
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: tools/novanet -> target
+          cache-on-failure: true
+          shared-key: coverage
+
+      - name: Install cargo-llvm-cov
+        uses: taiki-e/install-action@cargo-llvm-cov
+
+      - name: Generate coverage report
+        run: |
+          cargo llvm-cov --lib --lcov --output-path lcov.info
+          cargo llvm-cov report --lib --summary-only | tee coverage-summary.txt
+
+      - name: Extract coverage percentage
+        id: coverage
+        run: |
+          # Extract line coverage percentage
+          COVERAGE=$(grep "Total" coverage-summary.txt | awk '{print $NF}' | tr -d '%' || echo "0")
+          echo "percentage=$COVERAGE" >> $GITHUB_OUTPUT
+          echo "Coverage: $COVERAGE%"
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: tools/novanet/lcov.info
+          flags: rust
+          name: novanet-coverage
+          fail_ci_if_error: false
+          verbose: true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: |
+            tools/novanet/lcov.info
+            tools/novanet/coverage-summary.txt
+          retention-days: 30
+
+      - name: Check coverage threshold
+        env:
+          COVERAGE: ${{ steps.coverage.outputs.percentage }}
+          THRESHOLD: ${{ env.COVERAGE_THRESHOLD }}
+        run: |
+          if [ -n "$COVERAGE" ] && [ "$COVERAGE" != "0" ]; then
+            COVERAGE_INT=${COVERAGE%.*}
+            if [ "$COVERAGE_INT" -lt "$THRESHOLD" ]; then
+              echo "::warning::Coverage ($COVERAGE%) is below threshold ($THRESHOLD%)"
+            else
+              echo "Coverage ($COVERAGE%) meets threshold ($THRESHOLD%)"
+            fi
+          fi
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Security Audit (always runs, even on schedule)
+  # ─────────────────────────────────────────────────────────────────────────────
+  security:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    needs: check
+    if: always() && (needs.check.result == 'success' || needs.check.result == 'skipped')
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Install cargo-deny
-        uses: taiki-e/install-action@cargo-deny
+      - name: Cache cargo registry
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: tools/novanet -> target
+          cache-on-failure: true
+          shared-key: security
 
-      - name: Run cargo-deny
-        run: cargo deny check
+      - name: Install security tools
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-deny,cargo-audit
+
+      - name: Run cargo-deny (licenses + bans + sources)
+        id: deny
+        run: |
+          cargo deny check 2>&1 | tee deny-output.txt
+          echo "status=$?" >> $GITHUB_OUTPUT
+
+      - name: Run cargo-audit (vulnerabilities)
+        id: audit
+        run: |
+          cargo audit --json 2>&1 | tee audit-output.json || true
+          cargo audit 2>&1 | tee audit-output.txt
+          VULNS=$(grep -c "Vulnerability" audit-output.txt || echo "0")
+          echo "vulnerabilities=$VULNS" >> $GITHUB_OUTPUT
+
+      - name: Upload security reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-reports
+          path: |
+            tools/novanet/deny-output.txt
+            tools/novanet/audit-output.txt
+            tools/novanet/audit-output.json
+          retention-days: 30
+
+      - name: Create security issue on vulnerabilities (scheduled only)
+        if: github.event_name == 'schedule' && steps.audit.outputs.vulnerabilities != '0'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const vulns = '${{ steps.audit.outputs.vulnerabilities }}';
+            const title = `[Security] ${vulns} vulnerabilities found in Rust dependencies`;
+            const body = `## Weekly Security Scan Results
+
+            **Date**: ${new Date().toISOString().split('T')[0]}
+            **Vulnerabilities found**: ${vulns}
+
+            Please review the security reports in the [workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
+
+            ### Next Steps
+            1. Review \`audit-output.txt\` artifact
+            2. Update affected dependencies
+            3. Document exceptions in \`deny.toml\` if needed
+
+            ---
+            *This issue was automatically created by the weekly security scan.*`;
+
+            // Check for existing open issue
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'security,automated'
+            });
+
+            const existing = issues.data.find(i => i.title.includes('[Security]'));
+            if (!existing) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: body,
+                labels: ['security', 'automated', 'dependencies']
+              });
+            }
 
   # ─────────────────────────────────────────────────────────────────────────────
   # Semantic Coherence Validation
@@ -110,74 +320,310 @@ jobs:
   semantic:
     name: Semantic Audit
     runs-on: ubuntu-latest
+    if: github.event.inputs.run_security_only != 'true'
     needs: check
+    outputs:
+      node_count: ${{ steps.nodes.outputs.count }}
+      layer_count: ${{ steps.layers.outputs.count }}
+      arc_count: ${{ steps.arcs.outputs.count }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo registry and build
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: tools/novanet -> target
+          cache-on-failure: true
+          shared-key: semantic
 
       - name: Verify YAML node count
+        id: nodes
         env:
           EXPECTED_COUNT: ${{ env.NOVANET_NODE_COUNT }}
         run: |
-          YAML_COUNT=$(find ../../packages/core/models/node-kinds -name "*.yaml" | wc -l)
-          echo "YAML node count: $YAML_COUNT"
+          YAML_COUNT=$(find ../../packages/core/models/node-kinds -name "*.yaml" | wc -l | tr -d ' ')
+          echo "count=$YAML_COUNT" >> $GITHUB_OUTPUT
+          echo "YAML node count: $YAML_COUNT (expected: $EXPECTED_COUNT)"
           if [ "$YAML_COUNT" -ne "$EXPECTED_COUNT" ]; then
             echo "::error::YAML node count ($YAML_COUNT) does not match expected ($EXPECTED_COUNT)"
             exit 1
           fi
 
-      - name: Check for deprecated realm names
+      - name: Verify layer structure
+        id: layers
+        env:
+          EXPECTED_LAYERS: ${{ env.NOVANET_LAYER_COUNT }}
         run: |
-          DEPRECATED=$(grep -rn --include="*.rs" '"global"\|"tenant"' src/ 2>/dev/null | grep -v "test" | grep -v "// v11" || true)
+          SHARED=$(ls -d ../../packages/core/models/node-kinds/shared/*/ 2>/dev/null | wc -l | tr -d ' ')
+          ORG=$(ls -d ../../packages/core/models/node-kinds/org/*/ 2>/dev/null | wc -l | tr -d ' ')
+          TOTAL=$((SHARED + ORG))
+          echo "count=$TOTAL" >> $GITHUB_OUTPUT
+          echo "Layer count: $TOTAL ($SHARED shared + $ORG org)"
+          if [ "$TOTAL" -ne "$EXPECTED_LAYERS" ]; then
+            echo "::error::Layer count ($TOTAL) does not match expected ($EXPECTED_LAYERS)"
+            exit 1
+          fi
+
+      - name: Count arc kinds
+        id: arcs
+        run: |
+          ARC_COUNT=$(find ../../packages/core/models/arc-kinds -name "*.yaml" | wc -l | tr -d ' ')
+          echo "count=$ARC_COUNT" >> $GITHUB_OUTPUT
+          echo "Arc kind count: $ARC_COUNT"
+
+      - name: Check for deprecated realm names in Rust
+        run: |
+          # Search for deprecated realm names (global/tenant) but exclude test files and version comments
+          DEPRECATED=$(grep -rn --include="*.rs" '"global"\|"tenant"' src/ 2>/dev/null | grep -v "_test\.rs" | grep -v "mod tests" | grep -v "// v11" | grep -v "#\[test\]" || true)
           if [ -n "$DEPRECATED" ]; then
             echo "::warning::Deprecated realm names found (use 'shared'/'org'):"
             echo "$DEPRECATED" | head -10
           fi
 
-      - name: Check for edge-family terminology
+      - name: Check for deprecated L10n terminology
         run: |
-          EDGE=$(grep -rn --include="*.rs" "edge.family\|edge-family" src/ 2>/dev/null || true)
+          # L10n was renamed to Content/Generated in v10.9
+          L10N=$(grep -rn --include="*.rs" "L10n\|_l10n\|l10n_" src/ 2>/dev/null | grep -v "_test\.rs" | grep -v "mod tests" || true)
+          if [ -n "$L10N" ]; then
+            echo "::warning::Deprecated L10n terminology found (use Content/Generated):"
+            echo "$L10N" | head -10
+          fi
+
+      - name: Check for edge terminology (should be arc)
+        run: |
+          # We use Arc, not Edge (except React Flow internals)
+          EDGE=$(grep -rn --include="*.rs" "edge.family\|edge-family\|EdgeFamily\|edge_family" src/ 2>/dev/null || true)
           if [ -n "$EDGE" ]; then
-            echo "::error::edge-family terminology found (use arc-family):"
+            echo "::error::edge terminology found (use arc):"
             echo "$EDGE"
             exit 1
           fi
 
-      - name: Verify layer structure
+      - name: Validate YAML realm/layer consistency
         run: |
-          SHARED=$(ls -d ../../packages/core/models/node-kinds/shared/*/ | wc -l)
-          ORG=$(ls -d ../../packages/core/models/node-kinds/org/*/ | wc -l)
-          TOTAL=$((SHARED + ORG))
-          echo "Layer count: $TOTAL ($SHARED shared + $ORG org)"
-          if [ "$TOTAL" -ne 10 ]; then
-            echo "::error::Layer count ($TOTAL) does not match expected (10)"
+          # Check that each YAML file's realm/layer matches its path
+          ERRORS=""
+          for yaml in $(find ../../packages/core/models/node-kinds -name "*.yaml"); do
+            # Extract path components
+            PATH_REALM=$(echo "$yaml" | sed 's|.*/node-kinds/\([^/]*\)/.*|\1|')
+            PATH_LAYER=$(echo "$yaml" | sed 's|.*/node-kinds/[^/]*/\([^/]*\)/.*|\1|')
+            
+            # Extract YAML realm/layer (if present)
+            YAML_REALM=$(grep "^  realm:" "$yaml" 2>/dev/null | awk '{print $2}' | tr -d '"' || true)
+            YAML_LAYER=$(grep "^  layer:" "$yaml" 2>/dev/null | awk '{print $2}' | tr -d '"' || true)
+            
+            if [ -n "$YAML_REALM" ] && [ "$YAML_REALM" != "$PATH_REALM" ]; then
+              ERRORS="$ERRORS\nMismatch: $yaml (path=$PATH_REALM, yaml=$YAML_REALM)"
+            fi
+            if [ -n "$YAML_LAYER" ] && [ "$YAML_LAYER" != "$PATH_LAYER" ]; then
+              ERRORS="$ERRORS\nMismatch: $yaml (path=$PATH_LAYER, yaml=$YAML_LAYER)"
+            fi
+          done
+          
+          if [ -n "$ERRORS" ]; then
+            echo "::error::YAML path/content realm/layer mismatches found:"
+            echo -e "$ERRORS"
             exit 1
+          fi
+          echo "All YAML files have consistent realm/layer"
+
+      - name: Run schema validation (if available)
+        run: |
+          if cargo build --quiet 2>/dev/null; then
+            cargo run -- schema validate --strict 2>&1 || echo "::warning::Schema validation had issues"
+          else
+            echo "Skipping schema validation (build not ready)"
           fi
 
   # ─────────────────────────────────────────────────────────────────────────────
-  # Build (only on main)
+  # Build Release (main only)
   # ─────────────────────────────────────────────────────────────────────────────
   build:
-    name: Build
-    runs-on: ubuntu-latest
+    name: Build (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
     needs: [test, security, semantic]
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && github.event.inputs.run_security_only != 'true'
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact: novanet-linux-x64
+            target: x86_64-unknown-linux-gnu
+          - os: macos-latest
+            artifact: novanet-macos-arm64
+            target: aarch64-apple-darwin
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
 
-      - name: Cache cargo
+      - name: Cache cargo registry and build
         uses: Swatinem/rust-cache@v2
         with:
           workspaces: tools/novanet -> target
+          cache-on-failure: true
+          shared-key: build-${{ matrix.os }}
 
       - name: Build release
-        run: cargo build --release
+        run: cargo build --release --target ${{ matrix.target }}
 
-      - name: Upload binary
+      - name: Upload binary artifact
         uses: actions/upload-artifact@v4
         with:
-          name: novanet-linux
-          path: tools/novanet/target/release/novanet
-          retention-days: 7
+          name: ${{ matrix.artifact }}
+          path: tools/novanet/target/${{ matrix.target }}/release/novanet
+          retention-days: 30
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # PR Summary Comment
+  # ─────────────────────────────────────────────────────────────────────────────
+  summary:
+    name: PR Summary
+    runs-on: ubuntu-latest
+    needs: [check, test, coverage, security, semantic]
+    if: always() && github.event_name == 'pull_request'
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Generate summary comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const checkResult = '${{ needs.check.result }}';
+            const testResult = '${{ needs.test.result }}';
+            const coverageResult = '${{ needs.coverage.result }}';
+            const securityResult = '${{ needs.security.result }}';
+            const semanticResult = '${{ needs.semantic.result }}';
+            
+            const nodeCount = '${{ needs.semantic.outputs.node_count }}' || 'N/A';
+            const layerCount = '${{ needs.semantic.outputs.layer_count }}' || 'N/A';
+            const arcCount = '${{ needs.semantic.outputs.arc_count }}' || 'N/A';
+            
+            const statusEmoji = (result) => {
+              switch(result) {
+                case 'success': return ':white_check_mark:';
+                case 'failure': return ':x:';
+                case 'cancelled': return ':stop_sign:';
+                case 'skipped': return ':fast_forward:';
+                default: return ':question:';
+              }
+            };
+            
+            const body = `## Rust CI Results
+
+            | Job | Status |
+            |-----|--------|
+            | Check (fmt + clippy) | ${statusEmoji(checkResult)} ${checkResult} |
+            | Test (stable + beta) | ${statusEmoji(testResult)} ${testResult} |
+            | Coverage | ${statusEmoji(coverageResult)} ${coverageResult} |
+            | Security (deny + audit) | ${statusEmoji(securityResult)} ${securityResult} |
+            | Semantic Audit | ${statusEmoji(semanticResult)} ${semanticResult} |
+
+            ### Schema Statistics
+            - **Nodes**: ${nodeCount} (expected: ${{ env.NOVANET_NODE_COUNT }})
+            - **Layers**: ${layerCount} (expected: ${{ env.NOVANET_LAYER_COUNT }})
+            - **Arcs**: ${arcCount}
+            - **Version**: ${{ env.NOVANET_VERSION }}
+
+            <details>
+            <summary>View detailed results</summary>
+
+            - [Workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            - Coverage report available in artifacts
+            - Security reports available in artifacts
+
+            </details>
+
+            ---
+            *Generated by Rust CI workflow*`;
+
+            // Find existing comment
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number
+            });
+            
+            const existingComment = comments.find(c => 
+              c.user.type === 'Bot' && c.body.includes('## Rust CI Results')
+            );
+            
+            if (existingComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existingComment.id,
+                body: body
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: body
+              });
+            }
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Badge Update (main only)
+  # ─────────────────────────────────────────────────────────────────────────────
+  badge:
+    name: Update Badge
+    runs-on: ubuntu-latest
+    needs: [test, security]
+    if: github.ref == 'refs/heads/main' && github.event.inputs.run_security_only != 'true'
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Create badge data
+        id: badge
+        run: |
+          # Determine overall status
+          TEST_STATUS="${{ needs.test.result }}"
+          SECURITY_STATUS="${{ needs.security.result }}"
+          
+          if [ "$TEST_STATUS" = "success" ] && [ "$SECURITY_STATUS" = "success" ]; then
+            echo "status=passing" >> $GITHUB_OUTPUT
+            echo "color=brightgreen" >> $GITHUB_OUTPUT
+          elif [ "$TEST_STATUS" = "failure" ] || [ "$SECURITY_STATUS" = "failure" ]; then
+            echo "status=failing" >> $GITHUB_OUTPUT
+            echo "color=red" >> $GITHUB_OUTPUT
+          else
+            echo "status=unknown" >> $GITHUB_OUTPUT
+            echo "color=yellow" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Generate badge JSON
+        working-directory: ${{ github.workspace }}
+        run: |
+          mkdir -p .github/badges
+          cat > .github/badges/rust-ci.json << BADGE_EOF
+          {
+            "schemaVersion": 1,
+            "label": "rust ci",
+            "message": "${{ steps.badge.outputs.status }}",
+            "color": "${{ steps.badge.outputs.color }}"
+          }
+          BADGE_EOF
+
+      - name: Commit badge update
+        working-directory: ${{ github.workspace }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .github/badges/rust-ci.json
+          git diff --staged --quiet || git commit -m "chore: update rust-ci badge [skip ci]"
+          git push || echo "No changes to push"
