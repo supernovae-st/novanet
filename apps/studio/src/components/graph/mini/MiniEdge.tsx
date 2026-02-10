@@ -12,8 +12,9 @@
 import { memo } from 'react';
 import { BaseEdge, getStraightPath, type EdgeProps } from '@xyflow/react';
 
-export interface MiniEdgeData extends Record<string, unknown> {
+export interface MiniEdgeData {
   family?: 'ownership' | 'localization' | 'semantic' | 'generation' | 'mining';
+  [key: string]: unknown;
 }
 
 const ARC_FAMILY_COLORS: Record<string, string> = {
@@ -33,7 +34,7 @@ export const MiniEdge = memo(function MiniEdge({
   targetX,
   targetY,
   data,
-}: EdgeProps<MiniEdgeData>) {
+}: EdgeProps) {
   const [edgePath] = getStraightPath({
     sourceX,
     sourceY,
@@ -41,7 +42,8 @@ export const MiniEdge = memo(function MiniEdge({
     targetY,
   });
 
-  const color = data?.family ? ARC_FAMILY_COLORS[data.family] : DEFAULT_COLOR;
+  const edgeData = data as MiniEdgeData | undefined;
+  const color = edgeData?.family ? ARC_FAMILY_COLORS[edgeData.family] : DEFAULT_COLOR;
 
   return (
     <BaseEdge

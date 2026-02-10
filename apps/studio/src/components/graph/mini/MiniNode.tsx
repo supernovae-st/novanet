@@ -17,11 +17,12 @@ import { cn } from '@/lib/utils';
 import { getLayerGradientColors } from '@/design/nodeColors';
 import type { Layer, Realm } from '@novanet/core/types';
 
-export interface MiniNodeData extends Record<string, unknown> {
+export interface MiniNodeData {
   label: string;
   layer?: Layer;
   realm?: Realm;
   isCenter?: boolean;
+  [key: string]: unknown;
 }
 
 const REALM_COLORS: Record<Realm, string> = {
@@ -32,8 +33,8 @@ const REALM_COLORS: Record<Realm, string> = {
 export const MiniNode = memo(function MiniNode({
   data,
   selected,
-}: NodeProps<MiniNodeData>) {
-  const { label, layer, realm, isCenter } = data;
+}: NodeProps) {
+  const { label, layer, realm, isCenter } = data as MiniNodeData;
   const colors = getLayerGradientColors(layer);
   const realmColor = realm ? REALM_COLORS[realm] : '#6366f1';
 

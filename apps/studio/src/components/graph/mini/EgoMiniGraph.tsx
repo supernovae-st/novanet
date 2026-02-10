@@ -37,7 +37,7 @@ const edgeTypes = {
   mini: MiniEdge,
 };
 
-interface EgoMiniGraphProps {
+export interface EgoMiniGraphProps {
   centerNode: GraphNode;
   relatedEdges: StudioEdge[];
   relatedNodes: GraphNode[];
