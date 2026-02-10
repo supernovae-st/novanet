@@ -992,6 +992,9 @@ body {
     --text-muted: 0 0% 65%;
     --text-disabled: 0 0% 45%;
   }
+  .theme {
+    --animate-shine: shine var(--duration) infinite linear;
+  }
 }
 
 /* ========================================
@@ -1106,3 +1109,16 @@ body {
 
 }
 
+@theme inline {
+  @keyframes shine {
+  0% {
+    background-position: 0% 0%;
+    }
+  50% {
+    background-position: 100% 100%;
+    }
+  to {
+    background-position: 0% 0%;
+    }
+  }
+}
