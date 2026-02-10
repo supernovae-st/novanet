@@ -18,7 +18,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | Read | `data`, `meta`, `overlay`, `query` | Implemented (faceted Cypher) |
 | Write | `node create/edit/delete`, `arc create/delete` | Implemented (label validation) |
 | Schema | `schema generate`, `schema validate` | Implemented (12 artifacts) |
-| Docs | `doc generate`, `doc generate --list` | Implemented (11 views) |
+| Docs | `doc generate`, `doc generate --list` | Implemented (12 views) |
 | Search | `search --query=... [--kind=...]` | Implemented (fulltext + property) |
 | Locale | `locale list`, `locale import` | Implemented |
 | DB | `db seed`, `db migrate`, `db reset` | Implemented |
@@ -26,7 +26,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | Blueprint | `blueprint [--view=X]` | Implemented (10 views: tree, flow, arcs, stats, glossary, cardinality + 4 analysis) |
 | TUI | `tui` | Galaxy theme, mission control, EntityCategory filter, search, detail, arc explorer, CRUD dialogs, dashboard, logo, command palette, help overlay, boot animation, effects engine, onboarding |
 
-**950 tests pass** (`cargo test`). Zero clippy warnings.
+**955 tests pass** (`cargo test`). Zero clippy warnings.
 
 **Testing stack:**
 - `insta` — Snapshot testing (5 generator outputs)
@@ -133,7 +133,7 @@ cargo run -- schema validate                      # Validate YAML coherence
 cargo run -- schema validate --strict             # Fail on warnings
 
 # Documentation (YAML, no Neo4j)
-cargo run -- doc generate                         # All 11 view Mermaid diagrams
+cargo run -- doc generate                         # All 12 view Mermaid diagrams
 cargo run -- doc generate --view=block-generation # Single view
 cargo run -- doc generate --dry-run               # Preview without writing
 cargo run -- doc generate --list                  # List available views

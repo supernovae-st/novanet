@@ -2,7 +2,7 @@
 # v10.3: Renamed from concept-ecosystem.yaml - Entity replaces Concept
 id: entity-ecosystem
 name: Entity Network
-description: Entity with all related data (L10n, SEO, semantic links)
+description: Entity with all related data (content, SEO, semantic links)
 version: "10.3.0"
 
 root:

@@ -10,7 +10,7 @@
 //   - ADDED: SUBTOPIC_OF (Page → Page) for pillar-cluster SEO hierarchy
 //
 // v7.11.0 CHANGES:
-//   - ADDED: PREVIOUS_VERSION relation for L10n history chains
+//   - ADDED: PREVIOUS_VERSION relation for content history chains (v10.9: L10n → Content)
 //   - REMOVED: PageGenerated → PageMetrics from HAS_METRICS (query GA/PostHog with date ranges)
 //
 // v7.10.0 CHANGES:
@@ -25,11 +25,11 @@
 //   - REMOVED: HAS_CITATION (replaced by HAS_METRICS)
 //
 // v7.8.3 CHANGES:
-//   - RENAMED: GEOSeed → GEOQuery (all LOCALIZED nodes use *L10n suffix)
+//   - RENAMED: GEOSeed → GEOQuery (LOCALIZED nodes, v10.9: L10n suffix deprecated)
 //   - Updated all relations that reference GEOSeed
 //
 // v7.8.2 CHANGES:
-//   - RENAMED: SEOKeyword → SEOKeyword (all LOCALIZED nodes use *L10n suffix)
+//   - RENAMED: SEOKeyword → SEOKeyword (LOCALIZED nodes, v10.9: L10n suffix deprecated)
 //   - Updated all relations that reference SEOKeyword
 //
 // v7.2.0 CHANGES:
@@ -89,9 +89,9 @@ export const RelationType = {
   HAS_CONSTRAINT: 'HAS_CONSTRAINT', // LocaleCulture → Constraint
 
   // ─────────────────────────────────────────────────────────────────────────────
-  // LOCALIZATION (v7.0.0: unified HAS_CONTENT for all *L10n nodes)
+  // LOCALIZATION (v7.0.0: unified HAS_CONTENT for all *Content nodes - v10.9: L10n suffix deprecated)
   // ─────────────────────────────────────────────────────────────────────────────
-  HAS_CONTENT: 'HAS_CONTENT',             // Entity|Project → *L10n (v10.3: was Concept)
+  HAS_CONTENT: 'HAS_CONTENT',             // Entity|Project → *Content (v10.9: L10n → Content)
 
   // ─────────────────────────────────────────────────────────────────────────────
   // PAGE STRUCTURE

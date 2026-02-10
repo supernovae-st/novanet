@@ -14,5 +14,5 @@ include:
   - relation: HAS_BRAND_IDENTITY
     direction: outgoing
 
-  # v10.3: HAS_CONCEPT removed — Entity in global realm, use USES_ENTITY from Page/Block
+  # v10.3: HAS_CONCEPT removed — Entity in org realm, use USES_ENTITY from Page/Block
 

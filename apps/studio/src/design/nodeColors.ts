@@ -146,8 +146,8 @@ export function getRelationColors(type: string): GradientColors {
     return { primary: '#3b82f6', secondary: '#06b6d4' }; // Blue -> Cyan
   }
 
-  // Localization
-  if (type.includes('FOR_LOCALE') || type.includes('L10N') || type.includes('SUPPORTS')) {
+  // Localization (v11.6: L10N → CONTENT per ADR-014)
+  if (type.includes('FOR_LOCALE') || type.includes('CONTENT') || type.includes('SUPPORTS')) {
     return { primary: '#10b981', secondary: '#22c55e' }; // Emerald -> Green
   }
 

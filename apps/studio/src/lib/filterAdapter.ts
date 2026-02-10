@@ -516,7 +516,7 @@ export const VIEW_PRESETS: ViewPreset[] = [
   {
     id: 'generation-chain',
     name: 'Generation Chain',
-    description: 'Entities with L10n outputs',
+    description: 'Entities with content outputs',
     icon: '🔗',
     shortcut: '2',
     filter: () => NovaNetFilter.create()

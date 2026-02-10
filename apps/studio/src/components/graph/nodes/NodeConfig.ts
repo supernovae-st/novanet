@@ -51,7 +51,7 @@ export interface NodeConfig {
  * Size categories:
  * - Large (280x140): Root nodes (Project, Organization)
  * - Medium-Large (240x120): Page, Entity, main content nodes
- * - Medium (220x110): Core L10n, prompts
+ * - Medium (220x110): Content nodes, prompts
  * - Medium-Small (200x100): Standard nodes
  * - Small (180x90): Auxiliary nodes
  * - Extra-Small (160x80): Knowledge atoms, metrics nodes

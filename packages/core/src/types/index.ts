@@ -27,18 +27,8 @@ export {
 } from './nodes.js';
 
 // =============================================================================
-// CONTEXT MANAGEMENT TYPES (v7.1.0)
-// =============================================================================
-
-// REMOVED v8.2.0: Priority and Freshness types (YAML v7.11.0 alignment)
-// export type { Priority, Freshness } from './locale-knowledge.js';
-
-// =============================================================================
 // STANDARD PROPERTIES BASE
 // =============================================================================
-
-// REMOVED v8.2.0: Priority and Freshness types no longer needed
-// import type { Priority, Freshness } from './locale-knowledge.js';
 
 /**
  * Standard properties for all nodes (v8.2.0 - YAML v7.11.0 aligned)
@@ -111,7 +101,7 @@ export interface Entity extends StandardNodeProperties, EmbeddableNode {
 }
 
 export interface EntityContent extends EmbeddableNode {
-  // Standard properties (v8.2.0 - L10n nodes don't have key, no icon/priority/freshness)
+  // Standard properties (v8.2.0 - Content nodes don't have key, no icon/priority/freshness)
   display_name: string;
   description: string;
   llm_context: string;
@@ -179,7 +169,7 @@ export interface PageType extends StandardNodeProperties {
 }
 
 export interface PageGenerated {
-  // Standard properties (v8.2.0 - L10n nodes don't have key, no icon/priority/freshness)
+  // Standard properties (v8.2.0 - Content nodes don't have key, no icon/priority/freshness)
   display_name: string;
   description: string;
   llm_context: string;
@@ -222,7 +212,7 @@ export interface BlockType extends StandardNodeProperties {
 export type Block = StandardNodeProperties;
 
 export interface BlockGenerated {
-  // Standard properties (v8.2.0 - L10n nodes don't have key, no icon/priority/freshness)
+  // Standard properties (v8.2.0 - Content nodes don't have key, no icon/priority/freshness)
   display_name: string;
   description: string;
   llm_context: string;
