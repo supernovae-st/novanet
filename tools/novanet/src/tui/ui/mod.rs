@@ -9,7 +9,8 @@ mod status;
 mod tree;
 mod yaml_panel;
 
-pub use atlas::render_atlas;
+#[allow(unused_imports)]
+pub use atlas::render_atlas; // Atlas mode is work-in-progress
 pub use audit::render_audit;
 pub use graph::render_graph_panel;
 pub use info::render_info_panel;
@@ -219,12 +220,12 @@ pub(super) fn trait_icon(trait_name: &str) -> &'static str {
 /// Uses TrueColor RGB values for visual consistency in tree view.
 pub(super) fn trait_color(trait_name: &str) -> Color {
     match trait_name {
-        "invariant" => hex_to_color(theme::traits::INVARIANT_HEX),   // #3b82f6 blue
-        "localized" => hex_to_color(theme::traits::LOCALIZED_HEX),   // #22c55e green
-        "knowledge" => hex_to_color(theme::traits::KNOWLEDGE_HEX),   // #8b5cf6 purple
-        "generated" => hex_to_color(theme::traits::GENERATED_HEX),   // #b58900 gold
+        "invariant" => hex_to_color(theme::traits::INVARIANT_HEX), // #3b82f6 blue
+        "localized" => hex_to_color(theme::traits::LOCALIZED_HEX), // #22c55e green
+        "knowledge" => hex_to_color(theme::traits::KNOWLEDGE_HEX), // #8b5cf6 purple
+        "generated" => hex_to_color(theme::traits::GENERATED_HEX), // #b58900 gold
         "aggregated" => hex_to_color(theme::traits::AGGREGATED_HEX), // #6c71c4 violet
-        _ => Color::White, // fallback
+        _ => Color::White,                                         // fallback
     }
 }
 
@@ -467,28 +468,24 @@ pub fn render(f: &mut Frame, app: &mut App) {
 /// Shows: [1]Graph, [2]Audit, [3]Nexus
 /// v11.3: Simplified to 3 modes (Graph replaces Meta+Data, Nexus replaces Guide)
 fn render_header(f: &mut Frame, area: Rect, app: &App) {
-    let tabs: Vec<Span> = [
-        NavMode::Graph,
-        NavMode::Audit,
-        NavMode::Nexus,
-    ]
-    .iter()
-    .enumerate()
-    .map(|(i, mode)| {
-        let num = format!("[{}]", i + 1);
-        let label = mode.label();
-        let is_active = *mode == app.mode;
+    let tabs: Vec<Span> = [NavMode::Graph, NavMode::Audit, NavMode::Nexus]
+        .iter()
+        .enumerate()
+        .map(|(i, mode)| {
+            let num = format!("[{}]", i + 1);
+            let label = mode.label();
+            let is_active = *mode == app.mode;
 
-        if is_active {
-            Span::styled(
-                format!(" {}{}\u{2022} ", num, label),
-                theme::ui::focused_style(),
-            )
-        } else {
-            Span::styled(format!(" {}{} ", num, label), STYLE_DIM)
-        }
-    })
-    .collect();
+            if is_active {
+                Span::styled(
+                    format!(" {}{}\u{2022} ", num, label),
+                    theme::ui::focused_style(),
+                )
+            } else {
+                Span::styled(format!(" {}{} ", num, label), STYLE_DIM)
+            }
+        })
+        .collect();
 
     let mut header: Vec<Span> = vec![
         Span::styled(" NovaNet ", theme::ui::logo_style()),
@@ -510,10 +507,7 @@ fn render_header(f: &mut Frame, area: Rect, app: &App) {
             crate::tui::app::GraphView::Taxonomy => " [T] ",
             crate::tui::app::GraphView::Instances => " [I] ",
         };
-        header.push(Span::styled(
-            view_label,
-            Style::default().fg(Color::Cyan),
-        ));
+        header.push(Span::styled(view_label, Style::default().fg(Color::Cyan)));
     }
 
     // Context-aware shortcuts (v11.3: 3 modes)

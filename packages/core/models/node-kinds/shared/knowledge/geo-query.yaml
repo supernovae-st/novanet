@@ -1,5 +1,9 @@
-# models/node-kinds/global/seo/geo-query.yaml
+# models/node-kinds/shared/knowledge/geo-query.yaml
 # GEOQuery - Generative Engine Optimization query tracked across AI engines
+#
+# v11.4: Moved to shared/knowledge (Knowledge Atoms pattern)
+#        - realm: shared (was org)
+#        - layer: knowledge (was geo)
 #
 # v10.7: GEO Schema v1
 #        - New node type for AI visibility tracking (Gemini, GPT, Perplexity, Claude)
@@ -9,8 +13,8 @@
 
 node:
   name: GEOQuery
-  realm: org
-  layer: geo
+  realm: shared
+  layer: knowledge
   trait: knowledge
   icon: "🤖"
   description: "Query tracked across AI engines for generative engine optimization (GEO)"

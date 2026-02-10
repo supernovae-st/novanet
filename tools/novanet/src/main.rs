@@ -358,7 +358,11 @@ async fn main() -> color_eyre::Result<()> {
 
     match cli.command {
         // ── Blueprint (YAML + optional Neo4j) ────────────────────
-        Commands::Blueprint { view, format, no_validate } => {
+        Commands::Blueprint {
+            view,
+            format,
+            no_validate,
+        } => {
             let root = root?;
             // Try to connect to Neo4j for full validation, but work without it
             let db = if cli.password.is_some() {
@@ -378,7 +382,8 @@ async fn main() -> color_eyre::Result<()> {
                 view,
                 format,
                 no_validate,
-            ).await?;
+            )
+            .await?;
         }
 
         // ── Read commands (Neo4j) ────────────────────────────────

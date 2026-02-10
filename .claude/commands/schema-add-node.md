@@ -9,7 +9,7 @@ Add a new node type to the NovaNet ontology using Socratic discovery.
 ## Workflow
 
 1. **Discovery Phase**: Ask clarifying questions about the node:
-   - What realm? (global, tenant)
+   - What realm? (shared, org)
    - What layer? (existing or new)
    - What is its purpose in the graph?
    - What properties does it need?
@@ -36,16 +36,36 @@ Add a new node type to the NovaNet ontology using Socratic discovery.
 - **YAML filename**: kebab-case (e.g., `locale-humor.yaml`, `entity-content.yaml`)
 - **Property names**: snake_case (e.g., `display_name`, `llm_context`)
 
-## Nomenclature Rules (v10.9.0)
+## Nomenclature Rules (v11.3)
 
-| Pattern | Use For | Examples |
-|---------|---------|----------|
-| `*Content` | Human-curated localized content | EntityContent |
-| `*Generated` | LLM-generated output content | PageGenerated, BlockGenerated |
-| `*L10n` | Other localized content | ProjectL10n |
-| `Locale*` | Locale knowledge | LocaleVoice, LocaleCulture, LocaleLexicon |
-| `*Metrics` | Time-series data | SEOKeywordMetrics |
-| `*MiningRun` | Batch operations | SEOMiningRun |
+| Pattern | Trait | Use For | Examples |
+|---------|-------|---------|----------|
+| `*Content` | localized | Human-curated localized content | EntityContent, ProjectContent |
+| `*Generated` | generated | LLM-generated output content | PageGenerated, BlockGenerated |
+| `*Metrics` | aggregated | Computed/aggregated data | SEOKeywordMetrics, GEOMetrics |
+| `*Category` | invariant | Categorical groupings | EntityCategory |
+| `Locale*` | knowledge | Locale knowledge atoms | LocaleVoice, LocaleCulture |
+| `*Set` | invariant | Container nodes for atoms | TermSet, ExpressionSet |
+
+**Deprecated patterns (do not use):**
+- `*L10n` - Use `*Content` or `*Generated` instead
+
+## Realm/Layer (v11.3)
+
+| Realm | Layers |
+|-------|--------|
+| `shared` | locale, geography, knowledge |
+| `org` | config, foundation, structure, semantic, instruction, seo, geo, output |
+
+## Trait Selection (v11.3)
+
+| Trait | Use For | Border Style |
+|-------|---------|--------------|
+| `invariant` | Universal, locale-independent | solid |
+| `localized` | Has locale-specific content | dashed |
+| `knowledge` | Semantic knowledge atoms | dotted |
+| `generated` | LLM-generated output | double |
+| `aggregated` | Computed metrics | thin-dotted |
 
 ## Example
 

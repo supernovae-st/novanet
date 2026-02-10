@@ -1,13 +1,13 @@
 # packages/core/models/arc-kinds/semantic/belongs-to.yaml
-# ArcKind: BELONGS_TO - Entity belongs to a semantic category (tenant -> global)
+# ArcKind: BELONGS_TO - Entity belongs to a semantic category (org -> shared)
 #
 # v11.1.0: NEW arc replacing Entity.type property with proper graph relationship
-#          Entity (tenant/semantic) -> EntityCategory (global/config)
+#          Entity (org/semantic) -> EntityCategory (shared/config)
 
 arc:
   name: BELONGS_TO
   family: semantic
-  scope: cross_realm  # tenant Entity -> global EntityCategory
+  scope: cross_realm  # org Entity -> shared EntityCategory
 
   source: Entity
   target: EntityCategory

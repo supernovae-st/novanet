@@ -6,12 +6,51 @@
  * Provides consistent interaction state (hover, press) and mouse event handlers
  * for all node components. Eliminates duplicated state and callback logic.
  *
- * Used by: StructuralNode, LocaleKnowledgeNode, SchemaNode, ProjectNode
+ * v11.3 Premium interactions:
+ * - Levitation effect with translateY on hover/selected
+ * - Enhanced shadows for depth perception
+ * - Spring-like easing (cubic-bezier) for premium feel
+ * - Unified across all node types
+ *
+ * Used by: StructuralNode, LocaleKnowledgeNode, SchemaNode, ProjectNode, MetaBadgeNode
  */
 
 import { useState, useCallback, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { NODE_DESIGN } from '@/config/constants';
+
+// Premium easing curve (spring-like feel)
+const PREMIUM_EASING = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+
+// Levitation constants
+const LEVITATION = {
+  // How high the node floats (translateY in px, negative = up)
+  hover: -6,
+  selected: -10,
+  pressed: -2,
+  dimmed: 0,
+  // Scale values
+  scale: {
+    hover: 1.02,
+    selected: 1.04,
+    pressed: 0.98,
+    pressedSelected: 1.02,
+    dimmed: 0.9,
+    dimmedCircular: 0.75,
+    selectedCircular: 1.08,
+    hoverCircular: 1.04,
+    pressedCircular: 0.96,
+  },
+  // Shadow depth (box-shadow spread)
+  shadow: {
+    base: '0 4px 12px rgba(0, 0, 0, 0.15)',
+    hover: '0 12px 28px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.1)',
+    selected: '0 16px 40px rgba(0, 0, 0, 0.25), 0 6px 12px rgba(0, 0, 0, 0.15)',
+    pressed: '0 6px 16px rgba(0, 0, 0, 0.18)',
+  },
+  // Timing
+  timing: 200,
+} as const;
 
 export interface UseNodeInteractionsOptions {
   /** Whether node is selected */
@@ -39,12 +78,12 @@ export interface NodeInteractionsResult {
   handleMouseUp: () => void;
   /** Combined className for container based on state */
   containerClassName: string;
-  /** Inline style for container transitions */
+  /** Inline style for container transitions with levitation */
   containerStyle: React.CSSProperties;
 }
 
 /**
- * Hook for managing node hover/press interactions
+ * Hook for managing node hover/press interactions with premium levitation effects
  */
 export function useNodeInteractions({
   selected = false,
@@ -73,47 +112,68 @@ export function useNodeInteractions({
     setIsPressed(false);
   }, []);
 
-  // Compute scale class based on state priority
-  // Single scale value prevents class conflicts (e.g., scale-[0.98] + scale-105)
-  const scaleClass = useMemo(() => {
+  // Compute transform with levitation (translateY + scale)
+  const transform = useMemo(() => {
     if (isDimmed) {
-      return isCircular ? 'scale-75' : 'scale-90';
+      const scale = isCircular ? LEVITATION.scale.dimmedCircular : LEVITATION.scale.dimmed;
+      return `translateY(0) scale(${scale})`;
     }
+
     if (isPressed) {
-      // Press feedback: reduce current scale by ~2%
       if (selected) {
-        // 1.05 * 0.98 ≈ 1.03 - maintains press feedback on selected nodes
-        return isCircular ? 'scale-[1.08]' : 'scale-[1.03]';
+        // Pressed while selected: slight sink from floating position
+        const scale = isCircular ? LEVITATION.scale.selectedCircular * 0.98 : LEVITATION.scale.pressedSelected;
+        return `translateY(${LEVITATION.pressed}px) scale(${scale})`;
       }
-      return isCircular ? 'scale-[0.96]' : 'scale-[0.98]';
+      // Pressed: sink down
+      const scale = isCircular ? LEVITATION.scale.pressedCircular : LEVITATION.scale.pressed;
+      return `translateY(${LEVITATION.pressed}px) scale(${scale})`;
     }
+
     if (selected) {
-      return isCircular ? 'scale-110' : 'scale-105';
+      // Selected: high levitation
+      const scale = isCircular ? LEVITATION.scale.selectedCircular : LEVITATION.scale.selected;
+      return `translateY(${LEVITATION.selected}px) scale(${scale})`;
     }
+
     if (isHovered && !isHoverDimmed) {
-      return 'scale-103';
+      // Hover: moderate levitation
+      const scale = isCircular ? LEVITATION.scale.hoverCircular : LEVITATION.scale.hover;
+      return `translateY(${LEVITATION.hover}px) scale(${scale})`;
     }
-    return '';
+
+    // Default: grounded
+    return 'translateY(0) scale(1)';
   }, [isDimmed, isPressed, selected, isHovered, isHoverDimmed, isCircular]);
+
+  // Compute shadow based on state
+  const boxShadow = useMemo(() => {
+    if (isDimmed) return 'none';
+    if (isPressed) return LEVITATION.shadow.pressed;
+    if (selected) return LEVITATION.shadow.selected;
+    if (isHovered && !isHoverDimmed) return LEVITATION.shadow.hover;
+    return LEVITATION.shadow.base;
+  }, [isDimmed, isPressed, selected, isHovered, isHoverDimmed]);
 
   // Compute container className based on state
   const containerClassName = useMemo(() => {
     return cn(
-      'group relative node-pressable',
-      // Full dimming (focus mode) - grayscale via className, opacity via style
+      'group relative',
+      // Full dimming (focus mode) - grayscale via className
       isDimmed && 'grayscale pointer-events-none',
       // Lighter dimming (hover highlight mode)
-      isHoverDimmed && !isDimmed && 'hover-dimmed',
-      // Single scale class (computed above to prevent conflicts)
-      scaleClass
+      isHoverDimmed && !isDimmed && 'hover-dimmed'
     );
-  }, [isDimmed, isHoverDimmed, scaleClass]);
+  }, [isDimmed, isHoverDimmed]);
 
-  // Container style for transitions (opacity moved here for dynamic values)
+  // Container style with premium levitation effects
   const containerStyle = useMemo<React.CSSProperties>(() => ({
-    transition: `transform ${NODE_DESIGN.timing.transform}ms ease-out, opacity ${NODE_DESIGN.timing.transform}ms ease-out`,
+    transform,
+    boxShadow,
     opacity: isDimmed ? NODE_DESIGN.opacity.dimmed : 1,
-  }), [isDimmed]);
+    transition: `transform ${LEVITATION.timing}ms ${PREMIUM_EASING}, box-shadow ${LEVITATION.timing}ms ${PREMIUM_EASING}, opacity ${LEVITATION.timing}ms ease-out`,
+    willChange: 'transform, box-shadow',
+  }), [transform, boxShadow, isDimmed]);
 
   return {
     isHovered,

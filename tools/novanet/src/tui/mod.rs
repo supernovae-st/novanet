@@ -264,9 +264,13 @@ async fn run_app(
                     if let Some(category_key) = app.take_pending_category_instances_load() {
                         match TaxonomyTree::load_entities_by_category(db, &category_key).await {
                             Ok((instances, _total)) => {
-                                app.tree.entity_category_instances.insert(category_key, instances);
+                                app.tree
+                                    .entity_category_instances
+                                    .insert(category_key, instances);
                             }
-                            Err(e) => app.set_status_error(&format!("Load category instances: {}", e)),
+                            Err(e) => {
+                                app.set_status_error(&format!("Load category instances: {}", e))
+                            }
                         }
                     }
 

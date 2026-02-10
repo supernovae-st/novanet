@@ -1,21 +1,21 @@
-# models/node-kinds/global/seo/seo-keyword.yaml
+# models/node-kinds/shared/knowledge/seo-keyword.yaml
 # SEOKeyword - Target keyword with metrics (v10.6: enriched with Ahrefs/Semrush data)
+#
+# v11.4: Moved to shared/knowledge (Knowledge Atoms pattern)
+#        - realm: shared (was org)
+#        - layer: knowledge (was seo)
+#        - Universal market data available to all orgs
 #
 # v10.6: SEO Schema v2
 #        - Added: traffic_potential, clicks, clicks_per_search, serp_features
 #        - Added: competition, trend, seasonality
 #        - Added: relations to SEOQuestion, SEOComparison, SEOPreposition
 #        - Added: EXPRESSES relation to Entity
-#
-# v10.2: Merged SHARED → GLOBAL realm
-#        - realm: org (was shared)
-#        - trait: knowledge (was localized)
-#        - Owned by Locale via HAS_SEO_KEYWORDS
 
 node:
   name: SEOKeyword
-  realm: org
-  layer: seo
+  realm: shared
+  layer: knowledge
   trait: knowledge
   icon: "🔍"
   description: "Target keyword with metrics for SEO optimization (locale-specific knowledge)"

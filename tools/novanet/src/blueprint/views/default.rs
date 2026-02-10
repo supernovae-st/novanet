@@ -1,6 +1,8 @@
 //! Default blueprint view — rich overview of the meta-graph.
 
-use crate::blueprint::ascii::{self, progress_bar_compact, trait_symbol, arc_family_arrow, realm_icon, truncate};
+use crate::blueprint::ascii::{
+    self, arc_family_arrow, progress_bar_compact, realm_icon, trait_symbol, truncate,
+};
 use crate::blueprint::sources::BlueprintData;
 use crate::blueprint::validation::ValidationResult;
 use crate::parsers::yaml_node::NodeTrait;
@@ -74,14 +76,21 @@ fn render_stats(data: &BlueprintData) -> String {
 
 fn render_realms(data: &BlueprintData) -> String {
     let mut out = String::new();
-    out.push_str("┌──────────────────────────────────────────────────────────────────────────────┐\n");
-    out.push_str("│  REALMS                                                                      │\n");
+    out.push_str(
+        "┌──────────────────────────────────────────────────────────────────────────────┐\n",
+    );
+    out.push_str(
+        "│  REALMS                                                                      │\n",
+    );
 
     let by_realm = data.nodes_by_realm();
     let total = data.node_kind_count();
 
     for realm_def in &data.taxonomy.node_realms {
-        let count = by_realm.get(realm_def.key.as_str()).map(|v| v.len()).unwrap_or(0);
+        let count = by_realm
+            .get(realm_def.key.as_str())
+            .map(|v| v.len())
+            .unwrap_or(0);
         let bar = progress_bar_compact(count, total, 16);
         let icon = realm_icon(&realm_def.key);
         let desc = match realm_def.key.as_str() {
@@ -89,7 +98,8 @@ fn render_realms(data: &BlueprintData) -> String {
             "org" => "(business-specific content)",
             _ => "",
         };
-        let _ = writeln!(out,
+        let _ = writeln!(
+            out,
             "│  {} {:<8} {} {:>2} kinds {}{}│",
             icon,
             realm_def.key,
@@ -100,24 +110,34 @@ fn render_realms(data: &BlueprintData) -> String {
         );
     }
 
-    out.push_str("└──────────────────────────────────────────────────────────────────────────────┘");
+    out.push_str(
+        "└──────────────────────────────────────────────────────────────────────────────┘",
+    );
     out
 }
 
 fn render_layers(data: &BlueprintData) -> String {
     let mut out = String::new();
-    out.push_str("┌──────────────────────────────────────────────────────────────────────────────┐\n");
-    out.push_str("│  LAYERS                                                                      │\n");
+    out.push_str(
+        "┌──────────────────────────────────────────────────────────────────────────────┐\n",
+    );
+    out.push_str(
+        "│  LAYERS                                                                      │\n",
+    );
 
     let by_layer = data.nodes_by_layer();
     let max_count = by_layer.values().map(|v| v.len()).max().unwrap_or(1);
 
     for realm_def in &data.taxonomy.node_realms {
         for layer_def in &realm_def.layers {
-            let count = by_layer.get(layer_def.key.as_str()).map(|v| v.len()).unwrap_or(0);
+            let count = by_layer
+                .get(layer_def.key.as_str())
+                .map(|v| v.len())
+                .unwrap_or(0);
             let bar_width = (count * 10 / max_count).max(1);
             let bar = "█".repeat(bar_width);
-            let _ = writeln!(out,
+            let _ = writeln!(
+                out,
                 "│  {} {:<18} {:<10} {:>2}   {}{}│",
                 &layer_def.emoji,
                 layer_def.key,
@@ -129,23 +149,54 @@ fn render_layers(data: &BlueprintData) -> String {
         }
     }
 
-    out.push_str("└──────────────────────────────────────────────────────────────────────────────┘");
+    out.push_str(
+        "└──────────────────────────────────────────────────────────────────────────────┘",
+    );
     out
 }
 
 fn render_traits(data: &BlueprintData) -> String {
     let mut out = String::new();
-    out.push_str("┌──────────────────────────────────────────────────────────────────────────────┐\n");
-    out.push_str("│  TRAITS (how nodes behave with locales)                                      │\n");
+    out.push_str(
+        "┌──────────────────────────────────────────────────────────────────────────────┐\n",
+    );
+    out.push_str(
+        "│  TRAITS (how nodes behave with locales)                                      │\n",
+    );
 
     let by_trait = data.nodes_by_trait();
 
     let trait_info = [
-        (NodeTrait::Invariant, "invariant", "Same across all locales", "Entity, Page, Block"),
-        (NodeTrait::Localized, "localized", "Native content per locale", "EntityContent, ProjectContent"),
-        (NodeTrait::Knowledge, "knowledge", "Locale-specific atoms", "Term, Expression, Taboo"),
-        (NodeTrait::Generated, "generated", "LLM-generated output", "PageGenerated, BlockGenerated"),
-        (NodeTrait::Aggregated, "aggregated", "Computed metrics", "GEOMetrics, SEOKeywordMetrics"),
+        (
+            NodeTrait::Invariant,
+            "invariant",
+            "Same across all locales",
+            "Entity, Page, Block",
+        ),
+        (
+            NodeTrait::Localized,
+            "localized",
+            "Native content per locale",
+            "EntityContent, ProjectContent",
+        ),
+        (
+            NodeTrait::Knowledge,
+            "knowledge",
+            "Locale-specific atoms",
+            "Term, Expression, Taboo",
+        ),
+        (
+            NodeTrait::Generated,
+            "generated",
+            "LLM-generated output",
+            "PageGenerated, BlockGenerated",
+        ),
+        (
+            NodeTrait::Aggregated,
+            "aggregated",
+            "Computed metrics",
+            "GEOMetrics, SEOKeywordMetrics",
+        ),
     ];
 
     for (trait_enum, key, description, examples) in trait_info {
@@ -153,7 +204,8 @@ fn render_traits(data: &BlueprintData) -> String {
         let count = by_trait.get(&trait_enum).map(|v| v.len()).unwrap_or(0);
         let count_str = format!("({})", count);
         let padding = 80usize.saturating_sub(53).saturating_sub(examples.len());
-        let _ = writeln!(out,
+        let _ = writeln!(
+            out,
             "│  {} {:<10} {:<28} {:>4} │ {}{}│",
             symbol,
             key,
@@ -164,7 +216,9 @@ fn render_traits(data: &BlueprintData) -> String {
         );
     }
 
-    out.push_str("└──────────────────────────────────────────────────────────────────────────────┘");
+    out.push_str(
+        "└──────────────────────────────────────────────────────────────────────────────┘",
+    );
     out
 }
 
@@ -179,13 +233,18 @@ fn render_core_flow() -> String {
      │     │                               │                                        │\n\
      │     └────[HAS_GENERATED]────► PageGenerated ◄────[GENERATED_FOR]──── Page    │\n\
      │                                                                              │\n\
-     └──────────────────────────────────────────────────────────────────────────────┘".to_string()
+     └──────────────────────────────────────────────────────────────────────────────┘"
+        .to_string()
 }
 
 fn render_arc_families(data: &BlueprintData) -> String {
     let mut out = String::new();
-    out.push_str("┌──────────────────────────────────────────────────────────────────────────────┐\n");
-    out.push_str("│  ARC FAMILIES                                                                │\n");
+    out.push_str(
+        "┌──────────────────────────────────────────────────────────────────────────────┐\n",
+    );
+    out.push_str(
+        "│  ARC FAMILIES                                                                │\n",
+    );
 
     let by_family = data.arcs_by_family();
 
@@ -208,7 +267,8 @@ fn render_arc_families(data: &BlueprintData) -> String {
             _ => continue,
         };
         let count = by_family.get(&family_enum).map(|v| v.len()).unwrap_or(0);
-        let _ = writeln!(out,
+        let _ = writeln!(
+            out,
             "│  {} {:<14} {:>3} arcs   {}{}│",
             arrow,
             key,
@@ -218,7 +278,9 @@ fn render_arc_families(data: &BlueprintData) -> String {
         );
     }
 
-    out.push_str("└──────────────────────────────────────────────────────────────────────────────┘");
+    out.push_str(
+        "└──────────────────────────────────────────────────────────────────────────────┘",
+    );
     out
 }
 
@@ -226,7 +288,9 @@ fn render_validation(data: &BlueprintData) -> String {
     let result = ValidationResult::validate(data);
 
     let mut out = String::new();
-    out.push_str("┌──────────────────────────────────────────────────────────────────────────────┐\n");
+    out.push_str(
+        "┌──────────────────────────────────────────────────────────────────────────────┐\n",
+    );
 
     let status = if result.is_valid() {
         "✓ COHERENT"
@@ -234,17 +298,25 @@ fn render_validation(data: &BlueprintData) -> String {
         "⚠ ISSUES"
     };
 
-    let _ = writeln!(out, "│  VALIDATION                                                      {} │", status);
+    let _ = writeln!(
+        out,
+        "│  VALIDATION                                                      {} │",
+        status
+    );
 
     for check in &result.checks {
         let icon = if check.passed { "✓" } else { "⚠" };
-        let _ = writeln!(out, "│  {} {}{}│",
+        let _ = writeln!(
+            out,
+            "│  {} {}{}│",
             icon,
             ascii::pad_right(&check.name, 68),
             " ".repeat(80 - 76)
         );
         if let Some(ref details) = check.details {
-            let _ = writeln!(out, "│     └── {}{}│",
+            let _ = writeln!(
+                out,
+                "│     └── {}{}│",
                 truncate(details, 65),
                 " ".repeat(80 - 75)
             );
@@ -252,11 +324,19 @@ fn render_validation(data: &BlueprintData) -> String {
     }
 
     if !result.issues.is_empty() {
-        out.push_str("│                                                                              │\n");
-        let _ = writeln!(out, "│  💡 Run: novanet blueprint --view=audit for details{}│", " ".repeat(80 - 58));
+        out.push_str(
+            "│                                                                              │\n",
+        );
+        let _ = writeln!(
+            out,
+            "│  💡 Run: novanet blueprint --view=audit for details{}│",
+            " ".repeat(80 - 58)
+        );
     }
 
-    out.push_str("└──────────────────────────────────────────────────────────────────────────────┘");
+    out.push_str(
+        "└──────────────────────────────────────────────────────────────────────────────┘",
+    );
     out
 }
 
@@ -264,7 +344,8 @@ fn render_views_hint() -> String {
     "╭──────────────────────────────────────────────────────────────────────────────╮\n\
      │  📖 Views: --view=tree|flow|content|arcs|cardinality|glossary|audit|deps|   │\n\
      │            coverage|stats                                                    │\n\
-     ╰──────────────────────────────────────────────────────────────────────────────╯".to_string()
+     ╰──────────────────────────────────────────────────────────────────────────────╯"
+        .to_string()
 }
 
 #[cfg(test)]

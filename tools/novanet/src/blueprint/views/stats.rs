@@ -3,7 +3,7 @@
 use crate::blueprint::sources::BlueprintData;
 use crate::blueprint::validation::ValidationResult;
 use crate::output::OutputFormat;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 /// Stats data structure for JSON output.
 #[derive(Debug, Serialize, Deserialize)]
@@ -66,18 +66,48 @@ fn collect_stats(data: &BlueprintData) -> BlueprintStats {
         realms: data.realm_count(),
         layers: data.layer_count(),
         traits: TraitStats {
-            invariant: by_trait.get(&NodeTrait::Invariant).map(|v| v.len()).unwrap_or(0),
-            localized: by_trait.get(&NodeTrait::Localized).map(|v| v.len()).unwrap_or(0),
-            knowledge: by_trait.get(&NodeTrait::Knowledge).map(|v| v.len()).unwrap_or(0),
-            generated: by_trait.get(&NodeTrait::Generated).map(|v| v.len()).unwrap_or(0),
-            aggregated: by_trait.get(&NodeTrait::Aggregated).map(|v| v.len()).unwrap_or(0),
+            invariant: by_trait
+                .get(&NodeTrait::Invariant)
+                .map(|v| v.len())
+                .unwrap_or(0),
+            localized: by_trait
+                .get(&NodeTrait::Localized)
+                .map(|v| v.len())
+                .unwrap_or(0),
+            knowledge: by_trait
+                .get(&NodeTrait::Knowledge)
+                .map(|v| v.len())
+                .unwrap_or(0),
+            generated: by_trait
+                .get(&NodeTrait::Generated)
+                .map(|v| v.len())
+                .unwrap_or(0),
+            aggregated: by_trait
+                .get(&NodeTrait::Aggregated)
+                .map(|v| v.len())
+                .unwrap_or(0),
         },
         arc_families: ArcFamilyStats {
-            ownership: by_family.get(&ArcFamily::Ownership).map(|v| v.len()).unwrap_or(0),
-            localization: by_family.get(&ArcFamily::Localization).map(|v| v.len()).unwrap_or(0),
-            semantic: by_family.get(&ArcFamily::Semantic).map(|v| v.len()).unwrap_or(0),
-            generation: by_family.get(&ArcFamily::Generation).map(|v| v.len()).unwrap_or(0),
-            mining: by_family.get(&ArcFamily::Mining).map(|v| v.len()).unwrap_or(0),
+            ownership: by_family
+                .get(&ArcFamily::Ownership)
+                .map(|v| v.len())
+                .unwrap_or(0),
+            localization: by_family
+                .get(&ArcFamily::Localization)
+                .map(|v| v.len())
+                .unwrap_or(0),
+            semantic: by_family
+                .get(&ArcFamily::Semantic)
+                .map(|v| v.len())
+                .unwrap_or(0),
+            generation: by_family
+                .get(&ArcFamily::Generation)
+                .map(|v| v.len())
+                .unwrap_or(0),
+            mining: by_family
+                .get(&ArcFamily::Mining)
+                .map(|v| v.len())
+                .unwrap_or(0),
         },
         validation: ValidationStats {
             passed: validation.is_valid(),
@@ -165,6 +195,9 @@ mod tests {
 
         assert!(output.contains("BLUEPRINT STATS"), "Should have header");
         assert!(output.contains("NodeKinds:"), "Should have NodeKinds");
-        assert!(output.contains("VALIDATION"), "Should have validation section");
+        assert!(
+            output.contains("VALIDATION"),
+            "Should have validation section"
+        );
     }
 }

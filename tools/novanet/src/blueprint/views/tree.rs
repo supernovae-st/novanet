@@ -1,20 +1,31 @@
 //! Tree view — hierarchical Realm > Layer > Kind.
 
-use crate::blueprint::ascii::{trait_symbol, realm_icon, truncate};
+use crate::blueprint::ascii::{realm_icon, trait_symbol, truncate};
 use crate::blueprint::sources::BlueprintData;
 use std::collections::HashMap;
 
 /// Render tree view.
 pub fn render(data: &BlueprintData) -> String {
     let mut out = String::new();
-    out.push_str("╭──────────────────────────────────────────────────────────────────────────────╮\n");
-    out.push_str("│  ◉ NOVANET TREE                                                             │\n");
-    out.push_str("│                                                                              │\n");
-    out.push_str("│  Hierarchy: Realm > Layer > Kind                                             │\n");
-    out.push_str("╰──────────────────────────────────────────────────────────────────────────────╯\n\n");
+    out.push_str(
+        "╭──────────────────────────────────────────────────────────────────────────────╮\n",
+    );
+    out.push_str(
+        "│  ◉ NOVANET TREE                                                             │\n",
+    );
+    out.push_str(
+        "│                                                                              │\n",
+    );
+    out.push_str(
+        "│  Hierarchy: Realm > Layer > Kind                                             │\n",
+    );
+    out.push_str(
+        "╰──────────────────────────────────────────────────────────────────────────────╯\n\n",
+    );
 
     // Group nodes by realm and layer
-    let mut by_realm_layer: HashMap<(&str, &str), Vec<&crate::parsers::yaml_node::ParsedNode>> = HashMap::new();
+    let mut by_realm_layer: HashMap<(&str, &str), Vec<&crate::parsers::yaml_node::ParsedNode>> =
+        HashMap::new();
     for node in &data.node_kinds {
         by_realm_layer
             .entry((node.realm.as_str(), node.layer.as_str()))
@@ -31,12 +42,21 @@ pub fn render(data: &BlueprintData) -> String {
             _ => "",
         };
 
-        out.push_str(&format!("{} {} {}\n", realm_icon, realm_def.key.to_uppercase(), realm_desc));
+        out.push_str(&format!(
+            "{} {} {}\n",
+            realm_icon,
+            realm_def.key.to_uppercase(),
+            realm_desc
+        ));
 
         let layer_count = realm_def.layers.len();
         for (layer_idx, layer_def) in realm_def.layers.iter().enumerate() {
             let is_last_layer = layer_idx == layer_count - 1;
-            let layer_prefix = if is_last_layer { "└── " } else { "├── " };
+            let layer_prefix = if is_last_layer {
+                "└── "
+            } else {
+                "├── "
+            };
             let child_prefix = if is_last_layer { "    " } else { "│   " };
 
             let nodes = by_realm_layer
@@ -59,28 +79,30 @@ pub fn render(data: &BlueprintData) -> String {
             let node_count = sorted_nodes.len();
             for (node_idx, node) in sorted_nodes.iter().enumerate() {
                 let is_last_node = node_idx == node_count - 1;
-                let node_prefix = if is_last_node { "└── " } else { "├── " };
+                let node_prefix = if is_last_node {
+                    "└── "
+                } else {
+                    "├── "
+                };
                 let symbol = trait_symbol(&node.def.node_trait.to_string());
 
                 let description = truncate(&node.def.description, 40);
 
                 out.push_str(&format!(
                     "{}{}{} {} — {}\n",
-                    child_prefix,
-                    node_prefix,
-                    symbol,
-                    node.def.name,
-                    description
+                    child_prefix, node_prefix, symbol, node.def.name, description
                 ));
             }
         }
         out.push('\n');
     }
 
-    // Legend
-    out.push_str("───────────────────────────────────────────────────────────────────────────────\n");
+    // Legend (v11.2: 5 traits - derived split into generated + aggregated, job removed)
+    out.push_str(
+        "───────────────────────────────────────────────────────────────────────────────\n",
+    );
     out.push_str("LEGEND\n");
-    out.push_str("■ invariant   □ localized   ◊ knowledge   ◇ derived   ○ job\n");
+    out.push_str("■ invariant   □ localized   ◊ knowledge   ★ generated   ▪ aggregated\n");
 
     out
 }
@@ -97,8 +119,8 @@ mod tests {
         let output = render(&data);
 
         assert!(output.contains("NOVANET TREE"), "Should have header");
-        assert!(output.contains("SHARED"), "Should have global realm");
-        assert!(output.contains("ORG"), "Should have tenant realm");
+        assert!(output.contains("SHARED"), "Should have shared realm");
+        assert!(output.contains("ORG"), "Should have org realm");
         assert!(output.contains("LEGEND"), "Should have legend");
     }
 }

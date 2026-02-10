@@ -4,7 +4,7 @@
 arc:
   name: DEFAULT_LOCALE
   family: ownership
-  scope: cross_realm  # Project (tenant) → Locale (global)
+  scope: cross_realm  # Project (org) → Locale (shared)
   source: Project
   target: Locale
   cardinality: many_to_one

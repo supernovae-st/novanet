@@ -8,17 +8,31 @@ use crate::parsers::arcs::ArcFamily;
 pub fn render(data: &BlueprintData) -> String {
     let mut out = String::new();
 
-    out.push_str("╭──────────────────────────────────────────────────────────────────────────────╮\n");
-    out.push_str("│  ◉ NOVANET ARCS                                                             │\n");
-    out.push_str("│                                                                              │\n");
-    out.push_str("│  All arc kinds grouped by family                                             │\n");
-    out.push_str("╰──────────────────────────────────────────────────────────────────────────────╯\n\n");
+    out.push_str(
+        "╭──────────────────────────────────────────────────────────────────────────────╮\n",
+    );
+    out.push_str(
+        "│  ◉ NOVANET ARCS                                                             │\n",
+    );
+    out.push_str(
+        "│                                                                              │\n",
+    );
+    out.push_str(
+        "│  All arc kinds grouped by family                                             │\n",
+    );
+    out.push_str(
+        "╰──────────────────────────────────────────────────────────────────────────────╯\n\n",
+    );
 
     let by_family = data.arcs_by_family();
 
     let families = [
         (ArcFamily::Ownership, "ownership", "Parent-child hierarchy"),
-        (ArcFamily::Localization, "localization", "Invariant↔localized links"),
+        (
+            ArcFamily::Localization,
+            "localization",
+            "Invariant↔localized links",
+        ),
         (ArcFamily::Semantic, "semantic", "Meaning connections"),
         (ArcFamily::Generation, "generation", "LLM pipeline"),
         (ArcFamily::Mining, "mining", "Knowledge extraction"),
@@ -26,7 +40,10 @@ pub fn render(data: &BlueprintData) -> String {
 
     for (family_enum, family_key, description) in families {
         let arrow = arc_family_arrow(family_key);
-        let arcs = by_family.get(&family_enum).map(|v| v.as_slice()).unwrap_or(&[]);
+        let arcs = by_family
+            .get(&family_enum)
+            .map(|v| v.as_slice())
+            .unwrap_or(&[]);
 
         out.push_str(&format!(
             "┌──────────────────────────────────────────────────────────────────────────────┐\n\
@@ -36,7 +53,9 @@ pub fn render(data: &BlueprintData) -> String {
             family_key.to_uppercase(),
             arcs.len(),
             description,
-            " ".repeat(80 - 20 - family_key.len() - description.len() - arcs.len().to_string().len())
+            " ".repeat(
+                80 - 20 - family_key.len() - description.len() - arcs.len().to_string().len()
+            )
         ));
 
         if arcs.is_empty() {
@@ -67,11 +86,15 @@ pub fn render(data: &BlueprintData) -> String {
             }
         }
 
-        out.push_str("└──────────────────────────────────────────────────────────────────────────────┘\n\n");
+        out.push_str(
+            "└──────────────────────────────────────────────────────────────────────────────┘\n\n",
+        );
     }
 
     // Summary
-    out.push_str("───────────────────────────────────────────────────────────────────────────────\n");
+    out.push_str(
+        "───────────────────────────────────────────────────────────────────────────────\n",
+    );
     out.push_str(&format!("TOTAL: {} arc kinds\n", data.arc_count()));
 
     out
@@ -95,9 +118,15 @@ mod tests {
 
         assert!(output.contains("NOVANET ARCS"), "Should have header");
         assert!(output.contains("OWNERSHIP"), "Should have ownership family");
-        assert!(output.contains("LOCALIZATION"), "Should have localization family");
+        assert!(
+            output.contains("LOCALIZATION"),
+            "Should have localization family"
+        );
         assert!(output.contains("SEMANTIC"), "Should have semantic family");
-        assert!(output.contains("GENERATION"), "Should have generation family");
+        assert!(
+            output.contains("GENERATION"),
+            "Should have generation family"
+        );
         assert!(output.contains("MINING"), "Should have mining family");
         assert!(output.contains("TOTAL:"), "Should have total");
     }

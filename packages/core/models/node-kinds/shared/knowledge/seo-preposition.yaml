@@ -1,20 +1,24 @@
-# models/node-kinds/global/seo/seo-comparison.yaml
-# SEOComparison - Comparison keyword linking two entities
+# models/node-kinds/shared/knowledge/seo-preposition.yaml
+# SEOPreposition - Preposition keyword indicating use case
+#
+# v11.4: Moved to shared/knowledge (Knowledge Atoms pattern)
+#        - realm: shared (was org)
+#        - layer: knowledge (was seo)
 #
 # v10.6: SEO Schema v2 - New NodeKind
-#        - Captures comparison keywords (X vs Y) with their own volume/difficulty
-#        - Derived from Answer The Public "comparisons" category
-#        - Links to parent SEOKeyword via HAS_COMPARISONS
-#        - Links to TWO Entities via COMPARES_A and COMPARES_B arcs
-#        - Can be addressed by PageGenerated/BlockGenerated via ADDRESSES arc
+#        - Captures preposition keywords (X for Y) with their own volume/difficulty
+#        - Derived from Answer The Public "prepositions" category
+#        - Links to parent SEOKeyword via HAS_PREPOSITIONS
+#        - Optionally links to use_case Entity via USE_CASE_ENTITY arc
+#        - Can be addressed by BlockGenerated via ADDRESSES arc
 
 node:
-  name: SEOComparison
-  realm: org
-  layer: seo
+  name: SEOPreposition
+  realm: shared
+  layer: knowledge
   trait: knowledge
-  icon: "⚖️"
-  description: "Comparison keyword linking two entities (X vs Y)"
+  icon: "🔗"
+  description: "Preposition keyword indicating use case (X for Y)"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # STANDARD PROPERTIES (v7.1.0)
@@ -25,13 +29,13 @@ node:
       type: string
       required: true
       description: "Unique identifier"
-      example: "seoc-qr-code-vs-barcode-fr"
+      example: "seop-qr-code-pour-wifi-fr"
 
     display_name:
       type: string
       required: true
       description: "Human-readable name"
-      example: "qr code vs barcode"
+      example: "qr code pour wifi"
 
     description:
       type: string
@@ -41,7 +45,7 @@ node:
     llm_context:
       type: string
       required: false
-      description: "Context for LLM: key differentiators, winner criteria"
+      description: "Context for LLM: use case details, target audience"
 
     created_at:
       type: datetime
@@ -60,88 +64,75 @@ node:
     value:
       type: string
       required: true
-      description: "The comparison keyword string"
-      example: "qr code vs barcode"
+      description: "The preposition keyword string"
+      example: "qr code pour wifi"
 
     volume:
       type: int
       required: false
       description: "Monthly search volume"
-      example: 2000
+      example: 3000
 
     difficulty:
       type: int
       required: false
       description: "SEO difficulty score (0-100)"
-      example: 22
+      example: 18
 
     cpc:
       type: float
       required: false
       description: "Cost per click (USD)"
-      example: 0.30
+      example: 0.55
 
-    # --- Comparison-specific properties ---
-    comparison_type:
+    # --- Preposition-specific properties ---
+    preposition:
       type: string
       required: true
-      description: "Comparison type: vs | or | versus | compared_to | better_than | like | similar_to"
-      example: "vs"
+      description: "Preposition used: for | with | without | near | to | like | in | on | at"
+      example: "for"
 
-    entity_a_key:
+    use_case:
       type: string
       required: true
-      description: "Key of left-side Entity in comparison"
-      example: "qr-code"
+      description: "The use case or context (what it's for/with)"
+      example: "wifi"
 
-    entity_b_key:
-      type: string
-      required: true
-      description: "Key of right-side Entity in comparison"
-      example: "barcode"
-
-    winner:
+    use_case_type:
       type: string
       required: false
-      description: "If known, which side wins: a | b | tie | depends | null"
-      example: "a"
+      description: "Category of use case: feature | industry | audience | integration | location | event"
+      example: "feature"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # RELATIONS
   # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
-    # Incoming: SEOKeyword --[:HAS_COMPARISONS]--> SEOComparison (ownership)
-    # Incoming: PageGenerated/BlockGenerated --[:ADDRESSES]--> SEOComparison (coverage)
+    # Incoming: SEOKeyword --[:HAS_PREPOSITIONS]--> SEOPreposition (ownership)
+    # Incoming: BlockGenerated --[:ADDRESSES]--> SEOPreposition (coverage)
 
-    - relation: COMPARES_A
+    - relation: USE_CASE_ENTITY
       to: Entity
       direction: outgoing
-      description: "Left side of comparison (entity_a_key)"
-
-    - relation: COMPARES_B
-      to: Entity
-      direction: outgoing
-      description: "Right side of comparison (entity_b_key)"
+      description: "Optional: if use_case corresponds to an Entity"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # EXAMPLE
   # ═══════════════════════════════════════════════════════════════════════════════
 
   example:
-    description: "Find all comparisons involving an Entity"
+    description: "Get preposition keywords grouped by use case type"
     cypher: |
-      // Get all comparisons where Entity is on either side
-      MATCH (e:Entity {key: $entity_key})
-      OPTIONAL MATCH (c:SEOComparison)-[:COMPARES_A]->(e)
-      OPTIONAL MATCH (c2:SEOComparison)-[:COMPARES_B]->(e)
-      WITH coalesce(c, c2) AS comparison
-      WHERE comparison IS NOT NULL
-      MATCH (comparison)-[:COMPARES_A]->(ea:Entity)
-      MATCH (comparison)-[:COMPARES_B]->(eb:Entity)
-      RETURN comparison.value AS comparison,
-             comparison.volume,
-             ea.key AS entity_a,
-             eb.key AS entity_b,
-             comparison.winner
-      ORDER BY comparison.volume DESC
+      // Analyze use cases for a keyword
+      MATCH (kw:SEOKeyword {key: $keyword_key})-[:HAS_PREPOSITIONS]->(p:SEOPreposition)
+      OPTIONAL MATCH (p)-[:USE_CASE_ENTITY]->(e:Entity)
+      RETURN p.use_case_type AS type,
+             collect({
+               value: p.value,
+               volume: p.volume,
+               use_case: p.use_case,
+               entity: e.key
+             }) AS prepositions,
+             sum(p.volume) AS total_volume
+      ORDER BY total_volume DESC

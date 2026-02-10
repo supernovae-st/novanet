@@ -1,6 +1,7 @@
 //! Atlas mode UI rendering.
 //!
 //! This module contains all rendering functions for Atlas mode views:
+#![allow(dead_code)] // Atlas views are work-in-progress
 //! - Realm Map: Bird's-eye view of 2-realm architecture
 //! - Knowledge Atoms: Selective loading vs monolithic blobs
 //! - Generation Pipeline: Block generation flow (not translation)
@@ -1389,7 +1390,11 @@ fn render_atlas_view_traversal(app: &App) -> String {
             "knowledge",
             "Complete locale knowledge",
         ),
-        ("entity-ecosystem", "knowledge", "Entity with Content and SEO"),
+        (
+            "entity-ecosystem",
+            "knowledge",
+            "Entity with Content and SEO",
+        ),
         (
             "project-context",
             "project",
@@ -1646,8 +1651,8 @@ mod tests {
     use super::*;
     use crate::tui::app::App;
     use crate::tui::atlas::{ActivationTask, AtlasView};
-    use crate::tui::data::{AtlasLayerInfo, AtlasPageInfo, AtlasRealmInfo, AtlasRealmStats};
     use crate::tui::data::TaxonomyTree;
+    use crate::tui::data::{AtlasLayerInfo, AtlasPageInfo, AtlasRealmInfo, AtlasRealmStats};
 
     /// Create a minimal test App with default AtlasState.
     fn test_app() -> App {
@@ -1695,14 +1700,12 @@ mod tests {
                     key: "org".to_string(),
                     display_name: "Org".to_string(),
                     color: "#d33682".to_string(),
-                    layers: vec![
-                        AtlasLayerInfo {
-                            key: "foundation".to_string(),
-                            display_name: "Foundation".to_string(),
-                            color: "#cb4b16".to_string(),
-                            kind_count: 5,
-                        },
-                    ],
+                    layers: vec![AtlasLayerInfo {
+                        key: "foundation".to_string(),
+                        display_name: "Foundation".to_string(),
+                        color: "#cb4b16".to_string(),
+                        kind_count: 5,
+                    }],
                     total_kinds: 5,
                 },
             ],
@@ -1724,7 +1727,10 @@ mod tests {
         let output = render_atlas_realm_map(&app);
 
         // Should contain demo mode indicator
-        assert!(output.contains("[d] DEMO MODE"), "Should show DEMO MODE label");
+        assert!(
+            output.contains("[d] DEMO MODE"),
+            "Should show DEMO MODE label"
+        );
 
         // Should contain the 2-realm architecture header
         assert!(
@@ -1796,7 +1802,10 @@ mod tests {
         assert!(output.contains("Locale"), "Should show Locale layer");
         assert!(output.contains("Geography"), "Should show Geography layer");
         assert!(output.contains("Knowledge"), "Should show Knowledge layer");
-        assert!(output.contains("Foundation"), "Should show Foundation layer");
+        assert!(
+            output.contains("Foundation"),
+            "Should show Foundation layer"
+        );
 
         // Should have cursor indicator on first item
         assert!(output.contains("▶"), "Should show cursor indicator");
@@ -1867,7 +1876,10 @@ mod tests {
             output.contains("A\u{2080}   = Initial activation"),
             "Should explain A_0"
         );
-        assert!(output.contains("λ    = Decay rate"), "Should explain lambda");
+        assert!(
+            output.contains("λ    = Decay rate"),
+            "Should explain lambda"
+        );
         assert!(
             output.contains("t    = Distance from root"),
             "Should explain t (distance)"
@@ -2047,7 +2059,10 @@ mod tests {
         let output = render_atlas_knowledge_atoms(&app);
 
         // Should have atom types section
-        assert!(output.contains("ATOM TYPES"), "Should have ATOM TYPES section");
+        assert!(
+            output.contains("ATOM TYPES"),
+            "Should have ATOM TYPES section"
+        );
         assert!(
             output.contains("6 Sets + 6 Atoms"),
             "Should mention 6 sets and 6 atoms"
@@ -2310,7 +2325,10 @@ mod tests {
         let output = render_atlas_spreading_activation(&app);
 
         // Should handle high step values gracefully
-        assert!(output.contains("Step 100"), "Should display high step value");
+        assert!(
+            output.contains("Step 100"),
+            "Should display high step value"
+        );
         assert!(
             output.contains("propagated 100 hops"),
             "Should show hops for high step"

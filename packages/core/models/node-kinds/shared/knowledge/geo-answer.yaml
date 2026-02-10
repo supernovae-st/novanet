@@ -1,5 +1,9 @@
-# models/node-kinds/global/seo/geo-answer.yaml
+# models/node-kinds/shared/knowledge/geo-answer.yaml
 # GEOAnswer - LLM response sample (immutable snapshot)
+#
+# v11.4: Moved to shared/knowledge (Knowledge Atoms pattern)
+#        - realm: shared (was org)
+#        - layer: knowledge (was geo)
 #
 # v10.7: GEO Schema v1
 #        - Captures actual LLM responses for analysis
@@ -9,8 +13,8 @@
 
 node:
   name: GEOAnswer
-  realm: org
-  layer: geo
+  realm: shared
+  layer: knowledge
   trait: aggregated  # v11.2: Split derived → aggregated (computed metrics)
   icon: "💬"
   description: "LLM response sample for GEO analysis (immutable snapshot)"

@@ -30,9 +30,6 @@ pub enum NodeTrait {
     Aggregated,
 }
 
-/// Type alias for code that uses the v9 name.
-pub type LocaleBehavior = NodeTrait;
-
 impl std::fmt::Display for NodeTrait {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
@@ -96,7 +93,7 @@ pub struct NodeDef {
     pub layer: String,
 
     /// Node trait (v10.4) — required, fail-fast if missing.
-    #[serde(rename = "trait", alias = "locale_behavior")]
+    #[serde(rename = "trait")]
     pub node_trait: NodeTrait,
 
     /// v10 knowledge tier — optional, only for knowledge trait nodes.
@@ -302,17 +299,15 @@ mod tests {
     }
 
     #[test]
-    fn locale_behavior_alias_works() {
-        // Test backwards compatibility with v9 `locale_behavior` field
-        let yaml = "node:\n  name: Test\n  realm: org\n  layer: foundation\n  locale_behavior: localized\n  description: test";
-        let doc: NodeDocument = serde_yaml::from_str(yaml).unwrap();
-        assert_eq!(doc.node.node_trait, NodeTrait::Localized);
-    }
-
-    #[test]
     fn node_trait_all_variants() {
         // v11.2: 5 traits (split derived → generated + aggregated)
-        for variant in ["invariant", "localized", "knowledge", "generated", "aggregated"] {
+        for variant in [
+            "invariant",
+            "localized",
+            "knowledge",
+            "generated",
+            "aggregated",
+        ] {
             let yaml = format!(
                 "node:\n  name: T\n  realm: shared\n  layer: config\n  trait: {variant}\n  description: d"
             );
@@ -357,8 +352,7 @@ mod tests {
     #[test]
     fn optional_fields_default_to_none() {
         // v11.0: SEO layer is in tenant realm, v11.2: use generated trait
-        let yaml =
-            "node:\n  name: Minimal\n  realm: org\n  layer: seo\n  trait: generated\n  description: d";
+        let yaml = "node:\n  name: Minimal\n  realm: org\n  layer: seo\n  trait: generated\n  description: d";
         let doc: NodeDocument = serde_yaml::from_str(yaml).unwrap();
         assert!(doc.node.icon.is_none());
         assert!(doc.node.standard_properties.is_none());
@@ -483,7 +477,11 @@ node:
 
         // Verify trait distribution (2 realms: shared + org)
         let count = |t: NodeTrait| nodes.iter().filter(|n| n.def.node_trait == t).count();
-        assert_eq!(count(NodeTrait::Invariant), 29, "invariant count (v11.3: merged Org+Tenant into OrgConfig)");
+        assert_eq!(
+            count(NodeTrait::Invariant),
+            29,
+            "invariant count (v11.3: merged Org+Tenant into OrgConfig)"
+        );
         assert_eq!(
             count(NodeTrait::Localized),
             2,
@@ -506,14 +504,18 @@ node:
             "aggregated count (GEOAnswer, GEOMetrics, SEOKeywordMetrics)"
         );
 
-        // v11.3: Verify realm distribution (merged Org+Tenant into OrgConfig)
+        // v11.4: Verify realm distribution (SEO/GEO moved to shared/knowledge)
         let realm_count = |r: &str| nodes.iter().filter(|n| n.realm == r).count();
         assert_eq!(
             realm_count("shared"),
-            32,
-            "shared realm count (7 locale + 6 geography + 19 knowledge)"
+            40,
+            "shared realm count (1 config + 7 locale + 6 geography + 26 knowledge)"
         );
-        assert_eq!(realm_count("org"), 29, "org realm count (v11.3: -1 merged Org+Tenant)");
+        assert_eq!(
+            realm_count("org"),
+            21,
+            "org realm count (v11.4: SEO/GEO moved to shared)"
+        );
 
         // Spot-check known nodes
         let project = nodes.iter().find(|n| n.def.name == "Project").unwrap();

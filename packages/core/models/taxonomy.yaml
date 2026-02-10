@@ -1,6 +1,6 @@
 # packages/core/models/taxonomy.yaml
 # Source of truth for NovaNet taxonomy structure
-# v11.3.0 — Schema Reorganization
+# v11.4.0 — SEO/GEO to Shared Knowledge
 #
 # This file defines:
 # - 2 NodeRealms (SHARED, ORG) with nested NodeLayers
@@ -10,19 +10,24 @@
 # - 5 ArcCardinalities (zero_to_one / one_to_one / one_to_many / many_to_one / many_to_many)
 # - Terminal palette for TUI graceful degradation
 #
+# v11.4 Changes:
+# - SEO/GEO moved from org to shared/knowledge (Knowledge Atoms pattern)
+# - REMOVE: org/seo layer (SEOKeyword now in shared/knowledge)
+# - REMOVE: org/geo layer (GEOQuery now in shared/knowledge)
+# - ADD: shared/config layer for SEOKeywordFormat (EntityCategory pattern)
+# - CONSOLIDATE: SEOQuestion, SEOComparison, SEOPreposition → SEOKeyword + format
+# - SIMPLIFY: GEOMetrics removed (GEOAnswer IS the time-series)
+# - SHARED: 4 layers (config, locale, geography, knowledge)
+# - ORG: 6 layers (config, semantic, foundation, structure, instruction, output)
+#
 # v11.3 Changes:
-# - SHARED: 3 layers (locale, geography, knowledge) — was config + locale-knowledge
-# - ORG: 8 layers (+geo for GEO AI visibility) — was 7 layers
+# - SHARED: 3 layers (locale, geography, knowledge)
 # - OrgConfig: merged Organization + Tenant into single node
-# - GEO: split from SEO (GEOQuery, GEOAnswer, GEOMetrics)
+# (Note: v11.4 adds config layer back to shared for classifications)
 #
 # v11.2 Changes:
 # - Realm renames: global→shared, tenant→org (clearer semantics)
 # - Trait split: derived→generated+aggregated (LLM output vs computed metrics)
-#
-# v11.0 Changes:
-# - SEO moved from global to tenant (business-specific, not universal)
-# - Multi-tenant isolation at ORG boundary (Org A cannot see Org B)
 #
 # Generated artifacts:
 # - packages/db/seed/00.5-taxonomy.cypher (Realm, Layer, Trait, ArcFamily + hierarchy)
@@ -31,7 +36,7 @@
 # All meta-nodes receive double-label :Meta (e.g., :Meta:Realm)
 # Query all meta-nodes: MATCH (n:Meta) RETURN n
 
-version: "11.3.0"
+version: "11.4.0"
 
 # =============================================================================
 # NODE REALMS (2) — WHERE does the node live?
@@ -49,7 +54,18 @@ node_realms:
       Shared across ALL organizations. Universal locale knowledge that applies
       everywhere: cultural norms, linguistic patterns, formatting conventions.
       These nodes are READ-ONLY. No Entity here - Entity lives in ORG realm.
+      v11.4: SEO/GEO nodes now live in shared/knowledge. SEOKeywordFormat and
+      EntityCategory classifications live in shared/config.
     layers:
+      - key: config
+        display_name: Config
+        emoji: "⚙️"
+        color: "#64748b"
+        llm_context: |
+          Invariant classification nodes for shared realm. EntityCategory
+          (v11.1, ADR-017) and SEOKeywordFormat (v11.4) — universal categorical
+          groupings used across all organizations.
+
       - key: locale
         display_name: Locale
         emoji: "🌐"
@@ -77,6 +93,8 @@ node_realms:
           Knowledge containers (TermSet, ExpressionSet, etc.) and atoms
           (Term, Expression, Pattern, etc.). Language families, cultural realms,
           population clusters. Expertise that makes content feel NATIVE.
+          v11.4: SEO/GEO nodes now here (SEOKeyword, GEOQuery) — universal
+          market data following Knowledge Atoms pattern.
 
   - key: org
     display_name: Organization
@@ -104,25 +122,8 @@ node_realms:
           Invariant entities (Entity) and their localizations (EntityContent).
           Entity belongs to Project (HAS_ENTITY) and can be referenced by
           Pages/Blocks via USES_ENTITY. Entities link via SEMANTIC_LINK for
-          spreading activation during generation.
-
-      - key: seo
-        display_name: SEO
-        emoji: "🔍"
-        color: "#ec4899"
-        llm_context: |
-          Search engine optimization. Keywords, comparisons, prepositions,
-          questions. Traditional search visibility tracking. Keywords link
-          to Entity via EXPRESSES, content targets keywords via TARGETS.
-
-      - key: geo
-        display_name: GEO
-        emoji: "🤖"
-        color: "#f59e0b"
-        llm_context: |
-          Generative Engine Optimization. AI visibility tracking for LLM
-          search results. GEOQuery (questions asked), GEOAnswer (AI responses),
-          GEOMetrics (visibility scores). Separate from SEO traditional search.
+          spreading activation during generation. SEO/GEO targeting via
+          cross-realm arcs (TARGETS, MONITORS_GEO) to shared/knowledge.
 
       - key: foundation
         display_name: Foundation
@@ -365,13 +366,13 @@ terminal:
     # Realms (v11.2: shared + org)
     shared: 37       # cyan
     org: 141         # purple
-    # Layers (v11.3: locale, geography, knowledge in shared; +geo in org)
-    locale: 244             # gray (same as old config)
+    # Layers (v11.4: config, locale, geography, knowledge in shared; 6 in org)
+    # SHARED (4 layers)
+    config: 244             # gray (shared/config for classifications)
+    locale: 244             # gray
     geography: 43           # emerald (#10b981)
-    knowledge: 141          # purple
-    config: 244             # gray
-    seo: 205                # pink
-    geo: 178                # amber (#f59e0b)
+    knowledge: 141          # purple (includes SEO/GEO nodes)
+    # ORG (6 layers - seo/geo removed in v11.4)
     semantic: 208           # orange
     foundation: 33          # blue
     structure: 45           # cyan
@@ -394,13 +395,13 @@ terminal:
     # Realms (v11.2: shared + org)
     shared: 6        # cyan
     org: 5           # magenta
-    # Layers (v11.3: locale, geography, knowledge in shared; +geo in org)
+    # Layers (v11.4: config, locale, geography, knowledge in shared; 6 in org)
+    # SHARED (4 layers)
+    config: 8              # bright black (shared/config for classifications)
     locale: 8              # bright black
     geography: 2           # green
-    knowledge: 5           # magenta
-    config: 8              # bright black
-    seo: 13                # bright magenta
-    geo: 3                 # yellow
+    knowledge: 5           # magenta (includes SEO/GEO nodes)
+    # ORG (6 layers - seo/geo removed in v11.4)
     semantic: 3            # yellow
     foundation: 4          # blue
     structure: 6           # cyan
