@@ -303,6 +303,44 @@ pub(super) fn trait_abbrev(trait_name: &str) -> &'static str {
     }
 }
 
+// v11.6.1: Arc Family helpers for tree visual enrichment
+
+/// Get short abbreviation for arc family display in tree badges.
+pub(super) fn arc_family_abbrev(family_key: &str) -> &'static str {
+    match family_key {
+        "ownership" => "own",
+        "localization" => "loc",
+        "semantic" => "sem",
+        "generation" => "gen",
+        "mining" => "min",
+        _ => "???",
+    }
+}
+
+/// Get icon for arc family badge (from visual-encoding.yaml).
+pub(super) fn arc_family_badge_icon(family_key: &str) -> &'static str {
+    match family_key {
+        "ownership" => "→",
+        "localization" => "⇢",
+        "semantic" => "~",
+        "generation" => "⇒",
+        "mining" => "⇝",
+        _ => "?",
+    }
+}
+
+/// Get short abbreviation for cardinality display.
+pub(super) fn cardinality_abbrev(cardinality: &str) -> &'static str {
+    match cardinality {
+        "zero_to_one" => "0:1",
+        "one_to_one" => "1:1",
+        "one_to_many" => "1:N",
+        "many_to_one" => "N:1",
+        "many_to_many" => "N:M",
+        _ => "?:?",
+    }
+}
+
 /// Format classification badges for a Kind node.
 /// Returns: "◎shd ▣cfg ■inv" format with colored spans
 /// Note: Currently unused but available for future use in info panel

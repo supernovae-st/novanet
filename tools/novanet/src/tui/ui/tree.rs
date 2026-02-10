@@ -19,8 +19,9 @@ use rustc_hash::FxHashSet;
 use super::{
     COLOR_ACTIVE_KIND_BG, COLOR_ARC_FAMILY, COLOR_CONNECTED, COLOR_DESC_TEXT, COLOR_HIGHLIGHT_BG,
     COLOR_MUTED_TEXT, COLOR_UNFOCUSED_BORDER, EmptyStateKind, STYLE_DIM, STYLE_HIGHLIGHT,
-    STYLE_PRIMARY, STYLE_UNFOCUSED, layer_abbrev, layer_badge_icon, realm_abbrev, realm_badge_icon,
-    render_empty_state, spinner, trait_abbrev, trait_color, trait_icon,
+    STYLE_PRIMARY, STYLE_UNFOCUSED, arc_family_abbrev, arc_family_badge_icon, cardinality_abbrev,
+    layer_abbrev, layer_badge_icon, realm_abbrev, realm_badge_icon, render_empty_state, spinner,
+    trait_abbrev, trait_color, trait_icon,
 };
 use crate::tui::app::{App, Focus};
 use crate::tui::data::ArcDirection;
@@ -552,39 +553,137 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
     let has_arcs = !app.tree.arc_families.is_empty();
 
+    // Trait filter: only show realms/layers/kinds matching the filter
+    let trait_filter = app.trait_filter.as_deref();
+
     if !kinds_collapsed {
-        let realm_count = app.tree.realms.len();
-        for (ri, realm) in app.tree.realms.iter().enumerate() {
+        // Filter visible realms (skip realms with no matching kinds when trait filter active)
+        let visible_realms: Vec<_> = app
+            .tree
+            .realms
+            .iter()
+            .filter(|r| {
+                if let Some(filter) = trait_filter {
+                    r.layers
+                        .iter()
+                        .any(|l| l.kinds.iter().any(|k| k.trait_name == filter))
+                } else {
+                    true
+                }
+            })
+            .collect();
+        let realm_count = visible_realms.len();
+
+        for (ri, realm) in visible_realms.iter().enumerate() {
             let realm_is_last = ri == realm_count - 1 && !has_arcs;
             let realm_key = format!("realm:{}", realm.key);
             let realm_collapsed = app.tree.is_collapsed(&realm_key);
             let realm_icon = expand_icon(realm_collapsed);
 
             let realm_color = hex_to_color(&realm.color);
-            all_lines.push(make_line(
-                idx,
-                app.tree_cursor,
-                focused,
+
+            // v11.6.1: Custom Realm line with counts and right-aligned badge
+            // Format: [cursor][prefix][chevron] [icon] [name]  [▦layers ◇kinds]  │ [badge] │R│
+            let is_cursor = idx == app.tree_cursor;
+            let cursor_char = if is_cursor { ">" } else { " " };
+            let layers_count = realm.layers.len();
+            let kinds_count = realm.total_kinds();
+
+            // Build left side content
+            let left_content = format!(
+                "{}{}{}  {}",
+                cursor_char,
                 branch(realm_is_last),
                 realm_icon,
-                format!("{} {}", realm.icon, realm.display_name),
-                Color::Magenta, // line_color: parent section color
-                realm_color,    // text_color
-                app.search.matches.get(&idx).map(|v| v.as_slice()),
-                None, // bg_color
-                None, // trait_icon_opt
-            ));
+                realm.display_name
+            );
+
+            // Build center stats: ▦6 ◇21 + health rollup
+            let health_str = if let Some((percent, issues)) = realm.health_rollup() {
+                format_health_badge(Some(percent), Some(issues))
+            } else {
+                String::new()
+            };
+            let stats_str = format!("▦{} ◇{}{}", layers_count, kinds_count, health_str);
+
+            // Build right badge: ●org │R│
+            let badge_str = format!(
+                "{}{} │R│",
+                realm_badge_icon(&realm.key),
+                realm_abbrev(&realm.key)
+            );
+
+            // Calculate padding for alignment
+            let tree_width = area.width.saturating_sub(4) as usize;
+            let left_width = left_content.chars().count();
+            let stats_width = stats_str.chars().count();
+            let right_side = format!(" │ {}", badge_str);
+            let right_width = right_side.chars().count();
+
+            // Distribute remaining space: some before stats, rest after
+            let total_content = left_width + stats_width + right_width + 2; // +2 for spaces around stats
+            let total_padding = tree_width.saturating_sub(total_content);
+            let padding_before_stats = total_padding / 2;
+            let padding_after_stats = total_padding - padding_before_stats;
+
+            if is_cursor && focused {
+                let full_line = format!(
+                    "{}{}{}{}{}",
+                    left_content,
+                    " ".repeat(padding_before_stats + 1),
+                    stats_str,
+                    " ".repeat(padding_after_stats + 1),
+                    right_side
+                );
+                all_lines.push(Line::from(Span::styled(
+                    full_line,
+                    Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White),
+                )));
+            } else {
+                let mut spans: Vec<Span> = vec![
+                    Span::styled(cursor_char, Style::default()),
+                    Span::styled(branch(realm_is_last).to_string(), Style::default().fg(Color::Magenta)),
+                    Span::styled(format!("{}  ", realm_icon), Style::default().fg(realm_color)),
+                ];
+                // Apply fuzzy match highlighting to display_name
+                spans.extend(highlight_matches_with_bg(
+                    &realm.display_name,
+                    app.search.matches.get(&idx).map(|v| v.as_slice()),
+                    realm_color,
+                    None,
+                ));
+                // Padding + stats
+                spans.push(Span::styled(" ".repeat(padding_before_stats + 1), Style::default()));
+                spans.push(Span::styled(stats_str, Style::default().fg(COLOR_MUTED_TEXT)));
+                spans.push(Span::styled(" ".repeat(padding_after_stats + 1), Style::default()));
+                // Right badge
+                spans.push(Span::styled(" │ ", Style::default().fg(COLOR_MUTED_TEXT)));
+                spans.push(Span::styled(
+                    format!("{}{}", realm_badge_icon(&realm.key), realm_abbrev(&realm.key)),
+                    Style::default().fg(realm_color),
+                ));
+                spans.push(Span::styled(" │R│", Style::default().fg(COLOR_MUTED_TEXT)));
+
+                all_lines.push(Line::from(spans));
+            }
             idx += 1;
 
             if !realm_collapsed {
                 let is_data_mode = app.is_data_mode();
                 let hide_empty = app.hide_empty && is_data_mode;
 
-                // Filter visible layers (hide empty if hide_empty is true)
+                // Filter visible layers (hide empty if hide_empty, trait filter if active)
                 let visible_layers: Vec<_> = realm
                     .layers
                     .iter()
                     .filter(|l| {
+                        // Trait filter: skip layers with no matching kinds
+                        if let Some(filter) = trait_filter {
+                            if !l.kinds.iter().any(|k| k.trait_name == filter) {
+                                return false;
+                            }
+                        }
+                        // Hide empty filter (Data mode only)
                         if hide_empty {
                             l.kinds.iter().map(|k| k.instance_count).sum::<i64>() > 0
                         } else {
@@ -609,32 +708,101 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
                     // In Data mode: gray out empty layers, show instance count
                     let layer_color = hex_to_color(&layer.color);
-                    let (display_name, text_color) = if is_data_mode {
-                        let name = format!("{} ({})", layer.display_name, layer_instance_count);
-                        let color = if layer_is_empty {
-                            COLOR_MUTED_TEXT // Gray for empty layers
-                        } else {
-                            layer_color
-                        };
-                        (name, color)
+                    let text_color = if is_data_mode && layer_is_empty {
+                        COLOR_MUTED_TEXT // Gray for empty layers
                     } else {
-                        (layer.display_name.clone(), layer_color)
+                        layer_color
                     };
 
+                    // v11.6.1: Custom Layer line with counts and right-aligned badge
+                    // Format: [cursor][prefix][chevron] [icon] [name]  [◇kinds]  │ [badge] │L│
+                    let is_cursor = idx == app.tree_cursor;
+                    let cursor_char = if is_cursor { ">" } else { " " };
                     let prefix = format!("{}{}", cont(realm_is_last), branch(layer_is_last));
-                    all_lines.push(make_line(
-                        idx,
-                        app.tree_cursor,
-                        focused,
-                        &prefix,
-                        layer_icon,
-                        display_name,
-                        realm_color, // line_color: parent realm color
-                        text_color,  // text_color (grayed if empty in Data mode)
-                        app.search.matches.get(&idx).map(|v| v.as_slice()),
-                        None, // bg_color
-                        None, // trait_icon_opt
-                    ));
+                    let layer_badge = layer_badge_icon(&layer.key);
+                    let kinds_in_layer = layer.kinds.len();
+
+                    // Display name with instance count in Data mode
+                    let display_name = if is_data_mode {
+                        format!("{} ({})", layer.display_name, layer_instance_count)
+                    } else {
+                        layer.display_name.clone()
+                    };
+
+                    // Build left side content
+                    let left_content = format!(
+                        "{}{}{}  {}",
+                        cursor_char, prefix, layer_icon, display_name
+                    );
+
+                    // Build center stats: ◇4 + health rollup
+                    let health_str = if let Some((percent, issues)) = layer.health_rollup() {
+                        format_health_badge(Some(percent), Some(issues))
+                    } else {
+                        String::new()
+                    };
+                    let stats_str = format!("◇{}{}", kinds_in_layer, health_str);
+
+                    // Build right badge: ◆sem │L│
+                    let badge_str = format!(
+                        "{}{} │L│",
+                        layer_badge,
+                        layer_abbrev(&layer.key)
+                    );
+
+                    // Calculate padding for alignment
+                    let tree_width = area.width.saturating_sub(4) as usize;
+                    let left_width = left_content.chars().count();
+                    let stats_width = stats_str.chars().count();
+                    let right_side = format!(" │ {}", badge_str);
+                    let right_width = right_side.chars().count();
+
+                    let total_content = left_width + stats_width + right_width + 2;
+                    let total_padding = tree_width.saturating_sub(total_content);
+                    let padding_before_stats = total_padding / 2;
+                    let padding_after_stats = total_padding - padding_before_stats;
+
+                    if is_cursor && focused {
+                        let full_line = format!(
+                            "{}{}{}{}{}",
+                            left_content,
+                            " ".repeat(padding_before_stats + 1),
+                            stats_str,
+                            " ".repeat(padding_after_stats + 1),
+                            right_side
+                        );
+                        all_lines.push(Line::from(Span::styled(
+                            full_line,
+                            Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White),
+                        )));
+                    } else {
+                        let base_style = Style::default();
+                        let mut spans: Vec<Span> = vec![
+                            Span::styled(cursor_char, base_style),
+                            Span::styled(prefix.clone(), base_style.fg(realm_color)),
+                            Span::styled(format!("{}  ", layer_icon), base_style.fg(text_color)),
+                        ];
+                        // Apply fuzzy match highlighting to display_name
+                        spans.extend(highlight_matches_with_bg(
+                            &display_name,
+                            app.search.matches.get(&idx).map(|v| v.as_slice()),
+                            text_color,
+                            None,
+                        ));
+                        // Padding + stats
+                        spans.push(Span::styled(" ".repeat(padding_before_stats + 1), base_style));
+                        spans.push(Span::styled(stats_str, base_style.fg(COLOR_MUTED_TEXT)));
+                        spans.push(Span::styled(" ".repeat(padding_after_stats + 1), base_style));
+                        // Right badge
+                        spans.push(Span::styled(" │ ", base_style.fg(COLOR_MUTED_TEXT)));
+                        spans.push(Span::styled(
+                            format!("{}{}", layer_badge, layer_abbrev(&layer.key)),
+                            base_style.fg(layer_color),
+                        ));
+                        spans.push(Span::styled(" │L│", base_style.fg(COLOR_MUTED_TEXT)));
+
+                        all_lines.push(Line::from(spans));
+                    }
                     idx += 1;
 
                     if !layer_collapsed {
@@ -643,6 +811,13 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             .kinds
                             .iter()
                             .filter(|k| {
+                                // Trait filter: skip kinds that don't match
+                                if let Some(filter) = trait_filter {
+                                    if k.trait_name != filter {
+                                        return false;
+                                    }
+                                }
+                                // Hide empty filter (Data mode only)
                                 if hide_empty {
                                     k.instance_count > 0
                                 } else {
@@ -698,18 +873,18 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 .filter(|a| a.direction == ArcDirection::Incoming)
                                 .count();
 
-                            // Build arc direction suffix: →2←1 or just →2 or ←1
+                            // v11.6.1: Build arc direction suffix with spaces: →2 ←1
                             let arc_suffix = match (outgoing, incoming) {
                                 (0, 0) => String::new(),
                                 (o, 0) => format!(" →{}", o),
                                 (0, i) => format!(" ←{}", i),
-                                (o, i) => format!(" →{}←{}", o, i),
+                                (o, i) => format!(" →{} ←{}", o, i),
                             };
 
-                            // Properties count: req/total (compact)
+                            // v11.6.1: Properties count with ⊞ icon: ⊞6/9
                             let props_suffix = if !kind.properties.is_empty() {
                                 format!(
-                                    " {}/{}p",
+                                    " ⊞{}/{}",
                                     kind.required_properties.len(),
                                     kind.properties.len()
                                 )
@@ -762,26 +937,25 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 None
                             };
 
-                            // v11.5: Custom Kind line with right-aligned classification badges
-                            // Format: [cursor] [prefix] [chevron] [trait] [name (count)] │ [badges]
+                            // v11.6: Custom Kind line with right-aligned classification badges
+                            // Format: [cursor] [prefix] [chevron] [trait(abbrev)] [name (count)] │ [badges]
                             let is_cursor = idx == app.tree_cursor;
                             let cursor_char = if is_cursor { ">" } else { " " };
+                            let t_abbrev = trait_abbrev(&kind.trait_name);
 
-                            // Build left side content
+                            // Build left side content with trait icon + abbrev: ■(i)
                             let left_content = format!(
-                                "{}{}{} {} {}",
-                                cursor_char, prefix, kind_icon, t_icon, display_text
+                                "{}{}{} {}({}) {}",
+                                cursor_char, prefix, kind_icon, t_icon, t_abbrev, display_text
                             );
 
-                            // Badge format: ◎shd ▣cfg ■inv (approx 18 chars with spaces)
+                            // Badge format: ●org ●cfg (trait moved to tree icon)
                             let badge_str = format!(
-                                "{}{} {}{} {}{}",
+                                "{}{} {}{}",
                                 realm_badge_icon(&realm.key),
                                 realm_abbrev(&realm.key),
                                 layer_badge_icon(&layer.key),
-                                layer_abbrev(&layer.key),
-                                t_icon,
-                                trait_abbrev(&kind.trait_name)
+                                layer_abbrev(&layer.key)
                             );
 
                             // Calculate padding for right-alignment
@@ -820,7 +994,8 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                         format!("{} ", kind_icon),
                                         base_style.fg(kind_text_color),
                                     ),
-                                    Span::styled(format!("{} ", t_icon), base_style.fg(t_color)),
+                                    // v11.6: trait icon with abbrev in parens: ■(i)
+                                    Span::styled(format!("{}({}) ", t_icon, t_abbrev), base_style.fg(t_color)),
                                 ];
 
                                 // Apply fuzzy match highlighting to display_text
@@ -844,7 +1019,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                     base_style.fg(realm_color),
                                 ));
                                 spans.push(Span::styled(" ", base_style));
-                                // Layer badge
+                                // Layer badge (trait moved to tree icon as ■(i))
                                 spans.push(Span::styled(
                                     format!(
                                         "{}{}",
@@ -852,12 +1027,6 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                         layer_abbrev(&layer.key)
                                     ),
                                     base_style.fg(layer_color),
-                                ));
-                                spans.push(Span::styled(" ", base_style));
-                                // Trait badge
-                                spans.push(Span::styled(
-                                    format!("{}{}", t_icon, trait_abbrev(&kind.trait_name)),
-                                    base_style.fg(t_color),
                                 ));
 
                                 all_lines.push(Line::from(spans));
@@ -1202,39 +1371,161 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
             let family_collapsed = app.tree.is_collapsed(&family_key);
             let family_icon = expand_icon(family_collapsed);
 
-            all_lines.push(make_line(
-                idx,
-                app.tree_cursor,
-                focused,
+            // v11.6.1: Custom ArcFamily line with counts and right-aligned badge
+            // Format: [cursor][prefix][chevron] [icon] [name]  [◇arcs]  │ [badge] │F│
+            let is_cursor = idx == app.tree_cursor;
+            let cursor_char = if is_cursor { ">" } else { " " };
+            let arcs_in_family = family.arc_kinds.len();
+            let family_badge = arc_family_badge_icon(&family.key);
+
+            // Build left side content
+            let left_content = format!(
+                "{}{}{}  {}",
+                cursor_char,
                 branch(family_is_last),
                 family_icon,
-                format!("{} ({})", family.display_name, family.arc_kinds.len()),
-                Color::Yellow,    // line_color: parent section color
-                COLOR_ARC_FAMILY, // text_color
-                app.search.matches.get(&idx).map(|v| v.as_slice()),
-                None, // bg_color
-                None, // trait_icon_opt
-            ));
+                family.display_name
+            );
+
+            // Build center stats: ◇43
+            let stats_str = format!("◇{}", arcs_in_family);
+
+            // Build right badge: →own │F│
+            let badge_str = format!(
+                "{}{} │F│",
+                family_badge,
+                arc_family_abbrev(&family.key)
+            );
+
+            // Calculate padding for alignment
+            let tree_width = area.width.saturating_sub(4) as usize;
+            let left_width = left_content.chars().count();
+            let stats_width = stats_str.chars().count();
+            let right_side = format!(" │ {}", badge_str);
+            let right_width = right_side.chars().count();
+
+            let total_content = left_width + stats_width + right_width + 2;
+            let total_padding = tree_width.saturating_sub(total_content);
+            let padding_before_stats = total_padding / 2;
+            let padding_after_stats = total_padding - padding_before_stats;
+
+            if is_cursor && focused {
+                let full_line = format!(
+                    "{}{}{}{}{}",
+                    left_content,
+                    " ".repeat(padding_before_stats + 1),
+                    stats_str,
+                    " ".repeat(padding_after_stats + 1),
+                    right_side
+                );
+                all_lines.push(Line::from(Span::styled(
+                    full_line,
+                    Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White),
+                )));
+            } else {
+                let base_style = Style::default();
+                let mut spans: Vec<Span> = vec![
+                    Span::styled(cursor_char, base_style),
+                    Span::styled(branch(family_is_last).to_string(), base_style.fg(Color::Yellow)),
+                    Span::styled(format!("{}  ", family_icon), base_style.fg(COLOR_ARC_FAMILY)),
+                ];
+                // Apply fuzzy match highlighting to display_name
+                spans.extend(highlight_matches_with_bg(
+                    &family.display_name,
+                    app.search.matches.get(&idx).map(|v| v.as_slice()),
+                    COLOR_ARC_FAMILY,
+                    None,
+                ));
+                // Padding + stats
+                spans.push(Span::styled(" ".repeat(padding_before_stats + 1), base_style));
+                spans.push(Span::styled(stats_str, base_style.fg(COLOR_MUTED_TEXT)));
+                spans.push(Span::styled(" ".repeat(padding_after_stats + 1), base_style));
+                // Right badge
+                spans.push(Span::styled(" │ ", base_style.fg(COLOR_MUTED_TEXT)));
+                spans.push(Span::styled(
+                    format!("{}{}", family_badge, arc_family_abbrev(&family.key)),
+                    base_style.fg(COLOR_ARC_FAMILY),
+                ));
+                spans.push(Span::styled(" │F│", base_style.fg(COLOR_MUTED_TEXT)));
+
+                all_lines.push(Line::from(spans));
+            }
             idx += 1;
 
             if !family_collapsed {
                 let arc_count = family.arc_kinds.len();
                 for (ai, arc_kind) in family.arc_kinds.iter().enumerate() {
                     let arc_is_last = ai == arc_count - 1;
+
+                    // v11.6.1: Custom ArcKind line with source→target and cardinality badge
+                    // Format: [cursor][prefix] [name]  [From→To]  │ [cardinality] │
+                    let is_cursor = idx == app.tree_cursor;
+                    let cursor_char = if is_cursor { ">" } else { " " };
                     let prefix = format!("{}{}", cont(family_is_last), branch(arc_is_last));
-                    all_lines.push(make_line(
-                        idx,
-                        app.tree_cursor,
-                        focused,
-                        &prefix,
-                        "",
-                        arc_kind.display_name.clone(),
-                        COLOR_ARC_FAMILY, // line_color: parent family color
-                        COLOR_DESC_TEXT,  // text_color
-                        app.search.matches.get(&idx).map(|v| v.as_slice()),
-                        None, // bg_color
-                        None, // trait_icon_opt
-                    ));
+
+                    // Build left side content: arc name
+                    let left_content = format!(
+                        "{}{}  {}",
+                        cursor_char, prefix, arc_kind.display_name
+                    );
+
+                    // Build center: From→To (abbreviated kind names)
+                    let from_abbrev = arc_kind.from_kind.chars().take(8).collect::<String>();
+                    let to_abbrev = arc_kind.to_kind.chars().take(8).collect::<String>();
+                    let flow_str = format!("{}→{}", from_abbrev, to_abbrev);
+
+                    // Build right badge: cardinality
+                    let card_str = cardinality_abbrev(&arc_kind.cardinality);
+                    let badge_str = format!("│{}│", card_str);
+
+                    // Calculate padding for alignment
+                    let tree_width = area.width.saturating_sub(4) as usize;
+                    let left_width = left_content.chars().count();
+                    let flow_width = flow_str.chars().count();
+                    let right_side = format!(" {}", badge_str);
+                    let right_width = right_side.chars().count();
+
+                    let total_content = left_width + flow_width + right_width + 2;
+                    let total_padding = tree_width.saturating_sub(total_content);
+                    let padding_before_flow = total_padding / 2;
+                    let padding_after_flow = total_padding - padding_before_flow;
+
+                    if is_cursor && focused {
+                        let full_line = format!(
+                            "{}{}{}{}{}",
+                            left_content,
+                            " ".repeat(padding_before_flow + 1),
+                            flow_str,
+                            " ".repeat(padding_after_flow + 1),
+                            right_side
+                        );
+                        all_lines.push(Line::from(Span::styled(
+                            full_line,
+                            Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White),
+                        )));
+                    } else {
+                        let base_style = Style::default();
+                        let mut spans: Vec<Span> = vec![
+                            Span::styled(cursor_char, base_style),
+                            Span::styled(prefix.clone(), base_style.fg(COLOR_ARC_FAMILY)),
+                            Span::styled("  ", base_style),
+                        ];
+                        // Apply fuzzy match highlighting to display_name
+                        spans.extend(highlight_matches_with_bg(
+                            &arc_kind.display_name,
+                            app.search.matches.get(&idx).map(|v| v.as_slice()),
+                            COLOR_DESC_TEXT,
+                            None,
+                        ));
+                        // Padding + flow
+                        spans.push(Span::styled(" ".repeat(padding_before_flow + 1), base_style));
+                        spans.push(Span::styled(flow_str, base_style.fg(COLOR_MUTED_TEXT)));
+                        spans.push(Span::styled(" ".repeat(padding_after_flow + 1), base_style));
+                        // Right badge (cardinality)
+                        spans.push(Span::styled(format!(" │{}│", card_str), base_style.fg(Color::Cyan)));
+
+                        all_lines.push(Line::from(spans));
+                    }
                     idx += 1;
                 }
             }
@@ -1263,14 +1554,25 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     } else {
         "◆ Schema" // Diamond = structure/meta
     };
+
+    // v11.6.2: Add trait filter indicator if active
+    let filter_indicator = match app.trait_filter.as_deref() {
+        Some("invariant") => " │ ■ invariant",
+        Some("localized") => " │ □ localized",
+        Some("knowledge") => " │ ◊ knowledge",
+        Some("generated") => " │ ★ generated",
+        Some("aggregated") => " │ ▪ aggregated",
+        _ => "",
+    };
+
     let hierarchy = app
         .tree
         .hierarchy_position(app.tree_cursor, app.is_data_mode());
     let hierarchy_str = hierarchy.to_compact_string();
     let title = if hierarchy_str.is_empty() {
-        format!(" {} ", mode_prefix)
+        format!(" {}{} ", mode_prefix, filter_indicator)
     } else {
-        format!(" {} │ {} ", mode_prefix, hierarchy_str)
+        format!(" {} │ {}{} ", mode_prefix, hierarchy_str, filter_indicator)
     };
 
     // Render block with title

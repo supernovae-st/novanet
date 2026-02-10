@@ -196,6 +196,28 @@ pub struct LayerInfo {
     pub kinds: Vec<KindInfo>,
 }
 
+impl LayerInfo {
+    /// Calculate health rollup for this layer (average of all Kinds with health data).
+    /// Returns (average_percent, total_issues) or None if no health data available.
+    pub fn health_rollup(&self) -> Option<(u8, usize)> {
+        let kinds_with_health: Vec<_> = self
+            .kinds
+            .iter()
+            .filter_map(|k| k.health_percent.map(|p| (p, k.issues_count.unwrap_or(0))))
+            .collect();
+
+        if kinds_with_health.is_empty() {
+            return None;
+        }
+
+        let total_percent: u32 = kinds_with_health.iter().map(|(p, _)| *p as u32).sum();
+        let total_issues: usize = kinds_with_health.iter().map(|(_, i)| *i).sum();
+        let avg_percent = (total_percent / kinds_with_health.len() as u32) as u8;
+
+        Some((avg_percent, total_issues))
+    }
+}
+
 /// Realm containing Layers.
 #[derive(Debug, Clone)]
 pub struct RealmInfo {
@@ -204,6 +226,34 @@ pub struct RealmInfo {
     pub color: String,
     pub icon: &'static str,
     pub layers: Vec<LayerInfo>,
+}
+
+impl RealmInfo {
+    /// Total number of kinds across all layers in this realm.
+    pub fn total_kinds(&self) -> usize {
+        self.layers.iter().map(|l| l.kinds.len()).sum()
+    }
+
+    /// Calculate health rollup for this realm (average of all Kinds across all Layers).
+    /// Returns (average_percent, total_issues) or None if no health data available.
+    pub fn health_rollup(&self) -> Option<(u8, usize)> {
+        let kinds_with_health: Vec<_> = self
+            .layers
+            .iter()
+            .flat_map(|l| l.kinds.iter())
+            .filter_map(|k| k.health_percent.map(|p| (p, k.issues_count.unwrap_or(0))))
+            .collect();
+
+        if kinds_with_health.is_empty() {
+            return None;
+        }
+
+        let total_percent: u32 = kinds_with_health.iter().map(|(p, _)| *p as u32).sum();
+        let total_issues: usize = kinds_with_health.iter().map(|(_, i)| *i).sum();
+        let avg_percent = (total_percent / kinds_with_health.len() as u32) as u8;
+
+        Some((avg_percent, total_issues))
+    }
 }
 
 /// Stats for status bar.
@@ -1987,6 +2037,156 @@ RETURN kw.keyword as keyword,
 
                         if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
                             for kind in &layer.kinds {
+                                if idx == cursor {
+                                    return Some(TreeItem::Kind(realm, layer, kind));
+                                }
+                                idx += 1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Arcs section header
+        if idx == cursor {
+            return Some(TreeItem::ArcsSection);
+        }
+        idx += 1;
+
+        if !self.is_collapsed("arcs") {
+            for family in &self.arc_families {
+                if idx == cursor {
+                    return Some(TreeItem::ArcFamily(family));
+                }
+                idx += 1;
+
+                if !self.is_collapsed(&format!("family:{}", family.key)) {
+                    for arc_kind in &family.arc_kinds {
+                        if idx == cursor {
+                            return Some(TreeItem::ArcKind(family, arc_kind));
+                        }
+                        idx += 1;
+                    }
+                }
+            }
+        }
+
+        None
+    }
+
+    // =========================================================================
+    // TRAIT FILTER METHODS (Quick Filter: fi/fl/fk/fg/fa)
+    // =========================================================================
+
+    /// Check if a Layer has any Kinds matching the trait filter.
+    fn layer_has_matching_kinds(&self, layer: &LayerInfo, trait_filter: &str) -> bool {
+        layer.kinds.iter().any(|k| k.trait_name == trait_filter)
+    }
+
+    /// Check if a Realm has any Layers with matching Kinds.
+    fn realm_has_matching_kinds(&self, realm: &RealmInfo, trait_filter: &str) -> bool {
+        realm
+            .layers
+            .iter()
+            .any(|l| self.layer_has_matching_kinds(l, trait_filter))
+    }
+
+    /// Count visible items with trait filter applied.
+    /// Hides Kinds that don't match, and Layers/Realms with no matching Kinds.
+    pub fn item_count_with_trait_filter(&self, trait_filter: Option<&str>) -> usize {
+        let Some(filter) = trait_filter else {
+            return self.item_count(); // No filter, use normal count
+        };
+
+        let mut count = 0;
+
+        // Kinds section
+        count += 1; // "Kinds" header
+        if !self.is_collapsed("kinds") {
+            for realm in &self.realms {
+                // Skip realms with no matching kinds
+                if !self.realm_has_matching_kinds(realm, filter) {
+                    continue;
+                }
+                count += 1; // realm header
+                if !self.is_collapsed(&format!("realm:{}", realm.key)) {
+                    for layer in &realm.layers {
+                        // Skip layers with no matching kinds
+                        if !self.layer_has_matching_kinds(layer, filter) {
+                            continue;
+                        }
+                        count += 1; // layer header
+                        if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
+                            // Count only matching kinds
+                            count += layer
+                                .kinds
+                                .iter()
+                                .filter(|k| k.trait_name == filter)
+                                .count();
+                        }
+                    }
+                }
+            }
+        }
+
+        // Arcs section (not filtered by trait)
+        count += 1; // "Arcs" header
+        if !self.is_collapsed("arcs") {
+            for family in &self.arc_families {
+                count += 1; // family header
+                if !self.is_collapsed(&format!("family:{}", family.key)) {
+                    count += family.arc_kinds.len();
+                }
+            }
+        }
+
+        count
+    }
+
+    /// Get item at cursor position with trait filter applied.
+    pub fn item_at_with_trait_filter(
+        &self,
+        cursor: usize,
+        trait_filter: Option<&str>,
+    ) -> Option<TreeItem<'_>> {
+        let Some(filter) = trait_filter else {
+            return self.item_at(cursor); // No filter, use normal lookup
+        };
+
+        let mut idx = 0;
+
+        // Kinds section header
+        if idx == cursor {
+            return Some(TreeItem::KindsSection);
+        }
+        idx += 1;
+
+        if !self.is_collapsed("kinds") {
+            for realm in &self.realms {
+                // Skip realms with no matching kinds
+                if !self.realm_has_matching_kinds(realm, filter) {
+                    continue;
+                }
+                if idx == cursor {
+                    return Some(TreeItem::Realm(realm));
+                }
+                idx += 1;
+
+                if !self.is_collapsed(&format!("realm:{}", realm.key)) {
+                    for layer in &realm.layers {
+                        // Skip layers with no matching kinds
+                        if !self.layer_has_matching_kinds(layer, filter) {
+                            continue;
+                        }
+                        if idx == cursor {
+                            return Some(TreeItem::Layer(realm, layer));
+                        }
+                        idx += 1;
+
+                        if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
+                            // Only include matching kinds
+                            for kind in layer.kinds.iter().filter(|k| k.trait_name == filter) {
                                 if idx == cursor {
                                     return Some(TreeItem::Kind(realm, layer, kind));
                                 }

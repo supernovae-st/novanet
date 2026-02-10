@@ -523,3 +523,28 @@ icons:
       web: clipboard-check
       terminal: "U"
       description: "Data quality audit"
+
+  # ---------------------------------------------------------------------------
+  # COUNT ICONS — Statistics indicators for tree view (v11.6.1)
+  # ---------------------------------------------------------------------------
+  counts:
+    layers_count:
+      web: layers
+      terminal: "▦"
+      description: "Number of layers in realm"
+    kinds_count:
+      web: file-type
+      terminal: "◇"
+      description: "Number of node kinds"
+    arcs_out:
+      web: arrow-right
+      terminal: "→"
+      description: "Outgoing arc types"
+    arcs_in:
+      web: arrow-left
+      terminal: "←"
+      description: "Incoming arc types"
+    props:
+      web: list
+      terminal: "⊞"
+      description: "Properties (required/total)"

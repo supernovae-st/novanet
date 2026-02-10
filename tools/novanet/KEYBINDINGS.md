@@ -69,10 +69,28 @@ Scrollbars are displayed when content exceeds visible area.
 | Key | Action |
 |-----|--------|
 | `/` | Open search overlay (vim-style) |
-| `f` | Open search overlay (alias) |
 | `?` | Open help overlay (keyboard shortcuts) |
 | `F1` | Open color legend overlay (Realm/Layer/Trait colors) |
 | `Esc` | Close current overlay |
+
+---
+
+## Trait Filter (v11.6.2)
+
+Quick filter to show only Kinds matching a specific trait. Works in Meta mode.
+Press `f` followed by the trait key to filter.
+
+| Key | Action |
+|-----|--------|
+| `fi` | Filter: invariant (■) |
+| `fl` | Filter: localized (□) |
+| `fk` | Filter: knowledge (◊) |
+| `fg` | Filter: generated (★) |
+| `fa` | Filter: aggregated (▪) |
+| `ff` | Clear filter (show all) |
+
+When a filter is active, the title bar shows the active trait (e.g., `◆ Schema │ ■ invariant`).
+Layers and Realms with no matching Kinds are hidden.
 
 ---
 

@@ -63,7 +63,7 @@ import {
   type TurboNodeData,
   type TurboNodeType,
 } from './nodes';
-import { FloatingEdge, MagneticEdge, type FloatingEdgeType, EdgeVisibilityProvider } from './edges';
+import { FloatingEdge, MagneticEdge, BundledEdge, type FloatingEdgeType, EdgeVisibilityProvider, useParallelEdges, getEdgeIndexInGroup, BUNDLE_THRESHOLD } from './edges';
 import { NodeContextMenu } from './NodeContextMenu';
 import { GraphToolbar } from './GraphToolbar';
 import type { GraphNode as GraphNodeType, GraphEdge as GraphEdgeType } from '@/types';
@@ -330,6 +330,25 @@ function Graph2DInner({
     nodeId: string;
     position: { x: number; y: number };
   } | null>(null);
+
+  // =========================================================================
+  // EDGE BUNDLING STATE (v11.6.1)
+  // =========================================================================
+  // Tracks which bundled edge groups (4+ parallel edges) are expanded
+  const [expandedBundles, setExpandedBundles] = useState<Set<string>>(new Set());
+
+  // Callback for bundle hover
+  const handleBundleHover = useCallback((bundleKey: string, expanded: boolean) => {
+    setExpandedBundles((prev) => {
+      const next = new Set(prev);
+      if (expanded) {
+        next.add(bundleKey);
+      } else {
+        next.delete(bundleKey);
+      }
+      return next;
+    });
+  }, []);
 
   // =========================================================================
   // SCHEMA MODE STATE (Task 3.2)
@@ -849,12 +868,39 @@ function Graph2DInner({
     return new Set(layoutedNodes.map((n) => n.id));
   }, [layoutedNodes]);
 
+  // Memoize visible graph edges for parallel detection (v11.6.1)
+  const visibleGraphEdges = useMemo(() => {
+    return graphEdges.filter((e) => visibleNodeIdSet.has(e.source) && visibleNodeIdSet.has(e.target));
+  }, [graphEdges, visibleNodeIdSet]);
+
+  // Detect parallel edges (v11.6.1)
+  // Cast to Edge[] since useParallelEdges only uses id/source/target
+  const parallelEdgeGroups = useParallelEdges(visibleGraphEdges as unknown as ReactFlowEdge[]);
+
   const initialEdges = useMemo(() => {
     // DEFENSIVE: Only include edges where both source and target nodes exist
-    const businessEdges = graphEdges
-      .filter((e) => visibleNodeIdSet.has(e.source) && visibleNodeIdSet.has(e.target))
+    const businessEdges = visibleGraphEdges
       .map((e) => {
         const dimmed = isEdgeDimmed(e.source, e.target);
+
+        // Get parallel edge info from groups (v11.6.1)
+        const parallelInfo = getEdgeIndexInGroup(
+          { id: e.id, source: e.source, target: e.target } as ReactFlowEdge,
+          parallelEdgeGroups.groups
+        );
+
+        // Check if this edge is part of a bundled group (4+ edges)
+        const [sortedA, sortedB] = [e.source, e.target].sort();
+        const bundleKey = `${sortedA}::${sortedB}`;
+        const group = parallelEdgeGroups.groups.get(bundleKey);
+        const isBundledEdge = group?.isBundled && !expandedBundles.has(bundleKey);
+
+        // Skip bundled edges when collapsed (v11.6.1)
+        // TODO: Add BundledEdgeOverlay component to render collapsed bundles
+        // For now, bundled edges (4+) are hidden when collapsed, shown when expanded via hover
+        if (isBundledEdge) {
+          return null;
+        }
 
         return {
           id: e.id,
@@ -866,9 +912,13 @@ function Graph2DInner({
             dimmed, // Focus mode dimming only
             animated: !dimmed, // Animation controlled by focus dimming (hover dimming handled locally)
             showLabel: showEdgeLabels,
+            // Parallel edge offset info (v11.6.1)
+            parallelIndex: parallelInfo?.index,
+            parallelTotal: parallelInfo?.total,
           },
         };
-      });
+      })
+      .filter((e): e is NonNullable<typeof e> => e !== null);
 
     // In magnetic mode, add structural edges (Realm→Layer, Node→Layer)
     if (isMagneticMode && magneticData) {
@@ -913,7 +963,7 @@ function Graph2DInner({
     }
 
     return businessEdges;
-  }, [graphEdges, graphNodes, visibleNodeIdSet, isEdgeDimmed, showEdgeLabels, isMagneticMode, magneticData]);
+  }, [visibleGraphEdges, graphNodes, parallelEdgeGroups, expandedBundles, isEdgeDimmed, showEdgeLabels, isMagneticMode, magneticData]);
 
   // React Flow state
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
