@@ -195,20 +195,36 @@ pub(super) fn scroll_indicator(
 // HELPER FUNCTIONS (shared across UI modules)
 // =============================================================================
 
-/// Get icon for a node trait.
-/// - invariant: ◆ (solid diamond) - core structural nodes
-/// - localized: ◇ (empty diamond) - locale-specific content
-/// - knowledge: ● (solid circle) - knowledge atoms
-/// - job: ○ (empty circle) - async processing nodes
-/// - derived: ◈ (fancy diamond) - computed/derived nodes
+/// Get icon for a node trait (from visual-encoding.yaml).
+///
+/// - invariant: ■ (solid square) - stable across locales
+/// - localized: □ (empty square) - locale-specific content
+/// - knowledge: ◊ (diamond) - locale expertise data
+/// - generated: ★ (star) - LLM-generated output
+/// - aggregated: ▪ (small square) - computed metrics
+///
+/// Note: v11.2 removed job trait, split derived into generated+aggregated
 pub(super) fn trait_icon(trait_name: &str) -> &'static str {
     match trait_name {
-        "invariant" => "◆",
-        "localized" => "◇",
-        "knowledge" => "●",
-        "job" => "○",
-        "derived" => "◈",
+        "invariant" => "■",
+        "localized" => "□",
+        "knowledge" => "◊",
+        "generated" => "★",
+        "aggregated" => "▪",
         _ => "·", // fallback
+    }
+}
+
+/// Get color for a node trait (from taxonomy.yaml node_traits).
+/// Uses TrueColor RGB values for visual consistency in tree view.
+pub(super) fn trait_color(trait_name: &str) -> Color {
+    match trait_name {
+        "invariant" => hex_to_color(theme::traits::INVARIANT_HEX),   // #3b82f6 blue
+        "localized" => hex_to_color(theme::traits::LOCALIZED_HEX),   // #22c55e green
+        "knowledge" => hex_to_color(theme::traits::KNOWLEDGE_HEX),   // #8b5cf6 purple
+        "generated" => hex_to_color(theme::traits::GENERATED_HEX),   // #b58900 gold
+        "aggregated" => hex_to_color(theme::traits::AGGREGATED_HEX), // #6c71c4 violet
+        _ => Color::White, // fallback
     }
 }
 
