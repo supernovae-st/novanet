@@ -259,6 +259,85 @@ novanet arc delete --id=abc123
 novanet relation create ...  # Still works, but deprecated
 ```
 
+## Query-First Architecture (v11.6)
+
+NovaNet Studio uses **Query-First Architecture** where Cypher queries are the single source of truth for graph visualization.
+
+### Core Concepts
+
+| Term | Definition |
+|------|------------|
+| **Query-First** | Architecture pattern where graph display is determined solely by the executed Cypher query |
+| **Meta-Graph** | The schema graph showing NodeKind and ArcKind nodes (60 nodes, ~70 arcs) |
+| **KINDS_QUERY** | Foundational query that fetches all NodeKind instances for META mode |
+| **ARCS_QUERY** | Foundational query that fetches all ArcKind instances for META mode |
+| **View** | Parameterized Cypher template defined in YAML, executable with context parameters |
+| **ViewPicker** | UI component for selecting and executing views |
+| **QueryPill** | UI component displaying the current query, with edit capability |
+
+### View Categories
+
+| Category | Purpose | Contextual |
+|----------|---------|------------|
+| `global` | Full graph exploration (complete-graph, shared-layer) | No |
+| `contextual` | Node-specific subgraph (composition, knowledge) | Yes |
+| `generation` | AI agent context (block-generation) | Yes |
+| `mining` | SEO/GEO intelligence (seo-intel, geo-intel) | Yes |
+
+### Foundational Queries
+
+```cypher
+-- KINDS_QUERY: Fetch all NodeKind instances (META mode)
+MATCH (k:Kind)
+RETURN k.name AS name, k.realm AS realm, k.layer AS layer,
+       k.trait AS trait, k.display_name AS display_name
+
+-- ARCS_QUERY: Fetch all ArcKind instances (META mode)
+MATCH (a:ArcKind)
+RETURN a.name AS name, a.family AS family, a.scope AS scope,
+       a.cardinality AS cardinality, a.source AS source, a.target AS target
+```
+
+### View Execution Flow
+
+```
+User clicks ViewPicker
+    ↓
+viewStore.executeView(viewId, params)
+    ↓
+/api/views/:id/query (fetch YAML + substitute params)
+    ↓
+Neo4j executes Cypher
+    ↓
+queryStore.setQuery(cypher)   # QueryPill displays
+graphStore.setNodes(results)  # Graph renders
+```
+
+### Interactions
+
+| Action | Behavior |
+|--------|----------|
+| Click view | `executeView()` → auto-run query → update graph |
+| Ctrl+Click view | `loadQueryOnly()` → load query without executing |
+| Edit QueryPill | Manual changes → click ▶️ to run |
+| Context view card | `executeView()` with `nodeKey` param |
+
+### YAML View Schema
+
+```yaml
+id: composition
+description: Page/Block composition hierarchy
+category: contextual         # global | contextual | generation | mining
+contextual: true             # appears in node sidebar
+applicable_types: [Page, Block]  # compatible node types
+modes: [data, meta, overlay, query]
+cypher: |
+  MATCH (root {key: $nodeKey})
+  ...
+```
+
+> **Reference**: See ADR-021 in `novanet-decisions.md` for full architecture rationale.
+
 ## Summary
 
 1. **Arc** = directed link (not Edge, not Relation)
@@ -267,3 +346,6 @@ novanet relation create ...  # Still works, but deprecated
 4. **Realm/Layer/Trait** = node classification axes
 5. **ArcFamily/ArcScope/ArcCardinality** = arc classification axes
 6. **taxonomy.yaml** = source of truth for facet definitions
+7. **Query-First** = Cypher query determines graph display (v11.6)
+8. **Meta-Graph** = schema graph of NodeKind + ArcKind nodes
+9. **KINDS_QUERY / ARCS_QUERY** = foundational queries for META mode
