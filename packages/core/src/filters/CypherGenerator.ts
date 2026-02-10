@@ -36,12 +36,12 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   // Output
   HAS_GENERATED: 'output',
   HAS_CONTENT: 'content',
-  // Locale knowledge
-  HAS_IDENTITY: 'identity',
-  HAS_VOICE: 'voice',
+  // Locale knowledge (v11.5 schema)
   HAS_CULTURE: 'culture',
   HAS_MARKET: 'market',
-  HAS_LEXICON: 'lexicon',
+  HAS_FORMATTING: 'formatting',
+  HAS_SLUGIFICATION: 'slugification',
+  HAS_EXPRESSIONS: 'expressionSet',
   HAS_EXPRESSION: 'expression',
   // SEO (v10.3: EXPRESSES replaces TARGETS_SEO, GEO removed)
   EXPRESSES: 'seoKeyword',
@@ -77,12 +77,12 @@ const RELATION_TARGET_TYPE_MAP: Record<string, string> = {
   // Output
   HAS_GENERATED: 'PageGenerated',
   HAS_CONTENT: 'EntityContent',
-  // Locale knowledge
-  HAS_IDENTITY: 'LocaleIdentity',
-  HAS_VOICE: 'LocaleVoice',
-  HAS_CULTURE: 'LocaleCulture',
-  HAS_MARKET: 'LocaleMarket',
-  HAS_LEXICON: 'LocaleLexicon',
+  // Locale knowledge (v11.5 schema)
+  HAS_CULTURE: 'Culture',
+  HAS_MARKET: 'Market',
+  HAS_FORMATTING: 'Formatting',
+  HAS_SLUGIFICATION: 'Slugification',
+  HAS_EXPRESSIONS: 'ExpressionSet',
   HAS_EXPRESSION: 'Expression',
   // SEO (v10.3: EXPRESSES replaces TARGETS_SEO, GEO removed)
   EXPRESSES: 'SEOKeyword',

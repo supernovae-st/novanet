@@ -229,15 +229,15 @@ export class ViewLoader {
         filter.includeContent();
         break;
 
-      case 'HAS_IDENTITY':
-      case 'HAS_VOICE':
+      // v11.5: Locale knowledge relations
       case 'HAS_CULTURE':
       case 'HAS_MARKET':
-      case 'HAS_LEXICON': {
+      case 'HAS_FORMATTING':
+      case 'HAS_SLUGIFICATION':
+      case 'HAS_EXPRESSIONS': {
         const criteria = filter.getCriteria();
-        const hasKnowledge = criteria.includes.some(i =>
-          ['HAS_IDENTITY', 'HAS_VOICE', 'HAS_CULTURE', 'HAS_MARKET', 'HAS_LEXICON'].includes(i.relation)
-        );
+        const knowledgeRelations = ['HAS_CULTURE', 'HAS_MARKET', 'HAS_FORMATTING', 'HAS_SLUGIFICATION', 'HAS_EXPRESSIONS'];
+        const hasKnowledge = criteria.includes.some(i => knowledgeRelations.includes(i.relation));
         if (!hasKnowledge) {
           filter.includeKnowledge();
         }

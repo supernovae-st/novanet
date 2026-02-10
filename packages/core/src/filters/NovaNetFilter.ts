@@ -170,12 +170,13 @@ export class NovaNetFilter {
   }
 
   /**
-   * Includes all locale knowledge nodes (Identity, Voice, Culture, Market, Lexicon).
+   * Includes all locale knowledge nodes (Culture, Market, Formatting, Slugification, ExpressionSet).
    * Typically used with fromLocale().
    * Safe to call multiple times - prevents duplicate relations.
+   * v11.5: Updated to match current schema.
    */
   includeKnowledge(): this {
-    const knowledgeRelations = ['HAS_IDENTITY', 'HAS_VOICE', 'HAS_CULTURE', 'HAS_MARKET', 'HAS_LEXICON'];
+    const knowledgeRelations = ['HAS_CULTURE', 'HAS_MARKET', 'HAS_FORMATTING', 'HAS_SLUGIFICATION', 'HAS_EXPRESSIONS'];
     // Prevent duplicates if called multiple times
     const hasKnowledge = this.state.includes.some(i => knowledgeRelations.includes(i.relation));
     if (!hasKnowledge) {
