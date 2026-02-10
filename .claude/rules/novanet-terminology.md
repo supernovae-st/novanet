@@ -147,7 +147,7 @@ Properties use `snake_case` in YAML and TypeScript:
 node:
   name: LocaleVoice
   realm: shared             # v11.2: renamed from global
-  layer: knowledge          # v11.3: 11 layers (3 shared + 8 org)
+  layer: knowledge          # v11.5: 10 layers (4 shared + 6 org)
   trait: knowledge
   display_name: "Locale Voice"
   llm_context: "..."

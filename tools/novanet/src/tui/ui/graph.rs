@@ -1124,15 +1124,15 @@ mod tests {
             .map(|s| s.content.as_ref())
             .collect();
 
-        // Should show 25% for global (1/4 = 25%) and 75% for tenant (3/4 = 75%)
+        // Should show 25% for shared (1/4 = 25%) and 75% for org (3/4 = 75%)
         assert!(
             all_content.contains("25%"),
-            "global should be 25%, got: {}",
+            "shared should be 25%, got: {}",
             all_content
         );
         assert!(
             all_content.contains("75%"),
-            "tenant should be 75%, got: {}",
+            "org should be 75%, got: {}",
             all_content
         );
     }

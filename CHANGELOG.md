@@ -27,6 +27,10 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Version mismatch across CLAUDE.md files (synchronized to v11.5.0)
 - VERSION file created as single source of truth
 - Node counts corrected in all documentation
+- Arc count documentation: 116 → 114 (matches YAML reality)
+- ADR version header: v11.3 → v11.5
+- TUI layer mappings: Added locale 🌍, geography 🗺 for v11.3 split
+- Schema stats example: 64/120 → 60/114 Kinds/ArcKinds
 
 ## [11.3.0] - 2026-02-10
 

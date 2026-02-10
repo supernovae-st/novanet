@@ -19,9 +19,9 @@ use rustc_hash::FxHashSet;
 use super::{
     COLOR_ACTIVE_KIND_BG, COLOR_ARC_FAMILY, COLOR_CONNECTED, COLOR_DESC_TEXT, COLOR_HIGHLIGHT_BG,
     COLOR_HINT_TEXT, COLOR_MUTED_TEXT, COLOR_UNFOCUSED_BORDER, EmptyStateKind, STYLE_DIM,
-    STYLE_HIGHLIGHT, STYLE_PRIMARY, STYLE_UNFOCUSED, layer_abbrev, layer_badge_icon,
-    realm_abbrev, realm_badge_icon, render_empty_state, spinner, trait_abbrev, trait_color,
-    trait_icon, truncate_start,
+    STYLE_HIGHLIGHT, STYLE_PRIMARY, STYLE_UNFOCUSED, layer_abbrev, layer_badge_icon, realm_abbrev,
+    realm_badge_icon, render_empty_state, spinner, trait_abbrev, trait_color, trait_icon,
+    truncate_start,
 };
 use crate::tui::app::{App, Focus};
 use crate::tui::data::ArcDirection;
@@ -433,10 +433,8 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 (text, color)
                             } else {
                                 // Meta mode: arcs + props (no instance count)
-                                let text = format!(
-                                    "{}{}{}",
-                                    kind.display_name, arc_suffix, props_suffix
-                                );
+                                let text =
+                                    format!("{}{}{}", kind.display_name, arc_suffix, props_suffix);
                                 (text, Color::White)
                             };
 
@@ -473,9 +471,12 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             // Badge format: ◎shd ▣cfg ■inv (approx 18 chars with spaces)
                             let badge_str = format!(
                                 "{}{} {}{} {}{}",
-                                realm_badge_icon(&realm.key), realm_abbrev(&realm.key),
-                                layer_badge_icon(&layer.key), layer_abbrev(&layer.key),
-                                t_icon, trait_abbrev(&kind.trait_name)
+                                realm_badge_icon(&realm.key),
+                                realm_abbrev(&realm.key),
+                                layer_badge_icon(&layer.key),
+                                layer_abbrev(&layer.key),
+                                t_icon,
+                                trait_abbrev(&kind.trait_name)
                             );
 
                             // Calculate padding for right-alignment
@@ -510,7 +511,10 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 let mut spans: Vec<Span> = vec![
                                     Span::styled(cursor_char, base_style),
                                     Span::styled(prefix.clone(), base_style.fg(layer_color)),
-                                    Span::styled(format!("{} ", kind_icon), base_style.fg(kind_text_color)),
+                                    Span::styled(
+                                        format!("{} ", kind_icon),
+                                        base_style.fg(kind_text_color),
+                                    ),
                                     Span::styled(format!("{} ", t_icon), base_style.fg(t_color)),
                                 ];
 
@@ -527,13 +531,21 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 spans.push(Span::styled(" │ ", base_style.fg(COLOR_MUTED_TEXT)));
                                 // Realm badge
                                 spans.push(Span::styled(
-                                    format!("{}{}", realm_badge_icon(&realm.key), realm_abbrev(&realm.key)),
+                                    format!(
+                                        "{}{}",
+                                        realm_badge_icon(&realm.key),
+                                        realm_abbrev(&realm.key)
+                                    ),
                                     base_style.fg(realm_color),
                                 ));
                                 spans.push(Span::styled(" ", base_style));
                                 // Layer badge
                                 spans.push(Span::styled(
-                                    format!("{}{}", layer_badge_icon(&layer.key), layer_abbrev(&layer.key)),
+                                    format!(
+                                        "{}{}",
+                                        layer_badge_icon(&layer.key),
+                                        layer_abbrev(&layer.key)
+                                    ),
                                     base_style.fg(layer_color),
                                 ));
                                 spans.push(Span::styled(" ", base_style));
