@@ -277,6 +277,107 @@ export const iconSizes = {
 } as const;
 
 // ============================================================================
+// NODE CARD SIZES - Unified sizing for graph node components
+// ============================================================================
+
+/**
+ * Node card size tokens - Centralized sizing for graph nodes
+ *
+ * Source of truth for card dimensions across all node components.
+ * Maps size categories to width/height, and node types to categories.
+ *
+ * Usage:
+ * ```ts
+ * const { width, height } = nodeCardSizes.getByType('Page');
+ * // or direct access
+ * const size = nodeCardSizes.sizes.lg; // { width: 240, height: 120 }
+ * ```
+ */
+export const nodeCardSizes = {
+  /** Size categories - from extra-small to extra-large */
+  sizes: {
+    /** 160×80 - Knowledge atoms (Term, Expression, SEOKeyword) */
+    xs: { width: 160, height: 80 },
+    /** 180×90 - Compact nodes (ContentSlot, Style, Culture) */
+    sm: { width: 180, height: 90 },
+    /** 200×100 - Standard nodes (Block, EntityContent) */
+    md: { width: 200, height: 100 },
+    /** 220×110 - Medium-large (Locale, BrandIdentity) */
+    lg: { width: 220, height: 110 },
+    /** 240×120 - Large structural (Page, Entity, Layer attractors) */
+    xl: { width: 240, height: 120 },
+    /** 280×140 - Premium (Project, OrgConfig, Realm attractors) */
+    '2xl': { width: 280, height: 140 },
+  },
+
+  /** Node type to size category mapping */
+  byType: {
+    // Extra-large (2xl) - Premium nodes
+    Project: '2xl',
+    OrgConfig: '2xl',
+    realmAttractor: '2xl',
+
+    // Large (xl) - Structural nodes
+    Page: 'xl',
+    Entity: 'xl',
+    layerAttractor: 'xl',
+
+    // Medium-large (lg)
+    Locale: 'lg',
+    BrandIdentity: 'lg',
+    PageGenerated: 'lg',
+
+    // Medium (md) - Standard nodes
+    Block: 'md',
+    EntityContent: 'md',
+    Continent: 'md',
+    PageType: 'md',
+    BlockType: 'md',
+    ContentSlot: 'md',
+
+    // Small (sm) - Compact nodes
+    Style: 'sm',
+    Culture: 'sm',
+    BlockPrompt: 'sm',
+    Region: 'sm',
+    Country: 'sm',
+
+    // Extra-small (xs) - Knowledge atoms
+    Term: 'xs',
+    Expression: 'xs',
+    Pattern: 'xs',
+    CultureRef: 'xs',
+    Taboo: 'xs',
+    AudienceTrait: 'xs',
+    TermSet: 'xs',
+    ExpressionSet: 'xs',
+    PatternSet: 'xs',
+    CultureSet: 'xs',
+    TabooSet: 'xs',
+    AudienceSet: 'xs',
+    CategorySet: 'xs',
+    SEOKeyword: 'xs',
+    GEOQuery: 'xs',
+  } as Record<string, keyof typeof nodeCardSizes.sizes>,
+
+  /** Get size by category key */
+  get(sizeKey: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl') {
+    return this.sizes[sizeKey];
+  },
+
+  /** Get size by node type (with fallback to md) */
+  getByType(type: string): { width: number; height: number } {
+    const sizeKey = this.byType[type];
+    return this.sizes[sizeKey] || this.sizes.md;
+  },
+
+  /** Get width only (for backward compat with getCardWidth functions) */
+  getWidth(type: string): number {
+    return this.getByType(type).width;
+  },
+} as const;
+
+// ============================================================================
 // PANEL CLASSES - Consistent sidebar/panel styling
 // ============================================================================
 
@@ -864,6 +965,7 @@ export const tokens = {
   opacity,
   defaultColors,
   iconSizes,
+  nodeCardSizes,
   // Semantic spacing tokens
   gapTokens,
   paddingTokens,
