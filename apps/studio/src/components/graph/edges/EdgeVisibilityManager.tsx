@@ -35,13 +35,46 @@ import { create } from 'zustand';
 // ZUSTAND STORE
 // =============================================================================
 
-/** Performance mode thresholds */
+/**
+ * Effect quality tiers based on edge count.
+ *
+ * ADAPTIVE DENSITY: More edges = simpler effects for performance.
+ * Fewer edges = richer effects for "wow" factor.
+ */
+export type EffectTier = 'ultra' | 'high' | 'medium' | 'low' | 'minimal';
+
+/**
+ * Performance thresholds for progressive effect density.
+ *
+ * - ULTRA:   0-30 arcs   → All effects + extra trail segments
+ * - HIGH:    30-100 arcs → Full atom effects (current)
+ * - MEDIUM:  100-250 arcs → Fewer particles, shorter trails
+ * - LOW:     250-500 arcs → 2-element simplified
+ * - MINIMAL: 500+ arcs   → Static glow only, no animation
+ */
 export const PERF_THRESHOLDS = {
-  /** Above this edge count, use simplified 2-element effects */
-  SIMPLIFY_EFFECTS: 200,
-  /** Above this edge count, disable animations entirely */
-  DISABLE_ANIMATIONS: 500,
+  /** Below this: ULTRA tier (rich effects) */
+  ULTRA_MAX: 30,
+  /** Below this: HIGH tier (full effects) */
+  HIGH_MAX: 100,
+  /** Below this: MEDIUM tier (reduced effects) */
+  MEDIUM_MAX: 250,
+  /** Below this: LOW tier (simplified 2-element) */
+  LOW_MAX: 500,
+  // Above LOW_MAX: MINIMAL tier (no animations)
 } as const;
+
+/**
+ * Calculate effect tier from edge count.
+ * More edges = lower tier = simpler effects.
+ */
+export function calculateEffectTier(edgeCount: number): EffectTier {
+  if (edgeCount <= PERF_THRESHOLDS.ULTRA_MAX) return 'ultra';
+  if (edgeCount <= PERF_THRESHOLDS.HIGH_MAX) return 'high';
+  if (edgeCount <= PERF_THRESHOLDS.MEDIUM_MAX) return 'medium';
+  if (edgeCount <= PERF_THRESHOLDS.LOW_MAX) return 'low';
+  return 'minimal';
+}
 
 interface EdgeVisibilityState {
   /** Set of edge IDs currently visible in the viewport */
@@ -50,10 +83,13 @@ interface EdgeVisibilityState {
   /** Total edge count in the graph (for performance decisions) */
   totalEdgeCount: number;
 
-  /** Whether to use simplified edge effects */
+  /** Current effect quality tier */
+  effectTier: EffectTier;
+
+  /** Whether to use simplified edge effects (low tier) */
   useSimplifiedEffects: boolean;
 
-  /** Whether to disable edge animations entirely */
+  /** Whether to disable edge animations entirely (minimal tier) */
   disableAnimations: boolean;
 
   /**
@@ -87,6 +123,7 @@ interface EdgeVisibilityState {
 export const useEdgeVisibilityStore = create<EdgeVisibilityState>((set, get) => ({
   visibleEdges: new Set(),
   totalEdgeCount: 0,
+  effectTier: 'ultra' as EffectTier,
   useSimplifiedEffects: false,
   disableAnimations: false,
 
@@ -105,16 +142,21 @@ export const useEdgeVisibilityStore = create<EdgeVisibilityState>((set, get) => 
   isVisible: (id: string) => get().visibleEdges.has(id),
 
   setTotalEdgeCount: (count: number) => {
+    const tier = calculateEffectTier(count);
     set({
       totalEdgeCount: count,
-      useSimplifiedEffects: count > PERF_THRESHOLDS.SIMPLIFY_EFFECTS,
-      disableAnimations: count > PERF_THRESHOLDS.DISABLE_ANIMATIONS,
+      effectTier: tier,
+      // LOW tier and below use simplified effects
+      useSimplifiedEffects: tier === 'low' || tier === 'minimal',
+      // MINIMAL tier disables animations entirely
+      disableAnimations: tier === 'minimal',
     });
   },
 
   clear: () => set({
     visibleEdges: new Set(),
     totalEdgeCount: 0,
+    effectTier: 'ultra' as EffectTier,
     useSimplifiedEffects: false,
     disableAnimations: false,
   }),
@@ -240,6 +282,8 @@ interface UseEdgeVisibilityReturn {
   unregisterEdge: (id: string, element: Element) => void;
   /** Update total edge count (from store) */
   setTotalEdgeCount: (count: number) => void;
+  /** Current effect quality tier (from store) */
+  effectTier: EffectTier;
   /** Whether to use simplified 2-element effects (from store) */
   useSimplifiedEffects: boolean;
   /** Whether to disable animations entirely (from store) */
@@ -282,6 +326,7 @@ export function useEdgeVisibility(): UseEdgeVisibilityReturn {
     isVisible: store.isVisible,
     clear: store.clear,
     setTotalEdgeCount: store.setTotalEdgeCount,
+    effectTier: store.effectTier,
     useSimplifiedEffects: store.useSimplifiedEffects,
     disableAnimations: store.disableAnimations,
     // From context (with noop fallbacks)
