@@ -118,7 +118,7 @@ mod tests {
 
     #[test]
     fn parse_csv_multiple_trimmed() {
-        // v10.6: 2 realms (shared, org)
+        // v11.2: 2 realms (shared, org) - renamed from global, tenant
         assert_eq!(parse_csv(Some(" shared , org ")), vec!["shared", "org"]);
     }
 
@@ -184,11 +184,11 @@ mod tests {
 
     #[test]
     fn roundtrip_json() {
-        // v10.4: shared realm has SEO layer
+        // v11.5: shared realm has knowledge layer (SEO/GEO nodes consolidated there)
         let original = FacetFilter::from_cli(
             Some("shared"),
-            Some("seo"),
-            Some("derived,job"),
+            Some("knowledge"),
+            Some("generated,aggregated"),
             Some("mining"),
             None,
         );

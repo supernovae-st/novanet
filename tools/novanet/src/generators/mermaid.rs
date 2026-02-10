@@ -404,7 +404,7 @@ pub fn wrap_in_markdown(mermaid_code: &str) -> String {
         "- **\u{1F4E6} PROJECT** — Project-specific content structure and generation"
     )
     .unwrap();
-    // v10.2: SHARED realm removed, SEO now in SHARED
+    // v11.5: Architecture is 2 realms (shared + org), 10 layers
     writeln!(out).unwrap();
     writeln!(out, "## Graph Diagram").unwrap();
     writeln!(out).unwrap();
