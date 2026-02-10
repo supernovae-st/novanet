@@ -38,22 +38,23 @@ pub struct LayerCardInfo {
     pub kind_count: usize,
 }
 
-/// Shared realm layers (3 layers) — v11.3: locale, geography, knowledge.
-pub const SHARED_LAYERS: [(&str, &str, &str); 3] = [
-    ("locale", "\u{1f310}", "Locale definitions"), // 🌐
-    ("geography", "\u{1f5fa}", "Geographic data"), // 🗺️
-    ("knowledge", "\u{1f4da}", "Terms, Patterns"), // 📚
+/// Shared realm layers (4 layers) — v11.5: config, locale, geography, knowledge.
+/// All icons are single-width Unicode symbols (no emojis).
+pub const SHARED_LAYERS: [(&str, &str, &str); 4] = [
+    ("config", "\u{2699}", "Definitions"),        // ⚙
+    ("locale", "\u{2295}", "Locale settings"),    // ⊕
+    ("geography", "\u{2299}", "Geographic data"), // ⊙
+    ("knowledge", "\u{25c8}", "Terms, Patterns"), // ◈
 ];
 
-/// Org realm layers (8 layers) — v11.3: +geo for AI visibility.
-pub const ORG_LAYERS: [(&str, &str, &str); 8] = [
+/// Org realm layers (6 layers) — v11.5: config, foundation, structure, semantic, instruction, output.
+/// SEO/GEO consolidated to shared/knowledge.
+pub const ORG_LAYERS: [(&str, &str, &str); 6] = [
     ("config", "\u{2699}", "OrgConfig root"),       // ⚙
-    ("foundation", "\u{25c7}", "Project, Brand"),   // ◇
-    ("structure", "\u{25c6}", "Pages, Blocks"),     // ◆
+    ("foundation", "\u{25a3}", "Project, Brand"),   // ▣
+    ("structure", "\u{25a4}", "Pages, Blocks"),     // ▤
     ("semantic", "\u{25c6}", "Entities, Personas"), // ◆
-    ("instruction", "\u{270e}", "Prompts, Rules"),  // ✎
-    ("seo", "\u{1f50d}", "SEO Keywords"),           // 🔍
-    ("geo", "\u{1f916}", "GEO AI Visibility"),      // 🤖
+    ("instruction", "\u{25a7}", "Prompts, Rules"),  // ▧
     ("output", "\u{25cf}", "Generated content"),    // ●
 ];
 
@@ -292,14 +293,15 @@ mod tests {
 
     #[test]
     fn test_global_layers_count() {
-        // v11.3: SHARED has 3 layers (locale, geography, knowledge)
-        assert_eq!(SHARED_LAYERS.len(), 3);
+        // v11.5: SHARED has 4 layers (config, locale, geography, knowledge)
+        assert_eq!(SHARED_LAYERS.len(), 4);
     }
 
     #[test]
     fn test_tenant_layers_count() {
-        // v11.3: ORG has 8 layers (config, foundation, structure, semantic, instruction, seo, geo, output)
-        assert_eq!(ORG_LAYERS.len(), 8);
+        // v11.5: ORG has 6 layers (config, foundation, structure, semantic, instruction, output)
+        // SEO/GEO consolidated to shared/knowledge
+        assert_eq!(ORG_LAYERS.len(), 6);
     }
 
     #[test]

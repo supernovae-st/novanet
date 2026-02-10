@@ -281,7 +281,9 @@ fn render_breadcrumb(f: &mut Frame, area: Rect, app: &App) -> u16 {
         ));
         // Label (bold for last item)
         let label_style = if i == path.len() - 1 {
-            Style::default().fg(level.color).add_modifier(Modifier::BOLD)
+            Style::default()
+                .fg(level.color)
+                .add_modifier(Modifier::BOLD)
         } else {
             Style::default().fg(level.color)
         };
@@ -336,8 +338,7 @@ fn render_minimap(f: &mut Frame, area: Rect, info: &MiniMapInfo) {
 
         // Determine what's visible in this row's range
         let cursor_in_range = cursor >= tree_start && cursor < tree_end.max(tree_start + 1);
-        let viewport_overlaps =
-            tree_end > viewport_start && tree_start < viewport_end;
+        let viewport_overlaps = tree_end > viewport_start && tree_start < viewport_end;
 
         let (symbol, color) = if cursor_in_range {
             // Cursor position: solid block with realm color
@@ -350,10 +351,7 @@ fn render_minimap(f: &mut Frame, area: Rect, info: &MiniMapInfo) {
             ("▒▒", Color::Rgb(40, 40, 50))
         };
 
-        lines.push(Line::from(Span::styled(
-            symbol,
-            Style::default().fg(color),
-        )));
+        lines.push(Line::from(Span::styled(symbol, Style::default().fg(color))));
     }
 
     let paragraph = Paragraph::new(lines);
@@ -1261,11 +1259,13 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     // v11.6: Show mode with icon + hierarchy position
     let total = app.current_item_count(); // Used for scrollbar
     let mode_prefix = if app.is_data_mode() {
-        "● Data"  // Filled circle = instances/data
+        "● Data" // Filled circle = instances/data
     } else {
         "◆ Schema" // Diamond = structure/meta
     };
-    let hierarchy = app.tree.hierarchy_position(app.tree_cursor, app.is_data_mode());
+    let hierarchy = app
+        .tree
+        .hierarchy_position(app.tree_cursor, app.is_data_mode());
     let hierarchy_str = hierarchy.to_compact_string();
     let title = if hierarchy_str.is_empty() {
         format!(" {} ", mode_prefix)
@@ -1334,15 +1334,13 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
     // Render vertical separator between tree and mini-map
     if inner_area.height > 0 {
-        let sep_area = Rect::new(
-            sep_x,
-            inner_area.y,
-            1,
-            inner_area.height,
-        );
+        let sep_area = Rect::new(sep_x, inner_area.y, 1, inner_area.height);
         let mut sep_lines: Vec<Line> = Vec::with_capacity(inner_area.height as usize);
         for _ in 0..inner_area.height {
-            sep_lines.push(Line::from(Span::styled("│", Style::default().fg(Color::Rgb(50, 50, 60)))));
+            sep_lines.push(Line::from(Span::styled(
+                "│",
+                Style::default().fg(Color::Rgb(50, 50, 60)),
+            )));
         }
         let sep_paragraph = Paragraph::new(sep_lines);
         f.render_widget(sep_paragraph, sep_area);
@@ -1358,8 +1356,9 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
             .track_symbol(Some("│"))
             .thumb_symbol("█");
 
-        let mut scrollbar_state = ScrollbarState::new(total.saturating_sub(effective_visible_height))
-            .position(app.tree_scroll);
+        let mut scrollbar_state =
+            ScrollbarState::new(total.saturating_sub(effective_visible_height))
+                .position(app.tree_scroll);
 
         // Place scrollbar between tree content and mini-map separator
         let scrollbar_area = Rect {

@@ -63,16 +63,24 @@ export type RelationType =
 
 /**
  * Atomic effect building blocks - composable primitives
+ *
+ * v11.6.1: Added 4 new family-specific effects
  */
 export type EffectPrimitive =
+  // Core effects (v11.6.0)
   | 'emit'          // Pulse/burst at source
   | 'particles'     // Traveling data packets
   | 'trail'         // Comet tail behind particles
   | 'impact'        // Burst at target
   | 'glow'          // Edge glow layer
-  | 'zigzag'        // Neural branching sparks
+  | 'zigzag'        // Neural branching sparks (semantic family)
   | 'interference'  // Wave overlay pattern
-  | 'scanline';     // Holographic scan effect
+  | 'scanline'      // Holographic scan effect
+  // Family-specific effects (v11.6.1)
+  | 'energyPulse'   // Intense power packets with glow trail (ownership)
+  | 'dnaHelix'      // Double helix spiral animation (localization)
+  | 'matrixCode'    // Flowing code characters (generation)
+  | 'radarSweep';   // Gradient sweep like radar (mining)
 
 /**
  * Animation speed presets

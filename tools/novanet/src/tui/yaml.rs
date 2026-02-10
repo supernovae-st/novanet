@@ -172,7 +172,7 @@ node:
   realm: shared
   layer: config
   trait: invariant
-  icon: "🌍"
+  icon: "⊕"
   description: "First-class locale node (BCP 47)"
   llm_context: "USE: for locale-specific content"
 

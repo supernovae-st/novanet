@@ -2,25 +2,25 @@
 
 Complete keyboard shortcuts reference for the NovaNet Terminal UI.
 
-> **v11.3**: Mode consolidation - 3 modes (Graph, Audit, Nexus) with GraphView toggle.
+> **v11.6**: Navigation redesign - 4 independent modes (Meta, Data, Audit, Nexus).
+> Keys 1-4 switch modes GLOBALLY from anywhere. Nexus uses [ ] for tabs.
 > Source of truth: `src/tui/app.rs` (handle_key)
 
 ---
 
-## Navigation Modes (v11.3)
+## Navigation Modes (v11.6)
 
 | Key | Action |
 |-----|--------|
-| `1` | Switch to Graph mode (Taxonomy/Instances toggle with `t`) |
-| `2` | Switch to Audit mode (schema validation) |
-| `3` | Switch to Nexus mode (gamified learning hub) |
-| `t` | Toggle GraphView: Taxonomy ↔ Instances (Graph mode only) |
-| `N` | Cycle through all 3 modes |
+| `1` | Switch to Meta mode (schema taxonomy view) |
+| `2` | Switch to Data mode (instances view) |
+| `3` | Switch to Audit mode (schema validation) |
+| `4` | Switch to Nexus mode (gamified learning hub) |
 | `Tab` | Cycle focus: Tree → Info → Graph → YAML |
 | `Shift+Tab` | Cycle focus backwards |
 | `` ` `` | Open recent items popup (navigation history) |
 
-**Mode indicator**: Header shows `[T]` for Taxonomy view, `[I]` for Instances view.
+**Mode indicator**: Header shows `[1]Meta [2]Data [3]Audit [4]Nexus` with active mode highlighted.
 
 ---
 
@@ -39,7 +39,7 @@ Complete keyboard shortcuts reference for the NovaNet Terminal UI.
 | `H` | Collapse all (global) |
 | `L` | Expand all (global) |
 | `p` | Jump to parent node |
-| `0` | Toggle hide empty (Instances view only) |
+| `0` | Toggle hide empty (Data mode only) |
 | `d` | Page down (half screen) |
 | `u` | Page up (half screen) |
 | `g` | Jump to first item |
@@ -103,7 +103,7 @@ Scrollbars are displayed when content exceeds visible area.
 
 ---
 
-## Schema Overlay (Instances View)
+## Schema Overlay (Data mode)
 
 | Key | Action |
 |-----|--------|
@@ -113,16 +113,14 @@ Scrollbars are displayed when content exceeds visible area.
 
 ---
 
-## Graph Mode Hierarchy (v11.3)
+## Mode Hierarchy (v11.6)
 
-The tree structure follows this hierarchy:
-
-**Taxonomy view** (`t` to toggle):
+**Meta mode** (key `1`): Schema taxonomy view
 ```
 Realm → Layer → Kind
 ```
 
-**Instances view** (`t` to toggle):
+**Data mode** (key `2`): Instance view
 ```
 Realm → Layer → Kind → EntityCategory (Entity only) → Instance
 ```
@@ -141,26 +139,26 @@ The status bar shows context-aware hints:
 
 | Context | Hint | Action |
 |---------|------|--------|
-| On Kind (Taxonomy) | `t:→Instances` | Press t to switch to Instances view |
-| On Instance | `t:→Taxonomy` | Press t to switch to Taxonomy view |
+| On Kind (Meta) | `2:→Data` | Press 2 to switch to Data mode |
+| On Instance | `1:→Meta` | Press 1 to switch to Meta mode |
 | On EntityCategory | `l:expand` | Press l to expand and see instances in category |
 
 ---
 
-## Nexus Mode (Mode 3)
+## Nexus Mode (Mode 4)
 
-Gamified learning hub for NovaNet concepts (v11.3: renamed from Guide).
+Gamified learning hub for NovaNet concepts.
 
 ### Tab Switching (within Nexus mode)
 
 | Key | Action |
 |-----|--------|
-| `1` | Switch to Traits tab |
-| `2` | Switch to Layers tab |
-| `3` | Switch to Arcs tab |
-| `4` | Switch to Pipeline tab |
+| `[` | Switch to previous tab |
+| `]` | Switch to next tab |
 | `Tab` | Cycle to next tab |
 | `Shift+Tab` | Cycle to previous tab |
+
+**Tabs**: Traits → Layers → Arcs → Pipeline
 
 ### Quick Jump (g prefix)
 
@@ -215,16 +213,16 @@ The bottom bar shows educational tips with trait-colored keywords.
 ```
 Navigation:  j/k (up/down)  h/l (toggle)  d/u (page)  g/G (top/bottom)  p (parent)
 Expand:      e (subtree)    c (collapse)  H/L (global collapse/expand)
-Filter:      0 (hide empty in Instances view)
-Modes:       1-3 (direct)   N (cycle)   t (Graph view toggle)   ` (recent items)
+Filter:      0 (hide empty in Data mode)
+Modes:       1 (Meta)  2 (Data)  3 (Audit)  4 (Nexus)  ` (recent items)
 Focus:       Tab (cycle panels)
 Search:      / or f (search)  ? (help)  F1 (legend)
 Actions:     r (refresh)  y/Y (yank key/JSON)  J (JSON toggle)  Ctrl+o/i (back/forward)
 Schema:      s (overlay)  +/- (focus property)
 Exit:        q or Esc
 
-Nexus Mode (3):
-Tabs:        1-4 (Traits/Layers/Arcs/Pipeline)  Tab (cycle)
+Nexus Mode (4):
+Tabs:        [ ] (prev/next tab)  Tab (cycle)
 Quick Jump:  gi/gl/gk/gg/ga (traits)  g0 (top)
 Actions:     y (yank)  n (next tip)  Enter/Esc (drill)
 ```

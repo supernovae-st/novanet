@@ -254,45 +254,39 @@ pub(super) fn realm_badge_icon(realm_key: &str) -> &'static str {
 }
 
 /// Get short abbreviation for layer display in tree badges.
-/// Format: ▣xxx where xxx is 3-letter abbreviation
+/// v11.5: 10 layers (4 shared + 6 org)
 pub(super) fn layer_abbrev(layer_key: &str) -> &'static str {
     match layer_key {
-        // v11.3: 4 shared layers
+        // v11.5: 4 shared layers
         "config" => "cfg",
         "locale" => "loc",
         "geography" => "geo",
         "knowledge" => "kno",
-        // v11.3: 6 org layers
+        // v11.5: 6 org layers
         "foundation" => "fnd",
         "structure" => "str",
         "semantic" => "sem",
         "instruction" => "ins",
         "output" => "out",
-        // Removed in v11.3 (kept for backward compat)
-        "seo" => "seo",
-        "locale-knowledge" => "lkn",
         _ => "???",
     }
 }
 
 /// Get icon for layer badge (from visual-encoding.yaml).
-/// Named `_badge` to avoid collision with expand_icon variables in tree.rs
+/// v11.5: All icons are single-width Unicode symbols (no emojis)
 pub(super) fn layer_badge_icon(layer_key: &str) -> &'static str {
     match layer_key {
-        // v11.3: 4 shared layers
+        // v11.5: 4 shared layers
         "config" => "⚙",
-        "locale" => "🌍",
-        "geography" => "🗺",
-        "knowledge" => "◇",
-        // v11.3: 6 org layers
+        "locale" => "⊕",
+        "geography" => "⊙",
+        "knowledge" => "◈",
+        // v11.5: 6 org layers
         "foundation" => "▣",
-        "structure" => "▢",
+        "structure" => "▤",
         "semantic" => "◆",
-        "instruction" => "▷",
+        "instruction" => "▧",
         "output" => "●",
-        // Removed in v11.3 (kept for backward compat)
-        "seo" => "◈",
-        "locale-knowledge" => "◆",
         _ => "○",
     }
 }
@@ -582,7 +576,7 @@ fn render_footer_hints(f: &mut Frame, area: Rect, app: &App) {
     use crate::tui::app::Focus;
 
     let hints = match app.mode {
-        NavMode::Graph => match app.focus {
+        NavMode::Meta | NavMode::Data => match app.focus {
             Focus::Tree => {
                 "Tree: [h/l] Toggle  [j/k] Navigate  [Space] Expand  [g/G] Top/Bottom  [Tab] Panel  [/] Search  [?] Help"
             }
@@ -591,7 +585,7 @@ fn render_footer_hints(f: &mut Frame, area: Rect, app: &App) {
             Focus::Yaml => "YAML: [j/k] Scroll  [y] Copy  [Tab] Panel  [/] Search  [?] Help",
         },
         NavMode::Audit => {
-            "[j/k] Navigate  [Enter] Drill down  [r] Refresh  [1-3] Mode  [?] Help  [q] Quit"
+            "[j/k] Navigate  [Enter] Drill down  [r] Refresh  [1-4] Mode  [?] Help  [q] Quit"
         }
         NavMode::Nexus => {
             "[1-4] Tabs  [j/k] Navigate  [Enter] Select  [Esc] Back  [/] Search  [?] Help"
@@ -608,10 +602,10 @@ fn render_footer_hints(f: &mut Frame, area: Rect, app: &App) {
 }
 
 /// Header: Logo + Mode tabs.
-/// Shows: [1]Graph, [2]Audit, [3]Nexus
-/// v11.3: Simplified to 3 modes (Graph replaces Meta+Data, Nexus replaces Guide)
+/// Shows: [1]Meta, [2]Data, [3]Audit, [4]Nexus
+/// v11.6: 4 independent modes with keys 1-4
 fn render_header(f: &mut Frame, area: Rect, app: &App) {
-    let tabs: Vec<Span> = [NavMode::Graph, NavMode::Audit, NavMode::Nexus]
+    let tabs: Vec<Span> = [NavMode::Meta, NavMode::Data, NavMode::Audit, NavMode::Nexus]
         .iter()
         .enumerate()
         .map(|(i, mode)| {
@@ -644,21 +638,21 @@ fn render_header(f: &mut Frame, area: Rect, app: &App) {
         ));
     }
 
-    // Context-aware shortcuts (v11.3: 3 modes)
+    // Context-aware shortcuts (v11.6: 4 independent modes, 1-4 global)
     let right_side = if app.mode == NavMode::Nexus {
         vec![Span::styled(
-            "  1-4:tabs  jk:nav  Enter:drill  Esc:back  ?:help  q:quit",
+            "  []:tabs  jk:nav  Enter:drill  Esc:back  1-4:modes  ?:help  q:quit",
             theme::ui::muted_style(),
         )]
     } else if app.mode == NavMode::Audit {
         vec![Span::styled(
-            "  jk:nav  r:refresh  1-3:modes  ?:help  q:quit",
+            "  jk:nav  r:refresh  1-4:modes  ?:help  q:quit",
             theme::ui::muted_style(),
         )]
     } else {
-        // Graph mode
+        // Meta/Data mode (v11.6: 't' toggle removed, 1-4 for modes)
         vec![Span::styled(
-            "  h/l:toggle  jk:scroll  t:view  Tab:panel  /:find  ?:help  q:quit",
+            "  h/l:toggle  jk:scroll  Tab:panel  /:find  1-4:modes  ?:help  q:quit",
             theme::ui::muted_style(),
         )]
     };
@@ -861,14 +855,15 @@ fn render_recent_items_overlay(f: &mut Frame, app: &App) {
                 Some(crate::tui::data::TreeItem::ArcFamily(f)) => ("↔", f.display_name.clone()),
                 Some(crate::tui::data::TreeItem::ArcKind(_, ak)) => ("→", ak.display_name.clone()),
                 Some(crate::tui::data::TreeItem::EntityCategory(_, _, _, cat)) => {
-                    ("📁", cat.display_name.clone())
+                    ("◫", cat.display_name.clone())
                 }
                 None => ("?", format!("(cursor {})", cursor)),
             };
 
-            // v11.3: 3 modes
+            // v11.6: 4 modes (Meta, Data, Audit, Nexus)
             let mode_badge = match mode {
-                crate::tui::app::NavMode::Graph => "[G]",
+                crate::tui::app::NavMode::Meta => "[M]",
+                crate::tui::app::NavMode::Data => "[D]",
                 crate::tui::app::NavMode::Audit => "[!]",
                 crate::tui::app::NavMode::Nexus => "[N]",
             };

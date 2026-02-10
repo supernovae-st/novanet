@@ -7,11 +7,11 @@ This file provides guidance to Claude Code when working in the `tools/novanet/` 
 `novanet` is a unified Rust CLI + TUI binary for managing the NovaNet context graph.
 It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 
-**Version**: v11.5.0 (Locale moved to shared/config)
+**Version**: v11.6.0 (Locale moved to shared/config)
 
 ## Current Status
 
-**v11.5.0 Schema Refinement** — Locale moved from shared/locale to shared/config (definitions layer pattern). SEO/GEO consolidated to shared/knowledge. Architecture: SHARED (4 layers: config, locale, geography, knowledge, 39 nodes), ORG (6 layers: config, foundation, structure, semantic, instruction, output, 21 nodes). 60 total nodes, 10 layers. Galaxy-themed mission control TUI with EntityCategory filtering, search, detail, arc explorer, CRUD dialogs, dashboard stats, ASCII logo, breadcrumb navigation, command palette, help overlay, boot animation, effects engine, and onboarding.
+**v11.6.0 Schema Refinement** — Locale moved from shared/locale to shared/config (definitions layer pattern). SEO/GEO consolidated to shared/knowledge. Architecture: SHARED (4 layers: config, locale, geography, knowledge, 39 nodes), ORG (6 layers: config, foundation, structure, semantic, instruction, output, 21 nodes). 60 total nodes, 10 layers. Galaxy-themed mission control TUI with EntityCategory filtering, search, detail, arc explorer, CRUD dialogs, dashboard stats, ASCII logo, breadcrumb navigation, command palette, help overlay, boot animation, effects engine, and onboarding.
 
 | Area | Commands | Status |
 |------|----------|--------|

@@ -1,6 +1,6 @@
 # packages/core/models/taxonomy.yaml
 # Source of truth for NovaNet taxonomy structure
-# v11.5.0 — Layer Clarification (Locale → config)
+# v11.6.0 — Layer Clarification (Locale → config)
 #
 # This file defines:
 # - 2 NodeRealms (SHARED, ORG) with nested NodeLayers
@@ -42,7 +42,7 @@
 # All meta-nodes receive double-label :Meta (e.g., :Meta:Realm)
 # Query all meta-nodes: MATCH (n:Meta) RETURN n
 
-version: "11.5.0"
+version: "11.6.0"
 
 # =============================================================================
 # NODE REALMS (2) — WHERE does the node live?
