@@ -19,6 +19,7 @@ import { cn } from '@/lib/utils';
 import { useNodeInteractions } from '@/hooks';
 import { RealmIcon } from '@/components/ui/CategoryIcon';
 import { BlueprintOverlay } from './BlueprintOverlay';
+import { GlowBadge } from './effects';
 import { NODE_BG, NODE_DESIGN } from '@/config/constants';
 import type { Realm } from '@novanet/core/types';
 import { REALM_COLORS } from '@/design/colors/generated';
@@ -37,35 +38,6 @@ export interface RealmAttractorData extends Record<string, unknown> {
 }
 
 export type RealmAttractorNodeType = Node<RealmAttractorData, 'realmAttractor'>;
-
-// =============================================================================
-// GlowBadge - Badge with glow + gradient effect (matches SchemaNode)
-// =============================================================================
-
-const GlowBadge = memo(function GlowBadge({
-  label,
-  icon,
-  color,
-}: {
-  label: string;
-  icon?: React.ReactNode;
-  color: string;
-}) {
-  return (
-    <span
-      className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wide px-2.5 py-1.5 rounded-md"
-      style={{
-        background: `linear-gradient(135deg, ${color}40, ${color}20)`,
-        color: color,
-        border: `1px solid ${color}60`,
-        boxShadow: `0 0 12px ${color}35, inset 0 1px 0 ${color}25`,
-      }}
-    >
-      {icon}
-      {label}
-    </span>
-  );
-});
 
 // =============================================================================
 // Main Component
@@ -202,10 +174,12 @@ export const RealmAttractorNode = memo(function RealmAttractorNode({
                   label="REALM"
                   icon={<RealmIcon realm={realmKey} size={12} strokeWidth={2} style={{ color: primaryColor }} />}
                   color={primaryColor}
+                  size="lg"
                 />
                 <GlowBadge
                   label={realmKey.toUpperCase()}
                   color={primaryColor}
+                  size="lg"
                 />
               </div>
             </div>
