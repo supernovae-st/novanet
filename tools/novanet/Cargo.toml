@@ -9,6 +9,7 @@ description = "NovaNet context graph CLI + TUI"
 [dependencies]
 # CLI
 clap = { version = "4", features = ["derive", "env"] }
+clap_complete = "4"                # Shell completion generation
 
 # TUI (feature-gated)
 ratatui = { version = "0.30", optional = true }

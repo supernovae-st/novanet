@@ -11,19 +11,21 @@
       "persistent": true
     },
     "lint": {
-      "outputs": []
+      "outputs": [".eslintcache"]
     },
     "type-check": {
       "dependsOn": ["^build"],
-      "outputs": []
+      "outputs": ["tsconfig.tsbuildinfo"]
     },
     "test": {
-      "dependsOn": ["build"],
-      "outputs": []
+      "outputs": ["coverage/**"]
     },
     "test:watch": {
       "cache": false,
       "persistent": true
+    },
+    "format:check": {
+      "outputs": []
     }
   }
 }

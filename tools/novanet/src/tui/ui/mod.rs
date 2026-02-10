@@ -229,6 +229,106 @@ pub(super) fn trait_color(trait_name: &str) -> Color {
     }
 }
 
+// =============================================================================
+// CLASSIFICATION BADGE HELPERS (v11.5 TreeView Enhancement)
+// =============================================================================
+
+/// Get short abbreviation for realm display in tree badges.
+/// Format: ◎xxx where xxx is 3-letter abbreviation
+pub(super) fn realm_abbrev(realm_key: &str) -> &'static str {
+    match realm_key {
+        "shared" => "shd",
+        "org" => "org",
+        _ => "???",
+    }
+}
+
+/// Get icon for realm badge (from visual-encoding.yaml).
+/// Named `_badge` to avoid collision with expand_icon variables in tree.rs
+pub(super) fn realm_badge_icon(realm_key: &str) -> &'static str {
+    match realm_key {
+        "shared" => "◎",
+        "org" => "◉",
+        _ => "○",
+    }
+}
+
+/// Get short abbreviation for layer display in tree badges.
+/// Format: ▣xxx where xxx is 3-letter abbreviation
+pub(super) fn layer_abbrev(layer_key: &str) -> &'static str {
+    match layer_key {
+        "config" => "cfg",
+        "locale-knowledge" => "lkn",
+        "foundation" => "fnd",
+        "structure" => "str",
+        "semantic" => "sem",
+        "instruction" => "ins",
+        "seo" => "seo",
+        "knowledge" => "kno",
+        "output" => "out",
+        _ => "???",
+    }
+}
+
+/// Get icon for layer badge (from visual-encoding.yaml).
+/// Named `_badge` to avoid collision with expand_icon variables in tree.rs
+pub(super) fn layer_badge_icon(layer_key: &str) -> &'static str {
+    match layer_key {
+        "config" => "⚙",
+        "locale-knowledge" => "◆",
+        "foundation" => "▣",
+        "structure" => "▢",
+        "semantic" => "◆",
+        "instruction" => "▷",
+        "seo" => "◈",
+        "knowledge" => "◇",
+        "output" => "●",
+        _ => "○",
+    }
+}
+
+/// Get short abbreviation for trait display in tree badges.
+pub(super) fn trait_abbrev(trait_name: &str) -> &'static str {
+    match trait_name {
+        "invariant" => "inv",
+        "localized" => "loc",
+        "knowledge" => "kno",
+        "generated" => "gen",
+        "aggregated" => "agg",
+        _ => "???",
+    }
+}
+
+/// Format classification badges for a Kind node.
+/// Returns: "◎shd ▣cfg ■inv" format with colored spans
+/// Note: Currently unused but available for future use in info panel
+#[allow(dead_code)]
+pub(super) fn format_classification_badge(
+    realm_key: &str,
+    layer_key: &str,
+    trait_name: &str,
+    realm_color: Color,
+    layer_color: Color,
+) -> Vec<Span<'static>> {
+    let t_color = trait_color(trait_name);
+    vec![
+        Span::styled(
+            format!("{}{}", realm_badge_icon(realm_key), realm_abbrev(realm_key)),
+            Style::default().fg(realm_color),
+        ),
+        Span::styled(" ", Style::default()),
+        Span::styled(
+            format!("{}{}", layer_badge_icon(layer_key), layer_abbrev(layer_key)),
+            Style::default().fg(layer_color),
+        ),
+        Span::styled(" ", Style::default()),
+        Span::styled(
+            format!("{}{}", trait_icon(trait_name), trait_abbrev(trait_name)),
+            Style::default().fg(t_color),
+        ),
+    ]
+}
+
 /// Wrap text to lines of max `width` characters, returning owned Strings.
 /// Uses char indices instead of collecting to Vec<char> for efficiency.
 pub(super) fn wrap_text(text: &str, width: usize) -> Vec<String> {
@@ -442,12 +542,14 @@ pub fn render(f: &mut Frame, app: &mut App) {
             Constraint::Length(1), // Header
             Constraint::Min(0),    // Main content
             Constraint::Length(1), // Status bar
+            Constraint::Length(1), // Footer hints
         ])
         .split(f.area());
 
     render_header(f, chunks[0], app);
     render_main(f, chunks[1], app);
     render_status(f, chunks[2], app);
+    render_footer_hints(f, chunks[3], app);
 
     // Overlays on top (order matters: last = topmost)
     if app.search.active {
@@ -462,6 +564,30 @@ pub fn render(f: &mut Frame, app: &mut App) {
     if app.recent_items_active {
         render_recent_items_overlay(f, app);
     }
+}
+
+/// Footer: Contextual keybinding hints based on mode and focus.
+fn render_footer_hints(f: &mut Frame, area: Rect, app: &App) {
+    use crate::tui::app::Focus;
+
+    let hints = match app.mode {
+        NavMode::Graph => match app.focus {
+            Focus::Tree => "Tree: [h/l] Toggle  [j/k] Navigate  [Space] Expand  [g/G] Top/Bottom  [Tab] Panel  [/] Search  [?] Help",
+            Focus::Info => "Info: [j/k] Scroll  [y] Copy  [Tab] Panel  [/] Search  [?] Help",
+            Focus::Graph => "Graph: [Click] Select  [Scroll] Zoom  [Tab] Panel  [?] Help",
+            Focus::Yaml => "YAML: [j/k] Scroll  [y] Copy  [Tab] Panel  [/] Search  [?] Help",
+        },
+        NavMode::Audit => "[j/k] Navigate  [Enter] Drill down  [r] Refresh  [1-3] Mode  [?] Help  [q] Quit",
+        NavMode::Nexus => "[1-4] Tabs  [j/k] Navigate  [Enter] Select  [Esc] Back  [/] Search  [?] Help",
+    };
+
+    let line = Line::from(Span::styled(
+        format!("  {}", hints),
+        Style::default().fg(COLOR_HINT_TEXT),
+    ));
+
+    let paragraph = Paragraph::new(line).style(Style::default().bg(Color::Rgb(18, 18, 25)));
+    f.render_widget(paragraph, area);
 }
 
 /// Header: Logo + Mode tabs.

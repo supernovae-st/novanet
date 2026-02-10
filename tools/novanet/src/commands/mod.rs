@@ -2,8 +2,10 @@
 
 pub mod arc;
 pub mod blueprint;
+pub mod completions;
 pub mod db;
 pub mod doc;
+pub mod doctor;
 pub mod entity;
 pub mod filter;
 pub mod knowledge;
