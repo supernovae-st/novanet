@@ -18,6 +18,11 @@ export const EmitPrimitive = memo(function EmitPrimitive({
   state,
   sourcePosition,
 }: EffectPrimitiveProps) {
+  // Guard against undefined position
+  if (!sourcePosition || typeof sourcePosition.x !== 'number') {
+    return null;
+  }
+
   const isHighlighted = state === 'highlighted';
   const scale = isHighlighted ? EMIT_CONFIG.highlightedScale : 1;
   const baseSize = EMIT_CONFIG.baseSize * intensity * scale;
