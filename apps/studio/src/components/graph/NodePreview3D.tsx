@@ -106,9 +106,23 @@ export const NodePreview3D = memo(function NodePreview3D({
     return () => {
       cancelAnimationFrame(animationRef.current);
       setIsInitialized(false);
+
+      // Dispose composite meshes before scene
+      if (compositeMeshesRef.current && sceneRef.current) {
+        sceneRef.current.remove(compositeMeshesRef.current.group);
+        disposeCompositeNode(compositeMeshesRef.current);
+        compositeMeshesRef.current = null;
+      }
+
       renderer.dispose();
-      if (containerRef.current?.contains(renderer.domElement)) {
-        containerRef.current.removeChild(renderer.domElement);
+
+      // Safe DOM cleanup - container may be unmounted
+      try {
+        if (containerRef.current?.contains(renderer.domElement)) {
+          containerRef.current.removeChild(renderer.domElement);
+        }
+      } catch {
+        // Component already unmounted, ignore
       }
     };
   }, [size]);
@@ -117,10 +131,11 @@ export const NodePreview3D = memo(function NodePreview3D({
   useEffect(() => {
     if (!sceneRef.current) return;
 
-    // Remove old node
-    if (compositeMeshesRef.current) {
+    // Remove old node with null checks
+    if (compositeMeshesRef.current && sceneRef.current) {
       sceneRef.current.remove(compositeMeshesRef.current.group);
       disposeCompositeNode(compositeMeshesRef.current);
+      compositeMeshesRef.current = null;
     }
 
     // Get colors
