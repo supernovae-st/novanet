@@ -304,7 +304,7 @@ mod tests {
         // NODE_LAYERS declaration
         assert!(output.contains("export const NODE_LAYERS: Record<NodeType, Layer>"));
 
-        // Realm headers (v11.3: 3 shared layers + 4 org layers = 7 nodes)
+        // Realm headers (test fixture has 7 nodes: 3 shared + 4 org)
         assert!(output.contains("SHARED REALM (3 nodes)"));
         assert!(output.contains("ORG REALM (4 nodes)"));
 

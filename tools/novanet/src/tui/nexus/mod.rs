@@ -2,11 +2,11 @@
 //!
 //! Nexus Mode provides 4 tabs for understanding NovaNet's core concepts:
 //! - Traits: 5-trait constellation (invariant, localized, knowledge, generated, aggregated)
-//! - Layers: 2-realm split view (Shared 3 layers | Org 8 layers)
+//! - Layers: 2-realm split view (Shared 4 layers | Org 6 layers)
 //! - Arcs: Arc families and scope visualization
 //! - Pipeline: Animated generation flow (not translation)
 //!
-//! v11.3: Mode renamed from Guide to Nexus. Trait split: derived → generated + aggregated.
+//! v11.5: 60 nodes (39 shared + 21 org), 10 layers (4 shared + 6 org).
 
 pub mod arcs;
 pub mod layers;
@@ -465,8 +465,8 @@ impl NexusState {
             }
             NexusTab::Layers => {
                 // Bound by number of layers in current realm
-                // v11.3: shared: 3 layers (0-2), org: 8 layers (0-7)
-                let max = if self.layer_realm == 0 { 2 } else { 7 };
+                // v11.5: shared: 4 layers (0-3), org: 6 layers (0-5)
+                let max = if self.layer_realm == 0 { 3 } else { 5 };
                 if self.layer_cursor < max {
                     self.layer_cursor += 1;
                     true
@@ -1433,26 +1433,26 @@ mod tests {
     fn test_layers_global_max_cursor() {
         let mut state = NexusState::new();
         state.tab = NexusTab::Layers;
-        state.layer_realm = 0; // Shared (3 layers v11.3, max index 2)
-        state.layer_cursor = 2;
+        state.layer_realm = 0; // Shared (4 layers v11.5, max index 3)
+        state.layer_cursor = 3;
 
         // Should not go beyond max
         let changed = state.handle_key(key_event(KeyCode::Char('j')));
         assert!(!changed);
-        assert_eq!(state.layer_cursor, 2);
+        assert_eq!(state.layer_cursor, 3);
     }
 
     #[test]
     fn test_layers_tenant_max_cursor() {
         let mut state = NexusState::new();
         state.tab = NexusTab::Layers;
-        state.layer_realm = 1; // Org (8 layers v11.3, max index 7)
-        state.layer_cursor = 7;
+        state.layer_realm = 1; // Org (6 layers v11.5, max index 5)
+        state.layer_cursor = 5;
 
         // Should not go beyond max
         let changed = state.handle_key(key_event(KeyCode::Char('j')));
         assert!(!changed);
-        assert_eq!(state.layer_cursor, 7);
+        assert_eq!(state.layer_cursor, 5);
     }
 
     #[test]
