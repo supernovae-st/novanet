@@ -23,27 +23,37 @@ interface ArcPreview3DSimpleProps {
 }
 
 // Mini node for source/target
-function MiniNode({ position, layer, realm }: {
+function MiniNode({ position, layer, realm, offset = 0 }: {
   position: [number, number, number];
   layer: Layer;
   realm: Realm;
+  offset?: number;
 }) {
   const meshRef = useRef<THREE.Mesh>(null);
   const ringRef = useRef<THREE.Mesh>(null);
+  const groupRef = useRef<THREE.Group>(null);
   const layerColor = LAYER_COLORS[layer] || '#6366f1';
   const realmColor = REALM_COLORS[realm] || '#6366f1';
 
-  useFrame((_, delta) => {
+  useFrame(({ clock }, delta) => {
     if (meshRef.current) {
-      meshRef.current.rotation.y += delta * 0.5;
+      meshRef.current.rotation.y += delta * 0.7;
+      meshRef.current.rotation.x = Math.sin(clock.getElapsedTime() * 0.5 + offset) * 0.15;
     }
     if (ringRef.current) {
-      ringRef.current.rotation.z += delta * 0.8;
+      ringRef.current.rotation.z += delta * 0.9;
+      // Pulse effect
+      const material = ringRef.current.material as THREE.MeshBasicMaterial;
+      material.opacity = 0.35 + Math.sin(clock.getElapsedTime() * 2 + offset) * 0.15;
+    }
+    // Subtle floating
+    if (groupRef.current) {
+      groupRef.current.position.y = Math.sin(clock.getElapsedTime() * 0.6 + offset) * 0.2;
     }
   });
 
   return (
-    <group position={position}>
+    <group position={position} ref={groupRef}>
       <mesh ref={meshRef}>
         <dodecahedronGeometry args={[1.2]} />
         <meshPhysicalMaterial
@@ -51,7 +61,7 @@ function MiniNode({ position, layer, realm }: {
           metalness={0.3}
           roughness={0.2}
           emissive={layerColor}
-          emissiveIntensity={0.4}
+          emissiveIntensity={0.5}
           transparent
           opacity={0.95}
         />
@@ -117,12 +127,17 @@ function ArcLine({ arcType }: { arcType: string }) {
       const time = clock.getElapsedTime();
 
       for (let i = 0; i < particleCount; i++) {
-        const phase = (time * 0.8 + i / particleCount) % 1;
+        const phase = (time * 1.2 + i / particleCount) % 1;
         positions[i * 3] = -5 + phase * 10;
-        positions[i * 3 + 1] = Math.sin(time * 3 + i * 0.5) * 0.3;
+        positions[i * 3 + 1] = Math.sin(time * 4 + i * 0.8) * 0.4;
+        positions[i * 3 + 2] = Math.cos(time * 3 + i * 0.6) * 0.2;
       }
 
       pointsRef.current.geometry.attributes.position.needsUpdate = true;
+
+      // Pulse the particle size
+      const material = pointsRef.current.material as THREE.PointsMaterial;
+      material.size = 0.35 + Math.sin(time * 3) * 0.1;
     }
   });
 
@@ -160,8 +175,8 @@ function SceneContent({ arcType, source, target }: {
 
   return (
     <group ref={groupRef}>
-      <MiniNode position={[-5, 0, 0]} layer={source.layer} realm={source.realm} />
-      <MiniNode position={[5, 0, 0]} layer={target.layer} realm={target.realm} />
+      <MiniNode position={[-5, 0, 0]} layer={source.layer} realm={source.realm} offset={0} />
+      <MiniNode position={[5, 0, 0]} layer={target.layer} realm={target.realm} offset={Math.PI} />
       <ArcLine arcType={arcType} />
     </group>
   );
@@ -200,7 +215,9 @@ export const ArcPreview3DSimple = memo(function ArcPreview3DSimple({
           enableZoom={false}
           enablePan={false}
           autoRotate
-          autoRotateSpeed={0.8}
+          autoRotateSpeed={1.2}
+          minPolarAngle={Math.PI / 4}
+          maxPolarAngle={Math.PI * 3 / 4}
         />
       </Canvas>
     </div>
