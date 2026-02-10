@@ -225,42 +225,16 @@ impl NexusState {
                 true
             }
 
-            // Tab switching with number keys 1-4
-            KeyCode::Char('1') => {
-                if self.tab != NexusTab::Traits {
-                    self.tab = NexusTab::Traits;
-                    self.reset_drill();
-                    true
-                } else {
-                    false
-                }
+            // Tab switching with [ ] brackets (vim-style)
+            KeyCode::Char('[') => {
+                self.tab = self.tab.prev();
+                self.reset_drill();
+                true
             }
-            KeyCode::Char('2') => {
-                if self.tab != NexusTab::Layers {
-                    self.tab = NexusTab::Layers;
-                    self.reset_drill();
-                    true
-                } else {
-                    false
-                }
-            }
-            KeyCode::Char('3') => {
-                if self.tab != NexusTab::Arcs {
-                    self.tab = NexusTab::Arcs;
-                    self.reset_drill();
-                    true
-                } else {
-                    false
-                }
-            }
-            KeyCode::Char('4') => {
-                if self.tab != NexusTab::Pipeline {
-                    self.tab = NexusTab::Pipeline;
-                    self.reset_drill();
-                    true
-                } else {
-                    false
-                }
+            KeyCode::Char(']') => {
+                self.tab = self.tab.next();
+                self.reset_drill();
+                true
             }
 
             // Tab cycling with Tab key
@@ -353,18 +327,16 @@ impl NexusState {
             NexusTab::Layers => {
                 // Yank the current layer key
                 let layers = if self.layer_realm == 0 {
-                    // Shared layers (v11.3: 3 layers)
-                    vec!["locale", "geography", "knowledge"]
+                    // Shared layers (v11.5: 4 layers)
+                    vec!["config", "locale", "geography", "knowledge"]
                 } else {
-                    // Org layers (v11.3: 8 layers)
+                    // Org layers (v11.5: 6 layers) - SEO/GEO consolidated to shared/knowledge
                     vec![
                         "config",
                         "foundation",
                         "structure",
                         "semantic",
                         "instruction",
-                        "seo",
-                        "geo",
                         "output",
                     ]
                 };
@@ -1154,48 +1126,56 @@ mod tests {
     }
 
     // ==========================================================================
-    // TAB SWITCHING WITH NUMBER KEYS (1-4)
+    // TAB SWITCHING WITH BRACKET KEYS (v11.6: [ ] for tab nav)
     // ==========================================================================
 
     #[test]
-    fn test_number_key_1_switches_to_traits() {
+    fn test_bracket_left_switches_to_prev_tab() {
         let mut state = NexusState::new();
         state.tab = NexusTab::Layers;
 
-        let changed = state.handle_key(key_event(KeyCode::Char('1')));
+        let changed = state.handle_key(key_event(KeyCode::Char('[')));
         assert!(changed);
-        assert_eq!(state.tab, NexusTab::Traits);
-
-        // Pressing '1' when already on Traits should return false
-        let changed = state.handle_key(key_event(KeyCode::Char('1')));
-        assert!(!changed);
         assert_eq!(state.tab, NexusTab::Traits);
     }
 
     #[test]
-    fn test_number_key_2_switches_to_layers() {
+    fn test_bracket_right_switches_to_next_tab() {
         let mut state = NexusState::new();
         assert_eq!(state.tab, NexusTab::Traits);
 
-        let changed = state.handle_key(key_event(KeyCode::Char('2')));
+        let changed = state.handle_key(key_event(KeyCode::Char(']')));
         assert!(changed);
         assert_eq!(state.tab, NexusTab::Layers);
     }
 
     #[test]
-    fn test_number_key_3_switches_to_arcs() {
+    fn test_bracket_navigation_cycles() {
         let mut state = NexusState::new();
+        assert_eq!(state.tab, NexusTab::Traits);
 
-        let changed = state.handle_key(key_event(KeyCode::Char('3')));
-        assert!(changed);
+        // Navigate forward through all tabs
+        state.handle_key(key_event(KeyCode::Char(']')));
+        assert_eq!(state.tab, NexusTab::Layers);
+
+        state.handle_key(key_event(KeyCode::Char(']')));
         assert_eq!(state.tab, NexusTab::Arcs);
+
+        state.handle_key(key_event(KeyCode::Char(']')));
+        assert_eq!(state.tab, NexusTab::Pipeline);
+
+        // Wrap around
+        state.handle_key(key_event(KeyCode::Char(']')));
+        assert_eq!(state.tab, NexusTab::Traits);
     }
 
     #[test]
-    fn test_number_key_4_switches_to_pipeline() {
+    fn test_bracket_left_wraps() {
         let mut state = NexusState::new();
+        assert_eq!(state.tab, NexusTab::Traits);
 
-        let changed = state.handle_key(key_event(KeyCode::Char('4')));
+        // [ from Traits wraps to Pipeline
+        let changed = state.handle_key(key_event(KeyCode::Char('[')));
         assert!(changed);
         assert_eq!(state.tab, NexusTab::Pipeline);
     }
@@ -1206,7 +1186,7 @@ mod tests {
         state.drill_depth = 2;
         state.drill_cursor = 5;
 
-        state.handle_key(key_event(KeyCode::Char('2'))); // Switch to Layers
+        state.handle_key(key_event(KeyCode::Char(']'))); // Switch to Layers via ]
         assert_eq!(state.drill_depth, 0);
         assert_eq!(state.drill_cursor, 0);
     }
@@ -1821,14 +1801,17 @@ mod tests {
         state.tab = NexusTab::Layers;
         state.layer_realm = 0; // Shared
 
-        // v11.3: Shared layers are locale, geography, knowledge
+        // v11.5: Shared layers are config, locale, geography, knowledge
         state.layer_cursor = 0;
-        assert_eq!(state.get_current_yank_text(), Some("locale".to_string()));
+        assert_eq!(state.get_current_yank_text(), Some("config".to_string()));
 
         state.layer_cursor = 1;
-        assert_eq!(state.get_current_yank_text(), Some("geography".to_string()));
+        assert_eq!(state.get_current_yank_text(), Some("locale".to_string()));
 
         state.layer_cursor = 2;
+        assert_eq!(state.get_current_yank_text(), Some("geography".to_string()));
+
+        state.layer_cursor = 3;
         assert_eq!(state.get_current_yank_text(), Some("knowledge".to_string()));
     }
 
@@ -1838,22 +1821,21 @@ mod tests {
         state.tab = NexusTab::Layers;
         state.layer_realm = 1; // Org
 
-        // v11.3: Org realm has 8 layers
-        // config(0), foundation(1), structure(2), semantic(3),
-        // instruction(4), seo(5), geo(6), output(7)
+        // v11.5: Org realm has 6 layers (SEO/GEO consolidated to shared/knowledge)
+        // config(0), foundation(1), structure(2), semantic(3), instruction(4), output(5)
         state.layer_cursor = 0;
         assert_eq!(state.get_current_yank_text(), Some("config".to_string()));
 
         state.layer_cursor = 3;
         assert_eq!(state.get_current_yank_text(), Some("semantic".to_string()));
 
+        state.layer_cursor = 4;
+        assert_eq!(
+            state.get_current_yank_text(),
+            Some("instruction".to_string())
+        );
+
         state.layer_cursor = 5;
-        assert_eq!(state.get_current_yank_text(), Some("seo".to_string()));
-
-        state.layer_cursor = 6;
-        assert_eq!(state.get_current_yank_text(), Some("geo".to_string()));
-
-        state.layer_cursor = 7;
         assert_eq!(state.get_current_yank_text(), Some("output".to_string()));
     }
 

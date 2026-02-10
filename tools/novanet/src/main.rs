@@ -384,7 +384,7 @@ async fn main() -> color_eyre::Result<()> {
                 match connect_db(&cli).await {
                     Ok(db) => Some(db),
                     Err(_) => {
-                        eprintln!("⚠️  Could not connect to Neo4j, running YAML-only mode");
+                        eprintln!("⚠  Could not connect to Neo4j, running YAML-only mode");
                         None
                     }
                 }
@@ -408,7 +408,7 @@ async fn main() -> color_eyre::Result<()> {
             novanet::commands::read::run_data(&db, format).await?;
         }
         Commands::Meta { format } => {
-            eprintln!("⚠️  'meta' is deprecated, use 'blueprint' instead");
+            eprintln!("⚠  'meta' is deprecated, use 'blueprint' instead");
             let db = connect_db(&cli).await?;
             eprintln!("novanet meta --format={format:?}");
             novanet::commands::read::run_meta(&db, format).await?;
@@ -749,7 +749,7 @@ async fn main() -> color_eyre::Result<()> {
                             r.duration_ms,
                         );
                         for w in &r.warnings {
-                            eprintln!("    ⚠️  {}", w);
+                            eprintln!("    ⚠  {}", w);
                         }
                     }
 
@@ -804,11 +804,11 @@ async fn main() -> color_eyre::Result<()> {
                         eprintln!("  {} Phase {}: {}", status, r.phase, r.file);
 
                         for e in &r.errors {
-                            eprintln!("    ❌ {}", e);
+                            eprintln!("    ✗ {}", e);
                             has_errors = true;
                         }
                         for w in &r.warnings {
-                            eprintln!("    ⚠️  {}", w);
+                            eprintln!("    ⚠  {}", w);
                         }
                     }
 
@@ -827,16 +827,16 @@ async fn main() -> color_eyre::Result<()> {
 
             if fresh {
                 // --fresh: regenerate schema + reset database
-                eprintln!("🔄 Fresh start: regenerating schema...");
+                eprintln!("↻ Fresh start: regenerating schema...");
                 let results = novanet::commands::schema::schema_generate(&root, false)?;
                 eprintln!("   ✓ Generated {} artifact(s)", results.len());
 
-                eprintln!("🗄️  Resetting database...");
+                eprintln!("⊞  Resetting database...");
                 let db = connect_db(&cli).await?;
                 novanet::commands::db::run_reset(&db, &root).await?;
                 eprintln!("   ✓ Database reset complete");
 
-                eprintln!("🚀 Launching TUI...\n");
+                eprintln!("➜ Launching TUI...\n");
                 novanet::tui::run(&db, &root).await?;
             } else {
                 // Normal mode: validate schema and warn if out of sync
@@ -851,12 +851,12 @@ async fn main() -> color_eyre::Result<()> {
                     .collect();
 
                 if !errors.is_empty() || !warnings.is_empty() {
-                    eprintln!("⚠️  Schema validation found issues:");
+                    eprintln!("⚠  Schema validation found issues:");
                     for e in &errors {
-                        eprintln!("   ❌ {}", e.message);
+                        eprintln!("   ✗ {}", e.message);
                     }
                     for w in &warnings {
-                        eprintln!("   ⚠️  {}", w.message);
+                        eprintln!("   ⚠  {}", w.message);
                     }
                     eprintln!();
                     eprintln!("   Run: cargo run -- tui --fresh");
@@ -883,7 +883,7 @@ async fn main() -> color_eyre::Result<()> {
                 match connect_db(&cli).await {
                     Ok(db) => Some(db),
                     Err(e) => {
-                        eprintln!("⚠️  Could not connect to Neo4j: {}", e);
+                        eprintln!("⚠  Could not connect to Neo4j: {}", e);
                         None
                     }
                 }

@@ -3,7 +3,7 @@
 /**
  * SchemaNode - Premium card for schema visualization
  *
- * v11.3 Design:
+ * v11.5 Design:
  * - Wider card (240px), taller
  * - Large icon top-left with glow
  * - 3 stacked badges: Realm, Layer, Trait (with design system colors)
@@ -34,14 +34,13 @@ import {
 
 export type Trait = 'invariant' | 'localized' | 'knowledge' | 'generated' | 'aggregated';
 
+// v11.5: 5 traits (derived/job removed in v11.2)
 const TRAIT_BORDER_STYLES: Record<string, { style: string; width: number; className?: string }> = {
   invariant: { style: 'solid', width: 2 },
   localized: { style: 'dashed', width: 2 },
   knowledge: { style: 'dotted', width: 2 },
   generated: { style: 'double', width: 2 },
   aggregated: { style: 'dotted', width: 3 },
-  derived: { style: 'dotted', width: 1 },
-  job: { style: 'solid', width: 1 },
 };
 
 export interface SchemaNodeData extends Record<string, unknown> {

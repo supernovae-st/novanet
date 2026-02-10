@@ -29,7 +29,7 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
-**Current Version**: v11.5.0
+**Current Version**: v11.6.0
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
 **Related docs**:
@@ -186,14 +186,14 @@ pnpm infra:seed            # Seed database
 pnpm infra:reset           # Reset database
 
 # Rust binary (tools/novanet) — all commands
-cargo run -- schema generate               # Regenerate all artifacts (7 generators)
+cargo run -- schema generate               # Regenerate all artifacts (12 generators)
 cargo run -- schema validate               # Validate YAML coherence
 cargo run -- doc generate                  # Generate 12 view Mermaid diagrams
 cargo run -- doc generate --list           # List available views
 cargo run -- meta --format=json            # Mode 1: Meta-graph
 cargo run -- data --format=table           # Mode 2: Data nodes
 cargo run -- overlay                       # Mode 3: Data + Meta
-cargo run -- query --realm=tenant          # Mode 4: Faceted query
+cargo run -- query --realm=org             # Mode 4: Faceted query
 cargo run -- search --query="page"         # Fulltext + property search
 cargo run -- node create --kind=Page --key=my-page  # CRUD
 cargo run -- db seed                       # Execute seed Cypher files

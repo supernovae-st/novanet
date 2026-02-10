@@ -147,9 +147,9 @@ async fn run_app(
             crossterm::terminal::disable_raw_mode().ok();
             crossterm::execute!(io::stdout(), crossterm::terminal::LeaveAlternateScreen).ok();
 
-            eprintln!("\n\x1b[1;31m❌ Failed to load graph data from Neo4j:\x1b[0m");
+            eprintln!("\n\x1b[1;31m✗ Failed to load graph data from Neo4j:\x1b[0m");
             eprintln!("   {}\n", e);
-            eprintln!("\x1b[1;33m💡 Troubleshooting:\x1b[0m");
+            eprintln!("\x1b[1;33m◆ Troubleshooting:\x1b[0m");
             eprintln!("   • Check Neo4j is running: \x1b[36mdocker ps\x1b[0m");
             eprintln!("   • Verify credentials: \x1b[36mneo4j / novanetpassword\x1b[0m");
             eprintln!("   • Run seed: \x1b[36mpnpm infra:seed\x1b[0m");

@@ -91,11 +91,6 @@ node:
       - "CREATE INDEX outputartifact_status IF NOT EXISTS FOR (oa:OutputArtifact) ON (oa.status)"
 
   relations:
-    incoming:
-      - type: PRODUCES
-        from: GenerationJob
-        description: "Job that produced this artifact"
-
     outgoing:
       - type: INCLUDES
         to:
@@ -106,10 +101,6 @@ node:
       - type: FOR_LOCALE
         to: Locale
         description: "Target locale for this bundle"
-
-      - type: HAS_EVALUATION
-        to: EvaluationSignal
-        description: "Quality evaluations for this bundle"
 
       - type: PREVIOUS_VERSION
         to: OutputArtifact
