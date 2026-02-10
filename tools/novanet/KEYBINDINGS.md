@@ -176,7 +176,7 @@ Gamified learning hub for NovaNet concepts.
 | `Tab` | Cycle to next tab |
 | `Shift+Tab` | Cycle to previous tab |
 
-**Tabs**: [1]Traits → [2]Layers → [3]Arcs → [4]Pipeline → [5]Quiz
+**Tabs**: [1]Traits → [2]Layers → [3]Arcs → [4]Pipeline → [5]Quiz → [6]Views
 
 ### Quick Jump (g prefix)
 
@@ -226,6 +226,34 @@ Interactive quiz testing knowledge of NovaNet taxonomy.
 - Score tracking with grade at completion
 - Press `r` to restart after completing
 
+### Views Mode (Tab 6)
+
+Schema views explorer teaching Query-First architecture.
+
+| Key | Action |
+|-----|--------|
+| `j` / `Down` | Navigate down in views list |
+| `k` / `Up` | Navigate up in views list |
+| `h` | Switch to previous category |
+| `l` | Switch to next category |
+| `?` | Toggle Query-First concept panel |
+| `Esc` | Close concept panel / drill up |
+| `y` | Yank current view ID |
+
+**Features**:
+- Browse views by category (Overview, Generation, Knowledge, Project, Mining, Contextual)
+- Learn about Query-First architecture concept
+- See view metadata (ID, root type, description, notes)
+- View YAML paths and doc generation commands
+
+**Categories**:
+- **Overview**: Layer views (complete-graph, shared-layer, project-layer)
+- **Generation**: Context views for LLM generation (page-generation-context, block-generation)
+- **Knowledge**: Locale and entity knowledge (locale-full-knowledge, entity-ecosystem)
+- **Project**: Project structure (project-context, project-overview)
+- **Mining**: SEO pipeline (seo-pipeline)
+- **Contextual**: Node-specific views shown in sidebar
+
 ### Tips Bar
 
 The bottom bar shows educational tips with trait-colored keywords.
@@ -258,8 +286,9 @@ Schema:      s (overlay)  +/- (focus property)
 Exit:        q or Esc
 
 Nexus Mode (4):
-Tabs:        [ ] (prev/next tab)  Tab (cycle) — 5 tabs: Traits, Layers, Arcs, Pipeline, Quiz
+Tabs:        [ ] (prev/next tab)  Tab (cycle) — 6 tabs: Traits, Layers, Arcs, Pipeline, Quiz, Views
 Quick Jump:  gi/gl/gk/gg/ga (traits)  g0 (top)
 Actions:     y (yank)  n (next tip)  Enter/Esc (drill)
 Quiz:        j/k (select)  Enter (submit/next)  r (restart)
+Views:       j/k (nav)  h/l (category)  ? (concept panel)
 ```

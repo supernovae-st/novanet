@@ -33,7 +33,7 @@ NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
 **Related docs**:
-- `.claude/rules/novanet-decisions.md` — Architecture decisions (ADR-001 through ADR-020)
+- `.claude/rules/novanet-decisions.md` — Architecture decisions (ADR-001 through ADR-021)
 - `.claude/rules/novanet-terminology.md` — Canonical terminology reference
 
 ```
@@ -149,6 +149,44 @@ Categories: realms, layers, traits, arc_families, states, navigation, quality, m
 ```
 
 **No backward compatibility needed** - this is v0, design for clean architecture.
+
+---
+
+## Query-First Architecture (v11.6)
+
+NovaNet Studio uses **Query-First Architecture** where Cypher is the single source of truth for graph visualization.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  QUERY-FIRST FLOW                                                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ViewPicker ──▶ viewStore.executeView() ──▶ /api/views/:id/query ──▶ Neo4j │
+│       │                    │                        │                  │    │
+│       ▼                    ▼                        ▼                  ▼    │
+│  QueryPill ◀── queryStore.setQuery() ◀── YAML cypher ◀── Results (nodes)   │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  CORE PRINCIPLES                                                            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  1. Cypher Query = Source of Truth (graph displays query results only)      │
+│  2. YAML Views = Single Definition Source (no hardcoded queries in TS)      │
+│  3. Auto-Execute with Edit Option (click = run, Ctrl+click = edit first)   │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  META MODE QUERIES                                                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  KINDS_QUERY: MATCH (k:Kind) RETURN k.name, k.realm, k.layer, k.trait      │
+│  ARCS_QUERY:  MATCH (a:ArcKind) RETURN a.name, a.family, a.scope, ...      │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**View categories**: `global` (full graph), `contextual` (node-specific), `generation` (AI agent), `mining` (SEO/GEO)
+
+**Reference**: ADR-021 in `.claude/rules/novanet-decisions.md`
 
 ---
 

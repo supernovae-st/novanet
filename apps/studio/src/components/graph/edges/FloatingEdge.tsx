@@ -24,38 +24,10 @@ import { releaseEdgeAnimationSlot } from './effects/EffectRenderer';
 import { getSmartLabel, getNodeIntersection, generateCurvedPath, generateReversedPath, generateParallelPath } from './EdgeUtils';
 import type { EdgeState } from './system/types';
 
+// Arc family detection with comprehensive mapping (60+ relation types)
+import { getArcFamily, type ArcFamily } from './system/arcFamilyPalettes';
+
 // Note: EffectRenderer disabled for now - using InlineEdgeEffects instead (working pattern)
-
-// =============================================================================
-// Arc Family Detection
-// =============================================================================
-
-type ArcFamily = 'ownership' | 'localization' | 'semantic' | 'generation' | 'mining';
-
-function getArcFamily(relationType: string): ArcFamily {
-  // Ownership family: HAS_*, BELONGS_TO, CONTAINS_*
-  if (relationType.startsWith('HAS_') || relationType === 'BELONGS_TO' || relationType.startsWith('CONTAINS_')) {
-    return 'ownership';
-  }
-  // Localization family: LOCALIZES, FOR_LOCALE, AVAILABLE_IN
-  if (relationType === 'LOCALIZES' || relationType === 'FOR_LOCALE' || relationType === 'AVAILABLE_IN') {
-    return 'localization';
-  }
-  // Semantic family: USES_*, REFERENCES, RELATED_TO, MENTIONS
-  if (relationType.startsWith('USES_') || relationType === 'REFERENCES' || relationType === 'RELATED_TO' || relationType === 'MENTIONS') {
-    return 'semantic';
-  }
-  // Generation family: GENERATES, PRODUCES, DERIVED_FROM
-  if (relationType === 'GENERATES' || relationType === 'PRODUCES' || relationType === 'DERIVED_FROM') {
-    return 'generation';
-  }
-  // Mining family: MINED_FROM, EXTRACTED_FROM, DISCOVERED_IN
-  if (relationType === 'MINED_FROM' || relationType === 'EXTRACTED_FROM' || relationType === 'DISCOVERED_IN') {
-    return 'mining';
-  }
-  // Default to ownership
-  return 'ownership';
-}
 
 // =============================================================================
 // Inline Edge Effects (Working Pattern)
@@ -72,11 +44,13 @@ interface InlineEdgeEffectsProps {
  * InlineEdgeEffects - Advanced animated effects with high visibility
  *
  * Each arc family has a distinct, elaborate visual style:
- * - ownership: ⚡ Energy Pulse - Multi-layer glow with trail (power flows to children)
- * - localization: 🧬 DNA Helix - Double spiral oscillation (content DNA adapts)
- * - semantic: 🔗 Neural Sparks - Fast zigzag synapses (meaning connections)
- * - generation: 💻 Matrix Code - Flowing characters (AI processing data)
- * - mining: 📡 Radar Sweep - Scanning gradient (discovery)
+ * - ownership: ⚡ BLUE Energy Pulse - Multi-layer glow with trail (power flows to children)
+ * - localization: 🧬 GREEN DNA Helix - Double spiral oscillation (content DNA adapts)
+ * - semantic: 🔗 ORANGE Neural Sparks - Fast zigzag synapses (meaning connections)
+ * - generation: 💻 PURPLE Matrix Code - Flowing characters (AI processing data)
+ * - mining: 📡 PINK Radar Sweep - Scanning gradient (discovery)
+ *
+ * Colors come from taxonomy.yaml via arcFamilyPalettes.ts
  */
 const InlineEdgeEffects = memo(function InlineEdgeEffects({
   edgePath,
@@ -87,9 +61,15 @@ const InlineEdgeEffects = memo(function InlineEdgeEffects({
   const family = getArcFamily(relationType);
   const isHighlighted = state === 'highlighted' || state === 'selected';
 
-  // MUCH larger sizes for visibility
-  const baseSize = isHighlighted ? 14 : 10;
-  const baseDuration = isHighlighted ? 1.2 : 1.8;
+  // MUCH larger sizes for visibility - bigger when highlighted
+  const baseSize = isHighlighted ? 16 : 12;
+  const baseDuration = isHighlighted ? 1.0 : 1.6;
+
+  // Debug: log arc family for each edge (remove after debugging)
+  if (typeof window !== 'undefined') {
+    console.log(`[ArcEffect] ${relationType} → ${family} (${colors.primary})`);
+  }
+
 
   switch (family) {
     case 'ownership':

@@ -241,6 +241,11 @@ src/
   - Path validation: file must be at `models/node-kinds/{realm}/{layer}/{name}.yaml`
   - Generators read realm/layer from YAML content, validate against path
   - v11.5: 2 realms (shared, org), 10 layers (4 shared + 6 org), 60 node types
+- **Query-First architecture (v11.6)**: Cypher is the single source of truth for graph display
+  - META mode uses KINDS_QUERY + ARCS_QUERY to build the meta-graph
+  - `cargo run -- meta` executes these foundational queries
+  - Views defined in `packages/core/models/views/*.yaml` (no hardcoded TypeScript)
+  - See ADR-021 in `.claude/rules/novanet-decisions.md`
 - **Icons source of truth (v11.5)**: `visual-encoding.yaml` → `icons:` section
   - Dual format: `web` (Lucide for Studio) + `terminal` (Unicode for TUI)
   - Categories: realms, layers, traits, arc_families, states, navigation, quality, modes
