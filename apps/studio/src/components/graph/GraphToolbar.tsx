@@ -40,7 +40,7 @@ import {
   TooltipTrigger,
   TooltipContent,
   TooltipShortcut,
-} from '@/components/ui/tooltip';
+} from '@/components/ui/Tooltip';
 
 // =============================================================================
 // Design System Tokens (from centralized tokens.ts)

@@ -44,5 +44,11 @@ export { SegmentedTabs } from './SegmentedTabs';
 export { MatrixRainOverlay } from './MatrixRainOverlay';
 export { MatrixExplosionOverlay } from './MatrixExplosionOverlay';
 
+// Magic UI effects (v11.6: PascalCase naming convention)
+export { BorderBeam } from './BorderBeam';
+export { ShineBorder } from './ShineBorder';
+export { Particles, type ParticlesProps } from './Particles';
+export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './Tooltip';
+
 // Card components
 export { NodeCard, NodeCardGrid, type NodeCardProps, type NodeCardGridProps } from './NodeCard';

@@ -35,7 +35,7 @@ function MousePosition(): MousePosition {
   return mousePosition
 }
 
-interface ParticlesProps extends ComponentPropsWithoutRef<"div"> {
+export interface ParticlesProps extends ComponentPropsWithoutRef<"div"> {
   className?: string
   quantity?: number
   staticity?: number
