@@ -1,4 +1,4 @@
-# NovaNet Architecture Decisions (v11.3)
+# NovaNet Architecture Decisions (v11.5)
 
 This file documents key architecture decisions for NovaNet. Reference these when making implementation choices.
 

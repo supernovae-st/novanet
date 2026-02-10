@@ -79,21 +79,21 @@ const COLOR_ACTIVE_KIND_BG: Color = Color::Rgb(25, 35, 45);
 // Layout constants (percentages and sizes)
 // -----------------------------------------------------------------------------
 
-/// Wide layout: Tree panel percentage.
-const LAYOUT_WIDE_TREE_PCT: u16 = 25;
+/// Wide layout: Tree panel percentage (v11.5: increased from 25% to 28% for more info).
+const LAYOUT_WIDE_TREE_PCT: u16 = 28;
 /// Wide layout: Info+Graph panel percentage.
-const LAYOUT_WIDE_INFO_PCT: u16 = 38;
+const LAYOUT_WIDE_INFO_PCT: u16 = 36;
 /// Wide layout: YAML panel percentage.
-const LAYOUT_WIDE_YAML_PCT: u16 = 37;
+const LAYOUT_WIDE_YAML_PCT: u16 = 36;
 /// Wide layout: Info section percentage (within Info+Graph).
 const LAYOUT_WIDE_INFO_SECTION_PCT: u16 = 60;
 /// Wide layout: Graph section percentage (within Info+Graph).
 const LAYOUT_WIDE_GRAPH_SECTION_PCT: u16 = 40;
 
-/// Narrow layout: Tree panel percentage.
-const LAYOUT_NARROW_TREE_PCT: u16 = 25;
+/// Narrow layout: Tree panel percentage (v11.5: increased from 25% to 28%).
+const LAYOUT_NARROW_TREE_PCT: u16 = 28;
 /// Narrow layout: Detail panel percentage.
-const LAYOUT_NARROW_DETAIL_PCT: u16 = 75;
+const LAYOUT_NARROW_DETAIL_PCT: u16 = 72;
 /// Narrow layout: Info section percentage.
 const LAYOUT_NARROW_INFO_PCT: u16 = 35;
 /// Narrow layout: Graph section percentage.
@@ -257,15 +257,20 @@ pub(super) fn realm_badge_icon(realm_key: &str) -> &'static str {
 /// Format: ▣xxx where xxx is 3-letter abbreviation
 pub(super) fn layer_abbrev(layer_key: &str) -> &'static str {
     match layer_key {
+        // v11.3: 4 shared layers
         "config" => "cfg",
-        "locale-knowledge" => "lkn",
+        "locale" => "loc",
+        "geography" => "geo",
+        "knowledge" => "kno",
+        // v11.3: 6 org layers
         "foundation" => "fnd",
         "structure" => "str",
         "semantic" => "sem",
         "instruction" => "ins",
-        "seo" => "seo",
-        "knowledge" => "kno",
         "output" => "out",
+        // Removed in v11.3 (kept for backward compat)
+        "seo" => "seo",
+        "locale-knowledge" => "lkn",
         _ => "???",
     }
 }
@@ -274,15 +279,20 @@ pub(super) fn layer_abbrev(layer_key: &str) -> &'static str {
 /// Named `_badge` to avoid collision with expand_icon variables in tree.rs
 pub(super) fn layer_badge_icon(layer_key: &str) -> &'static str {
     match layer_key {
+        // v11.3: 4 shared layers
         "config" => "⚙",
-        "locale-knowledge" => "◆",
+        "locale" => "🌍",
+        "geography" => "🗺",
+        "knowledge" => "◇",
+        // v11.3: 6 org layers
         "foundation" => "▣",
         "structure" => "▢",
         "semantic" => "◆",
         "instruction" => "▷",
-        "seo" => "◈",
-        "knowledge" => "◇",
         "output" => "●",
+        // Removed in v11.3 (kept for backward compat)
+        "seo" => "◈",
+        "locale-knowledge" => "◆",
         _ => "○",
     }
 }

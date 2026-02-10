@@ -387,15 +387,14 @@ impl TaxonomyTree {
 MATCH (k:Kind:Meta)
 OPTIONAL MATCH (k)-[:IN_REALM]->(r:Realm)
 OPTIONAL MATCH (k)-[:IN_LAYER]->(l:Layer)
-OPTIONAL MATCH (k)-[:HAS_TRAIT]->(t:Trait)
 OPTIONAL MATCH (n)-[:OF_KIND]->(k)
-WITH k, r, l, t, count(n) AS instances
+WITH k, r, l, count(n) AS instances
 RETURN
     k.label AS kind_key,
     coalesce(k.display_name, k.label) AS kind_display,
     coalesce(k.llm_context, '') AS kind_desc,
     coalesce(k.icon, '') AS kind_icon,
-    coalesce(t.key, '') AS trait_key,
+    coalesce(k.trait, '') AS trait_key,
     coalesce(r.key, 'unknown') AS realm_key,
     coalesce(r.display_name, r.key, 'Unknown') AS realm_display,
     coalesce(r.color, '#ffffff') AS realm_color,
