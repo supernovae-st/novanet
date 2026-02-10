@@ -14,13 +14,14 @@
 
 import React, { memo, useMemo, useCallback, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
 import { useUIStore } from '@/stores/uiStore';
 import { useGraphStore } from '@/stores/graphStore';
-import { panelClasses, gapTokens } from '@/design/tokens';
+import { panelClasses } from '@/design/tokens';
 import { getRelationColors } from '@/design/nodeColors';
+import { ElementIdentityCard } from '@/components/ui/detail-panel';
 import { ArcOverviewTab } from './tabs/ArcOverviewTab';
 import { ArcContextTab } from './tabs/ArcContextTab';
 import { ArcDataTab } from './tabs/ArcDataTab';
@@ -94,48 +95,6 @@ const TabBar = memo(function TabBar({
 });
 
 /**
- * Header with arc type badge and close button
- */
-const ArcHeader = memo(function ArcHeader({
-  arc,
-  colors,
-  onClose,
-}: {
-  arc: GraphEdge;
-  colors: { primary: string; secondary: string };
-  onClose: () => void;
-}) {
-  const arcType = arc.type || (arc.data?.relationType as string | undefined) || 'UNKNOWN';
-
-  return (
-    <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.08]">
-      <div className={cn('flex items-center', gapTokens.default)}>
-        {/* Arc type badge */}
-        <div
-          className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-mono font-semibold uppercase tracking-wider"
-          style={{
-            backgroundColor: `${colors.primary}20`,
-            color: colors.primary,
-            border: `1px solid ${colors.primary}40`,
-            boxShadow: `0 0 12px ${colors.secondary}30`,
-          }}
-        >
-          <ArrowRight className="w-3.5 h-3.5" />
-          <span>{arcType.replace(/_/g, ' ')}</span>
-        </div>
-      </div>
-      <button
-        onClick={onClose}
-        className="p-1.5 rounded-lg hover:bg-white/10 text-white/40 hover:text-white/60 transition-colors"
-        title="Close (] or Esc)"
-      >
-        <X className="w-4 h-4" />
-      </button>
-    </div>
-  );
-});
-
-/**
  * Empty state when no arc is selected
  */
 function EmptyState() {
@@ -197,8 +156,15 @@ export const TabbedArcPanel = memo(function TabbedArcPanel({
 
   return (
     <div className={cn(panelClasses.container, 'flex flex-col', className)}>
-      {/* Header */}
-      <ArcHeader arc={arc} colors={colors} onClose={handleClose} />
+      {/* Header with arc identity */}
+      <ElementIdentityCard
+        elementType="arc"
+        variant="header"
+        arcType={arcType}
+        arcId={arc.id}
+        colors={colors}
+        onClose={handleClose}
+      />
 
       {/* Tab Bar */}
       <TabBar activeTab={activeTab} onTabChange={setActiveTab} colors={colors} />

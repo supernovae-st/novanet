@@ -3,6 +3,8 @@
 /**
  * SidebarTabs - Rich tabbed sidebar with Schema and Data panels
  *
+ * v12: Simplified - tabs are just for organizing content, no mode switching.
+ *
  * Tab bar handles identity (no header card needed in panels):
  * - Schema tab: static stats (35 types · 3 scopes)
  * - Data tab: dynamic stats from DB + live dot
@@ -14,13 +16,10 @@
  * and show stats in the tab bar without double-fetching.
  */
 
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { Boxes, Database } from 'lucide-react';
-import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
 import { iconSizes } from '@/design/tokens';
-import { useUIStore } from '@/stores/uiStore';
-import { useAnimationStore } from '@/stores/animationStore';
 import { useDatabaseSchema } from '@/hooks';
 import { DatabaseInfoPanel } from './DatabaseInfoPanel';
 import { SchemaFilterPanel } from './SchemaFilterPanel';
@@ -34,31 +33,16 @@ const TAB_ACCENTS: Record<TabId, string> = {
 };
 
 export const SidebarTabs = memo(function SidebarTabs() {
-  const navigationMode = useUIStore((s) => s.navigationMode);
-  const { isTransitioning, startTransition } = useAnimationStore(
-    useShallow((s) => ({
-      isTransitioning: s.isTransitioning,
-      startTransition: s.startTransition,
-    }))
-  );
+  // v12: Local tab state - no mode switching, just content organization
+  const [activeTab, setActiveTab] = useState<TabId>('data');
 
   // Lift schema hook to share between tab bar stats and DatabaseInfoPanel
   const schemaData = useDatabaseSchema();
   const { schema, isLoading: schemaLoading } = schemaData;
 
-  // v11.0: Simplified - Meta shows Schema tab, Data shows Data tab
-  const activeTab: TabId = navigationMode === 'meta' ? 'schema' : 'data';
-
-  const handleTabClick = useCallback(
-    (tabId: TabId) => {
-      const targetMode = tabId === 'schema' ? 'meta' : 'data';
-      // Skip if already in target mode or transition in progress
-      if (navigationMode === targetMode || isTransitioning) return;
-      // Start the Matrix transition - page.tsx orchestrates the mode change
-      startTransition(targetMode);
-    },
-    [navigationMode, isTransitioning, startTransition]
-  );
+  const handleTabClick = useCallback((tabId: TabId) => {
+    setActiveTab(tabId);
+  }, []);
 
   return (
     <div className="h-full flex flex-col">
@@ -173,7 +157,7 @@ export const SidebarTabs = memo(function SidebarTabs() {
         <div className="absolute bottom-0 left-0 right-0 h-px bg-white/[0.06]" />
       </div>
 
-      {/* Tab Content - v11.0: Simplified to Schema and Data only */}
+      {/* Tab Content - v12: Local tab state, no mode switching */}
       <div className="flex-1 overflow-hidden" id={`sidebar-panel-${activeTab}`} role="tabpanel">
         {activeTab === 'schema' && <SchemaFilterPanel />}
         {activeTab === 'data' && <DatabaseInfoPanel schemaData={schemaData} />}

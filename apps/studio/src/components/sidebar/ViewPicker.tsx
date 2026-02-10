@@ -362,18 +362,15 @@ export const ViewPicker = memo(function ViewPicker({ className }: ViewPickerProp
     }))
   );
 
-  const navigationMode = useUIStore((s) => s.navigationMode);
-
   // Load registry on mount
   useEffect(() => {
     loadRegistry();
   }, [loadRegistry]);
 
-  // Flatten categories and filter by current navigation mode
+  // Flatten categories - v12.0: all views available (no mode filtering)
   const views = useMemo(() => {
-    const all = categories.flatMap((cat) => cat.views);
-    return all.filter((v) => !v.modes || v.modes.includes(navigationMode));
-  }, [categories, navigationMode]);
+    return categories.flatMap((cat) => cat.views);
+  }, [categories]);
   const activeView = getActiveView();
 
   const handleOpen = useCallback(() => {

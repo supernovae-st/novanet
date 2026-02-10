@@ -66,7 +66,7 @@ export const ViewSelector = memo(function ViewSelector({
   const {
     categories,
     activeViewId,
-    loading,
+    isLoading,
     error,
     loadRegistry,
     executeView,
@@ -74,7 +74,7 @@ export const ViewSelector = memo(function ViewSelector({
     useShallow((state) => ({
       categories: state.categories,
       activeViewId: state.activeViewId,
-      loading: state.loading,
+      isLoading: state.isLoading,
       error: state.error,
       loadRegistry: state.loadRegistry,
       executeView: state.executeView,
@@ -137,7 +137,7 @@ export const ViewSelector = memo(function ViewSelector({
   };
 
   // Loading state
-  if (loading && categories.length === 0) {
+  if (isLoading && categories.length === 0) {
     return (
       <div className={cn('space-y-1', className)}>
         <div className={cn('flex items-center px-3 py-2 text-xs text-white/40', gapTokens.default)}>

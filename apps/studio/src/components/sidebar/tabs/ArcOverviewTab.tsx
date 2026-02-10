@@ -4,17 +4,19 @@
  * ArcOverviewTab - Arc overview with direction and connected nodes
  *
  * Features:
- * - Arc type badge with ArcFamily color
+ * - 3D arc preview (centered)
  * - Animated direction indicator (source → target)
  * - 2x NodeNavigationCard (clickable)
  * - Key properties section
+ *
+ * Note: Identity (badge + arc ID) is shown in panel header via ElementIdentityCard
  *
  * v11.7 — Enhanced arc experience
  */
 
 import { memo, useMemo } from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, Hash, Clock } from 'lucide-react';
+import { ArrowRight, Clock } from 'lucide-react';
 import { KIND_META } from '@novanet/core/types';
 import type { Layer, Realm, Trait } from '@novanet/core/types';
 import { cn } from '@/lib/utils';
@@ -140,7 +142,6 @@ export const ArcOverviewTab = memo(function ArcOverviewTab({
   const setSelectedNode = useUIStore((state) => state.setSelectedNode);
 
   const arcType = arc.type || (arc.data?.relationType as string | undefined) || 'UNKNOWN';
-  const arcId = arc.id;
 
   // Extract any timestamps if available
   const createdAt = arc.data?.createdAt as string | undefined;
@@ -152,50 +153,20 @@ export const ArcOverviewTab = memo(function ArcOverviewTab({
 
   return (
     <div className="p-4 space-y-6">
-      {/* 3D Arc Preview */}
+      {/* 3D Arc Preview (centered) */}
       <div className="flex justify-center">
-        <ArcPreview3D
-          arcType={arcType}
-          source={sourceClassification}
-          target={targetClassification}
-          size={160}
-          className="shadow-2xl"
-        />
-      </div>
-
-      {/* Arc type header */}
-      <div
-        className="p-4 rounded-xl"
-        style={{
-          background: `linear-gradient(135deg, ${colors.primary}15, ${colors.glow}08)`,
-          border: `1px solid ${colors.primary}25`,
-        }}
-      >
-        {/* Arc type badge */}
         <div
-          className={cn(
-            'inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-mono font-semibold uppercase tracking-wider mb-3',
-            gapTokens.tight
-          )}
+          className="p-3 rounded-xl"
           style={{
-            background: `linear-gradient(135deg, ${colors.primary}35, ${colors.glow}25)`,
-            color: colors.primary,
-            boxShadow: `0 0 12px ${colors.glow}30`,
+            background: `linear-gradient(135deg, ${colors.primary}08, ${colors.glow}04)`,
+            border: `1px solid ${colors.primary}15`,
           }}
         >
-          <ArrowRight className="w-3.5 h-3.5" />
-          <span>{String(arcType).replace(/_/g, ' ')}</span>
-        </div>
-
-        {/* Arc ID with copy */}
-        <div className={cn('flex items-center text-sm', gapTokens.default)}>
-          <Hash className="w-3.5 h-3.5 text-white/30" />
-          <span className="font-mono text-white/50 flex-1 truncate">{String(arcId)}</span>
-          <CopyButton
-            onCopy={() => copy(String(arcId))}
-            isCopied={copied}
-            label="Copy ID"
-            size="sm"
+          <ArcPreview3D
+            arcType={arcType}
+            source={sourceClassification}
+            target={targetClassification}
+            size={140}
           />
         </div>
       </div>

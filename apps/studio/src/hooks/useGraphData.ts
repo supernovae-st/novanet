@@ -12,7 +12,6 @@
 import { useCallback, useState, useRef } from 'react';
 import { useGraphStore } from '@/stores/graphStore';
 import { useFilterStore } from '@/stores/filterStore';
-import { useUIStore, selectNavigationMode, type NavigationMode } from '@/stores/uiStore';
 import { DEFAULT_FETCH_LIMIT } from '@/config/constants';
 import { logger } from '@/lib/logger';
 import { fetchJSON, postJSON, getErrorMessage } from '@/lib/fetchClient';
@@ -46,7 +45,7 @@ export interface FetchOptions {
 }
 
 export interface UseGraphDataReturn {
-  /** Fetch graph data from API (or schema based on navigationMode) */
+  /** Fetch graph data from API */
   fetchData: (options?: FetchOptions) => Promise<GraphDataResponse>;
   /** Fetch schema graph (ontology) */
   fetchSchemaData: () => Promise<GraphDataResponse>;
@@ -54,8 +53,6 @@ export interface UseGraphDataReturn {
   executeQuery: (cypher: string) => Promise<GraphDataResponse>;
   /** Fetch graph statistics */
   fetchStats: () => Promise<Record<string, number> | null>;
-  /** Current navigation mode */
-  navigationMode: NavigationMode;
   /** Loading state */
   isLoading: boolean;
   /** Error message */
@@ -86,9 +83,6 @@ export function useGraphData(options: UseGraphDataOptions = {}): UseGraphDataRet
   const enabledNodeTypes = useFilterStore((state) => state.enabledNodeTypes);
   const selectedLocale = useFilterStore((state) => state.selectedLocale);
   const searchQuery = useFilterStore((state) => state.searchQuery);
-
-  // Navigation mode (data vs meta)
-  const navigationMode = useUIStore(selectNavigationMode);
 
   /**
    * Fetch graph data from API
@@ -271,7 +265,6 @@ export function useGraphData(options: UseGraphDataOptions = {}): UseGraphDataRet
     fetchSchemaData,
     executeQuery,
     fetchStats,
-    navigationMode,
     isLoading,
     error,
     clearError,
