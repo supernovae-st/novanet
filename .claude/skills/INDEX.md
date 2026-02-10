@@ -16,7 +16,7 @@ Located in `.claude/skills/`
 | **novanet-sync** | `/novanet-sync` | Schema validation/regeneration (YAML → artifacts) |
 | **novanet-tui** | `/novanet-tui` | Galaxy-themed terminal UI keybindings and features |
 | **security-audit** | `/security-audit` | Comprehensive security audit (cargo-deny, pnpm audit) |
-| **codebase-audit** | — | Parallel codebase health analysis (Ralph Wiggum Loop) |
+| **codebase-audit** | `/codebase-audit` | Parallel codebase health analysis (Ralph Wiggum Loop) |
 | **token-audit** | — | Design system token adoption verification |
 
 ---
@@ -66,6 +66,9 @@ Invoke directly with slash command:
 /novanet-sync generate     # Regenerate artifacts
 /novanet-tui               # Launch TUI
 /security-audit all        # Full security audit
+/codebase-audit            # Full 10-agent audit
+/codebase-audit quick      # Essential checks only
+/codebase-audit --fix      # Auto-fix issues
 ```
 
 ### Auto-Triggered Skills

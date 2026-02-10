@@ -491,19 +491,38 @@ Add a new arc type between nodes.
 
 **Trigger:** Before releases, after refactoring, periodic maintenance
 
+**Invocation:** `/codebase-audit [mode] [--fix]`
+
 **Process:**
-1. **SCAN** - Launch parallel agents (haiku model)
+1. **SCAN** - Launch 10 parallel agents (haiku model)
 2. **SYNTHESIZE** - Prioritize findings (CRITICAL → LOW)
 3. **FIX** - Apply corrections with tests
 4. **VERIFY** - Re-run until clean
 
-**Parallel agents:**
-- Dead Code Analysis
-- Package.json Audit
-- TypeScript Config Audit
-- Documentation Accuracy
-- Test Health
-- Index Exports
+**10 Parallel Agents:**
+1. YAML Schema Validation
+2. Generated Artifacts Sync
+3. Rust Code Quality
+4. Test Coverage Analysis
+5. Documentation Freshness
+6. Dependency Audit
+7. Performance Patterns
+8. Security Patterns
+9. Dead Code Detection
+10. Semantic Coherence
+
+**Arguments:**
+
+| Mode | Agents | Description |
+|------|--------|-------------|
+| `full` | 10 | Complete audit (default) |
+| `quick` | 4 | Essential checks only |
+| `yaml` | 2 | YAML schema + sync |
+| `rust` | 2 | Rust quality + tests |
+| `typescript` | 2 | TypeScript + dead code |
+| `security` | 2 | Security + deps |
+| `docs` | 2 | Documentation accuracy |
+| `--fix` | - | Auto-fix issues (append to any mode) |
 
 ---
 
