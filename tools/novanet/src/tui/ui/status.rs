@@ -11,6 +11,7 @@ use ratatui::widgets::Paragraph;
 
 use super::{STYLE_DIM, STYLE_HINT, STYLE_MUTED, STYLE_SEPARATOR};
 use crate::tui::app::{App, Focus, NavMode};
+use crate::tui::cache::combine_hashes;
 use crate::tui::data::TreeItem;
 use crate::tui::theme::hex_to_color;
 use crate::tui::unicode::truncate_start_to_width;
@@ -18,6 +19,21 @@ use crate::tui::unicode::truncate_start_to_width;
 // =============================================================================
 // PURE HELPER FUNCTIONS (testable)
 // =============================================================================
+
+/// Compute cache key for realm mini-bar.
+///
+/// Key includes: bar_width, realm count, and kinds per realm.
+/// Changes to any of these will invalidate the cache.
+pub(crate) fn compute_mini_bar_cache_key(app: &App, bar_width: usize) -> u64 {
+    let mut keys: Vec<u64> = Vec::with_capacity(app.tree.realms.len() + 2);
+    keys.push(bar_width as u64);
+    keys.push(app.tree.realms.len() as u64);
+    for realm in &app.tree.realms {
+        let count: usize = realm.layers.iter().map(|l| l.kinds.len()).sum();
+        keys.push(count as u64);
+    }
+    combine_hashes(&keys)
+}
 
 /// Get contextual keyboard shortcuts based on mode, focus, and selection.
 ///
@@ -262,8 +278,14 @@ pub fn render_status(f: &mut Frame, area: Rect, app: &App) {
     ));
 
     // Mini realm distribution bar (8 char width) - shows proportion of kinds per realm
+    // Uses cache to avoid Vec allocation per frame (~32KB/sec saved at 60fps)
     spans.push(Span::styled(" ", STYLE_SEPARATOR));
-    spans.extend(build_realm_mini_bar(app, 8));
+    let bar_width: usize = 8;
+    let cache_key = compute_mini_bar_cache_key(app, bar_width);
+    let cached_spans = app.mini_bar_cache.borrow_mut().get_clone_or_compute(cache_key, || {
+        build_realm_mini_bar(app, bar_width)
+    });
+    spans.extend(cached_spans);
 
     spans.push(Span::styled(" | ", STYLE_SEPARATOR));
 

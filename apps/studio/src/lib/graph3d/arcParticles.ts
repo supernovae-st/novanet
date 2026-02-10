@@ -1,12 +1,15 @@
 /**
  * Arc Particle Effects for 3D Graph Visualization
  *
+ * ATOMIC/NEURAL STYLE — Small, fast, numerous particles
+ * Creates visible energy flow like fiber optics + synapses
+ *
  * Each arc family has distinct particle behavior:
- * - ownership: Pulse dots flowing source→target
- * - localization: Globe orbs with slow orbit
- * - semantic: Sparks with random zigzag
- * - generation: Matrix rain cascade
- * - mining: Radar sweep pulse
+ * - ownership: Steady data stream, blue
+ * - localization: Undulating flow, green
+ * - semantic: Sparking synapses, orange
+ * - generation: Fast cascade, violet
+ * - mining: Radar pulse waves, pink
  */
 
 export type ArcFamily = 'ownership' | 'localization' | 'semantic' | 'generation' | 'mining';
@@ -21,52 +24,61 @@ export interface ArcParticleConfig {
   curvature: number;
 }
 
-// Particle configuration for each arc family
+/**
+ * Particle configuration for each arc family — NEURAL/FIBER OPTIC STYLE
+ *
+ * Key settings for visible energy transfer:
+ * - particleWidth: 2-4 (tiny, like neurons firing)
+ * - particles: 30-50 (creates continuous stream)
+ * - particleSpeed: 0.02-0.05 (fast, visible flow)
+ * - linkWidth: 1.5 (thin elegant line with glow)
+ * - curvature: 0-0.3 for elegant arcs
+ */
 export const ARC_PARTICLE_CONFIG: Record<ArcFamily, ArcParticleConfig> = {
   ownership: {
-    particles: 4,
-    particleSpeed: 0.005,
-    particleWidth: 2,
-    particleColor: '#3b82f6',
-    linkWidth: 1.5,
-    linkOpacity: 0.4,
-    curvature: 0,
+    particles: 40,             // Dense data stream
+    particleSpeed: 0.025,      // Fast, steady flow
+    particleWidth: 3,          // Tiny glowing dots
+    particleColor: '#60a5fa',  // Bright blue (blue-400)
+    linkWidth: 1.5,            // Thin elegant line
+    linkOpacity: 0.25,         // Subtle base line
+    curvature: 0,              // Straight ownership links
   },
   localization: {
-    particles: 2,
-    particleSpeed: 0.002,
-    particleWidth: 3,
-    particleColor: '#22c55e',
-    linkWidth: 1,
-    linkOpacity: 0.3,
-    curvature: 0.2,
+    particles: 35,             // Flowing stream
+    particleSpeed: 0.02,       // Smooth undulating
+    particleWidth: 3.5,        // Slightly larger
+    particleColor: '#4ade80',  // Bright green (green-400)
+    linkWidth: 1.5,            // Thin line
+    linkOpacity: 0.2,          // Subtle
+    curvature: 0.2,            // Gentle curve
   },
   semantic: {
-    particles: 6,
-    particleSpeed: 0.008,
-    particleWidth: 1.5,
-    particleColor: '#f97316',
-    linkWidth: 1,
-    linkOpacity: 0.3,
-    curvature: 0.1,
+    particles: 50,             // Sparking synapses
+    particleSpeed: 0.035,      // Fast, energetic
+    particleWidth: 2.5,        // Small sparks
+    particleColor: '#fb923c',  // Bright orange (orange-400)
+    linkWidth: 1,              // Thinner line
+    linkOpacity: 0.2,          // Subtle
+    curvature: 0.1,            // Slight curve
   },
   generation: {
-    particles: 8,
-    particleSpeed: 0.01,
-    particleWidth: 2.5,
-    particleColor: '#8b5cf6',
-    linkWidth: 2,
-    linkOpacity: 0.5,
-    curvature: 0,
+    particles: 45,             // Fast cascade
+    particleSpeed: 0.045,      // Very fast
+    particleWidth: 3,          // Medium dots
+    particleColor: '#a78bfa',  // Bright purple (violet-400)
+    linkWidth: 2,              // Slightly thicker (important)
+    linkOpacity: 0.35,         // More visible
+    curvature: 0,              // Straight generation flow
   },
   mining: {
-    particles: 3,
-    particleSpeed: 0.003,
-    particleWidth: 1,
-    particleColor: '#ec4899',
-    linkWidth: 0.5,
-    linkOpacity: 0.2,
-    curvature: 0.3,
+    particles: 30,             // Radar pulse
+    particleSpeed: 0.015,      // Slower, scanning
+    particleWidth: 4,          // Larger pings
+    particleColor: '#f472b6',  // Bright pink (pink-400)
+    linkWidth: 1.5,            // Thin line
+    linkOpacity: 0.2,          // Subtle
+    curvature: 0.3,            // Curved sweep
   },
 };
 
