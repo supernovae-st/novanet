@@ -7,6 +7,7 @@
  * with CommandPalette (⌘K) and AiSearchOverlay (⌘J).
  *
  * Features:
+ * - Tabs for Studio, Pad, TUI keybindings
  * - Inline search header (same pattern as ⌘K/⌘J)
  * - Grouped by category with unified section headers
  * - Keyboard navigation (Escape to close)
@@ -16,15 +17,38 @@
  */
 
 import { memo, useState, useEffect, useRef, useMemo } from 'react';
-import { Search, X, Circle, Square, Triangle, Hexagon } from 'lucide-react';
+import {
+  Search,
+  X,
+  Circle,
+  Square,
+  Triangle,
+  Hexagon,
+  Monitor,
+  Keyboard,
+  Terminal,
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SHORTCUTS } from '@/config/shortcuts';
+import { TUI_KEYBINDINGS, PAD_LAYERS, TUI_CATEGORIES, type KeyBinding } from '@/config/keybindings';
 import { KeyboardKey, KeyboardShortcut } from '@/components/ui/KeyboardKey';
 import { Kbd } from '@/components/ui/Kbd';
 import { Modal } from '@/components/ui/Modal';
 import { overlayClasses, gapTokens, iconSizes } from '@/design/tokens';
 import { useAutoFocus } from '@/hooks';
 import type { Shortcut } from '@/lib/keyboard';
+
+// =============================================================================
+// Tab Types
+// =============================================================================
+
+type TabType = 'studio' | 'pad' | 'tui';
+
+const TABS: { id: TabType; label: string; icon: React.ReactNode }[] = [
+  { id: 'studio', label: 'Studio', icon: <Monitor className="w-4 h-4" /> },
+  { id: 'pad', label: 'Pad', icon: <Keyboard className="w-4 h-4" /> },
+  { id: 'tui', label: 'TUI', icon: <Terminal className="w-4 h-4" /> },
+];
 
 export interface KeyboardHelpPanelProps {
   isOpen: boolean;
@@ -178,6 +202,134 @@ const VisualEncodingRow = memo(function VisualEncodingRow({
   );
 });
 
+// =============================================================================
+// TUI Keybinding Components
+// =============================================================================
+
+/**
+ * TUI Shortcut row
+ */
+const TuiShortcutRow = memo(function TuiShortcutRow({ binding }: { binding: KeyBinding }) {
+  return (
+    <div className={cn(
+      overlayClasses.rowBase,
+      overlayClasses.rowIdle,
+      'justify-between',
+      gapTokens.spacious,
+    )}>
+      <div className="flex flex-col gap-0.5 min-w-0">
+        <span className="text-sm font-medium text-white/80 truncate">{binding.label}</span>
+        {binding.description && (
+          <span className="text-xs text-white/40 truncate">{binding.description}</span>
+        )}
+      </div>
+      <KeyboardShortcut keys={[binding.key.toUpperCase()]} size="sm" />
+    </div>
+  );
+});
+
+/**
+ * Group TUI bindings by category
+ */
+function groupTuiByCategory(bindings: KeyBinding[]): Map<string, KeyBinding[]> {
+  const groups = new Map<string, KeyBinding[]>();
+  for (const binding of bindings) {
+    if (!groups.has(binding.category)) {
+      groups.set(binding.category, []);
+    }
+    groups.get(binding.category)!.push(binding);
+  }
+  return groups;
+}
+
+/**
+ * TUI Category section
+ */
+const TuiCategorySection = memo(function TuiCategorySection({
+  category,
+  bindings,
+}: {
+  category: string;
+  bindings: KeyBinding[];
+}) {
+  const config = TUI_CATEGORIES[category] || { label: category, order: 99 };
+
+  return (
+    <div className="mb-2">
+      <div className={overlayClasses.sectionHeader}>
+        {config.label}
+      </div>
+      <div className="space-y-0.5">
+        {bindings.map((binding) => (
+          <TuiShortcutRow key={binding.id} binding={binding} />
+        ))}
+      </div>
+    </div>
+  );
+});
+
+// =============================================================================
+// Pad Keybinding Components
+// =============================================================================
+
+/**
+ * Pad Layer Section - shows keys in a visual grid
+ */
+const PadLayerSection = memo(function PadLayerSection({
+  layer,
+}: {
+  layer: typeof PAD_LAYERS[0];
+}) {
+  return (
+    <div className="mb-4">
+      <div className={cn(overlayClasses.sectionHeader, 'flex items-center gap-2')}>
+        <span
+          className="w-2.5 h-2.5 rounded-full"
+          style={{ backgroundColor: layer.color }}
+        />
+        <span>Layer {layer.id}: {layer.name}</span>
+      </div>
+      <p className="text-xs text-white/40 mb-3 px-2">{layer.description}</p>
+
+      {/* 3x4 Grid */}
+      <div className="grid grid-cols-4 gap-1.5 px-2">
+        {layer.keys.map((key) => (
+          <div
+            key={key.position}
+            className={cn(
+              'p-2 rounded-lg border text-center',
+              key.action === 'NONE'
+                ? 'bg-white/[0.02] border-white/[0.05] text-white/20'
+                : 'bg-white/[0.04] border-white/[0.1]'
+            )}
+          >
+            <div className="text-xs font-medium text-white/80">{key.label || '—'}</div>
+            <div className="text-[10px] font-mono text-white/40 mt-0.5">{key.key}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Encoder info */}
+      {layer.encoder && (
+        <div className="mt-2 px-2 flex items-center gap-3 text-xs text-white/50">
+          <span className="flex items-center gap-1">
+            <span className="text-white/30">↻</span>
+            <span>{layer.encoder.cw.label}</span>
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="text-white/30">↺</span>
+            <span>{layer.encoder.ccw.label}</span>
+          </span>
+        </div>
+      )}
+    </div>
+  );
+});
+
+// =============================================================================
+// Visual Encoding Section
+// =============================================================================
+
 /**
  * Visual Encoding Section - shows how visual channels map to graph properties
  */
@@ -295,19 +447,20 @@ export const KeyboardHelpPanel = memo(function KeyboardHelpPanel({
   onClose,
 }: KeyboardHelpPanelProps) {
   const [search, setSearch] = useState('');
+  const [activeTab, setActiveTab] = useState<TabType>('studio');
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   // Auto-focus search input when opened
   useAutoFocus(searchInputRef, isOpen);
 
-  // Reset search when opened
+  // Reset search and tab when opened
   useEffect(() => {
     if (isOpen) {
       setSearch('');
     }
   }, [isOpen]);
 
-  // Filter shortcuts by search
+  // Filter Studio shortcuts by search
   const filteredShortcuts = useMemo(() => {
     if (!search.trim()) return SHORTCUTS;
 
@@ -320,7 +473,7 @@ export const KeyboardHelpPanel = memo(function KeyboardHelpPanel({
     );
   }, [search]);
 
-  // Group filtered shortcuts by category
+  // Group filtered Studio shortcuts by category
   const groupedShortcuts = useMemo(() => {
     const groups = groupByCategory(filteredShortcuts);
     // Sort by category order
@@ -330,6 +483,29 @@ export const KeyboardHelpPanel = memo(function KeyboardHelpPanel({
       return orderA - orderB;
     });
   }, [filteredShortcuts]);
+
+  // Filter TUI bindings by search
+  const filteredTuiBindings = useMemo(() => {
+    if (!search.trim()) return TUI_KEYBINDINGS;
+
+    const searchLower = search.toLowerCase();
+    return TUI_KEYBINDINGS.filter(
+      (b) =>
+        b.label.toLowerCase().includes(searchLower) ||
+        b.description?.toLowerCase().includes(searchLower) ||
+        b.key.toLowerCase().includes(searchLower)
+    );
+  }, [search]);
+
+  // Group filtered TUI bindings by category
+  const groupedTuiBindings = useMemo(() => {
+    const groups = groupTuiByCategory(filteredTuiBindings);
+    return Array.from(groups.entries()).sort((a, b) => {
+      const orderA = TUI_CATEGORIES[a[0]]?.order ?? 99;
+      const orderB = TUI_CATEGORIES[b[0]]?.order ?? 99;
+      return orderA - orderB;
+    });
+  }, [filteredTuiBindings]);
 
   return (
     <Modal.Root
@@ -344,46 +520,119 @@ export const KeyboardHelpPanel = memo(function KeyboardHelpPanel({
         ariaLabel="Keyboard shortcuts"
         className={overlayClasses.animation}
       >
-        {/* Search Header - unified inline search */}
-        <div className={cn(overlayClasses.searchHeader, gapTokens.spacious)}>
-          <Search className={cn(iconSizes.xl, 'text-white/40 shrink-0')} />
-          <input
-            ref={searchInputRef}
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search shortcuts…"
-            aria-label="Search shortcuts"
-            className={overlayClasses.searchInput}
-            autoComplete="off"
-            spellCheck={false}
-          />
-          {search && (
-            <button
-              onClick={() => setSearch('')}
-              aria-label="Clear search"
-              className="p-1.5 hover:bg-white/10 rounded-lg transition-colors text-white/40 hover:text-white/60"
-            >
-              <X className={iconSizes.md} />
-            </button>
-          )}
-          <KeyboardKey size="md" className="hidden sm:inline-flex">?</KeyboardKey>
+        {/* Tabs + Search Header */}
+        <div className="border-b border-white/[0.08]">
+          {/* Tabs */}
+          <div className="flex gap-1 px-3 pt-3">
+            {TABS.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={cn(
+                  'flex items-center gap-1.5 px-3 py-2 rounded-t-lg text-sm font-medium transition-colors',
+                  activeTab === tab.id
+                    ? 'bg-white/[0.08] text-white border-b-2 border-novanet-500'
+                    : 'text-white/50 hover:text-white hover:bg-white/[0.04]'
+                )}
+              >
+                {tab.icon}
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Search Header - unified inline search */}
+          <div className={cn(overlayClasses.searchHeader, gapTokens.spacious)}>
+            <Search className={cn(iconSizes.xl, 'text-white/40 shrink-0')} />
+            <input
+              ref={searchInputRef}
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={
+                activeTab === 'studio' ? 'Search shortcuts…' :
+                activeTab === 'tui' ? 'Search TUI bindings…' :
+                'Search pad keys…'
+              }
+              aria-label="Search shortcuts"
+              className={overlayClasses.searchInput}
+              autoComplete="off"
+              spellCheck={false}
+            />
+            {search && (
+              <button
+                onClick={() => setSearch('')}
+                aria-label="Clear search"
+                className="p-1.5 hover:bg-white/10 rounded-lg transition-colors text-white/40 hover:text-white/60"
+              >
+                <X className={iconSizes.md} />
+              </button>
+            )}
+            <KeyboardKey size="md" className="hidden sm:inline-flex">?</KeyboardKey>
+          </div>
         </div>
 
-        {/* Shortcuts List */}
+        {/* Content based on active tab */}
         <Modal.Body maxHeight={overlayClasses.bodyMaxHeight}>
           <div className={cn('p-2', overlayClasses.contentAnimation)}>
-            {groupedShortcuts.length === 0 ? (
-              <div className="py-8 text-center text-white/40 text-sm">
-                No shortcuts found for &ldquo;{search}&rdquo;
-              </div>
-            ) : (
+            {/* Studio Tab */}
+            {activeTab === 'studio' && (
               <>
-                {groupedShortcuts.map(([category, shortcuts]) => (
-                  <CategorySection key={category} category={category} shortcuts={shortcuts} />
+                {groupedShortcuts.length === 0 ? (
+                  <div className="py-8 text-center text-white/40 text-sm">
+                    No shortcuts found for &ldquo;{search}&rdquo;
+                  </div>
+                ) : (
+                  <>
+                    {groupedShortcuts.map(([category, shortcuts]) => (
+                      <CategorySection key={category} category={category} shortcuts={shortcuts} />
+                    ))}
+                    {/* Visual Encoding Reference - only show when not searching */}
+                    {!search.trim() && <VisualEncodingSection />}
+                  </>
+                )}
+              </>
+            )}
+
+            {/* Pad Tab */}
+            {activeTab === 'pad' && (
+              <>
+                <div className="mb-3 p-3 bg-novanet-500/10 border border-novanet-500/20 rounded-xl">
+                  <p className="text-xs text-novanet-300">
+                    Work Louder Creator Micro — 3×4 matrix + encoder
+                  </p>
+                  <p className="text-[11px] text-white/40 mt-1">
+                    Press <Kbd>P</Kbd> to open the full pad configurator
+                  </p>
+                </div>
+                {PAD_LAYERS.map((layer) => (
+                  <PadLayerSection key={layer.id} layer={layer} />
                 ))}
-                {/* Visual Encoding Reference - only show when not searching */}
-                {!search.trim() && <VisualEncodingSection />}
+              </>
+            )}
+
+            {/* TUI Tab */}
+            {activeTab === 'tui' && (
+              <>
+                {groupedTuiBindings.length === 0 ? (
+                  <div className="py-8 text-center text-white/40 text-sm">
+                    No TUI bindings found for &ldquo;{search}&rdquo;
+                  </div>
+                ) : (
+                  <>
+                    <div className="mb-3 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
+                      <p className="text-xs text-emerald-300">
+                        NovaNet TUI — Terminal interface keybindings
+                      </p>
+                      <p className="text-[11px] text-white/40 mt-1">
+                        Run <code className="font-mono bg-white/10 px-1 rounded">cargo run -- tui</code> in tools/novanet
+                      </p>
+                    </div>
+                    {groupedTuiBindings.map(([category, bindings]) => (
+                      <TuiCategorySection key={category} category={category} bindings={bindings} />
+                    ))}
+                  </>
+                )}
               </>
             )}
           </div>
