@@ -642,8 +642,14 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
             } else {
                 let mut spans: Vec<Span> = vec![
                     Span::styled(cursor_char, Style::default()),
-                    Span::styled(branch(realm_is_last).to_string(), Style::default().fg(Color::Magenta)),
-                    Span::styled(format!("{}  ", realm_icon), Style::default().fg(realm_color)),
+                    Span::styled(
+                        branch(realm_is_last).to_string(),
+                        Style::default().fg(Color::Magenta),
+                    ),
+                    Span::styled(
+                        format!("{}  ", realm_icon),
+                        Style::default().fg(realm_color),
+                    ),
                 ];
                 // Apply fuzzy match highlighting to display_name
                 spans.extend(highlight_matches_with_bg(
@@ -653,13 +659,26 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     None,
                 ));
                 // Padding + stats
-                spans.push(Span::styled(" ".repeat(padding_before_stats + 1), Style::default()));
-                spans.push(Span::styled(stats_str, Style::default().fg(COLOR_MUTED_TEXT)));
-                spans.push(Span::styled(" ".repeat(padding_after_stats + 1), Style::default()));
+                spans.push(Span::styled(
+                    " ".repeat(padding_before_stats + 1),
+                    Style::default(),
+                ));
+                spans.push(Span::styled(
+                    stats_str,
+                    Style::default().fg(COLOR_MUTED_TEXT),
+                ));
+                spans.push(Span::styled(
+                    " ".repeat(padding_after_stats + 1),
+                    Style::default(),
+                ));
                 // Right badge
                 spans.push(Span::styled(" │ ", Style::default().fg(COLOR_MUTED_TEXT)));
                 spans.push(Span::styled(
-                    format!("{}{}", realm_badge_icon(&realm.key), realm_abbrev(&realm.key)),
+                    format!(
+                        "{}{}",
+                        realm_badge_icon(&realm.key),
+                        realm_abbrev(&realm.key)
+                    ),
                     Style::default().fg(realm_color),
                 ));
                 spans.push(Span::styled(" │R│", Style::default().fg(COLOR_MUTED_TEXT)));
@@ -730,10 +749,8 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     };
 
                     // Build left side content
-                    let left_content = format!(
-                        "{}{}{}  {}",
-                        cursor_char, prefix, layer_icon, display_name
-                    );
+                    let left_content =
+                        format!("{}{}{}  {}", cursor_char, prefix, layer_icon, display_name);
 
                     // Build center stats: ◇4 + health rollup
                     let health_str = if let Some((percent, issues)) = layer.health_rollup() {
@@ -744,11 +761,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     let stats_str = format!("◇{}{}", kinds_in_layer, health_str);
 
                     // Build right badge: ◆sem │L│
-                    let badge_str = format!(
-                        "{}{} │L│",
-                        layer_badge,
-                        layer_abbrev(&layer.key)
-                    );
+                    let badge_str = format!("{}{} │L│", layer_badge, layer_abbrev(&layer.key));
 
                     // Calculate padding for alignment
                     let tree_width = area.width.saturating_sub(4) as usize;
@@ -790,9 +803,15 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             None,
                         ));
                         // Padding + stats
-                        spans.push(Span::styled(" ".repeat(padding_before_stats + 1), base_style));
+                        spans.push(Span::styled(
+                            " ".repeat(padding_before_stats + 1),
+                            base_style,
+                        ));
                         spans.push(Span::styled(stats_str, base_style.fg(COLOR_MUTED_TEXT)));
-                        spans.push(Span::styled(" ".repeat(padding_after_stats + 1), base_style));
+                        spans.push(Span::styled(
+                            " ".repeat(padding_after_stats + 1),
+                            base_style,
+                        ));
                         // Right badge
                         spans.push(Span::styled(" │ ", base_style.fg(COLOR_MUTED_TEXT)));
                         spans.push(Span::styled(
@@ -995,7 +1014,10 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                         base_style.fg(kind_text_color),
                                     ),
                                     // v11.6: trait icon with abbrev in parens: ■(i)
-                                    Span::styled(format!("{}({}) ", t_icon, t_abbrev), base_style.fg(t_color)),
+                                    Span::styled(
+                                        format!("{}({}) ", t_icon, t_abbrev),
+                                        base_style.fg(t_color),
+                                    ),
                                 ];
 
                                 // Apply fuzzy match highlighting to display_text
@@ -1391,11 +1413,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
             let stats_str = format!("◇{}", arcs_in_family);
 
             // Build right badge: →own │F│
-            let badge_str = format!(
-                "{}{} │F│",
-                family_badge,
-                arc_family_abbrev(&family.key)
-            );
+            let badge_str = format!("{}{} │F│", family_badge, arc_family_abbrev(&family.key));
 
             // Calculate padding for alignment
             let tree_width = area.width.saturating_sub(4) as usize;
@@ -1426,8 +1444,14 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                 let base_style = Style::default();
                 let mut spans: Vec<Span> = vec![
                     Span::styled(cursor_char, base_style),
-                    Span::styled(branch(family_is_last).to_string(), base_style.fg(Color::Yellow)),
-                    Span::styled(format!("{}  ", family_icon), base_style.fg(COLOR_ARC_FAMILY)),
+                    Span::styled(
+                        branch(family_is_last).to_string(),
+                        base_style.fg(Color::Yellow),
+                    ),
+                    Span::styled(
+                        format!("{}  ", family_icon),
+                        base_style.fg(COLOR_ARC_FAMILY),
+                    ),
                 ];
                 // Apply fuzzy match highlighting to display_name
                 spans.extend(highlight_matches_with_bg(
@@ -1437,9 +1461,15 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     None,
                 ));
                 // Padding + stats
-                spans.push(Span::styled(" ".repeat(padding_before_stats + 1), base_style));
+                spans.push(Span::styled(
+                    " ".repeat(padding_before_stats + 1),
+                    base_style,
+                ));
                 spans.push(Span::styled(stats_str, base_style.fg(COLOR_MUTED_TEXT)));
-                spans.push(Span::styled(" ".repeat(padding_after_stats + 1), base_style));
+                spans.push(Span::styled(
+                    " ".repeat(padding_after_stats + 1),
+                    base_style,
+                ));
                 // Right badge
                 spans.push(Span::styled(" │ ", base_style.fg(COLOR_MUTED_TEXT)));
                 spans.push(Span::styled(
@@ -1464,10 +1494,8 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     let prefix = format!("{}{}", cont(family_is_last), branch(arc_is_last));
 
                     // Build left side content: arc name
-                    let left_content = format!(
-                        "{}{}  {}",
-                        cursor_char, prefix, arc_kind.display_name
-                    );
+                    let left_content =
+                        format!("{}{}  {}", cursor_char, prefix, arc_kind.display_name);
 
                     // Build center: From→To (abbreviated kind names)
                     let from_abbrev = arc_kind.from_kind.chars().take(8).collect::<String>();
@@ -1518,11 +1546,17 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             None,
                         ));
                         // Padding + flow
-                        spans.push(Span::styled(" ".repeat(padding_before_flow + 1), base_style));
+                        spans.push(Span::styled(
+                            " ".repeat(padding_before_flow + 1),
+                            base_style,
+                        ));
                         spans.push(Span::styled(flow_str, base_style.fg(COLOR_MUTED_TEXT)));
                         spans.push(Span::styled(" ".repeat(padding_after_flow + 1), base_style));
                         // Right badge (cardinality)
-                        spans.push(Span::styled(format!(" │{}│", card_str), base_style.fg(Color::Cyan)));
+                        spans.push(Span::styled(
+                            format!(" │{}│", card_str),
+                            base_style.fg(Color::Cyan),
+                        ));
 
                         all_lines.push(Line::from(spans));
                     }

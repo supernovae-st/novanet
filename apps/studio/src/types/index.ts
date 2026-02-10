@@ -44,7 +44,6 @@ export type {
   Expression,
   SEOKeyword,
   SEOKeywordMetrics,
-  SEOMiningRun,
   // Prompts
   PagePrompt,
   BlockPrompt,
