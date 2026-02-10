@@ -11,6 +11,7 @@
 pub mod arcs;
 pub mod layers;
 pub mod pipeline;
+pub mod quiz;
 pub mod traits;
 
 use std::time::Instant;
@@ -60,16 +61,19 @@ pub enum NexusTab {
     Arcs,
     /// Generation pipeline animation
     Pipeline,
+    /// Interactive quiz about NovaNet taxonomy
+    Quiz,
 }
 
 impl NexusTab {
-    /// Get the shortcut key for this tab (1-4 when in Nexus mode).
+    /// Get the shortcut key for this tab (1-5 when in Nexus mode).
     pub fn shortcut(&self) -> char {
         match self {
             NexusTab::Traits => '1',
             NexusTab::Layers => '2',
             NexusTab::Arcs => '3',
             NexusTab::Pipeline => '4',
+            NexusTab::Quiz => '5',
         }
     }
 
@@ -80,6 +84,7 @@ impl NexusTab {
             NexusTab::Layers => "Layers",
             NexusTab::Arcs => "Arcs",
             NexusTab::Pipeline => "Pipeline",
+            NexusTab::Quiz => "Quiz",
         }
     }
 
@@ -90,6 +95,7 @@ impl NexusTab {
             NexusTab::Layers,
             NexusTab::Arcs,
             NexusTab::Pipeline,
+            NexusTab::Quiz,
         ]
     }
 
@@ -99,17 +105,19 @@ impl NexusTab {
             NexusTab::Traits => NexusTab::Layers,
             NexusTab::Layers => NexusTab::Arcs,
             NexusTab::Arcs => NexusTab::Pipeline,
-            NexusTab::Pipeline => NexusTab::Traits,
+            NexusTab::Pipeline => NexusTab::Quiz,
+            NexusTab::Quiz => NexusTab::Traits,
         }
     }
 
     /// Cycle to previous tab.
     pub fn prev(&self) -> Self {
         match self {
-            NexusTab::Traits => NexusTab::Pipeline,
+            NexusTab::Traits => NexusTab::Quiz,
             NexusTab::Layers => NexusTab::Traits,
             NexusTab::Arcs => NexusTab::Layers,
             NexusTab::Pipeline => NexusTab::Arcs,
+            NexusTab::Quiz => NexusTab::Pipeline,
         }
     }
 }
@@ -139,6 +147,10 @@ pub struct NexusState {
     pub pipeline_stage: usize,
     /// Whether pipeline animation is running.
     pub pipeline_animating: bool,
+
+    // === Quiz tab state ===
+    /// Quiz state (current question, score, etc.).
+    pub quiz: quiz::QuizState,
 
     // === Drill-down state ===
     /// Drill depth (0=overview, 1=kinds, 2=instances).
@@ -178,6 +190,7 @@ impl NexusState {
             arc_cursor: 0,
             pipeline_stage: 0,
             pipeline_animating: false,
+            quiz: quiz::QuizState::new(),
             drill_depth: 0,
             drill_cursor: 0,
             pending_g: false,
@@ -257,8 +270,19 @@ impl NexusState {
             KeyCode::Left | KeyCode::Char('h') => self.navigate_left(),
             KeyCode::Right | KeyCode::Char('l') => self.navigate_right(),
 
-            // Enter for drill-down
-            KeyCode::Enter => self.drill_down(),
+            // Enter for drill-down or quiz submit/next
+            KeyCode::Enter => {
+                if self.tab == NexusTab::Quiz {
+                    if self.quiz.answered {
+                        self.quiz.next_question(quiz::QUESTIONS);
+                    } else {
+                        self.quiz.submit_answer(quiz::QUESTIONS);
+                    }
+                    true
+                } else {
+                    self.drill_down()
+                }
+            }
 
             // Escape for drill-up (also clears pending_g)
             KeyCode::Esc => {
@@ -280,6 +304,16 @@ impl NexusState {
             KeyCode::Char('n') => {
                 self.next_tip();
                 true
+            }
+
+            // 'r' to restart quiz (when in Quiz tab)
+            KeyCode::Char('r') => {
+                if self.tab == NexusTab::Quiz {
+                    self.quiz.reset();
+                    true
+                } else {
+                    false
+                }
             }
 
             // 'y' to yank (copy) current selection to clipboard
@@ -365,6 +399,12 @@ impl NexusState {
                 ];
                 stages.get(self.pipeline_stage).map(|s| s.to_string())
             }
+            NexusTab::Quiz => {
+                // Yank the current question text
+                quiz::QUESTIONS
+                    .get(self.quiz.current_question)
+                    .map(|q| q.question.to_string())
+            }
         }
     }
 
@@ -446,6 +486,10 @@ impl NexusState {
                     false
                 }
             }
+            NexusTab::Quiz => {
+                self.quiz.select_up();
+                true
+            }
         }
     }
 
@@ -491,6 +535,10 @@ impl NexusState {
                 } else {
                     false
                 }
+            }
+            NexusTab::Quiz => {
+                self.quiz.select_down();
+                true
             }
         }
     }
@@ -551,6 +599,10 @@ impl NexusState {
                 // Pipeline doesn't have drill-down, toggle animation instead
                 self.pipeline_animating = !self.pipeline_animating;
                 true
+            }
+            NexusTab::Quiz => {
+                // Quiz doesn't have drill-down
+                false
             }
         }
     }
@@ -635,6 +687,22 @@ impl NexusState {
                 let stage = stages.get(self.pipeline_stage).unwrap_or(&"");
                 format!("Nexus > {} > {}", tab_name, stage)
             }
+            NexusTab::Quiz => {
+                let total = quiz::QUESTIONS.len();
+                if self.quiz.complete {
+                    format!(
+                        "Nexus > {} > Complete ({}/{})",
+                        tab_name, self.quiz.score, total
+                    )
+                } else {
+                    format!(
+                        "Nexus > {} > Q{}/{}",
+                        tab_name,
+                        self.quiz.current_question + 1,
+                        total
+                    )
+                }
+            }
         }
     }
 
@@ -676,6 +744,7 @@ pub fn render_nexus(f: &mut Frame, area: Rect, app: &App) {
         NexusTab::Layers => layers::render_layers_tab(f, app, chunks[2]),
         NexusTab::Arcs => arcs::render_arcs_tab(f, app, chunks[2]),
         NexusTab::Pipeline => pipeline::render_pipeline_tab(f, app, chunks[2]),
+        NexusTab::Quiz => quiz::render_quiz_tab(f, app, chunks[2]),
     }
 
     // Render "Did you know?" tips bar
@@ -702,6 +771,7 @@ fn render_tab_bar(f: &mut Frame, area: Rect, app: &App) {
                 NexusTab::Layers => "\u{25a3}",   // ▣
                 NexusTab::Arcs => "\u{21c4}",     // ⇄
                 NexusTab::Pipeline => "\u{26a1}", // ⚡
+                NexusTab::Quiz => "\u{2753}",     // ❓
             };
 
             Span::styled(format!("[{}]{} {} ", idx + 1, symbol, tab.label()), style)
@@ -1096,17 +1166,21 @@ mod tests {
         assert_eq!(state.tab, NexusTab::Pipeline);
 
         state.handle_key(key_event(KeyCode::Tab));
+        assert_eq!(state.tab, NexusTab::Quiz);
+
+        state.handle_key(key_event(KeyCode::Tab));
         assert_eq!(state.tab, NexusTab::Traits); // Wraps around
     }
 
     #[test]
     fn test_guide_tab_all() {
         let all = NexusTab::all();
-        assert_eq!(all.len(), 4);
+        assert_eq!(all.len(), 5);
         assert_eq!(all[0], NexusTab::Traits);
         assert_eq!(all[1], NexusTab::Layers);
         assert_eq!(all[2], NexusTab::Arcs);
         assert_eq!(all[3], NexusTab::Pipeline);
+        assert_eq!(all[4], NexusTab::Quiz);
     }
 
     #[test]
@@ -1115,6 +1189,7 @@ mod tests {
         assert_eq!(NexusTab::Layers.shortcut(), '2');
         assert_eq!(NexusTab::Arcs.shortcut(), '3');
         assert_eq!(NexusTab::Pipeline.shortcut(), '4');
+        assert_eq!(NexusTab::Quiz.shortcut(), '5');
     }
 
     #[test]
@@ -1123,6 +1198,7 @@ mod tests {
         assert_eq!(NexusTab::Layers.label(), "Layers");
         assert_eq!(NexusTab::Arcs.label(), "Arcs");
         assert_eq!(NexusTab::Pipeline.label(), "Pipeline");
+        assert_eq!(NexusTab::Quiz.label(), "Quiz");
     }
 
     // ==========================================================================
@@ -1164,6 +1240,9 @@ mod tests {
         state.handle_key(key_event(KeyCode::Char(']')));
         assert_eq!(state.tab, NexusTab::Pipeline);
 
+        state.handle_key(key_event(KeyCode::Char(']')));
+        assert_eq!(state.tab, NexusTab::Quiz);
+
         // Wrap around
         state.handle_key(key_event(KeyCode::Char(']')));
         assert_eq!(state.tab, NexusTab::Traits);
@@ -1174,10 +1253,10 @@ mod tests {
         let mut state = NexusState::new();
         assert_eq!(state.tab, NexusTab::Traits);
 
-        // [ from Traits wraps to Pipeline
+        // [ from Traits wraps to Quiz (now last tab)
         let changed = state.handle_key(key_event(KeyCode::Char('[')));
         assert!(changed);
-        assert_eq!(state.tab, NexusTab::Pipeline);
+        assert_eq!(state.tab, NexusTab::Quiz);
     }
 
     #[test]
@@ -1201,7 +1280,10 @@ mod tests {
         assert_eq!(state.tab, NexusTab::Traits);
 
         state.handle_key(key_event(KeyCode::BackTab));
-        assert_eq!(state.tab, NexusTab::Pipeline); // Wraps to end
+        assert_eq!(state.tab, NexusTab::Quiz); // Wraps to end (Quiz is now last)
+
+        state.handle_key(key_event(KeyCode::BackTab));
+        assert_eq!(state.tab, NexusTab::Pipeline);
 
         state.handle_key(key_event(KeyCode::BackTab));
         assert_eq!(state.tab, NexusTab::Arcs);

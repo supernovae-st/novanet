@@ -3,6 +3,7 @@
 use nucleo_matcher::pattern::{Atom, AtomKind, CaseMatching, Normalization};
 use nucleo_matcher::{Config, Matcher, Utf32Str};
 use rustc_hash::FxHashMap;
+use std::cell::RefCell;
 use std::fs;
 use std::path::Path;
 
@@ -10,6 +11,7 @@ use crossterm::event::{KeyCode, KeyEvent};
 
 use super::atlas::AtlasState;
 use super::audit::SharedAuditStats;
+use super::cache::RenderCache;
 use super::data::{
     ArcKindDetails, KindArcsData, LayerDetails, RealmDetails, TaxonomyTree, TreeItem,
 };
@@ -18,6 +20,8 @@ use super::schema::{CoverageStats, MatchedProperty, ValidatedProperty, Validatio
 use super::handlers::dispatch_mode_handler;
 use super::theme::Theme;
 use super::yaml::{YamlSections, YamlViewSection};
+
+use ratatui::text::Span;
 
 // =============================================================================
 // CONSTANTS
@@ -295,6 +299,12 @@ pub struct App {
     pub trait_filter: Option<String>,
     /// Pending filter key (true when 'f' was pressed, waiting for second key)
     pub filter_pending: bool,
+    // ==========================================================================
+    // Render Caches (D: Performance Optimization)
+    // ==========================================================================
+    /// Cache for status bar realm mini-bar (avoids Vec allocation per frame).
+    /// Uses RefCell for interior mutability during immutable render calls.
+    pub mini_bar_cache: RefCell<RenderCache<Vec<Span<'static>>>>,
 }
 
 impl App {
@@ -363,6 +373,8 @@ impl App {
             // Trait filter (Quick Filter)
             trait_filter: None,
             filter_pending: false,
+            // Render caches (D: Performance Optimization)
+            mini_bar_cache: RefCell::new(RenderCache::new()),
         };
         app.load_yaml_for_current();
         app
