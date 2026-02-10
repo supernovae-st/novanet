@@ -1,9 +1,13 @@
 #!/usr/bin/env sh
 
-# Schema sync validation - runs when YAML models are changed
-# Ensures generated artifacts stay in sync with YAML source of truth
+# Pre-commit validation for NovaNet
+# - Schema sync validation (YAML models)
+# - Design system coherence (taxonomy, visual encoding, TypeScript, Rust)
 
-# Check if YAML models changed in this commit
+# =============================================================================
+# Schema Sync Validation
+# =============================================================================
+
 if git diff --cached --name-only | grep -q "packages/core/models/"; then
   echo "📋 YAML models changed - validating sync..."
 
@@ -27,4 +31,36 @@ if git diff --cached --name-only | grep -q "packages/core/models/"; then
   fi
 
   echo "✅ Schema sync validated"
+fi
+
+# =============================================================================
+# Design System Coherence Validation
+# =============================================================================
+
+DESIGN_SYSTEM_PATTERNS="taxonomy.yaml|visual-encoding.yaml|edges/system/|tui/theme.rs|graph/layers.ts|graph/hierarchy.ts|types/nodes.ts"
+
+if git diff --cached --name-only | grep -Eq "$DESIGN_SYSTEM_PATTERNS"; then
+  echo "🎨 Design system files changed - validating coherence..."
+
+  # Run design system validation
+  pnpm validate:design-system
+
+  if [ $? -ne 0 ]; then
+    echo ""
+    echo "════════════════════════════════════════════════════════════"
+    echo "❌ Design system validation failed!"
+    echo ""
+    echo "The following may be out of sync:"
+    echo "  - taxonomy.yaml (arc families, realms, layers, traits)"
+    echo "  - visual-encoding.yaml (icons, colors)"
+    echo "  - TypeScript (arcFamilyPalettes.ts, layers.ts, hierarchy.ts)"
+    echo "  - Rust TUI (theme.rs)"
+    echo ""
+    echo "Run to see details:"
+    echo "  pnpm validate:design-system"
+    echo "════════════════════════════════════════════════════════════"
+    exit 1
+  fi
+
+  echo "✅ Design system coherence validated"
 fi

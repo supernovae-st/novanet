@@ -196,11 +196,11 @@ describe('Relation Registry', () => {
       });
     });
 
-    it('should have mining relations prefixed consistently', () => {
-      expect(RelationType.SEO_MINES).toBe('SEO_MINES');
-      expect(RelationType.GEO_MINES).toBe('GEO_MINES');
-      // REMOVED v7.8.4: SEO_DISCOVERED_BY (SEOVariation deleted)
-      // REMOVED v7.8.4: GEO_DISCOVERED_BY (GEOReformulation deleted)
+    it('should have mining relations for SEO/GEO targeting', () => {
+      // v11.5: SEO_MINES/GEO_MINES removed — SEO/GEO nodes moved to shared/knowledge
+      // Mining relations are now TARGETS_SEO and TARGETS_GEO
+      expect(RelationType.TARGETS_SEO).toBe('TARGETS_SEO');
+      expect(RelationType.TARGETS_GEO).toBe('TARGETS_GEO');
     });
 
     it('should have provenance relations', () => {
@@ -231,11 +231,13 @@ describe('Relation Registry', () => {
       expect(targetsRelations).toContain('TARGETS_GEO');
     });
 
-    it('should use *_MINES for mining job relations', () => {
-      const minesRelations = Object.keys(RelationType).filter((r) => r.endsWith('_MINES'));
+    it('should use TARGETS_* for SEO/GEO mining relations', () => {
+      // v11.5: *_MINES patterns removed — SEO/GEO now in shared/knowledge
+      // Mining relations use TARGETS_* pattern
+      const targetsRelations = Object.keys(RelationType).filter((r) => r.startsWith('TARGETS_'));
 
-      expect(minesRelations).toContain('SEO_MINES');
-      expect(minesRelations).toContain('GEO_MINES');
+      expect(targetsRelations).toContain('TARGETS_SEO');
+      expect(targetsRelations).toContain('TARGETS_GEO');
     });
 
     it('should not have inconsistent verb tenses', () => {
@@ -269,9 +271,10 @@ describe('Relation Naming Conventions', () => {
     expect(targetsRelations).toContain('TARGETS_GEO');
   });
 
-  it('should use *_MINES for mining job relations', () => {
-    expect(RelationType.SEO_MINES).toBe('SEO_MINES');
-    expect(RelationType.GEO_MINES).toBe('GEO_MINES');
+  it('should have TARGETS_* for SEO/GEO relations', () => {
+    // v11.5: *_MINES patterns removed — SEO/GEO now in shared/knowledge
+    expect(RelationType.TARGETS_SEO).toBe('TARGETS_SEO');
+    expect(RelationType.TARGETS_GEO).toBe('TARGETS_GEO');
   });
 });
 
