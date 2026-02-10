@@ -357,6 +357,56 @@ pub fn render_help(f: &mut Frame, app: &App) {
                 Span::styled("Quit", STYLE_DIM),
             ]),
             Line::from(""),
+            // v11.6.2: Trait Filter
+            Line::from(vec![Span::styled("  Trait Filter (Meta mode)", STYLE_HIGHLIGHT)]),
+            Line::from(vec![
+                Span::styled("    fi       ", STYLE_PRIMARY),
+                Span::styled("Filter: invariant (■)", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    fl       ", STYLE_PRIMARY),
+                Span::styled("Filter: localized (□)", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    fk       ", STYLE_PRIMARY),
+                Span::styled("Filter: knowledge (◊)", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    fg       ", STYLE_PRIMARY),
+                Span::styled("Filter: generated (★)", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    fa       ", STYLE_PRIMARY),
+                Span::styled("Filter: aggregated (▪)", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    ff       ", STYLE_PRIMARY),
+                Span::styled("Clear filter (show all)", STYLE_DIM),
+            ]),
+            Line::from(""),
+            // v11.6.1: Tree icons legend
+            Line::from(vec![Span::styled("  Tree Icons", STYLE_HIGHLIGHT)]),
+            Line::from(vec![
+                Span::styled("    ▦◇       ", STYLE_PRIMARY),
+                Span::styled("Layers / Kinds count", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    →←       ", STYLE_PRIMARY),
+                Span::styled("Outgoing / Incoming arcs", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    ⊞        ", STYLE_PRIMARY),
+                Span::styled("Properties (req/total)", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    │R│ │L│  ", STYLE_PRIMARY),
+                Span::styled("Realm / Layer type", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    i l k g a", STYLE_PRIMARY),
+                Span::styled("Traits (inv/loc/know/gen/agg)", STYLE_DIM),
+            ]),
+            Line::from(""),
             Line::from(Span::styled("  Press any key to close", STYLE_DIM)),
         ]
     };

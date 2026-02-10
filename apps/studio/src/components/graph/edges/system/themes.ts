@@ -175,6 +175,7 @@ export const RELATION_OVERRIDES: Partial<Record<RelationType, ThemeOverride>> = 
   },
 
   // ─── Localization Overrides ───
+  // v11.6.1: Effects now come from arc family (dnaHelix), not overrides
   SUPPORTS_LOCALE: {
     particlePreset: 'helix',
     glowIntensity: 0.9,
@@ -182,7 +183,7 @@ export const RELATION_OVERRIDES: Partial<Record<RelationType, ThemeOverride>> = 
   },
   HAS_L10N: {
     speed: 'normal',
-    effects: DEFAULT_EFFECTS,
+    // effects removed: now uses arcFamily 'localization' → 'dnaHelix'
   },
   FOR_LOCALE: {
     lineStyle: 'dashed',
@@ -190,10 +191,11 @@ export const RELATION_OVERRIDES: Partial<Record<RelationType, ThemeOverride>> = 
   },
 
   // ─── Generation Overrides ───
+  // v11.6.1: Effects now come from arc family, additional effects can be added
   HAS_OUTPUT: {
-    effects: [...DEFAULT_EFFECTS, 'scanline', 'zigzag'],
     speed: 'ultra',
     glowIntensity: 0.95,
+    // effects removed: now uses arcFamily 'localization' → 'dnaHelix' + category defaults
   },
   HAS_PROMPT: {
     lineStyle: 'zigzag',
@@ -211,10 +213,11 @@ export const RELATION_OVERRIDES: Partial<Record<RelationType, ThemeOverride>> = 
   },
 
   // ─── Semantic Overrides ───
+  // v11.6.1: Effects now come from arc family (zigzag), not overrides
   USES_ENTITY: {
-    effects: [...DEFAULT_EFFECTS, 'zigzag'],
     speed: 'normal',
     strokeWidth: 3.5,
+    // effects removed: now uses arcFamily 'semantic' → 'zigzag'
   },
   OF_TYPE: {
     lineStyle: 'dashed',
@@ -222,9 +225,10 @@ export const RELATION_OVERRIDES: Partial<Record<RelationType, ThemeOverride>> = 
   },
 
   // ─── SEO Overrides ───
+  // v11.6.1: Effects now come from arc family (radarSweep for mining)
   TARGETS_SEO: {
-    effects: [...DEFAULT_EFFECTS, 'scanline'],
     speed: 'fast',
+    // effects removed: now uses arcFamily 'mining' → 'radarSweep'
   },
   HAS_VARIATION: {
     lineStyle: 'dotted',
@@ -232,9 +236,10 @@ export const RELATION_OVERRIDES: Partial<Record<RelationType, ThemeOverride>> = 
   },
 
   // ─── GEO Overrides ───
+  // v11.6.1: Effects now come from arc family (radarSweep for mining)
   TARGETS_GEO: {
-    effects: [...DEFAULT_EFFECTS, 'scanline', 'interference'],
     speed: 'fast',
+    // effects removed: now uses arcFamily 'mining' → 'radarSweep'
   },
   HAS_CITATION: {
     lineStyle: 'solid',

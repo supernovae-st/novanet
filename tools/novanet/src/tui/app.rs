@@ -283,6 +283,13 @@ pub struct App {
     pub pending_audit_load: bool,
     /// Cursor in audit mode (which Kind is selected)
     pub audit_cursor: usize,
+    // ==========================================================================
+    // Trait Filter State (Quick Filter: fi/fl/fk/fg/fa/ff)
+    // ==========================================================================
+    /// Active trait filter (None = show all, Some("invariant") = filter by trait)
+    pub trait_filter: Option<String>,
+    /// Pending filter key (true when 'f' was pressed, waiting for second key)
+    pub filter_pending: bool,
 }
 
 impl App {
@@ -348,6 +355,9 @@ impl App {
             audit_stats: None,
             pending_audit_load: false,
             audit_cursor: 0,
+            // Trait filter (Quick Filter)
+            trait_filter: None,
+            filter_pending: false,
         };
         app.load_yaml_for_current();
         app
@@ -745,6 +755,65 @@ impl App {
             return self.handle_recent_items_key(key);
         }
 
+        // Filter pending mode: waiting for second key (fi/fl/fk/fg/fa/ff)
+        if self.filter_pending {
+            self.filter_pending = false; // Always clear pending state
+            match key.code {
+                KeyCode::Char('i') => {
+                    self.trait_filter = Some("invariant".to_string());
+                    self.tree_cursor = 0;
+                    self.tree_scroll = 0;
+                    self.set_status("Filter: invariant (■)");
+                    return true;
+                }
+                KeyCode::Char('l') => {
+                    self.trait_filter = Some("localized".to_string());
+                    self.tree_cursor = 0;
+                    self.tree_scroll = 0;
+                    self.set_status("Filter: localized (□)");
+                    return true;
+                }
+                KeyCode::Char('k') => {
+                    self.trait_filter = Some("knowledge".to_string());
+                    self.tree_cursor = 0;
+                    self.tree_scroll = 0;
+                    self.set_status("Filter: knowledge (◊)");
+                    return true;
+                }
+                KeyCode::Char('g') => {
+                    self.trait_filter = Some("generated".to_string());
+                    self.tree_cursor = 0;
+                    self.tree_scroll = 0;
+                    self.set_status("Filter: generated (★)");
+                    return true;
+                }
+                KeyCode::Char('a') => {
+                    self.trait_filter = Some("aggregated".to_string());
+                    self.tree_cursor = 0;
+                    self.tree_scroll = 0;
+                    self.set_status("Filter: aggregated (▪)");
+                    return true;
+                }
+                KeyCode::Char('f') => {
+                    // ff = clear filter
+                    self.trait_filter = None;
+                    self.tree_cursor = 0;
+                    self.tree_scroll = 0;
+                    self.set_status("Filter cleared");
+                    return true;
+                }
+                KeyCode::Esc => {
+                    // Cancel filter mode, do nothing
+                    return true;
+                }
+                _ => {
+                    // Unknown second key: fall through to activate search
+                    self.search.active = true;
+                    return true;
+                }
+            }
+        }
+
         // Search mode captures all input
         if self.search.active {
             return self.handle_search_key(key);
@@ -836,9 +905,16 @@ impl App {
                 true
             }
 
-            // Open search (/ = vim-style search, f = find alias)
-            KeyCode::Char('/') | KeyCode::Char('f') => {
+            // Open search (/ = vim-style search)
+            KeyCode::Char('/') => {
                 self.search.active = true;
+                true
+            }
+
+            // Trait filter prefix (f = filter, wait for second key: i/l/k/g/a/f)
+            KeyCode::Char('f') => {
+                self.filter_pending = true;
+                self.set_status("Filter: [i]nvariant [l]ocalized [k]nowledge [g]enerated [a]ggregated [f]clear");
                 true
             }
 
@@ -1517,7 +1593,9 @@ impl App {
         if self.is_data_mode() {
             self.tree.item_at_for_mode(self.tree_cursor, true)
         } else {
-            self.tree.item_at(self.tree_cursor)
+            // Meta mode: apply trait filter if active
+            self.tree
+                .item_at_with_trait_filter(self.tree_cursor, self.trait_filter.as_deref())
         }
     }
 
@@ -1533,7 +1611,9 @@ impl App {
         if self.is_data_mode() {
             self.tree.item_count_for_mode(true)
         } else {
-            self.tree.item_count()
+            // Meta mode: apply trait filter if active
+            self.tree
+                .item_count_with_trait_filter(self.trait_filter.as_deref())
         }
     }
 
