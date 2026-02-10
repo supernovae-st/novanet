@@ -1,0 +1,30 @@
+# Contextual View: Categories
+# Entity category classification
+id: categories
+description: Entity category classification
+category: contextual
+contextual: true
+applicable_types: [Entity, EntityCategory]
+modes: [data, overlay, query]
+
+cypher: |
+  MATCH (n {key: $nodeKey})
+  WHERE n:Entity OR n:EntityCategory
+  OPTIONAL MATCH (n)-[r1:BELONGS_TO]->(category:EntityCategory)
+  OPTIONAL MATCH (n)<-[r2:BELONGS_TO]-(entity:Entity)
+  WITH n,
+       collect(DISTINCT category) AS categories,
+       collect(DISTINCT entity)[0..$limit] AS entities,
+       collect(DISTINCT r1) + collect(DISTINCT r2) AS rels
+  RETURN [n] + categories + entities AS nodes,
+         rels AS relationships
+
+params:
+  - name: nodeKey
+    type: string
+    required: true
+    description: Key of the Entity or EntityCategory
+  - name: limit
+    type: integer
+    default: 50
+    description: Maximum number of entities to return
