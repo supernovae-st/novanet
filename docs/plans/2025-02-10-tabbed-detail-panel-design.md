@@ -349,6 +349,108 @@ La Cypher Pill est **toujours visible** en haut du canvas, montrant la query act
 }
 ```
 
+## Node Click → Aside Open Flow
+
+Quand l'utilisateur clique sur une node dans le graph, l'Aside s'ouvre avec les tabs.
+
+### Sequence
+```
+1. CLICK sur une Node dans le graph
+       │
+       ▼
+2. NODE SELECTION EFFECTS activés
+   ├── Border épais + glow pulse
+   ├── Lévitation (translateY -8px)
+   ├── Expanding rings
+   ├── Space dust particles
+   └── Hyperspace burst (0.5s)
+       │
+       ▼
+3. ASIDE OUVRE (slide in from right, 0.3s)
+   ├── Animation: translateX(100%) → translateX(0)
+   └── Backdrop subtle blur sur le graph
+       │
+       ▼
+4. TABS LOADED avec données de la node
+   ├── [Overview] - active par défaut
+   ├── [Data] - properties, stats
+   ├── [Graph] - Mermaid views, Context views
+   └── [Code] - JSON, YAML, Cypher, TS
+       │
+       ▼
+5. CYPHER PILL UPDATE
+   ├── Query pour charger les relations de la node
+   └── Stats: incoming/outgoing arcs count
+```
+
+### Tab Navigation dans l'Aside
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  ✕ Close                                        Page: homepage  │
+├─────────────────────────────────────────────────────────────────┤
+│  [Overview]  [Data]  [Graph]  [Code]                            │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  Tab Content Area                                               │
+│                                                                 │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │                                                           │  │
+│  │   (Contenu du tab actif)                                  │  │
+│  │                                                           │  │
+│  └───────────────────────────────────────────────────────────┘  │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Tab Content by Type
+
+| Tab | Content | Data Source |
+|-----|---------|-------------|
+| **Overview** | Type badge, key, realm/layer/trait, description | Node metadata |
+| **Data** | Properties table, stats (in/out arcs), coverage | Node properties + Cypher count |
+| **Graph** | ViewSwitcher: [Ego] [Arcs] [Flow] [Context] | Cypher queries per view |
+| **Code** | FormatSwitcher: [JSON] [YAML] [Cypher] [TS] | Serialized node data |
+
+### Graph Tab — View Buttons
+
+Quand on clique sur un bouton de vue dans le Graph tab :
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  [Ego ◉]  [Arcs ○]  [Flow ○]  [Context ▼]                      │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  Mermaid diagram ou liste de relations                          │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+
+Context dropdown (type-specific):
+┌─────────────────────────┐
+│ Page Construction       │  <- Pour nodes de type Page
+│ Entity Connections      │  <- Pour nodes de type Entity
+│ Block Hierarchy         │  <- Pour nodes de type Block
+│ Project Overview        │  <- Pour nodes de type Project
+│ SEO/GEO Network         │  <- Pour nodes SEO/GEO
+│ Locale Settings         │  <- Pour nodes de type Locale
+└─────────────────────────┘
+```
+
+### Context View Click → Graph Focus
+
+Quand on clique sur un **Context View** button (ex: "Page Construction") :
+
+```
+1. ASIDE FERME (slide out)
+2. GRAPH FOCUS avec Context View
+   ├── Cypher Pill: nouvelle query
+   ├── Matrix rain pendant loading
+   └── HYBRID animation sur le graph
+```
+
+Ceci déclenche le flow décrit dans "Context View Transitions" ci-dessous.
+
+---
+
 ## Context View Transitions
 
 Flow complet quand l'utilisateur clique sur un Context View button (ex: "Page Context").
