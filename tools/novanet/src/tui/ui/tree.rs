@@ -84,6 +84,13 @@ fn highlight_matches_with_bg(
 }
 
 // =============================================================================
+// CONSTANTS
+// =============================================================================
+
+/// Horizontal padding inside tree panel (left side only, right has minimap).
+const TREE_PADDING_LEFT: u16 = 1;
+
+// =============================================================================
 // BREADCRUMB RENDERING (v11.6)
 // =============================================================================
 
@@ -1279,12 +1286,15 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     let inner_area = block.inner(area);
     f.render_widget(block, area);
 
-    // v11.6: Reserve 3 chars on right for mini-map (2 chars + 1 separator)
+    // v11.6: Reserve space for mini-map (2 chars + 1 separator) and add left padding
     let minimap_width: u16 = 3;
-    let content_width = inner_area.width.saturating_sub(minimap_width);
+    let content_x = inner_area.x + TREE_PADDING_LEFT;
+    let content_width = inner_area
+        .width
+        .saturating_sub(minimap_width + TREE_PADDING_LEFT);
 
-    // v11.6: Render sticky breadcrumb at top of content area (excluding mini-map)
-    let breadcrumb_area = Rect::new(inner_area.x, inner_area.y, content_width, inner_area.height);
+    // v11.6: Render sticky breadcrumb at top of content area (with padding)
+    let breadcrumb_area = Rect::new(content_x, inner_area.y, content_width, inner_area.height);
     let breadcrumb_height = render_breadcrumb(f, breadcrumb_area, app);
 
     // Calculate tree area below breadcrumb (with separator line)
@@ -1294,10 +1304,10 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
         .height
         .saturating_sub(breadcrumb_height + separator_height);
 
-    // Render separator line if breadcrumb exists (only in content area, not mini-map)
+    // Render separator line if breadcrumb exists (with padding)
     if breadcrumb_height > 0 && content_width > 0 {
         let separator_area = Rect::new(
-            inner_area.x,
+            content_x,
             inner_area.y + breadcrumb_height,
             content_width,
             1,
@@ -1309,15 +1319,16 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
         f.render_widget(separator, separator_area);
     }
 
-    // Render tree content below breadcrumb (excluding mini-map area)
-    let tree_area = Rect::new(inner_area.x, tree_y, content_width, tree_height);
+    // Render tree content below breadcrumb (with padding)
+    let tree_area = Rect::new(content_x, tree_y, content_width, tree_height);
 
     let paragraph = Paragraph::new(lines);
     f.render_widget(paragraph, tree_area);
 
-    // v11.6: Render mini-map on right side (full height of inner area)
+    // v11.6: Render mini-map on right side (positioned from right edge)
+    let sep_x = inner_area.x + inner_area.width - minimap_width;
     let minimap_area = Rect::new(
-        inner_area.x + content_width + 1, // +1 for separator space
+        sep_x + 1, // After separator
         inner_area.y,
         2, // Mini-map is 2 chars wide
         inner_area.height,
@@ -1328,7 +1339,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     // Render vertical separator between tree and mini-map
     if inner_area.height > 0 {
         let sep_area = Rect::new(
-            inner_area.x + content_width,
+            sep_x,
             inner_area.y,
             1,
             inner_area.height,
