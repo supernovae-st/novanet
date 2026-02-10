@@ -600,6 +600,8 @@ export const pickerClasses = {
   ].join(' '),
   /** Default size - Raycast-style: max-w-2xl = 672px (same as overlays) */
   sizeDefault: 'max-w-2xl',
+  /** Large size for grids with many items (3 columns) */
+  sizeLarge: 'max-w-4xl',
   /** Compact size for simpler pickers */
   sizeCompact: 'max-w-xl',
   /** Max height */
@@ -618,8 +620,8 @@ export const pickerClasses = {
   searchBar: 'flex items-center gap-3 px-5 sm:px-6 py-3.5 border-b border-white/[0.08]',
   /** Search input (shared with overlayClasses pattern) */
   searchInput: 'flex-1 bg-transparent text-white placeholder-white/35 text-base outline-none border-none ring-0 focus:outline-none focus:ring-0',
-  /** Grid container */
-  grid: 'flex-1 overflow-y-auto scrollbar-thin p-5 sm:p-6 animate-overlay-content',
+  /** Grid container - min-h-0 enables flex shrink for scrolling */
+  grid: 'flex-1 min-h-0 overflow-y-auto scrollbar-thin p-5 sm:p-6 animate-overlay-content',
   /** Card base */
   cardBase: [
     'flex flex-col items-center justify-center p-4 sm:p-5 rounded-xl',

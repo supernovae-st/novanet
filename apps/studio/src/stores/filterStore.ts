@@ -5,6 +5,7 @@ import type { Realm, Layer, Trait, NodeType } from '@novanet/core/types';
 import type { FilterPreset } from '@/types';
 import { CORE_TYPES, ALL_NODE_TYPES, NODE_LAYERS } from '@/config/nodeTypes';
 import { DEFAULT_PRESET } from '@/config/presets';
+import { DEFAULT_DISPLAY_LIMIT } from '@/config/constants';
 import { NovaNetFilter, VIEW_PRESETS, getViewPresetByShortcut } from '@/lib/filterAdapter';
 import { logger } from '@/lib/logger';
 
@@ -34,6 +35,9 @@ interface ExtendedFilterState {
   // Schema mode collapsed groups (Task 3.1)
   collapsedRealms: Realm[];
   collapsedLayers: string[]; // Format: "Realm-layer"
+
+  // Display limit for graph visualization
+  displayLimit: number;
 }
 
 interface FilterStoreState extends ExtendedFilterState {
@@ -82,6 +86,9 @@ interface FilterStoreState extends ExtendedFilterState {
   isRealmCollapsed: (realm: Realm) => boolean;
   isLayerCollapsed: (realm: Realm, layer: string) => boolean;
   resetSchemaFilters: () => void;
+
+  // Display limit action
+  setDisplayLimit: (limit: number) => void;
 }
 
 export const useFilterStore = create<FilterStoreState>()(
@@ -109,6 +116,9 @@ export const useFilterStore = create<FilterStoreState>()(
       // Schema mode collapsed groups initial state (Task 3.1)
       collapsedRealms: [],
       collapsedLayers: [],
+
+      // Display limit for graph visualization
+      displayLimit: DEFAULT_DISPLAY_LIMIT,
 
       // Actions
       setEnabledNodeTypes: (types) => {
@@ -426,6 +436,14 @@ export const useFilterStore = create<FilterStoreState>()(
           state.collapsedLayers = [];
         });
       },
+
+      // Display limit action
+      setDisplayLimit: (limit) => {
+        set((state) => {
+          state.displayLimit = limit;
+        });
+        logger.debug('FilterStore', 'Display limit updated', { limit });
+      },
     })),
     {
       name: 'novanet-filters',
@@ -462,7 +480,7 @@ export const useFilterStore = create<FilterStoreState>()(
             state: {
               ...value.state,
               // Convert Set to array for JSON serialization
-              enabledNodeTypes: Array.from(value.state.enabledNodeTypes),
+              enabledNodeTypes: Array.from(value.state.enabledNodeTypes || []),
             },
           };
           localStorage.setItem(name, JSON.stringify(toStore));
@@ -487,8 +505,10 @@ export const useFilterStore = create<FilterStoreState>()(
         // Schema mode collapsed groups (Task 3.1)
         collapsedRealms: state.collapsedRealms,
         collapsedLayers: state.collapsedLayers,
+        // Display limit
+        displayLimit: state.displayLimit,
       }) as FilterStoreState,
-      version: 9,
+      version: 10,
       migrate: (persistedState: unknown, version: number) => {
         if (version < 9) {
           // v9: clear stale v8 category-based filters, reset to defaults
@@ -507,6 +527,15 @@ export const useFilterStore = create<FilterStoreState>()(
             arcFamilyFilter: [],
             collapsedRealms: [],
             collapsedLayers: [],
+            displayLimit: DEFAULT_DISPLAY_LIMIT,
+          };
+        }
+        if (version < 10) {
+          // v10: add displayLimit
+          const state = persistedState as Record<string, unknown>;
+          return {
+            ...state,
+            displayLimit: DEFAULT_DISPLAY_LIMIT,
           };
         }
         return persistedState as FilterStoreState;

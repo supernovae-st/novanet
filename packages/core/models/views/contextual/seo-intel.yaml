@@ -14,7 +14,7 @@ cypher: |
   OPTIONAL MATCH (keyword)-[r2:IN_CLUSTER]->(cluster:SEOKeywordSet)
   OPTIONAL MATCH (keyword)-[r3:HAS_METRICS]->(metrics:SEOKeywordMetrics)
   WITH n,
-       collect(DISTINCT keyword)[0..$limit] AS keywords,
+       collect(DISTINCT keyword)[0..50] AS keywords,
        collect(DISTINCT cluster) AS clusters,
        collect(DISTINCT metrics) AS metrics,
        collect(DISTINCT r1) + collect(DISTINCT r2) + collect(DISTINCT r3) AS rels

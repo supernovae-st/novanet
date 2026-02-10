@@ -35,7 +35,16 @@ include:
       - relation: SUBTOPIC_OF
         direction: outgoing
 
-  # v11.2: Entity is in ORG realm semantic layer, accessed via USES_ENTITY from Page/Block
+  # v11.6: Project owns entities directly via HAS_ENTITY
+  - relation: HAS_ENTITY
+    direction: outgoing
+    include:
+      - relation: HAS_CONTENT
+        direction: outgoing
+      - relation: BELONGS_TO
+        direction: outgoing
+      - relation: SEMANTIC_LINK
+        direction: outgoing
 
 docs:
   title: "Complete Graph View"

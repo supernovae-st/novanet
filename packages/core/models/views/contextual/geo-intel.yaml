@@ -14,7 +14,7 @@ cypher: |
   OPTIONAL MATCH (query)-[r2:HAS_ANSWER]->(answer:GEOAnswer)
   OPTIONAL MATCH (query)-[r3:IN_QUERY_SET]->(querySet:GEOQuerySet)
   WITH n,
-       collect(DISTINCT query)[0..$limit] AS queries,
+       collect(DISTINCT query)[0..50] AS queries,
        collect(DISTINCT answer) AS answers,
        collect(DISTINCT querySet) AS querySets,
        collect(DISTINCT r1) + collect(DISTINCT r2) + collect(DISTINCT r3) AS rels

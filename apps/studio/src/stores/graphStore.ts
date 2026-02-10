@@ -1,6 +1,242 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
+import type { Draft } from 'immer';
 import type { GraphNode, GraphEdge, GraphData, NodeDetail } from '@/types';
+
+/**
+ * Polyfill for requestIdleCallback (Safari doesn't support it)
+ * Falls back to setTimeout with 1ms delay (yields to event loop)
+ */
+const requestIdleCallbackPolyfill: (cb: IdleRequestCallback) => number =
+  typeof requestIdleCallback !== 'undefined'
+    ? requestIdleCallback
+    : (cb: IdleRequestCallback) =>
+        window.setTimeout(() => cb({ didTimeout: false, timeRemaining: () => 50 }), 1) as unknown as number;
+
+const cancelIdleCallbackPolyfill: (id: number) => void =
+  typeof cancelIdleCallback !== 'undefined' ? cancelIdleCallback : (id: number) => window.clearTimeout(id);
+
+/** Batch size for chunked processing (tune for ~16ms frames) */
+const INDEX_BATCH_SIZE = 2000;
+
+/**
+ * Builds graph indexes progressively using requestIdleCallback.
+ * Non-blocking: yields to main thread between batches.
+ *
+ * Priority order (critical indexes first):
+ * 1. nodeMap (20%) - Required for getNodeById, node lookups
+ * 2. edgeMap (20%) - Required for getEdgeById
+ * 3. edgesBySource (20%) - Required for getNodeDetail outgoing
+ * 4. edgesByTarget (20%) - Required for getNodeDetail incoming
+ * 5. adjacencyMap (20%) - Required for neighbor traversal
+ */
+function buildIndexesProgressively(
+  nodes: GraphNode[],
+  edges: GraphEdge[],
+  set: (fn: (state: Draft<GraphState>) => void) => void
+): void {
+  // Pre-allocate maps with expected sizes for better performance
+  const nodeMap = new Map<string, GraphNode>();
+  const edgeMap = new Map<string, GraphEdge>();
+  const edgesBySource = new Map<string, GraphEdge[]>();
+  const edgesByTarget = new Map<string, GraphEdge[]>();
+  const adjacencyMap = new Map<string, Set<string>>();
+  const counts: Record<string, number> = {};
+
+  let currentIdleHandle: number | null = null;
+
+  // Phase 1: Build nodeMap (highest priority - enables getNodeById immediately)
+  const buildNodeMap = (startIdx: number, deadline: IdleDeadline): void => {
+    let i = startIdx;
+    while (i < nodes.length && (deadline.timeRemaining() > 0 || deadline.didTimeout)) {
+      const batchEnd = Math.min(i + INDEX_BATCH_SIZE, nodes.length);
+      for (; i < batchEnd; i++) {
+        const node = nodes[i];
+        nodeMap.set(node.id, node);
+        counts[node.type] = (counts[node.type] || 0) + 1;
+      }
+    }
+
+    if (i < nodes.length) {
+      // More work to do - schedule next batch
+      const progress = Math.round((i / nodes.length) * 20);
+      set((state) => {
+        state.indexProgress.percent = progress;
+      });
+      currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildNodeMap(i, dl));
+    } else {
+      // Phase 1 complete - commit nodeMap and start phase 2
+      set((state) => {
+        state.nodeMap = nodeMap;
+        state.nodeTypeCounts = counts;
+        state.indexProgress.phase = 'edgeMap';
+        state.indexProgress.percent = 20;
+        state.indexProgress.ready.nodeMap = true;
+      });
+      currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildEdgeMap(0, dl));
+    }
+  };
+
+  // Phase 2: Build edgeMap (enables getEdgeById)
+  const buildEdgeMap = (startIdx: number, deadline: IdleDeadline): void => {
+    let i = startIdx;
+    while (i < edges.length && (deadline.timeRemaining() > 0 || deadline.didTimeout)) {
+      const batchEnd = Math.min(i + INDEX_BATCH_SIZE, edges.length);
+      for (; i < batchEnd; i++) {
+        edgeMap.set(edges[i].id, edges[i]);
+      }
+    }
+
+    if (i < edges.length) {
+      const progress = 20 + Math.round((i / edges.length) * 20);
+      set((state) => {
+        state.indexProgress.percent = progress;
+      });
+      currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildEdgeMap(i, dl));
+    } else {
+      set((state) => {
+        state.edgeMap = edgeMap;
+        state.indexProgress.phase = 'edgesBySource';
+        state.indexProgress.percent = 40;
+        state.indexProgress.ready.edgeMap = true;
+      });
+      currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildEdgesBySource(0, dl));
+    }
+  };
+
+  // Phase 3: Build edgesBySource (enables getNodeDetail outgoing)
+  const buildEdgesBySource = (startIdx: number, deadline: IdleDeadline): void => {
+    let i = startIdx;
+    while (i < edges.length && (deadline.timeRemaining() > 0 || deadline.didTimeout)) {
+      const batchEnd = Math.min(i + INDEX_BATCH_SIZE, edges.length);
+      for (; i < batchEnd; i++) {
+        const edge = edges[i];
+        const existing = edgesBySource.get(edge.source);
+        if (existing) {
+          existing.push(edge);
+        } else {
+          edgesBySource.set(edge.source, [edge]);
+        }
+      }
+    }
+
+    if (i < edges.length) {
+      const progress = 40 + Math.round((i / edges.length) * 20);
+      set((state) => {
+        state.indexProgress.percent = progress;
+      });
+      currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildEdgesBySource(i, dl));
+    } else {
+      set((state) => {
+        state.edgesBySource = edgesBySource;
+        state.indexProgress.phase = 'edgesByTarget';
+        state.indexProgress.percent = 60;
+        state.indexProgress.ready.edgesBySource = true;
+      });
+      currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildEdgesByTarget(0, dl));
+    }
+  };
+
+  // Phase 4: Build edgesByTarget (enables getNodeDetail incoming)
+  const buildEdgesByTarget = (startIdx: number, deadline: IdleDeadline): void => {
+    let i = startIdx;
+    while (i < edges.length && (deadline.timeRemaining() > 0 || deadline.didTimeout)) {
+      const batchEnd = Math.min(i + INDEX_BATCH_SIZE, edges.length);
+      for (; i < batchEnd; i++) {
+        const edge = edges[i];
+        const existing = edgesByTarget.get(edge.target);
+        if (existing) {
+          existing.push(edge);
+        } else {
+          edgesByTarget.set(edge.target, [edge]);
+        }
+      }
+    }
+
+    if (i < edges.length) {
+      const progress = 60 + Math.round((i / edges.length) * 20);
+      set((state) => {
+        state.indexProgress.percent = progress;
+      });
+      currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildEdgesByTarget(i, dl));
+    } else {
+      set((state) => {
+        state.edgesByTarget = edgesByTarget;
+        state.indexProgress.phase = 'adjacency';
+        state.indexProgress.percent = 80;
+        state.indexProgress.ready.edgesByTarget = true;
+      });
+      currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildAdjacencyMap(0, dl));
+    }
+  };
+
+  // Phase 5: Build adjacencyMap (lowest priority - neighbor traversal)
+  const buildAdjacencyMap = (startIdx: number, deadline: IdleDeadline): void => {
+    let i = startIdx;
+    while (i < edges.length && (deadline.timeRemaining() > 0 || deadline.didTimeout)) {
+      const batchEnd = Math.min(i + INDEX_BATCH_SIZE, edges.length);
+      for (; i < batchEnd; i++) {
+        const edge = edges[i];
+        let sourceSet = adjacencyMap.get(edge.source);
+        if (!sourceSet) {
+          sourceSet = new Set();
+          adjacencyMap.set(edge.source, sourceSet);
+        }
+        sourceSet.add(edge.target);
+
+        let targetSet = adjacencyMap.get(edge.target);
+        if (!targetSet) {
+          targetSet = new Set();
+          adjacencyMap.set(edge.target, targetSet);
+        }
+        targetSet.add(edge.source);
+      }
+    }
+
+    if (i < edges.length) {
+      const progress = 80 + Math.round((i / edges.length) * 20);
+      set((state) => {
+        state.indexProgress.percent = progress;
+      });
+      currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildAdjacencyMap(i, dl));
+    } else {
+      // All phases complete
+      set((state) => {
+        state.adjacencyMap = adjacencyMap;
+        state.indexProgress.phase = 'complete';
+        state.indexProgress.percent = 100;
+        state.indexProgress.ready.adjacencyMap = true;
+      });
+      currentIdleHandle = null;
+    }
+  };
+
+  // Start the progressive build chain
+  currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildNodeMap(0, dl));
+
+  // Note: We don't return a cleanup function here because:
+  // 1. Index building should complete even if component unmounts
+  // 2. The store is global, so cleanup is not typically needed
+  // If needed, the caller can track currentIdleHandle and cancel via cancelIdleCallbackPolyfill
+}
+
+/** Index building progress phases */
+type IndexPhase = 'idle' | 'nodeMap' | 'edgeMap' | 'edgesBySource' | 'edgesByTarget' | 'adjacency' | 'complete';
+
+/** Index building progress state */
+interface IndexProgress {
+  phase: IndexPhase;
+  /** Overall progress 0-100 */
+  percent: number;
+  /** Which indexes are ready for use */
+  ready: {
+    nodeMap: boolean;
+    edgeMap: boolean;
+    edgesBySource: boolean;
+    edgesByTarget: boolean;
+    adjacencyMap: boolean;
+  };
+}
 
 interface GraphState {
   // Data
@@ -27,6 +263,9 @@ interface GraphState {
   totalNodes: number;
   totalArcs: number;
   nodeTypeCounts: Record<string, number>;
+
+  // Index building progress (for non-blocking builds)
+  indexProgress: IndexProgress;
 
   // Actions
   setGraphData: (data: GraphData) => void;
@@ -59,9 +298,21 @@ export const useGraphStore = create<GraphState>()(
     totalNodes: 0,
     totalArcs: 0,
     nodeTypeCounts: {},
+    indexProgress: {
+      phase: 'idle',
+      percent: 0,
+      ready: {
+        nodeMap: false,
+        edgeMap: false,
+        edgesBySource: false,
+        edgesByTarget: false,
+        adjacencyMap: false,
+      },
+    },
 
     // Actions
     setGraphData: (data) => {
+      // Phase 1: Immediately set raw data (renders can start)
       set((state) => {
         state.nodes = data.nodes;
         state.edges = data.edges;
@@ -69,54 +320,22 @@ export const useGraphStore = create<GraphState>()(
         state.totalArcs = data.edges.length;
         state.lastFetchTime = Date.now();
         state.error = null;
-
-        // Build indexed maps for O(1) lookups (critical for 19k nodes)
-        const nodeMap = new Map<string, GraphNode>();
-        const adjacencyMap = new Map<string, Set<string>>();
-        const edgesBySource = new Map<string, GraphEdge[]>();
-        const edgesByTarget = new Map<string, GraphEdge[]>();
-        const edgeMap = new Map<string, GraphEdge>();
-        const counts: Record<string, number> = {};
-
-        // Index nodes
-        data.nodes.forEach((node) => {
-          nodeMap.set(node.id, node);
-          counts[node.type] = (counts[node.type] || 0) + 1;
-        });
-
-        // Build adjacency map and edge indexes
-        data.edges.forEach((edge) => {
-          // Adjacency map (bidirectional)
-          if (!adjacencyMap.has(edge.source)) {
-            adjacencyMap.set(edge.source, new Set());
-          }
-          if (!adjacencyMap.has(edge.target)) {
-            adjacencyMap.set(edge.target, new Set());
-          }
-          adjacencyMap.get(edge.source)!.add(edge.target);
-          adjacencyMap.get(edge.target)!.add(edge.source);
-
-          // Edge indexes by source and target (for O(k) getNodeDetail)
-          if (!edgesBySource.has(edge.source)) {
-            edgesBySource.set(edge.source, []);
-          }
-          if (!edgesByTarget.has(edge.target)) {
-            edgesByTarget.set(edge.target, []);
-          }
-          edgesBySource.get(edge.source)!.push(edge);
-          edgesByTarget.get(edge.target)!.push(edge);
-
-          // Edge map for O(1) getEdgeById
-          edgeMap.set(edge.id, edge);
-        });
-
-        state.nodeMap = nodeMap;
-        state.adjacencyMap = adjacencyMap;
-        state.edgesBySource = edgesBySource;
-        state.edgesByTarget = edgesByTarget;
-        state.edgeMap = edgeMap;
-        state.nodeTypeCounts = counts;
+        state.indexProgress = {
+          phase: 'nodeMap',
+          percent: 0,
+          ready: {
+            nodeMap: false,
+            edgeMap: false,
+            edgesBySource: false,
+            edgesByTarget: false,
+            adjacencyMap: false,
+          },
+        };
       });
+
+      // Build indexes progressively using requestIdleCallback
+      // Priority order: nodeMap (most critical) > edgeMap > edgesBySource/Target > adjacency
+      buildIndexesProgressively(data.nodes, data.edges, set);
     },
 
     mergeGraphData: (newNodes, newEdges) => {
@@ -201,6 +420,17 @@ export const useGraphStore = create<GraphState>()(
         state.totalNodes = 0;
         state.totalArcs = 0;
         state.nodeTypeCounts = {};
+        state.indexProgress = {
+          phase: 'idle',
+          percent: 0,
+          ready: {
+            nodeMap: false,
+            edgeMap: false,
+            edgesBySource: false,
+            edgesByTarget: false,
+            adjacencyMap: false,
+          },
+        };
       });
     },
 

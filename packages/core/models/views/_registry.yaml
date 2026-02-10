@@ -136,7 +136,7 @@ views:
     modes: [data, overlay, query]
 
   # Project structure
-  - id: project-structure
+  - id: project
     file: contextual/project.yaml
     description: Project structure (Pages, Entities, Brand)
     category: contextual
@@ -181,7 +181,7 @@ views:
     modes: [data, overlay, query]
 
   # Generation pipeline
-  - id: generation-pipeline
+  - id: generation
     file: contextual/generation.yaml
     description: Generation pipeline and outputs
     category: contextual

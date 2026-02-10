@@ -1,8 +1,8 @@
 # models/views/project-overview.yaml
 id: project-overview
 name: Project Overview
-description: Project dashboard with pages and brand identity
-version: "1.2"
+description: Project dashboard with pages, entities, and brand identity
+version: "11.6"
 
 root:
   type: Project
@@ -14,5 +14,9 @@ include:
   - relation: HAS_BRAND_IDENTITY
     direction: outgoing
 
-  # v10.3: HAS_CONCEPT removed — Entity in org realm, use USES_ENTITY from Page/Block
+  - relation: HAS_ENTITY
+    direction: outgoing
+
+  - relation: HAS_CONTENT
+    direction: outgoing
 

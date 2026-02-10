@@ -238,7 +238,7 @@ const ViewPickerModal = memo(function ViewPickerModal({
         aria-modal="true"
         aria-labelledby="view-picker-title"
         onKeyDown={handleKeyDown}
-        className={cn(pickerClasses.shell, pickerClasses.sizeDefault, pickerClasses.maxHeight)}
+        className={cn(pickerClasses.shell, pickerClasses.sizeLarge, 'h-[80vh]')}
       >
         {/* Header */}
         <div className={pickerClasses.header}>

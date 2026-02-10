@@ -4,14 +4,19 @@
  * Computed selector that combines graphStore nodes with filterStore settings.
  * Provides filtered nodes and edges based on enabled node types and locale.
  *
- * Performance: Uses useMemo to prevent unnecessary recalculations.
+ * Performance optimizations (v12.1):
+ * - Single-pass filtering with early exit on empty results
+ * - Combined aggregation (realm/layer counts) during filter pass
+ * - Memoized filter predicates to avoid closure recreation
+ * - Early exit when no filters are active (identity return)
+ *
  * This is critical for 19k nodes.
  *
  * @example
  * const { nodes, edges, isFiltered } = useFilteredGraph();
  */
 
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useGraphStore } from '@/stores/graphStore';
 import { useFilterStore } from '@/stores/filterStore';
 import { ALL_NODE_TYPES } from '@/config/nodeTypes';
@@ -53,6 +58,30 @@ export interface FilteredGraphResult {
   isMetaMode: boolean;
 }
 
+/** Internal result from single-pass filter with aggregated counts */
+interface FilterPassResult {
+  nodes: GraphNode[];
+  visibleNodeIds: Set<string>;
+  realmCounts: RealmCounts;
+  layerCounts: LayerCounts;
+}
+
+/** Create empty layer counts object */
+function createEmptyLayerCounts(): LayerCounts {
+  return {
+    // Shared realm (4) — v11.4: includes config
+    config: 0, locale: 0, geography: 0, knowledge: 0,
+    // Org realm (6) — v11.4: seo/geo removed
+    foundation: 0, structure: 0, semantic: 0,
+    instruction: 0, output: 0,
+  };
+}
+
+/** Create empty realm counts object */
+function createEmptyRealmCounts(): RealmCounts {
+  return { shared: 0, org: 0 };
+}
+
 export function useFilteredGraph(): FilteredGraphResult {
   // Get raw data from stores
   const allNodes = useGraphStore((state) => state.nodes);
@@ -61,129 +90,181 @@ export function useFilteredGraph(): FilteredGraphResult {
   const enabledNodeTypes = useFilterStore((state) => state.enabledNodeTypes);
   const selectedLocale = useFilterStore((state) => state.selectedLocale);
   const searchQuery = useFilterStore((state) => state.searchQuery);
+  const displayLimit = useFilterStore((state) => state.displayLimit);
 
   // Detect schema mode based on node IDs (schema nodes have 'schema-' prefix)
   // v12.0: No longer based on navigationMode, now based on loaded data
+  // Optimized: Early exit on empty, count without creating intermediate array
   const isMetaMode = useMemo(() => {
-    // If we have nodes and most of them are schema nodes, we're in meta mode
     if (allNodes.length === 0) return false;
-    const schemaNodeCount = allNodes.filter(n => n.id.startsWith('schema-')).length;
-    return schemaNodeCount > 0 && schemaNodeCount === allNodes.length;
+    // Count schema nodes without creating intermediate array
+    let schemaCount = 0;
+    for (const node of allNodes) {
+      if (node.id.startsWith('schema-')) schemaCount++;
+      else return false; // Early exit: if any non-schema node, not meta mode
+    }
+    return schemaCount > 0;
   }, [allNodes]);
 
-  // Chained memos for optimal performance:
-  // Each filter stage only recalculates when its dependencies change
+  // Memoize normalized search query to avoid repeated toLowerCase/trim
+  const normalizedSearchQuery = useMemo(() => {
+    if (!searchQuery || !searchQuery.trim()) return null;
+    return searchQuery.toLowerCase().trim();
+  }, [searchQuery]);
 
-  // Stage 1: Filter out hidden nodes
-  const unhiddenNodes = useMemo(() => {
-    if (hiddenNodeIds.size === 0) return allNodes;
-    return allNodes.filter((node) => !hiddenNodeIds.has(node.id));
-  }, [allNodes, hiddenNodeIds]);
-
-  // Stage 2: Filter by node type (bypassed in schema mode to show all 35 types)
-  const typeFilteredNodes = useMemo(() => {
-    // In schema mode, show all types regardless of filter settings
-    if (isMetaMode) return unhiddenNodes;
-    if (enabledNodeTypes.size === 0) return unhiddenNodes;
-    return unhiddenNodes.filter((node) => enabledNodeTypes.has(node.type));
-  }, [unhiddenNodes, enabledNodeTypes, isMetaMode]);
-
-  // Stage 3: Filter by locale (bypassed in schema mode - schema nodes have no locale)
-  const localeFilteredNodes = useMemo(() => {
-    // In schema mode, skip locale filtering (schema nodes don't have locales)
-    if (isMetaMode) return typeFilteredNodes;
-    if (!selectedLocale) return typeFilteredNodes;
-    return typeFilteredNodes.filter((node) => {
-      // Include nodes that match the locale or don't have a locale (global nodes)
-      const nodeLocale = node.data?.locale_code || node.data?.code;
-      return !nodeLocale || nodeLocale === selectedLocale;
-    });
-  }, [typeFilteredNodes, selectedLocale, isMetaMode]);
-
-  // Stage 4: Filter by search query
-  const filteredNodes = useMemo(() => {
-    if (!searchQuery || !searchQuery.trim()) return localeFilteredNodes;
-    const query = searchQuery.toLowerCase().trim();
-    return localeFilteredNodes.filter(
-      (node) =>
-        node.key?.toLowerCase().includes(query) ||
-        node.displayName?.toLowerCase().includes(query) ||
-        node.description?.toLowerCase().includes(query) ||
-        node.type.toLowerCase().includes(query)
+  // Memoize filter predicate functions to avoid closure recreation
+  const matchesSearch = useCallback((node: GraphNode, query: string): boolean => {
+    return (
+      node.key?.toLowerCase().includes(query) ||
+      node.displayName?.toLowerCase().includes(query) ||
+      node.description?.toLowerCase().includes(query) ||
+      node.type.toLowerCase().includes(query)
     );
-  }, [localeFilteredNodes, searchQuery]);
+  }, []);
 
-  // Compute visible node IDs for edge filtering
-  const visibleNodeIds = useMemo(() => {
-    return new Set(filteredNodes.map((node) => node.id));
-  }, [filteredNodes]);
-
-  // Compute filtered edges (only those connecting visible nodes)
-  const filteredEdges = useMemo(() => {
-    return allEdges.filter(
-      (edge) => visibleNodeIds.has(edge.source) && visibleNodeIds.has(edge.target)
-    );
-  }, [allEdges, visibleNodeIds]);
-
-  // Check if any filters are active (in schema mode, type/locale filters are bypassed)
-  const isFiltered = useMemo(() => {
-    // In schema mode, only search affects visible nodes
+  // Check if any filters are active (computed once, used for early exit)
+  const hasActiveFilters = useMemo(() => {
     if (isMetaMode) {
-      return (
-        hiddenNodeIds.size > 0 ||
-        (searchQuery !== null && searchQuery.trim() !== '')
-      );
+      return hiddenNodeIds.size > 0 || normalizedSearchQuery !== null;
     }
     return (
       hiddenNodeIds.size > 0 ||
       enabledNodeTypes.size !== ALL_NODE_TYPES.length ||
       selectedLocale !== null ||
-      (searchQuery !== null && searchQuery.trim() !== '')
+      normalizedSearchQuery !== null
     );
-  }, [hiddenNodeIds, enabledNodeTypes, selectedLocale, searchQuery, isMetaMode]);
+  }, [hiddenNodeIds, enabledNodeTypes, selectedLocale, normalizedSearchQuery, isMetaMode]);
+
+  // Single-pass filter with aggregation
+  // Combines all 5 filter stages + realm/layer counting into one pass
+  const filterResult = useMemo((): FilterPassResult => {
+    const realmCounts = createEmptyRealmCounts();
+    const layerCounts = createEmptyLayerCounts();
+
+    // Early exit: no nodes
+    if (allNodes.length === 0) {
+      return {
+        nodes: allNodes,
+        visibleNodeIds: new Set(),
+        realmCounts,
+        layerCounts,
+      };
+    }
+
+    // Early exit: no filters active and no display limit
+    if (!hasActiveFilters && (!displayLimit || displayLimit <= 0 || allNodes.length <= displayLimit)) {
+      // Still need to compute counts
+      const visibleNodeIds = new Set<string>();
+      for (const node of allNodes) {
+        visibleNodeIds.add(node.id);
+        const realm = NODE_REALMS[node.type as NodeType];
+        if (realm && realm in realmCounts) {
+          realmCounts[realm]++;
+        }
+        const layer = NODE_LAYERS[node.type as NodeType];
+        if (layer && layer in layerCounts) {
+          layerCounts[layer]++;
+        }
+      }
+      return { nodes: allNodes, visibleNodeIds, realmCounts, layerCounts };
+    }
+
+    // Pre-compute filter conditions for the loop
+    const hasHiddenNodes = hiddenNodeIds.size > 0;
+    const hasTypeFilter = !isMetaMode && enabledNodeTypes.size > 0;
+    const hasLocaleFilter = !isMetaMode && selectedLocale !== null;
+    const hasSearchFilter = normalizedSearchQuery !== null;
+    const hasDisplayLimit = displayLimit && displayLimit > 0;
+
+    const filteredNodes: GraphNode[] = [];
+    const visibleNodeIds = new Set<string>();
+
+    // Single pass through all nodes
+    for (const node of allNodes) {
+      // Stage 1: Hidden nodes filter
+      if (hasHiddenNodes && hiddenNodeIds.has(node.id)) {
+        continue;
+      }
+
+      // Stage 2: Type filter (bypassed in schema mode)
+      if (hasTypeFilter && !enabledNodeTypes.has(node.type)) {
+        continue;
+      }
+
+      // Stage 3: Locale filter (bypassed in schema mode)
+      if (hasLocaleFilter) {
+        const nodeLocale = node.data?.locale_code || node.data?.code;
+        if (nodeLocale && nodeLocale !== selectedLocale) {
+          continue;
+        }
+      }
+
+      // Stage 4: Search filter
+      if (hasSearchFilter && !matchesSearch(node, normalizedSearchQuery)) {
+        continue;
+      }
+
+      // Stage 5: Display limit (early exit when limit reached)
+      if (hasDisplayLimit && filteredNodes.length >= displayLimit) {
+        break; // Early exit - no need to process remaining nodes
+      }
+
+      // Node passes all filters - add to results and aggregate counts
+      filteredNodes.push(node);
+      visibleNodeIds.add(node.id);
+
+      // Aggregate realm count
+      const realm = NODE_REALMS[node.type as NodeType];
+      if (realm && realm in realmCounts) {
+        realmCounts[realm]++;
+      }
+
+      // Aggregate layer count
+      const layer = NODE_LAYERS[node.type as NodeType];
+      if (layer && layer in layerCounts) {
+        layerCounts[layer]++;
+      }
+    }
+
+    return { nodes: filteredNodes, visibleNodeIds, realmCounts, layerCounts };
+  }, [
+    allNodes,
+    hasActiveFilters,
+    hiddenNodeIds,
+    enabledNodeTypes,
+    selectedLocale,
+    normalizedSearchQuery,
+    displayLimit,
+    isMetaMode,
+    matchesSearch,
+  ]);
+
+  // Extract results from single-pass filter
+  const { nodes: filteredNodes, visibleNodeIds, realmCounts, layerCounts } = filterResult;
+
+  // Compute filtered edges (only those connecting visible nodes)
+  // Early exit if no visible nodes
+  const filteredEdges = useMemo(() => {
+    if (visibleNodeIds.size === 0) return [];
+    return allEdges.filter(
+      (edge) => visibleNodeIds.has(edge.source) && visibleNodeIds.has(edge.target)
+    );
+  }, [allEdges, visibleNodeIds]);
 
   // Compute distinct relation types count
+  // Early exit if no edges
   const distinctRelationTypes = useMemo(() => {
+    if (filteredEdges.length === 0) return 0;
     const types = new Set(filteredEdges.map((edge) => edge.type));
     return types.size;
   }, [filteredEdges]);
-
-  // Compute scope counts (for schema mode breakdown) - v11.2: 2 realms
-  const realmCounts = useMemo((): RealmCounts => {
-    const counts: RealmCounts = { shared: 0, org: 0 };
-    for (const node of filteredNodes) {
-      const scope = NODE_REALMS[node.type as NodeType];
-      if (scope && scope in counts) {
-        counts[scope]++;
-      }
-    }
-    return counts;
-  }, [filteredNodes]);
-
-  // Compute layer counts (for schema mode breakdown) - v11.4: 10 layers
-  const layerCounts = useMemo((): LayerCounts => {
-    const counts: LayerCounts = {
-      // Shared realm (4) — v11.4: includes config
-      config: 0, locale: 0, geography: 0, knowledge: 0,
-      // Org realm (6) — v11.4: seo/geo removed
-      foundation: 0, structure: 0, semantic: 0,
-      instruction: 0, output: 0,
-    };
-    for (const node of filteredNodes) {
-      const layer = NODE_LAYERS[node.type as NodeType];
-      if (layer && layer in counts) {
-        counts[layer]++;
-      }
-    }
-    return counts;
-  }, [filteredNodes]);
 
   return {
     nodes: filteredNodes,
     edges: filteredEdges,
     totalNodes: allNodes.length,
     totalArcs: allEdges.length,
-    isFiltered,
+    isFiltered: hasActiveFilters,
     visibleNodeCount: filteredNodes.length,
     visibleEdgeCount: filteredEdges.length,
     distinctRelationTypes,

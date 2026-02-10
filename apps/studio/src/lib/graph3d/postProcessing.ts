@@ -47,6 +47,9 @@ export interface BloomConfig {
   threshold: number;    // Brightness threshold (0-1)
 }
 
+// Quality level type (matches uiStore.BloomQuality)
+export type BloomQualityLevel = 'off' | 'low' | 'medium' | 'high' | 'auto';
+
 // Default bloom settings for galaxy-themed graph
 export const DEFAULT_BLOOM_CONFIG: BloomConfig = {
   strength: 0.8,
@@ -60,6 +63,215 @@ export const HIGH_BLOOM_CONFIG: BloomConfig = {
   radius: 0.6,
   threshold: 0.4,
 };
+
+// =============================================================================
+// Adaptive Bloom Quality Presets
+// =============================================================================
+
+/** Bloom configs for each quality level */
+export const BLOOM_QUALITY_CONFIGS: Record<Exclude<BloomQualityLevel, 'off' | 'auto'>, BloomConfig> = {
+  low: {
+    strength: 0.4,
+    radius: 0.2,
+    threshold: 0.8, // Higher threshold = fewer pixels bloom
+  },
+  medium: {
+    strength: 0.8,
+    radius: 0.4,
+    threshold: 0.5,
+  },
+  high: {
+    strength: 1.8,
+    radius: 0.6,
+    threshold: 0.1, // Low threshold = hyperspace glow
+  },
+};
+
+// =============================================================================
+// Performance Detection
+// =============================================================================
+
+export interface PerformanceProfile {
+  /** Detected tier: low/medium/high */
+  tier: 'low' | 'medium' | 'high';
+  /** Whether device is mobile */
+  isMobile: boolean;
+  /** Estimated GPU capability (0-1 scale) */
+  gpuScore: number;
+  /** Recommended bloom quality */
+  recommendedBloomQuality: Exclude<BloomQualityLevel, 'auto'>;
+}
+
+/**
+ * Detect device performance capabilities
+ * Uses WebGL capabilities and device heuristics
+ */
+export function detectPerformanceProfile(): PerformanceProfile {
+  // Default to medium if detection fails
+  const defaultProfile: PerformanceProfile = {
+    tier: 'medium',
+    isMobile: false,
+    gpuScore: 0.5,
+    recommendedBloomQuality: 'medium',
+  };
+
+  if (typeof window === 'undefined') return defaultProfile;
+
+  // Mobile detection
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  ) || (typeof navigator !== 'undefined' && navigator.maxTouchPoints > 1);
+
+  // Try to get WebGL info for GPU detection
+  let gpuScore = 0.5;
+  let gpuRenderer = '';
+
+  try {
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+
+    if (gl) {
+      const debugInfo = (gl as WebGLRenderingContext).getExtension('WEBGL_debug_renderer_info');
+      if (debugInfo) {
+        gpuRenderer = (gl as WebGLRenderingContext).getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || '';
+      }
+
+      // Check max texture size as proxy for GPU capability
+      const maxTextureSize = (gl as WebGLRenderingContext).getParameter((gl as WebGLRenderingContext).MAX_TEXTURE_SIZE);
+      if (maxTextureSize >= 16384) gpuScore = 0.9;
+      else if (maxTextureSize >= 8192) gpuScore = 0.7;
+      else if (maxTextureSize >= 4096) gpuScore = 0.5;
+      else gpuScore = 0.3;
+    }
+  } catch {
+    // WebGL detection failed, use defaults
+  }
+
+  // Detect low-end GPUs by renderer string
+  const lowEndGPUs = [
+    'intel hd graphics',
+    'intel uhd graphics',
+    'intel iris',
+    'mali-',
+    'adreno 3',
+    'adreno 4',
+    'powervr',
+    'apple gpu', // Older iOS devices
+  ];
+
+  const isLowEndGPU = lowEndGPUs.some((gpu) =>
+    gpuRenderer.toLowerCase().includes(gpu)
+  );
+
+  // High-end GPU detection
+  const highEndGPUs = [
+    'nvidia geforce rtx',
+    'nvidia geforce gtx 10',
+    'nvidia geforce gtx 16',
+    'nvidia geforce gtx 20',
+    'radeon rx 5',
+    'radeon rx 6',
+    'radeon rx 7',
+    'apple m1',
+    'apple m2',
+    'apple m3',
+  ];
+
+  const isHighEndGPU = highEndGPUs.some((gpu) =>
+    gpuRenderer.toLowerCase().includes(gpu)
+  );
+
+  // Determine tier
+  let tier: 'low' | 'medium' | 'high';
+  if (isMobile || isLowEndGPU || gpuScore < 0.4) {
+    tier = 'low';
+  } else if (isHighEndGPU && gpuScore >= 0.7) {
+    tier = 'high';
+  } else {
+    tier = 'medium';
+  }
+
+  // Recommended bloom quality
+  let recommendedBloomQuality: Exclude<BloomQualityLevel, 'auto'>;
+  if (tier === 'low') {
+    recommendedBloomQuality = 'off'; // Disable bloom on low-end
+  } else if (tier === 'high') {
+    recommendedBloomQuality = 'high';
+  } else {
+    recommendedBloomQuality = 'medium';
+  }
+
+  return {
+    tier,
+    isMobile,
+    gpuScore,
+    recommendedBloomQuality,
+  };
+}
+
+// =============================================================================
+// Node Count Adaptive Quality
+// =============================================================================
+
+/**
+ * Get bloom quality based on node count for adaptive performance
+ * Reduces quality when many nodes are on screen
+ */
+export function getAdaptiveBloomQuality(
+  nodeCount: number,
+  baseQuality: Exclude<BloomQualityLevel, 'auto'>
+): Exclude<BloomQualityLevel, 'auto'> {
+  if (baseQuality === 'off') return 'off';
+
+  // Thresholds for downgrading quality
+  const HIGH_NODE_THRESHOLD = 200;
+  const VERY_HIGH_NODE_THRESHOLD = 500;
+
+  if (nodeCount >= VERY_HIGH_NODE_THRESHOLD) {
+    // Very high node count: drop two levels or turn off
+    if (baseQuality === 'high') return 'low';
+    if (baseQuality === 'medium') return 'off';
+    return 'off';
+  }
+
+  if (nodeCount >= HIGH_NODE_THRESHOLD) {
+    // High node count: drop one level
+    if (baseQuality === 'high') return 'medium';
+    if (baseQuality === 'medium') return 'low';
+    return 'off';
+  }
+
+  return baseQuality;
+}
+
+/**
+ * Get bloom config for quality level
+ * Returns null if bloom should be disabled
+ */
+export function getBloomConfigForQuality(
+  quality: BloomQualityLevel,
+  nodeCount?: number
+): BloomConfig | null {
+  if (quality === 'off') return null;
+
+  let effectiveQuality: Exclude<BloomQualityLevel, 'auto'>;
+
+  if (quality === 'auto') {
+    const profile = detectPerformanceProfile();
+    effectiveQuality = profile.recommendedBloomQuality;
+  } else {
+    effectiveQuality = quality;
+  }
+
+  // Apply node count adaptation
+  if (nodeCount !== undefined) {
+    effectiveQuality = getAdaptiveBloomQuality(nodeCount, effectiveQuality);
+  }
+
+  if (effectiveQuality === 'off') return null;
+
+  return BLOOM_QUALITY_CONFIGS[effectiveQuality];
+}
 
 /**
  * Create post-processing composer with bloom effect
