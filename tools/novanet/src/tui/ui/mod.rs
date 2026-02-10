@@ -593,10 +593,13 @@ fn render_footer_hints(f: &mut Frame, area: Rect, app: &App) {
             Focus::Yaml => "YAML: [j/k] Scroll  [y] Copy  [Tab] Panel  [/] Search  [?] Help",
         },
         NavMode::Audit => {
-            "[j/k] Navigate  [Enter] Drill down  [r] Refresh  [1-4] Mode  [?] Help  [q] Quit"
+            "[j/k] Navigate  [Enter] Drill down  [r] Refresh  [1-5] Mode  [?] Help  [q] Quit"
         }
         NavMode::Nexus => {
             "[1-4] Tabs  [j/k] Navigate  [Enter] Select  [Esc] Back  [/] Search  [?] Help"
+        }
+        NavMode::Atlas => {
+            "[1-6] Views  [j/k] Navigate  [h/l] Zoom  [1-5] Mode  [?] Help  [q] Quit"
         }
     };
 
@@ -610,10 +613,10 @@ fn render_footer_hints(f: &mut Frame, area: Rect, app: &App) {
 }
 
 /// Header: Logo + Mode tabs.
-/// Shows: [1]Meta, [2]Data, [3]Audit, [4]Nexus
-/// v11.6: 4 independent modes with keys 1-4
+/// Shows: [1]Meta, [2]Data, [3]Audit, [4]Nexus, [5]Atlas
+/// v11.6: 5 independent modes with keys 1-5
 fn render_header(f: &mut Frame, area: Rect, app: &App) {
-    let tabs: Vec<Span> = [NavMode::Meta, NavMode::Data, NavMode::Audit, NavMode::Nexus]
+    let tabs: Vec<Span> = [NavMode::Meta, NavMode::Data, NavMode::Audit, NavMode::Nexus, NavMode::Atlas]
         .iter()
         .enumerate()
         .map(|(i, mode)| {
@@ -646,21 +649,26 @@ fn render_header(f: &mut Frame, area: Rect, app: &App) {
         ));
     }
 
-    // Context-aware shortcuts (v11.6: 4 independent modes, 1-4 global)
+    // Context-aware shortcuts (v11.6: 5 independent modes, 1-5 global)
     let right_side = if app.mode == NavMode::Nexus {
         vec![Span::styled(
-            "  []:tabs  jk:nav  Enter:drill  Esc:back  1-4:modes  ?:help  q:quit",
+            "  []:tabs  jk:nav  Enter:drill  Esc:back  1-5:modes  ?:help  q:quit",
             theme::ui::muted_style(),
         )]
     } else if app.mode == NavMode::Audit {
         vec![Span::styled(
-            "  jk:nav  r:refresh  1-4:modes  ?:help  q:quit",
+            "  jk:nav  r:refresh  1-5:modes  ?:help  q:quit",
+            theme::ui::muted_style(),
+        )]
+    } else if app.mode == NavMode::Atlas {
+        vec![Span::styled(
+            "  []:views  jk:nav  h/l:zoom  1-5:modes  ?:help  q:quit",
             theme::ui::muted_style(),
         )]
     } else {
-        // Meta/Data mode (v11.6: 't' toggle removed, 1-4 for modes)
+        // Meta/Data mode (v11.6: 't' toggle removed, 1-5 for modes)
         vec![Span::styled(
-            "  h/l:toggle  jk:scroll  Tab:panel  /:find  1-4:modes  ?:help  q:quit",
+            "  h/l:toggle  jk:scroll  Tab:panel  /:find  1-5:modes  ?:help  q:quit",
             theme::ui::muted_style(),
         )]
     };
@@ -709,6 +717,12 @@ fn render_main(f: &mut Frame, area: Rect, app: &mut App) {
     // Nexus mode has its own rendering (v11.3: renamed from Guide)
     if app.mode == NavMode::Nexus {
         super::nexus::render_nexus(f, area, app);
+        return;
+    }
+
+    // Atlas mode: interactive architecture visualizations
+    if app.mode == NavMode::Atlas {
+        render_atlas(f, area, app);
         return;
     }
 
@@ -868,12 +882,13 @@ fn render_recent_items_overlay(f: &mut Frame, app: &App) {
                 None => ("?", format!("(cursor {})", cursor)),
             };
 
-            // v11.6: 4 modes (Meta, Data, Audit, Nexus)
+            // v11.6: 5 modes (Meta, Data, Audit, Nexus, Atlas)
             let mode_badge = match mode {
                 crate::tui::app::NavMode::Meta => "[M]",
                 crate::tui::app::NavMode::Data => "[D]",
                 crate::tui::app::NavMode::Audit => "[!]",
                 crate::tui::app::NavMode::Nexus => "[N]",
+                crate::tui::app::NavMode::Atlas => "[A]",
             };
 
             let prefix = if is_selected { "› " } else { "  " };

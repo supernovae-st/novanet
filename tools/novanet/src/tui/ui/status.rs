@@ -28,22 +28,23 @@ pub(crate) fn get_contextual_shortcuts(
     is_instance: bool,
     is_kind: bool,
 ) -> &'static str {
-    // v11.6: 4 independent modes (1-4 global), t toggle removed
+    // v11.6: 5 independent modes (1-5 global), t toggle removed
     match mode {
-        NavMode::Audit => "j/k:nav  1-4:modes  r:refresh  ?:help",
-        NavMode::Nexus => "j/k:nav  []:tabs  Enter:select  Esc:back  1-4:modes  ?:help",
+        NavMode::Audit => "j/k:nav  1-5:modes  r:refresh  ?:help",
+        NavMode::Nexus => "j/k:nav  []:tabs  Enter:select  Esc:back  1-5:modes  ?:help",
+        NavMode::Atlas => "j/k:nav  []:views  h/l:zoom  1-5:modes  ?:help",
         NavMode::Meta | NavMode::Data => match focus {
             Focus::Tree => {
                 if is_instance {
-                    "j/k:nav  y/Y:copy  1-4:modes  ?:help"
+                    "j/k:nav  y/Y:copy  1-5:modes  ?:help"
                 } else if is_kind {
-                    "j/k:nav  y:copy  h/l:expand  1-4:modes  ?:help"
+                    "j/k:nav  y:copy  h/l:expand  1-5:modes  ?:help"
                 } else {
-                    "j/k:nav  y:copy  h/l:toggle  1-4:modes  ?:help"
+                    "j/k:nav  y:copy  h/l:toggle  1-5:modes  ?:help"
                 }
             }
             Focus::Yaml | Focus::Info => "j/k:scroll  d/u:page  g/G:jump",
-            Focus::Graph => "Tab:panel  1-4:modes",
+            Focus::Graph => "Tab:panel  1-5:modes",
         },
     }
 }
@@ -287,23 +288,29 @@ mod tests {
     use pretty_assertions::assert_eq;
 
     // =========================================================================
-    // get_contextual_shortcuts tests (v11.6: 4 modes - Meta, Data, Audit, Nexus)
+    // get_contextual_shortcuts tests (v11.6: 5 modes - Meta, Data, Audit, Nexus, Atlas)
     // =========================================================================
 
     #[test]
     fn test_shortcuts_audit_mode() {
         let result = get_contextual_shortcuts(NavMode::Audit, Focus::Tree, false, false);
-        assert_eq!(result, "j/k:nav  1-4:modes  r:refresh  ?:help");
+        assert_eq!(result, "j/k:nav  1-5:modes  r:refresh  ?:help");
     }
 
     #[test]
     fn test_shortcuts_nexus_mode() {
-        // v11.6: Nexus uses [ ] for tabs, 1-4 for global mode switching
+        // v11.6: Nexus uses [ ] for tabs, 1-5 for global mode switching
         let result = get_contextual_shortcuts(NavMode::Nexus, Focus::Tree, false, false);
         assert_eq!(
             result,
-            "j/k:nav  []:tabs  Enter:select  Esc:back  1-4:modes  ?:help"
+            "j/k:nav  []:tabs  Enter:select  Esc:back  1-5:modes  ?:help"
         );
+    }
+
+    #[test]
+    fn test_shortcuts_atlas_mode() {
+        let result = get_contextual_shortcuts(NavMode::Atlas, Focus::Tree, false, false);
+        assert_eq!(result, "j/k:nav  []:views  h/l:zoom  1-5:modes  ?:help");
     }
 
     #[test]
@@ -335,7 +342,7 @@ mod tests {
     #[test]
     fn test_shortcuts_meta_mode_graph_focus() {
         let result = get_contextual_shortcuts(NavMode::Meta, Focus::Graph, false, false);
-        assert!(result.contains("1-4:modes"));
+        assert!(result.contains("1-5:modes"));
     }
 
     // =========================================================================
