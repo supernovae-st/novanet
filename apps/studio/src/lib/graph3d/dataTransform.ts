@@ -20,6 +20,8 @@ export interface ForceGraphNode {
   // Force graph properties
   val?: number; // Node size
   color?: string;
+  // Pre-computed connection count (avoids O(n×m) lookup in render)
+  connectionCount: number;
   // Position (set by force simulation)
   x?: number;
   y?: number;
@@ -48,9 +50,9 @@ export interface ForceGraphData {
 }
 
 /**
- * Transform GraphNode to ForceGraphNode
+ * Transform GraphNode to ForceGraphNode (without connectionCount - added later)
  */
-function transformNode(node: GraphNode): ForceGraphNode {
+function transformNode(node: GraphNode): Omit<ForceGraphNode, 'connectionCount'> {
   const meta = KIND_META[node.type];
 
   return {
@@ -97,14 +99,35 @@ function transformEdge(edge: GraphEdge): ForceGraphLink {
 }
 
 /**
+ * Pre-compute connection counts for all nodes in O(n + m)
+ * This avoids the O(n × m) filter in renderNode that was causing 10-20s freezes
+ */
+function computeConnectionCounts(edges: GraphEdge[]): Map<string, number> {
+  const counts = new Map<string, number>();
+
+  for (const edge of edges) {
+    counts.set(edge.source, (counts.get(edge.source) ?? 0) + 1);
+    counts.set(edge.target, (counts.get(edge.target) ?? 0) + 1);
+  }
+
+  return counts;
+}
+
+/**
  * Transform complete graph data for 3D visualization
  */
 export function transformGraphData(
   nodes: GraphNode[],
   edges: GraphEdge[]
 ): ForceGraphData {
+  // Pre-compute connection counts O(m) instead of O(n × m) per-node lookup
+  const connectionCounts = computeConnectionCounts(edges);
+
   return {
-    nodes: nodes.map(transformNode),
+    nodes: nodes.map((node) => ({
+      ...transformNode(node),
+      connectionCount: connectionCounts.get(node.id) ?? 0,
+    })),
     links: edges.map(transformEdge),
   };
 }

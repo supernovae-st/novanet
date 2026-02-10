@@ -103,12 +103,6 @@ export interface Graph3DProps {
   onPaneClick?: () => void;
 }
 
-// Cache for composite node meshes
-const compositeNodeCache = new Map<string, THREE.Group>();
-
-// Hover state tracking
-const hoverScales = new Map<string, number>();
-
 export const Graph3D = memo(function Graph3D({
   className,
   showLegend = true,
@@ -120,6 +114,19 @@ export const Graph3D = memo(function Graph3D({
   const fgRef = useRef<ForceGraphMethods | null>(null);
   const starfieldRef = useRef<THREE.Points | null>(null);
   const composerRef = useRef<ReturnType<typeof createEnhancedComposer> | null>(null);
+
+  // Instance-level caches (not global) to prevent memory leaks
+  const compositeNodeCacheRef = useRef(new Map<string, THREE.Group>());
+  const hoverScalesRef = useRef(new Map<string, number>());
+
+  // Cached geometries and materials to avoid allocation per render
+  const selectionGlowGeometryRef = useRef<THREE.SphereGeometry | null>(null);
+  const selectionGlowMaterialRef = useRef<THREE.MeshBasicMaterial | null>(null);
+  const hoverGlowGeometryRef = useRef<THREE.SphereGeometry | null>(null);
+  const hoverGlowMaterialsRef = useRef(new Map<string, THREE.MeshBasicMaterial>());
+  // Cached particle geometries and materials (keyed by color)
+  const particleGeometryRef = useRef<THREE.SphereGeometry | null>(null);
+  const particleMaterialsRef = useRef(new Map<string, THREE.MeshStandardMaterial>());
   const [legendCollapsed, setLegendCollapsed] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [isGraphReady, setIsGraphReady] = useState(false);
@@ -151,9 +158,10 @@ export const Graph3D = memo(function Graph3D({
     const currentNodeIds = new Set(graphData.nodes.map((n) => n.id));
 
     // Remove cached meshes for nodes that no longer exist
-    for (const nodeId of compositeNodeCache.keys()) {
+    const cache = compositeNodeCacheRef.current;
+    for (const nodeId of cache.keys()) {
       if (!currentNodeIds.has(nodeId)) {
-        const mesh = compositeNodeCache.get(nodeId);
+        const mesh = cache.get(nodeId);
         if (mesh) {
           mesh.traverse((child) => {
             if (child instanceof THREE.Mesh) {
@@ -164,17 +172,55 @@ export const Graph3D = memo(function Graph3D({
             }
           });
         }
-        compositeNodeCache.delete(nodeId);
+        cache.delete(nodeId);
       }
     }
 
     // Clear stale hover scales
-    for (const nodeId of hoverScales.keys()) {
+    const scales = hoverScalesRef.current;
+    for (const nodeId of scales.keys()) {
       if (!currentNodeIds.has(nodeId)) {
-        hoverScales.delete(nodeId);
+        scales.delete(nodeId);
       }
     }
   }, [graphData.nodes]);
+
+  // Cleanup ALL cached meshes on unmount to prevent memory leaks
+  useEffect(() => {
+    const cacheRef = compositeNodeCacheRef;
+
+    return () => {
+      // Dispose all cached geometries and materials
+      for (const mesh of cacheRef.current.values()) {
+        mesh.traverse((child) => {
+          if (child instanceof THREE.Mesh) {
+            child.geometry?.dispose();
+            if (child.material instanceof THREE.Material) {
+              child.material.dispose();
+            }
+          }
+        });
+      }
+      cacheRef.current.clear();
+      hoverScalesRef.current.clear();
+
+      // Dispose cached glow geometries and materials
+      selectionGlowGeometryRef.current?.dispose();
+      selectionGlowMaterialRef.current?.dispose();
+      hoverGlowGeometryRef.current?.dispose();
+      for (const material of hoverGlowMaterialsRef.current.values()) {
+        material.dispose();
+      }
+      hoverGlowMaterialsRef.current.clear();
+
+      // Dispose cached particle geometries and materials
+      particleGeometryRef.current?.dispose();
+      for (const material of particleMaterialsRef.current.values()) {
+        material.dispose();
+      }
+      particleMaterialsRef.current.clear();
+    };
+  }, []);
 
   // Add starfield to scene when graph is ready
   useEffect(() => {
@@ -198,7 +244,7 @@ export const Graph3D = memo(function Graph3D({
     };
   }, [isGraphReady]);
 
-  // Initialize post-processing bloom
+  // Initialize post-processing bloom with WebGL context loss handling
   useEffect(() => {
     if (!isGraphReady || !fgRef.current) return;
 
@@ -207,6 +253,43 @@ export const Graph3D = memo(function Graph3D({
     const camera = fgRef.current.camera?.();
 
     if (!renderer || !scene || !camera) return;
+
+    // Get canvas for WebGL context event listeners
+    const canvas = renderer.domElement;
+
+    // WebGL context loss handler — graceful degradation
+    const handleContextLost = (event: Event) => {
+      event.preventDefault(); // Allow context to be restored
+      console.warn('[Graph3D] WebGL context lost — pausing rendering');
+
+      // Dispose composer to free resources
+      if (composerRef.current) {
+        composerRef.current.dispose();
+        composerRef.current = null;
+      }
+    };
+
+    // WebGL context restore handler — recreate resources
+    const handleContextRestored = () => {
+      console.info('[Graph3D] WebGL context restored — recreating resources');
+
+      // Recreate composer after context restore
+      const newComposer = createEnhancedComposer(renderer, scene, camera, {
+        strength: 1.8,
+        radius: 0.6,
+        threshold: 0.1,
+      }, {
+        offset: 0.5,
+        darkness: 0.4,
+      });
+      composerRef.current = newComposer;
+
+      // Clear caches - cached meshes have invalid GPU handles after restore
+      compositeNodeCacheRef.current.clear();
+    };
+
+    canvas.addEventListener('webglcontextlost', handleContextLost);
+    canvas.addEventListener('webglcontextrestored', handleContextRestored);
 
     // Create enhanced composer (bloom + vignette) — HYPERSPACE GLOW
     const composer = createEnhancedComposer(renderer, scene, camera, {
@@ -228,6 +311,8 @@ export const Graph3D = memo(function Graph3D({
     window.addEventListener('resize', handleResize);
 
     return () => {
+      canvas.removeEventListener('webglcontextlost', handleContextLost);
+      canvas.removeEventListener('webglcontextrestored', handleContextRestored);
       window.removeEventListener('resize', handleResize);
       // Dispose the composer and its passes to prevent GPU memory leaks
       if (composerRef.current) {
@@ -398,11 +483,8 @@ export const Graph3D = memo(function Graph3D({
     const layerColor = getLayerColor(node.layer);
     const realmColor = getRealmColor(node.realm);
 
-    // Calculate connection count for particle density
-    const connectionCount = graphData.links.filter(
-      l => l.source === node.id || l.target === node.id ||
-           (l.source as any)?.id === node.id || (l.target as any)?.id === node.id
-    ).length;
+    // Use pre-computed connection count (O(1) instead of O(m) filter per node)
+    const connectionCount = node.connectionCount ?? 0;
 
     // Create composite node (Core + Rings + Particles)
     const composite = createCompositeNode({
@@ -420,7 +502,7 @@ export const Graph3D = memo(function Graph3D({
     // Apply focus+context
     const contextOpacity = getNodeOpacity(node.id);
     const contextScale = getNodeScale(node.id);
-    const hoverScale = hoverScales.get(node.id) || 1.0;
+    const hoverScale = hoverScalesRef.current.get(node.id) || 1.0;
 
     // Scale the entire group
     group.scale.setScalar(contextScale * hoverScale);
@@ -449,33 +531,46 @@ export const Graph3D = memo(function Graph3D({
       particles.material.opacity *= contextOpacity;
     }
 
-    // Add selection outer glow
+    // Add selection outer glow (using cached geometry/material)
     if (node.id === selectedNodeId) {
-      const glowGeometry = new THREE.SphereGeometry(14, 16, 16);
-      const glowMaterial = new THREE.MeshBasicMaterial({
-        color: 0xffffff,
-        transparent: true,
-        opacity: 0.12,
-        side: THREE.BackSide,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-      });
-      const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+      // Lazy-create cached geometry
+      if (!selectionGlowGeometryRef.current) {
+        selectionGlowGeometryRef.current = new THREE.SphereGeometry(14, 16, 16);
+      }
+      if (!selectionGlowMaterialRef.current) {
+        selectionGlowMaterialRef.current = new THREE.MeshBasicMaterial({
+          color: 0xffffff,
+          transparent: true,
+          opacity: 0.12,
+          side: THREE.BackSide,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        });
+      }
+      const glow = new THREE.Mesh(selectionGlowGeometryRef.current, selectionGlowMaterialRef.current);
       group.add(glow);
     }
 
-    // Add hover highlight
+    // Add hover highlight (using cached geometry, color-keyed materials)
     if (node.id === hoveredNodeId && node.id !== selectedNodeId) {
-      const hoverGeometry = new THREE.SphereGeometry(12, 12, 12);
-      const hoverMaterial = new THREE.MeshBasicMaterial({
-        color: parseInt(layerColor.replace('#', ''), 16),
-        transparent: true,
-        opacity: 0.08,
-        side: THREE.BackSide,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-      });
-      const hoverGlow = new THREE.Mesh(hoverGeometry, hoverMaterial);
+      // Lazy-create cached geometry
+      if (!hoverGlowGeometryRef.current) {
+        hoverGlowGeometryRef.current = new THREE.SphereGeometry(12, 12, 12);
+      }
+      // Get or create material for this layer color
+      let hoverMaterial = hoverGlowMaterialsRef.current.get(layerColor);
+      if (!hoverMaterial) {
+        hoverMaterial = new THREE.MeshBasicMaterial({
+          color: parseInt(layerColor.replace('#', ''), 16),
+          transparent: true,
+          opacity: 0.08,
+          side: THREE.BackSide,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        });
+        hoverGlowMaterialsRef.current.set(layerColor, hoverMaterial);
+      }
+      const hoverGlow = new THREE.Mesh(hoverGlowGeometryRef.current, hoverMaterial);
       group.add(hoverGlow);
     }
 
@@ -483,7 +578,7 @@ export const Graph3D = memo(function Graph3D({
     group.userData = { nodeId: node.id, nodeType: node.type };
 
     return group;
-  }, [selectedNodeId, hoveredNodeId, selectionBurst, getNodeOpacity, getNodeScale, graphData.links]);
+  }, [selectedNodeId, hoveredNodeId, selectionBurst, getNodeOpacity, getNodeScale]);
 
   // Smooth camera zoom to selected node — larger distance for bigger nodes
   const zoomToNode = useCallback((node: ForceGraphNode) => {
@@ -534,12 +629,13 @@ export const Graph3D = memo(function Graph3D({
   // Node hover handler with scale effect
   const handleNodeHover = useCallback(
     (node: ForceGraphNode | null, prevNode: ForceGraphNode | null) => {
-      // Update hover scale
+      // Update hover scale (using ref)
+      const scales = hoverScalesRef.current;
       if (prevNode) {
-        hoverScales.set(prevNode.id, 1.0);
+        scales.set(prevNode.id, 1.0);
       }
       if (node) {
-        hoverScales.set(node.id, 1.15);
+        scales.set(node.id, 1.15);
       }
 
       setHoveredNode(node?.id || null);
@@ -697,7 +793,7 @@ export const Graph3D = memo(function Graph3D({
     }
   }, []);
 
-  // Custom emissive particle object for bloom compatibility
+  // Custom emissive particle object for bloom compatibility (with geometry caching)
   const getParticleThreeObject = useCallback((link: unknown) => {
     try {
       const l = link as ForceGraphLink | undefined;
@@ -705,24 +801,37 @@ export const Graph3D = memo(function Graph3D({
         ? getArcParticleConfig(String(l.type || '')).particleColor
         : '#60a5fa';
 
-      const color = new THREE.Color(colorStr);
-      const geometry = new THREE.SphereGeometry(1.5, 12, 12);
+      // Lazy-create cached geometry (shared by all particles)
+      if (!particleGeometryRef.current) {
+        particleGeometryRef.current = new THREE.SphereGeometry(1.5, 12, 12);
+      }
 
-      // MeshStandardMaterial with emissive for bloom glow
-      const material = new THREE.MeshStandardMaterial({
-        color: color,
-        emissive: color,
-        emissiveIntensity: 3.0,  // High intensity to exceed bloom threshold
-        transparent: true,
-        opacity: 0.9,
-      });
+      // Get or create material for this color
+      let material = particleMaterialsRef.current.get(colorStr);
+      if (!material) {
+        const color = new THREE.Color(colorStr);
+        material = new THREE.MeshStandardMaterial({
+          color: color,
+          emissive: color,
+          emissiveIntensity: 3.0,  // High intensity to exceed bloom threshold
+          transparent: true,
+          opacity: 0.9,
+        });
+        particleMaterialsRef.current.set(colorStr, material);
+      }
 
-      return new THREE.Mesh(geometry, material);
+      return new THREE.Mesh(particleGeometryRef.current, material);
     } catch {
-      // Fallback: simple sphere
-      const geometry = new THREE.SphereGeometry(1.5, 8, 8);
-      const material = new THREE.MeshBasicMaterial({ color: 0x60a5fa });
-      return new THREE.Mesh(geometry, material);
+      // Fallback: use cached geometry if available
+      if (!particleGeometryRef.current) {
+        particleGeometryRef.current = new THREE.SphereGeometry(1.5, 8, 8);
+      }
+      let fallbackMaterial = particleMaterialsRef.current.get('fallback');
+      if (!fallbackMaterial) {
+        fallbackMaterial = new THREE.MeshStandardMaterial({ color: 0x60a5fa }) as any;
+        particleMaterialsRef.current.set('fallback', fallbackMaterial as THREE.MeshStandardMaterial);
+      }
+      return new THREE.Mesh(particleGeometryRef.current, fallbackMaterial);
     }
   }, []);
 
