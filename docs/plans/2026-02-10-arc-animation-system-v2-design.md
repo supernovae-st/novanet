@@ -3,7 +3,23 @@
 **Date**: 2026-02-10
 **Version**: v11.6.1
 **Author**: Claude + Thibaut
-**Status**: Ready for Implementation
+**Status**: ✅ IMPLEMENTED
+
+## Implementation Status
+
+| Feature | Status | Location |
+|---------|--------|----------|
+| Energy Pulse (ownership) | ✅ Done | `FloatingEdge.tsx:InlineEdgeEffects` |
+| DNA Helix (localization) | ✅ Done | `FloatingEdge.tsx:InlineEdgeEffects` |
+| Neural Sparks (semantic) | ✅ Done | `FloatingEdge.tsx:InlineEdgeEffects` |
+| Matrix Code (generation) | ✅ Done | `FloatingEdge.tsx:InlineEdgeEffects` |
+| Radar Sweep (mining) | ✅ Done | `FloatingEdge.tsx:InlineEdgeEffects` |
+| Arc Family Detection | ✅ Done | `arcFamilyPalettes.ts:getArcFamily()` |
+| Visual Encoding YAML | ✅ Done | `visual-encoding.yaml:arc_animation_effects` |
+| Multi-edge bundling | 🔜 Planned | Phase 2 |
+| Canvas hybrid | 🔜 Planned | Phase 3 |
+
+**Note**: Effects implemented inline in FloatingEdge.tsx using SVG `animateMotion` with inline `path` attribute (most reliable cross-browser pattern).
 
 ## Overview
 

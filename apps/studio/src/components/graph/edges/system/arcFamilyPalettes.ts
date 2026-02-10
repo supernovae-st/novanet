@@ -1,10 +1,19 @@
 /**
- * Arc Family Palettes - v9.5
+ * Arc Family Palettes - v11.6.1
  *
  * Colors derived from taxonomy.yaml arc_families definitions.
- * Each arc family has a distinct visual identity.
+ * Each arc family has a distinct visual identity with unique animation effects.
  *
- * @see packages/core/models/taxonomy.yaml
+ * @see packages/core/models/taxonomy.yaml — Color definitions
+ * @see packages/core/models/visual-encoding.yaml — arc_animation_effects section
+ * @see FloatingEdge.tsx — InlineEdgeEffects implementation
+ *
+ * Animation Effects per Family:
+ * - ownership:     ⚡ Energy Pulse (blue) — power flows to children
+ * - localization:  🧬 DNA Helix (green) — content DNA adapts
+ * - semantic:      🔗 Neural Sparks (orange) — meaning connections
+ * - generation:    💻 Matrix Code (purple) — AI processing
+ * - mining:        📡 Radar Sweep (pink) — data discovery
  */
 
 import type { ColorPalette } from './types';
