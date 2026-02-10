@@ -442,20 +442,20 @@ node:
             return;
         }
 
-        // v10.8: 60 nodes (37 global + 23 tenant)
-        // v10.8 added: Continent, GeoRegion, GeoSubRegion, LanguageFamily, LanguageBranch,
-        // CulturalRealm, CulturalSubRealm, IncomeGroup, LendingCategory, EconomicRegion,
-        // PopulationCluster, PopulationSubCluster (+12)
-        // v10.9 added: GEOQuery, GEOAnswer, GEOMetrics (+3)
-        // v11.1 removed: GenerationJob, SEOMiningRun, EvaluationSignal (-3)
-        // v11.3 merged: Organization + Tenant → OrgConfig (-1)
-        // v11.4: SEOKeywordFormat, SEOKeywordSet, GEOQuerySet (+3), removed SEOQuestion,
-        //        SEOComparison, SEOPreposition, GEOMetrics (-4)
+        // v11.5: 60 nodes (39 shared + 21 org)
+        // History:
+        // - v10.8: Added geographic nodes (+12)
+        // - v10.9: Added GEO nodes (+3)
+        // - v11.1: Removed job nodes (-3)
+        // - v11.2: Renamed global → shared, tenant → org
+        // - v11.3: Merged Organization + Tenant → OrgConfig (-1)
+        // - v11.4: Added containers (+3), removed obsolete SEO types (-4)
+        // - v11.5: Moved Locale to shared/config, consolidated SEO/GEO to shared/knowledge
         let nodes = load_all_nodes(root).expect("should parse all 60 nodes");
         assert_eq!(
             nodes.len(),
             60,
-            "expected 60 YAML node files (v11.4: +3 new, -4 obsolete)"
+            "expected 60 YAML node files (v11.5: 39 shared + 21 org)"
         );
 
         // Every node has a non-empty name, realm, and layer

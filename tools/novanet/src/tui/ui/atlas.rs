@@ -244,15 +244,22 @@ fn render_realm_map_demo(lines: &mut Vec<String>, cursor: usize) {
 
     let global_selected = cursor == 0;
     let g_prefix = if global_selected { "▶" } else { " " };
+    // v11.5: SHARED realm has 4 layers, 39 kinds
     lines.push(format!(
-        "║  {} ┌─ SHARED (READ-ONLY) ───────────────────── 14 kinds ──────┐          ║",
+        "║  {} ┌─ SHARED (READ-ONLY) ───────────────────── 39 kinds ──────┐          ║",
         g_prefix
     ));
     lines.push(
-        "║    │  config              2 kinds   (Taxonomy, VisualEncoding)│          ║".to_string(),
+        "║    │  config              3 kinds   (EntityCategory, Locale...)│          ║".to_string(),
     );
     lines.push(
-        "║    │  locale               7 kinds   (Locale, Formatting...)   │          ║".to_string(),
+        "║    │  locale              6 kinds   (Style, Formatting...)    │          ║".to_string(),
+    );
+    lines.push(
+        "║    │  geography           6 kinds   (Continent, Region...)    │          ║".to_string(),
+    );
+    lines.push(
+        "║    │  knowledge          24 kinds   (Terms, SEO, GEO...)      │          ║".to_string(),
     );
     lines.push(
         "║    └──────────────────────────────────────────────────────────┘          ║".to_string(),
@@ -266,30 +273,28 @@ fn render_realm_map_demo(lines: &mut Vec<String>, cursor: usize) {
 
     let tenant_selected = cursor == 1;
     let t_prefix = if tenant_selected { "▶" } else { " " };
+    // v11.5: ORG realm has 6 layers, 21 kinds
     lines.push(format!(
-        "║  {} ┌─ ORG ─────────────────────────────── 32 kinds ──────┐          ║",
+        "║  {} ┌─ ORG ─────────────────────────────── 21 kinds ──────┐          ║",
         t_prefix
     ));
     lines.push(
-        "║    │  config              2 kinds   (OrgConfig, Settings) │          ║".to_string(),
+        "║    │  config              1 kind    (OrgConfig)           │          ║".to_string(),
     );
     lines.push(
-        "║    │  foundation          4 kinds   (Project, BrandIdentity...)│          ║".to_string(),
+        "║    │  foundation          3 kinds   (Project, Brand...)   │          ║".to_string(),
     );
     lines.push(
-        "║    │  structure           3 kinds   (Page, Block, ContentSlot)│          ║".to_string(),
+        "║    │  structure           3 kinds   (Page, Block...)      │          ║".to_string(),
     );
     lines.push(
-        "║    │  semantic            3 kinds   (Knowledge atom usage)   │          ║".to_string(),
+        "║    │  semantic            4 kinds   (Entity, EntityContent)│          ║".to_string(),
     );
     lines.push(
-        "║    │  instruction         4 kinds   (Prompt, GenerationJob)  │          ║".to_string(),
+        "║    │  instruction         7 kinds   (PageType, BlockType...)│          ║".to_string(),
     );
     lines.push(
-        "║    │  seo                 9 kinds   (SEOKeyword, GeoQuery...)│          ║".to_string(),
-    );
-    lines.push(
-        "║    │  output              5 kinds   (PageGenerated, BlockGen.)│          ║".to_string(),
+        "║    │  output              3 kinds   (PageGenerated...)    │          ║".to_string(),
     );
     lines.push(
         "║    └──────────────────────────────────────────────────────────┘          ║".to_string(),
