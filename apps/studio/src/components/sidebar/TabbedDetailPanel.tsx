@@ -13,7 +13,7 @@
 
 import { memo, useMemo, useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
@@ -21,7 +21,7 @@ import { getLayerGradientColors } from '@/design/nodeColors';
 import { useUIStore, type DetailPanelTab } from '@/stores/uiStore';
 import { useGraphStore } from '@/stores/graphStore';
 import { panelClasses } from '@/design/tokens';
-import { LayerIcon } from '@/components/ui/CategoryIcon';
+import { ElementIdentityCard } from '@/components/ui/detail-panel';
 import { OverviewTab } from './tabs/OverviewTab';
 import { DataTab } from './tabs/DataTab';
 import { GraphTab } from './tabs/GraphTab';
@@ -221,44 +221,17 @@ export const TabbedDetailPanel = memo(function TabbedDetailPanel({
 
   return (
     <div className={cn(panelClasses.container, 'flex flex-col relative', className)}>
-      {/* Header with node title and close button */}
-      <div
-        className="flex items-center justify-between px-4 py-3 border-b border-white/[0.06]"
-        style={{
-          background: `linear-gradient(135deg, ${colors.primary}12, ${colors.secondary}08)`,
-        }}
-      >
-        <div className="flex items-center gap-2 min-w-0">
-          <div
-            className="flex items-center justify-center w-6 h-6 rounded"
-            style={{
-              background: `linear-gradient(135deg, ${colors.primary}30, ${colors.secondary}20)`,
-            }}
-          >
-            <LayerIcon
-              layer={config?.layer || 'foundation'}
-              size={14}
-              style={{ color: colors.primary }}
-            />
-          </div>
-          <div className="min-w-0">
-            <h2 className="text-sm font-semibold text-white truncate">
-              {node.displayName}
-            </h2>
-            <p className="text-xs text-white/40 font-mono truncate">
-              {node.key}
-            </p>
-          </div>
-        </div>
-        <button
-          onClick={clearSelection}
-          className="p-1.5 rounded hover:bg-white/10 text-white/40 hover:text-white transition-colors"
-          title="Close panel (Esc)"
-          aria-label="Close details panel"
-        >
-          <X className="w-4 h-4" />
-        </button>
-      </div>
+      {/* Header with node identity */}
+      <ElementIdentityCard
+        elementType="node"
+        variant="header"
+        layer={config?.layer || 'foundation'}
+        colors={colors}
+        displayName={node.displayName}
+        typeLabel={config?.label || node.type}
+        nodeKey={node.key}
+        onClose={clearSelection}
+      />
 
       {/* Tab bar */}
       <TabBar activeTab={activeTab} onTabChange={setActiveTab} colors={colors} />

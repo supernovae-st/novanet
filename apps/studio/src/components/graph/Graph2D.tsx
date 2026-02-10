@@ -222,7 +222,6 @@ function Graph2DInner({
     clearSelection,
     sidebarOpen,
     focusMode,
-    navigationMode, // Navigation mode (data/meta)
   } = useUIStore(
     useShallow((state) => ({
       minimapVisible: state.minimapVisible,
@@ -238,10 +237,16 @@ function Graph2DInner({
       clearSelection: state.clearSelection,
       sidebarOpen: state.sidebarOpen,
       focusMode: state.focusMode,
-      navigationMode: state.navigationMode, // Navigation mode (data/meta)
       layoutMode: state.layoutMode, // Magnetic grouping toggle
     }))
   );
+
+  // v12: Detect schema mode from loaded nodes (node IDs have 'schema-' prefix)
+  const isMetaMode = useMemo(() => {
+    if (graphNodes.length === 0) return false;
+    const schemaNodeCount = graphNodes.filter(n => n.id.startsWith('schema-')).length;
+    return schemaNodeCount > 0 && schemaNodeCount === graphNodes.length;
+  }, [graphNodes]);
 
   // Filter store - v9.5: collapsed state no longer needed (pure graph nodes)
   // Kept for potential future use with meta-node filtering
@@ -355,16 +360,13 @@ function Graph2DInner({
   // =========================================================================
   // SCHEMA MODE STATE (Task 3.2)
   // =========================================================================
-  // Schema mode displays the ontology hierarchy (46 node types) instead of
-  // real data instances. Uses ELK layout for hierarchical grouped visualization.
+  // v12: Schema mode is detected from loaded nodes (schema- prefix), not
+  // from navigation mode. Uses ELK layout for hierarchical grouped visualization.
   // =========================================================================
   const [schemaNodes, setSchemaNodes] = useState<ReactFlowNode[]>([]);
   const [schemaArcs, setSchemaEdges] = useState<ReactFlowEdge[]>([]);
   const [isSchemaLayouting, setIsSchemaLayouting] = useState(false);
   const [, setSchemaLayoutError] = useState<Error | null>(null);
-
-  // Track previous navigationMode to detect changes
-  const prevNavigationModeRef = useRef(navigationMode);
 
   // PERF: Ref for schemaNodes to avoid callback re-creation during drag
   // Callbacks use ref.current to always get latest nodes without re-running
@@ -417,18 +419,13 @@ function Graph2DInner({
     }
   }, [layoutDirection]);
 
-  // Load schema graph when:
-  // - navigationMode changes to 'meta'
-  // - collapsed state changes (via loadSchemaGraph dependency)
-  // - layout direction changes (via loadSchemaGraph dependency)
-  // - layoutVersion changes (user clicked layout button)
+  // v12: Load schema graph when isMetaMode is detected from loaded nodes
+  // (schema nodes have 'schema-' prefix in their IDs)
   useEffect(() => {
-    if (navigationMode === 'meta') {
+    if (isMetaMode) {
       loadSchemaGraph();
     }
-    prevNavigationModeRef.current = navigationMode;
-     
-  }, [navigationMode, loadSchemaGraph, layoutVersion]);
+  }, [isMetaMode, loadSchemaGraph, layoutVersion]);
 
   // =========================================================================
   // SCHEMA NODE DRAG HANDLERS (Task 1 & 3: Schema Node Dragging + Constraints)
@@ -1212,14 +1209,15 @@ function Graph2DInner({
 
     // Deselect all schema nodes when clicking on pane
     // Required because we use useState instead of useNodesState for schema mode
-    if (navigationMode === 'meta') {
+    // v12: Check if schemaNodes exist instead of navigationMode
+    if (schemaNodes.length > 0) {
       setSchemaNodes((nodes) =>
         nodes.map((n) => ({ ...n, selected: false }))
       );
     }
 
     onPaneClick?.();
-  }, [setSelectedNode, onPaneClick, navigationMode]);
+  }, [setSelectedNode, onPaneClick, schemaNodes.length]);
 
   // Right-click context menu handler
   const handleNodeContextMenu: NodeMouseHandler<TurboNodeType> = useCallback(
@@ -1431,10 +1429,11 @@ function Graph2DInner({
   // =========================================================================
   // SCHEMA MODE RENDER (Task 3.2)
   // =========================================================================
-  // When in schema mode, render the hierarchical schema visualization
+  // v12: Schema mode is detected from loaded nodes (schema- prefix), not
+  // from navigation mode. Renders hierarchical schema visualization
   // with ELK layout and group nodes. Wrapped in SchemaErrorBoundary.
   // =========================================================================
-  if (navigationMode === 'meta') {
+  if (isMetaMode) {
     return (
       <SchemaErrorBoundary>
         <div

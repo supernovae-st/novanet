@@ -3,6 +3,8 @@
 /**
  * MatrixExplosionOverlay - Matrix Rain Easter Egg
  *
+ * v12: Simplified - uses a single emerald theme (no mode dependency)
+ *
  * Architecture:
  * - State machine for animation phases (IDLE → RUNNING → FADING → IDLE)
  * - Single requestAnimationFrame loop for all animations
@@ -17,7 +19,6 @@
  */
 
 import { memo, useEffect, useRef, useCallback } from 'react';
-import type { NavigationMode } from '@/stores/uiStore';
 
 // ============================================================================
 // Configuration
@@ -56,11 +57,8 @@ const CONFIG = {
   charDelayMs: 45,
 } as const;
 
-// v11.0: Simplified to Meta and Data only
-const THEMES: Record<NavigationMode, { primary: string; rgb: string; name: string }> = {
-  data: { primary: '#34d399', rgb: '52, 211, 153', name: 'data' },
-  meta: { primary: '#60a5fa', rgb: '96, 165, 250', name: 'meta' },
-};
+// v12: Single emerald theme (no mode dependency)
+const THEME = { primary: '#34d399', rgb: '52, 211, 153', name: 'novanet' };
 
 // ============================================================================
 // Types
@@ -156,13 +154,11 @@ function updateParticle(p: Particle): void {
 interface MatrixExplosionOverlayProps {
   isActive: boolean;
   onComplete: () => void;
-  navigationMode: NavigationMode;
 }
 
 export const MatrixExplosionOverlay = memo(function MatrixExplosionOverlay({
   isActive,
   onComplete,
-  navigationMode,
 }: MatrixExplosionOverlayProps) {
   // Refs for DOM elements
   const containerRef = useRef<HTMLDivElement>(null);
@@ -186,7 +182,7 @@ export const MatrixExplosionOverlay = memo(function MatrixExplosionOverlay({
   // Debounce ref
   const lastActivationRef = useRef(0);
 
-  const theme = THEMES[navigationMode] || THEMES.meta;
+  const theme = THEME;
   const fullText = `> ${theme.name}`;
 
   // Initialize canvas

@@ -98,6 +98,8 @@ export interface Graph3DProps {
   onNodeClick?: (nodeId: string) => void;
   /** Callback when a node is double-clicked (expand) */
   onNodeDoubleClick?: (nodeId: string) => void;
+  /** Callback when an edge is clicked */
+  onEdgeClick?: (edgeId: string) => void;
   /** Callback when background is clicked */
   onPaneClick?: () => void;
 }
@@ -113,6 +115,7 @@ export const Graph3D = memo(function Graph3D({
   showLegend = true,
   onNodeClick,
   onNodeDoubleClick,
+  onEdgeClick,
   onPaneClick,
 }: Graph3DProps) {
   const fgRef = useRef<ForceGraphMethods | null>(null);
@@ -135,6 +138,8 @@ export const Graph3D = memo(function Graph3D({
   const hoveredNodeId = useUIStore((state) => state.hoveredNodeId);
   const setSelectedNode = useUIStore((state) => state.setSelectedNode);
   const setHoveredNode = useUIStore((state) => state.setHoveredNode);
+  const setSelectedEdge = useUIStore((state) => state.setSelectedEdge);
+  const setHoveredEdge = useUIStore((state) => state.setHoveredEdge);
 
   // Transform data for force graph
   const graphData = useMemo(() => {
@@ -226,6 +231,10 @@ export const Graph3D = memo(function Graph3D({
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      // Dispose the composer and its passes to prevent GPU memory leaks
+      if (composerRef.current) {
+        composerRef.current.dispose();
+      }
       composerRef.current = null;
     };
   }, [isGraphReady]);
@@ -244,6 +253,11 @@ export const Graph3D = memo(function Graph3D({
     controls.maxDistance = 1200;               // Allow zooming out for large spread
     controls.enableDamping = true;             // Smooth deceleration
     controls.dampingFactor = 0.06;             // Smoother damping
+
+    // Cleanup: dispose OrbitControls to prevent stale event listeners
+    return () => {
+      controls.dispose?.();
+    };
   }, [isGraphReady]);
 
   // Configure D3 forces for layer/realm positioning
@@ -580,8 +594,71 @@ export const Graph3D = memo(function Graph3D({
   // Background click handler
   const handleBackgroundClick = useCallback(() => {
     setSelectedNode(null);
+    setSelectedEdge(null);
     onPaneClick?.();
-  }, [setSelectedNode, onPaneClick]);
+  }, [setSelectedNode, setSelectedEdge, onPaneClick]);
+
+  // Link click handler
+  const handleLinkClick = useCallback(
+    (link: ForceGraphLink) => {
+      // Extract source/target IDs (can be string or object after D3 simulation)
+      const sourceId = typeof link.source === 'object'
+        ? (link.source as { id?: string }).id ?? ''
+        : link.source;
+      const targetId = typeof link.target === 'object'
+        ? (link.target as { id?: string }).id ?? ''
+        : link.target;
+
+      // Clear node selection, set edge selection
+      setSelectedNode(null);
+      setSelectedEdge(link.id, {
+        id: link.id,
+        type: link.type ?? 'UNKNOWN',
+        source: sourceId,
+        target: targetId,
+        data: { ...link },
+      });
+
+      // Zoom camera to midpoint between nodes
+      if (fgRef.current?.cameraPosition && link.source && link.target) {
+        const sourceNode = graphData.nodes.find(n => n.id === sourceId);
+        const targetNode = graphData.nodes.find(n => n.id === targetId);
+
+        if (sourceNode && targetNode) {
+          const midPoint = {
+            x: ((sourceNode.x || 0) + (targetNode.x || 0)) / 2,
+            y: ((sourceNode.y || 0) + (targetNode.y || 0)) / 2,
+            z: ((sourceNode.z || 0) + (targetNode.z || 0)) / 2,
+          };
+
+          const distance = 200;
+          const cameraPos = {
+            x: midPoint.x + distance * 0.6,
+            y: midPoint.y + distance * 0.5,
+            z: midPoint.z + distance * 0.7,
+          };
+
+          fgRef.current.cameraPosition(cameraPos, midPoint, 1200);
+        }
+      }
+
+      onEdgeClick?.(link.id);
+    },
+    [setSelectedNode, setSelectedEdge, graphData.nodes, onEdgeClick]
+  );
+
+  // Link hover handler
+  const handleLinkHover = useCallback(
+    (link: ForceGraphLink | null) => {
+      setHoveredEdge(link?.id ?? null);
+
+      // Change cursor
+      if (typeof document !== 'undefined') {
+        document.body.style.cursor = link ? 'pointer' : 'grab';
+      }
+    },
+    [setHoveredEdge]
+  );
 
   // Engine tick to mark graph as ready
   const handleEngineTick = useCallback(() => {
@@ -612,7 +689,7 @@ export const Graph3D = memo(function Graph3D({
     const linkKey = `${sourceId}-${targetId}`;
 
     if (highlightedLinks.has(linkKey)) {
-      return baseWidth * 3;  // 3x wider when highlighted
+      return baseWidth * 2;  // 2x wider when highlighted (reduced from 3x)
     }
 
     return selectedNodeId ? baseWidth * 0.5 : baseWidth;  // Dim when selection exists
@@ -694,6 +771,8 @@ export const Graph3D = memo(function Graph3D({
         onNodeClick={handleNodeClick as any}
         onNodeRightClick={handleNodeDoubleClick as any}
         onNodeHover={handleNodeHover as any}
+        onLinkClick={handleLinkClick as any}
+        onLinkHover={handleLinkHover as any}
         onBackgroundClick={handleBackgroundClick}
         onEngineTick={handleEngineTick}
         linkColor={getLinkColor as any}
