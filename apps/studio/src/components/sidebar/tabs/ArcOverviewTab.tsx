@@ -4,19 +4,18 @@
  * ArcOverviewTab - Arc overview with direction and connected nodes
  *
  * Features:
- * - 3D arc preview (centered)
+ * - Side-by-side layout: info left, 3D preview right
+ * - Arc type badge
  * - Animated direction indicator (source → target)
  * - 2x NodeNavigationCard (clickable)
  * - Key properties section
  *
- * Note: Identity (badge + arc ID) is shown in panel header via ElementIdentityCard
- *
- * v11.7 — Enhanced arc experience
+ * v11.7 — Enhanced arc experience with side-by-side layout
  */
 
 import { memo, useMemo } from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, Clock } from 'lucide-react';
+import { ArrowRight, Clock, Hash } from 'lucide-react';
 import { KIND_META } from '@novanet/core/types';
 import type { Layer, Realm, Trait } from '@novanet/core/types';
 import { cn } from '@/lib/utils';
@@ -153,21 +152,61 @@ export const ArcOverviewTab = memo(function ArcOverviewTab({
 
   return (
     <div className="p-4 space-y-6">
-      {/* 3D Arc Preview (centered) */}
-      <div className="flex justify-center">
-        <div
-          className="p-3 rounded-xl"
-          style={{
-            background: `linear-gradient(135deg, ${colors.primary}08, ${colors.glow}04)`,
-            border: `1px solid ${colors.primary}15`,
-          }}
-        >
-          <ArcPreview3D
-            arcType={arcType}
-            source={sourceClassification}
-            target={targetClassification}
-            size={140}
-          />
+      {/* Header card with side-by-side layout: Info left, 3D right */}
+      <div
+        className="relative p-4 rounded-xl overflow-hidden"
+        style={{
+          background: `linear-gradient(135deg, ${colors.primary}12, ${colors.glow}06)`,
+          border: `1px solid ${colors.primary}20`,
+        }}
+      >
+        <div className="flex items-start gap-4">
+          {/* Left side: Arc info */}
+          <div className="flex-1 min-w-0">
+            {/* Arc type badge */}
+            <div
+              className={cn(
+                'inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold mb-3',
+                gapTokens.tight
+              )}
+              style={{
+                background: `linear-gradient(135deg, ${colors.primary}30, ${colors.glow}20)`,
+                color: colors.primary,
+                boxShadow: `0 0 8px ${colors.primary}25`,
+              }}
+            >
+              {arcType}
+            </div>
+
+            {/* Arc ID */}
+            <h3 className="text-base font-semibold text-white mb-1.5 leading-tight">
+              {sourceNode?.displayName || 'Unknown'} → {targetNode?.displayName || 'Unknown'}
+            </h3>
+
+            {/* Arc ID with copy button */}
+            <div className={cn('flex items-center text-sm', gapTokens.tight)}>
+              <Hash className="w-3 h-3 text-white/25 flex-shrink-0" />
+              <span className="font-mono text-white/40 truncate text-xs">
+                {arc.id}
+              </span>
+              <CopyButton
+                onCopy={() => copy(arc.id)}
+                isCopied={copied}
+                label="Copy"
+                size="sm"
+              />
+            </div>
+          </div>
+
+          {/* Right side: 3D Arc Preview (rotating) */}
+          <div className="flex-shrink-0">
+            <ArcPreview3D
+              arcType={arcType}
+              source={sourceClassification}
+              target={targetClassification}
+              size={100}
+            />
+          </div>
         </div>
       </div>
 
