@@ -50,8 +50,9 @@ const SIZE_MULTIPLIERS: Record<GeometryType, number> = {
 
 /**
  * Create a Three.js geometry based on layer classification
+ * baseSize = 15 for visible "Pixar-style" nodes in hyperspace
  */
-export function createGeometryForLayer(layer: Layer, baseSize = 5): THREE.BufferGeometry {
+export function createGeometryForLayer(layer: Layer, baseSize = 15): THREE.BufferGeometry {
   const geometryType = LAYER_GEOMETRY_MAP[layer];
   const size = baseSize * (SIZE_MULTIPLIERS[geometryType] || 1.0);
 
@@ -93,7 +94,7 @@ export function createGeometryForLayer(layer: Layer, baseSize = 5): THREE.Buffer
 /**
  * Create torus rings for locale nodes (globe-like appearance)
  */
-export function createTorusRings(baseSize = 5): THREE.BufferGeometry[] {
+export function createTorusRings(baseSize = 15): THREE.BufferGeometry[] {
   const rings: THREE.BufferGeometry[] = [];
 
   // Equator ring

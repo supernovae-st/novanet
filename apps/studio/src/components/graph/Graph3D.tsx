@@ -29,14 +29,16 @@ import {
   filterValidData,
   getLayerColor,
   getRealmColor,
-  createGeometryForLayer,
   getArcParticleConfig,
   createStarfield,
   createEnhancedComposer,
   updateComposerSize,
+  createCompositeNode,
+  TRAIT_GLOW_INTENSITY,
   type ForceGraphNode,
   type ForceGraphLink,
 } from '@/lib/graph3d';
+import type { Layer, NodeRealm, NodeTrait } from '@novanet/core/types';
 import { Graph3DLegend } from './Graph3DLegend';
 
 // Layer Z-axis positions for visual separation
@@ -100,94 +102,8 @@ export interface Graph3DProps {
   onPaneClick?: () => void;
 }
 
-// Cache geometries to avoid recreation
-const geometryCache = new Map<string, THREE.BufferGeometry>();
-
-// Cache materials to avoid recreation
-const materialCache = new Map<string, THREE.Material>();
-
-/**
- * Get or create cached geometry for a layer
- */
-function getCachedGeometry(layer: string): THREE.BufferGeometry {
-  if (!geometryCache.has(layer)) {
-    const geometry = createGeometryForLayer(layer as Parameters<typeof createGeometryForLayer>[0]);
-    geometryCache.set(layer, geometry);
-  }
-  return geometryCache.get(layer)!.clone();
-}
-
-/**
- * Create material based on trait with caching
- */
-function createTraitMaterial(trait: string, layerColor: string): THREE.Material {
-  const cacheKey = `${trait}-${layerColor}`;
-
-  if (materialCache.has(cacheKey)) {
-    return materialCache.get(cacheKey)!.clone();
-  }
-
-  let material: THREE.Material;
-
-  switch (trait) {
-    case 'localized':
-      // Wireframe for localized content
-      material = new THREE.MeshStandardMaterial({
-        color: layerColor,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.85,
-      });
-      break;
-
-    case 'knowledge':
-      // Glass-like material for knowledge atoms
-      material = new THREE.MeshPhysicalMaterial({
-        color: layerColor,
-        transparent: true,
-        opacity: 0.7,
-        transmission: 0.4,
-        roughness: 0.15,
-        metalness: 0.05,
-        clearcoat: 0.3,
-      });
-      break;
-
-    case 'generated':
-      // Emissive glow for generated content - bloom compatible
-      material = new THREE.MeshStandardMaterial({
-        color: layerColor,
-        emissive: layerColor,
-        emissiveIntensity: 1.5,  // Increased for bloom
-        transparent: true,
-        opacity: 0.95,
-        toneMapped: false,  // Required for bloom to work
-      });
-      break;
-
-    case 'aggregated':
-      // Dotted appearance for aggregated metrics
-      material = new THREE.MeshStandardMaterial({
-        color: layerColor,
-        transparent: true,
-        opacity: 0.6,
-        wireframe: true,
-        wireframeLinewidth: 2,
-      });
-      break;
-
-    default: // invariant
-      // Solid metallic for invariant definitions
-      material = new THREE.MeshStandardMaterial({
-        color: layerColor,
-        metalness: 0.4,
-        roughness: 0.5,
-      });
-  }
-
-  materialCache.set(cacheKey, material);
-  return material.clone();
-}
+// Cache for composite node meshes
+const compositeNodeCache = new Map<string, THREE.Group>();
 
 // Hover state tracking
 const hoverScales = new Map<string, number>();
@@ -203,6 +119,7 @@ export const Graph3D = memo(function Graph3D({
   const starfieldRef = useRef<THREE.Points | null>(null);
   const composerRef = useRef<ReturnType<typeof createEnhancedComposer> | null>(null);
   const [legendCollapsed, setLegendCollapsed] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
   const [isGraphReady, setIsGraphReady] = useState(false);
   const [neighborIds, setNeighborIds] = useState<Set<string>>(new Set());
   const [highlightedLinks, setHighlightedLinks] = useState<Set<string>>(new Set());
@@ -256,14 +173,14 @@ export const Graph3D = memo(function Graph3D({
 
     if (!renderer || !scene || !camera) return;
 
-    // Create enhanced composer (bloom + vignette)
+    // Create enhanced composer (bloom + vignette) — HYPERSPACE GLOW
     const composer = createEnhancedComposer(renderer, scene, camera, {
-      strength: 1.2,
-      radius: 0.5,
-      threshold: 0.7,
+      strength: 1.8,      // Strong bloom for hyperspace glow
+      radius: 0.6,        // Wide bloom spread
+      threshold: 0.3,     // More elements glow
     }, {
-      offset: 0.5,
-      darkness: 0.4,
+      offset: 0.5,        // Cinematic vignette
+      darkness: 0.4,      // Darker edges for depth
     });
     composerRef.current = composer;
 
@@ -291,10 +208,10 @@ export const Graph3D = memo(function Graph3D({
     // Constrain orbit to prevent disorientation
     controls.minPolarAngle = Math.PI * 0.15;  // Don't go fully overhead
     controls.maxPolarAngle = Math.PI * 0.85;  // Don't go fully underneath
-    controls.minDistance = 50;                 // Prevent clipping into nodes
-    controls.maxDistance = 600;                // Keep graph visible
+    controls.minDistance = 100;                // Prevent clipping into larger nodes
+    controls.maxDistance = 1200;               // Allow zooming out for large spread
     controls.enableDamping = true;             // Smooth deceleration
-    controls.dampingFactor = 0.08;             // Damping strength
+    controls.dampingFactor = 0.06;             // Smoother damping
   }, [isGraphReady]);
 
   // Configure D3 forces for layer/realm positioning
@@ -303,8 +220,14 @@ export const Graph3D = memo(function Graph3D({
 
     const fg = fgRef.current as any;
 
-    // Reduce charge for less repulsion
-    fg.d3Force?.('charge')?.strength?.(-60);
+    // VERY strong charge repulsion for hyperspace spread
+    fg.d3Force?.('charge')?.strength?.(-500);
+
+    // Add layer Z-positioning force
+    fg.d3Force?.('z')?.strength?.(0.4);
+
+    // Large link distance for breathing room between big nodes
+    fg.d3Force?.('link')?.distance?.(120);
 
     // Reheat simulation to apply new forces
     fg.d3ReheatSimulation?.();
@@ -351,9 +274,12 @@ export const Graph3D = memo(function Graph3D({
     const links = new Set<string>();
 
     graphData.links.forEach((link) => {
+      if (!link) return;
       // source/target can be string (initial) or object (after d3 simulation)
-      const source = link.source as string | { id: string };
-      const target = link.target as string | { id: string };
+      const source = link.source as string | { id: string } | undefined;
+      const target = link.target as string | { id: string } | undefined;
+      if (!source || !target) return;
+
       const sourceId = typeof source === 'object' ? source.id : source;
       const targetId = typeof target === 'object' ? target.id : target;
 
@@ -366,6 +292,65 @@ export const Graph3D = memo(function Graph3D({
     setNeighborIds(neighbors);
     setHighlightedLinks(links);
   }, [selectedNodeId, graphData.links]);
+
+  // Camera preset views — adjusted for larger graph spread
+  const setCameraView = useCallback((view: 'top' | 'front' | 'side' | 'reset') => {
+    if (!fgRef.current?.cameraPosition) return;
+
+    const distance = 500;  // Increased for larger nodes/spread
+    const positions: Record<string, { pos: { x: number; y: number; z: number }; lookAt: { x: number; y: number; z: number } }> = {
+      top: { pos: { x: 0, y: distance, z: 0 }, lookAt: { x: 0, y: 0, z: 0 } },
+      front: { pos: { x: 0, y: 80, z: distance }, lookAt: { x: 0, y: 0, z: 0 } },
+      side: { pos: { x: distance, y: 80, z: 0 }, lookAt: { x: 0, y: 0, z: 0 } },
+      reset: { pos: { x: distance * 0.6, y: distance * 0.4, z: distance * 0.7 }, lookAt: { x: 0, y: 0, z: 0 } },
+    };
+
+    const { pos, lookAt } = positions[view];
+    fgRef.current.cameraPosition(pos, lookAt, 1200);  // Smoother 1.2s animation
+  }, []);
+
+  // Keyboard shortcuts handler
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't trigger if typing in input
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+      switch (e.key.toLowerCase()) {
+        case '?':
+        case 'h':
+          e.preventDefault();
+          setShowHelp(prev => !prev);
+          break;
+        case 'l':
+          e.preventDefault();
+          setLegendCollapsed(prev => !prev);
+          break;
+        case 't':
+          e.preventDefault();
+          setCameraView('top');
+          break;
+        case 'f':
+          e.preventDefault();
+          setCameraView('front');
+          break;
+        case 's':
+          e.preventDefault();
+          setCameraView('side');
+          break;
+        case 'r':
+          e.preventDefault();
+          setCameraView('reset');
+          break;
+        case 'escape':
+          setShowHelp(false);
+          setSelectedNode(null);
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [setCameraView, setSelectedNode]);
 
   // Calculate node opacity based on selection context
   const getNodeOpacity = useCallback((nodeId: string): number => {
@@ -383,98 +368,89 @@ export const Graph3D = memo(function Graph3D({
     return 0.7;  // Others = smaller
   }, [selectedNodeId, neighborIds]);
 
-  // Custom node rendering with Three.js
+  // Custom node rendering with Three.js — ATOMIC/GALAXY STYLE
+  // Core + Orbital Rings + Particle Cloud
   const renderNode = useCallback((node: ForceGraphNode) => {
-    const group = new THREE.Group();
-    const nodeSize = node.val || 4;
-
     // Get colors
     const layerColor = getLayerColor(node.layer);
     const realmColor = getRealmColor(node.realm);
 
-    // Create main geometry based on layer
-    const geometry = getCachedGeometry(node.layer);
+    // Calculate connection count for particle density
+    const connectionCount = graphData.links.filter(
+      l => l.source === node.id || l.target === node.id ||
+           (l.source as any)?.id === node.id || (l.target as any)?.id === node.id
+    ).length;
 
-    // Create material based on trait
-    const material = createTraitMaterial(node.trait, layerColor);
+    // Create composite node (Core + Rings + Particles)
+    const composite = createCompositeNode({
+      layer: node.layer as Layer,
+      realm: node.realm as NodeRealm,
+      trait: node.trait as NodeTrait,
+      layerColor,
+      realmColor,
+      connectionCount,
+      baseSize: 8,
+    });
 
-    // Apply focus+context opacity
+    const { group, core, rings, particles } = composite;
+
+    // Apply focus+context
     const contextOpacity = getNodeOpacity(node.id);
-    if (material instanceof THREE.MeshStandardMaterial ||
-        material instanceof THREE.MeshPhysicalMaterial ||
-        material instanceof THREE.MeshBasicMaterial) {
-      material.transparent = true;
-      material.opacity = Math.min(material.opacity || 1, contextOpacity);
-    }
+    const contextScale = getNodeScale(node.id);
+    const hoverScale = hoverScales.get(node.id) || 1.0;
 
-    // Add emissive for selected/burst node (bloom effect)
-    if (material instanceof THREE.MeshStandardMaterial) {
+    // Scale the entire group
+    group.scale.setScalar(contextScale * hoverScale);
+
+    // Adjust opacity based on context
+    if (core.material instanceof THREE.MeshPhysicalMaterial) {
+      core.material.opacity = Math.min(core.material.opacity, contextOpacity);
+
+      // Boost emissive for selected/burst nodes
       if (node.id === selectionBurst) {
-        // Burst effect - extra bright supernova
-        material.emissive = new THREE.Color(layerColor);
-        material.emissiveIntensity = 5.0;
-        material.toneMapped = false;
+        core.material.emissiveIntensity = 5.0;
       } else if (node.id === selectedNodeId) {
-        // Selected - bright glow
-        material.emissive = new THREE.Color(layerColor);
-        material.emissiveIntensity = 2.0;
-        material.toneMapped = false;
+        core.material.emissiveIntensity = 2.5;
       }
     }
 
-    // Create mesh
-    const mesh = new THREE.Mesh(geometry, material);
-
-    // Apply focus+context scale with hover
-    const contextScale = getNodeScale(node.id);
-    const hoverScale = hoverScales.get(node.id) || 1.0;
-    mesh.scale.setScalar(contextScale * hoverScale);
-
-    group.add(mesh);
-
-    // Add realm indicator ring
-    const ringSize = nodeSize * 1.3;
-    const ringGeometry = new THREE.TorusGeometry(ringSize, 0.25, 8, 32);
-    const ringMaterial = new THREE.MeshBasicMaterial({
-      color: realmColor,
-      transparent: true,
-      opacity: contextOpacity * 0.7,
+    // Adjust ring opacity
+    rings.forEach((ring) => {
+      if (ring.material instanceof THREE.MeshBasicMaterial) {
+        ring.material.opacity *= contextOpacity;
+      }
     });
-    const ring = new THREE.Mesh(ringGeometry, ringMaterial);
-    ring.rotation.x = Math.PI / 2;
-    group.add(ring);
 
-    // Add selection glow
+    // Adjust particle opacity
+    if (particles.material instanceof THREE.PointsMaterial) {
+      particles.material.opacity *= contextOpacity;
+    }
+
+    // Add selection outer glow
     if (node.id === selectedNodeId) {
-      const glowGeometry = new THREE.SphereGeometry(nodeSize * 1.8, 16, 16);
+      const glowGeometry = new THREE.SphereGeometry(14, 16, 16);
       const glowMaterial = new THREE.MeshBasicMaterial({
-        color: '#ffffff',
+        color: 0xffffff,
         transparent: true,
-        opacity: 0.15,
+        opacity: 0.12,
         side: THREE.BackSide,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
       });
       const glow = new THREE.Mesh(glowGeometry, glowMaterial);
       group.add(glow);
-
-      // Add pulsing inner glow
-      const innerGlowGeometry = new THREE.SphereGeometry(nodeSize * 1.4, 16, 16);
-      const innerGlowMaterial = new THREE.MeshBasicMaterial({
-        color: layerColor,
-        transparent: true,
-        opacity: 0.25,
-      });
-      const innerGlow = new THREE.Mesh(innerGlowGeometry, innerGlowMaterial);
-      group.add(innerGlow);
     }
 
     // Add hover highlight
     if (node.id === hoveredNodeId && node.id !== selectedNodeId) {
-      const hoverGeometry = new THREE.SphereGeometry(nodeSize * 1.5, 12, 12);
+      const hoverGeometry = new THREE.SphereGeometry(12, 12, 12);
       const hoverMaterial = new THREE.MeshBasicMaterial({
-        color: layerColor,
+        color: parseInt(layerColor.replace('#', ''), 16),
         transparent: true,
-        opacity: 0.1,
+        opacity: 0.08,
         side: THREE.BackSide,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
       });
       const hoverGlow = new THREE.Mesh(hoverGeometry, hoverMaterial);
       group.add(hoverGlow);
@@ -484,9 +460,9 @@ export const Graph3D = memo(function Graph3D({
     group.userData = { nodeId: node.id, nodeType: node.type };
 
     return group;
-  }, [selectedNodeId, hoveredNodeId, selectionBurst, getNodeOpacity, getNodeScale]);
+  }, [selectedNodeId, hoveredNodeId, selectionBurst, getNodeOpacity, getNodeScale, graphData.links]);
 
-  // Smooth camera zoom to selected node
+  // Smooth camera zoom to selected node — larger distance for bigger nodes
   const zoomToNode = useCallback((node: ForceGraphNode) => {
     if (!fgRef.current?.cameraPosition) return;
 
@@ -497,15 +473,15 @@ export const Graph3D = memo(function Graph3D({
       z: node.z || 0,
     };
 
-    // Calculate camera position at fixed distance for consistency
-    const distance = 100;
+    // Calculate camera position at larger distance for bigger nodes
+    const distance = 180;  // Increased for larger nodes
     const cameraPos = {
       x: nodePos.x + distance * 0.6,
       y: nodePos.y + distance * 0.4,
       z: nodePos.z + distance * 0.7,
     };
 
-    // Smooth 1.5s animation (longer = more cinematic)
+    // Smooth 1.5s cinematic animation
     fgRef.current.cameraPosition(cameraPos, nodePos, 1500);
   }, []);
 
@@ -568,17 +544,21 @@ export const Graph3D = memo(function Graph3D({
 
   // Link styling callbacks
   const getLinkColor = useCallback((link: ForceGraphLink) => {
+    if (!link?.type) return '#60a5fa';
     const config = getArcParticleConfig(link.type);
     return config.particleColor;
   }, []);
 
   const getLinkWidth = useCallback((link: ForceGraphLink) => {
+    if (!link) return 0;
     const config = getArcParticleConfig(link.type);
     const baseWidth = config.linkWidth;
 
     // Highlight connected links
-    const source = link.source as string | { id: string };
-    const target = link.target as string | { id: string };
+    const source = link.source as string | { id: string } | undefined;
+    const target = link.target as string | { id: string } | undefined;
+    if (!source || !target) return baseWidth;
+
     const sourceId = typeof source === 'object' ? source.id : source;
     const targetId = typeof target === 'object' ? target.id : target;
     const linkKey = `${sourceId}-${targetId}`;
@@ -591,8 +571,11 @@ export const Graph3D = memo(function Graph3D({
   }, [highlightedLinks, selectedNodeId]);
 
   const getLinkOpacity = useCallback((link: ForceGraphLink) => {
-    const source = link.source as string | { id: string };
-    const target = link.target as string | { id: string };
+    if (!link) return 0.3;
+    const source = link.source as string | { id: string } | undefined;
+    const target = link.target as string | { id: string } | undefined;
+    if (!source || !target) return 0.3;
+
     const sourceId = typeof source === 'object' ? source.id : source;
     const targetId = typeof target === 'object' ? target.id : target;
     const linkKey = `${sourceId}-${targetId}`;
@@ -603,23 +586,33 @@ export const Graph3D = memo(function Graph3D({
   }, [highlightedLinks, selectedNodeId]);
 
   const getLinkParticles = useCallback((link: ForceGraphLink) => {
+    if (!link?.type) return 6;
     const config = getArcParticleConfig(link.type);
     return config.particles;
   }, []);
 
   const getLinkParticleSpeed = useCallback((link: ForceGraphLink) => {
+    if (!link?.type) return 0.005;
     const config = getArcParticleConfig(link.type);
     return config.particleSpeed;
   }, []);
 
   const getLinkParticleWidth = useCallback((link: ForceGraphLink) => {
+    if (!link?.type) return 15;
     const config = getArcParticleConfig(link.type);
     return config.particleWidth;
   }, []);
 
   const getLinkParticleColor = useCallback((link: ForceGraphLink) => {
+    if (!link?.type) return '#60a5fa';
     const config = getArcParticleConfig(link.type);
     return config.particleColor;
+  }, []);
+
+  const getLinkCurvature = useCallback((link: ForceGraphLink) => {
+    if (!link?.type) return 0;
+    const config = getArcParticleConfig(link.type);
+    return config.curvature;
   }, []);
 
   // Empty state - unified with Graph2D
@@ -662,26 +655,18 @@ export const Graph3D = memo(function Graph3D({
         linkDirectionalParticleSpeed={getLinkParticleSpeed as any}
         linkDirectionalParticleWidth={getLinkParticleWidth as any}
         linkDirectionalParticleColor={getLinkParticleColor as any}
-        backgroundColor="#070b14"
+        linkDirectionalParticleResolution={16}
+        linkCurvature={getLinkCurvature as any}
+        linkCurveRotation={0.5}
+        nodeRelSize={8}
+        backgroundColor="#050810"
         showNavInfo={false}
         enableNodeDrag={true}
         enableNavigationControls={true}
         controlType="orbit"
-        warmupTicks={50}
-        cooldownTicks={100}
+        warmupTicks={80}
+        cooldownTicks={150}
       />
-
-      {/* Stats overlay */}
-      <div className="absolute bottom-4 left-4 px-3 py-2 rounded-lg bg-black/60 backdrop-blur-sm border border-white/10">
-        <p className="text-xs text-white/70 font-medium">
-          {graphData.nodes.length} nodes · {graphData.links.length} arcs
-        </p>
-        {selectedNodeId && (
-          <p className="text-[10px] text-white/40 mt-1">
-            Selected: {graphData.nodes.find(n => n.id === selectedNodeId)?.name || selectedNodeId}
-          </p>
-        )}
-      </div>
 
       {/* Legend */}
       {showLegend && (
@@ -689,6 +674,83 @@ export const Graph3D = memo(function Graph3D({
           collapsed={legendCollapsed}
           onToggle={() => setLegendCollapsed(!legendCollapsed)}
         />
+      )}
+
+      {/* Keyboard shortcuts hint */}
+      <div className="absolute top-4 right-4 px-3 py-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20">
+        <p className="text-xs text-white/80 font-medium">Press <kbd className="px-1.5 py-0.5 mx-1 bg-white/20 rounded text-white">?</kbd> for help</p>
+      </div>
+
+      {/* Help overlay */}
+      {showHelp && (
+        <div
+          className="absolute inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50"
+          onClick={() => setShowHelp(false)}
+        >
+          <div
+            className="bg-slate-900/95 border border-white/20 rounded-xl p-6 max-w-md shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+              <span className="text-2xl">🎮</span> Keyboard Shortcuts
+            </h2>
+            <div className="space-y-3 text-sm">
+              <div className="grid grid-cols-2 gap-x-6 gap-y-2">
+                <div className="text-white/50">Navigation</div>
+                <div></div>
+
+                <kbd className="px-2 py-0.5 bg-white/10 rounded text-white/80 text-xs font-mono">T</kbd>
+                <span className="text-white/70">Top view</span>
+
+                <kbd className="px-2 py-0.5 bg-white/10 rounded text-white/80 text-xs font-mono">F</kbd>
+                <span className="text-white/70">Front view</span>
+
+                <kbd className="px-2 py-0.5 bg-white/10 rounded text-white/80 text-xs font-mono">S</kbd>
+                <span className="text-white/70">Side view</span>
+
+                <kbd className="px-2 py-0.5 bg-white/10 rounded text-white/80 text-xs font-mono">R</kbd>
+                <span className="text-white/70">Reset view (isometric)</span>
+
+                <div className="col-span-2 border-t border-white/10 my-2"></div>
+
+                <div className="text-white/50">UI Controls</div>
+                <div></div>
+
+                <kbd className="px-2 py-0.5 bg-white/10 rounded text-white/80 text-xs font-mono">L</kbd>
+                <span className="text-white/70">Toggle legend</span>
+
+                <kbd className="px-2 py-0.5 bg-white/10 rounded text-white/80 text-xs font-mono">?</kbd>
+                <span className="text-white/70">Show/hide help</span>
+
+                <kbd className="px-2 py-0.5 bg-white/10 rounded text-white/80 text-xs font-mono">Esc</kbd>
+                <span className="text-white/70">Deselect / Close</span>
+
+                <div className="col-span-2 border-t border-white/10 my-2"></div>
+
+                <div className="text-white/50">Mouse</div>
+                <div></div>
+
+                <span className="text-white/60">Drag</span>
+                <span className="text-white/70">Rotate view</span>
+
+                <span className="text-white/60">Scroll</span>
+                <span className="text-white/70">Zoom in/out</span>
+
+                <span className="text-white/60">Right-drag</span>
+                <span className="text-white/70">Pan view</span>
+
+                <span className="text-white/60">Click node</span>
+                <span className="text-white/70">Select + zoom</span>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowHelp(false)}
+              className="mt-4 w-full py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white/70 text-sm transition-colors"
+            >
+              Close (Esc)
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

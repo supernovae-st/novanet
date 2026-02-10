@@ -18,7 +18,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { X, Loader2, HelpCircle, Layers } from 'lucide-react';
+import { X, Loader2, HelpCircle, Layers, Gamepad2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { iconSizes, gapTokens } from '@/design/tokens';
 import { DEFAULT_FETCH_LIMIT } from '@/config/constants';
@@ -49,6 +49,7 @@ import { TabbedArcPanel } from '@/components/sidebar/TabbedArcPanel';
 import { KeyboardHelpPanel } from '@/components/dx/KeyboardHelpPanel';
 import { CommandPalette, useCommandPalette, useCommandPaletteState } from '@/components/ui/CommandPalette';
 import { AiSearchOverlay } from '@/components/chat/AiSearchOverlay';
+import { MacropadVisualizer } from '@/components/macropad';
 import { QueryPill, ResultsOverview, ExpandedBreakdown, TableView, RawView } from '@/components/query';
 import type { ExpandedViewType } from '@/components/query/ResultsOverview';
 import { useQueryStore, QueryBuilder } from '@/stores/queryStore';
@@ -200,6 +201,11 @@ export default function HomePage() {
   const openAiSearch = useCallback(() => uiActions.openModal('ai-chat'), [uiActions]);
   const closeAiSearch = useCallback(() => uiActions.closeModal(), [uiActions]);
   const aiSearchOpen = uiState.activeModal === 'ai-chat';
+
+  // Macropad configurator (P) - uses uiStore exclusive modal system
+  const openMacropad = useCallback(() => uiActions.openModal('macropad-configurator'), [uiActions]);
+  const closeMacropad = useCallback(() => uiActions.closeModal(), [uiActions]);
+  const macropadOpen = uiState.activeModal === 'macropad-configurator';
 
   // Get selected node/edge data (memoized)
   const selectedNode = useMemo(
@@ -425,6 +431,13 @@ export default function HomePage() {
         return;
       }
 
+      // Macropad configurator
+      if (e.key === 'p' && !e.metaKey && !e.ctrlKey && !e.shiftKey) {
+        e.preventDefault();
+        openMacropad();
+        return;
+      }
+
       // Cycle navigation mode (N) - triggers Matrix transition
       // v11.0: Simplified to Meta and Data only
       if (e.key === 'n' && !e.metaKey && !e.ctrlKey && !e.shiftKey) {
@@ -529,7 +542,7 @@ export default function HomePage() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [uiActions, filterActions, shortcutsOpen, closeShortcuts, openPalette, openAiSearch, navigationMode, transitionState.isTransitioning, transitionActions, traitFilter, arcFamilyFilter]);
+  }, [uiActions, filterActions, shortcutsOpen, closeShortcuts, openPalette, openAiSearch, openMacropad, navigationMode, transitionState.isTransitioning, transitionActions, traitFilter, arcFamilyFilter]);
 
   // ═══════════════════════════════════════════════════════════════════════════
   // MEMOIZED HANDLERS
@@ -686,7 +699,7 @@ export default function HomePage() {
               </div>
             )}
 
-            {/* Bottom left - Visual Encoding & Keyboard shortcuts */}
+            {/* Bottom left - Visual Encoding & Keyboard shortcuts & Macropad */}
             <div className={cn('absolute bottom-4 left-4 flex items-center', gapTokens.tight)}>
               {/* Visual Encoding Legend toggle */}
               <button
@@ -709,6 +722,19 @@ export default function HomePage() {
               >
                 <HelpCircle className={iconSizes.md} />
                 <kbd className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/10 border border-white/10">?</kbd>
+              </button>
+              {/* Macropad Configurator */}
+              <button
+                onClick={openMacropad}
+                className={cn(
+                  'px-3 py-2 rounded-xl bg-[#0d0d12] border border-white/10 hover:bg-novanet-500/15 hover:border-novanet-500/30 transition-colors shadow-lg shadow-black/40 flex items-center',
+                  macropadOpen ? 'text-novanet-400 border-novanet-500/30' : 'text-white/40 hover:text-novanet-400',
+                  gapTokens.default
+                )}
+                title="Macropad Configurator (P)"
+              >
+                <Gamepad2 className={iconSizes.md} />
+                <kbd className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/10 border border-white/10">P</kbd>
               </button>
             </div>
 
@@ -873,6 +899,9 @@ export default function HomePage() {
         onClose={closeAiSearch}
         onExecuteQuery={executeQuery}
       />
+
+      {/* Macropad Configurator (P) */}
+      <MacropadVisualizer />
 
       {/* Easter Egg - Matrix Explosion Effect */}
       <MatrixExplosionOverlay

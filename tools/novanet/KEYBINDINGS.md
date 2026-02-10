@@ -176,7 +176,7 @@ Gamified learning hub for NovaNet concepts.
 | `Tab` | Cycle to next tab |
 | `Shift+Tab` | Cycle to previous tab |
 
-**Tabs**: Traits → Layers → Arcs → Pipeline
+**Tabs**: [1]Traits → [2]Layers → [3]Arcs → [4]Pipeline → [5]Quiz
 
 ### Quick Jump (g prefix)
 
@@ -207,6 +207,24 @@ Gamified learning hub for NovaNet concepts.
 |-----|--------|
 | `y` | Yank (copy current item to clipboard) |
 | `n` | Next "Did you know?" tip |
+
+### Quiz Mode (Tab 5)
+
+Interactive quiz testing knowledge of NovaNet taxonomy.
+
+| Key | Action |
+|-----|--------|
+| `j` / `Down` | Select previous answer |
+| `k` / `Up` | Select next answer |
+| `Enter` | Submit answer / Next question |
+| `r` | Restart quiz (when complete) |
+| `y` | Yank current question text |
+
+**Features**:
+- 15 questions about NovaNet (realms, layers, traits, arcs, naming)
+- Immediate feedback with explanations
+- Score tracking with grade at completion
+- Press `r` to restart after completing
 
 ### Tips Bar
 
@@ -240,7 +258,8 @@ Schema:      s (overlay)  +/- (focus property)
 Exit:        q or Esc
 
 Nexus Mode (4):
-Tabs:        [ ] (prev/next tab)  Tab (cycle)
+Tabs:        [ ] (prev/next tab)  Tab (cycle) — 5 tabs: Traits, Layers, Arcs, Pipeline, Quiz
 Quick Jump:  gi/gl/gk/gg/ga (traits)  g0 (top)
 Actions:     y (yank)  n (next tip)  Enter/Esc (drill)
+Quiz:        j/k (select)  Enter (submit/next)  r (restart)
 ```

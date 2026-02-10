@@ -17,7 +17,7 @@ interface UseGridNavigationOptions<T extends HTMLElement = HTMLElement> {
   /** Reference to the grid container for scroll management */
   gridRef: RefObject<T | null>;
   /** Callback when an item is selected via Enter key */
-  onSelect: (index: number) => void;
+  onSelect: (index: number, event?: React.KeyboardEvent) => void;
   /** Callback when Escape is pressed */
   onEscape: () => void;
   /** Whether navigation is enabled */
@@ -92,7 +92,7 @@ export function useGridNavigation<T extends HTMLElement = HTMLElement>({
           break;
         case 'Enter':
           e.preventDefault();
-          onSelect(focusedIndex);
+          onSelect(focusedIndex, e);
           break;
       }
     },

@@ -15,7 +15,7 @@ export type LayoutMode = 'containers' | 'magnetic';
 export type NavigationMode = 'data' | 'meta';
 
 // Modal types - only one can be open at a time
-export type ModalType = 'command-palette' | 'keyboard-shortcuts' | 'ai-chat' | 'cypher-editor' | 'locale-picker' | 'project-picker' | null;
+export type ModalType = 'command-palette' | 'keyboard-shortcuts' | 'ai-chat' | 'cypher-editor' | 'locale-picker' | 'project-picker' | 'macropad-configurator' | null;
 
 // Detail panel tab types
 export type DetailPanelTab = 'overview' | 'data' | 'graph' | 'code';

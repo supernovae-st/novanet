@@ -9,3 +9,4 @@ export * from './geometryFactory';
 export * from './arcParticles';
 export * from './dataTransform';
 export * from './postProcessing';
+export * from './nodeComposite';

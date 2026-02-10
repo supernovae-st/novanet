@@ -23,6 +23,7 @@
 mod app;
 pub mod atlas;
 mod audit;
+pub mod cache;
 pub mod clipboard;
 mod data;
 mod handlers;

@@ -1,5 +1,12 @@
 'use client';
 
+// DEBUG: Temporary global for logging
+declare global {
+  interface Window {
+    __edgeDebugLogged?: Set<string>;
+  }
+}
+
 /**
  * FloatingEdge - Modular edge component with composable effects
  *
@@ -89,8 +96,12 @@ export const FloatingEdge = memo(function FloatingEdge({
   const targetNode = useInternalNode(target);
   const pathRef = useRef<SVGPathElement>(null);
 
-  // Get zoom for LOD and label scaling
-  const zoom = useStore((state) => state.transform[2]);
+  // Get viewport transform for LOD and label scaling
+  // transform = [panX, panY, zoom], width/height = viewport dimensions
+  const transform = useStore((state) => state.transform);
+  const viewportWidth = useStore((state) => state.width);
+  const viewportHeight = useStore((state) => state.height);
+  const zoom = transform[2];
 
   // Direct store subscriptions for hover and selection state
   const hoveredEdgeId = useUIStore(selectHoveredEdgeId);
@@ -181,12 +192,23 @@ export const FloatingEdge = memo(function FloatingEdge({
     return { edgePath: path, reversedPath: revPath, edgeLength: length, sourcePoint: sourcePt, targetPoint: targetPt };
   }, [sourceNode, targetNode, sourceX, sourceY, sourceWidth, sourceHeight, targetX, targetY, targetWidth, targetHeight, parallelIndex, parallelTotal]);
 
-  // LOD calculation
+  // LOD calculation - distance from VIEWPORT CENTER (not world origin)
+  // This ensures edges visible on screen get high LOD regardless of graph position
   const distanceFromCenter = useMemo(() => {
-    const midX = (sourcePoint.x + targetPoint.x) / 2;
-    const midY = (sourcePoint.y + targetPoint.y) / 2;
-    return Math.sqrt(midX * midX + midY * midY);
-  }, [sourcePoint, targetPoint]);
+    // Edge midpoint in world coordinates
+    const edgeMidX = (sourcePoint.x + targetPoint.x) / 2;
+    const edgeMidY = (sourcePoint.y + targetPoint.y) / 2;
+
+    // Viewport center in world coordinates
+    // transform = [panX, panY, zoom] where pan values shift the viewport
+    const viewportCenterX = (viewportWidth / 2 - transform[0]) / zoom;
+    const viewportCenterY = (viewportHeight / 2 - transform[1]) / zoom;
+
+    // Distance from viewport center to edge midpoint
+    const dx = edgeMidX - viewportCenterX;
+    const dy = edgeMidY - viewportCenterY;
+    return Math.sqrt(dx * dx + dy * dy);
+  }, [sourcePoint, targetPoint, transform, viewportWidth, viewportHeight, zoom]);
 
   const { tier: lodTier, shouldRender: shouldRenderEffects, intensityMultiplier } = useEdgeLOD({
     distanceFromCenter,
@@ -234,6 +256,28 @@ export const FloatingEdge = memo(function FloatingEdge({
   const scaledFontSize = baseFontSize * labelScale;
 
   const shouldAnimate = isEdgeVisible && canAnimate && isAnimated && !effectiveDimmed;
+
+  // DEBUG: Log animation conditions for first few edges
+  if (typeof window !== 'undefined' && !window.__edgeDebugLogged) {
+    window.__edgeDebugLogged = new Set();
+  }
+  if (typeof window !== 'undefined' && window.__edgeDebugLogged && window.__edgeDebugLogged.size < 5 && !window.__edgeDebugLogged.has(id)) {
+    window.__edgeDebugLogged.add(id);
+    console.log(`[Edge ${id}] Animation debug:`, {
+      isEdgeVisible,
+      canAnimate,
+      isAnimated,
+      effectiveDimmed,
+      shouldAnimate,
+      shouldRenderEffects,
+      lodTier,
+      distanceFromCenter: Math.round(distanceFromCenter),
+      zoom: zoom.toFixed(2),
+      viewportWidth,
+      viewportHeight,
+      transform: transform.map(t => Math.round(t)),
+    });
+  }
 
   return (
     <g className="floating-edge" style={{ opacity: groupOpacity, transition: 'opacity 0.15s ease-out' }}>
