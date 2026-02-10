@@ -5,6 +5,8 @@
 //!
 //! Output target: `packages/core/src/filters/views.generated.ts`
 
+#![allow(clippy::needless_raw_string_hashes)]
+
 use crate::parsers::views::{
     self, Direction, IncludeRule, ViewDef, ViewRegistry, ViewRegistryEntry,
 };

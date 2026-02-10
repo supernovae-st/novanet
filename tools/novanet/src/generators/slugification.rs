@@ -2,6 +2,8 @@
 //!
 //! Transforms parsed ATH 2-rules-slug data into Neo4j seed file.
 
+#![allow(clippy::needless_raw_string_hashes)]
+
 use std::path::PathBuf;
 
 use chrono::Local;

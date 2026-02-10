@@ -2,6 +2,8 @@
 //!
 //! Transforms parsed ATH 4-culture-norms data into Neo4j seed file.
 
+#![allow(clippy::needless_raw_string_hashes)]
+
 use std::path::PathBuf;
 
 use chrono::Local;
@@ -56,14 +58,14 @@ impl CultureGenerator {
         let locale_count = cultures.len();
 
         format!(
-            r#"// ============================================================================
+            r"// ============================================================================
 // CULTURE SEED - Generated from ATH 4-culture-norms
 // Generated: {}
 // Source: {}/4-culture-norms/
 // Locales: {}
 // ============================================================================
 
-"#,
+",
             timestamp,
             self.ath_path.display(),
             locale_count
@@ -75,11 +77,11 @@ impl CultureGenerator {
         let mut output = String::new();
 
         output.push_str(&format!(
-            r#"// ----------------------------------------------------------------------------
+            r"// ----------------------------------------------------------------------------
 // PART 1: Culture nodes ({} locales)
 // ----------------------------------------------------------------------------
 
-"#,
+",
             cultures.len()
         ));
 
@@ -111,7 +113,7 @@ impl CultureGenerator {
         );
 
         format!(
-            r#"MERGE (c:Culture {{key: '{}'}})
+            r"MERGE (c:Culture {{key: '{}'}})
 SET c.display_name = '{}',
     c.description = '{}',
     c.llm_context = '{}',
@@ -130,7 +132,7 @@ SET c.display_name = '{}',
     c.template_version = '{}',
     c.source_file = '{}',
     c.last_updated = '{}';
-"#,
+",
             c.locale_key,
             escape_cypher(&format!("{} Culture Norms", c.locale_key)),
             escape_cypher(&format!("Cultural context and norms for {}", c.locale_key)),
@@ -158,20 +160,20 @@ SET c.display_name = '{}',
         let mut output = String::new();
 
         output.push_str(
-            r#"// ----------------------------------------------------------------------------
+            r"// ----------------------------------------------------------------------------
 // PART 2: Arcs Locale → Culture
 // ----------------------------------------------------------------------------
 
-"#,
+",
         );
 
         for c in cultures {
             output.push_str(&format!(
-                r#"MATCH (l:Locale {{key: '{}'}})
+                r"MATCH (l:Locale {{key: '{}'}})
 MATCH (c:Culture {{key: '{}'}})
 MERGE (l)-[:HAS_CULTURE]->(c);
 
-"#,
+",
                 c.locale_key, c.locale_key
             ));
         }
