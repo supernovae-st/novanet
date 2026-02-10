@@ -85,10 +85,9 @@ pub fn render_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
         COLOR_UNFOCUSED_BORDER
     };
 
-    // Check if we should show a chart (Realm, Layer, or Kind item)
+    // Check if we should show a chart (Realm or Layer item)
     let is_realm = matches!(app.current_item(), Some(TreeItem::Realm(_)));
     let is_layer = matches!(app.current_item(), Some(TreeItem::Layer(_, _)));
-    let is_kind = matches!(app.current_item(), Some(TreeItem::Kind(..)));
 
     if is_realm && area.height > 25 {
         // v12: Full realm stats with all charts
@@ -157,15 +156,6 @@ pub fn render_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
 
         render_info_text(f, chunks[0], app, focused, border_color);
         render_layer_sparkline(f, chunks[1], app);
-    } else if is_kind && area.height > 10 {
-        // Kind: Arc distribution chart
-        let chunks = Layout::default()
-            .direction(Direction::Vertical)
-            .constraints([Constraint::Min(6), Constraint::Length(5)])
-            .split(area);
-
-        render_info_text(f, chunks[0], app, focused, border_color);
-        render_kind_arc_chart(f, chunks[1], app);
     } else {
         // Normal text-only info panel (fallback for small height)
         render_info_text(f, area, app, focused, border_color);
@@ -307,65 +297,6 @@ fn render_layer_sparkline(f: &mut Frame, area: Rect, app: &App) {
         .style(Style::default().fg(hex_to_color(&layer.color)));
 
     f.render_widget(sparkline, area);
-}
-
-/// Render a bar chart showing incoming vs outgoing arc distribution for the selected Kind.
-fn render_kind_arc_chart(f: &mut Frame, area: Rect, app: &App) {
-    let Some(TreeItem::Kind(_, _, kind)) = app.current_item() else {
-        return;
-    };
-
-    // Count incoming and outgoing arcs from kind definition
-    let incoming: usize = kind
-        .arcs
-        .iter()
-        .filter(|a| a.direction == ArcDirection::Incoming)
-        .count();
-    let outgoing: usize = kind
-        .arcs
-        .iter()
-        .filter(|a| a.direction == ArcDirection::Outgoing)
-        .count();
-
-    if incoming == 0 && outgoing == 0 {
-        // No arcs, show placeholder
-        let block = Block::default()
-            .title(Span::styled(" Arc Distribution ", STYLE_DIM))
-            .borders(Borders::ALL)
-            .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER));
-        let paragraph = Paragraph::new(Span::styled("  No arcs defined", STYLE_MUTED)).block(block);
-        f.render_widget(paragraph, area);
-        return;
-    }
-
-    // Build bar data
-    let bars = vec![
-        Bar::default()
-            .value(incoming as u64)
-            .label(Line::from("← In"))
-            .style(Style::default().fg(Color::Green)),
-        Bar::default()
-            .value(outgoing as u64)
-            .label(Line::from("Out →"))
-            .style(Style::default().fg(Color::Cyan)),
-    ];
-
-    let chart = BarChart::default()
-        .block(
-            Block::default()
-                .title(Span::styled(
-                    format!(" Arc Distribution ({} total) ", incoming + outgoing),
-                    STYLE_DIM,
-                ))
-                .borders(Borders::ALL)
-                .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER)),
-        )
-        .data(BarGroup::default().bars(&bars))
-        .bar_width(8)
-        .bar_gap(2)
-        .direction(Direction::Vertical);
-
-    f.render_widget(chart, area);
 }
 
 /// Render a sparkline showing health percentages across all Kinds in a Realm.
