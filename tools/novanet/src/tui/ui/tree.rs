@@ -647,23 +647,23 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             let kind_collapsed = app.tree.is_collapsed(&kind_key_str);
 
                             // Show collapse icon based on mode:
-                            // - Data mode: if instances exist
-                            // - Meta mode: if kind has outgoing arcs (can explore schema)
+                            // - Data mode: show chevron if instances exist
+                            // - Meta mode: Kinds are leaf nodes (no children to expand)
                             let kind_icon = if is_data_mode {
                                 // In Data mode: show chevron if instances exist
                                 if let Some(instances) = app.tree.get_instances(&kind.key) {
                                     if !instances.is_empty() {
                                         expand_icon(kind_collapsed)
                                     } else {
-                                        " " // Leaf node placeholder for alignment
+                                        " " // Leaf node - no instances
                                     }
                                 } else {
-                                    " " // Leaf node placeholder for alignment
+                                    " " // Leaf node - no instances
                                 }
                             } else {
-                                // In Meta mode: always show chevron (can expand to see arcs)
-                                // This makes the tree consistently interactive
-                                expand_icon(kind_collapsed)
+                                // In Meta mode: Kinds are leaf nodes (no children)
+                                // v11.6: Fixed - don't show chevron for leaf nodes
+                                " "
                             };
 
                             // v10.1: Show instance count (always in Data mode)
