@@ -13,7 +13,7 @@
  * - Keyboard shortcuts (1-9 for quick access)
  */
 
-import { memo, useRef, useCallback, useEffect } from 'react';
+import { memo, useRef, useCallback, useEffect, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { ChevronLeft, ChevronRight, Zap, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -49,8 +49,11 @@ export const ViewScrollBar = memo(function ViewScrollBar({
     }))
   );
 
-  // Flatten views for scroll bar
-  const allViews = categories.flatMap((cat) => cat.views);
+  // Flatten views for scroll bar (memoized for performance)
+  const allViews = useMemo(
+    () => categories.flatMap((cat) => cat.views),
+    [categories]
+  );
 
   // Scroll handler
   const scroll = useCallback((direction: 'left' | 'right') => {
