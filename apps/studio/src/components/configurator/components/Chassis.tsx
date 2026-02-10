@@ -23,11 +23,11 @@ const CHASSIS_RADIUS = 0.25;
 const INNER_INSET = 0.15;
 const INNER_DEPTH = 0.12;
 
-// Material colors matching reference images
-const CHASSIS_COLOR = '#1a2a4a';
-const INNER_COLOR = '#0f1a2e';
-const EDGE_COLOR = '#3a5a8a';
-const USB_COLOR = '#0a0a0a';
+// Material colors matching Figma design - light gray chassis
+const CHASSIS_COLOR = '#e5e7eb';  // gray-200 - light gray body
+const INNER_COLOR = '#d1d5db';    // gray-300 - slightly darker recess
+const EDGE_COLOR = '#9ca3af';     // gray-400 - subtle edges
+const USB_COLOR = '#374151';      // gray-700 - dark USB port
 
 export function Chassis() {
   // USB-C port shape
@@ -63,9 +63,9 @@ export function Chassis() {
       >
         <meshStandardMaterial
           color={CHASSIS_COLOR}
-          metalness={0.85}
-          roughness={0.25}
-          envMapIntensity={1.2}
+          metalness={0.3}
+          roughness={0.6}
+          envMapIntensity={0.8}
         />
         <Edges scale={1.002} threshold={15} color={EDGE_COLOR} linewidth={1} />
       </RoundedBox>
@@ -84,8 +84,8 @@ export function Chassis() {
       >
         <meshStandardMaterial
           color={INNER_COLOR}
-          metalness={0.6}
-          roughness={0.5}
+          metalness={0.2}
+          roughness={0.7}
         />
       </RoundedBox>
 
@@ -93,9 +93,9 @@ export function Chassis() {
       <mesh position={[0, 0.02, 0]}>
         <boxGeometry args={[CHASSIS_WIDTH - 0.1, 0.04, CHASSIS_DEPTH - 0.1]} />
         <meshStandardMaterial
-          color="#0a1525"
-          metalness={0.9}
-          roughness={0.1}
+          color="#9ca3af"
+          metalness={0.4}
+          roughness={0.5}
         />
       </mesh>
 
@@ -118,7 +118,7 @@ export function Chassis() {
         <meshStandardMaterial color="#050505" metalness={0.3} roughness={0.8} />
       </mesh>
 
-      {/* Corner screws (aesthetic detail) */}
+      {/* Corner screws (black like in Figma) */}
       {[
         [-CHASSIS_WIDTH / 2 + 0.25, CHASSIS_HEIGHT + 0.01, -CHASSIS_DEPTH / 2 + 0.25],
         [CHASSIS_WIDTH / 2 - 0.25, CHASSIS_HEIGHT + 0.01, -CHASSIS_DEPTH / 2 + 0.25],
@@ -126,8 +126,8 @@ export function Chassis() {
         [CHASSIS_WIDTH / 2 - 0.25, CHASSIS_HEIGHT + 0.01, CHASSIS_DEPTH / 2 - 0.25],
       ].map((pos, i) => (
         <mesh key={i} position={pos as [number, number, number]}>
-          <cylinderGeometry args={[0.04, 0.04, 0.02, 16]} />
-          <meshStandardMaterial color="#2a3a5a" metalness={0.8} roughness={0.3} />
+          <cylinderGeometry args={[0.06, 0.06, 0.03, 16]} />
+          <meshStandardMaterial color="#1f2937" metalness={0.2} roughness={0.8} />
         </mesh>
       ))}
 

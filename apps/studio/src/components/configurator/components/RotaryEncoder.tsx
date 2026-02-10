@@ -121,13 +121,13 @@ export function RotaryEncoder({
 
   return (
     <group ref={groupRef} position={position}>
-      {/* Base ring */}
+      {/* Base ring (matching light gray chassis) */}
       <mesh position={[0, -height / 2 - 0.03, 0]}>
         <cylinderGeometry args={[radius * 1.15, radius * 1.15, 0.06, 32]} />
         <meshStandardMaterial
-          color="#1a2a3e"
-          metalness={0.7}
-          roughness={0.3}
+          color="#9ca3af"
+          metalness={0.3}
+          roughness={0.6}
         />
       </mesh>
 

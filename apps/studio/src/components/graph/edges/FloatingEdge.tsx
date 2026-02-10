@@ -65,10 +65,8 @@ const InlineEdgeEffects = memo(function InlineEdgeEffects({
   const baseSize = isHighlighted ? 16 : 12;
   const baseDuration = isHighlighted ? 1.0 : 1.6;
 
-  // Debug: log arc family for each edge (remove after debugging)
-  if (typeof window !== 'undefined') {
-    console.log(`[ArcEffect] ${relationType} → ${family} (${colors.primary})`);
-  }
+  // Debug: uncomment to see arc family detection in console
+  // console.log(`[ArcEffect] ${relationType} → ${family} (${colors.primary})`);
 
 
   switch (family) {

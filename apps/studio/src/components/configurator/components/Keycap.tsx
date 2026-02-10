@@ -1,20 +1,20 @@
 'use client';
 
 /**
- * Keycap - Interactive translucent keycap with LED glow
+ * Keycap - Black matte keycap matching Work Louder Micro design
  *
  * Features:
- * - MeshTransmissionMaterial for realistic glass effect
- * - Hover: scale 1.05, increased glow
+ * - Black matte material (matching Figma design)
+ * - Colored keys for specific positions (red, purple, cyan, green)
+ * - Hover: scale 1.05
  * - Press: scale 0.95, Y offset, elastic bounce
- * - Particle burst on press
- * - Layer icon displayed on top
+ * - White icons on black keys, dark icons on colored keys
  */
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { useFrame, ThreeEvent } from '@react-three/fiber';
-import { RoundedBox, Text, MeshTransmissionMaterial } from '@react-three/drei';
-import * as THREE from 'three';
+import { RoundedBox, Text } from '@react-three/drei';
+import type { Group } from 'three';
 import type { KeycapProps } from '../types';
 import { getVisualEncoding } from '../utils/visualEncoding';
 
@@ -31,21 +31,32 @@ const HOVER_SCALE = 1.08;
 const PRESS_SCALE = 0.92;
 const PRESS_Y_OFFSET = -0.06;
 
+// Default black color for most keys
+const DEFAULT_KEY_COLOR = '#1a1a1a';
+
+// Check if a key should be colored based on layer
+function isColoredKey(layer: string): boolean {
+  // Only these layers get their actual color
+  return ['config', 'locale', 'knowledge', 'geography'].includes(layer);
+}
+
 export function Keycap({ position, binding, onPress, index }: KeycapProps) {
   const [hovered, setHovered] = useState(false);
   const [pressed, setPressed] = useState(false);
-  const groupRef = useRef<THREE.Group>(null);
-  const glowRef = useRef<THREE.Mesh>(null);
+  const groupRef = useRef<Group>(null);
 
   // Animation state with spring physics
   const scaleRef = useRef(1);
   const yOffsetRef = useRef(0);
   const velocityRef = useRef({ scale: 0, y: 0 });
-  const glowIntensityRef = useRef(0.3);
 
   // Get visual encoding for this layer
-  const { color, icon } = getVisualEncoding(binding.layer);
-  const colorObj = new THREE.Color(color);
+  const { color: layerColor, icon } = getVisualEncoding(binding.layer);
+
+  // Determine if this key should be colored or black
+  const shouldBeColored = isColoredKey(binding.layer);
+  const keyColor = shouldBeColored ? layerColor : DEFAULT_KEY_COLOR;
+  const iconColor = shouldBeColored ? '#1a1a1a' : '#ffffff';  // Dark icons on colored, white on black
 
   // Calculate grid position (3x3 grid)
   const row = Math.floor(index / 3);
@@ -57,7 +68,6 @@ export function Keycap({ position, binding, onPress, index }: KeycapProps) {
   useFrame((_, delta) => {
     const targetScale = pressed ? PRESS_SCALE : hovered ? HOVER_SCALE : 1;
     const targetY = pressed ? PRESS_Y_OFFSET : 0;
-    const targetGlow = pressed ? 0.9 : hovered ? 0.6 : 0.35;
 
     // Spring physics for scale
     const scaleForce = (targetScale - scaleRef.current) * SPRING_STIFFNESS;
@@ -71,20 +81,10 @@ export function Keycap({ position, binding, onPress, index }: KeycapProps) {
     velocityRef.current.y += (yForce + yDamping) * delta;
     yOffsetRef.current += velocityRef.current.y * delta;
 
-    // Smooth glow transition
-    glowIntensityRef.current += (targetGlow - glowIntensityRef.current) * 8 * delta;
-
     // Apply transforms
     if (groupRef.current) {
       groupRef.current.scale.setScalar(scaleRef.current);
       groupRef.current.position.y = position[1] + yOffsetRef.current;
-    }
-
-    // Update glow mesh
-    if (glowRef.current) {
-      glowRef.current.scale.setScalar(1.15 + glowIntensityRef.current * 0.3);
-      const mat = glowRef.current.material as THREE.MeshBasicMaterial;
-      mat.opacity = glowIntensityRef.current;
     }
   });
 
@@ -108,24 +108,9 @@ export function Keycap({ position, binding, onPress, index }: KeycapProps) {
 
   return (
     <group position={[position[0] + x, position[1], position[2] + z]}>
-      {/* Glow halo underneath */}
-      <mesh
-        ref={glowRef}
-        position={[0, -KEYCAP_HEIGHT / 2, 0]}
-        rotation={[-Math.PI / 2, 0, 0]}
-      >
-        <circleGeometry args={[KEYCAP_SIZE * 0.7, 32]} />
-        <meshBasicMaterial
-          color={color}
-          transparent
-          opacity={0.3}
-          blending={THREE.AdditiveBlending}
-        />
-      </mesh>
-
       {/* Main keycap group */}
       <group ref={groupRef}>
-        {/* Keycap body - translucent with transmission */}
+        {/* Keycap body - black matte or colored (matching Figma) */}
         <RoundedBox
           args={[KEYCAP_SIZE, KEYCAP_HEIGHT, KEYCAP_SIZE]}
           radius={KEYCAP_RADIUS}
@@ -136,40 +121,39 @@ export function Keycap({ position, binding, onPress, index }: KeycapProps) {
           castShadow
           receiveShadow
         >
-          <MeshTransmissionMaterial
-            transmission={0.85}
-            thickness={1.5}
-            roughness={0.05}
-            chromaticAberration={0.03}
-            anisotropicBlur={0.3}
-            color={colorObj}
-            emissive={color}
-            emissiveIntensity={pressed ? 2.5 : hovered ? 1.8 : 1.2}
-            toneMapped={false}
-            samples={4}
-            resolution={256}
+          <meshStandardMaterial
+            color={keyColor}
+            metalness={0.1}
+            roughness={0.8}
+            envMapIntensity={0.3}
           />
         </RoundedBox>
 
-        {/* Inner LED light source */}
-        <pointLight
-          position={[0, -KEYCAP_HEIGHT * 0.3, 0]}
-          color={color}
-          intensity={pressed ? 3 : hovered ? 2 : 1}
-          distance={1.2}
-          decay={2}
-        />
+        {/* Subtle highlight on hover */}
+        {hovered && (
+          <RoundedBox
+            args={[KEYCAP_SIZE + 0.02, KEYCAP_HEIGHT + 0.01, KEYCAP_SIZE + 0.02]}
+            radius={KEYCAP_RADIUS}
+            smoothness={4}
+          >
+            <meshBasicMaterial
+              color={shouldBeColored ? keyColor : '#4b5563'}
+              transparent
+              opacity={0.3}
+            />
+          </RoundedBox>
+        )}
 
         {/* Icon on top of keycap */}
         <Text
           position={[0, KEYCAP_HEIGHT / 2 + 0.01, 0]}
           rotation={[-Math.PI / 2, 0, 0]}
           fontSize={0.22}
-          color="#ffffff"
+          color={iconColor}
           anchorX="center"
           anchorY="middle"
-          outlineWidth={0.015}
-          outlineColor="#000000"
+          outlineWidth={0.01}
+          outlineColor={shouldBeColored ? '#ffffff' : '#000000'}
           font="/fonts/inter-bold.woff"
         >
           {icon}
