@@ -5,6 +5,7 @@ export { DatabaseInfoPanel } from './DatabaseInfoPanel';
 // Detail panels
 export { NodeDetailsPanel } from './NodeDetailsPanel';
 export { ArcDetailsPanel } from './ArcDetailsPanel';
+export { TabbedDetailPanel } from './TabbedDetailPanel';
 
 // Filter pickers
 export { LocalePicker } from './LocalePicker';

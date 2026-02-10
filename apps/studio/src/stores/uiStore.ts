@@ -17,6 +17,9 @@ export type NavigationMode = 'data' | 'meta';
 // Modal types - only one can be open at a time
 export type ModalType = 'command-palette' | 'keyboard-shortcuts' | 'ai-chat' | 'cypher-editor' | 'locale-picker' | 'project-picker' | null;
 
+// Detail panel tab types
+export type DetailPanelTab = 'overview' | 'data' | 'graph' | 'code';
+
 // Selected edge data - unified format for both data and schema modes
 export interface SelectedEdgeData {
   id: string;
@@ -46,6 +49,9 @@ interface UIStoreState extends UIState, SelectionState {
 
   // Hover connections - node IDs connected to hovered node (for direct subscription in node components)
   hoveredConnectedNodeIds: Set<string>;
+
+  // Detail panel tab selection
+  detailPanelTab: DetailPanelTab;
 
   // Edge labels visibility
   showEdgeLabels: boolean;
@@ -93,6 +99,9 @@ interface UIStoreState extends UIState, SelectionState {
   setHoveredConnections: (ids: Set<string>) => void;
   clearSelection: () => void;
 
+  // Detail panel tab action
+  setDetailPanelTab: (tab: DetailPanelTab) => void;
+
   // Modal actions - exclusive (closes any open modal before opening new one)
   openModal: (modal: ModalType) => void;
   closeModal: () => void;
@@ -133,6 +142,9 @@ export const selectLayoutVersion = (state: UIStoreState) => state.layoutVersion;
 /** Selector for layoutMode - use with useUIStore(selectLayoutMode) */
 export const selectLayoutMode = (state: UIStoreState) => state.layoutMode;
 
+/** Selector for detailPanelTab - use with useUIStore(selectDetailPanelTab) */
+export const selectDetailPanelTab = (state: UIStoreState) => state.detailPanelTab;
+
 // =============================================================================
 // Store Implementation
 // =============================================================================
@@ -163,6 +175,9 @@ export const useUIStore = create<UIStoreState>()(
       hoveredEdgeId: null,
       hoveredConnectedNodeIds: new Set(),
       highlightedNodeIds: new Set(),
+
+      // Detail panel tab
+      detailPanelTab: 'overview' as DetailPanelTab,
 
       // Modal state - exclusive
       activeModal: null as ModalType,
@@ -345,6 +360,13 @@ export const useUIStore = create<UIStoreState>()(
         });
       },
 
+      // Detail panel tab action
+      setDetailPanelTab: (tab) => {
+        set((state) => {
+          state.detailPanelTab = tab;
+        });
+      },
+
       // Modal actions - exclusive (pure state updates, no DOM side effects)
       // Body scroll lock is handled by useModal/useBodyScrollLock hooks in components
       openModal: (modal) => {
@@ -375,8 +397,9 @@ export const useUIStore = create<UIStoreState>()(
         spacingPreset: state.spacingPreset,
         spacingValue: state.spacingValue,
         navigationMode: state.navigationMode,
+        detailPanelTab: state.detailPanelTab,
       }),
-      version: 10,
+      version: 11,
       migrate: (persistedState: unknown, version: number) => {
         if (version < 9) {
           // v9: clear stale v8 state, reset to defaults
@@ -390,6 +413,7 @@ export const useUIStore = create<UIStoreState>()(
             spacingPreset: DEFAULT_SPACING_PRESET,
             spacingValue: 100,
             navigationMode: 'data',
+            detailPanelTab: 'overview',
           };
         }
         if (version < 10) {
@@ -400,6 +424,15 @@ export const useUIStore = create<UIStoreState>()(
             ...prev,
             dataMode: undefined,
             navigationMode: oldMode === 'schema' ? 'meta' : oldMode,
+            detailPanelTab: 'overview',
+          };
+        }
+        if (version < 11) {
+          // v11: Add detailPanelTab
+          const prev = persistedState as Record<string, unknown>;
+          return {
+            ...prev,
+            detailPanelTab: 'overview',
           };
         }
         return persistedState as UIStoreState;
