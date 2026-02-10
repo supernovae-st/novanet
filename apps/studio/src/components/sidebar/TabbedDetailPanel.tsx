@@ -17,7 +17,7 @@ import { Loader2 } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
-import { getLayerGradientColors } from '@/design/nodeColors';
+import { getLayerPalette } from '@/design/colors/palette';
 import { useUIStore, type DetailPanelTab } from '@/stores/uiStore';
 import { useGraphStore } from '@/stores/graphStore';
 import { panelClasses } from '@/design/tokens';
@@ -209,7 +209,8 @@ export const TabbedDetailPanel = memo(function TabbedDetailPanel({
 
   // Get node config and colors
   const config = node ? NODE_TYPE_CONFIG[node.type] || NODE_TYPE_CONFIG.Project : null;
-  const colors = config ? getLayerGradientColors(config.layer) : { primary: '#888', secondary: '#666' };
+  const layerPalette = config ? getLayerPalette(config.layer) : { primary: '#888', secondary: '#666666' };
+  const colors = { primary: layerPalette.primary, secondary: layerPalette.secondary };
 
   if (!node) {
     return (

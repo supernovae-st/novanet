@@ -4,15 +4,20 @@
  * ATOMIC/NEURAL STYLE — Small, fast, numerous particles
  * Creates visible energy flow like fiber optics + synapses
  *
- * Each arc family has distinct particle behavior:
- * - ownership: Steady data stream, blue
- * - localization: Undulating flow, green
- * - semantic: Sparking synapses, orange
- * - generation: Fast cascade, violet
- * - mining: Radar pulse waves, pink
+ * Colors are sourced from the unified palette system (taxonomy.yaml).
+ * Only particle-specific config (speed, width, count) is defined here.
+ *
+ * @see @/design/colors/palette.ts — Unified color system
  */
 
-export type ArcFamily = 'ownership' | 'localization' | 'semantic' | 'generation' | 'mining';
+import {
+  getArcFamily as getArcFamilyUnified,
+  ARC_FAMILY_HEX,
+  type ArcFamilyKey,
+} from '@/design/colors/palette';
+
+// Re-export the unified type for backwards compatibility
+export type ArcFamily = ArcFamilyKey;
 
 export interface ArcParticleConfig {
   particles: number;
@@ -91,63 +96,10 @@ export const ARC_PARTICLE_CONFIG: Record<ArcFamily, ArcParticleConfig> = {
 
 /**
  * Detect arc family from relation type
+ * Re-exports the unified getArcFamily function from palette.ts
  */
 export function detectArcFamily(relationType: string): ArcFamily {
-  const type = relationType.toUpperCase();
-
-  // Ownership family
-  if (
-    type.startsWith('HAS_') ||
-    type.includes('BELONGS') ||
-    type.includes('_OF') ||
-    type === 'HAS_CONTENT' ||
-    type === 'HAS_GENERATED'
-  ) {
-    return 'ownership';
-  }
-
-  // Localization family
-  if (
-    type.includes('LOCALE') ||
-    type.includes('LOCALIZE') ||
-    type.includes('L10N') ||
-    type === 'CONTENT_OF'
-  ) {
-    return 'localization';
-  }
-
-  // Semantic family
-  if (
-    type.includes('USES') ||
-    type.includes('LINKS') ||
-    type.includes('RELATED') ||
-    type.includes('SEMANTIC')
-  ) {
-    return 'semantic';
-  }
-
-  // Generation family
-  if (
-    type.includes('GENERATE') ||
-    type.includes('PROMPT') ||
-    type.includes('OUTPUT') ||
-    type === 'GENERATED_FOR'
-  ) {
-    return 'generation';
-  }
-
-  // Mining family
-  if (
-    type.includes('SEO') ||
-    type.includes('GEO') ||
-    type.includes('KEYWORD') ||
-    type.includes('METRIC')
-  ) {
-    return 'mining';
-  }
-
-  // Default to ownership
-  return 'ownership';
+  return getArcFamilyUnified(relationType);
 }
 
 /**
