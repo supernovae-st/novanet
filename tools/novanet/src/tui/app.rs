@@ -13,7 +13,7 @@ use super::audit::SharedAuditStats;
 use super::data::{
     ArcKindDetails, KindArcsData, LayerDetails, RealmDetails, TaxonomyTree, TreeItem,
 };
-use super::guide::GuideState;
+use super::nexus::NexusState;
 use super::schema::{CoverageStats, MatchedProperty, ValidatedProperty, ValidationStats};
 use super::theme::Theme;
 use super::yaml::{YamlSections, YamlViewSection};
@@ -34,55 +34,69 @@ pub const INFO_SCROLL_MARGIN: usize = 5;
 /// Default tree height (updated by UI on render).
 pub const DEFAULT_TREE_HEIGHT: usize = 20;
 
-/// Navigation mode (matches Studio).
-/// Order: 1:Meta 2:Data 3:Overlay 4:Query 5:Atlas 6:Audit 7:Guide
+/// Navigation mode — simplified to 3 modes in v11.3 Nexus update.
+/// Order: 1:Graph 2:Audit 3:Nexus
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum NavMode {
+    /// Unified graph view (replaces Meta + Data)
     #[default]
-    Meta,
-    Data,
-    Overlay,
-    Query,
-    Atlas,
+    Graph,
+    /// Schema audit mode
     Audit,
-    Guide,
+    /// Gamified learning hub (replaces Guide)
+    Nexus,
 }
 
 impl NavMode {
     pub fn label(&self) -> &'static str {
         match self {
-            NavMode::Meta => "Meta",
-            NavMode::Data => "Data",
-            NavMode::Overlay => "Overlay",
-            NavMode::Query => "Query",
-            NavMode::Atlas => "Atlas",
+            NavMode::Graph => "Graph",
             NavMode::Audit => "Audit",
-            NavMode::Guide => "Guide",
+            NavMode::Nexus => "Nexus",
         }
     }
 
     pub fn cycle(&self) -> Self {
         match self {
-            NavMode::Meta => NavMode::Data,
-            NavMode::Data => NavMode::Overlay,
-            NavMode::Overlay => NavMode::Query,
-            NavMode::Query => NavMode::Atlas,
-            NavMode::Atlas => NavMode::Audit,
-            NavMode::Audit => NavMode::Guide,
-            NavMode::Guide => NavMode::Meta,
+            NavMode::Graph => NavMode::Audit,
+            NavMode::Audit => NavMode::Nexus,
+            NavMode::Nexus => NavMode::Graph,
         }
     }
 
-    /// Get array index for mode_cursors (0-6).
+    /// Get array index for mode_cursors (0-2).
     pub fn index(&self) -> usize {
         match self {
-            NavMode::Meta => 0,
-            NavMode::Data => 1,
-            NavMode::Overlay => 2,
-            NavMode::Query => 3,
-            NavMode::Atlas => 4,
-            NavMode::Audit => 5,
-            NavMode::Guide => 6,
+            NavMode::Graph => 0,
+            NavMode::Audit => 1,
+            NavMode::Nexus => 2,
+        }
+    }
+}
+
+/// Graph view toggle — unified view can show taxonomy (schema) or instances (data).
+/// Toggle with 't' key while in Graph mode.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum GraphView {
+    /// Taxonomy view: Realm > Layer > Kind hierarchy (schema-focused)
+    #[default]
+    Taxonomy,
+    /// Instances view: shows actual data nodes under each Kind
+    Instances,
+}
+
+impl GraphView {
+    pub fn label(&self) -> &'static str {
+        match self {
+            GraphView::Taxonomy => "Taxonomy",
+            GraphView::Instances => "Instances",
+        }
+    }
+
+    pub fn toggle(&self) -> Self {
+        match self {
+            GraphView::Taxonomy => GraphView::Instances,
+            GraphView::Instances => GraphView::Taxonomy,
         }
     }
 }
@@ -188,10 +202,12 @@ pub struct App {
     /// Cached theme (color mode detected once at startup).
     pub theme: Theme,
     pub mode: NavMode,
+    /// Graph view toggle (Taxonomy vs Instances) — only relevant in Graph mode.
+    pub graph_view: GraphView,
     pub focus: Focus,
     pub tree_cursor: usize,
-    /// Remember cursor position per mode (Meta, Data, Overlay, Query, Atlas, Audit, Guide).
-    pub mode_cursors: [usize; 7],
+    /// Remember cursor position per mode (Graph, Audit, Nexus).
+    pub mode_cursors: [usize; 3],
     pub tree_scroll: usize, // Scroll offset for tree
     pub tree_height: usize, // Visible height (set by UI)
     pub tree: TaxonomyTree,
@@ -258,8 +274,8 @@ pub struct App {
     pub hide_empty: bool,
     /// Atlas mode state (architecture visualizations)
     pub atlas: AtlasState,
-    /// Guide mode state (educational taxonomy views)
-    pub guide: GuideState,
+    /// Nexus mode state (gamified learning hub)
+    pub nexus: NexusState,
     /// Animation tick counter (increments each frame, used for spinners)
     pub tick: u16,
     // ==========================================================================
@@ -305,10 +321,11 @@ impl App {
     pub fn new(tree: TaxonomyTree, root_path: String) -> Self {
         let mut app = Self {
             theme: Theme::with_root(&root_path), // Load colors + icons from YAML
-            mode: NavMode::Meta,
+            mode: NavMode::Graph,
+            graph_view: GraphView::default(),
             focus: Focus::Tree,
             tree_cursor: 0,
-            mode_cursors: [0; 7], // Init all modes at cursor 0 (Meta, Data, Overlay, Query, Atlas, Audit, Guide)
+            mode_cursors: [0; 3], // Init all modes at cursor 0 (Graph, Audit, Nexus)
             tree_scroll: 0,
             tree_height: DEFAULT_TREE_HEIGHT,
             tree,
@@ -346,7 +363,7 @@ impl App {
             data_cursor_before_filter: 0,
             hide_empty: false,
             atlas: AtlasState::default(),
-            guide: GuideState::default(),
+            nexus: NexusState::default(),
             tick: 0,
             // Schema overlay (Feature 1)
             schema_overlay_enabled: true, // Enabled by default
@@ -369,14 +386,18 @@ impl App {
         app
     }
 
-    /// Get the active YAML section based on current navigation mode.
-    /// - Meta mode → Kind section
-    /// - Data mode → Instance section
+    /// Get the active YAML section based on current navigation mode and graph view.
+    /// - Graph mode + Taxonomy → Kind section
+    /// - Graph mode + Instances → Instance section
     pub fn yaml_active_section(&self) -> YamlViewSection {
         match self.mode {
-            NavMode::Meta => YamlViewSection::Kind,
-            NavMode::Data => YamlViewSection::Instance,
-            // Overlay/Query/Atlas default to Kind
+            NavMode::Graph => {
+                match self.graph_view {
+                    GraphView::Taxonomy => YamlViewSection::Kind,
+                    GraphView::Instances => YamlViewSection::Instance,
+                }
+            }
+            // Audit/Nexus default to Kind
             _ => YamlViewSection::Kind,
         }
     }
@@ -785,90 +806,25 @@ impl App {
             }
         }
 
-        // Atlas mode delegates to atlas state (except mode switching 1-4)
-        if self.mode == NavMode::Atlas {
-            match key.code {
-                // Mode switching exits Atlas mode (with cursor memory)
-                KeyCode::Char('1') => {
-                    self.save_mode_cursor();
-                    self.mode = NavMode::Meta;
-                    self.restore_mode_cursor(NavMode::Meta);
-                    self.load_yaml_for_current();
-                    return true;
-                }
-                KeyCode::Char('2') => {
-                    self.save_mode_cursor();
-                    self.mode = NavMode::Data;
-                    self.restore_mode_cursor(NavMode::Data);
-                    self.request_instance_load_for_current();
-                    return true;
-                }
-                KeyCode::Char('3') => {
-                    // Already in Atlas, no-op
-                    return false;
-                }
-                KeyCode::Char('4') => {
-                    self.save_mode_cursor();
-                    self.mode = NavMode::Audit;
-                    self.restore_mode_cursor(NavMode::Audit);
-                    self.pending_audit_load = true;
-                    return true;
-                }
-                KeyCode::Char('5') => {
-                    self.save_mode_cursor();
-                    self.mode = NavMode::Guide;
-                    self.restore_mode_cursor(NavMode::Guide);
-                    return true;
-                }
-                KeyCode::Char('?') => {
-                    self.help_active = true;
-                    return true;
-                }
-                KeyCode::Char('/') | KeyCode::Char('f') => {
-                    self.search.active = true;
-                    return true;
-                }
-                KeyCode::F(1) => {
-                    self.legend_active = true;
-                    return true;
-                }
-                // All other keys handled by atlas
-                _ => return self.atlas.handle_key(key),
-            }
-        }
-
-        // Audit mode: handle navigation and mode switching
+        // Audit mode: handle navigation and mode switching (1=Graph, 2=Audit, 3=Nexus)
         if self.mode == NavMode::Audit {
             match key.code {
                 // Mode switching exits Audit mode
                 KeyCode::Char('1') => {
                     self.save_mode_cursor();
-                    self.mode = NavMode::Meta;
-                    self.restore_mode_cursor(NavMode::Meta);
+                    self.mode = NavMode::Graph;
+                    self.restore_mode_cursor(NavMode::Graph);
                     self.load_yaml_for_current();
                     return true;
                 }
                 KeyCode::Char('2') => {
-                    self.save_mode_cursor();
-                    self.mode = NavMode::Data;
-                    self.restore_mode_cursor(NavMode::Data);
-                    self.request_instance_load_for_current();
-                    return true;
-                }
-                KeyCode::Char('3') => {
-                    self.save_mode_cursor();
-                    self.mode = NavMode::Atlas;
-                    self.restore_mode_cursor(NavMode::Atlas);
-                    return true;
-                }
-                KeyCode::Char('4') => {
                     // Already in Audit, no-op
                     return false;
                 }
-                KeyCode::Char('5') => {
+                KeyCode::Char('3') => {
                     self.save_mode_cursor();
-                    self.mode = NavMode::Guide;
-                    self.restore_mode_cursor(NavMode::Guide);
+                    self.mode = NavMode::Nexus;
+                    self.restore_mode_cursor(NavMode::Nexus);
                     return true;
                 }
                 // Navigation in Audit mode
@@ -902,16 +858,16 @@ impl App {
             }
         }
 
-        // Guide mode: delegates to guide state
-        // Keys 1-4 switch Guide tabs (Traits/Layers/Arcs/Pipeline), NOT global modes
-        // Use Esc to exit Guide mode back to Meta mode
-        if self.mode == NavMode::Guide {
+        // Nexus mode: delegates to guide state (gamified learning hub)
+        // Keys 1-4 switch Nexus tabs (Traits/Layers/Arcs/Pipeline), NOT global modes
+        // Use Esc to exit Nexus mode back to Graph mode
+        if self.mode == NavMode::Nexus {
             match key.code {
                 KeyCode::Esc => {
-                    // Exit Guide mode, return to Meta
+                    // Exit Nexus mode, return to Graph
                     self.save_mode_cursor();
-                    self.mode = NavMode::Meta;
-                    self.restore_mode_cursor(NavMode::Meta);
+                    self.mode = NavMode::Graph;
+                    self.restore_mode_cursor(NavMode::Graph);
                     self.load_yaml_for_current();
                     return true;
                 }
@@ -927,8 +883,8 @@ impl App {
                     self.legend_active = true;
                     return true;
                 }
-                // All keys (including 1-4 for tab switching) handled by guide
-                _ => return self.guide.handle_key(key),
+                // All keys (including 1-4 for tab switching) handled by nexus (guide)
+                _ => return self.nexus.handle_key(key),
             }
         }
 
@@ -960,68 +916,59 @@ impl App {
                 true
             }
 
-            // Mode switching: 1-4 direct (1=Meta, 2=Data, 3=Atlas, 4=Audit)
+            // Mode switching: 1-3 direct (1=Graph, 2=Audit, 3=Nexus)
             KeyCode::Char('1') => {
-                // Switch to Meta mode, restoring saved cursor position
-                self.exit_filtered_data_mode();
-                self.tree.collapse_all_kinds(); // Collapse all Kind instances
-                self.save_mode_cursor(); // Save Data cursor
-                self.mode = NavMode::Meta;
-                self.restore_mode_cursor(NavMode::Meta); // Restore Meta cursor
-                self.load_yaml_for_current();
+                // Switch to Graph mode (or exit filtered mode if already there)
+                if self.mode != NavMode::Graph {
+                    self.exit_filtered_data_mode();
+                    self.save_mode_cursor();
+                    self.mode = NavMode::Graph;
+                    self.restore_mode_cursor(NavMode::Graph);
+                    self.load_yaml_for_current();
+                } else if self.is_filtered_data_mode() {
+                    // Already in Graph mode but filtered - exit filter
+                    self.exit_filtered_data_mode();
+                    self.graph_view = GraphView::Taxonomy;
+                }
                 true
             }
             KeyCode::Char('2') => {
-                // If on a Kind in Meta mode, switch to Data and expand to show instances
-                if self.mode == NavMode::Meta {
-                    if let Some(super::data::TreeItem::Kind(_, _, kind)) =
-                        self.tree.item_at(self.tree_cursor)
-                    {
-                        let kind_key = kind.key.clone();
-                        self.save_mode_cursor();
-                        self.mode = NavMode::Data;
-                        // Collapse all Kinds first, then expand only the current one
-                        self.tree.collapse_all_kinds();
-                        self.tree.collapsed.remove(&format!("kind:{}", kind_key));
-                        // Request instance load
-                        if self.tree.get_instances(&kind_key).is_none() {
-                            self.pending_instance_load = Some(kind_key);
-                        }
-                        return true;
-                    }
+                // Switch to Audit mode
+                if self.mode != NavMode::Audit {
+                    self.exit_filtered_data_mode();
+                    self.save_mode_cursor();
+                    self.mode = NavMode::Audit;
+                    self.restore_mode_cursor(NavMode::Audit);
+                    self.pending_audit_load = true;
                 }
-                self.exit_filtered_data_mode();
-                self.tree.collapse_all_kinds(); // Collapse all Kind instances
-                self.save_mode_cursor();
-                self.mode = NavMode::Data;
-                self.restore_mode_cursor(NavMode::Data);
-                self.request_instance_load_for_current();
                 true
             }
             KeyCode::Char('3') => {
-                self.exit_filtered_data_mode();
-                self.save_mode_cursor();
-                self.mode = NavMode::Atlas;
-                self.restore_mode_cursor(NavMode::Atlas);
-                // Initialize atlas with context from current selection
-                self.init_atlas_from_current();
+                // Switch to Nexus mode
+                if self.mode != NavMode::Nexus {
+                    self.exit_filtered_data_mode();
+                    self.save_mode_cursor();
+                    self.mode = NavMode::Nexus;
+                    self.restore_mode_cursor(NavMode::Nexus);
+                }
                 true
             }
-            KeyCode::Char('4') => {
-                self.exit_filtered_data_mode();
-                self.save_mode_cursor();
-                self.mode = NavMode::Audit;
-                self.restore_mode_cursor(NavMode::Audit);
-                // Request audit stats load
-                self.pending_audit_load = true;
-                true
-            }
-            KeyCode::Char('5') => {
-                self.exit_filtered_data_mode();
-                self.save_mode_cursor();
-                self.mode = NavMode::Guide;
-                self.restore_mode_cursor(NavMode::Guide);
-                true
+            // Toggle GraphView (Taxonomy ↔ Instances) in Graph mode
+            KeyCode::Char('t') => {
+                if self.mode == NavMode::Graph {
+                    self.graph_view = self.graph_view.toggle();
+                    // When switching to Instances view, request instance load for current Kind
+                    if self.graph_view == GraphView::Instances {
+                        self.request_instance_load_for_current();
+                    } else {
+                        // When switching to Taxonomy, collapse all Kind instances
+                        self.tree.collapse_all_kinds();
+                    }
+                    self.load_yaml_for_current();
+                    true
+                } else {
+                    false
+                }
             }
             KeyCode::Char('n') | KeyCode::Char('N') => {
                 self.exit_filtered_data_mode();
@@ -1029,10 +976,6 @@ impl App {
                 let new_mode = self.mode.cycle();
                 self.mode = new_mode;
                 self.restore_mode_cursor(new_mode);
-                // Initialize atlas when cycling to it
-                if new_mode == NavMode::Atlas {
-                    self.init_atlas_from_current();
-                }
                 // Request audit stats when cycling to Audit
                 if new_mode == NavMode::Audit {
                     self.pending_audit_load = true;
@@ -1378,10 +1321,10 @@ impl App {
                     self.yaml_peek = false;
                     return true;
                 }
-                // Second priority: exit filtered Data mode
+                // Second priority: exit filtered Data mode (switch to Taxonomy view)
                 if self.is_filtered_data_mode() {
                     self.exit_filtered_data_mode();
-                    self.mode = NavMode::Meta;
+                    self.graph_view = GraphView::Taxonomy;
                     return true;
                 }
                 false
@@ -1495,9 +1438,10 @@ impl App {
         }
     }
 
-    /// Check if currently in Data mode.
+    /// Check if currently showing instances (Instances view in Graph mode).
+    /// This is the equivalent of the old Data mode.
     pub fn is_data_mode(&self) -> bool {
-        self.mode == NavMode::Data
+        self.mode == NavMode::Graph && self.graph_view == GraphView::Instances
     }
 
     /// Save current cursor to mode_cursors for the current mode.
@@ -1952,32 +1896,27 @@ impl App {
         self.atlas.pending_page_load = true; // Trigger data load
     }
 
-    /// Check if Atlas realm stats need loading (returns true once, then resets flag).
+    // NOTE: Atlas methods kept for compatibility but Atlas mode is removed in v11.3.
+    // Atlas functionality will be migrated to Nexus missions in a future phase.
+
+    /// Check if Atlas realm stats need loading (always false - Atlas removed in v11.3).
     pub fn take_pending_atlas_realm_stats_load(&mut self) -> bool {
-        if self.atlas.pending_realm_stats_load && self.mode == NavMode::Atlas {
-            self.atlas.pending_realm_stats_load = false;
-            true
-        } else {
-            false
-        }
+        false // Atlas mode removed
     }
 
     /// Set Atlas realm stats (for Realm Map view).
+    #[allow(dead_code)]
     pub fn set_atlas_realm_stats(&mut self, stats: super::data::AtlasRealmStats) {
         self.atlas.realm_stats = Some(stats);
     }
 
-    /// Check if Atlas pages list needs loading (returns true once, then resets flag).
+    /// Check if Atlas pages list needs loading (always false - Atlas removed in v11.3).
     pub fn take_pending_atlas_pages_list_load(&mut self) -> bool {
-        if self.atlas.pending_pages_list_load && self.mode == NavMode::Atlas {
-            self.atlas.pending_pages_list_load = false;
-            true
-        } else {
-            false
-        }
+        false // Atlas mode removed
     }
 
     /// Set Atlas pages list (for Page Composition view).
+    #[allow(dead_code)]
     pub fn set_atlas_pages_list(&mut self, pages: Vec<super::data::AtlasPageInfo>) {
         self.atlas.page_count = pages.len();
         self.atlas.pages_list = pages;
@@ -1988,20 +1927,13 @@ impl App {
         }
     }
 
-    /// Check if Atlas page composition needs loading (returns page key and locale if needed).
+    /// Check if Atlas page composition needs loading (always None - Atlas removed in v11.3).
     pub fn take_pending_atlas_page_load(&mut self) -> Option<(String, String)> {
-        if self.atlas.pending_page_load && self.mode == NavMode::Atlas {
-            self.atlas.pending_page_load = false;
-            self.atlas
-                .current_page_key
-                .clone()
-                .map(|key| (key, self.atlas.selected_locale.clone()))
-        } else {
-            None
-        }
+        None // Atlas mode removed
     }
 
     /// Set Atlas page composition data.
+    #[allow(dead_code)]
     pub fn set_atlas_page_composition(&mut self, data: super::atlas::PageCompositionData) {
         self.atlas.page_data = Some(data);
     }
@@ -2222,28 +2154,29 @@ mod tests {
     // ========================================================================
 
     #[test]
-    fn test_mode_starts_as_meta() {
+    fn test_mode_starts_as_graph_taxonomy() {
         let app = create_test_app();
-        assert_eq!(app.mode, NavMode::Meta);
-        assert!(!app.is_data_mode());
+        assert_eq!(app.mode, NavMode::Graph);
+        assert_eq!(app.graph_view, GraphView::Taxonomy);
+        assert!(!app.is_data_mode()); // Taxonomy view = not data mode
     }
 
     #[test]
-    fn test_switch_to_data_mode_preserves_cursor() {
+    fn test_switch_to_instances_view_preserves_cursor() {
         let mut app = create_test_app();
 
         // Navigate to Locale kind (index 3)
         // Kinds (0), shared (1), locale (2), Locale (3)
         app.tree_cursor = 3;
 
-        // Verify we're at Locale in Meta mode
+        // Verify we're at Locale in Taxonomy view
         match app.tree.item_at(app.tree_cursor) {
             Some(TreeItem::Kind(_, _, k)) => assert_eq!(k.key, "Locale"),
             other => panic!("Expected Kind Locale, got {:?}", other),
         }
 
-        // Switch to Data mode
-        app.mode = NavMode::Data;
+        // Switch to Instances view
+        app.graph_view = GraphView::Instances;
 
         // Cursor should still be at same position
         assert_eq!(app.tree_cursor, 3);
@@ -2251,12 +2184,12 @@ mod tests {
         // Item at cursor should still be Locale kind
         match app.current_item() {
             Some(TreeItem::Kind(_, _, k)) => assert_eq!(k.key, "Locale"),
-            other => panic!("Expected Kind Locale in Data mode, got {:?}", other),
+            other => panic!("Expected Kind Locale in Instances view, got {:?}", other),
         }
     }
 
     #[test]
-    fn test_data_mode_shows_instances_after_kind() {
+    fn test_instances_view_shows_instances_after_kind() {
         let mut app = create_test_app();
 
         // Add instances to Locale kind
@@ -2287,13 +2220,13 @@ mod tests {
         app.tree
             .set_instances("Locale", instances.clone(), instances.len());
 
-        // Switch to Data mode
-        app.mode = NavMode::Data;
+        // Switch to Instances view
+        app.graph_view = GraphView::Instances;
 
         // Item count should include instances
-        // Meta: 1 (Kinds) + 1 (shared) + 1 (locale) + 1 (Locale)
-        //       + 1 (org) + 1 (structure) + 1 (Page) + 1 (Arcs) = 8
-        // Data: + 2 instances = 10
+        // Taxonomy: 1 (Kinds) + 1 (shared) + 1 (locale) + 1 (Locale)
+        //           + 1 (org) + 1 (structure) + 1 (Page) + 1 (Arcs) = 8
+        // Instances: + 2 instances = 10
         assert_eq!(app.current_item_count(), 10);
 
         // Position 4 should be fr-FR instance
@@ -2316,7 +2249,7 @@ mod tests {
     }
 
     #[test]
-    fn test_meta_mode_hides_instances() {
+    fn test_taxonomy_view_hides_instances() {
         let mut app = create_test_app();
 
         // Add instances
@@ -2334,14 +2267,15 @@ mod tests {
         app.tree
             .set_instances("Locale", instances.clone(), instances.len());
 
-        // In Meta mode, instances should not be counted
+        // In Taxonomy view, instances should not be counted
+        assert_eq!(app.graph_view, GraphView::Taxonomy);
         assert_eq!(app.current_item_count(), 8); // No instances
 
-        // Position 4 should be tenant (not an instance)
+        // Position 4 should be org realm (not an instance)
         app.tree_cursor = 4;
         match app.current_item() {
             Some(TreeItem::Realm(r)) => assert_eq!(r.key, "org"),
-            other => panic!("Expected Realm tenant, got {:?}", other),
+            other => panic!("Expected Realm org, got {:?}", other),
         }
     }
 
@@ -2349,47 +2283,53 @@ mod tests {
     fn test_mode_cycle() {
         let mut app = create_test_app();
 
-        assert_eq!(app.mode, NavMode::Meta);
-
-        app.mode = app.mode.cycle();
-        assert_eq!(app.mode, NavMode::Data);
-
-        app.mode = app.mode.cycle();
-        assert_eq!(app.mode, NavMode::Overlay);
-
-        app.mode = app.mode.cycle();
-        assert_eq!(app.mode, NavMode::Query);
-
-        app.mode = app.mode.cycle();
-        assert_eq!(app.mode, NavMode::Atlas);
+        // v11.3: 3 modes - Graph, Audit, Nexus
+        assert_eq!(app.mode, NavMode::Graph);
 
         app.mode = app.mode.cycle();
         assert_eq!(app.mode, NavMode::Audit);
 
         app.mode = app.mode.cycle();
-        assert_eq!(app.mode, NavMode::Guide);
+        assert_eq!(app.mode, NavMode::Nexus);
 
         app.mode = app.mode.cycle();
-        assert_eq!(app.mode, NavMode::Meta); // Cycle back
+        assert_eq!(app.mode, NavMode::Graph); // Cycle back
     }
 
     #[test]
-    fn test_key_1_switches_to_meta() {
+    fn test_key_1_stays_in_graph_mode() {
         let mut app = create_test_app();
-        app.mode = NavMode::Data;
+        app.mode = NavMode::Audit; // Start in Audit
 
         app.handle_key(crossterm::event::KeyEvent::from(KeyCode::Char('1')));
 
-        assert_eq!(app.mode, NavMode::Meta);
+        assert_eq!(app.mode, NavMode::Graph);
     }
 
     #[test]
-    fn test_key_2_switches_to_data() {
+    fn test_key_2_switches_to_audit() {
         let mut app = create_test_app();
 
         app.handle_key(crossterm::event::KeyEvent::from(KeyCode::Char('2')));
 
-        assert_eq!(app.mode, NavMode::Data);
+        assert_eq!(app.mode, NavMode::Audit);
+    }
+
+    #[test]
+    fn test_key_t_toggles_graph_view() {
+        let mut app = create_test_app();
+        assert_eq!(app.mode, NavMode::Graph);
+        assert_eq!(app.graph_view, GraphView::Taxonomy);
+
+        // Press 't' to toggle to Instances
+        app.handle_key(crossterm::event::KeyEvent::from(KeyCode::Char('t')));
+        assert_eq!(app.graph_view, GraphView::Instances);
+        assert!(app.is_data_mode());
+
+        // Press 't' again to toggle back to Taxonomy
+        app.handle_key(crossterm::event::KeyEvent::from(KeyCode::Char('t')));
+        assert_eq!(app.graph_view, GraphView::Taxonomy);
+        assert!(!app.is_data_mode());
     }
 
     #[test]
@@ -2425,7 +2365,7 @@ mod tests {
             .set_instances("Locale", instances.clone(), instances.len());
 
         // Switch to Data mode
-        app.mode = NavMode::Data;
+        app.graph_view = GraphView::Instances;
 
         // With expanded Locale: 10 items
         assert_eq!(app.current_item_count(), 10);
@@ -2446,7 +2386,7 @@ mod tests {
         app.tree_scroll = 3;
         app.info_scroll = 2;
         app.yaml_scroll = 1;
-        app.mode = NavMode::Data; // Must be in Data mode for filtered mode
+        app.graph_view = GraphView::Instances; // Must be in Data mode for filtered mode
 
         app.enter_filtered_data_mode("Locale".to_string());
 
@@ -2464,7 +2404,7 @@ mod tests {
     fn test_filtered_mode_exit_restores_cursor() {
         let mut app = create_test_app();
         app.tree_cursor = 5;
-        app.mode = NavMode::Data;
+        app.graph_view = GraphView::Instances;
 
         app.enter_filtered_data_mode("Locale".to_string());
         assert_eq!(app.tree_cursor, 0);
@@ -2477,7 +2417,7 @@ mod tests {
     #[test]
     fn test_filtered_mode_exit_clamps_cursor_to_bounds() {
         let mut app = create_test_app();
-        app.mode = NavMode::Data;
+        app.graph_view = GraphView::Instances;
         app.tree_cursor = 100; // Way beyond valid range
         app.data_cursor_before_filter = 100;
         app.data_filter_kind = Some("Locale".to_string());
@@ -2492,7 +2432,7 @@ mod tests {
     #[test]
     fn test_filtered_mode_empty_instances() {
         let mut app = create_test_app();
-        app.mode = NavMode::Data;
+        app.graph_view = GraphView::Instances;
         // Page has no instances loaded
         app.enter_filtered_data_mode("Page".to_string());
 
@@ -2507,7 +2447,7 @@ mod tests {
     #[test]
     fn test_filtered_mode_with_instances() {
         let mut app = create_test_app();
-        app.mode = NavMode::Data;
+        app.graph_view = GraphView::Instances;
 
         // Add instances to Locale kind
         let instances = vec![
@@ -2554,7 +2494,7 @@ mod tests {
     #[test]
     fn test_key_esc_exits_filtered_mode() {
         let mut app = create_test_app();
-        app.mode = NavMode::Data;
+        app.graph_view = GraphView::Instances;
         app.enter_filtered_data_mode("Locale".to_string());
 
         assert!(app.is_filtered_data_mode());
@@ -2564,22 +2504,24 @@ mod tests {
 
         assert!(handled);
         assert!(!app.is_filtered_data_mode());
-        assert_eq!(app.mode, NavMode::Meta); // Switched back to Meta
+        // v11.3: Esc exits filtered mode and switches to Taxonomy view
+        assert_eq!(app.graph_view, GraphView::Taxonomy);
+        assert_eq!(app.mode, NavMode::Graph); // Still in Graph mode
     }
 
     #[test]
     fn test_key_1_exits_filtered_mode() {
         let mut app = create_test_app();
-        app.mode = NavMode::Data;
+        app.graph_view = GraphView::Instances;
         app.enter_filtered_data_mode("Locale".to_string());
 
         assert!(app.is_filtered_data_mode());
 
-        // Press 1 (switch to Meta)
+        // Press 1 (stay in Graph mode, exits filtered mode)
         app.handle_key(crossterm::event::KeyEvent::from(KeyCode::Char('1')));
 
         assert!(!app.is_filtered_data_mode());
-        assert_eq!(app.mode, NavMode::Meta);
+        assert_eq!(app.mode, NavMode::Graph);
     }
 
     // ========================================================================
@@ -3420,11 +3362,11 @@ mod tests {
         app.search.active = true;
         app.update_search();
 
-        // Switch mode directly
-        app.mode = NavMode::Meta;
+        // Switch mode directly (to Audit, for example)
+        app.mode = NavMode::Audit;
 
         // Search state should still exist
-        assert_eq!(app.mode, NavMode::Meta);
+        assert_eq!(app.mode, NavMode::Audit);
         // Search results preserved (or cleared depending on design)
     }
 

@@ -305,7 +305,7 @@ impl TaxonomyTree {
 /// Render the Traits tab with constellation and detail panel.
 /// When drilled down (drill_depth > 0), shows kind list instead of constellation.
 pub fn render_traits_tab(f: &mut Frame, app: &App, area: Rect) {
-    if app.guide.drill_depth > 0 {
+    if app.nexus.drill_depth > 0 {
         // Drilled mode: show kind list on left, detail on right
         let chunks = Layout::default()
             .direction(Direction::Horizontal)
@@ -329,7 +329,7 @@ pub fn render_traits_tab(f: &mut Frame, app: &App, area: Rect) {
 /// Render the constellation view showing 5 traits connected.
 fn render_constellation(f: &mut Frame, app: &App, area: Rect) {
     let trait_stats = app.tree.get_trait_stats();
-    let selected_idx = app.guide.trait_cursor;
+    let selected_idx = app.nexus.trait_cursor;
     let theme = &app.theme;
 
     let block = Block::default()
@@ -488,7 +488,7 @@ fn center_text(text: &str, width: usize) -> String {
 /// Render the detail panel for the selected trait.
 fn render_detail_panel(f: &mut Frame, app: &App, area: Rect) {
     let trait_stats = app.tree.get_trait_stats();
-    let selected_idx = app.guide.trait_cursor;
+    let selected_idx = app.nexus.trait_cursor;
     let theme = &app.theme;
 
     let selected = trait_stats.get(selected_idx);
@@ -745,7 +745,7 @@ fn render_detail_panel(f: &mut Frame, app: &App, area: Rect) {
 /// Render the list of kinds for the selected trait (drill-down view).
 fn render_kind_list(f: &mut Frame, app: &App, area: Rect) {
     let trait_stats = app.tree.get_trait_stats();
-    let selected_trait_idx = app.guide.trait_cursor;
+    let selected_trait_idx = app.nexus.trait_cursor;
     let theme = &app.theme;
 
     let trait_name = TRAIT_ORDER.get(selected_trait_idx).unwrap_or(&"");
@@ -765,7 +765,7 @@ fn render_kind_list(f: &mut Frame, app: &App, area: Rect) {
     f.render_widget(block, area);
 
     // Get flattened kinds list
-    let kinds = app.guide.get_trait_kinds(&trait_stats);
+    let kinds = app.nexus.get_trait_kinds(&trait_stats);
     let visible_height = inner.height as usize;
 
     if kinds.is_empty() {
@@ -779,7 +779,7 @@ fn render_kind_list(f: &mut Frame, app: &App, area: Rect) {
     }
 
     // Calculate scroll window
-    let cursor = app.guide.drill_cursor.min(kinds.len().saturating_sub(1));
+    let cursor = app.nexus.drill_cursor.min(kinds.len().saturating_sub(1));
     let scroll_offset = if cursor < visible_height / 2 {
         0
     } else if cursor >= kinds.len().saturating_sub(visible_height / 2) {
@@ -858,7 +858,7 @@ fn render_kind_list(f: &mut Frame, app: &App, area: Rect) {
 /// Render detail panel for the selected kind in drill-down view.
 fn render_kind_detail(f: &mut Frame, app: &App, area: Rect) {
     let trait_stats = app.tree.get_trait_stats();
-    let kinds = app.guide.get_trait_kinds(&trait_stats);
+    let kinds = app.nexus.get_trait_kinds(&trait_stats);
     let theme = &app.theme;
 
     let block = Block::default()
@@ -874,7 +874,7 @@ fn render_kind_detail(f: &mut Frame, app: &App, area: Rect) {
     let inner = block.inner(area);
     f.render_widget(block, area);
 
-    let cursor = app.guide.drill_cursor.min(kinds.len().saturating_sub(1));
+    let cursor = app.nexus.drill_cursor.min(kinds.len().saturating_sub(1));
 
     let Some((layer_key, kind_key)) = kinds.get(cursor) else {
         let empty = Paragraph::new("Select a kind to see details");
@@ -909,7 +909,7 @@ fn render_kind_detail(f: &mut Frame, app: &App, area: Rect) {
     let mut lines: Vec<Line> = Vec::new();
 
     // Kind name with trait symbol
-    let trait_name = TRAIT_ORDER.get(app.guide.trait_cursor).unwrap_or(&"");
+    let trait_name = TRAIT_ORDER.get(app.nexus.trait_cursor).unwrap_or(&"");
     let trait_color = theme.trait_color(trait_name);
 
     lines.push(Line::from(vec![
