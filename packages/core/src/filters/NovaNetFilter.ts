@@ -276,7 +276,7 @@ export class NovaNetFilter {
   }
 
   // REMOVED v10.3: includeProjectConcepts() - HAS_CONCEPT arc removed
-  // Entity is now in global realm, accessed via USES_ENTITY from Page/Block
+  // Entity is now in shared realm, accessed via USES_ENTITY from Page/Block
 
   /**
    * Includes localized content via FOR_LOCALE relation.

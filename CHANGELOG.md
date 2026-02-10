@@ -7,6 +7,34 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [11.2.0] - 2026-02-10
+
+### Breaking Changes
+- **Realm renames**: `global` → `shared`, `tenant` → `org`
+  - Clearer naming: `shared` describes purpose (shared resources), `org` describes ownership
+  - Updated 65 YAML files, 40+ Rust files, 8+ TypeScript files
+- **Trait split**: `derived` → `generated` + `aggregated`
+  - `generated` (4 nodes): PageGenerated, BlockGenerated, OutputArtifact, PromptArtifact
+  - `aggregated` (3 nodes): GeoAnswer, GeoMetrics, SEOKeywordMetrics
+- **Job removal**: Removed `job` trait and 3 nodes
+  - Deleted: GenerationJob, SEOMiningRun, EvaluationSignal
+  - Deleted: 7 arc kinds referencing job nodes
+
+### Added
+- **Visibility derivation**: `internal` | `fragment` | `publishable` derived from (realm, layer, kind)
+- **Status property**: `draft` | `reviewed` | `published` on EntityContent, ProjectContent
+- **ADR-018**: Classification System Refinement documentation
+
+### Changed
+- **Node count**: 65 → 62 nodes (removed 3 job nodes)
+- **Trait count**: 6 → 5 traits (removed job, split derived)
+- **Container traits**: TermSet, ExpressionSet, etc. now `invariant` (was `knowledge`)
+- **TUI Icons**: Updated defaults for generated/aggregated traits
+
+### Fixed
+- KEYBINDINGS.md deprecated trait references (gd→gg, gj removed, ga added)
+- Documentation version references updated to v11.2.0
+
 ## [11.0.0] - 2026-02-09
 
 ### Breaking Changes
@@ -256,7 +284,9 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Migrated from git submodules to true monorepo
 - Organization links updated to supernovae-st
 
-[Unreleased]: https://github.com/supernovae-st/novanet-dev/compare/v9.7.0...HEAD
+[Unreleased]: https://github.com/supernovae-st/novanet-dev/compare/v11.2.0...HEAD
+[11.2.0]: https://github.com/supernovae-st/novanet-dev/compare/v11.0.0...v11.2.0
+[11.0.0]: https://github.com/supernovae-st/novanet-dev/compare/v9.7.0...v11.0.0
 [9.7.0]: https://github.com/supernovae-st/novanet-dev/compare/v9.0.1...v9.7.0
 [9.0.1]: https://github.com/supernovae-st/novanet-dev/compare/v9.0.0...v9.0.1
 [9.0.0]: https://github.com/supernovae-st/novanet-dev/compare/v8.3.0...v9.0.0

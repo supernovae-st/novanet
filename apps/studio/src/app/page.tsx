@@ -223,7 +223,7 @@ export default function HomePage() {
     if (navigationMode === 'meta') {
       const nodeId = uiState.hoveredNodeId;
 
-      // Realm containers: realm-{Realm} (e.g., realm-global, realm-tenant)
+      // Realm containers: realm-{Realm} (e.g., realm-shared, realm-org)
       if (nodeId.startsWith('realm-')) {
         const realm = nodeId.replace('realm-', '');
         const realmEmoji = realm === 'shared' ? '🌍' : realm === 'org' ? '🏢' : '🎯';

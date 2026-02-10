@@ -35,7 +35,7 @@ Generate culturally-native content across 200+ locales — not translation, but 
 |  |  |  |  |
 |:---:|:---:|:---:|:---:|
 | **Knowledge Graph** | **200+ Locales** | **Graph Studio** | **AI-Powered** |
-| 65 node types, 124 arcs | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
+| 62 node types, 124 arcs | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
 | Neo4j with APOC | Locale knowledge layer | React Flow + ELK.js layouts | Cypher generation from text |
 
 ---
@@ -54,10 +54,10 @@ Generate culturally-native content across 200+ locales — not translation, but 
 flowchart TB
     subgraph MONO["NovaNet Monorepo"]
         direction TB
-        CORE["@novanet/core v11.0.0\nTypes · Schemas · Filters"]
+        CORE["@novanet/core v11.2.0\nTypes · Schemas · Filters"]
         DB["@novanet/db v1.0.0\nDocker · Seeds · Migrations"]
-        STUDIO["@novanet/studio v11.0.0\nNext.js 16 · React 19"]
-        RUST["novanet CLI v11.0.0\nRust · 13 commands · TUI"]
+        STUDIO["@novanet/studio v11.2.0\nNext.js 16 · React 19"]
+        RUST["novanet CLI v11.2.0\nRust · 13 commands · TUI"]
     end
 
     CORE --> STUDIO
@@ -117,7 +117,7 @@ novanet-hq/
 ├── packages/
 │   ├── core/                  # @novanet/core — types, schemas, filters
 │   │   ├── models/            # YAML schema definitions (source of truth)
-│   │   │   ├── taxonomy.yaml  # 2 realms (global 2 + tenant 7), 9 layers, 5 traits
+│   │   │   ├── taxonomy.yaml  # 2 realms (shared 2 + org 7), 9 layers, 5 traits
 │   │   │   ├── node-kinds/    # node definitions by realm/layer
 │   │   │   └── arc-kinds/     # arc definitions by family
 │   │   └── src/               # TypeScript implementation
@@ -143,10 +143,10 @@ novanet-hq/
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| **@novanet/core** | `11.0.0` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
+| **@novanet/core** | `11.2.0` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
 | **@novanet/db** | `1.0.0` | Docker Compose for Neo4j, Cypher seeds, migrations |
-| **@novanet/studio** | `11.0.0` | Interactive graph visualization with AI chat |
-| **tools/novanet** | `11.0.0` | Rust CLI + TUI for schema generation, validation, queries |
+| **@novanet/studio** | `11.2.0` | Interactive graph visualization with AI chat |
+| **tools/novanet** | `11.2.0` | Rust CLI + TUI for schema generation, validation, queries |
 
 ---
 
@@ -215,14 +215,14 @@ Password: (see NEO4J_PASSWORD env var)
 
 ## Graph Schema
 
-NovaNet models content as a knowledge graph with **2 Realms** and **9 Layers** (v11.0.0):
+NovaNet models content as a knowledge graph with **2 Realms** and **9 Layers** (v11.2.0):
 
 | Realm | Layers | Description |
 |-------|--------|-------------|
-| **Global** | config, locale-knowledge | Universal locale knowledge (READ-ONLY) |
-| **Tenant** | config, foundation, structure, semantic, instruction, seo, output | Business-specific content |
+| **Shared** | config, locale-knowledge | Universal locale knowledge (READ-ONLY) |
+| **Org** | config, foundation, structure, semantic, instruction, seo, output | Organization-specific content |
 
-Each node type has a **Trait** (invariant / localized / knowledge / derived / job) and arcs are classified by **ArcFamily**.
+Each node type has a **Trait** (invariant / localized / knowledge / generated / aggregated) and arcs are classified by **ArcFamily**.
 
 See [`packages/core/models/taxonomy.yaml`](packages/core/models/taxonomy.yaml) for complete schema.
 
@@ -249,7 +249,7 @@ See [`packages/core/models/taxonomy.yaml`](packages/core/models/taxonomy.yaml) f
 │ │ ...            │  │   [BlockGenerated]               │  │ [Copy JSON]  │ │
 │ └────────────────┘  └──────────────────────────────────┘  └──────────────┘ │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  Mode: Data  │  65 nodes  │  124 arcs  │  Zoom: 100%  │  Locale: fr-FR │
+│  Mode: Data  │  62 nodes  │  124 arcs  │  Zoom: 100%  │  Locale: fr-FR │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 *Interactive 2D graph visualization with AI-powered queries (⌘J)*

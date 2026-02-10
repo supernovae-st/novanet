@@ -39,7 +39,7 @@ v11.0 establishes 2-Realm Architecture with naming convention refactor:
 - Renamed arcs: HAS_L10N → HAS_CONTENT, HAS_OUTPUT → HAS_GENERATED
 - GLOBAL (2 layers): config, locale-knowledge — universal, READ-ONLY
 - TENANT (7 layers): config, foundation, structure, semantic, seo, instruction, output
-- 65 node types, 124 arc types (v11.1: +EntityCategory, +BELONGS_TO)
+- 62 node types, 124 arc types (v11.2: 62 nodes (shared/org realms), +BELONGS_TO)
 
 **Boundary rule:** TypeScript (this package) generates code artifacts. Rust (`tools/novanet/`) executes at runtime.
 
