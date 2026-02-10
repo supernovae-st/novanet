@@ -82,8 +82,9 @@ export interface CypherQuery {
  * - knowledge: Locale and concept views
  * - project: Project structure views
  * - mining: SEO pipeline views (v10.3: GEO removed)
+ * - contextual: Node-specific views (shown based on selected node type)
  */
-export type ViewCategory = 'overview' | 'generation' | 'knowledge' | 'project' | 'mining';
+export type ViewCategory = 'overview' | 'generation' | 'knowledge' | 'project' | 'mining' | 'contextual';
 
 /**
  * Navigation modes that a view supports.

@@ -4,14 +4,64 @@
  * Executes view Cypher queries and returns graph data (nodes + edges).
  * Used by Context Views Action Cards in the TabbedDetailPanel footer.
  *
+ * v11.6: Supports YAML-based contextual views with direct Cypher templates
+ *
  * @example GET /api/views/composition/data?nodeId=xxx&nodeKey=page:homepage
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { promises as fs } from 'fs';
+import path from 'path';
+import yaml from 'js-yaml';
 import { executeQuery } from '@/lib/neo4j';
 import { getViewQuery, getViewStatsQuery } from '@/lib/cypher/viewQueries';
 import { VIEW_TYPES, type ViewId } from '@/config/viewTypes';
 import { logger } from '@/lib/logger';
+
+// =============================================================================
+// YAML CONTEXTUAL VIEW TYPES
+// =============================================================================
+
+interface ContextualViewParam {
+  name: string;
+  type: string;
+  required?: boolean;
+  description?: string;
+}
+
+interface ContextualViewDef {
+  id: string;
+  description: string;
+  category: string;
+  contextual: boolean;
+  applicable_types: string[];
+  modes: string[];
+  cypher: string;
+  params?: ContextualViewParam[];
+}
+
+/**
+ * Try to load a contextual view from YAML.
+ */
+async function loadContextualView(viewId: string): Promise<ContextualViewDef | null> {
+  const contextualPath = path.join(
+    process.cwd(),
+    '../../packages/core/models/views/contextual',
+    `${viewId}.yaml`
+  );
+
+  try {
+    const content = await fs.readFile(contextualPath, 'utf-8');
+    const data = yaml.load(content) as ContextualViewDef;
+
+    if (data && data.contextual === true && data.cypher) {
+      return data;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
 
 // =============================================================================
 // VALIDATION
@@ -49,14 +99,6 @@ export async function GET(
     );
   }
 
-  // Check if view exists in our configuration
-  if (!VIEW_TYPES[id as ViewId]) {
-    return NextResponse.json(
-      { success: false, error: `View '${id}' not found` },
-      { status: 404 }
-    );
-  }
-
   try {
     // Extract query parameters
     const searchParams = request.nextUrl.searchParams;
@@ -88,16 +130,85 @@ export async function GET(
     // Parse limit (default 50, max 200)
     const limit = Math.min(Math.max(parseInt(limitParam || '50', 10) || 50, 1), 200);
 
-    // Build query params
+    const viewId = id as ViewId;
+
+    // First, try to load YAML contextual view
+    const contextualView = await loadContextualView(id);
+
+    if (contextualView) {
+      // Use YAML Cypher template
+      const cypherParams: Record<string, unknown> = {
+        nodeKey,
+        nodeId,
+        nodeType,
+        limit,
+      };
+
+      logger.info('API', `/views/${id}/data (YAML contextual)`, {
+        nodeKey,
+        description: contextualView.description,
+      });
+
+      const result = await executeQuery(contextualView.cypher, cypherParams);
+
+      // Get view configuration for visual styling
+      const viewConfig = VIEW_TYPES[viewId];
+
+      if (statsOnly) {
+        return NextResponse.json({
+          success: true,
+          data: {
+            stats: {
+              nodeCount: result.totalNodes,
+              arcCount: result.totalArcs,
+            },
+          },
+          meta: {
+            viewId,
+            queryDuration: result.duration,
+            requestDuration: Date.now() - startTime,
+          },
+        });
+      }
+
+      return NextResponse.json({
+        success: true,
+        data: {
+          nodes: result.nodes,
+          edges: result.edges,
+          view: {
+            id: viewId,
+            label: viewConfig?.label || contextualView.id,
+            style: viewConfig?.style || 'flow',
+            effect: viewConfig?.effect || 'border-beam',
+            transitionColor: viewConfig?.transitionColor || '#06b6d4',
+          },
+        },
+        meta: {
+          totalNodes: result.totalNodes,
+          totalArcs: result.totalArcs,
+          queryDuration: result.duration,
+          requestDuration: Date.now() - startTime,
+          description: contextualView.description,
+        },
+      });
+    }
+
+    // Check if view exists in our configuration (for non-contextual views)
+    if (!VIEW_TYPES[viewId]) {
+      return NextResponse.json(
+        { success: false, error: `View '${id}' not found` },
+        { status: 404 }
+      );
+    }
+
+    // Build query params for hardcoded queries
     const queryParams = {
       nodeId,
       nodeKey,
       nodeType,
       limit,
     };
-
-    // Get the appropriate query
-    const viewId = id as ViewId;
 
     if (statsOnly) {
       // Return only stats (lighter weight)
@@ -126,7 +237,7 @@ export async function GET(
       });
     }
 
-    // Full data query
+    // Full data query (fallback to hardcoded queries)
     const { cypher, params: cypherParams, description } = getViewQuery(viewId, queryParams);
 
     logger.info('API', `/views/${id}/data`, {

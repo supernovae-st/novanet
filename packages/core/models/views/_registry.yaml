@@ -1,5 +1,5 @@
 # models/views/_registry.yaml
-version: "11.5.0"
+version: "11.6.0"
 description: NovaNet Core View Definitions
 
 # Categories for UI grouping:
@@ -8,6 +8,7 @@ description: NovaNet Core View Definitions
 # - knowledge: Locale and entity views
 # - project: Project structure views
 # - mining: SEO pipeline views
+# - contextual: Node-specific views (contextual: true)
 
 # =============================================================================
 # OVERVIEW LAYER VIEWS (extracted from complete-graph)
@@ -101,4 +102,134 @@ views:
     file: seo-pipeline.yaml
     description: SEO keyword mining and optimization workflow
     category: mining
+    modes: [data, overlay, query]
+
+# =============================================================================
+# CONTEXTUAL VIEWS (node-specific, shown in sidebar)
+# =============================================================================
+
+  # Page/Block hierarchy
+  - id: composition
+    file: contextual/composition.yaml
+    description: Page/Block composition hierarchy
+    category: contextual
+    contextual: true
+    applicable_types: [Page, Block]
+    modes: [data, overlay, query]
+
+  # Locale knowledge
+  - id: knowledge
+    file: contextual/knowledge.yaml
+    description: Locale knowledge atoms (Terms, Expressions, Patterns)
+    category: contextual
+    contextual: true
+    applicable_types: [Locale]
+    modes: [data, overlay, query]
+
+  # Geographic hierarchy
+  - id: geographic
+    file: contextual/geographic.yaml
+    description: Geographic hierarchy (Country → Region → Continent)
+    category: contextual
+    contextual: true
+    applicable_types: [Locale]
+    modes: [data, overlay, query]
+
+  # Project structure
+  - id: project-structure
+    file: contextual/project.yaml
+    description: Project structure (Pages, Entities, Brand)
+    category: contextual
+    contextual: true
+    applicable_types: [Project]
+    modes: [data, overlay, query]
+
+  # Brand identity
+  - id: brand
+    file: contextual/brand.yaml
+    description: Brand identity configuration
+    category: contextual
+    contextual: true
+    applicable_types: [Project, BrandIdentity]
+    modes: [data, overlay, query]
+
+  # Entity connections
+  - id: entities
+    file: contextual/entities.yaml
+    description: Connected entities and semantic links
+    category: contextual
+    contextual: true
+    applicable_types: [Page, Block, Entity]
+    modes: [data, overlay, query]
+
+  # SEO intel
+  - id: seo-intel
+    file: contextual/seo-intel.yaml
+    description: SEO keywords, clusters, and metrics
+    category: contextual
+    contextual: true
+    applicable_types: [Entity, Page, SEOKeyword]
+    modes: [data, overlay, query]
+
+  # GEO intel
+  - id: geo-intel
+    file: contextual/geo-intel.yaml
+    description: GEO queries and AI-generated answers
+    category: contextual
+    contextual: true
+    applicable_types: [Entity, GEOQuery]
+    modes: [data, overlay, query]
+
+  # Generation pipeline
+  - id: generation-pipeline
+    file: contextual/generation.yaml
+    description: Generation pipeline and outputs
+    category: contextual
+    contextual: true
+    applicable_types: [Page, Block, PageGenerated, BlockGenerated]
+    modes: [data, overlay, query]
+
+  # Entity categories
+  - id: categories
+    file: contextual/categories.yaml
+    description: Entity category classification
+    category: contextual
+    contextual: true
+    applicable_types: [Entity, EntityCategory]
+    modes: [data, overlay, query]
+
+  # Cross-realm connections
+  - id: cross-realm
+    file: contextual/cross-realm.yaml
+    description: Cross-realm connections (org ↔ shared)
+    category: contextual
+    contextual: true
+    applicable_types: [Entity, Page, Block, Project]
+    modes: [data, overlay, query]
+
+  # Locale coverage
+  - id: locales
+    file: contextual/locales.yaml
+    description: Locale coverage and content status
+    category: contextual
+    contextual: true
+    applicable_types: [Page, Entity, Project, Block]
+    modes: [data, overlay, query]
+
+  # Content per locale
+  - id: content
+    file: contextual/content.yaml
+    description: Content per locale
+    category: contextual
+    contextual: true
+    applicable_types: [Entity, Project]
+    modes: [data, overlay, query]
+
+  # Performance metrics
+  - id: metrics
+    file: contextual/metrics.yaml
+    description: Performance metrics and analytics
+    category: contextual
+    contextual: true
+    applicable_types: [SEOKeyword, SEOKeywordMetrics, GEOQuery, GEOAnswer]
     modes: [data, overlay, query]

@@ -1,0 +1,26 @@
+# Contextual View: Content
+# Content per locale
+id: content
+description: Content per locale
+category: contextual
+contextual: true
+applicable_types: [Entity, Project]
+modes: [data, overlay, query]
+
+cypher: |
+  MATCH (n {key: $nodeKey})
+  WHERE n:Entity OR n:Project
+  OPTIONAL MATCH (n)-[r:HAS_CONTENT]->(content)
+  OPTIONAL MATCH (content)-[r2:FOR_LOCALE]->(locale:Locale)
+  WITH n,
+       collect(DISTINCT content) AS contents,
+       collect(DISTINCT locale) AS locales,
+       collect(DISTINCT r) + collect(DISTINCT r2) AS rels
+  RETURN [n] + contents + locales AS nodes,
+         rels AS relationships
+
+params:
+  - name: nodeKey
+    type: string
+    required: true
+    description: Key of the Entity or Project

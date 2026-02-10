@@ -1,0 +1,23 @@
+# Contextual View: Geographic
+# Geographic hierarchy (Country → Region → Continent)
+id: geographic
+description: Geographic hierarchy (Country → Region → Continent)
+category: contextual
+contextual: true
+applicable_types: [Locale]
+modes: [data, overlay, query]
+
+cypher: |
+  MATCH (locale:Locale {key: $nodeKey})
+  OPTIONAL MATCH (locale)-[r1:FOR_COUNTRY]->(country)
+  OPTIONAL MATCH (country)-[r2:IN_REGION]->(region)
+  OPTIONAL MATCH (region)-[r3:IN_CONTINENT]->(continent)
+  WITH locale, country, region, continent,
+       collect(DISTINCT r1) + collect(DISTINCT r2) + collect(DISTINCT r3) AS rels
+  RETURN [locale, country, region, continent] AS nodes, rels AS relationships
+
+params:
+  - name: nodeKey
+    type: string
+    required: true
+    description: Key of the Locale
