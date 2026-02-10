@@ -101,7 +101,7 @@ fn render_realm_column(
     realm_idx: usize,
 ) {
     let theme = &app.theme;
-    let is_selected_realm = app.guide.layer_realm == realm_idx;
+    let is_selected_realm = app.nexus.layer_realm == realm_idx;
 
     // Get realm color for border
     let realm_color = theme.realm_color(realm_key);
@@ -154,7 +154,7 @@ fn render_realm_column(
             .map(|(_, count)| *count)
             .unwrap_or(0);
 
-        let is_selected = is_selected_realm && app.guide.layer_cursor == idx;
+        let is_selected = is_selected_realm && app.nexus.layer_cursor == idx;
 
         let card_lines = build_layer_card(
             layer_key,

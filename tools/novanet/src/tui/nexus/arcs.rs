@@ -170,7 +170,7 @@ pub fn render_arcs_tab(f: &mut Frame, app: &App, area: Rect) {
 fn render_arc_families(f: &mut Frame, app: &App, area: Rect) {
     let theme = &app.theme;
     let cards = app.tree.get_arc_family_cards();
-    let selected_idx = app.guide.arc_cursor;
+    let selected_idx = app.nexus.arc_cursor;
 
     let block = Block::default()
         .title(Span::styled(

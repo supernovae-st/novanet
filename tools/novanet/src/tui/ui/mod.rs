@@ -464,15 +464,13 @@ pub fn render(f: &mut Frame, app: &mut App) {
 }
 
 /// Header: Logo + Mode tabs.
-/// Shows: [1]Meta, [2]Data, [3]Atlas, [4]Audit, [5]Guide
-/// (Overlay and Query modes removed - not useful for now)
+/// Shows: [1]Graph, [2]Audit, [3]Nexus
+/// v11.3: Simplified to 3 modes (Graph replaces Meta+Data, Nexus replaces Guide)
 fn render_header(f: &mut Frame, area: Rect, app: &App) {
     let tabs: Vec<Span> = [
-        NavMode::Meta,
-        NavMode::Data,
-        NavMode::Atlas,
+        NavMode::Graph,
         NavMode::Audit,
-        NavMode::Guide,
+        NavMode::Nexus,
     ]
     .iter()
     .enumerate()
@@ -498,33 +496,41 @@ fn render_header(f: &mut Frame, area: Rect, app: &App) {
     ];
     header.extend(tabs);
 
-    // Show hide_empty indicator when active in Data mode
-    if app.hide_empty && app.mode == NavMode::Data {
+    // Show hide_empty indicator when active in Instances view
+    if app.hide_empty && app.is_data_mode() {
         header.push(Span::styled(
             " [∅ hidden]",
             Style::default().fg(Color::Yellow),
         ));
     }
 
-    // Context-aware shortcuts
-    let right_side = if app.mode == NavMode::Atlas {
-        vec![Span::styled(
-            "  a-r:views  d:demo  l:locale  ?:help  q:quit",
-            theme::ui::muted_style(),
-        )]
-    } else if app.mode == NavMode::Guide {
+    // Show GraphView indicator in Graph mode
+    if app.mode == NavMode::Graph {
+        let view_label = match app.graph_view {
+            crate::tui::app::GraphView::Taxonomy => " [T] ",
+            crate::tui::app::GraphView::Instances => " [I] ",
+        };
+        header.push(Span::styled(
+            view_label,
+            Style::default().fg(Color::Cyan),
+        ));
+    }
+
+    // Context-aware shortcuts (v11.3: 3 modes)
+    let right_side = if app.mode == NavMode::Nexus {
         vec![Span::styled(
             "  1-4:tabs  jk:nav  Enter:drill  Esc:back  ?:help  q:quit",
             theme::ui::muted_style(),
         )]
-    } else if app.mode == NavMode::Data {
+    } else if app.mode == NavMode::Audit {
         vec![Span::styled(
-            "  h/l:toggle  jk:scroll  0:hide  Tab:panel  /:find  ?:help  q:quit",
+            "  jk:nav  r:refresh  1-3:modes  ?:help  q:quit",
             theme::ui::muted_style(),
         )]
     } else {
+        // Graph mode
         vec![Span::styled(
-            "  h/l:toggle  jk:scroll  Tab:panel  /:find  ?:help  q:quit",
+            "  h/l:toggle  jk:scroll  t:view  Tab:panel  /:find  ?:help  q:quit",
             theme::ui::muted_style(),
         )]
     };
@@ -564,24 +570,19 @@ impl LayoutMode {
 
 /// Main content: responsive layout based on terminal width.
 fn render_main(f: &mut Frame, area: Rect, app: &mut App) {
-    // Atlas mode has its own rendering
-    if app.mode == NavMode::Atlas {
-        render_atlas(f, area, app);
-        return;
-    }
-
     // Audit mode has its own rendering (Feature 6)
     if app.mode == NavMode::Audit {
         render_audit(f, area, app);
         return;
     }
 
-    // Guide mode has its own rendering (Batch 3+)
-    if app.mode == NavMode::Guide {
-        super::guide::render_guide(f, area, app);
+    // Nexus mode has its own rendering (v11.3: renamed from Guide)
+    if app.mode == NavMode::Nexus {
+        super::nexus::render_nexus(f, area, app);
         return;
     }
 
+    // Graph mode: standard 3-panel layout
     let layout_mode = LayoutMode::detect(area.width);
 
     match layout_mode {
@@ -737,14 +738,11 @@ fn render_recent_items_overlay(f: &mut Frame, app: &App) {
                 None => ("?", format!("(cursor {})", cursor)),
             };
 
+            // v11.3: 3 modes
             let mode_badge = match mode {
-                crate::tui::app::NavMode::Meta => "[M]",
-                crate::tui::app::NavMode::Data => "[D]",
-                crate::tui::app::NavMode::Overlay => "[O]",
-                crate::tui::app::NavMode::Query => "[Q]",
-                crate::tui::app::NavMode::Atlas => "[A]",
+                crate::tui::app::NavMode::Graph => "[G]",
                 crate::tui::app::NavMode::Audit => "[!]",
-                crate::tui::app::NavMode::Guide => "[G]",
+                crate::tui::app::NavMode::Nexus => "[N]",
             };
 
             let prefix = if is_selected { "› " } else { "  " };

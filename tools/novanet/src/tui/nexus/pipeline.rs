@@ -64,8 +64,8 @@ fn vflow_char(tick: usize, offset: usize) -> &'static str {
 /// Render the Pipeline tab with animated generation flow.
 pub fn render_pipeline_tab(f: &mut Frame, app: &App, area: Rect) {
     let theme = &app.theme;
-    let current_stage = app.guide.pipeline_stage;
-    let is_animating = app.guide.pipeline_animating;
+    let current_stage = app.nexus.pipeline_stage;
+    let is_animating = app.nexus.pipeline_animating;
     let tick = app.tick as usize;
 
     // Split into main diagram (70%) and principle box (30%)
