@@ -65,19 +65,30 @@ RETURN
 `;
 
 // =============================================================================
+// Configuration
+// =============================================================================
+
+/** Schema queries should complete quickly (5 seconds max) */
+const SCHEMA_QUERY_TIMEOUT = 5000;
+
+// =============================================================================
 // GET /api/graph/ontology - Fetch schema graph from Neo4j
 // =============================================================================
 
 export async function GET() {
   const startTime = Date.now();
   const driver = getDriver();
-  const session = driver.session({ defaultAccessMode: neo4j.session.READ });
+
+  // Session created inside try for proper error handling
+  let session: ReturnType<typeof driver.session> | null = null;
 
   try {
-    // Execute both queries in parallel
+    session = driver.session({ defaultAccessMode: neo4j.session.READ });
+
+    // Execute both queries in parallel with timeout
     const [kindsResult, arcsResult] = await Promise.all([
-      session.run(KINDS_QUERY),
-      session.run(ARCS_QUERY),
+      session.run(KINDS_QUERY, {}, { timeout: SCHEMA_QUERY_TIMEOUT }),
+      session.run(ARCS_QUERY, {}, { timeout: SCHEMA_QUERY_TIMEOUT }),
     ]);
 
     // Transform Kind records to GraphNodes
@@ -158,6 +169,6 @@ export async function GET() {
       { status: 500 }
     );
   } finally {
-    await session.close();
+    if (session) await session.close();
   }
 }
