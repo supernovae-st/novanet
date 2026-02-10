@@ -1,50 +1,44 @@
-// NovaNet Core - Unified Relation Registry v8.0.0
-// Single source of truth for all Neo4j relationships
-//
-// v7.12.1 CHANGES:
-//   - ADDED: anchor_type property to LINKS_TO (exact_match | partial_match | branded | generic)
-//   - ADDED: nofollow property to LINKS_TO (boolean, default false)
-//
-// v7.12.0 CHANGES:
-//   - ADDED: LINKS_TO (Page → Page) for explicit internal linking with concept-based anchors
-//   - ADDED: SUBTOPIC_OF (Page → Page) for pillar-cluster SEO hierarchy
-//
-// v7.11.0 CHANGES:
-//   - ADDED: PREVIOUS_VERSION relation for content history chains (v10.9: L10n → Content)
-//   - REMOVED: PageGenerated → PageMetrics from HAS_METRICS (query GA/PostHog with date ranges)
-//
-// v7.10.0 CHANGES:
-//   - UPDATED: OF_TYPE now supports Page → PageType (mirrors Block → BlockType)
-//
-// v7.8.5 CHANGES:
-//   - UNIFIED: HAS_METRICS for all time-series observations
-//     - PageGenerated → PageMetrics (existing)
-//     - SEOKeyword → SEOKeywordMetrics (renamed from SEOSnapshot)
-//     - GEOQuery → GEOMetrics (renamed from GEOCitation)
-//   - REMOVED: HAS_SNAPSHOT (replaced by HAS_METRICS)
-//   - REMOVED: HAS_CITATION (replaced by HAS_METRICS)
-//
-// v7.8.3 CHANGES:
-//   - RENAMED: GEOSeed → GEOQuery (LOCALIZED nodes, v10.9: L10n suffix deprecated)
-//   - Updated all relations that reference GEOSeed
-//
-// v7.8.2 CHANGES:
-//   - RENAMED: SEOKeyword → SEOKeyword (LOCALIZED nodes, v10.9: L10n suffix deprecated)
-//   - Updated all relations that reference SEOKeyword
-//
-// v7.2.0 CHANGES:
-//   - ADDED: HAS_PROMPT, HAS_RULES, GENERATED relations for Prompt nodes
-//   - ADDED: GeneratedPropsSchema for provenance tracking
-//
-// v7.1.0 CHANGES:
-//   - ADDED: priority/freshness fields to all nodes for context budgeting
-//   - ADDED: Standardized llm_context format: "USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
-//   - ADDED: UsedSEOKeywordPropsSchema, UsedGEOSeedPropsSchema for provenance
-//
-// v7.0.0 CHANGES:
-//   - PAGE_USES_CONCEPT + BLOCK_USES_CONCEPT → USES_CONCEPT (v7.0) → USES_ENTITY (v10.3)
-//   - HAS_PAGE_OUTPUT + HAS_BLOCK_OUTPUT → HAS_GENERATED (unified)
-//   - Standard property: llm_hints → llm_context
+/**
+ * @fileoverview NovaNet Relation Registry
+ * @module @novanet/core/schemas/relations
+ * @version 11.6.0
+ *
+ * Unified registry for all Neo4j relationship types in the NovaNet knowledge graph.
+ * This module defines relation types, their property schemas, and the complete registry.
+ *
+ * **Relation Categories:**
+ * - Project Root: HAS_PAGE, HAS_BRAND_IDENTITY, SUPPORTS_LOCALE
+ * - Locale: DEFAULT_LOCALE, FALLBACK_TO, FOR_LOCALE, VARIANT_OF
+ * - Locale Knowledge: HAS_IDENTITY, HAS_VOICE, HAS_CULTURE, HAS_MARKET, HAS_LEXICON
+ * - Localization: HAS_CONTENT, CONTENT_OF
+ * - Page Structure: HAS_BLOCK, OF_TYPE, LINKS_TO, SUBTOPIC_OF
+ * - Entity Usage: USES_ENTITY, SEMANTIC_LINK, BELONGS_TO
+ * - Output: HAS_GENERATED, HAS_METRICS, ASSEMBLES
+ * - SEO/GEO Targeting: HAS_SEO_TARGET, HAS_GEO_TARGET, TARGETS_SEO, TARGETS_GEO
+ * - Provenance: INFLUENCED_BY, GENERATED_FROM, GENERATED
+ * - Inverse: CONTENT_OF, GENERATED_FOR, BLOCK_OF, USED_BY
+ *
+ * @example
+ * ```typescript
+ * import { RelationType, RelationRegistry } from '@novanet/core/schemas/relations';
+ *
+ * // Get relation definition
+ * const hasPage = RelationRegistry[RelationType.HAS_PAGE];
+ * console.log(hasPage.cardinality); // '1:N'
+ * ```
+ *
+ * @see ADR-015 — Unidirectional Ownership Arcs
+ * @see packages/core/models/arc-kinds/ — Arc YAML definitions
+ *
+ * @changelog
+ * - v7.12.1: Added anchor_type, nofollow to LINKS_TO
+ * - v7.12.0: Added LINKS_TO, SUBTOPIC_OF for page relationships
+ * - v7.11.0: Added PREVIOUS_VERSION, removed PageGenerated → PageMetrics
+ * - v7.10.0: OF_TYPE supports Page → PageType
+ * - v7.8.5: Unified HAS_METRICS for all time-series observations
+ * - v7.2.0: Added HAS_PROMPT, HAS_RULES, GENERATED for prompts
+ * - v7.0.0: Unified USES_ENTITY, HAS_GENERATED
+ */
 
 import { z } from 'zod';
 
@@ -188,32 +182,69 @@ export interface RelationDefinition {
   description: string;
 }
 
-// Relation property schemas
-export const SupportsLocalePropsSchema = z.object({
-  default: z.boolean(),
-});
+// =============================================================================
+// RELATION PROPERTY SCHEMAS
+// =============================================================================
 
+/**
+ * Properties for SUPPORTS_LOCALE relation (Project → Locale).
+ */
+export const SupportsLocalePropsSchema = z.object({
+  default: z.boolean()
+    .describe('Whether this is the default locale for the project'),
+}).describe('SUPPORTS_LOCALE relation properties');
+
+/**
+ * Properties for HAS_BLOCK relation (Page → Block).
+ */
 export const HasBlockPropsSchema = z.object({
-  position: z.number().int().min(0),
-});
+  position: z.number()
+    .int()
+    .min(0)
+    .describe('Zero-indexed position of block within page'),
+}).describe('HAS_BLOCK relation properties with ordering');
 
 // ─────────────────────────────────────────────────────────────────────────────
 // PAGE RELATIONSHIPS PROPS (v7.12.0, extended v7.12.1)
 // ─────────────────────────────────────────────────────────────────────────────
 
+/**
+ * Properties for LINKS_TO relation (Page → Page).
+ *
+ * Defines internal link properties including anchor text derivation,
+ * context, SEO weight, and anchor type optimization.
+ *
+ * @example
+ * ```typescript
+ * const linkProps = LinksToPropsSchema.parse({
+ *   concept_key: 'qr-code-generator',
+ *   context: 'body',
+ *   seo_weight: 0.8,
+ *   anchor_type: 'partial_match',
+ *   nofollow: false,
+ * });
+ * ```
+ */
 export const LinksToPropsSchema = z.object({
-  concept_key: z.string().regex(/^[a-z0-9-]+$/),  // Anchor text derived from EntityContent.title
-  context: z.enum(['cta', 'body', 'related', 'nav']),  // Where link appears
-  seo_weight: z.number().min(0).max(1),  // Link importance for SEO
-  // v7.12.1: SEO anchor optimization
-  anchor_type: z.enum(['exact_match', 'partial_match', 'branded', 'generic']).default('partial_match'),
-  // exact_match: anchor = EntityContent.title exactly (5× traffic, use sparingly max 10%)
-  // partial_match: anchor includes concept keywords
-  // branded: anchor = brand name (QR Code AI)
-  // generic: anchor = "click here", "learn more" (low SEO value)
-  nofollow: z.boolean().default(false),  // Set true for login/legal pages to prevent equity flow
-});
+  concept_key: z.string()
+    .regex(/^[a-z0-9-]+$/)
+    .describe('Entity key for anchor text derivation from EntityContent.title'),
+  context: z.enum(['cta', 'body', 'related', 'nav'])
+    .describe('Where the link appears: CTA button, body text, related section, or navigation'),
+  seo_weight: z.number()
+    .min(0).max(1)
+    .describe('Link importance for SEO (0-1 scale)'),
+  anchor_type: z.enum(['exact_match', 'partial_match', 'branded', 'generic'])
+    .default('partial_match')
+    .describe('Anchor text optimization: exact_match (5× traffic, max 10%), partial_match (keywords), branded (brand name), generic (low SEO)'),
+  nofollow: z.boolean()
+    .default(false)
+    .describe('Set true for login/legal pages to prevent PageRank flow'),
+}).describe('LINKS_TO relation properties for internal linking');
 
+/**
+ * Properties for SEMANTIC_LINK relation (Entity → Entity).
+ */
 export const SemanticLinkPropsSchema = z.object({
   type: z.enum([
     'is_action_on', 'has_action',
@@ -221,60 +252,103 @@ export const SemanticLinkPropsSchema = z.object({
     'type_of', 'has_type',
     'requires', 'required_by',
     'related', 'opposite',
-  ]),
-  temperature: z.number().min(0).max(1),
-});
+  ]).describe('Semantic relationship type between entities'),
+  temperature: z.number()
+    .min(0).max(1)
+    .describe('Activation spreading weight (0-1 scale)'),
+}).describe('SEMANTIC_LINK relation properties for entity connections');
 
+/**
+ * Properties for USES_ENTITY relation (Page|Block → Entity).
+ */
 export const UsesEntityPropsSchema = z.object({
-  purpose: z.enum(['primary', 'secondary', 'contextual']),
-  temperature: z.number().min(0).max(1),
-});
+  purpose: z.enum(['primary', 'secondary', 'contextual'])
+    .describe('Entity role: primary (main topic), secondary (supporting), contextual (mentioned)'),
+  temperature: z.number()
+    .min(0).max(1)
+    .describe('Relevance weight for LLM context loading (0-1 scale)'),
+}).describe('USES_ENTITY relation properties for content-entity connections');
 
+/**
+ * Properties for TARGETS_SEO relation (Entity → SEOKeyword).
+ */
 export const TargetsSEOPropsSchema = z.object({
-  status: z.enum(['active', 'paused', 'archived']),
-  priority: z.number().int().min(1).max(10),
-});
+  status: z.enum(['active', 'paused', 'archived'])
+    .describe('Targeting status: active (being optimized), paused (temporary hold), archived (historical)'),
+  priority: z.number()
+    .int().min(1).max(10)
+    .describe('Priority ranking for SEO efforts (1-10 scale)'),
+}).describe('TARGETS_SEO relation properties for cross-locale SEO shortcuts');
 
+/**
+ * Properties for TARGETS_GEO relation (Entity → GEOQuery).
+ */
 export const TargetsGEOPropsSchema = z.object({
-  status: z.enum(['active', 'monitoring', 'archived']),
-  priority: z.number().int().min(1).max(10),
-});
+  status: z.enum(['active', 'monitoring', 'archived'])
+    .describe('Targeting status: active (optimizing), monitoring (tracking), archived (historical)'),
+  priority: z.number()
+    .int().min(1).max(10)
+    .describe('Priority ranking for GEO efforts (1-10 scale)'),
+}).describe('TARGETS_GEO relation properties for cross-locale GEO shortcuts');
 
 // v7.7.0: Locale-aligned targeting (EntityContent → SEO/GEO)
+
+/**
+ * Properties for HAS_SEO_TARGET relation (EntityContent → SEOKeyword).
+ */
 export const HasSEOTargetPropsSchema = z.object({
-  role: z.enum(['primary', 'secondary', 'long-tail']),
-  priority: z.number().int().min(1).max(10),
-});
+  role: z.enum(['primary', 'secondary', 'long-tail'])
+    .describe('Keyword role: primary (main target), secondary (supporting), long-tail (niche)'),
+  priority: z.number()
+    .int().min(1).max(10)
+    .describe('Priority ranking within role (1-10 scale)'),
+}).describe('HAS_SEO_TARGET relation properties for locale-aligned SEO');
 
+/**
+ * Properties for HAS_GEO_TARGET relation (EntityContent → GEOQuery).
+ */
 export const HasGEOTargetPropsSchema = z.object({
-  role: z.enum(['primary', 'contextual']),
-  priority: z.number().int().min(1).max(10),
-});
+  role: z.enum(['primary', 'contextual'])
+    .describe('Query role: primary (main intent), contextual (related)'),
+  priority: z.number()
+    .int().min(1).max(10)
+    .describe('Priority ranking within role (1-10 scale)'),
+}).describe('HAS_GEO_TARGET relation properties for locale-aligned GEO');
 
+/**
+ * Properties for ASSEMBLES relation (PageGenerated → BlockGenerated).
+ */
 export const AssemblesPropsSchema = z.object({
-  position: z.number().int().min(0),
-});
+  position: z.number()
+    .int()
+    .min(0)
+    .describe('Zero-indexed position of block within generated page'),
+}).describe('ASSEMBLES relation properties for page assembly');
 
+/**
+ * Properties for INFLUENCED_BY relation (BlockGenerated → EntityContent).
+ */
 export const InfluencedByPropsSchema = z.object({
-  weight: z.number().min(0).max(1),
-  concept_version: z.number().int().positive(),
-});
-
-export const UsedSEOKeywordPropsSchema = z.object({
-  weight: z.number().min(0).max(1),
-});
-
-export const UsedGEOQueryPropsSchema = z.object({
-  weight: z.number().min(0).max(1),
-});
+  weight: z.number()
+    .min(0).max(1)
+    .describe('Influence weight in generation (0-1 scale)'),
+  concept_version: z.number()
+    .int()
+    .positive()
+    .describe('Version of EntityContent used during generation'),
+}).describe('INFLUENCED_BY relation properties for provenance tracking');
 
 // ─────────────────────────────────────────────────────────────────────────────
-// PROMPT RELATION PROPS (v7.2.0)
+// PROMPT RELATION PROPS
 // ─────────────────────────────────────────────────────────────────────────────
 
+/**
+ * Properties for GENERATED relation (PagePrompt|BlockPrompt → PageGenerated|BlockGenerated).
+ */
 export const GeneratedPropsSchema = z.object({
-  generated_at: z.date(),
-});
+  generated_at: z.date()
+    .describe('Timestamp when the generation occurred'),
+}).describe('GENERATED relation properties for prompt-to-output provenance');
 
 // =============================================================================
 // RELATION REGISTRY
