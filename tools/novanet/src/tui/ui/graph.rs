@@ -1485,8 +1485,8 @@ mod tests {
 
     #[test]
     fn test_build_graph_distribution_stats_percentage_calculation() {
-        // Create 2 realms: global with 1 kind, tenant with 3 kinds
-        // Expected: global = 25%, tenant = 75%
+        // Create 2 realms: shared with 1 kind, org with 3 kinds
+        // Expected: shared = 25%, org = 75%
         let global_kind = create_test_kind("Config");
         let global_layer = create_test_layer("config", vec![global_kind]);
         let global_realm = create_test_realm("shared", vec![global_layer]);

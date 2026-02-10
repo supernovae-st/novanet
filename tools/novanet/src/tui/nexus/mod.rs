@@ -127,7 +127,7 @@ pub struct NexusState {
     // === Layers tab state ===
     /// Cursor position in layers list.
     pub layer_cursor: usize,
-    /// Selected realm (0=global, 1=tenant).
+    /// Selected realm (0=shared, 1=org).
     pub layer_realm: usize,
 
     // === Arcs tab state ===
