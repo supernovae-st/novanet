@@ -38,7 +38,50 @@ interface InlineEdgeEffectsProps {
   relationType: string;
   colors: { primary: string; secondary: string; glow: string };
   state: EdgeState;
+  /** Use simplified 2-element rendering for performance */
+  simplified?: boolean;
 }
+
+/**
+ * SimplifiedEdgeEffect - Lightweight 2-element animated effect for large graphs
+ *
+ * Uses only 2 SVG elements per edge (vs 11-20 in full mode):
+ * 1. Single animated particle with glow
+ * 2. Optional secondary particle (offset timing)
+ *
+ * Performance: ~85% reduction in SVG elements
+ */
+const SimplifiedEdgeEffect = memo(function SimplifiedEdgeEffect({
+  edgePath,
+  colors,
+  state,
+}: Omit<InlineEdgeEffectsProps, 'relationType' | 'simplified'>) {
+  const isHighlighted = state === 'highlighted' || state === 'selected';
+  const size = isHighlighted ? 10 : 7;
+  const duration = isHighlighted ? 1.2 : 2.0;
+
+  return (
+    <g className="effect-simplified">
+      {/* Single animated particle with integrated glow */}
+      <circle
+        r={size}
+        fill={colors.primary}
+        opacity={0.9}
+        style={{ filter: `drop-shadow(0 0 ${size}px ${colors.glow})` }}
+      >
+        <animateMotion dur={`${duration}s`} repeatCount="indefinite" path={edgePath} />
+      </circle>
+      {/* Secondary particle - offset timing */}
+      <circle
+        r={size * 0.6}
+        fill={colors.secondary}
+        opacity={0.7}
+      >
+        <animateMotion dur={`${duration}s`} repeatCount="indefinite" begin={`${duration / 2}s`} path={edgePath} />
+      </circle>
+    </g>
+  );
+});
 
 /**
  * InlineEdgeEffects - Advanced animated effects with high visibility
@@ -57,7 +100,13 @@ const InlineEdgeEffects = memo(function InlineEdgeEffects({
   relationType,
   colors,
   state,
+  simplified = false,
 }: InlineEdgeEffectsProps) {
+  // PERFORMANCE: Use simplified 2-element effect for large graphs
+  if (simplified) {
+    return <SimplifiedEdgeEffect edgePath={edgePath} colors={colors} state={state} />;
+  }
+
   const family = getArcFamily(relationType);
   const isHighlighted = state === 'highlighted' || state === 'selected';
 
@@ -446,8 +495,8 @@ export const FloatingEdge = memo(function FloatingEdge({
     isHighlighted: isHovered,
   });
 
-  // Visibility culling
-  const { isVisible, registerEdge, unregisterEdge } = useEdgeVisibility();
+  // Visibility culling and performance mode
+  const { isVisible, registerEdge, unregisterEdge, useSimplifiedEffects, disableAnimations } = useEdgeVisibility();
   useEffect(() => {
     const element = pathRef.current;
     if (element) {
@@ -557,9 +606,10 @@ export const FloatingEdge = memo(function FloatingEdge({
   const baseFontSize = isHovered || isSelected ? 13 : 10;
   const scaledFontSize = baseFontSize * labelScale;
 
-  // Simplified: always animate if not dimmed (LOD and budget optimizations can be re-enabled later)
+  // PERFORMANCE: Disable animations when edge count exceeds threshold
+  // Simplified effects are handled by passing the simplified prop
   // Original: const shouldAnimate = isEdgeVisible && canAnimate && isAnimated && !effectiveDimmed;
-  const shouldAnimate = isAnimated && !effectiveDimmed;
+  const shouldAnimate = isAnimated && !effectiveDimmed && !disableAnimations;
 
   return (
     <g className="floating-edge" style={{ opacity: groupOpacity, transition: 'opacity 0.15s ease-out' }}>

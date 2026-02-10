@@ -21,6 +21,28 @@ export const DEFAULT_QUERY_LIMIT = 25;
 /** Limit for node expansion queries (double-click) */
 export const EXPAND_QUERY_LIMIT = 50;
 
+/** Display limit options for graph visualization */
+export const DISPLAY_LIMIT_OPTIONS = [50, 100, 250, 500, 1000] as const;
+
+/** Default display limit for graph visualization */
+export const DEFAULT_DISPLAY_LIMIT = 250;
+
+// =============================================================================
+// PERFORMANCE THRESHOLDS
+// =============================================================================
+
+/** Threshold above which simplified edge effects are used */
+export const EDGE_SIMPLIFICATION_THRESHOLD = 200;
+
+/** Threshold above which edge animations are disabled */
+export const EDGE_ANIMATION_THRESHOLD = 500;
+
+/** Threshold above which node clustering is suggested */
+export const NODE_CLUSTERING_THRESHOLD = 300;
+
+/** Maximum concurrent edge animations for 60fps target */
+export const MAX_CONCURRENT_EDGE_ANIMATIONS = 50;
+
 // =============================================================================
 // UI TIMING
 // =============================================================================

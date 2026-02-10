@@ -86,7 +86,6 @@ export const StatsCounter = memo(function StatsCounter({
         )}
         onMouseEnter={() => onMetaHoverChange?.(true)}
         onMouseLeave={() => onMetaHoverChange?.(false)}
-        title={isMetaMode ? "Schema Mode - Click for surprise..." : "Data Mode"}
       >
         <Boxes className="w-4 h-4" />
         <span>{isMetaMode ? 'Meta' : 'Data'}</span>

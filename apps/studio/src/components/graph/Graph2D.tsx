@@ -656,7 +656,9 @@ function Graph2DInner({
           const radius = 500;
           subs.forEach((sub, i) => {
             const angle = (2 * Math.PI * i) / subs.length - Math.PI / 2;
-            layerPositions[sub.key] = {
+            // Use realm-qualified key to avoid collisions (e.g., shared/config vs org/config)
+            const layerPosKey = `${sub.realmKey}-${sub.key}`;
+            layerPositions[layerPosKey] = {
               x: realmPos.x + radius * Math.cos(angle),
               y: realmPos.y + radius * Math.sin(angle),
             };
@@ -697,8 +699,10 @@ function Graph2DInner({
         }
 
         // Layer attractor nodes
+        // Use realm-qualified IDs to avoid duplicates (e.g., shared/config vs org/config)
         for (const sub of magneticData.layers) {
-          const pos = layerPositions[sub.key];
+          const layerPosKey = `${sub.realmKey}-${sub.key}`;
+          const pos = layerPositions[layerPosKey];
           const parentRealm = magneticData.realms.find(s => s.key === sub.realmKey);
           // typeCount = how many nodeTypes map to this layer (static)
           const subTypeCount = Object.values(nodeTypeToLayer)
@@ -706,12 +710,13 @@ function Graph2DInner({
           // loadedCount = how many loaded instances belong to this layer (dynamic)
           const subLoadedCount = turboNodes
             .filter(n => nodeTypeToLayer[n.data.type] === sub.key).length;
+          const layerId = `layer-${sub.realmKey}-${sub.key}`;
           attractorNodes.push({
-            id: `layer-${sub.key}`,
+            id: layerId,
             type: 'layerAttractor',
             position: pos,
             data: {
-              id: `layer-${sub.key}`,
+              id: layerId,
               type: 'Layer',
               key: sub.key,
               label: sub.displayName,
@@ -733,9 +738,19 @@ function Graph2DInner({
           return seed / 0x7fffffff;
         };
 
+        // Create nodeType → realm-qualified layer key mapping
+        // (needed because layerPositions now uses qualified keys like "shared-config")
+        const nodeTypeToQualifiedLayerKey: Record<string, string> = {};
+        for (const [nodeType, layerKey] of Object.entries(nodeTypeToLayer)) {
+          const layer = magneticData.layers.find(l => l.key === layerKey);
+          if (layer) {
+            nodeTypeToQualifiedLayerKey[nodeType] = `${layer.realmKey}-${layer.key}`;
+          }
+        }
+
         const magneticDataNodes = turboNodes.map(node => {
-          const layerKey = nodeTypeToLayer[node.data.type] || 'foundation';
-          const layerPos = layerPositions[layerKey] || { x: 0, y: 0 };
+          const qualifiedLayerKey = nodeTypeToQualifiedLayerKey[node.data.type] || 'org-foundation';
+          const layerPos = layerPositions[qualifiedLayerKey] || { x: 0, y: 0 };
           return {
             ...node,
             position: {
@@ -831,10 +846,23 @@ function Graph2DInner({
     // eslint-disable-next-line react-hooks/exhaustive-deps -- layoutVersion forces recalculation even when direction unchanged
   }, [graphNodes, graphEdges, layoutDirection, layoutVersion, isMagneticMode, magneticData]);
 
+  // DEFENSIVE: Filter out any nodes with invalid positions (prevents React Flow crashes)
+  const validLayoutedNodes = useMemo(() => {
+    return layoutedNodes.filter((node) => {
+      const hasValidPosition = node.position &&
+        typeof node.position.x === 'number' && !isNaN(node.position.x) &&
+        typeof node.position.y === 'number' && !isNaN(node.position.y);
+      if (!hasValidPosition) {
+        logger.warn('Graph2D', 'Filtered node with invalid position', { nodeId: node.id });
+      }
+      return hasValidPosition;
+    });
+  }, [layoutedNodes]);
+
   // Step 2: Apply dimming state ONLY when focus/hover changes (cheap O(n) operation)
   // Priority: Selection focus mode > Hover highlight > Normal
   const initialNodes = useMemo(() => {
-    return layoutedNodes.map((node) => {
+    return validLayoutedNodes.map((node) => {
       // Focus mode dimming takes precedence over hover dimming
       const focusDimmed = isNodeDimmed(node.id);
       // Hover dimming is lighter (25% opacity vs 15% for focus)
@@ -852,7 +880,7 @@ function Graph2DInner({
       };
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps -- focusSelectedId/hoveredId triggers recalc when selection/hover changes
-  }, [layoutedNodes, isNodeDimmed, isNodeHoverDimmed, focusSelectedId, hoveredId]);
+  }, [validLayoutedNodes, isNodeDimmed, isNodeHoverDimmed, focusSelectedId, hoveredId]);
 
   // =========================================================================
   // EDGE DATA - Simplified
@@ -863,8 +891,8 @@ function Graph2DInner({
   // =========================================================================
   // Build set of visible node IDs for edge validation
   const visibleNodeIdSet = useMemo(() => {
-    return new Set(layoutedNodes.map((n) => n.id));
-  }, [layoutedNodes]);
+    return new Set(validLayoutedNodes.map((n) => n.id));
+  }, [validLayoutedNodes]);
 
   // Memoize visible graph edges for parallel detection (v11.6.1)
   const visibleGraphEdges = useMemo(() => {
@@ -923,11 +951,13 @@ function Graph2DInner({
       const magneticEdges: Array<(typeof businessEdges)[number] | FloatingEdgeType> = [];
 
       // Realm → Layer edges (HAS_LAYER)
+      // Use realm-qualified layer IDs to avoid duplicates
       for (const sub of magneticData.layers) {
+        const layerId = `layer-${sub.realmKey}-${sub.key}`;
         magneticEdges.push({
           id: `edge-realm-${sub.realmKey}-to-${sub.key}`,
           source: `realm-${sub.realmKey}`,
-          target: `layer-${sub.key}`,
+          target: layerId,
           type: 'floating' as const,
           data: {
             relationType: 'HAS_LAYER',
@@ -938,14 +968,23 @@ function Graph2DInner({
         });
       }
 
+      // Build nodeType → full layer ID mapping
+      const nodeTypeToLayerId: Record<string, string> = {};
+      for (const [nodeType, layerKey] of Object.entries(nodeTypeToLayer)) {
+        const layer = magneticData.layers.find(l => l.key === layerKey);
+        if (layer) {
+          nodeTypeToLayerId[nodeType] = `layer-${layer.realmKey}-${layer.key}`;
+        }
+      }
+
       // Data node → Layer edges (OF_KIND) - faint magnetic edges
       for (const node of graphNodes) {
-        const layerKey = nodeTypeToLayer[node.type];
-        if (layerKey) {
+        const layerId = nodeTypeToLayerId[node.type];
+        if (layerId) {
           magneticEdges.push({
-            id: `edge-${node.id}-in-layer-${layerKey}`,
+            id: `edge-${node.id}-in-${layerId}`,
             source: node.id,
-            target: `layer-${layerKey}`,
+            target: layerId,
             type: 'magnetic',
             data: {
               relationType: 'OF_KIND',

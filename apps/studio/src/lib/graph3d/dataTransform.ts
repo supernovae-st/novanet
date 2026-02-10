@@ -32,15 +32,37 @@ export interface ForceGraphNode {
   vz?: number;
 }
 
+/**
+ * Link endpoint can be string (before D3 simulation) or object (after simulation).
+ * D3 force simulation mutates source/target from string to { id, x, y, z, ... }.
+ */
+export type LinkEndpoint = string | { id?: string } | undefined | null;
+
 // Link format for react-force-graph-3d
 export interface ForceGraphLink {
   id: string;
-  source: string;
-  target: string;
+  source: string | LinkEndpoint; // String initially, object after D3 simulation
+  target: string | LinkEndpoint; // String initially, object after D3 simulation
   type: string;
   // Additional properties
   curvature?: number;
   color?: string;
+}
+
+/**
+ * Safely extract node ID from a link endpoint.
+ * D3 force simulation mutates source/target from string to object with id property.
+ *
+ * @param endpoint - Link source or target (string | { id?: string } | undefined | null)
+ * @returns Node ID string, or empty string if invalid
+ */
+export function getNodeIdFromLinkEndpoint(endpoint: LinkEndpoint): string {
+  if (!endpoint) return '';
+  if (typeof endpoint === 'string') return endpoint;
+  if (typeof endpoint === 'object' && 'id' in endpoint) {
+    return endpoint.id ?? '';
+  }
+  return '';
 }
 
 // Complete graph data format
@@ -139,15 +161,19 @@ export function filterValidData(data: ForceGraphData): ForceGraphData {
   const nodeIds = new Set(data.nodes.map((n) => n.id));
 
   // Filter links to only include those with valid source/target
-  const validLinks = data.links.filter(
-    (link) => nodeIds.has(link.source as string) && nodeIds.has(link.target as string)
-  );
+  const validLinks = data.links.filter((link) => {
+    const sourceId = getNodeIdFromLinkEndpoint(link.source as LinkEndpoint);
+    const targetId = getNodeIdFromLinkEndpoint(link.target as LinkEndpoint);
+    return sourceId !== '' && targetId !== '' && nodeIds.has(sourceId) && nodeIds.has(targetId);
+  });
 
   // Get connected node IDs
   const connectedNodeIds = new Set<string>();
   validLinks.forEach((link) => {
-    connectedNodeIds.add(link.source as string);
-    connectedNodeIds.add(link.target as string);
+    const sourceId = getNodeIdFromLinkEndpoint(link.source as LinkEndpoint);
+    const targetId = getNodeIdFromLinkEndpoint(link.target as LinkEndpoint);
+    if (sourceId) connectedNodeIds.add(sourceId);
+    if (targetId) connectedNodeIds.add(targetId);
   });
 
   // Keep all nodes (including orphans for now - they'll be positioned separately)

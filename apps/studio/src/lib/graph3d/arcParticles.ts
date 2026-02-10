@@ -19,66 +19,73 @@ export interface ArcParticleConfig {
   particleSpeed: number;
   particleWidth: number;
   particleColor: string;
+  linkColor: string;      // Separate dark color for the link itself
   linkWidth: number;
   linkOpacity: number;
   curvature: number;
 }
 
 /**
- * Particle configuration for each arc family — NEURAL/FIBER OPTIC STYLE
+ * Particle configuration for each arc family — PARTICLES ARE THE STAR
  *
- * Key settings for visible energy transfer:
- * - particleWidth: 2-4 (tiny, like neurons firing)
- * - particles: 30-50 (creates continuous stream)
- * - particleSpeed: 0.02-0.05 (fast, visible flow)
- * - linkWidth: 1.5 (thin elegant line with glow)
- * - curvature: 0-0.3 for elegant arcs
+ * MAXIMUM visibility for particles, links are near-invisible guides:
+ * - particles: 15-30 (continuous visible stream)
+ * - particleSpeed: 0.01-0.03 (fast but trackable)
+ * - particleWidth: 4-7 (bright visible orbs)
+ * - linkWidth: 0.2-0.4 (hair-thin, just a hint)
+ * - linkOpacity: 0.05-0.08 (near transparent)
+ * - curvature: 0-0.25 for elegant arcs
  */
 export const ARC_PARTICLE_CONFIG: Record<ArcFamily, ArcParticleConfig> = {
   ownership: {
-    particles: 8,              // Fewer but more visible particles
-    particleSpeed: 0.008,      // Slower for visibility (was 0.025)
-    particleWidth: 6,          // Much larger (was 3)
+    particles: 20,             // Continuous stream
+    particleSpeed: 0.012,      // Steady flow
+    particleWidth: 5,          // Bright orbs
     particleColor: '#60a5fa',  // Bright blue (blue-400)
-    linkWidth: 1.5,            // Thin elegant line
-    linkOpacity: 0.35,         // More visible (was 0.25)
+    linkColor: '#1e3a5f',      // Very dark blue - barely visible guide
+    linkWidth: 0.3,            // Hair-thin guide
+    linkOpacity: 0.15,         // Low opacity
     curvature: 0,              // Straight ownership links
   },
   localization: {
-    particles: 6,              // Fewer particles
-    particleSpeed: 0.006,      // Slower (was 0.02)
-    particleWidth: 7,          // Larger (was 3.5)
+    particles: 15,             // Flowing particles
+    particleSpeed: 0.008,      // Slower, undulating
+    particleWidth: 6,          // Larger orbs
     particleColor: '#4ade80',  // Bright green (green-400)
-    linkWidth: 1.5,            // Thin line
-    linkOpacity: 0.3,          // More visible (was 0.2)
+    linkColor: '#134e3a',      // Very dark green
+    linkWidth: 0.25,           // Hair-thin
+    linkOpacity: 0.15,         // Low opacity
     curvature: 0.2,            // Gentle curve
   },
   semantic: {
-    particles: 10,             // Fewer sparking particles
-    particleSpeed: 0.012,      // Slower (was 0.035)
-    particleWidth: 5,          // Larger (was 2.5)
+    particles: 25,             // Dense sparking stream
+    particleSpeed: 0.02,       // Fast synaptic firing
+    particleWidth: 4,          // Smaller, numerous
     particleColor: '#fb923c',  // Bright orange (orange-400)
-    linkWidth: 1.2,            // Slightly thicker (was 1)
-    linkOpacity: 0.3,          // More visible (was 0.2)
+    linkColor: '#431407',      // Very dark orange/brown
+    linkWidth: 0.2,            // Thinnest - synapses don't need thick lines
+    linkOpacity: 0.15,         // Low opacity
     curvature: 0.1,            // Slight curve
   },
   generation: {
-    particles: 8,              // Fewer cascade particles
-    particleSpeed: 0.015,      // Slower (was 0.045)
-    particleWidth: 6,          // Larger (was 3)
+    particles: 30,             // Cascading energy
+    particleSpeed: 0.025,      // Fast cascade
+    particleWidth: 5,          // Medium orbs
     particleColor: '#a78bfa',  // Bright purple (violet-400)
-    linkWidth: 1.8,            // Thicker (was 2)
-    linkOpacity: 0.4,          // More visible (was 0.35)
+    linkColor: '#2e1065',      // Very dark violet
+    linkWidth: 0.35,           // Slightly thicker for generation flow
+    linkOpacity: 0.2,          // Slightly more visible
     curvature: 0,              // Straight generation flow
   },
   mining: {
-    particles: 5,              // Fewer radar pulses
-    particleSpeed: 0.005,      // Much slower (was 0.015)
-    particleWidth: 8,          // Much larger (was 4)
+    particles: 12,             // Radar pulses
+    particleSpeed: 0.006,      // Slow sweep
+    particleWidth: 7,          // Large pings - radar style
     particleColor: '#f472b6',  // Bright pink (pink-400)
-    linkWidth: 1.5,            // Thin line
-    linkOpacity: 0.3,          // More visible (was 0.2)
-    curvature: 0.3,            // Curved sweep
+    linkColor: '#500724',      // Very dark pink/maroon
+    linkWidth: 0.25,           // Thin
+    linkOpacity: 0.15,         // Low opacity
+    curvature: 0.25,           // Curved sweep
   },
 };
 

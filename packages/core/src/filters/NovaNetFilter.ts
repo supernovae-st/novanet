@@ -136,6 +136,21 @@ export class NovaNetFilter {
   }
 
   /**
+   * Includes Entity nodes related to Project via HAS_ENTITY (v11.6).
+   * Used when Project directly owns entities (vs Page/Block using entities).
+   * @param opts - Optional configuration
+   * @param opts.depth - Traversal depth (default: 1)
+   */
+  includeProjectEntities(opts?: { depth?: number }): this {
+    this.state.includes.push({
+      relation: 'HAS_ENTITY',
+      direction: 'outgoing',
+      depth: opts?.depth ?? 1,
+    });
+    return this;
+  }
+
+  /**
    * Includes PagePrompt/BlockPrompt nodes via HAS_PROMPT.
    * @param opts - Optional configuration
    * @param opts.activeOnly - Only include active prompts

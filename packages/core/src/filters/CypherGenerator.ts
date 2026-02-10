@@ -22,20 +22,34 @@ import { NovaNetFilter } from './NovaNetFilter.js';
 // =============================================================================
 
 const RELATION_ALIAS_MAP: Record<string, string> = {
-  // Core structure
+  // Core structure (v11.6)
   HAS_PAGE: 'page',
   HAS_BLOCK: 'block',
+  HAS_ENTITY: 'entity',
   HAS_BRAND_IDENTITY: 'brandIdentity',
+  HAS_PROJECT: 'project',
   OF_TYPE: 'blockType',
-  // v10.3: Entity replaces Concept
-  USES_ENTITY: 'entity',
+  OF_KIND: 'kind',
+  // Entity relationships
+  USES_ENTITY: 'usedEntity',
   SEMANTIC_LINK: 'relatedEntity',
+  BELONGS_TO: 'category',
+  INCLUDES: 'includedEntity',
+  APPLIES_TO: 'applicableEntity',
+  ENABLES: 'enabledEntity',
+  SIMILAR_TO: 'similarEntity',
+  REQUIRES: 'requiredEntity',
+  TYPE_OF: 'typeEntity',
+  VARIANT_OF: 'variantEntity',
+  ALTERNATIVE_TO: 'alternativeEntity',
   // Prompts
   HAS_PROMPT: 'prompt',
   HAS_RULES: 'rules',
   // Output
-  HAS_GENERATED: 'output',
+  HAS_GENERATED: 'generated',
   HAS_CONTENT: 'content',
+  CONTENT_OF: 'contentParent',
+  HAS_LOCALIZED_CONTENT: 'localizedContent',
   // Locale knowledge (v11.5 schema)
   HAS_CULTURE: 'culture',
   HAS_MARKET: 'market',
@@ -43,65 +57,54 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   HAS_SLUGIFICATION: 'slugification',
   HAS_EXPRESSIONS: 'expressionSet',
   HAS_EXPRESSION: 'expression',
-  // SEO (v10.3: EXPRESSES replaces TARGETS_SEO, GEO removed)
+  CONTAINS: 'contained',
+  FOLLOWS_RULE: 'slugRule',
+  // Geographic
+  HAS_INCOME_LEVEL: 'incomeLevel',
+  IN_CULTURAL_SUBREALM: 'culturalSubrealm',
+  SPEAKS_BRANCH: 'languageBranch',
+  IN_SUBREGION: 'subregion',
+  HAS_PRIMARY_POPULATION: 'population',
+  IN_CONTINENT: 'continent',
+  IN_REGION: 'region',
+  PART_OF_REALM: 'culturalRealm',
+  BRANCH_OF: 'languageFamily',
+  CLUSTER_OF: 'populationCluster',
+  // SEO
   EXPRESSES: 'seoKeyword',
+  TARGETS: 'target',
+  SEO_MINES: 'minedSeoKeyword',
   // Locale
   SUPPORTS_LOCALE: 'supportedLocale',
+  DEFAULT_LOCALE: 'defaultLocale',
   FALLBACK_TO: 'fallbackLocale',
-  FOR_LOCALE: 'locale',
+  FOR_LOCALE: 'forLocale',
   // Metrics & Assembly
   HAS_METRICS: 'metrics',
   ASSEMBLES: 'assembledBlock',
   // Provenance
   GENERATED: 'generatedOutput',
-  INFLUENCED_BY: 'influencingEntity',  // v10.3: renamed from influencingConcept
+  INFLUENCED_BY: 'influencingEntity',
   GENERATED_FROM: 'generatedFromType',
   BELONGS_TO_PROJECT_CONTENT: 'projectContent',
-  // SEO Mining
-  SEO_MINES: 'minedSeoKeyword',
-  // REMOVED v10.3: HAS_CONCEPT, USES_CONCEPT, TARGETS_SEO, TARGETS_GEO, GEO_MINES (GEO removed)
+  // Meta-graph (Kind/ArcKind)
+  HAS_KIND: 'hasKind',
+  HAS_ARC_KIND: 'arcKind',
+  IN_REALM: 'inRealm',
+  IN_LAYER: 'inLayer',
+  EXHIBITS: 'exhibits',
+  IN_FAMILY: 'inFamily',
+  FROM_KIND: 'fromKind',
+  TO_KIND: 'toKind',
+  HAS_LAYER: 'layer',
 };
 
-const RELATION_TARGET_TYPE_MAP: Record<string, string> = {
-  // Core structure
-  HAS_PAGE: 'Page',
-  HAS_BLOCK: 'Block',
-  HAS_BRAND_IDENTITY: 'BrandIdentity',
-  OF_TYPE: 'BlockType',
-  // v10.3: Entity replaces Concept
-  USES_ENTITY: 'Entity',
-  SEMANTIC_LINK: 'Entity',
-  // Prompts
-  HAS_PROMPT: 'PagePrompt',
-  HAS_RULES: 'BlockRules',
-  // Output
-  HAS_GENERATED: 'PageGenerated',
-  HAS_CONTENT: 'EntityContent',
-  // Locale knowledge (v11.5 schema)
-  HAS_CULTURE: 'Culture',
-  HAS_MARKET: 'Market',
-  HAS_FORMATTING: 'Formatting',
-  HAS_SLUGIFICATION: 'Slugification',
-  HAS_EXPRESSIONS: 'ExpressionSet',
-  HAS_EXPRESSION: 'Expression',
-  // SEO (v10.3: EXPRESSES replaces TARGETS_SEO, GEO removed)
-  EXPRESSES: 'SEOKeyword',
-  // Locale
-  SUPPORTS_LOCALE: 'Locale',
-  FALLBACK_TO: 'Locale',
-  FOR_LOCALE: 'Locale',
-  // Metrics & Assembly
-  HAS_METRICS: 'PageMetrics',
-  ASSEMBLES: 'BlockGenerated',
-  // Provenance
-  GENERATED: 'PageGenerated',
-  INFLUENCED_BY: 'EntityContent',  // v10.3: was ConceptL10n
-  GENERATED_FROM: 'BlockType',
-  BELONGS_TO_PROJECT_CONTENT: 'ProjectContent',
-  // SEO Mining
-  SEO_MINES: 'SEOKeyword',
-  // REMOVED v10.3: HAS_CONCEPT, USES_CONCEPT, TARGETS_SEO, TARGETS_GEO, GEO_MINES (GEO removed)
-};
+// v11.6: Target type labels are now OPTIONAL
+// The same relation can target different node types depending on context:
+// - HAS_CONTENT: Entity → EntityContent, Project → ProjectContent
+// - HAS_ENTITY: Project → Entity
+// Rather than trying to map every context, we omit the target label and let Neo4j
+// return whatever node is connected. This is more flexible and schema-independent.
 
 // =============================================================================
 // CYPHER GENERATOR
@@ -142,11 +145,12 @@ export class CypherGenerator {
       const relAlias = `r${relIndex++}`;
       relAliases.push(relAlias);
 
-      const targetType = this.relationToTargetType(include.relation);
       const arrow = this.directionToArrow(include.direction);
       const activeFilter = include.filters?.active ? ' {active: true}' : '';
       // Capture the relationship with a variable (r0, r1, etc.)
-      const matchLine = `OPTIONAL MATCH (root)${arrow.left}[${relAlias}:${include.relation}]${arrow.right}(${alias}:${targetType}${activeFilter})`;
+      // v11.6: Don't specify target type - let Neo4j return whatever is connected
+      // This handles cases where same relation targets different types (HAS_CONTENT, HAS_ENTITY, etc.)
+      const matchLine = `OPTIONAL MATCH (root)${arrow.left}[${relAlias}:${include.relation}]${arrow.right}(${alias}${activeFilter})`;
 
       lines.push(matchLine);
 
@@ -220,10 +224,6 @@ export class CypherGenerator {
 
   private static relationToAlias(relation: string): string {
     return RELATION_ALIAS_MAP[relation] || relation.toLowerCase();
-  }
-
-  private static relationToTargetType(relation: string): string {
-    return RELATION_TARGET_TYPE_MAP[relation] || 'Node';
   }
 
   private static directionToArrow(direction?: string): { left: string; right: string } {
