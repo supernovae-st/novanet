@@ -3,11 +3,6 @@ import { describe, it, expect } from 'vitest';
 import { NovaNetFilter } from '../filters/NovaNetFilter.js';
 import { CypherGenerator } from '../filters/CypherGenerator.js';
 import { ViewLoader } from '../filters/ViewLoader.js';
-import * as path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 describe('NovaNetFilter', () => {
   describe('create()', () => {
@@ -474,11 +469,9 @@ describe('CypherGenerator', () => {
 // =============================================================================
 
 describe('ViewLoader', () => {
-  const viewsDir = path.resolve(__dirname, '../../models/views');
-
   describe('loadView()', () => {
-    it('loads a YAML view definition', async () => {
-      const view = await ViewLoader.loadView('page-generation-context', viewsDir);
+    it('loads a view definition from generated constants', async () => {
+      const view = await ViewLoader.loadView('page-generation-context');
 
       expect(view.id).toBe('page-generation-context');
       expect(view.name).toBe('Page Generation Context');
@@ -486,7 +479,7 @@ describe('ViewLoader', () => {
     });
 
     it('parses include rules correctly', async () => {
-      const view = await ViewLoader.loadView('page-generation-context', viewsDir);
+      const view = await ViewLoader.loadView('page-generation-context');
 
       expect(view.include).toBeInstanceOf(Array);
       expect(view.include.length).toBeGreaterThan(0);
@@ -495,21 +488,20 @@ describe('ViewLoader', () => {
     });
 
     it('parses filters correctly', async () => {
-      const view = await ViewLoader.loadView('page-generation-context', viewsDir);
+      const view = await ViewLoader.loadView('page-generation-context');
 
       expect(view.filters).toBeDefined();
-      // v8.2.0: priority removed from YAML views (YAML v7.11.0 alignment)
       expect(view.filters?.locale).toBe('$locale');
     });
 
     it('throws error for non-existent view', async () => {
-      await expect(ViewLoader.loadView('non-existent', viewsDir)).rejects.toThrow();
+      await expect(ViewLoader.loadView('non-existent')).rejects.toThrow();
     });
   });
 
   describe('toFilter()', () => {
     it('converts ViewDefinition to NovaNetFilter', async () => {
-      const view = await ViewLoader.loadView('page-generation-context', viewsDir);
+      const view = await ViewLoader.loadView('page-generation-context');
       const filter = ViewLoader.toFilter(view, { key: 'page-pricing', locale: 'fr-FR' });
 
       const criteria = filter.getCriteria();
@@ -517,18 +509,15 @@ describe('ViewLoader', () => {
     });
 
     it('applies locale from params when view uses $locale placeholder', async () => {
-      const view = await ViewLoader.loadView('page-generation-context', viewsDir);
+      const view = await ViewLoader.loadView('page-generation-context');
       const filter = ViewLoader.toFilter(view, { key: 'page-pricing', locale: 'fr-FR' });
 
       const criteria = filter.getCriteria();
       expect(criteria.filters.locale).toBe('fr-FR');
     });
 
-    // REMOVED v8.2.0: priority filter from view definition test (YAML v7.11.0 alignment)
-    // it('applies priority filter from view definition', async () => { ... });
-
     it('applies include rules from view definition', async () => {
-      const view = await ViewLoader.loadView('page-generation-context', viewsDir);
+      const view = await ViewLoader.loadView('page-generation-context');
       const filter = ViewLoader.toFilter(view, { key: 'page-pricing' });
 
       const criteria = filter.getCriteria();
@@ -538,7 +527,7 @@ describe('ViewLoader', () => {
 
   describe('loadRegistry()', () => {
     it('loads the view registry', async () => {
-      const registry = await ViewLoader.loadRegistry(viewsDir);
+      const registry = await ViewLoader.loadRegistry();
 
       expect(registry.version).toBeDefined();
       expect(registry.views).toBeInstanceOf(Array);
@@ -546,7 +535,7 @@ describe('ViewLoader', () => {
     });
 
     it('registry entries have required fields', async () => {
-      const registry = await ViewLoader.loadRegistry(viewsDir);
+      const registry = await ViewLoader.loadRegistry();
 
       for (const entry of registry.views) {
         expect(entry.id).toBeDefined();
@@ -556,10 +545,10 @@ describe('ViewLoader', () => {
     });
 
     it('all registered views can be loaded', async () => {
-      const registry = await ViewLoader.loadRegistry(viewsDir);
+      const registry = await ViewLoader.loadRegistry();
 
       for (const entry of registry.views) {
-        const view = await ViewLoader.loadView(entry.id, viewsDir);
+        const view = await ViewLoader.loadView(entry.id);
         expect(view.id).toBe(entry.id);
       }
     });

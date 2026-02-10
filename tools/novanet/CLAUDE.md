@@ -18,7 +18,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | Read | `data`, `meta`, `overlay`, `query` | Implemented (faceted Cypher) |
 | Write | `node create/edit/delete`, `arc create/delete` | Implemented (label validation) |
 | Schema | `schema generate`, `schema validate` | Implemented (12 artifacts) |
-| Docs | `doc generate`, `doc generate --list` | Implemented (12 views) |
+| Docs | `doc generate`, `doc generate --list` | Implemented (11 views) |
 | Search | `search --query=... [--kind=...]` | Implemented (fulltext + property) |
 | Locale | `locale list`, `locale import` | Implemented |
 | DB | `db seed`, `db migrate`, `db reset` | Implemented |
@@ -133,7 +133,7 @@ cargo run -- schema validate                      # Validate YAML coherence
 cargo run -- schema validate --strict             # Fail on warnings
 
 # Documentation (YAML, no Neo4j)
-cargo run -- doc generate                         # All 12 view Mermaid diagrams
+cargo run -- doc generate                         # All 11 view Mermaid diagrams
 cargo run -- doc generate --view=block-generation # Single view
 cargo run -- doc generate --dry-run               # Preview without writing
 cargo run -- doc generate --list                  # List available views
@@ -157,7 +157,7 @@ cargo run -- tui                                  # Interactive terminal UI
 # Quality
 cargo clippy -- -D warnings    # Zero warnings policy
 cargo fmt --check              # Formatting check
-cargo nextest run              # 952 tests (fast, parallel)
+cargo nextest run              # 955 tests (fast, parallel)
 cargo test -- --ignored        # Neo4j integration tests (requires running Neo4j)
 
 # Security & auditing

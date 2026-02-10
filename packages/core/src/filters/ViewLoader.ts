@@ -65,12 +65,10 @@ export class ViewLoader {
    * Loads a single view definition by ID.
    *
    * @param viewId - The view identifier
-   * @param _viewsDir - Deprecated: no longer used (kept for API compatibility)
    * @returns The parsed ViewDefinition
    * @throws Error if view does not exist
    */
-  static async loadView(viewId: string, _viewsDir?: string): Promise<ViewDefinition> {
-    // Use generated constant - no file I/O needed
+  static async loadView(viewId: string): Promise<ViewDefinition> {
     const generated = getGeneratedView(viewId);
     return convertViewDefinition(generated);
   }
@@ -90,10 +88,9 @@ export class ViewLoader {
   /**
    * Loads the view registry.
    *
-   * @param _viewsDir - Deprecated: no longer used (kept for API compatibility)
    * @returns The view registry
    */
-  static async loadRegistry(_viewsDir?: string): Promise<ViewRegistry> {
+  static async loadRegistry(): Promise<ViewRegistry> {
     return {
       version: '9.9.0',
       description: 'NovaNet Core View Definitions (generated)',

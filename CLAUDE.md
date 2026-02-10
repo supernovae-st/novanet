@@ -85,7 +85,7 @@ v11.5 refines the layer structure with Locale moved to shared/config:
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
 All commands implemented: data/meta/overlay/query, node/arc CRUD, search, locale, db,
-schema generate/validate, doc generate, filter build, Galaxy-themed TUI with boot animation, effects engine, and onboarding. 950 tests pass.
+schema generate/validate, doc generate, filter build, Galaxy-themed TUI with boot animation, effects engine, and onboarding. 955 tests pass.
 
 **YAML-first architecture:** Each Kind YAML has explicit `realm:` and `layer:` fields (source of truth).
 Path validation ensures `models/node-kinds/{realm}/{layer}/{name}.yaml` matches YAML content.
@@ -96,7 +96,7 @@ v11.5: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 60 nodes.
 - `terminal`: Unicode symbol for TUI
 Categories: realms, layers, traits, arc_families, states, navigation, quality, modes.
 
-**Boundary rule (v9 target):** TypeScript generates code artifacts. Rust executes at runtime.
+**Boundary rule:** TypeScript generates code artifacts. Rust executes at runtime.
 
 ---
 

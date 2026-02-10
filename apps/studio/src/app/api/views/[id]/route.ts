@@ -1,44 +1,6 @@
 // apps/studio/src/app/api/views/[id]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { ViewLoader, CypherGenerator } from '@novanet/core/filters';
-import path from 'path';
-import fs from 'fs';
-
-// ============================================================================
-// PATH RESOLUTION (works in dev + production + monorepo)
-// ============================================================================
-
-function resolveViewsDir(): string {
-  // Priority 1: Environment variable (for production/custom deployments)
-  if (process.env.NOVANET_VIEWS_DIR) {
-    return process.env.NOVANET_VIEWS_DIR;
-  }
-
-  // Priority 2: Monorepo structure detection
-  const candidates = [
-    path.resolve(process.cwd(), '../../packages/core/models/views'),
-    path.resolve(process.cwd(), 'packages/core/models/views'),
-    path.resolve(process.cwd(), '../packages/core/models/views'),
-  ];
-
-  for (const candidate of candidates) {
-    if (fs.existsSync(path.join(candidate, '_registry.yaml'))) {
-      return candidate;
-    }
-  }
-
-  throw new Error(
-    'Could not locate views directory. Set NOVANET_VIEWS_DIR environment variable.'
-  );
-}
-
-let viewsDir: string | null = null;
-function getViewsDir(): string {
-  if (!viewsDir) {
-    viewsDir = resolveViewsDir();
-  }
-  return viewsDir;
-}
 
 // ============================================================================
 // VALIDATION
@@ -97,7 +59,7 @@ export async function GET(
     }
 
     // Load view definition
-    const view = await ViewLoader.loadView(id, getViewsDir());
+    const view = await ViewLoader.loadView(id);
 
     // Convert to filter and generate Cypher
     const filter = ViewLoader.toFilter(view, viewParams);
