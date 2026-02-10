@@ -3,8 +3,6 @@
 // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
 
 import { z } from 'zod';
-// REMOVED v8.2.0: Priority and Freshness no longer exist
-// import { PrioritySchema, FreshnessSchema } from './locale-knowledge.schema.js';
 
 // =============================================================================
 // BASE PROMPT SCHEMA (v8.2.0 - no icon/priority/freshness)

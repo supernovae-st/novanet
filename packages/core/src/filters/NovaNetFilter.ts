@@ -202,9 +202,10 @@ export class NovaNetFilter {
   }
 
   /**
-   * Includes localized content nodes via HAS_CONTENT.
+   * Includes content nodes via HAS_CONTENT.
+   * v11.6: renamed from includeL10n() (ADR-014)
    */
-  includeL10n(): this {
+  includeContent(): this {
     this.state.includes.push({
       relation: 'HAS_CONTENT',
       direction: 'outgoing',

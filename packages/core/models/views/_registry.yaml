@@ -73,7 +73,7 @@ views:
 
   - id: entity-ecosystem
     file: entity-ecosystem.yaml
-    description: Entity with L10n, SEO keywords, semantic links (v10.3)
+    description: Entity with content, SEO keywords, semantic links (v10.3)
     category: knowledge
     modes: [data, overlay, query]
 

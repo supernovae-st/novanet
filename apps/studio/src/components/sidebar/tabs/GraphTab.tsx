@@ -230,8 +230,7 @@ export const GraphTab = memo(function GraphTab({
   }, []);
 
   const handleExpand = useCallback(() => {
-    // TODO: Open in modal
-    console.log('Expand diagram');
+    // TODO: Expand diagram in modal
   }, []);
 
   const handleCopy = useCallback(() => {

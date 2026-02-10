@@ -162,6 +162,6 @@ docs:
   notes:
     - "Project nodes are per-project - each project has its own instances"
     - "Invariant nodes (Page, Block, Entity) are defined once per project"
-    - "Localized nodes (*L10n) are generated for each supported locale"
+    - "Localized nodes (*Content/*Generated) are generated for each supported locale"
     - "The orchestrator uses this view to coordinate generation"
     - "Output nodes (PageGenerated, BlockGenerated) are LLM-generated, not human-written"

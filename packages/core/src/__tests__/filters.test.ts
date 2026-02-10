@@ -147,8 +147,8 @@ describe('NovaNetFilter', () => {
       );
     });
 
-    it('includeL10n() adds HAS_CONTENT include rule (v10.3: from Entity)', () => {
-      const filter = NovaNetFilter.create().fromEntity('tier-pro').includeL10n();
+    it('includeContent() adds HAS_CONTENT include rule (v11.6: renamed from includeL10n)', () => {
+      const filter = NovaNetFilter.create().fromEntity('tier-pro').includeContent();
       const criteria = filter.getCriteria();
       expect(criteria.includes).toContainEqual(
         expect.objectContaining({ relation: 'HAS_CONTENT', direction: 'outgoing' })

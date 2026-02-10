@@ -1,7 +1,7 @@
 // novanet-core/src/types/project.ts
 // Project + nodable architecture types (v7.2.2)
 //
-// v7.2.2: BrandL10n merged into ProjectContent (CTAs, meta, SEO keywords)
+// v7.2.2: BrandL10n merged into ProjectContent (CTAs, meta, SEO keywords) - L10n suffix deprecated v10.9
 // v7.1.0 STANDARD PROPERTIES:
 //   key, display_name, description, llm_context, created_at, updated_at
 
@@ -30,7 +30,7 @@ export interface Project {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// PROJECTL10N (localized identity & messaging) - v7.1.0
+// PROJECTCONTENT (localized identity & messaging) - v7.1.0, renamed v10.9
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export interface VoiceTone {
@@ -41,7 +41,7 @@ export interface VoiceTone {
 }
 
 export interface ProjectContent {
-  // Standard properties (v7.1.0 - L10n nodes don't have key)
+  // Standard properties (v7.1.0 - Content nodes don't have key)
   display_name: string;
   description: string;
   llm_context: string;

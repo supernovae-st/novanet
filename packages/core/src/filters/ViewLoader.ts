@@ -229,7 +229,7 @@ export class ViewLoader {
         break;
 
       case 'HAS_CONTENT':
-        filter.includeL10n();
+        filter.includeContent();
         break;
 
       case 'HAS_IDENTITY':
