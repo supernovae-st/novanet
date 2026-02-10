@@ -1,6 +1,6 @@
 // packages/core/src/config/nodeIcons.ts
 // Presentation layer configuration for node icons
-// v11.2.0 — Realm renames (shared/org), job nodes removed
+// v11.3.0 — 3-layer shared realm, GEO layer, OrgConfig consolidation
 
 import type { NodeType } from '../types/nodes.js';
 
@@ -10,15 +10,16 @@ import type { NodeType } from '../types/nodes.js';
  * Icons are now in presentation layer, not data model.
  */
 export const NODE_ICONS: Record<NodeType, string> = {
-  // SHARED — config (14)
+  // SHARED — locale (7)
   Locale: '🌍',
-  EntityCategory: '🏷️',
   Formatting: '📝',
   Slugification: '🔗',
   Adaptation: '🔄',
   Style: '🎭',
   Culture: '🏺',
   Market: '📊',
+
+  // SHARED — geography (6)
   Continent: '🗺️',
   GeoRegion: '🌐',
   GeoSubRegion: '🗾',
@@ -26,7 +27,8 @@ export const NODE_ICONS: Record<NodeType, string> = {
   LendingCategory: '🏦',
   EconomicRegion: '💹',
 
-  // SHARED — locale-knowledge (18) — Sets + Atoms + Linguistic/Cultural taxonomy
+  // SHARED — knowledge (19)
+  EntityCategory: '🏷️',
   TermSet: '📚',
   ExpressionSet: '💭',
   PatternSet: '🔣',
@@ -46,19 +48,20 @@ export const NODE_ICONS: Record<NodeType, string> = {
   PopulationCluster: '👨‍👩‍👧‍👦',
   PopulationSubCluster: '👥',
 
-  // ORG — seo (8) — SEO + GEO (Generative Engine Optimization)
+  // ORG — config (1) — v11.3: Organization + Tenant merged
+  OrgConfig: '🏢',
+
+  // ORG — seo (5)
   SEOKeyword: '🔍',
   SEOKeywordMetrics: '📊',
   SEOComparison: '⚖️',
   SEOPreposition: '🔗',
   SEOQuestion: '❓',
+
+  // ORG — geo (3) — v11.3: new layer split from seo
   GEOQuery: '🤖',
   GEOAnswer: '💬',
   GEOMetrics: '📊',
-
-  // ORG — config (2)
-  Organization: '🏢',
-  Tenant: '🏠',
 
   // ORG — foundation (3)
   Project: '📦',

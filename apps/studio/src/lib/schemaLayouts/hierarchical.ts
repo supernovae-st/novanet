@@ -23,19 +23,25 @@ import dagre from '@dagrejs/dagre';
 // =============================================================================
 
 const REALM_CONFIGS: Record<Realm, { label: string; color: string }> = {
-  shared: { label: 'Global', color: '#2aa198' },   // Solarized cyan
-  org: { label: 'Tenant', color: '#6c71c4' },   // Solarized violet
+  shared: { label: 'Shared', color: '#2aa198' },   // Solarized cyan
+  org: { label: 'Org', color: '#6c71c4' },          // Solarized violet
 };
 
+// v11.3: 11 layers (3 shared + 8 org)
 const LAYER_CONFIGS: Record<string, { label: string }> = {
+  // Shared realm (3)
+  locale: { label: 'Locale' },
+  geography: { label: 'Geography' },
+  knowledge: { label: 'Knowledge' },
+  // Org realm (8)
+  config: { label: 'Config' },
   foundation: { label: 'Foundation' },
   structure: { label: 'Structure' },
   semantic: { label: 'Semantic' },
   instruction: { label: 'Instructions' },
-  output: { label: 'Output' },
-  config: { label: 'Config' },
-  'locale-knowledge': { label: 'Locale Knowledge' },
   seo: { label: 'SEO' },
+  geo: { label: 'GEO' },
+  output: { label: 'Output' },
 };
 
 // Node sizes for Dagre layout

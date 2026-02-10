@@ -1,0 +1,118 @@
+# packages/core/models/node-kinds/global/locale-knowledge/language-branch.yaml
+# LanguageBranch - ISO 639-5 language branch/sub-family
+#
+# v10.8: Geographic Taxonomy - Phase 2
+# Data: ~30 branches (Romance, Germanic, Slavic, Semitic, etc.)
+# Source: ISO 639-5 (loc.gov)
+
+node:
+  name: LanguageBranch
+  realm: shared
+  layer: knowledge
+  trait: knowledge
+  icon: "🌿"
+  description: "ISO 639-5 language branch for fine-grained linguistic clustering"
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "ISO 639-5 three-letter code"
+      pattern: "^[a-z]{3}$"
+      examples:
+        - "roa"  # Romance
+        - "gem"  # Germanic
+        - "sla"  # Slavic
+        - "sem"  # Semitic
+        - "zhx"  # Chinese
+
+    display_name:
+      type: string
+      required: true
+      description: "English name of the language branch"
+      example: "Romance"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "Romance languages derived from Latin: French, Spanish, Italian, Portuguese"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints"
+      example: "USE: for French, Spanish, Italian, Portuguese. TRIGGERS: romance, latin-derived. SHARE: similar vocabulary, grammar structures, gender agreement."
+
+    created_at:
+      type: datetime
+      required: true
+
+    updated_at:
+      type: datetime
+      required: true
+
+  properties:
+    parent_family:
+      type: string
+      required: true
+      description: "Parent LanguageFamily key"
+      example: "ine"
+
+    name_native:
+      type: string
+      required: false
+      description: "Name in a representative language"
+      example: "Langues romanes"
+
+    shared_features:
+      type: json
+      required: false
+      description: "Linguistic features shared across languages in this branch"
+      example:
+        - "gendered nouns"
+        - "verb conjugation"
+        - "Latin-derived vocabulary"
+
+  relations:
+    outgoing:
+      - type: BRANCH_OF
+        to: LanguageFamily
+        cardinality: "N:1"
+        description: "Branch belongs to language family"
+
+    incoming:
+      - type: SPEAKS_BRANCH
+        from: Locale
+        cardinality: "N:1"
+        description: "Locales whose primary language is in this branch"
+
+  example:
+    data:
+      key: "roa"
+      display_name: "Romance"
+      description: "Romance languages derived from Latin: French, Spanish, Italian, Portuguese, Romanian"
+      parent_family: "ine"
+      name_native: "Langues romanes"
+      shared_features:
+        - "gendered nouns (masculine/feminine)"
+        - "verb conjugation (6+ forms)"
+        - "Latin-derived vocabulary"
+        - "definite/indefinite articles"
+      llm_context: "USE: for French, Spanish, Italian, Portuguese, Romanian. TRIGGERS: romance, latin-derived. SHARE: 60-80% vocabulary similarity, similar grammar. Expression patterns transfer well."
+
+    cypher: |
+      // Get all locales speaking this branch
+      MATCH (b:LanguageBranch {key: $key})<-[:SPEAKS_BRANCH]-(l:Locale)
+      RETURN l.key, l.display_name
+      ORDER BY l.key
+
+      // Get branch with its family
+      MATCH (b:LanguageBranch {key: $key})-[:BRANCH_OF]->(f:LanguageFamily)
+      RETURN b.key, b.name, f.key AS family, f.name AS family_name
+
+      // Find locales with similar linguistic features
+      MATCH (l:Locale {key: 'fr-FR'})-[:SPEAKS_BRANCH]->(b:LanguageBranch)
+      MATCH (b)<-[:SPEAKS_BRANCH]-(similar:Locale)
+      WHERE similar.key <> 'fr-FR'
+      RETURN similar.key, similar.display_name, b.name AS shared_branch

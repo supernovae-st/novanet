@@ -1,5 +1,5 @@
 // packages/core/src/graph/__tests__/hierarchy.test.ts
-// Tests for REALM_HIERARCHY — v11.2.0 (2 realms, 9 layers, 62 nodes)
+// Tests for REALM_HIERARCHY — v11.3.0 (61 nodes, 11 layers, 2 realms)
 import { describe, it, expect } from 'vitest';
 import { REALM_HIERARCHY } from '../hierarchy';
 import type { Realm } from '../../types/nodes';
@@ -16,44 +16,47 @@ describe('graph/hierarchy', () => {
     const shared = REALM_HIERARCHY.shared;
     expect(shared.label).toBe('SHARED');
     expect(shared.icon).toBe('🌍');
-    expect(Object.keys(shared.layers)).toHaveLength(2);  // config, locale-knowledge
-    expect(shared.layers.config.nodeTypes).toContain('Locale');
-    // v10.9: locale-knowledge layer has 18 nodes (6 Sets + 6 Atoms + 6 Linguistic)
-    expect(shared.layers['locale-knowledge'].nodeTypes).toHaveLength(18);
-    expect(shared.layers['locale-knowledge'].nodeTypes).toContain('TermSet');
-    expect(shared.layers['locale-knowledge'].nodeTypes).toContain('Term');
-    expect(shared.layers['locale-knowledge'].nodeTypes).toContain('LanguageFamily');
+    // v11.3: shared realm has 3 layers (locale, geography, knowledge)
+    expect(Object.keys(shared.layers)).toHaveLength(3);
+    expect(shared.layers.locale.nodeTypes).toContain('Locale');
+    expect(shared.layers.geography.nodeTypes).toContain('Continent');
+    expect(shared.layers.knowledge.nodeTypes).toContain('TermSet');
+    expect(shared.layers.knowledge.nodeTypes).toContain('Term');
+    expect(shared.layers.knowledge.nodeTypes).toContain('LanguageFamily');
   });
 
   it('should have correct org realm structure', () => {
     const org = REALM_HIERARCHY.org;
     expect(org.label).toBe('ORG');
     expect(org.icon).toBe('🏢');
-    expect(Object.keys(org.layers)).toHaveLength(7);  // config, foundation, structure, semantic, seo, instruction, output
-    // config layer has Organization + Tenant
-    expect(org.layers.config.nodeTypes).toContain('Organization');
-    expect(org.layers.config.nodeTypes).toContain('Tenant');
+    // v11.3: org realm has 8 layers
+    expect(Object.keys(org.layers)).toHaveLength(8);
+    // config layer has OrgConfig only
+    expect(org.layers.config.nodeTypes).toContain('OrgConfig');
     expect(org.layers.foundation.nodeTypes).toContain('Project');
     // Entity/EntityContent are in org/semantic
     expect(org.layers.semantic.nodeTypes).toContain('Entity');
     expect(org.layers.semantic.nodeTypes).toContain('EntityContent');
-    // v11.2: SEO is in org realm
+    // v11.3: SEO and GEO are separate layers
     expect(org.layers.seo.nodeTypes).toContain('SEOKeyword');
+    expect(org.layers.geo.nodeTypes).toContain('GEOQuery');
   });
 
   it('should have correct node counts per layer', () => {
-    // v11.1: Global realm: config (14 = 13 + EntityCategory), locale-knowledge (18) = 32
-    expect(REALM_HIERARCHY.shared.layers.config.nodeTypes).toHaveLength(14);
-    expect(REALM_HIERARCHY.shared.layers['locale-knowledge'].nodeTypes).toHaveLength(18);
+    // v11.3: Shared realm (32 nodes total)
+    expect(REALM_HIERARCHY.shared.layers.locale.nodeTypes).toHaveLength(7);
+    expect(REALM_HIERARCHY.shared.layers.geography.nodeTypes).toHaveLength(6);
+    expect(REALM_HIERARCHY.shared.layers.knowledge.nodeTypes).toHaveLength(19);
 
-    // v11.2: Tenant realm: config (2), foundation (3), structure (3), semantic (4), seo (8), instruction (7), output (3) = 30
-    expect(REALM_HIERARCHY.org.layers.config.nodeTypes).toHaveLength(2);  // Organization, Tenant
+    // v11.3: Org realm (29 nodes total)
+    expect(REALM_HIERARCHY.org.layers.config.nodeTypes).toHaveLength(1);  // OrgConfig
     expect(REALM_HIERARCHY.org.layers.foundation.nodeTypes).toHaveLength(3);
     expect(REALM_HIERARCHY.org.layers.structure.nodeTypes).toHaveLength(3);
-    expect(REALM_HIERARCHY.org.layers.semantic.nodeTypes).toHaveLength(4);  // Entity, EntityContent, AudiencePersona, ChannelSurface
-    expect(REALM_HIERARCHY.org.layers.seo.nodeTypes).toHaveLength(8);  // SEO + GEO (SEOMiningRun removed)
+    expect(REALM_HIERARCHY.org.layers.semantic.nodeTypes).toHaveLength(4);
     expect(REALM_HIERARCHY.org.layers.instruction.nodeTypes).toHaveLength(7);
-    expect(REALM_HIERARCHY.org.layers.output.nodeTypes).toHaveLength(3);  // v11.2: job nodes removed
+    expect(REALM_HIERARCHY.org.layers.seo.nodeTypes).toHaveLength(5);
+    expect(REALM_HIERARCHY.org.layers.geo.nodeTypes).toHaveLength(3);
+    expect(REALM_HIERARCHY.org.layers.output.nodeTypes).toHaveLength(3);
   });
 
   it('should have valid realm definitions with required fields', () => {
@@ -80,7 +83,7 @@ describe('graph/hierarchy', () => {
     }
   });
 
-  it('should have total of 62 nodes across all realms', () => {
+  it('should have total of 61 nodes across all realms', () => {
     let totalNodes = 0;
 
     for (const realm of ['shared', 'org'] as Realm[]) {
@@ -90,6 +93,6 @@ describe('graph/hierarchy', () => {
       }
     }
 
-    expect(totalNodes).toBe(62);  // v11.2: 3 job nodes removed
+    expect(totalNodes).toBe(61);  // v11.3: 61 nodes
   });
 });

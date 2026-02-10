@@ -1,5 +1,5 @@
 // packages/core/src/graph/__tests__/generator.test.ts
-// Tests for schema graph generator — v11.2.0 (62 nodes, 2 realms, 3 job nodes removed)
+// Tests for schema graph generator — v11.3.0 (61 nodes, 2 realms, 11 layers)
 // TDD: Write tests first, then implementation
 
 import { describe, it, expect } from 'vitest';
@@ -8,9 +8,9 @@ import { NODE_TYPES } from '../../types/nodes.js';
 
 describe('graph/generator', () => {
   describe('generateSchemaGraph', () => {
-    it('should generate 62 schema nodes', () => {
+    it('should generate 61 schema nodes', () => {
       const result = generateSchemaGraph();
-      expect(result.nodes).toHaveLength(62);
+      expect(result.nodes).toHaveLength(61);
     });
 
     it('should generate schema arcs from RelationRegistry', () => {
@@ -44,7 +44,7 @@ describe('graph/generator', () => {
       expect(hasPageArc?.cardinality).toBeDefined();
     });
 
-    it('should map all 62 node types', () => {
+    it('should map all 61 node types', () => {
       const result = generateSchemaGraph();
       const nodeTypes = result.nodes.map(n => n.nodeType);
 
@@ -92,14 +92,14 @@ describe('graph/generator', () => {
 
     it('should include stats', () => {
       const result = getSchemaHierarchy();
-      expect(result.stats.totalNodes).toBe(62);
-      expect(result.stats.nodesByRealm.org).toBe(30);   // v11.2: 30 org nodes (3 job nodes removed)
-      expect(result.stats.nodesByRealm.shared).toBe(32);   // v11.2: 32 shared nodes
+      expect(result.stats.totalNodes).toBe(61);
+      expect(result.stats.nodesByRealm.org).toBe(29);     // v11.3: 29 org nodes
+      expect(result.stats.nodesByRealm.shared).toBe(32);  // v11.3: 32 shared nodes
     });
 
     it('should include all nodes', () => {
       const result = getSchemaHierarchy();
-      expect(result.nodes).toHaveLength(62);
+      expect(result.nodes).toHaveLength(61);
     });
 
     it('should include arcs', () => {
@@ -110,15 +110,15 @@ describe('graph/generator', () => {
     it('should have correct realm definitions', () => {
       const result = getSchemaHierarchy();
 
-      // v11.2: Org realm (7 layers - includes SEO)
+      // v11.3: Org realm (8 layers)
       expect(result.realms.org.label).toBe('ORG');
       expect(result.realms.org.icon).toBe('🏢');
-      expect(Object.keys(result.realms.org.layers)).toHaveLength(7);
+      expect(Object.keys(result.realms.org.layers)).toHaveLength(8);
 
-      // v11.2: Shared realm (2 layers - config, locale-knowledge)
+      // v11.3: Shared realm (3 layers - locale, geography, knowledge)
       expect(result.realms.shared.label).toBe('SHARED');
       expect(result.realms.shared.icon).toBe('🌍');
-      expect(Object.keys(result.realms.shared.layers)).toHaveLength(2);
+      expect(Object.keys(result.realms.shared.layers)).toHaveLength(3);
     });
 
     it('should have totalArcs in stats', () => {

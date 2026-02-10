@@ -1,0 +1,99 @@
+# OrgConfig - Organization configuration root node
+# v11.3: Merged from Organization + Tenant (simpler, unified model)
+
+node:
+  name: OrgConfig
+  realm: org
+  layer: config
+  trait: invariant
+  icon: "🏢"
+  description: "Organization configuration root. Parent of all projects."
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # STANDARD PROPERTIES
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Unique organization identifier (kebab-case)"
+      example: "supernovae"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable organization name"
+      example: "SuperNovae"
+
+    description:
+      type: string
+      required: true
+      description: "Brief description of the organization"
+      example: "AI-powered content localization"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM routing context (USE/TRIGGERS/NOT format)"
+      example: "USE: org-level context. TRIGGERS: supernovae, company. NOT: project-specific."
+
+    created_at:
+      type: datetime
+      required: true
+
+    updated_at:
+      type: datetime
+      required: true
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # ORG-SPECIFIC PROPERTIES
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  properties:
+    domain:
+      type: string
+      required: false
+      description: "Primary domain for the organization"
+      example: "supernovae.studio"
+
+    website_url:
+      type: string
+      required: false
+      description: "Organization website URL"
+      example: "https://supernovae.studio"
+
+    industry:
+      type: string
+      required: false
+      description: "Industry or sector"
+      example: "Software / AI / Localization"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # RELATIONS (FROM this node)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  relations:
+    HAS_PROJECT:
+      to: Project
+      cardinality: "1:N"
+      description: "Projects owned by this organization"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # EXAMPLE
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  example:
+    data:
+      key: "supernovae"
+      display_name: "SuperNovae"
+      description: "AI-powered content localization"
+      llm_context: "USE: org-level context. TRIGGERS: supernovae, company. NOT: project-specific."
+      domain: "supernovae.studio"
+      website_url: "https://supernovae.studio"
+      industry: "Software / AI / Localization"
+
+    cypher: |
+      MATCH (org:OrgConfig {key: $key})
+      OPTIONAL MATCH (org)-[:HAS_PROJECT]->(p:Project)
+      RETURN org, collect(DISTINCT p) AS projects

@@ -61,14 +61,19 @@ const REALMS: { key: Realm; label: string; icon: LucideIcon }[] = [
 ];
 
 const LAYERS: { key: Layer; label: string; icon: LucideIcon }[] = [
+  // Shared realm (3)
+  { key: 'locale', label: 'Locale', icon: Settings },
+  { key: 'geography', label: 'Geography', icon: Globe },
+  { key: 'knowledge', label: 'Knowledge', icon: Brain },
+  // Org realm (8)
   { key: 'config', label: 'Configuration', icon: Settings },
-  { key: 'locale-knowledge', label: 'Locale Knowledge', icon: Brain },
   { key: 'foundation', label: 'Foundation', icon: Landmark },
   { key: 'structure', label: 'Structure', icon: Layers },
   { key: 'semantic', label: 'Semantic', icon: Lightbulb },
   { key: 'instruction', label: 'Instructions', icon: FileText },
-  { key: 'output', label: 'Generated Output', icon: FileOutput },
   { key: 'seo', label: 'SEO Intelligence', icon: Search },
+  { key: 'geo', label: 'GEO Intelligence', icon: Sparkles },
+  { key: 'output', label: 'Generated Output', icon: FileOutput },
 ];
 
 const TRAITS: { key: Trait; label: string; icon: LucideIcon }[] = [

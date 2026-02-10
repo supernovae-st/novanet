@@ -1145,15 +1145,20 @@ WITH r, l, count(k) as kind_count
 ORDER BY
     CASE r.key WHEN 'shared' THEN 0 ELSE 1 END,
     CASE l.key
-        WHEN 'config' THEN 0
-        WHEN 'locale-knowledge' THEN 1
-        WHEN 'seo' THEN 2
-        WHEN 'foundation' THEN 3
-        WHEN 'structure' THEN 4
-        WHEN 'semantic' THEN 5
-        WHEN 'instruction' THEN 6
-        WHEN 'output' THEN 7
-        ELSE 8
+        // SHARED realm layers (0-2)
+        WHEN 'locale' THEN 0
+        WHEN 'geography' THEN 1
+        WHEN 'knowledge' THEN 2
+        // ORG realm layers (3-10)
+        WHEN 'config' THEN 3
+        WHEN 'foundation' THEN 4
+        WHEN 'structure' THEN 5
+        WHEN 'semantic' THEN 6
+        WHEN 'instruction' THEN 7
+        WHEN 'seo' THEN 8
+        WHEN 'geo' THEN 9
+        WHEN 'output' THEN 10
+        ELSE 11
     END
 RETURN r.key as realm_key,
        coalesce(r.display_name, r.key) as realm_name,
@@ -2583,11 +2588,12 @@ mod tests {
         let page_kind = create_test_kind("Page", "Page");
         let entity_kind = create_test_kind("Entity", "Entity");
 
-        let locale_knowledge = create_test_layer("locale-knowledge", vec![locale_kind]);
+        // v11.3: Shared realm has 3 layers (locale, geography, knowledge)
+        let locale_layer = create_test_layer("locale", vec![locale_kind]);
         let structure = create_test_layer("structure", vec![page_kind]);
         let semantic = create_test_layer("semantic", vec![entity_kind]);
 
-        let global = create_test_realm("shared", vec![locale_knowledge]);
+        let global = create_test_realm("shared", vec![locale_layer]);
         let tenant = create_test_realm("org", vec![structure, semantic]);
 
         let realms = vec![global, tenant];
@@ -2704,8 +2710,8 @@ mod tests {
     #[test]
     fn test_tree_item_count_meta_mode() {
         let tree = create_test_tree();
-        // In Meta mode: 1 (Kinds) + 1 (global) + 1 (locale-knowledge) + 1 (Locale)
-        //              + 1 (tenant) + 1 (structure) + 1 (Page) + 1 (semantic) + 1 (Entity)
+        // In Meta mode: 1 (Kinds) + 1 (shared) + 1 (locale) + 1 (Locale)
+        //              + 1 (org) + 1 (structure) + 1 (Page) + 1 (semantic) + 1 (Entity)
         //              + 1 (Arcs)
         // Total: 10
         assert_eq!(tree.item_count(), 10);
@@ -2741,7 +2747,7 @@ mod tests {
         // Expand shared realm (v11.2: was global)
         tree.toggle("realm:shared");
 
-        // Now we see: Kinds + shared + locale-knowledge + org + Arcs = 5
+        // Now we see: Kinds + shared + locale + org + Arcs = 5
         // Note: collapse_all() also collapsed the layer, so we don't see Locale yet
         assert_eq!(tree.item_count(), 5);
     }
@@ -2798,18 +2804,16 @@ mod tests {
     }
 
     #[test]
-    fn test_mock_tree_global_has_locale_knowledge_layer() {
+    fn test_mock_tree_shared_has_locale_layer() {
         let tree = create_test_tree();
-        let global = tree
+        let shared = tree
             .realms
             .iter()
             .find(|r| r.key == "shared")
             .expect("Shared realm should exist");
-        let has_locale_knowledge = global.layers.iter().any(|l| l.key == "locale-knowledge");
-        assert!(
-            has_locale_knowledge,
-            "Shared realm should have locale-knowledge layer"
-        );
+        // v11.3: locale-knowledge split into 3 layers, test tree uses "locale"
+        let has_locale = shared.layers.iter().any(|l| l.key == "locale");
+        assert!(has_locale, "Shared realm should have locale layer");
     }
 
     // ========================================================================
@@ -2875,7 +2879,7 @@ mod tests {
     fn test_validate_cypher_label_valid() {
         // Valid labels: alphanumeric, underscore, dash
         assert!(super::validate_cypher_label("Entity").is_ok());
-        assert!(super::validate_cypher_label("locale-knowledge").is_ok());
+        assert!(super::validate_cypher_label("knowledge").is_ok());
         assert!(super::validate_cypher_label("PageGenerated").is_ok());
     }
 

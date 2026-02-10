@@ -1,5 +1,5 @@
 // packages/core/src/graph/__tests__/types.test.ts
-// Tests for graph types — v10.6.0
+// Tests for graph types — v11.3.0 (11 layers, 61 nodes)
 import { describe, it, expect } from 'vitest';
 import type { SchemaNode, SchemaArc, RealmDefinition } from '../types';
 import type { Layer } from '../../types/nodes';
@@ -32,12 +32,12 @@ describe('graph/types', () => {
   });
 
   it('should export Layer type with all values', () => {
-    // v10.6: 8 layers (no organization-only layers)
+    // v11.3: 11 layers (3 shared + 8 org)
     const layers: Layer[] = [
-      'foundation', 'structure', 'semantic', 'instruction', 'output',  // org realm
-      'config', 'locale-knowledge', 'seo'  // global realm
+      'locale', 'geography', 'knowledge',  // shared realm (3)
+      'config', 'foundation', 'structure', 'semantic', 'instruction', 'seo', 'geo', 'output',  // org realm (8)
     ];
-    expect(layers).toHaveLength(8);
+    expect(layers).toHaveLength(11);
   });
 
   it('should export RealmDefinition interface', () => {
@@ -57,7 +57,7 @@ describe('graph/types', () => {
       id: 'schema-Locale',
       nodeType: 'Locale',
       realm: 'shared',
-      layer: 'config',
+      layer: 'locale',
       label: 'Locale',
       description: 'Locale configuration',
       trait: 'invariant',

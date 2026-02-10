@@ -80,46 +80,46 @@ describe('schemaLayoutELK', () => {
 
   beforeEach(() => {
     // Create a minimal mock hierarchy for testing
-    // v10.6: 2 realms (global, tenant)
+    // v11.3: 2 realms (shared, org), 11 layers (3 shared + 8 org)
     mockHierarchy = {
       realms: {
         shared: {
           realm: 'shared' as Realm,
-          label: 'GLOBAL',
+          label: 'SHARED',
           icon: '🌍',
           description: 'Shared across all tenants',
           layers: {
-            config: {
-              label: 'Configuration',
+            locale: {
+              label: 'Locale',
               description: 'Locale configuration',
-              icon: '⚙️',
-              nodeTypes: ['Locale'] as never[],
+              icon: '🌍',
+              nodeTypes: ['Locale', 'Formatting', 'Style'] as never[],
             },
-            'locale-knowledge': {
-              label: 'Locale Knowledge',
-              description: 'Locale-specific knowledge',
+            geography: {
+              label: 'Geography',
+              description: 'Geographic classifications',
+              icon: '🗺️',
+              nodeTypes: ['Continent', 'GeoRegion'] as never[],
+            },
+            knowledge: {
+              label: 'Knowledge',
+              description: 'Knowledge sets and atoms',
               icon: '🧠',
-              nodeTypes: ['Style', 'Formatting'] as never[],
-            },
-            seo: {
-              label: 'SEO',
-              description: 'SEO data',
-              icon: '🔍',
-              nodeTypes: ['SEOKeyword'] as never[],
+              nodeTypes: ['TermSet', 'Term'] as never[],
             },
           } as Record<Layer, { label: string; description: string; icon: string; nodeTypes: never[] }>,
         },
         org: {
           realm: 'org' as Realm,
-          label: 'TENANT',
+          label: 'ORG',
           icon: '🏢',
-          description: 'Tenant-specific content',
+          description: 'Organization-specific content',
           layers: {
             config: {
               label: 'Configuration',
-              description: 'Tenant config',
+              description: 'Org config',
               icon: '⚙️',
-              nodeTypes: ['Organization'] as never[],
+              nodeTypes: ['OrgConfig'] as never[],
             },
             foundation: {
               label: 'Foundation',
@@ -137,25 +137,34 @@ describe('schemaLayoutELK', () => {
         },
       } as Record<Realm, typeof mockHierarchy.realms.org>,
       nodes: [
-        { id: 'schema-Organization', nodeType: 'Organization', realm: 'org', layer: 'config', label: 'Organization', description: '', trait: 'invariant' },
+        // Shared realm - locale (3)
+        { id: 'schema-Locale', nodeType: 'Locale', realm: 'shared', layer: 'locale', label: 'Locale', description: '', trait: 'invariant' },
+        { id: 'schema-Formatting', nodeType: 'Formatting', realm: 'shared', layer: 'locale', label: 'Formatting', description: '', trait: 'knowledge' },
+        { id: 'schema-Style', nodeType: 'Style', realm: 'shared', layer: 'locale', label: 'Style', description: '', trait: 'knowledge' },
+        // Shared realm - geography (2)
+        { id: 'schema-Continent', nodeType: 'Continent', realm: 'shared', layer: 'geography', label: 'Continent', description: '', trait: 'invariant' },
+        { id: 'schema-GeoRegion', nodeType: 'GeoRegion', realm: 'shared', layer: 'geography', label: 'Geo Region', description: '', trait: 'invariant' },
+        // Shared realm - knowledge (2)
+        { id: 'schema-TermSet', nodeType: 'TermSet', realm: 'shared', layer: 'knowledge', label: 'Term Set', description: '', trait: 'invariant' },
+        { id: 'schema-Term', nodeType: 'Term', realm: 'shared', layer: 'knowledge', label: 'Term', description: '', trait: 'knowledge' },
+        // Org realm - config (1)
+        { id: 'schema-OrgConfig', nodeType: 'OrgConfig', realm: 'org', layer: 'config', label: 'Org Config', description: '', trait: 'invariant' },
+        // Org realm - foundation (3)
         { id: 'schema-Project', nodeType: 'Project', realm: 'org', layer: 'foundation', label: 'Project', description: '', trait: 'invariant' },
         { id: 'schema-BrandIdentity', nodeType: 'BrandIdentity', realm: 'org', layer: 'foundation', label: 'Brand Identity', description: '', trait: 'invariant' },
         { id: 'schema-ProjectContent', nodeType: 'ProjectContent', realm: 'org', layer: 'foundation', label: 'Project Content', description: '', trait: 'localized' },
+        // Org realm - structure (2)
         { id: 'schema-Page', nodeType: 'Page', realm: 'org', layer: 'structure', label: 'Page', description: '', trait: 'invariant' },
         { id: 'schema-Block', nodeType: 'Block', realm: 'org', layer: 'structure', label: 'Block', description: '', trait: 'invariant' },
-        { id: 'schema-Locale', nodeType: 'Locale', realm: 'shared', layer: 'config', label: 'Locale', description: '', trait: 'invariant' },
-        { id: 'schema-Style', nodeType: 'Style', realm: 'shared', layer: 'locale-knowledge', label: 'Style', description: '', trait: 'knowledge' },
-        { id: 'schema-Formatting', nodeType: 'Formatting', realm: 'shared', layer: 'locale-knowledge', label: 'Formatting', description: '', trait: 'knowledge' },
-        { id: 'schema-SEOKeyword', nodeType: 'SEOKeyword', realm: 'shared', layer: 'seo', label: 'SEO Keyword', description: '', trait: 'localized' },
       ] as SchemaNode[],
       arcs: [
         { id: 'schema-arc-0', relationType: 'HAS_PAGE', sourceType: 'Project', targetType: 'Page', label: 'HAS_PAGE', description: '', cardinality: '1:N' },
         { id: 'schema-arc-1', relationType: 'HAS_BLOCK', sourceType: 'Page', targetType: 'Block', label: 'HAS_BLOCK', description: '', cardinality: '1:N' },
       ] as SchemaArc[],
       stats: {
-        totalNodes: 10,
+        totalNodes: 13,
         totalArcs: 2,
-        nodesByRealm: { shared: 4, org: 6 },
+        nodesByRealm: { shared: 7, org: 6 },
       },
     };
   });
@@ -170,8 +179,8 @@ describe('schemaLayoutELK', () => {
       const result = await applySchemaLayout(mockHierarchy);
 
       // Should have meta nodes + schema nodes
-      // 2 realm badges + 5 layer badges + 9 schema nodes = 16
-      expect(result.nodes.length).toBeGreaterThan(9);
+      // v11.3: 2 realm badges + 6 layer badges + 13 schema nodes = 21
+      expect(result.nodes.length).toBeGreaterThan(13);
 
       // All nodes should have positions
       for (const node of result.nodes) {
@@ -184,29 +193,29 @@ describe('schemaLayoutELK', () => {
     it('should create realm meta badge nodes', async () => {
       const result = await applySchemaLayout(mockHierarchy);
 
-      // v10.6: Realms are metaBadge nodes with metaType: 'realm' (2 realms: global, tenant)
+      // v11.3: Realms are metaBadge nodes with metaType: 'realm' (2 realms: shared, org)
       const realmBadges = result.nodes.filter(n =>
         n.type === 'metaBadge' && n.data.metaType === 'realm'
       );
       expect(realmBadges).toHaveLength(2);
 
       // Verify realm badge data
-      const tenantRealm = realmBadges.find(n => n.data.realmKey === 'org');
-      expect(tenantRealm).toBeDefined();
-      expect(tenantRealm?.data.label).toBe('Tenant');
+      const orgRealm = realmBadges.find(n => n.data.realmKey === 'org');
+      expect(orgRealm).toBeDefined();
+      expect(orgRealm?.data.label).toBe('Org');
     });
 
     it('should create layer meta badge nodes', async () => {
       const result = await applySchemaLayout(mockHierarchy);
 
-      // v10.6: Layers are metaBadge nodes with metaType: 'layer'
+      // v11.3: Layers are metaBadge nodes with metaType: 'layer'
       const layerBadges = result.nodes.filter(n =>
         n.type === 'metaBadge' && n.data.metaType === 'layer'
       );
-      // 3 (Tenant: config, foundation, structure) + 3 (Global: config, locale-knowledge, seo) = 6
+      // v11.3: 3 shared (locale, geography, knowledge) + 3 org (config, foundation, structure) = 6
       expect(layerBadges).toHaveLength(6);
 
-      // v10.6: No parent relationships - connected by HAS_LAYER edges
+      // v11.3: No parent relationships - connected by HAS_LAYER edges
       const hasLayerEdges = result.edges.filter(e => e.data?.relationType === 'HAS_LAYER');
       expect(hasLayerEdges.length).toBe(6);
     });
@@ -215,11 +224,11 @@ describe('schemaLayoutELK', () => {
       const result = await applySchemaLayout(mockHierarchy);
 
       const schemaNodes = result.nodes.filter(n => n.type === 'schemaNode');
-      expect(schemaNodes).toHaveLength(10);
+      expect(schemaNodes).toHaveLength(13);
 
-      // v10.5: Connected by HAS_KIND edges (not parent relationships)
+      // v11.3: Connected by HAS_KIND edges (not parent relationships)
       const hasKindEdges = result.edges.filter(e => e.data?.relationType === 'HAS_KIND');
-      expect(hasKindEdges.length).toBe(10);
+      expect(hasKindEdges.length).toBe(13);
     });
 
     it('should position all nodes with valid coordinates', async () => {
@@ -237,14 +246,14 @@ describe('schemaLayoutELK', () => {
     it('should include business edges plus hierarchy edges', async () => {
       const result = await applySchemaLayout(mockHierarchy);
 
-      // v10.6: Total edges = HAS_LAYER + HAS_KIND + business edges
-      // 6 HAS_LAYER + 10 HAS_KIND + 2 business = 18
+      // v11.3: Total edges = HAS_LAYER + HAS_KIND + business edges
+      // 6 HAS_LAYER + 13 HAS_KIND + 2 business = 21
       const hasLayerEdges = result.edges.filter(e => e.data?.relationType === 'HAS_LAYER');
       const hasKindEdges = result.edges.filter(e => e.data?.relationType === 'HAS_KIND');
       const businessEdges = result.edges.filter(e => !e.data?.isMetaEdge);
 
       expect(hasLayerEdges.length).toBe(6);
-      expect(hasKindEdges.length).toBe(10);
+      expect(hasKindEdges.length).toBe(13);
       expect(businessEdges.length).toBe(2); // Original mock edges
     });
 

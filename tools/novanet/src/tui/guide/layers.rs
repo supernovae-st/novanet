@@ -1,8 +1,8 @@
 //! Layers Tab — Split view showing Shared and Org realms.
 //!
-//! Layout (v11.0):
-//! - Left side: SHARED realm (2 layers: config, locale-knowledge)
-//! - Right side: ORG realm (7 layers: config, foundation, structure, semantic, instruction, seo, output)
+//! Layout (v11.3):
+//! - Left side: SHARED realm (3 layers: locale, geography, knowledge)
+//! - Right side: ORG realm (8 layers: config, foundation, structure, semantic, instruction, seo, geo, output)
 //!
 //! Each layer card shows:
 //! - Icon (from theme)
@@ -38,21 +38,23 @@ pub struct LayerCardInfo {
     pub kind_count: usize,
 }
 
-/// Shared realm layers (2 layers) — v11.0: SEO moved to tenant.
-pub const SHARED_LAYERS: [(&str, &str, &str); 2] = [
-    ("config", "\u{2699}", "System settings"),           // ⚙
-    ("locale-knowledge", "\u{25ca}", "Terms, Patterns"), // ◊
+/// Shared realm layers (3 layers) — v11.3: locale, geography, knowledge.
+pub const SHARED_LAYERS: [(&str, &str, &str); 3] = [
+    ("locale", "\u{1f310}", "Locale definitions"),     // 🌐
+    ("geography", "\u{1f5fa}", "Geographic data"),     // 🗺️
+    ("knowledge", "\u{1f4da}", "Terms, Patterns"),     // 📚
 ];
 
-/// Org realm layers (7 layers) — v11.0: SEO added from global.
-pub const ORG_LAYERS: [(&str, &str, &str); 7] = [
-    ("config", "\u{2699}", "Org settings"),       // ⚙
-    ("foundation", "\u{25c7}", "Entities, Assets"),  // ◇
-    ("structure", "\u{25c6}", "Pages, Blocks"),      // ◆
-    ("semantic", "\u{25c6}", "Prompts, Context"),    // ◆
-    ("instruction", "\u{270e}", "Generation rules"), // ✎
-    ("seo", "\u{1f50d}", "Keywords, Queries"),       // 🔍
-    ("output", "\u{25cf}", "Generated content"),     // ●
+/// Org realm layers (8 layers) — v11.3: +geo for AI visibility.
+pub const ORG_LAYERS: [(&str, &str, &str); 8] = [
+    ("config", "\u{2699}", "OrgConfig root"),          // ⚙
+    ("foundation", "\u{25c7}", "Project, Brand"),      // ◇
+    ("structure", "\u{25c6}", "Pages, Blocks"),        // ◆
+    ("semantic", "\u{25c6}", "Entities, Personas"),    // ◆
+    ("instruction", "\u{270e}", "Prompts, Rules"),     // ✎
+    ("seo", "\u{1f50d}", "SEO Keywords"),              // 🔍
+    ("geo", "\u{1f916}", "GEO AI Visibility"),         // 🤖
+    ("output", "\u{25cf}", "Generated content"),       // ●
 ];
 
 impl TaxonomyTree {
@@ -290,14 +292,14 @@ mod tests {
 
     #[test]
     fn test_global_layers_count() {
-        // v11.0: SHARED has 2 layers (config, locale-knowledge), SEO moved to tenant
-        assert_eq!(SHARED_LAYERS.len(), 2);
+        // v11.3: SHARED has 3 layers (locale, geography, knowledge)
+        assert_eq!(SHARED_LAYERS.len(), 3);
     }
 
     #[test]
     fn test_tenant_layers_count() {
-        // v11.0: ORG has 7 layers (config, foundation, structure, semantic, instruction, seo, output)
-        assert_eq!(ORG_LAYERS.len(), 7);
+        // v11.3: ORG has 8 layers (config, foundation, structure, semantic, instruction, seo, geo, output)
+        assert_eq!(ORG_LAYERS.len(), 8);
     }
 
     #[test]
