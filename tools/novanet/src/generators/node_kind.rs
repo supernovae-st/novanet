@@ -83,8 +83,8 @@ fn derive_visibility(realm: &str, layer: &str, kind_name: &str) -> &'static str 
         // Generated and content nodes are publishable
         "PageGenerated" | "BlockGenerated" => return "publishable",
         "Entity" | "EntityContent" => return "publishable",
-        // SEO/GEO data is publishable
-        "GEOQuery" | "GEOMetrics" | "SEOKeyword" | "SEOKeywordMetrics" => return "publishable",
+        // SEO/GEO data is publishable (v11.4: GEOMetrics removed)
+        "GEOQuery" | "GEOAnswer" | "SEOKeyword" | "SEOKeywordMetrics" => return "publishable",
         _ => {}
     }
 
@@ -640,43 +640,43 @@ mod tests {
             .generate(root)
             .expect("should generate kind cypher");
 
-        // v11.3: 61 Kind MERGE statements (merged Org+Tenant into OrgConfig)
+        // v11.4: 60 Kind MERGE statements (+3 new containers, -4 obsolete SEO types)
         let kind_merges = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Meta:Kind"))
             .count();
         assert_eq!(
-            kind_merges, 61,
-            "expected 61 Kind MERGE statements (v11.3: merged Org+Tenant)"
+            kind_merges, 60,
+            "expected 60 Kind MERGE statements (v11.4: +3 new, -4 obsolete)"
         );
 
-        // 61 HAS_KIND relationships
+        // 60 HAS_KIND relationships
         let has_kind = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_KIND]"))
             .count();
-        assert_eq!(has_kind, 61, "expected 61 HAS_KIND relationships");
+        assert_eq!(has_kind, 60, "expected 60 HAS_KIND relationships");
 
-        // 61 IN_REALM relationships
+        // 60 IN_REALM relationships (v11.4)
         let in_realm = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_REALM]"))
             .count();
-        assert_eq!(in_realm, 61, "expected 61 IN_REALM relationships");
+        assert_eq!(in_realm, 60, "expected 60 IN_REALM relationships");
 
-        // 61 IN_LAYER relationships
+        // 60 IN_LAYER relationships (v11.4)
         let in_layer = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_LAYER]"))
             .count();
-        assert_eq!(in_layer, 61, "expected 61 IN_LAYER relationships");
+        assert_eq!(in_layer, 60, "expected 60 IN_LAYER relationships");
 
-        // 61 EXHIBITS relationships
+        // 60 EXHIBITS relationships (v11.4)
         let exhibits = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:EXHIBITS]"))
             .count();
-        assert_eq!(exhibits, 61, "expected 61 EXHIBITS relationships");
+        assert_eq!(exhibits, 60, "expected 60 EXHIBITS relationships");
 
         // Spot checks — specific Kinds
         assert!(cypher.contains("k_Project:Meta:Kind {label: 'Project'}"));
@@ -708,8 +708,8 @@ mod tests {
             }
         }
 
-        // v11.3: Header mentions 61 Kind nodes (merged Org+Tenant into OrgConfig)
-        assert!(cypher.contains("61 Kind nodes"));
+        // v11.4: Header mentions 60 Kind nodes (+3 new, -4 obsolete)
+        assert!(cypher.contains("60 Kind nodes"));
 
         // v10.1: knowledge_tier removed from all YAMLs (node type is sufficient)
         // Verify no knowledge_tier properties are present in output
@@ -775,7 +775,7 @@ mod tests {
             "publishable"
         );
         assert_eq!(
-            derive_visibility("shared", "knowledge", "GEOMetrics"),
+            derive_visibility("shared", "knowledge", "GEOAnswer"),
             "publishable"
         );
     }

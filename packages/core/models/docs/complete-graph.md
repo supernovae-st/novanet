@@ -26,7 +26,7 @@ This diagram shows the complete NovaNet graph schema with all 42 node types and 
 ```mermaid
 flowchart TB
   %% NovaNet Graph v11.4.0
-  %% Generated: 61 nodes, 160 arcs
+  %% Generated: 60 nodes, 158 arcs
   %% Source: node-kinds/ + arc-kinds/ + taxonomy.yaml
 
   %% Trait styling (node_trait)
@@ -41,6 +41,7 @@ flowchart TB
     subgraph SHARED_config["Config"]
       EntityCategory["🔵 EntityCategory"]
       Locale["🔵 Locale"]
+      SEOKeywordFormat["🔵 SEOKeywordFormat"]
     end
     subgraph SHARED_locale["Locale"]
       Adaptation["🟣 Adaptation"]
@@ -68,19 +69,17 @@ flowchart TB
       Expression["🟣 Expression"]
       ExpressionSet["🔵 ExpressionSet"]
       GEOAnswer["⚪ GEOAnswer"]
-      GEOMetrics["⚪ GEOMetrics"]
       GEOQuery["🟣 GEOQuery"]
+      GEOQuerySet["🔵 GEOQuerySet"]
       LanguageBranch["🟣 LanguageBranch"]
       LanguageFamily["🟣 LanguageFamily"]
       Pattern["🟣 Pattern"]
       PatternSet["🔵 PatternSet"]
       PopulationCluster["🟣 PopulationCluster"]
       PopulationSubCluster["🟣 PopulationSubCluster"]
-      SEOComparison["🟣 SEOComparison"]
       SEOKeyword["🟣 SEOKeyword"]
       SEOKeywordMetrics["⚪ SEOKeywordMetrics"]
-      SEOPreposition["🟣 SEOPreposition"]
-      SEOQuestion["🟣 SEOQuestion"]
+      SEOKeywordSet["🔵 SEOKeywordSet"]
       Taboo["🟣 Taboo"]
       TabooSet["🔵 TabooSet"]
       Term["🟣 Term"]
@@ -186,7 +185,6 @@ flowchart TB
   Entity -.->|USED_BY| Block
   Entity -.->|USED_BY| Page
   Entity -.->|VARIANT_OF| Entity
-  EntityContent -.->|ANSWERS| SEOQuestion
   EntityContent -.->|CONTENT_OF| Entity
   EntityContent -.->|CONTENT_OF| Project
   EntityContent -.->|FOR_LOCALE| Locale
@@ -194,7 +192,7 @@ flowchart TB
   EntityContent -.->|TARGETS| SEOKeyword
   ExpressionSet -->|CONTAINS_EXPRESSION| Expression
   GEOQuery -->|HAS_GEO_ANSWERS| GEOAnswer
-  GEOQuery --o|HAS_GEO_METRICS| GEOMetrics
+  GEOQuerySet -->|CONTAINS_GEO_QUERY| GEOQuery
   GeoRegion -->|IN_CONTINENT| Continent
   GeoSubRegion -->|IN_REGION| GeoRegion
   LanguageBranch -->|BRANCH_OF| LanguageFamily
@@ -206,7 +204,7 @@ flowchart TB
   Locale -->|HAS_CULTURE_SET| CultureSet
   Locale -->|HAS_EXPRESSIONS| ExpressionSet
   Locale -->|HAS_FORMATTING| Formatting
-  Locale -->|HAS_GEO_QUERIES| GEOQuery
+  Locale -->|HAS_GEO_QUERIES| GEOQuerySet
   Locale -.->|HAS_INCOME_LEVEL| IncomeGroup
   Locale -.->|HAS_LENDING_TYPE| LendingCategory
   Locale -.->|HAS_LOCALIZED_CONTENT| BlockGenerated
@@ -217,7 +215,7 @@ flowchart TB
   Locale -->|HAS_PATTERNS| PatternSet
   Locale -.->|HAS_POPULATION| PopulationSubCluster
   Locale -.->|HAS_PRIMARY_POPULATION| PopulationCluster
-  Locale -->|HAS_SEO_KEYWORDS| SEOKeyword
+  Locale -->|HAS_SEO_KEYWORDS| SEOKeywordSet
   Locale -->|HAS_SLUGIFICATION| Slugification
   Locale -->|HAS_STYLE| Style
   Locale -->|HAS_TABOOS| TabooSet
@@ -247,7 +245,6 @@ flowchart TB
   Page -.->|SUBTOPIC_OF| Page
   Page -.->|TARGETS_PERSONA| AudiencePersona
   Page -.->|USES_ENTITY| Entity
-  PageGenerated -.->|ADDRESSES| SEOComparison
   PageGenerated ==>|ASSEMBLES| BlockGenerated
   PageGenerated -->|BELONGS_TO_PROJECT_CONTENT| ProjectContent
   PageGenerated -.->|FOR_CHANNEL| ChannelSurface
@@ -276,23 +273,23 @@ flowchart TB
   PromptArtifact ==>|COMPILED_FROM| BlockPrompt
   PromptArtifact ==>|COMPILED_FROM| PagePrompt
   PromptArtifact ==>|INCLUDES_ENTITY| Entity
-  SEOComparison -.->|COMPARES_A| Entity
-  SEOComparison -.->|COMPARES_B| Entity
+  SEOKeyword -.->|COMPARES_A| Entity
+  SEOKeyword -.->|COMPARES_B| Entity
   SEOKeyword -.->|EXPRESSES| Entity
-  SEOKeyword -->|HAS_COMPARISONS| SEOComparison
+  SEOKeyword -->|HAS_FORMAT| SEOKeywordFormat
   SEOKeyword --o|HAS_METRICS| SEOKeywordMetrics
-  SEOKeyword -->|HAS_PREPOSITIONS| SEOPreposition
-  SEOKeyword -->|HAS_QUESTIONS| SEOQuestion
-  SEOPreposition -.->|USE_CASE_ENTITY| Entity
+  SEOKeyword -.->|MENTIONS_BRAND| Entity
+  SEOKeyword -.->|USE_CASE_FOR| Entity
+  SEOKeywordSet -->|CONTAINS_SEO_KEYWORD| SEOKeyword
   TabooSet -->|CONTAINS_TABOO| Taboo
   TermSet -->|CONTAINS_TERM| Term
 
   %% Arc colors by family
-  linkStyle 3,4,13,14,15,17,18,19,20,23,24,25,102,103,105,106,107,109,110,122,126,127,128,129,130,131,132,133,147,148,149 stroke:#8b5cf6,stroke-width:2px
-  linkStyle 12,16,41,42,61,62,63,73,81,82,83,84,85,86,89,90,96,97,98,99,100,104,125,139,140,144,145,146 stroke:#22c55e,stroke-width:2px
-  linkStyle 68,154 stroke:#ec4899,stroke-width:2px
-  linkStyle 0,1,5,6,7,8,26,27,28,29,40,66,67,69,70,71,74,75,76,77,78,79,80,87,88,91,92,93,94,95,101,108,111,112,113,114,116,117,123,134,135,136,137,138,141,142,143,153,155,156,158,159 stroke:#3b82f6,stroke-width:2px
-  linkStyle 2,9,10,11,21,22,30,31,32,33,34,35,36,37,38,39,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,64,65,72,115,118,119,120,121,124,150,151,152,157 stroke:#f97316,stroke-width:2px
+  linkStyle 3,4,13,14,15,17,18,19,20,23,24,25,101,102,104,105,106,108,109,120,124,125,126,127,128,129,130,131,145,146,147 stroke:#8b5cf6,stroke-width:2px
+  linkStyle 12,16,41,42,60,61,62,72,80,81,82,83,84,85,88,89,95,96,97,98,99,103,123,137,138,142,143,144 stroke:#22c55e,stroke-width:2px
+  linkStyle 152 stroke:#ec4899,stroke-width:2px
+  linkStyle 0,1,5,6,7,8,26,27,28,29,40,65,66,67,68,69,70,73,74,75,76,77,78,79,86,87,90,91,92,93,94,100,107,110,111,112,113,115,116,121,132,133,134,135,136,139,140,141,151,155,156,157 stroke:#3b82f6,stroke-width:2px
+  linkStyle 2,9,10,11,21,22,30,31,32,33,34,35,36,37,38,39,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,63,64,71,114,117,118,119,122,148,149,150,153,154 stroke:#f97316,stroke-width:2px
 
   %% Class assignments
   class Adaptation knowledge
@@ -322,8 +319,8 @@ flowchart TB
   class ExpressionSet invariant
   class Formatting knowledge
   class GEOAnswer aggregated
-  class GEOMetrics aggregated
   class GEOQuery knowledge
+  class GEOQuerySet invariant
   class GeoRegion invariant
   class GeoSubRegion invariant
   class IncomeGroup invariant
@@ -345,11 +342,10 @@ flowchart TB
   class Project invariant
   class ProjectContent localized
   class PromptArtifact generated
-  class SEOComparison knowledge
   class SEOKeyword knowledge
+  class SEOKeywordFormat invariant
   class SEOKeywordMetrics aggregated
-  class SEOPreposition knowledge
-  class SEOQuestion knowledge
+  class SEOKeywordSet invariant
   class Slugification knowledge
   class Style knowledge
   class Taboo knowledge

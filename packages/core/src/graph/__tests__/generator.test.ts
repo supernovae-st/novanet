@@ -1,5 +1,5 @@
 // packages/core/src/graph/__tests__/generator.test.ts
-// Tests for schema graph generator — v11.4.0 (61 nodes, 2 realms, 10 layers)
+// Tests for schema graph generator — v11.5.0 (60 nodes, 2 realms, 10 layers)
 // TDD: Write tests first, then implementation
 
 import { describe, it, expect } from 'vitest';
@@ -8,9 +8,9 @@ import { NODE_TYPES } from '../../types/nodes.js';
 
 describe('graph/generator', () => {
   describe('generateSchemaGraph', () => {
-    it('should generate 61 schema nodes', () => {
+    it('should generate 60 schema nodes', () => {
       const result = generateSchemaGraph();
-      expect(result.nodes).toHaveLength(61);
+      expect(result.nodes).toHaveLength(60);
     });
 
     it('should generate schema arcs from RelationRegistry', () => {
@@ -44,7 +44,7 @@ describe('graph/generator', () => {
       expect(hasPageArc?.cardinality).toBeDefined();
     });
 
-    it('should map all 61 node types', () => {
+    it('should map all 60 node types', () => {
       const result = generateSchemaGraph();
       const nodeTypes = result.nodes.map(n => n.nodeType);
 
@@ -92,14 +92,14 @@ describe('graph/generator', () => {
 
     it('should include stats', () => {
       const result = getSchemaHierarchy();
-      expect(result.stats.totalNodes).toBe(61);
-      expect(result.stats.nodesByRealm.org).toBe(21);     // v11.4: 21 org nodes (SEO/GEO moved)
-      expect(result.stats.nodesByRealm.shared).toBe(40);  // v11.4: 40 shared nodes (includes SEO/GEO)
+      expect(result.stats.totalNodes).toBe(60);
+      expect(result.stats.nodesByRealm.org).toBe(21);     // v11.5: 21 org nodes (SEO/GEO moved)
+      expect(result.stats.nodesByRealm.shared).toBe(39);  // v11.5: 39 shared nodes (includes SEO/GEO)
     });
 
     it('should include all nodes', () => {
       const result = getSchemaHierarchy();
-      expect(result.nodes).toHaveLength(61);
+      expect(result.nodes).toHaveLength(60);
     });
 
     it('should include arcs', () => {
@@ -110,12 +110,12 @@ describe('graph/generator', () => {
     it('should have correct realm definitions', () => {
       const result = getSchemaHierarchy();
 
-      // v11.4: Org realm (6 layers - seo/geo removed)
+      // v11.5: Org realm (6 layers - seo/geo removed)
       expect(result.realms.org.label).toBe('ORG');
       expect(result.realms.org.icon).toBe('🏢');
       expect(Object.keys(result.realms.org.layers)).toHaveLength(6);
 
-      // v11.4: Shared realm (4 layers - config, locale, geography, knowledge)
+      // v11.5: Shared realm (4 layers - config, locale, geography, knowledge)
       expect(result.realms.shared.label).toBe('SHARED');
       expect(result.realms.shared.icon).toBe('🌍');
       expect(Object.keys(result.realms.shared.layers)).toHaveLength(4);

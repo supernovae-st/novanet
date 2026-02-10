@@ -46,7 +46,7 @@ node:
     llm_context:
       type: string
       required: false
-      description: "GEOQuery represents an AI search query to monitor for visibility. It is DISCOVERED/CONFIGURED data, not generated content. Static query definition - time-series metrics live in GEOAnswer nodes. v11.4: Now in shared/knowledge (Knowledge Atoms pattern). Access: EntityContent --[:MONITORS_GEO]--> GEOQuery --[:HAS_GEO_ANSWER]--> GEOAnswer"
+      description: "GEOQuery represents an AI search query to monitor for visibility. It is DISCOVERED/CONFIGURED data, not generated content. Static query definition - time-series metrics live in GEOAnswer nodes. v11.4: Now in shared/knowledge (Knowledge Atoms pattern). Access: EntityContent --[:MONITORS_GEO]--> GEOQuery --[:HAS_GEO_ANSWERS]--> GEOAnswer"
 
     created_at:
       type: datetime
@@ -96,7 +96,7 @@ node:
   relations:
     # Incoming: EntityContent --[:MONITORS_GEO]--> GEOQuery (targeting, v11.4)
 
-    - relation: HAS_GEO_ANSWER
+    - relation: HAS_GEO_ANSWERS
       to: GEOAnswer
       direction: outgoing
       cardinality: "1:N"
@@ -112,7 +112,7 @@ node:
       // v11.4: GEOQuery with time-series answers (metrics in GEOAnswer)
       MATCH (e:Entity {key: $entity_key})-[:HAS_CONTENT]->(ec:EntityContent)
       MATCH (ec)-[:MONITORS_GEO]->(q:GEOQuery)
-      OPTIONAL MATCH (q)-[:HAS_GEO_ANSWER]->(a:GEOAnswer)
+      OPTIONAL MATCH (q)-[:HAS_GEO_ANSWERS]->(a:GEOAnswer)
       WITH q, a ORDER BY a.captured_at DESC
       WITH q, collect(a)[0] AS latest_answer
       RETURN q.value AS query,

@@ -1,0 +1,26 @@
+# arc-kinds/ownership/contains-geo-query.yaml
+# CONTAINS_GEO_QUERY - GEOQuerySet contains GEOQuery atoms (v11.4)
+#
+# v11.4: Type-constrained container arc (ADR-016)
+#        - Follows Knowledge Atoms pattern
+#        - GEOQuerySet (container) → GEOQuery (atom)
+
+arc:
+  name: CONTAINS_GEO_QUERY
+  family: ownership
+  scope: intra_realm
+  source: GEOQuerySet
+  target: GEOQuery
+  cardinality: one_to_many
+  llm_context: |
+    GEOQuerySet contains its GEOQuery atoms.
+    Type-constrained: only GEOQuerySet can use this arc.
+    Pattern: (GEOQuerySet)-[:CONTAINS_GEO_QUERY]->(GEOQuery)
+    v11.4: New arc for container-atom relationship.
+  cypher_pattern: "(GEOQuerySet)-[:CONTAINS_GEO_QUERY]->(GEOQuery)"
+  example:
+    description: "Get all GEO queries in a locale's query set"
+    cypher: |
+      MATCH (l:Locale {key: $locale})-[:HAS_GEO_QUERIES]->(qs:GEOQuerySet)
+      MATCH (qs)-[:CONTAINS_GEO_QUERY]->(q:GEOQuery)
+      RETURN q.value, q.query_type

@@ -572,6 +572,13 @@ REALMS (62 nodes total):
 
 **Status**: Approved (v11.3)
 
+**Problem**: The `locale-knowledge` layer in v11.2 conflated three distinct concerns:
+1. BCP-47 locale configuration (Locale, LocaleVoice, LocaleGrammar)
+2. Geographic data (Region, Country, GeoFeature)
+3. Semantic knowledge atoms (Terms, Expressions, Patterns)
+
+This made queries ambiguous ("knowledge in locale-knowledge" is confusing) and prevented clean layer-based filtering in Studio.
+
 **Decision**: Reorganize the layer structure for better semantic clarity.
 
 ### Changes
@@ -694,7 +701,7 @@ REALMS (61 nodes total):
 | 009 | v9.5 | Terminal color graceful degradation |
 | 010 | v9.5 | Skill-first DX |
 | 011 | v10.5 | Company project pattern (superseded by 012) |
-| 012 | v10.6 | 2-Realm Architecture (updated v11.3: 11 layers) |
+| 012 | v10.6 | 2-Realm Architecture (updated v11.5: 10 layers) |
 | 013 | v10.6 | Icons source of truth |
 | 014 | v10.9 | Naming convention refactor (L10n to Content/Generated) |
 | 015 | v10.9 | Unidirectional ownership arcs |
@@ -708,6 +715,10 @@ REALMS (61 nodes total):
 
 **Status**: Approved (v11.5)
 
+**Problem**: Two architectural issues emerged from v11.3/v11.4 usage:
+1. **Locale misplacement**: `Locale` was in `shared/locale` layer with settings nodes (Style, Formatting), but Locale is a *definition* (invariant trait), not a *setting* (knowledge trait). This caused trait inconsistency.
+2. **SEO/GEO redundancy**: SEO/GEO nodes in `org` realm duplicated knowledge that should be universal across organizations. An SEO keyword like "QR code generator" is the same regardless of organization.
+
 **Decision**: Refine the schema with Locale moved to shared/config and SEO/GEO layers consolidated.
 
 ### Changes
@@ -718,7 +729,7 @@ REALMS (61 nodes total):
 | **SEO/GEO layers** | org/seo, org/geo (separate) | Removed from org |
 | **SEO/GEO nodes** | In org realm | Moved to shared/knowledge |
 | **Layer count** | 11 (3 shared + 8 org) | 10 (4 shared + 6 org) |
-| **Node distribution** | 32 shared + 29 org | 40 shared + 21 org |
+| **Node distribution** | 32 shared + 29 org | **39 shared + 21 org = 60 nodes** |
 
 ### Locale to Config Layer
 
@@ -764,12 +775,12 @@ AFTER (v11.5):
 ### Architecture Summary (v11.5)
 
 ```
-REALMS (61 nodes total):
-├── shared/              # Universal knowledge (READ-ONLY) — 40 nodes
-│   ├── config/          # 2 nodes (EntityCategory, Locale)
-│   ├── locale/          # 6 nodes (Style, Formatting, Slugification, etc.)
+REALMS (60 nodes total):
+├── shared/              # Universal knowledge (READ-ONLY) — 39 nodes
+│   ├── config/          # 3 nodes (EntityCategory, Locale, SEOKeywordFormat)
+│   ├── locale/          # 6 nodes (Culture, Style, Formatting, etc.)
 │   ├── geography/       # 6 nodes (Continent, Region, etc.)
-│   └── knowledge/       # 26 nodes (Terms, Expressions, SEO, GEO, etc.)
+│   └── knowledge/       # 24 nodes (Terms, Expressions, SEO, GEO, etc.)
 │
 └── org/                 # Organization-specific — 21 nodes
     ├── config/          # 1 node (OrgConfig)

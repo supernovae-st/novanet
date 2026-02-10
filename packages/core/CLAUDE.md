@@ -37,9 +37,9 @@ v11.5 refines the 2-Realm Architecture with Locale moved to shared/config:
 **Key v11.5 changes:**
 - Locale moved: shared/locale → shared/config (definitions layer pattern)
 - SEO/GEO consolidation: seo/geo layers removed from org, nodes in shared/knowledge
-- SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (40 nodes)
+- SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (39 nodes)
 - ORG (6 layers): config, foundation, structure, semantic, instruction, output (21 nodes)
-- 61 node types, 116 arc types
+- 60 node types, 116 arc types
 
 **Boundary rule:** TypeScript (this package) generates code artifacts. Rust (`tools/novanet/`) executes at runtime.
 
@@ -117,20 +117,19 @@ RETURN ak.key, af.key AS family, target.label AS target_kind;
 core/
 ├── models/                    # YAML schema definitions (SOURCE OF TRUTH)
 │   ├── _index.yaml            # MODEL INDEX (graph structure, node categories)
-│   ├── taxonomy.yaml          # v11.3: 2 Realms (shared/org), 11 Layers
+│   ├── taxonomy.yaml          # v11.5: 2 Realms (shared/org), 10 Layers
 │   ├── node-kinds/            # ONE FILE PER NODE TYPE
-│   │   ├── shared/            # Realm: shared (32 nodes)
-│   │   │   ├── locale/        #   Layer: locale (7 nodes)
+│   │   ├── shared/            # Realm: shared (39 nodes)
+│   │   │   ├── config/        #   Layer: config (3 nodes: Locale, EntityCategory, SEOKeywordFormat)
+│   │   │   ├── locale/        #   Layer: locale (6 nodes)
 │   │   │   ├── geography/     #   Layer: geography (6 nodes)
-│   │   │   └── knowledge/     #   Layer: knowledge (19 nodes)
-│   │   └── org/               # Realm: org (29 nodes)
-│   │       ├── config/        #   Layer: config (OrgConfig)
+│   │   │   └── knowledge/     #   Layer: knowledge (24 nodes incl. SEO/GEO)
+│   │   └── org/               # Realm: org (21 nodes)
+│   │       ├── config/        #   Layer: config (1 node: OrgConfig)
 │   │       ├── foundation/    #   Layer: foundation (Project, BrandIdentity, ProjectContent)
 │   │       ├── structure/     #   Layer: structure (Page, Block, ContentSlot)
 │   │       ├── semantic/      #   Layer: semantic (Entity, EntityContent, etc.)
 │   │       ├── instruction/   #   Layer: instruction (Prompts, BlockRules)
-│   │       ├── seo/           #   Layer: seo (SEOKeyword, Metrics)
-│   │       ├── geo/           #   Layer: geo (GEOQuery, GEOAnswer, GEOMetrics)
 │   │       └── output/        #   Layer: output (PageGenerated, BlockGenerated)
 │   ├── arc-kinds/             # ONE FILE PER ARC TYPE (116 files)
 │   └── views/                 # YAML view definitions
@@ -157,10 +156,10 @@ Locale*         = Locale Knowledge nodes (LocaleVoice, LocaleCulture, etc.)
 *Metrics        = Time-series observations (SEOKeywordMetrics, GEOMetrics)
 ```
 
-**v11.3 meta-graph terminology:**
+**v11.5 meta-graph terminology:**
 ```
 Realm           = WHERE? (shared / org)
-Layer           = WHAT? (11 functional layers: 3 shared + 8 org)
+Layer           = WHAT? (10 functional layers: 4 shared + 6 org)
 Kind            = Neo4j label as meta-node
 Trait           = HOW? (invariant / localized / knowledge / generated / aggregated)
 ArcFamily       = Relationship classification (ownership / localization / semantic / generation / mining)

@@ -1,28 +1,28 @@
 // src/types/nodes.ts
-// Single source of truth for all 61 NovaNet node types
-// v11.4.0 — SEO/GEO moved to shared/knowledge (Knowledge Atoms pattern)
+// Single source of truth for all 60 NovaNet node types
+// v11.5.0 — SEO/GEO moved to shared/knowledge (Knowledge Atoms pattern)
 
 // =============================================================================
-// NODE TYPES (61 nodes across 2 realms, 10 layers)
+// NODE TYPES (60 nodes across 2 realms, 10 layers)
 // =============================================================================
 
 export const NODE_TYPES = [
   // ═══════════════════════════════════════════════════════════════════════════
-  // SHARED REALM (40 nodes) — 4 layers: config, locale, geography, knowledge
+  // SHARED REALM (39 nodes) — 4 layers: config, locale, geography, knowledge
   // ═══════════════════════════════════════════════════════════════════════════
-  // config (2) — v11.4: classification nodes + Locale definition
-  'EntityCategory', 'Locale',
+  // config (3) — v11.5: classification nodes + Locale definition + SEO format
+  'EntityCategory', 'Locale', 'SEOKeywordFormat',
   // locale (6) — Locale SETTINGS (not the Locale definition itself)
   'Formatting', 'Slugification', 'Adaptation', 'Style', 'Culture', 'Market',
   // geography (6) — Geographic classifications
   'Continent', 'GeoRegion', 'GeoSubRegion', 'IncomeGroup', 'LendingCategory', 'EconomicRegion',
-  // knowledge (26) — Sets + Atoms + Linguistic/Cultural taxonomy + SEO/GEO
+  // knowledge (24) — Sets + Atoms + Linguistic/Cultural taxonomy + SEO/GEO
   'TermSet', 'ExpressionSet', 'PatternSet', 'CultureSet', 'TabooSet', 'AudienceSet',
   'Term', 'Expression', 'Pattern', 'CultureRef', 'Taboo', 'AudienceTrait',
   'LanguageFamily', 'LanguageBranch', 'CulturalRealm', 'CulturalSubRealm', 'PopulationCluster', 'PopulationSubCluster',
-  // knowledge — SEO/GEO (8) — v11.4: moved from org to shared/knowledge
-  'SEOKeyword', 'SEOKeywordMetrics', 'SEOComparison', 'SEOPreposition', 'SEOQuestion',
-  'GEOQuery', 'GEOAnswer', 'GEOMetrics',
+  // knowledge — SEO/GEO (6) — v11.5: moved from org to shared/knowledge
+  'SEOKeyword', 'SEOKeywordMetrics', 'SEOKeywordSet',
+  'GEOQuery', 'GEOQuerySet', 'GEOAnswer',
 
   // ═══════════════════════════════════════════════════════════════════════════
   // ORG REALM (21 nodes) — 6 layers: config, foundation, structure, semantic, instruction, output
@@ -45,7 +45,7 @@ export const NODE_TYPES = [
 export type NodeType = typeof NODE_TYPES[number];
 
 // =============================================================================
-// v11.4 TAXONOMY TYPES (2 realms, 10 layers: 4 shared + 6 org)
+// v11.5 TAXONOMY TYPES (2 realms, 10 layers: 4 shared + 6 org)
 // SEO/GEO nodes moved to shared/knowledge (Knowledge Atoms pattern)
 // =============================================================================
 
@@ -58,8 +58,8 @@ export type Layer =
 export type Trait = 'invariant' | 'localized' | 'knowledge' | 'generated' | 'aggregated';
 
 // =============================================================================
-// KIND_META — unified classification for all 61 node types
-// v11.4.0 — SEO/GEO moved to shared/knowledge (Knowledge Atoms pattern)
+// KIND_META — unified classification for all 60 node types
+// v11.5.0 — SEO/GEO moved to shared/knowledge (Knowledge Atoms pattern)
 // =============================================================================
 
 export interface KindMeta {
@@ -70,10 +70,11 @@ export interface KindMeta {
 
 export const KIND_META: Record<NodeType, KindMeta> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // SHARED REALM — config (2) — v11.4: classification nodes + Locale definition
+  // SHARED REALM — config (3) — v11.5: classification nodes + Locale definition
   // ═══════════════════════════════════════════════════════════════════════════
-  EntityCategory: { realm: 'shared', layer: 'config', trait: 'invariant' },
-  Locale:         { realm: 'shared', layer: 'config', trait: 'invariant' },
+  EntityCategory:   { realm: 'shared', layer: 'config', trait: 'invariant' },
+  Locale:           { realm: 'shared', layer: 'config', trait: 'invariant' },
+  SEOKeywordFormat: { realm: 'shared', layer: 'config', trait: 'invariant' },
 
   // SHARED REALM — locale (6) — locale SETTINGS
   Formatting:     { realm: 'shared', layer: 'locale', trait: 'knowledge' },
@@ -91,7 +92,7 @@ export const KIND_META: Record<NodeType, KindMeta> = {
   LendingCategory:{ realm: 'shared', layer: 'geography', trait: 'invariant' },
   EconomicRegion: { realm: 'shared', layer: 'geography', trait: 'invariant' },
 
-  // SHARED REALM — knowledge (26) — containers, atoms, SEO/GEO
+  // SHARED REALM — knowledge (24) — containers, atoms, SEO/GEO
   TermSet:             { realm: 'shared', layer: 'knowledge', trait: 'invariant' },
   ExpressionSet:       { realm: 'shared', layer: 'knowledge', trait: 'invariant' },
   PatternSet:          { realm: 'shared', layer: 'knowledge', trait: 'invariant' },
@@ -141,15 +142,13 @@ export const KIND_META: Record<NodeType, KindMeta> = {
   BlockInstruction:{ realm: 'org', layer: 'instruction', trait: 'invariant' },
   PromptArtifact:  { realm: 'org', layer: 'instruction', trait: 'generated' },
 
-  // SHARED REALM — knowledge (SEO/GEO) — v11.4: moved from org to shared
+  // SHARED REALM — knowledge (SEO/GEO) — v11.5: moved from org to shared
   SEOKeyword:       { realm: 'shared', layer: 'knowledge', trait: 'knowledge' },
   SEOKeywordMetrics:{ realm: 'shared', layer: 'knowledge', trait: 'aggregated' },
-  SEOComparison:    { realm: 'shared', layer: 'knowledge', trait: 'knowledge' },
-  SEOPreposition:   { realm: 'shared', layer: 'knowledge', trait: 'knowledge' },
-  SEOQuestion:      { realm: 'shared', layer: 'knowledge', trait: 'knowledge' },
+  SEOKeywordSet:    { realm: 'shared', layer: 'knowledge', trait: 'invariant' },
   GEOQuery:         { realm: 'shared', layer: 'knowledge', trait: 'knowledge' },
+  GEOQuerySet:      { realm: 'shared', layer: 'knowledge', trait: 'invariant' },
   GEOAnswer:        { realm: 'shared', layer: 'knowledge', trait: 'aggregated' },
-  GEOMetrics:       { realm: 'shared', layer: 'knowledge', trait: 'aggregated' },
 
   // ORG REALM — output (3)
   PageGenerated:  { realm: 'org', layer: 'output', trait: 'generated' },

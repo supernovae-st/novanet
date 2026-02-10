@@ -1,0 +1,19 @@
+# arc-kinds/semantic/mentions-brand.yaml
+# MENTIONS_BRAND - Brand keyword mentions a brand entity (v11.4)
+
+arc:
+  name: MENTIONS_BRAND
+  family: semantic
+  scope: cross_realm
+  temperature_threshold: 0.7
+  source: SEOKeyword
+  target: Entity
+  cardinality: many_to_one
+
+  llm_context: |
+    Brand keyword mentions a brand entity.
+    Only valid when SEOKeyword has HAS_FORMAT → brand.
+    Pattern: (SEOKeyword)-[:MENTIONS_BRAND]->(Entity)
+    v11.4: New arc for brand keyword semantics.
+
+  cypher_pattern: "(SEOKeyword)-[:MENTIONS_BRAND]->(Entity)"
