@@ -697,43 +697,37 @@ pub mod nav_mode {
     pub const ATLAS_16: Color = Color::Magenta;
 
     /// Get nav mode color for a given color mode.
+    /// v11.3: Updated for 3-mode structure (Graph, Audit, Nexus)
     pub fn color(nav_mode: &str, mode: ColorMode) -> Color {
         match mode {
             ColorMode::TrueColor => match nav_mode {
-                "meta" | "Meta" => hex_to_color(META_HEX),
-                "data" | "Data" => hex_to_color(DATA_HEX),
-                "overlay" | "Overlay" => hex_to_color(OVERLAY_HEX),
-                "query" | "Query" => hex_to_color(QUERY_HEX),
-                "atlas" | "Atlas" => hex_to_color(ATLAS_HEX),
+                "graph" | "Graph" => hex_to_color(META_HEX), // Graph inherits Meta color
+                "audit" | "Audit" => hex_to_color(QUERY_HEX), // Audit uses Query color
+                "nexus" | "Nexus" => hex_to_color(ATLAS_HEX), // Nexus uses Atlas color
                 _ => Color::White,
             },
             ColorMode::Color256 => match nav_mode {
-                "meta" | "Meta" => Color::Indexed(META_256),
-                "data" | "Data" => Color::Indexed(DATA_256),
-                "overlay" | "Overlay" => Color::Indexed(OVERLAY_256),
-                "query" | "Query" => Color::Indexed(QUERY_256),
-                "atlas" | "Atlas" => Color::Indexed(ATLAS_256),
+                "graph" | "Graph" => Color::Indexed(META_256),
+                "audit" | "Audit" => Color::Indexed(QUERY_256),
+                "nexus" | "Nexus" => Color::Indexed(ATLAS_256),
                 _ => Color::White,
             },
             ColorMode::Color16 => match nav_mode {
-                "meta" | "Meta" => META_16,
-                "data" | "Data" => DATA_16,
-                "overlay" | "Overlay" => OVERLAY_16,
-                "query" | "Query" => QUERY_16,
-                "atlas" | "Atlas" => ATLAS_16,
+                "graph" | "Graph" => META_16,
+                "audit" | "Audit" => QUERY_16,
+                "nexus" | "Nexus" => ATLAS_16,
                 _ => Color::White,
             },
         }
     }
 
     /// Get icon for nav mode.
+    /// v11.3: Updated for 3-mode structure (Graph, Audit, Nexus)
     pub fn icon(nav_mode: &str) -> &'static str {
         match nav_mode {
-            "meta" | "Meta" => "◈",
-            "data" | "Data" => "●",
-            "overlay" | "Overlay" => "◐",
-            "query" | "Query" => "◎",
-            "atlas" | "Atlas" => "✦",
+            "graph" | "Graph" => "◈",
+            "audit" | "Audit" => "◎",
+            "nexus" | "Nexus" => "✦",
             _ => "○",
         }
     }

@@ -203,15 +203,15 @@ pub fn render_help(f: &mut Frame, app: &App) {
                 Span::styled("Jump to knowledge trait", STYLE_DIM),
             ]),
             Line::from(vec![
-                Span::styled("    gd       ", STYLE_PRIMARY),
-                Span::styled("Jump to derived trait", STYLE_DIM),
-            ]),
-            Line::from(vec![
-                Span::styled("    gj       ", STYLE_PRIMARY),
-                Span::styled("Jump to job trait", STYLE_DIM),
-            ]),
-            Line::from(vec![
                 Span::styled("    gg       ", STYLE_PRIMARY),
+                Span::styled("Jump to generated trait", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    ga       ", STYLE_PRIMARY),
+                Span::styled("Jump to aggregated trait", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    g0       ", STYLE_PRIMARY),
                 Span::styled("Go to top (reset cursors)", STYLE_DIM),
             ]),
             Line::from(""),
@@ -223,12 +223,12 @@ pub fn render_help(f: &mut Frame, app: &App) {
             Line::from(""),
             Line::from(vec![Span::styled("  Exit", STYLE_HIGHLIGHT)]),
             Line::from(vec![
-                Span::styled("    5-7      ", STYLE_PRIMARY),
-                Span::styled("Switch to other modes", STYLE_DIM),
+                Span::styled("    1-2      ", STYLE_PRIMARY),
+                Span::styled("Switch to Graph/Audit modes", STYLE_DIM),
             ]),
             Line::from(vec![
                 Span::styled("    N        ", STYLE_PRIMARY),
-                Span::styled("Cycle modes (exit Guide)", STYLE_DIM),
+                Span::styled("Cycle modes (exit Nexus)", STYLE_DIM),
             ]),
             Line::from(vec![
                 Span::styled("    q        ", STYLE_PRIMARY),
@@ -454,11 +454,11 @@ pub fn render_legend(f: &mut Frame, app: &App) {
     ]));
     lines.push(Line::from(vec![
         Span::styled("    ··· ", STYLE_PRIMARY),
-        Span::styled("derived (dotted)", STYLE_DIM),
+        Span::styled("generated (dotted)", STYLE_DIM),
     ]));
     lines.push(Line::from(vec![
-        Span::styled("    ─ ─ ", STYLE_PRIMARY),
-        Span::styled("job (thin)", STYLE_DIM),
+        Span::styled("    · · ", STYLE_PRIMARY),
+        Span::styled("aggregated (dotted thin)", STYLE_DIM),
     ]));
 
     lines.push(Line::from(""));
