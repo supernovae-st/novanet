@@ -1,8 +1,8 @@
 //! Layers Tab — Split view showing Shared and Org realms.
 //!
-//! Layout (v11.3):
-//! - Left side: SHARED realm (3 layers: locale, geography, knowledge)
-//! - Right side: ORG realm (8 layers: config, foundation, structure, semantic, instruction, seo, geo, output)
+//! Layout (v11.5):
+//! - Left side: SHARED realm (4 layers: config, locale, geography, knowledge)
+//! - Right side: ORG realm (6 layers: config, foundation, structure, semantic, instruction, output)
 //!
 //! Each layer card shows:
 //! - Icon (from theme)

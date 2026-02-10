@@ -2963,7 +2963,7 @@ mod tests {
         let page_kind = create_test_kind("Page", "Page");
         let entity_kind = create_test_kind("Entity", "Entity");
 
-        // v11.3: Shared realm has 3 layers (locale, geography, knowledge)
+        // Minimal test fixture (v11.5 has 4 shared layers: config, locale, geography, knowledge)
         let locale_layer = create_test_layer("locale", vec![locale_kind]);
         let structure = create_test_layer("structure", vec![page_kind]);
         let semantic = create_test_layer("semantic", vec![entity_kind]);
@@ -3186,7 +3186,7 @@ mod tests {
             .iter()
             .find(|r| r.key == "shared")
             .expect("Shared realm should exist");
-        // v11.3: locale-knowledge split into 3 layers, test tree uses "locale"
+        // v11.5: 4 shared layers (config, locale, geography, knowledge); test tree uses "locale"
         let has_locale = shared.layers.iter().any(|l| l.key == "locale");
         assert!(has_locale, "Shared realm should have locale layer");
     }
