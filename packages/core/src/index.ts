@@ -27,8 +27,8 @@ export * from './types/index.js';
  *
  * const { query, params } = CypherGenerator.generate(filter);
  *
- * // YAML-based views
- * const view = await ViewLoader.loadView('page-generation-context', viewsDir);
+ * // View-based filters (generated constants)
+ * const view = await ViewLoader.loadView('page-generation-context');
  * const filterFromView = ViewLoader.toFilter(view, { key: 'page-pricing', locale: 'fr-FR' });
  * ```
  */
