@@ -18,6 +18,11 @@ export const ImpactPrimitive = memo(function ImpactPrimitive({
   state,
   targetPosition,
 }: EffectPrimitiveProps) {
+  // Guard against undefined position
+  if (!targetPosition || typeof targetPosition.x !== 'number') {
+    return null;
+  }
+
   const isHighlighted = state === 'highlighted';
   const scale = isHighlighted ? IMPACT_CONFIG.highlightedScale : 1;
   const baseSize = IMPACT_CONFIG.baseSize * intensity * scale;
