@@ -17,9 +17,11 @@
 import { memo, useCallback, useRef, useMemo, useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import * as THREE from 'three';
+import { Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useFilteredGraph } from '@/hooks';
 import { useUIStore } from '@/stores/uiStore';
+import { EmptyState } from '@/components/ui/EmptyState';
 import {
   transformGraphData,
   filterValidData,
@@ -399,19 +401,16 @@ export const Graph3D = memo(function Graph3D({
     return config.particleColor;
   }, []);
 
-  // Empty state
+  // Empty state - unified with Graph2D
   if (graphData.nodes.length === 0) {
     return (
-      <div
-        className={cn(
-          'flex items-center justify-center bg-slate-900',
-          className
-        )}
-      >
-        <div className="text-center text-white/50">
-          <p className="text-lg">No nodes to display</p>
-          <p className="text-sm mt-2 text-white/30">Try adjusting your filters</p>
-        </div>
+      <div className={cn('h-full bg-slate-900', className)}>
+        <EmptyState
+          icon={Sparkles}
+          title="No nodes to display"
+          description="Try adjusting your filters or fetching data from Neo4j. Use the preset shortcuts (1-9) to quickly filter."
+          accentColor="accent-purple"
+        />
       </div>
     );
   }
@@ -419,28 +418,29 @@ export const Graph3D = memo(function Graph3D({
   return (
     <div className={cn('relative', className)}>
       <ForceGraph3D
-        ref={fgRef}
-        graphData={graphData}
-        nodeThreeObject={renderNode}
-        nodeLabel={(node: ForceGraphNode) =>
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ref={fgRef as any}
+        graphData={graphData as any}
+        nodeThreeObject={renderNode as any}
+        nodeLabel={((node: ForceGraphNode) =>
           `<div style="background: rgba(0,0,0,0.8); padding: 4px 8px; border-radius: 4px; font-size: 11px;">
             <strong>${node.name}</strong><br/>
             <span style="color: rgba(255,255,255,0.6)">${node.type} · ${node.layer}</span>
-          </div>`
+          </div>`) as any
         }
         nodeThreeObjectExtend={false}
-        onNodeClick={handleNodeClick}
-        onNodeRightClick={handleNodeDoubleClick}
-        onNodeHover={handleNodeHover}
+        onNodeClick={handleNodeClick as any}
+        onNodeRightClick={handleNodeDoubleClick as any}
+        onNodeHover={handleNodeHover as any}
         onBackgroundClick={handleBackgroundClick}
         onEngineTick={handleEngineTick}
-        linkColor={getLinkColor}
-        linkWidth={getLinkWidth}
+        linkColor={getLinkColor as any}
+        linkWidth={getLinkWidth as any}
         linkOpacity={0.5}
-        linkDirectionalParticles={getLinkParticles}
-        linkDirectionalParticleSpeed={getLinkParticleSpeed}
-        linkDirectionalParticleWidth={getLinkParticleWidth}
-        linkDirectionalParticleColor={getLinkParticleColor}
+        linkDirectionalParticles={getLinkParticles as any}
+        linkDirectionalParticleSpeed={getLinkParticleSpeed as any}
+        linkDirectionalParticleWidth={getLinkParticleWidth as any}
+        linkDirectionalParticleColor={getLinkParticleColor as any}
         backgroundColor="#070b14"
         showNavInfo={false}
         enableNodeDrag={true}

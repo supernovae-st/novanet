@@ -221,27 +221,27 @@ export const CORE_EFFECTS: EffectPrimitive[] = ['particles', 'glow'];
 export const LOD_CONFIGS: Record<LODTier, LODConfig> = {
   high: {
     effects: 'ALL',
-    maxParticles: 6,
+    maxParticles: 8,
     enableGlow: true,
     targetFPS: 60,
   },
   medium: {
-    effects: 'CORE',
-    maxParticles: 3,
+    effects: 'ALL',  // Changed: show all effects by default
+    maxParticles: 4,
+    enableGlow: true,
+    targetFPS: 45,
+  },
+  low: {
+    effects: 'CORE',  // Changed: particles + glow instead of just glow
+    maxParticles: 2,
     enableGlow: true,
     targetFPS: 30,
   },
-  low: {
-    effects: 'GLOW',
+  minimal: {
+    effects: 'GLOW',  // Changed: at least glow instead of none
     maxParticles: 1,
     enableGlow: true,
     targetFPS: 15,
-  },
-  minimal: {
-    effects: 'NONE',
-    maxParticles: 0,
-    enableGlow: false,
-    targetFPS: 0,
   },
 } as const;
 
@@ -249,10 +249,10 @@ export const LOD_CONFIGS: Record<LODTier, LODConfig> = {
  * Distance thresholds for LOD tiers (in pixels, adjusted for zoom)
  */
 export const LOD_DISTANCES = {
-  full: 200,
-  reduced: 500,
-  minimal: 1000,
-  static: 2000,
+  full: 800,      // Increased: more edges get full effects
+  reduced: 1500,  // Increased: larger medium zone
+  minimal: 3000,  // Increased: effects visible further
+  static: 5000,   // Increased: edges stay animated longer
   // Beyond static distance = hidden
 } as const;
 
@@ -274,7 +274,7 @@ export const EDGE_PRIORITIES: Record<EdgePriority, number> = {
  * Default animation budget configuration
  */
 export const DEFAULT_ANIMATION_BUDGET: AnimationBudgetConfig = {
-  maxConcurrent: 50,
+  maxConcurrent: 150,  // Increased: allow more concurrent animations
   priorities: EDGE_PRIORITIES,
 } as const;
 
@@ -286,17 +286,17 @@ export const DEFAULT_ANIMATION_BUDGET: AnimationBudgetConfig = {
  * Pre-warm counts for effect pool
  */
 export const POOL_PREWARM_COUNTS: Partial<Record<EffectPrimitive, number>> = {
-  particles: 20,
-  glow: 30,
-  trail: 15,
-  emit: 10,
-  impact: 10,
+  particles: 50,   // Increased for always-on animations
+  glow: 60,
+  trail: 40,
+  emit: 30,
+  impact: 25,
 } as const;
 
 /**
  * Maximum pool size per primitive type
  */
-export const POOL_MAX_SIZE = 100;
+export const POOL_MAX_SIZE = 200;  // Increased for always-on animations
 
 // =============================================================================
 // Duration Helpers
