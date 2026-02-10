@@ -39,6 +39,11 @@ function getHoverNodeConfig(node: HoverNodeInfo): NodeTypeConfig | null {
   return NODE_TYPE_CONFIG[node.type as NodeType] || null;
 }
 
+// Type guard: check if a node is a schema group (Realm or Layer container)
+function isSchemaGroupNode(node: HoverNodeInfo): node is SchemaGroupNode {
+  return node.type === 'RealmGroup' || node.type === 'LayerGroup';
+}
+
 // Import GraphCanvas for 2D/3D view switching
 import { GraphCanvas, Graph3DLegend } from '@/components/graph';
 import { GraphErrorBoundary } from '@/components/ui/ErrorBoundary';
@@ -208,10 +213,60 @@ export default function HomePage() {
   const macropadOpen = uiState.activeModal === 'macropad-configurator';
 
   // Get selected node/edge data (memoized)
-  const selectedNode = useMemo(
-    () => (uiState.selectedNodeId ? getNodeById(uiState.selectedNodeId) : null),
-    [uiState.selectedNodeId, getNodeById]
-  );
+  // Supports both data mode (full node data) and schema mode (synthetic from node id)
+  const selectedNode = useMemo((): HoverNodeInfo | null => {
+    if (!uiState.selectedNodeId) return null;
+
+    // Data mode: look up in graphStore
+    const node = getNodeById(uiState.selectedNodeId);
+    if (node) return node;
+
+    // Schema mode: handle different node id formats
+    if (navigationMode === 'meta') {
+      const nodeId = uiState.selectedNodeId;
+
+      // Realm containers: realm-{Realm} (e.g., realm-shared, realm-org)
+      if (nodeId.startsWith('realm-')) {
+        const realm = nodeId.replace('realm-', '');
+        const realmEmoji = realm === 'shared' ? '🌍' : realm === 'org' ? '🏢' : '🎯';
+        const realmLabel = realm.charAt(0).toUpperCase() + realm.slice(1);
+        return {
+          id: nodeId,
+          type: 'RealmGroup',
+          key: realm,
+          displayName: `${realmEmoji} ${realmLabel} Realm`,
+        } as SchemaGroupNode;
+      }
+
+      // Layer containers: layer-{Realm}-{LayerName}
+      if (nodeId.startsWith('layer-')) {
+        const parts = nodeId.replace('layer-', '').split('-');
+        const layerName = parts.slice(1).join('-');
+        return {
+          id: nodeId,
+          type: 'LayerGroup',
+          key: layerName,
+          displayName: layerName.charAt(0).toUpperCase() + layerName.slice(1),
+        } as SchemaGroupNode;
+      }
+
+      // Schema nodes: schema-{NodeType}
+      if (nodeId.startsWith('schema-')) {
+        const nodeType = nodeId.replace('schema-', '');
+        const config = NODE_TYPE_CONFIG[nodeType as keyof typeof NODE_TYPE_CONFIG];
+        if (config) {
+          return {
+            id: nodeId,
+            type: nodeType,
+            key: nodeType,
+            displayName: config.label,
+          } as GraphNode;
+        }
+      }
+    }
+
+    return null;
+  }, [uiState.selectedNodeId, getNodeById, navigationMode]);
   // Use selectedEdgeData from store (supports both data and schema modes)
   // Fallback to getEdgeById for backwards compatibility
   const selectedEdge = useMemo(
@@ -879,10 +934,40 @@ export default function HomePage() {
             {selectedEdge ? (
               /* Tabbed Arc Details Panel (has its own header) */
               <TabbedArcPanel arc={selectedEdge} className="h-full" />
-            ) : (
+            ) : selectedNode && isSchemaGroupNode(selectedNode) ? (
+              /* Schema Group Panel (Realm or Layer container) */
+              <div className="h-full flex flex-col">
+                <div className="px-4 py-3 border-b border-white/8 flex items-center justify-between">
+                  <div>
+                    <h2 className="text-lg font-semibold text-white">{selectedNode.displayName}</h2>
+                    <p className="text-sm text-white/50">{selectedNode.type === 'RealmGroup' ? 'Realm' : 'Layer'}</p>
+                  </div>
+                  <button
+                    onClick={() => uiActions.setSelectedNode(null)}
+                    className="p-1.5 rounded-md hover:bg-white/10 text-white/50 hover:text-white transition-colors"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+                <div className="flex-1 p-4 overflow-auto">
+                  <div className="space-y-4">
+                    <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+                      <p className="text-sm text-white/70">
+                        {selectedNode.type === 'RealmGroup'
+                          ? `The ${selectedNode.key} realm contains node types for ${selectedNode.key === 'shared' ? 'universal, read-only knowledge' : 'organization-specific content'}.`
+                          : `The ${selectedNode.key} layer groups related node types.`}
+                      </p>
+                    </div>
+                    <p className="text-xs text-white/40">
+                      Click on a node type within this {selectedNode.type === 'RealmGroup' ? 'realm' : 'layer'} to see detailed information.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : selectedNode ? (
               /* Tabbed Node Details Panel (has its own header) */
-              <TabbedDetailPanel node={selectedNode ?? null} className="h-full" />
-            )}
+              <TabbedDetailPanel node={selectedNode} className="h-full" />
+            ) : null}
           </aside>
         )}
       </div>
