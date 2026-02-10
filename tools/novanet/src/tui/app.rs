@@ -955,9 +955,9 @@ impl App {
             KeyCode::Char('t') => {
                 if self.mode == NavMode::Graph {
                     self.graph_view = self.graph_view.toggle();
-                    // When switching to Instances view, request instance load for current Kind
+                    // When switching to Instances view, auto-expand current Kind and load instances
                     if self.graph_view == GraphView::Instances {
-                        self.request_instance_load_for_current();
+                        self.auto_expand_current_kind_for_instances();
                     } else {
                         // When switching to Taxonomy, collapse all Kind instances
                         self.tree.collapse_all_kinds();
@@ -1709,8 +1709,37 @@ impl App {
         self.update_schema_match_for_current();
     }
 
+    /// Auto-expand the current Kind when switching to Instances view.
+    /// If cursor is on a Kind, expands it and triggers instance loading.
+    fn auto_expand_current_kind_for_instances(&mut self) {
+        // Use Taxonomy view item_at since we just switched modes
+        // and cursor position is based on Taxonomy view
+        // Clone key upfront to avoid borrow checker issues
+        let kind_key = if let Some(super::data::TreeItem::Kind(_, _, kind)) =
+            self.tree.item_at(self.tree_cursor)
+        {
+            Some(kind.key.clone())
+        } else {
+            None
+        };
+
+        if let Some(key) = kind_key {
+            let collapse_key = format!("kind:{}", key);
+
+            // Expand the Kind if it's collapsed
+            if self.tree.is_collapsed(&collapse_key) {
+                self.tree.toggle(&collapse_key);
+            }
+
+            // Request instance loading if not already loaded
+            if self.tree.get_instances(&key).is_none() {
+                self.pending_instance_load = Some(key);
+            }
+        }
+    }
+
     /// Toggle collapse/expand of the current tree item.
-    /// Also triggers loading for Entity categories and category instances in Data mode.
+    /// Also triggers loading for instances, Entity categories, and category instances in Data mode.
     fn toggle_tree_item(&mut self) {
         if let Some(key) = self.tree.collapse_key_at(self.tree_cursor) {
             // Check if expanding (going from collapsed to expanded)
@@ -1719,9 +1748,16 @@ impl App {
 
             // Only trigger loading when expanding (not collapsing)
             if was_collapsed && self.is_data_mode() {
-                // When expanding Entity Kind, load categories if not already loaded
-                if key == "kind:Entity" && self.tree.entity_categories.is_empty() {
-                    self.pending_entity_categories_load = true;
+                // When expanding any Kind, load instances if not already loaded
+                if let Some(kind_key) = key.strip_prefix("kind:") {
+                    // Special case: Entity Kind also loads categories
+                    if kind_key == "Entity" && self.tree.entity_categories.is_empty() {
+                        self.pending_entity_categories_load = true;
+                    }
+                    // Load instances for this Kind if not already loaded
+                    if self.tree.get_instances(kind_key).is_none() {
+                        self.pending_instance_load = Some(kind_key.to_string());
+                    }
                 }
                 // When expanding an EntityCategory, load instances for that category
                 else if let Some(category_key) = key.strip_prefix("category:") {
