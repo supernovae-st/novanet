@@ -20,7 +20,7 @@ import { cn } from '@/lib/utils';
 import { useUIStore } from '@/stores/uiStore';
 import { useGraphStore } from '@/stores/graphStore';
 import { panelClasses } from '@/design/tokens';
-import { getRelationColors } from '@/design/nodeColors';
+import { getArcPalette } from '@/design/colors/palette';
 import { ElementIdentityCard } from '@/components/ui/detail-panel';
 import { ArcOverviewTab } from './tabs/ArcOverviewTab';
 import { ArcContextTab } from './tabs/ArcContextTab';
@@ -142,9 +142,10 @@ export const TabbedArcPanel = memo(function TabbedArcPanel({
     clearSelection();
   }, [clearSelection]);
 
-  // Get arc colors based on relation type
+  // Get arc colors based on relation type (from unified palette)
   const arcType = arc?.type || (arc?.data?.relationType as string | undefined) || 'UNKNOWN';
-  const colors = getRelationColors(arcType);
+  const palette = getArcPalette(arcType);
+  const colors = { primary: palette.primary, secondary: palette.secondary };
 
   if (!arc) {
     return (
