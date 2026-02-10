@@ -2132,7 +2132,7 @@ mod tests {
             issues_count: None,
         };
 
-        // v11.3: Shared realm has 3 layers (locale, geography, knowledge)
+        // Minimal test fixture (v11.5 has 4 shared layers: config, locale, geography, knowledge)
         let locale_layer = LayerInfo {
             key: "locale".to_string(),
             display_name: "Locale".to_string(),

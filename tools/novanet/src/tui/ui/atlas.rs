@@ -1801,9 +1801,9 @@ mod tests {
         assert!(output.contains("SHARED"), "Should show Shared realm");
         assert!(output.contains("ORG"), "Should show Org realm");
 
-        // Should contain layer names (v11.3: 3 shared layers)
+        // Should contain layer names (v11.5: 4 shared layers in production, fixture has all 4)
         assert!(output.contains("Config"), "Should show Config layer");
-        // v11.3: locale-knowledge split into 3 layers
+        // v11.5: 4 shared layers (config, locale, geography, knowledge)
         assert!(output.contains("Locale"), "Should show Locale layer");
         assert!(output.contains("Geography"), "Should show Geography layer");
         assert!(output.contains("Knowledge"), "Should show Knowledge layer");
@@ -1827,7 +1827,7 @@ mod tests {
         let output = render_atlas_realm_map(&app);
 
         // Cursor position should be shown in live mode
-        // v11.3: Total items = realms (2) + layers (4 in shared + 1 in org) = 7
+        // Test fixture: 2 realms + 4 shared layers + 1 org layer = 7 items
         assert!(
             output.contains("Cursor: 3/7"),
             "Should show cursor position 3/7 in live mode"
