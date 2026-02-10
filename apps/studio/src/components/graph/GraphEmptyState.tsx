@@ -9,7 +9,7 @@
  * - Suggestions for troubleshooting
  */
 
-import { memo } from 'react';
+import { memo, useState, useEffect } from 'react';
 import {
   Database,
   AlertTriangle,
@@ -38,6 +38,12 @@ interface GraphEmptyStateProps {
 export const GraphEmptyState = memo(function GraphEmptyState({
   className,
 }: GraphEmptyStateProps) {
+  // Hydration fix: only show dynamic content after mount
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
   const activeViewId = useViewStore((state) => state.activeViewId);
   const isCustomQuery = useViewStore((state) => state.isCustomQuery);
   const error = useQueryStore((state) => state.error);
@@ -117,8 +123,9 @@ export const GraphEmptyState = memo(function GraphEmptyState({
   const info = getDiagnosticInfo();
   const Icon = info.icon;
 
-  // Loading state
-  if (isExecuting) {
+  // SSR/Hydration: show stable loading state until mounted
+  // This prevents hydration mismatch from Zustand store state differences
+  if (!hasMounted || isExecuting) {
     return (
       <div className={cn('flex items-center justify-center h-full', className)}>
         <div className="flex flex-col items-center gap-4">
