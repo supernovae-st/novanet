@@ -1,6 +1,6 @@
 //! Generate `layers.ts` via MiniJinja template (YAML → TypeScript).
 //!
-//! Reads all 44 YAML node definitions, groups by realm and layer,
+//! Reads all 60 YAML node definitions (v11.5), groups by realm and layer,
 //! and produces `packages/core/src/graph/layers.ts`.
 //! Replaces `SubcategoryGenerator.ts` from @novanet/schema-tools.
 //!

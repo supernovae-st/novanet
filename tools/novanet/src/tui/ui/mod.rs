@@ -341,36 +341,6 @@ pub(super) fn cardinality_abbrev(cardinality: &str) -> &'static str {
     }
 }
 
-/// Format classification badges for a Kind node.
-/// Returns: "◎shd ▣cfg ■inv" format with colored spans
-/// Note: Currently unused but available for future use in info panel
-#[allow(dead_code)]
-pub(super) fn format_classification_badge(
-    realm_key: &str,
-    layer_key: &str,
-    trait_name: &str,
-    realm_color: Color,
-    layer_color: Color,
-) -> Vec<Span<'static>> {
-    let t_color = trait_color(trait_name);
-    vec![
-        Span::styled(
-            format!("{}{}", realm_badge_icon(realm_key), realm_abbrev(realm_key)),
-            Style::default().fg(realm_color),
-        ),
-        Span::styled(" ", Style::default()),
-        Span::styled(
-            format!("{}{}", layer_badge_icon(layer_key), layer_abbrev(layer_key)),
-            Style::default().fg(layer_color),
-        ),
-        Span::styled(" ", Style::default()),
-        Span::styled(
-            format!("{}{}", trait_icon(trait_name), trait_abbrev(trait_name)),
-            Style::default().fg(t_color),
-        ),
-    ]
-}
-
 /// Wrap text to lines of max `width` characters, returning owned Strings.
 /// Uses char indices instead of collecting to Vec<char> for efficiency.
 pub(super) fn wrap_text(text: &str, width: usize) -> Vec<String> {
