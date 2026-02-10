@@ -37,3 +37,16 @@ export {
   useEffectPoolCleanup,
 } from './useEffectPool';
 export type { UseEffectPoolOptions, UseEffectPoolResult } from './useEffectPool';
+
+// Parallel edge hooks (v11.6.1)
+export {
+  useParallelEdges,
+  getEdgeIndexInGroup,
+  BUNDLE_THRESHOLD,
+  MAX_FAN_OUT_OFFSET,
+  FAN_OUT_OFFSET_PER_EDGE,
+} from './useParallelEdges';
+export type {
+  ParallelEdgeGroup,
+  UseParallelEdgesResult,
+} from './useParallelEdges';

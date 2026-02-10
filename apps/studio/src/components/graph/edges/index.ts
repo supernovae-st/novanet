@@ -21,6 +21,7 @@
 
 export { FloatingEdge, type FloatingEdgeData, type FloatingEdgeType } from './FloatingEdge';
 export { MagneticEdge } from './MagneticEdge';
+export { BundledEdge, type BundledEdgeProps } from './BundledEdge';
 
 // =============================================================================
 // Type System
@@ -82,6 +83,7 @@ export { effectPool } from './system/performance/LazyEffectPool';
 // =============================================================================
 
 export {
+  // Core primitives
   EmitPrimitive,
   ImpactPrimitive,
   GlowPrimitive,
@@ -90,6 +92,11 @@ export {
   ZigzagPrimitive,
   InterferencePrimitive,
   ScanlinePrimitive,
+  // Family-specific primitives (v11.6.1)
+  EnergyPulsePrimitive,
+  DNAHelixPrimitive,
+  MatrixCodePrimitive,
+  RadarSweepPrimitive,
   PRIMITIVE_REGISTRY,
 } from './effects/primitives';
 
@@ -108,12 +115,22 @@ export { useEdgeTheme, useEdgeColors, useEdgeTiming, useEdgeEffects } from './ho
 export { useEdgeLOD, useLODStats } from './hooks/useEdgeLOD';
 export { useAnimationBudget, useAnimationBudgetStats } from './hooks/useAnimationBudget';
 export { useEffectPool, useEffectPoolStats, usePrewarmEffectPool } from './hooks/useEffectPool';
+// Parallel edge hooks (v11.6.1)
+export { useParallelEdges, getEdgeIndexInGroup, BUNDLE_THRESHOLD } from './hooks/useParallelEdges';
+export type { ParallelEdgeGroup, UseParallelEdgesResult } from './hooks/useParallelEdges';
 
 // =============================================================================
 // Utilities
 // =============================================================================
 
-export { formatRelationType, getNodeIntersection, generateCurvedPath, isValidPosition } from './EdgeUtils';
+export {
+  formatRelationType,
+  getNodeIntersection,
+  generateCurvedPath,
+  generateParallelPath,
+  getPathMidpoint,
+  isValidPosition,
+} from './EdgeUtils';
 
 // =============================================================================
 // Visibility Management

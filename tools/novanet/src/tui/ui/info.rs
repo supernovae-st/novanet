@@ -71,7 +71,12 @@ fn truncate_str(s: &str, max_width: usize) -> String {
 // =============================================================================
 
 /// Info panel: displays metadata for selected item with independent scroll.
-/// Shows a BarChart when on a Realm item.
+/// Shows sparklines and charts based on the selected item type.
+///
+/// v12 Sparkline Stats:
+/// - Realm: Kinds/Layer bar chart + Trait distribution + Instance sparkline
+/// - Layer: Instance sparkline per Kind
+/// - Kind: Arc distribution (incoming vs outgoing)
 pub fn render_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
     let focused = app.focus == Focus::Info;
     let border_color = if focused {
@@ -81,48 +86,84 @@ pub fn render_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
     };
 
     // Check if we should show a chart (Realm, Layer, or Kind item)
-    let show_bar_chart = matches!(app.current_item(), Some(TreeItem::Realm(_)));
-    let show_sparkline = matches!(app.current_item(), Some(TreeItem::Layer(_, _)));
-    let show_arc_chart = matches!(app.current_item(), Some(TreeItem::Kind(..)));
+    let is_realm = matches!(app.current_item(), Some(TreeItem::Realm(_)));
+    let is_layer = matches!(app.current_item(), Some(TreeItem::Layer(_, _)));
+    let is_kind = matches!(app.current_item(), Some(TreeItem::Kind(..)));
 
-    if show_bar_chart && area.height > 12 {
-        // Split area: top for text, bottom for bar chart
+    if is_realm && area.height > 25 {
+        // v12: Full realm stats with all charts
+        // Split: text (min 6) | bar chart (8) | trait dist (5) | health (5) | instances (5)
+        let chunks = Layout::default()
+            .direction(Direction::Vertical)
+            .constraints([
+                Constraint::Min(6),
+                Constraint::Length(8),
+                Constraint::Length(5),
+                Constraint::Length(5),
+                Constraint::Length(5),
+            ])
+            .split(area);
+
+        render_info_text(f, chunks[0], app, focused, border_color);
+        render_realm_bar_chart(f, chunks[1], app);
+        render_realm_trait_distribution(f, chunks[2], app);
+        render_realm_health_sparkline(f, chunks[3], app);
+        render_realm_instance_sparkline(f, chunks[4], app);
+    } else if is_realm && area.height > 20 {
+        // v12: Three charts (bar, trait, health)
+        let chunks = Layout::default()
+            .direction(Direction::Vertical)
+            .constraints([
+                Constraint::Min(6),
+                Constraint::Length(8),
+                Constraint::Length(5),
+                Constraint::Length(5),
+            ])
+            .split(area);
+
+        render_info_text(f, chunks[0], app, focused, border_color);
+        render_realm_bar_chart(f, chunks[1], app);
+        render_realm_trait_distribution(f, chunks[2], app);
+        render_realm_health_sparkline(f, chunks[3], app);
+    } else if is_realm && area.height > 15 {
+        // Medium height: bar chart + trait distribution
+        let chunks = Layout::default()
+            .direction(Direction::Vertical)
+            .constraints([Constraint::Min(6), Constraint::Length(8), Constraint::Length(5)])
+            .split(area);
+
+        render_info_text(f, chunks[0], app, focused, border_color);
+        render_realm_bar_chart(f, chunks[1], app);
+        render_realm_trait_distribution(f, chunks[2], app);
+    } else if is_realm && area.height > 12 {
+        // Original: just bar chart
         let chunks = Layout::default()
             .direction(Direction::Vertical)
             .constraints([Constraint::Min(6), Constraint::Length(8)])
             .split(area);
 
-        // Render text info in top chunk
         render_info_text(f, chunks[0], app, focused, border_color);
-
-        // Render bar chart in bottom chunk
         render_realm_bar_chart(f, chunks[1], app);
-    } else if show_sparkline && area.height > 10 {
-        // Split area: top for text, bottom for sparkline
+    } else if is_layer && area.height > 10 {
+        // Layer: Instance sparkline per Kind
         let chunks = Layout::default()
             .direction(Direction::Vertical)
             .constraints([Constraint::Min(6), Constraint::Length(5)])
             .split(area);
 
-        // Render text info in top chunk
         render_info_text(f, chunks[0], app, focused, border_color);
-
-        // Render sparkline in bottom chunk
         render_layer_sparkline(f, chunks[1], app);
-    } else if show_arc_chart && area.height > 10 {
-        // Split area: top for text, bottom for arc distribution chart
+    } else if is_kind && area.height > 10 {
+        // Kind: Arc distribution chart
         let chunks = Layout::default()
             .direction(Direction::Vertical)
             .constraints([Constraint::Min(6), Constraint::Length(5)])
             .split(area);
 
-        // Render text info in top chunk
         render_info_text(f, chunks[0], app, focused, border_color);
-
-        // Render arc distribution chart in bottom chunk
         render_kind_arc_chart(f, chunks[1], app);
     } else {
-        // Normal text-only info panel
+        // Normal text-only info panel (fallback for small height)
         render_info_text(f, area, app, focused, border_color);
     }
 }
@@ -321,6 +362,157 @@ fn render_kind_arc_chart(f: &mut Frame, area: Rect, app: &App) {
         .direction(Direction::Vertical);
 
     f.render_widget(chart, area);
+}
+
+/// Render a sparkline showing health percentages across all Kinds in a Realm.
+/// Provides a quick visual overview of data quality distribution.
+fn render_realm_health_sparkline(f: &mut Frame, area: Rect, app: &App) {
+    let Some(TreeItem::Realm(realm)) = app.current_item() else {
+        return;
+    };
+
+    // Collect health percentages from all kinds in all layers
+    let data: Vec<u64> = realm
+        .layers
+        .iter()
+        .flat_map(|l| l.kinds.iter())
+        .map(|k| k.health_percent.unwrap_or(0) as u64)
+        .collect();
+
+    if data.is_empty() {
+        return;
+    }
+
+    // Calculate stats
+    let total: u64 = data.iter().sum();
+    let count = data.len() as u64;
+    let avg = if count > 0 { total / count } else { 0 };
+    let min = *data.iter().min().unwrap_or(&0);
+    let max = *data.iter().max().unwrap_or(&0);
+
+    let sparkline = Sparkline::default()
+        .block(
+            Block::default()
+                .title(Span::styled(
+                    format!(" Health Distribution (avg {}%, min {}%, max {}%) ", avg, min, max),
+                    STYLE_DIM,
+                ))
+                .borders(Borders::ALL)
+                .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER)),
+        )
+        .data(&data)
+        .style(Style::default().fg(Color::Green));
+
+    f.render_widget(sparkline, area);
+}
+
+/// Render a bar chart showing trait distribution across Kinds in a Realm.
+/// Shows how many Kinds belong to each trait category.
+fn render_realm_trait_distribution(f: &mut Frame, area: Rect, app: &App) {
+    let Some(TreeItem::Realm(realm)) = app.current_item() else {
+        return;
+    };
+
+    // Count kinds by trait
+    let mut trait_counts: BTreeMap<&str, u64> = BTreeMap::new();
+    for layer in &realm.layers {
+        for kind in &layer.kinds {
+            *trait_counts.entry(kind.trait_name.as_str()).or_insert(0) += 1;
+        }
+    }
+
+    if trait_counts.is_empty() {
+        return;
+    }
+
+    // Build bars with trait colors
+    let trait_colors: [(&str, Color); 5] = [
+        ("invariant", Color::Rgb(38, 139, 210)),   // Blue
+        ("localized", Color::Rgb(211, 54, 130)),   // Magenta
+        ("knowledge", Color::Rgb(181, 137, 0)),    // Yellow
+        ("generated", Color::Rgb(133, 153, 0)),    // Green
+        ("aggregated", Color::Rgb(108, 113, 196)), // Violet
+    ];
+
+    let bars: Vec<Bar> = trait_colors
+        .iter()
+        .filter_map(|(trait_name, color)| {
+            trait_counts.get(trait_name).map(|&count| {
+                // First 3 chars as label
+                let label: String = trait_name.chars().take(3).collect();
+                Bar::default()
+                    .value(count)
+                    .label(Line::from(label))
+                    .style(Style::default().fg(*color))
+            })
+        })
+        .collect();
+
+    if bars.is_empty() {
+        return;
+    }
+
+    let total: u64 = trait_counts.values().sum();
+    let chart = BarChart::default()
+        .block(
+            Block::default()
+                .title(Span::styled(
+                    format!(" Trait Distribution ({} Kinds) ", total),
+                    STYLE_DIM,
+                ))
+                .borders(Borders::ALL)
+                .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER)),
+        )
+        .data(BarGroup::default().bars(&bars))
+        .bar_width(4)
+        .bar_gap(1)
+        .value_style(
+            Style::default()
+                .fg(Color::White)
+                .add_modifier(Modifier::BOLD),
+        )
+        .label_style(Style::default().fg(Color::Gray));
+
+    f.render_widget(chart, area);
+}
+
+/// Render a sparkline showing instance counts across Kinds in a Realm.
+/// Provides a quick visual overview of data distribution.
+fn render_realm_instance_sparkline(f: &mut Frame, area: Rect, app: &App) {
+    let Some(TreeItem::Realm(realm)) = app.current_item() else {
+        return;
+    };
+
+    // Collect instance counts from all kinds in all layers
+    let data: Vec<u64> = realm
+        .layers
+        .iter()
+        .flat_map(|l| l.kinds.iter())
+        .map(|k| k.instance_count.max(0) as u64)
+        .collect();
+
+    if data.is_empty() {
+        return;
+    }
+
+    // Calculate stats
+    let total: u64 = data.iter().sum();
+    let max_val = *data.iter().max().unwrap_or(&0);
+
+    let sparkline = Sparkline::default()
+        .block(
+            Block::default()
+                .title(Span::styled(
+                    format!(" Instance Distribution ({} total, max {}) ", total, max_val),
+                    STYLE_DIM,
+                ))
+                .borders(Borders::ALL)
+                .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER)),
+        )
+        .data(&data)
+        .style(Style::default().fg(Color::Cyan));
+
+    f.render_widget(sparkline, area);
 }
 
 /// Get title for detail panel based on current selection.

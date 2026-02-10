@@ -24,7 +24,7 @@ import {
   GLOW_CONFIG,
   getDuration,
 } from './constants';
-import { getArcFamily, getArcFamilyPalette, type ArcFamily } from './arcFamilyPalettes';
+import { getArcFamily, getArcFamilyPalette, getArcFamilyEffect, type ArcFamily } from './arcFamilyPalettes';
 
 // =============================================================================
 // Relation to Category Mapping
@@ -148,11 +148,12 @@ function mergeTheme(base: EdgeTheme, override: ThemeOverride): EdgeTheme {
  * Resolve complete theme for a relation type
  *
  * Resolution order:
- * 1. Get category from relation type (for effects/style)
- * 2. Get arc family from relation type (for colors, v9.5)
- * 3. Merge category theme with arc family palette
- * 4. Apply relation-specific overrides (if any)
- * 5. Compute timing and size configs
+ * 1. Get category from relation type (for base style)
+ * 2. Get arc family from relation type (for colors + signature effect, v9.5+)
+ * 3. Get arc family's signature effect primitive (v11.6.1)
+ * 4. Merge category theme with arc family palette and effect
+ * 5. Apply relation-specific overrides (if any)
+ * 6. Compute timing and size configs
  */
 export function resolveTheme(
   relationType: string,
@@ -171,18 +172,23 @@ export function resolveTheme(
   const arcFamily = getArcFamily(relationType);
   const arcFamilyPalette = getArcFamilyPalette(relationType);
 
-  // 3. Merge: category theme structure + arc family colors
+  // 3. Get arc family's signature effect
+  const familyEffect = getArcFamilyEffect(arcFamily);
+
+  // 4. Merge: category theme structure + arc family colors + arc family effect
   const categoryTheme = CATEGORY_THEMES[category];
   const baseTheme: EdgeTheme = {
     ...categoryTheme,
     palette: arcFamilyPalette,
+    // Inject arc family's signature effect as primary, followed by category effects
+    effects: [familyEffect, ...categoryTheme.effects.filter(e => e !== familyEffect)],
   };
 
-  // 4. Apply overrides
+  // 5. Apply overrides
   const override = RELATION_OVERRIDES[relationType as RelationType];
   const mergedTheme = override ? mergeTheme(baseTheme, override) : baseTheme;
 
-  // 5. Build resolved theme
+  // 6. Build resolved theme
   return {
     ...mergedTheme,
     category,
@@ -221,10 +227,15 @@ export function getCachedBaseTheme(relationType: string): EdgeTheme & { category
     // Get colors from arc family (v9.5)
     const arcFamilyPalette = getArcFamilyPalette(relationType);
 
-    // Merge: use category theme but override with arc family colors
+    // Get arc family's signature effect (v11.6.1)
+    const familyEffect = getArcFamilyEffect(arcFamily);
+
+    // Merge: use category theme but override with arc family colors + effect
     const baseTheme: EdgeTheme = {
       ...categoryTheme,
       palette: arcFamilyPalette,
+      // Inject arc family's signature effect as primary
+      effects: [familyEffect, ...categoryTheme.effects.filter(e => e !== familyEffect)],
     };
 
     // Apply relation-specific overrides

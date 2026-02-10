@@ -8,11 +8,12 @@
  * - Motion animations for tab transitions
  * - Synced with uiStore for tab persistence
  * - Glassmorphism design with Magic UI effects
+ * - Context Views footer with Action Cards (v11.6)
  */
 
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X } from 'lucide-react';
+import { X, Loader2 } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
@@ -25,6 +26,10 @@ import { OverviewTab } from './tabs/OverviewTab';
 import { DataTab } from './tabs/DataTab';
 import { GraphTab } from './tabs/GraphTab';
 import { CodeTab } from './tabs/CodeTab';
+import { ContextViewFooter } from './footer/ContextViewFooter';
+import { MatrixTransition } from '@/components/graph/effects/MatrixTransition';
+import { useContextViews, useViewDetails } from '@/hooks/useContextViews';
+import type { ViewId } from '@/config/viewTypes';
 import type { GraphNode } from '@/types';
 
 interface TabbedDetailPanelProps {
@@ -109,20 +114,55 @@ export const TabbedDetailPanel = memo(function TabbedDetailPanel({
   node,
   className,
 }: TabbedDetailPanelProps) {
-  const { activeTab, setActiveTab, clearSelection } = useUIStore(
+  const { activeTab, setActiveTab, clearSelection, openModal } = useUIStore(
     useShallow((state) => ({
       activeTab: state.detailPanelTab,
       setActiveTab: state.setDetailPanelTab,
       clearSelection: state.clearSelection,
+      openModal: state.openModal,
     }))
   );
 
-  const { edges, nodes: allNodes } = useGraphStore(
+  const { edges, nodes: allNodes, setGraphData } = useGraphStore(
     useShallow((state) => ({
       edges: state.edges,
       nodes: state.nodes,
+      setGraphData: state.setGraphData,
     }))
   );
+
+  // Active context view state
+  const [activeViewId, setActiveViewId] = useState<ViewId | null>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [pendingViewId, setPendingViewId] = useState<ViewId | null>(null);
+
+  // Fetch view data when a view is selected
+  const { data: viewData, isLoading: isViewLoading, error: viewError } = useViewDetails(
+    node,
+    pendingViewId
+  );
+
+  // Handle view data loaded - apply to graph after transition
+  useEffect(() => {
+    if (viewData && !isViewLoading && pendingViewId) {
+      // Data is ready, the transition will call onComplete which loads the data
+    }
+  }, [viewData, isViewLoading, pendingViewId]);
+
+  // Handle transition complete - load data into graph
+  const handleTransitionComplete = useCallback(() => {
+    setIsTransitioning(false);
+
+    if (viewData) {
+      // Load the view data into the graph
+      setGraphData({
+        nodes: viewData.nodes,
+        edges: viewData.edges,
+      });
+      setActiveViewId(pendingViewId);
+    }
+    setPendingViewId(null);
+  }, [viewData, pendingViewId, setGraphData]);
 
   // Get related edges for the selected node
   const relatedData = useMemo(() => {
@@ -141,6 +181,34 @@ export const TabbedDetailPanel = memo(function TabbedDetailPanel({
     return { relatedEdges: nodeEdges, relatedNodes };
   }, [node, edges, allNodes]);
 
+  // Get context views for this node
+  const { views: contextViews } = useContextViews(
+    node,
+    relatedData.relatedEdges,
+    allNodes
+  );
+
+  // Handle view selection
+  const handleViewSelect = useCallback((viewId: string) => {
+    const vid = viewId as ViewId;
+
+    // Don't re-trigger if already loading this view
+    if (vid === pendingViewId || vid === activeViewId) {
+      return;
+    }
+
+    // Start loading and transition
+    setPendingViewId(vid);
+    setIsTransitioning(true);
+  }, [pendingViewId, activeViewId]);
+
+  // Handle "More Views" button
+  const handleMoreViews = useCallback(() => {
+    // Open the view selector modal
+    // For now, just log - will integrate with existing modal system
+    console.log('Open more views modal');
+  }, []);
+
   // Get node config and colors
   const config = node ? NODE_TYPE_CONFIG[node.type] || NODE_TYPE_CONFIG.Project : null;
   const colors = config ? getLayerGradientColors(config.layer) : { primary: '#888', secondary: '#666' };
@@ -154,7 +222,7 @@ export const TabbedDetailPanel = memo(function TabbedDetailPanel({
   }
 
   return (
-    <div className={cn(panelClasses.container, 'flex flex-col', className)}>
+    <div className={cn(panelClasses.container, 'flex flex-col relative', className)}>
       {/* Header with node title and close button */}
       <div
         className="flex items-center justify-between px-4 py-3 border-b border-white/[0.06]"
@@ -198,7 +266,7 @@ export const TabbedDetailPanel = memo(function TabbedDetailPanel({
       <TabBar activeTab={activeTab} onTabChange={setActiveTab} colors={colors} />
 
       {/* Tab content with animations */}
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 overflow-hidden min-h-0">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
@@ -230,6 +298,39 @@ export const TabbedDetailPanel = memo(function TabbedDetailPanel({
           </motion.div>
         </AnimatePresence>
       </div>
+
+      {/* Context Views Footer (v11.6) */}
+      {contextViews.length > 0 && (
+        <ContextViewFooter
+          views={contextViews}
+          nodeKey={node.key}
+          activeViewId={activeViewId}
+          onViewSelect={handleViewSelect}
+          onMoreViews={handleMoreViews}
+        />
+      )}
+
+      {/* Loading indicator for view data */}
+      {isViewLoading && pendingViewId && (
+        <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-black/80 px-3 py-2 rounded-full text-xs text-white/70">
+          <Loader2 className="w-3 h-3 animate-spin" />
+          Loading view...
+        </div>
+      )}
+
+      {/* View error notification */}
+      {viewError && (
+        <div className="absolute bottom-20 left-1/2 -translate-x-1/2 bg-red-500/80 px-3 py-2 rounded text-xs text-white">
+          {viewError.message}
+        </div>
+      )}
+
+      {/* Matrix Transition Effect (v11.6) */}
+      <MatrixTransition
+        isActive={isTransitioning}
+        viewId={pendingViewId}
+        onComplete={handleTransitionComplete}
+      />
     </div>
   );
 });

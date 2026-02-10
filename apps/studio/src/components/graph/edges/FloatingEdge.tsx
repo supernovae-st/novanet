@@ -21,7 +21,7 @@ import { useEdgeTheme } from './hooks/useEdgeTheme';
 import { useEdgeLOD } from './hooks/useEdgeLOD';
 import { useAnimationBudget } from './hooks/useAnimationBudget';
 import { EffectRenderer, releaseEdgeAnimationSlot } from './effects/EffectRenderer';
-import { getSmartLabel, getNodeIntersection, generateCurvedPath, generateReversedPath } from './EdgeUtils';
+import { getSmartLabel, getNodeIntersection, generateCurvedPath, generateReversedPath, generateParallelPath } from './EdgeUtils';
 import type { EdgeState } from './system/types';
 
 // =============================================================================
@@ -34,6 +34,9 @@ export interface FloatingEdgeData extends Record<string, unknown> {
   dimmed?: boolean;
   selected?: boolean;
   showLabel?: boolean;
+  /** Parallel edge support (v11.6.1) */
+  parallelIndex?: number;
+  parallelTotal?: number;
 }
 
 export type FloatingEdgeType = Edge<FloatingEdgeData>;
@@ -65,7 +68,9 @@ function arePropsEqual(
     prevData.dimmed === nextData.dimmed &&
     prevData.animated === nextData.animated &&
     prevData.showLabel === nextData.showLabel &&
-    prevData.relationType === nextData.relationType
+    prevData.relationType === nextData.relationType &&
+    prevData.parallelIndex === nextData.parallelIndex &&
+    prevData.parallelTotal === nextData.parallelTotal
   );
 }
 
@@ -100,6 +105,9 @@ export const FloatingEdge = memo(function FloatingEdge({
   const isSelected = selected || data?.selected || selectedEdgeId === id;
   const showLabel = data?.showLabel !== false;
   const relationType = data?.relationType || '';
+  // Parallel edge info (v11.6.1)
+  const parallelIndex = data?.parallelIndex;
+  const parallelTotal = data?.parallelTotal;
 
   // Hover state computation
   const isHovered = hoveredEdgeId === id;
@@ -146,7 +154,7 @@ export const FloatingEdge = memo(function FloatingEdge({
   const targetWidth = targetNode?.measured?.width ?? 200;
   const targetHeight = targetNode?.measured?.height ?? 100;
 
-  // Calculate edge path
+  // Calculate edge path (with parallel offset support v11.6.1)
   const { edgePath, reversedPath, edgeLength, sourcePoint, targetPoint } = useMemo(() => {
     if (!sourceNode || !targetNode) {
       return { edgePath: '', reversedPath: '', edgeLength: 0, sourcePoint: { x: 0, y: 0 }, targetPoint: { x: 0, y: 0 } };
@@ -158,7 +166,12 @@ export const FloatingEdge = memo(function FloatingEdge({
     const sourcePt = getNodeIntersection(sourceCenter, sourceWidth, sourceHeight, targetCenter, 16);
     const targetPt = getNodeIntersection(targetCenter, targetWidth, targetHeight, sourceCenter, 20);
 
-    const path = generateCurvedPath(sourcePt, targetPt);
+    // Use parallel path offset when edge is part of a parallel group
+    const hasParallelInfo = typeof parallelIndex === 'number' && typeof parallelTotal === 'number' && parallelTotal > 1;
+    const path = hasParallelInfo
+      ? generateParallelPath(sourcePt, targetPt, parallelIndex, parallelTotal)
+      : generateCurvedPath(sourcePt, targetPt);
+    // Note: reversedPath doesn't use parallel offset (animation direction stays consistent)
     const revPath = generateReversedPath(sourcePt, targetPt);
 
     const dx = targetPt.x - sourcePt.x;
@@ -166,7 +179,7 @@ export const FloatingEdge = memo(function FloatingEdge({
     const length = Math.sqrt(dx * dx + dy * dy);
 
     return { edgePath: path, reversedPath: revPath, edgeLength: length, sourcePoint: sourcePt, targetPoint: targetPt };
-  }, [sourceNode, targetNode, sourceX, sourceY, sourceWidth, sourceHeight, targetX, targetY, targetWidth, targetHeight]);
+  }, [sourceNode, targetNode, sourceX, sourceY, sourceWidth, sourceHeight, targetX, targetY, targetWidth, targetHeight, parallelIndex, parallelTotal]);
 
   // LOD calculation
   const distanceFromCenter = useMemo(() => {
