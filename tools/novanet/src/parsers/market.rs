@@ -406,18 +406,17 @@ fn parse_payment_methods(content: &str) -> serde_json::Value {
     let mut methods: Vec<PaymentMethod> = Vec::new();
 
     // Find the payment methods section
-    let payment_section_start = content.find("### 2.4 Payment Methods");
-    if payment_section_start.is_none() {
+    let Some(start) = content.find("### 2.4 Payment Methods") else {
         return serde_json::json!([]);
-    }
+    };
 
     // Find the next section (## 3.) to limit our search
-    let section_end = content[payment_section_start.unwrap()..]
+    let section_end = content[start..]
         .find("\n## ")
-        .map(|i| payment_section_start.unwrap() + i)
+        .map(|i| start + i)
         .unwrap_or(content.len());
 
-    let section = &content[payment_section_start.unwrap()..section_end];
+    let section = &content[start..section_end];
 
     // Parse table rows: | Method | Usage | Trend |
     let table_re = Regex::new(r"\|\s*([^|]+)\s*\|\s*(\d+)%\s*\|\s*([^|]+)\s*\|").unwrap();
@@ -449,18 +448,17 @@ fn parse_social_networks(content: &str) -> serde_json::Value {
     let mut networks: Vec<SocialNetwork> = Vec::new();
 
     // Find the social media section
-    let social_section_start = content.find("### 4.1 Social Media Platforms");
-    if social_section_start.is_none() {
+    let Some(start) = content.find("### 4.1 Social Media Platforms") else {
         return serde_json::json!([]);
-    }
+    };
 
     // Find the next section to limit our search
-    let section_end = content[social_section_start.unwrap()..]
+    let section_end = content[start..]
         .find("\n### 4.2")
-        .map(|i| social_section_start.unwrap() + i)
+        .map(|i| start + i)
         .unwrap_or(content.len());
 
-    let section = &content[social_section_start.unwrap()..section_end];
+    let section = &content[start..section_end];
 
     // Parse table rows: | Platform | Penetration | Primary Audience | Best for |
     let table_re =
@@ -494,18 +492,17 @@ fn parse_popular_platforms(content: &str) -> serde_json::Value {
     let mut platforms: Vec<EcommercePlatform> = Vec::new();
 
     // Find the major players section
-    let players_section_start = content.find("### 7.1 Major Players");
-    if players_section_start.is_none() {
+    let Some(start) = content.find("### 7.1 Major Players") else {
         return serde_json::json!([]);
-    }
+    };
 
     // Find the next section to limit our search
-    let section_end = content[players_section_start.unwrap()..]
+    let section_end = content[start..]
         .find("\n### 7.2")
-        .map(|i| players_section_start.unwrap() + i)
+        .map(|i| start + i)
         .unwrap_or(content.len());
 
-    let section = &content[players_section_start.unwrap()..section_end];
+    let section = &content[start..section_end];
 
     // Parse table rows: | Company | Market Share | Strength |
     let table_re = Regex::new(r"\|\s*([^|]+)\s*\|\s*(\d+)%\s*\|\s*([^|]+)\s*\|").unwrap();

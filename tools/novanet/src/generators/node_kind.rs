@@ -1,6 +1,6 @@
 //! Generate Kind meta-nodes + schema_hint, context_budget + facet relations.
 //!
-//! Reads all 44 YAML node definitions and produces idempotent MERGE statements
+//! Reads all 60 YAML node definitions (v11.5) and produces idempotent MERGE statements
 //! for Kind nodes with auto-computed properties, plus hierarchy and facet rels.
 //!
 //! Output target: `packages/db/seed/01-kinds.cypher`

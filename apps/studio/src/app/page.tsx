@@ -43,7 +43,7 @@ function getHoverNodeConfig(node: HoverNodeInfo): NodeTypeConfig | null {
 import { GraphCanvas } from '@/components/graph';
 import { GraphErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { StatsCounter, Pill, Divider, RefreshButton, LayerIcon, MatrixRainOverlay, MatrixExplosionOverlay } from '@/components/ui';
-import { NavigationModeToggle } from '@/components/toolbar/NavigationModeToggle';
+import { ViewModeToggle } from '@/components/toolbar/ViewModeToggle';
 import { TabbedDetailPanel } from '@/components/sidebar/TabbedDetailPanel';
 import { ArcDetailsPanel } from '@/components/sidebar/ArcDetailsPanel';
 import { KeyboardHelpPanel } from '@/components/dx/KeyboardHelpPanel';
@@ -77,6 +77,7 @@ export default function HomePage() {
   // UI Store - actions (stable references)
   const uiActions = useUIStore(
     useShallow((state) => ({
+      setViewMode: state.setViewMode,
       toggleViewMode: state.toggleViewMode,
       toggleSidebar: state.toggleSidebar,
       toggleFocusMode: state.toggleFocusMode,
@@ -800,9 +801,9 @@ export default function HomePage() {
                   ) : null}
                 </div>
               )}
-              <NavigationModeToggle
-                mode={transitionState.targetMode ?? navigationMode}
-                onModeChange={setNavigationMode}
+              <ViewModeToggle
+                mode={uiState.viewMode}
+                onModeChange={uiActions.setViewMode}
               />
             </div>
 

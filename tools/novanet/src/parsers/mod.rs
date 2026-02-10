@@ -1,6 +1,6 @@
 //! YAML parsers for NovaNet model definitions.
 //!
-//! - `yaml_node`: Parse node-kind YAML files (v10.9: 44+ kinds with trait validation)
+//! - `yaml_node`: Parse node-kind YAML files (v11.5: 60 kinds with trait validation)
 //! - `arcs`: Parse arc-kinds/ directory → arc definitions (ArcFamily, ArcDef)
 //! - `organizing`: Parse taxonomy.yaml (realms, layers, traits, arc_families)
 //! - `taxonomy`: Parse taxonomy.yaml (v9.5 source of truth)

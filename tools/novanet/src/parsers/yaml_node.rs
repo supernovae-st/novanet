@@ -1,4 +1,4 @@
-//! Parse 42 YAML node definitions with trait validation.
+//! Parse 60 YAML node definitions with trait validation (v11.5).
 //!
 //! Fails fast if any YAML is missing `trait`, `realm`, or `layer` — no silent defaults.
 //! Each file at `packages/core/models/node-kinds/<realm>/<layer>/<name>.yaml`
