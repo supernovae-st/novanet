@@ -641,8 +641,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Meta:ArcKind"))
             .count();
         assert_eq!(
-            ak_merges, 116,
-            "expected 116 ArcKind MERGE statements (v11.3: -1 has-company-project)"
+            ak_merges, 114,
+            "expected 114 ArcKind MERGE statements (v11.4: -7 obsolete SEO arcs, +5 new)"
         );
 
         // HAS_ARC_KIND relationships match ArcKind count
@@ -650,14 +650,14 @@ mod tests {
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_ARC_KIND]"))
             .count();
-        assert_eq!(has_ak, 116, "expected 116 HAS_ARC_KIND relationships");
+        assert_eq!(has_ak, 114, "expected 114 HAS_ARC_KIND relationships");
 
         // IN_FAMILY relationships match ArcKind count
         let in_family = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_FAMILY]"))
             .count();
-        assert_eq!(in_family, 116, "expected 116 IN_FAMILY relationships");
+        assert_eq!(in_family, 114, "expected 114 IN_FAMILY relationships");
 
         // Family distribution (non-inverse counts)
         // Section 2 MATCH lines have ArcFamily first: "MATCH (af:ArcFamily ..."
@@ -677,10 +677,10 @@ mod tests {
         let generation = count_family("generation");
         let mining = count_family("mining");
 
-        // v11.3: Total arcs = 116 (ownership=45 -1 has-company-project, semantic=42, localization=15, generation=12, mining=2)
+        // v11.4: Total arcs = 114 (ownership=45, semantic=42, localization=15, generation=12, mining=0)
         assert!(
-            ownership + localization + semantic + generation + mining == 116,
-            "family counts should sum to 116: o={ownership} l={localization} s={semantic} g={generation} m={mining}"
+            ownership + localization + semantic + generation + mining == 114,
+            "family counts should sum to 114: o={ownership} l={localization} s={semantic} g={generation} m={mining}"
         );
 
         // Spot checks — specific ArcKinds
@@ -710,8 +710,8 @@ mod tests {
             }
         }
 
-        // v11.3: Header reflects count (116 total, -1 has-company-project)
-        assert!(cypher.contains("116 ArcKind nodes"));
+        // v11.4: Header reflects count (114 total)
+        assert!(cypher.contains("114 ArcKind nodes"));
     }
 
     /// Snapshot test for a minimal ArcSchema generator output.

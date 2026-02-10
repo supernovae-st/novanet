@@ -80,23 +80,22 @@ describe('FacetFilterPanel', () => {
       // v10.6: organization + project merged into tenant
     });
 
-    it('renders 11 layer items (v11.3: 3 shared + 8 org)', () => {
+    it('renders 10 layer items (v11.5: 4 shared + 6 org)', () => {
       render(<FacetFilterPanel />);
 
-      // Shared realm (3)
+      // Shared realm (4 layers: config, locale, geography, knowledge)
       expect(screen.getByText('Locale')).toBeInTheDocument();
       expect(screen.getByText('Geography')).toBeInTheDocument();
       // "Knowledge" appears in both Layers and Traits sections
       expect(screen.getAllByText('Knowledge')).toHaveLength(2);
-      // Org realm (8)
-      expect(screen.getByText('Configuration')).toBeInTheDocument();
+      expect(screen.getByText('Configuration')).toBeInTheDocument();  // v11.5: shared config layer visible
+      // Org realm (6 layers: config, foundation, structure, semantic, instruction, output)
       expect(screen.getByText('Foundation')).toBeInTheDocument();
       expect(screen.getByText('Structure')).toBeInTheDocument();
       // "Semantic" appears in both Layers and Arc Families sections
       expect(screen.getAllByText('Semantic')).toHaveLength(2);
       expect(screen.getByText('Instructions')).toBeInTheDocument();
-      expect(screen.getByText('SEO Intelligence')).toBeInTheDocument();
-      expect(screen.getByText('GEO Intelligence')).toBeInTheDocument();
+      // v11.5: SEO/GEO layers removed - nodes in shared/knowledge now
       expect(screen.getByText('Generated Output')).toBeInTheDocument();
     });
 

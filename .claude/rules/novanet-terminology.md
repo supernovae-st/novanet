@@ -28,13 +28,13 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 
 | Realm | Layers | Nodes | Description |
 |-------|--------|-------|-------------|
-| `shared` | config, locale, geography, knowledge | 40 | Universal knowledge (READ-ONLY) |
+| `shared` | config, locale, geography, knowledge | 39 | Universal knowledge (READ-ONLY) |
 | `org` | config, foundation, structure, semantic, instruction, output | 21 | Organization-specific content |
 
 > **v11.5 Changes:**
-> - Locale moved: shared/locale → shared/config (definitions layer)
+> - Locale moved: shared/locale → shared/config (Locale is a definition, not settings)
 > - SEO/GEO consolidation: seo/geo layers removed from org, nodes in shared/knowledge
-> - Total: 61 nodes (40 shared + 21 org), 10 layers (4 shared + 6 org)
+> - Total: **60 nodes** (39 shared + 21 org), **10 layers** (4 shared + 6 org)
 
 > **v11.3 Changes:**
 > - Layer split: `locale-knowledge` → `locale`, `geography`, `knowledge` (3 layers)
@@ -54,13 +54,13 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | 2 | FUNCTION? | `ArcFamily` | `family` | `ownership`, `localization`, `semantic`, `generation`, `mining` |
 | 3 | MULTIPLICITY? | `ArcCardinality` | `cardinality` | `zero_to_one`, `one_to_one`, `one_to_many`, `many_to_many` |
 
-## YAML Source Files (v11.3)
+## YAML Source Files (v11.5)
 
 | File | Content |
 |------|---------|
-| `taxonomy.yaml` | Realm/Layer/Trait/ArcFamily/ArcScope definitions (v11.3: 2 realms, 11 layers, 5 traits) |
-| `node-kinds/shared/` | 32 NodeKind definitions in shared realm (locale: 7, geography: 6, knowledge: 19) |
-| `node-kinds/org/` | 29 NodeKind definitions in org realm (config: 1, foundation: 3, structure: 3, semantic: 4, instruction: 7, seo: 5, geo: 3, output: 3) |
+| `taxonomy.yaml` | Realm/Layer/Trait/ArcFamily/ArcScope definitions (v11.5: 2 realms, 10 layers, 5 traits) |
+| `node-kinds/shared/` | 39 NodeKind definitions in shared realm (config: 3, locale: 6, geography: 6, knowledge: 24 incl. SEO/GEO) |
+| `node-kinds/org/` | 21 NodeKind definitions in org realm (config: 1, foundation: 3, structure: 3, semantic: 4, instruction: 7, output: 3) |
 | `arc-kinds/` | 1 file per ArcKind, organized by ArcFamily |
 | `relations.yaml` | Legacy format (deprecated, kept for parser compatibility) |
 
@@ -75,7 +75,7 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | Rust structs | `PascalCase` | `ArcKind`, `NodeRealm` |
 | Rust files | `snake_case.rs` | `arc_schema.rs`, `taxonomy.rs` |
 
-## Node Naming Convention (v11.3)
+## Node Naming Convention (v11.5)
 
 > **RULE: Suffix indicates trait and relationship to parent invariant node**
 
@@ -83,14 +83,14 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 |---------|-------|-------|-------------|---------|
 | `FooContent` | localized | semantic | Node has locale-specific content for invariant `Foo` | `EntityContent` (parent: `Entity`) |
 | `FooGenerated` | generated | output | Node is generated output from invariant `Foo` | `PageGenerated` (parent: `Page`) |
-| `FooCategory` | invariant | knowledge | Categorical grouping for invariant `Foo` | `EntityCategory` |
+| `FooCategory` | invariant | config | Categorical grouping for invariant `Foo` | `EntityCategory` |
+| `FooSet` | invariant | knowledge | Container grouping related atoms | `TermSet`, `SEOKeywordSet`, `GEOQuerySet` |
 | `Foo` | varies | varies | Node is standalone (no parent invariant) | `SEOKeyword`, `Term`, `Expression` |
 
-**v11.3 Changes:**
-- Layer split: `locale-knowledge` → `locale`, `geography`, `knowledge`
-- New layer: `geo` added to org realm
-- Node merge: Organization + Tenant → OrgConfig
-- 11 layers total (3 shared + 8 org)
+**v11.5 Changes:**
+- SEO/GEO consolidation: seo/geo layers removed from org, nodes moved to shared/knowledge
+- Locale definition in shared/config (Locale is invariant, settings are in locale layer)
+- 10 layers total (4 shared + 6 org), 60 nodes (39 shared + 21 org)
 
 **v11.2 Changes:**
 - Trait `derived` split into `generated` (LLM output) and `aggregated` (computed metrics)

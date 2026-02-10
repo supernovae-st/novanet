@@ -101,9 +101,9 @@ const RELATION_TARGET_TYPE_MAP: Record<string, string> = {
   HAS_TABOOS: 'TabooSet',
   HAS_AUDIENCE: 'AudienceSet',
   HAS_SEO_TARGET: 'SEOKeyword',
-  HAS_GEO_TARGET: 'GEOSeedL10n',
+  HAS_GEO_TARGET: 'GEOQuery',
   TARGETS_SEO: 'SEOKeyword',
-  TARGETS_GEO: 'GEOSeedL10n',
+  TARGETS_GEO: 'GEOQuery',
   HAS_PAGE: 'Page',
   // v10.3: HAS_CONCEPT removed — Entity in shared realm
   SUPPORTS_LOCALE: 'Locale',
@@ -554,11 +554,11 @@ export const VIEW_PRESETS: ViewPreset[] = [
   {
     id: 'seo-keywords',
     name: 'SEO & GEO Keywords',
-    description: 'Search optimization data (v11.4: in knowledge layer)',
+    description: 'Search optimization data (v11.5: in knowledge layer)',
     icon: '🔍',
     shortcut: '6',
     filter: () => NovaNetFilter.create()
-      .byTypes('SEOKeyword', 'SEOKeywordMetrics', 'SEOComparison', 'SEOPreposition', 'SEOQuestion', 'GEOQuery', 'GEOAnswer', 'GEOMetrics'),
+      .byTypes('SEOKeyword', 'SEOKeywordMetrics', 'SEOKeywordSet', 'SEOKeywordFormat', 'GEOQuery', 'GEOQuerySet', 'GEOAnswer'),
   },
   {
     id: 'invariant-types',

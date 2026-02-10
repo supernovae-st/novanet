@@ -1,12 +1,17 @@
 # arc-kinds/ownership/has-seo-keywords.yaml
-# HAS_SEO_KEYWORDS - Locale owns SEO keywords (v10.2)
+# HAS_SEO_KEYWORDS - Locale owns SEOKeywordSet container (v11.4)
 #
 # v10.2: New arc for GLOBAL/seo ownership
 #        - Locale owns SEOKeyword (same pattern as HAS_TERMS, HAS_PATTERNS)
 #        - Replaces FOR_LOCALE (which was localization, not ownership)
 #
+# v11.4: Container pattern (ADR-016 consistency)
+#        - Changed target: SEOKeyword → SEOKeywordSet
+#        - Changed cardinality: one_to_many → one_to_one
+#        - Two-hop traversal: Locale → SEOKeywordSet → SEOKeyword
+#
 # v11.5: scope fix (cross_realm → intra_realm)
-#        - Locale (shared/config) → SEOKeyword (shared/knowledge)
+#        - Locale (shared/config) → SEOKeywordSet (shared/knowledge)
 #        - Both in shared realm
 
 arc:
@@ -14,16 +19,18 @@ arc:
   family: ownership
   scope: intra_realm
   source: Locale
-  target: SEOKeyword
-  cardinality: one_to_many
+  target: SEOKeywordSet
+  cardinality: one_to_one
   llm_context: |
-    Locale owns its SEO keywords. Similar to HAS_TERMS, HAS_PATTERNS.
+    Locale owns one SEOKeywordSet container. Follows container pattern (ADR-016).
+    Two-hop traversal to reach individual keywords:
+      Locale --[:HAS_SEO_KEYWORDS]--> SEOKeywordSet --[:CONTAINS_SEO_KEYWORD]--> SEOKeyword
     Use to load all keywords for a locale's SEO strategy.
-    v10.2: Moved from SHARED to GLOBAL realm with ownership pattern.
 
   example:
-    description: "Get all keywords for a locale"
+    description: "Get all keywords for a locale via container"
     cypher: |
-      MATCH (l:Locale {key: $locale})-[:HAS_SEO_KEYWORDS]->(kw:SEOKeyword)
+      MATCH (l:Locale {key: $locale})-[:HAS_SEO_KEYWORDS]->(set:SEOKeywordSet)
+            -[:CONTAINS_SEO_KEYWORD]->(kw:SEOKeyword)
       RETURN kw.value, kw.volume, kw.difficulty
       ORDER BY kw.volume DESC

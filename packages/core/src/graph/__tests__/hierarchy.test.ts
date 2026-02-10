@@ -1,5 +1,5 @@
 // packages/core/src/graph/__tests__/hierarchy.test.ts
-// Tests for REALM_HIERARCHY — v11.4.0 (61 nodes, 10 layers, 2 realms)
+// Tests for REALM_HIERARCHY — v11.5.0 (60 nodes, 10 layers, 2 realms)
 import { describe, it, expect } from 'vitest';
 import { REALM_HIERARCHY } from '../hierarchy';
 import type { Realm } from '../../types/nodes';
@@ -16,16 +16,17 @@ describe('graph/hierarchy', () => {
     const shared = REALM_HIERARCHY.shared;
     expect(shared.label).toBe('SHARED');
     expect(shared.icon).toBe('🌍');
-    // v11.4: shared realm has 4 layers (config, locale, geography, knowledge)
+    // v11.5: shared realm has 4 layers (config, locale, geography, knowledge)
     expect(Object.keys(shared.layers)).toHaveLength(4);
     expect(shared.layers.config.nodeTypes).toContain('EntityCategory');
-    expect(shared.layers.config.nodeTypes).toContain('Locale');  // v11.4: Locale in config
+    expect(shared.layers.config.nodeTypes).toContain('Locale');  // v11.5: Locale in config
+    expect(shared.layers.config.nodeTypes).toContain('SEOKeywordFormat');  // v11.5: SEOKeywordFormat in config
     expect(shared.layers.locale.nodeTypes).toContain('Style');   // locale layer has Style, not Locale
     expect(shared.layers.geography.nodeTypes).toContain('Continent');
     expect(shared.layers.knowledge.nodeTypes).toContain('TermSet');
     expect(shared.layers.knowledge.nodeTypes).toContain('Term');
     expect(shared.layers.knowledge.nodeTypes).toContain('LanguageFamily');
-    // v11.4: SEO/GEO moved to shared/knowledge
+    // v11.5: SEO/GEO moved to shared/knowledge
     expect(shared.layers.knowledge.nodeTypes).toContain('SEOKeyword');
     expect(shared.layers.knowledge.nodeTypes).toContain('GEOQuery');
   });
@@ -34,7 +35,7 @@ describe('graph/hierarchy', () => {
     const org = REALM_HIERARCHY.org;
     expect(org.label).toBe('ORG');
     expect(org.icon).toBe('🏢');
-    // v11.4: org realm has 6 layers (seo/geo removed)
+    // v11.5: org realm has 6 layers (seo/geo removed)
     expect(Object.keys(org.layers)).toHaveLength(6);
     // config layer has OrgConfig only
     expect(org.layers.config.nodeTypes).toContain('OrgConfig');
@@ -45,13 +46,13 @@ describe('graph/hierarchy', () => {
   });
 
   it('should have correct node counts per layer', () => {
-    // v11.4: Shared realm (40 nodes total) — SEO/GEO moved here
-    expect(REALM_HIERARCHY.shared.layers.config.nodeTypes).toHaveLength(2);  // EntityCategory, Locale
-    expect(REALM_HIERARCHY.shared.layers.locale.nodeTypes).toHaveLength(6);  // v11.4: Locale moved to config
+    // v11.5: Shared realm (39 nodes total) — SEO/GEO moved here
+    expect(REALM_HIERARCHY.shared.layers.config.nodeTypes).toHaveLength(3);  // EntityCategory, Locale, SEOKeywordFormat
+    expect(REALM_HIERARCHY.shared.layers.locale.nodeTypes).toHaveLength(6);  // v11.5: Locale moved to config
     expect(REALM_HIERARCHY.shared.layers.geography.nodeTypes).toHaveLength(6);
-    expect(REALM_HIERARCHY.shared.layers.knowledge.nodeTypes).toHaveLength(26); // +8 SEO/GEO
+    expect(REALM_HIERARCHY.shared.layers.knowledge.nodeTypes).toHaveLength(24); // SEO/GEO nodes
 
-    // v11.4: Org realm (21 nodes total) — SEO/GEO removed
+    // v11.5: Org realm (21 nodes total) — SEO/GEO removed
     expect(REALM_HIERARCHY.org.layers.config.nodeTypes).toHaveLength(1);  // OrgConfig
     expect(REALM_HIERARCHY.org.layers.foundation.nodeTypes).toHaveLength(3);
     expect(REALM_HIERARCHY.org.layers.structure.nodeTypes).toHaveLength(3);
@@ -84,7 +85,7 @@ describe('graph/hierarchy', () => {
     }
   });
 
-  it('should have total of 61 nodes across all realms', () => {
+  it('should have total of 60 nodes across all realms', () => {
     let totalNodes = 0;
 
     for (const realm of ['shared', 'org'] as Realm[]) {
@@ -94,6 +95,6 @@ describe('graph/hierarchy', () => {
       }
     }
 
-    expect(totalNodes).toBe(61);  // v11.3: 61 nodes
+    expect(totalNodes).toBe(60);  // v11.5: 60 nodes (39 shared + 21 org)
   });
 });

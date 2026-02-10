@@ -1,0 +1,15 @@
+# arc-kinds/ownership/contains-seo-keyword.yaml
+# CONTAINS_SEO_KEYWORD - SEOKeywordSet contains SEOKeyword atoms (v11.4)
+#
+# v11.4: Split from generic CONTAINS for semantic correctness (ADR-016)
+#        Each container type can only contain its specific atom type
+
+arc:
+  name: CONTAINS_SEO_KEYWORD
+  family: ownership
+  scope: intra_realm
+  source: SEOKeywordSet
+  target: SEOKeyword
+  cardinality: one_to_many
+  llm_context: SEOKeywordSet contains SEOKeyword atoms. Use to traverse from set to individual keywords.
+  cypher_pattern: "(SEOKeywordSet)-[:CONTAINS_SEO_KEYWORD]->(SEOKeyword)"

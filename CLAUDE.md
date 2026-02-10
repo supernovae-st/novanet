@@ -8,6 +8,22 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 
 ---
 
+## Why NovaNet Exists
+
+**Problem**: Scaling content across 200+ locales is prohibitively expensive with traditional translation.
+- Translation loses cultural nuance (idioms, humor, formality levels)
+- Cost grows linearly: 200 locales = 200× translation cost
+- Maintaining translation databases creates synchronization nightmares
+
+**Solution**: NovaNet generates content **natively** per locale from invariant semantic entities.
+- LLM generates in target locale with cultural context (LocaleVoice, LocaleCulture)
+- Entity definitions are written once; content is generated 200×
+- Knowledge atoms (Terms, Expressions, Patterns) provide locale-specific vocabulary
+
+**Result**: Native-quality content at a fraction of translation cost, with consistent brand voice across all locales.
+
+---
+
 ## Overview
 
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
@@ -15,6 +31,10 @@ NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation
 **Target Application**: QR Code AI (https://qrcode-ai.com)
 **Current Version**: v11.5.0
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
+
+**Related docs**:
+- `.claude/rules/novanet-decisions.md` — Architecture decisions (ADR-001 through ADR-020)
+- `.claude/rules/novanet-terminology.md` — Canonical terminology reference
 
 ```
 CRITICAL: Generation, NOT Translation
@@ -56,11 +76,11 @@ v11.5 refines the layer structure with Locale moved to shared/config:
 **Key changes in v11.5:**
 - **Locale moved**: Locale from shared/locale to shared/config (definitions layer pattern)
 - **SEO/GEO consolidation**: seo/geo layers removed from org, nodes moved to shared/knowledge
-- **61 nodes** total: 40 shared + 21 org
+- **60 nodes** total: 39 shared + 21 org
 
 **Architecture (v11.5):**
 - 2 realms: SHARED + ORG
-- SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (40 nodes)
+- SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (39 nodes)
 - ORG (6 layers): config, foundation, structure, semantic, instruction, output (21 nodes)
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
@@ -69,7 +89,7 @@ schema generate/validate, doc generate, filter build, Galaxy-themed TUI with boo
 
 **YAML-first architecture:** Each Kind YAML has explicit `realm:` and `layer:` fields (source of truth).
 Path validation ensures `models/node-kinds/{realm}/{layer}/{name}.yaml` matches YAML content.
-v11.5: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 61 nodes.
+v11.5: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 60 nodes.
 
 **Icons source of truth (v11.5):** `visual-encoding.yaml` → `icons:` section provides dual-format icons:
 - `web`: Lucide icon name for Studio
@@ -123,7 +143,7 @@ Categories: realms, layers, traits, arc_families, states, navigation, quality, m
 │  Containers (6): TermSet, ExpressionSet, PatternSet,                        │
 │                  CultureSet, TabooSet, AudienceSet                          │
 │  Atoms (6):      Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait│
-│  Total:          61 nodes (40 shared + 21 org)                              │
+│  Total:          60 nodes (39 shared + 21 org)                              │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -237,6 +257,19 @@ pnpm infra:seed
 # 4. Start development
 pnpm dev    # → http://localhost:3000
 ```
+
+---
+
+## Learning Path (New Developers)
+
+1. **Read this file** — Understand the generation philosophy (not translation)
+2. **Explore TUI** — `cargo run -- tui` in `tools/novanet/` for interactive graph exploration
+3. **Read `models/_index.yaml`** — Complete schema overview with all 60 nodes
+4. **Study `taxonomy.yaml`** — Realm/Layer/Trait definitions with visual encoding
+5. **Check ADRs** — `.claude/rules/novanet-decisions.md` explains WHY decisions were made
+6. **Run Studio** — `pnpm dev` and explore the graph visually at http://localhost:3000
+
+**Key concepts progression**: Realm → Layer → Trait → Node → Arc → ArcFamily
 
 ---
 

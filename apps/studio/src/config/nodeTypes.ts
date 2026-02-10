@@ -1,20 +1,20 @@
 // =============================================================================
-// NODE TYPE CONFIGURATION (v11.3.0)
+// NODE TYPE CONFIGURATION (v11.5.0)
 // =============================================================================
-// Visual configuration for all 61 NovaNet node types
-// v11.3: 11 layers (3 shared + 8 org), 2 realms, OrgConfig consolidation
+// Visual configuration for all 60 NovaNet node types
+// v11.5: SEO/GEO moved to shared/knowledge, 10 layers (4 shared + 6 org), 2 realms
 // NodeType, Layer, KIND_META imported from @novanet/core (Single Source of Truth)
 
 import type { NodeType, Layer } from '@novanet/core/types';
 import { NODE_TYPES, KIND_META } from '@novanet/core/types';
 
 // =============================================================================
-// NODE LAYERS (v11.3 - 11 layers, 61 nodes)
+// NODE LAYERS (v11.5 - 10 layers, 60 nodes)
 // Derived from KIND_META — single source of truth
 // =============================================================================
 
 /**
- * Node layers with their types (v11.3 - 61 nodes across 11 layers)
+ * Node layers with their types (v11.5 - 60 nodes across 10 layers)
  * Derived from KIND_META in @novanet/core
  */
 export const NODE_LAYERS: Record<Layer, NodeType[]> = Object.entries(KIND_META).reduce(
@@ -45,7 +45,7 @@ export interface NodeTypeConfig {
 }
 
 /**
- * All node type configurations (v11.3 - 61 nodes)
+ * All node type configurations (v11.5 - 60 nodes)
  * Aligned with @novanet/core NODE_TYPES
  */
 export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
@@ -536,8 +536,22 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
 
   // ==========================================================================
-  // SHARED REALM — KNOWLEDGE LAYER — SEO nodes (5 nodes)
-  // v11.4: Moved from org/seo to shared/knowledge (Knowledge Atoms pattern)
+  // SHARED REALM — CONFIG LAYER — SEOKeywordFormat (1 node)
+  // v11.5: Classification config node
+  // ==========================================================================
+  SEOKeywordFormat: {
+    type: 'SEOKeywordFormat',
+    label: 'SEO Keyword Format',
+    icon: '📋',
+    color: '#64748b',
+    colorClass: 'bg-slate-500',
+    size: 14,
+    layer: 'config',
+  },
+
+  // ==========================================================================
+  // SHARED REALM — KNOWLEDGE LAYER — SEO nodes (3 nodes)
+  // v11.5: SEOKeyword, SEOKeywordMetrics, SEOKeywordSet
   // ==========================================================================
   SEOKeyword: {
     type: 'SEOKeyword',
@@ -557,37 +571,19 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 10,
     layer: 'knowledge',
   },
-  SEOComparison: {
-    type: 'SEOComparison',
-    label: 'SEO Comparison',
-    icon: '⚖️',
-    color: '#8b5cf6',
-    colorClass: 'bg-violet-500',
-    size: 12,
-    layer: 'knowledge',
-  },
-  SEOPreposition: {
-    type: 'SEOPreposition',
-    label: 'SEO Preposition',
-    icon: '🔗',
+  SEOKeywordSet: {
+    type: 'SEOKeywordSet',
+    label: 'SEO Keyword Set',
+    icon: '📑',
     color: '#7c3aed',
     colorClass: 'bg-violet-600',
-    size: 12,
-    layer: 'knowledge',
-  },
-  SEOQuestion: {
-    type: 'SEOQuestion',
-    label: 'SEO Question',
-    icon: '❓',
-    color: '#6d28d9',
-    colorClass: 'bg-violet-700',
     size: 12,
     layer: 'knowledge',
   },
 
   // ==========================================================================
   // SHARED REALM — KNOWLEDGE LAYER — GEO nodes (3 nodes)
-  // v11.4: Moved from org/geo to shared/knowledge (Knowledge Atoms pattern)
+  // v11.5: GEOQuery, GEOQuerySet, GEOAnswer
   // ==========================================================================
   GEOQuery: {
     type: 'GEOQuery',
@@ -598,6 +594,15 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 16,
     layer: 'knowledge',
   },
+  GEOQuerySet: {
+    type: 'GEOQuerySet',
+    label: 'GEO Query Set',
+    icon: '🗃️',
+    color: '#6d28d9',
+    colorClass: 'bg-violet-700',
+    size: 12,
+    layer: 'knowledge',
+  },
   GEOAnswer: {
     type: 'GEOAnswer',
     label: 'GEO Answer',
@@ -605,15 +610,6 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#a78bfa',
     colorClass: 'bg-violet-400',
     size: 14,
-    layer: 'knowledge',
-  },
-  GEOMetrics: {
-    type: 'GEOMetrics',
-    label: 'GEO Metrics',
-    icon: '📊',
-    color: '#c4b5fd',
-    colorClass: 'bg-violet-300',
-    size: 10,
     layer: 'knowledge',
   },
 
@@ -694,7 +690,7 @@ export interface LayerConfig {
 
 /**
  * All layers with their configuration (ordered for display)
- * v11.4: 10 layers (4 shared + 6 org) — SEO/GEO moved to shared/knowledge
+ * v11.5: 10 layers (4 shared + 6 org) — SEO/GEO moved to shared/knowledge
  */
 export const NODE_VISUAL_LAYERS: LayerConfig[] = [
   // SHARED realm (4 layers: config, locale, geography, knowledge)

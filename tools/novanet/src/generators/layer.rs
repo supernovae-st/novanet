@@ -418,15 +418,15 @@ mod tests {
         let generator = LayerGenerator;
         let output = generator.generate(root).expect("should generate layers.ts");
 
-        // v11.4: 61 nodes (2 realms: shared + org, SEO/GEO moved to shared)
+        // v11.4: 60 nodes (+3 new containers, -4 obsolete SEO types)
         assert!(
-            output.contains("mapping all 61 node types"),
-            "should mention 61 node types"
+            output.contains("mapping all 60 node types"),
+            "should mention 60 node types"
         );
 
-        // v11.4: Realm node counts (SEO/GEO moved from org to shared)
-        assert!(output.contains("SHARED REALM (40 nodes)")); // config (1) + locale (7) + geography (6) + knowledge (26)
-        assert!(output.contains("ORG REALM (21 nodes)")); // v11.4: SEO/GEO moved to shared
+        // v11.4: Realm node counts (+3 new, -4 obsolete in shared)
+        assert!(output.contains("SHARED REALM (39 nodes)")); // config (2) + locale (7) + geography (6) + knowledge (24)
+        assert!(output.contains("ORG REALM (21 nodes)")); // unchanged in v11.4
 
         // 8 unique layers present (v11.4: 4 shared + 6 org, config in both)
         for layer in [

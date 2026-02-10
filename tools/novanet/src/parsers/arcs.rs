@@ -114,7 +114,7 @@ impl NodeRef {
 /// Top-level arcs document (from relations.yaml).
 #[derive(Debug, Deserialize)]
 pub struct ArcsDocument {
-    /// The 116 arc definitions (v11.3).
+    /// The arc definitions (v11.5: 114 arcs after obsolete SEO arcs removed).
     pub arcs: Vec<ArcDef>,
 
     /// SEMANTIC_LINK subtypes (10 entries: is_action_on, includes, etc.).

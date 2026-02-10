@@ -1,12 +1,17 @@
 # arc-kinds/ownership/has-geo-queries.yaml
-# HAS_GEO_QUERIES - Locale owns GEO queries (v10.7)
+# HAS_GEO_QUERIES - Locale owns GEO query container (v11.4)
 #
 # v10.7: GEO Schema v1
 #        - Locale owns GEOQuery (same pattern as HAS_SEO_KEYWORDS)
 #        - GEO queries are locale-specific knowledge
 #
+# v11.4: Container pattern (like Knowledge Atoms)
+#        - Locale → GEOQuerySet (container) → GEOQuery (atoms)
+#        - Changed target from GEOQuery to GEOQuerySet
+#        - Changed cardinality from one_to_many to one_to_one
+#
 # v11.5: scope fix (cross_realm → intra_realm)
-#        - Locale (shared/config) → GEOQuery (shared/knowledge)
+#        - Locale (shared/config) → GEOQuerySet (shared/knowledge)
 #        - Both in shared realm
 
 arc:
@@ -14,18 +19,20 @@ arc:
   family: ownership
   scope: intra_realm
   source: Locale
-  target: GEOQuery
-  cardinality: one_to_many
+  target: GEOQuerySet
+  cardinality: one_to_one
   llm_context: |
-    Locale owns its GEO queries. Similar to HAS_SEO_KEYWORDS.
-    Use to load all AI visibility queries for a locale's GEO strategy.
-    v10.7: New arc for Generative Engine Optimization tracking.
+    Locale owns its GEO query set (container). Similar to HAS_TERMS pattern.
+    Traversal: Locale --[:HAS_GEO_QUERIES]--> GEOQuerySet --[:CONTAINS_GEO_QUERY]--> GEOQuery
+    Use to load the container, then traverse to individual GEO queries.
+    v11.4: Updated to container pattern (1 Locale has 1 GEOQuerySet).
 
-  cypher_pattern: (Locale)-[:HAS_GEO_QUERIES]->(GEOQuery)
+  cypher_pattern: (Locale)-[:HAS_GEO_QUERIES]->(GEOQuerySet)
 
   example:
-    description: "Get all GEO queries for a locale"
+    description: "Get all GEO queries for a locale via container"
     cypher: |
-      MATCH (l:Locale {key: $locale})-[:HAS_GEO_QUERIES]->(q:GEOQuery)
+      MATCH (l:Locale {key: $locale})-[:HAS_GEO_QUERIES]->(qs:GEOQuerySet)
+            -[:CONTAINS_GEO_QUERY]->(q:GEOQuery)
       RETURN q.value, q.ai_visibility_score, q.share_of_voice
       ORDER BY q.ai_visibility_score DESC
