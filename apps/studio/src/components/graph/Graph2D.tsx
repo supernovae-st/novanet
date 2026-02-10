@@ -460,6 +460,15 @@ function Graph2DInner({
       // Note: Schema nodes have different data structure than data nodes
       setSelectedNode(node.id);
 
+      // Update selected state on all schema nodes
+      // Required because we use useState instead of useNodesState
+      setSchemaNodes((nodes) =>
+        nodes.map((n) => ({
+          ...n,
+          selected: n.id === node.id,
+        }))
+      );
+
       // Bring clicked node to front (z-index)
       bringSchemaNodeToFront(node.id);
 
@@ -1148,8 +1157,17 @@ function Graph2DInner({
   const handlePaneClick = useCallback(() => {
     setSelectedNode(null);
     setContextMenu(null);
+
+    // Deselect all schema nodes when clicking on pane
+    // Required because we use useState instead of useNodesState for schema mode
+    if (navigationMode === 'meta') {
+      setSchemaNodes((nodes) =>
+        nodes.map((n) => ({ ...n, selected: false }))
+      );
+    }
+
     onPaneClick?.();
-  }, [setSelectedNode, onPaneClick]);
+  }, [setSelectedNode, onPaneClick, navigationMode]);
 
   // Right-click context menu handler
   const handleNodeContextMenu: NodeMouseHandler<TurboNodeType> = useCallback(
