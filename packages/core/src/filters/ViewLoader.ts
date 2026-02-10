@@ -260,6 +260,10 @@ export class ViewLoader {
         filter.includePages();
         break;
 
+      case 'HAS_ENTITY':
+        filter.includeProjectEntities({ depth: include.depth });
+        break;
+
       case 'HAS_BRAND_IDENTITY':
         filter.includeBrandIdentity();
         break;
@@ -319,7 +323,15 @@ export class ViewLoader {
         break;
 
       default:
-        throw new Error(`Unknown relation in view include: ${include.relation}. Update ViewLoader.applyInclude() to handle this relation.`);
+        // v11.6: Pass through unknown relations directly
+        // This makes views more flexible and schema-independent
+        filter.getCriteria().includes.push({
+          relation: include.relation,
+          direction: include.direction || 'outgoing',
+          depth: include.depth,
+          filters: include.filters,
+        });
+        break;
     }
   }
 }

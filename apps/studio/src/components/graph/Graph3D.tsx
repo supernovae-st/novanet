@@ -19,9 +19,10 @@
 import { memo, useCallback, useRef, useMemo, useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import * as THREE from 'three';
+import { shallow } from 'zustand/shallow';
 import { cn } from '@/lib/utils';
 import { useFilteredGraph } from '@/hooks';
-import { useUIStore } from '@/stores/uiStore';
+import { useUIStore, selectGraph3DState, selectGraph3DActions } from '@/stores/uiStore';
 import { GraphEmptyState } from './GraphEmptyState';
 import {
   transformGraphData,
@@ -33,12 +34,81 @@ import {
   createEnhancedComposer,
   updateComposerSize,
   createCompositeNode,
+  getBloomConfigForQuality,
+  detectPerformanceProfile,
   TRAIT_GLOW_INTENSITY,
   type ForceGraphNode,
   type ForceGraphLink,
+  type BloomQualityLevel,
 } from '@/lib/graph3d';
 import type { Layer, Realm, Trait } from '@novanet/core/types';
 import { Graph3DLegend } from './Graph3DLegend';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Type Guards for ForceGraph Link Endpoints
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Link endpoint can be string (before D3 simulation) or object (after simulation)
+ */
+type LinkEndpoint = string | { id?: string } | undefined | null;
+
+/**
+ * Safely extract node ID from a link endpoint.
+ * D3 force simulation mutates source/target from string to object with id property.
+ *
+ * @param endpoint - Link source or target (string | { id?: string } | undefined | null)
+ * @returns Node ID string, or empty string if invalid
+ */
+function getNodeIdFromLinkEndpoint(endpoint: LinkEndpoint): string {
+  if (!endpoint) return '';
+  if (typeof endpoint === 'string') return endpoint;
+  if (typeof endpoint === 'object' && 'id' in endpoint) {
+    return endpoint.id ?? '';
+  }
+  return '';
+}
+
+/**
+ * Type guard to validate a ForceGraphLink has valid source and target IDs.
+ * Returns true if both endpoints resolve to non-empty strings.
+ */
+function isValidForceGraphLink(
+  link: ForceGraphLink | null | undefined
+): link is ForceGraphLink & { source: LinkEndpoint; target: LinkEndpoint } {
+  if (!link) return false;
+  const sourceId = getNodeIdFromLinkEndpoint(link.source as LinkEndpoint);
+  const targetId = getNodeIdFromLinkEndpoint(link.target as LinkEndpoint);
+  return sourceId !== '' && targetId !== '';
+}
+
+/**
+ * Parse hex color string to integer with fallback.
+ * Handles both '#RRGGBB' and 'RRGGBB' formats.
+ *
+ * @param color - Hex color string (e.g., '#60a5fa' or '60a5fa')
+ * @param fallback - Fallback integer value if parsing fails (default: 0x60a5fa)
+ * @returns Parsed integer or fallback
+ */
+function parseHexColor(color: string, fallback: number = 0x60a5fa): number {
+  if (!color || typeof color !== 'string') return fallback;
+
+  // Remove leading # if present
+  const hex = color.startsWith('#') ? color.slice(1) : color;
+
+  // Validate hex format (3, 6, or 8 characters)
+  if (!/^[0-9a-fA-F]{3}$|^[0-9a-fA-F]{6}$|^[0-9a-fA-F]{8}$/.test(hex)) {
+    return fallback;
+  }
+
+  // Expand 3-char hex to 6-char
+  const fullHex = hex.length === 3
+    ? hex.split('').map(c => c + c).join('')
+    : hex.slice(0, 6); // Ignore alpha channel if 8-char
+
+  const parsed = parseInt(fullHex, 16);
+  return Number.isNaN(parsed) ? fallback : parsed;
+}
 
 // Layer Z-axis positions for visual separation
 const LAYER_Z_POSITIONS: Record<string, number> = {
@@ -138,13 +208,14 @@ export const Graph3D = memo(function Graph3D({
   // Get filtered graph data
   const { nodes, edges } = useFilteredGraph();
 
-  // UI store for selection
-  const selectedNodeId = useUIStore((state) => state.selectedNodeId);
-  const hoveredNodeId = useUIStore((state) => state.hoveredNodeId);
-  const setSelectedNode = useUIStore((state) => state.setSelectedNode);
-  const setHoveredNode = useUIStore((state) => state.setHoveredNode);
-  const setSelectedEdge = useUIStore((state) => state.setSelectedEdge);
-  const setHoveredEdge = useUIStore((state) => state.setHoveredEdge);
+  // UI store for selection - combined into 2 subscriptions instead of 6
+  // State selector with shallow equality (re-renders only when values change)
+  const { selectedNodeId, hoveredNodeId } = useUIStore(selectGraph3DState, shallow);
+  // Actions selector (stable reference - actions never change, no equality check needed)
+  const { setSelectedNode, setHoveredNode, setSelectedEdge, setHoveredEdge } = useUIStore(selectGraph3DActions);
+
+  // Bloom quality from store (persisted user preference)
+  const bloomQuality = useUIStore((state) => state.bloomQuality) as BloomQualityLevel;
 
   // Transform data for force graph
   const graphData = useMemo(() => {
@@ -380,16 +451,12 @@ export const Graph3D = memo(function Graph3D({
     const links = new Set<string>();
 
     graphData.links.forEach((link) => {
-      if (!link) return;
-      // source/target can be string (initial) or object (after d3 simulation)
-      const source = link.source as string | { id: string } | undefined;
-      const target = link.target as string | { id: string } | undefined;
-      if (!source || !target) return;
+      // Use type guard to validate link has valid source/target
+      if (!isValidForceGraphLink(link)) return;
 
-      // Handle both string and object forms, with null safety for .id
-      const sourceId = typeof source === 'object' ? (source.id ?? '') : source;
-      const targetId = typeof target === 'object' ? (target.id ?? '') : target;
-      if (!sourceId || !targetId) return;
+      // Use helper to extract IDs safely from either string or object form
+      const sourceId = getNodeIdFromLinkEndpoint(link.source as LinkEndpoint);
+      const targetId = getNodeIdFromLinkEndpoint(link.target as LinkEndpoint);
 
       if (sourceId === selectedNodeId || targetId === selectedNodeId) {
         neighbors.add(sourceId === selectedNodeId ? targetId : sourceId);
@@ -561,7 +628,7 @@ export const Graph3D = memo(function Graph3D({
       let hoverMaterial = hoverGlowMaterialsRef.current.get(layerColor);
       if (!hoverMaterial) {
         hoverMaterial = new THREE.MeshBasicMaterial({
-          color: parseInt(layerColor.replace('#', ''), 16),
+          color: parseHexColor(layerColor),
           transparent: true,
           opacity: 0.08,
           side: THREE.BackSide,
@@ -661,13 +728,9 @@ export const Graph3D = memo(function Graph3D({
   // Link click handler
   const handleLinkClick = useCallback(
     (link: ForceGraphLink) => {
-      // Extract source/target IDs (can be string or object after D3 simulation)
-      const sourceId = typeof link.source === 'object'
-        ? (link.source as { id?: string }).id ?? ''
-        : link.source;
-      const targetId = typeof link.target === 'object'
-        ? (link.target as { id?: string }).id ?? ''
-        : link.target;
+      // Use helper to extract source/target IDs safely (handles string or object form)
+      const sourceId = getNodeIdFromLinkEndpoint(link.source as LinkEndpoint);
+      const targetId = getNodeIdFromLinkEndpoint(link.target as LinkEndpoint);
 
       // Clear node selection, set edge selection
       setSelectedNode(null);
@@ -679,8 +742,8 @@ export const Graph3D = memo(function Graph3D({
         data: { ...link },
       });
 
-      // Zoom camera to midpoint between nodes
-      if (fgRef.current?.cameraPosition && link.source && link.target) {
+      // Zoom camera to midpoint between nodes (only if valid link)
+      if (fgRef.current?.cameraPosition && isValidForceGraphLink(link)) {
         const sourceNode = graphData.nodes.find(n => n.id === sourceId);
         const targetNode = graphData.nodes.find(n => n.id === targetId);
 
@@ -885,8 +948,10 @@ export const Graph3D = memo(function Graph3D({
         enableNodeDrag={true}
         enableNavigationControls={true}
         controlType="orbit"
-        warmupTicks={0}
-        cooldownTicks={100}
+        warmupTicks={100}
+        cooldownTicks={200}
+        d3AlphaDecay={0.04}
+        d3VelocityDecay={0.5}
       />
 
       {/* Legend */}

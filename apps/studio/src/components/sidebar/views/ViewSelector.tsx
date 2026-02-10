@@ -33,6 +33,8 @@ import {
 import { cn } from '@/lib/utils';
 import { iconSizes, gapTokens } from '@/design/tokens';
 import { useViewStore, type ViewParams } from '@/stores/viewStore';
+import { useUIStore } from '@/stores/uiStore';
+import { useGraphStore } from '@/stores/graphStore';
 import type { ViewRegistryEntry } from '@novanet/core/filters';
 import { FilterTree } from '@/components/ui/FilterTree';
 import { VIEW_CATEGORIES } from '@/config/viewCategories';
@@ -81,18 +83,31 @@ export const ViewSelector = memo(function ViewSelector({
     }))
   );
 
+  // Get selected node info for passing to views
+  const selectedNodeId = useUIStore((state) => state.selectedNodeId);
+  const getNodeById = useGraphStore((state) => state.getNodeById);
+
   // Load registry on mount
   useEffect(() => {
     loadRegistry();
   }, [loadRegistry]);
 
-  // Handle view selection - executes the view's Cypher query
+  // Handle view selection - executes the view's Cypher query with selected node's key
   const handleSelect = useCallback(
     (view: ViewRegistryEntry) => {
-      executeView(view.id);
-      onSelect?.(view.id);
+      // v11.6: Pass the selected node's key when executing a view
+      // This ensures views are scoped to the specific node the user selected
+      const params: ViewParams = {};
+      if (selectedNodeId) {
+        const node = getNodeById(selectedNodeId);
+        if (node?.key) {
+          params.key = node.key;
+        }
+      }
+      executeView(view.id, Object.keys(params).length > 0 ? params : undefined);
+      onSelect?.(view.id, params);
     },
-    [executeView, onSelect]
+    [executeView, onSelect, selectedNodeId, getNodeById]
   );
 
   // Flatten views for shortcut indexing (memoized for performance)

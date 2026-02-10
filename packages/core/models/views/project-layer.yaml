@@ -39,13 +39,15 @@ include:
           - relation: HAS_GENERATED
             direction: outgoing
 
-  # Semantic
-  - relation: USES_ENTITY
+  # Semantic - v11.6: Use HAS_ENTITY for direct project ownership
+  - relation: HAS_ENTITY
     direction: outgoing
     include:
       - relation: HAS_CONTENT
         direction: outgoing
       - relation: SEMANTIC_LINK
+        direction: outgoing
+      - relation: BELONGS_TO
         direction: outgoing
 
 docs:

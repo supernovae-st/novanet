@@ -10,6 +10,10 @@ export type LayoutDirection = 'TB' | 'LR' | 'dagre' | 'radial' | 'force';
 // Layout mode: containers (hardcoded groups) vs magnetic (Neo4j-driven attractors)
 export type LayoutMode = 'containers' | 'magnetic';
 
+// Bloom quality levels for 3D graph post-processing
+// 'auto' = detect device capability and adapt
+export type BloomQuality = 'off' | 'low' | 'medium' | 'high' | 'auto';
+
 // Modal types - only one can be open at a time
 export type ModalType = 'command-palette' | 'keyboard-shortcuts' | 'ai-chat' | 'cypher-editor' | 'locale-picker' | 'project-picker' | 'macropad-configurator' | null;
 
@@ -64,6 +68,12 @@ interface UIStoreState extends UIState, SelectionState {
   /** Counter to force re-layout when spacing changes */
   spacingVersion: number;
 
+  // 3D graph bloom effect settings
+  /** Bloom quality level (off/low/medium/high/auto) */
+  bloomQuality: BloomQuality;
+  /** Whether bloom is enabled (derived from bloomQuality !== 'off') */
+  bloomEnabled: boolean;
+
   // View actions
   setViewMode: (mode: ViewMode) => void;
   toggleViewMode: () => void;
@@ -81,6 +91,10 @@ interface UIStoreState extends UIState, SelectionState {
   // Spacing actions
   setSpacingPreset: (preset: SpacingPreset) => void;
   setSpacingValue: (value: number) => void;
+
+  // Bloom actions
+  setBloomQuality: (quality: BloomQuality) => void;
+  toggleBloom: () => void;
 
   // Selection actions
   setSelectedNode: (id: string | null) => void;
@@ -133,6 +147,76 @@ export const selectLayoutMode = (state: UIStoreState) => state.layoutMode;
 /** Selector for detailPanelTab - use with useUIStore(selectDetailPanelTab) */
 export const selectDetailPanelTab = (state: UIStoreState) => state.detailPanelTab;
 
+/** Selector for bloomQuality - use with useUIStore(selectBloomQuality) */
+export const selectBloomQuality = (state: UIStoreState) => state.bloomQuality;
+
+/** Selector for bloomEnabled - use with useUIStore(selectBloomEnabled) */
+export const selectBloomEnabled = (state: UIStoreState) => state.bloomEnabled;
+
+// =============================================================================
+// Composite Selectors (grouped state for fewer subscriptions)
+// =============================================================================
+
+/**
+ * Graph3D selection state - combine into single subscription with shallow equality
+ * Use: const { selectedNodeId, hoveredNodeId } = useUIStore(selectGraph3DState, shallow)
+ */
+export const selectGraph3DState = (state: UIStoreState) => ({
+  selectedNodeId: state.selectedNodeId,
+  hoveredNodeId: state.hoveredNodeId,
+});
+
+/**
+ * Graph3D actions - stable reference (actions never change)
+ * Use: const actions = useUIStore(selectGraph3DActions)
+ */
+export const selectGraph3DActions = (state: UIStoreState) => ({
+  setSelectedNode: state.setSelectedNode,
+  setHoveredNode: state.setHoveredNode,
+  setSelectedEdge: state.setSelectedEdge,
+  setHoveredEdge: state.setHoveredEdge,
+});
+
+/**
+ * Layout state - combine direction, version, and mode
+ * Use: const layout = useUIStore(selectLayoutState, shallow)
+ */
+export const selectLayoutState = (state: UIStoreState) => ({
+  layoutDirection: state.layoutDirection,
+  layoutVersion: state.layoutVersion,
+  layoutMode: state.layoutMode,
+});
+
+/**
+ * Selection state (nodes + edges) - for detail panels
+ * Use: const selection = useUIStore(selectSelectionState, shallow)
+ */
+export const selectSelectionState = (state: UIStoreState) => ({
+  selectedNodeId: state.selectedNodeId,
+  selectedEdgeId: state.selectedEdgeId,
+  selectedEdgeData: state.selectedEdgeData,
+});
+
+/**
+ * Hover highlight state - for useHoverHighlight hook
+ * Use: const hover = useUIStore(selectHoverState, shallow)
+ */
+export const selectHoverState = (state: UIStoreState) => ({
+  hoveredNodeId: state.hoveredNodeId,
+  hoveredEdgeId: state.hoveredEdgeId,
+  selectedNodeId: state.selectedNodeId,
+});
+
+/**
+ * Node selection actions - for useNodeSelection hook
+ * Use: const actions = useUIStore(selectNodeSelectionActions)
+ */
+export const selectNodeSelectionActions = (state: UIStoreState) => ({
+  setSelectedNode: state.setSelectedNode,
+  setDetailPanelTab: state.setDetailPanelTab,
+  clearSelection: state.clearSelection,
+});
+
 // =============================================================================
 // Store Implementation
 // =============================================================================
@@ -153,6 +237,10 @@ export const useUIStore = create<UIStoreState>()(
       spacingPreset: DEFAULT_SPACING_PRESET,
       spacingValue: 100, // 0=compact, 50=normal, 100=spacious
       spacingVersion: 0,
+
+      // Bloom settings (default to auto-detect)
+      bloomQuality: 'auto' as BloomQuality,
+      bloomEnabled: true, // Will be updated based on auto-detection
 
       // Selection state
       selectedNodeId: null,
@@ -275,6 +363,26 @@ export const useUIStore = create<UIStoreState>()(
         });
       },
 
+      // Bloom actions
+      setBloomQuality: (quality) => {
+        set((state) => {
+          state.bloomQuality = quality;
+          state.bloomEnabled = quality !== 'off';
+        });
+      },
+
+      toggleBloom: () => {
+        set((state) => {
+          if (state.bloomEnabled) {
+            state.bloomQuality = 'off';
+            state.bloomEnabled = false;
+          } else {
+            state.bloomQuality = 'auto';
+            state.bloomEnabled = true;
+          }
+        });
+      },
+
       // Selection actions
       setSelectedNode: (id) => {
         set((state) => {
@@ -369,14 +477,16 @@ export const useUIStore = create<UIStoreState>()(
         spacingPreset: state.spacingPreset,
         spacingValue: state.spacingValue,
         detailPanelTab: state.detailPanelTab,
+        bloomQuality: state.bloomQuality,
       }),
-      version: 12, // v12: Remove NavigationMode (view-based navigation)
+      version: 13, // v13: Add bloom quality settings
       migrate: (persistedState: unknown, version: number) => {
+        const prev = persistedState as Record<string, unknown>;
+
         if (version < 12) {
           // v12: Remove navigationMode, reset to clean state
-          const prev = persistedState as Record<string, unknown>;
           // Strip navigationMode and dataMode (legacy) from persisted state
-          const { navigationMode, dataMode, ...rest } = prev as Record<string, unknown>;
+          const { navigationMode, dataMode, ...rest } = prev;
           return {
             viewMode: (rest.viewMode as string) ?? '2d',
             sidebarOpen: (rest.sidebarOpen as boolean) ?? true,
@@ -387,8 +497,18 @@ export const useUIStore = create<UIStoreState>()(
             spacingPreset: (rest.spacingPreset as string) ?? DEFAULT_SPACING_PRESET,
             spacingValue: (rest.spacingValue as number) ?? 100,
             detailPanelTab: (rest.detailPanelTab as string) ?? 'overview',
+            bloomQuality: 'auto',
           };
         }
+
+        if (version < 13) {
+          // v13: Add bloom quality (default to auto)
+          return {
+            ...prev,
+            bloomQuality: 'auto',
+          };
+        }
+
         return persistedState as UIStoreState;
       },
     }

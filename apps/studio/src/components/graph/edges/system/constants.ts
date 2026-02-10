@@ -20,12 +20,13 @@ import type {
 
 /**
  * Base animation durations in seconds per speed preset
+ * Slower = more relaxed, easier to follow visually
  */
 export const ANIMATION_DURATIONS: Record<AnimationSpeed, number> = {
-  slow: 5,
-  normal: 3,
-  fast: 1.5,
-  ultra: 0.8,
+  slow: 7,      // was 5 - more meditative
+  normal: 4.5,  // was 3 - gentle flow
+  fast: 2.2,    // was 1.5 - still visible
+  ultra: 1.2,   // was 0.8 - trackable speed
 } as const;
 
 /**

@@ -13,7 +13,7 @@ cypher: |
   OPTIONAL MATCH (container)-[r2:CONTAINS_TERM|CONTAINS_EXPRESSION|CONTAINS_PATTERN|CONTAINS_CULTURE_REF|CONTAINS_TABOO|CONTAINS_AUDIENCE_TRAIT]->(atom)
   WITH locale,
        collect(DISTINCT container) AS containers,
-       collect(DISTINCT atom)[0..$limit] AS atoms,
+       collect(DISTINCT atom)[0..50] AS atoms,
        collect(DISTINCT r1) AS r1s,
        collect(DISTINCT r2) AS r2s
   RETURN [locale] + containers + atoms AS nodes,

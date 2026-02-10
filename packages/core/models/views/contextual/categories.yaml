@@ -14,7 +14,7 @@ cypher: |
   OPTIONAL MATCH (n)<-[r2:BELONGS_TO]-(entity:Entity)
   WITH n,
        collect(DISTINCT category) AS categories,
-       collect(DISTINCT entity)[0..$limit] AS entities,
+       collect(DISTINCT entity)[0..50] AS entities,
        collect(DISTINCT r1) + collect(DISTINCT r2) AS rels
   RETURN [n] + categories + entities AS nodes,
          rels AS relationships

@@ -35,9 +35,26 @@ import { create } from 'zustand';
 // ZUSTAND STORE
 // =============================================================================
 
+/** Performance mode thresholds */
+export const PERF_THRESHOLDS = {
+  /** Above this edge count, use simplified 2-element effects */
+  SIMPLIFY_EFFECTS: 200,
+  /** Above this edge count, disable animations entirely */
+  DISABLE_ANIMATIONS: 500,
+} as const;
+
 interface EdgeVisibilityState {
   /** Set of edge IDs currently visible in the viewport */
   visibleEdges: Set<string>;
+
+  /** Total edge count in the graph (for performance decisions) */
+  totalEdgeCount: number;
+
+  /** Whether to use simplified edge effects */
+  useSimplifiedEffects: boolean;
+
+  /** Whether to disable edge animations entirely */
+  disableAnimations: boolean;
 
   /**
    * Update visibility status for an edge.
@@ -55,6 +72,12 @@ interface EdgeVisibilityState {
   isVisible: (id: string) => boolean;
 
   /**
+   * Update total edge count and recalculate performance flags.
+   * @param count - Total number of edges in the graph
+   */
+  setTotalEdgeCount: (count: number) => void;
+
+  /**
    * Clear all visibility tracking.
    * Used when unmounting or resetting the view.
    */
@@ -63,6 +86,9 @@ interface EdgeVisibilityState {
 
 export const useEdgeVisibilityStore = create<EdgeVisibilityState>((set, get) => ({
   visibleEdges: new Set(),
+  totalEdgeCount: 0,
+  useSimplifiedEffects: false,
+  disableAnimations: false,
 
   setVisible: (id: string, visible: boolean) => {
     set(state => {
@@ -78,7 +104,20 @@ export const useEdgeVisibilityStore = create<EdgeVisibilityState>((set, get) => 
 
   isVisible: (id: string) => get().visibleEdges.has(id),
 
-  clear: () => set({ visibleEdges: new Set() }),
+  setTotalEdgeCount: (count: number) => {
+    set({
+      totalEdgeCount: count,
+      useSimplifiedEffects: count > PERF_THRESHOLDS.SIMPLIFY_EFFECTS,
+      disableAnimations: count > PERF_THRESHOLDS.DISABLE_ANIMATIONS,
+    });
+  },
+
+  clear: () => set({
+    visibleEdges: new Set(),
+    totalEdgeCount: 0,
+    useSimplifiedEffects: false,
+    disableAnimations: false,
+  }),
 }));
 
 // =============================================================================
@@ -199,6 +238,12 @@ interface UseEdgeVisibilityReturn {
   registerEdge: (id: string, element: Element) => void;
   /** Unregister edge from IntersectionObserver (from context) */
   unregisterEdge: (id: string, element: Element) => void;
+  /** Update total edge count (from store) */
+  setTotalEdgeCount: (count: number) => void;
+  /** Whether to use simplified 2-element effects (from store) */
+  useSimplifiedEffects: boolean;
+  /** Whether to disable animations entirely (from store) */
+  disableAnimations: boolean;
 }
 
 /**
@@ -236,6 +281,9 @@ export function useEdgeVisibility(): UseEdgeVisibilityReturn {
     setVisible: store.setVisible,
     isVisible: store.isVisible,
     clear: store.clear,
+    setTotalEdgeCount: store.setTotalEdgeCount,
+    useSimplifiedEffects: store.useSimplifiedEffects,
+    disableAnimations: store.disableAnimations,
     // From context (with noop fallbacks)
     registerEdge: context?.registerEdge ?? noop,
     unregisterEdge: context?.unregisterEdge ?? noop,

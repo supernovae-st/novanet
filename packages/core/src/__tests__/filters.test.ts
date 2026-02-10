@@ -269,8 +269,8 @@ describe('CypherGenerator', () => {
         .includeBlocks();
       const result = CypherGenerator.generate(filter);
 
-      // Relationship variable (r0, r1, etc.) is captured for returning edges
-      expect(result.query).toMatch(/OPTIONAL MATCH \(root\)-\[r\d+:HAS_BLOCK\]->\(block:Block\)/);
+      // v11.6: Target type not specified, relationship variable captured
+      expect(result.query).toMatch(/OPTIONAL MATCH \(root\)-\[r\d+:HAS_BLOCK\]->\(block\)/);
     });
 
     it('generates WHERE for locale filter with $locale param', () => {
@@ -350,9 +350,9 @@ describe('CypherGenerator', () => {
         .includeEntities({ spreading: true });
       const result = CypherGenerator.generate(filter);
 
-      // Relationship variables captured for returning edges
-      expect(result.query).toMatch(/OPTIONAL MATCH \(root\)-\[r\d+:USES_ENTITY\]->\(entity:Entity\)/);
-      expect(result.query).toMatch(/OPTIONAL MATCH \(entity\)-\[r\d+:SEMANTIC_LINK\*1\.\.1\]->\(relatedEntity:Entity\)/);
+      // v11.6: Target type not specified, alias is now 'usedEntity'
+      expect(result.query).toMatch(/OPTIONAL MATCH \(root\)-\[r\d+:USES_ENTITY\]->\(usedEntity\)/);
+      expect(result.query).toMatch(/OPTIONAL MATCH \(usedEntity\)-\[r\d+:SEMANTIC_LINK\*1\.\.1\]->\(relatedUsedEntity:Entity\)/);
     });
 
     it('does not generate SEMANTIC_LINK for entities with depth = 1', () => {
@@ -361,7 +361,8 @@ describe('CypherGenerator', () => {
         .includeEntities();
       const result = CypherGenerator.generate(filter);
 
-      expect(result.query).toMatch(/OPTIONAL MATCH \(root\)-\[r\d+:USES_ENTITY\]->\(entity:Entity\)/);
+      // v11.6: Target type not specified, alias is now 'usedEntity'
+      expect(result.query).toMatch(/OPTIONAL MATCH \(root\)-\[r\d+:USES_ENTITY\]->\(usedEntity\)/);
       expect(result.query).not.toContain('SEMANTIC_LINK');
     });
   });
@@ -373,7 +374,8 @@ describe('CypherGenerator', () => {
         .includePrompts({ activeOnly: true });
       const result = CypherGenerator.generate(filter);
 
-      expect(result.query).toMatch(/OPTIONAL MATCH \(root\)-\[r\d+:HAS_PROMPT\]->\(prompt:PagePrompt \{active: true\}\)/);
+      // v11.6: Target type not specified, only property filter
+      expect(result.query).toMatch(/OPTIONAL MATCH \(root\)-\[r\d+:HAS_PROMPT\]->\(prompt \{active: true\}\)/);
     });
 
     it('does not add {active: true} when activeOnly is false', () => {
@@ -382,7 +384,8 @@ describe('CypherGenerator', () => {
         .includePrompts();
       const result = CypherGenerator.generate(filter);
 
-      expect(result.query).toMatch(/OPTIONAL MATCH \(root\)-\[r\d+:HAS_PROMPT\]->\(prompt:PagePrompt\)/);
+      // v11.6: Target type not specified
+      expect(result.query).toMatch(/OPTIONAL MATCH \(root\)-\[r\d+:HAS_PROMPT\]->\(prompt\)/);
       expect(result.query).not.toContain('{active: true}');
     });
   });
@@ -394,16 +397,18 @@ describe('CypherGenerator', () => {
         .includeBlocks();
       const result = CypherGenerator.generate(filter);
 
-      expect(result.query).toMatch(/\(root\)-\[r\d+:HAS_BLOCK\]->\(block:Block\)/);
+      // v11.6: Target type not specified
+      expect(result.query).toMatch(/\(root\)-\[r\d+:HAS_BLOCK\]->\(block\)/);
     });
 
-    it('generates BlockType for OF_TYPE relation', () => {
+    it('generates OF_TYPE relation for blocks', () => {
       const filter = NovaNetFilter.create()
         .fromBlock('block-hero')
         .includeBlockType();
       const result = CypherGenerator.generate(filter);
 
-      expect(result.query).toMatch(/\(root\)-\[r\d+:OF_TYPE\]->\(blockType:BlockType\)/);
+      // v11.6: Target type not specified
+      expect(result.query).toMatch(/\(root\)-\[r\d+:OF_TYPE\]->\(blockType\)/);
     });
 
     it('generates Project include relations (v10.3: no HAS_CONCEPT)', () => {
@@ -413,9 +418,9 @@ describe('CypherGenerator', () => {
         .includeBrandIdentity();
       const result = CypherGenerator.generate(filter);
 
-      // Relationship variables (r0, r1, etc.) are captured for returning edges
-      expect(result.query).toMatch(/\[r\d+:HAS_PAGE\]->\(page:Page\)/);
-      expect(result.query).toMatch(/\[r\d+:HAS_BRAND_IDENTITY\]->\(brandIdentity:BrandIdentity\)/);
+      // v11.6: Target type not specified, relationship variables still captured
+      expect(result.query).toMatch(/\[r\d+:HAS_PAGE\]->\(page\)/);
+      expect(result.query).toMatch(/\[r\d+:HAS_BRAND_IDENTITY\]->\(brandIdentity\)/);
       // REMOVED v10.3: HAS_CONCEPT (Entity is in org realm)
     });
   });

@@ -54,60 +54,80 @@ export interface CypherQuery {
 // =============================================================================
 
 const RELATION_ALIAS_MAP: Record<string, string> = {
+  // Core structure (v11.6)
+  HAS_PAGE: 'page',
   HAS_BLOCK: 'block',
+  HAS_ENTITY: 'entity',
+  HAS_BRAND_IDENTITY: 'brandIdentity',
+  HAS_PROJECT: 'project',
+  OF_TYPE: 'blockType',
+  OF_KIND: 'kind',
+  // Entity relationships
+  USES_ENTITY: 'usedEntity',
+  SEMANTIC_LINK: 'relatedEntity',
+  BELONGS_TO: 'category',
+  INCLUDES: 'includedEntity',
+  APPLIES_TO: 'applicableEntity',
+  ENABLES: 'enabledEntity',
+  SIMILAR_TO: 'similarEntity',
+  REQUIRES: 'requiredEntity',
+  TYPE_OF: 'typeEntity',
+  VARIANT_OF: 'variantEntity',
+  ALTERNATIVE_TO: 'alternativeEntity',
+  // Prompts
   HAS_PROMPT: 'prompt',
   HAS_RULES: 'rules',
-  USES_ENTITY: 'entity',
-  HAS_CONTENT: 'content',
+  // Output
   HAS_GENERATED: 'generated',
-  // v10 knowledge arcs (tiered model)
+  HAS_CONTENT: 'content',
+  CONTENT_OF: 'contentParent',
+  HAS_LOCALIZED_CONTENT: 'localizedContent',
+  // Locale knowledge (v11.5 schema)
+  HAS_CULTURE: 'culture',
+  HAS_MARKET: 'market',
   HAS_FORMATTING: 'formatting',
   HAS_SLUGIFICATION: 'slugification',
+  HAS_EXPRESSIONS: 'expressionSet',
+  HAS_EXPRESSION: 'expression',
+  CONTAINS: 'contained',
+  FOLLOWS_RULE: 'slugRule',
+  // Geographic
+  HAS_INCOME_LEVEL: 'incomeLevel',
+  IN_CULTURAL_SUBREALM: 'culturalSubrealm',
+  SPEAKS_BRANCH: 'languageBranch',
+  IN_SUBREGION: 'subregion',
+  HAS_PRIMARY_POPULATION: 'population',
+  IN_CONTINENT: 'continent',
+  IN_REGION: 'region',
+  PART_OF_REALM: 'culturalRealm',
+  BRANCH_OF: 'languageFamily',
+  CLUSTER_OF: 'populationCluster',
+  // SEO
+  EXPRESSES: 'seoKeyword',
+  TARGETS: 'target',
+  SEO_MINES: 'minedSeoKeyword',
+  // Locale
+  SUPPORTS_LOCALE: 'supportedLocale',
+  DEFAULT_LOCALE: 'defaultLocale',
+  FALLBACK_TO: 'fallbackLocale',
+  FOR_LOCALE: 'forLocale',
+  // Metrics
+  HAS_METRICS: 'metrics',
+  // Legacy (deprecated but kept for compatibility)
   HAS_ADAPTATION: 'adaptation',
   HAS_STYLE: 'style',
   HAS_TERMS: 'terms',
-  HAS_EXPRESSIONS: 'expressions',
   HAS_PATTERNS: 'patterns',
-  HAS_CULTURE: 'culture',
   HAS_TABOOS: 'taboos',
   HAS_AUDIENCE: 'audience',
-  HAS_SEO_TARGET: 'seoKeyword',
-  HAS_GEO_TARGET: 'geoSeed',
-  TARGETS_SEO: 'seoKeyword',
-  TARGETS_GEO: 'geoSeed',
-  HAS_PAGE: 'page',
-  // v10.3: HAS_CONCEPT removed — Entity in shared realm
-  SUPPORTS_LOCALE: 'locale',
-  FOR_LOCALE: 'locale',
 };
 
-const RELATION_TARGET_TYPE_MAP: Record<string, string> = {
-  HAS_BLOCK: 'Block',
-  HAS_PROMPT: 'PagePrompt',
-  HAS_RULES: 'BlockRules',
-  USES_ENTITY: 'Entity',
-  HAS_CONTENT: 'EntityContent',
-  HAS_GENERATED: 'PageGenerated',
-  // v10 knowledge nodes (tiered model)
-  HAS_FORMATTING: 'Formatting',
-  HAS_SLUGIFICATION: 'Slugification',
-  HAS_ADAPTATION: 'Adaptation',
-  HAS_STYLE: 'Style',
-  HAS_TERMS: 'TermSet',
-  HAS_EXPRESSIONS: 'ExpressionSet',
-  HAS_PATTERNS: 'PatternSet',
-  HAS_CULTURE: 'CultureSet',
-  HAS_TABOOS: 'TabooSet',
-  HAS_AUDIENCE: 'AudienceSet',
-  HAS_SEO_TARGET: 'SEOKeyword',
-  HAS_GEO_TARGET: 'GEOQuery',
-  TARGETS_SEO: 'SEOKeyword',
-  TARGETS_GEO: 'GEOQuery',
-  HAS_PAGE: 'Page',
-  // v10.3: HAS_CONCEPT removed — Entity in shared realm
-  SUPPORTS_LOCALE: 'Locale',
-  FOR_LOCALE: 'Locale',
-};
+// v11.6: Target type labels are now OPTIONAL
+// The same relation can target different node types depending on context:
+// - HAS_CONTENT: Entity → EntityContent, Project → ProjectContent
+// - HAS_ENTITY: Project → Entity
+// Rather than trying to map every context, we DON'T specify the target label
+// and let Neo4j return whatever node is connected.
 
 // =============================================================================
 // NOVANET FILTER (fluent API - mirrors novanet-core/src/filters/NovaNetFilter.ts)
@@ -188,6 +208,23 @@ export class NovaNetFilter {
       relation: 'USES_ENTITY',
       direction: 'outgoing',
       depth: opts?.spreading ? 2 : (opts?.depth ?? 1),
+    });
+    return this;
+  }
+
+  includeProjectEntities(opts?: { depth?: number }): this {
+    this.state.includes.push({
+      relation: 'HAS_ENTITY',
+      direction: 'outgoing',
+      depth: opts?.depth ?? 1,
+    });
+    return this;
+  }
+
+  includeBrandIdentity(): this {
+    this.state.includes.push({
+      relation: 'HAS_BRAND_IDENTITY',
+      direction: 'outgoing',
     });
     return this;
   }
@@ -409,22 +446,24 @@ export class CypherGenerator {
     }
 
     // 2. OPTIONAL MATCH for includes
+    // v11.6: Don't specify target type - let Neo4j return whatever is connected
+    // This handles cases where same relation targets different types (HAS_CONTENT, HAS_ENTITY, etc.)
     for (const include of criteria.includes) {
       const alias = this.relationToAlias(include.relation);
       aliases.add(alias);
 
-      const targetType = this.relationToTargetType(include.relation);
-      let matchLine = `OPTIONAL MATCH (root)-[:${include.relation}]->(${alias}:${targetType})`;
+      // Build match line without target type constraint
+      let matchLine = `OPTIONAL MATCH (root)-[:${include.relation}]->(${alias})`;
 
       // Add filter for active prompts/rules
       if (include.filters?.active) {
-        matchLine = `OPTIONAL MATCH (root)-[:${include.relation}]->(${alias}:${targetType} {active: true})`;
+        matchLine = `OPTIONAL MATCH (root)-[:${include.relation}]->(${alias} {active: true})`;
       }
 
       lines.push(matchLine);
 
       // Handle spreading activation for entities
-      if (include.relation === 'USES_ENTITY' && include.depth && include.depth > 1) {
+      if ((include.relation === 'USES_ENTITY' || include.relation === 'HAS_ENTITY') && include.depth && include.depth > 1) {
         const relatedAlias = `related${this.capitalize(alias)}`;
         lines.push(`OPTIONAL MATCH (${alias})-[:SEMANTIC_LINK*1..${include.depth - 1}]->(${relatedAlias}:Entity)`);
         aliases.add(relatedAlias);
@@ -477,10 +516,6 @@ export class CypherGenerator {
 
   private static relationToAlias(relation: string): string {
     return RELATION_ALIAS_MAP[relation] || relation.toLowerCase().replace('has_', '');
-  }
-
-  private static relationToTargetType(relation: string): string {
-    return RELATION_TARGET_TYPE_MAP[relation] || 'Node';
   }
 
   private static capitalize(str: string): string {

@@ -13,6 +13,7 @@ export { Pill } from './Pill';
 export { Divider } from './Divider';
 export { IconButton } from './IconButton';
 export { RefreshButton } from './RefreshButton';
+export { DisplayLimitSelector } from './DisplayLimitSelector';
 export { Kbd } from './Kbd';
 export { LayerIcon } from './CategoryIcon';
 
