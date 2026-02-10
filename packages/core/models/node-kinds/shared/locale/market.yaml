@@ -1,4 +1,4 @@
-# packages/core/models/node-kinds/global/config/market.yaml
+# models/node-kinds/shared/locale/market.yaml
 # Market — Market intelligence for a locale including demographics, digital maturity, e-commerce landscape, and consumer behavior
 #
 # v10.7: NEW node for 7-node locale knowledge architecture

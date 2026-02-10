@@ -1,6 +1,6 @@
 # packages/core/models/taxonomy.yaml
 # Source of truth for NovaNet taxonomy structure
-# v11.4.0 — SEO/GEO to Shared Knowledge
+# v11.5.0 — Layer Clarification (Locale → config)
 #
 # This file defines:
 # - 2 NodeRealms (SHARED, ORG) with nested NodeLayers
@@ -9,6 +9,12 @@
 # - 2 ArcScopes (intra_realm / cross_realm)
 # - 5 ArcCardinalities (zero_to_one / one_to_one / one_to_many / many_to_one / many_to_many)
 # - Terminal palette for TUI graceful degradation
+#
+# v11.5 Changes:
+# - MOVE: Locale from shared/locale to shared/config (invariant definition, not parameter)
+# - CLARIFY: shared/config = all invariant definitions (Locale, EntityCategory, SEOKeywordFormat)
+# - CLARIFY: shared/locale = locale-specific settings only (Culture, Style, Formatting, etc.)
+# - RULE: config layer = invariant trait, locale layer = knowledge trait
 #
 # v11.4 Changes:
 # - SEO/GEO moved from org to shared/knowledge (Knowledge Atoms pattern)
@@ -36,7 +42,7 @@
 # All meta-nodes receive double-label :Meta (e.g., :Meta:Realm)
 # Query all meta-nodes: MATCH (n:Meta) RETURN n
 
-version: "11.4.0"
+version: "11.5.0"
 
 # =============================================================================
 # NODE REALMS (2) — WHERE does the node live?
@@ -54,6 +60,7 @@ node_realms:
       Shared across ALL organizations. Universal locale knowledge that applies
       everywhere: cultural norms, linguistic patterns, formatting conventions.
       These nodes are READ-ONLY. No Entity here - Entity lives in ORG realm.
+      v11.5: Locale moved to config layer (invariant definition).
       v11.4: SEO/GEO nodes now live in shared/knowledge. SEOKeywordFormat and
       EntityCategory classifications live in shared/config.
     layers:
@@ -62,18 +69,20 @@ node_realms:
         emoji: "⚙️"
         color: "#64748b"
         llm_context: |
-          Invariant classification nodes for shared realm. EntityCategory
-          (v11.1, ADR-017) and SEOKeywordFormat (v11.4) — universal categorical
-          groupings used across all organizations.
+          Invariant definitions for shared realm. All nodes have invariant trait.
+          v11.5: Locale (BCP-47 codes), EntityCategory (v11.1, ADR-017),
+          SEOKeywordFormat (v11.4). These are universal DEFINITIONS, not
+          locale-specific parameters.
 
       - key: locale
         display_name: Locale
         emoji: "🌐"
         color: "#64748b"
         llm_context: |
-          Core locale definitions and configuration. Locale nodes with properties
-          (language code, region, writing direction), plus Formatting, Style,
-          Slugification, Adaptation, Culture, and Market settings.
+          Locale-specific SETTINGS (1:1 with Locale). All nodes have knowledge trait.
+          v11.5: Culture, Style, Formatting, Adaptation, Market, Slugification.
+          These contain discovered/curated data specific to each locale.
+          Pattern: Locale (config) --[:HAS_X]--> Setting (locale).
 
       - key: geography
         display_name: Geography

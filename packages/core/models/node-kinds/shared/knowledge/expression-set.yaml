@@ -1,4 +1,4 @@
-# packages/core/models/node-kinds/global/locale-knowledge/expression-set.yaml
+# models/node-kinds/shared/knowledge/expression-set.yaml
 # ExpressionSet — Container for all Expression atoms of a locale
 #
 # v10.7: Simplified model - one ExpressionSet per locale

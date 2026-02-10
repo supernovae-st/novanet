@@ -1,4 +1,4 @@
-# packages/core/models/node-kinds/global/knowledge/pattern-set.yaml
+# models/node-kinds/shared/knowledge/pattern-set.yaml
 # PatternSet — Container grouping Pattern atoms by usage
 #
 # v10.1: Pure container (no JSON blobs - data lives in Pattern atoms)

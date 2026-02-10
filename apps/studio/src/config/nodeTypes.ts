@@ -175,17 +175,21 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
 
   // ==========================================================================
-  // SHARED REALM — KNOWLEDGE LAYER (19 nodes)
+  // SHARED REALM — CONFIG LAYER (1 node) — v11.4: classification nodes
   // ==========================================================================
   EntityCategory: {
     type: 'EntityCategory',
     label: 'Entity Category',
     icon: '🏷️',
-    color: '#0d9488',
-    colorClass: 'bg-teal-600',
+    color: '#64748b',
+    colorClass: 'bg-slate-500',
     size: 16,
-    layer: 'knowledge',
+    layer: 'config',
   },
+
+  // ==========================================================================
+  // SHARED REALM — KNOWLEDGE LAYER (26 nodes) — containers, atoms, SEO/GEO
+  // ==========================================================================
   TermSet: {
     type: 'TermSet',
     label: 'Term Set',
@@ -690,10 +694,10 @@ export interface LayerConfig {
 
 /**
  * All layers with their configuration (ordered for display)
- * v11.3: 11 layers (3 shared + 8 org)
+ * v11.4: 10 layers (4 shared + 6 org) — SEO/GEO moved to shared/knowledge
  */
 export const NODE_VISUAL_LAYERS: LayerConfig[] = [
-  // SHARED realm (3 layers)
+  // SHARED realm (4 layers: config, locale, geography, knowledge)
   {
     id: 'locale',
     label: 'Locale',
@@ -718,7 +722,8 @@ export const NODE_VISUAL_LAYERS: LayerConfig[] = [
     colorLight: '#a78bfa',
     nodeTypes: getNodeTypesByLayer('knowledge'),
   },
-  // ORG realm (8 layers)
+  // ORG realm (6 layers: config, foundation, structure, semantic, instruction, output)
+  // Note: 'config' layer contains nodes from BOTH realms (EntityCategory in shared, OrgConfig in org)
   {
     id: 'config',
     label: 'Config',

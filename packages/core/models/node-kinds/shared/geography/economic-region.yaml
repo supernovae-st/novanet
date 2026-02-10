@@ -1,4 +1,4 @@
-# packages/core/models/node-kinds/global/config/economic-region.yaml
+# models/node-kinds/shared/geography/economic-region.yaml
 # EconomicRegion - World Bank economic region
 #
 # v10.8: Geographic Taxonomy - Phase 4

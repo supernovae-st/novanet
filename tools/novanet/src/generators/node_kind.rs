@@ -72,7 +72,7 @@ fn context_budget(node: &ParsedNode) -> &'static str {
 /// Visibility levels:
 /// - `internal`: Not exposed (config, instruction, locale knowledge)
 /// - `fragment`: Building blocks, not publishable alone (foundation, structure)
-/// - `publishable`: Can be published to end users (semantic, seo, output)
+/// - `publishable`: Can be published to end users (semantic, output)
 ///
 /// v11.2: Added as derived property, not classification axis.
 fn derive_visibility(realm: &str, layer: &str, kind_name: &str) -> &'static str {
@@ -93,8 +93,8 @@ fn derive_visibility(realm: &str, layer: &str, kind_name: &str) -> &'static str 
         // SHARED realm — always internal (locale knowledge, config)
         ("shared", _) => "internal",
 
-        // ORG publishable layers
-        ("org", "semantic") | ("org", "seo") | ("org", "output") => "publishable",
+        // ORG publishable layers (v11.4: seo/geo moved to shared)
+        ("org", "semantic") | ("org", "output") => "publishable",
 
         // ORG fragment layers
         ("org", "foundation") | ("org", "structure") => "fragment",
@@ -688,7 +688,7 @@ mod tests {
         assert!(cypher.contains("k_Page.context_budget = 'high'"));
         assert!(cypher.contains("k_BlockType.context_budget = 'medium'"));
         assert!(cypher.contains("k_Style.context_budget = 'medium'")); // knowledge trait
-        assert!(cypher.contains("k_Locale.context_budget = 'high'")); // v11.3: invariant trait → high
+        assert!(cypher.contains("k_Locale.context_budget = 'medium'")); // v11.5: config layer → medium
 
         // Spot check — facet wiring (v10.6: project → org)
         assert!(cypher.contains("(k:Kind {label: 'Page'}), (r:Realm {key: 'org'})"));
@@ -769,27 +769,37 @@ mod tests {
             derive_visibility("org", "semantic", "EntityContent"),
             "publishable"
         );
-        assert_eq!(derive_visibility("org", "seo", "SEOKeyword"), "publishable");
-        assert_eq!(derive_visibility("org", "seo", "GEOMetrics"), "publishable");
+        // v11.4: SEO/GEO nodes in shared/knowledge but still publishable (kind-name override)
+        assert_eq!(
+            derive_visibility("shared", "knowledge", "SEOKeyword"),
+            "publishable"
+        );
+        assert_eq!(
+            derive_visibility("shared", "knowledge", "GEOMetrics"),
+            "publishable"
+        );
     }
 
     #[test]
     fn visibility_layer_rules() {
         // Shared realm → internal (regardless of layer)
-        // v11.3: 3 shared layers (locale, geography, knowledge)
+        // v11.4: 4 shared layers (config, locale, geography, knowledge)
         assert_eq!(derive_visibility("shared", "locale", "Locale"), "internal");
         assert_eq!(derive_visibility("shared", "knowledge", "Term"), "internal");
         assert_eq!(
             derive_visibility("shared", "geography", "Continent"),
             "internal"
         );
+        assert_eq!(
+            derive_visibility("shared", "config", "EntityCategory"),
+            "internal"
+        );
 
-        // Org publishable layers
+        // Org publishable layers (v11.4: seo/geo removed from org)
         assert_eq!(
             derive_visibility("org", "semantic", "Unknown"),
             "publishable"
         );
-        assert_eq!(derive_visibility("org", "seo", "Unknown"), "publishable");
         assert_eq!(derive_visibility("org", "output", "Unknown"), "publishable");
 
         // Org fragment layers

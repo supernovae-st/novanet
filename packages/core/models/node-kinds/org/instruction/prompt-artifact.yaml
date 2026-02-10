@@ -1,3 +1,4 @@
+# models/node-kinds/org/instruction/prompt-artifact.yaml
 node:
   name: PromptArtifact
   realm: org

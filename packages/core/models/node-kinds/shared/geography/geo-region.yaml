@@ -1,4 +1,4 @@
-# packages/core/models/node-kinds/global/config/geo-region.yaml
+# models/node-kinds/shared/geography/geo-region.yaml
 # GeoRegion - UN M49 geographic region for locale clustering
 #
 # v10.8: Geographic Taxonomy - Phase 1

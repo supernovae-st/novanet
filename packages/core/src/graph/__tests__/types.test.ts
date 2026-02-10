@@ -32,12 +32,12 @@ describe('graph/types', () => {
   });
 
   it('should export Layer type with all values', () => {
-    // v11.3: 11 layers (3 shared + 8 org)
+    // v11.4: 10 layers (4 shared + 6 org) — seo/geo removed
     const layers: Layer[] = [
-      'locale', 'geography', 'knowledge',  // shared realm (3)
-      'config', 'foundation', 'structure', 'semantic', 'instruction', 'seo', 'geo', 'output',  // org realm (8)
+      'config', 'locale', 'geography', 'knowledge',  // shared realm (4)
+      'foundation', 'structure', 'semantic', 'instruction', 'output',  // org realm (6) — config shared
     ];
-    expect(layers).toHaveLength(11);
+    expect(layers).toHaveLength(9);  // 9 unique (config appears in both)
   });
 
   it('should export RealmDefinition interface', () => {

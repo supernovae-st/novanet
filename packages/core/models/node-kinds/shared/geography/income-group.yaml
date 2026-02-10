@@ -1,4 +1,4 @@
-# packages/core/models/node-kinds/global/config/income-group.yaml
+# models/node-kinds/shared/geography/income-group.yaml
 # IncomeGroup - World Bank income classification
 #
 # v10.8: Geographic Taxonomy - Phase 4

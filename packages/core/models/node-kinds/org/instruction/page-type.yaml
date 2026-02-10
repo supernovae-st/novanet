@@ -1,4 +1,4 @@
-# models/nodes/project/instruction/page-type.yaml
+# models/node-kinds/org/instruction/page-type.yaml
 # PageType - Template rules and structure for page generation (v7.12.0)
 #
 # v7.12.0 CHANGES:

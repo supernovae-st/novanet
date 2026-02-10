@@ -243,7 +243,7 @@ fn render_colors(doc: &OrganizingDoc) -> crate::Result<String> {
         .collect();
 
     // Extract layers (nested under realms), deduplicated by key
-    // Multiple realms may have layers with the same key (e.g., 'config' in global and tenant)
+    // Multiple realms may have layers with the same key (e.g., 'config' in shared and org)
     // We keep only unique keys (first occurrence wins)
     let mut seen_layers = std::collections::HashSet::new();
     let layers: Vec<ColorEntry> = doc

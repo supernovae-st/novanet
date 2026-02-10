@@ -1,4 +1,4 @@
-# packages/core/models/node-kinds/global/knowledge/culture-set.yaml
+# models/node-kinds/shared/knowledge/culture-set.yaml
 # CultureSet — Container grouping CultureRef atoms by type
 #
 # v10.1: Pure container (no JSON blobs - data lives in CultureRef atoms)

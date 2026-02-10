@@ -1,10 +1,15 @@
-# models/nodes/global/config/locale.yaml
+# models/node-kinds/shared/config/locale.yaml
 # Locale - Graph-native locale node with fallback chains and knowledge links
+#
+# v11.5: Moved from shared/locale to shared/config
+#        - Locale is a DEFINITION (invariant), not a parameter
+#        - shared/locale now contains only locale SETTINGS (Culture, Style, etc.)
+#        - Follows EntityCategory pattern: definitions in config layer
 
 node:
   name: Locale
   realm: shared
-  layer: locale
+  layer: config
   trait: invariant
   icon: "🔷"
   description: "First-class locale node (BCP 47) with fallback chains and knowledge graph connections"

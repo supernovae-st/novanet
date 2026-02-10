@@ -1,4 +1,4 @@
-# models/nodes/project/structure/page.yaml
+# models/node-kinds/org/structure/page.yaml
 # Page - Invariant page structure with orchestrator instructions
 #
 # v7.12.1 CHANGES:

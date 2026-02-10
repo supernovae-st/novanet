@@ -1,6 +1,6 @@
 // packages/core/src/graph/types.ts
 // NovaNet Graph Module Types - Schema visualization structures
-// v10.6.0 — 2-Realm Architecture (global + tenant)
+// v11.5.0 — 2-Realm Architecture (shared + org)
 
 import type { NodeType, Realm, Layer } from '../types/nodes.js';
 import type { RelationType } from '../schemas/relations.schema.js';
@@ -21,7 +21,7 @@ export interface SchemaNode {
   id: string;
   /** The NodeType this represents */
   nodeType: NodeType;
-  /** Realm (global, tenant) */
+  /** Realm (shared, org) */
   realm: Realm;
   /** Layer within the realm */
   layer: Layer;
@@ -29,7 +29,7 @@ export interface SchemaNode {
   label: string;
   /** Description of this node type */
   description: string;
-  /** Trait (invariant, localized, knowledge, derived, job) */
+  /** Trait (invariant, localized, knowledge, generated, aggregated) */
   trait: string;
   /** Optional icon for display */
   icon?: string;
@@ -110,9 +110,9 @@ export interface RealmDefinition {
  * Used by visualizers that need grouped layout (like Studio).
  */
 export interface HierarchicalSchemaData {
-  /** All 2 realm definitions (global, tenant) */
+  /** All 2 realm definitions (shared, org) */
   realms: Record<Realm, RealmDefinition>;
-  /** All schema nodes (43 nodes) */
+  /** All schema nodes (61 nodes) */
   nodes: SchemaNode[];
   /** All schema arcs */
   arcs: SchemaArc[];

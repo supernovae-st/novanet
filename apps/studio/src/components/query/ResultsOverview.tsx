@@ -40,20 +40,18 @@ const REALM_CONFIG = {
   org: { emoji: '🏢', color: '#0ea5e9' },      // sky blue
 } as const;
 
-/** Layer config - color inherited from parent realm (v11.3: 11 layers) */
+/** Layer config - color inherited from parent realm (v11.4: 10 layers) */
 const LAYER_CONFIG: Record<Layer, { emoji: string; realm: keyof typeof REALM_CONFIG }> = {
-  // Shared realm (3 layers) — v11.3: locale, geography, knowledge
+  // Shared realm (4 layers) — v11.4: config, locale, geography, knowledge
+  config: { emoji: '⚙️', realm: 'shared' },
   locale: { emoji: '🌍', realm: 'shared' },
   geography: { emoji: '🗺️', realm: 'shared' },
-  knowledge: { emoji: '🧠', realm: 'shared' },
-  // Org realm (8 layers) — v11.3: config, foundation, structure, semantic, instruction, seo, geo, output
-  config: { emoji: '⚙️', realm: 'org' },
+  knowledge: { emoji: '🧠', realm: 'shared' },  // v11.4: includes SEO/GEO nodes
+  // Org realm (6 layers) — v11.4: foundation, structure, semantic, instruction, output (seo/geo removed)
   foundation: { emoji: '🏛️', realm: 'org' },
   structure: { emoji: '🧱', realm: 'org' },
   semantic: { emoji: '💡', realm: 'org' },
   instruction: { emoji: '📋', realm: 'org' },
-  seo: { emoji: '🔍', realm: 'org' },
-  geo: { emoji: '🤖', realm: 'org' },
   output: { emoji: '📤', realm: 'org' },
 } as const;
 
@@ -292,11 +290,11 @@ export const ExpandedBreakdown = memo(function ExpandedBreakdown({
                   ))}
                 </div>
 
-                {/* Layers - inline badges (v11.3: 11 layers) */}
+                {/* Layers - inline badges (v11.4: 10 layers) */}
                 <div className="h-px bg-white/[0.04] mb-2.5" />
-                <SectionHeader icon={NodeIcon} label="layers" count={11} />
+                <SectionHeader icon={NodeIcon} label="layers" count={10} />
                 <div className="flex flex-wrap gap-1.5 mb-3">
-                  {(['locale', 'geography', 'knowledge', 'config', 'foundation', 'structure', 'semantic', 'instruction', 'seo', 'geo', 'output'] as const).map((layer, i) => {
+                  {(['config', 'locale', 'geography', 'knowledge', 'foundation', 'structure', 'semantic', 'instruction', 'output'] as const).map((layer, i) => {
                     const config = LAYER_CONFIG[layer];
                     const realmColor = REALM_CONFIG[config.realm].color;
                     return (

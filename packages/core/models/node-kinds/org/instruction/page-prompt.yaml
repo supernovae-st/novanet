@@ -1,4 +1,4 @@
-# models/nodes/project/instruction/page-prompt.yaml
+# models/node-kinds/org/instruction/page-prompt.yaml
 # PagePrompt - Orchestrator instructions for page generation (v7.2.0)
 
 node:

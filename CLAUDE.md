@@ -13,7 +13,7 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
-**Current Version**: v11.3.0
+**Current Version**: v11.5.0
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
 ```
@@ -25,9 +25,9 @@ Entity (invariant) -> Generate natively -> EntityContent (local)  <-- RIGHT
 
 ---
 
-## v11.3 Nomenclature
+## v11.5 Nomenclature
 
-v11.3 reorganizes the layer structure for better semantic clarity:
+v11.5 refines the layer structure with Locale moved to shared/config:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -43,7 +43,7 @@ v11.3 reorganizes the layer structure for better semantic clarity:
 ├─────────────────────────────────────────────────────────────────────────────┤
 │  NodeKind:                                                                  │
 │    WHERE?  NodeRealm  (shared / org)                                        │
-│    WHAT?   NodeLayer  (11 layers: 3 shared + 8 org)                         │
+│    WHAT?   NodeLayer  (10 layers: 4 shared + 6 org)                         │
 │    HOW?    NodeTrait  (invariant / localized / knowledge / generated / aggregated) │
 │                                                                             │
 │  ArcKind:                                                                   │
@@ -53,16 +53,15 @@ v11.3 reorganizes the layer structure for better semantic clarity:
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**Key changes in v11.3:**
-- **Layer split**: `locale-knowledge` → `locale`, `geography`, `knowledge` (3 layers)
-- **New layer**: `geo` added to org realm for GEO intelligence nodes
-- **Node merge**: Organization + Tenant → OrgConfig (cleaner config layer)
-- **61 nodes** total (was 62): 32 shared + 29 org
+**Key changes in v11.5:**
+- **Locale moved**: Locale from shared/locale to shared/config (definitions layer pattern)
+- **SEO/GEO consolidation**: seo/geo layers removed from org, nodes moved to shared/knowledge
+- **61 nodes** total: 40 shared + 21 org
 
-**Architecture (v11.3):**
+**Architecture (v11.5):**
 - 2 realms: SHARED + ORG
-- SHARED (3 layers): locale, geography, knowledge — universal, READ-ONLY (32 nodes)
-- ORG (8 layers): config, foundation, structure, semantic, instruction, seo, geo, output (29 nodes)
+- SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (40 nodes)
+- ORG (6 layers): config, foundation, structure, semantic, instruction, output (21 nodes)
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
 All commands implemented: data/meta/overlay/query, node/arc CRUD, search, locale, db,
@@ -70,9 +69,9 @@ schema generate/validate, doc generate, filter build, Galaxy-themed TUI with boo
 
 **YAML-first architecture:** Each Kind YAML has explicit `realm:` and `layer:` fields (source of truth).
 Path validation ensures `models/node-kinds/{realm}/{layer}/{name}.yaml` matches YAML content.
-v11.3: 2 realms (shared, org), 11 layers total (3 shared + 8 org), 61 nodes.
+v11.5: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 61 nodes.
 
-**Icons source of truth (v11.0):** `visual-encoding.yaml` → `icons:` section provides dual-format icons:
+**Icons source of truth (v11.5):** `visual-encoding.yaml` → `icons:` section provides dual-format icons:
 - `web`: Lucide icon name for Studio
 - `terminal`: Unicode symbol for TUI
 Categories: realms, layers, traits, arc_families, states, navigation, quality, modes.
@@ -118,13 +117,13 @@ Categories: realms, layers, traits, arc_families, states, navigation, quality, m
 │     └─ [:USES_TERM], [:USES_EXPRESSION] on Block nodes                      │
 │                                                                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  STATISTICS (v11.3)                                                         │
+│  STATISTICS (v11.5)                                                         │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  Containers (6): TermSet, ExpressionSet, PatternSet,                        │
 │                  CultureSet, TabooSet, AudienceSet                          │
 │  Atoms (6):      Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait│
-│  Total:          61 nodes (32 shared + 29 org)                              │
+│  Total:          61 nodes (40 shared + 21 org)                              │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -334,11 +333,11 @@ See `.claude/README.md` for full documentation.
 ### YAML Kind Structure
 
 ```yaml
-# packages/core/models/node-kinds/shared/knowledge/locale-voice.yaml
+# packages/core/models/node-kinds/shared/knowledge/term.yaml
 node:
-  name: LocaleVoice
+  name: Term
   realm: shared               # Source of truth (must match path)
-  layer: knowledge            # v11.3: 11 layers (3 shared + 8 org)
+  layer: knowledge            # v11.5: 10 layers (4 shared + 6 org)
   trait: knowledge
   description: "..."
   properties:

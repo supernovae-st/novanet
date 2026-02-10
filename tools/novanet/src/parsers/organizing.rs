@@ -165,8 +165,8 @@ arc_families:
 
         let doc = load_organizing(root).expect("should load from taxonomy.yaml");
 
-        // v11.4: SEO/GEO to shared/knowledge, seo/geo layers removed
-        assert_eq!(doc.version, "11.4.0");
+        // v11.5: Locale moved to shared/config
+        assert_eq!(doc.version, "11.5.0");
         assert_eq!(doc.realms.len(), 2); // v11.2: 2 realms (shared, org)
         assert_eq!(doc.traits.len(), 5); // v11.2: split derived → generated + aggregated
         assert_eq!(doc.arc_families.len(), 5);

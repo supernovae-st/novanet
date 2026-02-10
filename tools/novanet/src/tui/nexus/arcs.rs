@@ -345,7 +345,7 @@ fn render_arc_scope(f: &mut Frame, app: &App, area: Rect) {
             Style::default().fg(Color::Yellow),
         ),
         Span::styled("Block", Style::default().fg(tenant_color)),
-        Span::styled("  (both in tenant)", Style::default().fg(Color::DarkGray)),
+        Span::styled("  (both in org)", Style::default().fg(Color::DarkGray)),
     ]));
 
     lines.push(Line::from(""));
@@ -363,7 +363,7 @@ fn render_arc_scope(f: &mut Frame, app: &App, area: Rect) {
                 .add_modifier(Modifier::BOLD),
         ),
         Span::styled(
-            "Between global <-> tenant",
+            "Between shared <-> org",
             Style::default().fg(Color::Rgb(150, 150, 160)),
         ),
     ]));
@@ -377,7 +377,7 @@ fn render_arc_scope(f: &mut Frame, app: &App, area: Rect) {
             Style::default().fg(Color::Magenta),
         ),
         Span::styled("PageGenerated", Style::default().fg(tenant_color)),
-        Span::styled("  (global -> tenant)", Style::default().fg(Color::DarkGray)),
+        Span::styled("  (shared -> org)", Style::default().fg(Color::DarkGray)),
     ]));
 
     let paragraph = Paragraph::new(lines).wrap(Wrap { trim: false });

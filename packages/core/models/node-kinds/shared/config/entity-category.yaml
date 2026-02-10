@@ -1,4 +1,4 @@
-# packages/core/models/node-kinds/shared/config/entity-category.yaml
+# models/node-kinds/shared/config/entity-category.yaml
 # EntityCategory - Semantic classification for Entity nodes
 #
 # v11.4: Moved to shared/config (classification nodes layer)

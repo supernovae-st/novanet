@@ -1,5 +1,5 @@
 // packages/core/src/graph/__tests__/layers.test.ts
-// Tests for NODE_LAYERS — v11.3.0 (61 nodes, 11 layers, 2 realms)
+// Tests for NODE_LAYERS — v11.4.0 (61 nodes, 10 layers, 2 realms)
 import { describe, it, expect } from 'vitest';
 import { NODE_LAYERS, getLayer, getNodeTypesByLayer } from '../layers';
 import { NODE_TYPES } from '../../types/nodes';
@@ -16,7 +16,7 @@ describe('graph/layers', () => {
   });
 
   it('should map org realm nodes correctly', () => {
-    // v11.3: org realm has 8 layers
+    // v11.4: org realm has 6 layers (seo/geo removed, config shared)
     // config (1): OrgConfig
     expect(NODE_LAYERS.OrgConfig).toBe('config');
 
@@ -40,22 +40,16 @@ describe('graph/layers', () => {
     expect(NODE_LAYERS.PageGenerated).toBe('output');
     expect(NODE_LAYERS.BlockGenerated).toBe('output');
     expect(NODE_LAYERS.OutputArtifact).toBe('output');
-
-    // seo (5) - v11.3: SEO only, no GEO
-    expect(NODE_LAYERS.SEOKeyword).toBe('seo');
-    expect(NODE_LAYERS.SEOKeywordMetrics).toBe('seo');
-
-    // geo (3) - v11.3: new layer split from SEO
-    expect(NODE_LAYERS.GEOQuery).toBe('geo');
-    expect(NODE_LAYERS.GEOAnswer).toBe('geo');
-    expect(NODE_LAYERS.GEOMetrics).toBe('geo');
   });
 
   it('should map shared realm nodes correctly', () => {
-    // v11.3: shared realm has 3 layers (locale, geography, knowledge)
+    // v11.4: shared realm has 4 layers (config, locale, geography, knowledge)
 
-    // locale (7) - locale definitions and settings
-    expect(NODE_LAYERS.Locale).toBe('locale');
+    // config (2) - classification nodes + Locale node
+    expect(NODE_LAYERS.EntityCategory).toBe('config');
+    expect(NODE_LAYERS.Locale).toBe('config');  // v11.4: Locale is in config layer
+
+    // locale (6) - locale settings (not including Locale node itself)
     expect(NODE_LAYERS.Style).toBe('locale');
     expect(NODE_LAYERS.Formatting).toBe('locale');
     expect(NODE_LAYERS.Adaptation).toBe('locale');
@@ -71,7 +65,7 @@ describe('graph/layers', () => {
     expect(NODE_LAYERS.IncomeGroup).toBe('geography');
     expect(NODE_LAYERS.LendingCategory).toBe('geography');
 
-    // knowledge (19) - sets, atoms, linguistic taxonomy
+    // knowledge (26) - sets, atoms, linguistic taxonomy, SEO/GEO (v11.4: moved from org)
     expect(NODE_LAYERS.TermSet).toBe('knowledge');
     expect(NODE_LAYERS.Term).toBe('knowledge');
     expect(NODE_LAYERS.ExpressionSet).toBe('knowledge');
@@ -80,16 +74,23 @@ describe('graph/layers', () => {
     expect(NODE_LAYERS.Pattern).toBe('knowledge');
     expect(NODE_LAYERS.LanguageFamily).toBe('knowledge');
     expect(NODE_LAYERS.LanguageBranch).toBe('knowledge');
-    expect(NODE_LAYERS.EntityCategory).toBe('knowledge');
+
+    // v11.4: SEO/GEO in shared/knowledge
+    expect(NODE_LAYERS.SEOKeyword).toBe('knowledge');
+    expect(NODE_LAYERS.SEOKeywordMetrics).toBe('knowledge');
+    expect(NODE_LAYERS.GEOQuery).toBe('knowledge');
+    expect(NODE_LAYERS.GEOAnswer).toBe('knowledge');
+    expect(NODE_LAYERS.GEOMetrics).toBe('knowledge');
   });
 
   it('getLayer should return correct layer', () => {
     expect(getLayer('Project')).toBe('foundation');
-    expect(getLayer('Locale')).toBe('locale');
+    expect(getLayer('Locale')).toBe('config');  // v11.4: Locale is in config layer
     expect(getLayer('Entity')).toBe('semantic');
     expect(getLayer('Term')).toBe('knowledge');
     expect(getLayer('Continent')).toBe('geography');
-    expect(getLayer('GEOQuery')).toBe('geo');
+    expect(getLayer('GEOQuery')).toBe('knowledge');  // v11.4: moved to shared/knowledge
+    expect(getLayer('EntityCategory')).toBe('config');  // v11.4: shared/config
   });
 
   it('getNodeTypesByLayer should return correct node types', () => {
@@ -107,39 +108,35 @@ describe('graph/layers', () => {
     expect(semantic).toContain('EntityContent');
     expect(semantic).toHaveLength(4);
 
-    // v11.3: knowledge layer has 19 nodes
+    // v11.4: knowledge layer has 26 nodes (includes SEO/GEO)
     const knowledge = getNodeTypesByLayer('knowledge');
     expect(knowledge).toContain('TermSet');
     expect(knowledge).toContain('Term');
     expect(knowledge).toContain('ExpressionSet');
     expect(knowledge).toContain('Expression');
     expect(knowledge).toContain('LanguageFamily');
-    expect(knowledge).toContain('EntityCategory');
-    expect(knowledge).toHaveLength(19);
+    expect(knowledge).toContain('SEOKeyword');
+    expect(knowledge).toContain('GEOQuery');
+    expect(knowledge).toHaveLength(26);
 
-    // v11.3: locale layer has 7 nodes
+    // v11.4: locale layer has 6 nodes (Locale is in config)
     const locale = getNodeTypesByLayer('locale');
-    expect(locale).toContain('Locale');
     expect(locale).toContain('Style');
     expect(locale).toContain('Formatting');
-    expect(locale).toHaveLength(7);
+    expect(locale).toContain('Adaptation');
+    expect(locale).toHaveLength(6);  // Style, Formatting, Adaptation, Slugification, Culture, Market
 
-    // v11.3: geography layer has 6 nodes
+    // v11.4: geography layer has 6 nodes
     const geography = getNodeTypesByLayer('geography');
     expect(geography).toContain('Continent');
     expect(geography).toContain('GeoRegion');
     expect(geography).toHaveLength(6);
 
-    // v11.3: geo layer has 3 nodes (split from seo)
-    const geo = getNodeTypesByLayer('geo');
-    expect(geo).toContain('GEOQuery');
-    expect(geo).toContain('GEOAnswer');
-    expect(geo).toContain('GEOMetrics');
-    expect(geo).toHaveLength(3);
-
-    // v11.3: config layer has 1 node (OrgConfig only)
+    // v11.4: config layer has 3 nodes (EntityCategory + Locale from shared + OrgConfig from org)
     const config = getNodeTypesByLayer('config');
     expect(config).toContain('OrgConfig');
-    expect(config).toHaveLength(1);
+    expect(config).toContain('EntityCategory');
+    expect(config).toContain('Locale');  // v11.4: Locale is in config layer
+    expect(config).toHaveLength(3);
   });
 });

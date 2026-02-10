@@ -18,33 +18,7 @@ import { LayerIcon, RealmIcon } from '@/components/ui/CategoryIcon';
 import { BlueprintOverlay } from '../nodes/BlueprintOverlay';
 import { NODE_BG, NODE_DESIGN } from '@/config/constants';
 import type { Realm, Layer } from '@novanet/core/types';
-
-// =============================================================================
-// Design System Colors (from taxonomy.yaml)
-// =============================================================================
-
-const REALM_COLORS: Record<string, string> = {
-  shared: '#2aa198',
-  org: '#6c71c4',
-};
-
-// v11.4 Layer colors (from taxonomy.yaml)
-// SHARED: config, locale, geography, knowledge
-// ORG: config, semantic, foundation, structure, instruction, output
-// Note: seo/geo layers REMOVED in v11.4 - nodes moved to shared/knowledge
-const LAYER_COLORS: Record<string, string> = {
-  // Shared layers (4)
-  config: '#64748b',
-  locale: '#64748b',
-  geography: '#10b981',
-  knowledge: '#8b5cf6',
-  // Org layers (6)
-  semantic: '#f97316',
-  foundation: '#3b82f6',
-  structure: '#06b6d4',
-  instruction: '#eab308',
-  output: '#22c55e',
-};
+import { REALM_COLORS, LAYER_COLORS } from '@/design/colors/generated';
 
 // =============================================================================
 // Types
@@ -101,11 +75,11 @@ export const MetaBadgeNode = memo(function MetaBadgeNode({
 }: NodeProps<MetaBadgeNodeType>) {
   const { metaType, label, typeCount = 0, realmKey = 'shared', layerKey = 'foundation' } = data;
 
-  // Get design system color based on meta type
+  // Get design system color based on meta type (from generated taxonomy)
   const isRealm = metaType === 'realm';
   const primaryColor = isRealm
-    ? REALM_COLORS[realmKey] || '#2aa198'
-    : LAYER_COLORS[layerKey] || '#64748b';
+    ? REALM_COLORS[realmKey]?.color || '#2aa198'
+    : LAYER_COLORS[layerKey]?.color || '#64748b';
 
   const {
     isHovered,
@@ -172,9 +146,10 @@ export const MetaBadgeNode = memo(function MetaBadgeNode({
             minHeight: 160,
             borderRadius: selected ? NODE_DESIGN.radius.innerSelected : NODE_DESIGN.radius.inner,
             backgroundColor: selected ? NODE_DESIGN.selectedBg : NODE_BG.default,
-            ...(selected
-              ? { border: `${NODE_DESIGN.border.innerSelected}px solid ${primaryColor}` }
-              : traitBorderStyle),
+            border: selected ? `${NODE_DESIGN.border.innerSelected}px solid ${primaryColor}` : undefined,
+            borderStyle: selected ? undefined : traitBorderStyle.borderStyle,
+            borderWidth: selected ? undefined : traitBorderStyle.borderWidth,
+            borderColor: selected ? undefined : traitBorderStyle.borderColor,
             boxShadow: selected ? NODE_DESIGN.shadows.skeuomorphic(primaryColor) : undefined,
             // CSS variable for animation color
             '--pulse-color': `${primaryColor}60`,

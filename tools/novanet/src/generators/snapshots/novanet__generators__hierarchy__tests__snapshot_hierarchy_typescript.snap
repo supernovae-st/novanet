@@ -20,7 +20,7 @@ import { getNodeTypesByRealmAndLayer } from './layers.js';
  * This is the single source of truth for the ontology structure.
  *
  * 2 Realms (3 layers):
- * - Shared: Shared across ALL tenants. (1 layer)
+ * - Shared: Shared across ALL orgs. (1 layer)
  * - Org: Organization-specific content. (2 layers)
  */
 export const REALM_HIERARCHY: Record<Realm, RealmDefinition> = {
@@ -31,7 +31,7 @@ export const REALM_HIERARCHY: Record<Realm, RealmDefinition> = {
     realm: 'shared',
     label: 'SHARED',
     icon: '🌍',
-    description: 'Shared across ALL tenants.',
+    description: 'Shared across ALL orgs.',
     layers: {
       'config': {
         label: 'Configuration',

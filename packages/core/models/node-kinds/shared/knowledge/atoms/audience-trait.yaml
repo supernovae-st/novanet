@@ -1,4 +1,4 @@
-# packages/core/models/node-kinds/global/knowledge/atoms/audience-trait.yaml
+# models/node-kinds/shared/knowledge/atoms/audience-trait.yaml
 # AudienceTrait — Audience segment behavior within an AudienceSet
 #
 # Locale-native: each locale has unique audience insights (no invariant parent)
