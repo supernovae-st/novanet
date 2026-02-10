@@ -470,11 +470,12 @@ impl Icons {
         icons.layers.insert("output".into(), "●".into());
 
         // Traits (v11.2: 5 traits - derived split into generated + aggregated)
+        // Icons from visual-encoding.yaml (source of truth)
         icons.traits.insert("invariant".into(), "■".into());
         icons.traits.insert("localized".into(), "□".into());
         icons.traits.insert("knowledge".into(), "◊".into());
-        icons.traits.insert("generated".into(), "▪".into());
-        icons.traits.insert("aggregated".into(), "▫".into());
+        icons.traits.insert("generated".into(), "★".into());  // star for LLM-generated
+        icons.traits.insert("aggregated".into(), "▪".into()); // small square for computed
 
         // Arc families
         icons.arc_families.insert("ownership".into(), "→".into());
