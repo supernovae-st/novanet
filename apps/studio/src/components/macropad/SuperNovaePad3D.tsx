@@ -3,23 +3,28 @@
 /**
  * SuperNovaePad3D - Work Louder Creator Micro 3D Visualizer
  *
- * v4.1 - Figma Reference Edition
- * Based on official Work Louder x Figma design
+ * v5.0 - Perfect Figma Match Edition
+ * Based on exact Figma reference: Front.svg
  *
- * Layout:
- * ┌─────────────────────────────────────┐
- * │ ENC1   KEY KEY KEY   ENC2           │ Row 0
- * │ KEY    KEY KEY KEY                  │ Row 1
- * │ KEY    KEY KEY KEY                  │ Row 2
- * │ enc3       KEY KEY   opt            │ Row 3 (subtle controls)
- * └─────────────────────────────────────┘
+ * Layout (matching Figma exactly):
+ * ┌─────────────────────────────────────────┐
+ * │  ●                              ●       │  (corner screws)
+ * │     ┌──────┐                            │
+ * │     │ ENC1 │  [■] [■]    (●)            │  Row 0: silver encoder, 2 black keys, black knob
+ * │     └──────┘                            │
+ * │     [▶] [coral] [purple] [↗]            │  Row 1: black, coral, purple, black
+ * │     [#]  [◆]    [blue]  [green]         │  Row 2: black, black, blue, green
+ * │     (🚀) [◐]    [🔍]    (☺)             │  Row 3: logo, black, black, smiley (corners subtle)
+ * │  ●                              ●       │  (corner screws)
+ * │        "SuperNovae Pad"    "NovaNet"    │  (side text)
+ * └─────────────────────────────────────────┘
  *
- * ENC3 and OPT button are subtle (reduced opacity) as they're secondary controls.
+ * USB-C connector at top center
  */
 
 import { useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, RoundedBox } from '@react-three/drei';
+import { OrbitControls, RoundedBox, Text } from '@react-three/drei';
 import * as THREE from 'three';
 
 // =============================================================================
@@ -40,47 +45,51 @@ interface SuperNovaePad3DProps {
 }
 
 // =============================================================================
-// Constants
+// Constants - Matching Figma exactly
 // =============================================================================
 
-const KEY_SIZE = 0.9;
-const KEY_HEIGHT = 0.4;
-const KEY_GAP = 0.15;
-const KEY_RADIUS = 0.15; // Rounded corners like Figma
-const PRESS_DEPTH = 0.06;
+const KEY_SIZE = 0.95;
+const KEY_HEIGHT = 0.38;
+const KEY_GAP = 0.12;
+const KEY_RADIUS = 0.18; // More rounded like Figma
+const PRESS_DEPTH = 0.05;
 
-// Colors from Figma design
+// Colors from Figma design (exact match)
 const COLORS = {
-  red: '#ef4444',
-  purple: '#8b5cf6',
-  blue: '#3b82f6',
-  green: '#22c55e',
-  white: '#f8fafc',
+  black: '#1a1a1a',      // Matte black keys
+  coral: '#f87171',      // Coral/salmon red
+  purple: '#a855f7',     // Bright purple
+  blue: '#3b82f6',       // Bright blue
+  green: '#22c55e',      // Bright green
+  white: '#ffffff',      // Icons on black keys
 };
 
-// Key layout with colors (matching Figma)
-// Format: [row][col] = color or null for encoder/empty position
-const KEY_LAYOUT: (string | null)[][] = [
-  [null, COLORS.red, COLORS.red, COLORS.red, null],     // Row 0: ENC1, 3 red keys, ENC2
-  [COLORS.red, COLORS.purple, COLORS.blue, COLORS.blue], // Row 1: red, purple, blue, blue
-  [COLORS.purple, COLORS.purple, COLORS.green, COLORS.green], // Row 2: purple, purple, green, green
-  [null, COLORS.blue, COLORS.green, null],               // Row 3: (enc3), 2 center keys, (opt)
+// Key layout with colors - EXACT Figma match
+// null = encoder/special position, 'black' = black key, color string = colored key
+type KeyColor = 'black' | 'coral' | 'purple' | 'blue' | 'green' | null;
+const KEY_LAYOUT: KeyColor[][] = [
+  [null, 'black', 'black', null],           // Row 0: ENC1, 2 black keys, ENC2
+  ['black', 'coral', 'purple', 'black'],    // Row 1: black(play), coral, purple, black(export)
+  ['black', 'black', 'blue', 'green'],      // Row 2: black(hash), black(diamond), blue, green
+  [null, 'black', 'black', null],           // Row 3: logo(subtle), black(drop), black(search), smiley(subtle)
 ];
 
-// Chassis - white/frosted like real device
-const CHASSIS_WHITE = '#f1f5f9';
-const CHASSIS_LIGHT = '#e2e8f0';
-const PCB_COLOR = '#1e293b';
+// Chassis dimensions
+const CHASSIS_WIDTH = 5.8;
+const CHASSIS_DEPTH_Z = 5.8;
+const CHASSIS_HEIGHT = 0.55;
+const CHASSIS_RADIUS = 0.5;
 
-const CHASSIS_WIDTH = 6.5;
-const CHASSIS_DEPTH_Z = 6.5;
-const CHASSIS_HEIGHT = 0.6;
+// Colors
+const CHASSIS_WHITE = '#e8e8e8';
+const CHASSIS_INNER = '#d4d4d4';
+const SCREW_COLOR = '#1f2937';
 
 // =============================================================================
-// Gummy Keycap
+// Key Component - Black matte or colored gummy
 // =============================================================================
 
-function GummyKey({
+function Keycap({
   position,
   color,
   isSelected,
@@ -89,7 +98,7 @@ function GummyKey({
   onPointerLeave,
 }: {
   position: [number, number, number];
-  color: string;
+  color: KeyColor;
   isSelected: boolean;
   onClick: () => void;
   onPointerEnter?: () => void;
@@ -99,6 +108,9 @@ function GummyKey({
   const [isPressed, setIsPressed] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const pressProgress = useRef(0);
+
+  const actualColor = color === 'black' ? COLORS.black : COLORS[color as keyof typeof COLORS] || COLORS.black;
+  const isBlackKey = color === 'black';
 
   useFrame((_, delta) => {
     if (!groupRef.current) return;
@@ -115,22 +127,13 @@ function GummyKey({
 
   return (
     <group ref={groupRef} position={position}>
-      {/* LED glow */}
-      <pointLight
-        position={[0, -0.1, 0]}
-        color={color}
-        intensity={isSelected ? 4 : isHovered ? 2.5 : 1.5}
-        distance={1.5}
-        decay={2}
-      />
-
-      {/* Key stem */}
-      <mesh position={[0, -0.08, 0]}>
-        <boxGeometry args={[KEY_SIZE * 0.4, 0.1, KEY_SIZE * 0.4]} />
-        <meshStandardMaterial color={PCB_COLOR} />
+      {/* Key stem/base */}
+      <mesh position={[0, -0.06, 0]}>
+        <boxGeometry args={[KEY_SIZE * 0.35, 0.08, KEY_SIZE * 0.35]} />
+        <meshStandardMaterial color="#0a0a0a" />
       </mesh>
 
-      {/* Main keycap - gummy style with rounded corners */}
+      {/* Main keycap */}
       <RoundedBox
         args={[KEY_SIZE, KEY_HEIGHT, KEY_SIZE]}
         radius={KEY_RADIUS}
@@ -150,28 +153,51 @@ function GummyKey({
         }}
         castShadow
       >
-        <meshPhysicalMaterial
-          color={color}
-          emissive={color}
-          emissiveIntensity={isSelected ? 0.5 : isHovered ? 0.3 : 0.15}
-          roughness={0.25}
-          metalness={0}
-          clearcoat={0.9}
-          clearcoatRoughness={0.2}
-        />
+        {isBlackKey ? (
+          // Matte black key
+          <meshStandardMaterial
+            color={actualColor}
+            roughness={0.85}
+            metalness={0.05}
+          />
+        ) : (
+          // Colored gummy key with shine
+          <meshPhysicalMaterial
+            color={actualColor}
+            emissive={actualColor}
+            emissiveIntensity={isSelected ? 0.4 : isHovered ? 0.25 : 0.1}
+            roughness={0.3}
+            metalness={0}
+            clearcoat={0.8}
+            clearcoatRoughness={0.25}
+          />
+        )}
       </RoundedBox>
 
-      {/* Top highlight */}
-      <mesh position={[0, KEY_HEIGHT * 0.75, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <circleGeometry args={[KEY_SIZE * 0.25, 32]} />
-        <meshBasicMaterial color="#ffffff" transparent opacity={isSelected ? 0.35 : 0.12} />
-      </mesh>
+      {/* LED glow for colored keys */}
+      {!isBlackKey && (
+        <pointLight
+          position={[0, -0.05, 0]}
+          color={actualColor}
+          intensity={isSelected ? 3 : isHovered ? 2 : 1}
+          distance={1.2}
+          decay={2}
+        />
+      )}
 
-      {/* Selection ring */}
+      {/* Selection indicator */}
       {isSelected && (
-        <mesh position={[0, KEY_HEIGHT * 0.78, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <ringGeometry args={[KEY_SIZE * 0.38, KEY_SIZE * 0.44, 32]} />
-          <meshBasicMaterial color="#ffffff" />
+        <mesh position={[0, KEY_HEIGHT + 0.01, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <ringGeometry args={[KEY_SIZE * 0.35, KEY_SIZE * 0.42, 32]} />
+          <meshBasicMaterial color="#ffffff" transparent opacity={0.9} />
+        </mesh>
+      )}
+
+      {/* Hover highlight for black keys */}
+      {isBlackKey && isHovered && (
+        <mesh position={[0, KEY_HEIGHT + 0.005, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[KEY_SIZE * 0.6, KEY_SIZE * 0.6]} />
+          <meshBasicMaterial color="#ffffff" transparent opacity={0.1} />
         </mesh>
       )}
     </group>
@@ -179,117 +205,70 @@ function GummyKey({
 }
 
 // =============================================================================
-// Silver Encoder (knurled metal - ENC1 main, ENC3 subtle)
+// Silver Knurled Encoder (ENC1 - top left)
 // =============================================================================
 
-function SilverEncoder({
-  position,
-  size = 1,
-  subtle = false
-}: {
-  position: [number, number, number];
-  size?: number;
-  subtle?: boolean;
-}) {
-  const knobRef = useRef<THREE.Mesh>(null);
+function SilverEncoder({ position }: { position: [number, number, number] }) {
+  const knobRef = useRef<THREE.Group>(null);
 
   useFrame((state) => {
     if (knobRef.current) {
-      knobRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.4) * 0.05;
+      knobRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.04;
     }
   });
 
-  const s = size;
-  const opacity = subtle ? 0.4 : 1;
-
   return (
     <group position={position}>
-      {/* Base ring - dark */}
-      <mesh position={[0, -0.05 * s, 0]} castShadow={!subtle}>
-        <cylinderGeometry args={[0.42 * s, 0.45 * s, 0.1 * s, 32]} />
-        <meshStandardMaterial
-          color="#374151"
-          metalness={0.8}
-          roughness={0.3}
-          transparent={subtle}
-          opacity={opacity}
-        />
+      {/* Housing/frame - dark gray */}
+      <mesh position={[0, -0.08, 0]} castShadow>
+        <boxGeometry args={[0.95, 0.12, 0.75]} />
+        <meshStandardMaterial color="#2d2d2d" roughness={0.7} metalness={0.3} />
       </mesh>
 
-      {/* Knurled cylinder - silver metallic */}
-      <mesh ref={knobRef} castShadow={!subtle}>
-        <cylinderGeometry args={[0.35 * s, 0.35 * s, 0.45 * s, 32]} />
-        <meshStandardMaterial
-          color="#9ca3af"
-          metalness={0.95}
-          roughness={0.15}
-          transparent={subtle}
-          opacity={opacity}
-        />
+      {/* Inner frame */}
+      <mesh position={[0, -0.02, 0]}>
+        <boxGeometry args={[0.85, 0.06, 0.65]} />
+        <meshStandardMaterial color="#1a1a1a" roughness={0.8} />
       </mesh>
 
-      {/* Knurling grooves - skip for subtle */}
-      {!subtle && Array.from({ length: 24 }).map((_, i) => {
-        const angle = (i / 24) * Math.PI * 2;
-        return (
-          <mesh
-            key={i}
-            position={[Math.cos(angle) * 0.33 * s, 0, Math.sin(angle) * 0.33 * s]}
-            rotation={[0, -angle, 0]}
-          >
-            <boxGeometry args={[0.02 * s, 0.4 * s, 0.008 * s]} />
-            <meshStandardMaterial color="#6b7280" metalness={0.9} roughness={0.2} />
-          </mesh>
-        );
-      })}
+      {/* Knurled cylinder */}
+      <group ref={knobRef} position={[0, 0.15, 0]}>
+        <mesh castShadow>
+          <cylinderGeometry args={[0.28, 0.28, 0.35, 32]} />
+          <meshStandardMaterial
+            color="#b0b0b0"
+            metalness={0.95}
+            roughness={0.12}
+          />
+        </mesh>
 
-      {/* Top face - flat silver */}
-      <mesh position={[0, 0.23 * s, 0]}>
-        <cylinderGeometry args={[0.28 * s, 0.32 * s, 0.05 * s, 32]} />
-        <meshStandardMaterial
-          color="#d1d5db"
-          metalness={0.9}
-          roughness={0.1}
-          transparent={subtle}
-          opacity={opacity}
-        />
-      </mesh>
+        {/* Knurling lines */}
+        {Array.from({ length: 28 }).map((_, i) => {
+          const angle = (i / 28) * Math.PI * 2;
+          return (
+            <mesh
+              key={i}
+              position={[Math.cos(angle) * 0.26, 0, Math.sin(angle) * 0.26]}
+              rotation={[0, -angle, 0]}
+            >
+              <boxGeometry args={[0.015, 0.32, 0.004]} />
+              <meshStandardMaterial color="#888888" metalness={0.9} roughness={0.15} />
+            </mesh>
+          );
+        })}
+
+        {/* Top cap */}
+        <mesh position={[0, 0.18, 0]}>
+          <cylinderGeometry args={[0.22, 0.26, 0.04, 32]} />
+          <meshStandardMaterial color="#cccccc" metalness={0.9} roughness={0.1} />
+        </mesh>
+      </group>
     </group>
   );
 }
 
 // =============================================================================
-// Tiny Optional Button (bottom right - very subtle)
-// =============================================================================
-
-function TinyButton({ position }: { position: [number, number, number] }) {
-  return (
-    <group position={position}>
-      {/* Very small, subtle circular button */}
-      <mesh>
-        <cylinderGeometry args={[0.18, 0.18, 0.08, 16]} />
-        <meshStandardMaterial
-          color="#e2e8f0"
-          roughness={0.5}
-          transparent
-          opacity={0.35}
-        />
-      </mesh>
-      {/* Tiny center dot */}
-      <mesh position={[0, 0.05, 0]}>
-        <cylinderGeometry args={[0.06, 0.06, 0.02, 12]} />
-        <meshStandardMaterial
-          color="#94a3b8"
-          transparent
-          opacity={0.4}
-        />
-      </mesh>
-    </group>
-  );
-}
-
-// =============================================================================
-// Black Volume Knob (ENC2)
+// Black Volume Knob (ENC2 - top right)
 // =============================================================================
 
 function BlackKnob({ position }: { position: [number, number, number] }) {
@@ -297,33 +276,33 @@ function BlackKnob({ position }: { position: [number, number, number] }) {
 
   useFrame((state) => {
     if (knobRef.current) {
-      knobRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.03;
+      knobRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.25) * 0.03;
     }
   });
 
   return (
     <group position={position} ref={knobRef}>
-      {/* Base ring - dark */}
-      <mesh position={[0, -0.06, 0]} castShadow>
-        <cylinderGeometry args={[0.48, 0.5, 0.08, 32]} />
-        <meshStandardMaterial color="#374151" metalness={0.7} roughness={0.35} />
+      {/* Base */}
+      <mesh position={[0, -0.04, 0]} castShadow>
+        <cylinderGeometry args={[0.48, 0.5, 0.06, 32]} />
+        <meshStandardMaterial color="#2a2a2a" metalness={0.5} roughness={0.5} />
       </mesh>
 
-      {/* Main body - matte black */}
+      {/* Main body - matte black with subtle gradient */}
       <mesh castShadow>
-        <cylinderGeometry args={[0.42, 0.44, 0.5, 32]} />
-        <meshStandardMaterial color="#1f2937" metalness={0.15} roughness={0.85} />
+        <cylinderGeometry args={[0.44, 0.46, 0.42, 32]} />
+        <meshStandardMaterial color="#1a1a1a" metalness={0.1} roughness={0.9} />
       </mesh>
 
-      {/* Top - slightly concave look */}
-      <mesh position={[0, 0.22, 0]}>
-        <cylinderGeometry args={[0.35, 0.38, 0.08, 32]} />
-        <meshStandardMaterial color="#111827" metalness={0.2} roughness={0.8} />
+      {/* Top surface - slightly darker */}
+      <mesh position={[0, 0.2, 0]}>
+        <cylinderGeometry args={[0.38, 0.42, 0.06, 32]} />
+        <meshStandardMaterial color="#0f0f0f" metalness={0.15} roughness={0.85} />
       </mesh>
 
-      {/* Position indicator - white line */}
-      <mesh position={[0, 0.27, 0.32]} rotation={[Math.PI / 2, 0, 0]}>
-        <boxGeometry args={[0.05, 0.08, 0.015]} />
+      {/* Position indicator line */}
+      <mesh position={[0, 0.24, 0.36]} rotation={[Math.PI / 2, 0, 0]}>
+        <boxGeometry args={[0.06, 0.1, 0.02]} />
         <meshBasicMaterial color="#ffffff" />
       </mesh>
     </group>
@@ -331,94 +310,184 @@ function BlackKnob({ position }: { position: [number, number, number] }) {
 }
 
 // =============================================================================
-// White Frosted Chassis
+// Subtle Corner Button (logo bottom-left, smiley bottom-right)
 // =============================================================================
 
-function Chassis({ layerColor }: { layerColor: string }) {
+function SubtleButton({
+  position,
+  variant
+}: {
+  position: [number, number, number];
+  variant: 'logo' | 'smiley';
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
-    <group>
-      {/* Main body - white frosted */}
-      <RoundedBox
-        args={[CHASSIS_WIDTH, CHASSIS_HEIGHT, CHASSIS_DEPTH_Z]}
-        radius={0.4}
-        smoothness={4}
-        position={[0, -CHASSIS_HEIGHT / 2, 0]}
-        receiveShadow
+    <group position={position}>
+      {/* Small circular base */}
+      <mesh
         castShadow
+        onPointerEnter={() => setIsHovered(true)}
+        onPointerLeave={() => setIsHovered(false)}
       >
-        <meshPhysicalMaterial
-          color={CHASSIS_WHITE}
-          roughness={0.4}
-          metalness={0}
-          clearcoat={0.2}
-          clearcoatRoughness={0.6}
+        <cylinderGeometry args={[0.32, 0.34, 0.15, 24]} />
+        <meshStandardMaterial
+          color={variant === 'logo' ? '#2a2a2a' : '#e5e5e5'}
+          roughness={0.6}
+          metalness={variant === 'logo' ? 0.1 : 0.0}
         />
-      </RoundedBox>
+      </mesh>
 
-      {/* Inner plate - slightly darker */}
-      <RoundedBox
-        args={[CHASSIS_WIDTH - 0.3, 0.08, CHASSIS_DEPTH_Z - 0.3]}
-        radius={0.3}
-        smoothness={4}
-        position={[0, 0.04, 0]}
-      >
-        <meshStandardMaterial color={CHASSIS_LIGHT} roughness={0.5} />
-      </RoundedBox>
+      {/* Top surface */}
+      <mesh position={[0, 0.08, 0]}>
+        <cylinderGeometry args={[0.26, 0.28, 0.04, 24]} />
+        <meshStandardMaterial
+          color={variant === 'logo' ? '#1a1a1a' : '#f5f5f5'}
+          roughness={0.5}
+        />
+      </mesh>
 
-      {/* PCB plate - dark where keys mount */}
-      <RoundedBox
-        args={[CHASSIS_WIDTH - 0.6, 0.06, CHASSIS_DEPTH_Z - 0.6]}
-        radius={0.25}
-        smoothness={4}
-        position={[0, 0.08, 0]}
-      >
-        <meshStandardMaterial color={PCB_COLOR} roughness={0.8} />
-      </RoundedBox>
+      {/* Indicator dots for smiley variant */}
+      {variant === 'smiley' && (
+        <group position={[0, 0.11, 0]}>
+          {/* Three small dots like in Figma */}
+          {[-0.08, 0, 0.08].map((x, i) => (
+            <mesh key={i} position={[x, 0, 0]}>
+              <cylinderGeometry args={[0.02, 0.02, 0.02, 8]} />
+              <meshStandardMaterial color="#fbbf24" emissive="#fbbf24" emissiveIntensity={0.3} />
+            </mesh>
+          ))}
+        </group>
+      )}
 
-      {/* Corner screws - black */}
-      {[
-        [-CHASSIS_WIDTH / 2 + 0.35, 0.02, -CHASSIS_DEPTH_Z / 2 + 0.35],
-        [CHASSIS_WIDTH / 2 - 0.35, 0.02, -CHASSIS_DEPTH_Z / 2 + 0.35],
-        [-CHASSIS_WIDTH / 2 + 0.35, 0.02, CHASSIS_DEPTH_Z / 2 - 0.35],
-        [CHASSIS_WIDTH / 2 - 0.35, 0.02, CHASSIS_DEPTH_Z / 2 - 0.35],
-      ].map((pos, i) => (
-        <mesh key={i} position={pos as [number, number, number]} castShadow>
-          <cylinderGeometry args={[0.08, 0.08, 0.06, 12]} />
-          <meshStandardMaterial color="#1f2937" metalness={0.9} roughness={0.2} />
-        </mesh>
-      ))}
+      {/* Hover effect */}
+      {isHovered && (
+        <pointLight position={[0, 0.2, 0]} intensity={0.5} distance={0.8} color="#ffffff" />
+      )}
+    </group>
+  );
+}
 
-      {/* RGB underglow */}
-      <pointLight
-        position={[0, -CHASSIS_HEIGHT - 0.1, 0]}
-        color={layerColor}
-        intensity={1.5}
-        distance={3}
-        decay={2}
-      />
-      <mesh position={[0, -CHASSIS_HEIGHT - 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[CHASSIS_WIDTH - 1, CHASSIS_DEPTH_Z - 1]} />
-        <meshBasicMaterial color={layerColor} transparent opacity={0.25} />
+// =============================================================================
+// USB-C Connector
+// =============================================================================
+
+function USBConnector({ position }: { position: [number, number, number] }) {
+  return (
+    <group position={position}>
+      {/* Metal housing */}
+      <mesh>
+        <boxGeometry args={[0.35, 0.12, 0.18]} />
+        <meshStandardMaterial color="#808080" metalness={0.9} roughness={0.2} />
+      </mesh>
+      {/* Port opening */}
+      <mesh position={[0, 0, 0.05]}>
+        <boxGeometry args={[0.25, 0.08, 0.1]} />
+        <meshStandardMaterial color="#1a1a1a" />
+      </mesh>
+      {/* Cable */}
+      <mesh position={[0, 0.1, 0.3]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.06, 0.06, 0.4, 12]} />
+        <meshStandardMaterial color="#2a2a2a" roughness={0.8} />
       </mesh>
     </group>
   );
 }
 
 // =============================================================================
-// Background
+// White Chassis with Corner Screws
+// =============================================================================
+
+function Chassis({ layerColor }: { layerColor: string }) {
+  return (
+    <group>
+      {/* Main body - white/light gray plastic */}
+      <RoundedBox
+        args={[CHASSIS_WIDTH, CHASSIS_HEIGHT, CHASSIS_DEPTH_Z]}
+        radius={CHASSIS_RADIUS}
+        smoothness={6}
+        position={[0, -CHASSIS_HEIGHT / 2, 0]}
+        receiveShadow
+        castShadow
+      >
+        <meshPhysicalMaterial
+          color={CHASSIS_WHITE}
+          roughness={0.45}
+          metalness={0}
+          clearcoat={0.15}
+          clearcoatRoughness={0.7}
+        />
+      </RoundedBox>
+
+      {/* Inner recessed plate */}
+      <RoundedBox
+        args={[CHASSIS_WIDTH - 0.4, 0.1, CHASSIS_DEPTH_Z - 0.4]}
+        radius={CHASSIS_RADIUS - 0.1}
+        smoothness={4}
+        position={[0, 0.02, 0]}
+      >
+        <meshStandardMaterial color={CHASSIS_INNER} roughness={0.5} />
+      </RoundedBox>
+
+      {/* Corner screws - bigger and more visible like Figma */}
+      {[
+        [-CHASSIS_WIDTH / 2 + 0.4, 0.04, -CHASSIS_DEPTH_Z / 2 + 0.4],
+        [CHASSIS_WIDTH / 2 - 0.4, 0.04, -CHASSIS_DEPTH_Z / 2 + 0.4],
+        [-CHASSIS_WIDTH / 2 + 0.4, 0.04, CHASSIS_DEPTH_Z / 2 - 0.4],
+        [CHASSIS_WIDTH / 2 - 0.4, 0.04, CHASSIS_DEPTH_Z / 2 - 0.4],
+      ].map((pos, i) => (
+        <group key={i} position={pos as [number, number, number]}>
+          {/* Screw head */}
+          <mesh castShadow>
+            <cylinderGeometry args={[0.12, 0.12, 0.06, 16]} />
+            <meshStandardMaterial color={SCREW_COLOR} metalness={0.8} roughness={0.3} />
+          </mesh>
+          {/* Phillips cross indent */}
+          <mesh position={[0, 0.035, 0]} rotation={[0, Math.PI / 4, 0]}>
+            <boxGeometry args={[0.14, 0.02, 0.025]} />
+            <meshStandardMaterial color="#0a0a0a" />
+          </mesh>
+          <mesh position={[0, 0.035, 0]} rotation={[0, -Math.PI / 4, 0]}>
+            <boxGeometry args={[0.14, 0.02, 0.025]} />
+            <meshStandardMaterial color="#0a0a0a" />
+          </mesh>
+        </group>
+      ))}
+
+      {/* USB-C connector at top */}
+      <USBConnector position={[0, 0.1, -CHASSIS_DEPTH_Z / 2 - 0.1]} />
+
+      {/* RGB underglow effect */}
+      <pointLight
+        position={[0, -CHASSIS_HEIGHT - 0.05, 0]}
+        color={layerColor}
+        intensity={1.2}
+        distance={2.5}
+        decay={2}
+      />
+      <mesh position={[0, -CHASSIS_HEIGHT + 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[CHASSIS_WIDTH - 0.8, CHASSIS_DEPTH_Z - 0.8]} />
+        <meshBasicMaterial color={layerColor} transparent opacity={0.2} />
+      </mesh>
+    </group>
+  );
+}
+
+// =============================================================================
+// Background - Dark grid
 // =============================================================================
 
 function Background() {
   return (
-    <group position={[0, -CHASSIS_HEIGHT - 0.2, 0]}>
+    <group position={[0, -CHASSIS_HEIGHT - 0.15, 0]}>
       <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
         <planeGeometry args={[50, 50]} />
         <meshStandardMaterial color="#0f172a" />
       </mesh>
       <gridHelper args={[50, 50, '#1e3a5f', '#0c1929']} position={[0, 0.01, 0]} />
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 0]}>
-        <circleGeometry args={[5, 48]} />
-        <meshBasicMaterial color="#0ea5e9" transparent opacity={0.05} />
+        <circleGeometry args={[4.5, 48]} />
+        <meshBasicMaterial color="#0ea5e9" transparent opacity={0.04} />
       </mesh>
     </group>
   );
@@ -432,88 +501,51 @@ function Scene({ selectedKey, activeLayer, layers, onKeyClick, onKeyHover }: Sup
   const currentLayer = layers[activeLayer] || layers[0];
   const layerColor = currentLayer?.color || '#00FFFF';
 
-  // Build key positions based on layout
+  // Build key grid (4x4 minus encoder/special positions)
   const keys = useMemo(() => {
-    const result: { id: string; row: number; col: number; color: string; x: number; z: number }[] = [];
+    const result: { id: string; row: number; col: number; color: KeyColor; x: number; z: number }[] = [];
     const spacing = KEY_SIZE + KEY_GAP;
+    const startX = -1.5 * spacing;
+    const startZ = -1.5 * spacing;
 
-    // Row 0: skip 0,0 (ENC1) and 0,4 (ENC2), keys at 0,1 0,2 0,3
-    for (let col = 1; col <= 3; col++) {
-      const color = KEY_LAYOUT[0][col];
-      if (color) {
-        result.push({
-          id: `0,${col}`,
-          row: 0,
-          col,
-          color,
-          x: (col - 2) * spacing, // Center the 3 keys
-          z: -1.5 * spacing,
-        });
+    for (let row = 0; row < 4; row++) {
+      for (let col = 0; col < 4; col++) {
+        const keyColor = KEY_LAYOUT[row][col];
+        if (keyColor !== null) {
+          result.push({
+            id: `${row},${col}`,
+            row,
+            col,
+            color: keyColor,
+            x: startX + col * spacing,
+            z: startZ + row * spacing,
+          });
+        }
       }
     }
-
-    // Row 1: 4 keys
-    for (let col = 0; col < 4; col++) {
-      const color = KEY_LAYOUT[1][col];
-      if (color) {
-        result.push({
-          id: `1,${col}`,
-          row: 1,
-          col,
-          color,
-          x: (col - 1.5) * spacing,
-          z: -0.5 * spacing,
-        });
-      }
-    }
-
-    // Row 2: 4 keys
-    for (let col = 0; col < 4; col++) {
-      const color = KEY_LAYOUT[2][col];
-      if (color) {
-        result.push({
-          id: `2,${col}`,
-          row: 2,
-          col,
-          color,
-          x: (col - 1.5) * spacing,
-          z: 0.5 * spacing,
-        });
-      }
-    }
-
-    // Row 3: 2 center keys (positions 1 and 2)
-    for (let col = 1; col <= 2; col++) {
-      const color = KEY_LAYOUT[3][col];
-      if (color) {
-        result.push({
-          id: `3,${col}`,
-          row: 3,
-          col,
-          color,
-          x: (col - 1.5) * spacing,
-          z: 1.5 * spacing,
-        });
-      }
-    }
-
     return result;
   }, []);
 
-  // Encoder positions
+  // Component positions
   const spacing = KEY_SIZE + KEY_GAP;
-  const enc1Pos: [number, number, number] = [-1.5 * spacing, 0.3, -1.5 * spacing]; // Top-left
-  const enc2Pos: [number, number, number] = [1.5 * spacing, 0.35, -1.5 * spacing]; // Top-right
-  const enc3Pos: [number, number, number] = [-1.5 * spacing, 0.12, 1.5 * spacing];  // Bottom-left (subtle)
-  const optPos: [number, number, number] = [1.5 * spacing, 0.1, 1.5 * spacing];     // Bottom-right (tiny optional)
+  const startX = -1.5 * spacing;
+  const startZ = -1.5 * spacing;
+
+  // Encoder positions (row 0)
+  const enc1Pos: [number, number, number] = [startX, 0.2, startZ];                    // Top-left
+  const enc2Pos: [number, number, number] = [startX + 3 * spacing, 0.28, startZ];     // Top-right
+
+  // Subtle buttons (row 3)
+  const logoPos: [number, number, number] = [startX, 0.12, startZ + 3 * spacing];     // Bottom-left
+  const smileyPos: [number, number, number] = [startX + 3 * spacing, 0.12, startZ + 3 * spacing]; // Bottom-right
 
   return (
     <>
-      {/* Lighting */}
-      <ambientLight intensity={0.6} />
+      {/* Lighting - optimized for white chassis + black/colored keys */}
+      <ambientLight intensity={0.65} />
       <directionalLight
-        position={[5, 15, 8]}
-        intensity={1.4}
+        position={[6, 18, 10]}
+        intensity={1.3}
         castShadow
         shadow-mapSize={[2048, 2048]}
         shadow-camera-far={50}
@@ -522,18 +554,18 @@ function Scene({ selectedKey, activeLayer, layers, onKeyClick, onKeyHover }: Sup
         shadow-camera-top={10}
         shadow-camera-bottom={-10}
       />
-      <pointLight position={[-5, 6, -5]} intensity={0.4} color="#a855f7" />
-      <pointLight position={[5, 5, 5]} intensity={0.35} color="#0ea5e9" />
-      <pointLight position={[0, 4, 0]} intensity={0.3} color="#ffffff" />
+      <pointLight position={[-6, 8, -6]} intensity={0.35} color="#a855f7" />
+      <pointLight position={[6, 6, 6]} intensity={0.3} color="#0ea5e9" />
+      <pointLight position={[0, 5, 0]} intensity={0.25} color="#ffffff" />
 
       <Background />
       <Chassis layerColor={layerColor} />
 
       {/* Keys */}
       {keys.map((key) => (
-        <GummyKey
+        <Keycap
           key={key.id}
-          position={[key.x, 0.15, key.z]}
+          position={[key.x, 0.12, key.z]}
           color={key.color}
           isSelected={selectedKey === key.id}
           onClick={() => onKeyClick(key.id)}
@@ -543,10 +575,12 @@ function Scene({ selectedKey, activeLayer, layers, onKeyClick, onKeyHover }: Sup
       ))}
 
       {/* Encoders */}
-      <SilverEncoder position={enc1Pos} size={1} />
+      <SilverEncoder position={enc1Pos} />
       <BlackKnob position={enc2Pos} />
-      <SilverEncoder position={enc3Pos} size={0.5} subtle />
-      <TinyButton position={optPos} />
+
+      {/* Subtle corner buttons */}
+      <SubtleButton position={logoPos} variant="logo" />
+      <SubtleButton position={smileyPos} variant="smiley" />
 
       <OrbitControls
         enablePan={false}
@@ -571,10 +605,10 @@ export function SuperNovaePad3D(props: SuperNovaePad3DProps) {
     <div style={{ width: '100%', height: '100%', background: '#0f172a' }}>
       <Canvas
         shadows
-        camera={{ position: [0, 7, 9], fov: 42 }}
+        camera={{ position: [0, 8, 10], fov: 40 }}
         onCreated={(state) => {
           state.gl.toneMapping = THREE.ACESFilmicToneMapping;
-          state.gl.toneMappingExposure = 1.2;
+          state.gl.toneMappingExposure = 1.15;
         }}
       >
         <color attach="background" args={['#0f172a']} />
