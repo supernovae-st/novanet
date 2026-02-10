@@ -1086,7 +1086,7 @@ impl App {
                         self.tree_cursor = 0;
                         self.tree_scroll = 0;
                         self.load_yaml_for_current();
-                        self.request_instance_load_for_current();
+                        // Note: Instance loading removed - use Space/Enter to expand
                     }
                     Focus::Info => {
                         self.info_scroll = 0;
@@ -1105,7 +1105,7 @@ impl App {
                         self.tree_cursor = max;
                         self.ensure_cursor_visible();
                         self.load_yaml_for_current();
-                        self.request_instance_load_for_current();
+                        // Note: Instance loading removed - use Space/Enter to expand
                     }
                     Focus::Info => {
                         let max_scroll = self.info_line_count.saturating_sub(INFO_SCROLL_MARGIN);
@@ -1128,7 +1128,7 @@ impl App {
                             self.tree_cursor -= 1;
                             self.ensure_cursor_visible();
                             self.load_yaml_for_current();
-                            self.request_instance_load_for_current();
+                            // Note: Instance loading removed - use Space/Enter to expand
                         }
                     }
                     Focus::Info => {
@@ -1153,7 +1153,7 @@ impl App {
                             self.tree_cursor += 1;
                             self.ensure_cursor_visible();
                             self.load_yaml_for_current();
-                            self.request_instance_load_for_current();
+                            // Note: Instance loading removed - use Space/Enter to expand
                         }
                     }
                     Focus::Info => {
@@ -1181,7 +1181,7 @@ impl App {
                         self.tree_cursor = (self.tree_cursor + PAGE_SCROLL_AMOUNT).min(max);
                         self.ensure_cursor_visible();
                         self.load_yaml_for_current();
-                        self.request_instance_load_for_current();
+                        // Note: Instance loading removed - use Space/Enter to expand
                     }
                     Focus::Info => {
                         let max_scroll = self.info_line_count.saturating_sub(INFO_SCROLL_MARGIN);
@@ -1201,7 +1201,7 @@ impl App {
                         self.tree_cursor = self.tree_cursor.saturating_sub(PAGE_SCROLL_AMOUNT);
                         self.ensure_cursor_visible();
                         self.load_yaml_for_current();
-                        self.request_instance_load_for_current();
+                        // Note: Instance loading removed - use Space/Enter to expand
                     }
                     Focus::Info => {
                         self.info_scroll = self.info_scroll.saturating_sub(PAGE_SCROLL_AMOUNT);

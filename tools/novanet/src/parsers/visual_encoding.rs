@@ -344,12 +344,11 @@ mod tests {
         assert_eq!(icons.realm_terminal("shared"), "◉");
         assert_eq!(icons.realm_terminal("org"), "◎");
 
-        // Layers (11) — v11.3: 3 shared + 8 org
+        // Layers (10) — v11.5: 4 shared + 6 org (geo removed, SEO/GEO consolidated to knowledge)
         assert!(icons.layers.contains_key("config"));
         assert!(icons.layers.contains_key("locale"));
         assert!(icons.layers.contains_key("geography"));
         assert!(icons.layers.contains_key("knowledge"));
-        assert!(icons.layers.contains_key("geo"));
         assert!(icons.layers.contains_key("output"));
         assert_eq!(icons.layer_terminal("config"), "⚙");
 
