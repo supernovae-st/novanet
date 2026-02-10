@@ -19,11 +19,10 @@
 import { memo, useCallback, useRef, useMemo, useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import * as THREE from 'three';
-import { Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useFilteredGraph } from '@/hooks';
 import { useUIStore } from '@/stores/uiStore';
-import { EmptyState } from '@/components/ui/EmptyState';
+import { GraphEmptyState } from './GraphEmptyState';
 import {
   transformGraphData,
   filterValidData,
@@ -740,16 +739,11 @@ export const Graph3D = memo(function Graph3D({
     return config.curvature;
   }, []);
 
-  // Empty state - unified with Graph2D
+  // Empty state - context-aware diagnostics
   if (graphData.nodes.length === 0) {
     return (
       <div className={cn('h-full bg-slate-900', className)}>
-        <EmptyState
-          icon={Sparkles}
-          title="No nodes to display"
-          description="Try adjusting your filters or fetching data from Neo4j. Use the preset shortcuts (1-9) to quickly filter."
-          accentColor="accent-purple"
-        />
+        <GraphEmptyState />
       </div>
     );
   }

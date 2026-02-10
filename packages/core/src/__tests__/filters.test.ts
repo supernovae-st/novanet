@@ -261,13 +261,14 @@ describe('CypherGenerator', () => {
       expect(result.params.rootKey).toBe('page-pricing');
     });
 
-    it('generates OPTIONAL MATCH for includes', () => {
+    it('generates OPTIONAL MATCH for includes with relationship variable', () => {
       const filter = NovaNetFilter.create()
         .fromPage('page-pricing')
         .includeBlocks();
       const result = CypherGenerator.generate(filter);
 
-      expect(result.query).toContain('OPTIONAL MATCH (root)-[:HAS_BLOCK]->(block:Block)');
+      // Relationship variable (r0, r1, etc.) is captured for returning edges
+      expect(result.query).toMatch(/OPTIONAL MATCH \(root\)-\[r\d+:HAS_BLOCK\]->\(block:Block\)/);
     });
 
     it('generates WHERE for locale filter with $locale param', () => {
@@ -347,8 +348,9 @@ describe('CypherGenerator', () => {
         .includeEntities({ spreading: true });
       const result = CypherGenerator.generate(filter);
 
-      expect(result.query).toContain('OPTIONAL MATCH (root)-[:USES_ENTITY]->(entity:Entity)');
-      expect(result.query).toContain('OPTIONAL MATCH (entity)-[:SEMANTIC_LINK*1..1]->(relatedEntity:Entity)');
+      // Relationship variables captured for returning edges
+      expect(result.query).toMatch(/OPTIONAL MATCH \(root\)-\[r\d+:USES_ENTITY\]->\(entity:Entity\)/);
+      expect(result.query).toMatch(/OPTIONAL MATCH \(entity\)-\[r\d+:SEMANTIC_LINK\*1\.\.1\]->\(relatedEntity:Entity\)/);
     });
 
     it('does not generate SEMANTIC_LINK for entities with depth = 1', () => {
@@ -357,7 +359,7 @@ describe('CypherGenerator', () => {
         .includeEntities();
       const result = CypherGenerator.generate(filter);
 
-      expect(result.query).toContain('OPTIONAL MATCH (root)-[:USES_ENTITY]->(entity:Entity)');
+      expect(result.query).toMatch(/OPTIONAL MATCH \(root\)-\[r\d+:USES_ENTITY\]->\(entity:Entity\)/);
       expect(result.query).not.toContain('SEMANTIC_LINK');
     });
   });
@@ -369,7 +371,7 @@ describe('CypherGenerator', () => {
         .includePrompts({ activeOnly: true });
       const result = CypherGenerator.generate(filter);
 
-      expect(result.query).toContain('OPTIONAL MATCH (root)-[:HAS_PROMPT]->(prompt:PagePrompt {active: true})');
+      expect(result.query).toMatch(/OPTIONAL MATCH \(root\)-\[r\d+:HAS_PROMPT\]->\(prompt:PagePrompt \{active: true\}\)/);
     });
 
     it('does not add {active: true} when activeOnly is false', () => {
@@ -378,7 +380,7 @@ describe('CypherGenerator', () => {
         .includePrompts();
       const result = CypherGenerator.generate(filter);
 
-      expect(result.query).toContain('OPTIONAL MATCH (root)-[:HAS_PROMPT]->(prompt:PagePrompt)');
+      expect(result.query).toMatch(/OPTIONAL MATCH \(root\)-\[r\d+:HAS_PROMPT\]->\(prompt:PagePrompt\)/);
       expect(result.query).not.toContain('{active: true}');
     });
   });
@@ -390,7 +392,7 @@ describe('CypherGenerator', () => {
         .includeBlocks();
       const result = CypherGenerator.generate(filter);
 
-      expect(result.query).toContain('(root)-[:HAS_BLOCK]->(block:Block)');
+      expect(result.query).toMatch(/\(root\)-\[r\d+:HAS_BLOCK\]->\(block:Block\)/);
     });
 
     it('generates BlockType for OF_TYPE relation', () => {
@@ -399,7 +401,7 @@ describe('CypherGenerator', () => {
         .includeBlockType();
       const result = CypherGenerator.generate(filter);
 
-      expect(result.query).toContain('(root)-[:OF_TYPE]->(blockType:BlockType)');
+      expect(result.query).toMatch(/\(root\)-\[r\d+:OF_TYPE\]->\(blockType:BlockType\)/);
     });
 
     it('generates Project include relations (v10.3: no HAS_CONCEPT)', () => {
@@ -409,8 +411,9 @@ describe('CypherGenerator', () => {
         .includeBrandIdentity();
       const result = CypherGenerator.generate(filter);
 
-      expect(result.query).toContain('[:HAS_PAGE]->(page:Page)');
-      expect(result.query).toContain('[:HAS_BRAND_IDENTITY]->(brandIdentity:BrandIdentity)');
+      // Relationship variables (r0, r1, etc.) are captured for returning edges
+      expect(result.query).toMatch(/\[r\d+:HAS_PAGE\]->\(page:Page\)/);
+      expect(result.query).toMatch(/\[r\d+:HAS_BRAND_IDENTITY\]->\(brandIdentity:BrandIdentity\)/);
       // REMOVED v10.3: HAS_CONCEPT (Entity is in org realm)
     });
   });
@@ -544,10 +547,14 @@ describe('ViewLoader', () => {
       }
     });
 
-    it('all registered views can be loaded', async () => {
+    it('all non-contextual registered views can be loaded', async () => {
       const registry = await ViewLoader.loadRegistry();
 
-      for (const entry of registry.views) {
+      // Contextual views (category: 'contextual') are loaded differently via API
+      // They use Cypher templates, not declarative include rules
+      const nonContextualViews = registry.views.filter(v => v.category !== 'contextual');
+
+      for (const entry of nonContextualViews) {
         const view = await ViewLoader.loadView(entry.id);
         expect(view.id).toBe(entry.id);
       }
