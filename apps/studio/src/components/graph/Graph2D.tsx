@@ -64,7 +64,7 @@ import {
   type TurboNodeData,
   type TurboNodeType,
 } from './nodes';
-import { FloatingEdge, MagneticEdge, BundledEdge, type FloatingEdgeType, EdgeVisibilityProvider, useParallelEdges, getEdgeIndexInGroup, BUNDLE_THRESHOLD } from './edges';
+import { FloatingEdge, MagneticEdge, BundledEdge, type FloatingEdgeType, EdgeVisibilityProvider, useEdgeVisibilityStore, useParallelEdges, getEdgeIndexInGroup, BUNDLE_THRESHOLD } from './edges';
 import { NodeContextMenu } from './NodeContextMenu';
 import { GraphToolbar } from './GraphToolbar';
 import type { GraphNode as GraphNodeType, GraphEdge as GraphEdgeType } from '@/types';
@@ -1005,6 +1005,15 @@ function Graph2DInner({
   // React Flow state
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+
+  // ==========================================================================
+  // PERFORMANCE: Update edge count for simplified effects mode
+  // ==========================================================================
+  // Track total edge count for performance decisions (simplified effects, disabled animations)
+  const setTotalEdgeCount = useEdgeVisibilityStore((state) => state.setTotalEdgeCount);
+  useEffect(() => {
+    setTotalEdgeCount(initialEdges.length);
+  }, [initialEdges.length, setTotalEdgeCount]);
 
   // ==========================================================================
   // Z-INDEX MANAGEMENT - Data mode (schema mode hook is above, near setSchemaNodes)

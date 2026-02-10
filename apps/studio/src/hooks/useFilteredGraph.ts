@@ -66,6 +66,20 @@ interface FilterPassResult {
   layerCounts: LayerCounts;
 }
 
+/**
+ * Compute connection count for each node from edges.
+ * Used for smart display limit (show most connected nodes first).
+ * @returns Map of nodeId -> connection count
+ */
+function computeConnectionCounts(edges: GraphEdge[]): Map<string, number> {
+  const counts = new Map<string, number>();
+  for (const edge of edges) {
+    counts.set(edge.source, (counts.get(edge.source) ?? 0) + 1);
+    counts.set(edge.target, (counts.get(edge.target) ?? 0) + 1);
+  }
+  return counts;
+}
+
 /** Create empty layer counts object */
 function createEmptyLayerCounts(): LayerCounts {
   return {
@@ -176,10 +190,15 @@ export function useFilteredGraph(): FilteredGraphResult {
     const hasSearchFilter = normalizedSearchQuery !== null;
     const hasDisplayLimit = displayLimit && displayLimit > 0;
 
-    const filteredNodes: GraphNode[] = [];
-    const visibleNodeIds = new Set<string>();
+    // =========================================================================
+    // SMART DISPLAY LIMIT: Rank nodes by connection count
+    // =========================================================================
+    // Instead of arbitrary slice, keep the most connected nodes when limiting.
+    // This ensures hub nodes (high connectivity) are always visible.
+    // =========================================================================
 
-    // Single pass through all nodes
+    // First pass: collect all nodes that pass filters (without limit)
+    const candidateNodes: GraphNode[] = [];
     for (const node of allNodes) {
       // Stage 1: Hidden nodes filter
       if (hasHiddenNodes && hiddenNodeIds.has(node.id)) {
@@ -204,13 +223,28 @@ export function useFilteredGraph(): FilteredGraphResult {
         continue;
       }
 
-      // Stage 5: Display limit (early exit when limit reached)
-      if (hasDisplayLimit && filteredNodes.length >= displayLimit) {
-        break; // Early exit - no need to process remaining nodes
-      }
+      candidateNodes.push(node);
+    }
 
-      // Node passes all filters - add to results and aggregate counts
-      filteredNodes.push(node);
+    // Apply display limit with connection-based ranking
+    let filteredNodes: GraphNode[];
+    if (hasDisplayLimit && candidateNodes.length > displayLimit) {
+      // Compute connection counts and sort by most connected
+      const connectionCounts = computeConnectionCounts(allEdges);
+      const sortedNodes = [...candidateNodes].sort((a, b) => {
+        const countA = connectionCounts.get(a.id) ?? 0;
+        const countB = connectionCounts.get(b.id) ?? 0;
+        return countB - countA; // Descending order (most connected first)
+      });
+      filteredNodes = sortedNodes.slice(0, displayLimit);
+    } else {
+      filteredNodes = candidateNodes;
+    }
+
+    const visibleNodeIds = new Set<string>();
+
+    // Aggregate counts for visible nodes
+    for (const node of filteredNodes) {
       visibleNodeIds.add(node.id);
 
       // Aggregate realm count
@@ -229,6 +263,7 @@ export function useFilteredGraph(): FilteredGraphResult {
     return { nodes: filteredNodes, visibleNodeIds, realmCounts, layerCounts };
   }, [
     allNodes,
+    allEdges, // Added for connection-based ranking
     hasActiveFilters,
     hiddenNodeIds,
     enabledNodeTypes,

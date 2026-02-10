@@ -16,7 +16,8 @@
 
 import { useCallback } from 'react';
 import { useOnSelectionChange, type OnSelectionChangeParams } from '@xyflow/react';
-import { useUIStore, selectSelectedNodeId, selectNodeSelectionActions } from '@/stores/uiStore';
+import { useShallow } from 'zustand/react/shallow';
+import { useUIStore, selectSelectedNodeId } from '@/stores/uiStore';
 
 export interface UseNodeSelectionResult {
   /** Currently selected node ID (null if none) */
@@ -41,8 +42,14 @@ export interface UseNodeSelectionResult {
 export function useNodeSelection(): UseNodeSelectionResult {
   // Single primitive selector (no shallow needed for primitives)
   const selectedNodeId = useUIStore(selectSelectedNodeId);
-  // Combined actions selector (stable reference - actions never change)
-  const { setSelectedNode, setDetailPanelTab, clearSelection } = useUIStore(selectNodeSelectionActions);
+  // Combined actions selector with useShallow (stable reference - actions never change)
+  const { setSelectedNode, setDetailPanelTab, clearSelection } = useUIStore(
+    useShallow((state) => ({
+      setSelectedNode: state.setSelectedNode,
+      setDetailPanelTab: state.setDetailPanelTab,
+      clearSelection: state.clearSelection,
+    }))
+  );
 
   // IMPORTANT: onChange MUST be memoized for useOnSelectionChange
   // See: https://reactflow.dev/api-reference/hooks/use-on-selection-change
