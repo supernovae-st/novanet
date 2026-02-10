@@ -54,7 +54,7 @@ import { z } from 'zod';
 
 export const RelationType = {
   // ─────────────────────────────────────────────────────────────────────────────
-  // PROJECT ROOT (v10.3: HAS_CONCEPT removed — Entity in global realm, use USES_ENTITY)
+  // PROJECT ROOT (v10.3: HAS_CONCEPT removed — Entity in shared realm, use USES_ENTITY)
   // ─────────────────────────────────────────────────────────────────────────────
   HAS_PAGE: 'HAS_PAGE',                   // Project → Page
   HAS_BRAND_IDENTITY: 'HAS_BRAND_IDENTITY', // Project → BrandIdentity
@@ -292,7 +292,7 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   // ─────────────────────────────────────────────────────────────────────────────
   // PROJECT ROOT
   // ─────────────────────────────────────────────────────────────────────────────
-  // v10.3: HAS_CONCEPT removed — Entity is in global realm, use USES_ENTITY from Page/Block
+  // v10.3: HAS_CONCEPT removed — Entity is in shared realm, use USES_ENTITY from Page/Block
   [RelationType.HAS_PAGE]: {
     type: RelationType.HAS_PAGE,
     from: 'Project',

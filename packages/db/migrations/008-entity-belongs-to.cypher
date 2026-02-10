@@ -74,8 +74,9 @@ MATCH (e:Entity)-[:BELONGS_TO]->(c:EntityCategory)
 RETURN c.key AS category,
        c.display_name AS display_name,
        c.question AS question,
-       count(e) AS entity_count
-ORDER BY c.sort_order;
+       count(e) AS entity_count,
+       c.sort_order AS sort_order
+ORDER BY sort_order;
 
 // ---------------------------------------------------------------------------
 // STEP 6: Verify no remaining type properties

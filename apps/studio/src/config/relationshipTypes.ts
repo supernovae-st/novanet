@@ -29,7 +29,7 @@ export type RelationshipCategory =
  */
 export const RELATIONSHIP_CATEGORIES: Record<RelationshipCategory, RelationType[]> = {
   // Ownership: Project/parent owns child entities (5 relations)
-  // v10.3: HAS_CONCEPT removed — Entity in global realm, use USES_ENTITY
+  // v10.3: HAS_CONCEPT removed — Entity in shared realm, use USES_ENTITY
   ownership: [
     'HAS_PAGE',
     'HAS_BRAND_IDENTITY',
@@ -122,7 +122,7 @@ export interface RelationshipTypeConfig {
 
 /**
  * All relationship type configurations (51 relations)
- * v10.3: HAS_CONCEPT removed — Entity in global realm, use USES_ENTITY
+ * v10.3: HAS_CONCEPT removed — Entity in shared realm, use USES_ENTITY
  * v11.1: BELONGS_TO added — Entity → EntityCategory semantic classification
  */
 export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfig> = {

@@ -77,7 +77,7 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   TARGETS_SEO: 'seoKeyword',
   TARGETS_GEO: 'geoSeed',
   HAS_PAGE: 'page',
-  // v10.3: HAS_CONCEPT removed — Entity in global realm
+  // v10.3: HAS_CONCEPT removed — Entity in shared realm
   SUPPORTS_LOCALE: 'locale',
   FOR_LOCALE: 'locale',
 };
@@ -105,7 +105,7 @@ const RELATION_TARGET_TYPE_MAP: Record<string, string> = {
   TARGETS_SEO: 'SEOKeyword',
   TARGETS_GEO: 'GEOSeedL10n',
   HAS_PAGE: 'Page',
-  // v10.3: HAS_CONCEPT removed — Entity in global realm
+  // v10.3: HAS_CONCEPT removed — Entity in shared realm
   SUPPORTS_LOCALE: 'Locale',
   FOR_LOCALE: 'Locale',
 };

@@ -51,7 +51,7 @@ describe('Type Exports', () => {
 
   describe('Core Entities', () => {
     it('Entity should extend StandardNodeProperties (v10.3)', () => {
-      // v10.3: Entity replaces Concept (global realm, knowledge layer)
+      // v10.3: Entity replaces Concept (org realm, semantic layer)
       const entity: Entity = {
         key: 'action-create-qr',
         display_name: 'Create QR Code',
@@ -69,7 +69,7 @@ describe('Type Exports', () => {
     });
 
     it('EntityContent should have required localization fields (v10.3)', () => {
-      // v10.3: EntityContent replaces ConceptL10n (global realm, knowledge layer)
+      // v10.3: EntityContent replaces ConceptL10n (org realm, semantic layer)
       const l10n: EntityContent = {
         display_name: 'QR Code',
         description: 'Localized entity',
