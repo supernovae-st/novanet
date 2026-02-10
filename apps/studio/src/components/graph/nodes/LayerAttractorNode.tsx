@@ -19,6 +19,7 @@ import { cn } from '@/lib/utils';
 import { useNodeInteractions } from '@/hooks';
 import { LayerIcon } from '@/components/ui/CategoryIcon';
 import { BlueprintOverlay } from './BlueprintOverlay';
+import { GlowBadge } from './effects';
 import { NODE_BG, NODE_DESIGN } from '@/config/constants';
 import type { Layer } from '@novanet/core/types';
 import { LAYER_COLORS } from '@/design/colors/generated';
@@ -38,35 +39,6 @@ export interface LayerAttractorData extends Record<string, unknown> {
 }
 
 export type LayerAttractorNodeType = Node<LayerAttractorData, 'layerAttractor'>;
-
-// =============================================================================
-// GlowBadge - Badge with glow + gradient effect (matches SchemaNode)
-// =============================================================================
-
-const GlowBadge = memo(function GlowBadge({
-  label,
-  icon,
-  color,
-}: {
-  label: string;
-  icon?: React.ReactNode;
-  color: string;
-}) {
-  return (
-    <span
-      className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wide px-2 py-1 rounded-md"
-      style={{
-        background: `linear-gradient(135deg, ${color}40, ${color}20)`,
-        color: color,
-        border: `1px solid ${color}60`,
-        boxShadow: `0 0 10px ${color}30, inset 0 1px 0 ${color}20`,
-      }}
-    >
-      {icon}
-      {label}
-    </span>
-  );
-});
 
 // =============================================================================
 // Main Component
