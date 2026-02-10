@@ -178,7 +178,7 @@ pub struct Icon {
 /// Complete icon system — single source of truth for all icons.
 #[derive(Debug, Default, Deserialize)]
 pub struct Icons {
-    /// Realm icons (global, tenant).
+    /// Realm icons (shared, org).
     #[serde(default)]
     pub realms: HashMap<String, Icon>,
     /// Layer icons (locale, geography, knowledge, config, etc.).

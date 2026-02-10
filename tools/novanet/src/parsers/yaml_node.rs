@@ -86,7 +86,7 @@ pub struct NodeDef {
     /// Neo4j label (PascalCase), e.g. "Project", "PageGenerated".
     pub name: String,
 
-    /// Realm classification (global, tenant) — explicit in YAML.
+    /// Realm classification (shared, org) — explicit in YAML.
     pub realm: String,
 
     /// Layer classification (config, knowledge, foundation, etc.) — explicit in YAML.

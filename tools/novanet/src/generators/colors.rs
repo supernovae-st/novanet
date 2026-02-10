@@ -499,9 +499,9 @@ mod tests {
         assert!(output.contains("'shared'"));
         assert!(output.contains("'org'"));
 
-        // Should have 8 unique layers (v11.4: config in both realms, seo/geo removed)
-        // SHARED: config, locale, geography, knowledge
-        // ORG: config, semantic, foundation, structure, instruction, output
+        // Should have 9 unique layer names (v11.5: 10 total, config in both realms)
+        // SHARED: config, locale, geography, knowledge (4)
+        // ORG: config, foundation, structure, semantic, instruction, output (6)
         for layer in [
             "config",
             "locale",

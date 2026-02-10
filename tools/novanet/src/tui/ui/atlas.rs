@@ -1839,7 +1839,7 @@ mod tests {
         let mut app = test_app();
         app.atlas.demo_mode = false;
         app.atlas.realm_stats = Some(test_realm_stats());
-        app.atlas.realm_cursor = 1; // First layer in global
+        app.atlas.realm_cursor = 1; // First layer in shared realm
         app.atlas.realm_zoomed = true;
 
         let output = render_atlas_realm_map(&app);

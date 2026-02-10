@@ -3154,7 +3154,7 @@ mod tests {
         app.update_search();
 
         // Result indices should be reasonable (within expected tree size)
-        // Tree has: 2 headers + 2 realms + 9 layers + 48 kinds + 5 arc families + ~30 arc kinds
+        // Tree has: 2 headers + 2 realms + 10 layers + 60 kinds + 5 arc families + arc kinds
         // So max should be under 200
         let reasonable_max = 200;
         for idx in &app.search.results {
