@@ -83,8 +83,8 @@ describe('schemaLayoutELK', () => {
     // v10.6: 2 realms (global, tenant)
     mockHierarchy = {
       realms: {
-        global: {
-          realm: 'global' as Realm,
+        shared: {
+          realm: 'shared' as Realm,
           label: 'GLOBAL',
           icon: '🌍',
           description: 'Shared across all tenants',
@@ -109,8 +109,8 @@ describe('schemaLayoutELK', () => {
             },
           } as Record<Layer, { label: string; description: string; icon: string; nodeTypes: never[] }>,
         },
-        tenant: {
-          realm: 'tenant' as Realm,
+        org: {
+          realm: 'org' as Realm,
           label: 'TENANT',
           icon: '🏢',
           description: 'Tenant-specific content',
@@ -135,18 +135,18 @@ describe('schemaLayoutELK', () => {
             },
           } as Record<Layer, { label: string; description: string; icon: string; nodeTypes: never[] }>,
         },
-      } as Record<Realm, typeof mockHierarchy.realms.tenant>,
+      } as Record<Realm, typeof mockHierarchy.realms.org>,
       nodes: [
-        { id: 'schema-Organization', nodeType: 'Organization', realm: 'tenant', layer: 'config', label: 'Organization', description: '', trait: 'invariant' },
-        { id: 'schema-Project', nodeType: 'Project', realm: 'tenant', layer: 'foundation', label: 'Project', description: '', trait: 'invariant' },
-        { id: 'schema-BrandIdentity', nodeType: 'BrandIdentity', realm: 'tenant', layer: 'foundation', label: 'Brand Identity', description: '', trait: 'invariant' },
-        { id: 'schema-ProjectContent', nodeType: 'ProjectContent', realm: 'tenant', layer: 'foundation', label: 'Project Content', description: '', trait: 'localized' },
-        { id: 'schema-Page', nodeType: 'Page', realm: 'tenant', layer: 'structure', label: 'Page', description: '', trait: 'invariant' },
-        { id: 'schema-Block', nodeType: 'Block', realm: 'tenant', layer: 'structure', label: 'Block', description: '', trait: 'invariant' },
-        { id: 'schema-Locale', nodeType: 'Locale', realm: 'global', layer: 'config', label: 'Locale', description: '', trait: 'invariant' },
-        { id: 'schema-Style', nodeType: 'Style', realm: 'global', layer: 'locale-knowledge', label: 'Style', description: '', trait: 'knowledge' },
-        { id: 'schema-Formatting', nodeType: 'Formatting', realm: 'global', layer: 'locale-knowledge', label: 'Formatting', description: '', trait: 'knowledge' },
-        { id: 'schema-SEOKeyword', nodeType: 'SEOKeyword', realm: 'global', layer: 'seo', label: 'SEO Keyword', description: '', trait: 'localized' },
+        { id: 'schema-Organization', nodeType: 'Organization', realm: 'org', layer: 'config', label: 'Organization', description: '', trait: 'invariant' },
+        { id: 'schema-Project', nodeType: 'Project', realm: 'org', layer: 'foundation', label: 'Project', description: '', trait: 'invariant' },
+        { id: 'schema-BrandIdentity', nodeType: 'BrandIdentity', realm: 'org', layer: 'foundation', label: 'Brand Identity', description: '', trait: 'invariant' },
+        { id: 'schema-ProjectContent', nodeType: 'ProjectContent', realm: 'org', layer: 'foundation', label: 'Project Content', description: '', trait: 'localized' },
+        { id: 'schema-Page', nodeType: 'Page', realm: 'org', layer: 'structure', label: 'Page', description: '', trait: 'invariant' },
+        { id: 'schema-Block', nodeType: 'Block', realm: 'org', layer: 'structure', label: 'Block', description: '', trait: 'invariant' },
+        { id: 'schema-Locale', nodeType: 'Locale', realm: 'shared', layer: 'config', label: 'Locale', description: '', trait: 'invariant' },
+        { id: 'schema-Style', nodeType: 'Style', realm: 'shared', layer: 'locale-knowledge', label: 'Style', description: '', trait: 'knowledge' },
+        { id: 'schema-Formatting', nodeType: 'Formatting', realm: 'shared', layer: 'locale-knowledge', label: 'Formatting', description: '', trait: 'knowledge' },
+        { id: 'schema-SEOKeyword', nodeType: 'SEOKeyword', realm: 'shared', layer: 'seo', label: 'SEO Keyword', description: '', trait: 'localized' },
       ] as SchemaNode[],
       arcs: [
         { id: 'schema-arc-0', relationType: 'HAS_PAGE', sourceType: 'Project', targetType: 'Page', label: 'HAS_PAGE', description: '', cardinality: '1:N' },
@@ -155,7 +155,7 @@ describe('schemaLayoutELK', () => {
       stats: {
         totalNodes: 10,
         totalArcs: 2,
-        nodesByRealm: { global: 4, tenant: 6 },
+        nodesByRealm: { shared: 4, org: 6 },
       },
     };
   });
@@ -191,7 +191,7 @@ describe('schemaLayoutELK', () => {
       expect(realmBadges).toHaveLength(2);
 
       // Verify realm badge data
-      const tenantRealm = realmBadges.find(n => n.data.realmKey === 'tenant');
+      const tenantRealm = realmBadges.find(n => n.data.realmKey === 'org');
       expect(tenantRealm).toBeDefined();
       expect(tenantRealm?.data.label).toBe('Tenant');
     });
@@ -254,10 +254,10 @@ describe('schemaLayoutELK', () => {
         ...mockHierarchy,
         realms: {
           ...mockHierarchy.realms,
-          tenant: {
-            ...mockHierarchy.realms.tenant,
+          org: {
+            ...mockHierarchy.realms.org,
             layers: {
-              ...mockHierarchy.realms.tenant.layers,
+              ...mockHierarchy.realms.org.layers,
               empty: {
                 label: 'Empty',
                 description: 'Empty layer',
@@ -266,7 +266,7 @@ describe('schemaLayoutELK', () => {
               },
             } as unknown as Record<Layer, { label: string; description: string; icon: string; nodeTypes: never[] }>,
           },
-        } as Record<Realm, typeof mockHierarchy.realms.tenant>,
+        } as Record<Realm, typeof mockHierarchy.realms.org>,
       };
 
       const result = await applySchemaLayout(hierarchyWithEmpty);
@@ -342,7 +342,7 @@ describe('schemaLayoutELK', () => {
         realms: {} as never,
         nodes: [],
         arcs: [],
-        stats: { totalNodes: 0, totalArcs: 0, nodesByRealm: { global: 0, tenant: 0 } },
+        stats: { totalNodes: 0, totalArcs: 0, nodesByRealm: { shared: 0, org: 0 } },
       };
 
       // Should not throw

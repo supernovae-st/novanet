@@ -1,6 +1,6 @@
 // packages/core/src/graph/generator.ts
 // Schema graph generator - Creates flat and hierarchical schema representations
-// v11.1.0 — EntityCategory classification system
+// v11.2.0 — Realm renames (shared/org), job nodes removed, trait split
 
 import { NODE_TYPES, NODE_REALMS, NODE_TRAITS, type NodeType, type Realm } from '../types/nodes.js';
 import { RelationRegistry } from '../schemas/relations.schema.js';
@@ -18,9 +18,9 @@ import { REALM_HIERARCHY } from './hierarchy.js';
  */
 const NODE_LABELS: Record<NodeType, string> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // GLOBAL REALM (32 nodes)
+  // SHARED REALM (32 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
-  // config (14) - v11.1: added EntityCategory
+  // config (14)
   Locale: 'Locale',
   EntityCategory: 'Entity Category',
   Formatting: 'Formatting',
@@ -56,19 +56,8 @@ const NODE_LABELS: Record<NodeType, string> = {
   PopulationCluster: 'Population Cluster',
   PopulationSubCluster: 'Population Sub-Cluster',
 
-  // seo (9) — SEO + GEO (Generative Engine Optimization)
-  SEOKeyword: 'SEO Keyword',
-  SEOKeywordMetrics: 'SEO Metrics',
-  SEOMiningRun: 'SEO Mining',
-  SEOComparison: 'SEO Comparison',
-  SEOPreposition: 'SEO Preposition',
-  SEOQuestion: 'SEO Question',
-  GEOQuery: 'GEO Query',
-  GEOAnswer: 'GEO Answer',
-  GEOMetrics: 'GEO Metrics',
-
   // ═══════════════════════════════════════════════════════════════════════════
-  // TENANT REALM (24 nodes)
+  // ORG REALM (30 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
   // config (2)
   Organization: 'Organization',
@@ -86,9 +75,19 @@ const NODE_LABELS: Record<NodeType, string> = {
 
   // semantic (4)
   Entity: 'Entity',
-  EntityContent: 'Entity L10n',
+  EntityContent: 'Entity Content',
   AudiencePersona: 'Audience Persona',
   ChannelSurface: 'Channel Surface',
+
+  // seo (8) — SEO + GEO (Generative Engine Optimization)
+  SEOKeyword: 'SEO Keyword',
+  SEOKeywordMetrics: 'SEO Metrics',
+  SEOComparison: 'SEO Comparison',
+  SEOPreposition: 'SEO Preposition',
+  SEOQuestion: 'SEO Question',
+  GEOQuery: 'GEO Query',
+  GEOAnswer: 'GEO Answer',
+  GEOMetrics: 'GEO Metrics',
 
   // instruction (7)
   PageType: 'Page Type',
@@ -99,12 +98,10 @@ const NODE_LABELS: Record<NodeType, string> = {
   BlockInstruction: 'Block Instruction',
   PromptArtifact: 'Prompt Artifact',
 
-  // output (5)
-  PageGenerated: 'Page L10n',
-  BlockGenerated: 'Block L10n',
-  GenerationJob: 'Generation Job',
+  // output (3)
+  PageGenerated: 'Page Generated',
+  BlockGenerated: 'Block Generated',
   OutputArtifact: 'Output Artifact',
-  EvaluationSignal: 'Evaluation Signal',
 };
 
 // =============================================================================
@@ -112,8 +109,8 @@ const NODE_LABELS: Record<NodeType, string> = {
 // =============================================================================
 
 const REALM_DESCRIPTIONS: Record<Realm, string> = {
-  global: 'Shared across all tenants (Locale knowledge, SEO)',
-  tenant: 'Tenant-specific content, structure, Entity nodes',
+  shared: 'Shared across all tenants (Locale knowledge)',
+  org: 'Organization-specific content, structure, Entity nodes',
 };
 
 // =============================================================================
@@ -124,8 +121,8 @@ const TRAIT_DESCRIPTIONS: Record<string, string> = {
   invariant: 'Language-independent, same across all locales',
   localized: 'Human-curated localized content',
   knowledge: 'Locale-specific cultural/linguistic knowledge',
-  derived: 'Computed from other data (metrics)',
-  job: 'Background processing job',
+  generated: 'LLM-generated content output',
+  aggregated: 'Computed metrics and aggregated data',
 };
 
 // =============================================================================
@@ -133,7 +130,7 @@ const TRAIT_DESCRIPTIONS: Record<string, string> = {
 // =============================================================================
 
 /**
- * Generate flat schema graph with all 60 node types and arcs.
+ * Generate flat schema graph with all 62 node types and arcs.
  * This is the canonical representation of the NovaNet ontology.
  *
  * @returns SchemaGraphResult with nodes and arcs
@@ -142,7 +139,7 @@ const TRAIT_DESCRIPTIONS: Record<string, string> = {
  * ```typescript
  * const { nodes, arcs } = generateSchemaGraph();
  * console.log(`${nodes.length} nodes, ${arcs.length} arcs`);
- * // Output: "60 nodes, ~XX arcs"
+ * // Output: "62 nodes, ~XX arcs"
  * ```
  */
 export function generateSchemaGraph(): SchemaGraphResult {
@@ -150,7 +147,7 @@ export function generateSchemaGraph(): SchemaGraphResult {
   const arcs: SchemaArc[] = [];
 
   // ==========================================================================
-  // GENERATE NODES - All 60 node types
+  // GENERATE NODES - All 62 node types
   // ==========================================================================
 
   for (const nodeType of NODE_TYPES) {
@@ -214,7 +211,7 @@ export function generateSchemaGraph(): SchemaGraphResult {
  * ```typescript
  * const hierarchy = getSchemaHierarchy();
  * console.log(hierarchy.stats);
- * // Output: { totalNodes: 60, totalArcs: ~XX, nodesByRealm: { global: 37, tenant: 23 } }
+ * // Output: { totalNodes: 62, totalArcs: ~XX, nodesByRealm: { shared: 32, org: 30 } }
  * ```
  */
 export function getSchemaHierarchy(): HierarchicalSchemaData {
@@ -222,8 +219,8 @@ export function getSchemaHierarchy(): HierarchicalSchemaData {
 
   // Count nodes by realm
   const nodesByRealm: Record<Realm, number> = {
-    global: 0,
-    tenant: 0,
+    shared: 0,
+    org: 0,
   };
 
   for (const node of nodes) {

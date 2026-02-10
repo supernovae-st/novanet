@@ -1,0 +1,178 @@
+# models/node-kinds/tenant/output/page-generated.yaml
+# PageGenerated - Assembled LLM-generated page content (v10.9.0)
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+# v10.9.0 CHANGES (Naming Convention Refactor)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+#   RENAMED: PageL10n → PageGenerated
+#   - Clearer semantics: this is GENERATED output, not source content
+#   - Trait changed: localized → derived (computed from source content)
+#   - Arc changed: HAS_OUTPUT → HAS_GENERATED (generation family)
+#
+# TRAIT SEMANTICS:
+#   - localized = source content (human-curated, e.g., EntityContent)
+#   - derived = computed output (LLM-generated, e.g., PageGenerated)
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+
+node:
+  name: PageGenerated
+  realm: org
+  layer: output
+  trait: generated  # v11.2: Split derived → generated (LLM output)
+  icon: "🟠"
+  description: "Assembled BlockGenerated content for a page (derived from source content)"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # STANDARD PROPERTIES
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      pattern: "^page:[a-z][a-z0-9-]*@[a-z]{2}-[A-Z]{2}$"
+      description: "Composite key: page:{page_key}@{locale_key}"
+      examples:
+        - "page:pricing@fr-FR"
+        - "page:features@ja-JP"
+
+    display_name:
+      type: string
+      required: true
+      description: "Auto-generated name"
+      example: "Pricing Page (fr-FR)"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "Assembled pricing page for French market"
+
+    llm_context:
+      type: string
+      required: false
+      description: "Generation context used"
+
+    created_at:
+      type: datetime
+      required: true
+      description: "Creation timestamp"
+
+    updated_at:
+      type: datetime
+      required: true
+      description: "Last update timestamp"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PAGEGENERATED-SPECIFIC PROPERTIES
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  properties:
+    assembled:
+      type: json
+      required: true
+      description: "Compiled blocks as JSON"
+
+    assembled_at:
+      type: datetime
+      required: true
+      description: "Assembly timestamp"
+
+    assembler_version:
+      type: string
+      required: true
+      description: "Version tracking"
+      example: "1.2.0"
+
+    status:
+      type: string
+      required: true
+      enum: ["draft", "published", "archived"]
+      description: "Publication status"
+
+    # ─────────────────────────────────────────────────────────────────────────────
+    # VERSIONING
+    # ─────────────────────────────────────────────────────────────────────────────
+    version:
+      type: int
+      required: true
+      description: "Version number (1, 2, 3...)"
+      example: 1
+
+    published_at:
+      type: datetime
+      required: false
+      description: "When this version was put live"
+
+    replaced_at:
+      type: datetime
+      required: false
+      description: "When this version was replaced (null = current)"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # RELATIONS
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  relations:
+    incoming:
+      - type: HAS_GENERATED  # v10.9.0: Changed from HAS_OUTPUT
+        from: Page
+        description: "Page that owns this LLM-generated content"
+
+      - type: GENERATED_BY
+        from: PagePrompt
+        description: "Prompt that generated this output (provenance)"
+
+    outgoing:
+      - type: FOR_LOCALE
+        to: Locale
+        description: "Target locale for this output"
+
+      - type: ASSEMBLES
+        to: BlockGenerated
+        description: "BlockGenerated nodes assembled into this page"
+
+      - type: BELONGS_TO_PROJECT_CONTENT
+        to: ProjectContent
+        description: "Locale-aligned project context (voice, tagline, CTAs)"
+
+      - type: PREVIOUS_VERSION
+        to: PageGenerated
+        cardinality: "1:1"
+        description: "Link to previous version in history chain"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # NEO4J CONFIGURATION
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  neo4j:
+    indexes:
+      - "CREATE INDEX pagegenerated_status IF NOT EXISTS FOR (pg:PageGenerated) ON (pg.status)"
+      - "CREATE INDEX pagegenerated_date IF NOT EXISTS FOR (pg:PageGenerated) ON (pg.assembled_at)"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # EXAMPLE
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  example:
+    key: "page:pricing@fr-FR"
+    display_name: "Page Tarifs (fr-FR)"
+    description: "Page tarifs assemblée pour le marché français"
+    llm_context: "USE: display assembled page content. TRIGGERS: pricing page, fr-FR output."
+    assembled:
+      headers:
+        title: "Tarifs QR Code AI"
+        meta_description: "Découvrez nos formules de création de QR codes..."
+      sections:
+        - type: "hero"
+          content: "..."
+        - type: "pricing-table"
+          content: "..."
+    assembled_at: "2024-01-15T10:30:00Z"
+    assembler_version: "1.2.0"
+    status: "published"
+    version: 3
+    published_at: "2024-01-15T10:35:00Z"
+    replaced_at: null

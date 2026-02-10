@@ -1,0 +1,184 @@
+# packages/core/models/node-kinds/global/config/culture.yaml
+# Culture — Cultural context for a locale including calendar, seasons, business norms, communication style, and core values
+#
+# v10.7: NEW node for 7-node locale knowledge architecture
+# Used by LLM for culturally-appropriate content generation.
+# Stability: High - changes rarely
+
+node:
+  name: Culture
+  realm: shared
+  layer: config
+  trait: knowledge
+  icon: "🌍"
+  description: "Cultural context for a locale including calendar, seasons, business norms, communication style, and core values. Used by LLM for culturally-appropriate content generation."
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Unique key (locale code)"
+      example: "fr-FR"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "French (France) Culture"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "Cultural context and norms for fr-FR"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints"
+      example: "USE: cultural tone, timing references, value expressions. TRIGGERS: seasonal refs, holiday mentions, formality choices. KEY: adapt for cultural context. NOT: formatting or technical rules."
+
+    created_at:
+      type: datetime
+      required: true
+
+    updated_at:
+      type: datetime
+      required: true
+
+  properties:
+    # ═══════════════════════════════════════════════════════════════════════════
+    # TIER 1: INDEXED SCALARS (Cypher-queryable)
+    # ═══════════════════════════════════════════════════════════════════════════
+    hemisphere:
+      type: string
+      required: true
+      enum: ["northern", "southern"]
+      description: "Geographic hemisphere affecting season references"
+      example: "northern"
+      llm_context: "Determines which months map to summer/winter in generated content"
+
+    work_week_start:
+      type: string
+      required: true
+      enum: ["sunday", "monday", "saturday"]
+      description: "First day of the business week"
+      example: "monday"
+      llm_context: "Affects 'start of week' and 'weekend' references"
+
+    communication_directness:
+      type: string
+      required: true
+      enum: ["direct", "indirect", "contextual"]
+      description: "Cultural communication style preference"
+      example: "indirect"
+      llm_context: "Direct cultures prefer explicit CTAs; indirect cultures prefer suggestion"
+
+    hierarchy_importance:
+      type: string
+      required: true
+      enum: ["high", "medium", "low"]
+      description: "Importance of social/business hierarchy"
+      example: "high"
+      llm_context: "High hierarchy = formal titles; Low = first names acceptable"
+
+    individualism_level:
+      type: string
+      required: true
+      enum: ["individualist", "collectivist", "mixed"]
+      description: "Individual vs collective orientation"
+      example: "mixed"
+      llm_context: "Individualist = 'you' focus; Collectivist = 'we/together' focus"
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # TIER 2: STRUCTURED JSON (programmatic lookup)
+    # ═══════════════════════════════════════════════════════════════════════════
+    seasons:
+      type: json
+      required: true
+      description: "Season definitions with month mappings and local names"
+      example:
+        spring:
+          months: [3, 4, 5]
+          name: "printemps"
+        summer:
+          months: [6, 7, 8]
+          name: "été"
+        autumn:
+          months: [9, 10, 11]
+          name: "automne"
+        winter:
+          months: [12, 1, 2]
+          name: "hiver"
+
+    holidays:
+      type: json
+      required: true
+      description: "Major holidays with dates and importance levels"
+      example:
+        - key: "christmas"
+          date: "12-25"
+          importance: "major"
+          name: "Noël"
+        - key: "bastille_day"
+          date: "07-14"
+          importance: "major"
+          name: "Fête nationale"
+        - key: "labor_day"
+          date: "05-01"
+          importance: "medium"
+          name: "Fête du Travail"
+
+    business_hours:
+      type: json
+      required: true
+      description: "Typical business operating hours"
+      example:
+        start: "09:00"
+        end: "18:00"
+        lunch_break: true
+        lunch_start: "12:00"
+        lunch_end: "14:00"
+
+    values:
+      type: json
+      required: true
+      description: "Core cultural values as ordered list"
+      example: ["liberté", "égalité", "fraternité"]
+
+    communication_norms:
+      type: json
+      required: true
+      description: "Communication conventions for greetings, closings, etc."
+      example:
+        greetings: "formal"
+        closings: "warm"
+        small_talk: "expected"
+        business_card_exchange: "moderate"
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # TIER 3: LLM CONTEXT (narrative text)
+    # ═══════════════════════════════════════════════════════════════════════════
+    culture_summary:
+      type: string
+      required: true
+      description: "200-word narrative summary of cultural context for LLM"
+      example: "French culture values intellectual discourse, art, and savoir-vivre..."
+
+    taboos_summary:
+      type: string
+      required: false
+      description: "Brief summary of cultural taboos and sensitivities"
+      example: "Avoid discussing personal finances, age, or salary. Religious and political topics require care..."
+
+    raw_markdown:
+      type: string
+      required: false
+      description: "Full source markdown for edge case reference"
+
+  relations:
+    incoming:
+      - type: HAS_CULTURE
+        from: Locale
+        cardinality: "1:1"
+        description: "Locale has exactly one culture config"

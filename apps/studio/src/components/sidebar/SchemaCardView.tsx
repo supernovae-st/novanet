@@ -28,12 +28,12 @@ import type { GraphNode, NodeType } from '@/types';
 
 // Realm icons
 const REALM_ICONS: Record<Realm, LucideIcon> = {
-  global: Globe,
-  tenant: Building2,
+  shared: Globe,
+  org: Building2,
 };
 
 // Ordered realms for consistent rendering
-const REALM_ORDER: Realm[] = ['global', 'tenant'];
+const REALM_ORDER: Realm[] = ['shared', 'org'];
 
 export interface SchemaCardViewProps {
   className?: string;

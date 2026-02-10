@@ -1143,7 +1143,7 @@ MATCH (r:Realm)-[:HAS_LAYER]->(l:Layer)
 OPTIONAL MATCH (k:Kind)-[:IN_LAYER]->(l)
 WITH r, l, count(k) as kind_count
 ORDER BY
-    CASE r.key WHEN 'global' THEN 0 ELSE 1 END,
+    CASE r.key WHEN 'shared' THEN 0 ELSE 1 END,
     CASE l.key
         WHEN 'config' THEN 0
         WHEN 'locale-knowledge' THEN 1
@@ -2275,8 +2275,8 @@ pub enum TreeItem<'a> {
 /// Uses unicode symbols instead of emoji for terminal compatibility.
 fn realm_icon(key: &str) -> &'static str {
     match key {
-        "global" => "◉", // filled circle - universal/shared
-        "tenant" => "◎", // circle with dot - scoped/owned
+        "shared" => "◉", // filled circle - universal/shared
+        "org" => "◎", // circle with dot - scoped/owned
         _ => "○",        // empty circle - unknown
     }
 }
@@ -2442,16 +2442,16 @@ impl TaxonomyTree {
         };
 
         let global_realm = RealmInfo {
-            key: "global".to_string(),
-            display_name: "Global".to_string(),
+            key: "shared".to_string(),
+            display_name: "Shared".to_string(),
             color: "#2aa198".to_string(),
             icon: "◉",
             layers: vec![config_layer],
         };
 
         let tenant_realm = RealmInfo {
-            key: "tenant".to_string(),
-            display_name: "Tenant".to_string(),
+            key: "org".to_string(),
+            display_name: "Org".to_string(),
             color: "#d33682".to_string(),
             icon: "◎",
             layers: vec![foundation_layer],
@@ -2496,8 +2496,8 @@ mod tests {
         let tree = TaxonomyTree::mock_for_testing();
 
         assert_eq!(tree.realms.len(), 2, "mock should have 2 realms");
-        assert_eq!(tree.realms[0].key, "global");
-        assert_eq!(tree.realms[1].key, "tenant");
+        assert_eq!(tree.realms[0].key, "shared");
+        assert_eq!(tree.realms[1].key, "org");
     }
 
     #[test]
@@ -2587,8 +2587,8 @@ mod tests {
         let structure = create_test_layer("structure", vec![page_kind]);
         let semantic = create_test_layer("semantic", vec![entity_kind]);
 
-        let global = create_test_realm("global", vec![locale_knowledge]);
-        let tenant = create_test_realm("tenant", vec![structure, semantic]);
+        let global = create_test_realm("shared", vec![locale_knowledge]);
+        let tenant = create_test_realm("org", vec![structure, semantic]);
 
         let realms = vec![global, tenant];
 
@@ -2734,14 +2734,14 @@ mod tests {
         // Expand Kinds section
         tree.toggle("kinds");
 
-        // Now we see: Kinds + global + tenant + Arcs = 4
+        // Now we see: Kinds + shared + org + Arcs = 4 (v11.2: shared + org)
         // (realms are still collapsed, so we don't see layers/kinds)
         assert_eq!(tree.item_count(), 4);
 
-        // Expand global realm
-        tree.toggle("realm:global");
+        // Expand shared realm (v11.2: was global)
+        tree.toggle("realm:shared");
 
-        // Now we see: Kinds + global + locale-knowledge + tenant + Arcs = 5
+        // Now we see: Kinds + shared + locale-knowledge + org + Arcs = 5
         // Note: collapse_all() also collapsed the layer, so we don't see Locale yet
         assert_eq!(tree.item_count(), 5);
     }
@@ -2754,16 +2754,16 @@ mod tests {
         let initial_count = tree.item_count();
         assert_eq!(initial_count, 10);
 
-        // Toggle global realm to collapse it
-        tree.toggle("realm:global");
+        // Toggle shared realm to collapse it (v11.2: was global)
+        tree.toggle("realm:shared");
 
-        // Now: Kinds + global (collapsed) + tenant + structure + Page + semantic + Entity + Arcs
+        // Now: Kinds + shared (collapsed) + org + structure + Page + semantic + Entity + Arcs
         // = 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 = 8
         let after_collapse = tree.item_count();
         assert_eq!(after_collapse, 8);
 
         // Toggle again to expand
-        tree.toggle("realm:global");
+        tree.toggle("realm:shared");
 
         // Should return to original count
         assert_eq!(tree.item_count(), initial_count);
@@ -2786,14 +2786,14 @@ mod tests {
     #[test]
     fn test_mock_tree_global_realm() {
         let tree = create_test_tree();
-        let global = tree.realms.iter().find(|r| r.key == "global");
+        let global = tree.realms.iter().find(|r| r.key == "shared");
         assert!(global.is_some(), "Tree should have a global realm");
     }
 
     #[test]
     fn test_mock_tree_tenant_realm() {
         let tree = create_test_tree();
-        let tenant = tree.realms.iter().find(|r| r.key == "tenant");
+        let tenant = tree.realms.iter().find(|r| r.key == "org");
         assert!(tenant.is_some(), "Tree should have a tenant realm");
     }
 
@@ -2803,12 +2803,12 @@ mod tests {
         let global = tree
             .realms
             .iter()
-            .find(|r| r.key == "global")
-            .expect("Global realm should exist");
+            .find(|r| r.key == "shared")
+            .expect("Shared realm should exist");
         let has_locale_knowledge = global.layers.iter().any(|l| l.key == "locale-knowledge");
         assert!(
             has_locale_knowledge,
-            "Global realm should have locale-knowledge layer"
+            "Shared realm should have locale-knowledge layer"
         );
     }
 
@@ -2845,7 +2845,7 @@ mod tests {
     #[test]
     fn test_yaml_path_fallback_accepts_valid_realm_layer() {
         // When realm and layer are valid, fallback should generate proper path
-        let realm_key = "tenant";
+        let realm_key = "org";
         let layer_key = "structure";
         let kind_key = "Page";
 
@@ -2860,9 +2860,10 @@ mod tests {
             )
         };
 
+        // v11.2: org realm (was tenant)
         assert_eq!(
             yaml_path,
-            "packages/core/models/node-kinds/tenant/structure/page.yaml"
+            "packages/core/models/node-kinds/org/structure/page.yaml"
         );
     }
 
@@ -2939,11 +2940,11 @@ mod tests {
         // Basic sanity checks
         assert!(!tree.realms.is_empty(), "Should load realms from Neo4j");
         assert!(
-            tree.realms.iter().any(|r| r.key == "global"),
+            tree.realms.iter().any(|r| r.key == "shared"),
             "Should have global realm"
         );
         assert!(
-            tree.realms.iter().any(|r| r.key == "tenant"),
+            tree.realms.iter().any(|r| r.key == "org"),
             "Should have tenant realm"
         );
     }

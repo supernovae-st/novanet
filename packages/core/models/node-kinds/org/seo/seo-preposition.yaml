@@ -1,0 +1,134 @@
+# models/node-kinds/global/seo/seo-preposition.yaml
+# SEOPreposition - Preposition keyword indicating use case
+#
+# v10.6: SEO Schema v2 - New NodeKind
+#        - Captures preposition keywords (X for Y) with their own volume/difficulty
+#        - Derived from Answer The Public "prepositions" category
+#        - Links to parent SEOKeyword via HAS_PREPOSITIONS
+#        - Optionally links to use_case Entity via USE_CASE_ENTITY arc
+#        - Can be addressed by BlockGenerated via ADDRESSES arc
+
+node:
+  name: SEOPreposition
+  realm: org
+  layer: seo
+  trait: knowledge
+  icon: "🔗"
+  description: "Preposition keyword indicating use case (X for Y)"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # STANDARD PROPERTIES (v7.1.0)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Unique identifier"
+      example: "seop-qr-code-pour-wifi-fr"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "qr code pour wifi"
+
+    description:
+      type: string
+      required: false
+      description: "Short description"
+
+    llm_context:
+      type: string
+      required: false
+      description: "Context for LLM: use case details, target audience"
+
+    created_at:
+      type: datetime
+      required: false
+
+    updated_at:
+      type: datetime
+      required: false
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # NODE-SPECIFIC PROPERTIES
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  properties:
+    # --- Core keyword data ---
+    value:
+      type: string
+      required: true
+      description: "The preposition keyword string"
+      example: "qr code pour wifi"
+
+    volume:
+      type: int
+      required: false
+      description: "Monthly search volume"
+      example: 3000
+
+    difficulty:
+      type: int
+      required: false
+      description: "SEO difficulty score (0-100)"
+      example: 18
+
+    cpc:
+      type: float
+      required: false
+      description: "Cost per click (USD)"
+      example: 0.55
+
+    # --- Preposition-specific properties ---
+    preposition:
+      type: string
+      required: true
+      description: "Preposition used: for | with | without | near | to | like | in | on | at"
+      example: "for"
+
+    use_case:
+      type: string
+      required: true
+      description: "The use case or context (what it's for/with)"
+      example: "wifi"
+
+    use_case_type:
+      type: string
+      required: false
+      description: "Category of use case: feature | industry | audience | integration | location | event"
+      example: "feature"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # RELATIONS
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  relations:
+    # Incoming: SEOKeyword --[:HAS_PREPOSITIONS]--> SEOPreposition (ownership)
+    # Incoming: BlockGenerated --[:ADDRESSES]--> SEOPreposition (coverage)
+
+    - relation: USE_CASE_ENTITY
+      to: Entity
+      direction: outgoing
+      description: "Optional: if use_case corresponds to an Entity"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # EXAMPLE
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  example:
+    description: "Get preposition keywords grouped by use case type"
+    cypher: |
+      // Analyze use cases for a keyword
+      MATCH (kw:SEOKeyword {key: $keyword_key})-[:HAS_PREPOSITIONS]->(p:SEOPreposition)
+      OPTIONAL MATCH (p)-[:USE_CASE_ENTITY]->(e:Entity)
+      RETURN p.use_case_type AS type,
+             collect({
+               value: p.value,
+               volume: p.volume,
+               use_case: p.use_case,
+               entity: e.key
+             }) AS prepositions,
+             sum(p.volume) AS total_volume
+      ORDER BY total_volume DESC

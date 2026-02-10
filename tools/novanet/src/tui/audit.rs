@@ -40,24 +40,24 @@ impl KindAuditStats {
     }
 }
 
-/// Global audit statistics summary.
+/// Shared audit statistics summary.
 #[derive(Debug, Clone, Default)]
 #[allow(dead_code)] // WIP: Audit mode implementation
-pub struct GlobalAuditStats {
+pub struct SharedAuditStats {
     /// Stats per Kind
     pub kinds: Vec<KindAuditStats>,
     /// Total instances across all Kinds
     pub total_instances: usize,
     /// Total Kinds with issues
     pub kinds_with_issues: usize,
-    /// Global coverage percentage
+    /// Shared coverage percentage
     pub global_coverage: u8,
     /// Total missing required fields
     pub total_issues: usize,
 }
 
 #[allow(dead_code)] // WIP: Audit mode implementation
-impl GlobalAuditStats {
+impl SharedAuditStats {
     /// Calculate global stats from Kind stats.
     pub fn from_kinds(kinds: Vec<KindAuditStats>) -> Self {
         let total_instances: usize = kinds.iter().map(|k| k.instance_count).sum();
@@ -88,7 +88,7 @@ impl GlobalAuditStats {
 /// Load audit statistics from Neo4j.
 /// This queries all Kinds and their instances to calculate coverage.
 #[allow(dead_code)] // WIP: Audit mode implementation
-pub async fn load_audit_stats(db: &Db) -> crate::Result<GlobalAuditStats> {
+pub async fn load_audit_stats(db: &Db) -> crate::Result<SharedAuditStats> {
     // Query all Kinds with their required properties and instance counts
     let cypher = r#"
 MATCH (k:Kind:Meta)
@@ -147,7 +147,7 @@ ORDER BY instance_count DESC
         });
     }
 
-    Ok(GlobalAuditStats::from_kinds(kinds))
+    Ok(SharedAuditStats::from_kinds(kinds))
 }
 
 // =============================================================================
@@ -212,7 +212,7 @@ mod tests {
             },
         ];
 
-        let global = GlobalAuditStats::from_kinds(kinds);
+        let global = SharedAuditStats::from_kinds(kinds);
 
         assert_eq!(global.total_instances, 200);
         assert_eq!(global.kinds_with_issues, 1);

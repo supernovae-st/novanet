@@ -92,37 +92,37 @@ pub fn heatmap_color(count: usize, max_count: usize) -> Color {
 // REALM COLORS (from taxonomy.yaml node_realms)
 // =============================================================================
 
-/// Realm color definitions (v10.6: 2 realms only - global + tenant).
+/// Realm color definitions (v11.2: 2 realms - shared + org).
 pub mod realm {
     use super::*;
 
-    pub const GLOBAL_HEX: &str = "#2aa198";
-    pub const TENANT_HEX: &str = "#6c71c4";
+    pub const SHARED_HEX: &str = "#2aa198";
+    pub const ORG_HEX: &str = "#6c71c4";
 
     // 256-color palette indices
-    pub const GLOBAL_256: u8 = 37;
-    pub const TENANT_256: u8 = 141;
+    pub const SHARED_256: u8 = 37;
+    pub const ORG_256: u8 = 141;
 
     // 16-color palette indices
-    pub const GLOBAL_16: Color = Color::Cyan;
-    pub const TENANT_16: Color = Color::Magenta;
+    pub const SHARED_16: Color = Color::Cyan;
+    pub const ORG_16: Color = Color::Magenta;
 
     /// Get realm color for a given color mode.
     pub fn color(realm: &str, mode: ColorMode) -> Color {
         match mode {
             ColorMode::TrueColor => match realm {
-                "global" => hex_to_color(GLOBAL_HEX),
-                "tenant" => hex_to_color(TENANT_HEX),
+                "shared" => hex_to_color(SHARED_HEX),
+                "org" => hex_to_color(ORG_HEX),
                 _ => Color::White,
             },
             ColorMode::Color256 => match realm {
-                "global" => Color::Indexed(GLOBAL_256),
-                "tenant" => Color::Indexed(TENANT_256),
+                "shared" => Color::Indexed(SHARED_256),
+                "org" => Color::Indexed(ORG_256),
                 _ => Color::White,
             },
             ColorMode::Color16 => match realm {
-                "global" => GLOBAL_16,
-                "tenant" => TENANT_16,
+                "shared" => SHARED_16,
+                "org" => ORG_16,
                 _ => Color::White,
             },
         }
@@ -215,29 +215,33 @@ pub mod traits {
     use super::*;
 
     // Unicode border characters for trait encoding
-    // v11.2: 4 traits (job removed)
+    // v11.2: 5 traits (job removed, derived split → generated + aggregated)
     pub const INVARIANT_BORDER: &str = "─";
     pub const LOCALIZED_BORDER: &str = "┄";
     pub const KNOWLEDGE_BORDER: &str = "┈";
-    pub const DERIVED_BORDER: &str = "═";
+    pub const GENERATED_BORDER: &str = "═";
+    pub const AGGREGATED_BORDER: &str = "┅";
 
     // Trait colors (hex)
     pub const INVARIANT_HEX: &str = "#3b82f6";
     pub const LOCALIZED_HEX: &str = "#22c55e";
     pub const KNOWLEDGE_HEX: &str = "#8b5cf6";
-    pub const DERIVED_HEX: &str = "#9ca3af";
+    pub const GENERATED_HEX: &str = "#b58900";
+    pub const AGGREGATED_HEX: &str = "#6c71c4";
 
     // 256-color palette
     pub const INVARIANT_256: u8 = 33;
     pub const LOCALIZED_256: u8 = 41;
     pub const KNOWLEDGE_256: u8 = 141;
-    pub const DERIVED_256: u8 = 245;
+    pub const GENERATED_256: u8 = 136;
+    pub const AGGREGATED_256: u8 = 141;
 
     // 16-color palette
     pub const INVARIANT_16: Color = Color::Blue;
     pub const LOCALIZED_16: Color = Color::Green;
     pub const KNOWLEDGE_16: Color = Color::Magenta;
-    pub const DERIVED_16: Color = Color::DarkGray;
+    pub const GENERATED_16: Color = Color::Yellow;
+    pub const AGGREGATED_16: Color = Color::Magenta;
 
     /// Get trait border character.
     pub fn border_char(trait_key: &str) -> &'static str {
@@ -245,7 +249,8 @@ pub mod traits {
             "invariant" => INVARIANT_BORDER,
             "localized" => LOCALIZED_BORDER,
             "knowledge" => KNOWLEDGE_BORDER,
-            "derived" => DERIVED_BORDER,
+            "generated" => GENERATED_BORDER,
+            "aggregated" => AGGREGATED_BORDER,
             _ => INVARIANT_BORDER,
         }
     }
@@ -257,21 +262,24 @@ pub mod traits {
                 "invariant" => hex_to_color(INVARIANT_HEX),
                 "localized" => hex_to_color(LOCALIZED_HEX),
                 "knowledge" => hex_to_color(KNOWLEDGE_HEX),
-                "derived" => hex_to_color(DERIVED_HEX),
+                "generated" => hex_to_color(GENERATED_HEX),
+                "aggregated" => hex_to_color(AGGREGATED_HEX),
                 _ => Color::White,
             },
             ColorMode::Color256 => match trait_key {
                 "invariant" => Color::Indexed(INVARIANT_256),
                 "localized" => Color::Indexed(LOCALIZED_256),
                 "knowledge" => Color::Indexed(KNOWLEDGE_256),
-                "derived" => Color::Indexed(DERIVED_256),
+                "generated" => Color::Indexed(GENERATED_256),
+                "aggregated" => Color::Indexed(AGGREGATED_256),
                 _ => Color::White,
             },
             ColorMode::Color16 => match trait_key {
                 "invariant" => INVARIANT_16,
                 "localized" => LOCALIZED_16,
                 "knowledge" => KNOWLEDGE_16,
-                "derived" => DERIVED_16,
+                "generated" => GENERATED_16,
+                "aggregated" => AGGREGATED_16,
                 _ => Color::White,
             },
         }
@@ -421,9 +429,9 @@ impl Icons {
     fn defaults() -> Self {
         let mut icons = Self::default();
 
-        // Realms
-        icons.realms.insert("global".into(), "◉".into());
-        icons.realms.insert("tenant".into(), "◎".into());
+        // Realms (v11.2: shared + org)
+        icons.realms.insert("shared".into(), "◉".into());
+        icons.realms.insert("org".into(), "◎".into());
 
         // Layers
         icons.layers.insert("config".into(), "⚙".into());
@@ -935,22 +943,22 @@ mod tests {
     #[test]
     fn test_realm_colors_truecolor() {
         let mode = ColorMode::TrueColor;
-        assert_eq!(realm::color("global", mode), Color::Rgb(42, 161, 152));
-        assert_eq!(realm::color("tenant", mode), Color::Rgb(108, 113, 196));
+        assert_eq!(realm::color("shared", mode), Color::Rgb(42, 161, 152));
+        assert_eq!(realm::color("org", mode), Color::Rgb(108, 113, 196));
     }
 
     #[test]
     fn test_realm_colors_256() {
         let mode = ColorMode::Color256;
-        assert_eq!(realm::color("global", mode), Color::Indexed(37));
-        assert_eq!(realm::color("tenant", mode), Color::Indexed(141));
+        assert_eq!(realm::color("shared", mode), Color::Indexed(37));
+        assert_eq!(realm::color("org", mode), Color::Indexed(141));
     }
 
     #[test]
     fn test_realm_colors_16() {
         let mode = ColorMode::Color16;
-        assert_eq!(realm::color("global", mode), Color::Cyan);
-        assert_eq!(realm::color("tenant", mode), Color::Magenta);
+        assert_eq!(realm::color("shared", mode), Color::Cyan);
+        assert_eq!(realm::color("org", mode), Color::Magenta);
     }
 
     #[test]
@@ -964,7 +972,8 @@ mod tests {
     fn test_trait_borders() {
         assert_eq!(traits::border_char("invariant"), "─");
         assert_eq!(traits::border_char("localized"), "┄");
-        assert_eq!(traits::border_char("derived"), "═");
+        assert_eq!(traits::border_char("generated"), "═");
+        assert_eq!(traits::border_char("aggregated"), "┅");
     }
 
     #[test]
@@ -977,18 +986,19 @@ mod tests {
     #[test]
     fn test_theme_instance() {
         let theme = Theme::with_mode(ColorMode::TrueColor);
-        assert_eq!(theme.realm_color("global"), Color::Rgb(42, 161, 152));
+        assert_eq!(theme.realm_color("shared"), Color::Rgb(42, 161, 152));
         assert_eq!(theme.layer_color("output"), Color::Rgb(34, 197, 94));
-        assert_eq!(theme.trait_border("derived"), "═");
+        assert_eq!(theme.trait_border("generated"), "═");
+        assert_eq!(theme.trait_border("aggregated"), "┅");
     }
 
     #[test]
     fn test_icons_defaults() {
         let icons = Icons::defaults();
 
-        // Realms
-        assert_eq!(icons.realm("global"), "◉");
-        assert_eq!(icons.realm("tenant"), "◎");
+        // Realms (v11.2: shared + org)
+        assert_eq!(icons.realm("shared"), "◉");
+        assert_eq!(icons.realm("org"), "◎");
         assert_eq!(icons.realm("unknown"), "○"); // Fallback
 
         // Layers
@@ -1021,7 +1031,7 @@ mod tests {
     fn test_theme_has_icons() {
         let theme = Theme::new();
         // Icons should be available on theme
-        assert_eq!(theme.icons.realm("global"), "◉");
+        assert_eq!(theme.icons.realm("shared"), "◉");
         assert_eq!(theme.icons.state("loading"), "◐");
     }
 
@@ -1039,33 +1049,33 @@ mod tests {
 
         let icons = Icons::load(&root.display().to_string());
 
-        // Should have loaded from visual-encoding.yaml
-        assert_eq!(icons.realm("global"), "◉");
-        assert_eq!(icons.realm("tenant"), "◎");
+        // Should have loaded from visual-encoding.yaml (v11.2: shared + org)
+        assert_eq!(icons.realm("shared"), "◉");
+        assert_eq!(icons.realm("org"), "◎");
         assert_eq!(icons.layer("config"), "⚙");
         assert_eq!(icons.state("loading"), "◐");
         assert_eq!(icons.nav("expanded"), "▼");
     }
 
     // =========================================================================
-    // Task 2.1: Realm color resolution tests
+    // Task 2.1: Realm color resolution tests (v11.2: shared + org)
     // =========================================================================
 
     #[test]
-    fn test_realm_color_global_truecolor() {
-        let color = realm::color("global", ColorMode::TrueColor);
+    fn test_realm_color_shared_truecolor() {
+        let color = realm::color("shared", ColorMode::TrueColor);
         assert!(
             matches!(color, Color::Rgb(..)),
-            "global realm should return RGB color in TrueColor mode"
+            "shared realm should return RGB color in TrueColor mode"
         );
     }
 
     #[test]
-    fn test_realm_color_tenant_truecolor() {
-        let color = realm::color("tenant", ColorMode::TrueColor);
+    fn test_realm_color_org_truecolor() {
+        let color = realm::color("org", ColorMode::TrueColor);
         assert!(
             matches!(color, Color::Rgb(..)),
-            "tenant realm should return RGB color in TrueColor mode"
+            "org realm should return RGB color in TrueColor mode"
         );
     }
 
@@ -1169,12 +1179,17 @@ mod tests {
             "┈",
             "knowledge: double border"
         );
+        // v11.2: split derived → generated + aggregated
         assert_eq!(
-            traits::border_char("derived"),
+            traits::border_char("generated"),
             "═",
-            "derived: dotted border"
+            "generated: double border"
         );
-        // v11.2: job trait removed
+        assert_eq!(
+            traits::border_char("aggregated"),
+            "┅",
+            "aggregated: dotted border"
+        );
     }
 
     /// Test trait border fallback for unknown traits.
@@ -1201,8 +1216,9 @@ mod tests {
         assert_eq!(theme.trait_border("invariant"), "─");
         assert_eq!(theme.trait_border("localized"), "┄");
         assert_eq!(theme.trait_border("knowledge"), "┈");
-        assert_eq!(theme.trait_border("derived"), "═");
-        // v11.2: job trait removed
+        // v11.2: split derived → generated + aggregated
+        assert_eq!(theme.trait_border("generated"), "═");
+        assert_eq!(theme.trait_border("aggregated"), "┅");
     }
 
     // =========================================================================

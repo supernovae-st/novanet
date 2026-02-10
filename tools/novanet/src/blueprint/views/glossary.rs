@@ -41,7 +41,7 @@ pub fn render(data: &BlueprintData) -> String {
     out.push_str("│                                                                              │\n");
     for realm in &data.taxonomy.node_realms {
         out.push_str(&format!("│  {} {}:{}│\n",
-            if realm.key == "global" { "◉" } else { "◎" },
+            if realm.key == "shared" { "◉" } else { "◎" },
             realm.key.to_uppercase(),
             " ".repeat(80 - 6 - realm.key.len())
         ));

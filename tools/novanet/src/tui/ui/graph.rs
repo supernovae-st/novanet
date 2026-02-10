@@ -806,7 +806,7 @@ mod tests {
     ) -> KindArcsData {
         KindArcsData {
             kind_label: kind_label.to_string(),
-            realm: "tenant".to_string(),
+            realm: "org".to_string(),
             layer: "structure".to_string(),
             incoming,
             outgoing,
@@ -1072,7 +1072,7 @@ mod tests {
         let kind1 = create_test_kind("Page");
         let kind2 = create_test_kind("Block");
         let layer = create_test_layer("structure", vec![kind1, kind2]);
-        let realm = create_test_realm("tenant", vec![layer]);
+        let realm = create_test_realm("org", vec![layer]);
         let tree = create_tree_with_realms(vec![realm]);
         let app = create_test_app_with_tree(tree);
 
@@ -1104,7 +1104,7 @@ mod tests {
         // Expected: global = 25%, tenant = 75%
         let global_kind = create_test_kind("Config");
         let global_layer = create_test_layer("config", vec![global_kind]);
-        let global_realm = create_test_realm("global", vec![global_layer]);
+        let global_realm = create_test_realm("shared", vec![global_layer]);
 
         let tenant_kinds = vec![
             create_test_kind("Page"),
@@ -1112,7 +1112,7 @@ mod tests {
             create_test_kind("Entity"),
         ];
         let tenant_layer = create_test_layer("structure", tenant_kinds);
-        let tenant_realm = create_test_realm("tenant", vec![tenant_layer]);
+        let tenant_realm = create_test_realm("org", vec![tenant_layer]);
 
         let tree = create_tree_with_realms(vec![global_realm, tenant_realm]);
         let app = create_test_app_with_tree(tree);
@@ -1143,19 +1143,19 @@ mod tests {
         // bar_width = (realm_kinds * bar_max_width) / total_kinds
         // bar_max_width = 20
 
-        // Global: 2 kinds, Tenant: 8 kinds, Total: 10
-        // Global bar = (2 * 20) / 10 = 4
-        // Tenant bar = (8 * 20) / 10 = 16
+        // Shared: 2 kinds, Org: 8 kinds, Total: 10
+        // Shared bar = (2 * 20) / 10 = 4
+        // Org bar = (8 * 20) / 10 = 16
 
         let global_kinds = vec![create_test_kind("Config1"), create_test_kind("Config2")];
         let global_layer = create_test_layer("config", global_kinds);
-        let global_realm = create_test_realm("global", vec![global_layer]);
+        let global_realm = create_test_realm("shared", vec![global_layer]);
 
         let tenant_kinds: Vec<KindInfo> = (0..8)
             .map(|i| create_test_kind(&format!("Kind{}", i)))
             .collect();
         let tenant_layer = create_test_layer("structure", tenant_kinds);
-        let tenant_realm = create_test_realm("tenant", vec![tenant_layer]);
+        let tenant_realm = create_test_realm("org", vec![tenant_layer]);
 
         let tree = create_tree_with_realms(vec![global_realm, tenant_realm]);
         let app = create_test_app_with_tree(tree);
@@ -1168,7 +1168,7 @@ mod tests {
             .iter()
             .filter(|l| {
                 let content: String = l.spans.iter().map(|s| s.content.as_ref()).collect();
-                (content.contains("global") || content.contains("tenant")) && content.contains('%')
+                (content.contains("shared") || content.contains("org")) && content.contains('%')
             })
             .collect();
 
@@ -1189,7 +1189,7 @@ mod tests {
         let global_blocks = global_line.matches('\u{2588}').count();
         let tenant_blocks = tenant_line.matches('\u{2588}').count();
 
-        // Tenant should have more blocks than global (8 kinds vs 2 kinds)
+        // Org should have more blocks than global (8 kinds vs 2 kinds)
         assert!(
             tenant_blocks > global_blocks,
             "tenant ({} blocks) should have more than global ({} blocks)",
@@ -1213,7 +1213,7 @@ mod tests {
 
         let layer1 = create_test_layer("config", layer1_kinds);
         let layer2 = create_test_layer("foundation", layer2_kinds);
-        let realm = create_test_realm("tenant", vec![layer1, layer2]);
+        let realm = create_test_realm("org", vec![layer1, layer2]);
         let tree = create_tree_with_realms(vec![realm]);
         let app = create_test_app_with_tree(tree);
 
@@ -1272,7 +1272,7 @@ mod tests {
         let kind = create_test_kind("Page");
         let layer_with_kinds = create_test_layer("structure", vec![kind]);
         let empty_layer = create_test_layer("empty", Vec::new());
-        let realm = create_test_realm("tenant", vec![layer_with_kinds, empty_layer]);
+        let realm = create_test_realm("org", vec![layer_with_kinds, empty_layer]);
         let tree = create_tree_with_realms(vec![realm]);
         let app = create_test_app_with_tree(tree);
 
@@ -1300,7 +1300,7 @@ mod tests {
             create_test_kind("Entity"),
         ];
         let layer = create_test_layer("structure", kinds);
-        let realm = create_test_realm("tenant", vec![layer]);
+        let realm = create_test_realm("org", vec![layer]);
         let tree = create_tree_with_realms(vec![realm]);
         let app = create_test_app_with_tree(tree);
 

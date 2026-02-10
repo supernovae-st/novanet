@@ -94,14 +94,14 @@ describe('FacetFilterPanel', () => {
       expect(screen.getByText('SEO Intelligence')).toBeInTheDocument();
     });
 
-    it('renders 5 trait items', () => {
+    it('renders 5 trait items (v11.2: generated + aggregated, no derived/job)', () => {
       render(<FacetFilterPanel />);
 
       expect(screen.getByText('Invariant')).toBeInTheDocument();
       expect(screen.getByText('Localized')).toBeInTheDocument();
       expect(screen.getByText('Knowledge')).toBeInTheDocument();
-      expect(screen.getByText('Derived')).toBeInTheDocument();
-      expect(screen.getByText('Job')).toBeInTheDocument();
+      expect(screen.getByText('Generated')).toBeInTheDocument();
+      expect(screen.getByText('Aggregated')).toBeInTheDocument();
     });
 
     it('renders 5 arc family items', () => {
@@ -134,7 +134,7 @@ describe('FacetFilterPanel', () => {
   describe('active facet count', () => {
     it('shows active count when facets are selected', () => {
       setupStore({
-        realmFilter: ['global'],
+        realmFilter: ['shared'],
         traitFilter: ['localized'],
         layerFilter: [],
       });
@@ -152,7 +152,7 @@ describe('FacetFilterPanel', () => {
 
     it('hides help text when facets are active', () => {
       setupStore({
-        realmFilter: ['global'],
+        realmFilter: ['shared'],
         traitFilter: [],
         layerFilter: [],
       });

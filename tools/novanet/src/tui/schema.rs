@@ -394,7 +394,7 @@ mod tests {
     const SAMPLE_YAML: &str = r#"
 node:
   name: Culture
-  realm: global
+  realm: shared
   layer: config
   trait: knowledge
 

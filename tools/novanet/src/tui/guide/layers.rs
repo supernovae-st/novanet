@@ -1,8 +1,8 @@
-//! Layers Tab — Split view showing Global and Tenant realms.
+//! Layers Tab — Split view showing Shared and Org realms.
 //!
 //! Layout (v11.0):
-//! - Left side: GLOBAL realm (2 layers: config, locale-knowledge)
-//! - Right side: TENANT realm (7 layers: config, foundation, structure, semantic, instruction, seo, output)
+//! - Left side: SHARED realm (2 layers: config, locale-knowledge)
+//! - Right side: ORG realm (7 layers: config, foundation, structure, semantic, instruction, seo, output)
 //!
 //! Each layer card shows:
 //! - Icon (from theme)
@@ -38,15 +38,15 @@ pub struct LayerCardInfo {
     pub kind_count: usize,
 }
 
-/// Global realm layers (2 layers) — v11.0: SEO moved to tenant.
-pub const GLOBAL_LAYERS: [(&str, &str, &str); 2] = [
+/// Shared realm layers (2 layers) — v11.0: SEO moved to tenant.
+pub const SHARED_LAYERS: [(&str, &str, &str); 2] = [
     ("config", "\u{2699}", "System settings"),           // ⚙
     ("locale-knowledge", "\u{25ca}", "Terms, Patterns"), // ◊
 ];
 
-/// Tenant realm layers (7 layers) — v11.0: SEO added from global.
-pub const TENANT_LAYERS: [(&str, &str, &str); 7] = [
-    ("config", "\u{2699}", "Tenant settings"),       // ⚙
+/// Org realm layers (7 layers) — v11.0: SEO added from global.
+pub const ORG_LAYERS: [(&str, &str, &str); 7] = [
+    ("config", "\u{2699}", "Org settings"),       // ⚙
     ("foundation", "\u{25c7}", "Entities, Assets"),  // ◇
     ("structure", "\u{25c6}", "Pages, Blocks"),      // ◆
     ("semantic", "\u{25c6}", "Prompts, Context"),    // ◆
@@ -77,16 +77,16 @@ impl TaxonomyTree {
 // RENDERING
 // =============================================================================
 
-/// Render the Layers tab with split view (Global | Tenant).
+/// Render the Layers tab with split view (Shared | Org).
 pub fn render_layers_tab(f: &mut Frame, app: &App, area: Rect) {
-    // Split into two columns: Global (left) and Tenant (right)
+    // Split into two columns: Shared (left) and Org (right)
     let chunks = Layout::default()
         .direction(Direction::Horizontal)
         .constraints([Constraint::Percentage(45), Constraint::Percentage(55)])
         .split(area);
 
-    render_realm_column(f, app, chunks[0], "global", "GLOBAL REALM", 0);
-    render_realm_column(f, app, chunks[1], "tenant", "TENANT REALM", 1);
+    render_realm_column(f, app, chunks[0], "shared", "SHARED REALM", 0);
+    render_realm_column(f, app, chunks[1], "org", "ORG REALM", 1);
 }
 
 /// Render a single realm column with its layers.
@@ -129,10 +129,10 @@ fn render_realm_column(
     let max_count = layer_stats.iter().map(|(_, c)| *c).max().unwrap_or(1);
 
     // Build layer cards
-    let layers = if realm_key == "global" {
-        &GLOBAL_LAYERS[..]
+    let layers = if realm_key == "shared" {
+        &SHARED_LAYERS[..]
     } else {
-        &TENANT_LAYERS[..]
+        &ORG_LAYERS[..]
     };
 
     let mut lines: Vec<Line<'static>> = Vec::new();
@@ -290,32 +290,32 @@ mod tests {
 
     #[test]
     fn test_global_layers_count() {
-        // v11.0: GLOBAL has 2 layers (config, locale-knowledge), SEO moved to tenant
-        assert_eq!(GLOBAL_LAYERS.len(), 2);
+        // v11.0: SHARED has 2 layers (config, locale-knowledge), SEO moved to tenant
+        assert_eq!(SHARED_LAYERS.len(), 2);
     }
 
     #[test]
     fn test_tenant_layers_count() {
-        // v11.0: TENANT has 7 layers (config, foundation, structure, semantic, instruction, seo, output)
-        assert_eq!(TENANT_LAYERS.len(), 7);
+        // v11.0: ORG has 7 layers (config, foundation, structure, semantic, instruction, seo, output)
+        assert_eq!(ORG_LAYERS.len(), 7);
     }
 
     #[test]
     fn test_layer_keys_valid() {
-        for (key, _, _) in GLOBAL_LAYERS {
+        for (key, _, _) in SHARED_LAYERS {
             assert!(!key.is_empty());
         }
-        for (key, _, _) in TENANT_LAYERS {
+        for (key, _, _) in ORG_LAYERS {
             assert!(!key.is_empty());
         }
     }
 
     #[test]
     fn test_layer_icons_valid() {
-        for (_, icon, _) in GLOBAL_LAYERS {
+        for (_, icon, _) in SHARED_LAYERS {
             assert!(!icon.is_empty());
         }
-        for (_, icon, _) in TENANT_LAYERS {
+        for (_, icon, _) in ORG_LAYERS {
             assert!(!icon.is_empty());
         }
     }

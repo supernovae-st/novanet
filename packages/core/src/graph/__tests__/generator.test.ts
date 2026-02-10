@@ -1,5 +1,5 @@
 // packages/core/src/graph/__tests__/generator.test.ts
-// Tests for schema graph generator — v11.1.0 (65 nodes, 2 realms, +EntityCategory)
+// Tests for schema graph generator — v11.2.0 (62 nodes, 2 realms, 3 job nodes removed)
 // TDD: Write tests first, then implementation
 
 import { describe, it, expect } from 'vitest';
@@ -8,9 +8,9 @@ import { NODE_TYPES } from '../../types/nodes.js';
 
 describe('graph/generator', () => {
   describe('generateSchemaGraph', () => {
-    it('should generate 65 schema nodes', () => {
+    it('should generate 62 schema nodes', () => {
       const result = generateSchemaGraph();
-      expect(result.nodes).toHaveLength(65);
+      expect(result.nodes).toHaveLength(62);
     });
 
     it('should generate schema arcs from RelationRegistry', () => {
@@ -25,7 +25,7 @@ describe('graph/generator', () => {
 
       expect(projectNode).toBeDefined();
       expect(projectNode?.id).toBe('schema-Project');
-      expect(projectNode?.realm).toBe('tenant');
+      expect(projectNode?.realm).toBe('org');
       expect(projectNode?.layer).toBe('foundation');
       expect(projectNode?.label).toBe('Project');
       expect(projectNode?.description).toBeDefined();
@@ -44,7 +44,7 @@ describe('graph/generator', () => {
       expect(hasPageArc?.cardinality).toBeDefined();
     });
 
-    it('should map all 65 node types', () => {
+    it('should map all 62 node types', () => {
       const result = generateSchemaGraph();
       const nodeTypes = result.nodes.map(n => n.nodeType);
 
@@ -86,20 +86,20 @@ describe('graph/generator', () => {
     it('should return hierarchical data with all 2 realms', () => {
       const result = getSchemaHierarchy();
       expect(Object.keys(result.realms)).toHaveLength(2);
-      expect(result.realms.tenant).toBeDefined();
-      expect(result.realms.global).toBeDefined();
+      expect(result.realms.org).toBeDefined();
+      expect(result.realms.shared).toBeDefined();
     });
 
     it('should include stats', () => {
       const result = getSchemaHierarchy();
-      expect(result.stats.totalNodes).toBe(65);
-      expect(result.stats.nodesByRealm.tenant).toBe(33);   // v11.1: 33 tenant nodes (includes SEO)
-      expect(result.stats.nodesByRealm.global).toBe(32);   // v11.1: 32 global nodes (+EntityCategory)
+      expect(result.stats.totalNodes).toBe(62);
+      expect(result.stats.nodesByRealm.org).toBe(30);   // v11.2: 30 org nodes (3 job nodes removed)
+      expect(result.stats.nodesByRealm.shared).toBe(32);   // v11.2: 32 shared nodes
     });
 
     it('should include all nodes', () => {
       const result = getSchemaHierarchy();
-      expect(result.nodes).toHaveLength(65);
+      expect(result.nodes).toHaveLength(62);
     });
 
     it('should include arcs', () => {
@@ -110,15 +110,15 @@ describe('graph/generator', () => {
     it('should have correct realm definitions', () => {
       const result = getSchemaHierarchy();
 
-      // v10.9: Tenant realm (7 layers - includes SEO)
-      expect(result.realms.tenant.label).toBe('TENANT');
-      expect(result.realms.tenant.icon).toBe('🏢');
-      expect(Object.keys(result.realms.tenant.layers)).toHaveLength(7);
+      // v11.2: Org realm (7 layers - includes SEO)
+      expect(result.realms.org.label).toBe('ORG');
+      expect(result.realms.org.icon).toBe('🏢');
+      expect(Object.keys(result.realms.org.layers)).toHaveLength(7);
 
-      // v10.9: Global realm (2 layers - config, locale-knowledge)
-      expect(result.realms.global.label).toBe('GLOBAL');
-      expect(result.realms.global.icon).toBe('🌍');
-      expect(Object.keys(result.realms.global.layers)).toHaveLength(2);
+      // v11.2: Shared realm (2 layers - config, locale-knowledge)
+      expect(result.realms.shared.label).toBe('SHARED');
+      expect(result.realms.shared.icon).toBe('🌍');
+      expect(Object.keys(result.realms.shared.layers)).toHaveLength(2);
     });
 
     it('should have totalArcs in stats', () => {

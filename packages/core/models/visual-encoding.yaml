@@ -1,6 +1,6 @@
 # packages/core/models/visual-encoding.yaml
 # Visual presentation rules for NovaNet graph elements
-# v10.6.0 — 2-Realm Architecture (GLOBAL / TENANT)
+# v11.2.0 — 2-Realm Architecture (SHARED / ORG)
 #
 # IMPORTANT: Colors are NOT defined here.
 # Colors come from taxonomy.yaml (node_realms, node_layers, node_traits, arc_families)
@@ -11,7 +11,7 @@
 # - apps/studio/src/design/visual-encoding.json (runtime config)
 # - tools/novanet/src/generated/visual_encoding.rs (TUI compile-time)
 
-version: "11.0.0"
+version: "11.2.0"
 
 # =============================================================================
 # CHANNEL MAPPING — Which visual channel encodes which facet
@@ -114,14 +114,21 @@ trait_borders:
     unicode_style: dotted
     description: "Locale knowledge reference data"
 
-  derived:
+  # v11.2: Split derived → generated + aggregated
+  generated:
     css_style: double
     css_width: 3px
     unicode_char: "═"
     unicode_style: double
-    description: "Computed from other nodes"
+    description: "LLM-generated content output"
 
-  # Note: job trait removed in v11.2 (deferred to v12+)
+  aggregated:
+    css_style: dotted
+    css_width: 3px
+    css_dash_array: "3 2"
+    unicode_char: "┅"
+    unicode_style: heavy_dotted
+    description: "Computed metrics and analytics"
 
 # =============================================================================
 # SCOPE STROKE STYLES — Intra vs Cross realm arcs
@@ -289,14 +296,14 @@ icons:
   # REALM ICONS — Where does the node live?
   # ---------------------------------------------------------------------------
   realms:
-    global:
+    shared:
       web: globe
       terminal: "◉"
       description: "Universal shared data (read-only)"
-    tenant:
+    org:
       web: building-2
       terminal: "◎"
-      description: "Multi-tenant isolated scope"
+      description: "Organization-specific data"
 
   # ---------------------------------------------------------------------------
   # LAYER ICONS — What functional category?
@@ -338,7 +345,7 @@ icons:
   # ---------------------------------------------------------------------------
   # TRAIT ICONS — How does the node behave across locales?
   # ---------------------------------------------------------------------------
-  # Note: v11.2 removed job trait (deferred to v12+)
+  # v11.2: Removed job trait, split derived → generated + aggregated
   traits:
     invariant:
       web: lock
@@ -352,10 +359,14 @@ icons:
       web: brain
       terminal: "◊"
       description: "Locale expertise data"
-    derived:
+    generated:
+      web: sparkles
+      terminal: "★"
+      description: "LLM-generated content output"
+    aggregated:
       web: calculator
       terminal: "▪"
-      description: "Computed from other nodes"
+      description: "Computed metrics and analytics"
 
   # ---------------------------------------------------------------------------
   # ARC FAMILY ICONS — What kind of relationship?

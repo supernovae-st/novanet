@@ -296,7 +296,7 @@ mod tests {
     #[test]
     fn faceted_query_single_realm() {
         let filter = FacetFilter {
-            realms: vec!["global".to_string()],
+            realms: vec!["shared".to_string()],
             ..Default::default()
         };
         let stmt = faceted_query(&filter, 200);
@@ -309,7 +309,7 @@ mod tests {
     #[test]
     fn faceted_query_multiple_facets() {
         let filter = FacetFilter {
-            realms: vec!["global".to_string()],
+            realms: vec!["shared".to_string()],
             layers: vec!["knowledge".to_string()],
             trait_filters: vec!["invariant".to_string()],
             ..Default::default()
@@ -376,7 +376,7 @@ mod tests {
     #[test]
     fn filter_build_query_with_facets() {
         let filter = FacetFilter {
-            realms: vec!["tenant".to_string()],
+            realms: vec!["org".to_string()],
             layers: vec!["structure".to_string()],
             ..Default::default()
         };
@@ -389,7 +389,7 @@ mod tests {
     #[test]
     fn faceted_query_all_axes_active() {
         let filter = FacetFilter {
-            realms: vec!["global".to_string(), "tenant".to_string()],
+            realms: vec!["shared".to_string(), "org".to_string()],
             layers: vec!["knowledge".to_string(), "structure".to_string()],
             trait_filters: vec!["invariant".to_string(), "localized".to_string()],
             kinds: vec!["Locale".to_string()],

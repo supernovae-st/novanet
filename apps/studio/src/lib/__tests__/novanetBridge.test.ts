@@ -76,7 +76,7 @@ describe('buildCypherViaRust', () => {
     mockExecFile.mockResolvedValue({ stdout: 'MATCH (n) RETURN n', stderr: '' });
 
     const facets: FacetFilter = {
-      realms: ['tenant'],
+      realms: ['org'],
       layers: ['structure'],
       traits: ['invariant'],
       arc_families: [],

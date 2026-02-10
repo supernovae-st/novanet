@@ -1,11 +1,12 @@
-//! Traits Tab — Constellation view showing 4 traits connected.
+//! Traits Tab — Constellation view showing 5 traits connected.
 //!
 //! The constellation shows the relationship between traits:
 //! - KNOWLEDGE at top (input to generation)
 //! - INVARIANT and LOCALIZED as core pair (structure -> output)
-//! - DERIVED at bottom (computed/aggregated data)
+//! - GENERATED and AGGREGATED at bottom (LLM output and computed metrics)
 //!
 //! Note: job trait removed in v11.2 (deferred to v12+).
+//! Note: v11.2 split derived → generated + aggregated.
 
 use ratatui::Frame;
 use ratatui::layout::{Constraint, Direction, Layout, Rect};
@@ -39,17 +40,18 @@ pub struct TraitStats {
 }
 
 /// Canonical trait order for constellation.
-/// Note: job trait removed in v11.2 (4 traits instead of 5).
-pub const TRAIT_ORDER: [&str; 4] = ["invariant", "localized", "knowledge", "derived"];
+/// Note: job trait removed in v11.2, derived split → generated + aggregated.
+pub const TRAIT_ORDER: [&str; 5] = ["invariant", "localized", "knowledge", "generated", "aggregated"];
 
 /// Get symbol for a trait.
 fn trait_symbol(key: &str) -> &'static str {
     match key {
-        "invariant" => "\u{25a0}", // ■
-        "localized" => "\u{25a1}", // □
-        "knowledge" => "\u{25ca}", // ◊
-        "derived" => "\u{2550}",   // ═
-        _ => "\u{00b7}",           // ·
+        "invariant" => "\u{25a0}",  // ■
+        "localized" => "\u{25a1}",  // □
+        "knowledge" => "\u{25ca}",  // ◊
+        "generated" => "\u{2605}",  // ★
+        "aggregated" => "\u{25aa}", // ▪
+        _ => "\u{00b7}",            // ·
     }
 }
 
@@ -59,7 +61,8 @@ fn trait_display_name(key: &str) -> &str {
         "invariant" => "INVARIANT",
         "localized" => "LOCALIZED",
         "knowledge" => "KNOWLEDGE",
-        "derived" => "DERIVED",
+        "generated" => "GENERATED",
+        "aggregated" => "AGGREGATED",
         _ => key,
     }
 }
@@ -71,13 +74,16 @@ fn trait_llm_context(key: &str) -> &str {
             "Nodes that do not change between locales. Structural definitions, configuration, and invariant business logic. Examples: Page, Entity, Block."
         }
         "localized" => {
-            "OUTPUT - Generated content per locale. Has invariant parent (e.g., PageGenerated -> Page). Created by LLM generation, not translation."
+            "OUTPUT - Generated content per locale. Has invariant parent (e.g., EntityContent -> Entity). Created by LLM generation, not translation."
         }
         "knowledge" => {
             "INPUT - Native locale knowledge (savoir). Loaded INTO the LLM as context. Exists only where needed (fr-FR may have 20K Terms, sw-KE may have 500)."
         }
-        "derived" => {
-            "Computed/aggregated data. Metrics, statistics, and cached computations derived from other nodes."
+        "generated" => {
+            "LLM-generated content output. Pages, blocks, and artifacts produced by the generation pipeline. Examples: PageGenerated, BlockGenerated, OutputArtifact."
+        }
+        "aggregated" => {
+            "Computed metrics and analytics. Time-series data, performance snapshots derived from external sources. Examples: GEOMetrics, SEOKeywordMetrics."
         }
         _ => "Unknown trait.",
     }
@@ -108,7 +114,7 @@ pub fn trait_code_examples(key: &str) -> Vec<CodeExample> {
                 title: "Entity (invariant structure)",
                 yaml: r#"node:
   name: Entity
-  realm: tenant
+  realm: org
   layer: foundation
   trait: invariant
   properties:
@@ -125,7 +131,7 @@ RETURN e.key, e.display_name"#,
                 title: "Page (structural template)",
                 yaml: r#"node:
   name: Page
-  realm: tenant
+  realm: org
   layer: structure
   trait: invariant"#,
                 neo4j: r#"(:Page {
@@ -141,7 +147,7 @@ RETURN p.key, collect(b.key) AS blocks"#,
                 title: "EntityContent (per-locale content)",
                 yaml: r#"node:
   name: EntityContent
-  realm: tenant
+  realm: org
   layer: semantic
   trait: localized
   # Composite key: entity:{key}@{locale}"#,
@@ -159,7 +165,7 @@ RETURN c.title, c.description"#,
                 title: "PageGenerated (LLM output)",
                 yaml: r#"node:
   name: PageGenerated
-  realm: tenant
+  realm: org
   layer: output
   trait: localized
   # Derived from Page, NOT translated"#,
@@ -178,7 +184,7 @@ RETURN g.html_content"#,
                 title: "Term (vocabulary atom)",
                 yaml: r#"node:
   name: Term
-  realm: global
+  realm: shared
   layer: locale-knowledge
   trait: knowledge
   # Native to locale, not translated"#,
@@ -197,7 +203,7 @@ RETURN t.term, t.definition"#,
                 title: "Expression (stylistic pattern)",
                 yaml: r#"node:
   name: Expression
-  realm: global
+  realm: shared
   layer: locale-knowledge
   trait: knowledge"#,
                 neo4j: r#"(:Expression {
@@ -217,7 +223,7 @@ RETURN e.pattern"#,
                 title: "ContentMetrics (computed stats)",
                 yaml: r#"node:
   name: ContentMetrics
-  realm: tenant
+  realm: org
   layer: output
   trait: derived
   # Aggregated from content nodes"#,
@@ -414,15 +420,18 @@ fn build_constellation_lines(
     let core_line = center_spans(core_pair, width);
     lines.push(core_line);
 
-    // Row 4: Connection line to DERIVED
-    let connector3 = center_text("\u{2572}  \u{2571}", width); // ╲  ╱
+    // Row 4: Connection lines to GENERATED and AGGREGATED
+    let connector3 = center_text("\u{2572}      \u{2571}", width); // ╲      ╱
     lines.push(connector3.into());
-    let connector4 = center_text("\u{2502}", width); // │
+    let connector4 = center_text("\u{2571}      \u{2572}", width); // ╱      ╲
     lines.push(connector4.into());
 
-    // Row 5: DERIVED at bottom (centered)
-    let bottom_spans = trait_span("derived", 3);
-    let bottom_line = center_spans(bottom_spans, width);
+    // Row 5: GENERATED and AGGREGATED at bottom (v11.2: split from derived)
+    let mut bottom_pair: Vec<Span<'static>> = Vec::new();
+    bottom_pair.extend(trait_span("generated", 3));
+    bottom_pair.push(Span::styled("  ", Style::default())); // spacer
+    bottom_pair.extend(trait_span("aggregated", 4));
+    let bottom_line = center_spans(bottom_pair, width);
     lines.push(bottom_line);
 
     lines.push(Line::from(""));
@@ -1038,7 +1047,8 @@ mod tests {
         assert_eq!(trait_symbol("invariant"), "\u{25a0}");
         assert_eq!(trait_symbol("localized"), "\u{25a1}");
         assert_eq!(trait_symbol("knowledge"), "\u{25ca}");
-        assert_eq!(trait_symbol("derived"), "\u{2550}");
+        assert_eq!(trait_symbol("generated"), "\u{2605}"); // ★
+        assert_eq!(trait_symbol("aggregated"), "\u{25aa}"); // ▪
         assert_eq!(trait_symbol("unknown"), "\u{00b7}");
     }
 
@@ -1047,16 +1057,19 @@ mod tests {
         assert_eq!(trait_display_name("invariant"), "INVARIANT");
         assert_eq!(trait_display_name("localized"), "LOCALIZED");
         assert_eq!(trait_display_name("knowledge"), "KNOWLEDGE");
+        assert_eq!(trait_display_name("generated"), "GENERATED");
+        assert_eq!(trait_display_name("aggregated"), "AGGREGATED");
     }
 
     #[test]
     fn test_trait_order() {
-        // v11.2: job trait removed (4 traits instead of 5)
-        assert_eq!(TRAIT_ORDER.len(), 4);
+        // v11.2: 5 traits (split derived → generated + aggregated)
+        assert_eq!(TRAIT_ORDER.len(), 5);
         assert_eq!(TRAIT_ORDER[0], "invariant");
         assert_eq!(TRAIT_ORDER[1], "localized");
         assert_eq!(TRAIT_ORDER[2], "knowledge");
-        assert_eq!(TRAIT_ORDER[3], "derived");
+        assert_eq!(TRAIT_ORDER[3], "generated");
+        assert_eq!(TRAIT_ORDER[4], "aggregated");
     }
 
     #[test]

@@ -147,7 +147,7 @@ fn render_realm_map_live(
     for realm in &stats.realms {
         let is_realm_selected = cursor == item_index;
         let realm_prefix = if is_realm_selected { "▶" } else { " " };
-        let realm_style = if realm.key == "global" {
+        let realm_style = if realm.key == "shared" {
             "READ-ONLY"
         } else {
             "per-tenant"
@@ -244,7 +244,7 @@ fn render_realm_map_demo(lines: &mut Vec<String>, cursor: usize) {
     let global_selected = cursor == 0;
     let g_prefix = if global_selected { "▶" } else { " " };
     lines.push(format!(
-        "║  {} ┌─ GLOBAL (READ-ONLY) ───────────────────── 14 kinds ──────┐          ║",
+        "║  {} ┌─ SHARED (READ-ONLY) ───────────────────── 14 kinds ──────┐          ║",
         g_prefix
     ));
     lines.push(
@@ -266,11 +266,11 @@ fn render_realm_map_demo(lines: &mut Vec<String>, cursor: usize) {
     let tenant_selected = cursor == 1;
     let t_prefix = if tenant_selected { "▶" } else { " " };
     lines.push(format!(
-        "║  {} ┌─ TENANT ─────────────────────────────── 32 kinds ──────┐          ║",
+        "║  {} ┌─ ORG ─────────────────────────────── 32 kinds ──────┐          ║",
         t_prefix
     ));
     lines.push(
-        "║    │  config              2 kinds   (TenantConfig, Settings) │          ║".to_string(),
+        "║    │  config              2 kinds   (OrgConfig, Settings) │          ║".to_string(),
     );
     lines.push(
         "║    │  foundation          4 kinds   (Project, BrandIdentity...)│          ║".to_string(),
@@ -1660,8 +1660,8 @@ mod tests {
         AtlasRealmStats {
             realms: vec![
                 AtlasRealmInfo {
-                    key: "global".to_string(),
-                    display_name: "Global".to_string(),
+                    key: "shared".to_string(),
+                    display_name: "Shared".to_string(),
                     color: "#2aa198".to_string(),
                     layers: vec![
                         AtlasLayerInfo {
@@ -1680,8 +1680,8 @@ mod tests {
                     total_kinds: 14,
                 },
                 AtlasRealmInfo {
-                    key: "tenant".to_string(),
-                    display_name: "Tenant".to_string(),
+                    key: "org".to_string(),
+                    display_name: "Org".to_string(),
                     color: "#d33682".to_string(),
                     layers: vec![
                         AtlasLayerInfo {
@@ -1724,8 +1724,8 @@ mod tests {
         assert!(output.contains("DEMO DATA"), "Should indicate demo data");
 
         // Should contain realm names in demo format
-        assert!(output.contains("GLOBAL"), "Should show GLOBAL realm");
-        assert!(output.contains("TENANT"), "Should show TENANT realm");
+        assert!(output.contains("SHARED"), "Should show SHARED realm");
+        assert!(output.contains("ORG"), "Should show ORG realm");
 
         // Should have navigation hint
         assert!(
@@ -1775,8 +1775,8 @@ mod tests {
         assert!(output.contains("19 NodeKinds"), "Should show total kinds");
 
         // Should contain realm names
-        assert!(output.contains("GLOBAL"), "Should show Global realm");
-        assert!(output.contains("TENANT"), "Should show Tenant realm");
+        assert!(output.contains("SHARED"), "Should show Shared realm");
+        assert!(output.contains("ORG"), "Should show Org realm");
 
         // Should contain layer names
         assert!(output.contains("Config"), "Should show Config layer");

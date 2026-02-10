@@ -1,0 +1,209 @@
+# models/nodes/project/structure/page.yaml
+# Page - Invariant page structure with orchestrator instructions
+#
+# v7.12.1 CHANGES:
+#   - ADDED: anchor_type property to LINKS_TO (exact_match | partial_match | branded | generic)
+#   - ADDED: nofollow property to LINKS_TO (boolean, default false)
+#
+# v7.12.0 CHANGES:
+#   - ADDED: LINKS_TO relation (Page → Page) for explicit internal linking
+#   - ADDED: SUBTOPIC_OF relation (Page → Page) for pillar-cluster hierarchy
+#
+# v7.10.0 CHANGES:
+#   - ADDED: OF_TYPE relation to PageType (mirrors Block → BlockType)
+#   - REMOVED: page_type enum (replaced by PageType node)
+#   - REMOVED: generation_priority (redundant with priority)
+
+node:
+  name: Page
+  realm: org
+  layer: structure
+  trait: invariant
+  icon: "🔷"
+  description: "Invariant page structure containing blocks and orchestrator instructions"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # STANDARD PROPERTIES (v7.1.0)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Page identifier. Format: page-{identifier}"
+      pattern: "^page-[a-z0-9-]+$"
+      examples:
+        - "page-pricing"
+        - "page-homepage"
+        - "page-features"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable UI name"
+      example: "Pricing Page"
+
+    description:
+      type: string
+      required: true
+      description: "One-line description of the page"
+      example: "Main pricing page with tier comparison and CTAs"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation].'"
+      example: "USE: orchestrate pricing page generation. TRIGGERS: pricing, tarifs, plans, abonnement. NOT: individual block generation."
+
+    created_at:
+      type: datetime
+      required: true
+
+    updated_at:
+      type: datetime
+      required: true
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # VECTOR EMBEDDING (v7.8.0 - Hybrid OntologyRAG)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  embedding_properties:
+    embedding:
+      type: vector
+      dimensions: 1536
+      required: false
+      description: "OpenAI text-embedding-3-small vector for semantic search"
+
+    embedding_source:
+      type: string
+      required: false
+      description: "Text used to generate embedding (for debugging)"
+
+    embedding_updated_at:
+      type: datetime
+      required: false
+      description: "Timestamp of last embedding update"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PAGE-SPECIFIC PROPERTIES
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  properties:
+    instructions:
+      type: string
+      required: false
+      deprecated: "v7.2.0 - Use :HAS_PROMPT → PagePrompt.prompt"
+      description: "Orchestrator directive for page generation"
+      example: "[GENERATE] Create conversion-focused pricing page comparing tiers"
+
+    # REMOVED v7.10.0: page_type (replaced by :OF_TYPE → PageType)
+    # REMOVED v7.10.0: generation_priority (redundant with priority)
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # RELATIONS (FROM this node)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  relations:
+    OF_TYPE:
+      to: PageType
+      cardinality: "N:1"
+      description: "Page template defining meta, layout rules, required blocks (v7.10.0)"
+
+    HAS_BLOCK:
+      to: Block
+      cardinality: "1:N"
+      props:
+        position:
+          type: int
+          description: "Block position within the page (1-based)"
+      description: "Content blocks within this page"
+
+    HAS_GENERATED:  # v10.9.0: renamed from HAS_OUTPUT
+      to: PageGenerated  # v10.9.0: renamed from PageL10n
+      cardinality: "1:N"
+      description: "Generated outputs for this page (one per locale)"
+
+    HAS_PROMPT:
+      to: PagePrompt
+      cardinality: "1:N"
+      description: "Orchestrator instructions with versioning (v7.2.0)"
+
+    USES_ENTITY:
+      to: Entity
+      cardinality: "N:N"
+      description: "Entities referenced by this page"
+
+    # v7.12.0: Page-to-Page relationships (v7.12.1: anchor_type + nofollow)
+    LINKS_TO:
+      to: Page
+      cardinality: "N:N"
+      props:
+        entity_key:
+          type: string
+          description: "Entity key - anchor text derived from EntityContent.display_name at generation time"
+        context:
+          type: string
+          enum: [cta, body, related, nav]
+          description: "Where the link appears in content"
+        seo_weight:
+          type: float
+          description: "Link importance for SEO (0.0-1.0)"
+        anchor_type:
+          type: string
+          enum: [exact_match, partial_match, branded, generic]
+          default: partial_match
+          description: "Anchor text strategy (v7.12.1). exact_match = 5× traffic but use sparingly (max 10%)"
+        nofollow:
+          type: boolean
+          default: false
+          description: "Set true for login/legal pages to prevent link equity flow (v7.12.1)"
+      description: "Explicit internal link for SEO. Anchor text is localized via Entity → EntityContent"
+
+    SUBTOPIC_OF:
+      to: Page
+      cardinality: "N:1"
+      description: "Cluster page is subtopic of pillar page (pillar-cluster SEO hierarchy)"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # EXAMPLE
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  example:
+    data:
+      key: "page-pricing"
+      display_name: "Pricing Page"
+      description: "Main pricing page with tier comparison and CTAs"
+      llm_context: "USE: orchestrate pricing page generation. TRIGGERS: pricing, tarifs, plans, abonnement. NOT: individual block generation."
+      instructions: "[GENERATE] Create conversion-focused pricing page comparing tiers"
+
+    cypher: |
+      // Get page with type and all blocks in order
+      MATCH (p:Page {key: $key})-[:OF_TYPE]->(pt:PageType)
+      MATCH (p)-[r:HAS_BLOCK]->(b:Block)-[:OF_TYPE]->(bt:BlockType)
+      OPTIONAL MATCH (p)-[:USES_ENTITY]->(e:Entity)
+      RETURN p, pt, collect(DISTINCT {block: b, type: bt, position: r.position}) AS blocks,
+             collect(DISTINCT e.key) AS page_entities
+      ORDER BY r.position
+
+      // Validate page has required blocks from PageType
+      MATCH (p:Page {key: $key})-[:OF_TYPE]->(pt:PageType)
+      MATCH (p)-[:HAS_BLOCK]->(b:Block)-[:OF_TYPE]->(bt:BlockType)
+      WITH pt, collect(bt.key) AS page_block_types
+      RETURN pt.required_block_types AS required,
+             [rbt IN pt.required_block_types WHERE NOT rbt IN page_block_types] AS missing
+
+      // Get page with latest generated output for locale (v10.9.0)
+      MATCH (p:Page {key: $key})-[:HAS_GENERATED]->(pg:PageGenerated)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+      RETURN p, pg
+      ORDER BY pg.assembled_at DESC
+      LIMIT 1
+
+      // v7.12.0: Get internal links with localized anchors (v10.9.0: EntityContent)
+      MATCH (p:Page {key: $key})-[link:LINKS_TO]->(target:Page)
+      MATCH (e:Entity {key: link.entity_key})-[:HAS_CONTENT]->(ec:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+      RETURN target.key AS target_page, ec.display_name AS anchor_text, link.context, link.seo_weight
+      ORDER BY link.seo_weight DESC
+
+      // v7.12.0: Get pillar page with its cluster pages
+      MATCH (pillar:Page {key: $key})<-[:SUBTOPIC_OF]-(cluster:Page)
+      RETURN pillar.key AS pillar, collect(cluster.key) AS clusters

@@ -408,7 +408,7 @@ mod tests {
 
         assert_eq!(count_merges("Realm"), 2, "expected 2 Realm nodes"); // v10.6: global + tenant
         assert_eq!(count_merges("Layer"), 9, "expected 9 Layer nodes"); // v10.6: 3 global + 6 tenant
-        assert_eq!(count_merges("Trait"), 4, "expected 4 Trait nodes"); // v11.1: removed job trait
+        assert_eq!(count_merges("Trait"), 5, "expected 5 Trait nodes"); // v11.2: split derived → generated + aggregated
         assert_eq!(count_merges("ArcFamily"), 5, "expected 5 ArcFamily nodes");
         assert_eq!(count_merges("ArcScope"), 2, "expected 2 ArcScope nodes");
         assert_eq!(
@@ -424,9 +424,9 @@ mod tests {
             .count();
         assert_eq!(has_layer_count, 9, "expected 9 HAS_LAYER relationships"); // v10.6: 3 global + 6 tenant
 
-        // Spot checks — specific nodes exist (v10.6: 2 realms only)
-        assert!(cypher.contains("r_global:Meta:Realm {key: 'global'}"));
-        assert!(cypher.contains("r_tenant:Meta:Realm {key: 'tenant'}")); // v10.6: tenant realm
+        // Spot checks — specific nodes exist (v11.2: 2 realms only)
+        assert!(cypher.contains("r_shared:Meta:Realm {key: 'shared'}"));
+        assert!(cypher.contains("r_org:Meta:Realm {key: 'org'}")); // v11.2: org realm
         assert!(cypher.contains("l_locale_knowledge:Meta:Layer {key: 'locale-knowledge'}"));
         assert!(cypher.contains("l_foundation:Meta:Layer {key: 'foundation'}"));
         assert!(cypher.contains("l_seo:Meta:Layer {key: 'seo'}"));
@@ -453,13 +453,13 @@ mod tests {
         assert!(cypher.contains("as_intra_realm:Meta:ArcScope {key: 'intra_realm'}"));
         assert!(cypher.contains("ac_one_to_many:Meta:ArcCardinality {key: 'one_to_many'}"));
 
-        // Header mentions v11.0.0
-        assert!(cypher.contains("v11.0.0"));
+        // Header mentions v11.2.0
+        assert!(cypher.contains("v11.2.0"));
 
         // HAS_LAYER wiring — specific pairs (v10.6)
-        assert!(cypher.contains("(r:Realm {key: 'global'}), (l:Layer {key: 'config'})"));
-        assert!(cypher.contains("(r:Realm {key: 'tenant'}), (l:Layer {key: 'foundation'})"));
-        assert!(cypher.contains("(r:Realm {key: 'tenant'}), (l:Layer {key: 'output'})"));
+        assert!(cypher.contains("(r:Realm {key: 'shared'}), (l:Layer {key: 'config'})"));
+        assert!(cypher.contains("(r:Realm {key: 'org'}), (l:Layer {key: 'foundation'})"));
+        assert!(cypher.contains("(r:Realm {key: 'org'}), (l:Layer {key: 'output'})"));
     }
 
     /// Snapshot test for a minimal taxonomy document.

@@ -22,7 +22,7 @@ use crate::tui::app::App;
 /// Render the Audit mode view showing data quality metrics.
 ///
 /// Displays:
-/// - Global coverage percentage with progress bar
+/// - Shared coverage percentage with progress bar
 /// - Total issues count
 /// - Per-Kind coverage table with instance counts and issue indicators
 pub fn render_audit(f: &mut Frame, area: Rect, app: &mut App) {
@@ -30,7 +30,7 @@ pub fn render_audit(f: &mut Frame, area: Rect, app: &mut App) {
         .direction(Direction::Vertical)
         .constraints([
             Constraint::Length(3), // Header
-            Constraint::Length(5), // Global stats
+            Constraint::Length(5), // Shared stats
             Constraint::Min(10),   // Kind list
             Constraint::Length(2), // Footer
         ])
@@ -53,14 +53,14 @@ pub fn render_audit(f: &mut Frame, area: Rect, app: &mut App) {
     );
     f.render_widget(header, chunks[0]);
 
-    // Global stats
+    // Shared stats
     if let Some(stats) = &app.audit_stats {
         let progress_filled = stats.global_coverage / 10;
         let progress_empty = 10 - progress_filled;
         let global_stats = vec![
             Line::from(""),
             Line::from(vec![
-                Span::styled("  Global Coverage: ", STYLE_MUTED),
+                Span::styled("  Shared Coverage: ", STYLE_MUTED),
                 Span::styled(format!("{}%  ", stats.global_coverage), STYLE_SUCCESS),
                 Span::styled("━".repeat(progress_filled as usize), STYLE_SUCCESS),
                 Span::styled("░".repeat(progress_empty as usize), STYLE_DIM),

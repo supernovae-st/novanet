@@ -1,13 +1,13 @@
 // packages/core/src/graph/__tests__/layers.test.ts
-// Tests for NODE_LAYERS — v11.1.0 (65 nodes, 2 realms, +EntityCategory)
+// Tests for NODE_LAYERS — v11.2.0 (62 nodes, 2 realms, 3 job nodes removed)
 import { describe, it, expect } from 'vitest';
 import { NODE_LAYERS, getLayer, getNodeTypesByLayer } from '../layers';
 import { NODE_TYPES } from '../../types/nodes';
 
 describe('graph/layers', () => {
-  it('should map all 65 node types to layers', () => {
+  it('should map all 62 node types to layers', () => {
     const mappedTypes = Object.keys(NODE_LAYERS);
-    expect(mappedTypes).toHaveLength(65);
+    expect(mappedTypes).toHaveLength(62);
 
     // Every NODE_TYPE should be mapped
     for (const nodeType of NODE_TYPES) {
@@ -48,7 +48,7 @@ describe('graph/layers', () => {
     expect(NODE_LAYERS.LanguageFamily).toBe('locale-knowledge');
     // SEO layer has 9 nodes
     expect(NODE_LAYERS.SEOKeyword).toBe('seo');
-    expect(NODE_LAYERS.SEOMiningRun).toBe('seo');
+    expect(NODE_LAYERS.SEOKeyword).toBe('seo');
     expect(NODE_LAYERS.GEOQuery).toBe('seo');
   });
 

@@ -1,4 +1,4 @@
-# NovaNet Terminology (v11.0)
+# NovaNet Terminology (v11.2)
 
 This file defines the canonical terminology for NovaNet. All code, documentation, and UI must use these terms consistently.
 
@@ -20,21 +20,27 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 
 | Axis | Question | Type | Property | Values |
 |------|----------|------|----------|--------|
-| 1 | WHERE? | `NodeRealm` | `realm` | `global`, `tenant` |
+| 1 | WHERE? | `NodeRealm` | `realm` | `shared`, `org` |
 | 2 | WHAT? | `NodeLayer` | `layer` | `config`, `locale-knowledge`, `seo`, `foundation`, `structure`, `semantic`, `instruction`, `output` |
-| 3 | HOW? | `NodeTrait` | `trait` | `invariant`, `localized`, `knowledge`, `derived`, `job` |
+| 3 | HOW? | `NodeTrait` | `trait` | `invariant`, `localized`, `knowledge`, `generated`, `aggregated` |
 
-### v11.0 Realm Architecture
+### v11.2 Realm Architecture
 
-| Realm | Layers | Description |
-|-------|--------|-------------|
-| `global` | config, locale-knowledge | Universal locale knowledge (READ-ONLY) |
-| `tenant` | config, foundation, structure, semantic, instruction, seo, output | Business-specific content |
+| Realm | Layers | Nodes | Description |
+|-------|--------|-------|-------------|
+| `shared` | config, locale-knowledge | 32 | Universal locale knowledge (READ-ONLY) |
+| `org` | config, foundation, structure, semantic, instruction, seo, output | 30 | Organization-specific content |
+
+> **v11.2 Changes:**
+> - Realm renames: `global` → `shared`, `tenant` → `org`
+> - Trait split: `derived` → `generated` + `aggregated`, `job` removed
+> - 3 job nodes removed (GenerationJob, SEOMiningRun, EvaluationSignal)
+> - Total: 62 nodes (was 65)
 
 > **v11.0 Changes:**
 > - SEO moved from global to tenant (ADR-012 fix)
-> - GLOBAL (2 layers): config, locale-knowledge
-> - TENANT (7 layers): config, foundation, structure, semantic, instruction, seo, output
+> - SHARED (2 layers): config, locale-knowledge
+> - ORG (7 layers): config, foundation, structure, semantic, instruction, seo, output
 
 ### Arc Classification (Faceted)
 
@@ -44,12 +50,13 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | 2 | FUNCTION? | `ArcFamily` | `family` | `ownership`, `localization`, `semantic`, `generation`, `mining` |
 | 3 | MULTIPLICITY? | `ArcCardinality` | `cardinality` | `zero_to_one`, `one_to_one`, `one_to_many`, `many_to_many` |
 
-## YAML Source Files (v11.0)
+## YAML Source Files (v11.2)
 
 | File | Content |
 |------|---------|
-| `taxonomy.yaml` | Realm/Layer/Trait/ArcFamily/ArcScope definitions (v11.0: 2 realms, 9 layers) |
-| `node-kinds/` | 1 file per NodeKind, organized by Realm/Layer |
+| `taxonomy.yaml` | Realm/Layer/Trait/ArcFamily/ArcScope definitions (v11.2: 2 realms, 9 layers, 5 traits) |
+| `node-kinds/shared/` | 32 NodeKind definitions in shared realm |
+| `node-kinds/org/` | 30 NodeKind definitions in org realm |
 | `arc-kinds/` | 1 file per ArcKind, organized by ArcFamily |
 | `relations.yaml` | Legacy format (deprecated, kept for parser compatibility) |
 
@@ -64,27 +71,30 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | Rust structs | `PascalCase` | `ArcKind`, `NodeRealm` |
 | Rust files | `snake_case.rs` | `arc_schema.rs`, `taxonomy.rs` |
 
-## Node Naming Convention (v10.9)
+## Node Naming Convention (v11.2)
 
 > **RULE: Suffix indicates trait and relationship to parent invariant node**
 
 | Pattern | Trait | Layer | When to Use | Example |
 |---------|-------|-------|-------------|---------|
 | `FooContent` | localized | semantic | Node has locale-specific content for invariant `Foo` | `EntityContent` (parent: `Entity`) |
-| `FooGenerated` | derived | output | Node is generated output from invariant `Foo` | `PageGenerated` (parent: `Page`) |
-| `FooL10n` | localized | foundation | Node has locale-specific settings for invariant `Foo` | `ProjectL10n` (parent: `Project`) |
-| `FooCategory` | invariant | structure | Categorical grouping for invariant `Foo` | `EntityCategory` (parent: `Entity`) |
+| `FooGenerated` | generated | output | Node is generated output from invariant `Foo` | `PageGenerated` (parent: `Page`) |
+| `FooCategory` | invariant | config | Categorical grouping for invariant `Foo` | `EntityCategory` |
 | `Foo` | varies | varies | Node is standalone (no parent invariant) | `SEOKeyword`, `Term`, `Expression` |
+
+**v11.2 Changes:**
+- Trait `derived` split into `generated` (LLM output) and `aggregated` (computed metrics)
+- `job` trait removed (3 nodes deleted)
+- Realms renamed: `global` → `shared`, `tenant` → `org`
+
+**v11.1 Changes:**
+- `EntityCategory` added (shared/config layer, invariant trait, categorical grouping)
+- `BELONGS_TO` arc added (Entity → EntityCategory, ownership family)
 
 **v10.9 Changes:**
 - `EntityL10n` renamed to `EntityContent` (semantic layer, localized trait)
-- `PageL10n` renamed to `PageGenerated` (output layer, derived trait)
-- `BlockL10n` renamed to `BlockGenerated` (output layer, derived trait)
-- `ProjectL10n` unchanged (foundation layer, localized trait)
-
-**v11.0 Changes:**
-- `EntityCategory` added (structure layer, invariant trait, categorical grouping)
-- `BELONGS_TO` arc added (Entity → EntityCategory, ownership family)
+- `PageL10n` renamed to `PageGenerated` (output layer, generated trait)
+- `BlockL10n` renamed to `BlockGenerated` (output layer, generated trait)
 
 **Arc Changes (v10.9):**
 - `HAS_L10N` renamed to `HAS_CONTENT` (Entity → EntityContent)
@@ -94,25 +104,29 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 
 ```
 ✅ Entity (invariant) → EntityContent (localized)   # Semantic layer content
-✅ Entity (invariant) → EntityCategory (invariant)  # Structure layer categorization
-✅ Page (invariant) → PageGenerated (derived)       # Output layer generated
-✅ Block (invariant) → BlockGenerated (derived)     # Output layer generated
-✅ Project (invariant) → ProjectContent (localized) # Foundation layer content (v11.0)
-✅ SEOKeyword (localized, no parent)                # Correct: no suffix
+✅ Entity (invariant) → EntityCategory (invariant)  # shared/config categorization
+✅ Page (invariant) → PageGenerated (generated)     # Output layer generated
+✅ Block (invariant) → BlockGenerated (generated)   # Output layer generated
+✅ Project (invariant) → ProjectContent (localized) # Foundation layer content
+✅ SEOKeyword (knowledge, no parent)                # Correct: no suffix
 ✅ Term (knowledge atom, no parent)                 # Correct: no suffix
+✅ SEOKeywordMetrics (aggregated)                   # Computed metrics
 
 ❌ EntityL10n (deprecated)                          # Use EntityContent
 ❌ PageL10n (deprecated)                            # Use PageGenerated
 ❌ BlockL10n (deprecated)                           # Use BlockGenerated
-❌ ProjectL10n (deprecated)                         # Use ProjectContent (v11.0)
+❌ ProjectL10n (deprecated)                         # Use ProjectContent
+❌ derived (deprecated trait)                       # Use generated or aggregated
+❌ job (removed trait)                              # Concept deferred to v12+
 ```
 
 **Rationale:**
 - `*Content` suffix indicates locale-specific semantic content (localized trait)
-- `*Generated` suffix indicates derived output from generation pipeline (derived trait)
+- `*Generated` suffix indicates LLM-generated output (generated trait)
+- `*Metrics` suffix indicates computed/aggregated data (aggregated trait)
 - `*Category` suffix indicates categorical grouping/taxonomy structure (invariant trait)
 - `*L10n` suffix is DEPRECATED - all localized nodes now use `*Content` suffix
-- Suffix choice reflects both the trait (localized vs derived vs invariant) and the layer (semantic vs output vs foundation vs structure)
+- Suffix choice reflects both the trait and the layer
 
 ## Property Naming
 
@@ -122,8 +136,8 @@ Properties use `snake_case` in YAML and TypeScript:
 # YAML
 node:
   name: LocaleVoice
-  realm: global
-  layer: locale-knowledge  # v10.6: 2 realms (global, tenant)
+  realm: shared             # v11.2: renamed from global
+  layer: locale-knowledge   # 2 realms (shared, org)
   trait: knowledge
   display_name: "Locale Voice"
   llm_context: "..."
@@ -157,6 +171,10 @@ These terms are deprecated and should NOT be used:
 | `NodeTypeMeta` | `Kind` | v9.0 renamed |
 | `DataMode` | `NavigationMode` | v9.0 renamed |
 | `category` | `trait` | YAML property |
+| `global` | `shared` | v11.2 realm rename |
+| `tenant` | `org` | v11.2 realm rename |
+| `derived` | `generated` / `aggregated` | v11.2 trait split |
+| `job` | (removed) | v11.2 trait removed |
 | `EntityL10n` | `EntityContent` | v10.9 renamed (semantic layer) |
 | `PageL10n` | `PageGenerated` | v10.9 renamed (output layer) |
 | `BlockL10n` | `BlockGenerated` | v10.9 renamed (output layer) |
@@ -164,8 +182,9 @@ These terms are deprecated and should NOT be used:
 | `HAS_L10N` | `HAS_CONTENT` | v10.9 renamed (Entity → EntityContent) |
 | `HAS_OUTPUT` | `HAS_GENERATED` | v10.9 renamed (Page/Block → *Generated) |
 | `BELONGS_TO_PROJECT_L10N` | `BELONGS_TO_PROJECT_CONTENT` | v11.0 renamed |
-| `BELONGS_TO` | `BELONGS_TO` | v11.0 added (Entity → EntityCategory) |
-| `EntityCategory` | `EntityCategory` | v11.0 added (structure layer, categorical grouping) |
+| `GenerationJob` | (removed) | v11.2 job nodes removed |
+| `SEOMiningRun` | (removed) | v11.2 job nodes removed |
+| `EvaluationSignal` | (removed) | v11.2 job nodes removed |
 | `GEOSeedL10n` | `GEOQuery` | v10.7 new GEO schema |
 | `GEOSeedMetrics` | `GEOMetrics` | v10.7 new GEO schema |
 
@@ -188,7 +207,7 @@ These terms are deprecated and should NOT be used:
 | Arc stroke | ArcFamily | `taxonomy.yaml` arc_families[].color |
 | Arc dash | ArcScope | solid (intra) / dashed (cross) |
 
-## Icons (v11.0)
+## Icons (v11.2)
 
 Source of truth: `packages/core/models/visual-encoding.yaml` → `icons:` section
 
@@ -198,9 +217,9 @@ Each icon has dual format:
 
 | Category | Purpose | Examples |
 |----------|---------|----------|
-| `realms` | Node ownership | ◉ global, ◎ tenant |
+| `realms` | Node ownership | ◉ shared, ◎ org |
 | `layers` | Functional layer | ⚙ config, ◆ semantic, ● output |
-| `traits` | Locale behavior | ■ invariant, □ localized, ◊ knowledge |
+| `traits` | Locale behavior | ■ invariant, □ localized, ◊ knowledge, ✦ generated, ⋆ aggregated |
 | `arc_families` | Arc type | → ownership, ⇢ localization |
 | `states` | UI empty states | ◐ loading, ∅ no_kinds, ⚠ error |
 | `navigation` | Tree controls | ▼ expanded, ▶ collapsed |
