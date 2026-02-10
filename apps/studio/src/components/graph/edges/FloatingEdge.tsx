@@ -20,9 +20,340 @@ import { useEdgeVisibility } from './EdgeVisibilityManager';
 import { useEdgeTheme } from './hooks/useEdgeTheme';
 import { useEdgeLOD } from './hooks/useEdgeLOD';
 import { useAnimationBudget } from './hooks/useAnimationBudget';
-import { EffectRenderer, releaseEdgeAnimationSlot } from './effects/EffectRenderer';
+import { releaseEdgeAnimationSlot } from './effects/EffectRenderer';
 import { getSmartLabel, getNodeIntersection, generateCurvedPath, generateReversedPath, generateParallelPath } from './EdgeUtils';
 import type { EdgeState } from './system/types';
+
+// Note: EffectRenderer disabled for now - using InlineEdgeEffects instead (working pattern)
+
+// =============================================================================
+// Arc Family Detection
+// =============================================================================
+
+type ArcFamily = 'ownership' | 'localization' | 'semantic' | 'generation' | 'mining';
+
+function getArcFamily(relationType: string): ArcFamily {
+  // Ownership family: HAS_*, BELONGS_TO, CONTAINS_*
+  if (relationType.startsWith('HAS_') || relationType === 'BELONGS_TO' || relationType.startsWith('CONTAINS_')) {
+    return 'ownership';
+  }
+  // Localization family: LOCALIZES, FOR_LOCALE, AVAILABLE_IN
+  if (relationType === 'LOCALIZES' || relationType === 'FOR_LOCALE' || relationType === 'AVAILABLE_IN') {
+    return 'localization';
+  }
+  // Semantic family: USES_*, REFERENCES, RELATED_TO, MENTIONS
+  if (relationType.startsWith('USES_') || relationType === 'REFERENCES' || relationType === 'RELATED_TO' || relationType === 'MENTIONS') {
+    return 'semantic';
+  }
+  // Generation family: GENERATES, PRODUCES, DERIVED_FROM
+  if (relationType === 'GENERATES' || relationType === 'PRODUCES' || relationType === 'DERIVED_FROM') {
+    return 'generation';
+  }
+  // Mining family: MINED_FROM, EXTRACTED_FROM, DISCOVERED_IN
+  if (relationType === 'MINED_FROM' || relationType === 'EXTRACTED_FROM' || relationType === 'DISCOVERED_IN') {
+    return 'mining';
+  }
+  // Default to ownership
+  return 'ownership';
+}
+
+// =============================================================================
+// Inline Edge Effects (Working Pattern)
+// =============================================================================
+
+interface InlineEdgeEffectsProps {
+  edgePath: string;
+  relationType: string;
+  colors: { primary: string; secondary: string; glow: string };
+  state: EdgeState;
+}
+
+/**
+ * InlineEdgeEffects - Advanced animated effects with high visibility
+ *
+ * Each arc family has a distinct, elaborate visual style:
+ * - ownership: ⚡ Energy Pulse - Multi-layer glow with trail (power flows to children)
+ * - localization: 🧬 DNA Helix - Double spiral oscillation (content DNA adapts)
+ * - semantic: 🔗 Neural Sparks - Fast zigzag synapses (meaning connections)
+ * - generation: 💻 Matrix Code - Flowing characters (AI processing data)
+ * - mining: 📡 Radar Sweep - Scanning gradient (discovery)
+ */
+const InlineEdgeEffects = memo(function InlineEdgeEffects({
+  edgePath,
+  relationType,
+  colors,
+  state,
+}: InlineEdgeEffectsProps) {
+  const family = getArcFamily(relationType);
+  const isHighlighted = state === 'highlighted' || state === 'selected';
+
+  // MUCH larger sizes for visibility
+  const baseSize = isHighlighted ? 14 : 10;
+  const baseDuration = isHighlighted ? 1.2 : 1.8;
+
+  switch (family) {
+    case 'ownership':
+      // ⚡ ENERGY PULSE - Multi-layer intense glow with trailing segments
+      // Visual: Bright power packets flowing from parent to children
+      return (
+        <g className="effect-ownership">
+          {/* Pulse group 1 - Leader pulse */}
+          <g>
+            {/* Outer glow layer (blur 12px) */}
+            <circle r={baseSize * 2.5} fill={colors.glow} opacity={0.4} style={{ filter: 'blur(8px)' }}>
+              <animateMotion dur={`${baseDuration}s`} repeatCount="indefinite" path={edgePath} />
+            </circle>
+            {/* Middle glow layer (blur 6px) */}
+            <circle r={baseSize * 1.8} fill={colors.primary} opacity={0.6} style={{ filter: 'blur(4px)' }}>
+              <animateMotion dur={`${baseDuration}s`} repeatCount="indefinite" path={edgePath} />
+            </circle>
+            {/* Core pulse (solid) */}
+            <circle r={baseSize} fill={colors.primary} opacity={0.95} style={{ filter: `drop-shadow(0 0 8px ${colors.glow})` }}>
+              <animateMotion dur={`${baseDuration}s`} repeatCount="indefinite" path={edgePath} />
+            </circle>
+            {/* White hot center */}
+            <circle r={baseSize * 0.4} fill="#ffffff" opacity={1}>
+              <animateMotion dur={`${baseDuration}s`} repeatCount="indefinite" path={edgePath} />
+            </circle>
+          </g>
+
+          {/* Trail segments - 5 decreasing particles behind leader */}
+          {[1, 2, 3, 4, 5].map((i) => (
+            <circle
+              key={`trail-${i}`}
+              r={baseSize * (1 - i * 0.15)}
+              fill={colors.glow}
+              opacity={0.8 - i * 0.12}
+              style={{ filter: `drop-shadow(0 0 ${6 - i}px ${colors.glow})` }}
+            >
+              <animateMotion
+                dur={`${baseDuration}s`}
+                repeatCount="indefinite"
+                begin={`${i * 0.08}s`}
+                path={edgePath}
+              />
+            </circle>
+          ))}
+
+          {/* Secondary pulse - offset timing */}
+          <circle r={baseSize * 0.7} fill={colors.secondary} opacity={0.85} style={{ filter: `drop-shadow(0 0 6px ${colors.glow})` }}>
+            <animateMotion dur={`${baseDuration}s`} repeatCount="indefinite" begin={`${baseDuration / 2}s`} path={edgePath} />
+          </circle>
+          <circle r={baseSize * 0.25} fill="#ffffff" opacity={0.9}>
+            <animateMotion dur={`${baseDuration}s`} repeatCount="indefinite" begin={`${baseDuration / 2}s`} path={edgePath} />
+          </circle>
+        </g>
+      );
+
+    case 'localization':
+      // 🧬 DNA HELIX - Double strand with oscillating offset
+      // Visual: Two intertwining streams representing content adaptation
+      return (
+        <g className="effect-localization">
+          {/* Strand 1 - Primary color */}
+          {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
+            <circle
+              key={`strand1-${i}`}
+              r={baseSize * 0.6}
+              fill={colors.primary}
+              opacity={0.9}
+              style={{ filter: `drop-shadow(0 0 4px ${colors.glow})` }}
+            >
+              <animateMotion dur={`${baseDuration * 1.5}s`} repeatCount="indefinite" begin={`${i * baseDuration * 0.18}s`} path={edgePath} />
+              {/* Oscillate perpendicular to path */}
+              <animate attributeName="cy" values="-12;12;-12" dur="0.6s" repeatCount="indefinite" begin={`${i * 0.075}s`} />
+            </circle>
+          ))}
+
+          {/* Strand 2 - Secondary color (opposite phase) */}
+          {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
+            <circle
+              key={`strand2-${i}`}
+              r={baseSize * 0.5}
+              fill={colors.secondary}
+              opacity={0.85}
+              style={{ filter: `drop-shadow(0 0 3px ${colors.secondary})` }}
+            >
+              <animateMotion dur={`${baseDuration * 1.5}s`} repeatCount="indefinite" begin={`${i * baseDuration * 0.18}s`} path={edgePath} />
+              {/* Opposite oscillation */}
+              <animate attributeName="cy" values="12;-12;12" dur="0.6s" repeatCount="indefinite" begin={`${i * 0.075}s`} />
+            </circle>
+          ))}
+
+          {/* Connecting "rungs" - white dots between strands */}
+          {[0, 1, 2, 3].map((i) => (
+            <circle
+              key={`rung-${i}`}
+              r={baseSize * 0.25}
+              fill="#ffffff"
+              opacity={0.7}
+            >
+              <animateMotion dur={`${baseDuration * 1.5}s`} repeatCount="indefinite" begin={`${i * baseDuration * 0.36}s`} path={edgePath} />
+            </circle>
+          ))}
+        </g>
+      );
+
+    case 'semantic':
+      // 🔗 NEURAL SPARKS - Fast zigzag synapses firing
+      // Visual: Rapid electrical impulses representing meaning connections
+      return (
+        <g className="effect-semantic">
+          {/* Fast primary sparks */}
+          {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
+            <g key={`spark-${i}`}>
+              {/* Spark core */}
+              <circle
+                r={baseSize * 0.45}
+                fill={colors.primary}
+                opacity={0.95}
+                style={{ filter: `drop-shadow(0 0 6px ${colors.glow})` }}
+              >
+                <animateMotion dur={`${baseDuration * 0.6}s`} repeatCount="indefinite" begin={`${i * baseDuration * 0.075}s`} path={edgePath} />
+              </circle>
+              {/* Spark trail */}
+              <circle
+                r={baseSize * 0.3}
+                fill={colors.glow}
+                opacity={0.6}
+              >
+                <animateMotion dur={`${baseDuration * 0.6}s`} repeatCount="indefinite" begin={`${i * baseDuration * 0.075 + 0.05}s`} path={edgePath} />
+              </circle>
+            </g>
+          ))}
+
+          {/* Zigzag glow particles */}
+          {[0, 1, 2, 3].map((i) => (
+            <circle
+              key={`glow-${i}`}
+              r={baseSize * 0.7}
+              fill={colors.glow}
+              opacity={0.4}
+              style={{ filter: 'blur(3px)' }}
+            >
+              <animateMotion dur={`${baseDuration * 0.6}s`} repeatCount="indefinite" begin={`${i * baseDuration * 0.15}s`} path={edgePath} />
+              {/* Random oscillation for zigzag effect */}
+              <animate attributeName="cx" values="-8;8;-8" dur="0.2s" repeatCount="indefinite" />
+              <animate attributeName="cy" values="8;-8;8" dur="0.15s" repeatCount="indefinite" />
+            </circle>
+          ))}
+        </g>
+      );
+
+    case 'generation':
+      // 💻 MATRIX CODE - Flowing data characters
+      // Visual: Digital rain effect representing AI/LLM processing
+      return (
+        <g className="effect-generation">
+          {/* Matrix character blocks */}
+          {[0, 1, 2, 3, 4, 5].map((i) => (
+            <g key={`char-${i}`}>
+              {/* Character glow background */}
+              <rect
+                x={-baseSize * 0.4}
+                y={-baseSize * 0.6}
+                width={baseSize * 0.8}
+                height={baseSize * 1.2}
+                fill={colors.glow}
+                opacity={0.5}
+                rx={2}
+                style={{ filter: 'blur(2px)' }}
+              >
+                <animateMotion dur={`${baseDuration * 0.9}s`} repeatCount="indefinite" begin={`${i * baseDuration * 0.15}s`} path={edgePath} rotate="auto" />
+              </rect>
+              {/* Character block */}
+              <rect
+                x={-baseSize * 0.3}
+                y={-baseSize * 0.5}
+                width={baseSize * 0.6}
+                height={baseSize}
+                fill={colors.primary}
+                opacity={0.95}
+                rx={1}
+                style={{ filter: `drop-shadow(0 0 4px ${colors.glow})` }}
+              >
+                <animateMotion dur={`${baseDuration * 0.9}s`} repeatCount="indefinite" begin={`${i * baseDuration * 0.15}s`} path={edgePath} rotate="auto" />
+              </rect>
+              {/* Bright center line (simulates character) */}
+              <rect
+                x={-baseSize * 0.1}
+                y={-baseSize * 0.35}
+                width={baseSize * 0.2}
+                height={baseSize * 0.7}
+                fill="#ffffff"
+                opacity={0.9}
+              >
+                <animateMotion dur={`${baseDuration * 0.9}s`} repeatCount="indefinite" begin={`${i * baseDuration * 0.15}s`} path={edgePath} rotate="auto" />
+                {/* Flickering effect */}
+                <animate attributeName="opacity" values="0.9;0.5;0.9;0.7;0.9" dur="0.3s" repeatCount="indefinite" begin={`${i * 0.1}s`} />
+              </rect>
+            </g>
+          ))}
+
+          {/* Scanline effect */}
+          <rect
+            x={-baseSize * 1.5}
+            y={-1}
+            width={baseSize * 3}
+            height={2}
+            fill={colors.glow}
+            opacity={0.7}
+          >
+            <animateMotion dur={`${baseDuration * 1.2}s`} repeatCount="indefinite" path={edgePath} rotate="auto" />
+          </rect>
+        </g>
+      );
+
+    case 'mining':
+      // 📡 RADAR SWEEP - Scanning pulse discovering data
+      // Visual: Radar-like sweep with expanding detection rings
+      return (
+        <g className="effect-mining">
+          {/* Main radar pulse */}
+          <g>
+            {/* Wide sweep glow */}
+            <circle r={baseSize * 2} fill={colors.glow} opacity={0.3} style={{ filter: 'blur(6px)' }}>
+              <animateMotion dur={`${baseDuration * 1.8}s`} repeatCount="indefinite" path={edgePath} />
+            </circle>
+            {/* Core scanner */}
+            <circle r={baseSize} fill={colors.primary} opacity={0.95} style={{ filter: `drop-shadow(0 0 10px ${colors.glow})` }}>
+              <animateMotion dur={`${baseDuration * 1.8}s`} repeatCount="indefinite" path={edgePath} />
+            </circle>
+            {/* Hot center */}
+            <circle r={baseSize * 0.35} fill="#ffffff" opacity={1}>
+              <animateMotion dur={`${baseDuration * 1.8}s`} repeatCount="indefinite" path={edgePath} />
+            </circle>
+          </g>
+
+          {/* Expanding detection rings */}
+          {[0, 1, 2].map((i) => (
+            <circle
+              key={`ring-${i}`}
+              r={baseSize}
+              fill="none"
+              stroke={colors.glow}
+              strokeWidth={2 - i * 0.5}
+              opacity={0}
+            >
+              <animateMotion dur={`${baseDuration * 1.8}s`} repeatCount="indefinite" begin={`${i * 0.4}s`} path={edgePath} />
+              {/* Expanding ring animation */}
+              <animate attributeName="r" values={`${baseSize};${baseSize * 3.5};${baseSize * 3.5}`} dur="1.2s" repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0.8;0.3;0" dur="1.2s" repeatCount="indefinite" />
+              <animate attributeName="stroke-width" values="2;0.5;0" dur="1.2s" repeatCount="indefinite" />
+            </circle>
+          ))}
+
+          {/* Secondary ping - offset */}
+          <circle r={baseSize * 0.6} fill={colors.secondary} opacity={0.8} style={{ filter: `drop-shadow(0 0 5px ${colors.glow})` }}>
+            <animateMotion dur={`${baseDuration * 1.8}s`} repeatCount="indefinite" begin={`${baseDuration * 0.9}s`} path={edgePath} />
+          </circle>
+        </g>
+      );
+
+    default:
+      return null;
+  }
+});
 
 // =============================================================================
 // Types
@@ -412,77 +743,16 @@ export const FloatingEdge = memo(function FloatingEdge({
         </>
       )}
 
-      {/* MINIMAL INLINE ANIMATION - bypassing EffectRenderer for debug */}
-      {/* Version 1: Using mpath reference (SVG 1.1 standard) */}
+      {/* INLINE ANIMATED EFFECTS - working pattern using inline path attribute */}
+      {/* Each arc family gets different visual treatment */}
       {shouldAnimate && (
-        <>
-          {/* Simple pulse 1 - starts immediately */}
-          <circle r={8} fill={theme.colors.primary} opacity={0.9}>
-            <animateMotion dur="2s" repeatCount="indefinite" begin="0s">
-              <mpath xlinkHref={`#edge-path-${id}`} href={`#edge-path-${id}`} />
-            </animateMotion>
-          </circle>
-          {/* Simple pulse 2 - offset start */}
-          <circle r={6} fill={theme.colors.glow} opacity={0.8}>
-            <animateMotion dur="2s" repeatCount="indefinite" begin="0.5s">
-              <mpath xlinkHref={`#edge-path-${id}`} href={`#edge-path-${id}`} />
-            </animateMotion>
-          </circle>
-          {/* Simple pulse 3 - more offset */}
-          <circle r={5} fill="#ffffff" opacity={0.7}>
-            <animateMotion dur="2s" repeatCount="indefinite" begin="1s">
-              <mpath xlinkHref={`#edge-path-${id}`} href={`#edge-path-${id}`} />
-            </animateMotion>
-          </circle>
-          {/* Simple pulse 4 - even more offset */}
-          <circle r={4} fill={theme.colors.secondary} opacity={0.6}>
-            <animateMotion dur="2s" repeatCount="indefinite" begin="1.5s">
-              <mpath xlinkHref={`#edge-path-${id}`} href={`#edge-path-${id}`} />
-            </animateMotion>
-          </circle>
-        </>
-      )}
-
-      {/* ALTERNATIVE: Using inline path attribute (fallback if mpath doesn't work) */}
-      {shouldAnimate && (
-        <>
-          {/* Bright magenta dot - uses edgePath directly */}
-          <circle r={10} fill="#ff00ff" opacity={1.0}>
-            <animateMotion dur="3s" repeatCount="indefinite" path={edgePath} />
-          </circle>
-          {/* Cyan dot - offset */}
-          <circle r={7} fill="#00ffff" opacity={0.9}>
-            <animateMotion dur="3s" repeatCount="indefinite" begin="1s" path={edgePath} />
-          </circle>
-          {/* Yellow dot - more offset */}
-          <circle r={5} fill="#ffff00" opacity={0.9}>
-            <animateMotion dur="3s" repeatCount="indefinite" begin="2s" path={edgePath} />
-          </circle>
-        </>
-      )}
-
-      {/* DEBUG: Static circles at source and target to verify basic rendering */}
-      {/* These should ALWAYS be visible if the edge is rendered */}
-      <circle cx={sourcePoint.x} cy={sourcePoint.y} r={15} fill="#00ff00" opacity={0.8} />
-      <circle cx={targetPoint.x} cy={targetPoint.y} r={12} fill="#ff0000" opacity={0.8} />
-
-      {/* Effect renderer - DISABLED for now, using inline animations above */}
-      {/* {shouldAnimate && (
-        <EffectRenderer
-          edgeId={id}
-          pathId={`edge-path-${id}`}
-          reversedPathId={`edge-path-reversed-${id}`}
+        <InlineEdgeEffects
+          edgePath={edgePath}
           relationType={relationType}
-          sourcePosition={sourcePoint}
-          targetPosition={targetPoint}
+          colors={theme.colors}
           state={edgeState}
-          zoom={zoom}
-          distanceFromCenter={distanceFromCenter}
-          isConnectedToSelected={connectsToHoveredNode}
-          intensityOverride={intensityMultiplier}
-          forceLOD={lodTier}
         />
-      )} */}
+      )}
 
       {/* Label */}
       {shouldShowLabel && (
