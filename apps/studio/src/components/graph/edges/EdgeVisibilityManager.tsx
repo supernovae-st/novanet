@@ -62,6 +62,8 @@ export const PERF_THRESHOLDS = {
   /** Below this: LOW tier (simplified 2-element) */
   LOW_MAX: 500,
   // Above LOW_MAX: MINIMAL tier (no animations)
+  /** Hub node threshold: nodes with more visible connections force LOW tier */
+  HUB_NODE_THRESHOLD: 12,
 } as const;
 
 /**
@@ -76,9 +78,21 @@ export function calculateEffectTier(edgeCount: number): EffectTier {
   return 'minimal';
 }
 
+/** Edge metadata for connection tracking */
+interface EdgeMeta {
+  source: string;
+  target: string;
+}
+
 interface EdgeVisibilityState {
   /** Set of edge IDs currently visible in the viewport */
   visibleEdges: Set<string>;
+
+  /** Edge metadata (source, target) for connection tracking */
+  edgeMeta: Map<string, EdgeMeta>;
+
+  /** Count of visible connections per node */
+  nodeConnectionCount: Map<string, number>;
 
   /** Total edge count in the graph (for performance decisions) */
   totalEdgeCount: number;
@@ -93,7 +107,14 @@ interface EdgeVisibilityState {
   disableAnimations: boolean;
 
   /**
+   * Register edge metadata (source, target) for connection tracking.
+   * Call this once when the edge component mounts.
+   */
+  registerEdgeMeta: (id: string, source: string, target: string) => void;
+
+  /**
    * Update visibility status for an edge.
+   * Also updates node connection counts for hub detection.
    * @param id - Edge identifier
    * @param visible - Whether the edge is visible in viewport
    */
@@ -106,6 +127,22 @@ interface EdgeVisibilityState {
    * @returns true if edge is in visible set
    */
   isVisible: (id: string) => boolean;
+
+  /**
+   * Check if a node is a "hub" with too many visible connections.
+   * Hub nodes force simplified effects for performance.
+   * @param nodeId - Node identifier
+   * @returns true if node has >= HUB_NODE_THRESHOLD visible connections
+   */
+  isHubNode: (nodeId: string) => boolean;
+
+  /**
+   * Get the effective tier for an edge, considering hub nodes.
+   * If either source or target is a hub, returns 'low'.
+   * @param edgeId - Edge identifier
+   * @returns effective tier (may be downgraded for hub connections)
+   */
+  getEffectiveTier: (edgeId: string) => EffectTier;
 
   /**
    * Update total edge count and recalculate performance flags.
@@ -122,24 +159,87 @@ interface EdgeVisibilityState {
 
 export const useEdgeVisibilityStore = create<EdgeVisibilityState>((set, get) => ({
   visibleEdges: new Set(),
+  edgeMeta: new Map(),
+  nodeConnectionCount: new Map(),
   totalEdgeCount: 0,
   effectTier: 'ultra' as EffectTier,
   useSimplifiedEffects: false,
   disableAnimations: false,
 
-  setVisible: (id: string, visible: boolean) => {
+  registerEdgeMeta: (id: string, source: string, target: string) => {
     set(state => {
-      const newSet = new Set(state.visibleEdges);
+      const newMeta = new Map(state.edgeMeta);
+      newMeta.set(id, { source, target });
+      return { edgeMeta: newMeta };
+    });
+  },
+
+  setVisible: (id: string, visible: boolean) => {
+    const state = get();
+    const wasVisible = state.visibleEdges.has(id);
+
+    // No change? Skip update
+    if (wasVisible === visible) return;
+
+    const meta = state.edgeMeta.get(id);
+
+    set(prevState => {
+      const newVisibleEdges = new Set(prevState.visibleEdges);
+      const newNodeCount = new Map(prevState.nodeConnectionCount);
+
       if (visible) {
-        newSet.add(id);
+        newVisibleEdges.add(id);
+        // Increment connection counts for source and target
+        if (meta) {
+          newNodeCount.set(meta.source, (newNodeCount.get(meta.source) ?? 0) + 1);
+          newNodeCount.set(meta.target, (newNodeCount.get(meta.target) ?? 0) + 1);
+        }
       } else {
-        newSet.delete(id);
+        newVisibleEdges.delete(id);
+        // Decrement connection counts for source and target
+        if (meta) {
+          const srcCount = (newNodeCount.get(meta.source) ?? 1) - 1;
+          const tgtCount = (newNodeCount.get(meta.target) ?? 1) - 1;
+          if (srcCount <= 0) {
+            newNodeCount.delete(meta.source);
+          } else {
+            newNodeCount.set(meta.source, srcCount);
+          }
+          if (tgtCount <= 0) {
+            newNodeCount.delete(meta.target);
+          } else {
+            newNodeCount.set(meta.target, tgtCount);
+          }
+        }
       }
-      return { visibleEdges: newSet };
+
+      return { visibleEdges: newVisibleEdges, nodeConnectionCount: newNodeCount };
     });
   },
 
   isVisible: (id: string) => get().visibleEdges.has(id),
+
+  isHubNode: (nodeId: string) => {
+    const count = get().nodeConnectionCount.get(nodeId) ?? 0;
+    return count >= PERF_THRESHOLDS.HUB_NODE_THRESHOLD;
+  },
+
+  getEffectiveTier: (edgeId: string) => {
+    const state = get();
+    const meta = state.edgeMeta.get(edgeId);
+
+    // If source or target is a hub node, force LOW tier
+    if (meta) {
+      const srcCount = state.nodeConnectionCount.get(meta.source) ?? 0;
+      const tgtCount = state.nodeConnectionCount.get(meta.target) ?? 0;
+      if (srcCount >= PERF_THRESHOLDS.HUB_NODE_THRESHOLD ||
+          tgtCount >= PERF_THRESHOLDS.HUB_NODE_THRESHOLD) {
+        return 'low';
+      }
+    }
+
+    return state.effectTier;
+  },
 
   setTotalEdgeCount: (count: number) => {
     const tier = calculateEffectTier(count);
@@ -155,6 +255,8 @@ export const useEdgeVisibilityStore = create<EdgeVisibilityState>((set, get) => 
 
   clear: () => set({
     visibleEdges: new Set(),
+    edgeMeta: new Map(),
+    nodeConnectionCount: new Map(),
     totalEdgeCount: 0,
     effectTier: 'ultra' as EffectTier,
     useSimplifiedEffects: false,
@@ -270,10 +372,16 @@ export function EdgeVisibilityProvider({ children }: EdgeVisibilityProviderProps
 interface UseEdgeVisibilityReturn {
   /** Set of visible edge IDs (from store) */
   visibleEdges: Set<string>;
+  /** Register edge metadata for connection tracking (from store) */
+  registerEdgeMeta: (id: string, source: string, target: string) => void;
   /** Update visibility for an edge (from store) */
   setVisible: (id: string, visible: boolean) => void;
   /** Check if edge is visible (from store) */
   isVisible: (id: string) => boolean;
+  /** Check if a node is a hub (from store) */
+  isHubNode: (nodeId: string) => boolean;
+  /** Get effective tier for an edge considering hub nodes (from store) */
+  getEffectiveTier: (edgeId: string) => EffectTier;
   /** Clear all visibility tracking (from store) */
   clear: () => void;
   /** Register edge for IntersectionObserver (from context) */
@@ -322,8 +430,11 @@ export function useEdgeVisibility(): UseEdgeVisibilityReturn {
   return {
     // From store
     visibleEdges: store.visibleEdges,
+    registerEdgeMeta: store.registerEdgeMeta,
     setVisible: store.setVisible,
     isVisible: store.isVisible,
+    isHubNode: store.isHubNode,
+    getEffectiveTier: store.getEffectiveTier,
     clear: store.clear,
     setTotalEdgeCount: store.setTotalEdgeCount,
     effectTier: store.effectTier,
