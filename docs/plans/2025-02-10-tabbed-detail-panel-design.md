@@ -290,6 +290,376 @@ Mode: [Schema ◉] [Data ○] [Overlay ○]     Depth: [1] [2] [3]
 └─────────────────────────────────────────────────────────┘
 ```
 
+## Cypher Pill Component (Persistent)
+
+La Cypher Pill est **toujours visible** en haut du canvas, montrant la query active qui "drive" la vue actuelle.
+
+### Position & Layout
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ ⚡ MATCH (p:Page)-[r]->(n) WHERE p.key = "homepage"... │ 12 │ 34 │ 45ms │ 📋 ▶ │
+└─────────────────────────────────────────────────────────────────────────────┘
+  │                                                        │    │    │      │  │
+  query (truncated, hover=full)                          nodes arcs time  copy run
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              GRAPH CANVAS                                   │
+│                         (avec Matrix overlay)                               │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Pill States
+
+| State | Appearance |
+|-------|------------|
+| **IDLE** | `⚡ Query... │ 12 │ 34 │ 45ms │ 📋 ▶` — query terminée, stats affichées |
+| **LOADING** | `⚡ Query... │ ◐ Loading...` — spinner, Matrix rain active |
+| **ERROR** | `✗ Neo4j connection timeout │ 🔄 Retry` — rouge, retry button |
+
+### Interactions
+
+- **Click query text** → expand en Cypher editor modal
+- **📋 Copy** → copie la query complète dans clipboard
+- **▶ Run** → re-execute la query (refresh)
+- **Hover** → affiche query complète en tooltip
+
+### CSS
+```css
+.cypher-pill {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+}
+
+.cypher-pill.loading {
+  border-color: var(--accent-color);
+  animation: pillPulse 1.5s infinite;
+}
+
+.cypher-pill.error {
+  border-color: var(--error-color);
+  background: rgba(220, 38, 38, 0.1);
+}
+```
+
+## Context View Transitions
+
+Flow complet quand l'utilisateur clique sur un Context View button (ex: "Page Context").
+
+### Sequence
+```
+1. CLICK Context View button
+       │
+       ▼
+2. ASIDE FERME (slide out, 0.3s ease-out)
+       │
+       ▼
+3. CYPHER PILL UPDATE
+   ├── Nouvelle query affichée
+   └── State: LOADING (spinner)
+       │
+       ▼
+4. MATRIX RAIN OVERLAY
+   ├── Canvas overlay avec caractères qui tombent
+   ├── Couleur: var(--accent-color) avec fade
+   └── Opacity: 0.3 (ne cache pas le graph)
+       │
+       ▼
+5. QUERY COMPLETE
+   ├── Pill state: IDLE (stats affichées)
+   └── Matrix rain fade out (0.3s)
+       │
+       ▼
+6. HYBRID ANIMATION (Graph transformation)
+   ├── Phase 1: Fade out nodes non-pertinentes (0.3s)
+   ├── Phase 2: Remove nodes du DOM (0.2s)
+   └── Phase 3: Re-layout centré force-directed (0.5s)
+       │
+       ▼
+7. FOCUSED VIEW READY
+   └── Graph filtré, focus node au centre
+```
+
+### Matrix Rain Effect
+```css
+.matrix-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 50;
+}
+
+.matrix-char {
+  position: absolute;
+  color: var(--accent-color);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  animation: matrixFall linear infinite;
+  text-shadow: 0 0 10px var(--accent-color);
+}
+
+@keyframes matrixFall {
+  0% { transform: translateY(-100%); opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+```
+
+### HYBRID Animation Timing
+```javascript
+const TRANSITION_TIMING = {
+  asideClose: 300,      // ms - slide out
+  queryExecute: 'async', // variable Neo4j response
+  matrixFade: 300,      // ms - rain fade out
+  nodeFadeOut: 300,     // ms - opacity 1 → 0
+  nodeRemove: 200,      // ms - scale down + remove
+  relayout: 500,        // ms - force-directed settle
+  total: '~1.3s + query time'
+};
+```
+
+## Node Selection Effects ("Waouh" Mode)
+
+Effets visuels premium quand une node est sélectionnée/focus.
+
+### État Normal vs Selected
+
+```
+NORMAL                              SELECTED (waouh mode)
+┌─ ─ ─ ─ ─ ─ ─ ─┐                     ·  ✦  ·    ·  ✧  ·
+│  📖 Geography  │                  ·    ·    ✦      ·    ·
+│     6 types    │                ╔════════════════════════╗
+└─ ─ ─ ─ ─ ─ ─ ─┘                ║ ┌────────────────────┐ ║
+                                  ║ │  📖 Geography      │ ║
+border: 2px dashed                ║ │     6 types        │ ║
+shadow: subtle                    ║ └────────────────────┘ ║
+transform: none                   ╚════════════════════════╝
+                                     ·    ✧    ·    ·    ✦
+
+                                  border: 4px solid + GLOW
+                                  shadow: multi-layer glow
+                                  transform: translateY(-8px)
+                                  particles: space dust ✦ ✧
+                                  rings: expanding opacity
+```
+
+### Effect 1: Border Épais + Glow Pulse
+
+```css
+.node-card {
+  border: 2px dashed var(--layer-color);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.node-card.selected {
+  border: 4px solid var(--layer-color);
+  box-shadow:
+    0 0 20px var(--layer-color),
+    0 0 40px color-mix(in srgb, var(--layer-color) 50%, transparent),
+    0 0 60px color-mix(in srgb, var(--layer-color) 25%, transparent);
+  animation: borderGlow 1.5s ease-in-out infinite;
+}
+
+@keyframes borderGlow {
+  0%, 100% {
+    box-shadow:
+      0 0 20px var(--layer-color),
+      0 0 40px color-mix(in srgb, var(--layer-color) 50%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 0 30px var(--layer-color),
+      0 0 60px color-mix(in srgb, var(--layer-color) 50%, transparent),
+      0 0 80px color-mix(in srgb, var(--layer-color) 25%, transparent);
+  }
+}
+```
+
+### Effect 2: Lévitation
+
+```css
+.node-card {
+  transform: translateY(0);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.node-card.selected {
+  transform: translateY(-8px);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.3),
+    0 0 60px color-mix(in srgb, var(--layer-color) 30%, transparent);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); /* bounce */
+}
+```
+
+### Effect 3: Expanding Border Rings
+
+```css
+.node-card.selected::before,
+.node-card.selected::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border: 2px solid var(--layer-color);
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.node-card.selected::before {
+  animation: expandRing 2s ease-out infinite;
+}
+
+.node-card.selected::after {
+  animation: expandRing 2s ease-out infinite 1s; /* staggered */
+}
+
+@keyframes expandRing {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+```
+
+### Effect 4: Space Dust Particles
+
+```typescript
+// SpaceDustParticles.tsx
+const PARTICLE_COUNT = 25;
+const PARTICLE_CHARS = ['✦', '✧', '·', '⋆', '∗'];
+
+function SpaceDustParticles({ active, color }: Props) {
+  return (
+    <div className="space-dust-container">
+      {active && Array.from({ length: PARTICLE_COUNT }).map((_, i) => (
+        <span
+          key={i}
+          className="space-dust-particle"
+          style={{
+            left: `${Math.random() * 100}%`,
+            animationDelay: `${Math.random() * 3}s`,
+            animationDuration: `${2 + Math.random() * 2}s`,
+            color: color,
+          }}
+        >
+          {PARTICLE_CHARS[Math.floor(Math.random() * PARTICLE_CHARS.length)]}
+        </span>
+      ))}
+    </div>
+  );
+}
+```
+
+```css
+.space-dust-container {
+  position: absolute;
+  inset: -40px;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.space-dust-particle {
+  position: absolute;
+  font-size: 12px;
+  opacity: 0;
+  animation: spaceDust 3s ease-in-out infinite;
+  text-shadow: 0 0 6px currentColor;
+}
+
+@keyframes spaceDust {
+  0% {
+    transform: translateY(20px) rotate(0deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.8;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-40px) rotate(180deg);
+    opacity: 0;
+  }
+}
+```
+
+### Effect 5: Hyperspace Streaks (Click Burst)
+
+```css
+.node-card.just-selected::before {
+  content: '';
+  position: absolute;
+  inset: 50%;
+  animation: hyperspaceBurst 0.5s ease-out forwards;
+}
+
+@keyframes hyperspaceBurst {
+  0% {
+    box-shadow:
+      0 0 0 0 var(--layer-color),
+      0 0 0 0 var(--layer-color),
+      0 0 0 0 var(--layer-color);
+    opacity: 1;
+  }
+  100% {
+    box-shadow:
+      100px 0 20px -10px transparent,
+      -100px 0 20px -10px transparent,
+      0 100px 20px -10px transparent,
+      0 -100px 20px -10px transparent;
+    opacity: 0;
+  }
+}
+```
+
+### Combined Effect Summary
+
+| Effect | Trigger | Duration | Purpose |
+|--------|---------|----------|---------|
+| Border Glow | selected | infinite (1.5s loop) | Attention indicator |
+| Lévitation | selected | 0.4s | Depth/importance |
+| Expanding Rings | selected | infinite (2s loop) | Radar/pulse effect |
+| Space Dust | selected | infinite (3s loop) | Premium feel |
+| Hyperspace Burst | click moment | 0.5s once | Satisfying feedback |
+
+### Performance Considerations
+
+```css
+/* GPU acceleration for smooth animations */
+.node-card {
+  will-change: transform, box-shadow;
+  transform: translateZ(0); /* force GPU layer */
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .node-card.selected {
+    animation: none;
+  }
+  .node-card.selected::before,
+  .node-card.selected::after {
+    animation: none;
+  }
+  .space-dust-particle {
+    display: none;
+  }
+}
+```
+
 ## Files to Create
 
 | File | Purpose |
@@ -302,7 +672,13 @@ Mode: [Schema ◉] [Data ○] [Overlay ○]     Depth: [1] [2] [3]
 | `components/sidebar/tabs/index.ts` | Barrel export |
 | `components/graph/MermaidView.tsx` | Mermaid renderer |
 | `components/graph/QueryPanel.tsx` | Cypher editor |
+| `components/graph/CypherPill.tsx` | Persistent query status bar (top) |
+| `components/graph/MatrixRain.tsx` | Matrix rain overlay effect |
+| `components/graph/SpaceDustParticles.tsx` | Selection particle effects |
+| `components/nodes/NodeCard.tsx` | Enhanced node card with waouh effects |
 | `hooks/useNeo4jQuery.ts` | Neo4j live queries |
+| `hooks/useNodeSelection.ts` | Selection state + effects trigger |
+| `hooks/useMatrixRain.ts` | Matrix rain animation state |
 
 ## Files to Modify
 
