@@ -167,7 +167,7 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 color: trait_color(&k.trait_name),
             });
             path.push(BreadcrumbLevel {
-                icon: "📂",
+                icon: "◫",
                 label: cat.display_name.clone(),
                 color: Color::Gray,
             });
@@ -890,8 +890,8 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
                                         // Category display: icon, name, and count
                                         let cat_display = format!(
-                                            "📁 {} ({})",
-                                            category.display_name, category.instance_count
+                                            "{} {} ({})",
+                                            "◫", category.display_name, category.instance_count
                                         );
 
                                         all_lines.push(make_line(
@@ -1257,24 +1257,20 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
         lines
     };
 
-    // Show scroll indicator in title (use mode-aware count for Data view)
-    // v11.6: Show mode with icon in title
-    let total = app.current_item_count();
+    // Show hierarchical position in title: R:1/2 L:2/4 K:3/7 I:42/300
+    // v11.6: Show mode with icon + hierarchy position
+    let total = app.current_item_count(); // Used for scrollbar
     let mode_prefix = if app.is_data_mode() {
         "● Data"  // Filled circle = instances/data
     } else {
         "◆ Schema" // Diamond = structure/meta
     };
-    let title = if total > visible_height {
-        format!(
-            " {} [{}-{}/{}] ",
-            mode_prefix,
-            app.tree_scroll + 1,
-            (app.tree_scroll + visible_height).min(total),
-            total
-        )
-    } else {
+    let hierarchy = app.tree.hierarchy_position(app.tree_cursor, app.is_data_mode());
+    let hierarchy_str = hierarchy.to_compact_string();
+    let title = if hierarchy_str.is_empty() {
         format!(" {} ", mode_prefix)
+    } else {
+        format!(" {} │ {} ", mode_prefix, hierarchy_str)
     };
 
     // Render block with title
