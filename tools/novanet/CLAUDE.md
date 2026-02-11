@@ -7,11 +7,11 @@ This file provides guidance to Claude Code when working in the `tools/novanet/` 
 `novanet` is a unified Rust CLI + TUI binary for managing the NovaNet context graph.
 It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 
-**Version**: v11.6.0 (Locale moved to shared/config)
+**Version**: v11.7.0 (Unified Tree Architecture)
 
 ## Current Status
 
-**v11.6.0 Schema Refinement** — Locale moved from shared/locale to shared/config (definitions layer pattern). SEO/GEO consolidated to shared/knowledge. Architecture: SHARED (4 layers: config, locale, geography, knowledge, 39 nodes), ORG (6 layers: config, foundation, structure, semantic, instruction, output, 21 nodes). 60 total nodes, 10 layers. Galaxy-themed mission control TUI with EntityCategory filtering, search, detail, arc explorer, CRUD dialogs, dashboard stats, ASCII logo, breadcrumb navigation, command palette, help overlay, boot animation, effects engine, and onboarding.
+**v11.7.0 Unified Tree Architecture** — 5 modes merged into 2 (Graph/Nexus). Realm, Layer, ArcFamily, ArcKind are now clickable nodes in a unified tree. Lazy instance loading with pagination via async channels. Dual icons (Lucide for web, Unicode for terminal). Architecture unchanged: SHARED (4 layers: config, locale, geography, knowledge, 39 nodes), ORG (6 layers: config, foundation, structure, semantic, instruction, output, 21 nodes). 60 total nodes, 10 layers.
 
 | Area | Commands | Status |
 |------|----------|--------|
@@ -26,7 +26,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | DB | `db seed`, `db migrate`, `db reset` | Implemented |
 | Filter | `filter build` | Implemented (JSON stdin, Studio subprocess) |
 | Blueprint | `blueprint [--view=X]` | Implemented (10 views) |
-| TUI | `tui` | Galaxy theme, effects engine, CRUD dialogs, Nexus Quiz |
+| TUI | `tui` | Unified tree (Graph/Nexus modes), lazy loading, async channels |
 | System | `completions`, `doctor` | Implemented |
 
 **998 tests pass** (`cargo test`). Zero clippy warnings.
@@ -222,10 +222,10 @@ src/
     filter.rs     filter build (JSON stdin → Cypher stdout)
   parsers/        YAML parsers (yaml_node, relations, taxonomy, organizing, views)
   generators/     Code generators (organizing, kind, arc_schema, layer, mermaid, view_mermaid, autowire, hierarchy, colors, icons, visual_encoding, views, tui_icons)
-  tui/            Terminal UI v2 — rebuilt for stability (feature-gated)
+  tui/            Terminal UI v3 — Unified Tree Architecture (feature-gated)
     mod.rs        Entry point (terminal setup + event loop)
-    app.rs        State machine (NavMode, Focus, tree/yaml scroll, collapse state)
-    data.rs       TaxonomyTree (Realm > Layer > Kind + ArcFamily > ArcKind)
+    app.rs        State machine (NavMode: Graph/Nexus, async channels for lazy loading)
+    data.rs       UnifiedTree (Realm > Layer > Kind > Instance, ArcFamily > ArcKind)
     theme.rs      Visual encoding + Icons (colors from taxonomy.yaml, icons from visual-encoding.yaml)
     ui.rs         3-panel layout (Tree | Info | YAML) + search/help overlays
 ```
@@ -259,7 +259,8 @@ See **[KEYBINDINGS.md](./KEYBINDINGS.md)** for complete keyboard shortcuts refer
 
 Quick summary:
 ```
-Navigation:  j/k (up/down)  h/l (toggle)  d/u (page)  1-4 (modes)
+Navigation:  j/k (up/down)  h/l (toggle)  d/u (page)
+Modes:       [1] Graph (unified tree)  [2] Nexus (Quiz, Audit, Stats, Help)
 Scroll:      ENC1 (tree)    ENC2 (yaml)
 Overlays:    / (help)       f (search)
 Exit:        q or Esc
