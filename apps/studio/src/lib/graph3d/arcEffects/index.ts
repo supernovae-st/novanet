@@ -3,3 +3,4 @@ export * from './types';
 export * from './SimpleLine3D';
 export * from './shaderUtils';
 export * from './PowerConduit3D';
+export * from './SynapticFiring3D';
