@@ -29,7 +29,7 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
-**Current Version**: v11.6.0
+**Current Version**: v11.7.0
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
 **Related docs**:
@@ -85,7 +85,7 @@ v11.5 refines the layer structure with Locale moved to shared/config:
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
 All commands implemented: data/meta/overlay/query, node/arc CRUD, search, locale, db,
-schema generate/validate, doc generate, filter build, Galaxy-themed TUI with boot animation, effects engine, and onboarding. 955 tests pass.
+schema generate/validate, doc generate, filter build. Galaxy-themed TUI with unified tree mode (v11.7), boot animation, effects engine, Nexus hub, and onboarding. 985 tests pass.
 
 **YAML-first architecture:** Each Kind YAML has explicit `realm:` and `layer:` fields (source of truth).
 Path validation ensures `models/node-kinds/{realm}/{layer}/{name}.yaml` matches YAML content.
@@ -97,6 +97,56 @@ v11.5: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 60 nodes.
 Categories: realms, layers, traits, arc_families, states, navigation, quality, modes.
 
 **Boundary rule:** TypeScript generates code artifacts. Rust executes at runtime.
+
+---
+
+## v11.7 Unified Tree Architecture
+
+v11.7 introduces the Unified Tree where Realm, Layer, ArcFamily, ArcKind are all clickable nodes.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  UNIFIED TREE PRINCIPLE                                                     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  "If it's a node in Neo4j, it's a node everywhere"                          │
+│                                                                             │
+│  Before v11.7:                                                              │
+│    Tree: Realm (label) > Layer (label) > Kind (clickable)                   │
+│    5 modes: Meta, Data, Overlay, Query, Atlas                               │
+│                                                                             │
+│  After v11.7:                                                               │
+│    Tree: Realm (node) > Layer (node) > Kind (node) > Instance (lazy)        │
+│    2 modes: [1] Graph + [2] Nexus                                           │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  KEY CHANGES                                                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  1. EVERYTHING IS A NODE                                                    │
+│     └─ Realm, Layer, ArcFamily, ArcKind are clickable with detail panels    │
+│     └─ Consistent UX: click any node → see properties, arcs, actions        │
+│                                                                             │
+│  2. 5 MODES → 2 MODES                                                       │
+│     └─ [1] Graph: Unified tree with lazy instance loading                   │
+│     └─ [2] Nexus: Hub for Quiz, Audit, Stats, Help                          │
+│                                                                             │
+│  3. LAZY INSTANCE LOADING                                                   │
+│     └─ Kind nodes expand to show first 10 instances + "load more"           │
+│     └─ No upfront loading of all instances                                  │
+│                                                                             │
+│  4. DUAL ICONS (NO EMOJI)                                                   │
+│     └─ Web: Lucide icons                                                    │
+│     └─ Terminal: Unicode symbols                                            │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Architecture:**
+- **Graph mode** (`[1]`): Unified tree with Realm > Layer > Kind > Instance hierarchy
+- **Nexus mode** (`[2]`): Hub for Nexus Quiz, codebase audit, stats dashboard, help
+
+**TUI implementation:** `tools/novanet/src/tui/` — unified tree replaces multi-mode navigation
 
 ---
 
@@ -236,7 +286,7 @@ cargo run -- search --query="page"         # Fulltext + property search
 cargo run -- node create --kind=Page --key=my-page  # CRUD
 cargo run -- db seed                       # Execute seed Cypher files
 cargo run -- locale list                   # Locale operations
-cargo run -- tui                           # Interactive terminal UI
+cargo run -- tui                           # Interactive TUI (unified tree + Nexus hub)
 
 # Turbo filters
 pnpm build --filter=@novanet/core       # Build only core
@@ -252,7 +302,7 @@ pnpm test --filter=@novanet/studio      # Test only studio
 | @novanet/core | Types, schemas, filters, generators |
 | @novanet/db | Neo4j Docker, seeds, migrations |
 | @novanet/studio | Web-based graph visualization |
-| tools/novanet | Rust CLI + TUI — all runtime commands (955 tests) |
+| tools/novanet | Rust CLI + TUI — all runtime commands (985 tests) |
 
 ---
 
@@ -301,7 +351,7 @@ pnpm dev    # → http://localhost:3000
 ## Learning Path (New Developers)
 
 1. **Read this file** — Understand the generation philosophy (not translation)
-2. **Explore TUI** — `cargo run -- tui` in `tools/novanet/` for interactive graph exploration
+2. **Explore TUI** — `cargo run -- tui` in `tools/novanet/` for unified tree exploration (v11.7)
 3. **Read `models/_index.yaml`** — Complete schema overview with all 60 nodes
 4. **Study `taxonomy.yaml`** — Realm/Layer/Trait definitions with visual encoding
 5. **Check ADRs** — `.claude/rules/novanet-decisions.md` explains WHY decisions were made

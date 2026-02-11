@@ -1,4 +1,4 @@
-# NovaNet Terminology (v11.5)
+# NovaNet Terminology (v11.7)
 
 This file defines the canonical terminology for NovaNet. All code, documentation, and UI must use these terms consistently.
 
@@ -35,6 +35,20 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 > - Locale moved: shared/locale → shared/config (Locale is a definition, not settings)
 > - SEO/GEO consolidation: seo/geo layers removed from org, nodes in shared/knowledge
 > - Total: **60 nodes** (39 shared + 21 org), **10 layers** (4 shared + 6 org)
+
+### v11.7 Unified Tree Architecture
+
+| Change | Before (v11.6) | After (v11.7) |
+|--------|----------------|---------------|
+| Nav modes | 5 (Meta/Data/Overlay/Query/Atlas) | 2 (Graph/Nexus) |
+| Realm/Layer | Visual groupings | Clickable nodes |
+| Instances | Hidden | Under Kind, expandable |
+| Icons | Mixed emoji | Dual: Lucide (web) + Unicode (terminal) |
+
+> **v11.7 Principle**: "If it's a node in Neo4j, it's a node everywhere"
+> - Realm nodes: clickable, show properties in detail panel
+> - Layer nodes: clickable, show HAS_LAYER relationships
+> - ArcFamily/ArcKind nodes: clickable with `[fam]`/`[arc]` badges
 
 > **v11.3 Changes:**
 > - Layer split: `locale-knowledge` → `locale`, `geography`, `knowledge` (3 layers)
@@ -203,15 +217,32 @@ These terms are deprecated and should NOT be used:
 | `org/seo` layer | `shared/knowledge` | v11.5 SEO nodes consolidated |
 | `org/geo` layer | `shared/knowledge` | v11.5 GEO nodes consolidated |
 | `Locale` in `shared/locale` | `Locale` in `shared/config` | v11.5 definitions layer pattern |
+| `data` mode | `graph` | v11.7 unified tree |
+| `meta` mode | `graph` | v11.7 unified tree |
+| `overlay` mode | `graph` | v11.7 unified tree |
+| `query` mode | `graph` + filters | v11.7 unified tree |
+| `atlas` mode | `nexus` | v11.7 renamed |
+| emoji icons | dual format `{ web, terminal }` | v11.7 icon system |
 
-## Navigation Modes
+## Navigation Modes (v11.7)
 
 | Mode | Content | Use Case |
 |------|---------|----------|
-| `data` | Real instances only | Default exploration |
-| `meta` | Meta-graph only | Schema understanding |
-| `overlay` | Data + meta combined | Architecture debugging |
-| `query` | Faceted filter results | Targeted exploration |
+| `graph` | Unified tree (Realm > Layer > Kind > Instance + Arcs) | Default exploration |
+| `nexus` | Hub (Quiz, Audit, Stats, Help) | Learning & validation |
+
+> **v11.7 Change**: Consolidated from 5 modes (Meta/Data/Overlay/Query/Atlas) to 2 modes (Graph/Nexus).
+> The unified tree in Graph mode shows meta AND data together — no mode switching needed.
+
+**Deprecated modes** (v11.6 and earlier):
+
+| Deprecated | Replacement | Notes |
+|------------|-------------|-------|
+| `data` | `graph` | Instances now under Kind nodes |
+| `meta` | `graph` | Meta-graph integrated in unified tree |
+| `overlay` | `graph` | Unified tree shows both |
+| `query` | `graph` + filters | Use tree filters instead |
+| `atlas` | `nexus` | Renamed, expanded functionality |
 
 ## Visual Encoding
 
@@ -223,24 +254,41 @@ These terms are deprecated and should NOT be used:
 | Arc stroke | ArcFamily | `taxonomy.yaml` arc_families[].color |
 | Arc dash | ArcScope | solid (intra) / dashed (cross) |
 
-## Icons (v11.5)
+## Icons (v11.7)
 
 Source of truth: `packages/core/models/visual-encoding.yaml` → `icons:` section
 
-Each icon has dual format:
-- `web`: Lucide icon name for Studio/web
-- `terminal`: Unicode symbol for TUI
+### Dual Icon Format (v11.7)
 
-| Category | Purpose | Examples |
-|----------|---------|----------|
+Icons use dual format for different rendering contexts:
+
+| Context | Format | Source |
+|---------|--------|--------|
+| Studio (web) | Lucide icon name | `icon.web` |
+| TUI (terminal) | Unicode symbol | `icon.terminal` |
+
+> **Rule**: NO emoji in code. Use `{ web: "globe", terminal: "◉" }` format.
+
+```typescript
+// Correct (v11.7)
+const realmIcon = { web: "globe", terminal: "◉" };
+
+// Wrong - NO emoji
+const realmIcon = "🌐";  // DEPRECATED
+```
+
+### Icon Categories
+
+| Category | Purpose | Examples (terminal) |
+|----------|---------|---------------------|
 | `realms` | Node ownership | ◉ shared, ◎ org |
-| `layers` | Functional layer | ⚙ config, 🌍 locale, 🗺️ geography, 🧠 knowledge, ◆ semantic, ● output |
+| `layers` | Functional layer | ⚙ config, ● locale, ◆ geography, ◊ knowledge, ■ semantic, ▣ output |
 | `traits` | Locale behavior | ■ invariant, □ localized, ◊ knowledge, ✦ generated, ⋆ aggregated |
 | `arc_families` | Arc type | → ownership, ⇢ localization |
 | `states` | UI empty states | ◐ loading, ∅ no_kinds, ⚠ error |
 | `navigation` | Tree controls | ▼ expanded, ▶ collapsed |
 | `quality` | Data completeness | ● complete, ◐ partial, * required |
-| `modes` | Nav modes | M meta, D data, A atlas |
+| `modes` | Nav modes | G graph, N nexus |
 
 **TUI loading**: `Theme::with_root()` loads icons from YAML at startup.
 
@@ -349,3 +397,6 @@ cypher: |
 7. **Query-First** = Cypher query determines graph display (v11.6)
 8. **Meta-Graph** = schema graph of NodeKind + ArcKind nodes
 9. **KINDS_QUERY / ARCS_QUERY** = foundational queries for META mode
+10. **Unified Tree** = single tree showing Realm > Layer > Kind > Instance + Arcs (v11.7)
+11. **Graph/Nexus** = two navigation modes replacing 5 previous modes (v11.7)
+12. **Dual Icons** = `{ web: "lucide-name", terminal: "◉" }` format, NO emoji (v11.7)
