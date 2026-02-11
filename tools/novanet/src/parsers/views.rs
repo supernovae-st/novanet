@@ -3,7 +3,7 @@
 //! Each view defines a traversal pattern from a root node type,
 //! used for documentation (Mermaid diagrams) and runtime context loading.
 
-use serde::Deserialize;
+use serde::{Deserialize, Deserializer, Serialize};
 use std::path::Path;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -17,6 +17,100 @@ pub enum Direction {
     Outgoing,
     Incoming,
     Both,
+}
+
+/// Icon with dual format (web + terminal).
+///
+/// Supports both new object format and legacy string format for backward compatibility.
+/// ```yaml
+/// # New format (v11.7+)
+/// icon:
+///   web: diamond
+///   terminal: "◆"
+///
+/// # Legacy format (backward compatible)
+/// icon: "🔷"
+/// ```
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+pub struct ViewIcon {
+    pub web: String,
+    pub terminal: String,
+}
+
+impl Default for ViewIcon {
+    fn default() -> Self {
+        Self {
+            web: "circle".to_string(),
+            terminal: "●".to_string(),
+        }
+    }
+}
+
+impl<'de> Deserialize<'de> for ViewIcon {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        use serde::de::{self, MapAccess, Visitor};
+        use std::fmt;
+
+        struct ViewIconVisitor;
+
+        impl<'de> Visitor<'de> for ViewIconVisitor {
+            type Value = ViewIcon;
+
+            fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+                formatter.write_str("a string or an object with 'web' and 'terminal' fields")
+            }
+
+            // Handle legacy string format: icon: "🔷"
+            fn visit_str<E>(self, value: &str) -> Result<Self::Value, E>
+            where
+                E: de::Error,
+            {
+                Ok(ViewIcon {
+                    web: "circle".to_string(), // Default web icon for legacy format
+                    terminal: value.to_string(),
+                })
+            }
+
+            // Handle new object format: icon: { web: "diamond", terminal: "◆" }
+            fn visit_map<M>(self, mut map: M) -> Result<Self::Value, M::Error>
+            where
+                M: MapAccess<'de>,
+            {
+                let mut web: Option<String> = None;
+                let mut terminal: Option<String> = None;
+
+                while let Some(key) = map.next_key::<String>()? {
+                    match key.as_str() {
+                        "web" => {
+                            if web.is_some() {
+                                return Err(de::Error::duplicate_field("web"));
+                            }
+                            web = Some(map.next_value()?);
+                        }
+                        "terminal" => {
+                            if terminal.is_some() {
+                                return Err(de::Error::duplicate_field("terminal"));
+                            }
+                            terminal = Some(map.next_value()?);
+                        }
+                        _ => {
+                            let _: serde::de::IgnoredAny = map.next_value()?;
+                        }
+                    }
+                }
+
+                let web = web.ok_or_else(|| de::Error::missing_field("web"))?;
+                let terminal = terminal.ok_or_else(|| de::Error::missing_field("terminal"))?;
+
+                Ok(ViewIcon { web, terminal })
+            }
+        }
+
+        deserializer.deserialize_any(ViewIconVisitor)
+    }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -111,12 +205,32 @@ pub struct ViewDef {
 #[derive(Debug, Clone, Deserialize)]
 pub struct ViewRegistryEntry {
     pub id: String,
-    pub file: String,
+    /// File path (optional in new format where views are inline).
+    #[serde(default)]
+    pub file: Option<String>,
     pub description: String,
     pub category: String,
+    /// Icon with web (Lucide) and terminal (Unicode) variants.
+    #[serde(default)]
+    pub icon: Option<ViewIcon>,
+    /// Color for the view (hex string).
+    #[serde(default)]
+    pub color: Option<String>,
     /// Navigation modes that show this view (data/meta/overlay/query).
     #[serde(default)]
     pub modes: Option<Vec<String>>,
+    /// Cypher query template (parameterized).
+    #[serde(default)]
+    pub cypher: Option<String>,
+    /// Parameter names for the Cypher template.
+    #[serde(default)]
+    pub params: Option<Vec<String>>,
+    /// Whether this view is contextual (appears in node sidebar).
+    #[serde(default)]
+    pub contextual: Option<bool>,
+    /// Node types this view applies to.
+    #[serde(default)]
+    pub applicable_types: Option<Vec<String>>,
 }
 
 /// The `_registry.yaml` document.
@@ -375,7 +489,19 @@ include:
         let reg = load_registry(&root).expect("should load registry");
         assert!(reg.views.len() >= 12);
 
-        let valid_cats = ["overview", "generation", "knowledge", "project", "mining", "contextual"];
+        // v11.7+ categories: meta, data, overlay, contextual
+        // Legacy categories: overview, generation, knowledge, project, mining
+        let valid_cats = [
+            "meta",
+            "data",
+            "overlay",
+            "contextual",
+            "overview",
+            "generation",
+            "knowledge",
+            "project",
+            "mining",
+        ];
         for entry in &reg.views {
             assert!(
                 valid_cats.contains(&entry.category.as_str()),
@@ -391,5 +517,97 @@ include:
         let Some(root) = test_root() else { return };
         let result = load_view(&root, "nonexistent-view");
         assert!(result.is_err());
+    }
+
+    #[test]
+    fn parse_view_icon_object_format() {
+        let yaml = r#"
+web: diamond
+terminal: "◆"
+"#;
+        let icon: ViewIcon = serde_yaml::from_str(yaml).unwrap();
+        assert_eq!(icon.web, "diamond");
+        assert_eq!(icon.terminal, "◆");
+    }
+
+    #[test]
+    fn parse_view_icon_legacy_string_format() {
+        let yaml = r#""🔷""#;
+        let icon: ViewIcon = serde_yaml::from_str(yaml).unwrap();
+        assert_eq!(icon.web, "circle"); // Default for legacy
+        assert_eq!(icon.terminal, "🔷");
+    }
+
+    #[test]
+    fn parse_registry_entry_with_icon() {
+        let yaml = r##"
+id: meta-complete
+description: Complete meta-graph
+icon:
+  web: diamond
+  terminal: "◆"
+color: "#8b5cf6"
+category: meta
+modes: [meta]
+cypher: |
+  MATCH (n:Meta)
+  RETURN n
+"##;
+        let entry: ViewRegistryEntry = serde_yaml::from_str(yaml).unwrap();
+        assert_eq!(entry.id, "meta-complete");
+        let icon = entry.icon.unwrap();
+        assert_eq!(icon.web, "diamond");
+        assert_eq!(icon.terminal, "◆");
+        assert_eq!(entry.color, Some("#8b5cf6".to_string()));
+        assert!(entry.cypher.is_some());
+    }
+
+    #[test]
+    fn parse_registry_with_new_format() {
+        let yaml = r##"
+version: "11.7.0"
+description: NovaNet Unified View System
+views:
+  - id: meta-complete
+    description: Complete meta-graph
+    icon:
+      web: diamond
+      terminal: "◆"
+    color: "#8b5cf6"
+    category: meta
+    modes: [meta]
+    cypher: |
+      MATCH (n:Meta)
+      RETURN n
+  - id: data-complete
+    description: All instance nodes
+    icon:
+      web: globe
+      terminal: "●"
+    color: "#6366f1"
+    category: data
+    modes: [data]
+    cypher: |
+      MATCH (n) WHERE NOT n:Meta
+      RETURN n
+"##;
+        let reg: ViewRegistry = serde_yaml::from_str(yaml).unwrap();
+        assert_eq!(reg.version, "11.7.0");
+        assert_eq!(reg.views.len(), 2);
+
+        // First view
+        let v1 = &reg.views[0];
+        assert_eq!(v1.id, "meta-complete");
+        let icon1 = v1.icon.as_ref().unwrap();
+        assert_eq!(icon1.web, "diamond");
+        assert_eq!(icon1.terminal, "◆");
+        assert_eq!(v1.color.as_deref(), Some("#8b5cf6"));
+
+        // Second view
+        let v2 = &reg.views[1];
+        assert_eq!(v2.id, "data-complete");
+        let icon2 = v2.icon.as_ref().unwrap();
+        assert_eq!(icon2.web, "globe");
+        assert_eq!(icon2.terminal, "●");
     }
 }

@@ -42,7 +42,7 @@
 # All meta-nodes receive double-label :Meta (e.g., :Meta:Realm)
 # Query all meta-nodes: MATCH (n:Meta) RETURN n
 
-version: "11.6.0"
+version: "11.7.0"
 
 # =============================================================================
 # NODE REALMS (2) — WHERE does the node live?
