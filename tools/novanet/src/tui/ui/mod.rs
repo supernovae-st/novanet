@@ -76,21 +76,21 @@ const COLOR_ACTIVE_KIND_BG: Color = Color::Rgb(25, 35, 45);
 // Layout constants (percentages and sizes)
 // -----------------------------------------------------------------------------
 
-/// Wide layout: Tree panel percentage (v11.6: equal 1/3 columns).
-const LAYOUT_WIDE_TREE_PCT: u16 = 33;
+/// Wide layout: Tree panel percentage (compact sidebar).
+const LAYOUT_WIDE_TREE_PCT: u16 = 25;
 /// Wide layout: Info+Graph panel percentage.
-const LAYOUT_WIDE_INFO_PCT: u16 = 34;
+const LAYOUT_WIDE_INFO_PCT: u16 = 38;
 /// Wide layout: YAML panel percentage.
-const LAYOUT_WIDE_YAML_PCT: u16 = 33;
+const LAYOUT_WIDE_YAML_PCT: u16 = 37;
 /// Wide layout: Info section percentage (within Info+Graph).
 const LAYOUT_WIDE_INFO_SECTION_PCT: u16 = 60;
 /// Wide layout: Graph section percentage (within Info+Graph).
 const LAYOUT_WIDE_GRAPH_SECTION_PCT: u16 = 40;
 
-/// Narrow layout: Tree panel percentage (v11.6: equal 1/3).
-const LAYOUT_NARROW_TREE_PCT: u16 = 33;
+/// Narrow layout: Tree panel percentage (compact sidebar).
+const LAYOUT_NARROW_TREE_PCT: u16 = 25;
 /// Narrow layout: Detail panel percentage.
-const LAYOUT_NARROW_DETAIL_PCT: u16 = 67;
+const LAYOUT_NARROW_DETAIL_PCT: u16 = 75;
 /// Narrow layout: Info section percentage.
 const LAYOUT_NARROW_INFO_PCT: u16 = 35;
 /// Narrow layout: Graph section percentage.
