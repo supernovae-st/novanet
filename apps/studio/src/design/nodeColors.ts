@@ -13,17 +13,14 @@ import type { Layer } from '@novanet/core/types';
 import {
   getLayerPalette,
   getArcPalette,
+  DEFAULT_LAYER_GRADIENT,
+  LAYER_GRADIENTS,
   type ColorPalette,
+  type GradientColors,
 } from '@/design/colors/palette';
 
-// =============================================================================
-// Color Types
-// =============================================================================
-
-export interface GradientColors {
-  primary: string;
-  secondary: string;
-}
+// Re-export GradientColors type for backwards compatibility
+export type { GradientColors } from '@/design/colors/palette';
 
 // =============================================================================
 // Unified Palette Conversion
@@ -36,18 +33,12 @@ function paletteToGradient(palette: ColorPalette): GradientColors {
   };
 }
 
-// =============================================================================
-// Layer Gradient Colors (used by TurboNode)
-// =============================================================================
-
-const DEFAULT_LAYER_COLORS: GradientColors = { primary: '#6366f1', secondary: '#8b5cf6' };
-
 /**
  * Get gradient colors for a layer
  * Uses unified palette from taxonomy.yaml
  */
 export function getLayerGradientColors(layer: Layer | undefined): GradientColors {
-  if (!layer) return DEFAULT_LAYER_COLORS;
+  if (!layer) return DEFAULT_LAYER_GRADIENT;
   return paletteToGradient(getLayerPalette(layer));
 }
 
@@ -68,8 +59,6 @@ const STRUCTURAL_LAYER_MAP: Record<string, Layer> = {
   ProjectContent: 'foundation',
 };
 
-const DEFAULT_STRUCTURAL_COLORS: GradientColors = { primary: '#6366f1', secondary: '#8b5cf6' };
-
 /**
  * Get gradient colors for structural node types
  * Maps node types to their layer colors from the unified palette
@@ -79,7 +68,7 @@ export function getStructuralColors(type: string): GradientColors {
   if (layer) {
     return paletteToGradient(getLayerPalette(layer));
   }
-  return DEFAULT_STRUCTURAL_COLORS;
+  return DEFAULT_LAYER_GRADIENT;
 }
 
 // =============================================================================
@@ -93,7 +82,8 @@ const LOCALE_KNOWLEDGE_TYPES = new Set([
   'Term', 'Expression', 'Pattern', 'CultureRef', 'Taboo', 'AudienceTrait',
 ]);
 
-const DEFAULT_LOCALE_KNOWLEDGE_COLORS: GradientColors = { primary: '#10b981', secondary: '#059669' };
+// Knowledge layer gradient from unified palette
+const KNOWLEDGE_LAYER_GRADIENT: GradientColors = LAYER_GRADIENTS.knowledge;
 
 /**
  * Get gradient colors for locale knowledge node types
@@ -103,7 +93,7 @@ export function getLocaleKnowledgeColors(type: string): GradientColors {
   if (LOCALE_KNOWLEDGE_TYPES.has(type)) {
     return paletteToGradient(getLayerPalette('knowledge'));
   }
-  return DEFAULT_LOCALE_KNOWLEDGE_COLORS;
+  return KNOWLEDGE_LAYER_GRADIENT;
 }
 
 // =============================================================================
@@ -144,5 +134,5 @@ export function getRelationColors(type: string): GradientColors {
 // =============================================================================
 
 export const COLORS = {
-  DEFAULT: DEFAULT_LAYER_COLORS,
+  DEFAULT: DEFAULT_LAYER_GRADIENT,
 } as const;
