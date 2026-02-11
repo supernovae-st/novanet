@@ -2,6 +2,7 @@
 import * as THREE from 'three';
 import type { ArcEffect3D, ArcEffectConfig, LODLevel } from './types';
 import { createArcTubeGeometry, createBaseUniforms, COMMON_GLSL } from './shaderUtils';
+import { DustParticleSystem, DUST_CONFIG } from './dustParticles';
 
 const VERTEX_SHADER = `
   varying vec2 vUv;
@@ -74,6 +75,7 @@ export class PowerConduit3D implements ArcEffect3D {
   private geometry: THREE.TubeGeometry;
   private material: THREE.ShaderMaterial;
   private uniforms: ReturnType<typeof createBaseUniforms>;
+  private dustSystem: DustParticleSystem;
 
   private sourcePos: THREE.Vector3;
   private targetPos: THREE.Vector3;
@@ -110,9 +112,18 @@ export class PowerConduit3D implements ArcEffect3D {
     // Create mesh
     this.tube = new THREE.Mesh(this.geometry, this.material);
     this.group.add(this.tube);
+
+    // Add dust particle system (diamond shapes with gravitational drift)
+    this.dustSystem = new DustParticleSystem(DUST_CONFIG.ownership);
+    this.dustSystem.updateArcPositions(this.sourcePos, this.targetPos);
+    this.group.add(this.dustSystem.mesh);
   }
 
   updatePositions(source: THREE.Vector3, target: THREE.Vector3): void {
+    // Defensive: skip if positions are invalid
+    if (!source || !target) return;
+    if (typeof source.x !== 'number' || typeof target.x !== 'number') return;
+
     // Only update if position changed significantly (threshold: 0.5 units)
     const threshold = 0.5;
     const sourceMoved = this.sourcePos.distanceTo(source) > threshold;
@@ -127,10 +138,16 @@ export class PowerConduit3D implements ArcEffect3D {
     this.geometry.dispose();
     this.geometry = createArcTubeGeometry(this.sourcePos, this.targetPos, 0.8, 64, 12);
     this.tube.geometry = this.geometry;
+
+    // Update dust particle positions
+    this.dustSystem.updateArcPositions(this.sourcePos, this.targetPos);
   }
 
-  updateUniforms(time: number, _deltaTime: number): void {
+  updateUniforms(time: number, deltaTime: number): void {
     this.uniforms.time.value = time;
+
+    // Animate dust particles
+    this.dustSystem.update(time, deltaTime);
   }
 
   setLOD(level: LODLevel): void {
@@ -163,5 +180,6 @@ export class PowerConduit3D implements ArcEffect3D {
   dispose(): void {
     this.geometry.dispose();
     this.material.dispose();
+    this.dustSystem.dispose();
   }
 }

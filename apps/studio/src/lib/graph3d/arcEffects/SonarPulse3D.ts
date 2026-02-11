@@ -2,6 +2,7 @@
 import * as THREE from 'three';
 import type { ArcEffect3D, ArcEffectConfig, LODLevel } from './types';
 import { parseColor } from './shaderUtils';
+import { DustParticleSystem, DUST_CONFIG } from './dustParticles';
 
 const RING_COUNT = 3;
 
@@ -24,6 +25,7 @@ export class SonarPulse3D implements ArcEffect3D {
   private pingParticle: THREE.Mesh;
   private pingGeometry: THREE.SphereGeometry;
   private pingMaterial: THREE.MeshBasicMaterial;
+  private dustSystem: DustParticleSystem;
 
   private sourcePos: THREE.Vector3;
   private targetPos: THREE.Vector3;
@@ -82,10 +84,19 @@ export class SonarPulse3D implements ArcEffect3D {
     this.pingParticle = new THREE.Mesh(this.pingGeometry, this.pingMaterial);
     this.group.add(this.pingParticle);
 
+    // Add dust particle system (hexagon shapes with pulsing drift)
+    this.dustSystem = new DustParticleSystem(DUST_CONFIG.mining);
+    this.dustSystem.updateArcPositions(this.sourcePos, this.targetPos);
+    this.group.add(this.dustSystem.mesh);
+
     this.updatePositions(this.sourcePos, this.targetPos);
   }
 
   updatePositions(source: THREE.Vector3, target: THREE.Vector3): void {
+    // Defensive: skip if positions are invalid
+    if (!source || !target) return;
+    if (typeof source.x !== 'number' || typeof target.x !== 'number') return;
+
     // Only update if position changed significantly
     const threshold = 0.5;
     if (this.sourcePos.distanceTo(source) < threshold && this.targetPos.distanceTo(target) < threshold) return;
@@ -115,9 +126,12 @@ export class SonarPulse3D implements ArcEffect3D {
     this.rings.forEach(ring => {
       ring.quaternion.copy(quaternion);
     });
+
+    // Update dust particle positions
+    this.dustSystem.updateArcPositions(this.sourcePos, this.targetPos);
   }
 
-  updateUniforms(time: number, _deltaTime: number): void {
+  updateUniforms(time: number, deltaTime: number): void {
     const cycleTime = (time * 0.25 + this.pulsePhase) % 1.0; // 4 second cycle
     const direction = new THREE.Vector3().subVectors(this.targetPos, this.sourcePos);
     const length = direction.length();
@@ -141,6 +155,9 @@ export class SonarPulse3D implements ArcEffect3D {
       ring.scale.setScalar(ringScale);
       this.ringMaterials[i].opacity = ringOpacity;
     });
+
+    // Animate dust particles
+    this.dustSystem.update(time, deltaTime);
   }
 
   setLOD(level: LODLevel): void {
@@ -159,5 +176,6 @@ export class SonarPulse3D implements ArcEffect3D {
     this.ringMaterials.forEach(m => m.dispose());
     this.pingGeometry.dispose();
     this.pingMaterial.dispose();
+    this.dustSystem.dispose();
   }
 }
