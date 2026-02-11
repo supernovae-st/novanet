@@ -99,6 +99,10 @@ export class DNAHelix3D implements ArcEffect3D {
   }
 
   updatePositions(source: THREE.Vector3, target: THREE.Vector3): void {
+    // Only update if position changed significantly
+    const threshold = 0.5;
+    if (this.sourcePos.distanceTo(source) < threshold && this.targetPos.distanceTo(target) < threshold) return;
+
     this.sourcePos.copy(source);
     this.targetPos.copy(target);
     this.initializeHelixPositions();
