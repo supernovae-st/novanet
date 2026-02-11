@@ -410,6 +410,40 @@ The Neo4j nodes (`:Meta:Realm`, `:Meta:Layer`, etc.) already exist in `00.5-taxo
 │       └─ ... +195 more [Enter to load]                 │
 ```
 
+**Instance Pagination**: First 10 instances loaded by default, "Load more" fetches next batch.
+
+### Arcs Tree with ArcFamily Nodes
+
+ArcFamily and ArcKind are NODES in Neo4j (`:Meta:ArcFamily`, `:Meta:ArcKind`).
+Badge indicators show this clearly:
+
+```
+▶ Arcs (114)
+  ▼ → ownership [46]                                 ●fam   ← ArcFamily node
+    → HAS_PROJECT →1 ←1 (OrgConfig → Project)       ●arc   ← ArcKind node
+    → HAS_PAGE →1 ←1 (Project → Page)               ●arc
+    → HAS_BLOCK →1 ←M (Page → Block)                ●arc
+    → HAS_ENTITY →1 ←M (Project → Entity)           ●arc
+    → ... +42 more
+  ▶ ⇢ localization [15]                              ●fam
+  ▶ ⋯ semantic [41]                                  ●fam
+  ▶ ═ generation [11]                                ●fam
+  ▶ ┄ mining [1]                                     ●fam
+```
+
+**ArcKind Display Format**: `→ ARC_NAME →out ←in (Source → Target)`
+
+| Element | Meaning |
+|---------|---------|
+| `→ HAS_PROJECT` | Arc direction + name |
+| `→1` | Outgoing cardinality (1) |
+| `←1` | Incoming cardinality (1) |
+| `(OrgConfig → Project)` | Source → Target types |
+| `●fam` | Badge: this is an ArcFamily node |
+| `●arc` | Badge: this is an ArcKind node |
+
+**Cardinality notation**: `1` = exactly one, `M` = many, `?` = zero-or-one
+
 ### Search Overlay ([/])
 
 ```
@@ -458,14 +492,89 @@ The Neo4j nodes (`:Meta:Realm`, `:Meta:Layer`, etc.) already exist in `00.5-taxo
 └─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
+## Panel Details by Node Type
+
+Clicking any node shows its properties and relationships in the right panel.
+
+### Realm Panel (e.g., Realm:shared)
+
+```
+┌─────────────────────────────────────────┐
+│  ◉ Realm: shared                        │
+│  ─────────────────────────────────────  │
+│                                         │
+│  key:          shared                   │
+│  display_name: Shared                   │
+│  color:        #2aa198                  │
+│  description:  Universal locale knowledge│
+│                                         │
+│  Stats:                                 │
+│  ├─ Layers:    4 (config, locale, ...)  │
+│  ├─ Kinds:     39                       │
+│  └─ Instances: 847                      │
+│                                         │
+│  Arcs:                                  │
+│  ├─ HAS_LAYER → Layer (4)               │
+│  └─ PART_OF ← Layer (4)                 │
+└─────────────────────────────────────────┘
+```
+
+### Layer Panel (e.g., Layer:config)
+
+```
+┌─────────────────────────────────────────┐
+│  ⚙ Layer: config                        │
+│  ─────────────────────────────────────  │
+│                                         │
+│  key:          config                   │
+│  realm:        shared                   │
+│  display_name: Config                   │
+│  color:        #64748b                  │
+│  description:  Configuration definitions│
+│                                         │
+│  Stats:                                 │
+│  ├─ Kinds:     3                        │
+│  └─ Instances: 214                      │
+│                                         │
+│  Arcs:                                  │
+│  ├─ HAS_KIND → Kind (3)                 │
+│  └─ PART_OF ← Realm:shared              │
+└─────────────────────────────────────────┘
+```
+
+### ArcFamily Panel (e.g., ArcFamily:ownership)
+
+```
+┌─────────────────────────────────────────┐
+│  → ArcFamily: ownership                 │
+│  ─────────────────────────────────────  │
+│                                         │
+│  key:          ownership                │
+│  display_name: Ownership                │
+│  color:        #3b82f6                  │
+│  description:  Parent-child hierarchy   │
+│                                         │
+│  Stats:                                 │
+│  ├─ ArcKinds:  46                       │
+│  └─ Instances: 2,847                    │
+│                                         │
+│  Contains:                              │
+│  ├─ HAS_PROJECT (OrgConfig → Project)   │
+│  ├─ HAS_PAGE (Project → Page)           │
+│  └─ ... +44 more                        │
+└─────────────────────────────────────────┘
+```
+
 ## Summary of Changes
 
 | Aspect | Before (v11.6) | After (v11.7) |
 |--------|----------------|---------------|
 | Header tabs | 5 (Meta/Data/Overlay/Query/Atlas) | 2 (Graph/Nexus) |
 | Tree structure | Realm/Layer as folders | Realm/Layer as clickable nodes |
-| Instances | Hidden or separate Data mode | Under Kind, expandable |
+| Instances | Hidden or separate Data mode | Under Kind, expandable (10 + load more) |
+| ArcFamily/ArcKind | Visual groupings | Clickable nodes with `●fam`/`●arc` badges |
 | Search | Separate Query mode | `[/]` overlay in Graph |
 | Atlas | Separate mode | Removed |
 | Audit | In Atlas | In Nexus hub |
 | Icons | Mixed emoji | Unicode only (no emoji) |
+| Node panels | Schema-only for Kind | Props + stats for ALL node types |
