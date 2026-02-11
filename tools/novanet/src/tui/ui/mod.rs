@@ -11,7 +11,8 @@ mod yaml_panel;
 
 #[allow(unused_imports)]
 pub use atlas::render_atlas; // Atlas mode is work-in-progress
-pub use audit::render_audit;
+#[allow(unused_imports)]
+pub use audit::render_audit; // Audit mode unused after v11.7
 pub use graph::render_graph_panel;
 pub use info::render_info_panel;
 pub use status::render_status;
@@ -593,7 +594,7 @@ fn render_footer_hints(f: &mut Frame, area: Rect, app: &App) {
             Focus::Yaml => "YAML: [j/k] Scroll  [y] Copy  [Tab] Panel  [/] Search  [?] Help",
         },
         NavMode::Nexus => {
-            "[1-4] Tabs  [j/k] Navigate  [Enter] Select  [Esc] Back  [/] Search  [?] Help"
+            "[1-2] Modes  [j/k] Navigate  [Enter] Select  [Esc] Back  [/] Search  [?] Help"
         }
     };
 

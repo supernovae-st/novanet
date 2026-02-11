@@ -25,6 +25,10 @@ use crate::tui::app::App;
 /// - Shared coverage percentage with progress bar
 /// - Total issues count
 /// - Per-Kind coverage table with instance counts and issue indicators
+///
+/// Note: Currently unused after v11.7 mode simplification (Graph/Nexus only).
+/// Retained for potential future Audit mode revival.
+#[allow(dead_code)]
 pub fn render_audit(f: &mut Frame, area: Rect, app: &mut App) {
     let chunks = Layout::default()
         .direction(Direction::Vertical)
