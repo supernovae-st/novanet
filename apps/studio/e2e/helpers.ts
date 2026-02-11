@@ -20,6 +20,12 @@ export async function waitForGraphLoaded(page: Page, timeout = 30000) {
     { timeout }
   );
 
-  // Wait for React Flow container
-  await page.waitForSelector('.react-flow', { timeout: 10000 });
+  // Wait for React Flow container (could be 2D or 3D view)
+  await page.waitForSelector('.react-flow, [data-testid="react-flow-wrapper"], canvas', {
+    timeout: 15000,
+    state: 'visible'
+  });
+
+  // Give it a moment to render nodes
+  await page.waitForTimeout(500);
 }
