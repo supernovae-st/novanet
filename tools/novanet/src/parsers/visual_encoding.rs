@@ -305,7 +305,7 @@ mod tests {
         let doc = load_visual_encoding(root).expect("should load visual-encoding.yaml");
 
         // Version (v11.6: Navigation redesign)
-        assert_eq!(doc.version, "11.6.0");
+        assert_eq!(doc.version, "11.7.0");
 
         // Channel mapping
         assert_eq!(doc.channel_mapping.node.fill_color, "layer");

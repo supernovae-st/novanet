@@ -392,7 +392,7 @@ arc_families:
         let doc = load_taxonomy(root).expect("should load taxonomy.yaml");
 
         // v11.5: Locale moved to shared/config
-        assert_eq!(doc.version, "11.6.0");
+        assert_eq!(doc.version, "11.7.0");
         assert_eq!(doc.node_realms.len(), 2); // v11.2: 2 realms (shared, org)
         assert_eq!(doc.node_traits.len(), 5); // v11.2: split derived → generated + aggregated
         assert_eq!(doc.arc_families.len(), 5);

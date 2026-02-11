@@ -1,235 +1,558 @@
 # models/views/_registry.yaml
-version: "11.6.0"
-description: NovaNet Core View Definitions
+version: "11.7.0"
+description: NovaNet Unified View System (29 views)
 
-# Categories for UI grouping:
-# - overview: Layer views (complete, shared, project)
-# - generation: Orchestrator and sub-agent context views
-# - knowledge: Locale and entity views
-# - project: Project structure views
-# - mining: SEO pipeline views
-# - contextual: Node-specific views (contextual: true)
+# View Categories:
+# - meta: Schema exploration (Realm, Layer, Kind, ArcKind) - 3 views
+# - data: Instance exploration by realm/layer/purpose - 10 views
+# - overlay: Meta + Data combined for debugging - 3 views
+# - contextual: Node-centered subgraphs - 13 views
 
 # =============================================================================
-# OVERVIEW LAYER VIEWS (extracted from complete-graph)
+# META VIEWS (3) - Schema exploration
 # =============================================================================
 views:
-  # Complete graph (all 60 nodes)
-  - id: complete-graph
-    file: complete-graph.yaml
-    description: Full NovaNet graph with all nodes and relations
-    category: overview
-    modes: [data, meta, overlay, query]
+  - id: meta-complete
+    description: Complete meta-graph (Realm, Layer, Kind, Trait, ArcKind)
+    icon:
+      web: diamond
+      terminal: "◆"
+    color: "#8b5cf6"
+    category: meta
+    modes: [meta]
+    cypher: |
+      MATCH (n:Meta)
+      OPTIONAL MATCH (n)-[r]->(m:Meta)
+      RETURN n, r, m
 
-  # Realm layers (derived from complete-graph)
-  - id: shared-layer
-    file: shared-layer.yaml
-    description: Locale configuration and knowledge (39 nodes)
-    category: overview
-    modes: [data, meta, overlay, query]
+  - id: meta-realm
+    description: Kinds of a specific realm with their layers
+    icon:
+      web: building-2
+      terminal: "◉"
+    color: "#6366f1"
+    category: meta
+    modes: [meta]
+    params: [realm]
+    cypher: |
+      MATCH (r:Meta:Realm {key: $realm})-[:HAS_LAYER]->(l:Meta:Layer)
+      OPTIONAL MATCH (l)-[:HAS_KIND]->(k:Meta:Kind)
+      OPTIONAL MATCH (k)-[:HAS_TRAIT]->(t:Meta:Trait)
+      RETURN r, l, k, t
 
-  - id: seo-keywords
-    file: seo-keywords.yaml
-    description: SEO keywords and metrics (3 nodes, shared realm)
-    category: overview
-    modes: [data, meta, overlay, query]
-
-  - id: project-layer
-    file: project-layer.yaml
-    description: Per-project nodes from foundation to output (14 nodes)
-    category: overview
-    modes: [data, meta, overlay, query]
-
-# =============================================================================
-# GENERATION VIEWS (for orchestrator and sub-agents)
-# =============================================================================
-
-  - id: page-generation-context
-    file: page-generation-context.yaml
-    description: Full context for orchestrator to generate a page
-    category: generation
-    modes: [data, overlay, query]
-
-  - id: block-generation
-    file: block-generation.yaml
-    description: Full context for sub-agent to generate a block
-    category: generation
-    modes: [data, overlay, query]
-
-  - id: block-semantic-network
-    file: block-semantic-network.yaml
-    description: Block with concepts and spreading activation
-    category: generation
-    modes: [data, overlay, query]
+  - id: meta-arcs
+    description: ArcKinds grouped by ArcFamily with source/target
+    icon:
+      web: git-branch
+      terminal: "→"
+    color: "#f59e0b"
+    category: meta
+    modes: [meta]
+    cypher: |
+      MATCH (af:Meta:ArcFamily)<-[:BELONGS_TO_FAMILY]-(ak:Meta:ArcKind)
+      MATCH (ak)-[:FROM_KIND]->(source:Meta:Kind)
+      MATCH (ak)-[:TO_KIND]->(target:Meta:Kind)
+      RETURN af, ak, source, target
 
 # =============================================================================
-# KNOWLEDGE VIEWS (locale and concepts)
+# DATA VIEWS (10) - Instance exploration
 # =============================================================================
 
-  - id: locale-full-knowledge
-    file: locale-full-knowledge.yaml
-    description: Complete locale knowledge (Identity, Voice, Culture, Market, Lexicon)
-    category: knowledge
-    modes: [data, overlay, query]
+  - id: data-complete
+    description: All instance nodes (no meta)
+    icon:
+      web: globe
+      terminal: "●"
+    color: "#6366f1"
+    category: data
+    modes: [data]
+    cypher: |
+      MATCH (n) WHERE NOT n:Meta
+      OPTIONAL MATCH (n)-[r]->(m) WHERE NOT m:Meta
+      RETURN n, r, m
 
-  - id: entity-ecosystem
-    file: entity-ecosystem.yaml
-    description: Entity with content, SEO keywords, semantic links (v10.3)
-    category: knowledge
-    modes: [data, overlay, query]
+  - id: data-org
+    description: Organization realm nodes (6 layers, 21 nodes)
+    icon:
+      web: building
+      terminal: "◎"
+    color: "#0ea5e9"
+    category: data
+    modes: [data]
+    cypher: |
+      MATCH (n) WHERE NOT n:Meta
+      WITH n
+      MATCH (k:Meta:Kind {name: labels(n)[0]})
+      WHERE k.realm = 'org'
+      OPTIONAL MATCH (n)-[r]->(m) WHERE NOT m:Meta
+      RETURN n, r, m
 
-# =============================================================================
-# PROJECT VIEWS (project structure)
-# =============================================================================
+  - id: data-shared
+    description: Shared realm nodes (4 layers, 39 nodes)
+    icon:
+      web: earth
+      terminal: "◉"
+    color: "#2aa198"
+    category: data
+    modes: [data]
+    cypher: |
+      MATCH (n) WHERE NOT n:Meta
+      WITH n
+      MATCH (k:Meta:Kind {name: labels(n)[0]})
+      WHERE k.realm = 'shared'
+      OPTIONAL MATCH (n)-[r]->(m) WHERE NOT m:Meta
+      RETURN n, r, m
 
-  - id: project-context
-    file: project-context.yaml
-    description: Project with supported locales and page inventory
-    category: project
-    modes: [data, overlay, query]
+  - id: data-geography
+    description: Geographic hierarchy (Continent → Region → Country)
+    icon:
+      web: map
+      terminal: "▧"
+    color: "#14b8a6"
+    category: data
+    modes: [data]
+    cypher: |
+      MATCH (c:Continent)
+      OPTIONAL MATCH (c)-[:HAS_REGION]->(r:GeoRegion)
+      OPTIONAL MATCH (r)-[:HAS_COUNTRY]->(co:Country)
+      OPTIONAL MATCH (co)-[:HAS_ZONE]->(z:GeoZone)
+      RETURN c, r, co, z
 
-  - id: project-overview
-    file: project-overview.yaml
-    description: Project dashboard with pages, brand identity, and concepts
-    category: project
-    modes: [data, overlay, query]
-
-# =============================================================================
-# MINING VIEWS (SEO pipeline)
-# =============================================================================
-
-  - id: seo-pipeline
-    file: seo-pipeline.yaml
-    description: SEO keyword mining and optimization workflow
-    category: mining
-    modes: [data, overlay, query]
-
-# =============================================================================
-# CONTEXTUAL VIEWS (node-specific, shown in sidebar)
-# =============================================================================
-
-  # Page/Block hierarchy
-  - id: composition
-    file: contextual/composition.yaml
-    description: Page/Block composition hierarchy
-    category: contextual
-    contextual: true
-    applicable_types: [Page, Block]
-    modes: [data, overlay, query]
-
-  # Locale knowledge
-  - id: knowledge
-    file: contextual/knowledge.yaml
-    description: Locale knowledge atoms (Terms, Expressions, Patterns)
-    category: contextual
-    contextual: true
-    applicable_types: [Locale]
-    modes: [data, overlay, query]
-
-  # Geographic hierarchy
-  - id: geographic
-    file: contextual/geographic.yaml
-    description: Geographic hierarchy (Country → Region → Continent)
-    category: contextual
-    contextual: true
-    applicable_types: [Locale]
-    modes: [data, overlay, query]
-
-  # Project structure
-  - id: project
-    file: contextual/project.yaml
-    description: Project structure (Pages, Entities, Brand)
-    category: contextual
+  - id: data-project
+    description: Project with all dependencies
+    icon:
+      web: folder-kanban
+      terminal: "▤"
+    color: "#6366f1"
+    category: data
+    modes: [data]
     contextual: true
     applicable_types: [Project]
-    modes: [data, overlay, query]
+    cypher: |
+      MATCH (p:Project {key: $nodeKey})
+      OPTIONAL MATCH (p)-[:HAS_PAGE]->(page:Page)
+      OPTIONAL MATCH (p)-[:HAS_ENTITY]->(entity:Entity)
+      OPTIONAL MATCH (p)-[:HAS_BRAND]->(brand:BrandIdentity)
+      OPTIONAL MATCH (p)-[:HAS_CONTENT]->(content:ProjectContent)
+      OPTIONAL MATCH (content)-[:FOR_LOCALE]->(locale:Locale)
+      WITH p, collect(DISTINCT page) AS pages, collect(DISTINCT entity) AS entities,
+           brand, collect(DISTINCT content) AS contents, collect(DISTINCT locale) AS locales
+      UNWIND ([p, brand] + pages + entities + contents + locales) AS n
+      WITH n WHERE n IS NOT NULL
+      RETURN collect(DISTINCT n) AS nodes
 
-  # Brand identity
-  - id: brand
-    file: contextual/brand.yaml
-    description: Brand identity configuration
+  - id: data-entities
+    description: Entities with content, categories, and keywords
+    icon:
+      web: link
+      terminal: "◈"
+    color: "#06b6d4"
+    category: data
+    modes: [data]
+    contextual: true
+    applicable_types: [Entity, EntityCategory]
+    cypher: |
+      MATCH (e:Entity)
+      OPTIONAL MATCH (e)-[:HAS_CONTENT]->(ec:EntityContent)
+      OPTIONAL MATCH (e)-[:BELONGS_TO]->(cat:EntityCategory)
+      OPTIONAL MATCH (ec)-[:FOR_LOCALE]->(locale:Locale)
+      OPTIONAL MATCH (e)-[:TARGETS]->(kw:SEOKeyword)
+      OPTIONAL MATCH (e)-[:MONITORS_GEO]->(gq:GEOQuery)
+      RETURN e, ec, cat, locale, kw, gq
+
+  - id: data-locale-coverage
+    description: Locale coverage by project (content per locale)
+    icon:
+      web: languages
+      terminal: "◌"
+    color: "#f59e0b"
+    category: data
+    modes: [data]
+    contextual: true
+    applicable_types: [Project, Locale]
+    cypher: |
+      MATCH (l:Locale)
+      OPTIONAL MATCH (pc:ProjectContent)-[:FOR_LOCALE]->(l)
+      OPTIONAL MATCH (pg:PageGenerated)-[:FOR_LOCALE]->(l)
+      OPTIONAL MATCH (bg:BlockGenerated)-[:FOR_LOCALE]->(l)
+      OPTIONAL MATCH (ec:EntityContent)-[:FOR_LOCALE]->(l)
+      RETURN l, collect(DISTINCT pc) AS projectContents,
+             collect(DISTINCT pg) AS pageGenerateds,
+             collect(DISTINCT bg) AS blockGenerateds,
+             collect(DISTINCT ec) AS entityContents
+
+  - id: data-seo
+    description: SEO intelligence (keywords, clusters, metrics)
+    icon:
+      web: target
+      terminal: "◎"
+    color: "#8b5cf6"
+    category: data
+    modes: [data]
+    contextual: true
+    applicable_types: [SEOKeyword, SEOKeywordSet, SEOCluster]
+    cypher: |
+      MATCH (kw:SEOKeyword)
+      OPTIONAL MATCH (ks:SEOKeywordSet)-[:CONTAINS]->(kw)
+      OPTIONAL MATCH (kw)-[:HAS_METRICS]->(m:SEOKeywordMetrics)
+      OPTIONAL MATCH (kw)-[:IN_CLUSTER]->(c:SEOCluster)
+      OPTIONAL MATCH (e)-[:TARGETS]->(kw) WHERE e:Entity OR e:Page
+      RETURN kw, ks, m, c, collect(DISTINCT e) AS targeters
+
+  - id: data-geo
+    description: GEO intelligence (AI answers monitoring)
+    icon:
+      web: radar
+      terminal: "◇"
+    color: "#a855f7"
+    category: data
+    modes: [data]
+    contextual: true
+    applicable_types: [GEOQuery, GEOQuerySet, GEOAnswer]
+    cypher: |
+      MATCH (gq:GEOQuery)
+      OPTIONAL MATCH (gs:GEOQuerySet)-[:CONTAINS]->(gq)
+      OPTIONAL MATCH (gq)-[:HAS_ANSWER]->(ga:GEOAnswer)
+      OPTIONAL MATCH (ga)-[:HAS_METRICS]->(gm:GEOMetrics)
+      OPTIONAL MATCH (gq)-[:FOR_LOCALE]->(l:Locale)
+      OPTIONAL MATCH (e:Entity)-[:MONITORS_GEO]->(gq)
+      RETURN gq, gs, ga, gm, l, collect(DISTINCT e) AS monitors
+
+  - id: data-generation
+    description: Generation pipeline (prompts → outputs)
+    icon:
+      web: zap
+      terminal: "★"
+    color: "#ec4899"
+    category: data
+    modes: [data]
+    contextual: true
+    applicable_types: [Page, Block, PageGenerated, BlockGenerated]
+    cypher: |
+      MATCH (p:Page)
+      OPTIONAL MATCH (pt:PageType)-[:TYPE_OF]->(p)
+      OPTIONAL MATCH (p)-[:HAS_PROMPT]->(pp:PagePrompt)
+      OPTIONAL MATCH (pp)<-[:COMPILED_FROM]-(pa:PromptArtifact)
+      OPTIONAL MATCH (p)-[:HAS_GENERATED]->(pg:PageGenerated)
+      OPTIONAL MATCH (pg)-[:FOR_LOCALE]->(l:Locale)
+      RETURN p, pt, pp, pa, pg, l
+      UNION
+      MATCH (b:Block)
+      OPTIONAL MATCH (bt:BlockType)-[:TYPE_OF]->(b)
+      OPTIONAL MATCH (b)-[:HAS_PROMPT]->(bp:BlockPrompt)
+      OPTIONAL MATCH (b)-[:HAS_GENERATED]->(bg:BlockGenerated)
+      OPTIONAL MATCH (bg)-[:FOR_LOCALE]->(l:Locale)
+      RETURN b AS p, bt AS pt, bp AS pp, null AS pa, bg AS pg, l
+
+# =============================================================================
+# OVERLAY VIEWS (3) - Meta + Data combined
+# =============================================================================
+
+  - id: overlay-complete
+    description: Meta + Data combined (debug architecture)
+    icon:
+      web: layers
+      terminal: "▣"
+    color: "#f97316"
+    category: overlay
+    modes: [overlay]
+    cypher: |
+      MATCH (n)
+      OPTIONAL MATCH (n)-[r]->(m)
+      RETURN n, r, m
+
+  - id: overlay-kind-instances
+    description: A Kind and all its instances
+    icon:
+      web: square-stack
+      terminal: "▤"
+    color: "#3b82f6"
+    category: overlay
+    modes: [overlay]
+    params: [kind]
+    cypher: |
+      MATCH (k:Meta:Kind {name: $kind})
+      OPTIONAL MATCH (n) WHERE $kind IN labels(n)
+      RETURN k, collect(DISTINCT n) AS instances
+
+  - id: overlay-arc-analysis
+    description: ArcKind with instance examples
+    icon:
+      web: git-compare
+      terminal: "⇄"
+    color: "#f59e0b"
+    category: overlay
+    modes: [overlay]
+    params: [arcKind]
+    cypher: |
+      MATCH (ak:Meta:ArcKind {name: $arcKind})
+      MATCH (ak)-[:FROM_KIND]->(source:Meta:Kind)
+      MATCH (ak)-[:TO_KIND]->(target:Meta:Kind)
+      OPTIONAL MATCH (s)-[r]->(t)
+      WHERE type(r) = $arcKind
+      RETURN ak, source, target, collect({source: s, rel: r, target: t})[0..5] AS examples
+
+# =============================================================================
+# CONTEXTUAL VIEWS (13) - Node-centered subgraphs
+# =============================================================================
+
+  - id: ctx-composition
+    description: Page/Block composition hierarchy
+    icon:
+      web: box
+      terminal: "□"
+    color: "#0ea5e9"
     category: contextual
     contextual: true
-    applicable_types: [Project, BrandIdentity]
-    modes: [data, overlay, query]
+    applicable_types: [Project, Page, Block]
+    modes: [data, overlay]
+    cypher: |
+      MATCH (root {key: $nodeKey})
+      WHERE root:Page OR root:Block OR root:Project
+      OPTIONAL MATCH path = (root)-[:HAS_BLOCK|HAS_PAGE*1..3]->(child)
+      WITH root, collect(DISTINCT child) AS children
+      UNWIND ([root] + children) AS n
+      WITH collect(DISTINCT n) AS nodes
+      UNWIND nodes AS n
+      OPTIONAL MATCH (n)-[r:HAS_BLOCK|HAS_PAGE]->(m)
+      WHERE m IN nodes
+      RETURN nodes, collect(DISTINCT r) AS relationships
 
-  # Entity connections
-  - id: entities
-    file: contextual/entities.yaml
-    description: Connected entities and semantic links
+  - id: ctx-entities
+    description: Connected entities (semantic links)
+    icon:
+      web: link-2
+      terminal: "◈"
+    color: "#06b6d4"
     category: contextual
     contextual: true
     applicable_types: [Page, Block, Entity]
-    modes: [data, overlay, query]
+    modes: [data, overlay]
+    cypher: |
+      MATCH (root {key: $nodeKey})
+      OPTIONAL MATCH (root)-[:USES_ENTITY|TARGETS*1..2]->(e:Entity)
+      OPTIONAL MATCH (e)-[:BELONGS_TO]->(c:EntityCategory)
+      WITH root, collect(DISTINCT e) AS entities, collect(DISTINCT c) AS categories
+      UNWIND ([root] + entities + categories) AS n
+      RETURN collect(DISTINCT n) AS nodes
 
-  # SEO intel
-  - id: seo-intel
-    file: contextual/seo-intel.yaml
-    description: SEO keywords, clusters, and metrics
+  - id: ctx-locales
+    description: Locale coverage (content per language)
+    icon:
+      web: globe-2
+      terminal: "◌"
+    color: "#f59e0b"
     category: contextual
     contextual: true
-    applicable_types: [Entity, Page, SEOKeyword]
-    modes: [data, overlay, query]
+    applicable_types: [Project, Page, Entity, Block]
+    modes: [data, overlay]
+    cypher: |
+      MATCH (root {key: $nodeKey})
+      OPTIONAL MATCH (root)-[:HAS_CONTENT|HAS_GENERATED]->(content)-[:FOR_LOCALE]->(locale:Locale)
+      WITH root, collect(DISTINCT content) AS contents, collect(DISTINCT locale) AS locales
+      UNWIND ([root] + contents + locales) AS n
+      RETURN collect(DISTINCT n) AS nodes
 
-  # GEO intel
-  - id: geo-intel
-    file: contextual/geo-intel.yaml
-    description: GEO queries and AI-generated answers
+  - id: ctx-knowledge
+    description: Knowledge atoms (Terms, Expressions, Patterns)
+    icon:
+      web: brain
+      terminal: "◇"
+    color: "#22c55e"
     category: contextual
     contextual: true
-    applicable_types: [Entity, GEOQuery]
-    modes: [data, overlay, query]
+    applicable_types: [Locale]
+    modes: [data, overlay]
+    cypher: |
+      MATCH (locale:Locale {key: $nodeKey})
+      OPTIONAL MATCH (locale)-[:HAS_TERMS|HAS_EXPRESSIONS|HAS_PATTERNS|HAS_CULTURE|HAS_TABOOS]->(set)
+      OPTIONAL MATCH (set)-[:CONTAINS_TERM|CONTAINS_EXPRESSION|CONTAINS_PATTERN|CONTAINS_CULTURE_REF|CONTAINS_TABOO]->(atom)
+      WITH locale, collect(DISTINCT set) AS sets, collect(DISTINCT atom) AS atoms
+      UNWIND ([locale] + sets + atoms) AS n
+      RETURN collect(DISTINCT n) AS nodes
 
-  # Generation pipeline
-  - id: generation
-    file: contextual/generation.yaml
-    description: Generation pipeline and outputs
+  - id: ctx-geographic
+    description: Geographic hierarchy (Continent → Region → Country)
+    icon:
+      web: map-pin
+      terminal: "▧"
+    color: "#14b8a6"
     category: contextual
     contextual: true
-    applicable_types: [Page, Block, PageGenerated, BlockGenerated]
-    modes: [data, overlay, query]
+    applicable_types: [Locale, Continent, GeoRegion, Country]
+    modes: [data, overlay]
+    cypher: |
+      MATCH (root {key: $nodeKey})
+      OPTIONAL MATCH (root)-[:FOR_COUNTRY]->(country:Country)
+      OPTIONAL MATCH (country)-[:IN_REGION]->(region)
+      OPTIONAL MATCH (region)-[:IN_CONTINENT]->(continent:Continent)
+      WITH root, country, region, continent
+      UNWIND [root, country, region, continent] AS n
+      WITH n WHERE n IS NOT NULL
+      RETURN collect(DISTINCT n) AS nodes
 
-  # Entity categories
-  - id: categories
-    file: contextual/categories.yaml
+  - id: ctx-generation
+    description: Generation pipeline (prompts → outputs)
+    icon:
+      web: sparkles
+      terminal: "★"
+    color: "#ec4899"
+    category: contextual
+    contextual: true
+    applicable_types: [Page, Block, PageGenerated, BlockGenerated, PagePrompt, BlockPrompt]
+    modes: [data, overlay]
+    cypher: |
+      MATCH (root {key: $nodeKey})
+      OPTIONAL MATCH (root)<-[:TYPE_OF]-(pageType:PageType)
+      OPTIONAL MATCH (root)-[:HAS_GENERATED]->(generated)
+      OPTIONAL MATCH (generated)-[:FOR_LOCALE]->(locale:Locale)
+      OPTIONAL MATCH (root)-[:HAS_PROMPT]->(prompt)
+      OPTIONAL MATCH (prompt)<-[:COMPILED_FROM]-(artifact:PromptArtifact)
+      WITH root, pageType, prompt, artifact, collect(DISTINCT generated) AS outputs, collect(DISTINCT locale) AS locales
+      UNWIND ([root, pageType, prompt, artifact] + outputs + locales) AS n
+      WITH n WHERE n IS NOT NULL
+      RETURN collect(DISTINCT n) AS nodes
+
+  - id: ctx-categories
     description: Entity category classification
+    icon:
+      web: tag
+      terminal: "#"
+    color: "#64748b"
     category: contextual
     contextual: true
     applicable_types: [Entity, EntityCategory]
-    modes: [data, overlay, query]
+    modes: [data, overlay]
+    cypher: |
+      MATCH (root {key: $nodeKey})
+      WHERE root:Entity OR root:EntityCategory
+      OPTIONAL MATCH (root)-[:BELONGS_TO]->(category:EntityCategory)
+      OPTIONAL MATCH (root)<-[:BELONGS_TO]-(entity:Entity)
+      WITH root, category, collect(DISTINCT entity) AS entities
+      UNWIND ([root, category] + entities) AS n
+      WITH n WHERE n IS NOT NULL
+      RETURN collect(DISTINCT n) AS nodes
 
-  # Cross-realm connections
-  - id: cross-realm
-    file: contextual/cross-realm.yaml
-    description: Cross-realm connections (org ↔ shared)
+  - id: ctx-seo-intel
+    description: SEO keywords and clusters
+    icon:
+      web: search
+      terminal: "◎"
+    color: "#8b5cf6"
     category: contextual
     contextual: true
-    applicable_types: [Entity, Page, Block, Project]
-    modes: [data, overlay, query]
+    applicable_types: [Entity, Page, SEOKeyword, SEOKeywordSet]
+    modes: [data, overlay]
+    cypher: |
+      MATCH (root {key: $nodeKey})
+      OPTIONAL MATCH (root)-[:TARGETS]->(keyword:SEOKeyword)
+      OPTIONAL MATCH (keyword)-[:HAS_METRICS]->(metrics:SEOKeywordMetrics)
+      OPTIONAL MATCH (keyword)-[:IN_CLUSTER]->(cluster:SEOCluster)
+      WITH root, collect(DISTINCT keyword) AS keywords, collect(DISTINCT metrics) AS allMetrics, collect(DISTINCT cluster) AS clusters
+      UNWIND ([root] + keywords + allMetrics + clusters) AS n
+      RETURN collect(DISTINCT n) AS nodes
 
-  # Locale coverage
-  - id: locales
-    file: contextual/locales.yaml
-    description: Locale coverage and content status
+  - id: ctx-geo-intel
+    description: GEO queries and AI answers
+    icon:
+      web: radar
+      terminal: "◇"
+    color: "#a855f7"
     category: contextual
     contextual: true
-    applicable_types: [Page, Entity, Project, Block]
-    modes: [data, overlay, query]
+    applicable_types: [Entity, GEOQuery, GEOQuerySet, GEOAnswer]
+    modes: [data, overlay]
+    cypher: |
+      MATCH (root {key: $nodeKey})
+      OPTIONAL MATCH (root)-[:MONITORS_GEO]->(query:GEOQuery)
+      OPTIONAL MATCH (query)-[:HAS_ANSWER]->(answer:GEOAnswer)
+      OPTIONAL MATCH (query)-[:IN_QUERY_SET]->(querySet:GEOQuerySet)
+      WITH root, collect(DISTINCT query) AS queries, collect(DISTINCT answer) AS answers, collect(DISTINCT querySet) AS querySets
+      UNWIND ([root] + queries + answers + querySets) AS n
+      RETURN collect(DISTINCT n) AS nodes
 
-  # Content per locale
-  - id: content
-    file: contextual/content.yaml
-    description: Content per locale
+  - id: ctx-project
+    description: Complete project structure (Pages, Entities, Brand)
+    icon:
+      web: folder-open
+      terminal: "▤"
+    color: "#6366f1"
     category: contextual
     contextual: true
-    applicable_types: [Entity, Project]
-    modes: [data, overlay, query]
+    applicable_types: [Project]
+    modes: [data, overlay]
+    cypher: |
+      MATCH (project:Project {key: $nodeKey})
+      OPTIONAL MATCH (project)-[:HAS_PAGE]->(page:Page)
+      OPTIONAL MATCH (project)-[:HAS_ENTITY]->(entity:Entity)
+      OPTIONAL MATCH (project)-[:HAS_BRAND]->(brand:BrandIdentity)
+      WITH project, collect(DISTINCT page) AS pages, collect(DISTINCT entity) AS entities, brand
+      UNWIND ([project, brand] + pages + entities) AS n
+      WITH n WHERE n IS NOT NULL
+      RETURN collect(DISTINCT n) AS nodes
 
-  # Performance metrics
-  - id: metrics
-    file: contextual/metrics.yaml
-    description: Performance metrics and analytics
+  - id: ctx-arc-relationships
+    description: Arc relationships grouped by family
+    icon:
+      web: git-fork
+      terminal: "⇢"
+    color: "#f59e0b"
     category: contextual
     contextual: true
-    applicable_types: [SEOKeyword, SEOKeywordMetrics, GEOQuery, GEOAnswer]
-    modes: [data, overlay, query]
+    applicable_types: []
+    modes: [data, overlay]
+    cypher: |
+      MATCH (root {key: $nodeKey})
+      OPTIONAL MATCH (root)-[r]->(target)
+      OPTIONAL MATCH (source)-[r2]->(root)
+      WITH root, collect({type: type(r), target: target, direction: 'outgoing'}) AS outgoing,
+           collect({type: type(r2), source: source, direction: 'incoming'}) AS incoming
+      RETURN root, outgoing, incoming
+
+  - id: ctx-full-context
+    description: Complete node context (all direct relationships)
+    icon:
+      web: maximize-2
+      terminal: "⊕"
+    color: "#6366f1"
+    category: contextual
+    contextual: true
+    applicable_types: []
+    modes: [data, overlay]
+    cypher: |
+      MATCH (root {key: $nodeKey})
+      OPTIONAL MATCH (root)-[r_out]->(target)
+      OPTIONAL MATCH (source)-[r_in]->(root)
+      WITH root,
+           collect(DISTINCT {rel: type(r_out), node: target}) AS outgoing,
+           collect(DISTINCT {rel: type(r_in), node: source}) AS incoming
+      RETURN root, outgoing, incoming
+
+  - id: ctx-neighborhood
+    description: Extended neighborhood (2 hops)
+    icon:
+      web: scan
+      terminal: "◎"
+    color: "#22c55e"
+    category: contextual
+    contextual: true
+    applicable_types: []
+    modes: [data, overlay]
+    cypher: |
+      MATCH (root {key: $nodeKey})
+      OPTIONAL MATCH path = (root)-[*1..2]-(neighbor)
+      WITH root, collect(DISTINCT neighbor) AS neighbors, collect(DISTINCT relationships(path)) AS rels
+      UNWIND ([root] + neighbors) AS n
+      RETURN collect(DISTINCT n) AS nodes
+
+# =============================================================================
+# VIEW SUMMARY
+# =============================================================================
+# | Category    | Count | Description                                          |
+# |-------------|-------|------------------------------------------------------|
+# | META        | 3     | Schema exploration (Realm, Layer, Kind, ArcKind)     |
+# | DATA        | 10    | Instance exploration (filtered by realm/layer/purpose)|
+# | OVERLAY     | 3     | Meta + Data combined (debug, analysis)               |
+# | CONTEXTUAL  | 13    | Node-centered subgraphs (grouped by arc family)      |
+# | TOTAL       | 29    |                                                      |
+# =============================================================================
