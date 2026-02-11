@@ -1,7 +1,7 @@
 //! Mode-specific key handlers for TUI.
 //!
-//! Each navigation mode (Meta, Data, Audit, Nexus, Atlas) has its own handler
-//! that processes mode-specific keys before falling through to global handlers.
+//! v11.7: Two navigation modes (Graph, Nexus).
+//! Graph mode uses global handlers; Nexus mode has its own handler.
 //!
 //! # Architecture
 //!
@@ -9,9 +9,7 @@
 //! App::handle_key()
 //!   ├── Overlays (help, legend, search, filter, recent)
 //!   ├── dispatch_mode_handler() ← Mode-specific preprocessing
-//!   │   ├── AuditModeHandler (j/k cursor, r refresh)
-//!   │   ├── NexusModeHandler (delegated to nexus state)
-//!   │   └── AtlasModeHandler (view switching, zoom)
+//!   │   └── NexusModeHandler (delegated to nexus state)
 //!   └── Global handlers (mode switch, panel focus, tree nav, etc.)
 //! ```
 
@@ -19,7 +17,9 @@ mod audit;
 mod atlas;
 mod nexus;
 
+#[allow(unused_imports)]
 pub use audit::handle_audit_key;
+#[allow(unused_imports)]
 pub use atlas::handle_atlas_key;
 pub use nexus::handle_nexus_key;
 
@@ -53,11 +53,9 @@ impl KeyResult {
 /// Returns `Some(true)` if handled, `None` if should fall through to global handlers.
 pub fn dispatch_mode_handler(app: &mut App, key: KeyEvent) -> Option<bool> {
     match app.mode {
-        NavMode::Audit => handle_audit_key(app, key).as_option(),
         NavMode::Nexus => handle_nexus_key(app, key).as_option(),
-        NavMode::Atlas => handle_atlas_key(app, key).as_option(),
-        // Meta and Data modes don't have mode-specific preprocessing
-        NavMode::Meta | NavMode::Data => None,
+        // Graph mode doesn't have mode-specific preprocessing
+        NavMode::Graph => None,
     }
 }
 

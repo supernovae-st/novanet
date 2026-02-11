@@ -584,7 +584,7 @@ fn render_footer_hints(f: &mut Frame, area: Rect, app: &App) {
     use crate::tui::app::Focus;
 
     let hints = match app.mode {
-        NavMode::Meta | NavMode::Data => match app.focus {
+        NavMode::Graph => match app.focus {
             Focus::Tree => {
                 "Tree: [h/l] Toggle  [j/k] Navigate  [Space] Expand  [g/G] Top/Bottom  [Tab] Panel  [/] Search  [?] Help"
             }
@@ -592,14 +592,8 @@ fn render_footer_hints(f: &mut Frame, area: Rect, app: &App) {
             Focus::Graph => "Graph: [Click] Select  [Scroll] Zoom  [Tab] Panel  [?] Help",
             Focus::Yaml => "YAML: [j/k] Scroll  [y] Copy  [Tab] Panel  [/] Search  [?] Help",
         },
-        NavMode::Audit => {
-            "[j/k] Navigate  [Enter] Drill down  [r] Refresh  [1-5] Mode  [?] Help  [q] Quit"
-        }
         NavMode::Nexus => {
             "[1-4] Tabs  [j/k] Navigate  [Enter] Select  [Esc] Back  [/] Search  [?] Help"
-        }
-        NavMode::Atlas => {
-            "[1-6] Views  [j/k] Navigate  [h/l] Zoom  [1-5] Mode  [?] Help  [q] Quit"
         }
     };
 
@@ -613,10 +607,10 @@ fn render_footer_hints(f: &mut Frame, area: Rect, app: &App) {
 }
 
 /// Header: Logo + Mode tabs.
-/// Shows: [1]Meta, [2]Data, [3]Audit, [4]Nexus, [5]Atlas
-/// v11.6: 5 independent modes with keys 1-5
+/// Shows: [1]Graph, [2]Nexus
+/// v11.7: 2 modes with keys 1-2
 fn render_header(f: &mut Frame, area: Rect, app: &App) {
-    let tabs: Vec<Span> = [NavMode::Meta, NavMode::Data, NavMode::Audit, NavMode::Nexus, NavMode::Atlas]
+    let tabs: Vec<Span> = [NavMode::Graph, NavMode::Nexus]
         .iter()
         .enumerate()
         .map(|(i, mode)| {
@@ -649,26 +643,16 @@ fn render_header(f: &mut Frame, area: Rect, app: &App) {
         ));
     }
 
-    // Context-aware shortcuts (v11.6: 5 independent modes, 1-5 global)
+    // Context-aware shortcuts (v11.7: 2 modes, 1-2 global)
     let right_side = if app.mode == NavMode::Nexus {
         vec![Span::styled(
-            "  []:tabs  jk:nav  Enter:drill  Esc:back  1-5:modes  ?:help  q:quit",
-            theme::ui::muted_style(),
-        )]
-    } else if app.mode == NavMode::Audit {
-        vec![Span::styled(
-            "  jk:nav  r:refresh  1-5:modes  ?:help  q:quit",
-            theme::ui::muted_style(),
-        )]
-    } else if app.mode == NavMode::Atlas {
-        vec![Span::styled(
-            "  []:views  jk:nav  h/l:zoom  1-5:modes  ?:help  q:quit",
+            "  []:tabs  jk:nav  Enter:drill  Esc:back  1-2:modes  ?:help  q:quit",
             theme::ui::muted_style(),
         )]
     } else {
-        // Meta/Data mode (v11.6: 't' toggle removed, 1-5 for modes)
+        // Graph mode (v11.7: unified tree)
         vec![Span::styled(
-            "  h/l:toggle  jk:scroll  Tab:panel  /:find  1-5:modes  ?:help  q:quit",
+            "  h/l:toggle  jk:scroll  Tab:panel  /:find  1-2:modes  ?:help  q:quit",
             theme::ui::muted_style(),
         )]
     };
@@ -708,25 +692,13 @@ impl LayoutMode {
 
 /// Main content: responsive layout based on terminal width.
 fn render_main(f: &mut Frame, area: Rect, app: &mut App) {
-    // Audit mode has its own rendering (Feature 6)
-    if app.mode == NavMode::Audit {
-        render_audit(f, area, app);
-        return;
-    }
-
-    // Nexus mode has its own rendering (v11.3: renamed from Guide)
+    // Nexus mode has its own rendering (v11.7: hub for Quiz, Audit, Stats, Help)
     if app.mode == NavMode::Nexus {
         super::nexus::render_nexus(f, area, app);
         return;
     }
 
-    // Atlas mode: interactive architecture visualizations
-    if app.mode == NavMode::Atlas {
-        render_atlas(f, area, app);
-        return;
-    }
-
-    // Graph mode: standard 3-panel layout
+    // Graph mode: standard 3-panel layout (v11.7: unified tree)
     let layout_mode = LayoutMode::detect(area.width);
 
     match layout_mode {
@@ -882,13 +854,10 @@ fn render_recent_items_overlay(f: &mut Frame, app: &App) {
                 None => ("?", format!("(cursor {})", cursor)),
             };
 
-            // v11.6: 5 modes (Meta, Data, Audit, Nexus, Atlas)
+            // v11.7: 2 modes (Graph, Nexus)
             let mode_badge = match mode {
-                crate::tui::app::NavMode::Meta => "[M]",
-                crate::tui::app::NavMode::Data => "[D]",
-                crate::tui::app::NavMode::Audit => "[!]",
+                crate::tui::app::NavMode::Graph => "[G]",
                 crate::tui::app::NavMode::Nexus => "[N]",
-                crate::tui::app::NavMode::Atlas => "[A]",
             };
 
             let prefix = if is_selected { "› " } else { "  " };
