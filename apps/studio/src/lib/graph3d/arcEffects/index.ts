@@ -2,6 +2,7 @@
 export * from './types';
 export * from './SimpleLine3D';
 export * from './shaderUtils';
+export * from './dustParticles';
 export * from './PowerConduit3D';
 export * from './SynapticFiring3D';
 export * from './DNAHelix3D';
