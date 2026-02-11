@@ -16,7 +16,7 @@ catalog:
   yaml: ^2.7.0
 
   # Database
-  neo4j-driver: ^5.28.1
+  neo4j-driver: ^6.0.1
 
   # Testing
   vitest: ^2.1.0

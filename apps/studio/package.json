@@ -37,7 +37,7 @@
     "js-yaml": "^4.1.1",
     "lucide-react": "^0.469.0",
     "motion": "^12.29.2",
-    "neo4j-driver": "^5.28.1",
+    "neo4j-driver": "^6.0.1",
     "next": "^16.1.4",
     "prism-react-renderer": "^2.4.1",
     "react": "^19.0.0",
