@@ -3,23 +3,17 @@
 //! `novanet blueprint` replaces the basic `novanet meta` command with:
 //! - Rich ASCII visualizations (flows, trees, matrices)
 //! - YAML ↔ Neo4j ↔ Cypher coherence validation
-//! - 10 specialized views for different needs
+//! - 7 specialized views for different needs
 //!
-//! # Views
+//! # Views (v11.7)
 //!
-//! Understanding the model:
 //! - `tree` — Hierarchy Realm > Layer > Kind
 //! - `flow` — 6 data flow diagrams
-//! - `content` — Content Model deep-dive
 //! - `arcs` — All arcs grouped by family
 //! - `cardinality` — 1:1, 1:N, N:M constraints
 //! - `glossary` — Concept definitions
-//!
-//! Analyzing state:
-//! - `audit` — Health check, drift detection
-//! - `deps` — Dependency impact analysis
-//! - `coverage` — Locale completion status
 //! - `stats` — Raw numbers for CI/scripts
+//! - (default) — Rich overview with all sections
 
 pub mod ascii;
 pub mod sources;
