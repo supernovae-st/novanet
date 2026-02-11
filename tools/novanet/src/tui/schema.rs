@@ -63,7 +63,7 @@ pub struct CoverageStats {
     pub total: usize,
     /// Properties with values
     pub filled: usize,
-    /// Required properties missing (used in tests and audit mode)
+    /// Required properties missing (used in tests)
     #[allow(dead_code)]
     pub missing_required: usize,
     /// Coverage percentage (0-100) — calculated for future progress bar display

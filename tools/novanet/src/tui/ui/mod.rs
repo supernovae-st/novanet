@@ -1,7 +1,7 @@
 //! UI rendering for TUI v2.
+//!
+//! v11.7: Two modes (Graph, Nexus). Renders tree, info, yaml, graph panels.
 
-mod atlas;
-mod audit;
 mod graph;
 mod info;
 mod overlays;
@@ -9,10 +9,6 @@ mod status;
 mod tree;
 mod yaml_panel;
 
-#[allow(unused_imports)]
-pub use atlas::render_atlas; // Atlas mode is work-in-progress
-#[allow(unused_imports)]
-pub use audit::render_audit; // Audit mode unused after v11.7
 pub use graph::render_graph_panel;
 pub use info::render_info_panel;
 pub use status::render_status;
@@ -693,7 +689,7 @@ impl LayoutMode {
 
 /// Main content: responsive layout based on terminal width.
 fn render_main(f: &mut Frame, area: Rect, app: &mut App) {
-    // Nexus mode has its own rendering (v11.7: hub for Quiz, Audit, Stats, Help)
+    // Nexus mode has its own rendering (v11.7: hub for Quiz, Stats, Help)
     if app.mode == NavMode::Nexus {
         super::nexus::render_nexus(f, area, app);
         return;

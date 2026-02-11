@@ -1,15 +1,8 @@
 //! NovaNet TUI v2 — rebuilt from scratch for stability.
 //!
-//! Phase 1: Exploration (MVP)
-//! - Header with mode tabs [1-4]
-//! - Taxonomy tree navigation
-//! - Detail panel with edges
-//! - Status bar with stats
-//!
-//! Phase 2: Atlas Mode
-//! - `5` Atlas mode with 6 interactive architecture views
-//! - Spreading Activation, Knowledge Atoms, Generation Pipeline
-//! - View Traversal, Page Composition, Realm Map
+//! v11.7: Two navigation modes:
+//! - [1] Graph: Unified tree view (Realm > Layer > Kind)
+//! - [2] Nexus: Hub for Quiz, Stats, Help
 //!
 //! ## Crash Recovery
 //!
@@ -21,8 +14,6 @@
 //! This ensures terminal isn't left in corrupted state after panics.
 
 mod app;
-pub mod atlas;
-mod audit;
 pub mod cache;
 pub mod clipboard;
 mod data;
@@ -277,61 +268,6 @@ async fn run_app(
                         }
                     }
 
-                    // Parallel load: Atlas realm stats + pages list (both triggered when entering Atlas)
-                    let load_atlas_stats = app.take_pending_atlas_realm_stats_load();
-                    let load_atlas_pages = app.take_pending_atlas_pages_list_load();
-
-                    if load_atlas_stats || load_atlas_pages {
-                        let (stats_result, pages_result) = tokio::join!(
-                            async {
-                                if load_atlas_stats {
-                                    Some(TaxonomyTree::load_atlas_realm_stats(db).await)
-                                } else {
-                                    None
-                                }
-                            },
-                            async {
-                                if load_atlas_pages {
-                                    Some(TaxonomyTree::load_atlas_pages_list(db).await)
-                                } else {
-                                    None
-                                }
-                            }
-                        );
-
-                        match stats_result {
-                            Some(Ok(stats)) => app.set_atlas_realm_stats(stats),
-                            Some(Err(e)) => {
-                                app.set_status_error(&format!("Load atlas stats: {}", e))
-                            }
-                            None => {}
-                        }
-                        match pages_result {
-                            Some(Ok(pages)) => app.set_atlas_pages_list(pages),
-                            Some(Err(e)) => {
-                                app.set_status_error(&format!("Load atlas pages: {}", e))
-                            }
-                            None => {}
-                        }
-                    }
-
-                    // Atlas page composition (individual load, depends on page_key)
-                    if let Some((page_key, locale)) = app.take_pending_atlas_page_load() {
-                        match TaxonomyTree::load_atlas_page_composition(db, &page_key, &locale)
-                            .await
-                        {
-                            Ok(data) => app.set_atlas_page_composition(data),
-                            Err(e) => app.set_status_error(&format!("Load page: {}", e)),
-                        }
-                    }
-
-                    // Audit mode: load global audit stats
-                    if app.take_pending_audit_load() {
-                        match audit::load_audit_stats(db).await {
-                            Ok(stats) => app.set_audit_stats(stats),
-                            Err(e) => app.set_status_error(&format!("Load audit: {}", e)),
-                        }
-                    }
 
                     terminal
                         .draw(|f| ui::render(f, &mut app))

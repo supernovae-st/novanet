@@ -9,8 +9,6 @@ use std::path::Path;
 
 use crossterm::event::{KeyCode, KeyEvent};
 
-use super::atlas::AtlasState;
-use super::audit::SharedAuditStats;
 use super::cache::RenderCache;
 use super::data::{
     ArcKindDetails, KindArcsData, LayerDetails, RealmDetails, TaxonomyTree, TreeItem,
@@ -48,8 +46,7 @@ pub enum NavMode {
     /// Replaces Meta/Data/Overlay modes from v11.6
     #[default]
     Graph,
-    /// Nexus mode: Hub for Quiz, Audit, Stats, Help
-    /// Replaces Atlas mode from v11.6
+    /// Nexus mode: Hub for Quiz, Stats, Help
     Nexus,
 }
 
@@ -239,8 +236,6 @@ pub struct App {
     pub data_cursor_before_filter: usize,
     /// Hide empty: when true, hide kinds/layers with 0 instances in Data mode
     pub hide_empty: bool,
-    /// Atlas mode state (architecture visualizations)
-    pub atlas: AtlasState,
     /// Nexus mode state (gamified learning hub)
     pub nexus: NexusState,
     /// Animation tick counter (increments each frame, used for spinners)
@@ -273,15 +268,6 @@ pub struct App {
     // ==========================================================================
     /// Whether to pretty-print JSON values (toggle with 'J')
     pub json_pretty: bool,
-    // ==========================================================================
-    // Audit Mode State (Feature 6)
-    // ==========================================================================
-    /// Audit statistics (loaded async when entering Audit mode)
-    pub audit_stats: Option<SharedAuditStats>,
-    /// Pending audit stats load request
-    pub pending_audit_load: bool,
-    /// Cursor in audit mode (which Kind is selected)
-    pub audit_cursor: usize,
     // ==========================================================================
     // Trait Filter State (Quick Filter: fi/fl/fk/fg/fa/ff)
     // ==========================================================================
@@ -341,7 +327,6 @@ impl App {
             data_filter_kind: None,
             data_cursor_before_filter: 0,
             hide_empty: false,
-            atlas: AtlasState::default(),
             nexus: NexusState::default(),
             tick: 0,
             // Schema overlay (Feature 1)
@@ -356,10 +341,6 @@ impl App {
             expanded_property: false,
             // JSON pretty-print (Feature 4)
             json_pretty: false,
-            // Audit mode (Feature 6)
-            audit_stats: None,
-            pending_audit_load: false,
-            audit_cursor: 0,
             // Trait filter (Quick Filter)
             trait_filter: None,
             filter_pending: false,
@@ -373,7 +354,7 @@ impl App {
     /// Get the active YAML section based on current navigation mode.
     /// - Meta mode → Kind section (schema)
     /// - Data mode → Instance section (data nodes)
-    /// - Audit/Nexus → Kind section
+    /// - Nexus → Kind section
     pub fn yaml_active_section(&self) -> YamlViewSection {
         match self.mode {
             // Graph mode shows Kind schema, Nexus shows Kind schema
@@ -844,7 +825,7 @@ impl App {
             }
         }
 
-        // Mode-specific key handling (Audit, Nexus, Atlas)
+        // Mode-specific key handling (Graph, Nexus)
         // Returns early if handled, falls through to global handlers otherwise
         if let Some(result) = dispatch_mode_handler(self, key) {
             return result;
@@ -899,7 +880,7 @@ impl App {
                 true
             }
             KeyCode::Char('2') => {
-                // Switch to Nexus mode (hub for Quiz, Audit, Stats, Help)
+                // Switch to Nexus mode (hub for Quiz, Stats, Help)
                 if self.mode != NavMode::Nexus {
                     self.save_mode_cursor();
                     self.mode = NavMode::Nexus;
@@ -1819,116 +1800,6 @@ impl App {
     pub fn spinner_frame(&self) -> char {
         const BRAILLE: &[char] = &['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
         BRAILLE[(self.tick / 2) as usize % BRAILLE.len()]
-    }
-
-    /// Initialize Atlas state from current selection (context-aware).
-    /// Maps current Kind to the most relevant Atlas view.
-    pub fn init_atlas_from_current(&mut self) {
-        use super::atlas::AtlasView;
-
-        // Determine the best Atlas view based on current selection
-        let view = match self.current_item() {
-            Some(TreeItem::Kind(_, layer, kind)) => {
-                // Map Kind to appropriate view
-                match kind.key.as_str() {
-                    "Page" | "Block" | "BlockType" | "PageType" => AtlasView::PageComposition,
-                    "Entity" | "EntityContent" => AtlasView::GenerationPipeline,
-                    "SEOKeyword" | "SEOKeywordMetrics" => AtlasView::SpreadingActivation,
-                    k if k.contains("Set") || k.contains("Term") || k.contains("Expression") => {
-                        AtlasView::KnowledgeAtoms
-                    }
-                    _ => {
-                        // Default based on layer
-                        match layer.key.as_str() {
-                            "structure" | "output" => AtlasView::PageComposition,
-                            "semantic" => AtlasView::GenerationPipeline,
-                            // v11.5: 4 shared layers (SEO/GEO consolidated to knowledge)
-                            "config" | "locale" | "geography" | "knowledge" => {
-                                AtlasView::KnowledgeAtoms
-                            }
-                            _ => AtlasView::RealmMap,
-                        }
-                    }
-                }
-            }
-            Some(TreeItem::Realm(..)) | Some(TreeItem::Layer(..)) => AtlasView::RealmMap,
-            Some(TreeItem::Instance(_, _, kind, _)) => {
-                // Map Instance's Kind to view
-                match kind.key.as_str() {
-                    "Page" | "Block" => AtlasView::PageComposition,
-                    "Entity" | "EntityContent" => AtlasView::GenerationPipeline,
-                    _ => AtlasView::RealmMap,
-                }
-            }
-            _ => AtlasView::RealmMap,
-        };
-
-        self.atlas.current_view = view;
-        self.atlas.pending_page_load = true; // Trigger data load
-    }
-
-    // NOTE: Atlas methods kept for compatibility but Atlas mode is removed in v11.3.
-    // Atlas functionality will be migrated to Nexus missions in a future phase.
-
-    /// Check if Atlas realm stats need loading (always false - Atlas removed in v11.3).
-    pub fn take_pending_atlas_realm_stats_load(&mut self) -> bool {
-        false // Atlas mode removed
-    }
-
-    /// Set Atlas realm stats (for Realm Map view).
-    #[allow(dead_code)]
-    pub fn set_atlas_realm_stats(&mut self, stats: super::data::AtlasRealmStats) {
-        self.atlas.realm_stats = Some(stats);
-    }
-
-    /// Check if Atlas pages list needs loading (always false - Atlas removed in v11.3).
-    pub fn take_pending_atlas_pages_list_load(&mut self) -> bool {
-        false // Atlas mode removed
-    }
-
-    /// Set Atlas pages list (for Page Composition view).
-    #[allow(dead_code)]
-    pub fn set_atlas_pages_list(&mut self, pages: Vec<super::data::AtlasPageInfo>) {
-        self.atlas.page_count = pages.len();
-        self.atlas.pages_list = pages;
-        // Trigger load of first page if available
-        if !self.atlas.pages_list.is_empty() && self.atlas.current_page_key.is_none() {
-            self.atlas.current_page_key = Some(self.atlas.pages_list[0].key.clone());
-            self.atlas.pending_page_load = true;
-        }
-    }
-
-    /// Check if Atlas page composition needs loading (always None - Atlas removed in v11.3).
-    pub fn take_pending_atlas_page_load(&mut self) -> Option<(String, String)> {
-        None // Atlas mode removed
-    }
-
-    /// Set Atlas page composition data.
-    #[allow(dead_code)]
-    pub fn set_atlas_page_composition(&mut self, data: super::atlas::PageCompositionData) {
-        self.atlas.page_data = Some(data);
-    }
-
-    // =========================================================================
-    // Audit Methods (now part of Nexus mode)
-    // =========================================================================
-
-    /// Check if Audit stats need loading (returns true once then resets).
-    /// Audit is now a sub-feature of Nexus mode.
-    #[allow(dead_code)] // WIP: Audit mode implementation
-    pub fn take_pending_audit_load(&mut self) -> bool {
-        if self.pending_audit_load && self.mode == NavMode::Nexus {
-            self.pending_audit_load = false;
-            true
-        } else {
-            false
-        }
-    }
-
-    /// Set Audit statistics after async load.
-    #[allow(dead_code)] // WIP: Audit mode implementation
-    pub fn set_audit_stats(&mut self, stats: SharedAuditStats) {
-        self.audit_stats = Some(stats);
     }
 
     // =========================================================================
