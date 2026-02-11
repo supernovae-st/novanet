@@ -48,41 +48,41 @@ export const DUST_CONFIG: Record<ArcFamily, DustConfig> = {
   ownership: {
     shape: 'diamond',
     count: 8,
-    size: 1.5,        // Visible at graph scale
+    size: 3.0,        // Large and visible
     drift: 'gravitational',
-    opacity: 0.8,
+    opacity: 0.9,
     color: '#3b82f6', // blue
   },
   localization: {
     shape: 'circle',
     count: 10,
-    size: 1.2,
+    size: 2.5,
     drift: 'orbital',
-    opacity: 0.7,
+    opacity: 0.85,
     color: '#22c55e', // green
   },
   semantic: {
     shape: 'star',
     count: 12,
-    size: 1.0,
+    size: 2.0,
     drift: 'sparkling',
-    opacity: 0.9,
+    opacity: 0.95,
     color: '#f97316', // orange
   },
   generation: {
     shape: 'triangle',
     count: 15,
-    size: 0.8,
+    size: 1.6,
     drift: 'cascade',
-    opacity: 0.8,
+    opacity: 0.9,
     color: '#8b5cf6', // purple
   },
   mining: {
     shape: 'hexagon',
     count: 6,
-    size: 1.8,
+    size: 3.5,
     drift: 'pulsing',
-    opacity: 0.7,
+    opacity: 0.85,
     color: '#ec4899', // pink
   },
 };
