@@ -35,6 +35,22 @@ export const COMMON_GLSL = {
       return mix(hash(i), hash(i + 1.0), smoothstep(0.0, 1.0, f));
     }
   `,
+
+  // Double helix utilities for arc motion
+  helix: `
+    // Calculate helix offset perpendicular to path direction
+    vec3 helixOffset(float t, float amplitude, float frequency, float phase) {
+      float angle = t * frequency * 6.28318 + phase;
+      // Perpendicular offset in local space (will be transformed by view matrix)
+      return vec3(cos(angle) * amplitude, sin(angle) * amplitude, 0.0);
+    }
+
+    // Dual helix for two intertwined spirals
+    vec2 dualHelixPhases(float t, float frequency) {
+      float base = t * frequency * 6.28318;
+      return vec2(base, base + 3.14159); // 180° phase offset
+    }
+  `,
 };
 
 /**
@@ -95,4 +111,27 @@ export function createBaseUniforms(color: string) {
     selected: { value: 0.0 },
     hovered: { value: 0.0 },
   };
+}
+
+/**
+ * Calculate helix position offset at parameter t (CPU-side)
+ * @param t - Position along arc (0-1)
+ * @param amplitude - Distance from center
+ * @param frequency - Rotations per arc length
+ * @param phase - Phase offset (0 or PI for dual helix)
+ * @param time - Animation time for rotation
+ */
+export function calculateHelixOffset(
+  t: number,
+  amplitude: number,
+  frequency: number,
+  phase: number,
+  time: number
+): THREE.Vector3 {
+  const angle = t * frequency * Math.PI * 2 + phase + time * 0.5;
+  return new THREE.Vector3(
+    Math.cos(angle) * amplitude,
+    Math.sin(angle) * amplitude,
+    0
+  );
 }
