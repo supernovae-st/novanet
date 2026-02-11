@@ -18,6 +18,10 @@ use crate::tui::app::App;
 ///
 /// Returns `KeyResult::Handled` if the key was consumed,
 /// `KeyResult::FallThrough` if it should be processed by global handlers.
+///
+/// Note: Currently unused after v11.7 mode simplification (Graph/Nexus only).
+/// Retained for potential future Atlas mode revival.
+#[allow(dead_code)]
 pub fn handle_atlas_key(app: &mut App, key: KeyEvent) -> KeyResult {
     match key.code {
         // Help overlay

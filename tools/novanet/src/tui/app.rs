@@ -1640,6 +1640,9 @@ impl App {
 
     /// Auto-expand the current Kind when switching to Instances view.
     /// If cursor is on a Kind, expands it and triggers instance loading.
+    ///
+    /// Note: Currently unused after v11.7 mode simplification.
+    #[allow(dead_code)]
     fn auto_expand_current_kind_for_instances(&mut self) {
         // Use Taxonomy view item_at since we just switched modes
         // and cursor position is based on Taxonomy view
