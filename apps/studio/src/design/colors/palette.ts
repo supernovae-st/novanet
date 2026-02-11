@@ -417,6 +417,101 @@ export const ARC_FAMILY_HEX: Record<ArcFamilyKey, string> = {
 };
 
 // =============================================================================
+// DEFAULT PALETTES (centralized fallbacks)
+// =============================================================================
+
+/**
+ * Default layer palette (foundation) — used when layer is unknown
+ */
+export const DEFAULT_LAYER_PALETTE: ColorPalette = LAYER_PALETTES.foundation;
+export const DEFAULT_LAYER_GRADIENT: GradientColors = LAYER_GRADIENTS.foundation;
+
+/**
+ * Default arc palette (ownership) — used when arc family is unknown
+ */
+export const DEFAULT_ARC_PALETTE: ColorPalette = ARC_PALETTES.ownership;
+export const DEFAULT_ARC_GRADIENT: GradientColors = ARC_GRADIENTS.ownership;
+
+// =============================================================================
+// PARTICLE COLORS (for 3D arc visualization)
+// =============================================================================
+
+/**
+ * Particle-specific color interface
+ * - particleColor: Bright, visible orbs (Tailwind -400 shades)
+ * - linkColor: Very dark, barely visible guide lines
+ */
+export interface ParticleColors {
+  particleColor: string;
+  linkColor: string;
+}
+
+/**
+ * Brighten a hex color (for visible particles)
+ * Uses Tailwind-style -400 shade approach
+ */
+function brightenColor(hex: string, amount: number = 0.3): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(255, Math.floor((num >> 16) * (1 - amount) + 255 * amount));
+  const g = Math.min(255, Math.floor(((num >> 8) & 0x00ff) * (1 - amount) + 255 * amount));
+  const b = Math.min(255, Math.floor((num & 0x0000ff) * (1 - amount) + 255 * amount));
+  return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
+}
+
+/**
+ * Darken a hex color significantly (for near-invisible link guides)
+ */
+function darkenColor(hex: string, amount: number = 0.7): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.floor((num >> 16) * (1 - amount));
+  const g = Math.floor(((num >> 8) & 0x00ff) * (1 - amount));
+  const b = Math.floor((num & 0x0000ff) * (1 - amount));
+  return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
+}
+
+/**
+ * Particle colors per arc family
+ * Derived from taxonomy colors with brightness adjustments
+ */
+export const ARC_PARTICLE_COLORS: Record<ArcFamilyKey, ParticleColors> = {
+  ownership: {
+    particleColor: brightenColor(ARC_FAMILY_COLORS.ownership.color, 0.4),
+    linkColor: darkenColor(ARC_FAMILY_COLORS.ownership.color, 0.7),
+  },
+  localization: {
+    particleColor: brightenColor(ARC_FAMILY_COLORS.localization.color, 0.4),
+    linkColor: darkenColor(ARC_FAMILY_COLORS.localization.color, 0.7),
+  },
+  semantic: {
+    particleColor: brightenColor(ARC_FAMILY_COLORS.semantic.color, 0.4),
+    linkColor: darkenColor(ARC_FAMILY_COLORS.semantic.color, 0.7),
+  },
+  generation: {
+    particleColor: brightenColor(ARC_FAMILY_COLORS.generation.color, 0.4),
+    linkColor: darkenColor(ARC_FAMILY_COLORS.generation.color, 0.7),
+  },
+  mining: {
+    particleColor: brightenColor(ARC_FAMILY_COLORS.mining.color, 0.4),
+    linkColor: darkenColor(ARC_FAMILY_COLORS.mining.color, 0.7),
+  },
+};
+
+/**
+ * Get particle colors for an arc type
+ */
+export function getArcParticleColors(relationType: string): ParticleColors {
+  const family = getArcFamily(relationType);
+  return ARC_PARTICLE_COLORS[family];
+}
+
+/**
+ * Get particle colors for an arc family directly
+ */
+export function getArcFamilyParticleColors(family: ArcFamilyKey): ParticleColors {
+  return ARC_PARTICLE_COLORS[family];
+}
+
+// =============================================================================
 // RE-EXPORTS for convenience
 // =============================================================================
 
