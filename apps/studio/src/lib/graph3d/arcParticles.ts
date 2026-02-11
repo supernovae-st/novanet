@@ -51,7 +51,7 @@ export const ARC_PARTICLE_CONFIG: Record<ArcFamily, ArcParticleConfig> = {
     particleColor: ARC_PARTICLE_COLORS.ownership.particleColor,
     linkColor: ARC_PARTICLE_COLORS.ownership.linkColor,
     linkWidth: 0.3,            // Hair-thin guide
-    linkOpacity: 0.24,         // +20% more opacity for visibility
+    linkOpacity: 0.29,         // Bright tubes
     curvature: 0,              // Straight ownership links
   },
   localization: {
@@ -61,7 +61,7 @@ export const ARC_PARTICLE_CONFIG: Record<ArcFamily, ArcParticleConfig> = {
     particleColor: ARC_PARTICLE_COLORS.localization.particleColor,
     linkColor: ARC_PARTICLE_COLORS.localization.linkColor,
     linkWidth: 0.25,           // Hair-thin
-    linkOpacity: 0.24,         // +20% more opacity for visibility
+    linkOpacity: 0.29,         // Bright tubes
     curvature: 0.2,            // Gentle curve
   },
   semantic: {
@@ -71,7 +71,7 @@ export const ARC_PARTICLE_CONFIG: Record<ArcFamily, ArcParticleConfig> = {
     particleColor: ARC_PARTICLE_COLORS.semantic.particleColor,
     linkColor: ARC_PARTICLE_COLORS.semantic.linkColor,
     linkWidth: 0.2,            // Thinnest - synapses don't need thick lines
-    linkOpacity: 0.24,         // +20% more opacity for visibility
+    linkOpacity: 0.29,         // Bright tubes
     curvature: 0.1,            // Slight curve
   },
   generation: {
@@ -81,7 +81,7 @@ export const ARC_PARTICLE_CONFIG: Record<ArcFamily, ArcParticleConfig> = {
     particleColor: ARC_PARTICLE_COLORS.generation.particleColor,
     linkColor: ARC_PARTICLE_COLORS.generation.linkColor,
     linkWidth: 0.35,           // Slightly thicker for generation flow
-    linkOpacity: 0.32,         // +20% more opacity for visibility
+    linkOpacity: 0.38,         // Bright tubes
     curvature: 0,              // Straight generation flow
   },
   mining: {
@@ -91,7 +91,7 @@ export const ARC_PARTICLE_CONFIG: Record<ArcFamily, ArcParticleConfig> = {
     particleColor: ARC_PARTICLE_COLORS.mining.particleColor,
     linkColor: ARC_PARTICLE_COLORS.mining.linkColor,
     linkWidth: 0.25,           // Thin
-    linkOpacity: 0.24,         // +20% more opacity for visibility
+    linkOpacity: 0.29,         // Bright tubes
     curvature: 0.25,           // Curved sweep
   },
 };
