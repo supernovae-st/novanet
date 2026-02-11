@@ -80,7 +80,7 @@ mod tests {
     #[test]
     fn test_audit_help_key() {
         let mut app = test_app();
-        app.mode = crate::tui::app::NavMode::Audit;
+        app.mode = crate::tui::app::NavMode::Nexus; // Audit is now part of Nexus
         app.help_active = false;
 
         let result = handle_audit_key(&mut app, key(KeyCode::Char('?')));
@@ -92,7 +92,7 @@ mod tests {
     #[test]
     fn test_audit_refresh_key() {
         let mut app = test_app();
-        app.mode = crate::tui::app::NavMode::Audit;
+        app.mode = crate::tui::app::NavMode::Nexus; // Audit is now part of Nexus
         app.pending_audit_load = false;
 
         let result = handle_audit_key(&mut app, key(KeyCode::Char('r')));
@@ -104,7 +104,7 @@ mod tests {
     #[test]
     fn test_audit_mode_switch_falls_through() {
         let mut app = test_app();
-        app.mode = crate::tui::app::NavMode::Audit;
+        app.mode = crate::tui::app::NavMode::Nexus; // Audit is now part of Nexus
 
         assert_eq!(
             handle_audit_key(&mut app, key(KeyCode::Char('1'))),
@@ -119,7 +119,7 @@ mod tests {
     #[test]
     fn test_audit_unknown_key_falls_through() {
         let mut app = test_app();
-        app.mode = crate::tui::app::NavMode::Audit;
+        app.mode = crate::tui::app::NavMode::Nexus; // Audit is now part of Nexus
 
         assert_eq!(
             handle_audit_key(&mut app, key(KeyCode::Char('x'))),
