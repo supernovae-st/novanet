@@ -18,7 +18,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | Read | `data`, `meta`, `overlay`, `query` | Implemented (faceted Cypher) |
 | Write | `node create/edit/delete`, `arc create/delete` | Implemented (label validation) |
 | Schema | `schema generate`, `schema validate` | Implemented (12 artifacts) |
-| Docs | `doc generate`, `doc generate --list` | Implemented (11 views) |
+| Docs | `doc generate`, `doc generate --list` | Implemented (40 views) |
 | Search | `search --query=... [--kind=...]` | Implemented (fulltext + property) |
 | Locale | `locale list`, `locale import`, `locale generate` | Implemented |
 | Knowledge | `knowledge generate`, `knowledge list` | Implemented (ATH integration) |
@@ -29,7 +29,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | TUI | `tui` | Galaxy theme, effects engine, CRUD dialogs, Nexus Quiz |
 | System | `completions`, `doctor` | Implemented |
 
-**985 tests pass** (`cargo test`). Zero clippy warnings.
+**998 tests pass** (`cargo test`). Zero clippy warnings.
 
 **Testing stack:**
 - `insta` — Snapshot testing (5 generator outputs)
