@@ -224,7 +224,7 @@ pub fn render_help(f: &mut Frame, app: &App) {
             Line::from(vec![Span::styled("  Exit", STYLE_HIGHLIGHT)]),
             Line::from(vec![
                 Span::styled("    1-2      ", STYLE_PRIMARY),
-                Span::styled("Switch to Graph/Audit modes", STYLE_DIM),
+                Span::styled("Switch to Graph mode", STYLE_DIM),
             ]),
             Line::from(vec![
                 Span::styled("    N        ", STYLE_PRIMARY),
@@ -306,10 +306,6 @@ pub fn render_help(f: &mut Frame, app: &App) {
             ]),
             Line::from(vec![
                 Span::styled("    2        ", STYLE_PRIMARY),
-                Span::styled("Audit mode (validation)", STYLE_DIM),
-            ]),
-            Line::from(vec![
-                Span::styled("    3        ", STYLE_PRIMARY),
                 Span::styled("Nexus mode (gamified learning)", STYLE_DIM),
             ]),
             Line::from(vec![

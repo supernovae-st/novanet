@@ -13,14 +13,8 @@
 //!   └── Global handlers (mode switch, panel focus, tree nav, etc.)
 //! ```
 
-mod audit;
-mod atlas;
 mod nexus;
 
-#[allow(unused_imports)]
-pub use audit::handle_audit_key;
-#[allow(unused_imports)]
-pub use atlas::handle_atlas_key;
 pub use nexus::handle_nexus_key;
 
 use crossterm::event::KeyEvent;

@@ -99,8 +99,6 @@ pub const QUALITY_REQUIRED: IconDef = IconDef::new("asterisk", "*", "Required fi
 // MODES ICONS (6)
 // =============================================================================
 
-pub const MODES_ATLAS: IconDef = IconDef::new("map", "A", "Architecture atlas");
-pub const MODES_AUDIT: IconDef = IconDef::new("clipboard-check", "U", "Data quality audit");
 pub const MODES_DATA: IconDef = IconDef::new("table", "D", "Data instances view");
 pub const MODES_META: IconDef = IconDef::new("database", "M", "Meta-graph view");
 pub const MODES_OVERLAY: IconDef = IconDef::new("layers", "O", "Combined meta+data");
@@ -206,8 +204,6 @@ pub fn quality_icons() -> HashMap<&'static str, IconDef> {
 /// Get all mode icons.
 pub fn mode_icons() -> HashMap<&'static str, IconDef> {
     icon_map! {
-        "atlas" => MODES_ATLAS,
-        "audit" => MODES_AUDIT,
         "data" => MODES_DATA,
         "meta" => MODES_META,
         "overlay" => MODES_OVERLAY,
@@ -288,8 +284,6 @@ pub fn state_terminal_icon(key: &str) -> &'static str {
 /// Get terminal icon for a mode.
 pub fn mode_terminal_icon(key: &str) -> &'static str {
     match key {
-        "atlas" => "A",
-        "audit" => "U",
         "data" => "D",
         "meta" => "M",
         "overlay" => "O",
