@@ -180,7 +180,7 @@ async fn run_app(
 
                 // Handle other keys
                 if app.handle_key(key) {
-                    // Parallel load: instances + arcs (both triggered when Kind selected)
+                    // PHASE 1: Fast instance loading (no arcs) + Kind arcs
                     let instance_key = app.take_pending_instance_load();
                     let arcs_key = app.take_pending_arcs_load();
 
@@ -188,7 +188,8 @@ async fn run_app(
                         let (inst_result, arcs_result) = tokio::join!(
                             async {
                                 match &instance_key {
-                                    Some(k) => Some(TaxonomyTree::load_instances(db, k).await),
+                                    // Use fast loading (no arc queries)
+                                    Some(k) => Some(TaxonomyTree::load_instances_fast(db, k).await),
                                     None => None,
                                 }
                             },
@@ -203,7 +204,14 @@ async fn run_app(
                         if let Some(k) = &instance_key {
                             match inst_result {
                                 Some(Ok((instances, total))) => {
+                                    // Collect keys for background arc loading
+                                    let keys: Vec<String> =
+                                        instances.iter().map(|i| i.key.clone()).collect();
                                     app.tree.set_instances(k, instances, total);
+                                    // Schedule arc loading in background
+                                    if !keys.is_empty() {
+                                        app.pending_instance_arcs_load = Some((k.clone(), keys));
+                                    }
                                 }
                                 Some(Err(e)) => {
                                     app.set_status_error(&format!("Load instances: {}", e));
@@ -219,6 +227,18 @@ async fn run_app(
                                 app.set_status_error(&format!("Load arcs: {}", e));
                             }
                             None => {}
+                        }
+                    }
+
+                    // PHASE 2: Background arc loading for instances
+                    if let Some((kind_key, keys)) = app.take_pending_instance_arcs_load() {
+                        match TaxonomyTree::load_instance_arcs(db, &kind_key, keys).await {
+                            Ok(arcs) => {
+                                app.tree.update_instance_arcs(&kind_key, arcs);
+                            }
+                            Err(e) => {
+                                app.set_status_error(&format!("Load arcs: {}", e));
+                            }
                         }
                     }
 
