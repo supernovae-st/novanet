@@ -27,6 +27,9 @@ import type { EdgeState } from './system/types';
 // Arc family detection with comprehensive mapping (60+ relation types)
 import { getArcFamily } from './system/arcFamilyPalettes';
 
+// Signature effects (v11.6.2 - Full Redesign)
+import { PowerConduit, DNAHelix, SynapticFiring, MatrixCodeRain, SonarPulse } from './effects';
+
 // Note: EffectRenderer disabled for now - using InlineEdgeEffects instead (working pattern)
 
 // =============================================================================
@@ -129,21 +132,23 @@ const SimplifiedEdgeEffect = memo(function SimplifiedEdgeEffect({
 });
 
 /**
- * InlineEdgeEffects - ADAPTIVE ATOM-LIKE animated effects (v3)
+ * InlineEdgeEffects - SIGNATURE EFFECTS for NovaNet arcs (v4)
  *
  * TIER-BASED RENDERING - Effect richness scales with graph size:
- * - ULTRA (0-30 arcs):   Maximum wow - extra trails, richer glows
- * - HIGH (30-100 arcs):  Full atom effects with all features
- * - MEDIUM (100-250):    Reduced particles, shorter trails
- * - LOW (250-500):       SimplifiedEdgeEffect (2-element)
+ * - ULTRA (0-30 arcs):   Maximum wow - full signature effects
+ * - HIGH (30-100 arcs):  Full signature effects
+ * - MEDIUM (100-250):    Reduced signature effects
+ * - LOW (250-500):       SimplifiedEdgeEffect (fallback)
  * - MINIMAL (500+):      No animation (handled outside)
  *
- * Each arc family has DISTINCT movement patterns:
- * - ownership: ⚡ STEADY PULSE - Consistent flow with trail
- * - localization: 🧬 GENTLE WAVE - Sinusoidal oscillation
- * - semantic: 🔗 ORBITING SPARKS - Slow circular drift
- * - generation: 💻 CASCADE PULSE - Rhythmic bursts
- * - mining: 📡 RADAR PING - Slow sweep + expanding rings
+ * Each arc family has a UNIQUE SIGNATURE EFFECT:
+ * - ownership: ⚡ POWER CONDUIT - High-voltage cable with orb convoy
+ * - localization: 🧬 DNA HELIX - Double strand with base pairs
+ * - semantic: 🔗 SYNAPTIC FIRING - Neural firing pulses
+ * - generation: 💻 MATRIX CODE RAIN - Falling characters + scanline
+ * - mining: 📡 SONAR PULSE - Ping + expanding rings + echo
+ *
+ * @see docs/plans/2026-02-11-arc-effects-redesign.md
  */
 const InlineEdgeEffects = memo(function InlineEdgeEffects({
   edgePath,
@@ -158,343 +163,23 @@ const InlineEdgeEffects = memo(function InlineEdgeEffects({
   }
 
   const family = getArcFamily(relationType);
-  const isHighlighted = state === 'highlighted' || state === 'selected';
 
-  // TIER-BASED SCALING
-  // ULTRA: biggest, slowest (most visible) | MEDIUM: smaller, faster
-  const sizeMultiplier = effectTier === 'ultra' ? 1.3 : effectTier === 'medium' ? 0.8 : 1.0;
-  const durationMultiplier = effectTier === 'ultra' ? 1.2 : effectTier === 'medium' ? 0.7 : 1.0;
-
-  // Base values scaled by tier
-  const baseSize = Math.round((isHighlighted ? 18 : 14) * sizeMultiplier);
-  const baseDuration = (isHighlighted ? 4 : 6) * durationMultiplier;
-
-  // Trail segment counts by tier (more = richer effect)
-  const trailCount = effectTier === 'ultra' ? 6 : effectTier === 'medium' ? 2 : 4;
-  const showSecondaryAtom = effectTier !== 'medium'; // MEDIUM tier skips secondary atoms
-
-
+  // Route to signature effects based on arc family
   switch (family) {
     case 'ownership':
-      // ⚡ STEADY PULSE - Consistent energy flow with visible trail
-      // Visual: Data ownership flowing from parent to children
-      // TIER-ADAPTIVE: ULTRA=6 trail, HIGH=4 trail, MEDIUM=2 trail + no secondary
-      return (
-        <g className="effect-ownership-atom">
-          {/* === LEADER ATOM === */}
-          {/* Wide glow field */}
-          <circle r={baseSize * 2.2} fill={colors.glow} opacity={0.3} style={{ filter: 'blur(10px)' }}>
-            <animateMotion dur={`${baseDuration}s`} repeatCount="indefinite" path={edgePath} />
-          </circle>
-          {/* Core glow */}
-          <circle r={baseSize * 1.4} fill={colors.primary} opacity={0.6} style={{ filter: 'blur(5px)' }}>
-            <animateMotion dur={`${baseDuration}s`} repeatCount="indefinite" path={edgePath} />
-            {/* Gentle organic wobble */}
-            <animate attributeName="cy" values="-4;4;-4" dur="1.2s" repeatCount="indefinite" />
-          </circle>
-          {/* Solid core */}
-          <circle r={baseSize} fill={colors.primary} opacity={0.95} style={{ filter: `drop-shadow(0 0 ${baseSize}px ${colors.glow})` }}>
-            <animateMotion dur={`${baseDuration}s`} repeatCount="indefinite" path={edgePath} />
-            <animate attributeName="cy" values="-2;2;-2" dur="0.9s" repeatCount="indefinite" />
-          </circle>
-          {/* White hot center */}
-          <circle r={baseSize * 0.35} fill="#ffffff" opacity={1}>
-            <animateMotion dur={`${baseDuration}s`} repeatCount="indefinite" path={edgePath} />
-          </circle>
+      return <PowerConduit edgePath={edgePath} colors={colors} state={state} effectTier={effectTier} />;
 
-          {/* === TRAIL (tier-adaptive segments) - shows direction === */}
-          {Array.from({ length: trailCount }, (_, i) => i + 1).map((i) => (
-            <circle
-              key={`trail-${i}`}
-              r={baseSize * (1 - i * (0.7 / trailCount))}
-              fill={colors.glow}
-              opacity={0.75 - i * (0.6 / trailCount)}
-              style={{ filter: `drop-shadow(0 0 ${Math.max(3, baseSize - i * 3)}px ${colors.glow})` }}
-            >
-              <animateMotion
-                dur={`${baseDuration}s`}
-                repeatCount="indefinite"
-                begin={`${i * 0.15}s`}
-                path={edgePath}
-              />
-            </circle>
-          ))}
+    case 'localization':
+      return <DNAHelix edgePath={edgePath} colors={colors} state={state} effectTier={effectTier} />;
 
-          {/* === SECONDARY ATOM (offset) - skipped in MEDIUM tier === */}
-          {showSecondaryAtom && (
-            <>
-              <circle r={baseSize * 0.8} fill={colors.secondary} opacity={0.85} style={{ filter: `drop-shadow(0 0 8px ${colors.glow})` }}>
-                <animateMotion dur={`${baseDuration}s`} repeatCount="indefinite" begin={`${baseDuration / 2}s`} path={edgePath} />
-                <animate attributeName="cy" values="3;-3;3" dur="1s" repeatCount="indefinite" />
-              </circle>
-              <circle r={baseSize * 0.3} fill="#ffffff" opacity={0.9}>
-                <animateMotion dur={`${baseDuration}s`} repeatCount="indefinite" begin={`${baseDuration / 2}s`} path={edgePath} />
-              </circle>
-            </>
-          )}
-        </g>
-      );
+    case 'semantic':
+      return <SynapticFiring edgePath={edgePath} colors={colors} state={state} effectTier={effectTier} />;
 
-    case 'localization': {
-      // 🧬 GENTLE WAVE - Sinusoidal oscillation for content adaptation
-      // Visual: Flowing wave of atoms adapting to locale
-      // TIER-ADAPTIVE: ULTRA=2×3+3, HIGH=2×3+2, MEDIUM=1×2+1
-      const strandAtomCount = effectTier === 'medium' ? 2 : 3;
-      const connectorCount = effectTier === 'ultra' ? 3 : effectTier === 'medium' ? 1 : 2;
-      return (
-        <g className="effect-localization-atom">
-          {/* === STRAND 1 (tier-adaptive atoms) - Primary wave === */}
-          {Array.from({ length: strandAtomCount }, (_, i) => (
-            <g key={`strand1-${i}`}>
-              {/* Glow field */}
-              <circle
-                r={baseSize * 1.6}
-                fill={colors.glow}
-                opacity={0.25}
-                style={{ filter: 'blur(6px)' }}
-              >
-                <animateMotion dur={`${baseDuration * 1.2}s`} repeatCount="indefinite" begin={`${i * baseDuration * 0.4}s`} path={edgePath} />
-                {/* Wide sinusoidal wave - SLOWER oscillation */}
-                <animate attributeName="cy" values="-18;18;-18" dur="2s" repeatCount="indefinite" begin={`${i * 0.3}s`} />
-              </circle>
-              {/* Core atom */}
-              <circle
-                r={baseSize * 0.9}
-                fill={colors.primary}
-                opacity={0.9}
-                style={{ filter: `drop-shadow(0 0 ${baseSize}px ${colors.glow})` }}
-              >
-                <animateMotion dur={`${baseDuration * 1.2}s`} repeatCount="indefinite" begin={`${i * baseDuration * 0.4}s`} path={edgePath} />
-                <animate attributeName="cy" values="-16;16;-16" dur="2s" repeatCount="indefinite" begin={`${i * 0.3}s`} />
-              </circle>
-              {/* White center */}
-              <circle r={baseSize * 0.3} fill="#ffffff" opacity={0.95}>
-                <animateMotion dur={`${baseDuration * 1.2}s`} repeatCount="indefinite" begin={`${i * baseDuration * 0.4}s`} path={edgePath} />
-                <animate attributeName="cy" values="-16;16;-16" dur="2s" repeatCount="indefinite" begin={`${i * 0.3}s`} />
-              </circle>
-            </g>
-          ))}
+    case 'generation':
+      return <MatrixCodeRain edgePath={edgePath} colors={colors} state={state} effectTier={effectTier} />;
 
-          {/* === STRAND 2 (tier-adaptive) - Secondary wave (opposite phase) - skipped in MEDIUM === */}
-          {showSecondaryAtom && Array.from({ length: strandAtomCount }, (_, i) => (
-            <g key={`strand2-${i}`}>
-              <circle
-                r={baseSize * 1.3}
-                fill={colors.secondary}
-                opacity={0.2}
-                style={{ filter: 'blur(5px)' }}
-              >
-                <animateMotion dur={`${baseDuration * 1.2}s`} repeatCount="indefinite" begin={`${i * baseDuration * 0.4}s`} path={edgePath} />
-                <animate attributeName="cy" values="18;-18;18" dur="2s" repeatCount="indefinite" begin={`${i * 0.3}s`} />
-              </circle>
-              <circle
-                r={baseSize * 0.7}
-                fill={colors.secondary}
-                opacity={0.85}
-                style={{ filter: `drop-shadow(0 0 8px ${colors.secondary})` }}
-              >
-                <animateMotion dur={`${baseDuration * 1.2}s`} repeatCount="indefinite" begin={`${i * baseDuration * 0.4}s`} path={edgePath} />
-                <animate attributeName="cy" values="16;-16;16" dur="2s" repeatCount="indefinite" begin={`${i * 0.3}s`} />
-              </circle>
-            </g>
-          ))}
-
-          {/* === CONNECTORS (tier-adaptive) - white dots between strands === */}
-          {Array.from({ length: connectorCount }, (_, i) => (
-            <circle
-              key={`conn-${i}`}
-              r={baseSize * 0.35}
-              fill="#ffffff"
-              opacity={0.8}
-              style={{ filter: `drop-shadow(0 0 4px #ffffff)` }}
-            >
-              <animateMotion dur={`${baseDuration * 1.2}s`} repeatCount="indefinite" begin={`${i * baseDuration * 0.6}s`} path={edgePath} />
-            </circle>
-          ))}
-        </g>
-      );
-    }
-
-    case 'semantic': {
-      // 🔗 ORBITING SPARKS - Slow circular drift for meaning connections
-      // Visual: Atoms orbiting around path showing semantic links
-      // TIER-ADAPTIVE: ULTRA=5 orbits+3 glow, HIGH=4 orbits+2 glow, MEDIUM=2 orbits+1 glow
-      const orbitCount = effectTier === 'ultra' ? 5 : effectTier === 'medium' ? 2 : 4;
-      const glowTrailCount = effectTier === 'ultra' ? 3 : effectTier === 'medium' ? 1 : 2;
-      return (
-        <g className="effect-semantic-atom">
-          {/* === ORBITING ATOMS (tier-adaptive) === */}
-          {Array.from({ length: orbitCount }, (_, i) => (
-            <g key={`orbit-${i}`}>
-              {/* Glow field */}
-              <circle
-                r={baseSize * 1.5}
-                fill={colors.glow}
-                opacity={0.25}
-                style={{ filter: 'blur(6px)' }}
-              >
-                <animateMotion dur={`${baseDuration * 0.8}s`} repeatCount="indefinite" begin={`${i * baseDuration * 0.2}s`} path={edgePath} />
-                {/* Orbital wobble - circular motion around path */}
-                <animate attributeName="cx" values="-10;10;-10" dur="1.5s" repeatCount="indefinite" begin={`${i * 0.4}s`} />
-                <animate attributeName="cy" values="10;-10;10" dur="1.2s" repeatCount="indefinite" begin={`${i * 0.4}s`} />
-              </circle>
-              {/* Core atom */}
-              <circle
-                r={baseSize * 0.8}
-                fill={colors.primary}
-                opacity={0.95}
-                style={{ filter: `drop-shadow(0 0 ${baseSize}px ${colors.glow})` }}
-              >
-                <animateMotion dur={`${baseDuration * 0.8}s`} repeatCount="indefinite" begin={`${i * baseDuration * 0.2}s`} path={edgePath} />
-                <animate attributeName="cx" values="-8;8;-8" dur="1.5s" repeatCount="indefinite" begin={`${i * 0.4}s`} />
-                <animate attributeName="cy" values="8;-8;8" dur="1.2s" repeatCount="indefinite" begin={`${i * 0.4}s`} />
-              </circle>
-              {/* White spark center */}
-              <circle r={baseSize * 0.25} fill="#ffffff" opacity={1}>
-                <animateMotion dur={`${baseDuration * 0.8}s`} repeatCount="indefinite" begin={`${i * baseDuration * 0.2}s`} path={edgePath} />
-                <animate attributeName="cx" values="-8;8;-8" dur="1.5s" repeatCount="indefinite" begin={`${i * 0.4}s`} />
-                <animate attributeName="cy" values="8;-8;8" dur="1.2s" repeatCount="indefinite" begin={`${i * 0.4}s`} />
-              </circle>
-            </g>
-          ))}
-
-          {/* === SUBTLE GLOW TRAIL (tier-adaptive) === */}
-          {Array.from({ length: glowTrailCount }, (_, i) => (
-            <circle
-              key={`glow-${i}`}
-              r={baseSize * 1.2}
-              fill={colors.glow}
-              opacity={0.3}
-              style={{ filter: 'blur(8px)' }}
-            >
-              <animateMotion dur={`${baseDuration * 0.8}s`} repeatCount="indefinite" begin={`${i * baseDuration * 0.4}s`} path={edgePath} />
-            </circle>
-          ))}
-        </g>
-      );
-    }
-
-    case 'generation': {
-      // 💻 CASCADE PULSE - Rhythmic bursts for AI processing
-      // Visual: Data packets cascading through the generation pipeline
-      // TIER-ADAPTIVE: ULTRA=4 cascade+4 trail, HIGH=3 cascade+3 trail, MEDIUM=2 cascade+2 trail
-      const cascadeCount = effectTier === 'ultra' ? 4 : effectTier === 'medium' ? 2 : 3;
-      const cascadeTrailCount = effectTier === 'ultra' ? 4 : effectTier === 'medium' ? 2 : 3;
-      return (
-        <g className="effect-generation-atom">
-          {/* === CASCADING ATOMS (tier-adaptive) === */}
-          {Array.from({ length: cascadeCount }, (_, i) => (
-            <g key={`cascade-${i}`}>
-              {/* Wide energy field */}
-              <circle
-                r={baseSize * 2}
-                fill={colors.glow}
-                opacity={0.2}
-                style={{ filter: 'blur(10px)' }}
-              >
-                <animateMotion dur={`${baseDuration * 0.9}s`} repeatCount="indefinite" begin={`${i * baseDuration * 0.3}s`} path={edgePath} />
-              </circle>
-              {/* Core glow */}
-              <circle
-                r={baseSize * 1.2}
-                fill={colors.primary}
-                opacity={0.5}
-                style={{ filter: 'blur(4px)' }}
-              >
-                <animateMotion dur={`${baseDuration * 0.9}s`} repeatCount="indefinite" begin={`${i * baseDuration * 0.3}s`} path={edgePath} />
-                {/* Pulsing effect */}
-                <animate attributeName="r" values={`${baseSize * 1.2};${baseSize * 1.5};${baseSize * 1.2}`} dur="1.5s" repeatCount="indefinite" begin={`${i * 0.5}s`} />
-              </circle>
-              {/* Solid atom */}
-              <circle
-                r={baseSize * 0.9}
-                fill={colors.primary}
-                opacity={0.95}
-                style={{ filter: `drop-shadow(0 0 ${baseSize}px ${colors.glow})` }}
-              >
-                <animateMotion dur={`${baseDuration * 0.9}s`} repeatCount="indefinite" begin={`${i * baseDuration * 0.3}s`} path={edgePath} />
-                {/* Subtle wobble */}
-                <animate attributeName="cy" values="-3;3;-3" dur="0.8s" repeatCount="indefinite" />
-              </circle>
-              {/* White center with flicker */}
-              <circle r={baseSize * 0.35} fill="#ffffff">
-                <animateMotion dur={`${baseDuration * 0.9}s`} repeatCount="indefinite" begin={`${i * baseDuration * 0.3}s`} path={edgePath} />
-                <animate attributeName="opacity" values="1;0.6;1;0.8;1" dur="0.8s" repeatCount="indefinite" begin={`${i * 0.2}s`} />
-              </circle>
-            </g>
-          ))}
-
-          {/* === TRAIL SEGMENTS (tier-adaptive) === */}
-          {Array.from({ length: cascadeTrailCount }, (_, i) => i + 1).map((i) => (
-            <circle
-              key={`trail-${i}`}
-              r={baseSize * (0.7 - i * (0.45 / cascadeTrailCount))}
-              fill={colors.glow}
-              opacity={0.6 - i * (0.45 / cascadeTrailCount)}
-              style={{ filter: `drop-shadow(0 0 ${Math.max(2, baseSize - i * 3)}px ${colors.glow})` }}
-            >
-              <animateMotion
-                dur={`${baseDuration * 0.9}s`}
-                repeatCount="indefinite"
-                begin={`${i * 0.15}s`}
-                path={edgePath}
-              />
-            </circle>
-          ))}
-        </g>
-      );
-    }
-
-    case 'mining': {
-      // 📡 RADAR SWEEP - Scanning pulse discovering data
-      // Visual: Radar-like sweep with expanding detection rings
-      // TIER-ADAPTIVE: ULTRA=4 rings + secondary, HIGH=3 rings + secondary, MEDIUM=2 rings no secondary
-      const ringCount = effectTier === 'ultra' ? 4 : effectTier === 'medium' ? 2 : 3;
-      return (
-        <g className="effect-mining">
-          {/* Main radar pulse */}
-          <g>
-            {/* Wide sweep glow */}
-            <circle r={baseSize * 2} fill={colors.glow} opacity={0.3} style={{ filter: 'blur(6px)' }}>
-              <animateMotion dur={`${baseDuration * 1.8}s`} repeatCount="indefinite" path={edgePath} />
-            </circle>
-            {/* Core scanner */}
-            <circle r={baseSize} fill={colors.primary} opacity={0.95} style={{ filter: `drop-shadow(0 0 10px ${colors.glow})` }}>
-              <animateMotion dur={`${baseDuration * 1.8}s`} repeatCount="indefinite" path={edgePath} />
-            </circle>
-            {/* Hot center */}
-            <circle r={baseSize * 0.35} fill="#ffffff" opacity={1}>
-              <animateMotion dur={`${baseDuration * 1.8}s`} repeatCount="indefinite" path={edgePath} />
-            </circle>
-          </g>
-
-          {/* Expanding detection rings (tier-adaptive) */}
-          {Array.from({ length: ringCount }, (_, i) => (
-            <circle
-              key={`ring-${i}`}
-              r={baseSize}
-              fill="none"
-              stroke={colors.glow}
-              strokeWidth={2 - i * (1.5 / ringCount)}
-              opacity={0}
-            >
-              <animateMotion dur={`${baseDuration * 1.8}s`} repeatCount="indefinite" begin={`${i * 0.4}s`} path={edgePath} />
-              {/* Expanding ring animation */}
-              <animate attributeName="r" values={`${baseSize};${baseSize * 3.5};${baseSize * 3.5}`} dur="1.2s" repeatCount="indefinite" />
-              <animate attributeName="opacity" values="0.8;0.3;0" dur="1.2s" repeatCount="indefinite" />
-              <animate attributeName="stroke-width" values="2;0.5;0" dur="1.2s" repeatCount="indefinite" />
-            </circle>
-          ))}
-
-          {/* Secondary ping - offset (skipped in MEDIUM tier) */}
-          {showSecondaryAtom && (
-            <circle r={baseSize * 0.6} fill={colors.secondary} opacity={0.8} style={{ filter: `drop-shadow(0 0 5px ${colors.glow})` }}>
-              <animateMotion dur={`${baseDuration * 1.8}s`} repeatCount="indefinite" begin={`${baseDuration * 0.9}s`} path={edgePath} />
-            </circle>
-          )}
-        </g>
-      );
-    }
+    case 'mining':
+      return <SonarPulse edgePath={edgePath} colors={colors} state={state} effectTier={effectTier} />;
 
     default:
       return null;

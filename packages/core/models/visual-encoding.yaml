@@ -258,32 +258,41 @@ animations:
     easing: ease-out
 
 # =============================================================================
-# ARC ANIMATION EFFECTS (Studio only) — v11.6.1
+# ARC ANIMATION EFFECTS (Studio only) — v11.6.2 FULL REDESIGN
 # =============================================================================
-# Each arc family has a unique animated visual effect.
+# Each arc family has a UNIQUE SIGNATURE EFFECT that conveys semantic meaning.
 # Colors come from taxonomy.yaml arc_families[].color
-# Implementation: apps/studio/src/components/graph/edges/FloatingEdge.tsx
+# Implementation: apps/studio/src/components/graph/edges/effects/*.tsx
+#
+# Design document: docs/plans/2026-02-11-arc-effects-redesign.md
 #
 # These effects make relationships visually distinct at a glance:
 # - Pattern recognition: users learn to identify relationship types by animation
 # - Semantic meaning: animations reflect the conceptual nature of each family
 # - Accessibility: supplements color with motion for colorblind users
+# - Tier scaling: effects adapt to graph density (ULTRA → MINIMAL)
 
 arc_animation_effects:
   ownership:
-    effect_name: energy_pulse
-    description: "Multi-layer glowing pulses with trailing segments"
-    visual_metaphor: "Power/authority flowing from parent to children"
+    effect_name: power_conduit
+    effect_file: PowerConduit.tsx
+    description: "High-voltage cable with 3 large orbs traveling in convoy"
+    visual_metaphor: "Power line delivering authority from parent to children"
     color: "#3b82f6"  # Blue (from taxonomy.yaml)
     layers:
-      - outer_glow: "blur 8px, opacity 0.4"
-      - middle_glow: "blur 4px, opacity 0.6"
-      - core_pulse: "solid, opacity 0.95, drop-shadow"
-      - hot_center: "white, opacity 1.0"
-      - trail_segments: "5 particles, decreasing size/opacity"
+      - cable_glow: "3-layer pulsing glow (blur 8px, 4s cycle)"
+      - core_cable: "4px stroke, bright blue"
+      - hot_wire: "1.5px white-blue center line"
+      - orb_convoy: "3 large orbs (20px) with smooth spline motion"
+      - orb_trails: "2-3 trailing segments per orb"
     timing:
-      base_duration_s: 1.6
-      highlighted_duration_s: 1.0
+      base_duration_s: 8  # Slow, authoritative
+      cable_pulse_s: 4
+      orb_spacing: "evenly distributed"
+    tier_scaling:
+      ultra: "3 orbs + 3 trails + full cable glow"
+      high: "3 orbs + 2 trails"
+      medium: "2 orbs + 1 trail"
     use_cases:
       - "HAS_PAGE, HAS_BLOCK, HAS_LAYER"
       - "Meta-graph structure (IN_REALM, IN_LAYER)"
@@ -291,75 +300,107 @@ arc_animation_effects:
 
   localization:
     effect_name: dna_helix
-    description: "Double strand oscillating perpendicular to path"
-    visual_metaphor: "Content DNA adapting to locale context"
+    effect_file: DNAHelix.tsx
+    description: "True double helix with strand crossing and base pair connectors"
+    visual_metaphor: "Content DNA unwinding and adapting to locale"
     color: "#22c55e"  # Green (from taxonomy.yaml)
     layers:
-      - strand_1: "8 particles, primary color, oscillating +/-12px"
-      - strand_2: "8 particles, secondary color, opposite phase"
-      - connecting_rungs: "4 white dots between strands"
+      - strand_1: "Primary wave (±25px amplitude, phase 0°)"
+      - strand_2: "Secondary wave (±25px amplitude, phase 180°)"
+      - base_pairs: "White connectors appearing at strand crossings"
+      - gene_markers: "Bright dots pulsing at intersections"
     timing:
-      base_duration_s: 2.4
-      oscillation_period_s: 0.6
+      base_duration_s: 10  # Slow, methodical adaptation
+      oscillation_period_s: 2.5
+      connector_fade_s: 0.3
+    tier_scaling:
+      ultra: "4 atoms/strand + 4 connectors + 3 gene markers"
+      high: "3 atoms/strand + 3 connectors + 2 gene markers"
+      medium: "2 atoms/strand + 2 connectors + 1 gene marker"
     use_cases:
       - "HAS_CONTENT, FOR_LOCALE, PRIMARY_LOCALE"
       - "Invariant ↔ EntityContent bridges"
       - "Locale-specific content relationships"
 
   semantic:
-    effect_name: neural_sparks
-    description: "Fast zigzag particles with random oscillation"
-    visual_metaphor: "Synapses firing, meaning connections activating"
+    effect_name: synaptic_firing
+    effect_file: SynapticFiring.tsx
+    description: "Neural firing with bright pulses, spark showers, and residual glow"
+    visual_metaphor: "Neurons firing and propagating meaning signals"
     color: "#f97316"  # Orange (from taxonomy.yaml)
     layers:
-      - spark_cores: "8 fast particles with trails"
-      - zigzag_glow: "4 particles with random X/Y oscillation"
+      - dormant_arc: "30% opacity baseline (resting state)"
+      - firing_pulse: "White-hot leading edge, 0.4s travel time"
+      - signal_decay: "Trailing decay segments behind pulse"
+      - spark_shower: "3-5 particles ejected at target"
+      - residual_glow: "Arc brightens for 1s after firing"
     timing:
-      base_duration_s: 0.96  # Very fast (0.6x normal)
-      oscillation_period_s: 0.15
+      firing_interval_s: "2.7-4.1 (organic, varied)"
+      pulse_travel_s: 0.4  # Fast signal
+      spark_lifetime_s: 0.5
+      residual_fade_s: 1.0
+    tier_scaling:
+      ultra: "3 pulses + 5 sparks + residual glow"
+      high: "2 pulses + 4 sparks + residual glow"
+      medium: "1 pulse + 2 sparks"
     use_cases:
       - "USES_ENTITY, SEMANTIC_LINK, RELATED_TO"
       - "Entity references from content"
       - "Concept connections"
 
   generation:
-    effect_name: matrix_code
-    description: "Rectangular character blocks with flickering effect"
-    visual_metaphor: "AI/LLM processing data, digital information flow"
+    effect_name: matrix_code_rain
+    effect_file: MatrixCodeRain.tsx
+    description: "Falling characters with parallax depth, processing bursts, and scanline"
+    visual_metaphor: "Data being processed through AI neural network"
     color: "#8b5cf6"  # Purple (from taxonomy.yaml)
     layers:
-      - character_glow: "blur 2px background"
-      - character_block: "rounded rectangles, auto-rotate along path"
-      - bright_center: "flickering white line simulating characters"
-      - scanline: "horizontal sweep effect"
+      - data_stream: "Characters (0, 1, ▓, ▒) falling at varied speeds"
+      - character_glow: "Blur 4px, parallax brightness variation"
+      - processing_burst: "Bright flash at path midpoint"
+      - scanline: "Horizontal line sweeping across arc"
+      - output_pulse: "Target glows when data 'arrives'"
     timing:
-      base_duration_s: 1.44
-      flicker_period_s: 0.3
+      character_fall_s: "1.2-2.8 (varied for parallax)"
+      processing_burst_s: 0.3  # Every ~2s
+      scanline_sweep_s: 4
+    tier_scaling:
+      ultra: "10 chars + 3 bursts + scanline + output pulse"
+      high: "8 chars + 2 bursts + output pulse"
+      medium: "5 chars + 1 burst"
     use_cases:
       - "HAS_GENERATED, GENERATED_BY, USES_MODEL"
       - "Prompt → Output relationships"
       - "LLM pipeline flow"
 
   mining:
-    effect_name: radar_sweep
-    description: "Scanning pulse with expanding detection rings"
-    visual_metaphor: "Radar/sonar discovering and tracking data"
+    effect_name: sonar_pulse
+    effect_file: SonarPulse.tsx
+    description: "Sonar ping with expanding rings, echo return, and data blips"
+    visual_metaphor: "Sonar pinging and discovering data in the depths"
     color: "#ec4899"  # Pink (from taxonomy.yaml)
     layers:
-      - wide_sweep_glow: "blur 6px, opacity 0.3"
-      - core_scanner: "main pulse with intense drop-shadow"
-      - expanding_rings: "3 rings that expand and fade"
-      - secondary_ping: "offset trailing pulse"
+      - ambient_scan: "Slow sweeping highlight (10s cycle)"
+      - ping_source: "Bright pulse emitted from source node"
+      - wave_rings: "4 concentric rings expanding along arc"
+      - echo_return: "Faint reflection traveling back to source"
+      - data_blips: "Bright dots at target when waves arrive"
     timing:
-      base_duration_s: 2.88  # Slower, methodical
-      ring_expansion_s: 1.2
+      ping_interval_s: 3  # Methodical scanning
+      ring_expansion_s: 1.5
+      echo_return_s: 2  # Slower return
+      blip_flash_s: 0.5
+    tier_scaling:
+      ultra: "4 rings + echo return + ambient scan + 3 blips"
+      high: "3 rings + echo return + 2 blips"
+      medium: "2 rings + 1 blip"
     use_cases:
       - "HAS_SEO_TARGET, HAS_GEO_TARGET, HAS_METRICS"
       - "SEO/GEO mining relationships"
       - "Analytics and measurement links"
 
 # Where to use arc animation effects:
-# 1. Studio 2D Graph (FloatingEdge.tsx) — IMPLEMENTED
+# 1. Studio 2D Graph (FloatingEdge.tsx) — IMPLEMENTED v11.6.2
 # 2. Studio 3D Graph (future) — edge glow effects
 # 3. TUI (future) — ASCII animation patterns
 # 4. Documentation diagrams — static representations
