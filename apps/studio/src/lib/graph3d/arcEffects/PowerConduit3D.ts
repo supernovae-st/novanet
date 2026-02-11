@@ -113,6 +113,13 @@ export class PowerConduit3D implements ArcEffect3D {
   }
 
   updatePositions(source: THREE.Vector3, target: THREE.Vector3): void {
+    // Only update if position changed significantly (threshold: 0.5 units)
+    const threshold = 0.5;
+    const sourceMoved = this.sourcePos.distanceTo(source) > threshold;
+    const targetMoved = this.targetPos.distanceTo(target) > threshold;
+
+    if (!sourceMoved && !targetMoved) return;
+
     this.sourcePos.copy(source);
     this.targetPos.copy(target);
 
