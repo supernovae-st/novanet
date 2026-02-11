@@ -200,4 +200,7 @@ packages/core/models/
 
 - [x] User approved all 5 concepts
 - [x] Matrix Code Rain selected for Generation
-- [ ] Implementation started
+- [x] Implementation started (2026-02-11)
+- [x] 5 effect components created in `effects/` folder
+- [x] Integrated into FloatingEdge.tsx via InlineEdgeEffects
+- [x] visual-encoding.yaml updated with v11.6.2 specs
