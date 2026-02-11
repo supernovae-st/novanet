@@ -1126,11 +1126,15 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                         instance.missing_required_count,
                                                     );
 
-                                                    // Arc count badge
-                                                    let arc_badge = format_arc_badge(
-                                                        instance.outgoing_arcs.len(),
-                                                        instance.incoming_arcs.len(),
-                                                    );
+                                                    // Arc count badge (show "..." while loading)
+                                                    let arc_badge = if instance.arcs_loading {
+                                                        " [...]".to_string()
+                                                    } else {
+                                                        format_arc_badge(
+                                                            instance.outgoing_arcs.len(),
+                                                            instance.incoming_arcs.len(),
+                                                        )
+                                                    };
 
                                                     // Completeness bar
                                                     let completeness_badge =
@@ -1264,11 +1268,15 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                         let missing_badge =
                                             format_missing_badge(instance.missing_required_count);
 
-                                        // Arc count badge: [->N <-M] (only if has arcs)
-                                        let arc_badge = format_arc_badge(
-                                            instance.outgoing_arcs.len(),
-                                            instance.incoming_arcs.len(),
-                                        );
+                                        // Arc count badge: [->N <-M] (only if has arcs, "..." while loading)
+                                        let arc_badge = if instance.arcs_loading {
+                                            " [...]".to_string()
+                                        } else {
+                                            format_arc_badge(
+                                                instance.outgoing_arcs.len(),
+                                                instance.incoming_arcs.len(),
+                                            )
+                                        };
 
                                         // Completeness bar: [==--] only shown if incomplete
                                         let completeness_badge = format_completeness_badge(

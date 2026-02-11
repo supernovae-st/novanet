@@ -646,6 +646,7 @@ mod tests {
             properties: BTreeMap::new(),
             outgoing_arcs: vec![],
             incoming_arcs: vec![],
+            arcs_loading: false,
             missing_required_count: 0,
             filled_properties: 2,
             total_properties: 5,

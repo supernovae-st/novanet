@@ -838,6 +838,7 @@ ORDER BY key
                 properties: props,
                 outgoing_arcs,
                 incoming_arcs,
+                arcs_loading: false, // Arcs already loaded in full query
                 missing_required_count: 0, // Calculated later in set_instances
                 filled_properties: 0,      // Calculated later in set_instances
                 total_properties: 0,       // Calculated later in set_instances
@@ -845,6 +846,165 @@ ORDER BY key
         }
 
         Ok((instances, total_count))
+    }
+
+    /// Load instances FAST - only keys + display_name, NO arc queries.
+    /// This returns in ~50ms instead of ~3s for large datasets.
+    /// Arcs should be loaded separately via `load_instance_arcs()`.
+    pub async fn load_instances_fast(
+        db: &Db,
+        kind_label: &str,
+    ) -> crate::Result<(Vec<InstanceInfo>, usize)> {
+        // Security: Validate label before interpolation into Cypher
+        validate_cypher_label(kind_label)?;
+
+        // Single fast query: get keys + display_name + basic props (no arc traversal)
+        let cypher = format!(
+            r#"
+MATCH (n:{kind_label})
+WHERE NOT n:Meta
+WITH count(n) AS total
+MATCH (n:{kind_label})
+WHERE NOT n:Meta
+WITH total, n
+ORDER BY n.key
+LIMIT {limit}
+RETURN
+    total,
+    coalesce(n.key, n.label, toString(id(n))) AS key,
+    coalesce(n.display_name, n.key, n.label) AS display_name,
+    properties(n) AS props
+"#,
+            kind_label = kind_label,
+            limit = INSTANCE_LIMIT
+        );
+
+        let rows = db.execute(&cypher).await?;
+        let mut instances = Vec::with_capacity(rows.len());
+        let mut total_count = 0usize;
+
+        for row in rows {
+            // Get total from first row
+            if total_count == 0 {
+                total_count = row.get::<i64>("total").unwrap_or(0) as usize;
+            }
+
+            let key: String = row.get("key").unwrap_or_default();
+            let display_name: String = row.get("display_name").unwrap_or_default();
+
+            // Parse properties
+            let props: BTreeMap<String, JsonValue> = row
+                .get::<neo4rs::BoltMap>("props")
+                .map(|m| {
+                    m.value
+                        .iter()
+                        .map(|(k, v)| (k.value.clone(), bolt_to_json(v)))
+                        .collect()
+                })
+                .unwrap_or_default();
+
+            instances.push(InstanceInfo {
+                key,
+                display_name,
+                kind_key: kind_label.to_string(),
+                properties: props,
+                outgoing_arcs: Vec::new(), // Empty - will be loaded separately
+                incoming_arcs: Vec::new(), // Empty - will be loaded separately
+                arcs_loading: true,        // Mark as loading
+                missing_required_count: 0,
+                filled_properties: 0,
+                total_properties: 0,
+            });
+        }
+
+        Ok((instances, total_count))
+    }
+
+    /// Load arcs for a batch of instance keys.
+    /// Called AFTER `load_instances_fast()` to populate arc data in background.
+    pub async fn load_instance_arcs(
+        db: &Db,
+        kind_label: &str,
+        keys: Vec<String>,
+    ) -> crate::Result<FxHashMap<String, (Vec<InstanceArc>, Vec<InstanceArc>)>> {
+        if keys.is_empty() {
+            return Ok(FxHashMap::default());
+        }
+
+        // Security: Validate label
+        validate_cypher_label(kind_label)?;
+
+        let cypher = format!(
+            r#"
+UNWIND $keys AS k
+MATCH (n:{kind_label} {{key: k}})
+OPTIONAL MATCH (n)-[out]->(target)
+WHERE NOT target:Meta
+WITH n, k, collect(DISTINCT {{
+    arc_type: type(out),
+    target_key: coalesce(target.key, target.label, id(target)),
+    target_kind: head(labels(target))
+}}) AS outgoing
+OPTIONAL MATCH (source)-[inc]->(n)
+WHERE NOT source:Meta
+WITH n, k, outgoing, collect(DISTINCT {{
+    arc_type: type(inc),
+    source_key: coalesce(source.key, source.label, id(source)),
+    source_kind: head(labels(source))
+}}) AS incoming
+RETURN k AS key, outgoing, incoming
+"#,
+            kind_label = kind_label
+        );
+
+        let rows = db.execute_with_params(&cypher, [("keys", keys)]).await?;
+        let mut result = FxHashMap::default();
+
+        for row in rows {
+            let key: String = row.get("key").unwrap_or_default();
+
+            // Parse outgoing arcs
+            let outgoing_arcs: Vec<InstanceArc> = row
+                .get::<Vec<neo4rs::BoltMap>>("outgoing")
+                .unwrap_or_default()
+                .into_iter()
+                .filter_map(|m| {
+                    let arc_type = m.get::<String>("arc_type").ok()?;
+                    if arc_type.is_empty() {
+                        return None;
+                    }
+                    Some(InstanceArc {
+                        arc_type,
+                        target_key: m.get("target_key").unwrap_or_default(),
+                        target_kind: m.get("target_kind").unwrap_or_default(),
+                        exists: true,
+                    })
+                })
+                .collect();
+
+            // Parse incoming arcs
+            let incoming_arcs: Vec<InstanceArc> = row
+                .get::<Vec<neo4rs::BoltMap>>("incoming")
+                .unwrap_or_default()
+                .into_iter()
+                .filter_map(|m| {
+                    let arc_type = m.get::<String>("arc_type").ok()?;
+                    if arc_type.is_empty() {
+                        return None;
+                    }
+                    Some(InstanceArc {
+                        arc_type,
+                        target_key: m.get("source_key").unwrap_or_default(),
+                        target_kind: m.get("source_kind").unwrap_or_default(),
+                        exists: true,
+                    })
+                })
+                .collect();
+
+            result.insert(key, (outgoing_arcs, incoming_arcs));
+        }
+
+        Ok(result)
     }
 
     /// Load graph statistics.
@@ -1298,6 +1458,7 @@ RETURN total,
                 properties: props,
                 outgoing_arcs,
                 incoming_arcs,
+                arcs_loading: false,
                 missing_required_count: 0, // Calculated later if needed
                 filled_properties: 0,      // Calculated later if needed
                 total_properties: 0,       // Calculated later if needed
@@ -1526,6 +1687,24 @@ RETURN total,
     /// Get total instance count for a Kind (may be > loaded instances).
     pub fn get_instance_total(&self, kind_key: &str) -> Option<usize> {
         self.instance_totals.get(kind_key).copied()
+    }
+
+    /// Update arcs for instances after progressive loading.
+    /// Called AFTER `set_instances` with arc data from `load_instance_arcs`.
+    pub fn update_instance_arcs(
+        &mut self,
+        kind_key: &str,
+        arcs: FxHashMap<String, (Vec<InstanceArc>, Vec<InstanceArc>)>,
+    ) {
+        if let Some(instances) = self.instances.get_mut(kind_key) {
+            for instance in instances.iter_mut() {
+                if let Some((outgoing, incoming)) = arcs.get(&instance.key) {
+                    instance.outgoing_arcs = outgoing.clone();
+                    instance.incoming_arcs = incoming.clone();
+                    instance.arcs_loading = false;
+                }
+            }
+        }
     }
 
     /// Total number of visible items for a specific mode.
@@ -2372,6 +2551,8 @@ pub struct InstanceInfo {
     pub outgoing_arcs: Vec<InstanceArc>,
     /// Incoming arcs to this instance.
     pub incoming_arcs: Vec<InstanceArc>,
+    /// Whether arcs are still being loaded (progressive loading).
+    pub arcs_loading: bool,
     /// Count of missing required properties (for tree badge).
     pub missing_required_count: usize,
     /// Count of filled (non-null/non-empty) properties.
@@ -2688,6 +2869,7 @@ mod tests {
             ]),
             outgoing_arcs: vec![],
             incoming_arcs: vec![],
+            arcs_loading: false,
             missing_required_count: 0,
             filled_properties: 0,
             total_properties: 0,
@@ -2715,6 +2897,7 @@ mod tests {
                 exists: true,
             }],
             incoming_arcs: vec![],
+            arcs_loading: false,
             missing_required_count: 0,
             filled_properties: 0,
             total_properties: 0,

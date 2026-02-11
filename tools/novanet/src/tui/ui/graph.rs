@@ -37,16 +37,18 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
     };
 
     // Calculate arc counts for title (separate in/out)
-    let (incoming_count, outgoing_count) = if let Some(ref arcs) = app.kind_arcs {
-        (arcs.incoming.len(), arcs.outgoing.len())
+    let (incoming_count, outgoing_count, arcs_loading) = if let Some(ref arcs) = app.kind_arcs {
+        (arcs.incoming.len(), arcs.outgoing.len(), false)
     } else if let Some(TreeItem::Instance(_, _, _, inst)) = app.current_item() {
-        (inst.incoming_arcs.len(), inst.outgoing_arcs.len())
+        (inst.incoming_arcs.len(), inst.outgoing_arcs.len(), inst.arcs_loading)
     } else {
-        (0, 0)
+        (0, 0, false)
     };
 
-    // Build title with in/out counts
-    let title = if incoming_count > 0 || outgoing_count > 0 {
+    // Build title with in/out counts (show loading if arcs are still loading)
+    let title = if arcs_loading {
+        " Arc Relationships [...] ".to_string()
+    } else if incoming_count > 0 || outgoing_count > 0 {
         format!(
             " Arc Relationships [←{} In] [{} Out→] ",
             incoming_count, outgoing_count
@@ -285,15 +287,22 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
         ]));
         lines.push(Line::from(Span::raw("")));
 
-        // Use references to arc vectors (no clone needed)
-        let total = instance.outgoing_arcs.len() + instance.incoming_arcs.len();
-
-        if total == 0 {
+        // Check loading state first
+        if instance.arcs_loading {
             lines.push(Line::from(Span::styled(
-                "  No arc connections for this instance",
-                STYLE_DIM,
+                "  Loading arc connections...",
+                Style::default().fg(Color::Yellow),
             )));
         } else {
+            // Use references to arc vectors (no clone needed)
+            let total = instance.outgoing_arcs.len() + instance.incoming_arcs.len();
+
+            if total == 0 {
+                lines.push(Line::from(Span::styled(
+                    "  No arc connections for this instance",
+                    STYLE_DIM,
+                )));
+            } else {
             // Outgoing arcs (iterate over reference, no clone of Vec)
             if !instance.outgoing_arcs.is_empty() {
                 lines.push(Line::from(Span::styled(
@@ -375,6 +384,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
                         Span::styled(instance_key.clone(), STYLE_PRIMARY),
                     ]));
                 }
+            }
             }
         }
 
