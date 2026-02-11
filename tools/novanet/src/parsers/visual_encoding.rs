@@ -378,8 +378,9 @@ mod tests {
         assert!(icons.quality.contains_key("required"));
         assert_eq!(icons.quality_terminal("required"), "*");
 
-        // Modes (6)
+        // Modes (6: 4 Studio + 2 TUI)
         assert!(icons.modes.contains_key("meta"));
-        assert!(icons.modes.contains_key("audit"));
+        assert!(icons.modes.contains_key("graph"));
+        assert!(icons.modes.contains_key("nexus"));
     }
 }

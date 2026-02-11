@@ -731,9 +731,10 @@ icons:
       description: "Statistics/chart header"
 
   # ---------------------------------------------------------------------------
-  # MODE ICONS — Navigation modes (1-6 keys)
+  # MODE ICONS — Navigation modes (v11.7: TUI has Graph/Nexus, Studio has meta/data/overlay/query)
   # ---------------------------------------------------------------------------
   modes:
+    # Studio view modes
     meta:
       web: database
       terminal: "M"
@@ -750,14 +751,15 @@ icons:
       web: filter
       terminal: "Q"
       description: "Faceted query"
-    atlas:
-      web: map
-      terminal: "A"
-      description: "Architecture atlas"
-    audit:
-      web: clipboard-check
-      terminal: "U"
-      description: "Data quality audit"
+    # TUI navigation modes (v11.7)
+    graph:
+      web: git-branch
+      terminal: "G"
+      description: "Unified tree view (Realm > Layer > Kind)"
+    nexus:
+      web: compass
+      terminal: "N"
+      description: "Hub for Quiz, Stats, Help"
 
   # ---------------------------------------------------------------------------
   # COUNT ICONS — Statistics indicators for tree view (v11.6.1)
