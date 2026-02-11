@@ -12,8 +12,6 @@ export {
   getLODIntensity,
   shouldAnimate,
   shouldRender,
-  calculateEdgeDistance,
-  calculateEdgeMidpoint,
   LODManager,
   lodManager,
 } from './LODController';

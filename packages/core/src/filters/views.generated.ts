@@ -368,19 +368,3 @@ export function getView(id: string): ViewDefinition {
   }
   return view;
 }
-
-/** Get all views in a category */
-export function getViewsByCategory(category: string): ViewDefinition[] {
-  return Object.values(VIEWS).filter(v => v.category === category);
-}
-
-/** Get registry entries for a navigation mode */
-export function getViewsForMode(mode: string): ViewRegistryEntry[] {
-  return VIEW_REGISTRY.filter(e => e.modes.includes(mode));
-}
-
-/** All view IDs */
-export const VIEW_IDS = Object.keys(VIEWS) as readonly string[];
-
-/** All category names */
-export const VIEW_CATEGORIES = [...new Set(VIEW_REGISTRY.map(e => e.category))] as const;
