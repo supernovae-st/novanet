@@ -1,6 +1,6 @@
 # packages/core/models/visual-encoding.yaml
 # Visual presentation rules for NovaNet graph elements
-# v11.6.0 — Navigation redesign (4 independent modes)
+# v11.7.0 — Unified Tree Architecture (everything is a node)
 #
 # IMPORTANT: Colors are NOT defined here.
 # Colors come from taxonomy.yaml (node_realms, node_layers, node_traits, arc_families)
@@ -11,7 +11,7 @@
 # - apps/studio/src/design/visual-encoding.json (runtime config)
 # - tools/novanet/src/generated/visual_encoding.rs (TUI compile-time)
 
-version: "11.6.0"
+version: "11.7.0"
 
 # =============================================================================
 # CHANNEL MAPPING — Which visual channel encodes which facet
@@ -401,9 +401,94 @@ arc_animation_effects:
 
 # Where to use arc animation effects:
 # 1. Studio 2D Graph (FloatingEdge.tsx) — IMPLEMENTED v11.6.2
-# 2. Studio 3D Graph (future) — edge glow effects
+# 2. Studio 3D Graph (arcEffects/*.ts) — IMPLEMENTED v11.7.0
 # 3. TUI (future) — ASCII animation patterns
 # 4. Documentation diagrams — static representations
+
+# =============================================================================
+# 3D ARC ANIMATION EFFECTS (Studio 3D Graph) — v11.7.0
+# =============================================================================
+# 3D implementation extends 2D signature effects with:
+# - Increased tube opacity (+35% from base)
+# - Dust particles that TRAVEL along the arc with perpendicular drift
+# - Helix motion overlay for zig-zag path effect
+#
+# Implementation: apps/studio/src/lib/graph3d/arcEffects/
+# - dustParticles.ts: DustParticleSystem class (InstancedMesh)
+# - shaderUtils.ts: calculateHelixOffset() for helix motion
+# - PowerConduit3D.ts, DNAHelix3D.ts, SynapticFiring3D.ts, MatrixRain3D.ts, SonarPulse3D.ts
+
+arc_animation_effects_3d:
+  # Global 3D parameters
+  global:
+    tube_opacity_increase: 0.35  # +35% visibility vs 2D
+    helix:
+      amplitude: 0.15            # Distance from center line
+      frequency: 2.5             # Oscillations along arc length
+    dust_particles:
+      use_instanced_mesh: true   # Single draw call per arc
+      billboarding: true         # Particles face camera
+
+  # Per-family dust particle configuration
+  ownership:
+    effect_3d: PowerConduit3D
+    tube_opacity: 0.20           # (0.15 × 1.35)
+    dust:
+      shape: diamond             # Energy crystal metaphor
+      count: 8
+      size: 0.15
+      drift: gravitational       # Slow sway while traveling
+      opacity: 0.6
+      travel_speed: 0.12         # Complete arc in ~8s
+    description: "Glowing tube with diamond dust drifting toward children"
+
+  localization:
+    effect_3d: DNAHelix3D
+    tube_opacity: 0.20
+    dust:
+      shape: circle              # Base pair metaphor
+      count: 10
+      size: 0.12
+      drift: orbital             # Spiral around tube
+      opacity: 0.5
+      travel_speed: 0.12
+    description: "Double helix particles with orbital drift"
+
+  semantic:
+    effect_3d: SynapticFiring3D
+    tube_opacity: 0.20
+    dust:
+      shape: star                # Spark metaphor
+      count: 12
+      size: 0.1
+      drift: sparkling           # Erratic movement
+      opacity: 0.7
+      travel_speed: 0.15
+    description: "Fast firing pulses with sparkling star dust"
+
+  generation:
+    effect_3d: MatrixRain3D
+    tube_opacity: 0.27           # (0.20 × 1.35) - brighter for emphasis
+    dust:
+      shape: triangle            # Data fragment metaphor
+      count: 15
+      size: 0.08
+      drift: cascade             # Zigzag descent
+      opacity: 0.6
+      travel_speed: 0.25         # Fast cascade
+    description: "Digital rain with cascading triangle fragments"
+
+  mining:
+    effect_3d: SonarPulse3D
+    tube_opacity: 0.20
+    dust:
+      shape: hexagon             # Data crystal metaphor
+      count: 6
+      size: 0.18
+      drift: pulsing             # Expand/contract rhythm
+      opacity: 0.5
+      travel_speed: 0.1          # Slow, methodical
+    description: "Sonar rings with pulsing hexagon crystals"
 
 # =============================================================================
 # ACCESSIBILITY
@@ -696,3 +781,32 @@ icons:
       web: list
       terminal: "⊞"
       description: "Properties (required/total)"
+
+  # ---------------------------------------------------------------------------
+  # META TYPE ICONS — Unified Tree node type indicators (v11.7)
+  # ---------------------------------------------------------------------------
+  meta_types:
+    realm:
+      web: database
+      terminal: "R"
+      description: "Graph realm container (shared/org)"
+    layer:
+      web: layers
+      terminal: "L"
+      description: "Functional layer grouping kinds"
+    kind:
+      web: box
+      terminal: "K"
+      description: "Node type definition"
+    instance:
+      web: file
+      terminal: "i"
+      description: "Data instance of a kind"
+    arc_family:
+      web: git-branch
+      terminal: "F"
+      description: "Arc family grouping arc kinds"
+    arc_kind:
+      web: arrow-right
+      terminal: "a"
+      description: "Arc type definition"
