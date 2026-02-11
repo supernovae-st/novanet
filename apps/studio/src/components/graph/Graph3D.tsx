@@ -679,7 +679,14 @@ export const Graph3D = memo(function Graph3D({
   const zoomToNode = useCallback((node: ForceGraphNode | null | undefined) => {
     if (!fgRef.current?.cameraPosition || !node) return;
 
-    // Get node position (defensive - node may not have position yet)
+    // Skip zoom if node doesn't have valid coordinates yet
+    // This can happen if D3 simulation hasn't positioned the node yet
+    if (node.x === undefined && node.y === undefined && node.z === undefined) {
+      console.debug('[Graph3D] Skipping zoom - node not positioned yet:', node.id);
+      return;
+    }
+
+    // Get node position (defensive - use 0 for any undefined coordinate)
     const nodePos = {
       x: node.x ?? 0,
       y: node.y ?? 0,
