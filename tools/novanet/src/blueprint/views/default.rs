@@ -329,8 +329,8 @@ fn render_validation(data: &BlueprintData) -> String {
         );
         let _ = writeln!(
             out,
-            "│  💡 Run: novanet blueprint --view=audit for details{}│",
-            " ".repeat(80 - 58)
+            "│  💡 Run: cargo run -- schema validate --strict for details{}│",
+            " ".repeat(80 - 63)
         );
     }
 
@@ -342,8 +342,7 @@ fn render_validation(data: &BlueprintData) -> String {
 
 fn render_views_hint() -> String {
     "╭──────────────────────────────────────────────────────────────────────────────╮\n\
-     │  📖 Views: --view=tree|flow|content|arcs|cardinality|glossary|audit|deps|   │\n\
-     │            coverage|stats                                                    │\n\
+     │  📖 Views: --view=tree|flow|arcs|cardinality|glossary|stats                  │\n\
      ╰──────────────────────────────────────────────────────────────────────────────╯"
         .to_string()
 }
