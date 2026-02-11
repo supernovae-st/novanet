@@ -66,14 +66,18 @@ export class ArcLODManager {
     sourcePosition: THREE.Vector3,
     targetPosition: THREE.Vector3
   ): void {
+    // Defensive: skip if positions are invalid
+    if (!sourcePosition || !targetPosition) return;
+    if (typeof sourcePosition.x !== 'number' || typeof targetPosition.x !== 'number') return;
+
     // Remove existing if present
     if (this.arcs.has(id)) {
       this.removeArc(id);
     }
 
     const config: ArcEffectConfig = {
-      sourcePosition,
-      targetPosition,
+      sourcePosition: sourcePosition.clone(),
+      targetPosition: targetPosition.clone(),
       family,
       color: ARC_FAMILY_COLORS[family],
     };
@@ -118,8 +122,12 @@ export class ArcLODManager {
     sourcePosition: THREE.Vector3,
     targetPosition: THREE.Vector3
   ): void {
+    // Defensive: skip if positions are invalid
+    if (!sourcePosition || !targetPosition) return;
+    if (typeof sourcePosition.x !== 'number' || typeof targetPosition.x !== 'number') return;
+
     const arc = this.arcs.get(id);
-    if (arc) {
+    if (arc && arc.midpoint) {
       arc.effect.updatePositions(sourcePosition, targetPosition);
       arc.midpoint.addVectors(sourcePosition, targetPosition).multiplyScalar(0.5);
     }
@@ -146,9 +154,14 @@ export class ArcLODManager {
    * Update all arcs (call each frame)
    */
   update(camera: THREE.Camera, time: number, deltaTime: number): void {
+    // Defensive: skip if camera invalid
+    if (!camera?.position) return;
     const cameraPosition = camera.position;
 
     Array.from(this.arcs.values()).forEach((arc) => {
+      // Defensive: skip if arc or midpoint invalid
+      if (!arc || !arc.midpoint || typeof arc.midpoint.x !== 'number') return;
+
       // Calculate distance to camera
       const distance = cameraPosition.distanceTo(arc.midpoint);
 
