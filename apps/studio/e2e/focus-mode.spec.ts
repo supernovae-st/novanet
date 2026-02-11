@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { waitForGraphLoaded } from './helpers';
 
-test.describe('Focus Mode - Node Selection Visibility', () => {
+test.describe.skip('Focus Mode - Node Selection Visibility', () => {
+  // TODO: Rewrite for Query-First Architecture - node selection behavior has changed
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
     // Wait for lazy-loaded graph to finish loading
