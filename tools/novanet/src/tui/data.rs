@@ -1727,8 +1727,26 @@ RETURN total,
 
                                 // In Data mode, add instances if not collapsed
                                 if data_mode && !self.is_collapsed(&format!("kind:{}", kind.key)) {
-                                    if let Some(instances) = self.instances.get(&kind.key) {
-                                        count += instances.len();
+                                    // Special case: Entity Kind shows categories hierarchy
+                                    if kind.key == "Entity" && !self.entity_categories.is_empty() {
+                                        for category in &self.entity_categories {
+                                            count += 1; // category node
+
+                                            // Count instances under category if not collapsed
+                                            let cat_key = format!("category:{}", category.key);
+                                            if !self.is_collapsed(&cat_key) {
+                                                if let Some(instances) =
+                                                    self.entity_category_instances.get(&category.key)
+                                                {
+                                                    count += instances.len();
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        // Regular kind: flat instances
+                                        if let Some(instances) = self.instances.get(&kind.key) {
+                                            count += instances.len();
+                                        }
                                     }
                                 }
                             }
@@ -1785,16 +1803,46 @@ RETURN total,
                                 }
                                 idx += 1;
 
-                                // In Data mode, check for instances
+                                // In Data mode, check for instances (or categories for Entity)
                                 if data_mode && !self.is_collapsed(&format!("kind:{}", kind.key)) {
-                                    if let Some(instances) = self.instances.get(&kind.key) {
-                                        for instance in instances {
+                                    // Special case: Entity Kind shows categories hierarchy
+                                    if kind.key == "Entity" && !self.entity_categories.is_empty() {
+                                        for category in &self.entity_categories {
                                             if idx == cursor {
-                                                return Some(TreeItem::Instance(
-                                                    realm, layer, kind, instance,
+                                                return Some(TreeItem::EntityCategory(
+                                                    realm, layer, kind, category,
                                                 ));
                                             }
                                             idx += 1;
+
+                                            // Show instances under category if not collapsed
+                                            let cat_key = format!("category:{}", category.key);
+                                            if !self.is_collapsed(&cat_key) {
+                                                if let Some(instances) =
+                                                    self.entity_category_instances.get(&category.key)
+                                                {
+                                                    for instance in instances {
+                                                        if idx == cursor {
+                                                            return Some(TreeItem::Instance(
+                                                                realm, layer, kind, instance,
+                                                            ));
+                                                        }
+                                                        idx += 1;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        // Regular kind: flat instances
+                                        if let Some(instances) = self.instances.get(&kind.key) {
+                                            for instance in instances {
+                                                if idx == cursor {
+                                                    return Some(TreeItem::Instance(
+                                                        realm, layer, kind, instance,
+                                                    ));
+                                                }
+                                                idx += 1;
+                                            }
                                         }
                                     }
                                 }
@@ -2081,8 +2129,13 @@ RETURN total,
     }
 
     /// Get the collapse key for an item at cursor position.
-    pub fn collapse_key_at(&self, cursor: usize) -> Option<String> {
-        match self.item_at(cursor) {
+    pub fn collapse_key_at(&self, cursor: usize, data_mode: bool) -> Option<String> {
+        let item = if data_mode {
+            self.item_at_for_mode(cursor, true)
+        } else {
+            self.item_at(cursor)
+        };
+        match item {
             Some(TreeItem::KindsSection) => Some("kinds".to_string()),
             Some(TreeItem::ArcsSection) => Some("arcs".to_string()),
             Some(TreeItem::Realm(r)) => Some(format!("realm:{}", r.key)),
