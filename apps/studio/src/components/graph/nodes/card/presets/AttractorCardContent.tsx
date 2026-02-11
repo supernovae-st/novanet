@@ -53,12 +53,8 @@ export const AttractorCardContent = memo(function AttractorCardContent({
 }: AttractorCardContentProps) {
   const { key, label, typeCount = 0, loadedCount = 0 } = data;
 
-  // Icon component based on variant
-  const IconComponent = variant === 'realm' ? RealmIcon : LayerIcon;
-  const iconKey = variant === 'realm' ? (key as Realm) : (key as Layer);
   const badgeLabel = variant === 'realm' ? 'REALM' : 'LAYER';
   const iconContainerSize = variant === 'realm' ? 'w-14 h-14' : 'w-11 h-11';
-  const iconSize = variant === 'realm' ? 28 : 22;
 
   // Icon container style with gradient glow
   const iconContainerStyle = useMemo(() => ({
@@ -73,6 +69,23 @@ export const AttractorCardContent = memo(function AttractorCardContent({
       : `0 0 ${variant === 'realm' ? '25px' : '20px'} ${colors.primary}35, inset 0 0 ${variant === 'realm' ? '15px' : '12px'} ${colors.primary}15`,
   }), [colors.primary, isHovered, variant]);
 
+  // Render icon based on variant to avoid TypeScript spread issues
+  const renderMainIcon = () => {
+    const iconStyle = { color: colors.primary };
+    if (variant === 'realm') {
+      return <RealmIcon realm={key as Realm} size={28} strokeWidth={1.5} style={iconStyle} />;
+    }
+    return <LayerIcon layer={key as Layer} size={22} strokeWidth={1.5} style={iconStyle} />;
+  };
+
+  const renderBadgeIcon = () => {
+    const iconStyle = { color: colors.primary };
+    if (variant === 'realm') {
+      return <RealmIcon realm={key as Realm} size={12} strokeWidth={2} style={iconStyle} />;
+    }
+    return <LayerIcon layer={key as Layer} size={10} strokeWidth={2} style={iconStyle} />;
+  };
+
   return (
     <div className={variant === 'realm' ? 'px-6 py-5' : 'px-4 py-4'}>
       {/* Top row: Icon left, Badges right */}
@@ -86,26 +99,14 @@ export const AttractorCardContent = memo(function AttractorCardContent({
           )}
           style={iconContainerStyle}
         >
-          <IconComponent
-            {...(variant === 'realm' ? { realm: iconKey as Realm } : { layer: iconKey as Layer })}
-            size={iconSize}
-            strokeWidth={1.5}
-            style={{ color: colors.primary }}
-          />
+          {renderMainIcon()}
         </div>
 
         {/* Stacked badges on right */}
         <div className={cn('flex flex-col items-end', variant === 'realm' ? 'gap-2' : 'gap-1.5')}>
           <GlowBadge
             label={badgeLabel}
-            icon={
-              <IconComponent
-                {...(variant === 'realm' ? { realm: iconKey as Realm } : { layer: iconKey as Layer })}
-                size={variant === 'realm' ? 12 : 10}
-                strokeWidth={2}
-                style={{ color: colors.primary }}
-              />
-            }
+            icon={renderBadgeIcon()}
             color={colors.primary}
             size={variant === 'realm' ? 'lg' : 'md'}
           />

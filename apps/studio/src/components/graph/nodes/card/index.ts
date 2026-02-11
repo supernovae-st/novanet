@@ -36,6 +36,8 @@ export {
   type AttractorNodeData,
 } from './presets/AttractorCardContent';
 
-// TODO: Add more presets as needed
-// export { ProjectCardContent } from './presets/ProjectCardContent';
-// export { KnowledgeCardContent } from './presets/KnowledgeCardContent';
+export {
+  ProjectCardContent,
+  type ProjectCardContentProps,
+  type ProjectNodeData,
+} from './presets/ProjectCardContent';

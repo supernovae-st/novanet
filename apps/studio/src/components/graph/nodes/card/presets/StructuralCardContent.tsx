@@ -20,6 +20,7 @@ import { LayerIcon } from '@/components/ui/CategoryIcon';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
 import { gapTokens } from '@/design/tokens';
 import type { CardContext } from '../CardShell';
+import type { Layer } from '@novanet/core/types';
 
 // =============================================================================
 // Types
@@ -46,7 +47,9 @@ export const StructuralCardContent = memo(function StructuralCardContent({
   selected,
   isHovered,
 }: StructuralCardContentProps) {
-  const config = NODE_TYPE_CONFIG[data.type] || { label: data.type, layer: 'foundation' };
+  // Type-safe config lookup with fallback
+  const config = (NODE_TYPE_CONFIG as Record<string, { label: string; layer: string }>)[data.type]
+    || { label: data.type, layer: 'foundation' };
 
   // Memoize icon style
   const iconStyle = useMemo(() => ({
@@ -60,7 +63,7 @@ export const StructuralCardContent = memo(function StructuralCardContent({
       <div className="flex items-center justify-between mb-1.5">
         <div className={cn('flex items-center', gapTokens.default)}>
           <LayerIcon
-            layer={config.layer}
+            layer={config.layer as Layer}
             size={20}
             strokeWidth={2}
             className={cn(
