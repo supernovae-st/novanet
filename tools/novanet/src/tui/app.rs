@@ -39,43 +39,33 @@ pub const INFO_SCROLL_MARGIN: usize = 5;
 /// Default tree height (updated by UI on render).
 pub const DEFAULT_TREE_HEIGHT: usize = 20;
 
-/// Navigation mode — 5 independent modes in v11.6 redesign.
-/// Order: 1:Meta 2:Data 3:Audit 4:Nexus 5:Atlas
-/// Keys 1-5 switch modes GLOBALLY from anywhere.
+/// Navigation mode — 2 modes in v11.7 Unified Tree.
+/// Order: 1:Graph 2:Nexus
+/// Keys 1-2 switch modes GLOBALLY from anywhere.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum NavMode {
-    /// Meta mode: Taxonomy view (Realm > Layer > Kind hierarchy, schema-focused)
+    /// Graph mode: Unified tree view (Realm > Layer > Kind hierarchy with instances)
+    /// Replaces Meta/Data/Overlay modes from v11.6
     #[default]
-    Meta,
-    /// Data mode: Instances view (actual data nodes under each Kind)
-    Data,
-    /// Audit mode: Schema validation and statistics
-    Audit,
-    /// Nexus mode: Gamified learning hub
+    Graph,
+    /// Nexus mode: Hub for Quiz, Audit, Stats, Help
+    /// Replaces Atlas mode from v11.6
     Nexus,
-    /// Atlas mode: Interactive architecture visualizations
-    Atlas,
 }
 
 impl NavMode {
     pub fn label(&self) -> &'static str {
         match self {
-            NavMode::Meta => "Meta",
-            NavMode::Data => "Data",
-            NavMode::Audit => "Audit",
+            NavMode::Graph => "Graph",
             NavMode::Nexus => "Nexus",
-            NavMode::Atlas => "Atlas",
         }
     }
 
-    /// Get array index for mode_cursors (0-4).
+    /// Get array index for mode_cursors (0-1).
     pub fn index(&self) -> usize {
         match self {
-            NavMode::Meta => 0,
-            NavMode::Data => 1,
-            NavMode::Audit => 2,
-            NavMode::Nexus => 3,
-            NavMode::Atlas => 4,
+            NavMode::Graph => 0,
+            NavMode::Nexus => 1,
         }
     }
 }
@@ -183,8 +173,8 @@ pub struct App {
     pub mode: NavMode,
     pub focus: Focus,
     pub tree_cursor: usize,
-    /// Remember cursor position per mode (Meta, Data, Audit, Nexus, Atlas).
-    pub mode_cursors: [usize; 5],
+    /// Remember cursor position per mode (Graph, Nexus).
+    pub mode_cursors: [usize; 2],
     pub tree_scroll: usize, // Scroll offset for tree
     pub tree_height: usize, // Visible height (set by UI)
     pub tree: TaxonomyTree,
@@ -311,10 +301,10 @@ impl App {
     pub fn new(tree: TaxonomyTree, root_path: String) -> Self {
         let mut app = Self {
             theme: Theme::with_root(&root_path), // Load colors + icons from YAML
-            mode: NavMode::Meta,
+            mode: NavMode::Graph,
             focus: Focus::Tree,
             tree_cursor: 0,
-            mode_cursors: [0; 5], // Init all modes at cursor 0 (Meta, Data, Audit, Nexus, Atlas)
+            mode_cursors: [0; 2], // Init all modes at cursor 0 (Graph, Nexus)
             tree_scroll: 0,
             tree_height: DEFAULT_TREE_HEIGHT,
             tree,
@@ -386,8 +376,8 @@ impl App {
     /// - Audit/Nexus → Kind section
     pub fn yaml_active_section(&self) -> YamlViewSection {
         match self.mode {
-            NavMode::Meta | NavMode::Audit | NavMode::Nexus | NavMode::Atlas => YamlViewSection::Kind,
-            NavMode::Data => YamlViewSection::Instance,
+            // Graph mode shows Kind schema, Nexus shows Kind schema
+            NavMode::Graph | NavMode::Nexus => YamlViewSection::Kind,
         }
     }
 
@@ -897,60 +887,23 @@ impl App {
                 true
             }
 
-            // Mode switching: 1-4 global (1=Meta, 2=Data, 3=Audit, 4=Nexus)
+            // Mode switching: 1-2 global (1=Graph, 2=Nexus)
             KeyCode::Char('1') => {
-                // Switch to Meta mode
-                if self.mode != NavMode::Meta {
-                    self.exit_filtered_data_mode();
+                // Switch to Graph mode (unified tree view)
+                if self.mode != NavMode::Graph {
                     self.save_mode_cursor();
-                    self.mode = NavMode::Meta;
-                    self.restore_mode_cursor(NavMode::Meta);
+                    self.mode = NavMode::Graph;
+                    self.restore_mode_cursor(NavMode::Graph);
                     self.load_yaml_for_current();
                 }
                 true
             }
             KeyCode::Char('2') => {
-                // Switch to Data mode
-                if self.mode != NavMode::Data {
-                    self.exit_filtered_data_mode();
-                    self.save_mode_cursor();
-                    self.mode = NavMode::Data;
-                    self.restore_mode_cursor(NavMode::Data);
-                    // Auto-expand current Kind when switching to Data mode
-                    self.auto_expand_current_kind_for_instances();
-                    self.load_yaml_for_current();
-                }
-                true
-            }
-            KeyCode::Char('3') => {
-                // Switch to Audit mode
-                if self.mode != NavMode::Audit {
-                    self.exit_filtered_data_mode();
-                    self.save_mode_cursor();
-                    self.mode = NavMode::Audit;
-                    self.restore_mode_cursor(NavMode::Audit);
-                    self.pending_audit_load = true;
-                }
-                true
-            }
-            KeyCode::Char('4') => {
-                // Switch to Nexus mode
+                // Switch to Nexus mode (hub for Quiz, Audit, Stats, Help)
                 if self.mode != NavMode::Nexus {
-                    self.exit_filtered_data_mode();
                     self.save_mode_cursor();
                     self.mode = NavMode::Nexus;
                     self.restore_mode_cursor(NavMode::Nexus);
-                }
-                true
-            }
-            KeyCode::Char('5') => {
-                // Switch to Atlas mode
-                if self.mode != NavMode::Atlas {
-                    self.exit_filtered_data_mode();
-                    self.save_mode_cursor();
-                    self.mode = NavMode::Atlas;
-                    self.restore_mode_cursor(NavMode::Atlas);
-                    self.init_atlas_from_current();
                 }
                 true
             }
@@ -1285,19 +1238,16 @@ impl App {
                 true
             }
 
-            // Esc: close peek (YAML), or exit filtered Data mode
+            // Esc: close peek (YAML), or exit filtered mode
             KeyCode::Esc => {
                 // First priority: close yaml peek if active
                 if self.yaml_peek {
                     self.yaml_peek = false;
                     return true;
                 }
-                // Second priority: exit filtered Data mode (switch to Meta mode)
+                // Second priority: exit filtered mode (stay in Graph mode)
                 if self.is_filtered_data_mode() {
                     self.exit_filtered_data_mode();
-                    self.save_mode_cursor();
-                    self.mode = NavMode::Meta;
-                    self.restore_mode_cursor(NavMode::Meta);
                     return true;
                 }
                 false
@@ -1411,9 +1361,10 @@ impl App {
         }
     }
 
-    /// Check if currently in Data mode (showing instances).
+    /// Check if currently in a mode that shows instances (Graph mode shows instances).
+    /// In v11.7 unified tree, Graph mode is the unified view that always shows instances.
     pub fn is_data_mode(&self) -> bool {
-        self.mode == NavMode::Data
+        self.mode == NavMode::Graph
     }
 
     /// Save current cursor to mode_cursors for the current mode.
@@ -1956,13 +1907,14 @@ impl App {
     }
 
     // =========================================================================
-    // Audit Mode Methods (Feature 6)
+    // Audit Methods (now part of Nexus mode)
     // =========================================================================
 
     /// Check if Audit stats need loading (returns true once then resets).
+    /// Audit is now a sub-feature of Nexus mode.
     #[allow(dead_code)] // WIP: Audit mode implementation
     pub fn take_pending_audit_load(&mut self) -> bool {
-        if self.pending_audit_load && self.mode == NavMode::Audit {
+        if self.pending_audit_load && self.mode == NavMode::Nexus {
             self.pending_audit_load = false;
             true
         } else {
@@ -2167,45 +2119,45 @@ mod tests {
     }
 
     // ========================================================================
-    // Mode tests (v11.6: 4 independent modes)
+    // Mode tests (v11.7: 2 modes - Graph and Nexus)
     // ========================================================================
 
     #[test]
-    fn test_mode_starts_as_meta() {
+    fn test_mode_starts_as_graph() {
         let app = create_test_app();
-        assert_eq!(app.mode, NavMode::Meta);
-        assert!(!app.is_data_mode()); // Meta mode = not data mode
+        assert_eq!(app.mode, NavMode::Graph);
+        assert!(app.is_data_mode()); // Graph mode shows instances
     }
 
     #[test]
-    fn test_switch_to_data_mode_preserves_cursor() {
+    fn test_graph_mode_shows_instances() {
         let mut app = create_test_app();
 
         // Navigate to Locale kind (index 3)
         // Kinds (0), shared (1), locale (2), Locale (3)
         app.tree_cursor = 3;
 
-        // Verify we're at Locale in Meta mode
+        // Verify we're at Locale in Graph mode
         match app.tree.item_at(app.tree_cursor) {
             Some(TreeItem::Kind(_, _, k)) => assert_eq!(k.key, "Locale"),
             other => panic!("Expected Kind Locale, got {:?}", other),
         }
 
-        // Switch to Data mode
-        app.mode = NavMode::Data;
+        // Graph mode should show instances (is_data_mode returns true)
+        assert!(app.is_data_mode());
 
-        // Cursor should still be at same position
+        // Cursor should be valid
         assert_eq!(app.tree_cursor, 3);
 
         // Item at cursor should still be Locale kind
         match app.current_item() {
             Some(TreeItem::Kind(_, _, k)) => assert_eq!(k.key, "Locale"),
-            other => panic!("Expected Kind Locale in Data mode, got {:?}", other),
+            other => panic!("Expected Kind Locale in Graph mode, got {:?}", other),
         }
     }
 
     #[test]
-    fn test_data_mode_shows_instances_after_kind() {
+    fn test_graph_mode_shows_instances_after_kind() {
         let mut app = create_test_app();
 
         // Add instances to Locale kind
@@ -2236,8 +2188,7 @@ mod tests {
         app.tree
             .set_instances("Locale", instances.clone(), instances.len());
 
-        // Switch to Data mode
-        app.mode = NavMode::Data;
+        // Graph mode (default) shows instances
 
         // Item count should include instances
         // Taxonomy: 1 (Kinds) + 1 (shared) + 1 (locale) + 1 (Locale)
@@ -2265,7 +2216,7 @@ mod tests {
     }
 
     #[test]
-    fn test_meta_mode_hides_instances() {
+    fn test_graph_mode_counts_instances() {
         let mut app = create_test_app();
 
         // Add instances
@@ -2283,74 +2234,45 @@ mod tests {
         app.tree
             .set_instances("Locale", instances.clone(), instances.len());
 
-        // In Meta mode, instances should not be counted
-        assert_eq!(app.mode, NavMode::Meta);
-        assert_eq!(app.current_item_count(), 8); // No instances
-
-        // Position 4 should be org realm (not an instance)
-        app.tree_cursor = 4;
-        match app.current_item() {
-            Some(TreeItem::Realm(r)) => assert_eq!(r.key, "org"),
-            other => panic!("Expected Realm org, got {:?}", other),
-        }
+        // In Graph mode, instances are visible
+        assert_eq!(app.mode, NavMode::Graph);
+        // 8 base items + 1 instance = 9 items
+        assert_eq!(app.current_item_count(), 9);
     }
 
     #[test]
     fn test_nav_mode_label() {
-        assert_eq!(NavMode::Meta.label(), "Meta");
-        assert_eq!(NavMode::Data.label(), "Data");
-        assert_eq!(NavMode::Audit.label(), "Audit");
+        assert_eq!(NavMode::Graph.label(), "Graph");
         assert_eq!(NavMode::Nexus.label(), "Nexus");
     }
 
     #[test]
     fn test_nav_mode_index() {
-        assert_eq!(NavMode::Meta.index(), 0);
-        assert_eq!(NavMode::Data.index(), 1);
-        assert_eq!(NavMode::Audit.index(), 2);
-        assert_eq!(NavMode::Nexus.index(), 3);
+        assert_eq!(NavMode::Graph.index(), 0);
+        assert_eq!(NavMode::Nexus.index(), 1);
     }
 
     #[test]
-    fn test_key_1_switches_to_meta() {
+    fn test_key_1_switches_to_graph() {
         let mut app = create_test_app();
-        app.mode = NavMode::Audit; // Start in Audit
+        app.mode = NavMode::Nexus; // Start in Nexus
 
         app.handle_key(crossterm::event::KeyEvent::from(KeyCode::Char('1')));
 
-        assert_eq!(app.mode, NavMode::Meta);
+        assert_eq!(app.mode, NavMode::Graph);
     }
 
     #[test]
-    fn test_key_2_switches_to_data() {
+    fn test_key_2_switches_to_nexus() {
         let mut app = create_test_app();
 
         app.handle_key(crossterm::event::KeyEvent::from(KeyCode::Char('2')));
-
-        assert_eq!(app.mode, NavMode::Data);
-        assert!(app.is_data_mode());
-    }
-
-    #[test]
-    fn test_key_3_switches_to_audit() {
-        let mut app = create_test_app();
-
-        app.handle_key(crossterm::event::KeyEvent::from(KeyCode::Char('3')));
-
-        assert_eq!(app.mode, NavMode::Audit);
-    }
-
-    #[test]
-    fn test_key_4_switches_to_nexus() {
-        let mut app = create_test_app();
-
-        app.handle_key(crossterm::event::KeyEvent::from(KeyCode::Char('4')));
 
         assert_eq!(app.mode, NavMode::Nexus);
     }
 
     #[test]
-    fn test_collapsed_kind_hides_instances_in_data_mode() {
+    fn test_collapsed_kind_hides_instances_in_graph_mode() {
         let mut app = create_test_app();
 
         // Add instances
@@ -2381,8 +2303,8 @@ mod tests {
         app.tree
             .set_instances("Locale", instances.clone(), instances.len());
 
-        // Switch to Data mode
-        app.mode = NavMode::Data;
+        // Graph mode (default) shows instances
+        assert_eq!(app.mode, NavMode::Graph);
 
         // With expanded Locale: 10 items
         assert_eq!(app.current_item_count(), 10);
@@ -2390,7 +2312,7 @@ mod tests {
         // Collapse Locale's instances (using toggle since it starts expanded)
         app.tree.toggle("kind:Locale");
 
-        // Now: 8 items (instances hidden even in Data mode)
+        // Now: 8 items (instances hidden when collapsed)
         assert_eq!(app.current_item_count(), 8);
     }
 
@@ -2403,7 +2325,7 @@ mod tests {
         app.tree_scroll = 3;
         app.info_scroll = 2;
         app.yaml_scroll = 1;
-        app.mode = NavMode::Data; // Must be in Data mode for filtered mode
+        app.mode = NavMode::Graph; // Graph mode shows instances
 
         app.enter_filtered_data_mode("Locale".to_string());
 
@@ -2421,7 +2343,7 @@ mod tests {
     fn test_filtered_mode_exit_restores_cursor() {
         let mut app = create_test_app();
         app.tree_cursor = 5;
-        app.mode = NavMode::Data;
+        app.mode = NavMode::Graph;
 
         app.enter_filtered_data_mode("Locale".to_string());
         assert_eq!(app.tree_cursor, 0);
@@ -2434,7 +2356,7 @@ mod tests {
     #[test]
     fn test_filtered_mode_exit_clamps_cursor_to_bounds() {
         let mut app = create_test_app();
-        app.mode = NavMode::Data;
+        app.mode = NavMode::Graph;
         app.tree_cursor = 100; // Way beyond valid range
         app.data_cursor_before_filter = 100;
         app.data_filter_kind = Some("Locale".to_string());
@@ -2449,7 +2371,7 @@ mod tests {
     #[test]
     fn test_filtered_mode_empty_instances() {
         let mut app = create_test_app();
-        app.mode = NavMode::Data;
+        app.mode = NavMode::Graph;
         // Page has no instances loaded
         app.enter_filtered_data_mode("Page".to_string());
 
@@ -2464,7 +2386,7 @@ mod tests {
     #[test]
     fn test_filtered_mode_with_instances() {
         let mut app = create_test_app();
-        app.mode = NavMode::Data;
+        app.mode = NavMode::Graph;
 
         // Add instances to Locale kind
         let instances = vec![
@@ -2511,7 +2433,7 @@ mod tests {
     #[test]
     fn test_key_esc_exits_filtered_mode() {
         let mut app = create_test_app();
-        app.mode = NavMode::Data;
+        app.mode = NavMode::Graph;
         app.enter_filtered_data_mode("Locale".to_string());
 
         assert!(app.is_filtered_data_mode());
@@ -2521,23 +2443,25 @@ mod tests {
 
         assert!(handled);
         assert!(!app.is_filtered_data_mode());
-        // v11.6: Esc exits filtered mode and switches to Meta mode
-        assert_eq!(app.mode, NavMode::Meta);
+        // v11.7: Esc exits filtered mode, stays in Graph mode
+        assert_eq!(app.mode, NavMode::Graph);
     }
 
     #[test]
-    fn test_key_1_exits_filtered_mode() {
+    fn test_key_1_in_graph_mode_no_mode_change() {
         let mut app = create_test_app();
-        app.mode = NavMode::Data;
+        app.mode = NavMode::Graph;
         app.enter_filtered_data_mode("Locale".to_string());
 
         assert!(app.is_filtered_data_mode());
 
-        // Press 1 (switch to Meta mode, exits filtered mode)
+        // Press 1 (Graph mode - already in Graph mode, so no mode change)
         app.handle_key(crossterm::event::KeyEvent::from(KeyCode::Char('1')));
 
-        assert!(!app.is_filtered_data_mode());
-        assert_eq!(app.mode, NavMode::Meta);
+        // v11.7: Key 1 = Graph mode, already in Graph so filtered mode stays
+        // Use Esc to exit filtered mode instead
+        assert!(app.is_filtered_data_mode());
+        assert_eq!(app.mode, NavMode::Graph);
     }
 
     // ========================================================================
@@ -3378,11 +3302,11 @@ mod tests {
         app.search.active = true;
         app.update_search();
 
-        // Switch mode directly (to Audit, for example)
-        app.mode = NavMode::Audit;
+        // Switch mode directly (to Nexus, for example)
+        app.mode = NavMode::Nexus;
 
         // Search state should still exist
-        assert_eq!(app.mode, NavMode::Audit);
+        assert_eq!(app.mode, NavMode::Nexus);
         // Search results preserved (or cleared depending on design)
     }
 

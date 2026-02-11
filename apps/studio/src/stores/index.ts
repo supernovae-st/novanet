@@ -10,3 +10,5 @@ export { useChatStore } from './chatStore';
 export { useQueryStore } from './queryStore';
 export { useViewStore } from './viewStore';
 export { useAnimationStore } from './animationStore';
+export { useSchemaStore } from './schemaStore';
+export { useTreeStore } from './treeStore';

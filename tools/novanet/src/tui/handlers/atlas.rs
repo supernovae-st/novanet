@@ -61,7 +61,7 @@ mod tests {
     #[test]
     fn test_atlas_help_key() {
         let mut app = test_app();
-        app.mode = crate::tui::app::NavMode::Atlas;
+        app.mode = crate::tui::app::NavMode::Nexus; // Atlas is now part of Nexus
         app.help_active = false;
 
         let result = handle_atlas_key(&mut app, key(KeyCode::Char('?')));
@@ -73,7 +73,7 @@ mod tests {
     #[test]
     fn test_atlas_view_switch_delegates() {
         let mut app = test_app();
-        app.mode = crate::tui::app::NavMode::Atlas;
+        app.mode = crate::tui::app::NavMode::Nexus; // Atlas is now part of Nexus
 
         // These should delegate to AtlasState which handles a-f for views
         let result = handle_atlas_key(&mut app, key(KeyCode::Char('a')));
@@ -83,7 +83,7 @@ mod tests {
     #[test]
     fn test_atlas_mode_switch_falls_through() {
         let mut app = test_app();
-        app.mode = crate::tui::app::NavMode::Atlas;
+        app.mode = crate::tui::app::NavMode::Nexus; // Atlas is now part of Nexus
 
         assert_eq!(
             handle_atlas_key(&mut app, key(KeyCode::Char('1'))),
@@ -98,7 +98,7 @@ mod tests {
     #[test]
     fn test_atlas_unknown_key_falls_through() {
         let mut app = test_app();
-        app.mode = crate::tui::app::NavMode::Atlas;
+        app.mode = crate::tui::app::NavMode::Nexus; // Atlas is now part of Nexus
 
         // An unhandled key should fall through
         assert_eq!(
