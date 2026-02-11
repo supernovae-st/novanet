@@ -320,13 +320,13 @@ export const FloatingEdge = memo(function FloatingEdge({
   // Get effective tier (may be downgraded if connected to hub node)
   const effectTier = getEffectiveTier(id);
 
-  // Extract node positions
-  const sourceX = sourceNode?.internals.positionAbsolute.x ?? 0;
-  const sourceY = sourceNode?.internals.positionAbsolute.y ?? 0;
+  // Extract node positions (defensive: internals/positionAbsolute may be undefined during mount)
+  const sourceX = sourceNode?.internals?.positionAbsolute?.x ?? 0;
+  const sourceY = sourceNode?.internals?.positionAbsolute?.y ?? 0;
   const sourceWidth = sourceNode?.measured?.width ?? 200;
   const sourceHeight = sourceNode?.measured?.height ?? 100;
-  const targetX = targetNode?.internals.positionAbsolute.x ?? 0;
-  const targetY = targetNode?.internals.positionAbsolute.y ?? 0;
+  const targetX = targetNode?.internals?.positionAbsolute?.x ?? 0;
+  const targetY = targetNode?.internals?.positionAbsolute?.y ?? 0;
   const targetWidth = targetNode?.measured?.width ?? 200;
   const targetHeight = targetNode?.measured?.height ?? 100;
 

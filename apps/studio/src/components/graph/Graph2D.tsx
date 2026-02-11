@@ -547,8 +547,9 @@ function Graph2DInner({
 
           // CRITICAL: Use positionAbsolute for nested nodes (inside group containers)
           // node.position is relative to parent, positionAbsolute is canvas-absolute
-          const finalX = internalNode.internals.positionAbsolute.x;
-          const finalY = internalNode.internals.positionAbsolute.y;
+          // Defensive: internals/positionAbsolute may be undefined during initialization
+          const finalX = internalNode.internals?.positionAbsolute?.x ?? node.position.x;
+          const finalY = internalNode.internals?.positionAbsolute?.y ?? node.position.y;
 
           centerOnNode(
             finalX,
