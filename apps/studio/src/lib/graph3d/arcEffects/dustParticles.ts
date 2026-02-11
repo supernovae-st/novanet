@@ -15,6 +15,7 @@
 
 import * as THREE from 'three';
 import type { ArcFamily } from '@/lib/graph3d/arcParticles';
+import { calculateHelixOffset } from './shaderUtils';
 
 // =============================================================================
 // TYPES
@@ -255,6 +256,12 @@ export class DustParticleSystem {
         this.targetPos,
         t
       );
+
+      // Apply helix motion (zig-zag path) - subtle oscillation perpendicular to arc
+      const helixAmplitude = 0.15;  // How far from center line
+      const helixFrequency = 2.5;   // Number of oscillations along arc
+      const helixOffset = calculateHelixOffset(t, helixAmplitude, helixFrequency, phase, time);
+      basePos.add(helixOffset);
 
       // Calculate perpendicular offset based on drift type
       const perpOffset = new THREE.Vector3();
