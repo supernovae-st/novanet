@@ -12,7 +12,7 @@
 
 import {
   getArcFamily as getArcFamilyUnified,
-  ARC_FAMILY_HEX,
+  ARC_PARTICLE_COLORS,
   type ArcFamilyKey,
 } from '@/design/colors/palette';
 
@@ -40,14 +40,16 @@ export interface ArcParticleConfig {
  * - linkWidth: 0.2-0.4 (hair-thin, just a hint)
  * - linkOpacity: 0.05-0.08 (near transparent)
  * - curvature: 0-0.25 for elegant arcs
+ *
+ * Colors are derived from taxonomy.yaml via ARC_PARTICLE_COLORS
  */
 export const ARC_PARTICLE_CONFIG: Record<ArcFamily, ArcParticleConfig> = {
   ownership: {
     particles: 20,             // Continuous stream
     particleSpeed: 0.012,      // Steady flow
     particleWidth: 5,          // Bright orbs
-    particleColor: '#60a5fa',  // Bright blue (blue-400)
-    linkColor: '#1e3a5f',      // Very dark blue - barely visible guide
+    particleColor: ARC_PARTICLE_COLORS.ownership.particleColor,
+    linkColor: ARC_PARTICLE_COLORS.ownership.linkColor,
     linkWidth: 0.3,            // Hair-thin guide
     linkOpacity: 0.15,         // Low opacity
     curvature: 0,              // Straight ownership links
@@ -56,8 +58,8 @@ export const ARC_PARTICLE_CONFIG: Record<ArcFamily, ArcParticleConfig> = {
     particles: 15,             // Flowing particles
     particleSpeed: 0.008,      // Slower, undulating
     particleWidth: 6,          // Larger orbs
-    particleColor: '#4ade80',  // Bright green (green-400)
-    linkColor: '#134e3a',      // Very dark green
+    particleColor: ARC_PARTICLE_COLORS.localization.particleColor,
+    linkColor: ARC_PARTICLE_COLORS.localization.linkColor,
     linkWidth: 0.25,           // Hair-thin
     linkOpacity: 0.15,         // Low opacity
     curvature: 0.2,            // Gentle curve
@@ -66,8 +68,8 @@ export const ARC_PARTICLE_CONFIG: Record<ArcFamily, ArcParticleConfig> = {
     particles: 25,             // Dense sparking stream
     particleSpeed: 0.02,       // Fast synaptic firing
     particleWidth: 4,          // Smaller, numerous
-    particleColor: '#fb923c',  // Bright orange (orange-400)
-    linkColor: '#431407',      // Very dark orange/brown
+    particleColor: ARC_PARTICLE_COLORS.semantic.particleColor,
+    linkColor: ARC_PARTICLE_COLORS.semantic.linkColor,
     linkWidth: 0.2,            // Thinnest - synapses don't need thick lines
     linkOpacity: 0.15,         // Low opacity
     curvature: 0.1,            // Slight curve
@@ -76,8 +78,8 @@ export const ARC_PARTICLE_CONFIG: Record<ArcFamily, ArcParticleConfig> = {
     particles: 30,             // Cascading energy
     particleSpeed: 0.025,      // Fast cascade
     particleWidth: 5,          // Medium orbs
-    particleColor: '#a78bfa',  // Bright purple (violet-400)
-    linkColor: '#2e1065',      // Very dark violet
+    particleColor: ARC_PARTICLE_COLORS.generation.particleColor,
+    linkColor: ARC_PARTICLE_COLORS.generation.linkColor,
     linkWidth: 0.35,           // Slightly thicker for generation flow
     linkOpacity: 0.2,          // Slightly more visible
     curvature: 0,              // Straight generation flow
@@ -86,8 +88,8 @@ export const ARC_PARTICLE_CONFIG: Record<ArcFamily, ArcParticleConfig> = {
     particles: 12,             // Radar pulses
     particleSpeed: 0.006,      // Slow sweep
     particleWidth: 7,          // Large pings - radar style
-    particleColor: '#f472b6',  // Bright pink (pink-400)
-    linkColor: '#500724',      // Very dark pink/maroon
+    particleColor: ARC_PARTICLE_COLORS.mining.particleColor,
+    linkColor: ARC_PARTICLE_COLORS.mining.linkColor,
     linkWidth: 0.25,           // Thin
     linkOpacity: 0.15,         // Low opacity
     curvature: 0.25,           // Curved sweep
