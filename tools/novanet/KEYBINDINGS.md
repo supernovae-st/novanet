@@ -2,99 +2,137 @@
 
 Complete keyboard shortcuts reference for the NovaNet Terminal UI.
 
-> **v11.6**: Navigation redesign - 4 independent modes (Meta, Data, Audit, Nexus).
-> Keys 1-4 switch modes GLOBALLY from anywhere. Nexus uses [ ] for tabs.
+> **v11.7**: Unified Tree Architecture - 2 modes (Graph, Nexus) with lazy instance loading.
+> Key `1` = Graph (unified tree), Key `2` = Nexus (hub). Search via `/` overlay.
 > Source of truth: `src/tui/app.rs` (handle_key)
 
 ---
 
-## Navigation Modes (v11.6)
+## Navigation Modes (v11.7)
 
-| Key | Action |
-|-----|--------|
-| `1` | Switch to Meta mode (schema taxonomy view) |
-| `2` | Switch to Data mode (instances view) |
-| `3` | Switch to Audit mode (schema validation) |
-| `4` | Switch to Nexus mode (gamified learning hub) |
-| `Tab` | Cycle focus: Tree → Info → Graph → YAML |
-| `Shift+Tab` | Cycle focus backwards |
-| `` ` `` | Open recent items popup (navigation history) |
+| Key | Mode | Description |
+|-----|------|-------------|
+| `1` | Graph | Unified tree (Realm > Layer > Kind > Instance + Arcs) |
+| `2` | Nexus | Hub (Quiz, Audit, Stats, Help) |
+| `/` | Search | Overlay search (filter nodes/arcs) |
 
-**Mode indicator**: Header shows `[1]Meta [2]Data [3]Audit [4]Nexus` with active mode highlighted.
+**Mode indicator**: Header shows `[1]Graph [2]Nexus` with active mode highlighted.
+
+> **Deprecated (v11.6)**: Keys `3` (Audit) and `4` (Nexus) are no longer separate modes.
+> Audit and Stats are now accessible from Nexus hub via `A` and `S`.
 
 ---
 
-## Tree Navigation
+## Unified Tree Navigation (v11.7)
+
+The unified tree combines schema (meta) and instances (data) in a single hierarchy:
+
+```
+Realm > Layer > Kind > Instance
+              > Arc Family > Arc Kind
+```
 
 | Key | Action |
 |-----|--------|
-| `j` / `Down` | Move cursor down |
-| `k` / `Up` | Move cursor up |
-| `h` | Collapse node |
-| `l` | Expand node |
-| `Space` | Toggle collapse/expand |
-| `Enter` | Toggle collapse/expand |
+| `j` / `Down` | Move down in tree |
+| `k` / `Up` | Move up in tree |
+| `h` / `Left` | Collapse node |
+| `l` / `Right` / `Enter` | Expand node / Select |
+| `Space` | Toggle expand/collapse |
+| `Tab` | Switch focus (Tree <-> Detail panel) |
+| `Shift+Tab` | Switch focus backwards |
+| `g` | Go to top of tree |
+| `G` | Go to bottom of tree |
+| `d` | Page down (half screen) |
+| `u` | Page up (half screen) |
+| `p` | Jump to parent node |
+
+### Subtree Operations
+
+| Key | Action |
+|-----|--------|
 | `e` / `E` | Expand subtree under cursor |
 | `c` | Collapse subtree under cursor |
 | `H` | Collapse all (global) |
 | `L` | Expand all (global) |
-| `p` | Jump to parent node |
-| `0` | Toggle hide empty (Data mode only) |
-| `d` | Page down (half screen) |
-| `u` | Page up (half screen) |
-| `g` | Jump to first item |
-| `G` | Jump to last item |
 
 ---
 
-## Panel Scrolling
+## Instance Loading (v11.7)
 
-When Info, YAML, or JSON panel is focused:
+Instances are loaded lazily when expanding a Kind node.
 
 | Key | Action |
 |-----|--------|
-| `j` / `Down` | Scroll down 1 line |
-| `k` / `Up` | Scroll up 1 line |
-| `d` | Scroll down half page |
-| `u` | Scroll up half page |
-| `g` | Scroll to top |
-| `G` | Scroll to bottom |
+| `Enter` on Kind | Expand to show first 10 instances |
+| `Enter` on "Load more..." | Load next 50 instances |
+| `r` | Refresh instance count for current Kind |
+| `R` | Refresh all instance counts |
 
-Scrollbars are displayed when content exceeds visible area.
+**Visual indicators**:
+- `(42)` after Kind name = instance count
+- `[+50 more]` = additional instances available
+- Spinner shown while loading
 
 ---
 
-## Search & Help
+## Nexus Hub (v11.7)
+
+The Nexus hub provides gamified learning and system tools.
+
+### Quick Access (from Graph mode)
 
 | Key | Action |
 |-----|--------|
-| `/` | Open search overlay (vim-style) |
-| `?` | Open help overlay (keyboard shortcuts) |
-| `F1` | Open color legend overlay (Realm/Layer/Trait colors) |
-| `Esc` | Close current overlay |
+| `2` | Enter Nexus hub |
+| `Q` | Jump to Quiz mode |
+| `A` | Jump to Audit mode |
+| `S` | Jump to Stats dashboard |
+| `?` | Jump to Help overlay |
 
----
-
-## Trait Filter (v11.6.2)
-
-Quick filter to show only Kinds matching a specific trait. Works in Meta mode.
-Press `f` followed by the trait key to filter.
+### Within Nexus Mode
 
 | Key | Action |
 |-----|--------|
-| `fi` | Filter: invariant (■) |
-| `fl` | Filter: localized (□) |
-| `fk` | Filter: knowledge (◊) |
-| `fg` | Filter: generated (★) |
-| `fa` | Filter: aggregated (▪) |
-| `ff` | Clear filter (show all) |
+| `1` | Back to Graph mode |
+| `[` | Previous tab |
+| `]` | Next tab |
+| `Tab` | Cycle to next tab |
+| `Shift+Tab` | Cycle to previous tab |
 
-When a filter is active, the title bar shows the active trait (e.g., `◆ Schema │ ■ invariant`).
-Layers and Realms with no matching Kinds are hidden.
+**Tabs**: Quiz | Audit | Stats | Help
+
+### Quiz Mode
+
+| Key | Action |
+|-----|--------|
+| `j` / `Down` | Select next answer |
+| `k` / `Up` | Select previous answer |
+| `Enter` | Submit answer / Next question |
+| `r` | Restart quiz (when complete) |
+| `y` | Yank current question text |
+
+### Audit Mode
+
+| Key | Action |
+|-----|--------|
+| `j` / `Down` | Navigate audit results |
+| `k` / `Up` | Navigate audit results |
+| `Enter` | View details |
+| `r` | Re-run audit |
+
+### Stats Dashboard
+
+| Key | Action |
+|-----|--------|
+| `r` | Refresh stats |
+| `y` | Yank stats as JSON |
 
 ---
 
 ## Search Overlay
+
+Press `/` from anywhere to open search.
 
 | Key | Action |
 |-----|--------|
@@ -108,6 +146,38 @@ Layers and Realms with no matching Kinds are hidden.
 
 ---
 
+## Trait Filter
+
+Quick filter to show only Kinds matching a specific trait.
+
+| Key | Action |
+|-----|--------|
+| `fi` | Filter: invariant |
+| `fl` | Filter: localized |
+| `fk` | Filter: knowledge |
+| `fg` | Filter: generated |
+| `fa` | Filter: aggregated |
+| `ff` | Clear filter (show all) |
+
+When a filter is active, the title bar shows the active trait.
+
+---
+
+## Panel Scrolling
+
+When Detail or YAML panel is focused:
+
+| Key | Action |
+|-----|--------|
+| `j` / `Down` | Scroll down 1 line |
+| `k` / `Up` | Scroll up 1 line |
+| `d` | Scroll down half page |
+| `u` | Scroll up half page |
+| `g` | Scroll to top |
+| `G` | Scroll to bottom |
+
+---
+
 ## Actions
 
 | Key | Action |
@@ -118,148 +188,17 @@ Layers and Realms with no matching Kinds are hidden.
 | `J` | Toggle JSON pretty-print / compact mode |
 | `Ctrl+o` | Navigate back in history |
 | `Ctrl+i` | Navigate forward in history |
+| `` ` `` | Open recent items popup (navigation history) |
 
 ---
 
-## Schema Overlay (Data mode)
+## Help & Legend
 
 | Key | Action |
 |-----|--------|
-| `s` | Toggle schema overlay (show property match) |
-| `+` / `=` | Focus next property in schema overlay |
-| `-` / `_` | Focus previous property in schema overlay |
-
----
-
-## Mode Hierarchy (v11.6)
-
-**Meta mode** (key `1`): Schema taxonomy view
-```
-Realm → Layer → Kind
-```
-
-**Data mode** (key `2`): Instance view
-```
-Realm → Layer → Kind → EntityCategory (Entity only) → Instance
-```
-
-**Note**: EntityCategory only appears when viewing Entity instances. It groups Entity instances
-by semantic type (THING, ACTION, FEATURE, etc.). Other kinds jump directly from Kind to Instance.
-
-Navigation through EntityCategory uses the same keys as all other tree levels:
-- `h` collapse EntityCategory, `l` expand it
-- `j`/`k` move between categories or instances
-- `Space`/`Enter` toggle expand/collapse
-
-## Context-Aware Actions
-
-The status bar shows context-aware hints:
-
-| Context | Hint | Action |
-|---------|------|--------|
-| On Kind (Meta) | `2:→Data` | Press 2 to switch to Data mode |
-| On Instance | `1:→Meta` | Press 1 to switch to Meta mode |
-| On EntityCategory | `l:expand` | Press l to expand and see instances in category |
-
----
-
-## Nexus Mode (Mode 4)
-
-Gamified learning hub for NovaNet concepts.
-
-### Tab Switching (within Nexus mode)
-
-| Key | Action |
-|-----|--------|
-| `[` | Switch to previous tab |
-| `]` | Switch to next tab |
-| `Tab` | Cycle to next tab |
-| `Shift+Tab` | Cycle to previous tab |
-
-**Tabs**: [1]Traits → [2]Layers → [3]Arcs → [4]Pipeline → [5]Quiz → [6]Views
-
-### Quick Jump (g prefix)
-
-| Key | Action |
-|-----|--------|
-| `gi` | Jump to invariant trait |
-| `gl` | Jump to localized trait |
-| `gk` | Jump to knowledge trait |
-| `gg` | Jump to generated trait |
-| `ga` | Jump to aggregated trait |
-| `g0` | Reset all cursors to top |
-
-### Navigation
-
-| Key | Action |
-|-----|--------|
-| `j` / `Down` | Move cursor down |
-| `k` / `Up` | Move cursor up |
-| `h` | Switch realm (Layers) / drill up (others) |
-| `l` | Switch realm (Layers) / drill down (others) |
-| `Enter` | Drill down into selection |
-| `Esc` | Drill up / cancel pending `g` |
-| `Space` | Toggle animation (Pipeline tab only) |
-
-### Actions
-
-| Key | Action |
-|-----|--------|
-| `y` | Yank (copy current item to clipboard) |
-| `n` | Next "Did you know?" tip |
-
-### Quiz Mode (Tab 5)
-
-Interactive quiz testing knowledge of NovaNet taxonomy.
-
-| Key | Action |
-|-----|--------|
-| `j` / `Down` | Select previous answer |
-| `k` / `Up` | Select next answer |
-| `Enter` | Submit answer / Next question |
-| `r` | Restart quiz (when complete) |
-| `y` | Yank current question text |
-
-**Features**:
-- 15 questions about NovaNet (realms, layers, traits, arcs, naming)
-- Immediate feedback with explanations
-- Score tracking with grade at completion
-- Press `r` to restart after completing
-
-### Views Mode (Tab 6)
-
-Schema views explorer teaching Query-First architecture.
-
-| Key | Action |
-|-----|--------|
-| `j` / `Down` | Navigate down in views list |
-| `k` / `Up` | Navigate up in views list |
-| `h` | Switch to previous category |
-| `l` | Switch to next category |
-| `?` | Toggle Query-First concept panel |
-| `Esc` | Close concept panel / drill up |
-| `y` | Yank current view ID |
-
-**Features**:
-- Browse views by category (Overview, Generation, Knowledge, Project, Mining, Contextual)
-- Learn about Query-First architecture concept
-- See view metadata (ID, root type, description, notes)
-- View YAML paths and doc generation commands
-
-**Categories**:
-- **Overview**: Layer views (complete-graph, shared-layer, project-layer)
-- **Generation**: Context views for LLM generation (page-generation-context, block-generation)
-- **Knowledge**: Locale and entity knowledge (locale-full-knowledge, entity-ecosystem)
-- **Project**: Project structure (project-context, project-overview)
-- **Mining**: SEO pipeline (seo-pipeline)
-- **Contextual**: Node-specific views shown in sidebar
-
-### Tips Bar
-
-The bottom bar shows educational tips with trait-colored keywords.
-- Press `n` to cycle through tips
-- Press `y` to copy current selection
-- Clipboard feedback shown temporarily (2s)
+| `?` | Open help overlay (keyboard shortcuts) |
+| `F1` | Open color legend overlay (Realm/Layer/Trait colors) |
+| `Esc` | Close current overlay |
 
 ---
 
@@ -275,20 +214,30 @@ The bottom bar shows educational tips with trait-colored keywords.
 ## Vim-Style Summary
 
 ```
-Navigation:  j/k (up/down)  h/l (toggle)  d/u (page)  g/G (top/bottom)  p (parent)
-Expand:      e (subtree)    c (collapse)  H/L (global collapse/expand)
-Filter:      0 (hide empty in Data mode)
-Modes:       1 (Meta)  2 (Data)  3 (Audit)  4 (Nexus)  ` (recent items)
+GRAPH MODE (1):
+Navigation:  j/k (up/down)  h/l (collapse/expand)  d/u (page)  g/G (top/bottom)  p (parent)
+Expand:      e (subtree)    c (collapse subtree)  H/L (global collapse/expand)
+Instances:   Enter (load)   r (refresh count)
 Focus:       Tab (cycle panels)
-Search:      / or f (search)  ? (help)  F1 (legend)
+Filter:      fi/fl/fk/fg/fa (trait)  ff (clear)
+Search:      / (search)  ? (help)  F1 (legend)
 Actions:     r (refresh)  y/Y (yank key/JSON)  J (JSON toggle)  Ctrl+o/i (back/forward)
-Schema:      s (overlay)  +/- (focus property)
 Exit:        q or Esc
 
-Nexus Mode (4):
-Tabs:        [ ] (prev/next tab)  Tab (cycle) — 6 tabs: Traits, Layers, Arcs, Pipeline, Quiz, Views
-Quick Jump:  gi/gl/gk/gg/ga (traits)  g0 (top)
-Actions:     y (yank)  n (next tip)  Enter/Esc (drill)
+NEXUS MODE (2):
+Access:      Q (quiz)  A (audit)  S (stats)  ? (help)
+Tabs:        [ ] (prev/next)  Tab (cycle)
 Quiz:        j/k (select)  Enter (submit/next)  r (restart)
-Views:       j/k (nav)  h/l (category)  ? (concept panel)
+Back:        1 (Graph mode)
 ```
+
+---
+
+## Deprecated Keybindings (v11.6 -> v11.7)
+
+| Old Key | Old Action | New Equivalent |
+|---------|------------|----------------|
+| `3` | Audit mode | `2` then `A` (Nexus > Audit) |
+| `4` | Nexus mode | `2` (Nexus) |
+| `0` | Hide empty (Data mode) | Removed (unified tree shows all) |
+| `s` | Schema overlay | Removed (unified tree shows schema inline) |
