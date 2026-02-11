@@ -48,41 +48,41 @@ export const DUST_CONFIG: Record<ArcFamily, DustConfig> = {
   ownership: {
     shape: 'diamond',
     count: 8,
-    size: 0.15,
+    size: 1.5,        // Visible at graph scale
     drift: 'gravitational',
-    opacity: 0.6,
+    opacity: 0.8,
     color: '#3b82f6', // blue
   },
   localization: {
     shape: 'circle',
     count: 10,
-    size: 0.12,
+    size: 1.2,
     drift: 'orbital',
-    opacity: 0.5,
+    opacity: 0.7,
     color: '#22c55e', // green
   },
   semantic: {
     shape: 'star',
     count: 12,
-    size: 0.1,
+    size: 1.0,
     drift: 'sparkling',
-    opacity: 0.7,
+    opacity: 0.9,
     color: '#f97316', // orange
   },
   generation: {
     shape: 'triangle',
     count: 15,
-    size: 0.08,
+    size: 0.8,
     drift: 'cascade',
-    opacity: 0.6,
+    opacity: 0.8,
     color: '#8b5cf6', // purple
   },
   mining: {
     shape: 'hexagon',
     count: 6,
-    size: 0.18,
+    size: 1.8,
     drift: 'pulsing',
-    opacity: 0.5,
+    opacity: 0.7,
     color: '#ec4899', // pink
   },
 };
@@ -257,15 +257,15 @@ export class DustParticleSystem {
         t
       );
 
-      // Apply helix motion (zig-zag path) - subtle oscillation perpendicular to arc
-      const helixAmplitude = 0.15;  // How far from center line
+      // Apply helix motion (zig-zag path) - oscillation perpendicular to arc
+      const helixAmplitude = 2.0;   // Visible distance from center line
       const helixFrequency = 2.5;   // Number of oscillations along arc
       const helixOffset = calculateHelixOffset(t, helixAmplitude, helixFrequency, phase, time);
       basePos.add(helixOffset);
 
       // Calculate perpendicular offset based on drift type
       const perpOffset = new THREE.Vector3();
-      const perpDist = 0.25 + Math.sin(phase) * 0.15; // 0.1-0.4 units from tube
+      const perpDist = 3.0 + Math.sin(phase) * 1.5; // 1.5-4.5 units from tube (visible at graph scale)
 
       switch (this.config.drift) {
         case 'gravitational':
