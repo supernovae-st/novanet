@@ -215,6 +215,8 @@ pub struct App {
     pub pending_instance_load: Option<String>,
     /// Pending Kind arcs load request (Kind label to load from Neo4j)
     pub pending_arcs_load: Option<String>,
+    /// Pending instance arc loading (Kind label + instance keys for background arc loading)
+    pub pending_instance_arcs_load: Option<(String, Vec<String>)>,
     /// Pending entity categories load (triggered when Entity Kind expanded)
     pub pending_entity_categories_load: bool,
     /// Pending category instances load (category key to load)
@@ -317,6 +319,7 @@ impl App {
             arc_kind_details: None,
             pending_instance_load: None,
             pending_arcs_load: None,
+            pending_instance_arcs_load: None,
             pending_entity_categories_load: false,
             pending_category_instances_load: None,
             pending_arc_kind_load: None,
@@ -1730,6 +1733,12 @@ impl App {
         self.pending_arcs_load.take()
     }
 
+    /// Take the pending instance arcs load request.
+    /// Returns (Kind label, instance keys) to load arcs for.
+    pub fn take_pending_instance_arcs_load(&mut self) -> Option<(String, Vec<String>)> {
+        self.pending_instance_arcs_load.take()
+    }
+
     /// Take the pending entity categories load request.
     /// Returns true if categories need to be loaded.
     pub fn take_pending_entity_categories_load(&mut self) -> bool {
@@ -1782,6 +1791,7 @@ impl App {
     pub fn has_pending_load(&self) -> bool {
         self.pending_instance_load.is_some()
             || self.pending_arcs_load.is_some()
+            || self.pending_instance_arcs_load.is_some()
             || self.pending_arc_kind_load.is_some()
             || self.pending_realm_load.is_some()
             || self.pending_layer_load.is_some()
@@ -2043,6 +2053,7 @@ mod tests {
                 properties: BTreeMap::new(),
                 outgoing_arcs: vec![],
                 incoming_arcs: vec![],
+                arcs_loading: false,
                 missing_required_count: 0,
                 filled_properties: 0,
                 total_properties: 0,
@@ -2054,6 +2065,7 @@ mod tests {
                 properties: BTreeMap::new(),
                 outgoing_arcs: vec![],
                 incoming_arcs: vec![],
+                arcs_loading: false,
                 missing_required_count: 0,
                 filled_properties: 0,
                 total_properties: 0,
@@ -2101,6 +2113,7 @@ mod tests {
             properties: BTreeMap::new(),
             outgoing_arcs: vec![],
             incoming_arcs: vec![],
+            arcs_loading: false,
             missing_required_count: 0,
             filled_properties: 0,
             total_properties: 0,
@@ -2158,6 +2171,7 @@ mod tests {
                 properties: BTreeMap::new(),
                 outgoing_arcs: vec![],
                 incoming_arcs: vec![],
+                arcs_loading: false,
                 missing_required_count: 0,
                 filled_properties: 0,
                 total_properties: 0,
@@ -2169,6 +2183,7 @@ mod tests {
                 properties: BTreeMap::new(),
                 outgoing_arcs: vec![],
                 incoming_arcs: vec![],
+                arcs_loading: false,
                 missing_required_count: 0,
                 filled_properties: 0,
                 total_properties: 0,
@@ -2271,6 +2286,7 @@ mod tests {
                 properties: BTreeMap::new(),
                 outgoing_arcs: vec![],
                 incoming_arcs: vec![],
+                arcs_loading: false,
                 missing_required_count: 0,
                 filled_properties: 0,
                 total_properties: 0,
@@ -2282,6 +2298,7 @@ mod tests {
                 properties: BTreeMap::new(),
                 outgoing_arcs: vec![],
                 incoming_arcs: vec![],
+                arcs_loading: false,
                 missing_required_count: 0,
                 filled_properties: 0,
                 total_properties: 0,
