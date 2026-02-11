@@ -230,18 +230,6 @@ async fn run_app(
                         }
                     }
 
-                    // PHASE 2: Background arc loading for instances
-                    if let Some((kind_key, keys)) = app.take_pending_instance_arcs_load() {
-                        match TaxonomyTree::load_instance_arcs(db, &kind_key, keys).await {
-                            Ok(arcs) => {
-                                app.tree.update_instance_arcs(&kind_key, arcs);
-                            }
-                            Err(e) => {
-                                app.set_status_error(&format!("Load arcs: {}", e));
-                            }
-                        }
-                    }
-
                     // Sequential loads for other details (typically only one fires at a time)
                     if let Some(arc_key) = app.take_pending_arc_kind_load() {
                         match TaxonomyTree::load_arc_kind_details(db, &arc_key).await {
@@ -313,6 +301,19 @@ async fn run_app(
 
                 // Clear expired status messages
                 app.clear_expired_status();
+
+                // PHASE 2: Background arc loading for instances (deferred from key handler)
+                // This runs on timeout so the UI renders with "[...]" first, showing loading state
+                if let Some((kind_key, keys)) = app.take_pending_instance_arcs_load() {
+                    match TaxonomyTree::load_instance_arcs(db, &kind_key, keys).await {
+                        Ok(arcs) => {
+                            app.tree.update_instance_arcs(&kind_key, arcs);
+                        }
+                        Err(e) => {
+                            app.set_status_error(&format!("Load arcs: {}", e));
+                        }
+                    }
+                }
 
                 // Re-render if there's a pending load (animates spinner) or status message
                 if app.has_pending_load() || app.status_message.is_some() {
