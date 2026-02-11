@@ -2,7 +2,7 @@
 
 Claude Code configuration for the NovaNet monorepo.
 
-**Version**: v11.5.0 | **Docs**: [Claude Code Official](https://docs.anthropic.com/en/docs/claude-code)
+**Version**: v11.7.0 | **Docs**: [Claude Code Official](https://docs.anthropic.com/en/docs/claude-code)
 
 ---
 
@@ -10,7 +10,7 @@ Claude Code configuration for the NovaNet monorepo.
 
 ```
 ╔═══════════════════════════════════════════════════════════════════════════════════════════════════╗
-║                              NOVANET DX - v11.5.0                                                  ║
+║                              NOVANET DX - v11.7.0                                                  ║
 ╠═══════════════════════════════════════════════════════════════════════════════════════════════════╣
 ║                                                                                                   ║
 ║   COMMANDS (slash commands)                                                                       ║
@@ -40,6 +40,66 @@ Claude Code configuration for the NovaNet monorepo.
 ║                                                                                                   ║
 ╚═══════════════════════════════════════════════════════════════════════════════════════════════════╝
 ```
+
+---
+
+## v11.7 Unified Tree Architecture
+
+**ADR-022** introduces the Unified Tree Architecture, simplifying TUI/Studio navigation.
+
+### Key Changes
+
+| Aspect | Before (v11.6) | After (v11.7) |
+|--------|----------------|---------------|
+| Header tabs | 5 (Meta/Data/Overlay/Query/Atlas) | 2 (Graph/Nexus) |
+| Realm/Layer | Visual groupings | Clickable nodes |
+| Instances | Hidden or separate Data mode | Under Kind, expandable |
+| Atlas | Separate mode | Removed |
+| Audit | In Atlas | In Nexus hub |
+| Icons | Mixed emoji | Dual: Lucide (web) + Unicode (terminal) |
+
+### Principle
+
+**"If it's a node in Neo4j, it's a node everywhere"**
+
+Realm, Layer, ArcFamily, ArcKind are all `:Meta:*` nodes in Neo4j. v11.7 makes them clickable everywhere.
+
+### Navigation Modes
+
+```
+[1]Graph   Unified tree: Realm > Layer > Kind > Instance + Arcs
+[2]Nexus   Hub: Quiz, Audit, Stats, Help
+[/]        Search overlay (replaces Query mode)
+```
+
+### v11.7 Implementation Skills
+
+When implementing v11.7 Unified Tree Architecture, use these skills per phase:
+
+| Phase | Skills | Agents |
+|-------|--------|--------|
+| Neo4j Migration | - | `neo4j-architect` |
+| YAML Updates | `spn-writing:mermaid` | - |
+| Type Definitions | `rust-core` | `rust-architect` |
+| Generators | `rust-core` | `rust-pro` |
+| TUI (Rust) | `rust-async`, `test-driven-development` | `rust-async-expert` |
+| Studio (TS) | - | `feature-dev:code-architect` |
+| Testing | `testing-anti-patterns` | `feature-dev:code-reviewer` |
+
+### Pre-Implementation Checklist (v11.7)
+
+```
+- [ ] Neo4j running (`pnpm infra:up`)
+- [ ] Schema seeded (`pnpm infra:seed`)
+- [ ] Tests pass (`cargo nextest run && pnpm test`)
+- [ ] Clean git status
+- [ ] Create worktree (`/spn-powers:using-git-worktrees`)
+```
+
+### Reference
+
+- Design: `docs/plans/2026-02-11-unified-tree-design.md`
+- ADR-022: Unified Tree Architecture
 
 ---
 
@@ -221,7 +281,7 @@ Display NovaNet architecture in ASCII format.
 | `pipeline`, `sync` | Source of Truth sync pipeline |
 | `locale`, `knowledge` | Locale Knowledge node structure (14 types) |
 | `infra`, `neo4j` | Infrastructure (Docker, seeds, migrations) |
-| `studio` | Studio web app (API routes, stores, NavigationMode) |
+| `studio` | Studio web app (API routes, stores, Graph/Nexus modes) |
 | `packages`, `deps` | Packages dependency graph (includes Rust) |
 | `flow`, `generation` | LLM generation pipeline |
 | `rust`, `cli` | Rust binary architecture (`tools/novanet/`) |
@@ -452,8 +512,9 @@ Add a new arc type between nodes.
 
 **Provides:**
 - Launch command (`cargo run -- tui`)
-- Keybindings reference (navigation, NavMode, scrolling, overlays)
+- Keybindings reference (navigation, Graph/Nexus modes, scrolling, overlays)
 - Visual features (Galaxy theme, boot animation, effects engine)
+- v11.7 Unified Tree (Realm/Layer/Kind/Instance as clickable nodes)
 - Troubleshooting guide
 
 **Arguments:**
@@ -463,6 +524,13 @@ Add a new arc type between nodes.
 | _(empty)_ | Launch TUI |
 | `help`, `keys` | Show keybindings reference |
 | `features` | Show visual features overview |
+
+**v11.7 Navigation:**
+```
+[1]Graph   Unified tree with all nodes clickable
+[2]Nexus   Hub (Quiz, Audit, Stats, Help)
+[/]        Search overlay
+```
 
 ---
 
@@ -592,7 +660,7 @@ RETURN related.key, activation ORDER BY activation DESC
 2. **Code Quality (Rust)** - Ownership, `thiserror`/`color-eyre`, no `.unwrap()`, clippy
 3. **Security** - Credentials, injection, XSS
 4. **NovaNet Conventions** - Generation NOT translation, imports
-5. **v9 Meta-Graph Conventions** - Realm/Layer/Kind terminology, NavigationMode, `:Meta` label
+5. **v9 Meta-Graph Conventions** - Realm/Layer/Kind terminology, Graph/Nexus modes, `:Meta` label
 6. **Rust-First Architecture** - Single `novanet` binary for all operations, TS limited to Studio + types
 7. **Testing** - Coverage, edge cases, mocks
 
@@ -643,13 +711,16 @@ Architecture Decision Records (ADRs):
 - **ADR-009:** Self-Describing Meta-Graph (v9)
 - **ADR-010:** CLI-First Architecture (v9) — Rust binary
 - **ADR-011:** TS/Rust Boundary Rule (v9)
-- **ADR-012:** NavigationMode (v9) — 4 modes
+- **ADR-012:** NavigationMode (v9) — 4 modes (superseded by ADR-022)
 - **ADR-013:** OF_KIND Instance Bridge (v9)
 - **ADR-014:** Trait-Based Visual Encoding (v9)
+- **ADR-020:** Schema Refinement (v11.5)
+- **ADR-021:** Query-First Architecture (v11.6)
+- **ADR-022:** Unified Tree Architecture (v11.7) — 2 modes (Graph/Nexus)
 
 ---
 
-## Key Numbers (v11.5.0)
+## Key Numbers (v11.7.0)
 
 | Metric | Value |
 |--------|-------|
@@ -662,15 +733,16 @@ Architecture Decision Records (ADRs):
 | Shared nodes | 39 (config + locale + geography + knowledge) |
 | Org nodes | 21 |
 | Seed files | 11 |
-| View definitions | 12 |
+| View definitions | 29 (13 contextual + 16 global) |
 | View doc diagrams | 11 (generated by `novanet doc generate`) |
 | Migrations | 6 |
 | API routes (Studio) | 10 |
 | Zustand stores | 8 |
 | Filter presets | 10 |
 | Locales supported | 200+ |
-| ADRs | 19 |
-| Rust tests | 950 |
+| ADRs | 22 |
+| Rust tests | 985 |
+| TUI Modes | 2 (Graph, Nexus) |
 
 ---
 
@@ -729,15 +801,16 @@ pnpm audit:all
 pnpm doc:generate
 ```
 
-**Source of truth:** `/VERSION` file contains the canonical schema version (11.5.0).
+**Source of truth:** `/VERSION` file contains the canonical schema version (11.7.0).
 
 **`pnpm doc:audit` checks:**
-- Outdated version references (current: v11.5.0)
+- Outdated version references (current: v11.7.0)
 - Deprecated terminology (EntityL10n → EntityContent, PageL10n → PageGenerated, BlockL10n → BlockGenerated)
 - Deprecated arcs (HAS_L10N → HAS_CONTENT, HAS_OUTPUT → HAS_GENERATED)
 - Incorrect node/arc counts (60 nodes, 114 arcs expected)
 - Outdated realm names (global → shared, tenant → org)
 - Outdated layer structure (4 shared + 6 org = 10 layers)
+- v11.7: Deprecated 5-mode navigation (use 2-mode: Graph/Nexus)
 
 **`pnpm skill:audit` checks:**
 - Deprecated paths (`nodes/` → `node-kinds/`, `organizing-principles.yaml` → `taxonomy.yaml`)
@@ -798,9 +871,10 @@ This README should be updated when:
 
 | File | Purpose |
 |------|---------|
-| `/CLAUDE.md` | Monorepo overview (v9 migration context) |
-| `/packages/core/CLAUDE.md` | Core package (types, schemas, YAML, v9 terminology) |
+| `/CLAUDE.md` | Monorepo overview (v11.7 Unified Tree context) |
+| `/packages/core/CLAUDE.md` | Core package (types, schemas, YAML, v11.7 terminology) |
 | `/packages/db/CLAUDE.md` | Database infrastructure |
-| `/apps/studio/CLAUDE.md` | Studio application (NavigationMode, visual encoding) |
+| `/apps/studio/CLAUDE.md` | Studio application (Graph/Nexus modes, visual encoding) |
 | `/tools/novanet/` | Rust binary — CLI + TUI + generators (replaces schema-tools) |
 | `/docs/plans/2026-02-01-ontology-v9-design.md` | v9 migration plan (complete) |
+| `/docs/plans/2026-02-11-unified-tree-design.md` | v11.7 Unified Tree Architecture (ADR-022) |

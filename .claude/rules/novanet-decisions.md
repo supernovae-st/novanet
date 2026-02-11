@@ -1,4 +1,4 @@
-# NovaNet Architecture Decisions (v11.5)
+# NovaNet Architecture Decisions (v11.7)
 
 This file documents key architecture decisions for NovaNet. Reference these when making implementation choices.
 
@@ -919,15 +919,33 @@ cypher: |
 
 **Status**: Approved (v11.7)
 
-**Problem**: TUI and Studio had inconsistent behavior:
-1. Realm, Layer, Trait ARE nodes in Neo4j (`:Meta:Realm`, `:Meta:Layer`, etc.)
+**Problem**: NovaNet had inconsistent behavior between Neo4j and UI:
+1. Realm, Layer, Trait ARE nodes in Neo4j (`:Meta:Realm`, `:Meta:Layer`)
 2. But TUI/Studio treated them as visual groupings, not clickable nodes
 3. 5 separate modes (Meta/Data/Overlay/Query/Atlas) created confusion
-4. Emoji mixed with Unicode icons
+4. Emoji icons in code instead of proper icon system
+
+**Decision**: Unify into single tree where everything is a clickable node.
+
+**Changes**:
+- 5 modes → 2 modes: `[1]Graph` (unified tree) + `[2]Nexus` (hub)
+- Realm, Layer, ArcFamily, ArcKind are clickable nodes with detail panels
+- Kind nodes expand to show instances (lazy loading, 10 + "load more")
+- Dual icons: `{ web: "lucide-name", terminal: "◆" }` - no emoji
+- Atlas removed, Audit moved to Nexus hub
 
 **Principle**: "If it's a node in Neo4j, it's a node everywhere"
 
-**Decision**: Unify all modes into single tree view where everything is a clickable node.
+**Consequences**:
+- Neo4j migration needed (HAS_LAYER, HAS_KIND, BELONGS_TO_FAMILY arcs)
+- Types defined before generators
+- Backward compatibility shim for old nav modes
+- Performance optimization for large instance counts (200K+)
+
+**Files affected**:
+- TUI: `tools/novanet/src/tui/{app,data,ui,theme}.rs`
+- Studio: `apps/studio/src/components/graph/`, stores
+- YAML: `visual-encoding.yaml`, `views/_registry.yaml`
 
 ### Header Simplification
 
@@ -936,7 +954,7 @@ BEFORE (v11.6): [1]Meta [2]Data [3]Overlay [4]Query [5]Atlas
 AFTER (v11.7):  [1]Graph [2]Nexus
 ```
 
-### Changes
+### Changes Table
 
 | Aspect | Before | After |
 |--------|--------|-------|
