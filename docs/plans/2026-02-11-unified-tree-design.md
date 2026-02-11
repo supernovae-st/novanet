@@ -565,6 +565,43 @@ Clicking any node shows its properties and relationships in the right panel.
 └─────────────────────────────────────────┘
 ```
 
+## View System Integration
+
+The unified tree works with the **Unified View System** (see `2026-02-11-unified-view-system-design.md`).
+
+### View Categories (29 views)
+
+| Category | Count | Purpose |
+|----------|-------|---------|
+| META | 3 | Schema exploration (Realm, Layer, Kind, ArcKind) |
+| DATA | 10 | Instance exploration by realm/layer/purpose |
+| OVERLAY | 3 | Meta + Data combined for debugging |
+| CONTEXTUAL | 13 | Node-centered subgraphs |
+
+### Icon Format (NO EMOJI)
+
+All icons use **dual format** - different for Studio and TUI:
+
+```yaml
+icon:
+  web: "diamond"      # Lucide icon name (Studio/React)
+  terminal: "◆"       # Unicode symbol (TUI/Rust)
+```
+
+See `2026-02-11-unified-view-system-design.md` → "Icon Mapping" table for complete list.
+
+### Files to Update
+
+| File | Changes |
+|------|---------|
+| `packages/core/models/views/_registry.yaml` | Replace emoji → dual icons |
+| `packages/core/models/views/*.yaml` (14) | Replace `icon: "🔷"` → `icon: { web, terminal }` |
+| `packages/core/models/views/contextual/*.yaml` (13) | Same icon format change |
+| `apps/studio/src/components/views/ViewPicker.tsx` | Use Lucide icons from view.icon.web |
+| `tools/novanet/src/tui/views.rs` | Use Unicode icons from view.icon.terminal |
+
+---
+
 ## Summary of Changes
 
 | Aspect | Before (v11.6) | After (v11.7) |
@@ -576,5 +613,6 @@ Clicking any node shows its properties and relationships in the right panel.
 | Search | Separate Query mode | `[/]` overlay in Graph |
 | Atlas | Separate mode | Removed |
 | Audit | In Atlas | In Nexus hub |
-| Icons | Mixed emoji | Unicode only (no emoji) |
+| Icons | Mixed emoji | Dual: Lucide (web) + Unicode (terminal) |
 | Node panels | Schema-only for Kind | Props + stats for ALL node types |
+| Views | 29 views with emoji | 29 views with dual icons |
