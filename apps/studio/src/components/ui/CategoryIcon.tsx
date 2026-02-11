@@ -228,14 +228,6 @@ export const TraitIcon = memo(function TraitIcon({
 // =============================================================================
 
 /**
- * Get the Lucide icon component for a layer
- * Useful when you need the component reference, not a rendered element
- */
-export function getLayerIconComponent(layer: Layer) {
-  return LAYER_ICONS[layer] || Package;
-}
-
-/**
  * Export icon map for type checking
  */
 export type LayerIconMap = typeof LAYER_ICONS;

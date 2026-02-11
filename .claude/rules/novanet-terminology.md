@@ -268,7 +268,7 @@ NovaNet Studio uses **Query-First Architecture** where Cypher queries are the si
 | Term | Definition |
 |------|------------|
 | **Query-First** | Architecture pattern where graph display is determined solely by the executed Cypher query |
-| **Meta-Graph** | The schema graph showing NodeKind and ArcKind nodes (60 nodes, ~70 arcs) |
+| **Meta-Graph** | The schema graph showing NodeKind and ArcKind nodes (60 nodes, 114 arcs) |
 | **KINDS_QUERY** | Foundational query that fetches all NodeKind instances for META mode |
 | **ARCS_QUERY** | Foundational query that fetches all ArcKind instances for META mode |
 | **View** | Parameterized Cypher template defined in YAML, executable with context parameters |
