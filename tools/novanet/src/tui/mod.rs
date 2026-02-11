@@ -31,6 +31,7 @@ pub mod nexus;
 mod schema;
 pub mod theme;
 mod ui;
+pub mod unified_types;
 pub mod unicode;
 mod yaml;
 
