@@ -7,6 +7,65 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [11.7.0] - 2026-02-11
+
+### Added
+- **Unified Tree Architecture**: Merge 5 navigation modes into 2 (Graph/Nexus)
+  - All nodes clickable: Realm, Layer, Kind, Instance, ArcFamily, ArcKind
+  - Principle: "Node in Neo4j = Node everywhere"
+  - **ADR-022**: Unified Tree Architecture approved
+- **Neo4j Schema Migration**: New structural relationships
+  - `HAS_LAYER`: Realm → Layer (10 relationships)
+  - `HAS_KIND`: Layer → Kind (60 relationships)
+  - `BELONGS_TO_FAMILY`: ArcKind → ArcFamily (114 relationships)
+  - Performance indexes for tree navigation
+- **Dual Icon System**: Consistent iconography across TUI and Studio
+  - `visual-encoding.yaml`: Added `meta_types` icons (realm, layer, kind, instance, arc_family, arc_kind)
+  - `_registry.yaml`: All 29 views converted to dual format (web + terminal)
+  - Web: Lucide icons, Terminal: Unicode symbols
+  - No emoji in codebase
+- **Rust Type Definitions**: `unified_types.rs` in TUI module
+  - `NodeId` enum, `UnifiedNode` struct, `LazyChildren` enum
+  - `AsyncCommand`/`AsyncEvent` for tokio channels
+  - Badge presets, pagination constants
+- **TypeScript Type Definitions**: `unified-tree.ts` in core package
+  - `DualIcon`, `UnifiedNode` discriminated union
+  - Type guards: `isRealmNode`, `isLayerNode`, etc.
+  - `TreeState`/`TreeActions` interfaces
+- **Studio treeStore**: Zustand store for unified tree
+  - Lazy loading via `/api/tree/:id/children`
+  - Expand/collapse, selection, focus state
+  - Pagination support with `loadMoreChildren`
+- **UnifiedTreeNode component**: React component for tree rendering
+  - Dynamic Lucide icon loading
+  - Loading states, badge rendering
+  - Recursive children rendering
+
+### Changed
+- **TUI NavMode**: 5 modes → 2 modes
+  - `[1]Graph`: Unified tree (replaces Meta/Data/Overlay)
+  - `[2]Nexus`: Quiz/Audit/Stats/Help hub (replaces Atlas)
+  - Search via `[/]` overlay (no separate Query mode)
+- **View parser**: Supports both legacy string icons and new dual icon format
+- **View generator**: Outputs `ViewIcon` interface with web/terminal fields
+- **Version bump**: All files updated from 11.6.0 to 11.7.0
+
+### Migration
+```bash
+# Run Neo4j migration for structural relationships
+cargo run -- db migrate
+# Or manually execute:
+# packages/db/seed/migrations/v11.7-unified-tree.cypher
+
+# Regenerate schema artifacts
+cargo run -- schema generate
+```
+
+### Statistics
+- **1008 Rust tests passing** (4 new for NavMode)
+- **TypeScript type-check passing**
+- **12 artifacts regenerated** from YAML sources
+
 ## [11.6.0] - 2026-02-10
 
 ### Added
