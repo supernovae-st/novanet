@@ -4,7 +4,9 @@ import { waitForGraphLoaded } from './helpers';
 // Increase timeout for all tests in this file (schema takes time to load)
 test.setTimeout(60000);
 
-test.describe('DatabaseInfoPanel - Multi-select Query Execution', () => {
+test.describe.skip('DatabaseInfoPanel - Multi-select Query Execution', () => {
+  // TODO: Rewrite for Query-First Architecture (ADR-021)
+  // The "Nodes" tab has been replaced with view-based filtering
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
     // Wait for lazy-loaded graph to finish loading
