@@ -148,7 +148,7 @@ export class ArcLODManager {
   update(camera: THREE.Camera, time: number, deltaTime: number): void {
     const cameraPosition = camera.position;
 
-    for (const arc of this.arcs.values()) {
+    Array.from(this.arcs.values()).forEach((arc) => {
       // Calculate distance to camera
       const distance = cameraPosition.distanceTo(arc.midpoint);
 
@@ -161,17 +161,17 @@ export class ArcLODManager {
 
       // Update shader uniforms
       arc.effect.updateUniforms(time, deltaTime);
-    }
+    });
   }
 
   /**
    * Clear all arcs
    */
   clear(): void {
-    for (const arc of this.arcs.values()) {
+    Array.from(this.arcs.values()).forEach((arc) => {
       this.scene.remove(arc.effect.group);
       arc.effect.dispose();
-    }
+    });
     this.arcs.clear();
   }
 
