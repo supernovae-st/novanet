@@ -423,22 +423,24 @@ arc_animation_effects_3d:
   global:
     tube_opacity_increase: 0.35  # +35% visibility vs 2D
     helix:
-      amplitude: 0.15            # Distance from center line
+      amplitude: 2.0             # Distance from center line (visible at graph scale)
       frequency: 2.5             # Oscillations along arc length
     dust_particles:
       use_instanced_mesh: true   # Single draw call per arc
       billboarding: true         # Particles face camera
+      perp_dist_base: 3.0        # Base perpendicular distance from tube
+      perp_dist_variance: 1.5    # Variance in perpendicular distance
 
-  # Per-family dust particle configuration
+  # Per-family dust particle configuration (sizes scaled for graph visibility)
   ownership:
     effect_3d: PowerConduit3D
     tube_opacity: 0.20           # (0.15 × 1.35)
     dust:
       shape: diamond             # Energy crystal metaphor
       count: 8
-      size: 0.15
+      size: 1.5                  # Visible at graph scale
       drift: gravitational       # Slow sway while traveling
-      opacity: 0.6
+      opacity: 0.8
       travel_speed: 0.12         # Complete arc in ~8s
     description: "Glowing tube with diamond dust drifting toward children"
 
@@ -448,9 +450,9 @@ arc_animation_effects_3d:
     dust:
       shape: circle              # Base pair metaphor
       count: 10
-      size: 0.12
+      size: 1.2
       drift: orbital             # Spiral around tube
-      opacity: 0.5
+      opacity: 0.7
       travel_speed: 0.12
     description: "Double helix particles with orbital drift"
 
@@ -460,9 +462,9 @@ arc_animation_effects_3d:
     dust:
       shape: star                # Spark metaphor
       count: 12
-      size: 0.1
+      size: 1.0
       drift: sparkling           # Erratic movement
-      opacity: 0.7
+      opacity: 0.9
       travel_speed: 0.15
     description: "Fast firing pulses with sparkling star dust"
 
@@ -472,9 +474,9 @@ arc_animation_effects_3d:
     dust:
       shape: triangle            # Data fragment metaphor
       count: 15
-      size: 0.08
+      size: 0.8
       drift: cascade             # Zigzag descent
-      opacity: 0.6
+      opacity: 0.8
       travel_speed: 0.25         # Fast cascade
     description: "Digital rain with cascading triangle fragments"
 
@@ -484,9 +486,9 @@ arc_animation_effects_3d:
     dust:
       shape: hexagon             # Data crystal metaphor
       count: 6
-      size: 0.18
+      size: 1.8
       drift: pulsing             # Expand/contract rhythm
-      opacity: 0.5
+      opacity: 0.7
       travel_speed: 0.1          # Slow, methodical
     description: "Sonar rings with pulsing hexagon crystals"
 
