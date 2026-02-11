@@ -1966,3 +1966,416 @@ const EMOJI_TO_DUAL_ICON: Record<string, ViewIcon> = {
 ```
 
 This compatibility layer can be removed once all YAML files are migrated.
+
+---
+
+## Revised Execution Plan (Post-Review)
+
+> **Source**: Code architect review + Context7 (Ratatui, neo4rs) + Perplexity research
+> **Date**: 2026-02-11
+
+### Critical Issues Fixed
+
+| Issue | Severity | Fix |
+|-------|----------|-----|
+| Neo4j migration missing | **CRITICAL** | Added Phase 0: Neo4j schema migration |
+| Phase ordering wrong | **HIGH** | Types (Phase 2) now before Generators (Phase 3) |
+| Performance risk (200K instances) | **HIGH** | Added index + approximate count strategy |
+| Backward compat missing | **MEDIUM** | Added nav mode migration shim |
+| Test fixtures undefined | **MEDIUM** | Added fixtures directory structure |
+
+### Corrected Phase Execution Order
+
+```
+Phase 0: Neo4j Schema Migration (BLOCKING)
+    ↓
+Phase 1: YAML Updates (visual-encoding, views, taxonomy)
+    ↓
+Phase 2: TypeScript/Rust Type Definitions (BEFORE generators!)
+    ↓
+Phase 3: Generators (consume types, produce artifacts)
+    ↓
+Phase 4A: TUI (Rust)  ──┐
+                        ├── PARALLEL
+Phase 4B: Studio (TS) ──┘
+    ↓
+Phase 5: Testing (unit + integration + E2E)
+    ↓
+Phase 6: Documentation + CHANGELOG
+```
+
+### Phase 0: Neo4j Schema Migration (NEW - BLOCKING)
+
+**Why**: Without these relationships, unified tree queries will fail.
+
+```cypher
+// File: packages/db/seed/migrations/v11.7-unified-tree.cypher
+
+// 1. Create HAS_LAYER relationships (Realm → Layer)
+MATCH (r:Realm:Meta), (l:Layer:Meta)
+WHERE l.realm = r.key
+MERGE (r)-[:HAS_LAYER]->(l);
+
+// 2. Create HAS_KIND relationships (Layer → Kind)
+MATCH (l:Layer:Meta), (k:Kind:Meta)
+WHERE k.layer = l.key AND k.realm = l.realm
+MERGE (l)-[:HAS_KIND]->(k);
+
+// 3. Create BELONGS_TO_FAMILY relationships (ArcKind → ArcFamily)
+MATCH (af:ArcFamily:Meta), (ak:ArcKind:Meta)
+WHERE ak.family = af.key
+MERGE (ak)-[:BELONGS_TO_FAMILY]->(af);
+
+// 4. Add index for instance loading performance
+CREATE INDEX kind_instances_idx IF NOT EXISTS
+FOR (n)-[r:OF_KIND]->()
+ON (r);
+
+// 5. Add constraint for unique node keys
+CREATE CONSTRAINT node_key_unique IF NOT EXISTS
+FOR (n:Node) REQUIRE n.key IS UNIQUE;
+```
+
+**Validation**:
+```cypher
+// Verify migration success
+MATCH (r:Realm)-[:HAS_LAYER]->(l:Layer)-[:HAS_KIND]->(k:Kind)
+RETURN r.key AS realm, count(DISTINCT l) AS layers, count(DISTINCT k) AS kinds;
+// Expected: shared=4 layers/39 kinds, org=6 layers/21 kinds
+```
+
+### Phase 1: YAML Updates
+
+**Files**:
+- `packages/core/models/visual-encoding.yaml` - Add meta_types icons
+- `packages/core/models/views/_registry.yaml` - Replace emoji → dual icons
+- `packages/core/models/taxonomy.yaml` - Add `node_sections` config
+
+**Validation**: `cargo run -- schema validate --strict`
+
+### Phase 2: Type Definitions (BEFORE Generators!)
+
+**Rust** (`tools/novanet/src/tui/`):
+```rust
+// types.rs - NEW FILE
+pub enum NodeId { Section, Realm, Layer, Kind, Instance, ArcFamily, ArcKind }
+pub struct UnifiedNode { id, depth, display, children, neo4j_labels }
+pub enum LazyChildren { NotLoaded, Loading, Loaded { items, total, has_more }, Leaf }
+pub struct Badge { icon, abbrev, color_key }
+```
+
+**TypeScript** (`packages/core/src/types/`):
+```typescript
+// unified-tree.ts - NEW FILE
+export interface ViewIcon { web: string; terminal: string; }
+export interface UnifiedTreeNode { id: string; type: NodeType; /* ... */ }
+export type NodeType = 'realm' | 'layer' | 'kind' | 'instance' | 'arcFamily' | 'arcKind';
+```
+
+### Phase 3: Generators
+
+**Only after Phase 2 types exist!**
+
+- `icon_generator.rs` - Generate `tui/icons.rs` from `visual-encoding.yaml`
+- `view_generator.rs` - Update to handle dual icon format
+- Validate: `cargo run -- schema generate --dry-run`
+
+### Phase 4A: TUI Implementation (Rust)
+
+**Async Architecture** (from Ratatui best practices):
+
+```rust
+// src/tui/mod.rs - Channel-based async pattern
+use tokio::sync::mpsc;
+
+pub enum AsyncCommand {
+    LoadInstances { kind: String, offset: usize, limit: usize },
+    LoadRealmDetails(String),
+    LoadLayerDetails { realm: String, layer: String },
+    Shutdown,
+}
+
+pub enum AsyncEvent {
+    InstancesLoaded(InstanceLoadResponse),
+    RealmDetailsLoaded(RealmDetails),
+    Error(String),
+}
+
+// Main loop with tokio::select!
+async fn run(db: Db) -> Result<()> {
+    let (cmd_tx, mut cmd_rx) = mpsc::unbounded_channel::<AsyncCommand>();
+    let (evt_tx, mut evt_rx) = mpsc::unbounded_channel::<AsyncEvent>();
+
+    // Spawn async worker for Neo4j queries
+    let worker_db = db.clone();  // Arc<Graph> - cheap clone
+    tokio::spawn(async move {
+        while let Some(cmd) = cmd_rx.recv().await {
+            let result = match cmd {
+                AsyncCommand::LoadInstances { kind, offset, limit } => {
+                    match load_instances(&worker_db, &kind, offset, limit).await {
+                        Ok(resp) => evt_tx.send(AsyncEvent::InstancesLoaded(resp)),
+                        Err(e) => evt_tx.send(AsyncEvent::Error(e.to_string())),
+                    }
+                }
+                AsyncCommand::Shutdown => break,
+                // ... other commands
+            };
+        }
+    });
+
+    // TUI event loop
+    loop {
+        tokio::select! {
+            event = tui.next() => { /* handle key/mouse/tick */ }
+            Some(async_evt) = evt_rx.recv() => { /* handle async results */ }
+        }
+    }
+}
+```
+
+**Instance Loading with Approximate Count** (performance fix):
+
+```rust
+async fn load_instances(
+    db: &Db,
+    kind: &str,
+    offset: usize,
+    limit: usize,
+) -> Result<InstanceLoadResponse> {
+    // Use APOC for approximate count on large datasets
+    let count_cypher = r#"
+        CALL apoc.meta.stats() YIELD labels
+        WITH labels[$kind] AS count
+        RETURN CASE WHEN count > 10000 THEN count ELSE null END AS approx
+    "#;
+
+    let exact_cypher = format!(r#"
+        MATCH (n:{kind})-[:OF_KIND]->(k:Kind:Meta {{label: $kind}})
+        WITH count(n) AS total
+        MATCH (n:{kind})-[:OF_KIND]->(k:Kind:Meta {{label: $kind}})
+        WITH total, n ORDER BY n.key SKIP $offset LIMIT $limit
+        RETURN total, collect(n) AS instances
+    "#, kind = kind);
+
+    // ... execute and return
+}
+```
+
+### Phase 4B: Studio Implementation (TypeScript)
+
+**Zustand Store** (from Perplexity research):
+
+```typescript
+// apps/studio/src/stores/treeStore.ts
+import { create } from 'zustand';
+
+interface TreeState {
+  expanded: Set<string>;
+  loadedChildren: Map<string, string[]>;
+  loadingNodes: Set<string>;
+
+  toggleExpand: (nodeId: string) => void;
+  loadChildren: (nodeId: string) => Promise<void>;
+}
+
+export const useTreeStore = create<TreeState>((set, get) => ({
+  expanded: new Set(),
+  loadedChildren: new Map(),
+  loadingNodes: new Set(),
+
+  toggleExpand: (nodeId) => {
+    const { expanded, loadedChildren, loadChildren } = get();
+    const newExpanded = new Set(expanded);
+
+    if (newExpanded.has(nodeId)) {
+      newExpanded.delete(nodeId);
+    } else {
+      newExpanded.add(nodeId);
+      // Lazy load if not already loaded
+      if (!loadedChildren.has(nodeId)) {
+        loadChildren(nodeId);
+      }
+    }
+    set({ expanded: newExpanded });
+  },
+
+  loadChildren: async (nodeId) => {
+    set((s) => ({ loadingNodes: new Set(s.loadingNodes).add(nodeId) }));
+
+    try {
+      const children = await fetchChildren(nodeId);
+      set((s) => ({
+        loadedChildren: new Map(s.loadedChildren).set(nodeId, children),
+        loadingNodes: new Set([...s.loadingNodes].filter(id => id !== nodeId)),
+      }));
+    } catch (error) {
+      set((s) => ({
+        loadingNodes: new Set([...s.loadingNodes].filter(id => id !== nodeId)),
+      }));
+    }
+  },
+}));
+```
+
+**Tree Node with Suspense**:
+
+```tsx
+// apps/studio/src/components/graph/UnifiedTreeNode.tsx
+import { Suspense, lazy, startTransition } from 'react';
+import { useTreeStore } from '@/stores/treeStore';
+import * as Icons from 'lucide-react';
+
+const TreeChildren = lazy(() => import('./TreeChildren'));
+
+export function UnifiedTreeNode({ node }: { node: UnifiedNode }) {
+  const { expanded, loadingNodes, toggleExpand } = useTreeStore();
+  const isExpanded = expanded.has(node.id);
+  const isLoading = loadingNodes.has(node.id);
+
+  const handleClick = () => {
+    startTransition(() => {
+      toggleExpand(node.id);
+    });
+  };
+
+  const IconComponent = Icons[node.icon.web as keyof typeof Icons];
+
+  return (
+    <div className="tree-node">
+      <button onClick={handleClick}>
+        {isLoading ? <Icons.Loader2 className="animate-spin" /> : <IconComponent />}
+        <span>{node.label}</span>
+        {node.count && <span className="count">({node.count})</span>}
+      </button>
+
+      {isExpanded && (
+        <Suspense fallback={<div className="loading">Loading...</div>}>
+          <TreeChildren parentId={node.id} />
+        </Suspense>
+      )}
+    </div>
+  );
+}
+```
+
+### Phase 5: Testing
+
+**Test Fixtures Directory** (new):
+
+```
+tools/novanet/tests/fixtures/
+├── minimal-schema.yaml       # 5 nodes, 3 arcs (fast unit tests)
+├── realistic-schema.yaml     # 60 nodes, 114 arcs (integration)
+├── stress-test-schema.yaml   # 1000 nodes, 5000 arcs (performance)
+└── README.md                 # How to maintain fixtures
+```
+
+**Performance Benchmark** (new):
+
+```rust
+// tools/novanet/benches/instance_loading.rs
+use criterion::{criterion_group, criterion_main, Criterion};
+
+fn bench_load_10k_instances(c: &mut Criterion) {
+    let rt = tokio::runtime::Runtime::new().unwrap();
+    let db = rt.block_on(setup_test_db_with_10k_locales());
+
+    c.bench_function("load_10k_instances_first_page", |b| {
+        b.iter(|| {
+            rt.block_on(load_instances(&db, "Locale", 0, 10))
+        })
+    });
+}
+
+criterion_group!(benches, bench_load_10k_instances);
+criterion_main!(benches);
+```
+
+### Backward Compatibility Shim
+
+**TUI** (`app.rs`):
+
+```rust
+// Migrate old config on startup
+fn migrate_legacy_config(config: &mut Config) {
+    if let Some(old_mode) = config.get("nav_mode") {
+        let new_mode = match old_mode.as_str() {
+            "Meta" | "Data" | "Overlay" | "Query" => NavMode::Graph,
+            "Atlas" | "Nexus" => NavMode::Nexus,
+            _ => NavMode::Graph,
+        };
+        config.set("nav_mode_v11_7", new_mode);
+        config.remove("nav_mode");
+        config.save()?;
+    }
+}
+```
+
+**Studio** (`localStorage`):
+
+```typescript
+// apps/studio/src/lib/migrations.ts
+export function migrateLocalStorage() {
+  const oldMode = localStorage.getItem('navMode');
+  if (oldMode && ['Meta', 'Data', 'Overlay', 'Query', 'Atlas'].includes(oldMode)) {
+    const newMode = oldMode === 'Atlas' ? 'Nexus' : 'Graph';
+    localStorage.setItem('navMode', newMode);
+    localStorage.setItem('navMode_migrated_from', oldMode);
+  }
+}
+```
+
+### Realistic Timeline
+
+```
+Week 1 (Person A):
+  Day 1: Phase 0 (Neo4j migration) + Phase 1 (YAML)
+  Day 2: Phase 2 (Types - Rust + TypeScript)
+  Day 3: Phase 3 (Generators)
+  Day 4-5: Phase 4A start (TUI - data structures)
+
+Week 1 (Person B, starting Day 3):
+  Day 3-5: Phase 4B (Studio - all)
+
+Week 2:
+  Day 1-2: Phase 4A finish (TUI - UI + async)
+  Day 3: Integration testing (TUI ↔ Neo4j)
+  Day 4: Phase 5 (Testing - fix bugs)
+  Day 5: Phase 6 (Documentation)
+
+Total: 10 working days (2 weeks) with 2 people
+       15 working days (3 weeks) with 1 person
+```
+
+### Skills/Agents Per Phase
+
+| Phase | Skills to Use | Agents to Use |
+|-------|---------------|---------------|
+| 0 | - | `neo4j-architect` |
+| 1 | `spn-writing:mermaid` for diagrams | - |
+| 2 | `rust-core` (types), `spn-rust:rust-architect` | `rust-architect` |
+| 3 | `rust-core` | `rust-pro` |
+| 4A | `rust-async` (tokio), `test-driven-development` | `rust-async-expert` |
+| 4B | - | `feature-dev:code-architect` |
+| 5 | `testing-anti-patterns`, `systematic-debugging` | `feature-dev:code-reviewer` |
+| 6 | `spn-writing:writing` | - |
+
+### Pre-Implementation Checklist
+
+Before starting Phase 0:
+
+- [ ] Neo4j is running (`pnpm infra:up`)
+- [ ] Current schema is seeded (`pnpm infra:seed`)
+- [ ] All tests pass (`cargo nextest run && pnpm test`)
+- [ ] No uncommitted changes (`git status` clean)
+- [ ] Create git worktree for isolation (`/spn-powers:using-git-worktrees`)
+
+### Risk Mitigation Summary
+
+| Risk | Mitigation |
+|------|------------|
+| Generator fails without types | Phase 2 (Types) now before Phase 3 (Generators) |
+| 200K instance query timeout | Index + APOC approximate count |
+| Users lose nav mode preference | Backward compat shim on startup |
+| Icon YAML invalid | Fallback + warning message |
+| Test fixtures drift from schema | Automated sync test in CI |
