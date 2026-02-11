@@ -382,6 +382,38 @@ export const Graph3D = memo(function Graph3D({
     };
   }, [isGraphReady, graphData.links, graphData.nodes]);
 
+  // Continuous animation loop for shader uniforms (independent of D3 simulation)
+  useEffect(() => {
+    if (!isGraphReady || !fgRef.current || !arcLODManagerRef.current) return;
+
+    let animationFrameId: number;
+    let lastTime = performance.now();
+
+    const animate = () => {
+      const currentTime = performance.now();
+      const time = currentTime * 0.001;
+      const deltaTime = (currentTime - lastTime) * 0.001;
+      lastTime = currentTime;
+
+      // Update shader uniforms (animations)
+      if (arcLODManagerRef.current && fgRef.current) {
+        const camera = fgRef.current.camera?.();
+        if (camera) {
+          arcLODManagerRef.current.update(camera, time, deltaTime);
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    // Start animation loop
+    animationFrameId = requestAnimationFrame(animate);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [isGraphReady]);
+
   // Initialize post-processing bloom with WebGL context loss handling
   // Re-runs when bloomQuality or node count changes significantly
   useEffect(() => {
@@ -873,47 +905,37 @@ export const Graph3D = memo(function Graph3D({
     [setHoveredEdge]
   );
 
-  // Engine tick to mark graph as ready and update arc effects
+  // Engine tick to mark graph as ready and sync arc positions with D3 simulation
   const handleEngineTick = useCallback(() => {
     if (!isGraphReady) {
       setIsGraphReady(true);
     }
 
-    // Update arc positions and LOD
-    if (arcLODManagerRef.current && fgRef.current) {
-      const camera = fgRef.current.camera?.();
-      if (camera) {
-        const time = performance.now() * 0.001;
-        const deltaTime = 0.016; // ~60fps
+    // Update arc positions from D3 simulation (only during simulation, not for animations)
+    if (arcLODManagerRef.current) {
+      graphData.links.forEach((link) => {
+        if (!isValidForceGraphLink(link)) return;
 
-        // Update arc positions from simulation
-        graphData.links.forEach((link) => {
-          if (!isValidForceGraphLink(link)) return;
+        const sourceId = getNodeIdFromLinkEndpoint(link.source as LinkEndpoint);
+        const targetId = getNodeIdFromLinkEndpoint(link.target as LinkEndpoint);
+        const sourceNode = graphData.nodes.find(n => n.id === sourceId);
+        const targetNode = graphData.nodes.find(n => n.id === targetId);
 
-          const sourceId = getNodeIdFromLinkEndpoint(link.source as LinkEndpoint);
-          const targetId = getNodeIdFromLinkEndpoint(link.target as LinkEndpoint);
-          const sourceNode = graphData.nodes.find(n => n.id === sourceId);
-          const targetNode = graphData.nodes.find(n => n.id === targetId);
+        if (!sourceNode || !targetNode) return;
 
-          if (!sourceNode || !targetNode) return;
+        const sourcePos = new THREE.Vector3(
+          sourceNode.x ?? 0,
+          sourceNode.y ?? 0,
+          sourceNode.z ?? 0
+        );
+        const targetPos = new THREE.Vector3(
+          targetNode.x ?? 0,
+          targetNode.y ?? 0,
+          targetNode.z ?? 0
+        );
 
-          const sourcePos = new THREE.Vector3(
-            sourceNode.x ?? 0,
-            sourceNode.y ?? 0,
-            sourceNode.z ?? 0
-          );
-          const targetPos = new THREE.Vector3(
-            targetNode.x ?? 0,
-            targetNode.y ?? 0,
-            targetNode.z ?? 0
-          );
-
-          arcLODManagerRef.current?.updateArcPositions(link.id, sourcePos, targetPos);
-        });
-
-        // Update LOD and animations
-        arcLODManagerRef.current.update(camera, time, deltaTime);
-      }
+        arcLODManagerRef.current?.updateArcPositions(link.id, sourcePos, targetPos);
+      });
     }
   }, [isGraphReady, graphData.links, graphData.nodes]);
 
