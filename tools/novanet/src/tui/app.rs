@@ -957,7 +957,8 @@ impl App {
             KeyCode::Char('e') | KeyCode::Char('E') if key.modifiers.is_empty() => {
                 // E = Expand subtree under cursor
                 if self.focus == Focus::Tree {
-                    if let Some(key) = self.tree.collapse_key_at(self.tree_cursor) {
+                    let data_mode = self.is_data_mode();
+                    if let Some(key) = self.tree.collapse_key_at(self.tree_cursor, data_mode) {
                         self.tree.expand_subtree(&key);
                     }
                 }
@@ -966,7 +967,8 @@ impl App {
             KeyCode::Char('c') => {
                 // c = Collapse subtree under cursor
                 if self.focus == Focus::Tree {
-                    if let Some(key) = self.tree.collapse_key_at(self.tree_cursor) {
+                    let data_mode = self.is_data_mode();
+                    if let Some(key) = self.tree.collapse_key_at(self.tree_cursor, data_mode) {
                         self.tree.collapse_subtree(&key);
                     }
                 }
@@ -1657,7 +1659,8 @@ impl App {
     /// Toggle collapse/expand of the current tree item.
     /// Also triggers loading for instances, Entity categories, and category instances in Data mode.
     fn toggle_tree_item(&mut self) {
-        if let Some(key) = self.tree.collapse_key_at(self.tree_cursor) {
+        let data_mode = self.is_data_mode();
+        if let Some(key) = self.tree.collapse_key_at(self.tree_cursor, data_mode) {
             // Check if expanding (going from collapsed to expanded)
             let was_collapsed = self.tree.is_collapsed(&key);
             self.tree.toggle(&key);
