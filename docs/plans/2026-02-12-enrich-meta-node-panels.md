@@ -9,8 +9,8 @@
 | Question | Decision |
 |----------|----------|
 | **Objectives** | Pedagogical + Visual + All node types (A+C+D) |
-| **Visual distinction** | Badge `[⛺meta]` / `[data]` + Background color + Distinct icons |
-| **Badge format** | `[⛺meta]` for schema nodes, `[data]` for instances |
+| **Visual distinction** | Badge `[🧬meta]` / `[📄data]` + Background color + Distinct icons |
+| **Badge format** | `[🧬meta]` for schema nodes, `[📄data]` for instances |
 | **Tree display** | Suffix badge on meta lines + different background + badge in info panel |
 | **Info panel detail** | Ultra-complete: all sections + example instances + related arcs |
 
@@ -23,75 +23,75 @@
 │                                                                             │
 │  ▼ Nodes (60)                                                               │
 │  │                                                                          │
-│  ├▼ ◉ shared ──────────────────────────────────────────────────── [⛺meta]  │
+│  ├▼ ◉ shared ──────────────────────────────────────────────────── [🧬meta]  │
 │  │ │  39 kinds · 18K inst · 4 layers                                       │
 │  │ │                                                                        │
-│  │ ├▼ ⚙ config ────────────────────────────────────────────────── [⛺meta]  │
+│  │ ├▼ ⚙ config ────────────────────────────────────────────────── [🧬meta]  │
 │  │ │ │  3 kinds · 214 inst · ■ invariant                                   │
 │  │ │ │                                                                      │
-│  │ │ ├▼ ◆ Locale ■ ────────────────────────────────────────────── [⛺meta]  │
+│  │ │ ├▼ ◆ Locale ■ ────────────────────────────────────────────── [🧬meta]  │
 │  │ │ │ │  200 instances · shared/config                                    │
 │  │ │ │ │                                                                    │
-│  │ │ │ ├── fr-FR    [→5|←12]  [data]        French (France)                │
-│  │ │ │ ├── en-US    [→5|←8]   [data]        English (United States)        │
-│  │ │ │ ├── ja-JP    [→5|←3]   [data]        Japanese (Japan)               │
+│  │ │ │ ├── fr-FR    [→5|←12]  [📄data]        French (France)                │
+│  │ │ │ ├── en-US    [→5|←8]   [📄data]        English (United States)        │
+│  │ │ │ ├── ja-JP    [→5|←3]   [📄data]        Japanese (Japan)               │
 │  │ │ │ └── ⋯ 197 more                                                      │
 │  │ │ │                                                                      │
-│  │ │ └▶ ◆ EntityCategory ■ ────────────────────────────────────── [⛺meta]  │
+│  │ │ └▶ ◆ EntityCategory ■ ────────────────────────────────────── [🧬meta]  │
 │  │ │      13 instances                                                     │
 │  │ │                                                                        │
-│  │ └▼ ● locale ────────────────────────────────────────────────── [⛺meta]  │
+│  │ └▼ ● locale ────────────────────────────────────────────────── [🧬meta]  │
 │  │      6 kinds · 1.2K inst · mixed traits                                 │
 │  │                                                                          │
-│  └▼ ◎ org ─────────────────────────────────────────────────────── [⛺meta]  │
+│  └▼ ◎ org ─────────────────────────────────────────────────────── [🧬meta]  │
 │    │  21 kinds · 2.4K inst · 6 layers                                      │
 │    │                                                                        │
-│    ├▼ ■ foundation ────────────────────────────────────────────── [⛺meta]  │
+│    ├▼ ■ foundation ────────────────────────────────────────────── [🧬meta]  │
 │    │ │  3 kinds · 45 inst · ■□ mixed                                       │
 │    │ │                                                                      │
-│    │ ├▶ ◆ Project ■ ───────────────────────────────────────────── [⛺meta]  │
-│    │ ├▶ ◆ ProjectContent □ ────────────────────────────────────── [⛺meta]  │
-│    │ └▶ ◆ BrandIdentity ■ ─────────────────────────────────────── [⛺meta]  │
+│    │ ├▶ ◆ Project ■ ───────────────────────────────────────────── [🧬meta]  │
+│    │ ├▶ ◆ ProjectContent □ ────────────────────────────────────── [🧬meta]  │
+│    │ └▶ ◆ BrandIdentity ■ ─────────────────────────────────────── [🧬meta]  │
 │    │                                                                        │
-│    ├▼ ◆ semantic ──────────────────────────────────────────────── [⛺meta]  │
+│    ├▼ ◆ semantic ──────────────────────────────────────────────── [🧬meta]  │
 │    │ │  4 kinds · 890 inst · ■□ mixed                                      │
 │    │ │                                                                      │
-│    │ ├▶ ◆ Entity ■ ────────────────────────────────────────────── [⛺meta]  │
-│    │ └▶ ◆ EntityContent □ ─────────────────────────────────────── [⛺meta]  │
+│    │ ├▶ ◆ Entity ■ ────────────────────────────────────────────── [🧬meta]  │
+│    │ └▶ ◆ EntityContent □ ─────────────────────────────────────── [🧬meta]  │
 │    │                                                                        │
-│    └▼ ▣ output ────────────────────────────────────────────────── [⛺meta]  │
+│    └▼ ▣ output ────────────────────────────────────────────────── [🧬meta]  │
 │      │  3 kinds · 1.2K inst · ★ generated                                  │
 │      │                                                                      │
-│      ├▼ ◆ PageGenerated ★ ─────────────────────────────────────── [⛺meta]  │
+│      ├▼ ◆ PageGenerated ★ ─────────────────────────────────────── [🧬meta]  │
 │      │ │  450 instances · org/output                                       │
 │      │ │                                                                    │
-│      │ ├── page:homepage@fr-FR  [→3|←1] (⊞5/5)  [data]                     │
-│      │ ├── page:homepage@en-US  [→3|←1] (⊞5/5)  [data]                     │
-│      │ ├── page:pricing@fr-FR   [→2|←1] (✗1!)   [data]  ← missing req      │
+│      │ ├── page:homepage@fr-FR  [→3|←1] (⊞5/5)  [📄data]                     │
+│      │ ├── page:homepage@en-US  [→3|←1] (⊞5/5)  [📄data]                     │
+│      │ ├── page:pricing@fr-FR   [→2|←1] (✗1!)   [📄data]  ← missing req      │
 │      │ └── ⋯ 447 more                                                      │
 │      │                                                                      │
-│      └▶ ◆ BlockGenerated ★ ────────────────────────────────────── [⛺meta]  │
+│      └▶ ◆ BlockGenerated ★ ────────────────────────────────────── [🧬meta]  │
 │                                                                             │
 │  ══════════════════════════════════════════════════════════════════════════ │
 │                                                                             │
 │  ▼ Arcs (114)                                        5 families · 45K inst  │
 │  │                                                                          │
-│  ├▼ → ownership ───────────────────────────────────────────────── [⛺meta]  │
+│  ├▼ → ownership ───────────────────────────────────────────────── [🧬meta]  │
 │  │ │  43 arc kinds · 23K inst · eager traversal                            │
 │  │ │                                                                        │
-│  │ ├▶ → HAS_PAGE ──────────────────────────────────────────────── [⛺meta]  │
+│  │ ├▶ → HAS_PAGE ──────────────────────────────────────────────── [🧬meta]  │
 │  │ │     Project → Page · 1:N · intra_realm · 12K inst                     │
 │  │ │                                                                        │
-│  │ └▶ → HAS_BLOCK ─────────────────────────────────────────────── [⛺meta]  │
+│  │ └▶ → HAS_BLOCK ─────────────────────────────────────────────── [🧬meta]  │
 │  │       Page → Block · 1:N · intra_realm · 8K inst                        │
 │  │                                                                          │
-│  ├▼ ⇢ localization ────────────────────────────────────────────── [⛺meta]  │
+│  ├▼ ⇢ localization ────────────────────────────────────────────── [🧬meta]  │
 │  │ │  12 arc kinds · 15K inst · selective traversal                        │
 │  │ │                                                                        │
 │  │ └▶ ⇢ FOR_LOCALE                                                         │
 │  │       EntityContent → Locale · N:1 · cross_realm · 8K inst              │
 │  │                                                                          │
-│  └▶ ◊ semantic ────────────────────────────────────────────────── [⛺meta]  │
+│  └▶ ◊ semantic ────────────────────────────────────────────────── [🧬meta]  │
 │       28 arc kinds · 5K inst · context-dependent                           │
 │                                                                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
@@ -104,8 +104,8 @@
 │  ├── = leaf (no children / instance)                                       │
 │                                                                             │
 │  BADGES:                                                                    │
-│  [⛺meta]    = Schema node (Realm/Layer/Kind/ArcFamily/ArcKind)             │
-│  [data]      = Data node (instance)                                        │
+│  [🧬meta]    = Schema node (Realm/Layer/Kind/ArcFamily/ArcKind)             │
+│  [📄data]      = Data node (instance)                                        │
 │                                                                             │
 │  META TYPE ICONS:                                                           │
 │  ◉/◎ = Realm (shared/org)                                                  │
@@ -150,7 +150,7 @@
 │  INFO PANEL: META NODE (Kind)                                               │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│  [⛺meta] Kind                                                               │
+│  [🧬meta] Kind                                                               │
 │  ══════════════════════════════════════════════════════════════════════    │
 │                                                                             │
 │  IDENTITY                                                                   │
@@ -198,7 +198,7 @@
 │  INFO PANEL: DATA NODE (Instance)                                           │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│  [data] Locale                                                              │
+│  [📄data] Locale                                                              │
 │  ══════════════════════════════════════════════════════════════════════    │
 │                                                                             │
 │  IDENTITY                                                                   │
@@ -591,8 +591,8 @@ CYPHER
 
 ### Phase 4: Meta/Data Visual Distinction (from Brainstorm)
 
-11. **Add `[⛺meta]` badge suffix to tree lines** (`tree.rs`)
-    - Meta nodes (Realm, Layer, Kind, ArcFamily, ArcKind): append ` [⛺meta]`
+11. **Add `[🧬meta]` badge suffix to tree lines** (`tree.rs`)
+    - Meta nodes (Realm, Layer, Kind, ArcFamily, ArcKind): append ` [🧬meta]`
     - Data nodes (instances): no badge
     - Implementation: modify `render_tree_item()` function
 
@@ -601,14 +601,14 @@ CYPHER
     - Apply to Realm, Layer, Kind, ArcFamily, ArcKind lines
     - Data nodes keep default background
 
-13. **Add `[⛺meta]` badge to info panel header** (`info.rs`)
+13. **Add `[🧬meta]` badge to info panel header** (`info.rs`)
     - First line of panel shows badge before type
     - Add `type: Meta Node (schema)` line for meta nodes
     - Add `type: Data Node (instance)` line for data nodes
 
 14. **Update tree item rendering** (`tree.rs`)
     - Current: `▼ ◉ Realm:shared  ▦6 ◇21  │ ●org │R│`
-    - New:     `▼ ◉ Realm:shared [⛺meta]  ▦6 ◇21  │ ●org │R│`
+    - New:     `▼ ◉ Realm:shared [🧬meta]  ▦6 ◇21  │ ●org │R│`
 
 ### Phase 5: Ultra-Complete Info Panels (from Brainstorm)
 
@@ -632,8 +632,8 @@ CYPHER
 | File | Changes |
 |------|---------|
 | `tools/novanet/src/tui/data.rs` | Add llm_context, visual encoding fields |
-| `tools/novanet/src/tui/ui/info.rs` | Enrich all meta node panels, add [⛺meta] badge |
-| `tools/novanet/src/tui/ui/tree.rs` | Add [⛺meta] suffix, darker background for meta |
+| `tools/novanet/src/tui/ui/info.rs` | Enrich all meta node panels, add [🧬meta] badge |
+| `tools/novanet/src/tui/ui/tree.rs` | Add [🧬meta] suffix, darker background for meta |
 | `tools/novanet/src/tui/theme.rs` | Add META_BG color constant |
 | `tools/novanet/src/parsers/taxonomy.rs` | Parse llm_context field |
 | `tools/novanet/src/parsers/yaml_arc.rs` | Parse scope field |
@@ -656,7 +656,7 @@ CYPHER
 3. All meta nodes show instance counts from Neo4j
 4. Visual encoding (color, stroke, icon) is displayed
 5. No regression on Kind/Instance panels (already rich)
-6. **[⛺meta] badge visible on ALL meta nodes** in tree and info panel
+6. **[🧬meta] badge visible on ALL meta nodes** in tree and info panel
 7. **Darker background** distinguishes meta from data in tree view
 8. **EXAMPLE INSTANCES** section shows real data samples
 9. **RELATED ARCS/KINDS** enable navigation discovery
