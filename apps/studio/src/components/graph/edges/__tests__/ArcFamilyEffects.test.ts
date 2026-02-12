@@ -7,8 +7,8 @@
  * @see docs/plans/2026-02-10-arc-animation-system-v2-design.md
  */
 
-import { resolveTheme, resolveThemeCached, getCategory, clearThemeCache } from '../system/registry';
-import { getArcFamily, getArcFamilyEffect, ARC_FAMILY_EFFECTS } from '../system/arcFamilyPalettes';
+import { resolveTheme, resolveThemeCached, clearThemeCache } from '../system/registry';
+import { getArcFamilyEffect, ARC_FAMILY_EFFECTS } from '../system/arcFamilyPalettes';
 
 describe('Arc Family Effects Integration', () => {
   // Clear cache before each test to ensure fresh theme resolution

@@ -45,7 +45,8 @@ function getDataBadge(page: Page) {
 }
 
 // Helper: Check if currently in meta mode by looking at the badge text
-async function isInMetaMode(page: Page): Promise<boolean> {
+// Prefixed with underscore - kept for future tests when meta mode UI is finalized
+async function _isInMetaMode(page: Page): Promise<boolean> {
   const metaBadge = getMetaBadge(page);
   return await metaBadge.isVisible();
 }
@@ -172,7 +173,7 @@ test.describe.skip('Schema Mode - URL Sync', () => {
     await expect(page).not.toHaveURL(/mode=/);
 
     // Switch to schema mode
-    await switchToSchemaMode(page);
+    await switchToMetaMode(page);
 
     // URL should contain mode=schema (after debounce)
     await expect(page).toHaveURL(/mode=schema/, { timeout: 5000 });
@@ -560,7 +561,7 @@ test.describe.skip('Schema Mode - Error Handling', () => {
     await waitForGraphLoaded(page);
 
     // Switch to schema mode
-    await switchToSchemaMode(page);
+    await switchToMetaMode(page);
 
     // Wait for everything to settle
     await page.waitForTimeout(1000);

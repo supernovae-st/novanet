@@ -64,7 +64,7 @@ import {
   type TurboNodeData,
   type TurboNodeType,
 } from './nodes';
-import { FloatingEdge, MagneticEdge, BundledEdge, type FloatingEdgeType, EdgeVisibilityProvider, useEdgeVisibilityStore, useParallelEdges, getEdgeIndexInGroup, BUNDLE_THRESHOLD } from './edges';
+import { FloatingEdge, MagneticEdge, type FloatingEdgeType, EdgeVisibilityProvider, useEdgeVisibilityStore, useParallelEdges, getEdgeIndexInGroup } from './edges';
 import { NodeContextMenu } from './NodeContextMenu';
 import { GraphToolbar } from './GraphToolbar';
 import type { GraphNode as GraphNodeType, GraphEdge as GraphEdgeType } from '@/types';
@@ -262,8 +262,15 @@ function Graph2DInner({
   // When layoutMode is 'magnetic', fetch Realm/Layer as attractor nodes
   const { data: magneticData, isMagneticMode } = useMagneticData();
 
-  // Focus mode for selection-based dimming
-  const { isNodeDimmed, isEdgeDimmed, selectedId: focusSelectedId, connectedIds } = useFocusMode(graphEdges);
+  // Focus mode for selection-based dimming (supports both node and edge selection)
+  const {
+    isNodeDimmed,
+    isEdgeDimmed,
+    selectedId: focusSelectedId,
+    selectedEdgeId: focusSelectedEdgeId,
+    hoveredEdgeId: focusHoveredEdgeId,
+    connectedIds,
+  } = useFocusMode(graphEdges);
 
   // Hover highlight for connection-based dimming (lighter than focus mode)
   // NOTE: Edge hover state (isEdgeHoverDimmed) is now computed locally in FloatingEdge
@@ -861,10 +868,11 @@ function Graph2DInner({
   }, [layoutedNodes]);
 
   // Step 2: Apply dimming state ONLY when focus/hover changes (cheap O(n) operation)
-  // Priority: Selection focus mode > Hover highlight > Normal
+  // Priority: Selection focus mode > Edge focus mode > Hover highlight > Normal
   const initialNodes = useMemo(() => {
     return validLayoutedNodes.map((node) => {
       // Focus mode dimming takes precedence over hover dimming
+      // This now includes edge selection/hover (isNodeDimmed checks both)
       const focusDimmed = isNodeDimmed(node.id);
       // Hover dimming is lighter (25% opacity vs 15% for focus)
       const hoverDimmed = isNodeHoverDimmed(node.id);
@@ -880,8 +888,8 @@ function Graph2DInner({
         },
       };
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps -- focusSelectedId/hoveredId triggers recalc when selection/hover changes
-  }, [validLayoutedNodes, isNodeDimmed, isNodeHoverDimmed, focusSelectedId, hoveredId]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- selection/hover triggers recalc
+  }, [validLayoutedNodes, isNodeDimmed, isNodeHoverDimmed, focusSelectedId, focusSelectedEdgeId, focusHoveredEdgeId, hoveredId]);
 
   // =========================================================================
   // EDGE DATA - Simplified
@@ -1252,7 +1260,9 @@ function Graph2DInner({
   );
 
   const handlePaneClick = useCallback(() => {
-    setSelectedNode(null);
+    // v11.6.3: Use clearSelection to clear both node and edge selection
+    // This exits focus mode when clicking on the canvas background
+    clearSelection();
     setContextMenu(null);
 
     // Deselect all schema nodes when clicking on pane
@@ -1265,7 +1275,7 @@ function Graph2DInner({
     }
 
     onPaneClick?.();
-  }, [setSelectedNode, onPaneClick, schemaNodes.length]);
+  }, [clearSelection, onPaneClick, schemaNodes.length]);
 
   // Right-click context menu handler
   const handleNodeContextMenu: NodeMouseHandler<TurboNodeType> = useCallback(
@@ -1357,7 +1367,8 @@ function Graph2DInner({
 
       // Escape: clear selection (handled here for graph-specific context)
       // Note: Global escape handler in useKeyboardShortcuts handles dialogs
-      if (event.key === 'Escape' && selectedNodeId) {
+      // v11.6.3: Also handle edge selection to exit edge focus mode
+      if (event.key === 'Escape' && (selectedNodeId || focusSelectedEdgeId)) {
         event.preventDefault();
         clearSelection();
         setContextMenu(null);
@@ -1376,9 +1387,9 @@ function Graph2DInner({
     // - So when this effect runs, refs already contain fresh values
     // - This avoids re-registering the listener on every data change
     //
-    // Direct deps (selectedNodeId, callbacks):
+    // Direct deps (selectedNodeId, focusSelectedEdgeId, callbacks):
     // - These SHOULD trigger re-registration because handler behavior changes
-  }, [selectedNodeId, setSelectedNode, expandNode, hideNode, clearSelection]);
+  }, [selectedNodeId, focusSelectedEdgeId, setSelectedNode, expandNode, hideNode, clearSelection]);
 
   // Reset cycle index when selection changes externally
   useEffect(() => {

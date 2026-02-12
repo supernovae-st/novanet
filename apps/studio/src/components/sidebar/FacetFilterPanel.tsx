@@ -17,7 +17,6 @@ import { memo, useCallback, useMemo } from 'react';
 import {
   Globe,
   Building2,
-  Target,
   Landmark,
   Layers,
   Lightbulb,
@@ -25,8 +24,6 @@ import {
   FileOutput,
   Settings,
   Brain,
-  Search,
-  Globe2,
   Lock,
   Languages,
   BookOpen,

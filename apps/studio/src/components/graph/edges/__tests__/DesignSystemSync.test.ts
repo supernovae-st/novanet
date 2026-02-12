@@ -13,20 +13,21 @@
  * @see docs/plans/2026-02-10-arc-animation-system-v2-design.md
  */
 
+// v11.7.0: Use unified palette system (colors now from @/design/colors/palette)
 import {
-  ARC_FAMILY_COLORS,
-  ARC_FAMILY_PALETTES,
   ARC_FAMILY_EFFECTS,
-  ARC_FAMILY_STROKES,
   getArcFamily,
   getArcFamilyEffect,
   getArcFamilyPalette,
+  ARC_PALETTES,
+  ARC_STROKES,
   type ArcFamily,
 } from '../system/arcFamilyPalettes';
+import { ARC_FAMILY_COLORS } from '@/design/colors/generated';
 
 import { CATEGORY_THEMES, PALETTES } from '../system/themes';
-import { resolveTheme, getCategory, clearThemeCache } from '../system/registry';
-import type { EffectPrimitive, RelationCategory } from '../system/types';
+import { resolveTheme, clearThemeCache } from '../system/registry';
+import type { RelationCategory } from '../system/types';
 
 // =============================================================================
 // Arc Family Completeness
@@ -38,18 +39,20 @@ describe('Arc Family Completeness', () => {
   it('ARC_FAMILY_COLORS has all 5 families', () => {
     for (const family of ALL_ARC_FAMILIES) {
       expect(ARC_FAMILY_COLORS[family]).toBeDefined();
-      expect(ARC_FAMILY_COLORS[family]).toMatch(/^#[0-9a-f]{6}$/i);
+      // v11.7.0: ARC_FAMILY_COLORS now has ColorTokens structure with .color property
+      expect(ARC_FAMILY_COLORS[family].color).toMatch(/^#[0-9a-f]{6}$/i);
     }
   });
 
-  it('ARC_FAMILY_PALETTES has all 5 families with complete palettes', () => {
+  it('ARC_PALETTES has all 5 families with complete palettes', () => {
     for (const family of ALL_ARC_FAMILIES) {
-      const palette = ARC_FAMILY_PALETTES[family];
+      const palette = ARC_PALETTES[family];
       expect(palette).toBeDefined();
       expect(palette.primary).toMatch(/^#[0-9a-f]{6}$/i);
       expect(palette.secondary).toMatch(/^#[0-9a-f]{6}$/i);
       expect(palette.tertiary).toMatch(/^#[0-9a-f]{6}$/i);
-      expect(palette.glow).toMatch(/^#[0-9a-f]{6}$/i);
+      // v11.7.0: glow is now hex with alpha suffix
+      expect(palette.glow).toMatch(/^#[0-9a-f]{6,8}$/i);
     }
   });
 
@@ -64,9 +67,9 @@ describe('Arc Family Completeness', () => {
     expect(effects.size).toBe(5);
   });
 
-  it('ARC_FAMILY_STROKES has all 5 families', () => {
+  it('ARC_STROKES has all 5 families', () => {
     for (const family of ALL_ARC_FAMILIES) {
-      const stroke = ARC_FAMILY_STROKES[family];
+      const stroke = ARC_STROKES[family];
       expect(stroke).toBeDefined();
       expect(['solid', 'dashed', 'dotted']).toContain(stroke.style);
       expect(stroke.width).toBeGreaterThan(0);
@@ -82,15 +85,17 @@ describe('Color Consistency', () => {
   it('ARC_FAMILY_COLORS matches palette primary colors', () => {
     const families = Object.keys(ARC_FAMILY_COLORS) as ArcFamily[];
     for (const family of families) {
-      expect(ARC_FAMILY_COLORS[family]).toBe(ARC_FAMILY_PALETTES[family].primary);
+      // v11.7.0: ARC_FAMILY_COLORS has .color property, palette has .primary
+      expect(ARC_FAMILY_COLORS[family].color).toBe(ARC_PALETTES[family].primary);
     }
   });
 
-  it('Palette glow matches primary color', () => {
-    const families = Object.keys(ARC_FAMILY_PALETTES) as ArcFamily[];
+  it('Palette glow is derived from primary color', () => {
+    const families = Object.keys(ARC_PALETTES) as ArcFamily[];
     for (const family of families) {
-      const palette = ARC_FAMILY_PALETTES[family];
-      expect(palette.glow).toBe(palette.primary);
+      const palette = ARC_PALETTES[family];
+      // v11.7.0: glow is now primary + alpha, so it starts with primary hex
+      expect(palette.glow.startsWith(palette.primary)).toBe(true);
     }
   });
 });
