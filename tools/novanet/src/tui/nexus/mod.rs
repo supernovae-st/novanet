@@ -22,6 +22,7 @@
 
 pub mod arcs;
 pub mod glossary;
+pub mod i18n;
 pub mod intro;
 pub mod layers;
 pub mod persistence;
@@ -193,11 +194,54 @@ impl NexusTab {
     }
 }
 
+// =============================================================================
+// LOCALE (i18n)
+// =============================================================================
+
+/// Language for Nexus content (toggle with Shift+L).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum NexusLocale {
+    /// English (default)
+    #[default]
+    En,
+    /// French
+    Fr,
+}
+
+impl NexusLocale {
+    /// Toggle between En and Fr.
+    pub fn toggle(&self) -> Self {
+        match self {
+            NexusLocale::En => NexusLocale::Fr,
+            NexusLocale::Fr => NexusLocale::En,
+        }
+    }
+
+    /// Get display label for current locale.
+    pub fn label(&self) -> &'static str {
+        match self {
+            NexusLocale::En => "EN",
+            NexusLocale::Fr => "FR",
+        }
+    }
+
+    /// Get flag emoji for current locale.
+    pub fn flag(&self) -> &'static str {
+        match self {
+            NexusLocale::En => "🇬🇧",
+            NexusLocale::Fr => "🇫🇷",
+        }
+    }
+}
+
 /// Main Nexus mode state.
 #[derive(Debug, Clone)]
 pub struct NexusState {
     /// Currently active tab.
     pub tab: NexusTab,
+
+    /// Current locale for i18n (toggle with Shift+L).
+    pub locale: NexusLocale,
 
     // === LEARN Section State ===
 
@@ -283,6 +327,7 @@ impl NexusState {
     pub fn new() -> Self {
         Self {
             tab: NexusTab::default(),
+            locale: NexusLocale::default(),
             // LEARN section
             intro_page: 0,
             glossary: glossary::GlossaryState::new(),
@@ -514,6 +559,18 @@ impl NexusState {
             // 'y' to yank (copy) current selection to clipboard
             KeyCode::Char('y') => self.yank_current(),
 
+            // 'L' (Shift+L) to toggle locale (En/Fr)
+            KeyCode::Char('L') => {
+                self.locale = self.locale.toggle();
+                self.clipboard_message = Some(format!(
+                    "Language: {} {}",
+                    self.locale.flag(),
+                    self.locale.label()
+                ));
+                self.clipboard_message_time = Some(Instant::now());
+                true
+            }
+
             _ => false,
         }
     }
@@ -662,12 +719,14 @@ impl NexusState {
 
     /// Advance to the next "Did you know?" tip.
     pub fn next_tip(&mut self) {
-        self.tip_index = (self.tip_index + 1) % TIPS.len();
+        let tips = i18n::tips(self.locale);
+        self.tip_index = (self.tip_index + 1) % tips.len();
     }
 
     /// Get the current "Did you know?" tip.
     pub fn current_tip(&self) -> &'static str {
-        TIPS.get(self.tip_index).unwrap_or(&TIPS[0])
+        let tips = i18n::tips(self.locale);
+        tips.get(self.tip_index).unwrap_or(&tips[0])
     }
 
     /// Check if there's a pending 'g' key waiting for completion.
