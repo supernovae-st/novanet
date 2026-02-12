@@ -191,6 +191,8 @@ export const Graph3D = memo(function Graph3D({
   // Instance-level caches (not global) to prevent memory leaks
   const compositeNodeCacheRef = useRef(new Map<string, THREE.Group>());
   const hoverScalesRef = useRef(new Map<string, number>());
+  // Track previous selection to detect when aside panel closes (selection cleared)
+  const prevHasSelectionRef = useRef<boolean>(false);
 
   // Cached geometries and materials to avoid allocation per render
   const selectionGlowGeometryRef = useRef<THREE.SphereGeometry | null>(null);
@@ -213,9 +215,10 @@ export const Graph3D = memo(function Graph3D({
 
   // UI store for selection - combined into 2 subscriptions instead of 6
   // State selector with useShallow for object comparison (re-renders only when values change)
-  const { selectedNodeId, hoveredNodeId } = useUIStore(
+  const { selectedNodeId, selectedEdgeId, hoveredNodeId } = useUIStore(
     useShallow((state) => ({
       selectedNodeId: state.selectedNodeId,
+      selectedEdgeId: state.selectedEdgeId,
       hoveredNodeId: state.hoveredNodeId,
     }))
   );
@@ -636,6 +639,24 @@ export const Graph3D = memo(function Graph3D({
     fgRef.current.cameraPosition(pos, lookAt, 1200);  // Smoother 1.2s animation
   }, []);
 
+  // Auto-zoom to fit when aside panel closes (selection cleared)
+  // This provides a better UX when closing the detail panel
+  useEffect(() => {
+    const hasSelection = selectedNodeId !== null || selectedEdgeId !== null;
+
+    // If selection was present and is now cleared, reset camera to fit all nodes
+    if (prevHasSelectionRef.current && !hasSelection) {
+      // Small delay to let the panel animation complete
+      const timerId = setTimeout(() => {
+        setCameraView('reset');
+      }, 100);
+      return () => clearTimeout(timerId);
+    }
+
+    // Update ref for next render
+    prevHasSelectionRef.current = hasSelection;
+  }, [selectedNodeId, selectedEdgeId, setCameraView]);
+
   // Keyboard shortcuts handler
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -891,9 +912,11 @@ export const Graph3D = memo(function Graph3D({
   // Background click handler - deselect and reset view
   // Only triggers if we're not hovering a node (prevents conflict with onNodeClick)
   const handleBackgroundClick = useCallback(() => {
-    // Guard: If hovering a node, the click is for the node, not the background
+    // Guard: Read FRESH hover state directly from store (not stale closure)
     // This fixes the "double-click to select" bug in 3D view
-    if (hoveredNodeId) {
+    // React batches state updates, so captured hoveredNodeId may be stale
+    const freshHoveredNodeId = useUIStore.getState().hoveredNodeId;
+    if (freshHoveredNodeId) {
       return;
     }
 
@@ -901,7 +924,7 @@ export const Graph3D = memo(function Graph3D({
     setSelectedEdge(null);
     setCameraView('reset');  // Reset camera to default isometric view
     onPaneClick?.();
-  }, [hoveredNodeId, setSelectedNode, setSelectedEdge, setCameraView, onPaneClick]);
+  }, [setSelectedNode, setSelectedEdge, setCameraView, onPaneClick]);
 
   // Link click handler
   const handleLinkClick = useCallback(
