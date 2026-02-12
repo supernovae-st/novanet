@@ -458,7 +458,7 @@ Add a new arc type between nodes.
 | Pattern | ArcFamily | Examples |
 |---------|-----------|----------|
 | `HAS_*` | ownership | HAS_PAGE, HAS_BLOCK |
-| `HAS_CONTENT` | localization | Entity→EntityContent, Project→ProjectL10n |
+| `HAS_CONTENT` | localization | Entity→EntityContent, Project→ProjectContent |
 | `HAS_GENERATED` | generation | Page→PageGenerated, Block→BlockGenerated |
 | `*_OF` | ownership (inverse) | L10N_OF, BLOCK_OF, OUTPUT_OF |
 | `FOR_*` | localization | FOR_LOCALE |
