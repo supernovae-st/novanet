@@ -37,7 +37,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 ```
 +===================================================================================================+
-|                              NOVANET - SOURCE DE VERITE (v11.3)                                   |
+|                              NOVANET - SOURCE DE VERITE (v11.7)                                   |
 +===================================================================================================+
 
 +---------------------------------------------------------------------------------------------------+
@@ -46,9 +46,9 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 |                                                                                                   |
 |   packages/core/models/                                                                           |
 |   +-- _index.yaml                          <- Index du graphe (structure, changelog)              |
-|   +-- taxonomy.yaml                        <- v11.3: 2 Realms/11 Layers/5 Traits/5 ArcFamilies    |
-|   +-- node-kinds/                          <- 61 fichiers YAML (1 par Kind)                       |
-|   |   +-- shared/                          <- Realm: shared (32 nodes)                            |
+|   +-- taxonomy.yaml                        <- v11.7: 2 Realms/10 Layers/5 Traits/5 ArcFamilies    |
+|   +-- node-kinds/                          <- 60 fichiers YAML (1 par Kind)                       |
+|   |   +-- shared/                          <- Realm: shared (39 nodes)                            |
 |   |   |   +-- locale/                      <-   Layer: locale (7 nodes)                           |
 |   |   |   +-- geography/                   <-   Layer: geography (6 nodes)                        |
 |   |   |   +-- knowledge/                   <-   Layer: knowledge (19 nodes)                       |
@@ -56,7 +56,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 |   |   |       +-- expression-set.yaml, ... <- ExpressionSet, PatternSet, CultureSet, etc.         |
 |   |   |       +-- taboo-set.yaml, etc.     <- TabooSet, AudienceSet + their atoms                 |
 |   |   |                                                                                           |
-|   |   +-- org/                             <- Realm: org (29 nodes)                               |
+|   |   +-- org/                             <- Realm: org (21 nodes)                               |
 |   |       +-- config/                      <-   Layer: config (OrgConfig)                         |
 |   |       +-- foundation/                  <-   Layer: foundation (Project, Brand, ProjectContent)|
 |   |       +-- structure/                   <-   Layer: structure (Page, Block, Types)             |
@@ -66,7 +66,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 |   |       +-- geo/                         <-   Layer: geo (GEOQuery, GEOAnswer, GEOMetrics)      |
 |   |       +-- output/                      <-   Layer: output (PageGenerated, BlockGenerated)     |
 |   |                                                                                               |
-|   +-- arc-kinds/                           <- 125 fichiers YAML (1 par ArcKind)                   |
+|   +-- arc-kinds/                           <- 114 fichiers YAML (1 par ArcKind)                   |
 |   +-- relations.yaml                       <- Legacy format (kept for parser compatibility)       |
 |   +-- views/                               <- Definitions de vues YAML                            |
 |                                                                                                   |
@@ -75,11 +75,11 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 ---
 
-## Section: META-GRAPH (v11.3 Faceted Classification)
+## Section: META-GRAPH (v11.7 Faceted Classification)
 
 ```
 +===================================================================================================+
-|                    META-GRAPH (v11.3) - Self-Describing Context Graph                             |
+|                    META-GRAPH (v11.7) - Self-Describing Context Graph                             |
 +===================================================================================================+
 
   Each Kind sits at the intersection of 4 classification axes:
@@ -98,7 +98,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
   6 Meta-Node Types (all carry :Meta double-label):
 
   +-------------+    +--------------+    +-------------+
-  |  Realm (2)  |--->|  Layer (11)  |--->|  Kind (61)  |
+  |  Realm (2)  |--->|  Layer (10)  |--->|  Kind (60)  |
   |  WHERE?     |    |  WHAT?       |    |  1:1 label  |
   |  HAS_LAYER  |    |  HAS_KIND    |    |             |
   +-------------+    +--------------+    +------+------+
@@ -120,7 +120,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
   Arc Schema (OWL-inspired):
 
   +----------------+    FROM_KIND    +-------------+    TO_KIND     +----------------+
-  | ArcKind (125)  |---------------->|  Kind (61)  |<---------------| ArcKind (125)  |
+  | ArcKind (114)  |---------------->|  Kind (60)  |<---------------| ArcKind (114)  |
   |  1:1 rel type  |                 +-------------+                |                |
   +-------+--------+                                                +----------------+
           |
@@ -142,7 +142,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
   |  (e.g. Block)  |                |  label:Block |
   +----------------+                +-------------+
 
-  TUI Modes (v11.3 - 3 modes):
+  TUI Modes (v11.7 - 3 modes):
 
   +---------------------------------------------------------------------------------+
   |  Graph  |  Taxonomy (t) or Instances (t) view - unified graph exploration      |
@@ -157,7 +157,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 ```
 +===================================================================================================+
-|                    SOURCE OF TRUTH PIPELINE - Schema Propagation (v11.3)                          |
+|                    SOURCE OF TRUTH PIPELINE - Schema Propagation (v11.7)                          |
 +===================================================================================================+
 
      +---------------------------------------------------------------------------------------------+
@@ -165,7 +165,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
      |                        packages/core/models/                                                |
      |                        +-- node-kinds/               <- 61 NodeKind files                   |
      |                        +-- arc-kinds/                <- 125 ArcKind files                   |
-     |                        +-- taxonomy.yaml             <- 2 Realms, 11 Layers, 5 Traits       |
+     |                        +-- taxonomy.yaml             <- 2 Realms, 10 Layers, 5 Traits       |
      +---------------------------------------------+-----------------------------------------------+
                                                    |
          +-----------------------------------------+-----------------------------------------+
@@ -209,7 +209,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 ```
 +===================================================================================================+
-|                    RUST BINARY - tools/novanet/ (v11.3)                                           |
+|                    RUST BINARY - tools/novanet/ (v11.7)                                           |
 +===================================================================================================+
 
   +-----------------------------------------------------------------------------------------------+
@@ -251,7 +251,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 ```
 +===================================================================================================+
-|                              LOCALE KNOWLEDGE STRUCTURE (v11.3)                                   |
+|                              LOCALE KNOWLEDGE STRUCTURE (v11.7)                                   |
 +===================================================================================================+
 
      +---------------------------------------------------------------------------------------------+
@@ -359,7 +359,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 |   +---------------------------------------------------+--------------------------------------+   |
 |                                                                                                   |
 |   +-------------------------------------------------------------------------------------------+   |
-|   |  VISUALIZATION - TUI Modes (v11.3)                                                        |   |
+|   |  VISUALIZATION - TUI Modes (v11.7)                                                        |   |
 |   +-------------------------------------------------------------------------------------------+   |
 |   |                                                                                           |   |
 |   |  +---------------------+  +---------------------+  +---------------------+                |   |
@@ -371,7 +371,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 |   |  |  Grouped by Realm  |  |  validation         |  |  Arcs, Pipeline    |                |   |
 |   |  +---------------------+  +---------------------+  +---------------------+                |   |
 |   |                                                                                           |   |
-|   |  Visual Encoding (v11.3):                                                                 |   |
+|   |  Visual Encoding (v11.7):                                                                 |   |
 |   |  +-- Fill color   -> Layer (11 colors)                                                    |   |
 |   |  +-- Border style  -> Trait (5 styles: solid/dashed/dotted/double/thin-dotted)            |   |
 |   |  +-- Spatial group -> Realm (2 zones: shared, org)                                        |   |
@@ -394,7 +394,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 |                    +------------------+                                                           |
 |                    |  @novanet/core   |  <- Types, schemas, generators, filters                   |
 |                    |  (source truth)  |     node-kinds/ + arc-kinds/ + taxonomy.yaml              |
-|                    +--------+---------+     v11.3: 2 Realms, 11 Layers                            |
+|                    +--------+---------+     v11.7: 2 Realms, 10 Layers                            |
 |                             |                                                                     |
 |              +--------------+--------------+                                                      |
 |              |              |              |                                                      |
@@ -425,7 +425,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 ```
 +===================================================================================================+
-|  DATA FLOW: Generation Pipeline (v11.3)                                                           |
+|  DATA FLOW: Generation Pipeline (v11.7)                                                           |
 +===================================================================================================+
 |                                                                                                   |
 |   1. INVARIANT NODES (no locale)                                                                  |
@@ -468,7 +468,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 | Metric | Value |
 |--------|-------|
 | Kind (node types) | 60 |
-| ArcKind (arcs) | 116 |
+| ArcKind (arcs) | 114 |
 | Realms | 2 (shared, org) |
 | Layers | 10 (4 shared + 6 org) |
 | Traits | 5 (invariant, localized, knowledge, generated, aggregated) |
@@ -523,7 +523,7 @@ novanet tui                        # Galaxy-themed mission control TUI
 User can invoke with:
 - `/novanet-arch` or `/novanet-architecture`
 - `/novanet-arch source` - YAML source only
-- `/novanet-arch meta` - Meta-Graph (v11.3 faceted classification)
+- `/novanet-arch meta` - Meta-Graph (v11.7 faceted classification)
 - `/novanet-arch pipeline` - Source of Truth Pipeline
 - `/novanet-arch locale` - Locale Knowledge Structure
 - `/novanet-arch infra` - Infrastructure only

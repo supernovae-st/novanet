@@ -69,18 +69,18 @@ db/
 
 ---
 
-## Graph Schema (v11.3.0)
+## Graph Schema (v11.7.0)
 
 | Realm | Nodes | Description |
 |-------|-------|-------------|
-| **Shared** | 32 | Locale, geography, knowledge atoms (READ-ONLY) |
-| **Org** | 29 | Organization structure, content, generation |
+| **Shared** | 39 | Config, locale, geography, knowledge atoms (READ-ONLY) |
+| **Org** | 21 | Organization structure, content, generation |
 
-Total: **61 node types**, **125 arc types**, **~200 meta-nodes** (Realm/Layer/Kind/Trait/ArcFamily/ArcKind)
+Total: **60 node types**, **114 arc types**, **~200 meta-nodes** (Realm/Layer/Kind/Trait/ArcFamily/ArcKind)
 
 ---
 
-## Locale Knowledge Architecture (v11.3)
+## Locale Knowledge Architecture (v11.7)
 
 ```
 Locale {key: "fr-FR"}
@@ -111,7 +111,7 @@ RETURN labels(n)[0] AS label, count(*) AS count
 ORDER BY count DESC;
 ```
 
-### Load Locale with Knowledge (v11.3)
+### Load Locale with Knowledge (v11.7)
 
 ```cypher
 MATCH (l:Locale {key: $locale})

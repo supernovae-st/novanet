@@ -50,9 +50,9 @@ docs:
   title: "Complete Graph View"
   category: overview
   description: |
-    The complete NovaNet graph showing all 61 node types organized into two realms:
-    - **SHARED (3 layers)**: locale, geography, knowledge — Universal, READ-ONLY
-    - **ORG (8 layers)**: config, foundation, structure, semantic, instruction, seo, geo, output — Organization-specific
+    The complete NovaNet graph showing all 60 node types organized into two realms:
+    - **SHARED (4 layers)**: config, locale, geography, knowledge — Universal, READ-ONLY (39 nodes)
+    - **ORG (6 layers)**: config, foundation, structure, semantic, instruction, output — Organization-specific (21 nodes)
 
   layers:
     # SHARED REALM (3 layers)
