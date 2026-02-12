@@ -330,7 +330,7 @@ impl App {
             data_filter_kind: None,
             data_cursor_before_filter: 0,
             hide_empty: false,
-            nexus: NexusState::default(),
+            nexus: NexusState::with_persistence(),
             tick: 0,
             // Schema overlay (Feature 1)
             schema_overlay_enabled: true, // Enabled by default

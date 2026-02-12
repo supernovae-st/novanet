@@ -1,9 +1,11 @@
 //! Data loading for TUI — Neo4j queries for taxonomy tree, stats, and detail.
 
 use crate::db::Db;
+use crate::parsers::taxonomy::{TaxonomyDoc, load_taxonomy};
 use rustc_hash::{FxHashMap, FxHashSet};
 use serde_json::Value as JsonValue;
 use std::collections::BTreeMap;
+use std::path::Path;
 use tokio::join;
 
 /// Maximum number of instances to load per Kind.
@@ -159,6 +161,8 @@ pub struct ArcFamilyInfo {
     pub key: String,
     pub display_name: String,
     pub arc_kinds: Vec<ArcKindInfo>,
+    /// LLM context for this arc family (from taxonomy.yaml).
+    pub llm_context: String,
 }
 
 /// A Kind in the taxonomy tree.
@@ -194,6 +198,8 @@ pub struct LayerInfo {
     pub display_name: String,
     pub color: String,
     pub kinds: Vec<KindInfo>,
+    /// LLM context for this layer (from taxonomy.yaml).
+    pub llm_context: String,
 }
 
 impl LayerInfo {
@@ -226,6 +232,8 @@ pub struct RealmInfo {
     pub color: String,
     pub icon: &'static str,
     pub layers: Vec<LayerInfo>,
+    /// LLM context for this realm (from taxonomy.yaml).
+    pub llm_context: String,
 }
 
 impl RealmInfo {
@@ -394,8 +402,15 @@ pub struct TaxonomyTree {
 }
 
 impl TaxonomyTree {
-    /// Load taxonomy tree from Neo4j.
-    pub async fn load(db: &Db) -> crate::Result<Self> {
+    /// Load taxonomy tree from Neo4j, enriched with llm_context from taxonomy.yaml.
+    pub async fn load(db: &Db, root: &Path) -> crate::Result<Self> {
+        // Load taxonomy.yaml for llm_context enrichment
+        let taxonomy = load_taxonomy(root).ok();
+
+        // Build lookup maps for realm/layer llm_context
+        let (realm_llm_context, layer_llm_context, arc_family_llm_context) =
+            Self::build_llm_context_maps(&taxonomy);
+
         // Query all Kinds with their realm, layer, trait, and instance count
         // Note: Kind uses 'label' property as identifier, not 'key'
         let cypher = r#"
@@ -511,28 +526,40 @@ ORDER BY realm_key, layer_key, kind_key
                 .push(kind);
         }
 
-        // Convert to RealmInfo vec
+        // Convert to RealmInfo vec with llm_context from taxonomy.yaml
         let realms: Vec<RealmInfo> = realm_map
             .into_iter()
             .map(|(realm_key, (realm_display, realm_color, layers_map))| {
                 let layers: Vec<LayerInfo> = layers_map
                     .into_iter()
-                    .map(
-                        |(layer_key, (layer_display, layer_color, kinds))| LayerInfo {
+                    .map(|(layer_key, (layer_display, layer_color, kinds))| {
+                        // Look up llm_context from taxonomy.yaml
+                        let llm_ctx = layer_llm_context
+                            .get(&layer_key)
+                            .cloned()
+                            .unwrap_or_default();
+                        LayerInfo {
                             key: layer_key,
                             display_name: layer_display,
                             color: layer_color,
                             kinds,
-                        },
-                    )
+                            llm_context: llm_ctx,
+                        }
+                    })
                     .collect();
 
+                // Look up realm llm_context from taxonomy.yaml
+                let realm_llm_ctx = realm_llm_context
+                    .get(&realm_key)
+                    .cloned()
+                    .unwrap_or_default();
                 RealmInfo {
                     icon: realm_icon(&realm_key),
-                    key: realm_key,
+                    key: realm_key.clone(),
                     display_name: realm_display,
                     color: realm_color,
                     layers,
+                    llm_context: realm_llm_ctx,
                 }
             })
             .collect();
@@ -546,7 +573,11 @@ ORDER BY realm_key, layer_key, kind_key
 
         let stats = stats_result?;
         let arc_map = arcs_result.unwrap_or_default();
-        let arc_families = families_result.unwrap_or_default();
+        // Enrich arc_families with llm_context from taxonomy.yaml
+        let arc_families = Self::enrich_arc_families_with_llm_context(
+            families_result.unwrap_or_default(),
+            &arc_family_llm_context,
+        );
 
         // Apply arcs to kinds
         let realms = Self::apply_arcs_to_realms(realms, arc_map);
@@ -572,6 +603,51 @@ ORDER BY realm_key, layer_key, kind_key
             entity_categories: Vec::new(), // Loaded on-demand via load_entity_categories
             entity_category_instances: BTreeMap::new(), // Loaded on-demand when category expanded
         })
+    }
+
+    /// Build lookup maps for llm_context from taxonomy.yaml.
+    /// Returns (realm_llm_context, layer_llm_context, arc_family_llm_context).
+    fn build_llm_context_maps(
+        taxonomy: &Option<TaxonomyDoc>,
+    ) -> (
+        FxHashMap<String, String>,
+        FxHashMap<String, String>,
+        FxHashMap<String, String>,
+    ) {
+        let mut realm_map = FxHashMap::default();
+        let mut layer_map = FxHashMap::default();
+        let mut arc_family_map = FxHashMap::default();
+
+        if let Some(tax) = taxonomy {
+            // Extract realm llm_context
+            for realm in &tax.node_realms {
+                realm_map.insert(realm.key.clone(), realm.llm_context.clone());
+                // Extract layer llm_context (nested under realm)
+                for layer in &realm.layers {
+                    layer_map.insert(layer.key.clone(), layer.llm_context.clone());
+                }
+            }
+
+            // Extract arc_family llm_context
+            for family in &tax.arc_families {
+                arc_family_map.insert(family.key.clone(), family.llm_context.clone());
+            }
+        }
+
+        (realm_map, layer_map, arc_family_map)
+    }
+
+    /// Enrich arc_families with llm_context from taxonomy.yaml lookup map.
+    fn enrich_arc_families_with_llm_context(
+        mut families: Vec<ArcFamilyInfo>,
+        llm_context_map: &FxHashMap<String, String>,
+    ) -> Vec<ArcFamilyInfo> {
+        for family in &mut families {
+            if let Some(llm_ctx) = llm_context_map.get(&family.key) {
+                family.llm_context = llm_ctx.clone();
+            }
+        }
+        families
     }
 
     /// Apply arc map to realm/layer/kind tree.
@@ -693,6 +769,7 @@ ORDER BY family_key, arc_key
                 key,
                 display_name,
                 arc_kinds,
+                llm_context: String::new(), // Enriched later from taxonomy.yaml
             })
             .collect())
     }
@@ -838,7 +915,7 @@ ORDER BY key
                 properties: props,
                 outgoing_arcs,
                 incoming_arcs,
-                arcs_loading: false, // Arcs already loaded in full query
+                arcs_loading: false,       // Arcs already loaded in full query
                 missing_required_count: 0, // Calculated later in set_instances
                 filled_properties: 0,      // Calculated later in set_instances
                 total_properties: 0,       // Calculated later in set_instances
@@ -1310,7 +1387,6 @@ RETURN l.key as layer_key,
         }
     }
 
-
     // ========================================================================
     // Entity Category Hierarchy (Data mode)
     // ========================================================================
@@ -1735,8 +1811,9 @@ RETURN total,
                                             // Count instances under category if not collapsed
                                             let cat_key = format!("category:{}", category.key);
                                             if !self.is_collapsed(&cat_key) {
-                                                if let Some(instances) =
-                                                    self.entity_category_instances.get(&category.key)
+                                                if let Some(instances) = self
+                                                    .entity_category_instances
+                                                    .get(&category.key)
                                                 {
                                                     count += instances.len();
                                                 }
@@ -1818,8 +1895,9 @@ RETURN total,
                                             // Show instances under category if not collapsed
                                             let cat_key = format!("category:{}", category.key);
                                             if !self.is_collapsed(&cat_key) {
-                                                if let Some(instances) =
-                                                    self.entity_category_instances.get(&category.key)
+                                                if let Some(instances) = self
+                                                    .entity_category_instances
+                                                    .get(&category.key)
                                                 {
                                                     for instance in instances {
                                                         if idx == cursor {
@@ -2722,6 +2800,7 @@ impl TaxonomyTree {
             display_name: "Config".to_string(),
             color: "#6c71c4".to_string(),
             kinds: vec![app_config],
+            llm_context: String::new(),
         };
 
         let foundation_layer = LayerInfo {
@@ -2729,6 +2808,7 @@ impl TaxonomyTree {
             display_name: "Foundation".to_string(),
             color: "#268bd2".to_string(),
             kinds: vec![entity],
+            llm_context: String::new(),
         };
 
         let global_realm = RealmInfo {
@@ -2737,6 +2817,7 @@ impl TaxonomyTree {
             color: "#2aa198".to_string(),
             icon: "◉",
             layers: vec![config_layer],
+            llm_context: String::new(),
         };
 
         let tenant_realm = RealmInfo {
@@ -2745,6 +2826,7 @@ impl TaxonomyTree {
             color: "#d33682".to_string(),
             icon: "◎",
             layers: vec![foundation_layer],
+            llm_context: String::new(),
         };
 
         let realms = vec![global_realm, tenant_realm];
@@ -2855,6 +2937,7 @@ mod tests {
             display_name: key.to_string(),
             color: "#ffffff".to_string(),
             kinds,
+            llm_context: String::new(),
         }
     }
 
@@ -2865,6 +2948,7 @@ mod tests {
             color: "#ffffff".to_string(),
             icon: "○",
             layers,
+            llm_context: String::new(),
         }
     }
 
@@ -3226,7 +3310,11 @@ mod tests {
             .await
             .expect("Failed to connect to Neo4j");
 
-        let tree = TaxonomyTree::load(&db).await.expect("Failed to load tree");
+        // Use current working directory as root (tests run from monorepo root)
+        let root = std::path::Path::new(".");
+        let tree = TaxonomyTree::load(&db, root)
+            .await
+            .expect("Failed to load tree");
 
         // Basic sanity checks
         assert!(!tree.realms.is_empty(), "Should load realms from Neo4j");
