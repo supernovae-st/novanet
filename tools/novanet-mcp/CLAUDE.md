@@ -38,7 +38,7 @@ NovaNet MCP implements **RLM-on-KG** (Recursive Language Model on Knowledge Grap
 │  ├── Resources: entity://, kind://, locale://, view://                      │
 │  └── Tools: search, traverse, assemble, atoms                               │
 │                                                                             │
-│  PHASE 3 (In Progress)                                                      │
+│  PHASE 3 (Complete)                                                         │
 │  ├── Tool: novanet_generate (block/page mode, context anchors)              │
 │  ├── Prompts: cypher_query, cypher_explain, block_generation,               │
 │  │            page_generation, entity_analysis, locale_briefing             │
@@ -832,17 +832,24 @@ RETURN t.key, t.value LIMIT 50
 - [x] Tools: search, traverse, assemble, atoms
 - [x] RLM traversal with hop-by-hop evidence packets
 
-### Phase 3 (In Progress)
+### Phase 3 (Complete)
 - [x] Design: 6 MCP Prompts with Full RAG pattern
 - [x] Design: Hybrid architecture (atomic tools + novanet_generate composite)
 - [x] Design: Context Anchor pattern for cross-page references
 - [x] Views: 4 generation views added to _registry.yaml
-- [ ] Tool: novanet_generate (block/page mode)
-- [ ] Prompts: cypher_query, cypher_explain, block_generation, page_generation, entity_analysis, locale_briefing
-- [ ] Context Anchors: REFERENCES_PAGE arc + anchor resolution
-- [ ] Evidence packet compression (~200 bytes target)
+- [x] Tool: novanet_generate (block/page mode)
+- [x] Prompts: cypher_query, cypher_explain, block_generation, page_generation, entity_analysis, locale_briefing
+- [x] Context Anchors: REFERENCES_PAGE arc + anchor resolution
+- [x] Evidence packet compression (~200 bytes target)
 
 **Design document**: `docs/plans/2026-02-12-phase3-generate-prompts-design.md`
+
+### Phase 4 (Future)
+- [ ] Integration tests with real Neo4j + seed data
+- [ ] Claude Code integration testing (MCP protocol validation)
+- [ ] Performance benchmarks (latency, token efficiency)
+- [ ] Streaming support for large context assembly
+- [ ] Subscription support for graph change notifications
 
 ---
 
