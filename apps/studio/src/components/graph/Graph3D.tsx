@@ -35,8 +35,6 @@ import {
   updateComposerSize,
   createCompositeNode,
   getBloomConfigForQuality,
-  detectPerformanceProfile,
-  TRAIT_GLOW_INTENSITY,
   ArcLODManager,
   detectArcFamily,
   type ForceGraphNode,
@@ -185,6 +183,7 @@ export const Graph3D = memo(function Graph3D({
   onPaneClick,
 }: Graph3DProps) {
   const fgRef = useRef<ForceGraphMethods | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const starfieldRef = useRef<THREE.Points | null>(null);
   const composerRef = useRef<ReturnType<typeof createEnhancedComposer> | null>(null);
   const arcLODManagerRef = useRef<ArcLODManager | null>(null);
@@ -390,17 +389,21 @@ export const Graph3D = memo(function Graph3D({
     let lastTime = performance.now();
 
     const animate = () => {
-      const currentTime = performance.now();
-      const time = currentTime * 0.001;
-      const deltaTime = (currentTime - lastTime) * 0.001;
-      lastTime = currentTime;
+      try {
+        const currentTime = performance.now();
+        const time = currentTime * 0.001;
+        const deltaTime = (currentTime - lastTime) * 0.001;
+        lastTime = currentTime;
 
-      // Update shader uniforms (animations)
-      if (arcLODManagerRef.current && fgRef.current) {
-        const camera = fgRef.current.camera?.();
-        if (camera) {
-          arcLODManagerRef.current.update(camera, time, deltaTime);
+        // Update shader uniforms (animations)
+        if (arcLODManagerRef.current && fgRef.current) {
+          const camera = fgRef.current.camera?.();
+          if (camera?.position) {
+            arcLODManagerRef.current.update(camera, time, deltaTime);
+          }
         }
+      } catch (err) {
+        console.warn('[Graph3D] Animation loop error:', err);
       }
 
       animationFrameId = requestAnimationFrame(animate);
@@ -526,6 +529,40 @@ export const Graph3D = memo(function Graph3D({
     // Cleanup: dispose OrbitControls to prevent stale event listeners
     return () => {
       controls.dispose?.();
+    };
+  }, [isGraphReady]);
+
+  // ResizeObserver to handle container size changes (e.g., when detail panel opens/closes)
+  // This fixes the centering issue where Three.js doesn't detect flex layout changes
+  useEffect(() => {
+    if (!containerRef.current || !fgRef.current) return;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width, height } = entry.contentRect;
+        if (width === 0 || height === 0) continue;
+
+        // Force ForceGraph3D to resize its renderer
+        const renderer = fgRef.current?.renderer?.();
+        const camera = fgRef.current?.camera?.() as THREE.PerspectiveCamera | undefined;
+
+        if (renderer && camera) {
+          renderer.setSize(width, height);
+          camera.aspect = width / height;
+          camera.updateProjectionMatrix();
+
+          // Also update post-processing composer if active
+          if (composerRef.current) {
+            updateComposerSize(composerRef.current, width, height);
+          }
+        }
+      }
+    });
+
+    resizeObserver.observe(containerRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
     };
   }, [isGraphReady]);
 
@@ -764,47 +801,58 @@ export const Graph3D = memo(function Graph3D({
 
   // Smooth camera zoom to selected node — larger distance for bigger nodes
   const zoomToNode = useCallback((node: ForceGraphNode | null | undefined) => {
-    if (!fgRef.current?.cameraPosition || !node) return;
+    try {
+      if (!fgRef.current?.cameraPosition || !node) return;
 
-    // Skip zoom if node doesn't have valid coordinates yet
-    // This can happen if D3 simulation hasn't positioned the node yet
-    if (node.x === undefined && node.y === undefined && node.z === undefined) {
-      console.debug('[Graph3D] Skipping zoom - node not positioned yet:', node.id);
-      return;
+      // Skip zoom if node doesn't have valid coordinates yet
+      // This can happen if D3 simulation hasn't positioned the node yet
+      if (node.x === undefined && node.y === undefined && node.z === undefined) {
+        console.debug('[Graph3D] Skipping zoom - node not positioned yet:', node.id);
+        return;
+      }
+
+      // Extra defensive: ensure coordinates are numbers
+      const nx = typeof node.x === 'number' ? node.x : 0;
+      const ny = typeof node.y === 'number' ? node.y : 0;
+      const nz = typeof node.z === 'number' ? node.z : 0;
+
+      // Get node position - this is where the camera will look
+      const nodePos = { x: nx, y: ny, z: nz };
+
+      // Calculate camera position at fixed distance from node
+      const distance = 180;
+      const cameraPos = {
+        x: nodePos.x + distance * 0.6,
+        y: nodePos.y + distance * 0.4,
+        z: nodePos.z + distance * 0.7,
+      };
+
+      // Smooth 1.5s cinematic animation
+      // Note: The canvas container handles panel offset via flex layout
+      // No manual offset needed - camera looks directly at node position
+      fgRef.current.cameraPosition(cameraPos, nodePos, 1500);
+    } catch (err) {
+      console.warn('[Graph3D] zoomToNode error:', err);
     }
-
-    // Get node position (defensive - use 0 for any undefined coordinate)
-    const nodePos = {
-      x: node.x ?? 0,
-      y: node.y ?? 0,
-      z: node.z ?? 0,
-    };
-
-    // Calculate camera position at larger distance for bigger nodes
-    const distance = 180;  // Increased for larger nodes
-    const cameraPos = {
-      x: nodePos.x + distance * 0.6,
-      y: nodePos.y + distance * 0.4,
-      z: nodePos.z + distance * 0.7,
-    };
-
-    // Smooth 1.5s cinematic animation
-    fgRef.current.cameraPosition(cameraPos, nodePos, 1500);
   }, []);
 
   // Node click handler with zoom (defensive null check)
   const handleNodeClick = useCallback(
     (node: ForceGraphNode | null | undefined) => {
-      if (!node?.id) return;  // Defensive: node may be undefined from library
+      try {
+        if (!node?.id) return;  // Defensive: node may be undefined from library
 
-      setSelectedNode(node.id);
-      zoomToNode(node);
+        setSelectedNode(node.id);
+        zoomToNode(node);
 
-      // Trigger selection burst effect
-      setSelectionBurst(node.id);
-      setTimeout(() => setSelectionBurst(null), 400);
+        // Trigger selection burst effect
+        setSelectionBurst(node.id);
+        setTimeout(() => setSelectionBurst(null), 400);
 
-      onNodeClick?.(node.id);
+        onNodeClick?.(node.id);
+      } catch (err) {
+        console.warn('[Graph3D] handleNodeClick error:', err);
+      }
     },
     [setSelectedNode, zoomToNode, onNodeClick]
   );
@@ -840,12 +888,20 @@ export const Graph3D = memo(function Graph3D({
     [setHoveredNode]
   );
 
-  // Background click handler
+  // Background click handler - deselect and reset view
+  // Only triggers if we're not hovering a node (prevents conflict with onNodeClick)
   const handleBackgroundClick = useCallback(() => {
+    // Guard: If hovering a node, the click is for the node, not the background
+    // This fixes the "double-click to select" bug in 3D view
+    if (hoveredNodeId) {
+      return;
+    }
+
     setSelectedNode(null);
     setSelectedEdge(null);
+    setCameraView('reset');  // Reset camera to default isometric view
     onPaneClick?.();
-  }, [setSelectedNode, setSelectedEdge, onPaneClick]);
+  }, [hoveredNodeId, setSelectedNode, setSelectedEdge, setCameraView, onPaneClick]);
 
   // Link click handler
   const handleLinkClick = useCallback(
@@ -907,35 +963,40 @@ export const Graph3D = memo(function Graph3D({
 
   // Engine tick to mark graph as ready and sync arc positions with D3 simulation
   const handleEngineTick = useCallback(() => {
-    if (!isGraphReady) {
-      setIsGraphReady(true);
-    }
+    try {
+      if (!isGraphReady) {
+        setIsGraphReady(true);
+      }
 
-    // Update arc positions from D3 simulation (only during simulation, not for animations)
-    if (arcLODManagerRef.current) {
-      graphData.links.forEach((link) => {
-        if (!isValidForceGraphLink(link)) return;
+      // Update arc positions from D3 simulation (only during simulation, not for animations)
+      if (arcLODManagerRef.current) {
+        graphData.links.forEach((link) => {
+          if (!isValidForceGraphLink(link)) return;
 
-        const sourceId = getNodeIdFromLinkEndpoint(link.source as LinkEndpoint);
-        const targetId = getNodeIdFromLinkEndpoint(link.target as LinkEndpoint);
-        const sourceNode = graphData.nodes.find(n => n.id === sourceId);
-        const targetNode = graphData.nodes.find(n => n.id === targetId);
+          const sourceId = getNodeIdFromLinkEndpoint(link.source as LinkEndpoint);
+          const targetId = getNodeIdFromLinkEndpoint(link.target as LinkEndpoint);
+          const sourceNode = graphData.nodes.find(n => n.id === sourceId);
+          const targetNode = graphData.nodes.find(n => n.id === targetId);
 
-        if (!sourceNode || !targetNode) return;
+          if (!sourceNode || !targetNode) return;
 
-        const sourcePos = new THREE.Vector3(
-          sourceNode.x ?? 0,
-          sourceNode.y ?? 0,
-          sourceNode.z ?? 0
-        );
-        const targetPos = new THREE.Vector3(
-          targetNode.x ?? 0,
-          targetNode.y ?? 0,
-          targetNode.z ?? 0
-        );
+          // Extra defensive: ensure coordinates are numbers
+          const sourcePos = new THREE.Vector3(
+            typeof sourceNode.x === 'number' ? sourceNode.x : 0,
+            typeof sourceNode.y === 'number' ? sourceNode.y : 0,
+            typeof sourceNode.z === 'number' ? sourceNode.z : 0
+          );
+          const targetPos = new THREE.Vector3(
+            typeof targetNode.x === 'number' ? targetNode.x : 0,
+            typeof targetNode.y === 'number' ? targetNode.y : 0,
+            typeof targetNode.z === 'number' ? targetNode.z : 0
+          );
 
-        arcLODManagerRef.current?.updateArcPositions(link.id, sourcePos, targetPos);
-      });
+          arcLODManagerRef.current?.updateArcPositions(link.id, sourcePos, targetPos);
+        });
+      }
+    } catch (err) {
+      console.warn('[Graph3D] handleEngineTick error:', err);
     }
   }, [isGraphReady, graphData.links, graphData.nodes]);
 
@@ -1060,7 +1121,7 @@ export const Graph3D = memo(function Graph3D({
   }
 
   return (
-    <div className={cn('relative', className)}>
+    <div ref={containerRef} className={cn('relative', className)}>
       <ForceGraph3D
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ref={fgRef as any}
@@ -1086,7 +1147,7 @@ export const Graph3D = memo(function Graph3D({
         nodeRelSize={8}
         backgroundColor="#050810"
         showNavInfo={false}
-        enableNodeDrag={true}
+        enableNodeDrag={false}  // Disabled: DragControls crash on rapid clicks (Three.js bug)
         enableNavigationControls={true}
         controlType="orbit"
         warmupTicks={100}
