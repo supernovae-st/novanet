@@ -17,6 +17,7 @@ use ratatui::widgets::{Block, Borders, Paragraph, Wrap};
 use crate::tui::app::App;
 use crate::tui::data::TaxonomyTree;
 use crate::tui::theme::{Theme, heatmap_color};
+use crate::tui::ui::COLOR_UNFOCUSED_BORDER;
 
 // =============================================================================
 // TRAIT STATS
@@ -362,7 +363,7 @@ fn render_constellation(f: &mut Frame, app: &App, area: Rect) {
                 .add_modifier(Modifier::BOLD),
         ))
         .borders(Borders::ALL)
-        .border_style(Style::default().fg(Color::Rgb(60, 60, 70)));
+        .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER));
 
     let inner = block.inner(area);
     f.render_widget(block, area);
@@ -461,7 +462,7 @@ fn build_constellation_lines(
     // Separator
     lines.push(Line::from(Span::styled(
         "\u{2500}".repeat(width.saturating_sub(2)),
-        Style::default().fg(Color::Rgb(60, 60, 70)),
+        Style::default().fg(COLOR_UNFOCUSED_BORDER),
     )));
     lines.push(Line::from(""));
 
@@ -523,7 +524,7 @@ fn render_detail_panel(f: &mut Frame, app: &App, area: Rect) {
                 .add_modifier(Modifier::BOLD),
         ))
         .borders(Borders::ALL)
-        .border_style(Style::default().fg(Color::Rgb(60, 60, 70)));
+        .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER));
 
     let inner = block.inner(area);
     f.render_widget(block, area);
@@ -808,7 +809,7 @@ fn render_kind_list(f: &mut Frame, app: &App, area: Rect) {
                 .add_modifier(Modifier::BOLD),
         ))
         .borders(Borders::ALL)
-        .border_style(Style::default().fg(Color::Rgb(60, 60, 70)));
+        .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER));
 
     let inner = block.inner(area);
     f.render_widget(block, area);
@@ -918,7 +919,7 @@ fn render_kind_detail(f: &mut Frame, app: &App, area: Rect) {
                 .add_modifier(Modifier::BOLD),
         ))
         .borders(Borders::ALL)
-        .border_style(Style::default().fg(Color::Rgb(60, 60, 70)));
+        .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER));
 
     let inner = block.inner(area);
     f.render_widget(block, area);

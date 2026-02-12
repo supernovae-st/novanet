@@ -1121,19 +1121,19 @@ mod tests {
     fn test_build_graph_distribution_stats_percentage_calculation() {
         // Create 2 realms: shared with 1 kind, org with 3 kinds
         // Expected: shared = 25%, org = 75%
-        let global_kind = create_test_kind("Config");
-        let global_layer = create_test_layer("config", vec![global_kind]);
-        let global_realm = create_test_realm("shared", vec![global_layer]);
+        let shared_kind = create_test_kind("Config");
+        let shared_layer = create_test_layer("config", vec![shared_kind]);
+        let shared_realm = create_test_realm("shared", vec![shared_layer]);
 
-        let tenant_kinds = vec![
+        let org_kinds = vec![
             create_test_kind("Page"),
             create_test_kind("Block"),
             create_test_kind("Entity"),
         ];
-        let tenant_layer = create_test_layer("structure", tenant_kinds);
-        let tenant_realm = create_test_realm("org", vec![tenant_layer]);
+        let org_layer = create_test_layer("structure", org_kinds);
+        let org_realm = create_test_realm("org", vec![org_layer]);
 
-        let tree = create_tree_with_realms(vec![global_realm, tenant_realm]);
+        let tree = create_tree_with_realms(vec![shared_realm, org_realm]);
         let app = create_test_app_with_tree(tree);
 
         let lines = build_graph_distribution_stats(&app);
@@ -1166,17 +1166,17 @@ mod tests {
         // Shared bar = (2 * 20) / 10 = 4
         // Org bar = (8 * 20) / 10 = 16
 
-        let global_kinds = vec![create_test_kind("Config1"), create_test_kind("Config2")];
-        let global_layer = create_test_layer("config", global_kinds);
-        let global_realm = create_test_realm("shared", vec![global_layer]);
+        let shared_kinds = vec![create_test_kind("Config1"), create_test_kind("Config2")];
+        let shared_layer = create_test_layer("config", shared_kinds);
+        let shared_realm = create_test_realm("shared", vec![shared_layer]);
 
-        let tenant_kinds: Vec<KindInfo> = (0..8)
+        let org_kinds: Vec<KindInfo> = (0..8)
             .map(|i| create_test_kind(&format!("Kind{}", i)))
             .collect();
-        let tenant_layer = create_test_layer("structure", tenant_kinds);
-        let tenant_realm = create_test_realm("org", vec![tenant_layer]);
+        let org_layer = create_test_layer("structure", org_kinds);
+        let org_realm = create_test_realm("org", vec![org_layer]);
 
-        let tree = create_tree_with_realms(vec![global_realm, tenant_realm]);
+        let tree = create_tree_with_realms(vec![shared_realm, org_realm]);
         let app = create_test_app_with_tree(tree);
 
         let lines = build_graph_distribution_stats(&app);
@@ -1194,26 +1194,26 @@ mod tests {
         assert_eq!(realm_section.len(), 2, "should have 2 realm bar lines");
 
         // Verify the bars have different widths by counting block characters
-        let global_line: String = realm_section[0]
+        let shared_line: String = realm_section[0]
             .spans
             .iter()
             .map(|s| s.content.as_ref())
             .collect();
-        let tenant_line: String = realm_section[1]
+        let org_line: String = realm_section[1]
             .spans
             .iter()
             .map(|s| s.content.as_ref())
             .collect();
 
-        let global_blocks = global_line.matches('\u{2588}').count();
-        let tenant_blocks = tenant_line.matches('\u{2588}').count();
+        let shared_blocks = shared_line.matches('\u{2588}').count();
+        let org_blocks = org_line.matches('\u{2588}').count();
 
-        // Org should have more blocks than global (8 kinds vs 2 kinds)
+        // Org should have more blocks than shared (8 kinds vs 2 kinds)
         assert!(
-            tenant_blocks > global_blocks,
-            "tenant ({} blocks) should have more than global ({} blocks)",
-            tenant_blocks,
-            global_blocks
+            org_blocks > shared_blocks,
+            "org ({} blocks) should have more than shared ({} blocks)",
+            org_blocks,
+            shared_blocks
         );
     }
 

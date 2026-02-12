@@ -13,6 +13,7 @@ use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, Borders, Paragraph, Wrap};
 
 use crate::tui::app::App;
+use crate::tui::ui::COLOR_UNFOCUSED_BORDER;
 
 // =============================================================================
 // VIEW DATA
@@ -455,7 +456,7 @@ fn render_views_list(f: &mut Frame, app: &App, area: Rect) {
                 .add_modifier(Modifier::BOLD),
         ))
         .borders(Borders::ALL)
-        .border_style(Style::default().fg(Color::Rgb(60, 60, 70)));
+        .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER));
 
     let inner = block.inner(area);
     f.render_widget(block, area);
@@ -472,7 +473,7 @@ fn render_views_list(f: &mut Frame, app: &App, area: Rect) {
     ]));
     lines.push(Line::from(Span::styled(
         "\u{2500}".repeat(inner.width.saturating_sub(2) as usize),
-        Style::default().fg(Color::Rgb(60, 60, 70)),
+        Style::default().fg(COLOR_UNFOCUSED_BORDER),
     )));
     lines.push(Line::from(""));
 
@@ -547,7 +548,7 @@ fn render_view_detail(f: &mut Frame, app: &App, area: Rect) {
                 .add_modifier(Modifier::BOLD),
         ))
         .borders(Borders::ALL)
-        .border_style(Style::default().fg(Color::Rgb(60, 60, 70)));
+        .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER));
 
     let inner = block.inner(area);
     f.render_widget(block, area);

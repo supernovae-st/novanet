@@ -455,12 +455,12 @@ mod tests {
     // =========================================================================
 
     #[test]
-    fn test_realm_block_char_global() {
+    fn test_realm_block_char_shared() {
         assert_eq!(realm_block_char("shared"), "▓");
     }
 
     #[test]
-    fn test_realm_block_char_tenant() {
+    fn test_realm_block_char_org() {
         assert_eq!(realm_block_char("org"), "█");
     }
 
@@ -476,12 +476,12 @@ mod tests {
     // =========================================================================
 
     #[test]
-    fn test_realm_display_label_global() {
+    fn test_realm_display_label_shared() {
         assert_eq!(realm_display_label("shared"), "Shared");
     }
 
     #[test]
-    fn test_realm_display_label_tenant() {
+    fn test_realm_display_label_org() {
         assert_eq!(realm_display_label("org"), "Org");
     }
 

@@ -710,6 +710,10 @@ REALMS (61 nodes total):
 | 018 | v11.2 | Classification system refinement (realm renames, trait split) |
 | 019 | v11.3 | Layer reorganization (locale-knowledge split, geo layer, OrgConfig) |
 | 020 | v11.5 | Schema refinement (Locale to config, SEO/GEO consolidation) |
+| 021 | v11.6 | Query-First Architecture (Cypher as source of truth) |
+| 022 | v11.7 | Unified Tree Architecture (everything is a node, 2 modes) |
+| 023 | v11.8 | Class/Instance Terminology + Meta Elimination (Kind→Class, Meta→Schema) |
+| 024 | v11.8 | Trait Redefinition as "Data Origin" (defined/authored/imported/generated/retrieved) |
 
 ## ADR-020: Schema Refinement
 
@@ -1009,6 +1013,134 @@ From current TUI (keep these):
 
 **Reference**: `docs/plans/2026-02-11-unified-tree-design.md`
 
+## ADR-023: Class/Instance Terminology
+
+**Status**: Approved (v11.8)
+
+**Problem**: Two terminology issues caused confusion:
+
+1. **"Kind" was non-standard**: Not graph theory or ontology terminology. LLMs have less training data on "Kind" vs "Class". French "Genre" was awkward.
+
+2. **"Meta" was ambiguous**: Facebook collision (Meta company), Spanish "meta" means "goal", too abstract for humans, mixed usage across "Meta Node", "KindMeta", Neo4j `:Meta:` labels.
+
+**Decision**:
+- Rename schema-level terminology from "Kind" to "Class"
+- Data-level stays "Instance"
+- **ELIMINATE "Meta" prefix/suffix entirely** - use semantic names instead
+
+**Changes**:
+
+| Before | After | Context |
+|--------|-------|---------|
+| **Kind → Class** | | |
+| NodeKind | NodeClass | Rust/TypeScript struct |
+| ArcKind | ArcClass | Rust/TypeScript struct |
+| KindInfo | ClassInfo | TUI struct |
+| TreeItem::Kind | TreeItem::Class | Rust enum variant |
+| [:FROM_KIND] | [:FROM_CLASS] | Neo4j relationship |
+| [:TO_KIND] | [:TO_CLASS] | Neo4j relationship |
+| [:HAS_KIND] | [:HAS_CLASS] | Neo4j relationship |
+| "Node Kinds" | "Classes" | UI label |
+| **Meta → Semantic Names** | | |
+| KindMeta | Classification | TypeScript interface (realm/layer/trait axes) |
+| KIND_META | CLASS_TAXONOMY | TypeScript constant |
+| :Meta:Kind | :Schema:Class | Neo4j label (Meta→Schema) |
+| :Meta:ArcKind | :Schema:ArcClass | Neo4j label |
+| "Meta Node" | "Class" | Glossary term |
+| "Data Node" | "Instance" | Glossary term |
+| "Meta mode" | "Schema view" | Studio ViewPicker |
+| "Data mode" | "Graph view" | Studio ViewPicker |
+
+**Rationale**:
+
+**Class/Instance:**
+1. **LLM Semantic Clarity**: `rdfs:Class`, `owl:Class` are in LLM training data millions of times. "Class/Instance" is THE canonical OOP and ontology pairing.
+2. **Ontology Standard**: RDF Schema and OWL use "Class" for schema-level definitions. NovaNet is a knowledge graph - aligning with semantic web standards improves interoperability.
+3. **Universal Understanding**: Every programmer knows Class/Instance from OOP. Non-programmers understand "a class of things" from everyday English.
+4. **Internationalization**: "Classe/Instance" (French), "Clase/Instancia" (Spanish), "Klasse/Instanz" (German), クラス/インスタンス (Japanese) - perfect cognates.
+
+**Meta Elimination:**
+5. **Semantic names > abstract labels**: `Classification` describes WHAT it contains (realm/layer/trait axes). `Schema` describes WHAT it is (the schema, not data). "Meta" described NOTHING.
+6. **No collisions**: Avoids Facebook "Meta" confusion in searches and discussions.
+7. **International clarity**: "Schema" and "Classification" are universal technical terms. "Meta" has different meanings (Spanish "meta" = goal, Greek μετά = after).
+8. **Consistency**: Single terminology change instead of half-measures. No more `:Meta:` labels in Neo4j, no more `*Meta` suffixes in code.
+
+**Impact**:
+
+| Zone | Files | Changes | Effort |
+|------|-------|---------|--------|
+| Rust | 43 | 721 | 4-8h |
+| TypeScript | 19 | 93+ | 2-4h |
+| TUI/Nexus | 20+ | 1,299 | 3-5h |
+| Documentation | 14 | ~50 | 1-2h |
+| Studio | 8 | ~30 | 2-3h |
+| Neo4j Migration | - | Schema | 1h |
+
+**Migration**: Requires coordinated update across Rust, TypeScript, Neo4j, and documentation. Neo4j schema migration must happen first or synchronously with code changes.
+
+**Reference**: Brainstorming session 2026-02-12, devil's advocate analysis comparing 15 terminology options.
+
+## ADR-024: Trait Redefinition as "Data Origin"
+
+**Status**: Approved (v11.8)
+
+**Problem**: Current trait system is NOT orthogonal to Layer:
+
+1. **60% redundancy**: Most layers have single trait (instruction=invariant, output=generated)
+2. **Name collision**: "knowledge" trait vs "knowledge" layer
+3. **Catch-all**: 31 nodes are "invariant" but serve very different purposes
+4. **Mixed semantics**: Traits mix "locale behavior" with "data origin"
+
+Analysis by 5 brainstorming agents revealed Layer already answers "WHAT functional category?" - Trait should answer a DIFFERENT question.
+
+**Decision**: Redefine Trait as "Data Origin" (WHERE does data come from?):
+
+| Before | After | Definition |
+|--------|-------|------------|
+| invariant | **defined** | Defined by human, created ONCE. Structure/template. |
+| localized | **authored** | Written by human, PER locale. Editorial content. |
+| knowledge | **imported** | External data brought in. APIs, databases, corpora. |
+| generated | **generated** | Produced by OUR LLM. NovaNet generates this. |
+| aggregated | **retrieved** | Retrieved from EXTERNAL APIs. Snapshots of third-party data. |
+
+**True Orthogonality**:
+
+```
+LAYER answers:  "WHAT functional category?"
+                config, structure, semantic, instruction, output, knowledge...
+
+TRAIT answers:  "WHERE does the data come from?"
+                defined, authored, imported, generated, retrieved
+```
+
+**Node Distribution**:
+
+| Trait | Count | Examples |
+|-------|-------|----------|
+| defined | 31 | Page, Block, Entity, PageType, PagePrompt, Locale, OrgConfig |
+| imported | 22 | Term, Expression, Pattern, Culture, SEOKeyword, GEOQuery |
+| authored | 2 | EntityContent, ProjectContent |
+| generated | 5 | PageGenerated, BlockGenerated, OutputArtifact, PromptArtifact |
+| retrieved | 3 | GEOAnswer, SEOKeywordMetrics, GEOMetrics |
+
+**Key Clarification - GEOAnswer**:
+- GEOAnswer is `retrieved`, NOT `generated`
+- It's a SNAPSHOT of what Claude/GPT/Perplexity returned
+- We RETRIEVED it from their API, we didn't generate it
+- It's evidence of how AI engines see our content
+
+**Rationale**:
+
+1. **defined**: Human creates once, doesn't vary by locale
+2. **authored**: Human writes content, per locale (editorial)
+3. **imported**: Data brought in from external sources
+4. **generated**: Our LLM produces output
+5. **retrieved**: Fetched from third-party APIs (we capture, not create)
+
+**Research**: Drupal Config/Content Entity, Sanity Document/Object, OWL TBox/ABox, Neo4j labeling patterns
+
+**Reference**: 5-agent analysis, `docs/plans/2026-02-13-nomenclature-v118-design.md`
+
 ## Decision Log
 
 | ADR | Version | Summary |
@@ -1035,6 +1167,8 @@ From current TUI (keep these):
 | 020 | v11.5 | Schema refinement (Locale to config, SEO/GEO consolidation) |
 | 021 | v11.6 | Query-First Architecture (Cypher as source of truth) |
 | 022 | v11.7 | Unified Tree Architecture (everything is a node, 2 modes) |
+| 023 | v11.8 | Class/Instance Terminology + Meta Elimination (Kind→Class, Meta→Schema) |
+| 024 | v11.8 | Trait Redefinition as "Data Origin" (defined/authored/imported/generated/retrieved) |
 
 ## References
 
@@ -1043,3 +1177,4 @@ From current TUI (keep these):
 - `docs/plans/2026-02-01-ontology-v9-design.md` — Original v9 design
 - `docs/plans/2026-02-10-query-first-architecture-design.md` — Query-First Architecture design
 - `docs/plans/2026-02-11-unified-tree-design.md` — Unified Tree Architecture design
+- `docs/plans/2026-02-13-nomenclature-v118-design.md` — Nomenclature v11.8 (Class/Instance, Meta elimination, Trait renaming)
