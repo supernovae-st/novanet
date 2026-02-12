@@ -694,28 +694,29 @@ export interface LayerConfig {
  */
 export const NODE_VISUAL_LAYERS: LayerConfig[] = [
   // SHARED realm (4 layers: config, locale, geography, knowledge)
+  // Colors from taxonomy.yaml via generated.ts (Single Source of Truth)
   {
     id: 'locale',
     label: 'Locale',
     icon: '🌐',
-    color: '#2aa198',
-    colorLight: '#34d399',
+    color: '#64748b',  // slate-500 (from taxonomy.yaml)
+    colorLight: '#94a3b8',  // slate-400
     nodeTypes: getNodeTypesByLayer('locale'),
   },
   {
     id: 'geography',
     label: 'Geography',
     icon: '🗺️',
-    color: '#268bd2',
-    colorLight: '#60a5fa',
+    color: '#10b981',  // emerald-500 (from taxonomy.yaml)
+    colorLight: '#34d399',  // emerald-400
     nodeTypes: getNodeTypesByLayer('geography'),
   },
   {
     id: 'knowledge',
     label: 'Knowledge',
     icon: '📚',
-    color: '#6c71c4',
-    colorLight: '#a78bfa',
+    color: '#8b5cf6',  // violet-500 (from taxonomy.yaml)
+    colorLight: '#a78bfa',  // violet-400
     nodeTypes: getNodeTypesByLayer('knowledge'),
   },
   // ORG realm (6 layers: config, foundation, structure, semantic, instruction, output)
@@ -724,40 +725,40 @@ export const NODE_VISUAL_LAYERS: LayerConfig[] = [
     id: 'config',
     label: 'Config',
     icon: '⚙️',
-    color: '#657b83',
-    colorLight: '#93a1a1',
+    color: '#64748b',  // slate-500 (from taxonomy.yaml)
+    colorLight: '#94a3b8',  // slate-400
     nodeTypes: getNodeTypesByLayer('config'),
   },
   {
     id: 'foundation',
     label: 'Foundation',
     icon: '🏛️',
-    color: '#d33682',
-    colorLight: '#f472b6',
+    color: '#3b82f6',  // blue-500 (from taxonomy.yaml)
+    colorLight: '#60a5fa',  // blue-400
     nodeTypes: getNodeTypesByLayer('foundation'),
   },
   {
     id: 'structure',
     label: 'Structure',
     icon: '🏗️',
-    color: '#859900',
-    colorLight: '#a3e635',
+    color: '#06b6d4',  // cyan-500 (from taxonomy.yaml)
+    colorLight: '#22d3ee',  // cyan-400
     nodeTypes: getNodeTypesByLayer('structure'),
   },
   {
     id: 'semantic',
     label: 'Semantic',
     icon: '💡',
-    color: '#b58900',
-    colorLight: '#fbbf24',
+    color: '#f97316',  // orange-500 (from taxonomy.yaml)
+    colorLight: '#fb923c',  // orange-400
     nodeTypes: getNodeTypesByLayer('semantic'),
   },
   {
     id: 'instruction',
     label: 'Instruction',
     icon: '📝',
-    color: '#2aa198',
-    colorLight: '#5eead4',
+    color: '#eab308',  // yellow-500 (from taxonomy.yaml)
+    colorLight: '#facc15',  // yellow-400
     nodeTypes: getNodeTypesByLayer('instruction'),
   },
   // v11.4: seo and geo layers REMOVED - nodes moved to shared/knowledge
@@ -765,8 +766,8 @@ export const NODE_VISUAL_LAYERS: LayerConfig[] = [
     id: 'output',
     label: 'Output',
     icon: '✨',
-    color: '#dc322f',
-    colorLight: '#f87171',
+    color: '#22c55e',  // green-500 (from taxonomy.yaml)
+    colorLight: '#4ade80',  // green-400
     nodeTypes: getNodeTypesByLayer('output'),
   },
 ];
