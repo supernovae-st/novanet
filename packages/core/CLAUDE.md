@@ -8,7 +8,7 @@ NovaNet is a **native content generation system** (NOT translation) using Neo4j 
 
 **Target Application**: QR Code AI (https://qrcode-ai.com) - a multilingual SaaS for QR code generation.
 **Supported Locales**: 200+ locales (fr-FR, en-US, es-MX, ja-JP, etc.)
-**Current Version**: v11.5.0
+**Current Version**: v11.7.0
 
 ## CRITICAL: Generation, NOT Translation
 
@@ -23,9 +23,9 @@ Each locale content is **generated natively** from the invariant Entity, NOT tra
 
 For complete graph schema, node categories, and relations, see: **`models/_index.yaml`**
 
-## v11.5 Architecture
+## v11.7 Architecture
 
-v11.5 refines the 2-Realm Architecture with Locale moved to shared/config:
+v11.7 refines the 2-Realm Architecture with Locale moved to shared/config:
 
 | Axis | Values |
 |------|--------|
@@ -34,12 +34,12 @@ v11.5 refines the 2-Realm Architecture with Locale moved to shared/config:
 | **Trait** | invariant / localized / knowledge / generated / aggregated |
 | **ArcFamily** | ownership / localization / semantic / generation / mining |
 
-**Key v11.5 changes:**
+**Key v11.7 changes:**
 - Locale moved: shared/locale → shared/config (definitions layer pattern)
 - SEO/GEO consolidation: seo/geo layers removed from org, nodes in shared/knowledge
 - SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (39 nodes)
 - ORG (6 layers): config, foundation, structure, semantic, instruction, output (21 nodes)
-- 60 node types, 116 arc types
+- 60 node types, 114 arc types
 
 **Boundary rule:** TypeScript (this package) generates code artifacts. Rust (`tools/novanet/`) executes at runtime.
 
@@ -96,15 +96,15 @@ MATCH (l)-[:HAS_LEXICON]->(lex:LocaleLexicon)-[:HAS_EXPRESSION]->(e:Expression)
 WHERE e.semantic_field IN ['urgency', 'value']
 RETURN b.instructions, e.key, el.title, bt.rules, v.formality_score, collect(ex.text) AS expressions;
 
--- v11.5: Navigate meta-graph (Realm -> Layer -> Kind)
+-- v11.7: Navigate meta-graph (Realm -> Layer -> Kind)
 MATCH (r:Realm {key: "org"})-[:HAS_LAYER]->(l:Layer)-[:HAS_KIND]->(k:Kind)
 RETURN r.key, l.key, collect(k.label) AS kinds;
 
--- v11.5: Find all Kinds with a specific Trait
+-- v11.7: Find all Kinds with a specific Trait
 MATCH (k:Kind)-[:HAS_TRAIT]->(t:Trait {key: "generated"})
 RETURN k.label, t.key;
 
--- v11.5: Arc schema for a Kind
+-- v11.7: Arc schema for a Kind
 MATCH (ak:ArcKind)-[:FROM_KIND]->(k:Kind {label: "Block"})
 MATCH (ak)-[:TO_KIND]->(target:Kind)
 MATCH (ak)-[:IN_FAMILY]->(af:ArcFamily)
@@ -117,7 +117,7 @@ RETURN ak.key, af.key AS family, target.label AS target_kind;
 core/
 ├── models/                    # YAML schema definitions (SOURCE OF TRUTH)
 │   ├── _index.yaml            # MODEL INDEX (graph structure, node categories)
-│   ├── taxonomy.yaml          # v11.5: 2 Realms (shared/org), 10 Layers
+│   ├── taxonomy.yaml          # v11.7: 2 Realms (shared/org), 10 Layers
 │   ├── node-kinds/            # ONE FILE PER NODE TYPE
 │   │   ├── shared/            # Realm: shared (39 nodes)
 │   │   │   ├── config/        #   Layer: config (3 nodes: Locale, EntityCategory, SEOKeywordFormat)
@@ -156,7 +156,7 @@ Locale*         = Locale Knowledge nodes (LocaleVoice, LocaleCulture, etc.)
 *Metrics        = Time-series observations (SEOKeywordMetrics, GEOMetrics)
 ```
 
-**v11.5 meta-graph terminology:**
+**v11.7 meta-graph terminology:**
 ```
 Realm           = WHERE? (shared / org)
 Layer           = WHAT? (10 functional layers: 4 shared + 6 org)
