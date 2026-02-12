@@ -1,15 +1,23 @@
 //! MCP Server Handler
 //!
 //! Implements rmcp::ServerHandler for NovaNet MCP tools using macro-based routing.
+//! Phase 3: Adds novanet_generate tool and 6 MCP prompts.
 
+use crate::prompts::{self, PromptDefinition, PromptMessage as InternalPromptMessage};
 use crate::server::State;
 use crate::tools::{
-    AssembleParams, AtomsParams, DescribeParams, QueryParams, SearchParams, TraverseParams,
+    AssembleParams, AtomsParams, DescribeParams, GenerateParams, QueryParams, SearchParams,
+    TraverseParams,
 };
 use rmcp::handler::server::tool::ToolRouter;
 use rmcp::handler::server::wrapper::Parameters;
-use rmcp::model::{CallToolResult, Content, ErrorCode, ServerCapabilities, ServerInfo};
-use rmcp::{tool, tool_handler, tool_router, ErrorData as McpError, ServerHandler};
+use rmcp::model::{
+    CallToolResult, Content, ErrorCode, GetPromptRequestParams, GetPromptResult,
+    ListPromptsResult, PaginatedRequestParams, Prompt, PromptArgument,
+    PromptMessage, PromptMessageRole, ServerCapabilities, ServerInfo,
+};
+use rmcp::service::{RequestContext, RoleServer};
+use rmcp::{ErrorData as McpError, ServerHandler, tool, tool_handler, tool_router};
 use std::borrow::Cow;
 
 /// NovaNet MCP Handler with tool routing
@@ -202,6 +210,35 @@ impl NovaNetHandler {
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
+
+    /// Assemble complete generation context for block or page content.
+    ///
+    /// Orchestrates traverse, assemble, and atoms tools for AI agents.
+    /// Implements full RLM-on-KG pipeline with context anchors.
+    #[tool(
+        name = "novanet_generate",
+        description = "Assemble complete generation context for block or page content. Orchestrates traverse/assemble/atoms with context anchors."
+    )]
+    async fn novanet_generate(
+        &self,
+        params: Parameters<GenerateParams>,
+    ) -> Result<CallToolResult, McpError> {
+        let result = crate::tools::generate::execute(&self.state, params.0)
+            .await
+            .map_err(|e| McpError {
+                code: ErrorCode(-32000),
+                message: Cow::Owned(e.to_string()),
+                data: None,
+            })?;
+
+        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
+            code: ErrorCode(-32603),
+            message: Cow::Owned(format!("Serialization error: {}", e)),
+            data: None,
+        })?;
+
+        Ok(CallToolResult::success(vec![Content::text(json)]))
+    }
 }
 
 /// Implement ServerHandler for NovaNetHandler
@@ -210,13 +247,95 @@ impl ServerHandler for NovaNetHandler {
     fn get_info(&self) -> ServerInfo {
         ServerInfo {
             instructions: Some(
-                "NovaNet MCP Server - Knowledge Graph for AI Agents. \
+                "NovaNet MCP Server v0.3.0 - Knowledge Graph for AI Agents. \
                  Use novanet_describe to bootstrap your understanding of the schema, \
-                 then novanet_query to explore specific data."
+                 novanet_query to explore specific data, and novanet_generate for \
+                 content generation context assembly. 6 prompts available for \
+                 guided workflows."
                     .into(),
             ),
-            capabilities: ServerCapabilities::builder().enable_tools().build(),
+            capabilities: ServerCapabilities::builder()
+                .enable_tools()
+                .enable_prompts()
+                .build(),
             ..Default::default()
         }
     }
+
+    /// List all available prompts
+    #[allow(clippy::manual_async_fn)] // Required by ServerHandler trait signature
+    fn list_prompts(
+        &self,
+        _request: Option<PaginatedRequestParams>,
+        _context: RequestContext<RoleServer>,
+    ) -> impl std::future::Future<Output = Result<ListPromptsResult, McpError>> + Send + '_ {
+        async move {
+            let prompt_defs = prompts::list_prompts();
+            let prompts: Vec<Prompt> = prompt_defs
+                .into_iter()
+                .map(convert_prompt_definition)
+                .collect();
+
+            Ok(ListPromptsResult::with_all_items(prompts))
+        }
+    }
+
+    /// Get a specific prompt by name
+    #[allow(clippy::manual_async_fn)] // Required by ServerHandler trait signature
+    fn get_prompt(
+        &self,
+        request: GetPromptRequestParams,
+        _context: RequestContext<RoleServer>,
+    ) -> impl std::future::Future<Output = Result<GetPromptResult, McpError>> + Send + '_ {
+        async move {
+            let args = request.arguments.unwrap_or_default();
+
+            let rendered = prompts::render_prompt(&request.name, &args).ok_or_else(|| McpError {
+                code: ErrorCode(-32001),
+                message: Cow::Owned(format!("Prompt not found: {}", request.name)),
+                data: None,
+            })?;
+
+            Ok(GetPromptResult {
+                description: Some(rendered.description),
+                messages: rendered
+                    .messages
+                    .into_iter()
+                    .map(convert_prompt_message)
+                    .collect(),
+            })
+        }
+    }
+}
+
+/// Convert internal PromptDefinition to MCP Prompt
+fn convert_prompt_definition(def: PromptDefinition) -> Prompt {
+    Prompt {
+        name: def.name,
+        title: None,
+        description: Some(def.description),
+        arguments: Some(
+            def.arguments
+                .into_iter()
+                .map(|arg| PromptArgument {
+                    name: arg.name,
+                    title: None,
+                    description: Some(arg.description),
+                    required: Some(arg.required),
+                })
+                .collect(),
+        ),
+        icons: None,
+        meta: None,
+    }
+}
+
+/// Convert internal PromptMessage to MCP PromptMessage
+fn convert_prompt_message(msg: InternalPromptMessage) -> PromptMessage {
+    let role = match msg.role.as_str() {
+        "assistant" => PromptMessageRole::Assistant,
+        _ => PromptMessageRole::User, // MCP doesn't have system role, use user
+    };
+
+    PromptMessage::new_text(role, msg.content)
 }

@@ -9,7 +9,7 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
 /// Type of knowledge atom to retrieve
-#[derive(Debug, Clone, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Default, Deserialize, JsonSchema)]
 #[serde(rename_all = "lowercase")]
 pub enum AtomType {
     /// Technical terms with definitions
@@ -25,13 +25,8 @@ pub enum AtomType {
     /// Audience characteristics
     AudienceTrait,
     /// All atom types
+    #[default]
     All,
-}
-
-impl Default for AtomType {
-    fn default() -> Self {
-        Self::All
-    }
 }
 
 /// Parameters for novanet_atoms tool
@@ -177,7 +172,9 @@ pub async fn execute(state: &State, params: AtomsParams) -> Result<AtomsResult> 
 
 /// Get Terms for a locale
 async fn get_terms(state: &State, params: &AtomsParams, limit: usize) -> Result<Vec<Atom>> {
-    let domain_filter = params.domain.as_ref()
+    let domain_filter = params
+        .domain
+        .as_ref()
         .map(|d| format!("AND t.domain = '{}'", d))
         .unwrap_or_default();
 
@@ -204,22 +201,32 @@ async fn get_terms(state: &State, params: &AtomsParams, limit: usize) -> Result<
         query_params.insert("query".to_string(), serde_json::json!(q));
     }
 
-    let rows = state.pool().execute_query(&cypher, Some(query_params)).await?;
+    let rows = state
+        .pool()
+        .execute_query(&cypher, Some(query_params))
+        .await?;
 
-    Ok(rows.into_iter().map(|row| Atom {
-        key: row["key"].as_str().unwrap_or_default().to_string(),
-        atom_type: "Term".to_string(),
-        value: row["value"].as_str().unwrap_or_default().to_string(),
-        domain: row["domain"].as_str().map(|s| s.to_string()),
-        register: None,
-        properties: row.get("definition").map(|d| serde_json::json!({"definition": d})),
-        container_key: row["container_key"].as_str().map(|s| s.to_string()),
-    }).collect())
+    Ok(rows
+        .into_iter()
+        .map(|row| Atom {
+            key: row["key"].as_str().unwrap_or_default().to_string(),
+            atom_type: "Term".to_string(),
+            value: row["value"].as_str().unwrap_or_default().to_string(),
+            domain: row["domain"].as_str().map(|s| s.to_string()),
+            register: None,
+            properties: row
+                .get("definition")
+                .map(|d| serde_json::json!({"definition": d})),
+            container_key: row["container_key"].as_str().map(|s| s.to_string()),
+        })
+        .collect())
 }
 
 /// Get Expressions for a locale
 async fn get_expressions(state: &State, params: &AtomsParams, limit: usize) -> Result<Vec<Atom>> {
-    let register_filter = params.register.as_ref()
+    let register_filter = params
+        .register
+        .as_ref()
         .map(|r| format!("AND e.register = '{}'", r))
         .unwrap_or_default();
 
@@ -246,17 +253,25 @@ async fn get_expressions(state: &State, params: &AtomsParams, limit: usize) -> R
         query_params.insert("query".to_string(), serde_json::json!(q));
     }
 
-    let rows = state.pool().execute_query(&cypher, Some(query_params)).await?;
+    let rows = state
+        .pool()
+        .execute_query(&cypher, Some(query_params))
+        .await?;
 
-    Ok(rows.into_iter().map(|row| Atom {
-        key: row["key"].as_str().unwrap_or_default().to_string(),
-        atom_type: "Expression".to_string(),
-        value: row["value"].as_str().unwrap_or_default().to_string(),
-        domain: None,
-        register: row["register"].as_str().map(|s| s.to_string()),
-        properties: row.get("context").map(|c| serde_json::json!({"context": c})),
-        container_key: row["container_key"].as_str().map(|s| s.to_string()),
-    }).collect())
+    Ok(rows
+        .into_iter()
+        .map(|row| Atom {
+            key: row["key"].as_str().unwrap_or_default().to_string(),
+            atom_type: "Expression".to_string(),
+            value: row["value"].as_str().unwrap_or_default().to_string(),
+            domain: None,
+            register: row["register"].as_str().map(|s| s.to_string()),
+            properties: row
+                .get("context")
+                .map(|c| serde_json::json!({"context": c})),
+            container_key: row["container_key"].as_str().map(|s| s.to_string()),
+        })
+        .collect())
 }
 
 /// Get Patterns for a locale
@@ -283,17 +298,25 @@ async fn get_patterns(state: &State, params: &AtomsParams, limit: usize) -> Resu
         query_params.insert("query".to_string(), serde_json::json!(q));
     }
 
-    let rows = state.pool().execute_query(&cypher, Some(query_params)).await?;
+    let rows = state
+        .pool()
+        .execute_query(&cypher, Some(query_params))
+        .await?;
 
-    Ok(rows.into_iter().map(|row| Atom {
-        key: row["key"].as_str().unwrap_or_default().to_string(),
-        atom_type: "Pattern".to_string(),
-        value: row["value"].as_str().unwrap_or_default().to_string(),
-        domain: None,
-        register: None,
-        properties: row.get("purpose").map(|p| serde_json::json!({"purpose": p})),
-        container_key: row["container_key"].as_str().map(|s| s.to_string()),
-    }).collect())
+    Ok(rows
+        .into_iter()
+        .map(|row| Atom {
+            key: row["key"].as_str().unwrap_or_default().to_string(),
+            atom_type: "Pattern".to_string(),
+            value: row["value"].as_str().unwrap_or_default().to_string(),
+            domain: None,
+            register: None,
+            properties: row
+                .get("purpose")
+                .map(|p| serde_json::json!({"purpose": p})),
+            container_key: row["container_key"].as_str().map(|s| s.to_string()),
+        })
+        .collect())
 }
 
 /// Get CultureRefs for a locale
@@ -320,20 +343,26 @@ async fn get_culture_refs(state: &State, params: &AtomsParams, limit: usize) -> 
         query_params.insert("query".to_string(), serde_json::json!(q));
     }
 
-    let rows = state.pool().execute_query(&cypher, Some(query_params)).await?;
+    let rows = state
+        .pool()
+        .execute_query(&cypher, Some(query_params))
+        .await?;
 
-    Ok(rows.into_iter().map(|row| Atom {
-        key: row["key"].as_str().unwrap_or_default().to_string(),
-        atom_type: "CultureRef".to_string(),
-        value: row["value"].as_str().unwrap_or_default().to_string(),
-        domain: None,
-        register: None,
-        properties: Some(serde_json::json!({
-            "context": row.get("context"),
-            "appropriateness": row.get("appropriateness")
-        })),
-        container_key: row["container_key"].as_str().map(|s| s.to_string()),
-    }).collect())
+    Ok(rows
+        .into_iter()
+        .map(|row| Atom {
+            key: row["key"].as_str().unwrap_or_default().to_string(),
+            atom_type: "CultureRef".to_string(),
+            value: row["value"].as_str().unwrap_or_default().to_string(),
+            domain: None,
+            register: None,
+            properties: Some(serde_json::json!({
+                "context": row.get("context"),
+                "appropriateness": row.get("appropriateness")
+            })),
+            container_key: row["container_key"].as_str().map(|s| s.to_string()),
+        })
+        .collect())
 }
 
 /// Get Taboos for a locale
@@ -360,24 +389,34 @@ async fn get_taboos(state: &State, params: &AtomsParams, limit: usize) -> Result
         query_params.insert("query".to_string(), serde_json::json!(q));
     }
 
-    let rows = state.pool().execute_query(&cypher, Some(query_params)).await?;
+    let rows = state
+        .pool()
+        .execute_query(&cypher, Some(query_params))
+        .await?;
 
-    Ok(rows.into_iter().map(|row| Atom {
-        key: row["key"].as_str().unwrap_or_default().to_string(),
-        atom_type: "Taboo".to_string(),
-        value: row["value"].as_str().unwrap_or_default().to_string(),
-        domain: None,
-        register: None,
-        properties: Some(serde_json::json!({
-            "severity": row.get("severity"),
-            "category": row.get("category")
-        })),
-        container_key: row["container_key"].as_str().map(|s| s.to_string()),
-    }).collect())
+    Ok(rows
+        .into_iter()
+        .map(|row| Atom {
+            key: row["key"].as_str().unwrap_or_default().to_string(),
+            atom_type: "Taboo".to_string(),
+            value: row["value"].as_str().unwrap_or_default().to_string(),
+            domain: None,
+            register: None,
+            properties: Some(serde_json::json!({
+                "severity": row.get("severity"),
+                "category": row.get("category")
+            })),
+            container_key: row["container_key"].as_str().map(|s| s.to_string()),
+        })
+        .collect())
 }
 
 /// Get AudienceTraits for a locale
-async fn get_audience_traits(state: &State, params: &AtomsParams, limit: usize) -> Result<Vec<Atom>> {
+async fn get_audience_traits(
+    state: &State,
+    params: &AtomsParams,
+    limit: usize,
+) -> Result<Vec<Atom>> {
     let query_filter = params.query.as_ref()
         .map(|_| "AND (toLower(a.key) CONTAINS toLower($query) OR toLower(a.trait) CONTAINS toLower($query))")
         .unwrap_or_default();
@@ -400,20 +439,26 @@ async fn get_audience_traits(state: &State, params: &AtomsParams, limit: usize) 
         query_params.insert("query".to_string(), serde_json::json!(q));
     }
 
-    let rows = state.pool().execute_query(&cypher, Some(query_params)).await?;
+    let rows = state
+        .pool()
+        .execute_query(&cypher, Some(query_params))
+        .await?;
 
-    Ok(rows.into_iter().map(|row| Atom {
-        key: row["key"].as_str().unwrap_or_default().to_string(),
-        atom_type: "AudienceTrait".to_string(),
-        value: row["value"].as_str().unwrap_or_default().to_string(),
-        domain: None,
-        register: None,
-        properties: Some(serde_json::json!({
-            "demographic": row.get("demographic"),
-            "behavior": row.get("behavior")
-        })),
-        container_key: row["container_key"].as_str().map(|s| s.to_string()),
-    }).collect())
+    Ok(rows
+        .into_iter()
+        .map(|row| Atom {
+            key: row["key"].as_str().unwrap_or_default().to_string(),
+            atom_type: "AudienceTrait".to_string(),
+            value: row["value"].as_str().unwrap_or_default().to_string(),
+            domain: None,
+            register: None,
+            properties: Some(serde_json::json!({
+                "demographic": row.get("demographic"),
+                "behavior": row.get("behavior")
+            })),
+            container_key: row["container_key"].as_str().map(|s| s.to_string()),
+        })
+        .collect())
 }
 
 /// Get container information for a locale

@@ -2,11 +2,12 @@
 //!
 //! Phase 1: novanet_query, novanet_describe
 //! Phase 2: novanet_search, novanet_traverse, novanet_assemble, novanet_atoms
-//! Phase 3 (planned): novanet_generate
+//! Phase 3: novanet_generate
 
 pub mod assemble;
 pub mod atoms;
 pub mod describe;
+pub mod generate;
 pub mod query;
 pub mod search;
 pub mod traverse;
@@ -15,6 +16,7 @@ pub mod traverse;
 pub use assemble::{AssembleParams, AssembleResult};
 pub use atoms::{AtomsParams, AtomsResult};
 pub use describe::{DescribeParams, DescribeResult, DescribeTarget};
+pub use generate::{GenerateParams, GenerateResult};
 pub use query::{QueryParams, QueryResult};
 pub use search::{SearchParams, SearchResult};
 pub use traverse::{TraverseParams, TraverseResult};

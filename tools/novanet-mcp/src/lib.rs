@@ -8,7 +8,8 @@
 //!
 //! - 7 Tools: search, traverse, assemble, atoms, describe, query, generate
 //! - 4 Resources: entity://, kind://, locale://, view://
-//! - 3 Prompts: cypher_query, content_generation, context_analysis
+//! - 6 Prompts: cypher_query, cypher_explain, block_generation, page_generation,
+//!   entity_analysis, locale_briefing
 //!
 //! # Example
 //!
@@ -26,6 +27,7 @@
 pub mod cache;
 pub mod error;
 pub mod neo4j;
+pub mod prompts;
 pub mod resources;
 pub mod rlm;
 pub mod server;
