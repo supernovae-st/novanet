@@ -18,6 +18,7 @@ pub mod cache;
 pub mod clipboard;
 mod data;
 mod handlers;
+pub mod icons;
 pub mod nexus;
 mod schema;
 pub mod theme;

@@ -21,7 +21,7 @@ use super::{
     COLOR_MUTED_TEXT, COLOR_UNFOCUSED_BORDER, EmptyStateKind, STYLE_DIM, STYLE_HIGHLIGHT,
     STYLE_PRIMARY, STYLE_UNFOCUSED, arc_family_abbrev, arc_family_badge_icon, cardinality_abbrev,
     layer_abbrev, layer_badge_icon, realm_abbrev, realm_badge_icon, render_empty_state, spinner,
-    trait_abbrev, trait_color, trait_icon,
+    trait_abbrev, trait_icon,
 };
 use crate::tui::app::{App, Focus};
 use crate::tui::data::ArcDirection;
@@ -140,7 +140,7 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 label: l.display_name.clone(),
                 color: hex_to_color(&l.color),
             });
-            let kind_label = if app.is_data_mode() && k.instance_count > 0 {
+            let kind_label = if app.is_graph_mode() && k.instance_count > 0 {
                 format!("{} ({})", k.display_name, k.instance_count)
             } else {
                 k.display_name.clone()
@@ -148,7 +148,7 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
             path.push(BreadcrumbLevel {
                 icon: trait_icon(&k.trait_name),
                 label: kind_label,
-                color: trait_color(&k.trait_name),
+                color: app.theme.trait_color(&k.trait_name),
             });
         }
         Some(TreeItem::EntityCategory(r, l, k, cat)) => {
@@ -165,7 +165,7 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
             path.push(BreadcrumbLevel {
                 icon: trait_icon(&k.trait_name),
                 label: k.display_name.clone(),
-                color: trait_color(&k.trait_name),
+                color: app.theme.trait_color(&k.trait_name),
             });
             path.push(BreadcrumbLevel {
                 icon: "◫",
@@ -187,7 +187,7 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
             path.push(BreadcrumbLevel {
                 icon: trait_icon(&k.trait_name),
                 label: k.display_name.clone(),
-                color: trait_color(&k.trait_name),
+                color: app.theme.trait_color(&k.trait_name),
             });
             path.push(BreadcrumbLevel {
                 icon: "►",
@@ -410,7 +410,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     if total_kinds == 0 {
         // Render empty tree panel with border
         // v11.6: Show mode in empty state too
-        let empty_title = if app.is_data_mode() {
+        let empty_title = if app.is_graph_mode() {
             " ● Data "
         } else {
             " ◆ Schema "
@@ -688,7 +688,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
             idx += 1;
 
             if !realm_collapsed {
-                let is_data_mode = app.is_data_mode();
+                let is_data_mode = app.is_graph_mode();
                 let hide_empty = app.hide_empty && is_data_mode;
 
                 // Filter visible layers (hide empty if hide_empty, trait filter if active)
@@ -875,7 +875,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             // Format: Name (instances) →out←in req/tot
                             let kind_is_empty = kind.instance_count == 0;
                             let t_icon = trait_icon(&kind.trait_name);
-                            let t_color = trait_color(&kind.trait_name);
+                            let t_color = app.theme.trait_color(&kind.trait_name);
 
                             // Count arcs by direction
                             let outgoing = kind
@@ -1588,7 +1588,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     // Show hierarchical position in title: R:1/2 L:2/4 K:3/7 I:42/300
     // v11.6: Show mode with icon + hierarchy position
     let total = app.current_item_count(); // Used for scrollbar
-    let mode_prefix = if app.is_data_mode() {
+    let mode_prefix = if app.is_graph_mode() {
         "● Data" // Filled circle = instances/data
     } else {
         "◆ Schema" // Diamond = structure/meta
@@ -1606,7 +1606,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
     let hierarchy = app
         .tree
-        .hierarchy_position(app.tree_cursor, app.is_data_mode());
+        .hierarchy_position(app.tree_cursor, app.is_graph_mode());
     let hierarchy_str = hierarchy.to_compact_string();
     let title = if hierarchy_str.is_empty() {
         format!(" {}{} ", mode_prefix, filter_indicator)
