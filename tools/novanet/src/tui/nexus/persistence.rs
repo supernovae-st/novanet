@@ -84,14 +84,19 @@ impl TutorialProgress {
         }
     }
 
-    /// Save progress to disk.
+    /// Save progress to disk (atomic write via temp file + rename).
     pub fn save(&self) -> std::io::Result<()> {
         let path = Self::path();
         if let Some(parent) = path.parent() {
             std::fs::create_dir_all(parent)?;
         }
         let content = serde_json::to_string_pretty(self)?;
-        std::fs::write(path, content)
+
+        // Atomic write: write to temp file, then rename
+        // This prevents data corruption if process is interrupted during write
+        let temp_path = path.with_extension("json.tmp");
+        std::fs::write(&temp_path, &content)?;
+        std::fs::rename(&temp_path, &path)
     }
 
     /// Update from TutorialState.

