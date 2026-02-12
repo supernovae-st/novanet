@@ -96,12 +96,22 @@ pub const QUALITY_PARTIAL: IconDef = IconDef::new("circle-dot", "◐", "Some fie
 pub const QUALITY_REQUIRED: IconDef = IconDef::new("asterisk", "*", "Required field marker");
 
 // =============================================================================
-// MODES ICONS (6)
+// MODES ICONS (v11.7: 2 modes - Graph and Nexus)
 // =============================================================================
 
+/// v11.7: Unified tree mode (replaces Data/Meta/Overlay/Query)
+pub const MODES_GRAPH: IconDef = IconDef::new("git-branch", "G", "Unified graph tree");
+/// v11.7: Hub mode (Quiz, Audit, Stats, Help)
+pub const MODES_NEXUS: IconDef = IconDef::new("compass", "N", "Nexus hub");
+
+// Legacy aliases for backwards compatibility (deprecated)
+#[deprecated(since = "11.7.0", note = "Use MODES_GRAPH instead")]
 pub const MODES_DATA: IconDef = IconDef::new("table", "D", "Data instances view");
+#[deprecated(since = "11.7.0", note = "Use MODES_GRAPH instead")]
 pub const MODES_META: IconDef = IconDef::new("database", "M", "Meta-graph view");
+#[deprecated(since = "11.7.0", note = "Use MODES_GRAPH instead")]
 pub const MODES_OVERLAY: IconDef = IconDef::new("layers", "O", "Combined meta+data");
+#[deprecated(since = "11.7.0", note = "Use MODES_GRAPH instead")]
 pub const MODES_QUERY: IconDef = IconDef::new("filter", "Q", "Faceted query");
 
 // =============================================================================
@@ -201,9 +211,14 @@ pub fn quality_icons() -> HashMap<&'static str, IconDef> {
     }
 }
 
-/// Get all mode icons.
+/// Get all mode icons (v11.7: Graph + Nexus, legacy modes included for compat).
+#[allow(deprecated)]
 pub fn mode_icons() -> HashMap<&'static str, IconDef> {
     icon_map! {
+        // v11.7 modes
+        "graph" => MODES_GRAPH,
+        "nexus" => MODES_NEXUS,
+        // Legacy modes (deprecated, kept for backwards compatibility)
         "data" => MODES_DATA,
         "meta" => MODES_META,
         "overlay" => MODES_OVERLAY,
@@ -281,13 +296,187 @@ pub fn state_terminal_icon(key: &str) -> &'static str {
     }
 }
 
-/// Get terminal icon for a mode.
+/// Get terminal icon for a mode (v11.7: Graph + Nexus primary).
 pub fn mode_terminal_icon(key: &str) -> &'static str {
     match key {
+        // v11.7 modes
+        "graph" => "G",
+        "nexus" => "N",
+        // Legacy modes (deprecated)
         "data" => "D",
         "meta" => "M",
         "overlay" => "O",
         "query" => "Q",
         _ => "·",
+    }
+}
+
+// =============================================================================
+// TESTS
+// =============================================================================
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // =========================================================================
+    // ICON MAP TESTS
+    // =========================================================================
+
+    #[test]
+    fn test_realm_icons_count() {
+        let icons = realm_icons();
+        assert_eq!(icons.len(), 2);
+        assert!(icons.contains_key("org"));
+        assert!(icons.contains_key("shared"));
+    }
+
+    #[test]
+    fn test_layer_icons_count() {
+        let icons = layer_icons();
+        assert_eq!(icons.len(), 9);
+        assert!(icons.contains_key("config"));
+        assert!(icons.contains_key("semantic"));
+        assert!(icons.contains_key("output"));
+    }
+
+    #[test]
+    fn test_trait_icons_count() {
+        let icons = trait_icons();
+        assert_eq!(icons.len(), 5);
+        assert!(icons.contains_key("invariant"));
+        assert!(icons.contains_key("localized"));
+        assert!(icons.contains_key("generated"));
+    }
+
+    #[test]
+    fn test_arc_family_icons_count() {
+        let icons = arc_family_icons();
+        assert_eq!(icons.len(), 5);
+        assert!(icons.contains_key("ownership"));
+        assert!(icons.contains_key("semantic"));
+    }
+
+    #[test]
+    fn test_state_icons_count() {
+        let icons = state_icons();
+        assert_eq!(icons.len(), 8);
+        assert!(icons.contains_key("loading"));
+        assert!(icons.contains_key("error"));
+        assert!(icons.contains_key("success"));
+    }
+
+    #[test]
+    fn test_navigation_icons_count() {
+        let icons = navigation_icons();
+        assert_eq!(icons.len(), 7);
+        assert!(icons.contains_key("expanded"));
+        assert!(icons.contains_key("collapsed"));
+        assert!(icons.contains_key("search"));
+    }
+
+    #[test]
+    fn test_quality_icons_count() {
+        let icons = quality_icons();
+        assert_eq!(icons.len(), 6);
+        assert!(icons.contains_key("complete"));
+        assert!(icons.contains_key("required"));
+    }
+
+    #[test]
+    #[allow(deprecated)]
+    fn test_mode_icons_count() {
+        let icons = mode_icons();
+        // v11.7: 2 new modes + 4 legacy = 6 total
+        assert_eq!(icons.len(), 6);
+        assert!(icons.contains_key("graph"));
+        assert!(icons.contains_key("nexus"));
+        // Legacy modes still present for backwards compat
+        assert!(icons.contains_key("data"));
+        assert!(icons.contains_key("meta"));
+    }
+
+    // =========================================================================
+    // TERMINAL ICON TESTS
+    // =========================================================================
+
+    #[test]
+    fn test_realm_terminal_icon() {
+        assert_eq!(realm_terminal_icon("org"), "◎");
+        assert_eq!(realm_terminal_icon("shared"), "◉");
+        assert_eq!(realm_terminal_icon("unknown"), "·");
+    }
+
+    #[test]
+    fn test_layer_terminal_icon() {
+        assert_eq!(layer_terminal_icon("config"), "⚙");
+        assert_eq!(layer_terminal_icon("semantic"), "◆");
+        assert_eq!(layer_terminal_icon("output"), "●");
+        assert_eq!(layer_terminal_icon("unknown"), "·");
+    }
+
+    #[test]
+    fn test_trait_terminal_icon() {
+        assert_eq!(trait_terminal_icon("invariant"), "■");
+        assert_eq!(trait_terminal_icon("localized"), "□");
+        assert_eq!(trait_terminal_icon("generated"), "★");
+        assert_eq!(trait_terminal_icon("aggregated"), "▪");
+        assert_eq!(trait_terminal_icon("unknown"), "·");
+    }
+
+    #[test]
+    fn test_navigation_terminal_icon() {
+        assert_eq!(navigation_terminal_icon("expanded"), "▼");
+        assert_eq!(navigation_terminal_icon("collapsed"), "▶");
+        assert_eq!(navigation_terminal_icon("search"), "/");
+        assert_eq!(navigation_terminal_icon("unknown"), "·");
+    }
+
+    #[test]
+    fn test_state_terminal_icon() {
+        assert_eq!(state_terminal_icon("loading"), "◐");
+        assert_eq!(state_terminal_icon("error"), "✗");
+        assert_eq!(state_terminal_icon("success"), "✓");
+        assert_eq!(state_terminal_icon("unknown"), "·");
+    }
+
+    #[test]
+    fn test_mode_terminal_icon() {
+        // v11.7 modes
+        assert_eq!(mode_terminal_icon("graph"), "G");
+        assert_eq!(mode_terminal_icon("nexus"), "N");
+        // Legacy modes
+        assert_eq!(mode_terminal_icon("data"), "D");
+        assert_eq!(mode_terminal_icon("meta"), "M");
+        assert_eq!(mode_terminal_icon("unknown"), "·");
+    }
+
+    // =========================================================================
+    // ICON CONTENT TESTS
+    // =========================================================================
+
+    #[test]
+    fn test_icon_def_fields_not_empty() {
+        // Verify all constants have non-empty fields
+        assert!(!REALMS_ORG.web.is_empty());
+        assert!(!REALMS_ORG.terminal.is_empty());
+        assert!(!REALMS_ORG.description.is_empty());
+
+        assert!(!LAYERS_CONFIG.web.is_empty());
+        assert!(!TRAITS_INVARIANT.web.is_empty());
+        assert!(!ARC_FAMILIES_OWNERSHIP.web.is_empty());
+        assert!(!STATES_LOADING.web.is_empty());
+        assert!(!NAVIGATION_EXPANDED.web.is_empty());
+        assert!(!QUALITY_COMPLETE.web.is_empty());
+        assert!(!MODES_GRAPH.web.is_empty());
+    }
+
+    #[test]
+    fn test_v11_7_modes_constants() {
+        // v11.7: Verify new mode constants exist
+        assert_eq!(MODES_GRAPH.terminal, "G");
+        assert_eq!(MODES_NEXUS.terminal, "N");
+        assert!(MODES_GRAPH.description.contains("Unified"));
+        assert!(MODES_NEXUS.description.contains("hub"));
     }
 }

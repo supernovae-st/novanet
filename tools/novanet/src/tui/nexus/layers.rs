@@ -20,6 +20,7 @@ use crate::tui::app::App;
 use crate::tui::data::TaxonomyTree;
 use crate::tui::theme::Theme;
 use crate::tui::theme::heatmap_color;
+use crate::tui::ui::COLOR_UNFOCUSED_BORDER;
 
 // =============================================================================
 // LAYER DEFINITIONS
@@ -109,7 +110,7 @@ fn render_realm_column(
     let border_color = if is_selected_realm {
         realm_color
     } else {
-        Color::Rgb(60, 60, 70)
+        COLOR_UNFOCUSED_BORDER
     };
 
     let block = Block::default()
@@ -143,7 +144,7 @@ fn render_realm_column(
     // Header separator
     lines.push(Line::from(Span::styled(
         "\u{2500}".repeat(inner.width.saturating_sub(2) as usize),
-        Style::default().fg(Color::Rgb(60, 60, 70)),
+        Style::default().fg(COLOR_UNFOCUSED_BORDER),
     )));
     lines.push(Line::from(""));
 
@@ -292,13 +293,13 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_global_layers_count() {
+    fn test_shared_layers_count() {
         // v11.5: SHARED has 4 layers (config, locale, geography, knowledge)
         assert_eq!(SHARED_LAYERS.len(), 4);
     }
 
     #[test]
-    fn test_tenant_layers_count() {
+    fn test_org_layers_count() {
         // v11.5: ORG has 6 layers (config, foundation, structure, semantic, instruction, output)
         // SEO/GEO consolidated to shared/knowledge
         assert_eq!(ORG_LAYERS.len(), 6);

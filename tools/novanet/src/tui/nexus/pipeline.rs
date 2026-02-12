@@ -23,6 +23,7 @@ use ratatui::widgets::{Block, Borders, Paragraph, Wrap};
 
 use crate::tui::app::App;
 use crate::tui::theme::Theme;
+use crate::tui::ui::COLOR_UNFOCUSED_BORDER;
 
 // =============================================================================
 // PIPELINE STAGES
@@ -101,7 +102,7 @@ fn render_pipeline_diagram(
                 .add_modifier(Modifier::BOLD),
         ))
         .borders(Borders::ALL)
-        .border_style(Style::default().fg(Color::Rgb(60, 60, 70)));
+        .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER));
 
     let inner = block.inner(area);
     f.render_widget(block, area);
@@ -150,7 +151,7 @@ fn build_pipeline_lines(
             )
         } else {
             (
-                Style::default().fg(Color::Rgb(60, 60, 70)),
+                Style::default().fg(COLOR_UNFOCUSED_BORDER),
                 Style::default().fg(Color::Rgb(80, 80, 90)),
             )
         };
@@ -182,7 +183,7 @@ fn build_pipeline_lines(
     )));
     lines.push(Line::from(Span::styled(
         "\u{2500}".repeat(width.saturating_sub(4).min(60)),
-        Style::default().fg(Color::Rgb(60, 60, 70)),
+        Style::default().fg(COLOR_UNFOCUSED_BORDER),
     )));
     lines.push(Line::from(""));
 
@@ -416,7 +417,7 @@ fn render_principle_box(f: &mut Frame, area: Rect, is_animating: bool) {
                 .add_modifier(Modifier::BOLD),
         ))
         .borders(Borders::ALL)
-        .border_style(Style::default().fg(Color::Rgb(60, 60, 70)));
+        .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER));
 
     let inner = block.inner(area);
     f.render_widget(block, area);
