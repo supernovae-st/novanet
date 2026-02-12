@@ -13,9 +13,9 @@ use super::cache::RenderCache;
 use super::data::{
     ArcKindDetails, KindArcsData, LayerDetails, RealmDetails, TaxonomyTree, TreeItem,
 };
+use super::handlers::dispatch_mode_handler;
 use super::nexus::NexusState;
 use super::schema::{CoverageStats, MatchedProperty, ValidatedProperty, ValidationStats};
-use super::handlers::dispatch_mode_handler;
 use super::theme::Theme;
 use super::yaml::{YamlSections, YamlViewSection};
 
@@ -1658,36 +1658,59 @@ impl App {
 
     /// Toggle collapse/expand of the current tree item.
     /// Also triggers loading for instances, Entity categories, and category instances in Data mode.
+    /// Single-click behavior: if instances not loaded, load them AND expand in one action.
     fn toggle_tree_item(&mut self) {
         let data_mode = self.is_data_mode();
         if let Some(key) = self.tree.collapse_key_at(self.tree_cursor, data_mode) {
-            // Check if expanding (going from collapsed to expanded)
-            let was_collapsed = self.tree.is_collapsed(&key);
-            self.tree.toggle(&key);
+            // Handle Kind toggle in Data mode
+            if let Some(kind_key) = key.strip_prefix("kind:") {
+                if data_mode {
+                    let instances_loaded = self.tree.get_instances(kind_key).is_some();
 
-            // Only trigger loading when expanding (not collapsing)
-            if was_collapsed && self.is_data_mode() {
-                // When expanding any Kind, load instances if not already loaded
-                if let Some(kind_key) = key.strip_prefix("kind:") {
-                    // Special case: Entity Kind also loads categories
-                    if kind_key == "Entity" && self.tree.entity_categories.is_empty() {
-                        self.pending_entity_categories_load = true;
-                    }
-                    // Load instances for this Kind if not already loaded
-                    if self.tree.get_instances(kind_key).is_none() {
+                    if !instances_loaded {
+                        // First click on unloaded Kind: load instances AND ensure expanded
+                        if kind_key == "Entity" && self.tree.entity_categories.is_empty() {
+                            self.pending_entity_categories_load = true;
+                        }
                         self.pending_instance_load = Some(kind_key.to_string());
+                        // Ensure state is "expanded" so instances show when loaded
+                        if self.tree.is_collapsed(&key) {
+                            self.tree.toggle(&key);
+                        }
+                    } else {
+                        // Instances loaded: normal toggle
+                        self.tree.toggle(&key);
                     }
+                } else {
+                    // Meta mode: normal toggle (Kinds don't expand in meta)
+                    self.tree.toggle(&key);
                 }
-                // When expanding an EntityCategory, load instances for that category
-                else if let Some(category_key) = key.strip_prefix("category:") {
-                    if !self
+            }
+            // Handle EntityCategory toggle
+            else if let Some(category_key) = key.strip_prefix("category:") {
+                if data_mode {
+                    let instances_loaded = self
                         .tree
                         .entity_category_instances
-                        .contains_key(category_key)
-                    {
+                        .contains_key(category_key);
+
+                    if !instances_loaded {
+                        // First click: load category instances AND ensure expanded
                         self.pending_category_instances_load = Some(category_key.to_string());
+                        if self.tree.is_collapsed(&key) {
+                            self.tree.toggle(&key);
+                        }
+                    } else {
+                        // Instances loaded: normal toggle
+                        self.tree.toggle(&key);
                     }
+                } else {
+                    self.tree.toggle(&key);
                 }
+            }
+            // Other items (Realm, Layer, ArcFamily, etc.): normal toggle
+            else {
+                self.tree.toggle(&key);
             }
         }
     }
@@ -1950,6 +1973,7 @@ mod tests {
             display_name: "Locale".to_string(),
             color: "#2aa198".to_string(),
             kinds: vec![locale_kind],
+            llm_context: String::new(),
         };
 
         let structure = LayerInfo {
@@ -1957,6 +1981,7 @@ mod tests {
             display_name: "Structure".to_string(),
             color: "#b58900".to_string(),
             kinds: vec![page_kind],
+            llm_context: String::new(),
         };
 
         let global = RealmInfo {
@@ -1965,6 +1990,7 @@ mod tests {
             color: "#859900".to_string(),
             icon: "◉",
             layers: vec![locale_layer],
+            llm_context: String::new(),
         };
 
         let tenant = RealmInfo {
@@ -1973,6 +1999,7 @@ mod tests {
             color: "#b58900".to_string(),
             icon: "◎",
             layers: vec![structure],
+            llm_context: String::new(),
         };
 
         let realms = vec![global, tenant];
