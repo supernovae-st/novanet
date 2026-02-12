@@ -17,16 +17,17 @@
  * - Optimized useFrame callbacks
  */
 
-import { useRef, useMemo, useState, memo, useCallback } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { useRef, useMemo, useState, memo, useCallback, useEffect, type ReactNode } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, RoundedBox } from '@react-three/drei';
 import * as THREE from 'three';
+import { IntroAnimation } from './IntroAnimation';
 
 // Types
 interface Props {
   selectedKey: string | null;
   activeLayer: number;
-  layers: Array<{ id: number; name: string; color: string; keys: Record<string, any> }>;
+  layers: Array<{ id: number; name: string; color: string; keys: Record<string, unknown> }>;
   onKeyClick: (keyId: string) => void;
   onKeyHover?: (keyId: string | null) => void;
 }
@@ -65,6 +66,10 @@ const SCREW_POSITIONS: [number, number][] = [
 
 // Knurl ridge positions for silver encoder
 const KNURL_POSITIONS = [-0.24, -0.14, -0.04, 0.06, 0.16, 0.26];
+
+// Animation constants
+const INTRO_DURATION = 3000;
+const PAD_ROTATION_SPEED = 0.12; // Rotation speed for the pad itself
 
 // ============================================================================
 // Shared Geometries Hook
@@ -348,9 +353,79 @@ const Lights = memo(function Lights() {
 });
 
 // ============================================================================
+// Camera Controller (Smooth intro zoom + gentle rotation)
+// ============================================================================
+interface CameraControllerProps {
+  introComplete: boolean;
+}
+
+const CameraController = memo(function CameraController({ introComplete }: CameraControllerProps) {
+  const { camera } = useThree();
+  const introProgress = useRef(0);
+
+  // Overhead frontal view (high Y = looking down)
+  const FINAL_POS = new THREE.Vector3(1, 7, 7);    // High overhead, frontal
+  const START_POS = new THREE.Vector3(1.5, 9, 9); // Even higher for intro zoom
+
+  useEffect(() => {
+    // Set initial camera position - 3/4 view from the start
+    camera.position.copy(START_POS);
+    camera.lookAt(0, 0, 0);
+  }, [camera]);
+
+  useFrame((_, delta) => {
+    if (!introComplete) {
+      // During intro: smooth zoom into final 3/4 position
+      introProgress.current = Math.min(1, introProgress.current + delta * 0.35);
+      const eased = 1 - Math.pow(1 - introProgress.current, 3); // Ease out cubic
+
+      camera.position.lerpVectors(START_POS, FINAL_POS, eased);
+    }
+    // Camera stays fixed after intro - pad rotates instead
+
+    camera.lookAt(0, 0, 0);
+  });
+
+  return null;
+});
+
+// ============================================================================
+// Rotating Pad Group (continuous rotation after intro)
+// ============================================================================
+interface RotatingPadGroupProps {
+  introComplete: boolean;
+  children: ReactNode;
+}
+
+const RotatingPadGroup = memo(function RotatingPadGroup({ introComplete, children }: RotatingPadGroupProps) {
+  const groupRef = useRef<THREE.Group>(null);
+  const rotationY = useRef(0); // Start facing front
+  const targetRotation = useRef(0);
+
+  useFrame((_, delta) => {
+    if (!groupRef.current) return;
+
+    if (introComplete) {
+      // Continuous rotation after intro (same direction as text exit)
+      targetRotation.current += delta * PAD_ROTATION_SPEED;
+    }
+
+    // Smooth interpolation for both intro and post-intro
+    rotationY.current += (targetRotation.current - rotationY.current) * delta * 3;
+    groupRef.current.rotation.y = rotationY.current;
+  });
+
+  return <group ref={groupRef}>{children}</group>;
+});
+
+// ============================================================================
 // Scene (Pre-compute key positions)
 // ============================================================================
-function Scene({ selectedKey, onKeyClick }: Props) {
+interface SceneProps extends Props {
+  introComplete: boolean;
+}
+
+function Scene({ selectedKey, onKeyClick, introComplete }: SceneProps) {
   // Pre-compute all key data once
   const keyData = useMemo(() => {
     const spacing = KEY_SIZE + KEY_GAP;
@@ -393,29 +468,34 @@ function Scene({ selectedKey, onKeyClick }: Props) {
 
   return (
     <>
+      <CameraController introComplete={introComplete} />
       <Lights />
       <Background />
-      <Chassis />
-      <Underglow />
 
-      {/* 14 Keys + 2 Encoders in 4×4 grid */}
-      {keyData.map((key) => {
-        if (key.isEncoder) {
-          return key.isSilver
-            ? <SilverEncoder key={key.id} pos={[key.x, 0.15, key.z]} />
-            : <BlackEncoder key={key.id} pos={[key.x, 0.15, key.z]} />;
-        }
+      {/* Rotating pad group */}
+      <RotatingPadGroup introComplete={introComplete}>
+        <Chassis />
+        <Underglow />
 
-        return (
-          <Key
-            key={key.id}
-            pos={[key.x, KEY_HEIGHT / 2, key.z]}
-            color={key.color}
-            selected={selectedKey === key.id}
-            onClick={() => onKeyClick(key.id)}
-          />
-        );
-      })}
+        {/* 14 Keys + 2 Encoders in 4×4 grid */}
+        {keyData.map((key) => {
+          if (key.isEncoder) {
+            return key.isSilver
+              ? <SilverEncoder key={key.id} pos={[key.x, 0.15, key.z]} />
+              : <BlackEncoder key={key.id} pos={[key.x, 0.15, key.z]} />;
+          }
+
+          return (
+            <Key
+              key={key.id}
+              pos={[key.x, KEY_HEIGHT / 2, key.z]}
+              color={key.color}
+              selected={selectedKey === key.id}
+              onClick={() => onKeyClick(key.id)}
+            />
+          );
+        })}
+      </RotatingPadGroup>
 
       <OrbitControls
         enablePan={false}
@@ -423,7 +503,8 @@ function Scene({ selectedKey, onKeyClick }: Props) {
         maxDistance={12}
         minPolarAngle={0.3}
         maxPolarAngle={1.3}
-        target={[0, 0, 0.5]}
+        target={[0, 0, 0]}
+        enabled={introComplete}
       />
     </>
   );
@@ -432,23 +513,42 @@ function Scene({ selectedKey, onKeyClick }: Props) {
 // ============================================================================
 // Export (with performance settings)
 // ============================================================================
-export function CreatorBoardLowPoly(props: Props) {
+interface CreatorBoardProps extends Props {
+  skipIntro?: boolean;
+}
+
+export function CreatorBoardLowPoly({ skipIntro = false, ...props }: CreatorBoardProps) {
+  const [introComplete, setIntroComplete] = useState(skipIntro);
+
+  const handleIntroComplete = useCallback(() => {
+    setIntroComplete(true);
+  }, []);
+
   return (
-    <div style={{ width: '100%', height: '100%', background: '#0f172a' }}>
+    <div style={{ width: '100%', height: '100%', background: '#0f172a', position: 'relative' }}>
+      {/* HTML overlay for intro animation */}
+      {!skipIntro && !introComplete && (
+        <IntroAnimation
+          onComplete={handleIntroComplete}
+          duration={INTRO_DURATION}
+        />
+      )}
+
       <Canvas
         shadows
-        camera={{ position: [0, 5, 8], fov: 40 }}
-        // Performance optimizations
+        camera={{ position: [1.5, 9, 9], fov: 45 }}
         gl={{
           antialias: true,
           powerPreference: 'high-performance',
         }}
-        // Always render for continuous animations (rainbow, encoders)
         frameloop="always"
       >
         <color attach="background" args={['#0f172a']} />
         <fog attach="fog" args={['#0f172a', 12, 25]} />
-        <Scene {...props} />
+        <Scene
+          {...props}
+          introComplete={introComplete}
+        />
       </Canvas>
     </div>
   );

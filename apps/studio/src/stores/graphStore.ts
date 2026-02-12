@@ -4,17 +4,34 @@ import type { Draft } from 'immer';
 import type { GraphNode, GraphEdge, GraphData, NodeDetail } from '@/types';
 
 /**
+ * Detect if running in test environment (Jest/Vitest)
+ * In tests, we need synchronous index building for assertions to work
+ */
+const IS_TEST_ENV = typeof process !== 'undefined' && process.env?.NODE_ENV === 'test';
+
+/**
  * Polyfill for requestIdleCallback (Safari doesn't support it)
  * Falls back to setTimeout with 1ms delay (yields to event loop)
+ * In test environment, executes synchronously for test predictability
  */
 const requestIdleCallbackPolyfill: (cb: IdleRequestCallback) => number =
-  typeof requestIdleCallback !== 'undefined'
-    ? requestIdleCallback
-    : (cb: IdleRequestCallback) =>
-        window.setTimeout(() => cb({ didTimeout: false, timeRemaining: () => 50 }), 1) as unknown as number;
+  IS_TEST_ENV
+    ? (cb: IdleRequestCallback) => {
+        // Synchronous execution in tests - immediately call with generous time budget
+        cb({ didTimeout: false, timeRemaining: () => 50 });
+        return 0;
+      }
+    : typeof requestIdleCallback !== 'undefined'
+      ? requestIdleCallback
+      : (cb: IdleRequestCallback) =>
+          window.setTimeout(() => cb({ didTimeout: false, timeRemaining: () => 50 }), 1) as unknown as number;
 
 const cancelIdleCallbackPolyfill: (id: number) => void =
-  typeof cancelIdleCallback !== 'undefined' ? cancelIdleCallback : (id: number) => window.clearTimeout(id);
+  IS_TEST_ENV
+    ? () => {} // No-op in tests since execution is synchronous
+    : typeof cancelIdleCallback !== 'undefined'
+      ? cancelIdleCallback
+      : (id: number) => window.clearTimeout(id);
 
 /** Batch size for chunked processing (tune for ~16ms frames) */
 const INDEX_BATCH_SIZE = 2000;
@@ -312,6 +329,12 @@ export const useGraphStore = create<GraphState>()(
 
     // Actions
     setGraphData: (data) => {
+      // DEBUG: Log when graphStore receives data
+      console.log('[graphStore] setGraphData called:', {
+        nodeCount: data.nodes?.length ?? 0,
+        edgeCount: data.edges?.length ?? 0,
+      });
+
       // Phase 1: Immediately set raw data (renders can start)
       set((state) => {
         state.nodes = data.nodes;

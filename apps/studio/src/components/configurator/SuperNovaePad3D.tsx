@@ -1,7 +1,5 @@
 'use client';
 
-/* eslint-disable @typescript-eslint/no-explicit-any -- Three.js/gesture library interop requires any casts */
-
 /**
  * SuperNovaePad3D - Main 3D canvas for the macropad configurator
  *
@@ -20,7 +18,7 @@
  * - Particle burst on key press
  */
 
-import { Suspense, useCallback, useMemo, useState, useRef } from 'react';
+import { Suspense, useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import {
   Environment,
@@ -213,8 +211,10 @@ export function SuperNovaePad3D({
   const [particles, setParticles] = useState<Particle[]>([]);
   const particlesRef = useRef<Particle[]>([]);
 
-  // Sync ref with state for useFrame
-  particlesRef.current = particles;
+  // Sync ref with state for useFrame - must be in useEffect to avoid render-time ref access
+  useEffect(() => {
+    particlesRef.current = particles;
+  }, [particles]);
 
   // Key press handler with particle burst
   const handleKeyPress = useCallback(

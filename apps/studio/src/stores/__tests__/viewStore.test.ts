@@ -1,8 +1,9 @@
 // src/stores/__tests__/viewStore.test.ts
 // v12: Tests for view-based navigation store
 
-import { useViewStore } from '../viewStore';
+import { useViewStore, selectActiveViewId, selectIsCustomQuery, selectIsExecuting, selectCategories, selectIsRegistryLoaded } from '../viewStore';
 import { useQueryStore } from '../queryStore';
+import type { ViewCategoryGroup } from '@novanet/core/filters';
 
 // Mock fetch globally
 const mockFetch = jest.fn();
@@ -17,6 +18,16 @@ jest.mock('../queryStore', () => ({
   },
 }));
 
+// Mock filterStore - v12.1: Query-First filter injection
+jest.mock('../filterStore', () => ({
+  useFilterStore: {
+    getState: jest.fn(() => ({
+      displayLimit: 250,
+      selectedLocale: null,
+    })),
+  },
+}));
+
 // Mock logger to avoid console noise
 jest.mock('@/lib/logger', () => ({
   logger: {
@@ -27,19 +38,22 @@ jest.mock('@/lib/logger', () => ({
   },
 }));
 
-// Sample test data
-const mockCategories = [
+// Sample test data (v11.6.1 unified view system)
+const mockCategories: ViewCategoryGroup[] = [
   {
-    id: 'scope',
+    id: 'data',
+    name: 'Data',
     views: [
-      { id: 'complete-graph', description: 'Complete graph view', cypher: 'MATCH (n) RETURN n' },
-      { id: 'project-scope', description: 'Project scope view', cypher: 'MATCH (p:Project) RETURN p' },
+      { id: 'data-complete', description: 'Complete data graph', cypher: 'MATCH (n) RETURN n', category: 'data' },
+      { id: 'data-realm-shared', description: 'Shared realm nodes', cypher: 'MATCH (n:Shared) RETURN n', category: 'data' },
     ],
   },
   {
-    id: 'generation',
+    id: 'contextual',
+    name: 'Contextual',
     views: [
-      { id: 'block-generation', description: 'Block generation view', cypher: 'MATCH (b:Block) RETURN b' },
+      // v11.6.1: Updated to use new unified view ID
+      { id: 'ctx-generation', description: 'Block generation view', cypher: 'MATCH (b:Block) RETURN b', category: 'contextual' },
     ],
   },
 ];
@@ -61,13 +75,15 @@ describe('viewStore', () => {
     useViewStore.setState({
       categories: [],
       isRegistryLoaded: false,
-      activeViewId: 'complete-graph',
+      activeViewId: 'data-complete',
       isCustomQuery: false,
       customQueryText: null,
       params: {},
       isLoading: false,
       isExecuting: false,
       error: null,
+      // v11.6.1: Added for AbortController support
+      _abortController: null,
     });
   });
 
@@ -80,7 +96,7 @@ describe('viewStore', () => {
       const state = useViewStore.getState();
       expect(state.categories).toEqual([]);
       expect(state.isRegistryLoaded).toBe(false);
-      expect(state.activeViewId).toBe('complete-graph');
+      expect(state.activeViewId).toBe('data-complete');
       expect(state.isCustomQuery).toBe(false);
       expect(state.customQueryText).toBeNull();
       expect(state.params).toEqual({});
@@ -181,10 +197,10 @@ describe('viewStore', () => {
 
   describe('selectView', () => {
     it('should update activeViewId', () => {
-      useViewStore.getState().selectView('project-scope');
+      useViewStore.getState().selectView('data-realm-shared');
 
       const state = useViewStore.getState();
-      expect(state.activeViewId).toBe('project-scope');
+      expect(state.activeViewId).toBe('data-realm-shared');
     });
 
     it('should clear custom query state', () => {
@@ -194,7 +210,7 @@ describe('viewStore', () => {
         customQueryText: 'MATCH (n) RETURN n',
       });
 
-      useViewStore.getState().selectView('complete-graph');
+      useViewStore.getState().selectView('data-complete');
 
       const state = useViewStore.getState();
       expect(state.isCustomQuery).toBe(false);
@@ -202,7 +218,7 @@ describe('viewStore', () => {
     });
 
     it('should update params if provided', () => {
-      useViewStore.getState().selectView('project-scope', {
+      useViewStore.getState().selectView('data-realm-shared', {
         key: 'my-project',
         locale: 'fr-FR',
       });
@@ -219,7 +235,7 @@ describe('viewStore', () => {
         params: { key: 'existing-key' },
       });
 
-      useViewStore.getState().selectView('project-scope');
+      useViewStore.getState().selectView('data-realm-shared');
 
       expect(useViewStore.getState().params).toEqual({ key: 'existing-key' });
     });
@@ -233,7 +249,7 @@ describe('viewStore', () => {
     const mockViewResponse = {
       success: true,
       data: {
-        id: 'complete-graph',
+        id: 'data-complete',
         cypher: {
           query: 'MATCH (n) RETURN n LIMIT 100',
           params: { limit: 100 },
@@ -247,7 +263,7 @@ describe('viewStore', () => {
         json: async () => mockViewResponse,
       });
 
-      const promise = useViewStore.getState().executeView('complete-graph');
+      const promise = useViewStore.getState().executeView('data-complete');
 
       // Check executing state immediately
       expect(useViewStore.getState().isExecuting).toBe(true);
@@ -268,15 +284,15 @@ describe('viewStore', () => {
         json: async () => mockViewResponse,
       });
 
-      await useViewStore.getState().executeView('complete-graph');
+      await useViewStore.getState().executeView('data-complete');
 
       const state = useViewStore.getState();
-      expect(state.activeViewId).toBe('complete-graph');
+      expect(state.activeViewId).toBe('data-complete');
       expect(state.isCustomQuery).toBe(false);
       expect(state.customQueryText).toBeNull();
     });
 
-    it('should call queryStore.executeQuery with Cypher from view', async () => {
+    it('should call queryStore.executeQuery with Cypher from view (with filter injection)', async () => {
       const mockExecuteQuery = jest.fn().mockResolvedValue(undefined);
       (useQueryStore.getState as jest.Mock).mockReturnValue({
         executeQuery: mockExecuteQuery,
@@ -287,9 +303,11 @@ describe('viewStore', () => {
         json: async () => mockViewResponse,
       });
 
-      await useViewStore.getState().executeView('complete-graph');
+      await useViewStore.getState().executeView('data-complete');
 
-      expect(mockExecuteQuery).toHaveBeenCalledWith('MATCH (n) RETURN n LIMIT 100', { limit: 100 });
+      // v12.1: Query-First filter injection replaces LIMIT with displayLimit from filterStore
+      // The original LIMIT 100 gets replaced with displayLimit=250
+      expect(mockExecuteQuery).toHaveBeenCalledWith('MATCH (n) RETURN n LIMIT 250', { limit: 100 });
     });
 
     it('should include params in API URL', async () => {
@@ -298,19 +316,23 @@ describe('viewStore', () => {
         json: async () => mockViewResponse,
       });
 
-      await useViewStore.getState().executeView('project-scope', {
+      await useViewStore.getState().executeView('data-realm-shared', {
         key: 'my-project',
         locale: 'en-US',
       });
 
+      // v11.6.1: fetch now includes AbortController signal
       expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining('/api/views/project-scope')
+        expect.stringContaining('/api/views/data-realm-shared'),
+        expect.objectContaining({ signal: expect.any(AbortSignal) })
       );
       expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining('key=my-project')
+        expect.stringContaining('key=my-project'),
+        expect.objectContaining({ signal: expect.any(AbortSignal) })
       );
       expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining('locale=en-US')
+        expect.stringContaining('locale=en-US'),
+        expect.objectContaining({ signal: expect.any(AbortSignal) })
       );
     });
 
@@ -347,7 +369,7 @@ describe('viewStore', () => {
     it('should handle network errors', async () => {
       mockFetch.mockRejectedValueOnce(new Error('Connection failed'));
 
-      await useViewStore.getState().executeView('complete-graph');
+      await useViewStore.getState().executeView('data-complete');
 
       const state = useViewStore.getState();
       expect(state.error).toBe('Connection failed');
@@ -461,14 +483,18 @@ describe('viewStore', () => {
 
       // Only one fetch for executeView, not for loadRegistry
       expect(mockFetch).toHaveBeenCalledTimes(1);
-      expect(mockFetch).toHaveBeenCalledWith(expect.stringContaining('/api/views/complete-graph'));
+      // v11.6.1: fetch now includes AbortController signal
+      expect(mockFetch).toHaveBeenCalledWith(
+        expect.stringContaining('/api/views/data-complete'),
+        expect.objectContaining({ signal: expect.any(AbortSignal) })
+      );
     });
 
     it('should execute the persisted activeViewId', async () => {
       useViewStore.setState({
         isRegistryLoaded: true,
         categories: mockCategories,
-        activeViewId: 'project-scope',
+        activeViewId: 'data-realm-shared',
       });
 
       mockFetch.mockResolvedValueOnce({
@@ -481,7 +507,11 @@ describe('viewStore', () => {
 
       await useViewStore.getState().loadDefaultView();
 
-      expect(mockFetch).toHaveBeenCalledWith(expect.stringContaining('/api/views/project-scope'));
+      // v11.6.1: fetch now includes AbortController signal
+      expect(mockFetch).toHaveBeenCalledWith(
+        expect.stringContaining('/api/views/data-realm-shared'),
+        expect.objectContaining({ signal: expect.any(AbortSignal) })
+      );
     });
   });
 
@@ -523,7 +553,7 @@ describe('viewStore', () => {
   describe('clearView', () => {
     it('should reset to default view', () => {
       useViewStore.setState({
-        activeViewId: 'project-scope',
+        activeViewId: 'data-realm-shared',
         isCustomQuery: true,
         customQueryText: 'CUSTOM QUERY',
         params: { key: 'test', locale: 'en-US' },
@@ -532,7 +562,7 @@ describe('viewStore', () => {
       useViewStore.getState().clearView();
 
       const state = useViewStore.getState();
-      expect(state.activeViewId).toBe('complete-graph');
+      expect(state.activeViewId).toBe('data-complete');
       expect(state.isCustomQuery).toBe(false);
       expect(state.customQueryText).toBeNull();
       expect(state.params).toEqual({});
@@ -545,20 +575,20 @@ describe('viewStore', () => {
 
   describe('syncFromURL', () => {
     it('should parse view from URL', () => {
-      const params = new URLSearchParams('view=project-scope');
+      const params = new URLSearchParams('view=data-realm-shared');
 
       useViewStore.getState().syncFromURL(params);
 
-      expect(useViewStore.getState().activeViewId).toBe('project-scope');
+      expect(useViewStore.getState().activeViewId).toBe('data-realm-shared');
     });
 
     it('should parse all params from URL', () => {
-      const params = new URLSearchParams('view=project-scope&key=my-project&locale=fr-FR&project=proj1');
+      const params = new URLSearchParams('view=data-realm-shared&key=my-project&locale=fr-FR&project=proj1');
 
       useViewStore.getState().syncFromURL(params);
 
       const state = useViewStore.getState();
-      expect(state.activeViewId).toBe('project-scope');
+      expect(state.activeViewId).toBe('data-realm-shared');
       expect(state.params).toEqual({
         key: 'my-project',
         locale: 'fr-FR',
@@ -572,7 +602,7 @@ describe('viewStore', () => {
         customQueryText: 'CUSTOM',
       });
 
-      const params = new URLSearchParams('view=complete-graph');
+      const params = new URLSearchParams('view=data-complete');
       useViewStore.getState().syncFromURL(params);
 
       expect(useViewStore.getState().isCustomQuery).toBe(false);
@@ -596,22 +626,22 @@ describe('viewStore', () => {
 
   describe('toURLParams', () => {
     it('should include view in URL', () => {
-      useViewStore.setState({ activeViewId: 'project-scope' });
+      useViewStore.setState({ activeViewId: 'data-realm-shared' });
 
       const params = useViewStore.getState().toURLParams();
 
-      expect(params.get('view')).toBe('project-scope');
+      expect(params.get('view')).toBe('data-realm-shared');
     });
 
     it('should include all params in URL', () => {
       useViewStore.setState({
-        activeViewId: 'project-scope',
+        activeViewId: 'data-realm-shared',
         params: { key: 'my-key', locale: 'en-US', project: 'proj1' },
       });
 
       const params = useViewStore.getState().toURLParams();
 
-      expect(params.get('view')).toBe('project-scope');
+      expect(params.get('view')).toBe('data-realm-shared');
       expect(params.get('key')).toBe('my-key');
       expect(params.get('locale')).toBe('en-US');
       expect(params.get('project')).toBe('proj1');
@@ -619,7 +649,7 @@ describe('viewStore', () => {
 
     it('should not include view when in custom query mode', () => {
       useViewStore.setState({
-        activeViewId: 'complete-graph',
+        activeViewId: 'data-complete',
         isCustomQuery: true,
       });
 
@@ -630,7 +660,7 @@ describe('viewStore', () => {
 
     it('should not include undefined params', () => {
       useViewStore.setState({
-        activeViewId: 'complete-graph',
+        activeViewId: 'data-complete',
         params: { key: undefined, locale: 'en-US' },
       });
 
@@ -651,17 +681,18 @@ describe('viewStore', () => {
     });
 
     it('should find view in first category', () => {
-      const view = useViewStore.getState().getViewById('complete-graph');
+      const view = useViewStore.getState().getViewById('data-complete');
 
       expect(view).toBeDefined();
-      expect(view?.id).toBe('complete-graph');
+      expect(view?.id).toBe('data-complete');
     });
 
     it('should find view in second category', () => {
-      const view = useViewStore.getState().getViewById('block-generation');
+      // v11.6.1: Updated to use new unified view ID
+      const view = useViewStore.getState().getViewById('ctx-generation');
 
       expect(view).toBeDefined();
-      expect(view?.id).toBe('block-generation');
+      expect(view?.id).toBe('ctx-generation');
     });
 
     it('should return undefined for non-existent view', () => {
@@ -673,7 +704,7 @@ describe('viewStore', () => {
     it('should return undefined when categories are empty', () => {
       useViewStore.setState({ categories: [] });
 
-      const view = useViewStore.getState().getViewById('complete-graph');
+      const view = useViewStore.getState().getViewById('data-complete');
 
       expect(view).toBeUndefined();
     });
@@ -689,17 +720,17 @@ describe('viewStore', () => {
     });
 
     it('should return active view', () => {
-      useViewStore.setState({ activeViewId: 'project-scope' });
+      useViewStore.setState({ activeViewId: 'data-realm-shared' });
 
       const view = useViewStore.getState().getActiveView();
 
       expect(view).toBeDefined();
-      expect(view?.id).toBe('project-scope');
+      expect(view?.id).toBe('data-realm-shared');
     });
 
     it('should return undefined when in custom query mode', () => {
       useViewStore.setState({
-        activeViewId: 'complete-graph',
+        activeViewId: 'data-complete',
         isCustomQuery: true,
       });
 
@@ -723,35 +754,30 @@ describe('viewStore', () => {
 
   describe('selectors', () => {
     it('should export selectActiveViewId', () => {
-      const { selectActiveViewId } = require('../viewStore');
       useViewStore.setState({ activeViewId: 'test-view' });
 
       expect(selectActiveViewId(useViewStore.getState())).toBe('test-view');
     });
 
     it('should export selectIsCustomQuery', () => {
-      const { selectIsCustomQuery } = require('../viewStore');
       useViewStore.setState({ isCustomQuery: true });
 
       expect(selectIsCustomQuery(useViewStore.getState())).toBe(true);
     });
 
     it('should export selectIsExecuting', () => {
-      const { selectIsExecuting } = require('../viewStore');
       useViewStore.setState({ isExecuting: true });
 
       expect(selectIsExecuting(useViewStore.getState())).toBe(true);
     });
 
     it('should export selectCategories', () => {
-      const { selectCategories } = require('../viewStore');
       useViewStore.setState({ categories: mockCategories });
 
       expect(selectCategories(useViewStore.getState())).toEqual(mockCategories);
     });
 
     it('should export selectIsRegistryLoaded', () => {
-      const { selectIsRegistryLoaded } = require('../viewStore');
       useViewStore.setState({ isRegistryLoaded: true });
 
       expect(selectIsRegistryLoaded(useViewStore.getState())).toBe(true);
