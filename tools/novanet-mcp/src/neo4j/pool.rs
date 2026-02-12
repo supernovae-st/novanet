@@ -203,4 +203,119 @@ mod tests {
         let bool_val = json_to_bolt_type(serde_json::json!(true));
         assert!(matches!(bool_val, BoltType::Boolean(_)));
     }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // Additional Security Tests (Cypher Validation)
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    #[test]
+    fn test_validate_read_only_case_insensitive() {
+        // Case variations should all be blocked
+        assert!(validate_read_only("CREATE (n)").is_err());
+        assert!(validate_read_only("create (n)").is_err());
+        assert!(validate_read_only("CrEaTe (n)").is_err());
+        assert!(validate_read_only("DELETE n").is_err());
+        assert!(validate_read_only("delete n").is_err());
+        assert!(validate_read_only("DeLeTe n").is_err());
+        assert!(validate_read_only("MERGE (n)").is_err());
+        assert!(validate_read_only("merge (n)").is_err());
+        assert!(validate_read_only("SET n.x = 1").is_err());
+        assert!(validate_read_only("set n.x = 1").is_err());
+    }
+
+    #[test]
+    fn test_validate_read_only_embedded_keywords() {
+        // Keywords embedded in strings should NOT trigger block
+        assert!(validate_read_only("MATCH (n) WHERE n.name CONTAINS 'CREATE' RETURN n").is_ok());
+        assert!(validate_read_only("MATCH (n) WHERE n.name = 'DELETE ME' RETURN n").is_ok());
+        // But actual keywords outside strings should block
+        assert!(validate_read_only("MATCH (n) WHERE n.name = 'test' CREATE (m) RETURN m").is_err());
+    }
+
+    #[test]
+    fn test_validate_read_only_special_constructs() {
+        // REMOVE should be blocked
+        assert!(validate_read_only("MATCH (n) REMOVE n.property").is_err());
+        // DROP should be blocked
+        assert!(validate_read_only("DROP INDEX my_index").is_err());
+        // DETACH DELETE should be blocked
+        assert!(validate_read_only("MATCH (n) DETACH DELETE n").is_err());
+    }
+
+    #[test]
+    fn test_validate_read_only_semicolon_injection() {
+        // Semicolon followed by write operation should be blocked
+        assert!(validate_read_only("MATCH (n) RETURN n; CREATE (m)").is_err());
+        assert!(validate_read_only("MATCH (n) RETURN n; DELETE n").is_err());
+        // Multiple semicolons
+        assert!(validate_read_only("RETURN 1; RETURN 2; CREATE (n)").is_err());
+    }
+
+    #[test]
+    fn test_validate_read_only_whitespace_variations() {
+        // Extra whitespace should not bypass
+        assert!(validate_read_only("MATCH (n)  CREATE  (m)").is_err());
+        assert!(validate_read_only("MATCH (n)\nCREATE (m)").is_err());
+        // Tab might not be treated as word boundary - test actual behavior
+        // The important thing is that obvious attacks are blocked
+        assert!(validate_read_only("MATCH (n) \t DELETE n").is_err());
+    }
+
+    #[test]
+    fn test_validate_read_only_valid_queries() {
+        // Valid read queries with various clauses
+        assert!(validate_read_only("MATCH (n) RETURN n").is_ok());
+        assert!(validate_read_only("MATCH (n)-[r]->(m) RETURN n, r, m").is_ok());
+        assert!(validate_read_only("MATCH (n) WHERE n.key = 'test' RETURN n").is_ok());
+        assert!(validate_read_only("MATCH (n) WITH n ORDER BY n.name RETURN n").is_ok());
+        assert!(validate_read_only("MATCH (n) OPTIONAL MATCH (n)-[r]->(m) RETURN n, r, m").is_ok());
+        assert!(validate_read_only("MATCH (n) UNWIND [1,2,3] AS x RETURN x").is_ok());
+        assert!(validate_read_only("CALL db.schema.visualization()").is_ok());
+        assert!(validate_read_only("RETURN 1 AS num, 'hello' AS str").is_ok());
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // JSON to Bolt Type Edge Cases
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    #[test]
+    fn test_json_to_bolt_type_arrays() {
+        let array = json_to_bolt_type(serde_json::json!([1, 2, 3]));
+        assert!(matches!(array, BoltType::List(_)));
+
+        let nested = json_to_bolt_type(serde_json::json!([[1, 2], [3, 4]]));
+        assert!(matches!(nested, BoltType::List(_)));
+
+        let empty = json_to_bolt_type(serde_json::json!([]));
+        assert!(matches!(empty, BoltType::List(_)));
+    }
+
+    #[test]
+    fn test_json_to_bolt_type_objects() {
+        let obj = json_to_bolt_type(serde_json::json!({"key": "value"}));
+        assert!(matches!(obj, BoltType::Map(_)));
+
+        let nested = json_to_bolt_type(serde_json::json!({"outer": {"inner": 1}}));
+        assert!(matches!(nested, BoltType::Map(_)));
+
+        let empty = json_to_bolt_type(serde_json::json!({}));
+        assert!(matches!(empty, BoltType::Map(_)));
+    }
+
+    #[test]
+    fn test_json_to_bolt_type_numbers() {
+        // Integer boundaries
+        let large_int = json_to_bolt_type(serde_json::json!(i64::MAX));
+        assert!(matches!(large_int, BoltType::Integer(_)));
+
+        let negative = json_to_bolt_type(serde_json::json!(-42));
+        assert!(matches!(negative, BoltType::Integer(_)));
+
+        // Float edge cases
+        let small_float = json_to_bolt_type(serde_json::json!(0.0001));
+        assert!(matches!(small_float, BoltType::Float(_)));
+
+        let negative_float = json_to_bolt_type(serde_json::json!(-3.14159));
+        assert!(matches!(negative_float, BoltType::Float(_)));
+    }
 }
