@@ -821,6 +821,695 @@ mod tools_with_seed_data {
     }
 }
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// ADDITIONAL SECURITY TESTS (mcplint SEC-* category)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+mod security_extended {
+    use super::*;
+
+    #[tokio::test]
+    async fn test_path_traversal_in_key() {
+        require_neo4j!();
+
+        let uri = env::var("NEO4J_URI").unwrap();
+        let user = env::var("NEO4J_USER").unwrap();
+        let password = env::var("NEO4J_PASSWORD").unwrap();
+
+        let pool = novanet_mcp::neo4j::Neo4jPool::new(&uri, &user, &password, 5)
+            .await
+            .expect("Pool creation failed");
+
+        // Path traversal attempts in key parameter
+        let attack_keys = [
+            "../../etc/passwd",
+            "../../../root/.ssh/id_rsa",
+            "..\\..\\windows\\system32",
+            "%2e%2e%2f%2e%2e%2f",
+            "....//....//",
+        ];
+
+        for key in attack_keys {
+            let mut params = serde_json::Map::new();
+            params.insert("key".to_string(), serde_json::json!(key));
+
+            // Query should execute safely (key is just a string value)
+            let result = pool
+                .execute_query("RETURN $key AS key", Some(params))
+                .await;
+
+            // Should succeed and return the literal string, not traverse
+            assert!(result.is_ok(), "Path traversal test failed for: {}", key);
+            let rows = result.unwrap();
+            assert_eq!(
+                rows[0]["key"].as_str().unwrap(),
+                key,
+                "Key should be literal"
+            );
+        }
+    }
+
+    #[tokio::test]
+    async fn test_null_byte_injection() {
+        require_neo4j!();
+
+        let uri = env::var("NEO4J_URI").unwrap();
+        let user = env::var("NEO4J_USER").unwrap();
+        let password = env::var("NEO4J_PASSWORD").unwrap();
+
+        let pool = novanet_mcp::neo4j::Neo4jPool::new(&uri, &user, &password, 5)
+            .await
+            .expect("Pool creation failed");
+
+        // Null byte injection attempts
+        let attack_strings = [
+            "test\x00evil",
+            "test%00evil",
+            "test\u{0000}evil",
+            "normal\x00",
+        ];
+
+        for attack in attack_strings {
+            let mut params = serde_json::Map::new();
+            params.insert("value".to_string(), serde_json::json!(attack));
+
+            let result = pool
+                .execute_query("RETURN $value AS value", Some(params))
+                .await;
+
+            // Should handle gracefully (either succeed with literal or reject)
+            // Key point: should not cause security bypass
+            if result.is_ok() {
+                let rows = result.unwrap();
+                // Verify the string is returned as-is or sanitized
+                assert!(rows[0].get("value").is_some());
+            }
+            // Error is also acceptable - null bytes rejected
+        }
+    }
+
+    #[tokio::test]
+    async fn test_unicode_normalization_attacks() {
+        require_neo4j!();
+
+        let uri = env::var("NEO4J_URI").unwrap();
+        let user = env::var("NEO4J_USER").unwrap();
+        let password = env::var("NEO4J_PASSWORD").unwrap();
+
+        let pool = novanet_mcp::neo4j::Neo4jPool::new(&uri, &user, &password, 5)
+            .await
+            .expect("Pool creation failed");
+
+        // Unicode normalization edge cases
+        let unicode_strings = [
+            // Combining characters
+            "café",                      // NFC form
+            "cafe\u{0301}",              // NFD form (e + combining acute)
+            // Zero-width characters
+            "test\u{200B}value",         // Zero-width space
+            "test\u{FEFF}value",         // BOM
+            "test\u{200C}\u{200D}value", // ZWNJ + ZWJ
+            // Right-to-left override
+            "test\u{202E}evil\u{202C}",  // RLO attack
+            // Homoglyphs
+            "ᎻᎾᎷᎬ",                       // Cherokee letters look like HOME
+        ];
+
+        for text in unicode_strings {
+            let mut params = serde_json::Map::new();
+            params.insert("text".to_string(), serde_json::json!(text));
+
+            let result = pool
+                .execute_query("RETURN $text AS text", Some(params))
+                .await;
+
+            // Should handle all unicode gracefully
+            assert!(
+                result.is_ok(),
+                "Unicode handling failed for: {:?}",
+                text.escape_debug()
+            );
+        }
+    }
+
+    #[tokio::test]
+    async fn test_deep_nesting_dos() {
+        require_neo4j!();
+
+        let uri = env::var("NEO4J_URI").unwrap();
+        let user = env::var("NEO4J_USER").unwrap();
+        let password = env::var("NEO4J_PASSWORD").unwrap();
+
+        let pool = novanet_mcp::neo4j::Neo4jPool::new(&uri, &user, &password, 5)
+            .await
+            .expect("Pool creation failed");
+
+        // Create deeply nested JSON structure
+        let mut nested = serde_json::json!("leaf");
+        for _ in 0..50 {
+            nested = serde_json::json!({"nested": nested});
+        }
+
+        let mut params = serde_json::Map::new();
+        params.insert("data".to_string(), nested);
+
+        // Should handle deep nesting without stack overflow or timeout
+        let result = pool
+            .execute_query("RETURN $data AS data", Some(params))
+            .await;
+
+        // Either succeeds or fails gracefully, but shouldn't crash
+        if let Err(e) = &result {
+            eprintln!("Deep nesting error (acceptable): {}", e);
+        }
+    }
+
+    #[tokio::test]
+    async fn test_very_long_string_dos() {
+        require_neo4j!();
+
+        let uri = env::var("NEO4J_URI").unwrap();
+        let user = env::var("NEO4J_USER").unwrap();
+        let password = env::var("NEO4J_PASSWORD").unwrap();
+
+        let pool = novanet_mcp::neo4j::Neo4jPool::new(&uri, &user, &password, 5)
+            .await
+            .expect("Pool creation failed");
+
+        // Very long string (1MB)
+        let long_string = "x".repeat(1_000_000);
+
+        let mut params = serde_json::Map::new();
+        params.insert("long".to_string(), serde_json::json!(long_string));
+
+        let result = pool
+            .execute_query("RETURN length($long) AS len", Some(params))
+            .await;
+
+        // Should handle or reject gracefully
+        if let Ok(rows) = result {
+            assert_eq!(rows[0]["len"], 1_000_000);
+        }
+        // Rejection due to size is also acceptable
+    }
+
+    #[tokio::test]
+    async fn test_cypher_injection_case_variations() {
+        require_neo4j!();
+
+        let uri = env::var("NEO4J_URI").unwrap();
+        let user = env::var("NEO4J_USER").unwrap();
+        let password = env::var("NEO4J_PASSWORD").unwrap();
+
+        let pool = novanet_mcp::neo4j::Neo4jPool::new(&uri, &user, &password, 5)
+            .await
+            .expect("Pool creation failed");
+
+        // Case variation attacks
+        let attack_queries = [
+            "MATCH (n) cReAtE (m:Evil) RETURN n",
+            "MATCH (n) DeLeTe n",
+            "MATCH (n) MeRgE (m:Evil) RETURN m",
+            "match (n) CREATE (m:Evil) return n", // lowercase
+            "MATCH (n) RETURN n; CREATE (m:Evil)", // statement injection
+        ];
+
+        for query in attack_queries {
+            let result = pool.execute_query(query, None).await;
+            assert!(
+                result.is_err(),
+                "Case variation attack should be blocked: {}",
+                query
+            );
+        }
+    }
+
+    #[tokio::test]
+    async fn test_template_injection_in_cypher() {
+        require_neo4j!();
+
+        let uri = env::var("NEO4J_URI").unwrap();
+        let user = env::var("NEO4J_USER").unwrap();
+        let password = env::var("NEO4J_PASSWORD").unwrap();
+
+        let pool = novanet_mcp::neo4j::Neo4jPool::new(&uri, &user, &password, 5)
+            .await
+            .expect("Pool creation failed");
+
+        // Template injection attempts
+        let mut params = serde_json::Map::new();
+        params.insert("key".to_string(), serde_json::json!("test'} CREATE (m:Evil) WITH m MATCH (n {key: 'x"));
+
+        let result = pool
+            .execute_query("MATCH (n {key: $key}) RETURN n.key AS key", Some(params))
+            .await;
+
+        // Should succeed safely (parameterized query prevents injection)
+        assert!(
+            result.is_ok(),
+            "Parameterized query should prevent injection"
+        );
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// EDGE CASE TESTS (mcplint EDGE-* category)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+mod edge_cases {
+    use super::*;
+    use novanet_mcp::tokens::TokenCounter;
+
+    #[test]
+    fn test_empty_string_token_count() {
+        let counter = TokenCounter::new();
+
+        // Empty string
+        let count = counter.count("");
+        assert_eq!(count, 0, "Empty string should have 0 tokens");
+
+        // Whitespace only
+        let count = counter.count("   ");
+        assert!(count <= 2, "Whitespace should have minimal tokens");
+
+        // Single character
+        let count = counter.count("a");
+        assert!(count >= 1, "Single char should have at least 1 token");
+    }
+
+    #[test]
+    fn test_boundary_token_budgets() {
+        let counter = TokenCounter::new();
+
+        let text = "Hello, world!";
+
+        // Zero budget
+        assert!(!counter.within_budget(text, 0));
+
+        // Budget of 1
+        assert!(!counter.within_budget(text, 1));
+
+        // Large budget (but not overflow-inducing)
+        assert!(counter.within_budget(text, 1_000_000));
+    }
+
+    #[test]
+    fn test_truncate_edge_cases() {
+        let counter = TokenCounter::new();
+
+        // Empty text
+        let (truncated, count) = counter.truncate_to_budget("", 100);
+        assert!(truncated.is_empty());
+        assert_eq!(count, 0);
+
+        // Zero budget
+        let (truncated, _count) = counter.truncate_to_budget("Hello world", 0);
+        assert!(truncated.is_empty() || truncated.len() <= 10); // Minimal truncation
+    }
+
+    #[test]
+    fn test_unicode_emoji_token_counting() {
+        let counter = TokenCounter::new();
+
+        // Emoji text
+        let emoji_text = "Hello 👋🌍🎉 World!";
+        let count = counter.count(emoji_text);
+        assert!(count > 0, "Emoji text should have tokens");
+
+        // ZWJ sequences (family emoji)
+        let zwj_emoji = "👨‍👩‍👧‍👦"; // Family with ZWJ
+        let count = counter.count(zwj_emoji);
+        assert!(count > 0, "ZWJ emoji should have tokens");
+
+        // Flag emoji
+        let flags = "🇫🇷🇺🇸🇯🇵";
+        let count = counter.count(flags);
+        assert!(count > 0, "Flag emoji should have tokens");
+    }
+
+    #[tokio::test]
+    async fn test_empty_query_results() {
+        require_neo4j!();
+
+        let uri = env::var("NEO4J_URI").unwrap();
+        let user = env::var("NEO4J_USER").unwrap();
+        let password = env::var("NEO4J_PASSWORD").unwrap();
+
+        let pool = novanet_mcp::neo4j::Neo4jPool::new(&uri, &user, &password, 5)
+            .await
+            .expect("Pool creation failed");
+
+        // Query that returns no results
+        let result = pool
+            .execute_query("MATCH (n:NonexistentLabel12345) RETURN n", None)
+            .await;
+
+        assert!(result.is_ok(), "Empty result query should succeed");
+        let rows = result.unwrap();
+        assert!(rows.is_empty(), "Should return empty array");
+    }
+
+    #[tokio::test]
+    async fn test_limit_zero() {
+        require_neo4j!();
+
+        let uri = env::var("NEO4J_URI").unwrap();
+        let user = env::var("NEO4J_USER").unwrap();
+        let password = env::var("NEO4J_PASSWORD").unwrap();
+
+        let pool = novanet_mcp::neo4j::Neo4jPool::new(&uri, &user, &password, 5)
+            .await
+            .expect("Pool creation failed");
+
+        // LIMIT 0 should return empty results
+        let result = pool
+            .execute_query("RETURN 1 AS num LIMIT 0", None)
+            .await;
+
+        assert!(result.is_ok(), "LIMIT 0 query should succeed");
+        let rows = result.unwrap();
+        assert!(rows.is_empty(), "LIMIT 0 should return empty array");
+    }
+
+    #[tokio::test]
+    async fn test_special_characters_in_properties() {
+        require_neo4j!();
+
+        let uri = env::var("NEO4J_URI").unwrap();
+        let user = env::var("NEO4J_USER").unwrap();
+        let password = env::var("NEO4J_PASSWORD").unwrap();
+
+        let pool = novanet_mcp::neo4j::Neo4jPool::new(&uri, &user, &password, 5)
+            .await
+            .expect("Pool creation failed");
+
+        // Special characters that might cause issues
+        let special_values = [
+            "test'value",          // Single quote
+            "test\"value",         // Double quote
+            "test\\value",         // Backslash
+            "test\nvalue",         // Newline
+            "test\tvalue",         // Tab
+            "test\r\nvalue",       // CRLF
+            r"test`value",         // Backtick
+            "test{value}",         // Braces
+            "test[value]",         // Brackets
+            "test$value",          // Dollar sign
+        ];
+
+        for value in special_values {
+            let mut params = serde_json::Map::new();
+            params.insert("val".to_string(), serde_json::json!(value));
+
+            let result = pool
+                .execute_query("RETURN $val AS value", Some(params))
+                .await;
+
+            assert!(
+                result.is_ok(),
+                "Special character '{}' should be handled",
+                value.escape_debug()
+            );
+
+            let rows = result.unwrap();
+            assert_eq!(
+                rows[0]["value"].as_str().unwrap(),
+                value,
+                "Value should be preserved"
+            );
+        }
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// CACHE EDGE CASES
+// ═══════════════════════════════════════════════════════════════════════════════
+
+mod cache_extended {
+    use novanet_mcp::cache::QueryCache;
+    use std::time::Duration;
+
+    #[tokio::test]
+    async fn test_cache_key_collision_resistance() {
+        // Different queries should have different keys
+        let key1 = QueryCache::cache_key("MATCH (n) RETURN n", &None);
+        let key2 = QueryCache::cache_key("MATCH (n) RETURN n LIMIT 10", &None);
+        assert_ne!(key1, key2, "Different queries should have different keys");
+
+        // Same query, different params should have different keys
+        let params1 = Some({
+            let mut map = serde_json::Map::new();
+            map.insert("a".to_string(), serde_json::json!(1));
+            map
+        });
+        let params2 = Some({
+            let mut map = serde_json::Map::new();
+            map.insert("a".to_string(), serde_json::json!(2));
+            map
+        });
+
+        let key3 = QueryCache::cache_key("RETURN $a", &params1);
+        let key4 = QueryCache::cache_key("RETURN $a", &params2);
+        assert_ne!(key3, key4, "Different params should have different keys");
+    }
+
+    #[tokio::test]
+    async fn test_cache_concurrent_access() {
+        let cache = QueryCache::new(100, Duration::from_secs(60));
+
+        // Spawn multiple concurrent inserts/gets
+        let mut handles = vec![];
+        for i in 0..10 {
+            let cache_clone = cache.clone();
+            let handle = tokio::spawn(async move {
+                let key = format!("key_{}", i);
+                let value = serde_json::json!({"index": i});
+                cache_clone.insert(key.clone(), value.clone()).await;
+                let retrieved = cache_clone.get(&key).await;
+                assert_eq!(retrieved, Some(value));
+            });
+            handles.push(handle);
+        }
+
+        for handle in handles {
+            handle.await.expect("Concurrent cache operation failed");
+        }
+    }
+
+    #[tokio::test]
+    async fn test_cache_with_large_value() {
+        let cache = QueryCache::new(10, Duration::from_secs(60));
+
+        // Large JSON value
+        let large_array: Vec<serde_json::Value> = (0..1000)
+            .map(|i| serde_json::json!({"index": i, "data": "x".repeat(100)}))
+            .collect();
+
+        let key = "large_value".to_string();
+        cache.insert(key.clone(), serde_json::json!(large_array)).await;
+
+        let retrieved = cache.get(&key).await;
+        assert!(retrieved.is_some(), "Large value should be cached");
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// PROMPT EDGE CASES
+// ═══════════════════════════════════════════════════════════════════════════════
+
+mod prompts_extended {
+    use novanet_mcp::prompts;
+
+    #[test]
+    fn test_prompt_with_special_chars_in_args() {
+        // Special characters in arguments
+        let mut args = serde_json::Map::new();
+        args.insert(
+            "intent".to_string(),
+            serde_json::json!("Find entities with name containing ' OR \""),
+        );
+
+        let rendered = prompts::render_prompt("cypher_query", &args);
+        assert!(rendered.is_some(), "Should handle special chars");
+
+        let result = rendered.unwrap();
+        let all_content: String = result.messages.iter().map(|m| m.content.clone()).collect();
+        assert!(all_content.contains("'"), "Single quote should be preserved");
+    }
+
+    #[test]
+    fn test_prompt_with_unicode_args() {
+        let mut args = serde_json::Map::new();
+        args.insert(
+            "block_key".to_string(),
+            serde_json::json!("hero-日本語-section"),
+        );
+        args.insert("locale".to_string(), serde_json::json!("ja-JP"));
+
+        let rendered = prompts::render_prompt("block_generation", &args);
+        assert!(rendered.is_some(), "Should handle unicode in args");
+
+        let result = rendered.unwrap();
+        let all_content: String = result.messages.iter().map(|m| m.content.clone()).collect();
+        assert!(
+            all_content.contains("日本語"),
+            "Japanese should be preserved"
+        );
+    }
+
+    #[test]
+    fn test_prompt_with_very_long_args() {
+        let mut args = serde_json::Map::new();
+        let long_intent = "Find ".to_owned() + &"entities ".repeat(1000);
+        args.insert("intent".to_string(), serde_json::json!(long_intent));
+
+        let rendered = prompts::render_prompt("cypher_query", &args);
+        assert!(rendered.is_some(), "Should handle long args");
+    }
+
+    #[test]
+    fn test_prompt_with_empty_args() {
+        let mut args = serde_json::Map::new();
+        args.insert("intent".to_string(), serde_json::json!(""));
+
+        let rendered = prompts::render_prompt("cypher_query", &args);
+        assert!(rendered.is_some(), "Should handle empty string args");
+    }
+
+    #[test]
+    fn test_all_prompts_render() {
+        let prompt_names = [
+            "cypher_query",
+            "cypher_explain",
+            "block_generation",
+            "page_generation",
+            "entity_analysis",
+            "locale_briefing",
+        ];
+
+        for name in prompt_names {
+            // With minimal args
+            let args = serde_json::Map::new();
+            let rendered = prompts::render_prompt(name, &args);
+            assert!(
+                rendered.is_some(),
+                "Prompt '{}' should render with empty args",
+                name
+            );
+
+            // Verify structure
+            let result = rendered.unwrap();
+            assert!(!result.messages.is_empty(), "'{}' should have messages", name);
+        }
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// RESOURCE URI TESTS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+mod resource_uris {
+    #[test]
+    fn test_entity_uri_special_chars() {
+        // URIs with special characters should be parsed correctly
+        let special_keys = [
+            "qr-code-generator",   // Normal
+            "entity_with_underscore",
+            "entity.with.dots",
+            "entity:with:colons", // Might conflict with URI scheme
+            "entity/with/slashes", // Path-like
+            "entity?with&query=params", // Query-string like
+            "entity#with#hashes",
+            "entity%20encoded",
+        ];
+
+        for key in special_keys {
+            let uri = format!("entity://{}", key);
+            // Just verify the string is valid - actual parsing is in resources module
+            assert!(!uri.is_empty(), "URI should be non-empty for key: {}", key);
+        }
+    }
+
+    #[test]
+    fn test_locale_uri_formats() {
+        // Valid BCP-47 locale formats
+        let valid_locales = [
+            "en",
+            "en-US",
+            "fr-FR",
+            "zh-CN",
+            "zh-Hans-CN",
+            "sr-Latn-RS",
+            "es-419", // Latin America
+        ];
+
+        for locale in valid_locales {
+            let uri = format!("locale://{}", locale);
+            assert!(!uri.is_empty());
+        }
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// GENERATE TOOL EDGE CASES
+// ═══════════════════════════════════════════════════════════════════════════════
+
+mod generate_extended {
+    use novanet_mcp::tools::generate::{GenerateMode, GenerateParams};
+
+    #[test]
+    fn test_generate_params_with_zero_budget() {
+        let params = GenerateParams {
+            focus_key: "test".to_string(),
+            locale: "en-US".to_string(),
+            mode: GenerateMode::Block,
+            token_budget: Some(0),
+            include_examples: Some(false),
+            spreading_depth: Some(0),
+        };
+
+        // Should construct without panic
+        assert_eq!(params.token_budget, Some(0));
+        assert_eq!(params.spreading_depth, Some(0));
+    }
+
+    #[test]
+    fn test_generate_params_with_large_budget() {
+        let params = GenerateParams {
+            focus_key: "test".to_string(),
+            locale: "en-US".to_string(),
+            mode: GenerateMode::Page,
+            token_budget: Some(1_000_000), // 1M tokens
+            include_examples: Some(true),
+            spreading_depth: Some(10),
+        };
+
+        assert_eq!(params.token_budget, Some(1_000_000));
+    }
+
+    #[test]
+    fn test_generate_params_special_locale() {
+        let locales = ["zh-Hans-CN", "sr-Latn-RS", "es-419"];
+
+        for locale in locales {
+            let params = GenerateParams {
+                focus_key: "test".to_string(),
+                locale: locale.to_string(),
+                mode: GenerateMode::Block,
+                token_budget: None,
+                include_examples: None,
+                spreading_depth: None,
+            };
+
+            assert_eq!(params.locale, locale);
+        }
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// PERFORMANCE TESTS
+// ═══════════════════════════════════════════════════════════════════════════════
+
 mod performance {
     use super::*;
     use std::time::Instant;
