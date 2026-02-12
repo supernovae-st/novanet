@@ -2,7 +2,6 @@ import { Canvas } from '@react-three/fiber';
 import {
   Environment,
   ContactShadows,
-  Sphere,
   OrbitControls,
 } from '@react-three/drei';
 import { ReactNode } from 'react';

@@ -28,6 +28,7 @@ import { GraphTab } from './tabs/GraphTab';
 import { CodeTab } from './tabs/CodeTab';
 import { ContextViewFooter } from './footer/ContextViewFooter';
 import { MatrixTransition } from '@/components/graph/effects/MatrixTransition';
+// @deprecated imports kept for backward compatibility during migration
 import { useContextViews, useViewDetails } from '@/hooks/useContextViews';
 import type { ViewId } from '@/config/viewTypes';
 import type { GraphNode } from '@/types';

@@ -30,13 +30,11 @@ type ViewMode = 'properties' | 'json';
  * View mode toggle button
  */
 function ViewModeButton({
-  mode,
   label,
   icon: Icon,
   isActive,
   onClick,
 }: {
-  mode: ViewMode;
   label: string;
   icon: React.ComponentType<{ className?: string }>;
   isActive: boolean;
@@ -179,14 +177,12 @@ export const ArcDataTab = memo(function ArcDataTab({ arc }: ArcDataTabProps) {
       {/* View mode toggle */}
       <div className={cn('flex items-center p-2 border-b border-white/[0.06]', gapTokens.tight)}>
         <ViewModeButton
-          mode="properties"
           label="Properties"
           icon={TableIcon}
           isActive={viewMode === 'properties'}
           onClick={() => setViewMode('properties')}
         />
         <ViewModeButton
-          mode="json"
           label="JSON"
           icon={Braces}
           isActive={viewMode === 'json'}

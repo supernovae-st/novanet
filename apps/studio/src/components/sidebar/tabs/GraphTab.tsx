@@ -34,7 +34,6 @@ interface GraphTabProps {
 }
 
 interface ViewButtonProps {
-  view: GraphView;
   label: string;
   isActive: boolean;
   onClick: () => void;
@@ -44,7 +43,7 @@ interface ViewButtonProps {
 /**
  * View switcher button
  */
-function ViewButton({ view, label, isActive, onClick, hasDropdown }: ViewButtonProps) {
+function ViewButton({ label, isActive, onClick, hasDropdown }: ViewButtonProps) {
   return (
     <button
       onClick={onClick}
@@ -190,7 +189,7 @@ function ActionBar({
 
 export const GraphTab = memo(function GraphTab({
   node,
-  colors,
+  colors: _colors,
   relatedEdges,
   relatedNodes,
 }: GraphTabProps) {
@@ -244,25 +243,21 @@ export const GraphTab = memo(function GraphTab({
       {/* View switcher */}
       <div className={cn('flex items-center p-2 border-b border-white/[0.06]', gapTokens.tight)}>
         <ViewButton
-          view="ego"
           label="Ego"
           isActive={activeView === 'ego'}
           onClick={() => setActiveView('ego')}
         />
         <ViewButton
-          view="arcs"
           label="Arcs"
           isActive={activeView === 'arcs'}
           onClick={() => setActiveView('arcs')}
         />
         <ViewButton
-          view="flow"
           label="Flow"
           isActive={activeView === 'flow'}
           onClick={() => setActiveView('flow')}
         />
         <ViewButton
-          view="context"
           label="Context"
           isActive={activeView === 'context'}
           onClick={() => setActiveView('context')}
