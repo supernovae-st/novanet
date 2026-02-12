@@ -47,7 +47,7 @@ function isSchemaGroupNode(node: HoverNodeInfo): node is SchemaGroupNode {
 // Import GraphCanvas for 2D/3D view switching
 import { GraphCanvas, Graph3DLegend } from '@/components/graph';
 import { GraphErrorBoundary } from '@/components/ui/ErrorBoundary';
-import { StatsCounter, Pill, Divider, RefreshButton, LayerIcon, MatrixRainOverlay, MatrixExplosionOverlay, DisplayLimitSelector } from '@/components/ui';
+import { StatsCounter, Pill, Divider, RefreshButton, LayerIcon, MatrixRainOverlay, MatrixExplosionOverlay, DisplayLimitSelector, LocaleFilterSelector } from '@/components/ui';
 import { ViewModeToggle } from '@/components/toolbar/ViewModeToggle';
 import { TabbedDetailPanel } from '@/components/sidebar/TabbedDetailPanel';
 import { TabbedArcPanel } from '@/components/sidebar/TabbedArcPanel';
@@ -656,6 +656,8 @@ export default function HomePage() {
                         />
                         <Divider />
                         <RefreshButton onClick={handleRefresh} isLoading={isFetching} />
+                        <Divider />
+                        <LocaleFilterSelector />
                         <Divider />
                         <DisplayLimitSelector />
                       </div>

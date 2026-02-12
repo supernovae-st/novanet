@@ -35,11 +35,13 @@ import { cn } from '@/lib/utils';
 import { useUIStore } from '@/stores/uiStore';
 import { useWebHID } from '@/hooks/useWebHID';
 import { MacropadTutorial } from './MacropadTutorial';
+import { ActionPickerDrawer } from './ActionPickerDrawer';
 import { PAD_LAYERS } from '@/config/keybindings';
+import { type ActionPreset } from '@/config/actions';
 
-// Dynamic import with SSR disabled for Three.js
-const SuperNovaePad3D = dynamic(
-  () => import('./SuperNovaePad3D').then((mod) => {
+// Dynamic import with SSR disabled for Three.js - Low-poly with rainbow RGB
+const CreatorBoardLowPoly = dynamic(
+  () => import('./CreatorBoardLowPoly').then((mod) => {
     console.log('[MacropadVisualizer] 3D component loaded successfully');
     return mod.default;
   }),
@@ -50,25 +52,6 @@ const SuperNovaePad3D = dynamic(
         <div className="flex flex-col items-center gap-3">
           <div className="w-8 h-8 border-2 border-novanet-500/30 border-t-novanet-400 rounded-full animate-spin" />
           <p className="text-white/40 text-xs font-mono">Initializing Three.js...</p>
-        </div>
-      </div>
-    ),
-  }
-);
-
-// Low-poly version with rainbow RGB underglow
-const CreatorBoardLowPoly = dynamic(
-  () => import('./CreatorBoardLowPoly').then((mod) => {
-    console.log('[MacropadVisualizer] Low-poly 3D component loaded');
-    return mod.default;
-  }),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="flex items-center justify-center h-full bg-[#0f172a]">
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-8 h-8 border-2 border-cyan-500/30 border-t-cyan-400 rounded-full animate-spin" />
-          <p className="text-white/40 text-xs font-mono">Loading Rainbow RGB...</p>
         </div>
       </div>
     ),
@@ -164,6 +147,15 @@ export const MacropadVisualizer = memo(function MacropadVisualizer() {
   const [syncStatus, setSyncStatus] = useState<SyncStatus>('idle');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_hoveredKey, setHoveredKey] = useState<string | null>(null);
+
+  // Edit mode state
+  const [editingKey, setEditingKey] = useState<string | null>(null);
+  const [editingEncoderAction, setEditingEncoderAction] = useState<'cw' | 'ccw' | null>(null);
+  const [isCapturing, setIsCapturing] = useState(false);
+  const [previewLabel, setPreviewLabel] = useState<string | null>(null);
+
+  // Check if selected key is an encoder
+  const isEncoder = selectedKey === '0,0' || selectedKey === '0,3';
 
   // Store integration
   const activeModal = useUIStore((s) => s.activeModal);
@@ -299,6 +291,103 @@ export const MacropadVisualizer = memo(function MacropadVisualizer() {
       }
     };
     input.click();
+  }, []);
+
+  // =============================================================================
+  // Edit Mode Handlers
+  // =============================================================================
+
+  const handleEditKey = useCallback((keyId: string) => {
+    setEditingKey(keyId);
+    setSelectedKey(keyId);
+    setEditingEncoderAction(null);
+    setIsCapturing(false);
+    setPreviewLabel(null);
+  }, []);
+
+  const handleEditEncoderAction = useCallback((action: 'cw' | 'ccw') => {
+    if (!selectedKey) return;
+    setEditingKey(selectedKey);
+    setEditingEncoderAction(action);
+    setIsCapturing(false);
+    setPreviewLabel(null);
+  }, [selectedKey]);
+
+  const handleSelectAction = useCallback((action: ActionPreset) => {
+    if (!editingKey) return;
+
+    // Check if we're editing an encoder action
+    const editingIsEncoder = editingKey === '0,0' || editingKey === '0,3';
+
+    setConfig((prev) => {
+      const newConfig = { ...prev };
+      const layer = newConfig.layers[activeLayer];
+      if (!layer) return newConfig;
+
+      if (editingIsEncoder && editingEncoderAction && layer.encoder) {
+        // Update encoder CW or CCW binding
+        layer.encoder[editingEncoderAction] = {
+          key: action.key,
+          label: action.shortLabel,
+          action: action.id,
+        };
+      } else {
+        // Update regular key binding
+        layer.keys[editingKey] = {
+          key: action.key,
+          label: action.shortLabel,
+          action: action.id,
+        };
+      }
+      return newConfig;
+    });
+
+    // Mark as modified and close drawer
+    setSyncStatus('modified');
+    setEditingKey(null);
+    setEditingEncoderAction(null);
+    setIsCapturing(false);
+    setPreviewLabel(null);
+  }, [editingKey, editingEncoderAction, activeLayer]);
+
+  const handleStartCapture = useCallback(() => {
+    setIsCapturing(true);
+  }, []);
+
+  const handleCancelCapture = useCallback(() => {
+    setIsCapturing(false);
+  }, []);
+
+  const handleClearBinding = useCallback(() => {
+    if (!editingKey) return;
+
+    // Clear the binding
+    setConfig((prev) => {
+      const newConfig = { ...prev };
+      const layer = newConfig.layers[activeLayer];
+      if (layer && layer.keys[editingKey]) {
+        layer.keys[editingKey] = {
+          key: '',
+          label: '',
+          action: 'NONE',
+        };
+      }
+      return newConfig;
+    });
+
+    setSyncStatus('modified');
+    setEditingKey(null);
+  }, [editingKey, activeLayer]);
+
+  const handleCloseDrawer = useCallback(() => {
+    setEditingKey(null);
+    setEditingEncoderAction(null);
+    setIsCapturing(false);
+    setPreviewLabel(null);
+  }, []);
+
+  const handleHoverAction = useCallback((action: ActionPreset | null) => {
+    setPreviewLabel(action?.shortLabel || null);
   }, []);
 
   // Get selected key info
@@ -437,6 +526,37 @@ export const MacropadVisualizer = memo(function MacropadVisualizer() {
               className="absolute bottom-0 left-0 right-0 h-1 z-10"
               style={{ backgroundColor: currentLayer?.color, opacity: 0.5 }}
             />
+
+            {/* Action Picker Drawer */}
+            <ActionPickerDrawer
+              isOpen={!!editingKey}
+              selectedKey={
+                editingEncoderAction
+                  ? `Encoder ${editingEncoderAction.toUpperCase()}`
+                  : editingKey
+              }
+              currentBinding={(() => {
+                if (editingEncoderAction && currentLayer?.encoder) {
+                  const action = currentLayer.encoder[editingEncoderAction];
+                  return action ? { label: action.label, key: action.key } : null;
+                }
+                if (editingKey && currentLayer?.keys[editingKey]) {
+                  return {
+                    label: currentLayer.keys[editingKey].label,
+                    key: currentLayer.keys[editingKey].key,
+                  };
+                }
+                return null;
+              })()}
+              isCapturing={isCapturing}
+              isConnected={connectionStatus === 'connected'}
+              onSelectAction={handleSelectAction}
+              onStartCapture={handleStartCapture}
+              onCancelCapture={handleCancelCapture}
+              onClear={handleClearBinding}
+              onClose={handleCloseDrawer}
+              onHoverAction={handleHoverAction}
+            />
           </div>
 
           {/* Right Panel - Tutorial & Key Details */}
@@ -456,7 +576,57 @@ export const MacropadVisualizer = memo(function MacropadVisualizer() {
                 <h3 className="text-sm font-medium text-white/80">Key Details</h3>
               </div>
 
-              {selectedKeyInfo ? (
+              {isEncoder && currentLayer?.encoder ? (
+                /* Encoder UI */
+                <div className="space-y-4">
+                  {/* Position */}
+                  <div className="p-3 bg-white/[0.03] rounded-xl border border-white/[0.08]">
+                    <label className="text-[10px] uppercase tracking-wider text-white/40">
+                      Encoder
+                    </label>
+                    <p className="text-sm text-white font-mono mt-1">
+                      {selectedKey === '0,0' ? 'Left (Silver)' : 'Right (Black)'}
+                    </p>
+                  </div>
+
+                  {/* CW Action - Clickable */}
+                  <button
+                    onClick={() => handleEditEncoderAction('cw')}
+                    className="w-full p-3 bg-white/[0.03] rounded-xl border border-white/[0.08] text-left hover:bg-white/[0.06] hover:border-white/[0.15] transition-colors group"
+                  >
+                    <div className="flex items-center justify-between">
+                      <label className="text-[10px] uppercase tracking-wider text-white/40">
+                        ↻ Clockwise (CW)
+                      </label>
+                      <span className="text-[10px] text-white/30 group-hover:text-white/60 transition-colors">
+                        Click to edit
+                      </span>
+                    </div>
+                    <p className="text-lg text-white font-mono mt-1">
+                      {currentLayer.encoder.cw.label || '—'}
+                    </p>
+                  </button>
+
+                  {/* CCW Action - Clickable */}
+                  <button
+                    onClick={() => handleEditEncoderAction('ccw')}
+                    className="w-full p-3 bg-white/[0.03] rounded-xl border border-white/[0.08] text-left hover:bg-white/[0.06] hover:border-white/[0.15] transition-colors group"
+                  >
+                    <div className="flex items-center justify-between">
+                      <label className="text-[10px] uppercase tracking-wider text-white/40">
+                        ↺ Counter-clockwise (CCW)
+                      </label>
+                      <span className="text-[10px] text-white/30 group-hover:text-white/60 transition-colors">
+                        Click to edit
+                      </span>
+                    </div>
+                    <p className="text-lg text-white font-mono mt-1">
+                      {currentLayer.encoder.ccw.label || '—'}
+                    </p>
+                  </button>
+                </div>
+              ) : selectedKeyInfo ? (
+                /* Regular Key UI */
                 <div className="space-y-4">
                   {/* Position */}
                   <div className="p-3 bg-white/[0.03] rounded-xl border border-white/[0.08]">
@@ -468,15 +638,23 @@ export const MacropadVisualizer = memo(function MacropadVisualizer() {
                     </p>
                   </div>
 
-                  {/* Current Binding */}
-                  <div className="p-3 bg-white/[0.03] rounded-xl border border-white/[0.08]">
-                    <label className="text-[10px] uppercase tracking-wider text-white/40">
-                      Keycode
-                    </label>
+                  {/* Current Binding - Clickable to edit */}
+                  <button
+                    onClick={() => selectedKey && handleEditKey(selectedKey)}
+                    className="w-full p-3 bg-white/[0.03] rounded-xl border border-white/[0.08] text-left hover:bg-white/[0.06] hover:border-white/[0.15] transition-colors group"
+                  >
+                    <div className="flex items-center justify-between">
+                      <label className="text-[10px] uppercase tracking-wider text-white/40">
+                        Keycode
+                      </label>
+                      <span className="text-[10px] text-white/30 group-hover:text-white/60 transition-colors">
+                        Click to edit
+                      </span>
+                    </div>
                     <p className="text-lg text-white font-mono mt-1">
                       {selectedKeyInfo.key || '—'}
                     </p>
-                  </div>
+                  </button>
 
                   {/* Label */}
                   <div className="p-3 bg-white/[0.03] rounded-xl border border-white/[0.08]">
@@ -511,12 +689,13 @@ export const MacropadVisualizer = memo(function MacropadVisualizer() {
                 </div>
               )}
 
-              {/* Encoder info */}
-              {currentLayer?.encoder && (
+              {/* Encoder quick reference (only when not editing an encoder) */}
+              {currentLayer?.encoder && !isEncoder && (
                 <div className="mt-4 p-3 bg-white/[0.03] rounded-xl border border-white/[0.08]">
                   <label className="text-[10px] uppercase tracking-wider text-white/40">
-                    Encoder
+                    Encoder Config
                   </label>
+                  <p className="text-[10px] text-white/30 mt-0.5">Click encoder to edit</p>
                   <div className="mt-2 space-y-1 text-xs font-mono">
                     <p className="text-white/70">
                       ↻ CW: <span className="text-white">{currentLayer.encoder.cw.label}</span>

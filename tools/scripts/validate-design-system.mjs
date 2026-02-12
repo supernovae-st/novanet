@@ -127,21 +127,41 @@ function loadTypeScript(relativePath) {
 // Validators
 // =============================================================================
 
-function validateArcFamilies(taxonomy, arcFamilyPalettesTS) {
+function validateArcFamilies(taxonomy, arcFamilyPalettesTS, generatedTS) {
   logSection('Arc Families (taxonomy.yaml ↔ TypeScript)');
 
   const yamlFamilies = taxonomy.arc_families.map(f => f.key);
 
-  // Extract TypeScript arc families from ARC_FAMILY_COLORS
+  // v11.7: Check generated.ts for ARC_FAMILY_COLORS (unified palette system)
+  const generatedMatch = generatedTS?.match(/ARC_FAMILY_COLORS:\s*Record<ArcFamilyKey,\s*ColorTokens>\s*=\s*\{([\s\S]*?)\n\};/);
+  if (generatedMatch) {
+    const tsFamilies = [...generatedMatch[1].matchAll(/'(\w+)':\s*\{/g)].map(m => m[1]);
+
+    for (const family of yamlFamilies) {
+      if (tsFamilies.includes(family)) {
+        logOk(`${family}: defined in both YAML and generated.ts`);
+      } else {
+        logError(`${family}: missing in generated.ts ARC_FAMILY_COLORS`);
+      }
+    }
+
+    for (const family of tsFamilies) {
+      if (!yamlFamilies.includes(family)) {
+        logWarn(`${family}: defined in generated.ts but not in taxonomy.yaml`);
+      }
+    }
+    return;
+  }
+
+  // Fallback: check arcFamilyPalettes.ts for legacy format
   const tsMatch = arcFamilyPalettesTS.match(/ARC_FAMILY_COLORS:\s*Record<ArcFamily,\s*string>\s*=\s*\{([^}]+)\}/s);
   if (!tsMatch) {
-    logError('Could not find ARC_FAMILY_COLORS in arcFamilyPalettes.ts');
+    logError('Could not find ARC_FAMILY_COLORS in generated.ts or arcFamilyPalettes.ts');
     return;
   }
 
   const tsFamilies = [...tsMatch[1].matchAll(/(\w+):\s*['"]#/g)].map(m => m[1]);
 
-  // Check each YAML family exists in TS
   for (const family of yamlFamilies) {
     if (tsFamilies.includes(family)) {
       logOk(`${family}: defined in both YAML and TypeScript`);
@@ -150,7 +170,6 @@ function validateArcFamilies(taxonomy, arcFamilyPalettesTS) {
     }
   }
 
-  // Check for extra TS families
   for (const family of tsFamilies) {
     if (!yamlFamilies.includes(family)) {
       logWarn(`${family}: defined in TypeScript but not in taxonomy.yaml`);
@@ -158,13 +177,29 @@ function validateArcFamilies(taxonomy, arcFamilyPalettesTS) {
   }
 }
 
-function validateArcFamilyColors(taxonomy, arcFamilyPalettesTS) {
+function validateArcFamilyColors(taxonomy, arcFamilyPalettesTS, generatedTS) {
   logSection('Arc Family Colors (taxonomy.yaml ↔ TypeScript)');
 
   for (const family of taxonomy.arc_families) {
     const yamlColor = family.color.toLowerCase();
 
-    // Find color in TypeScript
+    // v11.7: Check generated.ts first (unified palette system)
+    if (generatedTS) {
+      const regex = new RegExp(`'${family.key}':\\s*\\{[^}]*color:\\s*'([^']+)'`, 's');
+      const genMatch = generatedTS.match(regex);
+
+      if (genMatch) {
+        const tsColor = genMatch[1].toLowerCase();
+        if (yamlColor === tsColor) {
+          logOk(`${family.key}: ${yamlColor} ✓`);
+        } else {
+          logError(`${family.key}: YAML=${yamlColor}, TS=${tsColor} (mismatch!)`);
+        }
+        continue;
+      }
+    }
+
+    // Fallback: check arcFamilyPalettes.ts for legacy format
     const regex = new RegExp(`${family.key}:\\s*['"]([^'"]+)['"]`, 'i');
     const tsMatch = arcFamilyPalettesTS.match(regex);
 
@@ -194,15 +229,16 @@ function validateArcFamilyEffects(arcFamilyPalettesTS) {
     mining: 'radarSweep',
   };
 
-  // Extract ARC_FAMILY_EFFECTS from TypeScript
-  const effectsMatch = arcFamilyPalettesTS.match(/ARC_FAMILY_EFFECTS:\s*Record<ArcFamily,\s*ArcFamilyEffect>\s*=\s*\{([^}]+)\}/s);
+  // Extract ARC_FAMILY_EFFECTS from TypeScript (supports quoted or unquoted values)
+  const effectsMatch = arcFamilyPalettesTS.match(/ARC_FAMILY_EFFECTS:\s*Record<ArcFamilyKey,\s*ArcFamilyEffect>\s*=\s*\{([^}]+)\}/s);
   if (!effectsMatch) {
     logError('Could not find ARC_FAMILY_EFFECTS in arcFamilyPalettes.ts');
     return;
   }
 
   for (const [family, expectedEffect] of Object.entries(expectedEffects)) {
-    const regex = new RegExp(`${family}:\\s*['"]([^'"]+)['"]`);
+    // Match both quoted ('energyPulse') and unquoted (energyPulse) values
+    const regex = new RegExp(`${family}:\\s*['"]?([^'",\\s}]+)['"]?`);
     const match = effectsMatch[1].match(regex);
 
     if (!match) {
@@ -598,6 +634,7 @@ async function main() {
   const taxonomy = loadYaml('packages/core/models/taxonomy.yaml');
   const visualEncoding = loadYaml('packages/core/models/visual-encoding.yaml');
   const arcFamilyPalettesTS = loadTypeScript('apps/studio/src/components/graph/edges/system/arcFamilyPalettes.ts');
+  const generatedTS = loadTypeScript('apps/studio/src/design/colors/generated.ts');  // v11.7 unified palette
   const typesTS = loadTypeScript('apps/studio/src/components/graph/edges/system/types.ts');
   const registryTS = loadTypeScript('apps/studio/src/components/graph/edges/system/registry.ts');
   const themesTS = loadTypeScript('apps/studio/src/components/graph/edges/system/themes.ts');
@@ -610,8 +647,8 @@ async function main() {
   }
 
   // Run validations - Arc System (v11.6.1)
-  validateArcFamilies(taxonomy, arcFamilyPalettesTS);
-  validateArcFamilyColors(taxonomy, arcFamilyPalettesTS);
+  validateArcFamilies(taxonomy, arcFamilyPalettesTS, generatedTS);
+  validateArcFamilyColors(taxonomy, arcFamilyPalettesTS, generatedTS);
   validateArcFamilyEffects(arcFamilyPalettesTS);
   validateEffectPrimitives(typesTS);
   validateVisualEncodingIcons(visualEncoding);

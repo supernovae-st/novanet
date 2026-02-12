@@ -261,7 +261,7 @@ export const MacropadTutorial = memo(function MacropadTutorial({
   isSupported,
   onConnect,
 }: MacropadTutorialProps) {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [expandedSteps, setExpandedSteps] = useState<Set<string>>(new Set(['browser']));
 
   const steps = getTutorialSteps(isSupported, connectionStatus);

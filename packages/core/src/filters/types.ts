@@ -76,29 +76,41 @@ export interface CypherQuery {
 // =============================================================================
 
 /**
- * View categories for UI grouping.
- * - overview: Layer views (complete, shared, org, project)
- * - generation: Orchestrator and sub-agent context views
- * - knowledge: Locale and concept views
- * - project: Project structure views
- * - mining: SEO pipeline views (v10.3: GEO removed)
- * - contextual: Node-specific views (shown based on selected node type)
+ * View categories for UI grouping (v11.6.1).
+ * - meta: Schema exploration (Realm, Layer, Kind, ArcKind)
+ * - data: Instance exploration by realm/layer/purpose
+ * - overlay: Meta + Data combined for debugging
+ * - contextual: Node-centered subgraphs
  */
-export type ViewCategory = 'overview' | 'generation' | 'knowledge' | 'project' | 'mining' | 'contextual';
+export type ViewCategory = 'meta' | 'data' | 'overlay' | 'contextual';
 
 /**
  * Navigation modes that a view supports.
  * Defined here (not imported from Studio) to avoid circular dependencies.
  */
-export type ViewNavigationMode = 'data' | 'meta' | 'overlay' | 'query';
+export type ViewNavigationMode = 'data' | 'meta' | 'overlay';
 
+/**
+ * View entry from _registry.yaml
+ */
 export interface ViewRegistryEntry {
   id: string;
-  file: string;
   description: string;
   category: ViewCategory;
-  /** Which navigation modes show this view. Omit for all modes. */
+  /** Emoji icon for display */
+  icon?: string;
+  /** Hex color for visual identity */
+  color?: string;
+  /** Which navigation modes show this view */
   modes?: ViewNavigationMode[];
+  /** Whether this is a contextual view (shown in node sidebar) */
+  contextual?: boolean;
+  /** Node types this view applies to (for contextual views) */
+  applicable_types?: string[];
+  /** Required params (e.g., ['realm', 'kind']) */
+  params?: string[];
+  /** Cypher query template (embedded in _registry.yaml) */
+  cypher?: string;
 }
 
 export interface ViewRegistry {

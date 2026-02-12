@@ -33,14 +33,22 @@ export {
 // Performance
 export * from './performance';
 
-// Arc Family (v9.5)
+// Arc Family (v11.7.0 - unified with @/design/colors/palette)
 export {
   type ArcFamily,
-  ARC_FAMILY_COLORS,
-  ARC_FAMILY_PALETTES,
-  ARC_FAMILY_STROKES,
-  RELATION_TO_FAMILY,
+  type ArcFamilyKey,
+  type ArcFamilyEffect,
+  ARC_PALETTES,
+  ARC_STROKES,
+  ARC_FAMILY_HEX,
+  ARC_FAMILY_EFFECTS,
   getArcFamily,
   getArcFamilyPalette,
-  getArcFamilyStroke,
+  getArcPalette,
+  getArcFamilyPaletteByKey,
+  getArcFamilyEffect,
+  getRelationEffect,
 } from './arcFamilyPalettes';
+
+// ColorPalette type (re-export from unified system)
+export type { ColorPalette } from '@/design/colors/palette';

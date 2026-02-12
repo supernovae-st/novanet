@@ -17,12 +17,14 @@
 
 import { memo, useMemo } from 'react';
 import type { EffectTier } from '../EdgeVisibilityManager';
+import { getRandomDelay } from '../EdgeUtils';
 
 interface MatrixCodeRainProps {
   edgePath: string;
   colors: { primary: string; secondary: string; glow: string };
   state: 'default' | 'highlighted' | 'selected' | 'muted';
   effectTier: EffectTier;
+  edgeId: string;
 }
 
 // Character sets for the matrix effect
@@ -46,6 +48,7 @@ export const MatrixCodeRain = memo(function MatrixCodeRain({
   colors,
   state,
   effectTier,
+  edgeId,
 }: MatrixCodeRainProps) {
   const isHighlighted = state === 'highlighted' || state === 'selected';
 
@@ -55,6 +58,9 @@ export const MatrixCodeRain = memo(function MatrixCodeRain({
   const showScanline = effectTier === 'ultra';
   const showOutputPulse = effectTier !== 'medium';
 
+  // Random delay to desynchronize animations across edges
+  const baseDelay = getRandomDelay(edgeId, 3);
+
   // Character generation with varied speeds
   const characters = useMemo(() => {
     const chars = CHAR_SETS.mixed;
@@ -62,19 +68,19 @@ export const MatrixCodeRain = memo(function MatrixCodeRain({
       char: chars[i % chars.length],
       // Varied fall speeds for parallax depth (1.2s to 2.8s)
       speed: 1.2 + (i * 0.17) + ((i * 7) % 5) * 0.2,
-      // Staggered start times
-      delay: (i * 0.3) + ((i * 13) % 7) * 0.1,
+      // Staggered start times with baseDelay
+      delay: baseDelay + (i * 0.3) + ((i * 13) % 7) * 0.1,
       // Size variation
       size: isHighlighted ? 12 + (i % 3) * 2 : 10 + (i % 3) * 2,
       // Brightness variation (parallax depth)
       brightness: 0.5 + (i % 3) * 0.2,
     }));
-  }, [characterCount, isHighlighted]);
+  }, [characterCount, isHighlighted, baseDelay]);
 
   // Processing burst timing (every 2s with variation)
   const burstIntervals = useMemo(() => {
-    return Array.from({ length: burstCount }, (_, i) => 1.8 + i * 2.3);
-  }, [burstCount]);
+    return Array.from({ length: burstCount }, (_, i) => baseDelay + 1.8 + i * 2.3);
+  }, [burstCount, baseDelay]);
 
   // Scanline sweep timing
   const scanlineDuration = 4;

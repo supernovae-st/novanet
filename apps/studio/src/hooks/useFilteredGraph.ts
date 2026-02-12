@@ -19,6 +19,7 @@
 import { useMemo, useCallback } from 'react';
 import { useGraphStore } from '@/stores/graphStore';
 import { useFilterStore } from '@/stores/filterStore';
+import { useQueryStore } from '@/stores/queryStore';
 import { ALL_NODE_TYPES } from '@/config/nodeTypes';
 import { NODE_REALMS } from '@novanet/core/types';
 import { NODE_LAYERS, type Layer } from '@novanet/core/graph';
@@ -96,6 +97,13 @@ function createEmptyRealmCounts(): RealmCounts {
   return { shared: 0, org: 0 };
 }
 
+// Meta node types from the NovaNet meta-graph schema
+// These are returned by meta-* views (meta-complete, meta-realm, etc.)
+// Includes 'Meta' as a catch-all for nodes that only have the :Meta label
+const META_NODE_TYPES = new Set([
+  'Meta', 'Realm', 'Layer', 'Kind', 'Trait', 'ArcKind', 'ArcFamily', 'ArcScope', 'ArcCardinality',
+]);
+
 export function useFilteredGraph(): FilteredGraphResult {
   // Get raw data from stores
   const allNodes = useGraphStore((state) => state.nodes);
@@ -106,18 +114,23 @@ export function useFilteredGraph(): FilteredGraphResult {
   const searchQuery = useFilterStore((state) => state.searchQuery);
   const displayLimit = useFilterStore((state) => state.displayLimit);
 
-  // Detect schema mode based on node IDs (schema nodes have 'schema-' prefix)
-  // v12.0: No longer based on navigationMode, now based on loaded data
-  // Optimized: Early exit on empty, count without creating intermediate array
+  // v12.1: Query-First - when a query is active, bypass type filtering
+  // The query defines what's displayed, not the enabledNodeTypes filter
+  const currentQuery = useQueryStore((state) => state.currentQuery);
+  const hasActiveQuery = currentQuery !== null && currentQuery.trim().length > 0;
+
+  // Detect meta mode based on node types (Realm, Layer, Kind, etc.)
+  // v12.1: Changed from ID prefix detection to type-based detection
+  // Meta mode is true if ALL nodes are meta types (Realm, Layer, Kind, etc.)
   const isMetaMode = useMemo(() => {
     if (allNodes.length === 0) return false;
-    // Count schema nodes without creating intermediate array
-    let schemaCount = 0;
+    // Check if all nodes are meta types
     for (const node of allNodes) {
-      if (node.id.startsWith('schema-')) schemaCount++;
-      else return false; // Early exit: if any non-schema node, not meta mode
+      if (!META_NODE_TYPES.has(node.type)) {
+        return false; // Early exit: if any non-meta node, not meta mode
+      }
     }
-    return schemaCount > 0;
+    return true;
   }, [allNodes]);
 
   // Memoize normalized search query to avoid repeated toLowerCase/trim
@@ -137,8 +150,10 @@ export function useFilteredGraph(): FilteredGraphResult {
   }, []);
 
   // Check if any filters are active (computed once, used for early exit)
+  // v12.1: Query-First - type filter is bypassed when a query is active
   const hasActiveFilters = useMemo(() => {
-    if (isMetaMode) {
+    if (isMetaMode || hasActiveQuery) {
+      // In meta mode or query-first mode, only check hidden/search filters (not type filter)
       return hiddenNodeIds.size > 0 || normalizedSearchQuery !== null;
     }
     return (
@@ -147,7 +162,7 @@ export function useFilteredGraph(): FilteredGraphResult {
       selectedLocale !== null ||
       normalizedSearchQuery !== null
     );
-  }, [hiddenNodeIds, enabledNodeTypes, selectedLocale, normalizedSearchQuery, isMetaMode]);
+  }, [hiddenNodeIds, enabledNodeTypes, selectedLocale, normalizedSearchQuery, isMetaMode, hasActiveQuery]);
 
   // Single-pass filter with aggregation
   // Combines all 5 filter stages + realm/layer counting into one pass
@@ -185,7 +200,9 @@ export function useFilteredGraph(): FilteredGraphResult {
 
     // Pre-compute filter conditions for the loop
     const hasHiddenNodes = hiddenNodeIds.size > 0;
-    const hasTypeFilter = !isMetaMode && enabledNodeTypes.size > 0;
+    // v12.1: Query-First - bypass type filter when a query is active
+    // The query defines what's displayed, not the enabledNodeTypes filter
+    const hasTypeFilter = !isMetaMode && !hasActiveQuery && enabledNodeTypes.size > 0;
     const hasLocaleFilter = !isMetaMode && selectedLocale !== null;
     const hasSearchFilter = normalizedSearchQuery !== null;
     const hasDisplayLimit = displayLimit && displayLimit > 0;
@@ -271,6 +288,7 @@ export function useFilteredGraph(): FilteredGraphResult {
     normalizedSearchQuery,
     displayLimit,
     isMetaMode,
+    hasActiveQuery, // v12.1: Query-First - bypass type filter when query is active
     matchesSearch,
   ]);
 

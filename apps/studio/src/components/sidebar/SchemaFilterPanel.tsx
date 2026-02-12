@@ -3,15 +3,16 @@
 /**
  * SchemaFilterPanel - Schema Browser with NodeCard display
  *
- * v11.0: Unified card-based schema browser similar to TUI meta view.
- * Uses NodeCard components for consistent styling across the app.
+ * v11.6.1: Unified card-based schema browser using schemaStore.
+ * Displays actual counts from Neo4j and supports filtering.
  */
 
-import { memo, useMemo, useState } from 'react';
-import { RelationType } from '@novanet/core/schemas';
+import { memo, useMemo, useState, useEffect } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { SegmentedTabs } from '@/components/ui/SegmentedTabs';
 import { Sidebar } from './SidebarContent';
 import { SchemaCardView } from './SchemaCardView';
+import { useSchemaStore, selectEnrichedNodeTypes, selectEnrichedRelTypes, selectIsSchemaLoaded } from '@/stores/schemaStore';
 
 // Tab definitions
 type SchemaTabId = 'types' | 'rels';
@@ -25,16 +26,28 @@ export const SchemaFilterPanel = memo(function SchemaFilterPanel({
 }: SchemaFilterPanelProps) {
   const [activeTab, setActiveTab] = useState<SchemaTabId>('types');
 
-  // Relationship count
-  const relCount = useMemo(() => {
-    return Object.keys(RelationType).length;
-  }, []);
+  // Get schema data from store
+  const { enrichedNodeTypes, enrichedRelTypes, isSchemaLoaded, loadSchema } = useSchemaStore(
+    useShallow((state) => ({
+      enrichedNodeTypes: selectEnrichedNodeTypes(state),
+      enrichedRelTypes: selectEnrichedRelTypes(state),
+      isSchemaLoaded: selectIsSchemaLoaded(state),
+      loadSchema: state.loadSchema,
+    }))
+  );
 
-  // Tab definitions
+  // Load schema on mount
+  useEffect(() => {
+    if (!isSchemaLoaded) {
+      loadSchema();
+    }
+  }, [isSchemaLoaded, loadSchema]);
+
+  // Tab definitions with actual counts
   const tabs = useMemo(() => [
-    { id: 'types' as const, label: 'Types', count: 42 },
-    { id: 'rels' as const, label: 'Rels', count: relCount },
-  ], [relCount]);
+    { id: 'types' as const, label: 'Types', count: enrichedNodeTypes.length },
+    { id: 'rels' as const, label: 'Rels', count: enrichedRelTypes.length },
+  ], [enrichedNodeTypes.length, enrichedRelTypes.length]);
 
   // Render Rels tab content (placeholder for now)
   const renderRelsContent = () => (

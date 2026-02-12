@@ -293,6 +293,10 @@ export const iconSizes = {
  * const size = nodeCardSizes.sizes.lg; // { width: 240, height: 120 }
  * ```
  */
+
+// Size key type (extracted to avoid circular reference)
+type NodeCardSizeKey = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+
 export const nodeCardSizes = {
   /** Size categories - from extra-small to extra-large */
   sizes: {
@@ -358,10 +362,10 @@ export const nodeCardSizes = {
     CategorySet: 'xs',
     SEOKeyword: 'xs',
     GEOQuery: 'xs',
-  } as Record<string, keyof typeof nodeCardSizes.sizes>,
+  } as Record<string, NodeCardSizeKey>,
 
   /** Get size by category key */
-  get(sizeKey: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl') {
+  get(sizeKey: NodeCardSizeKey) {
     return this.sizes[sizeKey];
   },
 
