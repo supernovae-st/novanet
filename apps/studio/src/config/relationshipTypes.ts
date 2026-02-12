@@ -126,288 +126,288 @@ export interface RelationshipTypeConfig {
  */
 export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfig> = {
   // ==========================================================================
-  // OWNERSHIP CATEGORY (5 relations) - violet
+  // OWNERSHIP CATEGORY (5 relations) - blue (from taxonomy.yaml)
   // ==========================================================================
   HAS_PAGE: {
     type: 'HAS_PAGE',
     label: 'Has Page',
-    color: '#8b5cf6',
+    color: '#3b82f6',  // blue-500
     category: 'ownership',
   },
   HAS_BRAND_IDENTITY: {
     type: 'HAS_BRAND_IDENTITY',
     label: 'Has Brand Identity',
-    color: '#a78bfa',
+    color: '#60a5fa',  // blue-400
     category: 'ownership',
   },
   HAS_BLOCK: {
     type: 'HAS_BLOCK',
     label: 'Has Block',
-    color: '#7c3aed',
+    color: '#2563eb',  // blue-600
     category: 'ownership',
   },
   HAS_PROMPT: {
     type: 'HAS_PROMPT',
     label: 'Has Prompt',
-    color: '#6d28d9',
+    color: '#1d4ed8',  // blue-700
     category: 'ownership',
   },
   HAS_RULES: {
     type: 'HAS_RULES',
     label: 'Has Rules',
-    color: '#5b21b6',
+    color: '#1e40af',  // blue-800
     category: 'ownership',
   },
 
   // ==========================================================================
-  // LOCALIZATION CATEGORY (6 relations) - emerald
+  // LOCALIZATION CATEGORY (5 relations) - green (from taxonomy.yaml)
   // ==========================================================================
   HAS_CONTENT: {
     type: 'HAS_CONTENT',
     label: 'Has Content',
-    color: '#10b981',
+    color: '#22c55e',  // green-500
     category: 'localization',
   },
   FOR_LOCALE: {
     type: 'FOR_LOCALE',
     label: 'For Locale',
-    color: '#34d399',
+    color: '#4ade80',  // green-400
     category: 'localization',
   },
   SUPPORTS_LOCALE: {
     type: 'SUPPORTS_LOCALE',
     label: 'Supports Locale',
-    color: '#6ee7b7',
+    color: '#86efac',  // green-300
     category: 'localization',
   },
   DEFAULT_LOCALE: {
     type: 'DEFAULT_LOCALE',
     label: 'Default Locale',
-    color: '#059669',
+    color: '#16a34a',  // green-600
     category: 'localization',
   },
   CONTENT_OF: {
     type: 'CONTENT_OF',
     label: 'Content Of',
-    color: '#047857',
+    color: '#15803d',  // green-700
     category: 'localization',
   },
 
   // ==========================================================================
-  // KNOWLEDGE CATEGORY (14 relations) - teal
+  // KNOWLEDGE CATEGORY (14 relations) - violet (matches LAYER_COLORS.knowledge)
   // ==========================================================================
   HAS_IDENTITY: {
     type: 'HAS_IDENTITY',
     label: 'Has Identity',
-    color: '#14b8a6',
+    color: '#8b5cf6',  // violet-500
     category: 'knowledge',
   },
   HAS_VOICE: {
     type: 'HAS_VOICE',
     label: 'Has Voice',
-    color: '#2dd4bf',
+    color: '#a78bfa',  // violet-400
     category: 'knowledge',
   },
   HAS_CULTURE: {
     type: 'HAS_CULTURE',
     label: 'Has Culture',
-    color: '#5eead4',
+    color: '#c4b5fd',  // violet-300
     category: 'knowledge',
   },
   HAS_MARKET: {
     type: 'HAS_MARKET',
     label: 'Has Market',
-    color: '#99f6e4',
+    color: '#ddd6fe',  // violet-200
     category: 'knowledge',
   },
   HAS_LEXICON: {
     type: 'HAS_LEXICON',
     label: 'Has Lexicon',
-    color: '#0d9488',
+    color: '#7c3aed',  // violet-600
     category: 'knowledge',
   },
   HAS_EXPRESSION: {
     type: 'HAS_EXPRESSION',
     label: 'Has Expression',
-    color: '#0f766e',
+    color: '#6d28d9',  // violet-700
     category: 'knowledge',
   },
   HAS_RULES_ADAPTATION: {
     type: 'HAS_RULES_ADAPTATION',
     label: 'Has Adaptation Rules',
-    color: '#115e59',
+    color: '#5b21b6',  // violet-800
     category: 'knowledge',
   },
   HAS_RULES_FORMATTING: {
     type: 'HAS_RULES_FORMATTING',
     label: 'Has Formatting Rules',
-    color: '#134e4a',
+    color: '#4c1d95',  // violet-900
     category: 'knowledge',
   },
   HAS_RULES_SLUG: {
     type: 'HAS_RULES_SLUG',
     label: 'Has Slug Rules',
-    color: '#042f2e',
+    color: '#2e1065',  // violet-950
     category: 'knowledge',
   },
   HAS_CULTURE_REFERENCES: {
     type: 'HAS_CULTURE_REFERENCES',
     label: 'Has Culture References',
-    color: '#ccfbf1',
+    color: '#ede9fe',  // violet-100
     category: 'knowledge',
   },
   HAS_REFERENCE: {
     type: 'HAS_REFERENCE',
     label: 'Has Reference',
-    color: '#5eead4',
+    color: '#c4b5fd',  // violet-300
     category: 'knowledge',
   },
   HAS_METAPHOR: {
     type: 'HAS_METAPHOR',
     label: 'Has Metaphor',
-    color: '#2dd4bf',
+    color: '#a78bfa',  // violet-400
     category: 'knowledge',
   },
   HAS_PATTERN: {
     type: 'HAS_PATTERN',
     label: 'Has Pattern',
-    color: '#14b8a6',
+    color: '#8b5cf6',  // violet-500
     category: 'knowledge',
   },
   HAS_CONSTRAINT: {
     type: 'HAS_CONSTRAINT',
     label: 'Has Constraint',
-    color: '#0d9488',
+    color: '#7c3aed',  // violet-600
     category: 'knowledge',
   },
 
   // ==========================================================================
-  // SEMANTIC CATEGORY (3 relations) - amber
+  // SEMANTIC CATEGORY (4 relations) - orange (from taxonomy.yaml)
   // ==========================================================================
   USES_ENTITY: {
     type: 'USES_ENTITY',
     label: 'Uses Entity',
-    color: '#f59e0b',
+    color: '#f97316',  // orange-500
     category: 'semantic',
   },
   SEMANTIC_LINK: {
     type: 'SEMANTIC_LINK',
     label: 'Semantic Link',
-    color: '#fbbf24',
+    color: '#fb923c',  // orange-400
     category: 'semantic',
   },
   USED_BY: {
     type: 'USED_BY',
     label: 'Used By',
-    color: '#d97706',
+    color: '#ea580c',  // orange-600
     category: 'semantic',
   },
   BELONGS_TO: {
     type: 'BELONGS_TO',
     label: 'Belongs To',
-    color: '#b45309',
+    color: '#c2410c',  // orange-700
     category: 'semantic',
   },
 
   // ==========================================================================
-  // STRUCTURE CATEGORY (4 relations) - blue
+  // STRUCTURE CATEGORY (4 relations) - cyan (matches LAYER_COLORS.structure)
   // ==========================================================================
   OF_TYPE: {
     type: 'OF_TYPE',
     label: 'Of Type',
-    color: '#3b82f6',
+    color: '#06b6d4',  // cyan-500
     category: 'structure',
   },
   SUBTOPIC_OF: {
     type: 'SUBTOPIC_OF',
     label: 'Subtopic Of',
-    color: '#60a5fa',
+    color: '#22d3ee',  // cyan-400
     category: 'structure',
   },
   BELONGS_TO_PROJECT_CONTENT: {
     type: 'BELONGS_TO_PROJECT_CONTENT',
     label: 'Belongs To Project Content',
-    color: '#2563eb',
+    color: '#0891b2',  // cyan-600
     category: 'structure',
   },
   BLOCK_OF: {
     type: 'BLOCK_OF',
     label: 'Block Of',
-    color: '#1d4ed8',
+    color: '#0e7490',  // cyan-700
     category: 'structure',
   },
 
   // ==========================================================================
-  // GENERATION CATEGORY (6 relations) - orange
+  // GENERATION CATEGORY (6 relations) - violet (from taxonomy.yaml)
   // ==========================================================================
   HAS_GENERATED: {
     type: 'HAS_GENERATED',
     label: 'Has Generated',
-    color: '#f97316',
+    color: '#8b5cf6',  // violet-500
     category: 'generation',
   },
   ASSEMBLES: {
     type: 'ASSEMBLES',
     label: 'Assembles',
-    color: '#fb923c',
+    color: '#a78bfa',  // violet-400
     category: 'generation',
   },
   GENERATED: {
     type: 'GENERATED',
     label: 'Generated',
-    color: '#fdba74',
+    color: '#c4b5fd',  // violet-300
     category: 'generation',
   },
   GENERATED_FOR: {
     type: 'GENERATED_FOR',
     label: 'Generated For',
-    color: '#ea580c',
+    color: '#7c3aed',  // violet-600
     category: 'generation',
   },
   GENERATED_FROM: {
     type: 'GENERATED_FROM',
     label: 'Generated From',
-    color: '#c2410c',
+    color: '#6d28d9',  // violet-700
     category: 'generation',
   },
   INFLUENCED_BY: {
     type: 'INFLUENCED_BY',
     label: 'Influenced By',
-    color: '#9a3412',
+    color: '#5b21b6',  // violet-800
     category: 'generation',
   },
 
   // ==========================================================================
-  // OPTIMIZATION CATEGORY (7 relations) - red
+  // OPTIMIZATION CATEGORY (5 relations) - pink (from taxonomy.yaml mining)
   // ==========================================================================
   HAS_SEO_TARGET: {
     type: 'HAS_SEO_TARGET',
     label: 'Has SEO Target',
-    color: '#ef4444',
+    color: '#ec4899',  // pink-500
     category: 'optimization',
   },
   HAS_GEO_TARGET: {
     type: 'HAS_GEO_TARGET',
     label: 'Has GEO Target',
-    color: '#f87171',
+    color: '#f472b6',  // pink-400
     category: 'optimization',
   },
   TARGETS_SEO: {
     type: 'TARGETS_SEO',
     label: 'Targets SEO',
-    color: '#dc2626',
+    color: '#db2777',  // pink-600
     category: 'optimization',
   },
   TARGETS_GEO: {
     type: 'TARGETS_GEO',
     label: 'Targets GEO',
-    color: '#b91c1c',
+    color: '#be185d',  // pink-700
     category: 'optimization',
   },
   HAS_METRICS: {
     type: 'HAS_METRICS',
     label: 'Has Metrics',
-    color: '#fca5a5',
+    color: '#fbcfe8',  // pink-200
     category: 'optimization',
   },
 
@@ -464,68 +464,69 @@ export function getRelationTypesByCategory(category: RelationshipCategory): Rela
  * All visual categories with their configuration (ordered for display)
  */
 export const RELATIONSHIP_VISUAL_CATEGORIES: RelationshipCategoryConfig[] = [
+  // Colors from taxonomy.yaml arc_families via ARC_FAMILY_COLORS (generated.ts)
   {
     id: 'ownership',
     label: 'Ownership',
     icon: '📦',
-    color: '#8b5cf6',
-    colorLight: '#a78bfa',
+    color: '#3b82f6',  // blue-500 (from taxonomy.yaml arc_families.ownership)
+    colorLight: '#60a5fa',  // blue-400
     relationTypes: getRelationTypesByCategory('ownership'),
   },
   {
     id: 'localization',
     label: 'Localization',
     icon: '🌍',
-    color: '#10b981',
-    colorLight: '#34d399',
+    color: '#22c55e',  // green-500 (from taxonomy.yaml arc_families.localization)
+    colorLight: '#4ade80',  // green-400
     relationTypes: getRelationTypesByCategory('localization'),
   },
   {
     id: 'knowledge',
     label: 'Knowledge',
     icon: '📚',
-    color: '#14b8a6',
-    colorLight: '#2dd4bf',
+    color: '#8b5cf6',  // violet-500 (matches LAYER_COLORS.knowledge)
+    colorLight: '#a78bfa',  // violet-400
     relationTypes: getRelationTypesByCategory('knowledge'),
   },
   {
     id: 'semantic',
     label: 'Semantic',
     icon: '💡',
-    color: '#f59e0b',
-    colorLight: '#fbbf24',
+    color: '#f97316',  // orange-500 (from taxonomy.yaml arc_families.semantic)
+    colorLight: '#fb923c',  // orange-400
     relationTypes: getRelationTypesByCategory('semantic'),
   },
   {
     id: 'structure',
     label: 'Structure',
     icon: '🏗️',
-    color: '#3b82f6',
-    colorLight: '#60a5fa',
+    color: '#06b6d4',  // cyan-500 (matches LAYER_COLORS.structure)
+    colorLight: '#22d3ee',  // cyan-400
     relationTypes: getRelationTypesByCategory('structure'),
   },
   {
     id: 'generation',
     label: 'Generation',
     icon: '🤖',
-    color: '#f97316',
-    colorLight: '#fb923c',
+    color: '#8b5cf6',  // violet-500 (from taxonomy.yaml arc_families.generation)
+    colorLight: '#a78bfa',  // violet-400
     relationTypes: getRelationTypesByCategory('generation'),
   },
   {
     id: 'optimization',
     label: 'Optimization',
     icon: '🎯',
-    color: '#ef4444',
-    colorLight: '#f87171',
+    color: '#ec4899',  // pink-500 (from taxonomy.yaml arc_families.mining)
+    colorLight: '#f472b6',  // pink-400
     relationTypes: getRelationTypesByCategory('optimization'),
   },
   {
     id: 'navigation',
     label: 'Navigation',
     icon: '🔗',
-    color: '#6366f1',
-    colorLight: '#818cf8',
+    color: '#6366f1',  // indigo-500 (UI-only category, no arc family match)
+    colorLight: '#818cf8',  // indigo-400
     relationTypes: getRelationTypesByCategory('navigation'),
   },
 ];
