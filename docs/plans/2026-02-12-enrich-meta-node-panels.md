@@ -32,9 +32,9 @@
 │  │ │ ├▼ ◆ Locale ■ ────────────────────────────────────────────── [◇meta]  │
 │  │ │ │ │  200 instances · shared/config                                    │
 │  │ │ │ │                                                                    │
-│  │ │ │ ├── fr-FR          French (France)                                  │
-│  │ │ │ ├── en-US          English (United States)                          │
-│  │ │ │ ├── ja-JP          Japanese (Japan)                                 │
+│  │ │ │ ├── fr-FR    [→5|←12]                French (France)                │
+│  │ │ │ ├── en-US    [→5|←8]                 English (United States)        │
+│  │ │ │ ├── ja-JP    [→5|←3]                 Japanese (Japan)               │
 │  │ │ │ └── ⋯ 197 more                                                      │
 │  │ │ │                                                                      │
 │  │ │ └▶ ◆ EntityCategory ■ ────────────────────────────────────── [◇meta]  │
@@ -65,16 +65,34 @@
 │      ├▼ ◆ PageGenerated ★ ─────────────────────────────────────── [◇meta]  │
 │      │ │  450 instances · org/output                                       │
 │      │ │                                                                    │
-│      │ ├── page:homepage@fr-FR                                             │
-│      │ ├── page:homepage@en-US                                             │
-│      │ └── ⋯ 448 more                                                      │
+│      │ ├── page:homepage@fr-FR  [→3|←1] (⊞5/5)                             │
+│      │ ├── page:homepage@en-US  [→3|←1] (⊞5/5)                             │
+│      │ ├── page:pricing@fr-FR   [→2|←1] (✗1!)     ← missing required prop  │
+│      │ └── ⋯ 447 more                                                      │
 │      │                                                                      │
 │      └▶ ◆ BlockGenerated ★ ────────────────────────────────────── [◇meta]  │
 │                                                                             │
-│  ▼ Arcs (114)                                                               │
+│  ══════════════════════════════════════════════════════════════════════════ │
+│                                                                             │
+│  ▼ Arcs (114)                                        5 families · 45K inst  │
 │  │                                                                          │
-│  └▼ → ownership ───────────────────────────────────────────────── [◇meta]  │
-│       43 arc kinds · 23K inst · eager traversal                            │
+│  ├▼ → ownership ───────────────────────────────────────────────── [◇meta]  │
+│  │ │  43 arc kinds · 23K inst · eager traversal                            │
+│  │ │                                                                        │
+│  │ ├▶ → HAS_PAGE ──────────────────────────────────────────────── [◇meta]  │
+│  │ │     Project → Page · 1:N · intra_realm · 12K inst                     │
+│  │ │                                                                        │
+│  │ └▶ → HAS_BLOCK ─────────────────────────────────────────────── [◇meta]  │
+│  │       Page → Block · 1:N · intra_realm · 8K inst                        │
+│  │                                                                          │
+│  ├▼ ⇢ localization ────────────────────────────────────────────── [◇meta]  │
+│  │ │  12 arc kinds · 15K inst · selective traversal                        │
+│  │ │                                                                        │
+│  │ └▶ ⇢ FOR_LOCALE                                                         │
+│  │       EntityContent → Locale · N:1 · cross_realm · 8K inst              │
+│  │                                                                          │
+│  └▶ ◊ semantic ────────────────────────────────────────────────── [◇meta]  │
+│       28 arc kinds · 5K inst · context-dependent                           │
 │                                                                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │  LÉGENDE                                                                    │
@@ -105,8 +123,18 @@
 │  SUBLINE INFO (sous chaque meta node):                                     │
 │  Realm:     {kinds} kinds · {inst}K inst · {layers} layers                 │
 │  Layer:     {kinds} kinds · {inst} inst · {trait} trait(s)                 │
-│  Kind:      {inst} instances · {trait} · {realm}/{layer}                   │
+│  Kind:      {inst} instances · {realm}/{layer}                             │
 │  ArcFamily: {arcs} arc kinds · {inst}K inst · {traversal}                  │
+│  ArcKind:   {source} → {target} · {card} · {scope} · {inst} inst           │
+│                                                                             │
+│  INSTANCE INDICATORS (sur les data nodes):                                 │
+│  [→N|←M]   = N arcs sortants, M arcs entrants                              │
+│  (⊞5/5)    = 5 props remplies sur 5 required (complet)                     │
+│  (✗1!)     = 1 prop required manquante (warning)                           │
+│  (⊞3/5)    = 3 props sur 5 (partiel)                                       │
+│                                                                             │
+│  SEPARATEUR:                                                                │
+│  ══════════ = séparation visuelle entre Nodes et Arcs                      │
 │                                                                             │
 │  BACKGROUND:                                                                │
 │  Meta nodes: slightly darker (rgb 30,35,45)                                │
@@ -119,26 +147,89 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  INFO PANEL HEADER (enriched)                                               │
+│  INFO PANEL: META NODE (Kind)                                               │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│  [◇meta] Realm                                                              │
+│  [◇meta] Kind                                                               │
 │  ══════════════════════════════════════════════════════════════════════    │
-│  type      Meta Node (schema)         ← NEW: explicit meta/data label      │
-│  key       shared                                                           │
-│  icon      ◉ (web: globe)             ← NEW: dual icon display             │
-│  color     #2aa198 ████               ← NEW: color preview                 │
-│  ...                                                                        │
 │                                                                             │
-│  DESCRIPTION                          ← NEW: llm_context from YAML         │
-│  ══════════════════════════════════════════════════════════════════════    │
-│  Shared across ALL organizations. Universal locale knowledge...            │
+│  IDENTITY                                                                   │
+│  ──────────────────────────────────────────────────────────────────────    │
+│  type        Meta Node (schema)                                            │
+│  key         Locale                                                        │
+│  kind        Kind                      ← meta-type (Realm/Layer/Kind/...)  │
 │                                                                             │
-│  EXAMPLE INSTANCES                    ← NEW: real data samples             │
+│  CLASSIFICATION                                                             │
+│  ──────────────────────────────────────────────────────────────────────    │
+│  realm       ◉ shared                                                      │
+│  layer       ⚙ config                                                      │
+│  trait       ■ invariant                                                   │
+│                                                                             │
+│  STATISTICS                                                                 │
+│  ──────────────────────────────────────────────────────────────────────    │
+│  instances   200                                                           │
+│  arcs out    5 types (HAS_VOICE, HAS_CULTURE, ...)                         │
+│  arcs in     3 types (FOR_LOCALE, ...)                                     │
+│                                                                             │
+│  VISUAL                                                                     │
+│  ──────────────────────────────────────────────────────────────────────    │
+│  icon        ● (web: globe)                                                │
+│  color       #2aa198 ████                                                  │
+│                                                                             │
+│  DESCRIPTION                                                                │
 │  ══════════════════════════════════════════════════════════════════════    │
-│  • Locale:fr-FR                                                            │
-│  • EntityCategory:thing                                                    │
-│  • Term:qr-code                                                            │
+│  Locale defines a BCP-47 language tag representing a specific              │
+│  language and region combination. Used as the target for all               │
+│  localized content generation...                                           │
+│                                                                             │
+│  EXAMPLE INSTANCES                                                          │
+│  ══════════════════════════════════════════════════════════════════════    │
+│  • fr-FR    [→5|←12]    French (France)                                    │
+│  • en-US    [→5|←8]     English (United States)                            │
+│  • ja-JP    [→5|←3]     Japanese (Japan)                                   │
+│                                                                             │
+│  CYPHER                                                                     │
+│  ══════════════════════════════════════════════════════════════════════    │
+│  MATCH (n:Locale) RETURN n LIMIT 10                                        │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  INFO PANEL: DATA NODE (Instance)                                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  Locale                                 ← pas de badge [◇meta] = data      │
+│  ══════════════════════════════════════════════════════════════════════    │
+│                                                                             │
+│  IDENTITY                                                                   │
+│  ──────────────────────────────────────────────────────────────────────    │
+│  type        Data Node (instance)                                          │
+│  key         fr-FR                                                         │
+│  kind        ◆ Locale                  ← lien vers le Kind                 │
+│                                                                             │
+│  CLASSIFICATION (inherited from Kind)                                       │
+│  ──────────────────────────────────────────────────────────────────────    │
+│  realm       ◉ shared                                                      │
+│  layer       ⚙ config                                                      │
+│  trait       ■ invariant                                                   │
+│                                                                             │
+│  ARCS                                                                       │
+│  ──────────────────────────────────────────────────────────────────────    │
+│  outgoing    5 arcs   [→5]                                                 │
+│    → HAS_VOICE        LocaleVoice:fr-FR                                    │
+│    → HAS_CULTURE      LocaleCulture:fr-FR                                  │
+│    → HAS_FORMATTING   LocaleFormatting:fr-FR                               │
+│  incoming    12 arcs  [←12]                                                │
+│    ← FOR_LOCALE       EntityContent:qr-code@fr-FR                          │
+│    ← FOR_LOCALE       PageGenerated:homepage@fr-FR                         │
+│                                                                             │
+│  PROPERTIES                            (⊞5/5) complete                     │
+│  ══════════════════════════════════════════════════════════════════════    │
+│  key           fr-FR                                                       │
+│  bcp47         fr-FR                                                       │
+│  display_name  French (France)                                             │
+│  native_name   Français (France)                                           │
+│  direction     ltr                                                         │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
