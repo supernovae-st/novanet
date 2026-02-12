@@ -3,7 +3,9 @@
 //! Implements rmcp::ServerHandler for NovaNet MCP tools using macro-based routing.
 
 use crate::server::State;
-use crate::tools::{DescribeParams, QueryParams};
+use crate::tools::{
+    AssembleParams, AtomsParams, DescribeParams, QueryParams, SearchParams, TraverseParams,
+};
 use rmcp::handler::server::tool::ToolRouter;
 use rmcp::handler::server::wrapper::Parameters;
 use rmcp::model::{CallToolResult, Content, ErrorCode, ServerCapabilities, ServerInfo};
@@ -69,6 +71,122 @@ impl NovaNetHandler {
         params: Parameters<DescribeParams>,
     ) -> Result<CallToolResult, McpError> {
         let result = crate::tools::describe::execute(&self.state, params.0)
+            .await
+            .map_err(|e| McpError {
+                code: ErrorCode(-32000),
+                message: Cow::Owned(e.to_string()),
+                data: None,
+            })?;
+
+        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
+            code: ErrorCode(-32603),
+            message: Cow::Owned(format!("Serialization error: {}", e)),
+            data: None,
+        })?;
+
+        Ok(CallToolResult::success(vec![Content::text(json)]))
+    }
+
+    /// Search the NovaNet knowledge graph using fulltext and property search.
+    ///
+    /// Supports fulltext, property-based, and hybrid search modes.
+    /// Filter by node kinds, realm, and layer.
+    #[tool(
+        name = "novanet_search",
+        description = "Search the NovaNet knowledge graph using fulltext or property search. Filter by kinds, realm, layer."
+    )]
+    async fn novanet_search(
+        &self,
+        params: Parameters<SearchParams>,
+    ) -> Result<CallToolResult, McpError> {
+        let result = crate::tools::search::execute(&self.state, params.0)
+            .await
+            .map_err(|e| McpError {
+                code: ErrorCode(-32000),
+                message: Cow::Owned(e.to_string()),
+                data: None,
+            })?;
+
+        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
+            code: ErrorCode(-32603),
+            message: Cow::Owned(format!("Serialization error: {}", e)),
+            data: None,
+        })?;
+
+        Ok(CallToolResult::success(vec![Content::text(json)]))
+    }
+
+    /// Traverse the NovaNet knowledge graph from a starting node.
+    ///
+    /// Configurable depth, direction, and arc filtering.
+    /// Implements RLM-on-KG hop-by-hop pattern.
+    #[tool(
+        name = "novanet_traverse",
+        description = "Traverse the knowledge graph from a starting node with configurable depth, direction, and arc filters."
+    )]
+    async fn novanet_traverse(
+        &self,
+        params: Parameters<TraverseParams>,
+    ) -> Result<CallToolResult, McpError> {
+        let result = crate::tools::traverse::execute(&self.state, params.0)
+            .await
+            .map_err(|e| McpError {
+                code: ErrorCode(-32000),
+                message: Cow::Owned(e.to_string()),
+                data: None,
+            })?;
+
+        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
+            code: ErrorCode(-32603),
+            message: Cow::Owned(format!("Serialization error: {}", e)),
+            data: None,
+        })?;
+
+        Ok(CallToolResult::success(vec![Content::text(json)]))
+    }
+
+    /// Assemble context for LLM generation from the knowledge graph.
+    ///
+    /// Gathers entity definitions, locale knowledge, and structural context
+    /// with token budget management and evidence packet compression.
+    #[tool(
+        name = "novanet_assemble",
+        description = "Assemble context for LLM generation with token budget management. Gathers entities, locale knowledge, and structure."
+    )]
+    async fn novanet_assemble(
+        &self,
+        params: Parameters<AssembleParams>,
+    ) -> Result<CallToolResult, McpError> {
+        let result = crate::tools::assemble::execute(&self.state, params.0)
+            .await
+            .map_err(|e| McpError {
+                code: ErrorCode(-32000),
+                message: Cow::Owned(e.to_string()),
+                data: None,
+            })?;
+
+        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
+            code: ErrorCode(-32603),
+            message: Cow::Owned(format!("Serialization error: {}", e)),
+            data: None,
+        })?;
+
+        Ok(CallToolResult::success(vec![Content::text(json)]))
+    }
+
+    /// Retrieve knowledge atoms for a specific locale.
+    ///
+    /// Returns Terms, Expressions, Patterns, CultureRefs, Taboos, and AudienceTraits.
+    /// Enables selective LLM context loading.
+    #[tool(
+        name = "novanet_atoms",
+        description = "Retrieve knowledge atoms (Terms, Expressions, Patterns, etc.) for a locale. Enables selective LLM context."
+    )]
+    async fn novanet_atoms(
+        &self,
+        params: Parameters<AtomsParams>,
+    ) -> Result<CallToolResult, McpError> {
+        let result = crate::tools::atoms::execute(&self.state, params.0)
             .await
             .map_err(|e| McpError {
                 code: ErrorCode(-32000),
