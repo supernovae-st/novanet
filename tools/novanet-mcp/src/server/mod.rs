@@ -11,8 +11,8 @@ pub use handler::NovaNetHandler;
 pub use state::State;
 
 use crate::error::Result;
-use rmcp::transport::stdio;
 use rmcp::ServiceExt;
+use rmcp::transport::stdio;
 
 /// NovaNet MCP Server
 pub struct Server {

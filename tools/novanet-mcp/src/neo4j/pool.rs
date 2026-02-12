@@ -125,10 +125,7 @@ fn add_param(query: Query, key: &str, value: serde_json::Value) -> Query {
         serde_json::Value::String(s) => query.param(key, s),
         serde_json::Value::Array(arr) => {
             // Convert array to Vec of BoltType
-            let bolt_list: Vec<BoltType> = arr
-                .into_iter()
-                .map(json_to_bolt_type)
-                .collect();
+            let bolt_list: Vec<BoltType> = arr.into_iter().map(json_to_bolt_type).collect();
             query.param(key, bolt_list)
         }
         serde_json::Value::Object(obj) => {

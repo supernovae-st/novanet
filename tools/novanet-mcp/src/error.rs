@@ -2,8 +2,8 @@
 //!
 //! Uses thiserror for ergonomic error handling.
 
-use rmcp::model::ErrorCode;
 use rmcp::ErrorData as McpError;
+use rmcp::model::ErrorCode;
 use std::borrow::Cow;
 use thiserror::Error;
 

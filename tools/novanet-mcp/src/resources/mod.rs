@@ -27,6 +27,7 @@ pub enum ResourceType {
 
 impl ResourceType {
     /// Parse a resource URI into its type and key
+    #[allow(clippy::manual_map)] // Consistent if-else chain is more readable here
     pub fn parse_uri(uri: &str) -> Option<(Self, String)> {
         if let Some(key) = uri.strip_prefix("entity://") {
             Some((Self::Entity, key.to_string()))
@@ -219,7 +220,9 @@ pub async fn fetch_entity(state: &State, key: &str) -> Result<EntityResource> {
 
     let rows = state.pool().execute_query(query, Some(params)).await?;
 
-    let row = rows.first().ok_or_else(|| crate::error::Error::not_found(key))?;
+    let row = rows
+        .first()
+        .ok_or_else(|| crate::error::Error::not_found(key))?;
 
     let content: Vec<LocalizedContent> = row["content"]
         .as_array()
@@ -239,11 +242,9 @@ pub async fn fetch_entity(state: &State, key: &str) -> Result<EntityResource> {
     let mut related = Vec::new();
     if let Some(outgoing) = row["outgoing"].as_array() {
         for r in outgoing {
-            if let (Some(k), Some(n), Some(rel)) = (
-                r["key"].as_str(),
-                r["name"].as_str(),
-                r["rel"].as_str(),
-            ) {
+            if let (Some(k), Some(n), Some(rel)) =
+                (r["key"].as_str(), r["name"].as_str(), r["rel"].as_str())
+            {
                 related.push(RelatedEntity {
                     key: k.to_string(),
                     name: n.to_string(),
@@ -255,11 +256,9 @@ pub async fn fetch_entity(state: &State, key: &str) -> Result<EntityResource> {
     }
     if let Some(incoming) = row["incoming"].as_array() {
         for r in incoming {
-            if let (Some(k), Some(n), Some(rel)) = (
-                r["key"].as_str(),
-                r["name"].as_str(),
-                r["rel"].as_str(),
-            ) {
+            if let (Some(k), Some(n), Some(rel)) =
+                (r["key"].as_str(), r["name"].as_str(), r["rel"].as_str())
+            {
                 related.push(RelatedEntity {
                     key: k.to_string(),
                     name: n.to_string(),
@@ -307,7 +306,9 @@ pub async fn fetch_kind(state: &State, name: &str) -> Result<KindResource> {
 
     let rows = state.pool().execute_query(query, Some(params)).await?;
 
-    let row = rows.first().ok_or_else(|| crate::error::Error::not_found(name))?;
+    let row = rows
+        .first()
+        .ok_or_else(|| crate::error::Error::not_found(name))?;
 
     let properties: Vec<PropertyDefinition> = row["properties"]
         .as_object()
@@ -334,11 +335,19 @@ pub async fn fetch_kind(state: &State, name: &str) -> Result<KindResource> {
         properties,
         outgoing_arcs: row["outgoing_arcs"]
             .as_array()
-            .map(|arr| arr.iter().filter_map(|v| v.as_str().map(|s| s.to_string())).collect())
+            .map(|arr| {
+                arr.iter()
+                    .filter_map(|v| v.as_str().map(|s| s.to_string()))
+                    .collect()
+            })
             .unwrap_or_default(),
         incoming_arcs: row["incoming_arcs"]
             .as_array()
-            .map(|arr| arr.iter().filter_map(|v| v.as_str().map(|s| s.to_string())).collect())
+            .map(|arr| {
+                arr.iter()
+                    .filter_map(|v| v.as_str().map(|s| s.to_string()))
+                    .collect()
+            })
             .unwrap_or_default(),
         instance_count: row["instance_count"].as_u64().unwrap_or(0) as usize,
     })
@@ -372,7 +381,9 @@ pub async fn fetch_locale(state: &State, key: &str) -> Result<LocaleResource> {
 
     let rows = state.pool().execute_query(query, Some(params)).await?;
 
-    let row = rows.first().ok_or_else(|| crate::error::Error::not_found(key))?;
+    let row = rows
+        .first()
+        .ok_or_else(|| crate::error::Error::not_found(key))?;
 
     Ok(LocaleResource {
         key: row["key"].as_str().unwrap_or(key).to_string(),
