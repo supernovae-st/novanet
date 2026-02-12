@@ -1,26 +1,25 @@
 'use client';
 
 /**
- * LayerIcon - Memory-efficient SVG icon system using Lucide (v10.5.0)
+ * CategoryIcon - Memory-efficient SVG icon system using Lucide
+ * Source: packages/core/models/visual-encoding.yaml
  *
  * Features:
  * - Tree-shakeable (only imports used icons)
  * - No memory leaks (pure React components)
- * - One icon per layer (9 layers in v10.5)
+ * - One icon per layer/trait/realm
  * - Consistent styling with glow effects
  *
- * Layers (v11.0 - 9 layers across 2 realms):
- * GLOBAL (2 layers):
- * - config: Settings (locale configuration)
- * - locale-knowledge: BookOpen (knowledge atoms)
- * TENANT (7 layers):
- * - config: Settings (organization)
- * - foundation: Package (project structure)
- * - structure: Layout (pages, blocks)
- * - semantic: Lightbulb (entities)
- * - instruction: FileText (prompts, rules)
- * - seo: Search (SEO optimization - moved to tenant in v11.0)
- * - output: Sparkles (generated content)
+ * Layers (v11.7 - 10 layers across 2 realms):
+ * SHARED (4 layers):
+ * - config: Settings, locale: Globe, geography: Map, knowledge: BookOpen
+ * ORG (6 layers):
+ * - foundation: Package, structure: LayoutGrid, semantic: Lightbulb
+ * - instruction: FileText, output: Sparkles
+ *
+ * Traits (5):
+ * - invariant: Lock, localized: Globe, knowledge: Brain
+ * - generated: Sparkles, aggregated: Calculator
  */
 
 import { memo, useMemo } from 'react';
@@ -34,11 +33,10 @@ import {
   BookOpen,
   Globe,
   Building2,
-  Square,
-  SquareDashed,
-  Gem,
-  Zap,
-  Layers,
+  Lock,
+  Brain,
+  Calculator,
+  Map,
   type LucideProps,
 } from 'lucide-react';
 import type { Layer, Realm } from '@novanet/core/types';
@@ -48,21 +46,22 @@ import type { Layer, Realm } from '@novanet/core/types';
 // =============================================================================
 
 /**
- * Layer to Lucide icon component mapping (v11.4 - 10 layers)
+ * Layer to Lucide icon component mapping (v11.7 - 10 layers)
+ * Source: packages/core/models/visual-encoding.yaml
  * Each layer has ONE representative icon
  */
 const LAYER_ICONS: Record<Layer, React.ComponentType<LucideProps>> = {
-  // Shared realm (4) — v11.4: includes config
-  config: Settings,
-  locale: Settings,
-  geography: BookOpen,
-  knowledge: BookOpen,  // v11.4: includes SEO/GEO nodes
-  // Org realm (6) — v11.4: seo/geo removed
-  foundation: Package,
-  structure: LayoutGrid,
-  semantic: Lightbulb,
-  instruction: FileText,
-  output: Sparkles,
+  // Shared realm (4) — v11.5
+  config: Settings,       // ⚙ settings
+  locale: Globe,          // ⊕ globe
+  geography: Map,         // ⊙ map
+  knowledge: BookOpen,    // ◈ book-open
+  // Org realm (6) — v11.5
+  foundation: Package,    // ▣ landmark (using Package as Landmark not imported)
+  structure: LayoutGrid,  // ▤ layout
+  semantic: Lightbulb,    // ◆ lightbulb
+  instruction: FileText,  // ▧ file-text
+  output: Sparkles,       // ● check-circle (using Sparkles for visual distinction)
 };
 
 /**
@@ -74,16 +73,17 @@ const REALM_ICONS: Record<Realm, React.ComponentType<LucideProps>> = {
 };
 
 /**
- * Trait to Lucide icon component mapping (v11.2 - 5 traits)
+ * Trait to Lucide icon component mapping (v11.7 - 5 traits)
+ * Source: packages/core/models/visual-encoding.yaml
  */
 export type Trait = 'invariant' | 'localized' | 'knowledge' | 'generated' | 'aggregated';
 
 const TRAIT_ICONS: Record<Trait, React.ComponentType<LucideProps>> = {
-  invariant: Square,
-  localized: SquareDashed,
-  knowledge: Gem,
-  generated: Zap,
-  aggregated: Layers,
+  invariant: Lock,        // ■ lock - Stable across all locales
+  localized: Globe,       // □ globe - Generated natively per locale
+  knowledge: Brain,       // ◊ brain - Locale expertise data
+  generated: Sparkles,    // ★ sparkles - LLM-generated content output
+  aggregated: Calculator, // ▪ calculator - Computed metrics and analytics
 };
 
 // =============================================================================
@@ -216,7 +216,7 @@ export const TraitIcon = memo(function TraitIcon({
   }, [glow, glowColor, style]);
 
   if (!IconComponent) {
-    return <Square style={computedStyle} {...props} />;
+    return <Lock style={computedStyle} {...props} />;
   }
 
   return <IconComponent style={computedStyle} {...props} />;
