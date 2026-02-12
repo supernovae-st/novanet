@@ -22,8 +22,8 @@ pub mod nexus;
 mod schema;
 pub mod theme;
 mod ui;
-pub mod unified_types;
 pub mod unicode;
+pub mod unified_types;
 mod yaml;
 
 #[cfg(test)]
@@ -134,7 +134,8 @@ async fn run_app(
     root_path: &Path,
 ) -> crate::Result<()> {
     // Load taxonomy tree from Neo4j with graceful error handling
-    let tree = match TaxonomyTree::load(db).await {
+    // Pass root_path to load taxonomy.yaml for llm_context enrichment
+    let tree = match TaxonomyTree::load(db, root_path).await {
         Ok(tree) => tree,
         Err(e) => {
             // Restore terminal before printing error
@@ -275,7 +276,6 @@ async fn run_app(
                             }
                         }
                     }
-
 
                     terminal
                         .draw(|f| ui::render(f, &mut app))
