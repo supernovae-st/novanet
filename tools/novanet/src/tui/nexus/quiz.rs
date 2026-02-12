@@ -9,6 +9,7 @@ use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, Borders, Paragraph, Wrap};
 
+use super::NexusLocale;
 use crate::tui::app::App;
 
 /// A quiz question with 4 answer options.
@@ -220,6 +221,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
 /// Render the Quiz tab content.
 pub fn render_quiz_tab(f: &mut Frame, app: &App, area: Rect) {
     let quiz = &app.nexus.quiz;
+    let locale = app.nexus.locale;
     let questions = QUESTIONS;
 
     // Layout: question area + options + status
@@ -233,16 +235,25 @@ pub fn render_quiz_tab(f: &mut Frame, app: &App, area: Rect) {
         .margin(1)
         .split(area);
 
+    // i18n labels
+    let (complete_label, score_label, question_label) = match locale {
+        NexusLocale::En => ("Quiz Complete", "Score", "Question"),
+        NexusLocale::Fr => ("Quiz Terminé", "Score", "Question"),
+    };
+
     // Main block
     let title = if quiz.complete {
         format!(
-            " Quiz Complete - Score: {}/{} ",
+            " {} - {}: {}/{} ",
+            complete_label,
+            score_label,
             quiz.score,
             questions.len()
         )
     } else {
         format!(
-            " Question {}/{} ",
+            " {} {}/{} ",
+            question_label,
             quiz.current_question + 1,
             questions.len()
         )
@@ -261,15 +272,39 @@ pub fn render_quiz_tab(f: &mut Frame, app: &App, area: Rect) {
     f.render_widget(block, area);
 
     if quiz.complete {
-        render_quiz_complete(f, app, &chunks);
+        render_quiz_complete(f, app, locale, &chunks);
     } else if let Some(question) = questions.get(quiz.current_question) {
-        render_question(f, app, question, &chunks);
+        render_question(f, app, locale, question, &chunks);
     }
 }
 
 /// Render the current question and options.
-fn render_question(f: &mut Frame, app: &App, question: &QuizQuestion, chunks: &[Rect]) {
+fn render_question(
+    f: &mut Frame,
+    app: &App,
+    locale: NexusLocale,
+    question: &QuizQuestion,
+    chunks: &[Rect],
+) {
     let quiz = &app.nexus.quiz;
+
+    // i18n labels
+    let (explanation_label, next_hint, score_label, answered_label, nav_hint) = match locale {
+        NexusLocale::En => (
+            "Explanation:",
+            "[Enter: next question]",
+            "Score",
+            "answered",
+            "[j/k or ↑/↓: select] [Enter: submit]",
+        ),
+        NexusLocale::Fr => (
+            "Explication:",
+            "[Entrée: question suivante]",
+            "Score",
+            "répondu",
+            "[j/k ou ↑/↓: sélectionner] [Entrée: valider]",
+        ),
+    };
 
     // Question text
     let question_text = Paragraph::new(question.question)
@@ -331,7 +366,7 @@ fn render_question(f: &mut Frame, app: &App, question: &QuizQuestion, chunks: &[
         let mut lines: Vec<Line> = vec![
             Line::from(""),
             Line::from(Span::styled(
-                "📚 Explanation:",
+                format!("📚 {}", explanation_label),
                 Style::default()
                     .fg(Color::Yellow)
                     .add_modifier(Modifier::BOLD),
@@ -341,16 +376,13 @@ fn render_question(f: &mut Frame, app: &App, question: &QuizQuestion, chunks: &[
                 Style::default().fg(Color::Rgb(180, 180, 200)),
             )),
             Line::from(""),
-            Line::from(Span::styled(
-                "[Enter: next question]",
-                Style::default().fg(Color::DarkGray),
-            )),
+            Line::from(Span::styled(next_hint, Style::default().fg(Color::DarkGray))),
         ];
 
         // Show score so far
         let current = quiz.current_question + 1;
         lines.push(Line::from(Span::styled(
-            format!("Score: {}/{} answered", quiz.score, current),
+            format!("{}: {}/{} {}", score_label, quiz.score, current, answered_label),
             Style::default().fg(Color::Cyan),
         )));
 
@@ -359,32 +391,49 @@ fn render_question(f: &mut Frame, app: &App, question: &QuizQuestion, chunks: &[
     } else {
         let hint = Paragraph::new(vec![
             Line::from(""),
-            Line::from(Span::styled(
-                "[j/k or ↑/↓: select] [Enter: submit]",
-                Style::default().fg(Color::DarkGray),
-            )),
+            Line::from(Span::styled(nav_hint, Style::default().fg(Color::DarkGray))),
         ]);
         f.render_widget(hint, explanation_area);
     }
 }
 
 /// Render the quiz completion screen.
-fn render_quiz_complete(f: &mut Frame, app: &App, chunks: &[Rect]) {
+fn render_quiz_complete(f: &mut Frame, app: &App, locale: NexusLocale, chunks: &[Rect]) {
     let quiz = &app.nexus.quiz;
     let total = QUESTIONS.len();
     let pct = (quiz.score as f64 / total as f64 * 100.0) as u8;
 
+    // i18n labels
+    let (final_score_label, restart_hint, expert, great, good, keep_learning) = match locale {
+        NexusLocale::En => (
+            "Final Score",
+            "[r: restart quiz] [Tab: other tabs]",
+            "🏆 Expert!",
+            "🎯 Great job!",
+            "📚 Good effort!",
+            "💪 Keep learning!",
+        ),
+        NexusLocale::Fr => (
+            "Score Final",
+            "[r: recommencer] [Tab: autres onglets]",
+            "🏆 Expert !",
+            "🎯 Excellent !",
+            "📚 Bon travail !",
+            "💪 Continue d'apprendre !",
+        ),
+    };
+
     let (grade, grade_color) = match pct {
-        90..=100 => ("🏆 Expert!", Color::Green),
-        75..=89 => ("🎯 Great job!", Color::Cyan),
-        60..=74 => ("📚 Good effort!", Color::Yellow),
-        _ => ("💪 Keep learning!", Color::Magenta),
+        90..=100 => (expert, Color::Green),
+        75..=89 => (great, Color::Cyan),
+        60..=74 => (good, Color::Yellow),
+        _ => (keep_learning, Color::Magenta),
     };
 
     let result_lines = vec![
         Line::from(""),
         Line::from(Span::styled(
-            format!("Final Score: {}/{} ({}%)", quiz.score, total, pct),
+            format!("{}: {}/{} ({}%)", final_score_label, quiz.score, total, pct),
             Style::default()
                 .fg(Color::White)
                 .add_modifier(Modifier::BOLD),
@@ -397,10 +446,7 @@ fn render_quiz_complete(f: &mut Frame, app: &App, chunks: &[Rect]) {
                 .add_modifier(Modifier::BOLD),
         )),
         Line::from(""),
-        Line::from(Span::styled(
-            "[r: restart quiz] [Tab: other tabs]",
-            Style::default().fg(Color::DarkGray),
-        )),
+        Line::from(Span::styled(restart_hint, Style::default().fg(Color::DarkGray))),
     ];
 
     let para = Paragraph::new(result_lines);
