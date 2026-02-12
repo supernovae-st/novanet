@@ -857,8 +857,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             let kind_icon = if is_data_mode && kind.instance_count > 0 {
                                 // Show expanded (▼) only if instances are actually loaded
                                 // Otherwise show collapsed (▶) even if state says "expanded"
-                                let instances_loaded =
-                                    app.tree.get_instances(&kind.key).is_some();
+                                let instances_loaded = app.tree.get_instances(&kind.key).is_some();
                                 if instances_loaded {
                                     expand_icon(kind_collapsed)
                                 } else {

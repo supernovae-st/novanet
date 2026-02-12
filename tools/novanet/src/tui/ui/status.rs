@@ -280,9 +280,10 @@ pub fn render_status(f: &mut Frame, area: Rect, app: &App) {
     spans.push(Span::styled(" ", STYLE_SEPARATOR));
     let bar_width: usize = 8;
     let cache_key = compute_mini_bar_cache_key(app, bar_width);
-    let cached_spans = app.mini_bar_cache.borrow_mut().get_clone_or_compute(cache_key, || {
-        build_realm_mini_bar(app, bar_width)
-    });
+    let cached_spans = app
+        .mini_bar_cache
+        .borrow_mut()
+        .get_clone_or_compute(cache_key, || build_realm_mini_bar(app, bar_width));
     spans.extend(cached_spans);
 
     spans.push(Span::styled(" | ", STYLE_SEPARATOR));

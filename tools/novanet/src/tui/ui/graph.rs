@@ -40,7 +40,11 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
     let (incoming_count, outgoing_count, arcs_loading) = if let Some(ref arcs) = app.kind_arcs {
         (arcs.incoming.len(), arcs.outgoing.len(), false)
     } else if let Some(TreeItem::Instance(_, _, _, inst)) = app.current_item() {
-        (inst.incoming_arcs.len(), inst.outgoing_arcs.len(), inst.arcs_loading)
+        (
+            inst.incoming_arcs.len(),
+            inst.outgoing_arcs.len(),
+            inst.arcs_loading,
+        )
     } else {
         (0, 0, false)
     };
@@ -303,88 +307,88 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
                     STYLE_DIM,
                 )));
             } else {
-            // Outgoing arcs (iterate over reference, no clone of Vec)
-            if !instance.outgoing_arcs.is_empty() {
-                lines.push(Line::from(Span::styled(
-                    format!(
-                        "  \u{2500}\u{25b6} OUTGOING ({}) ",
-                        instance.outgoing_arcs.len()
-                    ),
-                    Style::default()
-                        .fg(Color::Cyan)
-                        .add_modifier(Modifier::BOLD),
-                )));
-                lines.push(Line::from(Span::styled(
+                // Outgoing arcs (iterate over reference, no clone of Vec)
+                if !instance.outgoing_arcs.is_empty() {
+                    lines.push(Line::from(Span::styled(
+                        format!(
+                            "  \u{2500}\u{25b6} OUTGOING ({}) ",
+                            instance.outgoing_arcs.len()
+                        ),
+                        Style::default()
+                            .fg(Color::Cyan)
+                            .add_modifier(Modifier::BOLD),
+                    )));
+                    lines.push(Line::from(Span::styled(
                     "  \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}",
                     dim,
                 )));
 
-                for arc in &instance.outgoing_arcs {
-                    let status_style = if arc.exists {
-                        STYLE_SUCCESS
-                    } else {
-                        STYLE_HIGHLIGHT
-                    };
-                    let status_char = if arc.exists { "\u{2713}" } else { "\u{25cb}" };
+                    for arc in &instance.outgoing_arcs {
+                        let status_style = if arc.exists {
+                            STYLE_SUCCESS
+                        } else {
+                            STYLE_HIGHLIGHT
+                        };
+                        let status_char = if arc.exists { "\u{2713}" } else { "\u{25cb}" };
 
-                    lines.push(Line::from(vec![
-                        Span::styled(format!("  {} ", status_char), status_style),
-                        Span::styled(instance_key.clone(), STYLE_PRIMARY),
-                        Span::styled(" \u{2500}\u{2500}[", dim),
-                        Span::styled(
-                            arc.arc_type.clone(),
-                            Style::default()
-                                .fg(theme.arc_family_color("semantic"))
-                                .add_modifier(Modifier::BOLD),
-                        ),
-                        Span::styled("]\u{2500}\u{2500}\u{25b6} ", dim),
-                        Span::styled(arc.target_key.clone(), STYLE_SUCCESS),
-                        Span::styled(format!(" ({})", arc.target_kind), STYLE_DIM),
-                    ]));
+                        lines.push(Line::from(vec![
+                            Span::styled(format!("  {} ", status_char), status_style),
+                            Span::styled(instance_key.clone(), STYLE_PRIMARY),
+                            Span::styled(" \u{2500}\u{2500}[", dim),
+                            Span::styled(
+                                arc.arc_type.clone(),
+                                Style::default()
+                                    .fg(theme.arc_family_color("semantic"))
+                                    .add_modifier(Modifier::BOLD),
+                            ),
+                            Span::styled("]\u{2500}\u{2500}\u{25b6} ", dim),
+                            Span::styled(arc.target_key.clone(), STYLE_SUCCESS),
+                            Span::styled(format!(" ({})", arc.target_kind), STYLE_DIM),
+                        ]));
+                    }
+                    lines.push(Line::from(Span::raw("")));
                 }
-                lines.push(Line::from(Span::raw("")));
-            }
 
-            // Incoming arcs (iterate over reference, no clone of Vec)
-            if !instance.incoming_arcs.is_empty() {
-                lines.push(Line::from(Span::styled(
-                    format!(
-                        "  \u{25c0}\u{2500} INCOMING ({}) ",
-                        instance.incoming_arcs.len()
-                    ),
-                    Style::default()
-                        .fg(Color::Magenta)
-                        .add_modifier(Modifier::BOLD),
-                )));
-                lines.push(Line::from(Span::styled(
+                // Incoming arcs (iterate over reference, no clone of Vec)
+                if !instance.incoming_arcs.is_empty() {
+                    lines.push(Line::from(Span::styled(
+                        format!(
+                            "  \u{25c0}\u{2500} INCOMING ({}) ",
+                            instance.incoming_arcs.len()
+                        ),
+                        Style::default()
+                            .fg(Color::Magenta)
+                            .add_modifier(Modifier::BOLD),
+                    )));
+                    lines.push(Line::from(Span::styled(
                     "  \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}",
                     dim,
                 )));
 
-                for arc in &instance.incoming_arcs {
-                    let status_style = if arc.exists {
-                        STYLE_SUCCESS
-                    } else {
-                        STYLE_HIGHLIGHT
-                    };
-                    let status_char = if arc.exists { "\u{2713}" } else { "\u{25cb}" };
+                    for arc in &instance.incoming_arcs {
+                        let status_style = if arc.exists {
+                            STYLE_SUCCESS
+                        } else {
+                            STYLE_HIGHLIGHT
+                        };
+                        let status_char = if arc.exists { "\u{2713}" } else { "\u{25cb}" };
 
-                    lines.push(Line::from(vec![
-                        Span::styled(format!("  {} ", status_char), status_style),
-                        Span::styled(arc.target_key.clone(), STYLE_SUCCESS),
-                        Span::styled(format!(" ({})", arc.target_kind), STYLE_DIM),
-                        Span::styled(" \u{2500}\u{2500}[", dim),
-                        Span::styled(
-                            arc.arc_type.clone(),
-                            Style::default()
-                                .fg(theme.arc_family_color("semantic"))
-                                .add_modifier(Modifier::BOLD),
-                        ),
-                        Span::styled("]\u{2500}\u{2500}\u{25b6} ", dim),
-                        Span::styled(instance_key.clone(), STYLE_PRIMARY),
-                    ]));
+                        lines.push(Line::from(vec![
+                            Span::styled(format!("  {} ", status_char), status_style),
+                            Span::styled(arc.target_key.clone(), STYLE_SUCCESS),
+                            Span::styled(format!(" ({})", arc.target_kind), STYLE_DIM),
+                            Span::styled(" \u{2500}\u{2500}[", dim),
+                            Span::styled(
+                                arc.arc_type.clone(),
+                                Style::default()
+                                    .fg(theme.arc_family_color("semantic"))
+                                    .add_modifier(Modifier::BOLD),
+                            ),
+                            Span::styled("]\u{2500}\u{2500}\u{25b6} ", dim),
+                            Span::styled(instance_key.clone(), STYLE_PRIMARY),
+                        ]));
+                    }
                 }
-            }
             }
         }
 
@@ -860,6 +864,7 @@ mod tests {
             display_name: key.to_string(),
             color: "#ffffff".to_string(),
             kinds,
+            llm_context: String::new(),
         }
     }
 
@@ -870,6 +875,7 @@ mod tests {
             color: "#ffffff".to_string(),
             icon: "○",
             layers,
+            llm_context: String::new(),
         }
     }
 

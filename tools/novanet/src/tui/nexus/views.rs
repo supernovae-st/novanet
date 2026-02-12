@@ -468,10 +468,7 @@ fn render_views_list(f: &mut Frame, app: &App, area: Rect) {
             "Query-First Architecture ",
             Style::default().fg(Color::Rgb(180, 180, 180)),
         ),
-        Span::styled(
-            "[?:concept]",
-            Style::default().fg(Color::DarkGray),
-        ),
+        Span::styled("[?:concept]", Style::default().fg(Color::DarkGray)),
     ]));
     lines.push(Line::from(Span::styled(
         "\u{2500}".repeat(inner.width.saturating_sub(2) as usize),
@@ -486,9 +483,7 @@ fn render_views_list(f: &mut Frame, app: &App, area: Rect) {
 
         // Category header
         let cat_style = if is_selected_cat {
-            Style::default()
-                .fg(cat_color)
-                .add_modifier(Modifier::BOLD)
+            Style::default().fg(cat_color).add_modifier(Modifier::BOLD)
         } else {
             Style::default().fg(cat_color)
         };
@@ -691,7 +686,10 @@ fn render_concept_panel(f: &mut Frame, area: Rect) {
         } else if line.starts_with("  ") && line.contains(':') {
             // Numbered items
             Style::default().fg(Color::Yellow)
-        } else if line.starts_with("  -") || line.starts_with("  cargo") || line.starts_with("  packages") {
+        } else if line.starts_with("  -")
+            || line.starts_with("  cargo")
+            || line.starts_with("  packages")
+        {
             Style::default().fg(Color::Rgb(150, 200, 150))
         } else {
             Style::default().fg(Color::Rgb(180, 180, 180))
@@ -734,7 +732,11 @@ mod tests {
     #[test]
     fn test_views_count() {
         // Should have at least 15 views defined
-        assert!(VIEWS.len() >= 15, "Expected at least 15 views, got {}", VIEWS.len());
+        assert!(
+            VIEWS.len() >= 15,
+            "Expected at least 15 views, got {}",
+            VIEWS.len()
+        );
     }
 
     #[test]

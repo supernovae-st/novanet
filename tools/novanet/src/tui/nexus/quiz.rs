@@ -37,6 +37,8 @@ pub struct QuizState {
     pub answered: bool,
     /// Whether the quiz is complete.
     pub complete: bool,
+    /// High score (persisted across sessions).
+    pub high_score: Option<usize>,
 }
 
 impl QuizState {
@@ -45,9 +47,11 @@ impl QuizState {
         Self::default()
     }
 
-    /// Reset the quiz to start over.
+    /// Reset the quiz to start over (preserves high score).
     pub fn reset(&mut self) {
+        let high_score = self.high_score;
         *self = Self::default();
+        self.high_score = high_score;
     }
 
     /// Move selection up.
@@ -78,17 +82,29 @@ impl QuizState {
     }
 
     /// Move to the next question or complete the quiz.
-    pub fn next_question(&mut self, questions: &[QuizQuestion]) {
+    /// Returns true if this completes the quiz (for persistence trigger).
+    pub fn next_question(&mut self, questions: &[QuizQuestion]) -> bool {
         if !self.answered {
-            return;
+            return false;
         }
         if self.current_question + 1 >= questions.len() {
             self.complete = true;
+            // Update high score if current score beats it
+            if self.high_score.map(|h| self.score > h).unwrap_or(true) {
+                self.high_score = Some(self.score);
+            }
+            true // Quiz just completed
         } else {
             self.current_question += 1;
             self.selected_option = 0;
             self.answered = false;
+            false
         }
+    }
+
+    /// Check if current score is a new high score.
+    pub fn is_new_high_score(&self) -> bool {
+        self.complete && self.high_score == Some(self.score)
     }
 }
 
@@ -138,7 +154,12 @@ pub const QUESTIONS: &[QuizQuestion] = &[
     },
     QuizQuestion {
         question: "What was EntityL10n renamed to in v10.9?",
-        options: ["EntityContent", "EntityGenerated", "EntityOutput", "EntityData"],
+        options: [
+            "EntityContent",
+            "EntityGenerated",
+            "EntityOutput",
+            "EntityData",
+        ],
         correct: 0,
         explanation: "EntityL10n → EntityContent (semantic layer, localized trait). The 'Content' suffix indicates locale-specific semantic content.",
     },
@@ -162,7 +183,12 @@ pub const QUESTIONS: &[QuizQuestion] = &[
     },
     QuizQuestion {
         question: "Where does the Locale node live in v11.5?",
-        options: ["shared/locale", "shared/config", "org/config", "shared/knowledge"],
+        options: [
+            "shared/locale",
+            "shared/config",
+            "org/config",
+            "shared/knowledge",
+        ],
         correct: 1,
         explanation: "Locale moved to shared/config in v11.5 because it's a DEFINITION (invariant), not settings.",
     },
@@ -180,7 +206,12 @@ pub const QUESTIONS: &[QuizQuestion] = &[
     },
     QuizQuestion {
         question: "Knowledge atoms (Terms, Expressions) are loaded how?",
-        options: ["All at once", "Selectively per context", "Never loaded", "Cached globally"],
+        options: [
+            "All at once",
+            "Selectively per context",
+            "Never loaded",
+            "Cached globally",
+        ],
         correct: 1,
         explanation: "Selective LLM loading: Load 50 relevant Terms, not 20K JSON blob. Graph queries filter by context.",
     },
@@ -195,18 +226,26 @@ pub fn render_quiz_tab(f: &mut Frame, app: &App, area: Rect) {
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
-            Constraint::Length(5),  // Question
-            Constraint::Length(8),  // Options
-            Constraint::Min(1),     // Explanation/Result
+            Constraint::Length(5), // Question
+            Constraint::Length(8), // Options
+            Constraint::Min(1),    // Explanation/Result
         ])
         .margin(1)
         .split(area);
 
     // Main block
     let title = if quiz.complete {
-        format!(" Quiz Complete - Score: {}/{} ", quiz.score, questions.len())
+        format!(
+            " Quiz Complete - Score: {}/{} ",
+            quiz.score,
+            questions.len()
+        )
     } else {
-        format!(" Question {}/{} ", quiz.current_question + 1, questions.len())
+        format!(
+            " Question {}/{} ",
+            quiz.current_question + 1,
+            questions.len()
+        )
     };
 
     let block = Block::default()
@@ -234,7 +273,11 @@ fn render_question(f: &mut Frame, app: &App, question: &QuizQuestion, chunks: &[
 
     // Question text
     let question_text = Paragraph::new(question.question)
-        .style(Style::default().fg(Color::White).add_modifier(Modifier::BOLD))
+        .style(
+            Style::default()
+                .fg(Color::White)
+                .add_modifier(Modifier::BOLD),
+        )
         .wrap(Wrap { trim: true });
     f.render_widget(question_text, chunks[0]);
 
@@ -247,7 +290,12 @@ fn render_question(f: &mut Frame, app: &App, question: &QuizQuestion, chunks: &[
         let (prefix, style) = if quiz.answered {
             // After answering, show correct/incorrect
             if is_correct {
-                ("✓ ", Style::default().fg(Color::Green).add_modifier(Modifier::BOLD))
+                (
+                    "✓ ",
+                    Style::default()
+                        .fg(Color::Green)
+                        .add_modifier(Modifier::BOLD),
+                )
             } else if is_selected {
                 ("✗ ", Style::default().fg(Color::Red))
             } else {
@@ -256,7 +304,12 @@ fn render_question(f: &mut Frame, app: &App, question: &QuizQuestion, chunks: &[
         } else {
             // Before answering, show selection cursor
             if is_selected {
-                ("▶ ", Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD))
+                (
+                    "▶ ",
+                    Style::default()
+                        .fg(Color::Cyan)
+                        .add_modifier(Modifier::BOLD),
+                )
             } else {
                 ("  ", Style::default().fg(Color::White))
             }
@@ -279,7 +332,9 @@ fn render_question(f: &mut Frame, app: &App, question: &QuizQuestion, chunks: &[
             Line::from(""),
             Line::from(Span::styled(
                 "📚 Explanation:",
-                Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
+                Style::default()
+                    .fg(Color::Yellow)
+                    .add_modifier(Modifier::BOLD),
             )),
             Line::from(Span::styled(
                 question.explanation,
@@ -330,12 +385,16 @@ fn render_quiz_complete(f: &mut Frame, app: &App, chunks: &[Rect]) {
         Line::from(""),
         Line::from(Span::styled(
             format!("Final Score: {}/{} ({}%)", quiz.score, total, pct),
-            Style::default().fg(Color::White).add_modifier(Modifier::BOLD),
+            Style::default()
+                .fg(Color::White)
+                .add_modifier(Modifier::BOLD),
         )),
         Line::from(""),
         Line::from(Span::styled(
             grade,
-            Style::default().fg(grade_color).add_modifier(Modifier::BOLD),
+            Style::default()
+                .fg(grade_color)
+                .add_modifier(Modifier::BOLD),
         )),
         Line::from(""),
         Line::from(Span::styled(
