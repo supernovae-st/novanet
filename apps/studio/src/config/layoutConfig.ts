@@ -89,10 +89,13 @@ export const INITIAL_POSITION_CONFIG = {
 } as const;
 
 // =============================================================================
-// ANIMATION & INTERACTION
+// ANIMATION & INTERACTION (2D/3D unified)
 // =============================================================================
 
 export const GRAPH_ANIMATION = {
+  // -------------------------------------------------------------------------
+  // 2D Animation Timings (React Flow)
+  // -------------------------------------------------------------------------
   /** Duration for fitView animation (ms) */
   FIT_VIEW_DURATION: 400,
   /** Minimum zoom level for fitView */
@@ -107,4 +110,21 @@ export const GRAPH_ANIMATION = {
   UI_CHANGE_DELAY: 50,
   /** Delay before initial fitView on mount (ms) */
   INITIAL_FIT_DELAY: 100,
+
+  // -------------------------------------------------------------------------
+  // 3D Animation Timings (Three.js / react-force-graph-3d)
+  // Slightly longer than 2D for cinematic feel in 3D space
+  // -------------------------------------------------------------------------
+  /** Duration for 3D fitView/zoomToFit animation (ms) */
+  FIT_VIEW_DURATION_3D: 600,
+  /** Duration for 3D node focus zoom animation (ms) */
+  NODE_FOCUS_DURATION_3D: 800,
+  /** Duration for 3D camera reset animation (ms) - faster for responsiveness */
+  RESET_DURATION_3D: 400,
+  /** Duration for 3D edge midpoint zoom animation (ms) */
+  EDGE_FOCUS_DURATION_3D: 600,
+  /** Camera distance from node when focused */
+  NODE_FOCUS_DISTANCE_3D: 180,
+  /** Camera distance from edge midpoint when focused */
+  EDGE_FOCUS_DISTANCE_3D: 200,
 } as const;
