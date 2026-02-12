@@ -448,7 +448,7 @@ impl App {
     /// Handles filtered Data mode correctly (same logic as current_item()).
     fn get_current_tree_item_data(&self) -> TreeItemData {
         // In filtered Data mode, always return Instance (that's all we show)
-        if self.is_data_mode() && self.data_filter_kind.is_some() {
+        if self.is_graph_mode() && self.data_filter_kind.is_some() {
             if let Some(kind_key) = &self.data_filter_kind {
                 if self
                     .tree
@@ -470,7 +470,7 @@ impl App {
         }
 
         // Use mode-aware item lookup
-        let item = if self.is_data_mode() {
+        let item = if self.is_graph_mode() {
             self.tree.item_at_for_mode(self.tree_cursor, true)
         } else {
             self.tree.item_at(self.tree_cursor)
@@ -957,7 +957,7 @@ impl App {
             KeyCode::Char('e') | KeyCode::Char('E') if key.modifiers.is_empty() => {
                 // E = Expand subtree under cursor
                 if self.focus == Focus::Tree {
-                    let data_mode = self.is_data_mode();
+                    let data_mode = self.is_graph_mode();
                     if let Some(key) = self.tree.collapse_key_at(self.tree_cursor, data_mode) {
                         self.tree.expand_subtree(&key);
                     }
@@ -967,7 +967,7 @@ impl App {
             KeyCode::Char('c') => {
                 // c = Collapse subtree under cursor
                 if self.focus == Focus::Tree {
-                    let data_mode = self.is_data_mode();
+                    let data_mode = self.is_graph_mode();
                     if let Some(key) = self.tree.collapse_key_at(self.tree_cursor, data_mode) {
                         self.tree.collapse_subtree(&key);
                     }
@@ -977,7 +977,7 @@ impl App {
 
             // Toggle hide empty (0) - only in Data mode
             KeyCode::Char('0') => {
-                if self.is_data_mode() {
+                if self.is_graph_mode() {
                     self.hide_empty = !self.hide_empty;
                     self.set_status(if self.hide_empty {
                         "Hide empty: ON"
@@ -1149,7 +1149,7 @@ impl App {
             KeyCode::Char('p') => {
                 if let Some(parent_cursor) = self
                     .tree
-                    .find_parent_cursor(self.tree_cursor, self.is_data_mode())
+                    .find_parent_cursor(self.tree_cursor, self.is_graph_mode())
                 {
                     self.tree_cursor = parent_cursor;
                     self.ensure_cursor_visible();
@@ -1160,7 +1160,7 @@ impl App {
 
             // Toggle schema overlay (s) - only in Data mode
             KeyCode::Char('s') => {
-                if self.is_data_mode() {
+                if self.is_graph_mode() {
                     self.schema_overlay_enabled = !self.schema_overlay_enabled;
                     // Load/clear matched properties based on new state
                     self.update_schema_match_for_current();
@@ -1187,7 +1187,7 @@ impl App {
             // Property focus navigation (+/-) - Feature 3: Truncate Intelligent
             // Navigate focused property in schema overlay
             KeyCode::Char('+') | KeyCode::Char('=') => {
-                if self.is_data_mode() && self.schema_overlay_enabled {
+                if self.is_graph_mode() && self.schema_overlay_enabled {
                     if let Some(matched) = &self.matched_properties {
                         let max_idx = matched.len().saturating_sub(1);
                         self.focused_property_idx = (self.focused_property_idx + 1).min(max_idx);
@@ -1197,7 +1197,7 @@ impl App {
                 true
             }
             KeyCode::Char('-') | KeyCode::Char('_') => {
-                if self.is_data_mode() && self.schema_overlay_enabled {
+                if self.is_graph_mode() && self.schema_overlay_enabled {
                     self.focused_property_idx = self.focused_property_idx.saturating_sub(1);
                     self.expanded_property = false; // Collapse when changing property
                 }
@@ -1232,7 +1232,7 @@ impl App {
                     return true;
                 }
                 // Second priority: exit filtered mode (stay in Graph mode)
-                if self.is_filtered_data_mode() {
+                if self.is_filtered_graph_mode() {
                     self.exit_filtered_data_mode();
                     return true;
                 }
@@ -1310,7 +1310,7 @@ impl App {
                 true
             }
 
-            // Navigate up
+            // Navigate up (arrows, vim j/k)
             KeyCode::Up | KeyCode::Char('k') => {
                 if self.recent_items_cursor > 0 {
                     self.recent_items_cursor -= 1;
@@ -1347,9 +1347,9 @@ impl App {
         }
     }
 
-    /// Check if currently in a mode that shows instances (Graph mode shows instances).
-    /// In v11.7 unified tree, Graph mode is the unified view that always shows instances.
-    pub fn is_data_mode(&self) -> bool {
+    /// Check if currently in Graph mode (unified tree that shows instances).
+    /// v11.7: Renamed from is_graph_mode() for clarity — Graph mode IS the unified view.
+    pub fn is_graph_mode(&self) -> bool {
         self.mode == NavMode::Graph
     }
 
@@ -1482,12 +1482,13 @@ impl App {
         }
     }
 
-    /// Check if in filtered Data mode (drilling into a specific Kind).
-    pub fn is_filtered_data_mode(&self) -> bool {
-        self.is_data_mode() && self.data_filter_kind.is_some()
+    /// Check if in filtered Graph mode (drilling into a specific Kind).
+    /// v11.7: Renamed from is_filtered_graph_mode() for consistency.
+    pub fn is_filtered_graph_mode(&self) -> bool {
+        self.is_graph_mode() && self.data_filter_kind.is_some()
     }
 
-    /// Get the current filter Kind key (if in filtered Data mode).
+    /// Get the current filter Kind key (if in filtered Graph mode).
     pub fn get_filter_kind(&self) -> Option<&str> {
         self.data_filter_kind.as_deref()
     }
@@ -1497,12 +1498,12 @@ impl App {
     pub fn current_item(&self) -> Option<super::data::TreeItem<'_>> {
         // Filtered Data mode: show only instances of the filtered Kind
         if let Some(kind_key) = &self.data_filter_kind {
-            if self.is_data_mode() {
+            if self.is_graph_mode() {
                 return self.tree.filtered_item_at(self.tree_cursor, kind_key);
             }
         }
         // Normal mode
-        if self.is_data_mode() {
+        if self.is_graph_mode() {
             self.tree.item_at_for_mode(self.tree_cursor, true)
         } else {
             // Meta mode: apply trait filter if active
@@ -1515,12 +1516,12 @@ impl App {
     pub fn current_item_count(&self) -> usize {
         // Filtered Data mode: count only instances of the filtered Kind
         if let Some(kind_key) = &self.data_filter_kind {
-            if self.is_data_mode() {
+            if self.is_graph_mode() {
                 return self.tree.filtered_item_count(kind_key);
             }
         }
         // Normal mode
-        if self.is_data_mode() {
+        if self.is_graph_mode() {
             self.tree.item_count_for_mode(true)
         } else {
             // Meta mode: apply trait filter if active
@@ -1559,7 +1560,7 @@ impl App {
                 format!("{} → {}", r.display_name, l.display_name)
             }
             Some(TreeItem::Kind(r, l, k)) => {
-                if self.is_data_mode() && k.instance_count > 0 {
+                if self.is_graph_mode() && k.instance_count > 0 {
                     format!(
                         "{} → {} → {} ({})",
                         r.display_name, l.display_name, k.display_name, k.instance_count
@@ -1608,7 +1609,7 @@ impl App {
     /// Request instance loading for the currently selected Kind.
     /// Sets `pending_instance_load` if a Kind is selected and we're in Data mode.
     pub fn request_instance_load_for_current(&mut self) {
-        if !self.is_data_mode() {
+        if !self.is_graph_mode() {
             return;
         }
 
@@ -1660,7 +1661,7 @@ impl App {
     /// Also triggers loading for instances, Entity categories, and category instances in Data mode.
     /// Single-click behavior: if instances not loaded, load them AND expand in one action.
     fn toggle_tree_item(&mut self) {
-        let data_mode = self.is_data_mode();
+        let data_mode = self.is_graph_mode();
         if let Some(key) = self.tree.collapse_key_at(self.tree_cursor, data_mode) {
             // Handle Kind toggle in Data mode
             if let Some(kind_key) = key.strip_prefix("kind:") {
@@ -1723,7 +1724,7 @@ impl App {
         self.expanded_property = false;
 
         // Only relevant in Data mode with schema overlay enabled
-        if !self.is_data_mode() || !self.schema_overlay_enabled {
+        if !self.is_graph_mode() || !self.schema_overlay_enabled {
             self.matched_properties = None;
             self.coverage_stats = None;
             return;
@@ -1851,7 +1852,7 @@ impl App {
         use super::schema::{CoverageStats, load_schema_properties, match_properties};
 
         // Only in Data mode with schema overlay enabled
-        if !self.is_data_mode() || !self.schema_overlay_enabled {
+        if !self.is_graph_mode() || !self.schema_overlay_enabled {
             self.matched_properties = None;
             self.coverage_stats = None;
             return;
@@ -2040,7 +2041,7 @@ mod tests {
     fn test_mode_starts_as_graph() {
         let app = create_test_app();
         assert_eq!(app.mode, NavMode::Graph);
-        assert!(app.is_data_mode()); // Graph mode shows instances
+        assert!(app.is_graph_mode()); // Graph mode shows instances
     }
 
     #[test]
@@ -2058,7 +2059,7 @@ mod tests {
         }
 
         // Graph mode should show instances (is_data_mode returns true)
-        assert!(app.is_data_mode());
+        assert!(app.is_graph_mode());
 
         // Cursor should be valid
         assert_eq!(app.tree_cursor, 3);
@@ -2255,7 +2256,7 @@ mod tests {
         assert_eq!(app.yaml_scroll, 0);
         // Previous cursor saved
         assert_eq!(app.data_cursor_before_filter, 5);
-        assert!(app.is_filtered_data_mode());
+        assert!(app.is_filtered_graph_mode());
     }
 
     #[test]
@@ -2269,7 +2270,7 @@ mod tests {
 
         app.exit_filtered_data_mode();
         assert_eq!(app.tree_cursor, 5);
-        assert!(!app.is_filtered_data_mode());
+        assert!(!app.is_filtered_graph_mode());
     }
 
     #[test]
@@ -2295,7 +2296,7 @@ mod tests {
         app.enter_filtered_data_mode("Page".to_string());
 
         // Should still be in filtered mode
-        assert!(app.is_filtered_data_mode());
+        assert!(app.is_filtered_graph_mode());
         assert_eq!(app.get_filter_kind(), Some("Page"));
 
         // Count should be 0 (no instances)
@@ -2357,13 +2358,13 @@ mod tests {
         app.mode = NavMode::Graph;
         app.enter_filtered_data_mode("Locale".to_string());
 
-        assert!(app.is_filtered_data_mode());
+        assert!(app.is_filtered_graph_mode());
 
         // Press Esc
         let handled = app.handle_key(crossterm::event::KeyEvent::from(KeyCode::Esc));
 
         assert!(handled);
-        assert!(!app.is_filtered_data_mode());
+        assert!(!app.is_filtered_graph_mode());
         // v11.7: Esc exits filtered mode, stays in Graph mode
         assert_eq!(app.mode, NavMode::Graph);
     }
@@ -2374,14 +2375,14 @@ mod tests {
         app.mode = NavMode::Graph;
         app.enter_filtered_data_mode("Locale".to_string());
 
-        assert!(app.is_filtered_data_mode());
+        assert!(app.is_filtered_graph_mode());
 
         // Press 1 (Graph mode - already in Graph mode, so no mode change)
         app.handle_key(crossterm::event::KeyEvent::from(KeyCode::Char('1')));
 
         // v11.7: Key 1 = Graph mode, already in Graph so filtered mode stays
         // Use Esc to exit filtered mode instead
-        assert!(app.is_filtered_data_mode());
+        assert!(app.is_filtered_graph_mode());
         assert_eq!(app.mode, NavMode::Graph);
     }
 
