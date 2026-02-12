@@ -11,16 +11,16 @@ argument-hint: [validate|generate|status]
 
 Synchronize generated artifacts with YAML source of truth.
 
-## Source of Truth (v11.3)
+## Source of Truth (v11.7)
 
 ```
 packages/core/models/
-+-- node-kinds/                   <- 61 YAML files (one per NodeKind)
-|   +-- shared/                   <- Realm: shared (32 nodes)
++-- node-kinds/                   <- 60 YAML files (one per NodeKind)
+|   +-- shared/                   <- Realm: shared (39 nodes)
 |   |   +-- locale/               <-   Layer: locale (7 nodes)
 |   |   +-- geography/            <-   Layer: geography (6 nodes)
 |   |   +-- knowledge/            <-   Layer: knowledge (19 nodes)
-|   +-- org/                      <- Realm: org (29 nodes)
+|   +-- org/                      <- Realm: org (21 nodes)
 |       +-- config/               <-   Layer: config (OrgConfig)
 |       +-- foundation/           <-   Layer: foundation
 |       +-- structure/            <-   Layer: structure
@@ -29,9 +29,9 @@ packages/core/models/
 |       +-- seo/                  <-   Layer: seo (SEOKeyword)
 |       +-- geo/                  <-   Layer: geo (GEOQuery, GEOAnswer, GEOMetrics)
 |       +-- output/               <-   Layer: output
-+-- arc-kinds/                    <- 125 YAML files (one per ArcKind)
++-- arc-kinds/                    <- 114 YAML files (one per ArcKind)
 +-- relations.yaml                <- Legacy format (kept for parser compatibility)
-+-- taxonomy.yaml                 <- v11.3: 2 Realms, 11 Layers, 5 Traits
++-- taxonomy.yaml                 <- v11.7: 2 Realms, 10 Layers, 5 Traits
 ```
 
 ## Generated Artifacts
@@ -140,6 +140,6 @@ All generators live in `tools/novanet/src/generators/` (Rust-first architecture)
 
 **MermaidGenerator (`generators/mermaid.rs`):**
 - Reads `models/node-kinds/` and `models/arc-kinds/`
-- Generates Mermaid flowchart with all 61 Kinds and 125 arcs
+- Generates Mermaid flowchart with all 60 Kinds and 114 arcs
 - Groups by Realm (Shared, Org)
 - Colors by Layer (11 distinct colors)
