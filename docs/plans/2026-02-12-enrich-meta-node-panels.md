@@ -29,22 +29,47 @@
 │  │ ├▼ ⚙ config ────────────────────────────────────────────────── [◇meta]  │
 │  │ │ │  3 kinds · 214 inst · ■ invariant                                   │
 │  │ │ │                                                                      │
-│  │ │ ├▼ ◆ Locale ──────────────────────────────────────────────── [◇meta]  │
-│  │ │ │ │  200 instances · ■ invariant · shared/config                      │
+│  │ │ ├▼ ◆ Locale ■ ────────────────────────────────────────────── [◇meta]  │
+│  │ │ │ │  200 instances · shared/config                                    │
 │  │ │ │ │                                                                    │
 │  │ │ │ ├── fr-FR          French (France)                                  │
 │  │ │ │ ├── en-US          English (United States)                          │
 │  │ │ │ ├── ja-JP          Japanese (Japan)                                 │
 │  │ │ │ └── ⋯ 197 more                                                      │
 │  │ │ │                                                                      │
-│  │ │ └▶ ◆ EntityCategory ──────────────────────────────────────── [◇meta]  │
-│  │ │      13 instances · ■ invariant                                       │
+│  │ │ └▶ ◆ EntityCategory ■ ────────────────────────────────────── [◇meta]  │
+│  │ │      13 instances                                                     │
 │  │ │                                                                        │
 │  │ └▼ ● locale ────────────────────────────────────────────────── [◇meta]  │
 │  │      6 kinds · 1.2K inst · mixed traits                                 │
 │  │                                                                          │
 │  └▼ ◎ org ─────────────────────────────────────────────────────── [◇meta]  │
-│       21 kinds · 2.4K inst · 6 layers                                      │
+│    │  21 kinds · 2.4K inst · 6 layers                                      │
+│    │                                                                        │
+│    ├▼ ■ foundation ────────────────────────────────────────────── [◇meta]  │
+│    │ │  3 kinds · 45 inst · ■□ mixed                                       │
+│    │ │                                                                      │
+│    │ ├▶ ◆ Project ■ ───────────────────────────────────────────── [◇meta]  │
+│    │ ├▶ ◆ ProjectContent □ ────────────────────────────────────── [◇meta]  │
+│    │ └▶ ◆ BrandIdentity ■ ─────────────────────────────────────── [◇meta]  │
+│    │                                                                        │
+│    ├▼ ◆ semantic ──────────────────────────────────────────────── [◇meta]  │
+│    │ │  4 kinds · 890 inst · ■□ mixed                                      │
+│    │ │                                                                      │
+│    │ ├▶ ◆ Entity ■ ────────────────────────────────────────────── [◇meta]  │
+│    │ └▶ ◆ EntityContent □ ─────────────────────────────────────── [◇meta]  │
+│    │                                                                        │
+│    └▼ ▣ output ────────────────────────────────────────────────── [◇meta]  │
+│      │  3 kinds · 1.2K inst · ★ generated                                  │
+│      │                                                                      │
+│      ├▼ ◆ PageGenerated ★ ─────────────────────────────────────── [◇meta]  │
+│      │ │  450 instances · org/output                                       │
+│      │ │                                                                    │
+│      │ ├── page:homepage@fr-FR                                             │
+│      │ ├── page:homepage@en-US                                             │
+│      │ └── ⋯ 448 more                                                      │
+│      │                                                                      │
+│      └▶ ◆ BlockGenerated ★ ────────────────────────────────────── [◇meta]  │
 │                                                                             │
 │  ▼ Arcs (114)                                                               │
 │  │                                                                          │
@@ -64,11 +89,18 @@
 │  [◇meta]     = Schema node (Realm/Layer/Kind/ArcFamily/ArcKind)            │
 │  (no badge)  = Data node (instance)                                        │
 │                                                                             │
-│  ICONS:                                                                     │
+│  META TYPE ICONS:                                                           │
 │  ◉/◎ = Realm (shared/org)                                                  │
 │  ⚙●◊■▣ = Layer (config/locale/knowledge/semantic/output)                   │
 │  ◆ = Kind                                                                   │
 │  → = ArcFamily/ArcKind                                                      │
+│                                                                             │
+│  TRAIT ICONS (après le nom du Kind):                                        │
+│  ■ = invariant   (ne change jamais entre locales)                          │
+│  □ = localized   (contenu par locale: EntityContent, ProjectContent)       │
+│  ◇ = knowledge   (atomes de connaissance: Term, Expression, Pattern)       │
+│  ★ = generated   (output LLM: PageGenerated, BlockGenerated)               │
+│  ⋆ = aggregated  (métriques calculées: SEOKeywordMetrics, GEOMetrics)      │
 │                                                                             │
 │  SUBLINE INFO (sous chaque meta node):                                     │
 │  Realm:     {kinds} kinds · {inst}K inst · {layers} layers                 │
