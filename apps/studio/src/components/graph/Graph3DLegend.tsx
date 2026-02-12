@@ -147,7 +147,7 @@ export const Graph3DLegend = memo(function Graph3DLegend({
         {/* Layer → Shape */}
         <LegendSection title="Shape → Layer" icon={<Hexagon size={12} />} defaultOpen>
           <div className="grid grid-cols-2 gap-1">
-            {LAYER_SHAPES.map(({ layer, shape, color }) => (
+            {LAYER_SHAPES.map(({ layer, shape: _shape, color }) => (
               <div key={layer} className="flex items-center gap-1.5">
                 <div
                   className="w-2.5 h-2.5 rounded-sm"

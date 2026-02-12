@@ -32,7 +32,6 @@ import {
   Sparkles,
   Settings,
   BookOpen,
-  Search,
   Globe,
   Building2,
   Square,

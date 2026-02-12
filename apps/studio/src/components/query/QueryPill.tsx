@@ -104,22 +104,36 @@ function useMatrixTextScramble(text: string, isActive: boolean) {
   return scrambledText;
 }
 
-// Matrix rain component - intensified
+// Matrix rain component - v11.6.1: optimized with useRef to prevent memory churn
 const MatrixRain = memo(function MatrixRain() {
-  const [columns, setColumns] = useState<string[]>([]);
+  const [columns, setColumns] = useState<string[]>(() =>
+    Array.from({ length: 12 }, () =>
+      Array.from({ length: 4 }, () =>
+        MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)]
+      ).join('')
+    )
+  );
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setColumns(
-        Array.from({ length: 24 }, () =>
+    // v11.6.1: Use requestAnimationFrame-friendly interval (100ms instead of 70ms)
+    // and reduce column count from 24 to 12 for better performance
+    intervalRef.current = setInterval(() => {
+      setColumns(prev =>
+        prev.map(() =>
           Array.from({ length: 4 }, () =>
             MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)]
           ).join('')
         )
       );
-    }, 70);
+    }, 100);
 
-    return () => clearInterval(interval);
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
   }, []);
 
   return (
@@ -254,12 +268,18 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      if (editValue.trim()) {
-        setQuery(editValue.trim());
+      const trimmed = editValue.trim();
+      if (trimmed) {
+        // Only update query if user actually changed it
+        // (input type="text" strips newlines from original)
+        const normalizedOriginal = currentQuery?.replace(/\n/g, ' ').trim();
+        if (trimmed !== normalizedOriginal) {
+          setQuery(trimmed);
+        }
         setIsEditing(false);
         // v12: Execute via viewStore on Cmd+Enter
         if (e.metaKey || e.ctrlKey) {
-          handleRunQuery(editValue.trim());
+          handleRunQuery(currentQuery || trimmed);
         }
       }
     } else if (e.key === 'Escape') {
@@ -300,13 +320,6 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
       executeView(activeViewId);
     }
   }, [clear, isCustomQuery, activeViewId, executeView]);
-
-  // v12: Back to view button when in custom query mode
-  const handleBackToView = useCallback(() => {
-    executeView(activeViewId);
-    clear();
-    setEditValue('');
-  }, [activeViewId, executeView, clear]);
 
   const hasQuery = !!currentQuery;
 
@@ -394,7 +407,12 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
               onChange={(e) => setEditValue(e.target.value)}
               onKeyDown={handleKeyDown}
               onBlur={() => {
-                if (editValue.trim()) setQuery(editValue.trim());
+                // Only update if user actually modified the query
+                // (input type="text" strips newlines, so avoid overwriting original)
+                const trimmed = editValue.trim();
+                if (trimmed && trimmed !== currentQuery?.replace(/\n/g, ' ').trim()) {
+                  setQuery(trimmed);
+                }
                 setIsEditing(false);
               }}
               className="w-full bg-transparent font-mono text-sm text-white/90 placeholder:text-white/40 outline-none border-none ring-0 focus:ring-0 focus:outline-none"

@@ -36,7 +36,7 @@ interface FormatButtonProps {
 /**
  * Format switcher button
  */
-function FormatButton({ format, label, isActive, onClick }: FormatButtonProps) {
+function FormatButton({ format: _format, label, isActive, onClick }: FormatButtonProps) {
   return (
     <button
       onClick={onClick}
@@ -263,7 +263,7 @@ function CodeViewer({
   );
 }
 
-export const CodeTab = memo(function CodeTab({ node, colors }: CodeTabProps) {
+export const CodeTab = memo(function CodeTab({ node, colors: _colors }: CodeTabProps) {
   const [activeFormat, setActiveFormat] = useState<CodeFormat>('json');
   const { copied, copy } = useCopyFeedback();
 

@@ -47,7 +47,7 @@ export interface AttractorCardContentProps extends CardContext {
 export const AttractorCardContent = memo(function AttractorCardContent({
   data,
   colors,
-  selected,
+  selected: _selected,
   isHovered,
   variant,
 }: AttractorCardContentProps) {

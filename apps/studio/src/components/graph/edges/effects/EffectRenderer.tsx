@@ -15,7 +15,7 @@
 import { memo, useMemo } from 'react';
 import type { EffectPrimitiveProps, EdgeState, LODTier } from '../system/types';
 import { resolveThemeCached } from '../system/registry';
-import { filterEffectsForLOD, calculateLODTier } from '../system/performance/LODController';
+import { calculateLODTier } from '../system/performance/LODController';
 import { animationBudget } from '../system/performance/AnimationBudget';
 import { PRIMITIVE_REGISTRY } from './primitives';
 
