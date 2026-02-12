@@ -14,40 +14,99 @@
 | **Tree display** | Suffix badge on meta lines + different background + badge in info panel |
 | **Info panel detail** | Ultra-complete: all sections + example instances + related arcs |
 
-### Meta vs Data Visual System
+### Tree Design: Option B "Compact Semantic"
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  VISUAL DISTINCTION: META vs DATA                                           │
+│  TREE VIEW (Option B: Compact Semantic)                                     │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│  IN TREE VIEW:                                                              │
-│  ─────────────                                                              │
-│  ▼ ◉ Realm:shared [◇meta]        ▓▓▓▓ (darker background)                  │
-│    ▼ ⚙ Layer:config [◇meta]      ▓▓▓▓                                      │
-│      ▼ ◆ Kind:Locale [◇meta]     ▓▓▓▓                                      │
-│        ● Locale:fr-FR            ░░░░ (normal background = data)           │
-│        ● Locale:en-US            ░░░░                                      │
+│  ▼ Nodes (60)                                                               │
+│  │                                                                          │
+│  ├▼ ◉ shared ──────────────────────────────────────────────────── [◇meta]  │
+│  │ │  39 kinds · 18K inst · 4 layers                                       │
+│  │ │                                                                        │
+│  │ ├▼ ⚙ config ────────────────────────────────────────────────── [◇meta]  │
+│  │ │ │  3 kinds · 214 inst · ■ invariant                                   │
+│  │ │ │                                                                      │
+│  │ │ ├▼ ◆ Locale ──────────────────────────────────────────────── [◇meta]  │
+│  │ │ │ │  200 instances · ■ invariant · shared/config                      │
+│  │ │ │ │                                                                    │
+│  │ │ │ ├── fr-FR          French (France)                                  │
+│  │ │ │ ├── en-US          English (United States)                          │
+│  │ │ │ ├── ja-JP          Japanese (Japan)                                 │
+│  │ │ │ └── ⋯ 197 more                                                      │
+│  │ │ │                                                                      │
+│  │ │ └▶ ◆ EntityCategory ──────────────────────────────────────── [◇meta]  │
+│  │ │      13 instances · ■ invariant                                       │
+│  │ │                                                                        │
+│  │ └▼ ● locale ────────────────────────────────────────────────── [◇meta]  │
+│  │      6 kinds · 1.2K inst · mixed traits                                 │
+│  │                                                                          │
+│  └▼ ◎ org ─────────────────────────────────────────────────────── [◇meta]  │
+│       21 kinds · 2.4K inst · 6 layers                                      │
 │                                                                             │
-│  IN INFO PANEL HEADER:                                                      │
-│  ─────────────────────                                                      │
-│  ┌──────────────────────────────────────────────────────────────────────┐  │
-│  │  [◇meta] Realm                                                        │  │
-│  │  ══════════════════════════════════════════════════════════════════  │  │
-│  │  type      Meta Node (schema)                                         │  │
-│  │  key       shared                                                     │  │
-│  │  ...                                                                  │  │
-│  └──────────────────────────────────────────────────────────────────────┘  │
+│  ▼ Arcs (114)                                                               │
+│  │                                                                          │
+│  └▼ → ownership ───────────────────────────────────────────────── [◇meta]  │
+│       43 arc kinds · 23K inst · eager traversal                            │
 │                                                                             │
-│  BADGE LEGEND:                                                              │
-│  ─────────────                                                              │
-│  [◇meta]  = Schema/structure node (Realm, Layer, Kind, ArcFamily, ArcKind) │
-│  (no badge) = Data/instance node (actual content)                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  LÉGENDE                                                                    │
+├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│  COLOR ENCODING:                                                            │
-│  ───────────────                                                            │
-│  Meta nodes: rgb(30, 35, 45) background (slightly darker)                  │
+│  STRUCTURE:                                                                 │
+│  ├▼  = expanded (has children)                                             │
+│  └▶  = collapsed (has children)                                            │
+│  ├── = leaf (no children / instance)                                       │
+│                                                                             │
+│  BADGES:                                                                    │
+│  [◇meta]     = Schema node (Realm/Layer/Kind/ArcFamily/ArcKind)            │
+│  (no badge)  = Data node (instance)                                        │
+│                                                                             │
+│  ICONS:                                                                     │
+│  ◉/◎ = Realm (shared/org)                                                  │
+│  ⚙●◊■▣ = Layer (config/locale/knowledge/semantic/output)                   │
+│  ◆ = Kind                                                                   │
+│  → = ArcFamily/ArcKind                                                      │
+│                                                                             │
+│  SUBLINE INFO (sous chaque meta node):                                     │
+│  Realm:     {kinds} kinds · {inst}K inst · {layers} layers                 │
+│  Layer:     {kinds} kinds · {inst} inst · {trait} trait(s)                 │
+│  Kind:      {inst} instances · {trait} · {realm}/{layer}                   │
+│  ArcFamily: {arcs} arc kinds · {inst}K inst · {traversal}                  │
+│                                                                             │
+│  BACKGROUND:                                                                │
+│  Meta nodes: slightly darker (rgb 30,35,45)                                │
 │  Data nodes: default terminal background                                   │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Info Panel Enrichment (existing panel)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  INFO PANEL HEADER (enriched)                                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  [◇meta] Realm                                                              │
+│  ══════════════════════════════════════════════════════════════════════    │
+│  type      Meta Node (schema)         ← NEW: explicit meta/data label      │
+│  key       shared                                                           │
+│  icon      ◉ (web: globe)             ← NEW: dual icon display             │
+│  color     #2aa198 ████               ← NEW: color preview                 │
+│  ...                                                                        │
+│                                                                             │
+│  DESCRIPTION                          ← NEW: llm_context from YAML         │
+│  ══════════════════════════════════════════════════════════════════════    │
+│  Shared across ALL organizations. Universal locale knowledge...            │
+│                                                                             │
+│  EXAMPLE INSTANCES                    ← NEW: real data samples             │
+│  ══════════════════════════════════════════════════════════════════════    │
+│  • Locale:fr-FR                                                            │
+│  • EntityCategory:thing                                                    │
+│  • Term:qr-code                                                            │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
