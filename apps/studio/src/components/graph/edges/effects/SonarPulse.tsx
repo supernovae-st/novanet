@@ -17,12 +17,14 @@
 
 import { memo } from 'react';
 import type { EffectTier } from '../EdgeVisibilityManager';
+import { getRandomDelay } from '../EdgeUtils';
 
 interface SonarPulseProps {
   edgePath: string;
   colors: { primary: string; secondary: string; glow: string };
   state: 'default' | 'highlighted' | 'selected' | 'muted';
   effectTier: EffectTier;
+  edgeId: string;
 }
 
 /**
@@ -39,6 +41,7 @@ export const SonarPulse = memo(function SonarPulse({
   colors,
   state,
   effectTier,
+  edgeId,
 }: SonarPulseProps) {
   const isHighlighted = state === 'highlighted' || state === 'selected';
 
@@ -48,7 +51,10 @@ export const SonarPulse = memo(function SonarPulse({
   const showAmbientScan = effectTier === 'ultra';
   const dataBlipCount = effectTier === 'ultra' ? 3 : effectTier === 'medium' ? 1 : 2;
 
-  // Ping timing
+  // Random delay to desynchronize animations across edges
+  const baseDelay = getRandomDelay(edgeId, 3);
+
+  // Ping timing (with baseDelay offset)
   const pingInterval = 3; // Every 3s (methodical scanning)
   const ringExpansionTime = 1.5; // Time for ring to expand source->target
   const echoReturnTime = 2; // Slower return
@@ -115,7 +121,7 @@ export const SonarPulse = memo(function SonarPulse({
           <animateMotion
             dur="0.01s"
             repeatCount="indefinite"
-            begin="0s"
+            begin={`${baseDelay}s`}
             path={edgePath}
             keyPoints="0;0"
             keyTimes="0;1"
@@ -125,7 +131,7 @@ export const SonarPulse = memo(function SonarPulse({
             values="0;1;0"
             dur="0.3s"
             repeatCount="indefinite"
-            begin={`0s;${pingInterval}s`}
+            begin={`${baseDelay}s;${baseDelay + pingInterval}s`}
             keyTimes="0;0.15;1"
           />
           <animate
@@ -133,7 +139,7 @@ export const SonarPulse = memo(function SonarPulse({
             values="6;16;8"
             dur="0.3s"
             repeatCount="indefinite"
-            begin={`0s;${pingInterval}s`}
+            begin={`${baseDelay}s;${baseDelay + pingInterval}s`}
           />
         </circle>
 
@@ -147,7 +153,7 @@ export const SonarPulse = memo(function SonarPulse({
           <animateMotion
             dur="0.01s"
             repeatCount="indefinite"
-            begin="0s"
+            begin={`${baseDelay}s`}
             path={edgePath}
             keyPoints="0;0"
             keyTimes="0;1"
@@ -157,14 +163,14 @@ export const SonarPulse = memo(function SonarPulse({
             values="0;0.6;0"
             dur="0.4s"
             repeatCount="indefinite"
-            begin={`0s;${pingInterval}s`}
+            begin={`${baseDelay}s;${baseDelay + pingInterval}s`}
           />
         </circle>
       </g>
 
       {/* === WAVE PROPAGATION (concentric rings expanding along arc) === */}
       {Array.from({ length: ringCount }, (_, i) => {
-        const ringDelay = i * 0.15; // Staggered rings
+        const ringDelay = baseDelay + i * 0.15; // Staggered rings with base offset
 
         return (
           <g key={`ring-${i}`}>
@@ -248,7 +254,7 @@ export const SonarPulse = memo(function SonarPulse({
             <animateMotion
               dur={`${echoReturnTime}s`}
               repeatCount="indefinite"
-              begin={`${ringExpansionTime + 0.1}s;${pingInterval + ringExpansionTime + 0.1}s`}
+              begin={`${baseDelay + ringExpansionTime + 0.1}s;${baseDelay + pingInterval + ringExpansionTime + 0.1}s`}
               path={edgePath}
               keyPoints="1;0"
               keyTimes="0;1"
@@ -258,7 +264,7 @@ export const SonarPulse = memo(function SonarPulse({
               values="0;0.5;0.3;0"
               dur={`${echoReturnTime}s`}
               repeatCount="indefinite"
-              begin={`${ringExpansionTime + 0.1}s;${pingInterval + ringExpansionTime + 0.1}s`}
+              begin={`${baseDelay + ringExpansionTime + 0.1}s;${baseDelay + pingInterval + ringExpansionTime + 0.1}s`}
               keyTimes="0;0.1;0.7;1"
             />
           </circle>
@@ -273,7 +279,7 @@ export const SonarPulse = memo(function SonarPulse({
             <animateMotion
               dur={`${echoReturnTime}s`}
               repeatCount="indefinite"
-              begin={`${ringExpansionTime + 0.1}s;${pingInterval + ringExpansionTime + 0.1}s`}
+              begin={`${baseDelay + ringExpansionTime + 0.1}s;${baseDelay + pingInterval + ringExpansionTime + 0.1}s`}
               path={edgePath}
               keyPoints="1;0"
               keyTimes="0;1"
@@ -283,7 +289,7 @@ export const SonarPulse = memo(function SonarPulse({
               values="0;0.3;0.1;0"
               dur={`${echoReturnTime}s`}
               repeatCount="indefinite"
-              begin={`${ringExpansionTime + 0.1}s;${pingInterval + ringExpansionTime + 0.1}s`}
+              begin={`${baseDelay + ringExpansionTime + 0.1}s;${baseDelay + pingInterval + ringExpansionTime + 0.1}s`}
               keyTimes="0;0.1;0.6;1"
             />
           </circle>
@@ -292,7 +298,7 @@ export const SonarPulse = memo(function SonarPulse({
 
       {/* === DATA BLIPS (bright dots when wave arrives at target) === */}
       {Array.from({ length: dataBlipCount }, (_, i) => {
-        const blipDelay = ringExpansionTime + i * 0.2;
+        const blipDelay = baseDelay + ringExpansionTime + i * 0.2;
 
         return (
           <g key={`blip-${i}`}>

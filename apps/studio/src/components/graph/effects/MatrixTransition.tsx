@@ -14,8 +14,6 @@
 import { memo, useEffect, useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '@/lib/utils';
-import type { ViewId } from '@/config/viewTypes';
-import { VIEW_TYPES } from '@/config/viewTypes';
 
 // =============================================================================
 // TYPES
@@ -25,7 +23,10 @@ type TransitionPhase = 'idle' | 'dissolve' | 'rain' | 'materialize';
 
 interface MatrixTransitionProps {
   isActive: boolean;
-  viewId: ViewId | null;
+  /** v11.6.1: Pass color directly instead of looking up from deprecated VIEW_TYPES */
+  color?: string;
+  /** @deprecated Use color prop instead - viewId lookup is deprecated */
+  viewId?: string | null;
   onComplete?: () => void;
   className?: string;
 }
@@ -161,14 +162,15 @@ const MatrixRainCanvas = memo(function MatrixRainCanvas({
 
 export const MatrixTransition = memo(function MatrixTransition({
   isActive,
-  viewId,
+  color: colorProp,
+  viewId: _viewId, // deprecated, kept for backward compatibility
   onComplete,
   className,
 }: MatrixTransitionProps) {
   const [phase, setPhase] = useState<TransitionPhase>('idle');
 
-  // Get transition color from view config
-  const color = viewId ? VIEW_TYPES[viewId]?.transitionColor ?? '#22c55e' : '#22c55e';
+  // v11.6.1: Use color prop directly (default to Matrix green)
+  const color = colorProp || '#22c55e';
 
   // Run transition phases
   useEffect(() => {

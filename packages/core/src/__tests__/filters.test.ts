@@ -550,22 +550,30 @@ describe('ViewLoader', () => {
 
       for (const entry of registry.views) {
         expect(entry.id).toBeDefined();
-        expect(entry.file).toBeDefined();
         expect(entry.description).toBeDefined();
+        expect(entry.category).toBeDefined();
+        // v11.6.1: All views have embedded Cypher queries
+        expect(entry.cypher).toBeDefined();
       }
     });
 
-    it('all non-contextual registered views can be loaded', async () => {
+    it('all views have valid Cypher queries', async () => {
       const registry = await ViewLoader.loadRegistry();
 
-      // Contextual views (category: 'contextual') are loaded differently via API
-      // They use Cypher templates, not declarative include rules
-      const nonContextualViews = registry.views.filter(v => v.category !== 'contextual');
-
-      for (const entry of nonContextualViews) {
-        const view = await ViewLoader.loadView(entry.id);
-        expect(view.id).toBe(entry.id);
+      for (const entry of registry.views) {
+        // Each view should have a non-empty Cypher query
+        expect(entry.cypher).toBeDefined();
+        expect(entry.cypher!.trim().length).toBeGreaterThan(0);
+        // Cypher should contain MATCH or RETURN
+        expect(entry.cypher).toMatch(/MATCH|RETURN/i);
       }
+    });
+
+    it('getCypher returns query with params', async () => {
+      const cypherResult = await ViewLoader.getCypher('data-complete');
+      expect(cypherResult.query).toBeDefined();
+      expect(cypherResult.query.length).toBeGreaterThan(0);
+      expect(cypherResult.params).toBeDefined();
     });
   });
 });

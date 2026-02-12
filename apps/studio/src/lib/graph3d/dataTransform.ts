@@ -73,9 +73,15 @@ export interface ForceGraphData {
 
 /**
  * Transform GraphNode to ForceGraphNode (without connectionCount - added later)
+ * Initializes x/y/z to prevent "undefined" errors in Three.js DragControls
  */
 function transformNode(node: GraphNode): Omit<ForceGraphNode, 'connectionCount'> {
   const meta = KIND_META[node.type];
+
+  // Generate deterministic initial position based on node id hash
+  // This prevents "Cannot read properties of undefined (reading 'x')" in DragControls
+  const hash = node.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  const spread = 100;
 
   return {
     id: node.id,
@@ -86,6 +92,10 @@ function transformNode(node: GraphNode): Omit<ForceGraphNode, 'connectionCount'>
     trait: meta?.trait || 'invariant',
     description: node.description,
     val: getNodeSize(meta?.layer),
+    // Initialize positions to prevent DragControls crash
+    x: (hash % spread) - spread / 2,
+    y: ((hash * 7) % spread) - spread / 2,
+    z: ((hash * 13) % spread) - spread / 2,
   };
 }
 

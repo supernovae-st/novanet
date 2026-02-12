@@ -7,6 +7,7 @@
  * - getRelationIcon: Get icon for relation type
  * - getNodeIntersection: Calculate edge intersection with node bounds
  * - generateCurvedPath: Generate curved SVG path between two points
+ * - getRandomDelay: Generate deterministic random delay based on edge ID
  */
 
 /**
@@ -314,4 +315,34 @@ export function getPathMidpoint(
     x: mt * mt * x1 + 2 * mt * t * cx + t * t * x2,
     y: mt * mt * y1 + 2 * mt * t * cy + t * t * y2,
   };
+}
+
+// =============================================================================
+// Animation Timing Utilities (v11.6.3)
+// =============================================================================
+
+/**
+ * Generate a deterministic random delay based on edge ID.
+ *
+ * Uses simple string hashing to produce consistent delays for the same edge,
+ * preventing synchronized animation starts across all edges.
+ *
+ * @param edgeId - Unique edge identifier
+ * @param maxDelay - Maximum delay in seconds (default: 5)
+ * @returns Delay in seconds (0 to maxDelay)
+ *
+ * @example
+ * ```tsx
+ * const delay = getRandomDelay(edgeId, 10); // 0-10s delay
+ * <animateMotion begin={`${delay}s`} ... />
+ * ```
+ */
+export function getRandomDelay(edgeId: string, maxDelay: number = 5): number {
+  let hash = 0;
+  for (let i = 0; i < edgeId.length; i++) {
+    const char = edgeId.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  return Math.abs(hash % 1000) / 1000 * maxDelay;
 }

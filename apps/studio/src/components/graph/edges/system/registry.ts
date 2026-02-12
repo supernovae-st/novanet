@@ -24,7 +24,14 @@ import {
   GLOW_CONFIG,
   getDuration,
 } from './constants';
-import { getArcFamily, getArcFamilyPalette, getArcFamilyEffect, type ArcFamily } from './arcFamilyPalettes';
+// Arc family utilities (v11.7.0 - unified with @/design/colors/palette)
+// Uses arcFamilyPalettes wrapper for backwards compatibility (takes relation type string)
+import {
+  getArcFamily,
+  getArcFamilyPalette,
+  getArcFamilyEffect,
+  type ArcFamily,
+} from './arcFamilyPalettes';
 
 // =============================================================================
 // Relation to Category Mapping

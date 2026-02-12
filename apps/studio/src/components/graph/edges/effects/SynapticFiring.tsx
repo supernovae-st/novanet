@@ -17,12 +17,14 @@
 
 import { memo, useMemo } from 'react';
 import type { EffectTier } from '../EdgeVisibilityManager';
+import { getRandomDelay } from '../EdgeUtils';
 
 interface SynapticFiringProps {
   edgePath: string;
   colors: { primary: string; secondary: string; glow: string };
   state: 'default' | 'highlighted' | 'selected' | 'muted';
   effectTier: EffectTier;
+  edgeId: string;
 }
 
 /**
@@ -39,6 +41,7 @@ export const SynapticFiring = memo(function SynapticFiring({
   colors,
   state,
   effectTier,
+  edgeId,
 }: SynapticFiringProps) {
   const isHighlighted = state === 'highlighted' || state === 'selected';
 
@@ -47,14 +50,17 @@ export const SynapticFiring = memo(function SynapticFiring({
   const sparkCount = effectTier === 'ultra' ? 5 : effectTier === 'medium' ? 2 : 4;
   const showResidualGlow = effectTier !== 'medium';
 
+  // Random delay to desynchronize animations across edges
+  const baseDelay = getRandomDelay(edgeId, 5);
+
   // Firing interval - random-ish feel via prime numbers
   // Each pulse fires at different intervals to create organic timing
   const firingIntervals = useMemo(() => {
     return Array.from({ length: pulseCount }, (_, i) => {
       // Staggered intervals: 2.7s, 3.3s, 4.1s (prime-ish for organic feel)
-      return 2.7 + i * 0.7 + (i % 2) * 0.4;
+      return baseDelay + 2.7 + i * 0.7 + (i % 2) * 0.4;
     });
-  }, [pulseCount]);
+  }, [pulseCount, baseDelay]);
 
   // Total cycle time (longest interval + pulse travel + residual)
   const cycleDuration = Math.max(...firingIntervals) + 1.5;

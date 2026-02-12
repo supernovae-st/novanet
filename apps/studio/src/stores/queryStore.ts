@@ -7,8 +7,11 @@
 import { create } from 'zustand';
 import type { GraphNode, GraphEdge } from '@/types';
 import { useGraphStore } from './graphStore';
+import { useSchemaStore } from './schemaStore';
+import { useFilterStore } from './filterStore';
 import { DEFAULT_QUERY_LIMIT, EXPAND_QUERY_LIMIT, MIN_EXECUTION_ANIMATION_MS } from '@/config/constants';
 import { postJSON, getErrorMessage } from '@/lib/fetchClient';
+import { extractLimit } from '@/lib/cypher/injectFilters';
 
 export type ResultViewMode = 'graph' | 'table' | 'raw';
 
@@ -78,7 +81,26 @@ export const useQueryStore = create<QueryState>((set) => ({
     const abortController = new AbortController();
     currentAbortController = abortController;
 
-    set({ currentQuery: query, isExecuting: true, error: null });
+    // QUERY-FIRST: Substitute params into query so what's displayed is exactly what runs
+    // This makes the query copy-pasteable to Neo4j Browser
+    let finalQuery = query;
+    if (params) {
+      for (const [key, value] of Object.entries(params)) {
+        const placeholder = `$${key}`;
+        // Handle string values with quotes, numbers/booleans without
+        const replacement = typeof value === 'string' ? `"${value}"` : String(value);
+        finalQuery = finalQuery.replace(new RegExp(`\\$${key}\\b`, 'g'), replacement);
+      }
+    }
+
+    set({ currentQuery: finalQuery, isExecuting: true, error: null });
+
+    // v12.1: Query-First - sync LIMIT from query to filterStore.displayLimit
+    // This keeps the UI filter selector in sync with the actual query
+    const queryLimit = extractLimit(finalQuery);
+    if (queryLimit !== null) {
+      useFilterStore.getState().setDisplayLimit(queryLimit);
+    }
 
     try {
       interface QueryResponse {
@@ -90,10 +112,11 @@ export const useQueryStore = create<QueryState>((set) => ({
 
       // Run query + minimum animation delay in parallel
       // so the matrix effect is always visible
+      // QUERY-FIRST: Send finalQuery (params already substituted) for consistency
       const [data] = await Promise.all([
         postJSON<QueryResponse>(
           '/api/graph/query',
-          { cypher: query, params },
+          { cypher: finalQuery },
           { signal: abortController.signal }
         ),
         new Promise((r) => setTimeout(r, MIN_EXECUTION_ANIMATION_MS)),
@@ -124,6 +147,17 @@ export const useQueryStore = create<QueryState>((set) => ({
 
       // Also update graphStore so the graph visualization updates
       useGraphStore.getState().setGraphData({ nodes, edges });
+
+      // Update schemaStore with result counts for filter chip states
+      const nodeTypeCounts: Record<string, number> = {};
+      const relTypeCounts: Record<string, number> = {};
+      for (const node of nodes) {
+        nodeTypeCounts[node.type] = (nodeTypeCounts[node.type] || 0) + 1;
+      }
+      for (const edge of edges) {
+        relTypeCounts[edge.type] = (relTypeCounts[edge.type] || 0) + 1;
+      }
+      useSchemaStore.getState().updateCounts(nodeTypeCounts, relTypeCounts);
 
       // Return result for caller to capture (avoids race condition)
       return result;

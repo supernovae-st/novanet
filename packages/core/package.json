@@ -43,9 +43,11 @@
     "lint": "eslint src --ext .ts"
   },
   "dependencies": {
+    "js-yaml": "^4.1.0",
     "zod": "^3.24.0"
   },
   "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
     "@eslint/js": "catalog:",
     "@types/node": "catalog:",
     "@typescript-eslint/eslint-plugin": "catalog:",

@@ -21,8 +21,8 @@ export const DEFAULT_QUERY_LIMIT = 25;
 /** Limit for node expansion queries (double-click) */
 export const EXPAND_QUERY_LIMIT = 50;
 
-/** Display limit options for graph visualization */
-export const DISPLAY_LIMIT_OPTIONS = [50, 100, 250, 500, 1000] as const;
+/** Display limit options for graph visualization (v12.1: added 25 for Query-First sync) */
+export const DISPLAY_LIMIT_OPTIONS = [25, 50, 100, 200, 250, 500, 1000] as const;
 
 /** Default display limit for graph visualization */
 export const DEFAULT_DISPLAY_LIMIT = 250;

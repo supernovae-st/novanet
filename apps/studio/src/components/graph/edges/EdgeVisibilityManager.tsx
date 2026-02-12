@@ -46,24 +46,31 @@ export type EffectTier = 'ultra' | 'high' | 'medium' | 'low' | 'minimal';
 /**
  * Performance thresholds for progressive effect density.
  *
- * - ULTRA:   0-30 arcs   → All effects + extra trail segments
- * - HIGH:    30-100 arcs → Full atom effects (current)
- * - MEDIUM:  100-250 arcs → Fewer particles, shorter trails
- * - LOW:     250-500 arcs → 2-element simplified
- * - MINIMAL: 500+ arcs   → Static glow only, no animation
+ * v11.6.4 PERFORMANCE OPTIMIZATION:
+ * - ULTRA:   0-15 arcs   → Full signature effects (PowerConduit, DNAHelix, etc.)
+ * - HIGH:    15-40 arcs  → Full signature effects
+ * - MEDIUM:  40-80 arcs  → Simplified 2-element effect (no signature)
+ * - LOW:     80-150 arcs → Simplified 2-element effect
+ * - MINIMAL: 150+ arcs   → No animation at all
+ *
+ * Key changes from v11.6.3:
+ * - MEDIUM tier now uses SimplifiedEdgeEffect (was signature effects)
+ * - SimplifiedEdgeEffect reduced to 2 elements (was 7)
+ * - Selection effect simplified for large graphs (no blur)
+ * - Thresholds raised to keep animations for medium-sized graphs
  */
 export const PERF_THRESHOLDS = {
-  /** Below this: ULTRA tier (rich effects) */
-  ULTRA_MAX: 30,
-  /** Below this: HIGH tier (full effects) */
-  HIGH_MAX: 100,
-  /** Below this: MEDIUM tier (reduced effects) */
-  MEDIUM_MAX: 250,
-  /** Below this: LOW tier (simplified 2-element) */
-  LOW_MAX: 500,
+  /** Below this: ULTRA tier (full signature effects) */
+  ULTRA_MAX: 15,
+  /** Below this: HIGH tier (full signature effects) */
+  HIGH_MAX: 40,
+  /** Below this: MEDIUM tier (simplified effects) */
+  MEDIUM_MAX: 80,
+  /** Below this: LOW tier (simplified effects) */
+  LOW_MAX: 150,
   // Above LOW_MAX: MINIMAL tier (no animations)
   /** Hub node threshold: nodes with more visible connections force LOW tier */
-  HUB_NODE_THRESHOLD: 12,
+  HUB_NODE_THRESHOLD: 10,
 } as const;
 
 /**

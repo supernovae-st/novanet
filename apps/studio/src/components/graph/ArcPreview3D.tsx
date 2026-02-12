@@ -20,7 +20,7 @@ import {
   type CompositeNodeMeshes,
 } from '@/lib/graph3d/nodeComposite';
 import { getLayerColor, getRealmColor } from '@/lib/graph3d/colorPalette';
-import { getArcParticleConfig, detectArcFamily } from '@/lib/graph3d/arcParticles';
+import { getArcParticleConfig } from '@/lib/graph3d/arcParticles';
 import type { Layer, Realm, Trait } from '@novanet/core/types';
 
 export interface ArcPreview3DProps {

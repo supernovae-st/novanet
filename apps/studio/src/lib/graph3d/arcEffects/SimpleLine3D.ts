@@ -40,6 +40,10 @@ export class SimpleLine3D implements ArcEffect3D {
   }
 
   updatePositions(source: THREE.Vector3, target: THREE.Vector3): void {
+    // Defensive: skip if positions are invalid
+    if (!source || !target) return;
+    if (typeof source.x !== 'number' || typeof target.x !== 'number') return;
+
     const positions = this.geometry.attributes.position.array as Float32Array;
     positions[0] = source.x;
     positions[1] = source.y;

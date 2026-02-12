@@ -19,18 +19,17 @@ import {
   Check,
   Search,
   X,
+  Database,
+  Boxes,
   Layers,
-  Sparkles,
-  Brain,
-  FolderOpen,
-  TrendingUp,
   Eye,
   type LucideIcon,
 } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
 import { useViewStore } from '@/stores/viewStore';
-import { useUIStore } from '@/stores/uiStore';
+import { useUIStore, selectSelectedNodeId } from '@/stores/uiStore';
+import { useGraphStore } from '@/stores/graphStore';
 import { pickerClasses, iconSizes, gapTokens, getCardStagger } from '@/design/tokens';
 import { Kbd } from '@/components/ui';
 import {
@@ -47,13 +46,11 @@ import type { ViewRegistryEntry } from '@novanet/core/filters';
 // Constants
 const GRID_COLUMNS = 3;
 
-// Category colors and icons
+// Category colors and icons (v11.6.1 unified view system)
 const CATEGORY_CONFIG: Record<string, { color: string; label: string; icon: LucideIcon }> = {
-  overview: { color: '#a78bfa', label: 'Overview', icon: Layers },
-  generation: { color: '#34d399', label: 'Generation', icon: Sparkles },
-  knowledge: { color: '#60a5fa', label: 'Knowledge', icon: Brain },
-  project: { color: '#fbbf24', label: 'Project', icon: FolderOpen },
-  mining: { color: '#f472b6', label: 'Mining', icon: TrendingUp },
+  meta: { color: '#8b5cf6', label: 'Meta', icon: Database },
+  data: { color: '#6366f1', label: 'Data', icon: Boxes },
+  overlay: { color: '#f97316', label: 'Overlay', icon: Layers },
   contextual: { color: '#94a3b8', label: 'Contextual', icon: Eye },
 };
 
@@ -362,15 +359,37 @@ export const ViewPicker = memo(function ViewPicker({ className }: ViewPickerProp
     }))
   );
 
+  // Get selected node for contextual view filtering
+  const selectedNodeId = useUIStore(selectSelectedNodeId);
+  const getNodeById = useGraphStore((s) => s.getNodeById);
+  const selectedNode = selectedNodeId ? getNodeById(selectedNodeId) : null;
+
   // Load registry on mount
   useEffect(() => {
     loadRegistry();
   }, [loadRegistry]);
 
-  // Flatten categories - v12.0: all views available (no mode filtering)
+  // Flatten categories and filter by selected node type
+  // v11.6.1: Show all non-contextual views + contextual views applicable to selected node
   const views = useMemo(() => {
-    return categories.flatMap((cat) => cat.views);
-  }, [categories]);
+    const allViews = categories.flatMap((cat) => cat.views);
+    const selectedNodeType = selectedNode?.type;
+
+    return allViews.filter((view) => {
+      // Non-contextual views are always visible
+      if (!view.contextual) return true;
+
+      // Contextual views: show if applicable to selected node type
+      if (!selectedNodeType) return true; // No selection: show all contextual
+
+      // If applicable_types is empty or undefined, it applies to all types
+      const applicableTypes = view.applicable_types ?? [];
+      if (applicableTypes.length === 0) return true;
+
+      // Check if selected node type is in applicable_types
+      return applicableTypes.includes(selectedNodeType);
+    });
+  }, [categories, selectedNode]);
   const activeView = getActiveView();
 
   const handleOpen = useCallback(() => {

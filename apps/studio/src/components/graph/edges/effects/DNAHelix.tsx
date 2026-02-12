@@ -17,12 +17,14 @@
 
 import { memo } from 'react';
 import type { EffectTier } from '../EdgeVisibilityManager';
+import { getRandomDelay } from '../EdgeUtils';
 
 interface DNAHelixProps {
   edgePath: string;
   colors: { primary: string; secondary: string; glow: string };
   state: 'default' | 'highlighted' | 'selected' | 'muted';
   effectTier: EffectTier;
+  edgeId: string;
 }
 
 /**
@@ -39,6 +41,7 @@ export const DNAHelix = memo(function DNAHelix({
   colors,
   state,
   effectTier,
+  edgeId,
 }: DNAHelixProps) {
   const isHighlighted = state === 'highlighted' || state === 'selected';
 
@@ -53,11 +56,14 @@ export const DNAHelix = memo(function DNAHelix({
   // Oscillation period for the helix rotation feel
   const oscillationPeriod = 2.5;
 
+  // Random delay to desynchronize animations across edges
+  const baseDelay = getRandomDelay(edgeId, baseDuration);
+
   return (
     <g className="effect-dna-helix">
       {/* === STRAND 1 (Primary wave - phase 0) === */}
       {Array.from({ length: atomsPerStrand }, (_, i) => {
-        const atomDelay = (i * baseDuration) / atomsPerStrand;
+        const atomDelay = baseDelay + (i * baseDuration) / atomsPerStrand;
         // 3D illusion: atoms near the "front" are brighter
         const depthPhase = (i / atomsPerStrand) * Math.PI * 2;
         const brightness = 0.7 + 0.3 * Math.cos(depthPhase);
@@ -133,7 +139,7 @@ export const DNAHelix = memo(function DNAHelix({
 
       {/* === STRAND 2 (Secondary wave - phase 180) === */}
       {Array.from({ length: atomsPerStrand }, (_, i) => {
-        const atomDelay = (i * baseDuration) / atomsPerStrand;
+        const atomDelay = baseDelay + (i * baseDuration) / atomsPerStrand;
         // Opposite phase for crossing effect
         const depthPhase = ((i / atomsPerStrand) * Math.PI * 2) + Math.PI;
         const brightness = 0.5 + 0.3 * Math.cos(depthPhase);
@@ -192,7 +198,7 @@ export const DNAHelix = memo(function DNAHelix({
 
       {/* === BASE PAIR CONNECTORS (white lines at crossings) === */}
       {Array.from({ length: connectorCount }, (_, i) => {
-        const connectorDelay = (i * baseDuration) / connectorCount + baseDuration * 0.1;
+        const connectorDelay = baseDelay + (i * baseDuration) / connectorCount + baseDuration * 0.1;
 
         return (
           <g key={`connector-${i}`}>
@@ -262,7 +268,7 @@ export const DNAHelix = memo(function DNAHelix({
 
       {/* === GENE MARKERS (bright dots at intersections) === */}
       {Array.from({ length: geneMarkerCount }, (_, i) => {
-        const markerDelay = (i * baseDuration) / geneMarkerCount + baseDuration * 0.25;
+        const markerDelay = baseDelay + (i * baseDuration) / geneMarkerCount + baseDuration * 0.25;
 
         return (
           <circle

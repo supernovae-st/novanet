@@ -18,6 +18,8 @@ import { cn } from '@/lib/utils';
 import { pickerClasses, iconSizes, gapTokens, getCardStagger } from '@/design/tokens';
 import { Kbd } from '@/components/ui';
 import { useFilterStore } from '@/stores/filterStore';
+import { useQueryStore } from '@/stores/queryStore';
+import { injectFilters } from '@/lib/cypher/injectFilters';
 import {
   useBodyScrollLock,
   useOutsideClick,
@@ -114,12 +116,17 @@ export const LocalePicker = memo(function LocalePicker({
   isOpen,
   onClose,
 }: LocalePickerProps) {
-  const { selectedLocale, setSelectedLocale } = useFilterStore(
+  const { selectedLocale, setSelectedLocale, displayLimit } = useFilterStore(
     useShallow((state) => ({
       selectedLocale: state.selectedLocale,
       setSelectedLocale: state.setSelectedLocale,
+      displayLimit: state.displayLimit,
     }))
   );
+
+  // v12.1: Query-First - re-execute current query when locale changes
+  const currentQuery = useQueryStore((state) => state.currentQuery);
+  const executeQuery = useQueryStore((state) => state.executeQuery);
 
   const [searchInput, setSearchInput] = useState('');
   const search = useDeferredValue(searchInput);
@@ -170,12 +177,21 @@ export const LocalePicker = memo(function LocalePicker({
     });
   }, [search, localeInfoCache]);
 
+  // v12.1: Query-First - re-execute current query with new locale
   const handleSelect = useCallback(
     (code: string | null) => {
       setSelectedLocale(code);
+      // Re-execute current query with locale filter applied
+      if (currentQuery) {
+        const modifiedQuery = injectFilters(currentQuery, {
+          displayLimit,
+          localeKey: code || undefined,
+        });
+        executeQuery(modifiedQuery);
+      }
       delayedClose();
     },
-    [setSelectedLocale, delayedClose]
+    [setSelectedLocale, delayedClose, currentQuery, executeQuery, displayLimit]
   );
 
   // Grid navigation hook
@@ -220,13 +236,13 @@ export const LocalePicker = memo(function LocalePicker({
         aria-modal="true"
         aria-labelledby="locale-picker-title"
         onKeyDown={handleKeyDown}
-        className={cn(pickerClasses.shell, pickerClasses.sizeDefault, pickerClasses.maxHeight)}
+        className={cn(pickerClasses.shell, pickerClasses.sizeLarge, 'h-[80vh]')}
       >
         {/* Header */}
         <div className={pickerClasses.header}>
           <div className={cn('flex items-center', gapTokens.spacious)}>
-            <div className={cn(pickerClasses.headerIconBox, 'bg-white/[0.04]')}>
-              <Globe className={cn(iconSizes.lg, 'text-white/70')} />
+            <div className={cn(pickerClasses.headerIconBox, 'bg-teal-500/20 border-teal-500/30')}>
+              <Globe className={cn(iconSizes.xl, 'text-teal-400')} />
             </div>
             <div>
               <h2 id="locale-picker-title" className={pickerClasses.headerTitle}>
@@ -275,12 +291,12 @@ export const LocalePicker = memo(function LocalePicker({
         >
           <div
             ref={gridRef}
-            className={cn('grid grid-cols-4', gapTokens.spacious)}
+            className={cn('grid grid-cols-4', gapTokens.xl)}
           >
-            {/* All Languages card */}
+            {/* World card (all locales) */}
             <LocaleCard
               code=""
-              info={{ name: 'All Languages', flag: '🌐' }}
+              info={{ name: 'World', flag: '🌍' }}
               isSelected={selectedLocale === null}
               isFocused={focusedIndex === 0}
               onSelect={() => handleSelect(null)}

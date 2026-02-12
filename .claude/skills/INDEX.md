@@ -2,11 +2,11 @@
 
 Catalog of all Claude Code skills for the NovaNet monorepo.
 
-**Version**: v11.5.0 | **Total Skills**: 16 (6 core + 10 studio-specific)
+**Version**: v11.7.0 | **Total Skills**: 17 (7 core + 10 studio-specific)
 
 ---
 
-## Core Skills (6)
+## Core Skills (7)
 
 Located in `.claude/skills/`
 
@@ -15,6 +15,7 @@ Located in `.claude/skills/`
 | **novanet-architecture** | `/novanet-arch` | ASCII architecture diagrams (meta-graph, pipeline, Rust, Studio) |
 | **novanet-sync** | `/novanet-sync` | Schema validation/regeneration (YAML → artifacts) |
 | **novanet-tui** | `/novanet-tui` | Galaxy-themed terminal UI keybindings and features |
+| **novanet-mcp** | `/novanet-mcp` | MCP Server operations (RLM-on-KG, agent integration) |
 | **security-audit** | `/security-audit` | Comprehensive security audit (cargo-deny, pnpm audit) |
 | **codebase-audit** | `/codebase-audit` | Parallel codebase health analysis (Ralph Wiggum Loop) |
 | **token-audit** | — | Design system token adoption verification |
@@ -47,6 +48,7 @@ Located in `apps/studio/.claude/skills/`
 | architecture, overview, structure, meta-graph, codebase | novanet-architecture |
 | sync, validate, generate, schema, YAML | novanet-sync |
 | tui, terminal, keybindings, galaxy | novanet-tui |
+| mcp, agent, RLM, knowledge graph, AI integration | novanet-mcp |
 | security, audit, vulnerability, cargo-deny | security-audit |
 | codebase, health, dead code, cleanup | codebase-audit |
 | token, design system, gap, spacing | token-audit |
@@ -65,6 +67,9 @@ Invoke directly with slash command:
 /novanet-sync              # Check sync status
 /novanet-sync generate     # Regenerate artifacts
 /novanet-tui               # Launch TUI
+/novanet-mcp               # Check MCP server status
+/novanet-mcp test          # Run MCP server tests
+/novanet-mcp debug         # Start with debug logging
 /security-audit all        # Full security audit
 /codebase-audit            # Full 10-agent audit
 /codebase-audit quick      # Essential checks only

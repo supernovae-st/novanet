@@ -1,9 +1,11 @@
 'use client';
 
-import { memo } from 'react';
+import { memo, useCallback } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useFilterStore } from '@/stores/filterStore';
+import { useQueryStore } from '@/stores/queryStore';
+import { injectFilters } from '@/lib/cypher/injectFilters';
 import { DISPLAY_LIMIT_OPTIONS } from '@/config/constants';
 import { iconSizes } from '@/design/tokens';
 
@@ -13,19 +15,31 @@ interface DisplayLimitSelectorProps {
 
 /**
  * Compact dropdown to select the display limit for graph visualization.
- * Shows current limit and allows changing it to prevent performance issues.
+ * v12.1: Query-First - changing limit re-executes current view with new LIMIT
  */
 export const DisplayLimitSelector = memo(function DisplayLimitSelector({
   className,
 }: DisplayLimitSelectorProps) {
   const displayLimit = useFilterStore((state) => state.displayLimit);
   const setDisplayLimit = useFilterStore((state) => state.setDisplayLimit);
+  const currentQuery = useQueryStore((state) => state.currentQuery);
+  const executeQuery = useQueryStore((state) => state.executeQuery);
+
+  // v12.1: Query-First - re-execute current query with new limit
+  const handleLimitChange = useCallback((newLimit: number) => {
+    setDisplayLimit(newLimit);
+    // Re-execute current query with new limit injected
+    if (currentQuery) {
+      const modifiedQuery = injectFilters(currentQuery, { displayLimit: newLimit });
+      executeQuery(modifiedQuery);
+    }
+  }, [setDisplayLimit, currentQuery, executeQuery]);
 
   return (
     <div className={cn('relative inline-flex items-center', className)}>
       <select
         value={displayLimit}
-        onChange={(e) => setDisplayLimit(Number(e.target.value))}
+        onChange={(e) => handleLimitChange(Number(e.target.value))}
         className={cn(
           'appearance-none bg-transparent text-white/60 hover:text-white/80',
           'text-xs font-mono cursor-pointer',

@@ -16,12 +16,14 @@
 
 import { memo } from 'react';
 import type { EffectTier } from '../EdgeVisibilityManager';
+import { getRandomDelay } from '../EdgeUtils';
 
 interface PowerConduitProps {
   edgePath: string;
   colors: { primary: string; secondary: string; glow: string };
   state: 'default' | 'highlighted' | 'selected' | 'muted';
   effectTier: EffectTier;
+  edgeId: string;
 }
 
 /**
@@ -38,6 +40,7 @@ export const PowerConduit = memo(function PowerConduit({
   colors,
   state,
   effectTier,
+  edgeId,
 }: PowerConduitProps) {
   const isHighlighted = state === 'highlighted' || state === 'selected';
 
@@ -51,6 +54,9 @@ export const PowerConduit = memo(function PowerConduit({
 
   // Orb spacing (evenly distributed across the path)
   const orbSpacing = baseDuration / orbCount;
+
+  // Random delay to desynchronize animations across edges
+  const baseDelay = getRandomDelay(edgeId, baseDuration);
 
   return (
     <g className="effect-power-conduit">
@@ -115,7 +121,7 @@ export const PowerConduit = memo(function PowerConduit({
 
       {/* === ENERGY ORB CONVOY === */}
       {Array.from({ length: orbCount }, (_, i) => {
-        const orbDelay = i * orbSpacing;
+        const orbDelay = baseDelay + i * orbSpacing;
         const orbRadius = orbSize * (1 - i * 0.08); // Slight size variation
 
         return (
@@ -205,6 +211,7 @@ export const PowerConduit = memo(function PowerConduit({
 
             {/* === TRAIL SEGMENTS behind each orb === */}
             {Array.from({ length: trailCount }, (_, t) => {
+              // Trail follows slightly behind the orb
               const trailDelay = orbDelay + (t + 1) * 0.2;
               const trailSize = orbRadius * (0.7 - t * 0.15);
               const trailOpacity = 0.6 - t * 0.2;

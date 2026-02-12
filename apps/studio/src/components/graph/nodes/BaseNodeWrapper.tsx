@@ -16,12 +16,14 @@ import { cn } from '@/lib/utils';
 import { glassClasses } from '@/design/tokens';
 import { GlowingBorder } from '@/components/ui/GlowingBorder';
 import { SelectionHalo } from '../SelectionHalo';
+import { EdgeConnectionHalo, type EdgeConnectionRole } from '../EdgeConnectionHalo';
 import {
   useUIStore,
   selectHoveredNodeId,
   selectHoveredEdgeId,
   selectSelectedNodeId,
   selectHoveredConnectedNodeIds,
+  selectSelectedEdgeData,
 } from '@/stores/uiStore';
 import type { NodeType } from '@/types';
 
@@ -85,6 +87,15 @@ export const BaseNodeWrapper = memo(function BaseNodeWrapper({
   const hoveredEdgeId = useUIStore(selectHoveredEdgeId);
   const selectedNodeId = useUIStore(selectSelectedNodeId);
   const hoveredConnectedNodeIds = useUIStore(selectHoveredConnectedNodeIds);
+  const selectedEdgeData = useUIStore(selectSelectedEdgeData);
+
+  // Compute edge connection role for EdgeConnectionHalo
+  const edgeConnectionRole: EdgeConnectionRole =
+    selectedEdgeData?.source === data.id
+      ? 'source'
+      : selectedEdgeData?.target === data.id
+        ? 'target'
+        : null;
 
   // Focus mode dimming (when a node is selected, non-connected nodes dim to 15%)
   // Still comes from data prop as focus mode works correctly
@@ -107,7 +118,7 @@ export const BaseNodeWrapper = memo(function BaseNodeWrapper({
   return (
     <div
       className={cn(
-        'relative transition duration-200',
+        'relative transition duration-200 overflow-visible',
         effectiveDimmed && 'scale-95 pointer-events-none',
         isDimmed && 'grayscale'
       )}
@@ -115,6 +126,13 @@ export const BaseNodeWrapper = memo(function BaseNodeWrapper({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      {/* Edge Connection Halo - OUTSIDE GlowingBorder to avoid overflow clipping */}
+      <EdgeConnectionHalo
+        role={edgeConnectionRole}
+        color={color}
+        className={shapeClass}
+      />
+
       <GlowingBorder
         color={color}
         colorSecondary={colorSecondary || color}
