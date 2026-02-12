@@ -4,9 +4,9 @@
 //! - **Kind section**: name, realm, layer, trait, description, icon, llm_context
 //! - **Instance section**: standard_properties, properties
 //!
-//! This enables the TUI to show only the relevant section based on navigation mode:
-//! - [1]Meta mode → Kind section (schema definition)
-//! - [2]Data mode → Instance section (instance structure)
+//! This enables the TUI to show only the relevant section based on context:
+//! - v11.7 Graph mode: Realm/Layer/Kind selected → Kind section (schema)
+//! - v11.7 Graph mode: Instance selected → Instance section (data)
 
 use std::ops::Range;
 
@@ -89,12 +89,12 @@ impl YamlSections {
         })
     }
 
-    /// Get the Kind section content (for Meta mode).
+    /// Get the Kind section content (shown when Realm/Layer/Kind selected).
     pub fn kind_content(&self) -> &str {
         self.get_section_content(&self.kind_lines)
     }
 
-    /// Get the Instance section content (for Data mode).
+    /// Get the Instance section content (shown when Instance selected).
     pub fn instance_content(&self) -> &str {
         self.get_section_content(&self.instance_lines)
     }

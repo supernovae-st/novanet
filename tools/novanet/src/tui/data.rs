@@ -2811,7 +2811,7 @@ impl TaxonomyTree {
             llm_context: String::new(),
         };
 
-        let global_realm = RealmInfo {
+        let shared_realm = RealmInfo {
             key: "shared".to_string(),
             display_name: "Shared".to_string(),
             color: "#2aa198".to_string(),
@@ -2820,7 +2820,7 @@ impl TaxonomyTree {
             llm_context: String::new(),
         };
 
-        let tenant_realm = RealmInfo {
+        let org_realm = RealmInfo {
             key: "org".to_string(),
             display_name: "Org".to_string(),
             color: "#d33682".to_string(),
@@ -2829,7 +2829,7 @@ impl TaxonomyTree {
             llm_context: String::new(),
         };
 
-        let realms = vec![global_realm, tenant_realm];
+        let realms = vec![shared_realm, org_realm];
 
         // Build kind_index for O(1) lookups
         let mut kind_index = FxHashMap::default();

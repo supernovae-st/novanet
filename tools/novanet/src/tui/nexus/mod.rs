@@ -43,6 +43,7 @@ use ratatui::widgets::{Block, Borders, Paragraph};
 
 use crate::tui::app::App;
 use crate::tui::clipboard;
+use crate::tui::ui::COLOR_UNFOCUSED_BORDER;
 
 // Re-export TraitStats and CodeExample for external use
 pub use traits::{CodeExample, TraitStats, trait_code_examples};
@@ -1348,7 +1349,7 @@ fn render_tab_bar(f: &mut Frame, area: Rect, app: &App) {
 
         // Section separator (except for last section)
         if i < sections.len() - 1 {
-            spans.push(Span::styled(" │ ", Style::default().fg(Color::Rgb(60, 60, 70))));
+            spans.push(Span::styled(" │ ", Style::default().fg(COLOR_UNFOCUSED_BORDER)));
         }
     }
 
@@ -1392,7 +1393,7 @@ fn render_breadcrumb(f: &mut Frame, area: Rect, app: &App) {
         if !is_last {
             spans.push(Span::styled(
                 " > ",
-                Style::default().fg(Color::Rgb(60, 60, 70)),
+                Style::default().fg(COLOR_UNFOCUSED_BORDER),
             ));
         }
     }
@@ -2072,7 +2073,7 @@ mod tests {
     }
 
     #[test]
-    fn test_layers_global_max_cursor() {
+    fn test_layers_shared_max_cursor() {
         let mut state = NexusState::new();
         state.tab = NexusTab::Layers;
         state.layer_realm = 0; // Shared (4 layers v11.5, max index 3)
@@ -2085,7 +2086,7 @@ mod tests {
     }
 
     #[test]
-    fn test_layers_tenant_max_cursor() {
+    fn test_layers_org_max_cursor() {
         let mut state = NexusState::new();
         state.tab = NexusTab::Layers;
         state.layer_realm = 1; // Org (6 layers v11.5, max index 5)
@@ -2327,7 +2328,7 @@ mod tests {
     }
 
     #[test]
-    fn test_breadcrumb_layers_tenant() {
+    fn test_breadcrumb_layers_org() {
         let mut state = NexusState::new();
         state.tab = NexusTab::Layers;
         state.layer_realm = 1;
@@ -2455,7 +2456,7 @@ mod tests {
     }
 
     #[test]
-    fn test_get_current_yank_text_layers_global() {
+    fn test_get_current_yank_text_layers_shared() {
         let mut state = NexusState::new();
         state.tab = NexusTab::Layers;
         state.layer_realm = 0; // Shared
@@ -2475,7 +2476,7 @@ mod tests {
     }
 
     #[test]
-    fn test_get_current_yank_text_layers_tenant() {
+    fn test_get_current_yank_text_layers_org() {
         let mut state = NexusState::new();
         state.tab = NexusTab::Layers;
         state.layer_realm = 1; // Org

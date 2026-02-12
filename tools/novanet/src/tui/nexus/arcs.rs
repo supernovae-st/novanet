@@ -19,6 +19,7 @@ use ratatui::widgets::{Block, Borders, Paragraph, Wrap};
 use crate::tui::app::App;
 use crate::tui::data::TaxonomyTree;
 use crate::tui::theme::Theme;
+use crate::tui::ui::COLOR_UNFOCUSED_BORDER;
 use crate::tui::unicode::truncate_to_width;
 
 // =============================================================================
@@ -180,7 +181,7 @@ fn render_arc_families(f: &mut Frame, app: &App, area: Rect) {
                 .add_modifier(Modifier::BOLD),
         ))
         .borders(Borders::ALL)
-        .border_style(Style::default().fg(Color::Rgb(60, 60, 70)));
+        .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER));
 
     let inner = block.inner(area);
     f.render_widget(block, area);
@@ -248,7 +249,7 @@ fn render_family_card(
         )
     } else {
         (
-            Style::default().fg(Color::Rgb(60, 60, 70)),
+            Style::default().fg(COLOR_UNFOCUSED_BORDER),
             Style::default().fg(family_color),
             Style::default().fg(Color::Rgb(150, 150, 160)),
         )
@@ -298,7 +299,7 @@ fn render_arc_scope(f: &mut Frame, app: &App, area: Rect) {
                 .add_modifier(Modifier::BOLD),
         ))
         .borders(Borders::ALL)
-        .border_style(Style::default().fg(Color::Rgb(60, 60, 70)));
+        .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER));
 
     let inner = block.inner(area);
     f.render_widget(block, area);

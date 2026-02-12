@@ -1,4 +1,4 @@
-# NovaNet Terminology (v11.7)
+# NovaNet Terminology (v11.8)
 
 This file defines the canonical terminology for NovaNet. All code, documentation, and UI must use these terms consistently.
 
@@ -10,7 +10,9 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 |-------|--------|------|
 | **General** | Node | **Arc** |
 | **Instance (data)** | NodeData | ArcData |
-| **Definition (meta)** | NodeKind | ArcKind |
+| **Class (schema)** | NodeClass | ArcClass |
+
+> **v11.8 Change**: "Kind" → "Class", "Meta" eliminated. See ADR-023.
 
 > **CRITICAL**: We use "Arc" (not "Edge" or "Relation") for directed links between nodes.
 > This aligns with graph theory terminology for directed graphs.
@@ -223,6 +225,21 @@ These terms are deprecated and should NOT be used:
 | `query` mode | `graph` + filters | v11.7 unified tree |
 | `atlas` mode | `nexus` | v11.7 renamed |
 | emoji icons | dual format `{ web, terminal }` | v11.7 icon system |
+| **v11.8 Kind→Class + Meta elimination** | | |
+| `NodeKind` | `NodeClass` | v11.8 terminology |
+| `ArcKind` | `ArcClass` | v11.8 terminology |
+| `KindInfo` | `ClassInfo` | v11.8 TUI struct |
+| `KindMeta` | `Classification` | v11.8 (realm/layer/trait axes) |
+| `KIND_META` | `CLASS_TAXONOMY` | v11.8 TypeScript constant |
+| `:Meta:Kind` | `:Schema:Class` | v11.8 Neo4j label |
+| `:Meta:ArcKind` | `:Schema:ArcClass` | v11.8 Neo4j label |
+| `[:FROM_KIND]` | `[:FROM_CLASS]` | v11.8 Neo4j relationship |
+| `[:TO_KIND]` | `[:TO_CLASS]` | v11.8 Neo4j relationship |
+| `[:HAS_KIND]` | `[:HAS_CLASS]` | v11.8 Neo4j relationship |
+| "Meta Node" | "Class" | v11.8 glossary |
+| "Data Node" | "Instance" | v11.8 glossary |
+| "Meta mode" | "Schema view" | v11.8 Studio UI |
+| "Data mode" | "Graph view" | v11.8 Studio UI |
 
 ## Navigation Modes (v11.7)
 
