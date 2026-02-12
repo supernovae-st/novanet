@@ -51,3 +51,4 @@ __pycache__/
 
 # Proptest regressions
 proptest-regressions/
+tools/target/
