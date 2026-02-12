@@ -59,23 +59,29 @@ impl TokenCounter {
     pub fn within_budget(&self, text: &str, budget: usize) -> bool {
         let estimate = self.estimate(text);
 
-        // Fast path: clearly within budget (10% margin)
-        if estimate < budget * 90 / 100 {
+        // Calculate margins properly to avoid integer division issues with small budgets
+        // Use at least 1 token margin to handle small budgets correctly
+        let low_threshold = budget.saturating_sub(budget / 10).max(budget.saturating_sub(1));
+        let high_threshold = budget.saturating_add(budget / 10).max(budget.saturating_add(1));
+
+        // Fast path: clearly within budget (estimate is well below)
+        if estimate < low_threshold {
             return true;
         }
 
-        // Fast path: clearly over budget (10% margin)
-        if estimate > budget * 110 / 100 {
+        // Fast path: clearly over budget (estimate is well above)
+        if estimate > high_threshold {
             return false;
         }
 
-        // Slow path: exact count needed
+        // Slow path: exact count needed for borderline cases
         self.count(text) <= budget
     }
 
     /// Truncate text to fit within token budget
     ///
-    /// Returns the truncated text and actual token count
+    /// Returns the truncated text and actual token count.
+    /// Ensures truncation occurs at valid UTF-8 character boundaries.
     pub fn truncate_to_budget(&self, text: &str, budget: usize) -> (String, usize) {
         let tokens = self.count(text);
 
@@ -83,21 +89,52 @@ impl TokenCounter {
             return (text.to_string(), tokens);
         }
 
+        if budget == 0 {
+            return (String::new(), 0);
+        }
+
         // Binary search for the right truncation point
-        let mut low = 0;
-        let mut high = text.len();
+        // Use character-based iteration to avoid UTF-8 boundary issues
+        let char_indices: Vec<usize> = text.char_indices().map(|(i, _)| i).collect();
+        let char_count = char_indices.len();
+
+        if char_count == 0 {
+            return (String::new(), 0);
+        }
+
+        let mut low = 0usize;
+        let mut high = char_count;
 
         while low < high {
             let mid = (low + high).div_ceil(2);
-            let truncated = &text[..mid];
+            // Get byte index for this character position
+            let byte_idx = if mid >= char_count {
+                text.len()
+            } else {
+                char_indices[mid]
+            };
+            let truncated = &text[..byte_idx];
             if self.count(truncated) <= budget {
                 low = mid;
             } else {
+                if mid == 0 {
+                    break;
+                }
                 high = mid - 1;
             }
         }
 
-        let truncated = &text[..low];
+        // Get final truncation point
+        let final_byte_idx = if low >= char_count {
+            text.len()
+        } else if low == 0 {
+            // Even first character exceeds budget
+            0
+        } else {
+            char_indices[low]
+        };
+
+        let truncated = &text[..final_byte_idx];
         let final_count = self.count(truncated);
         (truncated.to_string(), final_count)
     }
@@ -416,5 +453,230 @@ mod tests {
         let counter = TokenCounter::default();
         let count = counter.count("test");
         assert!(count > 0, "Default counter should work");
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // Expert Agent Findings: Advanced Token Counting Edge Cases
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    #[test]
+    fn test_zwj_emoji_with_skin_tones() {
+        let counter = TokenCounter::new();
+
+        // Family emoji with skin tone modifiers (most complex ZWJ sequence)
+        let family_skin_tones = "👨🏻‍👩🏽‍👧🏾‍👦🏿";
+        let count = counter.count(family_skin_tones);
+        // This is a very complex ZWJ sequence, should have multiple tokens
+        assert!(count > 0, "Family with skin tones: {} tokens", count);
+
+        // Individual skin tone variants
+        let skin_tones = [
+            ("👋🏻", "light skin"),
+            ("👋🏼", "medium-light skin"),
+            ("👋🏽", "medium skin"),
+            ("👋🏾", "medium-dark skin"),
+            ("👋🏿", "dark skin"),
+        ];
+
+        for (emoji, desc) in skin_tones {
+            let count = counter.count(emoji);
+            assert!(count > 0, "{}: {} tokens", desc, count);
+        }
+
+        // Professional emoji with skin tones
+        let professionals = [
+            "👨🏻‍💻", // man technologist light skin
+            "👩🏿‍🔬", // woman scientist dark skin
+            "🧑🏽‍🚀", // person astronaut medium skin
+        ];
+
+        for emoji in professionals {
+            let count = counter.count(emoji);
+            assert!(count > 0, "Professional emoji: {} tokens", count);
+        }
+    }
+
+    #[test]
+    fn test_nfc_nfd_normalization() {
+        let counter = TokenCounter::new();
+
+        // NFC form: precomposed characters
+        let cafe_nfc = "café"; // U+00E9 (é as single codepoint)
+
+        // NFD form: decomposed characters
+        let cafe_nfd = "cafe\u{0301}"; // e + combining acute accent
+
+        let count_nfc = counter.count(cafe_nfc);
+        let count_nfd = counter.count(cafe_nfd);
+
+        // Both should be countable (might differ in token count)
+        assert!(count_nfc > 0, "NFC café: {} tokens", count_nfc);
+        assert!(count_nfd > 0, "NFD café: {} tokens", count_nfd);
+
+        // More normalization examples
+        let normalization_pairs = [
+            ("ñ", "n\u{0303}"),           // ñ vs n + combining tilde
+            ("ü", "u\u{0308}"),           // ü vs u + combining diaeresis
+            ("à", "a\u{0300}"),           // à vs a + combining grave
+            ("ç", "c\u{0327}"),           // ç vs c + combining cedilla
+        ];
+
+        for (nfc, nfd) in normalization_pairs {
+            let count_nfc = counter.count(nfc);
+            let count_nfd = counter.count(nfd);
+            assert!(count_nfc > 0, "NFC '{}': {} tokens", nfc, count_nfc);
+            assert!(count_nfd > 0, "NFD: {} tokens", count_nfd);
+        }
+    }
+
+    #[test]
+    fn test_zero_width_characters() {
+        let counter = TokenCounter::new();
+
+        // Zero-width joiner
+        let zwj = "\u{200D}";
+        let with_zwj = format!("a{}b", zwj);
+        let count = counter.count(&with_zwj);
+        assert!(count > 0, "Text with ZWJ: {} tokens", count);
+
+        // Zero-width non-joiner
+        let zwnj = "\u{200C}";
+        let with_zwnj = format!("a{}b", zwnj);
+        let count = counter.count(&with_zwnj);
+        assert!(count > 0, "Text with ZWNJ: {} tokens", count);
+
+        // Zero-width space
+        let zwsp = "\u{200B}";
+        let with_zwsp = format!("a{}b", zwsp);
+        let count = counter.count(&with_zwsp);
+        assert!(count > 0, "Text with ZWSP: {} tokens", count);
+
+        // Multiple zero-width chars
+        let multi_zw = format!("test{}{}{}value", zwj, zwnj, zwsp);
+        let count = counter.count(&multi_zw);
+        assert!(count > 0, "Multiple zero-width: {} tokens", count);
+    }
+
+    #[test]
+    fn test_truncate_unicode_boundary() {
+        let counter = TokenCounter::new();
+
+        // Test that truncation doesn't break Unicode characters
+        let text = "Hello 🌍 World 🎉 Test 🚀";
+        let budget = 3; // Very small budget
+
+        let (truncated, count) = counter.truncate_to_budget(text, budget);
+
+        // Should be valid UTF-8 (Rust strings guarantee this)
+        assert!(truncated.is_char_boundary(truncated.len()));
+        assert!(count <= budget, "Count {} should be <= budget {}", count, budget);
+
+        // Truncated text should be valid
+        let _recount = counter.count(&truncated);
+    }
+
+    #[test]
+    fn test_surrogate_pair_handling() {
+        let counter = TokenCounter::new();
+
+        // Characters outside BMP (require surrogate pairs in UTF-16)
+        let supplementary_chars = [
+            ("𝕳𝖊𝖑𝖑𝖔", "mathematical fraktur"),
+            ("🀀🀁🀂🀃", "mahjong tiles"),
+            ("𐀀𐀁𐀂", "Linear B syllables"),
+            ("𓀀𓀁𓀂", "Egyptian hieroglyphs"),
+        ];
+
+        for (text, desc) in supplementary_chars {
+            let count = counter.count(text);
+            assert!(count > 0, "{}: {} tokens", desc, count);
+
+            // Estimate should also work
+            let estimate = counter.estimate(text);
+            assert!(estimate > 0, "{} estimate: {}", desc, estimate);
+        }
+    }
+
+    #[test]
+    fn test_control_characters() {
+        let counter = TokenCounter::new();
+
+        // Various control characters
+        let control_chars = [
+            "\x00",         // NUL
+            "\x07",         // BEL
+            "\x08",         // BS
+            "\x0B",         // VT
+            "\x0C",         // FF
+            "\x1B",         // ESC
+            "\x7F",         // DEL
+        ];
+
+        for ctrl in control_chars {
+            let text = format!("before{}after", ctrl);
+            let count = counter.count(&text);
+            // Should handle gracefully (either count or skip)
+            assert!(count >= 1, "Control char should be handled");
+        }
+    }
+
+    #[test]
+    fn test_exact_budget_boundary() {
+        let counter = TokenCounter::new();
+
+        // Find text that hits exact budget
+        let text = "The quick brown fox";
+        let exact_count = counter.count(text);
+
+        // Should pass at exact budget
+        assert!(counter.within_budget(text, exact_count),
+            "Should pass at exact budget. exact_count={}", exact_count);
+
+        // Should fail at one less
+        if exact_count > 0 {
+            assert!(!counter.within_budget(text, exact_count - 1));
+        }
+
+        // Should pass at one more
+        assert!(counter.within_budget(text, exact_count + 1));
+    }
+
+    #[test]
+    fn test_alternating_scripts() {
+        let counter = TokenCounter::new();
+
+        // Alternating between different scripts
+        let alternating = "a中b日c한d";
+        let count = counter.count(alternating);
+        assert!(count > 0, "Alternating scripts: {} tokens", count);
+
+        // More complex alternation
+        let complex = "Hello世界Bonjour世界Привет世界";
+        let count = counter.count(complex);
+        assert!(count > 0, "Complex alternation: {} tokens", count);
+    }
+
+    #[test]
+    fn test_dense_token_strings() {
+        let counter = TokenCounter::new();
+
+        // Base64-like strings (high token density)
+        let base64_like = "SGVsbG8gV29ybGQhIFRoaXMgaXMgYSB0ZXN0Lg==";
+        let count = counter.count(base64_like);
+        let estimate = counter.estimate(base64_like);
+
+        // Both should work
+        assert!(count > 0, "Base64 count: {}", count);
+        assert!(estimate > 0, "Base64 estimate: {}", estimate);
+
+        // UUID-like strings
+        let uuid = "550e8400-e29b-41d4-a716-446655440000";
+        let count = counter.count(uuid);
+        assert!(count > 0, "UUID: {} tokens", count);
+
+        // Hex strings
+        let hex = "deadbeefcafebabe12345678";
+        let count = counter.count(hex);
+        assert!(count > 0, "Hex: {} tokens", count);
     }
 }
