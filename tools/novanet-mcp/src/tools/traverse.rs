@@ -9,7 +9,7 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
 /// Traversal direction
-#[derive(Debug, Clone, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Default, Deserialize, JsonSchema)]
 #[serde(rename_all = "lowercase")]
 pub enum TraversalDirection {
     /// Follow outgoing arcs only
@@ -17,13 +17,8 @@ pub enum TraversalDirection {
     /// Follow incoming arcs only
     Incoming,
     /// Follow both directions
+    #[default]
     Both,
-}
-
-impl Default for TraversalDirection {
-    fn default() -> Self {
-        Self::Both
-    }
 }
 
 /// Parameters for novanet_traverse tool
@@ -137,9 +132,9 @@ pub async fn execute(state: &State, params: TraverseParams) -> Result<TraverseRe
         .execute_query(start_query, Some(query_params.clone()))
         .await?;
 
-    let start_node = start_rows.first().ok_or_else(|| {
-        crate::error::Error::not_found(&params.start_key)
-    })?;
+    let start_node = start_rows
+        .first()
+        .ok_or_else(|| crate::error::Error::not_found(&params.start_key))?;
 
     let start_result = TraversalNode {
         key: start_node["key"].as_str().unwrap_or_default().to_string(),
@@ -204,7 +199,15 @@ pub async fn execute(state: &State, params: TraverseParams) -> Result<TraverseRe
         Ok(rows) => process_apoc_results(&rows, include_props),
         Err(_) => {
             // Fallback to simple traversal without APOC
-            simple_traverse(state, &params, &query_params, max_depth, limit, include_props).await?
+            simple_traverse(
+                state,
+                &params,
+                &query_params,
+                max_depth,
+                limit,
+                include_props,
+            )
+            .await?
         }
     };
 
@@ -270,7 +273,9 @@ fn process_apoc_results(
     }
 
     // Deduplicate arcs
-    arcs.sort_by(|a, b| (&a.source, &a.target, &a.arc_kind).cmp(&(&b.source, &b.target, &b.arc_kind)));
+    arcs.sort_by(|a, b| {
+        (&a.source, &a.target, &a.arc_kind).cmp(&(&b.source, &b.target, &b.arc_kind))
+    });
     arcs.dedup_by(|a, b| a.source == b.source && a.target == b.target && a.arc_kind == b.arc_kind);
 
     (nodes, arcs, max_depth)
@@ -292,11 +297,12 @@ async fn simple_traverse(
     };
 
     let target_filter = build_target_filter(&params.target_kinds);
+    let direction_pattern = format!("{}*1..{}", direction, max_depth);
 
     let cypher = format!(
         r#"
         MATCH (start {{key: $key}})
-        MATCH path = (start){direction}(end)
+        MATCH path = (start){direction_pattern}(end)
         WHERE length(path) <= {max_depth}
         {target_filter}
         WITH end, length(path) AS depth, [r IN relationships(path) | type(r)] AS path_arcs
@@ -308,7 +314,7 @@ async fn simple_traverse(
         ORDER BY depth, key
         LIMIT {limit}
         "#,
-        direction = format!("{}*1..{}", direction, max_depth),
+        direction_pattern = direction_pattern,
         max_depth = max_depth,
         target_filter = target_filter,
         limit = limit
@@ -350,7 +356,7 @@ async fn simple_traverse(
     let _arcs_query = format!(
         r#"
         MATCH (start {{key: $key}})
-        MATCH (start){direction}(end)
+        MATCH (start){direction_pattern}(end)
         WHERE length(path) <= {max_depth}
         MATCH (a)-[r]->(b)
         WHERE a.key IN [start.key] + [n IN nodes(path) | n.key]
@@ -358,7 +364,7 @@ async fn simple_traverse(
         RETURN DISTINCT a.key AS source, b.key AS target, type(r) AS arc_kind
         LIMIT {limit}
         "#,
-        direction = format!("{}*1..{}", direction, max_depth),
+        direction_pattern = direction_pattern,
         max_depth = max_depth,
         limit = limit * 2
     );

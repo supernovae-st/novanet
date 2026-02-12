@@ -9,10 +9,11 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
 /// Context assembly strategy
-#[derive(Debug, Clone, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Default, Deserialize, JsonSchema)]
 #[serde(rename_all = "lowercase")]
 pub enum AssemblyStrategy {
     /// Breadth-first traversal from focus node
+    #[default]
     Breadth,
     /// Depth-first traversal following ownership arcs
     Depth,
@@ -20,12 +21,6 @@ pub enum AssemblyStrategy {
     Relevance,
     /// Custom traversal order via arc families
     Custom,
-}
-
-impl Default for AssemblyStrategy {
-    fn default() -> Self {
-        Self::Breadth
-    }
 }
 
 /// Parameters for novanet_assemble tool
@@ -151,9 +146,9 @@ pub async fn execute(state: &State, params: AssembleParams) -> Result<AssembleRe
         .execute_query(focus_query, Some(query_params.clone()))
         .await?;
 
-    let focus_row = focus_rows.first().ok_or_else(|| {
-        crate::error::Error::not_found(&params.focus_key)
-    })?;
+    let focus_row = focus_rows
+        .first()
+        .ok_or_else(|| crate::error::Error::not_found(&params.focus_key))?;
 
     let focus = FocusNode {
         key: focus_row["key"].as_str().unwrap_or_default().to_string(),
@@ -171,7 +166,8 @@ pub async fn execute(state: &State, params: AssembleParams) -> Result<AssembleRe
 
     // Assemble entity definitions if requested
     if include_entities {
-        let entity_evidence = assemble_entities(state, &params.focus_key, &params.locale, max_depth).await?;
+        let entity_evidence =
+            assemble_entities(state, &params.focus_key, &params.locale, max_depth).await?;
         for packet in entity_evidence {
             if total_tokens + packet.tokens <= token_budget {
                 total_tokens += packet.tokens;
@@ -183,7 +179,8 @@ pub async fn execute(state: &State, params: AssembleParams) -> Result<AssembleRe
 
     // Assemble locale knowledge if requested
     if include_knowledge {
-        let knowledge_evidence = assemble_knowledge(state, &params.focus_key, &params.locale).await?;
+        let knowledge_evidence =
+            assemble_knowledge(state, &params.focus_key, &params.locale).await?;
         for packet in knowledge_evidence {
             if total_tokens + packet.tokens <= token_budget {
                 total_tokens += packet.tokens;
@@ -206,7 +203,11 @@ pub async fn execute(state: &State, params: AssembleParams) -> Result<AssembleRe
     }
 
     // Sort by relevance
-    evidence.sort_by(|a, b| b.relevance.partial_cmp(&a.relevance).unwrap_or(std::cmp::Ordering::Equal));
+    evidence.sort_by(|a, b| {
+        b.relevance
+            .partial_cmp(&a.relevance)
+            .unwrap_or(std::cmp::Ordering::Equal)
+    });
 
     let truncated = total_tokens >= token_budget;
 
@@ -292,10 +293,7 @@ async fn assemble_entities(
 
     let mut evidence = Vec::new();
     for row in rows {
-        let content = compress_to_evidence(
-            row["name"].as_str(),
-            row["description"].as_str(),
-        );
+        let content = compress_to_evidence(row["name"].as_str(), row["description"].as_str());
         let tokens = content.len().div_ceil(4); // Estimate
 
         evidence.push(EvidencePacket {

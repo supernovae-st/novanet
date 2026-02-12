@@ -8,7 +8,7 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
 /// Search mode
-#[derive(Debug, Clone, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Default, Deserialize, JsonSchema)]
 #[serde(rename_all = "lowercase")]
 pub enum SearchMode {
     /// Fulltext search using Neo4j fulltext indexes
@@ -16,13 +16,8 @@ pub enum SearchMode {
     /// Property-based search with exact or partial matching
     Property,
     /// Combined fulltext + property search
+    #[default]
     Hybrid,
-}
-
-impl Default for SearchMode {
-    fn default() -> Self {
-        Self::Hybrid
-    }
 }
 
 /// Parameters for novanet_search tool
@@ -148,7 +143,10 @@ async fn fulltext_search(
     let mut query_params = serde_json::Map::new();
     query_params.insert("query".to_string(), serde_json::json!(params.query));
 
-    let rows = state.pool().execute_query(&cypher, Some(query_params)).await?;
+    let rows = state
+        .pool()
+        .execute_query(&cypher, Some(query_params))
+        .await?;
 
     Ok(rows
         .into_iter()
@@ -168,10 +166,13 @@ async fn property_search(
     params: &SearchParams,
     limit: usize,
 ) -> Result<Vec<SearchHit>> {
-    let properties = params
-        .properties
-        .clone()
-        .unwrap_or_else(|| vec!["key".to_string(), "name".to_string(), "description".to_string()]);
+    let properties = params.properties.clone().unwrap_or_else(|| {
+        vec![
+            "key".to_string(),
+            "name".to_string(),
+            "description".to_string(),
+        ]
+    });
 
     let kind_filter = build_kind_filter(&params.kinds);
     let realm_filter = build_realm_filter(&params.realm);
@@ -213,7 +214,10 @@ async fn property_search(
     let mut query_params = serde_json::Map::new();
     query_params.insert("query".to_string(), serde_json::json!(params.query));
 
-    let rows = state.pool().execute_query(&cypher, Some(query_params)).await?;
+    let rows = state
+        .pool()
+        .execute_query(&cypher, Some(query_params))
+        .await?;
 
     Ok(rows
         .into_iter()
@@ -303,7 +307,10 @@ mod tests {
     #[test]
     fn test_build_realm_filter() {
         assert_eq!(build_realm_filter(&None), "");
-        assert_eq!(build_realm_filter(&Some("shared".to_string())), "AND n.realm = 'shared'");
+        assert_eq!(
+            build_realm_filter(&Some("shared".to_string())),
+            "AND n.realm = 'shared'"
+        );
     }
 
     #[test]
