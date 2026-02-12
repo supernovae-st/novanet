@@ -44,6 +44,7 @@ import {
 } from '@/lib/graph3d';
 import type { Layer, Realm, Trait } from '@novanet/core/types';
 import { Graph3DLegend } from './Graph3DLegend';
+import { GRAPH_ANIMATION } from '@/config/layoutConfig';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Type Guards for ForceGraph Link Endpoints
@@ -623,21 +624,96 @@ export const Graph3D = memo(function Graph3D({
     setHighlightedLinks(links);
   }, [selectedNodeId, graphData.links]);
 
-  // Camera preset views — adjusted for larger graph spread
+  // ==========================================================================
+  // CAMERA CONTROLS
+  // ==========================================================================
+
+  // Calculate bounding box of all nodes for zoomToFit
+  const calculateNodeBounds = useCallback(() => {
+    const nodes = graphData.nodes;
+    if (nodes.length === 0) return null;
+
+    let minX = Infinity, maxX = -Infinity;
+    let minY = Infinity, maxY = -Infinity;
+    let minZ = Infinity, maxZ = -Infinity;
+
+    for (const node of nodes) {
+      const x = typeof node.x === 'number' ? node.x : 0;
+      const y = typeof node.y === 'number' ? node.y : 0;
+      const z = typeof node.z === 'number' ? node.z : 0;
+
+      minX = Math.min(minX, x);
+      maxX = Math.max(maxX, x);
+      minY = Math.min(minY, y);
+      maxY = Math.max(maxY, y);
+      minZ = Math.min(minZ, z);
+      maxZ = Math.max(maxZ, z);
+    }
+
+    // Center of bounding box
+    const center = {
+      x: (minX + maxX) / 2,
+      y: (minY + maxY) / 2,
+      z: (minZ + maxZ) / 2,
+    };
+
+    // Size of bounding box (diagonal)
+    const size = Math.sqrt(
+      Math.pow(maxX - minX, 2) +
+      Math.pow(maxY - minY, 2) +
+      Math.pow(maxZ - minZ, 2)
+    );
+
+    return { center, size, bounds: { minX, maxX, minY, maxY, minZ, maxZ } };
+  }, [graphData.nodes]);
+
+  // Zoom to fit all nodes in view with smooth animation
+  const zoomToFit = useCallback((duration: number = GRAPH_ANIMATION.FIT_VIEW_DURATION_3D) => {
+    if (!fgRef.current?.cameraPosition) return;
+
+    const bounds = calculateNodeBounds();
+    if (!bounds) return;
+
+    const { center, size } = bounds;
+
+    // Calculate camera distance based on graph size (with padding)
+    const distance = Math.max(size * 1.5, GRAPH_ANIMATION.EDGE_FOCUS_DISTANCE_3D);
+
+    // Isometric-style camera position
+    const cameraPos = {
+      x: center.x + distance * 0.6,
+      y: center.y + distance * 0.5,
+      z: center.z + distance * 0.6,
+    };
+
+    // Animate camera with smooth easing
+    fgRef.current.cameraPosition(cameraPos, center, duration);
+  }, [calculateNodeBounds]);
+
+  // Camera preset views — now uses calculated bounds for 'reset'
   const setCameraView = useCallback((view: 'top' | 'front' | 'side' | 'reset') => {
     if (!fgRef.current?.cameraPosition) return;
 
-    const distance = 500;  // Increased for larger nodes/spread
-    const positions: Record<string, { pos: { x: number; y: number; z: number }; lookAt: { x: number; y: number; z: number } }> = {
-      top: { pos: { x: 0, y: distance, z: 0 }, lookAt: { x: 0, y: 0, z: 0 } },
-      front: { pos: { x: 0, y: 80, z: distance }, lookAt: { x: 0, y: 0, z: 0 } },
-      side: { pos: { x: distance, y: 80, z: 0 }, lookAt: { x: 0, y: 0, z: 0 } },
-      reset: { pos: { x: distance * 0.6, y: distance * 0.4, z: distance * 0.7 }, lookAt: { x: 0, y: 0, z: 0 } },
+    // For reset, use zoomToFit to center on actual graph content
+    if (view === 'reset') {
+      zoomToFit(GRAPH_ANIMATION.RESET_DURATION_3D);  // Fast animation for responsiveness
+      return;
+    }
+
+    // Calculate bounds for other views too
+    const bounds = calculateNodeBounds();
+    const center = bounds?.center ?? { x: 0, y: 0, z: 0 };
+    const distance = bounds ? Math.max(bounds.size * 1.2, 300) : 500;
+
+    const positions: Record<string, { pos: { x: number; y: number; z: number } }> = {
+      top: { pos: { x: center.x, y: center.y + distance, z: center.z } },
+      front: { pos: { x: center.x, y: center.y + 80, z: center.z + distance } },
+      side: { pos: { x: center.x + distance, y: center.y + 80, z: center.z } },
     };
 
-    const { pos, lookAt } = positions[view];
-    fgRef.current.cameraPosition(pos, lookAt, 1200);  // Smoother 1.2s animation
-  }, []);
+    const { pos } = positions[view];
+    fgRef.current.cameraPosition(pos, center, GRAPH_ANIMATION.NODE_FOCUS_DURATION_3D);
+  }, [calculateNodeBounds, zoomToFit]);
 
   // Auto-zoom to fit when aside panel closes (selection cleared)
   // This provides a better UX when closing the detail panel
@@ -841,17 +917,17 @@ export const Graph3D = memo(function Graph3D({
       const nodePos = { x: nx, y: ny, z: nz };
 
       // Calculate camera position at fixed distance from node
-      const distance = 180;
+      const distance = GRAPH_ANIMATION.NODE_FOCUS_DISTANCE_3D;
       const cameraPos = {
         x: nodePos.x + distance * 0.6,
         y: nodePos.y + distance * 0.4,
         z: nodePos.z + distance * 0.7,
       };
 
-      // Smooth 1.5s cinematic animation
+      // Smooth cinematic animation (unified timing with 2D)
       // Note: The canvas container handles panel offset via flex layout
       // No manual offset needed - camera looks directly at node position
-      fgRef.current.cameraPosition(cameraPos, nodePos, 1500);
+      fgRef.current.cameraPosition(cameraPos, nodePos, GRAPH_ANIMATION.NODE_FOCUS_DURATION_3D);
     } catch (err) {
       console.warn('[Graph3D] zoomToNode error:', err);
     }
@@ -887,6 +963,66 @@ export const Graph3D = memo(function Graph3D({
     [onNodeDoubleClick]
   );
 
+  // ==========================================================================
+  // CURSOR MANAGEMENT
+  // ==========================================================================
+
+  // Track if user is dragging (for cursor state)
+  const isDraggingRef = useRef(false);
+
+  // Update cursor based on current state
+  const updateCursor = useCallback((hovering: boolean) => {
+    if (typeof document === 'undefined') return;
+
+    if (hovering) {
+      document.body.style.cursor = 'pointer';
+    } else if (isDraggingRef.current) {
+      document.body.style.cursor = 'grabbing';
+    } else {
+      document.body.style.cursor = 'grab';
+    }
+  }, []);
+
+  // Handle mouse down/up for grabbing cursor
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const container = containerRef.current;
+
+    const handleMouseDown = (e: MouseEvent) => {
+      // Only set grabbing if not clicking on a node (check hover state)
+      const freshHover = useUIStore.getState().hoveredNodeId;
+      if (!freshHover && e.button === 0) {
+        isDraggingRef.current = true;
+        document.body.style.cursor = 'grabbing';
+      }
+    };
+
+    const handleMouseUp = () => {
+      if (isDraggingRef.current) {
+        isDraggingRef.current = false;
+        const freshHover = useUIStore.getState().hoveredNodeId;
+        updateCursor(!!freshHover);
+      }
+    };
+
+    // Also handle mouse leave to reset cursor
+    const handleMouseLeave = () => {
+      isDraggingRef.current = false;
+      document.body.style.cursor = 'default';
+    };
+
+    container.addEventListener('mousedown', handleMouseDown);
+    window.addEventListener('mouseup', handleMouseUp);
+    container.addEventListener('mouseleave', handleMouseLeave);
+
+    return () => {
+      container.removeEventListener('mousedown', handleMouseDown);
+      window.removeEventListener('mouseup', handleMouseUp);
+      container.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, [updateCursor]);
+
   // Node hover handler with scale effect (defensive null checks)
   const handleNodeHover = useCallback(
     (node: ForceGraphNode | null | undefined, prevNode: ForceGraphNode | null | undefined) => {
@@ -901,12 +1037,12 @@ export const Graph3D = memo(function Graph3D({
 
       setHoveredNode(node?.id ?? null);
 
-      // Change cursor
-      if (typeof document !== 'undefined') {
-        document.body.style.cursor = node ? 'pointer' : 'grab';
+      // Update cursor (only if not dragging)
+      if (!isDraggingRef.current) {
+        updateCursor(!!node);
       }
     },
-    [setHoveredNode]
+    [setHoveredNode, updateCursor]
   );
 
   // Background click handler - deselect and reset view
@@ -955,14 +1091,14 @@ export const Graph3D = memo(function Graph3D({
             z: ((sourceNode.z || 0) + (targetNode.z || 0)) / 2,
           };
 
-          const distance = 200;
+          const distance = GRAPH_ANIMATION.EDGE_FOCUS_DISTANCE_3D;
           const cameraPos = {
             x: midPoint.x + distance * 0.6,
             y: midPoint.y + distance * 0.5,
             z: midPoint.z + distance * 0.7,
           };
 
-          fgRef.current.cameraPosition(cameraPos, midPoint, 1200);
+          fgRef.current.cameraPosition(cameraPos, midPoint, GRAPH_ANIMATION.EDGE_FOCUS_DURATION_3D);
         }
       }
 
