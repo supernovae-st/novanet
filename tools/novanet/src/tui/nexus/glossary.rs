@@ -7,6 +7,9 @@
 //! - Relationships (3): Arc, Family, Scope
 //! - Architecture (1): Native Generation
 
+use std::borrow::Cow;
+use std::sync::LazyLock;
+
 use ratatui::Frame;
 use ratatui::layout::{Constraint, Direction, Layout, Rect};
 use ratatui::style::{Color, Modifier, Style};
@@ -15,6 +18,18 @@ use ratatui::widgets::{Block, Borders, List, ListItem, Paragraph, Wrap};
 
 use crate::tui::app::App;
 use crate::tui::theme::Theme;
+
+/// Pre-computed flattened concept list (computed once at first access).
+static ALL_CONCEPTS: LazyLock<Vec<(GlossaryCategory, &'static GlossaryConcept)>> =
+    LazyLock::new(|| {
+        let mut result = Vec::with_capacity(15); // Known size
+        for category in GlossaryCategory::all() {
+            for concept in category.concepts() {
+                result.push((*category, concept));
+            }
+        }
+        result
+    });
 
 // =============================================================================
 // GLOSSARY DATA STRUCTURES
@@ -296,38 +311,36 @@ impl GlossaryState {
         }
     }
 
-    /// Get all concepts (flattened).
-    pub fn all_concepts() -> Vec<(GlossaryCategory, &'static GlossaryConcept)> {
-        let mut result = Vec::new();
-        for category in GlossaryCategory::all() {
-            for concept in category.concepts() {
-                result.push((*category, concept));
-            }
-        }
-        result
+    /// Get all concepts (flattened) - returns reference to static data.
+    pub fn all_concepts() -> &'static [(GlossaryCategory, &'static GlossaryConcept)] {
+        &ALL_CONCEPTS
     }
 
     /// Get filtered concepts based on search query.
-    pub fn filtered_concepts(&self) -> Vec<(GlossaryCategory, &'static GlossaryConcept)> {
+    /// Returns Cow to avoid allocation when no filter is active.
+    pub fn filtered_concepts(&self) -> Cow<'static, [(GlossaryCategory, &'static GlossaryConcept)]> {
         if self.search_query.is_empty() {
-            return Self::all_concepts();
+            return Cow::Borrowed(Self::all_concepts());
         }
 
         let query = self.search_query.to_lowercase();
-        Self::all_concepts()
-            .into_iter()
-            .filter(|(_, concept)| {
-                concept.name.to_lowercase().contains(&query)
-                    || concept.short_desc.to_lowercase().contains(&query)
-                    || concept.full_desc.to_lowercase().contains(&query)
-            })
-            .collect()
+        Cow::Owned(
+            Self::all_concepts()
+                .iter()
+                .filter(|(_, concept)| {
+                    concept.name.to_lowercase().contains(&query)
+                        || concept.short_desc.to_lowercase().contains(&query)
+                        || concept.full_desc.to_lowercase().contains(&query)
+                })
+                .copied()
+                .collect(),
+        )
     }
 
     /// Get currently selected concept.
     pub fn current_concept(&self) -> Option<(GlossaryCategory, &'static GlossaryConcept)> {
         let concepts = self.filtered_concepts();
-        concepts.get(self.concept_cursor).cloned()
+        concepts.get(self.concept_cursor).copied()
     }
 
     /// Navigate up.
