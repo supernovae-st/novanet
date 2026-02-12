@@ -9,8 +9,8 @@
 | Question | Decision |
 |----------|----------|
 | **Objectives** | Pedagogical + Visual + All node types (A+C+D) |
-| **Visual distinction** | Badge `[🧬meta]` / `[📄data]` + Background color + Distinct icons |
-| **Badge format** | `[🧬meta]` for schema nodes, `[📄data]` for instances |
+| **Visual distinction** | Badge `[🧬meta]` / `[🦋data]` + Background color + Distinct icons |
+| **Badge format** | `[🧬meta]` for schema nodes, `[🦋data]` for instances |
 | **Tree display** | Suffix badge on meta lines + different background + badge in info panel |
 | **Info panel detail** | Ultra-complete: all sections + example instances + related arcs |
 
@@ -32,9 +32,9 @@
 │  │ │ ├▼ ◆ Locale ■ ────────────────────────────────────────────── [🧬meta]  │
 │  │ │ │ │  200 instances · shared/config                                    │
 │  │ │ │ │                                                                    │
-│  │ │ │ ├── fr-FR    [→5|←12]  [📄data]        French (France)                │
-│  │ │ │ ├── en-US    [→5|←8]   [📄data]        English (United States)        │
-│  │ │ │ ├── ja-JP    [→5|←3]   [📄data]        Japanese (Japan)               │
+│  │ │ │ ├── fr-FR    [→5|←12]  [🦋data]        French (France)                │
+│  │ │ │ ├── en-US    [→5|←8]   [🦋data]        English (United States)        │
+│  │ │ │ ├── ja-JP    [→5|←3]   [🦋data]        Japanese (Japan)               │
 │  │ │ │ └── ⋯ 197 more                                                      │
 │  │ │ │                                                                      │
 │  │ │ └▶ ◆ EntityCategory ■ ────────────────────────────────────── [🧬meta]  │
@@ -65,9 +65,9 @@
 │      ├▼ ◆ PageGenerated ★ ─────────────────────────────────────── [🧬meta]  │
 │      │ │  450 instances · org/output                                       │
 │      │ │                                                                    │
-│      │ ├── page:homepage@fr-FR  [→3|←1] (⊞5/5)  [📄data]                     │
-│      │ ├── page:homepage@en-US  [→3|←1] (⊞5/5)  [📄data]                     │
-│      │ ├── page:pricing@fr-FR   [→2|←1] (✗1!)   [📄data]  ← missing req      │
+│      │ ├── page:homepage@fr-FR  [→3|←1] (⊞5/5)  [🦋data]                     │
+│      │ ├── page:homepage@en-US  [→3|←1] (⊞5/5)  [🦋data]                     │
+│      │ ├── page:pricing@fr-FR   [→2|←1] (✗1!)   [🦋data]  ← missing req      │
 │      │ └── ⋯ 447 more                                                      │
 │      │                                                                      │
 │      └▶ ◆ BlockGenerated ★ ────────────────────────────────────── [🧬meta]  │
@@ -105,7 +105,7 @@
 │                                                                             │
 │  BADGES:                                                                    │
 │  [🧬meta]    = Schema node (Realm/Layer/Kind/ArcFamily/ArcKind)             │
-│  [📄data]      = Data node (instance)                                        │
+│  [🦋data]      = Data node (instance)                                        │
 │                                                                             │
 │  META TYPE ICONS:                                                           │
 │  ◉/◎ = Realm (shared/org)                                                  │
@@ -198,7 +198,7 @@
 │  INFO PANEL: DATA NODE (Instance)                                           │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│  [📄data] Locale                                                              │
+│  [🦋data] Locale                                                              │
 │  ══════════════════════════════════════════════════════════════════════    │
 │                                                                             │
 │  IDENTITY                                                                   │
