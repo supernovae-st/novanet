@@ -10,7 +10,6 @@
 //! - Tool execution via MCP protocol
 
 use std::env;
-use std::time::Duration;
 
 /// Test helper to check if Neo4j is available
 fn neo4j_available() -> bool {
@@ -426,7 +425,7 @@ mod security {
             // 1. Be blocked by validation (preferred)
             // 2. Execute the safe part only (Neo4j handles comments)
             // They should NOT execute the dangerous part
-            let result = pool.execute_query(query, None).await;
+            let _result = pool.execute_query(query, None).await;
             // If it succeeds, verify no mutations occurred
             // If it fails, that's also acceptable
         }
@@ -456,6 +455,369 @@ mod security {
         assert!(result.is_ok());
         let rows = result.unwrap();
         assert_eq!(rows[0]["name"], "test' OR 1=1 --");
+    }
+}
+
+mod generate_tool {
+    use super::*;
+    use novanet_mcp::tools::generate::{GenerateMode, GenerateParams};
+
+    #[tokio::test]
+    async fn test_generate_params_default() {
+        // Verify default parameters work
+        let params = GenerateParams {
+            focus_key: "test-page".to_string(),
+            locale: "fr-FR".to_string(),
+            mode: GenerateMode::default(),
+            token_budget: None,
+            include_examples: None,
+            spreading_depth: None,
+        };
+
+        assert_eq!(params.focus_key, "test-page");
+        assert_eq!(params.locale, "fr-FR");
+        assert!(matches!(params.mode, GenerateMode::Block));
+    }
+
+    #[tokio::test]
+    async fn test_generate_mode_block() {
+        let _mode = GenerateMode::Block;
+        // Block mode should be the default
+        let default_mode = GenerateMode::default();
+        assert!(matches!(default_mode, GenerateMode::Block));
+    }
+
+    #[tokio::test]
+    async fn test_generate_mode_page() {
+        let _mode = GenerateMode::Page;
+        // Page mode for full page orchestration
+        assert!(matches!(_mode, GenerateMode::Page));
+    }
+
+    #[tokio::test]
+    async fn test_generate_with_neo4j() {
+        require_neo4j!();
+
+        let uri = env::var("NEO4J_URI").unwrap();
+        let user = env::var("NEO4J_USER").unwrap();
+        let password = env::var("NEO4J_PASSWORD").unwrap();
+
+        let pool = novanet_mcp::neo4j::Neo4jPool::new(&uri, &user, &password, 5)
+            .await
+            .expect("Pool creation failed");
+
+        // Query for any Page node to use as focus
+        let result = pool
+            .execute_query("MATCH (p:Page) RETURN p.key AS key LIMIT 1", None)
+            .await;
+
+        // If we have a Page, we can test generate
+        if let Ok(rows) = result {
+            if !rows.is_empty() {
+                let page_key = rows[0]["key"].as_str().unwrap_or("homepage");
+                eprintln!("Found page for generate test: {}", page_key);
+                // Full generate test would require State setup
+            }
+        }
+    }
+}
+
+mod prompts {
+    use novanet_mcp::prompts;
+
+    #[test]
+    fn test_list_prompts() {
+        let prompt_list = prompts::list_prompts();
+
+        // Should have 6 prompts
+        assert_eq!(prompt_list.len(), 6, "Expected 6 prompts");
+
+        // Verify all prompt names
+        let names: Vec<&str> = prompt_list.iter().map(|p| p.name.as_str()).collect();
+        assert!(names.contains(&"cypher_query"));
+        assert!(names.contains(&"cypher_explain"));
+        assert!(names.contains(&"block_generation"));
+        assert!(names.contains(&"page_generation"));
+        assert!(names.contains(&"entity_analysis"));
+        assert!(names.contains(&"locale_briefing"));
+    }
+
+    #[test]
+    fn test_render_cypher_query_prompt() {
+        let mut args = serde_json::Map::new();
+        args.insert("intent".to_string(), serde_json::json!("Find all Entity nodes"));
+
+        let rendered = prompts::render_prompt("cypher_query", &args);
+        assert!(rendered.is_some(), "cypher_query should render");
+
+        let result = rendered.unwrap();
+        assert!(!result.messages.is_empty(), "Should have messages");
+
+        // The intent appears in the user message (message[1]), not system message (message[0])
+        let all_content: String = result.messages.iter().map(|m| m.content.clone()).collect();
+        assert!(
+            all_content.contains("Find all Entity nodes"),
+            "Should include intent in one of the messages. Got: {}",
+            all_content.chars().take(500).collect::<String>()
+        );
+    }
+
+    #[test]
+    fn test_render_block_generation_prompt() {
+        let mut args = serde_json::Map::new();
+        args.insert("block_key".to_string(), serde_json::json!("hero-section"));
+        args.insert("locale".to_string(), serde_json::json!("fr-FR"));
+
+        let rendered = prompts::render_prompt("block_generation", &args);
+        assert!(rendered.is_some(), "block_generation should render");
+
+        let result = rendered.unwrap();
+        assert!(!result.messages.is_empty());
+        // Check all messages for the arguments
+        let all_content: String = result.messages.iter().map(|m| m.content.clone()).collect();
+        assert!(
+            all_content.contains("hero-section"),
+            "Should include block_key in messages"
+        );
+        assert!(
+            all_content.contains("fr-FR"),
+            "Should include locale in messages"
+        );
+    }
+
+    #[test]
+    fn test_render_page_generation_prompt() {
+        let mut args = serde_json::Map::new();
+        args.insert("page_key".to_string(), serde_json::json!("homepage"));
+        args.insert("locale".to_string(), serde_json::json!("en-US"));
+
+        let rendered = prompts::render_prompt("page_generation", &args);
+        assert!(rendered.is_some(), "page_generation should render");
+
+        let result = rendered.unwrap();
+        let all_content: String = result.messages.iter().map(|m| m.content.clone()).collect();
+        assert!(
+            all_content.contains("homepage"),
+            "Should include page_key in messages"
+        );
+    }
+
+    #[test]
+    fn test_render_entity_analysis_prompt() {
+        let mut args = serde_json::Map::new();
+        args.insert("entity_key".to_string(), serde_json::json!("qr-code-generator"));
+        args.insert("locale".to_string(), serde_json::json!("de-DE"));
+
+        let rendered = prompts::render_prompt("entity_analysis", &args);
+        assert!(rendered.is_some(), "entity_analysis should render");
+
+        let result = rendered.unwrap();
+        let all_content: String = result.messages.iter().map(|m| m.content.clone()).collect();
+        assert!(
+            all_content.contains("qr-code-generator"),
+            "Should include entity_key in messages"
+        );
+    }
+
+    #[test]
+    fn test_render_locale_briefing_prompt() {
+        let mut args = serde_json::Map::new();
+        args.insert("locale_key".to_string(), serde_json::json!("ja-JP"));
+
+        let rendered = prompts::render_prompt("locale_briefing", &args);
+        assert!(rendered.is_some(), "locale_briefing should render");
+
+        let result = rendered.unwrap();
+        let all_content: String = result.messages.iter().map(|m| m.content.clone()).collect();
+        assert!(
+            all_content.contains("ja-JP"),
+            "Should include locale_key in messages"
+        );
+    }
+
+    #[test]
+    fn test_render_cypher_explain_prompt() {
+        let mut args = serde_json::Map::new();
+        args.insert(
+            "query".to_string(),
+            serde_json::json!("MATCH (e:Entity) RETURN e LIMIT 10"),
+        );
+        args.insert(
+            "results".to_string(),
+            serde_json::json!("[{\"key\": \"test\"}]"),
+        );
+
+        let rendered = prompts::render_prompt("cypher_explain", &args);
+        assert!(rendered.is_some(), "cypher_explain should render");
+
+        let result = rendered.unwrap();
+        let all_content: String = result.messages.iter().map(|m| m.content.clone()).collect();
+        assert!(
+            all_content.contains("MATCH"),
+            "Should include query in messages"
+        );
+    }
+
+    #[test]
+    fn test_prompt_missing_required_args() {
+        // Missing required 'intent' argument
+        let args = serde_json::Map::new();
+
+        let rendered = prompts::render_prompt("cypher_query", &args);
+        // Should still render but with placeholder
+        assert!(rendered.is_some());
+    }
+
+    #[test]
+    fn test_prompt_not_found() {
+        let args = serde_json::Map::new();
+        let rendered = prompts::render_prompt("nonexistent_prompt", &args);
+        assert!(rendered.is_none(), "Nonexistent prompt should return None");
+    }
+}
+
+mod tools_with_seed_data {
+    use super::*;
+
+    #[tokio::test]
+    async fn test_traverse_from_kind() {
+        require_neo4j!();
+
+        let uri = env::var("NEO4J_URI").unwrap();
+        let user = env::var("NEO4J_USER").unwrap();
+        let password = env::var("NEO4J_PASSWORD").unwrap();
+
+        let pool = novanet_mcp::neo4j::Neo4jPool::new(&uri, &user, &password, 5)
+            .await
+            .expect("Pool creation failed");
+
+        // Query for Kind nodes (meta-graph)
+        let result = pool
+            .execute_query(
+                "MATCH (k:Kind)-[r]->(m) RETURN k.name AS source, type(r) AS rel, labels(m)[0] AS target LIMIT 5",
+                None,
+            )
+            .await;
+
+        if let Ok(rows) = result {
+            eprintln!("Found {} Kind relationships", rows.len());
+            for row in &rows {
+                eprintln!(
+                    "  {} -[{}]-> {}",
+                    row["source"].as_str().unwrap_or("?"),
+                    row["rel"].as_str().unwrap_or("?"),
+                    row["target"].as_str().unwrap_or("?")
+                );
+            }
+        }
+    }
+
+    #[tokio::test]
+    async fn test_search_entities() {
+        require_neo4j!();
+
+        let uri = env::var("NEO4J_URI").unwrap();
+        let user = env::var("NEO4J_USER").unwrap();
+        let password = env::var("NEO4J_PASSWORD").unwrap();
+
+        let pool = novanet_mcp::neo4j::Neo4jPool::new(&uri, &user, &password, 5)
+            .await
+            .expect("Pool creation failed");
+
+        // Search for Entity nodes
+        let result = pool
+            .execute_query(
+                "MATCH (e:Entity) RETURN e.key AS key, e.name AS name LIMIT 5",
+                None,
+            )
+            .await;
+
+        if let Ok(rows) = result {
+            eprintln!("Found {} Entity nodes", rows.len());
+            for row in &rows {
+                eprintln!(
+                    "  Entity: {} ({})",
+                    row["key"].as_str().unwrap_or("?"),
+                    row["name"].as_str().unwrap_or("no name")
+                );
+            }
+        }
+    }
+
+    #[tokio::test]
+    async fn test_locale_knowledge() {
+        require_neo4j!();
+
+        let uri = env::var("NEO4J_URI").unwrap();
+        let user = env::var("NEO4J_USER").unwrap();
+        let password = env::var("NEO4J_PASSWORD").unwrap();
+
+        let pool = novanet_mcp::neo4j::Neo4jPool::new(&uri, &user, &password, 5)
+            .await
+            .expect("Pool creation failed");
+
+        // Query for locale knowledge atoms
+        let result = pool
+            .execute_query(
+                r#"
+                MATCH (l:Locale)
+                OPTIONAL MATCH (l)-[:HAS_TERMS]->(ts:TermSet)-[:CONTAINS_TERM]->(t:Term)
+                WITH l.key AS locale, count(t) AS term_count
+                RETURN locale, term_count
+                ORDER BY term_count DESC
+                LIMIT 5
+                "#,
+                None,
+            )
+            .await;
+
+        if let Ok(rows) = result {
+            eprintln!("Locale knowledge summary:");
+            for row in &rows {
+                eprintln!(
+                    "  {}: {} terms",
+                    row["locale"].as_str().unwrap_or("?"),
+                    row["term_count"]
+                );
+            }
+        }
+    }
+
+    #[tokio::test]
+    async fn test_page_block_structure() {
+        require_neo4j!();
+
+        let uri = env::var("NEO4J_URI").unwrap();
+        let user = env::var("NEO4J_USER").unwrap();
+        let password = env::var("NEO4J_PASSWORD").unwrap();
+
+        let pool = novanet_mcp::neo4j::Neo4jPool::new(&uri, &user, &password, 5)
+            .await
+            .expect("Pool creation failed");
+
+        // Query for Page/Block structure
+        let result = pool
+            .execute_query(
+                r#"
+                MATCH (p:Page)-[:HAS_BLOCK]->(b:Block)
+                WITH p.key AS page, collect(b.key) AS blocks
+                RETURN page, blocks, size(blocks) AS block_count
+                LIMIT 3
+                "#,
+                None,
+            )
+            .await;
+
+        if let Ok(rows) = result {
+            eprintln!("Page/Block structure:");
+            for row in &rows {
+                eprintln!(
+                    "  Page '{}': {} blocks",
+                    row["page"].as_str().unwrap_or("?"),
+                    row["block_count"]
+                );
+            }
+        }
     }
 }
 

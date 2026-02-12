@@ -116,6 +116,7 @@ bytes = "1.11"
 tokio-test = "0.4"
 pretty_assertions = "1"
 insta = { version = "1", features = ["yaml"] }
+criterion = { version = "0.6", features = ["html_reports"] }
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Release Profile - Optimized for production
@@ -134,6 +135,14 @@ opt-level = 3         # Maximum optimization
 [[bin]]
 name = "novanet-mcp"
 path = "src/main.rs"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Benchmarks
+# Run with: cargo bench
+# ═══════════════════════════════════════════════════════════════════════════════
+[[bench]]
+name = "mcp_benchmarks"
+harness = false
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # STANDALONE CRATE: Empty workspace table prevents parent workspace detection
