@@ -13,6 +13,7 @@ use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, Borders, Paragraph, Wrap};
 
+use super::{NexusLocale, i18n};
 use crate::tui::app::App;
 
 // =============================================================================
@@ -388,6 +389,7 @@ impl TutorialState {
 /// Render the Tutorial tab.
 pub fn render_tutorial_tab(f: &mut Frame, app: &App, area: Rect) {
     let tutorial = &app.nexus.tutorial;
+    let locale = app.nexus.locale;
     let _theme = &app.theme;
 
     // Split into progress bar, content, and navigation
@@ -400,19 +402,29 @@ pub fn render_tutorial_tab(f: &mut Frame, app: &App, area: Rect) {
         ])
         .split(area);
 
-    render_progress_bar(f, tutorial, chunks[0]);
+    render_progress_bar(f, tutorial, locale, chunks[0]);
     render_step_content(f, app, chunks[1]);
-    render_navigation(f, tutorial, chunks[2]);
+    render_navigation(f, tutorial, locale, chunks[2]);
 }
 
 /// Render the progress bar at the top.
-fn render_progress_bar(f: &mut Frame, tutorial: &TutorialState, area: Rect) {
+fn render_progress_bar(f: &mut Frame, tutorial: &TutorialState, locale: NexusLocale, area: Rect) {
     let _progress = tutorial.progress_percent();
     let step = tutorial.current_step + 1;
 
+    // i18n labels
+    let journey_label = match locale {
+        NexusLocale::En => "  YOUR JOURNEY  ",
+        NexusLocale::Fr => "  VOTRE PARCOURS  ",
+    };
+    let step_label = match locale {
+        NexusLocale::En => "Step",
+        NexusLocale::Fr => "Étape",
+    };
+
     // Build progress indicators
     let mut spans = vec![
-        Span::styled("  YOUR JOURNEY  ", Style::default().fg(Color::Magenta)),
+        Span::styled(journey_label, Style::default().fg(Color::Magenta)),
     ];
 
     for i in 0..TUTORIAL_STEPS {
@@ -440,7 +452,7 @@ fn render_progress_bar(f: &mut Frame, tutorial: &TutorialState, area: Rect) {
     }
 
     spans.push(Span::styled(
-        format!("    Step {}/{}", step, TUTORIAL_STEPS),
+        format!("    {step_label} {step}/{TUTORIAL_STEPS}"),
         Style::default().fg(Color::Cyan),
     ));
 
@@ -458,12 +470,32 @@ fn render_progress_bar(f: &mut Frame, tutorial: &TutorialState, area: Rect) {
 #[allow(clippy::vec_init_then_push)] // Dynamic vector building with loops
 fn render_step_content(f: &mut Frame, app: &App, area: Rect) {
     let tutorial = &app.nexus.tutorial;
-    let step = tutorial.current();
+    let locale = app.nexus.locale;
+    let step_idx = tutorial.current_step;
     let _theme = &app.theme;
+
+    // Get localized content
+    let i18n_steps = i18n::tutorial_steps(locale);
+    let i18n_step = i18n_steps.get(step_idx);
+
+    // Get title and description from i18n
+    let title = i18n_step.map(|s| s.title).unwrap_or_else(|| {
+        STEPS.get(step_idx).map(|s| s.title).unwrap_or("Unknown")
+    });
+    let description = i18n_step.map(|s| s.description).unwrap_or_else(|| {
+        STEPS.get(step_idx).map(|s| s.objective).unwrap_or("")
+    });
+    let i18n_tasks = i18n_step.map(|s| s.tasks).unwrap_or(&[]);
+
+    // Labels based on locale
+    let (goal_label, insight_label, try_label, hint_prefix, nav_hint) = match locale {
+        NexusLocale::En => ("GOAL: ", "THE KEY INSIGHT", "TRY IT", "Hint: ", "Press [1-3] to toggle task completion, [Enter] to mark step complete"),
+        NexusLocale::Fr => ("OBJECTIF : ", "L'IDÉE CLÉ", "ESSAYEZ", "Astuce : ", "Appuyez [1-3] pour cocher, [Entrée] pour terminer l'étape"),
+    };
 
     let block = Block::default()
         .title(Span::styled(
-            format!(" STEP {}: {} ", step.id, step.title.to_uppercase()),
+            format!(" ÉTAPE {}: {} ", step_idx + 1, title.to_uppercase()),
             Style::default()
                 .fg(Color::Cyan)
                 .add_modifier(Modifier::BOLD),
@@ -476,47 +508,51 @@ fn render_step_content(f: &mut Frame, app: &App, area: Rect) {
 
     let mut lines = Vec::new();
 
-    // Objective
+    // Objective/Description
     lines.push(Line::from(""));
     lines.push(Line::from(vec![
         Span::styled("  ", Style::default()),
         Span::styled(
-            "GOAL: ",
+            goal_label,
             Style::default()
                 .fg(Color::Yellow)
                 .add_modifier(Modifier::BOLD),
         ),
-        Span::styled(step.objective, Style::default().fg(Color::White)),
+        Span::styled(description, Style::default().fg(Color::White)),
     ]));
     lines.push(Line::from(""));
 
-    // Explanation
-    lines.push(Line::from(Span::styled(
-        "  THE KEY INSIGHT",
-        Style::default()
-            .fg(Color::Magenta)
-            .add_modifier(Modifier::BOLD),
-    )));
-    lines.push(Line::from(Span::styled(
-        "  ─────────────────────────────────────────────────────────────────────",
-        Style::default().fg(Color::DarkGray),
-    )));
+    // Explanation (only show for English, French has simplified content)
+    if locale == NexusLocale::En {
+        if let Some(step) = STEPS.get(step_idx) {
+            lines.push(Line::from(Span::styled(
+                format!("  {insight_label}"),
+                Style::default()
+                    .fg(Color::Magenta)
+                    .add_modifier(Modifier::BOLD),
+            )));
+            lines.push(Line::from(Span::styled(
+                "  ─────────────────────────────────────────────────────────────────────",
+                Style::default().fg(Color::DarkGray),
+            )));
 
-    for explanation_line in step.explanation {
-        if explanation_line.is_empty() {
+            for explanation_line in step.explanation {
+                if explanation_line.is_empty() {
+                    lines.push(Line::from(""));
+                } else {
+                    lines.push(Line::from(vec![
+                        Span::styled("  ", Style::default()),
+                        Span::styled(*explanation_line, Style::default().fg(Color::White)),
+                    ]));
+                }
+            }
             lines.push(Line::from(""));
-        } else {
-            lines.push(Line::from(vec![
-                Span::styled("  ", Style::default()),
-                Span::styled(*explanation_line, Style::default().fg(Color::White)),
-            ]));
         }
     }
-    lines.push(Line::from(""));
 
     // Practice tasks
     lines.push(Line::from(Span::styled(
-        "  TRY IT",
+        format!("  {try_label}"),
         Style::default()
             .fg(Color::Green)
             .add_modifier(Modifier::BOLD),
@@ -528,11 +564,16 @@ fn render_step_content(f: &mut Frame, app: &App, area: Rect) {
 
     let task_completions = tutorial
         .tasks_completed
-        .get(tutorial.current_step)
+        .get(step_idx)
         .cloned()
         .unwrap_or_default();
 
-    for (i, task) in step.tasks.iter().enumerate() {
+    // Use i18n tasks if available, otherwise fall back to STEPS
+    let task_count = i18n_tasks.len().max(
+        STEPS.get(step_idx).map(|s| s.tasks.len()).unwrap_or(0)
+    );
+
+    for i in 0..task_count {
         let is_complete = task_completions.get(i).copied().unwrap_or(false);
         let checkbox = if is_complete { "☑" } else { "☐" };
         let style = if is_complete {
@@ -541,25 +582,40 @@ fn render_step_content(f: &mut Frame, app: &App, area: Rect) {
             Style::default().fg(Color::White)
         };
 
+        // Get task description from i18n or fallback
+        let task_desc = i18n_tasks.get(i).copied().unwrap_or_else(|| {
+            STEPS.get(step_idx)
+                .and_then(|s| s.tasks.get(i))
+                .map(|t| t.description)
+                .unwrap_or("Task")
+        });
+
         lines.push(Line::from(vec![
             Span::styled(format!("  {} {}. ", checkbox, i + 1), style),
-            Span::styled(task.description, style),
+            Span::styled(task_desc, style),
         ]));
 
-        if let Some(hint) = task.hint {
-            lines.push(Line::from(vec![
-                Span::styled("       ", Style::default()),
-                Span::styled(
-                    format!("Hint: {}", hint),
-                    Style::default().fg(Color::DarkGray),
-                ),
-            ]));
+        // Show hints only in English (detailed content)
+        if locale == NexusLocale::En {
+            if let Some(step) = STEPS.get(step_idx) {
+                if let Some(task) = step.tasks.get(i) {
+                    if let Some(hint) = task.hint {
+                        lines.push(Line::from(vec![
+                            Span::styled("       ", Style::default()),
+                            Span::styled(
+                                format!("{hint_prefix}{hint}"),
+                                Style::default().fg(Color::DarkGray),
+                            ),
+                        ]));
+                    }
+                }
+            }
         }
     }
 
     lines.push(Line::from(""));
     lines.push(Line::from(Span::styled(
-        "  Press [1-3] to toggle task completion, [Enter] to mark step complete",
+        format!("  {nav_hint}"),
         Style::default().fg(Color::DarkGray),
     )));
 
@@ -568,18 +624,24 @@ fn render_step_content(f: &mut Frame, app: &App, area: Rect) {
 }
 
 /// Render navigation hint at the bottom.
-fn render_navigation(f: &mut Frame, tutorial: &TutorialState, area: Rect) {
+fn render_navigation(f: &mut Frame, tutorial: &TutorialState, locale: NexusLocale, area: Rect) {
+    // i18n labels
+    let (prev_label, next_label, complete_label, finish_label, reset_label, graph_label) = match locale {
+        NexusLocale::En => ("[p: previous]", "[n: next step]", "[Complete!]", "[Finish tasks to complete]", "[r: reset]", "[1: Graph mode]"),
+        NexusLocale::Fr => ("[p: précédent]", "[n: suivant]", "[Terminé !]", "[Finir les tâches]", "[r: réinit.]", "[1: mode Graphe]"),
+    };
+
     let prev = if tutorial.current_step > 0 {
-        "[p: previous]"
+        prev_label
     } else {
         ""
     };
     let next = if tutorial.current_step < TUTORIAL_STEPS - 1 {
-        "[n: next step]"
+        next_label
     } else if tutorial.complete {
-        "[Complete!]"
+        complete_label
     } else {
-        "[Finish tasks to complete]"
+        finish_label
     };
 
     let progress_bar = format!(
@@ -594,7 +656,7 @@ fn render_navigation(f: &mut Frame, tutorial: &TutorialState, area: Rect) {
         Span::styled(prev, Style::default().fg(Color::DarkGray)),
         Span::styled("  ", Style::default()),
         Span::styled(next, Style::default().fg(Color::Green)),
-        Span::styled("  [r: reset]  [1: Graph mode]  ", Style::default().fg(Color::DarkGray)),
+        Span::styled(format!("  {reset_label}  {graph_label}  "), Style::default().fg(Color::DarkGray)),
         Span::styled(progress_bar, Style::default().fg(Color::Cyan)),
     ]);
 

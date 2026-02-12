@@ -16,6 +16,7 @@ use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, Borders, List, ListItem, Paragraph, Wrap};
 
+use super::NexusLocale;
 use crate::tui::app::App;
 use crate::tui::theme::Theme;
 
@@ -447,20 +448,28 @@ impl GlossaryState {
 
 /// Render the Glossary tab.
 pub fn render_glossary_tab(f: &mut Frame, app: &App, area: Rect) {
+    let locale = app.nexus.locale;
+
     // Split into concept list and definition panel
     let chunks = Layout::default()
         .direction(Direction::Horizontal)
         .constraints([Constraint::Percentage(35), Constraint::Percentage(65)])
         .split(area);
 
-    render_concept_list(f, app, chunks[0]);
-    render_definition_panel(f, app, chunks[1]);
+    render_concept_list(f, app, locale, chunks[0]);
+    render_definition_panel(f, app, locale, chunks[1]);
 }
 
 /// Render the concept list (left panel).
-fn render_concept_list(f: &mut Frame, app: &App, area: Rect) {
+fn render_concept_list(f: &mut Frame, app: &App, locale: NexusLocale, area: Rect) {
     let glossary = &app.nexus.glossary;
     let concepts = glossary.filtered_concepts();
+
+    // i18n labels
+    let (search_label, filter_label, concepts_label) = match locale {
+        NexusLocale::En => ("Search", "Filter", "CONCEPTS"),
+        NexusLocale::Fr => ("Recherche", "Filtre", "CONCEPTS"),
+    };
 
     // Build list items
     let mut items: Vec<ListItem> = Vec::new();
@@ -506,11 +515,11 @@ fn render_concept_list(f: &mut Frame, app: &App, area: Rect) {
 
     // Search indicator
     let title = if glossary.search_active {
-        format!(" [/] Search: {}_ ", glossary.search_query)
+        format!(" [/] {search_label}: {}_ ", glossary.search_query)
     } else if !glossary.search_query.is_empty() {
-        format!(" [/] Filter: {} ", glossary.search_query)
+        format!(" [/] {filter_label}: {} ", glossary.search_query)
     } else {
-        format!(" CONCEPTS ({}) ", concepts.len())
+        format!(" {concepts_label} ({}) ", concepts.len())
     };
 
     let title_style = if glossary.search_active {
@@ -533,13 +542,19 @@ fn render_concept_list(f: &mut Frame, app: &App, area: Rect) {
 }
 
 /// Render the definition panel (right panel).
-fn render_definition_panel(f: &mut Frame, app: &App, area: Rect) {
+fn render_definition_panel(f: &mut Frame, app: &App, locale: NexusLocale, area: Rect) {
     let glossary = &app.nexus.glossary;
     let theme = &app.theme;
 
+    // i18n labels
+    let (definition_label, no_concept_msg) = match locale {
+        NexusLocale::En => (" DEFINITION ", "No concept selected"),
+        NexusLocale::Fr => (" DÉFINITION ", "Aucun concept sélectionné"),
+    };
+
     let block = Block::default()
         .title(Span::styled(
-            " DEFINITION ",
+            definition_label,
             Style::default()
                 .fg(Color::Cyan)
                 .add_modifier(Modifier::BOLD),
@@ -551,9 +566,9 @@ fn render_definition_panel(f: &mut Frame, app: &App, area: Rect) {
     f.render_widget(block, area);
 
     if let Some((category, concept)) = glossary.current_concept() {
-        render_concept_definition(f, theme, inner, category, concept);
+        render_concept_definition(f, theme, locale, inner, category, concept);
     } else {
-        let empty = Paragraph::new("No concept selected").style(Style::default().fg(Color::DarkGray));
+        let empty = Paragraph::new(no_concept_msg).style(Style::default().fg(Color::DarkGray));
         f.render_widget(empty, inner);
     }
 }
@@ -562,10 +577,29 @@ fn render_definition_panel(f: &mut Frame, app: &App, area: Rect) {
 fn render_concept_definition(
     f: &mut Frame,
     _theme: &Theme,
+    locale: NexusLocale,
     area: Rect,
     category: GlossaryCategory,
     concept: &GlossaryConcept,
 ) {
+    // i18n labels
+    let (classification_label, yaml_label, neo4j_label, see_also_label, nav_hint) = match locale {
+        NexusLocale::En => (
+            "  CLASSIFICATION",
+            "  YAML EXAMPLE",
+            "  NEO4J EXAMPLE",
+            "  SEE ALSO",
+            "  [j/k: navigate]  [/: search]  [y: copy]  [Esc: clear]",
+        ),
+        NexusLocale::Fr => (
+            "  CLASSIFICATION",
+            "  EXEMPLE YAML",
+            "  EXEMPLE NEO4J",
+            "  VOIR AUSSI",
+            "  [j/k: naviguer]  [/: rechercher]  [y: copier]  [Esc: effacer]",
+        ),
+    };
+
     let mut lines = Vec::new();
 
     // Title
@@ -607,7 +641,7 @@ fn render_concept_definition(
     // Classification (if any)
     if let Some(classification) = concept.classification {
         lines.push(Line::from(Span::styled(
-            "  CLASSIFICATION",
+            classification_label,
             Style::default()
                 .fg(Color::Magenta)
                 .add_modifier(Modifier::BOLD),
@@ -626,7 +660,7 @@ fn render_concept_definition(
     // YAML example (if any)
     if let Some(yaml) = concept.example_yaml {
         lines.push(Line::from(Span::styled(
-            "  YAML EXAMPLE",
+            yaml_label,
             Style::default()
                 .fg(Color::Green)
                 .add_modifier(Modifier::BOLD),
@@ -647,7 +681,7 @@ fn render_concept_definition(
     // Neo4j example (if any)
     if let Some(neo4j) = concept.example_neo4j {
         lines.push(Line::from(Span::styled(
-            "  NEO4J EXAMPLE",
+            neo4j_label,
             Style::default()
                 .fg(Color::Blue)
                 .add_modifier(Modifier::BOLD),
@@ -668,7 +702,7 @@ fn render_concept_definition(
     // See also
     if !concept.see_also.is_empty() {
         lines.push(Line::from(Span::styled(
-            "  SEE ALSO",
+            see_also_label,
             Style::default()
                 .fg(Color::Yellow)
                 .add_modifier(Modifier::BOLD),
@@ -689,7 +723,7 @@ fn render_concept_definition(
     // Navigation hint
     lines.push(Line::from(""));
     lines.push(Line::from(Span::styled(
-        "  [j/k: navigate]  [/: search]  [y: copy]  [Esc: clear]",
+        nav_hint,
         Style::default().fg(Color::DarkGray),
     )));
 

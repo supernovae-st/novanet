@@ -11,6 +11,7 @@ use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, Borders, Paragraph, Wrap};
 
+use super::NexusLocale;
 use crate::tui::app::App;
 use crate::tui::theme::Theme;
 
@@ -20,6 +21,7 @@ pub const INTRO_PAGES: usize = 3;
 /// Render the Intro tab content.
 pub fn render_intro_tab(f: &mut Frame, app: &App, area: Rect) {
     let page = app.nexus.intro_page.min(INTRO_PAGES - 1);
+    let locale = app.nexus.locale;
 
     // Split into main content and navigation hint
     let chunks = Layout::default()
@@ -29,21 +31,27 @@ pub fn render_intro_tab(f: &mut Frame, app: &App, area: Rect) {
 
     // Render the current page
     match page {
-        0 => render_page_1_what_is_novanet(f, &app.theme, chunks[0]),
-        1 => render_page_2_two_types_of_nodes(f, &app.theme, chunks[0]),
-        2 => render_page_3_classification(f, &app.theme, chunks[0]),
-        _ => render_page_1_what_is_novanet(f, &app.theme, chunks[0]),
+        0 => render_page_1_what_is_novanet(f, &app.theme, locale, chunks[0]),
+        1 => render_page_2_two_types_of_nodes(f, &app.theme, locale, chunks[0]),
+        2 => render_page_3_classification(f, &app.theme, locale, chunks[0]),
+        _ => render_page_1_what_is_novanet(f, &app.theme, locale, chunks[0]),
     }
 
     // Render navigation hint
-    render_navigation_hint(f, page, chunks[1]);
+    render_navigation_hint(f, locale, page, chunks[1]);
 }
 
 /// Page 1: What is NovaNet?
-fn render_page_1_what_is_novanet(f: &mut Frame, theme: &Theme, area: Rect) {
+fn render_page_1_what_is_novanet(f: &mut Frame, theme: &Theme, locale: NexusLocale, area: Rect) {
+    // i18n title
+    let title = match locale {
+        NexusLocale::En => " WHAT IS NOVANET? ",
+        NexusLocale::Fr => " QU'EST-CE QUE NOVANET ? ",
+    };
+
     let block = Block::default()
         .title(Span::styled(
-            " WHAT IS NOVANET? ",
+            title,
             Style::default()
                 .fg(Color::Cyan)
                 .add_modifier(Modifier::BOLD),
@@ -227,10 +235,16 @@ fn render_page_1_what_is_novanet(f: &mut Frame, theme: &Theme, area: Rect) {
 }
 
 /// Page 2: The Two Types of Nodes
-fn render_page_2_two_types_of_nodes(f: &mut Frame, theme: &Theme, area: Rect) {
+fn render_page_2_two_types_of_nodes(f: &mut Frame, theme: &Theme, locale: NexusLocale, area: Rect) {
+    // i18n title
+    let title = match locale {
+        NexusLocale::En => " THE TWO TYPES OF NODES ",
+        NexusLocale::Fr => " LES DEUX TYPES DE NOEUDS ",
+    };
+
     let block = Block::default()
         .title(Span::styled(
-            " THE TWO TYPES OF NODES ",
+            title,
             Style::default()
                 .fg(Color::Cyan)
                 .add_modifier(Modifier::BOLD),
@@ -413,10 +427,16 @@ fn render_page_2_two_types_of_nodes(f: &mut Frame, theme: &Theme, area: Rect) {
 }
 
 /// Page 3: Classification (Realm, Layer, Trait)
-fn render_page_3_classification(f: &mut Frame, theme: &Theme, area: Rect) {
+fn render_page_3_classification(f: &mut Frame, theme: &Theme, locale: NexusLocale, area: Rect) {
+    // i18n title
+    let title = match locale {
+        NexusLocale::En => " HOW NODES ARE CLASSIFIED ",
+        NexusLocale::Fr => " CLASSIFICATION DES NOEUDS ",
+    };
+
     let block = Block::default()
         .title(Span::styled(
-            " HOW NODES ARE CLASSIFIED ",
+            title,
             Style::default()
                 .fg(Color::Cyan)
                 .add_modifier(Modifier::BOLD),
@@ -583,21 +603,45 @@ fn render_page_3_classification(f: &mut Frame, theme: &Theme, area: Rect) {
 }
 
 /// Render navigation hint at the bottom.
-fn render_navigation_hint(f: &mut Frame, page: usize, area: Rect) {
-    let prev = if page > 0 { "[p: previous]" } else { "" };
+fn render_navigation_hint(f: &mut Frame, locale: NexusLocale, page: usize, area: Rect) {
+    // i18n labels
+    let (prev_label, next_label, tutorial_label, glossary_label, traits_label, page_label) =
+        match locale {
+            NexusLocale::En => (
+                "[p: previous]",
+                "[Enter/n: next]",
+                "[U: start Tutorial]",
+                "[G: Glossary]",
+                "[T: Traits]",
+                "Page",
+            ),
+            NexusLocale::Fr => (
+                "[p: précédent]",
+                "[Entrée/n: suivant]",
+                "[U: Tutoriel]",
+                "[G: Glossaire]",
+                "[T: Traits]",
+                "Page",
+            ),
+        };
+
+    let prev = if page > 0 { prev_label } else { "" };
     let next = if page < INTRO_PAGES - 1 {
-        "[Enter/n: next]"
+        next_label
     } else {
-        "[U: start Tutorial]"
+        tutorial_label
     };
-    let page_indicator = format!("[Page {}/{}]", page + 1, INTRO_PAGES);
+    let page_indicator = format!("[{} {}/{}]", page_label, page + 1, INTRO_PAGES);
 
     let line = Line::from(vec![
         Span::styled("  ", Style::default()),
         Span::styled(prev, Style::default().fg(Color::DarkGray)),
         Span::styled("  ", Style::default()),
         Span::styled(next, Style::default().fg(Color::Green)),
-        Span::styled("  [G: Glossary]  [T: Traits]  ", Style::default().fg(Color::DarkGray)),
+        Span::styled(
+            format!("  {}  {}  ", glossary_label, traits_label),
+            Style::default().fg(Color::DarkGray),
+        ),
         Span::styled(page_indicator, Style::default().fg(Color::Cyan)),
     ]);
 
