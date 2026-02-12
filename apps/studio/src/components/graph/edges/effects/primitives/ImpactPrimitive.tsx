@@ -18,10 +18,19 @@ export const ImpactPrimitive = memo(function ImpactPrimitive({
   state,
   targetPosition,
 }: EffectPrimitiveProps) {
+  // Burst particle angles - must be before any early returns (React hooks rule)
+  const burstAngles = useMemo(() => {
+    const count = IMPACT_CONFIG.burstCount;
+    return Array.from({ length: count }, (_, i) => (i * 360) / count);
+  }, []);
+
   // Guard against undefined position
   if (!targetPosition || typeof targetPosition.x !== 'number') {
     return null;
   }
+
+  // Don't render if intensity too low
+  if (intensity < 0.1) return null;
 
   const isHighlighted = state === 'highlighted';
   const scale = isHighlighted ? IMPACT_CONFIG.highlightedScale : 1;
@@ -30,15 +39,6 @@ export const ImpactPrimitive = memo(function ImpactPrimitive({
 
   // Delay impact to sync with particle arrival (~85% of duration)
   const delay = timing.duration * 0.85;
-
-  // Burst particle angles - must be before early return
-  const burstAngles = useMemo(() => {
-    const count = IMPACT_CONFIG.burstCount;
-    return Array.from({ length: count }, (_, i) => (i * 360) / count);
-  }, []);
-
-  // Don't render if intensity too low
-  if (intensity < 0.1) return null;
 
   const dur = `${timing.duration}s`;
   const burstDur = `${timing.duration * 0.4}s`;

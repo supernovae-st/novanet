@@ -588,6 +588,10 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                     Span::styled("Realm", STYLE_ACCENT),
                 ]),
                 Line::from(vec![
+                    Span::styled("category  ", STYLE_DIM),
+                    Span::styled("◈ Schema", Style::default().fg(Color::Cyan)),
+                ]),
+                Line::from(vec![
                     Span::styled("key       ", STYLE_DIM),
                     Span::styled(realm.key.clone(), STYLE_PRIMARY),
                 ]),
@@ -638,6 +642,22 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 }
             }
 
+            // LLM Context (if present)
+            if !realm.llm_context.is_empty() {
+                lines.push(Line::from(""));
+                lines.push(Line::from(Span::styled(
+                    "LLM CONTEXT",
+                    Style::default()
+                        .fg(Color::White)
+                        .add_modifier(Modifier::BOLD),
+                )));
+                lines.push(Line::from(Span::styled(SEPARATOR_MAJOR, STYLE_DIM)));
+                // Wrap the context text to fit panel width
+                for wrapped_line in wrap_text(&realm.llm_context, 38) {
+                    lines.push(Line::from(Span::styled(wrapped_line, STYLE_DESC)));
+                }
+            }
+
             lines
         }
         Some(TreeItem::Layer(realm, layer)) => {
@@ -646,6 +666,10 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 Line::from(vec![
                     Span::styled("type      ", STYLE_DIM),
                     Span::styled("Layer", STYLE_SUCCESS),
+                ]),
+                Line::from(vec![
+                    Span::styled("category  ", STYLE_DIM),
+                    Span::styled("◈ Schema", Style::default().fg(Color::Cyan)),
                 ]),
                 Line::from(vec![
                     Span::styled("key       ", STYLE_DIM),
@@ -708,6 +732,22 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 }
             }
 
+            // LLM Context (if present)
+            if !layer.llm_context.is_empty() {
+                lines.push(Line::from(""));
+                lines.push(Line::from(Span::styled(
+                    "LLM CONTEXT",
+                    Style::default()
+                        .fg(Color::White)
+                        .add_modifier(Modifier::BOLD),
+                )));
+                lines.push(Line::from(Span::styled(SEPARATOR_MAJOR, STYLE_DIM)));
+                // Wrap the context text to fit panel width
+                for wrapped_line in wrap_text(&layer.llm_context, 38) {
+                    lines.push(Line::from(Span::styled(wrapped_line, STYLE_DESC)));
+                }
+            }
+
             lines
         }
         Some(TreeItem::Kind(realm, layer, kind)) => {
@@ -718,6 +758,10 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 Line::from(vec![
                     Span::styled("type        ", STYLE_DIM),
                     Span::styled("Node Kind", STYLE_INFO),
+                ]),
+                Line::from(vec![
+                    Span::styled("category    ", STYLE_DIM),
+                    Span::styled("◈ Schema", Style::default().fg(Color::Cyan)),
                 ]),
                 Line::from(vec![
                     Span::styled("key         ", STYLE_DIM),
@@ -946,26 +990,73 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 lines.push(Line::from(Span::styled("  * = required", STYLE_DIM)));
             }
 
-            // Arcs section
+            // Related Arcs section
             if !kind.arcs.is_empty() {
+                // Count arcs by direction
+                let outgoing_count = kind
+                    .arcs
+                    .iter()
+                    .filter(|a| a.direction == ArcDirection::Outgoing)
+                    .count();
+                let incoming_count = kind
+                    .arcs
+                    .iter()
+                    .filter(|a| a.direction == ArcDirection::Incoming)
+                    .count();
+
                 lines.push(Line::from(""));
                 lines.push(Line::from(Span::styled(
-                    format!("Arcs ({})", kind.arcs.len()),
-                    STYLE_MUTED,
+                    "RELATED ARCS",
+                    Style::default()
+                        .fg(Color::White)
+                        .add_modifier(Modifier::BOLD),
                 )));
+                lines.push(Line::from(Span::styled(SEPARATOR_MAJOR, STYLE_DIM)));
 
-                for arc in &kind.arcs {
-                    let (arrow, arrow_color) = match arc.direction {
-                        ArcDirection::Outgoing => ("→", Color::Cyan),
-                        ArcDirection::Incoming => ("←", Color::Magenta),
-                    };
+                // Summary line
+                lines.push(Line::from(vec![
+                    Span::styled("→ ", Style::default().fg(Color::Cyan)),
+                    Span::styled(format!("{} outgoing  ", outgoing_count), STYLE_MUTED),
+                    Span::styled("← ", Style::default().fg(Color::Magenta)),
+                    Span::styled(format!("{} incoming", incoming_count), STYLE_MUTED),
+                ]));
 
-                    lines.push(Line::from(vec![
-                        Span::styled(format!("  {} ", arrow), Style::default().fg(arrow_color)),
-                        Span::styled(arc.arc_type.clone(), Style::default().fg(arrow_color)),
-                        Span::styled(" → ", STYLE_DIM),
-                        Span::styled(arc.target_kind.clone(), STYLE_HIGHLIGHT),
-                    ]));
+                // Group arcs by direction: outgoing first
+                let outgoing: Vec<_> = kind
+                    .arcs
+                    .iter()
+                    .filter(|a| a.direction == ArcDirection::Outgoing)
+                    .collect();
+                let incoming: Vec<_> = kind
+                    .arcs
+                    .iter()
+                    .filter(|a| a.direction == ArcDirection::Incoming)
+                    .collect();
+
+                // Outgoing arcs
+                if !outgoing.is_empty() {
+                    lines.push(Line::from(""));
+                    for arc in outgoing {
+                        lines.push(Line::from(vec![
+                            Span::styled("  → ", Style::default().fg(Color::Cyan)),
+                            Span::styled(arc.arc_type.clone(), Style::default().fg(Color::Cyan)),
+                            Span::styled(" → ", STYLE_DIM),
+                            Span::styled(arc.target_kind.clone(), STYLE_HIGHLIGHT),
+                        ]));
+                    }
+                }
+
+                // Incoming arcs
+                if !incoming.is_empty() {
+                    lines.push(Line::from(""));
+                    for arc in incoming {
+                        lines.push(Line::from(vec![
+                            Span::styled("  ← ", Style::default().fg(Color::Magenta)),
+                            Span::styled(arc.arc_type.clone(), Style::default().fg(Color::Magenta)),
+                            Span::styled(" ← ", STYLE_DIM),
+                            Span::styled(arc.target_kind.clone(), STYLE_HIGHLIGHT),
+                        ]));
+                    }
                 }
             }
 
@@ -990,10 +1081,14 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
             lines
         }
         Some(TreeItem::ArcFamily(family)) => {
-            vec![
+            let mut lines = vec![
                 Line::from(vec![
                     Span::styled("type      ", STYLE_DIM),
                     Span::styled("ArcFamily", STYLE_ARC_FAMILY),
+                ]),
+                Line::from(vec![
+                    Span::styled("category  ", STYLE_DIM),
+                    Span::styled("◈ Schema", Style::default().fg(Color::Cyan)),
                 ]),
                 Line::from(vec![
                     Span::styled("key       ", STYLE_DIM),
@@ -1003,15 +1098,40 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                     Span::styled("arcs      ", STYLE_DIM),
                     Span::styled(family.arc_kinds.len().to_string(), STYLE_PRIMARY),
                 ]),
-                Line::from(""),
-                Line::from(Span::styled("h/l to collapse/expand", STYLE_DIM)),
-            ]
+            ];
+
+            // LLM Context (if present)
+            if !family.llm_context.is_empty() {
+                lines.push(Line::from(""));
+                lines.push(Line::from(Span::styled(
+                    "LLM CONTEXT",
+                    Style::default()
+                        .fg(Color::White)
+                        .add_modifier(Modifier::BOLD),
+                )));
+                lines.push(Line::from(Span::styled(SEPARATOR_MAJOR, STYLE_DIM)));
+                // Wrap the context text to fit panel width
+                for wrapped_line in wrap_text(&family.llm_context, 38) {
+                    lines.push(Line::from(Span::styled(wrapped_line, STYLE_DESC)));
+                }
+            }
+
+            lines.push(Line::from(""));
+            lines.push(Line::from(Span::styled(
+                "h/l to collapse/expand",
+                STYLE_DIM,
+            )));
+            lines
         }
         Some(TreeItem::ArcKind(family, arc_kind)) => {
             let mut lines = vec![
                 Line::from(vec![
                     Span::styled("type      ", STYLE_DIM),
                     Span::styled("ArcKind", STYLE_HIGHLIGHT),
+                ]),
+                Line::from(vec![
+                    Span::styled("category  ", STYLE_DIM),
+                    Span::styled("◈ Schema", Style::default().fg(Color::Cyan)),
                 ]),
                 Line::from(vec![
                     Span::styled("key       ", STYLE_DIM),
@@ -1069,6 +1189,10 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 Line::from(vec![
                     Span::styled("type        ", STYLE_DIM),
                     Span::styled("Instance", STYLE_SUCCESS),
+                ]),
+                Line::from(vec![
+                    Span::styled("category    ", STYLE_DIM),
+                    Span::styled("◆ Data", Style::default().fg(Color::Yellow)),
                 ]),
                 Line::from(vec![
                     Span::styled("key         ", STYLE_DIM),
@@ -1474,22 +1598,30 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
             lines
         }
         Some(TreeItem::EntityCategory(_, _, _, cat)) => {
-            // Show category details
+            // Show category details with consistent panel structure
             let mut lines = vec![
                 Line::from(vec![
-                    Span::styled("Category: ", STYLE_HINT),
-                    Span::styled(cat.display_name.clone(), STYLE_PRIMARY),
+                    Span::styled("type      ", STYLE_DIM),
+                    Span::styled("EntityCategory", STYLE_ACCENT),
                 ]),
                 Line::from(vec![
-                    Span::styled("Key: ", STYLE_HINT),
+                    Span::styled("category  ", STYLE_DIM),
+                    Span::styled("◈ Schema", Style::default().fg(Color::Cyan)),
+                ]),
+                Line::from(vec![
+                    Span::styled("key       ", STYLE_DIM),
                     Span::styled(cat.key.clone(), STYLE_PRIMARY),
                 ]),
                 Line::from(vec![
-                    Span::styled("Question: ", STYLE_HINT),
-                    Span::styled(cat.question.clone(), STYLE_PRIMARY),
+                    Span::styled("name      ", STYLE_DIM),
+                    Span::styled(cat.display_name.clone(), STYLE_PRIMARY),
                 ]),
                 Line::from(vec![
-                    Span::styled("Entities: ", STYLE_HINT),
+                    Span::styled("question  ", STYLE_DIM),
+                    Span::styled(cat.question.clone(), STYLE_MUTED),
+                ]),
+                Line::from(vec![
+                    Span::styled("entities  ", STYLE_DIM),
                     Span::styled(cat.instance_count.to_string(), STYLE_PRIMARY),
                 ]),
             ];
