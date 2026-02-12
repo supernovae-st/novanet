@@ -40,17 +40,34 @@ import { FilterTree } from '@/components/ui/FilterTree';
 import { VIEW_CATEGORIES } from '@/config/viewCategories';
 
 // Map view IDs to icons (fallback to Eye for unknown views)
+// v11.6.1: Updated to new unified view system IDs
 const VIEW_ICONS: Record<string, LucideIcon> = {
+  // META views
+  'meta-complete': Grid3x3,
+  'meta-realm': Grid3x3,
+  'meta-arcs': Grid3x3,
+  // DATA views
+  'data-complete': Grid3x3,
+  'data-org': FolderKanban,
+  'data-shared': BookOpen,
+  'data-project': FolderKanban,
+  'data-entities': BookOpen,
+  'data-generation': Sparkles,
+  'data-seo': Pickaxe,
+  'data-geo': Pickaxe,
+  // OVERLAY views
+  'overlay-complete': Grid3x3,
+  // CONTEXTUAL views
+  'ctx-composition': FolderKanban,
+  'ctx-entities': BookOpen,
+  'ctx-knowledge': BookOpen,
+  'ctx-generation': Sparkles,
+  'ctx-seo-intel': Pickaxe,
+  'ctx-geo-intel': Pickaxe,
+  'ctx-project': FolderKanban,
+  // Legacy aliases (backward compat)
   'complete-graph': Grid3x3,
   'block-generation': Sparkles,
-  'concept-generation': Sparkles,
-  'page-generation': Sparkles,
-  'knowledge-graph': BookOpen,
-  'locale-knowledge': BookOpen,
-  'seo-mining': Pickaxe,
-  'geo-mining': Pickaxe,
-  'project-scope': FolderKanban,
-  'project-overview': FolderKanban,
 };
 
 // Keyboard shortcut mapping (1-9 keys map to first 9 views in order)

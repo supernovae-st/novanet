@@ -1,5 +1,6 @@
-// NovaNet Core Types v11.2.0 - 2-Realm Architecture
+// NovaNet Core Types v11.7.0 - Unified Tree Architecture
 //
+// v11.7.0: Unified tree where Realm, Layer, Kind, Instance, ArcFamily, ArcKind are all clickable nodes
 // v11.2.0: 2 realms (shared, org), derived → generated + aggregated, job nodes removed
 //
 // STANDARD PROPERTIES (all nodes):
@@ -396,3 +397,65 @@ export {
   PRIORITIES,
   TASK_MODIFIERS,
 } from './task-types.js';
+
+// =============================================================================
+// UNIFIED TREE (v11.7.0 - Unified Tree Architecture)
+// =============================================================================
+
+export {
+  // Dual icon format
+  type DualIcon,
+
+  // Node types
+  type UnifiedNodeType,
+  type SectionType,
+  type UnifiedNodeBase,
+  type SectionNode,
+  type RealmNode,
+  type LayerNode,
+  type KindNode,
+  type InstanceNode,
+  type ArcFamilyNode,
+  type ArcKindNode,
+  type UnifiedNode,
+
+  // Classification types
+  type NodeTrait,
+  type ArcCardinality,
+
+  // Badge types
+  type NodeBadge,
+  BADGES,
+
+  // Lazy loading types
+  type LazyChildrenState,
+  PAGINATION,
+
+  // Tree store types
+  type UnifiedTreeState,
+  type UnifiedTreeActions,
+
+  // API types
+  type LoadInstancesRequest,
+  type LoadInstancesResponse,
+  type NodeDetailsResponse,
+
+  // View types (unified tree specific)
+  type UnifiedViewDefinition,
+  type UnifiedViewRegistry,
+
+  // Type guards
+  isSectionNode,
+  isRealmNode,
+  isLayerNode,
+  isKindNode,
+  isInstanceNode,
+  isArcFamilyNode,
+  isArcKindNode,
+
+  // Utility functions
+  makeNodeId,
+  parseNodeId,
+  getLayerBadge,
+  getRealmBadge,
+} from './unified-tree.js';

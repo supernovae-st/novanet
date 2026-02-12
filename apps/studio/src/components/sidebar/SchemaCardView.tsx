@@ -3,8 +3,8 @@
 /**
  * SchemaCardView - Grid display of schema nodes using NodeCard
  *
- * v11.0: Unified card-based schema browser similar to TUI meta view.
- * Displays node types grouped by realm and layer in a card grid layout.
+ * v11.6.1: Unified card-based schema browser using schemaStore.
+ * Displays node types grouped by realm and layer with counts from current query.
  */
 
 import { memo, useMemo, useState, useCallback } from 'react';
@@ -16,24 +16,20 @@ import {
   Building2,
   type LucideIcon,
 } from 'lucide-react';
-import { REALM_HIERARCHY } from '@novanet/core/graph';
-import type { Layer } from '@novanet/core/graph';
+import { useShallow } from 'zustand/react/shallow';
 import { Realm } from '@novanet/core/types';
 import { cn } from '@/lib/utils';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
 import { iconSizes, gapTokens } from '@/design/tokens';
-import { REALM_COLORS } from '@/design/colors';
 import { NodeCard, NodeCardGrid } from '@/components/ui/NodeCard';
 import type { GraphNode, NodeType } from '@/types';
+import { useSchemaStore, selectRealmGroups, selectIsSchemaLoaded } from '@/stores/schemaStore';
 
 // Realm icons
 const REALM_ICONS: Record<Realm, LucideIcon> = {
   shared: Globe,
   org: Building2,
 };
-
-// Ordered realms for consistent rendering
-const REALM_ORDER: Realm[] = ['shared', 'org'];
 
 export interface SchemaCardViewProps {
   className?: string;
@@ -63,6 +59,14 @@ export const SchemaCardView = memo(function SchemaCardView({
   const [searchQuery, setSearchQuery] = useState('');
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set());
 
+  // Get realm groups from schema store
+  const { realmGroups, isSchemaLoaded } = useSchemaStore(
+    useShallow((state) => ({
+      realmGroups: selectRealmGroups(state),
+      isSchemaLoaded: selectIsSchemaLoaded(state),
+    }))
+  );
+
   // Toggle section collapse
   const toggleSection = useCallback((key: string) => {
     setCollapsedSections((prev) => {
@@ -80,30 +84,25 @@ export const SchemaCardView = memo(function SchemaCardView({
   const realmData = useMemo(() => {
     const query = searchQuery.toLowerCase().trim();
 
-    return REALM_ORDER.map((realm) => {
-      const realmDef = REALM_HIERARCHY[realm];
-      const accent = REALM_COLORS[realm];
-      const layers = Object.entries(realmDef.layers) as [
-        Layer,
-        (typeof realmDef.layers)[Layer],
-      ][];
-
+    return realmGroups.map((realmGroup) => {
       // Filter layers and their node types by search query
-      const filteredLayers = layers.map(([layerName, layerMeta]) => {
+      const filteredLayers = realmGroup.layers.map((layerGroup) => {
         const filteredTypes = query
-          ? layerMeta.nodeTypes.filter((type) => {
-              const config = NODE_TYPE_CONFIG[type];
+          ? layerGroup.nodeTypes.filter((nodeType) => {
+              const config = NODE_TYPE_CONFIG[nodeType.name];
               return (
-                type.toLowerCase().includes(query) ||
+                nodeType.name.toLowerCase().includes(query) ||
                 config?.label?.toLowerCase().includes(query)
               );
             })
-          : layerMeta.nodeTypes;
+          : layerGroup.nodeTypes;
 
         return {
-          name: layerName,
-          label: layerMeta.label,
+          name: layerGroup.layer,
+          label: layerGroup.displayName,
+          color: layerGroup.color,
           nodeTypes: filteredTypes,
+          totalCount: filteredTypes.reduce((sum, t) => sum + t.count, 0),
         };
       }).filter((layer) => layer.nodeTypes.length > 0);
 
@@ -111,16 +110,21 @@ export const SchemaCardView = memo(function SchemaCardView({
         (sum, layer) => sum + layer.nodeTypes.length,
         0
       );
+      const totalCount = filteredLayers.reduce(
+        (sum, layer) => sum + layer.totalCount,
+        0
+      );
 
       return {
-        realm,
-        label: realmDef.label,
-        accent,
+        realm: realmGroup.realm,
+        label: realmGroup.displayName,
+        accent: { color: realmGroup.color },
         layers: filteredLayers,
         nodeCount,
+        totalCount,
       };
     }).filter((realm) => realm.nodeCount > 0);
-  }, [searchQuery]);
+  }, [searchQuery, realmGroups]);
 
   return (
     <div className={cn('flex flex-col h-full', className)}>
@@ -152,7 +156,7 @@ export const SchemaCardView = memo(function SchemaCardView({
               const isCollapsed = collapsedSections.has(realmKey);
 
               return (
-                <div key={realm} className="flex flex-col">
+                <div key={realmKey} className="flex flex-col">
                   {/* Realm Header */}
                   <button
                     onClick={() => toggleSection(realmKey)}
@@ -184,7 +188,7 @@ export const SchemaCardView = memo(function SchemaCardView({
                         const isLayerCollapsed = collapsedSections.has(layerKey);
 
                         return (
-                          <div key={layer.name} className="flex flex-col">
+                          <div key={layerKey} className="flex flex-col">
                             {/* Layer Header */}
                             <button
                               onClick={() => toggleSection(layerKey)}
@@ -211,15 +215,17 @@ export const SchemaCardView = memo(function SchemaCardView({
                             {!isLayerCollapsed && (
                               <div className="pl-4 pt-2">
                                 <NodeCardGrid columns={2}>
-                                  {layer.nodeTypes.map((nodeType) => {
-                                    const graphNode = nodeTypeToGraphNode(nodeType as NodeType);
+                                  {layer.nodeTypes.map((enrichedType) => {
+                                    const graphNode = nodeTypeToGraphNode(enrichedType.name);
                                     return (
                                       <NodeCard
-                                        key={nodeType}
+                                        key={enrichedType.name}
                                         node={graphNode}
                                         compact
-                                        isSelected={selectedNodeType === nodeType}
-                                        onClick={() => onNodeSelect?.(nodeType as NodeType)}
+                                        isSelected={selectedNodeType === enrichedType.name}
+                                        onClick={() => onNodeSelect?.(enrichedType.name)}
+                                        instanceCount={enrichedType.count}
+                                        className={enrichedType.count === 0 ? 'opacity-50' : undefined}
                                       />
                                     );
                                   })}

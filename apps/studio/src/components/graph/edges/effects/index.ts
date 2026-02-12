@@ -19,6 +19,12 @@ export { MatrixCodeRain } from './MatrixCodeRain';   // Generation: Matrix code 
 export { SonarPulse } from './SonarPulse';           // Mining: Sonar pulse discovery
 
 // ============================================================================
+// SELECTION EFFECT (v11.6.5 - Selection UX Polish)
+// ============================================================================
+
+export { SelectionEffect } from './SelectionEffect'; // Direction, differentiation, transitions
+
+// ============================================================================
 // LEGACY SYSTEM (kept for backwards compatibility)
 // ============================================================================
 

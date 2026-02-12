@@ -1,5 +1,6 @@
 // stores/viewStore.ts
 // v12: View-based navigation - views are the single source of truth
+// v12.1: Query-First filter injection
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
@@ -7,6 +8,8 @@ import { immer } from 'zustand/middleware/immer';
 import type { ViewCategoryGroup, ViewRegistryEntry } from '@novanet/core/filters';
 import { logger } from '@/lib/logger';
 import { useQueryStore } from './queryStore';
+import { useFilterStore } from './filterStore';
+import { injectFilters } from '@/lib/cypher/injectFilters';
 
 // ============================================================================
 // TYPES
@@ -33,6 +36,9 @@ interface ViewStoreState {
   isLoading: boolean;
   isExecuting: boolean;
   error: string | null;
+
+  // Internal: AbortController for canceling in-flight requests (not persisted)
+  _abortController: AbortController | null;
 }
 
 interface ViewStoreActions {
@@ -62,7 +68,7 @@ interface ViewStoreActions {
 // CONSTANTS
 // ============================================================================
 
-const DEFAULT_VIEW_ID = 'complete-graph';
+const DEFAULT_VIEW_ID = 'data-complete';
 
 // ============================================================================
 // STORE
@@ -81,6 +87,7 @@ export const useViewStore = create<ViewStoreState & ViewStoreActions>()(
       isLoading: false,
       isExecuting: false,
       error: null,
+      _abortController: null,
 
       // Load registry from API
       loadRegistry: async () => {
@@ -95,6 +102,12 @@ export const useViewStore = create<ViewStoreState & ViewStoreActions>()(
 
         try {
           const res = await fetch('/api/views');
+
+          // v11.6.1: Check HTTP status before parsing JSON
+          if (!res.ok) {
+            throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+          }
+
           const json = await res.json();
 
           if (json.success) {
@@ -133,6 +146,16 @@ export const useViewStore = create<ViewStoreState & ViewStoreActions>()(
 
       // Select and execute a view (fetches Cypher and runs query)
       executeView: async (id, params) => {
+        // v11.6.1: Cancel any in-flight request to prevent race conditions
+        const currentAbort = get()._abortController;
+        if (currentAbort) {
+          currentAbort.abort();
+          logger.debug('ViewStore', 'Aborted previous request', { id });
+        }
+
+        // Create new AbortController for this request
+        const abortController = new AbortController();
+
         // First select the view and clear custom query flag
         set((state) => {
           state.activeViewId = id;
@@ -140,6 +163,7 @@ export const useViewStore = create<ViewStoreState & ViewStoreActions>()(
           state.customQueryText = null;
           state.isExecuting = true;
           state.error = null;
+          state._abortController = abortController;
           if (params) {
             state.params = params;
           }
@@ -156,7 +180,13 @@ export const useViewStore = create<ViewStoreState & ViewStoreActions>()(
           if (viewParams.project) queryParams.set('project', viewParams.project);
 
           const url = `/api/views/${id}${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
-          const res = await fetch(url);
+          const res = await fetch(url, { signal: abortController.signal });
+
+          // v11.6.1: Check HTTP status before parsing JSON
+          if (!res.ok) {
+            throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+          }
+
           const json = await res.json();
 
           if (!json.success) {
@@ -164,27 +194,70 @@ export const useViewStore = create<ViewStoreState & ViewStoreActions>()(
           }
 
           // Extract the Cypher query and params from the view
-          const cypherQuery = json.data.cypher?.query;
+          const baseCypherQuery = json.data.cypher?.query;
           const cypherParams = json.data.cypher?.params || {};
-          if (!cypherQuery) {
+          if (!baseCypherQuery) {
             throw new Error('View did not return a Cypher query');
           }
 
+          // v12.1: Query-First - inject filters into the Cypher query
+          // This ensures what's displayed = what's executed
+          const { displayLimit, selectedLocale } = useFilterStore.getState();
+          const cypherQuery = injectFilters(baseCypherQuery, {
+            displayLimit,
+            localeKey: selectedLocale || undefined,
+          });
+
           logger.debug('ViewStore', 'View Cypher loaded', {
             id,
-            cypher: cypherQuery.substring(0, 100) + '...',
+            baseCypher: baseCypherQuery.substring(0, 100) + '...',
+            finalCypher: cypherQuery.substring(0, 100) + '...',
+            filters: { displayLimit, selectedLocale },
             params: cypherParams,
           });
 
-          // Execute the query via queryStore with params
-          await useQueryStore.getState().executeQuery(cypherQuery, cypherParams);
+          // DEBUG: Log full cypher before executing
+          console.log('[viewStore] Executing Cypher:', {
+            id,
+            cypher: cypherQuery,
+            params: cypherParams,
+            filters: { displayLimit, selectedLocale },
+          });
 
-          set({ isExecuting: false });
+          // Execute the query via queryStore with params
+          const result = await useQueryStore.getState().executeQuery(cypherQuery, cypherParams);
+
+          // DEBUG: Log result from queryStore
+          console.log('[viewStore] Query result:', {
+            id,
+            hasResult: !!result,
+            nodeCount: result?.nodes?.length ?? 0,
+            edgeCount: result?.edges?.length ?? 0,
+          });
+
+          set((state) => {
+            state.isExecuting = false;
+            state._abortController = null;
+          });
           logger.info('ViewStore', 'View executed successfully', { id });
         } catch (error) {
-          const message = error instanceof Error ? error.message : 'Unknown error';
-          set({ error: message, isExecuting: false });
-          logger.error('ViewStore', 'View execution failed', { id, error: message });
+          // v11.6.1: Ignore aborted requests (user clicked another view)
+          if (error instanceof Error && error.name === 'AbortError') {
+            logger.debug('ViewStore', 'Request aborted', { id });
+            return;
+          }
+
+          // v11.6.10: Enhanced error logging for debugging
+          const message = error instanceof Error ? error.message : String(error) || 'Unknown error';
+          const errorDetails = error instanceof Error
+            ? { name: error.name, message: error.message, stack: error.stack?.split('\n').slice(0, 3).join('\n') }
+            : { raw: String(error) };
+          set((state) => {
+            state.error = message;
+            state.isExecuting = false;
+            state._abortController = null;
+          });
+          logger.error('ViewStore', `View execution failed: ${id}`, errorDetails);
         }
       },
 
@@ -212,15 +285,20 @@ export const useViewStore = create<ViewStoreState & ViewStoreActions>()(
 
       // Load default view on startup
       loadDefaultView: async () => {
-        const { activeViewId, executeView, isRegistryLoaded, loadRegistry } = get();
+        const { activeViewId, executeView, isRegistryLoaded, loadRegistry, getViewById } = get();
 
         // Ensure registry is loaded first
         if (!isRegistryLoaded) {
           await loadRegistry();
         }
 
+        // Validate that persisted view still exists in registry, fallback to default
+        const viewIdToLoad = activeViewId && getViewById(activeViewId)
+          ? activeViewId
+          : DEFAULT_VIEW_ID;
+
         // Execute the active view (persisted or default)
-        await executeView(activeViewId || DEFAULT_VIEW_ID);
+        await executeView(viewIdToLoad);
       },
 
       // Update params

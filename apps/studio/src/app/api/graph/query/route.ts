@@ -49,6 +49,14 @@ export async function POST(request: NextRequest) {
     // Execute query with safety checks
     const result = await executeCustomQuery(cypher, params);
 
+    // DEBUG: Log query results
+    console.log('[DEBUG /api/graph/query]', {
+      cypher: cypher.substring(0, 100),
+      params,
+      nodeCount: result.nodes.length,
+      edgeCount: result.edges.length,
+    });
+
     return NextResponse.json({
       success: true,
       data: {

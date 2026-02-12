@@ -1,16 +1,20 @@
 /**
- * YAML View Category Configuration
+ * YAML View Category Configuration (v11.6.1)
  *
  * Centralized configuration for view categories.
  * Used by both API routes and UI components.
+ *
+ * Categories:
+ * - meta: Schema exploration (Realm, Layer, Kind, ArcKind)
+ * - data: Instance exploration by realm/layer/purpose
+ * - overlay: Meta + Data combined for debugging
+ * - contextual: Node-centered subgraphs
  */
 
 import {
-  Crosshair,
-  Sparkles,
-  BookOpen,
-  FolderKanban,
-  Pickaxe,
+  Database,
+  Boxes,
+  Layers,
   Eye,
   type LucideIcon,
 } from 'lucide-react';
@@ -29,57 +33,41 @@ export interface CategoryConfig {
 }
 
 export const VIEW_CATEGORIES: Record<ViewCategory, CategoryConfig> = {
-  overview: {
-    id: 'overview',
-    label: 'Overview',
-    icon: Crosshair,
-    color: '#34d399', // emerald-400
-    description: 'Filter by realm and visibility',
+  meta: {
+    id: 'meta',
+    label: 'Meta',
+    icon: Database,
+    color: '#8b5cf6', // violet-500
+    description: 'Schema exploration (Realm, Layer, Kind, ArcKind)',
   },
-  generation: {
-    id: 'generation',
-    label: 'Generation',
-    icon: Sparkles,
-    color: '#fbbf24', // amber-400
-    description: 'Content generation workflows',
+  data: {
+    id: 'data',
+    label: 'Data',
+    icon: Boxes,
+    color: '#6366f1', // indigo-500
+    description: 'Instance exploration by realm, layer, or purpose',
   },
-  knowledge: {
-    id: 'knowledge',
-    label: 'Knowledge',
-    icon: BookOpen,
-    color: '#a78bfa', // violet-400
-    description: 'Knowledge graph exploration',
-  },
-  project: {
-    id: 'project',
-    label: 'Project',
-    icon: FolderKanban,
-    color: '#60a5fa', // blue-400
-    description: 'Project-specific views',
-  },
-  mining: {
-    id: 'mining',
-    label: 'Mining',
-    icon: Pickaxe,
-    color: '#fb7185', // rose-400
-    description: 'SEO/GEO mining operations',
+  overlay: {
+    id: 'overlay',
+    label: 'Overlay',
+    icon: Layers,
+    color: '#f97316', // orange-500
+    description: 'Meta + Data combined for debugging',
   },
   contextual: {
     id: 'contextual',
     label: 'Contextual',
     icon: Eye,
     color: '#94a3b8', // slate-400
-    description: 'Node-specific views (based on selected node type)',
+    description: 'Node-centered subgraphs',
   },
 };
 
 // Ordered list for display
 export const CATEGORY_ORDER: ViewCategory[] = [
-  'overview',
-  'generation',
-  'knowledge',
-  'project',
-  'mining',
+  'meta',
+  'data',
+  'overlay',
   'contextual',
 ];
 

@@ -272,7 +272,14 @@ export const useUIStore = create<UIStoreState>()(
 
       toggleSidebar: () => {
         set((state) => {
+          const wasOpen = state.sidebarOpen;
           state.sidebarOpen = !state.sidebarOpen;
+          // v11.6.3: Clear selection when closing sidebar to exit focus mode
+          if (wasOpen && !state.sidebarOpen) {
+            state.selectedNodeId = null;
+            state.selectedEdgeId = null;
+            state.selectedEdgeData = null;
+          }
         });
       },
 

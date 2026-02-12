@@ -24,7 +24,7 @@
 
 import { useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, RoundedBox, Text } from '@react-three/drei';
+import { OrbitControls, RoundedBox, Text, Billboard } from '@react-three/drei';
 import * as THREE from 'three';
 
 // =============================================================================
@@ -42,6 +42,11 @@ interface SuperNovaePad3DProps {
   }>;
   onKeyClick: (keyId: string) => void;
   onKeyHover?: (keyId: string | null) => void;
+  // New props for key binding UX
+  pressedKeys?: Set<string>;        // Physical keys currently pressed (WebHID)
+  editingKey?: string | null;       // Key currently being edited
+  previewLabel?: string | null;     // Ghost label when hovering preset
+  onEditKey?: (keyId: string) => void;  // Callback when edit button clicked
 }
 
 // =============================================================================
@@ -89,21 +94,37 @@ const SCREW_COLOR = '#1f2937';
 // Key Component - Black matte or colored gummy
 // =============================================================================
 
+interface KeycapProps {
+  position: [number, number, number];
+  color: KeyColor;
+  isSelected: boolean;
+  isPhysicallyPressed?: boolean;
+  isEditing?: boolean;
+  label?: string;
+  keycode?: string;
+  previewLabel?: string | null;
+  layerColor?: string;
+  onClick: () => void;
+  onPointerEnter?: () => void;
+  onPointerLeave?: () => void;
+  onEditClick?: () => void;
+}
+
 function Keycap({
   position,
   color,
   isSelected,
+  isPhysicallyPressed = false,
+  isEditing = false,
+  label,
+  keycode,
+  previewLabel,
+  layerColor = '#00FFFF',
   onClick,
   onPointerEnter,
   onPointerLeave,
-}: {
-  position: [number, number, number];
-  color: KeyColor;
-  isSelected: boolean;
-  onClick: () => void;
-  onPointerEnter?: () => void;
-  onPointerLeave?: () => void;
-}) {
+  onEditClick,
+}: KeycapProps) {
   const groupRef = useRef<THREE.Group>(null);
   const [isPressed, setIsPressed] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -112,9 +133,12 @@ function Keycap({
   const actualColor = color === 'black' ? COLORS.black : COLORS[color as keyof typeof COLORS] || COLORS.black;
   const isBlackKey = color === 'black';
 
+  // Physical press takes priority over click press
+  const shouldPress = isPressed || isPhysicallyPressed;
+
   useFrame((_, delta) => {
     if (!groupRef.current) return;
-    const target = isPressed ? 1 : 0;
+    const target = shouldPress ? 1 : 0;
     pressProgress.current += (target - pressProgress.current) * delta * 20;
     groupRef.current.position.y = position[1] - pressProgress.current * PRESS_DEPTH;
   });
@@ -124,6 +148,10 @@ function Keycap({
     onClick();
     setTimeout(() => setIsPressed(false), 100);
   };
+
+  // Show label when selected or editing
+  const showLabel = isSelected || isEditing;
+  const displayLabel = previewLabel || label;
 
   return (
     <group ref={groupRef} position={position}>
@@ -193,11 +221,114 @@ function Keycap({
         </mesh>
       )}
 
+      {/* Editing glow */}
+      {isEditing && (
+        <pointLight
+          position={[0, 0.5, 0]}
+          color={layerColor}
+          intensity={2}
+          distance={2}
+          decay={2}
+        />
+      )}
+
       {/* Hover highlight for black keys */}
       {isBlackKey && isHovered && (
         <mesh position={[0, KEY_HEIGHT + 0.005, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <planeGeometry args={[KEY_SIZE * 0.6, KEY_SIZE * 0.6]} />
           <meshBasicMaterial color="#ffffff" transparent opacity={0.1} />
+        </mesh>
+      )}
+
+      {/* Floating label (billboard - always faces camera) */}
+      {showLabel && displayLabel && (
+        <Billboard position={[0, -0.6, 0]} follow={true}>
+          <group>
+            {/* Label background */}
+            <mesh position={[0, 0, -0.01]}>
+              <planeGeometry args={[Math.max(1.4, displayLabel.length * 0.13), 0.45]} />
+              <meshBasicMaterial
+                color={previewLabel ? '#312e81' : '#0d0d12'}
+                transparent
+                opacity={0.9}
+              />
+            </mesh>
+            {/* Border */}
+            <mesh position={[0, 0, -0.02]}>
+              <planeGeometry args={[Math.max(1.5, displayLabel.length * 0.14), 0.55]} />
+              <meshBasicMaterial
+                color={previewLabel ? '#6366f1' : layerColor}
+                transparent
+                opacity={isEditing ? 0.8 : 0.4}
+              />
+            </mesh>
+            {/* Main text */}
+            <Text
+              position={[0, 0.04, 0]}
+              fontSize={0.14}
+              color={previewLabel ? '#a5b4fc' : '#ffffff'}
+              anchorX="center"
+              anchorY="middle"
+            >
+              {displayLabel}
+            </Text>
+            {/* Keycode subtitle */}
+            {keycode && !previewLabel && (
+              <Text
+                position={[0, -0.1, 0]}
+                fontSize={0.08}
+                color="#666666"
+                anchorX="center"
+                anchorY="middle"
+              >
+                [{keycode}]
+              </Text>
+            )}
+            {/* Preview indicator */}
+            {previewLabel && (
+              <Text
+                position={[0, -0.1, 0]}
+                fontSize={0.07}
+                color="#6366f1"
+                anchorX="center"
+                anchorY="middle"
+              >
+                preview
+              </Text>
+            )}
+            {/* Edit button indicator */}
+            {isSelected && !isEditing && !previewLabel && onEditClick && (
+              <group
+                position={[Math.max(0.5, displayLabel.length * 0.065), 0, 0]}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEditClick();
+                }}
+              >
+                <mesh>
+                  <circleGeometry args={[0.12, 16]} />
+                  <meshBasicMaterial color={layerColor} />
+                </mesh>
+                <Text
+                  position={[0, 0, 0.01]}
+                  fontSize={0.1}
+                  color="#000000"
+                  anchorX="center"
+                  anchorY="middle"
+                >
+                  ✎
+                </Text>
+              </group>
+            )}
+          </group>
+        </Billboard>
+      )}
+
+      {/* Connector line to label */}
+      {showLabel && displayLabel && (
+        <mesh position={[0, -0.35, 0]}>
+          <boxGeometry args={[0.02, 0.2, 0.02]} />
+          <meshBasicMaterial color={layerColor} transparent opacity={0.4} />
         </mesh>
       )}
     </group>
@@ -480,15 +611,37 @@ function Chassis({ layerColor }: { layerColor: string }) {
 function Background() {
   return (
     <group position={[0, -CHASSIS_HEIGHT - 0.15, 0]}>
+      {/* Base plane */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <planeGeometry args={[50, 50]} />
-        <meshStandardMaterial color="#0f172a" />
+        <planeGeometry args={[60, 60]} />
+        <meshStandardMaterial color="#0a1628" />
       </mesh>
-      <gridHelper args={[50, 50, '#1e3a5f', '#0c1929']} position={[0, 0.01, 0]} />
+
+      {/* Primary grid - larger cells, more visible */}
+      <gridHelper args={[60, 30, '#2563eb', '#1e40af']} position={[0, 0.01, 0]} />
+
+      {/* Secondary fine grid */}
+      <gridHelper args={[60, 120, '#1e3a5f', '#0c1929']} position={[0, 0.005, 0]} />
+
+      {/* Center glow ring - outer */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 0]}>
-        <circleGeometry args={[4.5, 48]} />
-        <meshBasicMaterial color="#0ea5e9" transparent opacity={0.04} />
+        <ringGeometry args={[6, 8, 64]} />
+        <meshBasicMaterial color="#0ea5e9" transparent opacity={0.08} />
       </mesh>
+
+      {/* Center glow - inner */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 0]}>
+        <circleGeometry args={[6, 64]} />
+        <meshBasicMaterial color="#0ea5e9" transparent opacity={0.06} />
+      </mesh>
+
+      {/* Corner markers */}
+      {[[-12, -12], [12, -12], [-12, 12], [12, 12]].map(([x, z], i) => (
+        <mesh key={i} rotation={[-Math.PI / 2, 0, 0]} position={[x, 0.015, z]}>
+          <ringGeometry args={[0.3, 0.5, 16]} />
+          <meshBasicMaterial color="#3b82f6" transparent opacity={0.3} />
+        </mesh>
+      ))}
     </group>
   );
 }
@@ -497,7 +650,17 @@ function Background() {
 // Scene
 // =============================================================================
 
-function Scene({ selectedKey, activeLayer, layers, onKeyClick, onKeyHover }: SuperNovaePad3DProps) {
+function Scene({
+  selectedKey,
+  activeLayer,
+  layers,
+  onKeyClick,
+  onKeyHover,
+  pressedKeys,
+  editingKey,
+  previewLabel,
+  onEditKey,
+}: SuperNovaePad3DProps) {
   const currentLayer = layers[activeLayer] || layers[0];
   const layerColor = currentLayer?.color || '#00FFFF';
 
@@ -562,17 +725,30 @@ function Scene({ selectedKey, activeLayer, layers, onKeyClick, onKeyHover }: Sup
       <Chassis layerColor={layerColor} />
 
       {/* Keys */}
-      {keys.map((key) => (
-        <Keycap
-          key={key.id}
-          position={[key.x, 0.12, key.z]}
-          color={key.color}
-          isSelected={selectedKey === key.id}
-          onClick={() => onKeyClick(key.id)}
-          onPointerEnter={() => onKeyHover?.(key.id)}
-          onPointerLeave={() => onKeyHover?.(null)}
-        />
-      ))}
+      {keys.map((key) => {
+        const keyBinding = currentLayer?.keys[key.id];
+        const isThisKeyEditing = editingKey === key.id;
+        const isThisKeySelected = selectedKey === key.id;
+
+        return (
+          <Keycap
+            key={key.id}
+            position={[key.x, 0.12, key.z]}
+            color={key.color}
+            isSelected={isThisKeySelected}
+            isPhysicallyPressed={pressedKeys?.has(key.id)}
+            isEditing={isThisKeyEditing}
+            label={keyBinding?.label || keyBinding?.action}
+            keycode={keyBinding?.key}
+            previewLabel={isThisKeyEditing ? previewLabel : null}
+            layerColor={layerColor}
+            onClick={() => onKeyClick(key.id)}
+            onPointerEnter={() => onKeyHover?.(key.id)}
+            onPointerLeave={() => onKeyHover?.(null)}
+            onEditClick={() => onEditKey?.(key.id)}
+          />
+        );
+      })}
 
       {/* Encoders */}
       <SilverEncoder position={enc1Pos} />
@@ -602,17 +778,17 @@ function Scene({ selectedKey, activeLayer, layers, onKeyClick, onKeyHover }: Sup
 
 export function SuperNovaePad3D(props: SuperNovaePad3DProps) {
   return (
-    <div style={{ width: '100%', height: '100%', background: '#0f172a' }}>
+    <div style={{ width: '100%', height: '100%', background: '#0a1628' }}>
       <Canvas
         shadows
-        camera={{ position: [0, 8, 10], fov: 40 }}
+        camera={{ position: [10, 9, 12], fov: 38 }}
         onCreated={(state) => {
           state.gl.toneMapping = THREE.ACESFilmicToneMapping;
-          state.gl.toneMappingExposure = 1.15;
+          state.gl.toneMappingExposure = 1.1;
         }}
       >
-        <color attach="background" args={['#0f172a']} />
-        <fog attach="fog" args={['#0f172a', 18, 35]} />
+        <color attach="background" args={['#0a1628']} />
+        <fog attach="fog" args={['#0a1628', 22, 45]} />
         <Scene {...props} />
       </Canvas>
     </div>

@@ -1,0 +1,14 @@
+/Users/thibaut/supernovae-st/novanet-hq/tools/target/release/deps/thiserror-fa727062c083f4ec.d: /Users/thibaut/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/lib.rs /Users/thibaut/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/aserror.rs /Users/thibaut/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/display.rs /Users/thibaut/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/var.rs /Users/thibaut/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/private.rs /Users/thibaut/supernovae-st/novanet-hq/tools/target/release/build/thiserror-fe846bb29e958ccb/out/private.rs
+
+/Users/thibaut/supernovae-st/novanet-hq/tools/target/release/deps/libthiserror-fa727062c083f4ec.rlib: /Users/thibaut/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/lib.rs /Users/thibaut/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/aserror.rs /Users/thibaut/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/display.rs /Users/thibaut/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/var.rs /Users/thibaut/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/private.rs /Users/thibaut/supernovae-st/novanet-hq/tools/target/release/build/thiserror-fe846bb29e958ccb/out/private.rs
+
+/Users/thibaut/supernovae-st/novanet-hq/tools/target/release/deps/libthiserror-fa727062c083f4ec.rmeta: /Users/thibaut/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/lib.rs /Users/thibaut/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/aserror.rs /Users/thibaut/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/display.rs /Users/thibaut/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/var.rs /Users/thibaut/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/private.rs /Users/thibaut/supernovae-st/novanet-hq/tools/target/release/build/thiserror-fe846bb29e958ccb/out/private.rs
+
+/Users/thibaut/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/lib.rs:
+/Users/thibaut/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/aserror.rs:
+/Users/thibaut/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/display.rs:
+/Users/thibaut/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/var.rs:
+/Users/thibaut/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/private.rs:
+/Users/thibaut/supernovae-st/novanet-hq/tools/target/release/build/thiserror-fe846bb29e958ccb/out/private.rs:
+
+# env-dep:OUT_DIR=/Users/thibaut/supernovae-st/novanet-hq/tools/target/release/build/thiserror-fe846bb29e958ccb/out

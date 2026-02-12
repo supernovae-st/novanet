@@ -24,11 +24,11 @@ import { releaseEdgeAnimationSlot } from './effects/EffectRenderer';
 import { getSmartLabel, getNodeIntersection, generateCurvedPath, generateReversedPath, generateParallelPath } from './EdgeUtils';
 import type { EdgeState } from './system/types';
 
-// Arc family detection with comprehensive mapping (60+ relation types)
-import { getArcFamily } from './system/arcFamilyPalettes';
+// Arc family detection from unified palette system (v11.7.0)
+import { getArcFamily } from '@/design/colors/palette';
 
 // Signature effects (v11.6.2 - Full Redesign)
-import { PowerConduit, DNAHelix, SynapticFiring, MatrixCodeRain, SonarPulse } from './effects';
+import { PowerConduit, DNAHelix, SynapticFiring, MatrixCodeRain, SonarPulse, SelectionEffect } from './effects';
 
 // Note: EffectRenderer disabled for now - using InlineEdgeEffects instead (working pattern)
 
@@ -43,90 +43,66 @@ interface InlineEdgeEffectsProps {
   state: EdgeState;
   /** Effect quality tier based on total edge count */
   effectTier: EffectTier;
+  /** Edge ID for deterministic random delay */
+  edgeId: string;
+}
+
+/**
+ * Generate a deterministic "random" delay based on edge ID.
+ * Uses a simple hash function to convert string to number.
+ * Returns a value between 0 and maxDelay seconds.
+ */
+function getRandomDelay(edgeId: string, maxDelay: number = 5): number {
+  let hash = 0;
+  for (let i = 0; i < edgeId.length; i++) {
+    const char = edgeId.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  // Normalize to 0-1 range, then multiply by maxDelay
+  return Math.abs(hash % 1000) / 1000 * maxDelay;
 }
 
 /**
  * SimplifiedEdgeEffect - Lightweight atom-like effect for large graphs
  *
- * ATOM DESIGN v2:
- * - Slower movement (4s duration) for better visibility
- * - Larger particles (14px) that are easy to track
- * - Multi-layer glow for "energy orb" effect
- * - Trail with size/opacity decay for direction
- * - Organic wobble via perpendicular oscillation
+ * ATOM DESIGN v3 (v11.6.4 - PERFORMANCE OPTIMIZED):
+ * - ULTRA simplified: Single animated particle with glow
+ * - NO trails, NO wobble, NO multiple layers
+ * - Just 2 SVG elements (core + glow) instead of 7
+ * - v11.6.3: Random start delay based on edge ID for natural staggering
  *
- * Performance: ~6 SVG elements per edge (optimized from 11-20)
+ * Performance: ~2 SVG elements per edge (was 7)
  */
 const SimplifiedEdgeEffect = memo(function SimplifiedEdgeEffect({
   edgePath,
   colors,
   state,
+  edgeId,
 }: Omit<InlineEdgeEffectsProps, 'relationType' | 'effectTier'>) {
   const isHighlighted = state === 'highlighted' || state === 'selected';
-  // LARGER particles for visibility
-  const size = isHighlighted ? 16 : 12;
-  // SLOWER movement - 4x slower than before
-  const duration = isHighlighted ? 3.5 : 5;
+  const size = isHighlighted ? 10 : 8;
+  const duration = 6; // Slow, steady movement
+  const startDelay = getRandomDelay(edgeId, duration);
 
   return (
     <g className="effect-simplified-atom">
-      {/* === LEADER ATOM === */}
-      {/* Outer glow - wide, soft, creates "energy field" */}
+      {/* Glow */}
       <circle
-        r={size * 2}
+        r={size * 1.5}
         fill={colors.glow}
-        opacity={0.25}
-        style={{ filter: 'blur(8px)' }}
+        opacity={0.4}
       >
-        <animateMotion dur={`${duration}s`} repeatCount="indefinite" path={edgePath} />
+        <animateMotion dur={`${duration}s`} repeatCount="indefinite" begin={`${startDelay}s`} path={edgePath} />
       </circle>
-
-      {/* Middle glow - core energy */}
-      <circle
-        r={size * 1.3}
-        fill={colors.primary}
-        opacity={0.5}
-        style={{ filter: 'blur(4px)' }}
-      >
-        <animateMotion dur={`${duration}s`} repeatCount="indefinite" path={edgePath} />
-        {/* Organic wobble - perpendicular oscillation */}
-        <animate attributeName="cy" values="-3;3;-3" dur="0.8s" repeatCount="indefinite" />
-      </circle>
-
-      {/* Core - solid visible particle */}
+      {/* Core particle */}
       <circle
         r={size}
         fill={colors.primary}
-        opacity={0.95}
-        style={{ filter: `drop-shadow(0 0 ${size}px ${colors.glow})` }}
+        opacity={0.9}
       >
-        <animateMotion dur={`${duration}s`} repeatCount="indefinite" path={edgePath} />
-        {/* Subtle wobble */}
-        <animate attributeName="cy" values="-2;2;-2" dur="0.6s" repeatCount="indefinite" />
+        <animateMotion dur={`${duration}s`} repeatCount="indefinite" begin={`${startDelay}s`} path={edgePath} />
       </circle>
-
-      {/* White hot center - brightest point */}
-      <circle r={size * 0.35} fill="#ffffff" opacity={1}>
-        <animateMotion dur={`${duration}s`} repeatCount="indefinite" path={edgePath} />
-      </circle>
-
-      {/* === TRAIL SEGMENTS (3) - show direction via decay === */}
-      {[1, 2, 3].map((i) => (
-        <circle
-          key={`trail-${i}`}
-          r={size * (1 - i * 0.2)}
-          fill={colors.glow}
-          opacity={0.7 - i * 0.15}
-          style={{ filter: `drop-shadow(0 0 ${Math.max(2, size - i * 3)}px ${colors.glow})` }}
-        >
-          <animateMotion
-            dur={`${duration}s`}
-            repeatCount="indefinite"
-            begin={`${i * 0.15}s`}
-            path={edgePath}
-          />
-        </circle>
-      ))}
     </g>
   );
 });
@@ -135,13 +111,13 @@ const SimplifiedEdgeEffect = memo(function SimplifiedEdgeEffect({
  * InlineEdgeEffects - SIGNATURE EFFECTS for NovaNet arcs (v4)
  *
  * TIER-BASED RENDERING - Effect richness scales with graph size:
- * - ULTRA (0-30 arcs):   Maximum wow - full signature effects
- * - HIGH (30-100 arcs):  Full signature effects
- * - MEDIUM (100-250):    Reduced signature effects
- * - LOW (250-500):       SimplifiedEdgeEffect (fallback)
- * - MINIMAL (500+):      No animation (handled outside)
+ * - ULTRA (0-10 arcs):   Maximum wow - full signature effects
+ * - HIGH (10-25 arcs):   Full signature effects
+ * - MEDIUM (25-40):      SimplifiedEdgeEffect (v11.6.4: downgraded for perf)
+ * - LOW (40-60):         SimplifiedEdgeEffect
+ * - MINIMAL (60+):       No animation (handled outside)
  *
- * Each arc family has a UNIQUE SIGNATURE EFFECT:
+ * Each arc family has a UNIQUE SIGNATURE EFFECT (ULTRA/HIGH only):
  * - ownership: ⚡ POWER CONDUIT - High-voltage cable with orb convoy
  * - localization: 🧬 DNA HELIX - Double strand with base pairs
  * - semantic: 🔗 SYNAPTIC FIRING - Neural firing pulses
@@ -156,30 +132,33 @@ const InlineEdgeEffects = memo(function InlineEdgeEffects({
   colors,
   state,
   effectTier,
+  edgeId,
 }: InlineEdgeEffectsProps) {
-  // LOW tier: Use simplified 2-element effect
-  if (effectTier === 'low') {
-    return <SimplifiedEdgeEffect edgePath={edgePath} colors={colors} state={state} />;
+  // v11.6.4: MEDIUM and LOW tiers use simplified 2-element effect for performance
+  // Only ULTRA and HIGH get full signature effects
+  if (effectTier === 'low' || effectTier === 'medium') {
+    return <SimplifiedEdgeEffect edgePath={edgePath} colors={colors} state={state} edgeId={edgeId} />;
   }
 
   const family = getArcFamily(relationType);
 
-  // Route to signature effects based on arc family
+  // Route to signature effects based on arc family (ULTRA/HIGH only)
+  // v11.6.3: Pass edgeId for random delay staggering
   switch (family) {
     case 'ownership':
-      return <PowerConduit edgePath={edgePath} colors={colors} state={state} effectTier={effectTier} />;
+      return <PowerConduit edgePath={edgePath} colors={colors} state={state} effectTier={effectTier} edgeId={edgeId} />;
 
     case 'localization':
-      return <DNAHelix edgePath={edgePath} colors={colors} state={state} effectTier={effectTier} />;
+      return <DNAHelix edgePath={edgePath} colors={colors} state={state} effectTier={effectTier} edgeId={edgeId} />;
 
     case 'semantic':
-      return <SynapticFiring edgePath={edgePath} colors={colors} state={state} effectTier={effectTier} />;
+      return <SynapticFiring edgePath={edgePath} colors={colors} state={state} effectTier={effectTier} edgeId={edgeId} />;
 
     case 'generation':
-      return <MatrixCodeRain edgePath={edgePath} colors={colors} state={state} effectTier={effectTier} />;
+      return <MatrixCodeRain edgePath={edgePath} colors={colors} state={state} effectTier={effectTier} edgeId={edgeId} />;
 
     case 'mining':
-      return <SonarPulse edgePath={edgePath} colors={colors} state={state} effectTier={effectTier} />;
+      return <SonarPulse edgePath={edgePath} colors={colors} state={state} effectTier={effectTier} edgeId={edgeId} />;
 
     default:
       return null;
@@ -318,7 +297,9 @@ export const FloatingEdge = memo(function FloatingEdge({
 
   const isEdgeVisible = isVisible(id);
   // Get effective tier (may be downgraded if connected to hub node)
-  const effectTier = getEffectiveTier(id);
+  // v11.6.4: FORCE ULTRA tier when edge is selected (one edge = full wow effect)
+  const baseTier = getEffectiveTier(id);
+  const effectTier = isSelected ? 'ultra' : baseTier;
 
   // Extract node positions (defensive: internals/positionAbsolute may be undefined during mount)
   const sourceX = sourceNode?.internals?.positionAbsolute?.x ?? 0;
@@ -412,9 +393,11 @@ export const FloatingEdge = memo(function FloatingEdge({
 
   // Label
   const smartLabel = getSmartLabel(relationType, edgeLength);
-  const labelText = smartLabel.text ? `${smartLabel.icon} ${smartLabel.text}` : smartLabel.icon;
-  const shouldShowLabel = showLabel && !effectiveDimmed && (edgeLength > 30 || isHovered || isSelected);
+  // v11.6.9: Flip arrow direction when text path is reversed (so arrow still points source→target)
   const isTextFlipped = sourcePoint.x > targetPoint.x;
+  const directionIcon = isTextFlipped ? '←' : '→';
+  const labelText = smartLabel.text ? `${directionIcon} ${smartLabel.text}` : directionIcon;
+  const shouldShowLabel = showLabel && !effectiveDimmed && (edgeLength > 30 || isHovered || isSelected);
   const labelPathId = isTextFlipped ? `edge-path-label-${id}` : `edge-path-${id}`;
   const labelScale = Math.min(2.5, Math.max(0.6, 1 / zoom));
   const baseFontSize = isHovered || isSelected ? 13 : 10;
@@ -422,11 +405,17 @@ export const FloatingEdge = memo(function FloatingEdge({
 
   // PERFORMANCE: Disable animations when edge count exceeds threshold
   // Simplified effects are handled by passing the simplified prop
-  // Original: const shouldAnimate = isEdgeVisible && canAnimate && isAnimated && !effectiveDimmed;
-  const shouldAnimate = isAnimated && !effectiveDimmed && !disableAnimations;
+  // v11.6.4: ALWAYS animate selected edge (even when global animations disabled)
+  // This gives the "wow" effect when focusing on a single edge
+  const shouldAnimate = isAnimated && !effectiveDimmed && (!disableAnimations || isSelected);
+
+  // PERFORMANCE: Disable opacity transition for large graphs to prevent flash effect
+  // When many edges update simultaneously, the transition causes a visible "blink"
+  // Only apply smooth transitions for small graphs (ultra/high tier = < 100 edges)
+  const useOpacityTransition = effectTier === 'ultra' || effectTier === 'high';
 
   return (
-    <g className="floating-edge" style={{ opacity: groupOpacity, transition: 'opacity 0.15s ease-out' }}>
+    <g className="floating-edge" style={{ opacity: groupOpacity, transition: useOpacityTransition ? 'opacity 0.15s ease-out' : 'none' }}>
       {/* Interaction path */}
       <path d={edgePath} fill="none" stroke="transparent" strokeWidth={40} strokeLinecap="round" style={{ cursor: 'pointer' }} />
 
@@ -473,127 +462,31 @@ export const FloatingEdge = memo(function FloatingEdge({
         />
       )}
 
-      {/* Selection pulse effect - animated glow when edge is selected */}
+      {/* Selection effect - v11.6.5: Selection UX Polish */}
+      {/* Includes: direction indicator, source/target differentiation, smooth transitions */}
       {isSelected && (
-        <>
-          {/* Wide outer glow - creates dramatic "energy field" effect */}
-          <path
-            d={edgePath}
-            fill="none"
-            stroke={theme.colors.glow}
-            strokeWidth={finalStrokeWidth + 20}
-            strokeLinecap="round"
-            style={{
-              opacity: 0.25,
-              filter: 'blur(12px)',
-              animation: 'edgeGlowPulse 2s ease-in-out infinite',
-            }}
-          />
-          {/* Main pulse glow */}
-          <path
-            d={edgePath}
-            fill="none"
-            stroke={theme.colors.glow}
-            strokeWidth={finalStrokeWidth + 12}
-            strokeLinecap="round"
-            style={{
-              opacity: 0.5,
-              filter: 'blur(8px)',
-              animation: 'edgePulse 1.5s ease-in-out infinite',
-            }}
-          />
-          {/* Inner bright pulse */}
-          <path
-            d={edgePath}
-            fill="none"
-            stroke="#ffffff"
-            strokeWidth={finalStrokeWidth + 4}
-            strokeLinecap="round"
-            style={{
-              opacity: 0.7,
-              filter: 'blur(3px)',
-              animation: 'edgePulse 1.5s ease-in-out infinite',
-              animationDelay: '0.1s',
-            }}
-          />
-          {/* Source endpoint ring */}
-          <circle
-            cx={sourcePoint.x}
-            cy={sourcePoint.y}
-            r={12}
-            fill="none"
-            stroke={theme.colors.glow}
-            strokeWidth={3}
-            style={{
-              opacity: 0.8,
-              filter: `drop-shadow(0 0 8px ${theme.colors.glow})`,
-              animation: 'endpointPulse 1.5s ease-in-out infinite',
-            }}
-          />
-          {/* Target endpoint ring */}
-          <circle
-            cx={targetPoint.x}
-            cy={targetPoint.y}
-            r={12}
-            fill="none"
-            stroke={theme.colors.glow}
-            strokeWidth={3}
-            style={{
-              opacity: 0.8,
-              filter: `drop-shadow(0 0 8px ${theme.colors.glow})`,
-              animation: 'endpointPulse 1.5s ease-in-out infinite',
-              animationDelay: '0.75s',
-            }}
-          />
-          {/* Source endpoint dot */}
-          <circle
-            cx={sourcePoint.x}
-            cy={sourcePoint.y}
-            r={5}
-            fill={theme.colors.primary}
-            style={{
-              filter: `drop-shadow(0 0 6px ${theme.colors.glow})`,
-            }}
-          />
-          {/* Target endpoint dot */}
-          <circle
-            cx={targetPoint.x}
-            cy={targetPoint.y}
-            r={5}
-            fill={theme.colors.primary}
-            style={{
-              filter: `drop-shadow(0 0 6px ${theme.colors.glow})`,
-            }}
-          />
-          {/* CSS keyframes injected via style tag */}
-          <style>
-            {`
-              @keyframes edgePulse {
-                0%, 100% { opacity: 0.4; }
-                50% { opacity: 0.8; }
-              }
-              @keyframes edgeGlowPulse {
-                0%, 100% { opacity: 0.15; }
-                50% { opacity: 0.35; }
-              }
-              @keyframes endpointPulse {
-                0%, 100% { r: 10; opacity: 0.6; }
-                50% { r: 16; opacity: 1; }
-              }
-            `}
-          </style>
-        </>
+        <SelectionEffect
+          edgePath={edgePath}
+          sourcePoint={sourcePoint}
+          targetPoint={targetPoint}
+          colors={{ primary: theme.colors.primary, glow: theme.colors.glow }}
+          strokeWidth={finalStrokeWidth}
+          edgeId={id}
+        />
       )}
 
       {/* INLINE ANIMATED EFFECTS - working pattern using inline path attribute */}
       {/* Each arc family gets different visual treatment */}
-      {shouldAnimate && (
+      {/* v11.6.3: Pass edgeId for random start delay staggering */}
+      {/* v11.6.8: Disabled when selected - SelectionEffect has its own particle system */}
+      {shouldAnimate && !isSelected && (
         <InlineEdgeEffects
           edgePath={edgePath}
           relationType={relationType}
           colors={theme.colors}
           state={edgeState}
           effectTier={effectTier}
+          edgeId={id}
         />
       )}
 
