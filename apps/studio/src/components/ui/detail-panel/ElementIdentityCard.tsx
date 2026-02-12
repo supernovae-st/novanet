@@ -23,6 +23,7 @@ import { cn } from '@/lib/utils';
 import { useCopyFeedback } from '@/hooks';
 import { CopyButton } from '@/components/dx/CopyButton';
 import { LayerIcon } from '@/components/ui/CategoryIcon';
+import { TextScramble } from '@/components/ui/TextScramble';
 import { gapTokens } from '@/design/tokens';
 import type { Layer } from '@novanet/core/types';
 
@@ -137,10 +138,10 @@ export const ElementIdentityCard = memo(function ElementIdentityCard(
           {elementType === 'node' ? (
             <div className="min-w-0">
               <h2 className="text-sm font-semibold text-white truncate">
-                {content.title}
+                <TextScramble text={content.title || ''} duration={250} />
               </h2>
-              <p className="text-xs text-white/40 font-mono truncate">
-                {content.subtitle}
+              <p className="text-xs text-white/40 truncate">
+                <TextScramble text={content.subtitle || ''} duration={300} delay={50} />
               </p>
             </div>
           ) : (
@@ -211,15 +212,15 @@ export const ElementIdentityCard = memo(function ElementIdentityCard(
           {/* Display name (nodes only) */}
           {content.title && (
             <h3 className="text-base font-semibold text-white mb-1.5 leading-tight">
-              {content.title}
+              <TextScramble text={content.title} duration={250} />
             </h3>
           )}
 
           {/* Key/ID with copy button */}
           <div className={cn('flex items-center text-sm', gapTokens.tight)}>
             <Hash className="w-3 h-3 text-white/25 flex-shrink-0" />
-            <span className="font-mono text-white/40 truncate text-xs">
-              {content.subtitle}
+            <span className="text-white/40 truncate text-xs">
+              <TextScramble text={content.subtitle || ''} duration={300} delay={50} />
             </span>
             <CopyButton
               onCopy={() => copy(content.copyValue)}

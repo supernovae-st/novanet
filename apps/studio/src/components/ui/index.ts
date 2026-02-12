@@ -14,6 +14,7 @@ export { Divider } from './Divider';
 export { IconButton } from './IconButton';
 export { RefreshButton } from './RefreshButton';
 export { DisplayLimitSelector } from './DisplayLimitSelector';
+export { LocaleFilterSelector } from './LocaleFilterSelector';
 export { Kbd } from './Kbd';
 export { LayerIcon } from './CategoryIcon';
 
@@ -44,6 +45,7 @@ export { SegmentedTabs } from './SegmentedTabs';
 // Animation components
 export { MatrixRainOverlay } from './MatrixRainOverlay';
 export { MatrixExplosionOverlay } from './MatrixExplosionOverlay';
+export { TextScramble } from './TextScramble';
 
 // Magic UI effects (v11.6: PascalCase naming convention)
 export { BorderBeam } from './BorderBeam';
