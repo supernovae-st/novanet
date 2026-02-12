@@ -218,6 +218,7 @@ function Graph2DInner({
     setHoveredEdge,
     setHoveredConnections,
     selectedNodeId,
+    selectedEdgeId,
     clearSelection,
     sidebarOpen,
     focusMode,
@@ -233,6 +234,7 @@ function Graph2DInner({
       setHoveredEdge: state.setHoveredEdge,
       setHoveredConnections: state.setHoveredConnections,
       selectedNodeId: state.selectedNodeId,
+      selectedEdgeId: state.selectedEdgeId,
       clearSelection: state.clearSelection,
       sidebarOpen: state.sidebarOpen,
       focusMode: state.focusMode,
@@ -324,7 +326,8 @@ function Graph2DInner({
   // Refs to track previous UI state for auto-fitView on changes
   const prevSidebarOpenRef = useRef(sidebarOpen);
   const prevFocusModeRef = useRef(focusMode);
-  // prevHasSelectionRef removed - no longer tracking selection close for fitView
+  // Track selection state to fitView when aside panel closes (selection cleared)
+  const prevHasSelectionRef = useRef<boolean>(false);
   const prevLayoutVersionRef = useRef(layoutVersion);
 
   // Track magnetic mode state for fitView on data arrival / mode exit
@@ -1465,6 +1468,27 @@ function Graph2DInner({
     }
     // PERF: smartFitView accessed via ref to avoid effect re-registration
   }, [transitionPhase]);
+
+  // ==========================================================================
+  // Selection Close FitView
+  // Refit camera when aside panel closes (selection cleared).
+  // Provides better UX by centering content after closing detail panel.
+  // ==========================================================================
+  useEffect(() => {
+    const hasSelection = selectedNodeId !== null || selectedEdgeId !== null;
+
+    // If selection was present and is now cleared, fit view
+    if (prevHasSelectionRef.current && !hasSelection) {
+      const timeoutId = setTimeout(() => {
+        smartFitViewRef.current({ duration: GRAPH_ANIMATION.FIT_VIEW_DURATION });
+      }, GRAPH_ANIMATION.UI_CHANGE_DELAY);
+      return () => clearTimeout(timeoutId);
+    }
+
+    // Update ref for next render
+    prevHasSelectionRef.current = hasSelection;
+    // PERF: smartFitView accessed via ref to avoid effect re-registration
+  }, [selectedNodeId, selectedEdgeId]);
 
   // ==========================================================================
   // Initial FitView on Mount
