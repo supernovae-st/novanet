@@ -38,27 +38,32 @@ pub(crate) fn compute_mini_bar_cache_key(app: &App, bar_width: usize) -> u64 {
 /// Get contextual keyboard shortcuts based on mode, focus, and selection.
 ///
 /// Returns a static string with the most relevant keyboard hints for the current context.
+/// Note: Nexus hints are generated dynamically from context_actions() in render_status.
+/// Format: arrows for nav, Enter for action (silent alternatives: hjkl, Space)
 pub(crate) fn get_contextual_shortcuts(
     mode: NavMode,
     focus: Focus,
     is_instance: bool,
     is_kind: bool,
 ) -> &'static str {
-    // v11.7: 2 modes (1-2 global), unified tree
+    // v11.7: 2 modes, unified tree
+    // Display: ↑/↓=vertical, ←/→=horizontal, Enter=action
+    // Silent alternatives: hjkl, Space (handled in key processing)
     match mode {
-        NavMode::Nexus => "j/k:nav  []:tabs  Enter:select  Esc:back  1-2:modes  ?:help",
+        // Nexus hints are handled separately via context_actions()
+        NavMode::Nexus => "",
         NavMode::Graph => match focus {
             Focus::Tree => {
                 if is_instance {
-                    "j/k:nav  y/Y:copy  1-2:modes  ?:help"
+                    "↑/↓:nav y:copy Esc:back"
                 } else if is_kind {
-                    "j/k:nav  y:copy  h/l:expand  1-2:modes  ?:help"
+                    "↑/↓:nav ←/→:expand y:copy"
                 } else {
-                    "j/k:nav  y:copy  h/l:toggle  1-2:modes  ?:help"
+                    "↑/↓:nav ←/→:toggle y:copy"
                 }
             }
-            Focus::Yaml | Focus::Info => "j/k:scroll  d/u:page  g/G:jump",
-            Focus::Graph => "Tab:panel  1-2:modes",
+            Focus::Yaml | Focus::Info => "↑/↓:scroll Enter:page y:copy",
+            Focus::Graph => "Tab:panel",
         },
     }
 }
@@ -218,22 +223,40 @@ pub fn render_status(f: &mut Frame, area: Rect, app: &App) {
 
     // Build filter indicator using extracted pure function
     let filter_indicator = build_filter_indicator(
-        app.is_filtered_data_mode(),
+        app.is_filtered_graph_mode(),
         app.get_filter_kind(),
         app.hide_empty,
     );
 
-    // Build status line spans
-    let mut spans = vec![
-        // Mode indicator: [M META]
-        Span::raw(" "),
-        Span::styled(
-            format!("{} {}", mode_icon, mode_label.to_uppercase()),
-            mode_style,
-        ),
-    ];
+    // Build status line spans - UNIFIED FORMAT for both modes:
+    // HINTS │ MODE │ BREADCRUMB │ STATS │ REALM-BAR │ [?]
+    let mut spans = Vec::with_capacity(20);
+    spans.push(Span::raw(" "));
 
-    // Add filter indicator if active
+    // 1. HINTS (context-aware, at START for both modes)
+    if app.mode == NavMode::Nexus {
+        // Nexus: dynamic hints from context_actions()
+        let actions = app.nexus.context_actions();
+        for (i, (key, action)) in actions.iter().enumerate() {
+            if i > 0 {
+                spans.push(Span::raw(" "));
+            }
+            spans.push(Span::styled(*key, STYLE_HINT));
+            spans.push(Span::styled(format!(":{}", action), STYLE_DIM));
+        }
+    } else {
+        // Graph: static hints from get_contextual_shortcuts()
+        spans.push(Span::styled(shortcuts, STYLE_DIM));
+    }
+
+    // 2. MODE indicator: │ ✦ NEXUS │ or │ ◆ GRAPH │
+    spans.push(Span::styled(" │ ", STYLE_SEPARATOR));
+    spans.push(Span::styled(
+        format!("{} {}", mode_icon, mode_label.to_uppercase()),
+        mode_style,
+    ));
+
+    // Add filter indicator if active (Graph mode only)
     if !filter_indicator.is_empty() {
         spans.push(Span::styled(
             filter_indicator,
@@ -241,13 +264,20 @@ pub fn render_status(f: &mut Frame, area: Rect, app: &App) {
         ));
     }
 
-    spans.push(Span::styled(" | ", STYLE_SEPARATOR));
-    // Breadcrumb
-    spans.push(Span::styled(breadcrumb_display, STYLE_HINT));
+    // 3. BREADCRUMB (context-aware)
+    spans.push(Span::styled(" │ ", STYLE_SEPARATOR));
+    if app.mode == NavMode::Nexus {
+        // Nexus: show section > tab (e.g., "LEARN > Intro")
+        let nexus_breadcrumb = app.nexus.status_breadcrumb();
+        spans.push(Span::styled(nexus_breadcrumb, STYLE_HINT));
+    } else {
+        // Graph: show tree path (truncated)
+        spans.push(Span::styled(breadcrumb_display, STYLE_HINT));
+    }
 
     // Loading spinner (if pending load)
     if app.has_pending_load() {
-        spans.push(Span::styled(" | ", STYLE_SEPARATOR));
+        spans.push(Span::styled(" │ ", STYLE_SEPARATOR));
         spans.push(Span::styled(
             format!("{} Loading...", app.spinner_frame()),
             Style::default().fg(Color::Yellow),
@@ -256,14 +286,12 @@ pub fn render_status(f: &mut Frame, area: Rect, app: &App) {
 
     // Status message (temporary, e.g., "Copied: key")
     if let Some((msg, _)) = &app.status_message {
-        spans.push(Span::styled(" | ", STYLE_SEPARATOR));
+        spans.push(Span::styled(" │ ", STYLE_SEPARATOR));
         spans.push(Span::styled(msg.clone(), Style::default().fg(Color::Green)));
     }
 
-    // Spacer to push shortcuts to the right
-    spans.push(Span::raw("  "));
-
-    // Stats (full words: nodes.arcs | kinds.arc-kinds)
+    // 4. STATS (full words: nodes.arcs │ kinds.arc-kinds)
+    spans.push(Span::styled(" │ ", STYLE_SEPARATOR));
     let stats = &app.tree.stats;
     spans.push(Span::styled(
         format_stats(
@@ -275,9 +303,8 @@ pub fn render_status(f: &mut Frame, area: Rect, app: &App) {
         STYLE_MUTED,
     ));
 
-    // Mini realm distribution bar (8 char width) - shows proportion of kinds per realm
-    // Uses cache to avoid Vec allocation per frame (~32KB/sec saved at 60fps)
-    spans.push(Span::styled(" ", STYLE_SEPARATOR));
+    // 5. REALM-BAR (mini bar showing realm distribution)
+    spans.push(Span::raw(" "));
     let bar_width: usize = 8;
     let cache_key = compute_mini_bar_cache_key(app, bar_width);
     let cached_spans = app
@@ -286,10 +313,9 @@ pub fn render_status(f: &mut Frame, area: Rect, app: &App) {
         .get_clone_or_compute(cache_key, || build_realm_mini_bar(app, bar_width));
     spans.extend(cached_spans);
 
-    spans.push(Span::styled(" | ", STYLE_SEPARATOR));
-
-    // Contextual shortcuts
-    spans.push(Span::styled(shortcuts, STYLE_DIM));
+    // 6. HELP indicator (always shown, both modes)
+    spans.push(Span::styled(" │ ", STYLE_SEPARATOR));
+    spans.push(Span::styled("[?]", STYLE_DIM));
 
     spans.push(Span::raw(" "));
 
@@ -314,44 +340,43 @@ mod tests {
 
     #[test]
     fn test_shortcuts_nexus_mode() {
-        // v11.7: Nexus uses [ ] for tabs, 1-2 for global mode switching
+        // v11.7: Nexus has its own action bar - status bar returns empty to avoid duplication
         let result = get_contextual_shortcuts(NavMode::Nexus, Focus::Tree, false, false);
-        assert_eq!(
-            result,
-            "j/k:nav  []:tabs  Enter:select  Esc:back  1-2:modes  ?:help"
-        );
+        assert_eq!(result, "");
     }
 
     #[test]
     fn test_shortcuts_graph_mode_tree_focus_on_kind() {
         let result = get_contextual_shortcuts(NavMode::Graph, Focus::Tree, false, true);
-        assert!(result.contains("j/k:nav"));
-        assert!(result.contains("?:help"));
+        assert!(result.contains("↑/↓:nav"));
+        assert!(result.contains("←/→:expand"));
+        assert!(result.contains("y:copy"));
     }
 
     #[test]
     fn test_shortcuts_graph_mode_tree_focus_not_on_kind() {
         let result = get_contextual_shortcuts(NavMode::Graph, Focus::Tree, false, false);
-        assert!(result.contains("j/k:nav"));
-        assert!(result.contains("?:help"));
+        assert!(result.contains("↑/↓:nav"));
+        assert!(result.contains("←/→:toggle"));
+        assert!(result.contains("y:copy"));
     }
 
     #[test]
     fn test_shortcuts_graph_mode_yaml_focus() {
         let result = get_contextual_shortcuts(NavMode::Graph, Focus::Yaml, false, false);
-        assert!(result.contains("j/k:scroll"));
+        assert!(result.contains("↑/↓:scroll"));
     }
 
     #[test]
     fn test_shortcuts_graph_mode_info_focus() {
         let result = get_contextual_shortcuts(NavMode::Graph, Focus::Info, false, false);
-        assert!(result.contains("j/k:scroll"));
+        assert!(result.contains("↑/↓:scroll"));
     }
 
     #[test]
     fn test_shortcuts_graph_mode_graph_focus() {
         let result = get_contextual_shortcuts(NavMode::Graph, Focus::Graph, false, false);
-        assert!(result.contains("1-2:modes"));
+        assert!(result.contains("Tab:panel"));
     }
 
     // =========================================================================
@@ -521,12 +546,17 @@ mod tests {
     }
 
     #[test]
-    fn test_shortcuts_all_modes_have_output() {
-        // All modes should produce non-empty shortcuts
-        for mode in [NavMode::Graph, NavMode::Nexus] {
-            let result = get_contextual_shortcuts(mode, Focus::Tree, false, false);
-            assert!(!result.is_empty(), "Mode {:?} should have shortcuts", mode);
-        }
+    fn test_shortcuts_graph_mode_has_output() {
+        // Graph mode should produce non-empty shortcuts
+        let result = get_contextual_shortcuts(NavMode::Graph, Focus::Tree, false, false);
+        assert!(!result.is_empty(), "Graph mode should have shortcuts");
+    }
+
+    #[test]
+    fn test_shortcuts_nexus_mode_is_empty() {
+        // Nexus has its own action bar, so status bar shortcuts are empty
+        let result = get_contextual_shortcuts(NavMode::Nexus, Focus::Tree, false, false);
+        assert!(result.is_empty(), "Nexus mode should not have status bar shortcuts");
     }
 
     #[test]

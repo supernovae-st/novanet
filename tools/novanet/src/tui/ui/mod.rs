@@ -22,6 +22,7 @@ use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, Borders, Clear, Paragraph};
 
 use super::app::{App, NavMode};
+use super::icons;
 use super::theme::{self, hex_to_color};
 use super::unicode::{truncate_start_to_width, truncate_to_width};
 
@@ -202,29 +203,18 @@ pub(super) fn scroll_indicator(
 /// - aggregated: ▪ (small square) - computed metrics
 ///
 /// Note: v11.2 removed job trait, split derived into generated+aggregated
+/// v11.7: Uses icons.rs (generated from visual-encoding.yaml) as source of truth
 pub(super) fn trait_icon(trait_name: &str) -> &'static str {
     match trait_name {
-        "invariant" => "■",
-        "localized" => "□",
-        "knowledge" => "◊",
-        "generated" => "★",
-        "aggregated" => "▪",
+        "invariant" => icons::TRAITS_INVARIANT.terminal,
+        "localized" => icons::TRAITS_LOCALIZED.terminal,
+        "knowledge" => icons::TRAITS_KNOWLEDGE.terminal,
+        "generated" => icons::TRAITS_GENERATED.terminal,
+        "aggregated" => icons::TRAITS_AGGREGATED.terminal,
         _ => "·", // fallback
     }
 }
 
-/// Get color for a node trait (from taxonomy.yaml node_traits).
-/// Uses TrueColor RGB values for visual consistency in tree view.
-pub(super) fn trait_color(trait_name: &str) -> Color {
-    match trait_name {
-        "invariant" => hex_to_color(theme::traits::INVARIANT_HEX), // #3b82f6 blue
-        "localized" => hex_to_color(theme::traits::LOCALIZED_HEX), // #22c55e green
-        "knowledge" => hex_to_color(theme::traits::KNOWLEDGE_HEX), // #8b5cf6 purple
-        "generated" => hex_to_color(theme::traits::GENERATED_HEX), // #b58900 gold
-        "aggregated" => hex_to_color(theme::traits::AGGREGATED_HEX), // #6c71c4 violet
-        _ => Color::White,                                         // fallback
-    }
-}
 
 // =============================================================================
 // CLASSIFICATION BADGE HELPERS (v11.5 TreeView Enhancement)
@@ -240,12 +230,13 @@ pub(super) fn realm_abbrev(realm_key: &str) -> &'static str {
     }
 }
 
-/// Get icon for realm badge (from visual-encoding.yaml).
+/// Get icon for realm badge (from visual-encoding.yaml via icons.rs).
 /// Named `_badge` to avoid collision with expand_icon variables in tree.rs
+/// v11.7: Uses icons.rs as source of truth (fixes swapped icons bug)
 pub(super) fn realm_badge_icon(realm_key: &str) -> &'static str {
     match realm_key {
-        "shared" => "◎",
-        "org" => "◉",
+        "shared" => icons::REALMS_SHARED.terminal,
+        "org" => icons::REALMS_ORG.terminal,
         _ => "○",
     }
 }
@@ -269,21 +260,22 @@ pub(super) fn layer_abbrev(layer_key: &str) -> &'static str {
     }
 }
 
-/// Get icon for layer badge (from visual-encoding.yaml).
+/// Get icon for layer badge (from visual-encoding.yaml via icons.rs).
 /// v11.5: All icons are single-width Unicode symbols (no emojis)
+/// v11.7: Uses icons.rs as source of truth
 pub(super) fn layer_badge_icon(layer_key: &str) -> &'static str {
     match layer_key {
         // v11.5: 4 shared layers
-        "config" => "⚙",
-        "locale" => "⊕",
-        "geography" => "⊙",
-        "knowledge" => "◈",
+        "config" => icons::LAYERS_CONFIG.terminal,
+        "locale" => icons::LAYERS_LOCALE.terminal,
+        "geography" => icons::LAYERS_GEOGRAPHY.terminal,
+        "knowledge" => icons::LAYERS_KNOWLEDGE.terminal,
         // v11.5: 6 org layers
-        "foundation" => "▣",
-        "structure" => "▤",
-        "semantic" => "◆",
-        "instruction" => "▧",
-        "output" => "●",
+        "foundation" => icons::LAYERS_FOUNDATION.terminal,
+        "structure" => icons::LAYERS_STRUCTURE.terminal,
+        "semantic" => icons::LAYERS_SEMANTIC.terminal,
+        "instruction" => icons::LAYERS_INSTRUCTION.terminal,
+        "output" => icons::LAYERS_OUTPUT.terminal,
         _ => "○",
     }
 }
@@ -314,14 +306,15 @@ pub(super) fn arc_family_abbrev(family_key: &str) -> &'static str {
     }
 }
 
-/// Get icon for arc family badge (from visual-encoding.yaml).
+/// Get icon for arc family badge (from visual-encoding.yaml via icons.rs).
+/// v11.7: Uses icons.rs as source of truth
 pub(super) fn arc_family_badge_icon(family_key: &str) -> &'static str {
     match family_key {
-        "ownership" => "→",
-        "localization" => "⇢",
-        "semantic" => "~",
-        "generation" => "⇒",
-        "mining" => "⇝",
+        "ownership" => icons::ARC_FAMILIES_OWNERSHIP.terminal,
+        "localization" => icons::ARC_FAMILIES_LOCALIZATION.terminal,
+        "semantic" => icons::ARC_FAMILIES_SEMANTIC.terminal,
+        "generation" => icons::ARC_FAMILIES_GENERATION.terminal,
+        "mining" => icons::ARC_FAMILIES_MINING.terminal,
         _ => "?",
     }
 }
@@ -551,15 +544,13 @@ pub fn render(f: &mut Frame, app: &mut App) {
         .constraints([
             Constraint::Length(1), // Header
             Constraint::Min(0),    // Main content
-            Constraint::Length(1), // Status bar
-            Constraint::Length(1), // Footer hints
+            Constraint::Length(1), // Unified status bar (hints + stats)
         ])
         .split(f.area());
 
     render_header(f, chunks[0], app);
     render_main(f, chunks[1], app);
     render_status(f, chunks[2], app);
-    render_footer_hints(f, chunks[3], app);
 
     // Overlays on top (order matters: last = topmost)
     if app.search.active {
@@ -574,33 +565,6 @@ pub fn render(f: &mut Frame, app: &mut App) {
     if app.recent_items_active {
         render_recent_items_overlay(f, app);
     }
-}
-
-/// Footer: Contextual keybinding hints based on mode and focus.
-fn render_footer_hints(f: &mut Frame, area: Rect, app: &App) {
-    use crate::tui::app::Focus;
-
-    let hints = match app.mode {
-        NavMode::Graph => match app.focus {
-            Focus::Tree => {
-                "Tree: [h/l] Toggle  [j/k] Navigate  [Space] Expand  [g/G] Top/Bottom  [Tab] Panel  [/] Search  [?] Help"
-            }
-            Focus::Info => "Info: [j/k] Scroll  [y] Copy  [Tab] Panel  [/] Search  [?] Help",
-            Focus::Graph => "Graph: [Click] Select  [Scroll] Zoom  [Tab] Panel  [?] Help",
-            Focus::Yaml => "YAML: [j/k] Scroll  [y] Copy  [Tab] Panel  [/] Search  [?] Help",
-        },
-        NavMode::Nexus => {
-            "[1-2] Modes  [j/k] Navigate  [Enter] Select  [Esc] Back  [/] Search  [?] Help"
-        }
-    };
-
-    let line = Line::from(Span::styled(
-        format!("  {}", hints),
-        Style::default().fg(COLOR_HINT_TEXT),
-    ));
-
-    let paragraph = Paragraph::new(line).style(Style::default().bg(Color::Rgb(18, 18, 25)));
-    f.render_widget(paragraph, area);
 }
 
 /// Header: Logo + Mode tabs.
@@ -633,26 +597,18 @@ fn render_header(f: &mut Frame, area: Rect, app: &App) {
     header.extend(tabs);
 
     // Show hide_empty indicator when active in Instances view
-    if app.hide_empty && app.is_data_mode() {
+    if app.hide_empty && app.is_graph_mode() {
         header.push(Span::styled(
             " [∅ hidden]",
             Style::default().fg(Color::Yellow),
         ));
     }
 
-    // Context-aware shortcuts (v11.7: 2 modes, 1-2 global)
-    let right_side = if app.mode == NavMode::Nexus {
-        vec![Span::styled(
-            "  []:tabs  jk:nav  Enter:drill  Esc:back  1-2:modes  ?:help  q:quit",
-            theme::ui::muted_style(),
-        )]
-    } else {
-        // Graph mode (v11.7: unified tree)
-        vec![Span::styled(
-            "  h/l:toggle  jk:scroll  Tab:panel  /:find  1-2:modes  ?:help  q:quit",
-            theme::ui::muted_style(),
-        )]
-    };
+    // Minimal right side: just ?:help and q:quit (shortcuts in footer/action bar)
+    let right_side = vec![Span::styled(
+        "  ?:help  q:quit",
+        theme::ui::muted_style(),
+    )];
 
     let mut full_header: Vec<Span<'static>> = header;
     // Calculate padding to right-align
