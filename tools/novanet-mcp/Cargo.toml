@@ -7,14 +7,14 @@
 # Architecture:
 # - 7 Tools: search, traverse, assemble, atoms, describe, query, generate
 # - 4 Resources: entity://, kind://, locale://, view://
-# - 3 Prompts: cypher_query, content_generation, context_analysis
+# - 6 Prompts: cypher_query, cypher_explain, block_generation, page_generation, entity_analysis, locale_briefing
 #
 # STANDALONE CRATE: Not part of workspace, allows independent versioning.
 # Context7 Verified: 2026-02-12
 
 [package]
 name = "novanet-mcp"
-version = "0.1.0"
+version = "0.3.0"
 edition = "2024"
 license = "LicenseRef-Proprietary"
 rust-version = "1.86"
