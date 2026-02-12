@@ -25,7 +25,7 @@ case "$FILE_PATH" in
 {
   "hookSpecificOutput": {
     "hookEventName": "PostToolUse",
-    "additionalContext": "Documentation file edited. Ensure version ($VERSION) and counts (76 nodes, 123 arcs, 2 realms, 9 layers) are consistent. Run 'pnpm doc:audit' to verify."
+    "additionalContext": "Documentation file edited. Ensure version ($VERSION) and counts (60 nodes, 114 arcs, 2 realms, 10 layers) are consistent. Run 'pnpm doc:audit' to verify."
   }
 }
 EOF
