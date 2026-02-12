@@ -26,6 +26,7 @@
 pub mod cache;
 pub mod error;
 pub mod neo4j;
+pub mod resources;
 pub mod rlm;
 pub mod server;
 pub mod tokens;
