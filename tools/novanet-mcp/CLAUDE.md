@@ -2,7 +2,7 @@
 
 MCP (Model Context Protocol) server exposing the NovaNet knowledge graph to AI agents.
 
-**Version**: 0.2.0 | **Rust**: 1.86 | **Edition**: 2024 | **rmcp**: 0.15
+**Version**: 0.3.0 | **Rust**: 1.86 | **Edition**: 2024 | **rmcp**: 0.15
 
 ---
 
@@ -22,7 +22,8 @@ NovaNet MCP implements **RLM-on-KG** (Recursive Language Model on Knowledge Grap
 │                    │              ├── novanet_search     (Fulltext search)  │
 │                    │              ├── novanet_traverse   (Graph traversal)  │
 │                    │              ├── novanet_assemble   (Context assembly) │
-│                    │              └── novanet_atoms      (Knowledge atoms)  │
+│                    │              ├── novanet_atoms      (Knowledge atoms)  │
+│                    │              └── novanet_generate   (RLM-on-KG context)│
 │                    │                                                        │
 │               MCP Protocol                                                  │
 │               (JSON-RPC 2.0)                                                │
@@ -37,9 +38,11 @@ NovaNet MCP implements **RLM-on-KG** (Recursive Language Model on Knowledge Grap
 │  ├── Resources: entity://, kind://, locale://, view://                      │
 │  └── Tools: search, traverse, assemble, atoms                               │
 │                                                                             │
-│  PHASE 3 (Planned)                                                          │
-│  ├── Prompts: cypher_query, content_generation, context_analysis            │
-│  └── Tools: generate (RLM-on-KG evidence assembly)                          │
+│  PHASE 3 (In Progress)                                                      │
+│  ├── Tool: novanet_generate (block/page mode, context anchors)              │
+│  ├── Prompts: cypher_query, cypher_explain, block_generation,               │
+│  │            page_generation, entity_analysis, locale_briefing             │
+│  └── Context Anchors: Cross-page references via REFERENCES_PAGE arc         │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -330,6 +333,76 @@ Retrieve knowledge atoms for a specific locale.
 }
 ```
 
+### `novanet_generate`
+
+Assemble complete generation context for block or page content. This is the composite tool that orchestrates traverse, assemble, and atoms for AI agents.
+
+**Parameters:**
+```json
+{
+  "focus_key": "homepage",
+  "locale": "fr-FR",
+  "mode": "page",
+  "token_budget": 50000,
+  "include_examples": true,
+  "spreading_depth": 2
+}
+```
+
+**Modes:**
+- `block` - Single block generation (entities, knowledge atoms)
+- `page` - Full page orchestration (structure, all blocks, cross-references)
+
+**Returns:**
+```json
+{
+  "prompt": "# Generation Context for homepage (fr-FR)...",
+  "evidence_summary": [
+    {
+      "source_key": "qr-code",
+      "evidence_type": "entity",
+      "relevance": 0.95,
+      "tokens": 120
+    }
+  ],
+  "locale_context": {
+    "locale_key": "fr-FR",
+    "language": "French",
+    "voice": "professionnel, accessible",
+    "formality": "vous"
+  },
+  "context_anchors": [
+    {
+      "page_key": "pricing",
+      "anchor_text": "page de tarifs",
+      "slug": "/fr/tarifs",
+      "context_hint": "Link when mentioning pricing or plans"
+    }
+  ],
+  "token_usage": {
+    "structure": 500,
+    "entities": 3200,
+    "knowledge": 1800,
+    "locale": 400,
+    "total": 5900,
+    "budget_remaining": 44100
+  },
+  "metadata": {
+    "blocks_discovered": 5,
+    "entities_loaded": 12,
+    "execution_time_ms": 250
+  }
+}
+```
+
+**Context Anchors:**
+
+Context Anchors enable cross-page references in generated content. When a Block references another Page via the `REFERENCES_PAGE` arc, the anchor metadata is included for creating internal links.
+
+Anchor syntax in generated content: `{{anchor:page_key|display text}}`
+
+Example: `"Découvrez notre {{anchor:pricing|page de tarifs}} pour..."` resolves to a proper link.
+
 ---
 
 ## Resources
@@ -434,6 +507,109 @@ view://composition
   ]
 }
 ```
+
+---
+
+## MCP Prompts
+
+NovaNet MCP provides 6 prompt templates for AI agent workflows. Prompts guide agents through tool orchestration for common tasks.
+
+### `cypher_query`
+
+Generate schema-aware Cypher queries from natural language.
+
+**Arguments:**
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `intent` | string | Yes | Natural language description of what to query |
+| `constraints` | string | No | Additional constraints (realm, layer, limit) |
+
+**Use case:** Agent needs to query the graph but doesn't know the schema.
+
+### `cypher_explain`
+
+Explain query results in business context.
+
+**Arguments:**
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `query` | string | Yes | The Cypher query that was executed |
+| `results` | string | Yes | JSON array of query results |
+
+**Use case:** Agent ran a query and needs to interpret results for the user.
+
+### `block_generation`
+
+Generate context for a single block's content.
+
+**Arguments:**
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `block_key` | string | Yes | The block's key |
+| `locale` | string | Yes | Target locale (BCP-47) |
+| `token_budget` | number | No | Max tokens (default: 10000) |
+
+**Use case:** Agent generating content for a specific Block.
+
+**Orchestration:**
+1. Call `novanet_traverse` to get block structure + entities
+2. Call `novanet_atoms` to get locale-specific knowledge
+3. Assemble evidence packets by relevance
+4. Return context with anchor syntax for cross-page links
+
+### `page_generation`
+
+Orchestrate full page generation across all blocks.
+
+**Arguments:**
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `page_key` | string | Yes | The page's key |
+| `locale` | string | Yes | Target locale (BCP-47) |
+| `token_budget` | number | No | Max tokens (default: 50000) |
+
+**Use case:** Agent generating an entire page with multiple blocks.
+
+**Orchestration:**
+1. Discover page structure via `novanet_traverse`
+2. For each block, invoke `block_generation` prompt
+3. Assemble page-level metadata (title, meta_description)
+4. Include context anchors for internal linking
+
+### `entity_analysis`
+
+Deep analysis of an entity with usage context.
+
+**Arguments:**
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `entity_key` | string | Yes | The entity's key |
+| `locale` | string | Yes | Analysis locale |
+
+**Use case:** Agent needs comprehensive understanding of an entity.
+
+**Returns:**
+- Entity definition summary
+- Locale-specific adaptations (EntityContent)
+- Pages/Blocks using this entity
+- Related entities (semantic connections)
+
+### `locale_briefing`
+
+Locale voice and culture summary for content generation.
+
+**Arguments:**
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `locale_key` | string | Yes | Locale key (BCP-47) |
+
+**Use case:** Agent needs to understand locale voice before generating content.
+
+**Returns:**
+- Voice guidelines (formality, tone, vocabulary)
+- Cultural context (references, taboos)
+- Technical formats (date, number, currency)
+- Example phrases demonstrating the voice
 
 ---
 
@@ -656,11 +832,17 @@ RETURN t.key, t.value LIMIT 50
 - [x] Tools: search, traverse, assemble, atoms
 - [x] RLM traversal with hop-by-hop evidence packets
 
-### Phase 3 (Planned)
-- [ ] MCP Prompts: cypher_query, content_generation, context_analysis
-- [ ] Tool: generate (full RLM-on-KG pipeline)
-- [ ] Evidence packet compression (~200 bytes)
-- [ ] Full token budget enforcement
+### Phase 3 (In Progress)
+- [x] Design: 6 MCP Prompts with Full RAG pattern
+- [x] Design: Hybrid architecture (atomic tools + novanet_generate composite)
+- [x] Design: Context Anchor pattern for cross-page references
+- [x] Views: 4 generation views added to _registry.yaml
+- [ ] Tool: novanet_generate (block/page mode)
+- [ ] Prompts: cypher_query, cypher_explain, block_generation, page_generation, entity_analysis, locale_briefing
+- [ ] Context Anchors: REFERENCES_PAGE arc + anchor resolution
+- [ ] Evidence packet compression (~200 bytes target)
+
+**Design document**: `docs/plans/2026-02-12-phase3-generate-prompts-design.md`
 
 ---
 
@@ -670,7 +852,9 @@ RETURN t.key, t.value LIMIT 50
 |------|---------|
 | `/CLAUDE.md` | NovaNet monorepo overview |
 | `/packages/core/models/` | YAML schema definitions (source of truth) |
+| `/packages/core/models/views/_registry.yaml` | View definitions (19 views, 4 generation) |
 | `/packages/db/seed/` | Neo4j seed scripts |
 | `/tools/novanet/` | Rust CLI + TUI (sister binary) |
 | `/.claude/rules/novanet-terminology.md` | Domain vocabulary |
 | `/.claude/rules/novanet-decisions.md` | Architecture decisions (ADRs) |
+| `docs/plans/2026-02-12-phase3-generate-prompts-design.md` | Phase 3 design document |
