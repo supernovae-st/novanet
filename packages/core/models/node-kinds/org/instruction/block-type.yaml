@@ -8,7 +8,7 @@ node:
   layer: instruction
   trait: defined
   icon: "🔷"
-  description: "Template defining rules, structure, and L10N requirements for a type of block"
+  description: "Template defining rules, structure, and locale-specific requirements for a type of block"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # STANDARD PROPERTIES (v7.1.0)
