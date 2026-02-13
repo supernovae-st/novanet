@@ -18,7 +18,7 @@ use rustc_hash::FxHashSet;
 
 use super::{
     COLOR_ACTIVE_KIND_BG, COLOR_ARC_FAMILY, COLOR_CONNECTED, COLOR_DESC_TEXT, COLOR_HIGHLIGHT_BG,
-    COLOR_MUTED_TEXT, COLOR_UNFOCUSED_BORDER, EmptyStateKind, STYLE_DIM, STYLE_HIGHLIGHT,
+    COLOR_MUTED_TEXT, COLOR_UNFOCUSED_BORDER, EmptyStateClass, STYLE_DIM, STYLE_HIGHLIGHT,
     STYLE_PRIMARY, STYLE_UNFOCUSED, arc_family_abbrev, arc_family_badge_icon, cardinality_abbrev,
     layer_abbrev, layer_badge_icon, realm_abbrev, realm_badge_icon, render_empty_state, spinner,
     trait_abbrev, trait_icon,
@@ -263,7 +263,7 @@ fn render_breadcrumb(f: &mut Frame, area: Rect, app: &App) -> u16 {
         return 1;
     }
 
-    // Build horizontal breadcrumb: ◎ Org → ⚙ Config → ■ Kind
+    // Build horizontal breadcrumb: ◎ Org → ⚙ Config → ■ Class
     let mut spans: Vec<Span> = Vec::with_capacity(path.len() * 3);
     spans.push(Span::raw(" ")); // Left padding
 
@@ -428,11 +428,11 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
             area.width.saturating_sub(2),
             area.height.saturating_sub(2),
         );
-        render_empty_state(f, inner_area, EmptyStateKind::NoKinds, app.tick);
+        render_empty_state(f, inner_area, EmptyStateClass::NoClasses, app.tick);
         return;
     }
 
-    // === FILTERED DATA MODE: Show only instances of selected Kind ===
+    // === FILTERED DATA MODE: Show only instances of selected Class ===
     if let Some(kind_key) = app.get_filter_kind() {
         render_filtered_instances(
             f,
@@ -454,7 +454,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     // line_color: color for tree prefix (│├└ characters)
     // text_color: color for icon and text
     // match_positions: optional fuzzy match positions for highlighting
-    // bg_color: optional background color for the line (e.g., active Kind highlight)
+    // bg_color: optional background color for the line (e.g., active Class highlight)
     // trait_icon_opt: optional (trait_icon, trait_color) for colored trait icons
     let make_line = |idx: usize,
                      cursor: usize,
@@ -853,7 +853,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
                             // Show collapse icon based on mode:
                             // - Data mode: show chevron if instances exist
-                            // - Meta mode: Kinds are leaf nodes (no children to expand)
+                            // - Schema mode: Classes are leaf nodes (no children to expand)
                             let kind_icon = if is_data_mode && kind.instance_count > 0 {
                                 // Show expanded (▼) only if instances are actually loaded
                                 // Otherwise show collapsed (▶) even if state says "expanded"
@@ -940,7 +940,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 cont(layer_is_last),
                                 branch(kind_is_last)
                             );
-                            // Highlight Kind if it has expanded instances (active focus)
+                            // Highlight Class if it has expanded instances (active focus)
                             let kind_has_expanded_instances = is_data_mode
                                 && !kind_collapsed
                                 && app
@@ -953,7 +953,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 None
                             };
 
-                            // v11.6: Custom Kind line with right-aligned classification badges
+                            // v11.6: Custom Class line with right-aligned classification badges
                             // Format: [cursor] [prefix] [chevron] [trait(abbrev)] [name (count)] │ [badges]
                             let is_cursor = idx == app.tree_cursor;
                             let cursor_char = if is_cursor { ">" } else { " " };
@@ -1052,9 +1052,9 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             }
                             idx += 1;
 
-                            // In Data mode, show instances under Kind (if not collapsed)
+                            // In Data mode, show instances under Class (if not collapsed)
                             if is_data_mode && !kind_collapsed {
-                                // Special case: Entity Kind shows categories instead of flat instances
+                                // Special case: Entity Class shows categories instead of flat instances
                                 if kind.key == "Entity" && !app.tree.entity_categories.is_empty() {
                                     let cat_count = app.tree.entity_categories.len();
                                     for (ci, category) in
@@ -1492,7 +1492,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                 for (ai, arc_kind) in family.arc_kinds.iter().enumerate() {
                     let arc_is_last = ai == arc_count - 1;
 
-                    // v11.6.1: Custom ArcKind line with source→target and cardinality badge
+                    // v11.6.1: Custom ArcClass line with source→target and cardinality badge
                     // Format: [cursor][prefix] [name]  [From→To]  │ [cardinality] │
                     let is_cursor = idx == app.tree_cursor;
                     let cursor_char = if is_cursor { ">" } else { " " };
@@ -1712,7 +1712,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     }
 }
 
-/// Render filtered Data mode: only instances of a specific Kind with breadcrumb.
+/// Render filtered Data mode: only instances of a specific Class with breadcrumb.
 fn render_filtered_instances(
     f: &mut Frame,
     area: Rect,
@@ -1722,7 +1722,7 @@ fn render_filtered_instances(
     focused: bool,
     border_color: Color,
 ) {
-    // Get Kind info for display with full hierarchy
+    // Get Class info for display with full hierarchy
     let kind_info = app.tree.find_kind(kind_key);
     let (realm_display, realm_color, layer_display, layer_color, kind_display) = kind_info
         .map(|(realm, layer, kind)| {
@@ -1747,7 +1747,7 @@ fn render_filtered_instances(
     // Build lines: breadcrumb + instances
     let mut all_lines: Vec<Line> = Vec::new();
 
-    // Breadcrumb header with full hierarchy: Realm → Layer → Kind
+    // Breadcrumb header with full hierarchy: Realm → Layer → Class
     all_lines.push(Line::from(vec![
         Span::styled("← ", STYLE_DIM),
         Span::styled("Esc", STYLE_HIGHLIGHT),
@@ -1786,7 +1786,7 @@ fn render_filtered_instances(
         } else {
             // Loaded but empty
             all_lines.push(Line::from(Span::styled(
-                "  No instances exist for this Kind",
+                "  No instances exist for this Class",
                 STYLE_DIM,
             )));
         }
@@ -1850,7 +1850,7 @@ fn render_filtered_instances(
         .take(visible_height)
         .collect();
 
-    // Title with Kind name and count + position indicator
+    // Title with Class name and count + position indicator
     // Format: "Locale (3/203)" when all loaded, "Locale (3/500 of 847)" when truncated
     let title = if instance_count > 0 {
         if is_truncated {
@@ -1931,7 +1931,7 @@ pub(super) fn build_tree_prefix(parent_is_last: &[bool], is_last: bool) -> Strin
     prefix
 }
 
-/// Format a health badge for a Kind node.
+/// Format a health badge for a Class node.
 /// Returns empty string if no health data, or a bar like " ━━━░░░░░░░50%"
 pub(super) fn format_health_badge(
     health_percent: Option<u8>,

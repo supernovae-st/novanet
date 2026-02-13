@@ -1,12 +1,12 @@
 //! Schema property matching for TUI overlay.
 //!
-//! This module handles matching instance properties against Kind schema definitions,
+//! This module handles matching instance properties against Class schema definitions,
 //! enabling the Data mode overlay that shows:
 //! - Filled properties (value present)
 //! - Empty optional properties (dim)
 //! - Missing required properties (red warning)
 //!
-//! Also provides Kind validation (Neo4j ↔ YAML source of truth).
+//! Also provides Class validation (Neo4j ↔ YAML source of truth).
 
 use indexmap::IndexMap;
 use serde::Deserialize;
@@ -99,17 +99,17 @@ impl CoverageStats {
 }
 
 // =============================================================================
-// Kind Property Validation (Neo4j ↔ YAML)
+// Class Property Validation (Neo4j ↔ YAML)
 // =============================================================================
 
-/// Validation status for Kind properties (Neo4j vs YAML source of truth).
+/// Validation status for Class properties (Neo4j vs YAML source of truth).
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ValidationStatus {
-    /// Property exists in both YAML schema and Neo4j Kind node
+    /// Property exists in both YAML schema and Neo4j Class node
     Sync,
-    /// YAML defines this property, but Neo4j Kind node is missing it
+    /// YAML defines this property, but Neo4j Class node is missing it
     Missing,
-    /// Neo4j Kind node has this property, but not defined in YAML schema
+    /// Neo4j Class node has this property, but not defined in YAML schema
     Extra,
 }
 
@@ -129,7 +129,7 @@ pub struct ValidatedProperty {
     pub status: ValidationStatus,
 }
 
-/// Validation statistics for a Kind.
+/// Validation statistics for a Class.
 #[derive(Debug, Clone, Default)]
 pub struct ValidationStats {
     /// Properties in sync (YAML = Neo4j)
@@ -324,10 +324,10 @@ fn json_value_to_string(value: &JsonValue) -> String {
 }
 
 // =============================================================================
-// Kind Validation Functions
+// Class Validation Functions
 // =============================================================================
 
-/// Validate Kind properties by comparing YAML schema against Neo4j state.
+/// Validate Class properties by comparing YAML schema against Neo4j state.
 ///
 /// Returns validated properties showing:
 /// - Sync: property exists in both YAML and Neo4j

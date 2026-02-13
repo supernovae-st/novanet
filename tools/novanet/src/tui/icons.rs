@@ -100,7 +100,7 @@ pub const QUALITY_REQUIRED: IconDef = IconDef::new("asterisk", "*", "Required fi
 // =============================================================================
 
 pub const MODES_DATA: IconDef = IconDef::new("table", "D", "Data instances view");
-pub const MODES_GRAPH: IconDef = IconDef::new("git-branch", "G", "Unified tree view (Realm > Layer > Kind)");
+pub const MODES_GRAPH: IconDef = IconDef::new("git-branch", "G", "Unified tree view (Realm > Layer > Class)");
 pub const MODES_META: IconDef = IconDef::new("database", "M", "Meta-graph view");
 pub const MODES_NEXUS: IconDef = IconDef::new("compass", "N", "Hub for Quiz, Stats, Help");
 pub const MODES_OVERLAY: IconDef = IconDef::new("layers", "O", "Combined meta+data");

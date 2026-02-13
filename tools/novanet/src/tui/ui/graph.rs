@@ -1,6 +1,6 @@
 //! Graph panel rendering for TUI.
 //!
-//! Displays Neo4j relationships for the selected Kind or Instance,
+//! Displays Neo4j relationships for the selected Class or Instance,
 //! realm/layer statistics, and arc details.
 
 use ratatui::Frame;
@@ -23,9 +23,9 @@ use super::{
 // GRAPH PANEL
 // =============================================================================
 
-/// Graph panel: Displays Neo4j relationships for the selected Kind or Instance.
+/// Graph panel: Displays Neo4j relationships for the selected Class or Instance.
 ///
-/// Shows real arc data from Neo4j when a Kind is selected,
+/// Shows real arc data from Neo4j when a Class is selected,
 /// instance arcs in Data mode, or contextual messages for other selections.
 pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
     let theme = &app.theme; // Use cached theme from App
@@ -239,7 +239,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
                 ),
             ]));
 
-            // Kind names
+            // Class names
             for kind_name in &group.kind_names {
                 lines.push(Line::from(vec![
                     Span::styled("      \u{2022} ", dim),
@@ -580,9 +580,9 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
             Some(TreeItem::ArcFamily(_)) => "\u{25b8} Select an Arc to see endpoints",
             Some(TreeItem::ArcClass(_, _)) => "\u{25b8} Loading arc details...",
             Some(TreeItem::Realm(_)) | Some(TreeItem::Layer(_, _)) => {
-                "\u{25b8} Select a Node Kind to see arc relationships"
+                "\u{25b8} Select a Node Class to see arc relationships"
             }
-            _ => "\u{25b8} Select a Node Kind or Arc to see details",
+            _ => "\u{25b8} Select a Node Class or Arc to see details",
         };
         lines.push(Line::from(Span::styled(hint, STYLE_DIM)));
     }
@@ -606,13 +606,13 @@ fn render_arcs_by_family(
         by_family
             .entry(&arc.family)
             .or_default()
-            .push((false, &arc.arc_key, &arc.other_kind)); // false = incoming
+            .push((false, &arc.arc_key, &arc.other_class)); // false = incoming
     }
     for arc in &arcs.outgoing {
         by_family
             .entry(&arc.family)
             .or_default()
-            .push((true, &arc.arc_key, &arc.other_kind)); // true = outgoing
+            .push((true, &arc.arc_key, &arc.other_class)); // true = outgoing
     }
 
     if by_family.is_empty() {
@@ -651,7 +651,7 @@ fn render_arcs_by_family(
         )));
 
         // Render arcs in this family (convert &str to owned String only for Span)
-        for (is_outgoing, arc_key, other_kind) in family_arcs {
+        for (is_outgoing, arc_key, other_class) in family_arcs {
             if *is_outgoing {
                 // Outgoing: Class --[ARC]---> Target
                 lines.push(Line::from(vec![
@@ -665,13 +665,13 @@ fn render_arcs_by_family(
                             .add_modifier(Modifier::BOLD),
                     ),
                     Span::styled("]\u{2500}\u{2500}\u{25b6} ", *dim),
-                    Span::styled((*other_kind).to_string(), STYLE_SUCCESS),
+                    Span::styled((*other_class).to_string(), STYLE_SUCCESS),
                 ]));
             } else {
                 // Incoming: Source --[ARC]---> Class
                 lines.push(Line::from(vec![
                     Span::styled("    ", *dim),
-                    Span::styled((*other_kind).to_string(), STYLE_SUCCESS),
+                    Span::styled((*other_class).to_string(), STYLE_SUCCESS),
                     Span::styled(" \u{2500}\u{2500}[", *dim),
                     Span::styled(
                         (*arc_key).to_string(),
@@ -723,9 +723,9 @@ fn build_graph_distribution_stats(app: &App) -> Vec<Line<'static>> {
 
     // Realm bars
     for realm in &app.tree.realms {
-        let realm_kinds: usize = realm.layers.iter().map(|l| l.kinds.len()).sum();
-        let percent = (realm_kinds as f64 / total_kinds as f64 * 100.0).round() as u8;
-        let bar_width = (realm_kinds * bar_max_width) / total_kinds.max(1);
+        let realm_classes: usize = realm.layers.iter().map(|l| l.kinds.len()).sum();
+        let percent = (realm_classes as f64 / total_kinds as f64 * 100.0).round() as u8;
+        let bar_width = (realm_classes * bar_max_width) / total_kinds.max(1);
         let bar = "\u{2588}".repeat(bar_width.max(1));
         let empty = "\u{2591}".repeat(bar_max_width.saturating_sub(bar_width));
 
@@ -741,7 +741,7 @@ fn build_graph_distribution_stats(app: &App) -> Vec<Line<'static>> {
             Span::styled(bar, Style::default().fg(theme.realm_color(&realm.key))),
             Span::styled(empty, STYLE_DIM),
             Span::styled(format!(" {:>3}%", percent), STYLE_MUTED),
-            Span::styled(format!("  {} Kinds", realm_kinds), STYLE_DIM),
+            Span::styled(format!("  {} Kinds", realm_classes), STYLE_DIM),
         ]));
     }
 
@@ -816,7 +816,7 @@ mod tests {
         Theme::with_mode(ColorMode::TrueColor)
     }
 
-    fn create_kind_arcs_data(
+    fn create_class_arcs_data(
         class_label: &str,
         incoming: Vec<Neo4jArc>,
         outgoing: Vec<Neo4jArc>,
@@ -830,15 +830,15 @@ mod tests {
         }
     }
 
-    fn create_neo4j_arc(arc_key: &str, other_kind: &str, family: &str) -> Neo4jArc {
+    fn create_neo4j_arc(arc_key: &str, other_class: &str, family: &str) -> Neo4jArc {
         Neo4jArc {
             arc_key: arc_key.to_string(),
-            other_kind: other_kind.to_string(),
+            other_class: other_class.to_string(),
             family: family.to_string(),
         }
     }
 
-    fn create_test_kind(key: &str) -> ClassInfo {
+    fn create_test_class(key: &str) -> ClassInfo {
         ClassInfo {
             key: key.to_string(),
             display_name: key.to_string(),
@@ -935,7 +935,7 @@ mod tests {
     fn test_render_arcs_by_family_empty() {
         let theme = create_test_theme();
         let dim = Style::default().fg(Color::Rgb(100, 100, 100));
-        let arcs = create_kind_arcs_data("Page", Vec::new(), Vec::new());
+        let arcs = create_class_arcs_data("Page", Vec::new(), Vec::new());
 
         let mut lines: Vec<Line> = Vec::new();
         render_arcs_by_family(&mut lines, &arcs, &theme, &dim);
@@ -960,7 +960,7 @@ mod tests {
             create_neo4j_arc("USES_ENTITY", "Entity", "semantic"),
             create_neo4j_arc("USES_BLOCK", "Block", "semantic"),
         ];
-        let arcs = create_kind_arcs_data("Page", Vec::new(), outgoing);
+        let arcs = create_class_arcs_data("Page", Vec::new(), outgoing);
 
         let mut lines: Vec<Line> = Vec::new();
         render_arcs_by_family(&mut lines, &arcs, &theme, &dim);
@@ -984,7 +984,7 @@ mod tests {
 
         let incoming = vec![create_neo4j_arc("BELONGS_TO", "Project", "ownership")];
         let outgoing = vec![create_neo4j_arc("USES_ENTITY", "Entity", "semantic")];
-        let arcs = create_kind_arcs_data("Page", incoming, outgoing);
+        let arcs = create_class_arcs_data("Page", incoming, outgoing);
 
         let mut lines: Vec<Line> = Vec::new();
         render_arcs_by_family(&mut lines, &arcs, &theme, &dim);
@@ -1017,7 +1017,7 @@ mod tests {
             create_neo4j_arc("USED_BY_BLOCK", "Block", "semantic"),
         ];
         let outgoing = vec![create_neo4j_arc("USES_ENTITY", "Entity", "semantic")];
-        let arcs = create_kind_arcs_data("Kind", incoming, outgoing);
+        let arcs = create_class_arcs_data("Class", incoming, outgoing);
 
         let mut lines: Vec<Line> = Vec::new();
         render_arcs_by_family(&mut lines, &arcs, &theme, &dim);
@@ -1039,7 +1039,7 @@ mod tests {
 
         let incoming = vec![create_neo4j_arc("BELONGS_TO", "Project", "ownership")];
         let outgoing = vec![create_neo4j_arc("HAS_PAGE", "Page", "ownership")];
-        let arcs = create_kind_arcs_data("Kind", incoming, outgoing);
+        let arcs = create_class_arcs_data("Class", incoming, outgoing);
 
         let mut lines: Vec<Line> = Vec::new();
         render_arcs_by_family(&mut lines, &arcs, &theme, &dim);
@@ -1050,10 +1050,10 @@ mod tests {
             .map(|s| s.content.as_ref())
             .collect();
 
-        // Outgoing: Kind --[ARC]---> Target
-        // Incoming: Source --[ARC]---> Kind
+        // Outgoing: Class --[ARC]---> Target
+        // Incoming: Source --[ARC]---> Class
         assert!(
-            all_content.contains("Kind"),
+            all_content.contains("Class"),
             "should contain the kind label"
         );
         assert!(
@@ -1088,8 +1088,8 @@ mod tests {
 
     #[test]
     fn test_build_graph_distribution_stats_single_realm() {
-        let kind1 = create_test_kind("Page");
-        let kind2 = create_test_kind("Block");
+        let kind1 = create_test_class("Page");
+        let kind2 = create_test_class("Block");
         let layer = create_test_layer("structure", vec![kind1, kind2]);
         let realm = create_test_realm("org", vec![layer]);
         let tree = create_tree_with_realms(vec![realm]);
@@ -1121,14 +1121,14 @@ mod tests {
     fn test_build_graph_distribution_stats_percentage_calculation() {
         // Create 2 realms: shared with 1 kind, org with 3 kinds
         // Expected: shared = 25%, org = 75%
-        let shared_kind = create_test_kind("Config");
+        let shared_kind = create_test_class("Config");
         let shared_layer = create_test_layer("config", vec![shared_kind]);
         let shared_realm = create_test_realm("shared", vec![shared_layer]);
 
         let org_kinds = vec![
-            create_test_kind("Page"),
-            create_test_kind("Block"),
-            create_test_kind("Entity"),
+            create_test_class("Page"),
+            create_test_class("Block"),
+            create_test_class("Entity"),
         ];
         let org_layer = create_test_layer("structure", org_kinds);
         let org_realm = create_test_realm("org", vec![org_layer]);
@@ -1159,19 +1159,19 @@ mod tests {
     #[test]
     fn test_build_graph_distribution_stats_bar_width_calculation() {
         // Create 2 realms with different kind counts
-        // bar_width = (realm_kinds * bar_max_width) / total_kinds
+        // bar_width = (realm_classes * bar_max_width) / total_kinds
         // bar_max_width = 20
 
         // Shared: 2 kinds, Org: 8 kinds, Total: 10
         // Shared bar = (2 * 20) / 10 = 4
         // Org bar = (8 * 20) / 10 = 16
 
-        let shared_kinds = vec![create_test_kind("Config1"), create_test_kind("Config2")];
+        let shared_kinds = vec![create_test_class("Config1"), create_test_class("Config2")];
         let shared_layer = create_test_layer("config", shared_kinds);
         let shared_realm = create_test_realm("shared", vec![shared_layer]);
 
         let org_kinds: Vec<ClassInfo> = (0..8)
-            .map(|i| create_test_kind(&format!("Kind{}", i)))
+            .map(|i| create_test_class(&format!("Class{}", i)))
             .collect();
         let org_layer = create_test_layer("structure", org_kinds);
         let org_realm = create_test_realm("org", vec![org_layer]);
@@ -1222,15 +1222,15 @@ mod tests {
         // Layer bars scale relative to max layer kinds, not total kinds
         // Create layers with different sizes
 
-        let layer1_kinds = vec![create_test_kind("Kind1")];
+        let layer1_classes = vec![create_test_class("Class1")];
         let layer2_kinds = vec![
-            create_test_kind("Kind2"),
-            create_test_kind("Kind3"),
-            create_test_kind("Kind4"),
-            create_test_kind("Kind5"),
+            create_test_class("Class2"),
+            create_test_class("Class3"),
+            create_test_class("Class4"),
+            create_test_class("Class5"),
         ];
 
-        let layer1 = create_test_layer("config", layer1_kinds);
+        let layer1 = create_test_layer("config", layer1_classes);
         let layer2 = create_test_layer("foundation", layer2_kinds);
         let realm = create_test_realm("org", vec![layer1, layer2]);
         let tree = create_tree_with_realms(vec![realm]);
@@ -1288,7 +1288,7 @@ mod tests {
     #[test]
     fn test_build_graph_distribution_stats_skips_empty_layers() {
         // Empty layers should not be shown in layer breakdown
-        let kind = create_test_kind("Page");
+        let kind = create_test_class("Page");
         let layer_with_kinds = create_test_layer("structure", vec![kind]);
         let empty_layer = create_test_layer("empty", Vec::new());
         let realm = create_test_realm("org", vec![layer_with_kinds, empty_layer]);
@@ -1314,9 +1314,9 @@ mod tests {
     #[test]
     fn test_build_graph_distribution_stats_kind_counts_displayed() {
         let kinds = vec![
-            create_test_kind("Page"),
-            create_test_kind("Block"),
-            create_test_kind("Entity"),
+            create_test_class("Page"),
+            create_test_class("Block"),
+            create_test_class("Entity"),
         ];
         let layer = create_test_layer("structure", kinds);
         let realm = create_test_realm("org", vec![layer]);
@@ -1330,9 +1330,9 @@ mod tests {
             .map(|s| s.content.as_ref())
             .collect();
 
-        // Should show "3 Kinds" somewhere in the content
+        // Should show "3 Classes" somewhere in the content
         assert!(
-            all_content.contains("3 Kinds") || all_content.contains("3"),
+            all_content.contains("3 Classes") || all_content.contains("3"),
             "should show kind count, got: {}",
             all_content
         );
@@ -1355,7 +1355,7 @@ mod tests {
             create_neo4j_arc("GENERATES", "Block", "generation"),
             create_neo4j_arc("MINES_DATA", "Source", "mining"),
         ];
-        let arcs = create_kind_arcs_data("Kind", Vec::new(), outgoing);
+        let arcs = create_class_arcs_data("Class", Vec::new(), outgoing);
 
         let mut lines: Vec<Line> = Vec::new();
         render_arcs_by_family(&mut lines, &arcs, &theme, &dim);
@@ -1383,7 +1383,7 @@ mod tests {
         let realms: Vec<RealmInfo> = (0..3)
             .map(|i| {
                 let kinds: Vec<ClassInfo> = (0..(i + 1))
-                    .map(|j| create_test_kind(&format!("Kind{}_{}", i, j)))
+                    .map(|j| create_test_class(&format!("Class{}_{}", i, j)))
                     .collect();
                 let layer = create_test_layer(&format!("layer{}", i), kinds);
                 create_test_realm(&format!("realm{}", i), vec![layer])

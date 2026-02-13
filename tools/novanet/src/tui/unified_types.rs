@@ -275,7 +275,7 @@ pub enum AsyncEvent {
 /// Response from loading instances.
 #[derive(Debug)]
 pub struct InstanceLoadResponse {
-    pub kind: String,
+    pub class: String,
     pub instances: Vec<InstanceInfo>,
     pub total: usize,
     pub offset: usize,
@@ -297,7 +297,7 @@ pub struct RealmDetails {
     pub color: String,
     pub description: String,
     pub layer_count: usize,
-    pub kind_count: usize,
+    pub class_count: usize,
     pub instance_count: usize,
 }
 
@@ -309,7 +309,7 @@ pub struct LayerDetails {
     pub display_name: String,
     pub color: String,
     pub description: String,
-    pub kind_count: usize,
+    pub class_count: usize,
     pub instance_count: usize,
 }
 
@@ -320,11 +320,11 @@ pub struct ArcFamilyDetails {
     pub display_name: String,
     pub color: String,
     pub description: String,
-    pub arc_kind_count: usize,
+    pub arc_class_count: usize,
     pub instance_count: usize,
 }
 
-/// Details for an ArcKind node panel.
+/// Details for an ArcClass node panel.
 #[derive(Debug)]
 pub struct ArcClassDetails {
     pub name: String,
@@ -439,11 +439,11 @@ mod tests {
             },
             NodeId::Class("Locale".to_string()),
             NodeId::Instance {
-                kind: "Locale".to_string(),
+                class: "Locale".to_string(),
                 key: "fr-FR".to_string(),
             },
             NodeId::ArcFamily("ownership".to_string()),
-            NodeId::ArcKind("HAS_PAGE".to_string()),
+            NodeId::ArcClass("HAS_PAGE".to_string()),
         ];
 
         for id in ids {

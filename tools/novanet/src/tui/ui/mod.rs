@@ -70,7 +70,7 @@ pub(super) const COLOR_OVERLAY_BG: Color = Color::Rgb(20, 20, 30);
 /// Brighter dim text.
 const COLOR_BRIGHT_DIM: Color = Color::Rgb(140, 140, 140);
 
-/// Active Kind background (subtle highlight for Kind with expanded instances).
+/// Active Class background (subtle highlight for Class with expanded instances).
 const COLOR_ACTIVE_KIND_BG: Color = Color::Rgb(25, 35, 45);
 
 // -----------------------------------------------------------------------------
@@ -364,90 +364,90 @@ pub(super) fn wrap_text(text: &str, width: usize) -> Vec<String> {
 /// Some variants are defined for future use in error handling paths.
 #[derive(Debug, Clone, Copy)]
 #[allow(dead_code)] // Variants used incrementally as error paths are implemented
-pub enum EmptyStateKind {
+pub enum EmptyStateClass {
     /// Neo4j connection failed
     NoConnection,
     /// Database has no node kinds
-    NoKinds,
+    NoClasses,
     /// Query returned no results
     NoResults,
-    /// Kind has no instances
+    /// Class has no instances
     NoInstances,
     /// Loading data (with animation)
     Loading,
 }
 
-impl EmptyStateKind {
+impl EmptyStateClass {
     /// Get the icon for this empty state.
     fn icon(&self) -> &'static str {
         match self {
-            EmptyStateKind::NoConnection => "⚠",
-            EmptyStateKind::NoKinds => "∅",
-            EmptyStateKind::NoResults => "◌",
-            EmptyStateKind::NoInstances => "□",
-            EmptyStateKind::Loading => "◐",
+            EmptyStateClass::NoConnection => "⚠",
+            EmptyStateClass::NoClasses => "∅",
+            EmptyStateClass::NoResults => "◌",
+            EmptyStateClass::NoInstances => "□",
+            EmptyStateClass::Loading => "◐",
         }
     }
 
     /// Get the title for this empty state.
     fn title(&self) -> &'static str {
         match self {
-            EmptyStateKind::NoConnection => "Neo4j Not Connected",
-            EmptyStateKind::NoKinds => "No Node Classes Found",
-            EmptyStateKind::NoResults => "No Results",
-            EmptyStateKind::NoInstances => "No Instances",
-            EmptyStateKind::Loading => "Loading…",
+            EmptyStateClass::NoConnection => "Neo4j Not Connected",
+            EmptyStateClass::NoClasses => "No Node Classes Found",
+            EmptyStateClass::NoResults => "No Results",
+            EmptyStateClass::NoInstances => "No Instances",
+            EmptyStateClass::Loading => "Loading…",
         }
     }
 
     /// Get the description lines for this empty state (zero allocation).
     fn description(&self) -> &'static [&'static str] {
         match self {
-            EmptyStateKind::NoConnection => &[
+            EmptyStateClass::NoConnection => &[
                 "Unable to connect to Neo4j",
                 "",
                 "Try:",
                 "  • pnpm infra:up",
                 "  • Check NEO4J_URI environment variable",
             ],
-            EmptyStateKind::NoKinds => &[
+            EmptyStateClass::NoClasses => &[
                 "The taxonomy tree is empty.",
                 "",
                 "Run:",
                 "  • cargo run -- schema generate",
                 "  • cargo run -- db seed",
             ],
-            EmptyStateKind::NoResults => &[
+            EmptyStateClass::NoResults => &[
                 "No nodes match your current filter.",
                 "",
                 "Try:",
                 "  • Remove filters with 'c'",
                 "  • Switch modes with 1-4",
             ],
-            EmptyStateKind::NoInstances => &[
-                "This Kind has no data instances yet.",
+            EmptyStateClass::NoInstances => &[
+                "This Class has no data instances yet.",
                 "",
                 "Create one with:",
-                "  cargo run -- node create --kind=<Kind>",
+                "  cargo run -- node create --class=<Class>",
             ],
-            EmptyStateKind::Loading => &["Fetching data from Neo4j…"],
+            EmptyStateClass::Loading => &["Fetching data from Neo4j…"],
         }
     }
 
     /// Get the hint text for this empty state.
     fn hint(&self) -> &'static str {
         match self {
-            EmptyStateKind::NoConnection => "Press 'r' to retry",
-            EmptyStateKind::NoKinds => "Press 'q' to quit",
-            EmptyStateKind::NoResults => "Press 'c' to clear filters",
-            EmptyStateKind::NoInstances => "Press Esc to go back",
-            EmptyStateKind::Loading => "",
+            EmptyStateClass::NoConnection => "Press 'r' to retry",
+            EmptyStateClass::NoClasses => "Press 'q' to quit",
+            EmptyStateClass::NoResults => "Press 'c' to clear filters",
+            EmptyStateClass::NoInstances => "Press Esc to go back",
+            EmptyStateClass::Loading => "",
         }
     }
 }
 
 /// Render an empty state message in a centered box.
-fn render_empty_state(f: &mut Frame, area: Rect, kind: EmptyStateKind, tick: u16) {
+fn render_empty_state(f: &mut Frame, area: Rect, kind: EmptyStateClass, tick: u16) {
     // Calculate centered box dimensions
     let box_width = POPUP_BOX_WIDTH.min(area.width.saturating_sub(4));
     let box_height = POPUP_BOX_HEIGHT.min(area.height.saturating_sub(2));
@@ -469,7 +469,7 @@ fn render_empty_state(f: &mut Frame, area: Rect, kind: EmptyStateKind, tick: u16
     let title_text = kind.title();
 
     // Loading spinner animation
-    let display_icon = if matches!(kind, EmptyStateKind::Loading) {
+    let display_icon = if matches!(kind, EmptyStateClass::Loading) {
         const BRAILLE: &[&str] = &["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
         BRAILLE[(tick / SPINNER_SPEED_DIVISOR as u16) as usize % BRAILLE.len()]
     } else {
@@ -958,62 +958,62 @@ mod tests {
     }
 
     // =============================================================================
-    // EmptyStateKind tests (Phase 6.2 TDD)
+    // EmptyStateClass tests (Phase 6.2 TDD)
     // =============================================================================
 
     #[test]
     fn test_empty_state_kind_icon_no_connection() {
-        assert_eq!(EmptyStateKind::NoConnection.icon(), "⚠");
+        assert_eq!(EmptyStateClass::NoConnection.icon(), "⚠");
     }
 
     #[test]
     fn test_empty_state_kind_icon_no_kinds() {
-        assert_eq!(EmptyStateKind::NoKinds.icon(), "∅");
+        assert_eq!(EmptyStateClass::NoClasses.icon(), "∅");
     }
 
     #[test]
     fn test_empty_state_kind_icon_no_results() {
-        assert_eq!(EmptyStateKind::NoResults.icon(), "◌");
+        assert_eq!(EmptyStateClass::NoResults.icon(), "◌");
     }
 
     #[test]
     fn test_empty_state_kind_icon_no_instances() {
-        assert_eq!(EmptyStateKind::NoInstances.icon(), "□");
+        assert_eq!(EmptyStateClass::NoInstances.icon(), "□");
     }
 
     #[test]
     fn test_empty_state_kind_icon_loading() {
-        assert_eq!(EmptyStateKind::Loading.icon(), "◐");
+        assert_eq!(EmptyStateClass::Loading.icon(), "◐");
     }
 
     #[test]
     fn test_empty_state_kind_title_no_connection() {
-        assert_eq!(EmptyStateKind::NoConnection.title(), "Neo4j Not Connected");
+        assert_eq!(EmptyStateClass::NoConnection.title(), "Neo4j Not Connected");
     }
 
     #[test]
     fn test_empty_state_kind_title_no_kinds() {
-        assert_eq!(EmptyStateKind::NoKinds.title(), "No Node Classes Found");
+        assert_eq!(EmptyStateClass::NoClasses.title(), "No Node Classes Found");
     }
 
     #[test]
     fn test_empty_state_kind_title_no_results() {
-        assert_eq!(EmptyStateKind::NoResults.title(), "No Results");
+        assert_eq!(EmptyStateClass::NoResults.title(), "No Results");
     }
 
     #[test]
     fn test_empty_state_kind_title_no_instances() {
-        assert_eq!(EmptyStateKind::NoInstances.title(), "No Instances");
+        assert_eq!(EmptyStateClass::NoInstances.title(), "No Instances");
     }
 
     #[test]
     fn test_empty_state_kind_title_loading() {
-        assert_eq!(EmptyStateKind::Loading.title(), "Loading…");
+        assert_eq!(EmptyStateClass::Loading.title(), "Loading…");
     }
 
     #[test]
     fn test_empty_state_kind_description_no_connection() {
-        let desc = EmptyStateKind::NoConnection.description();
+        let desc = EmptyStateClass::NoConnection.description();
         assert!(!desc.is_empty(), "description should not be empty");
         assert!(
             desc.iter().any(|s| s.contains("Neo4j")),
@@ -1027,7 +1027,7 @@ mod tests {
 
     #[test]
     fn test_empty_state_kind_description_no_kinds() {
-        let desc = EmptyStateKind::NoKinds.description();
+        let desc = EmptyStateClass::NoClasses.description();
         assert!(!desc.is_empty());
         assert!(
             desc.iter().any(|s| s.contains("schema generate")),
@@ -1041,7 +1041,7 @@ mod tests {
 
     #[test]
     fn test_empty_state_kind_description_no_results() {
-        let desc = EmptyStateKind::NoResults.description();
+        let desc = EmptyStateClass::NoResults.description();
         assert!(!desc.is_empty());
         assert!(
             desc.iter().any(|s| s.contains("filter")),
@@ -1051,7 +1051,7 @@ mod tests {
 
     #[test]
     fn test_empty_state_kind_description_no_instances() {
-        let desc = EmptyStateKind::NoInstances.description();
+        let desc = EmptyStateClass::NoInstances.description();
         assert!(!desc.is_empty());
         assert!(
             desc.iter().any(|s| s.contains("node create")),
@@ -1061,7 +1061,7 @@ mod tests {
 
     #[test]
     fn test_empty_state_kind_description_loading() {
-        let desc = EmptyStateKind::Loading.description();
+        let desc = EmptyStateClass::Loading.description();
         assert!(!desc.is_empty());
         assert!(
             desc.iter().any(|s| s.contains("Neo4j")),
@@ -1071,19 +1071,19 @@ mod tests {
 
     #[test]
     fn test_empty_state_kind_hint_no_connection() {
-        let hint = EmptyStateKind::NoConnection.hint();
+        let hint = EmptyStateClass::NoConnection.hint();
         assert!(hint.contains("r"), "hint should suggest retry with 'r'");
     }
 
     #[test]
     fn test_empty_state_kind_hint_no_kinds() {
-        let hint = EmptyStateKind::NoKinds.hint();
+        let hint = EmptyStateClass::NoClasses.hint();
         assert!(hint.contains("q"), "hint should suggest quit with 'q'");
     }
 
     #[test]
     fn test_empty_state_kind_hint_no_results() {
-        let hint = EmptyStateKind::NoResults.hint();
+        let hint = EmptyStateClass::NoResults.hint();
         assert!(
             hint.contains("c"),
             "hint should suggest clearing filters with 'c'"
@@ -1092,22 +1092,22 @@ mod tests {
 
     #[test]
     fn test_empty_state_kind_hint_no_instances() {
-        let hint = EmptyStateKind::NoInstances.hint();
+        let hint = EmptyStateClass::NoInstances.hint();
         assert!(hint.contains("Esc"), "hint should suggest go back");
     }
 
     #[test]
     fn test_empty_state_kind_hint_loading() {
         // Loading has no hint - it's a transient state
-        let hint = EmptyStateKind::Loading.hint();
+        let hint = EmptyStateClass::Loading.hint();
         // Just verify it doesn't panic and returns something
         assert!(hint.is_empty() || !hint.is_empty());
     }
 
     #[test]
     fn test_empty_state_kind_is_copy() {
-        // Verify EmptyStateKind is Copy (can be assigned without move)
-        let kind = EmptyStateKind::NoConnection;
+        // Verify EmptyStateClass is Copy (can be assigned without move)
+        let kind = EmptyStateClass::NoConnection;
         let kind2 = kind; // Copy
         let _kind3 = kind; // Still valid - proves Copy
         assert_eq!(kind2.title(), "Neo4j Not Connected");
@@ -1116,7 +1116,7 @@ mod tests {
     #[test]
     fn test_empty_state_kind_debug_trait() {
         // Verify Debug is implemented
-        let kind = EmptyStateKind::Loading;
+        let kind = EmptyStateClass::Loading;
         let debug_str = format!("{:?}", kind);
         assert!(
             debug_str.contains("Loading"),
@@ -1127,11 +1127,11 @@ mod tests {
     #[test]
     fn test_all_empty_state_kinds_have_non_empty_icon() {
         let kinds = [
-            EmptyStateKind::NoConnection,
-            EmptyStateKind::NoKinds,
-            EmptyStateKind::NoResults,
-            EmptyStateKind::NoInstances,
-            EmptyStateKind::Loading,
+            EmptyStateClass::NoConnection,
+            EmptyStateClass::NoClasses,
+            EmptyStateClass::NoResults,
+            EmptyStateClass::NoInstances,
+            EmptyStateClass::Loading,
         ];
         for kind in kinds {
             assert!(
@@ -1145,11 +1145,11 @@ mod tests {
     #[test]
     fn test_all_empty_state_kinds_have_non_empty_title() {
         let kinds = [
-            EmptyStateKind::NoConnection,
-            EmptyStateKind::NoKinds,
-            EmptyStateKind::NoResults,
-            EmptyStateKind::NoInstances,
-            EmptyStateKind::Loading,
+            EmptyStateClass::NoConnection,
+            EmptyStateClass::NoClasses,
+            EmptyStateClass::NoResults,
+            EmptyStateClass::NoInstances,
+            EmptyStateClass::Loading,
         ];
         for kind in kinds {
             assert!(

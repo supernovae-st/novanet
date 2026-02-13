@@ -2,7 +2,7 @@
 //!
 //! This module handles the YAML preview panel with:
 //! - Syntax highlighting for keys, values, comments, and punctuation
-//! - Contextual view with Kind/Instance sections
+//! - Contextual view with Class/Instance sections
 //! - Peek mode to preview hidden sections
 //! - Scrollbar for long content
 
@@ -55,7 +55,7 @@ pub fn render_yaml_panel(f: &mut Frame, area: Rect, app: &App) {
     let focused = app.focus == Focus::Yaml;
     let visible_height = area.height.saturating_sub(2) as usize;
 
-    // Always show YAML with contextual view (Kind or Instance section)
+    // Always show YAML with contextual view (Class or Instance section)
     render_yaml_content(f, area, app, focused, visible_height);
 }
 
@@ -63,7 +63,7 @@ pub fn render_yaml_panel(f: &mut Frame, area: Rect, app: &App) {
 // INTERNAL FUNCTIONS
 // =============================================================================
 
-/// Render YAML panel with contextual view (Kind vs Instance sections).
+/// Render YAML panel with contextual view (Class vs Instance sections).
 fn render_yaml_content(f: &mut Frame, area: Rect, app: &App, focused: bool, visible_height: usize) {
     let border_color = if focused {
         Color::Cyan // Consistent with Tree/Info panels
@@ -82,10 +82,10 @@ fn render_yaml_content(f: &mut Frame, area: Rect, app: &App, focused: bool, visi
         // Contextual view: show active section with ellipsis for hidden section
 
         match active_section {
-            YamlViewSection::Kind => {
-                // Show Kind section
+            YamlViewSection::Class => {
+                // Show Class section
                 for yaml_line in sections
-                    .kind_lines_iter()
+                    .class_lines_iter()
                     .skip(app.yaml_scroll)
                     .take(visible_height.saturating_sub(1))
                 {
@@ -129,7 +129,7 @@ fn render_yaml_content(f: &mut Frame, area: Rect, app: &App, focused: bool, visi
                 }
             }
             YamlViewSection::Instance => {
-                // Add ellipsis for hidden Kind section (if not in peek mode)
+                // Add ellipsis for hidden Class section (if not in peek mode)
                 if !app.yaml_peek {
                     let hint = if focused { "[Enter: peek]" } else { "" };
                     lines.push(Line::from(vec![
@@ -141,14 +141,14 @@ fn render_yaml_content(f: &mut Frame, area: Rect, app: &App, focused: bool, visi
                                 .add_modifier(Modifier::DIM),
                         ),
                         Span::styled(
-                            format!(" ({} lines) ", sections.kind_line_count()),
+                            format!(" ({} lines) ", sections.class_line_count()),
                             Style::default().fg(COLOR_MUTED_TEXT),
                         ),
                         Span::styled(hint, Style::default().fg(COLOR_HINT_TEXT)),
                         Span::styled(" ...", Style::default().fg(COLOR_MUTED_TEXT)),
                     ]));
                 }
-                // Show peeked Kind content (dim) at the top
+                // Show peeked Class content (dim) at the top
                 if app.yaml_peek {
                     let hint = if focused { "[Enter: collapse]" } else { "" };
                     lines.push(Line::from(vec![
@@ -157,7 +157,7 @@ fn render_yaml_content(f: &mut Frame, area: Rect, app: &App, focused: bool, visi
                         Span::styled(" ............", Style::default().fg(COLOR_MUTED_TEXT)),
                     ]));
                     let peek_lines = visible_height / 3; // Show ~1/3 of the hidden section
-                    for yaml_line in sections.kind_lines_iter().take(peek_lines) {
+                    for yaml_line in sections.class_lines_iter().take(peek_lines) {
                         lines.push(highlight_yaml_line_dim(yaml_line));
                     }
                     lines.push(Line::from(Span::styled(
@@ -177,7 +177,7 @@ fn render_yaml_content(f: &mut Frame, area: Rect, app: &App, focused: bool, visi
             }
         }
     } else if !app.yaml_content.is_empty() {
-        // Fallback: show full YAML (non-NodeKind files)
+        // Fallback: show full YAML (non-NodeClass files)
         for yaml_line in app
             .yaml_content
             .lines()
@@ -197,7 +197,7 @@ fn render_yaml_content(f: &mut Frame, area: Rect, app: &App, focused: bool, visi
     // Compute total lines for scroll indicator
     let total_lines = match sections_opt {
         Some(sections) => match active_section {
-            YamlViewSection::Kind => sections.kind_line_count(),
+            YamlViewSection::Class => sections.class_line_count(),
             YamlViewSection::Instance => sections.instance_line_count(),
         },
         None => app.yaml_content.lines().count(),
@@ -253,8 +253,8 @@ fn build_yaml_title_with_tabs(
 
     // Add tabs if we have sections
     if has_sections {
-        let (kind_style, instance_style) = match active {
-            YamlViewSection::Kind => (
+        let (class_style, instance_style) = match active {
+            YamlViewSection::Class => (
                 Style::default()
                     .fg(Color::Cyan)
                     .add_modifier(Modifier::BOLD),
@@ -268,7 +268,7 @@ fn build_yaml_title_with_tabs(
             ),
         };
 
-        let kind_indicator = if active == YamlViewSection::Kind {
+        let class_indicator = if active == YamlViewSection::Class {
             "*"
         } else {
             "o"
@@ -279,9 +279,9 @@ fn build_yaml_title_with_tabs(
             "o"
         };
 
-        spans.push(Span::styled("[Kind ", kind_style));
-        spans.push(Span::styled(kind_indicator, kind_style));
-        spans.push(Span::styled("]", kind_style));
+        spans.push(Span::styled("[Class ", class_style));
+        spans.push(Span::styled(class_indicator, class_style));
+        spans.push(Span::styled("]", class_style));
         spans.push(Span::styled(" ", Style::default()));
         spans.push(Span::styled("[Instance ", instance_style));
         spans.push(Span::styled(instance_indicator, instance_style));
@@ -614,24 +614,24 @@ mod tests {
 
     #[test]
     fn test_build_yaml_title_no_sections() {
-        let spans = build_yaml_title_with_tabs("path/to/file.yaml", YamlViewSection::Kind, false);
+        let spans = build_yaml_title_with_tabs("path/to/file.yaml", YamlViewSection::Class, false);
         // Without sections, should just show the path
         assert!(!spans.is_empty());
-        // Should not have [Kind] or [Instance] tabs
+        // Should not have [Class] or [Instance] tabs
         let full_text: String = spans.iter().map(|s| s.content.as_ref()).collect();
-        assert!(!full_text.contains("[Kind"));
+        assert!(!full_text.contains("[Class"));
         assert!(!full_text.contains("[Instance"));
         assert!(full_text.contains("file.yaml"));
     }
 
     #[test]
     fn test_build_yaml_title_with_sections_kind_active() {
-        let spans = build_yaml_title_with_tabs("file.yaml", YamlViewSection::Kind, true);
+        let spans = build_yaml_title_with_tabs("file.yaml", YamlViewSection::Class, true);
         let full_text: String = spans.iter().map(|s| s.content.as_ref()).collect();
         // Should have tabs
-        assert!(full_text.contains("[Kind"));
+        assert!(full_text.contains("[Class"));
         assert!(full_text.contains("[Instance"));
-        // Kind should be active (*)
+        // Class should be active (*)
         assert!(full_text.contains("*]")); // active indicator
     }
 
@@ -640,13 +640,13 @@ mod tests {
         let spans = build_yaml_title_with_tabs("file.yaml", YamlViewSection::Instance, true);
         let full_text: String = spans.iter().map(|s| s.content.as_ref()).collect();
         // Should have tabs
-        assert!(full_text.contains("[Kind"));
+        assert!(full_text.contains("[Class"));
         assert!(full_text.contains("[Instance"));
     }
 
     #[test]
     fn test_build_yaml_title_empty_path() {
-        let spans = build_yaml_title_with_tabs("", YamlViewSection::Kind, false);
+        let spans = build_yaml_title_with_tabs("", YamlViewSection::Class, false);
         let full_text: String = spans.iter().map(|s| s.content.as_ref()).collect();
         // Should show "YAML" fallback
         assert!(full_text.contains("YAML"));
@@ -654,9 +654,9 @@ mod tests {
 
     #[test]
     fn test_build_yaml_title_active_indicators() {
-        // When Kind is active
-        let kind_spans = build_yaml_title_with_tabs("f.yaml", YamlViewSection::Kind, true);
-        let kind_text: String = kind_spans.iter().map(|s| s.content.as_ref()).collect();
+        // When Class is active
+        let class_spans = build_yaml_title_with_tabs("f.yaml", YamlViewSection::Class, true);
+        let kind_text: String = class_spans.iter().map(|s| s.content.as_ref()).collect();
 
         // When Instance is active
         let instance_spans = build_yaml_title_with_tabs("f.yaml", YamlViewSection::Instance, true);

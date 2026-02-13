@@ -425,7 +425,7 @@ fn render_page_3_classification(f: &mut Frame, theme: &Theme, locale: NexusLocal
     let lines = vec![
         Line::from(""),
         Line::from(Span::styled(
-            "  Every Kind (type definition) has 3 classification properties:",
+            "  Every Class (type definition) has 3 classification properties:",
             Style::default()
                 .fg(Color::White)
                 .add_modifier(Modifier::BOLD),

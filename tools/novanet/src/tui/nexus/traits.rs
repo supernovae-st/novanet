@@ -33,7 +33,7 @@ pub struct TraitStats {
     pub kind_count: usize,
     /// LLM context description.
     pub llm_context: String,
-    /// Kinds grouped by layer for this trait.
+    /// Classs grouped by layer for this trait.
     pub kinds_by_layer: Vec<(String, Vec<String>)>,
 }
 
@@ -613,7 +613,7 @@ fn render_detail_panel(f: &mut Frame, app: &App, area: Rect) {
     }
     lines.push(Line::from(""));
 
-    // Kinds by layer section
+    // Classs by layer section
     lines.push(Line::from(Span::styled(
         "\u{250c}\u{2500} BY LAYER \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2510}",
         Style::default().fg(Color::Rgb(100, 100, 120)),
@@ -908,7 +908,7 @@ fn render_kind_list(f: &mut Frame, app: &App, area: Rect) {
     ]));
     lines.push(Line::from(""));
 
-    // Kind list with scroll
+    // Class list with scroll
     for (idx, (layer_key, kind_key)) in kinds.iter().enumerate().skip(scroll_offset) {
         if lines.len() >= visible_height {
             break;
