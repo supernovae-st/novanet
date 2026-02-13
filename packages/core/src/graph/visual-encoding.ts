@@ -271,7 +271,6 @@ export const KIND_ICONS: Record<string, string> = {
   EntityContent: 'globe',
   ExpressionSet: 'message-circle',
   Formatting: 'type',
-  InstructionArtifact: 'file-code',
   Locale: 'globe',
   OutputArtifact: 'package',
   Page: 'file-text',
@@ -281,6 +280,7 @@ export const KIND_ICONS: Record<string, string> = {
   PatternSet: 'puzzle',
   Project: 'folder',
   ProjectContent: 'languages',
+  PromptArtifact: 'file-code',
   SEOKeyword: 'search',
   SEOKeywordMetrics: 'bar-chart-2',
   Slugification: 'link',
@@ -446,9 +446,9 @@ export const ARC_FAMILIES_ICONS: Record<string, IconDefinition> = {
 export const STATES_ICONS: Record<string, IconDefinition> = {
   'error': { web: 'x', terminal: '✗', description: 'Operation failed' },
   'loading': { web: 'loader', terminal: '◐', description: 'Data loading in progress' },
+  'no_classes': { web: 'inbox', terminal: '∅', description: 'No node classes found' },
   'no_connection': { web: 'wifi-off', terminal: '⚠', description: 'Database not connected' },
   'no_instances': { web: 'file-x', terminal: '□', description: 'Class has no instances' },
-  'no_classes': { web: 'inbox', terminal: '∅', description: 'No node classes found' },
   'no_results': { web: 'search-x', terminal: '◌', description: 'Query returned nothing' },
   'success': { web: 'check', terminal: '✓', description: 'Operation succeeded' },
   'warning': { web: 'alert-triangle', terminal: '⚠', description: 'Warning condition' },
@@ -478,7 +478,7 @@ export const QUALITY_ICONS: Record<string, IconDefinition> = {
 // MODES ICONS (6)
 export const MODES_ICONS: Record<string, IconDefinition> = {
   'data': { web: 'table', terminal: 'D', description: 'Data instances view' },
-  'graph': { web: 'git-branch', terminal: 'G', description: 'Unified tree view (Realm > Layer > Kind)' },
+  'graph': { web: 'git-branch', terminal: 'G', description: 'Unified tree view (Realm > Layer > Class)' },
   'meta': { web: 'database', terminal: 'M', description: 'Meta-graph view' },
   'nexus': { web: 'compass', terminal: 'N', description: 'Hub for Quiz, Stats, Help' },
   'overlay': { web: 'layers', terminal: 'O', description: 'Combined meta+data' },

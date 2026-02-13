@@ -26,7 +26,7 @@ This diagram shows the complete NovaNet graph schema with all 42 node types and 
 ```mermaid
 flowchart TB
   %% NovaNet Graph v0.12.0
-  %% Generated: 59 nodes, 153 arcs
+  %% Generated: 59 nodes, 163 arcs
   %% Source: node-kinds/ + arc-kinds/ + taxonomy.yaml
 
   %% Trait styling (node_trait)
@@ -146,6 +146,8 @@ flowchart TB
   BlockInstruction ==>|GENERATED| BlockGenerated
   BlockInstruction ==>|GENERATED| PageGenerated
   BlockInstruction ==>|INCLUDES_STYLE| Style
+  BlockInstruction -->|INSTRUCTION_OF| Block
+  BlockInstruction -->|INSTRUCTION_OF| Page
   BlockInstruction -.->|REFERENCES_ENTITY| Entity
   BlockInstruction -.->|REFERENCES_PAGE| Page
   BlockType -->|HAS_RULES| BlockRules
@@ -155,12 +157,14 @@ flowchart TB
   Entity -.->|ACTS_ON| Entity
   Entity -.->|ALTERNATIVE_TO| Entity
   Entity -.->|APPLIES_TO| Entity
-  Entity -.->|BELONGS_TO| EntityCategory
+  Entity -->|BELONGS_TO| EntityCategory
+  Entity -->|CHILD_OF| Entity
   Entity -.->|COMPETES_WITH| Entity
   Entity -.->|ENABLED_BY| Entity
   Entity -.->|ENABLES| Entity
   Entity -.->|ENHANCED_BY| Entity
   Entity -.->|ENHANCES| Entity
+  Entity -->|ENTITY_OF| Project
   Entity -.->|HAS_APPLICATION| Entity
   Entity -->|HAS_CHILD| Entity
   Entity -.->|HAS_CONTENT| EntityContent
@@ -171,6 +175,9 @@ flowchart TB
   Entity -.->|INCLUDES| Entity
   Entity -.->|MATERIALIZES_AS| Page
   Entity -.->|OPERATED_BY| Entity
+  Entity -.->|POPULAR_IN| Continent
+  Entity -.->|POPULAR_IN| GeoRegion
+  Entity -.->|POPULAR_IN| GeoSubRegion
   Entity -.->|READS| Entity
   Entity -.->|READ_BY| Entity
   Entity -.->|REQUIRED_BY| Entity
@@ -220,6 +227,7 @@ flowchart TB
   Locale -.->|IN_CULTURAL_SUBREALM| CulturalSubRealm
   Locale -.->|IN_ECONOMIC_REGION| EconomicRegion
   Locale -.->|IN_SUBREGION| GeoRegion
+  Locale -.->|IN_SUBREGION| GeoSubRegion
   Locale -.->|LOCALE_VARIANT_OF| Locale
   Locale -.->|SPEAKS_BRANCH| LanguageBranch
   OrgConfig -->|HAS_PROJECT| Project
@@ -236,6 +244,7 @@ flowchart TB
   Page -->|HAS_SLOT| ContentSlot
   Page -->|HAS_STRUCTURE| PageStructure
   Page -.->|LINKS_TO| Page
+  Page -->|PAGE_OF| Project
   Page -.->|SUBTOPIC_OF| Page
   Page -.->|TARGETS_PERSONA| AudiencePersona
   Page -.->|USES_ENTITY| Entity
@@ -260,6 +269,7 @@ flowchart TB
   Project -.->|HAS_CONTENT| ProjectContent
   Project -->|HAS_ENTITY| Entity
   Project -->|HAS_PAGE| Page
+  Project -->|PROJECT_OF| OrgConfig
   Project -->|SUPPORTS_LOCALE| Locale
   ProjectContent -.->|CONTENT_OF| Entity
   ProjectContent -.->|CONTENT_OF| Project
@@ -279,11 +289,11 @@ flowchart TB
   TermSet -->|CONTAINS_TERM| Term
 
   %% Arc colors by family
-  linkStyle 3,4,11,12,13,15,16,17,18,19,20,21,99,100,102,103,104,106,107,115,119,120,121,122,123,124,125,126,140,141,142 stroke:#8b5cf6,stroke-width:2px
-  linkStyle 10,14,39,40,58,59,60,70,78,79,80,81,82,83,86,87,93,94,95,96,97,101,118,132,133,137,138,139 stroke:#22c55e,stroke-width:2px
-  linkStyle 147 stroke:#ec4899,stroke-width:2px
-  linkStyle 0,1,5,6,24,25,26,27,38,63,64,65,66,67,68,71,72,73,74,75,76,77,84,85,88,89,90,91,92,98,105,108,109,110,116,127,128,129,130,131,134,135,136,146,150,151,152 stroke:#3b82f6,stroke-width:2px
-  linkStyle 2,7,8,9,22,23,28,29,30,31,32,33,34,35,36,37,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,61,62,69,111,112,113,114,117,143,144,145,148,149 stroke:#f97316,stroke-width:2px
+  linkStyle 3,4,11,12,13,15,16,17,18,19,20,21,107,108,110,111,112,114,115,124,128,129,130,131,132,133,134,135,150,151,152 stroke:#8b5cf6,stroke-width:2px
+  linkStyle 10,14,43,44,65,66,67,77,85,86,87,88,89,90,93,94,100,101,102,103,104,105,109,127,141,142,147,148,149 stroke:#22c55e,stroke-width:2px
+  linkStyle 157 stroke:#ec4899,stroke-width:2px
+  linkStyle 0,1,5,6,22,23,26,27,28,29,33,34,40,42,70,71,72,73,74,75,78,79,80,81,82,83,84,91,92,95,96,97,98,99,106,113,116,117,118,120,125,136,137,138,139,140,143,144,145,146,156,160,161,162 stroke:#3b82f6,stroke-width:2px
+  linkStyle 2,7,8,9,24,25,30,31,32,35,36,37,38,39,41,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,68,69,76,119,121,122,123,126,153,154,155,158,159 stroke:#f97316,stroke-width:2px
 
   %% Class assignments
   class Adaptation imported

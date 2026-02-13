@@ -16,7 +16,7 @@ import type { NodeType } from '@novanet/core/types';
  * Source: packages/core/models/node-kinds/<realm>/<layer>/<name>.yaml
  */
 export const NODE_ICONS: Record<NodeType, string> = {
-  Adaptation: 'sweat_drops',
+  Adaptation: '💧',
   AudiencePersona: '👤',
   AudienceSet: '👥',
   AudienceTrait: '👥',
