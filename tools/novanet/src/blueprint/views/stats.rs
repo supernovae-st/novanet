@@ -19,11 +19,11 @@ pub struct BlueprintStats {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct TraitStats {
-    pub invariant: usize,
-    pub localized: usize,
-    pub knowledge: usize,
+    pub defined: usize,
+    pub authored: usize,
+    pub imported: usize,
     pub generated: usize,
-    pub aggregated: usize,
+    pub retrieved: usize,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -66,15 +66,15 @@ fn collect_stats(data: &BlueprintData) -> BlueprintStats {
         realms: data.realm_count(),
         layers: data.layer_count(),
         traits: TraitStats {
-            invariant: by_trait
+            defined: by_trait
                 .get(&NodeTrait::Defined)
                 .map(|v| v.len())
                 .unwrap_or(0),
-            localized: by_trait
+            authored: by_trait
                 .get(&NodeTrait::Authored)
                 .map(|v| v.len())
                 .unwrap_or(0),
-            knowledge: by_trait
+            imported: by_trait
                 .get(&NodeTrait::Imported)
                 .map(|v| v.len())
                 .unwrap_or(0),
@@ -82,7 +82,7 @@ fn collect_stats(data: &BlueprintData) -> BlueprintStats {
                 .get(&NodeTrait::Generated)
                 .map(|v| v.len())
                 .unwrap_or(0),
-            aggregated: by_trait
+            retrieved: by_trait
                 .get(&NodeTrait::Retrieved)
                 .map(|v| v.len())
                 .unwrap_or(0),
@@ -126,13 +126,13 @@ fn render_table(stats: &BlueprintStats) -> String {
          Realms:           {}\n\
          Layers:           {}\n\
          \n\
-         TRAITS\n\
+         TRAITS (ADR-024)\n\
          ───────────────────────────────────────\n\
-         invariant:        {}\n\
-         localized:        {}\n\
-         knowledge:        {}\n\
+         defined:          {}\n\
+         authored:         {}\n\
+         imported:         {}\n\
          generated:        {}\n\
-         aggregated:       {}\n\
+         retrieved:        {}\n\
          \n\
          ARC FAMILIES\n\
          ───────────────────────────────────────\n\
@@ -151,11 +151,11 @@ fn render_table(stats: &BlueprintStats) -> String {
         stats.arc_kinds,
         stats.realms,
         stats.layers,
-        stats.traits.invariant,
-        stats.traits.localized,
-        stats.traits.knowledge,
+        stats.traits.defined,
+        stats.traits.authored,
+        stats.traits.imported,
         stats.traits.generated,
-        stats.traits.aggregated,
+        stats.traits.retrieved,
         stats.arc_families.ownership,
         stats.arc_families.localization,
         stats.arc_families.semantic,

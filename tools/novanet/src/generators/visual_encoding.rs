@@ -6,7 +6,7 @@
 //! - Trait border styles (CSS + Unicode for TUI)
 //! - Scope stroke styles (intra/cross realm)
 //! - Cardinality arrow heads
-//! - Kind icons (Lucide icon mapping)
+//! - Class icons (Lucide icon mapping) — v11.8: renamed from Kind icons
 //! - Animation presets
 //! - Accessibility settings
 //!
@@ -81,9 +81,10 @@ struct TemplateCardinalityArrow {
     description: String,
 }
 
-/// Kind icon for template.
+/// Class icon for template (v11.8: renamed from Kind).
 #[derive(Debug, Serialize)]
-struct TemplateKindIcon {
+struct TemplateClassIcon {
+    /// v11.8: field name preserved as "kind" for backward compatibility in template
     kind: String,
     icon: String,
 }
@@ -317,11 +318,15 @@ export const KIND_ICONS: Record<string, string> = {
 };
 
 /**
- * Get Lucide icon name for a Kind.
+ * Get Lucide icon name for a Class.
+ * v11.8: renamed from getKindIcon
  */
-export function getKindIcon(kind: string): string {
-  return KIND_ICONS[kind] ?? 'circle';
+export function getClassIcon(className: string): string {
+  return KIND_ICONS[className] ?? 'circle';
 }
+
+/** @deprecated Use getClassIcon instead (v11.8) */
+export const getKindIcon = getClassIcon;
 
 // =============================================================================
 // ANIMATIONS ({{ animations | length }}) — Studio only
@@ -553,11 +558,11 @@ fn render_visual_encoding(doc: &VisualEncodingDoc) -> crate::Result<String> {
         .collect();
     cardinality_arrows.sort_by(|a, b| a.key.cmp(&b.key));
 
-    // Kind icons (sorted by kind name)
-    let mut class_icons: Vec<TemplateKindIcon> = doc
+    // Class icons (sorted by class name) — v11.8: renamed from Kind icons
+    let mut class_icons: Vec<TemplateClassIcon> = doc
         .class_icons
         .iter()
-        .map(|(kind, icon)| TemplateKindIcon {
+        .map(|(kind, icon)| TemplateClassIcon {
             kind: kind.clone(),
             icon: icon.clone(),
         })
@@ -772,11 +777,11 @@ mod tests {
         assert!(output.contains("one_to_one"));
         assert!(output.contains("one_to_many"));
 
-        // Kind icons
-        assert!(output.contains("KIND_ICONS:"));
+        // Class icons (v11.8: renamed from Kind icons)
+        assert!(output.contains("KIND_ICONS:")); // constant name preserved for simplicity
         assert!(output.contains("Locale: 'globe'"));
         assert!(output.contains("Page: 'file-text'"));
-        assert!(output.contains("export function getKindIcon"));
+        assert!(output.contains("export function getClassIcon")); // v11.8: renamed from getKindIcon
 
         // Animations
         assert!(output.contains("ANIMATIONS:"));

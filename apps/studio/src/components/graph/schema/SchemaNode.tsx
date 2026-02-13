@@ -127,7 +127,7 @@ export const SchemaNode = memo(function SchemaNode({
         : NODE_DESIGN.shadows.glow(layerColor),
   }), [layerColor, selected, isHovered]);
 
-  const traitBorder = TRAIT_BORDER_STYLES[trait] || TRAIT_BORDER_STYLES.invariant;
+  const traitBorder = TRAIT_BORDER_STYLES[trait] || TRAIT_BORDER_STYLES.defined; // v11.8: ADR-024
   const traitBorderStyle = useMemo(() => ({
     borderStyle: traitBorder.style,
     borderWidth: `${traitBorder.width}px`,

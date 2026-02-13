@@ -20,21 +20,23 @@ import * as THREE from 'three';
 import type { Layer, Realm, Trait } from '@novanet/core/types';
 
 // Trait animation speeds (ring rotation rad/s)
+// v11.8: Renamed per ADR-024 Data Origin semantics
 export const TRAIT_RING_SPEEDS: Record<Trait, number> = {
-  invariant: 0.2,    // Slow, stable
-  localized: 0.4,    // Medium
-  knowledge: 0.3,    // Gentle
+  defined: 0.2,      // Slow, stable (was: invariant)
+  authored: 0.4,     // Medium (was: localized)
+  imported: 0.3,     // Gentle (was: knowledge)
   generated: 0.8,    // Fast, active
-  aggregated: 0.5,   // Medium-fast
+  retrieved: 0.5,    // Medium-fast (was: aggregated)
 };
 
 // Trait glow intensities
+// v11.8: Renamed per ADR-024 Data Origin semantics
 export const TRAIT_GLOW_INTENSITY: Record<Trait, number> = {
-  invariant: 0.2,    // Subtle
-  localized: 0.4,    // Medium
-  knowledge: 0.6,    // Higher (knowledge glows)
+  defined: 0.2,      // Subtle (was: invariant)
+  authored: 0.4,     // Medium (was: localized)
+  imported: 0.6,     // Higher (was: knowledge)
   generated: 0.8,    // Bright (output)
-  aggregated: 0.5,   // Medium
+  retrieved: 0.5,    // Medium (was: aggregated)
 };
 
 // Particle count by importance (can be based on connection count)

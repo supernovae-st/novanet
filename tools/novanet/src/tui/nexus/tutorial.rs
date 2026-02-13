@@ -95,12 +95,12 @@ pub static STEPS: [TutorialStep; 5] = [
             "  shared: config, locale, geography, knowledge",
             "  org: config, foundation, structure, semantic, instruction, output",
             "",
-            "HOW?    Trait  (5 behaviors)",
-            "  invariant  = Same everywhere (Entity, Page)",
-            "  localized  = Generated per locale (EntityContent)",
-            "  knowledge  = Locale expertise (Term, Culture)",
-            "  generated  = LLM output (PageGenerated)",
-            "  aggregated = Computed metrics (SEOKeywordMetrics)",
+            "HOW?    Trait  (5 behaviors - ADR-024)",
+            "  defined   = Same everywhere (Entity, Page)",
+            "  authored  = Generated per locale (EntityContent)",
+            "  imported  = Locale expertise (Term, Culture)",
+            "  generated = LLM output (PageGenerated)",
+            "  retrieved = Computed metrics (SEOKeywordMetrics)",
         ],
         tasks: &[
             TutorialTask {
@@ -108,8 +108,8 @@ pub static STEPS: [TutorialStep; 5] = [
                 hint: Some("Locale and EntityCategory are in shared/config"),
             },
             TutorialTask {
-                description: "Find a node with trait 'localized' (look for dashed border)",
-                hint: Some("EntityContent in org/semantic has localized trait"),
+                description: "Find a node with trait 'authored' (look for dashed border)",
+                hint: Some("EntityContent in org/semantic has authored trait"),
             },
             TutorialTask {
                 description: "Find a node in org/semantic layer",
@@ -126,7 +126,7 @@ pub static STEPS: [TutorialStep; 5] = [
             "Nodes are connected by ARCS (directed relationships).",
             "",
             "The main pattern:",
-            "  Entity (invariant) --HAS_CONTENT--> EntityContent (localized)",
+            "  Entity (defined) --HAS_CONTENT--> EntityContent (authored)",
             "",
             "ARC FAMILIES group relationships by function:",
             "  ownership     - Parent owns child (HAS_CONTENT, HAS_BLOCK)",

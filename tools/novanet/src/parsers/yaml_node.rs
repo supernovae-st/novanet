@@ -474,11 +474,11 @@ node:
         // - v11.3: Merged Organization + Tenant → OrgConfig (-1)
         // - v11.4: Added containers (+3), removed obsolete SEO types (-4)
         // - v11.5: Moved Locale to shared/config, consolidated SEO/GEO to shared/knowledge
-        let nodes = load_all_nodes(root).expect("should parse all 60 nodes");
+        let nodes = load_all_nodes(root).expect("should parse all 58 nodes");
         assert_eq!(
             nodes.len(),
-            60,
-            "expected 60 YAML node files (v11.5: 39 shared + 21 org)"
+            58,
+            "expected 58 YAML node files (v0.12.0: 39 shared + 19 org)"
         );
 
         // Every node has a non-empty name, realm, and layer
@@ -501,24 +501,22 @@ node:
         }
 
         // Verify trait distribution (2 realms: shared + org)
-        // v11.4: +3 invariant (SEOKeywordFormat, SEOKeywordSet, GEOQuerySet)
-        //        -3 knowledge (SEOQuestion, SEOComparison, SEOPreposition)
-        //        -1 aggregated (GEOMetrics)
+        // v0.12.0: 58 nodes (39 shared + 19 org)
         let count = |t: NodeTrait| nodes.iter().filter(|n| n.def.node_trait == t).count();
         assert_eq!(
             count(NodeTrait::Defined),
-            32,
-            "invariant count (v11.4: +3 SEO containers/format)"
+            30,
+            "defined count (v0.12.0: 30 defined nodes)"
         );
         assert_eq!(
             count(NodeTrait::Authored),
             2,
-            "localized count (ProjectContent + EntityContent)"
+            "authored count (ProjectContent + EntityContent)"
         );
         assert_eq!(
             count(NodeTrait::Imported),
             20,
-            "knowledge count (v11.4: -3 obsolete SEO types)"
+            "imported count (v0.12.0: 20 knowledge nodes)"
         );
         assert_eq!(
             count(NodeTrait::Generated),
@@ -537,12 +535,12 @@ node:
         assert_eq!(
             realm_count("shared"),
             39,
-            "shared realm count (v11.4: +3 new containers, -4 obsolete nodes)"
+            "shared realm count (v0.12.0: 39 shared nodes)"
         );
         assert_eq!(
             realm_count("org"),
-            21,
-            "org realm count (unchanged in v11.4)"
+            19,
+            "org realm count (v0.12.0: 19 org nodes)"
         );
 
         // Spot-check known nodes

@@ -86,8 +86,9 @@ describe('FacetFilterPanel', () => {
       // Shared realm (4 layers: config, locale, geography, knowledge)
       expect(screen.getByText('Locale')).toBeInTheDocument();
       expect(screen.getByText('Geography')).toBeInTheDocument();
-      // "Knowledge" appears in both Layers and Traits sections
-      expect(screen.getAllByText('Knowledge')).toHaveLength(2);
+      // v11.8: "Knowledge" is layer only, trait renamed to "Imported" per ADR-024
+      expect(screen.getByText('Knowledge')).toBeInTheDocument();
+      expect(screen.getByText('Imported')).toBeInTheDocument();
       expect(screen.getByText('Configuration')).toBeInTheDocument();  // v11.5: shared config layer visible
       // Org realm (6 layers: config, foundation, structure, semantic, instruction, output)
       expect(screen.getByText('Foundation')).toBeInTheDocument();
@@ -99,15 +100,15 @@ describe('FacetFilterPanel', () => {
       expect(screen.getByText('Generated Output')).toBeInTheDocument();
     });
 
-    it('renders 5 trait items (v11.3: generated + aggregated)', () => {
+    // v11.8: Renamed per ADR-024 Data Origin semantics
+    it('renders 5 trait items (v11.8: defined/authored/imported/generated/retrieved)', () => {
       render(<FacetFilterPanel />);
 
-      expect(screen.getByText('Invariant')).toBeInTheDocument();
-      expect(screen.getByText('Localized')).toBeInTheDocument();
-      // "Knowledge" appears in both Layers and Traits sections - tested in layer test above
-      expect(screen.getAllByText('Knowledge')).toHaveLength(2);
+      expect(screen.getByText('Defined')).toBeInTheDocument();    // was: Invariant
+      expect(screen.getByText('Authored')).toBeInTheDocument();   // was: Localized
+      expect(screen.getByText('Imported')).toBeInTheDocument();   // was: Knowledge trait
       expect(screen.getByText('Generated')).toBeInTheDocument();
-      expect(screen.getByText('Aggregated')).toBeInTheDocument();
+      expect(screen.getByText('Retrieved')).toBeInTheDocument();  // was: Aggregated
     });
 
     it('renders 5 arc family items', () => {
@@ -141,7 +142,7 @@ describe('FacetFilterPanel', () => {
     it('shows active count when facets are selected', () => {
       setupStore({
         realmFilter: ['shared'],
-        traitFilter: ['localized'],
+        traitFilter: ['authored'], // v11.8: was 'localized'
         layerFilter: [],
       });
 

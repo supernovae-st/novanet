@@ -364,7 +364,7 @@ const VisualEncodingSection = memo(function VisualEncodingSection() {
         />
         <VisualEncodingRow
           channel="Border Style"
-          maps="Trait (invariant, localized, knowledge, generated, aggregated)"
+          maps="Trait (defined, authored, imported, generated, retrieved)"
           visual={
             <div className="flex gap-1.5 text-[10px] font-mono text-white/60">
               <span className="border-b-2 border-solid border-white/60 px-1">solid</span>
@@ -404,7 +404,7 @@ const VisualEncodingSection = memo(function VisualEncodingSection() {
         />
         <VisualEncodingRow
           channel="Material"
-          maps="Trait (glass=invariant, metal=localized, glow=knowledge, pulse=generated)"
+          maps="Trait (glass=defined, metal=authored, glow=imported, pulse=generated)"
           visual={
             <div className="flex gap-1.5 text-[10px] font-mono text-white/60">
               <span className="text-cyan-300">glass</span>

@@ -428,10 +428,11 @@ export default function HomePage() {
         return;
       }
 
-      // Cycle trait filter (T) - none → invariant → localized → knowledge → generated → aggregated → none
+      // Cycle trait filter (T) - none → defined → authored → imported → generated → retrieved → none
+      // v11.8: Renamed per ADR-024 Data Origin semantics
       if (e.key === 't' && !e.metaKey && !e.ctrlKey && !e.shiftKey) {
         e.preventDefault();
-        const traits = ['invariant', 'localized', 'knowledge', 'generated', 'aggregated'] as const;
+        const traits = ['defined', 'authored', 'imported', 'generated', 'retrieved'] as const;
         if (traitFilter.length === 0) {
           filterActions.setTraitFilter([traits[0]]);
         } else {

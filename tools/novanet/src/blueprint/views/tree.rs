@@ -97,12 +97,12 @@ pub fn render(data: &BlueprintData) -> String {
         out.push('\n');
     }
 
-    // Legend (v11.2: 5 traits - derived split into generated + aggregated, job removed)
+    // Legend (v11.8: ADR-024 Data Origin renames)
     out.push_str(
         "───────────────────────────────────────────────────────────────────────────────\n",
     );
     out.push_str("LEGEND\n");
-    out.push_str("■ invariant   □ localized   ◊ knowledge   ★ generated   ▪ aggregated\n");
+    out.push_str("■ defined   □ authored   ◊ imported   ★ generated   ▪ retrieved\n");
 
     out
 }

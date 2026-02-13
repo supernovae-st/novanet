@@ -29,11 +29,11 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
-**Current Version**: v11.7.0
+**Current Version**: v0.12.0
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
 **Related docs**:
-- `.claude/rules/novanet-decisions.md` — Architecture decisions (ADR-001 through ADR-021)
+- `.claude/rules/novanet-decisions.md` — Architecture decisions (ADR-001 through ADR-024)
 - `.claude/rules/novanet-terminology.md` — Canonical terminology reference
 
 ```
@@ -64,7 +64,7 @@ v11.5 refines the layer structure with Locale moved to shared/config:
 │  NodeKind:                                                                  │
 │    WHERE?  NodeRealm  (shared / org)                                        │
 │    WHAT?   NodeLayer  (10 layers: 4 shared + 6 org)                         │
-│    HOW?    NodeTrait  (invariant / localized / knowledge / generated / aggregated) │
+│    HOW?    NodeTrait  (defined / authored / imported / generated / retrieved) │
 │                                                                             │
 │  ArcKind:                                                                   │
 │    SCOPE   ArcScope       (intra_realm / cross_realm)                       │

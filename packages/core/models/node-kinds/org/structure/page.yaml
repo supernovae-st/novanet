@@ -102,11 +102,11 @@ node:
     instructions:
       type: string
       required: false
-      deprecated: "v7.2.0 - Use :HAS_PROMPT → PagePrompt.prompt"
+      deprecated: "v7.2.0 - Use :HAS_INSTRUCTION → BlockInstruction (v0.12.0 ADR-025)"
       description: "Orchestrator directive for page generation"
       example: "[GENERATE] Create conversion-focused pricing page comparing tiers"
 
-    # REMOVED v7.10.0: page_type (replaced by :OF_TYPE → PageType)
+    # REMOVED v7.10.0: page_type (replaced by :HAS_STRUCTURE → PageStructure, v0.12.0 ADR-025)
     # REMOVED v7.10.0: generation_priority (redundant with priority)
 
   # ═══════════════════════════════════════════════════════════════════════════════
@@ -114,10 +114,10 @@ node:
   # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
-    OF_TYPE:
-      to: PageType
+    HAS_STRUCTURE:  # v0.12.0 ADR-025: Renamed from OF_TYPE/PageType
+      to: PageStructure
       cardinality: "N:1"
-      description: "Page template defining meta, layout rules, required blocks (v7.10.0)"
+      description: "Page structure defining block order and composition (v0.12.0)"
 
     HAS_BLOCK:
       to: Block
@@ -133,10 +133,10 @@ node:
       cardinality: "1:N"
       description: "Generated outputs for this page (one per locale)"
 
-    HAS_PROMPT:
-      to: PagePrompt
+    HAS_INSTRUCTION:  # v0.12.0 ADR-025: Renamed from HAS_PROMPT/PagePrompt
+      to: BlockInstruction
       cardinality: "1:N"
-      description: "Orchestrator instructions with versioning (v7.2.0)"
+      description: "Block instructions composing PageInstruction at runtime (v0.12.0)"
 
     USES_ENTITY:
       to: Entity

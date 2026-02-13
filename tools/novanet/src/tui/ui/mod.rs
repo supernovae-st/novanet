@@ -195,28 +195,23 @@ pub(super) fn scroll_indicator(
 // =============================================================================
 
 /// Get icon for a node trait (from visual-encoding.yaml).
+/// v11.8: ADR-024 Data Origin semantics
 ///
-/// - invariant: ■ (solid square) - stable across locales
-/// - localized: □ (empty square) - locale-specific content
-/// - knowledge: ◊ (diamond) - locale expertise data
+/// - defined: ■ (solid square) - structurally fixed definitions
+/// - authored: □ (empty square) - human-authored locale content
+/// - imported: ◊ (diamond) - external authoritative data
 /// - generated: ★ (star) - LLM-generated output
-/// - aggregated: ▪ (small square) - computed metrics
+/// - retrieved: ▪ (small square) - computed/aggregated metrics
 ///
-/// v0.12.0: ADR-024 Data Origin rename — supports both old and new trait names
 /// Uses icons.rs (generated from visual-encoding.yaml) as source of truth
 pub(super) fn trait_icon(trait_name: &str) -> &'static str {
+    // v11.8: ADR-024 Data Origin semantics
     match trait_name {
-        // New names (v0.12.0)
         "defined" => icons::TRAITS_DEFINED.terminal,
         "authored" => icons::TRAITS_AUTHORED.terminal,
         "imported" => icons::TRAITS_IMPORTED.terminal,
         "generated" => icons::TRAITS_GENERATED.terminal,
         "retrieved" => icons::TRAITS_RETRIEVED.terminal,
-        // Legacy aliases (pre-v0.12.0)
-        "invariant" => icons::TRAITS_DEFINED.terminal,
-        "localized" => icons::TRAITS_AUTHORED.terminal,
-        "knowledge" => icons::TRAITS_IMPORTED.terminal,
-        "aggregated" => icons::TRAITS_RETRIEVED.terminal,
         _ => "·", // fallback
     }
 }
@@ -286,13 +281,14 @@ pub(super) fn layer_badge_icon(layer_key: &str) -> &'static str {
 }
 
 /// Get short abbreviation for trait display in tree badges.
+/// v11.8: Renamed per ADR-024 Data Origin semantics
 pub(super) fn trait_abbrev(trait_name: &str) -> &'static str {
     match trait_name {
-        "invariant" => "inv",
-        "localized" => "loc",
-        "knowledge" => "kno",
+        "defined" => "def",    // was: invariant
+        "authored" => "aut",   // was: localized
+        "imported" => "imp",   // was: knowledge
         "generated" => "gen",
-        "aggregated" => "agg",
+        "retrieved" => "ret",  // was: aggregated
         _ => "???",
     }
 }

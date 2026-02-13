@@ -17,9 +17,9 @@
  * - foundation: Package, structure: LayoutGrid, semantic: Lightbulb
  * - instruction: FileText, output: Sparkles
  *
- * Traits (5):
- * - invariant: Lock, localized: Globe, knowledge: Brain
- * - generated: Sparkles, aggregated: Calculator
+ * Traits (5) - v11.8: renamed per ADR-024 Data Origin:
+ * - defined: Lock, authored: Pen, imported: Download
+ * - generated: Sparkles, retrieved: CloudDownload
  */
 
 import { memo, useMemo } from 'react';
@@ -34,8 +34,9 @@ import {
   Globe,
   Building2,
   Lock,
-  Brain,
-  Calculator,
+  Pen,           // v11.8: authored trait (was: localized → Globe)
+  Download,      // v11.8: imported trait (was: knowledge → Brain)
+  CloudDownload, // v11.8: retrieved trait (was: aggregated → Calculator)
   Map,
   type LucideProps,
 } from 'lucide-react';
@@ -73,17 +74,18 @@ const REALM_ICONS: Record<Realm, React.ComponentType<LucideProps>> = {
 };
 
 /**
- * Trait to Lucide icon component mapping (v11.7 - 5 traits)
+ * Trait to Lucide icon component mapping (v11.8 - 5 traits)
+ * v11.8: Renamed per ADR-024 Data Origin semantics
  * Source: packages/core/models/visual-encoding.yaml
  */
-export type Trait = 'invariant' | 'localized' | 'knowledge' | 'generated' | 'aggregated';
+export type Trait = 'defined' | 'authored' | 'imported' | 'generated' | 'retrieved';
 
 const TRAIT_ICONS: Record<Trait, React.ComponentType<LucideProps>> = {
-  invariant: Lock,        // ■ lock - Stable across all locales
-  localized: Globe,       // □ globe - Generated natively per locale
-  knowledge: Brain,       // ◊ brain - Locale expertise data
-  generated: Sparkles,    // ★ sparkles - LLM-generated content output
-  aggregated: Calculator, // ▪ calculator - Computed metrics and analytics
+  defined: Lock,      // ■ lock - Structurally fixed definitions (was: invariant)
+  authored: Pen,      // □ pen - Human-authored content (was: localized)
+  imported: Download, // ◊ download - External authoritative data (was: knowledge)
+  generated: Sparkles, // ★ sparkles - LLM-generated output
+  retrieved: CloudDownload, // ▪ cloud-download - Computed/aggregated (was: aggregated)
 };
 
 // =============================================================================
@@ -193,7 +195,7 @@ export const RealmIcon = memo(function RealmIcon({
  * TraitIcon - Renders the appropriate Lucide icon for a trait
  *
  * @example
- * <TraitIcon trait="invariant" size={24} className="text-blue-500" />
+ * <TraitIcon trait="defined" size={24} className="text-blue-500" />
  * <TraitIcon trait="generated" glow glowColor="#b58900" />
  */
 export const TraitIcon = memo(function TraitIcon({

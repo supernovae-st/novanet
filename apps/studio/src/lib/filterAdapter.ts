@@ -595,9 +595,9 @@ export const VIEW_PRESETS: ViewPreset[] = [
       .byTypes('SEOKeyword', 'SEOKeywordMetrics', 'SEOKeywordSet', 'SEOKeywordFormat', 'GEOQuery', 'GEOQuerySet', 'GEOAnswer'),
   },
   {
-    id: 'invariant-types',
-    name: 'Invariant Types',
-    description: 'Nodes that do not change between locales',
+    id: 'defined-types',
+    name: 'Defined Types',
+    description: 'Structurally fixed schema definitions (v11.8: was invariant)',
     icon: '🔒',
     shortcut: '7',
     filter: () => NovaNetFilter.create()
@@ -607,9 +607,9 @@ export const VIEW_PRESETS: ViewPreset[] = [
       ),
   },
   {
-    id: 'localized-content',
-    name: 'Localized Content',
-    description: 'Nodes generated natively per locale',
+    id: 'authored-content',
+    name: 'Authored Content',
+    description: 'Human-authored locale-specific content (v11.8: was localized)',
     icon: '🌐',
     shortcut: '8',
     filter: () => NovaNetFilter.create()

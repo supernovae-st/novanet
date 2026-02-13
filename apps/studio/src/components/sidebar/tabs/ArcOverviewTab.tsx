@@ -127,20 +127,21 @@ function PropertyItem({
 /**
  * Get node classification for 3D preview
  */
+// v11.8: Default trait changed to 'defined' per ADR-024
 function getNodeClassification(node: GraphNode | null): {
   layer: Layer;
   realm: Realm;
   trait: Trait;
 } {
   if (!node) {
-    return { layer: 'foundation', realm: 'org', trait: 'invariant' };
+    return { layer: 'foundation', realm: 'org', trait: 'defined' };
   }
   const kindMeta = KIND_META[node.type];
   const config = NODE_TYPE_CONFIG[node.type];
   return {
     layer: (config?.layer ?? 'foundation') as Layer,
     realm: (kindMeta?.realm ?? 'org') as Realm,
-    trait: (kindMeta?.trait ?? 'invariant') as Trait,
+    trait: (kindMeta?.trait ?? 'defined') as Trait,
   };
 }
 

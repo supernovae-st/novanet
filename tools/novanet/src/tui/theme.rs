@@ -221,84 +221,90 @@ pub mod layer {
 // =============================================================================
 
 /// Trait border styles for visual encoding.
+/// v11.8: ADR-024 Data Origin renames:
+///   invariant → defined, localized → authored, knowledge → imported,
+///   generated (unchanged), aggregated → retrieved
 pub mod traits {
     use super::*;
 
     // Unicode border characters for trait encoding
-    // v11.2: 5 traits (job removed, derived split → generated + aggregated)
-    pub const INVARIANT_BORDER: &str = "─";
-    pub const LOCALIZED_BORDER: &str = "┄";
-    pub const KNOWLEDGE_BORDER: &str = "┈";
+    // v11.8: ADR-024 renamed traits (defined, authored, imported, generated, retrieved)
+    pub const DEFINED_BORDER: &str = "─";
+    pub const AUTHORED_BORDER: &str = "┄";
+    pub const IMPORTED_BORDER: &str = "┈";
     pub const GENERATED_BORDER: &str = "═";
-    pub const AGGREGATED_BORDER: &str = "┅";
+    pub const RETRIEVED_BORDER: &str = "┅";
 
     // Trait colors (hex)
-    pub const INVARIANT_HEX: &str = "#3b82f6";
-    pub const LOCALIZED_HEX: &str = "#22c55e";
-    pub const KNOWLEDGE_HEX: &str = "#8b5cf6";
+    pub const DEFINED_HEX: &str = "#3b82f6";
+    pub const AUTHORED_HEX: &str = "#22c55e";
+    pub const IMPORTED_HEX: &str = "#8b5cf6";
     pub const GENERATED_HEX: &str = "#b58900";
-    pub const AGGREGATED_HEX: &str = "#6c71c4";
+    pub const RETRIEVED_HEX: &str = "#6c71c4";
 
     // 256-color palette
-    pub const INVARIANT_256: u8 = 33;
-    pub const LOCALIZED_256: u8 = 41;
-    pub const KNOWLEDGE_256: u8 = 141;
+    pub const DEFINED_256: u8 = 33;
+    pub const AUTHORED_256: u8 = 41;
+    pub const IMPORTED_256: u8 = 141;
     pub const GENERATED_256: u8 = 136;
-    pub const AGGREGATED_256: u8 = 141;
+    pub const RETRIEVED_256: u8 = 141;
 
     // 16-color palette
-    pub const INVARIANT_16: Color = Color::Blue;
-    pub const LOCALIZED_16: Color = Color::Green;
-    pub const KNOWLEDGE_16: Color = Color::Magenta;
+    pub const DEFINED_16: Color = Color::Blue;
+    pub const AUTHORED_16: Color = Color::Green;
+    pub const IMPORTED_16: Color = Color::Magenta;
     pub const GENERATED_16: Color = Color::Yellow;
-    pub const AGGREGATED_16: Color = Color::Magenta;
+    pub const RETRIEVED_16: Color = Color::Magenta;
 
     /// Get trait border character.
+    /// v11.8: ADR-024 trait renames
     pub fn border_char(trait_key: &str) -> &'static str {
         match trait_key {
-            "invariant" => INVARIANT_BORDER,
-            "localized" => LOCALIZED_BORDER,
-            "knowledge" => KNOWLEDGE_BORDER,
+            "defined" => DEFINED_BORDER,
+            "authored" => AUTHORED_BORDER,
+            "imported" => IMPORTED_BORDER,
             "generated" => GENERATED_BORDER,
-            "aggregated" => AGGREGATED_BORDER,
-            _ => INVARIANT_BORDER,
+            "retrieved" => RETRIEVED_BORDER,
+            _ => DEFINED_BORDER,
         }
     }
 
     /// Get trait color for a given color mode.
+    /// v11.8: ADR-024 trait renames
     pub fn color(trait_key: &str, mode: ColorMode) -> Color {
         match mode {
             ColorMode::TrueColor => match trait_key {
-                "invariant" => hex_to_color(INVARIANT_HEX),
-                "localized" => hex_to_color(LOCALIZED_HEX),
-                "knowledge" => hex_to_color(KNOWLEDGE_HEX),
+                "defined" => hex_to_color(DEFINED_HEX),
+                "authored" => hex_to_color(AUTHORED_HEX),
+                "imported" => hex_to_color(IMPORTED_HEX),
                 "generated" => hex_to_color(GENERATED_HEX),
-                "aggregated" => hex_to_color(AGGREGATED_HEX),
+                "retrieved" => hex_to_color(RETRIEVED_HEX),
                 _ => Color::White,
             },
             ColorMode::Color256 => match trait_key {
-                "invariant" => Color::Indexed(INVARIANT_256),
-                "localized" => Color::Indexed(LOCALIZED_256),
-                "knowledge" => Color::Indexed(KNOWLEDGE_256),
+                "defined" => Color::Indexed(DEFINED_256),
+                "authored" => Color::Indexed(AUTHORED_256),
+                "imported" => Color::Indexed(IMPORTED_256),
                 "generated" => Color::Indexed(GENERATED_256),
-                "aggregated" => Color::Indexed(AGGREGATED_256),
+                "retrieved" => Color::Indexed(RETRIEVED_256),
                 _ => Color::White,
             },
             ColorMode::Color16 => match trait_key {
-                "invariant" => INVARIANT_16,
-                "localized" => LOCALIZED_16,
-                "knowledge" => KNOWLEDGE_16,
+                "defined" => DEFINED_16,
+                "authored" => AUTHORED_16,
+                "imported" => IMPORTED_16,
                 "generated" => GENERATED_16,
-                "aggregated" => AGGREGATED_16,
+                "retrieved" => RETRIEVED_16,
                 _ => Color::White,
             },
         }
     }
 
-    /// Get modifier for trait (bold for invariant).
+    /// Get modifier for trait (bold for defined).
+    /// v11.8: ADR-024 trait renames
     pub fn modifier(trait_key: &str) -> Modifier {
         match trait_key {
-            "invariant" => Modifier::BOLD,
+            "defined" => Modifier::BOLD,
             _ => Modifier::empty(),
         }
     }
@@ -974,17 +980,18 @@ mod tests {
 
     #[test]
     fn test_trait_borders() {
-        assert_eq!(traits::border_char("invariant"), "─");
-        assert_eq!(traits::border_char("localized"), "┄");
+        // v11.8: Renamed per ADR-024 Data Origin semantics
+        assert_eq!(traits::border_char("defined"), "─");      // was: invariant
+        assert_eq!(traits::border_char("authored"), "┄");     // was: localized
         assert_eq!(traits::border_char("generated"), "═");
-        assert_eq!(traits::border_char("aggregated"), "┅");
+        assert_eq!(traits::border_char("retrieved"), "┅");    // was: aggregated
     }
 
     #[test]
     fn test_trait_modifiers() {
-        assert_eq!(traits::modifier("invariant"), Modifier::BOLD);
-        // v11.2: job trait removed
-        assert_eq!(traits::modifier("localized"), Modifier::empty());
+        // v11.8: Renamed per ADR-024 Data Origin semantics
+        assert_eq!(traits::modifier("defined"), Modifier::BOLD);    // was: invariant
+        assert_eq!(traits::modifier("authored"), Modifier::empty()); // was: localized
     }
 
     #[test]
@@ -992,8 +999,9 @@ mod tests {
         let theme = Theme::with_mode(ColorMode::TrueColor);
         assert_eq!(theme.realm_color("shared"), Color::Rgb(42, 161, 152));
         assert_eq!(theme.layer_color("output"), Color::Rgb(34, 197, 94));
+        // v11.8: Renamed per ADR-024 Data Origin semantics
         assert_eq!(theme.trait_border("generated"), "═");
-        assert_eq!(theme.trait_border("aggregated"), "┅");
+        assert_eq!(theme.trait_border("retrieved"), "┅");     // was: aggregated
     }
 
     #[test]
@@ -1160,56 +1168,58 @@ mod tests {
     // Task 2.3: Trait border style tests (ADR-005)
     // =========================================================================
 
-    /// Test trait border styles for all 5 traits (ADR-005).
+    /// Test trait border styles for all 5 traits (ADR-005, updated ADR-024).
     /// Maps CSS border styles to Unicode box-drawing characters:
-    /// - invariant: solid -> "─" (U+2500 BOX DRAWINGS LIGHT HORIZONTAL)
-    /// - localized: dashed -> "┄" (U+2504 BOX DRAWINGS LIGHT TRIPLE DASH HORIZONTAL)
-    /// - knowledge: double -> "┈" (U+2508 BOX DRAWINGS LIGHT QUADRUPLE DASH HORIZONTAL)
-    /// - derived: dotted -> "═" (U+2550 BOX DRAWINGS DOUBLE HORIZONTAL)
-    /// - job: none -> " " (space - no border)
+    /// v11.8: Renamed per ADR-024 Data Origin semantics
+    /// - defined: solid -> "─" (U+2500 BOX DRAWINGS LIGHT HORIZONTAL)
+    /// - authored: dashed -> "┄" (U+2504 BOX DRAWINGS LIGHT TRIPLE DASH HORIZONTAL)
+    /// - imported: double -> "┈" (U+2508 BOX DRAWINGS LIGHT QUADRUPLE DASH HORIZONTAL)
+    /// - generated: dotted -> "═" (U+2550 BOX DRAWINGS DOUBLE HORIZONTAL)
+    /// - retrieved: thin dotted -> "┅" (U+2505 BOX DRAWINGS LIGHT QUADRUPLE DASH VERTICAL)
     #[test]
     fn test_trait_border_all_traits() {
+        // v11.8: Renamed per ADR-024 Data Origin semantics
         assert_eq!(
-            traits::border_char("invariant"),
+            traits::border_char("defined"),
             "─",
-            "invariant: solid border"
+            "defined: solid border (was: invariant)"
         );
         assert_eq!(
-            traits::border_char("localized"),
+            traits::border_char("authored"),
             "┄",
-            "localized: dashed border"
+            "authored: dashed border (was: localized)"
         );
         assert_eq!(
-            traits::border_char("knowledge"),
+            traits::border_char("imported"),
             "┈",
-            "knowledge: double border"
+            "imported: double border (was: knowledge)"
         );
-        // v11.2: split derived → generated + aggregated
         assert_eq!(
             traits::border_char("generated"),
             "═",
             "generated: double border"
         );
         assert_eq!(
-            traits::border_char("aggregated"),
+            traits::border_char("retrieved"),
             "┅",
-            "aggregated: dotted border"
+            "retrieved: dotted border (was: aggregated)"
         );
     }
 
     /// Test trait border fallback for unknown traits.
     #[test]
     fn test_trait_border_fallback() {
-        // Unknown traits should fallback to invariant border (solid)
+        // Unknown traits should fallback to defined border (solid)
+        // v11.8: Renamed per ADR-024 Data Origin semantics
         assert_eq!(
             traits::border_char("unknown"),
             "─",
-            "unknown trait should fallback to invariant border"
+            "unknown trait should fallback to defined border"
         );
         assert_eq!(
             traits::border_char(""),
             "─",
-            "empty trait should fallback to invariant border"
+            "empty trait should fallback to defined border"
         );
     }
 
@@ -1217,13 +1227,12 @@ mod tests {
     #[test]
     fn test_trait_border_via_theme() {
         let theme = Theme::with_mode(ColorMode::TrueColor);
-
-        assert_eq!(theme.trait_border("invariant"), "─");
-        assert_eq!(theme.trait_border("localized"), "┄");
-        assert_eq!(theme.trait_border("knowledge"), "┈");
-        // v11.2: split derived → generated + aggregated
+        // v11.8: Renamed per ADR-024 Data Origin semantics
+        assert_eq!(theme.trait_border("defined"), "─");     // was: invariant
+        assert_eq!(theme.trait_border("authored"), "┄");    // was: localized
+        assert_eq!(theme.trait_border("imported"), "┈");    // was: knowledge
         assert_eq!(theme.trait_border("generated"), "═");
-        assert_eq!(theme.trait_border("aggregated"), "┅");
+        assert_eq!(theme.trait_border("retrieved"), "┅");   // was: aggregated
     }
 
     // =========================================================================

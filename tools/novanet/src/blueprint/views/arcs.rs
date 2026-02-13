@@ -31,7 +31,7 @@ pub fn render(data: &BlueprintData) -> String {
         (
             ArcFamily::Localization,
             "localization",
-            "Invariant↔localized links",
+            "Defined↔authored links",
         ),
         (ArcFamily::Semantic, "semantic", "Meaning connections"),
         (ArcFamily::Generation, "generation", "LLM pipeline"),

@@ -33,6 +33,7 @@ import { useFilterStore } from '@/stores/filterStore';
 import { useGridNavigation } from '@/hooks/useGridNavigation';
 
 // Map preset IDs to Lucide icons for consistent SVG rendering
+// v11.8: Renamed per ADR-024 Data Origin semantics
 const PRESET_ICONS: Record<string, LucideIcon> = {
   'project-structure': Building2,
   'generation-chain': Link,
@@ -40,8 +41,8 @@ const PRESET_ICONS: Record<string, LucideIcon> = {
   'concept-network': Network,
   'prompts-rules': FileText,
   'seo-geo': Search,
-  'invariant-types': Lock,
-  'localized-content': Languages,
+  'defined-types': Lock,       // was: invariant-types
+  'authored-content': Languages, // was: localized-content
   'all-nodes': Grid3x3,
 };
 
