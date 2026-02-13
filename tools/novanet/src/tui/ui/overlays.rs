@@ -598,7 +598,7 @@ mod tests {
             key: "config".to_string(),
             display_name: "Config".to_string(),
             color: "#64748b".to_string(),
-            kinds: vec![],
+            classes: vec![],
             llm_context: String::new(),
         }
     }
@@ -627,7 +627,7 @@ mod tests {
         ArcFamilyInfo {
             key: "ownership".to_string(),
             display_name: "Ownership".to_string(),
-            arc_kinds: vec![],
+            arc_classes: vec![],
             llm_context: String::new(),
         }
     }

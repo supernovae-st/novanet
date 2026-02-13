@@ -2199,7 +2199,7 @@ mod tests {
         assert_eq!(app.current_item_count(), 10);
 
         // Collapse Locale's instances (using toggle since it starts expanded)
-        app.tree.toggle("kind:Locale");
+        app.tree.toggle("class:Locale");
 
         // Now: 8 items (instances hidden when collapsed)
         assert_eq!(app.current_item_count(), 8);

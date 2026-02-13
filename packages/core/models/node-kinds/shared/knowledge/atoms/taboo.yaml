@@ -10,7 +10,14 @@ node:
   layer: knowledge
   trait: imported
   icon: "🚫"
-  description: "Forbidden term, phrase, or concept that should be avoided in a locale"
+  description: |
+    Forbidden term, phrase, or concept that should be avoided in a locale.
+    Locale-native: each locale has its own taboos (no invariant parent).
+
+    USE: when validating content for cultural appropriateness, filtering forbidden terms.
+    TRIGGERS: "taboo", "forbidden term", "cultural restriction", "avoid word".
+    NOT: for expressions to use (use Expression), for cultural context (use CultureRef).
+    RELATES: TabooSet (CONTAINS), Locale (HAS_TABOOS).
 
   standard_properties:
     key:

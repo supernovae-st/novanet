@@ -17,7 +17,14 @@ node:
   layer: knowledge
   trait: retrieved  # v11.2: Split derived → aggregated (computed metrics)
   icon: "💬"
-  description: "LLM response sample for GEO analysis (immutable snapshot)"
+  description: |
+    LLM response sample for GEO analysis (immutable snapshot).
+    Captures actual AI engine responses for visibility tracking and analysis.
+
+    USE: when analyzing LLM responses, tracking brand citations, measuring AI visibility.
+    TRIGGERS: "GEO answer", "LLM response", "AI citation", "brand mention".
+    NOT: for query definition (use GEOQuery), for metrics aggregation (use GEOMetrics).
+    RELATES: GEOQuery (HAS_GEO_ANSWERS).
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # STANDARD PROPERTIES (v7.1.0)

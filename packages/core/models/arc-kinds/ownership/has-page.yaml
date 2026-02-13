@@ -8,5 +8,12 @@ arc:
   source: Project
   target: Page
   cardinality: one_to_many
-  llm_context: Project owns its page structures. Use to enumerate pages for generation.
+  inverse: PAGE_OF
+
+  llm_context: |
+    USE: when loading pages for a project.
+    TRIGGERS: project pages, page list, site structure.
+    NOT: page content (use HAS_BLOCK), page output (use HAS_GENERATED).
+    RELATES: Project (source), Page (target), PAGE_OF (inverse).
+
   cypher_pattern: (Project)-[:HAS_PAGE]->(Page)

@@ -480,7 +480,7 @@ impl Icons {
 
         // States
         icons.states.insert("no_connection".into(), "⚠".into());
-        icons.states.insert("no_kinds".into(), "∅".into());
+        icons.states.insert("no_classes".into(), "∅".into());
         icons.states.insert("no_results".into(), "◌".into());
         icons.states.insert("no_instances".into(), "□".into());
         icons.states.insert("loading".into(), "◐".into());
@@ -1024,7 +1024,7 @@ mod tests {
 
         // States
         assert_eq!(icons.state("loading"), "◐");
-        assert_eq!(icons.state("no_kinds"), "∅");
+        assert_eq!(icons.state("no_classes"), "∅");
 
         // Navigation
         assert_eq!(icons.nav("expanded"), "▼");

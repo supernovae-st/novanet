@@ -12,5 +12,9 @@ arc:
     - name: weight
       type: string
       required: false
-  llm_context: "Prompt artifact includes entity context for generation. weight: 0.0-1.0 influence on output."
+  llm_context: |
+    USE: when auditing what entities were included in a compiled prompt.
+    TRIGGERS: prompt context, included entities, generation audit.
+    NOT: for influence tracking (use INFLUENCED_BY), for raw prompt (use PageInstruction).
+    RELATES: PromptArtifact (source), Entity (target), weight property for influence.
   cypher_pattern: (PromptArtifact)-[:INCLUDES_ENTITY {weight}]->(Entity)
