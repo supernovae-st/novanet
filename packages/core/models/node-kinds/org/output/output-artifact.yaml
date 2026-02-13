@@ -92,11 +92,11 @@ node:
 
   relations:
     outgoing:
-      - type: INCLUDES
+      - type: BUNDLES
         to:
           - PageGenerated
           - BlockGenerated
-        description: "Content nodes included in this bundle"
+        description: "Content nodes bundled in this artifact"
 
       - type: FOR_LOCALE
         to: Locale
