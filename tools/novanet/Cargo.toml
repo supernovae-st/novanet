@@ -17,15 +17,15 @@ crossterm = { version = "0.29", features = ["event-stream"], optional = true }
 arboard = { version = "3", optional = true }  # Cross-platform clipboard
 
 # Async
-tokio = { version = "1.43", features = ["full"] }
-futures = "0.3"               # StreamExt for crossterm EventStream
+tokio = { workspace = true }
+futures = { workspace = true }  # StreamExt for crossterm EventStream
 
 # Neo4j
-neo4rs = "0.8"                # Pin minor: breaking changes between 0.x
+neo4rs = { workspace = true }   # Pin minor: breaking changes between 0.x
 
 # Serialization
-serde = { version = "1", features = ["derive"] }
-serde_json = "1"
+serde = { workspace = true }
+serde_json = { workspace = true }
 serde_yaml = "0.9"            # Maintained YAML library (serde_yml has soundness issues)
 
 # Template engine
@@ -55,13 +55,13 @@ unicode-width = "0.2"         # Display width for CJK, emoji (UAX#11)
 unicode-segmentation = "1.11" # Grapheme cluster iteration
 
 # Error handling
-thiserror = "2"               # Library-style errors (NovaNetError enum)
+thiserror = { workspace = true }  # Library-style errors (NovaNetError enum)
 color-eyre = "0.6"            # Rich error reports with context
 dirs = "6"                    # Cross-platform home directory (~/.novanet/crash.log)
 
 # Logging
-tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
 
 [features]
 default = ["tui"]
@@ -74,12 +74,5 @@ proptest = "1"                # Property-based testing (edge cases)
 tempfile = "3"                # Temporary files for parser tests
 tokio-test = "0.4"            # Async test utilities
 
-[profile.release]
-strip = true                  # Strip symbols (smaller binary)
-lto = "thin"                  # Link-time optimization
-codegen-units = 1             # Better optimization
-opt-level = 3
-
-[profile.dev.package."*"]
-opt-level = 2                 # Optimize deps in dev mode (faster builds)
+# NOTE: [profile.release] and [profile.dev] moved to workspace root (tools/Cargo.toml)
 

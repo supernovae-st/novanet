@@ -215,7 +215,6 @@ pub(super) fn trait_icon(trait_name: &str) -> &'static str {
     }
 }
 
-
 // =============================================================================
 // CLASSIFICATION BADGE HELPERS (v11.5 TreeView Enhancement)
 // =============================================================================
@@ -605,10 +604,7 @@ fn render_header(f: &mut Frame, area: Rect, app: &App) {
     }
 
     // Minimal right side: just ?:help and q:quit (shortcuts in footer/action bar)
-    let right_side = vec![Span::styled(
-        "  ?:help  q:quit",
-        theme::ui::muted_style(),
-    )];
+    let right_side = vec![Span::styled("  ?:help  q:quit", theme::ui::muted_style())];
 
     let mut full_header: Vec<Span<'static>> = header;
     // Calculate padding to right-align

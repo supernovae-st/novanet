@@ -376,13 +376,19 @@ fn render_question(
                 Style::default().fg(Color::Rgb(180, 180, 200)),
             )),
             Line::from(""),
-            Line::from(Span::styled(next_hint, Style::default().fg(Color::DarkGray))),
+            Line::from(Span::styled(
+                next_hint,
+                Style::default().fg(Color::DarkGray),
+            )),
         ];
 
         // Show score so far
         let current = quiz.current_question + 1;
         lines.push(Line::from(Span::styled(
-            format!("{}: {}/{} {}", score_label, quiz.score, current, answered_label),
+            format!(
+                "{}: {}/{} {}",
+                score_label, quiz.score, current, answered_label
+            ),
             Style::default().fg(Color::Cyan),
         )));
 
@@ -446,7 +452,10 @@ fn render_quiz_complete(f: &mut Frame, app: &App, locale: NexusLocale, chunks: &
                 .add_modifier(Modifier::BOLD),
         )),
         Line::from(""),
-        Line::from(Span::styled(restart_hint, Style::default().fg(Color::DarkGray))),
+        Line::from(Span::styled(
+            restart_hint,
+            Style::default().fg(Color::DarkGray),
+        )),
     ];
 
     let para = Paragraph::new(result_lines);

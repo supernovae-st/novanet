@@ -16,13 +16,14 @@ targets = [
 db-path = "~/.cargo/advisory-db"
 db-urls = ["https://github.com/rustsec/advisory-db"]
 # Ignore unmaintained crates from transitive dependencies
-# These are upstream issues we cannot control - review quarterly
+# These are upstream issues we cannot control
+# REVIEW SCHEDULE: Quarterly (next: 2026-05-01)
+# Check if neo4rs 0.9.0 resolves these before next review
 ignore = [
-    "RUSTSEC-2025-0012",  # backoff (neo4rs → backoff)
-    "RUSTSEC-2024-0384",  # instant (neo4rs → backoff → instant)
-    # Removed: RUSTSEC-2025-0119 (indicatif is not a dependency - false positive)
-    "RUSTSEC-2024-0436",  # paste (neo4rs → paste)
-    "RUSTSEC-2025-0134",  # rustls-pemfile (neo4rs → rustls-pemfile)
+    "RUSTSEC-2025-0012",  # backoff (neo4rs → backoff) - unmaintained
+    "RUSTSEC-2024-0384",  # instant (neo4rs → backoff → instant) - unmaintained
+    "RUSTSEC-2024-0436",  # paste (neo4rs → paste) - unmaintained
+    "RUSTSEC-2025-0134",  # rustls-pemfile (neo4rs → rustls-pemfile) - old API
 ]
 
 # =============================================================================

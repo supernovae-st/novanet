@@ -22,6 +22,7 @@ pub enum ParamValue {
 
 impl CypherStatement {
     /// Render the query with parameters inlined for copy-paste into Neo4j Browser.
+    #[must_use]
     pub fn render_inline(&self) -> String {
         let mut output = self.cypher.clone();
         for (name, value) in &self.params {
@@ -42,6 +43,7 @@ impl CypherStatement {
     }
 
     /// Get param by name (for passing to neo4rs).
+    #[must_use]
     pub fn get_param(&self, name: &str) -> Option<&ParamValue> {
         self.params.iter().find(|(n, _)| n == name).map(|(_, v)| v)
     }

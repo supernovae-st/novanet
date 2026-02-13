@@ -556,7 +556,10 @@ mod tests {
     fn test_shortcuts_nexus_mode_is_empty() {
         // Nexus has its own action bar, so status bar shortcuts are empty
         let result = get_contextual_shortcuts(NavMode::Nexus, Focus::Tree, false, false);
-        assert!(result.is_empty(), "Nexus mode should not have status bar shortcuts");
+        assert!(
+            result.is_empty(),
+            "Nexus mode should not have status bar shortcuts"
+        );
     }
 
     #[test]

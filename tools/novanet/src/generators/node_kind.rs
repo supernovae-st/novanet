@@ -381,8 +381,8 @@ fn generate_kind_cypher(nodes: &[ParsedNode]) -> crate::Result<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::generators::test_utils::{make_node, make_node_with_props};
     use crate::generators::Generator;
+    use crate::generators::test_utils::{make_node, make_node_with_props};
 
     #[test]
     fn schema_hint_no_properties() {
