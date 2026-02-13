@@ -1381,6 +1381,86 @@ arc:
 
 **Reference**: `docs/plans/2026-02-13-semantic-coherence-v0121-design.md`
 
+## ADR-027: Generation Family Arc Semantics
+
+**Status**: Approved (v0.12.1)
+
+**Problem**: The generation family arcs lacked clear documentation and consistent llm_context patterns, making it difficult to understand:
+- The generation pipeline flow (Instruction → PromptArtifact → Generated → Output)
+- When to use each arc for different traversal patterns
+- How to distinguish similar arcs (GENERATED vs HAS_GENERATED)
+
+**Decision**: Document the generation family semantics with clear flow diagrams and standardized llm_context.
+
+### Generation Pipeline Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  GENERATION PIPELINE                                                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  1. AUTHORING (instruction layer)                                           │
+│     PageInstruction ──[:INCLUDES_STYLE]──> Style                            │
+│     BlockInstruction ──[:INCLUDES_STYLE]──> Style                           │
+│                                                                             │
+│  2. COMPILATION (instruction → prompt)                                      │
+│     PageInstruction ──[:COMPILED_FROM]──< PromptArtifact                    │
+│     PromptArtifact ──[:INCLUDES_ENTITY]──> Entity                           │
+│                                                                             │
+│  3. GENERATION (prompt → content)                                           │
+│     BlockInstruction ──[:GENERATED]──> BlockGenerated                       │
+│     PageInstruction ──[:GENERATED]──> PageGenerated                         │
+│                                                                             │
+│  4. PROVENANCE (tracking)                                                   │
+│     BlockGenerated ──[:INFLUENCED_BY]──> EntityContent                      │
+│     BlockGenerated ──[:GENERATED_FROM]──> BlockType                         │
+│                                                                             │
+│  5. OUTPUT (assembly & deployment)                                          │
+│     Page ──[:HAS_GENERATED]──> PageGenerated                                │
+│     PageGenerated ──[:ASSEMBLES]──> BlockGenerated                          │
+│     OutputArtifact ──[:BUNDLES]──> PageGenerated                            │
+│     *Generated ──[:PREVIOUS_VERSION]──> *Generated                          │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Arc Disambiguation
+
+| Arc | Direction | Purpose | When to Use |
+|-----|-----------|---------|-------------|
+| `GENERATED` | Instruction → Generated | Provenance | "Which instruction made this?" |
+| `HAS_GENERATED` | Structure → Generated | Ownership | "What's the output for this page?" |
+| `GENERATED_FOR` | Generated → Structure | Inverse | "Which page owns this output?" |
+| `GENERATED_FROM` | Generated → Type | Validation | "Is this block schema-valid?" |
+| `COMPILED_FROM` | Artifact → Instruction | Audit | "What template made this prompt?" |
+| `INCLUDES_ENTITY` | Artifact → Entity | Context | "What entities were in the prompt?" |
+| `INCLUDES_STYLE` | Instruction → Style | Config | "What style settings apply?" |
+| `INFLUENCED_BY` | Generated → Content | Attribution | "What content influenced output?" |
+| `ASSEMBLES` | PageGen → BlockGen | Render | "What blocks in what order?" |
+| `BUNDLES` | Artifact → Generated | Deploy | "What's in this release?" |
+| `PREVIOUS_VERSION` | Generated → Generated | History | "What was the previous version?" |
+
+### llm_context Standard Pattern
+
+All generation family arcs now follow the USE/TRIGGERS/NOT/RELATES pattern:
+
+```yaml
+llm_context: |
+  USE: when [primary use case].
+  TRIGGERS: "keyword1", "keyword2", "keyword3".
+  NOT: for [disambiguation] (use [alternative] instead).
+  RELATES: [Source] (source), [Target] (target), [Related Arc] (relationship).
+```
+
+**Rationale**:
+
+1. **Pipeline Clarity**: Clear separation of authoring, compilation, generation, and output phases
+2. **Arc Disambiguation**: "GENERATED" (provenance) vs "HAS_GENERATED" (ownership) is now documented
+3. **LLM Context**: Standardized llm_context enables better RAG and spreading activation
+4. **Audit Trail**: Complete provenance from instruction through prompt to final output
+
+**Reference**: Generation family arc files in `packages/core/models/arc-kinds/generation/`
+
 ## Decision Log
 
 | ADR | Version | Summary |
@@ -1411,6 +1491,7 @@ arc:
 | 024 | v11.8 | Trait Redefinition as "Data Origin" (defined/authored/imported/generated/retrieved) |
 | 025 | v11.8 | Instruction Layer Renaming (PageType→PageStructure, PagePrompt→PageInstruction) |
 | 026 | v0.12.1 | Inverse Arc Policy (TIER 1/2/3 classification, naming conventions) |
+| 027 | v0.12.1 | Generation Family Arc Semantics (pipeline documentation, arc disambiguation) |
 
 ## References
 
