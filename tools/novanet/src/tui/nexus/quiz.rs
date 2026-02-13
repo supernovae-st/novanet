@@ -1199,19 +1199,15 @@ fn render_review_mode(f: &mut Frame, app: &App, locale: NexusLocale, chunks: &[R
     let wrong_count = wrong_indices.len();
 
     // i18n labels
-    let (review_title, nav_hint, exit_hint, your_answer, correct_answer) = match locale {
+    let (review_title, nav_hint, correct_answer) = match locale {
         NexusLocale::En => (
             "Review Wrong Answers",
             "[j/k: navigate] [Esc: exit review]",
-            "Press Esc to return to results",
-            "Your answer",
             "Correct answer",
         ),
         NexusLocale::Fr => (
             "Révision des Erreurs",
             "[j/k: naviguer] [Esc: quitter révision]",
-            "Appuyez sur Esc pour revenir",
-            "Votre réponse",
             "Bonne réponse",
         ),
     };
@@ -1219,17 +1215,6 @@ fn render_review_mode(f: &mut Frame, app: &App, locale: NexusLocale, chunks: &[R
     // Get current wrong question
     if let Some(q_idx) = quiz.current_review_question() {
         if let Some(question) = QUESTIONS.get(q_idx) {
-            let user_answer_idx = quiz
-                .answers
-                .get(q_idx)
-                .map(|_| {
-                    // We need to figure out what the user answered
-                    // Since we only store correct/incorrect, we can't show the exact wrong answer
-                    // But we can show which option was correct
-                    question.correct
-                })
-                .unwrap_or(0);
-
             let mut lines: Vec<Line> = vec![
                 Line::from(""),
                 Line::from(Span::styled(
