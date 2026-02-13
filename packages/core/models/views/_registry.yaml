@@ -23,8 +23,8 @@ views:
     category: meta
     modes: [meta]
     cypher: |
-      MATCH (n:Meta)
-      OPTIONAL MATCH (n)-[r]->(m:Meta)
+      MATCH (n:Schema)
+      OPTIONAL MATCH (n)-[r]->(m:Schema)
       RETURN n, r, m
       LIMIT 500
 
@@ -69,9 +69,9 @@ views:
     category: data
     modes: [data]
     cypher: |
-      MATCH (n) WHERE NOT n:Meta
+      MATCH (n) WHERE NOT n:Schema
       WITH n LIMIT 100
-      OPTIONAL MATCH (n)-[r]->(m) WHERE NOT m:Meta
+      OPTIONAL MATCH (n)-[r]->(m) WHERE NOT m:Schema
       RETURN n, r, m
 
   - id: data-locales
@@ -180,7 +180,7 @@ views:
     modes: [data, overlay]
     cypher: |
       MATCH (locale:Locale {key: $nodeKey})
-      OPTIONAL MATCH (locale)-[r]->(target) WHERE NOT target:Meta
+      OPTIONAL MATCH (locale)-[r]->(target) WHERE NOT target:Schema
       RETURN locale, r, target
       LIMIT 100
 
@@ -196,8 +196,8 @@ views:
     modes: [data, overlay]
     cypher: |
       MATCH (e:Entity {key: $nodeKey})
-      OPTIONAL MATCH (e)-[r1]->(target) WHERE NOT target:Meta
-      OPTIONAL MATCH (source)-[r2]->(e) WHERE NOT source:Meta
+      OPTIONAL MATCH (e)-[r1]->(target) WHERE NOT target:Schema
+      OPTIONAL MATCH (source)-[r2]->(e) WHERE NOT source:Schema
       RETURN e, r1, target, r2, source
       LIMIT 100
 
@@ -213,7 +213,7 @@ views:
     modes: [data, overlay]
     cypher: |
       MATCH (p:Project {key: $nodeKey})
-      OPTIONAL MATCH (p)-[r]->(target) WHERE NOT target:Meta
+      OPTIONAL MATCH (p)-[r]->(target) WHERE NOT target:Schema
       RETURN p, r, target
       LIMIT 100
 
@@ -229,8 +229,8 @@ views:
     modes: [data, overlay]
     cypher: |
       MATCH (root {key: $nodeKey})
-      OPTIONAL MATCH (root)-[r1]->(out) WHERE NOT out:Meta
-      OPTIONAL MATCH (in)-[r2]->(root) WHERE NOT in:Meta
+      OPTIONAL MATCH (root)-[r1]->(out) WHERE NOT out:Schema
+      OPTIONAL MATCH (in)-[r2]->(root) WHERE NOT in:Schema
       RETURN root, r1, out, r2, in
       LIMIT 100
 
@@ -246,7 +246,7 @@ views:
     modes: [data, overlay]
     cypher: |
       MATCH (root {key: $nodeKey})
-      OPTIONAL MATCH path = (root)-[*1..2]-(neighbor) WHERE NOT neighbor:Meta
+      OPTIONAL MATCH path = (root)-[*1..2]-(neighbor) WHERE NOT neighbor:Schema
       WITH root, relationships(path) AS rels, neighbor
       UNWIND rels AS r
       WITH DISTINCT root, r, startNode(r) AS s, endNode(r) AS t

@@ -1,5 +1,5 @@
 # models/node-kinds/org/structure/content-slot.yaml
-# Path: packages/core/models/nodes/project/structure/content-slot.yaml
+# v0.12.0: ContentSlot for A/B testing and dynamic content injection
 
 node:
   name: ContentSlot

@@ -6,8 +6,8 @@
 
 arc:
   name: BELONGS_TO
-  family: semantic
-  scope: cross_realm  # org Entity -> shared EntityCategory
+  family: ownership
+  scope: cross_realm  # org Entity -> shared EntityCategory (ADR-017)
 
   source: Entity
   target: EntityCategory
