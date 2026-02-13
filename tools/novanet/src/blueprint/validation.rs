@@ -886,25 +886,40 @@ mod tests {
         let root = crate::config::resolve_root(None).expect("Failed to resolve root");
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
 
-        // Count nodes per layer
-        let mut layer_counts: std::collections::HashMap<&str, usize> = std::collections::HashMap::new();
-        for node in &data.node_kinds {
-            *layer_counts.entry(node.layer.as_str()).or_insert(0) += 1;
-        }
+        // Count by realm (the reliable way)
+        let shared_count = data.node_kinds.iter().filter(|n| n.realm == "shared").count();
+        let org_count = data.node_kinds.iter().filter(|n| n.realm == "org").count();
 
-        // Shared layers (4 layers, 39 nodes total)
-        let shared_layers = ["config", "locale", "geography", "knowledge"];
-        let shared_total: usize = shared_layers.iter().filter_map(|l| layer_counts.get(l)).sum();
-        assert_eq!(shared_total, 39, "Shared realm should have 39 nodes, got {}", shared_total);
+        assert_eq!(shared_count, 39, "Shared realm should have 39 nodes, got {}", shared_count);
+        assert_eq!(org_count, 20, "Org realm should have 20 nodes, got {}", org_count);
 
-        // Org layers (6 layers, 20 nodes total)
-        let org_layers = ["foundation", "structure", "semantic", "instruction", "output"];
-        // Note: org also has config layer with 1 node
-        let org_config = data.node_kinds.iter().filter(|n| n.realm == "org" && n.layer == "config").count();
-        let org_other: usize = org_layers.iter().filter_map(|l| {
-            data.node_kinds.iter().filter(|n| n.realm == "org" && n.layer == *l).count().into()
-        }).sum();
-        let org_total = org_config + org_other;
-        assert_eq!(org_total, 20, "Org realm should have 20 nodes, got {}", org_total);
+        // Verify layer counts within each realm
+        // Shared: config(3) + locale(6) + geography(6) + knowledge(24) = 39
+        // Org: config(1) + foundation(3) + structure(3) + semantic(4) + instruction(6) + output(3) = 20
+
+        // Check that each realm has the expected layers
+        let shared_layers: std::collections::HashSet<&str> = data
+            .node_kinds
+            .iter()
+            .filter(|n| n.realm == "shared")
+            .map(|n| n.layer.as_str())
+            .collect();
+        assert!(shared_layers.contains("config"), "Shared should have config layer");
+        assert!(shared_layers.contains("locale"), "Shared should have locale layer");
+        assert!(shared_layers.contains("geography"), "Shared should have geography layer");
+        assert!(shared_layers.contains("knowledge"), "Shared should have knowledge layer");
+
+        let org_layers: std::collections::HashSet<&str> = data
+            .node_kinds
+            .iter()
+            .filter(|n| n.realm == "org")
+            .map(|n| n.layer.as_str())
+            .collect();
+        assert!(org_layers.contains("config"), "Org should have config layer");
+        assert!(org_layers.contains("foundation"), "Org should have foundation layer");
+        assert!(org_layers.contains("structure"), "Org should have structure layer");
+        assert!(org_layers.contains("semantic"), "Org should have semantic layer");
+        assert!(org_layers.contains("instruction"), "Org should have instruction layer");
+        assert!(org_layers.contains("output"), "Org should have output layer");
     }
 }
