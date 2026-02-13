@@ -1,4 +1,4 @@
-# NovaNet Studio (v11.7)
+# NovaNet Studio (v0.12.0)
 
 @.claude/rules/novanet-terminology.md
 @.claude/rules/novanet-decisions.md
@@ -9,13 +9,13 @@ Knowledge graph visualization for the NovaNet native content generation engine.
 
 ## Project Context
 
-**What:** Interactive 2D/3D graph visualization for 60 node types, 200 locales (~19,000 instances projected)
+**What:** Interactive 2D/3D graph visualization for 59 node classes, 200 locales (~19,000 instances projected)
 **Stack:** Next.js 16 + React 19 + TypeScript 5.9 + Tailwind CSS
 **Graph:** @xyflow/react (2D), @react-three/fiber (3D)
 **State:** Zustand 5 with persist/immer
 **DB:** Neo4j (bolt://localhost:7687)
 **AI:** Claude API for natural language → Cypher
-**Version:** v11.7.0 (Unified Tree Architecture)
+**Version:** v0.12.0 "Class Act" (ADR-024 Data Origin)
 
 ---
 
@@ -73,16 +73,16 @@ pnpm test            # Tests
 | `?` | Show shortcuts modal |
 | `Esc` | Close dialog / clear selection |
 
-**View (v11.7)**
+**View (v0.12.0)**
 | Key | Action |
 |-----|--------|
-| `1` | Graph mode (unified tree: Realm > Layer > Kind > Instance) |
+| `1` | Graph mode (unified tree: Realm > Layer > Class > Instance) |
 | `2` | Nexus mode (hub: Quiz, Audit, Stats, Help) |
 | `/` | Search overlay |
 | `G` | Focus mode (Zen) |
 | `M` | Toggle minimap |
 | `L` | Toggle edge labels |
-| `T` | Cycle trait filter (Invariant → Localized → ... → None) |
+| `T` | Cycle trait filter (Defined → Authored → ... → None) |
 | `E` | Cycle arc family filter (Ownership → ... → None) |
 | `⇧L` | Cycle locale filter |
 | `[` | Toggle left sidebar |
@@ -97,7 +97,7 @@ pnpm test            # Tests
 | `⇧R` | Radial layout (circular) |
 | `⇧F` | Force-directed layout |
 
-**Quick Views (Presets v11.7)**
+**Quick Views (Presets)**
 | Key | Action |
 |-----|--------|
 | `⇧1` | Project Structure - Project, Pages, Blocks hierarchy |
@@ -106,8 +106,8 @@ pnpm test            # Tests
 | `⇧4` | Entity Network - Entities and semantic links |
 | `⇧5` | Prompts & Instructions - AI instructions and prompt artifacts |
 | `⇧6` | SEO Intelligence - Search optimization data |
-| `⇧7` | Invariant Types - Nodes that do not change between locales |
-| `⇧8` | Localized Content - Nodes generated natively per locale |
+| `⇧7` | Defined Types - Nodes that do not change between locales |
+| `⇧8` | Authored Content - Nodes written natively per locale |
 | `⇧0` | All Nodes - Show everything |
 
 **Graph Interaction**
@@ -141,84 +141,84 @@ pnpm test            # Tests
 - `chatStore` - AI chat messages, streaming
 - `queryStore` - Cypher query state, history (Query-First)
 - `viewStore` - Saved views management (29 views)
-- `treeStore` - Unified tree state: expand/collapse, lazy loading (v11.7)
+- `treeStore` - Unified tree state: expand/collapse, lazy loading
 - `aiQueryStore` - AI-assisted query state
 - `animationStore` - Graph animation controls
 
 ---
 
-## Neo4j Schema (v11.7.0)
+## Neo4j Schema (v0.12.0)
 
-### Meta vs Data: The Core Distinction
+### Schema vs Data: The Core Distinction
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│  META vs DATA - Understanding NovaNet's Graph Structure                         │
+│  SCHEMA vs DATA - Understanding NovaNet's Graph Structure                       │
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                 │
-│  META NODES = Schema (structure)           DATA NODES = Instances (content)     │
-│  ───────────────────────────────           ─────────────────────────────────    │
-│  :Meta:Kind      (60 types)                :Locale, :Page, :Entity (200K+)      │
-│  :Meta:Realm     (2: shared, org)          Actual content nodes                 │
-│  :Meta:Layer     (10 layers)               Business data                        │
-│  :Meta:Trait     (5 behaviors)                                                  │
-│  :Meta:ArcFamily (5 families)              Link: (data)-[:OF_KIND]->(meta)      │
-│  :Meta:ArcKind   (114 relationships)                                            │
+│  SCHEMA NODES = Classes (structure)        DATA NODES = Instances (content)     │
+│  ───────────────────────────────────       ─────────────────────────────────    │
+│  :Schema:Class     (59 types)              :Locale, :Page, :Entity (200K+)      │
+│  :Schema:Realm     (2: shared, org)        Actual content nodes                 │
+│  :Schema:Layer     (10 layers)             Business data                        │
+│  :Schema:Trait     (5 data origins)                                             │
+│  :Schema:ArcFamily (5 families)            Link: (data)-[:OF_CLASS]->(schema)   │
+│  :Schema:ArcClass  (114 relationships)                                          │
 │                                                                                 │
 ├─────────────────────────────────────────────────────────────────────────────────┤
-│  CLASSIFICATION AXES (on NodeKind)         CLASSIFICATION VALUES                │
+│  CLASSIFICATION AXES (on NodeClass)        CLASSIFICATION VALUES                │
 │  ──────────────────────────────────        ─────────────────────────────────    │
 │  WHERE? → Realm                            shared (39 nodes, READ-ONLY)         │
-│  WHAT?  → Layer                            org (21 nodes, multi-tenant)         │
-│  HOW?   → Trait                                                                 │
+│  WHAT?  → Layer                            org (20 nodes, multi-tenant)         │
+│  HOW?   → Trait (Data Origin)                                                   │
 │                                                                                 │
 ├─────────────────────────────────────────────────────────────────────────────────┤
-│  LAYERS (v11.5: 10 total = 4 shared + 6 org)                                    │
-│  ───────────────────────────────────────────                                    │
+│  LAYERS (v0.12: 10 total = 4 shared + 6 org)                                    │
+│  ────────────────────────────────────────────                                   │
 │  SHARED: config → locale → geography → knowledge                                │
 │  ORG:    config → foundation → structure → semantic → instruction → output      │
 │                                                                                 │
 ├─────────────────────────────────────────────────────────────────────────────────┤
-│  TRAITS (5 behaviors vis-à-vis locales)                                         │
-│  ──────────────────────────────────────                                         │
-│  invariant   : Same in all locales (Entity, Page, Block)                        │
-│  localized   : Locale-specific content (EntityContent, ProjectContent)          │
-│  knowledge   : Locale knowledge atoms (Term, Expression, Pattern)               │
-│  generated   : LLM output (PageGenerated, BlockGenerated)                       │
-│  aggregated  : Computed metrics (SEOKeywordMetrics, GEOMetrics)                 │
+│  TRAITS (5 data origins - WHERE does data come from?)                           │
+│  ─────────────────────────────────────────────────────                          │
+│  defined    : Human-created once (Entity, Page, Block)                          │
+│  authored   : Human-written per locale (EntityContent, ProjectContent)          │
+│  imported   : External data brought in (Term, Expression, Pattern)              │
+│  generated  : LLM output (PageGenerated, BlockGenerated)                        │
+│  retrieved  : Fetched from external APIs (SEOKeywordMetrics, GEOMetrics)        │
 │                                                                                 │
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │  NATIVE GENERATION (not translation!)                                           │
 │  ────────────────────────────────────                                           │
-│  Entity (invariant) + Knowledge atoms (fr-FR) → Generate → EntityContent@fr-FR  │
+│  Entity (defined) + Knowledge atoms (fr-FR) → Generate → EntityContent@fr-FR    │
 │                                                                                 │
-│  ❌ Source → Translate → Target                                                 │
-│  ✅ Entity (invariant) → Generate natively → EntityContent (locale-specific)    │
+│  X Source → Translate → Target                                                  │
+│  V Entity (defined) → Generate natively → EntityContent (locale-specific)       │
 │                                                                                 │
 └─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Meta-Graph (v11.7 - Unified Tree Architecture)
+### Schema Graph (v0.12.0 - Unified Tree Architecture)
 
-v11.7 establishes faceted classification where **everything is a clickable node**:
+v0.12.0 establishes faceted classification where **everything is a clickable node**:
 
-| Meta-Type | Count | Purpose | Clickable |
-|-----------|-------|---------|-----------|
-| **Realm** | 2 | WHERE? (shared / org) | ✅ Yes |
-| **Layer** | 10 | WHAT? (4 shared + 6 org) | ✅ Yes |
-| **Trait** | 5 | HOW? (defined / authored / imported / generated / retrieved) | ✅ Yes |
-| **ArcFamily** | 5 | Relationship classification | ✅ Yes |
-| **ArcKind** | 114 | Individual relationship type | ✅ Yes |
-| **Kind** | 59 | Node type definitions (39 shared + 20 org) | ✅ Yes |
+| Schema-Type | Count | Purpose | Clickable |
+|-------------|-------|---------|-----------|
+| **Realm** | 2 | WHERE? (shared / org) | Yes |
+| **Layer** | 10 | WHAT? (4 shared + 6 org) | Yes |
+| **Trait** | 5 | Data Origin (defined / authored / imported / generated / retrieved) | Yes |
+| **ArcFamily** | 5 | Relationship classification | Yes |
+| **ArcClass** | 114 | Individual relationship type | Yes |
+| **Class** | 59 | Node type definitions (39 shared + 20 org) | Yes |
 
-All meta-nodes carry `:Meta` double-label. Instances link via `[:OF_KIND]`.
+All schema nodes carry `:Schema` double-label. Instances link via `[:OF_CLASS]`.
 
-### Realm Architecture (v11.5)
+### Realm Architecture (v0.12.0)
 
 | Realm | Layers | Nodes | Description |
 |-------|--------|-------|-------------|
 | **Shared** | config, locale, geography, knowledge | 39 | Universal knowledge (READ-ONLY) |
-| **Org** | config, foundation, structure, semantic, instruction, output | 21 | Business-specific content |
+| **Org** | config, foundation, structure, semantic, instruction, output | 20 | Business-specific content |
 
 ### Key Relations (grouped by ArcFamily)
 - **Ownership:** `HAS_PAGE`, `HAS_BLOCK`, `OF_TYPE`, `SUPPORTS_LOCALE`, `HAS_PROJECT`
@@ -227,13 +227,13 @@ All meta-nodes carry `:Meta` double-label. Instances link via `[:OF_KIND]`.
 - **Generation:** `HAS_GENERATED`, `HAS_PROMPT`
 - **Mining:** `EXPRESSES`, `HAS_SEO_TARGET`
 
-### Navigation Modes (v11.7 - ADR-022)
+### Navigation Modes (v0.12.0 - ADR-022)
 
-**v11.7 consolidates 5 modes into 2:**
+**Consolidated from 5 modes to 2:**
 
 | Mode | Key | Content | Use Case |
 |------|-----|---------|----------|
-| **Graph** | `1` | Unified tree: Realm > Layer > Kind > Instance + Arcs | Default exploration |
+| **Graph** | `1` | Unified tree: Realm > Layer > Class > Instance + Arcs | Default exploration |
 | **Nexus** | `2` | Hub: Quiz, Audit, Stats, Help | Learning & validation |
 
 **Deprecated modes** (v11.6 and earlier):
@@ -257,10 +257,12 @@ Path configured in tsconfig.json:
 "@novanet/core/*": ["../../packages/core/src/*"]
 ```
 
-> **v11.7 notes:**
+> **v0.12.0 notes:**
 > - `NodeCategory` was replaced by `Layer` in v9.0.0
 > - `EntityL10n` → `EntityContent`, `PageL10n` → `PageGenerated`, `BlockL10n` → `BlockGenerated` in v10.9
 > - 5 navigation modes consolidated into 2 (Graph/Nexus) in v11.7
+> - `Kind` → `Class`, `ArcKind` → `ArcClass`, `:Meta:` → `:Schema:` in v0.12.0
+> - Traits renamed: invariant→defined, localized→authored, knowledge→imported, aggregated→retrieved
 
 ---
 

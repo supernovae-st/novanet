@@ -8,14 +8,14 @@ expression: cypher
 //
 // Creates: 1 Realms, 2 Layers, 2 Traits, 1 ArcFamilies
 // Includes visual encoding properties
-// All meta-nodes have :Meta double-label
+// All schema-nodes have :Schema double-label
 // Uses MERGE for idempotent execution
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // REALMS (1)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-MERGE (r_test:Meta:Realm {key: 'test'})
+MERGE (r_test:Schema:Realm {key: 'test'})
 ON CREATE SET
   r_test.display_name = 'Test Realm',
   r_test.emoji = '🧪',
@@ -34,7 +34,7 @@ ON MATCH SET
 // ═══════════════════════════════════════════════════════════════════════════════
 
 // Test Realm layers
-MERGE (l_base:Meta:Layer {key: 'base'})
+MERGE (l_base:Schema:Layer {key: 'base'})
 ON CREATE SET
   l_base.display_name = 'Base Layer',
   l_base.emoji = '📋',
@@ -50,7 +50,7 @@ ON MATCH SET
 
 MATCH (r:Realm {key: 'test'}), (l:Layer {key: 'base'})
 MERGE (r)-[:HAS_LAYER]->(l);
-MERGE (l_derived:Meta:Layer {key: 'derived'})
+MERGE (l_derived:Schema:Layer {key: 'derived'})
 ON CREATE SET
   l_derived.display_name = 'Derived Layer',
   l_derived.emoji = '🔧',
@@ -71,7 +71,7 @@ MERGE (r)-[:HAS_LAYER]->(l);
 // TRAITS (2)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-MERGE (t_defined:Meta:Trait {key: 'defined'})
+MERGE (t_defined:Schema:Trait {key: 'defined'})
 ON CREATE SET
   t_defined.created_at = datetime(),
   t_defined.updated_at = datetime()
@@ -85,7 +85,7 @@ SET
   t_defined.unicode_border = '─',
   t_defined.llm_context = 'Content that does not change per locale.';
 
-MERGE (t_authored:Meta:Trait {key: 'authored'})
+MERGE (t_authored:Schema:Trait {key: 'authored'})
 ON CREATE SET
   t_authored.created_at = datetime(),
   t_authored.updated_at = datetime()
@@ -103,7 +103,7 @@ SET
 // ARC FAMILIES (1)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-MERGE (af_semantic:Meta:ArcFamily {key: 'semantic'})
+MERGE (af_semantic:Schema:ArcFamily {key: 'semantic'})
 ON CREATE SET
   af_semantic.created_at = datetime(),
   af_semantic.updated_at = datetime()

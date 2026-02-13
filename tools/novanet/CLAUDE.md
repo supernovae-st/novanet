@@ -29,7 +29,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | TUI | `tui` | Unified tree (Graph/Nexus modes), lazy loading, async channels |
 | System | `completions`, `doctor` | Implemented |
 
-**980 tests pass** (`cargo test`). Zero clippy warnings.
+**976 tests pass** (`cargo test`). Zero clippy warnings.
 
 **Testing stack:**
 - `insta` — Snapshot testing (5 generator outputs)
@@ -177,7 +177,7 @@ cargo run -- doctor --skip-db                     # Skip Neo4j connectivity chec
 # Quality
 cargo clippy -- -D warnings    # Zero warnings policy
 cargo fmt --check              # Formatting check
-cargo nextest run              # 955 tests (fast, parallel)
+cargo nextest run              # 976 tests (fast, parallel)
 cargo test -- --ignored        # Neo4j integration tests (requires running Neo4j)
 
 # Security & auditing
@@ -240,7 +240,7 @@ src/
 - **YAML-first architecture**: Each Kind YAML has explicit `realm:` and `layer:` fields (source of truth)
   - Path validation: file must be at `models/node-kinds/{realm}/{layer}/{name}.yaml`
   - Generators read realm/layer from YAML content, validate against path
-  - v11.5: 2 realms (shared, org), 10 layers (4 shared + 6 org), 60 node types
+  - v0.12.0: 2 realms (shared, org), 10 layers (4 shared + 6 org), 59 node types
 - **Query-First architecture (v11.6)**: Cypher is the single source of truth for graph display
   - META mode uses KINDS_QUERY + ARCS_QUERY to build the meta-graph
   - `cargo run -- meta` executes these foundational queries

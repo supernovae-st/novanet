@@ -81,7 +81,7 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   HAS_GENERATED: 'generated',
   HAS_CONTENT: 'content',
   CONTENT_OF: 'contentParent',
-  HAS_LOCALIZED_CONTENT: 'localizedContent',
+  HAS_AUTHORED_CONTENT: 'authoredContent',
   // Locale knowledge (v11.5 schema)
   HAS_CULTURE: 'culture',
   HAS_MARKET: 'market',

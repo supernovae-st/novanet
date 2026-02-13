@@ -4,14 +4,14 @@
 //
 // Creates: 2 Realms, 10 Layers, 5 Traits, 5 ArcFamilies
 // Includes visual encoding properties
-// All meta-nodes have :Meta double-label
+// All schema-nodes have :Schema double-label
 // Uses MERGE for idempotent execution
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // REALMS (2)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-MERGE (r_shared:Meta:Realm {key: 'shared'})
+MERGE (r_shared:Schema:Realm {key: 'shared'})
 ON CREATE SET
   r_shared.display_name = 'Shared',
   r_shared.emoji = '🌍',
@@ -25,7 +25,7 @@ ON MATCH SET
   r_shared.llm_context = 'Shared across ALL organizations. Universal locale knowledge that applies everywhere: cultural norms, linguistic patterns, formatting conventions. These nodes are READ-ONLY. No Entity here - Entity lives in ORG realm. v11.5: Locale moved to config layer (invariant definition). v11.4: SEO/GEO nodes now live in shared/knowledge. SEOKeywordFormat and EntityCategory classifications live in shared/config.',
   r_shared.updated_at = datetime();
 
-MERGE (r_org:Meta:Realm {key: 'org'})
+MERGE (r_org:Schema:Realm {key: 'org'})
 ON CREATE SET
   r_org.display_name = 'Organization',
   r_org.emoji = '🏢',
@@ -44,7 +44,7 @@ ON MATCH SET
 // ═══════════════════════════════════════════════════════════════════════════════
 
 // Shared layers
-MERGE (l_config:Meta:Layer {key: 'config'})
+MERGE (l_config:Schema:Layer {key: 'config'})
 ON CREATE SET
   l_config.display_name = 'Config',
   l_config.emoji = '⚙️',
@@ -60,7 +60,7 @@ ON MATCH SET
 
 MATCH (r:Realm {key: 'shared'}), (l:Layer {key: 'config'})
 MERGE (r)-[:HAS_LAYER]->(l);
-MERGE (l_locale:Meta:Layer {key: 'locale'})
+MERGE (l_locale:Schema:Layer {key: 'locale'})
 ON CREATE SET
   l_locale.display_name = 'Locale',
   l_locale.emoji = '🌐',
@@ -76,7 +76,7 @@ ON MATCH SET
 
 MATCH (r:Realm {key: 'shared'}), (l:Layer {key: 'locale'})
 MERGE (r)-[:HAS_LAYER]->(l);
-MERGE (l_geography:Meta:Layer {key: 'geography'})
+MERGE (l_geography:Schema:Layer {key: 'geography'})
 ON CREATE SET
   l_geography.display_name = 'Geography',
   l_geography.emoji = '🗺️',
@@ -92,7 +92,7 @@ ON MATCH SET
 
 MATCH (r:Realm {key: 'shared'}), (l:Layer {key: 'geography'})
 MERGE (r)-[:HAS_LAYER]->(l);
-MERGE (l_knowledge:Meta:Layer {key: 'knowledge'})
+MERGE (l_knowledge:Schema:Layer {key: 'knowledge'})
 ON CREATE SET
   l_knowledge.display_name = 'Knowledge',
   l_knowledge.emoji = '📚',
@@ -110,7 +110,7 @@ MATCH (r:Realm {key: 'shared'}), (l:Layer {key: 'knowledge'})
 MERGE (r)-[:HAS_LAYER]->(l);
 
 // Organization layers
-MERGE (l_config:Meta:Layer {key: 'config'})
+MERGE (l_config:Schema:Layer {key: 'config'})
 ON CREATE SET
   l_config.display_name = 'Config',
   l_config.emoji = '⚙️',
@@ -126,7 +126,7 @@ ON MATCH SET
 
 MATCH (r:Realm {key: 'org'}), (l:Layer {key: 'config'})
 MERGE (r)-[:HAS_LAYER]->(l);
-MERGE (l_semantic:Meta:Layer {key: 'semantic'})
+MERGE (l_semantic:Schema:Layer {key: 'semantic'})
 ON CREATE SET
   l_semantic.display_name = 'Semantic Layer',
   l_semantic.emoji = '💡',
@@ -142,7 +142,7 @@ ON MATCH SET
 
 MATCH (r:Realm {key: 'org'}), (l:Layer {key: 'semantic'})
 MERGE (r)-[:HAS_LAYER]->(l);
-MERGE (l_foundation:Meta:Layer {key: 'foundation'})
+MERGE (l_foundation:Schema:Layer {key: 'foundation'})
 ON CREATE SET
   l_foundation.display_name = 'Foundation',
   l_foundation.emoji = '🏛️',
@@ -158,7 +158,7 @@ ON MATCH SET
 
 MATCH (r:Realm {key: 'org'}), (l:Layer {key: 'foundation'})
 MERGE (r)-[:HAS_LAYER]->(l);
-MERGE (l_structure:Meta:Layer {key: 'structure'})
+MERGE (l_structure:Schema:Layer {key: 'structure'})
 ON CREATE SET
   l_structure.display_name = 'Structure',
   l_structure.emoji = '🏗️',
@@ -174,7 +174,7 @@ ON MATCH SET
 
 MATCH (r:Realm {key: 'org'}), (l:Layer {key: 'structure'})
 MERGE (r)-[:HAS_LAYER]->(l);
-MERGE (l_instruction:Meta:Layer {key: 'instruction'})
+MERGE (l_instruction:Schema:Layer {key: 'instruction'})
 ON CREATE SET
   l_instruction.display_name = 'Instructions',
   l_instruction.emoji = '📝',
@@ -190,7 +190,7 @@ ON MATCH SET
 
 MATCH (r:Realm {key: 'org'}), (l:Layer {key: 'instruction'})
 MERGE (r)-[:HAS_LAYER]->(l);
-MERGE (l_output:Meta:Layer {key: 'output'})
+MERGE (l_output:Schema:Layer {key: 'output'})
 ON CREATE SET
   l_output.display_name = 'Generated Output',
   l_output.emoji = '✨',
@@ -211,7 +211,7 @@ MERGE (r)-[:HAS_LAYER]->(l);
 // TRAITS (5)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-MERGE (t_defined:Meta:Trait {key: 'defined'})
+MERGE (t_defined:Schema:Trait {key: 'defined'})
 ON CREATE SET
   t_defined.created_at = datetime(),
   t_defined.updated_at = datetime()
@@ -225,7 +225,7 @@ SET
   t_defined.unicode_border = '─',
   t_defined.llm_context = 'Human-created ONCE. Structural definitions, configuration, templates. Does not change between locales. Page, Block, Entity, PageType, BlockType, Locale, OrgConfig, etc. "This is how things are set up."';
 
-MERGE (t_authored:Meta:Trait {key: 'authored'})
+MERGE (t_authored:Schema:Trait {key: 'authored'})
 ON CREATE SET
   t_authored.created_at = datetime(),
   t_authored.updated_at = datetime()
@@ -239,7 +239,7 @@ SET
   t_authored.unicode_border = '┄',
   t_authored.llm_context = 'Human-written content, PER locale. Editorial content curated by humans. EntityContent, ProjectContent. NOT translated — each locale version is written natively. "A human wrote this in French/Japanese/etc."';
 
-MERGE (t_imported:Meta:Trait {key: 'imported'})
+MERGE (t_imported:Schema:Trait {key: 'imported'})
 ON CREATE SET
   t_imported.created_at = datetime(),
   t_imported.updated_at = datetime()
@@ -253,7 +253,7 @@ SET
   t_imported.unicode_border = '┈',
   t_imported.llm_context = 'External data brought in from external sources. Linguistic corpora, market data, discovered keywords. Term, Expression, Pattern, CultureRef, SEOKeyword, GEOQuery. "We imported this from [source]."';
 
-MERGE (t_generated:Meta:Trait {key: 'generated'})
+MERGE (t_generated:Schema:Trait {key: 'generated'})
 ON CREATE SET
   t_generated.created_at = datetime(),
   t_generated.updated_at = datetime()
@@ -267,7 +267,7 @@ SET
   t_generated.unicode_border = '═',
   t_generated.llm_context = 'OUR LLM produces this output. Pages, blocks, and artifacts produced by the NovaNet generation pipeline. PageGenerated, BlockGenerated, OutputArtifact. "NovaNet generated this."';
 
-MERGE (t_retrieved:Meta:Trait {key: 'retrieved'})
+MERGE (t_retrieved:Schema:Trait {key: 'retrieved'})
 ON CREATE SET
   t_retrieved.created_at = datetime(),
   t_retrieved.updated_at = datetime()
@@ -285,7 +285,7 @@ SET
 // ARC FAMILIES (5)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-MERGE (af_ownership:Meta:ArcFamily {key: 'ownership'})
+MERGE (af_ownership:Schema:ArcFamily {key: 'ownership'})
 ON CREATE SET
   af_ownership.created_at = datetime(),
   af_ownership.updated_at = datetime()
@@ -300,7 +300,7 @@ SET
   af_ownership.default_traversal = 'eager',
   af_ownership.llm_context = 'Parent-child structural relationships. A node "owns" or "contains" another. Always follow in traversal (structural backbone).';
 
-MERGE (af_localization:Meta:ArcFamily {key: 'localization'})
+MERGE (af_localization:Schema:ArcFamily {key: 'localization'})
 ON CREATE SET
   af_localization.created_at = datetime(),
   af_localization.updated_at = datetime()
@@ -315,7 +315,7 @@ SET
   af_localization.default_traversal = 'eager',
   af_localization.llm_context = 'Links between invariant nodes and their locale-specific content. Includes locale knowledge edges (Locale → LocaleVoice, etc.) and content localization edges (Entity → EntityContent, etc.).';
 
-MERGE (af_semantic:Meta:ArcFamily {key: 'semantic'})
+MERGE (af_semantic:Schema:ArcFamily {key: 'semantic'})
 ON CREATE SET
   af_semantic.created_at = datetime(),
   af_semantic.updated_at = datetime()
@@ -330,7 +330,7 @@ SET
   af_semantic.default_traversal = 'lazy',
   af_semantic.llm_context = 'Meaning and entity connections. Spreading activation traversal with temperature-based filtering. Links entities to each other and to the pages/blocks that use them.';
 
-MERGE (af_generation:Meta:ArcFamily {key: 'generation'})
+MERGE (af_generation:Schema:ArcFamily {key: 'generation'})
 ON CREATE SET
   af_generation.created_at = datetime(),
   af_generation.updated_at = datetime()
@@ -345,7 +345,7 @@ SET
   af_generation.default_traversal = 'lazy',
   af_generation.llm_context = 'LLM generation pipeline flow. Provenance tracking from prompts to outputs, version history, and assembly relationships.';
 
-MERGE (af_mining:Meta:ArcFamily {key: 'mining'})
+MERGE (af_mining:Schema:ArcFamily {key: 'mining'})
 ON CREATE SET
   af_mining.created_at = datetime(),
   af_mining.updated_at = datetime()
@@ -364,7 +364,7 @@ SET
 // ARC SCOPES (2)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-MERGE (as_intra_realm:Meta:ArcScope {key: 'intra_realm'})
+MERGE (as_intra_realm:Schema:ArcScope {key: 'intra_realm'})
 ON CREATE SET
   as_intra_realm.display_name = 'Intra-Realm',
   as_intra_realm.description = 'Arc connects nodes within the same realm',
@@ -374,7 +374,7 @@ ON MATCH SET
   as_intra_realm.description = 'Arc connects nodes within the same realm',
   as_intra_realm.updated_at = datetime();
 
-MERGE (as_cross_realm:Meta:ArcScope {key: 'cross_realm'})
+MERGE (as_cross_realm:Schema:ArcScope {key: 'cross_realm'})
 ON CREATE SET
   as_cross_realm.display_name = 'Cross-Realm',
   as_cross_realm.description = 'Arc connects nodes across different realms',
@@ -388,7 +388,7 @@ ON MATCH SET
 // ARC CARDINALITIES (5)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-MERGE (ac_zero_to_one:Meta:ArcCardinality {key: 'zero_to_one'})
+MERGE (ac_zero_to_one:Schema:ArcCardinality {key: 'zero_to_one'})
 ON CREATE SET
   ac_zero_to_one.display_name = '0..1',
   ac_zero_to_one.description = 'Optional single target (nullable reference)',
@@ -398,7 +398,7 @@ ON MATCH SET
   ac_zero_to_one.description = 'Optional single target (nullable reference)',
   ac_zero_to_one.updated_at = datetime();
 
-MERGE (ac_one_to_one:Meta:ArcCardinality {key: 'one_to_one'})
+MERGE (ac_one_to_one:Schema:ArcCardinality {key: 'one_to_one'})
 ON CREATE SET
   ac_one_to_one.display_name = '1:1',
   ac_one_to_one.description = 'Single source to single target',
@@ -408,7 +408,7 @@ ON MATCH SET
   ac_one_to_one.description = 'Single source to single target',
   ac_one_to_one.updated_at = datetime();
 
-MERGE (ac_one_to_many:Meta:ArcCardinality {key: 'one_to_many'})
+MERGE (ac_one_to_many:Schema:ArcCardinality {key: 'one_to_many'})
 ON CREATE SET
   ac_one_to_many.display_name = '1:N',
   ac_one_to_many.description = 'Single source to multiple targets',
@@ -418,7 +418,7 @@ ON MATCH SET
   ac_one_to_many.description = 'Single source to multiple targets',
   ac_one_to_many.updated_at = datetime();
 
-MERGE (ac_many_to_one:Meta:ArcCardinality {key: 'many_to_one'})
+MERGE (ac_many_to_one:Schema:ArcCardinality {key: 'many_to_one'})
 ON CREATE SET
   ac_many_to_one.display_name = 'N:1',
   ac_many_to_one.description = 'Multiple sources to single target (inverse of one_to_many)',
@@ -428,7 +428,7 @@ ON MATCH SET
   ac_many_to_one.description = 'Multiple sources to single target (inverse of one_to_many)',
   ac_many_to_one.updated_at = datetime();
 
-MERGE (ac_many_to_many:Meta:ArcCardinality {key: 'many_to_many'})
+MERGE (ac_many_to_many:Schema:ArcCardinality {key: 'many_to_many'})
 ON CREATE SET
   ac_many_to_many.display_name = 'N:M',
   ac_many_to_many.description = 'Multiple sources to multiple targets',

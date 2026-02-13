@@ -528,7 +528,7 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
     from: ['Entity', 'Project'],
     to: ['EntityContent', 'ProjectContent'],
     cardinality: '1:N',
-    description: 'Invariant node has localized content (v7.0.0: unified)',
+    description: 'Defined node has authored content (v11.8: ADR-024 renamed)',
   },
 
   // ─────────────────────────────────────────────────────────────────────────────
@@ -758,7 +758,7 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
     from: ['EntityContent', 'ProjectContent'],
     to: ['Entity', 'Project'],
     cardinality: 'N:1',
-    description: 'Inverse of HAS_CONTENT - localized content points to parent',
+    description: 'Inverse of HAS_CONTENT - authored content points to parent',
   },
   [RelationType.GENERATED_FOR]: {
     type: RelationType.GENERATED_FOR,

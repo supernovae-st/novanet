@@ -1,6 +1,19 @@
 //! Glossary Tab - Searchable concept dictionary for NovaNet.
 //!
-//! v11.8 (ADR-023): Updated terminology - Class/Instance replaces Meta Node/Data Node
+//! v0.12.0 (ADR-024/025): Updated terminology
+//! - Class/Instance replaces Meta Node/Data Node (ADR-025)
+//! - Trait names: defined, authored, imported, generated, retrieved (ADR-024)
+//!
+//! **3-Panel Layout** (v0.12.0):
+//! - Left: Category browser with visual badges
+//! - Center: Concept list with category grouping
+//! - Right: Definition panel with interactive cross-links
+//!
+//! **Navigation**:
+//! - [1-5]: Jump to category
+//! - [j/k]: Navigate concepts
+//! - [Enter]: Jump to "See Also" concept
+//! - [/]: Search
 //!
 //! Provides 15 core concepts organized into 5 categories:
 //! - Graph Basics (4): Class, Instance, Entity, EntityContent
@@ -78,6 +91,39 @@ impl GlossaryCategory {
             GlossaryCategory::LocaleSystem => "Locale System",
             GlossaryCategory::Relationships => "Relationships",
             GlossaryCategory::Architecture => "Architecture",
+        }
+    }
+
+    /// Get category icon (v0.12.0).
+    pub fn icon(&self) -> &'static str {
+        match self {
+            GlossaryCategory::GraphBasics => "◆",      // Diamond for nodes
+            GlossaryCategory::Classification => "◫",   // Stacked squares for layers
+            GlossaryCategory::LocaleSystem => "◉",     // Circle for locales
+            GlossaryCategory::Relationships => "→",    // Arrow for arcs
+            GlossaryCategory::Architecture => "⚙",     // Gear for architecture
+        }
+    }
+
+    /// Get category color (v0.12.0).
+    pub fn color(&self) -> Color {
+        match self {
+            GlossaryCategory::GraphBasics => Color::Cyan,
+            GlossaryCategory::Classification => Color::Magenta,
+            GlossaryCategory::LocaleSystem => Color::Green,
+            GlossaryCategory::Relationships => Color::Yellow,
+            GlossaryCategory::Architecture => Color::Blue,
+        }
+    }
+
+    /// Get shortcut key (1-5) for this category.
+    pub fn shortcut(&self) -> char {
+        match self {
+            GlossaryCategory::GraphBasics => '1',
+            GlossaryCategory::Classification => '2',
+            GlossaryCategory::LocaleSystem => '3',
+            GlossaryCategory::Relationships => '4',
+            GlossaryCategory::Architecture => '5',
         }
     }
 
@@ -334,6 +380,10 @@ pub struct GlossaryState {
     pub search_query: String,
     /// Whether search mode is active.
     pub search_active: bool,
+    /// Selected "See Also" index for cross-navigation (v0.12.0).
+    pub see_also_cursor: usize,
+    /// Whether focus is on the "See Also" section (v0.12.0).
+    pub see_also_focused: bool,
 }
 
 impl GlossaryState {
@@ -344,6 +394,8 @@ impl GlossaryState {
             concept_cursor: 0,
             search_query: String::new(),
             search_active: false,
+            see_also_cursor: 0,
+            see_also_focused: false,
         }
     }
 
@@ -477,6 +529,89 @@ impl GlossaryState {
             self.expanded_category = Some(0);
         }
     }
+
+    // =========================================================================
+    // CROSS-NAVIGATION (v0.12.0)
+    // =========================================================================
+
+    /// Jump to a specific category by index (0-4).
+    pub fn jump_to_category(&mut self, index: usize) {
+        if index < GlossaryCategory::all().len() {
+            self.expanded_category = Some(index);
+            // Calculate starting cursor for this category
+            let mut cursor = 0;
+            for (i, category) in GlossaryCategory::all().iter().enumerate() {
+                if i == index {
+                    break;
+                }
+                cursor += category.concepts().len();
+            }
+            self.concept_cursor = cursor;
+            self.see_also_focused = false;
+            self.see_also_cursor = 0;
+        }
+    }
+
+    /// Toggle focus between concept list and "See Also" section.
+    pub fn toggle_see_also_focus(&mut self) {
+        if let Some((_, concept)) = self.current_concept() {
+            if !concept.see_also.is_empty() {
+                self.see_also_focused = !self.see_also_focused;
+                if self.see_also_focused {
+                    self.see_also_cursor = 0;
+                }
+            }
+        }
+    }
+
+    /// Navigate up in "See Also" section.
+    pub fn see_also_up(&mut self) {
+        if self.see_also_cursor > 0 {
+            self.see_also_cursor -= 1;
+        }
+    }
+
+    /// Navigate down in "See Also" section.
+    pub fn see_also_down(&mut self) {
+        if let Some((_, concept)) = self.current_concept() {
+            let max = concept.see_also.len().saturating_sub(1);
+            if self.see_also_cursor < max {
+                self.see_also_cursor += 1;
+            }
+        }
+    }
+
+    /// Jump to the currently selected "See Also" concept.
+    /// Returns true if successfully jumped.
+    pub fn jump_to_see_also(&mut self) -> bool {
+        if !self.see_also_focused {
+            return false;
+        }
+
+        if let Some((_, concept)) = self.current_concept() {
+            if let Some(target_name) = concept.see_also.get(self.see_also_cursor) {
+                // Find the concept in all_concepts
+                for (i, (_, c)) in Self::all_concepts().iter().enumerate() {
+                    if c.name == *target_name {
+                        self.concept_cursor = i;
+                        self.see_also_focused = false;
+                        self.see_also_cursor = 0;
+                        return true;
+                    }
+                }
+            }
+        }
+        false
+    }
+
+    /// Get the current "See Also" selection (if focused).
+    pub fn current_see_also(&self) -> Option<&'static str> {
+        if !self.see_also_focused {
+            return None;
+        }
+        self.current_concept()
+            .and_then(|(_, c)| c.see_also.get(self.see_also_cursor).copied())
+    }
 }
 
 // =============================================================================
@@ -487,14 +622,123 @@ impl GlossaryState {
 pub fn render_glossary_tab(f: &mut Frame, app: &App, area: Rect) {
     let locale = app.nexus.locale;
 
-    // Split into concept list and definition panel
+    // v0.12.0: 3-panel layout
+    // Left (15%): Category browser with visual badges
+    // Center (30%): Concept list
+    // Right (55%): Definition panel with cross-links
     let chunks = Layout::default()
         .direction(Direction::Horizontal)
-        .constraints([Constraint::Percentage(35), Constraint::Percentage(65)])
+        .constraints([
+            Constraint::Percentage(15),
+            Constraint::Percentage(30),
+            Constraint::Percentage(55),
+        ])
         .split(area);
 
-    render_concept_list(f, app, locale, chunks[0]);
-    render_definition_panel(f, app, locale, chunks[1]);
+    render_category_browser(f, app, locale, chunks[0]);
+    render_concept_list(f, app, locale, chunks[1]);
+    render_definition_panel(f, app, locale, chunks[2]);
+}
+
+/// Render the category browser (left panel, v0.12.0).
+fn render_category_browser(f: &mut Frame, app: &App, locale: NexusLocale, area: Rect) {
+    let glossary = &app.nexus.glossary;
+
+    // i18n labels
+    let categories_label = match locale {
+        NexusLocale::En => " CATEGORIES ",
+        NexusLocale::Fr => " CATÉGORIES ",
+    };
+
+    let block = Block::default()
+        .title(Span::styled(
+            categories_label,
+            Style::default()
+                .fg(Color::Cyan)
+                .add_modifier(Modifier::BOLD),
+        ))
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(Color::DarkGray));
+
+    let inner = block.inner(area);
+    f.render_widget(block, area);
+
+    // Render categories with icons and badges
+    let mut lines: Vec<Line> = Vec::new();
+    lines.push(Line::from("")); // Spacing
+
+    for (i, category) in GlossaryCategory::all().iter().enumerate() {
+        let is_current = glossary.expanded_category == Some(i);
+        let concept_count = category.concepts().len();
+
+        // Progress indicator: how many concepts in this category have been viewed
+        // (For now, show as selected/not selected)
+        let marker = if is_current { "▶" } else { " " };
+        let badge_style = if is_current {
+            Style::default()
+                .fg(category.color())
+                .add_modifier(Modifier::BOLD)
+        } else {
+            Style::default().fg(Color::DarkGray)
+        };
+
+        lines.push(Line::from(vec![
+            Span::styled(format!(" {} ", marker), badge_style),
+            Span::styled(
+                format!("[{}]", category.shortcut()),
+                Style::default().fg(Color::Yellow),
+            ),
+            Span::styled(
+                format!(" {} ", category.icon()),
+                Style::default().fg(category.color()),
+            ),
+        ]));
+
+        // Category name (truncated if needed)
+        let name = if area.width > 18 {
+            category.label().to_string()
+        } else {
+            category.label().chars().take(8).collect::<String>() + ".."
+        };
+
+        lines.push(Line::from(vec![
+            Span::styled("   ", Style::default()),
+            Span::styled(
+                name,
+                if is_current {
+                    Style::default()
+                        .fg(Color::White)
+                        .add_modifier(Modifier::BOLD)
+                } else {
+                    Style::default().fg(Color::DarkGray)
+                },
+            ),
+        ]));
+
+        // Concept count
+        lines.push(Line::from(vec![
+            Span::styled("   ", Style::default()),
+            Span::styled(
+                format!("({} concepts)", concept_count),
+                Style::default().fg(Color::DarkGray),
+            ),
+        ]));
+
+        lines.push(Line::from("")); // Spacing between categories
+    }
+
+    // Navigation hint at bottom
+    let hint = match locale {
+        NexusLocale::En => "[1-5]",
+        NexusLocale::Fr => "[1-5]",
+    };
+    lines.push(Line::from(Span::styled(
+        format!("  {} jump", hint),
+        Style::default().fg(Color::DarkGray),
+    )));
+
+    let paragraph = Paragraph::new(lines);
+    f.render_widget(paragraph, inner);
 }
 
 /// Render the concept list (left panel).
@@ -603,7 +847,7 @@ fn render_definition_panel(f: &mut Frame, app: &App, locale: NexusLocale, area: 
     f.render_widget(block, area);
 
     if let Some((category, concept)) = glossary.current_concept() {
-        render_concept_definition(f, theme, locale, inner, category, concept);
+        render_concept_definition(f, theme, locale, inner, category, concept, glossary);
     } else {
         let empty = Paragraph::new(no_concept_msg).style(Style::default().fg(Color::DarkGray));
         f.render_widget(empty, inner);
@@ -618,6 +862,7 @@ fn render_concept_definition(
     area: Rect,
     category: GlossaryCategory,
     concept: &GlossaryConcept,
+    glossary: &GlossaryState, // v0.12.0: Added for cross-link state
 ) {
     // i18n labels
     let (classification_label, yaml_label, neo4j_label, see_also_label, nav_hint) = match locale {
@@ -625,15 +870,15 @@ fn render_concept_definition(
             "  CLASSIFICATION",
             "  YAML EXAMPLE",
             "  NEO4J EXAMPLE",
-            "  SEE ALSO",
-            "  [j/k: navigate]  [/: search]  [y: copy]  [Esc: clear]",
+            "  SEE ALSO ↵",
+            "  [j/k] nav  [/] search  [Tab] see-also  [Enter] jump  [y] copy",
         ),
         NexusLocale::Fr => (
             "  CLASSIFICATION",
             "  EXEMPLE YAML",
             "  EXEMPLE NEO4J",
-            "  VOIR AUSSI",
-            "  [j/k: naviguer]  [/: rechercher]  [y: copier]  [Esc: effacer]",
+            "  VOIR AUSSI ↵",
+            "  [j/k] nav  [/] rechercher  [Tab] voir-aussi  [Enter] sauter  [y] copier",
         ),
     };
 
@@ -736,25 +981,53 @@ fn render_concept_definition(
         lines.push(Line::from(""));
     }
 
-    // See also
+    // See also - v0.12.0: Interactive cross-links
     if !concept.see_also.is_empty() {
-        lines.push(Line::from(Span::styled(
-            see_also_label,
+        let see_also_style = if glossary.see_also_focused {
             Style::default()
                 .fg(Color::Yellow)
-                .add_modifier(Modifier::BOLD),
-        )));
+                .add_modifier(Modifier::BOLD | Modifier::UNDERLINED)
+        } else {
+            Style::default()
+                .fg(Color::Yellow)
+                .add_modifier(Modifier::BOLD)
+        };
+
+        lines.push(Line::from(Span::styled(see_also_label, see_also_style)));
         lines.push(Line::from(Span::styled(
             "  ─────────────────────────────────────────────────────────────",
             Style::default().fg(Color::DarkGray),
         )));
-        lines.push(Line::from(vec![
-            Span::styled("  ", Style::default()),
-            Span::styled(
-                concept.see_also.join(", "),
-                Style::default().fg(Color::Cyan),
-            ),
-        ]));
+
+        // Render each cross-link as a clickable item
+        for (i, related) in concept.see_also.iter().enumerate() {
+            let is_selected = glossary.see_also_focused && glossary.see_also_cursor == i;
+            let marker = if is_selected { "▶" } else { "○" };
+            let link_style = if is_selected {
+                Style::default()
+                    .fg(Color::Cyan)
+                    .add_modifier(Modifier::BOLD | Modifier::UNDERLINED)
+            } else {
+                Style::default().fg(Color::Cyan)
+            };
+
+            lines.push(Line::from(vec![
+                Span::styled(
+                    format!("  {} ", marker),
+                    if is_selected {
+                        Style::default().fg(Color::Yellow)
+                    } else {
+                        Style::default().fg(Color::DarkGray)
+                    },
+                ),
+                Span::styled(*related, link_style),
+                if is_selected {
+                    Span::styled(" ← Enter to jump", Style::default().fg(Color::DarkGray))
+                } else {
+                    Span::raw("")
+                },
+            ]));
+        }
     }
 
     // Navigation hint

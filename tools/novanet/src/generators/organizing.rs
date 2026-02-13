@@ -1,7 +1,7 @@
 //! Generate Cypher for Realm, Layer, Trait, ArcFamily meta-nodes.
 //!
 //! Reads `taxonomy.yaml` and produces idempotent MERGE statements
-//! for the 4 taxonomy dimensions. All meta-nodes receive `:Meta` double-label.
+//! for the 4 taxonomy dimensions. All schema-nodes receive `:Schema` double-label.
 //!
 //! Features: visual encoding properties (border_style, stroke_style),
 //! retrieval properties (default_traversal for ArcFamily).
@@ -51,7 +51,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
     )
     .unwrap();
     writeln!(out, "// Includes visual encoding properties").unwrap();
-    writeln!(out, "// All meta-nodes have :Meta double-label").unwrap();
+    writeln!(out, "// All schema-nodes have :Schema double-label").unwrap();
     writeln!(out, "// Uses MERGE for idempotent execution").unwrap();
 
     // ── Realms ───────────────────────────────────────────────────────────
@@ -121,7 +121,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
         let llm = cypher_str(&trait_def.llm_context);
 
         // Start MERGE
-        writeln!(out, "MERGE ({var}:Meta:Trait {{key: '{}'}})", trait_def.key).unwrap();
+        writeln!(out, "MERGE ({var}:Schema:Trait {{key: '{}'}})", trait_def.key).unwrap();
         writeln!(out, "ON CREATE SET").unwrap();
         writeln!(out, "  {var}.created_at = datetime(),").unwrap();
         writeln!(out, "  {var}.updated_at = datetime()").unwrap();
@@ -155,7 +155,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
         let llm = cypher_str(&af.llm_context);
 
         // Start MERGE
-        writeln!(out, "MERGE ({var}:Meta:ArcFamily {{key: '{}'}})", af.key).unwrap();
+        writeln!(out, "MERGE ({var}:Schema:ArcFamily {{key: '{}'}})", af.key).unwrap();
         writeln!(out, "ON CREATE SET").unwrap();
         writeln!(out, "  {var}.created_at = datetime(),").unwrap();
         writeln!(out, "  {var}.updated_at = datetime()").unwrap();
@@ -285,12 +285,12 @@ mod tests {
         let cypher = generate_cypher(&doc).unwrap();
 
         // Realm
-        assert!(cypher.contains("MERGE (r_test:Meta:Realm {key: 'test'})"));
+        assert!(cypher.contains("MERGE (r_test:Schema:Realm {key: 'test'})"));
         assert!(cypher.contains("r_test.display_name = 'Test'"));
         assert!(cypher.contains("r_test.color = '#000000'"));
 
         // Layer
-        assert!(cypher.contains("MERGE (l_base:Meta:Layer {key: 'base'})"));
+        assert!(cypher.contains("MERGE (l_base:Schema:Layer {key: 'base'})"));
         assert!(cypher.contains("l_base.emoji = '📋'"));
 
         // HAS_LAYER
@@ -298,23 +298,23 @@ mod tests {
         assert!(cypher.contains("MERGE (r)-[:HAS_LAYER]->(l)"));
 
         // Trait with visual encoding
-        assert!(cypher.contains("MERGE (t_fixed:Meta:Trait {key: 'fixed'})"));
+        assert!(cypher.contains("MERGE (t_fixed:Schema:Trait {key: 'fixed'})"));
         assert!(cypher.contains("t_fixed.color = '#222222'"));
         assert!(cypher.contains("t_fixed.border_style = 'solid'"));
         assert!(cypher.contains("t_fixed.border_width = 2"));
         assert!(cypher.contains("t_fixed.unicode_border = '─'"));
 
         // ArcFamily with visual encoding
-        assert!(cypher.contains("MERGE (af_owns:Meta:ArcFamily {key: 'owns'})"));
+        assert!(cypher.contains("MERGE (af_owns:Schema:ArcFamily {key: 'owns'})"));
         assert!(cypher.contains("af_owns.arrow_style = '-->'"));
         assert!(cypher.contains("af_owns.stroke_style = 'solid'"));
         assert!(cypher.contains("af_owns.stroke_width = 2"));
 
         // :Meta double-label in all MERGE statements
-        assert!(cypher.contains(":Meta:Realm"));
-        assert!(cypher.contains(":Meta:Layer"));
-        assert!(cypher.contains(":Meta:Trait"));
-        assert!(cypher.contains(":Meta:ArcFamily"));
+        assert!(cypher.contains(":Schema:Realm"));
+        assert!(cypher.contains(":Schema:Layer"));
+        assert!(cypher.contains(":Schema:Trait"));
+        assert!(cypher.contains(":Schema:ArcFamily"));
 
         // Timestamps
         assert!(cypher.contains("created_at = datetime()"));
@@ -394,7 +394,7 @@ mod tests {
         let count_merges = |label: &str| {
             cypher
                 .lines()
-                .filter(|l: &&str| l.contains("MERGE") && l.contains(&format!(":Meta:{label}")))
+                .filter(|l: &&str| l.contains("MERGE") && l.contains(&format!(":Schema:{label}")))
                 .count()
         };
 
@@ -417,19 +417,19 @@ mod tests {
         assert_eq!(has_layer_count, 10, "expected 10 HAS_LAYER relationships"); // v11.4: 4 shared + 6 org
 
         // Spot checks — specific nodes exist (v11.4: 2 realms, 10 layers)
-        assert!(cypher.contains("r_shared:Meta:Realm {key: 'shared'}"));
-        assert!(cypher.contains("r_org:Meta:Realm {key: 'org'}")); // v11.2: org realm
-        assert!(cypher.contains("l_config:Meta:Layer {key: 'config'}")); // v11.4: shared.config
-        assert!(cypher.contains("l_locale:Meta:Layer {key: 'locale'}")); // v11.3: shared.locale
-        assert!(cypher.contains("l_geography:Meta:Layer {key: 'geography'}")); // v11.3: shared.geography
-        assert!(cypher.contains("l_knowledge:Meta:Layer {key: 'knowledge'}")); // v11.3: shared.knowledge
-        assert!(cypher.contains("l_foundation:Meta:Layer {key: 'foundation'}"));
-        assert!(cypher.contains("l_semantic:Meta:Layer {key: 'semantic'}")); // v10.6: tenant.semantic
+        assert!(cypher.contains("r_shared:Schema:Realm {key: 'shared'}"));
+        assert!(cypher.contains("r_org:Schema:Realm {key: 'org'}")); // v11.2: org realm
+        assert!(cypher.contains("l_config:Schema:Layer {key: 'config'}")); // v11.4: shared.config
+        assert!(cypher.contains("l_locale:Schema:Layer {key: 'locale'}")); // v11.3: shared.locale
+        assert!(cypher.contains("l_geography:Schema:Layer {key: 'geography'}")); // v11.3: shared.geography
+        assert!(cypher.contains("l_knowledge:Schema:Layer {key: 'knowledge'}")); // v11.3: shared.knowledge
+        assert!(cypher.contains("l_foundation:Schema:Layer {key: 'foundation'}"));
+        assert!(cypher.contains("l_semantic:Schema:Layer {key: 'semantic'}")); // v10.6: tenant.semantic
         // v11.4: seo/geo layers removed (nodes moved to shared/knowledge)
-        assert!(cypher.contains("t_authored:Meta:Trait {key: 'authored'}"));
-        assert!(cypher.contains("t_defined:Meta:Trait {key: 'defined'}"));
-        assert!(cypher.contains("af_semantic:Meta:ArcFamily {key: 'semantic'}"));
-        assert!(cypher.contains("af_mining:Meta:ArcFamily {key: 'mining'}"));
+        assert!(cypher.contains("t_authored:Schema:Trait {key: 'authored'}"));
+        assert!(cypher.contains("t_defined:Schema:Trait {key: 'defined'}"));
+        assert!(cypher.contains("af_semantic:Schema:ArcFamily {key: 'semantic'}"));
+        assert!(cypher.contains("af_mining:Schema:ArcFamily {key: 'mining'}"));
 
         // Spot check — arrow_style preserved
         assert!(cypher.contains("af_semantic.arrow_style = '.->'"));
@@ -445,8 +445,8 @@ mod tests {
         assert!(cypher.contains("af_localization.stroke_style = 'dashed'"));
 
         // Arc scopes and cardinalities
-        assert!(cypher.contains("as_intra_realm:Meta:ArcScope {key: 'intra_realm'}"));
-        assert!(cypher.contains("ac_one_to_many:Meta:ArcCardinality {key: 'one_to_many'}"));
+        assert!(cypher.contains("as_intra_realm:Schema:ArcScope {key: 'intra_realm'}"));
+        assert!(cypher.contains("ac_one_to_many:Schema:ArcCardinality {key: 'one_to_many'}"));
 
         // Header mentions v0.12.0
         assert!(cypher.contains("v0.12.0"));

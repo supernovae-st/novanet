@@ -252,13 +252,13 @@ node_realms:
         color: "#64748b"
         llm_context: "Config layer."
 node_traits:
-  - key: invariant
-    display_name: Invariant
+  - key: defined
+    display_name: Defined
     color: "#3b82f6"
     border_style: solid
     border_width: 2
     unicode_border: "─"
-    llm_context: "Invariant nodes."
+    llm_context: "Defined nodes (v11.8: was invariant)."
 arc_families:
   - key: ownership
     display_name: Ownership
@@ -288,7 +288,7 @@ terminal:
         assert_eq!(doc.node_realms[0].layers.len(), 1);
         assert_eq!(doc.node_realms[0].layers[0].key, "config");
         assert_eq!(doc.node_traits.len(), 1);
-        assert_eq!(doc.node_traits[0].key, "invariant");
+        assert_eq!(doc.node_traits[0].key, "defined"); // v11.8: was invariant
         assert_eq!(doc.node_traits[0].border_style, Some("solid".to_string()));
         assert_eq!(doc.node_traits[0].unicode_border, Some("─".to_string()));
         assert_eq!(doc.arc_families.len(), 1);
@@ -355,10 +355,10 @@ node_realms:
         color: "#64748b"
         llm_context: "Config."
 node_traits:
-  - key: invariant
-    display_name: Invariant
+  - key: defined
+    display_name: Defined
     color: "#3b82f6"
-    llm_context: "Invariant."
+    llm_context: "Defined."
 arc_families:
   - key: ownership
     display_name: Ownership
@@ -373,7 +373,7 @@ arc_families:
         assert_eq!(organizing.realms.len(), 1);
         assert_eq!(organizing.realms[0].key, "shared");
         assert_eq!(organizing.traits.len(), 1);
-        assert_eq!(organizing.traits[0].key, "invariant");
+        assert_eq!(organizing.traits[0].key, "defined"); // v11.8: was invariant
         assert_eq!(organizing.arc_families.len(), 1);
         assert_eq!(organizing.arc_families[0].key, "ownership");
     }

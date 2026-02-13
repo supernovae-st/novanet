@@ -1,6 +1,6 @@
 // packages/core/src/graph/types.ts
 // NovaNet Graph Module Types - Schema visualization structures
-// v11.5.0 — 2-Realm Architecture (shared + org)
+// v0.12.0 — 2-Realm Architecture (shared + org), ADR-024 trait renames
 
 import type { NodeType, Realm, Layer } from '../types/nodes.js';
 import type { RelationType } from '../schemas/relations.schema.js';
@@ -29,7 +29,7 @@ export interface SchemaNode {
   label: string;
   /** Description of this node type */
   description: string;
-  /** Trait (invariant, localized, knowledge, generated, aggregated) */
+  /** Trait (defined, authored, imported, generated, retrieved) */
   trait: string;
   /** Optional icon for display */
   icon?: string;

@@ -273,7 +273,7 @@ pub struct App {
     // ==========================================================================
     // Trait Filter State (Quick Filter: fi/fl/fk/fg/fa/ff)
     // ==========================================================================
-    /// Active trait filter (None = show all, Some("invariant") = filter by trait)
+    /// Active trait filter (None = show all, Some("defined") = filter by trait)
     pub trait_filter: Option<String>,
     /// Pending filter key (true when 'f' was pressed, waiting for second key)
     pub filter_pending: bool,

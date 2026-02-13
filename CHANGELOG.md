@@ -15,51 +15,85 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ### Breaking Changes
 - **Versioning transition**: Adopted proper SemVer (0.x.y = pre-production)
+- **Terminology refactor (ADR-023 Class/Instance)**:
+  - `NodeKind` → `NodeClass`: Schema-level node type definitions
+  - `ArcKind` → `ArcClass`: Schema-level arc type definitions
+  - `KindInfo` → `ClassInfo`: TUI struct for class metadata
+  - `[:HAS_KIND]` → `[:HAS_CLASS]`: Neo4j structural relationship
+  - `[:FROM_KIND]` → `[:FROM_CLASS]`: Arc source class relationship
+  - `[:TO_KIND]` → `[:TO_CLASS]`: Arc target class relationship
+  - `:Meta:Kind` → `:Schema:Class`: Neo4j label for schema nodes
+  - `:Meta:ArcKind` → `:Schema:ArcClass`: Neo4j label for schema arcs
+  - "Meta mode" → "Schema view" in Studio UI
 - **Trait renames (ADR-024 Data Origin)**: Semantic clarification of data origin traits
   - `invariant` → `defined`: Structurally fixed, version-controlled definitions
   - `localized` → `authored`: Human-authored locale-specific content
   - `knowledge` → `imported`: External data imported from authoritative sources
   - `generated` → `generated`: LLM-generated output (unchanged)
   - `aggregated` → `retrieved`: Computed/aggregated from external APIs
+- **Instruction layer renames (ADR-025)**:
+  - `PageType` → `PageStructure`: JSON defining block composition order
+  - `PagePrompt` → `PageInstruction`: Markdown with LLM directives and @ references
+  - `BlockPrompt` → `BlockInstruction`: Markdown with LLM directives and @ references
+  - `[:OF_TYPE]` (Page→PageType) → `[:HAS_STRUCTURE]`: Page structure relationship
+  - `[:HAS_PROMPT]` → `[:HAS_INSTRUCTION]`: Instruction relationship for Page/Block
+- **Node count**: 60 → 59 nodes (PageType merged into PageStructure)
 
 ### Changed
-- **YAML Node Definitions**: All 60 node-kinds updated with new trait names
-- **Rust TUI**: Updated `traits.rs` (TRAIT_ORDER, descriptions), `theme.rs` (icon defaults)
-- **TypeScript Studio**: Updated 15+ files including:
+- **YAML Node Definitions**: All 59 node-kinds updated with new trait names and class terminology
+- **Rust TUI**: Updated across 43 files (721 changes)
+  - `traits.rs`: TRAIT_ORDER, descriptions updated for ADR-024
+  - `theme.rs`: Icon defaults for new trait names
+  - `data.rs`: `KindInfo` → `ClassInfo`, unified tree terminology
+  - `app.rs`: Navigation mode labels updated
+- **TypeScript Studio**: Updated 19+ files (93+ changes)
   - Design system: `traitStyles.ts`, `palette.ts`, `generated.ts`
   - Components: `Graph3DLegend.tsx`, `SchemaNode.tsx`, `FacetFilterPanel.tsx`
   - Data transforms: `dataTransform.ts`, `hierarchical.ts`
   - Tests: `icon-sync.test.ts`, `schemaLayoutELK.test.ts`, `novanetBridge.test.ts`
-- **ADR-024**: Added Data Origin architecture decision record to novanet-decisions.md
+- **Neo4j Schema**: Migration required for label and relationship renames
+- **ADR-023**: Class/Instance Terminology + Meta Elimination
+- **ADR-024**: Trait Redefinition as Data Origin
+- **ADR-025**: Instruction Layer Renaming (PageStructure/PageInstruction)
 
 ### Migration
 ```bash
 # Regenerate schema artifacts from YAML
 cargo run -- schema generate
 
-# Update Neo4j constraints for new trait values
+# Update Neo4j schema (labels + relationships)
 cargo run -- db migrate
+
+# Key Neo4j changes:
+# - :Meta:Kind → :Schema:Class
+# - :Meta:ArcKind → :Schema:ArcClass
+# - [:HAS_KIND] → [:HAS_CLASS]
+# - [:FROM_KIND] → [:FROM_CLASS]
+# - [:TO_KIND] → [:TO_CLASS]
+# - [:OF_TYPE] (Page) → [:HAS_STRUCTURE]
+# - [:HAS_PROMPT] → [:HAS_INSTRUCTION]
 ```
 
 ### Statistics
-- **983 Rust tests passing**
+- **985 Rust tests passing**
 - **178 TypeScript core tests passing**
 - **All Studio tests passing**
+- **59 nodes, 10 layers, 5 traits**
 
 ## [11.7.0] - 2026-02-11
 
 ### Added
 - **Unified Tree Architecture**: Merge 5 navigation modes into 2 (Graph/Nexus)
-  - All nodes clickable: Realm, Layer, Kind, Instance, ArcFamily, ArcKind
+  - All nodes clickable: Realm, Layer, Class, Instance, ArcFamily, ArcClass
   - Principle: "Node in Neo4j = Node everywhere"
   - **ADR-022**: Unified Tree Architecture approved
 - **Neo4j Schema Migration**: New structural relationships
   - `HAS_LAYER`: Realm → Layer (10 relationships)
-  - `HAS_KIND`: Layer → Kind (60 relationships)
-  - `BELONGS_TO_FAMILY`: ArcKind → ArcFamily (114 relationships)
+  - `HAS_CLASS`: Layer → Class (59 relationships)
+  - `BELONGS_TO_FAMILY`: ArcClass → ArcFamily (114 relationships)
   - Performance indexes for tree navigation
 - **Dual Icon System**: Consistent iconography across TUI and Studio
-  - `visual-encoding.yaml`: Added `meta_types` icons (realm, layer, kind, instance, arc_family, arc_kind)
+  - `visual-encoding.yaml`: Added `schema_types` icons (realm, layer, class, instance, arc_family, arc_class)
   - `_registry.yaml`: All 29 views converted to dual format (web + terminal)
   - Web: Lucide icons, Terminal: Unicode symbols
   - No emoji in codebase
@@ -69,7 +103,7 @@ cargo run -- db migrate
   - Badge presets, pagination constants
 - **TypeScript Type Definitions**: `unified-tree.ts` in core package
   - `DualIcon`, `UnifiedNode` discriminated union
-  - Type guards: `isRealmNode`, `isLayerNode`, etc.
+  - Type guards: `isRealmNode`, `isLayerNode`, `isClassNode`, etc.
   - `TreeState`/`TreeActions` interfaces
 - **Studio treeStore**: Zustand store for unified tree
   - Lazy loading via `/api/tree/:id/children`
@@ -104,6 +138,7 @@ cargo run -- schema generate
 - **1008 Rust tests passing** (4 new for NavMode)
 - **TypeScript type-check passing**
 - **12 artifacts regenerated** from YAML sources
+- **59 nodes** (v0.12.0 consolidation), **10 layers**, **5 traits**
 
 ## [11.6.0] - 2026-02-10
 
@@ -456,7 +491,11 @@ cargo run -- schema generate
 - Migrated from git submodules to true monorepo
 - Organization links updated to supernovae-st
 
-[Unreleased]: https://github.com/supernovae-st/novanet-dev/compare/v11.3.0...HEAD
+[Unreleased]: https://github.com/supernovae-st/novanet-dev/compare/v0.12.0...HEAD
+[0.12.0]: https://github.com/supernovae-st/novanet-dev/compare/v11.7.0...v0.12.0
+[11.7.0]: https://github.com/supernovae-st/novanet-dev/compare/v11.6.0...v11.7.0
+[11.6.0]: https://github.com/supernovae-st/novanet-dev/compare/v11.5.0...v11.6.0
+[11.5.0]: https://github.com/supernovae-st/novanet-dev/compare/v11.3.0...v11.5.0
 [11.3.0]: https://github.com/supernovae-st/novanet-dev/compare/v11.2.0...v11.3.0
 [11.2.0]: https://github.com/supernovae-st/novanet-dev/compare/v11.0.0...v11.2.0
 [11.0.0]: https://github.com/supernovae-st/novanet-dev/compare/v9.7.0...v11.0.0
