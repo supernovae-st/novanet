@@ -381,7 +381,8 @@ fn render_constellation(f: &mut Frame, app: &App, area: Rect) {
     f.render_widget(paragraph, inner);
 }
 
-/// Build the ASCII constellation layout.
+/// Build the ASCII constellation layout with data flow visualization.
+/// v0.12.0 Enhanced: Shows data origin flow with directional arrows and role labels.
 fn build_constellation_lines(
     stats: &[TraitStats],
     selected_idx: usize,
@@ -423,45 +424,78 @@ fn build_constellation_lines(
         ]
     };
 
-    // Empty line for spacing
+    // Header: DATA FLOW title
+    lines.push(Line::from(""));
+    lines.push(Line::from(vec![
+        Span::styled("  ", Style::default()),
+        Span::styled(
+            "\u{2193} DATA FLOW \u{2193}",
+            Style::default()
+                .fg(Color::Yellow)
+                .add_modifier(Modifier::BOLD),
+        ),
+        Span::styled("  External data enters at top, flows down to outputs", Style::default().fg(Color::DarkGray)),
+    ]));
     lines.push(Line::from(""));
 
-    // Row 1: IMPORTED at top center (v0.12.0: was knowledge)
+    // Row 1: IMPORTED at top center with INPUT label (v0.12.0: was knowledge)
     let imported_spans = trait_span("imported", 2);
     let imported_line = center_spans(imported_spans, width);
     lines.push(imported_line);
-    lines.push(Line::from(""));
 
-    // Row 2: Connection lines from IMPORTED
-    let connector1 = center_text("\u{2571}    \u{2572}", width); // ╱    ╲
-    lines.push(Line::from(connector1));
-    let connector2 = center_text("\u{2571}      \u{2572}", width); // ╱      ╲
-    lines.push(Line::from(connector2));
+    // Role label for IMPORTED
+    let input_label = center_text("\u{250c}\u{2500} INPUT \u{2500}\u{2510}", width); // ┌─ INPUT ─┐
+    lines.push(Line::from(Span::styled(
+        input_label,
+        Style::default().fg(Color::Rgb(139, 92, 246)), // Purple
+    )));
 
-    // Row 3: DEFINED ════════════════════ AUTHORED (core pair, v0.12.0 renames)
+    // Row 2: Flow arrows from IMPORTED (down arrows)
+    let flow_down = center_text("\u{2502}            \u{2502}", width); // │            │
+    lines.push(Line::from(Span::styled(flow_down, Style::default().fg(Color::Rgb(100, 100, 120)))));
+    let arrow_down = center_text("\u{25bc}            \u{25bc}", width); // ▼            ▼
+    lines.push(Line::from(Span::styled(arrow_down, Style::default().fg(Color::Rgb(100, 100, 120)))));
+
+    // Row 3: DEFINED ═══ ↔ ═══ AUTHORED (core pair, v0.12.0 renames)
     let mut core_pair: Vec<Span<'static>> = Vec::new();
     core_pair.extend(trait_span("defined", 0));
     core_pair.push(Span::styled(
-        " \u{2550}\u{2550}\u{2550}\u{2550}\u{21d4}\u{2550}\u{2550}\u{2550}\u{2550} ",
+        " \u{2550}\u{2550}\u{21d4}\u{2550}\u{2550} ",
         Style::default().fg(Color::Yellow),
-    )); // ════↔════
+    )); // ══↔══
     core_pair.extend(trait_span("authored", 1));
     let core_line = center_spans(core_pair, width);
     lines.push(core_line);
 
-    // Row 4: Connection lines to GENERATED and RETRIEVED
-    let connector3 = center_text("\u{2572}      \u{2571}", width); // ╲      ╱
-    lines.push(connector3.into());
-    let connector4 = center_text("\u{2571}      \u{2572}", width); // ╱      ╲
-    lines.push(connector4.into());
+    // Role labels for DEFINED and AUTHORED
+    let structure_label = "STRUCTURE";
+    let editorial_label = "EDITORIAL";
+    let role_line = center_text(&format!("({})         ({})", structure_label, editorial_label), width);
+    lines.push(Line::from(Span::styled(
+        role_line,
+        Style::default().fg(Color::Rgb(100, 100, 120)),
+    )));
+
+    // Row 4: Flow arrows down to outputs
+    let flow_down2 = center_text("\u{2502}            \u{2502}", width);
+    lines.push(Line::from(Span::styled(flow_down2, Style::default().fg(Color::Rgb(100, 100, 120)))));
+    let arrow_down2 = center_text("\u{25bc}            \u{25bc}", width);
+    lines.push(Line::from(Span::styled(arrow_down2, Style::default().fg(Color::Rgb(100, 100, 120)))));
 
     // Row 5: GENERATED and RETRIEVED at bottom (v0.12.0: aggregated→retrieved)
     let mut bottom_pair: Vec<Span<'static>> = Vec::new();
     bottom_pair.extend(trait_span("generated", 3));
-    bottom_pair.push(Span::styled("  ", Style::default())); // spacer
+    bottom_pair.push(Span::styled("    ", Style::default())); // spacer
     bottom_pair.extend(trait_span("retrieved", 4));
     let bottom_line = center_spans(bottom_pair, width);
     lines.push(bottom_line);
+
+    // Role label for outputs
+    let output_label = center_text("\u{2514}\u{2500} OUTPUT \u{2500}\u{2518}", width); // └─ OUTPUT ─┘
+    lines.push(Line::from(Span::styled(
+        output_label,
+        Style::default().fg(Color::Rgb(34, 197, 94)), // Green
+    )));
 
     lines.push(Line::from(""));
 
@@ -470,6 +504,21 @@ fn build_constellation_lines(
         "\u{2500}".repeat(width.saturating_sub(2)),
         Style::default().fg(COLOR_UNFOCUSED_BORDER),
     )));
+
+    // Legend: Quick navigation hints
+    lines.push(Line::from(vec![
+        Span::styled("  Quick jump: ", Style::default().fg(Color::DarkGray)),
+        Span::styled("g", Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD)),
+        Span::styled("d=defined  ", Style::default().fg(Color::DarkGray)),
+        Span::styled("g", Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD)),
+        Span::styled("a=authored  ", Style::default().fg(Color::DarkGray)),
+        Span::styled("g", Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD)),
+        Span::styled("i=imported  ", Style::default().fg(Color::DarkGray)),
+        Span::styled("g", Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD)),
+        Span::styled("g=generated  ", Style::default().fg(Color::DarkGray)),
+        Span::styled("g", Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD)),
+        Span::styled("r=retrieved", Style::default().fg(Color::DarkGray)),
+    ]));
     lines.push(Line::from(""));
 
     // Selection list below constellation
@@ -487,11 +536,20 @@ fn build_constellation_lines(
             Style::default().fg(color)
         };
 
+        // Add role indicator
+        let role = match stat.key.as_str() {
+            "imported" => " \u{2190} INPUT",
+            "defined" | "authored" => " \u{2194} CORE",
+            "generated" | "retrieved" => " \u{2192} OUTPUT",
+            _ => "",
+        };
+
         lines.push(Line::from(vec![
             Span::styled(format!("  {} ", prefix), style),
             Span::styled(stat.symbol.to_string(), style),
             Span::raw(" "),
             Span::styled(stat.display_name.clone(), style),
+            Span::styled(role, Style::default().fg(Color::DarkGray)),
         ]));
     }
 

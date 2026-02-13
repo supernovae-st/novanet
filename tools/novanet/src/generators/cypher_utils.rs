@@ -90,7 +90,7 @@ pub fn cypher_list_owned(items: &[String]) -> String {
 // MERGE Statement Helpers
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Write a MERGE statement for a `:Meta:<Label>` node with ON CREATE/ON MATCH SET.
+/// Write a MERGE statement for a `:Schema:<Label>` node with ON CREATE/ON MATCH SET.
 ///
 /// Properties are formatted as `{var}.{name} = '{value}'`.
 /// Automatically adds `created_at` on CREATE and `updated_at` on MATCH.
@@ -101,7 +101,7 @@ pub fn write_merge_meta(
     key: &str,
     props: &[(&str, &str)],
 ) {
-    writeln!(out, "MERGE ({var}:Meta:{label} {{key: '{key}'}})").unwrap();
+    writeln!(out, "MERGE ({var}:Schema:{label} {{key: '{key}'}})").unwrap();
 
     writeln!(out, "ON CREATE SET").unwrap();
     for (name, value) in props {
@@ -268,7 +268,7 @@ mod tests {
             "shared",
             &[("display_name", "Shared"), ("emoji", "globe")],
         );
-        assert!(out.contains("MERGE (r:Meta:Realm {key: 'shared'})"));
+        assert!(out.contains("MERGE (r:Schema:Realm {key: 'shared'})"));
         assert!(out.contains("r.display_name = 'Shared'"));
         assert!(out.contains("r.emoji = 'globe'"));
         assert!(out.contains("created_at = datetime()"));

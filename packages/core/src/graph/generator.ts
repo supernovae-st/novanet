@@ -120,11 +120,11 @@ const REALM_DESCRIPTIONS: Record<Realm, string> = {
 // =============================================================================
 
 const TRAIT_DESCRIPTIONS: Record<string, string> = {
-  invariant: 'Language-independent, same across all locales',
-  localized: 'Human-curated localized content',
-  knowledge: 'Locale-specific cultural/linguistic knowledge',
-  generated: 'LLM-generated content output',
-  aggregated: 'Computed metrics and aggregated data',
+  defined: 'Human-created ONCE, structure/template (was invariant)',
+  authored: 'Human-written PER locale, editorial content (was localized)',
+  imported: 'External data brought in, corpora/APIs (was knowledge)',
+  generated: 'Produced by NovaNet LLM',
+  retrieved: 'Fetched from EXTERNAL APIs, snapshots (was aggregated)',
 };
 
 // =============================================================================

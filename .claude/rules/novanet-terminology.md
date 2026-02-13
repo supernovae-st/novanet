@@ -12,7 +12,7 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | **Instance (data)** | NodeData | ArcData |
 | **Class (schema)** | NodeClass | ArcClass |
 
-> **v11.8 Change**: "Kind" → "Class", "Meta" eliminated. See ADR-023.
+> **v0.12.0 Change**: "Kind" → "Class", "Meta" eliminated. See ADR-023.
 
 > **CRITICAL**: We use "Arc" (not "Edge" or "Relation") for directed links between nodes.
 > This aligns with graph theory terminology for directed graphs.
@@ -26,7 +26,7 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | 2 | WHAT? | `NodeLayer` | `layer` | `config`, `locale`, `geography`, `knowledge`, `foundation`, `structure`, `semantic`, `instruction`, `output` |
 | 3 | HOW? | `NodeTrait` | `trait` | `defined`, `authored`, `imported`, `generated`, `retrieved` |
 
-> **v11.8 Trait Redefinition (ADR-024)**: Trait now answers "WHERE does data come from?" (Data Origin)
+> **v0.12.0 Trait Redefinition (ADR-024)**: Trait now answers "WHERE does data come from?" (Data Origin)
 > - `defined` = Human-created once (templates, configs) — was `invariant`
 > - `authored` = Human-written per locale (editorial content) — was `localized`
 > - `imported` = External data brought in (corpora, SEO keywords) — was `knowledge`
@@ -51,13 +51,13 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 |--------|----------------|---------------|
 | Nav modes | 5 (Meta/Data/Overlay/Query/Atlas) | 2 (Graph/Nexus) |
 | Realm/Layer | Visual groupings | Clickable nodes |
-| Instances | Hidden | Under Kind, expandable |
+| Instances | Hidden | Under Class, expandable |
 | Icons | Mixed emoji | Dual: Lucide (web) + Unicode (terminal) |
 
 > **v11.7 Principle**: "If it's a node in Neo4j, it's a node everywhere"
 > - Realm nodes: clickable, show properties in detail panel
 > - Layer nodes: clickable, show HAS_LAYER relationships
-> - ArcFamily/ArcKind nodes: clickable with `[fam]`/`[arc]` badges
+> - ArcFamily/ArcClass nodes: clickable with `[fam]`/`[arc]` badges
 
 > **v11.3 Changes:**
 > - Layer split: `locale-knowledge` → `locale`, `geography`, `knowledge` (3 layers)
@@ -83,7 +83,7 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 |------|---------|
 | `taxonomy.yaml` | Realm/Layer/Trait/ArcFamily/ArcScope definitions (v11.5: 2 realms, 10 layers, 5 traits) |
 | `node-kinds/shared/` | 39 NodeClass definitions in shared realm (config: 3, locale: 6, geography: 6, knowledge: 24 incl. SEO/GEO) |
-| `node-kinds/org/` | 21 NodeClass definitions in org realm (config: 1, foundation: 3, structure: 3, semantic: 4, instruction: 7, output: 3) |
+| `node-kinds/org/` | 20 NodeClass definitions in org realm (config: 1, foundation: 3, structure: 3, semantic: 4, instruction: 6, output: 3) |
 | `arc-kinds/` | 1 file per ArcClass, organized by ArcFamily |
 | `relations.yaml` | Legacy format (deprecated, kept for parser compatibility) |
 
@@ -98,7 +98,7 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | Rust structs | `PascalCase` | `ArcClass`, `NodeRealm` |
 | Rust files | `snake_case.rs` | `arc_schema.rs`, `taxonomy.rs` |
 
-## Node Naming Convention (v11.8)
+## Node Naming Convention (v0.12.0)
 
 > **RULE: Suffix indicates trait and relationship to parent defined node**
 
@@ -110,7 +110,7 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | `FooSet` | defined | knowledge | Container grouping related atoms | `TermSet`, `SEOKeywordSet`, `GEOQuerySet` |
 | `Foo` | varies | varies | Node is standalone (no parent defined) | `SEOKeyword`, `Term`, `Expression` |
 
-**v11.8 Changes (ADR-024 Data Origin):**
+**v0.12.0 Changes (ADR-024 Data Origin):**
 - `invariant` → `defined` (human-created once)
 - `localized` → `authored` (human-written per locale)
 - `knowledge` → `imported` (external data brought in)
@@ -178,7 +178,7 @@ node:
   name: LocaleVoice
   realm: shared             # v11.2: renamed from global
   layer: knowledge          # v11.5: 10 layers (4 shared + 6 org)
-  trait: imported           # v11.8: ADR-024 renamed from knowledge
+  trait: imported           # v0.12.0: ADR-024 renamed from knowledge
   display_name: "Locale Voice"
   llm_context: "..."
 ```
@@ -205,10 +205,10 @@ These terms are deprecated and should NOT be used:
 | `EdgeKind` | `ArcKind` | |
 | `EdgeFamily` | `ArcFamily` | |
 | `Relation` | `Arc` | |
-| `RelationType` | Keep | Neo4j rel type string (e.g., `"HAS_PAGE"`) — ArcKind is the meta-node |
+| `RelationType` | Keep | Neo4j rel type string (e.g., `"HAS_PAGE"`) — ArcClass is the schema-node |
 | `Scope` (for realm) | `Realm` | v9.0 renamed |
 | `Subcategory` | `Layer` | v9.0 renamed |
-| `NodeTypeMeta` | `Kind` | v9.0 renamed |
+| `NodeTypeMeta` | `Class` | v9.0 renamed (Kind→Class in v0.12.0) |
 | `DataMode` | `NavigationMode` | v9.0 renamed |
 | `category` | `trait` | YAML property |
 | `global` | `shared` | v11.2 realm rename |
@@ -239,33 +239,33 @@ These terms are deprecated and should NOT be used:
 | `query` mode | `graph` + filters | v11.7 unified tree |
 | `atlas` mode | `nexus` | v11.7 renamed |
 | emoji icons | dual format `{ web, terminal }` | v11.7 icon system |
-| **v11.8 Kind→Class + Meta elimination** | | |
-| `NodeKind` | `NodeClass` | v11.8 terminology |
-| `ArcKind` | `ArcClass` | v11.8 terminology |
-| `KindInfo` | `ClassInfo` | v11.8 TUI struct |
-| `KindMeta` | `Classification` | v11.8 (realm/layer/trait axes) |
-| `KIND_META` | `CLASS_TAXONOMY` | v11.8 TypeScript constant |
-| `:Meta:Kind` | `:Schema:Class` | v11.8 Neo4j label |
-| `:Meta:ArcKind` | `:Schema:ArcClass` | v11.8 Neo4j label |
-| `[:FROM_KIND]` | `[:FROM_CLASS]` | v11.8 Neo4j relationship |
-| `[:TO_KIND]` | `[:TO_CLASS]` | v11.8 Neo4j relationship |
-| `[:HAS_KIND]` | `[:HAS_CLASS]` | v11.8 Neo4j relationship |
-| "Meta Node" | "Class" | v11.8 glossary |
-| "Data Node" | "Instance" | v11.8 glossary |
-| "Meta mode" | "Schema view" | v11.8 Studio UI |
-| "Data mode" | "Graph view" | v11.8 Studio UI |
-| **v11.8 Trait Redefinition (ADR-024)** | | |
-| `invariant` | `defined` | v11.8 trait rename (human-created once) |
-| `localized` | `authored` | v11.8 trait rename (human-written per locale) |
-| `knowledge` (trait) | `imported` | v11.8 trait rename (external data brought in) |
-| `aggregated` | `retrieved` | v11.8 trait rename (fetched from external APIs) |
-| **v11.8 Instruction Layer (ADR-025)** | | |
-| `PageType` | `PageStructure` | v11.8 (JSON defining block order) |
-| `PagePrompt` | `PageInstruction` | v11.8 (Markdown with @ refs) |
-| `BlockPrompt` | `BlockInstruction` | v11.8 (Markdown with @ refs) |
-| `[:OF_TYPE]` (Page→PageType) | `[:HAS_STRUCTURE]` | v11.8 arc rename |
-| `[:HAS_PROMPT]` (Page→PagePrompt) | `[:HAS_INSTRUCTION]` | v11.8 arc rename |
-| `[:HAS_PROMPT]` (Block→BlockPrompt) | `[:HAS_INSTRUCTION]` | v11.8 arc rename |
+| **v0.12.0 Kind→Class + Meta elimination** | | |
+| `NodeKind` | `NodeClass` | v0.12.0 terminology |
+| `ArcKind` | `ArcClass` | v0.12.0 terminology |
+| `KindInfo` | `ClassInfo` | v0.12.0 TUI struct |
+| `KindMeta` | `Classification` | v0.12.0 (realm/layer/trait axes) |
+| `KIND_META` | `CLASS_TAXONOMY` | v0.12.0 TypeScript constant |
+| `:Meta:Kind` | `:Schema:Class` | v0.12.0 Neo4j label |
+| `:Meta:ArcKind` | `:Schema:ArcClass` | v0.12.0 Neo4j label |
+| `[:FROM_KIND]` | `[:FROM_CLASS]` | v0.12.0 Neo4j relationship |
+| `[:TO_KIND]` | `[:TO_CLASS]` | v0.12.0 Neo4j relationship |
+| `[:HAS_KIND]` | `[:HAS_CLASS]` | v0.12.0 Neo4j relationship |
+| "Meta Node" | "Class" | v0.12.0 glossary |
+| "Data Node" | "Instance" | v0.12.0 glossary |
+| "Meta mode" | "Schema view" | v0.12.0 Studio UI |
+| "Data mode" | "Graph view" | v0.12.0 Studio UI |
+| **v0.12.0 Trait Redefinition (ADR-024)** | | |
+| `invariant` | `defined` | v0.12.0 trait rename (human-created once) |
+| `localized` | `authored` | v0.12.0 trait rename (human-written per locale) |
+| `knowledge` (trait) | `imported` | v0.12.0 trait rename (external data brought in) |
+| `aggregated` | `retrieved` | v0.12.0 trait rename (fetched from external APIs) |
+| **v0.12.0 Instruction Layer (ADR-025)** | | |
+| `PageType` | `PageStructure` | v0.12.0 (JSON defining block order) |
+| `PagePrompt` | `PageInstruction` | v0.12.0 (Markdown with @ refs) |
+| `BlockPrompt` | `BlockInstruction` | v0.12.0 (Markdown with @ refs) |
+| `[:OF_TYPE]` (Page→PageType) | `[:HAS_STRUCTURE]` | v0.12.0 arc rename |
+| `[:HAS_PROMPT]` (Page→PagePrompt) | `[:HAS_INSTRUCTION]` | v0.12.0 arc rename |
+| `[:HAS_PROMPT]` (Block→BlockPrompt) | `[:HAS_INSTRUCTION]` | v0.12.0 arc rename |
 
 ## Navigation Modes (v11.7)
 
@@ -281,7 +281,7 @@ These terms are deprecated and should NOT be used:
 
 | Deprecated | Replacement | Notes |
 |------------|-------------|-------|
-| `data` | `graph` | Instances now under Kind nodes |
+| `data` | `graph` | Instances now under Class nodes |
 | `meta` | `graph` | Meta-graph integrated in unified tree |
 | `overlay` | `graph` | Unified tree shows both |
 | `query` | `graph` + filters | Use tree filters instead |
@@ -432,16 +432,16 @@ cypher: |
 ## Summary
 
 1. **Arc** = directed link (not Edge, not Relation)
-2. **NodeClass** = node type definition (v11.8: was NodeKind)
-3. **ArcClass** = arc type definition (v11.8: was ArcKind)
+2. **NodeClass** = node type definition (v0.12.0: was NodeKind)
+3. **ArcClass** = arc type definition (v0.12.0: was ArcKind)
 4. **Realm/Layer/Trait** = node classification axes
 5. **ArcFamily/ArcScope/ArcCardinality** = arc classification axes
 6. **taxonomy.yaml** = source of truth for facet definitions
 7. **Query-First** = Cypher query determines graph display (v11.6)
-8. **Schema-Graph** = schema graph of NodeClass + ArcClass nodes (v11.8: was Meta-Graph)
-9. **CLASS_QUERY / ARCS_QUERY** = foundational queries for schema view (v11.8)
-10. **Unified Tree** = single tree showing Realm > Layer > Class > Instance + Arcs (v11.7/v11.8)
+8. **Schema-Graph** = schema graph of NodeClass + ArcClass nodes (v0.12.0: was Meta-Graph)
+9. **CLASS_QUERY / ARCS_QUERY** = foundational queries for schema view (v0.12.0)
+10. **Unified Tree** = single tree showing Realm > Layer > Class > Instance + Arcs (v11.7/v0.12.0)
 11. **Graph/Nexus** = two navigation modes replacing 5 previous modes (v11.7)
 12. **Dual Icons** = `{ web: "lucide-name", terminal: "◉" }` format, NO emoji (v11.7)
-13. **Trait = Data Origin** = WHERE does data come from? (defined/authored/imported/generated/retrieved) (v11.8)
-14. **PageStructure/PageInstruction** = replaced PageType/PagePrompt (v11.8)
+13. **Trait = Data Origin** = WHERE does data come from? (defined/authored/imported/generated/retrieved) (v0.12.0)
+14. **PageStructure/PageInstruction** = replaced PageType/PagePrompt (v0.12.0)

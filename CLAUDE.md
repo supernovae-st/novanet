@@ -15,7 +15,7 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 - Cost grows linearly: 200 locales = 200× translation cost
 - Maintaining translation databases creates synchronization nightmares
 
-**Solution**: NovaNet generates content **natively** per locale from invariant semantic entities.
+**Solution**: NovaNet generates content **natively** per locale from defined semantic entities.
 - LLM generates in target locale with cultural context (LocaleVoice, LocaleCulture)
 - Entity definitions are written once; content is generated 200×
 - Knowledge atoms (Terms, Expressions, Patterns) provide locale-specific vocabulary
@@ -40,7 +40,7 @@ NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation
 CRITICAL: Generation, NOT Translation
 
 Source -> Translate -> Target        <-- WRONG
-Entity (invariant) -> Generate natively -> EntityContent (local)  <-- RIGHT
+Entity (defined) -> Generate natively -> EntityContent (authored)  <-- RIGHT
 ```
 
 ---
@@ -84,7 +84,7 @@ v11.5 refines the layer structure with Locale moved to shared/config:
 - ORG (6 layers): config, foundation, structure, semantic, instruction, output (20 nodes)
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
-All commands implemented: data/meta/overlay/query, node/arc CRUD, search, locale, db,
+All commands implemented: blueprint/data/overlay/query, node/arc CRUD, search, locale, db,
 schema generate/validate, doc generate, filter build. Galaxy-themed TUI with unified tree mode (v11.7), boot animation, effects engine, Nexus hub, and onboarding. 980 tests pass.
 
 **YAML-first architecture:** Each Class YAML has explicit `realm:` and `layer:` fields (source of truth).
@@ -102,7 +102,7 @@ Categories: realms, layers, traits, arc_families, states, navigation, quality, m
 
 ## v11.7 Unified Tree Architecture
 
-v11.7 introduces the Unified Tree where Realm, Layer, ArcFamily, ArcKind are all clickable nodes.
+v11.7 introduces the Unified Tree where Realm, Layer, ArcFamily, ArcClass are all clickable nodes.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -132,7 +132,7 @@ v11.7 introduces the Unified Tree where Realm, Layer, ArcFamily, ArcKind are all
 │     └─ [2] Nexus: Hub for Quiz, Audit, Stats, Help                          │
 │                                                                             │
 │  3. LAZY INSTANCE LOADING                                                   │
-│     └─ Kind nodes expand to show first 10 instances + "load more"           │
+│     └─ Class nodes expand to show first 10 instances + "load more"          │
 │     └─ No upfront loading of all instances                                  │
 │                                                                             │
 │  4. DUAL ICONS (NO EMOJI)                                                   │
@@ -177,7 +177,7 @@ v11.7 introduces the Unified Tree where Realm, Layer, ArcFamily, ArcKind are all
 │     └─ All data lives in atoms                                              │
 │                                                                             │
 │  2. ATOMS ARE LOCALE-NATIVE                                                 │
-│     └─ Unlike Entities (invariant + Content for ALL locales)                │
+│     └─ Unlike Entities (defined + Content for ALL locales)                  │
 │     └─ Atoms exist only where needed: fr-FR may have 20K Terms              │
 │     └─ sw-KE may have 500 Terms - no translation, native generation         │
 │                                                                             │
@@ -278,9 +278,9 @@ cargo run -- schema generate               # Regenerate all artifacts (12 genera
 cargo run -- schema validate               # Validate YAML coherence
 cargo run -- doc generate                  # Generate 12 view Mermaid diagrams
 cargo run -- doc generate --list           # List available views
-cargo run -- meta --format=json            # Mode 1: Meta-graph
+cargo run -- blueprint --format=json       # Schema-graph visualization
 cargo run -- data --format=table           # Mode 2: Data nodes
-cargo run -- overlay                       # Mode 3: Data + Meta
+cargo run -- overlay                       # Mode 3: Data + Schema
 cargo run -- query --realm=org             # Mode 4: Faceted query
 cargo run -- search --query="page"         # Fulltext + property search
 cargo run -- node create --kind=Page --key=my-page  # CRUD
