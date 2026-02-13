@@ -1,6 +1,6 @@
 # models/views/_registry.yaml
-version: "11.7.2"
-description: NovaNet Unified View System (19 views)
+version: "0.12.0"
+description: NovaNet Unified View System (26 views - 19 in registry + 7 standalone)
 
 # Simplified view registry with WORKING queries
 # All queries return n, r, m pattern for proper graph visualization
@@ -344,7 +344,7 @@ views:
       RETURN l, culture, style, fmt, ts, es, terms, expressions
 
 # =============================================================================
-# VIEW SUMMARY (19 views total)
+# VIEW SUMMARY (26 views total)
 # =============================================================================
 # | Category    | Count | Description                                          |
 # |-------------|-------|------------------------------------------------------|
@@ -352,5 +352,20 @@ views:
 # | DATA        | 7     | Instance exploration (locales, entities, geography)  |
 # | CONTEXTUAL  | 5     | Node-centered subgraphs (generic, flexible)          |
 # | GENERATION  | 4     | AI agent context assembly                            |
-# | TOTAL       | 19    |                                                      |
+# | REGISTRY    | 19    | (subtotal in this file)                              |
+# |-------------|-------|------------------------------------------------------|
+# | STANDALONE  | 7     | Separate YAML files in views/ directory              |
+# |-------------|-------|------------------------------------------------------|
+# | TOTAL       | 26    |                                                      |
+# =============================================================================
+#
+# Standalone views (separate YAML files, v0.12.0 compliant):
+#   - block-generation.yaml         (generation, v11.8.0 ADR-025)
+#   - block-semantic-network.yaml   (generation, v11.8.0)
+#   - complete-graph.yaml           (global, v11.8.0 ADR-025)
+#   - entity-ecosystem.yaml         (contextual, v10.3.0)
+#   - locale-full-knowledge.yaml    (contextual, v11.5.0)
+#   - page-generation-context.yaml  (generation, v11.8.0)
+#   - project-context.yaml          (contextual, v8.0.0)
+#
 # =============================================================================
