@@ -51,7 +51,7 @@ node:
   name: EntityContent
   realm: org
   layer: semantic
-  trait: localized
+  trait: authored
   icon: "🟢"
   description: "Locale-native content for an Entity"
 

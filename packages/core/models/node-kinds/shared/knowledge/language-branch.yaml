@@ -9,7 +9,7 @@ node:
   name: LanguageBranch
   realm: shared
   layer: knowledge
-  trait: knowledge
+  trait: imported
   icon: "🌿"
   description: "ISO 639-5 language branch for fine-grained linguistic clustering"
 

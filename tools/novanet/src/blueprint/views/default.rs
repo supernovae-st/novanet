@@ -168,19 +168,19 @@ fn render_traits(data: &BlueprintData) -> String {
 
     let trait_info = [
         (
-            NodeTrait::Invariant,
+            NodeTrait::Defined,
             "invariant",
             "Same across all locales",
             "Entity, Page, Block",
         ),
         (
-            NodeTrait::Localized,
+            NodeTrait::Authored,
             "localized",
             "Native content per locale",
             "EntityContent, ProjectContent",
         ),
         (
-            NodeTrait::Knowledge,
+            NodeTrait::Imported,
             "knowledge",
             "Locale-specific atoms",
             "Term, Expression, Taboo",
@@ -192,7 +192,7 @@ fn render_traits(data: &BlueprintData) -> String {
             "PageGenerated, BlockGenerated",
         ),
         (
-            NodeTrait::Aggregated,
+            NodeTrait::Retrieved,
             "aggregated",
             "Computed metrics",
             "GEOAnswer, SEOKeywordMetrics",

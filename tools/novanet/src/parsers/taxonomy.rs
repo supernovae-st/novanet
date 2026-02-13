@@ -6,7 +6,7 @@
 //! - `arc_families` with stroke styles, arrow styles, and default_traversal
 //! - `arc_scopes` and `arc_cardinalities` for arc classification
 //! - `terminal` palette for TUI graceful degradation
-//! - `kind_retrieval_defaults` per-trait context assembly settings (v9.9)
+//! - `class_retrieval_defaults` per-trait context assembly settings (v0.12.0, was kind_retrieval_defaults)
 
 use serde::Deserialize;
 use std::collections::HashMap;
@@ -22,9 +22,9 @@ pub struct TaxonomyDoc {
     pub version: String,
     pub node_realms: Vec<NodeRealmDef>,
     pub node_traits: Vec<NodeTraitDef>,
-    /// v9.9: Per-trait retrieval defaults for context assembly.
-    #[serde(default)]
-    pub kind_retrieval_defaults: Option<HashMap<String, KindRetrievalDefaults>>,
+    /// v0.12.0: Per-trait retrieval defaults for context assembly (was kind_retrieval_defaults).
+    #[serde(default, alias = "kind_retrieval_defaults")]
+    pub class_retrieval_defaults: Option<HashMap<String, ClassRetrievalDefaults>>,
     pub arc_families: Vec<ArcFamilyDef>,
     #[serde(default)]
     pub arc_scopes: Vec<ArcScopeDef>,
@@ -34,9 +34,9 @@ pub struct TaxonomyDoc {
     pub terminal: Option<TerminalPalette>,
 }
 
-/// v9.9: Per-trait retrieval settings for context assembly.
+/// v0.12.0: Per-trait retrieval settings for context assembly (was KindRetrievalDefaults).
 #[derive(Debug, Clone, Deserialize)]
-pub struct KindRetrievalDefaults {
+pub struct ClassRetrievalDefaults {
     /// Maximum hops for structural traversal.
     #[serde(default)]
     pub traversal_depth: Option<u8>,
@@ -392,7 +392,7 @@ arc_families:
         let doc = load_taxonomy(root).expect("should load taxonomy.yaml");
 
         // v11.5: Locale moved to shared/config
-        assert_eq!(doc.version, "11.7.0");
+        assert_eq!(doc.version, "0.12.0");
         assert_eq!(doc.node_realms.len(), 2); // v11.2: 2 realms (shared, org)
         assert_eq!(doc.node_traits.len(), 5); // v11.2: split derived → generated + aggregated
         assert_eq!(doc.arc_families.len(), 5);
@@ -402,14 +402,14 @@ arc_families:
         let total_layers: usize = doc.node_realms.iter().map(|r| r.layers.len()).sum();
         assert_eq!(total_layers, 10); // v11.4: 4 shared + 6 org layers
 
-        // Check border styles
-        let invariant = doc
+        // Check border styles (v0.12.0: invariant → defined)
+        let defined = doc
             .node_traits
             .iter()
-            .find(|t| t.key == "invariant")
+            .find(|t| t.key == "defined")
             .unwrap();
-        assert_eq!(invariant.border_style, Some("solid".to_string()));
-        assert_eq!(invariant.unicode_border, Some("─".to_string()));
+        assert_eq!(defined.border_style, Some("solid".to_string()));
+        assert_eq!(defined.unicode_border, Some("─".to_string()));
 
         // Check terminal palette (uses semantic keys like global, tenant, etc.)
         let terminal = doc.terminal.as_ref().expect("should have terminal palette");
@@ -418,17 +418,17 @@ arc_families:
         assert!(terminal.palette_16.contains_key("shared"));
         assert!(terminal.palette_16.contains_key("org"));
 
-        // v9.9: Check kind_retrieval_defaults
+        // v0.12.0: kind_retrieval_defaults → class_retrieval_defaults
         let defaults = doc
-            .kind_retrieval_defaults
+            .class_retrieval_defaults
             .as_ref()
-            .expect("should have kind_retrieval_defaults");
-        assert!(defaults.contains_key("invariant"));
-        assert!(defaults.contains_key("localized"));
-        let invariant_defaults = defaults.get("invariant").unwrap();
-        assert_eq!(invariant_defaults.traversal_depth, Some(2));
-        assert_eq!(invariant_defaults.context_budget, Some(500));
-        assert_eq!(invariant_defaults.token_estimate, Some(100));
+            .expect("should have class_retrieval_defaults");
+        assert!(defaults.contains_key("defined"));
+        assert!(defaults.contains_key("authored"));
+        let defined_defaults = defaults.get("defined").unwrap();
+        assert_eq!(defined_defaults.traversal_depth, Some(2));
+        assert_eq!(defined_defaults.context_budget, Some(500));
+        assert_eq!(defined_defaults.token_estimate, Some(100));
 
         // v9.9: Check default_traversal on arc families
         let ownership = doc
@@ -446,7 +446,8 @@ arc_families:
     }
 
     #[test]
-    fn parse_kind_retrieval_defaults() {
+    fn parse_class_retrieval_defaults() {
+        // v0.12.0: Test both old (kind_retrieval_defaults) and new (class_retrieval_defaults) field names
         let yaml = r##"
 version: "10.5.0"
 node_realms:
@@ -462,16 +463,16 @@ node_realms:
         color: "#111"
         llm_context: "Base."
 node_traits:
-  - key: invariant
-    display_name: Invariant
+  - key: defined
+    display_name: Defined
     color: "#222"
-    llm_context: "Invariant."
-kind_retrieval_defaults:
-  invariant:
+    llm_context: "Defined."
+class_retrieval_defaults:
+  defined:
     traversal_depth: 2
     context_budget: 500
     token_estimate: 100
-  localized:
+  authored:
     traversal_depth: 2
     context_budget: 800
     token_estimate: 150
@@ -492,13 +493,13 @@ arc_families:
         let doc: TaxonomyDoc = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(doc.version, "10.5.0");
 
-        // Check kind_retrieval_defaults
-        let defaults = doc.kind_retrieval_defaults.unwrap();
+        // Check class_retrieval_defaults (v0.12.0: renamed from kind_retrieval_defaults)
+        let defaults = doc.class_retrieval_defaults.unwrap();
         assert_eq!(defaults.len(), 2);
-        let inv = defaults.get("invariant").unwrap();
-        assert_eq!(inv.traversal_depth, Some(2));
-        assert_eq!(inv.context_budget, Some(500));
-        assert_eq!(inv.token_estimate, Some(100));
+        let def = defaults.get("defined").unwrap();
+        assert_eq!(def.traversal_depth, Some(2));
+        assert_eq!(def.context_budget, Some(500));
+        assert_eq!(def.token_estimate, Some(100));
 
         // Check default_traversal
         assert_eq!(

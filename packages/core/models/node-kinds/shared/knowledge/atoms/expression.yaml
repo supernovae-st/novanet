@@ -8,7 +8,7 @@ node:
   name: Expression
   realm: shared
   layer: knowledge
-  trait: knowledge
+  trait: imported
   icon: "💬"
   description: "Individual expression, idiom, or phrase template belonging to a locale's ExpressionSet"
 

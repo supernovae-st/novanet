@@ -1,4 +1,4 @@
-//! Visual encoding parser — reads visual-encoding.yaml.
+//! Visual encoding parser — reads visual-encoding.yaml (v0.12.0).
 //!
 //! Parses the visual presentation rules for NovaNet graph elements:
 //! - Channel mapping (which visual property encodes which facet)
@@ -6,7 +6,7 @@
 //! - Trait border styles (solid, dashed, dotted, double)
 //! - Scope stroke styles (intra/cross realm)
 //! - Cardinality arrow heads
-//! - Kind icons (Lucide icon mapping)
+//! - Class icons (Lucide icon mapping) — v0.12.0: kind → class
 //! - Icon system (web + terminal icons for all categories)
 //! - Animation presets
 //! - Accessibility settings
@@ -29,7 +29,9 @@ pub struct VisualEncodingDoc {
     pub trait_borders: HashMap<String, TraitBorder>,
     pub scope_strokes: HashMap<String, ScopeStroke>,
     pub cardinality_arrows: HashMap<String, CardinalityArrow>,
-    pub kind_icons: HashMap<String, String>,
+    /// v0.12.0: kind_icons → class_icons (serde alias for backward compatibility)
+    #[serde(alias = "kind_icons")]
+    pub class_icons: HashMap<String, String>,
     pub animations: HashMap<String, Animation>,
     pub accessibility: AccessibilitySettings,
     /// Icon system (v10.6) — single source of truth for all icons.
@@ -274,9 +276,9 @@ pub fn load_visual_encoding(root: &Path) -> crate::Result<VisualEncodingDoc> {
             "visual-encoding.yaml has no trait_borders".to_string(),
         ));
     }
-    if doc.kind_icons.is_empty() {
+    if doc.class_icons.is_empty() {
         return Err(crate::NovaNetError::Validation(
-            "visual-encoding.yaml has no kind_icons".to_string(),
+            "visual-encoding.yaml has no class_icons".to_string(),
         ));
     }
 
@@ -305,7 +307,7 @@ mod tests {
         let doc = load_visual_encoding(root).expect("should load visual-encoding.yaml");
 
         // Version (v11.6: Navigation redesign)
-        assert_eq!(doc.version, "11.7.0");
+        assert_eq!(doc.version, "0.12.0");
 
         // Channel mapping
         assert_eq!(doc.channel_mapping.node.fill_color, "layer");
@@ -319,17 +321,17 @@ mod tests {
         assert!(doc.node_states.contains_key("selected"));
         assert!(doc.node_states.contains_key("filtered"));
 
-        // Trait borders (5) — v11.2: split derived → generated + aggregated
-        assert!(doc.trait_borders.contains_key("invariant"));
-        assert!(doc.trait_borders.contains_key("localized"));
-        assert!(doc.trait_borders.contains_key("knowledge"));
+        // Trait borders (5) — v0.12.0: renamed (ADR-024 Data Origin)
+        assert!(doc.trait_borders.contains_key("defined"));
+        assert!(doc.trait_borders.contains_key("authored"));
+        assert!(doc.trait_borders.contains_key("imported"));
         assert!(doc.trait_borders.contains_key("generated"));
-        assert!(doc.trait_borders.contains_key("aggregated"));
+        assert!(doc.trait_borders.contains_key("retrieved"));
 
         // Kind icons (44+)
-        assert!(doc.kind_icons.len() >= 30);
-        assert_eq!(doc.kind_icons.get("Locale"), Some(&"globe".to_string()));
-        assert_eq!(doc.kind_icons.get("Page"), Some(&"file-text".to_string()));
+        assert!(doc.class_icons.len() >= 30);
+        assert_eq!(doc.class_icons.get("Locale"), Some(&"globe".to_string()));
+        assert_eq!(doc.class_icons.get("Page"), Some(&"file-text".to_string()));
 
         // Accessibility
         assert!(doc.accessibility.min_contrast_ratio >= 4.5);
@@ -352,13 +354,13 @@ mod tests {
         assert!(icons.layers.contains_key("output"));
         assert_eq!(icons.layer_terminal("config"), "⚙");
 
-        // Traits (5) — v11.2: split derived → generated + aggregated
-        assert!(icons.traits.contains_key("invariant"));
-        assert!(icons.traits.contains_key("localized"));
-        assert!(icons.traits.contains_key("knowledge"));
+        // Traits (5) — v0.12.0: renamed (ADR-024 Data Origin)
+        assert!(icons.traits.contains_key("defined"));
+        assert!(icons.traits.contains_key("authored"));
+        assert!(icons.traits.contains_key("imported"));
         assert!(icons.traits.contains_key("generated"));
-        assert!(icons.traits.contains_key("aggregated"));
-        assert_eq!(icons.trait_terminal("invariant"), "■");
+        assert!(icons.traits.contains_key("retrieved"));
+        assert_eq!(icons.trait_terminal("defined"), "■");
         assert_eq!(icons.trait_terminal("generated"), "★");
 
         // States (8)

@@ -9,7 +9,7 @@ node:
   name: PatternSet
   realm: shared
   layer: knowledge
-  trait: invariant  # v11.2: Containers are universal categories (invariant), atoms are locale-native (knowledge)
+  trait: defined  # v11.2: Containers are universal categories (invariant), atoms are locale-native (knowledge)
   icon: "📋"
   description: "Container grouping Pattern atoms by usage"
 

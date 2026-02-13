@@ -5,7 +5,7 @@ node:
   name: ChannelSurface
   realm: org
   layer: semantic
-  trait: invariant
+  trait: defined
   icon: "📡"
   description: |
     Distribution channel or surface where content is published. Represents a specific

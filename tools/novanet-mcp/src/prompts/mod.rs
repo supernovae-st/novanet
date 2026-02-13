@@ -204,7 +204,7 @@ fn render_cypher_query(args: &serde_json::Map<String, serde_json::Value>) -> Ren
 
 **Realms (2)**: shared (39 nodes, READ-ONLY), org (21 nodes)
 **Layers (10)**: config, locale, geography, knowledge, foundation, structure, semantic, instruction, output
-**Traits (5)**: invariant, localized, knowledge, generated, aggregated
+**Traits (5)**: defined, authored, imported, generated, retrieved
 
 **Key Node Types:**
 - Entity (org/semantic) - Core semantic entities
@@ -285,10 +285,10 @@ fn render_cypher_explain(args: &serde_json::Map<String, serde_json::Value>) -> R
 
 ## NovaNet Context
 
-NovaNet is a native content generation system for multilingual websites. It does NOT translate - it generates content natively per locale from invariant entities.
+NovaNet is a native content generation system for multilingual websites. It does NOT translate - it generates content natively per locale from universal entity definitions.
 
 **Key Concepts:**
-- Entity: Invariant semantic concept (e.g., "QR Code Generator")
+- Entity: Universal semantic concept (e.g., "QR Code Generator")
 - EntityContent: Locale-specific content for an entity
 - Page/Block: Structure for generated content
 - Locale: BCP-47 locale with voice, culture, formatting settings
@@ -434,7 +434,7 @@ fn render_page_generation(args: &serde_json::Map<String, serde_json::Value>) -> 
 ## Generation Philosophy
 
 **CRITICAL: Generation, NOT Translation**
-All content is generated NATIVELY in the target locale from invariant entities. There is no source language.
+All content is generated NATIVELY in the target locale from universal entity definitions. There is no source language.
 
 ## Page Generation Flow
 
@@ -532,8 +532,8 @@ fn render_entity_analysis(args: &serde_json::Map<String, serde_json::Value>) -> 
 ## Entity Model
 
 In NovaNet:
-- **Entity** (invariant): Core semantic concept, defined once
-- **EntityContent** (localized): Locale-specific content (title, description, etc.)
+- **Entity** (defined): Core semantic concept, defined once
+- **EntityContent** (authored): Locale-specific content (title, description, etc.)
 - **EntityCategory**: Categorical grouping (product, service, concept, etc.)
 
 ## Analysis Queries

@@ -1,17 +1,22 @@
 # packages/core/models/visual-encoding.yaml
 # Visual presentation rules for NovaNet graph elements
-# v11.7.0 — Unified Tree Architecture (everything is a node)
+# v0.12.0 — "Class Act" Complete Nomenclature Migration
 #
 # IMPORTANT: Colors are NOT defined here.
 # Colors come from taxonomy.yaml (node_realms, node_layers, node_traits, arc_families)
 # This file defines HOW to USE those colors, not WHAT they are.
+#
+# v0.12.0 Changes (ADR-024):
+# - Trait renames: invariant→defined, localized→authored, knowledge→imported, aggregated→retrieved
+# - Kind → Class, Meta → Schema terminology throughout
+# - Instruction layer: PagePrompt → PageInstruction, BlockPrompt → BlockInstruction
 #
 # Generated artifacts:
 # - packages/core/src/graph/visual-encoding.ts (TypeScript types + helpers)
 # - apps/studio/src/design/visual-encoding.json (runtime config)
 # - tools/novanet/src/generated/visual_encoding.rs (TUI compile-time)
 
-version: "11.7.0"
+version: "0.12.0"
 
 # =============================================================================
 # CHANNEL MAPPING — Which visual channel encodes which facet
@@ -21,9 +26,9 @@ version: "11.7.0"
 channel_mapping:
   node:
     fill_color: layer        # Uses taxonomy.node_layers[].color
-    border_style: trait      # Uses trait_borders below
+    border_style: trait      # Uses trait_borders below (v0.12.0: Data Origin)
     border_color: realm      # Uses taxonomy.node_realms[].color at 60% opacity
-    icon: kind               # Uses kind_icons below
+    icon: class              # Uses class_icons below (v0.12.0: was kind)
     spatial_grouping: realm  # Layout clustering by realm
 
   arc:
@@ -89,46 +94,51 @@ arc_states:
 # =============================================================================
 # TRAIT BORDER STYLES — Studio (CSS) + TUI (Unicode)
 # =============================================================================
+# v0.12.0 (ADR-024): Trait = "Data Origin"
+#   - defined (was invariant): Human-created once
+#   - authored (was localized): Human-written per locale
+#   - imported (was knowledge): External data brought in
+#   - generated: Our LLM produces this
+#   - retrieved (was aggregated): Fetched from external APIs
 
 trait_borders:
-  invariant:
+  defined:
     css_style: solid
     css_width: 2px
     unicode_char: "─"
     unicode_style: light
-    description: "Stable, doesn't change between locales"
+    description: "Human-created ONCE, structure/template (was invariant)"
 
-  localized:
+  authored:
     css_style: dashed
     css_width: 2px
     css_dash_array: "6 3"
     unicode_char: "┄"
     unicode_style: dashed
-    description: "Generated natively per locale"
+    description: "Human-written content PER locale (was localized)"
 
-  knowledge:
+  imported:
     css_style: dotted
     css_width: 2px
     css_dash_array: "2 2"
     unicode_char: "┈"
     unicode_style: dotted
-    description: "Locale knowledge reference data"
+    description: "External data brought in from sources (was knowledge)"
 
-  # v11.2: Split derived → generated + aggregated
   generated:
     css_style: double
     css_width: 3px
     unicode_char: "═"
     unicode_style: double
-    description: "LLM-generated content output"
+    description: "OUR LLM produces this output"
 
-  aggregated:
+  retrieved:
     css_style: dotted
     css_width: 3px
     css_dash_array: "3 2"
     unicode_char: "┅"
     unicode_style: heavy_dotted
-    description: "Computed metrics and analytics"
+    description: "Fetched from EXTERNAL APIs (was aggregated)"
 
 # =============================================================================
 # SCOPE STROKE STYLES — Intra vs Cross realm arcs
@@ -171,10 +181,10 @@ cardinality_arrows:
     description: "Multiple sources to multiple targets"
 
 # =============================================================================
-# ICON MAPPING — Lucide icons per Kind
+# ICON MAPPING — Lucide icons per Class (v0.12.0: Kind → Class)
 # =============================================================================
 
-kind_icons:
+class_icons:
   # Global / Config (14 nodes — v11.1: +EntityCategory)
   Locale: globe
   EntityCategory: tag
@@ -215,12 +225,11 @@ kind_icons:
   AudiencePersona: user
   ChannelSurface: monitor
 
-  # Project / Instruction
-  PagePrompt: message-square
-  BlockPrompt: terminal
+  # Project / Instruction (v0.12.0: Prompt → Instruction)
+  PageInstruction: message-square    # was PagePrompt
+  BlockInstruction: terminal         # was BlockPrompt
   BlockRules: shield-check
-  BlockInstruction: clipboard-list
-  PromptArtifact: file-code
+  InstructionArtifact: file-code     # was PromptArtifact
 
   # Project / Output (v11.2: GenerationJob, EvaluationSignal removed)
   PageGenerated: file-check
@@ -581,30 +590,35 @@ icons:
       description: "Generated content"
 
   # ---------------------------------------------------------------------------
-  # TRAIT ICONS — How does the node behave across locales?
+  # TRAIT ICONS — WHERE does data come from? (Data Origin)
   # ---------------------------------------------------------------------------
-  # v11.2: Removed job trait, split derived → generated + aggregated
+  # v0.12.0 (ADR-024): Trait = "Data Origin"
+  #   - defined (was invariant): Human-created once
+  #   - authored (was localized): Human-written per locale
+  #   - imported (was knowledge): External data brought in
+  #   - generated: Our LLM produces this
+  #   - retrieved (was aggregated): Fetched from external APIs
   traits:
-    invariant:
+    defined:
       web: lock
       terminal: "■"
-      description: "Stable across all locales"
-    localized:
-      web: globe
+      description: "Human-created ONCE (was invariant)"
+    authored:
+      web: pen
       terminal: "□"
-      description: "Generated natively per locale"
-    knowledge:
-      web: brain
+      description: "Human-written PER locale (was localized)"
+    imported:
+      web: download
       terminal: "◊"
-      description: "Locale expertise data"
+      description: "External data brought in (was knowledge)"
     generated:
       web: sparkles
       terminal: "★"
-      description: "LLM-generated content output"
-    aggregated:
-      web: calculator
+      description: "OUR LLM produces this output"
+    retrieved:
+      web: cloud-download
       terminal: "▪"
-      description: "Computed metrics and analytics"
+      description: "Fetched from EXTERNAL APIs (was aggregated)"
 
   # ---------------------------------------------------------------------------
   # ARC FAMILY ICONS — What kind of relationship?
@@ -787,9 +801,10 @@ icons:
       description: "Properties (required/total)"
 
   # ---------------------------------------------------------------------------
-  # META TYPE ICONS — Unified Tree node type indicators (v11.7)
+  # SCHEMA TYPE ICONS — Unified Tree node type indicators (v0.12.0)
   # ---------------------------------------------------------------------------
-  meta_types:
+  # v0.12.0: Meta → Schema, Kind → Class
+  schema_types:
     realm:
       web: database
       terminal: "R"
@@ -797,20 +812,20 @@ icons:
     layer:
       web: layers
       terminal: "L"
-      description: "Functional layer grouping kinds"
-    kind:
+      description: "Functional layer grouping classes"
+    class:
       web: box
-      terminal: "K"
-      description: "Node type definition"
+      terminal: "C"
+      description: "Node class definition (was kind)"
     instance:
       web: file
       terminal: "i"
-      description: "Data instance of a kind"
+      description: "Data instance of a class"
     arc_family:
       web: git-branch
       terminal: "F"
-      description: "Arc family grouping arc kinds"
-    arc_kind:
+      description: "Arc family grouping arc classes"
+    arc_class:
       web: arrow-right
       terminal: "a"
-      description: "Arc type definition"
+      description: "Arc class definition (was arc_kind)"

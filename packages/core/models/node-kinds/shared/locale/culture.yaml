@@ -9,7 +9,7 @@ node:
   name: Culture
   realm: shared
   layer: locale
-  trait: knowledge
+  trait: imported
   icon: "🌍"
   description: "Cultural context for a locale including calendar, seasons, business norms, communication style, and core values. Used by LLM for culturally-appropriate content generation."
 

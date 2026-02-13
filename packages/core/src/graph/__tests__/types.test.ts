@@ -13,7 +13,7 @@ describe('graph/types', () => {
       layer: 'foundation',
       label: 'Project',
       description: 'Project node',
-      trait: 'invariant',
+      trait: 'defined',
     };
     expect(node.nodeType).toBe('Project');
   });
@@ -60,7 +60,7 @@ describe('graph/types', () => {
       layer: 'locale',
       label: 'Locale',
       description: 'Locale configuration',
-      trait: 'invariant',
+      trait: 'defined',
       icon: '🌍',
       color: '#10b981',
     };

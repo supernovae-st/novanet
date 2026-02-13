@@ -17,7 +17,7 @@ node:
   name: GEOQuery
   realm: shared
   layer: knowledge
-  trait: knowledge
+  trait: imported
   icon: "🤖"
   description: "Query tracked across AI engines for generative engine optimization (GEO)"
 

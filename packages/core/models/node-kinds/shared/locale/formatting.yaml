@@ -9,7 +9,7 @@ node:
   name: Formatting
   realm: shared
   layer: locale
-  trait: knowledge
+  trait: imported
   icon: "🔢"
   description: "Technical formatting rules: dates, numbers, currency, time, phone, address, units"
 

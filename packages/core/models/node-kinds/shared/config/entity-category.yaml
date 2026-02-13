@@ -12,7 +12,7 @@ node:
   name: EntityCategory
   realm: shared
   layer: config
-  trait: invariant
+  trait: defined
   icon: "📂"
   description: "Semantic category for classifying Entity nodes by their purpose"
 

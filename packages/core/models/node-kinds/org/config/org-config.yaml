@@ -5,7 +5,7 @@ node:
   name: OrgConfig
   realm: org
   layer: config
-  trait: invariant
+  trait: defined
   icon: "🏢"
   description: "Organization configuration root. Parent of all projects."
 

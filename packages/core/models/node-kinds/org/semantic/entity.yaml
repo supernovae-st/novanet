@@ -35,7 +35,7 @@ node:
   name: Entity
   realm: org
   layer: semantic
-  trait: invariant
+  trait: defined
   icon: "🔷"
   description: "Semantic unit representing products, features, concepts, actions, and tools"
 

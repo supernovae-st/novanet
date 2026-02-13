@@ -9,7 +9,7 @@ node:
   name: Continent
   realm: shared
   layer: geography
-  trait: invariant
+  trait: defined
   icon: "🌍"
   description: "UN M49 continental region for geographic clustering and LLM retrieval"
 

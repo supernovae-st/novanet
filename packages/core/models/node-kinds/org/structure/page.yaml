@@ -18,7 +18,7 @@ node:
   name: Page
   realm: org
   layer: structure
-  trait: invariant
+  trait: defined
   icon: "🔷"
   description: "Invariant page structure containing blocks and orchestrator instructions"
 
