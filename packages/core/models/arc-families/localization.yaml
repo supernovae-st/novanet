@@ -1,0 +1,37 @@
+# packages/core/models/arc-families/localization.yaml
+# Localization arc family definition
+# v0.12.5
+
+arc_family:
+  key: localization
+  display_name: Localization
+  description: |
+    Links between defined nodes and their locale-specific settings or content.
+    Includes locale knowledge arcs (Locale → LocaleVoice, etc.) and content
+    localization arcs (Entity → EntityContent, etc.).
+  color: "#22c55e"
+  stroke_style: dashed
+  stroke_width: 2
+  arrow_style: ".->"
+  default_traversal: eager
+  icon:
+    web: "globe-2"
+    terminal: "⇢"
+
+  arc_count: 18  # Computed by generator
+
+  key_arcs:
+    - FOR_LOCALE
+    - HAS_VOICE
+    - HAS_CULTURE
+    - HAS_STYLE
+    - HAS_FORMATTING
+    - HAS_TERMS
+    - HAS_EXPRESSIONS
+    - HAS_PATTERNS
+
+  llm_context: |
+    USE: when traversing locale-specific relationships.
+    TRIGGERS: "locale", "language", "culture", "localization", "per locale".
+    NOT: for structural ownership (use ownership family).
+    RELATES: FOR_LOCALE (content→locale), HAS_VOICE (locale→voice).

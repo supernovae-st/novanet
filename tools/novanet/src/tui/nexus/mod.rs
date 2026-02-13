@@ -21,6 +21,7 @@
 //! v0.12.4: 58 nodes (40 shared + 18 org), 10 layers (4 shared + 6 org).
 //! Progress persistence to ~/.novanet/tutorial_progress.json
 
+pub mod arch;
 pub mod arcs;
 pub mod glossary;
 pub mod i18n;
@@ -94,6 +95,8 @@ pub enum NexusTab {
     Layers,
     /// Arc families and scope
     Arcs,
+    /// Architecture Decision Records browser
+    Arch,
 
     // === PRACTICE Section (Interactive) ===
     /// Generation pipeline animation
@@ -119,6 +122,7 @@ impl NexusTab {
             NexusTab::Traits => 't',
             NexusTab::Layers => 'l',
             NexusTab::Arcs => 'a',
+            NexusTab::Arch => 'A',
             // PRACTICE section
             NexusTab::Pipeline => 'p',
             NexusTab::Quiz => 'q',
@@ -136,6 +140,7 @@ impl NexusTab {
             NexusTab::Traits => "Traits",
             NexusTab::Layers => "Layers",
             NexusTab::Arcs => "Arcs",
+            NexusTab::Arch => "Arch",
             NexusTab::Pipeline => "Pipeline",
             NexusTab::Quiz => "Quiz",
             NexusTab::Stats => "Stats",
@@ -154,6 +159,7 @@ impl NexusTab {
             NexusTab::Traits,
             NexusTab::Layers,
             NexusTab::Arcs,
+            NexusTab::Arch,
             // PRACTICE
             NexusTab::Pipeline,
             NexusTab::Quiz,
@@ -170,7 +176,8 @@ impl NexusTab {
             NexusTab::Tutorial => NexusTab::Traits,
             NexusTab::Traits => NexusTab::Layers,
             NexusTab::Layers => NexusTab::Arcs,
-            NexusTab::Arcs => NexusTab::Pipeline,
+            NexusTab::Arcs => NexusTab::Arch,
+            NexusTab::Arch => NexusTab::Pipeline,
             NexusTab::Pipeline => NexusTab::Quiz,
             NexusTab::Quiz => NexusTab::Stats,
             NexusTab::Stats => NexusTab::Views,
@@ -187,7 +194,8 @@ impl NexusTab {
             NexusTab::Traits => NexusTab::Tutorial,
             NexusTab::Layers => NexusTab::Traits,
             NexusTab::Arcs => NexusTab::Layers,
-            NexusTab::Pipeline => NexusTab::Arcs,
+            NexusTab::Arch => NexusTab::Arcs,
+            NexusTab::Pipeline => NexusTab::Arch,
             NexusTab::Quiz => NexusTab::Pipeline,
             NexusTab::Stats => NexusTab::Quiz,
             NexusTab::Views => NexusTab::Stats,
@@ -198,7 +206,7 @@ impl NexusTab {
     pub fn section(&self) -> &'static str {
         match self {
             NexusTab::Intro | NexusTab::Glossary | NexusTab::Tutorial => "LEARN",
-            NexusTab::Traits | NexusTab::Layers | NexusTab::Arcs => "EXPLORE",
+            NexusTab::Traits | NexusTab::Layers | NexusTab::Arcs | NexusTab::Arch => "EXPLORE",
             NexusTab::Pipeline | NexusTab::Quiz | NexusTab::Stats | NexusTab::Views => "PRACTICE",
         }
     }
@@ -231,6 +239,10 @@ impl NexusTab {
                 NexusTab::Arcs => vec![
                     (NexusTab::Traits, "Back to Traits"),
                     (NexusTab::Views, "See schema Views"),
+                ],
+                NexusTab::Arch => vec![
+                    (NexusTab::Arcs, "See Arc families"),
+                    (NexusTab::Layers, "See Layer organization"),
                 ],
                 NexusTab::Pipeline => vec![
                     (NexusTab::Traits, "Understand Traits"),
@@ -273,6 +285,10 @@ impl NexusTab {
                 NexusTab::Arcs => vec![
                     (NexusTab::Traits, "Retour aux Traits"),
                     (NexusTab::Views, "Voir les Vues"),
+                ],
+                NexusTab::Arch => vec![
+                    (NexusTab::Arcs, "Voir les Arcs"),
+                    (NexusTab::Layers, "Voir les Couches"),
                 ],
                 NexusTab::Pipeline => vec![
                     (NexusTab::Traits, "Comprendre les Traits"),
@@ -374,6 +390,10 @@ pub struct NexusState {
     /// Cursor position in arc families.
     pub arc_cursor: usize,
 
+    // === Arch tab state ===
+    /// Cursor position in ADR list.
+    pub arch_adr_index: usize,
+
     // === PRACTICE Section State ===
 
     // === Pipeline tab state ===
@@ -446,6 +466,7 @@ impl NexusState {
             layer_cursor: 0,
             layer_realm: 0,
             arc_cursor: 0,
+            arch_adr_index: 0,
             // PRACTICE section
             pipeline_stage: 0,
             pipeline_animating: false,
@@ -833,6 +854,10 @@ impl NexusState {
                 ];
                 families.get(self.arc_cursor).map(|s| s.to_string())
             }
+            NexusTab::Arch => {
+                // Yank the current ADR ID
+                Some("ADR Browser - see .claude/rules/novanet-decisions.md".to_string())
+            }
             // PRACTICE section
             NexusTab::Pipeline => {
                 // Yank the current pipeline stage
@@ -983,6 +1008,10 @@ impl NexusState {
                     false
                 }
             }
+            NexusTab::Arch => {
+                // ADR navigation handled by arch module
+                false
+            }
             // PRACTICE section
             NexusTab::Pipeline => {
                 if self.pipeline_stage > 0 {
@@ -1064,6 +1093,10 @@ impl NexusState {
                 } else {
                     false
                 }
+            }
+            NexusTab::Arch => {
+                // ADR navigation handled by arch module
+                false
             }
             // PRACTICE section
             NexusTab::Pipeline => {
@@ -1221,6 +1254,10 @@ impl NexusState {
                     false
                 }
             }
+            NexusTab::Arch => {
+                // ADR drill-down handled by arch module
+                false
+            }
             // PRACTICE section
             NexusTab::Pipeline => {
                 // Pipeline doesn't have drill-down, toggle animation instead
@@ -1347,6 +1384,9 @@ impl NexusState {
                 let family = families.get(self.arc_cursor).unwrap_or(&"");
                 format!("Nexus > {} > {} > {}", section, tab_name, family)
             }
+            NexusTab::Arch => {
+                format!("Nexus > {} > {} > ADR Browser", section, tab_name)
+            }
             // PRACTICE section
             NexusTab::Pipeline => {
                 let stages = [
@@ -1438,6 +1478,7 @@ impl NexusState {
             }
             NexusTab::Layers => vec![("←/→", "realm"), ("↑/↓", "layer"), ("y", "copy")],
             NexusTab::Arcs => vec![("↑/↓", "family"), ("Enter", "detail"), ("y", "copy")],
+            NexusTab::Arch => vec![("↑/↓", "adr"), ("Enter", "detail"), ("y", "copy")],
             NexusTab::Pipeline => vec![("↑/↓", "stage"), ("Enter", "play"), ("r", "reset")],
             NexusTab::Quiz => {
                 if self.quiz.answered {
@@ -1485,6 +1526,7 @@ pub fn render_nexus(f: &mut Frame, area: Rect, app: &App) {
         NexusTab::Traits => traits::render_traits_tab(f, app, chunks[2]),
         NexusTab::Layers => layers::render_layers_tab(f, app, chunks[2]),
         NexusTab::Arcs => arcs::render_arcs_tab(f, app, chunks[2]),
+        NexusTab::Arch => arch::render_arch_tab(f, app, chunks[2]),
         // PRACTICE section
         NexusTab::Pipeline => pipeline::render_pipeline_tab(f, app, chunks[2]),
         NexusTab::Quiz => quiz::render_quiz_tab(f, app, chunks[2]),

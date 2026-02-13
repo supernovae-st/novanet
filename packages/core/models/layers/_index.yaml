@@ -1,0 +1,16 @@
+# packages/core/models/layers/_index.yaml
+# Registry of all NodeLayer definitions
+# v0.12.5
+
+layers:
+  # Shared realm (4 layers)
+  - config
+  - locale
+  - geography
+  - knowledge
+  # Org realm (6 layers)
+  - foundation
+  - structure
+  - semantic
+  - instruction
+  - output
