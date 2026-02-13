@@ -12,9 +12,10 @@ use crossterm::event::{KeyCode, KeyEvent};
 use super::cache::RenderCache;
 use super::data::{
     ArcClassDetails, ClassArcsData, LayerDetails, RealmDetails, TaxonomyTree, TreeItem,
+    get_all_adrs, get_architecture_diagram,
 };
 use super::handlers::dispatch_mode_handler;
-use super::nexus::NexusState;
+use super::nexus::{NexusState, NexusTab};
 use super::schema::{CoverageStats, MatchedProperty, ValidatedProperty, ValidationStats};
 use super::theme::Theme;
 use super::yaml::{YamlSections, YamlViewSection};
@@ -558,6 +559,82 @@ impl App {
                 .tree_cursor
                 .saturating_sub(self.tree_height.saturating_sub(1));
         }
+    }
+
+    /// Navigate to a specific class by key.
+    ///
+    /// Expands the tree path to the class (classes header → realm → layer)
+    /// and sets the cursor to the class position.
+    ///
+    /// Returns `true` if the class was found and navigated to, `false` otherwise.
+    pub fn navigate_to_class(&mut self, class_key: &str) -> bool {
+        // Find the realm and layer containing this class
+        let mut found_realm: Option<&str> = None;
+        let mut found_layer: Option<&str> = None;
+
+        for realm in &self.tree.realms {
+            for layer in &realm.layers {
+                for class in &layer.classes {
+                    if class.key == class_key {
+                        found_realm = Some(&realm.key);
+                        found_layer = Some(&layer.key);
+                        break;
+                    }
+                }
+                if found_layer.is_some() {
+                    break;
+                }
+            }
+            if found_realm.is_some() {
+                break;
+            }
+        }
+
+        let (realm_key, layer_key) = match (found_realm, found_layer) {
+            (Some(r), Some(l)) => (r.to_string(), l.to_string()),
+            _ => return false,
+        };
+
+        // Expand the path: classes header, realm, layer
+        self.tree.expand("classes");
+        self.tree.expand(&format!("realm:{}", realm_key));
+        self.tree.expand(&format!("layer:{}:{}", realm_key, layer_key));
+
+        // Calculate the index (same logic as update_search)
+        let mut idx = 0;
+
+        // Classes section header
+        idx += 1;
+
+        for realm in &self.tree.realms {
+            // Realm
+            idx += 1;
+
+            if !self.tree.is_collapsed(&format!("realm:{}", realm.key)) {
+                for layer in &realm.layers {
+                    // Layer
+                    idx += 1;
+
+                    if !self
+                        .tree
+                        .is_collapsed(&format!("layer:{}:{}", realm.key, layer.key))
+                    {
+                        for class in &layer.classes {
+                            if class.key == class_key {
+                                // Found it!
+                                self.tree_cursor = idx;
+                                self.ensure_cursor_visible();
+                                self.load_yaml_for_current();
+                                return true;
+                            }
+                            idx += 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        false
     }
 
     /// Update search results based on current query using nucleo fuzzy matching.
@@ -1127,8 +1204,23 @@ impl App {
                 true
             }
 
-            // Refresh data from Neo4j (r = refresh)
+            // 'r' key: Jump to ADR if architecture diagram exists, else refresh
             KeyCode::Char('r') => {
+                // Check if current item has an architecture diagram
+                if let Some(adr_id) = self.get_current_adr_id() {
+                    // Find the ADR index
+                    let adrs = get_all_adrs();
+                    if let Some(idx) = adrs.iter().position(|adr| adr.id == adr_id) {
+                        // Switch to Nexus mode, Arch tab
+                        self.save_mode_cursor();
+                        self.mode = NavMode::Nexus;
+                        self.nexus.tab = NexusTab::Arch;
+                        self.nexus.arch_adr_index = idx;
+                        self.set_status(&format!("Jumped to {}", adr_id));
+                        return true;
+                    }
+                }
+                // No diagram or ADR not found — fall back to refresh
                 self.pending_refresh = true;
                 self.set_status("Refreshing...");
                 true
@@ -1355,7 +1447,7 @@ impl App {
     }
 
     /// Save current cursor to mode_cursors for the current mode.
-    fn save_mode_cursor(&mut self) {
+    pub fn save_mode_cursor(&mut self) {
         self.mode_cursors[self.mode.index()] = self.tree_cursor;
     }
 
@@ -1529,6 +1621,22 @@ impl App {
             self.tree
                 .item_count_with_trait_filter(self.trait_filter.as_deref())
         }
+    }
+
+    /// Get the ADR ID for the current item's architecture diagram (if any).
+    /// Returns None if the current item doesn't have an associated ADR diagram.
+    /// Used by 'r' keybinding to jump from Graph mode to Nexus Arch tab.
+    pub fn get_current_adr_id(&self) -> Option<String> {
+        // Get class name from current tree item
+        let class_key = match self.current_item() {
+            Some(TreeItem::Class(_, _, info)) => Some(info.key.as_str()),
+            Some(TreeItem::Instance(_, _, class_info, _)) => Some(class_info.key.as_str()),
+            _ => None,
+        }?;
+
+        // Get architecture diagram for this class
+        let diagram = get_architecture_diagram(class_key)?;
+        Some(diagram.adr_id.clone())
     }
 
     /// Enter filtered Data mode for a specific Class.
