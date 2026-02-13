@@ -1,0 +1,31 @@
+# packages/core/models/layers/foundation.yaml
+# Foundation layer definition (org realm only)
+# v0.12.5
+
+layer:
+  key: foundation
+  display_name: Foundation
+  description: |
+    Project identity. Project, Brand, ProjectContent. Each Organization has
+    1 company project (branding) + N product projects. Core identity that
+    anchors ALL content generation for each project.
+  color: "#3b82f6"
+  icon:
+    web: "landmark"
+    terminal: "■"
+
+  realms:
+    - org
+
+  classes:
+    - Project
+    - Brand
+    - ProjectContent
+
+  class_count: 3  # Computed by generator
+
+  llm_context: |
+    USE: when accessing project identity and branding.
+    TRIGGERS: "project", "brand", "identity", "company project".
+    NOT: for page structure (use structure layer).
+    RELATES: Project (defined), Brand (defined), ProjectContent (authored).

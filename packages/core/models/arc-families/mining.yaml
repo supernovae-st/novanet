@@ -1,0 +1,34 @@
+# packages/core/models/arc-families/mining.yaml
+# Mining arc family definition
+# v0.12.5
+
+arc_family:
+  key: mining
+  display_name: Mining
+  description: |
+    SEO/GEO data extraction and targeting. Links mining queries to their
+    targets, entities to their SEO keyword targets, and pages to their
+    GEO monitoring queries.
+  color: "#ec4899"
+  stroke_style: dashed
+  stroke_width: 1
+  arrow_style: "--o"
+  default_traversal: skip
+  icon:
+    web: "search"
+    terminal: "⇾"
+
+  arc_count: 16  # Computed by generator
+
+  key_arcs:
+    - TARGETS_KEYWORD
+    - MONITORS_GEO
+    - IN_CLUSTER
+    - HAS_METRICS
+    - ANSWERS_QUERY
+
+  llm_context: |
+    USE: when traversing SEO/GEO mining relationships.
+    TRIGGERS: "SEO", "GEO", "keyword", "mining", "search optimization".
+    NOT: for content generation (use generation family).
+    RELATES: TARGETS_KEYWORD (entity→seo), MONITORS_GEO (content→geo).

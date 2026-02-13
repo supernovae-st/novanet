@@ -1,0 +1,46 @@
+# packages/core/models/arc-families/generation.yaml
+# Generation arc family definition
+# v0.12.5
+
+arc_family:
+  key: generation
+  display_name: Generation
+  description: |
+    LLM generation pipeline flow. Provenance tracking from instructions to
+    outputs, version history, and assembly relationships. Documents what
+    created what in the generation process.
+  color: "#8b5cf6"
+  stroke_style: solid
+  stroke_width: 3
+  arrow_style: "==>"
+  default_traversal: lazy
+  icon:
+    web: "workflow"
+    terminal: "⇒"
+
+  arc_count: 15  # Computed by generator
+
+  key_arcs:
+    - GENERATED
+    - HAS_GENERATED
+    - GENERATED_FOR
+    - COMPILED_FROM
+    - ASSEMBLES
+    - BUNDLES
+    - INCLUDES_ENTITY
+    - INCLUDES_STYLE
+    - INFLUENCED_BY
+    - PREVIOUS_VERSION
+
+  pipeline_stages:
+    - authoring: "Instruction → Style"
+    - compilation: "Instruction → PromptArtifact"
+    - generation: "Instruction → Generated"
+    - provenance: "Generated → EntityContent"
+    - output: "PageGenerated → BlockGenerated"
+
+  llm_context: |
+    USE: when traversing generation pipeline.
+    TRIGGERS: "generated", "provenance", "pipeline", "compiled", "assembled".
+    NOT: for structural ownership (use ownership family).
+    RELATES: GENERATED (instruction→output), COMPILED_FROM (artifact→instruction).

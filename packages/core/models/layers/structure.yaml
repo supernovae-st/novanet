@@ -1,0 +1,31 @@
+# packages/core/models/layers/structure.yaml
+# Structure layer definition (org realm only)
+# v0.12.5
+
+layer:
+  key: structure
+  display_name: Structure
+  description: |
+    Information architecture. Pages, blocks, and their types. Defines the
+    SKELETON of the website - what pages exist, what blocks compose each
+    page, and the rules for each block type. All nodes have "defined" trait.
+  color: "#06b6d4"
+  icon:
+    web: "layout"
+    terminal: "▣"
+
+  realms:
+    - org
+
+  classes:
+    - Page
+    - Block
+    - ContentSlot
+
+  class_count: 3  # Computed by generator
+
+  llm_context: |
+    USE: when accessing page and block structure.
+    TRIGGERS: "page", "block", "structure", "layout", "skeleton".
+    NOT: for semantic entities (use semantic layer).
+    RELATES: Page (defined), Block (defined), ContentSlot (defined).

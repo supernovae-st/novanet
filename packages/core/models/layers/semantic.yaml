@@ -1,0 +1,32 @@
+# packages/core/models/layers/semantic.yaml
+# Semantic layer definition (org realm only)
+# v0.12.5
+
+layer:
+  key: semantic
+  display_name: Semantic
+  description: |
+    Meaning and knowledge relationships. Entities and their locale-specific
+    content. Contains the core business concepts that drive content generation.
+    Entity (defined) + EntityContent (authored per locale).
+  color: "#f97316"
+  icon:
+    web: "brain"
+    terminal: "◆"
+
+  realms:
+    - org
+
+  classes:
+    - Entity
+    - EntityContent
+    - AudiencePersona
+    - ChannelSurface
+
+  class_count: 4  # Computed by generator
+
+  llm_context: |
+    USE: when working with semantic entities and their content.
+    TRIGGERS: "entity", "meaning", "audience", "channel", "semantic".
+    NOT: for page structure (use structure layer).
+    RELATES: Entity (defined), EntityContent (authored), AudiencePersona (defined).

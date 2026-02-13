@@ -1,0 +1,40 @@
+# packages/core/models/traits/authored.yaml
+# Authored trait definition (Data Origin: human-written per locale)
+# v0.12.5
+
+trait:
+  key: authored
+  display_name: Authored
+  description: |
+    Human-written content, PER locale. Editorial content curated by humans.
+    NOT translated - each locale version is written natively.
+    "A human wrote this in French/Japanese/etc."
+  color: "#22c55e"
+  border_style: dashed
+  border_width: 2
+  unicode_border: "┄"
+  icon:
+    web: "pen-line"
+    terminal: "□"
+
+  node_count: 2  # Computed by generator
+
+  context_budget:
+    min: 800
+    max: 3000
+    default: 1500
+
+  retrieval_defaults:
+    traversal_depth: 2
+    context_budget: 800
+    token_estimate: 150
+
+  examples:
+    - EntityContent
+    - ProjectContent
+
+  llm_context: |
+    USE: when accessing human-written locale-specific content.
+    TRIGGERS: "content", "editorial", "authored", "written", "per locale".
+    NOT: for structural definitions (use defined trait).
+    RELATES: EntityContent (semantic), ProjectContent (foundation).

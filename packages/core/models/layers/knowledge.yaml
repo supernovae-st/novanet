@@ -1,0 +1,56 @@
+# packages/core/models/layers/knowledge.yaml
+# Knowledge layer definition (shared realm only)
+# v0.12.5
+
+layer:
+  key: knowledge
+  display_name: Knowledge
+  description: |
+    Deep locale-specific knowledge for native content generation. Knowledge
+    containers (TermSet, ExpressionSet, etc.) and atoms (Term, Expression,
+    Pattern, etc.). Includes SEO/GEO nodes (universal market data). All nodes
+    have "imported" trait (containers are "defined").
+  color: "#8b5cf6"
+  icon:
+    web: "book-open"
+    terminal: "◊"
+
+  realms:
+    - shared
+
+  classes:
+    # Containers (defined trait)
+    - TermSet
+    - ExpressionSet
+    - PatternSet
+    - CultureSet
+    - TabooSet
+    - AudienceSet
+    # Atoms (imported trait)
+    - Term
+    - Expression
+    - Pattern
+    - CultureRef
+    - Taboo
+    - AudienceTrait
+    # Language/Culture
+    - LanguageFamily
+    - CulturalRealm
+    - PopulationCluster
+    # SEO/GEO (imported trait)
+    - SEOKeyword
+    - SEOCluster
+    - SEOKeywordMetrics
+    - GEOQuery
+    - GEOAnswer
+    - GEOMetrics
+    # Categories
+    - CategorySet
+
+  class_count: 24  # Computed by generator
+
+  llm_context: |
+    USE: when accessing knowledge atoms for native content generation.
+    TRIGGERS: "term", "expression", "pattern", "SEO", "GEO", "cultural knowledge".
+    NOT: for structural definitions (use config layer).
+    RELATES: TermSet (container), Term (atom), SEOKeyword (market data).
