@@ -1,0 +1,23 @@
+# packages/core/models/arc-kinds/semantic/represents.yaml
+# ArcKind: REPRESENTS - Page represents its main Entity
+# v0.12.4: ADR-028 Page-Entity Architecture (1:1 mandatory relationship)
+
+arc:
+  name: REPRESENTS
+  family: semantic
+  scope: intra_realm
+
+  source: Page
+  target: Entity
+  cardinality: one_to_one
+
+  required: true
+
+  llm_context: |
+    Every Page MUST represent exactly one Entity (1:1 mandatory).
+    Page.key = Entity.key (Entity is the semantic source of truth).
+    The Page inherits its identity from the Entity it represents.
+    Example: page-qr-code-generator REPRESENTS entity qr-code-generator.
+    For additional Entity references within the page, use USES_ENTITY (N:N).
+
+  cypher_pattern: "(Page)-[:REPRESENTS]->(Entity)"

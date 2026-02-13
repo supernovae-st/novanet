@@ -18,7 +18,7 @@
 //! - [S] Stats: Matrix Control Tower (schema stats, heartbeat, bar charts)
 //! - [V] Views: Schema views explorer (Query-First architecture)
 //!
-//! v0.12.0: 59 nodes (39 shared + 20 org), 10 layers (4 shared + 6 org).
+//! v0.12.4: 58 nodes (40 shared + 18 org), 10 layers (4 shared + 6 org).
 //! Progress persistence to ~/.novanet/tutorial_progress.json
 
 pub mod arcs;
@@ -635,10 +635,16 @@ impl NexusState {
                             if quiz_completed {
                                 // Calculate if all categories have perfect scores (v0.12.0)
                                 let cat_scores = self.quiz.category_scores(quiz::QUESTIONS);
-                                let all_perfect = cat_scores.iter().all(|(_, correct, total)| correct == total);
+                                let all_perfect = cat_scores
+                                    .iter()
+                                    .all(|(_, correct, total)| correct == total);
 
                                 // Save quiz score, update streak, check achievements
-                                self.save_quiz_score(self.quiz.score, quiz::QUESTIONS.len(), all_perfect);
+                                self.save_quiz_score(
+                                    self.quiz.score,
+                                    quiz::QUESTIONS.len(),
+                                    all_perfect,
+                                );
                             }
                         } else {
                             self.quiz.submit_answer(quiz::QUESTIONS);
@@ -1496,10 +1502,7 @@ fn render_cross_tab_hints(f: &mut Frame, area: Rect, app: &App) {
     let mut spans: Vec<Span> = Vec::new();
 
     // Leading arrow
-    spans.push(Span::styled(
-        "→ ",
-        Style::default().fg(Color::DarkGray),
-    ));
+    spans.push(Span::styled("→ ", Style::default().fg(Color::DarkGray)));
 
     for (i, (tab, hint)) in related.iter().enumerate() {
         // Tab shortcut key
@@ -1510,17 +1513,11 @@ fn render_cross_tab_hints(f: &mut Frame, area: Rect, app: &App) {
                 .add_modifier(Modifier::BOLD),
         ));
         // Hint text
-        spans.push(Span::styled(
-            *hint,
-            Style::default().fg(Color::Cyan),
-        ));
+        spans.push(Span::styled(*hint, Style::default().fg(Color::Cyan)));
 
         // Separator
         if i < related.len() - 1 {
-            spans.push(Span::styled(
-                "  │  ",
-                Style::default().fg(Color::DarkGray),
-            ));
+            spans.push(Span::styled("  │  ", Style::default().fg(Color::DarkGray)));
         }
     }
 
@@ -1546,7 +1543,12 @@ fn render_tab_bar(f: &mut Frame, area: Rect, app: &App) {
         ),
         (
             "PRACTICE",
-            vec![NexusTab::Pipeline, NexusTab::Quiz, NexusTab::Stats, NexusTab::Views],
+            vec![
+                NexusTab::Pipeline,
+                NexusTab::Quiz,
+                NexusTab::Stats,
+                NexusTab::Views,
+            ],
         ),
     ];
 

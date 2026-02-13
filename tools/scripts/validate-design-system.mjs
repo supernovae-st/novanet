@@ -499,21 +499,22 @@ function validateTraits(taxonomy, typesTS) {
 function validateNodeCounts(layersTS) {
   logSection('Node Counts (layers.ts consistency)');
 
-  // v0.12.0: 59 nodes (39 shared + 20 org)
+  // v0.12.4: 58 nodes (40 shared + 18 org)
+  // ADR-028: +Country (geography), -PageStructure -PageInstruction (instruction)
   const expectedCounts = {
-    total: 59,
-    shared: 39,
-    org: 20,
+    total: 58,
+    shared: 40,
+    org: 18,
     sharedByLayer: {
       config: 3,
-      geography: 6,
+      geography: 7,  // +Country
       knowledge: 24,
       locale: 6,
     },
     orgByLayer: {
       config: 1,
       foundation: 3,
-      instruction: 6,
+      instruction: 4,  // -PageStructure -PageInstruction
       output: 3,
       semantic: 4,
       structure: 3,

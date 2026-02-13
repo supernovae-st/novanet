@@ -26,7 +26,7 @@ This diagram shows the complete NovaNet graph schema with all 42 node types and 
 ```mermaid
 flowchart TB
   %% NovaNet Graph v0.12.0
-  %% Generated: 59 nodes, 163 arcs
+  %% Generated: 58 nodes, 160 arcs
   %% Source: node-kinds/ + arc-kinds/ + taxonomy.yaml
 
   %% Trait styling (node_trait)
@@ -53,6 +53,7 @@ flowchart TB
     end
     subgraph SHARED_geography["Geography"]
       Continent["🔵 Continent"]
+      Country["🔵 Country"]
       EconomicRegion["🔵 EconomicRegion"]
       GeoRegion["🔵 GeoRegion"]
       GeoSubRegion["🔵 GeoSubRegion"]
@@ -112,8 +113,6 @@ flowchart TB
       BlockInstruction["🔵 BlockInstruction"]
       BlockRules["🔵 BlockRules"]
       BlockType["🔵 BlockType"]
-      PageInstruction["🔵 PageInstruction"]
-      PageStructure["🔵 PageStructure"]
       PromptArtifact["🌟 PromptArtifact"]
     end
     subgraph ORG_output["Generated Output"]
@@ -224,6 +223,7 @@ flowchart TB
   Locale -->|HAS_STYLE| Style
   Locale -->|HAS_TABOOS| TabooSet
   Locale -->|HAS_TERMS| TermSet
+  Locale -.->|IN_COUNTRY| Country
   Locale -.->|IN_CULTURAL_SUBREALM| CulturalSubRealm
   Locale -.->|IN_ECONOMIC_REGION| EconomicRegion
   Locale -.->|IN_SUBREGION| GeoRegion
@@ -242,9 +242,9 @@ flowchart TB
   Page ==>|HAS_GENERATED| PageGenerated
   Page -->|HAS_INSTRUCTION| BlockInstruction
   Page -->|HAS_SLOT| ContentSlot
-  Page -->|HAS_STRUCTURE| PageStructure
   Page -.->|LINKS_TO| Page
   Page -->|PAGE_OF| Project
+  Page -.->|REPRESENTS| Entity
   Page -.->|SUBTOPIC_OF| Page
   Page -.->|TARGETS_PERSONA| AudiencePersona
   Page -.->|USES_ENTITY| Entity
@@ -257,9 +257,6 @@ flowchart TB
   PageGenerated ==>|PREVIOUS_VERSION| BlockGenerated
   PageGenerated ==>|PREVIOUS_VERSION| OutputArtifact
   PageGenerated ==>|PREVIOUS_VERSION| PageGenerated
-  PageInstruction ==>|GENERATED| BlockGenerated
-  PageInstruction ==>|GENERATED| PageGenerated
-  PageInstruction ==>|INCLUDES_STYLE| Style
   PatternSet -->|CONTAINS_PATTERN| Pattern
   PopulationSubCluster -->|CLUSTER_OF| PopulationCluster
   Project -->|BELONGS_TO_ORG| OrgConfig
@@ -275,7 +272,6 @@ flowchart TB
   ProjectContent -.->|CONTENT_OF| Project
   ProjectContent -.->|FOR_LOCALE| Locale
   PromptArtifact ==>|COMPILED_FROM| BlockInstruction
-  PromptArtifact ==>|COMPILED_FROM| PageInstruction
   PromptArtifact ==>|INCLUDES_ENTITY| Entity
   SEOKeyword -.->|COMPARES_A| Entity
   SEOKeyword -.->|COMPARES_B| Entity
@@ -289,11 +285,11 @@ flowchart TB
   TermSet -->|CONTAINS_TERM| Term
 
   %% Arc colors by family
-  linkStyle 3,4,11,12,13,15,16,17,18,19,20,21,107,108,110,111,112,114,115,124,128,129,130,131,132,133,134,135,150,151,152 stroke:#8b5cf6,stroke-width:2px
-  linkStyle 10,14,43,44,65,66,67,77,85,86,87,88,89,90,93,94,100,101,102,103,104,105,109,127,141,142,147,148,149 stroke:#22c55e,stroke-width:2px
-  linkStyle 157 stroke:#ec4899,stroke-width:2px
-  linkStyle 0,1,5,6,22,23,26,27,28,29,33,34,40,42,70,71,72,73,74,75,78,79,80,81,82,83,84,91,92,95,96,97,98,99,106,113,116,117,118,120,125,136,137,138,139,140,143,144,145,146,156,160,161,162 stroke:#3b82f6,stroke-width:2px
-  linkStyle 2,7,8,9,24,25,30,31,32,35,36,37,38,39,41,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,68,69,76,119,121,122,123,126,153,154,155,158,159 stroke:#f97316,stroke-width:2px
+  linkStyle 3,4,11,12,13,15,16,17,18,19,20,21,108,109,111,112,113,115,116,125,129,130,131,132,133,148,149 stroke:#8b5cf6,stroke-width:2px
+  linkStyle 10,14,43,44,65,66,67,77,85,86,87,88,89,90,93,94,100,101,102,103,104,105,106,110,128,139,140,145,146,147 stroke:#22c55e,stroke-width:2px
+  linkStyle 154 stroke:#ec4899,stroke-width:2px
+  linkStyle 0,1,5,6,22,23,26,27,28,29,33,34,40,42,70,71,72,73,74,75,78,79,80,81,82,83,84,91,92,95,96,97,98,99,107,114,117,118,120,126,134,135,136,137,138,141,142,143,144,153,157,158,159 stroke:#3b82f6,stroke-width:2px
+  linkStyle 2,7,8,9,24,25,30,31,32,35,36,37,38,39,41,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,68,69,76,119,121,122,123,124,127,150,151,152,155,156 stroke:#f97316,stroke-width:2px
 
   %% Class assignments
   class Adaptation imported
@@ -309,6 +305,7 @@ flowchart TB
   class ChannelSurface defined
   class ContentSlot defined
   class Continent defined
+  class Country defined
   class CulturalRealm imported
   class CulturalSubRealm imported
   class Culture imported
@@ -336,8 +333,6 @@ flowchart TB
   class OutputArtifact generated
   class Page defined
   class PageGenerated generated
-  class PageInstruction defined
-  class PageStructure defined
   class Pattern imported
   class PatternSet defined
   class PopulationCluster imported

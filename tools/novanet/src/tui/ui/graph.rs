@@ -124,7 +124,10 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
             Span::styled("  \u{25aa}", dim),
             Span::styled(format!("{} Layers", details.layers.len()), STYLE_INFO),
             Span::styled(" \u{b7} ", dim),
-            Span::styled(format!("{} Node Classes", details.total_classes), STYLE_SUCCESS),
+            Span::styled(
+                format!("{} Node Classes", details.total_classes),
+                STYLE_SUCCESS,
+            ),
             Span::styled(" \u{b7} ", dim),
             Span::styled(
                 format!("{} Instances", details.total_instances),
@@ -205,7 +208,10 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
         // Stats summary
         lines.push(Line::from(vec![
             Span::styled("  \u{25aa}", dim),
-            Span::styled(format!("{} Node Classes", details.total_classes), STYLE_SUCCESS),
+            Span::styled(
+                format!("{} Node Classes", details.total_classes),
+                STYLE_SUCCESS,
+            ),
             Span::styled(" \u{b7} ", dim),
             Span::styled(
                 format!("{} Instances", details.total_instances),
@@ -802,7 +808,9 @@ fn build_graph_distribution_stats(app: &App) -> Vec<Line<'static>> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::tui::data::{ClassArcsData, ClassInfo, LayerInfo, Neo4jArc, RealmInfo, TaxonomyTree};
+    use crate::tui::data::{
+        ClassArcsData, ClassInfo, LayerInfo, Neo4jArc, RealmInfo, TaxonomyTree,
+    };
     use crate::tui::theme::{ColorMode, Theme};
     use pretty_assertions::assert_eq;
     use ratatui::style::Color;

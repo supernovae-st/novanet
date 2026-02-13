@@ -9,7 +9,7 @@ Get NovaNet running in 5 minutes.
 | Node.js | ≥20 | `node --version` |
 | pnpm | ≥9 | `pnpm --version` |
 | Docker | Latest | `docker --version` |
-| Rust | ≥1.84 | `rustc --version` |
+| Rust | ≥1.86 | `rustc --version` |
 
 ## Installation
 
@@ -66,14 +66,14 @@ Open http://localhost:7474 and run:
 MATCH (n:Meta) RETURN labels(n), count(n)
 ```
 
-Expected output:
+Expected output (v0.12.0):
 ```
-["Meta", "Realm"]     3
-["Meta", "Layer"]     9
-["Meta", "Kind"]      35
-["Meta", "Trait"]     5
+["Meta", "Realm"]      2
+["Meta", "Layer"]      10
+["Meta", "Kind"]       60
+["Meta", "Trait"]      5
 ["Meta", "ArcFamily"]  5
-["Meta", "ArcKind"]   76
+["Meta", "ArcKind"]    114
 ```
 
 ### Check Rust CLI
@@ -94,6 +94,37 @@ pnpm test
 # Rust tests
 cd tools/novanet && cargo test
 ```
+
+## Interactive TUI
+
+Launch the Terminal UI for graph exploration:
+
+```bash
+cd tools/novanet
+cargo run -- tui
+```
+
+### TUI Navigation (v0.12.0)
+
+| Key | Action |
+|-----|--------|
+| `1` | Graph mode (unified tree) |
+| `2` | Nexus mode (Quiz, Audit, Stats, Help) |
+| `j/k` | Navigate up/down |
+| `h/l` | Collapse/expand |
+| `Tab` | Switch panels |
+| `/` | Search overlay |
+| `?` | Help overlay |
+| `q` | Quit |
+
+### Nexus Hub Tabs
+
+| Tab | Key | Description |
+|-----|-----|-------------|
+| Quiz | `Q` | Test NovaNet knowledge |
+| Audit | `A` | Validate schema consistency |
+| Stats | `S` | Matrix Control Tower dashboard |
+| Help | `?` | Keybindings reference |
 
 ## Common Commands
 
@@ -122,13 +153,15 @@ cd tools/novanet && cargo test
 | `cargo run -- data` | Query data nodes |
 | `cargo run -- meta` | Query meta-graph |
 | `cargo run -- schema generate` | Regenerate artifacts |
+| `cargo run -- schema validate` | Validate YAML coherence |
 | `cargo run -- tui` | Interactive terminal UI |
+| `cargo run -- blueprint` | Rich ASCII visualization |
 
 ## Next Steps
 
-1. **Explore Studio** — Navigate the graph at http://localhost:3000
+1. **Explore TUI** — `cargo run -- tui` for unified tree exploration
 2. **Read Architecture** — [Architecture Overview](../architecture/overview.md)
-3. **Learn Commands** — [Schema Management](./schema-management.md)
+3. **Learn Schema** — [Schema Management](./schema-management.md)
 4. **Set up Claude Code** — [DX Overview](../claude-dx/overview.md)
 
 ## Troubleshooting
@@ -163,4 +196,14 @@ cargo run -- schema generate
 
 # Then type-check
 pnpm type-check
+```
+
+### Rust build fails
+
+```bash
+# Check Rust version (need 1.86+)
+rustc --version
+
+# Update if needed
+rustup update stable
 ```

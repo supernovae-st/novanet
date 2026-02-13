@@ -202,9 +202,7 @@ impl QuizState {
         if self.answered {
             return;
         }
-        let max = question
-            .map(|q| q.question_type.max_option())
-            .unwrap_or(3);
+        let max = question.map(|q| q.question_type.max_option()).unwrap_or(3);
         if self.selected_option < max {
             self.selected_option += 1;
         }
@@ -261,10 +259,10 @@ impl QuizState {
         }
         let pct = (correct as f64 / total as f64 * 100.0) as u8;
         match pct {
-            100 => "★",      // Perfect
-            75..=99 => "◆",  // Great
-            50..=74 => "●",  // Good
-            _ => "○",        // Keep learning
+            100 => "★",     // Perfect
+            75..=99 => "◆", // Great
+            50..=74 => "●", // Good
+            _ => "○",       // Keep learning
         }
     }
 
@@ -375,10 +373,10 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
-        question: "What is the total node count in NovaNet?",
-        options: ["50", "55", "59", "65"],
+        question: "What is the total node count in NovaNet v0.12.4?",
+        options: ["50", "55", "58", "65"],
         correct: 2,
-        explanation: "59 total nodes: 39 shared + 20 org.",
+        explanation: "58 total nodes: 40 shared + 18 org.",
         category: QuizCategory::Realms,
         question_type: QuizQuestionType::MultipleChoice,
     },
@@ -435,7 +433,12 @@ pub const QUESTIONS: &[QuizQuestion] = &[
     },
     QuizQuestion {
         question: "Where does the Locale node live?",
-        options: ["shared/locale", "shared/config", "org/config", "shared/knowledge"],
+        options: [
+            "shared/locale",
+            "shared/config",
+            "org/config",
+            "shared/knowledge",
+        ],
         correct: 1,
         explanation: "Locale lives in shared/config because it's a DEFINITION ('defined' trait), not settings.",
         category: QuizCategory::Layers,
@@ -537,7 +540,12 @@ pub const QUESTIONS: &[QuizQuestion] = &[
     },
     QuizQuestion {
         question: "What node stores localized entity content?",
-        options: ["EntityContent", "EntityGenerated", "EntityOutput", "EntityData"],
+        options: [
+            "EntityContent",
+            "EntityGenerated",
+            "EntityOutput",
+            "EntityData",
+        ],
         correct: 0,
         explanation: "EntityContent stores locale-specific authored content for Entities (semantic layer, 'authored' trait).",
         category: QuizCategory::Arcs,
@@ -588,7 +596,12 @@ pub const QUESTIONS: &[QuizQuestion] = &[
     },
     QuizQuestion {
         question: "Knowledge atoms are loaded how?",
-        options: ["All at once", "Selectively per context", "Never loaded", "Cached globally"],
+        options: [
+            "All at once",
+            "Selectively per context",
+            "Never loaded",
+            "Cached globally",
+        ],
         correct: 1,
         explanation: "Selective LLM loading: Load 50 relevant Terms, not 20K JSON blob. Graph queries filter by context.",
         category: QuizCategory::Generation,
@@ -790,12 +803,25 @@ fn render_category_badges(f: &mut Frame, quiz: &QuizState, locale: NexusLocale, 
                 Style::default()
                     .fg(cat.color())
                     .add_modifier(Modifier::BOLD),
-                format!(" {} {} {}/{} {} ", cat.icon(), cat.name(locale), correct, total, badge),
+                format!(
+                    " {} {} {}/{} {} ",
+                    cat.icon(),
+                    cat.name(locale),
+                    correct,
+                    total,
+                    badge
+                ),
             )
         } else {
             (
                 Style::default().fg(cat.color()),
-                format!(" {} {} {}/{} ", cat.icon(), cat.name(locale), correct, answered),
+                format!(
+                    " {} {} {}/{} ",
+                    cat.icon(),
+                    cat.name(locale),
+                    correct,
+                    answered
+                ),
             )
         };
 
@@ -1044,10 +1070,7 @@ fn render_quiz_complete(f: &mut Frame, app: &App, locale: NexusLocale, chunks: &
                 format!("{:<12}", cat.name(locale)),
                 Style::default().fg(Color::White),
             ),
-            Span::styled(
-                format!(" {} ", bar),
-                Style::default().fg(cat.color()),
-            ),
+            Span::styled(format!(" {} ", bar), Style::default().fg(cat.color())),
             Span::styled(
                 format!("{}/{} ", correct, cat_total),
                 Style::default()
@@ -1061,7 +1084,11 @@ fn render_quiz_complete(f: &mut Frame, app: &App, locale: NexusLocale, chunks: &
             Span::styled(
                 badge,
                 Style::default()
-                    .fg(if badge == "★" { Color::Yellow } else { cat.color() })
+                    .fg(if badge == "★" {
+                        Color::Yellow
+                    } else {
+                        cat.color()
+                    })
                     .add_modifier(Modifier::BOLD),
             ),
         ]));
@@ -1143,7 +1170,9 @@ fn render_quiz_complete(f: &mut Frame, app: &App, locale: NexusLocale, chunks: &
     if achievement_count > 0 {
         result_lines.push(Line::from(""));
         let progress_text = match locale {
-            NexusLocale::En => format!("Achievements: {}/{}", achievement_count, total_achievements),
+            NexusLocale::En => {
+                format!("Achievements: {}/{}", achievement_count, total_achievements)
+            }
             NexusLocale::Fr => format!("Succès: {}/{}", achievement_count, total_achievements),
         };
         result_lines.push(Line::from(Span::styled(
@@ -1259,7 +1288,11 @@ fn render_review_mode(f: &mut Frame, app: &App, locale: NexusLocale, chunks: &[R
 
             // Show correct answer with highlight
             let correct_opt = question.options.get(question.correct).unwrap_or(&"?");
-            let correct_label = question.question_type.labels().get(question.correct).unwrap_or(&"?");
+            let correct_label = question
+                .question_type
+                .labels()
+                .get(question.correct)
+                .unwrap_or(&"?");
             lines.push(Line::from(vec![
                 Span::styled(
                     format!("✓ {}: ", correct_answer),

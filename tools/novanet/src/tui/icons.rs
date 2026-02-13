@@ -14,7 +14,11 @@ pub struct IconDef {
 
 impl IconDef {
     const fn new(web: &'static str, terminal: &'static str, description: &'static str) -> Self {
-        Self { web, terminal, description }
+        Self {
+            web,
+            terminal,
+            description,
+        }
     }
 }
 
@@ -30,10 +34,12 @@ pub const REALMS_SHARED: IconDef = IconDef::new("globe", "◉", "Universal share
 // =============================================================================
 
 pub const LAYERS_CONFIG: IconDef = IconDef::new("settings", "⚙", "Configuration and definitions");
-pub const LAYERS_FOUNDATION: IconDef = IconDef::new("landmark", "▣", "Project identity and branding");
+pub const LAYERS_FOUNDATION: IconDef =
+    IconDef::new("landmark", "▣", "Project identity and branding");
 pub const LAYERS_GEOGRAPHY: IconDef = IconDef::new("map", "⊙", "Geographic classifications");
 pub const LAYERS_INSTRUCTION: IconDef = IconDef::new("file-text", "▧", "Generation directives");
-pub const LAYERS_KNOWLEDGE: IconDef = IconDef::new("book-open", "◈", "Locale expertise and knowledge atoms");
+pub const LAYERS_KNOWLEDGE: IconDef =
+    IconDef::new("book-open", "◈", "Locale expertise and knowledge atoms");
 pub const LAYERS_LOCALE: IconDef = IconDef::new("globe", "⊕", "Locale settings and formatting");
 pub const LAYERS_OUTPUT: IconDef = IconDef::new("check-circle", "●", "Generated content");
 pub const LAYERS_SEMANTIC: IconDef = IconDef::new("lightbulb", "◆", "Entities and meaning");
@@ -43,20 +49,28 @@ pub const LAYERS_STRUCTURE: IconDef = IconDef::new("layout", "▤", "Information
 // TRAITS ICONS (5)
 // =============================================================================
 
-pub const TRAITS_AUTHORED: IconDef = IconDef::new("pen", "□", "Human-written PER locale (was localized)");
+pub const TRAITS_AUTHORED: IconDef =
+    IconDef::new("pen", "□", "Human-written PER locale (was localized)");
 pub const TRAITS_DEFINED: IconDef = IconDef::new("lock", "■", "Human-created ONCE (was invariant)");
 pub const TRAITS_GENERATED: IconDef = IconDef::new("sparkles", "★", "OUR LLM produces this output");
-pub const TRAITS_IMPORTED: IconDef = IconDef::new("download", "◊", "External data brought in (was knowledge)");
-pub const TRAITS_RETRIEVED: IconDef = IconDef::new("cloud-download", "▪", "Fetched from EXTERNAL APIs (was aggregated)");
+pub const TRAITS_IMPORTED: IconDef =
+    IconDef::new("download", "◊", "External data brought in (was knowledge)");
+pub const TRAITS_RETRIEVED: IconDef = IconDef::new(
+    "cloud-download",
+    "▪",
+    "Fetched from EXTERNAL APIs (was aggregated)",
+);
 
 // =============================================================================
 // ARC_FAMILIES ICONS (5)
 // =============================================================================
 
 pub const ARC_FAMILIES_GENERATION: IconDef = IconDef::new("sparkles", "⇒", "LLM pipeline flow");
-pub const ARC_FAMILIES_LOCALIZATION: IconDef = IconDef::new("languages", "⇢", "Locale content links");
+pub const ARC_FAMILIES_LOCALIZATION: IconDef =
+    IconDef::new("languages", "⇢", "Locale content links");
 pub const ARC_FAMILIES_MINING: IconDef = IconDef::new("pickaxe", "⇝", "SEO data extraction");
-pub const ARC_FAMILIES_OWNERSHIP: IconDef = IconDef::new("arrow-right", "→", "Parent-child structural");
+pub const ARC_FAMILIES_OWNERSHIP: IconDef =
+    IconDef::new("arrow-right", "→", "Parent-child structural");
 pub const ARC_FAMILIES_SEMANTIC: IconDef = IconDef::new("link", "~", "Meaning connections");
 
 // =============================================================================
@@ -89,7 +103,8 @@ pub const NAVIGATION_SEARCH: IconDef = IconDef::new("search", "/", "Search mode"
 // =============================================================================
 
 pub const QUALITY_CHART: IconDef = IconDef::new("bar-chart-2", "≡", "Statistics/chart header");
-pub const QUALITY_COMPLETE: IconDef = IconDef::new("check-circle", "●", "All required fields present");
+pub const QUALITY_COMPLETE: IconDef =
+    IconDef::new("check-circle", "●", "All required fields present");
 pub const QUALITY_EMPTY: IconDef = IconDef::new("circle", "○", "No data");
 pub const QUALITY_OPTIONAL: IconDef = IconDef::new("minus", " ", "Optional field marker");
 pub const QUALITY_PARTIAL: IconDef = IconDef::new("circle-dot", "◐", "Some fields missing");
@@ -100,7 +115,11 @@ pub const QUALITY_REQUIRED: IconDef = IconDef::new("asterisk", "*", "Required fi
 // =============================================================================
 
 pub const MODES_DATA: IconDef = IconDef::new("table", "D", "Data instances view");
-pub const MODES_GRAPH: IconDef = IconDef::new("git-branch", "G", "Unified tree view (Realm > Layer > Class)");
+pub const MODES_GRAPH: IconDef = IconDef::new(
+    "git-branch",
+    "G",
+    "Unified tree view (Realm > Layer > Class)",
+);
 pub const MODES_META: IconDef = IconDef::new("database", "M", "Meta-graph view");
 pub const MODES_NEXUS: IconDef = IconDef::new("compass", "N", "Hub for Quiz, Stats, Help");
 pub const MODES_OVERLAY: IconDef = IconDef::new("layers", "O", "Combined meta+data");

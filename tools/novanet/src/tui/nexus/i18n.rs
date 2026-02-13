@@ -225,10 +225,10 @@ pub fn intro_page2(locale: NexusLocale) -> &'static [&'static str] {
 pub fn intro_page3(locale: NexusLocale) -> &'static [&'static str] {
     match locale {
         NexusLocale::En => &[
-            "THE GRAPH STRUCTURE (v0.12.0)",
+            "THE GRAPH STRUCTURE (v0.12.4)",
             "",
-            "59 node types organized by:",
-            "  • Realm (WHERE): shared (39) | org (20)",
+            "58 node types organized by:",
+            "  • Realm (WHERE): shared (40) | org (18)",
             "  • Layer (WHAT): 10 functional layers",
             "  • Trait (HOW): defined | authored | imported | generated | retrieved",
             "",
@@ -604,10 +604,10 @@ static QUIZ_EN: [QuizQuestionI18n; 15] = [
         explanation: "Shared (universal, read-only) and Org (organization-specific).",
     },
     QuizQuestionI18n {
-        question: "How many node types are in NovaNet v0.12.0?",
-        options: &["45", "59", "75", "90"],
+        question: "How many node types are in NovaNet v0.12.4?",
+        options: &["45", "58", "75", "90"],
         correct: 1,
-        explanation: "59 nodes: 39 in Shared realm + 20 in Org realm.",
+        explanation: "58 nodes: 40 in Shared realm + 18 in Org realm.",
     },
     QuizQuestionI18n {
         question: "What does the 'defined' trait mean?",

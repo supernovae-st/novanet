@@ -574,7 +574,7 @@ pub fn get_item_display(item: Option<&TreeItem>) -> (&'static str, String) {
 mod tests {
     use super::*;
     use crate::tui::data::{
-        ArcFamilyInfo, ArcClassInfo, InstanceInfo, ClassInfo, LayerInfo, RealmInfo,
+        ArcClassInfo, ArcFamilyInfo, ClassInfo, InstanceInfo, LayerInfo, RealmInfo,
     };
     use std::collections::BTreeMap;
 
