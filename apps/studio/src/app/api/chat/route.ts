@@ -14,7 +14,7 @@ const anthropic = new Anthropic({
 });
 
 /**
- * System prompt for Cypher generation (v11.0 schema)
+ * System prompt for Cypher generation (v0.12.0 schema)
  * Dynamic schema is injected from Neo4j via schemaCache.ts
  */
 const SYSTEM_PROMPT = `You are an AI assistant that helps users explore a Neo4j knowledge graph for a native content generation system called "NovaNet".
@@ -27,69 +27,74 @@ Key principle: Generation, NOT Translation
 - Source → Translate → Target ❌
 - Entity (defined) → Generate natively → EntityContent (local) ✅
 
-## Data Origin Traits (v11.8 - ADR-024)
+## Data Origin Traits (v0.12.0 - ADR-024)
 - **defined**: Structurally fixed, version-controlled definitions
 - **authored**: Human-authored locale-specific content
 - **imported**: External data from authoritative sources
 - **generated**: LLM-generated output
 - **retrieved**: Computed/aggregated from external APIs
 
-## Graph Schema (v11.0 fallback — live schema injected below if available)
+## Graph Schema (v0.12.0 fallback — live schema injected below if available)
 
 ### Standard Properties (all nodes)
 All nodes have: key, display_name, icon, description, llm_context, created_at, updated_at
 
-### 2-Realm Architecture (v11.0)
-- **GLOBAL** (2 layers): config, locale-knowledge — Universal, READ-ONLY
-- **TENANT** (7 layers): config, foundation, structure, semantic, instruction, seo, output — Business-specific
+### 2-Realm Architecture (v0.12.0)
+- **SHARED** (4 layers): config, locale, geography, knowledge — Universal, READ-ONLY (39 nodes)
+- **ORG** (6 layers): config, foundation, structure, semantic, instruction, output (20 nodes)
 
-### Node Types (65 total, organized by realm/layer)
+### Node Types (59 total, organized by realm/layer)
 
-**Global/Config** — Locale definitions
+**Shared/Config** — Locale and entity category definitions
 - Locale: BCP47 codes (language_code, country_code, fallback_chain)
-- Formatting: Date/number/currency formats
-- Style: Writing style preferences
-- Slugification: URL/slug patterns
-- Adaptation: Formality, emoji policies, tone
-- Market, Culture: Cultural contexts
+- EntityCategory: Entity type taxonomy
 
-**Global/Locale-Knowledge** — Knowledge atoms
+**Shared/Locale** — Locale settings
+- Formatting, Style, Slugification, Adaptation: Locale preferences
+- LocaleVoice, LocaleCulture: Voice and cultural context
+
+**Shared/Geography** — Geographic hierarchy
+- Continent, GeoRegion, Country, SubRegion, City, GeoFeature
+
+**Shared/Knowledge** — Knowledge atoms and SEO/GEO intelligence
 - Term, TermSet: Terminology glossary
 - Expression, ExpressionSet: Vocabulary expressions
 - Pattern, PatternSet: Grammar patterns
-- Taboo, TabooSet: Topics to avoid
 - CultureRef, CultureSet: Cultural references
+- Taboo, TabooSet: Topics to avoid
 - AudienceTrait, AudienceSet: Audience characteristics
+- SEOKeyword, SEOKeywordMetrics: SEO data
+- GEOQuery, GEOAnswer, GEOMetrics: AI search data
 
-**Tenant/Config** — Organization setup
-- Tenant, Organization: Root tenant node
-- Project, ProjectContent: Project with authored identity
-- BrandIdentity: Visual identity
+**Org/Config** — Organization setup
+- OrgConfig: Root organization configuration
+
+**Org/Foundation** — Project identity
+- Project, ProjectContent, BrandIdentity
 
 **Org/Structure** — Content structure
-- Page, Block, ContentSlot: Page and block structure
-- PageStructure, BlockType: Templates (v11.8: PageType → PageStructure)
+- Page, Block, ContentSlot: Page and block hierarchy
+- PageStructure, BlockType: Content templates
 
-**Tenant/Semantic** — Business content
-- Entity: Invariant business entities
-- EntityContent: Localized entity content → FOR_LOCALE
+**Org/Semantic** — Business content
+- Entity: Defined business entities
+- EntityContent: Authored entity content → FOR_LOCALE
 - AudiencePersona, ChannelSurface: Targeting
 
-**Tenant/SEO** — Search optimization (v11.0: moved to tenant)
-- SEOKeyword, SEOQuestion, SEOComparison, SEOPreposition: Keywords
-- GEOQuery, GEOAnswer, GEOMetrics: AI search queries
-- SEOKeywordMetrics: Analytics (v11.5: SEO in shared/knowledge)
+**Org/Instruction** — Generation instructions
+- PageInstruction, BlockInstruction: LLM prompts with @ references
+- SEOPrompt, GEOPrompt: Mining instructions
 
-**Tenant/Output** — Generation results
+**Org/Output** — Generation results
 - PageGenerated, BlockGenerated: Generated content → FOR_LOCALE
-- OutputArtifact: Pipeline output (v11.2: job nodes removed)
+- OutputArtifact: Pipeline output
 
-### Key Relationships (124 arc types)
+### Key Relationships (114 arc types)
 
-**Ownership**: HAS_PAGE, HAS_BLOCK, HAS_ENTITY, OF_TYPE, SUPPORTS_LOCALE
+**Ownership**: HAS_PAGE, HAS_BLOCK, HAS_ENTITY, HAS_STRUCTURE, SUPPORTS_LOCALE
 **Localization**: FOR_LOCALE, HAS_CONTENT, CONTENT_OF, FALLBACK_TO
 **Semantic**: USES_ENTITY, SEMANTIC_LINK, SUBTOPIC_OF, TARGETS
-**Generation**: HAS_GENERATED, GENERATED_FOR, USES_PROMPT
+**Generation**: HAS_GENERATED, GENERATED_FOR, HAS_INSTRUCTION
 **Mining**: HAS_SEO_KEYWORDS, HAS_GEO_QUERIES, TARGETS
 
 ## Your Task

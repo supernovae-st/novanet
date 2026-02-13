@@ -865,11 +865,16 @@ fn render_question(
     }
 }
 
-/// Render the quiz completion screen (v0.12.0 enhanced with category breakdown).
+/// Render the quiz completion screen (v0.12.0 enhanced with category breakdown and streak).
 fn render_quiz_complete(f: &mut Frame, app: &App, locale: NexusLocale, chunks: &[Rect]) {
     let quiz = &app.nexus.quiz;
     let total = QUESTIONS.len();
     let pct = (quiz.score as f64 / total as f64 * 100.0) as u8;
+
+    // Load streak from persistence (fast, file is tiny)
+    let progress = super::persistence::TutorialProgress::load();
+    let streak = progress.current_streak;
+    let best_streak = progress.best_streak;
 
     // i18n labels
     let (
@@ -880,6 +885,7 @@ fn render_quiz_complete(f: &mut Frame, app: &App, locale: NexusLocale, chunks: &
         good,
         keep_learning,
         category_breakdown_label,
+        streak_label,
     ) = match locale {
         NexusLocale::En => (
             "Final Score",
@@ -889,6 +895,7 @@ fn render_quiz_complete(f: &mut Frame, app: &App, locale: NexusLocale, chunks: &
             "● Good effort!",
             "○ Keep learning!",
             "Category Breakdown",
+            "Streak",
         ),
         NexusLocale::Fr => (
             "Score Final",
@@ -898,6 +905,7 @@ fn render_quiz_complete(f: &mut Frame, app: &App, locale: NexusLocale, chunks: &
             "● Bon travail !",
             "○ Continue d'apprendre !",
             "Détail par Catégorie",
+            "Série",
         ),
     };
 
@@ -980,6 +988,42 @@ fn render_quiz_complete(f: &mut Frame, app: &App, locale: NexusLocale, chunks: &
             ),
         ]));
     }
+
+    // Streak display (v0.12.0)
+    result_lines.push(Line::from(""));
+    let streak_icon = if streak >= 7 {
+        "🔥🔥"
+    } else if streak >= 3 {
+        "🔥"
+    } else {
+        "○"
+    };
+    let streak_color = if streak >= 7 {
+        Color::Yellow
+    } else if streak >= 3 {
+        Color::Rgb(255, 165, 0) // Orange
+    } else if streak >= 1 {
+        Color::Cyan
+    } else {
+        Color::DarkGray
+    };
+
+    result_lines.push(Line::from(vec![
+        Span::styled(
+            format!(" {} {}: ", streak_icon, streak_label),
+            Style::default()
+                .fg(streak_color)
+                .add_modifier(Modifier::BOLD),
+        ),
+        Span::styled(
+            format!("{} day{}", streak, if streak == 1 { "" } else { "s" }),
+            Style::default().fg(streak_color),
+        ),
+        Span::styled(
+            format!(" (best: {})", best_streak),
+            Style::default().fg(Color::DarkGray),
+        ),
+    ]));
 
     result_lines.push(Line::from(""));
     result_lines.push(Line::from(Span::styled(

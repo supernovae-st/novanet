@@ -53,8 +53,8 @@ import { Sidebar } from './SidebarContent';
 // =============================================================================
 
 const REALMS: { key: Realm; label: string; icon: LucideIcon }[] = [
-  { key: 'shared', label: 'Global', icon: Globe },
-  { key: 'org', label: 'Tenant', icon: Building2 },
+  { key: 'shared', label: 'Shared', icon: Globe },
+  { key: 'org', label: 'Org', icon: Building2 },
 ];
 
 const LAYERS: { key: Layer; label: string; icon: LucideIcon }[] = [

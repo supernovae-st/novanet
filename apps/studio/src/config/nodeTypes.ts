@@ -354,7 +354,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
 
   // ==========================================================================
-  // ORG REALM — CONFIG LAYER (1 node) — v11.3: Organization + Tenant merged
+  // ORG REALM — CONFIG LAYER (1 node) — v0.12.0: OrgConfig
   // ==========================================================================
   OrgConfig: {
     type: 'OrgConfig',
