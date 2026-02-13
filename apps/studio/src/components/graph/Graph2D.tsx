@@ -406,12 +406,12 @@ function Graph2DInner({
       const nodesWithZIndex = layoutedNodes.map((node) => {
         let zIndex: number = Z_INDEX.BASE;
 
-        // Meta nodes get lower z-index so Kind nodes appear on top
+        // Meta nodes get lower z-index so Class nodes appear on top
         const metaType = node.data?.metaType as string | undefined;
         if (metaType === 'realm') {
-          zIndex = Z_INDEX.REALM_TENANT; // Realms at base level
+          zIndex = Z_INDEX.REALM_ORG; // Realms at base level
         } else if (metaType === 'layer') {
-          zIndex = Z_INDEX.LAYER_TENANT; // Layers above realms
+          zIndex = Z_INDEX.LAYER_ORG; // Layers above realms
         }
         // Kind nodes (metaType === 'kind' or undefined) use BASE (highest)
 
@@ -1105,11 +1105,10 @@ function Graph2DInner({
   // PERF: Memoized MiniMap nodeColor callbacks to avoid re-creating functions
   // ==========================================================================
   const schemaMinimapNodeColor = useCallback((node: ReactFlowNode) => {
-    // Color by realm for schema nodes (v9 terminology)
+    // Color by realm for schema nodes (v0.12.0: shared/org)
     const realm = node.data?.realm;
-    if (realm === 'Project') return '#8b5cf6cc'; // violet
-    if (realm === 'Global') return '#10b981cc'; // emerald
-    if (realm === 'Shared') return '#f59e0bcc'; // amber
+    if (realm === 'shared') return '#10b981cc'; // emerald - universal knowledge
+    if (realm === 'org') return '#8b5cf6cc'; // violet - org-specific
     return '#666';
   }, []);
 

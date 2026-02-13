@@ -23,12 +23,12 @@ import type { Node as ReactFlowNode, Edge as ReactFlowEdge } from '@xyflow/react
 // =============================================================================
 
 export const Z_INDEX = {
-  /** Realm containers - layered by realm (Global < Tenant) - v10.6: 2 realms */
-  REALM_GLOBAL: 20,
-  REALM_TENANT: 30,
+  /** Realm containers - layered by realm (Shared < Org) - v0.12.0: 2 realms */
+  REALM_SHARED: 20,
+  REALM_ORG: 30,
   /** Layer containers - slightly above their parent realm */
-  LAYER_GLOBAL: 25,
-  LAYER_TENANT: 35,
+  LAYER_SHARED: 25,
+  LAYER_ORG: 35,
   /** Regular nodes base level (always above containers) */
   BASE: 1000,
   /** Nodes connected to hovered edge */
@@ -71,8 +71,8 @@ export interface UseGraphInteractionsReturn {
 /**
  * Get base z-index for a node based on its type and realm
  *
- * Container hierarchy (back to front) - v10.6: 2 realms:
- * - Global realm (20) < Tenant realm (30)
+ * Container hierarchy (back to front) - v0.12.0: 2 realms:
+ * - Shared realm (20) < Org realm (30)
  * - Layers slightly above their parent realm
  * - Regular nodes always on top (1000+)
  */
@@ -82,18 +82,18 @@ function getBaseZIndex(node: ReactFlowNode): number {
   // Realm containers: realm-{Realm}
   if (id.startsWith('realm-')) {
     const realm = id.replace('realm-', '');
-    if (realm === 'shared') return Z_INDEX.REALM_GLOBAL;
-    if (realm === 'org') return Z_INDEX.REALM_TENANT;
-    return Z_INDEX.REALM_GLOBAL; // fallback
+    if (realm === 'shared') return Z_INDEX.REALM_SHARED;
+    if (realm === 'org') return Z_INDEX.REALM_ORG;
+    return Z_INDEX.REALM_SHARED; // fallback
   }
 
   // Layer containers: layer-{Realm}-{LayerName}
   if (id.startsWith('layer-')) {
     const parts = id.replace('layer-', '').split('-');
     const realm = parts[0];
-    if (realm === 'shared') return Z_INDEX.LAYER_GLOBAL;
-    if (realm === 'org') return Z_INDEX.LAYER_TENANT;
-    return Z_INDEX.LAYER_GLOBAL; // fallback
+    if (realm === 'shared') return Z_INDEX.LAYER_SHARED;
+    if (realm === 'org') return Z_INDEX.LAYER_ORG;
+    return Z_INDEX.LAYER_SHARED; // fallback
   }
 
   // Regular nodes - always above containers

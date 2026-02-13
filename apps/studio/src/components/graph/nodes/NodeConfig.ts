@@ -58,7 +58,7 @@ export interface NodeConfig {
  */
 export const NODE_SIZES: Record<NodeType, NodeSize> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // GLOBAL REALM (32 nodes)
+  // SHARED REALM (39 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
   // config (14) - v11.1: added EntityCategory
   Locale: { width: 220, height: 110 },
@@ -108,7 +108,7 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   SEOKeywordFormat: { width: 180, height: 90 },
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // ORG REALM (21 nodes) — v11.5: SEO/GEO moved to shared/knowledge
+  // ORG REALM (20 nodes) — v11.5: SEO/GEO moved to shared/knowledge
   // ═══════════════════════════════════════════════════════════════════════════
   // config (1)
   OrgConfig: { width: 280, height: 140 },
@@ -143,26 +143,27 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
 };
 
 // =============================================================================
-// Color Lookup Table (v10.9.0 - 63 nodes)
+// Color Lookup Table (v0.12.0 - 59 nodes)
 // =============================================================================
 
 /**
- * Pre-computed colors for all 63 node types (v10.9.0)
+ * Pre-computed colors for all 59 node types (v0.12.0)
  *
  * Color palette by realm and layer:
- * - GLOBAL config: Emerald/Cyan/Blue tones
- * - GLOBAL locale-knowledge: Green/Pink/Purple tones
- * - GLOBAL seo: Red tones
- * - TENANT config: Sky blue (#0ea5e9 family)
- * - TENANT Foundation: Violet (#8b5cf6 family)
- * - TENANT Structure: Blue/Cyan (#3b82f6, #06b6d4 family)
- * - TENANT Semantic: Amber (#f59e0b family)
- * - TENANT Instruction: Blue (#3b82f6 family)
- * - TENANT Output: Orange/Red (#f97316, #ef4444 family)
+ * - SHARED config: Emerald/Cyan tones
+ * - SHARED locale: Blue tones
+ * - SHARED geography: Green tones
+ * - SHARED knowledge: Green/Pink/Purple tones (incl. SEO/GEO)
+ * - ORG config: Sky blue (#0ea5e9 family)
+ * - ORG foundation: Violet (#8b5cf6 family)
+ * - ORG structure: Blue/Cyan (#3b82f6, #06b6d4 family)
+ * - ORG semantic: Amber (#f59e0b family)
+ * - ORG instruction: Blue (#3b82f6 family)
+ * - ORG output: Orange/Red (#f97316, #ef4444 family)
  */
 export const NODE_COLORS: Record<NodeType, NodeColors> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // GLOBAL REALM (32 nodes)
+  // SHARED REALM (39 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
   // config (14) — Emerald/Cyan tones - v11.1: added EntityCategory
   Locale: {
@@ -407,7 +408,7 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
   },
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // ORG REALM (21 nodes) — v11.5: SEO/GEO moved to shared/knowledge
+  // ORG REALM (20 nodes) — v11.5: SEO/GEO moved to shared/knowledge
   // ═══════════════════════════════════════════════════════════════════════════
   // config (1) — Sky blue tone
   OrgConfig: {
