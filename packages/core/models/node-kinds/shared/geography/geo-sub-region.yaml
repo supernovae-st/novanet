@@ -10,7 +10,7 @@ node:
   name: GeoSubRegion
   realm: shared
   layer: geography
-  trait: invariant
+  trait: defined
   icon: "📍"
   description: "UN M49 intermediate region for fine-grained geographic clustering"
 

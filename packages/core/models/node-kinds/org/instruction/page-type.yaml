@@ -14,7 +14,7 @@ node:
   name: PageType
   realm: org
   layer: instruction
-  trait: invariant
+  trait: defined
   icon: "📐"
   description: "Template defining meta requirements, layout rules, and block composition for a type of page"
 

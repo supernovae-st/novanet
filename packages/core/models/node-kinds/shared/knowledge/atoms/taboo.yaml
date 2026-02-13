@@ -8,7 +8,7 @@ node:
   name: Taboo
   realm: shared
   layer: knowledge
-  trait: knowledge
+  trait: imported
   icon: "🚫"
   description: "Forbidden term, phrase, or concept that should be avoided in a locale"
 

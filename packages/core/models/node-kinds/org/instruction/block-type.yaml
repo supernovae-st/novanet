@@ -5,7 +5,7 @@ node:
   name: BlockType
   realm: org
   layer: instruction
-  trait: invariant
+  trait: defined
   icon: "🔷"
   description: "Template defining rules, structure, and L10N requirements for a type of block"
 

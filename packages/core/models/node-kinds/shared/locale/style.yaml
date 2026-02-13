@@ -11,7 +11,7 @@ node:
   name: Style
   realm: shared
   layer: locale
-  trait: knowledge
+  trait: imported
   icon: "🎭"
   description: "Communication style: tone, formality, directness, warmth, humor, identity traits"
 

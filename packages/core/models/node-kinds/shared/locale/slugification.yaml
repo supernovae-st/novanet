@@ -9,7 +9,7 @@ node:
   name: Slugification
   realm: shared
   layer: locale
-  trait: knowledge
+  trait: imported
   icon: "🔗"
   description: "URL slug rules: transliteration, stop words, URL conventions"
 

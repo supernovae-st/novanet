@@ -24,7 +24,14 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 |------|----------|------|----------|--------|
 | 1 | WHERE? | `NodeRealm` | `realm` | `shared`, `org` |
 | 2 | WHAT? | `NodeLayer` | `layer` | `config`, `locale`, `geography`, `knowledge`, `foundation`, `structure`, `semantic`, `instruction`, `output` |
-| 3 | HOW? | `NodeTrait` | `trait` | `invariant`, `localized`, `knowledge`, `generated`, `aggregated` |
+| 3 | HOW? | `NodeTrait` | `trait` | `defined`, `authored`, `imported`, `generated`, `retrieved` |
+
+> **v11.8 Trait Redefinition (ADR-024)**: Trait now answers "WHERE does data come from?" (Data Origin)
+> - `defined` = Human-created once (templates, configs) — was `invariant`
+> - `authored` = Human-written per locale (editorial content) — was `localized`
+> - `imported` = External data brought in (corpora, SEO keywords) — was `knowledge`
+> - `generated` = Produced by NovaNet LLM (unchanged)
+> - `retrieved` = Fetched from external APIs (GEO snapshots) — was `aggregated`
 
 ### v11.5 Realm Architecture
 
@@ -240,12 +247,24 @@ These terms are deprecated and should NOT be used:
 | "Data Node" | "Instance" | v11.8 glossary |
 | "Meta mode" | "Schema view" | v11.8 Studio UI |
 | "Data mode" | "Graph view" | v11.8 Studio UI |
+| **v11.8 Trait Redefinition (ADR-024)** | | |
+| `invariant` | `defined` | v11.8 trait rename (human-created once) |
+| `localized` | `authored` | v11.8 trait rename (human-written per locale) |
+| `knowledge` (trait) | `imported` | v11.8 trait rename (external data brought in) |
+| `aggregated` | `retrieved` | v11.8 trait rename (fetched from external APIs) |
+| **v11.8 Instruction Layer (ADR-025)** | | |
+| `PageType` | `PageStructure` | v11.8 (JSON defining block order) |
+| `PagePrompt` | `PageInstruction` | v11.8 (Markdown with @ refs) |
+| `BlockPrompt` | `BlockInstruction` | v11.8 (Markdown with @ refs) |
+| `[:OF_TYPE]` (Page→PageType) | `[:HAS_STRUCTURE]` | v11.8 arc rename |
+| `[:HAS_PROMPT]` (Page→PagePrompt) | `[:HAS_INSTRUCTION]` | v11.8 arc rename |
+| `[:HAS_PROMPT]` (Block→BlockPrompt) | `[:HAS_INSTRUCTION]` | v11.8 arc rename |
 
 ## Navigation Modes (v11.7)
 
 | Mode | Content | Use Case |
 |------|---------|----------|
-| `graph` | Unified tree (Realm > Layer > Kind > Instance + Arcs) | Default exploration |
+| `graph` | Unified tree (Realm > Layer > Class > Instance + Arcs) | Default exploration |
 | `nexus` | Hub (Quiz, Audit, Stats, Help) | Learning & validation |
 
 > **v11.7 Change**: Consolidated from 5 modes (Meta/Data/Overlay/Query/Atlas) to 2 modes (Graph/Nexus).
@@ -300,7 +319,7 @@ const realmIcon = "🌐";  // DEPRECATED
 |----------|---------|---------------------|
 | `realms` | Node ownership | ◉ shared, ◎ org |
 | `layers` | Functional layer | ⚙ config, ● locale, ◆ geography, ◊ knowledge, ■ semantic, ▣ output |
-| `traits` | Locale behavior | ■ invariant, □ localized, ◊ knowledge, ✦ generated, ⋆ aggregated |
+| `traits` | Data origin | ■ defined, □ authored, ◊ imported, ✦ generated, ⋆ retrieved |
 | `arc_families` | Arc type | → ownership, ⇢ localization |
 | `states` | UI empty states | ◐ loading, ∅ no_kinds, ⚠ error |
 | `navigation` | Tree controls | ▼ expanded, ▶ collapsed |
@@ -333,9 +352,9 @@ NovaNet Studio uses **Query-First Architecture** where Cypher queries are the si
 | Term | Definition |
 |------|------------|
 | **Query-First** | Architecture pattern where graph display is determined solely by the executed Cypher query |
-| **Meta-Graph** | The schema graph showing NodeKind and ArcKind nodes (60 nodes, 114 arcs) |
-| **KINDS_QUERY** | Foundational query that fetches all NodeKind instances for META mode |
-| **ARCS_QUERY** | Foundational query that fetches all ArcKind instances for META mode |
+| **Schema-Graph** | The schema graph showing NodeClass and ArcClass nodes (60 nodes, 114 arcs) |
+| **CLASS_QUERY** | Foundational query that fetches all NodeClass instances for schema view |
+| **ARCS_QUERY** | Foundational query that fetches all ArcClass instances for schema view |
 | **View** | Parameterized Cypher template defined in YAML, executable with context parameters |
 | **ViewPicker** | UI component for selecting and executing views |
 | **QueryPill** | UI component displaying the current query, with edit capability |
@@ -406,14 +425,16 @@ cypher: |
 ## Summary
 
 1. **Arc** = directed link (not Edge, not Relation)
-2. **NodeKind** = node type definition
-3. **ArcKind** = arc type definition
+2. **NodeClass** = node type definition (v11.8: was NodeKind)
+3. **ArcClass** = arc type definition (v11.8: was ArcKind)
 4. **Realm/Layer/Trait** = node classification axes
 5. **ArcFamily/ArcScope/ArcCardinality** = arc classification axes
 6. **taxonomy.yaml** = source of truth for facet definitions
 7. **Query-First** = Cypher query determines graph display (v11.6)
-8. **Meta-Graph** = schema graph of NodeKind + ArcKind nodes
-9. **KINDS_QUERY / ARCS_QUERY** = foundational queries for META mode
-10. **Unified Tree** = single tree showing Realm > Layer > Kind > Instance + Arcs (v11.7)
+8. **Schema-Graph** = schema graph of NodeClass + ArcClass nodes (v11.8: was Meta-Graph)
+9. **CLASS_QUERY / ARCS_QUERY** = foundational queries for schema view (v11.8)
+10. **Unified Tree** = single tree showing Realm > Layer > Class > Instance + Arcs (v11.7/v11.8)
 11. **Graph/Nexus** = two navigation modes replacing 5 previous modes (v11.7)
 12. **Dual Icons** = `{ web: "lucide-name", terminal: "◉" }` format, NO emoji (v11.7)
+13. **Trait = Data Origin** = WHERE does data come from? (defined/authored/imported/generated/retrieved) (v11.8)
+14. **PageStructure/PageInstruction** = replaced PageType/PagePrompt (v11.8)

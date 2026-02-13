@@ -4,7 +4,7 @@
 # v11.4: Knowledge Atoms pattern - container for GEOQuery atoms
 #        - realm: shared (universal GEO tracking)
 #        - layer: knowledge (locale knowledge infrastructure)
-#        - trait: invariant (container is universal category)
+#        - trait: defined (container is universal category)
 #        - 1:1 with Locale (one container per locale)
 #        - Access: Locale -[:HAS_GEO_QUERIES]-> GEOQuerySet -[:CONTAINS_GEO_QUERY]-> GEOQuery
 #
@@ -14,7 +14,7 @@ node:
   name: GEOQuerySet
   realm: shared
   layer: knowledge
-  trait: invariant  # Containers are universal categories (invariant), atoms are locale-native (knowledge)
+  trait: defined  # Containers are universal categories (invariant), atoms are locale-native (knowledge)
   icon: "📦"
   description: "Container for GEO queries belonging to a locale (1:1 with Locale)"
 

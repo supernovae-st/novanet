@@ -202,15 +202,21 @@ pub(super) fn scroll_indicator(
 /// - generated: ★ (star) - LLM-generated output
 /// - aggregated: ▪ (small square) - computed metrics
 ///
-/// Note: v11.2 removed job trait, split derived into generated+aggregated
-/// v11.7: Uses icons.rs (generated from visual-encoding.yaml) as source of truth
+/// v0.12.0: ADR-024 Data Origin rename — supports both old and new trait names
+/// Uses icons.rs (generated from visual-encoding.yaml) as source of truth
 pub(super) fn trait_icon(trait_name: &str) -> &'static str {
     match trait_name {
-        "invariant" => icons::TRAITS_INVARIANT.terminal,
-        "localized" => icons::TRAITS_LOCALIZED.terminal,
-        "knowledge" => icons::TRAITS_KNOWLEDGE.terminal,
+        // New names (v0.12.0)
+        "defined" => icons::TRAITS_DEFINED.terminal,
+        "authored" => icons::TRAITS_AUTHORED.terminal,
+        "imported" => icons::TRAITS_IMPORTED.terminal,
         "generated" => icons::TRAITS_GENERATED.terminal,
-        "aggregated" => icons::TRAITS_AGGREGATED.terminal,
+        "retrieved" => icons::TRAITS_RETRIEVED.terminal,
+        // Legacy aliases (pre-v0.12.0)
+        "invariant" => icons::TRAITS_DEFINED.terminal,
+        "localized" => icons::TRAITS_AUTHORED.terminal,
+        "knowledge" => icons::TRAITS_IMPORTED.terminal,
+        "aggregated" => icons::TRAITS_RETRIEVED.terminal,
         _ => "·", // fallback
     }
 }

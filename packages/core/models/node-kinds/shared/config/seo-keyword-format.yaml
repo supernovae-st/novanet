@@ -4,13 +4,13 @@
 # v11.4: Classification node following EntityCategory pattern (ADR-017)
 #        - realm: shared (universal taxonomy, applies to all orgs)
 #        - layer: config (classification nodes layer)
-#        - trait: invariant (7 static format definitions)
+#        - trait: defined (7 static format definitions)
 
 node:
   name: SEOKeywordFormat
   realm: shared
   layer: config
-  trait: invariant
+  trait: defined
   icon: "label"
   description: "Keyword format classification (EntityCategory pattern, ADR-017)"
 

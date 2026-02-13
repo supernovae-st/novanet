@@ -1,7 +1,7 @@
 /**
  * @fileoverview NovaNet Node Type Taxonomy
  * @module @novanet/core/types/nodes
- * @version 11.6.0
+ * @version 0.12.0
  *
  * Defines the complete taxonomy for all 60 NovaNet node types across 2 realms and 10 layers.
  * This is the **single source of truth** for node classification in the knowledge graph.
@@ -14,7 +14,7 @@
  * |--------|----------|--------|
  * | Realm  | WHERE?   | `shared` (universal, READ-ONLY) or `org` (organization-specific) |
  * | Layer  | WHAT?    | 10 functional layers (4 shared + 6 org) |
- * | Trait  | HOW?     | Localization behavior (invariant, localized, knowledge, generated, aggregated) |
+ * | Trait  | HOW?     | Data origin behavior (defined, authored, imported, generated, retrieved) |
  *
  * ## Realm Distribution
  *
@@ -52,7 +52,7 @@
  * ```
  *
  * @since 7.1.0
- * @version 11.6.0 - SEO/GEO moved to shared/knowledge
+ * @version 0.12.0 - SEO/GEO moved to shared/knowledge
  */
 export const NODE_TYPES = [
   // ═══════════════════════════════════════════════════════════════════════════
@@ -159,20 +159,20 @@ export type Layer =
   | 'foundation' | 'structure' | 'semantic' | 'instruction' | 'output';  // org realm layers (6) — note: 'config' shared with shared realm
 
 /**
- * Node trait classification: HOW the node behaves with respect to localization.
+ * Node trait classification: HOW the data originates (Data Origin axis).
  *
  * | Trait | Description | Visual Encoding | Example |
  * |-------|-------------|-----------------|---------|
- * | `invariant` | Same across all locales | Solid border | Entity, Page, Block |
- * | `localized` | Locale-specific content | Dashed border | EntityContent, ProjectContent |
- * | `knowledge` | Locale-native atoms | Dotted border | Term, Expression, Pattern |
+ * | `defined` | Schema-defined, universal | Solid border | Entity, Page, Block |
+ * | `authored` | Locale-specific authored content | Dashed border | EntityContent, ProjectContent |
+ * | `imported` | Imported from external sources | Dotted border | Term, Expression, Pattern |
  * | `generated` | LLM-generated output | Double border | PageGenerated, BlockGenerated |
- * | `aggregated` | Computed metrics | Dotted thin | SEOKeywordMetrics, GEOAnswer |
+ * | `retrieved` | Retrieved/computed metrics | Dotted thin | SEOKeywordMetrics, GEOAnswer |
  *
  * @example
  * ```typescript
  * // Check if node needs locale-specific content
- * const needsLocalization = KIND_META[nodeType].trait === 'localized';
+ * const needsAuthoring = KIND_META[nodeType].trait === 'authored';
  *
  * // Get all generated output nodes
  * const outputs = NODE_TYPES.filter(t => KIND_META[t].trait === 'generated');
@@ -180,9 +180,9 @@ export type Layer =
  * ```
  *
  * @see ADR-005 — Trait-based visual encoding
- * @see ADR-018 — Trait split (derived → generated + aggregated)
+ * @see ADR-024 — Trait renames (Data Origin)
  */
-export type Trait = 'invariant' | 'localized' | 'knowledge' | 'generated' | 'aggregated';
+export type Trait = 'defined' | 'authored' | 'imported' | 'generated' | 'retrieved';
 
 // =============================================================================
 // KIND_META — unified classification for all 60 node types
@@ -199,7 +199,7 @@ export type Trait = 'invariant' | 'localized' | 'knowledge' | 'generated' | 'agg
  * @example
  * ```typescript
  * const meta: KindMeta = KIND_META['Entity'];
- * // → { realm: 'org', layer: 'semantic', trait: 'invariant' }
+ * // → { realm: 'org', layer: 'semantic', trait: 'defined' }
  * ```
  */
 export interface KindMeta {
@@ -207,7 +207,7 @@ export interface KindMeta {
   realm: Realm;
   /** Functional category: one of 10 layers (4 shared + 6 org) */
   layer: Layer;
-  /** Localization behavior: invariant, localized, knowledge, generated, or aggregated */
+  /** Data origin: defined, authored, imported, generated, or retrieved */
   trait: Trait;
 }
 
@@ -225,7 +225,7 @@ export interface KindMeta {
  *
  * // Get classification for a specific type
  * const { realm, layer, trait } = KIND_META['Entity'];
- * // → { realm: 'org', layer: 'semantic', trait: 'invariant' }
+ * // → { realm: 'org', layer: 'semantic', trait: 'defined' }
  *
  * // Count nodes by realm
  * const sharedCount = NODE_TYPES.filter(t => KIND_META[t].realm === 'shared').length;
@@ -236,89 +236,89 @@ export interface KindMeta {
  * // → ['PageGenerated', 'BlockGenerated', 'OutputArtifact']
  * ```
  *
- * @version 11.6.0
+ * @version 0.12.0
  */
 export const KIND_META: Record<NodeType, KindMeta> = {
   // ═══════════════════════════════════════════════════════════════════════════
   // SHARED REALM — config (3) — v11.5: classification nodes + Locale definition
   // ═══════════════════════════════════════════════════════════════════════════
-  EntityCategory:   { realm: 'shared', layer: 'config', trait: 'invariant' },
-  Locale:           { realm: 'shared', layer: 'config', trait: 'invariant' },
-  SEOKeywordFormat: { realm: 'shared', layer: 'config', trait: 'invariant' },
+  EntityCategory:   { realm: 'shared', layer: 'config', trait: 'defined' },
+  Locale:           { realm: 'shared', layer: 'config', trait: 'defined' },
+  SEOKeywordFormat: { realm: 'shared', layer: 'config', trait: 'defined' },
 
   // SHARED REALM — locale (6) — locale SETTINGS
-  Formatting:     { realm: 'shared', layer: 'locale', trait: 'knowledge' },
-  Slugification:  { realm: 'shared', layer: 'locale', trait: 'knowledge' },
-  Adaptation:     { realm: 'shared', layer: 'locale', trait: 'knowledge' },
-  Style:          { realm: 'shared', layer: 'locale', trait: 'knowledge' },
-  Culture:        { realm: 'shared', layer: 'locale', trait: 'knowledge' },
-  Market:         { realm: 'shared', layer: 'locale', trait: 'knowledge' },
+  Formatting:     { realm: 'shared', layer: 'locale', trait: 'imported' },
+  Slugification:  { realm: 'shared', layer: 'locale', trait: 'imported' },
+  Adaptation:     { realm: 'shared', layer: 'locale', trait: 'imported' },
+  Style:          { realm: 'shared', layer: 'locale', trait: 'imported' },
+  Culture:        { realm: 'shared', layer: 'locale', trait: 'imported' },
+  Market:         { realm: 'shared', layer: 'locale', trait: 'imported' },
 
   // SHARED REALM — geography (6)
-  Continent:      { realm: 'shared', layer: 'geography', trait: 'invariant' },
-  GeoRegion:      { realm: 'shared', layer: 'geography', trait: 'invariant' },
-  GeoSubRegion:   { realm: 'shared', layer: 'geography', trait: 'invariant' },
-  IncomeGroup:    { realm: 'shared', layer: 'geography', trait: 'invariant' },
-  LendingCategory:{ realm: 'shared', layer: 'geography', trait: 'invariant' },
-  EconomicRegion: { realm: 'shared', layer: 'geography', trait: 'invariant' },
+  Continent:      { realm: 'shared', layer: 'geography', trait: 'defined' },
+  GeoRegion:      { realm: 'shared', layer: 'geography', trait: 'defined' },
+  GeoSubRegion:   { realm: 'shared', layer: 'geography', trait: 'defined' },
+  IncomeGroup:    { realm: 'shared', layer: 'geography', trait: 'defined' },
+  LendingCategory:{ realm: 'shared', layer: 'geography', trait: 'defined' },
+  EconomicRegion: { realm: 'shared', layer: 'geography', trait: 'defined' },
 
   // SHARED REALM — knowledge (24) — containers, atoms, SEO/GEO
-  TermSet:             { realm: 'shared', layer: 'knowledge', trait: 'invariant' },
-  ExpressionSet:       { realm: 'shared', layer: 'knowledge', trait: 'invariant' },
-  PatternSet:          { realm: 'shared', layer: 'knowledge', trait: 'invariant' },
-  CultureSet:          { realm: 'shared', layer: 'knowledge', trait: 'invariant' },
-  TabooSet:            { realm: 'shared', layer: 'knowledge', trait: 'invariant' },
-  AudienceSet:         { realm: 'shared', layer: 'knowledge', trait: 'invariant' },
-  Term:                { realm: 'shared', layer: 'knowledge', trait: 'knowledge' },
-  Expression:          { realm: 'shared', layer: 'knowledge', trait: 'knowledge' },
-  Pattern:             { realm: 'shared', layer: 'knowledge', trait: 'knowledge' },
-  CultureRef:          { realm: 'shared', layer: 'knowledge', trait: 'knowledge' },
-  Taboo:               { realm: 'shared', layer: 'knowledge', trait: 'knowledge' },
-  AudienceTrait:       { realm: 'shared', layer: 'knowledge', trait: 'knowledge' },
-  LanguageFamily:      { realm: 'shared', layer: 'knowledge', trait: 'knowledge' },
-  LanguageBranch:      { realm: 'shared', layer: 'knowledge', trait: 'knowledge' },
-  CulturalRealm:       { realm: 'shared', layer: 'knowledge', trait: 'knowledge' },
-  CulturalSubRealm:    { realm: 'shared', layer: 'knowledge', trait: 'knowledge' },
-  PopulationCluster:   { realm: 'shared', layer: 'knowledge', trait: 'knowledge' },
-  PopulationSubCluster:{ realm: 'shared', layer: 'knowledge', trait: 'knowledge' },
+  TermSet:             { realm: 'shared', layer: 'knowledge', trait: 'defined' },
+  ExpressionSet:       { realm: 'shared', layer: 'knowledge', trait: 'defined' },
+  PatternSet:          { realm: 'shared', layer: 'knowledge', trait: 'defined' },
+  CultureSet:          { realm: 'shared', layer: 'knowledge', trait: 'defined' },
+  TabooSet:            { realm: 'shared', layer: 'knowledge', trait: 'defined' },
+  AudienceSet:         { realm: 'shared', layer: 'knowledge', trait: 'defined' },
+  Term:                { realm: 'shared', layer: 'knowledge', trait: 'imported' },
+  Expression:          { realm: 'shared', layer: 'knowledge', trait: 'imported' },
+  Pattern:             { realm: 'shared', layer: 'knowledge', trait: 'imported' },
+  CultureRef:          { realm: 'shared', layer: 'knowledge', trait: 'imported' },
+  Taboo:               { realm: 'shared', layer: 'knowledge', trait: 'imported' },
+  AudienceTrait:       { realm: 'shared', layer: 'knowledge', trait: 'imported' },
+  LanguageFamily:      { realm: 'shared', layer: 'knowledge', trait: 'imported' },
+  LanguageBranch:      { realm: 'shared', layer: 'knowledge', trait: 'imported' },
+  CulturalRealm:       { realm: 'shared', layer: 'knowledge', trait: 'imported' },
+  CulturalSubRealm:    { realm: 'shared', layer: 'knowledge', trait: 'imported' },
+  PopulationCluster:   { realm: 'shared', layer: 'knowledge', trait: 'imported' },
+  PopulationSubCluster:{ realm: 'shared', layer: 'knowledge', trait: 'imported' },
 
   // ═══════════════════════════════════════════════════════════════════════════
   // ORG REALM — config (1) — v11.3: Organization + Tenant merged
   // ═══════════════════════════════════════════════════════════════════════════
-  OrgConfig: { realm: 'org', layer: 'config', trait: 'invariant' },
+  OrgConfig: { realm: 'org', layer: 'config', trait: 'defined' },
 
   // ORG REALM — foundation (3)
-  Project:        { realm: 'org', layer: 'foundation',  trait: 'invariant' },
-  BrandIdentity:  { realm: 'org', layer: 'foundation',  trait: 'invariant' },
-  ProjectContent: { realm: 'org', layer: 'foundation',  trait: 'localized' },
+  Project:        { realm: 'org', layer: 'foundation',  trait: 'defined' },
+  BrandIdentity:  { realm: 'org', layer: 'foundation',  trait: 'defined' },
+  ProjectContent: { realm: 'org', layer: 'foundation',  trait: 'authored' },
 
   // ORG REALM — structure (3)
-  Page:         { realm: 'org', layer: 'structure',   trait: 'invariant' },
-  Block:        { realm: 'org', layer: 'structure',   trait: 'invariant' },
-  ContentSlot:  { realm: 'org', layer: 'structure',   trait: 'invariant' },
+  Page:         { realm: 'org', layer: 'structure',   trait: 'defined' },
+  Block:        { realm: 'org', layer: 'structure',   trait: 'defined' },
+  ContentSlot:  { realm: 'org', layer: 'structure',   trait: 'defined' },
 
   // ORG REALM — semantic (4)
-  Entity:          { realm: 'org', layer: 'semantic', trait: 'invariant' },
-  EntityContent:   { realm: 'org', layer: 'semantic', trait: 'localized' },
-  AudiencePersona: { realm: 'org', layer: 'semantic', trait: 'invariant' },
-  ChannelSurface:  { realm: 'org', layer: 'semantic', trait: 'invariant' },
+  Entity:          { realm: 'org', layer: 'semantic', trait: 'defined' },
+  EntityContent:   { realm: 'org', layer: 'semantic', trait: 'authored' },
+  AudiencePersona: { realm: 'org', layer: 'semantic', trait: 'defined' },
+  ChannelSurface:  { realm: 'org', layer: 'semantic', trait: 'defined' },
 
   // ORG REALM — instruction (7)
-  PageType:        { realm: 'org', layer: 'instruction', trait: 'invariant' },
-  BlockType:       { realm: 'org', layer: 'instruction', trait: 'invariant' },
-  PagePrompt:      { realm: 'org', layer: 'instruction', trait: 'invariant' },
-  BlockPrompt:     { realm: 'org', layer: 'instruction', trait: 'invariant' },
-  BlockRules:      { realm: 'org', layer: 'instruction', trait: 'invariant' },
-  BlockInstruction:{ realm: 'org', layer: 'instruction', trait: 'invariant' },
+  PageType:        { realm: 'org', layer: 'instruction', trait: 'defined' },
+  BlockType:       { realm: 'org', layer: 'instruction', trait: 'defined' },
+  PagePrompt:      { realm: 'org', layer: 'instruction', trait: 'defined' },
+  BlockPrompt:     { realm: 'org', layer: 'instruction', trait: 'defined' },
+  BlockRules:      { realm: 'org', layer: 'instruction', trait: 'defined' },
+  BlockInstruction:{ realm: 'org', layer: 'instruction', trait: 'defined' },
   PromptArtifact:  { realm: 'org', layer: 'instruction', trait: 'generated' },
 
   // SHARED REALM — knowledge (SEO/GEO) — v11.5: moved from org to shared
-  SEOKeyword:       { realm: 'shared', layer: 'knowledge', trait: 'knowledge' },
-  SEOKeywordMetrics:{ realm: 'shared', layer: 'knowledge', trait: 'aggregated' },
-  SEOKeywordSet:    { realm: 'shared', layer: 'knowledge', trait: 'invariant' },
-  GEOQuery:         { realm: 'shared', layer: 'knowledge', trait: 'knowledge' },
-  GEOQuerySet:      { realm: 'shared', layer: 'knowledge', trait: 'invariant' },
-  GEOAnswer:        { realm: 'shared', layer: 'knowledge', trait: 'aggregated' },
+  SEOKeyword:       { realm: 'shared', layer: 'knowledge', trait: 'imported' },
+  SEOKeywordMetrics:{ realm: 'shared', layer: 'knowledge', trait: 'retrieved' },
+  SEOKeywordSet:    { realm: 'shared', layer: 'knowledge', trait: 'defined' },
+  GEOQuery:         { realm: 'shared', layer: 'knowledge', trait: 'imported' },
+  GEOQuerySet:      { realm: 'shared', layer: 'knowledge', trait: 'defined' },
+  GEOAnswer:        { realm: 'shared', layer: 'knowledge', trait: 'retrieved' },
 
   // ORG REALM — output (3)
   PageGenerated:  { realm: 'org', layer: 'output', trait: 'generated' },
@@ -359,8 +359,8 @@ export const NODE_REALMS: Record<NodeType, Realm> = deriveMap('realm');
  *
  * @example
  * ```typescript
- * const trait = NODE_TRAITS['Entity'];        // → 'invariant'
- * const trait = NODE_TRAITS['EntityContent']; // → 'localized'
+ * const trait = NODE_TRAITS['Entity'];        // → 'defined'
+ * const trait = NODE_TRAITS['EntityContent']; // → 'authored'
  * const trait = NODE_TRAITS['PageGenerated']; // → 'generated'
  * ```
  */

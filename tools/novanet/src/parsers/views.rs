@@ -565,7 +565,7 @@ cypher: |
     #[test]
     fn parse_registry_with_new_format() {
         let yaml = r##"
-version: "11.7.0"
+version: "0.12.0"
 description: NovaNet Unified View System
 views:
   - id: meta-complete
@@ -592,7 +592,7 @@ views:
       RETURN n
 "##;
         let reg: ViewRegistry = serde_yaml::from_str(yaml).unwrap();
-        assert_eq!(reg.version, "11.7.0");
+        assert_eq!(reg.version, "0.12.0");
         assert_eq!(reg.views.len(), 2);
 
         // First view

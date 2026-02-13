@@ -58,7 +58,7 @@ impl ResourceType {
 pub struct EntityResource {
     /// Entity key
     pub key: String,
-    /// Entity name (invariant)
+    /// Entity name (universal, not locale-specific)
     pub name: String,
     /// Entity definition
     pub definition: Option<String>,

@@ -10,7 +10,7 @@ node:
   name: BlockInstruction
   realm: org
   layer: instruction
-  trait: invariant
+  trait: defined
   icon: "📝"
   description: "Instructions for generating a specific block within a page. Contains markdown with @entity: and @link: references. Multiple BlockInstructions are concatenated at runtime to form PageInstruction."
 

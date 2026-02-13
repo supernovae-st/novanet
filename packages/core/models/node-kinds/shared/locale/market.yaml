@@ -9,7 +9,7 @@ node:
   name: Market
   realm: shared
   layer: locale
-  trait: knowledge
+  trait: imported
   icon: "📊"
   description: "Market intelligence for a locale including demographics, digital maturity, e-commerce landscape, and consumer behavior. Used for market-appropriate content strategy."
 

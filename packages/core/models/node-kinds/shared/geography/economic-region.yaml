@@ -9,7 +9,7 @@ node:
   name: EconomicRegion
   realm: shared
   layer: geography
-  trait: invariant
+  trait: defined
   icon: "📊"
   description: "World Bank economic region for market analysis"
 

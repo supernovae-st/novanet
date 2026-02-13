@@ -10,7 +10,7 @@
  *
  * Run: node tools/scripts/validate-design-system.mjs
  *
- * v11.6.1 - Arc Animation System v2
+ * v0.12.0 - Data Origin trait renames
  */
 
 import { readFileSync, existsSync } from 'fs';
@@ -219,7 +219,7 @@ function validateArcFamilyColors(taxonomy, arcFamilyPalettesTS, generatedTS) {
 }
 
 function validateArcFamilyEffects(arcFamilyPalettesTS) {
-  logSection('Arc Family Effects (v11.6.1)');
+  logSection('Arc Family Effects (v0.12.0)');
 
   const expectedEffects = {
     ownership: 'energyPulse',
@@ -260,7 +260,7 @@ function validateEffectPrimitives(typesTS) {
   const requiredPrimitives = [
     // Core effects
     'emit', 'particles', 'trail', 'impact', 'glow', 'zigzag', 'interference', 'scanline',
-    // Family-specific effects (v11.6.1)
+    // Family-specific effects (v0.12.0)
     'energyPulse', 'dnaHelix', 'matrixCode', 'radarSweep',
   ];
 
@@ -395,7 +395,7 @@ function validateRustTheme() {
 }
 
 // =============================================================================
-// Realm, Layer, Trait Validators (v11.6.0)
+// Realm, Layer, Trait Validators (v0.12.0)
 // =============================================================================
 
 function validateRealms(taxonomy, hierarchyTS) {
@@ -463,7 +463,8 @@ function validateLayers(taxonomy, hierarchyTS, layersTS) {
 function validateTraits(taxonomy, typesTS) {
   logSection('Node Traits (taxonomy.yaml ↔ TypeScript)');
 
-  const expectedTraits = ['invariant', 'localized', 'knowledge', 'generated', 'aggregated'];
+  // v0.12.0: Data Origin trait renames
+  const expectedTraits = ['defined', 'authored', 'imported', 'generated', 'retrieved'];
   const yamlTraits = taxonomy.node_traits?.map(t => t.key) || [];
 
   // Check YAML
@@ -586,7 +587,8 @@ function validateNodeCounts(layersTS) {
 function validateVisualEncodingTraits(visualEncoding, taxonomy) {
   logSection('Visual Encoding Trait Icons');
 
-  const expectedTraits = ['invariant', 'localized', 'knowledge', 'generated', 'aggregated'];
+  // v0.12.0: Data Origin trait renames
+  const expectedTraits = ['defined', 'authored', 'imported', 'generated', 'retrieved'];
   const traitIcons = visualEncoding.icons?.traits || {};
 
   for (const trait of expectedTraits) {
@@ -628,7 +630,7 @@ function validateVisualEncodingLayers(visualEncoding) {
 // =============================================================================
 
 async function main() {
-  logHeader('NovaNet Design System Validation v11.6.1');
+  logHeader('NovaNet Design System Validation v0.12.0');
 
   // Load files
   const taxonomy = loadYaml('packages/core/models/taxonomy.yaml');
@@ -646,7 +648,7 @@ async function main() {
     process.exit(1);
   }
 
-  // Run validations - Arc System (v11.6.1)
+  // Run validations - Arc System (v0.12.0)
   validateArcFamilies(taxonomy, arcFamilyPalettesTS, generatedTS);
   validateArcFamilyColors(taxonomy, arcFamilyPalettesTS, generatedTS);
   validateArcFamilyEffects(arcFamilyPalettesTS);
@@ -657,7 +659,7 @@ async function main() {
   validateTerminalPalette(taxonomy);
   validateRustTheme();
 
-  // Run validations - Taxonomy Structure (v11.6.0)
+  // Run validations - Taxonomy Structure (v0.12.0)
   if (hierarchyTS && layersTS) {
     validateRealms(taxonomy, hierarchyTS);
     validateLayers(taxonomy, hierarchyTS, layersTS);
