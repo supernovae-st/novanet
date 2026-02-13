@@ -70,7 +70,7 @@ impl TaxonomyTree {
                 realm
                     .layers
                     .iter()
-                    .map(|layer| (layer.key.clone(), layer.kinds.len()))
+                    .map(|layer| (layer.key.clone(), layer.classes.len()))
                     .collect()
             })
             .unwrap_or_default()
@@ -261,8 +261,8 @@ fn build_layer_card(
         ),
     ]));
 
-    // Row 3: │   N kinds           │ (heatmap color based on density)
-    let count_str = format!("{} kinds", kind_count);
+    // Row 3: │   N classes         │ (heatmap color based on density)
+    let count_str = format!("{} classes", kind_count);
     let count_color = heatmap_color(kind_count, max_count);
     let count_padding = card_width.saturating_sub(count_str.chars().count() + 6);
     lines.push(Line::from(vec![

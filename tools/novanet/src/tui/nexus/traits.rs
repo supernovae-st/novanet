@@ -284,7 +284,7 @@ impl TaxonomyTree {
         // Collect kinds by trait and layer
         for realm in &self.realms {
             for layer in &realm.layers {
-                for kind in &layer.kinds {
+                for kind in &layer.classes {
                     let trait_key = kind.trait_name.as_str();
                     if let Some(stats) = stats_map.get_mut(trait_key) {
                         stats.kind_count += 1;
@@ -871,7 +871,7 @@ fn render_kind_list(f: &mut Frame, app: &App, area: Rect) {
 
     if kinds.is_empty() {
         let empty_line = Line::from(Span::styled(
-            "No kinds with this trait",
+            "No classes with this trait",
             Style::default().fg(Color::DarkGray),
         ));
         let paragraph = Paragraph::new(vec![empty_line]);
@@ -894,7 +894,7 @@ fn render_kind_list(f: &mut Frame, app: &App, area: Rect) {
     // Header with count
     lines.push(Line::from(vec![
         Span::styled(
-            format!("{} kinds with trait ", kinds.len()),
+            format!("{} classes with trait ", kinds.len()),
             Style::default().fg(Color::DarkGray),
         ),
         Span::styled(
@@ -978,7 +978,7 @@ fn render_kind_detail(f: &mut Frame, app: &App, area: Rect) {
     let cursor = app.nexus.drill_cursor.min(kinds.len().saturating_sub(1));
 
     let Some((layer_key, kind_key)) = kinds.get(cursor) else {
-        let empty = Paragraph::new("Select a kind to see details");
+        let empty = Paragraph::new("Select a class to see details");
         f.render_widget(empty, inner);
         return;
     };
@@ -987,7 +987,7 @@ fn render_kind_detail(f: &mut Frame, app: &App, area: Rect) {
     let kind_data = app.tree.realms.iter().find_map(|realm| {
         realm.layers.iter().find_map(|layer| {
             if &layer.key == layer_key {
-                layer.kinds.iter().find(|k| &k.key == kind_key).map(|k| {
+                layer.classes.iter().find(|k| &k.key == kind_key).map(|k| {
                     (
                         realm.key.clone(),
                         realm.display_name.clone(),

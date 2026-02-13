@@ -77,7 +77,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
     let loading_msg = if app.pending_arcs_load.is_some() {
         Some("Loading arc relationships...")
     } else if app.pending_arc_kind_load.is_some() {
-        Some("Loading arc kind details...")
+        Some("Loading arc class details...")
     } else if app.pending_realm_load.is_some() {
         Some("Loading realm statistics...")
     } else if app.pending_layer_load.is_some() {
@@ -124,7 +124,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
             Span::styled("  \u{25aa}", dim),
             Span::styled(format!("{} Layers", details.layers.len()), STYLE_INFO),
             Span::styled(" \u{b7} ", dim),
-            Span::styled(format!("{} Node Classes", details.total_kinds), STYLE_SUCCESS),
+            Span::styled(format!("{} Node Classes", details.total_classes), STYLE_SUCCESS),
             Span::styled(" \u{b7} ", dim),
             Span::styled(
                 format!("{} Instances", details.total_instances),
@@ -148,14 +148,14 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
         let max_kinds = details
             .layers
             .iter()
-            .map(|l| l.kind_count)
+            .map(|l| l.class_count)
             .max()
             .unwrap_or(1)
             .max(1);
         let bar_max_width = 20usize;
 
         for layer in &details.layers {
-            let bar_width = (layer.kind_count * bar_max_width) / max_kinds;
+            let bar_width = (layer.class_count * bar_max_width) / max_kinds;
             let bar = "\u{2588}".repeat(bar_width.max(1));
 
             lines.push(Line::from(vec![
@@ -164,7 +164,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
                     format!("{:16}", layer.display_name),
                     Style::default().fg(theme.layer_color(&layer.key)),
                 ),
-                Span::styled(format!("{:>3} ", layer.kind_count), bright_dim),
+                Span::styled(format!("{:>3} ", layer.class_count), bright_dim),
                 Span::styled(bar, Style::default().fg(theme.layer_color(&layer.key))),
             ]));
         }
@@ -205,7 +205,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
         // Stats summary
         lines.push(Line::from(vec![
             Span::styled("  \u{25aa}", dim),
-            Span::styled(format!("{} Node Classes", details.total_kinds), STYLE_SUCCESS),
+            Span::styled(format!("{} Node Classes", details.total_classes), STYLE_SUCCESS),
             Span::styled(" \u{b7} ", dim),
             Span::styled(
                 format!("{} Instances", details.total_instances),
@@ -226,7 +226,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
             dim,
         )));
 
-        for group in &details.kinds_by_trait {
+        for group in &details.classes_by_trait {
             // Trait header with color
             let trait_color = theme.trait_color(&group.trait_key);
             lines.push(Line::from(vec![
@@ -698,12 +698,12 @@ fn build_graph_distribution_stats(app: &App) -> Vec<Line<'static>> {
     let mut total_kinds: usize = 0;
     for realm in &app.tree.realms {
         for layer in &realm.layers {
-            total_kinds += layer.kinds.len();
+            total_kinds += layer.classes.len();
         }
     }
 
     if total_kinds == 0 {
-        lines.push(Line::from(Span::styled("  No kinds loaded", STYLE_DIM)));
+        lines.push(Line::from(Span::styled("  No classes loaded", STYLE_DIM)));
         return lines;
     }
 
@@ -723,7 +723,7 @@ fn build_graph_distribution_stats(app: &App) -> Vec<Line<'static>> {
 
     // Realm bars
     for realm in &app.tree.realms {
-        let realm_classes: usize = realm.layers.iter().map(|l| l.kinds.len()).sum();
+        let realm_classes: usize = realm.layers.iter().map(|l| l.classes.len()).sum();
         let percent = (realm_classes as f64 / total_kinds as f64 * 100.0).round() as u8;
         let bar_width = (realm_classes * bar_max_width) / total_kinds.max(1);
         let bar = "\u{2588}".repeat(bar_width.max(1));
@@ -765,7 +765,7 @@ fn build_graph_distribution_stats(app: &App) -> Vec<Line<'static>> {
         .realms
         .iter()
         .flat_map(|r| r.layers.iter())
-        .map(|l| l.kinds.len())
+        .map(|l| l.classes.len())
         .max()
         .unwrap_or(1)
         .max(1);
@@ -773,7 +773,7 @@ fn build_graph_distribution_stats(app: &App) -> Vec<Line<'static>> {
     // Layer bars (grouped by realm)
     for realm in &app.tree.realms {
         for layer in &realm.layers {
-            let layer_kinds = layer.kinds.len();
+            let layer_kinds = layer.classes.len();
             if layer_kinds == 0 {
                 continue; // Skip empty layers
             }
@@ -858,12 +858,12 @@ mod tests {
         }
     }
 
-    fn create_test_layer(key: &str, kinds: Vec<ClassInfo>) -> LayerInfo {
+    fn create_test_layer(key: &str, classes: Vec<ClassInfo>) -> LayerInfo {
         LayerInfo {
             key: key.to_string(),
             display_name: key.to_string(),
             color: "#ffffff".to_string(),
-            kinds,
+            classes,
             llm_context: String::new(),
         }
     }
@@ -898,7 +898,7 @@ mod tests {
         let mut kind_index = FxHashMap::default();
         for (r_idx, realm) in realms.iter().enumerate() {
             for (l_idx, layer) in realm.layers.iter().enumerate() {
-                for (k_idx, kind) in layer.kinds.iter().enumerate() {
+                for (k_idx, kind) in layer.classes.iter().enumerate() {
                     kind_index.insert(kind.key.clone(), (r_idx, l_idx, k_idx));
                 }
             }
@@ -1080,8 +1080,8 @@ mod tests {
         assert_eq!(lines.len(), 1, "empty tree should produce 1 line");
         let content: String = lines[0].spans.iter().map(|s| s.content.as_ref()).collect();
         assert!(
-            content.contains("No kinds loaded"),
-            "should show 'No kinds loaded', got: {}",
+            content.contains("No classes loaded"),
+            "should show 'No classes loaded', got: {}",
             content
         );
     }

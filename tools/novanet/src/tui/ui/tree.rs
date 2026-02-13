@@ -398,16 +398,16 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     let visible_height = area.height.saturating_sub(2) as usize;
     app.tree_height = visible_height;
 
-    // === EMPTY STATE: No node kinds loaded ===
-    let total_kinds: usize = app
+    // === EMPTY STATE: No node classes loaded ===
+    let total_classes: usize = app
         .tree
         .realms
         .iter()
         .flat_map(|r| r.layers.iter())
-        .map(|l| l.kinds.len())
+        .map(|l| l.classes.len())
         .sum();
 
-    if total_kinds == 0 {
+    if total_classes == 0 {
         // Render empty tree panel with border
         // v11.6: Show mode in empty state too
         let empty_title = if app.is_graph_mode() {
@@ -527,22 +527,22 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     let cont = cont_char;
 
     // === KINDS SECTION ===
-    let kinds_collapsed = app.tree.is_collapsed("kinds");
-    let kinds_icon = expand_icon(kinds_collapsed);
-    let kinds_count: usize = app
+    let classes_collapsed = app.tree.is_collapsed("classes");
+    let classes_icon = expand_icon(classes_collapsed);
+    let classes_count: usize = app
         .tree
         .realms
         .iter()
         .flat_map(|r| r.layers.iter())
-        .map(|l| l.kinds.len())
+        .map(|l| l.classes.len())
         .sum();
     all_lines.push(make_line(
         idx,
         app.tree_cursor,
         focused,
         "",
-        kinds_icon,
-        format!("Node Classes ({})", kinds_count),
+        classes_icon,
+        format!("Node Classes ({})", classes_count),
         Color::Magenta, // line_color (not used - no prefix)
         Color::Magenta, // text_color
         app.search.matches.get(&idx).map(|v| v.as_slice()),
@@ -553,11 +553,11 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
     let has_arcs = !app.tree.arc_families.is_empty();
 
-    // Trait filter: only show realms/layers/kinds matching the filter
+    // Trait filter: only show realms/layers/classes matching the filter
     let trait_filter = app.trait_filter.as_deref();
 
-    if !kinds_collapsed {
-        // Filter visible realms (skip realms with no matching kinds when trait filter active)
+    if !classes_collapsed {
+        // Filter visible realms (skip realms with no matching classes when trait filter active)
         let visible_realms: Vec<_> = app
             .tree
             .realms
@@ -566,7 +566,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                 if let Some(filter) = trait_filter {
                     r.layers
                         .iter()
-                        .any(|l| l.kinds.iter().any(|k| k.trait_name == filter))
+                        .any(|l| l.classes.iter().any(|k| k.trait_name == filter))
                 } else {
                     true
                 }
@@ -583,11 +583,11 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
             let realm_color = hex_to_color(&realm.color);
 
             // v11.6.1: Custom Realm line with counts and right-aligned badge
-            // Format: [cursor][prefix][chevron] [icon] [name]  [▦layers ◇kinds]  │ [badge] │R│
+            // Format: [cursor][prefix][chevron] [icon] [name]  [▦layers ◇classes]  │ [badge] │R│
             let is_cursor = idx == app.tree_cursor;
             let cursor_char = if is_cursor { ">" } else { " " };
             let layers_count = realm.layers.len();
-            let kinds_count = realm.total_kinds();
+            let classes_count = realm.total_classes();
 
             // Build left side content
             let left_content = format!(
@@ -604,7 +604,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
             } else {
                 String::new()
             };
-            let stats_str = format!("▦{} ◇{}{}", layers_count, kinds_count, health_str);
+            let stats_str = format!("▦{} ◇{}{}", layers_count, classes_count, health_str);
 
             // Build right badge: ●org │R│
             let badge_str = format!(
@@ -696,15 +696,15 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     .layers
                     .iter()
                     .filter(|l| {
-                        // Trait filter: skip layers with no matching kinds
+                        // Trait filter: skip layers with no matching classes
                         if let Some(filter) = trait_filter {
-                            if !l.kinds.iter().any(|k| k.trait_name == filter) {
+                            if !l.classes.iter().any(|k| k.trait_name == filter) {
                                 return false;
                             }
                         }
                         // Hide empty filter (Data mode only)
                         if hide_empty {
-                            l.kinds.iter().map(|k| k.instance_count).sum::<i64>() > 0
+                            l.classes.iter().map(|k| k.instance_count).sum::<i64>() > 0
                         } else {
                             true
                         }
@@ -719,7 +719,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
                     // Calculate total instances in this layer
                     let layer_instance_count: i64 =
-                        layer.kinds.iter().map(|k| k.instance_count).sum();
+                        layer.classes.iter().map(|k| k.instance_count).sum();
                     let layer_is_empty = layer_instance_count == 0;
 
                     // Show expand icon only if layer has content
@@ -734,12 +734,12 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     };
 
                     // v11.6.1: Custom Layer line with counts and right-aligned badge
-                    // Format: [cursor][prefix][chevron] [icon] [name]  [◇kinds]  │ [badge] │L│
+                    // Format: [cursor][prefix][chevron] [icon] [name]  [◇classes]  │ [badge] │L│
                     let is_cursor = idx == app.tree_cursor;
                     let cursor_char = if is_cursor { ">" } else { " " };
                     let prefix = format!("{}{}", cont(realm_is_last), branch(layer_is_last));
                     let layer_badge = layer_badge_icon(&layer.key);
-                    let kinds_in_layer = layer.kinds.len();
+                    let classes_in_layer = layer.classes.len();
 
                     // Display name with instance count in Data mode
                     let display_name = if is_data_mode {
@@ -758,7 +758,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     } else {
                         String::new()
                     };
-                    let stats_str = format!("◇{}{}", kinds_in_layer, health_str);
+                    let stats_str = format!("◇{}{}", classes_in_layer, health_str);
 
                     // Build right badge: ◆sem │L│
                     let badge_str = format!("{}{} │L│", layer_badge, layer_abbrev(&layer.key));
@@ -825,12 +825,12 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     idx += 1;
 
                     if !layer_collapsed {
-                        // Filter visible kinds (hide empty if hide_empty is true)
-                        let visible_kinds: Vec<_> = layer
-                            .kinds
+                        // Filter visible classes (hide empty if hide_empty is true)
+                        let visible_classes: Vec<_> = layer
+                            .classes
                             .iter()
                             .filter(|k| {
-                                // Trait filter: skip kinds that don't match
+                                // Trait filter: skip classes that don't match
                                 if let Some(filter) = trait_filter {
                                     if k.trait_name != filter {
                                         return false;
@@ -844,11 +844,11 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 }
                             })
                             .collect();
-                        let kind_count = visible_kinds.len();
+                        let kind_count = visible_classes.len();
 
-                        for (ki, kind) in visible_kinds.iter().enumerate() {
+                        for (ki, kind) in visible_classes.iter().enumerate() {
                             let kind_is_last = ki == kind_count - 1;
-                            let class_key_str = format!("kind:{}", kind.key);
+                            let class_key_str = format!("class:{}", kind.key);
                             let kind_collapsed = app.tree.is_collapsed(&class_key_str);
 
                             // Show collapse icon based on mode:
@@ -922,7 +922,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                     health_badge
                                 );
                                 let color = if kind_is_empty {
-                                    COLOR_MUTED_TEXT // Gray for empty kinds
+                                    COLOR_MUTED_TEXT // Gray for empty classes
                                 } else {
                                     Color::White
                                 };
@@ -1218,7 +1218,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                         }
                                     }
                                 } else if let Some(instances) = app.tree.get_instances(&kind.key) {
-                                    // Regular kinds: show instances directly
+                                    // Regular classes: show instances directly
                                     let inst_count = instances.len();
                                     for (ii, instance) in instances.iter().enumerate() {
                                         let inst_is_last = ii == inst_count - 1;
@@ -1373,7 +1373,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
         .tree
         .arc_families
         .iter()
-        .map(|f| f.arc_kinds.len())
+        .map(|f| f.arc_classes.len())
         .sum();
     all_lines.push(make_line(
         idx,
@@ -1402,7 +1402,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
             // Format: [cursor][prefix][chevron] [icon] [name]  [◇arcs]  │ [badge] │F│
             let is_cursor = idx == app.tree_cursor;
             let cursor_char = if is_cursor { ">" } else { " " };
-            let arcs_in_family = family.arc_kinds.len();
+            let arcs_in_family = family.arc_classes.len();
             let family_badge = arc_family_badge_icon(&family.key);
 
             // Build left side content
@@ -1488,8 +1488,8 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
             idx += 1;
 
             if !family_collapsed {
-                let arc_count = family.arc_kinds.len();
-                for (ai, arc_kind) in family.arc_kinds.iter().enumerate() {
+                let arc_count = family.arc_classes.len();
+                for (ai, arc_kind) in family.arc_classes.iter().enumerate() {
                     let arc_is_last = ai == arc_count - 1;
 
                     // v11.6.1: Custom ArcClass line with source→target and cardinality badge
