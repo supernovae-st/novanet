@@ -1,11 +1,17 @@
 //! Tutorial Tab - Guided learning journey for NovaNet.
 //!
+//! v0.12.0: Enhanced visual progress tracking with:
+//! - Gradient progress bar with percentage
+//! - Step badges with completion status (◯→◉→✓)
+//! - Task completion checkboxes with XP
+//! - Achievement celebration animations
+//!
 //! 5-step interactive tutorial with hands-on practice:
 //! 1. Graph Fundamentals - Schema vs Instance distinction
 //! 2. Classification - Realm, Layer, Trait
 //! 3. Arcs & Relationships - Family, Scope, Cardinality
 //! 4. Generation Flow - NOT translation
-//! 5. Unified Tree - v11.7 navigation
+//! 5. Unified Tree - v0.12.0 navigation
 
 use ratatui::Frame;
 use ratatui::layout::{Constraint, Direction, Layout, Rect};
@@ -409,64 +415,144 @@ pub fn render_tutorial_tab(f: &mut Frame, app: &App, area: Rect) {
     render_navigation(f, tutorial, locale, chunks[2]);
 }
 
-/// Render the progress bar at the top.
+/// v0.12.0 Enhanced progress bar with visual badges and XP system.
 fn render_progress_bar(f: &mut Frame, tutorial: &TutorialState, locale: NexusLocale, area: Rect) {
-    let _progress = tutorial.progress_percent();
+    let progress = tutorial.progress_percent();
     let step = tutorial.current_step + 1;
+    let xp = calculate_xp(tutorial);
 
     // i18n labels
-    let journey_label = match locale {
-        NexusLocale::En => "  YOUR JOURNEY  ",
-        NexusLocale::Fr => "  VOTRE PARCOURS  ",
-    };
-    let step_label = match locale {
-        NexusLocale::En => "Step",
-        NexusLocale::Fr => "Étape",
+    let (journey_label, xp_label) = match locale {
+        NexusLocale::En => (" 🎓 YOUR LEARNING JOURNEY ", "XP"),
+        NexusLocale::Fr => (" 🎓 VOTRE PARCOURS ", "XP"),
     };
 
-    // Build progress indicators
+    // Build step indicators with badges
     let mut spans = vec![Span::styled(
         journey_label,
-        Style::default().fg(Color::Magenta),
+        Style::default()
+            .fg(Color::Magenta)
+            .add_modifier(Modifier::BOLD),
     )];
 
+    // Step badges with icons
+    let step_icons = ["◆", "◫", "→", "⚡", "🌳"];
     for i in 0..TUTORIAL_STEPS {
-        let status = tutorial.step_status(i);
-        let style = if i < tutorial.current_step {
-            Style::default().fg(Color::Green) // Completed
+        let is_complete = tutorial
+            .tasks_completed
+            .get(i)
+            .map(|t| t.iter().all(|&c| c))
+            .unwrap_or(false);
+
+        let (badge, style) = if is_complete {
+            (
+                "✓",
+                Style::default()
+                    .fg(Color::Green)
+                    .add_modifier(Modifier::BOLD),
+            )
         } else if i == tutorial.current_step {
-            Style::default()
-                .fg(Color::Cyan)
-                .add_modifier(Modifier::BOLD) // Current
+            (
+                step_icons.get(i).copied().unwrap_or("◉"),
+                Style::default()
+                    .fg(Color::Cyan)
+                    .add_modifier(Modifier::BOLD),
+            )
+        } else if i < tutorial.current_step {
+            (
+                "●",
+                Style::default().fg(Color::Yellow),
+            )
         } else {
-            Style::default().fg(Color::DarkGray) // Not started
+            (
+                "○",
+                Style::default().fg(Color::DarkGray),
+            )
         };
 
-        spans.push(Span::styled(status, style));
+        spans.push(Span::styled(format!(" {} ", badge), style));
 
         if i < TUTORIAL_STEPS - 1 {
-            let connector_style = if i < tutorial.current_step {
+            let connector = if is_complete {
+                "━━━"
+            } else if i < tutorial.current_step {
+                "───"
+            } else {
+                "···"
+            };
+            let connector_style = if is_complete || i < tutorial.current_step {
                 Style::default().fg(Color::Green)
             } else {
                 Style::default().fg(Color::DarkGray)
             };
-            spans.push(Span::styled("━━━━━━━━━━", connector_style));
+            spans.push(Span::styled(connector, connector_style));
         }
     }
 
+    // Progress bar with gradient effect
+    let filled = progress / 5; // 20 chars total
+    let empty = 20 - filled;
+    let progress_chars = format!("{}{}",
+        "█".repeat(filled.min(20)),
+        "░".repeat(empty.max(0))
+    );
+
+    // Color based on progress
+    let progress_color = if progress >= 80 {
+        Color::Green
+    } else if progress >= 40 {
+        Color::Yellow
+    } else {
+        Color::Cyan
+    };
+
+    spans.push(Span::styled("  │", Style::default().fg(Color::DarkGray)));
+    spans.push(Span::styled(progress_chars, Style::default().fg(progress_color)));
     spans.push(Span::styled(
-        format!("    {step_label} {step}/{TUTORIAL_STEPS}"),
-        Style::default().fg(Color::Cyan),
+        format!("│ {}% ", progress),
+        Style::default().fg(progress_color).add_modifier(Modifier::BOLD),
+    ));
+
+    // XP badge
+    spans.push(Span::styled(
+        format!(" ⭐ {} {xp_label}", xp),
+        Style::default()
+            .fg(Color::Yellow)
+            .add_modifier(Modifier::BOLD),
+    ));
+
+    // Step indicator
+    spans.push(Span::styled(
+        format!("  [{step}/{TUTORIAL_STEPS}]"),
+        Style::default().fg(Color::DarkGray),
     ));
 
     let line = Line::from(spans);
 
     let block = Block::default()
         .borders(Borders::ALL)
-        .border_style(Style::default().fg(Color::DarkGray));
+        .border_style(Style::default().fg(if progress == 100 {
+            Color::Green
+        } else {
+            Color::DarkGray
+        }));
 
     let paragraph = Paragraph::new(vec![Line::from(""), line]).block(block);
     f.render_widget(paragraph, area);
+}
+
+/// Calculate XP based on completed tasks (v0.12.0).
+fn calculate_xp(tutorial: &TutorialState) -> usize {
+    let mut xp = 0;
+    for (step_idx, tasks) in tutorial.tasks_completed.iter().enumerate() {
+        for (task_idx, &complete) in tasks.iter().enumerate() {
+            if complete {
+                // Base XP: 10 per task + bonus for later steps
+                xp += 10 + (step_idx * 5) + (task_idx * 2);
+            }
+        }
+    }
+    xp
 }
 
 /// Render the step content (objective, explanation, tasks).

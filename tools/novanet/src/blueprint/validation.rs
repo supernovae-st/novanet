@@ -688,4 +688,223 @@ mod tests {
         assert_ne!(issue_warning.severity, issue_info.severity);
         assert_ne!(issue_error.severity, issue_info.severity);
     }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // NOMENCLATURE DX TESTS (v0.12.0)
+    // ═══════════════════════════════════════════════════════════════════════════
+    // These tests validate ADR-023 (Class/Instance), ADR-024 (Data Origin traits),
+    // and ADR-025 (Instruction Layer) terminology is consistent across YAML.
+
+    /// ADR-024: Trait values must be the new "Data Origin" names
+    #[test]
+    fn test_adr024_trait_values_are_data_origin() {
+        use crate::parsers::yaml_node::NodeTrait;
+
+        let root = crate::config::resolve_root(None).expect("Failed to resolve root");
+        let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
+
+        // All traits must be one of the valid Data Origin values
+        for node in &data.node_kinds {
+            let is_valid = matches!(
+                node.def.node_trait,
+                NodeTrait::Defined
+                    | NodeTrait::Authored
+                    | NodeTrait::Imported
+                    | NodeTrait::Generated
+                    | NodeTrait::Retrieved
+            );
+
+            assert!(
+                is_valid,
+                "Node '{}' has invalid trait '{:?}'. Valid traits: Defined, Authored, Imported, Generated, Retrieved",
+                node.def.name,
+                node.def.node_trait
+            );
+        }
+    }
+
+    /// ADR-023: Must have exactly 59 node classes (39 shared + 20 org)
+    #[test]
+    fn test_adr023_node_count() {
+        let root = crate::config::resolve_root(None).expect("Failed to resolve root");
+        let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
+
+        let total = data.node_kinds.len();
+        let shared_count = data.node_kinds.iter().filter(|n| n.realm == "shared").count();
+        let org_count = data.node_kinds.iter().filter(|n| n.realm == "org").count();
+
+        assert_eq!(total, 59, "Expected 59 total nodes, got {}", total);
+        assert_eq!(shared_count, 39, "Expected 39 shared nodes, got {}", shared_count);
+        assert_eq!(org_count, 20, "Expected 20 org nodes, got {}", org_count);
+    }
+
+    /// ADR-025: Instruction layer nodes must use new names
+    #[test]
+    fn test_adr025_instruction_layer_nodes() {
+        let root = crate::config::resolve_root(None).expect("Failed to resolve root");
+        let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
+
+        let node_names: Vec<&str> = data.node_kinds.iter().map(|n| n.def.name.as_str()).collect();
+
+        // New instruction layer names (ADR-025)
+        assert!(
+            node_names.contains(&"PageStructure"),
+            "Missing PageStructure (renamed from PageType)"
+        );
+        assert!(
+            node_names.contains(&"PageInstruction"),
+            "Missing PageInstruction (renamed from PagePrompt)"
+        );
+        assert!(
+            node_names.contains(&"BlockInstruction"),
+            "Missing BlockInstruction (renamed from BlockPrompt)"
+        );
+
+        // Deprecated names should NOT exist
+        assert!(
+            !node_names.contains(&"PageType"),
+            "PageType is deprecated, use PageStructure"
+        );
+        assert!(
+            !node_names.contains(&"PagePrompt"),
+            "PagePrompt is deprecated, use PageInstruction"
+        );
+        assert!(
+            !node_names.contains(&"BlockPrompt"),
+            "BlockPrompt is deprecated, use BlockInstruction"
+        );
+    }
+
+    /// ADR-025: Arc types must use new instruction names
+    #[test]
+    fn test_adr025_instruction_arcs() {
+        let root = crate::config::resolve_root(None).expect("Failed to resolve root");
+        let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
+
+        let arc_names: Vec<&str> = data.arc_defs.iter().map(|a| a.arc_type.as_str()).collect();
+
+        // New arc names (ADR-025)
+        assert!(
+            arc_names.contains(&"HAS_INSTRUCTION"),
+            "Missing HAS_INSTRUCTION arc (renamed from HAS_PROMPT)"
+        );
+        assert!(
+            arc_names.contains(&"HAS_STRUCTURE"),
+            "Missing HAS_STRUCTURE arc (Page -> PageStructure)"
+        );
+
+        // Deprecated arc names should NOT exist
+        assert!(
+            !arc_names.contains(&"HAS_PROMPT"),
+            "HAS_PROMPT is deprecated, use HAS_INSTRUCTION"
+        );
+    }
+
+    /// ADR-023: No deprecated KIND arc terminology in YAML
+    /// Note: OF_CLASS, FROM_CLASS, TO_CLASS, HAS_CLASS are schema-level arcs
+    /// that connect :Schema:Class nodes, created during db seed (not in arc-kinds YAML).
+    /// Instance→Class relationship is via Neo4j labels, not explicit arcs.
+    #[test]
+    fn test_adr023_no_deprecated_kind_arcs() {
+        let root = crate::config::resolve_root(None).expect("Failed to resolve root");
+        let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
+
+        let arc_names: Vec<&str> = data.arc_defs.iter().map(|a| a.arc_type.as_str()).collect();
+
+        // Deprecated arc names should NOT exist in YAML definitions
+        assert!(
+            !arc_names.contains(&"OF_KIND"),
+            "OF_KIND is deprecated - schema arcs use OF_CLASS"
+        );
+        assert!(
+            !arc_names.contains(&"HAS_KIND"),
+            "HAS_KIND is deprecated - schema arcs use HAS_CLASS"
+        );
+        assert!(
+            !arc_names.contains(&"FROM_KIND"),
+            "FROM_KIND is deprecated - use FROM_CLASS"
+        );
+        assert!(
+            !arc_names.contains(&"TO_KIND"),
+            "TO_KIND is deprecated - use TO_CLASS"
+        );
+    }
+
+    /// Naming convention: *Content suffix indicates authored trait
+    #[test]
+    fn test_naming_convention_content_suffix() {
+        use crate::parsers::yaml_node::NodeTrait;
+
+        let root = crate::config::resolve_root(None).expect("Failed to resolve root");
+        let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
+
+        let content_nodes: Vec<_> = data
+            .node_kinds
+            .iter()
+            .filter(|n| n.def.name.ends_with("Content"))
+            .collect();
+
+        assert!(!content_nodes.is_empty(), "Should have *Content nodes");
+
+        for node in content_nodes {
+            assert!(
+                matches!(node.def.node_trait, NodeTrait::Authored),
+                "Node '{}' ends with 'Content' but has trait '{:?}' (should be Authored)",
+                node.def.name, node.def.node_trait
+            );
+        }
+    }
+
+    /// Naming convention: *Generated suffix indicates generated trait
+    #[test]
+    fn test_naming_convention_generated_suffix() {
+        use crate::parsers::yaml_node::NodeTrait;
+
+        let root = crate::config::resolve_root(None).expect("Failed to resolve root");
+        let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
+
+        let generated_nodes: Vec<_> = data
+            .node_kinds
+            .iter()
+            .filter(|n| n.def.name.ends_with("Generated"))
+            .collect();
+
+        assert!(!generated_nodes.is_empty(), "Should have *Generated nodes");
+
+        for node in generated_nodes {
+            assert!(
+                matches!(node.def.node_trait, NodeTrait::Generated),
+                "Node '{}' ends with 'Generated' but has trait '{:?}' (should be Generated)",
+                node.def.name, node.def.node_trait
+            );
+        }
+    }
+
+    /// Layer distribution validation (v0.12.0)
+    #[test]
+    fn test_layer_distribution() {
+        let root = crate::config::resolve_root(None).expect("Failed to resolve root");
+        let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
+
+        // Count nodes per layer
+        let mut layer_counts: std::collections::HashMap<&str, usize> = std::collections::HashMap::new();
+        for node in &data.node_kinds {
+            *layer_counts.entry(node.layer.as_str()).or_insert(0) += 1;
+        }
+
+        // Shared layers (4 layers, 39 nodes total)
+        let shared_layers = ["config", "locale", "geography", "knowledge"];
+        let shared_total: usize = shared_layers.iter().filter_map(|l| layer_counts.get(l)).sum();
+        assert_eq!(shared_total, 39, "Shared realm should have 39 nodes, got {}", shared_total);
+
+        // Org layers (6 layers, 20 nodes total)
+        let org_layers = ["foundation", "structure", "semantic", "instruction", "output"];
+        // Note: org also has config layer with 1 node
+        let org_config = data.node_kinds.iter().filter(|n| n.realm == "org" && n.layer == "config").count();
+        let org_other: usize = org_layers.iter().filter_map(|l| {
+            data.node_kinds.iter().filter(|n| n.realm == "org" && n.layer == *l).count().into()
+        }).sum();
+        let org_total = org_config + org_other;
+        assert_eq!(org_total, 20, "Org realm should have 20 nodes, got {}", org_total);
+    }
 }

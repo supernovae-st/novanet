@@ -8,7 +8,7 @@ NovaNet is a **native content generation system** (NOT translation) using Neo4j 
 
 **Target Application**: QR Code AI (https://qrcode-ai.com) - a multilingual SaaS for QR code generation.
 **Supported Locales**: 200+ locales (fr-FR, en-US, es-MX, ja-JP, etc.)
-**Current Version**: v11.7.0
+**Current Version**: v0.12.0
 
 ## CRITICAL: Generation, NOT Translation
 
@@ -23,23 +23,25 @@ Each locale content is **generated natively** from the invariant Entity, NOT tra
 
 For complete graph schema, node categories, and relations, see: **`models/_index.yaml`**
 
-## v11.7 Architecture
+## v0.12.0 Architecture
 
-v11.7 refines the 2-Realm Architecture with Locale moved to shared/config:
+v0.12.0 refines the 2-Realm Architecture with ADR-023 (Class/Instance terminology) and ADR-024 (Data Origin traits):
 
 | Axis | Values |
 |------|--------|
 | **Realm** | shared / org |
 | **Layer** | 10 functional layers (4 shared + 6 org) |
-| **Trait** | invariant / localized / knowledge / generated / aggregated |
+| **Trait** | defined / authored / imported / generated / retrieved |
 | **ArcFamily** | ownership / localization / semantic / generation / mining |
 
-**Key v11.7 changes:**
-- Locale moved: shared/locale → shared/config (definitions layer pattern)
-- SEO/GEO consolidation: seo/geo layers removed from org, nodes in shared/knowledge
+**Key v0.12.0 changes:**
+- ADR-023: "Kind" → "Class" terminology (NodeKind→NodeClass, ArcKind→ArcClass)
+- ADR-023: ":Meta:" → ":Schema:" in Neo4j labels
+- ADR-024: Trait redefinition as "Data Origin" (invariant→defined, localized→authored, knowledge→imported, aggregated→retrieved)
+- ADR-025: PagePrompt→PageInstruction, BlockPrompt→BlockInstruction
 - SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (39 nodes)
-- ORG (6 layers): config, foundation, structure, semantic, instruction, output (21 nodes)
-- 60 node types, 114 arc types
+- ORG (6 layers): config, foundation, structure, semantic, instruction, output (20 nodes)
+- 59 node types, 114 arc types
 
 **Boundary rule:** TypeScript (this package) generates code artifacts. Rust (`tools/novanet/`) executes at runtime.
 
@@ -96,15 +98,15 @@ MATCH (l)-[:HAS_LEXICON]->(lex:LocaleLexicon)-[:HAS_EXPRESSION]->(e:Expression)
 WHERE e.semantic_field IN ['urgency', 'value']
 RETURN b.instructions, e.key, el.title, bt.rules, v.formality_score, collect(ex.text) AS expressions;
 
--- v11.8: Navigate schema-graph (Realm -> Layer -> Class) - ADR-023
+-- v0.12.0: Navigate schema-graph (Realm -> Layer -> Class) - ADR-023
 MATCH (r:Realm {key: "org"})-[:HAS_LAYER]->(l:Layer)-[:HAS_CLASS]->(c:Schema:Class)
 RETURN r.key, l.key, collect(c.label) AS classes;
 
--- v11.8: Find all Classes with a specific Trait - ADR-024
+-- v0.12.0: Find all Classes with a specific Trait - ADR-024
 MATCH (c:Schema:Class)-[:HAS_TRAIT]->(t:Trait {key: "generated"})
 RETURN c.label, t.key;
 
--- v11.8: Arc schema for a Class
+-- v0.12.0: Arc schema for a Class
 MATCH (ac:Schema:ArcClass)-[:FROM_CLASS]->(c:Schema:Class {label: "Block"})
 MATCH (ac)-[:TO_CLASS]->(target:Schema:Class)
 MATCH (ac)-[:IN_FAMILY]->(af:Schema:ArcFamily)
@@ -124,12 +126,12 @@ core/
 │   │   │   ├── locale/        #   Layer: locale (6 nodes)
 │   │   │   ├── geography/     #   Layer: geography (6 nodes)
 │   │   │   └── knowledge/     #   Layer: knowledge (24 nodes incl. SEO/GEO)
-│   │   └── org/               # Realm: org (21 nodes)
+│   │   └── org/               # Realm: org (20 nodes)
 │   │       ├── config/        #   Layer: config (1 node: OrgConfig)
 │   │       ├── foundation/    #   Layer: foundation (Project, BrandIdentity, ProjectContent)
 │   │       ├── structure/     #   Layer: structure (Page, Block, ContentSlot)
 │   │       ├── semantic/      #   Layer: semantic (Entity, EntityContent, etc.)
-│   │       ├── instruction/   #   Layer: instruction (Prompts, BlockRules)
+│   │       ├── instruction/   #   Layer: instruction (PageInstruction, BlockInstruction, etc.)
 │   │       └── output/        #   Layer: output (PageGenerated, BlockGenerated)
 │   ├── arc-kinds/             # ONE FILE PER ARC TYPE (116 files)
 │   └── views/                 # YAML view definitions
@@ -144,29 +146,39 @@ core/
 
 > **Note:** `parsers/`, `services/`, `db/`, and `scripts/` were absorbed into the Rust binary (`tools/novanet/`) in v9.0.0.
 
-## Nomenclature (v11.3.0)
+## Nomenclature (v0.12.0)
 
 ```
-*Content suffix = Human-curated localized content (EntityContent)
+*Content suffix = Human-authored localized content (EntityContent)
 *Generated      = LLM-generated output content (PageGenerated, BlockGenerated)
-:HAS_CONTENT    = Human-curated content arc (Entity→EntityContent)
+:HAS_CONTENT    = Human-authored content arc (Entity→EntityContent)
 :HAS_GENERATED  = LLM-generated content arc (Page→PageGenerated, Block→BlockGenerated)
+:HAS_INSTRUCTION= Instruction arc (Page→PageInstruction, Block→BlockInstruction)
 ProjectContent  = Localized project content
 Locale*         = Locale Knowledge nodes (LocaleVoice, LocaleCulture, etc.)
 *Metrics        = Time-series observations (SEOKeywordMetrics, GEOMetrics)
 ```
 
-**v11.7 meta-graph terminology:**
+**v0.12.0 schema-graph terminology (ADR-023):**
 ```
 Realm           = WHERE? (shared / org)
 Layer           = WHAT? (10 functional layers: 4 shared + 6 org)
-Kind            = Neo4j label as meta-node
-Trait           = HOW? (invariant / localized / knowledge / generated / aggregated)
+Class           = Neo4j label as schema-node (was "Kind")
+Trait           = HOW? Data Origin (defined / authored / imported / generated / retrieved)
 ArcFamily       = Relationship classification (ownership / localization / semantic / generation / mining)
-ArcKind         = Individual relationship type as meta-node
-:Meta           = Double-label on all meta-nodes
-OF_KIND         = Instance -> Kind bridge
-NavigationMode  = 4 modes (data / meta / overlay / query)
+ArcClass        = Individual relationship type as schema-node (was "ArcKind")
+:Schema         = Double-label on all schema-nodes (was ":Meta")
+OF_CLASS        = Instance -> Class bridge (was "OF_KIND")
+NavigationMode  = 2 modes (graph / nexus)
+```
+
+**Trait definitions (ADR-024 Data Origin):**
+```
+defined         = Human-created once (templates, configs) — was "invariant"
+authored        = Human-written per locale (editorial content) — was "localized"
+imported        = External data brought in (corpora, SEO keywords) — was "knowledge"
+generated       = Produced by NovaNet LLM
+retrieved       = Fetched from external APIs (GEO snapshots) — was "aggregated"
 ```
 
 ## Language Convention

@@ -129,10 +129,10 @@ realms:
         color: "#64748b"
         llm_context: "Config layer."
 traits:
-  - key: invariant
-    display_name: Invariant
+  - key: defined
+    display_name: Defined
     color: "#3b82f6"
-    llm_context: "Invariant nodes."
+    llm_context: "Defined nodes (v11.8: was invariant)."
 arc_families:
   - key: ownership
     display_name: Ownership
@@ -147,7 +147,7 @@ arc_families:
         assert_eq!(doc.realms[0].layers.len(), 1);
         assert_eq!(doc.realms[0].layers[0].key, "config");
         assert_eq!(doc.traits.len(), 1);
-        assert_eq!(doc.traits[0].key, "invariant");
+        assert_eq!(doc.traits[0].key, "defined"); // v11.8: was invariant
         assert_eq!(doc.arc_families.len(), 1);
         assert_eq!(doc.arc_families[0].arrow_style, "-->");
     }

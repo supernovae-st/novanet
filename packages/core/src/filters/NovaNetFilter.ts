@@ -296,8 +296,8 @@ export class NovaNetFilter {
   // Entity is now in shared realm, accessed via USES_ENTITY from Page/Block
 
   /**
-   * Includes localized content via FOR_LOCALE relation.
-   * Used to connect L10n nodes to their Locale.
+   * Includes authored content via FOR_LOCALE relation.
+   * Used to connect authored content nodes to their Locale.
    */
   includeForLocale(): this {
     this.state.includes.push({

@@ -1,7 +1,8 @@
 // NovaNet Core Types v11.7.0 - Unified Tree Architecture
 //
 // v11.7.0: Unified tree where Realm, Layer, Kind, Instance, ArcFamily, ArcKind are all clickable nodes
-// v11.2.0: 2 realms (shared, org), derived → generated + aggregated, job nodes removed
+// v11.2.0: 2 realms (shared, org), derived split into generated + retrieved
+// v11.8.0: ADR-024 trait renames: invariant→defined, localized→authored, knowledge→imported, aggregated→retrieved
 //
 // STANDARD PROPERTIES (all nodes):
 //   key: string           - Unique identifier (with semantic prefix)
@@ -84,7 +85,7 @@ export {
 } from './project.js';
 
 // =============================================================================
-// ENTITY (v11.2 - org realm, semantic layer, invariant trait)
+// ENTITY (v11.8 - org realm, semantic layer, defined trait)
 // =============================================================================
 
 export interface Entity extends StandardNodeProperties, EmbeddableNode {
