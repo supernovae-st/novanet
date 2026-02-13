@@ -1,7 +1,11 @@
 //! Quiz mode for Nexus - Interactive learning about NovaNet taxonomy.
 //!
-//! Tests knowledge of realms, layers, traits, arcs, and NovaNet principles.
-//! 15 questions with multiple choice answers, immediate feedback.
+//! v0.12.0 Enhanced Quiz with:
+//! - 5 question categories: Realms, Layers, Traits, Arcs, Generation
+//! - Category badges with color-coded progress
+//! - Visual category indicators in question display
+//! - Category breakdown in completion screen with per-category scores
+//! - 15 questions with multiple choice answers, immediate feedback.
 
 use ratatui::Frame;
 use ratatui::layout::{Constraint, Direction, Layout, Rect};
@@ -11,6 +15,76 @@ use ratatui::widgets::{Block, Borders, Paragraph, Wrap};
 
 use super::NexusLocale;
 use crate::tui::app::App;
+
+/// Question categories aligned with NovaNet classification (v0.12.0).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum QuizCategory {
+    /// Questions about shared/org realms.
+    Realms,
+    /// Questions about the 10 layers (4 shared + 6 org).
+    Layers,
+    /// Questions about the 5 traits: defined, authored, imported, generated, retrieved.
+    Traits,
+    /// Questions about arcs, arc families, and relationships.
+    Arcs,
+    /// Questions about generation vs translation, knowledge atoms, pipeline.
+    Generation,
+}
+
+impl QuizCategory {
+    /// Get category icon (v0.12.0).
+    pub fn icon(&self) -> &'static str {
+        match self {
+            QuizCategory::Realms => "◉",
+            QuizCategory::Layers => "◫",
+            QuizCategory::Traits => "◆",
+            QuizCategory::Arcs => "→",
+            QuizCategory::Generation => "⚙",
+        }
+    }
+
+    /// Get category color (v0.12.0).
+    pub fn color(&self) -> Color {
+        match self {
+            QuizCategory::Realms => Color::Cyan,
+            QuizCategory::Layers => Color::Magenta,
+            QuizCategory::Traits => Color::Yellow,
+            QuizCategory::Arcs => Color::Green,
+            QuizCategory::Generation => Color::Blue,
+        }
+    }
+
+    /// Get category display name.
+    pub fn name(&self, locale: NexusLocale) -> &'static str {
+        match locale {
+            NexusLocale::En => match self {
+                QuizCategory::Realms => "Realms",
+                QuizCategory::Layers => "Layers",
+                QuizCategory::Traits => "Traits",
+                QuizCategory::Arcs => "Arcs",
+                QuizCategory::Generation => "Generation",
+            },
+            NexusLocale::Fr => match self {
+                QuizCategory::Realms => "Royaumes",
+                QuizCategory::Layers => "Couches",
+                QuizCategory::Traits => "Traits",
+                QuizCategory::Arcs => "Arcs",
+                QuizCategory::Generation => "Génération",
+            },
+        }
+    }
+
+    /// All categories in display order.
+    pub fn all() -> &'static [QuizCategory] {
+        &[
+            QuizCategory::Realms,
+            QuizCategory::Layers,
+            QuizCategory::Traits,
+            QuizCategory::Arcs,
+            QuizCategory::Generation,
+        ]
+    }
+}
 
 /// A quiz question with 4 answer options.
 #[derive(Debug, Clone)]
@@ -23,6 +97,8 @@ pub struct QuizQuestion {
     pub correct: usize,
     /// Explanation shown after answering.
     pub explanation: &'static str,
+    /// Category for grouping and badges (v0.12.0).
+    pub category: QuizCategory,
 }
 
 /// State of the quiz within Nexus mode.

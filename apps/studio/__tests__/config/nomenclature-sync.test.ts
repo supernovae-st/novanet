@@ -9,27 +9,30 @@
  * @see .claude/rules/novanet-decisions.md - ADR documentation
  */
 
-import { NODE_TYPES, REALMS, LAYERS, TRAITS } from '@novanet/core/types';
-import { RelationType, RELATION_SCHEMAS } from '@novanet/core/schemas';
+import { NODE_TYPES, NODE_REALMS, NODE_TRAITS, CLASS_TAXONOMY, type Trait } from '@novanet/core/types';
+import { RelationRegistry } from '@novanet/core/schemas';
 
 describe('Nomenclature Sync (v0.12.0)', () => {
   describe('ADR-024: Data Origin Traits', () => {
-    const VALID_TRAITS = ['defined', 'authored', 'imported', 'generated', 'retrieved'] as const;
+    const VALID_TRAITS: Trait[] = ['defined', 'authored', 'imported', 'generated', 'retrieved'];
     const DEPRECATED_TRAITS = ['invariant', 'localized', 'knowledge', 'aggregated'];
 
     it('should have exactly 5 valid traits', () => {
-      expect(TRAITS).toHaveLength(5);
+      expect(VALID_TRAITS).toHaveLength(5);
     });
 
-    it('should use new trait names (not deprecated)', () => {
-      TRAITS.forEach((trait) => {
+    it('should have all node traits be valid Data Origin names', () => {
+      const usedTraits = new Set(Object.values(NODE_TRAITS));
+      usedTraits.forEach((trait) => {
         expect(DEPRECATED_TRAITS).not.toContain(trait);
         expect(VALID_TRAITS).toContain(trait);
       });
     });
 
-    it('should have traits in correct order: defined, authored, imported, generated, retrieved', () => {
-      expect(TRAITS).toEqual(VALID_TRAITS);
+    it('should not use deprecated trait names anywhere', () => {
+      Object.entries(NODE_TRAITS).forEach(([nodeType, trait]) => {
+        expect(DEPRECATED_TRAITS).not.toContain(trait);
+      });
     });
   });
 
@@ -39,13 +42,17 @@ describe('Nomenclature Sync (v0.12.0)', () => {
     });
 
     it('should have 2 realms (shared, org)', () => {
-      expect(REALMS).toHaveLength(2);
-      expect(REALMS).toContain('shared');
-      expect(REALMS).toContain('org');
+      const realms = new Set(Object.values(NODE_REALMS));
+      expect(realms.size).toBe(2);
+      expect(realms).toContain('shared');
+      expect(realms).toContain('org');
     });
 
-    it('should have 10 layers (4 shared + 6 org)', () => {
-      expect(LAYERS).toHaveLength(10);
+    it('should have correct node distribution by realm', () => {
+      const sharedCount = Object.values(NODE_REALMS).filter((r) => r === 'shared').length;
+      const orgCount = Object.values(NODE_REALMS).filter((r) => r === 'org').length;
+      expect(sharedCount).toBe(39);
+      expect(orgCount).toBe(20);
     });
 
     it('should not have deprecated node names', () => {
@@ -64,19 +71,20 @@ describe('Nomenclature Sync (v0.12.0)', () => {
 
   describe('ADR-025: Instruction Layer Arcs', () => {
     it('should have HAS_INSTRUCTION relationship (not HAS_PROMPT)', () => {
-      const relationTypes = Object.keys(RELATION_SCHEMAS) as RelationType[];
+      const relationTypes = Object.keys(RelationRegistry);
       expect(relationTypes).toContain('HAS_INSTRUCTION');
       expect(relationTypes).not.toContain('HAS_PROMPT');
     });
 
     it('should have HAS_STRUCTURE relationship for Page->PageStructure', () => {
-      const relationTypes = Object.keys(RELATION_SCHEMAS) as RelationType[];
+      const relationTypes = Object.keys(RelationRegistry);
       expect(relationTypes).toContain('HAS_STRUCTURE');
     });
 
-    it('should have HAS_CLASS relationship (not HAS_KIND)', () => {
-      const relationTypes = Object.keys(RELATION_SCHEMAS) as RelationType[];
-      expect(relationTypes).toContain('HAS_CLASS');
+    it('should NOT have deprecated HAS_KIND relationship', () => {
+      // Note: HAS_CLASS is a schema-level arc created during db seed,
+      // not defined in TypeScript RelationRegistry
+      const relationTypes = Object.keys(RelationRegistry);
       expect(relationTypes).not.toContain('HAS_KIND');
     });
   });

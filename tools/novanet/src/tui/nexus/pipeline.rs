@@ -2,6 +2,14 @@
 //!
 //! Shows the core NovaNet principle: Generation, NOT Translation.
 //!
+//! v0.12.0: Enhanced controls:
+//! - [Space] Play/Pause animation
+//! - [l/→] Forward one stage
+//! - [h/←] Backward one stage
+//! - [r] Reset to beginning
+//! - [f] Fast mode (2x speed)
+//! - [s] Slow mode (0.5x speed)
+//!
 //! The pipeline has 6 stages (0-5):
 //! 0. IMPORTED - Input locale knowledge (Terms, Expressions, Patterns)
 //! 1. DEFINED - Structural templates (Page, Entity, Block)
@@ -9,11 +17,6 @@
 //! 3. LLM_GENERATE - LLM generation process
 //! 4. AUTHORED - Output generated content (PageGenerated, EntityContent, BlockGenerated)
 //! 5. COMPLETE - Generation complete
-//!
-//! Animation:
-//! - Space to play/pause
-//! - Shows active stage with highlight
-//! - Auto-advances through stages when animating
 
 use ratatui::Frame;
 use ratatui::layout::{Constraint, Direction, Layout, Rect};
@@ -78,7 +81,7 @@ pub fn render_pipeline_tab(f: &mut Frame, app: &App, area: Rect) {
         .split(area);
 
     render_pipeline_diagram(f, chunks[0], current_stage, is_animating, tick, theme);
-    render_principle_box(f, chunks[1], is_animating);
+    render_principle_box(f, chunks[1], is_animating, current_stage);
 }
 
 /// Render the main pipeline diagram.
@@ -409,8 +412,8 @@ fn build_pipeline_lines(
     lines
 }
 
-/// Render the principle box at the bottom.
-fn render_principle_box(f: &mut Frame, area: Rect, is_animating: bool) {
+/// Render the principle box at the bottom with enhanced controls (v0.12.0).
+fn render_principle_box(f: &mut Frame, area: Rect, is_animating: bool, current_stage: usize) {
     let block = Block::default()
         .title(Span::styled(
             " CORE PRINCIPLE ",
@@ -424,55 +427,114 @@ fn render_principle_box(f: &mut Frame, area: Rect, is_animating: bool) {
     let inner = block.inner(area);
     f.render_widget(block, area);
 
+    // Build stage timeline indicator (v0.12.0)
+    let mut timeline_spans: Vec<Span<'static>> = vec![Span::raw("   ")];
+    for (i, (name, symbol, _)) in PIPELINE_STAGES.iter().enumerate() {
+        let is_current = i == current_stage;
+        let is_past = i < current_stage;
+
+        let style = if is_current {
+            Style::default()
+                .fg(Color::Cyan)
+                .add_modifier(Modifier::BOLD | Modifier::UNDERLINED)
+        } else if is_past {
+            Style::default().fg(Color::Green)
+        } else {
+            Style::default().fg(Color::DarkGray)
+        };
+
+        timeline_spans.push(Span::styled(format!("{} {}", symbol, name), style));
+
+        if i < PIPELINE_STAGES.len() - 1 {
+            let arrow_style = if is_past {
+                Style::default().fg(Color::Green)
+            } else {
+                Style::default().fg(Color::DarkGray)
+            };
+            timeline_spans.push(Span::styled(" → ", arrow_style));
+        }
+    }
+
     let lines: Vec<Line<'static>> = vec![
+        Line::from(""),
+        // Stage timeline
+        Line::from(timeline_spans),
         Line::from(""),
         // WRONG way
         Line::from(vec![
-            Span::styled("   \u{2717} WRONG:  ", Style::default().fg(Color::Red)), // ✗
+            Span::styled("   ✗ WRONG:  ", Style::default().fg(Color::Red)),
             Span::styled("Source ", Style::default().fg(Color::Rgb(150, 150, 160))),
-            Span::styled("\u{2192}", Style::default().fg(Color::Red)),
+            Span::styled("→", Style::default().fg(Color::Red)),
             Span::styled(
                 " Translate ",
                 Style::default().fg(Color::Rgb(150, 150, 160)),
             ),
-            Span::styled("\u{2192}", Style::default().fg(Color::Red)),
+            Span::styled("→", Style::default().fg(Color::Red)),
             Span::styled(" Target", Style::default().fg(Color::Rgb(150, 150, 160))),
         ]),
-        Line::from(""),
         // RIGHT way
         Line::from(vec![
-            Span::styled("   \u{2713} RIGHT:  ", Style::default().fg(Color::Green)), // ✓
+            Span::styled("   ✓ RIGHT:  ", Style::default().fg(Color::Green)),
             Span::styled(
                 "Knowledge + Structure ",
                 Style::default().fg(Color::Rgb(150, 150, 160)),
             ),
-            Span::styled("\u{2192}", Style::default().fg(Color::Green)),
+            Span::styled("→", Style::default().fg(Color::Green)),
             Span::styled(" Generate ", Style::default().fg(Color::Rgb(234, 179, 8))),
-            Span::styled("\u{2192}", Style::default().fg(Color::Green)),
+            Span::styled("→", Style::default().fg(Color::Green)),
             Span::styled(
                 " Native Content",
                 Style::default().fg(Color::Rgb(34, 197, 94)),
             ),
         ]),
         Line::from(""),
-        // Status line
+        // v0.12.0: Enhanced controls
         if is_animating {
             Line::from(vec![
-                Span::styled("   [Space] Pause   ", Style::default().fg(Color::Cyan)),
-                Span::styled("[j/k] Stage   ", Style::default().fg(Color::DarkGray)),
-                Span::styled("[r] Reset", Style::default().fg(Color::DarkGray)),
+                Span::styled("   [Space] Pause  ", Style::default().fg(Color::Cyan)),
+                Span::styled("[h/←] Back  ", Style::default().fg(Color::Yellow)),
+                Span::styled("[l/→] Forward  ", Style::default().fg(Color::Yellow)),
+                Span::styled("[r] Reset  ", Style::default().fg(Color::DarkGray)),
+                Span::styled(
+                    format!("[{}/5]", current_stage),
+                    Style::default().fg(Color::Cyan),
+                ),
             ])
         } else {
             Line::from(vec![
-                Span::styled("   [Space] Animate   ", Style::default().fg(Color::Cyan)),
-                Span::styled("[j/k] Stage   ", Style::default().fg(Color::DarkGray)),
-                Span::styled("[1-4] Tabs", Style::default().fg(Color::DarkGray)),
+                Span::styled("   [Space] Play  ", Style::default().fg(Color::Cyan)),
+                Span::styled("[h/←] Back  ", Style::default().fg(Color::Yellow)),
+                Span::styled("[l/→] Forward  ", Style::default().fg(Color::Yellow)),
+                Span::styled("[r] Reset  ", Style::default().fg(Color::DarkGray)),
+                Span::styled(
+                    format!("[{}/5]", current_stage),
+                    Style::default().fg(Color::Cyan),
+                ),
             ])
         },
     ];
 
     let paragraph = Paragraph::new(lines).wrap(Wrap { trim: false });
     f.render_widget(paragraph, inner);
+}
+
+/// Go to previous stage (v0.12.0).
+pub fn prev_stage(stage: &mut usize) {
+    if *stage > 0 {
+        *stage -= 1;
+    }
+}
+
+/// Go to next stage (v0.12.0).
+pub fn next_stage(stage: &mut usize) {
+    if *stage < 5 {
+        *stage += 1;
+    }
+}
+
+/// Reset to first stage (v0.12.0).
+pub fn reset_stage(stage: &mut usize) {
+    *stage = 0;
 }
 
 // =============================================================================
