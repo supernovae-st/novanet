@@ -110,11 +110,11 @@
 # ARC FAMILIES (v0.12.0)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-#   ownership     (12) - Structural containment (HAS_PAGE, HAS_BLOCK, HAS_STRUCTURE, etc.)
-#   localization  (22) - Locale linking (HAS_CONTENT, FOR_LOCALE, etc.)
-#   semantic      (10) - Meaning connections (SEMANTIC_LINK, USES_ENTITY, BELONGS_TO, etc.)
-#   generation     (5) - AI output (HAS_GENERATED, HAS_INSTRUCTION, etc.)
-#   mining         (7) - Discovery jobs (HAS_SEO_TARGET, HAS_METRICS, etc.)
+#   ownership     (47) - Structural containment (HAS_PAGE, HAS_BLOCK, HAS_STRUCTURE, CONTAINS_*, etc.)
+#   localization  (15) - Locale linking (HAS_CONTENT, FOR_LOCALE, FALLBACK_TO, etc.)
+#   semantic      (41) - Meaning connections (SEMANTIC_LINK, USES_ENTITY, SIMILAR_TO, POPULAR_IN, etc.)
+#   generation    (11) - AI output (HAS_GENERATED, GENERATED, ASSEMBLES, etc.)
+#   mining         (1) - Analytics (HAS_METRICS)
 #
 #   See taxonomy.yaml for full ArcFamily definitions.
 #   See arc-kinds/ directory for all arc types with family assignment.
@@ -157,7 +157,7 @@
 # CHANGES v0.12.0 (SemVer transition from v11.x milestone versions)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-# Statistics: 59 nodes (39 shared + 20 org), 114 arcs (5 arc families)
+# Statistics: 59 nodes (39 shared + 20 org), 115 arcs (5 arc families)
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 
@@ -376,7 +376,7 @@ nodes_by_trait:
 # By Realm:
 #   🌍 SHARED:  39 nodes (config 3 + geography 6 + knowledge 24 + locale 6)
 #   📦 ORG:     20 nodes (config 1 + foundation 3 + structure 3 + semantic 4 + instruction 6 + output 3)
-#   TOTAL:      59 nodes, 114 arcs (5 arc families)
+#   TOTAL:      59 nodes, 115 arcs (5 arc families)
 #
 # By Trait (v0.12.0 ADR-024):
 #   🔵 DEFINED:   31 nodes (language-independent definitions)

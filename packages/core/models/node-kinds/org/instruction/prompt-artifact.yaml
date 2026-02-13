@@ -95,6 +95,6 @@ node:
         to: Entity
         description: "Entities whose context was included"
 
-      - type: INCLUDES_VOICE
-        to: LocaleVoice
-        description: "Locale voice parameters included"
+      - type: INCLUDES_STYLE
+        to: Style
+        description: "Locale style (voice, tone, formality) parameters included"
