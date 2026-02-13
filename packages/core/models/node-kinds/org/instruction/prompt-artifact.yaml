@@ -86,10 +86,10 @@ node:
   relations:
     outgoing:
       - type: COMPILED_FROM
-        to:
-          - PagePrompt
-          - BlockPrompt
-        description: "Source prompt this was compiled from"
+        to:  # v11.8 ADR-025: *Prompt → *Instruction
+          - PageInstruction
+          - BlockInstruction
+        description: "Source instruction this was compiled from"
 
       - type: INCLUDES_ENTITY
         to: Entity
