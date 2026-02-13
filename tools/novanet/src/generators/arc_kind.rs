@@ -8,7 +8,7 @@
 //!
 //! Output target: `packages/db/seed/02-arc-kinds.cypher`
 
-use super::cypher_utils::{cypher_list_owned, cypher_str};
+use super::cypher_utils::{cypher_list_owned, cypher_str, write_section_header_counted};
 use crate::parsers::arcs;
 use crate::parsers::arcs::{ArcDef, ArcsDocument, Cardinality};
 use crate::parsers::yaml_node;
@@ -167,7 +167,7 @@ fn generate_arc_schema(
     writeln!(out).unwrap();
 
     // ── Section 1: ArcKind nodes ─────────────────────────────────────────────
-    write_section_header(&mut out, "ArcKind Nodes", forward.len());
+    write_section_header_counted(&mut out, "ArcKind Nodes", forward.len());
     writeln!(out).unwrap();
 
     for rel in &forward {
@@ -252,7 +252,7 @@ fn generate_arc_schema(
     }
 
     // ── Section 2: HAS_ARC_KIND (ArcFamily → ArcKind) ─────────────────────────
-    write_section_header(
+    write_section_header_counted(
         &mut out,
         "Hierarchy: ArcFamily -[:HAS_ARC_KIND]-> ArcKind",
         forward.len(),
@@ -272,7 +272,7 @@ fn generate_arc_schema(
     }
 
     // ── Section 3: IN_FAMILY (ArcKind → ArcFamily) ───────────────────────────
-    write_section_header(
+    write_section_header_counted(
         &mut out,
         "Facet: ArcKind -[:IN_FAMILY]-> ArcFamily",
         forward.len(),
@@ -293,7 +293,7 @@ fn generate_arc_schema(
 
     // ── Section 4: FROM_KIND (ArcKind → Kind source labels) ─────────────────
     let from_count: usize = forward.iter().map(|r| r.source.len()).sum();
-    write_section_header(
+    write_section_header_counted(
         &mut out,
         "Arc Schema: ArcKind -[:FROM_KIND]-> Kind",
         from_count,
@@ -315,7 +315,7 @@ fn generate_arc_schema(
 
     // ── Section 5: TO_KIND (ArcKind → Kind target labels) ───────────────────
     let to_count: usize = forward.iter().map(|r| r.target.len()).sum();
-    write_section_header(&mut out, "Arc Schema: ArcKind -[:TO_KIND]-> Kind", to_count);
+    write_section_header_counted(&mut out, "Arc Schema: ArcKind -[:TO_KIND]-> Kind", to_count);
     writeln!(out).unwrap();
 
     for rel in &forward {
@@ -334,14 +334,6 @@ fn generate_arc_schema(
     Ok(out)
 }
 
-/// Write a visual section header comment.
-fn write_section_header(out: &mut String, title: &str, count: usize) {
-    let bar = "// ═══════════════════════════════════════════════════════════════════════════════";
-    writeln!(out, "{bar}").unwrap();
-    writeln!(out, "// {title} ({count})").unwrap();
-    writeln!(out, "{bar}").unwrap();
-}
-
 // ─────────────────────────────────────────────────────────────────────────────
 // Tests
 // ─────────────────────────────────────────────────────────────────────────────
@@ -349,30 +341,9 @@ fn write_section_header(out: &mut String, title: &str, count: usize) {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::generators::test_utils::make_rel_full as make_rel;
     use crate::generators::Generator;
     use crate::parsers::arcs::{ArcFamily, NodeRef};
-
-    fn make_rel(
-        rel_type: &str,
-        family: ArcFamily,
-        source: NodeRef,
-        target: NodeRef,
-        cardinality: Cardinality,
-    ) -> ArcDef {
-        ArcDef {
-            arc_type: rel_type.to_string(),
-            family,
-            scope: None,
-            source,
-            target,
-            cardinality,
-            llm_context: format!("{rel_type} context."),
-            properties: None,
-            is_self_referential: None,
-            inverse_of: None,
-            inverse_name: None,
-        }
-    }
 
     fn make_inverse(rel_type: &str, family: ArcFamily, inverse_of: &str) -> ArcDef {
         ArcDef {

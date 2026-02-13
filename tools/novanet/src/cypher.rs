@@ -51,6 +51,7 @@ impl CypherStatement {
 // Mode 1: Data — real instances only (no Meta nodes)
 // ---------------------------------------------------------------------------
 
+#[must_use]
 pub fn data_query(limit: i64) -> CypherStatement {
     CypherStatement {
         cypher: "\
@@ -72,6 +73,7 @@ LIMIT $limit"
 // Mode 2: Meta — meta-graph only (Realm, Layer, Kind, Trait, ArcFamily, ArcKind)
 // ---------------------------------------------------------------------------
 
+#[must_use]
 pub fn meta_query() -> CypherStatement {
     CypherStatement {
         cypher: "\
@@ -91,6 +93,7 @@ ORDER BY label, n.key"
 // Mode 3: Overlay — data + meta combined
 // ---------------------------------------------------------------------------
 
+#[must_use]
 pub fn overlay_query(limit: i64) -> CypherStatement {
     CypherStatement {
         cypher: "\
@@ -122,6 +125,7 @@ LIMIT $limit"
 /// 3. MATCH data nodes linked to those Kinds via OF_KIND
 ///
 /// If no facets are active, falls back to data_query (all non-Meta nodes).
+#[must_use]
 pub fn faceted_query(filter: &FacetFilter, limit: i64) -> CypherStatement {
     if filter.is_empty() {
         return data_query(limit);
@@ -193,6 +197,7 @@ LIMIT $limit"
 
 /// Build a Cypher query that resolves Kind labels from facets without fetching data nodes.
 /// Used by `novanet filter build` to output the resolved Cypher for Studio.
+#[must_use]
 pub fn filter_build_query(filter: &FacetFilter) -> CypherStatement {
     if filter.is_empty() {
         return CypherStatement {
