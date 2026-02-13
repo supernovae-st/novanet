@@ -78,7 +78,7 @@ describe('buildCypherViaRust', () => {
     const facets: FacetFilter = {
       realms: ['org'],
       layers: ['structure'],
-      traits: ['invariant'],
+      traits: ['defined'],  // v0.12.0: renamed from invariant
       arc_families: [],
       kinds: [],
     };

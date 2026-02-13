@@ -1,12 +1,13 @@
 //! Traits Tab — Constellation view showing 5 traits connected.
 //!
-//! The constellation shows the relationship between traits:
-//! - KNOWLEDGE at top (input to generation)
-//! - INVARIANT and LOCALIZED as core pair (structure -> output)
-//! - GENERATED and AGGREGATED at bottom (LLM output and computed metrics)
+//! v0.12.0 "Data Origin" - traits renamed per ADR-024:
+//! - IMPORTED at top (external knowledge brought in)
+//! - DEFINED and AUTHORED as core pair (structure -> output)
+//! - GENERATED and RETRIEVED at bottom (LLM output and API snapshots)
 //!
 //! Note: job trait removed in v11.2 (deferred to v12+).
 //! Note: v11.2 split derived → generated + aggregated.
+//! Note: v0.12.0 renamed: invariant→defined, localized→authored, knowledge→imported, aggregated→retrieved.
 
 use ratatui::Frame;
 use ratatui::layout::{Constraint, Direction, Layout, Rect};
@@ -41,56 +42,60 @@ pub struct TraitStats {
 }
 
 /// Canonical trait order for constellation.
+/// v0.12.0: renamed per ADR-024 Data Origin.
 /// Note: job trait removed in v11.2, derived split → generated + aggregated.
 pub const TRAIT_ORDER: [&str; 5] = [
-    "invariant",
-    "localized",
-    "knowledge",
+    "defined",    // was: invariant
+    "authored",   // was: localized
+    "imported",   // was: knowledge
     "generated",
-    "aggregated",
+    "retrieved",  // was: aggregated
 ];
 
 /// Get symbol for a trait.
+/// v0.12.0: renamed per ADR-024 Data Origin.
 fn trait_symbol(key: &str) -> &'static str {
     match key {
-        "invariant" => "\u{25a0}",  // ■
-        "localized" => "\u{25a1}",  // □
-        "knowledge" => "\u{25ca}",  // ◊
+        "defined" => "\u{25a0}",    // ■ (was: invariant)
+        "authored" => "\u{25a1}",   // □ (was: localized)
+        "imported" => "\u{25ca}",   // ◊ (was: knowledge)
         "generated" => "\u{2605}",  // ★
-        "aggregated" => "\u{25aa}", // ▪
+        "retrieved" => "\u{25aa}",  // ▪ (was: aggregated)
         _ => "\u{00b7}",            // ·
     }
 }
 
 /// Get display name for a trait.
+/// v0.12.0: renamed per ADR-024 Data Origin.
 fn trait_display_name(key: &str) -> &str {
     match key {
-        "invariant" => "INVARIANT",
-        "localized" => "LOCALIZED",
-        "knowledge" => "KNOWLEDGE",
+        "defined" => "DEFINED",
+        "authored" => "AUTHORED",
+        "imported" => "IMPORTED",
         "generated" => "GENERATED",
-        "aggregated" => "AGGREGATED",
+        "retrieved" => "RETRIEVED",
         _ => key,
     }
 }
 
 /// Get LLM context description for a trait.
+/// v0.12.0: renamed per ADR-024 Data Origin.
 fn trait_llm_context(key: &str) -> &str {
     match key {
-        "invariant" => {
-            "Nodes that do not change between locales. Structural definitions, configuration, and invariant business logic. Examples: Page, Entity, Block."
+        "defined" => {
+            "Human-created once, universal. Structural definitions, configuration, business logic. Examples: Page, Entity, Block."
         }
-        "localized" => {
-            "OUTPUT - Generated content per locale. Has invariant parent (e.g., EntityContent -> Entity). Created by LLM generation, not translation."
+        "authored" => {
+            "Human-written per locale. Editorial content with invariant parent (e.g., EntityContent -> Entity). Created by humans, not LLM."
         }
-        "knowledge" => {
-            "INPUT - Native locale knowledge (savoir). Loaded INTO the LLM as context. Exists only where needed (fr-FR may have 20K Terms, sw-KE may have 500)."
+        "imported" => {
+            "External data brought in. Native locale knowledge loaded INTO the LLM as context. Exists only where needed (fr-FR may have 20K Terms)."
         }
         "generated" => {
             "LLM-generated content output. Pages, blocks, and artifacts produced by the generation pipeline. Examples: PageGenerated, BlockGenerated, OutputArtifact."
         }
-        "aggregated" => {
-            "Computed metrics and analytics. Time-series data, performance snapshots derived from external sources. Examples: GEOAnswer, SEOKeywordMetrics."
+        "retrieved" => {
+            "Fetched from external APIs. Time-series data, performance snapshots from external sources. Examples: GEOAnswer, SEOKeywordMetrics."
         }
         _ => "Unknown trait.",
     }
@@ -114,16 +119,17 @@ pub struct CodeExample {
 }
 
 /// Get code examples for a trait.
+/// v0.12.0: renamed per ADR-024 Data Origin.
 pub fn trait_code_examples(key: &str) -> Vec<CodeExample> {
     match key {
-        "invariant" => vec![
+        "defined" => vec![
             CodeExample {
-                title: "Entity (invariant structure)",
+                title: "Entity (defined structure)",
                 yaml: r#"node:
   name: Entity
   realm: org
   layer: foundation
-  trait: invariant
+  trait: defined
   properties:
     key: { type: string, required: true }
     display_name: { type: string }"#,
@@ -140,7 +146,7 @@ RETURN e.key, e.display_name"#,
   name: Page
   realm: org
   layer: structure
-  trait: invariant"#,
+  trait: defined"#,
                 neo4j: r#"(:Page {
   key: "homepage",
   route: "/"
@@ -149,14 +155,14 @@ RETURN e.key, e.display_name"#,
 RETURN p.key, collect(b.key) AS blocks"#,
             },
         ],
-        "localized" => vec![
+        "authored" => vec![
             CodeExample {
                 title: "EntityContent (per-locale content)",
                 yaml: r#"node:
   name: EntityContent
   realm: org
   layer: semantic
-  trait: localized
+  trait: authored
   # Composite key: entity:{key}@{locale}"#,
                 neo4j: r#"(:EntityContent {
   key: "entity:qr-code@fr-FR",
@@ -169,31 +175,31 @@ WHERE c.key ENDS WITH $locale
 RETURN c.title, c.description"#,
             },
             CodeExample {
-                title: "PageGenerated (LLM output)",
+                title: "ProjectContent (editorial)",
                 yaml: r#"node:
-  name: PageGenerated
+  name: ProjectContent
   realm: org
-  layer: output
-  trait: localized
-  # Derived from Page, NOT translated"#,
-                neo4j: r#"(:PageGenerated {
-  key: "page:homepage@ja-JP",
-  generated_at: datetime(),
-  html_content: "<html>..."
+  layer: foundation
+  trait: authored
+  # Human-written per locale"#,
+                neo4j: r#"(:ProjectContent {
+  key: "project:qrcode-ai@fr-FR",
+  tagline: "Créez des QR codes...",
+  meta_description: "..."
 })"#,
-                cypher: r#"MATCH (p:Page)-[:HAS_GENERATED]->(g:PageGenerated)
-WHERE g.key ENDS WITH $locale
-RETURN g.html_content"#,
+                cypher: r#"MATCH (p:Project)-[:HAS_CONTENT]->(c:ProjectContent)
+WHERE c.key ENDS WITH $locale
+RETURN c.tagline"#,
             },
         ],
-        "knowledge" => vec![
+        "imported" => vec![
             CodeExample {
                 title: "Term (vocabulary atom)",
                 yaml: r#"node:
   name: Term
   realm: shared
   layer: knowledge
-  trait: knowledge
+  trait: imported
   # Native to locale, not translated"#,
                 neo4j: r#"(:Term {
   key: "term:artificial-intelligence@fr-FR",
@@ -212,7 +218,7 @@ RETURN t.term, t.definition"#,
   name: Expression
   realm: shared
   layer: knowledge
-  trait: knowledge"#,
+  trait: imported"#,
                 neo4j: r#"(:Expression {
   key: "expr:greeting-formal@de-DE",
   pattern: "Sehr geehrte/r {title} {name}",
@@ -233,7 +239,7 @@ RETURN e.pattern"#,
   realm: org
   layer: output
   trait: generated
-  # Generated by LLM from invariant Page"#,
+  # Generated by LLM from defined Page"#,
             neo4j: r#"(:PageGenerated {
   key: "page:homepage@fr-FR",
   html_content: "<html>...",
@@ -243,19 +249,19 @@ RETURN e.pattern"#,
 WHERE g.key ENDS WITH $locale
 RETURN g.html_content"#,
         }],
-        "aggregated" => vec![CodeExample {
-            title: "SEOKeywordMetrics (computed stats)",
+        "retrieved" => vec![CodeExample {
+            title: "SEOKeywordMetrics (API snapshot)",
             yaml: r#"node:
   name: SEOKeywordMetrics
-  realm: org
-  layer: seo
-  trait: aggregated
-  # Computed from SEO data"#,
+  realm: shared
+  layer: knowledge
+  trait: retrieved
+  # Retrieved from external API"#,
             neo4j: r#"(:SEOKeywordMetrics {
   key: "metrics:seo-kw@fr-FR",
   search_volume: 1500,
   difficulty: 0.65,
-  last_computed: datetime()
+  retrieved_at: datetime()
 })"#,
             cypher: r#"MATCH (k:SEOKeyword)-[:HAS_METRICS]->(m:SEOKeywordMetrics)
 WHERE m.key ENDS WITH $locale
@@ -420,40 +426,40 @@ fn build_constellation_lines(
     // Empty line for spacing
     lines.push(Line::from(""));
 
-    // Row 1: KNOWLEDGE at top center
-    let knowledge_spans = trait_span("knowledge", 2);
-    let knowledge_line = center_spans(knowledge_spans, width);
-    lines.push(knowledge_line);
+    // Row 1: IMPORTED at top center (v0.12.0: was knowledge)
+    let imported_spans = trait_span("imported", 2);
+    let imported_line = center_spans(imported_spans, width);
+    lines.push(imported_line);
     lines.push(Line::from(""));
 
-    // Row 2: Connection lines from KNOWLEDGE
+    // Row 2: Connection lines from IMPORTED
     let connector1 = center_text("\u{2571}    \u{2572}", width); // ╱    ╲
     lines.push(Line::from(connector1));
     let connector2 = center_text("\u{2571}      \u{2572}", width); // ╱      ╲
     lines.push(Line::from(connector2));
 
-    // Row 3: INVARIANT ════════════════════ LOCALIZED (core pair)
+    // Row 3: DEFINED ════════════════════ AUTHORED (core pair, v0.12.0 renames)
     let mut core_pair: Vec<Span<'static>> = Vec::new();
-    core_pair.extend(trait_span("invariant", 0));
+    core_pair.extend(trait_span("defined", 0));
     core_pair.push(Span::styled(
         " \u{2550}\u{2550}\u{2550}\u{2550}\u{21d4}\u{2550}\u{2550}\u{2550}\u{2550} ",
         Style::default().fg(Color::Yellow),
     )); // ════↔════
-    core_pair.extend(trait_span("localized", 1));
+    core_pair.extend(trait_span("authored", 1));
     let core_line = center_spans(core_pair, width);
     lines.push(core_line);
 
-    // Row 4: Connection lines to GENERATED and AGGREGATED
+    // Row 4: Connection lines to GENERATED and RETRIEVED
     let connector3 = center_text("\u{2572}      \u{2571}", width); // ╲      ╱
     lines.push(connector3.into());
     let connector4 = center_text("\u{2571}      \u{2572}", width); // ╱      ╲
     lines.push(connector4.into());
 
-    // Row 5: GENERATED and AGGREGATED at bottom (v11.2: split from derived)
+    // Row 5: GENERATED and RETRIEVED at bottom (v0.12.0: aggregated→retrieved)
     let mut bottom_pair: Vec<Span<'static>> = Vec::new();
     bottom_pair.extend(trait_span("generated", 3));
     bottom_pair.push(Span::styled("  ", Style::default())); // spacer
-    bottom_pair.extend(trait_span("aggregated", 4));
+    bottom_pair.extend(trait_span("retrieved", 4));
     let bottom_line = center_spans(bottom_pair, width);
     lines.push(bottom_line);
 
@@ -585,8 +591,8 @@ fn render_detail_panel(f: &mut Frame, app: &App, area: Rect) {
     )));
     lines.push(Line::from(""));
 
-    // Pattern section for INVARIANT
-    if stat.key == "invariant" {
+    // Pattern section for DEFINED (v0.12.0: was invariant)
+    if stat.key == "defined" {
         lines.push(Line::from(Span::styled(
             "PATTERN:",
             Style::default()
@@ -594,10 +600,10 @@ fn render_detail_panel(f: &mut Frame, app: &App, area: Rect) {
                 .add_modifier(Modifier::BOLD),
         )));
 
-        let invariant_color = theme.trait_color("invariant");
-        let localized_color = theme.trait_color("localized");
+        let defined_color = theme.trait_color("defined");
+        let authored_color = theme.trait_color("authored");
 
-        // Show invariant -> localized patterns
+        // Show defined -> authored/generated patterns
         // v10.9: Renamed L10n → Generated/Content
         let patterns = [
             ("Page", "PageGenerated"),
@@ -605,26 +611,26 @@ fn render_detail_panel(f: &mut Frame, app: &App, area: Rect) {
             ("Block", "BlockGenerated"),
         ];
 
-        for (inv, loc) in patterns {
+        for (def, out) in patterns {
             lines.push(Line::from(vec![
                 Span::styled(
-                    format!("\u{25a0} {} ", inv),
-                    Style::default().fg(invariant_color),
+                    format!("\u{25a0} {} ", def),
+                    Style::default().fg(defined_color),
                 ),
                 Span::styled(
                     "\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2192} ",
                     Style::default().fg(Color::DarkGray),
                 ),
                 Span::styled(
-                    format!("\u{25a1} {}", loc),
-                    Style::default().fg(localized_color),
+                    format!("\u{25a1} {}", out),
+                    Style::default().fg(authored_color),
                 ),
             ]));
         }
     }
 
-    // Pattern section for LOCALIZED
-    if stat.key == "localized" {
+    // Pattern section for AUTHORED (v0.12.0: was localized)
+    if stat.key == "authored" {
         lines.push(Line::from(Span::styled(
             "RELATIONSHIP:",
             Style::default()
@@ -632,19 +638,19 @@ fn render_detail_panel(f: &mut Frame, app: &App, area: Rect) {
                 .add_modifier(Modifier::BOLD),
         )));
         lines.push(Line::from(Span::styled(
-            "Content/Generated nodes have invariant parents.",
+            "Content nodes have defined parents.",
             Style::default().fg(Color::Rgb(150, 150, 150)),
         )));
         lines.push(Line::from(Span::styled(
-            "Generated by LLM, NOT translated.",
+            "Written by humans per locale, NOT translated.",
             Style::default()
                 .fg(Color::Rgb(34, 197, 94))
                 .add_modifier(Modifier::ITALIC),
         )));
     }
 
-    // Pattern section for KNOWLEDGE
-    if stat.key == "knowledge" {
+    // Pattern section for IMPORTED (v0.12.0: was knowledge)
+    if stat.key == "imported" {
         lines.push(Line::from(Span::styled(
             "KEY INSIGHT:",
             Style::default()
@@ -652,11 +658,11 @@ fn render_detail_panel(f: &mut Frame, app: &App, area: Rect) {
                 .add_modifier(Modifier::BOLD),
         )));
         lines.push(Line::from(Span::styled(
-            "Knowledge nodes are INPUT to generation.",
+            "Imported nodes are INPUT to generation.",
             Style::default().fg(Color::Rgb(150, 150, 150)),
         )));
         lines.push(Line::from(Span::styled(
-            "They exist ONLY where needed (native, not translated).",
+            "External data brought in (native, not translated).",
             Style::default()
                 .fg(Color::Rgb(139, 92, 246))
                 .add_modifier(Modifier::ITALIC),
@@ -1094,32 +1100,34 @@ mod tests {
 
     #[test]
     fn test_trait_symbols() {
-        assert_eq!(trait_symbol("invariant"), "\u{25a0}");
-        assert_eq!(trait_symbol("localized"), "\u{25a1}");
-        assert_eq!(trait_symbol("knowledge"), "\u{25ca}");
+        // v0.12.0: renamed per ADR-024 Data Origin
+        assert_eq!(trait_symbol("defined"), "\u{25a0}");
+        assert_eq!(trait_symbol("authored"), "\u{25a1}");
+        assert_eq!(trait_symbol("imported"), "\u{25ca}");
         assert_eq!(trait_symbol("generated"), "\u{2605}"); // ★
-        assert_eq!(trait_symbol("aggregated"), "\u{25aa}"); // ▪
+        assert_eq!(trait_symbol("retrieved"), "\u{25aa}"); // ▪
         assert_eq!(trait_symbol("unknown"), "\u{00b7}");
     }
 
     #[test]
     fn test_trait_display_names() {
-        assert_eq!(trait_display_name("invariant"), "INVARIANT");
-        assert_eq!(trait_display_name("localized"), "LOCALIZED");
-        assert_eq!(trait_display_name("knowledge"), "KNOWLEDGE");
+        // v0.12.0: renamed per ADR-024 Data Origin
+        assert_eq!(trait_display_name("defined"), "DEFINED");
+        assert_eq!(trait_display_name("authored"), "AUTHORED");
+        assert_eq!(trait_display_name("imported"), "IMPORTED");
         assert_eq!(trait_display_name("generated"), "GENERATED");
-        assert_eq!(trait_display_name("aggregated"), "AGGREGATED");
+        assert_eq!(trait_display_name("retrieved"), "RETRIEVED");
     }
 
     #[test]
     fn test_trait_order() {
-        // v11.2: 5 traits (split derived → generated + aggregated)
+        // v0.12.0: 5 traits renamed per ADR-024 Data Origin
         assert_eq!(TRAIT_ORDER.len(), 5);
-        assert_eq!(TRAIT_ORDER[0], "invariant");
-        assert_eq!(TRAIT_ORDER[1], "localized");
-        assert_eq!(TRAIT_ORDER[2], "knowledge");
+        assert_eq!(TRAIT_ORDER[0], "defined");
+        assert_eq!(TRAIT_ORDER[1], "authored");
+        assert_eq!(TRAIT_ORDER[2], "imported");
         assert_eq!(TRAIT_ORDER[3], "generated");
-        assert_eq!(TRAIT_ORDER[4], "aggregated");
+        assert_eq!(TRAIT_ORDER[4], "retrieved");
     }
 
     #[test]
@@ -1150,29 +1158,32 @@ mod tests {
     // ==========================================================================
 
     #[test]
-    fn test_code_examples_invariant() {
-        let examples = trait_code_examples("invariant");
+    fn test_code_examples_defined() {
+        // v0.12.0: was invariant
+        let examples = trait_code_examples("defined");
         assert_eq!(examples.len(), 2);
         assert!(examples[0].title.contains("Entity"));
-        assert!(examples[0].yaml.contains("trait: invariant"));
+        assert!(examples[0].yaml.contains("trait: defined"));
         assert!(!examples[0].neo4j.is_empty());
         assert!(!examples[0].cypher.is_empty());
     }
 
     #[test]
-    fn test_code_examples_localized() {
-        let examples = trait_code_examples("localized");
+    fn test_code_examples_authored() {
+        // v0.12.0: was localized
+        let examples = trait_code_examples("authored");
         assert_eq!(examples.len(), 2);
         assert!(examples[0].title.contains("EntityContent"));
-        assert!(examples[0].yaml.contains("trait: localized"));
+        assert!(examples[0].yaml.contains("trait: authored"));
     }
 
     #[test]
-    fn test_code_examples_knowledge() {
-        let examples = trait_code_examples("knowledge");
+    fn test_code_examples_imported() {
+        // v0.12.0: was knowledge
+        let examples = trait_code_examples("imported");
         assert_eq!(examples.len(), 2);
         assert!(examples[0].title.contains("Term"));
-        assert!(examples[0].yaml.contains("trait: knowledge"));
+        assert!(examples[0].yaml.contains("trait: imported"));
     }
 
     // v11.2: derived split into generated + aggregated
@@ -1185,11 +1196,12 @@ mod tests {
     }
 
     #[test]
-    fn test_code_examples_aggregated() {
-        let examples = trait_code_examples("aggregated");
+    fn test_code_examples_retrieved() {
+        // v0.12.0: was aggregated
+        let examples = trait_code_examples("retrieved");
         assert_eq!(examples.len(), 1);
         assert!(examples[0].title.contains("Metrics"));
-        assert!(examples[0].yaml.contains("trait: aggregated"));
+        assert!(examples[0].yaml.contains("trait: retrieved"));
     }
 
     // Note: test_code_examples_job removed in v11.2 (job trait deferred to v12+)

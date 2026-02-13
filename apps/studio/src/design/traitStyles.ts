@@ -58,21 +58,22 @@ function toTraitStyleTokens(trait: Trait): TraitStyleTokens {
 
 /**
  * 5 Trait border styles (generated from visual-encoding.yaml)
+ * v0.12.0: renamed per ADR-024 Data Origin
  *
  * | Trait      | Border     | Meaning                          |
  * |-----------|------------|----------------------------------|
- * | invariant  | solid 2px  | Stable, doesn't change per locale |
- * | localized  | dashed 2px | Generated natively per locale    |
- * | knowledge  | dotted 2px | Locale knowledge reference data  |
+ * | defined    | solid 2px  | Schema-defined structure (was invariant) |
+ * | authored   | dashed 2px | Human-written PER locale (was localized) |
+ * | imported   | dotted 2px | External data brought in (was knowledge) |
  * | generated  | double 3px | LLM-generated content output     |
- * | aggregated | solid 1px  | Computed metrics and analytics   |
+ * | retrieved  | dotted 3px | Fetched from external APIs (was aggregated) |
  */
 export const TRAIT_STYLES: Record<Trait, TraitStyleTokens> = {
-  invariant: toTraitStyleTokens('invariant'),
-  localized: toTraitStyleTokens('localized'),
-  knowledge: toTraitStyleTokens('knowledge'),
+  defined: toTraitStyleTokens('defined'),
+  authored: toTraitStyleTokens('authored'),
+  imported: toTraitStyleTokens('imported'),
   generated: toTraitStyleTokens('generated'),
-  aggregated: toTraitStyleTokens('aggregated'),
+  retrieved: toTraitStyleTokens('retrieved'),
 } as const;
 
 /**

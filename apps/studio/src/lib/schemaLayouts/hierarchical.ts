@@ -200,7 +200,7 @@ export function applyHierarchicalLayout(
             description: schemaNode?.description || '',
             realm,
             layer: layerKey,
-            trait: schemaNode?.trait || 'invariant',
+            trait: schemaNode?.trait || 'defined',
             isMetaNode: false,
             metaType: 'kind',
           },
