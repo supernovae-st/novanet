@@ -29,12 +29,12 @@ NovaNet uses Neo4j for native content generation (NOT translation):
 v11.0 uses a self-describing context graph with 6 meta-node types:
 - **Realm** (2): global, tenant — visibility boundary (one-way: global→tenant)
 - **Layer** (9): global (config, locale-knowledge) | tenant (config, foundation, structure, semantic, instruction, seo, output)
-- **Kind** (65): 1:1 mapping to Neo4j labels (carries `schema_hint`, `context_budget`)
+- **Class** (65): 1:1 mapping to Neo4j labels (carries `schema_hint`, `context_budget`)
 - **Trait** (5): invariant, localized, knowledge, derived, job — locale behavior
 - **ArcFamily** (5): ownership, localization, semantic, generation, mining
-- **ArcKind** (125): 1:1 mapping to Neo4j relationship types (carries `cypher_pattern`)
+- **ArcClass** (125): 1:1 mapping to Neo4j relationship types (carries `cypher_pattern`)
 
-All meta-nodes carry `:Meta` double-label. Instance bridge: `DataNode -[:OF_KIND]-> Kind`.
+All meta-nodes carry `:Schema` double-label. Instance bridge: `DataNode -[:OF_CLASS]-> Class`.
 
 ## Key Patterns
 
@@ -55,40 +55,40 @@ MATCH (l)-[:HAS_VOICE]->(v:LocaleVoice)
 RETURN b.instructions, e.key, el.title, v.formality_score
 ```
 
-### Meta-Graph: Navigate Taxonomy (v11.0)
+### Schema Graph: Navigate Taxonomy (v11.0)
 ```cypher
-MATCH (r:Realm {key: $realm})-[:HAS_LAYER]->(l:Layer)-[:HAS_KIND]->(k:Kind)
-RETURN r.key AS realm, l.key AS layer, collect(k.label) AS kinds
+MATCH (r:Realm {key: $realm})-[:HAS_LAYER]->(l:Layer)-[:HAS_CLASS]->(c:Class)
+RETURN r.key AS realm, l.key AS layer, collect(c.label) AS classes
 ```
 
-### Meta-Graph: Find Kinds by Trait (v11.0)
+### Schema Graph: Find Classes by Trait (v11.0)
 ```cypher
-MATCH (k:Kind)-[:HAS_TRAIT]->(t:Trait {key: $trait})
-RETURN k.label, k.schema_hint, k.context_budget
-ORDER BY k.label
+MATCH (c:Class)-[:HAS_TRAIT]->(t:Trait {key: $trait})
+RETURN c.label, c.schema_hint, c.context_budget
+ORDER BY c.label
 ```
 
-### Meta-Graph: Arc Schema for a Kind (v11.0)
+### Schema Graph: Arc Schema for a Class (v11.0)
 ```cypher
-MATCH (ak:ArcKind)-[:FROM_KIND]->(k:Kind {label: $kindLabel})
-MATCH (ak)-[:TO_KIND]->(target:Kind)
-MATCH (ak)-[:IN_FAMILY]->(af:ArcFamily)
-RETURN ak.key AS arc, af.key AS family, target.label AS target_kind, ak.cypher_pattern
+MATCH (ac:ArcClass)-[:FROM_CLASS]->(c:Class {label: $classLabel})
+MATCH (ac)-[:TO_CLASS]->(target:Class)
+MATCH (ac)-[:IN_FAMILY]->(af:ArcFamily)
+RETURN ac.key AS arc, af.key AS family, target.label AS target_class, ac.cypher_pattern
 ```
 
-### Meta-Graph: Full Context Assembly (v11.0)
+### Schema Graph: Full Context Assembly (v11.0)
 ```cypher
-// Describe Kind with full context
-MATCH (k:Kind {label: $kindLabel})
-MATCH (k)-[:IN_REALM]->(r:Realm)
-MATCH (k)-[:IN_LAYER]->(l:Layer)
-MATCH (k)-[:HAS_TRAIT]->(t:Trait)
-OPTIONAL MATCH (ak:ArcKind)-[:FROM_KIND]->(k)
-OPTIONAL MATCH (ak)-[:TO_KIND]->(target:Kind)
-OPTIONAL MATCH (ak)-[:IN_FAMILY]->(af:ArcFamily)
-RETURN k.label, k.schema_hint, k.context_budget,
+// Describe Class with full context
+MATCH (c:Class {label: $classLabel})
+MATCH (c)-[:IN_REALM]->(r:Realm)
+MATCH (c)-[:IN_LAYER]->(l:Layer)
+MATCH (c)-[:HAS_TRAIT]->(t:Trait)
+OPTIONAL MATCH (ac:ArcClass)-[:FROM_CLASS]->(c)
+OPTIONAL MATCH (ac)-[:TO_CLASS]->(target:Class)
+OPTIONAL MATCH (ac)-[:IN_FAMILY]->(af:ArcFamily)
+RETURN c.label, c.schema_hint, c.context_budget,
        r.key AS realm, l.key AS layer, t.key AS trait,
-       collect(DISTINCT {arc: ak.key, family: af.key, target: target.label}) AS outgoing_arcs
+       collect(DISTINCT {arc: ac.key, family: af.key, target: target.label}) AS outgoing_arcs
 ```
 
 ## Constraints
@@ -97,5 +97,5 @@ RETURN k.label, k.schema_hint, k.context_budget,
 - Limit results (default LIMIT 100)
 - Explain query logic in comments
 - Consider index usage for performance
-- Use `:Meta` label filter when querying meta-graph exclusively
-- Prefer `OF_KIND` for instance-to-type lookups (not label-based filtering)
+- Use `:Schema` label filter when querying schema graph exclusively
+- Prefer `OF_CLASS` for instance-to-type lookups (not label-based filtering)
