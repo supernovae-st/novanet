@@ -234,10 +234,10 @@ impl QuizState {
 }
 
 /// All quiz questions about NovaNet taxonomy.
-/// v0.12.0: Each question now has a category for badges and breakdown.
+/// v0.12.0: 30 questions across 5 categories with badges and breakdown.
 pub const QUESTIONS: &[QuizQuestion] = &[
     // ═══════════════════════════════════════════════════════════════════════════
-    // REALMS (2 questions)
+    // REALMS (6 questions)
     // ═══════════════════════════════════════════════════════════════════════════
     QuizQuestion {
         question: "How many realms does NovaNet v11.5 have?",
@@ -253,68 +253,126 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         explanation: "59 total nodes: 39 shared + 20 org. v0.12.0 refined SEO/GEO and removed obsolete nodes.",
         category: QuizCategory::Realms,
     },
+    QuizQuestion {
+        question: "The Shared realm is...",
+        options: ["Read-Write", "Read-Only", "Write-Only", "Admin-Only"],
+        correct: 1,
+        explanation: "Shared realm is READ-ONLY universal knowledge. All business content lives in Org realm.",
+        category: QuizCategory::Realms,
+    },
+    QuizQuestion {
+        question: "How many nodes are in the Shared realm?",
+        options: ["20", "30", "39", "45"],
+        correct: 2,
+        explanation: "Shared realm has 39 nodes across 4 layers: config, locale, geography, knowledge.",
+        category: QuizCategory::Realms,
+    },
+    QuizQuestion {
+        question: "How many nodes are in the Org realm?",
+        options: ["15", "20", "25", "30"],
+        correct: 1,
+        explanation: "Org realm has 20 nodes across 6 layers: config, foundation, structure, semantic, instruction, output.",
+        category: QuizCategory::Realms,
+    },
+    QuizQuestion {
+        question: "What was 'global' realm renamed to?",
+        options: ["public", "shared", "common", "universal"],
+        correct: 1,
+        explanation: "v11.2: 'global' → 'shared' (describes WHAT), 'tenant' → 'org' (describes WHO).",
+        category: QuizCategory::Realms,
+    },
     // ═══════════════════════════════════════════════════════════════════════════
-    // LAYERS (3 questions)
+    // LAYERS (6 questions)
     // ═══════════════════════════════════════════════════════════════════════════
     QuizQuestion {
-        question: "How many layers does the Shared realm have in v11.5?",
+        question: "How many layers does the Shared realm have?",
         options: ["3", "4", "5", "6"],
         correct: 1,
         explanation: "Shared has 4 layers: config, locale, geography, knowledge (39 nodes total).",
         category: QuizCategory::Layers,
     },
     QuizQuestion {
-        question: "How many layers does the Org realm have in v11.5?",
+        question: "How many layers does the Org realm have?",
         options: ["4", "5", "6", "7"],
         correct: 2,
         explanation: "Org has 6 layers: config, foundation, structure, semantic, instruction, output (20 nodes).",
         category: QuizCategory::Layers,
     },
     QuizQuestion {
-        question: "Where does the Locale node live in v11.5?",
-        options: [
-            "shared/locale",
-            "shared/config",
-            "org/config",
-            "shared/knowledge",
-        ],
+        question: "Where does the Locale node live?",
+        options: ["shared/locale", "shared/config", "org/config", "shared/knowledge"],
         correct: 1,
         explanation: "Locale moved to shared/config in v11.5 because it's a DEFINITION ('defined' trait), not settings.",
         category: QuizCategory::Layers,
     },
+    QuizQuestion {
+        question: "Which layer contains Entity and EntityContent?",
+        options: ["structure", "semantic", "foundation", "output"],
+        correct: 1,
+        explanation: "Entity and EntityContent live in the semantic layer - they represent meaning and knowledge.",
+        category: QuizCategory::Layers,
+    },
+    QuizQuestion {
+        question: "PageGenerated and BlockGenerated live in which layer?",
+        options: ["semantic", "structure", "instruction", "output"],
+        correct: 3,
+        explanation: "Generated nodes (PageGenerated, BlockGenerated, OutputArtifact) live in the output layer.",
+        category: QuizCategory::Layers,
+    },
+    QuizQuestion {
+        question: "Which layer contains Page and Block nodes?",
+        options: ["semantic", "structure", "foundation", "output"],
+        correct: 1,
+        explanation: "Page and Block live in the structure layer - they define content organization.",
+        category: QuizCategory::Layers,
+    },
     // ═══════════════════════════════════════════════════════════════════════════
-    // TRAITS (4 questions)
+    // TRAITS (6 questions)
     // ═══════════════════════════════════════════════════════════════════════════
     QuizQuestion {
-        question: "How many node traits exist in v11.8+?",
+        question: "How many node traits exist in v0.12.0?",
         options: ["3", "4", "5", "6"],
         correct: 2,
-        explanation: "5 traits: defined, authored, imported, generated, retrieved (ADR-024 Data Origin renames).",
+        explanation: "5 traits: defined, authored, imported, generated, retrieved (ADR-024 Data Origin).",
         category: QuizCategory::Traits,
     },
     QuizQuestion {
         question: "Which trait indicates LLM-generated output?",
         options: ["authored", "imported", "generated", "retrieved"],
         correct: 2,
-        explanation: "Generated trait indicates LLM-generated output (PageGenerated, BlockGenerated, OutputArtifact).",
+        explanation: "Generated trait indicates LLM output (PageGenerated, BlockGenerated, OutputArtifact).",
         category: QuizCategory::Traits,
     },
     QuizQuestion {
         question: "What border style indicates a 'defined' node?",
         options: ["dashed", "dotted", "double", "solid"],
         correct: 3,
-        explanation: "Defined nodes have solid borders. authored=dashed, imported=double, generated=dotted.",
+        explanation: "Defined=solid, authored=dashed, imported=double, generated=dotted, retrieved=dotted-thin.",
         category: QuizCategory::Traits,
     },
     QuizQuestion {
-        question: "What quick jump key goes to the 'generated' trait?",
+        question: "What quick jump key goes to 'generated' trait?",
         options: ["gd", "gg", "gn", "go"],
         correct: 1,
-        explanation: "gg jumps to Generated trait (v11.8+). gd=defined, ga=authored, gi=imported, gr=retrieved.",
+        explanation: "gg=generated. Also: gd=defined, ga=authored, gi=imported, gr=retrieved.",
+        category: QuizCategory::Traits,
+    },
+    QuizQuestion {
+        question: "Which trait is for human-written locale content?",
+        options: ["defined", "authored", "imported", "generated"],
+        correct: 1,
+        explanation: "Authored trait is for human-written per-locale content (EntityContent, ProjectContent).",
+        category: QuizCategory::Traits,
+    },
+    QuizQuestion {
+        question: "Which trait is for external API data?",
+        options: ["imported", "generated", "retrieved", "authored"],
+        correct: 2,
+        explanation: "Retrieved trait is for data fetched from external APIs (SEOKeywordMetrics, GEOMetrics).",
         category: QuizCategory::Traits,
     },
     // ═══════════════════════════════════════════════════════════════════════════
-    // ARCS (3 questions)
+    // ARCS (6 questions)
     // ═══════════════════════════════════════════════════════════════════════════
     QuizQuestion {
         question: "How many arc families exist in NovaNet?",
@@ -324,51 +382,93 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         category: QuizCategory::Arcs,
     },
     QuizQuestion {
-        question: "What arc scope is used when crossing realm boundaries?",
+        question: "What arc scope crosses realm boundaries?",
         options: ["intra_realm", "cross_realm", "multi_realm", "global_scope"],
         correct: 1,
         explanation: "cross_realm scope for arcs that cross between Shared and Org realms.",
         category: QuizCategory::Arcs,
     },
     QuizQuestion {
-        question: "What was EntityL10n renamed to in v10.9?",
-        options: [
-            "EntityContent",
-            "EntityGenerated",
-            "EntityOutput",
-            "EntityData",
-        ],
+        question: "What was EntityL10n renamed to?",
+        options: ["EntityContent", "EntityGenerated", "EntityOutput", "EntityData"],
         correct: 0,
-        explanation: "EntityL10n → EntityContent (semantic layer, 'authored' trait). The 'Content' suffix indicates locale-specific semantic content.",
+        explanation: "EntityL10n → EntityContent (semantic layer, 'authored' trait). Content = locale-specific.",
+        category: QuizCategory::Arcs,
+    },
+    QuizQuestion {
+        question: "HAS_CONTENT arc connects Entity to what?",
+        options: ["Page", "Block", "EntityContent", "Locale"],
+        correct: 2,
+        explanation: "HAS_CONTENT: Entity → EntityContent (ownership family, localization purpose).",
+        category: QuizCategory::Arcs,
+    },
+    QuizQuestion {
+        question: "Which arc family is for Page-Block relationships?",
+        options: ["localization", "semantic", "ownership", "generation"],
+        correct: 2,
+        explanation: "Ownership family includes HAS_BLOCK, HAS_PAGE, HAS_CONTENT - parent-child relationships.",
+        category: QuizCategory::Arcs,
+    },
+    QuizQuestion {
+        question: "How many total arcs (ArcClass) in v0.12.0?",
+        options: ["50", "85", "114", "150"],
+        correct: 2,
+        explanation: "114 arc types defined across 5 families, covering all node relationships.",
         category: QuizCategory::Arcs,
     },
     // ═══════════════════════════════════════════════════════════════════════════
-    // GENERATION (3 questions)
+    // GENERATION (6 questions)
     // ═══════════════════════════════════════════════════════════════════════════
     QuizQuestion {
         question: "What does NovaNet do with content?",
         options: ["Translation", "Transcription", "Generation", "Compilation"],
         correct: 2,
-        explanation: "NovaNet GENERATES content natively per locale, not translation. Entity → Generate → EntityContent.",
+        explanation: "NovaNet GENERATES content natively per locale, NOT translation. Native generation preserves cultural nuance.",
         category: QuizCategory::Generation,
     },
     QuizQuestion {
-        question: "What was PageL10n renamed to in v10.9?",
+        question: "What was PageL10n renamed to?",
         options: ["PageContent", "PageGenerated", "PageOutput", "PageLocal"],
         correct: 1,
-        explanation: "PageL10n → PageGenerated (output layer, generated trait). The 'Generated' suffix indicates LLM-generated output.",
+        explanation: "PageL10n → PageGenerated (output layer, generated trait). 'Generated' = LLM output.",
         category: QuizCategory::Generation,
     },
     QuizQuestion {
-        question: "Knowledge atoms (Terms, Expressions) are loaded how?",
-        options: [
-            "All at once",
-            "Selectively per context",
-            "Never loaded",
-            "Cached globally",
-        ],
+        question: "Knowledge atoms are loaded how?",
+        options: ["All at once", "Selectively per context", "Never loaded", "Cached globally"],
         correct: 1,
         explanation: "Selective LLM loading: Load 50 relevant Terms, not 20K JSON blob. Graph queries filter by context.",
+        category: QuizCategory::Generation,
+    },
+    QuizQuestion {
+        question: "What's the generation pipeline order?",
+        options: [
+            "Entity → Structure → Knowledge → Output",
+            "Knowledge → Entity → Structure → Output",
+            "Structure → Entity → Output → Knowledge",
+            "Output → Knowledge → Entity → Structure",
+        ],
+        correct: 1,
+        explanation: "Knowledge (imported) feeds Entity (defined) which structures Pages/Blocks for Output (generated).",
+        category: QuizCategory::Generation,
+    },
+    QuizQuestion {
+        question: "Term, Expression, Pattern have which trait?",
+        options: ["defined", "authored", "imported", "generated"],
+        correct: 2,
+        explanation: "Knowledge atoms (Term, Expression, Pattern) have 'imported' trait - external knowledge brought in.",
+        category: QuizCategory::Generation,
+    },
+    QuizQuestion {
+        question: "Why native generation over translation?",
+        options: [
+            "Faster processing",
+            "Cheaper API costs",
+            "Preserves cultural nuance",
+            "Smaller file sizes",
+        ],
+        correct: 2,
+        explanation: "Native generation preserves cultural nuance (idioms, humor, formality) that translation loses.",
         category: QuizCategory::Generation,
     },
 ];

@@ -170,7 +170,7 @@ pub const VIEWS: &[ViewEntry] = &[
         notes: &[
             "Used by the generation orchestrator",
             "Collects Page -> Blocks -> Entities -> Knowledge",
-            "Includes PagePrompt and PageType for instructions",
+            "Includes PageInstruction and PageStructure for instructions",
         ],
     },
     ViewEntry {
@@ -181,7 +181,7 @@ pub const VIEWS: &[ViewEntry] = &[
         root_type: "Block",
         notes: &[
             "Sub-agent receives this context slice",
-            "Block -> BlockPrompt -> used Terms/Expressions",
+            "Block -> BlockInstruction -> used Terms/Expressions",
             "Entities linked via USES_ENTITY arc",
         ],
     },
