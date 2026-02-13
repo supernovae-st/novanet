@@ -15,7 +15,7 @@
 //! ## PRACTICE (Interactive)
 //! - [P] Pipeline: Animated generation flow (not translation)
 //! - [Q] Quiz: Interactive taxonomy quiz
-//! - [S] Stats: Dynamic learning statistics (sparklines, gauges, achievements)
+//! - [S] Stats: Matrix Control Tower (schema stats, heartbeat, bar charts)
 //! - [V] Views: Schema views explorer (Query-First architecture)
 //!
 //! v0.12.0: 59 nodes (39 shared + 20 org), 10 layers (4 shared + 6 org).
