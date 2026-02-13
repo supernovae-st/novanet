@@ -1,0 +1,10 @@
+# packages/core/models/arc-families/_index.yaml
+# Registry of all ArcFamily definitions
+# v0.12.5
+
+arc_families:
+  - ownership
+  - localization
+  - semantic
+  - generation
+  - mining

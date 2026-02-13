@@ -1,0 +1,35 @@
+# packages/core/models/layers/config.yaml
+# Config layer definition (exists in both realms)
+# v0.12.5
+
+layer:
+  key: config
+  display_name: Config
+  description: |
+    Configuration and definitions layer. In shared realm: Locale, EntityCategory,
+    SEOKeywordFormat (universal definitions). In org realm: OrgConfig (organization
+    entry point). All nodes have "defined" trait.
+  color: "#64748b"
+  icon:
+    web: "settings"
+    terminal: "⚙"
+
+  realms:
+    - shared
+    - org
+
+  classes:
+    shared:
+      - Locale
+      - EntityCategory
+      - SEOKeywordFormat
+    org:
+      - OrgConfig
+
+  class_count: 4  # Computed by generator
+
+  llm_context: |
+    USE: when accessing configuration and definitions.
+    TRIGGERS: "config", "locale", "category", "organization settings".
+    NOT: for locale-specific content (use locale layer).
+    RELATES: Locale (shared), OrgConfig (org), EntityCategory (shared).

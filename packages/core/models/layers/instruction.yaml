@@ -1,0 +1,35 @@
+# packages/core/models/layers/instruction.yaml
+# Instruction layer definition (org realm only)
+# v0.12.5
+
+layer:
+  key: instruction
+  display_name: Instructions
+  description: |
+    Generation directives. Instructions and rules that guide the LLM during
+    content generation. PageStructure for block ordering, PageInstruction for
+    page-level guidance, BlockInstruction for block-specific instructions,
+    BlockType for block schemas, BlockRules for constraints.
+  color: "#eab308"
+  icon:
+    web: "file-text"
+    terminal: "▤"
+
+  realms:
+    - org
+
+  classes:
+    - PageStructure
+    - PageInstruction
+    - BlockInstruction
+    - BlockType
+    - BlockRules
+    - PromptArtifact
+
+  class_count: 6  # Computed by generator
+
+  llm_context: |
+    USE: when accessing generation instructions and rules.
+    TRIGGERS: "instruction", "prompt", "rules", "block type", "generation directives".
+    NOT: for generated output (use output layer).
+    RELATES: PageInstruction (defined), BlockInstruction (defined), BlockType (defined).

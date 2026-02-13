@@ -1,0 +1,34 @@
+# packages/core/models/layers/locale.yaml
+# Locale layer definition (shared realm only)
+# v0.12.5
+
+layer:
+  key: locale
+  display_name: Locale
+  description: |
+    Locale-specific settings (1:1 with Locale). Contains Culture, Style, Formatting,
+    Adaptation, Market, Slugification. These are discovered/curated data specific
+    to each locale. All nodes have "imported" trait.
+  color: "#64748b"
+  icon:
+    web: "languages"
+    terminal: "●"
+
+  realms:
+    - shared
+
+  classes:
+    - Culture
+    - Style
+    - Formatting
+    - Adaptation
+    - Market
+    - Slugification
+
+  class_count: 6  # Computed by generator
+
+  llm_context: |
+    USE: when accessing locale-specific settings.
+    TRIGGERS: "culture", "style", "formatting", "market", "adaptation".
+    NOT: for locale definitions (use config layer, Locale node).
+    RELATES: Culture (voice), Style (writing), Formatting (numbers/dates).

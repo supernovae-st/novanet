@@ -274,6 +274,431 @@ pub struct GraphStats {
 }
 
 // ============================================================================
+// Architecture Diagrams (v0.12.5 - ADR-028 visualization)
+// ============================================================================
+
+/// Architecture diagram for a specific Class.
+/// Used in Graph mode detail panel to show contextual ER diagrams.
+#[derive(Debug, Clone)]
+pub struct ArchitectureDiagram {
+    /// Class name this diagram is for (e.g., "Page", "Entity", "Brand")
+    pub class_name: String,
+    /// Related ADR identifier (e.g., "ADR-028")
+    pub adr_id: String,
+    /// ASCII diagram lines
+    pub diagram: Vec<String>,
+}
+
+/// ADR category for grouping in Nexus Arch tab.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum AdrCategory {
+    CorePrinciples,
+    SchemaArchitecture,
+    UxArchitecture,
+    ArcPolicies,
+    LayerEvolution,
+}
+
+impl AdrCategory {
+    pub fn label(&self) -> &'static str {
+        match self {
+            AdrCategory::CorePrinciples => "Core Principles",
+            AdrCategory::SchemaArchitecture => "Schema Architecture (v0.12.x)",
+            AdrCategory::UxArchitecture => "UX Architecture",
+            AdrCategory::ArcPolicies => "Arc Policies",
+            AdrCategory::LayerEvolution => "Layer Evolution (v11.x history)",
+        }
+    }
+
+    pub fn all() -> &'static [AdrCategory] {
+        &[
+            AdrCategory::CorePrinciples,
+            AdrCategory::SchemaArchitecture,
+            AdrCategory::UxArchitecture,
+            AdrCategory::ArcPolicies,
+            AdrCategory::LayerEvolution,
+        ]
+    }
+}
+
+/// ADR entry for Nexus Arch tab browser.
+#[derive(Debug, Clone)]
+pub struct AdrEntry {
+    /// ADR identifier (e.g., "ADR-028")
+    pub id: String,
+    /// ADR title (e.g., "Page-Entity Architecture")
+    pub title: String,
+    /// Version when ADR was introduced (e.g., "v0.12.3")
+    pub version: String,
+    /// Status (e.g., "Approved", "Superseded")
+    pub status: String,
+    /// Category for grouping
+    pub category: AdrCategory,
+    /// Summary bullet points
+    pub summary: Vec<String>,
+    /// ASCII diagram lines
+    pub diagram: Vec<String>,
+    /// Key rules
+    pub key_rules: Vec<String>,
+    /// Related Class names
+    pub related_classes: Vec<String>,
+}
+
+/// Get architecture diagram for a Class (if one exists).
+/// Only key classes have dedicated diagrams per ADR-028.
+pub fn get_architecture_diagram(class_name: &str) -> Option<ArchitectureDiagram> {
+    match class_name {
+        "Page" => Some(ArchitectureDiagram {
+            class_name: "Page".to_string(),
+            adr_id: "ADR-028".to_string(),
+            diagram: vec![
+                "        Project".to_string(),
+                "          │".to_string(),
+                "          │[:HAS_PAGE]".to_string(),
+                "          ▼".to_string(),
+                "┌────────────────────────────┐".to_string(),
+                "│                            │".to_string(),
+                "│ Page ══[:REPRESENTS]══▶    │".to_string(),
+                "│   │      (1:1)      Entity │".to_string(),
+                "│   │                   │    │".to_string(),
+                "│   │[:HAS_BLOCK]       │[:HAS_CONTENT]".to_string(),
+                "│   │  {order}          │    │".to_string(),
+                "│   ▼                   ▼    │".to_string(),
+                "│ Block          EntityContent".to_string(),
+                "│   │                        │".to_string(),
+                "│   └──[:USES_ENTITY]──▶     │".to_string(),
+                "│              Entity        │".to_string(),
+                "└────────────────────────────┘".to_string(),
+            ],
+        }),
+        "Entity" => Some(ArchitectureDiagram {
+            class_name: "Entity".to_string(),
+            adr_id: "ADR-028".to_string(),
+            diagram: vec![
+                "       Project".to_string(),
+                "          │".to_string(),
+                "          │[:HAS_ENTITY]".to_string(),
+                "          ▼".to_string(),
+                "┌────────────────────────────┐".to_string(),
+                "│                            │".to_string(),
+                "│ Entity ──[:BELONGS_TO]──▶  │".to_string(),
+                "│   │         EntityCategory │".to_string(),
+                "│   │                        │".to_string(),
+                "│   │[:HAS_CONTENT]          │".to_string(),
+                "│   ▼                        │".to_string(),
+                "│ EntityContent              │".to_string(),
+                "│   │                        │".to_string(),
+                "│   │[:FOR_LOCALE]           │".to_string(),
+                "│   ▼                        │".to_string(),
+                "│ Locale                     │".to_string(),
+                "│                            │".to_string(),
+                "│ ──[:SEMANTIC_LINK]──▶      │".to_string(),
+                "│    {temp, link_type} Entity│".to_string(),
+                "└────────────────────────────┘".to_string(),
+            ],
+        }),
+        "Block" => Some(ArchitectureDiagram {
+            class_name: "Block".to_string(),
+            adr_id: "ADR-028".to_string(),
+            diagram: vec![
+                "         Page".to_string(),
+                "          │".to_string(),
+                "          │[:HAS_BLOCK {order}]".to_string(),
+                "          ▼".to_string(),
+                "┌────────────────────────────┐".to_string(),
+                "│                            │".to_string(),
+                "│ Block ──[:OF_TYPE]──▶      │".to_string(),
+                "│   │           BlockType    │".to_string(),
+                "│   │                        │".to_string(),
+                "│   │[:HAS_INSTRUCTION]      │".to_string(),
+                "│   ▼                        │".to_string(),
+                "│ BlockInstruction           │".to_string(),
+                "│   │                        │".to_string(),
+                "│   │[:USES_ENTITY]          │".to_string(),
+                "│   ▼                        │".to_string(),
+                "│ Entity                     │".to_string(),
+                "└────────────────────────────┘".to_string(),
+            ],
+        }),
+        "Brand" => Some(ArchitectureDiagram {
+            class_name: "Brand".to_string(),
+            adr_id: "ADR-028".to_string(),
+            diagram: vec![
+                "       Project".to_string(),
+                "          │".to_string(),
+                "          │[:HAS_BRAND]".to_string(),
+                "          ▼".to_string(),
+                "┌────────────────────────────┐".to_string(),
+                "│                            │".to_string(),
+                "│ Brand ──[:HAS_DESIGN]──▶   │".to_string(),
+                "│   │         BrandDesign    │".to_string(),
+                "│   │                        │".to_string(),
+                "│   │──[:HAS_PRINCIPLES]──▶  │".to_string(),
+                "│   │        BrandPrinciples │".to_string(),
+                "│   │                        │".to_string(),
+                "│   │──[:HAS_PROMPT_STYLE]──▶│".to_string(),
+                "│   │        PromptStyle     │".to_string(),
+                "│   │                        │".to_string(),
+                "│   └──[:TARGETS_PERSONA]──▶ │".to_string(),
+                "│          AudiencePersona   │".to_string(),
+                "└────────────────────────────┘".to_string(),
+            ],
+        }),
+        "Locale" => Some(ArchitectureDiagram {
+            class_name: "Locale".to_string(),
+            adr_id: "ADR-028".to_string(),
+            diagram: vec![
+                "     shared/config".to_string(),
+                "          │".to_string(),
+                "          ▼".to_string(),
+                "┌────────────────────────────┐".to_string(),
+                "│                            │".to_string(),
+                "│ Locale ──[:HAS_VOICE]──▶   │".to_string(),
+                "│   │         LocaleVoice    │".to_string(),
+                "│   │                        │".to_string(),
+                "│   │──[:HAS_CULTURE]──▶     │".to_string(),
+                "│   │         CultureSet     │".to_string(),
+                "│   │                        │".to_string(),
+                "│   │──[:HAS_TERMS]──▶       │".to_string(),
+                "│   │         TermSet        │".to_string(),
+                "│   │                        │".to_string(),
+                "│   └──[:FOR_LOCALE]◀──      │".to_string(),
+                "│          EntityContent     │".to_string(),
+                "└────────────────────────────┘".to_string(),
+            ],
+        }),
+        "Project" => Some(ArchitectureDiagram {
+            class_name: "Project".to_string(),
+            adr_id: "ADR-028".to_string(),
+            diagram: vec![
+                "      OrgConfig".to_string(),
+                "          │".to_string(),
+                "          │[:HAS_PROJECT]".to_string(),
+                "          ▼".to_string(),
+                "┌────────────────────────────┐".to_string(),
+                "│                            │".to_string(),
+                "│ Project ──[:HAS_PAGE]──▶   │".to_string(),
+                "│   │              Page      │".to_string(),
+                "│   │                        │".to_string(),
+                "│   │──[:HAS_ENTITY]──▶      │".to_string(),
+                "│   │              Entity    │".to_string(),
+                "│   │                        │".to_string(),
+                "│   │──[:HAS_BRAND]──▶       │".to_string(),
+                "│   │              Brand     │".to_string(),
+                "│   │                        │".to_string(),
+                "│   └──[:HAS_CONTENT]──▶     │".to_string(),
+                "│          ProjectContent    │".to_string(),
+                "└────────────────────────────┘".to_string(),
+            ],
+        }),
+        _ => None,
+    }
+}
+
+/// Get all ADR entries for Nexus Arch tab.
+pub fn get_all_adrs() -> Vec<AdrEntry> {
+    vec![
+        // Core Principles
+        AdrEntry {
+            id: "ADR-007".to_string(),
+            title: "Generation NOT Translation".to_string(),
+            version: "core".to_string(),
+            status: "Approved".to_string(),
+            category: AdrCategory::CorePrinciples,
+            summary: vec![
+                "Entity → Generate natively → EntityContent".to_string(),
+                "NOT: Source → Translate → Target".to_string(),
+            ],
+            diagram: vec![
+                "Entity (defined) ──▶ Generate ──▶ EntityContent (authored)".to_string(),
+            ],
+            key_rules: vec![
+                "Content is generated natively per locale".to_string(),
+                "Translation loses cultural nuance".to_string(),
+            ],
+            related_classes: vec!["Entity".to_string(), "EntityContent".to_string()],
+        },
+        AdrEntry {
+            id: "ADR-003".to_string(),
+            title: "YAML-First Architecture".to_string(),
+            version: "v9.0".to_string(),
+            status: "Approved".to_string(),
+            category: AdrCategory::CorePrinciples,
+            summary: vec![
+                "YAML = single source of truth".to_string(),
+                "Generators → TS/Cypher/Mermaid".to_string(),
+            ],
+            diagram: vec![
+                "taxonomy.yaml ──▶ Rust Generator ──▶ TypeScript + Cypher".to_string(),
+            ],
+            key_rules: vec![
+                "Single source prevents drift".to_string(),
+                "CI validates sync".to_string(),
+            ],
+            related_classes: vec![],
+        },
+        AdrEntry {
+            id: "ADR-001".to_string(),
+            title: "Arc Terminology".to_string(),
+            version: "v9.5".to_string(),
+            status: "Approved".to_string(),
+            category: AdrCategory::CorePrinciples,
+            summary: vec![
+                "Use 'Arc' (not Edge/Relation)".to_string(),
+                "Graph theory for directed edges".to_string(),
+            ],
+            diagram: vec![],
+            key_rules: vec![
+                "Single consistent term across all platforms".to_string(),
+            ],
+            related_classes: vec![],
+        },
+        // Schema Architecture
+        AdrEntry {
+            id: "ADR-028".to_string(),
+            title: "Page-Entity Architecture".to_string(),
+            version: "v0.12.3".to_string(),
+            status: "Approved".to_string(),
+            category: AdrCategory::SchemaArchitecture,
+            summary: vec![
+                "Page ↔ Entity = 1:1 mandatory via [:REPRESENTS]".to_string(),
+                "Slug = Entity.key (source of truth)".to_string(),
+                "Order on arc: [:HAS_BLOCK {order}]".to_string(),
+            ],
+            diagram: vec![
+                "Page ──[:REPRESENTS]──▶ Entity (1:1 mandatory)".to_string(),
+                "  │                        │".to_string(),
+                "  │[:HAS_BLOCK {order}]    │[:HAS_CONTENT]".to_string(),
+                "  ▼                        ▼".to_string(),
+                "Block                 EntityContent@locale".to_string(),
+            ],
+            key_rules: vec![
+                "Every Page MUST have exactly one Entity".to_string(),
+                "SEO Keywords live on Entity, not Page".to_string(),
+                "Block.key = \"{page_key}:{block_type}:{index}\"".to_string(),
+            ],
+            related_classes: vec!["Page".to_string(), "Entity".to_string(), "Block".to_string()],
+        },
+        AdrEntry {
+            id: "ADR-024".to_string(),
+            title: "Trait = Data Origin".to_string(),
+            version: "v0.12.0".to_string(),
+            status: "Approved".to_string(),
+            category: AdrCategory::SchemaArchitecture,
+            summary: vec![
+                "invariant → defined".to_string(),
+                "localized → authored".to_string(),
+                "knowledge → imported".to_string(),
+                "aggregated → retrieved".to_string(),
+            ],
+            diagram: vec![],
+            key_rules: vec![
+                "Trait answers: WHERE does data come from?".to_string(),
+                "Layer answers: WHAT functional category?".to_string(),
+            ],
+            related_classes: vec![],
+        },
+        AdrEntry {
+            id: "ADR-023".to_string(),
+            title: "Class/Instance Terminology".to_string(),
+            version: "v0.12.0".to_string(),
+            status: "Approved".to_string(),
+            category: AdrCategory::SchemaArchitecture,
+            summary: vec![
+                "NodeKind → NodeClass".to_string(),
+                ":Meta:Kind → :Schema:Class".to_string(),
+                "\"Meta\" eliminated entirely".to_string(),
+            ],
+            diagram: vec![],
+            key_rules: vec![
+                "Class/Instance is standard OOP/ontology".to_string(),
+                "Avoids Facebook 'Meta' confusion".to_string(),
+            ],
+            related_classes: vec![],
+        },
+        // UX Architecture
+        AdrEntry {
+            id: "ADR-022".to_string(),
+            title: "Unified Tree (Graph/Nexus)".to_string(),
+            version: "v11.7".to_string(),
+            status: "Approved".to_string(),
+            category: AdrCategory::UxArchitecture,
+            summary: vec![
+                "5 modes → 2 modes: [1]Graph + [2]Nexus".to_string(),
+                "\"If it's a node in Neo4j, it's a node everywhere\"".to_string(),
+            ],
+            diagram: vec![
+                "▼ Realm:shared".to_string(),
+                "  ▼ Layer:config".to_string(),
+                "    ▼ Class:Locale [200]".to_string(),
+                "      ● Locale:fr-FR".to_string(),
+            ],
+            key_rules: vec![
+                "Realm, Layer, Class are clickable nodes".to_string(),
+                "Instances lazy-loaded under Class".to_string(),
+            ],
+            related_classes: vec![],
+        },
+        AdrEntry {
+            id: "ADR-021".to_string(),
+            title: "Query-First Architecture".to_string(),
+            version: "v11.6".to_string(),
+            status: "Approved".to_string(),
+            category: AdrCategory::UxArchitecture,
+            summary: vec![
+                "Cypher = source of truth".to_string(),
+                "YAML views only (no TS hardcoding)".to_string(),
+            ],
+            diagram: vec![],
+            key_rules: vec![
+                "Graph displays query results only".to_string(),
+                "Views are parameterized Cypher templates".to_string(),
+            ],
+            related_classes: vec![],
+        },
+        // Arc Policies
+        AdrEntry {
+            id: "ADR-026".to_string(),
+            title: "Inverse Arc Policy".to_string(),
+            version: "v0.12.1".to_string(),
+            status: "Approved".to_string(),
+            category: AdrCategory::ArcPolicies,
+            summary: vec![
+                "TIER 1: Required (HAS_* ↔ *_OF)".to_string(),
+                "TIER 2: Recommended (knowledge arcs)".to_string(),
+                "TIER 3: No inverse needed".to_string(),
+            ],
+            diagram: vec![],
+            key_rules: vec![
+                "HAS_ENTITY ↔ ENTITY_OF".to_string(),
+                "Container arcs: no inverse".to_string(),
+            ],
+            related_classes: vec![],
+        },
+        AdrEntry {
+            id: "ADR-027".to_string(),
+            title: "Generation Family Semantics".to_string(),
+            version: "v0.12.1".to_string(),
+            status: "Approved".to_string(),
+            category: AdrCategory::ArcPolicies,
+            summary: vec![
+                "GENERATED vs HAS_GENERATED".to_string(),
+                "Pipeline: Instruction → Prompt → Generated".to_string(),
+            ],
+            diagram: vec![
+                "PageInstruction ──[:COMPILED_FROM]──< PromptArtifact".to_string(),
+                "BlockInstruction ──[:GENERATED]──▶ BlockGenerated".to_string(),
+            ],
+            key_rules: vec![
+                "GENERATED = provenance (what made this?)".to_string(),
+                "HAS_GENERATED = ownership (what's the output?)".to_string(),
+            ],
+            related_classes: vec!["PageGenerated".to_string(), "BlockGenerated".to_string()],
+        },
+    ]
+}
+
+// ============================================================================
 // Entity Category Hierarchy (Data mode)
 // ============================================================================
 
@@ -1580,6 +2005,12 @@ RETURN total,
     /// Expand all nodes.
     pub fn expand_all(&mut self) {
         self.collapsed.clear();
+    }
+
+    /// Expand a single node (remove from collapsed set).
+    /// Unlike `expand_subtree`, this only expands the specified item.
+    pub fn expand(&mut self, key: &str) {
+        self.collapsed.remove(key);
     }
 
     /// Collapse all Class instances (hide their instances).
