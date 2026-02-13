@@ -8,7 +8,7 @@ use std::collections::BTreeMap;
 use std::path::Path;
 use tokio::join;
 
-/// Maximum number of instances to load per Kind.
+/// Maximum number of instances to load per Class.
 /// Reduced from 500 to 300 for better performance with large datasets.
 pub const INSTANCE_LIMIT: usize = 300;
 
@@ -130,7 +130,7 @@ fn bolt_to_json(bolt: &neo4rs::BoltType) -> JsonValue {
     }
 }
 
-/// Arc type for a Kind (from schema).
+/// Arc type for a Class (from schema).
 #[derive(Debug, Clone)]
 pub struct ArcInfo {
     pub arc_type: String,
@@ -144,7 +144,7 @@ pub enum ArcDirection {
     Incoming, // ←
 }
 
-/// An ArcKind in the arcs tree.
+/// An ArcClass in the arcs tree.
 #[derive(Debug, Clone)]
 pub struct ArcClassInfo {
     pub key: String,
@@ -155,7 +155,7 @@ pub struct ArcClassInfo {
     pub description: String,
 }
 
-/// ArcFamily containing ArcKinds.
+/// ArcFamily containing ArcClasss.
 #[derive(Debug, Clone)]
 pub struct ArcFamilyInfo {
     pub key: String,
@@ -165,7 +165,7 @@ pub struct ArcFamilyInfo {
     pub llm_context: String,
 }
 
-/// A Kind in the taxonomy tree.
+/// A Class in the taxonomy tree.
 #[derive(Debug, Clone)]
 #[allow(dead_code)] // schema_hint reserved for future use
 pub struct ClassInfo {
@@ -177,7 +177,7 @@ pub struct ClassInfo {
     pub instance_count: i64,
     pub arcs: Vec<ArcInfo>,
     pub yaml_path: String,
-    // Schema properties (from Neo4j Kind node)
+    // Schema properties (from Neo4j Class node)
     pub properties: Vec<String>,
     pub required_properties: Vec<String>,
     pub schema_hint: String,
@@ -191,7 +191,7 @@ pub struct ClassInfo {
     pub issues_count: Option<usize>,
 }
 
-/// Layer containing Kinds.
+/// Layer containing Classes.
 #[derive(Debug, Clone)]
 pub struct LayerInfo {
     pub key: String,
@@ -203,7 +203,7 @@ pub struct LayerInfo {
 }
 
 impl LayerInfo {
-    /// Calculate health rollup for this layer (average of all Kinds with health data).
+    /// Calculate health rollup for this layer (average of all Classes with health data).
     /// Returns (average_percent, total_issues) or None if no health data available.
     pub fn health_rollup(&self) -> Option<(u8, usize)> {
         let kinds_with_health: Vec<_> = self
@@ -242,7 +242,7 @@ impl RealmInfo {
         self.layers.iter().map(|l| l.kinds.len()).sum()
     }
 
-    /// Calculate health rollup for this realm (average of all Kinds across all Layers).
+    /// Calculate health rollup for this realm (average of all Classes across all Layers).
     /// Returns (average_percent, total_issues) or None if no health data available.
     pub fn health_rollup(&self) -> Option<(u8, usize)> {
         let kinds_with_health: Vec<_> = self
@@ -303,7 +303,7 @@ pub struct EntityCategory {
 #[derive(Debug, Clone)]
 pub struct Neo4jArc {
     pub arc_key: String,    // e.g., "FALLBACK_TO"
-    pub other_kind: String, // The Kind on the other end
+    pub other_class: String, // The Class on the other end
     pub family: String,     // e.g., "localization", "ownership"
 }
 
@@ -325,7 +325,7 @@ pub struct ArcEndpoint {
     pub layer: String,
 }
 
-/// Complete details for an ArcKind, loaded from Neo4j.
+/// Complete details for an ArcClass, loaded from Neo4j.
 #[derive(Debug, Clone, Default)]
 pub struct ArcClassDetails {
     pub display_name: String,
@@ -356,9 +356,9 @@ pub struct RealmDetails {
     pub total_instances: usize,
 }
 
-/// Kind stats grouped by trait for Layer details view.
+/// Class stats grouped by trait for Layer details view.
 #[derive(Debug, Clone)]
-pub struct TraitKindGroup {
+pub struct TraitClassGroup {
     pub trait_key: String,
     pub kind_names: Vec<String>,
 }
@@ -370,12 +370,12 @@ pub struct LayerDetails {
     pub display_name: String,
     pub description: String,
     pub realm: String,
-    pub kinds_by_trait: Vec<TraitKindGroup>,
+    pub kinds_by_trait: Vec<TraitClassGroup>,
     pub total_kinds: usize,
     pub total_instances: usize,
 }
 
-/// Full taxonomy tree: Realm > Layer > Kind + ArcFamily > ArcKind.
+/// Full taxonomy tree: Realm > Layer > Class + ArcFamily > ArcClass.
 #[derive(Debug, Clone, Default)]
 pub struct TaxonomyTree {
     pub realms: Vec<RealmInfo>,
@@ -384,8 +384,8 @@ pub struct TaxonomyTree {
     /// Collapsed state: stores keys of collapsed nodes (e.g., "kinds", "arcs", "realm:shared", "layer:structure")
     /// Uses FxHashSet for ~30% faster lookups on string keys.
     pub collapsed: FxHashSet<String>,
-    /// Instances loaded for Data view, keyed by Kind key.
-    /// Only populated when in Data mode and a Kind is selected.
+    /// Instances loaded for Data view, keyed by Class key.
+    /// Only populated when in Data mode and a Class is selected.
     /// Uses FxHashMap for ~30% faster lookups (no ordering needed).
     pub instances: FxHashMap<String, Vec<InstanceInfo>>,
     /// Total instance counts in Neo4j (may be > loaded instances due to INSTANCE_LIMIT).
@@ -414,8 +414,8 @@ impl TaxonomyTree {
         let (realm_llm_context, layer_llm_context, arc_family_llm_context) =
             Self::build_llm_context_maps(&taxonomy);
 
-        // Query all Kinds with their realm, layer, trait, and instance count
-        // Note: Kind uses 'label' property as identifier, not 'key'
+        // Query all Classes with their realm, layer, trait, and instance count
+        // Note: Class uses 'label' property as identifier, not 'key'
         let cypher = r#"
 MATCH (k:Class:Schema)
 OPTIONAL MATCH (k)-[:IN_REALM]->(r:Realm)
@@ -1154,11 +1154,11 @@ LIMIT 1
                 .into_iter()
                 .filter_map(|m| {
                     let arc_key = m.get::<String>("arc").ok()?;
-                    let other_kind = m.get::<String>("from").ok()?;
+                    let other_class = m.get::<String>("from").ok()?;
                     let family = m.get::<String>("family").ok().unwrap_or_default();
                     Some(Neo4jArc {
                         arc_key,
-                        other_kind,
+                        other_class,
                         family,
                     })
                 })
@@ -1172,11 +1172,11 @@ LIMIT 1
                 .into_iter()
                 .filter_map(|m| {
                     let arc_key = m.get::<String>("arc").ok()?;
-                    let other_kind = m.get::<String>("to").ok()?;
+                    let other_class = m.get::<String>("to").ok()?;
                     let family = m.get::<String>("family").ok().unwrap_or_default();
                     Some(Neo4jArc {
                         arc_key,
-                        other_kind,
+                        other_class,
                         family,
                     })
                 })
@@ -1194,7 +1194,7 @@ LIMIT 1
         }
     }
 
-    /// Load ArcKind details from Neo4j (endpoints, family, cardinality).
+    /// Load ArcClass details from Neo4j (endpoints, family, cardinality).
     pub async fn load_arc_kind_details(db: &Db, arc_key: &str) -> crate::Result<ArcClassDetails> {
         let cypher = r#"
 MATCH (ac:ArcClass {key: $arcKey})
@@ -1363,13 +1363,13 @@ RETURN l.key as layer_key,
             let groups_list = row
                 .get::<Vec<neo4rs::BoltMap>>("kinds_by_trait")
                 .unwrap_or_default();
-            let mut kinds_by_trait: Vec<TraitKindGroup> = Vec::with_capacity(groups_list.len());
+            let mut kinds_by_trait: Vec<TraitClassGroup> = Vec::with_capacity(groups_list.len());
             for group_map in groups_list {
                 if let Ok(trait_key) = group_map.get::<String>("trait_key") {
                     let kind_names: Vec<String> = group_map
                         .get::<Vec<String>>("kind_names")
                         .unwrap_or_default();
-                    kinds_by_trait.push(TraitKindGroup {
+                    kinds_by_trait.push(TraitClassGroup {
                         trait_key,
                         kind_names,
                     });
@@ -1582,7 +1582,7 @@ RETURN total,
         self.collapsed.clear();
     }
 
-    /// Collapse all Kind instances (hide their instances).
+    /// Collapse all Class instances (hide their instances).
     /// Used when switching between Meta and Data modes.
     pub fn collapse_all_kinds(&mut self) {
         for realm in &self.realms {
@@ -1706,9 +1706,9 @@ RETURN total,
     // Data view: Instance methods
     // ========================================================================
 
-    /// Set instances for a Kind (used in Data mode).
+    /// Set instances for a Class (used in Data mode).
     /// Also stores the total count for "X of Y" display.
-    /// Calculates missing_required_count for each instance based on Kind schema.
+    /// Calculates missing_required_count for each instance based on Class schema.
     #[allow(dead_code)]
     pub fn set_instances(
         &mut self,
@@ -1716,7 +1716,7 @@ RETURN total,
         mut instances: Vec<InstanceInfo>,
         total: usize,
     ) {
-        // Get schema info from Kind
+        // Get schema info from Class
         let (required_props, all_props) = self
             .find_kind(kind_key)
             .map(|(_, _, kind)| (kind.required_properties.clone(), kind.properties.clone()))
@@ -1758,12 +1758,12 @@ RETURN total,
         self.instance_totals.insert(kind_key.to_string(), total);
     }
 
-    /// Get instances for a Kind.
+    /// Get instances for a Class.
     pub fn get_instances(&self, kind_key: &str) -> Option<&Vec<InstanceInfo>> {
         self.instances.get(kind_key)
     }
 
-    /// Get total instance count for a Kind (may be > loaded instances).
+    /// Get total instance count for a Class (may be > loaded instances).
     pub fn get_instance_total(&self, kind_key: &str) -> Option<usize> {
         self.instance_totals.get(kind_key).copied()
     }
@@ -1787,13 +1787,13 @@ RETURN total,
     }
 
     /// Total number of visible items for a specific mode.
-    /// In Data mode (data_mode=true), includes instances under expanded Kinds.
-    /// For Entity Kind, shows category hierarchy: Entity > Category > instances.
+    /// In Data mode (data_mode=true), includes instances under expanded Classes.
+    /// For Entity Class, shows category hierarchy: Entity > Category > instances.
     pub fn item_count_for_mode(&self, data_mode: bool) -> usize {
         let mut count = 0;
 
-        // Kinds section
-        count += 1; // "Kinds" header
+        // Classs section
+        count += 1; // "Classes" header
         if !self.is_collapsed("kinds") {
             for realm in &self.realms {
                 count += 1; // realm header
@@ -1806,7 +1806,7 @@ RETURN total,
 
                                 // In Data mode, add instances if not collapsed
                                 if data_mode && !self.is_collapsed(&format!("kind:{}", kind.key)) {
-                                    // Special case: Entity Kind shows categories hierarchy
+                                    // Special case: Entity Class shows categories hierarchy
                                     if kind.key == "Entity" && !self.entity_categories.is_empty() {
                                         for category in &self.entity_categories {
                                             count += 1; // category node
@@ -1851,12 +1851,12 @@ RETURN total,
     }
 
     /// Get item at cursor position for a specific mode.
-    /// In Data mode (data_mode=true), includes instances under expanded Kinds.
-    /// For Entity Kind, shows category hierarchy: Entity > Category > instances.
+    /// In Data mode (data_mode=true), includes instances under expanded Classes.
+    /// For Entity Class, shows category hierarchy: Entity > Category > instances.
     pub fn item_at_for_mode(&self, cursor: usize, data_mode: bool) -> Option<TreeItem<'_>> {
         let mut idx = 0;
 
-        // Kinds section header
+        // Classs section header
         if idx == cursor {
             return Some(TreeItem::ClassesSection);
         }
@@ -1885,7 +1885,7 @@ RETURN total,
 
                                 // In Data mode, check for instances (or categories for Entity)
                                 if data_mode && !self.is_collapsed(&format!("kind:{}", kind.key)) {
-                                    // Special case: Entity Kind shows categories hierarchy
+                                    // Special case: Entity Class shows categories hierarchy
                                     if kind.key == "Entity" && !self.entity_categories.is_empty() {
                                         for category in &self.entity_categories {
                                             if idx == cursor {
@@ -1965,8 +1965,8 @@ RETURN total,
     pub fn item_count(&self) -> usize {
         let mut count = 0;
 
-        // Kinds section
-        count += 1; // "Kinds" header
+        // Classs section
+        count += 1; // "Classes" header
         if !self.is_collapsed("kinds") {
             for realm in &self.realms {
                 count += 1; // realm header
@@ -1999,7 +1999,7 @@ RETURN total,
     pub fn item_at(&self, cursor: usize) -> Option<TreeItem<'_>> {
         let mut idx = 0;
 
-        // Kinds section header
+        // Classs section header
         if idx == cursor {
             return Some(TreeItem::ClassesSection);
         }
@@ -2063,12 +2063,12 @@ RETURN total,
     // TRAIT FILTER METHODS (Quick Filter: fi/fl/fk/fg/fa)
     // =========================================================================
 
-    /// Check if a Layer has any Kinds matching the trait filter.
+    /// Check if a Layer has any Classes matching the trait filter.
     fn layer_has_matching_kinds(&self, layer: &LayerInfo, trait_filter: &str) -> bool {
         layer.kinds.iter().any(|k| k.trait_name == trait_filter)
     }
 
-    /// Check if a Realm has any Layers with matching Kinds.
+    /// Check if a Realm has any Layers with matching Classes.
     fn realm_has_matching_kinds(&self, realm: &RealmInfo, trait_filter: &str) -> bool {
         realm
             .layers
@@ -2077,7 +2077,7 @@ RETURN total,
     }
 
     /// Count visible items with trait filter applied.
-    /// Hides Kinds that don't match, and Layers/Realms with no matching Kinds.
+    /// Hides Classes that don't match, and Layers/Realms with no matching Classes.
     pub fn item_count_with_trait_filter(&self, trait_filter: Option<&str>) -> usize {
         let Some(filter) = trait_filter else {
             return self.item_count(); // No filter, use normal count
@@ -2085,8 +2085,8 @@ RETURN total,
 
         let mut count = 0;
 
-        // Kinds section
-        count += 1; // "Kinds" header
+        // Classs section
+        count += 1; // "Classes" header
         if !self.is_collapsed("kinds") {
             for realm in &self.realms {
                 // Skip realms with no matching kinds
@@ -2140,7 +2140,7 @@ RETURN total,
 
         let mut idx = 0;
 
-        // Kinds section header
+        // Classs section header
         if idx == cursor {
             return Some(TreeItem::ClassesSection);
         }
@@ -2222,7 +2222,7 @@ RETURN total,
             Some(TreeItem::Realm(r)) => Some(format!("realm:{}", r.key)),
             Some(TreeItem::Layer(r, l)) => Some(format!("layer:{}:{}", r.key, l.key)),
             Some(TreeItem::ArcFamily(f)) => Some(format!("family:{}", f.key)),
-            // In Data mode, Kind can be collapsed to hide instances
+            // In Data mode, Class can be collapsed to hide instances
             Some(TreeItem::Class(_, _, k)) => Some(format!("kind:{}", k.key)),
             // EntityCategory can be collapsed to hide its instances
             Some(TreeItem::EntityCategory(_, _, _, cat)) => Some(format!("category:{}", cat.key)),
@@ -2233,8 +2233,8 @@ RETURN total,
 
     /// Find the cursor position of the parent item.
     /// Returns None if at root or no parent exists.
-    /// Hierarchy: Instance → EntityCategory → Kind → Layer → Realm → ClassesSection
-    ///            ArcKind → ArcFamily → ArcsSection
+    /// Hierarchy: Instance → EntityCategory → Class → Layer → Realm → ClassesSection
+    ///            ArcClass → ArcFamily → ArcsSection
     pub fn find_parent_cursor(&self, cursor: usize, data_mode: bool) -> Option<usize> {
         let current = if data_mode {
             self.item_at_for_mode(cursor, true)
@@ -2252,15 +2252,15 @@ RETURN total,
             // Layer's parent is its Realm
             Some(TreeItem::Layer(realm, _)) => self.find_realm_cursor(&realm.key),
 
-            // Kind's parent is its Layer
+            // Class's parent is its Layer
             Some(TreeItem::Class(realm, layer, _)) => self.find_layer_cursor(&realm.key, &layer.key),
 
-            // EntityCategory's parent is its Kind (Entity)
+            // EntityCategory's parent is its Class (Entity)
             Some(TreeItem::EntityCategory(realm, layer, kind, _)) => {
                 self.find_kind_cursor_readonly(&realm.key, &layer.key, &kind.key, data_mode)
             }
 
-            // Instance's parent is its Kind (or EntityCategory for Entity kind)
+            // Instance's parent is its Class (or EntityCategory for Entity class)
             Some(TreeItem::Instance(realm, layer, kind, _)) => {
                 self.find_kind_cursor_readonly(&realm.key, &layer.key, &kind.key, data_mode)
             }
@@ -2268,7 +2268,7 @@ RETURN total,
             // ArcFamily's parent is ArcsSection
             Some(TreeItem::ArcFamily(_)) => self.find_arcs_section_cursor(),
 
-            // ArcKind's parent is its ArcFamily
+            // ArcClass's parent is its ArcFamily
             Some(TreeItem::ArcClass(family, _)) => self.find_family_cursor(&family.key),
         }
     }
@@ -2331,7 +2331,7 @@ RETURN total,
         None
     }
 
-    /// Find cursor position of a Kind (readonly, does not modify collapse state).
+    /// Find cursor position of a Class (readonly, does not modify collapse state).
     fn find_kind_cursor_readonly(
         &self,
         realm_key: &str,
@@ -2410,19 +2410,19 @@ RETURN total,
     }
 
     // ========================================================================
-    // Filtered Data mode: show only instances of a specific Kind
+    // Filtered Data mode: show only instances of a specific Class
     // ========================================================================
 
-    /// Get item count when filtered to a specific Kind (Data mode drill-down).
-    /// Returns only instances of that Kind.
+    /// Get item count when filtered to a specific Class (Data mode drill-down).
+    /// Returns only instances of that Class.
     pub fn filtered_item_count(&self, kind_key: &str) -> usize {
         self.instances.get(kind_key).map(|v| v.len()).unwrap_or(0)
     }
 
-    /// Get item at cursor when filtered to a specific Kind.
+    /// Get item at cursor when filtered to a specific Class.
     /// Returns Instance items only.
     pub fn filtered_item_at<'a>(&'a self, cursor: usize, kind_key: &str) -> Option<TreeItem<'a>> {
-        // Find the Kind info for context
+        // Find the Class info for context
         let kind_info = self.find_kind(kind_key)?;
         let instances = self.instances.get(kind_key)?;
         let instance = instances.get(cursor)?;
@@ -2434,7 +2434,7 @@ RETURN total,
         ))
     }
 
-    /// Find a Kind by key, returns (Realm, Layer, Kind) refs.
+    /// Find a Class by key, returns (Realm, Layer, Class) refs.
     /// O(1) lookup using cached index (built once on load).
     pub fn find_kind(&self, kind_key: &str) -> Option<(&RealmInfo, &LayerInfo, &ClassInfo)> {
         let (r_idx, l_idx, k_idx) = self.kind_index.get(kind_key)?;
@@ -2535,7 +2535,7 @@ RETURN total,
                     .position(|k| k.key == kind.key)
                     .map(|i| i + 1)
                     .unwrap_or(1);
-                // Calculate instance position within Kind
+                // Calculate instance position within Class
                 let instances = self.instances.get(&kind.key);
                 let total_instances = self.instance_totals.get(&kind.key).copied().unwrap_or(0);
                 // Find instance index by walking the visible items before cursor
@@ -2672,7 +2672,7 @@ fn to_kebab_case(s: &str) -> String {
 // Reserved for Data View feature - planned for v10.7+
 // ============================================================================
 
-/// An instance of a Kind in the data graph.
+/// An instance of a Class in the data graph.
 #[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct InstanceInfo {
@@ -2691,7 +2691,7 @@ pub struct InstanceInfo {
     pub missing_required_count: usize,
     /// Count of filled (non-null/non-empty) properties.
     pub filled_properties: usize,
-    /// Total properties in schema for this Kind.
+    /// Total properties in schema for this Class.
     pub total_properties: usize,
 }
 
@@ -2914,7 +2914,7 @@ mod tests {
     // Helper functions for creating test data
     // ========================================================================
 
-    fn create_test_kind(key: &str, display_name: &str) -> ClassInfo {
+    fn create_test_class(key: &str, display_name: &str) -> ClassInfo {
         ClassInfo {
             key: key.to_string(),
             display_name: display_name.to_string(),
@@ -2956,9 +2956,9 @@ mod tests {
     }
 
     fn create_test_tree() -> TaxonomyTree {
-        let locale_kind = create_test_kind("Locale", "Locale");
-        let page_kind = create_test_kind("Page", "Page");
-        let entity_kind = create_test_kind("Entity", "Entity");
+        let locale_kind = create_test_class("Locale", "Locale");
+        let page_kind = create_test_class("Page", "Page");
+        let entity_kind = create_test_class("Entity", "Entity");
 
         // Minimal test fixture (v11.5 has 4 shared layers: config, locale, geography, knowledge)
         let locale_layer = create_test_layer("locale", vec![locale_kind]);
@@ -3084,7 +3084,7 @@ mod tests {
     #[test]
     fn test_tree_item_count_meta_mode() {
         let tree = create_test_tree();
-        // In Meta mode: 1 (Kinds) + 1 (shared) + 1 (locale) + 1 (Locale)
+        // In Schema mode: 1 (Classes) + 1 (shared) + 1 (locale) + 1 (Locale)
         //              + 1 (org) + 1 (structure) + 1 (Page) + 1 (semantic) + 1 (Entity)
         //              + 1 (Arcs)
         // Total: 10
@@ -3098,7 +3098,7 @@ mod tests {
         // Collapse everything
         tree.collapse_all();
 
-        // When all collapsed: 1 (Kinds header) + 1 (Arcs header) = 2
+        // When all collapsed: 1 (Classes header) + 1 (Arcs header) = 2
         assert_eq!(tree.item_count(), 2);
     }
 
@@ -3109,19 +3109,19 @@ mod tests {
         // Start with everything collapsed
         tree.collapse_all();
         let collapsed_count = tree.item_count();
-        assert_eq!(collapsed_count, 2); // Just Kinds + Arcs headers
+        assert_eq!(collapsed_count, 2); // Just Classes + Arcs headers
 
-        // Expand Kinds section
+        // Expand Classes section
         tree.toggle("kinds");
 
-        // Now we see: Kinds + shared + org + Arcs = 4 (v11.2: shared + org)
+        // Now we see: Classes + shared + org + Arcs = 4 (v11.2: shared + org)
         // (realms are still collapsed, so we don't see layers/kinds)
         assert_eq!(tree.item_count(), 4);
 
         // Expand shared realm (v11.2: was global)
         tree.toggle("realm:shared");
 
-        // Now we see: Kinds + shared + locale + org + Arcs = 5
+        // Now we see: Classes + shared + locale + org + Arcs = 5
         // Note: collapse_all() also collapsed the layer, so we don't see Locale yet
         assert_eq!(tree.item_count(), 5);
     }
@@ -3137,7 +3137,7 @@ mod tests {
         // Toggle shared realm to collapse it (v11.2: was global)
         tree.toggle("realm:shared");
 
-        // Now: Kinds + shared (collapsed) + org + structure + Page + semantic + Entity + Arcs
+        // Now: Classes + shared (collapsed) + org + structure + Page + semantic + Entity + Arcs
         // = 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 = 8
         let after_collapse = tree.item_count();
         assert_eq!(after_collapse, 8);
@@ -3338,7 +3338,7 @@ mod tests {
             .await
             .expect("Failed to connect to Neo4j");
 
-        // Load instances for a Kind that should exist (Locale has seed data)
+        // Load instances for a Class that should exist (Locale has seed data)
         let result = TaxonomyTree::load_instances(&db, "Locale").await;
 
         match result {

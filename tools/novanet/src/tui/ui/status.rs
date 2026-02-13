@@ -71,7 +71,7 @@ pub(crate) fn get_contextual_shortcuts(
 /// Build filter indicator string based on app state.
 ///
 /// Returns:
-/// - " [KindKey]" if in filtered Data mode
+/// - " [ClassKey]" if in filtered Data mode
 /// - " [hide-empty]" if hide_empty is enabled
 /// - Empty string otherwise
 pub(crate) fn build_filter_indicator(

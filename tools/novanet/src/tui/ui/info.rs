@@ -74,9 +74,9 @@ fn truncate_str(s: &str, max_width: usize) -> String {
 /// Shows sparklines and charts based on the selected item type.
 ///
 /// v12 Sparkline Stats:
-/// - Realm: Kinds/Layer bar chart + Trait distribution + Instance sparkline
-/// - Layer: Instance sparkline per Kind
-/// - Kind: Arc distribution (incoming vs outgoing)
+/// - Realm: Classes/Layer bar chart + Trait distribution + Instance sparkline
+/// - Layer: Instance sparkline per Class
+/// - Class: Arc distribution (incoming vs outgoing)
 pub fn render_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
     let focused = app.focus == Focus::Info;
     let border_color = if focused {
@@ -148,7 +148,7 @@ pub fn render_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
         render_info_text(f, chunks[0], app, focused, border_color);
         render_realm_bar_chart(f, chunks[1], app);
     } else if is_layer && area.height > 10 {
-        // Layer: Instance sparkline per Kind
+        // Layer: Instance sparkline per Class
         let chunks = Layout::default()
             .direction(Direction::Vertical)
             .constraints([Constraint::Min(6), Constraint::Length(5)])
@@ -245,7 +245,7 @@ fn render_realm_bar_chart(f: &mut Frame, area: Rect, app: &App) {
     let chart = BarChart::default()
         .block(
             Block::default()
-                .title(Span::styled(" Kinds/Layer ", STYLE_DIM))
+                .title(Span::styled(" Classes/Layer ", STYLE_DIM))
                 .borders(Borders::ALL)
                 .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER)),
         )
@@ -299,7 +299,7 @@ fn render_layer_sparkline(f: &mut Frame, area: Rect, app: &App) {
     f.render_widget(sparkline, area);
 }
 
-/// Render a sparkline showing health percentages across all Kinds in a Realm.
+/// Render a sparkline showing health percentages across all Classes in a Realm.
 /// Provides a quick visual overview of data quality distribution.
 fn render_realm_health_sparkline(f: &mut Frame, area: Rect, app: &App) {
     let Some(TreeItem::Realm(realm)) = app.current_item() else {
@@ -344,8 +344,8 @@ fn render_realm_health_sparkline(f: &mut Frame, area: Rect, app: &App) {
     f.render_widget(sparkline, area);
 }
 
-/// Render a bar chart showing trait distribution across Kinds in a Realm.
-/// Shows how many Kinds belong to each trait category.
+/// Render a bar chart showing trait distribution across Classes in a Realm.
+/// Shows how many Classes belong to each trait category.
 fn render_realm_trait_distribution(f: &mut Frame, area: Rect, app: &App) {
     let Some(TreeItem::Realm(realm)) = app.current_item() else {
         return;
@@ -396,7 +396,7 @@ fn render_realm_trait_distribution(f: &mut Frame, area: Rect, app: &App) {
         .block(
             Block::default()
                 .title(Span::styled(
-                    format!(" Trait Distribution ({} Kinds) ", total),
+                    format!(" Trait Distribution ({} Classes) ", total),
                     STYLE_DIM,
                 ))
                 .borders(Borders::ALL)
@@ -415,7 +415,7 @@ fn render_realm_trait_distribution(f: &mut Frame, area: Rect, app: &App) {
     f.render_widget(chart, area);
 }
 
-/// Render a sparkline showing instance counts across Kinds in a Realm.
+/// Render a sparkline showing instance counts across Classes in a Realm.
 /// Provides a quick visual overview of data distribution.
 fn render_realm_instance_sparkline(f: &mut Frame, area: Rect, app: &App) {
     let Some(TreeItem::Realm(realm)) = app.current_item() else {
@@ -455,7 +455,7 @@ fn render_realm_instance_sparkline(f: &mut Frame, area: Rect, app: &App) {
 }
 
 /// Get title for detail panel based on current selection.
-/// Uses [K] badge for Kind and [I] badge for Instance for instant recognition.
+/// Uses [K] badge for Class and [I] badge for Instance for instant recognition.
 fn get_detail_title(app: &App) -> String {
     match app.current_item() {
         Some(TreeItem::ClassesSection) => "Node Classes".to_string(),
@@ -530,9 +530,9 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
 
                 let bar_width = 16usize;
                 for realm in &app.tree.realms {
-                    let realm_kinds: usize = realm.layers.iter().map(|l| l.kinds.len()).sum();
-                    let percent = (realm_kinds as f64 / kind_count as f64 * 100.0).round() as u8;
-                    let filled = (realm_kinds * bar_width) / kind_count.max(1);
+                    let realm_classes: usize = realm.layers.iter().map(|l| l.kinds.len()).sum();
+                    let percent = (realm_classes as f64 / kind_count as f64 * 100.0).round() as u8;
+                    let filled = (realm_classes * bar_width) / kind_count.max(1);
                     let bar = "█".repeat(filled.max(1));
                     let empty = "░".repeat(bar_width.saturating_sub(filled));
 
@@ -544,7 +544,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                         Span::styled(bar, Style::default().fg(theme.realm_color(&realm.key))),
                         Span::styled(empty, STYLE_DIM),
                         Span::styled(format!(" {:>3}%", percent), STYLE_MUTED),
-                        Span::styled(format!("  {} Kinds", realm_kinds), STYLE_DIM),
+                        Span::styled(format!("  {} Kinds", realm_classes), STYLE_DIM),
                     ]));
                 }
                 lines.push(Line::from(""));
@@ -1128,7 +1128,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
             let mut lines = vec![
                 Line::from(vec![
                     Span::styled("type      ", STYLE_DIM),
-                    Span::styled("ArcKind", STYLE_HIGHLIGHT),
+                    Span::styled("ArcClass", STYLE_HIGHLIGHT),
                 ]),
                 Line::from(vec![
                     Span::styled("category  ", STYLE_DIM),
@@ -1185,7 +1185,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
             // Unified header: type, key, kind, realm, layer, trait (12-char labels + icons)
             let theme = &app.theme;
 
-            // Header - matches Kind view structure for easy comparison
+            // Header - matches Class view structure for easy comparison
             let mut lines: Vec<Line<'static>> = vec![
                 Line::from(vec![
                     Span::styled("type        ", STYLE_DIM),
@@ -1233,7 +1233,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 ]));
             }
 
-            // Instances count (aligned with Kind's "properties" line context)
+            // Instances count (aligned with Class's "properties" line context)
             if kind.instance_count > 0 {
                 lines.push(Line::from(vec![
                     Span::styled("instances   ", STYLE_DIM),
@@ -1263,7 +1263,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
 
                     lines.push(Line::from(""));
 
-                    // Properties header (aligned with Kind view)
+                    // Properties header (aligned with Class view)
                     // Format: "properties  14/14 filled ━━━━━━━━━━ 100%"
                     let bar_width = 10usize;
                     let progress_filled = (percent * bar_width) / 100;
@@ -1277,7 +1277,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                         Span::styled(format!(" {}%", percent), STYLE_MUTED),
                     ]));
 
-                    // Status line (aligned with Kind's "budget" line)
+                    // Status line (aligned with Class's "budget" line)
                     let missing_required = matched
                         .iter()
                         .filter(|p| p.schema.required && p.status != PropertyStatus::Filled)
@@ -1297,7 +1297,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                         Span::styled(status_text, status_style),
                     ]));
 
-                    // PROPERTY COVERAGE section (aligned with Kind view)
+                    // PROPERTY COVERAGE section (aligned with Class view)
                     let required_count = matched.iter().filter(|p| p.schema.required).count();
                     let optional_count = matched.len().saturating_sub(required_count);
                     let required_filled = matched

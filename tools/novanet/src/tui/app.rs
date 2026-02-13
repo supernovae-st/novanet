@@ -42,7 +42,7 @@ pub const DEFAULT_TREE_HEIGHT: usize = 20;
 /// Keys 1-2 switch modes GLOBALLY from anywhere.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum NavMode {
-    /// Graph mode: Unified tree view (Realm > Layer > Kind hierarchy with instances)
+    /// Graph mode: Unified tree view (Realm > Layer > Class hierarchy with instances)
     /// Replaces Meta/Data/Overlay modes from v11.6
     #[default]
     Graph,
@@ -196,7 +196,7 @@ pub struct App {
     pub yaml_path: String,
     pub yaml_scroll: usize,
     pub yaml_line_count: usize, // Cached line count (avoids per-scroll recomputation)
-    /// Parsed YAML sections for contextual view (Kind vs Instance).
+    /// Parsed YAML sections for contextual view (Class vs Instance).
     pub yaml_sections: Option<YamlSections>,
     /// Whether peek mode is active (showing hidden section in dim).
     pub yaml_peek: bool,
@@ -207,21 +207,21 @@ pub struct App {
     /// Cache of YAML file contents (path -> content).
     /// Avoids re-reading files on every scroll/navigation.
     pub yaml_cache: FxHashMap<String, String>,
-    /// Neo4j arc data for current Kind (loaded async)
+    /// Neo4j arc data for current Class (loaded async)
     pub kind_arcs: Option<ClassArcsData>,
-    /// Neo4j arc kind details (loaded async when ArcKind selected)
+    /// Neo4j arc kind details (loaded async when ArcClass selected)
     pub arc_kind_details: Option<ArcClassDetails>,
-    // Data view: pending instance load request (Kind label to load)
+    // Data view: pending instance load request (Class label to load)
     pub pending_instance_load: Option<String>,
-    /// Pending Kind arcs load request (Kind label to load from Neo4j)
+    /// Pending Class arcs load request (Class label to load from Neo4j)
     pub pending_arcs_load: Option<String>,
-    /// Pending instance arc loading (Kind label + instance keys for background arc loading)
+    /// Pending instance arc loading (Class label + instance keys for background arc loading)
     pub pending_instance_arcs_load: Option<(String, Vec<String>)>,
-    /// Pending entity categories load (triggered when Entity Kind expanded)
+    /// Pending entity categories load (triggered when Entity Class expanded)
     pub pending_entity_categories_load: bool,
     /// Pending category instances load (category key to load)
     pub pending_category_instances_load: Option<String>,
-    /// Pending ArcKind details load request (Arc key to load from Neo4j)
+    /// Pending ArcClass details load request (Arc key to load from Neo4j)
     pub pending_arc_kind_load: Option<String>,
     /// Pending Realm details load request (Realm key to load from Neo4j)
     pub pending_realm_load: Option<String>,
@@ -231,8 +231,8 @@ pub struct App {
     pub realm_details: Option<RealmDetails>,
     /// Neo4j Layer details (loaded async when Layer selected)
     pub layer_details: Option<LayerDetails>,
-    /// Data mode filter: when set, show only instances of this Kind
-    /// None = show full tree, Some(kind_key) = show only instances of that Kind
+    /// Data mode filter: when set, show only instances of this Class
+    /// None = show full tree, Some(kind_key) = show only instances of that Class
     pub data_filter_kind: Option<String>,
     /// Cursor position before entering filtered Data mode (for restoration)
     pub data_cursor_before_filter: usize,
@@ -252,11 +252,11 @@ pub struct App {
     /// Coverage stats for current instance
     pub coverage_stats: Option<CoverageStats>,
     // ==========================================================================
-    // Kind Validation State (Neo4j ↔ YAML)
+    // Class Validation State (Neo4j ↔ YAML)
     // ==========================================================================
-    /// Validated properties for current Kind (YAML schema vs Neo4j)
+    /// Validated properties for current Class (YAML schema vs Neo4j)
     pub validated_kind_properties: Option<Vec<ValidatedProperty>>,
-    /// Validation stats for current Kind
+    /// Validation stats for current Class
     pub validation_stats: Option<ValidationStats>,
     // ==========================================================================
     // Property Focus State (Feature 3)
@@ -336,7 +336,7 @@ impl App {
             schema_overlay_enabled: true, // Enabled by default
             matched_properties: None,
             coverage_stats: None,
-            // Kind validation (Neo4j ↔ YAML)
+            // Class validation (Neo4j ↔ YAML)
             validated_kind_properties: None,
             validation_stats: None,
             // Property focus (Feature 3)
@@ -355,13 +355,13 @@ impl App {
     }
 
     /// Get the active YAML section based on current navigation mode.
-    /// - Meta mode → Kind section (schema)
+    /// - Meta mode → Class section (schema)
     /// - Data mode → Instance section (data nodes)
-    /// - Nexus → Kind section
+    /// - Nexus → Class section
     pub fn yaml_active_section(&self) -> YamlViewSection {
         match self.mode {
-            // Graph mode shows Kind schema, Nexus shows Kind schema
-            NavMode::Graph | NavMode::Nexus => YamlViewSection::Kind,
+            // Graph mode shows Class schema, Nexus shows Class schema
+            NavMode::Graph | NavMode::Nexus => YamlViewSection::Class,
         }
     }
 
@@ -384,7 +384,7 @@ impl App {
         self.pending_layer_load = None;
         self.pending_instance_load = None;
 
-        // Clear Kind validation state (only populated for Kind items)
+        // Clear Class validation state (only populated for Class items)
         self.validated_kind_properties = None;
         self.validation_stats = None;
 
@@ -401,7 +401,7 @@ impl App {
             } => {
                 self.load_yaml_cached(&yaml_path);
                 self.pending_arcs_load = Some(key);
-                // Load Kind validation (Neo4j vs YAML)
+                // Load Class validation (Neo4j vs YAML)
                 self.load_validated_kind_properties(&properties);
             }
             TreeItemData::ArcClass { yaml_path, key } => {
@@ -426,7 +426,7 @@ impl App {
                 self.load_yaml_cached("packages/core/models/taxonomy.yaml");
             }
             TreeItemData::Instance { class_yaml_path } => {
-                // Load the Kind's YAML to show Instance schema (standard_properties)
+                // Load the Class's YAML to show Instance schema (standard_properties)
                 if !class_yaml_path.is_empty() {
                     self.load_yaml_cached(&class_yaml_path);
                 } else {
@@ -455,7 +455,7 @@ impl App {
                     .filtered_item_at(self.tree_cursor, kind_key)
                     .is_some()
                 {
-                    // Get the Kind's yaml_path for showing schema in YAML panel
+                    // Get the Class's yaml_path for showing schema in YAML panel
                     if let Some((_, _, kind)) = self.tree.find_kind(kind_key) {
                         return TreeItemData::Instance {
                             class_yaml_path: kind.yaml_path.clone(),
@@ -505,7 +505,7 @@ impl App {
             Some(TreeItem::Instance(_, _, kind, _)) => TreeItemData::Instance {
                 class_yaml_path: kind.yaml_path.clone(),
             },
-            // EntityCategory shows parent Entity Kind's YAML
+            // EntityCategory shows parent Entity Class's YAML
             Some(TreeItem::EntityCategory(_, _, kind, _)) => TreeItemData::Class {
                 yaml_path: kind.yaml_path.clone(),
                 key: kind.key.clone(),
@@ -1464,7 +1464,7 @@ impl App {
                 serde_json::to_string_pretty(&inst.properties).ok()
             }
             Some(TreeItem::Class(_, _, kind)) => {
-                // For Kind, show properties schema
+                // For Class, show properties schema
                 Some(format!(
                     "{{\"properties\": {:?}, \"required\": {:?}}}",
                     kind.properties, kind.required_properties
@@ -1483,13 +1483,13 @@ impl App {
         }
     }
 
-    /// Check if in filtered Graph mode (drilling into a specific Kind).
+    /// Check if in filtered Graph mode (drilling into a specific Class).
     /// v11.7: Renamed from is_filtered_graph_mode() for consistency.
     pub fn is_filtered_graph_mode(&self) -> bool {
         self.is_graph_mode() && self.data_filter_kind.is_some()
     }
 
-    /// Get the current filter Kind key (if in filtered Graph mode).
+    /// Get the current filter Class key (if in filtered Graph mode).
     pub fn get_filter_kind(&self) -> Option<&str> {
         self.data_filter_kind.as_deref()
     }
@@ -1497,7 +1497,7 @@ impl App {
     /// Get item at cursor position for the current mode.
     /// Uses mode-aware method that shows instances in Data mode.
     pub fn current_item(&self) -> Option<super::data::TreeItem<'_>> {
-        // Filtered Data mode: show only instances of the filtered Kind
+        // Filtered Data mode: show only instances of the filtered Class
         if let Some(kind_key) = &self.data_filter_kind {
             if self.is_graph_mode() {
                 return self.tree.filtered_item_at(self.tree_cursor, kind_key);
@@ -1515,7 +1515,7 @@ impl App {
 
     /// Get total item count for the current mode.
     pub fn current_item_count(&self) -> usize {
-        // Filtered Data mode: count only instances of the filtered Kind
+        // Filtered Data mode: count only instances of the filtered Class
         if let Some(kind_key) = &self.data_filter_kind {
             if self.is_graph_mode() {
                 return self.tree.filtered_item_count(kind_key);
@@ -1531,7 +1531,7 @@ impl App {
         }
     }
 
-    /// Enter filtered Data mode for a specific Kind.
+    /// Enter filtered Data mode for a specific Class.
     /// Saves cursor position and resets to 0.
     /// Also resets all scroll states to avoid stale positions.
     #[allow(dead_code)]
@@ -1607,14 +1607,14 @@ impl App {
         }
     }
 
-    /// Request instance loading for the currently selected Kind.
-    /// Sets `pending_instance_load` if a Kind is selected and we're in Data mode.
+    /// Request instance loading for the currently selected Class.
+    /// Sets `pending_instance_load` if a Class is selected and we're in Data mode.
     pub fn request_instance_load_for_current(&mut self) {
         if !self.is_graph_mode() {
             return;
         }
 
-        // Check if current item is a Kind
+        // Check if current item is a Class
         if let Some(super::data::TreeItem::Class(_, _, kind)) = self.tree.item_at(self.tree_cursor) {
             // Only request if not already loaded
             if self.tree.get_instances(&kind.key).is_none() {
@@ -1632,13 +1632,13 @@ impl App {
     fn toggle_tree_item(&mut self) {
         let data_mode = self.is_graph_mode();
         if let Some(key) = self.tree.collapse_key_at(self.tree_cursor, data_mode) {
-            // Handle Kind toggle in Data mode
+            // Handle Class toggle in Data mode
             if let Some(kind_key) = key.strip_prefix("kind:") {
                 if data_mode {
                     let instances_loaded = self.tree.get_instances(kind_key).is_some();
 
                     if !instances_loaded {
-                        // First click on unloaded Kind: load instances AND ensure expanded
+                        // First click on unloaded Class: load instances AND ensure expanded
                         if kind_key == "Entity" && self.tree.entity_categories.is_empty() {
                             self.pending_entity_categories_load = true;
                         }
@@ -1652,7 +1652,7 @@ impl App {
                         self.tree.toggle(&key);
                     }
                 } else {
-                    // Meta mode: normal toggle (Kinds don't expand in meta)
+                    // Meta mode: normal toggle (Classes don't expand in schema)
                     self.tree.toggle(&key);
                 }
             }
@@ -1719,18 +1719,18 @@ impl App {
     }
 
     /// Check and clear pending instance load request.
-    /// Returns the Kind label to load, if any.
+    /// Returns the Class label to load, if any.
     pub fn take_pending_instance_load(&mut self) -> Option<String> {
         self.pending_instance_load.take()
     }
 
-    /// Take the pending arcs load request (returns Kind label if one was queued).
+    /// Take the pending arcs load request (returns Class label if one was queued).
     pub fn take_pending_arcs_load(&mut self) -> Option<String> {
         self.pending_arcs_load.take()
     }
 
     /// Take the pending instance arcs load request.
-    /// Returns (Kind label, instance keys) to load arcs for.
+    /// Returns (Class label, instance keys) to load arcs for.
     pub fn take_pending_instance_arcs_load(&mut self) -> Option<(String, Vec<String>)> {
         self.pending_instance_arcs_load.take()
     }
@@ -1747,7 +1747,7 @@ impl App {
         self.pending_category_instances_load.take()
     }
 
-    /// Set the loaded Kind arcs data from Neo4j.
+    /// Set the loaded Class arcs data from Neo4j.
     pub fn set_kind_arcs(&mut self, arcs: ClassArcsData) {
         self.kind_arcs = Some(arcs);
     }
@@ -1757,7 +1757,7 @@ impl App {
         self.pending_arc_kind_load.take()
     }
 
-    /// Set the loaded ArcKind details from Neo4j.
+    /// Set the loaded ArcClass details from Neo4j.
     pub fn set_arc_kind_details(&mut self, details: ArcClassDetails) {
         self.arc_kind_details = Some(details);
     }
@@ -1827,7 +1827,7 @@ impl App {
             return;
         }
 
-        // Need the Kind's YAML path to load schema
+        // Need the Class's YAML path to load schema
         if self.yaml_path.is_empty() {
             self.matched_properties = None;
             self.coverage_stats = None;
@@ -1851,16 +1851,16 @@ impl App {
     }
 
     // ==========================================================================
-    // Kind Validation (Neo4j ↔ YAML)
+    // Class Validation (Neo4j ↔ YAML)
     // ==========================================================================
 
-    /// Load validated properties for the current Kind (compares Neo4j vs YAML).
-    /// Called when selecting a Kind in Meta mode to show validation status.
+    /// Load validated properties for the current Class (compares Neo4j vs YAML).
+    /// Called when selecting a Class in Meta mode to show validation status.
     /// Uses cached YAML content to avoid redundant file I/O.
     pub fn load_validated_kind_properties(&mut self, kind_properties: &[String]) {
         use super::schema::{ValidationStats, parse_schema_properties, validate_kind_properties};
 
-        // Need the Kind's YAML path to load schema
+        // Need the Class's YAML path to load schema
         if self.yaml_path.is_empty() {
             return; // State already cleared in load_yaml_for_current()
         }
@@ -1869,7 +1869,7 @@ impl App {
         let yaml_content = match self.yaml_cache.get(&self.yaml_path) {
             Some(content) => content,
             None => {
-                tracing::warn!(path = %self.yaml_path, "YAML not in cache for Kind validation");
+                tracing::warn!(path = %self.yaml_path, "YAML not in cache for Class validation");
                 return;
             }
         };
@@ -2018,13 +2018,13 @@ mod tests {
         let mut app = create_test_app();
 
         // Navigate to Locale kind (index 3)
-        // Kinds (0), shared (1), locale (2), Locale (3)
+        // Classs (0), shared (1), locale (2), Locale (3)
         app.tree_cursor = 3;
 
         // Verify we're at Locale in Graph mode
         match app.tree.item_at(app.tree_cursor) {
             Some(TreeItem::Class(_, _, k)) => assert_eq!(k.key, "Locale"),
-            other => panic!("Expected Kind Locale, got {:?}", other),
+            other => panic!("Expected Class Locale, got {:?}", other),
         }
 
         // Graph mode should show instances (is_data_mode returns true)
@@ -2036,7 +2036,7 @@ mod tests {
         // Item at cursor should still be Locale kind
         match app.current_item() {
             Some(TreeItem::Class(_, _, k)) => assert_eq!(k.key, "Locale"),
-            other => panic!("Expected Kind Locale in Graph mode, got {:?}", other),
+            other => panic!("Expected Class Locale in Graph mode, got {:?}", other),
         }
     }
 
@@ -2077,7 +2077,7 @@ mod tests {
         // Graph mode (default) shows instances
 
         // Item count should include instances
-        // Taxonomy: 1 (Kinds) + 1 (shared) + 1 (locale) + 1 (Locale)
+        // Taxonomy: 1 (Classes) + 1 (shared) + 1 (locale) + 1 (Locale)
         //           + 1 (org) + 1 (structure) + 1 (Page) + 1 (Arcs) = 8
         // Instances: + 2 instances = 10
         assert_eq!(app.current_item_count(), 10);
@@ -2567,7 +2567,7 @@ mod tests {
         );
 
         // The result should include the index of "Page" kind
-        // Tree structure: Kinds(0), shared(1), locale(2), Locale(3),
+        // Tree structure: Classes(0), shared(1), locale(2), Locale(3),
         //                 org(4), structure(5), Page(6), Arcs(7)
         assert!(
             app.search.results.contains(&6),
