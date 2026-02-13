@@ -9,7 +9,7 @@ user-invocable: true
 
 Display the complete NovaNet architecture diagram showing:
 - Source of truth (YAML models)
-- v11.5 Meta-Graph (faceted classification)
+- v0.12.0 Schema Graph (faceted classification)
 - Generators (Mermaid, Layer, Kind, ArcSchema)
 - Neo4j infrastructure
 - Rust binary (`tools/novanet/`)
@@ -21,7 +21,7 @@ Display the complete NovaNet architecture diagram showing:
 Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 - **"source"** or **"yaml"** - Show Source de Verite section only
-- **"meta"** or **"facets"** - Show Meta-Graph (v11.5 faceted classification)
+- **"meta"** or **"facets"** - Show Schema Graph (v0.12.0 faceted classification)
 - **"infra"** or **"neo4j"** - Show Infrastructure section only
 - **"studio"** - Show Studio section only
 - **"packages"** or **"deps"** - Show Packages Dependency Graph
@@ -37,7 +37,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 ```
 +===================================================================================================+
-|                              NOVANET - SOURCE DE VERITE (v11.7)                                   |
+|                              NOVANET - SOURCE DE VERITE (v0.12.0)                                 |
 +===================================================================================================+
 
 +---------------------------------------------------------------------------------------------------+
@@ -46,27 +46,26 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 |                                                                                                   |
 |   packages/core/models/                                                                           |
 |   +-- _index.yaml                          <- Index du graphe (structure, changelog)              |
-|   +-- taxonomy.yaml                        <- v11.7: 2 Realms/10 Layers/5 Traits/5 ArcFamilies    |
-|   +-- node-kinds/                          <- 60 fichiers YAML (1 par Kind)                       |
+|   +-- taxonomy.yaml                        <- v0.12.0: 2 Realms/10 Layers/5 Traits/5 ArcFamilies  |
+|   +-- node-kinds/                          <- 59 fichiers YAML (1 par Class)                      |
 |   |   +-- shared/                          <- Realm: shared (39 nodes)                            |
-|   |   |   +-- locale/                      <-   Layer: locale (7 nodes)                           |
+|   |   |   +-- config/                      <-   Layer: config (Locale, EntityCategory, etc.)      |
+|   |   |   +-- locale/                      <-   Layer: locale (6 nodes)                           |
 |   |   |   +-- geography/                   <-   Layer: geography (6 nodes)                        |
-|   |   |   +-- knowledge/                   <-   Layer: knowledge (19 nodes)                       |
+|   |   |   +-- knowledge/                   <-   Layer: knowledge (incl. SEO/GEO nodes)            |
 |   |   |       +-- term-set.yaml, term.yaml <- Knowledge Containers + Atoms                        |
 |   |   |       +-- expression-set.yaml, ... <- ExpressionSet, PatternSet, CultureSet, etc.         |
-|   |   |       +-- taboo-set.yaml, etc.     <- TabooSet, AudienceSet + their atoms                 |
+|   |   |       +-- seo-*.yaml, geo-*.yaml   <- SEO/GEO nodes (moved from org)                      |
 |   |   |                                                                                           |
-|   |   +-- org/                             <- Realm: org (21 nodes)                               |
+|   |   +-- org/                             <- Realm: org (20 nodes)                               |
 |   |       +-- config/                      <-   Layer: config (OrgConfig)                         |
 |   |       +-- foundation/                  <-   Layer: foundation (Project, Brand, ProjectContent)|
 |   |       +-- structure/                   <-   Layer: structure (Page, Block, Types)             |
 |   |       +-- semantic/                    <-   Layer: semantic (Entity, EntityContent, Persona)  |
-|   |       +-- instruction/                 <-   Layer: instruction (Prompts, Rules)               |
-|   |       +-- seo/                         <-   Layer: seo (SEOKeyword, Metrics)                  |
-|   |       +-- geo/                         <-   Layer: geo (GEOQuery, GEOAnswer, GEOMetrics)      |
+|   |       +-- instruction/                 <-   Layer: instruction (Instructions, Rules)          |
 |   |       +-- output/                      <-   Layer: output (PageGenerated, BlockGenerated)     |
 |   |                                                                                               |
-|   +-- arc-kinds/                           <- 114 fichiers YAML (1 par ArcKind)                   |
+|   +-- arc-kinds/                           <- 114 fichiers YAML (1 par ArcClass)                  |
 |   +-- relations.yaml                       <- Legacy format (kept for parser compatibility)       |
 |   +-- views/                               <- Definitions de vues YAML                            |
 |                                                                                                   |
@@ -75,37 +74,37 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 ---
 
-## Section: META-GRAPH (v11.7 Faceted Classification)
+## Section: SCHEMA-GRAPH (v0.12.0 Faceted Classification)
 
 ```
 +===================================================================================================+
-|                    META-GRAPH (v11.7) - Self-Describing Context Graph                             |
+|                    SCHEMA-GRAPH (v0.12.0) - Self-Describing Context Graph                         |
 +===================================================================================================+
 
-  Each Kind sits at the intersection of 4 classification axes:
+  Each Class sits at the intersection of 4 classification axes:
 
   +------------------------------------------------------------------------------------------------+
   |                                                                                                |
   |   Axis 1 - WHERE?   :Realm       (2)  shared / org                                            |
-  |   Axis 2 - WHAT?    :Layer      (11)  SHARED: locale, geography, knowledge                    |
+  |   Axis 2 - WHAT?    :Layer      (10)  SHARED: config, locale, geography, knowledge            |
   |                                        ORG: config, foundation, structure, semantic,           |
-  |                                             instruction, seo, geo, output                      |
-  |   Axis 3 - HOW?     :Trait       (5)  invariant / localized / knowledge / generated / aggregated |
-  |   Axis 4 - LINKS?   :ArcKind   (125)  grouped into 5 ArcFamilies                              |
+  |                                             instruction, output                                |
+  |   Axis 3 - HOW?     :Trait       (5)  defined / authored / imported / generated / retrieved   |
+  |   Axis 4 - LINKS?   :ArcClass  (114)  grouped into 5 ArcFamilies                              |
   |                                                                                                |
   +------------------------------------------------------------------------------------------------+
 
-  6 Meta-Node Types (all carry :Meta double-label):
+  6 Schema-Node Types (all carry :Schema double-label):
 
-  +-------------+    +--------------+    +-------------+
-  |  Realm (2)  |--->|  Layer (10)  |--->|  Kind (60)  |
-  |  WHERE?     |    |  WHAT?       |    |  1:1 label  |
-  |  HAS_LAYER  |    |  HAS_KIND    |    |             |
-  +-------------+    +--------------+    +------+------+
-                                               |
-                     +-------------------------+-------------------------+
-                     |                         |                         |
-                     v                         v                         v
+  +-------------+    +--------------+    +--------------+
+  |  Realm (2)  |--->|  Layer (10)  |--->|  Class (59)  |
+  |  WHERE?     |    |  WHAT?       |    |  1:1 label   |
+  |  HAS_LAYER  |    |  HAS_CLASS   |    |              |
+  +-------------+    +--------------+    +------+-------+
+                                                |
+                     +--------------------------+-------------------------+
+                     |                          |                         |
+                     v                          v                         v
               +-------------+           +-------------+          +--------------+
               |  IN_REALM   |           |  IN_LAYER   |          |  HAS_TRAIT   |
               |  (facet)    |           |  (facet)    |          |  (facet)     |
@@ -119,10 +118,10 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
   Arc Schema (OWL-inspired):
 
-  +----------------+    FROM_KIND    +-------------+    TO_KIND     +----------------+
-  | ArcKind (114)  |---------------->|  Kind (60)  |<---------------| ArcKind (114)  |
-  |  1:1 rel type  |                 +-------------+                |                |
-  +-------+--------+                                                +----------------+
+  +----------------+    FROM_CLASS   +--------------+    TO_CLASS    +----------------+
+  | ArcClass (114) |---------------->|  Class (59)  |<---------------| ArcClass (114) |
+  |  1:1 rel type  |                 +--------------+                |                |
+  +-------+--------+                                                 +----------------+
           |
           | IN_FAMILY
           v
@@ -135,19 +134,18 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
   |  mining        |
   +----------------+
 
-  Instance Bridge (every data node links to its Kind):
+  Instance Bridge (every data node links to its Class):
 
-  +----------------+    OF_KIND     +-------------+
-  |  DataNode      |--------------->|  Kind :Meta  |
-  |  (e.g. Block)  |                |  label:Block |
-  +----------------+                +-------------+
+  +----------------+    OF_CLASS    +----------------+
+  |  DataNode      |--------------->|  Class :Schema |
+  |  (e.g. Block)  |                |  label:Block   |
+  +----------------+                +----------------+
 
-  TUI Modes (v11.7 - 3 modes):
+  TUI Modes (v0.12.0 - 2 modes):
 
   +---------------------------------------------------------------------------------+
-  |  Graph  |  Taxonomy (t) or Instances (t) view - unified graph exploration      |
-  |  Audit  |  Schema validation and consistency checks                            |
-  |  Nexus  |  Gamified learning hub (traits, layers, arcs, pipeline)              |
+  |  Graph  |  Unified tree: Realm > Layer > Class > Instance                      |
+  |  Nexus  |  Hub: Quiz, Audit, Stats, Help                                       |
   +---------------------------------------------------------------------------------+
 ```
 
@@ -157,14 +155,14 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 ```
 +===================================================================================================+
-|                    SOURCE OF TRUTH PIPELINE - Schema Propagation (v11.7)                          |
+|                    SOURCE OF TRUTH PIPELINE - Schema Propagation (v0.12.0)                        |
 +===================================================================================================+
 
      +---------------------------------------------------------------------------------------------+
      |                        YAML (Single Source of Truth)                                        |
      |                        packages/core/models/                                                |
-     |                        +-- node-kinds/               <- 61 NodeKind files                   |
-     |                        +-- arc-kinds/                <- 125 ArcKind files                   |
+     |                        +-- node-kinds/               <- 59 NodeClass files                  |
+     |                        +-- arc-kinds/                <- 114 ArcClass files                  |
      |                        +-- taxonomy.yaml             <- 2 Realms, 10 Layers, 5 Traits       |
      +---------------------------------------------+-----------------------------------------------+
                                                    |
@@ -172,18 +170,18 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
          |                    |                    |                    |                    |
          v                    v                    v                    v                    v
   +--------------+   +--------------+   +--------------+   +--------------+   +------------------+
-  |  Mermaid     |   |  Layer       |   |  Kind        |   |  Arc         |   |  Manual          |
+  |  Mermaid     |   |  Layer       |   |  Class       |   |  Arc         |   |  Manual          |
   |  Generator   |   |  Generator   |   |  Generator   |   |  Schema Gen  |   |  Cypher Seeds    |
   |  tools/novanet|  | tools/novanet|   | tools/novanet|   | tools/novanet|   |  packages/db/    |
   +------+-------+   +------+-------+   +------+-------+   +------+-------+   +--------+---------+
          |                  |                  |                  |                    |
          v                  v                  v                  v                    v
   +--------------+   +--------------+   +--------------+   +--------------+   +------------------+
-  | VIEW-COMPLETE|   |  layers.ts   |   | Kind :Meta   |   | ArcKind      |   | 00-constraints   |
-  | -GRAPH.md    |   |  src/graph/  |   | nodes w/     |   | :Meta nodes  |   | 00.5-taxonomy    |
-  |              |   |              |   | schema_hint  |   | w/ cypher_   |   | 01-kinds         |
-  |              |   |              |   |              |   | pattern      |   | 02-arc-kinds     |
-  +--------------+   +--------------+   +--------------+   +--------------+   | 99-autowire-kinds|
+  | VIEW-COMPLETE|   |  layers.ts   |   | Class :Schema|   | ArcClass     |   | 00-constraints   |
+  | -GRAPH.md    |   |  src/graph/  |   | nodes w/     |   | :Schema nodes|   | 00.5-taxonomy    |
+  |              |   |              |   | schema_hint  |   | w/ cypher_   |   | 01-classes       |
+  |              |   |              |   |              |   | pattern      |   | 02-arc-classes   |
+  +--------------+   +--------------+   +--------------+   +--------------+   | 99-autowire      |
                                                                               | (all generated)  |
                                                                               +--------+---------+
                                                                                        |
@@ -209,7 +207,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 ```
 +===================================================================================================+
-|                    RUST BINARY - tools/novanet/ (v11.7)                                           |
+|                    RUST BINARY - tools/novanet/ (v0.12.0)                                         |
 +===================================================================================================+
 
   +-----------------------------------------------------------------------------------------------+
@@ -251,7 +249,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 ```
 +===================================================================================================+
-|                              LOCALE KNOWLEDGE STRUCTURE (v11.7)                                   |
+|                              LOCALE KNOWLEDGE STRUCTURE (v0.12.0)                                 |
 +===================================================================================================+
 
      +---------------------------------------------------------------------------------------------+
@@ -317,7 +315,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 |   +-- 20-locales.cypher            <- Locales from CSV + MD (GENERATED)                           |
 |   +-- 21-locale-knowledge.cypher   <- LocaleIdentity, LocaleVoice, LocaleCulture, etc.            |
 |   +-- 31-project-qrcode-ai.cypher  <- Projet QR Code AI avec Pages, Blocks                        |
-|   +-- 34-prompts.cypher            <- BlockPrompt, PagePrompt                                     |
+|   +-- 34-instructions.cypher       <- BlockInstruction, PageInstruction                           |
 |   +-- 99-autowire-kinds.cypher     <- Links data nodes to Kinds (GENERATED)                       |
 |                                                                                                   |
 |   migrations/ (6 fichiers, idempotents)                                                           |
@@ -359,20 +357,20 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 |   +---------------------------------------------------+--------------------------------------+   |
 |                                                                                                   |
 |   +-------------------------------------------------------------------------------------------+   |
-|   |  VISUALIZATION - TUI Modes (v11.7)                                                        |   |
+|   |  VISUALIZATION - TUI Modes (v0.12.0 - 2 modes)                                            |   |
 |   +-------------------------------------------------------------------------------------------+   |
 |   |                                                                                           |   |
-|   |  +---------------------+  +---------------------+  +---------------------+                |   |
-|   |  |  GRAPH MODE        |  |  AUDIT MODE         |  |  NEXUS MODE        |                |   |
-|   |  |  (Taxonomy/Instances)|  |  (validation)      |  |  (learning hub)    |                |   |
-|   |  |                    |  |                     |  |                    |                |   |
-|   |  |  Real Neo4j data   |  |  Schema checks      |  |  Gamified learning |                |   |
-|   |  |  Force-directed    |  |  Consistency        |  |  Traits, Layers    |                |   |
-|   |  |  Grouped by Realm  |  |  validation         |  |  Arcs, Pipeline    |                |   |
-|   |  +---------------------+  +---------------------+  +---------------------+                |   |
+|   |  +---------------------------------------+  +---------------------------------------+     |   |
+|   |  |  GRAPH MODE                           |  |  NEXUS MODE                          |     |   |
+|   |  |  (Unified Tree)                       |  |  (Hub)                               |     |   |
+|   |  |                                       |  |                                      |     |   |
+|   |  |  Realm > Layer > Class > Instance     |  |  Quiz, Audit, Stats, Help            |     |   |
+|   |  |  Real Neo4j data                      |  |  Gamified learning                   |     |   |
+|   |  |  Lazy instance loading                |  |  Schema validation                   |     |   |
+|   |  +---------------------------------------+  +---------------------------------------+     |   |
 |   |                                                                                           |   |
-|   |  Visual Encoding (v11.7):                                                                 |   |
-|   |  +-- Fill color   -> Layer (11 colors)                                                    |   |
+|   |  Visual Encoding (v0.12.0):                                                               |   |
+|   |  +-- Fill color   -> Layer (10 colors)                                                    |   |
 |   |  +-- Border style  -> Trait (5 styles: solid/dashed/dotted/double/thin-dotted)            |   |
 |   |  +-- Spatial group -> Realm (2 zones: shared, org)                                        |   |
 |   |  +-- Arc stroke    -> ArcFamily (5 colors)                                                |   |
@@ -394,7 +392,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 |                    +------------------+                                                           |
 |                    |  @novanet/core   |  <- Types, schemas, generators, filters                   |
 |                    |  (source truth)  |     node-kinds/ + arc-kinds/ + taxonomy.yaml              |
-|                    +--------+---------+     v11.7: 2 Realms, 10 Layers                            |
+|                    +--------+---------+     v0.12.0: 2 Realms, 10 Layers                          |
 |                             |                                                                     |
 |              +--------------+--------------+                                                      |
 |              |              |              |                                                      |
@@ -425,7 +423,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 ```
 +===================================================================================================+
-|  DATA FLOW: Generation Pipeline (v11.7)                                                           |
+|  DATA FLOW: Generation Pipeline (v0.12.0)                                                         |
 +===================================================================================================+
 |                                                                                                   |
 |   1. INVARIANT NODES (no locale)                                                                  |
@@ -449,11 +447,11 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 |                                          |                                                        |
 |   4. GENERATION (LLM)                    |                                                        |
 |        +----------------------------------+                                                        |
-|        |     +-------------+                                                                      |
-|        +---->| BlockPrompt |                                                                      |
-|              +------+------+                                                                      |
-|                     | GENERATED                                                                   |
-|                     v                                                                             |
+|        |     +------------------+                                                                 |
+|        +---->| BlockInstruction |                                                                 |
+|              +--------+---------+                                                                 |
+|                       | GENERATED                                                                 |
+|                       v                                                                           |
 |              +---------------+                                                                    |
 |              | BlockGenerated|  <- Native content (NOT translation)                               |
 |              +---------------+                                                                    |
@@ -463,24 +461,24 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 ---
 
-## Key Numbers (v11.5.0)
+## Key Numbers (v0.12.0)
 
 | Metric | Value |
 |--------|-------|
-| Kind (node types) | 60 |
-| ArcKind (arcs) | 114 |
+| Class (node types) | 59 |
+| ArcClass (arcs) | 114 |
 | Realms | 2 (shared, org) |
 | Layers | 10 (4 shared + 6 org) |
-| Traits | 5 (invariant, localized, knowledge, generated, aggregated) |
+| Traits | 5 (defined, authored, imported, generated, retrieved) |
 | ArcFamilies | 5 |
 | Shared nodes | 39 (config + locale + geography + knowledge) |
-| Org nodes | 21 (config, foundation, structure, semantic, instruction, output) |
+| Org nodes | 20 (config, foundation, structure, semantic, instruction, output) |
 | Seed files | 11 |
 | Migrations | 6 |
 | Locales supported | 200 |
 | API routes (Studio) | 10 |
 | Zustand stores | 8 |
-| Rust tests | 950 |
+| Rust tests | 998 |
 
 ---
 
@@ -500,8 +498,8 @@ novanet overlay                    # Mode 3: Data + Meta
 novanet query --realm=org          # Mode 4: Faceted query
 
 # Write (Neo4j)
-novanet node create --kind=Page --key=my-page
-novanet arc create --from=a --to=b --kind=USES_ENTITY
+novanet node create --class=Page --key=my-page
+novanet arc create --from=a --to=b --class=USES_ENTITY
 
 # Database lifecycle
 novanet db seed                    # Execute seed files
@@ -523,7 +521,7 @@ novanet tui                        # Galaxy-themed mission control TUI
 User can invoke with:
 - `/novanet-arch` or `/novanet-architecture`
 - `/novanet-arch source` - YAML source only
-- `/novanet-arch meta` - Meta-Graph (v11.7 faceted classification)
+- `/novanet-arch meta` - Schema Graph (v0.12.0 faceted classification)
 - `/novanet-arch pipeline` - Source of Truth Pipeline
 - `/novanet-arch locale` - Locale Knowledge Structure
 - `/novanet-arch infra` - Infrastructure only
