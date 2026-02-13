@@ -189,7 +189,7 @@ const RELATION_TO_FAMILY: Record<string, ArcFamilyKey> = {
   HAS_BLOCK: 'ownership',
   HAS_BRAND_IDENTITY: 'ownership',
   HAS_ENTITY: 'ownership',
-  HAS_PROMPT: 'ownership',
+  HAS_INSTRUCTION: 'ownership',
   HAS_RULES: 'ownership',
   HAS_IDENTITY: 'ownership',
   HAS_VOICE: 'ownership',
@@ -203,8 +203,8 @@ const RELATION_TO_FAMILY: Record<string, ArcFamilyKey> = {
   IN_REALM: 'ownership',
   IN_LAYER: 'ownership',
   IN_FAMILY: 'ownership',
-  FROM_KIND: 'ownership',
-  TO_KIND: 'ownership',
+  FROM_CLASS: 'ownership',  // v11.8 ADR-023
+  TO_CLASS: 'ownership',    // v11.8 ADR-023
   CONTAINS_TERM: 'ownership',
   CONTAINS_EXPRESSION: 'ownership',
   CONTAINS_PATTERN: 'ownership',

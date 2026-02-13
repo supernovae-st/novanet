@@ -65,7 +65,7 @@ const VIEW_ICONS: Record<string, LucideIcon> = {
   'ctx-seo-intel': Pickaxe,
   'ctx-geo-intel': Pickaxe,
   'ctx-project': FolderKanban,
-  // Legacy aliases (backward compat)
+  // Aliases
   'complete-graph': Grid3x3,
   'block-generation': Sparkles,
 };

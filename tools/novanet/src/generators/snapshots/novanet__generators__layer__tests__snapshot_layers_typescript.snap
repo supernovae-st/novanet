@@ -9,7 +9,7 @@ expression: output
 
 import type { NodeType, Realm } from '../types/nodes.js';
 import type { Layer } from './types.js';
-import { KIND_META } from '../types/nodes.js';
+import { CLASS_TAXONOMY } from '../types/nodes.js';
 
 // =============================================================================
 // NODE_LAYERS - Maps each NodeType to its layer
@@ -95,7 +95,7 @@ export function getNodeTypesByLayer(layer: Layer): NodeType[] {
  * @returns Array of node types belonging to both the realm and layer
  */
 export function getNodeTypesByRealmAndLayer(realm: Realm, layer: Layer): NodeType[] {
-  return (Object.entries(KIND_META) as [NodeType, { realm: Realm; layer: Layer }][])
+  return (Object.entries(CLASS_TAXONOMY) as [NodeType, { realm: Realm; layer: Layer }][])
     .filter(([, meta]) => meta.realm === realm && meta.layer === layer)
     .map(([nodeType]) => nodeType);
 }

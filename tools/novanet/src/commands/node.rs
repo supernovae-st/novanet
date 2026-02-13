@@ -1,7 +1,8 @@
 //! Node CRUD commands: `novanet node create/edit/delete`.
 //!
 //! Creates, edits, and deletes data nodes in Neo4j. Node creation validates
-//! the Kind against the meta-graph and auto-wires the `OF_KIND` relationship.
+//! the Class against the schema-graph and auto-wires the `OF_CLASS` relationship.
+//! (v0.12.0 ADR-023: Kind→Class, OF_KIND→OF_CLASS)
 
 use crate::db::Db;
 use tracing::{info, warn};
@@ -49,29 +50,29 @@ fn build_set_fragment(props: &serde_json::Value, prefix: &str) -> (String, Vec<(
     (parts.join(", "), params)
 }
 
-/// Create a new node with the given Kind, key, and properties.
-/// Validates Kind exists in meta-graph and auto-wires OF_KIND.
+/// Create a new node with the given Class, key, and properties.
+/// Validates Class exists in schema-graph and auto-wires OF_CLASS.
 pub async fn run_create(db: &Db, kind: &str, key: &str, props_json: &str) -> crate::Result<()> {
     validate_label(kind)?;
 
-    // Validate Kind exists in meta-graph
+    // Validate Class exists in schema-graph (v0.12.0 ADR-023)
     let kind_rows = db
         .execute_with_params(
-            "MATCH (k:Kind {label: $kind}) RETURN k.label AS label",
+            "MATCH (c:Class {label: $kind}) RETURN c.label AS label",
             [("kind", kind)],
         )
         .await?;
 
     if kind_rows.is_empty() {
         return Err(crate::NovaNetError::Validation(format!(
-            "Kind '{kind}' not found in meta-graph. Use `novanet meta` to list available Kinds."
+            "Class '{kind}' not found in schema-graph. Use `novanet meta` to list available Classes."
         )));
     }
 
     let props = parse_props_json(props_json)?;
     let (set_fragment, params) = build_set_fragment(&props, "n");
 
-    // Build Cypher: CREATE node with dynamic label, SET props, wire OF_KIND
+    // Build Cypher: CREATE node with dynamic label, SET props, wire OF_CLASS
     let mut cypher = format!(
         "CREATE (n:{kind} {{key: $key}})\n\
          SET n.created_at = datetime(), n.updated_at = datetime()"
@@ -83,8 +84,8 @@ pub async fn run_create(db: &Db, kind: &str, key: &str, props_json: &str) -> cra
 
     cypher.push_str(
         "\nWITH n\n\
-         MATCH (k:Kind {label: $kind})\n\
-         CREATE (n)-[:OF_KIND]->(k)\n\
+         MATCH (c:Class {label: $kind})\n\
+         CREATE (n)-[:OF_CLASS]->(c)\n\
          RETURN n.key AS key, labels(n) AS labels",
     );
 

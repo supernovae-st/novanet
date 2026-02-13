@@ -1,6 +1,6 @@
 //! Generate `layers.ts` via MiniJinja template (YAML → TypeScript).
 //!
-//! Reads all 58 YAML node definitions (v0.12.0 / ADR-025), groups by realm and layer,
+//! Reads all 59 YAML node definitions (v0.12.0 / ADR-025), groups by realm and layer,
 //! and produces `packages/core/src/graph/layers.ts`.
 //! Replaces `SubcategoryGenerator.ts` from @novanet/schema-tools.
 //!
@@ -55,7 +55,7 @@ const LAYERS_TEMPLATE: &str = r##"// packages/core/src/graph/layers.ts
 
 import type { NodeType, Realm } from '../types/nodes.js';
 import type { Layer } from './types.js';
-import { KIND_META } from '../types/nodes.js';
+import { CLASS_TAXONOMY } from '../types/nodes.js';
 
 // =============================================================================
 // NODE_LAYERS - Maps each NodeType to its layer
@@ -115,7 +115,7 @@ export function getNodeTypesByLayer(layer: Layer): NodeType[] {
  * @returns Array of node types belonging to both the realm and layer
  */
 export function getNodeTypesByRealmAndLayer(realm: Realm, layer: Layer): NodeType[] {
-  return (Object.entries(KIND_META) as [NodeType, { realm: Realm; layer: Layer }][])
+  return (Object.entries(CLASS_TAXONOMY) as [NodeType, { realm: Realm; layer: Layer }][])
     .filter(([, meta]) => meta.realm === realm && meta.layer === layer)
     .map(([nodeType]) => nodeType);
 }
@@ -275,7 +275,7 @@ mod tests {
         // Imports
         assert!(output.contains("import type { NodeType, Realm } from '../types/nodes.js';"));
         assert!(output.contains("import type { Layer } from './types.js';"));
-        assert!(output.contains("import { KIND_META } from '../types/nodes.js';"));
+        assert!(output.contains("import { CLASS_TAXONOMY } from '../types/nodes.js';"));
 
         // NODE_LAYERS declaration
         assert!(output.contains("export const NODE_LAYERS: Record<NodeType, Layer>"));
@@ -394,15 +394,15 @@ mod tests {
         let generator = LayerGenerator;
         let output = generator.generate(root).expect("should generate layers.ts");
 
-        // v0.12.0: 58 nodes (39 shared + 19 org)
+        // v0.12.0: 59 nodes (39 shared + 20 org)
         assert!(
-            output.contains("mapping all 58 node types"),
-            "should mention 58 node types"
+            output.contains("mapping all 59 node types"),
+            "should mention 59 node types"
         );
 
         // v0.12.0: Realm node counts
         assert!(output.contains("SHARED REALM (39 nodes)")); // config (3) + locale (6) + geography (6) + knowledge (24)
-        assert!(output.contains("ORG REALM (19 nodes)")); // v0.12.0: 19 org nodes
+        assert!(output.contains("ORG REALM (20 nodes)")); // v0.12.0: 20 org nodes
 
         // 9 unique layer names (v11.5: 4 shared + 6 org = 10 total, config in both)
         for layer in [
@@ -442,7 +442,7 @@ mod tests {
         assert!(output.contains("export const NODE_LAYERS: Record<NodeType, Layer>"));
         assert!(output.contains("import type { NodeType, Realm }"));
         assert!(output.contains("import type { Layer }"));
-        assert!(output.contains("import { KIND_META }"));
+        assert!(output.contains("import { CLASS_TAXONOMY }"));
     }
 
     /// Snapshot test for TypeScript layer mapping output.

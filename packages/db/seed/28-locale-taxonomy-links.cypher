@@ -705,13 +705,13 @@ WHERE l.country_code IN ['FJ', 'NC', 'PG', 'SB', 'VU', 'AS', 'CK', 'FM', 'GU', '
 MERGE (l)-[:HAS_PRIMARY_POPULATION]->(p);
 
 // -----------------------------------------------------------------------------
-// 6. OF_KIND CONNECTIONS FOR LOCALES
-// Ensure all Locales connect to their meta-Kind
+// 6. OF_CLASS CONNECTIONS FOR LOCALES
+// Ensure all Locales connect to their meta-Class
 // -----------------------------------------------------------------------------
 
-MATCH (l:Locale), (k:Kind {label: 'Locale'})
-WHERE NOT (l)-[:OF_KIND]->(k)
-MERGE (l)-[:OF_KIND]->(k);
+MATCH (l:Locale), (c:Class {label: 'Locale'})
+WHERE NOT (l)-[:OF_CLASS]->(c)
+MERGE (l)-[:OF_CLASS]->(c);
 
 // -----------------------------------------------------------------------------
 // 7. SUMMARY STATS

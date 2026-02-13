@@ -66,9 +66,9 @@ All nodes have: key, display_name, icon, description, llm_context, created_at, u
 - Project, ProjectContent: Project with authored identity
 - BrandIdentity: Visual identity
 
-**Tenant/Structure** — Content structure
+**Org/Structure** — Content structure
 - Page, Block, ContentSlot: Page and block structure
-- PageType, BlockType: Templates
+- PageStructure, BlockType: Templates (v11.8: PageType → PageStructure)
 
 **Tenant/Semantic** — Business content
 - Entity: Invariant business entities

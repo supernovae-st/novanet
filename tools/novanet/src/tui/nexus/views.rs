@@ -115,7 +115,7 @@ pub const VIEWS: &[ViewEntry] = &[
     ViewEntry {
         id: "complete-graph",
         name: "Complete Graph",
-        description: "Full NovaNet graph with all 60 nodes and relations",
+        description: "Full NovaNet graph with all 59 nodes and relations",
         category: ViewCategory::Overview,
         root_type: "Project",
         notes: &[

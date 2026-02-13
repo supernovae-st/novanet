@@ -62,11 +62,11 @@ function toTraitStyleTokens(trait: Trait): TraitStyleTokens {
  *
  * | Trait      | Border     | Meaning                          |
  * |-----------|------------|----------------------------------|
- * | defined    | solid 2px  | Schema-defined structure (was invariant) |
- * | authored   | dashed 2px | Human-written PER locale (was localized) |
- * | imported   | dotted 2px | External data brought in (was knowledge) |
- * | generated  | double 3px | LLM-generated content output     |
- * | retrieved  | dotted 3px | Fetched from external APIs (was aggregated) |
+ * | defined    | solid 2px  | Schema-defined structure           |
+ * | authored   | dashed 2px | Human-written PER locale           |
+ * | imported   | dotted 2px | External data brought in           |
+ * | generated  | double 3px | LLM-generated content output       |
+ * | retrieved  | dotted 3px | Fetched from external APIs         |
  */
 export const TRAIT_STYLES: Record<Trait, TraitStyleTokens> = {
   defined: toTraitStyleTokens('defined'),

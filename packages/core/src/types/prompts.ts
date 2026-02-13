@@ -1,18 +1,17 @@
 // novanet-core/src/types/prompts.ts
-// Prompt types v7.2.0 - AI Instructions with versioning
+// Instruction types v0.12.0 - AI Instructions with versioning
 //
-// v7.2.0: Separation of Structure vs Prompts vs Output
-// - PagePrompt: Orchestrator instructions (extracted from Page.instructions)
-// - BlockPrompt: Sub-agent instructions (extracted from Block.instructions)
-// - BlockRules: Template rules (extracted from BlockType.rules)
+// PageInstruction: Orchestrator instructions for page generation
+// BlockInstruction: Sub-agent instructions for block generation
+// BlockRules: Template rules (extracted from BlockType.rules)
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// COMMON PROMPT PROPERTIES
+// COMMON INSTRUCTION PROPERTIES
 // ═══════════════════════════════════════════════════════════════════════════════
 
-interface PromptBase {
-  // Standard properties (v7.1.0 - no key, linked via :HAS_PROMPT/:HAS_RULES)
-  display_name: string;      // "Pricing Hero Prompt v1.0"
+interface InstructionBase {
+  // Standard properties (v11.8.0 - no key, linked via :HAS_INSTRUCTION/:HAS_RULES)
+  display_name: string;      // "Pricing Hero Instruction v1.0"
   description: string;       // "Instructions for pricing hero generation"
   llm_context: string;       // "USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
 
@@ -25,28 +24,28 @@ interface PromptBase {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// PAGEPROMPT - Orchestrator instructions (Category: PROMPTS 🔵)
+// PAGEINSTRUCTION - Orchestrator instructions (Category: INSTRUCTION)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export interface PagePrompt extends PromptBase {
-  // PagePrompt-specific
-  prompt: string;            // "[GENERATE] Create conversion-focused pricing page..."
+export interface PageInstruction extends InstructionBase {
+  // PageInstruction-specific — Markdown with @ references
+  instruction: string;       // "[GENERATE] Create conversion-focused pricing page..."
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// BLOCKPROMPT - Sub-agent instructions (Category: PROMPTS 🔵)
+// BLOCKINSTRUCTION - Sub-agent instructions (Category: INSTRUCTION)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export interface BlockPrompt extends PromptBase {
-  // BlockPrompt-specific
-  prompt: string;            // "[GENERATE] Hero highlighting @tier-pro benefits"
+export interface BlockInstruction extends InstructionBase {
+  // BlockInstruction-specific — Markdown with @ references
+  instruction: string;       // "[GENERATE] Hero highlighting @tier-pro benefits"
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// BLOCKRULES - Template generation rules (Category: PROMPTS 🔵)
+// BLOCKRULES - Template generation rules (Category: INSTRUCTION)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export interface BlockRules extends PromptBase {
+export interface BlockRules extends InstructionBase {
   // BlockRules-specific
   rules: string;             // "Title: action verb. Subtitle: value prop. CTA: urgency."
 }
@@ -55,4 +54,4 @@ export interface BlockRules extends PromptBase {
 // TYPE EXPORTS
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export type PromptNode = PagePrompt | BlockPrompt | BlockRules;
+export type InstructionNode = PageInstruction | BlockInstruction | BlockRules;

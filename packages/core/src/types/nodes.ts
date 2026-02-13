@@ -3,7 +3,7 @@
  * @module @novanet/core/types/nodes
  * @version 0.12.0
  *
- * Defines the complete taxonomy for all 60 NovaNet node types across 2 realms and 10 layers.
+ * Defines the complete taxonomy for all 59 NovaNet node types across 2 realms and 10 layers.
  * This is the **single source of truth** for node classification in the knowledge graph.
  *
  * ## Architecture Overview
@@ -26,28 +26,28 @@
  */
 
 // =============================================================================
-// NODE TYPES (60 nodes across 2 realms, 10 layers)
+// NODE TYPES (59 nodes across 2 realms, 10 layers)
 // =============================================================================
 
 /**
- * Complete list of all 60 NovaNet node types.
+ * Complete list of all 59 NovaNet node types.
  *
  * Organized by realm and layer:
  * - **SHARED** (39 nodes): config (3) + locale (6) + geography (6) + knowledge (24)
- * - **ORG** (21 nodes): config (1) + foundation (3) + structure (3) + semantic (4) + instruction (7) + output (3)
+ * - **ORG** (20 nodes): config (1) + foundation (3) + structure (3) + semantic (4) + instruction (6) + output (3)
  *
  * @example
  * ```typescript
- * import { NODE_TYPES, KIND_META } from '@novanet/core/types';
+ * import { NODE_TYPES, CLASS_TAXONOMY } from '@novanet/core/types';
  *
  * // Iterate all node types
  * NODE_TYPES.forEach(type => {
- *   const { realm, layer, trait } = KIND_META[type];
+ *   const { realm, layer, trait } = CLASS_TAXONOMY[type];
  *   console.log(`${type}: ${realm}/${layer} (${trait})`);
  * });
  *
  * // Filter by realm
- * const sharedTypes = NODE_TYPES.filter(t => KIND_META[t].realm === 'shared');
+ * const sharedTypes = NODE_TYPES.filter(t => CLASS_TAXONOMY[t].realm === 'shared');
  * // → 39 shared realm node types
  * ```
  *
@@ -73,7 +73,7 @@ export const NODE_TYPES = [
   'GEOQuery', 'GEOQuerySet', 'GEOAnswer',
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // ORG REALM (21 nodes) — 6 layers: config, foundation, structure, semantic, instruction, output
+  // ORG REALM (20 nodes) — 6 layers: config, foundation, structure, semantic, instruction, output
   // v11.4: SEO/GEO nodes moved to shared/knowledge
   // ═══════════════════════════════════════════════════════════════════════════
   // config (1) — v11.3: Organization + Tenant merged into OrgConfig
@@ -84,8 +84,8 @@ export const NODE_TYPES = [
   'Page', 'Block', 'ContentSlot',
   // semantic (4)
   'Entity', 'EntityContent', 'AudiencePersona', 'ChannelSurface',
-  // instruction (7)
-  'PageType', 'BlockType', 'PagePrompt', 'BlockPrompt', 'BlockRules', 'BlockInstruction', 'PromptArtifact',
+  // instruction (6)
+  'PageStructure', 'BlockType', 'PageInstruction', 'BlockInstruction', 'BlockRules', 'PromptArtifact',
   // output (3)
   'PageGenerated', 'BlockGenerated', 'OutputArtifact',
 ] as const;
@@ -98,7 +98,7 @@ export const NODE_TYPES = [
  * @example
  * ```typescript
  * function getNodeColor(type: NodeType): string {
- *   const { layer } = KIND_META[type];
+ *   const { layer } = CLASS_TAXONOMY[type];
  *   return LAYER_COLORS[layer];
  * }
  * ```
@@ -118,7 +118,7 @@ export type NodeType = typeof NODE_TYPES[number];
  * @example
  * ```typescript
  * // Check if a node is in the shared realm
- * const isShared = KIND_META[nodeType].realm === 'shared';
+ * const isShared = CLASS_TAXONOMY[nodeType].realm === 'shared';
  *
  * // Filter Cypher query by realm
  * const query = `MATCH (n:${nodeType}) WHERE n.realm = 'shared' RETURN n`;
@@ -148,7 +148,7 @@ export type Realm = 'shared' | 'org';
  * @example
  * ```typescript
  * // Get all semantic layer nodes
- * const semanticNodes = NODE_TYPES.filter(t => KIND_META[t].layer === 'semantic');
+ * const semanticNodes = NODE_TYPES.filter(t => CLASS_TAXONOMY[t].layer === 'semantic');
  * // → ['Entity', 'EntityContent', 'AudiencePersona', 'ChannelSurface']
  * ```
  *
@@ -172,10 +172,10 @@ export type Layer =
  * @example
  * ```typescript
  * // Check if node needs locale-specific content
- * const needsAuthoring = KIND_META[nodeType].trait === 'authored';
+ * const needsAuthoring = CLASS_TAXONOMY[nodeType].trait === 'authored';
  *
  * // Get all generated output nodes
- * const outputs = NODE_TYPES.filter(t => KIND_META[t].trait === 'generated');
+ * const outputs = NODE_TYPES.filter(t => CLASS_TAXONOMY[t].trait === 'generated');
  * // → ['PageGenerated', 'BlockGenerated', 'OutputArtifact', 'PromptArtifact']
  * ```
  *
@@ -185,7 +185,7 @@ export type Layer =
 export type Trait = 'defined' | 'authored' | 'imported' | 'generated' | 'retrieved';
 
 // =============================================================================
-// KIND_META — unified classification for all 60 node types
+// CLASS_TAXONOMY — unified classification for all 59 node types
 // =============================================================================
 
 /**
@@ -198,11 +198,11 @@ export type Trait = 'defined' | 'authored' | 'imported' | 'generated' | 'retriev
  *
  * @example
  * ```typescript
- * const meta: KindMeta = KIND_META['Entity'];
+ * const meta: Classification = CLASS_TAXONOMY['Entity'];
  * // → { realm: 'org', layer: 'semantic', trait: 'defined' }
  * ```
  */
-export interface KindMeta {
+export interface Classification {
   /** Where the node lives: 'shared' (universal) or 'org' (organization-specific) */
   realm: Realm;
   /** Functional category: one of 10 layers (4 shared + 6 org) */
@@ -212,7 +212,7 @@ export interface KindMeta {
 }
 
 /**
- * Complete classification registry for all 60 NovaNet node types.
+ * Complete classification registry for all 59 NovaNet node types.
  *
  * This is the **single source of truth** for node classification. Use this to:
  * - Determine which realm/layer a node belongs to
@@ -221,24 +221,24 @@ export interface KindMeta {
  *
  * @example
  * ```typescript
- * import { NODE_TYPES, KIND_META } from '@novanet/core/types';
+ * import { NODE_TYPES, CLASS_TAXONOMY } from '@novanet/core/types';
  *
  * // Get classification for a specific type
- * const { realm, layer, trait } = KIND_META['Entity'];
+ * const { realm, layer, trait } = CLASS_TAXONOMY['Entity'];
  * // → { realm: 'org', layer: 'semantic', trait: 'defined' }
  *
  * // Count nodes by realm
- * const sharedCount = NODE_TYPES.filter(t => KIND_META[t].realm === 'shared').length;
+ * const sharedCount = NODE_TYPES.filter(t => CLASS_TAXONOMY[t].realm === 'shared').length;
  * // → 39
  *
  * // Get all output layer nodes
- * const outputs = NODE_TYPES.filter(t => KIND_META[t].layer === 'output');
+ * const outputs = NODE_TYPES.filter(t => CLASS_TAXONOMY[t].layer === 'output');
  * // → ['PageGenerated', 'BlockGenerated', 'OutputArtifact']
  * ```
  *
  * @version 0.12.0
  */
-export const KIND_META: Record<NodeType, KindMeta> = {
+export const CLASS_TAXONOMY: Record<NodeType, Classification> = {
   // ═══════════════════════════════════════════════════════════════════════════
   // SHARED REALM — config (3) — v11.5: classification nodes + Locale definition
   // ═══════════════════════════════════════════════════════════════════════════
@@ -303,14 +303,13 @@ export const KIND_META: Record<NodeType, KindMeta> = {
   AudiencePersona: { realm: 'org', layer: 'semantic', trait: 'defined' },
   ChannelSurface:  { realm: 'org', layer: 'semantic', trait: 'defined' },
 
-  // ORG REALM — instruction (7)
-  PageType:        { realm: 'org', layer: 'instruction', trait: 'defined' },
-  BlockType:       { realm: 'org', layer: 'instruction', trait: 'defined' },
-  PagePrompt:      { realm: 'org', layer: 'instruction', trait: 'defined' },
-  BlockPrompt:     { realm: 'org', layer: 'instruction', trait: 'defined' },
-  BlockRules:      { realm: 'org', layer: 'instruction', trait: 'defined' },
-  BlockInstruction:{ realm: 'org', layer: 'instruction', trait: 'defined' },
-  PromptArtifact:  { realm: 'org', layer: 'instruction', trait: 'generated' },
+  // ORG REALM — instruction (6)
+  PageStructure:     { realm: 'org', layer: 'instruction', trait: 'defined' },
+  BlockType:         { realm: 'org', layer: 'instruction', trait: 'defined' },
+  PageInstruction:   { realm: 'org', layer: 'instruction', trait: 'defined' },
+  BlockInstruction:  { realm: 'org', layer: 'instruction', trait: 'defined' },
+  BlockRules:        { realm: 'org', layer: 'instruction', trait: 'defined' },
+  PromptArtifact:    { realm: 'org', layer: 'instruction', trait: 'generated' },
 
   // SHARED REALM — knowledge (SEO/GEO) — v11.5: moved from org to shared
   SEOKeyword:       { realm: 'shared', layer: 'knowledge', trait: 'imported' },
@@ -327,20 +326,20 @@ export const KIND_META: Record<NodeType, KindMeta> = {
 };
 
 // =============================================================================
-// DERIVED MAPS — computed from KIND_META
+// DERIVED MAPS — computed from CLASS_TAXONOMY
 // =============================================================================
 
 /**
- * Creates a derived lookup map from KIND_META for a specific field.
+ * Creates a derived lookup map from CLASS_TAXONOMY for a specific field.
  *
  * @internal
- * @param field - The KindMeta field to extract ('realm', 'layer', or 'trait')
+ * @param field - The Classification field to extract ('realm', 'layer', or 'trait')
  * @returns Record mapping NodeType to the extracted field value
  */
-function deriveMap<K extends keyof KindMeta>(field: K): Record<NodeType, KindMeta[K]> {
+function deriveMap<K extends keyof Classification>(field: K): Record<NodeType, Classification[K]> {
   return Object.fromEntries(
-    Object.entries(KIND_META).map(([k, v]) => [k, v[field]])
-  ) as Record<NodeType, KindMeta[K]>;
+    Object.entries(CLASS_TAXONOMY).map(([k, v]) => [k, v[field]])
+  ) as Record<NodeType, Classification[K]>;
 }
 
 /**

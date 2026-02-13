@@ -83,10 +83,10 @@ fn arc_family_description(key: &str) -> &str {
             "Hierarchical containment. Parent-child relationships like Page HAS_BLOCK, Org HAS_PAGE."
         }
         "localization" => {
-            "Locale-specific content. Links invariant to localized nodes like Entity HAS_CONTENT EntityContent."
+            "Locale-specific content. Links defined to authored nodes like Entity HAS_CONTENT EntityContent."
         }
         "semantic" => {
-            "Semantic relationships. Content uses knowledge atoms like Block USES_TERM, USES_EXPRESSION."
+            "Semantic relationships. Content uses imported atoms like Block USES_TERM, USES_EXPRESSION."
         }
         "generation" => "LLM generation flow. GENERATES, PRODUCES arcs tracking what creates what.",
         "mining" => "Data extraction and derivation. EXTRACTS, DERIVES arcs for computed content.",

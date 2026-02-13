@@ -2,7 +2,7 @@
 //!
 //! This tab is the first stop for newcomers, explaining:
 //! - WHY NovaNet exists (translation vs generation)
-//! - WHAT it does (Meta vs Data nodes)
+//! - WHAT it does (Schema vs Instance nodes)
 //! - HOW it classifies (Realm, Layer, Trait)
 
 use ratatui::Frame;
@@ -255,7 +255,7 @@ fn render_page_2_two_types_of_nodes(f: &mut Frame, theme: &Theme, locale: NexusL
         Line::from(vec![
             Span::styled("  ", Style::default()),
             Span::styled(
-                "META NODES (60 total)",
+                "SCHEMA CLASSES (59 total)",
                 Style::default()
                     .fg(Color::Magenta)
                     .add_modifier(Modifier::BOLD),
@@ -360,10 +360,7 @@ fn render_page_2_two_types_of_nodes(f: &mut Frame, theme: &Theme, locale: NexusL
         Line::from(vec![
             Span::styled("  │  ", Style::default().fg(Color::DarkGray)),
             Span::styled("trait: ", Style::default().fg(Color::DarkGray)),
-            Span::styled(
-                "defined",
-                Style::default().fg(theme.trait_color("defined")),
-            ),
+            Span::styled("defined", Style::default().fg(theme.trait_color("defined"))),
             Span::styled("                       ", Style::default()),
             Span::styled("country_code: ", Style::default().fg(Color::DarkGray)),
             Span::styled("\"FR\"", Style::default().fg(Color::Green)),
@@ -388,14 +385,14 @@ fn render_page_2_two_types_of_nodes(f: &mut Frame, theme: &Theme, locale: NexusL
                 Style::default().fg(Color::White),
             ),
             Span::styled(
-                "OF_KIND",
+                "OF_CLASS",
                 Style::default()
                     .fg(Color::Yellow)
                     .add_modifier(Modifier::BOLD),
             ),
         ]),
         Line::from(vec![Span::styled(
-            "  (:Locale {key: 'fr-FR'})-[:OF_KIND]->(:Kind {label: 'Locale'})",
+            "  (:Locale {key: 'fr-FR'})-[:OF_CLASS]->(:Class {label: 'Locale'})",
             Style::default().fg(Color::DarkGray),
         )]),
     ];
@@ -455,7 +452,7 @@ fn render_page_3_classification(f: &mut Frame, theme: &Theme, locale: NexusLocal
                     .fg(theme.realm_color("org"))
                     .add_modifier(Modifier::BOLD),
             ),
-            Span::styled(" (21 nodes)", Style::default().fg(Color::DarkGray)),
+            Span::styled(" (20 nodes)", Style::default().fg(Color::DarkGray)),
             Span::styled(
                 "                   │",
                 Style::default().fg(theme.realm_color("shared")),

@@ -225,7 +225,9 @@ NovaNet models content as a knowledge graph with **2 Realms** and **10 Layers** 
 
 **v11.5 changes:** Locale definition moved to shared/config. SEO/GEO nodes consolidated to shared/knowledge.
 
-Each node type has a **Trait** (invariant / localized / knowledge / generated / aggregated) and arcs are classified by **ArcFamily**.
+Each node type has a **Trait** (defined / authored / imported / generated / retrieved) and arcs are classified by **ArcFamily**.
+
+> **v0.12.0 ADR-024: Data Origin traits** — Trait now answers "WHERE does data come from?" (defined = human-created once, authored = human-written per locale, imported = external data brought in, generated = LLM output, retrieved = external API snapshots)
 
 See [`packages/core/models/taxonomy.yaml`](packages/core/models/taxonomy.yaml) for complete schema.
 

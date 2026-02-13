@@ -235,46 +235,43 @@ describe('Type Exports', () => {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// PROMPT TYPES (v7.2.0)
+// INSTRUCTION TYPES
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import type { PagePrompt, BlockPrompt, BlockRules } from '../types/prompts.js';
+import type { PageInstruction, BlockInstruction, BlockRules } from '../types/prompts.js';
 
-describe('Prompt Types (v8.2.0 - no icon/priority/freshness)', () => {
-  it('PagePrompt has required properties', () => {
-    // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
-    const prompt: PagePrompt = {
-      display_name: 'Pricing Page Prompt v1.0',
+describe('Instruction Types (v11.8.0)', () => {
+  it('PageInstruction has required properties', () => {
+    const instruction: PageInstruction = {
+      display_name: 'Pricing Page Instruction v1.0',
       description: 'Instructions for pricing page generation',
       llm_context: 'USE: orchestration. TRIGGERS: page. NOT: blocks.',
-      prompt: '[GENERATE] Create conversion-focused pricing page',
+      instruction: '[GENERATE] Create conversion-focused pricing page',
       version: '1.0',
       active: true,
       created_at: new Date(),
       updated_at: new Date(),
     };
-    expect(prompt.prompt).toBeDefined();
-    expect(prompt.version).toBe('1.0');
-    expect(prompt.active).toBe(true);
+    expect(instruction.instruction).toBeDefined();
+    expect(instruction.version).toBe('1.0');
+    expect(instruction.active).toBe(true);
   });
 
-  it('BlockPrompt has required properties', () => {
-    // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
-    const prompt: BlockPrompt = {
-      display_name: 'Pricing Hero Prompt v1.0',
+  it('BlockInstruction has required properties', () => {
+    const instruction: BlockInstruction = {
+      display_name: 'Pricing Hero Instruction v1.0',
       description: 'Instructions for pricing hero generation',
       llm_context: 'USE: hero generation. TRIGGERS: block hero. NOT: other blocks.',
-      prompt: '[GENERATE] Hero highlighting @tier-pro benefits',
+      instruction: '[GENERATE] Hero highlighting @tier-pro benefits',
       version: '1.0',
       active: true,
       created_at: new Date(),
       updated_at: new Date(),
     };
-    expect(prompt.prompt).toBeDefined();
+    expect(instruction.instruction).toBeDefined();
   });
 
   it('BlockRules has required properties', () => {
-    // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
     const rules: BlockRules = {
       display_name: 'Hero Rules v1.0',
       description: 'Generation rules for hero block type',

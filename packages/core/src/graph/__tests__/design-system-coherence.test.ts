@@ -11,7 +11,7 @@ import { parse as parseYaml } from 'yaml';
 
 import { REALM_HIERARCHY } from '../hierarchy';
 import { NODE_LAYERS, getNodeTypesByRealmAndLayer } from '../layers';
-import { NODE_TYPES, KIND_META } from '../../types/nodes';
+import { NODE_TYPES, CLASS_TAXONOMY } from '../../types/nodes';
 import type { Realm, Layer } from '../../types/nodes';
 
 // =============================================================================
@@ -34,11 +34,11 @@ const V11_6_ARCHITECTURE = {
   // 5 arc families
   arcFamilies: ['ownership', 'localization', 'semantic', 'generation', 'mining'] as const,
 
-  // Node counts
+  // Node counts (v0.12.0)
   nodeCounts: {
-    total: 60,
+    total: 59,
     shared: 39,
-    org: 21,
+    org: 20,
     byLayer: {
       // shared layers
       'shared/config': 3,
@@ -50,7 +50,7 @@ const V11_6_ARCHITECTURE = {
       'org/semantic': 4,
       'org/foundation': 3,
       'org/structure': 3,
-      'org/instruction': 7,
+      'org/instruction': 6,
       'org/output': 3,
     },
   },
@@ -183,8 +183,8 @@ describe('Design System Coherence: Layers', () => {
   it('should have Locale in shared/config (not shared/locale)', () => {
     // v11.5: Locale is a DEFINITION (invariant) not a SETTING (knowledge)
     expect(NODE_LAYERS.Locale).toBe('config');
-    expect(KIND_META.Locale.layer).toBe('config');
-    expect(KIND_META.Locale.trait).toBe('defined');
+    expect(CLASS_TAXONOMY.Locale.layer).toBe('config');
+    expect(CLASS_TAXONOMY.Locale.trait).toBe('defined');
   });
 
   it('should have SEO/GEO in shared/knowledge (not org)', () => {
@@ -193,7 +193,7 @@ describe('Design System Coherence: Layers', () => {
 
     for (const node of seoGeoNodes) {
       expect(NODE_LAYERS[node as keyof typeof NODE_LAYERS]).toBe('knowledge');
-      expect(KIND_META[node as keyof typeof KIND_META].realm).toBe('shared');
+      expect(CLASS_TAXONOMY[node as keyof typeof CLASS_TAXONOMY].realm).toBe('shared');
     }
   });
 });
@@ -244,7 +244,7 @@ describe('Design System Coherence: Traits', () => {
     const generatedNodes = ['PageGenerated', 'BlockGenerated', 'OutputArtifact', 'PromptArtifact'];
 
     for (const node of generatedNodes) {
-      expect(KIND_META[node as keyof typeof KIND_META].trait).toBe('generated');
+      expect(CLASS_TAXONOMY[node as keyof typeof CLASS_TAXONOMY].trait).toBe('generated');
     }
   });
 
@@ -252,7 +252,7 @@ describe('Design System Coherence: Traits', () => {
     const aggregatedNodes = ['SEOKeywordMetrics', 'GEOAnswer'];
 
     for (const node of aggregatedNodes) {
-      expect(KIND_META[node as keyof typeof KIND_META].trait).toBe('retrieved');
+      expect(CLASS_TAXONOMY[node as keyof typeof CLASS_TAXONOMY].trait).toBe('retrieved');
     }
   });
 });
@@ -301,15 +301,15 @@ describe('Design System Coherence: Arc Families', () => {
 // =============================================================================
 
 describe('Design System Coherence: Node Counts', () => {
-  it('should have exactly 60 total nodes', () => {
-    expect(NODE_TYPES).toHaveLength(60);
-    expect(Object.keys(NODE_LAYERS)).toHaveLength(60);
-    expect(Object.keys(KIND_META)).toHaveLength(60);
+  it('should have exactly 59 total nodes', () => {
+    expect(NODE_TYPES).toHaveLength(59);
+    expect(Object.keys(NODE_LAYERS)).toHaveLength(59);
+    expect(Object.keys(CLASS_TAXONOMY)).toHaveLength(59);
   });
 
   it('should have correct node distribution by realm', () => {
-    const sharedNodes = NODE_TYPES.filter(t => KIND_META[t].realm === 'shared');
-    const orgNodes = NODE_TYPES.filter(t => KIND_META[t].realm === 'org');
+    const sharedNodes = NODE_TYPES.filter(t => CLASS_TAXONOMY[t].realm === 'shared');
+    const orgNodes = NODE_TYPES.filter(t => CLASS_TAXONOMY[t].realm === 'org');
 
     expect(sharedNodes).toHaveLength(V11_6_ARCHITECTURE.nodeCounts.shared);
     expect(orgNodes).toHaveLength(V11_6_ARCHITECTURE.nodeCounts.org);
@@ -332,10 +332,10 @@ describe('Design System Coherence: Node Counts', () => {
   it('should have consistent node count across all sources', () => {
     const nodeTypesCount = NODE_TYPES.length;
     const nodeLayersCount = Object.keys(NODE_LAYERS).length;
-    const kindMetaCount = Object.keys(KIND_META).length;
+    const classificationCount = Object.keys(CLASS_TAXONOMY).length;
 
     expect(nodeTypesCount).toBe(nodeLayersCount);
-    expect(nodeLayersCount).toBe(kindMetaCount);
+    expect(nodeLayersCount).toBe(classificationCount);
   });
 });
 
@@ -440,13 +440,13 @@ describe('Design System Coherence: No Deprecated Terms', () => {
 });
 
 // =============================================================================
-// KIND_META Consistency Tests
+// CLASS_TAXONOMY Consistency Tests
 // =============================================================================
 
-describe('Design System Coherence: KIND_META Consistency', () => {
+describe('Design System Coherence: CLASS_TAXONOMY Consistency', () => {
   it('should have valid realm for all nodes', () => {
     for (const nodeType of NODE_TYPES) {
-      const meta = KIND_META[nodeType];
+      const meta = CLASS_TAXONOMY[nodeType];
       expect(V11_6_ARCHITECTURE.realms).toContain(meta.realm);
     }
   });
@@ -458,21 +458,21 @@ describe('Design System Coherence: KIND_META Consistency', () => {
     ];
 
     for (const nodeType of NODE_TYPES) {
-      const meta = KIND_META[nodeType];
+      const meta = CLASS_TAXONOMY[nodeType];
       expect(allLayers).toContain(meta.layer);
     }
   });
 
   it('should have valid trait for all nodes', () => {
     for (const nodeType of NODE_TYPES) {
-      const meta = KIND_META[nodeType];
+      const meta = CLASS_TAXONOMY[nodeType];
       expect(V11_6_ARCHITECTURE.traits).toContain(meta.trait);
     }
   });
 
-  it('should have consistent layer between NODE_LAYERS and KIND_META', () => {
+  it('should have consistent layer between NODE_LAYERS and CLASS_TAXONOMY', () => {
     for (const nodeType of NODE_TYPES) {
-      expect(NODE_LAYERS[nodeType]).toBe(KIND_META[nodeType].layer);
+      expect(NODE_LAYERS[nodeType]).toBe(CLASS_TAXONOMY[nodeType].layer);
     }
   });
 });

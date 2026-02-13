@@ -149,15 +149,15 @@ Press `/` from anywhere to open search.
 
 ## Trait Filter
 
-Quick filter to show only Kinds matching a specific trait.
+Quick filter to show only Classes matching a specific trait (ADR-024 Data Origin).
 
 | Key | Action |
 |-----|--------|
-| `fi` | Filter: invariant |
-| `fl` | Filter: localized |
-| `fk` | Filter: knowledge |
+| `fd` | Filter: defined |
+| `fa` | Filter: authored |
+| `fi` | Filter: imported |
 | `fg` | Filter: generated |
-| `fa` | Filter: aggregated |
+| `fr` | Filter: retrieved |
 | `ff` | Clear filter (show all) |
 
 When a filter is active, the title bar shows the active trait.
@@ -220,7 +220,7 @@ Navigation:  j/k (up/down)  h/l (collapse/expand)  d/u (page)  g/G (top/bottom) 
 Expand:      e (subtree)    c (collapse subtree)  H/L (global collapse/expand)
 Instances:   Enter (load)   r (refresh count)
 Focus:       Tab (cycle panels)
-Filter:      fi/fl/fk/fg/fa (trait)  ff (clear)
+Filter:      fd/fa/fi/fg/fr (trait)  ff (clear)
 Search:      / (search)  ? (help)  F1 (legend)
 Actions:     r (refresh)  y/Y (yank key/JSON)  J (JSON toggle)  Ctrl+o/i (back/forward)
 Exit:        q or Esc

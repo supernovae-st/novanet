@@ -28,8 +28,8 @@ pub const TRAIT_STYLES: &[(&str, &str, &str)] = &[
     ("defined", "#3b82f6", "#1d4ed8"),
     ("authored", "#22c55e", "#16a34a"),
     ("imported", "#8b5cf6", "#7c3aed"),
-    ("generated", "#b58900", "#996f00"),  // yellow-orange
-    ("retrieved", "#6c71c4", "#5761b3"),  // violet
+    ("generated", "#b58900", "#996f00"), // yellow-orange
+    ("retrieved", "#6c71c4", "#5761b3"), // violet
 ];
 
 /// Trait → emoji for node labels.
@@ -381,11 +381,7 @@ pub fn wrap_in_markdown(mermaid_code: &str) -> String {
         "| \u{1F7E3} Purple | Imported | Cultural/linguistic knowledge per locale |"
     )
     .unwrap();
-    writeln!(
-        out,
-        "| \u{1F31F} Gold | Generated | LLM-generated output |"
-    )
-    .unwrap();
+    writeln!(out, "| \u{1F31F} Gold | Generated | LLM-generated output |").unwrap();
     writeln!(
         out,
         "| \u{26AA} Gray | Retrieved | Computed/retrieved data |"

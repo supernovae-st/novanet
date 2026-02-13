@@ -12,7 +12,7 @@
 
 import type { GraphNode, GraphEdge, NodeType } from '@/types';
 import { NODE_LAYERS, type Layer } from '@novanet/core/graph';
-import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
+import { nodeTypeConfigs } from '@/config/nodeTypes';
 
 /** Threshold above which clustering is activated */
 export const CLUSTERING_THRESHOLD = 300;
@@ -119,7 +119,7 @@ export function clusterNodesByLayer(
       const nodeTypes = [...new Set(clusteredNodes.map((n) => n.type))];
 
       // Get layer color from first node's config
-      const firstConfig = NODE_TYPE_CONFIG[clusteredNodes[0].type];
+      const firstConfig = nodeTypeConfigs[clusteredNodes[0].type];
       const color = firstConfig?.color ?? '#666';
 
       const cluster: ClusterNode = {

@@ -174,7 +174,7 @@ describe('schemaLayoutELK', () => {
     // v9.5: Layout changed from ELK containers to Dagre hierarchical graph
     // - Realm and Layer are now metaBadge nodes (not container groups)
     // - No parent/child relationships - flat graph with edges
-    // - HAS_LAYER and HAS_KIND edges connect the hierarchy
+    // - HAS_LAYER and HAS_CLASS edges connect the hierarchy (v11.8 ADR-023)
 
     it('should layout schema nodes with Dagre', async () => {
       const result = await applySchemaLayout(mockHierarchy);
@@ -227,9 +227,9 @@ describe('schemaLayoutELK', () => {
       const schemaNodes = result.nodes.filter(n => n.type === 'schemaNode');
       expect(schemaNodes).toHaveLength(13);
 
-      // v11.3: Connected by HAS_KIND edges (not parent relationships)
-      const hasKindEdges = result.edges.filter(e => e.data?.relationType === 'HAS_KIND');
-      expect(hasKindEdges.length).toBe(13);
+      // v11.8 ADR-023: Connected by HAS_CLASS edges (not parent relationships)
+      const hasClassEdges = result.edges.filter(e => e.data?.relationType === 'HAS_CLASS');
+      expect(hasClassEdges.length).toBe(13);
     });
 
     it('should position all nodes with valid coordinates', async () => {
@@ -247,14 +247,14 @@ describe('schemaLayoutELK', () => {
     it('should include business edges plus hierarchy edges', async () => {
       const result = await applySchemaLayout(mockHierarchy);
 
-      // v11.3: Total edges = HAS_LAYER + HAS_KIND + business edges
-      // 6 HAS_LAYER + 13 HAS_KIND + 2 business = 21
+      // v11.8 ADR-023: Total edges = HAS_LAYER + HAS_CLASS + business edges
+      // 6 HAS_LAYER + 13 HAS_CLASS + 2 business = 21
       const hasLayerEdges = result.edges.filter(e => e.data?.relationType === 'HAS_LAYER');
-      const hasKindEdges = result.edges.filter(e => e.data?.relationType === 'HAS_KIND');
+      const hasClassEdges = result.edges.filter(e => e.data?.relationType === 'HAS_CLASS');
       const businessEdges = result.edges.filter(e => !e.data?.isMetaEdge);
 
       expect(hasLayerEdges.length).toBe(6);
-      expect(hasKindEdges.length).toBe(13);
+      expect(hasClassEdges.length).toBe(13);
       expect(businessEdges.length).toBe(2); // Original mock edges
     });
 
@@ -334,13 +334,13 @@ describe('schemaLayoutELK', () => {
       const hierarchy = getSchemaHierarchy();
       const result = await applySchemaLayout(hierarchy);
 
-      // v9.5: Has HAS_LAYER, HAS_KIND, and business edges
+      // v11.8 ADR-023: Has HAS_LAYER, HAS_CLASS, and business edges
       const hasLayerEdges = result.edges.filter(e => e.data?.relationType === 'HAS_LAYER');
-      const hasKindEdges = result.edges.filter(e => e.data?.relationType === 'HAS_KIND');
+      const hasClassEdges = result.edges.filter(e => e.data?.relationType === 'HAS_CLASS');
       const businessEdges = result.edges.filter(e => !e.data?.isMetaEdge);
 
       expect(hasLayerEdges.length).toBeGreaterThan(0);
-      expect(hasKindEdges.length).toBeGreaterThan(0);
+      expect(hasClassEdges.length).toBeGreaterThan(0);
       expect(businessEdges.length).toBe(hierarchy.arcs.length);
     });
   });

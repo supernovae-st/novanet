@@ -8,7 +8,7 @@
 //! - [U] Tutorial: 5-step guided learning journey
 //!
 //! ## EXPLORE (Schema exploration)
-//! - [T] Traits: 5-trait constellation (invariant, localized, knowledge, generated, aggregated)
+//! - [T] Traits: 5-trait constellation (defined, authored, imported, generated, retrieved)
 //! - [L] Layers: 2-realm split view (Shared 4 layers | Org 6 layers)
 //! - [A] Arcs: Arc families and scope visualization
 //!
@@ -17,7 +17,7 @@
 //! - [Q] Quiz: Interactive taxonomy quiz
 //! - [V] Views: Schema views explorer (Query-First architecture)
 //!
-//! v11.7: 60 nodes (39 shared + 21 org), 10 layers (4 shared + 6 org).
+//! v11.8: 59 nodes (39 shared + 20 org), 10 layers (4 shared + 6 org).
 //! Progress persistence to ~/.novanet/tutorial_progress.json
 
 pub mod arcs;
@@ -59,15 +59,15 @@ pub use tutorial::TutorialState;
 /// Educational tips shown at the bottom of Nexus mode.
 /// Rotates through concepts about NovaNet's architecture.
 pub const TIPS: &[&str] = &[
-    "Knowledge is INPUT (savoir) - Localized is OUTPUT (generated)",
+    "Imported is INPUT (savoir) - Authored is OUTPUT (generated)",
     "Layers define WHAT a node does, Traits define HOW it behaves with locale",
-    "Content/Generated nodes have invariant parents (Entity→EntityContent, Page→PageGenerated)",
-    "Generation, NOT translation: Knowledge + Structure -> Native content",
+    "Content/Generated nodes have defined parents (Entity→EntityContent, Page→PageGenerated)",
+    "Generation, NOT translation: Imported + Structure -> Native content",
     "Shared realm is READ-ONLY - all business content lives in Org",
-    "Quick jump: gi=invariant, gl=localized, gk=knowledge, gg=generated, ga=aggregated",
-    "Knowledge nodes exist ONLY where needed (fr-FR: 20K Terms, sw-KE: 500)",
+    "Quick jump: gd=defined, ga=authored, gi=imported, gg=generated, gr=retrieved",
+    "Imported nodes exist ONLY where needed (fr-FR: 20K Terms, sw-KE: 500)",
     "Arc families: ownership, localization, semantic, generation, mining",
-    "Invariant = structure (solid border), Localized = output (dashed border)",
+    "defined = structure (solid border), authored = output (dashed border)",
     "Press 'n' to see the next tip!",
 ];
 
@@ -298,7 +298,7 @@ pub struct NexusState {
     pub drill_cursor: usize,
 
     // === Quick jump state ===
-    /// Pending 'g' key for quick jump sequences (gi, gl, gk, gg, ga).
+    /// Pending 'g' key for quick jump sequences (gd, ga, gi, gg, gr).
     pub pending_g: bool,
 
     // === Tips state ===
@@ -406,16 +406,16 @@ impl NexusState {
 
     /// Handle key input in Nexus mode. Returns true if state changed.
     pub fn handle_key(&mut self, key: KeyEvent) -> bool {
-        // Handle pending 'g' state for quick jump shortcuts (gi, gl, gk, gg, ga)
-        // v11.3: gd (derived) → gg (generated) + ga (aggregated)
+        // Handle pending 'g' state for quick jump shortcuts (gd, ga, gi, gg, gr)
+        // v11.8: Traits renamed per ADR-024 (data origin: defined/authored/imported/generated/retrieved)
         if self.pending_g {
             self.pending_g = false; // Clear pending state
             return match key.code {
-                KeyCode::Char('i') => self.jump_to_trait(0), // invariant
-                KeyCode::Char('l') => self.jump_to_trait(1), // localized
-                KeyCode::Char('k') => self.jump_to_trait(2), // knowledge
-                KeyCode::Char('g') => self.jump_to_trait(3), // generated (v11.3: gg)
-                KeyCode::Char('a') => self.jump_to_trait(4), // aggregated (v11.3: ga)
+                KeyCode::Char('d') => self.jump_to_trait(0), // defined (was invariant)
+                KeyCode::Char('a') => self.jump_to_trait(1), // authored (was localized)
+                KeyCode::Char('i') => self.jump_to_trait(2), // imported (was knowledge)
+                KeyCode::Char('g') => self.jump_to_trait(3), // generated
+                KeyCode::Char('r') => self.jump_to_trait(4), // retrieved (was aggregated)
                 KeyCode::Char('0') => {
                     // g0 = go to top (reset cursors)
                     self.trait_cursor = 0;
@@ -597,7 +597,7 @@ impl NexusState {
                 // Yank the current page title
                 let titles = [
                     "What is NovaNet?",
-                    "Meta vs Data Nodes",
+                    "Schema vs Instance Nodes",
                     "Classification Axes",
                 ];
                 titles.get(self.intro_page).map(|s| s.to_string())
@@ -614,9 +614,9 @@ impl NexusState {
             NexusTab::Traits => {
                 // v11.8: ADR-024 Data Origin semantics (5 traits)
                 let traits = [
-                    "defined",   // was: invariant
-                    "authored",  // was: localized
-                    "imported",  // was: knowledge
+                    "defined",  // was: invariant
+                    "authored", // was: localized
+                    "imported", // was: knowledge
                     "generated",
                     "retrieved", // was: aggregated
                 ];
@@ -1459,52 +1459,19 @@ mod tests {
     }
 
     #[test]
-    fn test_quick_jump_gi() {
+    fn test_quick_jump_gd() {
         let mut state = NexusState::new();
         state.tab = NexusTab::Layers; // Start on different tab
         state.trait_cursor = 3;
 
-        // Press 'g' then 'i' for invariant
+        // Press 'g' then 'd' for defined (v11.8: was invariant)
         state.handle_key(key_event(KeyCode::Char('g')));
         assert!(state.has_pending_g());
 
-        state.handle_key(key_event(KeyCode::Char('i')));
+        state.handle_key(key_event(KeyCode::Char('d')));
         assert!(!state.has_pending_g());
         assert_eq!(state.tab, NexusTab::Traits);
-        assert_eq!(state.trait_cursor, 0); // invariant = index 0
-    }
-
-    #[test]
-    fn test_quick_jump_gl() {
-        let mut state = NexusState::new();
-
-        state.handle_key(key_event(KeyCode::Char('g')));
-        state.handle_key(key_event(KeyCode::Char('l')));
-
-        assert_eq!(state.tab, NexusTab::Traits);
-        assert_eq!(state.trait_cursor, 1); // localized = index 1
-    }
-
-    #[test]
-    fn test_quick_jump_gk() {
-        let mut state = NexusState::new();
-
-        state.handle_key(key_event(KeyCode::Char('g')));
-        state.handle_key(key_event(KeyCode::Char('k')));
-
-        assert_eq!(state.tab, NexusTab::Traits);
-        assert_eq!(state.trait_cursor, 2); // knowledge = index 2
-    }
-
-    #[test]
-    fn test_quick_jump_gg() {
-        let mut state = NexusState::new();
-
-        state.handle_key(key_event(KeyCode::Char('g')));
-        state.handle_key(key_event(KeyCode::Char('g')));
-
-        assert_eq!(state.tab, NexusTab::Traits);
-        assert_eq!(state.trait_cursor, 3); // generated = index 3 (v11.3: gg)
+        assert_eq!(state.trait_cursor, 0); // defined = index 0
     }
 
     #[test]
@@ -1515,7 +1482,40 @@ mod tests {
         state.handle_key(key_event(KeyCode::Char('a')));
 
         assert_eq!(state.tab, NexusTab::Traits);
-        assert_eq!(state.trait_cursor, 4); // aggregated = index 4 (v11.3: ga)
+        assert_eq!(state.trait_cursor, 1); // authored = index 1
+    }
+
+    #[test]
+    fn test_quick_jump_gi() {
+        let mut state = NexusState::new();
+
+        state.handle_key(key_event(KeyCode::Char('g')));
+        state.handle_key(key_event(KeyCode::Char('i')));
+
+        assert_eq!(state.tab, NexusTab::Traits);
+        assert_eq!(state.trait_cursor, 2); // imported = index 2
+    }
+
+    #[test]
+    fn test_quick_jump_gg() {
+        let mut state = NexusState::new();
+
+        state.handle_key(key_event(KeyCode::Char('g')));
+        state.handle_key(key_event(KeyCode::Char('g')));
+
+        assert_eq!(state.tab, NexusTab::Traits);
+        assert_eq!(state.trait_cursor, 3); // generated = index 3
+    }
+
+    #[test]
+    fn test_quick_jump_gr() {
+        let mut state = NexusState::new();
+
+        state.handle_key(key_event(KeyCode::Char('g')));
+        state.handle_key(key_event(KeyCode::Char('r')));
+
+        assert_eq!(state.tab, NexusTab::Traits);
+        assert_eq!(state.trait_cursor, 4); // retrieved = index 4 (v11.8: was aggregated)
     }
 
     #[test]

@@ -28,23 +28,23 @@ views:
       RETURN n, r, m
       LIMIT 500
 
-  - id: meta-kinds
-    description: All NodeKinds with their Realm and Layer
+  - id: meta-classes
+    description: All NodeClasses with their Realm and Layer (v11.8 ADR-023)
     icon:
       web: boxes
-      terminal: "K"
+      terminal: "C"
     color: "#6366f1"
     category: meta
     modes: [meta]
     cypher: |
-      MATCH (k:Kind)
-      OPTIONAL MATCH (realm:Realm {key: k.realm})
-      OPTIONAL MATCH (layer:Layer {key: k.layer})
-      RETURN k, realm, layer
+      MATCH (c:Schema:Class)
+      OPTIONAL MATCH (realm:Realm {key: c.realm})
+      OPTIONAL MATCH (layer:Layer {key: c.layer})
+      RETURN c, realm, layer
       LIMIT 200
 
   - id: meta-arcs
-    description: ArcKinds with their families
+    description: ArcClasses with their families (v11.8 ADR-023)
     icon:
       web: git-branch
       terminal: "A"
@@ -52,8 +52,8 @@ views:
     category: meta
     modes: [meta]
     cypher: |
-      MATCH (ak:Meta:ArcKind)-[r:BELONGS_TO_FAMILY]->(af:Meta:ArcFamily)
-      RETURN ak, r, af
+      MATCH (ac:Schema:ArcClass)-[r:BELONGS_TO_FAMILY]->(af:Schema:ArcFamily)
+      RETURN ac, r, af
       LIMIT 200
 
 # =============================================================================

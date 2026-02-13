@@ -3,21 +3,21 @@
 // =============================================================================
 // Visual configuration for all 60 NovaNet node types
 // v11.5: SEO/GEO moved to shared/knowledge, 10 layers (4 shared + 6 org), 2 realms
-// NodeType, Layer, KIND_META imported from @novanet/core (Single Source of Truth)
+// NodeType, Layer, CLASS_TAXONOMY imported from @novanet/core (Single Source of Truth)
 
 import type { NodeType, Layer } from '@novanet/core/types';
-import { NODE_TYPES, KIND_META } from '@novanet/core/types';
+import { NODE_TYPES, CLASS_TAXONOMY } from '@novanet/core/types';
 
 // =============================================================================
 // NODE LAYERS (v11.5 - 10 layers, 60 nodes)
-// Derived from KIND_META — single source of truth
+// Derived from CLASS_TAXONOMY — single source of truth
 // =============================================================================
 
 /**
  * Node layers with their types (v11.5 - 60 nodes across 10 layers)
- * Derived from KIND_META in @novanet/core
+ * Derived from CLASS_TAXONOMY in @novanet/core
  */
-export const NODE_LAYERS: Record<Layer, NodeType[]> = Object.entries(KIND_META).reduce(
+export const NODE_LAYERS: Record<Layer, NodeType[]> = Object.entries(CLASS_TAXONOMY).reduce(
   (acc, [nodeType, meta]) => {
     if (!acc[meta.layer]) acc[meta.layer] = [];
     acc[meta.layer].push(nodeType as NodeType);
@@ -471,9 +471,9 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   // ==========================================================================
   // ORG REALM — INSTRUCTION LAYER (7 nodes)
   // ==========================================================================
-  PageType: {
-    type: 'PageType',
-    label: 'Page Type',
+  PageStructure: {
+    type: 'PageStructure',
+    label: 'Page Structure',
     icon: '📐',
     color: '#2563eb',
     colorClass: 'bg-blue-600',
@@ -489,18 +489,18 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 16,
     layer: 'instruction',
   },
-  PagePrompt: {
-    type: 'PagePrompt',
-    label: 'Page Prompt',
+  PageInstruction: {
+    type: 'PageInstruction',
+    label: 'Page Instruction',
     icon: '📝',
     color: '#3b82f6',
     colorClass: 'bg-blue-500',
     size: 14,
     layer: 'instruction',
   },
-  BlockPrompt: {
-    type: 'BlockPrompt',
-    label: 'Block Prompt',
+  BlockInstruction: {
+    type: 'BlockInstruction',
+    label: 'Block Instruction',
     icon: '📝',
     color: '#60a5fa',
     colorClass: 'bg-blue-400',
@@ -513,15 +513,6 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     icon: '📏',
     color: '#93c5fd',
     colorClass: 'bg-blue-300',
-    size: 12,
-    layer: 'instruction',
-  },
-  BlockInstruction: {
-    type: 'BlockInstruction',
-    label: 'Block Instruction',
-    icon: '📋',
-    color: '#7dd3fc',
-    colorClass: 'bg-sky-300',
     size: 12,
     layer: 'instruction',
   },
@@ -671,10 +662,6 @@ export const CORE_TYPES: NodeType[] = [
   'Locale',
 ];
 
-/**
- * Alias for backwards compatibility
- */
-export const NODE_TYPE_CONFIG = nodeTypeConfigs;
 
 /**
  * Layer configuration for hierarchical display (v11.3)
@@ -778,6 +765,15 @@ export const NODE_VISUAL_LAYERS: LayerConfig[] = [
 export function getLayerConfig(layerId: Layer): LayerConfig | undefined {
   return NODE_VISUAL_LAYERS.find((c) => c.id === layerId);
 }
+
+// =============================================================================
+// ALIASES
+// =============================================================================
+
+/**
+ * Alias for nodeTypeConfigs (used throughout the codebase)
+ */
+export const NODE_TYPE_CONFIG = nodeTypeConfigs;
 
 // =============================================================================
 // VALIDATION: Ensure nodeTypeConfigs covers all NODE_TYPES from Core

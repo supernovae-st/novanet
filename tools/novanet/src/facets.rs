@@ -160,14 +160,14 @@ mod tests {
         let json = r#"{
             "realms": ["shared"],
             "layers": ["knowledge", "config"],
-            "traits": ["invariant"],
+            "traits": ["defined"],
             "arc_families": [],
             "kinds": []
         }"#;
         let f = FacetFilter::from_json(json).unwrap();
         assert_eq!(f.realms, vec!["shared"]);
         assert_eq!(f.layers, vec!["knowledge", "config"]);
-        assert_eq!(f.trait_filters, vec!["invariant"]);
+        assert_eq!(f.trait_filters, vec!["defined"]);
         assert!(f.arc_families.is_empty());
         assert!(f.kinds.is_empty());
     }
@@ -187,11 +187,11 @@ mod tests {
 
     #[test]
     fn roundtrip_json() {
-        // v11.5: shared realm has knowledge layer (SEO/GEO nodes consolidated there)
+        // v0.12.0: ADR-024 trait renames (generated unchanged, aggregated→retrieved)
         let original = FacetFilter::from_cli(
             Some("shared"),
             Some("knowledge"),
-            Some("generated,aggregated"),
+            Some("generated,retrieved"),
             Some("mining"),
             None,
         );

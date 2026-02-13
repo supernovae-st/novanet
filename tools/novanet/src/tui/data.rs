@@ -307,20 +307,20 @@ pub struct Neo4jArc {
     pub family: String,     // e.g., "localization", "ownership"
 }
 
-/// Complete arc data for a Kind, loaded from Neo4j.
+/// Complete arc data for a Class, loaded from Neo4j.
 #[derive(Debug, Clone, Default)]
 pub struct KindArcsData {
-    pub kind_label: String,
+    pub class_label: String,
     pub realm: String,
     pub layer: String,
     pub incoming: Vec<Neo4jArc>,
     pub outgoing: Vec<Neo4jArc>,
 }
 
-/// Endpoint info for an ArcKind (from/to Kind).
+/// Endpoint info for an ArcClass (from/to Class).
 #[derive(Debug, Clone)]
 pub struct ArcEndpoint {
-    pub kind_label: String,
+    pub class_label: String,
     pub realm: String,
     pub layer: String,
 }
@@ -417,10 +417,10 @@ impl TaxonomyTree {
         // Query all Kinds with their realm, layer, trait, and instance count
         // Note: Kind uses 'label' property as identifier, not 'key'
         let cypher = r#"
-MATCH (k:Kind:Meta)
+MATCH (k:Class:Schema)
 OPTIONAL MATCH (k)-[:IN_REALM]->(r:Realm)
 OPTIONAL MATCH (k)-[:IN_LAYER]->(l:Layer)
-OPTIONAL MATCH (n)-[:OF_KIND]->(k)
+OPTIONAL MATCH (n)-[:OF_CLASS]->(k)
 WITH k, r, l, count(n) AS instances
 RETURN
     k.label AS kind_key,
@@ -673,15 +673,15 @@ ORDER BY realm_key, layer_key, kind_key
     /// Fetch arcs as a map (for parallel loading).
     async fn fetch_arcs(db: &Db) -> crate::Result<BTreeMap<String, Vec<ArcInfo>>> {
         let cypher = r#"
-MATCH (ak:ArcKind:Meta)-[:FROM_KIND]->(fromKind:Kind:Meta)
-MATCH (ak)-[:TO_KIND]->(toKind:Kind:Meta)
+MATCH (ak:ArcClass:Schema)-[:FROM_CLASS]->(fromKind:Class:Schema)
+MATCH (ak)-[:TO_CLASS]->(toKind:Class:Schema)
 RETURN fromKind.label AS kind_key, ak.key AS arc_type, 'outgoing' AS direction, toKind.label AS target_kind
 ORDER BY fromKind.label, ak.key
 
 UNION
 
-MATCH (ak:ArcKind:Meta)-[:FROM_KIND]->(fromKind:Kind:Meta)
-MATCH (ak)-[:TO_KIND]->(toKind:Kind:Meta)
+MATCH (ak:ArcClass:Schema)-[:FROM_CLASS]->(fromKind:Class:Schema)
+MATCH (ak)-[:TO_CLASS]->(toKind:Class:Schema)
 RETURN toKind.label AS kind_key, ak.key AS arc_type, 'incoming' AS direction, fromKind.label AS target_kind
 ORDER BY toKind.label, ak.key
 "#;
@@ -718,9 +718,9 @@ ORDER BY toKind.label, ak.key
     /// Fetch arc families (for parallel loading).
     async fn fetch_arc_families(db: &Db) -> crate::Result<Vec<ArcFamilyInfo>> {
         let cypher = r#"
-MATCH (ak:ArcKind:Meta)-[:IN_FAMILY]->(af:ArcFamily:Meta)
-MATCH (ak)-[:FROM_KIND]->(fromKind:Kind:Meta)
-MATCH (ak)-[:TO_KIND]->(toKind:Kind:Meta)
+MATCH (ak:ArcClass:Schema)-[:IN_FAMILY]->(af:ArcFamily:Schema)
+MATCH (ak)-[:FROM_CLASS]->(fromKind:Class:Schema)
+MATCH (ak)-[:TO_CLASS]->(toKind:Class:Schema)
 RETURN
     af.key AS family_key,
     coalesce(af.display_name, af.key) AS family_display,
@@ -777,7 +777,7 @@ ORDER BY family_key, arc_key
             .collect())
     }
 
-    /// Load instances of a Kind from Neo4j for Data view.
+    /// Load instances of a Class from Neo4j for Data view.
     /// Returns (instances, total_count) - instances are limited to INSTANCE_LIMIT, total is the real count.
     ///
     /// Performance: Uses a two-pass query strategy for large datasets:
@@ -787,25 +787,25 @@ ORDER BY family_key, arc_key
     /// This avoids scanning all nodes (e.g., 9100 SEOKeyword) for arc collection.
     pub async fn load_instances(
         db: &Db,
-        kind_label: &str,
+        class_label: &str,
     ) -> crate::Result<(Vec<InstanceInfo>, usize)> {
         // Security: Validate label before interpolation into Cypher
-        validate_cypher_label(kind_label)?;
+        validate_cypher_label(class_label)?;
 
         // Pass 1: Get total count AND first N keys in a single fast query (index-based)
         let keys_cypher = format!(
             r#"
-MATCH (n:{kind_label})
-WHERE NOT n:Meta
+MATCH (n:{class_label})
+WHERE NOT n:Schema
 WITH count(n) AS total
-MATCH (n:{kind_label})
-WHERE NOT n:Meta
+MATCH (n:{class_label})
+WHERE NOT n:Schema
 WITH total, n.key AS key
 ORDER BY key
 LIMIT {limit}
 RETURN collect(key) AS keys, total
 "#,
-            kind_label = kind_label,
+            class_label = class_label,
             limit = INSTANCE_LIMIT
         );
         let keys_rows = db.execute(&keys_cypher).await?;
@@ -828,7 +828,7 @@ RETURN collect(key) AS keys, total
         let cypher = format!(
             r#"
 UNWIND $keys AS k
-MATCH (n:{kind_label} {{key: k}})
+MATCH (n:{class_label} {{key: k}})
 OPTIONAL MATCH (n)-[out]->(target)
 WHERE NOT target:Meta
 WITH n, k, collect(DISTINCT {{
@@ -851,7 +851,7 @@ RETURN
     incoming
 ORDER BY key
 "#,
-            kind_label = kind_label
+            class_label = class_label
         );
 
         // Execute with parameterized keys (safe from injection)
@@ -914,7 +914,7 @@ ORDER BY key
             instances.push(InstanceInfo {
                 key,
                 display_name,
-                kind_key: kind_label.to_string(),
+                kind_key: class_label.to_string(),
                 properties: props,
                 outgoing_arcs,
                 incoming_arcs,
@@ -933,19 +933,19 @@ ORDER BY key
     /// Arcs should be loaded separately via `load_instance_arcs()`.
     pub async fn load_instances_fast(
         db: &Db,
-        kind_label: &str,
+        class_label: &str,
     ) -> crate::Result<(Vec<InstanceInfo>, usize)> {
         // Security: Validate label before interpolation into Cypher
-        validate_cypher_label(kind_label)?;
+        validate_cypher_label(class_label)?;
 
         // Single fast query: get keys + display_name + basic props (no arc traversal)
         let cypher = format!(
             r#"
-MATCH (n:{kind_label})
-WHERE NOT n:Meta
+MATCH (n:{class_label})
+WHERE NOT n:Schema
 WITH count(n) AS total
-MATCH (n:{kind_label})
-WHERE NOT n:Meta
+MATCH (n:{class_label})
+WHERE NOT n:Schema
 WITH total, n
 ORDER BY n.key
 LIMIT {limit}
@@ -955,7 +955,7 @@ RETURN
     coalesce(n.display_name, n.key, n.label) AS display_name,
     properties(n) AS props
 "#,
-            kind_label = kind_label,
+            class_label = class_label,
             limit = INSTANCE_LIMIT
         );
 
@@ -986,7 +986,7 @@ RETURN
             instances.push(InstanceInfo {
                 key,
                 display_name,
-                kind_key: kind_label.to_string(),
+                kind_key: class_label.to_string(),
                 properties: props,
                 outgoing_arcs: Vec::new(), // Empty - will be loaded separately
                 incoming_arcs: Vec::new(), // Empty - will be loaded separately
@@ -1004,7 +1004,7 @@ RETURN
     /// Called AFTER `load_instances_fast()` to populate arc data in background.
     pub async fn load_instance_arcs(
         db: &Db,
-        kind_label: &str,
+        class_label: &str,
         keys: Vec<String>,
     ) -> crate::Result<FxHashMap<String, (Vec<InstanceArc>, Vec<InstanceArc>)>> {
         if keys.is_empty() {
@@ -1012,12 +1012,12 @@ RETURN
         }
 
         // Security: Validate label
-        validate_cypher_label(kind_label)?;
+        validate_cypher_label(class_label)?;
 
         let cypher = format!(
             r#"
 UNWIND $keys AS k
-MATCH (n:{kind_label} {{key: k}})
+MATCH (n:{class_label} {{key: k}})
 OPTIONAL MATCH (n)-[out]->(target)
 WHERE NOT target:Meta
 WITH n, k, collect(DISTINCT {{
@@ -1034,7 +1034,7 @@ WITH n, k, outgoing, collect(DISTINCT {{
 }}) AS incoming
 RETURN k AS key, outgoing, incoming
 "#,
-            kind_label = kind_label
+            class_label = class_label
         );
 
         let rows = db.execute_with_params(&cypher, [("keys", keys)]).await?;
@@ -1090,13 +1090,13 @@ RETURN k AS key, outgoing, incoming
     /// Load graph statistics.
     async fn load_stats(db: &Db) -> crate::Result<GraphStats> {
         let cypher = r#"
-MATCH (n) WHERE NOT n:Meta
+MATCH (n) WHERE NOT n:Schema
 WITH count(n) AS nodes
-MATCH ()-[r]->() WHERE NOT startNode(r):Meta AND NOT endNode(r):Meta
+MATCH ()-[r]->() WHERE NOT startNode(r):Schema AND NOT endNode(r):Schema
 WITH nodes, count(r) AS arcs
-MATCH (k:Kind:Meta)
+MATCH (k:Class:Schema)
 WITH nodes, arcs, count(k) AS kinds
-MATCH (ak:ArcKind:Meta)
+MATCH (ak:ArcClass:Schema)
 RETURN nodes, arcs, kinds, count(ak) AS arc_kinds
 "#;
 
@@ -1113,23 +1113,23 @@ RETURN nodes, arcs, kinds, count(ak) AS arc_kinds
         }
     }
 
-    /// Load arc relationships for a Kind from Neo4j.
+    /// Load arc relationships for a Class from Neo4j.
     /// Returns incoming and outgoing arcs with their families.
-    pub async fn load_kind_arcs(db: &Db, kind_label: &str) -> crate::Result<KindArcsData> {
+    pub async fn load_class_arcs(db: &Db, class_label: &str) -> crate::Result<KindArcsData> {
         let cypher = r#"
-MATCH (k:Kind {label: $kindLabel})
-OPTIONAL MATCH (k)-[:IN_LAYER]->(l:Layer)
+MATCH (c:Class {label: $classLabel})
+OPTIONAL MATCH (c)-[:IN_LAYER]->(l:Layer)
 OPTIONAL MATCH (l)<-[:HAS_LAYER]-(r:Realm)
-OPTIONAL MATCH (k)<-[:TO_KIND]-(inArc:ArcKind)-[:FROM_KIND]->(fromKind:Kind)
+OPTIONAL MATCH (c)<-[:TO_CLASS]-(inArc:ArcClass)-[:FROM_CLASS]->(fromClass:Class)
 OPTIONAL MATCH (inArc)-[:IN_FAMILY]->(inFamily:ArcFamily)
-OPTIONAL MATCH (k)<-[:FROM_KIND]-(outArc:ArcKind)-[:TO_KIND]->(toKind:Kind)
+OPTIONAL MATCH (c)<-[:FROM_CLASS]-(outArc:ArcClass)-[:TO_CLASS]->(toClass:Class)
 OPTIONAL MATCH (outArc)-[:IN_FAMILY]->(outFamily:ArcFamily)
-WITH k, r, l,
+WITH c, r, l,
      collect(DISTINCT CASE WHEN inArc IS NOT NULL
-         THEN {arc: inArc.key, from: fromKind.label, family: inFamily.key} END) as incoming,
+         THEN {arc: inArc.key, from: fromClass.label, family: inFamily.key} END) as incoming,
      collect(DISTINCT CASE WHEN outArc IS NOT NULL
-         THEN {arc: outArc.key, to: toKind.label, family: outFamily.key} END) as outgoing
-RETURN k.label as kind,
+         THEN {arc: outArc.key, to: toClass.label, family: outFamily.key} END) as outgoing
+RETURN c.label as class,
        r.key as realm,
        l.key as layer,
        [x IN incoming WHERE x IS NOT NULL] as incoming,
@@ -1138,11 +1138,11 @@ LIMIT 1
 "#;
 
         let rows = db
-            .execute_with_params(cypher, [("kindLabel", kind_label)])
+            .execute_with_params(cypher, [("classLabel", class_label)])
             .await?;
 
         if let Some(row) = rows.into_iter().next() {
-            let kind: String = row.get("kind").unwrap_or_default();
+            let class: String = row.get("class").unwrap_or_default();
             let realm: String = row.get("realm").unwrap_or_default();
             let layer: String = row.get("layer").unwrap_or_default();
 
@@ -1183,7 +1183,7 @@ LIMIT 1
                 .collect();
 
             Ok(KindArcsData {
-                kind_label: kind,
+                class_label: class,
                 realm,
                 layer,
                 incoming,
@@ -1197,23 +1197,23 @@ LIMIT 1
     /// Load ArcKind details from Neo4j (endpoints, family, cardinality).
     pub async fn load_arc_kind_details(db: &Db, arc_key: &str) -> crate::Result<ArcKindDetails> {
         let cypher = r#"
-MATCH (ak:ArcKind {key: $arcKey})
-OPTIONAL MATCH (ak)-[:IN_FAMILY]->(af:ArcFamily)
-OPTIONAL MATCH (ak)-[:FROM_KIND]->(fromKind:Kind)
-OPTIONAL MATCH (fromKind)-[:IN_LAYER]->(fromLayer:Layer)
+MATCH (ac:ArcClass {key: $arcKey})
+OPTIONAL MATCH (ac)-[:IN_FAMILY]->(af:ArcFamily)
+OPTIONAL MATCH (ac)-[:FROM_CLASS]->(fromClass:Class)
+OPTIONAL MATCH (fromClass)-[:IN_LAYER]->(fromLayer:Layer)
 OPTIONAL MATCH (fromLayer)<-[:HAS_LAYER]-(fromRealm:Realm)
-OPTIONAL MATCH (ak)-[:TO_KIND]->(toKind:Kind)
-OPTIONAL MATCH (toKind)-[:IN_LAYER]->(toLayer:Layer)
+OPTIONAL MATCH (ac)-[:TO_CLASS]->(toClass:Class)
+OPTIONAL MATCH (toClass)-[:IN_LAYER]->(toLayer:Layer)
 OPTIONAL MATCH (toLayer)<-[:HAS_LAYER]-(toRealm:Realm)
-RETURN coalesce(ak.display_name, ak.key) as display_name,
-       coalesce(ak.llm_context, '') as description,
-       coalesce(ak.cardinality, '') as cardinality,
-       coalesce(ak.cypher_pattern, '') as cypher_pattern,
+RETURN coalesce(ac.display_name, ac.key) as display_name,
+       coalesce(ac.llm_context, '') as description,
+       coalesce(ac.cardinality, '') as cardinality,
+       coalesce(ac.cypher_pattern, '') as cypher_pattern,
        coalesce(af.key, '') as family,
-       fromKind.label as from_kind,
+       fromClass.label as from_kind,
        coalesce(fromRealm.key, '') as from_realm,
        coalesce(fromLayer.key, '') as from_layer,
-       toKind.label as to_kind,
+       toClass.label as to_kind,
        coalesce(toRealm.key, '') as to_realm,
        coalesce(toLayer.key, '') as to_layer
 LIMIT 1
@@ -1230,22 +1230,22 @@ LIMIT 1
             let cypher_pattern: String = row.get("cypher_pattern").unwrap_or_default();
             let family: String = row.get("family").unwrap_or_default();
 
-            let from_kind: Option<String> = row.get("from_kind").ok();
+            let from_class: Option<String> = row.get("from_kind").ok();
             let from_realm: String = row.get("from_realm").unwrap_or_default();
             let from_layer: String = row.get("from_layer").unwrap_or_default();
 
-            let to_kind: Option<String> = row.get("to_kind").ok();
+            let to_class: Option<String> = row.get("to_kind").ok();
             let to_realm: String = row.get("to_realm").unwrap_or_default();
             let to_layer: String = row.get("to_layer").unwrap_or_default();
 
-            let from_endpoint = from_kind.map(|kind_label| ArcEndpoint {
-                kind_label,
+            let from_endpoint = from_class.map(|class_label| ArcEndpoint {
+                class_label,
                 realm: from_realm,
                 layer: from_layer,
             });
 
-            let to_endpoint = to_kind.map(|kind_label| ArcEndpoint {
-                kind_label,
+            let to_endpoint = to_class.map(|class_label| ArcEndpoint {
+                class_label,
                 realm: to_realm,
                 layer: to_layer,
             });
@@ -1269,20 +1269,20 @@ LIMIT 1
         // Query 1: Get realm info and totals
         let cypher_realm = r#"
 MATCH (r:Realm {key: $realmKey})
-OPTIONAL MATCH (r)-[:HAS_LAYER]->(l:Layer)<-[:IN_LAYER]-(k:Kind)
-OPTIONAL MATCH (k)<-[:OF_KIND]-(n)
+OPTIONAL MATCH (r)-[:HAS_LAYER]->(l:Layer)<-[:IN_LAYER]-(c:Class)
+OPTIONAL MATCH (c)<-[:OF_CLASS]-(n)
 RETURN r.key as realm_key,
        coalesce(r.display_name, r.key) as display_name,
        coalesce(r.llm_context, '') as description,
-       count(DISTINCT k) as total_kinds,
+       count(DISTINCT c) as total_kinds,
        count(DISTINCT n) as total_instances
 "#;
 
         // Query 2: Get layers with their kind counts (separate rows)
         let cypher_layers = r#"
 MATCH (r:Realm {key: $realmKey})-[:HAS_LAYER]->(l:Layer)
-OPTIONAL MATCH (l)<-[:IN_LAYER]-(k:Kind)
-WITH l, count(DISTINCT k) as kind_count
+OPTIONAL MATCH (l)<-[:IN_LAYER]-(c:Class)
+WITH l, count(DISTINCT c) as kind_count
 ORDER BY l.order
 RETURN l.key as layer_key,
        coalesce(l.display_name, l.key) as layer_display,
@@ -1332,12 +1332,12 @@ RETURN l.key as layer_key,
         let cypher = r#"
 MATCH (l:Layer {key: $layerKey})
 OPTIONAL MATCH (r:Realm)-[:HAS_LAYER]->(l)
-OPTIONAL MATCH (l)<-[:IN_LAYER]-(k:Kind)
-OPTIONAL MATCH (k)-[:HAS_TRAIT]->(t:Trait)
-OPTIONAL MATCH (k)<-[:OF_KIND]-(n)
-WITH l, r, t.key as trait_key, k, count(DISTINCT n) as inst_count
-ORDER BY trait_key, k.label
-WITH l, r, trait_key, collect(coalesce(k.display_name, k.label)) as kind_names, count(k) as trait_kind_count, sum(inst_count) as trait_instances
+OPTIONAL MATCH (l)<-[:IN_LAYER]-(c:Class)
+OPTIONAL MATCH (c)-[:HAS_TRAIT]->(t:Trait)
+OPTIONAL MATCH (c)<-[:OF_CLASS]-(n)
+WITH l, r, t.key as trait_key, c, count(DISTINCT n) as inst_count
+ORDER BY trait_key, c.label
+WITH l, r, trait_key, collect(coalesce(c.display_name, c.label)) as kind_names, count(c) as trait_kind_count, sum(inst_count) as trait_instances
 RETURN l.key as layer_key,
        coalesce(l.display_name, l.key) as display_name,
        coalesce(l.llm_context, '') as description,
@@ -3355,13 +3355,13 @@ mod tests {
 
     #[tokio::test]
     #[ignore] // Requires running Neo4j
-    async fn test_load_kind_arcs_integration() {
+    async fn test_load_class_arcs_integration() {
         let db = crate::db::Db::connect("bolt://localhost:7687", "neo4j", "novanetpassword")
             .await
             .expect("Failed to connect to Neo4j");
 
-        // Load arcs for a Kind that should have relationships
-        let result = TaxonomyTree::load_kind_arcs(&db, "Page").await;
+        // Load arcs for a Class that should have relationships
+        let result = TaxonomyTree::load_class_arcs(&db, "Page").await;
 
         match result {
             Ok(arcs_data) => {
@@ -3371,7 +3371,7 @@ mod tests {
                 let _ = arcs_data.outgoing.len();
             }
             Err(e) => {
-                panic!("load_kind_arcs failed: {}", e);
+                panic!("load_class_arcs failed: {}", e);
             }
         }
     }

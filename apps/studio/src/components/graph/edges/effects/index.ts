@@ -25,14 +25,16 @@ export { SonarPulse } from './SonarPulse';           // Mining: Sonar pulse disc
 export { SelectionEffect } from './SelectionEffect'; // Direction, differentiation, transitions
 
 // ============================================================================
-// LEGACY SYSTEM (kept for backwards compatibility)
+// EFFECT RENDERER
 // ============================================================================
 
-// Renderer
 export { EffectRenderer, releaseEdgeAnimationSlot, shouldRenderEffect } from './EffectRenderer';
 export type { EffectRendererProps, BatchEffectConfig } from './EffectRenderer';
 
-// Primitives
+// ============================================================================
+// EFFECT PRIMITIVES
+// ============================================================================
+
 export {
   EmitPrimitive,
   ImpactPrimitive,

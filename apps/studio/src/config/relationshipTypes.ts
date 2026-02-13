@@ -34,11 +34,10 @@ export const RELATIONSHIP_CATEGORIES: Record<RelationshipCategory, RelationType[
     'HAS_PAGE',
     'HAS_BRAND_IDENTITY',
     'HAS_BLOCK',
-    'HAS_PROMPT',
+    'HAS_INSTRUCTION',
     'HAS_RULES',
   ],
   // Localization: Locale assignment (5 relations)
-  // v11.6: L10N_OF, HAS_LOCALIZED_CONTENT removed (deprecated per ADR-014)
   localization: [
     'HAS_CONTENT',
     'CONTENT_OF',
@@ -70,9 +69,10 @@ export const RELATIONSHIP_CATEGORIES: Record<RelationshipCategory, RelationType[
     'USED_BY',
     'BELONGS_TO',
   ],
-  // Structure: Hierarchical structure (4 relations)
+  // Structure: Hierarchical structure (5 relations)
   structure: [
     'OF_TYPE',
+    'HAS_STRUCTURE',
     'SUBTOPIC_OF',
     'BELONGS_TO_PROJECT_CONTENT',
     'BLOCK_OF',
@@ -146,9 +146,9 @@ export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfi
     color: '#2563eb',  // blue-600
     category: 'ownership',
   },
-  HAS_PROMPT: {
-    type: 'HAS_PROMPT',
-    label: 'Has Prompt',
+  HAS_INSTRUCTION: {
+    type: 'HAS_INSTRUCTION',
+    label: 'Has Instruction',
     color: '#1d4ed8',  // blue-700
     category: 'ownership',
   },
@@ -310,12 +310,18 @@ export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfi
   },
 
   // ==========================================================================
-  // STRUCTURE CATEGORY (4 relations) - cyan (matches LAYER_COLORS.structure)
+  // STRUCTURE CATEGORY (5 relations) - cyan (matches LAYER_COLORS.structure)
   // ==========================================================================
   OF_TYPE: {
     type: 'OF_TYPE',
     label: 'Of Type',
     color: '#06b6d4',  // cyan-500
+    category: 'structure',
+  },
+  HAS_STRUCTURE: {
+    type: 'HAS_STRUCTURE',
+    label: 'Has Structure',
+    color: '#0284c7',  // sky-600
     category: 'structure',
   },
   SUBTOPIC_OF: {
@@ -539,7 +545,3 @@ export function getRelationshipColor(type: string): string {
   return config?.color || '#6b7280';
 }
 
-/**
- * Alias for backwards compatibility with relationshipColors.ts
- */
-export const RELATIONSHIP_TYPE_CONFIG = relationshipTypeConfigs;

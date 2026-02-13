@@ -16,8 +16,8 @@ export {
   type Trait,
   NODE_TRAITS,
   type Layer,
-  type KindMeta,
-  KIND_META,
+  type Classification,
+  CLASS_TAXONOMY,
 } from '@novanet/core/types';
 
 // Standard properties and domain types (v10.4: Entity-Centric, no GEO layer)
@@ -30,7 +30,7 @@ export type {
   Entity,
   EntityContent,
   Page,
-  PageType,
+  PageStructure,
   PageGenerated,
   Block,
   BlockType,
@@ -44,9 +44,9 @@ export type {
   Expression,
   SEOKeyword,
   SEOKeywordMetrics,
-  // Prompts
-  PagePrompt,
-  BlockPrompt,
+  // Instructions (v11.8: renamed from Prompts per ADR-025)
+  PageInstruction,
+  BlockInstruction,
   BlockRules,
   // Relation props
   SemanticLinkProps,

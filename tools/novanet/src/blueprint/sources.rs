@@ -56,22 +56,22 @@ impl BlueprintData {
         Ok(data)
     }
 
-    /// Query Neo4j for meta node counts.
+    /// Query Neo4j for schema node counts.
     ///
-    /// Uses correct labels and property names:
-    /// - `:Meta:Kind` nodes have `label` property (e.g., "Page", "Entity")
-    /// - `:Meta:ArcKind` nodes have `key` property (e.g., "HAS_PAGE", "USES_ENTITY")
+    /// Uses correct labels and property names (ADR-023 v0.12.0):
+    /// - `:Schema:Class` nodes have `label` property (e.g., "Page", "Entity")
+    /// - `:Schema:ArcClass` nodes have `key` property (e.g., "HAS_PAGE", "USES_ENTITY")
     async fn query_neo4j_counts(db: &Db) -> crate::Result<Neo4jCounts> {
-        // Count NodeKind meta nodes (double-label :Meta:Kind, property: label)
-        let node_query = "MATCH (n:Meta:Kind) RETURN n.label AS name ORDER BY n.label";
+        // Count Class schema nodes (double-label :Schema:Class, property: label)
+        let node_query = "MATCH (c:Schema:Class) RETURN c.label AS name ORDER BY c.label";
         let node_rows = db.execute(node_query).await?;
         let node_kind_names: Vec<String> = node_rows
             .iter()
             .filter_map(|row: &neo4rs::Row| row.get::<String>("name").ok())
             .collect();
 
-        // Count ArcKind meta nodes (double-label :Meta:ArcKind, property: key)
-        let arc_query = "MATCH (a:Meta:ArcKind) RETURN a.key AS name ORDER BY a.key";
+        // Count ArcClass schema nodes (double-label :Schema:ArcClass, property: key)
+        let arc_query = "MATCH (ac:Schema:ArcClass) RETURN ac.key AS name ORDER BY ac.key";
         let arc_rows = db.execute(arc_query).await?;
         let arc_kind_names: Vec<String> = arc_rows
             .iter()

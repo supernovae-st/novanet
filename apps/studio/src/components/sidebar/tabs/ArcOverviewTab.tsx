@@ -17,7 +17,7 @@ import { memo, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { motion } from 'motion/react';
 import { ArrowRight, Clock, Hash } from 'lucide-react';
-import { KIND_META } from '@novanet/core/types';
+import { CLASS_TAXONOMY } from '@novanet/core/types';
 import type { Layer, Realm, Trait } from '@novanet/core/types';
 import { cn } from '@/lib/utils';
 import { useCopyFeedback } from '@/hooks';
@@ -136,12 +136,12 @@ function getNodeClassification(node: GraphNode | null): {
   if (!node) {
     return { layer: 'foundation', realm: 'org', trait: 'defined' };
   }
-  const kindMeta = KIND_META[node.type];
+  const classification = CLASS_TAXONOMY[node.type];
   const config = NODE_TYPE_CONFIG[node.type];
   return {
     layer: (config?.layer ?? 'foundation') as Layer,
-    realm: (kindMeta?.realm ?? 'org') as Realm,
-    trait: (kindMeta?.trait ?? 'defined') as Trait,
+    realm: (classification?.realm ?? 'org') as Realm,
+    trait: (classification?.trait ?? 'defined') as Trait,
   };
 }
 

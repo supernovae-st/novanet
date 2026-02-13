@@ -23,9 +23,9 @@ type TransitionPhase = 'idle' | 'dissolve' | 'rain' | 'materialize';
 
 interface MatrixTransitionProps {
   isActive: boolean;
-  /** v11.6.1: Pass color directly instead of looking up from deprecated VIEW_TYPES */
+  /** Pass color directly (preferred) */
   color?: string;
-  /** @deprecated Use color prop instead - viewId lookup is deprecated */
+  /** Unused - use color prop instead */
   viewId?: string | null;
   onComplete?: () => void;
   className?: string;
@@ -163,7 +163,7 @@ const MatrixRainCanvas = memo(function MatrixRainCanvas({
 export const MatrixTransition = memo(function MatrixTransition({
   isActive,
   color: colorProp,
-  viewId: _viewId, // deprecated, kept for backward compatibility
+  viewId: _viewId, // unused, color prop preferred
   onComplete,
   className,
 }: MatrixTransitionProps) {

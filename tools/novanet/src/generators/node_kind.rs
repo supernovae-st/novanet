@@ -1,6 +1,6 @@
 //! Generate Class meta-nodes + schema_hint, context_budget + facet relations.
 //!
-//! Reads all 58 YAML node definitions (v0.12.0 / ADR-025) and produces idempotent MERGE statements
+//! Reads all 59 YAML node definitions (v0.12.0 / ADR-025) and produces idempotent MERGE statements
 //! for Class nodes with auto-computed properties, plus hierarchy and facet rels.
 //!
 //! v11.8 (ADR-023): Kind → Class, :Meta:Kind → :Schema:Class, [:HAS_KIND] → [:HAS_CLASS]
@@ -451,12 +451,7 @@ mod tests {
         );
         // config layer → medium
         assert_eq!(
-            context_budget(&make_node(
-                "Locale",
-                "shared",
-                "config",
-                NodeTrait::Defined
-            )),
+            context_budget(&make_node("Locale", "shared", "config", NodeTrait::Defined)),
             "medium"
         );
         // structure layer + invariant → high
@@ -581,43 +576,43 @@ mod tests {
             .generate(root)
             .expect("should generate kind cypher");
 
-        // v0.12.0: 58 Class MERGE statements (ADR-023: :Schema:Class)
+        // v0.12.0: 59 Class MERGE statements (ADR-023: :Schema:Class)
         let class_merges = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Schema:Class"))
             .count();
         assert_eq!(
-            class_merges, 58,
-            "expected 58 Class MERGE statements (v0.12.0: 39 shared + 19 org)"
+            class_merges, 59,
+            "expected 59 Class MERGE statements (v0.12.0: 39 shared + 20 org)"
         );
 
-        // 58 HAS_CLASS relationships (v0.12.0: renamed from HAS_KIND in v11.8)
+        // 59 HAS_CLASS relationships (v0.12.0: renamed from HAS_KIND in v11.8)
         let has_class = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_CLASS]"))
             .count();
-        assert_eq!(has_class, 58, "expected 58 HAS_CLASS relationships");
+        assert_eq!(has_class, 59, "expected 59 HAS_CLASS relationships");
 
-        // 58 IN_REALM relationships
+        // 59 IN_REALM relationships
         let in_realm = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_REALM]"))
             .count();
-        assert_eq!(in_realm, 58, "expected 58 IN_REALM relationships");
+        assert_eq!(in_realm, 59, "expected 59 IN_REALM relationships");
 
-        // 58 IN_LAYER relationships
+        // 59 IN_LAYER relationships
         let in_layer = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_LAYER]"))
             .count();
-        assert_eq!(in_layer, 58, "expected 58 IN_LAYER relationships");
+        assert_eq!(in_layer, 59, "expected 59 IN_LAYER relationships");
 
-        // 58 EXHIBITS relationships
+        // 59 EXHIBITS relationships
         let exhibits = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:EXHIBITS]"))
             .count();
-        assert_eq!(exhibits, 58, "expected 58 EXHIBITS relationships");
+        assert_eq!(exhibits, 59, "expected 59 EXHIBITS relationships");
 
         // Spot checks — specific Classes (v11.8: c_ prefix, :Schema:Class)
         assert!(cypher.contains("c_Project:Schema:Class {label: 'Project'}"));
@@ -648,8 +643,8 @@ mod tests {
             }
         }
 
-        // v0.12.0: Header mentions 58 Class nodes (ADR-023)
-        assert!(cypher.contains("58 Class nodes"));
+        // v0.12.0: Header mentions 59 Class nodes (ADR-023)
+        assert!(cypher.contains("59 Class nodes"));
 
         // v10.1: knowledge_tier removed from all YAMLs (node type is sufficient)
         assert!(

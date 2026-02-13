@@ -29,5 +29,5 @@ export async function applySchemaLayout(
   return applySchemaLayoutByDirection(hierarchy, layoutDirection);
 }
 
-// Re-export types for backward compatibility
+// Re-export types
 export type { SchemaLayoutResult };

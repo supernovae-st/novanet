@@ -6,11 +6,11 @@
 import type { NodeType } from '@novanet/core/types';
 
 // =============================================================================
-// NODE ICONS (60 nodes)
+// NODE ICONS (59 nodes)
 // =============================================================================
 
 /**
- * Emoji icons for all 60 node types.
+ * Emoji icons for all 59 node types.
  *
  * Each icon is defined in the node's YAML file under `node.icon`.
  * Source: packages/core/models/node-kinds/<realm>/<layer>/<name>.yaml
@@ -23,7 +23,6 @@ export const NODE_ICONS: Record<NodeType, string> = {
   Block: '🔷',
   BlockGenerated: '🟠',
   BlockInstruction: '📝',
-  BlockPrompt: '🔵',
   BlockRules: '🔵',
   BlockType: '🔷',
   BrandIdentity: '🔷',
@@ -57,8 +56,8 @@ export const NODE_ICONS: Record<NodeType, string> = {
   OutputArtifact: '📦',
   Page: '🔷',
   PageGenerated: '🟠',
-  PagePrompt: '🔵',
-  PageType: '📐',
+  PageInstruction: '📄',
+  PageStructure: '📐',
   Pattern: '📋',
   PatternSet: '📋',
   PopulationCluster: '👥',

@@ -7,11 +7,11 @@ This file provides guidance to Claude Code when working in the `tools/novanet/` 
 `novanet` is a unified Rust CLI + TUI binary for managing the NovaNet context graph.
 It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 
-**Version**: v0.12.0 (SemVer Transition + ADR-024 Data Origin)
+**Version**: v0.12.0 (SemVer Transition + ADR-024 Data Origin + ADR-025 Instruction Layer)
 
 ## Current Status
 
-**v0.12.0 SemVer Transition** — Proper semantic versioning adopted (0.x = pre-production). Includes ADR-024 Data Origin trait renames: invariant→defined, localized→authored, knowledge(trait)→imported, aggregated→retrieved. Unified Tree Architecture preserved. SHARED (4 layers: config, locale, geography, knowledge, 39 nodes), ORG (6 layers: config, foundation, structure, semantic, instruction, output, 21 nodes). 60 total nodes, 10 layers, 5 traits.
+**v0.12.0 SemVer Transition** — Proper semantic versioning adopted (0.x = pre-production). Includes ADR-024 Data Origin trait renames (invariant→defined, localized→authored, knowledge→imported, aggregated→retrieved) and ADR-025 Instruction Layer renames (PageType→PageStructure, PagePrompt→PageInstruction, BlockPrompt→BlockInstruction). Unified Tree Architecture preserved. SHARED (4 layers: config, locale, geography, knowledge, 39 nodes), ORG (6 layers: config, foundation, structure, semantic, instruction, output, 20 nodes). 59 total nodes, 10 layers, 5 traits.
 
 | Area | Commands | Status |
 |------|----------|--------|
@@ -29,7 +29,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | TUI | `tui` | Unified tree (Graph/Nexus modes), lazy loading, async channels |
 | System | `completions`, `doctor` | Implemented |
 
-**998 tests pass** (`cargo test`). Zero clippy warnings.
+**980 tests pass** (`cargo test`). Zero clippy warnings.
 
 **Testing stack:**
 - `insta` — Snapshot testing (5 generator outputs)

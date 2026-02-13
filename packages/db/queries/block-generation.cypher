@@ -10,13 +10,13 @@
 :param locale => "fr-FR";
 
 MATCH (b:Block {key: $blockKey})
-MATCH (b)-[:HAS_PROMPT]->(bp:BlockPrompt)
+MATCH (b)-[:HAS_INSTRUCTION]->(bi:BlockInstruction)
 MATCH (b)-[:OF_TYPE]->(bt:BlockType)
 OPTIONAL MATCH (bt)-[:HAS_RULES]->(br:BlockRules)
 OPTIONAL MATCH (b)-[:USES_ENTITY]->(c:Entity)
 OPTIONAL MATCH (c)-[:HAS_CONTENT]->(cl:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
 RETURN b.key AS block,
-       bp.instructions AS instructions,
+       bi.content AS instructions,
        bt.name AS blockType,
        br.rules AS rules,
        collect(DISTINCT {key: c.key, title: cl.title, definition: cl.definition}) AS concepts

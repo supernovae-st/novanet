@@ -14,7 +14,7 @@
 import { memo } from 'react';
 import dynamic from 'next/dynamic';
 import { Hash, MapPin, Layers, Sparkles } from 'lucide-react';
-import { KIND_META } from '@novanet/core/types';
+import { CLASS_TAXONOMY } from '@novanet/core/types';
 import type { Layer, Realm, Trait } from '@novanet/core/types';
 import { cn } from '@/lib/utils';
 import { useCopyFeedback } from '@/hooks';
@@ -125,11 +125,11 @@ export const OverviewTab = memo(function OverviewTab({
 }: OverviewTabProps) {
   const { copied, copy } = useCopyFeedback();
 
-  // Get classification from KIND_META
-  const kindMeta = KIND_META[node.type];
-  const realm = (kindMeta?.realm ?? 'org') as RealmKey;
+  // Get classification from CLASS_TAXONOMY (v11.8: ADR-023)
+  const classification = CLASS_TAXONOMY[node.type];
+  const realm = (classification?.realm ?? 'org') as RealmKey;
   const layer = (config?.layer ?? 'foundation') as LayerKey;
-  const trait = (kindMeta?.trait ?? 'defined') as TraitKey; // v11.8: ADR-024
+  const trait = (classification?.trait ?? 'defined') as TraitKey; // v11.8: ADR-024
 
   return (
     <div className="p-4 space-y-6">

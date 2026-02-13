@@ -335,14 +335,14 @@ export const nodeCardSizes = {
     Block: 'md',
     EntityContent: 'md',
     Continent: 'md',
-    PageType: 'md',
+    PageStructure: 'md',
     BlockType: 'md',
     ContentSlot: 'md',
 
     // Small (sm) - Compact nodes
     Style: 'sm',
     Culture: 'sm',
-    BlockPrompt: 'sm',
+    BlockInstruction: 'sm',
     Region: 'sm',
     Country: 'sm',
 
@@ -375,7 +375,7 @@ export const nodeCardSizes = {
     return this.sizes[sizeKey] || this.sizes.md;
   },
 
-  /** Get width only (for backward compat with getCardWidth functions) */
+  /** Get width only */
   getWidth(type: string): number {
     return this.getByType(type).width;
   },
