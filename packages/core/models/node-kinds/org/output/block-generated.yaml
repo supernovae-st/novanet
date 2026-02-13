@@ -121,9 +121,9 @@ node:
         from: Block
         description: "Block that owns this LLM-generated content"
 
-      - type: GENERATED_BY
+      - type: GENERATED
         from: BlockInstruction  # v11.8 ADR-025: BlockPrompt → BlockInstruction
-        description: "Instruction that generated this output (provenance)"
+        description: "Instruction that generated this output (provenance via <-[:GENERATED]-)"
 
       - type: ASSEMBLES
         from: PageGenerated
