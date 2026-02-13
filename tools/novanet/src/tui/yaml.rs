@@ -1,11 +1,11 @@
 //! YAML section parser for contextual view in TUI.
 //!
-//! Splits a NodeKind YAML file into two sections:
-//! - **Kind section**: name, realm, layer, trait, description, icon, llm_context
+//! Splits a NodeClass YAML file into two sections:
+//! - **Class section**: name, realm, layer, trait, description, icon, llm_context
 //! - **Instance section**: standard_properties, properties
 //!
 //! This enables the TUI to show only the relevant section based on context:
-//! - v11.7 Graph mode: Realm/Layer/Kind selected → Kind section (schema)
+//! - v11.7 Graph mode: Realm/Layer/Class selected → Class section (schema)
 //! - v11.7 Graph mode: Instance selected → Instance section (data)
 
 use std::ops::Range;
@@ -14,8 +14,8 @@ use std::ops::Range;
 #[derive(Debug, Clone, Default)]
 #[allow(dead_code)] // Fields reserved for future use
 pub struct YamlSections {
-    /// Line range for Kind metadata (name, realm, layer, trait, etc.)
-    pub kind_lines: Range<usize>,
+    /// Line range for Class metadata (name, realm, layer, trait, etc.)
+    pub class_lines: Range<usize>,
     /// Line range for Instance structure (standard_properties, properties)
     pub instance_lines: Range<usize>,
     /// Total line count
@@ -29,9 +29,9 @@ const INSTANCE_KEYS: &[&str] = &["standard_properties:", "properties:"];
 
 #[allow(dead_code)] // Methods reserved for future use
 impl YamlSections {
-    /// Parse YAML content and identify Kind vs Instance sections.
+    /// Parse YAML content and identify Class vs Instance sections.
     ///
-    /// Returns `None` if the content doesn't look like a NodeKind YAML
+    /// Returns `None` if the content doesn't look like a NodeClass YAML
     /// (i.e., doesn't have both kind and instance sections).
     pub fn parse(content: &str) -> Option<Self> {
         let lines: Vec<&str> = content.lines().collect();
@@ -42,7 +42,7 @@ impl YamlSections {
         }
 
         // Find the start of standard_properties or properties section
-        // This marks the boundary between Kind and Instance sections
+        // This marks the boundary between Class and Instance sections
         let mut instance_start: Option<usize> = None;
 
         for (i, line) in lines.iter().enumerate() {
@@ -58,11 +58,11 @@ impl YamlSections {
             }
         }
 
-        // If no instance section found, this isn't a NodeKind YAML
+        // If no instance section found, this isn't a NodeClass YAML
         let instance_start = instance_start?;
 
-        // Find where Kind section actually starts (skip initial comments/node:)
-        let mut kind_start = 0;
+        // Find where Class section actually starts (skip initial comments/node:)
+        let mut class_start = 0;
         for (i, line) in lines.iter().enumerate() {
             let trimmed = line.trim_start();
             // Skip comments and empty lines at the start
@@ -71,27 +71,27 @@ impl YamlSections {
             }
             // Skip "node:" wrapper if present
             if trimmed == "node:" {
-                kind_start = i + 1;
+                class_start = i + 1;
                 continue;
             }
             // Found actual content
-            if kind_start == 0 {
-                kind_start = i;
+            if class_start == 0 {
+                class_start = i;
             }
             break;
         }
 
         Some(Self {
-            kind_lines: kind_start..instance_start,
+            class_lines: class_start..instance_start,
             instance_lines: instance_start..total_lines,
             total_lines,
             raw_content: content.to_string(),
         })
     }
 
-    /// Get the Kind section content (shown when Realm/Layer/Kind selected).
-    pub fn kind_content(&self) -> &str {
-        self.get_section_content(&self.kind_lines)
+    /// Get the Class section content (shown when Realm/Layer/Class selected).
+    pub fn class_content(&self) -> &str {
+        self.get_section_content(&self.class_lines)
     }
 
     /// Get the Instance section content (shown when Instance selected).
@@ -115,12 +115,12 @@ impl YamlSections {
         &self.raw_content[start_offset..actual_end]
     }
 
-    /// Get lines iterator for Kind section.
-    pub fn kind_lines_iter(&self) -> impl Iterator<Item = &str> {
+    /// Get lines iterator for Class section.
+    pub fn class_lines_iter(&self) -> impl Iterator<Item = &str> {
         self.raw_content
             .lines()
-            .skip(self.kind_lines.start)
-            .take(self.kind_lines.end - self.kind_lines.start)
+            .skip(self.class_lines.start)
+            .take(self.class_lines.end - self.class_lines.start)
     }
 
     /// Get lines iterator for Instance section.
@@ -136,9 +136,9 @@ impl YamlSections {
         &self.raw_content
     }
 
-    /// Number of lines in Kind section.
-    pub fn kind_line_count(&self) -> usize {
-        self.kind_lines.end - self.kind_lines.start
+    /// Number of lines in Class section.
+    pub fn class_line_count(&self) -> usize {
+        self.class_lines.end - self.class_lines.start
     }
 
     /// Number of lines in Instance section.
@@ -146,9 +146,9 @@ impl YamlSections {
         self.instance_lines.end - self.instance_lines.start
     }
 
-    /// Check if this is a valid NodeKind YAML (has both sections).
+    /// Check if this is a valid NodeClass YAML (has both sections).
     pub fn is_valid(&self) -> bool {
-        self.kind_line_count() > 0 && self.instance_line_count() > 0
+        self.class_line_count() > 0 && self.instance_line_count() > 0
     }
 }
 
@@ -156,7 +156,7 @@ impl YamlSections {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum YamlViewSection {
     #[default]
-    Kind,
+    Class,
     Instance,
 }
 
@@ -195,13 +195,13 @@ node:
         let sections = YamlSections::parse(SAMPLE_YAML).unwrap();
 
         assert!(sections.is_valid());
-        assert!(sections.kind_line_count() > 0);
+        assert!(sections.class_line_count() > 0);
         assert!(sections.instance_line_count() > 0);
 
-        // Kind section should contain name, realm, etc.
-        let kind = sections.kind_content();
-        assert!(kind.contains("name: Locale"));
-        assert!(kind.contains("realm: shared"));
+        // Class section should contain name, realm, etc.
+        let class = sections.class_content();
+        assert!(class.contains("name: Locale"));
+        assert!(class.contains("realm: shared"));
 
         // Instance section should contain standard_properties
         let instance = sections.instance_content();

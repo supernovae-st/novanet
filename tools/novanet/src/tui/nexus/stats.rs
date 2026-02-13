@@ -175,9 +175,9 @@ struct SchemaStats {
     traits: usize,
     /// Number of realms (2)
     realms: usize,
-    /// Kinds per realm: (name, count, color)
+    /// Classs per realm: (name, count, color)
     realm_distribution: Vec<(&'static str, usize, Color)>,
-    /// Kinds per layer: (name, count)
+    /// Classs per layer: (name, count)
     layer_distribution: Vec<(String, usize)>,
     /// Arcs per family: (name, count)
     arc_family_distribution: Vec<(String, usize)>,

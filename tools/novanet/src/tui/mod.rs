@@ -1,7 +1,7 @@
 //! NovaNet TUI v2 — rebuilt from scratch for stability.
 //!
 //! v11.7: Two navigation modes:
-//! - [1] Graph: Unified tree view (Realm > Layer > Kind)
+//! - [1] Graph: Unified tree view (Realm > Layer > Class)
 //! - [2] Nexus: Hub for Quiz, Stats, Help
 //!
 //! ## Crash Recovery
@@ -182,7 +182,7 @@ async fn run_app(
 
                 // Handle other keys
                 if app.handle_key(key) {
-                    // PHASE 1: Fast instance loading (no arcs) + Kind arcs
+                    // PHASE 1: Fast instance loading (no arcs) + Class arcs
                     let instance_key = app.take_pending_instance_load();
                     let arcs_key = app.take_pending_arcs_load();
 
@@ -254,7 +254,7 @@ async fn run_app(
                         }
                     }
 
-                    // Entity category loading (triggered when Entity Kind expanded in Data mode)
+                    // Entity category loading (triggered when Entity Class expanded in Data mode)
                     if app.take_pending_entity_categories_load() {
                         match TaxonomyTree::load_entity_categories(db).await {
                             Ok(categories) => {

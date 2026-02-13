@@ -388,7 +388,7 @@ pub fn render_help(f: &mut Frame, app: &App) {
             Line::from(vec![Span::styled("  Tree Icons", STYLE_HIGHLIGHT)]),
             Line::from(vec![
                 Span::styled("    ▦◇       ", STYLE_PRIMARY),
-                Span::styled("Layers / Kinds count", STYLE_DIM),
+                Span::styled("Layers / Classes count", STYLE_DIM),
             ]),
             Line::from(vec![
                 Span::styled("    →←       ", STYLE_PRIMARY),
