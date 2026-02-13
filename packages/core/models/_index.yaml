@@ -279,11 +279,11 @@ files:
 # NODES BY TRAIT (v0.12.0 ADR-024 Data Origin renames)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-#   🔵 defined:    Language-independent, defined once (30 nodes)
+#   🔵 defined:    Language-independent, defined once (31 nodes)
 #   🟢 authored:   Per-locale content, human-curated (2 nodes)
 #   🟣 imported:   Knowledge ABOUT a locale, from external sources (20 nodes)
 #   🌟 generated:  LLM-generated output (4 nodes)
-#   ⚪ retrieved:  Computed/retrieved metrics (3 nodes)
+#   ⚪ retrieved:  External API snapshots (2 nodes)
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 
@@ -302,13 +302,12 @@ nodes_by_trait:
     - Entity
     - AudiencePersona
     - ChannelSurface
-    # Org/instruction
+    # Org/instruction (5 nodes - PromptArtifact is generated)
     - PageStructure
     - PageInstruction
     - BlockType
     - BlockRules
     - BlockInstruction
-    - PromptArtifact
     # Shared/config
     - Locale
     - EntityCategory
@@ -329,13 +328,6 @@ nodes_by_trait:
     - EconomicRegion
     - IncomeGroup
     - LendingCategory
-    # Shared/knowledge classification
-    - CulturalRealm
-    - CulturalSubRealm
-    - LanguageFamily
-    - LanguageBranch
-    - PopulationCluster
-    - PopulationSubCluster
 
   authored:
     - ProjectContent        # Org/foundation
@@ -352,6 +344,13 @@ nodes_by_trait:
     # Shared/knowledge SEO/GEO
     - SEOKeyword
     - GEOQuery
+    # Shared/knowledge classification taxonomies
+    - CulturalRealm
+    - CulturalSubRealm
+    - LanguageFamily
+    - LanguageBranch
+    - PopulationCluster
+    - PopulationSubCluster
     # Shared/locale settings
     - Culture
     - Formatting
@@ -364,10 +363,11 @@ nodes_by_trait:
     - PageGenerated         # Org/output
     - BlockGenerated        # Org/output
     - OutputArtifact        # Org/output
-    - GEOAnswer             # Shared/knowledge (AI-generated answer)
+    - PromptArtifact        # Org/instruction (LLM-generated prompt)
 
   retrieved:
-    - SEOKeywordMetrics     # Shared/knowledge (Ahrefs/Semrush metrics)
+    - SEOKeywordMetrics     # Shared/knowledge (Ahrefs/Semrush API)
+    - GEOAnswer             # Shared/knowledge (AI search API snapshots)
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # STATISTICS v0.12.0
@@ -381,7 +381,7 @@ nodes_by_trait:
 # By Trait (v0.12.0 ADR-024):
 #   🔵 DEFINED:   31 nodes (language-independent definitions)
 #   🟢 AUTHORED:   2 nodes (per-locale human-curated content)
-#   🟣 IMPORTED:  22 nodes (external knowledge about locales)
+#   🟣 IMPORTED:  20 nodes (external knowledge about locales)
 #   🌟 GENERATED:  4 nodes (LLM-generated output)
-#   ⚪ RETRIEVED:  3 nodes (API snapshots: GEOAnswer, SEOKeywordMetrics, GEOMetrics)
+#   ⚪ RETRIEVED:  2 nodes (API snapshots: SEOKeywordMetrics, GEOAnswer)
 #
