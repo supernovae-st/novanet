@@ -122,8 +122,8 @@ node:
         description: "Page that owns this LLM-generated content"
 
       - type: GENERATED_BY
-        from: PagePrompt
-        description: "Prompt that generated this output (provenance)"
+        from: PageInstruction  # v11.8 ADR-025: PagePrompt → PageInstruction
+        description: "Instruction that generated this output (provenance)"
 
     outgoing:
       - type: FOR_LOCALE
