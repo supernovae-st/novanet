@@ -1,6 +1,6 @@
 ---
 name: novanet-architecture
-description: Display the complete NovaNet architecture diagram in ASCII. Use when user asks about architecture, system overview, how components connect, meta-graph structure, or wants to understand the codebase structure.
+description: Display the complete NovaNet architecture diagram in ASCII. Use when user asks about architecture, system overview, how components connect, schema graph structure, or wants to understand the codebase structure.
 disable-model-invocation: false
 user-invocable: true
 ---

@@ -577,8 +577,8 @@ fn ymd_to_days(year: i32, month: u32, day: u32) -> i64 {
         [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     };
 
-    for m in 0..(month.saturating_sub(1) as usize) {
-        days += month_days[m];
+    for &day_count in month_days.iter().take(month.saturating_sub(1) as usize) {
+        days += day_count;
     }
 
     // Add days

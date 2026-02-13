@@ -1,5 +1,5 @@
 ---
-description: Display NovaNet meta-graph architecture diagrams in ASCII. Use when user asks about architecture, node taxonomy, arc taxonomy, layer structure, realm organization, or system overview. ALWAYS reads YAML source of truth first.
+description: Display NovaNet schema graph architecture diagrams in ASCII. Use when user asks about architecture, node taxonomy, arc taxonomy, layer structure, realm organization, or system overview. ALWAYS reads YAML source of truth first.
 argument-hint: [section]
 allowed-tools: Bash, Read, Glob, Grep
 ---
@@ -93,7 +93,7 @@ Use `$ARGUMENTS` to focus on specific section:
 
 | Argument | Description |
 |----------|-------------|
-| `all` or empty | Complete meta-graph taxonomy (default) |
+| `all` or empty | Complete schema graph taxonomy (default) |
 | `nodes` | Node taxonomy by realm/layer |
 | `arcs` | Arc taxonomy by family/scope |
 | `seo` | SEO nodes (shared/knowledge) |

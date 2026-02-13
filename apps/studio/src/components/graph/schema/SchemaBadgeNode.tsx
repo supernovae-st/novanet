@@ -1,13 +1,13 @@
 'use client';
 
 /**
- * MetaBadgeNode - Unified card design for Realm & Layer badges
+ * SchemaBadgeNode - Unified card design for Realm & Layer badges
  *
  * v11.3 Design - matches SchemaNode exactly:
  * - Wider card (240px), taller (140px min)
  * - Large icon top-left with glow
  * - Stacked badges on right
- * - Glow pulsé + gradient badges
+ * - Glow pulse + gradient badges
  */
 
 import { memo, useMemo } from 'react';
@@ -24,7 +24,7 @@ import { REALM_COLORS, LAYER_COLORS } from '@/design/colors/generated';
 // Types
 // =============================================================================
 
-export interface MetaBadgeNodeData extends Record<string, unknown> {
+export interface SchemaBadgeNodeData extends Record<string, unknown> {
   label: string;
   description: string;
   metaType: 'realm' | 'layer';
@@ -34,7 +34,7 @@ export interface MetaBadgeNodeData extends Record<string, unknown> {
   layerKey?: Layer;
 }
 
-export type MetaBadgeNodeType = Node<MetaBadgeNodeData, 'metaBadge'>;
+export type SchemaBadgeNodeType = Node<SchemaBadgeNodeData, 'metaBadge'>;
 
 // =============================================================================
 // GlowBadge - Badge with glow + gradient effect (matches SchemaNode)
@@ -69,10 +69,10 @@ const GlowBadge = memo(function GlowBadge({
 // Main Component
 // =============================================================================
 
-export const MetaBadgeNode = memo(function MetaBadgeNode({
+export const SchemaBadgeNode = memo(function SchemaBadgeNode({
   data,
   selected = false,
-}: NodeProps<MetaBadgeNodeType>) {
+}: NodeProps<SchemaBadgeNodeType>) {
   const { metaType, label, typeCount = 0, realmKey = 'shared', layerKey = 'foundation' } = data;
 
   // Get design system color based on meta type (from generated taxonomy)

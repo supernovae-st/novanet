@@ -413,10 +413,10 @@ export {
   type SectionNode,
   type RealmNode,
   type LayerNode,
-  type KindNode,
+  type ClassNode,
   type InstanceNode,
   type ArcFamilyNode,
-  type ArcKindNode,
+  type ArcClassNode,
   type UnifiedNode,
 
   // Classification types
@@ -448,10 +448,10 @@ export {
   isSectionNode,
   isRealmNode,
   isLayerNode,
-  isKindNode,
+  isClassNode,
   isInstanceNode,
   isArcFamilyNode,
-  isArcKindNode,
+  isArcClassNode,
 
   // Utility functions
   makeNodeId,

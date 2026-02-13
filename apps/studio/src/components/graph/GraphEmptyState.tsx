@@ -97,7 +97,7 @@ export const GraphEmptyState = memo(function GraphEmptyState({
         suggestions: [
           'Run pnpm infra:seed to populate sample data',
           'Try the "Complete Graph" view to see all available data',
-          'Switch to META mode to view the schema structure',
+          'Switch to Schema mode to view the schema structure',
           'Check Neo4j Browser directly to verify data exists',
         ],
       };

@@ -7,7 +7,7 @@
  * - Gradient borders with selection/hover states
  * - SelectionPulseRing effect
  * - GlassmorphismEffects
- * - BlueprintOverlay for meta mode
+ * - BlueprintOverlay for schema mode
  * - NodeHandles (connection points)
  * - Interaction state management
  *
@@ -76,7 +76,7 @@ export interface CardShellProps {
   showHandles?: boolean;
   /** Show glassmorphism effects when selected (default: true) */
   showGlassmorphism?: boolean;
-  /** Show blueprint overlay in meta mode (default: true when isMetaMode) */
+  /** Show blueprint overlay in schema mode (default: true when isSchemaMode) */
   showBlueprintOverlay?: boolean;
 
   // State
@@ -84,8 +84,8 @@ export interface CardShellProps {
   isDimmed?: boolean;
   /** Whether the node is hover-dimmed */
   isHoverDimmed?: boolean;
-  /** Whether in meta/schema mode */
-  isMetaMode?: boolean;
+  /** Whether in schema mode */
+  isSchemaMode?: boolean;
 
   // Customization
   /** Border radius in pixels (default: 16) */
@@ -119,7 +119,7 @@ export const CardShell = memo(function CardShell({
   // State
   isDimmed = false,
   isHoverDimmed = false,
-  isMetaMode = false,
+  isSchemaMode = false,
 
   // Customization
   borderRadius = 16,
@@ -168,7 +168,7 @@ export const CardShell = memo(function CardShell({
       className={cn(containerClassName, className)}
       style={{
         ...containerStyle,
-        ...(isMetaMode && !selected && { opacity: 0.6, filter: 'saturate(0.7)' }),
+        ...(isSchemaMode && !selected && { opacity: 0.6, filter: 'saturate(0.7)' }),
       }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -215,8 +215,8 @@ export const CardShell = memo(function CardShell({
             <GlassmorphismEffects borderRadius={selected ? innerSelectedRadius : innerRadius} />
           )}
 
-          {/* Blueprint overlay for meta mode */}
-          {isMetaMode && showBlueprintOverlay && (
+          {/* Blueprint overlay for schema mode */}
+          {isSchemaMode && showBlueprintOverlay && (
             <BlueprintOverlay
               color={colors.primary}
               selected={selected}

@@ -62,7 +62,7 @@ Claude Code configuration for the NovaNet monorepo.
 
 **"If it's a node in Neo4j, it's a node everywhere"**
 
-Realm, Layer, ArcFamily, ArcKind are all `:Meta:*` nodes in Neo4j. v11.7 makes them clickable everywhere.
+Realm, Layer, ArcFamily, ArcClass are all `:Schema:*` nodes in Neo4j. v11.7 makes them clickable everywhere.
 
 ### Navigation Modes
 
@@ -389,7 +389,7 @@ Master command for schema management.
 
 **Example:**
 ```bash
-/schema status     # Show current schema stats (60 Kinds, 114 ArcKinds, 2 Realms, 10 Layers)
+/schema status     # Show current schema stats (60 Classes, 114 ArcClasses, 2 Realms, 10 Layers)
 ```
 
 ---
@@ -688,9 +688,9 @@ Located in `apps/studio/.claude/rules/`:
 
 Domain vocabulary reference (v11.0.0):
 - Core concepts (Project, Entity, Page, Block, Locale, Context Graph)
-- Meta-Graph: 6 meta-node types (Realm, Layer, Kind, Trait, ArcFamily, ArcKind)
-- Full Kind Inventory (64 Kinds across 2 Realms)
-- Meta-Graph relations (hierarchy, facets, arc schema, instance bridge)
+- Schema Graph: 6 schema node types (Realm, Layer, Class, Trait, ArcFamily, ArcClass)
+- Full Class Inventory (64 Classes across 2 Realms)
+- Schema Graph relations (hierarchy, facets, arc schema, instance bridge)
 - Key data relations (grouped by ArcFamily)
 - v8 → v9 rename mapping
 - Locale Knowledge structure (14 nodes)
@@ -724,8 +724,8 @@ Architecture Decision Records (ADRs):
 
 | Metric | Value |
 |--------|-------|
-| Kind (node types) | 60 |
-| ArcKind (relations) | 114 |
+| Class (node types) | 60 |
+| ArcClass (relations) | 114 |
 | Realms | 2 (shared, org) |
 | Layers | 10 (4 shared + 6 org) |
 | Traits | 5 |
@@ -855,8 +855,8 @@ This README should be updated when:
 1. **Commands change** - New commands, renamed, removed
 2. **Skills updated** - New sections, new triggers
 3. **Agents modified** - New tools, changed prompts
-4. **Schema version bumps** - New Kinds, ArcKinds, Realms, Layers
-5. **v9 migration milestones** - Rust binary additions, meta-graph changes
+4. **Schema version bumps** - New Classes, ArcClasses, Realms, Layers
+5. **v9 migration milestones** - Rust binary additions, schema graph changes
 
 **Validation:**
 ```bash
