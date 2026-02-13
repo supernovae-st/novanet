@@ -1,5 +1,9 @@
 # Page - Invariant page structure with orchestrator instructions
 #
+# v0.12.4: ADR-028 - Page-Entity Architecture
+#   - Added REPRESENTS (1:1 to Entity) - every page has one main Entity
+#   - Removed HAS_STRUCTURE (PageStructure is calculated, not stored)
+#   - Renamed HAS_BLOCK.position → order for semantic clarity
 # v0.12.0: Initial clean schema (ADR-025 naming conventions)
 
 node:
@@ -93,18 +97,20 @@ node:
   # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
-    HAS_STRUCTURE:
-      to: PageStructure
-      cardinality: "N:1"
-      description: "Page structure defining block order and composition"
+    # v0.12.4 ADR-028: 1:1 mandatory relationship to main Entity
+    REPRESENTS:
+      to: Entity
+      cardinality: "1:1"
+      required: true
+      description: "Main Entity this page represents. Page.key = Entity.key (source of truth)"
 
     HAS_BLOCK:
       to: Block
       cardinality: "1:N"
       props:
-        position:
+        order:  # v0.12.4: renamed from position for semantic clarity
           type: int
-          description: "Block position within the page (1-based)"
+          description: "Block order within the page (1-based, source of truth)"
       description: "Content blocks within this page"
 
     HAS_GENERATED:  # v10.9.0: renamed from HAS_OUTPUT
@@ -165,20 +171,16 @@ node:
       llm_context: "USE: orchestrate pricing page generation. TRIGGERS: pricing, tarifs, plans, abonnement. NOT: individual block generation."
 
     cypher: |
-      // Get page with structure and all blocks in order (v0.12.0 ADR-025)
-      MATCH (p:Page {key: $key})-[:HAS_STRUCTURE]->(ps:PageStructure)
+      // v0.12.4: Get page with main Entity and all blocks in order
+      MATCH (p:Page {key: $key})-[:REPRESENTS]->(e:Entity)
       MATCH (p)-[r:HAS_BLOCK]->(b:Block)-[:OF_TYPE]->(bt:BlockType)
-      OPTIONAL MATCH (p)-[:USES_ENTITY]->(e:Entity)
-      RETURN p, ps, collect(DISTINCT {block: b, type: bt, position: r.position}) AS blocks,
-             collect(DISTINCT e.key) AS page_entities
-      ORDER BY r.position
+      RETURN p, e, collect(DISTINCT {block: b, type: bt, order: r.order}) AS blocks
+      ORDER BY r.order
 
-      // Validate page has required blocks from PageStructure (v0.12.0 ADR-025)
-      MATCH (p:Page {key: $key})-[:HAS_STRUCTURE]->(ps:PageStructure)
-      MATCH (p)-[:HAS_BLOCK]->(b:Block)-[:OF_TYPE]->(bt:BlockType)
-      WITH ps, collect(bt.key) AS page_block_types
-      RETURN ps.required_block_types AS required,
-             [rbt IN ps.required_block_types WHERE NOT rbt IN page_block_types] AS missing
+      // v0.12.4: Get page with all referenced entities (main + block refs)
+      MATCH (p:Page {key: $key})-[:REPRESENTS]->(main:Entity)
+      OPTIONAL MATCH (p)-[:USES_ENTITY]->(ref:Entity)
+      RETURN p, main.key AS main_entity, collect(DISTINCT ref.key) AS referenced_entities
 
       // Get page with latest generated output for locale (v10.9.0)
       MATCH (p:Page {key: $key})-[:HAS_GENERATED]->(pg:PageGenerated)-[:FOR_LOCALE]->(l:Locale {key: $locale})

@@ -121,7 +121,12 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
         let llm = cypher_str(&trait_def.llm_context);
 
         // Start MERGE
-        writeln!(out, "MERGE ({var}:Schema:Trait {{key: '{}'}})", trait_def.key).unwrap();
+        writeln!(
+            out,
+            "MERGE ({var}:Schema:Trait {{key: '{}'}})",
+            trait_def.key
+        )
+        .unwrap();
         writeln!(out, "ON CREATE SET").unwrap();
         writeln!(out, "  {var}.created_at = datetime(),").unwrap();
         writeln!(out, "  {var}.updated_at = datetime()").unwrap();

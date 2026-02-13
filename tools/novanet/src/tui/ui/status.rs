@@ -440,7 +440,10 @@ mod tests {
     #[test]
     fn test_format_stats_large_values() {
         let result = format_stats(10000, 50000, 500, 250);
-        assert_eq!(result, "10000 nodes.50000 arcs | 500 Classes.250 ArcClasses");
+        assert_eq!(
+            result,
+            "10000 nodes.50000 arcs | 500 Classes.250 ArcClasses"
+        );
     }
 
     #[test]

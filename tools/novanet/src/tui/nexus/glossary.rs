@@ -93,11 +93,11 @@ impl GlossaryCategory {
     /// Get category icon (v0.12.0).
     pub fn icon(&self) -> &'static str {
         match self {
-            GlossaryCategory::GraphBasics => "◆",      // Diamond for nodes
-            GlossaryCategory::Classification => "◫",   // Stacked squares for layers
-            GlossaryCategory::LocaleSystem => "◉",     // Circle for locales
-            GlossaryCategory::Relationships => "→",    // Arrow for arcs
-            GlossaryCategory::Architecture => "⚙",     // Gear for architecture
+            GlossaryCategory::GraphBasics => "◆",    // Diamond for nodes
+            GlossaryCategory::Classification => "◫", // Stacked squares for layers
+            GlossaryCategory::LocaleSystem => "◉",   // Circle for locales
+            GlossaryCategory::Relationships => "→",  // Arrow for arcs
+            GlossaryCategory::Architecture => "⚙",   // Gear for architecture
         }
     }
 
@@ -156,7 +156,7 @@ static GRAPH_BASICS_CONCEPTS: [GlossaryConcept; 4] = [
         name: "Class",
         short_desc: "Schema definitions (:Schema:Class)",
         full_desc: "A node that defines the SCHEMA (type system). Class nodes have the :Schema:Class \
-                    label in Neo4j. There are 59 Classes defining all types in NovaNet.",
+                    label in Neo4j. There are 58 Classes defining all types in NovaNet.",
         classification: None,
         example_yaml: None,
         example_neo4j: Some("(:Schema:Class {label: 'Locale', realm: 'shared', layer: 'config'})"),

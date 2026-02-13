@@ -1,19 +1,19 @@
 # packages/core/models/arc-kinds/generation/compiled-from.yaml
 # ArcKind: COMPILED_FROM — Prompt artifact was compiled from source instruction template
-# v0.12.0 ADR-025: PagePrompt→PageInstruction, BlockPrompt→BlockInstruction
+#
+# v0.12.4: ADR-028 - PageInstruction deleted (calculated at runtime from BlockInstructions)
+#   Target simplified to BlockInstruction only
 
 arc:
   name: COMPILED_FROM
   family: generation
   scope: intra_realm
   source: PromptArtifact
-  target:
-    - PageInstruction
-    - BlockInstruction
+  target: BlockInstruction
   cardinality: many_to_one
   llm_context: |
     USE: when tracing prompt artifact to source instruction for auditing.
     TRIGGERS: prompt source, instruction audit, template origin.
-    NOT: for generated content (use HAS_GENERATED), for instruction editing (use PageInstruction).
-    RELATES: PromptArtifact (source), PageInstruction/BlockInstruction (target).
-  cypher_pattern: (PromptArtifact)-[:COMPILED_FROM]->(PageInstruction)
+    NOT: for generated content (use HAS_GENERATED).
+    RELATES: PromptArtifact (source), BlockInstruction (target).
+  cypher_pattern: (PromptArtifact)-[:COMPILED_FROM]->(BlockInstruction)

@@ -356,7 +356,11 @@ fn render_big_numbers(f: &mut Frame, area: Rect, stats: &SchemaStats, state: &St
 fn render_heartbeat(f: &mut Frame, area: Rect, state: &StatsState) {
     let chunks = Layout::default()
         .direction(Direction::Vertical)
-        .constraints([Constraint::Length(1), Constraint::Length(3), Constraint::Min(0)])
+        .constraints([
+            Constraint::Length(1),
+            Constraint::Length(3),
+            Constraint::Min(0),
+        ])
         .split(area);
 
     // Status line
@@ -418,10 +422,7 @@ fn render_realm_bars(f: &mut Frame, area: Rect, stats: &SchemaStats, state: &Sta
     let block = Block::default()
         .borders(Borders::ALL)
         .border_style(Style::default().fg(COLOR_DIM))
-        .title(Span::styled(
-            " REALMS ",
-            Style::default().fg(COLOR_MUTED),
-        ));
+        .title(Span::styled(" REALMS ", Style::default().fg(COLOR_MUTED)));
 
     let inner = block.inner(area);
     f.render_widget(block, area);
@@ -446,7 +447,10 @@ fn render_realm_bars(f: &mut Frame, area: Rect, stats: &SchemaStats, state: &Sta
             Span::styled(format!("{:<8}", name), Style::default().fg(COLOR_MUTED)),
             Span::styled(bar, Style::default().fg(*color)),
             Span::styled(empty, Style::default().fg(COLOR_DIM)),
-            Span::styled(format!(" {:>2}", animated_count), Style::default().fg(*color)),
+            Span::styled(
+                format!(" {:>2}", animated_count),
+                Style::default().fg(*color),
+            ),
         ]));
         lines.push(Line::from(""));
     }
@@ -460,15 +464,17 @@ fn render_layer_bars(f: &mut Frame, area: Rect, stats: &SchemaStats, state: &Sta
     let block = Block::default()
         .borders(Borders::ALL)
         .border_style(Style::default().fg(COLOR_DIM))
-        .title(Span::styled(
-            " LAYERS ",
-            Style::default().fg(COLOR_MUTED),
-        ));
+        .title(Span::styled(" LAYERS ", Style::default().fg(COLOR_MUTED)));
 
     let inner = block.inner(area);
     f.render_widget(block, area);
 
-    let max_count = stats.layer_distribution.iter().map(|(_, c)| *c).max().unwrap_or(1);
+    let max_count = stats
+        .layer_distribution
+        .iter()
+        .map(|(_, c)| *c)
+        .max()
+        .unwrap_or(1);
 
     let mut lines = Vec::new();
     for (name, count) in stats.layer_distribution.iter().take(inner.height as usize) {
@@ -486,10 +492,16 @@ fn render_layer_bars(f: &mut Frame, area: Rect, stats: &SchemaStats, state: &Sta
         let display_name: String = name.chars().take(12).collect();
 
         lines.push(Line::from(vec![
-            Span::styled(format!(" {:<12}", display_name), Style::default().fg(COLOR_MUTED)),
+            Span::styled(
+                format!(" {:<12}", display_name),
+                Style::default().fg(COLOR_MUTED),
+            ),
             Span::styled(bar, Style::default().fg(COLOR_BLUE)),
             Span::styled(empty, Style::default().fg(COLOR_DIM)),
-            Span::styled(format!(" {:>2}", animated_count), Style::default().fg(COLOR_BLUE)),
+            Span::styled(
+                format!(" {:>2}", animated_count),
+                Style::default().fg(COLOR_BLUE),
+            ),
         ]));
     }
 
@@ -510,10 +522,21 @@ fn render_arc_family_bars(f: &mut Frame, area: Rect, stats: &SchemaStats, state:
     let inner = block.inner(area);
     f.render_widget(block, area);
 
-    let max_count = stats.arc_family_distribution.iter().map(|(_, c)| *c).max().unwrap_or(1);
+    let max_count = stats
+        .arc_family_distribution
+        .iter()
+        .map(|(_, c)| *c)
+        .max()
+        .unwrap_or(1);
 
     // Arc family colors
-    let family_colors = [COLOR_ORANGE, COLOR_CYAN, COLOR_VIOLET, COLOR_GREEN, COLOR_MAGENTA];
+    let family_colors = [
+        COLOR_ORANGE,
+        COLOR_CYAN,
+        COLOR_VIOLET,
+        COLOR_GREEN,
+        COLOR_MAGENTA,
+    ];
 
     let mut lines = Vec::new();
     for (i, (name, count)) in stats.arc_family_distribution.iter().enumerate() {
@@ -533,7 +556,10 @@ fn render_arc_family_bars(f: &mut Frame, area: Rect, stats: &SchemaStats, state:
 
         lines.push(Line::from(vec![
             Span::styled(" → ", Style::default().fg(color)),
-            Span::styled(format!("{:<10}", display_name), Style::default().fg(COLOR_MUTED)),
+            Span::styled(
+                format!("{:<10}", display_name),
+                Style::default().fg(COLOR_MUTED),
+            ),
             Span::styled(bar, Style::default().fg(color)),
             Span::styled(arrow, Style::default().fg(color)),
             Span::styled(

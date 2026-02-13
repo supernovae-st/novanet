@@ -1,6 +1,6 @@
 //! Generate `layers.ts` via MiniJinja template (YAML → TypeScript).
 //!
-//! Reads all 59 YAML node definitions (v0.12.0 / ADR-025), groups by realm and layer,
+//! Reads all 58 YAML node definitions (v0.12.4 / ADR-028), groups by realm and layer,
 //! and produces `packages/core/src/graph/layers.ts`.
 //! Replaces `SubcategoryGenerator.ts` from @novanet/schema-tools.
 //!
@@ -394,15 +394,15 @@ mod tests {
         let generator = LayerGenerator;
         let output = generator.generate(root).expect("should generate layers.ts");
 
-        // v0.12.0: 59 nodes (39 shared + 20 org)
+        // v0.12.4: 58 nodes (40 shared + 18 org) - ADR-028
         assert!(
-            output.contains("mapping all 59 node types"),
-            "should mention 59 node types"
+            output.contains("mapping all 58 node types"),
+            "should mention 58 node types"
         );
 
-        // v0.12.0: Realm node counts
-        assert!(output.contains("SHARED REALM (39 nodes)")); // config (3) + locale (6) + geography (6) + knowledge (24)
-        assert!(output.contains("ORG REALM (20 nodes)")); // v0.12.0: 20 org nodes
+        // v0.12.4: Realm node counts (Country added to shared, PageStructure/PageInstruction removed from org)
+        assert!(output.contains("SHARED REALM (40 nodes)")); // config (3) + locale (6) + geography (7) + knowledge (24)
+        assert!(output.contains("ORG REALM (18 nodes)")); // v0.12.4: 18 org nodes (was 20, -2 deleted)
 
         // 9 unique layer names (v11.5: 4 shared + 6 org = 10 total, config in both)
         for layer in [

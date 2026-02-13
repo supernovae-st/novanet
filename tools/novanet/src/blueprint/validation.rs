@@ -717,57 +717,81 @@ mod tests {
             assert!(
                 is_valid,
                 "Node '{}' has invalid trait '{:?}'. Valid traits: Defined, Authored, Imported, Generated, Retrieved",
-                node.def.name,
-                node.def.node_trait
+                node.def.name, node.def.node_trait
             );
         }
     }
 
-    /// ADR-023: Must have exactly 59 node classes (39 shared + 20 org)
+    /// ADR-028: Must have exactly 58 node classes (40 shared + 18 org)
+    /// v0.12.4: PageStructure/PageInstruction deleted (-2), Country added (+1)
     #[test]
     fn test_adr023_node_count() {
         let root = crate::config::resolve_root(None).expect("Failed to resolve root");
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
 
         let total = data.node_kinds.len();
-        let shared_count = data.node_kinds.iter().filter(|n| n.realm == "shared").count();
+        let shared_count = data
+            .node_kinds
+            .iter()
+            .filter(|n| n.realm == "shared")
+            .count();
         let org_count = data.node_kinds.iter().filter(|n| n.realm == "org").count();
 
-        assert_eq!(total, 59, "Expected 59 total nodes, got {}", total);
-        assert_eq!(shared_count, 39, "Expected 39 shared nodes, got {}", shared_count);
-        assert_eq!(org_count, 20, "Expected 20 org nodes, got {}", org_count);
+        assert_eq!(
+            total, 58,
+            "Expected 58 total nodes (v0.12.4), got {}",
+            total
+        );
+        assert_eq!(
+            shared_count, 40,
+            "Expected 40 shared nodes (v0.12.4: +Country), got {}",
+            shared_count
+        );
+        assert_eq!(
+            org_count, 18,
+            "Expected 18 org nodes (v0.12.4: -PageStructure -PageInstruction), got {}",
+            org_count
+        );
     }
 
-    /// ADR-025: Instruction layer nodes must use new names
+    /// ADR-028: Instruction layer nodes (v0.12.4: PageStructure/PageInstruction deleted)
+    /// PageStructure and PageInstruction are now calculated at runtime from Block order
     #[test]
     fn test_adr025_instruction_layer_nodes() {
         let root = crate::config::resolve_root(None).expect("Failed to resolve root");
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
 
-        let node_names: Vec<&str> = data.node_kinds.iter().map(|n| n.def.name.as_str()).collect();
+        let node_names: Vec<&str> = data
+            .node_kinds
+            .iter()
+            .map(|n| n.def.name.as_str())
+            .collect();
 
-        // Instruction layer names
-        assert!(
-            node_names.contains(&"PageStructure"),
-            "Missing PageStructure in instruction layer"
-        );
-        assert!(
-            node_names.contains(&"PageInstruction"),
-            "Missing PageInstruction in instruction layer"
-        );
+        // v0.12.4: Only BlockInstruction remains in instruction layer (PageStructure/PageInstruction deleted)
         assert!(
             node_names.contains(&"BlockInstruction"),
             "Missing BlockInstruction in instruction layer"
         );
-
-        // Deprecated names should NOT exist
         assert!(
-            !node_names.contains(&"PageType"),
-            "PageType is deprecated, use PageStructure"
+            node_names.contains(&"BlockType"),
+            "Missing BlockType in instruction layer"
+        );
+
+        // v0.12.4: PageStructure and PageInstruction should NOT exist (calculated at runtime)
+        assert!(
+            !node_names.contains(&"PageStructure"),
+            "PageStructure deleted in v0.12.4 (calculated at runtime)"
         );
         assert!(
+            !node_names.contains(&"PageInstruction"),
+            "PageInstruction deleted in v0.12.4 (calculated at runtime)"
+        );
+
+        // Legacy deprecated names should NOT exist
+        assert!(!node_names.contains(&"PageType"), "PageType is deprecated");
+        assert!(
             !node_names.contains(&"PagePrompt"),
-            "PagePrompt is deprecated, use PageInstruction"
+            "PagePrompt is deprecated"
         );
         assert!(
             !node_names.contains(&"BlockPrompt"),
@@ -775,7 +799,7 @@ mod tests {
         );
     }
 
-    /// ADR-025: Arc types must use new instruction names
+    /// ADR-028: Arc types for instruction layer (v0.12.4: HAS_STRUCTURE deleted)
     #[test]
     fn test_adr025_instruction_arcs() {
         let root = crate::config::resolve_root(None).expect("Failed to resolve root");
@@ -783,14 +807,22 @@ mod tests {
 
         let arc_names: Vec<&str> = data.arc_defs.iter().map(|a| a.arc_type.as_str()).collect();
 
-        // New arc names (ADR-025)
+        // Current arc names (v0.12.4)
         assert!(
             arc_names.contains(&"HAS_INSTRUCTION"),
-            "Missing HAS_INSTRUCTION arc (renamed from HAS_PROMPT)"
+            "Missing HAS_INSTRUCTION arc (Page/Block -> BlockInstruction)"
         );
+
+        // v0.12.4: REPRESENTS added for Page -> Entity (1:1)
         assert!(
-            arc_names.contains(&"HAS_STRUCTURE"),
-            "Missing HAS_STRUCTURE arc (Page -> PageStructure)"
+            arc_names.contains(&"REPRESENTS"),
+            "Missing REPRESENTS arc (Page -> Entity, ADR-028)"
+        );
+
+        // v0.12.4: HAS_STRUCTURE deleted (PageStructure no longer exists)
+        assert!(
+            !arc_names.contains(&"HAS_STRUCTURE"),
+            "HAS_STRUCTURE deleted in v0.12.4 (PageStructure calculated at runtime)"
         );
 
         // Deprecated arc names should NOT exist
@@ -850,7 +882,8 @@ mod tests {
             assert!(
                 matches!(node.def.node_trait, NodeTrait::Authored),
                 "Node '{}' ends with 'Content' but has trait '{:?}' (should be Authored)",
-                node.def.name, node.def.node_trait
+                node.def.name,
+                node.def.node_trait
             );
         }
     }
@@ -875,27 +908,41 @@ mod tests {
             assert!(
                 matches!(node.def.node_trait, NodeTrait::Generated),
                 "Node '{}' ends with 'Generated' but has trait '{:?}' (should be Generated)",
-                node.def.name, node.def.node_trait
+                node.def.name,
+                node.def.node_trait
             );
         }
     }
 
-    /// Layer distribution validation (v0.12.0)
+    /// Layer distribution validation (v0.12.4)
     #[test]
     fn test_layer_distribution() {
         let root = crate::config::resolve_root(None).expect("Failed to resolve root");
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
 
         // Count by realm (the reliable way)
-        let shared_count = data.node_kinds.iter().filter(|n| n.realm == "shared").count();
+        let shared_count = data
+            .node_kinds
+            .iter()
+            .filter(|n| n.realm == "shared")
+            .count();
         let org_count = data.node_kinds.iter().filter(|n| n.realm == "org").count();
 
-        assert_eq!(shared_count, 39, "Shared realm should have 39 nodes, got {}", shared_count);
-        assert_eq!(org_count, 20, "Org realm should have 20 nodes, got {}", org_count);
+        // v0.12.4: 40 shared (Country added), 18 org (PageStructure/PageInstruction deleted)
+        assert_eq!(
+            shared_count, 40,
+            "Shared realm should have 40 nodes (v0.12.4), got {}",
+            shared_count
+        );
+        assert_eq!(
+            org_count, 18,
+            "Org realm should have 18 nodes (v0.12.4), got {}",
+            org_count
+        );
 
-        // Verify layer counts within each realm
-        // Shared: config(3) + locale(6) + geography(6) + knowledge(24) = 39
-        // Org: config(1) + foundation(3) + structure(3) + semantic(4) + instruction(6) + output(3) = 20
+        // Verify layer counts within each realm (v0.12.4)
+        // Shared: config(3) + locale(6) + geography(7) + knowledge(24) = 40
+        // Org: config(1) + foundation(3) + structure(3) + semantic(4) + instruction(4) + output(3) = 18
 
         // Check that each realm has the expected layers
         let shared_layers: std::collections::HashSet<&str> = data
@@ -904,10 +951,22 @@ mod tests {
             .filter(|n| n.realm == "shared")
             .map(|n| n.layer.as_str())
             .collect();
-        assert!(shared_layers.contains("config"), "Shared should have config layer");
-        assert!(shared_layers.contains("locale"), "Shared should have locale layer");
-        assert!(shared_layers.contains("geography"), "Shared should have geography layer");
-        assert!(shared_layers.contains("knowledge"), "Shared should have knowledge layer");
+        assert!(
+            shared_layers.contains("config"),
+            "Shared should have config layer"
+        );
+        assert!(
+            shared_layers.contains("locale"),
+            "Shared should have locale layer"
+        );
+        assert!(
+            shared_layers.contains("geography"),
+            "Shared should have geography layer"
+        );
+        assert!(
+            shared_layers.contains("knowledge"),
+            "Shared should have knowledge layer"
+        );
 
         let org_layers: std::collections::HashSet<&str> = data
             .node_kinds
@@ -915,11 +974,29 @@ mod tests {
             .filter(|n| n.realm == "org")
             .map(|n| n.layer.as_str())
             .collect();
-        assert!(org_layers.contains("config"), "Org should have config layer");
-        assert!(org_layers.contains("foundation"), "Org should have foundation layer");
-        assert!(org_layers.contains("structure"), "Org should have structure layer");
-        assert!(org_layers.contains("semantic"), "Org should have semantic layer");
-        assert!(org_layers.contains("instruction"), "Org should have instruction layer");
-        assert!(org_layers.contains("output"), "Org should have output layer");
+        assert!(
+            org_layers.contains("config"),
+            "Org should have config layer"
+        );
+        assert!(
+            org_layers.contains("foundation"),
+            "Org should have foundation layer"
+        );
+        assert!(
+            org_layers.contains("structure"),
+            "Org should have structure layer"
+        );
+        assert!(
+            org_layers.contains("semantic"),
+            "Org should have semantic layer"
+        );
+        assert!(
+            org_layers.contains("instruction"),
+            "Org should have instruction layer"
+        );
+        assert!(
+            org_layers.contains("output"),
+            "Org should have output layer"
+        );
     }
 }

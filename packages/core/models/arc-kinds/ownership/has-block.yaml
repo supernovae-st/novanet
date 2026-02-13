@@ -1,5 +1,7 @@
 # packages/core/models/arc-kinds/ownership/has-block.yaml
 # ArcKind: HAS_BLOCK — Page contains Block
+#
+# v0.12.4: ADR-028 - Renamed position → order for semantic clarity
 
 arc:
   name: HAS_BLOCK
@@ -11,15 +13,16 @@ arc:
   cardinality: one_to_many
 
   properties:
-    - name: position
+    - name: order
       type: integer
       required: true
-      description: "Block ordering within page (0-indexed)"
+      description: "Block order within page (1-based, source of truth for block sequence)"
 
   inverse: BLOCK_OF
 
   llm_context: |
-    Page contains blocks with position ordering. Blocks can be reused across pages.
-    Use to enumerate blocks for a page: MATCH (p:Page)-[:HAS_BLOCK]->(b:Block)
+    Page contains blocks with order property. The order property (1-based) is the source of truth
+    for block sequence. Blocks can be reused across pages with different order values.
+    Use to enumerate blocks for a page: MATCH (p:Page)-[r:HAS_BLOCK]->(b:Block) ORDER BY r.order
 
-  cypher_pattern: "(Page)-[:HAS_BLOCK {position}]->(Block)"
+  cypher_pattern: "(Page)-[:HAS_BLOCK {order}]->(Block)"
