@@ -5,7 +5,8 @@
 //! - Category badges with color-coded progress
 //! - Visual category indicators in question display
 //! - Category breakdown in completion screen with per-category scores
-//! - 15 questions with multiple choice answers, immediate feedback.
+//! - 30+ questions with multiple choice AND True/False types
+//! - Immediate feedback with explanations
 
 use ratatui::Frame;
 use ratatui::layout::{Constraint, Direction, Layout, Rect};
@@ -86,19 +87,67 @@ impl QuizCategory {
     }
 }
 
-/// A quiz question with 4 answer options.
+/// Question type: Multiple Choice (4 options) or True/False (2 options).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum QuizQuestionType {
+    /// Standard 4-option multiple choice (A, B, C, D).
+    #[default]
+    MultipleChoice,
+    /// True/False question (faster pacing, binary choice).
+    TrueFalse,
+}
+
+impl QuizQuestionType {
+    /// Maximum option index for this question type.
+    pub fn max_option(&self) -> usize {
+        match self {
+            QuizQuestionType::MultipleChoice => 3, // 0-3 for A-D
+            QuizQuestionType::TrueFalse => 1,      // 0-1 for True/False
+        }
+    }
+
+    /// Option labels for this question type.
+    pub fn labels(&self) -> &'static [&'static str] {
+        match self {
+            QuizQuestionType::MultipleChoice => &["A", "B", "C", "D"],
+            QuizQuestionType::TrueFalse => &["T", "F"],
+        }
+    }
+
+    /// Icon for question type indicator.
+    pub fn icon(&self) -> &'static str {
+        match self {
+            QuizQuestionType::MultipleChoice => "▣",
+            QuizQuestionType::TrueFalse => "◐",
+        }
+    }
+}
+
+/// A quiz question with multiple answer options.
 #[derive(Debug, Clone)]
 pub struct QuizQuestion {
     /// The question text.
     pub question: &'static str,
-    /// The 4 answer options.
+    /// The answer options (4 for MultipleChoice, 2 for TrueFalse).
     pub options: [&'static str; 4],
-    /// Index of the correct answer (0-3).
+    /// Index of the correct answer.
     pub correct: usize,
     /// Explanation shown after answering.
     pub explanation: &'static str,
     /// Category for grouping and badges (v0.12.0).
     pub category: QuizCategory,
+    /// Question type: MultipleChoice (default) or TrueFalse.
+    pub question_type: QuizQuestionType,
+}
+
+impl QuizQuestion {
+    /// Get the effective number of options for this question.
+    pub fn option_count(&self) -> usize {
+        match self.question_type {
+            QuizQuestionType::MultipleChoice => 4,
+            QuizQuestionType::TrueFalse => 2,
+        }
+    }
 }
 
 /// State of the quiz within Nexus mode.
@@ -141,9 +190,15 @@ impl QuizState {
         }
     }
 
-    /// Move selection down.
-    pub fn select_down(&mut self) {
-        if !self.answered && self.selected_option < 3 {
+    /// Move selection down, respecting question type bounds.
+    pub fn select_down(&mut self, question: Option<&QuizQuestion>) {
+        if self.answered {
+            return;
+        }
+        let max = question
+            .map(|q| q.question_type.max_option())
+            .unwrap_or(3);
+        if self.selected_option < max {
             self.selected_option += 1;
         }
     }
@@ -234,7 +289,7 @@ impl QuizState {
 }
 
 /// All quiz questions about NovaNet taxonomy.
-/// v0.12.0: 30 questions across 5 categories with badges and breakdown.
+/// v0.12.0: 36 questions (30 multiple choice + 6 True/False) across 5 categories.
 pub const QUESTIONS: &[QuizQuestion] = &[
     // ═══════════════════════════════════════════════════════════════════════════
     // REALMS (6 questions)
@@ -245,6 +300,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 1,
         explanation: "NovaNet has 2 realms: Shared (universal, READ-ONLY) and Org (organization-specific).",
         category: QuizCategory::Realms,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
         question: "What is the total node count in NovaNet v11.5+?",
@@ -252,6 +308,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 2,
         explanation: "59 total nodes: 39 shared + 20 org. v0.12.0 refined SEO/GEO and removed obsolete nodes.",
         category: QuizCategory::Realms,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
         question: "The Shared realm is...",
@@ -259,6 +316,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 1,
         explanation: "Shared realm is READ-ONLY universal knowledge. All business content lives in Org realm.",
         category: QuizCategory::Realms,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
         question: "How many nodes are in the Shared realm?",
@@ -266,6 +324,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 2,
         explanation: "Shared realm has 39 nodes across 4 layers: config, locale, geography, knowledge.",
         category: QuizCategory::Realms,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
         question: "How many nodes are in the Org realm?",
@@ -273,6 +332,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 1,
         explanation: "Org realm has 20 nodes across 6 layers: config, foundation, structure, semantic, instruction, output.",
         category: QuizCategory::Realms,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
         question: "What was 'global' realm renamed to?",
@@ -280,6 +340,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 1,
         explanation: "v11.2: 'global' → 'shared' (describes WHAT), 'tenant' → 'org' (describes WHO).",
         category: QuizCategory::Realms,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     // ═══════════════════════════════════════════════════════════════════════════
     // LAYERS (6 questions)
@@ -290,6 +351,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 1,
         explanation: "Shared has 4 layers: config, locale, geography, knowledge (39 nodes total).",
         category: QuizCategory::Layers,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
         question: "How many layers does the Org realm have?",
@@ -297,6 +359,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 2,
         explanation: "Org has 6 layers: config, foundation, structure, semantic, instruction, output (20 nodes).",
         category: QuizCategory::Layers,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
         question: "Where does the Locale node live?",
@@ -304,6 +367,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 1,
         explanation: "Locale moved to shared/config in v11.5 because it's a DEFINITION ('defined' trait), not settings.",
         category: QuizCategory::Layers,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
         question: "Which layer contains Entity and EntityContent?",
@@ -311,6 +375,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 1,
         explanation: "Entity and EntityContent live in the semantic layer - they represent meaning and knowledge.",
         category: QuizCategory::Layers,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
         question: "PageGenerated and BlockGenerated live in which layer?",
@@ -318,6 +383,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 3,
         explanation: "Generated nodes (PageGenerated, BlockGenerated, OutputArtifact) live in the output layer.",
         category: QuizCategory::Layers,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
         question: "Which layer contains Page and Block nodes?",
@@ -325,6 +391,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 1,
         explanation: "Page and Block live in the structure layer - they define content organization.",
         category: QuizCategory::Layers,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     // ═══════════════════════════════════════════════════════════════════════════
     // TRAITS (6 questions)
@@ -335,6 +402,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 2,
         explanation: "5 traits: defined, authored, imported, generated, retrieved (ADR-024 Data Origin).",
         category: QuizCategory::Traits,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
         question: "Which trait indicates LLM-generated output?",
@@ -342,6 +410,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 2,
         explanation: "Generated trait indicates LLM output (PageGenerated, BlockGenerated, OutputArtifact).",
         category: QuizCategory::Traits,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
         question: "What border style indicates a 'defined' node?",
@@ -349,6 +418,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 3,
         explanation: "Defined=solid, authored=dashed, imported=double, generated=dotted, retrieved=dotted-thin.",
         category: QuizCategory::Traits,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
         question: "What quick jump key goes to 'generated' trait?",
@@ -356,6 +426,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 1,
         explanation: "gg=generated. Also: gd=defined, ga=authored, gi=imported, gr=retrieved.",
         category: QuizCategory::Traits,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
         question: "Which trait is for human-written locale content?",
@@ -363,6 +434,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 1,
         explanation: "Authored trait is for human-written per-locale content (EntityContent, ProjectContent).",
         category: QuizCategory::Traits,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
         question: "Which trait is for external API data?",
@@ -370,6 +442,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 2,
         explanation: "Retrieved trait is for data fetched from external APIs (SEOKeywordMetrics, GEOMetrics).",
         category: QuizCategory::Traits,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     // ═══════════════════════════════════════════════════════════════════════════
     // ARCS (6 questions)
@@ -380,6 +453,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 2,
         explanation: "5 arc families: ownership, localization, semantic, generation, mining.",
         category: QuizCategory::Arcs,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
         question: "What arc scope crosses realm boundaries?",
@@ -387,6 +461,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 1,
         explanation: "cross_realm scope for arcs that cross between Shared and Org realms.",
         category: QuizCategory::Arcs,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
         question: "What was EntityL10n renamed to?",
@@ -394,6 +469,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 0,
         explanation: "EntityL10n → EntityContent (semantic layer, 'authored' trait). Content = locale-specific.",
         category: QuizCategory::Arcs,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
         question: "HAS_CONTENT arc connects Entity to what?",
@@ -401,6 +477,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 2,
         explanation: "HAS_CONTENT: Entity → EntityContent (ownership family, localization purpose).",
         category: QuizCategory::Arcs,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
         question: "Which arc family is for Page-Block relationships?",
@@ -408,6 +485,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 2,
         explanation: "Ownership family includes HAS_BLOCK, HAS_PAGE, HAS_CONTENT - parent-child relationships.",
         category: QuizCategory::Arcs,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
         question: "How many total arcs (ArcClass) in v0.12.0?",
@@ -415,6 +493,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 2,
         explanation: "114 arc types defined across 5 families, covering all node relationships.",
         category: QuizCategory::Arcs,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     // ═══════════════════════════════════════════════════════════════════════════
     // GENERATION (6 questions)
@@ -425,6 +504,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 2,
         explanation: "NovaNet GENERATES content natively per locale, NOT translation. Native generation preserves cultural nuance.",
         category: QuizCategory::Generation,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
         question: "What was PageL10n renamed to?",
@@ -432,6 +512,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 1,
         explanation: "PageL10n → PageGenerated (output layer, generated trait). 'Generated' = LLM output.",
         category: QuizCategory::Generation,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
         question: "Knowledge atoms are loaded how?",
@@ -439,6 +520,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 1,
         explanation: "Selective LLM loading: Load 50 relevant Terms, not 20K JSON blob. Graph queries filter by context.",
         category: QuizCategory::Generation,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
         question: "What's the generation pipeline order?",
@@ -451,6 +533,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 1,
         explanation: "Knowledge (imported) feeds Entity (defined) which structures Pages/Blocks for Output (generated).",
         category: QuizCategory::Generation,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
         question: "Term, Expression, Pattern have which trait?",
@@ -458,6 +541,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 2,
         explanation: "Knowledge atoms (Term, Expression, Pattern) have 'imported' trait - external knowledge brought in.",
         category: QuizCategory::Generation,
+        question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
         question: "Why native generation over translation?",
@@ -470,6 +554,58 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         correct: 2,
         explanation: "Native generation preserves cultural nuance (idioms, humor, formality) that translation loses.",
         category: QuizCategory::Generation,
+        question_type: QuizQuestionType::MultipleChoice,
+    },
+    // ═══════════════════════════════════════════════════════════════════════════
+    // TRUE/FALSE QUESTIONS (6 questions - faster pacing)
+    // ═══════════════════════════════════════════════════════════════════════════
+    QuizQuestion {
+        question: "NovaNet uses translation to create localized content.",
+        options: ["True", "False", "", ""],
+        correct: 1, // False
+        explanation: "NovaNet uses NATIVE GENERATION, not translation. Content is generated per locale from invariant entities.",
+        category: QuizCategory::Generation,
+        question_type: QuizQuestionType::TrueFalse,
+    },
+    QuizQuestion {
+        question: "The Shared realm can be modified by organizations.",
+        options: ["True", "False", "", ""],
+        correct: 1, // False
+        explanation: "Shared realm is READ-ONLY. It contains universal knowledge that all organizations can read but not modify.",
+        category: QuizCategory::Realms,
+        question_type: QuizQuestionType::TrueFalse,
+    },
+    QuizQuestion {
+        question: "Entity nodes are invariant across all locales.",
+        options: ["True", "False", "", ""],
+        correct: 0, // True
+        explanation: "Entity nodes have 'defined' trait - they're invariant. EntityContent holds the locale-specific authored content.",
+        category: QuizCategory::Traits,
+        question_type: QuizQuestionType::TrueFalse,
+    },
+    QuizQuestion {
+        question: "NovaNet has exactly 10 layers (4 shared + 6 org).",
+        options: ["True", "False", "", ""],
+        correct: 0, // True
+        explanation: "Shared: config, locale, geography, knowledge (4). Org: config, foundation, structure, semantic, instruction, output (6).",
+        category: QuizCategory::Layers,
+        question_type: QuizQuestionType::TrueFalse,
+    },
+    QuizQuestion {
+        question: "HAS_CONTENT is part of the 'generation' arc family.",
+        options: ["True", "False", "", ""],
+        correct: 1, // False
+        explanation: "HAS_CONTENT is in the 'localization' family. HAS_GENERATED is in the 'generation' family.",
+        category: QuizCategory::Arcs,
+        question_type: QuizQuestionType::TrueFalse,
+    },
+    QuizQuestion {
+        question: "Knowledge atoms (Term, Expression, Pattern) are locale-specific.",
+        options: ["True", "False", "", ""],
+        correct: 0, // True
+        explanation: "Unlike Entities (invariant + Content for ALL locales), atoms exist only where needed. fr-FR may have 20K Terms, sw-KE may have 500.",
+        category: QuizCategory::Generation,
+        question_type: QuizQuestionType::TrueFalse,
     },
 ];
 
@@ -639,9 +775,12 @@ fn render_question(
         .wrap(Wrap { trim: true });
     f.render_widget(question_text, chunks[0]);
 
-    // Options
+    // Options - respect question type (True/False vs Multiple Choice)
+    let option_count = question.option_count();
+    let labels = question.question_type.labels();
     let mut option_lines: Vec<Line> = Vec::new();
-    for (i, opt) in question.options.iter().enumerate() {
+
+    for (i, opt) in question.options.iter().take(option_count).enumerate() {
         let is_selected = i == quiz.selected_option;
         let is_correct = i == question.correct;
 
@@ -673,10 +812,10 @@ fn render_question(
             }
         };
 
-        let letter = ['A', 'B', 'C', 'D'][i];
+        let label = labels.get(i).unwrap_or(&"?");
         option_lines.push(Line::from(vec![
             Span::styled(prefix, style),
-            Span::styled(format!("{}) ", letter), Style::default().fg(Color::Yellow)),
+            Span::styled(format!("{}) ", label), Style::default().fg(Color::Yellow)),
             Span::styled(*opt, style),
         ]));
     }
@@ -877,17 +1016,19 @@ mod tests {
     fn test_quiz_navigation() {
         let mut state = QuizState::new();
 
-        state.select_down();
+        // Use first question (multiple choice with max 3)
+        let q = QUESTIONS.first();
+        state.select_down(q);
         assert_eq!(state.selected_option, 1);
 
-        state.select_down();
+        state.select_down(q);
         assert_eq!(state.selected_option, 2);
 
-        state.select_down();
+        state.select_down(q);
         assert_eq!(state.selected_option, 3);
 
-        // Can't go past 3
-        state.select_down();
+        // Can't go past 3 for multiple choice
+        state.select_down(q);
         assert_eq!(state.selected_option, 3);
 
         state.select_up();
@@ -973,11 +1114,14 @@ mod tests {
     #[test]
     fn test_questions_have_valid_correct_index() {
         for (i, q) in QUESTIONS.iter().enumerate() {
+            let max_valid = q.option_count();
             assert!(
-                q.correct < 4,
-                "Question {} has invalid correct index: {}",
+                q.correct < max_valid,
+                "Question {} has invalid correct index: {} (max for {:?} is {})",
                 i,
-                q.correct
+                q.correct,
+                q.question_type,
+                max_valid - 1
             );
         }
     }
@@ -993,10 +1137,33 @@ mod tests {
         state.answered = true;
 
         let initial = state.selected_option;
-        state.select_down();
+        state.select_down(None);
         assert_eq!(state.selected_option, initial);
 
         state.select_up();
         assert_eq!(state.selected_option, initial);
+    }
+
+    #[test]
+    fn test_true_false_question_bounds() {
+        let mut state = QuizState::new();
+
+        // Create a True/False question
+        let tf_question = QuizQuestion {
+            question: "Test question",
+            options: ["True", "False", "", ""],
+            correct: 0,
+            explanation: "Test",
+            category: QuizCategory::Realms,
+            question_type: QuizQuestionType::TrueFalse,
+        };
+
+        // Can move from 0 to 1
+        state.select_down(Some(&tf_question));
+        assert_eq!(state.selected_option, 1);
+
+        // Can't go past 1 for True/False
+        state.select_down(Some(&tf_question));
+        assert_eq!(state.selected_option, 1);
     }
 }

@@ -27,6 +27,21 @@ pub struct TutorialProgress {
     pub quiz_high_score: Option<usize>,
     /// Total time spent in minutes.
     pub total_time_minutes: usize,
+    // ═══════════════════════════════════════════════════════════════════════════
+    // STREAK SYSTEM (v0.12.0)
+    // ═══════════════════════════════════════════════════════════════════════════
+    /// Current streak (consecutive days of quiz activity).
+    #[serde(default)]
+    pub current_streak: usize,
+    /// Best streak ever achieved.
+    #[serde(default)]
+    pub best_streak: usize,
+    /// Last date quiz was completed (YYYY-MM-DD format).
+    #[serde(default)]
+    pub last_quiz_date: Option<String>,
+    /// Total quizzes completed.
+    #[serde(default)]
+    pub total_quizzes_completed: usize,
 }
 
 /// Progress for a single tutorial step.
@@ -54,12 +69,16 @@ impl TutorialProgress {
     /// Create new TutorialProgress with default values.
     pub fn new() -> Self {
         Self {
-            version: "1.0".to_string(),
+            version: "1.1".to_string(), // v1.1 adds streak system
             started_at: None,
             updated_at: None,
             steps: Vec::new(),
             quiz_high_score: None,
             total_time_minutes: 0,
+            current_streak: 0,
+            best_streak: 0,
+            last_quiz_date: None,
+            total_quizzes_completed: 0,
         }
     }
 
