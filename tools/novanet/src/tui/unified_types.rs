@@ -1,7 +1,7 @@
-//! Unified Tree Types for v11.7
+//! Unified Tree Types for v11.8
 //!
 //! This module defines the core data structures for the unified tree architecture
-//! where Realm, Layer, Kind, Instance, ArcFamily, and ArcKind are all represented
+//! where Realm, Layer, Class, Instance, ArcFamily, and ArcClass are all represented
 //! as clickable nodes with detail panels.
 
 use rustc_hash::FxHashSet;
@@ -22,14 +22,14 @@ pub enum NodeId {
     Realm(String),
     /// Layer node within a realm (realm_key, layer_key)
     Layer { realm: String, layer: String },
-    /// Kind node (e.g., "Locale", "Entity")
-    Kind(String),
+    /// Class node (e.g., "Locale", "Entity")
+    Class(String),
     /// Data instance (class_label, instance_key)
-    Instance { kind: String, key: String },
+    Instance { class: String, key: String },
     /// Arc family (e.g., "ownership", "semantic")
     ArcFamily(String),
-    /// Arc kind (e.g., "HAS_PAGE", "USES_ENTITY")
-    ArcKind(String),
+    /// Arc class (e.g., "HAS_PAGE", "USES_ENTITY")
+    ArcClass(String),
 }
 
 /// Top-level section types in the tree.
@@ -48,10 +48,10 @@ impl NodeId {
             Self::Section(s) => format!("section:{:?}", s),
             Self::Realm(r) => format!("realm:{}", r),
             Self::Layer { realm, layer } => format!("layer:{}:{}", realm, layer),
-            Self::Kind(k) => format!("kind:{}", k),
-            Self::Instance { kind, key } => format!("instance:{}:{}", kind, key),
+            Self::Class(c) => format!("class:{}", c),
+            Self::Instance { class, key } => format!("instance:{}:{}", class, key),
             Self::ArcFamily(f) => format!("arcfamily:{}", f),
-            Self::ArcKind(a) => format!("arckind:{}", a),
+            Self::ArcClass(a) => format!("arcclass:{}", a),
         }
     }
 
@@ -79,12 +79,12 @@ impl NodeId {
                     None
                 }
             }
-            "kind" => Some(Self::Kind(parts[1].to_string())),
+            "class" => Some(Self::Class(parts[1].to_string())),
             "instance" => {
                 let sub: Vec<&str> = parts[1].splitn(2, ':').collect();
                 if sub.len() == 2 {
                     Some(Self::Instance {
-                        kind: sub[0].to_string(),
+                        class: sub[0].to_string(),
                         key: sub[1].to_string(),
                     })
                 } else {
@@ -92,7 +92,7 @@ impl NodeId {
                 }
             }
             "arcfamily" => Some(Self::ArcFamily(parts[1].to_string())),
-            "arckind" => Some(Self::ArcKind(parts[1].to_string())),
+            "arcclass" => Some(Self::ArcClass(parts[1].to_string())),
             _ => None,
         }
     }
@@ -109,7 +109,7 @@ impl NodeId {
 pub struct UnifiedNode {
     /// Unique identifier for this node
     pub id: NodeId,
-    /// Depth in tree (0=section, 1=realm/family, 2=layer, 3=kind, 4=instance)
+    /// Depth in tree (0=section, 1=realm/family, 2=layer, 3=class, 4=instance)
     pub depth: u8,
     /// Display properties (icon, label, badge, etc.)
     pub display: NodeDisplay,
@@ -132,7 +132,7 @@ pub struct NodeDisplay {
     pub count: Option<usize>,
     /// Arc and property statistics
     pub stats: Option<NodeStats>,
-    /// Trait abbreviation for Kind nodes (e.g., "inv", "loc", "gen")
+    /// Trait abbreviation for Class nodes (e.g., "def", "aut", "gen")
     pub trait_abbrev: Option<&'static str>,
 }
 
@@ -213,7 +213,7 @@ impl LazyChildren {
 // Pagination Constants
 // ============================================================================
 
-/// Number of instances to load initially when expanding a Kind.
+/// Number of instances to load initially when expanding a Class.
 pub const INITIAL_INSTANCE_BATCH: usize = 10;
 
 /// Number of instances to load on "Load more".
@@ -229,9 +229,9 @@ pub const MAX_INSTANCE_DISPLAY: usize = 1000;
 /// Commands sent from TUI to async worker.
 #[derive(Debug, Clone)]
 pub enum AsyncCommand {
-    /// Load instances for a Kind
+    /// Load instances for a Class
     LoadInstances {
-        kind: String,
+        class: String,
         offset: usize,
         limit: usize,
     },
@@ -241,8 +241,8 @@ pub enum AsyncCommand {
     LoadLayerDetails { realm: String, layer: String },
     /// Load details for an ArcFamily node
     LoadArcFamilyDetails(String),
-    /// Load details for an ArcKind node
-    LoadArcKindDetails(String),
+    /// Load details for an ArcClass node
+    LoadArcClassDetails(String),
     /// Refresh the entire tree
     RefreshTree,
     /// Shutdown the async worker
@@ -252,7 +252,7 @@ pub enum AsyncCommand {
 /// Events sent from async worker to TUI.
 #[derive(Debug)]
 pub enum AsyncEvent {
-    /// Instances loaded for a Kind
+    /// Instances loaded for a Class
     InstancesLoaded(InstanceLoadResponse),
     /// Realm details loaded
     RealmDetailsLoaded(RealmDetails),
@@ -260,8 +260,8 @@ pub enum AsyncEvent {
     LayerDetailsLoaded(LayerDetails),
     /// ArcFamily details loaded
     ArcFamilyDetailsLoaded(ArcFamilyDetails),
-    /// ArcKind details loaded
-    ArcKindDetailsLoaded(ArcKindDetails),
+    /// ArcClass details loaded
+    ArcClassDetailsLoaded(ArcClassDetails),
     /// Tree data refreshed
     TreeRefreshed(Box<UnifiedTreeData>),
     /// Error occurred
@@ -326,7 +326,7 @@ pub struct ArcFamilyDetails {
 
 /// Details for an ArcKind node panel.
 #[derive(Debug)]
-pub struct ArcKindDetails {
+pub struct ArcClassDetails {
     pub name: String,
     pub family: String,
     pub source: String,
@@ -437,7 +437,7 @@ mod tests {
                 realm: "shared".to_string(),
                 layer: "config".to_string(),
             },
-            NodeId::Kind("Locale".to_string()),
+            NodeId::Class("Locale".to_string()),
             NodeId::Instance {
                 kind: "Locale".to_string(),
                 key: "fr-FR".to_string(),
@@ -460,7 +460,7 @@ mod tests {
         assert!(!LazyChildren::Leaf.can_expand());
 
         let loaded = LazyChildren::Loaded {
-            items: vec![NodeId::Kind("Test".to_string())],
+            items: vec![NodeId::Class("Test".to_string())],
             total: 10,
             has_more: true,
         };

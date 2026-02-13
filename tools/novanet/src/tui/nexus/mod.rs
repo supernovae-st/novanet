@@ -1,6 +1,6 @@
 //! Nexus Mode - Gamified learning hub for NovaNet taxonomy.
 //!
-//! Nexus Mode provides 9 tabs organized in 3 sections:
+//! Nexus Mode provides 10 tabs organized in 3 sections:
 //!
 //! ## LEARN (Beginner-friendly)
 //! - [I] Intro: Big Picture introduction (what is NovaNet?)
@@ -15,9 +15,10 @@
 //! ## PRACTICE (Interactive)
 //! - [P] Pipeline: Animated generation flow (not translation)
 //! - [Q] Quiz: Interactive taxonomy quiz
+//! - [S] Stats: Dynamic learning statistics (sparklines, gauges, achievements)
 //! - [V] Views: Schema views explorer (Query-First architecture)
 //!
-//! v11.8: 59 nodes (39 shared + 20 org), 10 layers (4 shared + 6 org).
+//! v0.12.0: 59 nodes (39 shared + 20 org), 10 layers (4 shared + 6 org).
 //! Progress persistence to ~/.novanet/tutorial_progress.json
 
 pub mod arcs;
@@ -28,6 +29,7 @@ pub mod layers;
 pub mod persistence;
 pub mod pipeline;
 pub mod quiz;
+pub mod stats;
 pub mod traits;
 pub mod tutorial;
 pub mod views;
@@ -50,6 +52,7 @@ pub use traits::{CodeExample, TraitStats, trait_code_examples};
 
 // Re-export new tab types
 pub use glossary::GlossaryState;
+pub use stats::StatsState;
 pub use tutorial::TutorialState;
 
 // =============================================================================
@@ -97,6 +100,8 @@ pub enum NexusTab {
     Pipeline,
     /// Interactive quiz about NovaNet taxonomy
     Quiz,
+    /// Dynamic learning statistics (sparklines, gauges, achievements)
+    Stats,
     /// Schema views explorer (Query-First architecture)
     Views,
 }
@@ -117,6 +122,7 @@ impl NexusTab {
             // PRACTICE section
             NexusTab::Pipeline => 'p',
             NexusTab::Quiz => 'q',
+            NexusTab::Stats => 's',
             NexusTab::Views => 'v',
         }
     }
@@ -132,6 +138,7 @@ impl NexusTab {
             NexusTab::Arcs => "Arcs",
             NexusTab::Pipeline => "Pipeline",
             NexusTab::Quiz => "Quiz",
+            NexusTab::Stats => "Stats",
             NexusTab::Views => "Views",
         }
     }
@@ -150,6 +157,7 @@ impl NexusTab {
             // PRACTICE
             NexusTab::Pipeline,
             NexusTab::Quiz,
+            NexusTab::Stats,
             NexusTab::Views,
         ]
     }
@@ -164,7 +172,8 @@ impl NexusTab {
             NexusTab::Layers => NexusTab::Arcs,
             NexusTab::Arcs => NexusTab::Pipeline,
             NexusTab::Pipeline => NexusTab::Quiz,
-            NexusTab::Quiz => NexusTab::Views,
+            NexusTab::Quiz => NexusTab::Stats,
+            NexusTab::Stats => NexusTab::Views,
             NexusTab::Views => NexusTab::Intro,
         }
     }
@@ -180,7 +189,8 @@ impl NexusTab {
             NexusTab::Arcs => NexusTab::Layers,
             NexusTab::Pipeline => NexusTab::Arcs,
             NexusTab::Quiz => NexusTab::Pipeline,
-            NexusTab::Views => NexusTab::Quiz,
+            NexusTab::Stats => NexusTab::Quiz,
+            NexusTab::Views => NexusTab::Stats,
         }
     }
 
@@ -189,7 +199,7 @@ impl NexusTab {
         match self {
             NexusTab::Intro | NexusTab::Glossary | NexusTab::Tutorial => "LEARN",
             NexusTab::Traits | NexusTab::Layers | NexusTab::Arcs => "EXPLORE",
-            NexusTab::Pipeline | NexusTab::Quiz | NexusTab::Views => "PRACTICE",
+            NexusTab::Pipeline | NexusTab::Quiz | NexusTab::Stats | NexusTab::Views => "PRACTICE",
         }
     }
 
@@ -227,7 +237,11 @@ impl NexusTab {
                     (NexusTab::Quiz, "Test your knowledge"),
                 ],
                 NexusTab::Quiz => vec![
+                    (NexusTab::Stats, "See your Stats"),
                     (NexusTab::Glossary, "Review in Glossary"),
+                ],
+                NexusTab::Stats => vec![
+                    (NexusTab::Quiz, "Take a Quiz"),
                     (NexusTab::Tutorial, "Continue Tutorial"),
                 ],
                 NexusTab::Views => vec![
@@ -265,7 +279,11 @@ impl NexusTab {
                     (NexusTab::Quiz, "Tester vos connaissances"),
                 ],
                 NexusTab::Quiz => vec![
+                    (NexusTab::Stats, "Voir vos Stats"),
                     (NexusTab::Glossary, "Revoir dans Glossaire"),
+                ],
+                NexusTab::Stats => vec![
+                    (NexusTab::Quiz, "Faire un Quiz"),
                     (NexusTab::Tutorial, "Continuer le Tutoriel"),
                 ],
                 NexusTab::Views => vec![
@@ -368,6 +386,10 @@ pub struct NexusState {
     /// Quiz state (current question, score, etc.).
     pub quiz: quiz::QuizState,
 
+    // === Stats tab state (v0.12.0) ===
+    /// Stats state (score history, category mastery, animations).
+    pub stats: stats::StatsState,
+
     // === Views tab state ===
     /// Views state (category cursor, view cursor, concept panel).
     pub views: views::ViewsState,
@@ -428,6 +450,7 @@ impl NexusState {
             pipeline_stage: 0,
             pipeline_animating: false,
             quiz: quiz::QuizState::new(),
+            stats: stats::StatsState::new(),
             views: views::ViewsState::new(),
             // Shared state
             drill_depth: 0,
@@ -474,7 +497,7 @@ impl NexusState {
         }
     }
 
-    /// Save quiz high score, update streak, and check achievements (v0.12.0).
+    /// Save quiz high score, update streak, check achievements, and update stats (v0.12.0).
     /// Uses cache to avoid disk reads.
     ///
     /// Parameters:
@@ -494,6 +517,18 @@ impl NexusState {
 
         // Store new achievements to display in completion screen
         self.new_achievements = new_achievements;
+
+        // Update stats for sparkline and category mastery (v0.12.0)
+        let score_pct = if total > 0 {
+            (score as f64 / total as f64 * 100.0) as u64
+        } else {
+            0
+        };
+        self.stats.add_score(score_pct);
+
+        // Update category mastery from quiz
+        let cat_scores = self.quiz.category_scores(quiz::QUESTIONS);
+        self.stats.update_mastery(&cat_scores);
 
         if let Err(e) = progress.save() {
             self.clipboard_message = Some(format!("Save failed: {}", e));
@@ -811,6 +846,13 @@ impl NexusState {
                     .get(self.quiz.current_question)
                     .map(|q| q.question.to_string())
             }
+            NexusTab::Stats => {
+                // Yank stats summary
+                Some(format!(
+                    "Quiz score: {}%",
+                    self.stats.score_history.last().unwrap_or(&0)
+                ))
+            }
             NexusTab::Views => {
                 // Yank the current view ID
                 self.views.get_yank_text()
@@ -953,6 +995,10 @@ impl NexusState {
                 }
                 true
             }
+            NexusTab::Stats => {
+                // Stats tab: scroll stats view
+                false // No vertical navigation in stats
+            }
             NexusTab::Views => {
                 self.views.navigate_up();
                 true
@@ -1032,6 +1078,10 @@ impl NexusState {
                     self.quiz.select_down(question);
                 }
                 true
+            }
+            NexusTab::Stats => {
+                // Stats tab: scroll stats view
+                false // No vertical navigation in stats
             }
             NexusTab::Views => {
                 self.views.navigate_down();
@@ -1173,6 +1223,10 @@ impl NexusState {
             }
             NexusTab::Quiz => {
                 // Quiz doesn't have drill-down
+                false
+            }
+            NexusTab::Stats => {
+                // Stats doesn't have drill-down
                 false
             }
             NexusTab::Views => {
@@ -1335,6 +1389,9 @@ impl NexusState {
                     }
                 }
             }
+            NexusTab::Stats => {
+                format!("Nexus > {} > {}", section, tab_name)
+            }
         }
     }
 
@@ -1384,6 +1441,7 @@ impl NexusState {
                 }
             }
             NexusTab::Views => vec![("↑/↓", "view"), ("Enter", "detail"), ("y", "copy")],
+            NexusTab::Stats => vec![("↑/↓", "scroll"), ("y", "copy")],
         }
     }
 }
@@ -1424,6 +1482,7 @@ pub fn render_nexus(f: &mut Frame, area: Rect, app: &App) {
         // PRACTICE section
         NexusTab::Pipeline => pipeline::render_pipeline_tab(f, app, chunks[2]),
         NexusTab::Quiz => quiz::render_quiz_tab(f, app, chunks[2]),
+        NexusTab::Stats => stats::render_stats_tab(f, app, chunks[2]),
         NexusTab::Views => views::render_views_tab(f, app, chunks[2]),
     }
 
@@ -1487,7 +1546,7 @@ fn render_tab_bar(f: &mut Frame, area: Rect, app: &App) {
         ),
         (
             "PRACTICE",
-            vec![NexusTab::Pipeline, NexusTab::Quiz, NexusTab::Views],
+            vec![NexusTab::Pipeline, NexusTab::Quiz, NexusTab::Stats, NexusTab::Views],
         ),
     ];
 
@@ -1780,6 +1839,9 @@ mod tests {
         assert_eq!(state.tab, NexusTab::Quiz);
 
         state.handle_key(key_event(KeyCode::Tab));
+        assert_eq!(state.tab, NexusTab::Stats);
+
+        state.handle_key(key_event(KeyCode::Tab));
         assert_eq!(state.tab, NexusTab::Views);
 
         state.handle_key(key_event(KeyCode::Tab));
@@ -1789,7 +1851,7 @@ mod tests {
     #[test]
     fn test_guide_tab_all() {
         let all = NexusTab::all();
-        assert_eq!(all.len(), 9); // v11.7: 9 tabs
+        assert_eq!(all.len(), 10); // v0.12.0: 10 tabs (added Stats)
         // LEARN section
         assert_eq!(all[0], NexusTab::Intro);
         assert_eq!(all[1], NexusTab::Glossary);
@@ -1801,7 +1863,8 @@ mod tests {
         // PRACTICE section
         assert_eq!(all[6], NexusTab::Pipeline);
         assert_eq!(all[7], NexusTab::Quiz);
-        assert_eq!(all[8], NexusTab::Views);
+        assert_eq!(all[8], NexusTab::Stats);
+        assert_eq!(all[9], NexusTab::Views);
     }
 
     #[test]
@@ -1815,12 +1878,13 @@ mod tests {
         assert_eq!(NexusTab::Arcs.shortcut(), 'a');
         assert_eq!(NexusTab::Pipeline.shortcut(), 'p');
         assert_eq!(NexusTab::Quiz.shortcut(), 'q');
+        assert_eq!(NexusTab::Stats.shortcut(), 's');
         assert_eq!(NexusTab::Views.shortcut(), 'v');
     }
 
     #[test]
     fn test_guide_tab_labels() {
-        // v11.7: 9 tabs with labels
+        // v0.12.0: 10 tabs with labels (added Stats)
         assert_eq!(NexusTab::Intro.label(), "Intro");
         assert_eq!(NexusTab::Glossary.label(), "Glossary");
         assert_eq!(NexusTab::Tutorial.label(), "Tutorial");
@@ -1829,6 +1893,7 @@ mod tests {
         assert_eq!(NexusTab::Arcs.label(), "Arcs");
         assert_eq!(NexusTab::Pipeline.label(), "Pipeline");
         assert_eq!(NexusTab::Quiz.label(), "Quiz");
+        assert_eq!(NexusTab::Stats.label(), "Stats");
         assert_eq!(NexusTab::Views.label(), "Views");
     }
 
@@ -1884,6 +1949,9 @@ mod tests {
         assert_eq!(state.tab, NexusTab::Quiz);
 
         state.handle_key(key_event(KeyCode::Char(']')));
+        assert_eq!(state.tab, NexusTab::Stats);
+
+        state.handle_key(key_event(KeyCode::Char(']')));
         assert_eq!(state.tab, NexusTab::Views);
 
         // Wrap around
@@ -1922,9 +1990,12 @@ mod tests {
         let mut state = NexusState::new();
         assert_eq!(state.tab, NexusTab::Intro); // v11.7: default is Intro
 
-        // Cycle backward through all 9 tabs
+        // Cycle backward through all 10 tabs (v0.12.0: added Stats)
         state.handle_key(key_event(KeyCode::BackTab));
         assert_eq!(state.tab, NexusTab::Views); // Wraps to end
+
+        state.handle_key(key_event(KeyCode::BackTab));
+        assert_eq!(state.tab, NexusTab::Stats);
 
         state.handle_key(key_event(KeyCode::BackTab));
         assert_eq!(state.tab, NexusTab::Quiz);

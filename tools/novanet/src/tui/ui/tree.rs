@@ -129,7 +129,7 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 color: hex_to_color(&l.color),
             });
         }
-        Some(TreeItem::Kind(r, l, k)) => {
+        Some(TreeItem::Class(r, l, k)) => {
             path.push(BreadcrumbLevel {
                 icon: realm_badge_icon(&r.key),
                 label: r.display_name.clone(),
@@ -207,7 +207,7 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 color: Color::Magenta,
             });
         }
-        Some(TreeItem::ArcKind(f, ak)) => {
+        Some(TreeItem::ArcClass(f, ak)) => {
             path.push(BreadcrumbLevel {
                 icon: "⊶",
                 label: "Arcs".to_string(),
@@ -224,7 +224,7 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 color: Color::White,
             });
         }
-        Some(TreeItem::KindsSection) => {
+        Some(TreeItem::ClassesSection) => {
             path.push(BreadcrumbLevel {
                 icon: "◈",
                 label: "Node Classes".to_string(),
@@ -365,7 +365,7 @@ fn build_minimap_info(app: &App, visible_height: usize) -> MiniMapInfo {
     let realm_color = match app.current_item() {
         Some(crate::tui::data::TreeItem::Realm(r)) => hex_to_color(&r.color),
         Some(crate::tui::data::TreeItem::Layer(r, _)) => hex_to_color(&r.color),
-        Some(crate::tui::data::TreeItem::Kind(r, _, _)) => hex_to_color(&r.color),
+        Some(crate::tui::data::TreeItem::Class(r, _, _)) => hex_to_color(&r.color),
         Some(crate::tui::data::TreeItem::EntityCategory(r, _, _, _)) => hex_to_color(&r.color),
         Some(crate::tui::data::TreeItem::Instance(r, _, _, _)) => hex_to_color(&r.color),
         _ => Color::Cyan, // Default for arc sections

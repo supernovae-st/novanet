@@ -109,7 +109,7 @@ node:
       description: "Localized project identity and messaging"
 
     HAS_AUDIENCE:
-      to: Audience
+      to: AudiencePersona
       cardinality: "1:N"
       description: "Target audience personas"
 
