@@ -961,7 +961,8 @@ impl NexusState {
                 }
             }
             NexusTab::Quiz => {
-                self.quiz.select_down();
+                let question = quiz::QUESTIONS.get(self.quiz.current_question);
+                self.quiz.select_down(question);
                 true
             }
             NexusTab::Views => {
