@@ -11,27 +11,26 @@ argument-hint: [validate|generate|status]
 
 Synchronize generated artifacts with YAML source of truth.
 
-## Source of Truth (v11.7)
+## Source of Truth (v12.0)
 
 ```
 packages/core/models/
-+-- node-kinds/                   <- 60 YAML files (one per NodeKind)
++-- node-kinds/                   <- 59 YAML files (one per NodeClass)
 |   +-- shared/                   <- Realm: shared (39 nodes)
-|   |   +-- locale/               <-   Layer: locale (7 nodes)
+|   |   +-- config/               <-   Layer: config (EntityCategory, Locale, SEOKeywordFormat)
+|   |   +-- locale/               <-   Layer: locale (6 nodes)
 |   |   +-- geography/            <-   Layer: geography (6 nodes)
-|   |   +-- knowledge/            <-   Layer: knowledge (19 nodes)
-|   +-- org/                      <- Realm: org (21 nodes)
+|   |   +-- knowledge/            <-   Layer: knowledge (24 nodes, incl. SEO/GEO)
+|   +-- org/                      <- Realm: org (20 nodes)
 |       +-- config/               <-   Layer: config (OrgConfig)
-|       +-- foundation/           <-   Layer: foundation
-|       +-- structure/            <-   Layer: structure
-|       +-- semantic/             <-   Layer: semantic (Entity, EntityContent)
-|       +-- instruction/          <-   Layer: instruction
-|       +-- seo/                  <-   Layer: seo (SEOKeyword)
-|       +-- geo/                  <-   Layer: geo (GEOQuery, GEOAnswer, GEOMetrics)
-|       +-- output/               <-   Layer: output
-+-- arc-kinds/                    <- 114 YAML files (one per ArcKind)
+|       +-- foundation/           <-   Layer: foundation (3 nodes)
+|       +-- structure/            <-   Layer: structure (3 nodes)
+|       +-- semantic/             <-   Layer: semantic (Entity, EntityContent, etc.)
+|       +-- instruction/          <-   Layer: instruction (7 nodes)
+|       +-- output/               <-   Layer: output (3 nodes)
++-- arc-kinds/                    <- 114 YAML files (one per ArcClass)
 +-- relations.yaml                <- Legacy format (kept for parser compatibility)
-+-- taxonomy.yaml                 <- v11.7: 2 Realms, 10 Layers, 5 Traits
++-- taxonomy.yaml                 <- v12.0: 2 Realms, 10 Layers, 5 Traits (defined/authored/imported/generated/retrieved)
 ```
 
 ## Generated Artifacts
@@ -41,8 +40,8 @@ packages/core/models/
 | Source | Generator | Output |
 |--------|-----------|--------|
 | taxonomy.yaml | OrganizingGenerator | seed/00.5-taxonomy.cypher |
-| node-kinds/ | NodeKindGenerator | seed/01-kinds.cypher |
-| arc-kinds/ | ArcKindGenerator | seed/02-arc-kinds.cypher |
+| node-kinds/ | NodeClassGenerator | seed/01-kinds.cypher |
+| arc-kinds/ | ArcClassGenerator | seed/02-arc-kinds.cypher |
 | node-kinds/ | LayerGenerator | src/graph/layers.ts |
 | models/ | MermaidGenerator | models/docs/complete-graph.md |
 | node-kinds/ | AutowireGenerator | seed/99-autowire-kinds.cypher |
@@ -140,6 +139,6 @@ All generators live in `tools/novanet/src/generators/` (Rust-first architecture)
 
 **MermaidGenerator (`generators/mermaid.rs`):**
 - Reads `models/node-kinds/` and `models/arc-kinds/`
-- Generates Mermaid flowchart with all 60 Kinds and 114 arcs
+- Generates Mermaid flowchart with all 59 Classes and 114 arcs
 - Groups by Realm (Shared, Org)
-- Colors by Layer (11 distinct colors)
+- Colors by Layer (10 distinct colors)

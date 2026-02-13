@@ -44,8 +44,8 @@ If validation fails -> run `cargo run -- schema generate` first.
 | `all` | taxonomy.yaml + ALL node-kinds + ALL arc-kinds |
 | `nodes` | taxonomy.yaml + node-kinds/**/*.yaml |
 | `arcs` | taxonomy.yaml + arc-kinds/**/*.yaml |
-| `seo` | node-kinds/org/seo/*.yaml |
-| `geo` | node-kinds/org/geo/*.yaml |
+| `seo` | node-kinds/shared/knowledge/*.yaml (SEO* nodes) |
+| `geo` | node-kinds/shared/knowledge/*.yaml (GEO* nodes) |
 | `knowledge` | node-kinds/shared/knowledge/*.yaml |
 | `locale` | node-kinds/shared/locale/*.yaml |
 | `geography` | node-kinds/shared/geography/*.yaml |
@@ -68,8 +68,8 @@ find packages/core/models/node-kinds -name "*.yaml" | xargs -I{} dirname {} | so
 From YAML files, extract:
 - **Node names** from `node.name`
 - **Realms** from `node.realm` (shared | org)
-- **Layers** from `node.layer` (11 layers: locale, geography, knowledge | config, foundation, structure, semantic, instruction, seo, geo, output)
-- **Traits** from `node.trait` (invariant | localized | knowledge | generated | aggregated)
+- **Layers** from `node.layer` (10 layers: config, locale, geography, knowledge | config, foundation, structure, semantic, instruction, output)
+- **Traits** from `node.trait` (defined | authored | imported | generated | retrieved)
 - **Colors** from taxonomy.yaml `node_realms[].color`, `node_layers[].color`
 
 ### Step 4: Generate ASCII Diagram
@@ -96,8 +96,8 @@ Use `$ARGUMENTS` to focus on specific section:
 | `all` or empty | Complete meta-graph taxonomy (default) |
 | `nodes` | Node taxonomy by realm/layer |
 | `arcs` | Arc taxonomy by family/scope |
-| `seo` | SEO layer nodes and arcs (org/seo) |
-| `geo` | GEO layer nodes (org/geo) |
+| `seo` | SEO nodes (shared/knowledge) |
+| `geo` | GEO nodes (shared/knowledge) |
 | `knowledge` | Knowledge layer (Sets, Atoms) (shared/knowledge) |
 | `locale` | Locale layer (shared/locale) |
 | `geography` | Geography layer (shared/geography) |
@@ -129,9 +129,9 @@ Use this structure for consistency:
 +-------------------------------------------------------------------------------+
 |  TRAIT LEGEND (from taxonomy.yaml node_traits)                                |
 +-------------------------------------------------------------------------------+
-|  solid     = invariant       dashed   = localized                             |
-|  dotted    = knowledge       double   = generated                             |
-|  thin-dot  = aggregated                                                       |
+|  solid     = defined         dashed   = authored                              |
+|  dotted    = imported        double   = generated                             |
+|  thin-dot  = retrieved                                                        |
 +-------------------------------------------------------------------------------+
 ```
 
@@ -147,9 +147,9 @@ Use this structure for consistency:
 ```yaml
 node:
   name: SEOKeyword      # <- Node name
-  realm: org            # <- WHERE (shared | org)
-  layer: seo            # <- WHAT layer
-  trait: knowledge      # <- HOW (invariant | localized | knowledge | generated | aggregated)
+  realm: shared         # <- WHERE (shared | org)
+  layer: knowledge      # <- WHAT layer
+  trait: imported       # <- HOW (defined | authored | imported | generated | retrieved)
 ```
 
 **Output format:**
@@ -184,7 +184,7 @@ arc:
 ## Section: seo
 
 **Required reads:**
-- `packages/core/models/node-kinds/org/seo/*.yaml`
+- `packages/core/models/node-kinds/shared/knowledge/*.yaml` (SEO* nodes)
 - `packages/core/models/arc-kinds/mining/*.yaml`
 
 Show: SEOKeyword, SEOKeywordMetrics, SEOCluster, etc. and their relationships.
@@ -194,7 +194,7 @@ Show: SEOKeyword, SEOKeywordMetrics, SEOCluster, etc. and their relationships.
 ## Section: geo
 
 **Required reads:**
-- `packages/core/models/node-kinds/org/geo/*.yaml`
+- `packages/core/models/node-kinds/shared/knowledge/*.yaml` (GEO* nodes)
 
 Show: GEOQuery, GEOAnswer, GEOMetrics and their relationships.
 
@@ -216,8 +216,8 @@ Show: All Sets (TermSet, etc.), all Atoms (Term, etc.), Entity/EntityContent fro
 /novanet-arch              # Full architecture (reads ALL YAML)
 /novanet-arch nodes        # Node taxonomy from node-kinds/**
 /novanet-arch arcs         # Arc taxonomy from arc-kinds/**
-/novanet-arch seo          # SEO layer from org/seo/
-/novanet-arch geo          # GEO layer from org/geo/
+/novanet-arch seo          # SEO nodes from shared/knowledge/
+/novanet-arch geo          # GEO nodes from shared/knowledge/
 /novanet-arch knowledge    # Knowledge layer from shared/knowledge/
 /novanet-arch locale       # Locale layer from shared/locale/
 /novanet-arch org          # Org realm (v11.3)

@@ -36,36 +36,36 @@ Add a new node type to the NovaNet ontology using Socratic discovery.
 - **YAML filename**: kebab-case (e.g., `locale-humor.yaml`, `entity-content.yaml`)
 - **Property names**: snake_case (e.g., `display_name`, `llm_context`)
 
-## Nomenclature Rules (v11.3)
+## Nomenclature Rules (v0.12.0)
 
 | Pattern | Trait | Use For | Examples |
 |---------|-------|---------|----------|
-| `*Content` | localized | Human-curated localized content | EntityContent, ProjectContent |
+| `*Content` | authored | Human-curated localized content | EntityContent, ProjectContent |
 | `*Generated` | generated | LLM-generated output content | PageGenerated, BlockGenerated |
-| `*Metrics` | aggregated | Computed/aggregated data | SEOKeywordMetrics, GEOMetrics |
-| `*Category` | invariant | Categorical groupings | EntityCategory |
-| `Locale*` | knowledge | Locale knowledge atoms | LocaleVoice, LocaleCulture |
-| `*Set` | invariant | Container nodes for atoms | TermSet, ExpressionSet |
+| `*Metrics` | retrieved | External API snapshots | SEOKeywordMetrics, GEOMetrics |
+| `*Category` | defined | Categorical groupings | EntityCategory |
+| `Locale*` | imported | Locale knowledge atoms | LocaleVoice, LocaleCulture |
+| `*Set` | defined | Container nodes for atoms | TermSet, ExpressionSet |
 
 **Deprecated patterns (do not use):**
 - `*L10n` - Use `*Content` or `*Generated` instead
 
-## Realm/Layer (v11.3)
+## Realm/Layer (v0.12.0)
 
 | Realm | Layers |
 |-------|--------|
-| `shared` | locale, geography, knowledge |
-| `org` | config, foundation, structure, semantic, instruction, seo, geo, output |
+| `shared` | config, locale, geography, knowledge |
+| `org` | config, foundation, structure, semantic, instruction, output |
 
-## Trait Selection (v11.3)
+## Trait Selection (v0.12.0)
 
 | Trait | Use For | Border Style |
 |-------|---------|--------------|
-| `invariant` | Universal, locale-independent | solid |
-| `localized` | Has locale-specific content | dashed |
-| `knowledge` | Semantic knowledge atoms | dotted |
-| `generated` | LLM-generated output | double |
-| `aggregated` | Computed metrics | thin-dotted |
+| `defined` | Human-created once (templates, configs) | solid |
+| `authored` | Human-written per locale (editorial) | dashed |
+| `imported` | External data brought in (corpora) | dotted |
+| `generated` | Produced by NovaNet LLM | double |
+| `retrieved` | Fetched from external APIs | thin-dotted |
 
 ## Example
 

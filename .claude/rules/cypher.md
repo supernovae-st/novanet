@@ -6,24 +6,28 @@ paths:
 
 # Cypher/Neo4j Rules
 
-## Meta-Graph Navigation (v10.9)
+## Schema-Graph Navigation (v12)
 ```cypher
 // Taxonomy hierarchy
-MATCH (r:Realm)-[:HAS_LAYER]->(l:Layer)-[:HAS_KIND]->(k:Kind)
+MATCH (r:Realm)-[:HAS_LAYER]->(l:Layer)-[:HAS_CLASS]->(c:Class)
 
-// Kind context assembly
-MATCH (k:Kind {label: $kind})
-MATCH (k)-[:IN_REALM]->(r:Realm)
-MATCH (k)-[:IN_LAYER]->(l:Layer)
-MATCH (k)-[:HAS_TRAIT]->(t:Trait)
+// Class context assembly
+MATCH (c:Class {label: $class})
+MATCH (c)-[:IN_REALM]->(r:Realm)
+MATCH (c)-[:IN_LAYER]->(l:Layer)
+MATCH (c)-[:HAS_TRAIT]->(t:Trait)
 
-// Instance bridge (data → meta)
-MATCH (n:Page)-[:OF_KIND]->(k:Kind {label: 'Page'})
+// Instance bridge (data → schema)
+MATCH (n:Page)-[:OF_CLASS]->(c:Class {label: 'Page'})
+
+// Arc class navigation
+MATCH (ac:ArcClass)-[:FROM_CLASS]->(source:Class)
+MATCH (ac)-[:TO_CLASS]->(target:Class)
 ```
 
 ## Constraints & Indexes
 - All node types need unique constraint on `key`
-- Meta-nodes have `:Meta` double-label
+- Schema-nodes have `:Schema` double-label (v12: was `:Meta`)
 - Use APOC for complex operations
 
 ## Seed File Conventions

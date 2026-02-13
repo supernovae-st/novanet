@@ -9,14 +9,14 @@ Add a new arc type (directed relationship) between nodes in the NovaNet ontology
 ## Terminology
 
 > **Arc** = directed link between nodes (graph theory term for directed edges)
-> **ArcKind** = arc type definition (e.g., HAS_BLOCK, USES_ENTITY)
+> **ArcClass** = arc type definition (e.g., HAS_BLOCK, USES_ENTITY)
 > **ArcFamily** = classification of arc types (ownership, localization, semantic, generation, mining)
 
 ## Workflow
 
 1. **Discovery Phase**: Ask about the arc:
-   - From which node type(s)? (source Kind)
-   - To which node type(s)? (target Kind)
+   - From which node type(s)? (source Class)
+   - To which node type(s)? (target Class)
    - What ArcFamily? (ownership, localization, semantic, generation, mining)
    - What is the cardinality? (one_to_one, one_to_many, many_to_many)
    - Does it need properties? (temperature, position, etc.)
@@ -54,7 +54,7 @@ Add a new arc type (directed relationship) between nodes in the NovaNet ontology
 | `generation` | AI-generated | `==>` | HAS_GENERATED, HAS_PROMPT |
 | `mining` | SEO/GEO data | `--o` | HAS_SEO_TARGET, HAS_GEO_TARGET |
 
-## Naming Conventions (v10.9.0)
+## Naming Conventions (v0.12.0)
 
 | Pattern | Use For | Examples |
 |---------|---------|----------|

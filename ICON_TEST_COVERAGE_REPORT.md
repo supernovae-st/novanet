@@ -1,5 +1,10 @@
 # Icon Test Coverage Report
 
+> **DEPRECATED**: This report was created for v10.6.0 and is now outdated.
+> Current version is v0.12.0 with 59 nodes (39 shared + 20 org), 114 arcs, 10 layers, and 5 traits.
+> The icon system has been significantly refactored since this report was written.
+> Consider deleting this file or regenerating the report.
+
 **Date**: 2026-02-06
 **Project**: NovaNet v10.6.0
 **Scope**: Icon generation, parsing, and TUI rendering systems
