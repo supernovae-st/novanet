@@ -1860,7 +1860,7 @@ mod tests {
         let mut state = NexusState::new();
         assert_eq!(state.tab, NexusTab::Intro); // v11.7: default is Intro
 
-        // Cycle through all 9 tabs
+        // Cycle through all 11 tabs (v0.12.3: added Arch)
         state.handle_key(key_event(KeyCode::Tab));
         assert_eq!(state.tab, NexusTab::Glossary);
 
@@ -1875,6 +1875,9 @@ mod tests {
 
         state.handle_key(key_event(KeyCode::Tab));
         assert_eq!(state.tab, NexusTab::Arcs);
+
+        state.handle_key(key_event(KeyCode::Tab));
+        assert_eq!(state.tab, NexusTab::Arch); // v0.12.3: Arch added
 
         state.handle_key(key_event(KeyCode::Tab));
         assert_eq!(state.tab, NexusTab::Pipeline);
@@ -1895,7 +1898,7 @@ mod tests {
     #[test]
     fn test_guide_tab_all() {
         let all = NexusTab::all();
-        assert_eq!(all.len(), 10); // v0.12.0: 10 tabs (added Stats)
+        assert_eq!(all.len(), 11); // v0.12.3: 11 tabs (added Arch)
         // LEARN section
         assert_eq!(all[0], NexusTab::Intro);
         assert_eq!(all[1], NexusTab::Glossary);
@@ -1904,11 +1907,12 @@ mod tests {
         assert_eq!(all[3], NexusTab::Traits);
         assert_eq!(all[4], NexusTab::Layers);
         assert_eq!(all[5], NexusTab::Arcs);
+        assert_eq!(all[6], NexusTab::Arch); // v0.12.3: Arch added
         // PRACTICE section
-        assert_eq!(all[6], NexusTab::Pipeline);
-        assert_eq!(all[7], NexusTab::Quiz);
-        assert_eq!(all[8], NexusTab::Stats);
-        assert_eq!(all[9], NexusTab::Views);
+        assert_eq!(all[7], NexusTab::Pipeline);
+        assert_eq!(all[8], NexusTab::Quiz);
+        assert_eq!(all[9], NexusTab::Stats);
+        assert_eq!(all[10], NexusTab::Views);
     }
 
     #[test]
@@ -1970,7 +1974,7 @@ mod tests {
         let mut state = NexusState::new();
         assert_eq!(state.tab, NexusTab::Intro); // v11.7: default is Intro
 
-        // Navigate forward through all 9 tabs
+        // Navigate forward through all 11 tabs (v0.12.3: added Arch)
         state.handle_key(key_event(KeyCode::Char(']')));
         assert_eq!(state.tab, NexusTab::Glossary);
 
@@ -1985,6 +1989,9 @@ mod tests {
 
         state.handle_key(key_event(KeyCode::Char(']')));
         assert_eq!(state.tab, NexusTab::Arcs);
+
+        state.handle_key(key_event(KeyCode::Char(']')));
+        assert_eq!(state.tab, NexusTab::Arch); // v0.12.3: Arch added
 
         state.handle_key(key_event(KeyCode::Char(']')));
         assert_eq!(state.tab, NexusTab::Pipeline);
@@ -2034,7 +2041,7 @@ mod tests {
         let mut state = NexusState::new();
         assert_eq!(state.tab, NexusTab::Intro); // v11.7: default is Intro
 
-        // Cycle backward through all 10 tabs (v0.12.0: added Stats)
+        // Cycle backward through all 11 tabs (v0.12.3: added Arch)
         state.handle_key(key_event(KeyCode::BackTab));
         assert_eq!(state.tab, NexusTab::Views); // Wraps to end
 
@@ -2046,6 +2053,9 @@ mod tests {
 
         state.handle_key(key_event(KeyCode::BackTab));
         assert_eq!(state.tab, NexusTab::Pipeline);
+
+        state.handle_key(key_event(KeyCode::BackTab));
+        assert_eq!(state.tab, NexusTab::Arch); // v0.12.3: Arch added
 
         state.handle_key(key_event(KeyCode::BackTab));
         assert_eq!(state.tab, NexusTab::Arcs);
