@@ -29,7 +29,7 @@ pub(crate) fn compute_mini_bar_cache_key(app: &App, bar_width: usize) -> u64 {
     keys.push(bar_width as u64);
     keys.push(app.tree.realms.len() as u64);
     for realm in &app.tree.realms {
-        let count: usize = realm.layers.iter().map(|l| l.kinds.len()).sum();
+        let count: usize = realm.layers.iter().map(|l| l.classes.len()).sum();
         keys.push(count as u64);
     }
     combine_hashes(&keys)
@@ -143,18 +143,18 @@ pub(crate) fn realm_display_label(realm_key: &str) -> &str {
 fn build_realm_mini_bar(app: &App, bar_width: usize) -> Vec<Span<'static>> {
     let mut spans = Vec::with_capacity(8);
 
-    // Calculate total kinds from all realms
+    // Calculate total classes from all realms
     let mut realm_counts: Vec<(&str, usize, Color)> = Vec::with_capacity(app.tree.realms.len());
-    let mut total_kinds: usize = 0;
+    let mut total_classes: usize = 0;
 
     for realm in &app.tree.realms {
-        let count: usize = realm.layers.iter().map(|l| l.kinds.len()).sum();
+        let count: usize = realm.layers.iter().map(|l| l.classes.len()).sum();
         let color = hex_to_color(&realm.color);
         realm_counts.push((&realm.key, count, color));
-        total_kinds += count;
+        total_classes += count;
     }
 
-    if total_kinds == 0 {
+    if total_classes == 0 {
         spans.push(Span::styled("░".repeat(bar_width), STYLE_DIM));
         return spans;
     }
@@ -164,7 +164,7 @@ fn build_realm_mini_bar(app: &App, bar_width: usize) -> Vec<Span<'static>> {
     let mut percentages: Vec<(&str, u8, Color)> = Vec::with_capacity(realm_counts.len());
 
     for (i, (key, count, color)) in realm_counts.iter().enumerate() {
-        let proportion = *count as f64 / total_kinds as f64;
+        let proportion = *count as f64 / total_classes as f64;
         let percent = (proportion * 100.0).round() as u8;
         percentages.push((key, percent, *color));
 

@@ -77,7 +77,7 @@ pub static STEPS: [TutorialStep; 5] = [
             },
             TutorialTask {
                 description: "Expand Locale to see instances: fr-FR, ja-JP, ar-AE...",
-                hint: Some("Press Enter or 'l' to expand the Locale kind"),
+                hint: Some("Press Enter or 'l' to expand the Locale class"),
             },
             TutorialTask {
                 description: "Click on \"fr-FR\" to see its properties",

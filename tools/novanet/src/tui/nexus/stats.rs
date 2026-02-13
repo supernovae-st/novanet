@@ -194,7 +194,7 @@ impl SchemaStats {
             .iter()
             .map(|r| {
                 let name = if r.key == "shared" { "shared" } else { "org" };
-                let count = r.total_kinds();
+                let count = r.total_classes();
                 let color = if r.key == "shared" {
                     COLOR_CYAN
                 } else {
@@ -208,7 +208,7 @@ impl SchemaStats {
         let mut layer_distribution: Vec<(String, usize)> = Vec::new();
         for realm in &tree.realms {
             for layer in &realm.layers {
-                layer_distribution.push((layer.display_name.clone(), layer.kinds.len()));
+                layer_distribution.push((layer.display_name.clone(), layer.classes.len()));
             }
         }
         // Sort by count descending
@@ -218,7 +218,7 @@ impl SchemaStats {
         let arc_family_distribution: Vec<_> = tree
             .arc_families
             .iter()
-            .map(|f| (f.display_name.clone(), f.arc_kinds.len()))
+            .map(|f| (f.display_name.clone(), f.arc_classes.len()))
             .collect();
 
         // Count unique layers

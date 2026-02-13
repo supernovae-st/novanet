@@ -220,13 +220,12 @@ node:
       example: ["QR code personnalise", "QR code design"]
 
   # ===========================================================================
-  # RELATIONS
+  # RELATIONS (v11 format)
   # ===========================================================================
 
   relations:
-    - relation: FOR_LOCALE
+    FOR_LOCALE:
       to: Locale
-      direction: outgoing
       cardinality: "N:1"
       description: "Links to the locale this content is for"
 
