@@ -7,6 +7,42 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.12.1] - 2026-02-13
+
+### Added
+- **ADR-026: Inverse Arc Policy** - Tiered policy for bidirectional arc relationships
+  - TIER 1 (Required): Core ownership arcs with frequent bidirectional traversal
+  - TIER 2 (Recommended): Knowledge/locale traversal arcs
+  - TIER 3 (Optional): Config/low-frequency arcs
+- **ADR-027: Generation Family Arc Semantics** - Pipeline documentation and arc disambiguation
+  - Generation pipeline architecture (authoring → compilation → generation → output)
+  - Arc disambiguation table (GENERATED vs HAS_GENERATED, etc.)
+- **Arc Design Best Practices Guide** (`.claude/rules/arc-design-guide.md`)
+  - Naming conventions (HAS_*, *_OF, CONTAINS_*, VERB patterns)
+  - llm_context pattern specification (USE/TRIGGERS/NOT/RELATES)
+  - Cardinality and scope rules
+
+### Fixed
+- **Missing inverse arcs** - Created 5 new inverse arcs for TIER 1 compliance:
+  - `CHILD_OF` (inverse of HAS_CHILD) - Entity hierarchy traversal
+  - `INSTRUCTION_OF` (inverse of HAS_INSTRUCTION) - Instruction ownership
+  - `ENTITY_OF` (inverse of HAS_ENTITY) - Entity project ownership
+  - `PAGE_OF` (inverse of HAS_PAGE) - Page project ownership
+  - `PROJECT_OF` (inverse of HAS_PROJECT) - Project org ownership
+- **project-content.yaml** - Migrated from legacy list format to v11 map format
+
+### Changed
+- **llm_context standardization** - All generation family arcs (11) now use USE/TRIGGERS/NOT/RELATES pattern
+- **Node descriptions enhanced** - 5 nodes updated with proper llm_context:
+  - GEOQuery, GEOAnswer, SEOKeywordMetrics, Taboo, PromptArtifact
+- **Forward arcs updated** - 6 ownership arcs now declare `inverse:` field
+
+### Statistics
+- **1014 Rust tests passing**
+- **12 artifacts regenerated**
+- **Schema validation**: 0 errors, 0 warnings
+- **37 files reviewed** in code review
+
 ## [0.12.0] - 2026-02-13
 
 > **Versioning Note**: Starting with v0.12.0, NovaNet follows strict [SemVer](https://semver.org/).
