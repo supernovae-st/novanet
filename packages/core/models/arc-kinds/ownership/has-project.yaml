@@ -8,5 +8,12 @@ arc:
   source: OrgConfig
   target: Project
   cardinality: one_to_many
-  llm_context: OrgConfig owns all projects. Use to enumerate all projects for an organization.
+  inverse: PROJECT_OF
+
+  llm_context: |
+    USE: when loading projects for an organization.
+    TRIGGERS: org projects, project list, multi-project.
+    NOT: single project context (use Project directly).
+    RELATES: OrgConfig (source), Project (target), PROJECT_OF (inverse).
+
   cypher_pattern: (OrgConfig)-[:HAS_PROJECT]->(Project)

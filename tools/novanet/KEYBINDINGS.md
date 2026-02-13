@@ -2,13 +2,14 @@
 
 Complete keyboard shortcuts reference for the NovaNet Terminal UI.
 
-> **v11.7**: Unified Tree Architecture - 2 modes (Graph, Nexus) with lazy instance loading.
+> **v0.12.0**: Unified Tree Architecture - 2 modes (Graph, Nexus) with lazy instance loading.
 > Key `1` = Graph (unified tree), Key `2` = Nexus (hub). Search via `/` overlay.
+> Stats tab redesigned as "Matrix Control Tower" with schema stats and animations.
 > Source of truth: `src/tui/app.rs` (handle_key)
 
 ---
 
-## Navigation Modes (v11.7)
+## Navigation Modes (v0.12.0)
 
 | Key | Mode | Description |
 |-----|------|-------------|
@@ -23,7 +24,7 @@ Complete keyboard shortcuts reference for the NovaNet Terminal UI.
 
 ---
 
-## Unified Tree Navigation (v11.7)
+## Unified Tree Navigation (v0.12.0)
 
 The unified tree combines schema (meta) and instances (data) in a single hierarchy:
 
@@ -58,7 +59,7 @@ Realm > Layer > Kind > Instance
 
 ---
 
-## Instance Loading (v11.7)
+## Instance Loading (v0.12.0)
 
 Instances are loaded lazily when expanding a Kind node.
 
@@ -76,7 +77,7 @@ Instances are loaded lazily when expanding a Kind node.
 
 ---
 
-## Nexus Hub (v11.7)
+## Nexus Hub (v0.12.0)
 
 The Nexus hub provides gamified learning and system tools.
 
@@ -122,12 +123,19 @@ The Nexus hub provides gamified learning and system tools.
 | `Enter` | View details |
 | `r` | Re-run audit |
 
-### Stats Dashboard
+### Stats Dashboard (Matrix Control Tower)
+
+The Stats tab displays NovaNet schema statistics with cyberpunk aesthetics:
+- **Hero Panel**: Big animated counters (NODE, ARC, LAYR, TRAT, RELM)
+- **Heartbeat**: Pulsing sparkline (system status indicator)
+- **Bar Charts**: Realm, Layer, and Arc Family distributions
+
+Boot animation plays on first view (~2s), then heartbeat pulses continuously.
 
 | Key | Action |
 |-----|--------|
-| `r` | Refresh stats |
-| `y` | Yank stats as JSON |
+| `r` | Refresh stats from Neo4j |
+| `y` | Yank stats summary |
 
 ---
 
@@ -235,7 +243,7 @@ Back:        1 (Graph mode)
 
 ---
 
-## Deprecated Keybindings (v11.6 -> v11.7)
+## Deprecated Keybindings (v11.6 -> v0.12.0)
 
 | Old Key | Old Action | New Equivalent |
 |---------|------------|----------------|

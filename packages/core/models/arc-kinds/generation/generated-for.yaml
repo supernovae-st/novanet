@@ -13,5 +13,9 @@ arc:
     - Block
   cardinality: many_to_one
   inverse_of: HAS_GENERATED
-  llm_context: Inverse of HAS_GENERATED — generated output points to source structure.
+  llm_context: |
+    USE: when finding which Page/Block a generated node belongs to.
+    TRIGGERS: source structure, parent page, parent block.
+    NOT: for loading generated output (use HAS_GENERATED).
+    RELATES: PageGenerated/BlockGenerated (source), Page/Block (target), HAS_GENERATED (inverse).
   cypher_pattern: (PageGenerated)-[:GENERATED_FOR]->(Page)

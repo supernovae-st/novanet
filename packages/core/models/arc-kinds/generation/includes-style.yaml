@@ -13,7 +13,9 @@ arc:
   cardinality: many_to_one
 
   llm_context: |
-    Instruction template includes style configuration from locale.
-    Style provides voice, tone, and formality settings.
+    USE: when loading style settings for instruction compilation.
+    TRIGGERS: locale style, voice settings, tone configuration.
+    NOT: for instruction content (use PageInstruction), for generated output (use HAS_GENERATED).
+    RELATES: PageInstruction/BlockInstruction (source), Style (target, cross_realm).
 
   cypher_pattern: "(PageInstruction, BlockInstruction)-[:INCLUDES_STYLE]->(Style)"

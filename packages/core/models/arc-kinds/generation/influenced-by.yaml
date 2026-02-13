@@ -15,5 +15,9 @@ arc:
     - name: entity_version
       type: string
       required: false
-  llm_context: "Provenance: which entities influenced this output. weight: 0.0-1.0."
+  llm_context: |
+    USE: when tracing provenance, understanding what entity content influenced output.
+    TRIGGERS: provenance, entity influence, content source, attribution.
+    NOT: for current entity (use EntityContent), for generation flow (use GENERATED).
+    RELATES: BlockGenerated (source), EntityContent (target), weight property for influence strength.
   cypher_pattern: (BlockGenerated)-[:INFLUENCED_BY {weight, entity_version}]->(EntityContent)

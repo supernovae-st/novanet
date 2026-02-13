@@ -15,7 +15,14 @@ node:
   layer: knowledge
   trait: retrieved  # v11.2: Split derived → aggregated (computed metrics)
   icon: "📸"
-  description: "Historical metrics snapshot for an SEO keyword (time-series)"
+  description: |
+    Historical metrics snapshot for an SEO keyword (time-series data).
+    Stores volume, difficulty, position, impressions at a point in time.
+
+    USE: when tracking keyword performance over time, analyzing trends.
+    TRIGGERS: "keyword metrics", "SEO history", "position tracking", "GSC data".
+    NOT: for keyword definition (use SEOKeyword), for GEO visibility (use GEOMetrics).
+    RELATES: SEOKeyword (HAS_METRICS).
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # STANDARD PROPERTIES (v7.1.0)

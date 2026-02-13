@@ -18,5 +18,9 @@ arc:
     - name: checksum
       type: string
       required: false
-  llm_context: Output artifact bundles specific generated nodes for deployment. Use to load all content included in an artifact.
+  llm_context: |
+    USE: when deploying content, loading all generated nodes in an artifact.
+    TRIGGERS: deployment bundle, artifact contents, release package.
+    NOT: for live content (use PageGenerated), for structure (use HAS_GENERATED).
+    RELATES: OutputArtifact (source), PageGenerated/BlockGenerated (target), checksum for integrity.
   cypher_pattern: (OutputArtifact)-[:BUNDLES {position, checksum}]->(PageGenerated)

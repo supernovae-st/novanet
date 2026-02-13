@@ -363,9 +363,9 @@ mod tests {
 
         // States (8)
         assert!(icons.states.contains_key("loading"));
-        assert!(icons.states.contains_key("no_kinds"));
+        assert!(icons.states.contains_key("no_classes"));
         assert_eq!(icons.state_terminal("loading"), "◐");
-        assert_eq!(icons.state_terminal("no_kinds"), "∅");
+        assert_eq!(icons.state_terminal("no_classes"), "∅");
 
         // Navigation (7)
         assert!(icons.navigation.contains_key("expanded"));

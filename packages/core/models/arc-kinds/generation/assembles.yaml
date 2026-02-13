@@ -12,5 +12,9 @@ arc:
     - name: position
       type: string
       required: false
-  llm_context: PageGenerated assembles BlockGenerateds with position for ordering.
+  llm_context: |
+    USE: when rendering a complete page, loading blocks in order.
+    TRIGGERS: page render, block assembly, content composition.
+    NOT: for structure definition (use HAS_BLOCK), for single block (use BlockGenerated).
+    RELATES: PageGenerated (source), BlockGenerated (target), position property for ordering.
   cypher_pattern: (PageGenerated)-[:ASSEMBLES {position}]->(BlockGenerated)
