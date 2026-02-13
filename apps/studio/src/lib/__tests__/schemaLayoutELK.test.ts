@@ -259,7 +259,7 @@ describe('schemaLayoutELK', () => {
     });
 
     it('should skip empty layers (P1 fix)', async () => {
-      // Add an empty layer to tenant realm
+      // Add an empty layer to org realm
       const hierarchyWithEmpty: HierarchicalSchemaData = {
         ...mockHierarchy,
         realms: {

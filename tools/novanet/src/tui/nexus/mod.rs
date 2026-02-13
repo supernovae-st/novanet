@@ -469,16 +469,33 @@ impl NexusState {
         }
     }
 
-    /// Save quiz high score to disk (uses cache to avoid disk reads).
+    /// Save quiz high score and update streak (uses cache to avoid disk reads).
     pub fn save_quiz_score(&mut self, score: usize) {
         let progress = self
             .progress_cache
             .get_or_insert_with(persistence::TutorialProgress::load);
         progress.update_quiz_score(score);
+        progress.update_streak(); // v0.12.0: Track streak on quiz completion
         if let Err(e) = progress.save() {
             self.clipboard_message = Some(format!("Save failed: {}", e));
             self.clipboard_message_time = Some(Instant::now());
         }
+    }
+
+    /// Get current streak for display (v0.12.0).
+    pub fn get_streak(&mut self) -> (usize, usize) {
+        let progress = self
+            .progress_cache
+            .get_or_insert_with(persistence::TutorialProgress::load);
+        (progress.current_streak, progress.best_streak)
+    }
+
+    /// Get streak message for display (v0.12.0).
+    pub fn get_streak_message(&mut self) -> String {
+        let progress = self
+            .progress_cache
+            .get_or_insert_with(persistence::TutorialProgress::load);
+        progress.streak_message()
     }
 
     /// Reset drill-down state (when switching tabs).
