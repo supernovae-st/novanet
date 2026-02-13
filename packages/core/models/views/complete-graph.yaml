@@ -146,4 +146,4 @@ docs:
     - "For generation tasks, use more specific views like page-generation or block-generation"
     - "The graph follows a 2-realm hierarchy: SHARED (read-only) > ORG (business)"
     - "Mermaid diagram is auto-generated from arc-kinds/ via MermaidGenerator"
-    - "v11.8: 60 nodes, 114 arcs (ADR-025 Instruction Layer Renaming)"
+    - "59 nodes, 114 arcs"

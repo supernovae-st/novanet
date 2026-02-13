@@ -397,6 +397,10 @@ pub struct NexusState {
     // === Persistence cache ===
     /// Cached progress to avoid disk reads on every save.
     progress_cache: Option<persistence::TutorialProgress>,
+
+    // === Achievement display state (v0.12.0) ===
+    /// Newly unlocked achievements to display on quiz completion.
+    pub new_achievements: Vec<persistence::Achievement>,
 }
 
 impl Default for NexusState {
@@ -433,6 +437,7 @@ impl NexusState {
             clipboard_message: None,
             clipboard_message_time: None,
             progress_cache: None,
+            new_achievements: Vec::new(),
         }
     }
 
@@ -469,13 +474,27 @@ impl NexusState {
         }
     }
 
-    /// Save quiz high score and update streak (uses cache to avoid disk reads).
-    pub fn save_quiz_score(&mut self, score: usize) {
+    /// Save quiz high score, update streak, and check achievements (v0.12.0).
+    /// Uses cache to avoid disk reads.
+    ///
+    /// Parameters:
+    /// - score: Current quiz score
+    /// - total: Total questions in quiz
+    /// - all_categories_perfect: Whether all categories have 100% scores
+    pub fn save_quiz_score(&mut self, score: usize, total: usize, all_categories_perfect: bool) {
         let progress = self
             .progress_cache
             .get_or_insert_with(persistence::TutorialProgress::load);
+
         progress.update_quiz_score(score);
-        progress.update_streak(); // v0.12.0: Track streak on quiz completion
+        progress.update_streak();
+
+        // Check and unlock achievements (v0.12.0)
+        let new_achievements = progress.check_achievements(score, total, all_categories_perfect);
+
+        // Store new achievements to display in completion screen
+        self.new_achievements = new_achievements;
+
         if let Err(e) = progress.save() {
             self.clipboard_message = Some(format!("Save failed: {}", e));
             self.clipboard_message_time = Some(Instant::now());
@@ -579,8 +598,12 @@ impl NexusState {
                         if self.quiz.answered {
                             let quiz_completed = self.quiz.next_question(quiz::QUESTIONS);
                             if quiz_completed {
-                                // Save quiz score to persistence
-                                self.save_quiz_score(self.quiz.score);
+                                // Calculate if all categories have perfect scores (v0.12.0)
+                                let cat_scores = self.quiz.category_scores(quiz::QUESTIONS);
+                                let all_perfect = cat_scores.iter().all(|(_, correct, total)| correct == total);
+
+                                // Save quiz score, update streak, check achievements
+                                self.save_quiz_score(self.quiz.score, quiz::QUESTIONS.len(), all_perfect);
                             }
                         } else {
                             self.quiz.submit_answer(quiz::QUESTIONS);
@@ -601,9 +624,14 @@ impl NexusState {
                 }
             }
 
-            // Escape for drill-up (also clears pending_g, closes concept panel)
+            // Escape for drill-up (also clears pending_g, closes concept panel, exits review mode)
             KeyCode::Esc => {
                 self.pending_g = false;
+                // In Quiz tab, exit review mode first
+                if self.tab == NexusTab::Quiz && self.quiz.review_mode {
+                    self.quiz.exit_review_mode();
+                    return true;
+                }
                 // In Views tab, close concept panel first
                 if self.tab == NexusTab::Views && self.views.show_concept {
                     self.views.show_concept = false;
@@ -642,7 +670,20 @@ impl NexusState {
             // 'r' to restart quiz (when in Quiz tab)
             KeyCode::Char('r') => {
                 if self.tab == NexusTab::Quiz {
+                    // Exit review mode first if active
+                    self.quiz.exit_review_mode();
                     self.quiz.reset();
+                    true
+                } else {
+                    false
+                }
+            }
+
+            // 'w' to enter review mode (review wrong answers after quiz completion)
+            KeyCode::Char('w') => {
+                if self.tab == NexusTab::Quiz && self.quiz.complete && self.quiz.has_wrong_answers()
+                {
+                    self.quiz.enter_review_mode();
                     true
                 } else {
                     false
@@ -904,7 +945,12 @@ impl NexusState {
                 }
             }
             NexusTab::Quiz => {
-                self.quiz.select_up();
+                if self.quiz.review_mode {
+                    // In review mode, navigate between wrong answers
+                    self.quiz.review_prev();
+                } else {
+                    self.quiz.select_up();
+                }
                 true
             }
             NexusTab::Views => {
@@ -978,8 +1024,13 @@ impl NexusState {
                 }
             }
             NexusTab::Quiz => {
-                let question = quiz::QUESTIONS.get(self.quiz.current_question);
-                self.quiz.select_down(question);
+                if self.quiz.review_mode {
+                    // In review mode, navigate between wrong answers
+                    self.quiz.review_next();
+                } else {
+                    let question = quiz::QUESTIONS.get(self.quiz.current_question);
+                    self.quiz.select_down(question);
+                }
                 true
             }
             NexusTab::Views => {
@@ -2738,7 +2789,8 @@ mod tests {
     fn test_save_quiz_score_no_panic() {
         let mut state = NexusState::new();
         // Should not panic even if save fails
-        state.save_quiz_score(10);
+        // Parameters: score, total, all_categories_perfect
+        state.save_quiz_score(10, 36, false);
     }
 
     #[test]

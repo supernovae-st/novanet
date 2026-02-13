@@ -112,13 +112,13 @@ export interface RealmDefinition {
 export interface HierarchicalSchemaData {
   /** All 2 realm definitions (shared, org) */
   realms: Record<Realm, RealmDefinition>;
-  /** All schema nodes (60 nodes) */
+  /** All schema nodes (59 nodes) */
   nodes: SchemaNode[];
   /** All schema arcs */
   arcs: SchemaArc[];
   /** Statistics */
   stats: {
-    /** Total number of node types (60) */
+    /** Total number of node types (59) */
     totalNodes: number;
     /** Total number of arcs */
     totalArcs: number;

@@ -804,17 +804,17 @@ pnpm doc:generate
 **Source of truth:** `/VERSION` file contains the canonical schema version (11.7.0).
 
 **`pnpm doc:audit` checks:**
-- Outdated version references (current: v11.7.0)
+- Outdated version references (current: v0.12.0)
 - Deprecated terminology (EntityL10n → EntityContent, PageL10n → PageGenerated, BlockL10n → BlockGenerated)
 - Deprecated arcs (HAS_L10N → HAS_CONTENT, HAS_OUTPUT → HAS_GENERATED)
-- Incorrect node/arc counts (60 nodes, 114 arcs expected)
+- Incorrect node/arc counts (59 nodes, 114 arcs expected)
 - Outdated realm names (global → shared, tenant → org)
 - Outdated layer structure (4 shared + 6 org = 10 layers)
-- v11.7: Deprecated 5-mode navigation (use 2-mode: Graph/Nexus)
+- Deprecated 5-mode navigation (use 2-mode: Graph/Nexus)
 
 **`pnpm skill:audit` checks:**
 - Deprecated paths (`nodes/` → `node-kinds/`, `organizing-principles.yaml` → `taxonomy.yaml`)
-- Node/arc counts match YAML sources (60 node-kinds, 114 arc-kinds)
+- Node/arc counts match YAML sources (59 node-kinds, 114 arc-kinds)
 - Deprecated terminology in skills/commands/rules
 
 **Auto-sync reminders:**

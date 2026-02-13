@@ -540,9 +540,9 @@ pub fn get_type_label(item: Option<&TreeItem>) -> &'static str {
         Some(TreeItem::ArcsSection) => "Section",
         Some(TreeItem::Realm(_)) => "Realm",
         Some(TreeItem::Layer(_, _)) => "Layer",
-        Some(TreeItem::Kind(_, _, _)) => "Node Kind",
+        Some(TreeItem::Kind(_, _, _)) => "Node Class",
         Some(TreeItem::ArcFamily(_)) => "ArcFamily",
-        Some(TreeItem::ArcKind(_, _)) => "Arc Kind",
+        Some(TreeItem::ArcKind(_, _)) => "Arc Class",
         Some(TreeItem::Instance(_, _, _, _)) => "Instance",
         Some(TreeItem::EntityCategory(_, _, _, _)) => "Category",
         None => "",
@@ -553,7 +553,7 @@ pub fn get_type_label(item: Option<&TreeItem>) -> &'static str {
 /// Returns a tuple of (prefix, name) for rendering.
 pub fn get_item_display(item: Option<&TreeItem>) -> (&'static str, String) {
     match item {
-        Some(TreeItem::KindsSection) => ("", "Node Kinds".to_string()),
+        Some(TreeItem::KindsSection) => ("", "Node Classes".to_string()),
         Some(TreeItem::ArcsSection) => ("", "Arcs".to_string()),
         Some(TreeItem::Realm(r)) => (r.icon, r.display_name.clone()),
         Some(TreeItem::Layer(_, l)) => ("  ", l.display_name.clone()),
@@ -695,7 +695,7 @@ mod tests {
         let layer = make_layer();
         let kind = make_kind();
         let item = TreeItem::Kind(&realm, &layer, &kind);
-        assert_eq!(get_type_label(Some(&item)), "Node Kind");
+        assert_eq!(get_type_label(Some(&item)), "Node Class");
     }
 
     #[test]
@@ -710,7 +710,7 @@ mod tests {
         let family = make_arc_family();
         let arc_kind = make_arc_kind();
         let item = TreeItem::ArcKind(&family, &arc_kind);
-        assert_eq!(get_type_label(Some(&item)), "Arc Kind");
+        assert_eq!(get_type_label(Some(&item)), "Arc Class");
     }
 
     #[test]
@@ -737,7 +737,7 @@ mod tests {
         let item = TreeItem::KindsSection;
         let (prefix, name) = get_item_display(Some(&item));
         assert_eq!(prefix, "");
-        assert_eq!(name, "Node Kinds");
+        assert_eq!(name, "Node Classes");
     }
 
     #[test]

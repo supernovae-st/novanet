@@ -513,7 +513,7 @@ function validateNodeCounts(layersTS) {
     orgByLayer: {
       config: 1,
       foundation: 3,
-      instruction: 6,  // v0.12.0: PageStructure replaced PageType
+      instruction: 6,
       output: 3,
       semantic: 4,
       structure: 3,

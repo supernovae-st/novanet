@@ -1,9 +1,5 @@
 # models/node-kinds/org/instruction/page-structure.yaml
-# PageStructure - Template rules and structure for page generation (v11.8)
-#
-# v11.8 CHANGES (ADR-025):
-#   - RENAMED: PageType → PageStructure
-#   - Semantic clarity: "Structure" describes JSON defining block order/composition
+# PageStructure - Template rules and structure for page generation
 #
 # DESIGN RATIONALE:
 #   - Defines meta/SEO requirements, layout rules, required blocks

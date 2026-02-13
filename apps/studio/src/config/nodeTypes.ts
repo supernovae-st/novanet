@@ -1,20 +1,20 @@
 // =============================================================================
-// NODE TYPE CONFIGURATION (v11.5.0)
+// NODE TYPE CONFIGURATION (v0.12.0)
 // =============================================================================
-// Visual configuration for all 60 NovaNet node types
-// v11.5: SEO/GEO moved to shared/knowledge, 10 layers (4 shared + 6 org), 2 realms
+// Visual configuration for all 59 NovaNet node types
+// 10 layers (4 shared + 6 org), 2 realms
 // NodeType, Layer, CLASS_TAXONOMY imported from @novanet/core (Single Source of Truth)
 
 import type { NodeType, Layer } from '@novanet/core/types';
 import { NODE_TYPES, CLASS_TAXONOMY } from '@novanet/core/types';
 
 // =============================================================================
-// NODE LAYERS (v11.5 - 10 layers, 60 nodes)
+// NODE LAYERS (10 layers, 59 nodes)
 // Derived from CLASS_TAXONOMY — single source of truth
 // =============================================================================
 
 /**
- * Node layers with their types (v11.5 - 60 nodes across 10 layers)
+ * Node layers with their types (59 nodes across 10 layers)
  * Derived from CLASS_TAXONOMY in @novanet/core
  */
 export const NODE_LAYERS: Record<Layer, NodeType[]> = Object.entries(CLASS_TAXONOMY).reduce(
@@ -45,7 +45,7 @@ export interface NodeTypeConfig {
 }
 
 /**
- * All node type configurations (v11.5 - 60 nodes)
+ * All node type configurations (59 nodes)
  * Aligned with @novanet/core NODE_TYPES
  */
 export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {

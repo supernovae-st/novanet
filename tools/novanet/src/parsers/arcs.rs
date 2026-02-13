@@ -538,7 +538,7 @@ arcs:
       - Page
       - Block
     target:
-      - PageType
+      - PageStructure
       - BlockType
     cardinality: many_to_one
     llm_context: "Types."
@@ -546,7 +546,7 @@ arcs:
         let doc: ArcsDocument = serde_yaml::from_str(yaml).unwrap();
         let arc = &doc.arcs[0];
         assert_eq!(arc.source.labels().as_slice(), ["Page", "Block"]);
-        assert_eq!(arc.target.labels().as_slice(), ["PageType", "BlockType"]);
+        assert_eq!(arc.target.labels().as_slice(), ["PageStructure", "BlockType"]);
     }
 
     #[test]

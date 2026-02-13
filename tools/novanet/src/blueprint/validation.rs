@@ -746,18 +746,18 @@ mod tests {
 
         let node_names: Vec<&str> = data.node_kinds.iter().map(|n| n.def.name.as_str()).collect();
 
-        // New instruction layer names (ADR-025)
+        // Instruction layer names
         assert!(
             node_names.contains(&"PageStructure"),
-            "Missing PageStructure (renamed from PageType)"
+            "Missing PageStructure in instruction layer"
         );
         assert!(
             node_names.contains(&"PageInstruction"),
-            "Missing PageInstruction (renamed from PagePrompt)"
+            "Missing PageInstruction in instruction layer"
         );
         assert!(
             node_names.contains(&"BlockInstruction"),
-            "Missing BlockInstruction (renamed from BlockPrompt)"
+            "Missing BlockInstruction in instruction layer"
         );
 
         // Deprecated names should NOT exist

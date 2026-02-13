@@ -227,7 +227,7 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
         Some(TreeItem::KindsSection) => {
             path.push(BreadcrumbLevel {
                 icon: "◈",
-                label: "Node Kinds".to_string(),
+                label: "Node Classes".to_string(),
                 color: Color::Cyan,
             });
         }
@@ -542,7 +542,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
         focused,
         "",
         kinds_icon,
-        format!("Node Kinds ({})", kinds_count),
+        format!("Node Classes ({})", kinds_count),
         Color::Magenta, // line_color (not used - no prefix)
         Color::Magenta, // text_color
         app.search.matches.get(&idx).map(|v| v.as_slice()),

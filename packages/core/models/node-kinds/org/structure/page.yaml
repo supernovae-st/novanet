@@ -93,10 +93,10 @@ node:
   # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
-    HAS_STRUCTURE:  # v0.12.0 ADR-025: Renamed from OF_TYPE/PageType
+    HAS_STRUCTURE:
       to: PageStructure
       cardinality: "N:1"
-      description: "Page structure defining block order and composition (v0.12.0)"
+      description: "Page structure defining block order and composition"
 
     HAS_BLOCK:
       to: Block

@@ -1,5 +1,5 @@
 // packages/core/src/graph/__tests__/types.test.ts
-// Tests for graph types — v11.7.0 (10 layers, 60 nodes)
+// Tests for graph types (10 layers, 59 nodes)
 import { describe, it, expect } from 'vitest';
 import type { SchemaNode, SchemaArc, RealmDefinition } from '../types';
 import type { Layer } from '../../types/nodes';
@@ -43,13 +43,13 @@ describe('graph/types', () => {
   it('should export RealmDefinition interface', () => {
     const realmDef: RealmDefinition = {
       realm: 'org',
-      label: 'TENANT',
+      label: 'ORG',
       icon: '📦',
-      description: 'Tenant-specific content and structure',
+      description: 'Organization-specific content and structure',
       layers: {} as RealmDefinition['layers'],
     };
     expect(realmDef.realm).toBe('org');
-    expect(realmDef.label).toBe('TENANT');
+    expect(realmDef.label).toBe('ORG');
   });
 
   it('should allow optional properties on SchemaNode', () => {
