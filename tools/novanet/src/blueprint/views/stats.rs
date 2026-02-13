@@ -67,15 +67,15 @@ fn collect_stats(data: &BlueprintData) -> BlueprintStats {
         layers: data.layer_count(),
         traits: TraitStats {
             invariant: by_trait
-                .get(&NodeTrait::Invariant)
+                .get(&NodeTrait::Defined)
                 .map(|v| v.len())
                 .unwrap_or(0),
             localized: by_trait
-                .get(&NodeTrait::Localized)
+                .get(&NodeTrait::Authored)
                 .map(|v| v.len())
                 .unwrap_or(0),
             knowledge: by_trait
-                .get(&NodeTrait::Knowledge)
+                .get(&NodeTrait::Imported)
                 .map(|v| v.len())
                 .unwrap_or(0),
             generated: by_trait
@@ -83,7 +83,7 @@ fn collect_stats(data: &BlueprintData) -> BlueprintStats {
                 .map(|v| v.len())
                 .unwrap_or(0),
             aggregated: by_trait
-                .get(&NodeTrait::Aggregated)
+                .get(&NodeTrait::Retrieved)
                 .map(|v| v.len())
                 .unwrap_or(0),
         },

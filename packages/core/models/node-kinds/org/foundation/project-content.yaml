@@ -29,7 +29,7 @@ node:
   name: ProjectContent
   realm: org
   layer: foundation
-  trait: localized
+  trait: authored
   icon: "🟢"
   description: "Localized identity and messaging for a Project"
 

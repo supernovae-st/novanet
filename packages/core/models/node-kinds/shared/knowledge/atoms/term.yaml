@@ -8,7 +8,7 @@ node:
   name: Term
   realm: shared
   layer: knowledge
-  trait: knowledge
+  trait: imported
   icon: "📝"
   description: "Individual vocabulary term belonging to a locale's TermSet"
 

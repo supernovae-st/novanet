@@ -1,5 +1,5 @@
 ---
-source: src/generators/organizing.rs
+source: novanet/src/generators/organizing.rs
 expression: cypher
 ---
 // Taxonomy Seed v10.5.0
@@ -71,33 +71,33 @@ MERGE (r)-[:HAS_LAYER]->(l);
 // TRAITS (2)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-MERGE (t_invariant:Meta:Trait {key: 'invariant'})
+MERGE (t_defined:Meta:Trait {key: 'defined'})
 ON CREATE SET
-  t_invariant.created_at = datetime(),
-  t_invariant.updated_at = datetime()
+  t_defined.created_at = datetime(),
+  t_defined.updated_at = datetime()
 ON MATCH SET
-  t_invariant.updated_at = datetime()
+  t_defined.updated_at = datetime()
 SET
-  t_invariant.display_name = 'Invariant',
-  t_invariant.color = '#6366f1',
-  t_invariant.border_style = 'solid',
-  t_invariant.border_width = 2,
-  t_invariant.unicode_border = '─',
-  t_invariant.llm_context = 'Content that does not change per locale.';
+  t_defined.display_name = 'Defined',
+  t_defined.color = '#6366f1',
+  t_defined.border_style = 'solid',
+  t_defined.border_width = 2,
+  t_defined.unicode_border = '─',
+  t_defined.llm_context = 'Content that does not change per locale.';
 
-MERGE (t_localized:Meta:Trait {key: 'localized'})
+MERGE (t_authored:Meta:Trait {key: 'authored'})
 ON CREATE SET
-  t_localized.created_at = datetime(),
-  t_localized.updated_at = datetime()
+  t_authored.created_at = datetime(),
+  t_authored.updated_at = datetime()
 ON MATCH SET
-  t_localized.updated_at = datetime()
+  t_authored.updated_at = datetime()
 SET
-  t_localized.display_name = 'Localized',
-  t_localized.color = '#ec4899',
-  t_localized.border_style = 'dashed',
-  t_localized.border_width = 2,
-  t_localized.unicode_border = '╌',
-  t_localized.llm_context = 'Content that varies per locale.';
+  t_authored.display_name = 'Authored',
+  t_authored.color = '#ec4899',
+  t_authored.border_style = 'dashed',
+  t_authored.border_width = 2,
+  t_authored.unicode_border = '╌',
+  t_authored.llm_context = 'Content that varies per locale.';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // ARC FAMILIES (1)

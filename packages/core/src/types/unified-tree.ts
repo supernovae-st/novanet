@@ -169,11 +169,11 @@ export type UnifiedNode =
  * Node trait (locale behavior).
  */
 export type NodeTrait =
-  | 'invariant'
-  | 'localized'
+  | 'defined'
+  | 'authored'
   | 'knowledge'
   | 'generated'
-  | 'aggregated';
+  | 'retrieved';
 
 /**
  * Arc cardinality.

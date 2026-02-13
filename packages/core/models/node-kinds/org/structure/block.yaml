@@ -5,7 +5,7 @@ node:
   name: Block
   realm: org
   layer: structure
-  trait: invariant
+  trait: defined
   icon: "🔷"
   description: "Page section instance containing sub-agent instructions and concept references"
 

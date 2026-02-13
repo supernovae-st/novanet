@@ -10,7 +10,7 @@ node:
   name: Locale
   realm: shared
   layer: config
-  trait: invariant
+  trait: defined
   icon: "🔷"
   description: "First-class locale node (BCP 47) with fallback chains and knowledge graph connections"
 

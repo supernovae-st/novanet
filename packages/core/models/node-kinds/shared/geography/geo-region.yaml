@@ -9,7 +9,7 @@ node:
   name: GeoRegion
   realm: shared
   layer: geography
-  trait: invariant
+  trait: defined
   icon: "🗺️"
   description: "UN M49 geographic region for clustering similar locales"
 

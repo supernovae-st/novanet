@@ -9,7 +9,7 @@ node:
   name: LendingCategory
   realm: shared
   layer: geography
-  trait: invariant
+  trait: defined
   icon: "🏦"
   description: "World Bank lending classification for development context"
 

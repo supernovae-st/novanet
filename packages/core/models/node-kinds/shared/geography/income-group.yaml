@@ -9,7 +9,7 @@ node:
   name: IncomeGroup
   realm: shared
   layer: geography
-  trait: invariant
+  trait: defined
   icon: "💰"
   description: "World Bank income classification for market segmentation"
 

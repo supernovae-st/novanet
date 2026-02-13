@@ -13,7 +13,7 @@ node:
   name: SEOKeywordMetrics
   realm: shared
   layer: knowledge
-  trait: aggregated  # v11.2: Split derived → aggregated (computed metrics)
+  trait: retrieved  # v11.2: Split derived → aggregated (computed metrics)
   icon: "📸"
   description: "Historical metrics snapshot for an SEO keyword (time-series)"
 

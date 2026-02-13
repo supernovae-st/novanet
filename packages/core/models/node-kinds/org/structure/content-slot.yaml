@@ -5,7 +5,7 @@ node:
   name: ContentSlot
   realm: org
   layer: structure
-  trait: invariant
+  trait: defined
   icon: "🔲"
   description: |
     Named slot within a page structure for content injection. Enables A/B testing,

@@ -1,20 +1,30 @@
 # packages/core/models/taxonomy.yaml
 # Source of truth for NovaNet taxonomy structure
-# v11.6.0 — Layer Clarification (Locale → config)
+# v0.12.0 — "Class Act" Complete Nomenclature Migration
 #
 # This file defines:
 # - 2 NodeRealms (SHARED, ORG) with nested NodeLayers
-# - 5 NodeTraits (locale behavior) with visual encoding
+# - 5 NodeTraits (DATA ORIGIN) with visual encoding
 # - 5 ArcFamilies (arc classification) with visual encoding
 # - 2 ArcScopes (intra_realm / cross_realm)
 # - 5 ArcCardinalities (zero_to_one / one_to_one / one_to_many / many_to_one / many_to_many)
 # - Terminal palette for TUI graceful degradation
 #
+# v0.12.0 Changes (ADR-023, ADR-024, ADR-025):
+# - TRAIT REDEFINITION: Trait now answers "WHERE does data come from?" (Data Origin)
+# - RENAME: invariant → defined (human-created once, structure/template)
+# - RENAME: localized → authored (human-written per locale, editorial content)
+# - RENAME: knowledge → imported (external data brought in, APIs/corpora)
+# - KEEP: generated (our LLM produces this output)
+# - RENAME: aggregated → retrieved (fetched from external APIs, snapshots)
+# - SCHEMA LABELS: :Meta:Kind → :Schema:Class, :Meta:ArcKind → :Schema:ArcClass
+# - INSTRUCTION LAYER: PageType → PageStructure, PagePrompt → PageInstruction
+#
 # v11.5 Changes:
-# - MOVE: Locale from shared/locale to shared/config (invariant definition, not parameter)
-# - CLARIFY: shared/config = all invariant definitions (Locale, EntityCategory, SEOKeywordFormat)
+# - MOVE: Locale from shared/locale to shared/config (defined definition, not parameter)
+# - CLARIFY: shared/config = all defined definitions (Locale, EntityCategory, SEOKeywordFormat)
 # - CLARIFY: shared/locale = locale-specific settings only (Culture, Style, Formatting, etc.)
-# - RULE: config layer = invariant trait, locale layer = knowledge trait
+# - RULE: config layer = defined trait, locale layer = imported trait
 #
 # v11.4 Changes:
 # - SEO/GEO moved from org to shared/knowledge (Knowledge Atoms pattern)
@@ -39,10 +49,10 @@
 # - packages/db/seed/00.5-taxonomy.cypher (Realm, Layer, Trait, ArcFamily + hierarchy)
 # - packages/core/src/graph/hierarchy.ts (realm→layer tree, auto-generated)
 #
-# All meta-nodes receive double-label :Meta (e.g., :Meta:Realm)
-# Query all meta-nodes: MATCH (n:Meta) RETURN n
+# All schema-nodes receive double-label :Schema (e.g., :Schema:Realm)
+# Query all schema-nodes: MATCH (n:Schema) RETURN n
 
-version: "11.7.0"
+version: "0.12.0"
 
 # =============================================================================
 # NODE REALMS (2) — WHERE does the node live?
@@ -69,7 +79,7 @@ node_realms:
         emoji: "⚙️"
         color: "#64748b"
         llm_context: |
-          Invariant definitions for shared realm. All nodes have invariant trait.
+          Human-defined definitions for shared realm. All nodes have "defined" trait.
           v11.5: Locale (BCP-47 codes), EntityCategory (v11.1, ADR-017),
           SEOKeywordFormat (v11.4). These are universal DEFINITIONS, not
           locale-specific parameters.
@@ -79,7 +89,7 @@ node_realms:
         emoji: "🌐"
         color: "#64748b"
         llm_context: |
-          Locale-specific SETTINGS (1:1 with Locale). All nodes have knowledge trait.
+          Locale-specific SETTINGS (1:1 with Locale). All nodes have "imported" trait.
           v11.5: Culture, Style, Formatting, Adaptation, Market, Slugification.
           These contain discovered/curated data specific to each locale.
           Pattern: Locale (config) --[:HAS_X]--> Setting (locale).
@@ -128,7 +138,7 @@ node_realms:
         emoji: "💡"
         color: "#f97316"
         llm_context: |
-          Invariant entities (Entity) and their localizations (EntityContent).
+          Defined entities (Entity) and their authored content (EntityContent).
           Entity belongs to Project (HAS_ENTITY) and can be referenced by
           Pages/Blocks via USES_ENTITY. Entities link via SEMANTIC_LINK for
           spreading activation during generation. SEO/GEO targeting via
@@ -157,9 +167,10 @@ node_realms:
         emoji: "📝"
         color: "#eab308"
         llm_context: |
-          Generation directives. Prompts and rules that guide the LLM during
-          content generation. PagePrompt for page-level guidance, BlockPrompt
+          Generation directives. Instructions and rules that guide the LLM during
+          content generation. PageInstruction for page-level guidance, BlockInstruction
           for block-specific instructions, BlockRules for constraints.
+          v0.12.0: PagePrompt → PageInstruction, BlockPrompt → BlockInstruction.
 
       - key: output
         display_name: Generated Output
@@ -172,44 +183,49 @@ node_realms:
           instruction nodes with locale knowledge.
 
 # =============================================================================
-# NODE TRAITS (5) — HOW does the node behave across locales?
+# NODE TRAITS (5) — WHERE does the data come from? (Data Origin)
 # =============================================================================
 # Visual encoding: border_style maps to CSS border-style / ratatui border
-# v11.2: Split derived → generated + aggregated (still 5 total: invariant, localized, knowledge, generated, aggregated)
+# v0.12.0 (ADR-024): Trait redefined as "Data Origin"
+#   - invariant → defined (human-created once, structure/template)
+#   - localized → authored (human-written per locale, editorial content)
+#   - knowledge → imported (external data brought in, APIs/corpora)
+#   - generated → generated (our LLM produces this output)
+#   - aggregated → retrieved (fetched from external APIs, snapshots)
 
 node_traits:
-  - key: invariant
-    display_name: Invariant
+  - key: defined
+    display_name: Defined
     color: "#3b82f6"
     border_style: solid
     border_width: 2
     unicode_border: "─"
     llm_context: |
-      Nodes that do not change between locales. Structural definitions,
-      configuration, and invariant business logic. Always the same
-      regardless of target locale.
+      Human-created ONCE. Structural definitions, configuration, templates.
+      Does not change between locales. Page, Block, Entity, PageType, BlockType,
+      Locale, OrgConfig, etc. "This is how things are set up."
 
-  - key: localized
-    display_name: Localized
+  - key: authored
+    display_name: Authored
     color: "#22c55e"
     border_style: dashed
     border_width: 2
     unicode_border: "┄"
     llm_context: |
-      Content generated natively per locale. NOT translated — each locale
-      version is generated independently from the invariant Entity using
-      locale-specific knowledge.
+      Human-written content, PER locale. Editorial content curated by humans.
+      EntityContent, ProjectContent. NOT translated — each locale version
+      is written natively. "A human wrote this in French/Japanese/etc."
 
-  - key: knowledge
-    display_name: Knowledge
+  - key: imported
+    display_name: Imported
     color: "#8b5cf6"
     border_style: dotted
     border_width: 2
     unicode_border: "┈"
     llm_context: |
-      Cultural and linguistic expertise per locale. Deep knowledge about
-      how a locale communicates: voice, culture, formatting rules, lexicon,
-      expressions. The foundation for native content generation.
+      External data brought in from external sources. Linguistic corpora,
+      market data, discovered keywords. Term, Expression, Pattern, CultureRef,
+      SEOKeyword, GEOQuery. "We imported this from [source]."
 
   - key: generated
     display_name: Generated
@@ -218,44 +234,46 @@ node_traits:
     border_width: 2
     unicode_border: "═"
     llm_context: |
-      LLM-generated content output. Pages, blocks, and artifacts produced
-      by the generation pipeline. These are the final outputs ready for
-      rendering or export.
+      OUR LLM produces this output. Pages, blocks, and artifacts produced
+      by the NovaNet generation pipeline. PageGenerated, BlockGenerated,
+      OutputArtifact. "NovaNet generated this."
 
-  - key: aggregated
-    display_name: Aggregated
+  - key: retrieved
+    display_name: Retrieved
     color: "#6c71c4"
     border_style: dotted
     border_width: 3
     unicode_border: "┅"
     llm_context: |
-      Computed metrics and analytics. Time-series data, performance snapshots,
-      and other values aggregated from external sources or calculations.
+      Fetched from EXTERNAL APIs. Snapshots from third-party services.
+      We don't create it, we capture it. GEOAnswer (Claude/GPT response),
+      SEOKeywordMetrics (Ahrefs data), GEOMetrics. "We fetched this from [API]."
 
 # =============================================================================
-# KIND RETRIEVAL DEFAULTS (v9.9) — Context Assembly Properties
+# CLASS RETRIEVAL DEFAULTS (v0.12.0) — Context Assembly Properties
 # =============================================================================
 # Default values per trait type for the v10 Context Assembly Engine.
 # These properties are used by the engine to make autonomous traversal decisions.
+# v0.12.0: Renamed from kind_retrieval_defaults, updated trait names.
 
-kind_retrieval_defaults:
-  invariant:
+class_retrieval_defaults:
+  defined:
     traversal_depth: 2      # Max hops for structural traversal
     context_budget: 500     # Default token allocation
     token_estimate: 100     # Estimated tokens per instance
-  localized:
+  authored:
     traversal_depth: 2
     context_budget: 800
     token_estimate: 150
-  knowledge:
-    traversal_depth: 1      # Shallow traversal for knowledge nodes
+  imported:
+    traversal_depth: 1      # Shallow traversal for imported nodes
     context_budget: 200
     token_estimate: 50
   generated:
     traversal_depth: 1      # v11.2: Split from derived
     context_budget: 150
     token_estimate: 50
-  aggregated:
+  retrieved:
     traversal_depth: 1      # v11.2: Split from derived
     context_budget: 80
     token_estimate: 20
@@ -387,12 +405,12 @@ terminal:
     structure: 45           # cyan
     instruction: 178        # yellow
     output: 41              # green
-    # Traits (v11.2: derived → generated + aggregated)
-    invariant: 33   # blue
-    localized: 41   # green
-    knowledge_trait: 141  # purple (avoid collision with layer)
+    # Traits (v0.12.0: Data Origin naming)
+    defined: 33     # blue (was invariant)
+    authored: 41    # green (was localized)
+    imported: 141   # purple (was knowledge)
     generated: 136  # yellow-orange (b58900)
-    aggregated: 141 # violet (6c71c4)
+    retrieved: 141  # violet (6c71c4) (was aggregated)
     # Arc families
     ownership_arc: 33   # blue
     localization_arc: 41  # green
@@ -416,12 +434,12 @@ terminal:
     structure: 6           # cyan
     instruction: 11        # bright yellow
     output: 2              # green
-    # Traits (v11.2: derived → generated + aggregated)
-    invariant: 4    # blue
-    localized: 2    # green
-    knowledge_trait: 5  # magenta
+    # Traits (v0.12.0: Data Origin naming)
+    defined: 4      # blue (was invariant)
+    authored: 2     # green (was localized)
+    imported: 5     # magenta (was knowledge)
     generated: 3    # yellow
-    aggregated: 5   # magenta
+    retrieved: 5    # magenta (was aggregated)
     # Arc families
     ownership_arc: 4    # blue
     localization_arc: 2 # green

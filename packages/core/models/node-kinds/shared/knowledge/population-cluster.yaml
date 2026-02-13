@@ -9,7 +9,7 @@ node:
   name: PopulationCluster
   realm: shared
   layer: knowledge
-  trait: knowledge
+  trait: imported
   icon: "👥"
   description: "Macro population cluster for generating diverse, representative imagery"
 

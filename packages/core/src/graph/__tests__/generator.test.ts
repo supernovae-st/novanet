@@ -29,7 +29,7 @@ describe('graph/generator', () => {
       expect(projectNode?.layer).toBe('foundation');
       expect(projectNode?.label).toBe('Project');
       expect(projectNode?.description).toBeDefined();
-      expect(projectNode?.trait).toBe('invariant');
+      expect(projectNode?.trait).toBe('defined');
     });
 
     it('should include all required arc properties', () => {

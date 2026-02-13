@@ -8,7 +8,7 @@ node:
   name: Pattern
   realm: shared
   layer: knowledge
-  trait: knowledge
+  trait: imported
   icon: "📋"
   description: "Content structure pattern or template belonging to a locale's PatternSet"
 

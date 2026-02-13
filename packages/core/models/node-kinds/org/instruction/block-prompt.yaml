@@ -5,7 +5,7 @@ node:
   name: BlockPrompt
   realm: org
   layer: instruction
-  trait: invariant
+  trait: defined
   icon: "🔵"
   description: "AI instructions for generating a specific block with versioning"
 

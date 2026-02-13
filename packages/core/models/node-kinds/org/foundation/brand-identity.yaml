@@ -5,7 +5,7 @@ node:
   name: BrandIdentity
   realm: org
   layer: foundation
-  trait: invariant
+  trait: defined
   icon: "🔷"
   description: "Visual style, colors, typography, and artistic direction - universal across locales"
 

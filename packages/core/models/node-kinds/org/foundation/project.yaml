@@ -5,7 +5,7 @@ node:
   name: Project
   realm: org
   layer: foundation
-  trait: invariant
+  trait: defined
   icon: "🔷"
   description: "Multi-tenant root node containing project configuration and brand info"
 

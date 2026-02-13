@@ -15,7 +15,7 @@ node:
   name: GEOAnswer
   realm: shared
   layer: knowledge
-  trait: aggregated  # v11.2: Split derived → aggregated (computed metrics)
+  trait: retrieved  # v11.2: Split derived → aggregated (computed metrics)
   icon: "💬"
   description: "LLM response sample for GEO analysis (immutable snapshot)"
 

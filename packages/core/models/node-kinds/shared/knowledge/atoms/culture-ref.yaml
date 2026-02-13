@@ -8,7 +8,7 @@ node:
   name: CultureRef
   realm: shared
   layer: knowledge
-  trait: knowledge
+  trait: imported
   icon: "🎭"
   description: "Cultural reference, holiday, custom, or shared knowledge within a locale"
 

@@ -18,7 +18,7 @@ node:
   name: SEOKeyword
   realm: shared
   layer: knowledge
-  trait: knowledge
+  trait: imported
   icon: "🔍"
   description: "Target keyword with metrics for SEO optimization (locale-specific knowledge)"
   llm_context: |

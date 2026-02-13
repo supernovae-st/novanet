@@ -23,7 +23,7 @@ use crate::parsers::yaml_node::{NodeDef, NodeTrait, ParsedNode, PropertyDef};
 ///
 /// # Example
 /// ```ignore
-/// let node = make_node("Page", "org", "structure", NodeTrait::Invariant);
+/// let node = make_node("Page", "org", "structure", NodeTrait::Defined);
 /// assert_eq!(node.def.name, "Page");
 /// ```
 pub fn make_node(name: &str, realm: &str, layer: &str, behavior: NodeTrait) -> ParsedNode {
@@ -52,9 +52,9 @@ pub fn make_node(name: &str, realm: &str, layer: &str, behavior: NodeTrait) -> P
 
 /// Create a `ParsedNode` for testing with default Invariant trait.
 ///
-/// Shorthand for `make_node(name, realm, layer, NodeTrait::Invariant)`.
+/// Shorthand for `make_node(name, realm, layer, NodeTrait::Defined)`.
 pub fn make_node_simple(name: &str, realm: &str, layer: &str) -> ParsedNode {
-    make_node(name, realm, layer, NodeTrait::Invariant)
+    make_node(name, realm, layer, NodeTrait::Defined)
 }
 
 /// Create a `ParsedNode` for testing with explicit properties.
@@ -65,7 +65,7 @@ pub fn make_node_simple(name: &str, realm: &str, layer: &str) -> ParsedNode {
 /// # Example
 /// ```ignore
 /// let node = make_node_with_props(
-///     "Page", "org", "structure", NodeTrait::Invariant,
+///     "Page", "org", "structure", NodeTrait::Defined,
 ///     vec![("key", "string", true), ("title", "string", false)]
 /// );
 /// ```
@@ -164,17 +164,17 @@ mod tests {
 
     #[test]
     fn test_make_node_basic() {
-        let node = make_node("Page", "org", "structure", NodeTrait::Invariant);
+        let node = make_node("Page", "org", "structure", NodeTrait::Defined);
         assert_eq!(node.def.name, "Page");
         assert_eq!(node.realm, "org");
         assert_eq!(node.layer, "structure");
-        assert_eq!(node.def.node_trait, NodeTrait::Invariant);
+        assert_eq!(node.def.node_trait, NodeTrait::Defined);
     }
 
     #[test]
     fn test_make_node_simple_defaults_to_invariant() {
         let node = make_node_simple("Term", "shared", "knowledge");
-        assert_eq!(node.def.node_trait, NodeTrait::Invariant);
+        assert_eq!(node.def.node_trait, NodeTrait::Defined);
     }
 
     #[test]
@@ -183,7 +183,7 @@ mod tests {
             "Entity",
             "org",
             "semantic",
-            NodeTrait::Invariant,
+            NodeTrait::Defined,
             vec![("key", "string", true), ("name", "string", false)],
         );
         let props = node.def.properties.unwrap();

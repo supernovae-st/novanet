@@ -9,7 +9,7 @@ node:
   name: Adaptation
   realm: shared
   layer: locale
-  trait: knowledge
+  trait: imported
   icon: "sweat_drops"
   display_name: "Adaptation"
   description: "Content adaptation rules for FACTS vs ILLUSTRATIONS classification and technical term handling. Core decision engine for what to translate literally vs generate natively."

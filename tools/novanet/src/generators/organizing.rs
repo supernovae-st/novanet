@@ -266,7 +266,7 @@ mod tests {
                 unicode_border: Some("─".to_string()),
                 llm_context: "Fixed trait.".to_string(),
             }],
-            kind_retrieval_defaults: None,
+            class_retrieval_defaults: None,
             arc_families: vec![ArcFamilyDef {
                 key: "owns".to_string(),
                 display_name: "Owns".to_string(),
@@ -354,7 +354,7 @@ mod tests {
                 unicode_border: None,
                 llm_context: "Trait.".to_string(),
             }],
-            kind_retrieval_defaults: None,
+            class_retrieval_defaults: None,
             arc_families: vec![ArcFamilyDef {
                 key: "e".to_string(),
                 display_name: "E".to_string(),
@@ -426,8 +426,8 @@ mod tests {
         assert!(cypher.contains("l_foundation:Meta:Layer {key: 'foundation'}"));
         assert!(cypher.contains("l_semantic:Meta:Layer {key: 'semantic'}")); // v10.6: tenant.semantic
         // v11.4: seo/geo layers removed (nodes moved to shared/knowledge)
-        assert!(cypher.contains("t_localized:Meta:Trait {key: 'localized'}"));
-        assert!(cypher.contains("t_invariant:Meta:Trait {key: 'invariant'}"));
+        assert!(cypher.contains("t_authored:Meta:Trait {key: 'authored'}"));
+        assert!(cypher.contains("t_defined:Meta:Trait {key: 'defined'}"));
         assert!(cypher.contains("af_semantic:Meta:ArcFamily {key: 'semantic'}"));
         assert!(cypher.contains("af_mining:Meta:ArcFamily {key: 'mining'}"));
 
@@ -437,8 +437,8 @@ mod tests {
         assert!(cypher.contains("af_mining.arrow_style = '--o'"));
 
         // Visual encoding — border styles on traits
-        assert!(cypher.contains("t_invariant.border_style = 'solid'"));
-        assert!(cypher.contains("t_localized.border_style = 'dashed'"));
+        assert!(cypher.contains("t_defined.border_style = 'solid'"));
+        assert!(cypher.contains("t_authored.border_style = 'dashed'"));
 
         // Visual encoding — stroke styles on arc families
         assert!(cypher.contains("af_ownership.stroke_style = 'solid'"));
@@ -448,8 +448,8 @@ mod tests {
         assert!(cypher.contains("as_intra_realm:Meta:ArcScope {key: 'intra_realm'}"));
         assert!(cypher.contains("ac_one_to_many:Meta:ArcCardinality {key: 'one_to_many'}"));
 
-        // Header mentions v11.7.0
-        assert!(cypher.contains("v11.7.0"));
+        // Header mentions v0.12.0
+        assert!(cypher.contains("v0.12.0"));
 
         // HAS_LAYER wiring — specific pairs (v11.4: shared has config, locale, geography, knowledge)
         assert!(cypher.contains("(r:Realm {key: 'shared'}), (l:Layer {key: 'config'})"));
@@ -492,8 +492,8 @@ mod tests {
             }],
             node_traits: vec![
                 NodeTraitDef {
-                    key: "invariant".to_string(),
-                    display_name: "Invariant".to_string(),
+                    key: "defined".to_string(),
+                    display_name: "Defined".to_string(),
                     color: "#6366f1".to_string(),
                     border_style: Some("solid".to_string()),
                     border_width: Some(2),
@@ -501,8 +501,8 @@ mod tests {
                     llm_context: "Content that does not change per locale.".to_string(),
                 },
                 NodeTraitDef {
-                    key: "localized".to_string(),
-                    display_name: "Localized".to_string(),
+                    key: "authored".to_string(),
+                    display_name: "Authored".to_string(),
                     color: "#ec4899".to_string(),
                     border_style: Some("dashed".to_string()),
                     border_width: Some(2),
@@ -510,7 +510,7 @@ mod tests {
                     llm_context: "Content that varies per locale.".to_string(),
                 },
             ],
-            kind_retrieval_defaults: None,
+            class_retrieval_defaults: None,
             arc_families: vec![ArcFamilyDef {
                 key: "semantic".to_string(),
                 display_name: "Semantic".to_string(),

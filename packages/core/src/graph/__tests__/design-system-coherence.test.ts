@@ -1,5 +1,5 @@
 // packages/core/src/graph/__tests__/design-system-coherence.test.ts
-// Comprehensive tests for design system coherence — v11.6.0
+// Comprehensive tests for design system coherence — v0.12.0
 // Validates taxonomy, visual encoding, and TypeScript consistency
 //
 // Philosophy: v0 clean architecture — no backward compatibility, no legacy patterns
@@ -29,7 +29,7 @@ const V11_6_ARCHITECTURE = {
   },
 
   // 5 traits
-  traits: ['invariant', 'localized', 'knowledge', 'generated', 'aggregated'] as const,
+  traits: ['defined', 'authored', 'imported', 'generated', 'retrieved'] as const,
 
   // 5 arc families
   arcFamilies: ['ownership', 'localization', 'semantic', 'generation', 'mining'] as const,
@@ -184,7 +184,7 @@ describe('Design System Coherence: Layers', () => {
     // v11.5: Locale is a DEFINITION (invariant) not a SETTING (knowledge)
     expect(NODE_LAYERS.Locale).toBe('config');
     expect(KIND_META.Locale.layer).toBe('config');
-    expect(KIND_META.Locale.trait).toBe('invariant');
+    expect(KIND_META.Locale.trait).toBe('defined');
   });
 
   it('should have SEO/GEO in shared/knowledge (not org)', () => {
@@ -218,7 +218,8 @@ describe('Design System Coherence: Traits', () => {
 
   it('should NOT have deprecated traits', () => {
     const yamlTraitKeys = taxonomy.node_traits.map(t => t.key);
-    const deprecatedTraits = ['derived', 'job'];
+    // v0.12.0: old names (invariant, localized, knowledge, aggregated) are deprecated
+    const deprecatedTraits = ['derived', 'job', 'invariant', 'localized', 'knowledge', 'aggregated'];
 
     for (const deprecated of deprecatedTraits) {
       expect(yamlTraitKeys).not.toContain(deprecated);
@@ -227,11 +228,11 @@ describe('Design System Coherence: Traits', () => {
 
   it('should have correct border styles for each trait', () => {
     const expectedBorders: Record<string, string> = {
-      invariant: 'solid',
-      localized: 'dashed',
-      knowledge: 'dotted',
+      defined: 'solid',
+      authored: 'dashed',
+      imported: 'dotted',
       generated: 'double',
-      aggregated: 'dotted',
+      retrieved: 'dotted',
     };
 
     for (const trait of taxonomy.node_traits) {
@@ -251,7 +252,7 @@ describe('Design System Coherence: Traits', () => {
     const aggregatedNodes = ['SEOKeywordMetrics', 'GEOAnswer'];
 
     for (const node of aggregatedNodes) {
-      expect(KIND_META[node as keyof typeof KIND_META].trait).toBe('aggregated');
+      expect(KIND_META[node as keyof typeof KIND_META].trait).toBe('retrieved');
     }
   });
 });
