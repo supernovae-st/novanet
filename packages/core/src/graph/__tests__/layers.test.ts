@@ -1,13 +1,13 @@
 // packages/core/src/graph/__tests__/layers.test.ts
-// Tests for NODE_LAYERS — v11.5.0 (60 nodes, 10 layers, 2 realms)
+// Tests for NODE_LAYERS — v0.12.0 (59 nodes, 10 layers, 2 realms)
 import { describe, it, expect } from 'vitest';
 import { NODE_LAYERS, getLayer, getNodeTypesByLayer } from '../layers';
 import { NODE_TYPES } from '../../types/nodes';
 
 describe('graph/layers', () => {
-  it('should map all 60 node types to layers', () => {
+  it('should map all 59 node types to layers', () => {
     const mappedTypes = Object.keys(NODE_LAYERS);
-    expect(mappedTypes).toHaveLength(60);
+    expect(mappedTypes).toHaveLength(59);
 
     // Every NODE_TYPE should be mapped
     for (const nodeType of NODE_TYPES) {

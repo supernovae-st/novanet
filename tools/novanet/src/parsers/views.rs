@@ -3,7 +3,7 @@
 //! Each view defines a traversal pattern from a root node type,
 //! used for documentation (Mermaid diagrams) and runtime context loading.
 
-use serde::{Deserialize, Deserializer, Serialize};
+use serde::{Deserialize, Serialize};
 use std::path::Path;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -21,17 +21,12 @@ pub enum Direction {
 
 /// Icon with dual format (web + terminal).
 ///
-/// Supports both new object format and legacy string format for backward compatibility.
 /// ```yaml
-/// # New format (v11.7+)
 /// icon:
 ///   web: diamond
 ///   terminal: "◆"
-///
-/// # Legacy format (backward compatible)
-/// icon: "🔷"
 /// ```
-#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ViewIcon {
     pub web: String,
     pub terminal: String,
@@ -43,73 +38,6 @@ impl Default for ViewIcon {
             web: "circle".to_string(),
             terminal: "●".to_string(),
         }
-    }
-}
-
-impl<'de> Deserialize<'de> for ViewIcon {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        use serde::de::{self, MapAccess, Visitor};
-        use std::fmt;
-
-        struct ViewIconVisitor;
-
-        impl<'de> Visitor<'de> for ViewIconVisitor {
-            type Value = ViewIcon;
-
-            fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-                formatter.write_str("a string or an object with 'web' and 'terminal' fields")
-            }
-
-            // Handle legacy string format: icon: "🔷"
-            fn visit_str<E>(self, value: &str) -> Result<Self::Value, E>
-            where
-                E: de::Error,
-            {
-                Ok(ViewIcon {
-                    web: "circle".to_string(), // Default web icon for legacy format
-                    terminal: value.to_string(),
-                })
-            }
-
-            // Handle new object format: icon: { web: "diamond", terminal: "◆" }
-            fn visit_map<M>(self, mut map: M) -> Result<Self::Value, M::Error>
-            where
-                M: MapAccess<'de>,
-            {
-                let mut web: Option<String> = None;
-                let mut terminal: Option<String> = None;
-
-                while let Some(key) = map.next_key::<String>()? {
-                    match key.as_str() {
-                        "web" => {
-                            if web.is_some() {
-                                return Err(de::Error::duplicate_field("web"));
-                            }
-                            web = Some(map.next_value()?);
-                        }
-                        "terminal" => {
-                            if terminal.is_some() {
-                                return Err(de::Error::duplicate_field("terminal"));
-                            }
-                            terminal = Some(map.next_value()?);
-                        }
-                        _ => {
-                            let _: serde::de::IgnoredAny = map.next_value()?;
-                        }
-                    }
-                }
-
-                let web = web.ok_or_else(|| de::Error::missing_field("web"))?;
-                let terminal = terminal.ok_or_else(|| de::Error::missing_field("terminal"))?;
-
-                Ok(ViewIcon { web, terminal })
-            }
-        }
-
-        deserializer.deserialize_any(ViewIconVisitor)
     }
 }
 
@@ -528,14 +456,6 @@ terminal: "◆"
         let icon: ViewIcon = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(icon.web, "diamond");
         assert_eq!(icon.terminal, "◆");
-    }
-
-    #[test]
-    fn parse_view_icon_legacy_string_format() {
-        let yaml = r#""🔷""#;
-        let icon: ViewIcon = serde_yaml::from_str(yaml).unwrap();
-        assert_eq!(icon.web, "circle"); // Default for legacy
-        assert_eq!(icon.terminal, "🔷");
     }
 
     #[test]

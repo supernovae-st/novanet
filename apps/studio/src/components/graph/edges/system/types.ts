@@ -15,7 +15,7 @@
 export type RelationCategory =
   | 'structural'    // HAS_*, CONTAINS
   | 'localization'  // FOR_LOCALE, SUPPORTS, HAS_CONTENT
-  | 'generation'    // HAS_GENERATED, HAS_PROMPT, HAS_RULES
+  | 'generation'    // HAS_GENERATED, HAS_INSTRUCTION, HAS_RULES
   | 'semantic'      // USES_ENTITY, SEMANTIC
   | 'seo'           // TARGETS_SEO, HAS_VARIATION
   | 'geo'           // TARGETS_GEO, HAS_CITATION
@@ -36,7 +36,7 @@ export type RelationType =
   | 'FOR_LOCALE'
   // Generation
   | 'HAS_GENERATED'
-  | 'HAS_PROMPT'
+  | 'HAS_INSTRUCTION'
   | 'HAS_RULES'
   | 'GENERATED_BY'
   // Semantic
@@ -204,7 +204,7 @@ export type ArcFamilyType =
  * Resolved theme (after merging category base + relation overrides)
  */
 export interface ResolvedEdgeTheme extends EdgeTheme {
-  /** Source category (legacy, for backward compatibility) */
+  /** Source category */
   category: RelationCategory;
   /** Arc family (v9.5 - primary classification) */
   arcFamily?: ArcFamilyType;

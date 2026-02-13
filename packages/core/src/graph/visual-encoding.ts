@@ -290,11 +290,15 @@ export const KIND_ICONS: Record<string, string> = {
 };
 
 /**
- * Get Lucide icon name for a Kind.
+ * Get Lucide icon name for a Class.
+ * v11.8: renamed from getKindIcon
  */
-export function getKindIcon(kind: string): string {
-  return KIND_ICONS[kind] ?? 'circle';
+export function getClassIcon(className: string): string {
+  return KIND_ICONS[className] ?? 'circle';
 }
+
+/** @deprecated Use getClassIcon instead (v11.8) */
+export const getKindIcon = getClassIcon;
 
 // =============================================================================
 // ANIMATIONS (5) — Studio only

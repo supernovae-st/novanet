@@ -19,6 +19,7 @@ import { REALM_HIERARCHY } from './hierarchy.js';
 const NODE_LABELS: Record<NodeType, string> = {
   // ═══════════════════════════════════════════════════════════════════════════
   // SHARED REALM (39 nodes) — 4 layers: config, locale, geography, knowledge
+  // v11.8.0: 59 total nodes (39 shared + 20 org)
   // ═══════════════════════════════════════════════════════════════════════════
   // config (3) — v11.5: Locale + EntityCategory + SEOKeywordFormat
   EntityCategory: 'Entity Category',
@@ -70,7 +71,7 @@ const NODE_LABELS: Record<NodeType, string> = {
   GEOAnswer: 'GEO Answer',
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // ORG REALM (21 nodes) — 6 layers
+  // ORG REALM (20 nodes) — 6 layers
   // ═══════════════════════════════════════════════════════════════════════════
   // config (1) — v11.3: Organization + Tenant merged
   OrgConfig: 'Org Config',
@@ -91,13 +92,12 @@ const NODE_LABELS: Record<NodeType, string> = {
   AudiencePersona: 'Audience Persona',
   ChannelSurface: 'Channel Surface',
 
-  // instruction (7)
-  PageType: 'Page Type',
+  // instruction (6)
+  PageStructure: 'Page Structure',
   BlockType: 'Block Type',
-  PagePrompt: 'Page Prompt',
-  BlockPrompt: 'Block Prompt',
-  BlockRules: 'Block Rules',
+  PageInstruction: 'Page Instruction',
   BlockInstruction: 'Block Instruction',
+  BlockRules: 'Block Rules',
   PromptArtifact: 'Prompt Artifact',
 
   // output (3)
@@ -132,7 +132,7 @@ const TRAIT_DESCRIPTIONS: Record<string, string> = {
 // =============================================================================
 
 /**
- * Generate flat schema graph with all 60 node types and arcs.
+ * Generate flat schema graph with all 59 node types and arcs.
  * This is the canonical representation of the NovaNet ontology.
  *
  * @returns SchemaGraphResult with nodes and arcs
@@ -141,7 +141,7 @@ const TRAIT_DESCRIPTIONS: Record<string, string> = {
  * ```typescript
  * const { nodes, arcs } = generateSchemaGraph();
  * console.log(`${nodes.length} nodes, ${arcs.length} arcs`);
- * // Output: "60 nodes, ~114 arcs"
+ * // Output: "59 nodes, ~114 arcs"
  * ```
  */
 export function generateSchemaGraph(): SchemaGraphResult {
@@ -213,7 +213,7 @@ export function generateSchemaGraph(): SchemaGraphResult {
  * ```typescript
  * const hierarchy = getSchemaHierarchy();
  * console.log(hierarchy.stats);
- * // Output: { totalNodes: 60, totalArcs: ~114, nodesByRealm: { shared: 39, org: 21 } }
+ * // Output: { totalNodes: 59, totalArcs: ~114, nodesByRealm: { shared: 39, org: 20 } }
  * ```
  */
 export function getSchemaHierarchy(): HierarchicalSchemaData {

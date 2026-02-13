@@ -3,10 +3,8 @@
 // =============================================================================
 // Defines all 14 context views with their visual styles, effects, and node mappings
 //
-// @deprecated v11.6.1: This file is deprecated in favor of the unified view system.
-// Views are now defined in packages/core/models/views/_registry.yaml with embedded Cypher.
+// NOTE: Views are now defined in packages/core/models/views/_registry.yaml with embedded Cypher.
 // Use @novanet/core/filters ViewLoader.loadRegistry() instead.
-// Migration: https://github.com/supernovae-st/novanet-hq/docs/plans/2026-02-11-unified-view-system-design.md
 
 import type { NodeType } from '@novanet/core/types';
 

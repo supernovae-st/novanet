@@ -62,19 +62,19 @@ describe('NovaNetFilter', () => {
       expect(entityRule?.depth).toBe(2);
     });
 
-    it('includePrompts() adds HAS_PROMPT include rule', () => {
-      const filter = NovaNetFilter.create().fromPage('page-pricing').includePrompts();
+    it('includeInstructions() adds HAS_INSTRUCTION include rule', () => {
+      const filter = NovaNetFilter.create().fromPage('page-pricing').includeInstructions();
       const criteria = filter.getCriteria();
       expect(criteria.includes).toContainEqual(
-        expect.objectContaining({ relation: 'HAS_PROMPT', direction: 'outgoing' })
+        expect.objectContaining({ relation: 'HAS_INSTRUCTION', direction: 'outgoing' })
       );
     });
 
-    it('includePrompts({ activeOnly: true }) filters active prompts', () => {
-      const filter = NovaNetFilter.create().fromPage('page-pricing').includePrompts({ activeOnly: true });
+    it('includeInstructions({ activeOnly: true }) filters active instructions', () => {
+      const filter = NovaNetFilter.create().fromPage('page-pricing').includeInstructions({ activeOnly: true });
       const criteria = filter.getCriteria();
-      const promptRule = criteria.includes.find(i => i.relation === 'HAS_PROMPT');
-      expect(promptRule?.filters?.active).toBe(true);
+      const instructionRule = criteria.includes.find(i => i.relation === 'HAS_INSTRUCTION');
+      expect(instructionRule?.filters?.active).toBe(true);
     });
 
     it('includeBlockType() adds OF_TYPE include rule', () => {
@@ -230,12 +230,12 @@ describe('NovaNetFilter', () => {
   });
 
   describe('chaining', () => {
-    it('supports fluent chaining of multiple methods (v10.3: Entity)', () => {
+    it('supports fluent chaining of multiple methods', () => {
       const filter = NovaNetFilter.create()
         .fromPage('page-pricing')
         .includeBlocks()
         .includeEntities({ spreading: true })
-        .includePrompts({ activeOnly: true })
+        .includeInstructions({ activeOnly: true })
         .forLocale('fr-FR')
         .maxDepth(2);
 
@@ -368,24 +368,24 @@ describe('CypherGenerator', () => {
   });
 
   describe('active filter', () => {
-    it('generates {active: true} filter for prompts', () => {
+    it('generates {active: true} filter for instructions', () => {
       const filter = NovaNetFilter.create()
         .fromPage('page-pricing')
-        .includePrompts({ activeOnly: true });
+        .includeInstructions({ activeOnly: true });
       const result = CypherGenerator.generate(filter);
 
-      // v11.6: Target type not specified, only property filter
-      expect(result.query).toMatch(/OPTIONAL MATCH \(root\)-\[r\d+:HAS_PROMPT\]->\(prompt \{active: true\}\)/);
+      // Target type not specified, only property filter
+      expect(result.query).toMatch(/OPTIONAL MATCH \(root\)-\[r\d+:HAS_INSTRUCTION\]->\(instruction \{active: true\}\)/);
     });
 
     it('does not add {active: true} when activeOnly is false', () => {
       const filter = NovaNetFilter.create()
         .fromPage('page-pricing')
-        .includePrompts();
+        .includeInstructions();
       const result = CypherGenerator.generate(filter);
 
-      // v11.6: Target type not specified
-      expect(result.query).toMatch(/OPTIONAL MATCH \(root\)-\[r\d+:HAS_PROMPT\]->\(prompt\)/);
+      // Target type not specified
+      expect(result.query).toMatch(/OPTIONAL MATCH \(root\)-\[r\d+:HAS_INSTRUCTION\]->\(instruction\)/);
       expect(result.query).not.toContain('{active: true}');
     });
   });
@@ -431,7 +431,7 @@ describe('CypherGenerator', () => {
         .fromPage('page-pricing')
         .includeBlocks()
         .includeEntities({ spreading: true })
-        .includePrompts({ activeOnly: true })
+        .includeInstructions({ activeOnly: true })
         .forLocale('fr-FR');
 
       const result = CypherGenerator.generate(filter);
@@ -439,11 +439,11 @@ describe('CypherGenerator', () => {
       // Should have root match
       expect(result.query).toContain('MATCH (root:Page {key: $rootKey})');
 
-      // Should have includes (v10.3: USES_ENTITY replaces USES_CONCEPT)
+      // Should have includes
       expect(result.query).toContain('OPTIONAL MATCH');
       expect(result.query).toContain('HAS_BLOCK');
       expect(result.query).toContain('USES_ENTITY');
-      expect(result.query).toContain('HAS_PROMPT');
+      expect(result.query).toContain('HAS_INSTRUCTION');
 
       // Should have spreading activation
       expect(result.query).toContain('SEMANTIC_LINK');
@@ -476,66 +476,10 @@ describe('CypherGenerator', () => {
 });
 
 // =============================================================================
-// ViewLoader Tests (Task 4)
+// ViewLoader Tests (v11.8: Query-First Architecture)
 // =============================================================================
 
 describe('ViewLoader', () => {
-  describe('loadView()', () => {
-    it('loads a view definition from generated constants', async () => {
-      const view = await ViewLoader.loadView('page-generation-context');
-
-      expect(view.id).toBe('page-generation-context');
-      expect(view.name).toBe('Page Generation Context');
-      expect(view.root.type).toBe('Page');
-    });
-
-    it('parses include rules correctly', async () => {
-      const view = await ViewLoader.loadView('page-generation-context');
-
-      expect(view.include).toBeInstanceOf(Array);
-      expect(view.include.length).toBeGreaterThan(0);
-      expect(view.include[0]).toHaveProperty('relation');
-      expect(view.include[0]).toHaveProperty('direction');
-    });
-
-    it('parses filters correctly', async () => {
-      const view = await ViewLoader.loadView('page-generation-context');
-
-      expect(view.filters).toBeDefined();
-      expect(view.filters?.locale).toBe('$locale');
-    });
-
-    it('throws error for non-existent view', async () => {
-      await expect(ViewLoader.loadView('non-existent')).rejects.toThrow();
-    });
-  });
-
-  describe('toFilter()', () => {
-    it('converts ViewDefinition to NovaNetFilter', async () => {
-      const view = await ViewLoader.loadView('page-generation-context');
-      const filter = ViewLoader.toFilter(view, { key: 'page-pricing', locale: 'fr-FR' });
-
-      const criteria = filter.getCriteria();
-      expect(criteria.root).toEqual({ type: 'Page', key: 'page-pricing' });
-    });
-
-    it('applies locale from params when view uses $locale placeholder', async () => {
-      const view = await ViewLoader.loadView('page-generation-context');
-      const filter = ViewLoader.toFilter(view, { key: 'page-pricing', locale: 'fr-FR' });
-
-      const criteria = filter.getCriteria();
-      expect(criteria.filters.locale).toBe('fr-FR');
-    });
-
-    it('applies include rules from view definition', async () => {
-      const view = await ViewLoader.loadView('page-generation-context');
-      const filter = ViewLoader.toFilter(view, { key: 'page-pricing' });
-
-      const criteria = filter.getCriteria();
-      expect(criteria.includes.length).toBeGreaterThan(0);
-    });
-  });
-
   describe('loadRegistry()', () => {
     it('loads the view registry', async () => {
       const registry = await ViewLoader.loadRegistry();

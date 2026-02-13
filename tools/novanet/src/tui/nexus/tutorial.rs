@@ -1,7 +1,7 @@
 //! Tutorial Tab - Guided learning journey for NovaNet.
 //!
 //! 5-step interactive tutorial with hands-on practice:
-//! 1. Graph Fundamentals - Meta vs Data distinction
+//! 1. Graph Fundamentals - Schema vs Instance distinction
 //! 2. Classification - Realm, Layer, Trait
 //! 3. Arcs & Relationships - Family, Scope, Cardinality
 //! 4. Generation Flow - NOT translation
@@ -49,20 +49,20 @@ pub static STEPS: [TutorialStep; 5] = [
     TutorialStep {
         id: 1,
         title: "Graph Fundamentals",
-        objective: "Understand that NovaNet has definitions (META) and actual data (DATA)",
+        objective: "Understand that NovaNet has definitions (SCHEMA) and actual data (INSTANCE)",
         explanation: &[
             "NovaNet stores TWO kinds of information:",
             "",
-            "META: \"What types exist?\"",
-            "  - 60 total Kind definitions",
-            "  - Example: Kind:Locale (the definition of what a locale IS)",
+            "SCHEMA: \"What types exist?\"",
+            "  - 59 total Class definitions (39 shared + 20 org)",
+            "  - Example: Class:Locale (the definition of what a locale IS)",
             "",
-            "DATA: \"What instances exist?\"",
+            "INSTANCE: \"What instances exist?\"",
             "  - 200,000+ actual instances",
             "  - Example: Locale:fr-FR (an actual locale instance)",
             "",
-            "The relationship between them is OF_KIND:",
-            "  (:Locale {key: 'fr-FR'})-[:OF_KIND]->(:Kind {label: 'Locale'})",
+            "The relationship between them is OF_CLASS:",
+            "  (:Locale {key: 'fr-FR'})-[:OF_CLASS]->(:Class {label: 'Locale'})",
         ],
         tasks: &[
             TutorialTask {
@@ -85,22 +85,22 @@ pub static STEPS: [TutorialStep; 5] = [
         title: "Classification",
         objective: "Understand how nodes are classified with Realm, Layer, and Trait",
         explanation: &[
-            "Every Kind has 3 classification axes:",
+            "Every Class has 3 classification axes:",
             "",
             "WHERE?  Realm",
             "  shared (39 nodes) = Universal, READ-ONLY",
-            "  org (21 nodes) = Organization-specific",
+            "  org (20 nodes) = Organization-specific",
             "",
             "WHAT?   Layer  (10 total)",
             "  shared: config, locale, geography, knowledge",
             "  org: config, foundation, structure, semantic, instruction, output",
             "",
-            "HOW?    Trait  (5 behaviors - ADR-024)",
-            "  defined   = Same everywhere (Entity, Page)",
-            "  authored  = Generated per locale (EntityContent)",
-            "  imported  = Locale expertise (Term, Culture)",
+            "HOW?    Trait  (5 data origins - ADR-024)",
+            "  defined   = Human-created once (Entity, Page)",
+            "  authored  = Human-written per locale (EntityContent)",
+            "  imported  = External data brought in (Term, Culture)",
             "  generated = LLM output (PageGenerated)",
-            "  retrieved = Computed metrics (SEOKeywordMetrics)",
+            "  retrieved = Fetched from external APIs (SEOKeywordMetrics)",
         ],
         tasks: &[
             TutorialTask {
@@ -142,7 +142,7 @@ pub static STEPS: [TutorialStep; 5] = [
         tasks: &[
             TutorialTask {
                 description: "Find Entity in org/semantic",
-                hint: Some("Entity is invariant - solid border"),
+                hint: Some("Entity is 'defined' - solid border"),
             },
             TutorialTask {
                 description: "Look at Entity's outgoing arcs",
@@ -165,13 +165,13 @@ pub static STEPS: [TutorialStep; 5] = [
             "  Problem: Loses cultural nuance, costs 200x",
             "",
             "RIGHT approach (native generation):",
-            "  Entity (invariant, defined once)",
+            "  Entity (defined, created once)",
             "    + Knowledge (fr-FR: Terms, Culture, Style)",
-            "    -> EntityContent@fr-FR (generated natively)",
+            "    -> EntityContent@fr-FR (authored natively)",
             "",
             "The pipeline:",
             "  1. Knowledge - Load locale expertise (Terms, Culture)",
-            "  2. Entity - Get invariant definition",
+            "  2. Entity - Get defined structure",
             "  3. Structure - Page/Block layout",
             "  4. Instructions - Prompts and constraints",
             "  5. Generation - LLM produces native content",
@@ -189,7 +189,7 @@ pub static STEPS: [TutorialStep; 5] = [
                 ),
             },
             TutorialTask {
-                description: "Understand why 'knowledge' comes FIRST",
+                description: "Understand why 'imported' comes FIRST",
                 hint: Some("LLM needs locale expertise before generating"),
             },
         ],
@@ -204,17 +204,17 @@ pub static STEPS: [TutorialStep; 5] = [
             "  \"If it's a node in Neo4j, it's a node everywhere\"",
             "",
             "The tree structure:",
-            "  Nodes (60)",
+            "  Nodes (59)",
             "    Realm:shared (clickable!)",
             "      Layer:config (clickable!)",
-            "        Kind:Locale (clickable, expandable)",
+            "        Class:Locale (clickable, expandable)",
             "          Locale:fr-FR (data instance)",
             "          Locale:ja-JP",
             "          ...",
             "",
             "  Arcs (114)",
             "    ArcFamily:ownership (clickable!)",
-            "      ArcKind:HAS_CONTENT (clickable!)",
+            "      ArcClass:HAS_CONTENT (clickable!)",
             "",
             "Navigation modes:",
             "  [1] Graph - Unified tree (you are here normally)",

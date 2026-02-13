@@ -1,13 +1,13 @@
 /**
  * Hierarchical Layout - Pure graph visualization without container nodes
  *
- * Generates Realm, Layer, and Kind as regular graph nodes with edges:
- * - Realm nodes (2): global, tenant (v10.6)
- * - Layer nodes (8): config, locale-knowledge, seo, foundation, structure, semantic, instruction, output
- * - Kind nodes (43): all node types
+ * Generates Realm, Layer, and Class as regular graph nodes with edges (v11.8 ADR-023):
+ * - Realm nodes (2): shared, org (v11.2)
+ * - Layer nodes (10): config, locale, geography, knowledge, foundation, structure, semantic, instruction, output (v11.5)
+ * - Class nodes (60): all node types
  * - HAS_LAYER edges (Realm → Layer)
- * - HAS_KIND edges (Layer → Kind)
- * - Business edges (Kind → Kind)
+ * - HAS_CLASS edges (Layer → Class)
+ * - Business edges (Class → Class)
  *
  * Uses Dagre for hierarchical LR layout (left-to-right).
  */
@@ -48,8 +48,8 @@ const REALM_NODE_WIDTH = 280;
 const REALM_NODE_HEIGHT = 160;
 const LAYER_NODE_WIDTH = 280;
 const LAYER_NODE_HEIGHT = 160;
-const KIND_NODE_WIDTH = 280;
-const KIND_NODE_HEIGHT = 160;
+const CLASS_NODE_WIDTH = 280;
+const CLASS_NODE_HEIGHT = 160;
 
 // Dagre layout config
 const DAGRE_CONFIG = {
@@ -165,33 +165,33 @@ export function applyHierarchicalLayout(
       });
 
       // ==========================================================================
-      // 3. Create Kind Nodes (35) and HAS_KIND edges
+      // 3. Create Class Nodes (60) and HAS_CLASS edges (v11.8 ADR-023)
       // ==========================================================================
 
       for (const nodeType of layerData.nodeTypes) {
-        const kindNodeId = `schema-${nodeType}`;
+        const classNodeId = `schema-${nodeType}`;
         const schemaNode = hierarchy.nodes.find((n) => n.nodeType === nodeType);
 
         // Add to Dagre
-        g.setNode(kindNodeId, { width: KIND_NODE_WIDTH, height: KIND_NODE_HEIGHT });
+        g.setNode(classNodeId, { width: CLASS_NODE_WIDTH, height: CLASS_NODE_HEIGHT });
 
-        // Create HAS_KIND edge (Layer → Kind)
-        g.setEdge(layerNodeId, kindNodeId);
+        // Create HAS_CLASS edge (Layer → Class)
+        g.setEdge(layerNodeId, classNodeId);
         edges.push({
-          id: `edge-has-kind-${layerKey}-${nodeType}`,
+          id: `edge-has-class-${layerKey}-${nodeType}`,
           source: layerNodeId,
-          target: kindNodeId,
+          target: classNodeId,
           type: 'floating',
           data: {
-            relationType: 'HAS_KIND',
-            label: 'HAS_KIND',
+            relationType: 'HAS_CLASS',
+            label: 'HAS_CLASS',
             isMetaEdge: true,
           },
         });
 
         // Create React Flow node
         nodes.push({
-          id: kindNodeId,
+          id: classNodeId,
           type: 'schemaNode',
           position: { x: 0, y: 0 },
           data: {
@@ -202,7 +202,7 @@ export function applyHierarchicalLayout(
             layer: layerKey,
             trait: schemaNode?.trait || 'defined',
             isMetaNode: false,
-            metaType: 'kind',
+            metaType: 'class',
           },
         });
       }
@@ -210,7 +210,7 @@ export function applyHierarchicalLayout(
   }
 
   // ==========================================================================
-  // 4. Add Business Edges (Kind → Kind) - existing schema edges
+  // 4. Add Business Edges (Class → Class) - existing schema edges
   // ==========================================================================
 
   const validNodeIds = new Set(nodes.map((n) => n.id));

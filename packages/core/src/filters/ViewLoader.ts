@@ -7,16 +7,6 @@ import yaml from 'js-yaml';
 import type { ViewDefinition, ViewRegistry, ViewRegistryEntry, IncludeRule, CypherQuery } from './types.js';
 import { NovaNetFilter } from './NovaNetFilter.js';
 
-// Fallback to generated views for backward compatibility
-let getGeneratedView: ((id: string) => unknown) | null = null;
-
-// Try to import generated views (may not exist in new unified system)
-try {
-  const generated = await import('./views.generated.js');
-  getGeneratedView = generated.getView || null;
-} catch {
-  // No generated views - using unified _registry.yaml only
-}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // YAML Registry Loading
@@ -56,55 +46,6 @@ async function loadRegistryYAML(): Promise<YAMLRegistry> {
   throw new Error('Could not load _registry.yaml from any known path');
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Type conversion (for backward compatibility with declarative views)
-// ─────────────────────────────────────────────────────────────────────────────
-
-interface GeneratedIncludeRule {
-  relation: string;
-  direction: 'outgoing' | 'incoming' | 'both';
-  depth?: number;
-  targetTypes?: string[];
-  include?: GeneratedIncludeRule[];
-}
-
-interface GeneratedViewDefinition {
-  id: string;
-  name: string;
-  description: string;
-  version?: string;
-  root: { type: string; key?: string };
-  include: GeneratedIncludeRule[];
-  filters?: { locale?: string; maxDepth?: number };
-}
-
-function convertIncludeRule(rule: GeneratedIncludeRule): IncludeRule {
-  return {
-    relation: rule.relation,
-    direction: rule.direction,
-    depth: rule.depth,
-    targetTypes: rule.targetTypes as IncludeRule['targetTypes'],
-    include: rule.include?.map(convertIncludeRule),
-  };
-}
-
-function convertViewDefinition(view: GeneratedViewDefinition): ViewDefinition {
-  return {
-    id: view.id,
-    name: view.name,
-    description: view.description,
-    version: view.version ?? '11.6.1',
-    root: {
-      type: view.root.type as ViewDefinition['root']['type'],
-      key: view.root.key,
-    },
-    include: view.include.map(convertIncludeRule),
-    filters: view.filters ? {
-      locale: view.filters.locale,
-      maxDepth: view.filters.maxDepth,
-    } : undefined,
-  };
-}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ViewLoader
@@ -173,32 +114,6 @@ export class ViewLoader {
     };
   }
 
-  /**
-   * Loads a single view definition by ID (backward compatibility).
-   * For views with embedded Cypher, this throws an error.
-   *
-   * @param viewId - The view identifier
-   * @returns The parsed ViewDefinition
-   * @throws Error if view is Cypher-only or does not exist
-   * @deprecated Use getViewById + getCypher instead
-   */
-  static async loadView(viewId: string): Promise<ViewDefinition> {
-    // First check if it's in the unified registry with Cypher
-    const view = await this.getViewById(viewId);
-    if (view?.cypher) {
-      throw new Error(
-        `View '${viewId}' uses embedded Cypher. Use ViewLoader.getCypher() instead.`
-      );
-    }
-
-    // Fall back to generated views for backward compatibility
-    if (getGeneratedView) {
-      const generated = getGeneratedView(viewId) as GeneratedViewDefinition;
-      return convertViewDefinition(generated);
-    }
-
-    throw new Error(`View '${viewId}' not found`);
-  }
 
   /**
    * Get all available view IDs.
@@ -307,8 +222,8 @@ export class ViewLoader {
         });
         break;
 
-      case 'HAS_PROMPT':
-        filter.includePrompts({ activeOnly });
+      case 'HAS_INSTRUCTION':
+        filter.includeInstructions({ activeOnly });
         break;
 
       case 'HAS_RULES':

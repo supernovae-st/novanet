@@ -279,79 +279,67 @@ describe('Relation Naming Conventions', () => {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// PROMPT SCHEMAS (v7.2.0)
+// INSTRUCTION SCHEMAS
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import { PagePromptSchema, BlockPromptSchema, BlockRulesSchema } from '../schemas/prompts.schema.js';
+import { PageInstructionSchema, BlockInstructionSchema, BlockRulesSchema } from '../schemas/prompts.schema.js';
 
-describe('Prompt Schemas (v7.2.0)', () => {
-  describe('PagePromptSchema', () => {
-    it('validates valid PagePrompt', () => {
+describe('Instruction Schemas (v11.8.0)', () => {
+  describe('PageInstructionSchema', () => {
+    it('validates valid PageInstruction', () => {
       const valid = {
-        display_name: 'Pricing Page Prompt v1.0',
-        icon: '📝',
+        display_name: 'Pricing Page Instruction v1.0',
         description: 'Instructions for pricing page generation',
         llm_context: 'USE: orchestration. TRIGGERS: page. NOT: blocks.',
-        priority: 'high',
-        freshness: 'static',
-        prompt: '[GENERATE] Create conversion-focused pricing page',
+        instruction: '[GENERATE] Create conversion-focused pricing page',
         version: '1.0',
         active: true,
         created_at: new Date(),
         updated_at: new Date(),
       };
-      expect(PagePromptSchema.parse(valid)).toBeDefined();
+      expect(PageInstructionSchema.parse(valid)).toBeDefined();
     });
 
-    it('rejects empty prompt', () => {
+    it('rejects empty instruction', () => {
       const invalid = {
         display_name: 'Test',
-        icon: '📝',
         description: 'Test',
         llm_context: 'USE: x. TRIGGERS: y. NOT: z.',
-        priority: 'high',
-        freshness: 'static',
-        prompt: '',
+        instruction: '',
         version: '1.0',
         active: true,
         created_at: new Date(),
         updated_at: new Date(),
       };
-      expect(() => PagePromptSchema.parse(invalid)).toThrow();
+      expect(() => PageInstructionSchema.parse(invalid)).toThrow();
     });
 
     it('rejects invalid llm_context format', () => {
       const invalid = {
         display_name: 'Test',
-        icon: '📝',
         description: 'Test',
         llm_context: 'Invalid format without USE/TRIGGERS/NOT',
-        priority: 'high',
-        freshness: 'static',
-        prompt: '[GENERATE] Test',
+        instruction: '[GENERATE] Test',
         version: '1.0',
         active: true,
         created_at: new Date(),
         updated_at: new Date(),
       };
-      expect(() => PagePromptSchema.parse(invalid)).toThrow();
+      expect(() => PageInstructionSchema.parse(invalid)).toThrow();
     });
 
     it('rejects invalid version format', () => {
       const invalid = {
         display_name: 'Test',
-        icon: '📝',
         description: 'Test',
         llm_context: 'USE: x. TRIGGERS: y. NOT: z.',
-        priority: 'high',
-        freshness: 'static',
-        prompt: '[GENERATE] Test',
+        instruction: '[GENERATE] Test',
         version: 'invalid-version',
         active: true,
         created_at: new Date(),
         updated_at: new Date(),
       };
-      expect(() => PagePromptSchema.parse(invalid)).toThrow();
+      expect(() => PageInstructionSchema.parse(invalid)).toThrow();
     });
 
     it('accepts valid semver versions', () => {
@@ -359,55 +347,46 @@ describe('Prompt Schemas (v7.2.0)', () => {
       validVersions.forEach((version) => {
         const valid = {
           display_name: 'Test',
-          icon: '📝',
           description: 'Test',
           llm_context: 'USE: x. TRIGGERS: y. NOT: z.',
-          priority: 'high',
-          freshness: 'static',
-          prompt: '[GENERATE] Test',
+          instruction: '[GENERATE] Test',
           version,
           active: true,
           created_at: new Date(),
           updated_at: new Date(),
         };
-        expect(PagePromptSchema.parse(valid)).toBeDefined();
+        expect(PageInstructionSchema.parse(valid)).toBeDefined();
       });
     });
   });
 
-  describe('BlockPromptSchema', () => {
-    it('validates valid BlockPrompt', () => {
+  describe('BlockInstructionSchema', () => {
+    it('validates valid BlockInstruction', () => {
       const valid = {
-        display_name: 'Hero Prompt v1.0',
-        icon: '📝',
+        display_name: 'Hero Instruction v1.0',
         description: 'Instructions for hero generation',
         llm_context: 'USE: hero. TRIGGERS: block. NOT: other.',
-        priority: 'high',
-        freshness: 'static',
-        prompt: '[GENERATE] Hero highlighting @tier-pro',
+        instruction: '[GENERATE] Hero highlighting @tier-pro',
         version: '1.0',
         active: true,
         created_at: new Date(),
         updated_at: new Date(),
       };
-      expect(BlockPromptSchema.parse(valid)).toBeDefined();
+      expect(BlockInstructionSchema.parse(valid)).toBeDefined();
     });
 
-    it('rejects empty prompt', () => {
+    it('rejects empty instruction', () => {
       const invalid = {
         display_name: 'Test',
-        icon: '📝',
         description: 'Test',
         llm_context: 'USE: x. TRIGGERS: y. NOT: z.',
-        priority: 'high',
-        freshness: 'static',
-        prompt: '',
+        instruction: '',
         version: '1.0',
         active: true,
         created_at: new Date(),
         updated_at: new Date(),
       };
-      expect(() => BlockPromptSchema.parse(invalid)).toThrow();
+      expect(() => BlockInstructionSchema.parse(invalid)).toThrow();
     });
   });
 
@@ -415,11 +394,8 @@ describe('Prompt Schemas (v7.2.0)', () => {
     it('validates valid BlockRules', () => {
       const valid = {
         display_name: 'Hero Rules v1.0',
-        icon: '📏',
         description: 'Generation rules for hero',
         llm_context: 'USE: rules. TRIGGERS: hero. NOT: other.',
-        priority: 'high',
-        freshness: 'static',
         rules: 'Title: action verb. Subtitle: value prop.',
         version: '1.0',
         active: true,
@@ -432,11 +408,8 @@ describe('Prompt Schemas (v7.2.0)', () => {
     it('rejects empty rules', () => {
       const invalid = {
         display_name: 'Test',
-        icon: '📏',
         description: 'Test',
         llm_context: 'USE: x. TRIGGERS: y. NOT: z.',
-        priority: 'high',
-        freshness: 'static',
         rules: '',
         version: '1.0',
         active: true,
@@ -449,28 +422,28 @@ describe('Prompt Schemas (v7.2.0)', () => {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// RELATIONS v7.2.0 - Prompt relations
+// RELATIONS - Instruction relations
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { RelationRegistry } from '../schemas/relations.schema.js';
 
-describe('Relations v7.2.0', () => {
-  describe('HAS_PROMPT relation', () => {
+describe('Relations v11.8.0', () => {
+  describe('HAS_INSTRUCTION relation', () => {
     it('exists in RelationType and RelationRegistry', () => {
-      expect(RelationType.HAS_PROMPT).toBe('HAS_PROMPT');
-      expect(RelationRegistry[RelationType.HAS_PROMPT]).toBeDefined();
+      expect(RelationType.HAS_INSTRUCTION).toBe('HAS_INSTRUCTION');
+      expect(RelationRegistry[RelationType.HAS_INSTRUCTION]).toBeDefined();
     });
 
-    it('links Page and Block to PagePrompt and BlockPrompt', () => {
-      const rel = RelationRegistry[RelationType.HAS_PROMPT];
+    it('links Page and Block to PageInstruction and BlockInstruction', () => {
+      const rel = RelationRegistry[RelationType.HAS_INSTRUCTION];
       expect(rel.from).toContain('Page');
       expect(rel.from).toContain('Block');
-      expect(rel.to).toContain('PagePrompt');
-      expect(rel.to).toContain('BlockPrompt');
+      expect(rel.to).toContain('PageInstruction');
+      expect(rel.to).toContain('BlockInstruction');
     });
 
     it('has 1:N cardinality for versioning', () => {
-      const rel = RelationRegistry[RelationType.HAS_PROMPT];
+      const rel = RelationRegistry[RelationType.HAS_INSTRUCTION];
       expect(rel.cardinality).toBe('1:N');
     });
   });
@@ -499,10 +472,10 @@ describe('Relations v7.2.0', () => {
       expect(RelationRegistry[RelationType.GENERATED]).toBeDefined();
     });
 
-    it('links PagePrompt/BlockPrompt to PageGenerated/BlockGenerated', () => {
+    it('links PageInstruction/BlockInstruction to PageGenerated/BlockGenerated', () => {
       const rel = RelationRegistry[RelationType.GENERATED];
-      expect(rel.from).toContain('PagePrompt');
-      expect(rel.from).toContain('BlockPrompt');
+      expect(rel.from).toContain('PageInstruction');
+      expect(rel.from).toContain('BlockInstruction');
       expect(rel.to).toContain('PageGenerated');
       expect(rel.to).toContain('BlockGenerated');
     });
@@ -519,10 +492,11 @@ describe('Relations v7.2.0', () => {
   });
 
   describe('Naming conventions', () => {
-    it('should include HAS_PROMPT in HAS_* relations', () => {
+    it('should include HAS_INSTRUCTION in HAS_* relations', () => {
       const hasRelations = Object.keys(RelationType).filter((r) => r.startsWith('HAS_'));
-      expect(hasRelations).toContain('HAS_PROMPT');
+      expect(hasRelations).toContain('HAS_INSTRUCTION');
       expect(hasRelations).toContain('HAS_RULES');
     });
+
   });
 });

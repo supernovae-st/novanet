@@ -396,7 +396,7 @@ node:
   name: Culture
   realm: shared
   layer: config
-  trait: knowledge
+  trait: imported  # v0.12.0 ADR-024: knowledge→imported
 
   standard_properties:
     key:

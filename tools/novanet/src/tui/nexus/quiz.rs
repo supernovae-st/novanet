@@ -145,13 +145,13 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         question: "How many layers does the Org realm have in v11.5?",
         options: ["4", "5", "6", "7"],
         correct: 2,
-        explanation: "Org has 6 layers: config, foundation, structure, semantic, instruction, output (21 nodes).",
+        explanation: "Org has 6 layers: config, foundation, structure, semantic, instruction, output (20 nodes).",
     },
     QuizQuestion {
-        question: "What is the total node count in NovaNet v11.5?",
-        options: ["50", "55", "60", "65"],
+        question: "What is the total node count in NovaNet v11.5+?",
+        options: ["50", "55", "59", "65"],
         correct: 2,
-        explanation: "60 total nodes: 39 shared + 21 org. Schema was refined to consolidate SEO/GEO to shared.",
+        explanation: "59 total nodes: 39 shared + 20 org. v0.12.0 refined SEO/GEO and removed obsolete nodes.",
     },
     QuizQuestion {
         question: "What was EntityL10n renamed to in v10.9?",
@@ -162,7 +162,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
             "EntityData",
         ],
         correct: 0,
-        explanation: "EntityL10n → EntityContent (semantic layer, authored trait). The 'Content' suffix indicates locale-specific semantic content.",
+        explanation: "EntityL10n → EntityContent (semantic layer, 'authored' trait). The 'Content' suffix indicates locale-specific semantic content.",
     },
     QuizQuestion {
         question: "What was PageL10n renamed to in v10.9?",
@@ -191,13 +191,13 @@ pub const QUESTIONS: &[QuizQuestion] = &[
             "shared/knowledge",
         ],
         correct: 1,
-        explanation: "Locale moved to shared/config in v11.5 because it's a DEFINITION (defined trait), not settings.",
+        explanation: "Locale moved to shared/config in v11.5 because it's a DEFINITION ('defined' trait), not settings.",
     },
     QuizQuestion {
-        question: "What border style indicates a defined node?",
+        question: "What border style indicates a 'defined' node?",
         options: ["dashed", "dotted", "double", "solid"],
         correct: 3,
-        explanation: "Defined nodes have solid borders. Authored=dashed, imported=double, generated=dotted.",
+        explanation: "Defined nodes have solid borders. authored=dashed, imported=double, generated=dotted.",
     },
     QuizQuestion {
         question: "What quick jump key goes to the 'generated' trait?",

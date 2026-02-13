@@ -1,18 +1,6 @@
-# models/node-kinds/org/structure/page.yaml
 # Page - Invariant page structure with orchestrator instructions
 #
-# v7.12.1 CHANGES:
-#   - ADDED: anchor_type property to LINKS_TO (exact_match | partial_match | branded | generic)
-#   - ADDED: nofollow property to LINKS_TO (boolean, default false)
-#
-# v7.12.0 CHANGES:
-#   - ADDED: LINKS_TO relation (Page → Page) for explicit internal linking
-#   - ADDED: SUBTOPIC_OF relation (Page → Page) for pillar-cluster hierarchy
-#
-# v7.10.0 CHANGES:
-#   - ADDED: OF_TYPE relation to PageType (mirrors Block → BlockType)
-#   - REMOVED: page_type enum (replaced by PageType node)
-#   - REMOVED: generation_priority (redundant with priority)
+# v0.12.0: Initial clean schema (ADR-025 naming conventions)
 
 node:
   name: Page
@@ -98,16 +86,7 @@ node:
   # PAGE-SPECIFIC PROPERTIES
   # ═══════════════════════════════════════════════════════════════════════════════
 
-  properties:
-    instructions:
-      type: string
-      required: false
-      deprecated: "v7.2.0 - Use :HAS_INSTRUCTION → BlockInstruction (v0.12.0 ADR-025)"
-      description: "Orchestrator directive for page generation"
-      example: "[GENERATE] Create conversion-focused pricing page comparing tiers"
-
-    # REMOVED v7.10.0: page_type (replaced by :HAS_STRUCTURE → PageStructure, v0.12.0 ADR-025)
-    # REMOVED v7.10.0: generation_priority (redundant with priority)
+  # No page-specific properties - instructions moved to HAS_INSTRUCTION → BlockInstruction
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # RELATIONS (FROM this node)
@@ -184,23 +163,22 @@ node:
       display_name: "Pricing Page"
       description: "Main pricing page with tier comparison and CTAs"
       llm_context: "USE: orchestrate pricing page generation. TRIGGERS: pricing, tarifs, plans, abonnement. NOT: individual block generation."
-      instructions: "[GENERATE] Create conversion-focused pricing page comparing tiers"
 
     cypher: |
-      // Get page with type and all blocks in order
-      MATCH (p:Page {key: $key})-[:OF_TYPE]->(pt:PageType)
+      // Get page with structure and all blocks in order (v0.12.0 ADR-025)
+      MATCH (p:Page {key: $key})-[:HAS_STRUCTURE]->(ps:PageStructure)
       MATCH (p)-[r:HAS_BLOCK]->(b:Block)-[:OF_TYPE]->(bt:BlockType)
       OPTIONAL MATCH (p)-[:USES_ENTITY]->(e:Entity)
-      RETURN p, pt, collect(DISTINCT {block: b, type: bt, position: r.position}) AS blocks,
+      RETURN p, ps, collect(DISTINCT {block: b, type: bt, position: r.position}) AS blocks,
              collect(DISTINCT e.key) AS page_entities
       ORDER BY r.position
 
-      // Validate page has required blocks from PageType
-      MATCH (p:Page {key: $key})-[:OF_TYPE]->(pt:PageType)
+      // Validate page has required blocks from PageStructure (v0.12.0 ADR-025)
+      MATCH (p:Page {key: $key})-[:HAS_STRUCTURE]->(ps:PageStructure)
       MATCH (p)-[:HAS_BLOCK]->(b:Block)-[:OF_TYPE]->(bt:BlockType)
-      WITH pt, collect(bt.key) AS page_block_types
-      RETURN pt.required_block_types AS required,
-             [rbt IN pt.required_block_types WHERE NOT rbt IN page_block_types] AS missing
+      WITH ps, collect(bt.key) AS page_block_types
+      RETURN ps.required_block_types AS required,
+             [rbt IN ps.required_block_types WHERE NOT rbt IN page_block_types] AS missing
 
       // Get page with latest generated output for locale (v10.9.0)
       MATCH (p:Page {key: $key})-[:HAS_GENERATED]->(pg:PageGenerated)-[:FOR_LOCALE]->(l:Locale {key: $locale})

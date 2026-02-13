@@ -30,14 +30,14 @@ pub fn build_search_query(query: &str, kind: Option<&str>, limit: i64) -> Cypher
         ParamValue::StringList(vec![query.to_string()]),
     ));
 
-    // Optional Kind filter (parameterized for safety)
-    if let Some(kind_label) = kind {
+    // Optional Class filter (parameterized for safety)
+    if let Some(class_label) = kind {
         // Use parameterized label matching instead of direct interpolation
         // This prevents injection even if validation is bypassed
         cypher.push_str("\nAND ANY(label IN labels(n) WHERE label = $kind)");
         params.push((
             "kind".to_string(),
-            ParamValue::StringList(vec![kind_label.to_string()]),
+            ParamValue::StringList(vec![class_label.to_string()]),
         ));
     }
 

@@ -1,10 +1,10 @@
 # models/views/complete-graph.yaml
 # Complete graph view showing all 60 node types and 114 arc types
-# v11.3.0 — 2-Realm Architecture (SHARED + ORG)
+# v11.8.0 — ADR-025 Instruction Layer Renaming
 id: complete-graph
 name: Complete Graph
 description: Full NovaNet graph with all nodes and relations
-version: "11.3.0"
+version: "11.8.0"
 
 root:
   type: Project
@@ -26,7 +26,7 @@ include:
     include:
       - relation: HAS_BLOCK
         direction: outgoing
-      - relation: HAS_PROMPT
+      - relation: HAS_INSTRUCTION
         direction: outgoing
       - relation: HAS_GENERATED
         direction: outgoing
@@ -93,7 +93,7 @@ docs:
       description: Entities and audience targeting
 
     - name: Org - Instruction
-      nodes: [PagePrompt, BlockPrompt, BlockRules, BlockInstruction, PageType, BlockType, PromptArtifact]
+      nodes: [PageInstruction, BlockInstruction, BlockRules, PageStructure, BlockType, PromptArtifact]
       color: orange
       description: Generation instructions and types
 
@@ -146,4 +146,4 @@ docs:
     - "For generation tasks, use more specific views like page-generation or block-generation"
     - "The graph follows a 2-realm hierarchy: SHARED (read-only) > ORG (business)"
     - "Mermaid diagram is auto-generated from arc-kinds/ via MermaidGenerator"
-    - "v11.6: 60 nodes, 114 arcs (2-realm architecture)"
+    - "v11.8: 60 nodes, 114 arcs (ADR-025 Instruction Layer Renaming)"

@@ -24,7 +24,7 @@ export interface UseCopyFeedbackOptions {
   duration?: number;
   /** Callback after successful copy */
   onCopy?: (text: string) => void;
-  /** Show toast notification (default: false for backward compat) */
+  /** Show toast notification (default: false) */
   showToast?: boolean;
   /** Custom toast message (default: 'Copied to clipboard') */
   toastMessage?: string;

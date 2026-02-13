@@ -13,7 +13,7 @@ const VIEW_ID_REGEX = /^[a-z0-9-]+$/;
 // Valid locale pattern (BCP 47 - permissive to support variants like zh-Hans-CN)
 const LOCALE_REGEX = /^[a-z]{2,3}(-[A-Za-z]{2,4})?(-[A-Z]{2})?(-[a-z0-9]+)*$/;
 
-// v11.6.1: Legacy view ID aliases (backward compatibility)
+// View ID aliases for standardized naming
 const VIEW_ID_ALIASES: Record<string, string> = {
   'complete-graph': 'data-complete',
   'block-generation': 'ctx-generation',
@@ -64,7 +64,7 @@ export async function GET(
     );
   }
 
-  // v11.6.1: Apply alias for backward compatibility with legacy view IDs
+  // Apply alias for standardized view IDs
   const id = VIEW_ID_ALIASES[rawId] || rawId;
 
   try {

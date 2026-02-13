@@ -3,11 +3,11 @@
 //! Shows the core NovaNet principle: Generation, NOT Translation.
 //!
 //! The pipeline has 6 stages (0-5):
-//! 0. KNOWLEDGE - Input locale knowledge (Terms, Expressions, Patterns)
-//! 1. INVARIANT - Structural templates (Page, Entity, Block)
+//! 0. IMPORTED - Input locale knowledge (Terms, Expressions, Patterns)
+//! 1. DEFINED - Structural templates (Page, Entity, Block)
 //! 2. CONTEXT_LOAD - Knowledge atoms loaded into LLM context
 //! 3. LLM_GENERATE - LLM generation process
-//! 4. LOCALIZED - Output generated content (PageGenerated, EntityContent, BlockGenerated)
+//! 4. AUTHORED - Output generated content (PageGenerated, EntityContent, BlockGenerated)
 //! 5. COMPLETE - Generation complete
 //!
 //! Animation:
@@ -32,12 +32,12 @@ use crate::tui::ui::COLOR_UNFOCUSED_BORDER;
 /// Pipeline stage definitions.
 /// v11.8: Renamed per ADR-024 Data Origin semantics
 pub const PIPELINE_STAGES: [(&str, &str, &str); 6] = [
-    ("IMPORTED", "\u{25ca}", "Load imported knowledge"),   // ◊ (was: KNOWLEDGE)
+    ("IMPORTED", "\u{25ca}", "Load imported knowledge"), // ◊ (was: KNOWLEDGE)
     ("DEFINED", "\u{25a0}", "Load structural definitions"), // ■ (was: INVARIANT)
-    ("CONTEXT", "\u{2193}", "Inject into LLM context"),    // ↓
-    ("GENERATE", "\u{21d2}", "LLM native generation"),     // ⇒
-    ("AUTHORED", "\u{25a1}", "Output authored content"),   // □ (was: LOCALIZED)
-    ("COMPLETE", "\u{2713}", "Generation complete"),       // ✓
+    ("CONTEXT", "\u{2193}", "Inject into LLM context"),  // ↓
+    ("GENERATE", "\u{21d2}", "LLM native generation"),   // ⇒
+    ("AUTHORED", "\u{25a1}", "Output authored content"), // □ (was: LOCALIZED)
+    ("COMPLETE", "\u{2713}", "Generation complete"),     // ✓
 ];
 
 /// Get stage color based on stage index.
@@ -189,16 +189,16 @@ fn build_pipeline_lines(
     )));
     lines.push(Line::from(""));
 
-    // Row 1: KNOWLEDGE and INVARIANT side by side
-    let knowledge_box = stage_box(0, "KNOWLEDGE", "\u{25ca}");
-    let invariant_box = stage_box(1, "INVARIANT", "\u{25a0}");
+    // Row 1: IMPORTED and DEFINED side by side
+    let imported_box = stage_box(0, "IMPORTED", "\u{25ca}");
+    let defined_box = stage_box(1, "DEFINED", "\u{25a0}");
 
     // Merge boxes horizontally (simplified for terminal)
     for i in 0..3 {
         let mut spans: Vec<Span<'static>> = vec![Span::raw("    ")];
 
-        // Add knowledge box line
-        if let Some(line) = knowledge_box.get(i) {
+        // Add imported box line
+        if let Some(line) = imported_box.get(i) {
             for span in &line.spans {
                 spans.push(span.clone());
             }
@@ -206,8 +206,8 @@ fn build_pipeline_lines(
 
         spans.push(Span::raw("          "));
 
-        // Add invariant box line
-        if let Some(line) = invariant_box.get(i) {
+        // Add defined box line
+        if let Some(line) = defined_box.get(i) {
             for span in &line.spans {
                 spans.push(span.clone());
             }
@@ -377,9 +377,9 @@ fn build_pipeline_lines(
         Span::styled("\u{25bc}", Style::default().fg(output_color)), // ▼
     ]));
 
-    // Row 4: LOCALIZED output box
-    let localized_box = stage_box(4, "LOCALIZED", "\u{25a1}");
-    for line in localized_box {
+    // Row 4: AUTHORED output box
+    let authored_box = stage_box(4, "AUTHORED", "\u{25a1}");
+    for line in authored_box {
         let mut spans: Vec<Span<'static>> = vec![Span::raw("             ")];
         for span in line.spans {
             spans.push(span);
@@ -508,11 +508,11 @@ mod tests {
     #[test]
     fn test_pipeline_stages_names() {
         // v11.8: Renamed per ADR-024 Data Origin semantics
-        assert_eq!(PIPELINE_STAGES[0].0, "IMPORTED");   // was: KNOWLEDGE
-        assert_eq!(PIPELINE_STAGES[1].0, "DEFINED");    // was: INVARIANT
+        assert_eq!(PIPELINE_STAGES[0].0, "IMPORTED"); // was: KNOWLEDGE
+        assert_eq!(PIPELINE_STAGES[1].0, "DEFINED"); // was: INVARIANT
         assert_eq!(PIPELINE_STAGES[2].0, "CONTEXT");
         assert_eq!(PIPELINE_STAGES[3].0, "GENERATE");
-        assert_eq!(PIPELINE_STAGES[4].0, "AUTHORED");   // was: LOCALIZED
+        assert_eq!(PIPELINE_STAGES[4].0, "AUTHORED"); // was: LOCALIZED
         assert_eq!(PIPELINE_STAGES[5].0, "COMPLETE");
     }
 

@@ -29,11 +29,11 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
-**Current Version**: v0.12.0
+**Current Version**: v0.12.0 "Class Act" (ADR-023 + ADR-024)
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
 **Related docs**:
-- `.claude/rules/novanet-decisions.md` — Architecture decisions (ADR-001 through ADR-024)
+- `.claude/rules/novanet-decisions.md` — Architecture decisions (ADR-001 through ADR-025)
 - `.claude/rules/novanet-terminology.md` — Canonical terminology reference
 
 ```
@@ -57,16 +57,16 @@ v11.5 refines the layer structure with Locale moved to shared/config:
 │  ─────────────────────────────────────────                                  │
 │  General         │ Node      │ Arc      │                                   │
 │  Instance (data) │ NodeData  │ ArcData  │                                   │
-│  Definition      │ NodeKind  │ ArcKind  │                                   │
+│  Definition      │ NodeClass │ ArcClass │                                   │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │  CLASSIFICATION AXES                                                        │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  NodeKind:                                                                  │
+│  NodeClass:                                                                 │
 │    WHERE?  NodeRealm  (shared / org)                                        │
 │    WHAT?   NodeLayer  (10 layers: 4 shared + 6 org)                         │
 │    HOW?    NodeTrait  (defined / authored / imported / generated / retrieved) │
 │                                                                             │
-│  ArcKind:                                                                   │
+│  ArcClass:                                                                  │
 │    SCOPE   ArcScope       (intra_realm / cross_realm)                       │
 │    FUNC    ArcFamily      (ownership / localization / semantic / gen / min) │
 │    MULT    ArcCardinality (1:1 / 1:N / N:M)                                 │
@@ -76,20 +76,20 @@ v11.5 refines the layer structure with Locale moved to shared/config:
 **Key changes in v11.5:**
 - **Locale moved**: Locale from shared/locale to shared/config (definitions layer pattern)
 - **SEO/GEO consolidation**: seo/geo layers removed from org, nodes moved to shared/knowledge
-- **60 nodes** total: 39 shared + 21 org
+- **59 nodes** total: 39 shared + 20 org
 
 **Architecture (v11.5):**
 - 2 realms: SHARED + ORG
 - SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (39 nodes)
-- ORG (6 layers): config, foundation, structure, semantic, instruction, output (21 nodes)
+- ORG (6 layers): config, foundation, structure, semantic, instruction, output (20 nodes)
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
 All commands implemented: data/meta/overlay/query, node/arc CRUD, search, locale, db,
-schema generate/validate, doc generate, filter build. Galaxy-themed TUI with unified tree mode (v11.7), boot animation, effects engine, Nexus hub, and onboarding. 985 tests pass.
+schema generate/validate, doc generate, filter build. Galaxy-themed TUI with unified tree mode (v11.7), boot animation, effects engine, Nexus hub, and onboarding. 980 tests pass.
 
-**YAML-first architecture:** Each Kind YAML has explicit `realm:` and `layer:` fields (source of truth).
+**YAML-first architecture:** Each Class YAML has explicit `realm:` and `layer:` fields (source of truth).
 Path validation ensures `models/node-kinds/{realm}/{layer}/{name}.yaml` matches YAML content.
-v11.5: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 60 nodes.
+v11.5: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 59 nodes.
 
 **Icons source of truth (v11.5):** `visual-encoding.yaml` → `icons:` section provides dual-format icons:
 - `web`: Lucide icon name for Studio
@@ -112,11 +112,11 @@ v11.7 introduces the Unified Tree where Realm, Layer, ArcFamily, ArcKind are all
 │  "If it's a node in Neo4j, it's a node everywhere"                          │
 │                                                                             │
 │  Before v11.7:                                                              │
-│    Tree: Realm (label) > Layer (label) > Kind (clickable)                   │
+│    Tree: Realm (label) > Layer (label) > Class (clickable)                  │
 │    5 modes: Meta, Data, Overlay, Query, Atlas                               │
 │                                                                             │
 │  After v11.7:                                                               │
-│    Tree: Realm (node) > Layer (node) > Kind (node) > Instance (lazy)        │
+│    Tree: Realm (node) > Layer (node) > Class (node) > Instance (lazy)       │
 │    2 modes: [1] Graph + [2] Nexus                                           │
 │                                                                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
@@ -124,7 +124,7 @@ v11.7 introduces the Unified Tree where Realm, Layer, ArcFamily, ArcKind are all
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  1. EVERYTHING IS A NODE                                                    │
-│     └─ Realm, Layer, ArcFamily, ArcKind are clickable with detail panels    │
+│     └─ Realm, Layer, ArcFamily, ArcClass are clickable with detail panels   │
 │     └─ Consistent UX: click any node → see properties, arcs, actions        │
 │                                                                             │
 │  2. 5 MODES → 2 MODES                                                       │
@@ -143,7 +143,7 @@ v11.7 introduces the Unified Tree where Realm, Layer, ArcFamily, ArcKind are all
 ```
 
 **Architecture:**
-- **Graph mode** (`[1]`): Unified tree with Realm > Layer > Kind > Instance hierarchy
+- **Graph mode** (`[1]`): Unified tree with Realm > Layer > Class > Instance hierarchy
 - **Nexus mode** (`[2]`): Hub for Nexus Quiz, codebase audit, stats dashboard, help
 
 **TUI implementation:** `tools/novanet/src/tui/` — unified tree replaces multi-mode navigation
@@ -193,7 +193,7 @@ v11.7 introduces the Unified Tree where Realm, Layer, ArcFamily, ArcKind are all
 │  Containers (6): TermSet, ExpressionSet, PatternSet,                        │
 │                  CultureSet, TabooSet, AudienceSet                          │
 │  Atoms (6):      Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait│
-│  Total:          60 nodes (39 shared + 21 org)                              │
+│  Total:          59 nodes (39 shared + 20 org)                              │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -225,11 +225,11 @@ NovaNet Studio uses **Query-First Architecture** where Cypher is the single sour
 │  3. Auto-Execute with Edit Option (click = run, Ctrl+click = edit first)   │
 │                                                                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  META MODE QUERIES                                                          │
+│  SCHEMA VIEW QUERIES                                                        │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│  KINDS_QUERY: MATCH (k:Kind) RETURN k.name, k.realm, k.layer, k.trait      │
-│  ARCS_QUERY:  MATCH (a:ArcKind) RETURN a.name, a.family, a.scope, ...      │
+│  CLASSES_QUERY: MATCH (c:Class) RETURN c.name, c.realm, c.layer, c.trait   │
+│  ARCS_QUERY:    MATCH (a:ArcClass) RETURN a.name, a.family, a.scope, ...   │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -352,12 +352,12 @@ pnpm dev    # → http://localhost:3000
 
 1. **Read this file** — Understand the generation philosophy (not translation)
 2. **Explore TUI** — `cargo run -- tui` in `tools/novanet/` for unified tree exploration (v11.7)
-3. **Read `models/_index.yaml`** — Complete schema overview with all 60 nodes
+3. **Read `models/_index.yaml`** — Complete schema overview with all 59 nodes
 4. **Study `taxonomy.yaml`** — Realm/Layer/Trait definitions with visual encoding
 5. **Check ADRs** — `.claude/rules/novanet-decisions.md` explains WHY decisions were made
 6. **Run Studio** — `pnpm dev` and explore the graph visually at http://localhost:3000
 
-**Key concepts progression**: Realm → Layer → Trait → Node → Arc → ArcFamily
+**Key concepts progression**: Realm → Layer → Trait → Class → Arc → ArcFamily
 
 ---
 
@@ -451,7 +451,7 @@ See `.claude/README.md` for full documentation.
 5. cargo run -- db seed                # Update Neo4j
 ```
 
-### YAML Kind Structure
+### YAML Class Structure
 
 ```yaml
 # packages/core/models/node-kinds/shared/knowledge/term.yaml
@@ -459,8 +459,10 @@ node:
   name: Term
   realm: shared               # Source of truth (must match path)
   layer: knowledge            # v11.5: 10 layers (4 shared + 6 org)
-  trait: knowledge
+  trait: imported             # v11.8: defined/authored/imported/generated/retrieved
   description: "..."
   properties:
     # ...
 ```
+
+> **v11.8 Changes**: "Kind" → "Class", "Meta" eliminated. Trait redefined as "Data Origin" (ADR-024).

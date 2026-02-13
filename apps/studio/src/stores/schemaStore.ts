@@ -2,15 +2,15 @@
 // v12: Schema Discovery Store for Unified View System
 //
 // Provides:
-// - Database schema discovery (60 node labels, 114 relationship types)
-// - Taxonomy metadata merging (colors, icons, layers from KIND_META)
+// - Database schema discovery (59 node labels, 114 relationship types)
+// - Taxonomy metadata merging (colors, icons, layers from CLASS_TAXONOMY)
 // - Current query counts (updated after each query execution)
-// - Realm > Layer > Kind hierarchy for Schema Explorer Panel
+// - Realm > Layer > Class hierarchy for Schema Explorer Panel
 
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-import { NODE_TYPES, KIND_META, type NodeType, type Realm, type Layer, type Trait } from '@novanet/core/types';
-import { LAYERS_ICONS, REALMS_ICONS, getKindIcon } from '@novanet/core/graph';
+import { NODE_TYPES, CLASS_TAXONOMY, type NodeType, type Realm, type Layer, type Trait } from '@novanet/core/types';
+import { LAYERS_ICONS, REALMS_ICONS, getClassIcon } from '@novanet/core/graph';
 import { logger } from '@/lib/logger';
 
 // ============================================================================
@@ -210,20 +210,20 @@ interface SchemaStoreActions {
 // ============================================================================
 
 /**
- * Build enriched node types from KIND_META with counts.
+ * Build enriched node types from CLASS_TAXONOMY with counts.
  */
 function buildEnrichedNodeTypes(
   counts: Record<string, number>,
   excludedTypes: Set<string>
 ): EnrichedNodeType[] {
   return NODE_TYPES.map((name) => {
-    const meta = KIND_META[name];
+    const meta = CLASS_TAXONOMY[name];
     return {
       name,
       realm: meta.realm,
       layer: meta.layer,
       trait: meta.trait,
-      icon: getKindIcon(name),
+      icon: getClassIcon(name),
       color: LAYER_COLORS[meta.layer],
       count: counts[name] ?? 0,
       isActive: !excludedTypes.has(name),
@@ -284,7 +284,7 @@ function getArcFamily(relType: string): string {
     return 'localization';
   }
   // Generation family
-  if (relType.startsWith('HAS_PROMPT') || relType.startsWith('HAS_GENERATED') ||
+  if (relType.startsWith('HAS_INSTRUCTION') || relType.startsWith('HAS_GENERATED') ||
       relType.startsWith('COMPILED_') || relType.includes('_GENERATED')) {
     return 'generation';
   }

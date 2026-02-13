@@ -206,10 +206,10 @@ v11.7 establishes faceted classification where **everything is a clickable node*
 |-----------|-------|---------|-----------|
 | **Realm** | 2 | WHERE? (shared / org) | ✅ Yes |
 | **Layer** | 10 | WHAT? (4 shared + 6 org) | ✅ Yes |
-| **Trait** | 5 | HOW? (invariant / localized / knowledge / generated / aggregated) | ✅ Yes |
+| **Trait** | 5 | HOW? (defined / authored / imported / generated / retrieved) | ✅ Yes |
 | **ArcFamily** | 5 | Relationship classification | ✅ Yes |
 | **ArcKind** | 114 | Individual relationship type | ✅ Yes |
-| **Kind** | 60 | Node type definitions (39 shared + 21 org) | ✅ Yes |
+| **Kind** | 59 | Node type definitions (39 shared + 20 org) | ✅ Yes |
 
 All meta-nodes carry `:Meta` double-label. Instances link via `[:OF_KIND]`.
 

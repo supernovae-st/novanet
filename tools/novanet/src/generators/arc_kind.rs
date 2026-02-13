@@ -316,7 +316,11 @@ fn generate_arc_schema(
 
     // ── Section 5: TO_CLASS (ArcClass → Class target labels) ───────────────────
     let to_count: usize = forward.iter().map(|r| r.target.len()).sum();
-    write_section_header_counted(&mut out, "Arc Schema: ArcClass -[:TO_CLASS]-> Class", to_count);
+    write_section_header_counted(
+        &mut out,
+        "Arc Schema: ArcClass -[:TO_CLASS]-> Class",
+        to_count,
+    );
     writeln!(out).unwrap();
 
     for rel in &forward {
@@ -552,14 +556,14 @@ mod tests {
 
         let cypher = generate_arc_schema(&doc, &HashMap::new(), &mock_kind_realms()).unwrap();
 
-        // 2 FROM_CLASS (Page, Block) — v11.8: renamed from FROM_KIND
+        // 2 FROM_CLASS (Page, Block) — v11.8: renamed from FROM_CLASS
         let from_class = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:FROM_CLASS]"))
             .count();
         assert_eq!(from_class, 2, "should have 2 FROM_CLASS for multi-source");
 
-        // 2 TO_CLASS (PageGenerated, BlockGenerated) — v11.8: renamed from TO_KIND
+        // 2 TO_CLASS (PageGenerated, BlockGenerated) — v11.8: renamed from TO_CLASS
         let to_class = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:TO_CLASS]"))
@@ -608,17 +612,17 @@ mod tests {
             .generate(root)
             .expect("should generate arc schema cypher");
 
-        // v11.8: Count ArcClass nodes (114 total) — renamed from ArcKind
+        // v11.8: Count ArcClass nodes (114 total) — renamed from ArcClass
         let ac_merges = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Schema:ArcClass"))
             .count();
         assert_eq!(
             ac_merges, 114,
-            "expected 114 ArcClass MERGE statements (v11.8: renamed from ArcKind)"
+            "expected 114 ArcClass MERGE statements (v11.8: renamed from ArcClass)"
         );
 
-        // HAS_ARC_CLASS relationships match ArcClass count (v11.8: renamed from HAS_ARC_KIND)
+        // HAS_ARC_CLASS relationships match ArcClass count (v11.8: renamed from HAS_ARC_CLASS)
         let has_ac = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_ARC_CLASS]"))
@@ -656,7 +660,7 @@ mod tests {
             "family counts should sum to 114: o={ownership} l={localization} s={semantic} g={generation} m={mining}"
         );
 
-        // Spot checks — specific ArcClass nodes (v11.8: renamed from ArcKind)
+        // Spot checks — specific ArcClass nodes (v11.8: renamed from ArcClass)
         assert!(cypher.contains("ac_HAS_PAGE:Schema:ArcClass {key: 'HAS_PAGE'}"));
         assert!(cypher.contains("ac_HAS_BLOCK:Schema:ArcClass {key: 'HAS_BLOCK'}"));
         assert!(cypher.contains("ac_FOR_LOCALE:Schema:ArcClass {key: 'FOR_LOCALE'}"));
@@ -667,7 +671,7 @@ mod tests {
             "HAS_BLOCK should have inverse_name BLOCK_OF"
         );
 
-        // Spot check — FROM_CLASS/TO_CLASS for HAS_PAGE (v11.8: renamed from FROM_KIND/TO_KIND)
+        // Spot check — FROM_CLASS/TO_CLASS for HAS_PAGE (v11.8: renamed from FROM_CLASS/TO_CLASS)
         assert!(cypher.contains("(ac:ArcClass {key: 'HAS_PAGE'}), (c:Class {label: 'Project'})"));
 
         // All cardinality values are valid
@@ -683,7 +687,7 @@ mod tests {
             }
         }
 
-        // v11.8: Header reflects count (114 total ArcClass nodes)
+        // v11.8: Header reflects count (114 total ArcClass nodes — ADR-023)
         assert!(cypher.contains("114 ArcClass nodes"));
     }
 

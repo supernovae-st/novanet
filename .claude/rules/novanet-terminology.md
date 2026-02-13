@@ -38,12 +38,12 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | Realm | Layers | Nodes | Description |
 |-------|--------|-------|-------------|
 | `shared` | config, locale, geography, knowledge | 39 | Universal knowledge (READ-ONLY) |
-| `org` | config, foundation, structure, semantic, instruction, output | 21 | Organization-specific content |
+| `org` | config, foundation, structure, semantic, instruction, output | 20 | Organization-specific content |
 
 > **v11.5 Changes:**
 > - Locale moved: shared/locale → shared/config (Locale is a definition, not settings)
 > - SEO/GEO consolidation: seo/geo layers removed from org, nodes in shared/knowledge
-> - Total: **60 nodes** (39 shared + 21 org), **10 layers** (4 shared + 6 org)
+> - Total: **59 nodes** (39 shared + 20 org), **10 layers** (4 shared + 6 org)
 
 ### v11.7 Unified Tree Architecture
 
@@ -82,20 +82,20 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | File | Content |
 |------|---------|
 | `taxonomy.yaml` | Realm/Layer/Trait/ArcFamily/ArcScope definitions (v11.5: 2 realms, 10 layers, 5 traits) |
-| `node-kinds/shared/` | 39 NodeKind definitions in shared realm (config: 3, locale: 6, geography: 6, knowledge: 24 incl. SEO/GEO) |
-| `node-kinds/org/` | 21 NodeKind definitions in org realm (config: 1, foundation: 3, structure: 3, semantic: 4, instruction: 7, output: 3) |
-| `arc-kinds/` | 1 file per ArcKind, organized by ArcFamily |
+| `node-kinds/shared/` | 39 NodeClass definitions in shared realm (config: 3, locale: 6, geography: 6, knowledge: 24 incl. SEO/GEO) |
+| `node-kinds/org/` | 21 NodeClass definitions in org realm (config: 1, foundation: 3, structure: 3, semantic: 4, instruction: 7, output: 3) |
+| `arc-kinds/` | 1 file per ArcClass, organized by ArcFamily |
 | `relations.yaml` | Legacy format (deprecated, kept for parser compatibility) |
 
 ## File Naming
 
 | Type | Convention | Example |
 |------|------------|---------|
-| NodeKind YAML | `kebab-case.yaml` | `locale-voice.yaml`, `entity-content.yaml`, `page-generated.yaml` |
-| ArcKind YAML | `kebab-case.yaml` | `has-page.yaml`, `uses-entity.yaml` |
-| TypeScript types | `PascalCase` | `NodeKind`, `ArcFamily`, `NodeRealm` |
-| TypeScript files | `kebab-case.ts` | `arc-kinds.ts`, `node-layers.ts` |
-| Rust structs | `PascalCase` | `ArcKind`, `NodeRealm` |
+| NodeClass YAML | `kebab-case.yaml` | `locale-voice.yaml`, `entity-content.yaml`, `page-generated.yaml` |
+| ArcClass YAML | `kebab-case.yaml` | `has-page.yaml`, `uses-entity.yaml` |
+| TypeScript types | `PascalCase` | `NodeClass`, `ArcFamily`, `NodeRealm` |
+| TypeScript files | `kebab-case.ts` | `arc-classes.ts`, `node-layers.ts` |
+| Rust structs | `PascalCase` | `ArcClass`, `NodeRealm` |
 | Rust files | `snake_case.rs` | `arc_schema.rs`, `taxonomy.rs` |
 
 ## Node Naming Convention (v11.8)
@@ -120,7 +120,7 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 **v11.5 Changes:**
 - SEO/GEO consolidation: seo/geo layers removed from org, nodes moved to shared/knowledge
 - Locale definition in shared/config (Locale is defined, settings are in locale layer)
-- 10 layers total (4 shared + 6 org), 60 nodes (39 shared + 21 org)
+- 10 layers total (4 shared + 6 org), 59 nodes (39 shared + 20 org)
 
 **v11.2 Changes:**
 - Trait `derived` split into `generated` (LLM output) and `aggregated` (computed metrics)
@@ -185,7 +185,7 @@ node:
 
 ```typescript
 // TypeScript
-interface NodeKind {
+interface NodeClass {
   name: string;
   realm: NodeRealm;
   layer: NodeLayer;
@@ -359,7 +359,7 @@ NovaNet Studio uses **Query-First Architecture** where Cypher queries are the si
 | Term | Definition |
 |------|------------|
 | **Query-First** | Architecture pattern where graph display is determined solely by the executed Cypher query |
-| **Schema-Graph** | The schema graph showing NodeClass and ArcClass nodes (60 nodes, 114 arcs) |
+| **Schema-Graph** | The schema graph showing NodeClass and ArcClass nodes (59 nodes, 114 arcs) |
 | **CLASS_QUERY** | Foundational query that fetches all NodeClass instances for schema view |
 | **ARCS_QUERY** | Foundational query that fetches all ArcClass instances for schema view |
 | **View** | Parameterized Cypher template defined in YAML, executable with context parameters |
@@ -378,13 +378,13 @@ NovaNet Studio uses **Query-First Architecture** where Cypher queries are the si
 ### Foundational Queries
 
 ```cypher
--- KINDS_QUERY: Fetch all NodeKind instances (META mode)
-MATCH (k:Kind)
+-- CLASS_QUERY: Fetch all NodeClass instances (SCHEMA mode)
+MATCH (k:Class)
 RETURN k.name AS name, k.realm AS realm, k.layer AS layer,
        k.trait AS trait, k.display_name AS display_name
 
--- ARCS_QUERY: Fetch all ArcKind instances (META mode)
-MATCH (a:ArcKind)
+-- ARCS_QUERY: Fetch all ArcClass instances (SCHEMA mode)
+MATCH (a:ArcClass)
 RETURN a.name AS name, a.family AS family, a.scope AS scope,
        a.cardinality AS cardinality, a.source AS source, a.target AS target
 ```

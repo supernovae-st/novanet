@@ -1,5 +1,6 @@
-# models/node-kinds/org/instruction/block-type.yaml
 # BlockType - Template rules and structure for block generation
+#
+# v0.12.0: Initial clean schema (ADR-025 naming conventions)
 
 node:
   name: BlockType
@@ -69,13 +70,6 @@ node:
       description: "JSON schema reference defining output structure"
       example: "schemas/hero.json"
 
-    rules:
-      type: string
-      required: false
-      deprecated: "v7.2.0 - Use :HAS_RULES → BlockRules.rules"
-      description: "Generation rules for LLM"
-      example: "Title: action verb. Subtitle: value prop. CTA: urgency."
-
   # ═══════════════════════════════════════════════════════════════════════════════
   # RELATIONS (FROM this node)
   # ═══════════════════════════════════════════════════════════════════════════════
@@ -98,7 +92,6 @@ node:
       llm_context: "USE: generate attention-grabbing hero sections. TRIGGERS: hero, header, banner, above-fold. NOT: body or footer content."
       category: "header"
       structure: "schemas/hero.json"
-      rules: "Title: action verb. Subtitle: value prop. CTA: urgency."
 
     cypher: |
       // Get block type with active rules

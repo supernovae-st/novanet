@@ -129,12 +129,11 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   ChannelSurface: { width: 200, height: 100 },
 
   // instruction (7)
-  PageType: { width: 200, height: 100 },
+  PageStructure: { width: 200, height: 100 },
   BlockType: { width: 200, height: 100 },
-  PagePrompt: { width: 200, height: 100 },
-  BlockPrompt: { width: 180, height: 90 },
-  BlockRules: { width: 180, height: 90 },
+  PageInstruction: { width: 200, height: 100 },
   BlockInstruction: { width: 180, height: 90 },
+  BlockRules: { width: 180, height: 90 },
   PromptArtifact: { width: 200, height: 100 },
 
   // output (3) — v11.2: job nodes removed
@@ -484,7 +483,7 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
   },
 
   // instruction (7) — Blue tones
-  PageType: {
+  PageStructure: {
     primary: '#2563eb',
     secondary: '#3b82f6',
     tertiary: '#60a5fa',
@@ -496,13 +495,13 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     tertiary: '#2dd4bf',
     glow: '#14b8a640',
   },
-  PagePrompt: {
+  PageInstruction: {
     primary: '#3b82f6',
     secondary: '#60a5fa',
     tertiary: '#93c5fd',
     glow: '#3b82f640',
   },
-  BlockPrompt: {
+  BlockInstruction: {
     primary: '#60a5fa',
     secondary: '#3b82f6',
     tertiary: '#93c5fd',
@@ -513,12 +512,6 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     secondary: '#60a5fa',
     tertiary: '#bfdbfe',
     glow: '#93c5fd40',
-  },
-  BlockInstruction: {
-    primary: '#bfdbfe',
-    secondary: '#93c5fd',
-    tertiary: '#dbeafe',
-    glow: '#bfdbfe40',
   },
   PromptArtifact: {
     primary: '#1d4ed8',

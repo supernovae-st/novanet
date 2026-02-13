@@ -1,13 +1,13 @@
-// NovaNet Prompts Migration v8.2.0
+// NovaNet Instructions Migration v0.12.0
 //
-// Aligned with YAML v7.11.0 (icon, priority, freshness removed from schema)
+// v0.12.0 ADR-025: PagePrompt → PageInstruction, BlockPrompt → BlockInstruction
 //
-// Extracts AI instructions from existing nodes into dedicated Prompt nodes:
-//   - Page.instructions -> PagePrompt
-//   - Block.instructions -> BlockPrompt
+// Extracts AI instructions from existing nodes into dedicated Instruction nodes:
+//   - Page.instructions -> PageInstruction
+//   - Block.instructions -> BlockInstruction
 //   - BlockType.rules -> BlockRules
 //
-// v8.2.0 STANDARD PROPERTIES (Prompt nodes):
+// v0.12.0 STANDARD PROPERTIES (Instruction nodes):
 //   display_name, description, llm_context,
 //   prompt/rules (content), version, active, created_at, updated_at
 //
@@ -16,14 +16,14 @@
 //   active: true (only one active per parent node)
 //
 // NOTE: Original properties (instructions, rules) are KEPT for backward compatibility.
-//       Remove in v7.3.0 after confirming migration success.
+//       Remove after confirming migration success.
 
 // =============================================================================
-// PAGEPROMPT - Orchestrator Instructions (Category: PROMPTS)
+// PAGEINSTRUCTION - Orchestrator Instructions (Category: INSTRUCTIONS)
 // =============================================================================
 //
-// Extracts Page.instructions into PagePrompt nodes.
-// Creates :HAS_PROMPT relationship from Page to PagePrompt.
+// Extracts Page.instructions into PageInstruction nodes.
+// Creates :HAS_INSTRUCTION relationship from Page to PageInstruction.
 //
 // PROPERTY ORDER:
 //   1. IDENTIFICATION     -> display_name
@@ -35,12 +35,12 @@
 
 MATCH (p:Page)
 WHERE p.instructions IS NOT NULL
-CREATE (p)-[:HAS_PROMPT]->(pp:PagePrompt {
+CREATE (p)-[:HAS_INSTRUCTION]->(pi:PageInstruction {
   // 1. IDENTIFICATION
-  display_name: p.display_name + " Prompt v1.0",
+  display_name: p.display_name + " Instruction v1.0",
   // 2. DOCUMENTATION
   description: "Orchestration instructions for " + p.display_name,
-  llm_context: "USE: page generation orchestration. TRIGGERS: " + p.key + ", page prompt. NOT: individual block prompts.",
+  llm_context: "USE: page generation orchestration. TRIGGERS: " + p.key + ", page instruction. NOT: individual block instructions.",
   // 3. PROMPT-SPECIFIC
   prompt: p.instructions,
   version: "1.0",
@@ -51,11 +51,11 @@ CREATE (p)-[:HAS_PROMPT]->(pp:PagePrompt {
 });
 
 // =============================================================================
-// BLOCKPROMPT - Sub-Agent Instructions (Category: PROMPTS)
+// BLOCKINSTRUCTION - Sub-Agent Instructions (Category: INSTRUCTIONS)
 // =============================================================================
 //
-// Extracts Block.instructions into BlockPrompt nodes.
-// Creates :HAS_PROMPT relationship from Block to BlockPrompt.
+// Extracts Block.instructions into BlockInstruction nodes.
+// Creates :HAS_INSTRUCTION relationship from Block to BlockInstruction.
 //
 // PROPERTY ORDER:
 //   1. IDENTIFICATION     -> display_name
@@ -67,12 +67,12 @@ CREATE (p)-[:HAS_PROMPT]->(pp:PagePrompt {
 
 MATCH (b:Block)
 WHERE b.instructions IS NOT NULL
-CREATE (b)-[:HAS_PROMPT]->(bp:BlockPrompt {
+CREATE (b)-[:HAS_INSTRUCTION]->(bi:BlockInstruction {
   // 1. IDENTIFICATION
-  display_name: b.display_name + " Prompt v1.0",
+  display_name: b.display_name + " Instruction v1.0",
   // 2. DOCUMENTATION
   description: "Generation instructions for " + b.display_name,
-  llm_context: "USE: block content generation. TRIGGERS: " + b.key + ", block prompt. NOT: other blocks or page orchestration.",
+  llm_context: "USE: block content generation. TRIGGERS: " + b.key + ", block instruction. NOT: other blocks or page orchestration.",
   // 3. PROMPT-SPECIFIC
   prompt: b.instructions,
   version: "1.0",

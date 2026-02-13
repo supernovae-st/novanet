@@ -3,7 +3,7 @@
 /**
  * Kbd - Keyboard shortcut badge component (Skeuomorphic)
  *
- * Thin wrapper around KeyboardKey with size="sm" for backward compatibility.
+ * Thin wrapper around KeyboardKey with size="sm".
  * For more control (sizes, interactive mode), use KeyboardKey directly.
  */
 

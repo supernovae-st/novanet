@@ -12,7 +12,7 @@
 //   updated_at: datetime
 
 // =============================================================================
-// NODE TYPES + TAXONOMY (Realm, Layer, Trait, KIND_META)
+// NODE TYPES + TAXONOMY (Realm, Layer, Trait, CLASS_TAXONOMY)
 // =============================================================================
 
 export {
@@ -21,8 +21,8 @@ export {
   type Realm,
   type Layer,
   type Trait,
-  type KindMeta,
-  KIND_META,
+  type Classification,
+  CLASS_TAXONOMY,
   NODE_REALMS,
   NODE_TRAITS,
 } from './nodes.js';
@@ -132,26 +132,25 @@ export interface Page extends StandardNodeProperties, EmbeddableNode {
 }
 
 /**
- * PageType categories for organization and SEO hierarchy (v7.12.0)
+ * PageStructure categories for organization and SEO hierarchy (v7.12.0)
  * - marketing, product, content, legal, support: traditional categories
  * - pillar: comprehensive guide page that links to cluster pages
  * - cluster: focused subtopic page that links to its pillar via :SUBTOPIC_OF
  */
-export type PageTypeCategory = 'marketing' | 'product' | 'content' | 'legal' | 'support' | 'pillar' | 'cluster';
+export type PageStructureCategory = 'marketing' | 'product' | 'content' | 'legal' | 'support' | 'pillar' | 'cluster';
 
 /**
- * PageType - Template defining meta requirements, layout rules, and block composition (v7.10.0)
- * Mirrors BlockType pattern: Page -[:OF_TYPE]-> PageType (like Block -[:OF_TYPE]-> BlockType)
+ * PageStructure - JSON defining which BlockTypes in what order (ADR-025)
+ * Page -[:HAS_STRUCTURE]-> PageStructure
  */
-export interface PageType extends StandardNodeProperties {
-  // key: "pagetype-landing" (v7.10.0 prefix convention)
-  // display_name: "Landing Page"
-  // icon: "📐"
-  // description: "High-conversion landing page template"
+export interface PageStructure extends StandardNodeProperties {
+  // key: "pagestructure-landing"
+  // display_name: "Landing Page Structure"
+  // description: "High-conversion landing page structure"
   // llm_context: "USE: orchestrate landing page. TRIGGERS: landing, conversion. NOT: blog posts."
 
-  /** Page category for organization and SEO hierarchy (v7.12.0: added pillar/cluster) */
-  category: PageTypeCategory;
+  /** Page category for organization and SEO hierarchy */
+  category: PageStructureCategory;
 
   /** JSON schema defining required meta/SEO fields */
   meta_schema?: Record<string, unknown>;
@@ -159,7 +158,7 @@ export interface PageType extends StandardNodeProperties {
   /** Constraints on block organization and positioning */
   layout_rules?: Record<string, unknown>;
 
-  /** BlockType keys that MUST appear on pages of this type */
+  /** BlockType keys that MUST appear on pages of this structure */
   required_block_types?: string[];
 
   /** BlockType keys recommended but not required */
@@ -208,7 +207,7 @@ export interface BlockType extends StandardNodeProperties {
 /**
  * Block node - a content unit within a Page.
  * key: "block-pricing-hero" (v7.1.0 prefix convention)
- * Note: Block-specific instructions are in BlockPrompt nodes (v8.0.0)
+ * Note: Block-specific instructions are in BlockInstruction nodes
  */
 export type Block = StandardNodeProperties;
 
@@ -373,14 +372,14 @@ export interface LinksToProps {
 }
 
 // =============================================================================
-// PROMPTS (v7.2.0)
+// INSTRUCTIONS
 // =============================================================================
 
 export {
-  type PagePrompt,
-  type BlockPrompt,
+  type PageInstruction,
+  type BlockInstruction,
   type BlockRules,
-  type PromptNode,
+  type InstructionNode,
 } from './prompts.js';
 
 // =============================================================================

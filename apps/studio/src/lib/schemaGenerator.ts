@@ -1,11 +1,8 @@
 /**
  * Schema Graph Generator
  *
- * @deprecated Since v11.6 - Use Query-First Architecture instead.
- * The meta-graph is now fetched directly from Neo4j via /api/graph/ontology.
+ * NOTE: Use Query-First Architecture instead via /api/graph/ontology.
  * See: apps/studio/src/app/api/graph/ontology/route.ts
- *
- * This file is kept for backward compatibility but will be removed in v12.
  *
  * Query-First Architecture Flow:
  * YAML → Rust Generator → Cypher Seed → Neo4j ← Cypher Query ← Studio
@@ -57,7 +54,7 @@ export interface SchemaGraphResult {
  * Generate schema graph with all 42 node types and their relationships
  * v10.4: 42 nodes, 8 layers, 2 realms
  *
- * @deprecated Use /api/graph/ontology instead (Query-First Architecture)
+ * NOTE: Use /api/graph/ontology instead (Query-First Architecture)
  */
 export function generateSchemaGraph(): SchemaGraphResult {
   const nodes: GraphNode[] = [];

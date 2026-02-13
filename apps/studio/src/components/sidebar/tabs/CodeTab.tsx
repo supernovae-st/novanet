@@ -12,7 +12,7 @@
 import { memo, useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Copy, Check } from 'lucide-react';
-import { KIND_META } from '@novanet/core/types';
+import { CLASS_TAXONOMY } from '@novanet/core/types';
 import { cn } from '@/lib/utils';
 import { useCopyFeedback } from '@/hooks';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
@@ -75,10 +75,10 @@ function toJson(node: GraphNode): string {
  */
 function toYaml(node: GraphNode): string {
   const config = NODE_TYPE_CONFIG[node.type];
-  const kindMeta = KIND_META[node.type];
-  const realm = kindMeta?.realm ?? 'org';
+  const classification = CLASS_TAXONOMY[node.type];
+  const realm = classification?.realm ?? 'org';
   const layer = config?.layer ?? 'foundation';
-  const trait = kindMeta?.trait ?? 'defined'; // v11.8: ADR-024
+  const trait = classification?.trait ?? 'defined'; // v11.8: ADR-024
 
   const lines: string[] = [
     `# ${node.type} Node`,
@@ -160,10 +160,10 @@ RETURN n, r, related;`;
  */
 function toTypeScript(node: GraphNode): string {
   const config = NODE_TYPE_CONFIG[node.type];
-  const kindMeta = KIND_META[node.type];
-  const realm = kindMeta?.realm ?? 'org';
+  const classification = CLASS_TAXONOMY[node.type];
+  const realm = classification?.realm ?? 'org';
   const layer = config?.layer ?? 'foundation';
-  const trait = kindMeta?.trait ?? 'defined'; // v11.8: ADR-024
+  const trait = classification?.trait ?? 'defined'; // v11.8: ADR-024
   const properties = node.data || {};
 
   const propTypes = Object.entries(properties)

@@ -1,4 +1,4 @@
-//! Parse 60 YAML node definitions with trait validation (v0.12.0).
+//! Parse 59 YAML node definitions with trait validation (v0.12.0).
 //!
 //! Fails fast if any YAML is missing `trait`, `realm`, or `layer` — no silent defaults.
 //! Each file at `packages/core/models/node-kinds/<realm>/<layer>/<name>.yaml`
@@ -18,24 +18,13 @@ use walkdir::WalkDir;
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// The 5 node traits (v0.12.0 ADR-024): defined, authored, imported, generated, retrieved.
-///
-/// v0.12.0 renames (with serde aliases for backward compatibility):
-///   - invariant → defined (human-created once)
-///   - localized → authored (human-written per locale)
-///   - knowledge → imported (external data brought in)
-///   - generated → generated (our LLM produces this)
-///   - aggregated → retrieved (fetched from external APIs)
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum NodeTrait {
-    #[serde(alias = "invariant")]
     Defined,
-    #[serde(alias = "localized")]
     Authored,
-    #[serde(alias = "knowledge")]
     Imported,
     Generated,
-    #[serde(alias = "aggregated")]
     Retrieved,
 }
 
@@ -298,8 +287,8 @@ mod tests {
 
     #[test]
     fn node_trait_deserialize() {
-        // Test with v9.5 `trait` field
-        let yaml = "node:\n  name: Test\n  realm: org\n  layer: foundation\n  trait: invariant\n  description: test";
+        // Test with v0.12.0 trait names (ADR-024: Data Origin)
+        let yaml = "node:\n  name: Test\n  realm: org\n  layer: foundation\n  trait: defined\n  description: test";
         let doc: NodeDocument = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(doc.node.node_trait, NodeTrait::Defined);
         assert_eq!(doc.node.name, "Test");
@@ -321,25 +310,6 @@ mod tests {
     }
 
     #[test]
-    fn node_trait_backward_compat_aliases() {
-        // v0.12.0: Old trait names work via serde aliases
-        let aliases = [
-            ("invariant", "defined"),
-            ("localized", "authored"),
-            ("knowledge", "imported"),
-            ("aggregated", "retrieved"),
-        ];
-        for (old_name, new_name) in aliases {
-            let yaml = format!(
-                "node:\n  name: T\n  realm: shared\n  layer: config\n  trait: {old_name}\n  description: d"
-            );
-            let doc: NodeDocument = serde_yaml::from_str(&yaml).unwrap();
-            // Old name parses, but to_string() returns new canonical name
-            assert_eq!(doc.node.node_trait.to_string(), new_name);
-        }
-    }
-
-    #[test]
     fn missing_trait_fails() {
         let yaml = "node:\n  name: Test\n  realm: org\n  layer: foundation\n  description: test";
         let result = serde_yaml::from_str::<NodeDocument>(yaml);
@@ -355,7 +325,7 @@ mod tests {
     #[test]
     fn missing_realm_fails() {
         let yaml =
-            "node:\n  name: Test\n  layer: foundation\n  trait: invariant\n  description: test";
+            "node:\n  name: Test\n  layer: foundation\n  trait: defined\n  description: test";
         let result = serde_yaml::from_str::<NodeDocument>(yaml);
         assert!(result.is_err(), "should fail without realm");
         let err_msg = result.unwrap_err().to_string();
@@ -391,7 +361,7 @@ node:
   name: Test
   realm: org
   layer: semantic
-  trait: invariant
+  trait: defined
   description: d
   properties:
     volume:
@@ -422,7 +392,7 @@ node:
   name: Style
   realm: shared
   layer: knowledge
-  trait: knowledge
+  trait: imported
   knowledge_tier: style
   description: "Locale style settings"
 "#;
@@ -438,7 +408,7 @@ node:
             ("semantic", KnowledgeTier::Semantic),
         ] {
             let yaml = format!(
-                "node:\n  name: T\n  realm: shared\n  layer: knowledge\n  trait: knowledge\n  knowledge_tier: {variant}\n  description: d"
+                "node:\n  name: T\n  realm: shared\n  layer: knowledge\n  trait: imported\n  knowledge_tier: {variant}\n  description: d"
             );
             let doc: NodeDocument = serde_yaml::from_str(&yaml).unwrap();
             assert_eq!(doc.node.knowledge_tier, Some(expected));
@@ -448,7 +418,7 @@ node:
     #[test]
     fn knowledge_tier_optional() {
         // Non-knowledge nodes don't have knowledge_tier
-        let yaml = "node:\n  name: Project\n  realm: org\n  layer: foundation\n  trait: invariant\n  description: d";
+        let yaml = "node:\n  name: Project\n  realm: org\n  layer: foundation\n  trait: defined\n  description: d";
         let doc: NodeDocument = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(doc.node.knowledge_tier, None);
     }
@@ -465,7 +435,7 @@ node:
             return;
         }
 
-        // v11.5: 60 nodes (39 shared + 21 org)
+        // v0.12.0: 59 nodes (39 shared + 20 org)
         // History:
         // - v10.8: Added geographic nodes (+12)
         // - v10.9: Added GEO nodes (+3)
@@ -474,11 +444,12 @@ node:
         // - v11.3: Merged Organization + Tenant → OrgConfig (-1)
         // - v11.4: Added containers (+3), removed obsolete SEO types (-4)
         // - v11.5: Moved Locale to shared/config, consolidated SEO/GEO to shared/knowledge
-        let nodes = load_all_nodes(root).expect("should parse all 58 nodes");
+        // - v0.12.0: ADR-024 trait rename (defined/authored/imported/generated/retrieved)
+        let nodes = load_all_nodes(root).expect("should parse all 59 nodes");
         assert_eq!(
             nodes.len(),
-            58,
-            "expected 58 YAML node files (v0.12.0: 39 shared + 19 org)"
+            59,
+            "expected 59 YAML node files (v0.12.0: 39 shared + 20 org)"
         );
 
         // Every node has a non-empty name, realm, and layer
@@ -501,12 +472,12 @@ node:
         }
 
         // Verify trait distribution (2 realms: shared + org)
-        // v0.12.0: 58 nodes (39 shared + 19 org)
+        // v0.12.0: 59 nodes (39 shared + 20 org) - ADR-024 Data Origin traits
         let count = |t: NodeTrait| nodes.iter().filter(|n| n.def.node_trait == t).count();
         assert_eq!(
             count(NodeTrait::Defined),
-            30,
-            "defined count (v0.12.0: 30 defined nodes)"
+            31,
+            "defined count (v0.12.0: 31 defined nodes)"
         );
         assert_eq!(
             count(NodeTrait::Authored),
@@ -516,7 +487,7 @@ node:
         assert_eq!(
             count(NodeTrait::Imported),
             20,
-            "imported count (v0.12.0: 20 knowledge nodes)"
+            "imported count (v0.12.0: 20 imported nodes)"
         );
         assert_eq!(
             count(NodeTrait::Generated),
@@ -526,7 +497,7 @@ node:
         assert_eq!(
             count(NodeTrait::Retrieved),
             2,
-            "aggregated count (v11.4: GEOAnswer, SEOKeywordMetrics; GEOMetrics removed)"
+            "retrieved count (v0.12.0: GEOAnswer, SEOKeywordMetrics)"
         );
 
         // v11.4: Verify realm distribution (SEO/GEO moved to shared/knowledge)
@@ -539,8 +510,8 @@ node:
         );
         assert_eq!(
             realm_count("org"),
-            19,
-            "org realm count (v0.12.0: 19 org nodes)"
+            20,
+            "org realm count (v0.12.0: 20 org nodes)"
         );
 
         // Spot-check known nodes

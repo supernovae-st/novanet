@@ -284,11 +284,11 @@ pub(super) fn layer_badge_icon(layer_key: &str) -> &'static str {
 /// v11.8: Renamed per ADR-024 Data Origin semantics
 pub(super) fn trait_abbrev(trait_name: &str) -> &'static str {
     match trait_name {
-        "defined" => "def",    // was: invariant
-        "authored" => "aut",   // was: localized
-        "imported" => "imp",   // was: knowledge
+        "defined" => "def",  // was: invariant
+        "authored" => "aut", // was: localized
+        "imported" => "imp", // was: knowledge
         "generated" => "gen",
-        "retrieved" => "ret",  // was: aggregated
+        "retrieved" => "ret", // was: aggregated
         _ => "???",
     }
 }

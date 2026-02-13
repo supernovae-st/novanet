@@ -197,7 +197,7 @@ async fn run_app(
                             },
                             async {
                                 match &arcs_key {
-                                    Some(k) => Some(TaxonomyTree::load_kind_arcs(db, k).await),
+                                    Some(k) => Some(TaxonomyTree::load_class_arcs(db, k).await),
                                     None => None,
                                 }
                             }
