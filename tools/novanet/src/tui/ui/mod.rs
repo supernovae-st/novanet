@@ -1,7 +1,9 @@
 //! UI rendering for TUI v2.
 //!
 //! v11.7: Two modes (Graph, Nexus). Renders tree, info, yaml, graph panels.
+//! v0.12.3: Architecture panel for contextual ADR diagrams.
 
+mod architecture;
 mod graph;
 mod info;
 mod overlays;
@@ -9,6 +11,7 @@ mod status;
 mod tree;
 mod yaml_panel;
 
+pub use architecture::render_architecture_panel;
 pub use graph::render_graph_panel;
 pub use info::render_info_panel;
 pub use status::render_status;
@@ -79,14 +82,14 @@ const COLOR_ACTIVE_KIND_BG: Color = Color::Rgb(25, 35, 45);
 
 /// Wide layout: Tree panel percentage (compact sidebar).
 const LAYOUT_WIDE_TREE_PCT: u16 = 25;
-/// Wide layout: Info+Graph panel percentage.
-const LAYOUT_WIDE_INFO_PCT: u16 = 38;
-/// Wide layout: YAML panel percentage.
-const LAYOUT_WIDE_YAML_PCT: u16 = 37;
-/// Wide layout: Info section percentage (within Info+Graph).
-const LAYOUT_WIDE_INFO_SECTION_PCT: u16 = 60;
-/// Wide layout: Graph section percentage (within Info+Graph).
-const LAYOUT_WIDE_GRAPH_SECTION_PCT: u16 = 40;
+/// Wide layout: Detail+Arc panel percentage (center column).
+const LAYOUT_WIDE_DETAIL_PCT: u16 = 40;
+/// Wide layout: YAML+Arch panel percentage (right column).
+const LAYOUT_WIDE_YAML_PCT: u16 = 35;
+/// Wide layout: Top row percentage (Info/YAML panels).
+const LAYOUT_WIDE_TOP_PCT: u16 = 60;
+/// Wide layout: Bottom row percentage (Graph/Architecture panels).
+const LAYOUT_WIDE_BOTTOM_PCT: u16 = 40;
 
 /// Narrow layout: Tree panel percentage (compact sidebar).
 const LAYOUT_NARROW_TREE_PCT: u16 = 25;
@@ -658,13 +661,14 @@ fn render_main(f: &mut Frame, area: Rect, app: &mut App) {
     }
 }
 
-/// Wide layout: Tree | Info+Graph | YAML.
+/// Wide layout: Tree | Info+Graph | YAML+Arch.
+/// v0.12.3: Right column split to show contextual architecture diagrams.
 fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
     let chunks = Layout::default()
         .direction(Direction::Horizontal)
         .constraints([
             Constraint::Percentage(LAYOUT_WIDE_TREE_PCT),
-            Constraint::Percentage(LAYOUT_WIDE_INFO_PCT),
+            Constraint::Percentage(LAYOUT_WIDE_DETAIL_PCT),
             Constraint::Percentage(LAYOUT_WIDE_YAML_PCT),
         ])
         .split(area);
@@ -675,15 +679,25 @@ fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
     let middle_chunks = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
-            Constraint::Percentage(LAYOUT_WIDE_INFO_SECTION_PCT),
-            Constraint::Percentage(LAYOUT_WIDE_GRAPH_SECTION_PCT),
+            Constraint::Percentage(LAYOUT_WIDE_TOP_PCT),
+            Constraint::Percentage(LAYOUT_WIDE_BOTTOM_PCT),
         ])
         .split(chunks[1]);
 
     render_info_panel(f, middle_chunks[0], app);
     render_graph_panel(f, middle_chunks[1], app);
 
-    render_yaml_panel(f, chunks[2], app);
+    // Stack YAML and Architecture vertically in the right panel
+    let right_chunks = Layout::default()
+        .direction(Direction::Vertical)
+        .constraints([
+            Constraint::Percentage(LAYOUT_WIDE_TOP_PCT),
+            Constraint::Percentage(LAYOUT_WIDE_BOTTOM_PCT),
+        ])
+        .split(chunks[2]);
+
+    render_yaml_panel(f, right_chunks[0], app);
+    render_architecture_panel(f, right_chunks[1], app);
 }
 
 /// Narrow layout: Tree | Info+Graph+YAML stacked.
