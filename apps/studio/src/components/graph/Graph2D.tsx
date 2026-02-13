@@ -88,8 +88,8 @@ const nodeTypes = {
   project: ProjectNode,
   // Schema mode node types (Task 3.2)
   schemaNode: SchemaNode,
-  // v9.5: Compact badge for Realm & Layer in hierarchical view
-  metaBadge: SchemaBadgeNode,
+  // v11.8: Compact badge for Realm & Layer in schema view
+  schemaBadge: SchemaBadgeNode,
   // Magnetic grouping attractor nodes (Task 10)
   realmAttractor: RealmAttractorNode,
   layerAttractor: LayerAttractorNode,

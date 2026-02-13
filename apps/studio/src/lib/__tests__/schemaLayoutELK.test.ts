@@ -172,14 +172,14 @@ describe('schemaLayoutELK', () => {
 
   describe('applySchemaLayout', () => {
     // v9.5: Layout changed from ELK containers to Dagre hierarchical graph
-    // - Realm and Layer are now metaBadge nodes (not container groups)
+    // - Realm and Layer are now schemaBadge nodes (not container groups)
     // - No parent/child relationships - flat graph with edges
     // - HAS_LAYER and HAS_CLASS edges connect the hierarchy (v11.8 ADR-023)
 
     it('should layout schema nodes with Dagre', async () => {
       const result = await applySchemaLayout(mockHierarchy);
 
-      // Should have meta nodes + schema nodes
+      // Should have schema badge nodes + schema class nodes
       // v11.3: 2 realm badges + 6 layer badges + 13 schema nodes = 21
       expect(result.nodes.length).toBeGreaterThan(13);
 
@@ -191,12 +191,12 @@ describe('schemaLayoutELK', () => {
       }
     });
 
-    it('should create realm meta badge nodes', async () => {
+    it('should create realm schema badge nodes', async () => {
       const result = await applySchemaLayout(mockHierarchy);
 
-      // v11.3: Realms are metaBadge nodes with metaType: 'realm' (2 realms: shared, org)
+      // v11.3: Realms are schemaBadge nodes with metaType: 'realm' (2 realms: shared, org)
       const realmBadges = result.nodes.filter(n =>
-        n.type === 'metaBadge' && n.data.metaType === 'realm'
+        n.type === 'schemaBadge' && n.data.metaType === 'realm'
       );
       expect(realmBadges).toHaveLength(2);
 
@@ -206,12 +206,12 @@ describe('schemaLayoutELK', () => {
       expect(orgRealm?.data.label).toBe('Org');
     });
 
-    it('should create layer meta badge nodes', async () => {
+    it('should create layer schema badge nodes', async () => {
       const result = await applySchemaLayout(mockHierarchy);
 
-      // v11.3: Layers are metaBadge nodes with metaType: 'layer'
+      // v11.3: Layers are schemaBadge nodes with metaType: 'layer'
       const layerBadges = result.nodes.filter(n =>
-        n.type === 'metaBadge' && n.data.metaType === 'layer'
+        n.type === 'schemaBadge' && n.data.metaType === 'layer'
       );
       // v11.3: 3 shared (locale, geography, knowledge) + 3 org (config, foundation, structure) = 6
       expect(layerBadges).toHaveLength(6);
@@ -307,16 +307,16 @@ describe('schemaLayoutELK', () => {
       const hierarchy = getSchemaHierarchy();
       const result = await applySchemaLayout(hierarchy);
 
-      // v10.6: Uses metaBadge for Realm and Layer, schemaNode for Class
-      // Should have 2 realm meta badges (shared, org)
+      // v11.8: Uses schemaBadge for Realm and Layer, schemaNode for Class
+      // Should have 2 realm schema badges (shared, org)
       const realmBadges = result.nodes.filter(n =>
-        n.type === 'metaBadge' && n.data.metaType === 'realm'
+        n.type === 'schemaBadge' && n.data.metaType === 'realm'
       );
       expect(realmBadges).toHaveLength(2);
 
-      // Should have layer meta badges (varies by active layers)
+      // Should have layer schema badges (varies by active layers)
       const layerBadges = result.nodes.filter(n =>
-        n.type === 'metaBadge' && n.data.metaType === 'layer'
+        n.type === 'schemaBadge' && n.data.metaType === 'layer'
       );
       expect(layerBadges.length).toBeGreaterThan(0);
 

@@ -474,7 +474,7 @@ fn get_detail_title(app: &App) -> String {
         Some(TreeItem::ArcClass(_, ek)) => ek.display_name.clone(),
         Some(TreeItem::Instance(_, _, _, inst)) => {
             // [I] badge for Instance - instant recognition
-            format!("[I] {} ({})", inst.key, inst.kind_key)
+            format!("[I] {} ({})", inst.key, inst.class_key)
         }
         Some(TreeItem::EntityCategory(_, _, _, cat)) => {
             // [C] badge for Category
@@ -544,7 +544,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                         Span::styled(bar, Style::default().fg(theme.realm_color(&realm.key))),
                         Span::styled(empty, STYLE_DIM),
                         Span::styled(format!(" {:>3}%", percent), STYLE_MUTED),
-                        Span::styled(format!("  {} Kinds", realm_classes), STYLE_DIM),
+                        Span::styled(format!("  {} Classes", realm_classes), STYLE_DIM),
                     ]));
                 }
                 lines.push(Line::from(""));
@@ -1042,7 +1042,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                             Span::styled("  → ", Style::default().fg(Color::Cyan)),
                             Span::styled(arc.arc_type.clone(), Style::default().fg(Color::Cyan)),
                             Span::styled(" → ", STYLE_DIM),
-                            Span::styled(arc.target_kind.clone(), STYLE_HIGHLIGHT),
+                            Span::styled(arc.target_class.clone(), STYLE_HIGHLIGHT),
                         ]));
                     }
                 }
@@ -1055,7 +1055,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                             Span::styled("  ← ", Style::default().fg(Color::Magenta)),
                             Span::styled(arc.arc_type.clone(), Style::default().fg(Color::Magenta)),
                             Span::styled(" ← ", STYLE_DIM),
-                            Span::styled(arc.target_kind.clone(), STYLE_HIGHLIGHT),
+                            Span::styled(arc.target_class.clone(), STYLE_HIGHLIGHT),
                         ]));
                     }
                 }
@@ -1144,11 +1144,11 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 ]),
                 Line::from(vec![
                     Span::styled("from      ", STYLE_DIM),
-                    Span::styled(arc_kind.from_kind.clone(), STYLE_INFO),
+                    Span::styled(arc_kind.from_class.clone(), STYLE_INFO),
                 ]),
                 Line::from(vec![
                     Span::styled("to        ", STYLE_DIM),
-                    Span::styled(arc_kind.to_kind.clone(), STYLE_INFO),
+                    Span::styled(arc_kind.to_class.clone(), STYLE_INFO),
                 ]),
             ];
 
@@ -1572,7 +1572,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                         let target_display = cmp
                             .target_key
                             .clone()
-                            .unwrap_or_else(|| cmp.target_kind.clone());
+                            .unwrap_or_else(|| cmp.target_class.clone());
                         lines.push(Line::from(vec![
                             Span::styled("    ══", STYLE_SUCCESS),
                             Span::styled(format!("[{}]", cmp.arc_type), STYLE_HIGHLIGHT),
@@ -1587,7 +1587,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                             Span::styled(format!("[{}]", cmp.arc_type), STYLE_DIM),
                             Span::styled("╌╌> ", STYLE_ERROR),
                             Span::styled(
-                                format!("({} - not connected)", cmp.target_kind),
+                                format!("({} - not connected)", cmp.target_class),
                                 STYLE_DIM,
                             ),
                             Span::styled(" ✗", STYLE_ERROR),

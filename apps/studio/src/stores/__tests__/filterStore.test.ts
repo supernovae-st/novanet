@@ -457,12 +457,12 @@ describe('filterStore', () => {
       it('should handle multiple layers independently', () => {
         useFilterStore.getState().toggleLayerCollapsed('org', 'foundation');
         useFilterStore.getState().toggleLayerCollapsed('org', 'structure');
-        useFilterStore.getState().toggleLayerCollapsed('shared', 'locale-knowledge');
+        useFilterStore.getState().toggleLayerCollapsed('shared', 'knowledge');
 
         const state = useFilterStore.getState();
         expect(state.collapsedLayers).toContain('org-foundation');
         expect(state.collapsedLayers).toContain('org-structure');
-        expect(state.collapsedLayers).toContain('shared-locale-knowledge');
+        expect(state.collapsedLayers).toContain('shared-knowledge');
       });
     });
 
@@ -501,7 +501,7 @@ describe('filterStore', () => {
 
       it('should reset collapsedLayers to empty array', () => {
         useFilterStore.setState({
-          collapsedLayers: ['org-foundation', 'shared-locale-knowledge'],
+          collapsedLayers: ['org-foundation', 'shared-knowledge'],
         });
 
         useFilterStore.getState().resetSchemaFilters();
@@ -512,7 +512,7 @@ describe('filterStore', () => {
       it('should reset both collapsedRealms and collapsedLayers', () => {
         useFilterStore.setState({
           collapsedRealms: ['org', 'shared'],
-          collapsedLayers: ['org-foundation', 'shared-locale-knowledge'],
+          collapsedLayers: ['org-foundation', 'shared-knowledge'],
         });
 
         useFilterStore.getState().resetSchemaFilters();

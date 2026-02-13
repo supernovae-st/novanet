@@ -34,7 +34,7 @@ export interface SchemaBadgeNodeData extends Record<string, unknown> {
   layerKey?: Layer;
 }
 
-export type SchemaBadgeNodeType = Node<SchemaBadgeNodeData, 'metaBadge'>;
+export type SchemaBadgeNodeType = Node<SchemaBadgeNodeData, 'schemaBadge'>;
 
 // =============================================================================
 // GlowBadge - Badge with glow + gradient effect (matches SchemaNode)

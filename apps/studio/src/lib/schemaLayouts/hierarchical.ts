@@ -66,7 +66,7 @@ const DAGRE_CONFIG = {
 // =============================================================================
 
 /**
- * Apply hierarchical layout with Realm → Layer → Kind structure
+ * Apply hierarchical layout with Realm → Layer → Class structure
  *
  * @param hierarchy - Schema hierarchy data from @novanet/core
  * @returns React Flow nodes and edges
@@ -86,7 +86,7 @@ export function applyHierarchicalLayout(
   const layerToRealm: Record<string, Realm> = {};
 
   // ==========================================================================
-  // 1. Create Realm Nodes (3)
+  // 1. Create Realm Nodes (2): shared, org
   // ==========================================================================
 
   for (const [realmKey, realmData] of Object.entries(hierarchy.realms)) {
@@ -104,10 +104,10 @@ export function applyHierarchicalLayout(
     }
 
     // Create React Flow node (will position later)
-    // Use metaBadge type for compact display
+    // Use schemaBadge type for compact display
     nodes.push({
       id: nodeId,
-      type: 'metaBadge',
+      type: 'schemaBadge',
       position: { x: 0, y: 0 }, // Will be set by Dagre
       data: {
         label: config.label,
@@ -120,7 +120,7 @@ export function applyHierarchicalLayout(
     });
 
     // ==========================================================================
-    // 2. Create Layer Nodes (9) for this Realm
+    // 2. Create Layer Nodes (10 total: 4 shared + 6 org)
     // ==========================================================================
 
     for (const [layerKey, layerData] of Object.entries(realmData.layers)) {
@@ -148,10 +148,10 @@ export function applyHierarchicalLayout(
       });
 
       // Create React Flow node
-      // Use metaBadge type for compact display
+      // Use schemaBadge type for compact display
       nodes.push({
         id: layerNodeId,
-        type: 'metaBadge',
+        type: 'schemaBadge',
         position: { x: 0, y: 0 },
         data: {
           label: layerConfig.label,
@@ -165,7 +165,7 @@ export function applyHierarchicalLayout(
       });
 
       // ==========================================================================
-      // 3. Create Class Nodes (60) and HAS_CLASS edges (v11.8 ADR-023)
+      // 3. Create Class Nodes (59) and HAS_CLASS edges (v11.8 ADR-023)
       // ==========================================================================
 
       for (const nodeType of layerData.nodeTypes) {

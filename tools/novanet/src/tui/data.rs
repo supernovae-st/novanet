@@ -135,7 +135,7 @@ fn bolt_to_json(bolt: &neo4rs::BoltType) -> JsonValue {
 pub struct ArcInfo {
     pub arc_type: String,
     pub direction: ArcDirection,
-    pub target_kind: String,
+    pub target_class: String,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -149,8 +149,8 @@ pub enum ArcDirection {
 pub struct ArcClassInfo {
     pub key: String,
     pub display_name: String,
-    pub from_kind: String,
-    pub to_kind: String,
+    pub from_class: String,
+    pub to_class: String,
     pub cardinality: String,
     pub description: String,
 }
@@ -392,7 +392,7 @@ pub struct TaxonomyTree {
     /// Used to show "3/300 of 847" when results are truncated.
     /// Uses FxHashMap for ~30% faster lookups (no ordering needed).
     pub instance_totals: FxHashMap<String, usize>,
-    /// Cache: kind_key -> (realm_idx, layer_idx, kind_idx) for O(1) lookups.
+    /// Cache: class_key -> (realm_idx, layer_idx, kind_idx) for O(1) lookups.
     /// Built once on load, never mutated (tree structure is immutable).
     pub(crate) kind_index: FxHashMap<String, (usize, usize, usize)>,
     /// Entity categories for Data mode grouping.
@@ -423,7 +423,7 @@ OPTIONAL MATCH (k)-[:IN_LAYER]->(l:Layer)
 OPTIONAL MATCH (n)-[:OF_CLASS]->(k)
 WITH k, r, l, count(n) AS instances
 RETURN
-    k.label AS kind_key,
+    k.label AS class_key,
     coalesce(k.display_name, k.label) AS kind_display,
     coalesce(k.llm_context, '') AS kind_desc,
     coalesce(k.icon, '') AS kind_icon,
@@ -441,7 +441,7 @@ RETURN
     coalesce(k.schema_hint, '') AS schema_hint,
     coalesce(k.context_budget, '') AS context_budget,
     k.knowledge_tier AS knowledge_tier
-ORDER BY realm_key, layer_key, kind_key
+ORDER BY realm_key, layer_key, class_key
 "#;
 
         let rows = db.execute(cypher).await?;
@@ -459,7 +459,7 @@ ORDER BY realm_key, layer_key, kind_key
 
         for row in rows {
             // Extract fields using RowExt for ergonomic defaults
-            let kind_key = row.str("kind_key");
+            let class_key = row.str("class_key");
             let kind_display = row.str("kind_display");
             let kind_desc = row.str("kind_desc");
             let kind_icon = row.str("kind_icon");
@@ -488,7 +488,7 @@ ORDER BY realm_key, layer_key, kind_key
                     "packages/core/models/node-kinds/{}/{}/{}.yaml",
                     realm_key,
                     layer_key,
-                    to_kebab_case(&kind_key)
+                    to_kebab_case(&class_key)
                 )
             };
 
@@ -501,7 +501,7 @@ ORDER BY realm_key, layer_key, kind_key
             let knowledge_tier = row.opt_str("knowledge_tier");
 
             let kind = ClassInfo {
-                key: kind_key,
+                key: class_key,
                 display_name: kind_display,
                 description: kind_desc,
                 icon: kind_icon,
@@ -673,29 +673,29 @@ ORDER BY realm_key, layer_key, kind_key
     /// Fetch arcs as a map (for parallel loading).
     async fn fetch_arcs(db: &Db) -> crate::Result<BTreeMap<String, Vec<ArcInfo>>> {
         let cypher = r#"
-MATCH (ak:ArcClass:Schema)-[:FROM_CLASS]->(fromKind:Class:Schema)
-MATCH (ak)-[:TO_CLASS]->(toKind:Class:Schema)
-RETURN fromKind.label AS kind_key, ak.key AS arc_type, 'outgoing' AS direction, toKind.label AS target_kind
-ORDER BY fromKind.label, ak.key
+MATCH (ak:ArcClass:Schema)-[:FROM_CLASS]->(fromClass:Class:Schema)
+MATCH (ak)-[:TO_CLASS]->(toClass:Class:Schema)
+RETURN fromClass.label AS class_key, ak.key AS arc_type, 'outgoing' AS direction, toClass.label AS target_class
+ORDER BY fromClass.label, ak.key
 
 UNION
 
-MATCH (ak:ArcClass:Schema)-[:FROM_CLASS]->(fromKind:Class:Schema)
-MATCH (ak)-[:TO_CLASS]->(toKind:Class:Schema)
-RETURN toKind.label AS kind_key, ak.key AS arc_type, 'incoming' AS direction, fromKind.label AS target_kind
-ORDER BY toKind.label, ak.key
+MATCH (ak:ArcClass:Schema)-[:FROM_CLASS]->(fromClass:Class:Schema)
+MATCH (ak)-[:TO_CLASS]->(toClass:Class:Schema)
+RETURN toClass.label AS class_key, ak.key AS arc_type, 'incoming' AS direction, fromClass.label AS target_class
+ORDER BY toClass.label, ak.key
 "#;
 
         let rows = db.execute(cypher).await?;
         let mut arc_map: BTreeMap<String, Vec<ArcInfo>> = BTreeMap::new();
 
         for row in rows {
-            let kind_key = row.str("kind_key");
+            let class_key = row.str("class_key");
             let arc_type = row.str("arc_type");
             let direction_str = row.str("direction");
-            let target_kind = row.str("target_kind");
+            let target_class = row.str("target_class");
 
-            if kind_key.is_empty() || arc_type.is_empty() {
+            if class_key.is_empty() || arc_type.is_empty() {
                 continue;
             }
 
@@ -705,10 +705,10 @@ ORDER BY toKind.label, ak.key
                 ArcDirection::Outgoing
             };
 
-            arc_map.entry(kind_key).or_default().push(ArcInfo {
+            arc_map.entry(class_key).or_default().push(ArcInfo {
                 arc_type,
                 direction,
-                target_kind,
+                target_class,
             });
         }
 
@@ -719,8 +719,8 @@ ORDER BY toKind.label, ak.key
     async fn fetch_arc_families(db: &Db) -> crate::Result<Vec<ArcFamilyInfo>> {
         let cypher = r#"
 MATCH (ak:ArcClass:Schema)-[:IN_FAMILY]->(af:ArcFamily:Schema)
-MATCH (ak)-[:FROM_CLASS]->(fromKind:Class:Schema)
-MATCH (ak)-[:TO_CLASS]->(toKind:Class:Schema)
+MATCH (ak)-[:FROM_CLASS]->(fromClass:Class:Schema)
+MATCH (ak)-[:TO_CLASS]->(toClass:Class:Schema)
 RETURN
     af.key AS family_key,
     coalesce(af.display_name, af.key) AS family_display,
@@ -728,8 +728,8 @@ RETURN
     coalesce(ak.display_name, ak.key) AS arc_display,
     coalesce(ak.cardinality, '') AS cardinality,
     coalesce(ak.llm_context, '') AS arc_desc,
-    fromKind.label AS from_kind,
-    toKind.label AS to_kind
+    fromClass.label AS from_class,
+    toClass.label AS to_class
 ORDER BY family_key, arc_key
 "#;
 
@@ -743,8 +743,8 @@ ORDER BY family_key, arc_key
             let arc_display = row.str("arc_display");
             let cardinality = row.str("cardinality");
             let arc_desc = row.str("arc_desc");
-            let from_kind = row.str("from_kind");
-            let to_kind = row.str("to_kind");
+            let from_class = row.str("from_class");
+            let to_class = row.str("to_class");
 
             if family_key.is_empty() || arc_key.is_empty() {
                 continue;
@@ -753,8 +753,8 @@ ORDER BY family_key, arc_key
             let arc_kind = ArcClassInfo {
                 key: arc_key,
                 display_name: arc_display,
-                from_kind,
-                to_kind,
+                from_class,
+                to_class,
                 cardinality,
                 description: arc_desc,
             };
@@ -834,7 +834,7 @@ WHERE NOT target:Meta
 WITH n, k, collect(DISTINCT {{
     arc_type: type(out),
     target_key: coalesce(target.key, target.label, id(target)),
-    target_kind: head(labels(target))
+    target_class: head(labels(target))
 }}) AS outgoing
 OPTIONAL MATCH (source)-[inc]->(n)
 WHERE NOT source:Meta
@@ -886,7 +886,7 @@ ORDER BY key
                     Some(InstanceArc {
                         arc_type,
                         target_key: m.get("target_key").unwrap_or_default(),
-                        target_kind: m.get("target_kind").unwrap_or_default(),
+                        target_class: m.get("target_class").unwrap_or_default(),
                         exists: true,
                     })
                 })
@@ -905,7 +905,7 @@ ORDER BY key
                     Some(InstanceArc {
                         arc_type,
                         target_key: m.get("source_key").unwrap_or_default(),
-                        target_kind: m.get("source_kind").unwrap_or_default(),
+                        target_class: m.get("source_kind").unwrap_or_default(),
                         exists: true,
                     })
                 })
@@ -914,7 +914,7 @@ ORDER BY key
             instances.push(InstanceInfo {
                 key,
                 display_name,
-                kind_key: class_label.to_string(),
+                class_key: class_label.to_string(),
                 properties: props,
                 outgoing_arcs,
                 incoming_arcs,
@@ -986,7 +986,7 @@ RETURN
             instances.push(InstanceInfo {
                 key,
                 display_name,
-                kind_key: class_label.to_string(),
+                class_key: class_label.to_string(),
                 properties: props,
                 outgoing_arcs: Vec::new(), // Empty - will be loaded separately
                 incoming_arcs: Vec::new(), // Empty - will be loaded separately
@@ -1023,7 +1023,7 @@ WHERE NOT target:Meta
 WITH n, k, collect(DISTINCT {{
     arc_type: type(out),
     target_key: coalesce(target.key, target.label, id(target)),
-    target_kind: head(labels(target))
+    target_class: head(labels(target))
 }}) AS outgoing
 OPTIONAL MATCH (source)-[inc]->(n)
 WHERE NOT source:Meta
@@ -1056,7 +1056,7 @@ RETURN k AS key, outgoing, incoming
                     Some(InstanceArc {
                         arc_type,
                         target_key: m.get("target_key").unwrap_or_default(),
-                        target_kind: m.get("target_kind").unwrap_or_default(),
+                        target_class: m.get("target_class").unwrap_or_default(),
                         exists: true,
                     })
                 })
@@ -1075,7 +1075,7 @@ RETURN k AS key, outgoing, incoming
                     Some(InstanceArc {
                         arc_type,
                         target_key: m.get("source_key").unwrap_or_default(),
-                        target_kind: m.get("source_kind").unwrap_or_default(),
+                        target_class: m.get("source_kind").unwrap_or_default(),
                         exists: true,
                     })
                 })
@@ -1210,10 +1210,10 @@ RETURN coalesce(ac.display_name, ac.key) as display_name,
        coalesce(ac.cardinality, '') as cardinality,
        coalesce(ac.cypher_pattern, '') as cypher_pattern,
        coalesce(af.key, '') as family,
-       fromClass.label as from_kind,
+       fromClass.label as from_class,
        coalesce(fromRealm.key, '') as from_realm,
        coalesce(fromLayer.key, '') as from_layer,
-       toClass.label as to_kind,
+       toClass.label as to_class,
        coalesce(toRealm.key, '') as to_realm,
        coalesce(toLayer.key, '') as to_layer
 LIMIT 1
@@ -1230,11 +1230,11 @@ LIMIT 1
             let cypher_pattern: String = row.get("cypher_pattern").unwrap_or_default();
             let family: String = row.get("family").unwrap_or_default();
 
-            let from_class: Option<String> = row.get("from_kind").ok();
+            let from_class: Option<String> = row.get("from_class").ok();
             let from_realm: String = row.get("from_realm").unwrap_or_default();
             let from_layer: String = row.get("from_layer").unwrap_or_default();
 
-            let to_class: Option<String> = row.get("to_kind").ok();
+            let to_class: Option<String> = row.get("to_class").ok();
             let to_realm: String = row.get("to_realm").unwrap_or_default();
             let to_layer: String = row.get("to_layer").unwrap_or_default();
 
@@ -1451,7 +1451,7 @@ WHERE NOT target:Meta
 WITH total, e, collect(DISTINCT {
     arc_type: type(out),
     target_key: coalesce(target.key, target.label, toString(id(target))),
-    target_kind: head(labels(target))
+    target_class: head(labels(target))
 }) AS outgoing
 OPTIONAL MATCH (source)-[inc]->(e)
 WHERE NOT source:Meta
@@ -1505,7 +1505,7 @@ RETURN total,
                     Some(InstanceArc {
                         arc_type,
                         target_key: m.get("target_key").unwrap_or_default(),
-                        target_kind: m.get("target_kind").unwrap_or_default(),
+                        target_class: m.get("target_class").unwrap_or_default(),
                         exists: true,
                     })
                 })
@@ -1524,7 +1524,7 @@ RETURN total,
                     Some(InstanceArc {
                         arc_type,
                         target_key: m.get("source_key").unwrap_or_default(),
-                        target_kind: m.get("source_kind").unwrap_or_default(),
+                        target_class: m.get("source_kind").unwrap_or_default(),
                         exists: true,
                     })
                 })
@@ -1533,7 +1533,7 @@ RETURN total,
             instances.push(InstanceInfo {
                 key,
                 display_name,
-                kind_key: "Entity".to_string(),
+                class_key: "Entity".to_string(),
                 properties: props,
                 outgoing_arcs,
                 incoming_arcs,
@@ -1712,13 +1712,13 @@ RETURN total,
     #[allow(dead_code)]
     pub fn set_instances(
         &mut self,
-        kind_key: &str,
+        class_key: &str,
         mut instances: Vec<InstanceInfo>,
         total: usize,
     ) {
         // Get schema info from Class
         let (required_props, all_props) = self
-            .find_kind(kind_key)
+            .find_kind(class_key)
             .map(|(_, _, kind)| (kind.required_properties.clone(), kind.properties.clone()))
             .unwrap_or_default();
 
@@ -1754,28 +1754,28 @@ RETURN total,
             instance.total_properties = total_props;
         }
 
-        self.instances.insert(kind_key.to_string(), instances);
-        self.instance_totals.insert(kind_key.to_string(), total);
+        self.instances.insert(class_key.to_string(), instances);
+        self.instance_totals.insert(class_key.to_string(), total);
     }
 
     /// Get instances for a Class.
-    pub fn get_instances(&self, kind_key: &str) -> Option<&Vec<InstanceInfo>> {
-        self.instances.get(kind_key)
+    pub fn get_instances(&self, class_key: &str) -> Option<&Vec<InstanceInfo>> {
+        self.instances.get(class_key)
     }
 
     /// Get total instance count for a Class (may be > loaded instances).
-    pub fn get_instance_total(&self, kind_key: &str) -> Option<usize> {
-        self.instance_totals.get(kind_key).copied()
+    pub fn get_instance_total(&self, class_key: &str) -> Option<usize> {
+        self.instance_totals.get(class_key).copied()
     }
 
     /// Update arcs for instances after progressive loading.
     /// Called AFTER `set_instances` with arc data from `load_instance_arcs`.
     pub fn update_instance_arcs(
         &mut self,
-        kind_key: &str,
+        class_key: &str,
         arcs: FxHashMap<String, (Vec<InstanceArc>, Vec<InstanceArc>)>,
     ) {
-        if let Some(instances) = self.instances.get_mut(kind_key) {
+        if let Some(instances) = self.instances.get_mut(class_key) {
             for instance in instances.iter_mut() {
                 if let Some((outgoing, incoming)) = arcs.get(&instance.key) {
                     instance.outgoing_arcs = outgoing.clone();
@@ -2336,7 +2336,7 @@ RETURN total,
         &self,
         realm_key: &str,
         layer_key: &str,
-        kind_key: &str,
+        class_key: &str,
         data_mode: bool,
     ) -> Option<usize> {
         if self.is_collapsed("kinds") {
@@ -2352,7 +2352,7 @@ RETURN total,
                         for kind in &layer.kinds {
                             if realm.key == realm_key
                                 && layer.key == layer_key
-                                && kind.key == kind_key
+                                && kind.key == class_key
                             {
                                 return Some(idx);
                             }
@@ -2415,16 +2415,16 @@ RETURN total,
 
     /// Get item count when filtered to a specific Class (Data mode drill-down).
     /// Returns only instances of that Class.
-    pub fn filtered_item_count(&self, kind_key: &str) -> usize {
-        self.instances.get(kind_key).map(|v| v.len()).unwrap_or(0)
+    pub fn filtered_item_count(&self, class_key: &str) -> usize {
+        self.instances.get(class_key).map(|v| v.len()).unwrap_or(0)
     }
 
     /// Get item at cursor when filtered to a specific Class.
     /// Returns Instance items only.
-    pub fn filtered_item_at<'a>(&'a self, cursor: usize, kind_key: &str) -> Option<TreeItem<'a>> {
+    pub fn filtered_item_at<'a>(&'a self, cursor: usize, class_key: &str) -> Option<TreeItem<'a>> {
         // Find the Class info for context
-        let kind_info = self.find_kind(kind_key)?;
-        let instances = self.instances.get(kind_key)?;
+        let kind_info = self.find_kind(class_key)?;
+        let instances = self.instances.get(class_key)?;
         let instance = instances.get(cursor)?;
         Some(TreeItem::Instance(
             kind_info.0,
@@ -2436,8 +2436,8 @@ RETURN total,
 
     /// Find a Class by key, returns (Realm, Layer, Class) refs.
     /// O(1) lookup using cached index (built once on load).
-    pub fn find_kind(&self, kind_key: &str) -> Option<(&RealmInfo, &LayerInfo, &ClassInfo)> {
-        let (r_idx, l_idx, k_idx) = self.kind_index.get(kind_key)?;
+    pub fn find_kind(&self, class_key: &str) -> Option<(&RealmInfo, &LayerInfo, &ClassInfo)> {
+        let (r_idx, l_idx, k_idx) = self.kind_index.get(class_key)?;
         let realm = self.realms.get(*r_idx)?;
         let layer = realm.layers.get(*l_idx)?;
         let kind = layer.kinds.get(*k_idx)?;
@@ -2678,7 +2678,7 @@ fn to_kebab_case(s: &str) -> String {
 pub struct InstanceInfo {
     pub key: String,
     pub display_name: String,
-    pub kind_key: String,
+    pub class_key: String,
     /// Properties as JSON values (properly typed, not debug strings).
     pub properties: BTreeMap<String, JsonValue>,
     /// Outgoing arcs from this instance.
@@ -2701,7 +2701,7 @@ pub struct InstanceInfo {
 pub struct InstanceArc {
     pub arc_type: String,
     pub target_key: String,
-    pub target_kind: String,
+    pub target_class: String,
     /// True if this arc exists, false if it's from schema but not yet created.
     pub exists: bool,
 }
@@ -2711,7 +2711,7 @@ pub struct InstanceArc {
 #[derive(Debug, Clone)]
 pub struct ArcComparison {
     pub arc_type: String,
-    pub target_kind: String,
+    pub target_class: String,
     pub exists: bool,
     pub target_key: Option<String>, // Only if exists
 }
@@ -2733,7 +2733,7 @@ impl InstanceInfo {
 
                 comparisons.push(ArcComparison {
                     arc_type: schema_arc.arc_type.clone(),
-                    target_kind: schema_arc.target_kind.clone(),
+                    target_class: schema_arc.target_class.clone(),
                     exists: actual.is_some(),
                     target_key: actual.map(|a| a.target_key.clone()),
                 });
@@ -3002,7 +3002,7 @@ mod tests {
         let instance = InstanceInfo {
             key: "fr-FR".to_string(),
             display_name: "Français (France)".to_string(),
-            kind_key: "Locale".to_string(),
+            class_key: "Locale".to_string(),
             properties: BTreeMap::from([
                 ("language".to_string(), JsonValue::String("fr".to_string())),
                 ("region".to_string(), JsonValue::String("FR".to_string())),
@@ -3016,7 +3016,7 @@ mod tests {
         };
 
         assert_eq!(instance.key, "fr-FR");
-        assert_eq!(instance.kind_key, "Locale");
+        assert_eq!(instance.class_key, "Locale");
         assert_eq!(
             instance.properties.get("language"),
             Some(&JsonValue::String("fr".to_string()))
@@ -3028,12 +3028,12 @@ mod tests {
         let instance = InstanceInfo {
             key: "fr-FR".to_string(),
             display_name: "Français".to_string(),
-            kind_key: "Locale".to_string(),
+            class_key: "Locale".to_string(),
             properties: BTreeMap::new(),
             outgoing_arcs: vec![InstanceArc {
                 arc_type: "HAS_TERMS".to_string(),
                 target_key: "fr-FR-terms".to_string(),
-                target_kind: "TermSet".to_string(),
+                target_class: "TermSet".to_string(),
                 exists: true,
             }],
             incoming_arcs: vec![],
@@ -3047,12 +3047,12 @@ mod tests {
             ArcInfo {
                 arc_type: "HAS_TERMS".to_string(),
                 direction: ArcDirection::Outgoing,
-                target_kind: "TermSet".to_string(),
+                target_class: "TermSet".to_string(),
             },
             ArcInfo {
                 arc_type: "HAS_CULTURE".to_string(),
                 direction: ArcDirection::Outgoing,
-                target_kind: "CultureSet".to_string(),
+                target_class: "CultureSet".to_string(),
             },
         ];
 
@@ -3200,7 +3200,7 @@ mod tests {
         // instead of generating invalid path like "node-kinds/unknown/layer/kind.yaml"
         let realm_key = "unknown";
         let layer_key = "structure";
-        let kind_key = "Page";
+        let class_key = "Page";
 
         // Simulate the validation logic from TaxonomyTree::load
         let yaml_path = if realm_key == "unknown" || layer_key == "unknown" {
@@ -3210,7 +3210,7 @@ mod tests {
                 "packages/core/models/node-kinds/{}/{}/{}.yaml",
                 realm_key,
                 layer_key,
-                super::to_kebab_case(kind_key)
+                super::to_kebab_case(class_key)
             )
         };
 
@@ -3225,7 +3225,7 @@ mod tests {
         // When realm and layer are valid, fallback should generate proper path
         let realm_key = "org";
         let layer_key = "structure";
-        let kind_key = "Page";
+        let class_key = "Page";
 
         let yaml_path = if realm_key == "unknown" || layer_key == "unknown" {
             String::new()
@@ -3234,7 +3234,7 @@ mod tests {
                 "packages/core/models/node-kinds/{}/{}/{}.yaml",
                 realm_key,
                 layer_key,
-                super::to_kebab_case(kind_key)
+                super::to_kebab_case(class_key)
             )
         };
 

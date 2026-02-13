@@ -170,9 +170,9 @@ cargo run -- schema generate
   - org/seo and org/geo layers removed
 
 ### Changed
-- **Node count**: 61 → 60 nodes (consolidated)
+- **Node count**: 61 → 59 nodes (consolidated)
 - **Layer count**: 11 → 10 layers (4 shared + 6 org)
-- **Node distribution**: 39 shared + 21 org (was 32 + 29)
+- **Node distribution**: 39 shared + 20 org (was 32 + 29)
 - **ADR-020**: Schema Refinement documentation added
 
 ### Fixed
@@ -182,7 +182,7 @@ cargo run -- schema generate
 - Arc count documentation: 116 → 114 (matches YAML reality)
 - ADR version header: v11.3 → v11.5
 - TUI layer mappings: Added locale 🌍, geography 🗺 for v11.3 split
-- Schema stats example: 64/120 → 60/114 Kinds/ArcKinds
+- Schema stats example: 64/120 → 59/114 Classes/ArcClasses
 
 ## [11.3.0] - 2026-02-10
 

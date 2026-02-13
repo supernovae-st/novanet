@@ -15,11 +15,11 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 
 | Area | Commands | Status |
 |------|----------|--------|
-| Read | `data`, `meta`, `overlay`, `query` | Implemented (faceted Cypher) |
+| Read | `blueprint`, `data`, `overlay`, `query` | Implemented (faceted Cypher) |
 | Write | `node create/edit/delete`, `arc create/delete` | Implemented (label validation) |
 | Schema | `schema generate`, `schema validate` | Implemented (12 artifacts) |
 | Docs | `doc generate`, `doc generate --list` | Implemented (40 views) |
-| Search | `search --query=... [--kind=...]` | Implemented (fulltext + property) |
+| Search | `search --query=... [--class=...]` | Implemented (fulltext + property) |
 | Locale | `locale list`, `locale import`, `locale generate` | Implemented |
 | Knowledge | `knowledge generate`, `knowledge list` | Implemented (ATH integration) |
 | Entity | `entity seed`, `entity list`, `entity validate` | Implemented (phase-based) |
@@ -106,19 +106,19 @@ cargo build --features tui                        # Build with TUI (default)
 cargo build --no-default-features                 # CLI-only (no TUI deps)
 
 # Read modes (Neo4j)
-cargo run -- meta                                 # Mode 1: Meta-graph only
+cargo run -- blueprint                            # Mode 1: Schema-graph visualization
 cargo run -- data                                 # Mode 2: Data nodes only
-cargo run -- overlay                              # Mode 3: Data + Meta overlay
+cargo run -- overlay                              # Mode 3: Data + Schema overlay
 cargo run -- query --realm=org --format=json      # Mode 4: Faceted query
 
 # Write operations (Neo4j)
-cargo run -- node create --kind=Page --key=my-page --props='{"display_name":"My Page"}'
+cargo run -- node create --class=Page --key=my-page --props='{"display_name":"My Page"}'
 cargo run -- node edit --key=my-page --set='{"description":"Updated"}'
 cargo run -- node delete --key=my-page --confirm
-cargo run -- arc create --from=page1 --to=entity1 --kind=USES_ENTITY
+cargo run -- arc create --from=page1 --to=entity1 --class=USES_ENTITY
 
 # Search (Neo4j)
-cargo run -- search --query="page" --kind=Page --limit=20
+cargo run -- search --query="page" --class=Page --limit=20
 
 # Locale (Neo4j)
 cargo run -- locale list --format=table
@@ -157,7 +157,7 @@ echo '{"realms":["project"]}' | cargo run -- filter build
 
 # Blueprint (YAML, no Neo4j — rich ASCII visualization)
 cargo run -- blueprint                            # Default overview with all sections
-cargo run -- blueprint --view=tree                # Realm > Layer > Kind hierarchy
+cargo run -- blueprint --view=tree                # Realm > Layer > Class hierarchy
 cargo run -- blueprint --view=flow                # 6 flow diagrams
 cargo run -- blueprint --view=arcs                # Arc families with relationships
 cargo run -- blueprint --view=stats               # Raw counts (supports --format=json)
@@ -207,13 +207,13 @@ src/
   db.rs           Neo4j connection pool (neo4rs::Graph + Arc)
   error.rs        NovaNetError enum (thiserror) + Result type alias
   cypher.rs       CypherStatement builder (data/meta/overlay/query/search)
-  facets.rs       FacetFilter (Realm/Layer/Trait/ArcFamily/Kind) + JSON serde
+  facets.rs       FacetFilter (Realm/Layer/Trait/ArcFamily/Class) + JSON serde
   output.rs       OutputFormat (Table/Json/Cypher) + rendering helpers
   commands/
     mod.rs        Module registry
     read.rs       data/meta/overlay/query (CypherStatement → Neo4j → format)
     node.rs       node create/edit/delete (label validation + Cypher)
-    arc.rs        arc create/delete (ArcKind validation + Cypher)
+    arc.rs        arc create/delete (ArcClass validation + Cypher)
     search.rs     search --query (fulltext + property match)
     locale.rs     locale list/import
     db.rs         db seed/migrate/reset (Cypher file execution)
@@ -225,7 +225,7 @@ src/
   tui/            Terminal UI v3 — Unified Tree Architecture (feature-gated)
     mod.rs        Entry point (terminal setup + event loop)
     app.rs        State machine (NavMode: Graph/Nexus, async channels for lazy loading)
-    data.rs       UnifiedTree (Realm > Layer > Kind > Instance, ArcFamily > ArcKind)
+    data.rs       UnifiedTree (Realm > Layer > Class > Instance, ArcFamily > ArcClass)
     theme.rs      Visual encoding + Icons (colors from taxonomy.yaml, icons from visual-encoding.yaml)
     ui.rs         3-panel layout (Tree | Info | YAML) + search/help overlays
 ```
@@ -237,13 +237,13 @@ src/
 - **Root discovery**: `--root` flag > `NOVANET_ROOT` env > walk up to `pnpm-workspace.yaml`
 - **YAML models**: Live in `packages/core/models/` (relative to monorepo root)
 - **Feature gate**: `cargo build --no-default-features` for CLI-only (no TUI deps)
-- **YAML-first architecture**: Each Kind YAML has explicit `realm:` and `layer:` fields (source of truth)
+- **YAML-first architecture**: Each Class YAML has explicit `realm:` and `layer:` fields (source of truth)
   - Path validation: file must be at `models/node-kinds/{realm}/{layer}/{name}.yaml`
   - Generators read realm/layer from YAML content, validate against path
   - v0.12.0: 2 realms (shared, org), 10 layers (4 shared + 6 org), 59 node types
 - **Query-First architecture (v11.6)**: Cypher is the single source of truth for graph display
-  - META mode uses KINDS_QUERY + ARCS_QUERY to build the schema graph
-  - `cargo run -- meta` executes these foundational queries
+  - Schema mode uses CLASSES_QUERY + ARCS_QUERY to build the schema graph
+  - `cargo run -- blueprint` executes these foundational queries
   - Views defined in `packages/core/models/views/*.yaml` (no hardcoded TypeScript)
   - See ADR-021 in `.claude/rules/novanet-decisions.md`
 - **Icons source of truth (v11.5)**: `visual-encoding.yaml` → `icons:` section

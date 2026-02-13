@@ -636,8 +636,8 @@ mod tests {
         ArcClassInfo {
             key: "HAS_PAGE".to_string(),
             display_name: "Has Page".to_string(),
-            from_kind: "Project".to_string(),
-            to_kind: "Page".to_string(),
+            from_class: "Project".to_string(),
+            to_class: "Page".to_string(),
             cardinality: "1:N".to_string(),
             description: "Project owns pages".to_string(),
         }
@@ -647,7 +647,7 @@ mod tests {
         InstanceInfo {
             key: "page-1".to_string(),
             display_name: "Home Page".to_string(),
-            kind_key: "page".to_string(),
+            class_key: "page".to_string(),
             properties: BTreeMap::new(),
             outgoing_arcs: vec![],
             incoming_arcs: vec![],
