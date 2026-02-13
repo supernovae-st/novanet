@@ -1,6 +1,6 @@
 //! Data loading for TUI — Neo4j queries for taxonomy tree, stats, and detail.
 
-use crate::db::Db;
+use crate::db::{Db, RowExt};
 use crate::parsers::taxonomy::{TaxonomyDoc, load_taxonomy};
 use rustc_hash::{FxHashMap, FxHashSet};
 use serde_json::Value as JsonValue;
@@ -458,21 +458,22 @@ ORDER BY realm_key, layer_key, kind_key
         > = BTreeMap::new();
 
         for row in rows {
-            let kind_key: String = row.get("kind_key").unwrap_or_default();
-            let kind_display: String = row.get("kind_display").unwrap_or_default();
-            let kind_desc: String = row.get("kind_desc").unwrap_or_default();
-            let kind_icon: String = row.get("kind_icon").unwrap_or_default();
-            let trait_key: String = row.get("trait_key").unwrap_or_default();
-            let realm_key: String = row.get("realm_key").unwrap_or_default();
-            let realm_display: String = row.get("realm_display").unwrap_or_default();
-            let realm_color: String = row.get("realm_color").unwrap_or_default();
-            let layer_key: String = row.get("layer_key").unwrap_or_default();
-            let layer_display: String = row.get("layer_display").unwrap_or_default();
-            let layer_color: String = row.get("layer_color").unwrap_or_default();
-            let instances: i64 = row.get("instances").unwrap_or(0);
+            // Extract fields using RowExt for ergonomic defaults
+            let kind_key = row.str("kind_key");
+            let kind_display = row.str("kind_display");
+            let kind_desc = row.str("kind_desc");
+            let kind_icon = row.str("kind_icon");
+            let trait_key = row.str("trait_key");
+            let realm_key = row.str("realm_key");
+            let realm_display = row.str("realm_display");
+            let realm_color = row.str("realm_color");
+            let layer_key = row.str("layer_key");
+            let layer_display = row.str("layer_display");
+            let layer_color = row.str("layer_color");
+            let instances = row.int("instances");
 
             // Get YAML path from Neo4j (with fallback to computed path)
-            let yaml_path_raw: String = row.get("yaml_path").unwrap_or_default();
+            let yaml_path_raw = row.str("yaml_path");
             let yaml_path = if !yaml_path_raw.is_empty() {
                 // Neo4j stores relative path like "node-kinds/org/structure/block.yaml"
                 // We need to prefix with "packages/core/models/"
@@ -492,13 +493,12 @@ ORDER BY realm_key, layer_key, kind_key
             };
 
             // Get schema properties from Neo4j
-            let properties: Vec<String> = row.get("properties").unwrap_or_default();
-            let required_properties: Vec<String> =
-                row.get("required_properties").unwrap_or_default();
-            let schema_hint: String = row.get("schema_hint").unwrap_or_default();
-            let context_budget: String = row.get("context_budget").unwrap_or_default();
+            let properties = row.vec_str("properties");
+            let required_properties = row.vec_str("required_properties");
+            let schema_hint = row.str("schema_hint");
+            let context_budget = row.str("context_budget");
             // v10: knowledge_tier (optional, only for knowledge-trait nodes)
-            let knowledge_tier: Option<String> = row.get("knowledge_tier").ok();
+            let knowledge_tier = row.opt_str("knowledge_tier");
 
             let kind = KindInfo {
                 key: kind_key,
@@ -690,10 +690,10 @@ ORDER BY toKind.label, ak.key
         let mut arc_map: BTreeMap<String, Vec<ArcInfo>> = BTreeMap::new();
 
         for row in rows {
-            let kind_key: String = row.get("kind_key").unwrap_or_default();
-            let arc_type: String = row.get("arc_type").unwrap_or_default();
-            let direction_str: String = row.get("direction").unwrap_or_default();
-            let target_kind: String = row.get("target_kind").unwrap_or_default();
+            let kind_key = row.str("kind_key");
+            let arc_type = row.str("arc_type");
+            let direction_str = row.str("direction");
+            let target_kind = row.str("target_kind");
 
             if kind_key.is_empty() || arc_type.is_empty() {
                 continue;
@@ -737,14 +737,14 @@ ORDER BY family_key, arc_key
         let mut family_map: BTreeMap<String, (String, Vec<ArcKindInfo>)> = BTreeMap::new();
 
         for row in rows {
-            let family_key: String = row.get("family_key").unwrap_or_default();
-            let family_display: String = row.get("family_display").unwrap_or_default();
-            let arc_key: String = row.get("arc_key").unwrap_or_default();
-            let arc_display: String = row.get("arc_display").unwrap_or_default();
-            let cardinality: String = row.get("cardinality").unwrap_or_default();
-            let arc_desc: String = row.get("arc_desc").unwrap_or_default();
-            let from_kind: String = row.get("from_kind").unwrap_or_default();
-            let to_kind: String = row.get("to_kind").unwrap_or_default();
+            let family_key = row.str("family_key");
+            let family_display = row.str("family_display");
+            let arc_key = row.str("arc_key");
+            let arc_display = row.str("arc_display");
+            let cardinality = row.str("cardinality");
+            let arc_desc = row.str("arc_desc");
+            let from_kind = row.str("from_kind");
+            let to_kind = row.str("to_kind");
 
             if family_key.is_empty() || arc_key.is_empty() {
                 continue;
@@ -859,8 +859,8 @@ ORDER BY key
         let mut instances = Vec::with_capacity(rows.len());
 
         for row in rows {
-            let key: String = row.get("key").unwrap_or_default();
-            let display_name: String = row.get("display_name").unwrap_or_default();
+            let key = row.str("key");
+            let display_name = row.str("display_name");
 
             // Parse properties as BTreeMap with proper JSON values
             let props: BTreeMap<String, JsonValue> = row
