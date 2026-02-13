@@ -27,7 +27,7 @@ export interface EnrichedNodeType {
   realm: Realm;
   /** Layer (config | locale | geography | knowledge | foundation | structure | semantic | instruction | output) */
   layer: Layer;
-  /** Trait (invariant | localized | knowledge | generated | aggregated) */
+  /** Trait (defined | authored | imported | generated | retrieved) v11.8: ADR-024 */
   trait: Trait;
   /** Lucide icon name */
   icon: string;

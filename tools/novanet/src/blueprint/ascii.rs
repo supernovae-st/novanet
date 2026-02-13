@@ -402,14 +402,14 @@ pub fn horizontal_rule(width: usize) -> String {
     chars::HORIZONTAL.to_string().repeat(width)
 }
 
-/// Trait symbols for display (v11.2: 5 traits - derived split, job removed).
+/// Trait symbols for display (v11.8: ADR-024 Data Origin renames).
 pub fn trait_symbol(trait_key: &str) -> &'static str {
     match trait_key {
-        "invariant" => "■",
-        "localized" => "□",
-        "knowledge" => "◊",
+        "defined" => "■",
+        "authored" => "□",
+        "imported" => "◊",
         "generated" => "★",
-        "aggregated" => "▪",
+        "retrieved" => "▪",
         _ => "?",
     }
 }
@@ -503,8 +503,10 @@ mod tests {
 
     #[test]
     fn test_trait_symbol() {
-        assert_eq!(trait_symbol("invariant"), "■");
-        assert_eq!(trait_symbol("localized"), "□");
-        assert_eq!(trait_symbol("knowledge"), "◊");
+        assert_eq!(trait_symbol("defined"), "■");
+        assert_eq!(trait_symbol("authored"), "□");
+        assert_eq!(trait_symbol("imported"), "◊");
+        assert_eq!(trait_symbol("generated"), "★");
+        assert_eq!(trait_symbol("retrieved"), "▪");
     }
 }

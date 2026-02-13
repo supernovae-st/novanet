@@ -844,7 +844,7 @@ mod tests {
             display_name: key.to_string(),
             description: String::new(),
             icon: String::new(),
-            trait_name: "invariant".to_string(),
+            trait_name: "defined".to_string(),
             instance_count: 0,
             arcs: Vec::new(),
             yaml_path: String::new(),

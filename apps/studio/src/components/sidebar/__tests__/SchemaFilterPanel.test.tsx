@@ -34,9 +34,9 @@ const mockSchemaStoreData = {
   excludedRelTypes: new Set<string>(),
   // Enriched types
   enrichedNodeTypes: [
-    { name: 'Page' as NodeType, count: 5, realm: 'org' as Realm, layer: 'structure' as Layer, trait: 'invariant' as Trait, icon: 'FileText', color: '#8b5cf6', isActive: true },
-    { name: 'Entity' as NodeType, count: 3, realm: 'org' as Realm, layer: 'semantic' as Layer, trait: 'invariant' as Trait, icon: 'Box', color: '#a78bfa', isActive: true },
-    { name: 'Locale' as NodeType, count: 10, realm: 'shared' as Realm, layer: 'config' as Layer, trait: 'invariant' as Trait, icon: 'Globe', color: '#6366f1', isActive: true },
+    { name: 'Page' as NodeType, count: 5, realm: 'org' as Realm, layer: 'structure' as Layer, trait: 'defined' as Trait, icon: 'FileText', color: '#8b5cf6', isActive: true },
+    { name: 'Entity' as NodeType, count: 3, realm: 'org' as Realm, layer: 'semantic' as Layer, trait: 'defined' as Trait, icon: 'Box', color: '#a78bfa', isActive: true },
+    { name: 'Locale' as NodeType, count: 10, realm: 'shared' as Realm, layer: 'config' as Layer, trait: 'defined' as Trait, icon: 'Globe', color: '#6366f1', isActive: true },
   ],
   enrichedRelTypes: [
     { name: 'HAS_PAGE', count: 5, family: 'ownership', color: '#3b82f6', isActive: true },
@@ -58,7 +58,7 @@ const mockSchemaStoreData = {
           color: '#6366f1',
           totalCount: 10,
           nodeTypes: [
-            { name: 'Locale' as NodeType, count: 10, realm: 'shared' as Realm, layer: 'config' as Layer, trait: 'invariant' as Trait, icon: 'Globe', color: '#6366f1', isActive: true },
+            { name: 'Locale' as NodeType, count: 10, realm: 'shared' as Realm, layer: 'config' as Layer, trait: 'defined' as Trait, icon: 'Globe', color: '#6366f1', isActive: true },
           ],
         },
       ],
@@ -78,7 +78,7 @@ const mockSchemaStoreData = {
           color: '#8b5cf6',
           totalCount: 5,
           nodeTypes: [
-            { name: 'Page' as NodeType, count: 5, realm: 'org' as Realm, layer: 'structure' as Layer, trait: 'invariant' as Trait, icon: 'FileText', color: '#8b5cf6', isActive: true },
+            { name: 'Page' as NodeType, count: 5, realm: 'org' as Realm, layer: 'structure' as Layer, trait: 'defined' as Trait, icon: 'FileText', color: '#8b5cf6', isActive: true },
           ],
         },
         {
@@ -88,7 +88,7 @@ const mockSchemaStoreData = {
           color: '#a78bfa',
           totalCount: 3,
           nodeTypes: [
-            { name: 'Entity' as NodeType, count: 3, realm: 'org' as Realm, layer: 'semantic' as Layer, trait: 'invariant' as Trait, icon: 'Box', color: '#a78bfa', isActive: true },
+            { name: 'Entity' as NodeType, count: 3, realm: 'org' as Realm, layer: 'semantic' as Layer, trait: 'defined' as Trait, icon: 'Box', color: '#a78bfa', isActive: true },
           ],
         },
       ],

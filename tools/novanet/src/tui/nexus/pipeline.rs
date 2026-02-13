@@ -30,24 +30,26 @@ use crate::tui::ui::COLOR_UNFOCUSED_BORDER;
 // =============================================================================
 
 /// Pipeline stage definitions.
+/// v11.8: Renamed per ADR-024 Data Origin semantics
 pub const PIPELINE_STAGES: [(&str, &str, &str); 6] = [
-    ("KNOWLEDGE", "\u{25ca}", "Load locale knowledge"), // ◊
-    ("INVARIANT", "\u{25a0}", "Load structural templates"), // ■
-    ("CONTEXT", "\u{2193}", "Inject into LLM context"), // ↓
-    ("GENERATE", "\u{21d2}", "LLM native generation"),  // ⇒
-    ("LOCALIZED", "\u{25a1}", "Output localized content"), // □
-    ("COMPLETE", "\u{2713}", "Generation complete"),    // ✓
+    ("IMPORTED", "\u{25ca}", "Load imported knowledge"),   // ◊ (was: KNOWLEDGE)
+    ("DEFINED", "\u{25a0}", "Load structural definitions"), // ■ (was: INVARIANT)
+    ("CONTEXT", "\u{2193}", "Inject into LLM context"),    // ↓
+    ("GENERATE", "\u{21d2}", "LLM native generation"),     // ⇒
+    ("AUTHORED", "\u{25a1}", "Output authored content"),   // □ (was: LOCALIZED)
+    ("COMPLETE", "\u{2713}", "Generation complete"),       // ✓
 ];
 
 /// Get stage color based on stage index.
+/// v11.8: Renamed per ADR-024 Data Origin semantics
 fn stage_color(stage: usize, theme: &Theme) -> Color {
     match stage {
-        0 => theme.trait_color("knowledge"), // Knowledge = purple
-        1 => theme.trait_color("invariant"), // Invariant = blue
-        2 => Color::Rgb(249, 115, 22),       // Context = orange
-        3 => Color::Rgb(234, 179, 8),        // Generate = yellow (LLM)
-        4 => theme.trait_color("localized"), // Localized = green
-        5 => Color::Rgb(34, 197, 94),        // Complete = bright green
+        0 => theme.trait_color("imported"), // Imported = purple (was: knowledge)
+        1 => theme.trait_color("defined"),  // Defined = blue (was: invariant)
+        2 => Color::Rgb(249, 115, 22),      // Context = orange
+        3 => Color::Rgb(234, 179, 8),       // Generate = yellow (LLM)
+        4 => theme.trait_color("authored"), // Authored = green (was: localized)
+        5 => Color::Rgb(34, 197, 94),       // Complete = bright green
         _ => Color::White,
     }
 }
@@ -505,11 +507,12 @@ mod tests {
 
     #[test]
     fn test_pipeline_stages_names() {
-        assert_eq!(PIPELINE_STAGES[0].0, "KNOWLEDGE");
-        assert_eq!(PIPELINE_STAGES[1].0, "INVARIANT");
+        // v11.8: Renamed per ADR-024 Data Origin semantics
+        assert_eq!(PIPELINE_STAGES[0].0, "IMPORTED");   // was: KNOWLEDGE
+        assert_eq!(PIPELINE_STAGES[1].0, "DEFINED");    // was: INVARIANT
         assert_eq!(PIPELINE_STAGES[2].0, "CONTEXT");
         assert_eq!(PIPELINE_STAGES[3].0, "GENERATE");
-        assert_eq!(PIPELINE_STAGES[4].0, "LOCALIZED");
+        assert_eq!(PIPELINE_STAGES[4].0, "AUTHORED");   // was: LOCALIZED
         assert_eq!(PIPELINE_STAGES[5].0, "COMPLETE");
     }
 
@@ -535,24 +538,25 @@ mod tests {
     fn test_stage_color() {
         let theme = Theme::new();
 
-        // Knowledge should be purple-ish (trait color)
-        let knowledge_color = stage_color(0, &theme);
+        // v11.8: Renamed per ADR-024 Data Origin semantics
+        // Imported should be purple-ish (trait color, was: knowledge)
+        let imported_color = stage_color(0, &theme);
         assert!(matches!(
-            knowledge_color,
+            imported_color,
             Color::Rgb(_, _, _) | Color::Indexed(_) | Color::Magenta
         ));
 
-        // Invariant should be blue-ish (trait color)
-        let invariant_color = stage_color(1, &theme);
+        // Defined should be blue-ish (trait color, was: invariant)
+        let defined_color = stage_color(1, &theme);
         assert!(matches!(
-            invariant_color,
+            defined_color,
             Color::Rgb(_, _, _) | Color::Indexed(_) | Color::Blue
         ));
 
-        // Localized should be green-ish (trait color)
-        let localized_color = stage_color(4, &theme);
+        // Authored should be green-ish (trait color, was: localized)
+        let authored_color = stage_color(4, &theme);
         assert!(matches!(
-            localized_color,
+            authored_color,
             Color::Rgb(_, _, _) | Color::Indexed(_) | Color::Green
         ));
     }

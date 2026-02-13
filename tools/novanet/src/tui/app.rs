@@ -749,26 +749,27 @@ impl App {
         // Filter pending mode: waiting for second key (fi/fl/fk/fg/fa/ff)
         if self.filter_pending {
             self.filter_pending = false; // Always clear pending state
+            // v11.8: Renamed per ADR-024 Data Origin semantics
             match key.code {
+                KeyCode::Char('d') => {
+                    self.trait_filter = Some("defined".to_string());
+                    self.tree_cursor = 0;
+                    self.tree_scroll = 0;
+                    self.set_status("Filter: defined (■)");
+                    return true;
+                }
+                KeyCode::Char('a') => {
+                    self.trait_filter = Some("authored".to_string());
+                    self.tree_cursor = 0;
+                    self.tree_scroll = 0;
+                    self.set_status("Filter: authored (□)");
+                    return true;
+                }
                 KeyCode::Char('i') => {
-                    self.trait_filter = Some("invariant".to_string());
+                    self.trait_filter = Some("imported".to_string());
                     self.tree_cursor = 0;
                     self.tree_scroll = 0;
-                    self.set_status("Filter: invariant (■)");
-                    return true;
-                }
-                KeyCode::Char('l') => {
-                    self.trait_filter = Some("localized".to_string());
-                    self.tree_cursor = 0;
-                    self.tree_scroll = 0;
-                    self.set_status("Filter: localized (□)");
-                    return true;
-                }
-                KeyCode::Char('k') => {
-                    self.trait_filter = Some("knowledge".to_string());
-                    self.tree_cursor = 0;
-                    self.tree_scroll = 0;
-                    self.set_status("Filter: knowledge (◊)");
+                    self.set_status("Filter: imported (◊)");
                     return true;
                 }
                 KeyCode::Char('g') => {
@@ -778,11 +779,11 @@ impl App {
                     self.set_status("Filter: generated (★)");
                     return true;
                 }
-                KeyCode::Char('a') => {
-                    self.trait_filter = Some("aggregated".to_string());
+                KeyCode::Char('r') => {
+                    self.trait_filter = Some("retrieved".to_string());
                     self.tree_cursor = 0;
                     self.tree_scroll = 0;
-                    self.set_status("Filter: aggregated (▪)");
+                    self.set_status("Filter: retrieved (▪)");
                     return true;
                 }
                 KeyCode::Char('f') => {
@@ -1905,7 +1906,7 @@ mod tests {
             display_name: "Locale".to_string(),
             description: String::new(),
             icon: String::new(),
-            trait_name: "knowledge".to_string(),
+            trait_name: "imported".to_string(),
             instance_count: 3,
             arcs: Vec::new(),
             yaml_path: String::new(),
@@ -1923,7 +1924,7 @@ mod tests {
             display_name: "Page".to_string(),
             description: String::new(),
             icon: String::new(),
-            trait_name: "invariant".to_string(),
+            trait_name: "defined".to_string(),
             instance_count: 5,
             arcs: Vec::new(),
             yaml_path: String::new(),

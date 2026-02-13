@@ -169,19 +169,19 @@ fn render_traits(data: &BlueprintData) -> String {
     let trait_info = [
         (
             NodeTrait::Defined,
-            "invariant",
+            "defined",
             "Same across all locales",
             "Entity, Page, Block",
         ),
         (
             NodeTrait::Authored,
-            "localized",
+            "authored",
             "Native content per locale",
             "EntityContent, ProjectContent",
         ),
         (
             NodeTrait::Imported,
-            "knowledge",
+            "imported",
             "Locale-specific atoms",
             "Term, Expression, Taboo",
         ),
@@ -193,7 +193,7 @@ fn render_traits(data: &BlueprintData) -> String {
         ),
         (
             NodeTrait::Retrieved,
-            "aggregated",
+            "retrieved",
             "Computed metrics",
             "GEOAnswer, SEOKeywordMetrics",
         ),
@@ -250,7 +250,7 @@ fn render_arc_families(data: &BlueprintData) -> String {
 
     let family_info = [
         ("ownership", "Parent-child hierarchy (HAS_PAGE, HAS_BLOCK)"),
-        ("localization", "Invariant↔localized links (HAS_CONTENT)"),
+        ("localization", "Defined↔authored links (HAS_CONTENT)"),
         ("semantic", "Meaning connections (USES_ENTITY)"),
         ("generation", "LLM pipeline (HAS_GENERATED)"),
         ("mining", "Knowledge extraction (EXTRACTS_TERM)"),

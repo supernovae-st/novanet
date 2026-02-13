@@ -1,6 +1,8 @@
 # NovaNet Roadmap
 
-Current version: **v11.8.0** | Last release: v11.7.0 | Target: QR Code AI (https://qrcode-ai.com)
+Current version: **v0.12.0** | Last release: v11.7.0 (legacy) | Target: QR Code AI (https://qrcode-ai.com)
+
+> **Versioning Note**: Starting with v0.12.0, NovaNet follows strict SemVer. Versions v8.x-v11.x were internal milestones.
 
 ## Milestones Overview
 
@@ -33,8 +35,10 @@ v11.6 Query-First Architecture         █████████████�
       Tabbed detail panel, CypherPill, ADR-021 Query-First
 v11.7 Unified Tree Architecture        ████████████████████  100%  RELEASED
       5 modes→2 (Graph/Nexus), ADR-022, dual icons, lazy loading
-v11.8 Class Act                        ████████████████████  100%  <- CURRENT
+v11.8 Class Act (legacy)               ████████████████████  100%  RELEASED
       Trait renames (ADR-024): defined/authored/imported/generated/retrieved
+v0.12 SemVer Transition                ████████████████████  100%  <- CURRENT
+      Proper semantic versioning (0.x = pre-production)
 
 ═══════════════════════════════════════════════════════════════════════════════
 IDEAS (no timeline)
@@ -107,7 +111,19 @@ Will be reimplemented on stable v2 foundation when prioritized.
 | 7.8k | Command palette + UX | DEFERRED |
 | 7.8l | Wow effects (CRT, shake, glitch, pulse) | DEFERRED |
 
-## v11.8.0 — Class Act ← CURRENT
+## v0.12.0 — SemVer Transition ← CURRENT
+
+Adopted proper semantic versioning. v0.x.y indicates pre-production status.
+
+| Change | Description |
+|--------|-------------|
+| **SemVer adoption** | 0.x.y versioning indicates pre-1.0 status |
+| **ADR-024 traits** | defined/authored/imported/generated/retrieved |
+| **Unified packages** | All packages now at 0.12.0 |
+
+---
+
+## v11.8.0 — Class Act (Legacy)
 
 Trait rename migration per ADR-024 "Data Origin" for clearer semantics.
 
@@ -240,3 +256,4 @@ release/v*      Release preparation (optional, for complex releases)
 | v11.6.0 | 2026-02-10 | Query-First Architecture (ADR-021), tabbed detail panel |
 | v11.7.0 | 2026-02-11 | Unified Tree Architecture (ADR-022), 5→2 modes, dual icons |
 | v11.8.0 | 2026-02-13 | Class Act (ADR-024), trait renames for data origin semantics |
+| v0.12.0 | 2026-02-13 | SemVer Transition — proper versioning (0.x = pre-production) |

@@ -1,4 +1,4 @@
-# NovaNet Terminology (v11.8)
+# NovaNet Terminology (v0.12.0)
 
 This file defines the canonical terminology for NovaNet. All code, documentation, and UI must use these terms consistently.
 
@@ -98,21 +98,28 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | Rust structs | `PascalCase` | `ArcKind`, `NodeRealm` |
 | Rust files | `snake_case.rs` | `arc_schema.rs`, `taxonomy.rs` |
 
-## Node Naming Convention (v11.5)
+## Node Naming Convention (v11.8)
 
-> **RULE: Suffix indicates trait and relationship to parent invariant node**
+> **RULE: Suffix indicates trait and relationship to parent defined node**
 
 | Pattern | Trait | Layer | When to Use | Example |
 |---------|-------|-------|-------------|---------|
-| `FooContent` | localized | semantic | Node has locale-specific content for invariant `Foo` | `EntityContent` (parent: `Entity`) |
-| `FooGenerated` | generated | output | Node is generated output from invariant `Foo` | `PageGenerated` (parent: `Page`) |
-| `FooCategory` | invariant | config | Categorical grouping for invariant `Foo` | `EntityCategory` |
-| `FooSet` | invariant | knowledge | Container grouping related atoms | `TermSet`, `SEOKeywordSet`, `GEOQuerySet` |
-| `Foo` | varies | varies | Node is standalone (no parent invariant) | `SEOKeyword`, `Term`, `Expression` |
+| `FooContent` | authored | semantic | Node has locale-specific content for defined `Foo` | `EntityContent` (parent: `Entity`) |
+| `FooGenerated` | generated | output | Node is generated output from defined `Foo` | `PageGenerated` (parent: `Page`) |
+| `FooCategory` | defined | config | Categorical grouping for defined `Foo` | `EntityCategory` |
+| `FooSet` | defined | knowledge | Container grouping related atoms | `TermSet`, `SEOKeywordSet`, `GEOQuerySet` |
+| `Foo` | varies | varies | Node is standalone (no parent defined) | `SEOKeyword`, `Term`, `Expression` |
+
+**v11.8 Changes (ADR-024 Data Origin):**
+- `invariant` → `defined` (human-created once)
+- `localized` → `authored` (human-written per locale)
+- `knowledge` → `imported` (external data brought in)
+- `generated` → `generated` (unchanged, LLM output)
+- `aggregated` → `retrieved` (fetched from external APIs)
 
 **v11.5 Changes:**
 - SEO/GEO consolidation: seo/geo layers removed from org, nodes moved to shared/knowledge
-- Locale definition in shared/config (Locale is invariant, settings are in locale layer)
+- Locale definition in shared/config (Locale is defined, settings are in locale layer)
 - 10 layers total (4 shared + 6 org), 60 nodes (39 shared + 21 org)
 
 **v11.2 Changes:**
@@ -121,11 +128,11 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 - Realms renamed: `global` → `shared`, `tenant` → `org`
 
 **v11.1 Changes:**
-- `EntityCategory` added (shared/knowledge layer, invariant trait, categorical grouping)
+- `EntityCategory` added (shared/knowledge layer, defined trait, categorical grouping)
 - `BELONGS_TO` arc added (Entity → EntityCategory, ownership family)
 
 **v10.9 Changes:**
-- `EntityL10n` renamed to `EntityContent` (semantic layer, localized trait)
+- `EntityL10n` renamed to `EntityContent` (semantic layer, authored trait)
 - `PageL10n` renamed to `PageGenerated` (output layer, generated trait)
 - `BlockL10n` renamed to `BlockGenerated` (output layer, generated trait)
 
@@ -136,29 +143,29 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 **Examples:**
 
 ```
-✅ Entity (invariant) → EntityContent (localized)   # Semantic layer content
-✅ Entity (invariant) → EntityCategory (invariant)  # shared/config categorization
-✅ Page (invariant) → PageGenerated (generated)     # Output layer generated
-✅ Block (invariant) → BlockGenerated (generated)   # Output layer generated
-✅ Project (invariant) → ProjectContent (localized) # Foundation layer content
-✅ SEOKeyword (knowledge, no parent)                # Correct: no suffix
-✅ Term (knowledge atom, no parent)                 # Correct: no suffix
-✅ SEOKeywordMetrics (aggregated)                   # Computed metrics
+✅ Entity (defined) → EntityContent (authored)       # Semantic layer content
+✅ Entity (defined) → EntityCategory (defined)       # shared/config categorization
+✅ Page (defined) → PageGenerated (generated)        # Output layer generated
+✅ Block (defined) → BlockGenerated (generated)      # Output layer generated
+✅ Project (defined) → ProjectContent (authored)     # Foundation layer content
+✅ SEOKeyword (imported, no parent)                  # Correct: no suffix
+✅ Term (imported atom, no parent)                   # Correct: no suffix
+✅ SEOKeywordMetrics (retrieved)                     # Computed metrics
 
-❌ EntityL10n (deprecated)                          # Use EntityContent
-❌ PageL10n (deprecated)                            # Use PageGenerated
-❌ BlockL10n (deprecated)                           # Use BlockGenerated
-❌ ProjectL10n (deprecated)                         # Use ProjectContent
-❌ derived (deprecated trait)                       # Use generated or aggregated
-❌ job (removed trait)                              # Concept deferred to v12+
+❌ EntityL10n (deprecated)                           # Use EntityContent
+❌ PageL10n (deprecated)                             # Use PageGenerated
+❌ BlockL10n (deprecated)                            # Use BlockGenerated
+❌ ProjectL10n (deprecated)                          # Use ProjectContent
+❌ invariant/localized/knowledge/aggregated (deprecated) # Use ADR-024 names
+❌ job (removed trait)                               # Concept deferred to v12+
 ```
 
 **Rationale:**
-- `*Content` suffix indicates locale-specific semantic content (localized trait)
+- `*Content` suffix indicates locale-specific semantic content (authored trait)
 - `*Generated` suffix indicates LLM-generated output (generated trait)
-- `*Metrics` suffix indicates computed/aggregated data (aggregated trait)
-- `*Category` suffix indicates categorical grouping/taxonomy structure (invariant trait)
-- `*L10n` suffix is DEPRECATED - all localized nodes now use `*Content` suffix
+- `*Metrics` suffix indicates computed/retrieved data (retrieved trait)
+- `*Category` suffix indicates categorical grouping/taxonomy structure (defined trait)
+- `*L10n` suffix is DEPRECATED - all authored nodes now use `*Content` suffix
 - Suffix choice reflects both the trait and the layer
 
 ## Property Naming
@@ -171,7 +178,7 @@ node:
   name: LocaleVoice
   realm: shared             # v11.2: renamed from global
   layer: knowledge          # v11.5: 10 layers (4 shared + 6 org)
-  trait: knowledge
+  trait: imported           # v11.8: ADR-024 renamed from knowledge
   display_name: "Locale Voice"
   llm_context: "..."
 ```

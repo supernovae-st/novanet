@@ -35,12 +35,13 @@ const REALM_DESCRIPTIONS: Record<Realm, string> = {
   org: 'Business-specific content and structure (Organization, Projects)',
 };
 
+// v11.8: Renamed per ADR-024 Data Origin semantics
 const BEHAVIOR_DESCRIPTIONS: Record<string, string> = {
-  invariant: 'Language-independent, same across all locales',
-  localized: 'Human-curated localized content',
-  knowledge: 'Locale-specific cultural/linguistic knowledge',
-  derived: 'Computed from other data (metrics)',
-  job: 'Background processing job',
+  defined: 'Structurally fixed, version-controlled definitions',  // was: invariant
+  authored: 'Human-authored locale-specific content',             // was: localized
+  imported: 'External data from authoritative sources',           // was: knowledge
+  generated: 'LLM-generated output',
+  retrieved: 'Computed/aggregated from external APIs',            // was: aggregated (derived)
 };
 
 // =============================================================================

@@ -1,6 +1,59 @@
-# NovaNet Architecture Decisions (v11.7)
+# NovaNet Architecture Decisions (v0.12.0)
 
 This file documents key architecture decisions for NovaNet. Reference these when making implementation choices.
+
+> **Version note**: v0.12.0 "Class Act" — previously versioned as v11.x (missing leading 0).
+
+---
+
+## Quick Reference (TL;DR)
+
+### Core Principles
+
+| ADR | Principle | Rule |
+|-----|-----------|------|
+| **007** | Generation NOT Translation | `Entity → Generate natively → EntityContent` (not translate) |
+| **003** | YAML-First | YAML = source of truth → generators → TS/Cypher/Mermaid |
+| **001** | Arc Terminology | Use "Arc" (not Edge/Relation) for directed links |
+
+### Current Architecture (v0.12.0)
+
+```
+SHARED (4 layers, 39 nodes): config, locale, geography, knowledge — READ-ONLY
+ORG (6 layers, 21 nodes): config, foundation, structure, semantic, instruction, output
+Total: 60 nodes, 10 layers, 5 traits
+```
+
+### v0.12.0 "Class Act" Key Changes
+
+| ADR | Change | Summary |
+|-----|--------|---------|
+| **024** | Trait = Data Origin | `invariant→defined`, `localized→authored`, `knowledge→imported`, `aggregated→retrieved` |
+| **023** | Class/Instance | `NodeKind→NodeClass`, `:Meta:Kind→:Schema:Class`, "Meta" eliminated |
+| **025** | Instruction Rename | `PageType→PageStructure`, `*Prompt→*Instruction` |
+
+### Trait Quick Reference (ADR-024)
+
+| Trait | Origin | Examples |
+|-------|--------|----------|
+| `defined` | Human creates ONCE | Page, Block, Entity, Locale, OrgConfig |
+| `authored` | Human writes PER locale | EntityContent, ProjectContent |
+| `imported` | External data brought in | Term, Expression, SEOKeyword, GEOQuery |
+| `generated` | Our LLM produces | PageGenerated, BlockGenerated |
+| `retrieved` | Fetched from external APIs | GEOAnswer, SEOKeywordMetrics |
+
+### UX Architecture
+
+| ADR | Feature | Rule |
+|-----|---------|------|
+| **022** | Unified Tree | 2 modes: `[1]Graph` + `[2]Nexus`. "If it's a node in Neo4j, it's a node everywhere" |
+| **021** | Query-First | Cypher = source of truth. YAML views only (no TS hardcoding) |
+| **014** | Naming | `*Content` = localized, `*Generated` = LLM output. Keys: `entity:key@locale` |
+| **013** | Icons | `visual-encoding.yaml` → `{ web: "lucide", terminal: "◆" }` — NO emoji |
+
+---
+
+## Full ADR Documentation
 
 ## ADR-001: Arc Terminology
 

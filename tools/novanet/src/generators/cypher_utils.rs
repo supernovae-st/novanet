@@ -136,10 +136,10 @@ pub fn write_section_header(out: &mut String, title: &str) {
 ///
 /// # Example
 /// ```ignore
-/// write_section_header_counted(&mut out, "Kind Nodes", 60);
+/// write_section_header_counted(&mut out, "Class Nodes", 58);
 /// // Output:
 /// // ═══════════════════════════════════════════════════════════════════════════════
-/// // Kind Nodes (60)
+/// // Class Nodes (58)
 /// // ═══════════════════════════════════════════════════════════════════════════════
 /// ```
 pub fn write_section_header_counted(out: &mut String, title: &str, count: usize) {

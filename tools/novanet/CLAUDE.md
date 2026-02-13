@@ -7,11 +7,11 @@ This file provides guidance to Claude Code when working in the `tools/novanet/` 
 `novanet` is a unified Rust CLI + TUI binary for managing the NovaNet context graph.
 It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 
-**Version**: v11.7.0 (Unified Tree Architecture)
+**Version**: v0.12.0 (SemVer Transition + ADR-024 Data Origin)
 
 ## Current Status
 
-**v11.7.0 Unified Tree Architecture** — 5 modes merged into 2 (Graph/Nexus). Realm, Layer, ArcFamily, ArcKind are now clickable nodes in a unified tree. Lazy instance loading with pagination via async channels. Dual icons (Lucide for web, Unicode for terminal). Architecture unchanged: SHARED (4 layers: config, locale, geography, knowledge, 39 nodes), ORG (6 layers: config, foundation, structure, semantic, instruction, output, 21 nodes). 60 total nodes, 10 layers.
+**v0.12.0 SemVer Transition** — Proper semantic versioning adopted (0.x = pre-production). Includes ADR-024 Data Origin trait renames: invariant→defined, localized→authored, knowledge(trait)→imported, aggregated→retrieved. Unified Tree Architecture preserved. SHARED (4 layers: config, locale, geography, knowledge, 39 nodes), ORG (6 layers: config, foundation, structure, semantic, instruction, output, 21 nodes). 60 total nodes, 10 layers, 5 traits.
 
 | Area | Commands | Status |
 |------|----------|--------|

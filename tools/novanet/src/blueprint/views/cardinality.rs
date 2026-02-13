@@ -72,7 +72,7 @@ pub fn render(data: &BlueprintData) -> String {
         "│                                                                              │\n",
     );
     out.push_str(
-        "│  ═══ means exactly one on each side (per locale for localized nodes)         │\n",
+        "│  ═══ means exactly one on each side (per locale for authored nodes)           │\n",
     );
     out.push_str(
         "└──────────────────────────────────────────────────────────────────────────────┘\n\n",

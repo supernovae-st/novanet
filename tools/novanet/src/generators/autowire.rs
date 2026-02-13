@@ -1,10 +1,12 @@
-//! Generate OF_KIND wiring Cypher statements (instance → Kind bridge).
+//! Generate OF_CLASS wiring Cypher statements (instance → Class bridge).
+//!
+//! v11.8 (ADR-023): Kind → Class, OF_KIND → OF_CLASS
 //!
 //! For every node type in the schema, generates a MERGE statement that links
-//! all existing instances of that type to their Kind meta-node via `OF_KIND`.
-//! Replaces the v8 `99-autowire-subcategories.cypher` (IN_SUBCATEGORY → OF_KIND).
+//! all existing instances of that type to their Class node via `OF_CLASS`.
+//! Replaces the v8 `99-autowire-subcategories.cypher` (IN_SUBCATEGORY → OF_CLASS).
 //!
-//! Output target: `packages/db/seed/99-autowire-kinds.cypher`
+//! Output target: `packages/db/seed/99-autowire-classes.cypher`
 
 use crate::parsers::yaml_node;
 use std::collections::BTreeMap;
@@ -60,7 +62,7 @@ fn generate_autowire(nodes: &[yaml_node::ParsedNode]) -> crate::Result<String> {
     // Header
     writeln!(
         out,
-        "// Auto-wire OF_KIND relationships (v9 instance → Kind bridge)"
+        "// Auto-wire OF_CLASS relationships (v11.8 instance → Class bridge)"
     )
     .unwrap();
     writeln!(
@@ -70,7 +72,7 @@ fn generate_autowire(nodes: &[yaml_node::ParsedNode]) -> crate::Result<String> {
     .unwrap();
     writeln!(
         out,
-        "// Runs AFTER all other seeds to connect instance nodes to their Kind meta-nodes."
+        "// Runs AFTER all other seeds to connect instance nodes to their Class nodes."
     )
     .unwrap();
     writeln!(
@@ -138,8 +140,9 @@ fn generate_autowire(nodes: &[yaml_node::ParsedNode]) -> crate::Result<String> {
 
             for name in node_names {
                 writeln!(out, "MATCH (n:{name})").unwrap();
-                writeln!(out, "MATCH (k:Kind {{label: '{name}'}})").unwrap();
-                writeln!(out, "MERGE (n)-[:OF_KIND]->(k);").unwrap();
+                // v11.8: :Class (was :Kind)
+                writeln!(out, "MATCH (c:Class {{label: '{name}'}})").unwrap();
+                writeln!(out, "MERGE (n)-[:OF_CLASS]->(c);").unwrap();
                 writeln!(out).unwrap();
             }
         }
@@ -159,19 +162,20 @@ fn generate_autowire(nodes: &[yaml_node::ParsedNode]) -> crate::Result<String> {
     .unwrap();
     writeln!(out, "// Run this to verify the wiring was successful:").unwrap();
     writeln!(out, "//").unwrap();
+    // v11.8: :Class, [:HAS_CLASS], [:OF_CLASS] (was :Kind, [:HAS_KIND], [:OF_KIND])
     writeln!(
         out,
-        "// MATCH (r:Realm)-[:HAS_LAYER]->(l:Layer)-[:HAS_KIND]->(k:Kind)"
+        "// MATCH (r:Realm)-[:HAS_LAYER]->(l:Layer)-[:HAS_CLASS]->(c:Class)"
     )
     .unwrap();
-    writeln!(out, "// OPTIONAL MATCH (k)<-[rel:OF_KIND]-(n)").unwrap();
+    writeln!(out, "// OPTIONAL MATCH (c)<-[rel:OF_CLASS]-(n)").unwrap();
     writeln!(
         out,
-        "// WITH r.key AS realm, l.key AS layer, k.label AS kind, count(rel) AS instanceCount"
+        "// WITH r.key AS realm, l.key AS layer, c.label AS class, count(rel) AS instanceCount"
     )
     .unwrap();
     writeln!(out, "// ORDER BY realm, layer, instanceCount DESC").unwrap();
-    writeln!(out, "// RETURN realm, layer, kind, instanceCount;").unwrap();
+    writeln!(out, "// RETURN realm, layer, class, instanceCount;").unwrap();
 
     Ok(out)
 }
@@ -201,23 +205,23 @@ mod tests {
 
         // Header
         assert!(cypher.contains("Total: 6 node types"));
-        assert!(cypher.contains("OF_KIND"));
+        assert!(cypher.contains("OF_CLASS")); // v11.8: renamed from OF_KIND
         assert!(cypher.contains("v0.12.0"));
 
-        // 6 MERGE OF_KIND statements
-        let of_kind = cypher
+        // 6 MERGE OF_CLASS statements (v11.8: renamed from OF_KIND)
+        let of_class = cypher
             .lines()
-            .filter(|l: &&str| l.contains("MERGE") && l.contains("[:OF_KIND]"))
+            .filter(|l: &&str| l.contains("MERGE") && l.contains("[:OF_CLASS]"))
             .count();
-        assert_eq!(of_kind, 6, "expected 6 OF_KIND statements");
+        assert_eq!(of_class, 6, "expected 6 OF_CLASS statements");
 
-        // Spot check patterns
+        // Spot check patterns (v11.8: :Class, c variable)
         assert!(cypher.contains("MATCH (n:Project)"));
-        assert!(cypher.contains("MATCH (k:Kind {label: 'Project'})"));
-        assert!(cypher.contains("MERGE (n)-[:OF_KIND]->(k);"));
+        assert!(cypher.contains("MATCH (c:Class {label: 'Project'})"));
+        assert!(cypher.contains("MERGE (n)-[:OF_CLASS]->(c);"));
 
         assert!(cypher.contains("MATCH (n:Locale)"));
-        assert!(cypher.contains("MATCH (k:Kind {label: 'Locale'})"));
+        assert!(cypher.contains("MATCH (c:Class {label: 'Locale'})"));
 
         // Realm order: shared, org (v11.4: 2 realms)
         let shared_pos = cypher.find("SHARED REALM").unwrap();
@@ -236,9 +240,11 @@ mod tests {
         let page_pos = cypher.find("MATCH (n:Page)").unwrap();
         assert!(block_pos < page_pos, "Block should come before Page");
 
-        // No IN_SUBCATEGORY (v8 term)
+        // No deprecated terms (v8: IN_SUBCATEGORY, v11.7: OF_KIND)
         assert!(!cypher.contains("IN_SUBCATEGORY"));
         assert!(!cypher.contains("Subcategory"));
+        assert!(!cypher.contains("OF_KIND")); // v11.8: renamed to OF_CLASS
+        assert!(!cypher.contains(":Kind {")); // v11.8: renamed to :Class
 
         // Verification query present
         assert!(cypher.contains("VERIFICATION QUERY"));
@@ -276,23 +282,23 @@ mod tests {
             .generate(root)
             .expect("should generate autowire cypher");
 
-        // v11.4: 60 OF_KIND statements (+3 new containers, -4 obsolete SEO types)
-        let of_kind = cypher
+        // v0.12.0: 58 OF_CLASS statements (renamed from OF_KIND in v11.8)
+        let of_class = cypher
             .lines()
-            .filter(|l: &&str| l.contains("MERGE") && l.contains("[:OF_KIND]"))
+            .filter(|l: &&str| l.contains("MERGE") && l.contains("[:OF_CLASS]"))
             .count();
         assert_eq!(
-            of_kind, 60,
-            "expected 60 OF_KIND statements (v11.4: +3 new, -4 obsolete)"
+            of_class, 58,
+            "expected 58 OF_CLASS statements (v0.12.0: 39 shared + 19 org)"
         );
 
         // 2 realms present (v11.3: shared + org)
         assert!(cypher.contains("SHARED REALM"));
         assert!(cypher.contains("ORG REALM"));
 
-        // Spot checks (v11.3)
+        // Spot checks (v11.8: :Class instead of :Kind)
         assert!(cypher.contains("MATCH (n:Style)"));
-        assert!(cypher.contains("MATCH (k:Kind {label: 'Style'})"));
+        assert!(cypher.contains("MATCH (c:Class {label: 'Style'})"));
 
         // v11.5: Layer counts (4 shared + 6 org = 10 layers)
         assert!(cypher.contains("Shared > Config (3 types)")); // EntityCategory + Locale + SEOKeywordFormat
@@ -300,8 +306,8 @@ mod tests {
         assert!(cypher.contains("Shared > Geography (6 types)")); // Continent, Region, etc.
         assert!(cypher.contains("Shared > Knowledge (24 types)")); // v11.4: +2 containers, -4 obsolete
 
-        // v11.4: Header
-        assert!(cypher.contains("Total: 60 node types"));
+        // v0.12.0: Header
+        assert!(cypher.contains("Total: 58 node types"));
 
         // Verification query present
         assert!(cypher.contains("VERIFICATION QUERY"));

@@ -1,5 +1,6 @@
 # packages/core/models/arc-kinds/generation/generated.yaml
-# ArcKind: GENERATED — Prompt produced localized content
+# ArcKind: GENERATED — Instruction produced localized content
+# v0.12.0 ADR-025: PagePrompt→PageInstruction, BlockPrompt→BlockInstruction
 
 arc:
   name: GENERATED
@@ -7,8 +8,8 @@ arc:
   scope: intra_realm
 
   source:
-    - PagePrompt
-    - BlockPrompt
+    - PageInstruction
+    - BlockInstruction
   target:
     - PageGenerated
     - BlockGenerated
@@ -21,8 +22,8 @@ arc:
       description: "Timestamp when content was generated"
 
   llm_context: |
-    Provenance tracking: which prompt generated which output.
+    Provenance tracking: which instruction generated which output.
     Use for debugging and version history.
-    Query: MATCH (prompt:BlockPrompt)-[:GENERATED]->(content:BlockGenerated)
+    Query: MATCH (instr:BlockInstruction)-[:GENERATED]->(content:BlockGenerated)
 
-  cypher_pattern: "(BlockPrompt)-[:GENERATED {generated_at}]->(BlockGenerated)"
+  cypher_pattern: "(BlockInstruction)-[:GENERATED {generated_at}]->(BlockGenerated)"

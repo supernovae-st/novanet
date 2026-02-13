@@ -171,7 +171,7 @@ export type UnifiedNode =
 export type NodeTrait =
   | 'defined'
   | 'authored'
-  | 'knowledge'
+  | 'imported'
   | 'generated'
   | 'retrieved';
 

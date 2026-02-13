@@ -612,13 +612,13 @@ impl NexusState {
             }
             // EXPLORE section
             NexusTab::Traits => {
-                // Yank the current trait name (v11.2: 5 traits, split derived → generated + aggregated)
+                // v11.8: ADR-024 Data Origin semantics (5 traits)
                 let traits = [
-                    "invariant",
-                    "localized",
-                    "knowledge",
+                    "defined",   // was: invariant
+                    "authored",  // was: localized
+                    "imported",  // was: knowledge
                     "generated",
-                    "aggregated",
+                    "retrieved", // was: aggregated
                 ];
                 traits.get(self.trait_cursor).map(|s| s.to_string())
             }
@@ -2419,23 +2419,23 @@ mod tests {
         let mut state = NexusState::new();
         state.tab = NexusTab::Traits;
 
+        // v11.8: ADR-024 Data Origin semantics
         state.trait_cursor = 0;
-        assert_eq!(state.get_current_yank_text(), Some("invariant".to_string()));
+        assert_eq!(state.get_current_yank_text(), Some("defined".to_string())); // was: invariant
 
         state.trait_cursor = 1;
-        assert_eq!(state.get_current_yank_text(), Some("localized".to_string()));
+        assert_eq!(state.get_current_yank_text(), Some("authored".to_string())); // was: localized
 
         state.trait_cursor = 2;
-        assert_eq!(state.get_current_yank_text(), Some("knowledge".to_string()));
+        assert_eq!(state.get_current_yank_text(), Some("imported".to_string())); // was: knowledge
 
-        // v11.2: split derived → generated + aggregated
         state.trait_cursor = 3;
         assert_eq!(state.get_current_yank_text(), Some("generated".to_string()));
 
         state.trait_cursor = 4;
         assert_eq!(
             state.get_current_yank_text(),
-            Some("aggregated".to_string())
+            Some("retrieved".to_string()) // was: aggregated
         );
 
         // Index 5 now returns None
