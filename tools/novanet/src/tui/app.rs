@@ -11,7 +11,7 @@ use crossterm::event::{KeyCode, KeyEvent};
 
 use super::cache::RenderCache;
 use super::data::{
-    ArcKindDetails, KindArcsData, LayerDetails, RealmDetails, TaxonomyTree, TreeItem,
+    ArcClassDetails, ClassArcsData, LayerDetails, RealmDetails, TaxonomyTree, TreeItem,
 };
 use super::handlers::dispatch_mode_handler;
 use super::nexus::NexusState;
@@ -103,12 +103,12 @@ impl Focus {
 /// This avoids borrow checker issues when we need to both read the tree and mutate App.
 #[derive(Debug)]
 enum TreeItemData {
-    Kind {
+    Class {
         yaml_path: String,
         key: String,
         properties: Vec<String>,
     },
-    ArcKind {
+    ArcClass {
         yaml_path: String,
         key: String,
     },
@@ -122,9 +122,9 @@ enum TreeItemData {
         key: String,
     },
     Section,
-    /// Instance with its parent Kind's yaml_path (to show schema in YAML panel).
+    /// Instance with its parent Class's yaml_path (to show schema in YAML panel).
     Instance {
-        kind_yaml_path: String,
+        class_yaml_path: String,
     },
     None,
 }
@@ -208,9 +208,9 @@ pub struct App {
     /// Avoids re-reading files on every scroll/navigation.
     pub yaml_cache: FxHashMap<String, String>,
     /// Neo4j arc data for current Kind (loaded async)
-    pub kind_arcs: Option<KindArcsData>,
+    pub kind_arcs: Option<ClassArcsData>,
     /// Neo4j arc kind details (loaded async when ArcKind selected)
-    pub arc_kind_details: Option<ArcKindDetails>,
+    pub arc_kind_details: Option<ArcClassDetails>,
     // Data view: pending instance load request (Kind label to load)
     pub pending_instance_load: Option<String>,
     /// Pending Kind arcs load request (Kind label to load from Neo4j)
@@ -394,7 +394,7 @@ impl App {
 
         // Handle based on item type
         match current {
-            TreeItemData::Kind {
+            TreeItemData::Class {
                 yaml_path,
                 key,
                 properties,
@@ -404,7 +404,7 @@ impl App {
                 // Load Kind validation (Neo4j vs YAML)
                 self.load_validated_kind_properties(&properties);
             }
-            TreeItemData::ArcKind { yaml_path, key } => {
+            TreeItemData::ArcClass { yaml_path, key } => {
                 self.load_yaml_cached(&yaml_path);
                 self.pending_arc_kind_load = Some(key);
             }
@@ -425,10 +425,10 @@ impl App {
             TreeItemData::Section => {
                 self.load_yaml_cached("packages/core/models/taxonomy.yaml");
             }
-            TreeItemData::Instance { kind_yaml_path } => {
+            TreeItemData::Instance { class_yaml_path } => {
                 // Load the Kind's YAML to show Instance schema (standard_properties)
-                if !kind_yaml_path.is_empty() {
-                    self.load_yaml_cached(&kind_yaml_path);
+                if !class_yaml_path.is_empty() {
+                    self.load_yaml_cached(&class_yaml_path);
                 } else {
                     self.yaml_path.clear();
                     self.yaml_content.clear();
@@ -458,11 +458,11 @@ impl App {
                     // Get the Kind's yaml_path for showing schema in YAML panel
                     if let Some((_, _, kind)) = self.tree.find_kind(kind_key) {
                         return TreeItemData::Instance {
-                            kind_yaml_path: kind.yaml_path.clone(),
+                            class_yaml_path: kind.yaml_path.clone(),
                         };
                     }
                     return TreeItemData::Instance {
-                        kind_yaml_path: String::new(),
+                        class_yaml_path: String::new(),
                     };
                 }
             }
@@ -477,14 +477,14 @@ impl App {
         };
 
         match item {
-            Some(TreeItem::Kind(_, _, kind)) => TreeItemData::Kind {
+            Some(TreeItem::Class(_, _, kind)) => TreeItemData::Class {
                 yaml_path: kind.yaml_path.clone(),
                 key: kind.key.clone(),
                 properties: kind.properties.clone(),
             },
-            Some(TreeItem::ArcKind(family, arc)) => {
+            Some(TreeItem::ArcClass(family, arc)) => {
                 let arc_file = arc.key.to_lowercase().replace('_', "-");
-                TreeItemData::ArcKind {
+                TreeItemData::ArcClass {
                     yaml_path: format!(
                         "packages/core/models/arc-kinds/{}/{}.yaml",
                         family.key, arc_file
@@ -501,12 +501,12 @@ impl App {
             Some(TreeItem::ArcFamily(family)) => TreeItemData::ArcFamily {
                 key: family.key.clone(),
             },
-            Some(TreeItem::KindsSection) | Some(TreeItem::ArcsSection) => TreeItemData::Section,
+            Some(TreeItem::ClassesSection) | Some(TreeItem::ArcsSection) => TreeItemData::Section,
             Some(TreeItem::Instance(_, _, kind, _)) => TreeItemData::Instance {
-                kind_yaml_path: kind.yaml_path.clone(),
+                class_yaml_path: kind.yaml_path.clone(),
             },
             // EntityCategory shows parent Entity Kind's YAML
-            Some(TreeItem::EntityCategory(_, _, kind, _)) => TreeItemData::Kind {
+            Some(TreeItem::EntityCategory(_, _, kind, _)) => TreeItemData::Class {
                 yaml_path: kind.yaml_path.clone(),
                 key: kind.key.clone(),
                 properties: kind.properties.clone(),
@@ -1442,9 +1442,9 @@ impl App {
         let key = match self.current_item() {
             Some(TreeItem::Realm(r)) => Some(r.key.clone()),
             Some(TreeItem::Layer(_, l)) => Some(l.key.clone()),
-            Some(TreeItem::Kind(_, _, k)) => Some(k.key.clone()),
+            Some(TreeItem::Class(_, _, k)) => Some(k.key.clone()),
             Some(TreeItem::ArcFamily(f)) => Some(f.key.clone()),
-            Some(TreeItem::ArcKind(_, a)) => Some(a.key.clone()),
+            Some(TreeItem::ArcClass(_, a)) => Some(a.key.clone()),
             Some(TreeItem::EntityCategory(_, _, _, cat)) => Some(cat.key.clone()),
             Some(TreeItem::Instance(_, _, _, inst)) => Some(inst.key.clone()),
             _ => None,
@@ -1463,7 +1463,7 @@ impl App {
                 // Serialize instance properties to JSON
                 serde_json::to_string_pretty(&inst.properties).ok()
             }
-            Some(TreeItem::Kind(_, _, kind)) => {
+            Some(TreeItem::Class(_, _, kind)) => {
                 // For Kind, show properties schema
                 Some(format!(
                     "{{\"properties\": {:?}, \"required\": {:?}}}",
@@ -1554,13 +1554,13 @@ impl App {
     pub fn current_breadcrumb(&self) -> String {
         use super::data::TreeItem;
         match self.current_item() {
-            Some(TreeItem::KindsSection) => "Node Classes".to_string(),
+            Some(TreeItem::ClassesSection) => "Node Classes".to_string(),
             Some(TreeItem::ArcsSection) => "Arcs".to_string(),
             Some(TreeItem::Realm(r)) => r.display_name.clone(),
             Some(TreeItem::Layer(r, l)) => {
                 format!("{} → {}", r.display_name, l.display_name)
             }
-            Some(TreeItem::Kind(r, l, k)) => {
+            Some(TreeItem::Class(r, l, k)) => {
                 if self.is_graph_mode() && k.instance_count > 0 {
                     format!(
                         "{} → {} → {} ({})",
@@ -1586,7 +1586,7 @@ impl App {
                 )
             }
             Some(TreeItem::ArcFamily(f)) => format!("Arcs → {}", f.display_name),
-            Some(TreeItem::ArcKind(f, ak)) => {
+            Some(TreeItem::ArcClass(f, ak)) => {
                 format!("Arcs → {} → {}", f.display_name, ak.display_name)
             }
             None => "NovaNet".to_string(),
@@ -1615,7 +1615,7 @@ impl App {
         }
 
         // Check if current item is a Kind
-        if let Some(super::data::TreeItem::Kind(_, _, kind)) = self.tree.item_at(self.tree_cursor) {
+        if let Some(super::data::TreeItem::Class(_, _, kind)) = self.tree.item_at(self.tree_cursor) {
             // Only request if not already loaded
             if self.tree.get_instances(&kind.key).is_none() {
                 self.pending_instance_load = Some(kind.key.clone());
@@ -1748,7 +1748,7 @@ impl App {
     }
 
     /// Set the loaded Kind arcs data from Neo4j.
-    pub fn set_kind_arcs(&mut self, arcs: KindArcsData) {
+    pub fn set_kind_arcs(&mut self, arcs: ClassArcsData) {
         self.kind_arcs = Some(arcs);
     }
 
@@ -1758,7 +1758,7 @@ impl App {
     }
 
     /// Set the loaded ArcKind details from Neo4j.
-    pub fn set_arc_kind_details(&mut self, details: ArcKindDetails) {
+    pub fn set_arc_kind_details(&mut self, details: ArcClassDetails) {
         self.arc_kind_details = Some(details);
     }
 
@@ -1893,7 +1893,7 @@ impl App {
 #[cfg(test)]
 mod tests {
     use super::super::data::{
-        GraphStats, InstanceInfo, KindInfo, LayerInfo, RealmInfo, TaxonomyTree, TreeItem,
+        GraphStats, InstanceInfo, ClassInfo, LayerInfo, RealmInfo, TaxonomyTree, TreeItem,
     };
     use super::*;
     use rustc_hash::{FxHashMap, FxHashSet};
@@ -1901,7 +1901,7 @@ mod tests {
 
     // Helper: Create test taxonomy tree
     fn create_test_tree() -> TaxonomyTree {
-        let locale_kind = KindInfo {
+        let locale_kind = ClassInfo {
             key: "Locale".to_string(),
             display_name: "Locale".to_string(),
             description: String::new(),
@@ -1919,7 +1919,7 @@ mod tests {
             issues_count: None,
         };
 
-        let page_kind = KindInfo {
+        let page_kind = ClassInfo {
             key: "Page".to_string(),
             display_name: "Page".to_string(),
             description: String::new(),
@@ -2023,7 +2023,7 @@ mod tests {
 
         // Verify we're at Locale in Graph mode
         match app.tree.item_at(app.tree_cursor) {
-            Some(TreeItem::Kind(_, _, k)) => assert_eq!(k.key, "Locale"),
+            Some(TreeItem::Class(_, _, k)) => assert_eq!(k.key, "Locale"),
             other => panic!("Expected Kind Locale, got {:?}", other),
         }
 
@@ -2035,7 +2035,7 @@ mod tests {
 
         // Item at cursor should still be Locale kind
         match app.current_item() {
-            Some(TreeItem::Kind(_, _, k)) => assert_eq!(k.key, "Locale"),
+            Some(TreeItem::Class(_, _, k)) => assert_eq!(k.key, "Locale"),
             other => panic!("Expected Kind Locale in Graph mode, got {:?}", other),
         }
     }

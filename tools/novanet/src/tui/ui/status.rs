@@ -216,7 +216,7 @@ pub fn render_status(f: &mut Frame, area: Rect, app: &App) {
     // Determine if current item is instance or kind for contextual shortcuts
     let current_item = app.current_item();
     let is_instance = matches!(current_item, Some(TreeItem::Instance(..)));
-    let is_class = matches!(current_item, Some(TreeItem::Kind(..)));
+    let is_class = matches!(current_item, Some(TreeItem::Class(..)));
 
     // Get contextual shortcuts using extracted pure function
     let shortcuts = get_contextual_shortcuts(app.mode, app.focus, is_instance, is_class);

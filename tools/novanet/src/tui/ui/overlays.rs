@@ -536,13 +536,13 @@ pub fn render_legend(f: &mut Frame, app: &App) {
 /// Used in search results to show what type of item was matched.
 pub fn get_type_label(item: Option<&TreeItem>) -> &'static str {
     match item {
-        Some(TreeItem::KindsSection) => "Section",
+        Some(TreeItem::ClassesSection) => "Section",
         Some(TreeItem::ArcsSection) => "Section",
         Some(TreeItem::Realm(_)) => "Realm",
         Some(TreeItem::Layer(_, _)) => "Layer",
-        Some(TreeItem::Kind(_, _, _)) => "Node Class",
+        Some(TreeItem::Class(_, _, _)) => "Node Class",
         Some(TreeItem::ArcFamily(_)) => "ArcFamily",
-        Some(TreeItem::ArcKind(_, _)) => "Arc Class",
+        Some(TreeItem::ArcClass(_, _)) => "Arc Class",
         Some(TreeItem::Instance(_, _, _, _)) => "Instance",
         Some(TreeItem::EntityCategory(_, _, _, _)) => "Category",
         None => "",
@@ -553,13 +553,13 @@ pub fn get_type_label(item: Option<&TreeItem>) -> &'static str {
 /// Returns a tuple of (prefix, name) for rendering.
 pub fn get_item_display(item: Option<&TreeItem>) -> (&'static str, String) {
     match item {
-        Some(TreeItem::KindsSection) => ("", "Node Classes".to_string()),
+        Some(TreeItem::ClassesSection) => ("", "Node Classes".to_string()),
         Some(TreeItem::ArcsSection) => ("", "Arcs".to_string()),
         Some(TreeItem::Realm(r)) => (r.icon, r.display_name.clone()),
         Some(TreeItem::Layer(_, l)) => ("  ", l.display_name.clone()),
-        Some(TreeItem::Kind(_, _, k)) => ("    ", k.display_name.clone()),
+        Some(TreeItem::Class(_, _, k)) => ("    ", k.display_name.clone()),
         Some(TreeItem::ArcFamily(f)) => ("  ", f.display_name.clone()),
-        Some(TreeItem::ArcKind(_, ek)) => ("    ", ek.display_name.clone()),
+        Some(TreeItem::ArcClass(_, ek)) => ("    ", ek.display_name.clone()),
         Some(TreeItem::Instance(_, _, _, inst)) => ("      ", inst.display_name.clone()),
         Some(TreeItem::EntityCategory(_, _, _, cat)) => ("      ", cat.display_name.clone()),
         None => ("?", "Unknown".to_string()),
@@ -574,7 +574,7 @@ pub fn get_item_display(item: Option<&TreeItem>) -> (&'static str, String) {
 mod tests {
     use super::*;
     use crate::tui::data::{
-        ArcFamilyInfo, ArcKindInfo, InstanceInfo, KindInfo, LayerInfo, RealmInfo,
+        ArcFamilyInfo, ArcClassInfo, InstanceInfo, ClassInfo, LayerInfo, RealmInfo,
     };
     use std::collections::BTreeMap;
 
@@ -603,8 +603,8 @@ mod tests {
         }
     }
 
-    fn make_kind() -> KindInfo {
-        KindInfo {
+    fn make_kind() -> ClassInfo {
+        ClassInfo {
             key: "page".to_string(),
             display_name: "Page".to_string(),
             description: "A page entity".to_string(),
@@ -632,8 +632,8 @@ mod tests {
         }
     }
 
-    fn make_arc_kind() -> ArcKindInfo {
-        ArcKindInfo {
+    fn make_arc_kind() -> ArcClassInfo {
+        ArcClassInfo {
             key: "HAS_PAGE".to_string(),
             display_name: "Has Page".to_string(),
             from_kind: "Project".to_string(),
@@ -664,7 +664,7 @@ mod tests {
 
     #[test]
     fn test_type_label_kinds_section() {
-        let item = TreeItem::KindsSection;
+        let item = TreeItem::ClassesSection;
         assert_eq!(get_type_label(Some(&item)), "Section");
     }
 
@@ -694,7 +694,7 @@ mod tests {
         let realm = make_realm();
         let layer = make_layer();
         let kind = make_kind();
-        let item = TreeItem::Kind(&realm, &layer, &kind);
+        let item = TreeItem::Class(&realm, &layer, &kind);
         assert_eq!(get_type_label(Some(&item)), "Node Class");
     }
 
@@ -709,7 +709,7 @@ mod tests {
     fn test_type_label_arc_kind() {
         let family = make_arc_family();
         let arc_kind = make_arc_kind();
-        let item = TreeItem::ArcKind(&family, &arc_kind);
+        let item = TreeItem::ArcClass(&family, &arc_kind);
         assert_eq!(get_type_label(Some(&item)), "Arc Class");
     }
 
@@ -734,7 +734,7 @@ mod tests {
 
     #[test]
     fn test_display_kinds_section() {
-        let item = TreeItem::KindsSection;
+        let item = TreeItem::ClassesSection;
         let (prefix, name) = get_item_display(Some(&item));
         assert_eq!(prefix, "");
         assert_eq!(name, "Node Classes");
@@ -772,7 +772,7 @@ mod tests {
         let realm = make_realm();
         let layer = make_layer();
         let kind = make_kind();
-        let item = TreeItem::Kind(&realm, &layer, &kind);
+        let item = TreeItem::Class(&realm, &layer, &kind);
         let (prefix, name) = get_item_display(Some(&item));
         assert_eq!(prefix, "    "); // 4 spaces
         assert_eq!(name, "Page");
@@ -791,7 +791,7 @@ mod tests {
     fn test_display_arc_kind_indented() {
         let family = make_arc_family();
         let arc_kind = make_arc_kind();
-        let item = TreeItem::ArcKind(&family, &arc_kind);
+        let item = TreeItem::ArcClass(&family, &arc_kind);
         let (prefix, name) = get_item_display(Some(&item));
         assert_eq!(prefix, "    "); // 4 spaces
         assert_eq!(name, "Has Page");
@@ -832,13 +832,13 @@ mod tests {
         let arc_kind = make_arc_kind();
 
         let all_items: Vec<TreeItem> = vec![
-            TreeItem::KindsSection,
+            TreeItem::ClassesSection,
             TreeItem::ArcsSection,
             TreeItem::Realm(&realm),
             TreeItem::Layer(&realm, &layer),
-            TreeItem::Kind(&realm, &layer, &kind),
+            TreeItem::Class(&realm, &layer, &kind),
             TreeItem::ArcFamily(&family),
-            TreeItem::ArcKind(&family, &arc_kind),
+            TreeItem::ArcClass(&family, &arc_kind),
             TreeItem::Instance(&realm, &layer, &kind, &instance),
         ];
 

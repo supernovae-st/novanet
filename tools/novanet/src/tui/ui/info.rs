@@ -458,11 +458,11 @@ fn render_realm_instance_sparkline(f: &mut Frame, area: Rect, app: &App) {
 /// Uses [K] badge for Kind and [I] badge for Instance for instant recognition.
 fn get_detail_title(app: &App) -> String {
     match app.current_item() {
-        Some(TreeItem::KindsSection) => "Node Classes".to_string(),
+        Some(TreeItem::ClassesSection) => "Node Classes".to_string(),
         Some(TreeItem::ArcsSection) => "Arcs".to_string(),
         Some(TreeItem::Realm(r)) => format!("{} {}", r.icon, r.display_name),
         Some(TreeItem::Layer(_, l)) => l.display_name.clone(),
-        Some(TreeItem::Kind(_, _, k)) => {
+        Some(TreeItem::Class(_, _, k)) => {
             // [C] badge for Class - instant recognition
             if k.icon.is_empty() {
                 format!("[C] {}", k.display_name)
@@ -471,7 +471,7 @@ fn get_detail_title(app: &App) -> String {
             }
         }
         Some(TreeItem::ArcFamily(f)) => f.display_name.clone(),
-        Some(TreeItem::ArcKind(_, ek)) => ek.display_name.clone(),
+        Some(TreeItem::ArcClass(_, ek)) => ek.display_name.clone(),
         Some(TreeItem::Instance(_, _, _, inst)) => {
             // [I] badge for Instance - instant recognition
             format!("[I] {} ({})", inst.key, inst.kind_key)
@@ -492,7 +492,7 @@ fn get_detail_title(app: &App) -> String {
 fn build_info_lines(app: &App) -> Vec<Line<'static>> {
     // Use mode-aware item lookup (shows instances in Data mode)
     match app.current_item() {
-        Some(TreeItem::KindsSection) => {
+        Some(TreeItem::ClassesSection) => {
             let theme = &app.theme;
             let kind_count: usize = app
                 .tree
@@ -751,7 +751,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
 
             lines
         }
-        Some(TreeItem::Kind(realm, layer, kind)) => {
+        Some(TreeItem::Class(realm, layer, kind)) => {
             let theme = &app.theme;
 
             // Unified header: type, key, kind, realm, layer, trait (12-char labels)
@@ -1124,7 +1124,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
             )));
             lines
         }
-        Some(TreeItem::ArcKind(family, arc_kind)) => {
+        Some(TreeItem::ArcClass(family, arc_kind)) => {
             let mut lines = vec![
                 Line::from(vec![
                     Span::styled("type      ", STYLE_DIM),

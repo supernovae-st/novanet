@@ -612,29 +612,29 @@ mod tests {
             .generate(root)
             .expect("should generate arc schema cypher");
 
-        // v11.8: Count ArcClass nodes (114 total) — renamed from ArcClass
+        // v0.12.0: Count ArcClass nodes (115 total)
         let ac_merges = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Schema:ArcClass"))
             .count();
         assert_eq!(
-            ac_merges, 114,
-            "expected 114 ArcClass MERGE statements (v11.8: renamed from ArcClass)"
+            ac_merges, 115,
+            "expected 115 ArcClass MERGE statements (v0.12.0)"
         );
 
-        // HAS_ARC_CLASS relationships match ArcClass count (v11.8: renamed from HAS_ARC_CLASS)
+        // HAS_ARC_CLASS relationships match ArcClass count
         let has_ac = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_ARC_CLASS]"))
             .count();
-        assert_eq!(has_ac, 114, "expected 114 HAS_ARC_CLASS relationships");
+        assert_eq!(has_ac, 115, "expected 115 HAS_ARC_CLASS relationships");
 
         // IN_FAMILY relationships match ArcClass count
         let in_family = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_FAMILY]"))
             .count();
-        assert_eq!(in_family, 114, "expected 114 IN_FAMILY relationships");
+        assert_eq!(in_family, 115, "expected 115 IN_FAMILY relationships");
 
         // Family distribution (non-inverse counts)
         // Section 2 MATCH lines have ArcFamily first: "MATCH (af:ArcFamily ..."
@@ -654,10 +654,10 @@ mod tests {
         let generation = count_family("generation");
         let mining = count_family("mining");
 
-        // v11.4: Total arcs = 114 (ownership=45, semantic=42, localization=15, generation=12, mining=0)
+        // v0.12.0: Total arcs = 115 (ownership=47, semantic=41, localization=15, generation=11, mining=1)
         assert!(
-            ownership + localization + semantic + generation + mining == 114,
-            "family counts should sum to 114: o={ownership} l={localization} s={semantic} g={generation} m={mining}"
+            ownership + localization + semantic + generation + mining == 115,
+            "family counts should sum to 115: o={ownership} l={localization} s={semantic} g={generation} m={mining}"
         );
 
         // Spot checks — specific ArcClass nodes (v11.8: renamed from ArcClass)
@@ -687,8 +687,8 @@ mod tests {
             }
         }
 
-        // v11.8: Header reflects count (114 total ArcClass nodes — ADR-023)
-        assert!(cypher.contains("114 ArcClass nodes"));
+        // v0.12.0: Header reflects count (115 total ArcClass nodes)
+        assert!(cypher.contains("115 ArcClass nodes"));
     }
 
     /// Snapshot test for a minimal ArcSchema generator output.

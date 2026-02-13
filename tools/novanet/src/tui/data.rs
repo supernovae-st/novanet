@@ -146,7 +146,7 @@ pub enum ArcDirection {
 
 /// An ArcKind in the arcs tree.
 #[derive(Debug, Clone)]
-pub struct ArcKindInfo {
+pub struct ArcClassInfo {
     pub key: String,
     pub display_name: String,
     pub from_kind: String,
@@ -160,7 +160,7 @@ pub struct ArcKindInfo {
 pub struct ArcFamilyInfo {
     pub key: String,
     pub display_name: String,
-    pub arc_kinds: Vec<ArcKindInfo>,
+    pub arc_kinds: Vec<ArcClassInfo>,
     /// LLM context for this arc family (from taxonomy.yaml).
     pub llm_context: String,
 }
@@ -168,7 +168,7 @@ pub struct ArcFamilyInfo {
 /// A Kind in the taxonomy tree.
 #[derive(Debug, Clone)]
 #[allow(dead_code)] // schema_hint reserved for future use
-pub struct KindInfo {
+pub struct ClassInfo {
     pub key: String,
     pub display_name: String,
     pub description: String,
@@ -197,7 +197,7 @@ pub struct LayerInfo {
     pub key: String,
     pub display_name: String,
     pub color: String,
-    pub kinds: Vec<KindInfo>,
+    pub kinds: Vec<ClassInfo>,
     /// LLM context for this layer (from taxonomy.yaml).
     pub llm_context: String,
 }
@@ -309,7 +309,7 @@ pub struct Neo4jArc {
 
 /// Complete arc data for a Class, loaded from Neo4j.
 #[derive(Debug, Clone, Default)]
-pub struct KindArcsData {
+pub struct ClassArcsData {
     pub class_label: String,
     pub realm: String,
     pub layer: String,
@@ -327,7 +327,7 @@ pub struct ArcEndpoint {
 
 /// Complete details for an ArcKind, loaded from Neo4j.
 #[derive(Debug, Clone, Default)]
-pub struct ArcKindDetails {
+pub struct ArcClassDetails {
     pub display_name: String,
     pub description: String,
     pub family: String,
@@ -453,7 +453,7 @@ ORDER BY realm_key, layer_key, kind_key
             (
                 String,
                 String,
-                BTreeMap<String, (String, String, Vec<KindInfo>)>,
+                BTreeMap<String, (String, String, Vec<ClassInfo>)>,
             ),
         > = BTreeMap::new();
 
@@ -500,7 +500,7 @@ ORDER BY realm_key, layer_key, kind_key
             // v10: knowledge_tier (optional, only for knowledge-trait nodes)
             let knowledge_tier = row.opt_str("knowledge_tier");
 
-            let kind = KindInfo {
+            let kind = ClassInfo {
                 key: kind_key,
                 display_name: kind_display,
                 description: kind_desc,
@@ -734,7 +734,7 @@ ORDER BY family_key, arc_key
 "#;
 
         let rows = db.execute(cypher).await?;
-        let mut family_map: BTreeMap<String, (String, Vec<ArcKindInfo>)> = BTreeMap::new();
+        let mut family_map: BTreeMap<String, (String, Vec<ArcClassInfo>)> = BTreeMap::new();
 
         for row in rows {
             let family_key = row.str("family_key");
@@ -750,7 +750,7 @@ ORDER BY family_key, arc_key
                 continue;
             }
 
-            let arc_kind = ArcKindInfo {
+            let arc_kind = ArcClassInfo {
                 key: arc_key,
                 display_name: arc_display,
                 from_kind,
@@ -1115,7 +1115,7 @@ RETURN nodes, arcs, kinds, count(ak) AS arc_kinds
 
     /// Load arc relationships for a Class from Neo4j.
     /// Returns incoming and outgoing arcs with their families.
-    pub async fn load_class_arcs(db: &Db, class_label: &str) -> crate::Result<KindArcsData> {
+    pub async fn load_class_arcs(db: &Db, class_label: &str) -> crate::Result<ClassArcsData> {
         let cypher = r#"
 MATCH (c:Class {label: $classLabel})
 OPTIONAL MATCH (c)-[:IN_LAYER]->(l:Layer)
@@ -1182,7 +1182,7 @@ LIMIT 1
                 })
                 .collect();
 
-            Ok(KindArcsData {
+            Ok(ClassArcsData {
                 class_label: class,
                 realm,
                 layer,
@@ -1190,12 +1190,12 @@ LIMIT 1
                 outgoing,
             })
         } else {
-            Ok(KindArcsData::default())
+            Ok(ClassArcsData::default())
         }
     }
 
     /// Load ArcKind details from Neo4j (endpoints, family, cardinality).
-    pub async fn load_arc_kind_details(db: &Db, arc_key: &str) -> crate::Result<ArcKindDetails> {
+    pub async fn load_arc_kind_details(db: &Db, arc_key: &str) -> crate::Result<ArcClassDetails> {
         let cypher = r#"
 MATCH (ac:ArcClass {key: $arcKey})
 OPTIONAL MATCH (ac)-[:IN_FAMILY]->(af:ArcFamily)
@@ -1250,7 +1250,7 @@ LIMIT 1
                 layer: to_layer,
             });
 
-            Ok(ArcKindDetails {
+            Ok(ArcClassDetails {
                 display_name,
                 description,
                 family,
@@ -1260,7 +1260,7 @@ LIMIT 1
                 to_endpoint,
             })
         } else {
-            Ok(ArcKindDetails::default())
+            Ok(ArcClassDetails::default())
         }
     }
 
@@ -1858,7 +1858,7 @@ RETURN total,
 
         // Kinds section header
         if idx == cursor {
-            return Some(TreeItem::KindsSection);
+            return Some(TreeItem::ClassesSection);
         }
         idx += 1;
 
@@ -1879,7 +1879,7 @@ RETURN total,
                         if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
                             for kind in &layer.kinds {
                                 if idx == cursor {
-                                    return Some(TreeItem::Kind(realm, layer, kind));
+                                    return Some(TreeItem::Class(realm, layer, kind));
                                 }
                                 idx += 1;
 
@@ -1950,7 +1950,7 @@ RETURN total,
                 if !self.is_collapsed(&format!("family:{}", family.key)) {
                     for arc_kind in &family.arc_kinds {
                         if idx == cursor {
-                            return Some(TreeItem::ArcKind(family, arc_kind));
+                            return Some(TreeItem::ArcClass(family, arc_kind));
                         }
                         idx += 1;
                     }
@@ -2001,7 +2001,7 @@ RETURN total,
 
         // Kinds section header
         if idx == cursor {
-            return Some(TreeItem::KindsSection);
+            return Some(TreeItem::ClassesSection);
         }
         idx += 1;
 
@@ -2022,7 +2022,7 @@ RETURN total,
                         if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
                             for kind in &layer.kinds {
                                 if idx == cursor {
-                                    return Some(TreeItem::Kind(realm, layer, kind));
+                                    return Some(TreeItem::Class(realm, layer, kind));
                                 }
                                 idx += 1;
                             }
@@ -2048,7 +2048,7 @@ RETURN total,
                 if !self.is_collapsed(&format!("family:{}", family.key)) {
                     for arc_kind in &family.arc_kinds {
                         if idx == cursor {
-                            return Some(TreeItem::ArcKind(family, arc_kind));
+                            return Some(TreeItem::ArcClass(family, arc_kind));
                         }
                         idx += 1;
                     }
@@ -2142,7 +2142,7 @@ RETURN total,
 
         // Kinds section header
         if idx == cursor {
-            return Some(TreeItem::KindsSection);
+            return Some(TreeItem::ClassesSection);
         }
         idx += 1;
 
@@ -2172,7 +2172,7 @@ RETURN total,
                             // Only include matching kinds
                             for kind in layer.kinds.iter().filter(|k| k.trait_name == filter) {
                                 if idx == cursor {
-                                    return Some(TreeItem::Kind(realm, layer, kind));
+                                    return Some(TreeItem::Class(realm, layer, kind));
                                 }
                                 idx += 1;
                             }
@@ -2198,7 +2198,7 @@ RETURN total,
                 if !self.is_collapsed(&format!("family:{}", family.key)) {
                     for arc_kind in &family.arc_kinds {
                         if idx == cursor {
-                            return Some(TreeItem::ArcKind(family, arc_kind));
+                            return Some(TreeItem::ArcClass(family, arc_kind));
                         }
                         idx += 1;
                     }
@@ -2217,23 +2217,23 @@ RETURN total,
             self.item_at(cursor)
         };
         match item {
-            Some(TreeItem::KindsSection) => Some("kinds".to_string()),
+            Some(TreeItem::ClassesSection) => Some("kinds".to_string()),
             Some(TreeItem::ArcsSection) => Some("arcs".to_string()),
             Some(TreeItem::Realm(r)) => Some(format!("realm:{}", r.key)),
             Some(TreeItem::Layer(r, l)) => Some(format!("layer:{}:{}", r.key, l.key)),
             Some(TreeItem::ArcFamily(f)) => Some(format!("family:{}", f.key)),
             // In Data mode, Kind can be collapsed to hide instances
-            Some(TreeItem::Kind(_, _, k)) => Some(format!("kind:{}", k.key)),
+            Some(TreeItem::Class(_, _, k)) => Some(format!("kind:{}", k.key)),
             // EntityCategory can be collapsed to hide its instances
             Some(TreeItem::EntityCategory(_, _, _, cat)) => Some(format!("category:{}", cat.key)),
             // Leaf nodes can't be collapsed
-            Some(TreeItem::ArcKind(_, _)) | Some(TreeItem::Instance(_, _, _, _)) | None => None,
+            Some(TreeItem::ArcClass(_, _)) | Some(TreeItem::Instance(_, _, _, _)) | None => None,
         }
     }
 
     /// Find the cursor position of the parent item.
     /// Returns None if at root or no parent exists.
-    /// Hierarchy: Instance → EntityCategory → Kind → Layer → Realm → KindsSection
+    /// Hierarchy: Instance → EntityCategory → Kind → Layer → Realm → ClassesSection
     ///            ArcKind → ArcFamily → ArcsSection
     pub fn find_parent_cursor(&self, cursor: usize, data_mode: bool) -> Option<usize> {
         let current = if data_mode {
@@ -2244,16 +2244,16 @@ RETURN total,
 
         match current {
             // Section headers have no parent
-            Some(TreeItem::KindsSection) | Some(TreeItem::ArcsSection) | None => None,
+            Some(TreeItem::ClassesSection) | Some(TreeItem::ArcsSection) | None => None,
 
-            // Realm's parent is KindsSection (always at index 0)
+            // Realm's parent is ClassesSection (always at index 0)
             Some(TreeItem::Realm(_)) => Some(0),
 
             // Layer's parent is its Realm
             Some(TreeItem::Layer(realm, _)) => self.find_realm_cursor(&realm.key),
 
             // Kind's parent is its Layer
-            Some(TreeItem::Kind(realm, layer, _)) => self.find_layer_cursor(&realm.key, &layer.key),
+            Some(TreeItem::Class(realm, layer, _)) => self.find_layer_cursor(&realm.key, &layer.key),
 
             // EntityCategory's parent is its Kind (Entity)
             Some(TreeItem::EntityCategory(realm, layer, kind, _)) => {
@@ -2269,7 +2269,7 @@ RETURN total,
             Some(TreeItem::ArcFamily(_)) => self.find_arcs_section_cursor(),
 
             // ArcKind's parent is its ArcFamily
-            Some(TreeItem::ArcKind(family, _)) => self.find_family_cursor(&family.key),
+            Some(TreeItem::ArcClass(family, _)) => self.find_family_cursor(&family.key),
         }
     }
 
@@ -2278,7 +2278,7 @@ RETURN total,
         if self.is_collapsed("kinds") {
             return None; // Realm not visible
         }
-        let mut idx = 1; // Skip KindsSection
+        let mut idx = 1; // Skip ClassesSection
         for realm in &self.realms {
             if realm.key == realm_key {
                 return Some(idx);
@@ -2301,7 +2301,7 @@ RETURN total,
         if self.is_collapsed("kinds") {
             return None;
         }
-        let mut idx = 1; // Skip KindsSection
+        let mut idx = 1; // Skip ClassesSection
         for realm in &self.realms {
             idx += 1; // Realm
             if realm.key == realm_key {
@@ -2342,7 +2342,7 @@ RETURN total,
         if self.is_collapsed("kinds") {
             return None;
         }
-        let mut idx = 1; // Skip KindsSection
+        let mut idx = 1; // Skip ClassesSection
         for realm in &self.realms {
             idx += 1; // Realm
             if !self.is_collapsed(&format!("realm:{}", realm.key)) {
@@ -2373,7 +2373,7 @@ RETURN total,
 
     /// Find cursor position of ArcsSection.
     fn find_arcs_section_cursor(&self) -> Option<usize> {
-        let mut idx = 1; // Skip KindsSection
+        let mut idx = 1; // Skip ClassesSection
         if !self.is_collapsed("kinds") {
             for realm in &self.realms {
                 idx += 1;
@@ -2436,7 +2436,7 @@ RETURN total,
 
     /// Find a Kind by key, returns (Realm, Layer, Kind) refs.
     /// O(1) lookup using cached index (built once on load).
-    pub fn find_kind(&self, kind_key: &str) -> Option<(&RealmInfo, &LayerInfo, &KindInfo)> {
+    pub fn find_kind(&self, kind_key: &str) -> Option<(&RealmInfo, &LayerInfo, &ClassInfo)> {
         let (r_idx, l_idx, k_idx) = self.kind_index.get(kind_key)?;
         let realm = self.realms.get(*r_idx)?;
         let layer = realm.layers.get(*l_idx)?;
@@ -2456,7 +2456,7 @@ RETURN total,
         let total_realms = self.realms.len();
 
         match item {
-            None | Some(TreeItem::KindsSection) | Some(TreeItem::ArcsSection) => {
+            None | Some(TreeItem::ClassesSection) | Some(TreeItem::ArcsSection) => {
                 HierarchyPosition::default()
             }
             Some(TreeItem::Realm(realm)) => {
@@ -2490,7 +2490,7 @@ RETURN total,
                     ..Default::default()
                 }
             }
-            Some(TreeItem::Kind(realm, layer, kind)) => {
+            Some(TreeItem::Class(realm, layer, kind)) => {
                 let realm_idx = self
                     .realms
                     .iter()
@@ -2574,7 +2574,7 @@ RETURN total,
                     ..Default::default()
                 }
             }
-            Some(TreeItem::ArcFamily(_)) | Some(TreeItem::ArcKind(_, _)) => {
+            Some(TreeItem::ArcFamily(_)) | Some(TreeItem::ArcClass(_, _)) => {
                 // Arcs section - no realm/layer/kind hierarchy
                 HierarchyPosition::default()
             }
@@ -2586,24 +2586,24 @@ RETURN total,
 #[derive(Debug, Clone)]
 pub enum TreeItem<'a> {
     // Section headers
-    KindsSection,
+    ClassesSection,
     ArcsSection,
-    // Kinds hierarchy
+    // Classes hierarchy
     Realm(&'a RealmInfo),
     Layer(&'a RealmInfo, &'a LayerInfo),
-    Kind(&'a RealmInfo, &'a LayerInfo, &'a KindInfo),
+    Class(&'a RealmInfo, &'a LayerInfo, &'a ClassInfo),
     // Arcs hierarchy
     ArcFamily(&'a ArcFamilyInfo),
-    ArcKind(&'a ArcFamilyInfo, &'a ArcKindInfo),
-    // Data view: Entity categories (between Kind and instances for Entity only)
+    ArcClass(&'a ArcFamilyInfo, &'a ArcClassInfo),
+    // Data view: Entity categories (between Class and instances for Entity only)
     EntityCategory(
         &'a RealmInfo,
         &'a LayerInfo,
-        &'a KindInfo,
+        &'a ClassInfo,
         &'a EntityCategory,
     ),
-    // Data view: instances under Kinds (or under EntityCategory for Entity)
-    Instance(&'a RealmInfo, &'a LayerInfo, &'a KindInfo, &'a InstanceInfo),
+    // Data view: instances under Classes (or under EntityCategory for Entity)
+    Instance(&'a RealmInfo, &'a LayerInfo, &'a ClassInfo, &'a InstanceInfo),
 }
 
 /// Hierarchical position info for compact display in tree title.
@@ -2762,7 +2762,7 @@ impl TaxonomyTree {
     ///
     /// Empty arc_families and default stats.
     pub fn mock_for_testing() -> Self {
-        let app_config = KindInfo {
+        let app_config = ClassInfo {
             key: "AppConfig".to_string(),
             display_name: "App Config".to_string(),
             description: "Application configuration".to_string(),
@@ -2780,7 +2780,7 @@ impl TaxonomyTree {
             issues_count: None,
         };
 
-        let entity = KindInfo {
+        let entity = ClassInfo {
             key: "Entity".to_string(),
             display_name: "Entity".to_string(),
             description: "Foundation entity".to_string(),
@@ -2914,8 +2914,8 @@ mod tests {
     // Helper functions for creating test data
     // ========================================================================
 
-    fn create_test_kind(key: &str, display_name: &str) -> KindInfo {
-        KindInfo {
+    fn create_test_kind(key: &str, display_name: &str) -> ClassInfo {
+        ClassInfo {
             key: key.to_string(),
             display_name: display_name.to_string(),
             description: String::new(),
@@ -2934,7 +2934,7 @@ mod tests {
         }
     }
 
-    fn create_test_layer(key: &str, kinds: Vec<KindInfo>) -> LayerInfo {
+    fn create_test_layer(key: &str, kinds: Vec<ClassInfo>) -> LayerInfo {
         LayerInfo {
             key: key.to_string(),
             display_name: key.to_string(),
