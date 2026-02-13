@@ -183,31 +183,8 @@ fn generate_autowire(nodes: &[yaml_node::ParsedNode]) -> crate::Result<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::generators::test_utils::make_node_simple as make_node;
     use crate::generators::Generator;
-    use crate::parsers::yaml_node::{NodeDef, NodeTrait, ParsedNode};
-
-    fn make_node(name: &str, realm: &str, layer: &str) -> ParsedNode {
-        ParsedNode {
-            def: NodeDef {
-                name: name.to_string(),
-                realm: realm.to_string(),
-                layer: layer.to_string(),
-                node_trait: NodeTrait::Invariant,
-                knowledge_tier: None,
-                icon: None,
-                description: "test".to_string(),
-                standard_properties: None,
-                properties: None,
-                neo4j: None,
-                example: None,
-            },
-            realm: realm.to_string(),
-            layer: layer.to_string(),
-            source_path: std::path::PathBuf::from(format!(
-                "models/node-kinds/{realm}/{layer}/{name}.yaml"
-            )),
-        }
-    }
 
     #[test]
     fn generate_small_autowire() {

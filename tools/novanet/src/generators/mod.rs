@@ -23,6 +23,8 @@ pub mod mermaid;
 pub mod node_kind;
 pub mod organizing;
 pub mod slugification;
+#[cfg(test)]
+pub mod test_utils;
 pub mod tui_icons;
 pub mod view_mermaid;
 pub mod views;

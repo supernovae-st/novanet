@@ -372,24 +372,9 @@ fn wrap_view_markdown(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::parsers::arcs::{ArcDef, ArcFamily, Cardinality, NodeRef};
+    use crate::generators::test_utils::make_rel;
+    use crate::parsers::arcs::{ArcFamily, Cardinality, NodeRef};
     use crate::parsers::views::{Direction, IncludeRule, RootDef, ViewDef};
-
-    fn make_rel(rel_type: &str, family: ArcFamily, source: &str, target: &str) -> ArcDef {
-        ArcDef {
-            arc_type: rel_type.to_string(),
-            family,
-            scope: None,
-            source: NodeRef::Single(source.to_string()),
-            target: NodeRef::Single(target.to_string()),
-            cardinality: Cardinality::OneToMany,
-            llm_context: format!("{rel_type} context"),
-            properties: None,
-            is_self_referential: None,
-            inverse_of: None,
-            inverse_name: None,
-        }
-    }
 
     fn make_view(root_type: &str, rules: Vec<IncludeRule>) -> ViewDef {
         ViewDef {
