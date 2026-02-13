@@ -198,7 +198,7 @@ impl NexusTab {
 // LOCALE (i18n)
 // =============================================================================
 
-/// Language for Nexus content (toggle with Shift+L).
+/// Language for Nexus content (toggle with Shift+I).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum NexusLocale {
     /// English (default)
@@ -240,7 +240,7 @@ pub struct NexusState {
     /// Currently active tab.
     pub tab: NexusTab,
 
-    /// Current locale for i18n (toggle with Shift+L).
+    /// Current locale for i18n (toggle with Shift+I).
     pub locale: NexusLocale,
 
     // === LEARN Section State ===
@@ -595,7 +595,11 @@ impl NexusState {
             // LEARN section
             NexusTab::Intro => {
                 // Yank the current page title
-                let titles = ["What is NovaNet?", "Meta vs Data Nodes", "Classification Axes"];
+                let titles = [
+                    "What is NovaNet?",
+                    "Meta vs Data Nodes",
+                    "Classification Axes",
+                ];
                 titles.get(self.intro_page).map(|s| s.to_string())
             }
             NexusTab::Glossary => {
@@ -708,8 +712,8 @@ impl NexusState {
     /// Navigate to previous section (LEARN ← EXPLORE ← PRACTICE ← LEARN).
     fn prev_section(&mut self) -> bool {
         let target_tab = match self.tab.section() {
-            "LEARN" => NexusTab::Pipeline, // ← PRACTICE (wrap)
-            "EXPLORE" => NexusTab::Intro,  // ← LEARN
+            "LEARN" => NexusTab::Pipeline,  // ← PRACTICE (wrap)
+            "EXPLORE" => NexusTab::Intro,   // ← LEARN
             "PRACTICE" => NexusTab::Traits, // ← EXPLORE
             _ => return false,
         };
@@ -1064,7 +1068,10 @@ impl NexusState {
             NexusTab::Intro => {
                 let page = self.intro_page + 1;
                 let total = intro::INTRO_PAGES;
-                format!("Nexus > {} > {} > Page {}/{}", section, tab_name, page, total)
+                format!(
+                    "Nexus > {} > {} > Page {}/{}",
+                    section, tab_name, page, total
+                )
             }
             NexusTab::Glossary => {
                 if self.glossary.search_active {
@@ -1086,7 +1093,10 @@ impl NexusState {
                 if self.tutorial.complete {
                     format!("Nexus > {} > {} > Complete!", section, tab_name)
                 } else {
-                    format!("Nexus > {} > {} > Step {}/{}", section, tab_name, step, total)
+                    format!(
+                        "Nexus > {} > {} > Step {}/{}",
+                        section, tab_name, step, total
+                    )
                 }
             }
             // EXPLORE section
@@ -1148,7 +1158,8 @@ impl NexusState {
                 } else {
                     format!(
                         "Nexus > {} > {} > Q{}/{}",
-                        section, tab_name,
+                        section,
+                        tab_name,
                         self.quiz.current_question + 1,
                         total
                     )
@@ -1160,7 +1171,13 @@ impl NexusState {
                 } else {
                     let cat = self.views.current_category();
                     if let Some(view) = self.views.current_view() {
-                        format!("Nexus > {} > {} > {} > {}", section, tab_name, cat.label(), view.name)
+                        format!(
+                            "Nexus > {} > {} > {} > {}",
+                            section,
+                            tab_name,
+                            cat.label(),
+                            view.name
+                        )
                     } else {
                         format!("Nexus > {} > {} > {}", section, tab_name, cat.label())
                     }
@@ -1194,71 +1211,27 @@ impl NexusState {
         // Display: ↑/↓=vertical, ←/→=horizontal, Enter=action
         // Silent alternatives: hjkl, Space (handled in key processing)
         match self.tab {
-            NexusTab::Intro => vec![
-                ("←/→", "page"),
-                ("Enter", "next"),
-                ("y", "copy"),
-            ],
-            NexusTab::Glossary => vec![
-                ("↑/↓", "nav"),
-                ("Enter", "expand"),
-                ("y", "copy"),
-            ],
-            NexusTab::Tutorial => vec![
-                ("↑/↓", "task"),
-                ("Enter", "done"),
-                ("r", "reset"),
-            ],
+            NexusTab::Intro => vec![("←/→", "page"), ("Enter", "next"), ("y", "copy")],
+            NexusTab::Glossary => vec![("↑/↓", "nav"), ("Enter", "expand"), ("y", "copy")],
+            NexusTab::Tutorial => vec![("↑/↓", "task"), ("Enter", "done"), ("r", "reset")],
             NexusTab::Traits => {
                 if self.drill_depth > 0 {
-                    vec![
-                        ("↑/↓", "nav"),
-                        ("Enter", "select"),
-                        ("Esc", "back"),
-                    ]
+                    vec![("↑/↓", "nav"), ("Enter", "select"), ("Esc", "back")]
                 } else {
-                    vec![
-                        ("↑/↓", "trait"),
-                        ("Enter", "drill"),
-                        ("y", "copy"),
-                    ]
+                    vec![("↑/↓", "trait"), ("Enter", "drill"), ("y", "copy")]
                 }
             }
-            NexusTab::Layers => vec![
-                ("←/→", "realm"),
-                ("↑/↓", "layer"),
-                ("y", "copy"),
-            ],
-            NexusTab::Arcs => vec![
-                ("↑/↓", "family"),
-                ("Enter", "detail"),
-                ("y", "copy"),
-            ],
-            NexusTab::Pipeline => vec![
-                ("↑/↓", "stage"),
-                ("Enter", "play"),
-                ("r", "reset"),
-            ],
+            NexusTab::Layers => vec![("←/→", "realm"), ("↑/↓", "layer"), ("y", "copy")],
+            NexusTab::Arcs => vec![("↑/↓", "family"), ("Enter", "detail"), ("y", "copy")],
+            NexusTab::Pipeline => vec![("↑/↓", "stage"), ("Enter", "play"), ("r", "reset")],
             NexusTab::Quiz => {
                 if self.quiz.answered {
-                    vec![
-                        ("Enter", "next"),
-                        ("r", "restart"),
-                        ("y", "copy"),
-                    ]
+                    vec![("Enter", "next"), ("r", "restart"), ("y", "copy")]
                 } else {
-                    vec![
-                        ("↑/↓", "option"),
-                        ("Enter", "submit"),
-                        ("←/→", "hint"),
-                    ]
+                    vec![("↑/↓", "option"), ("Enter", "submit"), ("←/→", "hint")]
                 }
             }
-            NexusTab::Views => vec![
-                ("↑/↓", "view"),
-                ("Enter", "detail"),
-                ("y", "copy"),
-            ],
+            NexusTab::Views => vec![("↑/↓", "view"), ("Enter", "detail"), ("y", "copy")],
         }
     }
 }
@@ -1309,9 +1282,18 @@ fn render_tab_bar(f: &mut Frame, area: Rect, app: &App) {
 
     // Section definitions: (name, tabs)
     let sections = [
-        ("LEARN", vec![NexusTab::Intro, NexusTab::Glossary, NexusTab::Tutorial]),
-        ("EXPLORE", vec![NexusTab::Traits, NexusTab::Layers, NexusTab::Arcs]),
-        ("PRACTICE", vec![NexusTab::Pipeline, NexusTab::Quiz, NexusTab::Views]),
+        (
+            "LEARN",
+            vec![NexusTab::Intro, NexusTab::Glossary, NexusTab::Tutorial],
+        ),
+        (
+            "EXPLORE",
+            vec![NexusTab::Traits, NexusTab::Layers, NexusTab::Arcs],
+        ),
+        (
+            "PRACTICE",
+            vec![NexusTab::Pipeline, NexusTab::Quiz, NexusTab::Views],
+        ),
     ];
 
     let mut spans: Vec<Span> = Vec::new();
@@ -1328,7 +1310,10 @@ fn render_tab_bar(f: &mut Frame, area: Rect, app: &App) {
         } else {
             Style::default().fg(Color::Rgb(100, 100, 110))
         };
-        spans.push(Span::styled(format!("{} {} ", indicator, name), section_style));
+        spans.push(Span::styled(
+            format!("{} {} ", indicator, name),
+            section_style,
+        ));
 
         // Tab names within section (only show if current section)
         if is_current_section {
@@ -1349,7 +1334,10 @@ fn render_tab_bar(f: &mut Frame, area: Rect, app: &App) {
 
         // Section separator (except for last section)
         if i < sections.len() - 1 {
-            spans.push(Span::styled(" │ ", Style::default().fg(COLOR_UNFOCUSED_BORDER)));
+            spans.push(Span::styled(
+                " │ ",
+                Style::default().fg(COLOR_UNFOCUSED_BORDER),
+            ));
         }
     }
 

@@ -37,3 +37,16 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 
 # Testing
 tokio-test = "0.4"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Profiles (must be at workspace root, ignored in member crates)
+# ─────────────────────────────────────────────────────────────────────────────
+
+[profile.release]
+strip = true                  # Strip symbols (smaller binary)
+lto = "thin"                  # Link-time optimization
+codegen-units = 1             # Better optimization
+opt-level = 3
+
+[profile.dev.package."*"]
+opt-level = 2                 # Optimize deps in dev mode (faster builds)

@@ -39,6 +39,7 @@ impl FacetFilter {
     /// assert_eq!(f.layers, vec!["knowledge"]);
     /// assert!(f.trait_filters.is_empty());
     /// ```
+    #[must_use]
     pub fn from_cli(
         realm: Option<&str>,
         layer: Option<&str>,
@@ -62,6 +63,7 @@ impl FacetFilter {
     }
 
     /// Whether all facets are empty (no filters active).
+    #[must_use]
     pub fn is_empty(&self) -> bool {
         self.realms.is_empty()
             && self.layers.is_empty()
@@ -71,6 +73,7 @@ impl FacetFilter {
     }
 
     /// Count of active facet axes (0–5).
+    #[must_use]
     pub fn active_count(&self) -> usize {
         [
             !self.realms.is_empty(),

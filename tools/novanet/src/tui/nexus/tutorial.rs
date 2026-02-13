@@ -184,7 +184,9 @@ pub static STEPS: [TutorialStep; 5] = [
             },
             TutorialTask {
                 description: "Identify the 6 stages of generation",
-                hint: Some("Knowledge -> Entity -> Structure -> Instructions -> Generation -> Output"),
+                hint: Some(
+                    "Knowledge -> Entity -> Structure -> Instructions -> Generation -> Output",
+                ),
             },
             TutorialTask {
                 description: "Understand why 'knowledge' comes FIRST",
@@ -423,9 +425,10 @@ fn render_progress_bar(f: &mut Frame, tutorial: &TutorialState, locale: NexusLoc
     };
 
     // Build progress indicators
-    let mut spans = vec![
-        Span::styled(journey_label, Style::default().fg(Color::Magenta)),
-    ];
+    let mut spans = vec![Span::styled(
+        journey_label,
+        Style::default().fg(Color::Magenta),
+    )];
 
     for i in 0..TUTORIAL_STEPS {
         let status = tutorial.step_status(i);
@@ -479,18 +482,30 @@ fn render_step_content(f: &mut Frame, app: &App, area: Rect) {
     let i18n_step = i18n_steps.get(step_idx);
 
     // Get title and description from i18n
-    let title = i18n_step.map(|s| s.title).unwrap_or_else(|| {
-        STEPS.get(step_idx).map(|s| s.title).unwrap_or("Unknown")
-    });
-    let description = i18n_step.map(|s| s.description).unwrap_or_else(|| {
-        STEPS.get(step_idx).map(|s| s.objective).unwrap_or("")
-    });
+    let title = i18n_step
+        .map(|s| s.title)
+        .unwrap_or_else(|| STEPS.get(step_idx).map(|s| s.title).unwrap_or("Unknown"));
+    let description = i18n_step
+        .map(|s| s.description)
+        .unwrap_or_else(|| STEPS.get(step_idx).map(|s| s.objective).unwrap_or(""));
     let i18n_tasks = i18n_step.map(|s| s.tasks).unwrap_or(&[]);
 
     // Labels based on locale
     let (goal_label, insight_label, try_label, hint_prefix, nav_hint) = match locale {
-        NexusLocale::En => ("GOAL: ", "THE KEY INSIGHT", "TRY IT", "Hint: ", "Press [1-3] to toggle task completion, [Enter] to mark step complete"),
-        NexusLocale::Fr => ("OBJECTIF : ", "L'IDÉE CLÉ", "ESSAYEZ", "Astuce : ", "Appuyez [1-3] pour cocher, [Entrée] pour terminer l'étape"),
+        NexusLocale::En => (
+            "GOAL: ",
+            "THE KEY INSIGHT",
+            "TRY IT",
+            "Hint: ",
+            "Press [1-3] to toggle task completion, [Enter] to mark step complete",
+        ),
+        NexusLocale::Fr => (
+            "OBJECTIF : ",
+            "L'IDÉE CLÉ",
+            "ESSAYEZ",
+            "Astuce : ",
+            "Appuyez [1-3] pour cocher, [Entrée] pour terminer l'étape",
+        ),
     };
 
     let block = Block::default()
@@ -569,9 +584,9 @@ fn render_step_content(f: &mut Frame, app: &App, area: Rect) {
         .unwrap_or_default();
 
     // Use i18n tasks if available, otherwise fall back to STEPS
-    let task_count = i18n_tasks.len().max(
-        STEPS.get(step_idx).map(|s| s.tasks.len()).unwrap_or(0)
-    );
+    let task_count = i18n_tasks
+        .len()
+        .max(STEPS.get(step_idx).map(|s| s.tasks.len()).unwrap_or(0));
 
     for i in 0..task_count {
         let is_complete = task_completions.get(i).copied().unwrap_or(false);
@@ -584,7 +599,8 @@ fn render_step_content(f: &mut Frame, app: &App, area: Rect) {
 
         // Get task description from i18n or fallback
         let task_desc = i18n_tasks.get(i).copied().unwrap_or_else(|| {
-            STEPS.get(step_idx)
+            STEPS
+                .get(step_idx)
                 .and_then(|s| s.tasks.get(i))
                 .map(|t| t.description)
                 .unwrap_or("Task")
@@ -626,10 +642,25 @@ fn render_step_content(f: &mut Frame, app: &App, area: Rect) {
 /// Render navigation hint at the bottom.
 fn render_navigation(f: &mut Frame, tutorial: &TutorialState, locale: NexusLocale, area: Rect) {
     // i18n labels
-    let (prev_label, next_label, complete_label, finish_label, reset_label, graph_label) = match locale {
-        NexusLocale::En => ("[p: previous]", "[n: next step]", "[Complete!]", "[Finish tasks to complete]", "[r: reset]", "[1: Graph mode]"),
-        NexusLocale::Fr => ("[p: précédent]", "[n: suivant]", "[Terminé !]", "[Finir les tâches]", "[r: réinit.]", "[1: mode Graphe]"),
-    };
+    let (prev_label, next_label, complete_label, finish_label, reset_label, graph_label) =
+        match locale {
+            NexusLocale::En => (
+                "[p: previous]",
+                "[n: next step]",
+                "[Complete!]",
+                "[Finish tasks to complete]",
+                "[r: reset]",
+                "[1: Graph mode]",
+            ),
+            NexusLocale::Fr => (
+                "[p: précédent]",
+                "[n: suivant]",
+                "[Terminé !]",
+                "[Finir les tâches]",
+                "[r: réinit.]",
+                "[1: mode Graphe]",
+            ),
+        };
 
     let prev = if tutorial.current_step > 0 {
         prev_label
@@ -656,7 +687,10 @@ fn render_navigation(f: &mut Frame, tutorial: &TutorialState, locale: NexusLocal
         Span::styled(prev, Style::default().fg(Color::DarkGray)),
         Span::styled("  ", Style::default()),
         Span::styled(next, Style::default().fg(Color::Green)),
-        Span::styled(format!("  {reset_label}  {graph_label}  "), Style::default().fg(Color::DarkGray)),
+        Span::styled(
+            format!("  {reset_label}  {graph_label}  "),
+            Style::default().fg(Color::DarkGray),
+        ),
         Span::styled(progress_bar, Style::default().fg(Color::Cyan)),
     ]);
 
