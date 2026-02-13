@@ -366,11 +366,11 @@ fn render_realm_trait_distribution(f: &mut Frame, area: Rect, app: &App) {
     // Build bars with trait colors
     // v11.8: Renamed per ADR-024 Data Origin semantics
     let trait_colors: [(&str, Color); 5] = [
-        ("defined", Color::Rgb(38, 139, 210)),     // Blue (was: invariant)
-        ("authored", Color::Rgb(211, 54, 130)),    // Magenta (was: localized)
-        ("imported", Color::Rgb(181, 137, 0)),     // Yellow (was: knowledge)
-        ("generated", Color::Rgb(133, 153, 0)),    // Green
-        ("retrieved", Color::Rgb(108, 113, 196)),  // Violet (was: aggregated)
+        ("defined", Color::Rgb(38, 139, 210)),  // Blue (was: invariant)
+        ("authored", Color::Rgb(211, 54, 130)), // Magenta (was: localized)
+        ("imported", Color::Rgb(181, 137, 0)),  // Yellow (was: knowledge)
+        ("generated", Color::Rgb(133, 153, 0)), // Green
+        ("retrieved", Color::Rgb(108, 113, 196)), // Violet (was: aggregated)
     ];
 
     let bars: Vec<Bar> = trait_colors

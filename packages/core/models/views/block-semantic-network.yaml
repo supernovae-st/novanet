@@ -2,13 +2,13 @@
 id: block-semantic-network
 name: Spreading Activation
 description: Block with concepts and spreading activation (2 hops)
-version: "8.0.0"
+version: "11.8.0"
 
 root:
   type: Block
 
 include:
-  - relation: HAS_PROMPT
+  - relation: HAS_INSTRUCTION
     direction: outgoing
     filters:
       active: true
@@ -42,7 +42,7 @@ docs:
 
   layers:
     - name: Block Layer
-      nodes: [Block, BlockPrompt]
+      nodes: [Block, BlockInstruction]
       color: blue
       description: Starting point for activation
 

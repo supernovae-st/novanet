@@ -54,7 +54,7 @@ const NODE_DIMENSIONS: Record<string, { width: number; height: number }> = {
   // Structural nodes - medium sized cards
   Page: { width: 240, height: 140 },
   Locale: { width: 230, height: 130 },
-  Entity: { width: 225, height: 130 }, // v10.3: was Concept
+  Entity: { width: 225, height: 130 },
   Block: { width: 205, height: 120 },
   BlockType: { width: 195, height: 115 },
   BrandIdentity: { width: 210, height: 120 },
@@ -76,8 +76,8 @@ const NODE_DIMENSIONS: Record<string, { width: number; height: number }> = {
   AudienceSet: { width: 105, height: 105 },
 
   // Generation nodes
-  PagePrompt: { width: 200, height: 110 },
-  BlockPrompt: { width: 190, height: 105 },
+  PageInstruction: { width: 200, height: 110 },
+  BlockInstruction: { width: 190, height: 105 },
   BlockRules: { width: 190, height: 105 },
   PageOutput: { width: 200, height: 110 },
   BlockOutput: { width: 190, height: 105 },

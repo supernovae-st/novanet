@@ -74,8 +74,8 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   TYPE_OF: 'typeEntity',
   VARIANT_OF: 'variantEntity',
   ALTERNATIVE_TO: 'alternativeEntity',
-  // Prompts
-  HAS_PROMPT: 'prompt',
+  // Instructions
+  HAS_INSTRUCTION: 'instruction',
   HAS_RULES: 'rules',
   // Output
   HAS_GENERATED: 'generated',
@@ -113,7 +113,7 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   FOR_LOCALE: 'forLocale',
   // Metrics
   HAS_METRICS: 'metrics',
-  // Legacy (deprecated but kept for compatibility)
+  // Legacy mappings
   HAS_ADAPTATION: 'adaptation',
   HAS_STYLE: 'style',
   HAS_TERMS: 'terms',
@@ -229,9 +229,9 @@ export class NovaNetFilter {
     return this;
   }
 
-  includePrompts(opts?: { activeOnly?: boolean }): this {
+  includeInstructions(opts?: { activeOnly?: boolean }): this {
     const rule: IncludeRule = {
-      relation: 'HAS_PROMPT',
+      relation: 'HAS_INSTRUCTION',
       direction: 'outgoing',
     };
     if (opts?.activeOnly) {
@@ -597,19 +597,19 @@ export const VIEW_PRESETS: ViewPreset[] = [
   {
     id: 'defined-types',
     name: 'Defined Types',
-    description: 'Structurally fixed schema definitions (v11.8: was invariant)',
+    description: 'Structurally fixed schema definitions',
     icon: '🔒',
     shortcut: '7',
     filter: () => NovaNetFilter.create()
       .byTypes(
         'Locale', 'Project', 'BrandIdentity', 'Page', 'Block', 'Entity',
-        'PageType', 'BlockType', 'PagePrompt', 'BlockPrompt', 'BlockRules',
+        'PageStructure', 'BlockType', 'PageInstruction', 'BlockInstruction', 'BlockRules',
       ),
   },
   {
     id: 'authored-content',
     name: 'Authored Content',
-    description: 'Human-authored locale-specific content (v11.8: was localized)',
+    description: 'Human-authored locale-specific content',
     icon: '🌐',
     shortcut: '8',
     filter: () => NovaNetFilter.create()

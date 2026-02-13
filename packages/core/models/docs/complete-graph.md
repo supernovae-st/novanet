@@ -6,15 +6,15 @@
 
 This diagram shows the complete NovaNet graph schema with all 42 node types and their relationships.
 
-### Legend
+### Legend (ADR-024)
 
 | Color | Trait | Description |
 |-------|-------|-------------|
-| 🔵 Blue | Invariant | Nodes that don't change between locales |
-| 🟢 Green | Localized | Nodes with locale-specific content |
-| 🟣 Purple | Knowledge | Cultural/linguistic knowledge per locale |
-| ⚪ Gray | Derived | Computed/aggregated data |
-| ⚙️ Gray | Job | Background processing tasks |
+| 🔵 Blue | Defined | Nodes that don't change between locales |
+| 🟢 Green | Authored | Nodes with locale-specific content |
+| 🟣 Purple | Imported | Cultural/linguistic knowledge per locale |
+| 🌟 Gold | Generated | LLM-generated output |
+| ⚪ Gray | Retrieved | Computed/retrieved data |
 
 ### Realms
 
@@ -26,7 +26,7 @@ This diagram shows the complete NovaNet graph schema with all 42 node types and 
 ```mermaid
 flowchart TB
   %% NovaNet Graph v0.12.0
-  %% Generated: 60 nodes, 158 arcs
+  %% Generated: 59 nodes, 153 arcs
   %% Source: node-kinds/ + arc-kinds/ + taxonomy.yaml
 
   %% Trait styling (node_trait)
@@ -110,11 +110,10 @@ flowchart TB
     end
     subgraph ORG_instruction["Instructions"]
       BlockInstruction["🔵 BlockInstruction"]
-      BlockPrompt["🔵 BlockPrompt"]
       BlockRules["🔵 BlockRules"]
       BlockType["🔵 BlockType"]
-      PagePrompt["🔵 PagePrompt"]
-      PageType["🔵 PageType"]
+      PageInstruction["🔵 PageInstruction"]
+      PageStructure["🔵 PageStructure"]
       PromptArtifact["🌟 PromptArtifact"]
     end
     subgraph ORG_output["Generated Output"]
@@ -130,10 +129,8 @@ flowchart TB
   Block -.->|FILLS_SLOT| ContentSlot
   Block ==>|HAS_GENERATED| BlockGenerated
   Block ==>|HAS_GENERATED| PageGenerated
-  Block -->|HAS_PROMPT| BlockPrompt
-  Block -->|HAS_PROMPT| PagePrompt
+  Block -->|HAS_INSTRUCTION| BlockInstruction
   Block -->|OF_TYPE| BlockType
-  Block -->|OF_TYPE| PageType
   Block -.->|TARGETS_PERSONA| AudiencePersona
   Block -.->|USES_ENTITY| Entity
   BlockGenerated -.->|FOR_CHANNEL| ChannelSurface
@@ -146,11 +143,11 @@ flowchart TB
   BlockGenerated ==>|PREVIOUS_VERSION| BlockGenerated
   BlockGenerated ==>|PREVIOUS_VERSION| OutputArtifact
   BlockGenerated ==>|PREVIOUS_VERSION| PageGenerated
+  BlockInstruction ==>|GENERATED| BlockGenerated
+  BlockInstruction ==>|GENERATED| PageGenerated
+  BlockInstruction ==>|INCLUDES_STYLE| Style
   BlockInstruction -.->|REFERENCES_ENTITY| Entity
   BlockInstruction -.->|REFERENCES_PAGE| Page
-  BlockPrompt ==>|GENERATED| BlockGenerated
-  BlockPrompt ==>|GENERATED| PageGenerated
-  BlockPrompt ==>|INCLUDES_STYLE| Style
   BlockType -->|HAS_RULES| BlockRules
   ContentSlot -->|ACCEPTS_BLOCK_TYPE| BlockType
   CulturalSubRealm -->|PART_OF_REALM| CulturalRealm
@@ -236,12 +233,9 @@ flowchart TB
   Page ==>|HAS_GENERATED| BlockGenerated
   Page ==>|HAS_GENERATED| PageGenerated
   Page -->|HAS_INSTRUCTION| BlockInstruction
-  Page -->|HAS_PROMPT| BlockPrompt
-  Page -->|HAS_PROMPT| PagePrompt
   Page -->|HAS_SLOT| ContentSlot
+  Page -->|HAS_STRUCTURE| PageStructure
   Page -.->|LINKS_TO| Page
-  Page -->|OF_TYPE| BlockType
-  Page -->|OF_TYPE| PageType
   Page -.->|SUBTOPIC_OF| Page
   Page -.->|TARGETS_PERSONA| AudiencePersona
   Page -.->|USES_ENTITY| Entity
@@ -254,9 +248,9 @@ flowchart TB
   PageGenerated ==>|PREVIOUS_VERSION| BlockGenerated
   PageGenerated ==>|PREVIOUS_VERSION| OutputArtifact
   PageGenerated ==>|PREVIOUS_VERSION| PageGenerated
-  PagePrompt ==>|GENERATED| BlockGenerated
-  PagePrompt ==>|GENERATED| PageGenerated
-  PagePrompt ==>|INCLUDES_STYLE| Style
+  PageInstruction ==>|GENERATED| BlockGenerated
+  PageInstruction ==>|GENERATED| PageGenerated
+  PageInstruction ==>|INCLUDES_STYLE| Style
   PatternSet -->|CONTAINS_PATTERN| Pattern
   PopulationSubCluster -->|CLUSTER_OF| PopulationCluster
   Project -->|BELONGS_TO_ORG| OrgConfig
@@ -270,8 +264,8 @@ flowchart TB
   ProjectContent -.->|CONTENT_OF| Entity
   ProjectContent -.->|CONTENT_OF| Project
   ProjectContent -.->|FOR_LOCALE| Locale
-  PromptArtifact ==>|COMPILED_FROM| BlockPrompt
-  PromptArtifact ==>|COMPILED_FROM| PagePrompt
+  PromptArtifact ==>|COMPILED_FROM| BlockInstruction
+  PromptArtifact ==>|COMPILED_FROM| PageInstruction
   PromptArtifact ==>|INCLUDES_ENTITY| Entity
   SEOKeyword -.->|COMPARES_A| Entity
   SEOKeyword -.->|COMPARES_B| Entity
@@ -285,11 +279,11 @@ flowchart TB
   TermSet -->|CONTAINS_TERM| Term
 
   %% Arc colors by family
-  linkStyle 3,4,13,14,15,17,18,19,20,23,24,25,101,102,104,105,106,108,109,120,124,125,126,127,128,129,130,131,145,146,147 stroke:#8b5cf6,stroke-width:2px
-  linkStyle 12,16,41,42,60,61,62,72,80,81,82,83,84,85,88,89,95,96,97,98,99,103,123,137,138,142,143,144 stroke:#22c55e,stroke-width:2px
-  linkStyle 152 stroke:#ec4899,stroke-width:2px
-  linkStyle 0,1,5,6,7,8,26,27,28,29,40,65,66,67,68,69,70,73,74,75,76,77,78,79,86,87,90,91,92,93,94,100,107,110,111,112,113,115,116,121,132,133,134,135,136,139,140,141,151,155,156,157 stroke:#3b82f6,stroke-width:2px
-  linkStyle 2,9,10,11,21,22,30,31,32,33,34,35,36,37,38,39,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,63,64,71,114,117,118,119,122,148,149,150,153,154 stroke:#f97316,stroke-width:2px
+  linkStyle 3,4,11,12,13,15,16,17,18,19,20,21,99,100,102,103,104,106,107,115,119,120,121,122,123,124,125,126,140,141,142 stroke:#8b5cf6,stroke-width:2px
+  linkStyle 10,14,39,40,58,59,60,70,78,79,80,81,82,83,86,87,93,94,95,96,97,101,118,132,133,137,138,139 stroke:#22c55e,stroke-width:2px
+  linkStyle 147 stroke:#ec4899,stroke-width:2px
+  linkStyle 0,1,5,6,24,25,26,27,38,63,64,65,66,67,68,71,72,73,74,75,76,77,84,85,88,89,90,91,92,98,105,108,109,110,116,127,128,129,130,131,134,135,136,146,150,151,152 stroke:#3b82f6,stroke-width:2px
+  linkStyle 2,7,8,9,22,23,28,29,30,31,32,33,34,35,36,37,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,61,62,69,111,112,113,114,117,143,144,145,148,149 stroke:#f97316,stroke-width:2px
 
   %% Class assignments
   class Adaptation imported
@@ -299,7 +293,6 @@ flowchart TB
   class Block defined
   class BlockGenerated generated
   class BlockInstruction defined
-  class BlockPrompt defined
   class BlockRules defined
   class BlockType defined
   class BrandIdentity defined
@@ -333,8 +326,8 @@ flowchart TB
   class OutputArtifact generated
   class Page defined
   class PageGenerated generated
-  class PagePrompt defined
-  class PageType defined
+  class PageInstruction defined
+  class PageStructure defined
   class Pattern imported
   class PatternSet defined
   class PopulationCluster imported

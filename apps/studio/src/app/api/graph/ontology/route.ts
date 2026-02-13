@@ -1,14 +1,14 @@
 /**
  * Schema Graph API Route (Query-First Architecture)
  *
- * Returns the ontological schema graph (60 node types + 114 arc kinds)
- * directly from Neo4j meta-nodes. No TypeScript generation - pure Cypher.
+ * Returns the ontological schema graph (60 node classes + 114 arc classes)
+ * directly from Neo4j schema-nodes. No TypeScript generation - pure Cypher.
  *
- * Meta-graph structure in Neo4j:
- * - :Meta:Kind (60) - node type definitions from YAML
- * - :Meta:ArcKind (114) - arc type definitions from YAML
- * - [:FROM_KIND] ArcKind → Kind (source)
- * - [:TO_KIND] ArcKind → Kind (target)
+ * Schema-graph structure in Neo4j (v11.8 ADR-023):
+ * - :Schema:Class (60) - node type definitions from YAML
+ * - :Schema:ArcClass (114) - arc type definitions from YAML
+ * - [:FROM_CLASS] ArcClass → Class (source)
+ * - [:TO_CLASS] ArcClass → Class (target)
  *
  * Query-First Architecture Flow:
  * YAML → Rust Generator → Cypher Seed → Neo4j ← Cypher Query ← Studio
@@ -26,40 +26,40 @@ import type { GraphNode, GraphEdge, NodeType, RelationType } from '@/types';
 // =============================================================================
 
 /**
- * Query to fetch all Kind nodes with their properties.
+ * Query to fetch all Class nodes with their properties (v11.8 ADR-023).
  * Returns node properties directly to avoid label parsing issues.
  */
-const KINDS_QUERY = `
-MATCH (k:Meta:Kind)
+const CLASSES_QUERY = `
+MATCH (c:Schema:Class)
 RETURN
-  k.label AS label,
-  k.key AS key,
-  k.realm AS realm,
-  k.layer AS layer,
-  k.trait AS trait,
-  k.display_name AS displayName,
-  k.llm_context AS llmContext,
-  k.properties AS properties,
-  k.required_properties AS requiredProperties,
-  k.schema_hint AS schemaHint,
-  k.context_budget AS contextBudget,
-  k.visibility AS visibility
-ORDER BY k.realm, k.layer, k.label
+  c.label AS label,
+  c.key AS key,
+  c.realm AS realm,
+  c.layer AS layer,
+  c.trait AS trait,
+  c.display_name AS displayName,
+  c.llm_context AS llmContext,
+  c.properties AS properties,
+  c.required_properties AS requiredProperties,
+  c.schema_hint AS schemaHint,
+  c.context_budget AS contextBudget,
+  c.visibility AS visibility
+ORDER BY c.realm, c.layer, c.label
 `;
 
 /**
- * Query to fetch all schema edges (ArcKind → source/target Kind).
+ * Query to fetch all schema edges (ArcClass → source/target Class) (v11.8 ADR-023).
  * Returns flattened data for edge construction.
  */
 const ARCS_QUERY = `
-MATCH (source:Meta:Kind)<-[:FROM_KIND]-(ak:Meta:ArcKind)-[:TO_KIND]->(target:Meta:Kind)
+MATCH (source:Schema:Class)<-[:FROM_CLASS]-(ac:Schema:ArcClass)-[:TO_CLASS]->(target:Schema:Class)
 RETURN
-  ak.key AS arcKey,
-  ak.display_name AS arcDisplayName,
-  ak.llm_context AS arcLlmContext,
-  ak.family AS family,
-  ak.scope AS scope,
-  ak.cardinality AS cardinality,
+  ac.key AS arcKey,
+  ac.display_name AS arcDisplayName,
+  ac.llm_context AS arcLlmContext,
+  ac.family AS family,
+  ac.scope AS scope,
+  ac.cardinality AS cardinality,
   source.label AS sourceLabel,
   target.label AS targetLabel
 `;
@@ -86,13 +86,13 @@ export async function GET() {
     session = driver.session({ defaultAccessMode: neo4j.session.READ });
 
     // Execute both queries in parallel with timeout
-    const [kindsResult, arcsResult] = await Promise.all([
-      session.run(KINDS_QUERY, {}, { timeout: SCHEMA_QUERY_TIMEOUT }),
+    const [classesResult, arcsResult] = await Promise.all([
+      session.run(CLASSES_QUERY, {}, { timeout: SCHEMA_QUERY_TIMEOUT }),
       session.run(ARCS_QUERY, {}, { timeout: SCHEMA_QUERY_TIMEOUT }),
     ]);
 
-    // Transform Kind records to GraphNodes
-    const nodes: GraphNode[] = kindsResult.records.map((record) => {
+    // Transform Class records to GraphNodes
+    const nodes: GraphNode[] = classesResult.records.map((record) => {
       const label = record.get('label') as string;
       return {
         id: `schema-${label}`,

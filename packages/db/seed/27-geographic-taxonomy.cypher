@@ -1052,16 +1052,16 @@ MATCH (cr:CulturalRealm), (csr:CulturalSubRealm) WHERE csr.parent_realm = cr.key
 MATCH (pc:PopulationCluster), (psc:PopulationSubCluster) WHERE psc.parent_cluster = pc.key MERGE (psc)-[:CLUSTER_OF]->(pc);
 
 // -----------------------------------------------------------------------------
-// CONNECT TO KIND META-NODES (OF_KIND relationships)
+// CONNECT TO CLASS SCHEMA-NODES (OF_CLASS relationships)
 // -----------------------------------------------------------------------------
 
-MATCH (n:Continent), (k:Kind {label: 'Continent'}) MERGE (n)-[:OF_KIND]->(k);
-MATCH (n:GeoRegion), (k:Kind {label: 'GeoRegion'}) MERGE (n)-[:OF_KIND]->(k);
-MATCH (n:GeoSubRegion), (k:Kind {label: 'GeoSubRegion'}) MERGE (n)-[:OF_KIND]->(k);
-MATCH (n:IncomeGroup), (k:Kind {label: 'IncomeGroup'}) MERGE (n)-[:OF_KIND]->(k);
-MATCH (n:LanguageFamily), (k:Kind {label: 'LanguageFamily'}) MERGE (n)-[:OF_KIND]->(k);
-MATCH (n:LanguageBranch), (k:Kind {label: 'LanguageBranch'}) MERGE (n)-[:OF_KIND]->(k);
-MATCH (n:CulturalRealm), (k:Kind {label: 'CulturalRealm'}) MERGE (n)-[:OF_KIND]->(k);
-MATCH (n:CulturalSubRealm), (k:Kind {label: 'CulturalSubRealm'}) MERGE (n)-[:OF_KIND]->(k);
-MATCH (n:PopulationCluster), (k:Kind {label: 'PopulationCluster'}) MERGE (n)-[:OF_KIND]->(k);
-MATCH (n:PopulationSubCluster), (k:Kind {label: 'PopulationSubCluster'}) MERGE (n)-[:OF_KIND]->(k);
+MATCH (n:Continent), (c:Schema:Class {label: 'Continent'}) MERGE (n)-[:OF_CLASS]->(c);
+MATCH (n:GeoRegion), (c:Schema:Class {label: 'GeoRegion'}) MERGE (n)-[:OF_CLASS]->(c);
+MATCH (n:GeoSubRegion), (c:Schema:Class {label: 'GeoSubRegion'}) MERGE (n)-[:OF_CLASS]->(c);
+MATCH (n:IncomeGroup), (c:Schema:Class {label: 'IncomeGroup'}) MERGE (n)-[:OF_CLASS]->(c);
+MATCH (n:LanguageFamily), (c:Schema:Class {label: 'LanguageFamily'}) MERGE (n)-[:OF_CLASS]->(c);
+MATCH (n:LanguageBranch), (c:Schema:Class {label: 'LanguageBranch'}) MERGE (n)-[:OF_CLASS]->(c);
+MATCH (n:CulturalRealm), (c:Schema:Class {label: 'CulturalRealm'}) MERGE (n)-[:OF_CLASS]->(c);
+MATCH (n:CulturalSubRealm), (c:Schema:Class {label: 'CulturalSubRealm'}) MERGE (n)-[:OF_CLASS]->(c);
+MATCH (n:PopulationCluster), (c:Schema:Class {label: 'PopulationCluster'}) MERGE (n)-[:OF_CLASS]->(c);
+MATCH (n:PopulationSubCluster), (c:Schema:Class {label: 'PopulationSubCluster'}) MERGE (n)-[:OF_CLASS]->(c);

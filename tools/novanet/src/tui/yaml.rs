@@ -171,7 +171,7 @@ node:
   name: Locale
   realm: shared
   layer: config
-  trait: invariant
+  trait: defined  // v0.12.0 ADR-024: invariant→defined
   icon: "⊕"
   description: "First-class locale node (BCP 47)"
   llm_context: "USE: for locale-specific content"

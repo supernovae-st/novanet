@@ -24,7 +24,7 @@ pub enum NodeId {
     Layer { realm: String, layer: String },
     /// Kind node (e.g., "Locale", "Entity")
     Kind(String),
-    /// Data instance (kind_label, instance_key)
+    /// Data instance (class_label, instance_key)
     Instance { kind: String, key: String },
     /// Arc family (e.g., "ownership", "semantic")
     ArcFamily(String),

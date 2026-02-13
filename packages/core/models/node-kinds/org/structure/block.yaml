@@ -1,5 +1,6 @@
-# models/node-kinds/org/structure/block.yaml
 # Block - Page section instance with sub-agent instructions
+#
+# v0.12.0: Initial clean schema (ADR-025 naming conventions)
 
 node:
   name: Block
@@ -50,17 +51,7 @@ node:
       type: datetime
       required: true
 
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOCK-SPECIFIC PROPERTIES
-  # ═══════════════════════════════════════════════════════════════════════════════
-
-  properties:
-    instructions:
-      type: string
-      required: false
-      deprecated: "v7.2.0 - Use :HAS_INSTRUCTION → BlockInstruction.prompt"
-      description: "Sub-agent directive with @concept-key references"
-      example: "[GENERATE] Hero for pricing page, highlight @tier-pro benefits"
+  # No block-specific properties - instructions moved to HAS_INSTRUCTION → BlockInstruction
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # RELATIONS (FROM this node)
@@ -97,7 +88,6 @@ node:
       display_name: "Pricing Hero"
       description: "Hero section for pricing page"
       llm_context: "USE: generate pricing page hero content. TRIGGERS: pricing, hero, tier comparison. NOT: FAQ or footer blocks."
-      instructions: "[GENERATE] Hero for pricing page, highlight @tier-pro benefits"
 
     cypher: |
       // Load full context for block generation (v10.9.0: EntityContent)
@@ -105,7 +95,8 @@ node:
       MATCH (b)-[:USES_ENTITY]->(e:Entity)-[:HAS_CONTENT]->(ec:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
       OPTIONAL MATCH (l)-[:HAS_VOICE]->(v:LocaleVoice)
       OPTIONAL MATCH (l)-[:HAS_CULTURE]->(cult:LocaleCulture)
-      RETURN b.instructions, bt.rules, bt.llm_context,
+      OPTIONAL MATCH (b)-[:HAS_INSTRUCTION]->(bi:BlockInstruction {active: true})
+      RETURN bi.prompt AS instructions, bt.llm_context,
              collect(DISTINCT {key: e.key, title: ec.display_name, definition: ec.definition}) AS entities,
              v AS voice, cult AS culture
 

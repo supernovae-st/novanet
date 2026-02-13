@@ -69,13 +69,13 @@ CREATE INDEX bo_date IF NOT EXISTS FOR (bo:BlockGenerated) ON (bo.generated_at);
 // v7.8.5: BlockGenerated replaces BlockOutput
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// PROMPTS (v7.2.0)
+// INSTRUCTIONS (v11.8.0 ADR-025: PagePrompt→PageInstruction, BlockPrompt→BlockInstruction)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-CREATE INDEX pageprompt_active IF NOT EXISTS FOR (pp:PagePrompt) ON (pp.active);
-CREATE INDEX pageprompt_version IF NOT EXISTS FOR (pp:PagePrompt) ON (pp.version);
-CREATE INDEX blockprompt_active IF NOT EXISTS FOR (bp:BlockPrompt) ON (bp.active);
-CREATE INDEX blockprompt_version IF NOT EXISTS FOR (bp:BlockPrompt) ON (bp.version);
+CREATE INDEX pageinstruction_active IF NOT EXISTS FOR (pi:PageInstruction) ON (pi.active);
+CREATE INDEX pageinstruction_version IF NOT EXISTS FOR (pi:PageInstruction) ON (pi.version);
+CREATE INDEX blockinstruction_active IF NOT EXISTS FOR (bi:BlockInstruction) ON (bi.active);
+CREATE INDEX blockinstruction_version IF NOT EXISTS FOR (bi:BlockInstruction) ON (bi.version);
 CREATE INDEX blockrules_active IF NOT EXISTS FOR (br:BlockRules) ON (br.active);
 CREATE INDEX blockrules_version IF NOT EXISTS FOR (br:BlockRules) ON (br.version);
 
@@ -112,18 +112,18 @@ CREATE INDEX infl_weight IF NOT EXISTS FOR ()-[r:INFLUENCED_BY]-() ON (r.weight)
 CREATE INDEX gen_date IF NOT EXISTS FOR ()-[r:GENERATED]-() ON (r.generated_at);
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// META-GRAPH (v9.5.0)
-// Faceted classification: Realm, Layer, Kind, Trait, ArcFamily, ArcKind
+// SCHEMA-GRAPH (v0.12.0 ADR-023)
+// Faceted classification: Realm, Layer, Class, Trait, ArcFamily, ArcClass
 // ═══════════════════════════════════════════════════════════════════════════════
 
 CREATE CONSTRAINT realm_key IF NOT EXISTS FOR (r:Realm) REQUIRE r.key IS UNIQUE;
 CREATE CONSTRAINT layer_key IF NOT EXISTS FOR (l:Layer) REQUIRE l.key IS UNIQUE;
 // v10.9: Layer order index for TUI ORDER BY optimization
 CREATE INDEX layer_order IF NOT EXISTS FOR (l:Layer) ON (l.order);
-CREATE CONSTRAINT kind_label IF NOT EXISTS FOR (k:Kind) REQUIRE k.label IS UNIQUE;
+CREATE CONSTRAINT class_label IF NOT EXISTS FOR (c:Class) REQUIRE c.label IS UNIQUE;
 CREATE CONSTRAINT trait_key IF NOT EXISTS FOR (t:Trait) REQUIRE t.key IS UNIQUE;
 CREATE CONSTRAINT arcfamily_key IF NOT EXISTS FOR (af:ArcFamily) REQUIRE af.key IS UNIQUE;
-CREATE CONSTRAINT arckind_key IF NOT EXISTS FOR (ak:ArcKind) REQUIRE ak.key IS UNIQUE;
+CREATE CONSTRAINT arcclass_key IF NOT EXISTS FOR (ac:ArcClass) REQUIRE ac.key IS UNIQUE;
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // KNOWLEDGE ATOMS (v10.7.0)

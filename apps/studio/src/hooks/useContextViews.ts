@@ -3,10 +3,8 @@
 // =============================================================================
 // Returns available context views for a selected node with live stats
 //
-// @deprecated v11.6.1: This hook is deprecated in favor of the unified view system.
-// Contextual views are now filtered via viewStore based on applicable_types from _registry.yaml.
+// NOTE: Contextual views are now filtered via viewStore based on applicable_types from _registry.yaml.
 // Use viewStore.categories and filter by view.applicable_types instead.
-// Migration: https://github.com/supernovae-st/novanet-hq/docs/plans/2026-02-11-unified-view-system-design.md
 
 import { useMemo, useState, useEffect } from 'react';
 import type { GraphNode, GraphEdge } from '@/types';

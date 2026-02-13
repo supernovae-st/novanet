@@ -201,7 +201,7 @@ export const SHORTCUTS: Shortcut[] = [
   {
     id: 'preset-3',
     keys: '3',
-    label: 'Core + Entities', // v10.3: was Concepts
+    label: 'Core + Entities',
     category: 'preset',
     icon: 'Layers',
     when: ['input-not-focused'],
@@ -219,7 +219,7 @@ export const SHORTCUTS: Shortcut[] = [
   {
     id: 'preset-5',
     keys: '5',
-    label: 'Entities', // v10.3: was Concepts
+    label: 'Entities',
     category: 'preset',
     icon: 'Lightbulb',
     when: ['input-not-focused'],

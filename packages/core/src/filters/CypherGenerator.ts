@@ -42,8 +42,8 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   TYPE_OF: 'typeEntity',
   VARIANT_OF: 'variantEntity',
   ALTERNATIVE_TO: 'alternativeEntity',
-  // Prompts
-  HAS_PROMPT: 'prompt',
+  // Instructions
+  HAS_INSTRUCTION: 'instruction',
   HAS_RULES: 'rules',
   // Output
   HAS_GENERATED: 'generated',
@@ -87,15 +87,15 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   INFLUENCED_BY: 'influencingEntity',
   GENERATED_FROM: 'generatedFromType',
   BELONGS_TO_PROJECT_CONTENT: 'projectContent',
-  // Meta-graph (Kind/ArcKind)
-  HAS_KIND: 'hasKind',
-  HAS_ARC_KIND: 'arcKind',
+  // Schema-graph (Class/ArcClass) - v11.8 ADR-023
+  HAS_CLASS: 'hasClass',
+  HAS_ARC_CLASS: 'arcClass',
   IN_REALM: 'inRealm',
   IN_LAYER: 'inLayer',
   EXHIBITS: 'exhibits',
   IN_FAMILY: 'inFamily',
-  FROM_KIND: 'fromKind',
-  TO_KIND: 'toKind',
+  FROM_CLASS: 'fromClass',
+  TO_CLASS: 'toClass',
   HAS_LAYER: 'layer',
 };
 

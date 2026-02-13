@@ -197,7 +197,7 @@ export const RELATION_OVERRIDES: Partial<Record<RelationType, ThemeOverride>> = 
     glowIntensity: 0.95,
     // effects removed: now uses arcFamily 'generation' → 'matrixCode' + category defaults
   },
-  HAS_PROMPT: {
+  HAS_INSTRUCTION: {
     lineStyle: 'zigzag',
     particlePreset: 'orbit',
     palette: {

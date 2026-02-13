@@ -175,7 +175,7 @@ mod tests {
     fn validate_rel_type_valid() {
         assert!(validate_rel_type("FOR_LOCALE").is_ok());
         assert!(validate_rel_type("HAS_BLOCK").is_ok());
-        assert!(validate_rel_type("OF_KIND").is_ok());
+        assert!(validate_rel_type("OF_CLASS").is_ok());
         assert!(validate_rel_type("SUPPORTS_LOCALE").is_ok());
     }
 

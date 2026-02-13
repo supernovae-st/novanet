@@ -499,10 +499,11 @@ function validateTraits(taxonomy, typesTS) {
 function validateNodeCounts(layersTS) {
   logSection('Node Counts (layers.ts consistency)');
 
+  // v0.12.0: 59 nodes (39 shared + 20 org)
   const expectedCounts = {
-    total: 60,
+    total: 59,
     shared: 39,
-    org: 21,
+    org: 20,
     sharedByLayer: {
       config: 3,
       geography: 6,
@@ -512,7 +513,7 @@ function validateNodeCounts(layersTS) {
     orgByLayer: {
       config: 1,
       foundation: 3,
-      instruction: 7,
+      instruction: 6,  // v0.12.0: PageStructure replaced PageType
       output: 3,
       semantic: 4,
       structure: 3,

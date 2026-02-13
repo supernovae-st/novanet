@@ -419,12 +419,12 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
             Span::styled(" (Layer)", STYLE_DIM),
             Span::styled(" \u{2192} ", bright_dim),
             Span::styled(
-                &arcs.kind_label,
+                &arcs.class_label,
                 Style::default()
                     .fg(Color::Green)
                     .add_modifier(Modifier::BOLD),
             ),
-            Span::styled(" (Node Kind)", STYLE_DIM),
+            Span::styled(" (Node Class)", STYLE_DIM),
         ]));
         lines.push(Line::from(Span::raw("")));
 
@@ -470,7 +470,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
             lines.push(Line::from(vec![
                 Span::styled("    FROM: ", STYLE_ACCENT),
                 Span::styled(
-                    &from.kind_label,
+                    &from.class_label,
                     Style::default()
                         .fg(Color::Green)
                         .add_modifier(Modifier::BOLD),
@@ -499,7 +499,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
             lines.push(Line::from(vec![
                 Span::styled("    TO:   ", STYLE_INFO),
                 Span::styled(
-                    &to.kind_label,
+                    &to.class_label,
                     Style::default()
                         .fg(Color::Green)
                         .add_modifier(Modifier::BOLD),
@@ -617,13 +617,13 @@ fn render_arcs_by_family(
 
     if by_family.is_empty() {
         lines.push(Line::from(Span::styled(
-            "  No arc relationships defined for this Node Kind",
+            "  No arc relationships defined for this Node Class",
             STYLE_DIM,
         )));
         return;
     }
 
-    let kind_label = &arcs.kind_label;
+    let class_label = &arcs.class_label;
 
     // Render each family group
     for (family, family_arcs) in &by_family {
@@ -653,10 +653,10 @@ fn render_arcs_by_family(
         // Render arcs in this family (convert &str to owned String only for Span)
         for (is_outgoing, arc_key, other_kind) in family_arcs {
             if *is_outgoing {
-                // Outgoing: Kind --[ARC]---> Target
+                // Outgoing: Class --[ARC]---> Target
                 lines.push(Line::from(vec![
                     Span::styled("    ", *dim),
-                    Span::styled(kind_label.to_string(), STYLE_PRIMARY),
+                    Span::styled(class_label.to_string(), STYLE_PRIMARY),
                     Span::styled(" \u{2500}\u{2500}[", *dim),
                     Span::styled(
                         (*arc_key).to_string(),
@@ -668,7 +668,7 @@ fn render_arcs_by_family(
                     Span::styled((*other_kind).to_string(), STYLE_SUCCESS),
                 ]));
             } else {
-                // Incoming: Source --[ARC]---> Kind
+                // Incoming: Source --[ARC]---> Class
                 lines.push(Line::from(vec![
                     Span::styled("    ", *dim),
                     Span::styled((*other_kind).to_string(), STYLE_SUCCESS),
@@ -680,7 +680,7 @@ fn render_arcs_by_family(
                             .add_modifier(Modifier::BOLD),
                     ),
                     Span::styled("]\u{2500}\u{2500}\u{25b6} ", *dim),
-                    Span::styled(kind_label.to_string(), STYLE_PRIMARY),
+                    Span::styled(class_label.to_string(), STYLE_PRIMARY),
                 ]));
             }
         }
@@ -817,12 +817,12 @@ mod tests {
     }
 
     fn create_kind_arcs_data(
-        kind_label: &str,
+        class_label: &str,
         incoming: Vec<Neo4jArc>,
         outgoing: Vec<Neo4jArc>,
     ) -> KindArcsData {
         KindArcsData {
-            kind_label: kind_label.to_string(),
+            class_label: class_label.to_string(),
             realm: "org".to_string(),
             layer: "structure".to_string(),
             incoming,

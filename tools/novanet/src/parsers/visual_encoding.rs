@@ -29,8 +29,6 @@ pub struct VisualEncodingDoc {
     pub trait_borders: HashMap<String, TraitBorder>,
     pub scope_strokes: HashMap<String, ScopeStroke>,
     pub cardinality_arrows: HashMap<String, CardinalityArrow>,
-    /// v0.12.0: kind_icons → class_icons (serde alias for backward compatibility)
-    #[serde(alias = "kind_icons")]
     pub class_icons: HashMap<String, String>,
     pub animations: HashMap<String, Animation>,
     pub accessibility: AccessibilitySettings,

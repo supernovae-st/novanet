@@ -25,7 +25,7 @@ import { MiniNode, type MiniNodeData } from './MiniNode';
 import { MiniEdge, type MiniEdgeData } from './MiniEdge';
 import type { GraphNode } from '@/types';
 import type { Edge as StudioEdge } from '@xyflow/react';
-import { KIND_META } from '@novanet/core/types';
+import { CLASS_TAXONOMY } from '@novanet/core/types';
 
 // Node types for React Flow
 const nodeTypes = {
@@ -57,7 +57,7 @@ function createRadialLayout(
   const radius = 60;
 
   // Get meta info for center node
-  const centerMeta = KIND_META[centerNode.type];
+  const centerMeta = CLASS_TAXONOMY[centerNode.type];
 
   // Center node
   const nodes: Node<MiniNodeData>[] = [
@@ -82,7 +82,7 @@ function createRadialLayout(
     const x = centerX + radius * Math.cos(angle);
     const y = centerY + radius * Math.sin(angle);
 
-    const meta = KIND_META[node.type];
+    const meta = CLASS_TAXONOMY[node.type];
 
     nodes.push({
       id: node.id,

@@ -403,11 +403,7 @@ arc_families:
         assert_eq!(total_layers, 10); // v11.4: 4 shared + 6 org layers
 
         // Check border styles (v0.12.0: invariant → defined)
-        let defined = doc
-            .node_traits
-            .iter()
-            .find(|t| t.key == "defined")
-            .unwrap();
+        let defined = doc.node_traits.iter().find(|t| t.key == "defined").unwrap();
         assert_eq!(defined.border_style, Some("solid".to_string()));
         assert_eq!(defined.unicode_border, Some("─".to_string()));
 

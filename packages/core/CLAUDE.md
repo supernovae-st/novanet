@@ -96,19 +96,19 @@ MATCH (l)-[:HAS_LEXICON]->(lex:LocaleLexicon)-[:HAS_EXPRESSION]->(e:Expression)
 WHERE e.semantic_field IN ['urgency', 'value']
 RETURN b.instructions, e.key, el.title, bt.rules, v.formality_score, collect(ex.text) AS expressions;
 
--- v11.7: Navigate meta-graph (Realm -> Layer -> Kind)
-MATCH (r:Realm {key: "org"})-[:HAS_LAYER]->(l:Layer)-[:HAS_KIND]->(k:Kind)
-RETURN r.key, l.key, collect(k.label) AS kinds;
+-- v11.8: Navigate schema-graph (Realm -> Layer -> Class) - ADR-023
+MATCH (r:Realm {key: "org"})-[:HAS_LAYER]->(l:Layer)-[:HAS_CLASS]->(c:Schema:Class)
+RETURN r.key, l.key, collect(c.label) AS classes;
 
--- v11.7: Find all Kinds with a specific Trait
-MATCH (k:Kind)-[:HAS_TRAIT]->(t:Trait {key: "generated"})
-RETURN k.label, t.key;
+-- v11.8: Find all Classes with a specific Trait - ADR-024
+MATCH (c:Schema:Class)-[:HAS_TRAIT]->(t:Trait {key: "generated"})
+RETURN c.label, t.key;
 
--- v11.7: Arc schema for a Kind
-MATCH (ak:ArcKind)-[:FROM_KIND]->(k:Kind {label: "Block"})
-MATCH (ak)-[:TO_KIND]->(target:Kind)
-MATCH (ak)-[:IN_FAMILY]->(af:ArcFamily)
-RETURN ak.key, af.key AS family, target.label AS target_kind;
+-- v11.8: Arc schema for a Class
+MATCH (ac:Schema:ArcClass)-[:FROM_CLASS]->(c:Schema:Class {label: "Block"})
+MATCH (ac)-[:TO_CLASS]->(target:Schema:Class)
+MATCH (ac)-[:IN_FAMILY]->(af:Schema:ArcFamily)
+RETURN ac.key, af.key AS family, target.label AS target_class;
 ```
 
 ## File Structure

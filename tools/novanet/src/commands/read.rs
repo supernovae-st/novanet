@@ -1,4 +1,4 @@
-//! Read commands: `novanet data`, `novanet meta`, `novanet overlay`, `novanet query`.
+//! Read commands: `novanet data`, `novanet overlay`, `novanet query`.
 //!
 //! Each mode builds a Cypher query, executes it against Neo4j, and formats the
 //! output as Table, JSON, or raw Cypher.
@@ -11,21 +11,14 @@ use tracing::instrument;
 
 const DEFAULT_LIMIT: i64 = 500;
 
-/// Mode 1: Data nodes only (WHERE NOT n:Meta).
+/// Data nodes only (WHERE NOT n:Meta).
 #[instrument(skip(db))]
 pub async fn run_data(db: &Db, format: OutputFormat) -> crate::Result<()> {
     let stmt = cypher::data_query(DEFAULT_LIMIT);
     dispatch(db, &stmt, format, extract_node_rows).await
 }
 
-/// Mode 2: Meta-graph only (MATCH (n:Meta)).
-#[instrument(skip(db))]
-pub async fn run_meta(db: &Db, format: OutputFormat) -> crate::Result<()> {
-    let stmt = cypher::meta_query();
-    dispatch(db, &stmt, format, extract_node_rows).await
-}
-
-/// Mode 3: Data + Meta overlay.
+/// Data + Meta overlay.
 #[instrument(skip(db))]
 pub async fn run_overlay(db: &Db, format: OutputFormat) -> crate::Result<()> {
     let stmt = cypher::overlay_query(DEFAULT_LIMIT);

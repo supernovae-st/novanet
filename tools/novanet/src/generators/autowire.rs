@@ -282,14 +282,14 @@ mod tests {
             .generate(root)
             .expect("should generate autowire cypher");
 
-        // v0.12.0: 58 OF_CLASS statements (renamed from OF_KIND in v11.8)
+        // v0.12.0: 59 OF_CLASS statements (renamed from OF_KIND in v11.8)
         let of_class = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:OF_CLASS]"))
             .count();
         assert_eq!(
-            of_class, 58,
-            "expected 58 OF_CLASS statements (v0.12.0: 39 shared + 19 org)"
+            of_class, 59,
+            "expected 59 OF_CLASS statements (v0.12.0: 39 shared + 20 org)"
         );
 
         // 2 realms present (v11.3: shared + org)
@@ -307,7 +307,7 @@ mod tests {
         assert!(cypher.contains("Shared > Knowledge (24 types)")); // v11.4: +2 containers, -4 obsolete
 
         // v0.12.0: Header
-        assert!(cypher.contains("Total: 58 node types"));
+        assert!(cypher.contains("Total: 59 node types"));
 
         // Verification query present
         assert!(cypher.contains("VERIFICATION QUERY"));

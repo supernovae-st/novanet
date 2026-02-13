@@ -47,12 +47,12 @@ ORDER BY b.position
 :param locale => "fr-FR";
 
 MATCH (p:Project {key: $projectKey})-[:HAS_PAGE]->(page:Page {key: $pageKey})
-MATCH (page)-[:HAS_PROMPT]->(pp:PagePrompt)
+MATCH (page)-[:HAS_INSTRUCTION]->(pi:PageInstruction)
 OPTIONAL MATCH (page)-[:HAS_BLOCK]->(b:Block)
 OPTIONAL MATCH (b)-[:USES_ENTITY]->(c:Entity)
 OPTIONAL MATCH (c)-[:HAS_CONTENT]->(cl:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
 RETURN page.key AS page,
-       pp.instructions AS instructions,
+       pi.content AS instructions,
        collect(DISTINCT b.key) AS blocks,
        collect(DISTINCT {concept: c.key, title: cl.title}) AS concepts
 

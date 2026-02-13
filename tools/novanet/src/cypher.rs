@@ -72,27 +72,7 @@ LIMIT $limit"
 }
 
 // ---------------------------------------------------------------------------
-// Mode 2: Meta — meta-graph only (Realm, Layer, Kind, Trait, ArcFamily, ArcKind)
-// ---------------------------------------------------------------------------
-
-#[must_use]
-pub fn meta_query() -> CypherStatement {
-    CypherStatement {
-        cypher: "\
-MATCH (n:Meta)
-WITH n, [l IN labels(n) WHERE l <> 'Meta'][0] AS label
-RETURN label,
-       n.key AS key,
-       coalesce(n.display_name, '') AS display_name,
-       coalesce(n.description, '') AS description
-ORDER BY label, n.key"
-            .to_string(),
-        params: vec![],
-    }
-}
-
-// ---------------------------------------------------------------------------
-// Mode 3: Overlay — data + meta combined
+// Overlay — data + meta combined
 // ---------------------------------------------------------------------------
 
 #[must_use]
@@ -121,12 +101,12 @@ LIMIT $limit"
 
 /// Build a faceted Cypher query from a `FacetFilter`.
 ///
-/// Strategy:
-/// 1. MATCH Kind nodes satisfying all active facets (AND across axes, OR within axis)
-/// 2. Collect resolved Kind labels
-/// 3. MATCH data nodes linked to those Kinds via OF_KIND
+/// Strategy (v0.12.0 ADR-023):
+/// 1. MATCH Class nodes satisfying all active facets (AND across axes, OR within axis)
+/// 2. Collect resolved Class labels
+/// 3. MATCH data nodes linked to those Classes via OF_CLASS
 ///
-/// If no facets are active, falls back to data_query (all non-Meta nodes).
+/// If no facets are active, falls back to data_query (all non-Schema nodes).
 #[must_use]
 pub fn faceted_query(filter: &FacetFilter, limit: i64) -> CypherStatement {
     if filter.is_empty() {
@@ -138,7 +118,7 @@ pub fn faceted_query(filter: &FacetFilter, limit: i64) -> CypherStatement {
 
     if !filter.realms.is_empty() {
         where_clauses
-            .push("EXISTS { MATCH (k)-[:IN_REALM]->(r:Realm) WHERE r.key IN $realms }".to_string());
+            .push("EXISTS { MATCH (c)-[:IN_REALM]->(r:Realm) WHERE r.key IN $realms }".to_string());
         params.push((
             "realms".to_string(),
             ParamValue::StringList(filter.realms.clone()),
@@ -147,7 +127,7 @@ pub fn faceted_query(filter: &FacetFilter, limit: i64) -> CypherStatement {
 
     if !filter.layers.is_empty() {
         where_clauses
-            .push("EXISTS { MATCH (k)-[:IN_LAYER]->(l:Layer) WHERE l.key IN $layers }".to_string());
+            .push("EXISTS { MATCH (c)-[:IN_LAYER]->(l:Layer) WHERE l.key IN $layers }".to_string());
         params.push((
             "layers".to_string(),
             ParamValue::StringList(filter.layers.clone()),
@@ -156,7 +136,7 @@ pub fn faceted_query(filter: &FacetFilter, limit: i64) -> CypherStatement {
 
     if !filter.trait_filters.is_empty() {
         where_clauses.push(
-            "EXISTS { MATCH (k)-[:HAS_TRAIT]->(t:Trait) WHERE t.key IN $traits }".to_string(),
+            "EXISTS { MATCH (c)-[:HAS_TRAIT]->(t:Trait) WHERE t.key IN $traits }".to_string(),
         );
         params.push((
             "traits".to_string(),
@@ -165,7 +145,7 @@ pub fn faceted_query(filter: &FacetFilter, limit: i64) -> CypherStatement {
     }
 
     if !filter.kinds.is_empty() {
-        where_clauses.push("k.label IN $kinds".to_string());
+        where_clauses.push("c.label IN $kinds".to_string());
         params.push((
             "kinds".to_string(),
             ParamValue::StringList(filter.kinds.clone()),
@@ -181,12 +161,12 @@ pub fn faceted_query(filter: &FacetFilter, limit: i64) -> CypherStatement {
 
     let cypher = format!(
         "\
-MATCH (k:Kind)
+MATCH (c:Class)
 WHERE {where_clause}
-WITH collect(k.label) AS resolved_kinds
-MATCH (n)-[:OF_KIND]->(k2:Kind)
-WHERE k2.label IN resolved_kinds
-RETURN k2.label AS label,
+WITH collect(c.label) AS resolved_classes
+MATCH (n)-[:OF_CLASS]->(c2:Class)
+WHERE c2.label IN resolved_classes
+RETURN c2.label AS label,
        n.key AS key,
        coalesce(n.display_name, '') AS display_name,
        coalesce(n.description, '') AS description
@@ -214,7 +194,7 @@ pub fn filter_build_query(filter: &FacetFilter) -> CypherStatement {
 
     if !filter.realms.is_empty() {
         where_clauses
-            .push("EXISTS { MATCH (k)-[:IN_REALM]->(r:Realm) WHERE r.key IN $realms }".to_string());
+            .push("EXISTS { MATCH (c)-[:IN_REALM]->(r:Realm) WHERE r.key IN $realms }".to_string());
         params.push((
             "realms".to_string(),
             ParamValue::StringList(filter.realms.clone()),
@@ -223,7 +203,7 @@ pub fn filter_build_query(filter: &FacetFilter) -> CypherStatement {
 
     if !filter.layers.is_empty() {
         where_clauses
-            .push("EXISTS { MATCH (k)-[:IN_LAYER]->(l:Layer) WHERE l.key IN $layers }".to_string());
+            .push("EXISTS { MATCH (c)-[:IN_LAYER]->(l:Layer) WHERE l.key IN $layers }".to_string());
         params.push((
             "layers".to_string(),
             ParamValue::StringList(filter.layers.clone()),
@@ -232,7 +212,7 @@ pub fn filter_build_query(filter: &FacetFilter) -> CypherStatement {
 
     if !filter.trait_filters.is_empty() {
         where_clauses.push(
-            "EXISTS { MATCH (k)-[:HAS_TRAIT]->(t:Trait) WHERE t.key IN $traits }".to_string(),
+            "EXISTS { MATCH (c)-[:HAS_TRAIT]->(t:Trait) WHERE t.key IN $traits }".to_string(),
         );
         params.push((
             "traits".to_string(),
@@ -241,7 +221,7 @@ pub fn filter_build_query(filter: &FacetFilter) -> CypherStatement {
     }
 
     if !filter.kinds.is_empty() {
-        where_clauses.push("k.label IN $kinds".to_string());
+        where_clauses.push("c.label IN $kinds".to_string());
         params.push((
             "kinds".to_string(),
             ParamValue::StringList(filter.kinds.clone()),
@@ -252,12 +232,12 @@ pub fn filter_build_query(filter: &FacetFilter) -> CypherStatement {
 
     let cypher = format!(
         "\
-MATCH (k:Kind)
+MATCH (c:Class)
 WHERE {where_clause}
-WITH collect(k.label) AS resolved_kinds
-MATCH (n)-[:OF_KIND]->(k2:Kind)
-WHERE k2.label IN resolved_kinds
-RETURN n, k2.label AS kind_label"
+WITH collect(c.label) AS resolved_classes
+MATCH (n)-[:OF_CLASS]->(c2:Class)
+WHERE c2.label IN resolved_classes
+RETURN n, c2.label AS class_label"
     );
 
     CypherStatement { cypher, params }
@@ -276,13 +256,6 @@ mod tests {
             stmt.get_param("limit"),
             Some(ParamValue::Int(100))
         ));
-    }
-
-    #[test]
-    fn meta_query_matches_meta() {
-        let stmt = meta_query();
-        assert!(stmt.cypher.contains("(n:Meta)"));
-        assert!(stmt.params.is_empty());
     }
 
     #[test]
@@ -309,8 +282,8 @@ mod tests {
         let stmt = faceted_query(&filter, 200);
         assert!(stmt.cypher.contains("IN_REALM"));
         assert!(stmt.cypher.contains("$realms"));
-        assert!(stmt.cypher.contains("resolved_kinds"));
-        assert!(stmt.cypher.contains("OF_KIND"));
+        assert!(stmt.cypher.contains("resolved_classes"));
+        assert!(stmt.cypher.contains("OF_CLASS"));
     }
 
     #[test]
@@ -318,7 +291,7 @@ mod tests {
         let filter = FacetFilter {
             realms: vec!["shared".to_string()],
             layers: vec!["knowledge".to_string()],
-            trait_filters: vec!["invariant".to_string()],
+            trait_filters: vec!["defined".to_string()],
             ..Default::default()
         };
         let stmt = faceted_query(&filter, 100);
@@ -337,7 +310,7 @@ mod tests {
             ..Default::default()
         };
         let stmt = faceted_query(&filter, 50);
-        assert!(stmt.cypher.contains("k.label IN $kinds"));
+        assert!(stmt.cypher.contains("c.label IN $kinds"));
         assert!(!stmt.cypher.contains("IN_REALM"));
     }
 
@@ -388,7 +361,7 @@ mod tests {
             ..Default::default()
         };
         let stmt = filter_build_query(&filter);
-        assert!(stmt.cypher.contains("RETURN n, k2.label AS kind_label"));
+        assert!(stmt.cypher.contains("RETURN n, c2.label AS class_label"));
         assert!(stmt.cypher.contains("IN_REALM"));
         assert!(stmt.cypher.contains("IN_LAYER"));
     }
@@ -398,7 +371,7 @@ mod tests {
         let filter = FacetFilter {
             realms: vec!["shared".to_string(), "org".to_string()],
             layers: vec!["knowledge".to_string(), "structure".to_string()],
-            trait_filters: vec!["invariant".to_string(), "localized".to_string()],
+            trait_filters: vec!["defined".to_string(), "authored".to_string()],
             kinds: vec!["Locale".to_string()],
             arc_families: vec!["taxonomy".to_string()],
         };
@@ -406,7 +379,7 @@ mod tests {
         assert!(stmt.cypher.contains("IN_REALM"));
         assert!(stmt.cypher.contains("IN_LAYER"));
         assert!(stmt.cypher.contains("HAS_TRAIT"));
-        assert!(stmt.cypher.contains("k.label IN $kinds"));
+        assert!(stmt.cypher.contains("c.label IN $kinds"));
         // 5 params: realms, layers, traits, kinds, limit
         assert_eq!(stmt.params.len(), 5);
     }
@@ -451,11 +424,5 @@ mod tests {
     fn overlay_query_sort_order() {
         let stmt = overlay_query(100);
         assert!(stmt.cypher.contains("ORDER BY is_meta DESC, label, n.key"));
-    }
-
-    #[test]
-    fn meta_query_no_limit() {
-        let stmt = meta_query();
-        assert!(!stmt.cypher.contains("LIMIT"));
     }
 }

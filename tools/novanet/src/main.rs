@@ -43,11 +43,6 @@ enum Commands {
         #[arg(long)]
         no_validate: bool,
     },
-    /// Mode 1: Meta-graph only (MATCH (n:Meta)) [deprecated: use blueprint]
-    Meta {
-        #[arg(long, value_enum, default_value_t = OutputFormat::Table)]
-        format: OutputFormat,
-    },
     /// Mode 2: Data nodes only (WHERE NOT n:Meta)
     Data {
         #[arg(long, value_enum, default_value_t = OutputFormat::Table)]
@@ -161,7 +156,7 @@ struct QueryArgs {
 
 #[derive(Subcommand)]
 enum NodeAction {
-    /// Create a new node (auto-wires OF_KIND)
+    /// Create a new node (auto-wires OF_CLASS)
     Create {
         /// Kind label (e.g., Page, Entity, Project)
         #[arg(long)]
@@ -406,12 +401,6 @@ async fn main() -> color_eyre::Result<()> {
             let db = connect_db(&cli).await?;
             eprintln!("novanet data --format={format:?}");
             novanet::commands::read::run_data(&db, format).await?;
-        }
-        Commands::Meta { format } => {
-            eprintln!("⚠  'meta' is deprecated, use 'blueprint' instead");
-            let db = connect_db(&cli).await?;
-            eprintln!("novanet meta --format={format:?}");
-            novanet::commands::read::run_meta(&db, format).await?;
         }
         Commands::Overlay { format } => {
             let db = connect_db(&cli).await?;

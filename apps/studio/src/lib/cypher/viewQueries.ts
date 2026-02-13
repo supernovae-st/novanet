@@ -3,10 +3,8 @@
 // =============================================================================
 // Cypher query builders for each context view type
 //
-// @deprecated v11.6.1: This file is deprecated in favor of the unified view system.
-// Cypher queries are now embedded directly in packages/core/models/views/_registry.yaml.
+// NOTE: Cypher queries are now embedded directly in packages/core/models/views/_registry.yaml.
 // Use ViewLoader.getCypher(viewId) from @novanet/core/filters instead.
-// Migration: https://github.com/supernovae-st/novanet-hq/docs/plans/2026-02-11-unified-view-system-design.md
 
 import type { ViewId } from '@/config/viewTypes';
 

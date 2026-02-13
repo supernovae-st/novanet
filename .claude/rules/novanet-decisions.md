@@ -20,8 +20,8 @@ This file documents key architecture decisions for NovaNet. Reference these when
 
 ```
 SHARED (4 layers, 39 nodes): config, locale, geography, knowledge — READ-ONLY
-ORG (6 layers, 21 nodes): config, foundation, structure, semantic, instruction, output
-Total: 60 nodes, 10 layers, 5 traits
+ORG (6 layers, 20 nodes): config, foundation, structure, semantic, instruction, output
+Total: 59 nodes, 10 layers, 5 traits
 ```
 
 ### v0.12.0 "Class Act" Key Changes
@@ -786,7 +786,7 @@ REALMS (61 nodes total):
 | **SEO/GEO layers** | org/seo, org/geo (separate) | Removed from org |
 | **SEO/GEO nodes** | In org realm | Moved to shared/knowledge |
 | **Layer count** | 11 (3 shared + 8 org) | 10 (4 shared + 6 org) |
-| **Node distribution** | 32 shared + 29 org | **39 shared + 21 org = 60 nodes** |
+| **Node distribution** | 32 shared + 29 org | **39 shared + 20 org = 59 nodes** |
 
 ### Locale to Config Layer
 
@@ -832,19 +832,19 @@ AFTER (v11.5):
 ### Architecture Summary (v11.5)
 
 ```
-REALMS (60 nodes total):
+REALMS (59 nodes total):
 ├── shared/              # Universal knowledge (READ-ONLY) — 39 nodes
 │   ├── config/          # 3 nodes (EntityCategory, Locale, SEOKeywordFormat)
 │   ├── locale/          # 6 nodes (Culture, Style, Formatting, etc.)
 │   ├── geography/       # 6 nodes (Continent, Region, etc.)
 │   └── knowledge/       # 24 nodes (Terms, Expressions, SEO, GEO, etc.)
 │
-└── org/                 # Organization-specific — 21 nodes
+└── org/                 # Organization-specific — 20 nodes
     ├── config/          # 1 node (OrgConfig)
     ├── foundation/      # 3 nodes (Project, ProjectContent, BrandIdentity)
     ├── structure/       # 3 nodes (Page, Block, ContentSlot)
     ├── semantic/        # 4 nodes (Entity, EntityContent, AudiencePersona, ChannelSurface)
-    ├── instruction/     # 7 nodes (PageType, BlockType, prompts, etc.)
+    ├── instruction/     # 6 nodes (PageStructure, PageInstruction, BlockInstruction, BlockType, BlockRules, PromptArtifact)
     └── output/          # 3 nodes (PageGenerated, BlockGenerated, OutputArtifact)
 ```
 

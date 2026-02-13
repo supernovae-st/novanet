@@ -6,7 +6,7 @@
 
 import type { GraphNode, GraphEdge } from '@/types';
 import type { Layer, Realm } from '@novanet/core/types';
-import { KIND_META } from '@novanet/core/types';
+import { CLASS_TAXONOMY } from '@novanet/core/types';
 
 // Node format for react-force-graph-3d
 export interface ForceGraphNode {
@@ -76,7 +76,7 @@ export interface ForceGraphData {
  * Initializes x/y/z to prevent "undefined" errors in Three.js DragControls
  */
 function transformNode(node: GraphNode): Omit<ForceGraphNode, 'connectionCount'> {
-  const meta = KIND_META[node.type];
+  const meta = CLASS_TAXONOMY[node.type];
 
   // Generate deterministic initial position based on node id hash
   // This prevents "Cannot read properties of undefined (reading 'x')" in DragControls

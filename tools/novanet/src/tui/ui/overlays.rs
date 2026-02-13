@@ -190,17 +190,18 @@ pub fn render_help(f: &mut Frame, app: &App) {
             ]),
             Line::from(""),
             Line::from(vec![Span::styled("  Quick Jump (Traits)", STYLE_HIGHLIGHT)]),
+            // v0.12.0 ADR-024: Updated trait names
             Line::from(vec![
                 Span::styled("    gi       ", STYLE_PRIMARY),
-                Span::styled("Jump to invariant trait", STYLE_DIM),
+                Span::styled("Jump to defined trait", STYLE_DIM),
             ]),
             Line::from(vec![
                 Span::styled("    gl       ", STYLE_PRIMARY),
-                Span::styled("Jump to localized trait", STYLE_DIM),
+                Span::styled("Jump to authored trait", STYLE_DIM),
             ]),
             Line::from(vec![
                 Span::styled("    gk       ", STYLE_PRIMARY),
-                Span::styled("Jump to knowledge trait", STYLE_DIM),
+                Span::styled("Jump to imported trait", STYLE_DIM),
             ]),
             Line::from(vec![
                 Span::styled("    gg       ", STYLE_PRIMARY),
@@ -208,7 +209,7 @@ pub fn render_help(f: &mut Frame, app: &App) {
             ]),
             Line::from(vec![
                 Span::styled("    ga       ", STYLE_PRIMARY),
-                Span::styled("Jump to aggregated trait", STYLE_DIM),
+                Span::styled("Jump to retrieved trait", STYLE_DIM),
             ]),
             Line::from(vec![
                 Span::styled("    g0       ", STYLE_PRIMARY),
@@ -353,22 +354,22 @@ pub fn render_help(f: &mut Frame, app: &App) {
                 Span::styled("Quit", STYLE_DIM),
             ]),
             Line::from(""),
-            // v11.6.2: Trait Filter
+            // v0.12.0 ADR-024: Updated trait names (was "Trait Filter (Meta mode)")
             Line::from(vec![Span::styled(
-                "  Trait Filter (Meta mode)",
+                "  Trait Filter (Schema view)",
                 STYLE_HIGHLIGHT,
             )]),
             Line::from(vec![
                 Span::styled("    fi       ", STYLE_PRIMARY),
-                Span::styled("Filter: invariant (■)", STYLE_DIM),
+                Span::styled("Filter: defined (■)", STYLE_DIM),
             ]),
             Line::from(vec![
                 Span::styled("    fl       ", STYLE_PRIMARY),
-                Span::styled("Filter: localized (□)", STYLE_DIM),
+                Span::styled("Filter: authored (□)", STYLE_DIM),
             ]),
             Line::from(vec![
                 Span::styled("    fk       ", STYLE_PRIMARY),
-                Span::styled("Filter: knowledge (◊)", STYLE_DIM),
+                Span::styled("Filter: imported (◊)", STYLE_DIM),
             ]),
             Line::from(vec![
                 Span::styled("    fg       ", STYLE_PRIMARY),
@@ -376,7 +377,7 @@ pub fn render_help(f: &mut Frame, app: &App) {
             ]),
             Line::from(vec![
                 Span::styled("    fa       ", STYLE_PRIMARY),
-                Span::styled("Filter: aggregated (▪)", STYLE_DIM),
+                Span::styled("Filter: retrieved (▪)", STYLE_DIM),
             ]),
             Line::from(vec![
                 Span::styled("    ff       ", STYLE_PRIMARY),
@@ -402,8 +403,8 @@ pub fn render_help(f: &mut Frame, app: &App) {
                 Span::styled("Realm / Layer type", STYLE_DIM),
             ]),
             Line::from(vec![
-                Span::styled("    i l k g a", STYLE_PRIMARY),
-                Span::styled("Traits (inv/loc/know/gen/agg)", STYLE_DIM),
+                Span::styled("    d a i g r", STYLE_PRIMARY),
+                Span::styled("Traits (def/aut/imp/gen/ret)", STYLE_DIM),
             ]),
             Line::from(""),
             Line::from(Span::styled("  Press any key to close", STYLE_DIM)),
@@ -489,17 +490,18 @@ pub fn render_legend(f: &mut Frame, app: &App) {
         "  Traits (border style)",
         STYLE_HIGHLIGHT,
     )]));
+    // v0.12.0 ADR-024: Updated trait names (Data Origin semantics)
     lines.push(Line::from(vec![
         Span::styled("    ─── ", STYLE_PRIMARY),
-        Span::styled("invariant (solid)", STYLE_DIM),
+        Span::styled("defined (solid)", STYLE_DIM),
     ]));
     lines.push(Line::from(vec![
         Span::styled("    ╌╌╌ ", STYLE_PRIMARY),
-        Span::styled("localized (dashed)", STYLE_DIM),
+        Span::styled("authored (dashed)", STYLE_DIM),
     ]));
     lines.push(Line::from(vec![
         Span::styled("    ═══ ", STYLE_PRIMARY),
-        Span::styled("knowledge (double)", STYLE_DIM),
+        Span::styled("imported (double)", STYLE_DIM),
     ]));
     lines.push(Line::from(vec![
         Span::styled("    ··· ", STYLE_PRIMARY),
@@ -507,7 +509,7 @@ pub fn render_legend(f: &mut Frame, app: &App) {
     ]));
     lines.push(Line::from(vec![
         Span::styled("    · · ", STYLE_PRIMARY),
-        Span::styled("aggregated (dotted thin)", STYLE_DIM),
+        Span::styled("retrieved (dotted thin)", STYLE_DIM),
     ]));
 
     lines.push(Line::from(""));
@@ -880,9 +882,9 @@ mod tests {
     fn test_legend_trait_styles_count() {
         // v11.8: ADR-024 Data Origin semantics (5 traits)
         let expected_traits = [
-            "defined",   // was: invariant
-            "authored",  // was: localized
-            "imported",  // was: knowledge
+            "defined",  // was: invariant
+            "authored", // was: localized
+            "imported", // was: knowledge
             "generated",
             "retrieved", // was: aggregated
         ];

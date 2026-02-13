@@ -45,23 +45,23 @@ pub struct TraitStats {
 /// v0.12.0: renamed per ADR-024 Data Origin.
 /// Note: job trait removed in v11.2, derived split → generated + aggregated.
 pub const TRAIT_ORDER: [&str; 5] = [
-    "defined",    // was: invariant
-    "authored",   // was: localized
-    "imported",   // was: knowledge
+    "defined",  // was: invariant
+    "authored", // was: localized
+    "imported", // was: knowledge
     "generated",
-    "retrieved",  // was: aggregated
+    "retrieved", // was: aggregated
 ];
 
 /// Get symbol for a trait.
 /// v0.12.0: renamed per ADR-024 Data Origin.
 fn trait_symbol(key: &str) -> &'static str {
     match key {
-        "defined" => "\u{25a0}",    // ■ (was: invariant)
-        "authored" => "\u{25a1}",   // □ (was: localized)
-        "imported" => "\u{25ca}",   // ◊ (was: knowledge)
-        "generated" => "\u{2605}",  // ★
-        "retrieved" => "\u{25aa}",  // ▪ (was: aggregated)
-        _ => "\u{00b7}",            // ·
+        "defined" => "\u{25a0}",   // ■ (was: invariant)
+        "authored" => "\u{25a1}",  // □ (was: localized)
+        "imported" => "\u{25ca}",  // ◊ (was: knowledge)
+        "generated" => "\u{2605}", // ★
+        "retrieved" => "\u{25aa}", // ▪ (was: aggregated)
+        _ => "\u{00b7}",           // ·
     }
 }
 

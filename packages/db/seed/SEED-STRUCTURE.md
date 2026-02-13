@@ -5,26 +5,26 @@ This document describes the seed file organization aligned with the YAML archite
 ## Numbering Convention
 
 ```
-00-09  INFRASTRUCTURE + META-GRAPH
+00-09  INFRASTRUCTURE + SCHEMA GRAPH
        └── 00-constraints.cypher      ← Constraints (runs first)
        └── 00.5-taxonomy.cypher       ← Taxonomy (generated from YAML)
-       └── 01-kinds.cypher            ← NodeKinds (generated)
+       └── 01-classes.cypher          ← NodeClasses (generated)
        └── 01-vector-indexes.cypher   ← Vector indexes
-       └── 02-arc-kinds.cypher        ← ArcKinds (generated)
+       └── 02-arc-classes.cypher      ← ArcClasses (generated)
        └── Generated via: novanet schema generate
 
-20-29  GLOBAL REALM DATA (reference data)
+20-29  SHARED REALM DATA (reference data)
        └── Locales, locale knowledge (terms, expressions, patterns)
        └── SEO keywords, metrics
        └── Shared across all projects
 
-30-39  PROJECT REALM DATA (business data)
+30-39  ORG REALM DATA (business data)
        └── Organizations, Projects, Pages, Blocks, Entities
        └── Your production content
        └── Layer-ordered: config → foundation → structure → semantic → instruction → output
 
 99     AUTOWIRE (generated)
-       └── 99-autowire-kinds.cypher   ← Links data nodes to their Kinds
+       └── 99-autowire-classes.cypher ← Links data nodes to their Classes
        └── Generated via: novanet schema generate
 ```
 
@@ -37,18 +37,18 @@ This document describes the seed file organization aligned with the YAML archite
 | `00-constraints.cypher` | Uniqueness constraints on key properties | Manual |
 | `01-vector-indexes.cypher` | Vector similarity indexes for embeddings | Manual |
 
-### 00.5-99 META-GRAPH (generated)
+### 00.5-99 SCHEMA GRAPH (generated)
 
 | File | YAML Source | Description |
 |------|-------------|-------------|
-| `00.5-taxonomy.cypher` | `taxonomy.yaml` | 2 Realms, 8 Layers, 5 Traits |
-| `01-kinds.cypher` | `node-kinds/**/*.yaml` | 46 NodeKinds (23 global + 23 project) |
-| `02-arc-kinds.cypher` | `arc-kinds/**/*.yaml` | 51 ArcKinds |
-| `99-autowire-kinds.cypher` | (computed) | Links data nodes to their Kinds |
+| `00.5-taxonomy.cypher` | `taxonomy.yaml` | 2 Realms, 10 Layers, 5 Traits |
+| `01-classes.cypher` | `node-kinds/**/*.yaml` | 59 NodeClasses (39 shared + 20 org) |
+| `02-arc-classes.cypher` | `arc-kinds/**/*.yaml` | 114 ArcClasses |
+| `99-autowire-classes.cypher` | (computed) | Links data nodes to their Classes |
 
 **Regenerate:** `novanet schema generate` or `pnpm schema:generate`
 
-### 20-29 GLOBAL REALM DATA
+### 20-29 SHARED REALM DATA
 
 | File | Layer | Description |
 |------|-------|-------------|
@@ -58,7 +58,7 @@ This document describes the seed file organization aligned with the YAML archite
 
 **Regenerate locales:** `novanet locale generate` (from CSV + MD sources)
 
-### 30-39 TENANT REALM DATA
+### 30-39 ORG REALM DATA
 
 | File | Layer | Description |
 |------|-------|-------------|
@@ -66,7 +66,7 @@ This document describes the seed file organization aligned with the YAML archite
 | `31-project-qrcode-ai.cypher` | foundation | QR Code AI project with Pages, Entities |
 | `34-prompts.cypher` | instruction | Prompt templates and rules |
 
-**Layer order in tenant realm:**
+**Layer order in org realm:**
 1. `30-xx` config (Organizations)
 2. `31-xx` foundation (Projects, BrandIdentity)
 3. `32-xx` structure (Pages, Blocks)
@@ -100,20 +100,20 @@ cat _legacy/90-concepts-mvp.cypher | cypher-shell -u neo4j -p novanetpassword
 ```
 packages/core/models/                    packages/db/seed/
 ├── taxonomy.yaml                        ├── 00.5-taxonomy.cypher (generated)
-├── node-kinds/                          ├── 01-kinds.cypher (generated)
-│   ├── global/                          │
+├── node-kinds/                          ├── 01-classes.cypher (generated)
+│   ├── shared/                          │
 │   │   ├── config/      ────────────→   ├── 20-locales.cypher
 │   │   ├── knowledge/   ────────────→   ├── 21-locale-knowledge.cypher
 │   │   └── seo/         ────────────→   └── 25-seo-keywords.cypher
-│   └── project/                         │
+│   └── org/                             │
 │       ├── config/      ────────────→   ├── 30-org-*.cypher
 │       ├── foundation/  ────────────→   ├── 31-project-*.cypher
 │       ├── structure/   ────────────→   ├── 32-pages-*.cypher
 │       ├── semantic/    ────────────→   ├── 33-entities-*.cypher
 │       ├── instruction/ ────────────→   ├── 34-prompts-*.cypher
 │       └── output/      ────────────→   └── 35-outputs-*.cypher
-├── arc-kinds/                           ├── 02-arc-kinds.cypher (generated)
-└── (computed)                           └── 99-autowire-kinds.cypher (generated)
+├── arc-kinds/                           ├── 02-arc-classes.cypher (generated)
+└── (computed)                           └── 99-autowire-classes.cypher (generated)
 ```
 
 ## Workflow
@@ -168,7 +168,7 @@ pnpm db:restore backups/neo4j-before-my-changes.tar.gz
 
 1. **Use MERGE** - Idempotent inserts, safe to re-run
 2. **Use keys** - Every node needs a unique `key` property
-3. **Link to Kinds** - Use `[:OF_KIND]` or let `99-autowire-kinds.cypher` handle it
+3. **Link to Classes** - Use `[:OF_CLASS]` or let `99-autowire-classes.cypher` handle it
 4. **Order matters** - Lower numbers run first, dependencies must exist
 5. **Git track everything** - Seeds are code, review changes
 6. **Backup before migrations** - Use `pnpm db:backup`
@@ -179,12 +179,12 @@ After seeding, verify counts:
 
 ```cypher
 // Count by Realm
-MATCH (n)-[:OF_KIND]->(:Kind)-[:IN_REALM]->(r:Realm)
+MATCH (n)-[:OF_CLASS]->(:Schema:Class)-[:IN_REALM]->(r:Realm)
 RETURN r.key as realm, count(n) as nodes
 ORDER BY realm;
 
 // Count by Layer
-MATCH (n)-[:OF_KIND]->(:Kind)-[:IN_LAYER]->(l:Layer)
+MATCH (n)-[:OF_CLASS]->(:Schema:Class)-[:IN_LAYER]->(l:Layer)
 RETURN l.key as layer, count(n) as nodes
 ORDER BY layer;
 ```

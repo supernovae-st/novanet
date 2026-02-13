@@ -140,14 +140,14 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 label: l.display_name.clone(),
                 color: hex_to_color(&l.color),
             });
-            let kind_label = if app.is_graph_mode() && k.instance_count > 0 {
+            let class_label = if app.is_graph_mode() && k.instance_count > 0 {
                 format!("{} ({})", k.display_name, k.instance_count)
             } else {
                 k.display_name.clone()
             };
             path.push(BreadcrumbLevel {
                 icon: trait_icon(&k.trait_name),
-                label: kind_label,
+                label: class_label,
                 color: app.theme.trait_color(&k.trait_name),
             });
         }

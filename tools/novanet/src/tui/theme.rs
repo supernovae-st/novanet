@@ -465,11 +465,11 @@ impl Icons {
 
         // Traits (v0.12.0: renamed per ADR-024 Data Origin)
         // Icons from visual-encoding.yaml (source of truth)
-        icons.traits.insert("defined".into(), "■".into());    // was: invariant
-        icons.traits.insert("authored".into(), "□".into());   // was: localized
-        icons.traits.insert("imported".into(), "◊".into());   // was: knowledge
-        icons.traits.insert("generated".into(), "★".into());  // star for LLM-generated
-        icons.traits.insert("retrieved".into(), "▪".into());  // was: aggregated
+        icons.traits.insert("defined".into(), "■".into()); // was: invariant
+        icons.traits.insert("authored".into(), "□".into()); // was: localized
+        icons.traits.insert("imported".into(), "◊".into()); // was: knowledge
+        icons.traits.insert("generated".into(), "★".into()); // star for LLM-generated
+        icons.traits.insert("retrieved".into(), "▪".into()); // was: aggregated
 
         // Arc families
         icons.arc_families.insert("ownership".into(), "→".into());
@@ -981,16 +981,16 @@ mod tests {
     #[test]
     fn test_trait_borders() {
         // v11.8: Renamed per ADR-024 Data Origin semantics
-        assert_eq!(traits::border_char("defined"), "─");      // was: invariant
-        assert_eq!(traits::border_char("authored"), "┄");     // was: localized
+        assert_eq!(traits::border_char("defined"), "─"); // was: invariant
+        assert_eq!(traits::border_char("authored"), "┄"); // was: localized
         assert_eq!(traits::border_char("generated"), "═");
-        assert_eq!(traits::border_char("retrieved"), "┅");    // was: aggregated
+        assert_eq!(traits::border_char("retrieved"), "┅"); // was: aggregated
     }
 
     #[test]
     fn test_trait_modifiers() {
         // v11.8: Renamed per ADR-024 Data Origin semantics
-        assert_eq!(traits::modifier("defined"), Modifier::BOLD);    // was: invariant
+        assert_eq!(traits::modifier("defined"), Modifier::BOLD); // was: invariant
         assert_eq!(traits::modifier("authored"), Modifier::empty()); // was: localized
     }
 
@@ -1001,7 +1001,7 @@ mod tests {
         assert_eq!(theme.layer_color("output"), Color::Rgb(34, 197, 94));
         // v11.8: Renamed per ADR-024 Data Origin semantics
         assert_eq!(theme.trait_border("generated"), "═");
-        assert_eq!(theme.trait_border("retrieved"), "┅");     // was: aggregated
+        assert_eq!(theme.trait_border("retrieved"), "┅"); // was: aggregated
     }
 
     #[test]
@@ -1228,11 +1228,11 @@ mod tests {
     fn test_trait_border_via_theme() {
         let theme = Theme::with_mode(ColorMode::TrueColor);
         // v11.8: Renamed per ADR-024 Data Origin semantics
-        assert_eq!(theme.trait_border("defined"), "─");     // was: invariant
-        assert_eq!(theme.trait_border("authored"), "┄");    // was: localized
-        assert_eq!(theme.trait_border("imported"), "┈");    // was: knowledge
+        assert_eq!(theme.trait_border("defined"), "─"); // was: invariant
+        assert_eq!(theme.trait_border("authored"), "┄"); // was: localized
+        assert_eq!(theme.trait_border("imported"), "┈"); // was: knowledge
         assert_eq!(theme.trait_border("generated"), "═");
-        assert_eq!(theme.trait_border("retrieved"), "┅");   // was: aggregated
+        assert_eq!(theme.trait_border("retrieved"), "┅"); // was: aggregated
     }
 
     // =========================================================================

@@ -27,7 +27,7 @@ export interface FilterState {
  *   .fromPage('page-pricing')
  *   .includeBlocks()
  *   .includeEntities({ spreading: true })
- *   .includePrompts({ activeOnly: true })
+ *   .includeInstructions({ activeOnly: true })
  *   .forLocale('fr-FR')
  *   .maxDepth(2);
  *
@@ -151,13 +151,13 @@ export class NovaNetFilter {
   }
 
   /**
-   * Includes PagePrompt/BlockPrompt nodes via HAS_PROMPT.
+   * Includes PageInstruction/BlockInstruction nodes via HAS_INSTRUCTION.
    * @param opts - Optional configuration
-   * @param opts.activeOnly - Only include active prompts
+   * @param opts.activeOnly - Only include active instructions
    */
-  includePrompts(opts?: { activeOnly?: boolean }): this {
+  includeInstructions(opts?: { activeOnly?: boolean }): this {
     const rule: IncludeRule = {
-      relation: 'HAS_PROMPT',
+      relation: 'HAS_INSTRUCTION',
       direction: 'outgoing',
     };
     if (opts?.activeOnly) {

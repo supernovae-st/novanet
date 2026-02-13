@@ -34,9 +34,10 @@
  * - v7.12.1: Added anchor_type, nofollow to LINKS_TO
  * - v7.12.0: Added LINKS_TO, SUBTOPIC_OF for page relationships
  * - v7.11.0: Added PREVIOUS_VERSION, removed PageGenerated → PageMetrics
- * - v7.10.0: OF_TYPE supports Page → PageType
+ * - v11.8.0: ADR-025 — Page -[:HAS_STRUCTURE]-> PageStructure (was OF_TYPE → PageType)
+ * - v7.10.0: OF_TYPE supports Page → PageType (DEPRECATED, see v11.8.0)
  * - v7.8.5: Unified HAS_METRICS for all time-series observations
- * - v7.2.0: Added HAS_PROMPT, HAS_RULES, GENERATED for prompts
+ * - v7.2.0: Added HAS_INSTRUCTION, HAS_RULES, GENERATED for instructions
  * - v7.0.0: Unified USES_ENTITY, HAS_GENERATED
  */
 
@@ -91,6 +92,7 @@ export const RelationType = {
   // PAGE STRUCTURE
   // ─────────────────────────────────────────────────────────────────────────────
   HAS_BLOCK: 'HAS_BLOCK',           // Page → Block
+  HAS_STRUCTURE: 'HAS_STRUCTURE',   // Page → PageStructure (v11.8: ADR-025)
   OF_TYPE: 'OF_TYPE',               // Block → BlockType
 
   // ─────────────────────────────────────────────────────────────────────────────
@@ -146,11 +148,11 @@ export const RelationType = {
   BELONGS_TO_PROJECT_CONTENT: 'BELONGS_TO_PROJECT_CONTENT', // PageGenerated → ProjectContent (locale-aligned)
 
   // ─────────────────────────────────────────────────────────────────────────────
-  // PROMPT RELATIONS (v7.2.0 - AI instructions with versioning)
+  // INSTRUCTION RELATIONS
   // ─────────────────────────────────────────────────────────────────────────────
-  HAS_PROMPT: 'HAS_PROMPT',   // Page|Block → PagePrompt|BlockPrompt
-  HAS_RULES: 'HAS_RULES',     // BlockType → BlockRules
-  GENERATED: 'GENERATED',     // PagePrompt|BlockPrompt → PageGenerated|BlockGenerated (provenance)
+  HAS_INSTRUCTION: 'HAS_INSTRUCTION',   // Page|Block → PageInstruction|BlockInstruction
+  HAS_RULES: 'HAS_RULES',               // BlockType → BlockRules
+  GENERATED: 'GENERATED',               // PageInstruction|BlockInstruction → PageGenerated|BlockGenerated (provenance)
 
   // ─────────────────────────────────────────────────────────────────────────────
   // VERSION HISTORY (v7.11.0)
@@ -339,16 +341,16 @@ export const InfluencedByPropsSchema = z.object({
 }).describe('INFLUENCED_BY relation properties for provenance tracking');
 
 // ─────────────────────────────────────────────────────────────────────────────
-// PROMPT RELATION PROPS
+// INSTRUCTION RELATION PROPS
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * Properties for GENERATED relation (PagePrompt|BlockPrompt → PageGenerated|BlockGenerated).
+ * Properties for GENERATED relation (PageInstruction|BlockInstruction → PageGenerated|BlockGenerated).
  */
 export const GeneratedPropsSchema = z.object({
   generated_at: z.date()
     .describe('Timestamp when the generation occurred'),
-}).describe('GENERATED relation properties for prompt-to-output provenance');
+}).describe('GENERATED relation properties for instruction-to-output provenance');
 
 // =============================================================================
 // RELATION REGISTRY
@@ -540,12 +542,19 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
     props: HasBlockPropsSchema,
     description: 'Page contains blocks with position',
   },
+  [RelationType.HAS_STRUCTURE]: {
+    type: RelationType.HAS_STRUCTURE,
+    from: 'Page',
+    to: 'PageStructure',
+    cardinality: 'N:1',
+    description: 'Page uses a specific structure (v11.8: ADR-025)',
+  },
   [RelationType.OF_TYPE]: {
     type: RelationType.OF_TYPE,
-    from: ['Page', 'Block'],
-    to: ['PageType', 'BlockType'],
+    from: 'Block',
+    to: 'BlockType',
     cardinality: 'N:1',
-    description: 'Page or Block is of a specific type (v7.10.0: Page → PageType, Block → BlockType)',
+    description: 'Block is of a specific type (Block → BlockType)',
   },
 
   // ─────────────────────────────────────────────────────────────────────────────
@@ -702,29 +711,29 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   },
 
   // ─────────────────────────────────────────────────────────────────────────────
-  // PROMPT RELATIONS (v7.2.0 - AI instructions with versioning)
+  // INSTRUCTION RELATIONS
   // ─────────────────────────────────────────────────────────────────────────────
-  [RelationType.HAS_PROMPT]: {
-    type: RelationType.HAS_PROMPT,
+  [RelationType.HAS_INSTRUCTION]: {
+    type: RelationType.HAS_INSTRUCTION,
     from: ['Page', 'Block'],
-    to: ['PagePrompt', 'BlockPrompt'],
+    to: ['PageInstruction', 'BlockInstruction'],
     cardinality: '1:N',
-    description: 'Links structure nodes to their AI prompts (v7.2.0)',
+    description: 'Links structure nodes to their AI instructions',
   },
   [RelationType.HAS_RULES]: {
     type: RelationType.HAS_RULES,
     from: 'BlockType',
     to: 'BlockRules',
     cardinality: '1:N',
-    description: 'Links BlockType to generation rules (v7.2.0)',
+    description: 'Links BlockType to generation rules',
   },
   [RelationType.GENERATED]: {
     type: RelationType.GENERATED,
-    from: ['PagePrompt', 'BlockPrompt'],
+    from: ['PageInstruction', 'BlockInstruction'],
     to: ['PageGenerated', 'BlockGenerated'],
     cardinality: 'N:M',
     props: GeneratedPropsSchema,
-    description: 'Provenance: which prompt generated which output (v7.2.0)',
+    description: 'Provenance: which instruction generated which output',
   },
 
   // ─────────────────────────────────────────────────────────────────────────────

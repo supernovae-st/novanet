@@ -78,13 +78,12 @@ export const NODE_ICONS: Record<NodeType, string> = {
   AudiencePersona: '👤',
   ChannelSurface: '📡',
 
-  // ORG — instruction (7)
-  PageType: '📐',
+  // ORG — instruction (6)
+  PageStructure: '📐',
   BlockType: '📋',
-  PagePrompt: '📝',
-  BlockPrompt: '📝',
-  BlockRules: '📏',
+  PageInstruction: '📝',
   BlockInstruction: '📜',
+  BlockRules: '📏',
   PromptArtifact: '📋',
 
   // ORG — output (3)

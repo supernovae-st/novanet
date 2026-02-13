@@ -3,7 +3,7 @@
 id: project-layer
 name: Project Layer
 description: Per-project nodes from foundation to generated output
-version: "8.0.0"
+version: "11.8.0"
 
 root:
   type: Project
@@ -23,9 +23,9 @@ include:
   - relation: HAS_PAGE
     direction: outgoing
     include:
-      - relation: OF_TYPE
+      - relation: HAS_STRUCTURE
         direction: outgoing
-      - relation: HAS_PROMPT
+      - relation: HAS_INSTRUCTION
         direction: outgoing
       - relation: HAS_GENERATED
         direction: outgoing
@@ -34,7 +34,7 @@ include:
         include:
           - relation: OF_TYPE
             direction: outgoing
-          - relation: HAS_PROMPT
+          - relation: HAS_INSTRUCTION
             direction: outgoing
           - relation: HAS_GENERATED
             direction: outgoing
@@ -61,7 +61,7 @@ docs:
     - **Foundation (3)**: Project, BrandIdentity, ProjectContent
     - **Structure (2)**: Page, Block
     - **Semantic (2)**: Entity, EntityContent
-    - **Instruction (5)**: PageType, PagePrompt, BlockType, BlockPrompt, BlockRules
+    - **Instruction (5)**: PageStructure, PageInstruction, BlockType, BlockInstruction, BlockRules
     - **Output (2)**: PageGenerated, BlockGenerated
 
     **Key insight:**
@@ -85,7 +85,7 @@ docs:
       description: Meaning and knowledge (invariant + localized)
 
     - name: Instruction
-      nodes: [PageType, PagePrompt, BlockType, BlockPrompt, BlockRules]
+      nodes: [PageStructure, PageInstruction, BlockType, BlockInstruction, BlockRules]
       color: orange
       description: AI generation directives (invariant)
 
@@ -133,12 +133,12 @@ docs:
       description: Load full context for generating a page
       query: |
         MATCH (p:Project {key: $projectKey})-[:HAS_PAGE]->(page:Page {key: $pageKey})
-        MATCH (page)-[:HAS_PROMPT]->(pp:PagePrompt)
+        MATCH (page)-[:HAS_INSTRUCTION]->(pi:PageInstruction)
         OPTIONAL MATCH (page)-[:HAS_BLOCK]->(b:Block)
         OPTIONAL MATCH (b)-[:USES_ENTITY]->(c:Entity)
         OPTIONAL MATCH (c)-[:HAS_CONTENT]->(cl:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
         RETURN page.key AS page,
-               pp.instructions AS instructions,
+               pi.content AS instructions,
                collect(DISTINCT b.key) AS blocks,
                collect(DISTINCT {concept: c.key, title: cl.title}) AS concepts
       params:

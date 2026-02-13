@@ -7,7 +7,7 @@
 # HOW:  Orchestrator dispatches to sub-agents, each generates a Block natively
 #
 # ═══════════════════════════════════════════════════════════════════════════════
-# TWO-REALM ARCHITECTURE (v10.3.0 - Entity-centric, SHARED merged into GLOBAL)
+# TWO-REALM ARCHITECTURE (v0.12.0 ADR-025)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 #   ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -15,85 +15,112 @@
 #   ├─────────────────────────────────────────────────────────────────────────────┤
 #   │                                                                             │
 #   │  ┌───────────────────────────────────────────────────────────────────────┐  │
-#   │  │  🌍 GLOBAL (22 nodes) - Single instance, shared by ALL projects       │  │
-#   │  │  └─ config/    Locale (1)                                             │  │
-#   │  │  └─ knowledge/ 18 knowledge nodes (10 containers + 6 atoms + Entity)  │  │
-#   │  │      Entity:     Entity (invariant), EntityContent (localized)           │  │
-#   │  │      Containers: Style, Formatting, Slugification, Adaptation,        │  │
-#   │  │                  TermSet, ExpressionSet, PatternSet, CultureSet,      │  │
-#   │  │                  TabooSet, AudienceSet                                │  │
-#   │  │      Atoms:      Term, Expression, Pattern, Taboo, CultureRef,        │  │
-#   │  │                  AudienceTrait                                        │  │
-#   │  │  └─ seo/       3 SEO nodes (v10.2: moved from SHARED)                 │  │
-#   │  │      SEOKeyword (knowledge), SEOKeywordMetrics (derived),             │  │
-#   │  │      SEOMiningRun (job)                                               │  │
+#   │  │  🌍 SHARED (39 nodes) - Universal knowledge, shared by ALL orgs      │  │
+#   │  │  └─ config/     3 nodes: Locale, EntityCategory, SEOKeywordFormat    │  │
+#   │  │  └─ geography/  6 nodes: Continent, GeoRegion, GeoSubRegion,         │  │
+#   │  │                          EconomicRegion, IncomeGroup, LendingCategory│  │
+#   │  │  └─ knowledge/ 24 nodes:                                             │  │
+#   │  │      Containers: TermSet, ExpressionSet, PatternSet, CultureSet,     │  │
+#   │  │                  TabooSet, AudienceSet, SEOKeywordSet, GEOQuerySet   │  │
+#   │  │      Atoms:      Term, Expression, Pattern, Taboo, CultureRef,       │  │
+#   │  │                  AudienceTrait, SEOKeyword, GEOQuery, GEOAnswer      │  │
+#   │  │      Metrics:    SEOKeywordMetrics                                   │  │
+#   │  │      Cultural:   CulturalRealm, CulturalSubRealm                     │  │
+#   │  │      Linguistic: LanguageFamily, LanguageBranch                      │  │
+#   │  │      Population: PopulationCluster, PopulationSubCluster             │  │
+#   │  │  └─ locale/     6 nodes: Culture, Style, Formatting, Slugification,  │  │
+#   │  │                          Adaptation, Market                          │  │
 #   │  └───────────────────────────────────────────────────────────────────────┘  │
 #   │                                                                             │
 #   │  ┌───────────────────────────────────────────────────────────────────────┐  │
-#   │  │  📦 PROJECT (21 nodes) - Per-project instances                        │  │
-#   │  │  └─ foundation/  🏢 Project, BrandIdentity, ProjectContent               │  │
-#   │  │  └─ structure/   🔧 Page, Block, ContentSlot                          │  │
-#   │  │  └─ semantic/    💡 AudiencePersona, ChannelSurface                   │  │
-#   │  │  └─ instruction/ 📝 PageType, PagePrompt, BlockPrompt, BlockType,     │  │
-#   │  │                     BlockRules, PromptArtifact, BlockInstruction      │  │
-#   │  │  └─ output/      📤 PageGenerated, BlockGenerated, GenerationJob, OutputArtifact│  │
-#   │  │                     EvaluationSignal                                  │  │
+#   │  │  📦 ORG (20 nodes) - Organization-specific content                   │  │
+#   │  │  └─ config/      1 node:  OrgConfig                                  │  │
+#   │  │  └─ foundation/  3 nodes: Project, BrandIdentity, ProjectContent     │  │
+#   │  │  └─ structure/   3 nodes: Page, Block, ContentSlot                   │  │
+#   │  │  └─ semantic/    4 nodes: Entity, EntityContent, AudiencePersona,    │  │
+#   │  │                           ChannelSurface                             │  │
+#   │  │  └─ instruction/ 6 nodes: PageStructure, PageInstruction, BlockType, │  │
+#   │  │                           BlockRules, BlockInstruction, PromptArtifact│  │
+#   │  │  └─ output/      3 nodes: PageGenerated, BlockGenerated,             │  │
+#   │  │                           OutputArtifact                             │  │
 #   │  └───────────────────────────────────────────────────────────────────────┘  │
 #   │                                                                             │
 #   └─────────────────────────────────────────────────────────────────────────────┘
 #
 # ═══════════════════════════════════════════════════════════════════════════════
-# GRAPH STRUCTURE
+# PAGE COMPOSITION ARCHITECTURE
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-#   Project ──┬─[:SUPPORTS_LOCALE {status}]───┐
-#             │                                v
-#             ├─[:DEFAULT_LOCALE]───────────> Locale ─[:HAS_*]──> LocaleKnowledge*
-#             │                                  │
-#             ├─[:HAS_BRAND_IDENTITY]─> BrandIdentity  └─[:HAS_SEO_KEYWORDS]──> SEOKeyword
+#   Project ──┬─[:SUPPORTS_LOCALE]───────> Locale ─[:HAS_*]──> LocaleKnowledge*
 #             │
-#             ├─[:HAS_L10N]─> ProjectContent ──:FOR_LOCALE──> Locale
+#             ├─[:HAS_BRAND_IDENTITY]─> BrandIdentity
 #             │
-#             └─[:HAS_PAGE]─> Page ──┬─[:HAS_BLOCK {position}]─> Block ──:OF_TYPE──> BlockType
+#             ├─[:HAS_CONTENT]─> ProjectContent ──:FOR_LOCALE──> Locale
+#             │
+#             └─[:HAS_PAGE]─> Page ──┬─[:HAS_STRUCTURE]─> PageStructure (template)
+#                               │    │
+#                               │    ├─[:HAS_BLOCK {position}]─> Block ──:OF_TYPE──> BlockType
+#                               │    │                            │
+#                               │    │                     :HAS_INSTRUCTION──> BlockInstruction
 #                               │    │                            │
 #                               │    │                     :USES_ENTITY
 #                               │    │                            v
-#                               │    │                         Entity ──[:HAS_L10N]──> EntityContent
+#                               │    │                         Entity ──[:HAS_CONTENT]──> EntityContent
 #                               │    │                            │           ──:FOR_LOCALE──> Locale
-#                               │    │                            │                    │
-#                               │    │                     :SEMANTIC_LINK        :HAS_SEO_TARGET
-#                               │    │                            v                    v
-#                               │    │                         Entity             SEOKeyword
+#                               │    │                            │
+#                               │    │                     :SEMANTIC_LINK (spreading activation)
+#                               │    │                            v
+#                               │    │                         Entity
 #                               │    │
-#                               │    └──:HAS_OUTPUT──> BlockGenerated ──:FOR_LOCALE──> Locale
+#                               │    └──:HAS_GENERATED──> BlockGenerated ──:FOR_LOCALE──> Locale
 #                               │
-#                               ├──:USES_ENTITY──> Entity (global)
+#                               ├──:HAS_INSTRUCTION──> BlockInstruction (compiled to PageInstruction)
 #                               │
-#                               ├──:LINKS_TO {entity_key, context, seo_weight, anchor_type, nofollow}──> Page (v10.3)
+#                               ├──:USES_ENTITY──> Entity (invariant)
 #                               │
-#                               ├──:SUBTOPIC_OF──> Page (pillar-cluster hierarchy, v7.12.0)
+#                               ├──:LINKS_TO {entity_key, context, anchor_type, nofollow}──> Page
 #                               │
-#                               └──:HAS_OUTPUT──> PageGenerated ──:FOR_LOCALE──> Locale
-#                                                     │
-#                                               :PREVIOUS_VERSION
-#                                                     v
-#                                               PageGenerated (history)
+#                               ├──:SUBTOPIC_OF──> Page (pillar-cluster SEO hierarchy)
+#                               │
+#                               └──:HAS_GENERATED──> PageGenerated ──:FOR_LOCALE──> Locale
 #
 # ═══════════════════════════════════════════════════════════════════════════════
-# ARC FAMILIES (v9.5.0 - replaces relation classification)
+# INSTRUCTION LAYER (v0.12.0 ADR-025)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-#   ownership     (11) - Structural containment (HAS_PAGE, HAS_BLOCK, etc.)
-#   localization  (22) - L10n + locale linking (HAS_L10N, FOR_LOCALE, etc.)
-#   semantic       (5) - Meaning connections (SEMANTIC_LINK, USES_ENTITY, etc.)
-#   generation     (5) - AI output (GENERATES, USES_PROMPT, etc.)
-#   mining         (7) - Discovery jobs (MINES, HAS_METRICS, etc.)
+#   PageStructure   Template rules for page composition (required_block_types, layout_rules)
+#        │
+#        └──── Page ──[:HAS_BLOCK]──> Block ──[:HAS_INSTRUCTION]──> BlockInstruction
+#                                       │                              │
+#                                       │                       markdown content with
+#                                       │                       @entity:key, @link:key syntax
+#                                       │                              │
+#                              [:OF_TYPE]                     [:REFERENCES_ENTITY]
+#                                   │                         [:REFERENCES_PAGE]
+#                                   v                              │
+#                              BlockType                           v
+#                              (rules, schema)               Entity / Page
+#
+#   BlockInstruction → compiled by order into → PageInstruction
+#                                                  │
+#                                           sent to LLM for
+#                                           PageGenerated output
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+# ARC FAMILIES (v0.12.0)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+#   ownership     (12) - Structural containment (HAS_PAGE, HAS_BLOCK, HAS_STRUCTURE, etc.)
+#   localization  (22) - Locale linking (HAS_CONTENT, FOR_LOCALE, etc.)
+#   semantic      (10) - Meaning connections (SEMANTIC_LINK, USES_ENTITY, BELONGS_TO, etc.)
+#   generation     (5) - AI output (HAS_GENERATED, HAS_INSTRUCTION, etc.)
+#   mining         (7) - Discovery jobs (HAS_SEO_TARGET, HAS_METRICS, etc.)
 #
 #   See taxonomy.yaml for full ArcFamily definitions.
 #   See arc-kinds/ directory for all arc types with family assignment.
 #
 # ═══════════════════════════════════════════════════════════════════════════════
-# STANDARD NODE PROPERTIES v7.11.0 (simplified from v7.1.0)
+# STANDARD NODE PROPERTIES v0.12.0
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 #   key: string              # Semantic prefix + identifier (unique per label)
@@ -103,339 +130,279 @@
 #   created_at: datetime
 #   updated_at: datetime
 #
-#   REMOVED v7.11.0: icon (UI concern), priority (YAGNI), freshness (YAGNI)
-#
 # ═══════════════════════════════════════════════════════════════════════════════
 # NAMING CONVENTIONS (Neo4j official)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-#   NODE LABELS:      CamelCase, uppercase first (ConceptL10n, PageGenerated)
-#   RELATIONSHIPS:    UPPER_SNAKE_CASE (HAS_L10N, FOR_LOCALE)
+#   NODE LABELS:      CamelCase, uppercase first (EntityContent, PageGenerated)
+#   RELATIONSHIPS:    UPPER_SNAKE_CASE (HAS_CONTENT, FOR_LOCALE)
 #   PROPERTIES:       snake_case (display_name, llm_context)
 #
 # ═══════════════════════════════════════════════════════════════════════════════
-# NOMENCLATURE v7.8.0
+# NODE NAMING PATTERNS (v0.12.0)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-#   *L10n suffix  → ALL localized content (human OR LLM generated)
-#   :HAS_L10N     → human-curated content (ConceptL10n, ProjectContent)
-#   :HAS_OUTPUT   → LLM-generated content (PageGenerated, BlockGenerated)
-#   *Metrics      → Time-series observations (SEOKeywordMetrics)
-#   Locale*       → Locale Knowledge nodes (LocaleVoice, LocaleCulture, etc.)
+#   FooContent   → localized semantic content for invariant Foo (authored trait)
+#   FooGenerated → LLM-generated output from Foo (generated trait)
+#   FooSet       → container grouping Foo atoms (defined trait)
+#   FooMetrics   → computed/retrieved metrics (retrieved trait)
+#
+#   Examples:
+#     Entity → EntityContent (semantic layer, authored)
+#     Page → PageGenerated (output layer, generated)
+#     Term → TermSet (knowledge container, defined)
+#     SEOKeyword → SEOKeywordMetrics (retrieved)
 #
 # ═══════════════════════════════════════════════════════════════════════════════
-# CHANGES v9.0.0 (from v8.2.0)
+# CHANGES v0.12.0 (SemVer transition from v11.x milestone versions)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-# Self-Describing Context Graph:
-#   - NEW: organizing-principles.yaml with 6 meta-node types
-#         (Realm, Layer, Kind, Trait, ArcFamily, ArcKind)
-#   - RENAMED: Scope → Realm (global, project, shared)
-#   - RENAMED: Subcategory → Layer (9 functional layers)
-#   - RENAMED: locale_behavior trait "localeKnowledge" → "knowledge"
-#   - NEW: locale_behavior field on ALL 35 node YAMLs (replaces category)
-#   - REMOVED: category meta field from all node YAMLs
-#   - FIXED: stale header comments on all 35 node YAMLs
+# ADR-024: Trait Renames (Data Origin clarity)
+#   - invariant → defined (language-independent, defined once)
+#   - localized → authored (per-locale content, human-curated)
+#   - knowledge → imported (knowledge ABOUT a locale, imported from sources)
+#   - derived   → generated (LLM-generated output)
+#   - aggregated → retrieved (computed/retrieved metrics)
 #
-# Relations v9 format:
-#   - REWRITTEN: relations.yaml from dict→list format
-#   - NEW: family field on every relation (ownership/localization/semantic/generation/mining)
-#   - NEW: cardinality field (one_to_one, one_to_many, many_to_one, many_to_many)
-#   - RENAMED: from/to → source/target
-#   - RENAMED: description → llm_context
-#   - EXPANDED: wildcard "*" sources to explicit node lists
-#   - EXPANDED: string-encoded "[A, B]" to proper YAML lists
+# ADR-025: Naming Clarifications
+#   - PageType → PageStructure (template rules, not content type)
+#   - PagePrompt → PageInstruction (compiled from BlockInstructions)
+#   - BlockPrompt → BlockInstruction (markdown with @entity/@link refs)
+#   - HAS_PROMPT → HAS_INSTRUCTION (relation rename)
+#   - OF_TYPE (Page→PageType) → HAS_STRUCTURE (Page→PageStructure)
 #
-# Meta-graph classification:
-#   - NEW: 3 Realms (global, project, shared)
-#   - NEW: 8 Layers (config, knowledge, foundation, structure, semantic, instruction, output, seo)
-#   - NEW: 5 Traits (invariant, localized, knowledge, derived, job)
-#   - NEW: 5 ArcFamilies (ownership, localization, semantic, generation, mining)
-#   - NEW: OF_KIND replaces IN_SUBCATEGORY
-#
-# Statistics: 43 nodes, 65 arcs (5 arc families), 2 realms — v10.3.0
-#
-# ═══════════════════════════════════════════════════════════════════════════════
-# CHANGES v8.2.0 (from v8.1.0)
-# ═══════════════════════════════════════════════════════════════════════════════
-#
-# YAML v7.11.0 Alignment Complete:
-#   - REMOVED: icon, priority, freshness from ALL TypeScript interfaces
-#   - REMOVED: Priority, Freshness type definitions
-#   - REMOVED: icon, priority, freshness from ALL Neo4j seeds
-#   - ADDED: NODE_ICONS config in presentation layer
-#   - ADDED: Migration script 004-remove-deprecated-properties.cypher
-#
-# Standard properties (6 total):
-#   key, display_name, description, llm_context, created_at, updated_at
-#
-# Statistics: 35 nodes (unchanged), 50 relations (unchanged)
-#
-# ═══════════════════════════════════════════════════════════════════════════════
-# CHANGES v8.0.0 (from v7.12.0)
-# ═══════════════════════════════════════════════════════════════════════════════
-#
-# SEO Anchor Optimization for LINKS_TO:
-#   - ADDED: anchor_type (exact_match | partial_match | branded | generic)
-#            - exact_match: anchor = ConceptL10n.title exactly (5× traffic, max 10%)
-#            - partial_match: anchor includes concept keywords (default)
-#            - branded: anchor = brand name (QR Code AI)
-#            - generic: anchor = "click here" (low SEO value)
-#   - ADDED: nofollow (boolean, default false)
-#            - Set true for login/legal pages to prevent link equity flow
-#
-# Statistics: 35 nodes, 50 relations (unchanged)
-#
-# ═══════════════════════════════════════════════════════════════════════════════
-# CHANGES v7.12.0 (from v7.11.0)
-# ═══════════════════════════════════════════════════════════════════════════════
-#
-# Page-to-Page Relationships for SEO:
-#   - ADDED: LINKS_TO (Page → Page) for explicit internal linking
-#            Props: concept_key (anchor from ConceptL10n.title), context, seo_weight
-#   - ADDED: SUBTOPIC_OF (Page → Page) for pillar-cluster hierarchy
-#   - UPDATED: PageType.category to include "pillar" | "cluster" values
-#
-# Statistics: 35 nodes, 63 relations (+2)
-#
-# ═══════════════════════════════════════════════════════════════════════════════
-# CHANGES v7.11.0 (from v7.10.0)
-# ═══════════════════════════════════════════════════════════════════════════════
-#
-# Simplification + Versioning:
-#   - REMOVED: priority, freshness, icon from standard properties (YAGNI)
-#   - REMOVED: PageMetrics node (query GA/PostHog with date ranges instead)
-#   - ADDED: PREVIOUS_VERSION relation for BlockGenerated, PageGenerated history chain
-#   - ADDED: version, published_at, replaced_at properties on L10n nodes
-#
-# Statistics: 35 nodes (-1), 61 relations (+1)
-#
-# ═══════════════════════════════════════════════════════════════════════════════
-# CHANGES v7.10.0 (from v7.9.0)
-# ═══════════════════════════════════════════════════════════════════════════════
-#
-# PageType node (mirrors BlockType pattern):
-#   - ADDED: PageType node in instruction layer
-#   - ADDED: Page -[:OF_TYPE]-> PageType relation
-#   - REMOVED: Page.page_type enum property
-#   - REMOVED: Page.generation_priority (redundant with priority)
-#
-# ═══════════════════════════════════════════════════════════════════════════════
-# CHANGES v7.9.0 (from v7.8.5)
-# ═══════════════════════════════════════════════════════════════════════════════
-#
-# Folder Restructure (scope-based, aligned with GRAPH-DETAILED.md):
-#   - RESTRUCTURED: nodes/ now organized by scope (global/, shared/, project/)
-#   - NEW: nodes/global/config/ for Locale configuration
-#   - NEW: nodes/global/knowledge/ for 14 LocaleKnowledge nodes
-#   - NEW: nodes/shared/seo/ for SHARED scope
-#   - NEW: nodes/project/{role}/ for PROJECT scope by functional role
-#   - NEW: models/schema/nodes.schema.json for JSON Schema validation
-#
-# Functional Role Sub-folders (within project/):
-#   - foundation/  🏢 Project, BrandIdentity, ProjectContent
-#   - structure/   🔧 Page, Block
-#   - semantic/    💡 Concept, ConceptL10n
-#   - instruction/ 📝 PagePrompt, BlockPrompt, BlockType, BlockRules
-#   - output/      📤 PageGenerated, BlockGenerated, PageMetrics
-#
-# Benefits:
-#   - Perfect alignment with GRAPH-DETAILED.md scope architecture
-#   - Clear separation: GLOBAL (shared) vs SHARED (reusable) vs PROJECT (per-tenant)
-#   - Easy to understand multi-tenant boundaries
-#   - JSON Schema enables programmatic validation
-#
-# ═══════════════════════════════════════════════════════════════════════════════
-# CHANGES v7.8.5 (Unified Metrics Pattern)
-# ═══════════════════════════════════════════════════════════════════════════════
-#
-# Unified HAS_METRICS relation for all time-series observations:
-#   - RENAMED: SEOSnapshot → SEOKeywordMetrics
-#   - REMOVED: GEOCitation (GEO layer removed)
-#   - REMOVED: HAS_SNAPSHOT (replaced by HAS_METRICS)
-#   - REMOVED: HAS_CITATION (replaced by HAS_METRICS)
-#
-# Semantic vs Auxiliary relation classification documented.
+# Statistics: 59 nodes (39 shared + 20 org), 56 arcs (5 arc families)
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 
 files:
   # ═══════════════════════════════════════════════════════════════════════════
-  # 🌍 GLOBAL REALM (22 nodes) - Shared by ALL projects
+  # 🌍 SHARED REALM (39 nodes) - Universal knowledge, READ-ONLY
   # ═══════════════════════════════════════════════════════════════════════════
 
-  global:
-    # Locale configuration (1 node)
+  shared:
+    # Configuration (3 nodes)
     config:
-      - node-kinds/global/config/locale.yaml
+      - node-kinds/shared/config/locale.yaml           # BCP-47 locale definition
+      - node-kinds/shared/config/entity-category.yaml  # Entity classification (13 types)
+      - node-kinds/shared/config/seo-keyword-format.yaml # SEO keyword format
 
-    # Locale knowledge (18 nodes) - v10.3 Entity-centric + Knowledge Atoms model
+    # Geography (6 nodes) - World Bank / UN classification
+    geography:
+      - node-kinds/shared/geography/continent.yaml
+      - node-kinds/shared/geography/geo-region.yaml
+      - node-kinds/shared/geography/geo-sub-region.yaml
+      - node-kinds/shared/geography/economic-region.yaml
+      - node-kinds/shared/geography/income-group.yaml
+      - node-kinds/shared/geography/lending-category.yaml
+
+    # Knowledge (24 nodes) - Locale knowledge atoms + SEO/GEO
     knowledge:
-      # Entity nodes (2) - v10.3 replaces project/semantic/Concept
-      - node-kinds/global/knowledge/entity.yaml           # Invariant entity
-      - node-kinds/global/knowledge/entity-l10n.yaml      # Localized content
-      # Container nodes (10) - aggregate knowledge by category
-      - node-kinds/global/knowledge/formatting.yaml       # Technical
-      - node-kinds/global/knowledge/slugification.yaml    # Technical
-      - node-kinds/global/knowledge/adaptation.yaml       # Technical
-      - node-kinds/global/knowledge/style.yaml            # Style
-      - node-kinds/global/knowledge/term-set.yaml         # Semantic container
-      - node-kinds/global/knowledge/expression-set.yaml   # Semantic container
-      - node-kinds/global/knowledge/pattern-set.yaml      # Semantic container
-      - node-kinds/global/knowledge/culture-set.yaml      # Semantic container
-      - node-kinds/global/knowledge/taboo-set.yaml        # Semantic container
-      - node-kinds/global/knowledge/audience-set.yaml     # Semantic container
-      # Atom nodes (6) - granular knowledge items for selective LLM loading
-      - node-kinds/global/knowledge/atoms/term.yaml
-      - node-kinds/global/knowledge/atoms/expression.yaml
-      - node-kinds/global/knowledge/atoms/pattern.yaml
-      - node-kinds/global/knowledge/atoms/culture-ref.yaml
-      - node-kinds/global/knowledge/atoms/taboo.yaml
-      - node-kinds/global/knowledge/atoms/audience-trait.yaml
+      # Containers (8) - aggregate knowledge by category
+      - node-kinds/shared/knowledge/term-set.yaml
+      - node-kinds/shared/knowledge/expression-set.yaml
+      - node-kinds/shared/knowledge/pattern-set.yaml
+      - node-kinds/shared/knowledge/culture-set.yaml
+      - node-kinds/shared/knowledge/taboo-set.yaml
+      - node-kinds/shared/knowledge/audience-set.yaml
+      - node-kinds/shared/knowledge/seo-keyword-set.yaml
+      - node-kinds/shared/knowledge/geo-query-set.yaml
+      # Atoms (6) - granular knowledge items for selective LLM loading
+      - node-kinds/shared/knowledge/atoms/term.yaml
+      - node-kinds/shared/knowledge/atoms/expression.yaml
+      - node-kinds/shared/knowledge/atoms/pattern.yaml
+      - node-kinds/shared/knowledge/atoms/culture-ref.yaml
+      - node-kinds/shared/knowledge/atoms/taboo.yaml
+      - node-kinds/shared/knowledge/atoms/audience-trait.yaml
+      # SEO/GEO (4)
+      - node-kinds/shared/knowledge/seo-keyword.yaml
+      - node-kinds/shared/knowledge/seo-keyword-metrics.yaml
+      - node-kinds/shared/knowledge/geo-query.yaml
+      - node-kinds/shared/knowledge/geo-answer.yaml
+      # Cultural classification (2)
+      - node-kinds/shared/knowledge/cultural-realm.yaml
+      - node-kinds/shared/knowledge/cultural-sub-realm.yaml
+      # Linguistic classification (2)
+      - node-kinds/shared/knowledge/language-family.yaml
+      - node-kinds/shared/knowledge/language-branch.yaml
+      # Population classification (2)
+      - node-kinds/shared/knowledge/population-cluster.yaml
+      - node-kinds/shared/knowledge/population-sub-cluster.yaml
 
-    # SEO targeting + metrics + jobs (3 nodes) - v10.2 moved to GLOBAL
-    seo:
-      - node-kinds/global/seo/seo-keyword.yaml
-      - node-kinds/global/seo/seo-keyword-metrics.yaml
-      - node-kinds/global/seo/seo-mining-run.yaml
+    # Locale settings (6 nodes) - per-locale configuration
+    locale:
+      - node-kinds/shared/locale/culture.yaml
+      - node-kinds/shared/locale/style.yaml
+      - node-kinds/shared/locale/formatting.yaml
+      - node-kinds/shared/locale/slugification.yaml
+      - node-kinds/shared/locale/adaptation.yaml
+      - node-kinds/shared/locale/market.yaml
 
   # ═══════════════════════════════════════════════════════════════════════════
-  # 📦 PROJECT REALM (21 nodes) - Per-project instances
+  # 📦 ORG REALM (20 nodes) - Organization-specific content
   # ═══════════════════════════════════════════════════════════════════════════
 
-  project:
-    # 🏢 FOUNDATION (3 nodes) - Project root & identity
+  org:
+    # Organization config (1 node)
+    config:
+      - node-kinds/org/config/org-config.yaml
+
+    # Foundation (3 nodes) - Project root & identity
     foundation:
-      - node-kinds/project/foundation/project.yaml
-      - node-kinds/project/foundation/brand-identity.yaml
-      - node-kinds/project/foundation/project-l10n.yaml
+      - node-kinds/org/foundation/project.yaml
+      - node-kinds/org/foundation/brand-identity.yaml
+      - node-kinds/org/foundation/project-content.yaml
 
-    # 🔧 STRUCTURE (3 nodes) - Content scaffolding
+    # Structure (3 nodes) - Content scaffolding
     structure:
-      - node-kinds/project/structure/page.yaml
-      - node-kinds/project/structure/block.yaml
-      - node-kinds/project/structure/content-slot.yaml
+      - node-kinds/org/structure/page.yaml
+      - node-kinds/org/structure/block.yaml
+      - node-kinds/org/structure/content-slot.yaml
 
-    # 💡 SEMANTIC (2 nodes) - Audience & channel targeting (v10.3: Concept moved to GLOBAL Entity)
+    # Semantic (4 nodes) - Entity & audience targeting
     semantic:
-      - node-kinds/project/semantic/audience-persona.yaml
-      - node-kinds/project/semantic/channel-surface.yaml
+      - node-kinds/org/semantic/entity.yaml          # Invariant semantic entity
+      - node-kinds/org/semantic/entity-content.yaml  # Localized entity content
+      - node-kinds/org/semantic/audience-persona.yaml
+      - node-kinds/org/semantic/channel-surface.yaml
 
-    # 📝 INSTRUCTION (7 nodes) - AI generation directives
+    # Instruction (6 nodes) - AI generation directives (v0.12.0 ADR-025)
     instruction:
-      - node-kinds/project/instruction/page-type.yaml
-      - node-kinds/project/instruction/page-prompt.yaml
-      - node-kinds/project/instruction/block-prompt.yaml
-      - node-kinds/project/instruction/block-type.yaml
-      - node-kinds/project/instruction/block-rules.yaml
-      - node-kinds/project/instruction/prompt-artifact.yaml
-      - node-kinds/project/instruction/block-instruction.yaml
+      - node-kinds/org/instruction/page-structure.yaml    # Template rules (was: PageType)
+      - node-kinds/org/instruction/page-instruction.yaml  # Compiled instructions (was: PagePrompt)
+      - node-kinds/org/instruction/block-type.yaml
+      - node-kinds/org/instruction/block-rules.yaml
+      - node-kinds/org/instruction/block-instruction.yaml # Markdown with @entity/@link
+      - node-kinds/org/instruction/prompt-artifact.yaml
 
-    # 📤 OUTPUT (5 nodes) - LLM-generated content
+    # Output (3 nodes) - LLM-generated content
     output:
-      - node-kinds/project/output/page-l10n.yaml
-      - node-kinds/project/output/block-l10n.yaml
-      - node-kinds/project/output/generation-job.yaml
-      - node-kinds/project/output/output-artifact.yaml
-      - node-kinds/project/output/evaluation-signal.yaml
+      - node-kinds/org/output/page-generated.yaml
+      - node-kinds/org/output/block-generated.yaml
+      - node-kinds/org/output/output-artifact.yaml
 
   # ═══════════════════════════════════════════════════════════════════════════
   # REFERENCE FILES
   # ═══════════════════════════════════════════════════════════════════════════
 
-  arc_kinds: arc-kinds/               # Arc definitions by family (replaces relations.yaml)
+  arc_kinds: arc-kinds/               # Arc definitions by family
   views: views/                       # YAML view definitions
   schema: schema/nodes.schema.json    # JSON Schema for validation
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# NODES BY TRAIT (v11.8.0 ADR-024 Data Origin renames)
+# NODES BY TRAIT (v0.12.0 ADR-024 Data Origin renames)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-#   🔵 defined:    Language-independent, defined once (was: invariant)
-#   🟢 authored:   Per-locale content, has :FOR_LOCALE (was: localized)
-#   🟣 imported:   Knowledge ABOUT a locale (was: knowledge)
-#   🌟 generated:  LLM-generated output (was: derived, partially)
-#   ⚪ retrieved:  Computed/retrieved metrics (was: derived/aggregated)
+#   🔵 defined:    Language-independent, defined once (30 nodes)
+#   🟢 authored:   Per-locale content, human-curated (2 nodes)
+#   🟣 imported:   Knowledge ABOUT a locale, from external sources (20 nodes)
+#   🌟 generated:  LLM-generated output (4 nodes)
+#   ⚪ retrieved:  Computed/retrieved metrics (3 nodes)
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 
 nodes_by_trait:
   defined:
+    # Org/config
+    - OrgConfig
+    # Org/foundation
     - Project
     - BrandIdentity
-    - Entity
+    # Org/structure
     - Page
     - Block
-    - PageType
-    - BlockType
-    - PagePrompt
-    - BlockPrompt
-    - BlockRules
-    - BlockInstruction
-    - Locale
     - ContentSlot
+    # Org/semantic
+    - Entity
     - AudiencePersona
     - ChannelSurface
-    # Containers also defined (v11.5)
+    # Org/instruction
+    - PageStructure         # v0.12.0: renamed from PageType
+    - PageInstruction       # v0.12.0: renamed from PagePrompt
+    - BlockType
+    - BlockRules
+    - BlockInstruction      # v0.12.0: renamed from BlockPrompt
+    - PromptArtifact
+    # Shared/config
+    - Locale
+    - EntityCategory
+    - SEOKeywordFormat
+    # Shared/knowledge containers
     - TermSet
     - ExpressionSet
     - PatternSet
     - CultureSet
     - TabooSet
     - AudienceSet
-    - EntityCategory
+    - SEOKeywordSet
+    - GEOQuerySet
+    # Shared/geography
+    - Continent
+    - GeoRegion
+    - GeoSubRegion
+    - EconomicRegion
+    - IncomeGroup
+    - LendingCategory
+    # Shared/knowledge classification
+    - CulturalRealm
+    - CulturalSubRealm
+    - LanguageFamily
+    - LanguageBranch
+    - PopulationCluster
+    - PopulationSubCluster
+
   authored:
-    - ProjectContent
-    - EntityContent
+    - ProjectContent        # Org/foundation
+    - EntityContent         # Org/semantic
+
   imported:
-    # Knowledge atoms
+    # Shared/knowledge atoms
     - Term
     - Expression
     - Pattern
     - CultureRef
     - Taboo
     - AudienceTrait
-    # Locale settings
+    # Shared/knowledge SEO/GEO
+    - SEOKeyword
+    - GEOQuery
+    # Shared/locale settings
+    - Culture
     - Formatting
     - Slugification
     - Adaptation
     - Style
-    - SEOKeyword
+    - Market
+
   generated:
-    - PageGenerated
-    - BlockGenerated
-    - OutputArtifact
-    - PromptArtifact
+    - PageGenerated         # Org/output
+    - BlockGenerated        # Org/output
+    - OutputArtifact        # Org/output
+    - GEOAnswer             # Shared/knowledge (AI-generated answer)
+
   retrieved:
-    - SEOKeywordMetrics
-    - GEOAnswer
-    - GEOMetrics
+    - SEOKeywordMetrics     # Shared/knowledge (Ahrefs/Semrush metrics)
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# STATISTICS v10.3.0 (Entity-centric architecture)
+# STATISTICS v0.12.0
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 # By Realm:
-#   🌍 GLOBAL:  22 nodes (Locale 1 + Knowledge 18 (Entity 2 + Containers 10 + Atoms 6) + SEO 3)
-#   📦 PROJECT: 21 nodes (Foundation 3 + Structure 3 + Semantic 2 + Instruction 7 + Output 5)
-#   TOTAL:      43 nodes, 65 arcs (5 arc families)
+#   🌍 SHARED:  39 nodes (config 3 + geography 6 + knowledge 24 + locale 6)
+#   📦 ORG:     20 nodes (config 1 + foundation 3 + structure 3 + semantic 4 + instruction 6 + output 3)
+#   TOTAL:      59 nodes, 56 arcs (5 arc families)
 #
-# By Trait:
-#   🔵 INVARIANT:  15 (Project, BrandIdentity, Entity, Page, Block, PageType, BlockType,
-#                      PagePrompt, BlockPrompt, BlockRules, BlockInstruction, Locale,
-#                      ContentSlot, AudiencePersona, ChannelSurface)
-#   🟢 LOCALIZED:   5 (ProjectContent, EntityContent, PageGenerated, BlockGenerated, SEOKeyword)
-#   🟣 KNOWLEDGE:  16 (Containers: Formatting, Slugification, Adaptation, Style, TermSet,
-#                      ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet;
-#                      Atoms: Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait)
-#   ⚪ DERIVED:     4 (SEOKeywordMetrics, PromptArtifact, OutputArtifact, EvaluationSignal)
-#   ⚙️ JOB:         2 (SEOMiningRun, GenerationJob)
+# By Trait (v0.12.0 ADR-024):
+#   🔵 DEFINED:   38 nodes (language-independent definitions)
+#   🟢 AUTHORED:   2 nodes (per-locale human-curated content)
+#   🟣 IMPORTED:  14 nodes (external knowledge about locales)
+#   🌟 GENERATED:  4 nodes (LLM-generated output)
+#   ⚪ RETRIEVED:  1 node  (computed/retrieved metrics)
 #
-# v10.3.0 changes (Entity-centric):
-#   - MOVED: Concept → Entity (PROJECT semantic → GLOBAL knowledge)
-#   - MOVED: ConceptL10n → EntityContent (PROJECT semantic → GLOBAL knowledge)
-#   - REMOVED: SearchIntent, TopicCluster (PROJECT semantic) — replaced by Entity
-#   - ADDED: BlockInstruction (PROJECT instruction)
-#   - Entity is GLOBAL: shared across projects, linked via USES_ENTITY
-#   - EntityContent provides localized titles/descriptions for SEO anchors
+# v0.12.0 changes:
+#   - SemVer transition from v11.x milestone versioning
+#   - ADR-024: Trait renames for data origin clarity
+#   - ADR-025: Instruction layer naming clarifications
+#   - PageType → PageStructure, PagePrompt → PageInstruction
+#   - BlockPrompt → BlockInstruction with @entity/@link syntax
 #

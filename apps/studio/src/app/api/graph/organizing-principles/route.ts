@@ -61,11 +61,11 @@ export async function GET() {
       realm_key: record.get('realm_key') as string,
     }));
 
-    // Fetch Kind → Layer mapping from HAS_KIND relationships
+    // Fetch Class → Layer mapping from HAS_CLASS relationships (v11.8 ADR-023)
     const mappingResult = await session.run(`
-      MATCH (l:Layer)-[:HAS_KIND]->(k:Kind)
-      RETURN k.label AS node_type, l.key AS layer
-      ORDER BY k.label
+      MATCH (l:Layer)-[:HAS_CLASS]->(c:Schema:Class)
+      RETURN c.label AS node_type, l.key AS layer
+      ORDER BY c.label
     `);
 
     const nodeTypeMapping: Record<string, string> = {};

@@ -1,5 +1,5 @@
 // packages/core/src/graph/__tests__/hierarchy.test.ts
-// Tests for REALM_HIERARCHY — v11.5.0 (60 nodes, 10 layers, 2 realms)
+// Tests for REALM_HIERARCHY — v0.12.0 (59 nodes, 10 layers, 2 realms)
 import { describe, it, expect } from 'vitest';
 import { REALM_HIERARCHY } from '../hierarchy';
 import type { Realm } from '../../types/nodes';
@@ -52,12 +52,12 @@ describe('graph/hierarchy', () => {
     expect(REALM_HIERARCHY.shared.layers.geography.nodeTypes).toHaveLength(6);
     expect(REALM_HIERARCHY.shared.layers.knowledge.nodeTypes).toHaveLength(24); // SEO/GEO nodes
 
-    // v11.5: Org realm (21 nodes total) — SEO/GEO removed
+    // v0.12.0: Org realm (20 nodes total) — PromptArtifact removed
     expect(REALM_HIERARCHY.org.layers.config.nodeTypes).toHaveLength(1);  // OrgConfig
     expect(REALM_HIERARCHY.org.layers.foundation.nodeTypes).toHaveLength(3);
     expect(REALM_HIERARCHY.org.layers.structure.nodeTypes).toHaveLength(3);
     expect(REALM_HIERARCHY.org.layers.semantic.nodeTypes).toHaveLength(4);
-    expect(REALM_HIERARCHY.org.layers.instruction.nodeTypes).toHaveLength(7);
+    expect(REALM_HIERARCHY.org.layers.instruction.nodeTypes).toHaveLength(6);  // v0.12.0: PromptArtifact removed
     expect(REALM_HIERARCHY.org.layers.output.nodeTypes).toHaveLength(3);
   });
 
@@ -85,7 +85,7 @@ describe('graph/hierarchy', () => {
     }
   });
 
-  it('should have total of 60 nodes across all realms', () => {
+  it('should have total of 59 nodes across all realms', () => {
     let totalNodes = 0;
 
     for (const realm of ['shared', 'org'] as Realm[]) {
@@ -95,6 +95,6 @@ describe('graph/hierarchy', () => {
       }
     }
 
-    expect(totalNodes).toBe(60);  // v11.5: 60 nodes (39 shared + 21 org)
+    expect(totalNodes).toBe(59);  // v0.12.0: 59 nodes (39 shared + 20 org)
   });
 });
