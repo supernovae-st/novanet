@@ -343,7 +343,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
                             ),
                             Span::styled("]\u{2500}\u{2500}\u{25b6} ", dim),
                             Span::styled(arc.target_key.clone(), STYLE_SUCCESS),
-                            Span::styled(format!(" ({})", arc.target_kind), STYLE_DIM),
+                            Span::styled(format!(" ({})", arc.target_class), STYLE_DIM),
                         ]));
                     }
                     lines.push(Line::from(Span::raw("")));
@@ -376,7 +376,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
                         lines.push(Line::from(vec![
                             Span::styled(format!("  {} ", status_char), status_style),
                             Span::styled(arc.target_key.clone(), STYLE_SUCCESS),
-                            Span::styled(format!(" ({})", arc.target_kind), STYLE_DIM),
+                            Span::styled(format!(" ({})", arc.target_class), STYLE_DIM),
                             Span::styled(" \u{2500}\u{2500}[", dim),
                             Span::styled(
                                 arc.arc_type.clone(),
@@ -741,7 +741,7 @@ fn build_graph_distribution_stats(app: &App) -> Vec<Line<'static>> {
             Span::styled(bar, Style::default().fg(theme.realm_color(&realm.key))),
             Span::styled(empty, STYLE_DIM),
             Span::styled(format!(" {:>3}%", percent), STYLE_MUTED),
-            Span::styled(format!("  {} Kinds", realm_classes), STYLE_DIM),
+            Span::styled(format!("  {} Classes", realm_classes), STYLE_DIM),
         ]));
     }
 

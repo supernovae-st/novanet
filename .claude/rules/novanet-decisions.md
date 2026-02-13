@@ -1170,11 +1170,11 @@ TRAIT answers:  "WHERE does the data come from?"
 
 | Trait | Count | Examples |
 |-------|-------|----------|
-| defined | 31 | Page, Block, Entity, PageType, PagePrompt, Locale, OrgConfig |
-| imported | 22 | Term, Expression, Pattern, Culture, SEOKeyword, GEOQuery |
+| defined | 31 | Page, Block, Entity, PageStructure, PageInstruction, BlockInstruction, Locale, OrgConfig |
+| imported | 20 | Term, Expression, Pattern, Culture, SEOKeyword, GEOQuery |
 | authored | 2 | EntityContent, ProjectContent |
-| generated | 5 | PageGenerated, BlockGenerated, OutputArtifact, PromptArtifact |
-| retrieved | 3 | GEOAnswer, SEOKeywordMetrics, GEOMetrics |
+| generated | 4 | PageGenerated, BlockGenerated, OutputArtifact, PromptArtifact |
+| retrieved | 2 | GEOAnswer, SEOKeywordMetrics |
 
 **Key Clarification - GEOAnswer**:
 - GEOAnswer is `retrieved`, NOT `generated`

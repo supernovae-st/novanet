@@ -232,7 +232,7 @@ pub struct App {
     /// Neo4j Layer details (loaded async when Layer selected)
     pub layer_details: Option<LayerDetails>,
     /// Data mode filter: when set, show only instances of this Class
-    /// None = show full tree, Some(kind_key) = show only instances of that Class
+    /// None = show full tree, Some(class_key) = show only instances of that Class
     pub data_filter_kind: Option<String>,
     /// Cursor position before entering filtered Data mode (for restoration)
     pub data_cursor_before_filter: usize,
@@ -449,14 +449,14 @@ impl App {
     fn get_current_tree_item_data(&self) -> TreeItemData {
         // In filtered Data mode, always return Instance (that's all we show)
         if self.is_graph_mode() && self.data_filter_kind.is_some() {
-            if let Some(kind_key) = &self.data_filter_kind {
+            if let Some(class_key) = &self.data_filter_kind {
                 if self
                     .tree
-                    .filtered_item_at(self.tree_cursor, kind_key)
+                    .filtered_item_at(self.tree_cursor, class_key)
                     .is_some()
                 {
                     // Get the Class's yaml_path for showing schema in YAML panel
-                    if let Some((_, _, kind)) = self.tree.find_kind(kind_key) {
+                    if let Some((_, _, kind)) = self.tree.find_kind(class_key) {
                         return TreeItemData::Instance {
                             class_yaml_path: kind.yaml_path.clone(),
                         };
@@ -1498,9 +1498,9 @@ impl App {
     /// Uses mode-aware method that shows instances in Data mode.
     pub fn current_item(&self) -> Option<super::data::TreeItem<'_>> {
         // Filtered Data mode: show only instances of the filtered Class
-        if let Some(kind_key) = &self.data_filter_kind {
+        if let Some(class_key) = &self.data_filter_kind {
             if self.is_graph_mode() {
-                return self.tree.filtered_item_at(self.tree_cursor, kind_key);
+                return self.tree.filtered_item_at(self.tree_cursor, class_key);
             }
         }
         // Normal mode
@@ -1516,9 +1516,9 @@ impl App {
     /// Get total item count for the current mode.
     pub fn current_item_count(&self) -> usize {
         // Filtered Data mode: count only instances of the filtered Class
-        if let Some(kind_key) = &self.data_filter_kind {
+        if let Some(class_key) = &self.data_filter_kind {
             if self.is_graph_mode() {
-                return self.tree.filtered_item_count(kind_key);
+                return self.tree.filtered_item_count(class_key);
             }
         }
         // Normal mode
@@ -1535,17 +1535,17 @@ impl App {
     /// Saves cursor position and resets to 0.
     /// Also resets all scroll states to avoid stale positions.
     #[allow(dead_code)]
-    pub fn enter_filtered_data_mode(&mut self, kind_key: String) {
+    pub fn enter_filtered_data_mode(&mut self, class_key: String) {
         self.data_cursor_before_filter = self.tree_cursor;
-        self.data_filter_kind = Some(kind_key.clone());
+        self.data_filter_kind = Some(class_key.clone());
         self.tree_cursor = 0;
         self.tree_scroll = 0;
         // Reset other scroll states to avoid stale positions
         self.info_scroll = 0;
         self.yaml_scroll = 0;
         // Request instance load if not already loaded
-        if self.tree.get_instances(&kind_key).is_none() {
-            self.pending_instance_load = Some(kind_key);
+        if self.tree.get_instances(&class_key).is_none() {
+            self.pending_instance_load = Some(class_key);
         }
     }
 
@@ -1633,16 +1633,16 @@ impl App {
         let data_mode = self.is_graph_mode();
         if let Some(key) = self.tree.collapse_key_at(self.tree_cursor, data_mode) {
             // Handle Class toggle in Data mode
-            if let Some(kind_key) = key.strip_prefix("kind:") {
+            if let Some(class_key) = key.strip_prefix("kind:") {
                 if data_mode {
-                    let instances_loaded = self.tree.get_instances(kind_key).is_some();
+                    let instances_loaded = self.tree.get_instances(class_key).is_some();
 
                     if !instances_loaded {
                         // First click on unloaded Class: load instances AND ensure expanded
-                        if kind_key == "Entity" && self.tree.entity_categories.is_empty() {
+                        if class_key == "Entity" && self.tree.entity_categories.is_empty() {
                             self.pending_entity_categories_load = true;
                         }
-                        self.pending_instance_load = Some(kind_key.to_string());
+                        self.pending_instance_load = Some(class_key.to_string());
                         // Ensure state is "expanded" so instances show when loaded
                         if self.tree.is_collapsed(&key) {
                             self.tree.toggle(&key);
@@ -2049,7 +2049,7 @@ mod tests {
             InstanceInfo {
                 key: "fr-FR".to_string(),
                 display_name: "Français".to_string(),
-                kind_key: "Locale".to_string(),
+                class_key: "Locale".to_string(),
                 properties: BTreeMap::new(),
                 outgoing_arcs: vec![],
                 incoming_arcs: vec![],
@@ -2061,7 +2061,7 @@ mod tests {
             InstanceInfo {
                 key: "en-US".to_string(),
                 display_name: "English".to_string(),
-                kind_key: "Locale".to_string(),
+                class_key: "Locale".to_string(),
                 properties: BTreeMap::new(),
                 outgoing_arcs: vec![],
                 incoming_arcs: vec![],
@@ -2109,7 +2109,7 @@ mod tests {
         let instances = vec![InstanceInfo {
             key: "fr-FR".to_string(),
             display_name: "Français".to_string(),
-            kind_key: "Locale".to_string(),
+            class_key: "Locale".to_string(),
             properties: BTreeMap::new(),
             outgoing_arcs: vec![],
             incoming_arcs: vec![],
@@ -2167,7 +2167,7 @@ mod tests {
             InstanceInfo {
                 key: "fr-FR".to_string(),
                 display_name: "Français".to_string(),
-                kind_key: "Locale".to_string(),
+                class_key: "Locale".to_string(),
                 properties: BTreeMap::new(),
                 outgoing_arcs: vec![],
                 incoming_arcs: vec![],
@@ -2179,7 +2179,7 @@ mod tests {
             InstanceInfo {
                 key: "en-US".to_string(),
                 display_name: "English".to_string(),
-                kind_key: "Locale".to_string(),
+                class_key: "Locale".to_string(),
                 properties: BTreeMap::new(),
                 outgoing_arcs: vec![],
                 incoming_arcs: vec![],
@@ -2282,7 +2282,7 @@ mod tests {
             InstanceInfo {
                 key: "fr-FR".to_string(),
                 display_name: "Français".to_string(),
-                kind_key: "Locale".to_string(),
+                class_key: "Locale".to_string(),
                 properties: BTreeMap::new(),
                 outgoing_arcs: vec![],
                 incoming_arcs: vec![],
@@ -2294,7 +2294,7 @@ mod tests {
             InstanceInfo {
                 key: "en-US".to_string(),
                 display_name: "English".to_string(),
-                kind_key: "Locale".to_string(),
+                class_key: "Locale".to_string(),
                 properties: BTreeMap::new(),
                 outgoing_arcs: vec![],
                 incoming_arcs: vec![],

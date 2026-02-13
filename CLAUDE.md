@@ -283,7 +283,7 @@ cargo run -- data --format=table           # Mode 2: Data nodes
 cargo run -- overlay                       # Mode 3: Data + Schema
 cargo run -- query --realm=org             # Mode 4: Faceted query
 cargo run -- search --query="page"         # Fulltext + property search
-cargo run -- node create --kind=Page --key=my-page  # CRUD
+cargo run -- node create --class=Page --key=my-page  # CRUD
 cargo run -- db seed                       # Execute seed Cypher files
 cargo run -- locale list                   # Locale operations
 cargo run -- tui                           # Interactive TUI (unified tree + Nexus hub)

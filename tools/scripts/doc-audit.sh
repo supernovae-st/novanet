@@ -36,9 +36,8 @@ print_taxonomy_summary
 # Optional: Validate YAML syntax
 if [ "$YAML_CHECK" = true ]; then
   echo -e "${BLUE}Validating YAML syntax...${NC}"
-  validate_yaml_directory "packages/core/models/node-kinds" "Node-kinds"
-  validate_yaml_directory "packages/core/models/arc-kinds" "Arc-kinds"
-  validate_yaml_directory "packages/core/models/meta" "Meta definitions"
+  validate_yaml_directory "packages/core/models/node-kinds" "Node classes"
+  validate_yaml_directory "packages/core/models/arc-kinds" "Arc classes"
   validate_yaml_directory "packages/core/models/views" "View definitions"
   validate_yaml_syntax "packages/core/models/taxonomy.yaml" && \
     echo -e "${GREEN}OK${NC}: taxonomy.yaml" || \
@@ -81,18 +80,18 @@ check_file() {
   # Check node counts (skip historical references in ROADMAP.md and CHANGELOG.md)
   # Only match TOTAL counts, not per-realm/layer counts
   if [[ "$file" != *"ROADMAP.md"* ]] && [[ "$file" != *"CHANGELOG.md"* ]]; then
-    # Match total patterns: "XX node types", "XX Kind Types", "Total: XX nodes", "XX nodes,"
+    # Match total patterns: "XX node types", "XX Class Types", "Total: XX nodes", "XX nodes,"
     local found_node_count
-    found_node_count=$(grep -oE "([0-9]+\s*(node types|Kind Types|Kinds)|\bTotal:?\s*[0-9]+\s*nodes|[0-9]+\s*nodes,)" "$file" 2>/dev/null | grep -oE "[0-9]+" | head -1)
+    found_node_count=$(grep -oE "([0-9]+\s*(node types|Class Types|Classes)|\bTotal:?\s*[0-9]+\s*nodes|[0-9]+\s*nodes,)" "$file" 2>/dev/null | grep -oE "[0-9]+" | head -1)
     if [ -n "$found_node_count" ] && [ "$found_node_count" != "$NODE_COUNT" ] 2>/dev/null; then
       echo -e "${YELLOW}WARN${NC}: $file has node count $found_node_count (should be $NODE_COUNT)"
       ((WARNINGS++))
       file_issues=1
     fi
 
-    # Check arc counts - match total patterns: "XX arcs", "XX ArcKinds"
+    # Check arc counts - match total patterns: "XX arcs", "XX ArcClasses"
     local found_arc_count
-    found_arc_count=$(grep -oE "([0-9]+\s*(arcs|ArcKinds))" "$file" 2>/dev/null | grep -oE "[0-9]+" | head -1)
+    found_arc_count=$(grep -oE "([0-9]+\s*(arcs|ArcClasses))" "$file" 2>/dev/null | grep -oE "[0-9]+" | head -1)
     if [ -n "$found_arc_count" ] && [ "$found_arc_count" != "$ARC_COUNT" ] 2>/dev/null; then
       echo -e "${YELLOW}WARN${NC}: $file has arc count $found_arc_count (should be $ARC_COUNT)"
       ((WARNINGS++))
