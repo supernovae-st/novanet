@@ -250,8 +250,8 @@ fn render_layers(nodes: &[yaml_node::ParsedNode]) -> crate::Result<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::generators::test_utils::make_node_simple as make_node;
     use crate::generators::Generator;
+    use crate::generators::test_utils::make_node_simple as make_node;
 
     #[test]
     fn render_small_layers() {

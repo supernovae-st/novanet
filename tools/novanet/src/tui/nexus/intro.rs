@@ -57,10 +57,7 @@ fn render_page_1_what_is_novanet(f: &mut Frame, theme: &Theme, locale: NexusLoca
     let lines = vec![
         Line::from(""),
         Line::from(vec![
-            Span::styled(
-                "  NovaNet is a ",
-                Style::default().fg(Color::White),
-            ),
+            Span::styled("  NovaNet is a ", Style::default().fg(Color::White)),
             Span::styled(
                 "KNOWLEDGE GRAPH",
                 Style::default()
@@ -74,10 +71,7 @@ fn render_page_1_what_is_novanet(f: &mut Frame, theme: &Theme, locale: NexusLoca
         ]),
         Line::from(""),
         Line::from(vec![
-            Span::styled(
-                "  Instead of ",
-                Style::default().fg(Color::White),
-            ),
+            Span::styled("  Instead of ", Style::default().fg(Color::White)),
             Span::styled(
                 "translating",
                 Style::default()
@@ -95,12 +89,10 @@ fn render_page_1_what_is_novanet(f: &mut Frame, theme: &Theme, locale: NexusLoca
                     .add_modifier(Modifier::BOLD),
             ),
         ]),
-        Line::from(vec![
-            Span::styled(
-                "  content natively for each locale using local knowledge (vocabulary, culture, style).",
-                Style::default().fg(Color::White),
-            ),
-        ]),
+        Line::from(vec![Span::styled(
+            "  content natively for each locale using local knowledge (vocabulary, culture, style).",
+            Style::default().fg(Color::White),
+        )]),
         Line::from(""),
         Line::from(Span::styled(
             "  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
@@ -137,10 +129,7 @@ fn render_page_1_what_is_novanet(f: &mut Frame, theme: &Theme, locale: NexusLoca
             Span::styled("\"QR Code\"", Style::default().fg(Color::Green)),
         ]),
         Line::from(vec![
-            Span::styled(
-                "      description: ",
-                Style::default().fg(Color::DarkGray),
-            ),
+            Span::styled("      description: ", Style::default().fg(Color::DarkGray)),
             Span::styled(
                 "\"Two-dimensional barcode...\"",
                 Style::default().fg(Color::Green),
@@ -148,10 +137,7 @@ fn render_page_1_what_is_novanet(f: &mut Frame, theme: &Theme, locale: NexusLoca
         ]),
         Line::from(""),
         Line::from(vec![
-            Span::styled(
-                "  NovaNet generates ",
-                Style::default().fg(Color::White),
-            ),
+            Span::styled("  NovaNet generates ", Style::default().fg(Color::White)),
             Span::styled(
                 "NATIVE",
                 Style::default()
@@ -183,7 +169,10 @@ fn render_page_1_what_is_novanet(f: &mut Frame, theme: &Theme, locale: NexusLoca
         Line::from(vec![
             Span::styled("  display_name: ", Style::default().fg(Color::DarkGray)),
             Span::styled("\"QR Code\"", Style::default().fg(Color::Green)),
-            Span::styled("          display_name: ", Style::default().fg(Color::DarkGray)),
+            Span::styled(
+                "          display_name: ",
+                Style::default().fg(Color::DarkGray),
+            ),
             Span::styled("\"QRコード\"", Style::default().fg(Color::Green)),
         ]),
         Line::from(vec![
@@ -212,7 +201,10 @@ fn render_page_1_what_is_novanet(f: &mut Frame, theme: &Theme, locale: NexusLoca
         Line::from(vec![
             Span::styled("  display_name: ", Style::default().fg(Color::DarkGray)),
             Span::styled("\"رمز QR\"", Style::default().fg(Color::Green)),
-            Span::styled("           display_name: ", Style::default().fg(Color::DarkGray)),
+            Span::styled(
+                "           display_name: ",
+                Style::default().fg(Color::DarkGray),
+            ),
             Span::styled("\"QR-kode\"", Style::default().fg(Color::Green)),
         ]),
         Line::from(vec![
@@ -283,10 +275,7 @@ fn render_page_2_two_types_of_nodes(f: &mut Frame, theme: &Theme, locale: NexusL
                 Style::default().fg(Color::Magenta),
             ),
             Span::styled("                ", Style::default()),
-            Span::styled(
-                "══════════════════════",
-                Style::default().fg(Color::Cyan),
-            ),
+            Span::styled("══════════════════════", Style::default().fg(Color::Cyan)),
         ]),
         Line::from(vec![
             Span::styled(
@@ -342,17 +331,11 @@ fn render_page_2_two_types_of_nodes(f: &mut Frame, theme: &Theme, locale: NexusL
         ]),
         Line::from(vec![
             Span::styled("  │  ", Style::default().fg(Color::DarkGray)),
-            Span::styled(
-                "────────────────",
-                Style::default().fg(Color::Magenta),
-            ),
+            Span::styled("────────────────", Style::default().fg(Color::Magenta)),
             Span::styled("              ", Style::default()),
             Span::styled("\"Locale\"", Style::default().fg(Color::Yellow)),
             Span::styled("             ", Style::default()),
-            Span::styled(
-                "─────────────────",
-                Style::default().fg(Color::Cyan),
-            ),
+            Span::styled("─────────────────", Style::default().fg(Color::Cyan)),
             Span::styled("   │", Style::default().fg(Color::DarkGray)),
         ]),
         Line::from(vec![
@@ -377,7 +360,10 @@ fn render_page_2_two_types_of_nodes(f: &mut Frame, theme: &Theme, locale: NexusL
         Line::from(vec![
             Span::styled("  │  ", Style::default().fg(Color::DarkGray)),
             Span::styled("trait: ", Style::default().fg(Color::DarkGray)),
-            Span::styled("invariant", Style::default().fg(theme.trait_color("invariant"))),
+            Span::styled(
+                "invariant",
+                Style::default().fg(theme.trait_color("invariant")),
+            ),
             Span::styled("                       ", Style::default()),
             Span::styled("country_code: ", Style::default().fg(Color::DarkGray)),
             Span::styled("\"FR\"", Style::default().fg(Color::Green)),
@@ -397,7 +383,10 @@ fn render_page_2_two_types_of_nodes(f: &mut Frame, theme: &Theme, locale: NexusL
         )),
         Line::from(""),
         Line::from(vec![
-            Span::styled("  The relationship is called: ", Style::default().fg(Color::White)),
+            Span::styled(
+                "  The relationship is called: ",
+                Style::default().fg(Color::White),
+            ),
             Span::styled(
                 "OF_KIND",
                 Style::default()
@@ -405,12 +394,10 @@ fn render_page_2_two_types_of_nodes(f: &mut Frame, theme: &Theme, locale: NexusL
                     .add_modifier(Modifier::BOLD),
             ),
         ]),
-        Line::from(vec![
-            Span::styled(
-                "  (:Locale {key: 'fr-FR'})-[:OF_KIND]->(:Kind {label: 'Locale'})",
-                Style::default().fg(Color::DarkGray),
-            ),
-        ]),
+        Line::from(vec![Span::styled(
+            "  (:Locale {key: 'fr-FR'})-[:OF_KIND]->(:Kind {label: 'Locale'})",
+            Style::default().fg(Color::DarkGray),
+        )]),
     ];
 
     let paragraph = Paragraph::new(lines).wrap(Wrap { trim: false });
@@ -469,29 +456,50 @@ fn render_page_3_classification(f: &mut Frame, theme: &Theme, locale: NexusLocal
                     .add_modifier(Modifier::BOLD),
             ),
             Span::styled(" (21 nodes)", Style::default().fg(Color::DarkGray)),
-            Span::styled("                   │", Style::default().fg(theme.realm_color("shared"))),
+            Span::styled(
+                "                   │",
+                Style::default().fg(theme.realm_color("shared")),
+            ),
         ]),
         Line::from(vec![
             Span::styled("  │  ", Style::default().fg(theme.realm_color("shared"))),
             Span::styled("Universal knowledge", Style::default().fg(Color::White)),
             Span::styled("               ", Style::default()),
             Span::styled("Organization-specific", Style::default().fg(Color::White)),
-            Span::styled("             │", Style::default().fg(theme.realm_color("shared"))),
+            Span::styled(
+                "             │",
+                Style::default().fg(theme.realm_color("shared")),
+            ),
         ]),
         Line::from(vec![
             Span::styled("  │  ", Style::default().fg(theme.realm_color("shared"))),
             Span::styled("READ-ONLY", Style::default().fg(Color::Red)),
             Span::styled("                          ", Style::default()),
             Span::styled("Your business content", Style::default().fg(Color::White)),
-            Span::styled("             │", Style::default().fg(theme.realm_color("shared"))),
+            Span::styled(
+                "             │",
+                Style::default().fg(theme.realm_color("shared")),
+            ),
         ]),
         Line::from(vec![
-            Span::styled("  │  Examples: ", Style::default().fg(theme.realm_color("shared"))),
-            Span::styled("Locale, Term, Culture", Style::default().fg(Color::DarkGray)),
+            Span::styled(
+                "  │  Examples: ",
+                Style::default().fg(theme.realm_color("shared")),
+            ),
+            Span::styled(
+                "Locale, Term, Culture",
+                Style::default().fg(Color::DarkGray),
+            ),
             Span::styled("    ", Style::default()),
-            Span::styled("Examples: ", Style::default().fg(theme.realm_color("shared"))),
+            Span::styled(
+                "Examples: ",
+                Style::default().fg(theme.realm_color("shared")),
+            ),
             Span::styled("Entity, Page", Style::default().fg(Color::DarkGray)),
-            Span::styled("            │", Style::default().fg(theme.realm_color("shared"))),
+            Span::styled(
+                "            │",
+                Style::default().fg(theme.realm_color("shared")),
+            ),
         ]),
         Line::from(Span::styled(
             "  └──────────────────────────────────────────────────────────────────────────┘",
@@ -505,36 +513,63 @@ fn render_page_3_classification(f: &mut Frame, theme: &Theme, locale: NexusLocal
         )),
         Line::from(vec![
             Span::styled("  │  ", Style::default().fg(Color::Blue)),
-            Span::styled("shared/config", Style::default().fg(theme.realm_color("shared"))),
-            Span::styled(" → Locale, EntityCategory       ", Style::default().fg(Color::DarkGray)),
+            Span::styled(
+                "shared/config",
+                Style::default().fg(theme.realm_color("shared")),
+            ),
+            Span::styled(
+                " → Locale, EntityCategory       ",
+                Style::default().fg(Color::DarkGray),
+            ),
             Span::styled("(definitions)", Style::default().fg(Color::DarkGray)),
             Span::styled("      │", Style::default().fg(Color::Blue)),
         ]),
         Line::from(vec![
             Span::styled("  │  ", Style::default().fg(Color::Blue)),
-            Span::styled("shared/knowledge", Style::default().fg(theme.realm_color("shared"))),
-            Span::styled(" → Term, Expression, Culture  ", Style::default().fg(Color::DarkGray)),
+            Span::styled(
+                "shared/knowledge",
+                Style::default().fg(theme.realm_color("shared")),
+            ),
+            Span::styled(
+                " → Term, Expression, Culture  ",
+                Style::default().fg(Color::DarkGray),
+            ),
             Span::styled("(locale expertise)", Style::default().fg(Color::DarkGray)),
             Span::styled(" │", Style::default().fg(Color::Blue)),
         ]),
         Line::from(vec![
             Span::styled("  │  ", Style::default().fg(Color::Blue)),
-            Span::styled("org/semantic", Style::default().fg(theme.realm_color("org"))),
-            Span::styled(" → Entity, EntityContent         ", Style::default().fg(Color::DarkGray)),
+            Span::styled(
+                "org/semantic",
+                Style::default().fg(theme.realm_color("org")),
+            ),
+            Span::styled(
+                " → Entity, EntityContent         ",
+                Style::default().fg(Color::DarkGray),
+            ),
             Span::styled("(your content)", Style::default().fg(Color::DarkGray)),
             Span::styled("     │", Style::default().fg(Color::Blue)),
         ]),
         Line::from(vec![
             Span::styled("  │  ", Style::default().fg(Color::Blue)),
-            Span::styled("org/structure", Style::default().fg(theme.realm_color("org"))),
-            Span::styled(" → Page, Block                    ", Style::default().fg(Color::DarkGray)),
+            Span::styled(
+                "org/structure",
+                Style::default().fg(theme.realm_color("org")),
+            ),
+            Span::styled(
+                " → Page, Block                    ",
+                Style::default().fg(Color::DarkGray),
+            ),
             Span::styled("(website)", Style::default().fg(Color::DarkGray)),
             Span::styled("          │", Style::default().fg(Color::Blue)),
         ]),
         Line::from(vec![
             Span::styled("  │  ", Style::default().fg(Color::Blue)),
             Span::styled("org/output", Style::default().fg(theme.realm_color("org"))),
-            Span::styled(" → PageGenerated, BlockGenerated ", Style::default().fg(Color::DarkGray)),
+            Span::styled(
+                " → PageGenerated, BlockGenerated ",
+                Style::default().fg(Color::DarkGray),
+            ),
             Span::styled("(LLM output)", Style::default().fg(Color::DarkGray)),
             Span::styled("       │", Style::default().fg(Color::Blue)),
         ]),
@@ -552,36 +587,66 @@ fn render_page_3_classification(f: &mut Frame, theme: &Theme, locale: NexusLocal
             Span::styled("  │  ", Style::default().fg(theme.trait_color("invariant"))),
             Span::styled("■", Style::default().fg(theme.trait_color("invariant"))),
             Span::styled(" invariant   ", Style::default().fg(Color::White)),
-            Span::styled("Same everywhere      Entity, Page, Block", Style::default().fg(Color::DarkGray)),
-            Span::styled("              │", Style::default().fg(theme.trait_color("invariant"))),
+            Span::styled(
+                "Same everywhere      Entity, Page, Block",
+                Style::default().fg(Color::DarkGray),
+            ),
+            Span::styled(
+                "              │",
+                Style::default().fg(theme.trait_color("invariant")),
+            ),
         ]),
         Line::from(vec![
             Span::styled("  │  ", Style::default().fg(theme.trait_color("invariant"))),
             Span::styled("□", Style::default().fg(theme.trait_color("localized"))),
             Span::styled(" localized   ", Style::default().fg(Color::White)),
-            Span::styled("Generated per locale EntityContent@fr-FR", Style::default().fg(Color::DarkGray)),
-            Span::styled("             │", Style::default().fg(theme.trait_color("invariant"))),
+            Span::styled(
+                "Generated per locale EntityContent@fr-FR",
+                Style::default().fg(Color::DarkGray),
+            ),
+            Span::styled(
+                "             │",
+                Style::default().fg(theme.trait_color("invariant")),
+            ),
         ]),
         Line::from(vec![
             Span::styled("  │  ", Style::default().fg(theme.trait_color("invariant"))),
             Span::styled("◇", Style::default().fg(theme.trait_color("knowledge"))),
             Span::styled(" knowledge   ", Style::default().fg(Color::White)),
-            Span::styled("Locale expertise     Term, Culture", Style::default().fg(Color::DarkGray)),
-            Span::styled("                    │", Style::default().fg(theme.trait_color("invariant"))),
+            Span::styled(
+                "Locale expertise     Term, Culture",
+                Style::default().fg(Color::DarkGray),
+            ),
+            Span::styled(
+                "                    │",
+                Style::default().fg(theme.trait_color("invariant")),
+            ),
         ]),
         Line::from(vec![
             Span::styled("  │  ", Style::default().fg(theme.trait_color("invariant"))),
             Span::styled("★", Style::default().fg(theme.trait_color("generated"))),
             Span::styled(" generated   ", Style::default().fg(Color::White)),
-            Span::styled("LLM output           PageGenerated", Style::default().fg(Color::DarkGray)),
-            Span::styled("                     │", Style::default().fg(theme.trait_color("invariant"))),
+            Span::styled(
+                "LLM output           PageGenerated",
+                Style::default().fg(Color::DarkGray),
+            ),
+            Span::styled(
+                "                     │",
+                Style::default().fg(theme.trait_color("invariant")),
+            ),
         ]),
         Line::from(vec![
             Span::styled("  │  ", Style::default().fg(theme.trait_color("invariant"))),
             Span::styled("▪", Style::default().fg(theme.trait_color("aggregated"))),
             Span::styled(" aggregated  ", Style::default().fg(Color::White)),
-            Span::styled("Computed metrics     SEOKeywordMetrics", Style::default().fg(Color::DarkGray)),
-            Span::styled("                 │", Style::default().fg(theme.trait_color("invariant"))),
+            Span::styled(
+                "Computed metrics     SEOKeywordMetrics",
+                Style::default().fg(Color::DarkGray),
+            ),
+            Span::styled(
+                "                 │",
+                Style::default().fg(theme.trait_color("invariant")),
+            ),
         ]),
         Line::from(Span::styled(
             "  └──────────────────────────────────────────────────────────────────────────┘",
@@ -592,7 +657,6 @@ fn render_page_3_classification(f: &mut Frame, theme: &Theme, locale: NexusLocal
     let paragraph = Paragraph::new(lines).wrap(Wrap { trim: false });
     f.render_widget(paragraph, inner);
 }
-
 
 // =============================================================================
 // TESTS

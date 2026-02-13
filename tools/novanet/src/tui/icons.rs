@@ -14,7 +14,11 @@ pub struct IconDef {
 
 impl IconDef {
     const fn new(web: &'static str, terminal: &'static str, description: &'static str) -> Self {
-        Self { web, terminal, description }
+        Self {
+            web,
+            terminal,
+            description,
+        }
     }
 }
 
@@ -30,10 +34,12 @@ pub const REALMS_SHARED: IconDef = IconDef::new("globe", "◉", "Universal share
 // =============================================================================
 
 pub const LAYERS_CONFIG: IconDef = IconDef::new("settings", "⚙", "Configuration and definitions");
-pub const LAYERS_FOUNDATION: IconDef = IconDef::new("landmark", "▣", "Project identity and branding");
+pub const LAYERS_FOUNDATION: IconDef =
+    IconDef::new("landmark", "▣", "Project identity and branding");
 pub const LAYERS_GEOGRAPHY: IconDef = IconDef::new("map", "⊙", "Geographic classifications");
 pub const LAYERS_INSTRUCTION: IconDef = IconDef::new("file-text", "▧", "Generation directives");
-pub const LAYERS_KNOWLEDGE: IconDef = IconDef::new("book-open", "◈", "Locale expertise and knowledge atoms");
+pub const LAYERS_KNOWLEDGE: IconDef =
+    IconDef::new("book-open", "◈", "Locale expertise and knowledge atoms");
 pub const LAYERS_LOCALE: IconDef = IconDef::new("globe", "⊕", "Locale settings and formatting");
 pub const LAYERS_OUTPUT: IconDef = IconDef::new("check-circle", "●", "Generated content");
 pub const LAYERS_SEMANTIC: IconDef = IconDef::new("lightbulb", "◆", "Entities and meaning");
@@ -43,7 +49,8 @@ pub const LAYERS_STRUCTURE: IconDef = IconDef::new("layout", "▤", "Information
 // TRAITS ICONS (5)
 // =============================================================================
 
-pub const TRAITS_AGGREGATED: IconDef = IconDef::new("calculator", "▪", "Computed metrics and analytics");
+pub const TRAITS_AGGREGATED: IconDef =
+    IconDef::new("calculator", "▪", "Computed metrics and analytics");
 pub const TRAITS_GENERATED: IconDef = IconDef::new("sparkles", "★", "LLM-generated content output");
 pub const TRAITS_INVARIANT: IconDef = IconDef::new("lock", "■", "Stable across all locales");
 pub const TRAITS_KNOWLEDGE: IconDef = IconDef::new("brain", "◊", "Locale expertise data");
@@ -54,9 +61,11 @@ pub const TRAITS_LOCALIZED: IconDef = IconDef::new("globe", "□", "Generated na
 // =============================================================================
 
 pub const ARC_FAMILIES_GENERATION: IconDef = IconDef::new("sparkles", "⇒", "LLM pipeline flow");
-pub const ARC_FAMILIES_LOCALIZATION: IconDef = IconDef::new("languages", "⇢", "Locale content links");
+pub const ARC_FAMILIES_LOCALIZATION: IconDef =
+    IconDef::new("languages", "⇢", "Locale content links");
 pub const ARC_FAMILIES_MINING: IconDef = IconDef::new("pickaxe", "⇝", "SEO data extraction");
-pub const ARC_FAMILIES_OWNERSHIP: IconDef = IconDef::new("arrow-right", "→", "Parent-child structural");
+pub const ARC_FAMILIES_OWNERSHIP: IconDef =
+    IconDef::new("arrow-right", "→", "Parent-child structural");
 pub const ARC_FAMILIES_SEMANTIC: IconDef = IconDef::new("link", "~", "Meaning connections");
 
 // =============================================================================
@@ -89,7 +98,8 @@ pub const NAVIGATION_SEARCH: IconDef = IconDef::new("search", "/", "Search mode"
 // =============================================================================
 
 pub const QUALITY_CHART: IconDef = IconDef::new("bar-chart-2", "≡", "Statistics/chart header");
-pub const QUALITY_COMPLETE: IconDef = IconDef::new("check-circle", "●", "All required fields present");
+pub const QUALITY_COMPLETE: IconDef =
+    IconDef::new("check-circle", "●", "All required fields present");
 pub const QUALITY_EMPTY: IconDef = IconDef::new("circle", "○", "No data");
 pub const QUALITY_OPTIONAL: IconDef = IconDef::new("minus", " ", "Optional field marker");
 pub const QUALITY_PARTIAL: IconDef = IconDef::new("circle-dot", "◐", "Some fields missing");

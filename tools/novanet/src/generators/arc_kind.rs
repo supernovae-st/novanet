@@ -341,8 +341,8 @@ fn generate_arc_schema(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::generators::test_utils::make_rel_full as make_rel;
     use crate::generators::Generator;
+    use crate::generators::test_utils::make_rel_full as make_rel;
     use crate::parsers::arcs::{ArcFamily, NodeRef};
 
     fn make_inverse(rel_type: &str, family: ArcFamily, inverse_of: &str) -> ArcDef {

@@ -99,6 +99,7 @@ The Nexus hub provides gamified learning and system tools.
 | `]` | Next tab |
 | `Tab` | Cycle to next tab |
 | `Shift+Tab` | Cycle to previous tab |
+| `I` | Toggle language (En/Fr) |
 
 **Tabs**: Quiz | Audit | Stats | Help
 
@@ -227,6 +228,7 @@ Exit:        q or Esc
 NEXUS MODE (2):
 Access:      Q (quiz)  A (audit)  S (stats)  ? (help)
 Tabs:        [ ] (prev/next)  Tab (cycle)
+i18n:        I (toggle En/Fr)
 Quiz:        j/k (select)  Enter (submit/next)  r (restart)
 Back:        1 (Graph mode)
 ```

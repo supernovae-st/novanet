@@ -125,7 +125,9 @@ static GRAPH_BASICS_CONCEPTS: [GlossaryConcept; 4] = [
                     the real locales, entities, pages, etc. There are 200,000+ data nodes.",
         classification: None,
         example_yaml: None,
-        example_neo4j: Some("(:Locale {key: 'fr-FR', display_name: 'French (France)', script: 'latin'})"),
+        example_neo4j: Some(
+            "(:Locale {key: 'fr-FR', display_name: 'French (France)', script: 'latin'})",
+        ),
         see_also: &["Meta Node", "Instance"],
     },
     GlossaryConcept {
@@ -134,7 +136,9 @@ static GRAPH_BASICS_CONCEPTS: [GlossaryConcept; 4] = [
         full_desc: "A semantic unit representing products, features, concepts, actions, or tools. \
                     Entities are INVARIANT - defined once, then localized content is generated for each locale.",
         classification: Some("Realm: org | Layer: semantic | Trait: invariant"),
-        example_yaml: Some("node:\n  name: Entity\n  realm: org\n  layer: semantic\n  trait: invariant"),
+        example_yaml: Some(
+            "node:\n  name: Entity\n  realm: org\n  layer: semantic\n  trait: invariant",
+        ),
         example_neo4j: Some("(:Entity {key: 'qr-code', display_name: 'QR Code', is_pillar: true})"),
         see_also: &["EntityContent", "Realm", "Trait"],
     },
@@ -145,7 +149,9 @@ static GRAPH_BASICS_CONCEPTS: [GlossaryConcept; 4] = [
                     using locale knowledge (Terms, Culture, Style). One EntityContent per locale.",
         classification: Some("Realm: org | Layer: semantic | Trait: localized"),
         example_yaml: None,
-        example_neo4j: Some("(:EntityContent {\n  key: 'entity:qr-code@fr-FR',\n  display_name: 'QR Code',\n  description: 'Code-barres 2D...'\n})"),
+        example_neo4j: Some(
+            "(:EntityContent {\n  key: 'entity:qr-code@fr-FR',\n  display_name: 'QR Code',\n  description: 'Code-barres 2D...'\n})",
+        ),
         see_also: &["Entity", "Locale", "Term"],
     },
 ];
@@ -158,7 +164,9 @@ static CLASSIFICATION_CONCEPTS: [GlossaryConcept; 3] = [
                     - SHARED (39 nodes): Universal knowledge, READ-ONLY\n\
                     - ORG (21 nodes): Organization-specific business content",
         classification: None,
-        example_yaml: Some("node:\n  realm: shared  # Universal, cannot be modified by org\n  # OR\n  realm: org     # Organization-specific"),
+        example_yaml: Some(
+            "node:\n  realm: shared  # Universal, cannot be modified by org\n  # OR\n  realm: org     # Organization-specific",
+        ),
         example_neo4j: None,
         see_also: &["Layer", "Trait"],
     },
@@ -169,7 +177,9 @@ static CLASSIFICATION_CONCEPTS: [GlossaryConcept; 3] = [
                     Shared: config, locale, geography, knowledge\n\
                     Org: config, foundation, structure, semantic, instruction, output",
         classification: None,
-        example_yaml: Some("# Shared layers (4):\nconfig, locale, geography, knowledge\n\n# Org layers (6):\nconfig, foundation, structure, semantic, instruction, output"),
+        example_yaml: Some(
+            "# Shared layers (4):\nconfig, locale, geography, knowledge\n\n# Org layers (6):\nconfig, foundation, structure, semantic, instruction, output",
+        ),
         example_neo4j: None,
         see_also: &["Realm", "Trait"],
     },
@@ -183,7 +193,9 @@ static CLASSIFICATION_CONCEPTS: [GlossaryConcept; 3] = [
                     - generated: LLM output (PageGenerated)\n\
                     - aggregated: Computed metrics (SEOKeywordMetrics)",
         classification: None,
-        example_yaml: Some("# Visual encoding:\n  invariant  = solid border\n  localized  = dashed border\n  knowledge  = double border\n  generated  = dotted border\n  aggregated = thin dotted border"),
+        example_yaml: Some(
+            "# Visual encoding:\n  invariant  = solid border\n  localized  = dashed border\n  knowledge  = double border\n  generated  = dotted border\n  aggregated = thin dotted border",
+        ),
         example_neo4j: None,
         see_also: &["Realm", "Layer"],
     },
@@ -197,7 +209,9 @@ static LOCALE_SYSTEM_CONCEPTS: [GlossaryConcept; 4] = [
                     script, and text_direction. NovaNet supports 200 locales.",
         classification: Some("Realm: shared | Layer: config | Trait: invariant"),
         example_yaml: None,
-        example_neo4j: Some("(:Locale {\n  key: 'fr-FR',\n  language_code: 'fr',\n  country_code: 'FR',\n  script: 'latin',\n  text_direction: 'ltr'\n})"),
+        example_neo4j: Some(
+            "(:Locale {\n  key: 'fr-FR',\n  language_code: 'fr',\n  country_code: 'FR',\n  script: 'latin',\n  text_direction: 'ltr'\n})",
+        ),
         see_also: &["Term", "Culture"],
     },
     GlossaryConcept {
@@ -207,7 +221,9 @@ static LOCALE_SYSTEM_CONCEPTS: [GlossaryConcept; 4] = [
                     that makes native generation possible. Terms have domain, register, and synonyms.",
         classification: Some("Realm: shared | Layer: knowledge | Trait: knowledge"),
         example_yaml: None,
-        example_neo4j: Some("(:Term {\n  key: 'subscription_monthly',\n  value: 'abonnement mensuel',\n  domain: 'pricing',\n  register: 'formal',\n  synonyms: ['formule mensuelle']\n})"),
+        example_neo4j: Some(
+            "(:Term {\n  key: 'subscription_monthly',\n  value: 'abonnement mensuel',\n  domain: 'pricing',\n  register: 'formal',\n  synonyms: ['formule mensuelle']\n})",
+        ),
         see_also: &["Locale", "Expression", "Culture"],
     },
     GlossaryConcept {
@@ -217,7 +233,9 @@ static LOCALE_SYSTEM_CONCEPTS: [GlossaryConcept; 4] = [
                     Expressions capture cultural idioms that cannot be directly translated.",
         classification: Some("Realm: shared | Layer: knowledge | Trait: knowledge"),
         example_yaml: None,
-        example_neo4j: Some("(:Expression {\n  key: 'easy_task_fr',\n  value: \"C'est du gateau\",\n  meaning: 'It\\'s easy',\n  formality: 'informal'\n})"),
+        example_neo4j: Some(
+            "(:Expression {\n  key: 'easy_task_fr',\n  value: \"C'est du gateau\",\n  meaning: 'It\\'s easy',\n  formality: 'informal'\n})",
+        ),
         see_also: &["Term", "Culture"],
     },
     GlossaryConcept {
@@ -227,7 +245,9 @@ static LOCALE_SYSTEM_CONCEPTS: [GlossaryConcept; 4] = [
                     taboos, humor style, and other cultural considerations for content generation.",
         classification: Some("Realm: shared | Layer: knowledge | Trait: knowledge"),
         example_yaml: None,
-        example_neo4j: Some("(:Culture {\n  key: 'fr_formality',\n  aspect: 'formality',\n  value: 'Use vous for business',\n  strength: 'strong'\n})"),
+        example_neo4j: Some(
+            "(:Culture {\n  key: 'fr_formality',\n  aspect: 'formality',\n  value: 'Use vous for business',\n  strength: 'strong'\n})",
+        ),
         see_also: &["Term", "Locale"],
     },
 ];
@@ -240,7 +260,9 @@ static RELATIONSHIPS_CONCEPTS: [GlossaryConcept; 3] = [
                     'Edge' or 'Relation' to align with graph theory terminology for directed graphs.",
         classification: None,
         example_yaml: None,
-        example_neo4j: Some("(:Entity {key: 'qr-code'})-[:HAS_CONTENT]->(:EntityContent {key: 'entity:qr-code@fr-FR'})"),
+        example_neo4j: Some(
+            "(:Entity {key: 'qr-code'})-[:HAS_CONTENT]->(:EntityContent {key: 'entity:qr-code@fr-FR'})",
+        ),
         see_also: &["Family", "Scope"],
     },
     GlossaryConcept {
@@ -253,7 +275,9 @@ static RELATIONSHIPS_CONCEPTS: [GlossaryConcept; 3] = [
                     - generation: LLM pipeline (HAS_GENERATED)\n\
                     - mining: SEO/GEO intelligence (HAS_KEYWORD)",
         classification: None,
-        example_yaml: Some("arc:\n  name: HAS_CONTENT\n  family: ownership\n  source: Entity\n  target: EntityContent"),
+        example_yaml: Some(
+            "arc:\n  name: HAS_CONTENT\n  family: ownership\n  source: Entity\n  target: EntityContent",
+        ),
         example_neo4j: None,
         see_also: &["Arc", "Scope"],
     },
@@ -264,25 +288,27 @@ static RELATIONSHIPS_CONCEPTS: [GlossaryConcept; 3] = [
                     - intra_realm: Both nodes in same realm (org Entity -> org EntityContent)\n\
                     - cross_realm: Nodes in different realms (org Entity -> shared EntityCategory)",
         classification: None,
-        example_yaml: Some("arc:\n  scope: cross_realm  # org -> shared\n  # OR\n  scope: intra_realm  # same realm"),
+        example_yaml: Some(
+            "arc:\n  scope: cross_realm  # org -> shared\n  # OR\n  scope: intra_realm  # same realm",
+        ),
         example_neo4j: None,
         see_also: &["Arc", "Family", "Realm"],
     },
 ];
 
-static ARCHITECTURE_CONCEPTS: [GlossaryConcept; 1] = [
-    GlossaryConcept {
-        name: "Native Generation",
-        short_desc: "Generate, NOT translate",
-        full_desc: "NovaNet's core philosophy: content is GENERATED natively using locale \
+static ARCHITECTURE_CONCEPTS: [GlossaryConcept; 1] = [GlossaryConcept {
+    name: "Native Generation",
+    short_desc: "Generate, NOT translate",
+    full_desc: "NovaNet's core philosophy: content is GENERATED natively using locale \
                     knowledge, NOT translated from a source language. This preserves cultural \
                     nuance and produces content that sounds natural to native speakers.",
-        classification: None,
-        example_yaml: Some("# WRONG:\nSource -> Translate -> Target\n\n# RIGHT:\nEntity (invariant)\n  + Knowledge (fr-FR: Terms, Culture)\n  -> EntityContent@fr-FR (native)"),
-        example_neo4j: None,
-        see_also: &["Entity", "EntityContent", "Term"],
-    },
-];
+    classification: None,
+    example_yaml: Some(
+        "# WRONG:\nSource -> Translate -> Target\n\n# RIGHT:\nEntity (invariant)\n  + Knowledge (fr-FR: Terms, Culture)\n  -> EntityContent@fr-FR (native)",
+    ),
+    example_neo4j: None,
+    see_also: &["Entity", "EntityContent", "Term"],
+}];
 
 // =============================================================================
 // GLOSSARY STATE
@@ -319,7 +345,9 @@ impl GlossaryState {
 
     /// Get filtered concepts based on search query.
     /// Returns Cow to avoid allocation when no filter is active.
-    pub fn filtered_concepts(&self) -> Cow<'static, [(GlossaryCategory, &'static GlossaryConcept)]> {
+    pub fn filtered_concepts(
+        &self,
+    ) -> Cow<'static, [(GlossaryCategory, &'static GlossaryConcept)]> {
         if self.search_query.is_empty() {
             return Cow::Borrowed(Self::all_concepts());
         }
@@ -797,9 +825,13 @@ mod tests {
         let filtered = state.filtered_concepts();
         // Should find Entity and EntityContent
         assert!(filtered.len() >= 2);
-        assert!(filtered.iter().all(|(_, c)| c.name.to_lowercase().contains("entity")
-            || c.short_desc.to_lowercase().contains("entity")
-            || c.full_desc.to_lowercase().contains("entity")));
+        assert!(
+            filtered
+                .iter()
+                .all(|(_, c)| c.name.to_lowercase().contains("entity")
+                    || c.short_desc.to_lowercase().contains("entity")
+                    || c.full_desc.to_lowercase().contains("entity"))
+        );
     }
 
     #[test]

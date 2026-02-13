@@ -448,8 +448,8 @@ pub fn wrap_in_markdown(mermaid_code: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::generators::test_utils::{make_node, make_rel};
     use crate::generators::Generator;
+    use crate::generators::test_utils::{make_node, make_rel};
     use crate::parsers::arcs::{Cardinality, NodeRef};
     use crate::parsers::organizing::{ArcFamilyDef, LayerDef, RealmDef, TraitDef};
     use crate::parsers::yaml_node::NodeTrait;
