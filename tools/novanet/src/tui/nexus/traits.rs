@@ -38,13 +38,7 @@ pub struct TraitStats {
 }
 
 /// Canonical trait order for constellation.
-pub const TRAIT_ORDER: [&str; 5] = [
-    "defined",
-    "authored",
-    "imported",
-    "generated",
-    "retrieved",
-];
+pub const TRAIT_ORDER: [&str; 5] = ["defined", "authored", "imported", "generated", "retrieved"];
 
 /// Get symbol for a trait.
 fn trait_symbol(key: &str) -> &'static str {
@@ -422,7 +416,10 @@ fn build_constellation_lines(
                 .fg(Color::Yellow)
                 .add_modifier(Modifier::BOLD),
         ),
-        Span::styled("  External data enters at top, flows down to outputs", Style::default().fg(Color::DarkGray)),
+        Span::styled(
+            "  External data enters at top, flows down to outputs",
+            Style::default().fg(Color::DarkGray),
+        ),
     ]));
     lines.push(Line::from(""));
 
@@ -440,9 +437,15 @@ fn build_constellation_lines(
 
     // Row 2: Flow arrows from IMPORTED (down arrows)
     let flow_down = center_text("\u{2502}            \u{2502}", width); // │            │
-    lines.push(Line::from(Span::styled(flow_down, Style::default().fg(Color::Rgb(100, 100, 120)))));
+    lines.push(Line::from(Span::styled(
+        flow_down,
+        Style::default().fg(Color::Rgb(100, 100, 120)),
+    )));
     let arrow_down = center_text("\u{25bc}            \u{25bc}", width); // ▼            ▼
-    lines.push(Line::from(Span::styled(arrow_down, Style::default().fg(Color::Rgb(100, 100, 120)))));
+    lines.push(Line::from(Span::styled(
+        arrow_down,
+        Style::default().fg(Color::Rgb(100, 100, 120)),
+    )));
 
     // Row 3: DEFINED ═══ ↔ ═══ AUTHORED (core pair)
     let mut core_pair: Vec<Span<'static>> = Vec::new();
@@ -458,7 +461,10 @@ fn build_constellation_lines(
     // Role labels for DEFINED and AUTHORED
     let structure_label = "STRUCTURE";
     let editorial_label = "EDITORIAL";
-    let role_line = center_text(&format!("({})         ({})", structure_label, editorial_label), width);
+    let role_line = center_text(
+        &format!("({})         ({})", structure_label, editorial_label),
+        width,
+    );
     lines.push(Line::from(Span::styled(
         role_line,
         Style::default().fg(Color::Rgb(100, 100, 120)),
@@ -466,9 +472,15 @@ fn build_constellation_lines(
 
     // Row 4: Flow arrows down to outputs
     let flow_down2 = center_text("\u{2502}            \u{2502}", width);
-    lines.push(Line::from(Span::styled(flow_down2, Style::default().fg(Color::Rgb(100, 100, 120)))));
+    lines.push(Line::from(Span::styled(
+        flow_down2,
+        Style::default().fg(Color::Rgb(100, 100, 120)),
+    )));
     let arrow_down2 = center_text("\u{25bc}            \u{25bc}", width);
-    lines.push(Line::from(Span::styled(arrow_down2, Style::default().fg(Color::Rgb(100, 100, 120)))));
+    lines.push(Line::from(Span::styled(
+        arrow_down2,
+        Style::default().fg(Color::Rgb(100, 100, 120)),
+    )));
 
     // Row 5: GENERATED and RETRIEVED at bottom
     let mut bottom_pair: Vec<Span<'static>> = Vec::new();
@@ -496,15 +508,40 @@ fn build_constellation_lines(
     // Legend: Quick navigation hints
     lines.push(Line::from(vec![
         Span::styled("  Quick jump: ", Style::default().fg(Color::DarkGray)),
-        Span::styled("g", Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD)),
+        Span::styled(
+            "g",
+            Style::default()
+                .fg(Color::Yellow)
+                .add_modifier(Modifier::BOLD),
+        ),
         Span::styled("d=defined  ", Style::default().fg(Color::DarkGray)),
-        Span::styled("g", Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD)),
+        Span::styled(
+            "g",
+            Style::default()
+                .fg(Color::Yellow)
+                .add_modifier(Modifier::BOLD),
+        ),
         Span::styled("a=authored  ", Style::default().fg(Color::DarkGray)),
-        Span::styled("g", Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD)),
+        Span::styled(
+            "g",
+            Style::default()
+                .fg(Color::Yellow)
+                .add_modifier(Modifier::BOLD),
+        ),
         Span::styled("i=imported  ", Style::default().fg(Color::DarkGray)),
-        Span::styled("g", Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD)),
+        Span::styled(
+            "g",
+            Style::default()
+                .fg(Color::Yellow)
+                .add_modifier(Modifier::BOLD),
+        ),
         Span::styled("g=generated  ", Style::default().fg(Color::DarkGray)),
-        Span::styled("g", Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD)),
+        Span::styled(
+            "g",
+            Style::default()
+                .fg(Color::Yellow)
+                .add_modifier(Modifier::BOLD),
+        ),
         Span::styled("r=retrieved", Style::default().fg(Color::DarkGray)),
     ]));
     lines.push(Line::from(""));

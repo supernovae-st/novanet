@@ -302,9 +302,9 @@ pub struct EntityCategory {
 /// A single arc relationship from Neo4j.
 #[derive(Debug, Clone)]
 pub struct Neo4jArc {
-    pub arc_key: String,    // e.g., "FALLBACK_TO"
+    pub arc_key: String,     // e.g., "FALLBACK_TO"
     pub other_class: String, // The Class on the other end
-    pub family: String,     // e.g., "localization", "ownership"
+    pub family: String,      // e.g., "localization", "ownership"
 }
 
 /// Complete arc data for a Class, loaded from Neo4j.
@@ -2253,7 +2253,9 @@ RETURN total,
             Some(TreeItem::Layer(realm, _)) => self.find_realm_cursor(&realm.key),
 
             // Class's parent is its Layer
-            Some(TreeItem::Class(realm, layer, _)) => self.find_layer_cursor(&realm.key, &layer.key),
+            Some(TreeItem::Class(realm, layer, _)) => {
+                self.find_layer_cursor(&realm.key, &layer.key)
+            }
 
             // EntityCategory's parent is its Class (Entity)
             Some(TreeItem::EntityCategory(realm, layer, kind, _)) => {
@@ -2603,7 +2605,12 @@ pub enum TreeItem<'a> {
         &'a EntityCategory,
     ),
     // Data view: instances under Classes (or under EntityCategory for Entity)
-    Instance(&'a RealmInfo, &'a LayerInfo, &'a ClassInfo, &'a InstanceInfo),
+    Instance(
+        &'a RealmInfo,
+        &'a LayerInfo,
+        &'a ClassInfo,
+        &'a InstanceInfo,
+    ),
 }
 
 /// Hierarchical position info for compact display in tree title.
@@ -2882,7 +2889,11 @@ mod tests {
 
         assert_eq!(shared.layers.len(), 1, "shared should have 1 layer");
         assert_eq!(shared.layers[0].key, "config");
-        assert_eq!(shared.layers[0].classes.len(), 1, "config should have 1 kind");
+        assert_eq!(
+            shared.layers[0].classes.len(),
+            1,
+            "config should have 1 kind"
+        );
         assert_eq!(shared.layers[0].classes[0].key, "AppConfig");
     }
 

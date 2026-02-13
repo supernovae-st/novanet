@@ -789,7 +789,9 @@ fn render_recent_items_overlay(f: &mut Frame, app: &App) {
             // Get item name at that cursor position
             let item = app.tree.item_at(cursor);
             let (icon, name) = match item {
-                Some(crate::tui::data::TreeItem::ClassesSection) => ("≡", "Node Classes".to_string()),
+                Some(crate::tui::data::TreeItem::ClassesSection) => {
+                    ("≡", "Node Classes".to_string())
+                }
                 Some(crate::tui::data::TreeItem::ArcsSection) => ("⇄", "Arcs".to_string()),
                 Some(crate::tui::data::TreeItem::Realm(r)) => (r.icon, r.display_name.clone()),
                 Some(crate::tui::data::TreeItem::Layer(_, l)) => ("▸", l.display_name.clone()),

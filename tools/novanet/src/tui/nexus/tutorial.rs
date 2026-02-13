@@ -60,7 +60,7 @@ pub static STEPS: [TutorialStep; 5] = [
             "NovaNet stores TWO kinds of information:",
             "",
             "SCHEMA: \"What types exist?\"",
-            "  - 59 total Class definitions (39 shared + 20 org)",
+            "  - 58 total Class definitions (40 shared + 18 org)",
             "  - Example: Class:Locale (the definition of what a locale IS)",
             "",
             "INSTANCE: \"What instances exist?\"",
@@ -459,15 +459,9 @@ fn render_progress_bar(f: &mut Frame, tutorial: &TutorialState, locale: NexusLoc
                     .add_modifier(Modifier::BOLD),
             )
         } else if i < tutorial.current_step {
-            (
-                "●",
-                Style::default().fg(Color::Yellow),
-            )
+            ("●", Style::default().fg(Color::Yellow))
         } else {
-            (
-                "○",
-                Style::default().fg(Color::DarkGray),
-            )
+            ("○", Style::default().fg(Color::DarkGray))
         };
 
         spans.push(Span::styled(format!(" {} ", badge), style));
@@ -492,10 +486,7 @@ fn render_progress_bar(f: &mut Frame, tutorial: &TutorialState, locale: NexusLoc
     // Progress bar with gradient effect
     let filled = progress / 5; // 20 chars total
     let empty = 20 - filled;
-    let progress_chars = format!("{}{}",
-        "█".repeat(filled.min(20)),
-        "░".repeat(empty.max(0))
-    );
+    let progress_chars = format!("{}{}", "█".repeat(filled.min(20)), "░".repeat(empty.max(0)));
 
     // Color based on progress
     let progress_color = if progress >= 80 {
@@ -507,10 +498,15 @@ fn render_progress_bar(f: &mut Frame, tutorial: &TutorialState, locale: NexusLoc
     };
 
     spans.push(Span::styled("  │", Style::default().fg(Color::DarkGray)));
-    spans.push(Span::styled(progress_chars, Style::default().fg(progress_color)));
+    spans.push(Span::styled(
+        progress_chars,
+        Style::default().fg(progress_color),
+    ));
     spans.push(Span::styled(
         format!("│ {}% ", progress),
-        Style::default().fg(progress_color).add_modifier(Modifier::BOLD),
+        Style::default()
+            .fg(progress_color)
+            .add_modifier(Modifier::BOLD),
     ));
 
     // XP badge

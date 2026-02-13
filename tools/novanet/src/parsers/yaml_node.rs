@@ -1,4 +1,4 @@
-//! Parse 59 YAML node definitions with trait validation (v0.12.0).
+//! Parse 58 YAML node definitions with trait validation (v0.12.4).
 //!
 //! Fails fast if any YAML is missing `trait`, `realm`, or `layer` — no silent defaults.
 //! Each file at `packages/core/models/node-kinds/<realm>/<layer>/<name>.yaml`
@@ -435,7 +435,7 @@ node:
             return;
         }
 
-        // v0.12.0: 59 nodes (39 shared + 20 org)
+        // v0.12.0: 58 nodes (40 shared + 18 org)
         // History:
         // - v10.8: Added geographic nodes (+12)
         // - v10.9: Added GEO nodes (+3)
@@ -445,11 +445,12 @@ node:
         // - v11.4: Added containers (+3), removed obsolete SEO types (-4)
         // - v11.5: Moved Locale to shared/config, consolidated SEO/GEO to shared/knowledge
         // - v0.12.0: ADR-024 trait rename (defined/authored/imported/generated/retrieved)
-        let nodes = load_all_nodes(root).expect("should parse all 59 nodes");
+        // v0.12.4: ADR-028 - PageStructure/PageInstruction deleted, Country added
+        let nodes = load_all_nodes(root).expect("should parse all 58 nodes");
         assert_eq!(
             nodes.len(),
-            59,
-            "expected 59 YAML node files (v0.12.0: 39 shared + 20 org)"
+            58,
+            "expected 58 YAML node files (v0.12.4: 40 shared + 18 org)"
         );
 
         // Every node has a non-empty name, realm, and layer
@@ -472,12 +473,12 @@ node:
         }
 
         // Verify trait distribution (2 realms: shared + org)
-        // v0.12.0: 59 nodes (39 shared + 20 org) - ADR-024 Data Origin traits
+        // v0.12.0: 58 nodes (40 shared + 18 org) - ADR-024 Data Origin traits
         let count = |t: NodeTrait| nodes.iter().filter(|n| n.def.node_trait == t).count();
         assert_eq!(
             count(NodeTrait::Defined),
-            31,
-            "defined count (v0.12.0: 31 defined nodes)"
+            30,
+            "defined count (v0.12.4: 30 defined nodes after PageStructure/PageInstruction deleted, Country added)"
         );
         assert_eq!(
             count(NodeTrait::Authored),
@@ -500,18 +501,19 @@ node:
             "retrieved count (v0.12.0: GEOAnswer, SEOKeywordMetrics)"
         );
 
-        // v11.4: Verify realm distribution (SEO/GEO moved to shared/knowledge)
-        // shared: +3 (SEOKeywordFormat, SEOKeywordSet, GEOQuerySet) -4 obsolete = net -1
+        // v0.12.4: Verify realm distribution (ADR-028 Page-Entity Architecture)
+        // shared: +1 Country (geography layer) = 40
+        // org: -2 PageStructure, PageInstruction (calculated at runtime) = 18
         let realm_count = |r: &str| nodes.iter().filter(|n| n.realm == r).count();
         assert_eq!(
             realm_count("shared"),
-            39,
-            "shared realm count (v0.12.0: 39 shared nodes)"
+            40,
+            "shared realm count (v0.12.4: 40 shared nodes incl. Country)"
         );
         assert_eq!(
             realm_count("org"),
-            20,
-            "org realm count (v0.12.0: 20 org nodes)"
+            18,
+            "org realm count (v0.12.4: 18 org nodes, PageStructure/PageInstruction deleted)"
         );
 
         // Spot-check known nodes

@@ -546,7 +546,10 @@ arcs:
         let doc: ArcsDocument = serde_yaml::from_str(yaml).unwrap();
         let arc = &doc.arcs[0];
         assert_eq!(arc.source.labels().as_slice(), ["Page", "Block"]);
-        assert_eq!(arc.target.labels().as_slice(), ["PageStructure", "BlockType"]);
+        assert_eq!(
+            arc.target.labels().as_slice(),
+            ["PageStructure", "BlockType"]
+        );
     }
 
     #[test]

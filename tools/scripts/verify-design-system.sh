@@ -150,11 +150,12 @@ stage_typescript_artifacts() {
 
   log_section "Node count verification"
   local node_count
+  # v0.12.4: 58 nodes (ADR-028: +Country, -PageStructure -PageInstruction)
   node_count=$(grep -c "^  [A-Z].*:" "$ROOT_DIR/packages/core/src/graph/layers.ts" 2>/dev/null || echo 0)
-  if [[ "$node_count" -eq 59 ]]; then
-    log_ok "NODE_LAYERS: 59 nodes defined"
+  if [[ "$node_count" -eq 58 ]]; then
+    log_ok "NODE_LAYERS: 58 nodes defined"
   else
-    log_fail "NODE_LAYERS: $node_count nodes (expected 59)"
+    log_fail "NODE_LAYERS: $node_count nodes (expected 58)"
   fi
 }
 

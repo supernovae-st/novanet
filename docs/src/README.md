@@ -7,8 +7,8 @@ Generate culturally-native content across 200+ locales — not translation, but 
 ```
 CRITICAL: Generation, NOT Translation
 
-Source → Translate → Target        ❌ Traditional
-Concept (invariant) → Generate → L10n  ✅ NovaNet
+Source → Translate → Target            ❌ Traditional
+Concept (invariant) → Generate → Content  ✅ NovaNet
 ```
 
 ## What is NovaNet?
@@ -31,6 +31,9 @@ pnpm infra:up && pnpm infra:seed
 
 # Start Studio
 pnpm dev  # → http://localhost:3000
+
+# Interactive TUI
+cd tools/novanet && cargo run -- tui
 ```
 
 ## Architecture at a Glance
@@ -46,7 +49,7 @@ flowchart TB
         CORE["@novanet/core\nTypes · Schemas"]
         DB["@novanet/db\nDocker · Seeds"]
         STUDIO["@novanet/studio\nNext.js · React"]
-        RUST["novanet CLI\nRust · TUI"]
+        RUST["novanet CLI + TUI\nRust · Unified Tree"]
     end
 
     NEO4J[("Neo4j\n~19,000 nodes")]
@@ -59,16 +62,24 @@ flowchart TB
     RUST --> NEO4J
 ```
 
-## Key Numbers (v9.0.1)
+## Key Numbers (v0.12.0)
 
 | Metric | Value |
 |--------|-------|
-| Node types (Kinds) | 35 |
-| Arc types (ArcKinds) | 77 |
-| Realms | 3 |
-| Layers | 9 |
+| Node types (Kinds) | 60 |
+| Arc types (ArcKinds) | 114 |
+| Realms | 2 (shared, org) |
+| Layers | 10 (4 shared + 6 org) |
+| Traits | 5 |
 | Locales supported | 200+ |
-| Tests passing | 955 |
+| Tests passing | 998 |
+
+### v0.12.0 Highlights
+
+- **Unified Tree Architecture**: 2 modes (Graph/Nexus) replace 5 modes
+- **Nexus Hub**: Quiz, Audit, Stats (Matrix Control Tower), Help
+- **Lazy Instance Loading**: Kind nodes expand with pagination
+- **Dual Icons**: Lucide (web) + Unicode (terminal), no emoji
 
 ## Documentation Sections
 

@@ -363,7 +363,12 @@ impl TutorialProgress {
     /// Check and unlock achievements based on current state (v0.12.0).
     /// Call after updating score, streak, etc.
     /// Returns list of newly unlocked achievements.
-    pub fn check_achievements(&mut self, score: usize, total: usize, all_categories_perfect: bool) -> Vec<Achievement> {
+    pub fn check_achievements(
+        &mut self,
+        score: usize,
+        total: usize,
+        all_categories_perfect: bool,
+    ) -> Vec<Achievement> {
         self.new_achievements.clear();
 
         let pct = if total > 0 {

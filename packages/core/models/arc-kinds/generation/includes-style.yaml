@@ -1,21 +1,22 @@
 # packages/core/models/arc-kinds/generation/includes-style.yaml
 # ArcKind: INCLUDES_STYLE - Instruction includes style directives
-# v0.12.0 ADR-025: PagePrompt→PageInstruction, BlockPrompt→BlockInstruction
+#
+# v0.12.4: ADR-028 - PageInstruction deleted (calculated at runtime from BlockInstructions)
+#   Source simplified to BlockInstruction only
+
 arc:
   name: INCLUDES_STYLE
   family: generation
   scope: cross_realm
 
-  source:
-    - PageInstruction
-    - BlockInstruction
+  source: BlockInstruction
   target: Style
   cardinality: many_to_one
 
   llm_context: |
     USE: when loading style settings for instruction compilation.
     TRIGGERS: locale style, voice settings, tone configuration.
-    NOT: for instruction content (use PageInstruction), for generated output (use HAS_GENERATED).
-    RELATES: PageInstruction/BlockInstruction (source), Style (target, cross_realm).
+    NOT: for generated output (use HAS_GENERATED).
+    RELATES: BlockInstruction (source), Style (target, cross_realm).
 
-  cypher_pattern: "(PageInstruction, BlockInstruction)-[:INCLUDES_STYLE]->(Style)"
+  cypher_pattern: "(BlockInstruction)-[:INCLUDES_STYLE]->(Style)"

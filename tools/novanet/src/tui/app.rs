@@ -1615,7 +1615,8 @@ impl App {
         }
 
         // Check if current item is a Class
-        if let Some(super::data::TreeItem::Class(_, _, kind)) = self.tree.item_at(self.tree_cursor) {
+        if let Some(super::data::TreeItem::Class(_, _, kind)) = self.tree.item_at(self.tree_cursor)
+        {
             // Only request if not already loaded
             if self.tree.get_instances(&kind.key).is_none() {
                 self.pending_instance_load = Some(kind.key.clone());
@@ -1893,7 +1894,7 @@ impl App {
 #[cfg(test)]
 mod tests {
     use super::super::data::{
-        GraphStats, InstanceInfo, ClassInfo, LayerInfo, RealmInfo, TaxonomyTree, TreeItem,
+        ClassInfo, GraphStats, InstanceInfo, LayerInfo, RealmInfo, TaxonomyTree, TreeItem,
     };
     use super::*;
     use rustc_hash::{FxHashMap, FxHashSet};
