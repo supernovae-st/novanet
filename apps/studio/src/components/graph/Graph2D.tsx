@@ -70,7 +70,7 @@ import { GraphToolbar } from './GraphToolbar';
 import type { GraphNode as GraphNodeType, GraphEdge as GraphEdgeType } from '@/types';
 
 // Schema mode imports (Task 3.2)
-import { SchemaNode, MetaBadgeNode } from './schema';
+import { SchemaNode, SchemaBadgeNode } from './schema';
 import { SchemaErrorBoundary } from './SchemaErrorBoundary';
 import { applySchemaLayout } from '@/lib/schemaLayoutELK';
 import { getSchemaHierarchy } from '@novanet/core/graph';
@@ -89,7 +89,7 @@ const nodeTypes = {
   // Schema mode node types (Task 3.2)
   schemaNode: SchemaNode,
   // v9.5: Compact badge for Realm & Layer in hierarchical view
-  metaBadge: MetaBadgeNode,
+  metaBadge: SchemaBadgeNode,
   // Magnetic grouping attractor nodes (Task 10)
   realmAttractor: RealmAttractorNode,
   layerAttractor: LayerAttractorNode,
@@ -243,7 +243,7 @@ function Graph2DInner({
   );
 
   // v12: Detect schema mode from loaded nodes (node IDs have 'schema-' prefix)
-  const isMetaMode = useMemo(() => {
+  const isSchemaMode = useMemo(() => {
     if (graphNodes.length === 0) return false;
     const schemaNodeCount = graphNodes.filter(n => n.id.startsWith('schema-')).length;
     return schemaNodeCount > 0 && schemaNodeCount === graphNodes.length;
@@ -428,13 +428,13 @@ function Graph2DInner({
     }
   }, [layoutDirection]);
 
-  // v12: Load schema graph when isMetaMode is detected from loaded nodes
+  // v12: Load schema graph when isSchemaMode is detected from loaded nodes
   // (schema nodes have 'schema-' prefix in their IDs)
   useEffect(() => {
-    if (isMetaMode) {
+    if (isSchemaMode) {
       loadSchemaGraph();
     }
-  }, [isMetaMode, loadSchemaGraph, layoutVersion]);
+  }, [isSchemaMode, loadSchemaGraph, layoutVersion]);
 
   // =========================================================================
   // SCHEMA NODE DRAG HANDLERS (Task 1 & 3: Schema Node Dragging + Constraints)
@@ -1515,7 +1515,7 @@ function Graph2DInner({
   // from navigation mode. Renders hierarchical schema visualization
   // with ELK layout and group nodes. Wrapped in SchemaErrorBoundary.
   // =========================================================================
-  if (isMetaMode) {
+  if (isSchemaMode) {
     return (
       <SchemaErrorBoundary>
         <div

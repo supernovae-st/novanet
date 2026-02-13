@@ -77,7 +77,7 @@ export const LocaleKnowledgeNode = memo(function LocaleKnowledgeNode(props: Node
       width={width}
       isDimmed={data.dimmed === true}
       isHoverDimmed={data.hoverDimmed === true}
-      isMetaMode={data.isMetaMode === true}
+      isSchemaMode={data.isSchemaMode === true}
       ariaLabel={`${data.type} node: ${data.displayName}`}
       renderContent={(ctx) => (
         <StructuralCardContent data={contentData} {...ctx} />

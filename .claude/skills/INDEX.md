@@ -12,7 +12,7 @@ Located in `.claude/skills/`
 
 | Skill | Invocation | Description |
 |-------|------------|-------------|
-| **novanet-architecture** | `/novanet-arch` | ASCII architecture diagrams (meta-graph, pipeline, Rust, Studio) |
+| **novanet-architecture** | `/novanet-arch` | ASCII architecture diagrams (schema graph, pipeline, Rust, Studio) |
 | **novanet-sync** | `/novanet-sync` | Schema validation/regeneration (YAML → artifacts) |
 | **novanet-tui** | `/novanet-tui` | Galaxy-themed terminal UI keybindings and features |
 | **novanet-mcp** | `/novanet-mcp` | MCP Server operations (RLM-on-KG, agent integration) |
@@ -45,7 +45,7 @@ Located in `apps/studio/.claude/skills/`
 
 | Trigger Keywords | Skill |
 |------------------|-------|
-| architecture, overview, structure, meta-graph, codebase | novanet-architecture |
+| architecture, overview, structure, schema graph, codebase | novanet-architecture |
 | sync, validate, generate, schema, YAML | novanet-sync |
 | tui, terminal, keybindings, galaxy | novanet-tui |
 | mcp, agent, RLM, knowledge graph, AI integration | novanet-mcp |

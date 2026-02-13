@@ -299,8 +299,8 @@ Limited but impactful:
 
 ```rust
 // Schema Achievements
-"Architect"        - Create first NodeKind
-"Arc Weaver"       - Create 10 ArcKinds
+"Architect"        - Create first NodeClass
+"Arc Weaver"       - Create 10 ArcClasses
 "Layer Cake"       - Use all 11 layers
 "Realm Walker"     - Work in both realms
 "Completionist"    - 100% schema coverage
@@ -386,7 +386,7 @@ static MISSIONS: &[Mission] = &[
     Mission {
         id: "complete_schema",
         title: "Knowledge Architect",
-        objective: "Define all 61 NodeKinds",
+        objective: "Define all 61 NodeClasses",
         xp_reward: 500,
         badge: Some("[ARCHITECT]"),
     },

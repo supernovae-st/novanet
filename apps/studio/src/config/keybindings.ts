@@ -51,11 +51,11 @@ export const TUI_KEYBINDINGS: KeyBinding[] = [
   { id: 'tui-nav-right', key: 'l', label: 'Expand / Enter', description: 'Expand node or enter', category: 'navigation', icon: 'ArrowRight' },
   { id: 'tui-toggle', key: 'space', label: 'Toggle', description: 'Toggle expand/collapse', category: 'navigation', icon: 'ToggleLeft' },
 
-  // Modes (1-4)
-  { id: 'tui-mode-meta', key: '1', label: 'Meta Mode', description: 'Switch to meta-graph view', category: 'mode', icon: 'Database' },
-  { id: 'tui-mode-data', key: '2', label: 'Data Mode', description: 'Switch to data nodes view', category: 'mode', icon: 'FileText' },
-  { id: 'tui-mode-overlay', key: '3', label: 'Overlay Mode', description: 'Show data + meta overlay', category: 'mode', icon: 'Layers' },
-  { id: 'tui-mode-query', key: '4', label: 'Query Mode', description: 'Faceted query mode', category: 'mode', icon: 'Search' },
+  // Modes (v11.7: unified to 2 modes - Graph/Nexus; legacy view categories for macropad)
+  { id: 'tui-mode-graph', key: '1', label: 'Graph Mode', description: 'Unified tree with Classes and Instances', category: 'mode', icon: 'Database' },
+  { id: 'tui-mode-nexus', key: '2', label: 'Nexus Mode', description: 'Hub for Quiz, Audit, Stats, Help', category: 'mode', icon: 'Compass' },
+  { id: 'tui-mode-filter', key: '3', label: 'Filter Mode', description: 'Apply faceted filters to graph', category: 'mode', icon: 'Filter' },
+  { id: 'tui-mode-search', key: '4', label: 'Search Mode', description: 'Search across nodes', category: 'mode', icon: 'Search' },
 
   // Scrolling
   { id: 'tui-page-up', key: 'u', label: 'Page Up', description: 'Scroll page up (Ctrl+U)', category: 'scroll', icon: 'ChevronsUp' },
@@ -85,18 +85,18 @@ export const PAD_LAYERS: PadLayer[] = [
     color: '#00FFFF',
     description: 'NovaNet TUI navigation - move through the graph tree',
     keys: [
-      { position: '0,0', key: '1', label: 'Meta', action: 'MODE_META' },
+      { position: '0,0', key: '1', label: 'Graph', action: 'MODE_GRAPH' },
       { position: '0,1', key: 'K', label: '↑', action: 'NAV_UP' },
       { position: '0,2', key: 'UP', label: '↑', action: 'ARROW_UP' },
-      { position: '0,3', key: '2', label: 'Data', action: 'MODE_DATA' },
+      { position: '0,3', key: '2', label: 'Nexus', action: 'MODE_NEXUS' },
       { position: '1,0', key: 'H', label: '←', action: 'NAV_LEFT' },
       { position: '1,1', key: 'LEFT', label: '←', action: 'ARROW_LEFT' },
       { position: '1,2', key: 'SPACE', label: 'Toggle', action: 'TOGGLE' },
       { position: '1,3', key: 'L', label: '→', action: 'NAV_RIGHT' },
-      { position: '2,0', key: '3', label: 'Overlay', action: 'MODE_OVERLAY' },
+      { position: '2,0', key: '3', label: 'Filter', action: 'MODE_FILTER' },
       { position: '2,1', key: 'J', label: '↓', action: 'NAV_DOWN' },
       { position: '2,2', key: 'DOWN', label: '↓', action: 'ARROW_DOWN' },
-      { position: '2,3', key: '4', label: 'Query', action: 'MODE_QUERY' },
+      { position: '2,3', key: '4', label: 'Search', action: 'MODE_SEARCH' },
     ],
     encoder: {
       cw: { key: 'K', label: 'Scroll Up', action: 'SCROLL_UP' },

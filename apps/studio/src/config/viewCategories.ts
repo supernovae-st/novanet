@@ -1,13 +1,13 @@
 /**
- * YAML View Category Configuration (v11.6.1)
+ * YAML View Category Configuration (v11.8)
  *
  * Centralized configuration for view categories.
  * Used by both API routes and UI components.
  *
  * Categories:
- * - meta: Schema exploration (Realm, Layer, Kind, ArcKind)
+ * - meta: Schema exploration (Realm, Layer, Class, ArcClass)
  * - data: Instance exploration by realm/layer/purpose
- * - overlay: Meta + Data combined for debugging
+ * - overlay: Schema + Data combined for debugging
  * - contextual: Node-centered subgraphs
  */
 
@@ -40,10 +40,10 @@ export interface CategoryConfig {
 export const VIEW_CATEGORIES: Record<ViewCategory, CategoryConfig> = {
   meta: {
     id: 'meta',
-    label: 'Meta',
+    label: 'Schema',
     icon: Database,
     color: '#8b5cf6',  // violet-500 (matches LAYER_COLORS.knowledge)
-    description: 'Schema exploration (Realm, Layer, Kind, ArcKind)',
+    description: 'Schema exploration (Realm, Layer, Class, ArcClass)',
   },
   data: {
     id: 'data',

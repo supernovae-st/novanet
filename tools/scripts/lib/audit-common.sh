@@ -36,9 +36,10 @@ count_arc_kinds() {
   find packages/core/models/arc-kinds -name "*.yaml" ! -name "_index.yaml" 2>/dev/null | wc -l | tr -d ' '
 }
 
-# Count realms from taxonomy.yaml (v10.6: 2 realms - global, tenant)
+# Count realms from taxonomy.yaml (v11.8: 2 realms - shared, org)
+# Regex matches deprecated terms to detect legacy usage
 count_realms() {
-  grep -E "^  - key: (global|tenant)$" packages/core/models/taxonomy.yaml 2>/dev/null | wc -l | tr -d ' '
+  grep -E "^  - key: (shared|org)$" packages/core/models/taxonomy.yaml 2>/dev/null | wc -l | tr -d ' '
 }
 
 # Count layers from taxonomy.yaml
@@ -46,9 +47,9 @@ count_layers() {
   grep -E "^      - key: " packages/core/models/taxonomy.yaml 2>/dev/null | wc -l | tr -d ' '
 }
 
-# Count traits from taxonomy.yaml
+# Count traits from taxonomy.yaml (v11.8 ADR-024: defined, authored, imported, generated, retrieved)
 count_traits() {
-  grep -E "^  - key: (invariant|localized|knowledge|derived|job)$" packages/core/models/taxonomy.yaml 2>/dev/null | wc -l | tr -d ' '
+  grep -E "^  - key: (defined|authored|imported|generated|retrieved)$" packages/core/models/taxonomy.yaml 2>/dev/null | wc -l | tr -d ' '
 }
 
 # Count arc families from taxonomy.yaml
@@ -136,11 +137,11 @@ print_taxonomy_summary() {
   [ "$cardinality_count" -eq 0 ] 2>/dev/null || cardinality_count="${cardinality_count:-4}"
 
   echo -e "${CYAN}Taxonomy Summary (from YAML):${NC}"
-  echo "  Nodes:        $node_count NodeKinds"
-  echo "  Arcs:         $arc_count ArcKinds"
-  echo "  Realms:       $realm_count (global, tenant)"
+  echo "  Nodes:        $node_count NodeClasses"
+  echo "  Arcs:         $arc_count ArcClasses"
+  echo "  Realms:       $realm_count (shared, org)"
   echo "  Layers:       $layer_count"
-  echo "  Traits:       $trait_count (invariant, localized, knowledge, derived, job)"
+  echo "  Traits:       $trait_count (defined, authored, imported, generated, retrieved)"
   echo "  ArcFamilies:  $arc_family_count (ownership, localization, semantic, generation, mining)"
   echo "  ArcScopes:    $arc_scope_count (intra_realm, cross_realm)"
   echo "  Cardinalities: $cardinality_count (0..1, 1:1, 1:N, N:M)"

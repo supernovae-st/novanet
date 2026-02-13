@@ -159,7 +159,7 @@
 │  │ 💡 INTEL UPLINK - LIVE DATA FROM NEO4J                               │ │
 │  │                                                                      │ │
 │  │ Current Arc Count: 347 relationships in graph                       │ │
-│  │ Most Used ArcKind: HAS_PAGE (89 instances)                          │ │
+│  │ Most Used ArcClass: HAS_PAGE (89 instances)                         │ │
 │  │ Your Created Arcs: 0 → Let's change that!                           │ │
 │  └──────────────────────────────────────────────────────────────────────┘ │
 │                                                                            │

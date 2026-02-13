@@ -1,5 +1,5 @@
 # models/node-kinds/org/foundation/project.yaml
-# Project - Multi-tenant root node with brand and project configuration
+# Project - Organization project root node with brand and project configuration
 
 node:
   name: Project
@@ -7,7 +7,7 @@ node:
   layer: foundation
   trait: defined
   icon: "🔷"
-  description: "Multi-tenant root node containing project configuration and brand info"
+  description: "Organization project root node containing project configuration and brand info"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # STANDARD PROPERTIES (v7.1.0)
