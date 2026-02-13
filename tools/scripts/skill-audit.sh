@@ -36,9 +36,8 @@ print_taxonomy_summary
 # Optional: Validate YAML syntax
 if [ "$YAML_CHECK" = true ]; then
   echo -e "${BLUE}Validating YAML syntax...${NC}"
-  validate_yaml_directory "packages/core/models/node-kinds" "Node-kinds"
-  validate_yaml_directory "packages/core/models/arc-kinds" "Arc-kinds"
-  validate_yaml_directory "packages/core/models/meta" "Meta definitions"
+  validate_yaml_directory "packages/core/models/node-kinds" "Node classes"
+  validate_yaml_directory "packages/core/models/arc-kinds" "Arc classes"
   echo ""
 fi
 
@@ -71,9 +70,9 @@ check_file() {
   fi
 
   # Check for correct source structure references
-  if grep -qE "\b(42|43|44|45|46)\s*(nodes?|Kinds?|NodeKinds?|fichiers)" "$file" 2>/dev/null; then
+  if grep -qE "\b(42|43|44|45|46|59|60)\s*(nodes?|Classes?|NodeClasses?|fichiers)" "$file" 2>/dev/null; then
     local actual_in_file
-    actual_in_file=$(grep -oE "\b(42|43|44|45|46)\s*(nodes?|Kinds?|NodeKinds?|fichiers)" "$file" 2>/dev/null | head -1 | grep -oE "^[0-9]+")
+    actual_in_file=$(grep -oE "\b(42|43|44|45|46|59|60)\s*(nodes?|Classes?|NodeClasses?|fichiers)" "$file" 2>/dev/null | head -1 | grep -oE "^[0-9]+")
     if [ "$actual_in_file" != "$NODE_COUNT" ] 2>/dev/null; then
       echo -e "${YELLOW}WARN${NC}: $file mentions ${actual_in_file:-?} nodes (YAML has $NODE_COUNT)"
       ((WARNINGS++))
@@ -135,8 +134,8 @@ if [ $exit_code -ne 0 ]; then
   echo ""
   echo "Source of Truth:"
   echo "  packages/core/models/"
-  echo "  ├── node-kinds/       ← $NODE_COUNT NodeKind YAMLs"
-  echo "  ├── arc-kinds/        ← $ARC_COUNT ArcKind YAMLs"
+  echo "  ├── node-kinds/       ← $NODE_COUNT NodeClass YAMLs"
+  echo "  ├── arc-kinds/        ← $ARC_COUNT ArcClass YAMLs"
   echo "  ├── taxonomy.yaml     ← Realms, Layers, Traits, ArcFamilies"
   echo "  └── relations.yaml    ← (deprecated, use arc-kinds/)"
   echo ""

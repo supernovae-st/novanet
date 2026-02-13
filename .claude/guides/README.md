@@ -298,7 +298,7 @@ Commit 3: Update ADR if decision changed
 - **Latest ADR**: ADR-025 (Instruction Layer)
 - **Latest Traits**: defined, authored, imported, generated, retrieved
 - **Realms**: shared (4 layers), org (6 layers)
-- **Total Nodes**: 60 (39 shared + 21 org)
+- **Total Nodes**: 59 (39 shared + 20 org)
 
 ---
 

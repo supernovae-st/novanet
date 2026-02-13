@@ -101,7 +101,7 @@ function createEmptyRealmCounts(): RealmCounts {
 // These are returned by schema-* views (schema-complete, schema-realm, etc.)
 // Includes 'Schema' as a catch-all for nodes that only have the :Schema label
 const SCHEMA_NODE_TYPES = new Set([
-  'Schema', 'Realm', 'Layer', 'Kind', 'Trait', 'ArcKind', 'ArcFamily', 'ArcScope', 'ArcCardinality',
+  'Schema', 'Realm', 'Layer', 'Class', 'Trait', 'ArcClass', 'ArcFamily', 'ArcScope', 'ArcCardinality',
 ]);
 
 export function useFilteredGraph(): FilteredGraphResult {

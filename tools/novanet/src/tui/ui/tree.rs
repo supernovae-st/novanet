@@ -433,12 +433,12 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     }
 
     // === FILTERED DATA MODE: Show only instances of selected Class ===
-    if let Some(kind_key) = app.get_filter_kind() {
+    if let Some(class_key) = app.get_filter_kind() {
         render_filtered_instances(
             f,
             area,
             app,
-            kind_key,
+            class_key,
             visible_height,
             focused,
             border_color,
@@ -848,8 +848,8 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
                         for (ki, kind) in visible_kinds.iter().enumerate() {
                             let kind_is_last = ki == kind_count - 1;
-                            let kind_key_str = format!("kind:{}", kind.key);
-                            let kind_collapsed = app.tree.is_collapsed(&kind_key_str);
+                            let class_key_str = format!("kind:{}", kind.key);
+                            let kind_collapsed = app.tree.is_collapsed(&class_key_str);
 
                             // Show collapse icon based on mode:
                             // - Data mode: show chevron if instances exist
@@ -1503,8 +1503,8 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                         format!("{}{}  {}", cursor_char, prefix, arc_kind.display_name);
 
                     // Build center: From→To (abbreviated kind names)
-                    let from_abbrev = arc_kind.from_kind.chars().take(8).collect::<String>();
-                    let to_abbrev = arc_kind.to_kind.chars().take(8).collect::<String>();
+                    let from_abbrev = arc_kind.from_class.chars().take(8).collect::<String>();
+                    let to_abbrev = arc_kind.to_class.chars().take(8).collect::<String>();
                     let flow_str = format!("{}→{}", from_abbrev, to_abbrev);
 
                     // Build right badge: cardinality
@@ -1717,13 +1717,13 @@ fn render_filtered_instances(
     f: &mut Frame,
     area: Rect,
     app: &App,
-    kind_key: &str,
+    class_key: &str,
     visible_height: usize,
     focused: bool,
     border_color: Color,
 ) {
     // Get Class info for display with full hierarchy
-    let kind_info = app.tree.find_kind(kind_key);
+    let kind_info = app.tree.find_kind(class_key);
     let (realm_display, realm_color, layer_display, layer_color, kind_display) = kind_info
         .map(|(realm, layer, kind)| {
             (
@@ -1740,7 +1740,7 @@ fn render_filtered_instances(
                 Color::White,
                 "Unknown".to_string(),
                 Color::White,
-                kind_key.to_string(),
+                class_key.to_string(),
             )
         });
 
@@ -1764,17 +1764,17 @@ fn render_filtered_instances(
     )));
 
     // Get instances and total count
-    let instances = app.tree.get_instances(kind_key);
+    let instances = app.tree.get_instances(class_key);
     let instance_count = instances.map(|i| i.len()).unwrap_or(0);
     let total_count = app
         .tree
-        .get_instance_total(kind_key)
+        .get_instance_total(class_key)
         .unwrap_or(instance_count);
     let is_truncated = total_count > instance_count;
     let is_loading = app
         .pending_instance_load
         .as_ref()
-        .is_some_and(|k| k == kind_key);
+        .is_some_and(|k| k == class_key);
 
     if instance_count == 0 {
         if is_loading {

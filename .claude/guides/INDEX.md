@@ -341,7 +341,7 @@ Fixes #123
 
 **Current NovaNet Version**: v11.8
 - **Realms**: shared (4 layers), org (6 layers) = 10 total
-- **Nodes**: 60 total (39 shared + 21 org)
+- **Nodes**: 59 total (39 shared + 20 org)
 - **Traits**: defined, authored, imported, generated, retrieved
 - **Latest ADR**: ADR-025 (Instruction Layer Renaming)
 
