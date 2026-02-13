@@ -15,5 +15,9 @@ arc:
     - OutputArtifact
   cardinality: one_to_one
   is_self_referential: true
-  llm_context: "Links to previous version in history chain. Query: (current)-[:PREVIOUS_VERSION*]->(old)."
+  llm_context: |
+    USE: when traversing version history, finding previous iterations.
+    TRIGGERS: version history, rollback, previous version, diff comparison.
+    NOT: for current content (use direct node), for deployment (use BUNDLES).
+    RELATES: Same type (source/target), self-referential chain for history.
   cypher_pattern: (BlockGenerated)-[:PREVIOUS_VERSION]->(BlockGenerated)

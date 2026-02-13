@@ -19,7 +19,14 @@ node:
   layer: knowledge
   trait: imported
   icon: "🤖"
-  description: "Query tracked across AI engines for generative engine optimization (GEO)"
+  description: |
+    Query tracked across AI engines for generative engine optimization (GEO).
+    Static query definition - time-series metrics live in GEOAnswer nodes.
+
+    USE: when defining AI search queries to monitor for brand visibility.
+    TRIGGERS: "GEO query", "AI search", "LLM visibility", "generative search".
+    NOT: for search rankings (use SEOKeyword), for LLM responses (use GEOAnswer).
+    RELATES: GEOAnswer (HAS_GEO_ANSWERS), EntityContent (MONITORS_GEO).
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # STANDARD PROPERTIES (v7.1.0)

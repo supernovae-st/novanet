@@ -1,8 +1,8 @@
-// NovaNet Core Types v11.7.0 - Unified Tree Architecture
+// NovaNet Core Types v11.8.0 - Unified Tree Architecture
 //
-// v11.7.0: Unified tree where Realm, Layer, Kind, Instance, ArcFamily, ArcKind are all clickable nodes
+// v11.8.0: ADR-023 terminology (Kind→Class, ArcKind→ArcClass), ADR-024 trait renames (defined/authored/imported/generated/retrieved)
+// v11.7.0: Unified tree where Realm, Layer, Class, Instance, ArcFamily, ArcClass are all clickable nodes
 // v11.2.0: 2 realms (shared, org), derived split into generated + retrieved
-// v11.8.0: ADR-024 trait renames: invariant→defined, localized→authored, knowledge→imported, aggregated→retrieved
 //
 // STANDARD PROPERTIES (all nodes):
 //   key: string           - Unique identifier (with semantic prefix)

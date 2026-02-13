@@ -22,8 +22,9 @@ arc:
   inverse: GENERATED_FOR
 
   llm_context: |
-    Links structure to its LLM-generated localized output (one per locale).
-    This is DERIVED content (computed), not SOURCE content.
-    Use: MATCH (p:Page)-[:HAS_GENERATED]->(pg:PageGenerated)-[:FOR_LOCALE]->(l:Locale)
+    USE: when loading LLM-generated output for a Page or Block.
+    TRIGGERS: generated content, page output, block output, locale content.
+    NOT: for source structure (use Page/Block directly), for prompts (use HAS_INSTRUCTION).
+    RELATES: Page/Block (source), PageGenerated/BlockGenerated (target), GENERATED_FOR (inverse).
 
   cypher_pattern: "(Page)-[:HAS_GENERATED]->(PageGenerated)"

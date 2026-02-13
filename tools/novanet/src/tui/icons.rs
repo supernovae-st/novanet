@@ -67,7 +67,7 @@ pub const STATES_ERROR: IconDef = IconDef::new("x", "✗", "Operation failed");
 pub const STATES_LOADING: IconDef = IconDef::new("loader", "◐", "Data loading in progress");
 pub const STATES_NO_CONNECTION: IconDef = IconDef::new("wifi-off", "⚠", "Database not connected");
 pub const STATES_NO_INSTANCES: IconDef = IconDef::new("file-x", "□", "Class has no instances");
-pub const STATES_NO_KINDS: IconDef = IconDef::new("inbox", "∅", "No node classes found");
+pub const STATES_NO_CLASSES: IconDef = IconDef::new("inbox", "∅", "No node classes found");
 pub const STATES_NO_RESULTS: IconDef = IconDef::new("search-x", "◌", "Query returned nothing");
 pub const STATES_SUCCESS: IconDef = IconDef::new("check", "✓", "Operation succeeded");
 pub const STATES_WARNING: IconDef = IconDef::new("alert-triangle", "⚠", "Warning condition");
@@ -171,7 +171,7 @@ pub fn state_icons() -> HashMap<&'static str, IconDef> {
         "loading" => STATES_LOADING,
         "no_connection" => STATES_NO_CONNECTION,
         "no_instances" => STATES_NO_INSTANCES,
-        "no_kinds" => STATES_NO_KINDS,
+        "no_classes" => STATES_NO_CLASSES,
         "no_results" => STATES_NO_RESULTS,
         "success" => STATES_SUCCESS,
         "warning" => STATES_WARNING,
@@ -277,7 +277,7 @@ pub fn state_terminal_icon(key: &str) -> &'static str {
         "loading" => "◐",
         "no_connection" => "⚠",
         "no_instances" => "□",
-        "no_kinds" => "∅",
+        "no_classes" => "∅",
         "no_results" => "◌",
         "success" => "✓",
         "warning" => "⚠",

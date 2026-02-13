@@ -22,8 +22,9 @@ arc:
       description: "Timestamp when content was generated"
 
   llm_context: |
-    Provenance tracking: which instruction generated which output.
-    Use for debugging and version history.
-    Query: MATCH (instr:BlockInstruction)-[:GENERATED]->(content:BlockGenerated)
+    USE: when tracing which instruction produced which generated content.
+    TRIGGERS: generation provenance, instruction audit, output source.
+    NOT: for structure ownership (use HAS_GENERATED), for compiled prompts (use COMPILED_FROM).
+    RELATES: PageInstruction/BlockInstruction (source), PageGenerated/BlockGenerated (target).
 
   cypher_pattern: "(BlockInstruction)-[:GENERATED {generated_at}]->(BlockGenerated)"

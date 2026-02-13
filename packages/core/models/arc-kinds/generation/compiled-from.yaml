@@ -11,5 +11,9 @@ arc:
     - PageInstruction
     - BlockInstruction
   cardinality: many_to_one
-  llm_context: Prompt artifact was compiled from source instruction template.
+  llm_context: |
+    USE: when tracing prompt artifact to source instruction for auditing.
+    TRIGGERS: prompt source, instruction audit, template origin.
+    NOT: for generated content (use HAS_GENERATED), for instruction editing (use PageInstruction).
+    RELATES: PromptArtifact (source), PageInstruction/BlockInstruction (target).
   cypher_pattern: (PromptArtifact)-[:COMPILED_FROM]->(PageInstruction)

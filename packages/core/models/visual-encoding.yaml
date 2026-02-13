@@ -653,10 +653,10 @@ icons:
       web: wifi-off
       terminal: "⚠"
       description: "Database not connected"
-    no_kinds:
+    no_classes:
       web: inbox
       terminal: "∅"
-      description: "No node kinds found"
+      description: "No node classes found"
     no_results:
       web: search-x
       terminal: "◌"
