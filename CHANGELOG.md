@@ -7,9 +7,14 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
-## [11.8.0] - 2026-02-13
+## [0.12.0] - 2026-02-13
+
+> **Versioning Note**: Starting with v0.12.0, NovaNet follows strict [SemVer](https://semver.org/).
+> Versions prior to 0.12.0 (v8.x through v11.x) used internal milestone numbering.
+> v1.0.0 will mark production readiness.
 
 ### Breaking Changes
+- **Versioning transition**: Adopted proper SemVer (0.x.y = pre-production)
 - **Trait renames (ADR-024 Data Origin)**: Semantic clarification of data origin traits
   - `invariant` → `defined`: Structurally fixed, version-controlled definitions
   - `localized` → `authored`: Human-authored locale-specific content

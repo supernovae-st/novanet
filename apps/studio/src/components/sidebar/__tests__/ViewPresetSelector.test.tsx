@@ -38,8 +38,8 @@ describe('ViewPresetSelector', () => {
     expect(screen.getByText('Entity')).toBeInTheDocument();     // Entity Network (v10.4)
     expect(screen.getByText('Prompts')).toBeInTheDocument();    // Prompts & Rules
     expect(screen.getByText('SEO')).toBeInTheDocument();        // SEO Keywords (v10.4)
-    expect(screen.getByText('Invariant')).toBeInTheDocument();   // Invariant Types
-    expect(screen.getByText('Localized')).toBeInTheDocument();  // Localized Content
+    expect(screen.getByText('Defined')).toBeInTheDocument();     // Defined Types (v11.8: was Invariant)
+    expect(screen.getByText('Authored')).toBeInTheDocument();   // Authored Content (v11.8: was Localized)
     expect(screen.getByText('All')).toBeInTheDocument();        // All Nodes
   });
 

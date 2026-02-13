@@ -61,7 +61,7 @@ fn render_page_1_what_is_novanet(f: &mut Frame, theme: &Theme, locale: NexusLoca
             Span::styled(
                 "KNOWLEDGE GRAPH",
                 Style::default()
-                    .fg(theme.trait_color("knowledge"))
+                    .fg(theme.trait_color("imported"))
                     .add_modifier(Modifier::BOLD),
             ),
             Span::styled(
@@ -155,14 +155,14 @@ fn render_page_1_what_is_novanet(f: &mut Frame, theme: &Theme, locale: NexusLoca
             Span::styled(
                 "French (fr-FR)",
                 Style::default()
-                    .fg(theme.trait_color("localized"))
+                    .fg(theme.trait_color("authored"))
                     .add_modifier(Modifier::BOLD),
             ),
             Span::styled("                  ", Style::default()),
             Span::styled(
                 "Japanese (ja-JP)",
                 Style::default()
-                    .fg(theme.trait_color("localized"))
+                    .fg(theme.trait_color("authored"))
                     .add_modifier(Modifier::BOLD),
             ),
         ]),
@@ -187,14 +187,14 @@ fn render_page_1_what_is_novanet(f: &mut Frame, theme: &Theme, locale: NexusLoca
             Span::styled(
                 "Arabic (ar-AE)",
                 Style::default()
-                    .fg(theme.trait_color("localized"))
+                    .fg(theme.trait_color("authored"))
                     .add_modifier(Modifier::BOLD),
             ),
             Span::styled("                   ", Style::default()),
             Span::styled(
                 "Afrikaans (af-ZA)",
                 Style::default()
-                    .fg(theme.trait_color("localized"))
+                    .fg(theme.trait_color("authored"))
                     .add_modifier(Modifier::BOLD),
             ),
         ]),
@@ -361,8 +361,8 @@ fn render_page_2_two_types_of_nodes(f: &mut Frame, theme: &Theme, locale: NexusL
             Span::styled("  │  ", Style::default().fg(Color::DarkGray)),
             Span::styled("trait: ", Style::default().fg(Color::DarkGray)),
             Span::styled(
-                "invariant",
-                Style::default().fg(theme.trait_color("invariant")),
+                "defined",
+                Style::default().fg(theme.trait_color("defined")),
             ),
             Span::styled("                       ", Style::default()),
             Span::styled("country_code: ", Style::default().fg(Color::DarkGray)),
@@ -578,52 +578,52 @@ fn render_page_3_classification(f: &mut Frame, theme: &Theme, locale: NexusLocal
             Style::default().fg(Color::Blue),
         )),
         Line::from(""),
-        // TRAIT
+        // TRAIT (ADR-024 Data Origin renames)
         Line::from(Span::styled(
             "  ┌─ TRAIT: How does it behave with locales? ───────────────────────────────┐",
-            Style::default().fg(theme.trait_color("invariant")),
+            Style::default().fg(theme.trait_color("defined")),
         )),
         Line::from(vec![
-            Span::styled("  │  ", Style::default().fg(theme.trait_color("invariant"))),
-            Span::styled("■", Style::default().fg(theme.trait_color("invariant"))),
-            Span::styled(" invariant   ", Style::default().fg(Color::White)),
+            Span::styled("  │  ", Style::default().fg(theme.trait_color("defined"))),
+            Span::styled("■", Style::default().fg(theme.trait_color("defined"))),
+            Span::styled(" defined     ", Style::default().fg(Color::White)),
             Span::styled(
                 "Same everywhere      Entity, Page, Block",
                 Style::default().fg(Color::DarkGray),
             ),
             Span::styled(
                 "              │",
-                Style::default().fg(theme.trait_color("invariant")),
+                Style::default().fg(theme.trait_color("defined")),
             ),
         ]),
         Line::from(vec![
-            Span::styled("  │  ", Style::default().fg(theme.trait_color("invariant"))),
-            Span::styled("□", Style::default().fg(theme.trait_color("localized"))),
-            Span::styled(" localized   ", Style::default().fg(Color::White)),
+            Span::styled("  │  ", Style::default().fg(theme.trait_color("defined"))),
+            Span::styled("□", Style::default().fg(theme.trait_color("authored"))),
+            Span::styled(" authored    ", Style::default().fg(Color::White)),
             Span::styled(
                 "Generated per locale EntityContent@fr-FR",
                 Style::default().fg(Color::DarkGray),
             ),
             Span::styled(
                 "             │",
-                Style::default().fg(theme.trait_color("invariant")),
+                Style::default().fg(theme.trait_color("defined")),
             ),
         ]),
         Line::from(vec![
-            Span::styled("  │  ", Style::default().fg(theme.trait_color("invariant"))),
-            Span::styled("◇", Style::default().fg(theme.trait_color("knowledge"))),
-            Span::styled(" knowledge   ", Style::default().fg(Color::White)),
+            Span::styled("  │  ", Style::default().fg(theme.trait_color("defined"))),
+            Span::styled("◇", Style::default().fg(theme.trait_color("imported"))),
+            Span::styled(" imported    ", Style::default().fg(Color::White)),
             Span::styled(
                 "Locale expertise     Term, Culture",
                 Style::default().fg(Color::DarkGray),
             ),
             Span::styled(
                 "                    │",
-                Style::default().fg(theme.trait_color("invariant")),
+                Style::default().fg(theme.trait_color("defined")),
             ),
         ]),
         Line::from(vec![
-            Span::styled("  │  ", Style::default().fg(theme.trait_color("invariant"))),
+            Span::styled("  │  ", Style::default().fg(theme.trait_color("defined"))),
             Span::styled("★", Style::default().fg(theme.trait_color("generated"))),
             Span::styled(" generated   ", Style::default().fg(Color::White)),
             Span::styled(
@@ -632,25 +632,25 @@ fn render_page_3_classification(f: &mut Frame, theme: &Theme, locale: NexusLocal
             ),
             Span::styled(
                 "                     │",
-                Style::default().fg(theme.trait_color("invariant")),
+                Style::default().fg(theme.trait_color("defined")),
             ),
         ]),
         Line::from(vec![
-            Span::styled("  │  ", Style::default().fg(theme.trait_color("invariant"))),
-            Span::styled("▪", Style::default().fg(theme.trait_color("aggregated"))),
-            Span::styled(" aggregated  ", Style::default().fg(Color::White)),
+            Span::styled("  │  ", Style::default().fg(theme.trait_color("defined"))),
+            Span::styled("▪", Style::default().fg(theme.trait_color("retrieved"))),
+            Span::styled(" retrieved   ", Style::default().fg(Color::White)),
             Span::styled(
                 "Computed metrics     SEOKeywordMetrics",
                 Style::default().fg(Color::DarkGray),
             ),
             Span::styled(
                 "                 │",
-                Style::default().fg(theme.trait_color("invariant")),
+                Style::default().fg(theme.trait_color("defined")),
             ),
         ]),
         Line::from(Span::styled(
             "  └──────────────────────────────────────────────────────────────────────────┘",
-            Style::default().fg(theme.trait_color("invariant")),
+            Style::default().fg(theme.trait_color("defined")),
         )),
     ];
 

@@ -67,21 +67,15 @@ pub const FAMILY_COLORS: &[(&str, &str)] = &[
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// Returns emoji for node_trait trait (O(1) match instead of O(n) search).
-/// v0.12.0: ADR-024 Data Origin rename, supports both old and new names.
+/// v0.12.0: ADR-024 Data Origin rename.
 pub fn trait_emoji(behavior: &str) -> &'static str {
     match behavior {
-        // New names (v0.12.0)
         "defined" => "\u{1F535}",   // 🔵
         "authored" => "\u{1F7E2}",  // 🟢
         "imported" => "\u{1F7E3}",  // 🟣
         "generated" => "\u{1F31F}", // 🌟
         "retrieved" => "\u{26AA}",  // ⚪
-        // Legacy aliases (pre-v0.12.0)
-        "invariant" => "\u{1F535}",  // 🔵 → defined
-        "localized" => "\u{1F7E2}",  // 🟢 → authored
-        "knowledge" => "\u{1F7E3}",  // 🟣 → imported
-        "aggregated" => "\u{26AA}",  // ⚪ → retrieved
-        _ => "\u{26AA}",             // fallback: white circle
+        _ => "\u{26AA}",            // fallback: white circle
     }
 }
 
@@ -368,33 +362,33 @@ pub fn wrap_in_markdown(mermaid_code: &str) -> String {
     )
     .unwrap();
     writeln!(out).unwrap();
-    writeln!(out, "### Legend").unwrap();
+    writeln!(out, "### Legend (ADR-024)").unwrap();
     writeln!(out).unwrap();
     writeln!(out, "| Color | Trait | Description |").unwrap();
     writeln!(out, "|-------|-------|-------------|").unwrap();
     writeln!(
         out,
-        "| \u{1F535} Blue | Invariant | Nodes that don't change between locales |"
+        "| \u{1F535} Blue | Defined | Nodes that don't change between locales |"
     )
     .unwrap();
     writeln!(
         out,
-        "| \u{1F7E2} Green | Localized | Nodes with locale-specific content |"
+        "| \u{1F7E2} Green | Authored | Nodes with locale-specific content |"
     )
     .unwrap();
     writeln!(
         out,
-        "| \u{1F7E3} Purple | Knowledge | Cultural/linguistic knowledge per locale |"
+        "| \u{1F7E3} Purple | Imported | Cultural/linguistic knowledge per locale |"
     )
     .unwrap();
     writeln!(
         out,
-        "| \u{26AA} Gray | Derived | Computed/aggregated data |"
+        "| \u{1F31F} Gold | Generated | LLM-generated output |"
     )
     .unwrap();
     writeln!(
         out,
-        "| \u{2699}\u{FE0F} Gray | Job | Background processing tasks |"
+        "| \u{26AA} Gray | Retrieved | Computed/retrieved data |"
     )
     .unwrap();
     writeln!(out).unwrap();

@@ -78,7 +78,7 @@ function toYaml(node: GraphNode): string {
   const kindMeta = KIND_META[node.type];
   const realm = kindMeta?.realm ?? 'org';
   const layer = config?.layer ?? 'foundation';
-  const trait = kindMeta?.trait ?? 'invariant';
+  const trait = kindMeta?.trait ?? 'defined'; // v11.8: ADR-024
 
   const lines: string[] = [
     `# ${node.type} Node`,
@@ -163,7 +163,7 @@ function toTypeScript(node: GraphNode): string {
   const kindMeta = KIND_META[node.type];
   const realm = kindMeta?.realm ?? 'org';
   const layer = config?.layer ?? 'foundation';
-  const trait = kindMeta?.trait ?? 'invariant';
+  const trait = kindMeta?.trait ?? 'defined'; // v11.8: ADR-024
   const properties = node.data || {};
 
   const propTypes = Object.entries(properties)

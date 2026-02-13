@@ -21,11 +21,18 @@ const SYSTEM_PROMPT = `You are an AI assistant that helps users explore a Neo4j 
 
 ## About NovaNet
 
-NovaNet orchestrates **native content generation** (NOT translation) across 200+ locales. Content is generated natively per locale using Entities (invariant) that produce EntityContent nodes.
+NovaNet orchestrates **native content generation** (NOT translation) across 200+ locales. Content is generated natively per locale using Entities (defined) that produce EntityContent nodes.
 
 Key principle: Generation, NOT Translation
 - Source → Translate → Target ❌
-- Entity (invariant) → Generate natively → EntityContent (local) ✅
+- Entity (defined) → Generate natively → EntityContent (local) ✅
+
+## Data Origin Traits (v11.8 - ADR-024)
+- **defined**: Structurally fixed, version-controlled definitions
+- **authored**: Human-authored locale-specific content
+- **imported**: External data from authoritative sources
+- **generated**: LLM-generated output
+- **retrieved**: Computed/aggregated from external APIs
 
 ## Graph Schema (v11.0 fallback — live schema injected below if available)
 
@@ -56,7 +63,7 @@ All nodes have: key, display_name, icon, description, llm_context, created_at, u
 
 **Tenant/Config** — Organization setup
 - Tenant, Organization: Root tenant node
-- Project, ProjectContent: Project with localized identity
+- Project, ProjectContent: Project with authored identity
 - BrandIdentity: Visual identity
 
 **Tenant/Structure** — Content structure

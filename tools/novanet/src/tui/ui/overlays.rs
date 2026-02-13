@@ -607,7 +607,7 @@ mod tests {
             display_name: "Page".to_string(),
             description: "A page entity".to_string(),
             icon: "📄".to_string(),
-            trait_name: "invariant".to_string(),
+            trait_name: "defined".to_string(),
             instance_count: 10,
             arcs: vec![],
             yaml_path: "models/node-kinds/org/structure/page.yaml".to_string(),
@@ -878,13 +878,13 @@ mod tests {
 
     #[test]
     fn test_legend_trait_styles_count() {
-        // Legend should show 5 trait styles (v11.2: split derived → generated + aggregated)
+        // v11.8: ADR-024 Data Origin semantics (5 traits)
         let expected_traits = [
-            "invariant",
-            "localized",
-            "knowledge",
+            "defined",   // was: invariant
+            "authored",  // was: localized
+            "imported",  // was: knowledge
             "generated",
-            "aggregated",
+            "retrieved", // was: aggregated
         ];
         assert_eq!(expected_traits.len(), 5);
     }

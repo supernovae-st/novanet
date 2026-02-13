@@ -91,7 +91,7 @@ pub fn render(data: &BlueprintData) -> String {
         "└──────────────────────────────────────────────────────────────────────────────┘\n\n",
     );
 
-    // Traits (v11.2: 5 traits - derived split into generated + aggregated, job removed)
+    // Traits (v11.8: ADR-024 Data Origin renames)
     out.push_str(
         "┌──────────────────────────────────────────────────────────────────────────────┐\n",
     );
@@ -109,11 +109,11 @@ pub fn render(data: &BlueprintData) -> String {
     );
     for trait_def in &data.taxonomy.node_traits {
         let symbol = match trait_def.key.as_str() {
-            "invariant" => "■",
-            "localized" => "□",
-            "knowledge" => "◊",
+            "defined" => "■",
+            "authored" => "□",
+            "imported" => "◊",
             "generated" => "★",
-            "aggregated" => "▪",
+            "retrieved" => "▪",
             _ => "?",
         };
         out.push_str(&format!(
@@ -163,7 +163,7 @@ pub fn render(data: &BlueprintData) -> String {
         "└──────────────────────────────────────────────────────────────────────────────┘\n\n",
     );
 
-    // Key Patterns (v11.2: derived split into generated + aggregated, job removed)
+    // Key Patterns (v11.8: ADR-024 Data Origin renames)
     out.push_str(
         "┌──────────────────────────────────────────────────────────────────────────────┐\n",
     );
@@ -180,19 +180,19 @@ pub fn render(data: &BlueprintData) -> String {
         "│                                                                              │\n",
     );
     out.push_str(
-        "│  ■ Invariant:  {kind-key}                    → \"homepage\", \"qr-generator\"    │\n",
+        "│  ■ Defined:    {kind-key}                    → \"homepage\", \"qr-generator\"    │\n",
     );
     out.push_str(
-        "│  □ Localized:  {kind}:{invariant}@{locale}   → \"entity:qr-gen@fr-FR\"         │\n",
+        "│  □ Authored:   {kind}:{defined}@{locale}     → \"entity:qr-gen@fr-FR\"         │\n",
     );
     out.push_str(
-        "│  ◊ Knowledge:  {locale}:{domain}:{key}       → \"fr-FR:tech:scanner\"          │\n",
+        "│  ◊ Imported:   {locale}:{domain}:{key}       → \"fr-FR:tech:scanner\"          │\n",
     );
     out.push_str(
-        "│  ★ Generated:  {kind}:{invariant}@{locale}   → \"page:home@fr-FR\"             │\n",
+        "│  ★ Generated:  {kind}:{defined}@{locale}     → \"page:home@fr-FR\"             │\n",
     );
     out.push_str(
-        "│  ▪ Aggregated: {kind}:{invariant}@{locale}   → \"metrics:seo-kw@fr-FR\"        │\n",
+        "│  ▪ Retrieved:  {kind}:{defined}@{locale}     → \"metrics:seo-kw@fr-FR\"        │\n",
     );
     out.push_str(
         "└──────────────────────────────────────────────────────────────────────────────┘\n\n",
@@ -215,7 +215,7 @@ pub fn render(data: &BlueprintData) -> String {
         "│  ❌ WRONG:  Source → Translate → Target                                      │\n",
     );
     out.push_str(
-        "│  ✓ RIGHT:  Entity (invariant) → Generate natively → EntityContent (local)    │\n",
+        "│  ✓ RIGHT:  Entity (defined) → Generate natively → EntityContent (authored)    │\n",
     );
     out.push_str(
         "│                                                                              │\n",

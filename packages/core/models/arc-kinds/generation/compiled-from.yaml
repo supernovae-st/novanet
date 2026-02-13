@@ -1,5 +1,6 @@
 # packages/core/models/arc-kinds/generation/compiled-from.yaml
-# ArcKind: COMPILED_FROM — Prompt artifact was compiled from source prompt template
+# ArcKind: COMPILED_FROM — Prompt artifact was compiled from source instruction template
+# v0.12.0 ADR-025: PagePrompt→PageInstruction, BlockPrompt→BlockInstruction
 
 arc:
   name: COMPILED_FROM
@@ -7,8 +8,8 @@ arc:
   scope: intra_realm
   source: PromptArtifact
   target:
-    - PagePrompt
-    - BlockPrompt
+    - PageInstruction
+    - BlockInstruction
   cardinality: many_to_one
-  llm_context: Prompt artifact was compiled from source prompt template.
-  cypher_pattern: (PromptArtifact)-[:COMPILED_FROM]->(PagePrompt)
+  llm_context: Prompt artifact was compiled from source instruction template.
+  cypher_pattern: (PromptArtifact)-[:COMPILED_FROM]->(PageInstruction)

@@ -1,25 +1,34 @@
 # packages/core/models/arc-kinds/ownership/has-instruction.yaml
-# ArcKind: HAS_INSTRUCTION — Page owns BlockInstructions (v10.3)
+# ArcKind: HAS_INSTRUCTION — Page/Block owns BlockInstructions (v0.12.0 ADR-025)
+#
+# Page has many BlockInstructions (one per block in the page).
+# Block has one BlockInstruction (its generation instructions).
 
 arc:
   name: HAS_INSTRUCTION
   family: ownership
   scope: intra_realm
 
-  source: Page
+  source:
+    - Page   # one_to_many: Page has many BlockInstructions (one per block)
+    - Block  # v0.12.0 ADR-025: many_to_one: Block has one BlockInstruction
   target: BlockInstruction
-  cardinality: one_to_many
+  cardinality: one_to_many  # Dominant pattern (Page → BlockInstructions)
 
   properties:
     - name: position
       type: integer
-      required: true
-      description: "BlockInstruction ordering within page (0-indexed)"
+      required: false  # Required for Page, not applicable for Block
+      description: "BlockInstruction ordering within page (0-indexed). Only used for Page source."
 
   inverse: INSTRUCTION_OF
 
   llm_context: |
-    Page owns ordered BlockInstructions.
-    Use: MATCH (p:Page)-[:HAS_INSTRUCTION]->(bi:BlockInstruction) ORDER BY bi.position
+    Page owns ordered BlockInstructions (one per block in the page).
+    Block owns its single BlockInstruction (generation instructions).
+    Page use: MATCH (p:Page)-[:HAS_INSTRUCTION]->(bi:BlockInstruction) ORDER BY bi.position
+    Block use: MATCH (b:Block)-[:HAS_INSTRUCTION]->(bi:BlockInstruction)
 
-  cypher_pattern: "(Page)-[:HAS_INSTRUCTION {position}]->(BlockInstruction)"
+  cypher_pattern: |
+    (Page)-[:HAS_INSTRUCTION {position}]->(BlockInstruction)
+    (Block)-[:HAS_INSTRUCTION]->(BlockInstruction)

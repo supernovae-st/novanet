@@ -129,7 +129,7 @@ export const OverviewTab = memo(function OverviewTab({
   const kindMeta = KIND_META[node.type];
   const realm = (kindMeta?.realm ?? 'org') as RealmKey;
   const layer = (config?.layer ?? 'foundation') as LayerKey;
-  const trait = (kindMeta?.trait ?? 'invariant') as TraitKey;
+  const trait = (kindMeta?.trait ?? 'defined') as TraitKey; // v11.8: ADR-024
 
   return (
     <div className="p-4 space-y-6">

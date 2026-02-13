@@ -1594,13 +1594,13 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
         "◆ Schema" // Diamond = structure/meta
     };
 
-    // v11.6.2: Add trait filter indicator if active
+    // v11.8: Renamed per ADR-024 Data Origin semantics
     let filter_indicator = match app.trait_filter.as_deref() {
-        Some("invariant") => " │ ■ invariant",
-        Some("localized") => " │ □ localized",
-        Some("knowledge") => " │ ◊ knowledge",
+        Some("defined") => " │ ■ defined",
+        Some("authored") => " │ □ authored",
+        Some("imported") => " │ ◊ imported",
         Some("generated") => " │ ★ generated",
-        Some("aggregated") => " │ ▪ aggregated",
+        Some("retrieved") => " │ ▪ retrieved",
         _ => "",
     };
 

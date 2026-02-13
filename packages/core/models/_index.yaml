@@ -1,5 +1,5 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-# NOVANET DATA MODELS INDEX v10.3.0
+# NOVANET DATA MODELS INDEX v0.12.0
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 # WHAT: Native content generation system using Neo4j graph database
@@ -348,22 +348,22 @@ files:
   schema: schema/nodes.schema.json    # JSON Schema for validation
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# NODES BY TRAIT (v9.0.0 - locale_behavior field in each YAML)
+# NODES BY TRAIT (v11.8.0 ADR-024 Data Origin renames)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-#   🔵 invariant:  Language-independent, defined once
-#   🟢 localized:  Per-locale content, has :FOR_LOCALE
-#   🟣 knowledge:  Knowledge ABOUT a locale (v9: renamed from localeKnowledge)
-#   ⚪ derived:    Inherits locale from parent
-#   ⚙️ job:        Background jobs, no locale
+#   🔵 defined:    Language-independent, defined once (was: invariant)
+#   🟢 authored:   Per-locale content, has :FOR_LOCALE (was: localized)
+#   🟣 imported:   Knowledge ABOUT a locale (was: knowledge)
+#   🌟 generated:  LLM-generated output (was: derived, partially)
+#   ⚪ retrieved:  Computed/retrieved metrics (was: derived/aggregated)
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 
 nodes_by_trait:
-  invariant:
+  defined:
     - Project
     - BrandIdentity
-    - Entity                # v10.3 - replaces Concept (GLOBAL)
+    - Entity
     - Page
     - Block
     - PageType
@@ -371,44 +371,45 @@ nodes_by_trait:
     - PagePrompt
     - BlockPrompt
     - BlockRules
-    - BlockInstruction      # v10.3 - new
+    - BlockInstruction
     - Locale
     - ContentSlot
     - AudiencePersona
     - ChannelSurface
-  localized:
-    - ProjectContent
-    - EntityContent            # v10.3 - replaces ConceptL10n (GLOBAL)
-    - PageGenerated
-    - BlockGenerated
-    - SEOKeyword
-  knowledge:
-    # Containers (10)
-    - Formatting
-    - Slugification
-    - Adaptation
-    - Style
+    # Containers also defined (v11.5)
     - TermSet
     - ExpressionSet
     - PatternSet
     - CultureSet
     - TabooSet
     - AudienceSet
-    # Atoms (6) - v10.1
+    - EntityCategory
+  authored:
+    - ProjectContent
+    - EntityContent
+  imported:
+    # Knowledge atoms
     - Term
     - Expression
     - Pattern
     - CultureRef
     - Taboo
     - AudienceTrait
-  derived:
-    - SEOKeywordMetrics
-    - PromptArtifact
+    # Locale settings
+    - Formatting
+    - Slugification
+    - Adaptation
+    - Style
+    - SEOKeyword
+  generated:
+    - PageGenerated
+    - BlockGenerated
     - OutputArtifact
-    - EvaluationSignal
-  job:
-    - SEOMiningRun
-    - GenerationJob
+    - PromptArtifact
+  retrieved:
+    - SEOKeywordMetrics
+    - GEOAnswer
+    - GEOMetrics
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # STATISTICS v10.3.0 (Entity-centric architecture)
