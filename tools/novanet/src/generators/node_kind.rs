@@ -81,7 +81,7 @@ fn derive_visibility(realm: &str, layer: &str, kind_name: &str) -> &'static str 
     // Kind-name overrides (priority 1)
     match kind_name {
         // Page/Block types and templates are fragments
-        "Page" | "Block" | "PageType" | "BlockType" => return "fragment",
+        "Page" | "Block" | "PageStructure" | "BlockType" => return "fragment",
         // Generated and content nodes are publishable
         "PageGenerated" | "BlockGenerated" => return "publishable",
         "Entity" | "EntityContent" => return "publishable",
@@ -442,7 +442,7 @@ mod tests {
         // instruction layer → medium (even with invariant trait)
         assert_eq!(
             context_budget(&make_node(
-                "PageType",
+                "PageStructure",
                 "org",
                 "instruction",
                 NodeTrait::Defined
@@ -746,7 +746,7 @@ mod tests {
         // Org internal layers
         assert_eq!(derive_visibility("org", "config", "Org"), "internal");
         assert_eq!(
-            derive_visibility("org", "instruction", "PagePrompt"),
+            derive_visibility("org", "instruction", "PageInstruction"),
             "internal"
         );
     }

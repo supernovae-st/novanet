@@ -116,6 +116,9 @@ pub struct QuizState {
     pub complete: bool,
     /// High score (persisted across sessions).
     pub high_score: Option<usize>,
+    /// Track correct/incorrect per question for category breakdown (v0.12.0).
+    /// Index matches QUESTIONS, true = correct, false = incorrect.
+    pub answers: Vec<bool>,
 }
 
 impl QuizState {
@@ -151,10 +154,55 @@ impl QuizState {
             return;
         }
         if let Some(q) = questions.get(self.current_question) {
-            if self.selected_option == q.correct {
+            let is_correct = self.selected_option == q.correct;
+            if is_correct {
                 self.score += 1;
             }
+            // Track answer for category breakdown (v0.12.0)
+            self.answers.push(is_correct);
             self.answered = true;
+        }
+    }
+
+    /// Calculate score per category (v0.12.0).
+    /// Returns (correct, total) for each category.
+    pub fn category_scores(&self, questions: &[QuizQuestion]) -> Vec<(QuizCategory, usize, usize)> {
+        let mut scores: Vec<(QuizCategory, usize, usize)> = Vec::new();
+
+        for cat in QuizCategory::all() {
+            let mut correct = 0;
+            let mut total = 0;
+
+            for (i, q) in questions.iter().enumerate() {
+                if q.category == *cat {
+                    total += 1;
+                    if let Some(&is_correct) = self.answers.get(i) {
+                        if is_correct {
+                            correct += 1;
+                        }
+                    }
+                }
+            }
+
+            if total > 0 {
+                scores.push((*cat, correct, total));
+            }
+        }
+
+        scores
+    }
+
+    /// Get badge emoji for category performance (v0.12.0).
+    pub fn category_badge(correct: usize, total: usize) -> &'static str {
+        if total == 0 {
+            return "○";
+        }
+        let pct = (correct as f64 / total as f64 * 100.0) as u8;
+        match pct {
+            100 => "★",      // Perfect
+            75..=99 => "◆",  // Great
+            50..=74 => "●",  // Good
+            _ => "○",        // Keep learning
         }
     }
 
@@ -186,77 +234,41 @@ impl QuizState {
 }
 
 /// All quiz questions about NovaNet taxonomy.
+/// v0.12.0: Each question now has a category for badges and breakdown.
 pub const QUESTIONS: &[QuizQuestion] = &[
+    // ═══════════════════════════════════════════════════════════════════════════
+    // REALMS (2 questions)
+    // ═══════════════════════════════════════════════════════════════════════════
     QuizQuestion {
         question: "How many realms does NovaNet v11.5 have?",
         options: ["1", "2", "3", "4"],
         correct: 1,
         explanation: "NovaNet has 2 realms: Shared (universal, READ-ONLY) and Org (organization-specific).",
-    },
-    QuizQuestion {
-        question: "What does NovaNet do with content?",
-        options: ["Translation", "Transcription", "Generation", "Compilation"],
-        correct: 2,
-        explanation: "NovaNet GENERATES content natively per locale, not translation. Entity → Generate → EntityContent.",
-    },
-    QuizQuestion {
-        question: "How many node traits exist in v11.8+?",
-        options: ["3", "4", "5", "6"],
-        correct: 2,
-        explanation: "5 traits: defined, authored, imported, generated, retrieved (ADR-024 Data Origin renames).",
-    },
-    QuizQuestion {
-        question: "Which trait indicates LLM-generated output?",
-        options: ["authored", "imported", "generated", "retrieved"],
-        correct: 2,
-        explanation: "Generated trait indicates LLM-generated output (PageGenerated, BlockGenerated, OutputArtifact).",
-    },
-    QuizQuestion {
-        question: "How many layers does the Shared realm have in v11.5?",
-        options: ["3", "4", "5", "6"],
-        correct: 1,
-        explanation: "Shared has 4 layers: config, locale, geography, knowledge (39 nodes total).",
-    },
-    QuizQuestion {
-        question: "How many layers does the Org realm have in v11.5?",
-        options: ["4", "5", "6", "7"],
-        correct: 2,
-        explanation: "Org has 6 layers: config, foundation, structure, semantic, instruction, output (20 nodes).",
+        category: QuizCategory::Realms,
     },
     QuizQuestion {
         question: "What is the total node count in NovaNet v11.5+?",
         options: ["50", "55", "59", "65"],
         correct: 2,
         explanation: "59 total nodes: 39 shared + 20 org. v0.12.0 refined SEO/GEO and removed obsolete nodes.",
+        category: QuizCategory::Realms,
     },
+    // ═══════════════════════════════════════════════════════════════════════════
+    // LAYERS (3 questions)
+    // ═══════════════════════════════════════════════════════════════════════════
     QuizQuestion {
-        question: "What was EntityL10n renamed to in v10.9?",
-        options: [
-            "EntityContent",
-            "EntityGenerated",
-            "EntityOutput",
-            "EntityData",
-        ],
-        correct: 0,
-        explanation: "EntityL10n → EntityContent (semantic layer, 'authored' trait). The 'Content' suffix indicates locale-specific semantic content.",
-    },
-    QuizQuestion {
-        question: "What was PageL10n renamed to in v10.9?",
-        options: ["PageContent", "PageGenerated", "PageOutput", "PageLocal"],
-        correct: 1,
-        explanation: "PageL10n → PageGenerated (output layer, generated trait). The 'Generated' suffix indicates LLM-generated output.",
-    },
-    QuizQuestion {
-        question: "How many arc families exist in NovaNet?",
+        question: "How many layers does the Shared realm have in v11.5?",
         options: ["3", "4", "5", "6"],
-        correct: 2,
-        explanation: "5 arc families: ownership, localization, semantic, generation, mining.",
+        correct: 1,
+        explanation: "Shared has 4 layers: config, locale, geography, knowledge (39 nodes total).",
+        category: QuizCategory::Layers,
     },
     QuizQuestion {
-        question: "What arc scope is used when crossing realm boundaries?",
-        options: ["intra_realm", "cross_realm", "multi_realm", "global_scope"],
-        correct: 1,
-        explanation: "cross_realm scope for arcs that cross between Shared and Org realms.",
+        question: "How many layers does the Org realm have in v11.5?",
+        options: ["4", "5", "6", "7"],
+        correct: 2,
+        explanation: "Org has 6 layers: config, foundation, structure, semantic, instruction, output (20 nodes).",
+        category: QuizCategory::Layers,
     },
     QuizQuestion {
         question: "Where does the Locale node live in v11.5?",
@@ -268,18 +280,84 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         ],
         correct: 1,
         explanation: "Locale moved to shared/config in v11.5 because it's a DEFINITION ('defined' trait), not settings.",
+        category: QuizCategory::Layers,
+    },
+    // ═══════════════════════════════════════════════════════════════════════════
+    // TRAITS (4 questions)
+    // ═══════════════════════════════════════════════════════════════════════════
+    QuizQuestion {
+        question: "How many node traits exist in v11.8+?",
+        options: ["3", "4", "5", "6"],
+        correct: 2,
+        explanation: "5 traits: defined, authored, imported, generated, retrieved (ADR-024 Data Origin renames).",
+        category: QuizCategory::Traits,
+    },
+    QuizQuestion {
+        question: "Which trait indicates LLM-generated output?",
+        options: ["authored", "imported", "generated", "retrieved"],
+        correct: 2,
+        explanation: "Generated trait indicates LLM-generated output (PageGenerated, BlockGenerated, OutputArtifact).",
+        category: QuizCategory::Traits,
     },
     QuizQuestion {
         question: "What border style indicates a 'defined' node?",
         options: ["dashed", "dotted", "double", "solid"],
         correct: 3,
         explanation: "Defined nodes have solid borders. authored=dashed, imported=double, generated=dotted.",
+        category: QuizCategory::Traits,
     },
     QuizQuestion {
         question: "What quick jump key goes to the 'generated' trait?",
         options: ["gd", "gg", "gn", "go"],
         correct: 1,
         explanation: "gg jumps to Generated trait (v11.8+). gd=defined, ga=authored, gi=imported, gr=retrieved.",
+        category: QuizCategory::Traits,
+    },
+    // ═══════════════════════════════════════════════════════════════════════════
+    // ARCS (3 questions)
+    // ═══════════════════════════════════════════════════════════════════════════
+    QuizQuestion {
+        question: "How many arc families exist in NovaNet?",
+        options: ["3", "4", "5", "6"],
+        correct: 2,
+        explanation: "5 arc families: ownership, localization, semantic, generation, mining.",
+        category: QuizCategory::Arcs,
+    },
+    QuizQuestion {
+        question: "What arc scope is used when crossing realm boundaries?",
+        options: ["intra_realm", "cross_realm", "multi_realm", "global_scope"],
+        correct: 1,
+        explanation: "cross_realm scope for arcs that cross between Shared and Org realms.",
+        category: QuizCategory::Arcs,
+    },
+    QuizQuestion {
+        question: "What was EntityL10n renamed to in v10.9?",
+        options: [
+            "EntityContent",
+            "EntityGenerated",
+            "EntityOutput",
+            "EntityData",
+        ],
+        correct: 0,
+        explanation: "EntityL10n → EntityContent (semantic layer, 'authored' trait). The 'Content' suffix indicates locale-specific semantic content.",
+        category: QuizCategory::Arcs,
+    },
+    // ═══════════════════════════════════════════════════════════════════════════
+    // GENERATION (3 questions)
+    // ═══════════════════════════════════════════════════════════════════════════
+    QuizQuestion {
+        question: "What does NovaNet do with content?",
+        options: ["Translation", "Transcription", "Generation", "Compilation"],
+        correct: 2,
+        explanation: "NovaNet GENERATES content natively per locale, not translation. Entity → Generate → EntityContent.",
+        category: QuizCategory::Generation,
+    },
+    QuizQuestion {
+        question: "What was PageL10n renamed to in v10.9?",
+        options: ["PageContent", "PageGenerated", "PageOutput", "PageLocal"],
+        correct: 1,
+        explanation: "PageL10n → PageGenerated (output layer, generated trait). The 'Generated' suffix indicates LLM-generated output.",
+        category: QuizCategory::Generation,
     },
     QuizQuestion {
         question: "Knowledge atoms (Terms, Expressions) are loaded how?",
@@ -291,19 +369,21 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         ],
         correct: 1,
         explanation: "Selective LLM loading: Load 50 relevant Terms, not 20K JSON blob. Graph queries filter by context.",
+        category: QuizCategory::Generation,
     },
 ];
 
-/// Render the Quiz tab content.
+/// Render the Quiz tab content (v0.12.0 enhanced).
 pub fn render_quiz_tab(f: &mut Frame, app: &App, area: Rect) {
     let quiz = &app.nexus.quiz;
     let locale = app.nexus.locale;
     let questions = QUESTIONS;
 
-    // Layout: question area + options + status
+    // Layout: category badges + question + options + status
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
+            Constraint::Length(2), // Category badges bar (v0.12.0)
             Constraint::Length(5), // Question
             Constraint::Length(8), // Options
             Constraint::Min(1),    // Explanation/Result
@@ -317,7 +397,12 @@ pub fn render_quiz_tab(f: &mut Frame, app: &App, area: Rect) {
         NexusLocale::Fr => ("Quiz Terminé", "Score", "Question"),
     };
 
-    // Main block
+    // Main block with category indicator
+    let current_cat = questions
+        .get(quiz.current_question)
+        .map(|q| q.category)
+        .unwrap_or(QuizCategory::Realms);
+
     let title = if quiz.complete {
         format!(
             " {} - {}: {}/{} ",
@@ -328,10 +413,13 @@ pub fn render_quiz_tab(f: &mut Frame, app: &App, area: Rect) {
         )
     } else {
         format!(
-            " {} {}/{} ",
+            " {} {} {}/{} │ {} {} ",
+            current_cat.icon(),
             question_label,
             quiz.current_question + 1,
-            questions.len()
+            questions.len(),
+            current_cat.name(locale),
+            current_cat.icon(),
         )
     };
 
@@ -339,7 +427,7 @@ pub fn render_quiz_tab(f: &mut Frame, app: &App, area: Rect) {
         .title(Span::styled(
             title,
             Style::default()
-                .fg(Color::Magenta)
+                .fg(current_cat.color())
                 .add_modifier(Modifier::BOLD),
         ))
         .borders(Borders::ALL)
@@ -347,11 +435,70 @@ pub fn render_quiz_tab(f: &mut Frame, app: &App, area: Rect) {
 
     f.render_widget(block, area);
 
+    // Render category badges bar (v0.12.0)
+    render_category_badges(f, quiz, locale, chunks[0]);
+
     if quiz.complete {
-        render_quiz_complete(f, app, locale, &chunks);
+        render_quiz_complete(f, app, locale, &chunks[1..]);
     } else if let Some(question) = questions.get(quiz.current_question) {
-        render_question(f, app, locale, question, &chunks);
+        render_question(f, app, locale, question, &chunks[1..]);
     }
+}
+
+/// Render category badges showing progress (v0.12.0).
+fn render_category_badges(f: &mut Frame, quiz: &QuizState, locale: NexusLocale, area: Rect) {
+    let mut spans: Vec<Span> = Vec::new();
+
+    // Calculate progress for each category
+    for cat in QuizCategory::all() {
+        let mut answered = 0;
+        let mut correct = 0;
+        let mut total = 0;
+
+        for (i, q) in QUESTIONS.iter().enumerate() {
+            if q.category == *cat {
+                total += 1;
+                if let Some(&is_correct) = quiz.answers.get(i) {
+                    answered += 1;
+                    if is_correct {
+                        correct += 1;
+                    }
+                }
+            }
+        }
+
+        // Badge style: dim if not started, colored if in progress, styled if complete
+        let badge = QuizState::category_badge(correct, answered);
+        let (style, text) = if answered == 0 {
+            (
+                Style::default().fg(Color::DarkGray),
+                format!(" {} {} ", cat.icon(), cat.name(locale)),
+            )
+        } else if answered == total {
+            (
+                Style::default()
+                    .fg(cat.color())
+                    .add_modifier(Modifier::BOLD),
+                format!(" {} {} {}/{} {} ", cat.icon(), cat.name(locale), correct, total, badge),
+            )
+        } else {
+            (
+                Style::default().fg(cat.color()),
+                format!(" {} {} {}/{} ", cat.icon(), cat.name(locale), correct, answered),
+            )
+        };
+
+        spans.push(Span::styled(text, style));
+        spans.push(Span::raw("│"));
+    }
+
+    // Remove trailing separator
+    if !spans.is_empty() {
+        spans.pop();
+    }
+
+    let badges = Paragraph::new(Line::from(spans));
+    f.render_widget(badges, area);
 }
 
 /// Render the current question and options.
@@ -479,29 +626,39 @@ fn render_question(
     }
 }
 
-/// Render the quiz completion screen.
+/// Render the quiz completion screen (v0.12.0 enhanced with category breakdown).
 fn render_quiz_complete(f: &mut Frame, app: &App, locale: NexusLocale, chunks: &[Rect]) {
     let quiz = &app.nexus.quiz;
     let total = QUESTIONS.len();
     let pct = (quiz.score as f64 / total as f64 * 100.0) as u8;
 
     // i18n labels
-    let (final_score_label, restart_hint, expert, great, good, keep_learning) = match locale {
+    let (
+        final_score_label,
+        restart_hint,
+        expert,
+        great,
+        good,
+        keep_learning,
+        category_breakdown_label,
+    ) = match locale {
         NexusLocale::En => (
             "Final Score",
             "[r: restart quiz] [Tab: other tabs]",
-            "🏆 Expert!",
-            "🎯 Great job!",
-            "📚 Good effort!",
-            "💪 Keep learning!",
+            "★ Expert!",
+            "◆ Great job!",
+            "● Good effort!",
+            "○ Keep learning!",
+            "Category Breakdown",
         ),
         NexusLocale::Fr => (
             "Score Final",
             "[r: recommencer] [Tab: autres onglets]",
-            "🏆 Expert !",
-            "🎯 Excellent !",
-            "📚 Bon travail !",
-            "💪 Continue d'apprendre !",
+            "★ Expert !",
+            "◆ Excellent !",
+            "● Bon travail !",
+            "○ Continue d'apprendre !",
+            "Détail par Catégorie",
         ),
     };
 
@@ -512,7 +669,8 @@ fn render_quiz_complete(f: &mut Frame, app: &App, locale: NexusLocale, chunks: &
         _ => (keep_learning, Color::Magenta),
     };
 
-    let result_lines = vec![
+    // Build result lines with category breakdown
+    let mut result_lines = vec![
         Line::from(""),
         Line::from(Span::styled(
             format!("{}: {}/{} ({}%)", final_score_label, quiz.score, total, pct),
@@ -529,10 +687,66 @@ fn render_quiz_complete(f: &mut Frame, app: &App, locale: NexusLocale, chunks: &
         )),
         Line::from(""),
         Line::from(Span::styled(
-            restart_hint,
-            Style::default().fg(Color::DarkGray),
+            format!("── {} ──", category_breakdown_label),
+            Style::default()
+                .fg(Color::Cyan)
+                .add_modifier(Modifier::BOLD),
         )),
+        Line::from(""),
     ];
+
+    // Category breakdown with badges (v0.12.0)
+    let cat_scores = quiz.category_scores(QUESTIONS);
+    for (cat, correct, cat_total) in cat_scores {
+        let badge = QuizState::category_badge(correct, cat_total);
+        let cat_pct = if cat_total > 0 {
+            (correct as f64 / cat_total as f64 * 100.0) as u8
+        } else {
+            0
+        };
+
+        // Progress bar
+        let bar_width = 10;
+        let filled = (bar_width * correct / cat_total.max(1)).min(bar_width);
+        let bar: String = "█".repeat(filled) + &"░".repeat(bar_width - filled);
+
+        result_lines.push(Line::from(vec![
+            Span::styled(
+                format!(" {} ", cat.icon()),
+                Style::default().fg(cat.color()),
+            ),
+            Span::styled(
+                format!("{:<12}", cat.name(locale)),
+                Style::default().fg(Color::White),
+            ),
+            Span::styled(
+                format!(" {} ", bar),
+                Style::default().fg(cat.color()),
+            ),
+            Span::styled(
+                format!("{}/{} ", correct, cat_total),
+                Style::default()
+                    .fg(cat.color())
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::styled(
+                format!("({}%) ", cat_pct),
+                Style::default().fg(Color::DarkGray),
+            ),
+            Span::styled(
+                badge,
+                Style::default()
+                    .fg(if badge == "★" { Color::Yellow } else { cat.color() })
+                    .add_modifier(Modifier::BOLD),
+            ),
+        ]));
+    }
+
+    result_lines.push(Line::from(""));
+    result_lines.push(Line::from(Span::styled(
+        restart_hint,
+        Style::default().fg(Color::DarkGray),
+    )));
 
     let para = Paragraph::new(result_lines);
     // Use entire area for results

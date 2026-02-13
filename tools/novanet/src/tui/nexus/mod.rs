@@ -192,6 +192,89 @@ impl NexusTab {
             NexusTab::Pipeline | NexusTab::Quiz | NexusTab::Views => "PRACTICE",
         }
     }
+
+    /// Get related tabs with navigation hints (v0.12.0).
+    /// Returns pairs of (related_tab, hint_text) for cross-navigation.
+    pub fn related_tabs(&self, locale: NexusLocale) -> Vec<(NexusTab, &'static str)> {
+        match locale {
+            NexusLocale::En => match self {
+                NexusTab::Intro => vec![
+                    (NexusTab::Glossary, "Learn terms in Glossary"),
+                    (NexusTab::Tutorial, "Start Tutorial journey"),
+                ],
+                NexusTab::Glossary => vec![
+                    (NexusTab::Traits, "See Traits constellation"),
+                    (NexusTab::Quiz, "Test your knowledge"),
+                ],
+                NexusTab::Tutorial => vec![
+                    (NexusTab::Pipeline, "See generation Pipeline"),
+                    (NexusTab::Quiz, "Practice with Quiz"),
+                ],
+                NexusTab::Traits => vec![
+                    (NexusTab::Layers, "See Layer organization"),
+                    (NexusTab::Pipeline, "See data flow"),
+                ],
+                NexusTab::Layers => vec![
+                    (NexusTab::Arcs, "See Arc families"),
+                    (NexusTab::Views, "Query with Views"),
+                ],
+                NexusTab::Arcs => vec![
+                    (NexusTab::Traits, "Back to Traits"),
+                    (NexusTab::Views, "See schema Views"),
+                ],
+                NexusTab::Pipeline => vec![
+                    (NexusTab::Traits, "Understand Traits"),
+                    (NexusTab::Quiz, "Test your knowledge"),
+                ],
+                NexusTab::Quiz => vec![
+                    (NexusTab::Glossary, "Review in Glossary"),
+                    (NexusTab::Tutorial, "Continue Tutorial"),
+                ],
+                NexusTab::Views => vec![
+                    (NexusTab::Layers, "See Layer structure"),
+                    (NexusTab::Arcs, "See Arc families"),
+                ],
+            },
+            NexusLocale::Fr => match self {
+                NexusTab::Intro => vec![
+                    (NexusTab::Glossary, "Termes dans Glossaire"),
+                    (NexusTab::Tutorial, "Commencer le Tutoriel"),
+                ],
+                NexusTab::Glossary => vec![
+                    (NexusTab::Traits, "Voir les Traits"),
+                    (NexusTab::Quiz, "Tester vos connaissances"),
+                ],
+                NexusTab::Tutorial => vec![
+                    (NexusTab::Pipeline, "Voir le Pipeline"),
+                    (NexusTab::Quiz, "Pratiquer avec le Quiz"),
+                ],
+                NexusTab::Traits => vec![
+                    (NexusTab::Layers, "Voir les Couches"),
+                    (NexusTab::Pipeline, "Voir le flux"),
+                ],
+                NexusTab::Layers => vec![
+                    (NexusTab::Arcs, "Voir les Arcs"),
+                    (NexusTab::Views, "Requêter avec Views"),
+                ],
+                NexusTab::Arcs => vec![
+                    (NexusTab::Traits, "Retour aux Traits"),
+                    (NexusTab::Views, "Voir les Vues"),
+                ],
+                NexusTab::Pipeline => vec![
+                    (NexusTab::Traits, "Comprendre les Traits"),
+                    (NexusTab::Quiz, "Tester vos connaissances"),
+                ],
+                NexusTab::Quiz => vec![
+                    (NexusTab::Glossary, "Revoir dans Glossaire"),
+                    (NexusTab::Tutorial, "Continuer le Tutoriel"),
+                ],
+                NexusTab::Views => vec![
+                    (NexusTab::Layers, "Voir les Couches"),
+                    (NexusTab::Arcs, "Voir les Arcs"),
+                ],
+            },
+        }
+    }
 }
 
 // =============================================================================
@@ -1248,7 +1331,8 @@ pub fn render_nexus(f: &mut Frame, area: Rect, app: &App) {
         .constraints([
             Constraint::Length(3), // Tab bar
             Constraint::Length(1), // Breadcrumb
-            Constraint::Min(1),    // Content (full height, no action bar)
+            Constraint::Min(1),    // Content
+            Constraint::Length(1), // Cross-tab hints (v0.12.0)
         ])
         .split(area);
 
@@ -1273,6 +1357,48 @@ pub fn render_nexus(f: &mut Frame, area: Rect, app: &App) {
         NexusTab::Quiz => quiz::render_quiz_tab(f, app, chunks[2]),
         NexusTab::Views => views::render_views_tab(f, app, chunks[2]),
     }
+
+    // Render cross-tab navigation hints (v0.12.0)
+    render_cross_tab_hints(f, chunks[3], app);
+}
+
+/// Render cross-tab navigation hints at the bottom (v0.12.0).
+fn render_cross_tab_hints(f: &mut Frame, area: Rect, app: &App) {
+    let related = app.nexus.tab.related_tabs(app.nexus.locale);
+    let mut spans: Vec<Span> = Vec::new();
+
+    // Leading arrow
+    spans.push(Span::styled(
+        "→ ",
+        Style::default().fg(Color::DarkGray),
+    ));
+
+    for (i, (tab, hint)) in related.iter().enumerate() {
+        // Tab shortcut key
+        spans.push(Span::styled(
+            format!("[{}] ", tab.shortcut()),
+            Style::default()
+                .fg(Color::Yellow)
+                .add_modifier(Modifier::BOLD),
+        ));
+        // Hint text
+        spans.push(Span::styled(
+            *hint,
+            Style::default().fg(Color::Cyan),
+        ));
+
+        // Separator
+        if i < related.len() - 1 {
+            spans.push(Span::styled(
+                "  │  ",
+                Style::default().fg(Color::DarkGray),
+            ));
+        }
+    }
+
+    let line = Line::from(spans);
+    let paragraph = Paragraph::new(line);
+    f.render_widget(paragraph, area);
 }
 
 /// Render the tab bar at the top of Nexus mode.

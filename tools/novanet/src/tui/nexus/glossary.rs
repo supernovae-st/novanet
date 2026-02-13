@@ -13,7 +13,7 @@
 //! - [1-5]: Jump to category
 //! - [j/k]: Navigate concepts
 //! - [Enter]: Jump to "See Also" concept
-//! - [/]: Search
+//! - `/`: Search
 //!
 //! Provides 15 core concepts organized into 5 categories:
 //! - Graph Basics (4): Class, Instance, Entity, EntityContent
