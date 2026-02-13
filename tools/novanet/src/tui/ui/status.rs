@@ -44,7 +44,7 @@ pub(crate) fn get_contextual_shortcuts(
     mode: NavMode,
     focus: Focus,
     is_instance: bool,
-    is_kind: bool,
+    is_class: bool,
 ) -> &'static str {
     // v11.7: 2 modes, unified tree
     // Display: ↑/↓=vertical, ←/→=horizontal, Enter=action
@@ -56,7 +56,7 @@ pub(crate) fn get_contextual_shortcuts(
             Focus::Tree => {
                 if is_instance {
                     "↑/↓:nav y:copy Esc:back"
-                } else if is_kind {
+                } else if is_class {
                     "↑/↓:nav ←/→:expand y:copy"
                 } else {
                     "↑/↓:nav ←/→:toggle y:copy"
@@ -94,7 +94,7 @@ pub(crate) fn build_filter_indicator(
 
 /// Format stats string for status bar.
 ///
-/// Returns a formatted string like "5 nodes.10 arcs | 3 Kinds.2 ArcKinds"
+/// Returns a formatted string like "5 nodes.10 arcs | 3 Classes.2 ArcClasses"
 pub(crate) fn format_stats(
     node_count: i64,
     arc_count: i64,
@@ -102,7 +102,7 @@ pub(crate) fn format_stats(
     arc_kind_count: i64,
 ) -> String {
     format!(
-        "{} nodes.{} arcs | {} Kinds.{} ArcKinds",
+        "{} nodes.{} arcs | {} Classes.{} ArcClasses",
         node_count, arc_count, kind_count, arc_kind_count
     )
 }
@@ -216,10 +216,10 @@ pub fn render_status(f: &mut Frame, area: Rect, app: &App) {
     // Determine if current item is instance or kind for contextual shortcuts
     let current_item = app.current_item();
     let is_instance = matches!(current_item, Some(TreeItem::Instance(..)));
-    let is_kind = matches!(current_item, Some(TreeItem::Kind(..)));
+    let is_class = matches!(current_item, Some(TreeItem::Kind(..)));
 
     // Get contextual shortcuts using extracted pure function
-    let shortcuts = get_contextual_shortcuts(app.mode, app.focus, is_instance, is_kind);
+    let shortcuts = get_contextual_shortcuts(app.mode, app.focus, is_instance, is_class);
 
     // Build filter indicator using extracted pure function
     let filter_indicator = build_filter_indicator(
@@ -428,26 +428,26 @@ mod tests {
     #[test]
     fn test_format_stats_zeros() {
         let result = format_stats(0, 0, 0, 0);
-        assert_eq!(result, "0 nodes.0 arcs | 0 Kinds.0 ArcKinds");
+        assert_eq!(result, "0 nodes.0 arcs | 0 Classes.0 ArcClasses");
     }
 
     #[test]
     fn test_format_stats_typical_values() {
         let result = format_stats(150, 200, 45, 30);
-        assert_eq!(result, "150 nodes.200 arcs | 45 Kinds.30 ArcKinds");
+        assert_eq!(result, "150 nodes.200 arcs | 45 Classes.30 ArcClasses");
     }
 
     #[test]
     fn test_format_stats_large_values() {
         let result = format_stats(10000, 50000, 500, 250);
-        assert_eq!(result, "10000 nodes.50000 arcs | 500 Kinds.250 ArcKinds");
+        assert_eq!(result, "10000 nodes.50000 arcs | 500 Classes.250 ArcClasses");
     }
 
     #[test]
     fn test_format_stats_negative_not_expected_but_handles() {
         // Negative counts shouldn't happen but function handles them
         let result = format_stats(-1, -1, -1, -1);
-        assert_eq!(result, "-1 nodes.-1 arcs | -1 Kinds.-1 ArcKinds");
+        assert_eq!(result, "-1 nodes.-1 arcs | -1 Classes.-1 ArcClasses");
     }
 
     // =========================================================================

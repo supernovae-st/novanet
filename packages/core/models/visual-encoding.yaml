@@ -217,7 +217,7 @@ class_icons:
   Page: file-text
   Block: square
   ContentSlot: inbox
-  PageType: layout
+  PageStructure: layout
   BlockType: component
 
   # Project / Semantic
@@ -225,11 +225,11 @@ class_icons:
   AudiencePersona: user
   ChannelSurface: monitor
 
-  # Project / Instruction (v0.12.0: Prompt → Instruction)
-  PageInstruction: message-square    # was PagePrompt
-  BlockInstruction: terminal         # was BlockPrompt
+  # Project / Instruction
+  PageInstruction: message-square
+  BlockInstruction: terminal
   BlockRules: shield-check
-  InstructionArtifact: file-code     # was PromptArtifact
+  PromptArtifact: file-code
 
   # Project / Output (v11.2: GenerationJob, EvaluationSignal removed)
   PageGenerated: file-check
@@ -664,7 +664,7 @@ icons:
     no_instances:
       web: file-x
       terminal: "□"
-      description: "Kind has no instances"
+      description: "Class has no instances"
     loading:
       web: loader
       terminal: "◐"
@@ -769,7 +769,7 @@ icons:
     graph:
       web: git-branch
       terminal: "G"
-      description: "Unified tree view (Realm > Layer > Kind)"
+      description: "Unified tree view (Realm > Layer > Class)"
     nexus:
       web: compass
       terminal: "N"

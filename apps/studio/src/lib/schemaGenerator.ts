@@ -28,8 +28,8 @@ import type { GraphNode, GraphEdge } from '@/types';
 // =============================================================================
 
 const REALM_DESCRIPTIONS: Record<Realm, string> = {
-  shared: 'Shared across all tenants (Locale knowledge, SEO)',
-  org: 'Business-specific content and structure (Organization, Projects)',
+  shared: 'Universal knowledge (READ-ONLY)',
+  org: 'Organization-specific content and structure',
 };
 
 // v11.8: Renamed per ADR-024 Data Origin semantics

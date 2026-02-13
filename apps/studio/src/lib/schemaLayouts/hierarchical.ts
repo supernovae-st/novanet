@@ -1,10 +1,10 @@
 /**
  * Hierarchical Layout - Pure graph visualization without container nodes
  *
- * Generates Realm, Layer, and Class as regular graph nodes with edges (v11.8 ADR-023):
- * - Realm nodes (2): shared, org (v11.2)
- * - Layer nodes (10): config, locale, geography, knowledge, foundation, structure, semantic, instruction, output (v11.5)
- * - Class nodes (60): all node types
+ * Generates Realm, Layer, and Class as regular graph nodes with edges:
+ * - Realm nodes (2): shared, org
+ * - Layer nodes (10): config, locale, geography, knowledge, foundation, structure, semantic, instruction, output
+ * - Class nodes (59): all node types
  * - HAS_LAYER edges (Realm → Layer)
  * - HAS_CLASS edges (Layer → Class)
  * - Business edges (Class → Class)

@@ -157,21 +157,7 @@
 # CHANGES v0.12.0 (SemVer transition from v11.x milestone versions)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-# ADR-024: Trait Renames (Data Origin clarity)
-#   - invariant → defined (language-independent, defined once)
-#   - localized → authored (per-locale content, human-curated)
-#   - knowledge → imported (knowledge ABOUT a locale, imported from sources)
-#   - derived   → generated (LLM-generated output)
-#   - aggregated → retrieved (computed/retrieved metrics)
-#
-# ADR-025: Naming Clarifications
-#   - PageType → PageStructure (template rules, not content type)
-#   - PagePrompt → PageInstruction (compiled from BlockInstructions)
-#   - BlockPrompt → BlockInstruction (markdown with @entity/@link refs)
-#   - HAS_PROMPT → HAS_INSTRUCTION (relation rename)
-#   - OF_TYPE (Page→PageType) → HAS_STRUCTURE (Page→PageStructure)
-#
-# Statistics: 59 nodes (39 shared + 20 org), 56 arcs (5 arc families)
+# Statistics: 59 nodes (39 shared + 20 org), 114 arcs (5 arc families)
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 
@@ -266,10 +252,10 @@ files:
       - node-kinds/org/semantic/audience-persona.yaml
       - node-kinds/org/semantic/channel-surface.yaml
 
-    # Instruction (6 nodes) - AI generation directives (v0.12.0 ADR-025)
+    # Instruction (6 nodes) - AI generation directives
     instruction:
-      - node-kinds/org/instruction/page-structure.yaml    # Template rules (was: PageType)
-      - node-kinds/org/instruction/page-instruction.yaml  # Compiled instructions (was: PagePrompt)
+      - node-kinds/org/instruction/page-structure.yaml    # Template rules
+      - node-kinds/org/instruction/page-instruction.yaml  # Compiled instructions
       - node-kinds/org/instruction/block-type.yaml
       - node-kinds/org/instruction/block-rules.yaml
       - node-kinds/org/instruction/block-instruction.yaml # Markdown with @entity/@link
@@ -317,11 +303,11 @@ nodes_by_trait:
     - AudiencePersona
     - ChannelSurface
     # Org/instruction
-    - PageStructure         # v0.12.0: renamed from PageType
-    - PageInstruction       # v0.12.0: renamed from PagePrompt
+    - PageStructure
+    - PageInstruction
     - BlockType
     - BlockRules
-    - BlockInstruction      # v0.12.0: renamed from BlockPrompt
+    - BlockInstruction
     - PromptArtifact
     # Shared/config
     - Locale
@@ -390,19 +376,12 @@ nodes_by_trait:
 # By Realm:
 #   🌍 SHARED:  39 nodes (config 3 + geography 6 + knowledge 24 + locale 6)
 #   📦 ORG:     20 nodes (config 1 + foundation 3 + structure 3 + semantic 4 + instruction 6 + output 3)
-#   TOTAL:      59 nodes, 56 arcs (5 arc families)
+#   TOTAL:      59 nodes, 114 arcs (5 arc families)
 #
 # By Trait (v0.12.0 ADR-024):
-#   🔵 DEFINED:   38 nodes (language-independent definitions)
+#   🔵 DEFINED:   31 nodes (language-independent definitions)
 #   🟢 AUTHORED:   2 nodes (per-locale human-curated content)
-#   🟣 IMPORTED:  14 nodes (external knowledge about locales)
+#   🟣 IMPORTED:  22 nodes (external knowledge about locales)
 #   🌟 GENERATED:  4 nodes (LLM-generated output)
-#   ⚪ RETRIEVED:  1 node  (computed/retrieved metrics)
-#
-# v0.12.0 changes:
-#   - SemVer transition from v11.x milestone versioning
-#   - ADR-024: Trait renames for data origin clarity
-#   - ADR-025: Instruction layer naming clarifications
-#   - PageType → PageStructure, PagePrompt → PageInstruction
-#   - BlockPrompt → BlockInstruction with @entity/@link syntax
+#   ⚪ RETRIEVED:  3 nodes (API snapshots: GEOAnswer, SEOKeywordMetrics, GEOMetrics)
 #

@@ -393,7 +393,7 @@ impl EmptyStateKind {
     fn title(&self) -> &'static str {
         match self {
             EmptyStateKind::NoConnection => "Neo4j Not Connected",
-            EmptyStateKind::NoKinds => "No Node Kinds Found",
+            EmptyStateKind::NoKinds => "No Node Classes Found",
             EmptyStateKind::NoResults => "No Results",
             EmptyStateKind::NoInstances => "No Instances",
             EmptyStateKind::Loading => "Loading…",
@@ -789,7 +789,7 @@ fn render_recent_items_overlay(f: &mut Frame, app: &App) {
             // Get item name at that cursor position
             let item = app.tree.item_at(cursor);
             let (icon, name) = match item {
-                Some(crate::tui::data::TreeItem::KindsSection) => ("≡", "Node Kinds".to_string()),
+                Some(crate::tui::data::TreeItem::KindsSection) => ("≡", "Node Classes".to_string()),
                 Some(crate::tui::data::TreeItem::ArcsSection) => ("⇄", "Arcs".to_string()),
                 Some(crate::tui::data::TreeItem::Realm(r)) => (r.icon, r.display_name.clone()),
                 Some(crate::tui::data::TreeItem::Layer(_, l)) => ("▸", l.display_name.clone()),
@@ -993,7 +993,7 @@ mod tests {
 
     #[test]
     fn test_empty_state_kind_title_no_kinds() {
-        assert_eq!(EmptyStateKind::NoKinds.title(), "No Node Kinds Found");
+        assert_eq!(EmptyStateKind::NoKinds.title(), "No Node Classes Found");
     }
 
     #[test]

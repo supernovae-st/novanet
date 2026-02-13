@@ -87,7 +87,7 @@ describe('schemaLayoutELK', () => {
           realm: 'shared' as Realm,
           label: 'SHARED',
           icon: '🌍',
-          description: 'Shared across all tenants',
+          description: 'Universal knowledge',
           layers: {
             locale: {
               label: 'Locale',
@@ -308,7 +308,7 @@ describe('schemaLayoutELK', () => {
       const result = await applySchemaLayout(hierarchy);
 
       // v10.6: Uses metaBadge for Realm and Layer, schemaNode for Kind
-      // Should have 2 realm meta badges (global, tenant)
+      // Should have 2 realm meta badges (shared, org)
       const realmBadges = result.nodes.filter(n =>
         n.type === 'metaBadge' && n.data.metaType === 'realm'
       );

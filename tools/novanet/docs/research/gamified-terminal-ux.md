@@ -312,7 +312,7 @@ Limited but impactful:
 "Filter Master"    - Use all facet filters
 
 // Exploration Achievements
-"Atlas Complete"   - View all 61 nodes
+"Atlas Complete"   - View all 59 nodes
 "Arc Explorer"     - Traverse all arc families
 "Locale Hunter"    - Query 10+ locales
 

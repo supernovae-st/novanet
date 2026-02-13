@@ -510,7 +510,7 @@ mod tests {
             family: ArcFamily::Ownership,
             scope: None,
             source: NodeRef::Multiple(vec!["Page".to_string(), "Block".to_string()]),
-            target: NodeRef::Multiple(vec!["PageType".to_string(), "BlockType".to_string()]),
+            target: NodeRef::Multiple(vec!["PageStructure".to_string(), "BlockType".to_string()]),
             cardinality: Cardinality::ManyToOne,
             llm_context: "type".to_string(),
             properties: None,
@@ -522,7 +522,7 @@ mod tests {
         let graph = resolve_view_graph(&view, &[rel]);
 
         assert!(graph.reachable.contains("Block"));
-        assert!(graph.reachable.contains("PageType"));
+        assert!(graph.reachable.contains("PageStructure"));
         assert!(graph.reachable.contains("BlockType"));
         assert_eq!(graph.arcs.len(), 2);
     }

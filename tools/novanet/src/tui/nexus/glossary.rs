@@ -1,10 +1,6 @@
 //! Glossary Tab - Searchable concept dictionary for NovaNet.
 //!
-//! v0.12.0 (ADR-024/025): Updated terminology
-//! - Class/Instance replaces Meta Node/Data Node (ADR-025)
-//! - Trait names: defined, authored, imported, generated, retrieved (ADR-024)
-//!
-//! **3-Panel Layout** (v0.12.0):
+//! **3-Panel Layout**:
 //! - Left: Category browser with visual badges
 //! - Center: Concept list with category grouping
 //! - Right: Definition panel with interactive cross-links
@@ -160,8 +156,7 @@ static GRAPH_BASICS_CONCEPTS: [GlossaryConcept; 4] = [
         name: "Class",
         short_desc: "Schema definitions (:Schema:Class)",
         full_desc: "A node that defines the SCHEMA (type system). Class nodes have the :Schema:Class \
-                    label in Neo4j. There are 59 Classes defining all types in NovaNet. \
-                    v11.8: Renamed from 'Meta Node' / 'Kind'.",
+                    label in Neo4j. There are 59 Classes defining all types in NovaNet.",
         classification: None,
         example_yaml: None,
         example_neo4j: Some("(:Schema:Class {label: 'Locale', realm: 'shared', layer: 'config'})"),
@@ -171,8 +166,7 @@ static GRAPH_BASICS_CONCEPTS: [GlossaryConcept; 4] = [
         name: "Instance",
         short_desc: "Actual data nodes (:Locale, :Entity)",
         full_desc: "Actual content instances. Instances are what your application uses - \
-                    the real locales, entities, pages, etc. There are 200,000+ instances. \
-                    v11.8: Renamed from 'Data Node'.",
+                    the real locales, entities, pages, etc. There are 200,000+ instances.",
         classification: None,
         example_yaml: None,
         example_neo4j: Some(
@@ -212,8 +206,7 @@ static CLASSIFICATION_CONCEPTS: [GlossaryConcept; 3] = [
         short_desc: "WHERE: shared vs org",
         full_desc: "WHERE a node lives. Two realms exist:\n\
                     - SHARED (39 classes): Universal knowledge, READ-ONLY\n\
-                    - ORG (20 classes): Organization-specific business content\n\
-                    v0.12.0: 59 total classes (ADR-025)",
+                    - ORG (20 classes): Organization-specific business content",
         classification: None,
         example_yaml: Some(
             "node:\n  realm: shared  # Universal, cannot be modified by org\n  # OR\n  realm: org     # Organization-specific",
@@ -237,7 +230,7 @@ static CLASSIFICATION_CONCEPTS: [GlossaryConcept; 3] = [
     GlossaryConcept {
         name: "Trait",
         short_desc: "HOW: data origin",
-        full_desc: "WHERE does the data come from? 5 traits (v11.8 ADR-024):\n\
+        full_desc: "WHERE does the data come from? 5 traits:\n\
                     - defined: Human-created once (Entity, Page)\n\
                     - authored: Human-written per locale (EntityContent)\n\
                     - imported: External data brought in (Term, Culture)\n\
@@ -258,7 +251,6 @@ static LOCALE_SYSTEM_CONCEPTS: [GlossaryConcept; 4] = [
         short_desc: "BCP-47 identifier (fr-FR, ja-JP)",
         full_desc: "A BCP-47 locale identifier with properties like language_code, country_code, \
                     script, and text_direction. NovaNet supports 200 locales.",
-        // v11.8 ADR-024: "invariant" trait renamed to "defined" (data origin)
         classification: Some("Realm: shared | Layer: config | Trait: defined"),
         example_yaml: None,
         example_neo4j: Some(
@@ -271,7 +263,6 @@ static LOCALE_SYSTEM_CONCEPTS: [GlossaryConcept; 4] = [
         short_desc: "Native vocabulary (\"abonnement mensuel\")",
         full_desc: "A vocabulary word or phrase specific to a locale. Part of the Knowledge \
                     that makes native generation possible. Terms have domain, register, and synonyms.",
-        // v11.8 ADR-024: "knowledge" trait renamed to "imported" (external data brought in)
         classification: Some("Realm: shared | Layer: knowledge | Trait: imported"),
         example_yaml: None,
         example_neo4j: Some(
@@ -284,7 +275,6 @@ static LOCALE_SYSTEM_CONCEPTS: [GlossaryConcept; 4] = [
         short_desc: "Idioms (\"C'est du gateau\")",
         full_desc: "Idiomatic expressions and phrases native to a locale. Unlike Terms (vocabulary), \
                     Expressions capture cultural idioms that cannot be directly translated.",
-        // v11.8 ADR-024: "knowledge" trait renamed to "imported"
         classification: Some("Realm: shared | Layer: knowledge | Trait: imported"),
         example_yaml: None,
         example_neo4j: Some(
@@ -297,7 +287,6 @@ static LOCALE_SYSTEM_CONCEPTS: [GlossaryConcept; 4] = [
         short_desc: "Social rules (formality, taboos)",
         full_desc: "Cultural rules and social conventions for a locale. Includes formality levels, \
                     taboos, humor style, and other cultural considerations for content generation.",
-        // v11.8 ADR-024: "knowledge" trait renamed to "imported"
         classification: Some("Realm: shared | Layer: knowledge | Trait: imported"),
         example_yaml: None,
         example_neo4j: Some(
@@ -1144,7 +1133,7 @@ mod tests {
         let state = GlossaryState::new();
         let yank = state.get_yank_text();
         assert!(yank.is_some());
-        assert_eq!(yank.unwrap(), "Class"); // v11.8: Renamed from "Meta Node"
+        assert_eq!(yank.unwrap(), "Class");
     }
 
     #[test]

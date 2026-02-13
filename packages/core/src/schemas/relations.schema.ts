@@ -29,16 +29,6 @@
  *
  * @see ADR-015 — Unidirectional Ownership Arcs
  * @see packages/core/models/arc-kinds/ — Arc YAML definitions
- *
- * @changelog
- * - v7.12.1: Added anchor_type, nofollow to LINKS_TO
- * - v7.12.0: Added LINKS_TO, SUBTOPIC_OF for page relationships
- * - v7.11.0: Added PREVIOUS_VERSION, removed PageGenerated → PageMetrics
- * - v11.8.0: ADR-025 — Page -[:HAS_STRUCTURE]-> PageStructure (was OF_TYPE → PageType)
- * - v7.10.0: OF_TYPE supports Page → PageType (DEPRECATED, see v11.8.0)
- * - v7.8.5: Unified HAS_METRICS for all time-series observations
- * - v7.2.0: Added HAS_INSTRUCTION, HAS_RULES, GENERATED for instructions
- * - v7.0.0: Unified USES_ENTITY, HAS_GENERATED
  */
 
 import { z } from 'zod';

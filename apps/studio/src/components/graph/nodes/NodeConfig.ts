@@ -1,11 +1,11 @@
 /**
- * NodeConfig - Pre-computed Lookup Tables for O(1) Access (v11.1.0)
+ * NodeConfig - Pre-computed Lookup Tables for O(1) Access
  *
  * Provides instant access to node sizes and colors without runtime computation.
  * This eliminates the performance overhead of computing styles on every render,
  * which is critical when rendering 19k+ nodes.
  *
- * v11.1.0: 62 nodes across 2 realms (SHARED / ORG) — EntityCategory + BELONGS_TO
+ * 59 nodes across 2 realms (SHARED / ORG)
  *
  * @example
  * // Fast lookup
@@ -42,16 +42,16 @@ export interface NodeConfig {
 }
 
 // =============================================================================
-// Size Lookup Table (v11.1.0 - 62 nodes)
+// Size Lookup Table (59 nodes)
 // =============================================================================
 
 /**
- * Pre-computed sizes for all 62 node types (v11.1.0)
+ * Pre-computed sizes for all 59 node types
  *
  * Size categories:
- * - Large (280x140): Root nodes (Project, Organization)
+ * - Large (280x140): Root nodes (Project, OrgConfig)
  * - Medium-Large (240x120): Page, Entity, main content nodes
- * - Medium (220x110): Content nodes, prompts
+ * - Medium (220x110): Content nodes, instructions
  * - Medium-Small (200x100): Standard nodes
  * - Small (180x90): Auxiliary nodes
  * - Extra-Small (160x80): Knowledge atoms, metrics nodes
