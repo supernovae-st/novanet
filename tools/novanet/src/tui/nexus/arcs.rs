@@ -121,9 +121,9 @@ impl TaxonomyTree {
             .iter()
             .map(|&key| {
                 let (arc_count, examples) = if let Some(info) = family_map.get(key) {
-                    let count = info.arc_kinds.len();
+                    let count = info.arc_classes.len();
                     let examples: Vec<String> = info
-                        .arc_kinds
+                        .arc_classes
                         .iter()
                         .take(3) // Show up to 3 examples
                         .map(|ak| ak.key.clone())

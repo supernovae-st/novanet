@@ -236,7 +236,7 @@ pub struct App {
     pub data_filter_kind: Option<String>,
     /// Cursor position before entering filtered Data mode (for restoration)
     pub data_cursor_before_filter: usize,
-    /// Hide empty: when true, hide kinds/layers with 0 instances in Data mode
+    /// Hide empty: when true, hide classes/layers with 0 instances in Data mode
     pub hide_empty: bool,
     /// Nexus mode state (gamified learning hub)
     pub nexus: NexusState,
@@ -486,7 +486,7 @@ impl App {
                 let arc_file = arc.key.to_lowercase().replace('_', "-");
                 TreeItemData::ArcClass {
                     yaml_path: format!(
-                        "packages/core/models/arc-kinds/{}/{}.yaml",
+                        "packages/core/models/arc-classes/{}/{}.yaml",
                         family.key, arc_file
                     ),
                     key: arc.key.clone(),
@@ -602,7 +602,7 @@ impl App {
         }
         idx += 1;
 
-        if !self.tree.is_collapsed("kinds") {
+        if !self.tree.is_collapsed("classes") {
             for realm in &self.tree.realms {
                 // Check display_name and key, take best match
                 let match_display = fuzzy_match(&realm.display_name, &mut matcher, &pattern);
@@ -626,7 +626,7 @@ impl App {
                             .tree
                             .is_collapsed(&format!("layer:{}:{}", realm.key, layer.key))
                         {
-                            for kind in &layer.kinds {
+                            for kind in &layer.classes {
                                 let match_display =
                                     fuzzy_match(&kind.display_name, &mut matcher, &pattern);
                                 let match_key = fuzzy_match(&kind.key, &mut matcher, &pattern);
@@ -657,7 +657,7 @@ impl App {
                 idx += 1;
 
                 if !self.tree.is_collapsed(&format!("family:{}", family.key)) {
-                    for arc_kind in &family.arc_kinds {
+                    for arc_kind in &family.arc_classes {
                         let match_display =
                             fuzzy_match(&arc_kind.display_name, &mut matcher, &pattern);
                         let match_key = fuzzy_match(&arc_kind.key, &mut matcher, &pattern);
@@ -1942,7 +1942,7 @@ mod tests {
             key: "locale".to_string(),
             display_name: "Locale".to_string(),
             color: "#2aa198".to_string(),
-            kinds: vec![locale_kind],
+            classes: vec![locale_kind],
             llm_context: String::new(),
         };
 
@@ -1950,7 +1950,7 @@ mod tests {
             key: "structure".to_string(),
             display_name: "Structure".to_string(),
             color: "#b58900".to_string(),
-            kinds: vec![page_kind],
+            classes: vec![page_kind],
             llm_context: String::new(),
         };
 
@@ -1978,7 +1978,7 @@ mod tests {
         let mut kind_index = FxHashMap::default();
         for (r_idx, realm) in realms.iter().enumerate() {
             for (l_idx, layer) in realm.layers.iter().enumerate() {
-                for (k_idx, kind) in layer.kinds.iter().enumerate() {
+                for (k_idx, kind) in layer.classes.iter().enumerate() {
                     kind_index.insert(kind.key.clone(), (r_idx, l_idx, k_idx));
                 }
             }
@@ -2680,10 +2680,10 @@ mod tests {
     fn test_search_respects_collapsed_state() {
         let mut app = create_test_app();
 
-        // Collapse the "kinds" section
-        app.tree.collapsed.insert("kinds".to_string());
+        // Collapse the "classes" section
+        app.tree.collapsed.insert("classes".to_string());
 
-        // Search for "Page" (which is under kinds)
+        // Search for "Page" (which is under classes)
         app.search.query = "Page".to_string();
         app.update_search();
 
@@ -2691,7 +2691,7 @@ mod tests {
         // But we should still find "Node Classes" header if it matches
         assert!(
             !app.search.results.contains(&6),
-            "Should not find Page when kinds is collapsed"
+            "Should not find Page when classes is collapsed"
         );
     }
 
@@ -2942,7 +2942,7 @@ mod tests {
         app.update_search();
 
         // Result indices should be reasonable (within expected tree size)
-        // Tree has: 2 headers + 2 realms + 10 layers + 60 kinds + 5 arc families + arc kinds
+        // Tree has: 2 headers + 2 realms + 10 layers + 60 classes + 5 arc families + arc classes
         // So max should be under 200
         let reasonable_max = 200;
         for idx in &app.search.results {
@@ -3169,13 +3169,13 @@ mod tests {
         let mut app = create_test_app();
 
         // Toggle a section using the tree API
-        app.tree.toggle("kinds");
+        app.tree.toggle("classes");
 
         // Verify toggle happened (collapsed state changed)
-        let is_collapsed = app.tree.is_collapsed("kinds");
+        let is_collapsed = app.tree.is_collapsed("classes");
         // Toggle again
-        app.tree.toggle("kinds");
-        let after_toggle = app.tree.is_collapsed("kinds");
+        app.tree.toggle("classes");
+        let after_toggle = app.tree.is_collapsed("classes");
 
         // Should be opposite of before
         assert_ne!(

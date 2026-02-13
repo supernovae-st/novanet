@@ -226,7 +226,7 @@ fn render_realm_bar_chart(f: &mut Frame, area: Rect, app: &App) {
         .layers
         .iter()
         .map(|layer| {
-            let count = layer.kinds.len() as u64;
+            let count = layer.classes.len() as u64;
             // Use first 4 chars of layer name as label (Unicode-safe)
             let label: String = layer.display_name.chars().take(4).collect();
             Bar::default()
@@ -270,7 +270,7 @@ fn render_layer_sparkline(f: &mut Frame, area: Rect, app: &App) {
 
     // Collect instance counts from kinds
     let data: Vec<u64> = layer
-        .kinds
+        .classes
         .iter()
         .map(|k| k.instance_count.max(0) as u64)
         .collect();
@@ -310,7 +310,7 @@ fn render_realm_health_sparkline(f: &mut Frame, area: Rect, app: &App) {
     let data: Vec<u64> = realm
         .layers
         .iter()
-        .flat_map(|l| l.kinds.iter())
+        .flat_map(|l| l.classes.iter())
         .map(|k| k.health_percent.unwrap_or(0) as u64)
         .collect();
 
@@ -354,7 +354,7 @@ fn render_realm_trait_distribution(f: &mut Frame, area: Rect, app: &App) {
     // Count kinds by trait
     let mut trait_counts: BTreeMap<&str, u64> = BTreeMap::new();
     for layer in &realm.layers {
-        for kind in &layer.kinds {
+        for kind in &layer.classes {
             *trait_counts.entry(kind.trait_name.as_str()).or_insert(0) += 1;
         }
     }
@@ -426,7 +426,7 @@ fn render_realm_instance_sparkline(f: &mut Frame, area: Rect, app: &App) {
     let data: Vec<u64> = realm
         .layers
         .iter()
-        .flat_map(|l| l.kinds.iter())
+        .flat_map(|l| l.classes.iter())
         .map(|k| k.instance_count.max(0) as u64)
         .collect();
 
@@ -499,7 +499,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 .realms
                 .iter()
                 .flat_map(|r| r.layers.iter())
-                .map(|l| l.kinds.len())
+                .map(|l| l.classes.len())
                 .sum();
 
             let mut lines = vec![
@@ -512,7 +512,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                     Span::styled(app.tree.realms.len().to_string(), STYLE_PRIMARY),
                 ]),
                 Line::from(vec![
-                    Span::styled("kinds     ", STYLE_DIM),
+                    Span::styled("classes   ", STYLE_DIM),
                     Span::styled(kind_count.to_string(), STYLE_PRIMARY),
                 ]),
                 Line::from(""),
@@ -530,7 +530,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
 
                 let bar_width = 16usize;
                 for realm in &app.tree.realms {
-                    let realm_classes: usize = realm.layers.iter().map(|l| l.kinds.len()).sum();
+                    let realm_classes: usize = realm.layers.iter().map(|l| l.classes.len()).sum();
                     let percent = (realm_classes as f64 / kind_count as f64 * 100.0).round() as u8;
                     let filled = (realm_classes * bar_width) / kind_count.max(1);
                     let bar = "█".repeat(filled.max(1));
@@ -561,7 +561,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 .tree
                 .arc_families
                 .iter()
-                .map(|f| f.arc_kinds.len())
+                .map(|f| f.arc_classes.len())
                 .sum();
             vec![
                 Line::from(vec![
@@ -582,7 +582,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
         }
         Some(TreeItem::Realm(realm)) => {
             let theme = &app.theme;
-            let kind_count: usize = realm.layers.iter().map(|l| l.kinds.len()).sum();
+            let kind_count: usize = realm.layers.iter().map(|l| l.classes.len()).sum();
             let mut lines = vec![
                 Line::from(vec![
                     Span::styled("type      ", STYLE_DIM),
@@ -601,7 +601,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                     Span::styled(realm.layers.len().to_string(), STYLE_PRIMARY),
                 ]),
                 Line::from(vec![
-                    Span::styled("kinds     ", STYLE_DIM),
+                    Span::styled("classes   ", STYLE_DIM),
                     Span::styled(kind_count.to_string(), STYLE_PRIMARY),
                 ]),
             ];
@@ -619,7 +619,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
 
                 let bar_width = 12usize;
                 for layer in &realm.layers {
-                    let count = layer.kinds.len();
+                    let count = layer.classes.len();
                     if count == 0 {
                         continue;
                     }
@@ -684,17 +684,17 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                     ),
                 ]),
                 Line::from(vec![
-                    Span::styled("kinds     ", STYLE_DIM),
-                    Span::styled(layer.kinds.len().to_string(), STYLE_PRIMARY),
+                    Span::styled("classes   ", STYLE_DIM),
+                    Span::styled(layer.classes.len().to_string(), STYLE_PRIMARY),
                 ]),
             ];
 
             // Add trait breakdown if there are kinds
-            if !layer.kinds.is_empty() {
+            if !layer.classes.is_empty() {
                 // Count kinds by trait
                 let mut trait_counts: std::collections::BTreeMap<String, usize> =
                     std::collections::BTreeMap::new();
-                for kind in &layer.kinds {
+                for kind in &layer.classes {
                     *trait_counts.entry(kind.trait_name.clone()).or_insert(0) += 1;
                 }
 
@@ -707,7 +707,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 )));
                 lines.push(Line::from(Span::styled(SEPARATOR_MAJOR, STYLE_DIM)));
 
-                let total = layer.kinds.len();
+                let total = layer.classes.len();
                 let bar_width = 12usize;
                 for (trait_name, count) in &trait_counts {
                     let percent = (*count as f64 / total as f64 * 100.0).round() as u8;
@@ -769,7 +769,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                     Span::styled(kind.key.clone(), STYLE_PRIMARY),
                 ]),
                 Line::from(vec![
-                    Span::styled("kind        ", STYLE_DIM),
+                    Span::styled("class       ", STYLE_DIM),
                     Span::styled("—", STYLE_DIM),
                 ]),
                 Line::from(vec![
@@ -1097,7 +1097,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 ]),
                 Line::from(vec![
                     Span::styled("arcs      ", STYLE_DIM),
-                    Span::styled(family.arc_kinds.len().to_string(), STYLE_PRIMARY),
+                    Span::styled(family.arc_classes.len().to_string(), STYLE_PRIMARY),
                 ]),
             ];
 
@@ -1200,7 +1200,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                     Span::styled(instance.key.clone(), STYLE_PRIMARY),
                 ]),
                 Line::from(vec![
-                    Span::styled("kind        ", STYLE_DIM),
+                    Span::styled("class       ", STYLE_DIM),
                     Span::styled(kind.display_name.clone(), STYLE_INFO),
                 ]),
                 Line::from(vec![
