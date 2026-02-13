@@ -7,6 +7,40 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [11.8.0] - 2026-02-13
+
+### Breaking Changes
+- **Trait renames (ADR-024 Data Origin)**: Semantic clarification of data origin traits
+  - `invariant` → `defined`: Structurally fixed, version-controlled definitions
+  - `localized` → `authored`: Human-authored locale-specific content
+  - `knowledge` → `imported`: External data imported from authoritative sources
+  - `generated` → `generated`: LLM-generated output (unchanged)
+  - `aggregated` → `retrieved`: Computed/aggregated from external APIs
+
+### Changed
+- **YAML Node Definitions**: All 60 node-kinds updated with new trait names
+- **Rust TUI**: Updated `traits.rs` (TRAIT_ORDER, descriptions), `theme.rs` (icon defaults)
+- **TypeScript Studio**: Updated 15+ files including:
+  - Design system: `traitStyles.ts`, `palette.ts`, `generated.ts`
+  - Components: `Graph3DLegend.tsx`, `SchemaNode.tsx`, `FacetFilterPanel.tsx`
+  - Data transforms: `dataTransform.ts`, `hierarchical.ts`
+  - Tests: `icon-sync.test.ts`, `schemaLayoutELK.test.ts`, `novanetBridge.test.ts`
+- **ADR-024**: Added Data Origin architecture decision record to novanet-decisions.md
+
+### Migration
+```bash
+# Regenerate schema artifacts from YAML
+cargo run -- schema generate
+
+# Update Neo4j constraints for new trait values
+cargo run -- db migrate
+```
+
+### Statistics
+- **983 Rust tests passing**
+- **178 TypeScript core tests passing**
+- **All Studio tests passing**
+
 ## [11.7.0] - 2026-02-11
 
 ### Added

@@ -134,12 +134,13 @@ export const REALM_PALETTES: Record<RealmKey, ColorPalette> = {
 // TRAIT PALETTES (from taxonomy.yaml via generated.ts)
 // =============================================================================
 
+// v0.12.0: renamed per ADR-024 Data Origin
 export const TRAIT_PALETTES: Record<TraitKey, ColorPalette> = {
-  invariant: createPalette(TRAIT_COLORS.invariant.color),
-  localized: createPalette(TRAIT_COLORS.localized.color),
-  knowledge: createPalette(TRAIT_COLORS.knowledge.color),
+  defined: createPalette(TRAIT_COLORS.defined.color),
+  authored: createPalette(TRAIT_COLORS.authored.color),
+  imported: createPalette(TRAIT_COLORS.imported.color),
   generated: createPalette(TRAIT_COLORS.generated.color),
-  aggregated: createPalette(TRAIT_COLORS.aggregated.color),
+  retrieved: createPalette(TRAIT_COLORS.retrieved.color),
 };
 
 // =============================================================================
@@ -333,7 +334,7 @@ export function getRealmPalette(realm: RealmKey | string): ColorPalette {
  * Get full palette for a trait
  */
 export function getTraitPalette(trait: TraitKey | string): ColorPalette {
-  return TRAIT_PALETTES[trait as TraitKey] ?? TRAIT_PALETTES.invariant;
+  return TRAIT_PALETTES[trait as TraitKey] ?? TRAIT_PALETTES.defined;
 }
 
 /**
@@ -396,13 +397,14 @@ export const REALM_HEX: Record<RealmKey, string> = {
 
 /**
  * Get raw hex colors for traits (for 3D rendering)
+ * v0.12.0: renamed per ADR-024 Data Origin
  */
 export const TRAIT_HEX: Record<TraitKey, string> = {
-  invariant: TRAIT_COLORS.invariant.color,
-  localized: TRAIT_COLORS.localized.color,
-  knowledge: TRAIT_COLORS.knowledge.color,
+  defined: TRAIT_COLORS.defined.color,
+  authored: TRAIT_COLORS.authored.color,
+  imported: TRAIT_COLORS.imported.color,
   generated: TRAIT_COLORS.generated.color,
-  aggregated: TRAIT_COLORS.aggregated.color,
+  retrieved: TRAIT_COLORS.retrieved.color,
 };
 
 /**

@@ -54,12 +54,13 @@ describe('Icon Synchronization', () => {
 
   describe('Trait Icons (from visual-encoding.yaml)', () => {
     it('should have all 5 trait icons defined', () => {
+      // v0.12.0: renamed per ADR-024 Data Origin
       const expectedTraits = [
-        'invariant',
-        'localized',
-        'knowledge',
+        'defined',     // was: invariant
+        'authored',    // was: localized
+        'imported',    // was: knowledge
         'generated',
-        'aggregated',
+        'retrieved',   // was: aggregated
       ];
 
       for (const trait of expectedTraits) {
@@ -70,13 +71,13 @@ describe('Icon Synchronization', () => {
       }
     });
 
-    it('should have correct web icons for traits (v11.7)', () => {
-      // From visual-encoding.yaml - these are the canonical mappings
-      expect(ICONS.traits.invariant.web).toBe('lock');
-      expect(ICONS.traits.localized.web).toBe('globe');
-      expect(ICONS.traits.knowledge.web).toBe('brain');
+    it('should have correct web icons for traits (v0.12.0: ADR-024 renames)', () => {
+      // From visual-encoding.yaml - v0.12.0 trait renames per ADR-024 Data Origin
+      expect(ICONS.traits.defined.web).toBe('lock');       // was: invariant
+      expect(ICONS.traits.authored.web).toBe('pen');       // was: localized
+      expect(ICONS.traits.imported.web).toBe('download');  // was: knowledge
       expect(ICONS.traits.generated.web).toBe('sparkles');
-      expect(ICONS.traits.aggregated.web).toBe('calculator');
+      expect(ICONS.traits.retrieved.web).toBe('cloud-download');  // was: aggregated
     });
   });
 

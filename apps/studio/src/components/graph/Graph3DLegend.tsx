@@ -28,13 +28,13 @@ const LAYER_SHAPES = [
   { layer: 'output', shape: 'Glow Sphere', color: '#22c55e' },
 ];
 
-// Trait materials
+// Trait materials (v0.12.0: renamed per ADR-024 Data Origin)
 const TRAIT_MATERIALS = [
-  { trait: 'invariant', style: 'Solid', description: 'Stable, metallic' },
-  { trait: 'localized', style: 'Wireframe', description: 'Transparent outline' },
-  { trait: 'knowledge', style: 'Glass', description: 'Semi-transparent' },
+  { trait: 'defined', style: 'Solid', description: 'Stable, metallic' },      // was: invariant
+  { trait: 'authored', style: 'Wireframe', description: 'Transparent outline' }, // was: localized
+  { trait: 'imported', style: 'Glass', description: 'Semi-transparent' },     // was: knowledge
   { trait: 'generated', style: 'Emissive', description: 'Glowing' },
-  { trait: 'aggregated', style: 'Points', description: 'Particle cloud' },
+  { trait: 'retrieved', style: 'Points', description: 'Particle cloud' },     // was: aggregated
 ];
 
 // Realm outlines
