@@ -8,7 +8,7 @@
 //!
 //! Output target: `packages/db/seed/00.5-taxonomy.cypher`
 
-use super::cypher_utils::{cypher_str, write_merge_meta};
+use super::cypher_utils::{cypher_str, write_merge_meta, write_section_header_counted};
 use crate::parsers::taxonomy::TaxonomyDoc;
 use std::fmt::Write;
 use std::path::Path;
@@ -56,7 +56,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
 
     // ── Realms ───────────────────────────────────────────────────────────
     writeln!(out).unwrap();
-    write_section_header(&mut out, "REALMS", doc.node_realms.len());
+    write_section_header_counted(&mut out, "REALMS", doc.node_realms.len());
 
     for realm in &doc.node_realms {
         writeln!(out).unwrap();
@@ -78,7 +78,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
 
     // ── Layers + HAS_LAYER rels ──────────────────────────────────────────
     writeln!(out).unwrap();
-    write_section_header(&mut out, "LAYERS", total_layers);
+    write_section_header_counted(&mut out, "LAYERS", total_layers);
 
     for realm in &doc.node_realms {
         writeln!(out).unwrap();
@@ -113,7 +113,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
 
     // ── Traits (with visual encoding) ────────────────────────────────────
     writeln!(out).unwrap();
-    write_section_header(&mut out, "TRAITS", doc.node_traits.len());
+    write_section_header_counted(&mut out, "TRAITS", doc.node_traits.len());
 
     for trait_def in &doc.node_traits {
         writeln!(out).unwrap();
@@ -147,7 +147,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
 
     // ── Arc Families (with visual encoding) ──────────────────────────────
     writeln!(out).unwrap();
-    write_section_header(&mut out, "ARC FAMILIES", doc.arc_families.len());
+    write_section_header_counted(&mut out, "ARC FAMILIES", doc.arc_families.len());
 
     for af in &doc.arc_families {
         writeln!(out).unwrap();
@@ -185,7 +185,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
     // ── Arc Scopes  ────────────────────────────────────────────────
     if !doc.arc_scopes.is_empty() {
         writeln!(out).unwrap();
-        write_section_header(&mut out, "ARC SCOPES", doc.arc_scopes.len());
+        write_section_header_counted(&mut out, "ARC SCOPES", doc.arc_scopes.len());
 
         for scope in &doc.arc_scopes {
             writeln!(out).unwrap();
@@ -206,7 +206,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
     // ── Arc Cardinalities  ─────────────────────────────────────────
     if !doc.arc_cardinalities.is_empty() {
         writeln!(out).unwrap();
-        write_section_header(&mut out, "ARC CARDINALITIES", doc.arc_cardinalities.len());
+        write_section_header_counted(&mut out, "ARC CARDINALITIES", doc.arc_cardinalities.len());
 
         for card in &doc.arc_cardinalities {
             writeln!(out).unwrap();
@@ -227,14 +227,6 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
     writeln!(out).unwrap();
 
     Ok(out)
-}
-
-/// Write a visual section header comment.
-fn write_section_header(out: &mut String, title: &str, count: usize) {
-    let bar = "// ═══════════════════════════════════════════════════════════════════════════════";
-    writeln!(out, "{bar}").unwrap();
-    writeln!(out, "// {title} ({count})").unwrap();
-    writeln!(out, "{bar}").unwrap();
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

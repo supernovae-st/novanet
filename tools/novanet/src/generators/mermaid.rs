@@ -448,48 +448,11 @@ pub fn wrap_in_markdown(mermaid_code: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::generators::test_utils::{make_node, make_rel};
     use crate::generators::Generator;
-    use crate::parsers::arcs::{ArcDef, Cardinality, NodeRef};
+    use crate::parsers::arcs::{Cardinality, NodeRef};
     use crate::parsers::organizing::{ArcFamilyDef, LayerDef, RealmDef, TraitDef};
-    use crate::parsers::yaml_node::{NodeDef, NodeTrait, ParsedNode};
-    use std::path::PathBuf;
-
-    fn make_node(name: &str, realm: &str, layer: &str, behavior: NodeTrait) -> ParsedNode {
-        ParsedNode {
-            def: NodeDef {
-                name: name.to_string(),
-                realm: realm.to_string(),
-                layer: layer.to_string(),
-                node_trait: behavior,
-                knowledge_tier: None,
-                icon: None,
-                description: format!("{name} description"),
-                standard_properties: None,
-                properties: None,
-                neo4j: None,
-                example: None,
-            },
-            realm: realm.to_string(),
-            layer: layer.to_string(),
-            source_path: PathBuf::from(format!("node-kinds/{realm}/{layer}/{name}.yaml")),
-        }
-    }
-
-    fn make_rel(rel_type: &str, family: ArcFamily, source: &str, target: &str) -> ArcDef {
-        ArcDef {
-            arc_type: rel_type.to_string(),
-            family,
-            scope: None,
-            source: NodeRef::Single(source.to_string()),
-            target: NodeRef::Single(target.to_string()),
-            cardinality: Cardinality::OneToMany,
-            llm_context: format!("{rel_type} context"),
-            properties: None,
-            is_self_referential: None,
-            inverse_of: None,
-            inverse_name: None,
-        }
-    }
+    use crate::parsers::yaml_node::NodeTrait;
 
     fn make_org_doc() -> OrganizingDoc {
         OrganizingDoc {

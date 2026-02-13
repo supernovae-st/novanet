@@ -32,41 +32,53 @@ pub fn resolve_root(explicit: Option<&Path>) -> crate::Result<PathBuf> {
     }
 }
 
-/// Derived paths from the monorepo root
+// ─────────────────────────────────────────────────────────────────────────────
+// Derived paths from the monorepo root
+// ─────────────────────────────────────────────────────────────────────────────
+
+#[must_use]
 pub fn models_dir(root: &Path) -> PathBuf {
     root.join("packages/core/models")
 }
 
+#[must_use]
 pub fn node_kinds_dir(root: &Path) -> PathBuf {
     root.join("packages/core/models/node-kinds")
 }
 
 /// Path to taxonomy.yaml (v9.5 - realms, layers, traits, arc families)
+#[must_use]
 pub fn taxonomy_path(root: &Path) -> PathBuf {
     root.join("packages/core/models/taxonomy.yaml")
 }
 
 /// Directory containing arc-kinds YAML files
+#[must_use]
 pub fn arc_kinds_dir(root: &Path) -> PathBuf {
     root.join("packages/core/models/arc-kinds")
 }
 
+#[must_use]
 pub fn seed_dir(root: &Path) -> PathBuf {
     root.join("packages/db/seed")
 }
 
+#[must_use]
 pub fn core_src_dir(root: &Path) -> PathBuf {
     root.join("packages/core/src")
 }
 
+#[must_use]
 pub fn views_dir(root: &Path) -> PathBuf {
     root.join("packages/core/models/views")
 }
 
+#[must_use]
 pub fn docs_dir(root: &Path) -> PathBuf {
     root.join("packages/core/models/docs")
 }
 
+#[must_use]
 pub fn migrations_dir(root: &Path) -> PathBuf {
     root.join("packages/db/migrations")
 }

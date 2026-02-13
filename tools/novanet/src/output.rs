@@ -39,6 +39,7 @@ pub struct OverlayRow {
 }
 
 /// Format node rows as a table string.
+#[must_use]
 pub fn format_table(rows: &[NodeRow]) -> String {
     if rows.is_empty() {
         return "(no results)".to_string();
@@ -48,6 +49,7 @@ pub fn format_table(rows: &[NodeRow]) -> String {
 }
 
 /// Format overlay rows as a table string.
+#[must_use]
 pub fn format_overlay_table(rows: &[OverlayRow]) -> String {
     if rows.is_empty() {
         return "(no results)".to_string();
@@ -57,11 +59,13 @@ pub fn format_overlay_table(rows: &[OverlayRow]) -> String {
 }
 
 /// Format node rows as pretty-printed JSON.
+#[must_use]
 pub fn format_json<T: Serialize>(rows: &[T]) -> String {
     serde_json::to_string_pretty(rows).unwrap_or_else(|e| format!("{{\"error\": \"{e}\"}}"))
 }
 
 /// Format a CypherStatement for display (inlined parameters).
+#[must_use]
 pub fn format_cypher(stmt: &CypherStatement) -> String {
     let mut output = String::new();
     output.push_str("// Parameterized:\n");

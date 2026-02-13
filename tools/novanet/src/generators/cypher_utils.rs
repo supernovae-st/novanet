@@ -132,6 +132,23 @@ pub fn write_section_header(out: &mut String, title: &str) {
     writeln!(out).unwrap();
 }
 
+/// Write a visual section header with item count (double-line style).
+///
+/// # Example
+/// ```ignore
+/// write_section_header_counted(&mut out, "Kind Nodes", 60);
+/// // Output:
+/// // ═══════════════════════════════════════════════════════════════════════════════
+/// // Kind Nodes (60)
+/// // ═══════════════════════════════════════════════════════════════════════════════
+/// ```
+pub fn write_section_header_counted(out: &mut String, title: &str, count: usize) {
+    let bar = "// ═══════════════════════════════════════════════════════════════════════════════";
+    writeln!(out, "{bar}").unwrap();
+    writeln!(out, "// {title} ({count})").unwrap();
+    writeln!(out, "{bar}").unwrap();
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Tests
 // ─────────────────────────────────────────────────────────────────────────────

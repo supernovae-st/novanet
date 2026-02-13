@@ -5,7 +5,7 @@
 //!
 //! Output target: `packages/db/seed/01-kinds.cypher`
 
-use super::cypher_utils::{cypher_list_ref, cypher_str};
+use super::cypher_utils::{cypher_list_ref, cypher_str, write_section_header_counted};
 use crate::parsers::yaml_node::{self, NodeTrait, ParsedNode};
 use std::fmt::Write;
 use std::path::Path;
@@ -221,7 +221,7 @@ fn generate_kind_cypher(nodes: &[ParsedNode]) -> crate::Result<String> {
     writeln!(out).unwrap();
 
     // ── Section 1: Kind nodes ────────────────────────────────────────────────
-    write_section_header(&mut out, "Kind Nodes", nodes.len());
+    write_section_header_counted(&mut out, "Kind Nodes", nodes.len());
     writeln!(out).unwrap();
 
     for node in nodes {
@@ -304,7 +304,7 @@ fn generate_kind_cypher(nodes: &[ParsedNode]) -> crate::Result<String> {
     }
 
     // ── Section 2: HAS_KIND (Layer → Kind) ──────────────────────────────────
-    write_section_header(
+    write_section_header_counted(
         &mut out,
         "Hierarchy: Layer -[:HAS_KIND]-> Kind",
         nodes.len(),
@@ -324,7 +324,7 @@ fn generate_kind_cypher(nodes: &[ParsedNode]) -> crate::Result<String> {
     }
 
     // ── Section 3: IN_REALM (Kind → Realm) ──────────────────────────────────
-    write_section_header(&mut out, "Facet: Kind -[:IN_REALM]-> Realm", nodes.len());
+    write_section_header_counted(&mut out, "Facet: Kind -[:IN_REALM]-> Realm", nodes.len());
     writeln!(out).unwrap();
 
     for node in nodes {
@@ -340,7 +340,7 @@ fn generate_kind_cypher(nodes: &[ParsedNode]) -> crate::Result<String> {
     }
 
     // ── Section 4: IN_LAYER (Kind → Layer) ──────────────────────────────────
-    write_section_header(&mut out, "Facet: Kind -[:IN_LAYER]-> Layer", nodes.len());
+    write_section_header_counted(&mut out, "Facet: Kind -[:IN_LAYER]-> Layer", nodes.len());
     writeln!(out).unwrap();
 
     for node in nodes {
@@ -356,7 +356,7 @@ fn generate_kind_cypher(nodes: &[ParsedNode]) -> crate::Result<String> {
     }
 
     // ── Section 5: EXHIBITS (Kind → Trait) ──────────────────────────────────
-    write_section_header(&mut out, "Facet: Kind -[:EXHIBITS]-> Trait", nodes.len());
+    write_section_header_counted(&mut out, "Facet: Kind -[:EXHIBITS]-> Trait", nodes.len());
     writeln!(out).unwrap();
 
     for node in nodes {
@@ -374,14 +374,6 @@ fn generate_kind_cypher(nodes: &[ParsedNode]) -> crate::Result<String> {
     Ok(out)
 }
 
-/// Write a visual section header comment.
-fn write_section_header(out: &mut String, title: &str, count: usize) {
-    let bar = "// ═══════════════════════════════════════════════════════════════════════════════";
-    writeln!(out, "{bar}").unwrap();
-    writeln!(out, "// {title} ({count})").unwrap();
-    writeln!(out, "{bar}").unwrap();
-}
-
 // ─────────────────────────────────────────────────────────────────────────────
 // Tests
 // ─────────────────────────────────────────────────────────────────────────────
@@ -389,61 +381,8 @@ fn write_section_header(out: &mut String, title: &str, count: usize) {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::generators::test_utils::{make_node, make_node_with_props};
     use crate::generators::Generator;
-    use crate::parsers::yaml_node::{NodeDef, PropertyDef};
-    use indexmap::IndexMap;
-    use std::collections::BTreeMap;
-
-    /// Build a minimal ParsedNode for testing.
-    fn make_node(name: &str, realm: &str, layer: &str, behavior: NodeTrait) -> ParsedNode {
-        ParsedNode {
-            def: NodeDef {
-                name: name.to_string(),
-                realm: realm.to_string(),
-                layer: layer.to_string(),
-                node_trait: behavior,
-                knowledge_tier: None,
-                icon: None,
-                description: format!("{name} description."),
-                standard_properties: None,
-                properties: None,
-                neo4j: None,
-                example: None,
-            },
-            realm: realm.to_string(),
-            layer: layer.to_string(),
-            source_path: std::path::PathBuf::from(format!(
-                "models/node-kinds/{realm}/{layer}/{}.yaml",
-                name.to_lowercase()
-            )),
-        }
-    }
-
-    fn make_node_with_props(
-        name: &str,
-        realm: &str,
-        layer: &str,
-        behavior: NodeTrait,
-        props: Vec<(&str, &str, bool)>, // (name, type, required)
-    ) -> ParsedNode {
-        // Use IndexMap to preserve YAML definition order
-        let mut properties = IndexMap::new();
-        for (pname, ptype, req) in props {
-            properties.insert(
-                pname.to_string(),
-                PropertyDef {
-                    prop_type: ptype.to_string(),
-                    required: Some(req),
-                    description: None,
-                    extra: BTreeMap::new(),
-                },
-            );
-        }
-
-        let mut node = make_node(name, realm, layer, behavior);
-        node.def.properties = Some(properties);
-        node
-    }
 
     #[test]
     fn schema_hint_no_properties() {
