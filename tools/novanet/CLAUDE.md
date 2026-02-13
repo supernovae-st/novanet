@@ -29,7 +29,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | TUI | `tui` | Unified tree (Graph/Nexus modes), lazy loading, async channels |
 | System | `completions`, `doctor` | Implemented |
 
-**976 tests pass** (`cargo test`). Zero clippy warnings.
+**984 tests pass** (`cargo test`). Zero clippy warnings.
 
 **Testing stack:**
 - `insta` — Snapshot testing (5 generator outputs)

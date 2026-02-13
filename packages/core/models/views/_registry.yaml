@@ -15,7 +15,7 @@ description: NovaNet Unified View System (19 views)
 # =============================================================================
 views:
   - id: meta-complete
-    description: Complete meta-graph (Realm, Layer, Kind, Trait, ArcKind)
+    description: Complete meta-graph (Realm, Layer, Class, Trait, ArcClass)
     icon:
       web: diamond
       terminal: "M"
@@ -348,7 +348,7 @@ views:
 # =============================================================================
 # | Category    | Count | Description                                          |
 # |-------------|-------|------------------------------------------------------|
-# | META        | 3     | Schema exploration (Realm, Layer, Kind, ArcKind)     |
+# | META        | 3     | Schema exploration (Realm, Layer, Class, ArcClass)   |
 # | DATA        | 7     | Instance exploration (locales, entities, geography)  |
 # | CONTEXTUAL  | 5     | Node-centered subgraphs (generic, flexible)          |
 # | GENERATION  | 4     | AI agent context assembly                            |
