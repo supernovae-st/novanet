@@ -58,6 +58,30 @@ pub fn arc_kinds_dir(root: &Path) -> PathBuf {
     root.join("packages/core/models/arc-kinds")
 }
 
+/// Directory containing realm YAML files (v0.12.5)
+#[must_use]
+pub fn realms_dir(root: &Path) -> PathBuf {
+    root.join("packages/core/models/realms")
+}
+
+/// Directory containing layer YAML files (v0.12.5)
+#[must_use]
+pub fn layers_dir(root: &Path) -> PathBuf {
+    root.join("packages/core/models/layers")
+}
+
+/// Directory containing trait YAML files (v0.12.5)
+#[must_use]
+pub fn traits_dir(root: &Path) -> PathBuf {
+    root.join("packages/core/models/traits")
+}
+
+/// Directory containing arc-family YAML files (v0.12.5)
+#[must_use]
+pub fn arc_families_dir(root: &Path) -> PathBuf {
+    root.join("packages/core/models/arc-families")
+}
+
 #[must_use]
 pub fn seed_dir(root: &Path) -> PathBuf {
     root.join("packages/db/seed")
