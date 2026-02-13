@@ -366,7 +366,7 @@ cargo run -- schema generate
   - `novanet schema generate` — orchestrates 12 generators (YAML → Cypher/TS/Mermaid/Rust)
   - `novanet schema validate` — YAML coherence checks
   - `novanet data/meta/overlay/query` — 4 navigation modes
-  - `novanet node create/edit/delete` — CRUD with meta-graph validation
+  - `novanet node create/edit/delete` — CRUD with schema graph validation
   - `novanet relation create/delete` — relationship management
   - `novanet search --query` — fulltext + property search
   - `novanet db seed/reset` — database management
@@ -407,7 +407,7 @@ cargo run -- schema generate
 - relations.yaml: dict → list format with `family`, `source`/`target`, `cardinality`
 - organizing-principles.yaml: v9.0.0 with realms/layers/traits/edge_families
 - 44 node YAMLs: added `locale_behavior`, removed `category`
-- All seed files regenerated for v9 meta-graph
+- All seed files regenerated for v9 schema graph
 - ESLint migrated to flat config
 
 ### Removed

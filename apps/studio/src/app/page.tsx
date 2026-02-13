@@ -170,7 +170,7 @@ export default function HomePage() {
   // ═══════════════════════════════════════════════════════════════════════════
 
   // Filtered graph stats (schema mode shows distinct relation types, not edges)
-  const { visibleNodeCount, visibleEdgeCount, isMetaMode, distinctRelationTypes } = useFilteredGraph();
+  const { visibleNodeCount, visibleEdgeCount, isSchemaMode, distinctRelationTypes } = useFilteredGraph();
 
   // Graph data fetching - v12: Most fetching now goes through viewStore
   const { executeQuery, isLoading: isFetching } = useGraphData();
@@ -645,15 +645,15 @@ export default function HomePage() {
                       <div className={cn('flex items-center', gapTokens.default)}>
                         <StatsCounter
                           nodeCount={visibleNodeCount}
-                          edgeCount={isMetaMode ? distinctRelationTypes : visibleEdgeCount}
+                          edgeCount={isSchemaMode ? distinctRelationTypes : visibleEdgeCount}
                           isLoading={queryState.isExecuting}
                           expandedView={expandedView}
                           onHoverNodes={() => openExpanded('nodes')}
                           onHoverRelations={() => openExpanded('relations')}
                           onHoverLeave={scheduleCloseExpanded}
-                          isMetaMode={isMetaMode}
-                          onMetaHoverChange={setIsMetaHovered}
-                          onMetaClick={() => !isExplosionActive && setIsExplosionActive(true)}
+                          isSchemaMode={isSchemaMode}
+                          onSchemaHoverChange={setIsMetaHovered}
+                          onSchemaClick={() => !isExplosionActive && setIsExplosionActive(true)}
                         />
                         <Divider />
                         <RefreshButton onClick={handleRefresh} isLoading={isFetching} />

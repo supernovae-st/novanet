@@ -185,11 +185,11 @@ cardinality_arrows:
 # =============================================================================
 
 class_icons:
-  # Global / Config (14 nodes — v11.1: +EntityCategory)
+  # Shared / Config (14 nodes — v11.1: +EntityCategory)
   Locale: globe
   EntityCategory: tag
 
-  # Global / Knowledge — v10 Tiered Model
+  # Shared / Knowledge — v10 Tiered Model
   # Technical tier
   Formatting: type
   Slugification: link
@@ -204,39 +204,39 @@ class_icons:
   TabooSet: alert-triangle
   AudienceSet: users
 
-  # Global / Semantic — v10.3 Entity-Centric Architecture
+  # Shared / Semantic — v10.3 Entity-Centric Architecture
   Entity: lightbulb
   EntityContent: globe
 
-  # Project / Foundation
+  # Org / Foundation
   Project: folder
   BrandIdentity: palette
   ProjectContent: languages
 
-  # Project / Structure
+  # Org / Structure
   Page: file-text
   Block: square
   ContentSlot: inbox
   PageStructure: layout
   BlockType: component
 
-  # Project / Semantic
-  # v10.3: Concept, ConceptL10n, SearchIntent, TopicCluster removed — see Global / Semantic
+  # Org / Semantic
+  # v10.3: Concept, ConceptL10n, SearchIntent, TopicCluster removed — see Shared / Semantic
   AudiencePersona: user
   ChannelSurface: monitor
 
-  # Project / Instruction
+  # Org / Instruction
   PageInstruction: message-square
   BlockInstruction: terminal
   BlockRules: shield-check
   PromptArtifact: file-code
 
-  # Project / Output (v11.2: GenerationJob, EvaluationSignal removed)
+  # Org / Output (v11.2: GenerationJob, EvaluationSignal removed)
   PageGenerated: file-check
   BlockGenerated: check-square
   OutputArtifact: package
 
-  # Shared / SEO (v11.5: consolidated to shared/knowledge)
+  # Shared / Knowledge (v11.5: SEO consolidated here)
   SEOKeyword: search
   SEOKeywordMetrics: bar-chart-2
 

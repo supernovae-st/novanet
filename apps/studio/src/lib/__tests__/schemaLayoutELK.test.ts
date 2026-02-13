@@ -307,7 +307,7 @@ describe('schemaLayoutELK', () => {
       const hierarchy = getSchemaHierarchy();
       const result = await applySchemaLayout(hierarchy);
 
-      // v10.6: Uses metaBadge for Realm and Layer, schemaNode for Kind
+      // v10.6: Uses metaBadge for Realm and Layer, schemaNode for Class
       // Should have 2 realm meta badges (shared, org)
       const realmBadges = result.nodes.filter(n =>
         n.type === 'metaBadge' && n.data.metaType === 'realm'

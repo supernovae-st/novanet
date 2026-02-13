@@ -41,7 +41,7 @@ export const ProjectNode = memo(function ProjectNode(props: NodeProps<ProjectNod
       width={280}
       isDimmed={data.dimmed === true}
       isHoverDimmed={data.hoverDimmed === true}
-      isMetaMode={data.isMetaMode === true}
+      isSchemaMode={data.isSchemaMode === true}
       ariaLabel={`Project node: ${data.displayName}`}
       renderContent={(ctx) => (
         <ProjectCardContent data={contentData} {...ctx} />

@@ -151,20 +151,20 @@ describe('CardShell', () => {
   });
 
   describe('Blueprint Overlay', () => {
-    it('shows BlueprintOverlay when isMetaMode is true', () => {
-      render(<CardShell {...defaultProps} isMetaMode={true} />);
+    it('shows BlueprintOverlay when isSchemaMode is true', () => {
+      render(<CardShell {...defaultProps} isSchemaMode={true} />);
 
       expect(screen.getByTestId('blueprint-overlay')).toBeInTheDocument();
     });
 
-    it('hides BlueprintOverlay when isMetaMode is false', () => {
-      render(<CardShell {...defaultProps} isMetaMode={false} />);
+    it('hides BlueprintOverlay when isSchemaMode is false', () => {
+      render(<CardShell {...defaultProps} isSchemaMode={false} />);
 
       expect(screen.queryByTestId('blueprint-overlay')).not.toBeInTheDocument();
     });
 
     it('can override BlueprintOverlay visibility', () => {
-      render(<CardShell {...defaultProps} isMetaMode={true} showBlueprintOverlay={false} />);
+      render(<CardShell {...defaultProps} isSchemaMode={true} showBlueprintOverlay={false} />);
 
       expect(screen.queryByTestId('blueprint-overlay')).not.toBeInTheDocument();
     });
@@ -172,7 +172,7 @@ describe('CardShell', () => {
 
   describe('Default Props', () => {
     it('has sensible defaults for optional props', () => {
-      render(<CardShell {...defaultProps} selected={true} isMetaMode={true} />);
+      render(<CardShell {...defaultProps} selected={true} isSchemaMode={true} />);
 
       // Default showPulseRing = true
       expect(screen.getByTestId('pulse-ring')).toBeInTheDocument();
@@ -183,7 +183,7 @@ describe('CardShell', () => {
       // Default showGlassmorphism = true
       expect(screen.getByTestId('glassmorphism')).toBeInTheDocument();
 
-      // Default showBlueprintOverlay = true when isMetaMode
+      // Default showBlueprintOverlay = true when isSchemaMode
       expect(screen.getByTestId('blueprint-overlay')).toBeInTheDocument();
     });
 

@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * BlueprintOverlay - Visual indicator for meta mode nodes
+ * BlueprintOverlay - Visual indicator for schema mode nodes
  *
  * Adds blueprint-style visual elements to differentiate schema nodes from data nodes:
  * - Blue-tinted dark background
@@ -9,7 +9,7 @@
  * - Dashed border with custom spacing (SVG for precise control)
  * - Small diamond badge in corner
  *
- * Usage: Place inside node card when isMetaMode is true
+ * Usage: Place inside node card when isSchemaMode is true
  */
 
 import { memo } from 'react';

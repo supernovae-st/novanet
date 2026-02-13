@@ -2,7 +2,7 @@
  * Unified Tree Types for v11.7
  *
  * This module defines the core data structures for the unified tree architecture
- * where Realm, Layer, Kind, Instance, ArcFamily, and ArcKind are all represented
+ * where Realm, Layer, Class, Instance, ArcFamily, and ArcClass are all represented
  * as clickable nodes with detail panels.
  *
  * v11.7 Principle: "If it's a node in Neo4j, it's a node everywhere"
@@ -35,10 +35,10 @@ export type UnifiedNodeType =
   | 'section'
   | 'realm'
   | 'layer'
-  | 'kind'
+  | 'class'
   | 'instance'
   | 'arcFamily'
-  | 'arcKind';
+  | 'arcClass';
 
 /**
  * Section types at the top level of the tree.
@@ -49,7 +49,7 @@ export type SectionType = 'nodes' | 'arcs';
  * Base interface for all unified tree nodes.
  */
 export interface UnifiedNodeBase {
-  /** Unique identifier (e.g., "Realm:shared", "Kind:Locale") */
+  /** Unique identifier (e.g., "Realm:shared", "Class:Locale") */
   id: string;
   /** Node type for discriminated union */
   type: UnifiedNodeType;
@@ -82,7 +82,7 @@ export interface RealmNode extends UnifiedNodeBase {
   key: string;
   color: string;
   layerCount: number;
-  kindCount: number;
+  classCount: number;
   instanceCount: number;
 }
 
@@ -94,15 +94,15 @@ export interface LayerNode extends UnifiedNodeBase {
   key: string;
   realm: string;
   color: string;
-  kindCount: number;
+  classCount: number;
   instanceCount: number;
 }
 
 /**
- * Kind node (e.g., "Locale", "Entity")
+ * Class node (e.g., "Locale", "Entity")
  */
-export interface KindNode extends UnifiedNodeBase {
-  type: 'kind';
+export interface ClassNode extends UnifiedNodeBase {
+  type: 'class';
   name: string;
   realm: string;
   layer: string;
@@ -120,7 +120,7 @@ export interface KindNode extends UnifiedNodeBase {
 export interface InstanceNode extends UnifiedNodeBase {
   type: 'instance';
   key: string;
-  kindName: string;
+  className: string;
   displayName: string;
   labels: string[];
 }
@@ -132,15 +132,15 @@ export interface ArcFamilyNode extends UnifiedNodeBase {
   type: 'arcFamily';
   key: string;
   color: string;
-  arcKindCount: number;
+  arcClassCount: number;
   instanceCount: number;
 }
 
 /**
- * ArcKind node (e.g., "HAS_PAGE", "USES_ENTITY")
+ * ArcClass node (e.g., "HAS_PAGE", "USES_ENTITY")
  */
-export interface ArcKindNode extends UnifiedNodeBase {
-  type: 'arcKind';
+export interface ArcClassNode extends UnifiedNodeBase {
+  type: 'arcClass';
   name: string;
   family: string;
   source: string;
@@ -156,10 +156,10 @@ export type UnifiedNode =
   | SectionNode
   | RealmNode
   | LayerNode
-  | KindNode
+  | ClassNode
   | InstanceNode
   | ArcFamilyNode
-  | ArcKindNode;
+  | ArcClassNode;
 
 // ============================================================================
 // Classification Types (from taxonomy)
@@ -210,7 +210,7 @@ export const BADGES = {
 
   // Meta-type badges
   ARC_FAMILY: { icon: '●', abbrev: 'fam', color: '#f59e0b' },
-  ARC_KIND: { icon: '●', abbrev: 'arc', color: '#f59e0b' },
+  ARC_CLASS: { icon: '●', abbrev: 'arc', color: '#f59e0b' },
 
   // Layer badges
   LAYER_CONFIG: { icon: '◎', abbrev: 'cfg', color: '#64748b' },
@@ -241,7 +241,7 @@ export type LazyChildrenState =
  * Pagination constants.
  */
 export const PAGINATION = {
-  /** Initial batch size when expanding a Kind */
+  /** Initial batch size when expanding a Class */
   INITIAL_BATCH: 10,
   /** Page size for "Load more" */
   PAGE_SIZE: 50,
@@ -296,10 +296,10 @@ export interface UnifiedTreeActions {
 // ============================================================================
 
 /**
- * Request to load instances for a Kind.
+ * Request to load instances for a Class.
  */
 export interface LoadInstancesRequest {
-  kind: string;
+  class: string;
   offset: number;
   limit: number;
 }
@@ -308,7 +308,7 @@ export interface LoadInstancesRequest {
  * Response from loading instances.
  */
 export interface LoadInstancesResponse {
-  kind: string;
+  class: string;
   instances: Array<{
     key: string;
     displayName: string;
@@ -379,8 +379,8 @@ export function isLayerNode(node: UnifiedNode): node is LayerNode {
   return node.type === 'layer';
 }
 
-export function isKindNode(node: UnifiedNode): node is KindNode {
-  return node.type === 'kind';
+export function isClassNode(node: UnifiedNode): node is ClassNode {
+  return node.type === 'class';
 }
 
 export function isInstanceNode(node: UnifiedNode): node is InstanceNode {
@@ -391,8 +391,8 @@ export function isArcFamilyNode(node: UnifiedNode): node is ArcFamilyNode {
   return node.type === 'arcFamily';
 }
 
-export function isArcKindNode(node: UnifiedNode): node is ArcKindNode {
-  return node.type === 'arcKind';
+export function isArcClassNode(node: UnifiedNode): node is ArcClassNode {
+  return node.type === 'arcClass';
 }
 
 // ============================================================================

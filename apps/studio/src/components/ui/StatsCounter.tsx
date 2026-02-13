@@ -23,17 +23,17 @@ interface StatsCounterProps {
   onHoverRelations?: () => void;
   onHoverLeave?: () => void;
   /** Whether in schema mode (changes wording and adds badge) */
-  isMetaMode?: boolean;
-  /** Callback when META badge hover state changes (for Matrix effect) */
-  onMetaHoverChange?: (isHovering: boolean) => void;
-  /** Callback when META badge is clicked (Easter egg trigger) */
-  onMetaClick?: () => void;
+  isSchemaMode?: boolean;
+  /** Callback when Schema badge hover state changes (for Matrix effect) */
+  onSchemaHoverChange?: (isHovering: boolean) => void;
+  /** Callback when Schema badge is clicked (Easter egg trigger) */
+  onSchemaClick?: () => void;
 }
 
 /**
  * Unified stats counter showing node/edge counts with icons
  * Hovering nodes/relations expands the pill to show type breakdowns
- * In meta mode, shows "Meta · X types · Y relations" with adapted wording
+ * In schema mode, shows "Schema · X types · Y relations" with adapted wording
  */
 export const StatsCounter = memo(function StatsCounter({
   nodeCount,
@@ -44,15 +44,15 @@ export const StatsCounter = memo(function StatsCounter({
   onHoverNodes,
   onHoverRelations,
   onHoverLeave,
-  isMetaMode = false,
-  onMetaHoverChange,
-  onMetaClick,
+  isSchemaMode = false,
+  onSchemaHoverChange,
+  onSchemaClick,
 }: StatsCounterProps) {
   const NodeIcon = GRAPH_ICONS.node;
   const RelIcon = GRAPH_ICONS.relationship;
 
   // Wording changes in schema mode
-  const nodeLabel = isMetaMode ? 'types' : 'nodes';
+  const nodeLabel = isSchemaMode ? 'types' : 'nodes';
   const relLabel = 'relations';
 
   return (
@@ -64,31 +64,31 @@ export const StatsCounter = memo(function StatsCounter({
         className
       )}
     >
-      {/* Mode badge - Always visible: Meta (blue) or Data (emerald) */}
+      {/* Mode badge - Always visible: Schema (blue) or Data (emerald) */}
       <button
         type="button"
-        onClick={onMetaClick}
+        onClick={onSchemaClick}
         className={cn(
           'flex items-center rounded-xl px-3 py-1.5 cursor-pointer',
           gapTokens.default,
           // Colors and typography - monospace code style
           'font-mono font-medium text-xs uppercase tracking-wider',
           // Mode-specific colors
-          isMetaMode
+          isSchemaMode
             ? 'bg-blue-500/15 text-blue-300 border-2 border-blue-400/40 hover:border-blue-400/60 hover:bg-blue-500/20 hover:text-blue-200 hover:shadow-[0_0_16px_rgba(59,130,246,0.4),0_0_32px_rgba(59,130,246,0.15)]'
             : 'bg-emerald-500/15 text-emerald-300 border-2 border-emerald-400/40 hover:border-emerald-400/60 hover:bg-emerald-500/20 hover:text-emerald-200 hover:shadow-[0_0_16px_rgba(16,185,129,0.4),0_0_32px_rgba(16,185,129,0.15)]',
-          // Subtle animated glow pulse (only in meta mode)
-          isMetaMode && 'animate-[glow-pulse_4s_ease-in-out_infinite]',
+          // Subtle animated glow pulse (only in schema mode)
+          isSchemaMode && 'animate-[glow-pulse_4s_ease-in-out_infinite]',
           // Transition
           'transition-all duration-300',
           // Active: scale down
           'active:scale-95'
         )}
-        onMouseEnter={() => onMetaHoverChange?.(true)}
-        onMouseLeave={() => onMetaHoverChange?.(false)}
+        onMouseEnter={() => onSchemaHoverChange?.(true)}
+        onMouseLeave={() => onSchemaHoverChange?.(false)}
       >
         <Boxes className="w-4 h-4" />
-        <span>{isMetaMode ? 'Meta' : 'Data'}</span>
+        <span>{isSchemaMode ? 'Schema' : 'Data'}</span>
       </button>
       <span className="text-white/20 group-hover/stats:text-white/40 transition-colors">·</span>
 

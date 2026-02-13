@@ -43,7 +43,7 @@ const LAYER_CONFIGS: Record<string, { label: string }> = {
 };
 
 // Node sizes for Dagre layout
-// MUST match visual dimensions in MetaBadgeNode and SchemaNode for proper click detection
+// MUST match visual dimensions in SchemaBadgeNode and SchemaNode for proper click detection
 const REALM_NODE_WIDTH = 280;
 const REALM_NODE_HEIGHT = 160;
 const LAYER_NODE_WIDTH = 280;
@@ -54,7 +54,7 @@ const CLASS_NODE_HEIGHT = 160;
 // Dagre layout config
 const DAGRE_CONFIG = {
   rankdir: 'LR', // Left to right
-  ranksep: 300, // Space between columns (Realm → Layer → Kind)
+  ranksep: 300, // Space between columns (Realm → Layer → Class)
   nodesep: 50, // Space between nodes in same column
   edgesep: 20,
   marginx: 100,
@@ -201,7 +201,7 @@ export function applyHierarchicalLayout(
             realm,
             layer: layerKey,
             trait: schemaNode?.trait || 'defined',
-            isMetaNode: false,
+            isSchemaNode: false,
             metaType: 'class',
           },
         });

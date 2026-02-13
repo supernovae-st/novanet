@@ -179,7 +179,7 @@ function toTypeScript(node: GraphNode): string {
 
   return `// ${node.type} Node Type Definition
 
-import type { NodeKind } from '@novanet/core';
+import type { NodeClass } from '@novanet/core';
 
 interface ${node.type}Data {
   key: string;
@@ -189,8 +189,8 @@ interface ${node.type}Data {
 ${propTypes}
 }
 
-// Node kind metadata
-const ${node.type.toLowerCase()}Kind: NodeKind = {
+// Node class metadata
+const ${node.type.toLowerCase()}Class: NodeClass = {
   name: '${node.type}',
   realm: '${realm}',
   layer: '${layer}',

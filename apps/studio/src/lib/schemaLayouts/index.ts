@@ -20,13 +20,13 @@ import { applyHierarchicalLayout } from './hierarchical';
  *
  * Layout Mapping (v9.5):
  * - dagre → Hierarchical (DEFAULT) - Pure graph nodes with Dagre LR layout
- * - LR    → Hierarchical - Same as dagre (Realm → Layer → Kind)
+ * - LR    → Hierarchical - Same as dagre (Realm → Layer → Class)
  * - TB    → Hierarchical - Same layout (may add TB variant later)
  * - radial → Hierarchical - Same layout (may add radial variant later)
  * - force → Hierarchical - Same layout (may add force variant later)
  *
  * Note: v9.5 replaces container-based layouts with pure graph visualization.
- * All nodes (Realm, Layer, Kind) are regular nodes connected by edges.
+ * All nodes (Realm, Layer, Class) are regular nodes connected by edges.
  *
  * @param hierarchy - Schema hierarchy data
  * @param direction - Layout direction from toolbar

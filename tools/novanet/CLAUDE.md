@@ -242,7 +242,7 @@ src/
   - Generators read realm/layer from YAML content, validate against path
   - v0.12.0: 2 realms (shared, org), 10 layers (4 shared + 6 org), 59 node types
 - **Query-First architecture (v11.6)**: Cypher is the single source of truth for graph display
-  - META mode uses KINDS_QUERY + ARCS_QUERY to build the meta-graph
+  - META mode uses KINDS_QUERY + ARCS_QUERY to build the schema graph
   - `cargo run -- meta` executes these foundational queries
   - Views defined in `packages/core/models/views/*.yaml` (no hardcoded TypeScript)
   - See ADR-021 in `.claude/rules/novanet-decisions.md`

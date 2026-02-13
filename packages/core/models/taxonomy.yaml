@@ -23,8 +23,8 @@ version: "0.12.0"
 # NODE REALMS (2) — WHERE does the node live?
 # =============================================================================
 # Each realm contains layers (functional classification)
-# Traversal: TENANT can read GLOBAL (one-way)
-# Isolation: Tenant A cannot see Tenant B (multi-tenant boundary)
+# Traversal: ORG can read SHARED (one-way)
+# Isolation: Org A cannot see Org B (multi-tenant boundary)
 
 node_realms:
   - key: shared

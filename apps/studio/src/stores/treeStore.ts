@@ -8,10 +8,10 @@ import type {
 } from '@novanet/core';
 
 /**
- * Unified Tree Store for v11.7
+ * Unified Tree Store for v11.8
  *
- * Manages the hierarchical tree state where Realm, Layer, Kind, Instance,
- * ArcFamily, and ArcKind are all clickable nodes with detail panels.
+ * Manages the hierarchical tree state where Realm, Layer, Class, Instance,
+ * ArcFamily, and ArcClass are all clickable nodes with detail panels.
  *
  * Principle: "If it's a node in Neo4j, it's a node everywhere"
  */
