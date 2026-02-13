@@ -20,11 +20,11 @@ pub enum NovaNetError {
 
     // Removed: Neo4j(#[from] neo4rs::Error) - use Connection or Query instead
     // Removed: Neo4jDe(#[from] neo4rs::DeError) - unused, neo4rs handles internally
-    #[error("no Kind found for label '{0}'")]
-    UnknownKind(String),
+    #[error("no Class found for label '{0}'")]
+    UnknownClass(String),
 
-    #[error("meta-graph integrity: {0}")]
-    MetaIntegrity(String),
+    #[error("schema-graph integrity: {0}")]
+    SchemaIntegrity(String),
 
     #[error("YAML schema error in {path}")]
     Schema {
@@ -50,15 +50,15 @@ mod tests {
     use super::*;
 
     #[test]
-    fn unknown_kind_display() {
-        let err = NovaNetError::UnknownKind("FooBar".to_string());
-        assert_eq!(err.to_string(), "no Kind found for label 'FooBar'");
+    fn unknown_class_display() {
+        let err = NovaNetError::UnknownClass("FooBar".to_string());
+        assert_eq!(err.to_string(), "no Class found for label 'FooBar'");
     }
 
     #[test]
-    fn meta_integrity_display() {
-        let err = NovaNetError::MetaIntegrity("missing Realm node".to_string());
-        assert_eq!(err.to_string(), "meta-graph integrity: missing Realm node");
+    fn schema_integrity_display() {
+        let err = NovaNetError::SchemaIntegrity("missing Realm node".to_string());
+        assert_eq!(err.to_string(), "schema-graph integrity: missing Realm node");
     }
 
     #[test]
