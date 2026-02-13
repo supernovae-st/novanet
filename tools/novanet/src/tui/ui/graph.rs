@@ -574,11 +574,11 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
         // Add contextual hint at the bottom
         lines.push(Line::from(Span::raw("")));
         let hint = match app.current_item() {
-            Some(TreeItem::KindsSection) | Some(TreeItem::ArcsSection) => {
+            Some(TreeItem::ClassesSection) | Some(TreeItem::ArcsSection) => {
                 "\u{25b8} Expand a section to explore"
             }
             Some(TreeItem::ArcFamily(_)) => "\u{25b8} Select an Arc to see endpoints",
-            Some(TreeItem::ArcKind(_, _)) => "\u{25b8} Loading arc details...",
+            Some(TreeItem::ArcClass(_, _)) => "\u{25b8} Loading arc details...",
             Some(TreeItem::Realm(_)) | Some(TreeItem::Layer(_, _)) => {
                 "\u{25b8} Select a Node Kind to see arc relationships"
             }
@@ -595,7 +595,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
 /// Optimized to use references instead of cloning strings.
 fn render_arcs_by_family(
     lines: &mut Vec<Line>,
-    arcs: &super::super::data::KindArcsData,
+    arcs: &super::super::data::ClassArcsData,
     theme: &theme::Theme,
     dim: &Style,
 ) {
@@ -802,7 +802,7 @@ fn build_graph_distribution_stats(app: &App) -> Vec<Line<'static>> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::tui::data::{KindArcsData, KindInfo, LayerInfo, Neo4jArc, RealmInfo, TaxonomyTree};
+    use crate::tui::data::{ClassArcsData, ClassInfo, LayerInfo, Neo4jArc, RealmInfo, TaxonomyTree};
     use crate::tui::theme::{ColorMode, Theme};
     use pretty_assertions::assert_eq;
     use ratatui::style::Color;
@@ -820,8 +820,8 @@ mod tests {
         class_label: &str,
         incoming: Vec<Neo4jArc>,
         outgoing: Vec<Neo4jArc>,
-    ) -> KindArcsData {
-        KindArcsData {
+    ) -> ClassArcsData {
+        ClassArcsData {
             class_label: class_label.to_string(),
             realm: "org".to_string(),
             layer: "structure".to_string(),
@@ -838,8 +838,8 @@ mod tests {
         }
     }
 
-    fn create_test_kind(key: &str) -> KindInfo {
-        KindInfo {
+    fn create_test_kind(key: &str) -> ClassInfo {
+        ClassInfo {
             key: key.to_string(),
             display_name: key.to_string(),
             description: String::new(),
@@ -858,7 +858,7 @@ mod tests {
         }
     }
 
-    fn create_test_layer(key: &str, kinds: Vec<KindInfo>) -> LayerInfo {
+    fn create_test_layer(key: &str, kinds: Vec<ClassInfo>) -> LayerInfo {
         LayerInfo {
             key: key.to_string(),
             display_name: key.to_string(),
@@ -1170,7 +1170,7 @@ mod tests {
         let shared_layer = create_test_layer("config", shared_kinds);
         let shared_realm = create_test_realm("shared", vec![shared_layer]);
 
-        let org_kinds: Vec<KindInfo> = (0..8)
+        let org_kinds: Vec<ClassInfo> = (0..8)
             .map(|i| create_test_kind(&format!("Kind{}", i)))
             .collect();
         let org_layer = create_test_layer("structure", org_kinds);
@@ -1382,7 +1382,7 @@ mod tests {
         // Test with multiple realms to ensure all are displayed
         let realms: Vec<RealmInfo> = (0..3)
             .map(|i| {
-                let kinds: Vec<KindInfo> = (0..(i + 1))
+                let kinds: Vec<ClassInfo> = (0..(i + 1))
                     .map(|j| create_test_kind(&format!("Kind{}_{}", i, j)))
                     .collect();
                 let layer = create_test_layer(&format!("layer{}", i), kinds);

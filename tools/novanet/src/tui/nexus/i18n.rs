@@ -876,3 +876,67 @@ static QUIZ_FR: [QuizQuestionI18n; 15] = [
         explanation: "Les atomes de knowledge n'existent QUE là où c'est nécessaire - chaque locale a exactement ce dont elle a besoin.",
     },
 ];
+
+// =============================================================================
+// STATS (v0.12.0)
+// =============================================================================
+
+/// Stats tab i18n strings.
+pub struct StatsI18n {
+    pub title: &'static str,
+    pub avg_score: &'static str,
+    pub streak: &'static str,
+    pub best: &'static str,
+    pub quizzes: &'static str,
+    pub achievements: &'static str,
+    pub score_history: &'static str,
+    pub last: &'static str,
+    pub scores: &'static str,
+    pub category_mastery: &'static str,
+    pub achievements_title: &'static str,
+    pub achievement_hint: &'static str,
+    category_labels: &'static [&'static str],
+}
+
+impl StatsI18n {
+    /// Create StatsI18n for given locale.
+    pub fn new(locale: super::NexusLocale) -> Self {
+        match locale {
+            super::NexusLocale::En => Self {
+                title: "Learning Stats",
+                avg_score: "Avg:",
+                streak: "Streak:",
+                best: "best",
+                quizzes: "Quizzes:",
+                achievements: "Achievements:",
+                score_history: "Score History",
+                last: "Last",
+                scores: "scores",
+                category_mastery: "Category Mastery",
+                achievements_title: "Achievements",
+                achievement_hint: "Complete quizzes and build streaks to unlock achievements!",
+                category_labels: &["Traits", "Layers", "Arcs", "Generation", "Architecture"],
+            },
+            super::NexusLocale::Fr => Self {
+                title: "Stats d'Apprentissage",
+                avg_score: "Moy:",
+                streak: "Série:",
+                best: "meilleur",
+                quizzes: "Quiz:",
+                achievements: "Succès:",
+                score_history: "Historique des Scores",
+                last: "Derniers",
+                scores: "scores",
+                category_mastery: "Maîtrise par Catégorie",
+                achievements_title: "Succès",
+                achievement_hint: "Complétez des quiz et construisez des séries pour débloquer des succès !",
+                category_labels: &["Traits", "Couches", "Arcs", "Génération", "Architecture"],
+            },
+        }
+    }
+
+    /// Get category labels for current locale.
+    pub fn category_labels(&self) -> &'static [&'static str] {
+        self.category_labels
+    }
+}
