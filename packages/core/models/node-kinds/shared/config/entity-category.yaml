@@ -4,7 +4,7 @@
 # v11.4: Moved to shared/config (classification nodes layer)
 #        - layer: config (was knowledge)
 #
-# v11.0: Global config node for categorizing entities by purpose
+# v11.0: Shared config node for categorizing entities by purpose
 # Enables: filtering, grouping, and LLM context selection by category
 # Source: Universal taxonomy (applies to all orgs)
 
@@ -95,7 +95,7 @@ node:
       from: Entity
       cardinality: "N:1"
       scope: cross_realm
-      description: "Entities classified under this category (tenant Entity -> global EntityCategory)"
+      description: "Entities classified under this category (org Entity -> shared EntityCategory)"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # EXAMPLES
@@ -136,7 +136,7 @@ node:
       RETURN e.key, e.display_name, e.description
       ORDER BY e.display_name
 
-      // Group entities by category for a tenant
-      MATCH (t:Tenant {key: $tenant_key})-[:HAS_ENTITY]->(e:Entity)-[:BELONGS_TO]->(c:EntityCategory)
+      // Group entities by category for an org
+      MATCH (o:OrgConfig {key: $org_key})-[:HAS_PROJECT]->(:Project)-[:HAS_ENTITY]->(e:Entity)-[:BELONGS_TO]->(c:EntityCategory)
       RETURN c.key AS category, collect(e.key) AS entities
       ORDER BY c.sort_order

@@ -458,16 +458,16 @@ fn render_realm_instance_sparkline(f: &mut Frame, area: Rect, app: &App) {
 /// Uses [K] badge for Kind and [I] badge for Instance for instant recognition.
 fn get_detail_title(app: &App) -> String {
     match app.current_item() {
-        Some(TreeItem::KindsSection) => "Node Kinds".to_string(),
+        Some(TreeItem::KindsSection) => "Node Classes".to_string(),
         Some(TreeItem::ArcsSection) => "Arcs".to_string(),
         Some(TreeItem::Realm(r)) => format!("{} {}", r.icon, r.display_name),
         Some(TreeItem::Layer(_, l)) => l.display_name.clone(),
         Some(TreeItem::Kind(_, _, k)) => {
-            // [K] badge for Kind - instant recognition
+            // [C] badge for Class - instant recognition
             if k.icon.is_empty() {
-                format!("[K] {}", k.display_name)
+                format!("[C] {}", k.display_name)
             } else {
-                format!("[K] {} {}", k.icon, k.display_name)
+                format!("[C] {} {}", k.icon, k.display_name)
             }
         }
         Some(TreeItem::ArcFamily(f)) => f.display_name.clone(),
@@ -758,7 +758,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
             let mut lines = vec![
                 Line::from(vec![
                     Span::styled("type        ", STYLE_DIM),
-                    Span::styled("Node Kind", STYLE_INFO),
+                    Span::styled("Node Class", STYLE_INFO),
                 ]),
                 Line::from(vec![
                     Span::styled("category    ", STYLE_DIM),

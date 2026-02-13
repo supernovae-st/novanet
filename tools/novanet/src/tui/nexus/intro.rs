@@ -313,7 +313,7 @@ fn render_page_2_two_types_of_nodes(f: &mut Frame, theme: &Theme, locale: NexusL
         Line::from(vec![
             Span::styled("  │  ", Style::default().fg(Color::DarkGray)),
             Span::styled(
-                "Kind: Locale",
+                "Class: Locale",
                 Style::default()
                     .fg(Color::Magenta)
                     .add_modifier(Modifier::BOLD),

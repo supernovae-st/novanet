@@ -99,9 +99,9 @@ node:
 
   relations:
     BELONGS_TO_ORG:
-      to: Organization
+      to: OrgConfig  # v11.3: Organization merged into OrgConfig
       cardinality: "N:1"
-      description: "Organization that owns this project (v10.5)"
+      description: "Organization config that owns this project"
 
     HAS_CONTENT:
       to: ProjectContent

@@ -463,7 +463,7 @@ mod tests {
             make_node("Project", "org", "foundation"),
             make_node("Page", "org", "structure"),
             make_node("Block", "org", "structure"),
-            make_node("PagePrompt", "org", "instruction"),
+            make_node("PageInstruction", "org", "instruction"),
             make_node("PageGenerated", "org", "output"),
         ];
 

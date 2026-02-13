@@ -1,9 +1,5 @@
 # packages/core/models/arc-kinds/ownership/of-type.yaml
-# ArcKind: OF_TYPE — Block references its type template (v11.8)
-#
-# v11.8 (ADR-025):
-#   - Page→PageType REMOVED (use HAS_STRUCTURE for Page→PageStructure)
-#   - Block→BlockType RETAINED
+# ArcKind: OF_TYPE — Block references its type template
 
 arc:
   name: OF_TYPE

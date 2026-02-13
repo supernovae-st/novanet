@@ -1,6 +1,5 @@
 # models/node-kinds/org/semantic/entity.yaml
-# models/node-kinds/tenant/semantic/entity.yaml
-# Entity - Tenant-level semantic unit (v11)
+# Entity - Org-level semantic unit (v11)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 # PURPOSE:
@@ -10,13 +9,13 @@
 #
 # ARCHITECTURE (Full Hierarchy):
 #
-#   Tenant ──[:HAS_ENTITY]──> Entity (invariant)
+#   OrgConfig ──[:HAS_PROJECT]──> Project ──[:HAS_ENTITY]──> Entity (defined)
 #                                   │
 #                                   └──[:HAS_CONTENT]──> EntityContent
 #                                                            │
 #                                                            └──[:FOR_LOCALE]──> Locale
 #
-#   • Organization = Multi-tenant isolation (e.g., SuperNovae Studio)
+#   • OrgConfig = Organization configuration (e.g., SuperNovae Studio)
 #   • Project = Product container (e.g., QR Code AI) - holds all entities
 #   • Entity = INVARIANT: defined once, same structure for all locales
 #   • EntityContent = LOCALIZED: generated natively per locale (NOT translated)
@@ -55,7 +54,7 @@ node:
     # ─────────────────────────────────────────────────────────────────────────────
     # RULES:
     #   • kebab-case only (lowercase, hyphens)
-    #   • Must be unique within tenant
+    #   • Must be unique within organization
     #   • Should be descriptive but concise
     #   • NO category prefix needed (category via BELONGS_TO relation)
     # ─────────────────────────────────────────────────────────────────────────────
@@ -188,7 +187,7 @@ node:
   #
   # NOTE: Entity classification moved to BELONGS_TO relation (see relations section).
   #       Entity now links to EntityCategory nodes for semantic categorization.
-  #       See: packages/core/models/node-kinds/tenant/semantic/entity-category.yaml
+  #       See: packages/core/models/node-kinds/shared/config/entity-category.yaml
   #
   # ═══════════════════════════════════════════════════════════════════════════════
 
@@ -443,9 +442,9 @@ node:
     # ─────────────────────────────────────────────────────────────────────────────
     # PURPOSE:
     #   Links entities to geographic regions where they're especially relevant.
-    #   Uses EXISTING global geographic nodes (no duplication).
+    #   Uses EXISTING shared geographic nodes (no duplication).
     #
-    # TARGETS (from global realm):
+    # TARGETS (from shared realm):
     #   • GeoRegion      (22 nodes: northern-africa, western-europe, etc.)
     #   • GeoSubRegion   (50+ nodes: maghreb, gulf-states, indian-subcontinent)
     #   • Continent      (6 nodes: africa, americas, asia, europe, oceania, antarctica)
@@ -455,8 +454,8 @@ node:
     #   qr-code-upi ──[:POPULAR_IN {weight: 0.95}]──> GeoSubRegion:indian-subcontinent
     #   qr-code-twint ──[:POPULAR_IN {weight: 0.85}]──> GeoRegion:western-europe
     #
-    # NOTE: This is a CROSS-REALM arc (tenant → global).
-    #       Geographic nodes are READ-ONLY global knowledge.
+    # NOTE: This is a CROSS-REALM arc (org → shared).
+    #       Geographic nodes are READ-ONLY shared knowledge.
     # ─────────────────────────────────────────────────────────────────────────────
     POPULAR_IN:
       to: [GeoRegion, GeoSubRegion, Continent]
@@ -475,8 +474,8 @@ node:
   # INCOMING RELATIONS
   # ═══════════════════════════════════════════════════════════════════════════════
   #
-  # Entities belong to a Project, which belongs to an Organization.
-  # This is the ownership hierarchy for multi-tenant isolation.
+  # Entities belong to a Project, which belongs to an OrgConfig.
+  # This is the ownership hierarchy for organization isolation.
   #
   # ═══════════════════════════════════════════════════════════════════════════════
 
@@ -550,7 +549,7 @@ node:
   cypher:
     # Get entity with all content (v10.9.0: renamed)
     get_with_content: |
-      MATCH (t:Tenant)-[:HAS_ENTITY]->(e:Entity {key: $key})
+      MATCH (p:Project)-[:HAS_ENTITY]->(e:Entity {key: $key})
       OPTIONAL MATCH (e)-[:HAS_CONTENT]->(ec:EntityContent)-[:FOR_LOCALE]->(l:Locale)
       RETURN e, collect({locale: l.key, title: ec.display_name}) AS content
 

@@ -223,7 +223,7 @@ SET
   t_defined.border_style = 'solid',
   t_defined.border_width = 2,
   t_defined.unicode_border = '─',
-  t_defined.llm_context = 'Human-created ONCE. Structural definitions, configuration, templates. Does not change between locales. Page, Block, Entity, PageType, BlockType, Locale, OrgConfig, etc. "This is how things are set up."';
+  t_defined.llm_context = 'Human-created ONCE. Structural definitions, configuration, templates. Does not change between locales. Page, Block, Entity, PageStructure, BlockType, Locale, OrgConfig, etc. "This is how things are set up."';
 
 MERGE (t_authored:Schema:Trait {key: 'authored'})
 ON CREATE SET

@@ -1,13 +1,9 @@
 //! Traits Tab — Constellation view showing 5 traits connected.
 //!
-//! v0.12.0 "Data Origin" - traits renamed per ADR-024:
+//! Layout:
 //! - IMPORTED at top (external knowledge brought in)
 //! - DEFINED and AUTHORED as core pair (structure -> output)
 //! - GENERATED and RETRIEVED at bottom (LLM output and API snapshots)
-//!
-//! Note: job trait removed in v11.2 (deferred to v12+).
-//! Note: v11.2 split derived → generated + aggregated.
-//! Note: v0.12.0 renamed: invariant→defined, localized→authored, knowledge→imported, aggregated→retrieved.
 
 use ratatui::Frame;
 use ratatui::layout::{Constraint, Direction, Layout, Rect};
@@ -42,31 +38,27 @@ pub struct TraitStats {
 }
 
 /// Canonical trait order for constellation.
-/// v0.12.0: renamed per ADR-024 Data Origin.
-/// Note: job trait removed in v11.2, derived split → generated + aggregated.
 pub const TRAIT_ORDER: [&str; 5] = [
-    "defined",  // was: invariant
-    "authored", // was: localized
-    "imported", // was: knowledge
+    "defined",
+    "authored",
+    "imported",
     "generated",
-    "retrieved", // was: aggregated
+    "retrieved",
 ];
 
 /// Get symbol for a trait.
-/// v0.12.0: renamed per ADR-024 Data Origin.
 fn trait_symbol(key: &str) -> &'static str {
     match key {
-        "defined" => "\u{25a0}",   // ■ (was: invariant)
-        "authored" => "\u{25a1}",  // □ (was: localized)
-        "imported" => "\u{25ca}",  // ◊ (was: knowledge)
+        "defined" => "\u{25a0}",   // ■
+        "authored" => "\u{25a1}",  // □
+        "imported" => "\u{25ca}",  // ◊
         "generated" => "\u{2605}", // ★
-        "retrieved" => "\u{25aa}", // ▪ (was: aggregated)
+        "retrieved" => "\u{25aa}", // ▪
         _ => "\u{00b7}",           // ·
     }
 }
 
 /// Get display name for a trait.
-/// v0.12.0: renamed per ADR-024 Data Origin.
 fn trait_display_name(key: &str) -> &str {
     match key {
         "defined" => "DEFINED",
@@ -79,7 +71,6 @@ fn trait_display_name(key: &str) -> &str {
 }
 
 /// Get LLM context description for a trait.
-/// v0.12.0: renamed per ADR-024 Data Origin.
 fn trait_llm_context(key: &str) -> &str {
     match key {
         "defined" => {
@@ -119,7 +110,6 @@ pub struct CodeExample {
 }
 
 /// Get code examples for a trait.
-/// v0.12.0: renamed per ADR-024 Data Origin.
 pub fn trait_code_examples(key: &str) -> Vec<CodeExample> {
     match key {
         "defined" => vec![
@@ -231,7 +221,6 @@ WHERE e.key STARTS WITH 'expr:'
 RETURN e.pattern"#,
             },
         ],
-        // v11.2: derived split into generated + aggregated
         "generated" => vec![CodeExample {
             title: "PageGenerated (LLM output)",
             yaml: r#"node:
@@ -267,7 +256,6 @@ RETURN g.html_content"#,
 WHERE m.key ENDS WITH $locale
 RETURN m.search_volume, m.difficulty"#,
         }],
-        // Note: job trait removed in v11.2 (deferred to v12+)
         _ => vec![],
     }
 }
@@ -382,7 +370,7 @@ fn render_constellation(f: &mut Frame, app: &App, area: Rect) {
 }
 
 /// Build the ASCII constellation layout with data flow visualization.
-/// v0.12.0 Enhanced: Shows data origin flow with directional arrows and role labels.
+/// Shows data origin flow with directional arrows and role labels.
 fn build_constellation_lines(
     stats: &[TraitStats],
     selected_idx: usize,
@@ -438,7 +426,7 @@ fn build_constellation_lines(
     ]));
     lines.push(Line::from(""));
 
-    // Row 1: IMPORTED at top center with INPUT label (v0.12.0: was knowledge)
+    // Row 1: IMPORTED at top center with INPUT label
     let imported_spans = trait_span("imported", 2);
     let imported_line = center_spans(imported_spans, width);
     lines.push(imported_line);
@@ -456,7 +444,7 @@ fn build_constellation_lines(
     let arrow_down = center_text("\u{25bc}            \u{25bc}", width); // ▼            ▼
     lines.push(Line::from(Span::styled(arrow_down, Style::default().fg(Color::Rgb(100, 100, 120)))));
 
-    // Row 3: DEFINED ═══ ↔ ═══ AUTHORED (core pair, v0.12.0 renames)
+    // Row 3: DEFINED ═══ ↔ ═══ AUTHORED (core pair)
     let mut core_pair: Vec<Span<'static>> = Vec::new();
     core_pair.extend(trait_span("defined", 0));
     core_pair.push(Span::styled(
@@ -482,7 +470,7 @@ fn build_constellation_lines(
     let arrow_down2 = center_text("\u{25bc}            \u{25bc}", width);
     lines.push(Line::from(Span::styled(arrow_down2, Style::default().fg(Color::Rgb(100, 100, 120)))));
 
-    // Row 5: GENERATED and RETRIEVED at bottom (v0.12.0: aggregated→retrieved)
+    // Row 5: GENERATED and RETRIEVED at bottom
     let mut bottom_pair: Vec<Span<'static>> = Vec::new();
     bottom_pair.extend(trait_span("generated", 3));
     bottom_pair.push(Span::styled("    ", Style::default())); // spacer
@@ -649,7 +637,7 @@ fn render_detail_panel(f: &mut Frame, app: &App, area: Rect) {
     )));
     lines.push(Line::from(""));
 
-    // Pattern section for DEFINED (v0.12.0: was invariant)
+    // Pattern section for DEFINED
     if stat.key == "defined" {
         lines.push(Line::from(Span::styled(
             "PATTERN:",
@@ -662,7 +650,6 @@ fn render_detail_panel(f: &mut Frame, app: &App, area: Rect) {
         let authored_color = theme.trait_color("authored");
 
         // Show defined -> authored/generated patterns
-        // v10.9: Renamed L10n → Generated/Content
         let patterns = [
             ("Page", "PageGenerated"),
             ("Entity", "EntityContent"),
@@ -687,7 +674,7 @@ fn render_detail_panel(f: &mut Frame, app: &App, area: Rect) {
         }
     }
 
-    // Pattern section for AUTHORED (v0.12.0: was localized)
+    // Pattern section for AUTHORED
     if stat.key == "authored" {
         lines.push(Line::from(Span::styled(
             "RELATIONSHIP:",
@@ -707,7 +694,7 @@ fn render_detail_panel(f: &mut Frame, app: &App, area: Rect) {
         )));
     }
 
-    // Pattern section for IMPORTED (v0.12.0: was knowledge)
+    // Pattern section for IMPORTED
     if stat.key == "imported" {
         lines.push(Line::from(Span::styled(
             "KEY INSIGHT:",
@@ -1015,14 +1002,14 @@ fn render_kind_detail(f: &mut Frame, app: &App, area: Rect) {
     });
 
     let Some((realm_key, realm_name, layer_name, kind)) = kind_data else {
-        let not_found = Paragraph::new(format!("Kind '{}' not found", kind_key));
+        let not_found = Paragraph::new(format!("Class '{}' not found", kind_key));
         f.render_widget(not_found, inner);
         return;
     };
 
     let mut lines: Vec<Line> = Vec::new();
 
-    // Kind name with trait symbol
+    // Class name with trait symbol
     let trait_name = TRAIT_ORDER.get(app.nexus.trait_cursor).unwrap_or(&"");
     let trait_color = theme.trait_color(trait_name);
 
@@ -1158,7 +1145,6 @@ mod tests {
 
     #[test]
     fn test_trait_symbols() {
-        // v0.12.0: renamed per ADR-024 Data Origin
         assert_eq!(trait_symbol("defined"), "\u{25a0}");
         assert_eq!(trait_symbol("authored"), "\u{25a1}");
         assert_eq!(trait_symbol("imported"), "\u{25ca}");
@@ -1169,7 +1155,6 @@ mod tests {
 
     #[test]
     fn test_trait_display_names() {
-        // v0.12.0: renamed per ADR-024 Data Origin
         assert_eq!(trait_display_name("defined"), "DEFINED");
         assert_eq!(trait_display_name("authored"), "AUTHORED");
         assert_eq!(trait_display_name("imported"), "IMPORTED");
@@ -1179,7 +1164,6 @@ mod tests {
 
     #[test]
     fn test_trait_order() {
-        // v0.12.0: 5 traits renamed per ADR-024 Data Origin
         assert_eq!(TRAIT_ORDER.len(), 5);
         assert_eq!(TRAIT_ORDER[0], "defined");
         assert_eq!(TRAIT_ORDER[1], "authored");
@@ -1217,7 +1201,6 @@ mod tests {
 
     #[test]
     fn test_code_examples_defined() {
-        // v0.12.0: was invariant
         let examples = trait_code_examples("defined");
         assert_eq!(examples.len(), 2);
         assert!(examples[0].title.contains("Entity"));
@@ -1228,7 +1211,6 @@ mod tests {
 
     #[test]
     fn test_code_examples_authored() {
-        // v0.12.0: was localized
         let examples = trait_code_examples("authored");
         assert_eq!(examples.len(), 2);
         assert!(examples[0].title.contains("EntityContent"));
@@ -1237,14 +1219,12 @@ mod tests {
 
     #[test]
     fn test_code_examples_imported() {
-        // v0.12.0: was knowledge
         let examples = trait_code_examples("imported");
         assert_eq!(examples.len(), 2);
         assert!(examples[0].title.contains("Term"));
         assert!(examples[0].yaml.contains("trait: imported"));
     }
 
-    // v11.2: derived split into generated + aggregated
     #[test]
     fn test_code_examples_generated() {
         let examples = trait_code_examples("generated");
@@ -1255,14 +1235,11 @@ mod tests {
 
     #[test]
     fn test_code_examples_retrieved() {
-        // v0.12.0: was aggregated
         let examples = trait_code_examples("retrieved");
         assert_eq!(examples.len(), 1);
         assert!(examples[0].title.contains("Metrics"));
         assert!(examples[0].yaml.contains("trait: retrieved"));
     }
-
-    // Note: test_code_examples_job removed in v11.2 (job trait deferred to v12+)
 
     #[test]
     fn test_code_examples_unknown() {

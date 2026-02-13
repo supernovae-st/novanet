@@ -596,8 +596,8 @@ impl App {
                     .map(|score| (score, indices))
             };
 
-        // Kinds section header
-        if let Some((score, indices)) = fuzzy_match("Node Kinds", &mut matcher, &pattern) {
+        // Classes section header
+        if let Some((score, indices)) = fuzzy_match("Node Classes", &mut matcher, &pattern) {
             matches.push((idx, score, indices));
         }
         idx += 1;
@@ -1554,7 +1554,7 @@ impl App {
     pub fn current_breadcrumb(&self) -> String {
         use super::data::TreeItem;
         match self.current_item() {
-            Some(TreeItem::KindsSection) => "Node Kinds".to_string(),
+            Some(TreeItem::KindsSection) => "Node Classes".to_string(),
             Some(TreeItem::ArcsSection) => "Arcs".to_string(),
             Some(TreeItem::Realm(r)) => r.display_name.clone(),
             Some(TreeItem::Layer(r, l)) => {
@@ -2687,8 +2687,8 @@ mod tests {
         app.search.query = "Page".to_string();
         app.update_search();
 
-        // When kinds is collapsed, we shouldn't search its children
-        // But we should still find "Node Kinds" header if it matches
+        // When classes are collapsed, we shouldn't search their children
+        // But we should still find "Node Classes" header if it matches
         assert!(
             !app.search.results.contains(&6),
             "Should not find Page when kinds is collapsed"
@@ -3154,10 +3154,10 @@ mod tests {
         app.tree.collapse_all();
 
         // Search should still work on visible items (headers)
-        app.search.query = "Kind".to_string();
+        app.search.query = "Class".to_string();
         app.update_search();
 
-        // Should find "Node Kinds" header
+        // Should find "Node Classes" header
         assert!(
             !app.search.results.is_empty(),
             "Should find header even when collapsed"

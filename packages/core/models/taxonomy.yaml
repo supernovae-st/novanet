@@ -1,6 +1,6 @@
 # packages/core/models/taxonomy.yaml
 # Source of truth for NovaNet taxonomy structure
-# v0.12.0 — "Class Act" Complete Nomenclature Migration
+# v0.12.0
 #
 # This file defines:
 # - 2 NodeRealms (SHARED, ORG) with nested NodeLayers
@@ -9,41 +9,6 @@
 # - 2 ArcScopes (intra_realm / cross_realm)
 # - 5 ArcCardinalities (zero_to_one / one_to_one / one_to_many / many_to_one / many_to_many)
 # - Terminal palette for TUI graceful degradation
-#
-# v0.12.0 Changes (ADR-023, ADR-024, ADR-025):
-# - TRAIT REDEFINITION: Trait now answers "WHERE does data come from?" (Data Origin)
-# - RENAME: invariant → defined (human-created once, structure/template)
-# - RENAME: localized → authored (human-written per locale, editorial content)
-# - RENAME: knowledge → imported (external data brought in, APIs/corpora)
-# - KEEP: generated (our LLM produces this output)
-# - RENAME: aggregated → retrieved (fetched from external APIs, snapshots)
-# - SCHEMA LABELS: :Meta:Kind → :Schema:Class, :Meta:ArcKind → :Schema:ArcClass
-# - INSTRUCTION LAYER: PageType → PageStructure, PagePrompt → PageInstruction
-#
-# v11.5 Changes:
-# - MOVE: Locale from shared/locale to shared/config (defined definition, not parameter)
-# - CLARIFY: shared/config = all defined definitions (Locale, EntityCategory, SEOKeywordFormat)
-# - CLARIFY: shared/locale = locale-specific settings only (Culture, Style, Formatting, etc.)
-# - RULE: config layer = defined trait, locale layer = imported trait
-#
-# v11.4 Changes:
-# - SEO/GEO moved from org to shared/knowledge (Knowledge Atoms pattern)
-# - REMOVE: org/seo layer (SEOKeyword now in shared/knowledge)
-# - REMOVE: org/geo layer (GEOQuery now in shared/knowledge)
-# - ADD: shared/config layer for SEOKeywordFormat (EntityCategory pattern)
-# - CONSOLIDATE: SEOQuestion, SEOComparison, SEOPreposition → SEOKeyword + format
-# - SIMPLIFY: GEOMetrics removed (GEOAnswer IS the time-series)
-# - SHARED: 4 layers (config, locale, geography, knowledge)
-# - ORG: 6 layers (config, semantic, foundation, structure, instruction, output)
-#
-# v11.3 Changes:
-# - SHARED: 3 layers (locale, geography, knowledge)
-# - OrgConfig: merged Organization + Tenant into single node
-# (Note: v11.4 adds config layer back to shared for classifications)
-#
-# v11.2 Changes:
-# - Realm renames: global→shared, tenant→org (clearer semantics)
-# - Trait split: derived→generated+aggregated (LLM output vs computed metrics)
 #
 # Generated artifacts:
 # - packages/db/seed/00.5-taxonomy.cypher (Realm, Layer, Trait, ArcFamily + hierarchy)
@@ -202,7 +167,7 @@ node_traits:
     unicode_border: "─"
     llm_context: |
       Human-created ONCE. Structural definitions, configuration, templates.
-      Does not change between locales. Page, Block, Entity, PageType, BlockType,
+      Does not change between locales. Page, Block, Entity, PageStructure, BlockType,
       Locale, OrgConfig, etc. "This is how things are set up."
 
   - key: authored

@@ -124,7 +124,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
             Span::styled("  \u{25aa}", dim),
             Span::styled(format!("{} Layers", details.layers.len()), STYLE_INFO),
             Span::styled(" \u{b7} ", dim),
-            Span::styled(format!("{} Node Kinds", details.total_kinds), STYLE_SUCCESS),
+            Span::styled(format!("{} Node Classes", details.total_kinds), STYLE_SUCCESS),
             Span::styled(" \u{b7} ", dim),
             Span::styled(
                 format!("{} Instances", details.total_instances),
@@ -133,7 +133,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
         ]));
         lines.push(Line::from(Span::raw("")));
 
-        // Layers with kind counts (horizontal bar chart)
+        // Layers with class counts (horizontal bar chart)
         lines.push(Line::from(Span::styled(
             "  LAYERS",
             Style::default()
@@ -205,7 +205,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
         // Stats summary
         lines.push(Line::from(vec![
             Span::styled("  \u{25aa}", dim),
-            Span::styled(format!("{} Node Kinds", details.total_kinds), STYLE_SUCCESS),
+            Span::styled(format!("{} Node Classes", details.total_kinds), STYLE_SUCCESS),
             Span::styled(" \u{b7} ", dim),
             Span::styled(
                 format!("{} Instances", details.total_instances),
@@ -214,9 +214,9 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
         ]));
         lines.push(Line::from(Span::raw("")));
 
-        // Node Kinds grouped by trait
+        // Node Classes grouped by trait
         lines.push(Line::from(Span::styled(
-            "  NODE KINDS BY TRAIT",
+            "  NODE CLASSES BY TRAIT",
             Style::default()
                 .fg(Color::White)
                 .add_modifier(Modifier::BOLD),

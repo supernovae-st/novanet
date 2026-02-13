@@ -168,6 +168,13 @@ pub struct QuizState {
     /// Track correct/incorrect per question for category breakdown (v0.12.0).
     /// Index matches QUESTIONS, true = correct, false = incorrect.
     pub answers: Vec<bool>,
+    // ═══════════════════════════════════════════════════════════════════════════
+    // REVIEW MODE (v0.12.0) - Review wrong answers after quiz completion
+    // ═══════════════════════════════════════════════════════════════════════════
+    /// Whether we're in review mode (reviewing wrong answers).
+    pub review_mode: bool,
+    /// Current index within wrong_answers list (not question index).
+    pub review_index: usize,
 }
 
 impl QuizState {
@@ -286,6 +293,71 @@ impl QuizState {
     pub fn is_new_high_score(&self) -> bool {
         self.complete && self.high_score == Some(self.score)
     }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // REVIEW MODE (v0.12.0) - Review wrong answers for reinforced learning
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    /// Get indices of questions answered incorrectly.
+    pub fn wrong_answers(&self) -> Vec<usize> {
+        self.answers
+            .iter()
+            .enumerate()
+            .filter(|&(_, &correct)| !correct)
+            .map(|(i, _)| i)
+            .collect()
+    }
+
+    /// Check if there are wrong answers to review.
+    pub fn has_wrong_answers(&self) -> bool {
+        self.answers.iter().any(|&correct| !correct)
+    }
+
+    /// Enter review mode (v0.12.0).
+    pub fn enter_review_mode(&mut self) {
+        if self.complete && self.has_wrong_answers() {
+            self.review_mode = true;
+            self.review_index = 0;
+        }
+    }
+
+    /// Exit review mode and return to completion screen.
+    pub fn exit_review_mode(&mut self) {
+        self.review_mode = false;
+        self.review_index = 0;
+    }
+
+    /// Navigate to next wrong answer in review mode.
+    pub fn review_next(&mut self) {
+        if self.review_mode {
+            let wrong = self.wrong_answers();
+            if self.review_index + 1 < wrong.len() {
+                self.review_index += 1;
+            }
+        }
+    }
+
+    /// Navigate to previous wrong answer in review mode.
+    pub fn review_prev(&mut self) {
+        if self.review_mode && self.review_index > 0 {
+            self.review_index -= 1;
+        }
+    }
+
+    /// Get the current question being reviewed (returns question index).
+    pub fn current_review_question(&self) -> Option<usize> {
+        if self.review_mode {
+            let wrong = self.wrong_answers();
+            wrong.get(self.review_index).copied()
+        } else {
+            None
+        }
+    }
+
+    /// Get count of wrong answers for display.
+    pub fn wrong_count(&self) -> usize {
+        self.answers.iter().filter(|&&c| !c).count()
+    }
 }
 
 /// All quiz questions about NovaNet taxonomy.
@@ -295,7 +367,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
     // REALMS (6 questions)
     // ═══════════════════════════════════════════════════════════════════════════
     QuizQuestion {
-        question: "How many realms does NovaNet v11.5 have?",
+        question: "How many realms does NovaNet have?",
         options: ["1", "2", "3", "4"],
         correct: 1,
         explanation: "NovaNet has 2 realms: Shared (universal, READ-ONLY) and Org (organization-specific).",
@@ -303,10 +375,10 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
-        question: "What is the total node count in NovaNet v11.5+?",
+        question: "What is the total node count in NovaNet?",
         options: ["50", "55", "59", "65"],
         correct: 2,
-        explanation: "59 total nodes: 39 shared + 20 org. v0.12.0 refined SEO/GEO and removed obsolete nodes.",
+        explanation: "59 total nodes: 39 shared + 20 org.",
         category: QuizCategory::Realms,
         question_type: QuizQuestionType::MultipleChoice,
     },
@@ -335,10 +407,10 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
-        question: "What was 'global' realm renamed to?",
-        options: ["public", "shared", "common", "universal"],
+        question: "Which realm contains universal locale knowledge?",
+        options: ["org", "shared", "config", "knowledge"],
         correct: 1,
-        explanation: "v11.2: 'global' → 'shared' (describes WHAT), 'tenant' → 'org' (describes WHO).",
+        explanation: "The Shared realm contains universal locale knowledge and is READ-ONLY.",
         category: QuizCategory::Realms,
         question_type: QuizQuestionType::MultipleChoice,
     },
@@ -365,7 +437,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         question: "Where does the Locale node live?",
         options: ["shared/locale", "shared/config", "org/config", "shared/knowledge"],
         correct: 1,
-        explanation: "Locale moved to shared/config in v11.5 because it's a DEFINITION ('defined' trait), not settings.",
+        explanation: "Locale lives in shared/config because it's a DEFINITION ('defined' trait), not settings.",
         category: QuizCategory::Layers,
         question_type: QuizQuestionType::MultipleChoice,
     },
@@ -397,10 +469,10 @@ pub const QUESTIONS: &[QuizQuestion] = &[
     // TRAITS (6 questions)
     // ═══════════════════════════════════════════════════════════════════════════
     QuizQuestion {
-        question: "How many node traits exist in v0.12.0?",
+        question: "How many node traits exist in NovaNet?",
         options: ["3", "4", "5", "6"],
         correct: 2,
-        explanation: "5 traits: defined, authored, imported, generated, retrieved (ADR-024 Data Origin).",
+        explanation: "5 traits answer 'WHERE does data come from?': defined (human, once), authored (human, per locale), imported (external knowledge), generated (LLM output), retrieved (external APIs).",
         category: QuizCategory::Traits,
         question_type: QuizQuestionType::MultipleChoice,
     },
@@ -408,7 +480,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         question: "Which trait indicates LLM-generated output?",
         options: ["authored", "imported", "generated", "retrieved"],
         correct: 2,
-        explanation: "Generated trait indicates LLM output (PageGenerated, BlockGenerated, OutputArtifact).",
+        explanation: "'generated' = AI/LLM produces the content. PageGenerated and BlockGenerated contain the natively generated locale content. Think: 'LLM wrote this'.",
         category: QuizCategory::Traits,
         question_type: QuizQuestionType::MultipleChoice,
     },
@@ -432,7 +504,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         question: "Which trait is for human-written locale content?",
         options: ["defined", "authored", "imported", "generated"],
         correct: 1,
-        explanation: "Authored trait is for human-written per-locale content (EntityContent, ProjectContent).",
+        explanation: "'authored' = human writes per-locale. EntityContent (fr-FR, de-DE, etc.) is authored because a human writes each locale's content. Think: 'A person wrote this in this language'.",
         category: QuizCategory::Traits,
         question_type: QuizQuestionType::MultipleChoice,
     },
@@ -464,10 +536,10 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
-        question: "What was EntityL10n renamed to?",
+        question: "What node stores localized entity content?",
         options: ["EntityContent", "EntityGenerated", "EntityOutput", "EntityData"],
         correct: 0,
-        explanation: "EntityL10n → EntityContent (semantic layer, 'authored' trait). Content = locale-specific.",
+        explanation: "EntityContent stores locale-specific authored content for Entities (semantic layer, 'authored' trait).",
         category: QuizCategory::Arcs,
         question_type: QuizQuestionType::MultipleChoice,
     },
@@ -488,7 +560,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
-        question: "How many total arcs (ArcClass) in v0.12.0?",
+        question: "How many total arcs (ArcClass) in NovaNet?",
         options: ["50", "85", "114", "150"],
         correct: 2,
         explanation: "114 arc types defined across 5 families, covering all node relationships.",
@@ -507,10 +579,10 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
-        question: "What was PageL10n renamed to?",
+        question: "What node stores generated page output?",
         options: ["PageContent", "PageGenerated", "PageOutput", "PageLocal"],
         correct: 1,
-        explanation: "PageL10n → PageGenerated (output layer, generated trait). 'Generated' = LLM output.",
+        explanation: "PageGenerated stores LLM-generated page content (output layer, 'generated' trait).",
         category: QuizCategory::Generation,
         question_type: QuizQuestionType::MultipleChoice,
     },
@@ -563,7 +635,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         question: "NovaNet uses translation to create localized content.",
         options: ["True", "False", "", ""],
         correct: 1, // False
-        explanation: "NovaNet uses NATIVE GENERATION, not translation. Content is generated per locale from invariant entities.",
+        explanation: "NovaNet uses NATIVE GENERATION, not translation. Content is generated natively per locale from defined entities (locale-independent definitions). This preserves cultural nuance that translation loses.",
         category: QuizCategory::Generation,
         question_type: QuizQuestionType::TrueFalse,
     },
@@ -576,10 +648,10 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         question_type: QuizQuestionType::TrueFalse,
     },
     QuizQuestion {
-        question: "Entity nodes are invariant across all locales.",
+        question: "Entity nodes have the 'defined' trait (same across all locales).",
         options: ["True", "False", "", ""],
         correct: 0, // True
-        explanation: "Entity nodes have 'defined' trait - they're invariant. EntityContent holds the locale-specific authored content.",
+        explanation: "Entity nodes have the 'defined' trait - they're written once and stay the same across all locales. The locale-specific content goes in EntityContent nodes (which have 'authored' trait).",
         category: QuizCategory::Traits,
         question_type: QuizQuestionType::TrueFalse,
     },
@@ -603,7 +675,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         question: "Knowledge atoms (Term, Expression, Pattern) are locale-specific.",
         options: ["True", "False", "", ""],
         correct: 0, // True
-        explanation: "Unlike Entities (invariant + Content for ALL locales), atoms exist only where needed. fr-FR may have 20K Terms, sw-KE may have 500.",
+        explanation: "Knowledge atoms have 'imported' trait and exist only where needed per locale. Unlike Entities (defined once + Content for each locale), atoms are natively sourced: fr-FR may have 20K Terms, sw-KE may have 500.",
         category: QuizCategory::Generation,
         question_type: QuizQuestionType::TrueFalse,
     },
@@ -674,7 +746,10 @@ pub fn render_quiz_tab(f: &mut Frame, app: &App, area: Rect) {
     // Render category badges bar (v0.12.0)
     render_category_badges(f, quiz, locale, chunks[0]);
 
-    if quiz.complete {
+    if quiz.review_mode {
+        // Review mode: show wrong answers one by one with explanations
+        render_review_mode(f, app, locale, &chunks[1..]);
+    } else if quiz.complete {
         render_quiz_complete(f, app, locale, &chunks[1..]);
     } else if let Some(question) = questions.get(quiz.current_question) {
         render_question(f, app, locale, question, &chunks[1..]);
@@ -865,7 +940,7 @@ fn render_question(
     }
 }
 
-/// Render the quiz completion screen (v0.12.0 enhanced with category breakdown and streak).
+/// Render the quiz completion screen (v0.12.0 enhanced with category breakdown, streak, achievements).
 fn render_quiz_complete(f: &mut Frame, app: &App, locale: NexusLocale, chunks: &[Rect]) {
     let quiz = &app.nexus.quiz;
     let total = QUESTIONS.len();
@@ -875,6 +950,9 @@ fn render_quiz_complete(f: &mut Frame, app: &App, locale: NexusLocale, chunks: &
     let progress = super::persistence::TutorialProgress::load();
     let streak = progress.current_streak;
     let best_streak = progress.best_streak;
+
+    // Get newly unlocked achievements from state (populated by save_quiz_score)
+    let new_achievements = &app.nexus.new_achievements;
 
     // i18n labels
     let (
@@ -1025,7 +1103,79 @@ fn render_quiz_complete(f: &mut Frame, app: &App, locale: NexusLocale, chunks: &
         ),
     ]));
 
+    // Display newly unlocked achievements (v0.12.0)
+    if !new_achievements.is_empty() {
+        result_lines.push(Line::from(""));
+        let achievement_label = match locale {
+            NexusLocale::En => "🏆 Achievement Unlocked!",
+            NexusLocale::Fr => "🏆 Succès Débloqué !",
+        };
+        result_lines.push(Line::from(Span::styled(
+            achievement_label,
+            Style::default()
+                .fg(Color::Yellow)
+                .add_modifier(Modifier::BOLD),
+        )));
+
+        for achievement in new_achievements {
+            result_lines.push(Line::from(vec![
+                Span::styled(
+                    format!("  {} ", achievement.icon()),
+                    Style::default().fg(Color::Yellow),
+                ),
+                Span::styled(
+                    achievement.name(),
+                    Style::default()
+                        .fg(Color::White)
+                        .add_modifier(Modifier::BOLD),
+                ),
+                Span::styled(
+                    format!(" - {}", achievement.description()),
+                    Style::default().fg(Color::DarkGray),
+                ),
+            ]));
+        }
+    }
+
+    // Show total achievement count
+    let achievement_count = progress.achievement_count();
+    let total_achievements = super::persistence::Achievement::all().len();
+    if achievement_count > 0 {
+        result_lines.push(Line::from(""));
+        let progress_text = match locale {
+            NexusLocale::En => format!("Achievements: {}/{}", achievement_count, total_achievements),
+            NexusLocale::Fr => format!("Succès: {}/{}", achievement_count, total_achievements),
+        };
+        result_lines.push(Line::from(Span::styled(
+            progress_text,
+            Style::default().fg(Color::Cyan),
+        )));
+    }
+
     result_lines.push(Line::from(""));
+
+    // Show review mode hint if there are wrong answers (v0.12.0)
+    if quiz.has_wrong_answers() {
+        let review_hint = match locale {
+            NexusLocale::En => format!(
+                "[w: review {} wrong answer{}]",
+                quiz.wrong_count(),
+                if quiz.wrong_count() == 1 { "" } else { "s" }
+            ),
+            NexusLocale::Fr => format!(
+                "[w: revoir {} erreur{}]",
+                quiz.wrong_count(),
+                if quiz.wrong_count() == 1 { "" } else { "s" }
+            ),
+        };
+        result_lines.push(Line::from(Span::styled(
+            review_hint,
+            Style::default()
+                .fg(Color::Rgb(255, 165, 0)) // Orange for emphasis
+                .add_modifier(Modifier::BOLD),
+        )));
+    }
+
     result_lines.push(Line::from(Span::styled(
         restart_hint,
         Style::default().fg(Color::DarkGray),
@@ -1040,6 +1190,136 @@ fn render_quiz_complete(f: &mut Frame, app: &App, locale: NexusLocale, chunks: &
         height: chunks[0].height + chunks[1].height + chunks[2].height,
     };
     f.render_widget(para, full_area);
+}
+
+/// Render review mode - showing wrong answers with explanations (v0.12.0).
+fn render_review_mode(f: &mut Frame, app: &App, locale: NexusLocale, chunks: &[Rect]) {
+    let quiz = &app.nexus.quiz;
+    let wrong_indices = quiz.wrong_answers();
+    let wrong_count = wrong_indices.len();
+
+    // i18n labels
+    let (review_title, nav_hint, exit_hint, your_answer, correct_answer) = match locale {
+        NexusLocale::En => (
+            "Review Wrong Answers",
+            "[j/k: navigate] [Esc: exit review]",
+            "Press Esc to return to results",
+            "Your answer",
+            "Correct answer",
+        ),
+        NexusLocale::Fr => (
+            "Révision des Erreurs",
+            "[j/k: naviguer] [Esc: quitter révision]",
+            "Appuyez sur Esc pour revenir",
+            "Votre réponse",
+            "Bonne réponse",
+        ),
+    };
+
+    // Get current wrong question
+    if let Some(q_idx) = quiz.current_review_question() {
+        if let Some(question) = QUESTIONS.get(q_idx) {
+            let user_answer_idx = quiz
+                .answers
+                .get(q_idx)
+                .map(|_| {
+                    // We need to figure out what the user answered
+                    // Since we only store correct/incorrect, we can't show the exact wrong answer
+                    // But we can show which option was correct
+                    question.correct
+                })
+                .unwrap_or(0);
+
+            let mut lines: Vec<Line> = vec![
+                Line::from(""),
+                Line::from(Span::styled(
+                    format!(
+                        "📖 {} ({}/{})",
+                        review_title,
+                        quiz.review_index + 1,
+                        wrong_count
+                    ),
+                    Style::default()
+                        .fg(Color::Yellow)
+                        .add_modifier(Modifier::BOLD),
+                )),
+                Line::from(""),
+                // Category badge
+                Line::from(vec![
+                    Span::styled(
+                        format!("{} ", question.category.icon()),
+                        Style::default().fg(question.category.color()),
+                    ),
+                    Span::styled(
+                        question.category.name(locale),
+                        Style::default()
+                            .fg(question.category.color())
+                            .add_modifier(Modifier::BOLD),
+                    ),
+                    Span::styled(
+                        format!(" │ {} ", question.question_type.icon()),
+                        Style::default().fg(Color::DarkGray),
+                    ),
+                ]),
+                Line::from(""),
+                // Question
+                Line::from(Span::styled(
+                    format!("❓ {}", question.question),
+                    Style::default()
+                        .fg(Color::White)
+                        .add_modifier(Modifier::BOLD),
+                )),
+                Line::from(""),
+            ];
+
+            // Show correct answer with highlight
+            let correct_opt = question.options.get(question.correct).unwrap_or(&"?");
+            let correct_label = question.question_type.labels().get(question.correct).unwrap_or(&"?");
+            lines.push(Line::from(vec![
+                Span::styled(
+                    format!("✓ {}: ", correct_answer),
+                    Style::default()
+                        .fg(Color::Green)
+                        .add_modifier(Modifier::BOLD),
+                ),
+                Span::styled(
+                    format!("{}) {}", correct_label, correct_opt),
+                    Style::default().fg(Color::Green),
+                ),
+            ]));
+
+            lines.push(Line::from(""));
+
+            // Explanation
+            lines.push(Line::from(Span::styled(
+                "📚 Explanation:",
+                Style::default()
+                    .fg(Color::Yellow)
+                    .add_modifier(Modifier::BOLD),
+            )));
+            lines.push(Line::from(Span::styled(
+                question.explanation,
+                Style::default().fg(Color::Rgb(180, 180, 200)),
+            )));
+
+            lines.push(Line::from(""));
+            lines.push(Line::from(Span::styled(
+                nav_hint,
+                Style::default().fg(Color::DarkGray),
+            )));
+
+            let para = Paragraph::new(lines).wrap(Wrap { trim: true });
+
+            // Use entire area
+            let full_area = Rect {
+                x: chunks[0].x,
+                y: chunks[0].y,
+                width: chunks[0].width,
+                height: chunks[0].height + chunks[1].height + chunks[2].height,
+            };
+            f.render_widget(para, full_area);
+        }
+    }
 }
 
 #[cfg(test)]
@@ -1209,5 +1489,118 @@ mod tests {
         // Can't go past 1 for True/False
         state.select_down(Some(&tf_question));
         assert_eq!(state.selected_option, 1);
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // REVIEW MODE TESTS (v0.12.0)
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    #[test]
+    fn test_wrong_answers_collection() {
+        let mut state = QuizState::new();
+
+        // Simulate answering: correct, wrong, correct, wrong, wrong
+        state.answers = vec![true, false, true, false, false];
+
+        let wrong = state.wrong_answers();
+        assert_eq!(wrong, vec![1, 3, 4]);
+        assert_eq!(state.wrong_count(), 3);
+        assert!(state.has_wrong_answers());
+    }
+
+    #[test]
+    fn test_no_wrong_answers() {
+        let mut state = QuizState::new();
+        state.answers = vec![true, true, true];
+
+        assert!(state.wrong_answers().is_empty());
+        assert_eq!(state.wrong_count(), 0);
+        assert!(!state.has_wrong_answers());
+    }
+
+    #[test]
+    fn test_enter_review_mode() {
+        let mut state = QuizState::new();
+        state.answers = vec![true, false, false];
+        state.complete = true;
+
+        // Can enter review mode when complete and has wrong answers
+        state.enter_review_mode();
+        assert!(state.review_mode);
+        assert_eq!(state.review_index, 0);
+    }
+
+    #[test]
+    fn test_cannot_enter_review_mode_when_incomplete() {
+        let mut state = QuizState::new();
+        state.answers = vec![true, false, false];
+        state.complete = false; // Not complete
+
+        state.enter_review_mode();
+        assert!(!state.review_mode); // Should not enter
+    }
+
+    #[test]
+    fn test_cannot_enter_review_mode_when_perfect() {
+        let mut state = QuizState::new();
+        state.answers = vec![true, true, true]; // All correct
+        state.complete = true;
+
+        state.enter_review_mode();
+        assert!(!state.review_mode); // Should not enter
+    }
+
+    #[test]
+    fn test_review_navigation() {
+        let mut state = QuizState::new();
+        state.answers = vec![true, false, true, false, false]; // 3 wrong: indices 1, 3, 4
+        state.complete = true;
+        state.enter_review_mode();
+
+        assert_eq!(state.review_index, 0);
+        assert_eq!(state.current_review_question(), Some(1));
+
+        // Navigate next
+        state.review_next();
+        assert_eq!(state.review_index, 1);
+        assert_eq!(state.current_review_question(), Some(3));
+
+        state.review_next();
+        assert_eq!(state.review_index, 2);
+        assert_eq!(state.current_review_question(), Some(4));
+
+        // Can't go past last
+        state.review_next();
+        assert_eq!(state.review_index, 2);
+
+        // Navigate prev
+        state.review_prev();
+        assert_eq!(state.review_index, 1);
+
+        state.review_prev();
+        assert_eq!(state.review_index, 0);
+
+        // Can't go below 0
+        state.review_prev();
+        assert_eq!(state.review_index, 0);
+    }
+
+    #[test]
+    fn test_exit_review_mode() {
+        let mut state = QuizState::new();
+        state.answers = vec![false, false];
+        state.complete = true;
+        state.enter_review_mode();
+        state.review_index = 1; // Moved to second wrong answer
+
+        state.exit_review_mode();
+        assert!(!state.review_mode);
+        assert_eq!(state.review_index, 0); // Reset
+    }
+
+    #[test]
+    fn test_current_review_question_when_not_in_review() {
+        let state = QuizState::new();
+        assert_eq!(state.current_review_question(), None);
     }
 }

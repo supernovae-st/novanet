@@ -19,7 +19,7 @@
  * ## Realm Distribution
  *
  * - **SHARED** (39 nodes): Universal locale knowledge, geography, SEO/GEO intelligence
- * - **ORG** (21 nodes): Organization-specific content, structure, generation pipeline
+ * - **ORG** (20 nodes): Organization-specific content, structure, generation pipeline
  *
  * @see {@link https://github.com/supernovae-st/novanet-hq/blob/main/.claude/rules/novanet-terminology.md | Terminology Reference}
  * @see {@link https://github.com/supernovae-st/novanet-hq/blob/main/.claude/rules/novanet-decisions.md | Architecture Decisions}
@@ -142,7 +142,7 @@ export type Realm = 'shared' | 'org';
  * - **`foundation`**: Project identity (Project, BrandIdentity, ProjectContent)
  * - **`structure`**: Page/Block hierarchy (Page, Block, ContentSlot)
  * - **`semantic`**: Business entities (Entity, EntityContent, AudiencePersona)
- * - **`instruction`**: Generation prompts (PageType, BlockType, prompts, rules)
+ * - **`instruction`**: Generation prompts (PageStructure, BlockType, prompts, rules)
  * - **`output`**: Generated artifacts (PageGenerated, BlockGenerated)
  *
  * @example

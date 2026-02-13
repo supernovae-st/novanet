@@ -3,7 +3,7 @@
 /**
  * StructuralCardContent - Content preset for structural nodes
  *
- * Used by: Page, Entity, Block, PageType, BlockType, ContentSlot, etc.
+ * Used by: Page, Entity, Block, PageStructure, BlockType, ContentSlot, etc.
  *
  * Layout:
  * ┌─────────────────────────────┐
