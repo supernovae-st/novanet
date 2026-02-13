@@ -1625,38 +1625,6 @@ impl App {
         self.update_schema_match_for_current();
     }
 
-    /// Auto-expand the current Kind when switching to Instances view.
-    /// If cursor is on a Kind, expands it and triggers instance loading.
-    ///
-    /// Note: Currently unused after v11.7 mode simplification.
-    #[allow(dead_code)]
-    fn auto_expand_current_kind_for_instances(&mut self) {
-        // Use Taxonomy view item_at since we just switched modes
-        // and cursor position is based on Taxonomy view
-        // Clone key upfront to avoid borrow checker issues
-        let kind_key = if let Some(super::data::TreeItem::Kind(_, _, kind)) =
-            self.tree.item_at(self.tree_cursor)
-        {
-            Some(kind.key.clone())
-        } else {
-            None
-        };
-
-        if let Some(key) = kind_key {
-            let collapse_key = format!("kind:{}", key);
-
-            // Expand the Kind if it's collapsed
-            if self.tree.is_collapsed(&collapse_key) {
-                self.tree.toggle(&collapse_key);
-            }
-
-            // Request instance loading if not already loaded
-            if self.tree.get_instances(&key).is_none() {
-                self.pending_instance_load = Some(key);
-            }
-        }
-    }
-
     /// Toggle collapse/expand of the current tree item.
     /// Also triggers loading for instances, Entity categories, and category instances in Data mode.
     /// Single-click behavior: if instances not loaded, load them AND expand in one action.
@@ -2020,11 +1988,11 @@ mod tests {
             arc_families: Vec::new(),
             stats: GraphStats::default(),
             collapsed: FxHashSet::default(),
-            instances: BTreeMap::new(),
-            instance_totals: BTreeMap::new(),
+            instances: FxHashMap::default(),
+            instance_totals: FxHashMap::default(),
             kind_index,
             entity_categories: Vec::new(),
-            entity_category_instances: BTreeMap::new(),
+            entity_category_instances: FxHashMap::default(),
         }
     }
 
