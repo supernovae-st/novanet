@@ -282,6 +282,7 @@ pub struct GraphStats {
 #[derive(Debug, Clone)]
 pub struct ArchitectureDiagram {
     /// Class name this diagram is for (e.g., "Page", "Entity", "Brand")
+    #[allow(dead_code)] // Reserved for future diagram lookup by class
     pub class_name: String,
     /// Related ADR identifier (e.g., "ADR-028")
     pub adr_id: String,
