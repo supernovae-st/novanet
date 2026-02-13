@@ -1,6 +1,6 @@
 ---
 name: novanet-tui
-description: Launch or explain the NovaNet interactive terminal UI. Use when user wants to explore the graph visually in the terminal, asks about TUI keybindings, or wants to navigate Realm/Layer/Kind hierarchy interactively.
+description: Launch or explain the NovaNet interactive terminal UI. Use when user wants to explore the graph visually in the terminal, asks about TUI keybindings, or wants to navigate Realm/Layer/Class hierarchy interactively.
 disable-model-invocation: false
 user-invocable: true
 ---
@@ -28,7 +28,7 @@ The TUI provides an immersive terminal experience for exploring the NovaNet know
 
 ```
 +=======================================================================================+
-|  NOVANET TUI - Galaxy-Themed Mission Control (v11.3)                                  |
+|  NOVANET TUI - Galaxy-Themed Mission Control (v0.12.0)                                |
 +=======================================================================================+
 
 +----------------------------------------------------------------------------------------+
@@ -39,7 +39,7 @@ The TUI provides an immersive terminal experience for exploring the NovaNet know
 |   |  TAXONOMY TREE       |  |  DETAIL PANEL                                        |   |
 |   |  (Left 40%)          |  |  (Right 60%)                                         |   |
 |   |                      |  |                                                      |   |
-|   |  Realm > Layer > Kind|  |  - YAML definition                                   |   |
+|   |  Realm > Layer >Class|  |  - YAML definition                                   |   |
 |   |  hierarchy           |  |  - Properties with types                             |   |
 |   |                      |  |  - Relationships (from/to)                           |   |
 |   |  v shared            |  |  - Statistics                                        |   |
@@ -53,7 +53,7 @@ The TUI provides an immersive terminal experience for exploring the NovaNet know
 |                                                                                        |
 |   +------------------------------------------------------------------------------------+|
 |   |  STATUS BAR                                                                       ||
-|   |  [Mode: Graph] [View: Taxonomy] [Kind: LocaleVoice] [?=Help] [/=Search]           ||
+|   |  [Mode: Graph] [View: Taxonomy] [Class: LocaleVoice] [?=Help] [/=Search]          ||
 |   +------------------------------------------------------------------------------------+|
 |                                                                                        |
 +----------------------------------------------------------------------------------------+
@@ -61,15 +61,14 @@ The TUI provides an immersive terminal experience for exploring the NovaNet know
 
 ## Keybindings
 
-### Mode Switching (v11.3: 3 modes)
+### Mode Switching (v0.12.0: 2 modes)
 
 | Key | Action |
 |-----|--------|
-| `1` | Switch to Graph mode (Taxonomy/Instances toggle with `t`) |
-| `2` | Switch to Audit mode (schema validation) |
-| `3` | Switch to Nexus mode (gamified learning hub) |
+| `1` | Switch to Graph mode (unified tree: Realm > Layer > Class > Instance) |
+| `2` | Switch to Nexus mode (learning hub: Quiz, Glossary, Stats, Help) |
 | `t` | Toggle GraphView: Taxonomy <-> Instances (Graph mode only) |
-| `N` | Cycle through all 3 modes |
+| `N` | Cycle through both modes |
 | `Tab` | Cycle focus: Tree -> Info -> Graph -> YAML |
 
 ### Tree Navigation
@@ -103,16 +102,16 @@ The TUI provides an immersive terminal experience for exploring the NovaNet know
 | `Esc` | Close current overlay |
 | `q` | Quit (or close overlay) |
 
-### Nexus Mode (Mode 3)
+### Nexus Mode (Mode 2)
 
 | Key | Action |
 |-----|--------|
-| `1-4` | Switch tabs (Traits/Layers/Arcs/Pipeline) |
-| `gi` | Jump to invariant trait |
-| `gl` | Jump to localized trait |
-| `gk` | Jump to knowledge trait |
+| `1-5` | Switch tabs (Quiz/Glossary/Stats/Help/Tutorial) |
+| `gd` | Jump to defined trait |
+| `ga` | Jump to authored trait |
+| `gi` | Jump to imported trait |
 | `gg` | Jump to generated trait |
-| `ga` | Jump to aggregated trait |
+| `gr` | Jump to retrieved trait |
 | `g0` | Reset all cursors to top |
 | `n` | Next "Did you know?" tip |
 
@@ -120,11 +119,10 @@ The TUI provides an immersive terminal experience for exploring the NovaNet know
 
 | Command | Description |
 |---------|-------------|
-| `Switch to Graph` | Graph mode (taxonomy/instances) |
-| `Switch to Audit` | Schema validation mode |
-| `Switch to Nexus` | Gamified learning hub |
+| `Switch to Graph` | Graph mode (unified tree) |
+| `Switch to Nexus` | Learning hub (Quiz, Glossary, Stats) |
 | `Dashboard` | Show Neo4j statistics |
-| `Search Kind` | Fuzzy search kinds |
+| `Search Class` | Fuzzy search classes |
 | `Toggle Effects` | CRT/glitch effects |
 | `Show Help` | Keybindings overlay |
 | `Quit` | Exit TUI |
@@ -135,9 +133,9 @@ The TUI provides an immersive terminal experience for exploring the NovaNet know
 
 - **SuperNovae color palette**: Deep space blues, nebula purples, star golds
 - **Realm colors**: Shared (emerald), Org (sky blue)
-- **Layer colors**: 11 distinct colors for each functional layer
+- **Layer colors**: 10 distinct colors for each functional layer
 - **ArcFamily colors**: 5 relationship type colors
-- **Trait styles**: solid (invariant), dashed (localized), dotted (knowledge), double (generated), thin-dotted (aggregated)
+- **Trait styles**: solid (defined), dashed (authored), dotted (imported), double (generated), thin-dotted (retrieved)
 
 ### Boot Animation (First Launch)
 
@@ -181,7 +179,7 @@ docker ps | grep neo4j
 
 # Check connection
 cd tools/novanet
-cargo run -- meta  # Should show meta-graph
+cargo run -- meta  # Should show schema graph
 
 # Then try TUI
 cargo run -- tui

@@ -72,12 +72,12 @@ describe('FacetFilterPanel', () => {
       expect(screen.getByText('Arc Families')).toBeInTheDocument();
     });
 
-    it('renders 2 realm items (v10.6: global + tenant)', () => {
+    it('renders 2 realm items (v11.2: shared + org)', () => {
       render(<FacetFilterPanel />);
 
-      expect(screen.getByText('Global')).toBeInTheDocument();
-      expect(screen.getByText('Tenant')).toBeInTheDocument();
-      // v10.6: organization + project merged into tenant
+      expect(screen.getByText('Shared')).toBeInTheDocument();
+      expect(screen.getByText('Org')).toBeInTheDocument();
+      // v11.2: global → shared, tenant → org
     });
 
     it('renders 10 layer items (v11.5: 4 shared + 6 org)', () => {
