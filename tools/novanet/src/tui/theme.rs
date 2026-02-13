@@ -457,13 +457,13 @@ impl Icons {
         icons.layers.insert("instruction".into(), "▧".into());
         icons.layers.insert("output".into(), "●".into());
 
-        // Traits (v11.2: 5 traits - derived split into generated + aggregated)
+        // Traits (v0.12.0: renamed per ADR-024 Data Origin)
         // Icons from visual-encoding.yaml (source of truth)
-        icons.traits.insert("invariant".into(), "■".into());
-        icons.traits.insert("localized".into(), "□".into());
-        icons.traits.insert("knowledge".into(), "◊".into());
-        icons.traits.insert("generated".into(), "★".into()); // star for LLM-generated
-        icons.traits.insert("aggregated".into(), "▪".into()); // small square for computed
+        icons.traits.insert("defined".into(), "■".into());    // was: invariant
+        icons.traits.insert("authored".into(), "□".into());   // was: localized
+        icons.traits.insert("imported".into(), "◊".into());   // was: knowledge
+        icons.traits.insert("generated".into(), "★".into());  // star for LLM-generated
+        icons.traits.insert("retrieved".into(), "▪".into());  // was: aggregated
 
         // Arc families
         icons.arc_families.insert("ownership".into(), "→".into());
@@ -1010,9 +1010,9 @@ mod tests {
         assert_eq!(icons.layer("semantic"), "◆");
         assert_eq!(icons.layer("unknown"), "·"); // Fallback
 
-        // Traits
-        assert_eq!(icons.trait_icon("invariant"), "■");
-        assert_eq!(icons.trait_icon("localized"), "□");
+        // Traits (v0.12.0: renamed per ADR-024)
+        assert_eq!(icons.trait_icon("defined"), "■");
+        assert_eq!(icons.trait_icon("authored"), "□");
 
         // States
         assert_eq!(icons.state("loading"), "◐");

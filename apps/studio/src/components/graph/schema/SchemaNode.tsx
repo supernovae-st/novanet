@@ -32,15 +32,16 @@ import {
 // Types
 // =============================================================================
 
-export type Trait = 'invariant' | 'localized' | 'knowledge' | 'generated' | 'aggregated';
+// v0.12.0: renamed per ADR-024 Data Origin
+export type Trait = 'defined' | 'authored' | 'imported' | 'generated' | 'retrieved';
 
-// v11.5: 5 traits (derived/job removed in v11.2)
+// v0.12.0: 5 traits renamed per ADR-024 Data Origin
 const TRAIT_BORDER_STYLES: Record<string, { style: string; width: number; className?: string }> = {
-  invariant: { style: 'solid', width: 2 },
-  localized: { style: 'dashed', width: 2 },
-  knowledge: { style: 'dotted', width: 2 },
+  defined: { style: 'solid', width: 2 },     // was: invariant
+  authored: { style: 'dashed', width: 2 },   // was: localized
+  imported: { style: 'dotted', width: 2 },   // was: knowledge
   generated: { style: 'double', width: 2 },
-  aggregated: { style: 'dotted', width: 3 },
+  retrieved: { style: 'dotted', width: 3 },  // was: aggregated
 };
 
 export interface SchemaNodeData extends Record<string, unknown> {
@@ -96,7 +97,7 @@ export const SchemaNode = memo(function SchemaNode({
   // Get classification values
   const realm = (data.realm || 'shared') as Realm;
   const layer = (config?.layer || data.layer || 'foundation') as Layer;
-  const trait = (data.trait || 'invariant') as Trait;
+  const trait = (data.trait || 'defined') as Trait;
 
   // Use LAYER color as the primary node color (from generated taxonomy)
   const layerColor = LAYER_COLORS[layer]?.color || '#64748b';

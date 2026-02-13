@@ -5,8 +5,8 @@
  *
  * Four facet sections:
  * - Realms (2): shared, org
- * - Layers (8): config, locale-knowledge, foundation, structure, semantic, instruction, output, seo
- * - Traits (5): invariant, localized, knowledge, generated, aggregated
+ * - Layers (9): config, locale, geography, knowledge, foundation, structure, semantic, instruction, output
+ * - Traits (5): defined, authored, imported, generated, retrieved (v0.12.0: ADR-024)
  * - Arc Families (5): ownership, localization, semantic, generation, mining
  *
  * Reads/writes filterStore facet state.
@@ -71,12 +71,13 @@ const LAYERS: { key: Layer; label: string; icon: LucideIcon }[] = [
   { key: 'output', label: 'Generated Output', icon: FileOutput },
 ];
 
+// v0.12.0: renamed per ADR-024 Data Origin
 const TRAITS: { key: Trait; label: string; icon: LucideIcon }[] = [
-  { key: 'invariant', label: 'Invariant', icon: Lock },
-  { key: 'localized', label: 'Localized', icon: Languages },
-  { key: 'knowledge', label: 'Knowledge', icon: BookOpen },
+  { key: 'defined', label: 'Defined', icon: Lock },
+  { key: 'authored', label: 'Authored', icon: Languages },
+  { key: 'imported', label: 'Imported', icon: BookOpen },
   { key: 'generated', label: 'Generated', icon: Sparkles },
-  { key: 'aggregated', label: 'Aggregated', icon: Cpu },
+  { key: 'retrieved', label: 'Retrieved', icon: Cpu },
 ];
 
 const ARC_FAMILIES: { key: string; label: string; icon: LucideIcon }[] = [
@@ -275,7 +276,7 @@ export const FacetFilterPanel = memo(function FacetFilterPanel({
           id="facet-traits"
           label="Traits"
           icon={<Sparkles className={iconSizes.sm} />}
-          color={TRAIT_COLORS.invariant.color}
+          color={TRAIT_COLORS.defined.color}
           checkboxState={traitCheckboxState}
           onCheckboxClick={handleTraitSectionClick}
           count={TRAITS.length}

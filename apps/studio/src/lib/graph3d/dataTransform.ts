@@ -89,7 +89,7 @@ function transformNode(node: GraphNode): Omit<ForceGraphNode, 'connectionCount'>
     type: node.type,
     layer: meta?.layer || 'semantic',
     realm: meta?.realm || 'org',
-    trait: meta?.trait || 'invariant',
+    trait: meta?.trait || 'defined',
     description: node.description,
     val: getNodeSize(meta?.layer),
     // Initialize positions to prevent DragControls crash

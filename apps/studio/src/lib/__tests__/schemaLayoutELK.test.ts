@@ -136,26 +136,27 @@ describe('schemaLayoutELK', () => {
           } as Record<Layer, { label: string; description: string; icon: string; nodeTypes: never[] }>,
         },
       } as Record<Realm, typeof mockHierarchy.realms.org>,
+      // v0.12.0: trait renames per ADR-024 Data Origin
       nodes: [
         // Shared realm - locale (3)
-        { id: 'schema-Locale', nodeType: 'Locale', realm: 'shared', layer: 'locale', label: 'Locale', description: '', trait: 'invariant' },
-        { id: 'schema-Formatting', nodeType: 'Formatting', realm: 'shared', layer: 'locale', label: 'Formatting', description: '', trait: 'knowledge' },
-        { id: 'schema-Style', nodeType: 'Style', realm: 'shared', layer: 'locale', label: 'Style', description: '', trait: 'knowledge' },
+        { id: 'schema-Locale', nodeType: 'Locale', realm: 'shared', layer: 'locale', label: 'Locale', description: '', trait: 'defined' },
+        { id: 'schema-Formatting', nodeType: 'Formatting', realm: 'shared', layer: 'locale', label: 'Formatting', description: '', trait: 'imported' },
+        { id: 'schema-Style', nodeType: 'Style', realm: 'shared', layer: 'locale', label: 'Style', description: '', trait: 'imported' },
         // Shared realm - geography (2)
-        { id: 'schema-Continent', nodeType: 'Continent', realm: 'shared', layer: 'geography', label: 'Continent', description: '', trait: 'invariant' },
-        { id: 'schema-GeoRegion', nodeType: 'GeoRegion', realm: 'shared', layer: 'geography', label: 'Geo Region', description: '', trait: 'invariant' },
+        { id: 'schema-Continent', nodeType: 'Continent', realm: 'shared', layer: 'geography', label: 'Continent', description: '', trait: 'defined' },
+        { id: 'schema-GeoRegion', nodeType: 'GeoRegion', realm: 'shared', layer: 'geography', label: 'Geo Region', description: '', trait: 'defined' },
         // Shared realm - knowledge (2)
-        { id: 'schema-TermSet', nodeType: 'TermSet', realm: 'shared', layer: 'knowledge', label: 'Term Set', description: '', trait: 'invariant' },
-        { id: 'schema-Term', nodeType: 'Term', realm: 'shared', layer: 'knowledge', label: 'Term', description: '', trait: 'knowledge' },
+        { id: 'schema-TermSet', nodeType: 'TermSet', realm: 'shared', layer: 'knowledge', label: 'Term Set', description: '', trait: 'defined' },
+        { id: 'schema-Term', nodeType: 'Term', realm: 'shared', layer: 'knowledge', label: 'Term', description: '', trait: 'imported' },
         // Org realm - config (1)
-        { id: 'schema-OrgConfig', nodeType: 'OrgConfig', realm: 'org', layer: 'config', label: 'Org Config', description: '', trait: 'invariant' },
+        { id: 'schema-OrgConfig', nodeType: 'OrgConfig', realm: 'org', layer: 'config', label: 'Org Config', description: '', trait: 'defined' },
         // Org realm - foundation (3)
-        { id: 'schema-Project', nodeType: 'Project', realm: 'org', layer: 'foundation', label: 'Project', description: '', trait: 'invariant' },
-        { id: 'schema-BrandIdentity', nodeType: 'BrandIdentity', realm: 'org', layer: 'foundation', label: 'Brand Identity', description: '', trait: 'invariant' },
-        { id: 'schema-ProjectContent', nodeType: 'ProjectContent', realm: 'org', layer: 'foundation', label: 'Project Content', description: '', trait: 'localized' },
+        { id: 'schema-Project', nodeType: 'Project', realm: 'org', layer: 'foundation', label: 'Project', description: '', trait: 'defined' },
+        { id: 'schema-BrandIdentity', nodeType: 'BrandIdentity', realm: 'org', layer: 'foundation', label: 'Brand Identity', description: '', trait: 'defined' },
+        { id: 'schema-ProjectContent', nodeType: 'ProjectContent', realm: 'org', layer: 'foundation', label: 'Project Content', description: '', trait: 'authored' },
         // Org realm - structure (2)
-        { id: 'schema-Page', nodeType: 'Page', realm: 'org', layer: 'structure', label: 'Page', description: '', trait: 'invariant' },
-        { id: 'schema-Block', nodeType: 'Block', realm: 'org', layer: 'structure', label: 'Block', description: '', trait: 'invariant' },
+        { id: 'schema-Page', nodeType: 'Page', realm: 'org', layer: 'structure', label: 'Page', description: '', trait: 'defined' },
+        { id: 'schema-Block', nodeType: 'Block', realm: 'org', layer: 'structure', label: 'Block', description: '', trait: 'defined' },
       ] as SchemaNode[],
       arcs: [
         { id: 'schema-arc-0', relationType: 'HAS_PAGE', sourceType: 'Project', targetType: 'Page', label: 'HAS_PAGE', description: '', cardinality: '1:N' },
