@@ -12,13 +12,13 @@ Skills are stored in `.claude/skills/` and activate based on conversation contex
 
 **Purpose**: Display schema architecture diagrams in ASCII.
 
-**When activated**: User asks about architecture, system overview, component connections, meta-graph structure.
+**When activated**: User asks about architecture, system overview, component connections, schema graph structure.
 
 **Invocation**: `/novanet-arch`
 
 **Output**: ASCII diagrams showing:
-- Node taxonomy (Realm > Layer > Kind)
-- Arc taxonomy (Family > ArcKind)
+- Node taxonomy (Realm > Layer > Class)
+- Arc taxonomy (Family > ArcClass)
 - Layer structure
 - Realm organization
 
@@ -40,7 +40,7 @@ Skills are stored in `.claude/skills/` and activate based on conversation contex
 
 **Purpose**: Launch or explain the interactive TUI.
 
-**When activated**: User wants to explore graph visually, asks about TUI keybindings, wants to navigate Realm/Layer/Kind hierarchy.
+**When activated**: User wants to explore graph visually, asks about TUI keybindings, wants to navigate Realm/Layer/Class hierarchy.
 
 **Output**: TUI launch instructions and keybinding reference.
 

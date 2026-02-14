@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * MagneticEdge - Faint edge for OF_KIND relationships
+ * MagneticEdge - Faint edge for OF_CLASS relationships (v0.12.0: was OF_KIND)
  *
  * These edges represent the taxonomy grouping but should be
  * visually subtle to not overwhelm the actual business relationships.

@@ -135,7 +135,7 @@ NovaNet v0.12.0 introduces the **Unified Tree** principle:
 
 | Mode | Key | Content |
 |------|-----|---------|
-| **Graph** | `1` | Unified tree: Realm > Layer > Kind > Instance + Arcs |
+| **Graph** | `1` | Unified tree: Realm > Layer > Class > Instance + Arcs |
 | **Nexus** | `2` | Hub: Quiz, Audit, Stats (Matrix Control Tower), Help |
 
 ### Key Changes from v11.x
@@ -150,15 +150,15 @@ NovaNet v0.12.0 introduces the **Unified Tree** principle:
 ### Unified Tree Structure
 
 ```
-▼ Nodes (60)
+▼ Nodes (61)
   ▼ ◉ Realm:shared           ← Clickable node
     ▼ ⚙ Layer:config         ← Clickable node
-      ▼ ◆ Kind:Locale [200]  ← Expandable
+      ▼ ◆ Class:Locale [200] ← Expandable (v0.12.0: Kind→Class)
         ● Locale:fr-FR       ← Instance
         ● Locale:en-US
-▼ Arcs (114)
+▼ Arcs (128)
   ▼ → ArcFamily:ownership
-    → ArcKind:HAS_PROJECT
+    → ArcClass:HAS_PROJECT   (v0.12.0: ArcKind→ArcClass)
 ```
 
 ## Classification System
@@ -169,7 +169,9 @@ NovaNet v0.12.0 introduces the **Unified Tree** principle:
 |------|----------|------|--------|
 | WHERE? | `NodeRealm` | realm | `shared`, `org` |
 | WHAT? | `NodeLayer` | layer | 10 layers (4 shared + 6 org) |
-| HOW? | `NodeTrait` | trait | `invariant`, `localized`, `knowledge`, `generated`, `aggregated` |
+| HOW? | `NodeTrait` | trait | `defined`, `authored`, `imported`, `generated`, `retrieved` |
+
+> **v0.12.0 ADR-024**: Trait = Data Origin. `invariant`→`defined`, `localized`→`authored`, `knowledge`→`imported`, `aggregated`→`retrieved`
 
 ### Arc Classification (Faceted)
 
@@ -201,6 +203,6 @@ Rust       = Runtime + Generation
 
 ## Related Documentation
 
-- [Ontology v9](./ontology-v9.md) — Meta-graph structure and history
-- [Meta-Graph](./meta-graph.md) — Classification system details
+- [Ontology v9](./ontology-v9.md) — Schema graph structure and history
+- [Schema Graph](./schema-graph.md) — Classification system details (v0.12.0: was meta-graph)
 - [Rust CLI](./rust-cli.md) — Command reference and TUI documentation

@@ -9,7 +9,7 @@
 :param projectKey => "qrcode-ai";
 
 MATCH (p:Project {key: $projectKey})
-OPTIONAL MATCH (p)-[:HAS_BRAND_IDENTITY]->(bi:BrandIdentity)
+OPTIONAL MATCH (p)-[:HAS_BRAND]->(bi:Brand) // v0.12.4 ADR-028: was HAS_BRAND_IDENTITY + BrandIdentity
 OPTIONAL MATCH (p)-[:SUPPORTS_LOCALE]->(l:Locale)
 OPTIONAL MATCH (p)-[:DEFAULT_LOCALE]->(dl:Locale)
 RETURN p.key AS project,
