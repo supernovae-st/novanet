@@ -573,3 +573,159 @@ PageNative:
    └─ Slug court > slug long (SEO)
    └─ Éviter plus de 3-4 mots par segment
 ```
+
+## Session 5: Architecture SEO - Pillar/Cluster/Sitemap
+
+### Hiérarchies Distinctes (Page vs Entity)
+
+```
+Entity.SUBTOPIC_OF = Hiérarchie SÉMANTIQUE (topic clusters SEO)
+Page.SUBTOPIC_OF   = Hiérarchie URL (routing, navigation)
+Page.CLUSTER_OF    = Hiérarchie SEO (pillar/cluster strategy)
+
+SOUVENT IDENTIQUES, MAIS PAS TOUJOURS.
+
+EXEMPLE OÙ ILS DIFFÈRENT:
+─────────────────────────
+
+Entity:instagram (pillar sémantique - la plateforme)
+├── SUBTOPIC_OF ← Entity:instagram-marketing
+└── SUBTOPIC_OF ← Entity:qr-instagram         ← Sémantiquement sous Instagram
+
+Mais côté URL:
+
+Page:qr-generator (notre outil principal)
+└── SUBTOPIC_OF ← Page:qr-instagram           ← URL sous notre outil
+
+Résultat:
+  - Entity:qr-instagram SUBTOPIC_OF → Entity:instagram (sémantique)
+  - Page:qr-instagram SUBTOPIC_OF → Page:qr-generator (URL)
+
+full_path = /créer-qr-code/instagram (suit Page.SUBTOPIC_OF)
+topic_cluster = Instagram (suit Entity.SUBTOPIC_OF)
+```
+
+### Structure Pillar/Cluster
+
+```
+PILLAR PAGE: Page:qr-generator (is_pillar: true)
+══════════════════════════════════════════════════
+
+                    ┌──────────────────────┐
+                    │   PILLAR PAGE        │
+                    │   /créer-qr-code     │
+                    │                      │
+                    │  Links vers tous     │
+                    │  les clusters        │
+                    └──────────┬───────────┘
+                               │
+           ┌───────────────────┼───────────────────┐
+           │                   │                   │
+           ▼                   ▼                   ▼
+    ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+    │  CLUSTER    │     │  CLUSTER    │     │  CLUSTER    │
+    │ /instagram  │     │  /wifi      │     │  /vcard     │
+    │             │     │             │     │             │
+    │ Link back → │     │ Link back → │     │ Link back → │
+    │ pillar      │     │ pillar      │     │ pillar      │
+    └─────────────┘     └─────────────┘     └─────────────┘
+
+RÈGLE SEO: Chaque cluster DOIT linker vers son pillar
+```
+
+### Modèle Page avec Pillar/Cluster
+
+```yaml
+Page (org/structure, defined):
+  key: string
+  slug: string (invariant, english)
+  is_pillar: boolean
+  pillar_strategy: string         # Pour pillars: description stratégie
+
+  relations:
+    REPRESENTS: Entity (1:1)
+    SUBTOPIC_OF: Page (parent URL)
+    CLUSTER_OF: Page (pillar SEO)
+    HAS_BLOCK: Block*
+
+PageNative (org/output, generated):
+  slug: string
+  full_path: string
+  pillar_link_anchor: string      # Texte du lien retour vers pillar
+  cluster_position: integer       # Ordre dans le cluster
+```
+
+### Blocks et Maillage Interne
+
+```
+BlockInstruction contient des liens:
+├── [@page:qr-instagram]          ← Lien vers cluster sibling
+├── [@page:qr-wifi]
+└── [@page:barcode-generator]     ← Lien vers related pillar
+
+Agrégé au niveau Page:
+
+Page ──[:LINKS_TO]──▶ Page
+       {
+         via_blocks: ["related-tools:1"],
+         link_type: "cluster_sibling" | "pillar_backlink" | "related",
+         anchor_text_source: "keyword:X" | "entity:X" | "custom"
+       }
+```
+
+### Arcs SEO Structure
+
+```
+[:CLUSTER_OF]
+├── Source: Page (cluster)
+├── Target: Page (pillar)
+├── Cardinality: N:1
+├── Properties: { priority: integer }
+└── "This page is part of this pillar's topic cluster"
+
+[:LINKS_TO]
+├── Source: Page
+├── Target: Page
+├── Cardinality: N:N
+├── Properties:
+│   ├── via_blocks: [string]
+│   ├── link_type: enum
+│   ├── anchor_text_source: string
+│   └── nofollow: boolean
+└── "Internal link from one page to another"
+
+[:PILLAR_FOR]
+├── Source: Page (pillar)
+├── Target: Entity (topic)
+├── Cardinality: 1:1
+└── "This pillar page covers this topic entity"
+```
+
+### Sitemap SEO View
+
+```
+PROJECT SITEMAP VIEW
+════════════════════
+
+⬢ PILLAR: créer-qr-code (12 clusters)
+│
+├──● instagram ←→ [wifi, vcard, menu]
+├──● wifi ←→ [instagram, vcard]
+├──● vcard ←→ [instagram, wifi, linkedin]
+└──● ...
+
+⬢ PILLAR: scan-qr-code (8 clusters)
+│
+├──● iphone ←→ [android, camera]
+└──● ...
+
+⚠ ORPHANS (need pillar assignment):
+├──○ mentions-legales
+└──○ contact
+
+LINK HEALTH METRICS:
+├── All clusters link to pillar: ✓ 100%
+├── Pillar links to all clusters: ✓ 100%
+├── Avg internal links per page: 5.2
+└── Broken links: 0
+```

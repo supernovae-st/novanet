@@ -222,58 +222,9 @@ pub struct SimpleViewsFile {
 // Loaders
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Load all view YAML files (skips `_registry.yaml`).
-pub fn load_all_views(root: &Path) -> crate::Result<Vec<ViewDef>> {
-    let views_dir = crate::config::views_dir(root);
-    if !views_dir.exists() {
-        return Err(crate::NovaNetError::Validation(format!(
-            "views directory not found: {}",
-            views_dir.display()
-        )));
-    }
-
-    let mut entries: Vec<_> = std::fs::read_dir(&views_dir)?
-        .filter_map(|e| e.ok())
-        .filter(|e| {
-            let name = e.file_name();
-            let name = name.to_string_lossy();
-            name.ends_with(".yaml") && !name.starts_with('_')
-        })
-        .collect();
-    entries.sort_by_key(|e| e.file_name());
-
-    let mut views = Vec::with_capacity(entries.len());
-    for entry in entries {
-        let view: ViewDef = super::utils::load_yaml(&entry.path())?;
-        views.push(view);
-    }
-
-    Ok(views)
-}
-
-/// Load a single view by ID.
-pub fn load_view(root: &Path, id: &str) -> crate::Result<ViewDef> {
-    let path = crate::config::views_dir(root).join(format!("{id}.yaml"));
-    if !path.exists() {
-        return Err(crate::NovaNetError::Validation(format!(
-            "view '{id}' not found (expected: {})",
-            path.display()
-        )));
-    }
-    super::utils::load_yaml(&path)
-}
-
-/// Load the view registry (`_registry.yaml`).
-pub fn load_registry(root: &Path) -> crate::Result<ViewRegistry> {
-    let path = crate::config::views_dir(root).join("_registry.yaml");
-    if !path.exists() {
-        return Err(crate::NovaNetError::Validation(format!(
-            "view registry not found: {}",
-            path.display()
-        )));
-    }
-    super::utils::load_yaml(&path)
-}
+// NOTE: The old view loader functions (load_all_views, load_view, load_registry)
+// were removed in v0.12.5. The views/ directory was replaced by a single views.yaml file.
+// Use load_simple_views() to load the new unified views format.
 
 /// Load the simplified views file (`views.yaml`).
 ///
@@ -442,72 +393,9 @@ include:
         Some(root.to_path_buf())
     }
 
-    #[test]
-    fn load_all_views_integration() {
-        let Some(root) = test_root() else { return };
-        let views = load_all_views(&root).expect("should load all views");
-        assert!(
-            views.len() >= 5,
-            "expected at least 5 views, got {}",
-            views.len()
-        );
-
-        for view in &views {
-            assert!(!view.id.is_empty(), "empty view id");
-            assert!(!view.name.is_empty(), "empty view name");
-            assert!(
-                !view.root.node_type.is_empty(),
-                "empty root type for {}",
-                view.id
-            );
-            assert!(!view.include.is_empty(), "no include rules for {}", view.id);
-        }
-    }
-
-    #[test]
-    fn load_single_view_integration() {
-        let Some(root) = test_root() else { return };
-        let view = load_view(&root, "block-generation").expect("should load block-generation");
-        assert_eq!(view.id, "block-generation");
-        assert_eq!(view.root.node_type, "Block");
-        assert!(view.include.len() >= 4);
-    }
-
-    #[test]
-    fn load_registry_integration() {
-        let Some(root) = test_root() else { return };
-        let reg = load_registry(&root).expect("should load registry");
-        assert!(reg.views.len() >= 12);
-
-        // v11.7+ categories: meta, data, overlay, contextual
-        // Legacy categories: overview, generation, knowledge, project, mining
-        let valid_cats = [
-            "meta",
-            "data",
-            "overlay",
-            "contextual",
-            "overview",
-            "generation",
-            "knowledge",
-            "project",
-            "mining",
-        ];
-        for entry in &reg.views {
-            assert!(
-                valid_cats.contains(&entry.category.as_str()),
-                "invalid category '{}' for view '{}'",
-                entry.category,
-                entry.id
-            );
-        }
-    }
-
-    #[test]
-    fn load_nonexistent_view_returns_error() {
-        let Some(root) = test_root() else { return };
-        let result = load_view(&root, "nonexistent-view");
-        assert!(result.is_err());
-    }
+    // NOTE: Old integration tests for load_all_views, load_view, load_registry
+    // were removed in v0.12.5. The views/ directory was replaced by views.yaml.
+    // See load_simple_views_integration for the new unified views format test.
 
     #[test]
     fn parse_view_icon_object_format() {
