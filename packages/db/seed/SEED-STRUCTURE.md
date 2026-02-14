@@ -43,7 +43,7 @@ This document describes the seed file organization aligned with the YAML archite
 |------|-------------|-------------|
 | `00.5-taxonomy.cypher` | `taxonomy.yaml` | 2 Realms, 10 Layers, 5 Traits |
 | `01-classes.cypher` | `node-classes/**/*.yaml` | 61 NodeClasses (40 shared + 21 org) |
-| `02-arc-classes.cypher` | `arc-classes/**/*.yaml` | 128 ArcClasses |
+| `02-arc-classes.cypher` | `arc-classes/**/*.yaml` | 169 ArcClasses |
 | `99-autowire-classes.cypher` | (computed) | Links data nodes to their Classes |
 
 **Regenerate:** `novanet schema generate` or `pnpm schema:generate`
