@@ -456,8 +456,8 @@ mod tests {
         assert!(cypher.contains("as_intra_realm:Schema:ArcScope {key: 'intra_realm'}"));
         assert!(cypher.contains("ac_one_to_many:Schema:ArcCardinality {key: 'one_to_many'}"));
 
-        // Header mentions v0.12.0
-        assert!(cypher.contains("v0.12.0"));
+        // Header mentions version
+        assert!(cypher.contains("v0.12.5"));
 
         // HAS_LAYER wiring — specific pairs (v11.4: shared has config, locale, geography, knowledge)
         assert!(cypher.contains("(r:Realm {key: 'shared'}), (l:Layer {key: 'config'})"));

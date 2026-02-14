@@ -11,9 +11,10 @@
  * Run: node tools/scripts/validate-design-system.mjs
  *
  * v0.12.0 - Data Origin trait renames
+ * v0.12.5 - Load arc families from individual YAML files
  */
 
-import { readFileSync, existsSync } from 'fs';
+import { readFileSync, existsSync, readdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { createRequire } from 'module';
@@ -123,14 +124,130 @@ function loadTypeScript(relativePath) {
   return readFileSync(fullPath, 'utf-8');
 }
 
+/**
+ * Load arc families from individual YAML files (v0.12.5+)
+ * Falls back to taxonomy.arc_families if individual files don't exist
+ */
+function loadArcFamilies(taxonomy) {
+  // First, check if arc_families exists in taxonomy (legacy format)
+  if (taxonomy?.arc_families?.length > 0) {
+    return taxonomy.arc_families;
+  }
+
+  // v0.12.5+: Load from individual files
+  const arcFamiliesDir = join(ROOT, 'packages/core/models/arc-families');
+  if (!existsSync(arcFamiliesDir)) {
+    logError('arc-families directory not found and taxonomy.arc_families is empty');
+    return [];
+  }
+
+  const arcFamilies = [];
+  const files = readdirSync(arcFamiliesDir).filter(f => f.endsWith('.yaml') && !f.startsWith('_'));
+
+  for (const file of files) {
+    const content = loadYaml(`packages/core/models/arc-families/${file}`);
+    if (content?.arc_family) {
+      arcFamilies.push({
+        key: content.arc_family.key,
+        color: content.arc_family.color,
+        display_name: content.arc_family.display_name,
+      });
+    }
+  }
+
+  if (arcFamilies.length === 0) {
+    logError('No arc families found in arc-families/*.yaml files');
+  } else {
+    logInfo(`Loaded ${arcFamilies.length} arc families from individual YAML files`);
+  }
+
+  return arcFamilies;
+}
+
+/**
+ * Load node realms from individual YAML files (v0.12.5+)
+ * Falls back to taxonomy.node_realms if individual files don't exist
+ */
+function loadRealms(taxonomy) {
+  // First, check if node_realms exists in taxonomy (legacy format)
+  if (taxonomy?.node_realms?.length > 0) {
+    return taxonomy.node_realms;
+  }
+
+  // v0.12.5+: Load from individual files
+  const realmsDir = join(ROOT, 'packages/core/models/realms');
+  if (!existsSync(realmsDir)) {
+    logWarn('realms directory not found, using expected defaults');
+    return [{ key: 'shared', layers: [] }, { key: 'org', layers: [] }];
+  }
+
+  const realms = [];
+  const files = readdirSync(realmsDir).filter(f => f.endsWith('.yaml') && !f.startsWith('_'));
+
+  for (const file of files) {
+    const content = loadYaml(`packages/core/models/realms/${file}`);
+    if (content?.realm) {
+      realms.push({
+        key: content.realm.key,
+        layers: content.realm.layers?.map(l => ({ key: l })) || [],
+        color: content.realm.color,
+      });
+    }
+  }
+
+  if (realms.length > 0) {
+    logInfo(`Loaded ${realms.length} realms from individual YAML files`);
+  }
+
+  return realms;
+}
+
+/**
+ * Load node traits from individual YAML files (v0.12.5+)
+ * Falls back to taxonomy.node_traits if individual files don't exist
+ */
+function loadTraits(taxonomy) {
+  // First, check if node_traits exists in taxonomy (legacy format)
+  if (taxonomy?.node_traits?.length > 0) {
+    return taxonomy.node_traits;
+  }
+
+  // v0.12.5+: Load from individual files
+  const traitsDir = join(ROOT, 'packages/core/models/traits');
+  if (!existsSync(traitsDir)) {
+    logWarn('traits directory not found');
+    return [];
+  }
+
+  const traits = [];
+  const files = readdirSync(traitsDir).filter(f => f.endsWith('.yaml') && !f.startsWith('_'));
+
+  for (const file of files) {
+    const content = loadYaml(`packages/core/models/traits/${file}`);
+    if (content?.trait) {
+      traits.push({
+        key: content.trait.key,
+        border_style: content.trait.border_style,
+        color: content.trait.color,
+      });
+    }
+  }
+
+  if (traits.length > 0) {
+    logInfo(`Loaded ${traits.length} traits from individual YAML files`);
+  }
+
+  return traits;
+}
+
 // =============================================================================
 // Validators
 // =============================================================================
 
-function validateArcFamilies(taxonomy, arcFamilyPalettesTS, generatedTS) {
+function validateArcFamilies(arcFamilies, arcFamilyPalettesTS, generatedTS) {
   logSection('Arc Families (taxonomy.yaml ↔ TypeScript)');
 
-  const yamlFamilies = taxonomy.arc_families.map(f => f.key);
+  const yamlFamilies = arcFamilies.map(f => f.key);
 
   // v11.7: Check generated.ts for ARC_FAMILY_COLORS (unified palette system)
   const generatedMatch = generatedTS?.match(/ARC_FAMILY_COLORS:\s*Record<ArcFamilyKey,\s*ColorTokens>\s*=\s*\{([\s\S]*?)\n\};/);
@@ -177,10 +294,10 @@ function validateArcFamilies(taxonomy, arcFamilyPalettesTS, generatedTS) {
   }
 }
 
-function validateArcFamilyColors(taxonomy, arcFamilyPalettesTS, generatedTS) {
+function validateArcFamilyColors(arcFamilies, arcFamilyPalettesTS, generatedTS) {
   logSection('Arc Family Colors (taxonomy.yaml ↔ TypeScript)');
 
-  for (const family of taxonomy.arc_families) {
+  for (const family of arcFamilies) {
     const yamlColor = family.color.toLowerCase();
 
     // v11.7: Check generated.ts first (unified palette system)
@@ -398,18 +515,18 @@ function validateRustTheme() {
 // Realm, Layer, Trait Validators (v0.12.0)
 // =============================================================================
 
-function validateRealms(taxonomy, hierarchyTS) {
-  logSection('Realms (taxonomy.yaml ↔ hierarchy.ts)');
+function validateRealms(realms, hierarchyTS) {
+  logSection('Realms (YAML ↔ hierarchy.ts)');
 
   const expectedRealms = ['shared', 'org'];
-  const yamlRealms = taxonomy.node_realms?.map(r => r.key) || [];
+  const yamlRealms = realms.map(r => r.key);
 
   // Check YAML has expected realms
   for (const realm of expectedRealms) {
     if (yamlRealms.includes(realm)) {
-      logOk(`${realm}: defined in taxonomy.yaml`);
+      logOk(`${realm}: defined in YAML`);
     } else {
-      logError(`${realm}: missing from taxonomy.yaml`);
+      logError(`${realm}: missing from YAML`);
     }
   }
 
@@ -424,15 +541,17 @@ function validateRealms(taxonomy, hierarchyTS) {
   }
 }
 
-function validateLayers(taxonomy, hierarchyTS, layersTS) {
-  logSection('Layers (taxonomy.yaml ↔ TypeScript)');
+function validateLayers(realms, hierarchyTS, layersTS) {
+  logSection('Layers (YAML ↔ TypeScript)');
 
   const sharedLayers = ['config', 'locale', 'geography', 'knowledge'];
   const orgLayers = ['config', 'semantic', 'foundation', 'structure', 'instruction', 'output'];
 
-  // Check YAML structure
-  const yamlSharedLayers = taxonomy.node_realms?.find(r => r.key === 'shared')?.layers?.map(l => l.key) || [];
-  const yamlOrgLayers = taxonomy.node_realms?.find(r => r.key === 'org')?.layers?.map(l => l.key) || [];
+  // Check YAML structure (v0.12.5: realms is now the loaded array)
+  const sharedRealm = realms.find(r => r.key === 'shared');
+  const orgRealm = realms.find(r => r.key === 'org');
+  const yamlSharedLayers = sharedRealm?.layers?.map(l => l.key || l) || [];
+  const yamlOrgLayers = orgRealm?.layers?.map(l => l.key || l) || [];
 
   logInfo(`Shared layers in YAML: ${yamlSharedLayers.length} (expected: ${sharedLayers.length})`);
   for (const layer of sharedLayers) {
@@ -460,20 +579,20 @@ function validateLayers(taxonomy, hierarchyTS, layersTS) {
   }
 }
 
-function validateTraits(taxonomy, typesTS) {
-  logSection('Node Traits (taxonomy.yaml ↔ TypeScript)');
+function validateTraits(traits, typesTS) {
+  logSection('Node Traits (YAML ↔ TypeScript)');
 
   // v0.12.0: Data Origin trait renames
   const expectedTraits = ['defined', 'authored', 'imported', 'generated', 'retrieved'];
-  const yamlTraits = taxonomy.node_traits?.map(t => t.key) || [];
+  const yamlTraits = traits.map(t => t.key);
 
   // Check YAML
   for (const trait of expectedTraits) {
     if (yamlTraits.includes(trait)) {
-      const traitDef = taxonomy.node_traits.find(t => t.key === trait);
-      logOk(`${trait}: border_style=${traitDef.border_style}`);
+      const traitDef = traits.find(t => t.key === trait);
+      logOk(`${trait}: border_style=${traitDef?.border_style || 'N/A'}`);
     } else {
-      logError(`${trait}: missing from taxonomy.yaml`);
+      logError(`${trait}: missing from YAML`);
     }
   }
 
@@ -586,7 +705,7 @@ function validateNodeCounts(layersTS) {
   }
 }
 
-function validateVisualEncodingTraits(visualEncoding, taxonomy) {
+function validateVisualEncodingTraits(visualEncoding, traits) {
   logSection('Visual Encoding Trait Icons');
 
   // v0.12.0: Data Origin trait renames
@@ -632,7 +751,7 @@ function validateVisualEncodingLayers(visualEncoding) {
 // =============================================================================
 
 async function main() {
-  logHeader('NovaNet Design System Validation v0.12.0');
+  logHeader('NovaNet Design System Validation v0.12.5');
 
   // Load files
   const taxonomy = loadYaml('packages/core/models/taxonomy.yaml');
@@ -650,9 +769,19 @@ async function main() {
     process.exit(1);
   }
 
+  // v0.12.5+: Load taxonomy elements from individual YAML files or taxonomy
+  const arcFamilies = loadArcFamilies(taxonomy);
+  if (arcFamilies.length === 0) {
+    console.log(`\n${RED}${BOLD}FATAL: No arc families found${RESET}\n`);
+    process.exit(1);
+  }
+
+  const realms = loadRealms(taxonomy);
+  const traits = loadTraits(taxonomy);
+
   // Run validations - Arc System (v0.12.0)
-  validateArcFamilies(taxonomy, arcFamilyPalettesTS, generatedTS);
-  validateArcFamilyColors(taxonomy, arcFamilyPalettesTS, generatedTS);
+  validateArcFamilies(arcFamilies, arcFamilyPalettesTS, generatedTS);
+  validateArcFamilyColors(arcFamilies, arcFamilyPalettesTS, generatedTS);
   validateArcFamilyEffects(arcFamilyPalettesTS);
   validateEffectPrimitives(typesTS);
   validateVisualEncodingIcons(visualEncoding);
@@ -663,11 +792,11 @@ async function main() {
 
   // Run validations - Taxonomy Structure (v0.12.0)
   if (hierarchyTS && layersTS) {
-    validateRealms(taxonomy, hierarchyTS);
-    validateLayers(taxonomy, hierarchyTS, layersTS);
-    validateTraits(taxonomy, typesTS);
+    validateRealms(realms, hierarchyTS);
+    validateLayers(realms, hierarchyTS, layersTS);
+    validateTraits(traits, typesTS);
     validateNodeCounts(layersTS);
-    validateVisualEncodingTraits(visualEncoding, taxonomy);
+    validateVisualEncodingTraits(visualEncoding, traits);
     validateVisualEncodingLayers(visualEncoding);
   } else {
     logWarn('Skipping taxonomy structure validation (missing hierarchy.ts or layers.ts)');

@@ -1,334 +1,23 @@
 # packages/core/models/taxonomy.yaml
-# Source of truth for NovaNet taxonomy structure
-# v0.12.0
+# MINIMAL VERSION - Most taxonomy data now in individual YAML files
+# v0.12.5
 #
-# This file defines:
-# - 2 NodeRealms (SHARED, ORG) with nested NodeLayers
-# - 5 NodeTraits (DATA ORIGIN) with visual encoding
-# - 5 ArcFamilies (arc classification) with visual encoding
-# - 2 ArcScopes (intra_realm / cross_realm)
-# - 5 ArcCardinalities (zero_to_one / one_to_one / one_to_many / many_to_one / many_to_many)
-# - Terminal palette for TUI graceful degradation
+# This file now contains ONLY centralized config that isn't per-item:
+# - arc_scopes (2 values, not worth individual files)
+# - arc_cardinalities (5 values, not worth individual files)
+# - class_retrieval_defaults (context assembly engine config)
+# - terminal palette (TUI graceful degradation)
 #
-# Generated artifacts:
-# - packages/db/seed/00.5-taxonomy.cypher (Realm, Layer, Trait, ArcFamily + hierarchy)
-# - packages/core/src/graph/hierarchy.ts (realm→layer tree, auto-generated)
+# MIGRATED TO INDIVIDUAL FILES (v0.12.5):
+# - node_realms → realms/*.yaml (with nested layers → layers/*.yaml)
+# - node_traits → traits/*.yaml
+# - arc_families → arc-families/*.yaml
 #
-# All schema-nodes receive double-label :Schema (e.g., :Schema:Realm)
-# Query all schema-nodes: MATCH (n:Schema) RETURN n
+# Load pattern:
+# - load_taxonomy_from_files() reads individual files + this file
+# - load_taxonomy() (legacy) reads only this file
 
-version: "0.12.0"
-
-# =============================================================================
-# NODE REALMS (2) — WHERE does the node live?
-# =============================================================================
-# Each realm contains layers (functional classification)
-# Traversal: ORG can read SHARED (one-way)
-# Isolation: Org A cannot see Org B (multi-tenant boundary)
-
-node_realms:
-  - key: shared
-    display_name: Shared
-    icon:
-      web: globe
-      terminal: "◉"
-    color: "#2aa198"
-    llm_context: |
-      Shared across ALL organizations. Universal locale knowledge that applies
-      everywhere: cultural norms, linguistic patterns, formatting conventions.
-      These nodes are READ-ONLY. No Entity here - Entity lives in ORG realm.
-      v11.5: Locale moved to config layer (invariant definition).
-      v11.4: SEO/GEO nodes now live in shared/knowledge. SEOKeywordFormat and
-      EntityCategory classifications live in shared/config.
-    layers:
-      - key: config
-        display_name: Config
-        icon:
-          web: settings
-          terminal: "⚙"
-        color: "#64748b"
-        llm_context: |
-          Human-defined definitions for shared realm. All nodes have "defined" trait.
-          v11.5: Locale (BCP-47 codes), EntityCategory (v11.1, ADR-017),
-          SEOKeywordFormat (v11.4). These are universal DEFINITIONS, not
-          locale-specific parameters.
-
-      - key: locale
-        display_name: Locale
-        icon:
-          web: globe
-          terminal: "⊕"
-        color: "#64748b"
-        llm_context: |
-          Locale-specific SETTINGS (1:1 with Locale). All nodes have "imported" trait.
-          v11.5: Culture, Style, Formatting, Adaptation, Market, Slugification.
-          These contain discovered/curated data specific to each locale.
-          Pattern: Locale (config) --[:HAS_X]--> Setting (locale).
-
-      - key: geography
-        display_name: Geography
-        icon:
-          web: map
-          terminal: "⊙"
-        color: "#10b981"
-        llm_context: |
-          Geographic and economic classifications. Continents, regions, sub-regions,
-          economic zones, income groups, lending categories. World Bank data
-          structure for geographic context.
-
-      - key: knowledge
-        display_name: Knowledge
-        icon:
-          web: book-open
-          terminal: "◈"
-        color: "#8b5cf6"
-        llm_context: |
-          Deep locale-specific knowledge for native content generation.
-          Knowledge containers (TermSet, ExpressionSet, etc.) and atoms
-          (Term, Expression, Pattern, etc.). Language families, cultural realms,
-          population clusters. Expertise that makes content feel NATIVE.
-          v11.4: SEO/GEO nodes now here (SEOKeyword, GEOQuery) — universal
-          market data following Knowledge Atoms pattern.
-
-  - key: org
-    display_name: Organization
-    icon:
-      web: building-2
-      terminal: "◎"
-    color: "#6c71c4"
-    llm_context: |
-      Organization-specific realm. Contains Projects, Entities, Pages, Blocks,
-      and all generated outputs. Org A cannot see Org B (multi-tenant isolation).
-      Project owns Entity (HAS_ENTITY). Page/Block reference Entity via
-      USES_ENTITY (N:M). AI context assembly follows arcs via spreading activation.
-    layers:
-      - key: config
-        display_name: Config
-        icon:
-          web: settings
-          terminal: "⚙"
-        color: "#64748b"
-        llm_context: |
-          Organization configuration root. OrgConfig node is the entry point
-          for org-level traversal. Links to Projects (HAS_PROJECT).
-
-      - key: semantic
-        display_name: Semantic Layer
-        icon:
-          web: lightbulb
-          terminal: "◆"
-        color: "#f97316"
-        llm_context: |
-          Defined entities (Entity) and their authored content (EntityContent).
-          Entity belongs to Project (HAS_ENTITY) and can be referenced by
-          Pages/Blocks via USES_ENTITY. Entities link via SEMANTIC_LINK for
-          spreading activation during generation. SEO/GEO targeting via
-          cross-realm arcs (TARGETS, MONITORS_GEO) to shared/knowledge.
-
-      - key: foundation
-        display_name: Foundation
-        icon:
-          web: landmark
-          terminal: "▣"
-        color: "#3b82f6"
-        llm_context: |
-          Project identity. Project, Brand, ProjectContent. Each Organization
-          has 1 company project (branding) + N product projects. Core
-          identity that anchors ALL content generation for each project.
-
-      - key: structure
-        display_name: Structure
-        icon:
-          web: layout
-          terminal: "▤"
-        color: "#06b6d4"
-        llm_context: |
-          Information architecture. Pages, blocks, and their types. Defines
-          the SKELETON of the website - what pages exist, what blocks compose
-          each page, and the rules for each block type.
-
-      - key: instruction
-        display_name: Instructions
-        icon:
-          web: file-text
-          terminal: "▧"
-        color: "#eab308"
-        llm_context: |
-          Generation directives. Instructions and rules that guide the LLM during
-          content generation. PageInstruction for page-level guidance, BlockInstruction
-          for block-specific instructions, BlockRules for constraints.
-          v0.12.0: PagePrompt → PageInstruction, BlockPrompt → BlockInstruction.
-
-      - key: output
-        display_name: Generated Output
-        icon:
-          web: check-circle
-          terminal: "●"
-        color: "#22c55e"
-        llm_context: |
-          LLM-generated content. The final localized pages and blocks ready
-          for rendering. These are the RESULTS of the generation pipeline -
-          created by combining foundation, structure, semantic, and
-          instruction nodes with locale knowledge.
-
-# =============================================================================
-# NODE TRAITS (5) — WHERE does the data come from? (Data Origin)
-# =============================================================================
-# Visual encoding: border_style maps to CSS border-style / ratatui border
-# v0.12.0 (ADR-024): Trait redefined as "Data Origin"
-#   - invariant → defined (human-created once, structure/template)
-#   - localized → authored (human-written per locale, editorial content)
-#   - knowledge → imported (external data brought in, APIs/corpora)
-#   - generated → generated (our LLM produces this output)
-#   - aggregated → retrieved (fetched from external APIs, snapshots)
-
-node_traits:
-  - key: defined
-    display_name: Defined
-    color: "#3b82f6"
-    border_style: solid
-    border_width: 2
-    unicode_border: "─"
-    llm_context: |
-      Human-created ONCE. Structural definitions, configuration, templates.
-      Does not change between locales. Page, Block, Entity, PageStructure, BlockType,
-      Locale, OrgConfig, etc. "This is how things are set up."
-
-  - key: authored
-    display_name: Authored
-    color: "#22c55e"
-    border_style: dashed
-    border_width: 2
-    unicode_border: "┄"
-    llm_context: |
-      Human-written content, PER locale. Editorial content curated by humans.
-      EntityContent, ProjectContent. NOT translated — each locale version
-      is written natively. "A human wrote this in French/Japanese/etc."
-
-  - key: imported
-    display_name: Imported
-    color: "#8b5cf6"
-    border_style: dotted
-    border_width: 2
-    unicode_border: "┈"
-    llm_context: |
-      External data brought in from external sources. Linguistic corpora,
-      market data, discovered keywords. Term, Expression, Pattern, CultureRef,
-      SEOKeyword, GEOQuery. "We imported this from [source]."
-
-  - key: generated
-    display_name: Generated
-    color: "#b58900"
-    border_style: double
-    border_width: 2
-    unicode_border: "═"
-    llm_context: |
-      OUR LLM produces this output. Pages, blocks, and artifacts produced
-      by the NovaNet generation pipeline. PageGenerated, BlockGenerated,
-      OutputArtifact. "NovaNet generated this."
-
-  - key: retrieved
-    display_name: Retrieved
-    color: "#6c71c4"
-    border_style: dotted
-    border_width: 3
-    unicode_border: "┅"
-    llm_context: |
-      Fetched from EXTERNAL APIs. Snapshots from third-party services.
-      We don't create it, we capture it. GEOAnswer (Claude/GPT response),
-      SEOKeywordMetrics (Ahrefs data), GEOMetrics. "We fetched this from [API]."
-
-# =============================================================================
-# CLASS RETRIEVAL DEFAULTS (v0.12.0) — Context Assembly Properties
-# =============================================================================
-# Default values per trait type for the v10 Context Assembly Engine.
-# These properties are used by the engine to make autonomous traversal decisions.
-# v0.12.0: Renamed from kind_retrieval_defaults, updated trait names.
-
-class_retrieval_defaults:
-  defined:
-    traversal_depth: 2      # Max hops for structural traversal
-    context_budget: 500     # Default token allocation
-    token_estimate: 100     # Estimated tokens per instance
-  authored:
-    traversal_depth: 2
-    context_budget: 800
-    token_estimate: 150
-  imported:
-    traversal_depth: 1      # Shallow traversal for imported nodes
-    context_budget: 200
-    token_estimate: 50
-  generated:
-    traversal_depth: 1      # v11.2: Split from derived
-    context_budget: 150
-    token_estimate: 50
-  retrieved:
-    traversal_depth: 1      # v11.2: Split from derived
-    context_budget: 80
-    token_estimate: 20
-
-# =============================================================================
-# ARC FAMILIES (5) — WHAT kind of relationship is this?
-# =============================================================================
-# Visual encoding: stroke_style for CSS, arrow_style for Mermaid
-
-arc_families:
-  - key: ownership
-    display_name: Ownership
-    color: "#3b82f6"
-    stroke_style: solid
-    stroke_width: 2
-    arrow_style: "-->"
-    default_traversal: eager  # v9.9: Always follow in context assembly
-    llm_context: |
-      Parent-child structural relationships. A node "owns" or "contains"
-      another. Always follow in traversal (structural backbone).
-
-  - key: localization
-    display_name: Localization
-    color: "#22c55e"
-    stroke_style: dashed
-    stroke_width: 2
-    arrow_style: ".->"
-    default_traversal: eager  # v9.9: Always follow for content localization
-    llm_context: |
-      Links between invariant nodes and their locale-specific content.
-      Includes locale knowledge edges (Locale → LocaleVoice, etc.) and
-      content localization edges (Entity → EntityContent, etc.).
-
-  - key: semantic
-    display_name: Semantic
-    color: "#f97316"
-    stroke_style: dotted
-    stroke_width: 2
-    arrow_style: ".->"
-    default_traversal: lazy   # v9.9: Follow if budget allows, temperature-gated
-    llm_context: |
-      Meaning and entity connections. Spreading activation traversal with
-      temperature-based filtering. Links entities to each other and to
-      the pages/blocks that use them.
-
-  - key: generation
-    display_name: Generation
-    color: "#8b5cf6"
-    stroke_style: solid
-    stroke_width: 3
-    arrow_style: "==>"
-    default_traversal: lazy   # v9.9: Follow for provenance if budget allows
-    llm_context: |
-      LLM generation pipeline flow. Provenance tracking from prompts to
-      outputs, version history, and assembly relationships.
-
-  - key: mining
-    display_name: Mining
-    color: "#ec4899"
-    stroke_style: dashed
-    stroke_width: 1
-    arrow_style: "--o"
-    default_traversal: skip   # v9.9: Skip unless explicitly requested
-    llm_context: |
-      SEO data extraction and targeting. Links mining runs to their
-      targets and concepts to their SEO keyword targets.
+version: "0.12.5"
 
 # =============================================================================
 # ARC SCOPES (2) — WHERE does the arc connect?
@@ -371,6 +60,35 @@ arc_cardinalities:
   - key: many_to_many
     display_name: "N:M"
     description: Multiple sources to multiple targets
+
+# =============================================================================
+# CLASS RETRIEVAL DEFAULTS (v0.12.0) — Context Assembly Properties
+# =============================================================================
+# Default values per trait type for the v10 Context Assembly Engine.
+# These properties are used by the engine to make autonomous traversal decisions.
+# v0.12.0: Renamed from kind_retrieval_defaults, updated trait names.
+
+class_retrieval_defaults:
+  defined:
+    traversal_depth: 2      # Max hops for structural traversal
+    context_budget: 500     # Default token allocation
+    token_estimate: 100     # Estimated tokens per instance
+  authored:
+    traversal_depth: 2
+    context_budget: 800
+    token_estimate: 150
+  imported:
+    traversal_depth: 1      # Shallow traversal for imported nodes
+    context_budget: 200
+    token_estimate: 50
+  generated:
+    traversal_depth: 1      # v11.2: Split from derived
+    context_budget: 150
+    token_estimate: 50
+  retrieved:
+    traversal_depth: 1      # v11.2: Split from derived
+    context_budget: 80
+    token_estimate: 20
 
 # =============================================================================
 # TERMINAL PALETTE — TUI graceful degradation

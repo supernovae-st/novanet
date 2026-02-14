@@ -68,7 +68,7 @@ impl Default for TaxonomyIcon {
 // YAML Structs (taxonomy.yaml)
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Top-level document for taxonomy.yaml.
+/// Top-level document for taxonomy.yaml (full format, legacy).
 #[derive(Debug, Deserialize)]
 pub struct TaxonomyDoc {
     pub version: String,
@@ -84,6 +84,32 @@ pub struct TaxonomyDoc {
     pub arc_cardinalities: Vec<ArcCardinalityDef>,
     #[serde(default)]
     pub terminal: Option<TerminalPalette>,
+}
+
+/// Minimal taxonomy.yaml format (v0.12.5+).
+///
+/// Contains only centralized config that isn't per-item:
+/// - arc_scopes, arc_cardinalities (small enums)
+/// - terminal palette (TUI graceful degradation)
+/// - class_retrieval_defaults (context assembly config)
+///
+/// Node realms, traits, and arc families are loaded from individual files.
+#[derive(Debug, Deserialize)]
+pub struct MinimalTaxonomyDoc {
+    #[serde(default = "default_version")]
+    pub version: String,
+    #[serde(default)]
+    pub arc_scopes: Vec<ArcScopeDef>,
+    #[serde(default)]
+    pub arc_cardinalities: Vec<ArcCardinalityDef>,
+    #[serde(default)]
+    pub terminal: Option<TerminalPalette>,
+    #[serde(default, alias = "kind_retrieval_defaults")]
+    pub class_retrieval_defaults: Option<HashMap<String, ClassRetrievalDefaults>>,
+}
+
+fn default_version() -> String {
+    "0.12.5".to_string()
 }
 
 /// v0.12.0: Per-trait retrieval settings for context assembly (was KindRetrievalDefaults).
@@ -200,45 +226,13 @@ pub struct TerminalPalette {
 // Loader
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Load and validate taxonomy.yaml.
+/// Load and validate taxonomy (backwards-compatible wrapper).
+///
+/// **v0.12.5**: This function now delegates to `load_taxonomy_from_files()`.
+/// The legacy `taxonomy.yaml` format (with node_realms, node_traits, arc_families)
+/// is no longer supported. Use `load_taxonomy_from_files()` directly for clarity.
 pub fn load_taxonomy(root: &Path) -> crate::Result<TaxonomyDoc> {
-    let path = crate::config::taxonomy_path(root);
-
-    if !path.exists() {
-        return Err(crate::NovaNetError::Validation(format!(
-            "taxonomy.yaml not found: {}",
-            path.display()
-        )));
-    }
-
-    let doc: TaxonomyDoc = super::utils::load_yaml(&path)?;
-
-    // Fail-fast validation
-    if doc.node_realms.is_empty() {
-        return Err(crate::NovaNetError::Validation(
-            "taxonomy.yaml has no node_realms".to_string(),
-        ));
-    }
-    for realm in &doc.node_realms {
-        if realm.layers.is_empty() {
-            return Err(crate::NovaNetError::Validation(format!(
-                "realm '{}' has no layers",
-                realm.key
-            )));
-        }
-    }
-    if doc.node_traits.is_empty() {
-        return Err(crate::NovaNetError::Validation(
-            "taxonomy.yaml has no node_traits".to_string(),
-        ));
-    }
-    if doc.arc_families.is_empty() {
-        return Err(crate::NovaNetError::Validation(
-            "taxonomy.yaml has no arc_families".to_string(),
-        ));
-    }
-
-    Ok(doc)
+    load_taxonomy_from_files(root)
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -266,16 +260,17 @@ pub fn load_taxonomy_from_files(root: &Path) -> crate::Result<TaxonomyDoc> {
 
     // Load arc_scopes, arc_cardinalities, terminal from taxonomy.yaml
     // (these are small and rarely change, kept centralized for now)
+    // v0.12.5: taxonomy.yaml is now minimal format (MinimalTaxonomyDoc)
     let taxonomy_path = crate::config::taxonomy_path(root);
     let (arc_scopes, arc_cardinalities, terminal, class_retrieval_defaults, version) =
         if taxonomy_path.exists() {
-            let legacy: TaxonomyDoc = super::utils::load_yaml(&taxonomy_path)?;
+            let minimal: MinimalTaxonomyDoc = super::utils::load_yaml(&taxonomy_path)?;
             (
-                legacy.arc_scopes,
-                legacy.arc_cardinalities,
-                legacy.terminal,
-                legacy.class_retrieval_defaults,
-                legacy.version,
+                minimal.arc_scopes,
+                minimal.arc_cardinalities,
+                minimal.terminal,
+                minimal.class_retrieval_defaults,
+                minimal.version,
             )
         } else {
             (vec![], vec![], None, None, "0.12.5".to_string())
@@ -618,10 +613,11 @@ arc_families:
             return;
         }
 
-        let doc = load_taxonomy(root).expect("should load taxonomy.yaml");
+        // v0.12.5: load_taxonomy() now delegates to load_taxonomy_from_files()
+        let doc = load_taxonomy(root).expect("should load taxonomy from individual files");
 
-        // v11.5: Locale moved to shared/config
-        assert_eq!(doc.version, "0.12.0");
+        // v0.12.5: Version comes from minimal taxonomy.yaml
+        assert_eq!(doc.version, "0.12.5");
         assert_eq!(doc.node_realms.len(), 2); // v11.2: 2 realms (shared, org)
         assert_eq!(doc.node_traits.len(), 5); // v11.2: split derived → generated + aggregated
         assert_eq!(doc.arc_families.len(), 5);
@@ -787,47 +783,6 @@ arc_families:
         assert_eq!(doc.arc_cardinalities.len(), 5);
     }
 
-    #[test]
-    fn load_taxonomy_from_files_matches_load_taxonomy() {
-        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-            .parent()
-            .and_then(|p| p.parent());
-
-        let Some(root) = root else { return };
-        if !root.join("pnpm-workspace.yaml").exists() {
-            return;
-        }
-
-        let from_yaml = load_taxonomy(root).expect("should load taxonomy.yaml");
-        let from_files = load_taxonomy_from_files(root).expect("should load from files");
-
-        // Compare realm counts
-        assert_eq!(from_yaml.node_realms.len(), from_files.node_realms.len());
-
-        // Compare total layer counts
-        let yaml_layers: usize = from_yaml.node_realms.iter().map(|r| r.layers.len()).sum();
-        let files_layers: usize = from_files.node_realms.iter().map(|r| r.layers.len()).sum();
-        assert_eq!(yaml_layers, files_layers);
-
-        // Compare trait counts
-        assert_eq!(from_yaml.node_traits.len(), from_files.node_traits.len());
-
-        // Compare arc family counts
-        assert_eq!(from_yaml.arc_families.len(), from_files.arc_families.len());
-
-        // Compare realm keys
-        let yaml_realm_keys: Vec<&str> = from_yaml
-            .node_realms
-            .iter()
-            .map(|r| r.key.as_str())
-            .collect();
-        let files_realm_keys: Vec<&str> = from_files
-            .node_realms
-            .iter()
-            .map(|r| r.key.as_str())
-            .collect();
-        for key in &yaml_realm_keys {
-            assert!(files_realm_keys.contains(key), "missing realm: {key}");
-        }
-    }
+    // v0.12.5: load_taxonomy_from_files_matches_load_taxonomy test REMOVED
+    // since load_taxonomy() now delegates to load_taxonomy_from_files()
 }
