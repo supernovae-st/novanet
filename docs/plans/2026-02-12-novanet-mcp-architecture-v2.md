@@ -13,7 +13,7 @@ After extensive research across 10+ parallel exploration agents including deep c
 ### Key Statistics Discovered (Actual Neo4j Queries)
 
 ```
-NodeKind count:   60   (39 shared + 21 org)
+NodeKind count:   60   (40 shared + 21 org)
 ArcKind count:    114  (5 families)
 Locale count:     200  (BCP-47 codes)
 Entity count:     281  (semantic layer)

@@ -48,7 +48,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 |   +-- _index.yaml                          <- Index du graphe (structure, changelog)              |
 |   +-- taxonomy.yaml                        <- v0.12.0: 2 Realms/10 Layers/5 Traits/5 ArcFamilies  |
 |   +-- node-classes/                          <- 59 fichiers YAML (1 par Class)                      |
-|   |   +-- shared/                          <- Realm: shared (39 nodes)                            |
+|   |   +-- shared/                          <- Realm: shared (40 nodes)                            |
 |   |   |   +-- config/                      <-   Layer: config (Locale, EntityCategory, etc.)      |
 |   |   |   +-- locale/                      <-   Layer: locale (6 nodes)                           |
 |   |   |   +-- geography/                   <-   Layer: geography (6 nodes)                        |

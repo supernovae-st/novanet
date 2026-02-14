@@ -254,7 +254,7 @@ cargo run -- schema generate
 - Arc count documentation: 116 → 114 (matches YAML reality)
 - ADR version header: v11.3 → v11.5
 - TUI layer mappings: Added locale 🌍, geography 🗺 for v11.3 split
-- Schema stats example: 64/120 → 59/114 Classes/ArcClasses
+- Schema stats example: 61/169 → 61/169 Classes/ArcClasses
 
 ## [11.3.0] - 2026-02-10
 

@@ -793,7 +793,7 @@ REALMS (61 nodes total):
 | **SEO/GEO layers** | org/seo, org/geo (separate) | Removed from org |
 | **SEO/GEO nodes** | In org realm | Moved to shared/knowledge |
 | **Layer count** | 11 (3 shared + 8 org) | 10 (4 shared + 6 org) |
-| **Node distribution** | 32 shared + 29 org | **39 shared + 20 org = 59 nodes** |
+| **Node distribution** | 32 shared + 29 org | **40 shared + 20 org = 61 nodes** |
 
 ### Locale to Config Layer
 
@@ -839,8 +839,8 @@ AFTER (v11.5):
 ### Architecture Summary (v11.5)
 
 ```
-REALMS (59 nodes total):
-├── shared/              # Universal knowledge (READ-ONLY) — 39 nodes
+REALMS (61 nodes total):
+├── shared/              # Universal knowledge (READ-ONLY) — 40 nodes
 │   ├── config/          # 3 nodes (EntityCategory, Locale, SEOKeywordFormat)
 │   ├── locale/          # 6 nodes (Culture, Style, Formatting, etc.)
 │   ├── geography/       # 6 nodes (Continent, Region, etc.)
@@ -1039,7 +1039,7 @@ AFTER (v11.7):  [1]Graph [2]Nexus
       ▼ ◆ Kind:Locale [200]  ← Clickable :Meta:Kind node
         ● Locale:fr-FR       ← Clickable :Locale instance
         ● Locale:en-US
-▼ Arcs (114)
+▼ Arcs (169)
   ▼ → ArcFamily:ownership
     → ArcKind:HAS_PROJECT
 ```

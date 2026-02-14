@@ -60,7 +60,7 @@ Clean up remaining inconsistencies, improve schema documentation quality, and en
 Schema validation:    0 errors ✓
 Tests:                953 passing ✓
 Clippy warnings:      0 ✓
-Neo4j nodes:          60 (39 shared + 21 org) ✓
+Neo4j nodes:          60 (40 shared + 21 org) ✓
 Neo4j arcs:           114 ✓
 Neo4j layers:         10 (4 shared + 6 org) ✓
 ```

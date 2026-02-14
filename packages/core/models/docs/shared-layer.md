@@ -7,7 +7,7 @@
 The Shared realm contains nodes shared across ALL organizations.
 This is the foundation for native content generation.
 
-**39 nodes organized by category:**
+**40 nodes organized by category:**
 - **Config (3)**: Locale, EntityCategory, CategorySet
 - **Locale (6)**: LocaleIdentity, LocaleVoice, LocaleCulture, LocaleMarket,
   LocaleLexicon, LocaleRulesAdaptation, etc.

@@ -174,7 +174,7 @@ pub struct CodeExample {
 
 **Layout**:
 ```
-┌─ SHARED (4 layers, 39 nodes) ────┬─ ORG (6 layers, 21 nodes) ──────────┐
+┌─ SHARED (4 layers, 40 nodes) ────┬─ ORG (6 layers, 21 nodes) ──────────┐
 │                                  │                                     │
 │ ⚙ config (3)                     │ ⚙ config (1)                        │
 │   OrgConfig, EntityCategory,     │   OrgConfig                         │

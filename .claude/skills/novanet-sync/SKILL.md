@@ -16,7 +16,7 @@ Synchronize generated artifacts with YAML source of truth.
 ```
 packages/core/models/
 +-- node-classes/                   <- 59 YAML files (one per NodeClass)
-|   +-- shared/                   <- Realm: shared (39 nodes)
+|   +-- shared/                   <- Realm: shared (40 nodes)
 |   |   +-- config/               <-   Layer: config (EntityCategory, Locale, SEOKeywordFormat)
 |   |   +-- locale/               <-   Layer: locale (6 nodes)
 |   |   +-- geography/            <-   Layer: geography (6 nodes)
