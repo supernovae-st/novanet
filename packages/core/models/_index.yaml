@@ -15,9 +15,9 @@
 #   ├─────────────────────────────────────────────────────────────────────────────┤
 #   │                                                                             │
 #   │  ┌───────────────────────────────────────────────────────────────────────┐  │
-#   │  │  🌍 SHARED (39 nodes) - Universal knowledge, shared by ALL orgs      │  │
+#   │  │  🌍 SHARED (40 nodes) - Universal knowledge, shared by ALL orgs      │  │
 #   │  │  └─ config/     3 nodes: Locale, EntityCategory, SEOKeywordFormat    │  │
-#   │  │  └─ geography/  6 nodes: Continent, GeoRegion, GeoSubRegion,         │  │
+#   │  │  └─ geography/  7 nodes: Continent, GeoRegion, GeoSubRegion, Country,│  │
 #   │  │                          EconomicRegion, IncomeGroup, LendingCategory│  │
 #   │  │  └─ knowledge/ 24 nodes:                                             │  │
 #   │  │      Containers: TermSet, ExpressionSet, PatternSet, CultureSet,     │  │
@@ -33,14 +33,15 @@
 #   │  └───────────────────────────────────────────────────────────────────────┘  │
 #   │                                                                             │
 #   │  ┌───────────────────────────────────────────────────────────────────────┐  │
-#   │  │  📦 ORG (20 nodes) - Organization-specific content                   │  │
+#   │  │  📦 ORG (21 nodes) - Organization-specific content                   │  │
 #   │  │  └─ config/      1 node:  OrgConfig                                  │  │
-#   │  │  └─ foundation/  3 nodes: Project, BrandIdentity, ProjectContent     │  │
+#   │  │  └─ foundation/  6 nodes: Project, Brand, BrandDesign, BrandPrinciples,│ │
+#   │  │                           PromptStyle, ProjectContent                │  │
 #   │  │  └─ structure/   3 nodes: Page, Block, ContentSlot                   │  │
 #   │  │  └─ semantic/    4 nodes: Entity, EntityContent, AudiencePersona,    │  │
 #   │  │                           ChannelSurface                             │  │
-#   │  │  └─ instruction/ 6 nodes: PageStructure, PageInstruction, BlockType, │  │
-#   │  │                           BlockRules, BlockInstruction, PromptArtifact│  │
+#   │  │  └─ instruction/ 4 nodes: BlockType, BlockRules, BlockInstruction,   │  │
+#   │  │                           PromptArtifact                             │  │
 #   │  │  └─ output/      3 nodes: PageGenerated, BlockGenerated,             │  │
 #   │  │                           OutputArtifact                             │  │
 #   │  └───────────────────────────────────────────────────────────────────────┘  │
@@ -53,13 +54,13 @@
 #
 #   Project ──┬─[:SUPPORTS_LOCALE]───────> Locale ─[:HAS_*]──> LocaleKnowledge*
 #             │
-#             ├─[:HAS_BRAND_IDENTITY]─> BrandIdentity
+#             ├─[:HAS_BRAND]─> Brand ──[:HAS_DESIGN]─> BrandDesign
+#             │                    └──[:HAS_PRINCIPLES]─> BrandPrinciples
+#             │                    └──[:HAS_PROMPT_STYLE]─> PromptStyle
 #             │
 #             ├─[:HAS_CONTENT]─> ProjectContent ──:FOR_LOCALE──> Locale
 #             │
-#             └─[:HAS_PAGE]─> Page ──┬─[:HAS_STRUCTURE]─> PageStructure (template)
-#                               │    │
-#                               │    ├─[:HAS_BLOCK {position}]─> Block ──:OF_TYPE──> BlockType
+#             └─[:HAS_PAGE]─> Page ──┬─[:HAS_BLOCK {position}]─> Block ──:OF_TYPE──> BlockType
 #                               │    │                            │
 #                               │    │                     :HAS_INSTRUCTION──> BlockInstruction
 #                               │    │                            │
@@ -74,7 +75,8 @@
 #                               │    │
 #                               │    └──:HAS_GENERATED──> BlockGenerated ──:FOR_LOCALE──> Locale
 #                               │
-#                               ├──:HAS_INSTRUCTION──> BlockInstruction (compiled to PageInstruction)
+#                               │  (v0.12.4: PageStructure/PageInstruction deleted - ADR-028)
+#                               │  (Block order determines structure; BlockInstructions assembled at runtime)
 #                               │
 #                               ├──:USES_ENTITY──> Entity (invariant)
 #                               │
@@ -85,12 +87,14 @@
 #                               └──:HAS_GENERATED──> PageGenerated ──:FOR_LOCALE──> Locale
 #
 # ═══════════════════════════════════════════════════════════════════════════════
-# INSTRUCTION LAYER (v0.12.0 ADR-025)
+# INSTRUCTION LAYER (v0.12.4 ADR-028)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-#   PageStructure   Template rules for page composition (required_block_types, layout_rules)
-#        │
-#        └──── Page ──[:HAS_BLOCK]──> Block ──[:HAS_INSTRUCTION]──> BlockInstruction
+#   v0.12.4: PageStructure and PageInstruction DELETED
+#   Block order (HAS_BLOCK {position}) determines page structure
+#   BlockInstructions are assembled at runtime by position order
+#
+#   Page ──[:HAS_BLOCK {position}]──> Block ──[:HAS_INSTRUCTION]──> BlockInstruction
 #                                       │                              │
 #                                       │                       markdown content with
 #                                       │                       @entity:key, @link:key syntax
@@ -101,18 +105,16 @@
 #                              BlockType                           v
 #                              (rules, schema)               Entity / Page
 #
-#   BlockInstruction → compiled by order into → PageInstruction
-#                                                  │
-#                                           sent to LLM for
+#   At runtime: BlockInstructions assembled by position → sent to LLM
 #                                           PageGenerated output
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 # ARC FAMILIES (v0.12.0)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-#   ownership     (47) - Structural containment (HAS_PAGE, HAS_BLOCK, HAS_STRUCTURE, CONTAINS_*, etc.)
-#   localization  (15) - Locale linking (HAS_CONTENT, FOR_LOCALE, FALLBACK_TO, etc.)
-#   semantic      (41) - Meaning connections (SEMANTIC_LINK, USES_ENTITY, SIMILAR_TO, POPULAR_IN, etc.)
+#   ownership     (54) - Structural containment (HAS_PAGE, HAS_BLOCK, HAS_BRAND, CONTAINS_*, etc.)
+#   localization  (16) - Locale linking (HAS_CONTENT, FOR_LOCALE, FALLBACK_TO, etc.)
+#   semantic      (44) - Meaning connections (SEMANTIC_LINK, USES_ENTITY, FOR_MARKET, etc.)
 #   generation    (11) - AI output (HAS_GENERATED, GENERATED, ASSEMBLES, etc.)
 #   mining         (1) - Analytics (HAS_METRICS)
 #
@@ -157,13 +159,14 @@
 # CHANGES v0.12.0 (SemVer transition from v11.x milestone versions)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-# Statistics: 59 nodes (39 shared + 20 org), 115 arcs (5 arc families)
+# Statistics: 61 nodes (40 shared + 21 org), 128 arcs (5 arc families)
+# v0.12.4: Added REFERENCES (Block→Entity), HAS_KEYWORD (Entity→SEOKeyword)
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 
 files:
   # ═══════════════════════════════════════════════════════════════════════════
-  # 🌍 SHARED REALM (39 nodes) - Universal knowledge, READ-ONLY
+  # 🌍 SHARED REALM (40 nodes) - Universal knowledge, READ-ONLY
   # ═══════════════════════════════════════════════════════════════════════════
 
   shared:
@@ -173,7 +176,7 @@ files:
       - node-kinds/shared/config/entity-category.yaml  # Entity classification (13 types)
       - node-kinds/shared/config/seo-keyword-format.yaml # SEO keyword format
 
-    # Geography (6 nodes) - World Bank / UN classification
+    # Geography (7 nodes) - World Bank / UN classification
     geography:
       - node-kinds/shared/geography/continent.yaml
       - node-kinds/shared/geography/geo-region.yaml
@@ -225,7 +228,7 @@ files:
       - node-kinds/shared/locale/market.yaml
 
   # ═══════════════════════════════════════════════════════════════════════════
-  # 📦 ORG REALM (20 nodes) - Organization-specific content
+  # 📦 ORG REALM (21 nodes) - Organization-specific content
   # ═══════════════════════════════════════════════════════════════════════════
 
   org:
@@ -233,10 +236,13 @@ files:
     config:
       - node-kinds/org/config/org-config.yaml
 
-    # Foundation (3 nodes) - Project root & identity
+    # Foundation (6 nodes) - Project root & brand architecture
     foundation:
       - node-kinds/org/foundation/project.yaml
-      - node-kinds/org/foundation/brand-identity.yaml
+      - node-kinds/org/foundation/brand.yaml             # Central brand identity
+      - node-kinds/org/foundation/brand-design.yaml      # Visual design system
+      - node-kinds/org/foundation/brand-principles.yaml  # Voice, tone, guidelines
+      - node-kinds/org/foundation/prompt-style.yaml      # LLM prompt style hints
       - node-kinds/org/foundation/project-content.yaml
 
     # Structure (3 nodes) - Content scaffolding
@@ -252,10 +258,8 @@ files:
       - node-kinds/org/semantic/audience-persona.yaml
       - node-kinds/org/semantic/channel-surface.yaml
 
-    # Instruction (6 nodes) - AI generation directives
+    # Instruction (4 nodes) - AI generation directives
     instruction:
-      - node-kinds/org/instruction/page-structure.yaml    # Template rules
-      - node-kinds/org/instruction/page-instruction.yaml  # Compiled instructions
       - node-kinds/org/instruction/block-type.yaml
       - node-kinds/org/instruction/block-rules.yaml
       - node-kinds/org/instruction/block-instruction.yaml # Markdown with @entity/@link
@@ -279,7 +283,7 @@ files:
 # NODES BY TRAIT (v0.12.0 ADR-024 Data Origin renames)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-#   🔵 defined:    Language-independent, defined once (31 nodes)
+#   🔵 defined:    Language-independent, defined once (33 nodes)
 #   🟢 authored:   Per-locale content, human-curated (2 nodes)
 #   🟣 imported:   Knowledge ABOUT a locale, from external sources (20 nodes)
 #   🌟 generated:  LLM-generated output (4 nodes)
@@ -291,9 +295,12 @@ nodes_by_trait:
   defined:
     # Org/config
     - OrgConfig
-    # Org/foundation
+    # Org/foundation (Brand Architecture)
     - Project
-    - BrandIdentity
+    - Brand
+    - BrandDesign
+    - BrandPrinciples
+    - PromptStyle
     # Org/structure
     - Page
     - Block
@@ -302,9 +309,7 @@ nodes_by_trait:
     - Entity
     - AudiencePersona
     - ChannelSurface
-    # Org/instruction (5 nodes - PromptArtifact is generated)
-    - PageStructure
-    - PageInstruction
+    # Org/instruction (3 nodes - PromptArtifact is generated)
     - BlockType
     - BlockRules
     - BlockInstruction
@@ -328,6 +333,7 @@ nodes_by_trait:
     - EconomicRegion
     - IncomeGroup
     - LendingCategory
+    - Country
 
   authored:
     - ProjectContent        # Org/foundation
@@ -373,10 +379,10 @@ nodes_by_trait:
 # STATISTICS v0.12.0
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-# By Realm:
-#   🌍 SHARED:  39 nodes (config 3 + geography 6 + knowledge 24 + locale 6)
-#   📦 ORG:     20 nodes (config 1 + foundation 3 + structure 3 + semantic 4 + instruction 6 + output 3)
-#   TOTAL:      59 nodes, 115 arcs (5 arc families)
+# By Realm (v0.12.4):
+#   🌍 SHARED:  40 nodes (config 3 + geography 7 + knowledge 24 + locale 6)
+#   📦 ORG:     21 nodes (config 1 + foundation 6 + structure 3 + semantic 4 + instruction 4 + output 3)
+#   TOTAL:      61 nodes, 128 arcs (5 arc families)
 #
 # By Trait (v0.12.0 ADR-024):
 #   🔵 DEFINED:   31 nodes (language-independent definitions)
