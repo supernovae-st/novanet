@@ -395,7 +395,7 @@ views:
 #   - entity-ecosystem.yaml         (contextual, v10.3.0)
 #   - locale-full-knowledge.yaml    (contextual, v11.5.0)
 #   - page-generation-context.yaml  (generation, v11.8.0)
-#   - page-pipeline-overview.yaml   (generation, v1.1.0 ADR-028) ✨ NEW
+#   - page-pipeline-overview.yaml   (generation, v2.0.0 ADR-028) ✨ UPDATED
 #   - project-context.yaml          (contextual, v8.0.0)
 #
 # =============================================================================

@@ -80,7 +80,7 @@ pub fn load_organizing(root: &Path) -> crate::Result<OrganizingDoc> {
     // Fail-fast validation (same as before)
     if doc.realms.is_empty() {
         return Err(crate::NovaNetError::Validation(
-            "taxonomy.yaml has no realms".to_string(),
+            "No realms defined in taxonomy".to_string(),
         ));
     }
     for realm in &doc.realms {
@@ -93,12 +93,12 @@ pub fn load_organizing(root: &Path) -> crate::Result<OrganizingDoc> {
     }
     if doc.traits.is_empty() {
         return Err(crate::NovaNetError::Validation(
-            "taxonomy.yaml has no traits".to_string(),
+            "No traits defined in taxonomy".to_string(),
         ));
     }
     if doc.arc_families.is_empty() {
         return Err(crate::NovaNetError::Validation(
-            "taxonomy.yaml has no arc_families".to_string(),
+            "No arc_families defined in taxonomy".to_string(),
         ));
     }
 
