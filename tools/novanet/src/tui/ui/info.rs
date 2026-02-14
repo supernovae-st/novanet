@@ -14,7 +14,7 @@ use ratatui::widgets::{
 use std::collections::BTreeMap;
 
 use crate::tui::app::{App, Focus};
-use crate::tui::data::{ArcDirection, TreeItem};
+use crate::tui::data::{ArcDirection, InstanceInfo, TreeItem};
 use crate::tui::schema::{PropertyStatus, ValidationStatus};
 use crate::tui::theme::hex_to_color;
 use crate::tui::unicode::{display_width, truncate_to_width};
@@ -1534,6 +1534,12 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 }
             }
 
+            // PIPELINE CONTEXT: Special section for Page instances (v0.12.5)
+            // Shows the generation pipeline in a visual format
+            if kind.key == "Page" && !instance.outgoing_arcs.is_empty() {
+                render_page_pipeline(&mut lines, instance);
+            }
+
             // Arc comparison diagram: schema arcs vs actual arcs
             // Shows existing (══) and missing (╌╌) connections
             if !kind.arcs.is_empty() {
@@ -1681,4 +1687,149 @@ fn json_value_to_display(value: &JsonValue) -> String {
         JsonValue::Array(arr) => serde_json::to_string(arr).unwrap_or_else(|_| "[]".to_string()),
         JsonValue::Object(obj) => serde_json::to_string(obj).unwrap_or_else(|_| "{}".to_string()),
     }
+}
+
+// =============================================================================
+// HELPER: Page Pipeline Rendering (v0.12.5 ADR-028)
+// =============================================================================
+
+/// Render pipeline context for Page instances.
+/// Shows the generation pipeline in a visual ASCII flow diagram.
+///
+/// ```text
+/// PIPELINE CONTEXT
+/// ══════════════════════════
+///
+/// ┌──────────┐     ┌──────────┐
+/// │ Project  │────▶│  Page    │
+/// └──────────┘     └──────────┘
+///       │                │
+///       ▼                ▼
+/// ┌──────────┐     ┌──────────┐
+/// │ Entity   │     │  Block×N │
+/// └──────────┘     └──────────┘
+///       │                │
+///       ▼                ▼
+/// ┌──────────┐     ┌──────────┐
+/// │ Keywords │     │Generated │
+/// └──────────┘     └──────────┘
+/// ```
+fn render_page_pipeline(lines: &mut Vec<Line<'static>>, instance: &InstanceInfo) {
+    // Find pipeline-relevant arcs from outgoing connections
+    let represents = instance
+        .outgoing_arcs
+        .iter()
+        .find(|a| a.arc_type == "REPRESENTS");
+    let has_blocks: Vec<_> = instance
+        .outgoing_arcs
+        .iter()
+        .filter(|a| a.arc_type == "HAS_BLOCK")
+        .collect();
+    let has_generated = instance
+        .outgoing_arcs
+        .iter()
+        .find(|a| a.arc_type == "HAS_GENERATED");
+    let uses_entity: Vec<_> = instance
+        .outgoing_arcs
+        .iter()
+        .filter(|a| a.arc_type == "USES_ENTITY")
+        .collect();
+
+    // Check incoming for Project
+    let project_arc = instance
+        .incoming_arcs
+        .iter()
+        .find(|a| a.arc_type == "HAS_PAGE");
+
+    // Only show if we have at least one pipeline relationship
+    if represents.is_none()
+        && has_blocks.is_empty()
+        && has_generated.is_none()
+        && project_arc.is_none()
+    {
+        return;
+    }
+
+    lines.push(Line::from(""));
+    lines.push(Line::from(Span::styled(
+        "PIPELINE CONTEXT",
+        Style::default()
+            .fg(Color::White)
+            .add_modifier(Modifier::BOLD),
+    )));
+    lines.push(Line::from(Span::styled(SEPARATOR_MAJOR, STYLE_DIM)));
+
+    // PROJECT → PAGE relationship (incoming)
+    if let Some(proj) = project_arc {
+        lines.push(Line::from(vec![
+            Span::styled("📁 ", STYLE_INFO),
+            Span::styled("Project: ", STYLE_DIM),
+            Span::styled(proj.target_key.clone(), STYLE_PRIMARY),
+        ]));
+    }
+
+    // REPRESENTS → Entity (semantic link)
+    if let Some(entity) = represents {
+        lines.push(Line::from(vec![
+            Span::styled("◆ ", Style::default().fg(Color::Cyan)),
+            Span::styled("Entity:  ", STYLE_DIM),
+            Span::styled(entity.target_key.clone(), STYLE_SUCCESS),
+        ]));
+    }
+
+    // USES_ENTITY (additional entities)
+    if !uses_entity.is_empty() {
+        lines.push(Line::from(vec![
+            Span::styled("  ", STYLE_DIM),
+            Span::styled(
+                format!("+ {} used entities", uses_entity.len()),
+                STYLE_MUTED,
+            ),
+        ]));
+    }
+
+    // HAS_BLOCK → Blocks (structure)
+    if !has_blocks.is_empty() {
+        lines.push(Line::from(vec![
+            Span::styled("▣ ", Style::default().fg(Color::Yellow)),
+            Span::styled("Blocks:  ", STYLE_DIM),
+            Span::styled(format!("{} blocks", has_blocks.len()), STYLE_INFO),
+        ]));
+        // List first 3 blocks
+        for (i, block) in has_blocks.iter().take(3).enumerate() {
+            let prefix = if i == has_blocks.len().min(3) - 1 {
+                "  └─ "
+            } else {
+                "  ├─ "
+            };
+            lines.push(Line::from(vec![
+                Span::styled(prefix, STYLE_DIM),
+                Span::styled(block.target_key.clone(), STYLE_HIGHLIGHT),
+            ]));
+        }
+        if has_blocks.len() > 3 {
+            lines.push(Line::from(vec![
+                Span::styled("  └─ ", STYLE_DIM),
+                Span::styled(format!("... +{} more", has_blocks.len() - 3), STYLE_DIM),
+            ]));
+        }
+    }
+
+    // HAS_GENERATED → PageGenerated (output)
+    if let Some(generated) = has_generated {
+        lines.push(Line::from(vec![
+            Span::styled("✦ ", Style::default().fg(Color::Magenta)),
+            Span::styled("Generated: ", STYLE_DIM),
+            Span::styled(generated.target_key.clone(), STYLE_ACCENT),
+            Span::styled(" ✓", STYLE_SUCCESS),
+        ]));
+    } else {
+        lines.push(Line::from(vec![
+            Span::styled("⋆ ", STYLE_DIM),
+            Span::styled("Generated: ", STYLE_DIM),
+            Span::styled("not yet", STYLE_WARNING),
+        ]));
+    }
+
+    lines.push(Line::from(""));
 }
