@@ -58,7 +58,8 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   HAS_PAGE: 'page',
   HAS_BLOCK: 'block',
   HAS_ENTITY: 'entity',
-  HAS_BRAND_IDENTITY: 'brandIdentity',
+  // v0.12.4: HAS_BRAND_IDENTITY → HAS_BRAND
+  HAS_BRAND: 'brand',
   HAS_PROJECT: 'project',
   OF_TYPE: 'blockType',
   OF_KIND: 'kind',
@@ -600,10 +601,11 @@ export const VIEW_PRESETS: ViewPreset[] = [
     description: 'Structurally fixed schema definitions',
     icon: '🔒',
     shortcut: '7',
+    // v0.12.4: BrandIdentity → Brand, PageStructure/PageInstruction removed
     filter: () => NovaNetFilter.create()
       .byTypes(
-        'Locale', 'Project', 'BrandIdentity', 'Page', 'Block', 'Entity',
-        'PageStructure', 'BlockType', 'PageInstruction', 'BlockInstruction', 'BlockRules',
+        'Locale', 'Project', 'Brand', 'Page', 'Block', 'Entity',
+        'BlockType', 'BlockInstruction', 'BlockRules',
       ),
   },
   {
