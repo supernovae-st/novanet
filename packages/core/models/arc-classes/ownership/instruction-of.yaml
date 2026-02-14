@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/instruction-of.yaml
-# ArcKind: INSTRUCTION_OF — Inverse of HAS_INSTRUCTION — BlockInstruction points to owner
+# ArcClass: INSTRUCTION_OF — Inverse of HAS_INSTRUCTION — BlockInstruction points to owner
 
 arc:
   name: INSTRUCTION_OF

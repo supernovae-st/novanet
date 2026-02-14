@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/of-type.yaml
-# ArcKind: OF_TYPE — Block references its type template
+# ArcClass: OF_TYPE — Block references its type template
 
 arc:
   name: OF_TYPE

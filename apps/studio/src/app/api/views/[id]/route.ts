@@ -31,8 +31,8 @@ interface ViewParams {
   project?: string;
   nodeKey?: string;
   realm?: string;
-  kind?: string;
-  arcKind?: string;
+  class?: string;
+  arcClass?: string;
 }
 
 /**
@@ -45,8 +45,8 @@ interface ViewParams {
  * - locale: BCP 47 locale code (e.g., 'fr-FR')
  * - project: Project key
  * - realm: Realm filter (shared | org)
- * - kind: Node kind name (for overlay-kind-instances)
- * - arcKind: Arc kind name (for overlay-arc-analysis)
+ * - class: Node class name (for overlay-class-instances)
+ * - arcClass: Arc class name (for overlay-arc-analysis)
  */
 export async function GET(
   request: NextRequest,
@@ -74,8 +74,8 @@ export async function GET(
       locale: searchParams.get('locale') || undefined,
       project: searchParams.get('project') || undefined,
       realm: searchParams.get('realm') || undefined,
-      kind: searchParams.get('kind') || undefined,
-      arcKind: searchParams.get('arcKind') || undefined,
+      class: searchParams.get('class') || undefined,
+      arcClass: searchParams.get('arcClass') || undefined,
     };
 
     // Validate locale format if provided
@@ -107,8 +107,8 @@ export async function GET(
     if (viewParams.locale) cypherParams.locale = viewParams.locale;
     if (viewParams.project) cypherParams.project = viewParams.project;
     if (viewParams.realm) cypherParams.realm = viewParams.realm;
-    if (viewParams.kind) cypherParams.kind = viewParams.kind;
-    if (viewParams.arcKind) cypherParams.arcKind = viewParams.arcKind;
+    if (viewParams.class) cypherParams.class = viewParams.class;
+    if (viewParams.arcClass) cypherParams.arcClass = viewParams.arcClass;
 
     // Get Cypher from view (embedded in _registry.yaml)
     if (!view.cypher) {

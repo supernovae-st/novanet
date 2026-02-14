@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/localization/primary-for.yaml
-# ArcKind: PRIMARY_FOR — PopulationCluster is primary for Locale (inverse of HAS_PRIMARY_POPULATION)
+# ArcClass: PRIMARY_FOR — PopulationCluster is primary for Locale (inverse of HAS_PRIMARY_POPULATION)
 #
 # v0.12.5: ADR-026 Inverse Arc Policy
 

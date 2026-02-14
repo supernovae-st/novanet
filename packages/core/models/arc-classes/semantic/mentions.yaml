@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/mentions.yaml
-# ArcKind: MENTIONS — BlockInstruction mentions various entities via @ references
+# ArcClass: MENTIONS — BlockInstruction mentions various entities via @ references
 #
 # v0.12.5: ADR-028 Page-Entity Architecture - granular @ reference tracking
 

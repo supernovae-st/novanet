@@ -12,7 +12,7 @@
  * - Spring-like easing (cubic-bezier) for premium feel
  * - Unified across all node types
  *
- * Used by: StructuralNode, LocaleKnowledgeNode, SchemaNode, ProjectNode, SchemaBadgeNode
+ * Used by: StructuralNode, SharedLayerNode, SchemaNode, ProjectNode, SchemaBadgeNode
  */
 
 import { useState, useCallback, useMemo } from 'react';

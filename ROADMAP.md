@@ -141,7 +141,7 @@ Trait rename migration per ADR-024 "Data Origin" for clearer semantics.
 - TypeScript Studio (15+ components, design system, tests)
 - ADR-024 added to novanet-decisions.md
 
-**Schema counts:** 60 NodeKinds, 114 ArcKinds, 2 Realms, 10 Layers (4 shared + 6 org)
+**Schema counts:** 61 NodeClasses, 128 ArcClasses, 2 Realms, 10 Layers (4 shared + 6 org)
 
 ---
 
@@ -156,7 +156,7 @@ Major architectural cleanup with 30-sniper comprehensive audit.
 | **Arc Coherence** | Fixed 22 arc scopes (cross_realm → intra_realm) |
 | **Docs Refactor** | 30-sniper audit of CLAUDE.md, DX, skills, agents, roadmap |
 
-**Schema counts:** 64 NodeKinds, 123 ArcKinds, 2 Realms, 9 Layers (2 global + 7 tenant)
+**Schema counts:** 64 NodeClasses, 123 ArcClasses, 2 Realms, 9 Layers (2 global + 7 tenant)
 
 ---
 
@@ -170,7 +170,7 @@ Semantic renaming for clearer architecture. Three ADRs implemented:
 | **ADR-015** | Unidirectional ownership | All `IS_*` arcs reversed to `HAS_*` (parent → child) |
 | **ADR-016** | CONTAINS → 6 typed arcs | `CONTAINS_TERM`, `CONTAINS_EXPRESSION`, `CONTAINS_PATTERN`, `CONTAINS_CULTURE_REF`, `CONTAINS_TABOO`, `CONTAINS_AUDIENCE_TRAIT` |
 
-**Schema counts:** 64 NodeKinds, 123 ArcKinds, 2 Realms (global/tenant), 9 Layers
+**Schema counts:** 64 NodeClasses, 123 ArcClasses, 2 Realms (global/tenant), 9 Layers
 
 ---
 
@@ -250,7 +250,7 @@ release/v*      Release preparation (optional, for complex releases)
 | v10.6.0 | 2026-02-05 | 2-Realm architecture (ADR-012), tenant isolation |
 | v10.7.0 | 2026-02-06 | Geographic taxonomy, population clusters |
 | v10.8.0 | 2026-02-07 | Icons source of truth (ADR-013), visual-encoding.yaml |
-| v10.9.0 | 2026-02-08 | Naming refactor (ADR-014/015/016), 64 Kinds, 120 ArcKinds |
+| v10.9.0 | 2026-02-08 | Naming refactor (ADR-014/015/016), 64 Classes, 120 ArcClasses |
 | v11.0.0 | 2026-02-08 | SEO → tenant migration, arc coherence (22 fixes), docs refactor |
 | v11.5.0 | 2026-02-10 | Schema refinement (ADR-020), Locale→config, 59 nodes, 10 layers |
 | v11.6.0 | 2026-02-10 | Query-First Architecture (ADR-021), tabbed detail panel |

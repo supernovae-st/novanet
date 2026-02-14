@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/popular-in.yaml
-# ArcKind: POPULAR_IN - Entity is popular/relevant in a geographic region
+# ArcClass: POPULAR_IN - Entity is popular/relevant in a geographic region
 # v0.12.0: Geographic relevance linking for entity visibility by region
 
 arc:

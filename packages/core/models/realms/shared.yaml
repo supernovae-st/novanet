@@ -20,7 +20,7 @@ realm:
     - geography
     - knowledge
 
-  node_count: 39  # Computed by generator
+  node_count: 40  # Computed by generator
 
   llm_context: |
     USE: when accessing universal locale knowledge.

@@ -8,7 +8,7 @@
  * - Top gradient reflection (glassmorphism)
  * - Shimmer animation (Apple-style shine)
  *
- * Used by: StructuralNode, LocaleKnowledgeNode, SchemaNode, ProjectNode
+ * Used by: StructuralNode, SharedLayerNode, SchemaNode, ProjectNode
  */
 
 import { memo, useMemo } from 'react';
@@ -17,7 +17,7 @@ import { NODE_DESIGN } from '@/config/constants';
 export interface GlassmorphismEffectsProps {
   /** Border radius to match parent container */
   borderRadius?: number;
-  /** Whether to use circular style (for LocaleKnowledgeNode) */
+  /** Whether to use circular style (for SharedLayerNode) */
   isCircular?: boolean;
 }
 

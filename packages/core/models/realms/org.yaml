@@ -22,7 +22,7 @@ realm:
     - instruction
     - output
 
-  node_count: 20  # Computed by generator
+  node_count: 21  # Computed by generator
 
   llm_context: |
     USE: when working with organization-specific content.

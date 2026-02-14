@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/generation/includes-style.yaml
-# ArcKind: INCLUDES_STYLE - Instruction includes style directives
+# ArcClass: INCLUDES_STYLE - Instruction includes style directives
 #
 # v0.12.4: ADR-028 - PageInstruction deleted (calculated at runtime from BlockInstructions)
 #   Source simplified to BlockInstruction only

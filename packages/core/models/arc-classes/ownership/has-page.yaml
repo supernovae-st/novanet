@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/has-page.yaml
-# ArcKind: HAS_PAGE — Project owns its page structures
+# ArcClass: HAS_PAGE — Project owns its page structures
 
 arc:
   name: HAS_PAGE

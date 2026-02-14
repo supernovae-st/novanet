@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/belongs-to.yaml
-# ArcKind: BELONGS_TO - Entity belongs to a semantic category (org -> shared)
+# ArcClass: BELONGS_TO - Entity belongs to a semantic category (org -> shared)
 #
 # v11.1.0: NEW arc replacing Entity.type property with proper graph relationship
 #          Entity (org/semantic) -> EntityCategory (shared/config)

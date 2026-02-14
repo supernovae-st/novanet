@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/expresses.yaml
-# ArcKind: EXPRESSES — SEOKeyword expresses an Entity (v10.3)
+# ArcClass: EXPRESSES — SEOKeyword expresses an Entity (v10.3)
 #
 # v11.5: scope fix (intra_realm → cross_realm)
 #        - SEOKeyword (shared/knowledge) → Entity (org/semantic)

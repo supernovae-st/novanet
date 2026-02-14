@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/uses-entity.yaml
-# ArcKind: USES_ENTITY — Page/Block references an Entity
+# ArcClass: USES_ENTITY — Page/Block references an Entity
 
 arc:
   name: USES_ENTITY

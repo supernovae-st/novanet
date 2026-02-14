@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/generation/compiled-from.yaml
-# ArcKind: COMPILED_FROM — Prompt artifact was compiled from source instruction template
+# ArcClass: COMPILED_FROM — Prompt artifact was compiled from source instruction template
 #
 # v0.12.4: ADR-028 - PageInstruction deleted (calculated at runtime from BlockInstructions)
 #   Target simplified to BlockInstruction only

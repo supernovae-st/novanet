@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/localization/in-country.yaml
-# ArcKind: IN_COUNTRY - Locale belongs to Country
+# ArcClass: IN_COUNTRY - Locale belongs to Country
 # v0.12.4: ADR-028 Geographic Hierarchy (Country level)
 
 arc:

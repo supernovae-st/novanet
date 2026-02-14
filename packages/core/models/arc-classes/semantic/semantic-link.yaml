@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/semantic-link.yaml
-# ArcKind: SEMANTIC_LINK — Spreading activation links between entities
+# ArcClass: SEMANTIC_LINK — Spreading activation links between entities
 # v10.3: Concept → Entity
 
 arc:

@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/read-by.yaml
-# ArcKind: READ_BY - Entity is read by a tool
+# ArcClass: READ_BY - Entity is read by a tool
 # v11.0: Inverse of READS arc
 
 arc:

@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/localization/has-income-level.yaml
-# ArcKind: HAS_INCOME_LEVEL - Locale's World Bank income classification
+# ArcClass: HAS_INCOME_LEVEL - Locale's World Bank income classification
 # v10.8: Geographic Taxonomy
 
 arc:

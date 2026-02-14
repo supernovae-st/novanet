@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/acts-on.yaml
-# ArcKind: ACTS_ON - Action operates directly on entity
+# ArcClass: ACTS_ON - Action operates directly on entity
 # v10.7: New semantic arc for ACTION → Entity relationships
 
 arc:

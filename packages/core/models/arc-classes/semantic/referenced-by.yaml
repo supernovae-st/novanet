@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/referenced-by.yaml
-# ArcKind: REFERENCED_BY — Entity is referenced by Block (inverse of REFERENCES)
+# ArcClass: REFERENCED_BY — Entity is referenced by Block (inverse of REFERENCES)
 #
 # v0.12.5: ADR-028 Page-Entity Architecture
 

@@ -98,7 +98,7 @@ export const ACCENT_COLORS = {
 
 /**
  * Shared design tokens for all node components
- * Provides consistency across StructuralNode, LocaleKnowledgeNode, SchemaNode, ProjectNode
+ * Provides consistency across StructuralNode, SharedLayerNode, SchemaNode, ProjectNode
  */
 export const NODE_DESIGN = {
   /** Border radius values */
@@ -109,7 +109,7 @@ export const NODE_DESIGN = {
     inner: 12,
     /** Inner card selected radius */
     innerSelected: 10,
-    /** Circular nodes (LocaleKnowledge) */
+    /** Circular nodes (SharedLayer) */
     circular: 9999,
   },
 

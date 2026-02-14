@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/generation/generated-for.yaml
-# ArcKind: GENERATED_FOR — Inverse of HAS_GENERATED (v10.9.0: renamed from OUTPUT_OF)
+# ArcClass: GENERATED_FOR — Inverse of HAS_GENERATED (v10.9.0: renamed from OUTPUT_OF)
 
 arc:
   name: GENERATED_FOR

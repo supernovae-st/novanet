@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/generation/generated-from.yaml
-# ArcKind: GENERATED_FROM — Direct link for fast structure validation (optimization shortcut)
+# ArcClass: GENERATED_FROM — Direct link for fast structure validation (optimization shortcut)
 
 arc:
   name: GENERATED_FROM

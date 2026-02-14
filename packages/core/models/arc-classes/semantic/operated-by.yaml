@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/operated-by.yaml
-# ArcKind: OPERATED_BY - Entity is operated on by an action
+# ArcClass: OPERATED_BY - Entity is operated on by an action
 # v11.0: Inverse of ACTS_ON arc
 
 arc:

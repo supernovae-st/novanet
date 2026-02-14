@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/culturally-similar.yaml
-# ArcKind: CULTURALLY_SIMILAR - Pre-computed locale similarity
+# ArcClass: CULTURALLY_SIMILAR - Pre-computed locale similarity
 # v10.8: Geographic Taxonomy
 
 arc:

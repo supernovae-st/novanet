@@ -1,10 +1,11 @@
 'use client';
 
 /**
- * LocaleKnowledgeNode - Unified card design for shared realm nodes (v11.3+)
+ * SharedLayerNode - Unified card design for shared realm nodes (v0.12.4)
  *
- * Handles nodes from 3 shared realm layers:
- * - locale: Locale, Culture, Style, etc.
+ * Handles nodes from 4 shared realm layers:
+ * - config: Locale, EntityCategory
+ * - locale: Culture, Style, Formatting, etc.
  * - geography: Region, Country, Continent, etc.
  * - knowledge: Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait
  * Plus containers: TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet
@@ -18,7 +19,7 @@ import { getSharedKnowledgeColors } from '@/design/nodeColors';
 import type { BaseNodeData } from './BaseNodeWrapper';
 import { CardShell, StructuralCardContent } from './card';
 
-export type LocaleKnowledgeNodeType = Node<BaseNodeData>;
+export type SharedLayerNodeType = Node<BaseNodeData>;
 
 /**
  * Get card width based on node type
@@ -35,8 +36,9 @@ function getCardWidth(type: string): number {
     case 'AudienceSet':
     case 'CategorySet':
       return 175;
-    // Locale/geography nodes
+    // Config/locale/geography nodes
     case 'Locale':
+    case 'EntityCategory':
     case 'Culture':
     case 'Style':
     case 'Region':
@@ -57,9 +59,9 @@ function getCardWidth(type: string): number {
 }
 
 /**
- * LocaleKnowledgeNode - Uses unified CardShell + StructuralCardContent
+ * SharedLayerNode - Uses unified CardShell + StructuralCardContent
  */
-export const LocaleKnowledgeNode = memo(function LocaleKnowledgeNode(props: NodeProps<LocaleKnowledgeNodeType>) {
+export const SharedLayerNode = memo(function SharedLayerNode(props: NodeProps<SharedLayerNodeType>) {
   const { data, selected = false } = props;
   const colors = useMemo(() => getSharedKnowledgeColors(data.type), [data.type]);
   const width = getCardWidth(data.type);

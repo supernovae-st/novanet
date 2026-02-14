@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/has-type.yaml
-# ArcKind: HAS_TYPE - Entity has subtypes (inverse of TYPE_OF)
+# ArcClass: HAS_TYPE - Entity has subtypes (inverse of TYPE_OF)
 # v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
 
 arc:

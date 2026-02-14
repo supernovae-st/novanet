@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/has-variant.yaml
-# ArcKind: HAS_VARIANT - Entity has variants/versions (inverse of VARIANT_OF)
+# ArcClass: HAS_VARIANT - Entity has variants/versions (inverse of VARIANT_OF)
 # v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
 
 arc:

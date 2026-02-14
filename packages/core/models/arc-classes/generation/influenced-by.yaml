@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/generation/influenced-by.yaml
-# ArcKind: INFLUENCED_BY — Provenance: which entities influenced this output
+# ArcClass: INFLUENCED_BY — Provenance: which entities influenced this output
 
 arc:
   name: INFLUENCED_BY

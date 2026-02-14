@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/default-locale.yaml
-# ArcKind: DEFAULT_LOCALE — Exactly one per project — the primary/fallback locale
+# ArcClass: DEFAULT_LOCALE — Exactly one per project — the primary/fallback locale
 
 arc:
   name: DEFAULT_LOCALE

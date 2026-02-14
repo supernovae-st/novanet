@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/localization/has-lending-type.yaml
-# ArcKind: HAS_LENDING_TYPE - Locale's World Bank lending classification
+# ArcClass: HAS_LENDING_TYPE - Locale's World Bank lending classification
 # v10.8: Geographic Taxonomy
 
 arc:

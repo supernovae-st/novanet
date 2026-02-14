@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/variant-of.yaml
-# ArcKind: VARIANT_OF - Entity is a variant/version of another Entity
+# ArcClass: VARIANT_OF - Entity is a variant/version of another Entity
 # v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
 
 arc:

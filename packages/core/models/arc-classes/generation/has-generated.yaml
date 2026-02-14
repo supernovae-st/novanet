@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/generation/has-generated.yaml
-# ArcKind: HAS_GENERATED — Structure node links to its LLM-generated output (v10.9.0)
+# ArcClass: HAS_GENERATED — Structure node links to its LLM-generated output (v10.9.0)
 #
 # v10.9.0: Renamed from HAS_OUTPUT → HAS_GENERATED
 #          Moved from localization family → generation family
