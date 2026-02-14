@@ -10,7 +10,7 @@
  * - Keyboard navigation and accessibility
  */
 
-import { useState, useCallback, useMemo, useEffect, useRef, memo, useDeferredValue, type MouseEvent } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef, memo, useDeferredValue } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'motion/react';
 import {
@@ -353,8 +353,6 @@ export const ViewPicker = memo(function ViewPicker({ className }: ViewPickerProp
 
   // v0.12.5: Node selector dropdown state for contextual views
   const [pendingContextualView, setPendingContextualView] = useState<ViewRegistryEntry | null>(null);
-  const [dropdownAnchorRect, setDropdownAnchorRect] = useState<DOMRect | null>(null);
-  const triggerRef = useRef<HTMLButtonElement>(null);
 
   const { categories, activeViewId, selectView, executeView, getActiveView, loadRegistry } = useViewStore(
     useShallow((s) => ({
@@ -442,10 +440,7 @@ export const ViewPicker = memo(function ViewPicker({ className }: ViewPickerProp
       // For contextual views, require a selected node
       if (isContextual) {
         if (!selectedNode) {
-          // v0.12.5: Show node selector dropdown instead of toast
-          if (triggerRef.current) {
-            setDropdownAnchorRect(triggerRef.current.getBoundingClientRect());
-          }
+          // v0.12.5: Show node selector modal instead of toast
           setPendingContextualView(view ?? null);
           return;
         }
@@ -463,23 +458,20 @@ export const ViewPicker = memo(function ViewPicker({ className }: ViewPickerProp
       if (pendingContextualView) {
         executeView(pendingContextualView.id, { key: nodeKey });
         setPendingContextualView(null);
-        setDropdownAnchorRect(null);
       }
     },
     [pendingContextualView, executeView]
   );
 
-  // v0.12.5: Close dropdown without selection
+  // v0.12.5: Close node selector modal
   const handleDropdownClose = useCallback(() => {
     setPendingContextualView(null);
-    setDropdownAnchorRect(null);
   }, []);
 
   return (
     <>
       {/* Trigger button */}
       <motion.button
-        ref={triggerRef}
         whileTap={{ scale: 0.97 }}
         onClick={handleOpen}
         className={cn(
@@ -512,13 +504,12 @@ export const ViewPicker = memo(function ViewPicker({ className }: ViewPickerProp
         onExecute={handleExecute}
       />
 
-      {/* v0.12.5: Node selector dropdown for contextual views */}
+      {/* v0.12.5: Node selector modal for contextual views */}
       {pendingContextualView && (
         <NodeSelectorDropdown
           applicableTypes={pendingContextualView.applicable_types ?? []}
           onSelect={handleNodeSelect}
           onClose={handleDropdownClose}
-          anchorRect={dropdownAnchorRect}
           viewName={pendingContextualView.description}
         />
       )}
