@@ -10,7 +10,9 @@ node:
   realm: shared
   layer: knowledge
   trait: imported
-  icon: "🎨"
+  icon:
+    web: "palette"
+    terminal: "◈"
   description: "Cultural sub-realm for fine-grained cultural adaptation"
 
   standard_properties:

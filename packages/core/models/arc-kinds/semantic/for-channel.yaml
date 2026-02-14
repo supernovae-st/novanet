@@ -12,7 +12,9 @@ arc:
   cardinality: many_to_one
 
   llm_context: |
-    Localized content is tailored for a specific channel surface.
-    Use to filter content: MATCH (c:BlockGenerated)-[:FOR_CHANNEL]->(ch:ChannelSurface {key: "mobile"})
+    USE: when finding content tailored for a specific channel.
+    TRIGGERS: channel surface, mobile content, channel targeting, platform specific.
+    NOT: locale targeting (use FOR_LOCALE), persona targeting (use TARGETS_PERSONA).
+    RELATES: PageGenerated/BlockGenerated (source), ChannelSurface (target).
 
   cypher_pattern: "(PageGenerated, BlockGenerated)-[:FOR_CHANNEL]->(ChannelSurface)"

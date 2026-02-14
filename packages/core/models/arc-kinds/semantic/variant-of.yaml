@@ -35,10 +35,9 @@ arc:
   inverse: HAS_VARIANT
 
   llm_context: |
-    Variant relationship: Entity A is a variant/version of Entity B.
-    The source is a specialized form of the target (more specific).
-    Examples: CustomQRCode VARIANT_OF QRCode, DynamicQR VARIANT_OF QRCode
-    variant_type: version (temporal), flavor (style), edition (release),
-      specialization (domain), customization (user-defined)
+    USE: when finding entity variants/versions (specialized forms).
+    TRIGGERS: variant of, version of, flavor, edition, specialization.
+    NOT: taxonomy (use TYPE_OF), alternatives (use ALTERNATIVE_TO).
+    RELATES: Entity (source/specialized), Entity (target/base), HAS_VARIANT (inverse).
 
   cypher_pattern: "(Entity)-[:VARIANT_OF {strength, temperature, variant_type}]->(Entity)"

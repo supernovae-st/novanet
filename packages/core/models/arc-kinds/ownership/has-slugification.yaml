@@ -6,5 +6,9 @@ arc:
   source: Locale
   target: Slugification
   cardinality: one_to_one
-  llm_context: Locale has exactly one slugification configuration.
+  llm_context: |
+    USE: when loading URL slug rules for a locale.
+    TRIGGERS: slugification, URL generation, slug rules, locale URLs, transliteration.
+    NOT: locale formatting (use HAS_FORMATTING), locale style (use HAS_STYLE).
+    RELATES: Locale (source), Slugification (target), 1:1 cardinality.
   cypher_pattern: (Locale)-[:HAS_SLUGIFICATION]->(Slugification)

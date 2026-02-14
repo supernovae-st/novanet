@@ -13,5 +13,9 @@ arc:
       type: string
       required: false
   inverse_of: HAS_BLOCK
-  llm_context: Inverse of HAS_BLOCK — block points to its page.
+  llm_context: |
+    USE: when finding which page owns a block.
+    TRIGGERS: block owner, block page, which page, parent page.
+    NOT: block content (use HAS_INSTRUCTION), block siblings (use HAS_BLOCK).
+    RELATES: Block (source), Page (target), HAS_BLOCK (inverse).
   cypher_pattern: (Block)-[:BLOCK_OF {position}]->(Page)

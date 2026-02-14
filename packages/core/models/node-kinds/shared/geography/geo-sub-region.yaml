@@ -12,7 +12,9 @@ node:
   realm: shared
   layer: geography
   trait: defined
-  icon: "📍"
+  icon:
+    web: "map-pin"
+    terminal: "◎"
   description: "UN M49 intermediate region for fine-grained geographic clustering"
 
   standard_properties:

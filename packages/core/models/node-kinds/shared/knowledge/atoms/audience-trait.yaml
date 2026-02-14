@@ -9,8 +9,14 @@ node:
   realm: shared
   layer: knowledge
   trait: imported
-  icon: "👥"
-  description: "Audience segment behavior, preference, or characteristic within a locale"
+  icon:
+    web: "users"
+    terminal: "◎"
+  description: |
+    Audience segment behavior, preference, or characteristic within a locale.
+    USE: When loading audience-specific content adaptation hints.
+    TRIGGERS: audience trait, segment behavior, user preferences, persona characteristics.
+    NOT: For personas (use AudiencePersona), for demographics (use population nodes).
 
   standard_properties:
     key:

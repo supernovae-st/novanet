@@ -8,5 +8,9 @@ arc:
   source: SEOKeyword
   target: SEOKeywordMetrics
   cardinality: one_to_many
-  llm_context: Time-series observation link. Not used in spreading activation.
+  llm_context: |
+    USE: when loading historical metrics for an SEO keyword.
+    TRIGGERS: keyword metrics, search volume, historical data, time series, trend analysis.
+    NOT: keyword targeting (use TARGETS), keyword expression (use EXPRESSES).
+    RELATES: SEOKeyword (source), SEOKeywordMetrics (target), one_to_many, not for spreading activation.
   cypher_pattern: (SEOKeyword)-[:HAS_METRICS]->(SEOKeywordMetrics)

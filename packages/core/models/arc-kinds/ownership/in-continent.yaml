@@ -14,7 +14,9 @@ arc:
   inverse: HAS_REGION
 
   llm_context: |
-    GeoRegion belongs to exactly one Continent (UN M49 hierarchy).
-    Use to traverse from region to continent: MATCH (r:GeoRegion)-[:IN_CONTINENT]->(c:Continent)
+    USE: when finding which continent a region belongs to.
+    TRIGGERS: region continent, geographic hierarchy, UN M49, continent lookup.
+    NOT: sub-regions (use IN_REGION), countries (use IN_COUNTRY).
+    RELATES: GeoRegion (source), Continent (target), HAS_REGION (inverse).
 
   cypher_pattern: "(GeoRegion)-[:IN_CONTINENT]->(Continent)"

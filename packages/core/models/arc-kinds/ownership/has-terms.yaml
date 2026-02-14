@@ -6,7 +6,11 @@ arc:
   source: Locale
   target: TermSet
   cardinality: one_to_many
-  llm_context: Locale has multiple term sets, one per domain.
+  llm_context: |
+    USE: when loading terminology for a locale by domain.
+    TRIGGERS: locale terms, terminology, domain vocabulary, glossary.
+    NOT: individual terms (use CONTAINS_TERM), locale culture (use HAS_CULTURE).
+    RELATES: Locale (source), TermSet (target), domain (property).
   cypher_pattern: "(Locale)-[:HAS_TERMS {domain: $domain}]->(TermSet)"
   properties:
     domain:

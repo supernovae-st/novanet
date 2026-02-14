@@ -28,8 +28,9 @@ arc:
   inverse: USED_BY
 
   llm_context: |
-    Page/Block references entities for generation context.
-    purpose: primary = main topic, secondary = supporting, contextual = background.
-    temperature: spreading activation weight (higher = more influence).
+    USE: when loading entities referenced by a page or block for generation.
+    TRIGGERS: uses entity, references, page entities, block context, content entities.
+    NOT: entity hierarchy (use HAS_CHILD), block instructions (use MENTIONS).
+    RELATES: Page/Block (source), Entity (target), USED_BY (inverse), purpose: primary/secondary/contextual.
 
   cypher_pattern: "(Page)-[:USES_ENTITY {purpose, temperature}]->(Entity)"

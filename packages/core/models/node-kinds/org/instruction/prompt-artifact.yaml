@@ -4,7 +4,9 @@ node:
   realm: org
   layer: instruction
   trait: generated  # v11.2: Split derived → generated (LLM output)
-  icon: "📋"
+  icon:
+    web: "clipboard"
+    terminal: "▤"
   description: |
     Compiled prompt artifact with all context resolved. Immutable snapshot of prompt state.
     Contains the full prompt text with all entity, voice, and culture injections.

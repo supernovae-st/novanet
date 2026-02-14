@@ -21,7 +21,9 @@ node:
   realm: org
   layer: output
   trait: generated  # v11.2: Split derived → generated (LLM output)
-  icon: "🟠"
+  icon:
+    web: check-square
+    terminal: "★"
   description: "LLM-generated content for a block (derived from source content)"
 
   # ═══════════════════════════════════════════════════════════════════════════════
@@ -53,7 +55,9 @@ node:
     llm_context:
       type: string
       required: false
-      description: "Generation context used"
+      description: |
+        Format: USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections].
+        Example: USE: when displaying generated block content or checking block output status. TRIGGERS: "block output", "generated block", "block content", locale code. NOT: for block structure (use Block), for block templates (use BlockType), for generation instructions (use BlockInstruction). RELATES: Block (source via HAS_GENERATED), Locale (target via FOR_LOCALE), EntityContent (influenced by via INFLUENCED_BY), PageGenerated (assembled into via ASSEMBLES).
 
     created_at:
       type: datetime

@@ -69,6 +69,48 @@ impl std::fmt::Display for KnowledgeTier {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Node Icon (dual format support)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Dual-format icon (web + terminal) for node definitions.
+/// v0.12.5: Supports both legacy string format and new dual format.
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[serde(untagged)]
+pub enum NodeIcon {
+    /// New dual format: { web: "diamond", terminal: "◆" }
+    Dual { web: String, terminal: String },
+    /// Legacy string format (emoji): "🔷"
+    Legacy(String),
+}
+
+impl Default for NodeIcon {
+    fn default() -> Self {
+        Self::Dual {
+            web: "circle".to_string(),
+            terminal: "●".to_string(),
+        }
+    }
+}
+
+impl NodeIcon {
+    /// Get the terminal icon (Unicode symbol).
+    pub fn terminal(&self) -> &str {
+        match self {
+            Self::Dual { terminal, .. } => terminal,
+            Self::Legacy(s) => s,
+        }
+    }
+
+    /// Get the web icon (Lucide name).
+    pub fn web(&self) -> &str {
+        match self {
+            Self::Dual { web, .. } => web,
+            Self::Legacy(s) => s,
+        }
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // YAML Structs
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -99,9 +141,10 @@ pub struct NodeDef {
     #[serde(default)]
     pub knowledge_tier: Option<KnowledgeTier>,
 
-    /// Emoji icon for Mermaid diagrams.
+    /// Dual-format icon (web + terminal) for diagrams and TUI.
+    /// v0.12.5: Supports both legacy string and new dual format.
     #[serde(default)]
-    pub icon: Option<String>,
+    pub icon: Option<NodeIcon>,
 
     /// Human-readable description.
     pub description: String,

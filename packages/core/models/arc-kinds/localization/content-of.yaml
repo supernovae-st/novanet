@@ -13,5 +13,9 @@ arc:
     - Project
   cardinality: many_to_one
   inverse_of: HAS_CONTENT
-  llm_context: Inverse of HAS_CONTENT — localized content points to parent.
+  llm_context: |
+    USE: when finding the parent entity/project from localized content.
+    TRIGGERS: content parent, entity from content, reverse content lookup.
+    NOT: forward lookup (use HAS_CONTENT), generated content (use GENERATED_FOR).
+    RELATES: EntityContent/ProjectContent (source), Entity/Project (target), HAS_CONTENT (inverse_of).
   cypher_pattern: (EntityContent)-[:CONTENT_OF]->(Entity)

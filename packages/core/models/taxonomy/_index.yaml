@@ -1,0 +1,41 @@
+# packages/core/models/taxonomy/_index.yaml
+# Taxonomy registry - imports all taxonomy components
+# v0.12.5: Exploded from taxonomy.yaml for maintainability
+
+version: "0.12.5"
+
+# Import structure (for documentation - not processed)
+imports:
+  realms:
+    - realms/shared.yaml
+    - realms/org.yaml
+  layers:
+    - layers/config.yaml
+    - layers/locale.yaml
+    - layers/geography.yaml
+    - layers/knowledge.yaml
+    - layers/foundation.yaml
+    - layers/structure.yaml
+    - layers/semantic.yaml
+    - layers/instruction.yaml
+    - layers/output.yaml
+  traits:
+    - traits/defined.yaml
+    - traits/authored.yaml
+    - traits/imported.yaml
+    - traits/generated.yaml
+    - traits/retrieved.yaml
+  arc_families:
+    - arc-families/ownership.yaml
+    - arc-families/localization.yaml
+    - arc-families/semantic.yaml
+    - arc-families/generation.yaml
+    - arc-families/mining.yaml
+
+# Summary statistics
+counts:
+  realms: 2
+  layers: 10
+  traits: 5
+  arc_families: 5
+  total_nodes: 59

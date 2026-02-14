@@ -10,7 +10,9 @@ node:
   realm: shared
   layer: knowledge
   trait: imported
-  icon: "👥"
+  icon:
+    web: "users"
+    terminal: "◎"
   description: "Macro population cluster for generating diverse, representative imagery"
 
   standard_properties:

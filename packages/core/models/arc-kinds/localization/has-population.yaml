@@ -25,8 +25,9 @@ arc:
   inverse: POPULATION_OF
 
   llm_context: |
-    Locale has multiple population sub-clusters with percentages for diverse image generation.
-    Use to get visual traits: MATCH (l:Locale)-[hp:HAS_POPULATION]->(ps:PopulationSubCluster) RETURN ps.visual_traits, hp.percentage
-    Example: fr-FR -[:HAS_POPULATION {percentage: 0.6}]-> Mediterranean
+    USE: when loading population demographics for diverse image generation.
+    TRIGGERS: population mix, demographics, visual diversity, ethnic composition.
+    NOT: primary population (use HAS_PRIMARY_POPULATION), geographic region (use IN_SUBREGION).
+    RELATES: Locale (source), PopulationSubCluster (target), POPULATION_OF (inverse), percentage property.
 
   cypher_pattern: "(Locale)-[:HAS_POPULATION {percentage, is_majority}]->(PopulationSubCluster)"

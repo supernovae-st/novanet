@@ -8,5 +8,9 @@ arc:
   source: Locale
   target: Market
   cardinality: one_to_one
-  llm_context: Every locale has exactly one market intelligence configuration node.
+  llm_context: |
+    USE: when loading market intelligence config for a locale.
+    TRIGGERS: market config, locale market, market intelligence, business context.
+    NOT: SEO keywords (use HAS_SEO_KEYWORDS), GEO queries (use HAS_GEO_QUERIES).
+    RELATES: Locale (source), Market (target), 1:1 cardinality.
   cypher_pattern: (Locale)-[:HAS_MARKET]->(Market)

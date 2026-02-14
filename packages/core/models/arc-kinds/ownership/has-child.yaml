@@ -37,10 +37,10 @@ arc:
   cycle_protection: true  # Prevent A → B → A
 
   llm_context: |
-    Entity hierarchy for URL structure (parent/child).
-    URL path = concatenation of slugs: /fr/blog/category/article
-    Use: MATCH path = (root:Entity)-[:HAS_CHILD*]->(leaf:Entity)
-    WARNING: Max depth = 3 (enforced by validation)
+    USE: when building entity hierarchies for URL structure.
+    TRIGGERS: entity hierarchy, parent child, URL path, nested entities.
+    NOT: entity content (use HAS_CONTENT), entity category (use BELONGS_TO).
+    RELATES: Entity (source), Entity (target), CHILD_OF (inverse), max_depth=3.
 
   cypher_pattern: "(Entity)-[:HAS_CHILD {position: 1, visibility: 'public'}]->(Entity)"
 

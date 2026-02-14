@@ -6,90 +6,110 @@
 import type { NodeType } from '@novanet/core/types';
 
 // =============================================================================
-// NODE ICONS (61 nodes)
+// NODE ICONS (61 nodes) — DUAL FORMAT
 // =============================================================================
 
 /**
- * Emoji icons for all 61 node types.
- *
- * Each icon is defined in the node's YAML file under `node.icon`.
- * Source: packages/core/models/node-kinds/<realm>/<layer>/<name>.yaml
+ * Icon definition with web (Lucide) and terminal (Unicode) variants.
  */
-export const NODE_ICONS: Record<NodeType, string> = {
-  Adaptation: '💧',
-  AudiencePersona: '👤',
-  AudienceSet: '👥',
-  AudienceTrait: '👥',
-  Block: '🔷',
-  BlockGenerated: '🟠',
-  BlockInstruction: '📝',
-  BlockRules: '🔵',
-  BlockType: '🔷',
-  Brand: '📄',
-  BrandDesign: '📄',
-  BrandPrinciples: '📄',
-  ChannelSurface: '📡',
-  ContentSlot: '🔲',
-  Continent: '🌍',
-  Country: '🏳️',
-  CulturalRealm: '🎭',
-  CulturalSubRealm: '🎨',
-  Culture: '🌍',
-  CultureRef: '🎭',
-  CultureSet: '🎭',
-  EconomicRegion: '📊',
-  Entity: '🔷',
-  EntityCategory: '📂',
-  EntityContent: '🟢',
-  Expression: '💬',
-  ExpressionSet: '💬',
-  Formatting: '🔢',
-  GEOAnswer: '💬',
-  GEOQuery: '🤖',
-  GEOQuerySet: '📦',
-  GeoRegion: '🗺️',
-  GeoSubRegion: '📍',
-  IncomeGroup: '💰',
-  LanguageBranch: '🌿',
-  LanguageFamily: '🗣️',
-  LendingCategory: '🏦',
-  Locale: '🔷',
-  Market: '📊',
-  OrgConfig: '🏢',
-  OutputArtifact: '📦',
-  Page: '🔷',
-  PageGenerated: '🟠',
-  Pattern: '📋',
-  PatternSet: '📋',
-  PopulationCluster: '👥',
-  PopulationSubCluster: '🧑',
-  Project: '🔷',
-  ProjectContent: '🟢',
-  PromptArtifact: '📋',
-  PromptStyle: '📄',
-  SEOKeyword: '🔍',
-  SEOKeywordFormat: 'label',
-  SEOKeywordMetrics: '📸',
-  SEOKeywordSet: '📦',
-  Slugification: '🔗',
-  Style: '🎭',
-  Taboo: '🚫',
-  TabooSet: '🚫',
-  Term: '📝',
-  TermSet: '📖',
-};
-
-/**
- * Get the emoji icon for a node type.
- *
- * @param type - The NodeType to get icon for
- * @returns The emoji icon string
- */
-export function getNodeIcon(type: NodeType): string {
-  return NODE_ICONS[type] ?? '📄';
+export interface NodeIcon {
+  web: string;      // Lucide icon name for Studio
+  terminal: string; // Unicode symbol for TUI
 }
 
 /**
- * Default icon for unknown node types.
+ * Dual-format icons for all 61 node types.
+ *
+ * Each icon is defined in the node's YAML file under `node.icon`.
+ * Source: packages/core/models/node-kinds/<realm>/<layer>/<name>.yaml
+ *
+ * v0.12.5: Updated to dual format { web, terminal }
  */
-export const DEFAULT_NODE_ICON = '📄';
+export const NODE_ICONS: Record<NodeType, NodeIcon> = {
+  Adaptation: { web: 'droplet', terminal: '◇' },
+  AudiencePersona: { web: 'user', terminal: '◇' },
+  AudienceSet: { web: 'users', terminal: '◎' },
+  AudienceTrait: { web: 'users', terminal: '◎' },
+  Block: { web: 'square', terminal: '□' },
+  BlockGenerated: { web: 'check-square', terminal: '★' },
+  BlockInstruction: { web: 'terminal', terminal: '▧' },
+  BlockRules: { web: 'circle', terminal: '●' },
+  BlockType: { web: 'component', terminal: '▦' },
+  Brand: { web: 'circle', terminal: '●' },
+  BrandDesign: { web: 'circle', terminal: '●' },
+  BrandPrinciples: { web: 'circle', terminal: '●' },
+  ChannelSurface: { web: 'radio', terminal: '◎' },
+  ContentSlot: { web: 'inbox', terminal: '▢' },
+  Continent: { web: 'globe', terminal: '◉' },
+  Country: { web: 'flag', terminal: '⚑' },
+  CulturalRealm: { web: 'drama', terminal: '◎' },
+  CulturalSubRealm: { web: 'palette', terminal: '◈' },
+  Culture: { web: 'globe', terminal: '◉' },
+  CultureRef: { web: 'drama', terminal: '◎' },
+  CultureSet: { web: 'drama', terminal: '◎' },
+  EconomicRegion: { web: 'bar-chart-2', terminal: '▣' },
+  Entity: { web: 'diamond', terminal: '◆' },
+  EntityCategory: { web: 'folder', terminal: '▤' },
+  EntityContent: { web: 'circle-check', terminal: '●' },
+  Expression: { web: 'message-square', terminal: '◇' },
+  ExpressionSet: { web: 'message-square', terminal: '◇' },
+  Formatting: { web: 'hash', terminal: '▦' },
+  GEOAnswer: { web: 'message-square', terminal: '◇' },
+  GEOQuery: { web: 'bot', terminal: '⚙' },
+  GEOQuerySet: { web: 'package', terminal: '■' },
+  GeoRegion: { web: 'map', terminal: '⊙' },
+  GeoSubRegion: { web: 'map-pin', terminal: '◎' },
+  IncomeGroup: { web: 'dollar-sign', terminal: '$' },
+  LanguageBranch: { web: 'leaf', terminal: '◇' },
+  LanguageFamily: { web: 'message-circle', terminal: '◇' },
+  LendingCategory: { web: 'bank', terminal: '▣' },
+  Locale: { web: 'diamond', terminal: '◆' },
+  Market: { web: 'bar-chart-2', terminal: '▣' },
+  OrgConfig: { web: 'building-2', terminal: '◎' },
+  OutputArtifact: { web: 'package', terminal: '■' },
+  Page: { web: 'file-text', terminal: '◇' },
+  PageGenerated: { web: 'file-check', terminal: '★' },
+  Pattern: { web: 'clipboard', terminal: '▤' },
+  PatternSet: { web: 'clipboard', terminal: '▤' },
+  PopulationCluster: { web: 'users', terminal: '◎' },
+  PopulationSubCluster: { web: 'user', terminal: '◇' },
+  Project: { web: 'folder', terminal: '▣' },
+  ProjectContent: { web: 'languages', terminal: '●' },
+  PromptArtifact: { web: 'clipboard', terminal: '▤' },
+  PromptStyle: { web: 'circle', terminal: '●' },
+  SEOKeyword: { web: 'search', terminal: '⌕' },
+  SEOKeywordFormat: { web: 'label', terminal: 'label' },
+  SEOKeywordMetrics: { web: 'camera', terminal: '◇' },
+  SEOKeywordSet: { web: 'package', terminal: '■' },
+  Slugification: { web: 'link', terminal: '⌘' },
+  Style: { web: 'drama', terminal: '◎' },
+  Taboo: { web: 'ban', terminal: '⊘' },
+  TabooSet: { web: 'ban', terminal: '⊘' },
+  Term: { web: 'edit', terminal: '✎' },
+  TermSet: { web: 'book-open', terminal: '◈' },
+};
+
+/**
+ * Get the web (Lucide) icon for a node type.
+ *
+ * @param type - The NodeType to get icon for
+ * @returns The Lucide icon name
+ */
+export function getNodeWebIcon(type: NodeType): string {
+  return NODE_ICONS[type]?.web ?? 'file';
+}
+
+/**
+ * Get the terminal (Unicode) icon for a node type.
+ *
+ * @param type - The NodeType to get icon for
+ * @returns The Unicode icon string
+ */
+export function getNodeTerminalIcon(type: NodeType): string {
+  return NODE_ICONS[type]?.terminal ?? '◆';
+}
+
+/**
+ * Default icons for unknown node types.
+ */
+export const DEFAULT_NODE_ICON: NodeIcon = { web: 'file', terminal: '◆' };

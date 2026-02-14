@@ -16,10 +16,9 @@ arc:
   required: true
 
   llm_context: |
-    Every Page MUST represent exactly one Entity (1:1 mandatory).
-    Page.key = Entity.key (Entity is the semantic source of truth).
-    The Page inherits its identity from the Entity it represents.
-    Example: page-qr-code-generator REPRESENTS entity qr-code-generator.
-    For additional Entity references within the page, use USES_ENTITY (N:N).
+    USE: when finding the main entity a page represents.
+    TRIGGERS: page entity, page represents, main entity, page identity.
+    NOT: entity usage (use USES_ENTITY), entity references (use REFERENCES).
+    RELATES: Page (source), Entity (target), REPRESENTED_BY (inverse), 1:1 mandatory.
 
   cypher_pattern: "(Page)-[:REPRESENTS]->(Entity)"

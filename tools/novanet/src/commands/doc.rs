@@ -124,10 +124,10 @@ mod tests {
 
         let results = doc_generate(&root, None, true).expect("should generate all view docs");
 
-        // At least 11 views (complete-graph is skipped, geo-pipeline removed in v10.1)
+        // At least 4 views (complete-graph is skipped, views reduced in v0.12)
         assert!(
-            results.len() >= 11,
-            "expected at least 11 view docs, got {}",
+            results.len() >= 4,
+            "expected at least 4 view docs, got {}",
             results.len()
         );
 

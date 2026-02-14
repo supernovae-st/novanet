@@ -8,5 +8,9 @@ arc:
   source: ContentSlot
   target: BlockType
   cardinality: one_to_many
-  llm_context: Slot accepts specific block types. Constraint enforcement.
+  llm_context: |
+    USE: when validating block placement in content slots.
+    TRIGGERS: slot validation, block constraints, allowed types.
+    NOT: block content (use HAS_INSTRUCTION), slot assignment (use FILLS_SLOT).
+    RELATES: ContentSlot (source), BlockType (target).
   cypher_pattern: (ContentSlot)-[:ACCEPTS_BLOCK_TYPE]->(BlockType)

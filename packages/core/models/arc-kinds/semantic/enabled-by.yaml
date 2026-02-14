@@ -35,8 +35,9 @@ arc:
   inverse: ENABLES
 
   llm_context: |
-    Inverse of ENABLES: Entity A is enabled/unlocked by Entity B.
-    Use for: finding prerequisites, capability dependencies.
-    Examples: Integration ENABLED_BY API, Optimization ENABLED_BY Analytics
+    USE: when finding what enables an entity's capability.
+    TRIGGERS: enabled by, made possible by, unlocked by, prerequisites.
+    NOT: requirement (use REQUIRED_BY), enhancement (use ENHANCED_BY).
+    RELATES: Entity (source), Entity (target/enabler), ENABLES (inverse).
 
   cypher_pattern: "(Entity)-[:ENABLED_BY {strength, temperature, enablement_type}]->(Entity)"

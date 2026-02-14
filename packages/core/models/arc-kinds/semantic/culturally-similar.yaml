@@ -23,8 +23,9 @@ arc:
       description: "Contributing factors to similarity"
 
   llm_context: |
-    Pre-computed cultural similarity between locales for fast LLM context retrieval.
-    Factors: language branch, cultural sub-realm, geo region, income group, script.
-    Use for fallback: MATCH (l:Locale)-[sim:CULTURALLY_SIMILAR]->(similar) ORDER BY sim.similarity_score DESC
+    USE: when finding culturally similar locales for fallback.
+    TRIGGERS: cultural similarity, locale fallback, similar culture, related locales.
+    NOT: language similarity (use SPEAKS_BRANCH), geographic (use IN_REGION).
+    RELATES: Locale (source), Locale (target), similarity_score (property).
 
   cypher_pattern: "(Locale)-[:CULTURALLY_SIMILAR {similarity_score, factors}]->(Locale)"

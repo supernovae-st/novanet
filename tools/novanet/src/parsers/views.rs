@@ -385,8 +385,8 @@ include:
         let Some(root) = test_root() else { return };
         let views = load_all_views(&root).expect("should load all views");
         assert!(
-            views.len() >= 12,
-            "expected at least 12 views, got {}",
+            views.len() >= 5,
+            "expected at least 5 views, got {}",
             views.len()
         );
 

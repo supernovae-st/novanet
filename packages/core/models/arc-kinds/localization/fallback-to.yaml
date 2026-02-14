@@ -9,5 +9,9 @@ arc:
   target: Locale
   cardinality: many_to_one
   is_self_referential: true
-  llm_context: "Fallback chain: (fr-CA)-[:FALLBACK_TO]->(fr-FR)-[:FALLBACK_TO]->(en-US)."
+  llm_context: |
+    USE: when resolving missing content by following locale fallback chain.
+    TRIGGERS: fallback locale, missing translation, locale chain, content resolution.
+    NOT: locale variants (use LOCALE_VARIANT_OF), primary locale (use PRIMARY_FOR).
+    RELATES: Locale (source), Locale (target/fallback), chain: fr-CA→fr-FR→en-US.
   cypher_pattern: (Locale)-[:FALLBACK_TO]->(Locale)

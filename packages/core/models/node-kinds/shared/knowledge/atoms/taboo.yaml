@@ -9,7 +9,9 @@ node:
   realm: shared
   layer: knowledge
   trait: imported
-  icon: "🚫"
+  icon:
+    web: "ban"
+    terminal: "⊘"
   description: |
     Forbidden term, phrase, or concept that should be avoided in a locale.
     Locale-native: each locale has its own taboos (no invariant parent).

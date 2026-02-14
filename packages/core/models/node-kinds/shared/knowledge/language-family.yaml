@@ -10,7 +10,9 @@ node:
   realm: shared
   layer: knowledge
   trait: imported
-  icon: "🗣️"
+  icon:
+    web: "message-circle"
+    terminal: "◇"
   description: "ISO 639-5 language family for clustering linguistically related locales"
 
   standard_properties:

@@ -15,8 +15,9 @@ arc:
   cardinality: many_to_many
 
   llm_context: |
-    Content is tailored for specific audience personas.
-    Brand defines target personas; content inherits or overrides.
-    Use to load persona context: MATCH (b:Block)-[:TARGETS_PERSONA]->(p:AudiencePersona)
+    USE: when finding which audience personas content is tailored for.
+    TRIGGERS: target audience, persona, who is this for, audience targeting.
+    NOT: locale targeting (use FOR_LOCALE), channel targeting (use FOR_CHANNEL).
+    RELATES: Brand/Page/Block/Entity (source), AudiencePersona (target), inherits from Brand.
 
   cypher_pattern: "(Brand, Page, Block, Entity)-[:TARGETS_PERSONA]->(AudiencePersona)"

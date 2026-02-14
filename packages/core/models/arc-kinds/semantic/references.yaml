@@ -30,10 +30,9 @@ arc:
   inverse: REFERENCED_BY
 
   llm_context: |
-    Block references an Entity for content injection or linking.
-    Aggregated from [@entity:X] refs parsed in BlockInstruction.
-    purpose: inject (embed EntityContent) vs link (hyperlink to Entity's Page).
-    count: how many times the entity appears in the block instruction.
-    Use: MATCH (b:Block)-[r:REFERENCES {purpose: 'inject'}]->(e:Entity)
+    USE: when finding entities referenced by a block.
+    TRIGGERS: block references, entity injection, block entities, content refs.
+    NOT: instruction-level refs (use REFERENCES_ENTITY), page links (use LINKS_TO).
+    RELATES: Block (source), Entity (target), REFERENCED_BY (inverse).
 
   cypher_pattern: "(Block)-[:REFERENCES {purpose, count}]->(Entity)"

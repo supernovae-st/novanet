@@ -70,7 +70,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
             &realm.key,
             &[
                 ("display_name", &realm.display_name),
-                ("emoji", &realm.emoji),
+                ("emoji", realm.emoji()),
                 ("color", &realm.color),
                 ("llm_context", &llm),
             ],
@@ -96,7 +96,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
                 &layer.key,
                 &[
                     ("display_name", &layer.display_name),
-                    ("emoji", &layer.emoji),
+                    ("emoji", layer.emoji()),
                     ("color", &layer.color),
                     ("llm_context", &llm),
                 ],
@@ -243,7 +243,9 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
 mod tests {
     use super::*;
     use crate::generators::Generator;
-    use crate::parsers::taxonomy::{ArcFamilyDef, NodeLayerDef, NodeRealmDef, NodeTraitDef};
+    use crate::parsers::taxonomy::{
+        ArcFamilyDef, NodeLayerDef, NodeRealmDef, NodeTraitDef, TaxonomyIcon,
+    };
 
     #[test]
     fn generate_small_cypher() {
@@ -252,13 +254,13 @@ mod tests {
             node_realms: vec![NodeRealmDef {
                 key: "test".to_string(),
                 display_name: "Test".to_string(),
-                emoji: "🧪".to_string(),
+                icon: TaxonomyIcon::Legacy("🧪".to_string()),
                 color: "#000000".to_string(),
                 llm_context: "Test realm.".to_string(),
                 layers: vec![NodeLayerDef {
                     key: "base".to_string(),
                     display_name: "Base".to_string(),
-                    emoji: "📋".to_string(),
+                    icon: TaxonomyIcon::Legacy("📋".to_string()),
                     color: "#111111".to_string(),
                     llm_context: "Base layer.".to_string(),
                 }],
@@ -340,13 +342,13 @@ mod tests {
             node_realms: vec![NodeRealmDef {
                 key: "r".to_string(),
                 display_name: "R".to_string(),
-                emoji: "X".to_string(),
+                icon: TaxonomyIcon::Legacy("X".to_string()),
                 color: "#fff".to_string(),
                 llm_context: "Line one.\n  Line two.\n  Line three.\n".to_string(),
                 layers: vec![NodeLayerDef {
                     key: "l".to_string(),
                     display_name: "L".to_string(),
-                    emoji: "Y".to_string(),
+                    icon: TaxonomyIcon::Legacy("Y".to_string()),
                     color: "#000".to_string(),
                     llm_context: "Layer.".to_string(),
                 }],
@@ -476,21 +478,21 @@ mod tests {
             node_realms: vec![NodeRealmDef {
                 key: "test".to_string(),
                 display_name: "Test Realm".to_string(),
-                emoji: "🧪".to_string(),
+                icon: TaxonomyIcon::Legacy("🧪".to_string()),
                 color: "#3b82f6".to_string(),
                 llm_context: "A test realm for snapshot testing.".to_string(),
                 layers: vec![
                     NodeLayerDef {
                         key: "base".to_string(),
                         display_name: "Base Layer".to_string(),
-                        emoji: "📋".to_string(),
+                        icon: TaxonomyIcon::Legacy("📋".to_string()),
                         color: "#10b981".to_string(),
                         llm_context: "The base layer.".to_string(),
                     },
                     NodeLayerDef {
                         key: "derived".to_string(),
                         display_name: "Derived Layer".to_string(),
-                        emoji: "🔧".to_string(),
+                        icon: TaxonomyIcon::Legacy("🔧".to_string()),
                         color: "#f59e0b".to_string(),
                         llm_context: "A derived layer.".to_string(),
                     },

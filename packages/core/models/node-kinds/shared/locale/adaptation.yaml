@@ -10,7 +10,9 @@ node:
   realm: shared
   layer: locale
   trait: imported
-  icon: "💧"
+  icon:
+    web: "droplet"
+    terminal: "◇"
   display_name: "Adaptation"
   description: "Content adaptation rules for FACTS vs ILLUSTRATIONS classification and technical term handling. Core decision engine for what to translate literally vs generate natively."
   llm_context: "Use this to decide: Is this content a FACT (translate literally) or ILLUSTRATION (generate natively)? Also handles technical term preferences."

@@ -22,7 +22,9 @@ node:
   realm: org
   layer: structure
   trait: defined
-  icon: "🔷"
+  icon:
+    web: square
+    terminal: "□"
   description: "An instance of a BlockType on a specific Page. Represents an invariant structural 'slot' that will be filled with generated content for each locale."
 
   # ═══════════════════════════════════════════════════════════════════════════════
@@ -33,12 +35,13 @@ node:
     key:
       type: string
       required: true
-      description: "Unique, stable identifier. Convention: blk-{page_key}-{slugified_display_name}"
-      pattern: "^blk-[a-z0-9-]+-[a-z0-9-]+$"
+      description: "Composite key: {page_key}:{block_type}:{index}. Globally unique, parseable components. Index enables multiple blocks of same type per page. (ADR-028)"
+      pattern: "^[a-z0-9-]+:[a-z0-9-]+:[1-9][0-9]*$"
       examples:
-        - "blk-pricing-hero"
-        - "blk-homepage-faq"
-        - "blk-custom-qr-code-design-features"
+        - "homepage:hero:1"
+        - "pricing:testimonials:1"
+        - "homepage:testimonials:2"
+        - "qr-generator:feature-grid:1"
 
     display_name:
       type: string
@@ -55,8 +58,12 @@ node:
     llm_context:
       type: string
       required: true
-      description: "LLM generation hints for this specific block instance. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation].'"
-      example: "USE: to generate content for the pricing page hero. TRIGGERS: pricing, hero, tier comparison. NOT: FAQ or footer blocks."
+      description: "LLM generation hints for this specific block instance. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections].'"
+      example: |
+        USE: when generating content for a specific page section or loading block context.
+        TRIGGERS: "block", "section", "component", "content slot", "hero", "faq".
+        NOT: for page-level orchestration (use Page), for block templates (use BlockType).
+        RELATES: Page (parent via HAS_BLOCK), BlockType (template via OF_TYPE), BlockGenerated (output), BlockInstruction (recipe).
 
     created_at:
       type: datetime
@@ -138,10 +145,14 @@ node:
 
   example:
     data:
-      key: "block-pricing-hero"
+      key: "pricing:hero:1"
       display_name: "Pricing Hero"
       description: "Hero section for pricing page"
-      llm_context: "USE: generate pricing page hero content. TRIGGERS: pricing, hero, tier comparison. NOT: FAQ or footer blocks."
+      llm_context: |
+        USE: when generating content for the pricing page hero section.
+        TRIGGERS: "pricing hero", "tier comparison", "above-fold pricing".
+        NOT: for FAQ blocks (use pricing:faq:1), for footer blocks (use shared footer).
+        RELATES: Page (pricing), BlockType (hero-v1), BlockInstruction (pricing_hero).
 
     cypher: |
       // Load full context for block generation (v10.9.0: EntityContent)

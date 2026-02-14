@@ -1,0 +1,23 @@
+# packages/core/models/taxonomy/layers/output.yaml
+# Output layer - generated content (org realm only)
+
+layer:
+  key: output
+  display_name: Generated Output
+  icon:
+    web: check-circle
+    terminal: "●"
+  color: "#22c55e"
+  realms: [org]
+
+  llm_context: |
+    USE: when loading or storing LLM-generated content.
+    TRIGGERS: "output", "generated", "result", "localized content", "final".
+    NOT: for instructions (use instruction layer), for entities (use semantic).
+    RELATES: PageGenerated, BlockGenerated, OutputArtifact.
+
+  nodes:
+    org:
+      - PageGenerated
+      - BlockGenerated
+      - OutputArtifact

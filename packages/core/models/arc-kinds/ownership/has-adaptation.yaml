@@ -6,5 +6,9 @@ arc:
   source: Locale
   target: Adaptation
   cardinality: one_to_one
-  llm_context: Locale has exactly one adaptation configuration.
+  llm_context: |
+    USE: when loading cultural adaptation rules for a locale.
+    TRIGGERS: locale adaptation, cultural adaptation, market adaptation, localization.
+    NOT: locale culture (use HAS_CULTURE), locale style (use HAS_STYLE).
+    RELATES: Locale (source), Adaptation (target), 1:1 cardinality.
   cypher_pattern: (Locale)-[:HAS_ADAPTATION]->(Adaptation)

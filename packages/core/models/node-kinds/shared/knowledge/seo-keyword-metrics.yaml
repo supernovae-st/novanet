@@ -14,7 +14,9 @@ node:
   realm: shared
   layer: knowledge
   trait: retrieved  # v11.2: Split derived → aggregated (computed metrics)
-  icon: "📸"
+  icon:
+    web: "camera"
+    terminal: "◇"
   description: |
     Historical metrics snapshot for an SEO keyword (time-series data).
     Stores volume, difficulty, position, impressions at a point in time.

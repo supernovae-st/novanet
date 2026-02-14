@@ -41,13 +41,9 @@ arc:
   # No inverse - symmetric relationship
 
   llm_context: |
-    Similarity relationship: Entity A is similar to Entity B (symmetric).
-    General similarity without implying competition or substitutability.
-    similarity_type: functional (same purpose), structural (same form),
-      semantic (same meaning), visual (same appearance), behavioral (same action)
-    Differs from ALTERNATIVE_TO: similar entities may not be interchangeable.
-    Examples: QRCode SIMILAR_TO DataMatrix, VCard SIMILAR_TO hCard
-    Symmetric: A SIMILAR_TO B implies B SIMILAR_TO A.
-    Use for: exploration, recommendation, related content.
+    USE: when finding entities similar to another (symmetric relationship).
+    TRIGGERS: similar to, like, resembles, related content, recommendations.
+    NOT: interchangeable alternatives (use ALTERNATIVE_TO), competition (use COMPETES_WITH).
+    RELATES: Entity (source), Entity (target), symmetric (A↔B), types: functional/structural/semantic/visual/behavioral.
 
   cypher_pattern: "(Entity)-[:SIMILAR_TO {strength, temperature, similarity_type, similarity_dimensions}]->(Entity)"

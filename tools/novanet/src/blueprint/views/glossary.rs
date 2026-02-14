@@ -81,7 +81,7 @@ pub fn render(data: &BlueprintData) -> String {
         for layer in &realm.layers {
             out.push_str(&format!(
                 "│    {} {:<18} — {}│\n",
-                layer.emoji,
+                layer.emoji(),
                 layer.key,
                 pad_right(&truncate(&layer.llm_context, 45), 45)
             ));

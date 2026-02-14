@@ -1,0 +1,24 @@
+# packages/core/models/taxonomy/layers/semantic.yaml
+# Semantic layer - entities and meaning (org realm only)
+
+layer:
+  key: semantic
+  display_name: Semantic
+  icon:
+    web: lightbulb
+    terminal: "◆"
+  color: "#f97316"
+  realms: [org]
+
+  llm_context: |
+    USE: when loading entity definitions and their localized content.
+    TRIGGERS: "semantic", "entity", "concept", "meaning", "content".
+    NOT: for structure (use structure layer), for instructions (use instruction).
+    RELATES: Entity (defined), EntityContent (authored), AudiencePersona, ChannelSurface.
+
+  nodes:
+    org:
+      - Entity
+      - EntityContent
+      - AudiencePersona
+      - ChannelSurface

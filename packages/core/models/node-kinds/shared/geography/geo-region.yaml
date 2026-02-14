@@ -11,7 +11,9 @@ node:
   realm: shared
   layer: geography
   trait: defined
-  icon: "🗺️"
+  icon:
+    web: "map"
+    terminal: "⊙"
   description: "UN M49 geographic region for clustering similar locales"
 
   standard_properties:

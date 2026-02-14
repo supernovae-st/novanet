@@ -8,7 +8,11 @@ arc:
   source: Locale
   target: CultureSet
   cardinality: one_to_many
-  llm_context: Locale has multiple culture sets, one per type (values, references, celebrities, calendar).
+  llm_context: |
+    USE: when loading culture atoms for a locale by type.
+    TRIGGERS: culture set, cultural values, cultural references, locale traditions.
+    NOT: culture config (use HAS_CULTURE), individual atoms (use CONTAINS_CULTURE_REF).
+    RELATES: Locale (source), CultureSet (target), type (property).
   cypher_pattern: "(Locale)-[:HAS_CULTURE_SET {type: $type}]->(CultureSet)"
   properties:
     type:

@@ -6,7 +6,9 @@ node:
   realm: org
   layer: semantic
   trait: defined
-  icon: "👤"
+  icon:
+    web: "user"
+    terminal: "◇"
   description: |
     Target audience archetype for content personalization. Represents a specific
     user segment with defined characteristics, goals, and pain points. Used to

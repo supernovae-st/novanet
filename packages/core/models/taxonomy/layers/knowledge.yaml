@@ -1,0 +1,46 @@
+# packages/core/models/taxonomy/layers/knowledge.yaml
+# Knowledge layer - deep locale knowledge atoms (shared realm only)
+
+layer:
+  key: knowledge
+  display_name: Knowledge
+  icon:
+    web: book-open
+    terminal: "◈"
+  color: "#8b5cf6"
+  realms: [shared]
+
+  llm_context: |
+    USE: when loading deep locale knowledge for native content generation.
+    TRIGGERS: "knowledge", "terms", "expressions", "patterns", "culture", "SEO", "GEO".
+    NOT: for locale settings (use locale layer), for definitions (use config).
+    RELATES: TermSet/Term, ExpressionSet/Expression, PatternSet/Pattern, SEOKeyword, GEOQuery.
+
+  nodes:
+    shared:
+      # Containers
+      - TermSet
+      - ExpressionSet
+      - PatternSet
+      - CultureSet
+      - TabooSet
+      - AudienceSet
+      # Atoms
+      - Term
+      - Expression
+      - Pattern
+      - CultureRef
+      - Taboo
+      - AudienceTrait
+      # Language/Culture hierarchies
+      - LanguageFamily
+      - LanguageBranch
+      - CulturalRealm
+      - CulturalSubRealm
+      - PopulationCluster
+      # SEO/GEO (v11.4)
+      - SEOKeyword
+      - SEOKeywordMetrics
+      - GEOQuery
+      - GEOAnswer
+      - GEOMetrics

@@ -35,9 +35,9 @@ arc:
   inverse: TYPE_OF
 
   llm_context: |
-    Inverse of TYPE_OF: Entity A has Entity B as a subtype.
-    Source is more general, target is more specific.
-    Use for: building taxonomies, finding all subtypes.
-    Examples: QRCode HAS_TYPE StaticQR, ContactFormat HAS_TYPE VCard
+    USE: when finding subtypes of an entity.
+    TRIGGERS: subtypes, types of, kinds of, taxonomy, classification.
+    NOT: variants (use HAS_VARIANT), children (use HAS_CHILD).
+    RELATES: Entity (source/general), Entity (target/specific), TYPE_OF (inverse).
 
   cypher_pattern: "(Entity)-[:HAS_TYPE {strength, temperature, taxonomy_level}]->(Entity)"

@@ -46,7 +46,7 @@ pub(crate) fn get_contextual_shortcuts(
     is_instance: bool,
     is_class: bool,
 ) -> &'static str {
-    // v11.7: 2 modes, unified tree
+    // v11.7: 3 modes (Graph, Nexus, Views)
     // Display: ↑/↓=vertical, ←/→=horizontal, Enter=action
     // Silent alternatives: hjkl, Space (handled in key processing)
     match mode {
@@ -65,6 +65,7 @@ pub(crate) fn get_contextual_shortcuts(
             Focus::Yaml | Focus::Info => "↑/↓:scroll Enter:page y:copy",
             Focus::Graph => "Tab:panel",
         },
+        NavMode::Views => "↑/↓:nav Enter:select y:copy",
     }
 }
 

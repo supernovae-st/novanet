@@ -6,7 +6,9 @@ node:
   realm: org
   layer: foundation
   trait: defined
-  icon: "🔷"
+  icon:
+    web: folder
+    terminal: "▣"
   description: "Organization project root node containing project configuration and brand info"
 
   # ═══════════════════════════════════════════════════════════════════════════════
@@ -35,8 +37,12 @@ node:
     llm_context:
       type: string
       required: true
-      description: "LLM generation hints. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation].'"
-      example: "USE: root context for QR Code AI. TRIGGERS: project, brand, qrcode-ai. NOT: other projects."
+      description: "LLM generation hints. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections].'"
+      example: |
+        USE: when loading project-level context or root configuration for content generation.
+        TRIGGERS: "project", "brand context", "project configuration", "qrcode-ai".
+        NOT: for organization-level config (use OrgConfig), for localized project content (use ProjectContent), for visual identity (use Brand).
+        RELATES: OrgConfig (owner via BELONGS_TO_ORG), Brand (identity via HAS_BRAND), Entity (owns via HAS_ENTITY), Page (owns via HAS_PAGE), Locale (supports via SUPPORTS_LOCALE).
 
     created_at:
       type: datetime

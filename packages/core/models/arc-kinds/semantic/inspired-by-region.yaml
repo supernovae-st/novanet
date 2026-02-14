@@ -10,7 +10,8 @@ arc:
   cardinality: many_to_one
   required: false
   llm_context: |
-    PromptStyle is inspired by a geographic region.
-    Region provides cultural context for visual style.
-    E.g., "French elegance", "Japanese minimalism".
+    USE: when finding the cultural inspiration for a prompt style.
+    TRIGGERS: style inspiration, regional style, cultural aesthetic, visual culture.
+    NOT: locale targeting (use FOR_LOCALE), brand design (use HAS_DESIGN).
+    RELATES: PromptStyle (source), GeoRegion (target), optional relationship.
   cypher_pattern: "(PromptStyle)-[:INSPIRED_BY_REGION]->(GeoRegion)"

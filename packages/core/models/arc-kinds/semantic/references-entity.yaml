@@ -22,7 +22,9 @@ arc:
       description: "Surrounding context in the instruction"
 
   llm_context: |
-    BlockInstruction references an Entity via @entity:key syntax. Auto-parsed.
-    Use: MATCH (bi:BlockInstruction)-[:REFERENCES_ENTITY]->(e:Entity)
+    USE: when finding entities referenced by a block instruction.
+    TRIGGERS: @entity reference, instruction entities, entity mention, entity context.
+    NOT: page references (use REFERENCES_PAGE), block mentions (use MENTIONS).
+    RELATES: BlockInstruction (source), Entity (target), auto-parsed from @ syntax.
 
   cypher_pattern: "(BlockInstruction)-[:REFERENCES_ENTITY {syntax, context}]->(Entity)"

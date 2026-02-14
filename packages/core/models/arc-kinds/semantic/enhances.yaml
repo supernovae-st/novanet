@@ -35,10 +35,9 @@ arc:
   inverse: ENHANCED_BY
 
   llm_context: |
-    Enhancement relationship: FEATURE entity improves THING/CONCEPT.
-    Use for analytics ENHANCES smart-link, password-protection ENHANCES dynamic-qr-code.
-    Different from ENABLES (unlocks capability) or INCLUDES (containment).
-    enhancement_type: adds (new capability), improves (better), extends (more),
-      optimizes (faster), secures (safer), tracks (monitors)
+    USE: when finding what features enhance an entity.
+    TRIGGERS: enhances, improves, adds capability, extends, feature.
+    NOT: enablement (use ENABLES), containment (use INCLUDES).
+    RELATES: Entity (source/feature), Entity (target/thing), ENHANCED_BY (inverse).
 
   cypher_pattern: "(Entity)-[:ENHANCES {strength, temperature, enhancement_type}]->(Entity)"

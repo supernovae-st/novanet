@@ -38,9 +38,9 @@ pub const INFO_SCROLL_MARGIN: usize = 5;
 /// Default tree height (updated by UI on render).
 pub const DEFAULT_TREE_HEIGHT: usize = 20;
 
-/// Navigation mode — 2 modes in v11.7 Unified Tree.
-/// Order: 1:Graph 2:Nexus
-/// Keys 1-2 switch modes GLOBALLY from anywhere.
+/// Navigation mode — 3 modes in v0.12.5.
+/// Order: 1:Graph 2:Nexus 3:Views
+/// Keys 1-3 switch modes GLOBALLY from anywhere.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum NavMode {
     /// Graph mode: Unified tree view (Realm > Layer > Class hierarchy with instances)
@@ -49,6 +49,8 @@ pub enum NavMode {
     Graph,
     /// Nexus mode: Hub for Quiz, Stats, Help
     Nexus,
+    /// Views mode: Schema views explorer (Query-First architecture)
+    Views,
 }
 
 impl NavMode {
@@ -56,15 +58,22 @@ impl NavMode {
         match self {
             NavMode::Graph => "Graph",
             NavMode::Nexus => "Nexus",
+            NavMode::Views => "Views",
         }
     }
 
-    /// Get array index for mode_cursors (0-1).
+    /// Get array index for mode_cursors (0-2).
     pub fn index(&self) -> usize {
         match self {
             NavMode::Graph => 0,
             NavMode::Nexus => 1,
+            NavMode::Views => 2,
         }
+    }
+
+    /// Get all modes in order.
+    pub fn all() -> &'static [NavMode] {
+        &[NavMode::Graph, NavMode::Nexus, NavMode::Views]
     }
 }
 
@@ -171,8 +180,8 @@ pub struct App {
     pub mode: NavMode,
     pub focus: Focus,
     pub tree_cursor: usize,
-    /// Remember cursor position per mode (Graph, Nexus).
-    pub mode_cursors: [usize; 2],
+    /// Remember cursor position per mode (Graph, Nexus, Views).
+    pub mode_cursors: [usize; 3],
     pub tree_scroll: usize, // Scroll offset for tree
     pub tree_height: usize, // Visible height (set by UI)
     pub tree: TaxonomyTree,
@@ -293,7 +302,7 @@ impl App {
             mode: NavMode::Graph,
             focus: Focus::Tree,
             tree_cursor: 0,
-            mode_cursors: [0; 2], // Init all modes at cursor 0 (Graph, Nexus)
+            mode_cursors: [0; 3], // Init all modes at cursor 0 (Graph, Nexus, Views)
             tree_scroll: 0,
             tree_height: DEFAULT_TREE_HEIGHT,
             tree,
@@ -358,11 +367,11 @@ impl App {
     /// Get the active YAML section based on current navigation mode.
     /// - Meta mode → Class section (schema)
     /// - Data mode → Instance section (data nodes)
-    /// - Nexus → Class section
+    /// - Nexus/Views → Class section
     pub fn yaml_active_section(&self) -> YamlViewSection {
         match self.mode {
-            // Graph mode shows Class schema, Nexus shows Class schema
-            NavMode::Graph | NavMode::Nexus => YamlViewSection::Class,
+            // Graph mode shows Class schema, Nexus/Views shows Class schema
+            NavMode::Graph | NavMode::Nexus | NavMode::Views => YamlViewSection::Class,
         }
     }
 
@@ -951,7 +960,7 @@ impl App {
                 true
             }
 
-            // Mode switching: 1-2 global (1=Graph, 2=Nexus)
+            // Mode switching: 1-3 global (1=Graph, 2=Nexus, 3=Views)
             KeyCode::Char('1') => {
                 // Switch to Graph mode (unified tree view)
                 if self.mode != NavMode::Graph {
@@ -968,6 +977,15 @@ impl App {
                     self.save_mode_cursor();
                     self.mode = NavMode::Nexus;
                     self.restore_mode_cursor(NavMode::Nexus);
+                }
+                true
+            }
+            KeyCode::Char('3') => {
+                // Switch to Views mode (Schema views explorer)
+                if self.mode != NavMode::Views {
+                    self.save_mode_cursor();
+                    self.mode = NavMode::Views;
+                    self.restore_mode_cursor(NavMode::Views);
                 }
                 true
             }

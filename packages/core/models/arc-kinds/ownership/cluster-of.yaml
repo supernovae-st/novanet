@@ -14,8 +14,9 @@ arc:
   inverse: HAS_SUBCLUSTER
 
   llm_context: |
-    PopulationSubCluster belongs to exactly one PopulationCluster.
-    Use to find related populations: MATCH (ps:PopulationSubCluster)-[:CLUSTER_OF]->(pc:PopulationCluster)
-    Example: Northern European -[:CLUSTER_OF]-> West Eurasian
+    USE: when finding population cluster for a sub-cluster.
+    TRIGGERS: population cluster, genetic group, related populations.
+    NOT: sub-cluster children (use HAS_SUBCLUSTER), geographic regions.
+    RELATES: PopulationSubCluster (source), PopulationCluster (target), HAS_SUBCLUSTER (inverse).
 
   cypher_pattern: "(PopulationSubCluster)-[:CLUSTER_OF]->(PopulationCluster)"

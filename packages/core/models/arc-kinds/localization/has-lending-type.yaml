@@ -14,8 +14,9 @@ arc:
   inverse: CLASSIFIES
 
   llm_context: |
-    Locale is classified in a World Bank lending category.
-    Use to understand development context: MATCH (l:Locale)-[:HAS_LENDING_TYPE]->(lc:LendingCategory)
-    Example: fr-FR -[:HAS_LENDING_TYPE]-> IBRD
+    USE: when finding World Bank lending classification for development context.
+    TRIGGERS: lending type, development status, World Bank category, IBRD/IDA.
+    NOT: income level (use HAS_INCOME_LEVEL), economic region (use IN_ECONOMIC_REGION).
+    RELATES: Locale (source), LendingCategory (target), CLASSIFIES (inverse).
 
   cypher_pattern: "(Locale)-[:HAS_LENDING_TYPE]->(LendingCategory)"

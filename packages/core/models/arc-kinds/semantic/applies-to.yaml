@@ -41,12 +41,9 @@ arc:
   inverse: HAS_APPLICATION
 
   llm_context: |
-    Application relationship: Entity A applies to / is used in Entity B.
-    Source is a tool/method, target is a domain/context.
-    application_type: use_case (specific), domain (field), industry (sector),
-      scenario (situation), context (environment)
-    relevance: primary (main use), secondary (common), niche (specialized),
-      experimental (emerging)
-    Examples: QRCode APPLIES_TO Marketing, VCard APPLIES_TO Networking
+    USE: when finding use cases or domains where an entity applies.
+    TRIGGERS: applies to, use case, domain, industry, applicable, scenario.
+    NOT: direct operation (use ACTS_ON), capability (use ENABLES).
+    RELATES: Entity (source/tool), Entity (target/domain), HAS_APPLICATION (inverse).
 
   cypher_pattern: "(Entity)-[:APPLIES_TO {strength, temperature, application_type, relevance}]->(Entity)"

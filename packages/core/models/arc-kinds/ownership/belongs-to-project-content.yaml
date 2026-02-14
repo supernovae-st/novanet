@@ -10,5 +10,9 @@ arc:
   source: PageGenerated
   target: ProjectContent
   cardinality: many_to_one
-  llm_context: "Locale-aligned: PageGenerated (fr-FR) → ProjectContent (fr-FR). Provides voice, tagline, CTAs."
+  llm_context: |
+    USE: when loading project-level content for page generation.
+    TRIGGERS: project content, locale voice, project tagline, project CTAs.
+    NOT: project config (use BELONGS_TO_ORG), page structure (use HAS_PAGE).
+    RELATES: PageGenerated (source), ProjectContent (target), locale-aligned.
   cypher_pattern: (PageGenerated)-[:BELONGS_TO_PROJECT_CONTENT]->(ProjectContent)

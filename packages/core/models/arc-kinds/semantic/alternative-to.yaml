@@ -41,12 +41,9 @@ arc:
   # No inverse - symmetric relationship
 
   llm_context: |
-    Alternative relationship: Entity A is an alternative to Entity B (symmetric).
-    Entities can substitute for each other in certain contexts.
-    alternative_type: equivalent (same purpose), similar (close match),
-      fallback (backup option), upgrade (better), downgrade (simpler)
-    Examples: VCard ALTERNATIVE_TO MeCard, PNG ALTERNATIVE_TO JPG
-    Symmetric: A ALTERNATIVE_TO B implies B ALTERNATIVE_TO A.
-    Differs from COMPETES_WITH: alternatives can coexist, competitors fight.
+    USE: when finding substitutable entities.
+    TRIGGERS: alternative, substitute, instead of, similar option, fallback.
+    NOT: competition (use COMPETES_WITH), similarity (use SIMILAR_TO).
+    RELATES: Entity (source), Entity (target), symmetric (no inverse needed).
 
   cypher_pattern: "(Entity)-[:ALTERNATIVE_TO {strength, temperature, alternative_type, context}]->(Entity)"

@@ -10,7 +10,9 @@ node:
   realm: shared
   layer: knowledge
   trait: defined  # v11.2: Containers are universal categories (invariant), atoms are locale-native (knowledge)
-  icon: "📋"
+  icon:
+    web: "clipboard"
+    terminal: "▤"
   description: "Container grouping Pattern atoms by usage"
 
   standard_properties:

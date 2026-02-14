@@ -11,7 +11,9 @@ node:
   realm: shared
   layer: geography
   trait: defined
-  icon: "🌍"
+  icon:
+    web: "globe"
+    terminal: "◉"
   description: "UN M49 continental region for geographic clustering and LLM retrieval"
 
   standard_properties:
