@@ -11,26 +11,26 @@ argument-hint: [validate|generate|status]
 
 Synchronize generated artifacts with YAML source of truth.
 
-## Source of Truth (v12.0)
+## Source of Truth (v0.12.5)
 
 ```
 packages/core/models/
-+-- node-classes/                   <- 59 YAML files (one per NodeClass)
++-- node-classes/                   <- 61 YAML files (one per NodeClass)
 |   +-- shared/                   <- Realm: shared (40 nodes)
 |   |   +-- config/               <-   Layer: config (EntityCategory, Locale, SEOKeywordFormat)
 |   |   +-- locale/               <-   Layer: locale (6 nodes)
 |   |   +-- geography/            <-   Layer: geography (6 nodes)
 |   |   +-- knowledge/            <-   Layer: knowledge (24 nodes, incl. SEO/GEO)
-|   +-- org/                      <- Realm: org (20 nodes)
+|   +-- org/                      <- Realm: org (21 nodes)
 |       +-- config/               <-   Layer: config (OrgConfig)
 |       +-- foundation/           <-   Layer: foundation (3 nodes)
 |       +-- structure/            <-   Layer: structure (3 nodes)
 |       +-- semantic/             <-   Layer: semantic (Entity, EntityContent, etc.)
 |       +-- instruction/          <-   Layer: instruction (7 nodes)
 |       +-- output/               <-   Layer: output (3 nodes)
-+-- arc-classes/                    <- 114 YAML files (one per ArcClass)
++-- arc-classes/                    <- 169 YAML files (one per ArcClass)
 +-- relations.yaml                <- Legacy format (kept for parser compatibility)
-+-- taxonomy.yaml                 <- v12.0: 2 Realms, 10 Layers, 5 Traits (defined/authored/imported/generated/retrieved)
++-- taxonomy.yaml                 <- v0.12.5: 2 Realms, 10 Layers, 5 Traits (defined/authored/imported/generated/retrieved)
 ```
 
 ## Generated Artifacts
@@ -139,6 +139,6 @@ All generators live in `tools/novanet/src/generators/` (Rust-first architecture)
 
 **MermaidGenerator (`generators/mermaid.rs`):**
 - Reads `models/node-classes/` and `models/arc-classes/`
-- Generates Mermaid flowchart with all 59 Classes and 114 arcs
+- Generates Mermaid flowchart with all 61 Classes and 169 arcs
 - Groups by Realm (Shared, Org)
 - Colors by Layer (10 distinct colors)

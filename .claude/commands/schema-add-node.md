@@ -36,7 +36,7 @@ Add a new node type to the NovaNet ontology using Socratic discovery.
 - **YAML filename**: kebab-case (e.g., `locale-humor.yaml`, `entity-content.yaml`)
 - **Property names**: snake_case (e.g., `display_name`, `llm_context`)
 
-## Nomenclature Rules (v0.12.0)
+## Nomenclature Rules (v0.12.5)
 
 | Pattern | Trait | Use For | Examples |
 |---------|-------|---------|----------|
@@ -50,14 +50,14 @@ Add a new node type to the NovaNet ontology using Socratic discovery.
 **Deprecated patterns (do not use):**
 - `*L10n` - Use `*Content` or `*Generated` instead
 
-## Realm/Layer (v0.12.0)
+## Realm/Layer (v0.12.5)
 
 | Realm | Layers |
 |-------|--------|
 | `shared` | config, locale, geography, knowledge |
 | `org` | config, foundation, structure, semantic, instruction, output |
 
-## Trait Selection (v0.12.0)
+## Trait Selection (v0.12.5)
 
 | Trait | Use For | Border Style |
 |-------|---------|--------------|

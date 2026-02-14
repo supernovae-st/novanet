@@ -7,7 +7,7 @@ This file provides guidance to Claude Code when working in the `tools/novanet/` 
 `novanet` is a unified Rust CLI + TUI binary for managing the NovaNet context graph.
 It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 
-**Version**: v0.12.0 (SemVer Transition + ADR-024 Data Origin + ADR-025 Instruction Layer)
+**Version**: v0.12.5 (SemVer Transition + ADR-024 Data Origin + ADR-025 Instruction Layer + ADR-028 Brand Architecture)
 
 ## Current Status
 
@@ -29,7 +29,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | TUI | `tui` | Unified tree (Graph/Nexus modes), lazy loading, async channels |
 | System | `completions`, `doctor` | Implemented |
 
-**984 tests pass** (`cargo test`). Zero clippy warnings.
+**1031 tests pass** (`cargo test`). Zero clippy warnings.
 
 **Testing stack:**
 - `insta` — Snapshot testing (5 generator outputs)
@@ -177,7 +177,7 @@ cargo run -- doctor --skip-db                     # Skip Neo4j connectivity chec
 # Quality
 cargo clippy -- -D warnings    # Zero warnings policy
 cargo fmt --check              # Formatting check
-cargo nextest run              # 976 tests (fast, parallel)
+cargo nextest run              # 1031 tests (fast, parallel)
 cargo test -- --ignored        # Neo4j integration tests (requires running Neo4j)
 
 # Security & auditing

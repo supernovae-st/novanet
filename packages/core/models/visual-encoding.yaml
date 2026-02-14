@@ -1,12 +1,12 @@
 # packages/core/models/visual-encoding.yaml
 # Visual presentation rules for NovaNet graph elements
-# v0.12.0 — "Class Act" Complete Nomenclature Migration
+# v0.12.5 — "Class Act" Complete Nomenclature Migration
 #
 # IMPORTANT: Colors are NOT defined here.
 # Colors come from taxonomy.yaml (node_realms, node_layers, node_traits, arc_families)
 # This file defines HOW to USE those colors, not WHAT they are.
 #
-# v0.12.0 Changes (ADR-024):
+# v0.12.5 Changes (ADR-024 + ADR-028):
 # - Trait renames: invariant→defined, localized→authored, knowledge→imported, aggregated→retrieved
 # - Kind → Class, Meta → Schema terminology throughout
 # - Instruction layer: PagePrompt → PageInstruction, BlockPrompt → BlockInstruction
@@ -16,7 +16,7 @@
 # - apps/studio/src/design/visual-encoding.json (runtime config)
 # - tools/novanet/src/generated/visual_encoding.rs (TUI compile-time)
 
-version: "0.12.0"
+version: "0.12.5"
 
 # =============================================================================
 # CHANNEL MAPPING — Which visual channel encodes which facet
