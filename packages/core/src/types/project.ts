@@ -6,7 +6,7 @@
 //   key, display_name, description, llm_context, created_at, updated_at
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// PROJECT (invariant) - v7.1.0
+// PROJECT (defined) - v7.1.0, trait renamed v0.12.0 ADR-024
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export interface Project {
@@ -30,7 +30,7 @@ export interface Project {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// PROJECTCONTENT (localized identity & messaging) - v7.1.0, renamed v10.9
+// PROJECTCONTENT (authored identity & messaging) - v7.1.0, renamed v10.9, trait v0.12.0 ADR-024
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export interface VoiceTone {

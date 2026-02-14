@@ -44,7 +44,7 @@ pub fn make_node(name: &str, realm: &str, layer: &str, behavior: NodeTrait) -> P
         realm: realm.to_string(),
         layer: layer.to_string(),
         source_path: PathBuf::from(format!(
-            "packages/core/models/node-kinds/{realm}/{layer}/{}.yaml",
+            "packages/core/models/node-classes/{realm}/{layer}/{}.yaml",
             name.to_lowercase()
         )),
     }

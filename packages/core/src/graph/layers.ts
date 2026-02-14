@@ -13,7 +13,7 @@ import { CLASS_TAXONOMY } from '../types/nodes.js';
 
 /**
  * Maps each NodeType to its layer within its realm.
- * AUTO-GENERATED from models/node-kinds/ folder structure.
+ * AUTO-GENERATED from models/node-classes/ folder structure.
  *
  * Layers by realm:
  * - Shared: config, geography, knowledge, locale
@@ -24,12 +24,12 @@ export const NODE_LAYERS: Record<NodeType, Layer> = {
   // SHARED REALM (40 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
 
-  // config (3 nodes) - matches models/node-kinds/shared/config/
+  // config (3 nodes) - matches models/node-classes/shared/config/
   EntityCategory: 'config',
   Locale: 'config',
   SEOKeywordFormat: 'config',
 
-  // geography (7 nodes) - matches models/node-kinds/shared/geography/
+  // geography (7 nodes) - matches models/node-classes/shared/geography/
   Continent: 'geography',
   Country: 'geography',
   EconomicRegion: 'geography',
@@ -38,7 +38,7 @@ export const NODE_LAYERS: Record<NodeType, Layer> = {
   IncomeGroup: 'geography',
   LendingCategory: 'geography',
 
-  // knowledge (24 nodes) - matches models/node-kinds/shared/knowledge/
+  // knowledge (24 nodes) - matches models/node-classes/shared/knowledge/
   AudienceSet: 'knowledge',
   AudienceTrait: 'knowledge',
   CulturalRealm: 'knowledge',
@@ -64,7 +64,7 @@ export const NODE_LAYERS: Record<NodeType, Layer> = {
   Term: 'knowledge',
   TermSet: 'knowledge',
 
-  // locale (6 nodes) - matches models/node-kinds/shared/locale/
+  // locale (6 nodes) - matches models/node-classes/shared/locale/
   Adaptation: 'locale',
   Culture: 'locale',
   Formatting: 'locale',
@@ -76,10 +76,10 @@ export const NODE_LAYERS: Record<NodeType, Layer> = {
   // ORG REALM (21 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
 
-  // config (1 node) - matches models/node-kinds/org/config/
+  // config (1 node) - matches models/node-classes/org/config/
   OrgConfig: 'config',
 
-  // foundation (6 nodes) - matches models/node-kinds/org/foundation/
+  // foundation (6 nodes) - matches models/node-classes/org/foundation/
   Brand: 'foundation',
   BrandDesign: 'foundation',
   BrandPrinciples: 'foundation',
@@ -87,24 +87,24 @@ export const NODE_LAYERS: Record<NodeType, Layer> = {
   ProjectContent: 'foundation',
   PromptStyle: 'foundation',
 
-  // instruction (4 nodes) - matches models/node-kinds/org/instruction/
+  // instruction (4 nodes) - matches models/node-classes/org/instruction/
   BlockInstruction: 'instruction',
   BlockRules: 'instruction',
   BlockType: 'instruction',
   PromptArtifact: 'instruction',
 
-  // output (3 nodes) - matches models/node-kinds/org/output/
+  // output (3 nodes) - matches models/node-classes/org/output/
   BlockGenerated: 'output',
   OutputArtifact: 'output',
   PageGenerated: 'output',
 
-  // semantic (4 nodes) - matches models/node-kinds/org/semantic/
+  // semantic (4 nodes) - matches models/node-classes/org/semantic/
   AudiencePersona: 'semantic',
   ChannelSurface: 'semantic',
   Entity: 'semantic',
   EntityContent: 'semantic',
 
-  // structure (3 nodes) - matches models/node-kinds/org/structure/
+  // structure (3 nodes) - matches models/node-classes/org/structure/
   Block: 'structure',
   ContentSlot: 'structure',
   Page: 'structure',

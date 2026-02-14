@@ -4,18 +4,16 @@
  * Centralized configuration for view categories.
  * Used by both API routes and UI components.
  *
- * Categories:
- * - meta: Schema exploration (Realm, Layer, Class, ArcClass)
- * - data: Instance exploration by realm/layer/purpose
- * - overlay: Schema + Data combined for debugging
- * - contextual: Node-centered subgraphs
+ * Categories (v0.12.5):
+ * - schema: Schema exploration (Classes, ArcClasses)
+ * - data: Instance exploration (Project, Locales, Geography)
  * - generation: AI agent context assembly
+ * - contextual: Node-centered subgraphs
  */
 
 import {
   Database,
   Boxes,
-  Layers,
   Eye,
   Sparkles,
   type LucideIcon,
@@ -35,31 +33,31 @@ export interface CategoryConfig {
 }
 
 // Color rationale (UI categories, not taxonomy-derived):
-// - meta: violet (#8b5cf6) - matches knowledge layer color (schema = knowledge)
-// - data: indigo (#6366f1) - distinct from meta, professional data color
-// - overlay: orange (#f97316) - attention/debug color, matches semantic layer
+// - schema: violet (#8b5cf6) - matches knowledge layer color
+// - data: indigo (#6366f1) - professional data color
+// - generation: pink (#ec4899) - AI/LLM theme
 // - contextual: slate (#94a3b8) - neutral, secondary importance
 export const VIEW_CATEGORIES: Record<ViewCategory, CategoryConfig> = {
-  meta: {
-    id: 'meta',
+  schema: {
+    id: 'schema',
     label: 'Schema',
     icon: Database,
     color: '#8b5cf6',  // violet-500 (matches LAYER_COLORS.knowledge)
-    description: 'Schema exploration (Realm, Layer, Class, ArcClass)',
+    description: 'Schema exploration (Classes, ArcClasses)',
   },
   data: {
     id: 'data',
     label: 'Data',
     icon: Boxes,
     color: '#6366f1',  // indigo-500 (distinct UI color for instances)
-    description: 'Instance exploration by realm, layer, or purpose',
+    description: 'Instance exploration (Project, Locales, Geography)',
   },
-  overlay: {
-    id: 'overlay',
-    label: 'Overlay',
-    icon: Layers,
-    color: '#f97316',  // orange-500 (matches LAYER_COLORS.semantic - debugging)
-    description: 'Meta + Data combined for debugging',
+  generation: {
+    id: 'generation',
+    label: 'Generation',
+    icon: Sparkles,
+    color: '#ec4899',  // pink-500 (AI/LLM theme)
+    description: 'AI agent context assembly',
   },
   contextual: {
     id: 'contextual',
@@ -68,22 +66,14 @@ export const VIEW_CATEGORIES: Record<ViewCategory, CategoryConfig> = {
     color: '#94a3b8',  // slate-400 (neutral, secondary)
     description: 'Node-centered subgraphs',
   },
-  generation: {
-    id: 'generation',
-    label: 'Generation',
-    icon: Sparkles,
-    color: '#ec4899',  // pink-500 (matches gen-pipeline view color)
-    description: 'AI agent context assembly',
-  },
 };
 
 // Ordered list for display
 export const CATEGORY_ORDER: ViewCategory[] = [
-  'meta',
+  'schema',
   'data',
-  'overlay',
-  'contextual',
   'generation',
+  'contextual',
 ];
 
 // Display names map (for API routes)

@@ -35,7 +35,7 @@ Add a new arc type (directed relationship) between nodes in the NovaNet ontology
    - Not all arcs need inverses
 
 4. **Creation Phase**:
-   - Add to `packages/core/models/arc-kinds/{family}/{arc-name}.yaml`
+   - Add to `packages/core/models/arc-classes/{family}/{arc-name}.yaml`
    - Update source node YAML with arc reference
    - Run `novanet schema generate`
    - Run `novanet schema validate`
@@ -82,7 +82,7 @@ This will start a dialog to understand the arc between LocaleLexicon and LocaleH
 ## YAML Structure (v10.3)
 
 ```yaml
-# packages/core/models/arc-kinds/semantic/uses-entity.yaml
+# packages/core/models/arc-classes/semantic/uses-entity.yaml
 arc:
   name: USES_ENTITY
   family: semantic

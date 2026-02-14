@@ -112,7 +112,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - **Node count**: 60 → 59 nodes (PageType merged into PageStructure)
 
 ### Changed
-- **YAML Node Definitions**: All 59 node-kinds updated with new trait names and class terminology
+- **YAML Node Definitions**: All 59 node-classes updated with new trait names and class terminology
 - **Rust TUI**: Updated across 43 files (721 changes)
   - `traits.rs`: TRAIT_ORDER, descriptions updated for ADR-024
   - `theme.rs`: Icon defaults for new trait names

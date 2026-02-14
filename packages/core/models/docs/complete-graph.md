@@ -27,7 +27,7 @@ This diagram shows the complete NovaNet graph schema with all 42 node types and 
 flowchart TB
   %% NovaNet Graph v0.12.0
   %% Generated: 61 nodes, 200 arcs
-  %% Source: node-kinds/ + arc-kinds/ + taxonomy.yaml
+  %% Source: node-classes/ + arc-classes/ + taxonomy.yaml
 
   %% Trait styling (node_trait)
   classDef defined fill:#3b82f6,stroke:#1d4ed8,color:#fff

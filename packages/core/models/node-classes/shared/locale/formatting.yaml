@@ -1,0 +1,293 @@
+# models/node-classes/shared/locale/formatting.yaml
+# Formatting — Technical formatting rules for a locale (dates, numbers, currency, time, phone, address)
+#
+# v10.6: Added time_system, percentage_space, raw_markdown (hybrid approach)
+# v10.6.1: Added month/day names, street_types, postal_code_format, national_id_patterns
+# Stability: High - changes rarely
+
+node:
+  name: Formatting
+  realm: shared
+  layer: locale
+  trait: imported
+  icon:
+    web: "hash"
+    terminal: "▦"
+  description: "Technical formatting rules: dates, numbers, currency, time, phone, address, units"
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Unique key (locale code)"
+      example: "fr-FR"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "French (France) Formatting"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "Date, number, currency formatting for fr-FR"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints"
+      example: "USE: numeric/date/currency formatting. TRIGGERS: dates, prices, numbers, phone, address. KEY: format only, never translate content. NOT: content style or adaptation."
+
+    created_at:
+      type: datetime
+      required: true
+
+    updated_at:
+      type: datetime
+      required: true
+
+  properties:
+    # ═══════════════════════════════════════════════════════════════════════════
+    # NUMBER FORMATTING
+    # ═══════════════════════════════════════════════════════════════════════════
+    decimal_separator:
+      type: string
+      required: true
+      description: "Decimal separator"
+      example: ","
+
+    thousands_separator:
+      type: string
+      required: true
+      description: "Thousands separator (use non-breaking space U+00A0 for French)"
+      example: " "
+
+    grouping_size:
+      type: int
+      required: false
+      description: "Digit grouping size (usually 3)"
+      example: 3
+
+    negative_format:
+      type: string
+      required: false
+      description: "Negative number format pattern"
+      example: "-{n}"
+
+    percentage_space:
+      type: bool
+      required: false
+      description: "Space before % symbol (true for French: '50 %')"
+      example: true
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # DATE FORMATTING
+    # ═══════════════════════════════════════════════════════════════════════════
+    date_format:
+      type: string
+      required: true
+      description: "Primary date format pattern"
+      example: "DD/MM/YYYY"
+
+    date_formats:
+      type: json
+      required: false
+      description: "All date formats by context"
+      example:
+        short: "DD/MM"
+        medium: "DD/MM/YYYY"
+        long: "D MMMM YYYY"
+        full: "dddd D MMMM YYYY"
+
+    date_separator:
+      type: string
+      required: false
+      description: "Date component separator"
+      example: "/"
+
+    month_names:
+      type: json
+      required: false
+      description: "Full month names in locale language (January-December order)"
+      example: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"]
+
+    month_names_abbr:
+      type: json
+      required: false
+      description: "Abbreviated month names in locale language"
+      example: ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."]
+
+    day_names:
+      type: json
+      required: false
+      description: "Full day names in locale language (Monday-Sunday order)"
+      example: ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"]
+
+    day_names_abbr:
+      type: json
+      required: false
+      description: "Abbreviated day names in locale language"
+      example: ["lun.", "mar.", "mer.", "jeu.", "ven.", "sam.", "dim."]
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # TIME FORMATTING
+    # ═══════════════════════════════════════════════════════════════════════════
+    time_system:
+      type: string
+      required: true
+      enum: ["24h", "12h"]
+      description: "Time system (24h for most of Europe, 12h for US/UK)"
+      llm_context: "24h = most of world; 12h = US/UK/Philippines. Affects time display."
+      example: "24h"
+
+    time_format:
+      type: string
+      required: false
+      description: "Time format pattern"
+      example: "HH:mm"
+
+    time_separator:
+      type: string
+      required: false
+      description: "Time component separator"
+      example: ":"
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # CURRENCY FORMATTING
+    # ═══════════════════════════════════════════════════════════════════════════
+    currency_code:
+      type: string
+      required: true
+      description: "ISO 4217 currency code"
+      example: "EUR"
+
+    currency_symbol:
+      type: string
+      required: true
+      description: "Currency symbol"
+      example: "€"
+
+    currency_position:
+      type: string
+      required: true
+      enum: ["before", "after"]
+      description: "Currency symbol position relative to amount"
+      example: "after"
+
+    currency_space:
+      type: bool
+      required: false
+      description: "Space between amount and currency symbol"
+      example: true
+
+    currency_format:
+      type: string
+      required: false
+      description: "Full currency format pattern"
+      example: "{amount} €"
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # PHONE FORMATTING
+    # ═══════════════════════════════════════════════════════════════════════════
+    country_code:
+      type: string
+      required: false
+      description: "International dialing code"
+      example: "+33"
+
+    phone_format:
+      type: string
+      required: false
+      description: "National phone number format"
+      example: "0X XX XX XX XX"
+
+    phone_international:
+      type: string
+      required: false
+      description: "International phone format"
+      example: "+33 X XX XX XX XX"
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # ADDRESS & UNITS
+    # ═══════════════════════════════════════════════════════════════════════════
+    address_format:
+      type: json
+      required: false
+      description: "Address line order and format"
+      example:
+        order: ["street", "postal_city", "country"]
+        postal_city: "{postal} {city}"
+
+    street_types:
+      type: json
+      required: false
+      description: "Common street type words in locale language"
+      example: ["rue", "avenue", "boulevard", "place", "impasse", "passage", "allée", "chemin", "route", "quai"]
+
+    postal_code_format:
+      type: string
+      required: false
+      description: "Postal code format description"
+      example: "NNNNN (5 digits)"
+
+    measurement_system:
+      type: string
+      required: true
+      enum: ["metric", "imperial", "mixed"]
+      description: "Default measurement system"
+      llm_context: "metric = most of world; imperial = US only; mixed = UK."
+      example: "metric"
+
+    temperature_unit:
+      type: string
+      required: false
+      enum: ["celsius", "fahrenheit"]
+      description: "Temperature display unit"
+      example: "celsius"
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # VALIDATION PATTERNS
+    # ═══════════════════════════════════════════════════════════════════════════
+    validation_patterns:
+      type: json
+      required: false
+      description: "Regex patterns for format validation"
+      example:
+        date: "^\\d{2}/\\d{2}/\\d{4}$"
+        time: "^([01]\\d|2[0-3]):[0-5]\\d(:[0-5]\\d)?$"
+        phone_national: "^0[1-9]( \\d{2}){4}$"
+        phone_international: "^\\+33 [1-9]( \\d{2}){4}$"
+        postal_code: "^\\d{5}$"
+        number: "^-?\\d{1,3}( \\d{3})*(,\\d+)?$"
+        currency: "^\\d{1,3}( \\d{3})*(,\\d{2})? €$"
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # NATIONAL IDENTIFIERS
+    # ═══════════════════════════════════════════════════════════════════════════
+    national_id_patterns:
+      type: json
+      required: false
+      description: "Country-specific identifier formats (social security, company IDs, bank accounts)"
+      example:
+        nir: "Social security number (1 85 05 78 006 084 36)"
+        siren: "Company ID - 9 digits (443061841)"
+        siret: "Establishment ID - 14 digits (44306184100047)"
+        iban: "Bank account (FR76 3000 6000 0112 3456 7890 189)"
+        vat: "VAT number (FR 12 345678901)"
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # RAW MARKDOWN (Hybrid approach)
+    # ═══════════════════════════════════════════════════════════════════════════
+    raw_markdown:
+      type: string
+      required: false
+      description: "Full source markdown for LLM context (includes examples, edge cases)"
+
+  relations:
+    incoming:
+      - type: HAS_FORMATTING
+        from: Locale
+        cardinality: "1:1"
+        description: "Locale has exactly one formatting config"

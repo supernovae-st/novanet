@@ -1,0 +1,48 @@
+# packages/core/models/arc-classes/semantic/links-to.yaml
+# ArcKind: LINKS_TO — Page-to-page SEO internal linking
+#
+# v0.12.4: ADR-028 Page-Entity Architecture
+# Calculated from [@page:X] refs in BlockInstructions with purpose: link
+
+arc:
+  name: LINKS_TO
+  family: semantic
+  scope: intra_realm
+  temperature_threshold: 0.4  # Internal links for SEO maillage
+
+  source: Page
+  target: Page
+  cardinality: many_to_many
+  is_self_referential: true
+
+  properties:
+    - name: via_blocks
+      type: array
+      required: false
+      description: "Block keys where link originates (e.g., ['hero', 'pricing'])"
+
+    - name: strength
+      type: integer
+      required: false
+      default: 1
+      description: "Link strength = count of [@page:X] refs across blocks"
+
+    - name: anchor_type
+      type: string
+      required: false
+      enum: [exact_match, partial_match, branded, generic]
+      description: "SEO anchor text strategy"
+
+    - name: nofollow
+      type: boolean
+      required: false
+      default: false
+      description: "Whether link should be nofollow"
+
+  llm_context: |
+    USE: when finding internal links between pages for SEO maillage.
+    TRIGGERS: internal linking, page links, SEO maillage, link building.
+    NOT: entity references (use REFERENCES_ENTITY), content mentions (use MENTIONS).
+    RELATES: Page (source), Page (target), via_blocks (property), calculated arc.
+
+  cypher_pattern: "(Page)-[:LINKS_TO {via_blocks, strength, anchor_type, nofollow}]->(Page)"

@@ -55,12 +55,12 @@ The goal is to achieve 100% uniformity: every entity (Realm, Layer, Trait, ArcFa
 │  ClassesSection       │ (none or summary)            │ No                       │
 │  Realm (shared)       │ realms/shared.yaml           │ No                       │
 │  Layer (semantic)     │ layers/semantic.yaml         │ No                       │
-│  Class (Page)         │ node-kinds/.../page.yaml     │ Yes [Class ◆]            │
-│  Instance (page:home) │ node-kinds/.../page.yaml     │ Yes [Instance ◆]         │
+│  Class (Page)         │ node-classes/.../page.yaml     │ Yes [Class ◆]            │
+│  Instance (page:home) │ node-classes/.../page.yaml     │ Yes [Instance ◆]         │
 │  EntityCategory       │ (entity-category.yaml)       │ No                       │
 │  ArcsSection          │ (none or summary)            │ No                       │
 │  ArcFamily (ownership)│ arc-families/ownership.yaml  │ No                       │
-│  ArcClass (HAS_PAGE)  │ arc-kinds/.../has-page.yaml  │ No                       │
+│  ArcClass (HAS_PAGE)  │ arc-classes/.../has-page.yaml  │ No                       │
 │                                                                                 │
 │  TAB FORMAT: [Class ◆] [Instance ○]  where ◆=active, ○=inactive                 │
 │                                                                                 │
@@ -78,7 +78,7 @@ The goal is to achieve 100% uniformity: every entity (Realm, Layer, Trait, ArcFa
 | `tui/yaml.rs` | Rename `YamlViewSection::Class` → keep, fix comment "Class metadata" | 17 |
 | `tui/yaml_panel.rs` | New tab format `[Class ◆]`, fix "node metadata" → "class definition" | 138, 282-288 |
 | `tui/app.rs` | `yaml_active_section()` based on TreeItem, fix meta/ paths | 361-366, 412-422 |
-| `tui/data.rs` | Fix `node-classes/` → `node-kinds/` | 488, 3221 |
+| `tui/data.rs` | Fix `node-classes/` → `node-classes/` | 488, 3221 |
 
 ---
 
@@ -90,9 +90,9 @@ The goal is to achieve 100% uniformity: every entity (Realm, Layer, Trait, ArcFa
 packages/core/models/
 ├── taxonomy.yaml          ← EVERYTHING in one file (realms, layers, traits, families)
 ├── visual-encoding.yaml   ← Icons and visual channels
-├── node-kinds/            ← Individual Class files ✓
+├── node-classes/            ← Individual Class files ✓
 │   └── {realm}/{layer}/{class}.yaml
-└── arc-kinds/             ← Individual Arc files ✓
+└── arc-classes/             ← Individual Arc files ✓
     └── {family}/{arc}.yaml
 ```
 
@@ -133,11 +133,11 @@ packages/core/models/
 │   ├── generation.yaml
 │   └── mining.yaml
 │
-├── node-kinds/            ← (unchanged)
+├── node-classes/            ← (unchanged)
 │   ├── _index.yaml
 │   └── {realm}/{layer}/{class}.yaml
 │
-├── arc-kinds/             ← (unchanged)
+├── arc-classes/             ← (unchanged)
 │   └── {family}/{arc}.yaml
 │
 ├── visual-encoding.yaml   ← (unchanged, icons source of truth)
@@ -401,7 +401,7 @@ arc_family:
    - Fix paths: `meta/arc-families/` → `arc-families/`
 
 2. Fix `tui/data.rs`:
-   - Fix `node-classes/` → `node-kinds/`
+   - Fix `node-classes/` → `node-classes/`
    - Update Cypher queries: `:Meta:` → `:Schema:`
 
 3. Fix `tui/yaml_panel.rs`:
@@ -604,7 +604,7 @@ graph/__tests__/design-system-coherence.test.ts  # Update paths
 | `:Meta:` (Neo4j) | `:Schema:` | cypher.rs, data.rs, search.rs |
 | `node metadata` | `class definition` | yaml_panel.rs |
 | `kind` (variable) | `class` | app.rs, data.rs, tree.rs |
-| `node-classes/` | `node-kinds/` | data.rs |
+| `node-classes/` | `node-classes/` | data.rs |
 | `meta/realms/` | `realms/` | app.rs |
 | `meta/layers/` | `layers/` | app.rs |
 | `meta/arc-families/` | `arc-families/` | app.rs |

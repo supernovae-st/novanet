@@ -1,0 +1,43 @@
+# packages/core/models/arc-classes/semantic/enhances.yaml
+# ArcKind: ENHANCES - Feature enhances entity capabilities
+# v10.7: New semantic arc for FEATURE → Entity relationships
+
+arc:
+  name: ENHANCES
+  family: semantic
+  scope: intra_realm
+  temperature_threshold: 0.2  # Enhancement - important for capability discovery
+
+  source: Entity
+  target: Entity
+  cardinality: many_to_many
+  is_self_referential: false
+
+  properties:
+    - name: strength
+      type: float
+      required: false
+      default: 0.75
+      description: "Enhancement strength (0.0-1.0)"
+
+    - name: temperature
+      type: float
+      required: false
+      default: 0.8
+      description: "Spreading activation weight"
+
+    - name: enhancement_type
+      type: string
+      required: false
+      enum: [adds, improves, extends, optimizes, secures, tracks]
+      description: "How the feature enhances the target"
+
+  inverse: ENHANCED_BY
+
+  llm_context: |
+    USE: when finding what features enhance an entity.
+    TRIGGERS: enhances, improves, adds capability, extends, feature.
+    NOT: enablement (use ENABLES), containment (use INCLUDES).
+    RELATES: Entity (source/feature), Entity (target/thing), ENHANCED_BY (inverse).
+
+  cypher_pattern: "(Entity)-[:ENHANCES {strength, temperature, enhancement_type}]->(Entity)"

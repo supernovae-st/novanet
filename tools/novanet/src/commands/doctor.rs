@@ -1,7 +1,7 @@
 //! System health checks for NovaNet.
 //!
 //! Verifies:
-//! - YAML validity (taxonomy, node-kinds, arc-kinds)
+//! - YAML validity (taxonomy, node-classes, arc-classes)
 //! - Neo4j connection (optional)
 //! - Schema sync status
 //! - Models directory structure
@@ -139,16 +139,16 @@ pub async fn run_doctor(
 
 fn check_models_directory(root: &Path) -> HealthCheck {
     let models = crate::config::models_dir(root);
-    let node_kinds = models.join("node-kinds");
-    let arc_kinds = models.join("arc-kinds");
+    let node_kinds = models.join("node-classes");
+    let arc_kinds = models.join("arc-classes");
     let taxonomy = models.join("taxonomy.yaml");
 
     let mut missing = Vec::new();
     if !node_kinds.exists() {
-        missing.push("node-kinds/");
+        missing.push("node-classes/");
     }
     if !arc_kinds.exists() {
-        missing.push("arc-kinds/");
+        missing.push("arc-classes/");
     }
     if !taxonomy.exists() {
         missing.push("taxonomy.yaml");

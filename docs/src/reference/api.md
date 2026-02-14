@@ -206,8 +206,8 @@ RETURN n
 
 | File | Content |
 |------|---------|
-| `node-kinds.generated.ts` | Kind Zod schemas |
-| `arc-kinds.generated.ts` | ArcKind definitions |
+| `node-classes.generated.ts` | Kind Zod schemas |
+| `arc-classes.generated.ts` | ArcKind definitions |
 | `taxonomy.generated.ts` | Enums for realm/layer/trait |
 | `visual-encoding.generated.ts` | Colors, icons |
 | `filters.generated.ts` | FacetFilter types |

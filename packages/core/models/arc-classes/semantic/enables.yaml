@@ -1,0 +1,43 @@
+# packages/core/models/arc-classes/semantic/enables.yaml
+# ArcKind: ENABLES - Entity enables/unlocks another Entity
+# v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
+
+arc:
+  name: ENABLES
+  family: semantic
+  scope: intra_realm
+  temperature_threshold: 0.2  # Enablement - important for capability mapping
+
+  source: Entity
+  target: Entity
+  cardinality: many_to_many
+  is_self_referential: true
+
+  properties:
+    - name: strength
+      type: float
+      required: false
+      default: 0.75
+      description: "Enablement strength (0.0-1.0)"
+
+    - name: temperature
+      type: float
+      required: false
+      default: 0.8
+      description: "Spreading activation weight"
+
+    - name: enablement_type
+      type: string
+      required: false
+      enum: [unlocks, enhances, permits, facilitates]
+      description: "Type of enablement relationship"
+
+  inverse: ENABLED_BY
+
+  llm_context: |
+    USE: when finding what capabilities an entity unlocks.
+    TRIGGERS: enables, unlocks, makes possible, facilitates, permits.
+    NOT: requirement (use REQUIRES), enhancement (use ENHANCES).
+    RELATES: Entity (source/enabler), Entity (target), ENABLED_BY (inverse).
+
+  cypher_pattern: "(Entity)-[:ENABLES {strength, temperature, enablement_type}]->(Entity)"

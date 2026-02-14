@@ -166,11 +166,11 @@ node_realms:
 
 ---
 
-### 1.2 Reorganize node-kinds Directory
+### 1.2 Reorganize node-classes Directory
 
 **Before (v10.5):**
 ```
-models/node-kinds/
+models/node-classes/
 ├── global/
 │   ├── config/
 │   ├── locale-knowledge/
@@ -187,7 +187,7 @@ models/node-kinds/
 
 **After (v10.6):**
 ```
-models/node-kinds/
+models/node-classes/
 ├── global/
 │   ├── config/
 │   ├── locale-knowledge/
@@ -204,12 +204,12 @@ models/node-kinds/
 **Commands:**
 ```bash
 # Merge organization + project into tenant
-mv models/node-kinds/organization models/node-kinds/tenant
-mv models/node-kinds/project/* models/node-kinds/tenant/
+mv models/node-classes/organization models/node-classes/tenant
+mv models/node-classes/project/* models/node-classes/tenant/
 
 # Update realm: field in all YAML files
-find models/node-kinds/tenant -name "*.yaml" -exec sed -i '' 's/realm: organization/realm: tenant/g' {} \;
-find models/node-kinds/tenant -name "*.yaml" -exec sed -i '' 's/realm: project/realm: tenant/g' {} \;
+find models/node-classes/tenant -name "*.yaml" -exec sed -i '' 's/realm: organization/realm: tenant/g' {} \;
+find models/node-classes/tenant -name "*.yaml" -exec sed -i '' 's/realm: project/realm: tenant/g' {} \;
 ```
 
 ---
@@ -409,8 +409,8 @@ pnpm type-check && pnpm lint && pnpm test
 ## Files Changed Summary
 
 **Renamed:**
-- `models/node-kinds/organization/` → `models/node-kinds/tenant/config/`
-- `models/node-kinds/project/` → `models/node-kinds/tenant/*`
+- `models/node-classes/organization/` → `models/node-classes/tenant/config/`
+- `models/node-classes/project/` → `models/node-classes/tenant/*`
 
 **Modified:**
 - `packages/core/models/taxonomy.yaml` (2 realms)

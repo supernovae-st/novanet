@@ -99,7 +99,7 @@ fi
 # 5. YAML count validation (only if YAML files are staged)
 if [ -n "$STAGED_YAML" ]; then
     echo -e "${YELLOW}► Validating YAML schema...${NC}"
-    YAML_COUNT=$(find "$REPO_ROOT/packages/core/models/node-kinds" -name "*.yaml" | wc -l | tr -d ' ')
+    YAML_COUNT=$(find "$REPO_ROOT/packages/core/models/node-classes" -name "*.yaml" | wc -l | tr -d ' ')
     if [ "$YAML_COUNT" -ne 60 ]; then
         echo -e "${RED}  ✗ YAML node count: $YAML_COUNT (expected 60 for v11.5)${NC}"
         exit 1

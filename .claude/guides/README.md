@@ -214,7 +214,7 @@ These guides support the NovaNet coding principles:
 
 ### Adding a New Node Type
 
-1. Create YAML: `packages/core/models/node-kinds/{realm}/{layer}/{name}.yaml`
+1. Create YAML: `packages/core/models/node-classes/{realm}/{layer}/{name}.yaml`
 2. Run tests: `cargo test test_path_content_match` (validates path ↔ content)
 3. Regenerate: `cargo run -- schema generate`
 4. Verify: `cargo test test_no_orphans` (ensures referenced nodes exist)

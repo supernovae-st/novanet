@@ -473,7 +473,7 @@ describe('Design System Coherence: No Deprecated Terms', () => {
     expect(NODE_TYPES).not.toContain('ProjectL10n');
   });
 
-  it('should use Content suffix for localized semantic nodes', () => {
+  it('should use Content suffix for authored semantic nodes', () => {
     expect(NODE_TYPES).toContain('EntityContent');
     expect(NODE_TYPES).toContain('ProjectContent');
   });

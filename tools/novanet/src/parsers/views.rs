@@ -171,6 +171,54 @@ pub struct ViewRegistry {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Simplified views.yaml (v0.12.5 - Single Source of Truth)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Category definition in views.yaml.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ViewCategoryDef {
+    pub label: String,
+    #[serde(default)]
+    pub icon: Option<ViewIcon>,
+    #[serde(default)]
+    pub color: Option<String>,
+    #[serde(default)]
+    pub description: Option<String>,
+}
+
+/// Single view entry in views.yaml.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SimpleViewEntry {
+    pub id: String,
+    pub name: String,
+    pub description: String,
+    pub category: String,
+    #[serde(default)]
+    pub icon: Option<ViewIcon>,
+    #[serde(default)]
+    pub color: Option<String>,
+    #[serde(default)]
+    pub root_type: Option<String>,
+    #[serde(default)]
+    pub contextual: Option<bool>,
+    #[serde(default)]
+    pub applicable_types: Option<Vec<String>>,
+    #[serde(default)]
+    pub cypher: Option<String>,
+}
+
+/// The simplified `views.yaml` document (v0.12.5).
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SimpleViewsFile {
+    pub version: String,
+    #[serde(default)]
+    pub description: Option<String>,
+    #[serde(default)]
+    pub categories: std::collections::HashMap<String, ViewCategoryDef>,
+    pub views: Vec<SimpleViewEntry>,
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Loaders
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -221,6 +269,20 @@ pub fn load_registry(root: &Path) -> crate::Result<ViewRegistry> {
     if !path.exists() {
         return Err(crate::NovaNetError::Validation(format!(
             "view registry not found: {}",
+            path.display()
+        )));
+    }
+    super::utils::load_yaml(&path)
+}
+
+/// Load the simplified views file (`views.yaml`).
+///
+/// This is the single source of truth for TUI and Studio (v0.12.5).
+pub fn load_simple_views(root: &Path) -> crate::Result<SimpleViewsFile> {
+    let path = crate::config::models_dir(root).join("views.yaml");
+    if !path.exists() {
+        return Err(crate::NovaNetError::Validation(format!(
+            "views.yaml not found: {}",
             path.display()
         )));
     }
@@ -529,5 +591,93 @@ views:
         let icon2 = v2.icon.as_ref().unwrap();
         assert_eq!(icon2.web, "globe");
         assert_eq!(icon2.terminal, "●");
+    }
+
+    #[test]
+    fn parse_simple_views_file() {
+        let yaml = r##"
+version: "0.12.5"
+description: NovaNet Essential Views (10 views)
+categories:
+  schema:
+    label: Schema
+    icon: { web: database, terminal: "◆" }
+    color: "#8b5cf6"
+    description: Schema exploration
+  generation:
+    label: Generation
+    icon: { web: sparkles, terminal: "⚡" }
+    color: "#ec4899"
+views:
+  - id: schema-complete
+    name: Complete Schema
+    description: All 61 Classes and 128 ArcClasses
+    category: schema
+    icon: { web: diamond, terminal: "◆" }
+    color: "#8b5cf6"
+    root_type: null
+    contextual: false
+    cypher: |
+      MATCH (n:Schema) RETURN n
+  - id: gen-page
+    name: Page Context
+    description: Full context for orchestrator
+    category: generation
+    icon: { web: layout, terminal: "P" }
+    color: "#06b6d4"
+    root_type: Page
+    contextual: true
+    applicable_types: [Page]
+    cypher: |
+      MATCH (p:Page {key: $nodeKey}) RETURN p
+"##;
+        let file: SimpleViewsFile = serde_yaml::from_str(yaml).unwrap();
+        assert_eq!(file.version, "0.12.5");
+        assert_eq!(file.views.len(), 2);
+        assert_eq!(file.categories.len(), 2);
+
+        // Check categories
+        let schema_cat = file.categories.get("schema").unwrap();
+        assert_eq!(schema_cat.label, "Schema");
+        assert_eq!(schema_cat.color.as_deref(), Some("#8b5cf6"));
+
+        // Check first view
+        let v1 = &file.views[0];
+        assert_eq!(v1.id, "schema-complete");
+        assert_eq!(v1.name, "Complete Schema");
+        assert_eq!(v1.category, "schema");
+        assert!(!v1.contextual.unwrap_or(false));
+
+        // Check second view
+        let v2 = &file.views[1];
+        assert_eq!(v2.id, "gen-page");
+        assert!(v2.contextual.unwrap_or(false));
+        assert_eq!(v2.applicable_types.as_ref().unwrap(), &["Page"]);
+    }
+
+    #[test]
+    fn load_simple_views_integration() {
+        let Some(root) = test_root() else { return };
+        let file = load_simple_views(&root).expect("should load views.yaml");
+        assert_eq!(file.views.len(), 10, "expected 10 views");
+        assert_eq!(file.categories.len(), 4, "expected 4 categories");
+
+        // Check categories exist
+        assert!(file.categories.contains_key("schema"));
+        assert!(file.categories.contains_key("data"));
+        assert!(file.categories.contains_key("generation"));
+        assert!(file.categories.contains_key("contextual"));
+
+        // Check all views have required fields
+        for view in &file.views {
+            assert!(!view.id.is_empty(), "view has empty id");
+            assert!(!view.name.is_empty(), "view {} has empty name", view.id);
+            assert!(
+                file.categories.contains_key(&view.category),
+                "view {} has invalid category {}",
+                view.id,
+                view.category
+            );
+        }
     }
 }

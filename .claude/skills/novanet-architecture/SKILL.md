@@ -47,7 +47,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 |   packages/core/models/                                                                           |
 |   +-- _index.yaml                          <- Index du graphe (structure, changelog)              |
 |   +-- taxonomy.yaml                        <- v0.12.0: 2 Realms/10 Layers/5 Traits/5 ArcFamilies  |
-|   +-- node-kinds/                          <- 59 fichiers YAML (1 par Class)                      |
+|   +-- node-classes/                          <- 59 fichiers YAML (1 par Class)                      |
 |   |   +-- shared/                          <- Realm: shared (39 nodes)                            |
 |   |   |   +-- config/                      <-   Layer: config (Locale, EntityCategory, etc.)      |
 |   |   |   +-- locale/                      <-   Layer: locale (6 nodes)                           |
@@ -65,7 +65,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 |   |       +-- instruction/                 <-   Layer: instruction (Instructions, Rules)          |
 |   |       +-- output/                      <-   Layer: output (PageGenerated, BlockGenerated)     |
 |   |                                                                                               |
-|   +-- arc-kinds/                           <- 114 fichiers YAML (1 par ArcClass)                  |
+|   +-- arc-classes/                           <- 114 fichiers YAML (1 par ArcClass)                  |
 |   +-- relations.yaml                       <- Legacy format (kept for parser compatibility)       |
 |   +-- views/                               <- Definitions de vues YAML                            |
 |                                                                                                   |
@@ -161,8 +161,8 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
      +---------------------------------------------------------------------------------------------+
      |                        YAML (Single Source of Truth)                                        |
      |                        packages/core/models/                                                |
-     |                        +-- node-kinds/               <- 59 NodeClass files                  |
-     |                        +-- arc-kinds/                <- 114 ArcClass files                  |
+     |                        +-- node-classes/               <- 59 NodeClass files                  |
+     |                        +-- arc-classes/                <- 114 ArcClass files                  |
      |                        +-- taxonomy.yaml             <- 2 Realms, 10 Layers, 5 Traits       |
      +---------------------------------------------+-----------------------------------------------+
                                                    |
@@ -391,7 +391,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 |                                                                                                   |
 |                    +------------------+                                                           |
 |                    |  @novanet/core   |  <- Types, schemas, generators, filters                   |
-|                    |  (source truth)  |     node-kinds/ + arc-kinds/ + taxonomy.yaml              |
+|                    |  (source truth)  |     node-classes/ + arc-classes/ + taxonomy.yaml              |
 |                    +--------+---------+     v0.12.0: 2 Realms, 10 Layers                          |
 |                             |                                                                     |
 |              +--------------+--------------+                                                      |

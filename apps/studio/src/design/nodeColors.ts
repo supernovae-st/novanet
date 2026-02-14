@@ -48,6 +48,7 @@ export function getLayerGradientColors(layer: Layer | undefined): GradientColors
 
 // Type-specific colors that extend layer colors
 // These provide more granular styling for specific node types
+// v0.12.4: BrandIdentity → Brand + BrandDesign + BrandPrinciples + PromptStyle (ADR-028)
 const STRUCTURAL_LAYER_MAP: Record<string, Layer> = {
   Project: 'foundation',
   Page: 'structure',
@@ -55,7 +56,10 @@ const STRUCTURAL_LAYER_MAP: Record<string, Layer> = {
   BlockType: 'instruction',
   Entity: 'semantic',
   Locale: 'config',
-  BrandIdentity: 'foundation',
+  Brand: 'foundation',
+  BrandDesign: 'foundation',
+  BrandPrinciples: 'foundation',
+  PromptStyle: 'foundation',
   ProjectContent: 'foundation',
 };
 

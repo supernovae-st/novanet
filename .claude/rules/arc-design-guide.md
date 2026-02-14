@@ -128,7 +128,7 @@ Knowledge/locale traversal arcs (high LLM context value):
 ### Forward Arc (declares inverse)
 
 ```yaml
-# packages/core/models/arc-kinds/ownership/has-entity.yaml
+# packages/core/models/arc-classes/ownership/has-entity.yaml
 arc:
   name: HAS_ENTITY
   family: ownership
@@ -150,7 +150,7 @@ arc:
 ### Inverse Arc (references forward)
 
 ```yaml
-# packages/core/models/arc-kinds/ownership/entity-of.yaml
+# packages/core/models/arc-classes/ownership/entity-of.yaml
 arc:
   name: ENTITY_OF
   family: ownership
@@ -268,4 +268,4 @@ llm_context: |
 
 - ADR-026: Inverse Arc Policy
 - ADR-027: Generation Family Arc Semantics
-- `packages/core/models/arc-kinds/` - All arc definitions
+- `packages/core/models/arc-classes/` - All arc definitions

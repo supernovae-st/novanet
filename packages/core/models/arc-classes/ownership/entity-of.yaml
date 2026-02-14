@@ -1,0 +1,19 @@
+# packages/core/models/arc-classes/ownership/entity-of.yaml
+# ArcKind: ENTITY_OF — Inverse of HAS_ENTITY (Entity belongs to Project)
+
+arc:
+  name: ENTITY_OF
+  family: ownership
+  scope: intra_realm
+  source: Entity
+  target: Project
+  cardinality: many_to_one
+  inverse_of: HAS_ENTITY
+
+  llm_context: |
+    USE: when finding which Project owns an Entity.
+    TRIGGERS: entity owner, entity project, which project.
+    NOT: loading entities for a project (use HAS_ENTITY).
+    RELATES: Entity (source), Project (target), HAS_ENTITY (inverse).
+
+  cypher_pattern: (Entity)-[:ENTITY_OF]->(Project)

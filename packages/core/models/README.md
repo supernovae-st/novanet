@@ -13,7 +13,7 @@ models/
 ├── taxonomy.yaml            # Realm/Layer/Trait definitions (colors, icons)
 ├── visual-encoding.yaml     # Visual channel mappings
 ├── README.md                # This file
-├── node-kinds/              # ONE FILE PER NODE CLASS (59 files)
+├── node-classes/              # ONE FILE PER NODE CLASS (59 files)
 │   ├── shared/              # ◉ SHARED realm (39 nodes)
 │   │   ├── config/          #    Locale, EntityCategory, OrgConfig (3)
 │   │   ├── locale/          #    LocaleVoice, LocaleCulture, LocaleStyle... (6)
@@ -26,7 +26,7 @@ models/
 │       ├── semantic/        #    Entity, EntityContent, Audience, Channel (4)
 │       ├── instruction/     #    PageStructure, PageInstruction, BlockType, BlockInstruction... (6)
 │       └── output/          #    PageGenerated, BlockGenerated, OutputArtifact (3)
-├── arc-kinds/               # ONE FILE PER ARC CLASS (114 arcs)
+├── arc-classes/               # ONE FILE PER ARC CLASS (114 arcs)
 │   ├── ownership/           # HAS_* arcs (43)
 │   ├── localization/        # FOR_LOCALE, SUPPORTS_LOCALE (14)
 │   ├── semantic/            # USES_*, SEMANTIC_LINK (26)
@@ -129,7 +129,7 @@ This launches a Socratic discovery workflow that:
 
 Or manually:
 
-1. Create `models/node-kinds/{realm}/{layer}/{node-name}.yaml`
+1. Create `models/node-classes/{realm}/{layer}/{node-name}.yaml`
 2. Add to `models/_index.yaml` files list
 3. Run `cd tools/novanet && cargo run -- schema generate`
 4. Run `cd tools/novanet && cargo run -- schema validate`

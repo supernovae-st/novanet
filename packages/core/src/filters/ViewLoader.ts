@@ -1,36 +1,39 @@
 // src/filters/ViewLoader.ts
-// v11.6.1: Unified view system - all views from _registry.yaml with embedded Cypher
+// v0.12.5: Unified view system - all views from views.yaml (single source of truth)
 
 import { promises as fs } from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
-import type { ViewDefinition, ViewRegistry, ViewRegistryEntry, IncludeRule, CypherQuery } from './types.js';
+import type { ViewDefinition, ViewRegistry, ViewRegistryEntry, ViewCategoryDef, IncludeRule, CypherQuery } from './types.js';
 import { NovaNetFilter } from './NovaNetFilter.js';
 
 
 // ─────────────────────────────────────────────────────────────────────────────
-// YAML Registry Loading
+// YAML Registry Loading (v0.12.5: views.yaml format)
 // ─────────────────────────────────────────────────────────────────────────────
 
 interface YAMLRegistry {
   version: string;
   description?: string;
+  categories: Record<string, ViewCategoryDef>;
   views: ViewRegistryEntry[];
 }
 
 let registryCache: YAMLRegistry | null = null;
 
 /**
- * Load the unified _registry.yaml file.
+ * Load the unified views.yaml file (v0.12.5).
+ * Single source of truth for TUI and Studio.
  */
 async function loadRegistryYAML(): Promise<YAMLRegistry> {
   if (registryCache) return registryCache;
 
   // Try multiple paths (for different execution contexts)
   const possiblePaths = [
-    path.join(process.cwd(), 'packages/core/models/views/_registry.yaml'),
-    path.join(process.cwd(), '../../packages/core/models/views/_registry.yaml'),
-    path.join(process.cwd(), '../../../packages/core/models/views/_registry.yaml'),
+    // New: views.yaml (v0.12.5)
+    path.join(process.cwd(), 'packages/core/models/views.yaml'),
+    path.join(process.cwd(), '../../packages/core/models/views.yaml'),
+    path.join(process.cwd(), '../../../packages/core/models/views.yaml'),
   ];
 
   for (const registryPath of possiblePaths) {
@@ -43,7 +46,7 @@ async function loadRegistryYAML(): Promise<YAMLRegistry> {
     }
   }
 
-  throw new Error('Could not load _registry.yaml from any known path');
+  throw new Error('Could not load views.yaml from any known path');
 }
 
 
@@ -52,15 +55,15 @@ async function loadRegistryYAML(): Promise<YAMLRegistry> {
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * ViewLoader - Loads view definitions from _registry.yaml (unified view system).
+ * ViewLoader - Loads view definitions from views.yaml (unified view system).
  *
- * v11.6.1: All views defined in _registry.yaml with embedded Cypher queries.
- * No more separate YAML files or generated TypeScript.
+ * v0.12.5: All views defined in views.yaml with embedded Cypher queries.
+ * Single source of truth for TUI and Studio.
  *
  * Usage:
  * ```typescript
  * const registry = await ViewLoader.loadRegistry();
- * const view = ViewLoader.getViewById(registry, 'data-complete');
+ * const view = ViewLoader.getViewById(registry, 'schema-complete');
  * if (view.cypher) {
  *   // Execute cypher directly
  * }
@@ -68,15 +71,16 @@ async function loadRegistryYAML(): Promise<YAMLRegistry> {
  */
 export class ViewLoader {
   /**
-   * Loads the unified view registry from _registry.yaml.
+   * Loads the unified view registry from views.yaml.
    *
-   * @returns The view registry with all views and their Cypher queries
+   * @returns The view registry with categories and views with their Cypher queries
    */
   static async loadRegistry(): Promise<ViewRegistry> {
     const registry = await loadRegistryYAML();
     return {
       version: registry.version,
-      description: registry.description || 'NovaNet Unified View System',
+      description: registry.description || 'NovaNet Essential Views',
+      categories: registry.categories || {},
       views: registry.views,
     };
   }

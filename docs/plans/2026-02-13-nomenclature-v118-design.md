@@ -720,7 +720,7 @@ Skills to verify:
 ║        └─ channel_mapping: verify trait references                            ║
 ║                                                                               ║
 ║  3. NODE KIND YAMLS (60 files with trait: field)                              ║
-║     └─ packages/core/models/node-kinds/**/*.yaml                              ║
+║     └─ packages/core/models/node-classes/**/*.yaml                              ║
 ║        └─ trait: invariant → defined, localized → authored, etc.              ║
 ║                                                                               ║
 ║  4. RUST GENERATORS (read YAML, write artifacts)                              ║
@@ -769,7 +769,7 @@ taxonomy.yaml (1)
        ↓
 visual-encoding.yaml (2)
        ↓
-node-kinds/**/*.yaml (3)  ─────────────────────┐
+node-classes/**/*.yaml (3)  ─────────────────────┐
        ↓                                       │
 Rust generators (4)                            │
        ↓                                       │
@@ -812,7 +812,7 @@ cargo nextest run && pnpm test
 
 # Zone 7: Terminology audit
 grep -r "NodeKind" --include="*.rs" --include="*.ts" | grep -v "test\|spec\|migration"
-grep -r "invariant" packages/core/models/node-kinds/ | wc -l  # Should be 0 after migration
+grep -r "invariant" packages/core/models/node-classes/ | wc -l  # Should be 0 after migration
 ```
 
 ## Nexus LEARN Module Brainstorm
@@ -986,7 +986,7 @@ Based on research from Context7 (Ratatui patterns), Perplexity (TUI UX), and oxy
 ║  │   ├─ 00.0-cleanup.cypher     (drop old :Meta: labels)                      ║
 ║  │   ├─ 00.5-taxonomy.cypher    (Realm, Layer, Trait with new names)          ║
 ║  │   ├─ 01-schema-classes.cypher (renamed from 01-kinds.cypher)               ║
-║  │   ├─ 02-arc-classes.cypher   (renamed from 02-arc-kinds.cypher)            ║
+║  │   ├─ 02-arc-classes.cypher   (renamed from 02-arc-classes.cypher)            ║
 ║  │   ├─ 03-instances.cypher     (sample data)                                 ║
 ║  │   └─ 04-relationships.cypher (connect all nodes)                           ║
 ║  │                                                                            ║
@@ -1071,8 +1071,8 @@ RETURN type(r), labels(source), labels(target) AS invalid_target;
 ║  2. PACKAGES/CORE                                                             ║
 ║     ├─ [ ] models/taxonomy.yaml — Trait names                                 ║
 ║     ├─ [ ] models/visual-encoding.yaml — Icons, borders                       ║
-║     ├─ [ ] models/node-kinds/**/*.yaml — 60 files                             ║
-║     ├─ [ ] models/arc-kinds/**/*.yaml — 114 files                             ║
+║     ├─ [ ] models/node-classes/**/*.yaml — 60 files                             ║
+║     ├─ [ ] models/arc-classes/**/*.yaml — 114 files                             ║
 ║     ├─ [ ] models/views/*.yaml — Query views                                  ║
 ║     ├─ [ ] src/graph/*.ts — Generated types                                   ║
 ║     └─ [ ] package.json — Version                                             ║
@@ -1321,8 +1321,8 @@ echo "════════════════════════�
 ║  HOUR 1-2: YAML & Source of Truth                                             ║
 ║  ├─ [ ] taxonomy.yaml (traits, colors, borders)                               ║
 ║  ├─ [ ] visual-encoding.yaml (icons)                                          ║
-║  ├─ [ ] node-kinds/**/*.yaml (60 files)                                       ║
-║  └─ [ ] arc-kinds/**/*.yaml (if trait references)                             ║
+║  ├─ [ ] node-classes/**/*.yaml (60 files)                                       ║
+║  └─ [ ] arc-classes/**/*.yaml (if trait references)                             ║
 ║  └─ GATE: yq validation + Ralph Layer 1                                       ║
 ║                                                                               ║
 ║  HOUR 2-4: RUST CODEBASE                                                      ║

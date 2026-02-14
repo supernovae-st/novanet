@@ -119,7 +119,7 @@
 #   mining         (1) - Analytics (HAS_METRICS)
 #
 #   See taxonomy.yaml for full ArcFamily definitions.
-#   See arc-kinds/ directory for all arc types with family assignment.
+#   See arc-classes/ directory for all arc types with family assignment.
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 # STANDARD NODE PROPERTIES v0.12.0
@@ -172,60 +172,60 @@ files:
   shared:
     # Configuration (3 nodes)
     config:
-      - node-kinds/shared/config/locale.yaml           # BCP-47 locale definition
-      - node-kinds/shared/config/entity-category.yaml  # Entity classification (13 types)
-      - node-kinds/shared/config/seo-keyword-format.yaml # SEO keyword format
+      - node-classes/shared/config/locale.yaml           # BCP-47 locale definition
+      - node-classes/shared/config/entity-category.yaml  # Entity classification (13 types)
+      - node-classes/shared/config/seo-keyword-format.yaml # SEO keyword format
 
     # Geography (7 nodes) - World Bank / UN classification
     geography:
-      - node-kinds/shared/geography/continent.yaml
-      - node-kinds/shared/geography/geo-region.yaml
-      - node-kinds/shared/geography/geo-sub-region.yaml
-      - node-kinds/shared/geography/economic-region.yaml
-      - node-kinds/shared/geography/income-group.yaml
-      - node-kinds/shared/geography/lending-category.yaml
+      - node-classes/shared/geography/continent.yaml
+      - node-classes/shared/geography/geo-region.yaml
+      - node-classes/shared/geography/geo-sub-region.yaml
+      - node-classes/shared/geography/economic-region.yaml
+      - node-classes/shared/geography/income-group.yaml
+      - node-classes/shared/geography/lending-category.yaml
 
     # Knowledge (24 nodes) - Locale knowledge atoms + SEO/GEO
     knowledge:
       # Containers (8) - aggregate knowledge by category
-      - node-kinds/shared/knowledge/term-set.yaml
-      - node-kinds/shared/knowledge/expression-set.yaml
-      - node-kinds/shared/knowledge/pattern-set.yaml
-      - node-kinds/shared/knowledge/culture-set.yaml
-      - node-kinds/shared/knowledge/taboo-set.yaml
-      - node-kinds/shared/knowledge/audience-set.yaml
-      - node-kinds/shared/knowledge/seo-keyword-set.yaml
-      - node-kinds/shared/knowledge/geo-query-set.yaml
+      - node-classes/shared/knowledge/term-set.yaml
+      - node-classes/shared/knowledge/expression-set.yaml
+      - node-classes/shared/knowledge/pattern-set.yaml
+      - node-classes/shared/knowledge/culture-set.yaml
+      - node-classes/shared/knowledge/taboo-set.yaml
+      - node-classes/shared/knowledge/audience-set.yaml
+      - node-classes/shared/knowledge/seo-keyword-set.yaml
+      - node-classes/shared/knowledge/geo-query-set.yaml
       # Atoms (6) - granular knowledge items for selective LLM loading
-      - node-kinds/shared/knowledge/atoms/term.yaml
-      - node-kinds/shared/knowledge/atoms/expression.yaml
-      - node-kinds/shared/knowledge/atoms/pattern.yaml
-      - node-kinds/shared/knowledge/atoms/culture-ref.yaml
-      - node-kinds/shared/knowledge/atoms/taboo.yaml
-      - node-kinds/shared/knowledge/atoms/audience-trait.yaml
+      - node-classes/shared/knowledge/atoms/term.yaml
+      - node-classes/shared/knowledge/atoms/expression.yaml
+      - node-classes/shared/knowledge/atoms/pattern.yaml
+      - node-classes/shared/knowledge/atoms/culture-ref.yaml
+      - node-classes/shared/knowledge/atoms/taboo.yaml
+      - node-classes/shared/knowledge/atoms/audience-trait.yaml
       # SEO/GEO (4)
-      - node-kinds/shared/knowledge/seo-keyword.yaml
-      - node-kinds/shared/knowledge/seo-keyword-metrics.yaml
-      - node-kinds/shared/knowledge/geo-query.yaml
-      - node-kinds/shared/knowledge/geo-answer.yaml
+      - node-classes/shared/knowledge/seo-keyword.yaml
+      - node-classes/shared/knowledge/seo-keyword-metrics.yaml
+      - node-classes/shared/knowledge/geo-query.yaml
+      - node-classes/shared/knowledge/geo-answer.yaml
       # Cultural classification (2)
-      - node-kinds/shared/knowledge/cultural-realm.yaml
-      - node-kinds/shared/knowledge/cultural-sub-realm.yaml
+      - node-classes/shared/knowledge/cultural-realm.yaml
+      - node-classes/shared/knowledge/cultural-sub-realm.yaml
       # Linguistic classification (2)
-      - node-kinds/shared/knowledge/language-family.yaml
-      - node-kinds/shared/knowledge/language-branch.yaml
+      - node-classes/shared/knowledge/language-family.yaml
+      - node-classes/shared/knowledge/language-branch.yaml
       # Population classification (2)
-      - node-kinds/shared/knowledge/population-cluster.yaml
-      - node-kinds/shared/knowledge/population-sub-cluster.yaml
+      - node-classes/shared/knowledge/population-cluster.yaml
+      - node-classes/shared/knowledge/population-sub-cluster.yaml
 
     # Locale settings (6 nodes) - per-locale configuration
     locale:
-      - node-kinds/shared/locale/culture.yaml
-      - node-kinds/shared/locale/style.yaml
-      - node-kinds/shared/locale/formatting.yaml
-      - node-kinds/shared/locale/slugification.yaml
-      - node-kinds/shared/locale/adaptation.yaml
-      - node-kinds/shared/locale/market.yaml
+      - node-classes/shared/locale/culture.yaml
+      - node-classes/shared/locale/style.yaml
+      - node-classes/shared/locale/formatting.yaml
+      - node-classes/shared/locale/slugification.yaml
+      - node-classes/shared/locale/adaptation.yaml
+      - node-classes/shared/locale/market.yaml
 
   # ═══════════════════════════════════════════════════════════════════════════
   # 📦 ORG REALM (21 nodes) - Organization-specific content
@@ -234,48 +234,48 @@ files:
   org:
     # Organization config (1 node)
     config:
-      - node-kinds/org/config/org-config.yaml
+      - node-classes/org/config/org-config.yaml
 
     # Foundation (6 nodes) - Project root & brand architecture
     foundation:
-      - node-kinds/org/foundation/project.yaml
-      - node-kinds/org/foundation/brand.yaml             # Central brand identity
-      - node-kinds/org/foundation/brand-design.yaml      # Visual design system
-      - node-kinds/org/foundation/brand-principles.yaml  # Voice, tone, guidelines
-      - node-kinds/org/foundation/prompt-style.yaml      # LLM prompt style hints
-      - node-kinds/org/foundation/project-content.yaml
+      - node-classes/org/foundation/project.yaml
+      - node-classes/org/foundation/brand.yaml             # Central brand identity
+      - node-classes/org/foundation/brand-design.yaml      # Visual design system
+      - node-classes/org/foundation/brand-principles.yaml  # Voice, tone, guidelines
+      - node-classes/org/foundation/prompt-style.yaml      # LLM prompt style hints
+      - node-classes/org/foundation/project-content.yaml
 
     # Structure (3 nodes) - Content scaffolding
     structure:
-      - node-kinds/org/structure/page.yaml
-      - node-kinds/org/structure/block.yaml
-      - node-kinds/org/structure/content-slot.yaml
+      - node-classes/org/structure/page.yaml
+      - node-classes/org/structure/block.yaml
+      - node-classes/org/structure/content-slot.yaml
 
     # Semantic (4 nodes) - Entity & audience targeting
     semantic:
-      - node-kinds/org/semantic/entity.yaml          # Invariant semantic entity
-      - node-kinds/org/semantic/entity-content.yaml  # Localized entity content
-      - node-kinds/org/semantic/audience-persona.yaml
-      - node-kinds/org/semantic/channel-surface.yaml
+      - node-classes/org/semantic/entity.yaml          # Invariant semantic entity
+      - node-classes/org/semantic/entity-content.yaml  # Localized entity content
+      - node-classes/org/semantic/audience-persona.yaml
+      - node-classes/org/semantic/channel-surface.yaml
 
     # Instruction (4 nodes) - AI generation directives
     instruction:
-      - node-kinds/org/instruction/block-type.yaml
-      - node-kinds/org/instruction/block-rules.yaml
-      - node-kinds/org/instruction/block-instruction.yaml # Markdown with @entity/@link
-      - node-kinds/org/instruction/prompt-artifact.yaml
+      - node-classes/org/instruction/block-type.yaml
+      - node-classes/org/instruction/block-rules.yaml
+      - node-classes/org/instruction/block-instruction.yaml # Markdown with @entity/@link
+      - node-classes/org/instruction/prompt-artifact.yaml
 
     # Output (3 nodes) - LLM-generated content
     output:
-      - node-kinds/org/output/page-generated.yaml
-      - node-kinds/org/output/block-generated.yaml
-      - node-kinds/org/output/output-artifact.yaml
+      - node-classes/org/output/page-generated.yaml
+      - node-classes/org/output/block-generated.yaml
+      - node-classes/org/output/output-artifact.yaml
 
   # ═══════════════════════════════════════════════════════════════════════════
   # REFERENCE FILES
   # ═══════════════════════════════════════════════════════════════════════════
 
-  arc_kinds: arc-kinds/               # Arc definitions by family
+  arc_kinds: arc-classes/               # Arc definitions by family
   views: views/                       # YAML view definitions
   schema: schema/nodes.schema.json    # JSON Schema for validation
 

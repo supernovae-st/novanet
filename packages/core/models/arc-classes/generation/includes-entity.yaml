@@ -1,0 +1,20 @@
+# packages/core/models/arc-classes/generation/includes-entity.yaml
+# ArcKind: INCLUDES_ENTITY — Prompt artifact includes entity context for generation
+
+arc:
+  name: INCLUDES_ENTITY
+  family: generation
+  scope: intra_realm
+  source: PromptArtifact
+  target: Entity
+  cardinality: one_to_many
+  properties:
+    - name: weight
+      type: string
+      required: false
+  llm_context: |
+    USE: when auditing what entities were included in a compiled prompt.
+    TRIGGERS: prompt context, included entities, generation audit.
+    NOT: for influence tracking (use INFLUENCED_BY), for raw instruction (use BlockInstruction).
+    RELATES: PromptArtifact (source), Entity (target), weight property for influence.
+  cypher_pattern: (PromptArtifact)-[:INCLUDES_ENTITY {weight}]->(Entity)

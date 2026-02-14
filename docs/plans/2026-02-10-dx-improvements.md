@@ -269,8 +269,8 @@ fn check_schema_sync(root: &Path) -> crate::Result<HealthCheck> {
 
 fn check_models_directory(root: &Path) -> crate::Result<HealthCheck> {
     let models = config::models_dir(root);
-    let node_kinds = models.join("node-kinds");
-    let arc_kinds = models.join("arc-kinds");
+    let node_kinds = models.join("node-classes");
+    let arc_kinds = models.join("arc-classes");
 
     if node_kinds.exists() && arc_kinds.exists() {
         Ok(HealthCheck {
@@ -282,7 +282,7 @@ fn check_models_directory(root: &Path) -> crate::Result<HealthCheck> {
         Ok(HealthCheck {
             name: "Models Directory",
             status: HealthStatus::Error,
-            message: "Missing node-kinds or arc-kinds directories".into(),
+            message: "Missing node-classes or arc-classes directories".into(),
         })
     }
 }

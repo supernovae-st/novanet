@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Split relations.yaml into individual arc-kinds/{family}/{name}.yaml files.
+ * Split relations.yaml into individual arc-classes/{family}/{name}.yaml files.
  *
  * Usage:
  *   node tools/scripts/split-relations.mjs
@@ -31,7 +31,7 @@ function findRoot() {
 
 const ROOT = findRoot();
 const RELATIONS_PATH = join(ROOT, 'packages/core/models/relations.yaml');
-const ARC_KINDS_DIR = join(ROOT, 'packages/core/models/arc-kinds');
+const ARC_KINDS_DIR = join(ROOT, 'packages/core/models/arc-classes');
 
 function toKebabCase(name) {
   return name.toLowerCase().replace(/_/g, '-');
@@ -104,7 +104,7 @@ function writeArcKind(rel, outputPath) {
   const shortDesc = llmContext
     ? llmContext.split('.')[0]
     : `${relType} relationship`;
-  const header = `# packages/core/models/arc-kinds/${family}/${toKebabCase(relType)}.yaml
+  const header = `# packages/core/models/arc-classes/${family}/${toKebabCase(relType)}.yaml
 # ArcKind: ${relType} — ${shortDesc}
 
 `;

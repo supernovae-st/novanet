@@ -15,7 +15,7 @@
 ### Task 1.1: Create Culture Node YAML
 
 **Files:**
-- Create: `packages/core/models/node-kinds/global/config/culture.yaml`
+- Create: `packages/core/models/node-classes/global/config/culture.yaml`
 
 **Step 1: Write the YAML schema**
 
@@ -122,7 +122,7 @@ Expected: No errors for culture.yaml
 **Step 3: Commit**
 
 ```bash
-git add packages/core/models/node-kinds/global/config/culture.yaml
+git add packages/core/models/node-classes/global/config/culture.yaml
 git commit -m "feat(schema): add Culture node for cultural context
 
 3-tier structure: indexed scalars, structured JSON, LLM context.
@@ -136,7 +136,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ### Task 1.2: Create Market Node YAML
 
 **Files:**
-- Create: `packages/core/models/node-kinds/global/config/market.yaml`
+- Create: `packages/core/models/node-classes/global/config/market.yaml`
 
 **Step 1: Write the YAML schema**
 
@@ -234,7 +234,7 @@ Expected: No errors for market.yaml
 **Step 3: Commit**
 
 ```bash
-git add packages/core/models/node-kinds/global/config/market.yaml
+git add packages/core/models/node-classes/global/config/market.yaml
 git commit -m "feat(schema): add Market node for market intelligence
 
 3-tier structure: demographics, digital maturity, e-commerce, payments.
@@ -248,11 +248,11 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ### Task 1.3: Update Style Node YAML (Add Formality)
 
 **Files:**
-- Modify: `packages/core/models/node-kinds/global/config/style.yaml`
+- Modify: `packages/core/models/node-classes/global/config/style.yaml`
 
 **Step 1: Read current style.yaml**
 
-Run: `cat packages/core/models/node-kinds/global/config/style.yaml`
+Run: `cat packages/core/models/node-classes/global/config/style.yaml`
 Note the existing properties.
 
 **Step 2: Add new properties from Adaptation migration**
@@ -323,7 +323,7 @@ Expected: No errors
 **Step 4: Commit**
 
 ```bash
-git add packages/core/models/node-kinds/global/config/style.yaml
+git add packages/core/models/node-classes/global/config/style.yaml
 git commit -m "feat(schema): expand Style with formality from Adaptation
 
 Adds: formality_default, pronoun_preference, directness_level, warmth_level,
@@ -338,11 +338,11 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ### Task 1.4: Simplify Adaptation Node YAML
 
 **Files:**
-- Modify: `packages/core/models/node-kinds/global/config/adaptation.yaml`
+- Modify: `packages/core/models/node-classes/global/config/adaptation.yaml`
 
 **Step 1: Read current adaptation.yaml**
 
-Run: `cat packages/core/models/node-kinds/global/config/adaptation.yaml`
+Run: `cat packages/core/models/node-classes/global/config/adaptation.yaml`
 Identify properties to remove (migrated to Style/Culture).
 
 **Step 2: Rewrite adaptation.yaml with simplified schema**
@@ -436,7 +436,7 @@ Expected: No errors
 **Step 4: Commit**
 
 ```bash
-git add packages/core/models/node-kinds/global/config/adaptation.yaml
+git add packages/core/models/node-classes/global/config/adaptation.yaml
 git commit -m "refactor(schema): simplify Adaptation to core FACTS/ILLUSTRATIONS
 
 Removes: formality (→ Style), calendar/seasons (→ Culture), measurement (→ Formatting).
@@ -451,8 +451,8 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ### Task 1.5: Add Arc Definitions for New Nodes
 
 **Files:**
-- Create: `packages/core/models/arc-kinds/ownership/has-culture.yaml`
-- Create: `packages/core/models/arc-kinds/ownership/has-market.yaml`
+- Create: `packages/core/models/arc-classes/ownership/has-culture.yaml`
+- Create: `packages/core/models/arc-classes/ownership/has-market.yaml`
 
 **Step 1: Create HAS_CULTURE arc**
 
@@ -498,8 +498,8 @@ Expected: No errors
 **Step 4: Commit**
 
 ```bash
-git add packages/core/models/arc-kinds/ownership/has-culture.yaml
-git add packages/core/models/arc-kinds/ownership/has-market.yaml
+git add packages/core/models/arc-classes/ownership/has-culture.yaml
+git add packages/core/models/arc-classes/ownership/has-market.yaml
 git commit -m "feat(schema): add HAS_CULTURE and HAS_MARKET arcs
 
 Links Locale to new Culture and Market nodes.

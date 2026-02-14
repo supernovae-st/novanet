@@ -63,7 +63,7 @@ import { CLASS_TAXONOMY } from '../types/nodes.js';
 
 /**
  * Maps each NodeType to its layer within its realm.
- * AUTO-GENERATED from models/node-kinds/ folder structure.
+ * AUTO-GENERATED from models/node-classes/ folder structure.
  *
  * Layers by realm:
 {%- for realm in realms %}
@@ -76,7 +76,7 @@ export const NODE_LAYERS: Record<NodeType, Layer> = {
   // {{ realm.label_upper }} REALM ({{ realm.node_count }} node{{ "s" if realm.node_count != 1 else "" }})
   // ═══════════════════════════════════════════════════════════════════════════
 {% for layer in realm.layers %}
-  // {{ layer.key }} ({{ layer.node_count }} node{{ "s" if layer.node_count != 1 else "" }}) - matches models/node-kinds/{{ layer.realm_key }}/{{ layer.key }}/
+  // {{ layer.key }} ({{ layer.node_count }} node{{ "s" if layer.node_count != 1 else "" }}) - matches models/node-classes/{{ layer.realm_key }}/{{ layer.key }}/
 {%- for node in layer.nodes %}
   {{ node }}: '{{ layer.key }}',
 {%- endfor %}
@@ -178,7 +178,7 @@ fn render_layers(nodes: &[yaml_node::ParsedNode]) -> crate::Result<String> {
     for &realm_key in REALM_ORDER {
         let Some(layers_map) = realm_map.get(realm_key) else {
             return Err(crate::NovaNetError::Validation(format!(
-                "realm '{realm_key}' has no nodes — expected nodes under models/node-kinds/{realm_key}/"
+                "realm '{realm_key}' has no nodes — expected nodes under models/node-classes/{realm_key}/"
             )));
         };
 
@@ -361,8 +361,8 @@ mod tests {
         let output = render_layers(&nodes).unwrap();
 
         // Comments should include the YAML folder path
-        assert!(output.contains("models/node-kinds/org/foundation/"));
-        assert!(output.contains("models/node-kinds/shared/config/"));
+        assert!(output.contains("models/node-classes/org/foundation/"));
+        assert!(output.contains("models/node-classes/shared/config/"));
     }
 
     #[test]

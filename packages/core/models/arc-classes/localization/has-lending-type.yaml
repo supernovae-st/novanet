@@ -1,0 +1,22 @@
+# packages/core/models/arc-classes/localization/has-lending-type.yaml
+# ArcKind: HAS_LENDING_TYPE - Locale's World Bank lending classification
+# v10.8: Geographic Taxonomy
+
+arc:
+  name: HAS_LENDING_TYPE
+  family: localization
+  scope: intra_realm
+
+  source: Locale
+  target: LendingCategory
+  cardinality: many_to_one
+
+  inverse: CLASSIFIES
+
+  llm_context: |
+    USE: when finding World Bank lending classification for development context.
+    TRIGGERS: lending type, development status, World Bank category, IBRD/IDA.
+    NOT: income level (use HAS_INCOME_LEVEL), economic region (use IN_ECONOMIC_REGION).
+    RELATES: Locale (source), LendingCategory (target), CLASSIFIES (inverse).
+
+  cypher_pattern: "(Locale)-[:HAS_LENDING_TYPE]->(LendingCategory)"

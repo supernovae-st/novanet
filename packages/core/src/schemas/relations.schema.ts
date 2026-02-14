@@ -28,7 +28,7 @@
  * ```
  *
  * @see ADR-015 — Unidirectional Ownership Arcs
- * @see packages/core/models/arc-kinds/ — Arc YAML definitions
+ * @see packages/core/models/arc-classes/ — Arc YAML definitions
  */
 
 import { z } from 'zod';

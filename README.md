@@ -119,8 +119,8 @@ novanet-hq/
 │   ├── core/                  # @novanet/core — types, schemas, filters
 │   │   ├── models/            # YAML schema definitions (source of truth)
 │   │   │   ├── taxonomy.yaml  # 2 realms (shared 4 + org 6), 10 layers, 5 traits
-│   │   │   ├── node-kinds/    # node definitions by realm/layer
-│   │   │   └── arc-kinds/     # arc definitions by family
+│   │   │   ├── node-classes/    # node definitions by realm/layer
+│   │   │   └── arc-classes/     # arc definitions by family
 │   │   └── src/               # TypeScript implementation
 │   └── db/                    # @novanet/db — Neo4j infrastructure
 │       ├── docker-compose.yml # Neo4j 5.26 + APOC

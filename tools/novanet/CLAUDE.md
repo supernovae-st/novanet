@@ -238,7 +238,7 @@ src/
 - **YAML models**: Live in `packages/core/models/` (relative to monorepo root)
 - **Feature gate**: `cargo build --no-default-features` for CLI-only (no TUI deps)
 - **YAML-first architecture**: Each Class YAML has explicit `realm:` and `layer:` fields (source of truth)
-  - Path validation: file must be at `models/node-kinds/{realm}/{layer}/{name}.yaml`
+  - Path validation: file must be at `models/node-classes/{realm}/{layer}/{name}.yaml`
   - Generators read realm/layer from YAML content, validate against path
   - v0.12.4: 2 realms (shared, org), 10 layers (4 shared + 6 org), 61 node types
 - **Query-First architecture (v11.6)**: Cypher is the single source of truth for graph display
@@ -270,7 +270,7 @@ Exit:        q or Esc
 
 ## Dependencies on Monorepo
 
-This binary reads YAML from `packages/core/models/` (node-kinds, arc-kinds, taxonomy, views)
+This binary reads YAML from `packages/core/models/` (node-classes, arc-classes, taxonomy, views)
 and writes to `packages/db/seed/` (Cypher), `packages/core/src/` (TypeScript),
 `packages/core/models/docs/` (Mermaid), and `tools/novanet/src/tui/icons.rs` (Rust).
 It does NOT depend on any npm packages at build time.

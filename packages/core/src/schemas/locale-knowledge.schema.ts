@@ -33,7 +33,7 @@
  * ```
  *
  * @see ADR-007 — Generation, Not Translation
- * @see packages/core/models/node-kinds/shared/locale/ — Locale YAML definitions
+ * @see packages/core/models/node-classes/shared/locale/ — Locale YAML definitions
  */
 
 import { z } from 'zod';

@@ -35,16 +35,6 @@ export * from './types/index.js';
 export * from './filters/index.js';
 
 // =============================================================================
-// CONFIG
-// =============================================================================
-
-/**
- * Configuration for spreading activation and task-specific modifiers.
- * Use: `import { config } from 'novanet-core'`
- */
-export * as config from './config/index.js';
-
-// =============================================================================
 // SCHEMAS
 // =============================================================================
 

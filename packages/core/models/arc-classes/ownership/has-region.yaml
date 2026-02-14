@@ -1,0 +1,24 @@
+# packages/core/models/arc-classes/ownership/has-region.yaml
+# ArcKind: HAS_REGION — Continent contains GeoRegion (inverse of IN_CONTINENT)
+#
+# v0.12.5: ADR-026 Inverse Arc Policy
+
+arc:
+  name: HAS_REGION
+  family: ownership
+  scope: intra_realm
+
+  source: Continent
+  target: GeoRegion
+  cardinality: one_to_many
+
+  inverse_of: IN_CONTINENT
+
+  llm_context: |
+    USE: when finding all regions of a continent.
+    TRIGGERS: "continent regions", "regions in", "which regions".
+    NOT: for finding a region's continent (use IN_CONTINENT).
+    RELATES: Continent (source), GeoRegion (target), IN_CONTINENT (inverse).
+    Example: Europe -[:HAS_REGION]-> Northern Europe, Western Europe, Southern Europe
+
+  cypher_pattern: "(Continent)-[:HAS_REGION]->(GeoRegion)"

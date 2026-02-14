@@ -1,10 +1,7 @@
-//! Views Tab — Schema views explorer for Nexus mode.
+//! Views Mode — Schema views explorer (v0.12.5).
 //!
-//! Shows available views from `doc generate --list` organized by category.
-//! Teaches users about:
-//! - View categories (overview, generation, knowledge, project, mining, contextual)
-//! - Query-First architecture concept
-//! - How views are generated from YAML definitions
+//! Loads views from `views.yaml` (single source of truth shared with Studio).
+//! Shows available views organized by category.
 
 use ratatui::Frame;
 use ratatui::layout::{Constraint, Direction, Layout, Rect};
@@ -12,336 +9,73 @@ use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, Borders, Paragraph, Wrap};
 
+use crate::parsers::views::{SimpleViewEntry, SimpleViewsFile, ViewCategoryDef, ViewIcon};
 use crate::tui::app::App;
 use crate::tui::ui::COLOR_UNFOCUSED_BORDER;
 
 // =============================================================================
-// VIEW DATA
+// LOADED VIEWS DATA
 // =============================================================================
 
-/// A view entry with metadata for display.
-#[derive(Debug, Clone)]
-pub struct ViewEntry {
-    /// View ID (e.g., "block-generation").
-    pub id: &'static str,
-    /// Display name.
-    pub name: &'static str,
-    /// Short description.
-    pub description: &'static str,
-    /// Category for grouping.
-    pub category: ViewCategory,
-    /// Root node type.
-    pub root_type: &'static str,
-    /// Educational notes about the view.
-    pub notes: &'static [&'static str],
+/// Loaded views data from views.yaml.
+#[derive(Debug, Clone, Default)]
+pub struct LoadedViews {
+    pub categories: Vec<(String, ViewCategoryDef)>,
+    pub views: Vec<SimpleViewEntry>,
 }
 
-/// View categories matching the registry.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum ViewCategory {
-    Overview,
-    Generation,
-    Knowledge,
-    Project,
-    Mining,
-    Contextual,
-}
-
-impl ViewCategory {
-    /// Get all categories in display order.
-    pub fn all() -> &'static [ViewCategory] {
-        &[
-            ViewCategory::Overview,
-            ViewCategory::Generation,
-            ViewCategory::Knowledge,
-            ViewCategory::Project,
-            ViewCategory::Mining,
-            ViewCategory::Contextual,
-        ]
-    }
-
-    /// Get display name for category.
-    pub fn label(&self) -> &'static str {
-        match self {
-            ViewCategory::Overview => "Overview",
-            ViewCategory::Generation => "Generation",
-            ViewCategory::Knowledge => "Knowledge",
-            ViewCategory::Project => "Project",
-            ViewCategory::Mining => "Mining",
-            ViewCategory::Contextual => "Contextual",
+impl LoadedViews {
+    /// Load views from views.yaml.
+    pub fn load(root_path: &str) -> Self {
+        let root = std::path::Path::new(root_path);
+        match crate::parsers::views::load_simple_views(root) {
+            Ok(file) => Self::from_file(file),
+            Err(e) => {
+                eprintln!("Warning: Failed to load views.yaml: {e}");
+                Self::default()
+            }
         }
     }
 
-    /// Get description for category.
-    pub fn description(&self) -> &'static str {
-        match self {
-            ViewCategory::Overview => "Layer views showing complete graph or realm subsets",
-            ViewCategory::Generation => "Context views for orchestrator and sub-agents",
-            ViewCategory::Knowledge => "Locale and entity knowledge views",
-            ViewCategory::Project => "Project structure and configuration views",
-            ViewCategory::Mining => "SEO/GEO pipeline views",
-            ViewCategory::Contextual => "Node-specific views shown in sidebar",
+    /// Convert from parsed file.
+    fn from_file(file: SimpleViewsFile) -> Self {
+        // Sort categories in display order
+        let category_order = ["schema", "data", "generation", "contextual"];
+        let mut categories: Vec<(String, ViewCategoryDef)> = file
+            .categories
+            .into_iter()
+            .collect();
+        categories.sort_by_key(|(k, _)| {
+            category_order.iter().position(|&c| c == k).unwrap_or(99)
+        });
+
+        Self {
+            categories,
+            views: file.views,
         }
     }
 
-    /// Get icon for category.
-    pub fn icon(&self) -> &'static str {
-        match self {
-            ViewCategory::Overview => "\u{25a3}",   // ▣
-            ViewCategory::Generation => "\u{26a1}", // ⚡
-            ViewCategory::Knowledge => "\u{25ca}",  // ◊
-            ViewCategory::Project => "\u{25a0}",    // ■
-            ViewCategory::Mining => "\u{2692}",     // ⚒
-            ViewCategory::Contextual => "\u{2630}", // ☰
-        }
+    /// Get views in a category.
+    pub fn views_in_category(&self, category: &str) -> Vec<&SimpleViewEntry> {
+        self.views.iter().filter(|v| v.category == category).collect()
     }
 
-    /// Get color for category.
-    pub fn color(&self) -> Color {
-        match self {
-            ViewCategory::Overview => Color::Cyan,
-            ViewCategory::Generation => Color::Yellow,
-            ViewCategory::Knowledge => Color::Rgb(139, 92, 246), // Purple
-            ViewCategory::Project => Color::Rgb(34, 197, 94),    // Green
-            ViewCategory::Mining => Color::Rgb(249, 115, 22),    // Orange
-            ViewCategory::Contextual => Color::Rgb(100, 116, 139), // Slate
-        }
+    /// Get category count.
+    pub fn category_count(&self) -> usize {
+        self.categories.len()
+    }
+
+    /// Get category at index.
+    pub fn category_at(&self, idx: usize) -> Option<&(String, ViewCategoryDef)> {
+        self.categories.get(idx)
     }
 }
-
-/// All available views (static data, matches _registry.yaml).
-pub const VIEWS: &[ViewEntry] = &[
-    // Overview views
-    ViewEntry {
-        id: "complete-graph",
-        name: "Complete Graph",
-        description: "Full NovaNet graph with all 61 nodes and relations",
-        category: ViewCategory::Overview,
-        root_type: "Project",
-        notes: &[
-            "Entry point for understanding the full schema",
-            "Generated by `novanet schema generate`, not `doc generate`",
-            "Shows all realms, layers, and arc families",
-        ],
-    },
-    ViewEntry {
-        id: "shared-layer",
-        name: "Shared Layer",
-        description: "Locale configuration and knowledge (40 nodes)",
-        category: ViewCategory::Overview,
-        root_type: "Locale",
-        notes: &[
-            "Universal knowledge shared across organizations",
-            "READ-ONLY in production (curated reference data)",
-            "Includes config, locale, geography, knowledge layers",
-        ],
-    },
-    ViewEntry {
-        id: "seo-keywords",
-        name: "SEO Keywords",
-        description: "SEO keywords and metrics (shared realm)",
-        category: ViewCategory::Overview,
-        root_type: "SEOKeyword",
-        notes: &[
-            "Market intelligence data",
-            "Moved to shared realm in v11.5 (universal across orgs)",
-            "Links SEOKeyword -> SEOKeywordMetrics",
-        ],
-    },
-    ViewEntry {
-        id: "project-layer",
-        name: "Project Layer",
-        description: "Per-project nodes from foundation to output (14 nodes)",
-        category: ViewCategory::Overview,
-        root_type: "Project",
-        notes: &[
-            "Organization-specific content",
-            "Foundation -> Structure -> Semantic -> Output flow",
-            "Includes Pages, Blocks, Entities, and generated content",
-        ],
-    },
-    // Generation views
-    ViewEntry {
-        id: "page-generation-context",
-        name: "Page Generation Context",
-        description: "Full context for orchestrator to generate a page",
-        category: ViewCategory::Generation,
-        root_type: "Page",
-        notes: &[
-            "Used by the generation orchestrator",
-            "Collects Page -> Blocks -> Entities -> Knowledge",
-            // v0.12.4: PageInstruction/PageStructure deleted (ADR-028)
-            "Includes BlockInstruction and BlockType for instructions",
-        ],
-    },
-    ViewEntry {
-        id: "block-generation",
-        name: "Block Generation",
-        description: "Full context for sub-agent to generate a block",
-        category: ViewCategory::Generation,
-        root_type: "Block",
-        notes: &[
-            "Sub-agent receives this context slice",
-            "Block -> BlockInstruction -> used Terms/Expressions",
-            "Entities linked via USES_ENTITY arc",
-        ],
-    },
-    ViewEntry {
-        id: "block-semantic-network",
-        name: "Block Semantic Network",
-        description: "Block with concepts and spreading activation",
-        category: ViewCategory::Generation,
-        root_type: "Block",
-        notes: &[
-            "Semantic activation spreading from Block",
-            "Entity relationships form a network",
-            "Used for context enrichment",
-        ],
-    },
-    ViewEntry {
-        id: "gen-pipeline",
-        name: "Page Pipeline",
-        description: "Full page generation pipeline (structure → generation → output)",
-        category: ViewCategory::Generation,
-        root_type: "Page",
-        notes: &[
-            "End-to-end view from Page to PageGenerated",
-            "Shows Block ordering (HAS_BLOCK.order)",
-            "Includes BlockType, BlockRules, BlockInstruction",
-            "Assembly sequence via ASSEMBLES.order",
-        ],
-    },
-    // Knowledge views
-    ViewEntry {
-        id: "locale-full-knowledge",
-        name: "Locale Full Knowledge",
-        description: "Complete locale knowledge (Identity, Voice, Culture, Market, Lexicon)",
-        category: ViewCategory::Knowledge,
-        root_type: "Locale",
-        notes: &[
-            "All knowledge atoms for a locale",
-            "Terms, Expressions, Patterns, CultureRefs, Taboos",
-            "Loaded selectively based on generation context",
-        ],
-    },
-    ViewEntry {
-        id: "entity-ecosystem",
-        name: "Entity Ecosystem",
-        description: "Entity with content, SEO keywords, semantic links",
-        category: ViewCategory::Knowledge,
-        root_type: "Entity",
-        notes: &[
-            "Shows Entity -> EntityContent per locale",
-            "Includes SEO keyword associations",
-            "RELATES_TO semantic links to other entities",
-        ],
-    },
-    // Project views
-    ViewEntry {
-        id: "project-context",
-        name: "Project Context",
-        description: "Project with supported locales and page inventory",
-        category: ViewCategory::Project,
-        root_type: "Project",
-        notes: &[
-            "Project -> SUPPORTS_LOCALE -> Locale",
-            "Project -> HAS_PAGE -> Page inventory",
-            "Entry point for understanding project scope",
-        ],
-    },
-    ViewEntry {
-        id: "project-overview",
-        name: "Project Overview",
-        description: "Project dashboard with pages, brand identity, and concepts",
-        category: ViewCategory::Project,
-        root_type: "Project",
-        notes: &[
-            "Dashboard view for project management",
-            "Includes Brand, BrandDesign, BrandPrinciples configuration",
-            "Shows page count and entity usage",
-        ],
-    },
-    // Mining views
-    ViewEntry {
-        id: "seo-pipeline",
-        name: "SEO Pipeline",
-        description: "SEO keyword mining and optimization workflow",
-        category: ViewCategory::Mining,
-        root_type: "SEOKeyword",
-        notes: &[
-            "SEOKeyword -> SEOKeywordMetrics (aggregated)",
-            "SEOCluster for topic grouping",
-            "Feeds into page optimization",
-        ],
-    },
-    // Contextual views (subset)
-    ViewEntry {
-        id: "composition",
-        name: "Composition",
-        description: "Page/Block composition hierarchy",
-        category: ViewCategory::Contextual,
-        root_type: "Page",
-        notes: &[
-            "Shown in sidebar when Page or Block selected",
-            "Page -> HAS_BLOCK -> Block hierarchy",
-            "Useful for understanding page structure",
-        ],
-    },
-    ViewEntry {
-        id: "knowledge",
-        name: "Knowledge",
-        description: "Locale knowledge atoms (Terms, Expressions, Patterns)",
-        category: ViewCategory::Contextual,
-        root_type: "Locale",
-        notes: &[
-            "Shown when Locale selected",
-            "TermSet, ExpressionSet, PatternSet containers",
-            "Atoms are loaded selectively for generation",
-        ],
-    },
-    ViewEntry {
-        id: "generation-pipeline",
-        name: "Generation Pipeline",
-        description: "Generation pipeline and outputs",
-        category: ViewCategory::Contextual,
-        root_type: "Page",
-        notes: &[
-            "Shown for Page, Block, or Generated nodes",
-            "Page -> PageGenerated output relationship",
-            "Tracks generation metadata (timestamps, versions)",
-        ],
-    },
-];
-
-/// Query-First architecture explanation.
-pub const QUERY_FIRST_CONCEPT: &[&str] = &[
-    "QUERY-FIRST ARCHITECTURE",
-    "",
-    "Views define traversal patterns from a root node type.",
-    "Instead of loading the entire graph, views specify:",
-    "",
-    "  1. ROOT: Starting node type (e.g., Block)",
-    "  2. INCLUDE: Relations to follow (e.g., HAS_PROMPT)",
-    "  3. DIRECTION: outgoing, incoming, or both",
-    "  4. DEPTH: Max hops for runtime queries",
-    "",
-    "This enables:",
-    "  - Selective context loading for LLM prompts",
-    "  - Efficient Cypher query generation",
-    "  - Mermaid diagram generation for docs",
-    "",
-    "Views are defined in YAML:",
-    "  packages/core/models/views/<view-id>.yaml",
-    "",
-    "Generate docs with:",
-    "  cargo run -- doc generate --view=<view-id>",
-];
 
 // =============================================================================
 // STATE
 // =============================================================================
 
-/// State for the Views tab.
+/// State for the Views mode.
 #[derive(Debug, Clone, Default)]
 pub struct ViewsState {
     /// Currently selected category index.
@@ -366,32 +100,36 @@ impl ViewsState {
     }
 
     /// Navigate up in views list.
-    pub fn navigate_up(&mut self) {
+    pub fn navigate_up(&mut self, loaded: &LoadedViews) {
         if self.view_cursor > 0 {
             self.view_cursor -= 1;
         } else if self.category_cursor > 0 {
             // Move to previous category
             self.category_cursor -= 1;
-            let views = self.views_in_category();
-            self.view_cursor = views.len().saturating_sub(1);
+            if let Some((cat_key, _)) = loaded.category_at(self.category_cursor) {
+                let views = loaded.views_in_category(cat_key);
+                self.view_cursor = views.len().saturating_sub(1);
+            }
         }
     }
 
     /// Navigate down in views list.
-    pub fn navigate_down(&mut self) {
-        let views = self.views_in_category();
-        if self.view_cursor + 1 < views.len() {
-            self.view_cursor += 1;
-        } else if self.category_cursor + 1 < ViewCategory::all().len() {
-            // Move to next category
-            self.category_cursor += 1;
-            self.view_cursor = 0;
+    pub fn navigate_down(&mut self, loaded: &LoadedViews) {
+        if let Some((cat_key, _)) = loaded.category_at(self.category_cursor) {
+            let views = loaded.views_in_category(cat_key);
+            if self.view_cursor + 1 < views.len() {
+                self.view_cursor += 1;
+            } else if self.category_cursor + 1 < loaded.category_count() {
+                // Move to next category
+                self.category_cursor += 1;
+                self.view_cursor = 0;
+            }
         }
     }
 
     /// Jump to next category.
-    pub fn next_category(&mut self) {
-        if self.category_cursor + 1 < ViewCategory::all().len() {
+    pub fn next_category(&mut self, loaded: &LoadedViews) {
+        if self.category_cursor + 1 < loaded.category_count() {
             self.category_cursor += 1;
             self.view_cursor = 0;
         }
@@ -410,38 +148,70 @@ impl ViewsState {
         self.show_concept = !self.show_concept;
     }
 
-    /// Get current category.
-    pub fn current_category(&self) -> ViewCategory {
-        ViewCategory::all()
-            .get(self.category_cursor)
-            .copied()
-            .unwrap_or(ViewCategory::Overview)
-    }
-
-    /// Get views in current category.
-    pub fn views_in_category(&self) -> Vec<&'static ViewEntry> {
-        let cat = self.current_category();
-        VIEWS.iter().filter(|v| v.category == cat).collect()
-    }
-
     /// Get currently selected view.
-    pub fn current_view(&self) -> Option<&'static ViewEntry> {
-        self.views_in_category().get(self.view_cursor).copied()
+    pub fn current_view<'a>(&self, loaded: &'a LoadedViews) -> Option<&'a SimpleViewEntry> {
+        let (cat_key, _) = loaded.category_at(self.category_cursor)?;
+        let views = loaded.views_in_category(cat_key);
+        views.get(self.view_cursor).copied()
     }
 
     /// Get text for yanking.
-    pub fn get_yank_text(&self) -> Option<String> {
-        self.current_view().map(|v| v.id.to_string())
+    pub fn get_yank_text(&self, loaded: &LoadedViews) -> Option<String> {
+        self.current_view(loaded).map(|v| v.id.clone())
     }
+}
+
+// =============================================================================
+// COLORS & ICONS
+// =============================================================================
+
+/// Parse hex color to ratatui Color.
+fn parse_color(hex: &str) -> Color {
+    if hex.len() == 7 && hex.starts_with('#') {
+        let r = u8::from_str_radix(&hex[1..3], 16).unwrap_or(128);
+        let g = u8::from_str_radix(&hex[3..5], 16).unwrap_or(128);
+        let b = u8::from_str_radix(&hex[5..7], 16).unwrap_or(128);
+        Color::Rgb(r, g, b)
+    } else {
+        Color::Gray
+    }
+}
+
+/// Get terminal icon from ViewIcon or default.
+fn terminal_icon<'a>(icon: &'a Option<ViewIcon>, default: &'a str) -> &'a str {
+    icon.as_ref().map(|i| i.terminal.as_str()).unwrap_or(default)
 }
 
 // =============================================================================
 // RENDERING
 // =============================================================================
 
-/// Render the Views tab.
+/// Query-First architecture explanation.
+const QUERY_FIRST_CONCEPT: &[&str] = &[
+    "QUERY-FIRST ARCHITECTURE",
+    "",
+    "Views define Cypher queries for graph traversal.",
+    "Instead of loading the entire graph, views specify:",
+    "",
+    "  1. ROOT: Starting node type (e.g., Block, Page)",
+    "  2. CYPHER: Query with $nodeKey parameter",
+    "  3. CATEGORY: schema, data, generation, contextual",
+    "",
+    "This enables:",
+    "  - Selective context loading for LLM prompts",
+    "  - Efficient Neo4j queries",
+    "  - Shared views between TUI and Studio",
+    "",
+    "Views are defined in YAML:",
+    "  packages/core/models/views.yaml",
+    "",
+    "Single source of truth for TUI + Studio (v0.12.5)",
+];
+
+/// Render the Views mode.
 pub fn render_views_tab(f: &mut Frame, app: &App, area: Rect) {
     let views_state = &app.nexus.views;
+    let loaded = &app.loaded_views;
 
     if views_state.show_concept {
         // Show Query-First concept panel
@@ -453,18 +223,16 @@ pub fn render_views_tab(f: &mut Frame, app: &App, area: Rect) {
             .constraints([Constraint::Percentage(40), Constraint::Percentage(60)])
             .split(area);
 
-        render_views_list(f, app, chunks[0]);
-        render_view_detail(f, app, chunks[1]);
+        render_views_list(f, views_state, loaded, chunks[0]);
+        render_view_detail(f, views_state, loaded, chunks[1]);
     }
 }
 
 /// Render the views list organized by category.
-fn render_views_list(f: &mut Frame, app: &App, area: Rect) {
-    let views_state = &app.nexus.views;
-
+fn render_views_list(f: &mut Frame, state: &ViewsState, loaded: &LoadedViews, area: Rect) {
     let block = Block::default()
         .title(Span::styled(
-            " SCHEMA VIEWS ",
+            " VIEWS ",
             Style::default()
                 .fg(Color::Cyan)
                 .add_modifier(Modifier::BOLD),
@@ -480,7 +248,7 @@ fn render_views_list(f: &mut Frame, app: &App, area: Rect) {
     // Header
     lines.push(Line::from(vec![
         Span::styled(
-            "Query-First Architecture ",
+            "Source: views.yaml ",
             Style::default().fg(Color::Rgb(180, 180, 180)),
         ),
         Span::styled("[?:concept]", Style::default().fg(Color::DarkGray)),
@@ -492,9 +260,9 @@ fn render_views_list(f: &mut Frame, app: &App, area: Rect) {
     lines.push(Line::from(""));
 
     // Categories and views
-    for (cat_idx, cat) in ViewCategory::all().iter().enumerate() {
-        let is_selected_cat = cat_idx == views_state.category_cursor;
-        let cat_color = cat.color();
+    for (cat_idx, (cat_key, cat_def)) in loaded.categories.iter().enumerate() {
+        let is_selected_cat = cat_idx == state.category_cursor;
+        let cat_color = cat_def.color.as_deref().map(parse_color).unwrap_or(Color::Cyan);
 
         // Category header
         let cat_style = if is_selected_cat {
@@ -503,21 +271,22 @@ fn render_views_list(f: &mut Frame, app: &App, area: Rect) {
             Style::default().fg(cat_color)
         };
 
-        let cat_views: Vec<_> = VIEWS.iter().filter(|v| v.category == *cat).collect();
+        let cat_views = loaded.views_in_category(cat_key);
+        let cat_icon = terminal_icon(&cat_def.icon, "●");
 
         lines.push(Line::from(vec![
-            Span::styled(format!("{} ", cat.icon()), cat_style),
-            Span::styled(cat.label(), cat_style),
+            Span::styled(format!("{cat_icon} "), cat_style),
+            Span::styled(&cat_def.label, cat_style),
             Span::styled(
                 format!(" ({})", cat_views.len()),
                 Style::default().fg(Color::DarkGray),
             ),
         ]));
 
-        // Views in category (only show if selected or nearby)
+        // Views in category (only show if selected)
         if is_selected_cat {
             for (view_idx, view) in cat_views.iter().enumerate() {
-                let is_selected = is_selected_cat && view_idx == views_state.view_cursor;
+                let is_selected = view_idx == state.view_cursor;
 
                 let prefix = if is_selected { "  \u{25b8} " } else { "    " }; // ▸
 
@@ -532,7 +301,7 @@ fn render_views_list(f: &mut Frame, app: &App, area: Rect) {
 
                 lines.push(Line::from(vec![
                     Span::styled(prefix, style),
-                    Span::styled(view.name, style),
+                    Span::styled(&view.name, style),
                 ]));
             }
         }
@@ -551,9 +320,8 @@ fn render_views_list(f: &mut Frame, app: &App, area: Rect) {
 }
 
 /// Render the detail panel for selected view.
-fn render_view_detail(f: &mut Frame, app: &App, area: Rect) {
-    let views_state = &app.nexus.views;
-
+#[allow(clippy::vec_init_then_push)]
+fn render_view_detail(f: &mut Frame, state: &ViewsState, loaded: &LoadedViews, area: Rect) {
     let block = Block::default()
         .title(Span::styled(
             " VIEW DETAIL ",
@@ -567,19 +335,19 @@ fn render_view_detail(f: &mut Frame, app: &App, area: Rect) {
     let inner = block.inner(area);
     f.render_widget(block, area);
 
-    let Some(view) = views_state.current_view() else {
+    let Some(view) = state.current_view(loaded) else {
         let empty = Paragraph::new("Select a view to see details");
         f.render_widget(empty, inner);
         return;
     };
 
-    let cat_color = view.category.color();
+    let view_color = view.color.as_deref().map(parse_color).unwrap_or(Color::Cyan);
 
     let mut lines: Vec<Line> = Vec::new();
 
     // View name
     lines.push(Line::from(Span::styled(
-        view.name,
+        &view.name,
         Style::default()
             .fg(Color::White)
             .add_modifier(Modifier::BOLD),
@@ -588,26 +356,48 @@ fn render_view_detail(f: &mut Frame, app: &App, area: Rect) {
     // Separator
     lines.push(Line::from(Span::styled(
         "\u{2550}".repeat(inner.width.saturating_sub(2) as usize),
-        Style::default().fg(cat_color),
+        Style::default().fg(view_color),
     )));
     lines.push(Line::from(""));
 
     // Metadata
     lines.push(Line::from(vec![
         Span::styled("ID:       ", Style::default().fg(Color::DarkGray)),
-        Span::styled(view.id, Style::default().fg(Color::Cyan)),
+        Span::styled(&view.id, Style::default().fg(Color::Cyan)),
     ]));
+
+    let view_icon = terminal_icon(&view.icon, "●");
     lines.push(Line::from(vec![
         Span::styled("Category: ", Style::default().fg(Color::DarkGray)),
         Span::styled(
-            format!("{} {}", view.category.icon(), view.category.label()),
-            Style::default().fg(cat_color),
+            format!("{view_icon} {}", view.category),
+            Style::default().fg(view_color),
         ),
     ]));
-    lines.push(Line::from(vec![
-        Span::styled("Root:     ", Style::default().fg(Color::DarkGray)),
-        Span::styled(view.root_type, Style::default().fg(Color::Yellow)),
-    ]));
+
+    if let Some(ref root) = view.root_type {
+        lines.push(Line::from(vec![
+            Span::styled("Root:     ", Style::default().fg(Color::DarkGray)),
+            Span::styled(root, Style::default().fg(Color::Yellow)),
+        ]));
+    }
+
+    if view.contextual.unwrap_or(false) {
+        lines.push(Line::from(vec![
+            Span::styled("Context:  ", Style::default().fg(Color::DarkGray)),
+            Span::styled("contextual (sidebar)", Style::default().fg(Color::Green)),
+        ]));
+    }
+
+    if let Some(ref types) = view.applicable_types {
+        if !types.is_empty() {
+            lines.push(Line::from(vec![
+                Span::styled("Types:    ", Style::default().fg(Color::DarkGray)),
+                Span::styled(types.join(", "), Style::default().fg(Color::Rgb(180, 180, 180))),
+            ]));
+        }
+    }
+
     lines.push(Line::from(""));
 
     // Description
@@ -618,57 +408,40 @@ fn render_view_detail(f: &mut Frame, app: &App, area: Rect) {
             .add_modifier(Modifier::BOLD),
     )));
     lines.push(Line::from(Span::styled(
-        view.description,
+        &view.description,
         Style::default().fg(Color::Rgb(180, 180, 180)),
     )));
     lines.push(Line::from(""));
 
-    // Notes section
-    if !view.notes.is_empty() {
+    // Cypher preview (truncated)
+    if let Some(ref cypher) = view.cypher {
         lines.push(Line::from(Span::styled(
-            "\u{250c}\u{2500} NOTES \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2510}",
-            Style::default().fg(Color::Rgb(100, 100, 120)),
+            "Cypher:",
+            Style::default()
+                .fg(Color::Green)
+                .add_modifier(Modifier::BOLD),
         )));
-
-        for note in view.notes {
-            lines.push(Line::from(vec![
-                Span::styled(
-                    "\u{2502} \u{2022} ",
-                    Style::default().fg(Color::Rgb(100, 100, 120)),
-                ),
-                Span::styled(*note, Style::default().fg(Color::Rgb(160, 160, 170))),
-            ]));
+        for (i, line) in cypher.lines().take(6).enumerate() {
+            let style = if i == 5 {
+                Style::default().fg(Color::DarkGray)
+            } else {
+                Style::default().fg(Color::Rgb(150, 200, 150))
+            };
+            let display = if i == 5 { "  ..." } else { line };
+            lines.push(Line::from(Span::styled(format!("  {display}"), style)));
         }
-
-        lines.push(Line::from(Span::styled(
-            "\u{2514}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2518}",
-            Style::default().fg(Color::Rgb(100, 100, 120)),
-        )));
         lines.push(Line::from(""));
     }
 
-    // Usage example
-    lines.push(Line::from(Span::styled(
-        "Generate docs:",
-        Style::default()
-            .fg(Color::Green)
-            .add_modifier(Modifier::BOLD),
-    )));
-    lines.push(Line::from(Span::styled(
-        format!("  cargo run -- doc generate --view={}", view.id),
-        Style::default().fg(Color::Rgb(150, 200, 150)),
-    )));
-    lines.push(Line::from(""));
-
     // YAML path
     lines.push(Line::from(Span::styled(
-        "YAML definition:",
+        "Source:",
         Style::default()
             .fg(Color::Cyan)
             .add_modifier(Modifier::BOLD),
     )));
     lines.push(Line::from(Span::styled(
-        format!("  packages/core/models/views/{}.yaml", view.id),
+        "  packages/core/models/views.yaml",
         Style::default().fg(Color::Rgb(150, 180, 220)),
     )));
 
@@ -701,10 +474,7 @@ fn render_concept_panel(f: &mut Frame, area: Rect) {
         } else if line.starts_with("  ") && line.contains(':') {
             // Numbered items
             Style::default().fg(Color::Yellow)
-        } else if line.starts_with("  -")
-            || line.starts_with("  cargo")
-            || line.starts_with("  packages")
-        {
+        } else if line.starts_with("  -") || line.starts_with("  packages") {
             Style::default().fg(Color::Rgb(150, 200, 150))
         } else {
             Style::default().fg(Color::Rgb(180, 180, 180))
@@ -740,88 +510,6 @@ mod tests {
     }
 
     #[test]
-    fn test_view_categories_count() {
-        assert_eq!(ViewCategory::all().len(), 6);
-    }
-
-    #[test]
-    fn test_views_count() {
-        // Should have at least 15 views defined
-        assert!(
-            VIEWS.len() >= 15,
-            "Expected at least 15 views, got {}",
-            VIEWS.len()
-        );
-    }
-
-    #[test]
-    fn test_views_have_valid_categories() {
-        for view in VIEWS {
-            // Just check category is one of the enum variants
-            let _ = view.category.label();
-            let _ = view.category.icon();
-            let _ = view.category.color();
-        }
-    }
-
-    #[test]
-    fn test_navigate_down() {
-        let mut state = ViewsState::new();
-        assert_eq!(state.view_cursor, 0);
-
-        state.navigate_down();
-        assert_eq!(state.view_cursor, 1);
-    }
-
-    #[test]
-    fn test_navigate_up() {
-        let mut state = ViewsState::new();
-        state.view_cursor = 2;
-
-        state.navigate_up();
-        assert_eq!(state.view_cursor, 1);
-    }
-
-    #[test]
-    fn test_navigate_up_at_zero_goes_to_prev_category() {
-        let mut state = ViewsState::new();
-        state.category_cursor = 1;
-        state.view_cursor = 0;
-
-        state.navigate_up();
-        assert_eq!(state.category_cursor, 0);
-        // Should be at last view of previous category
-    }
-
-    #[test]
-    fn test_next_category() {
-        let mut state = ViewsState::new();
-        state.view_cursor = 2;
-
-        state.next_category();
-        assert_eq!(state.category_cursor, 1);
-        assert_eq!(state.view_cursor, 0); // Reset on category change
-    }
-
-    #[test]
-    fn test_prev_category() {
-        let mut state = ViewsState::new();
-        state.category_cursor = 2;
-
-        state.prev_category();
-        assert_eq!(state.category_cursor, 1);
-    }
-
-    #[test]
-    fn test_prev_category_at_zero() {
-        let mut state = ViewsState::new();
-        assert_eq!(state.category_cursor, 0);
-
-        state.prev_category();
-        assert_eq!(state.category_cursor, 0); // Should stay at 0
-    }
-
-    #[test]
     fn test_toggle_concept() {
         let mut state = ViewsState::new();
         assert!(!state.show_concept);
@@ -831,36 +519,6 @@ mod tests {
 
         state.toggle_concept();
         assert!(!state.show_concept);
-    }
-
-    #[test]
-    fn test_views_in_category() {
-        let state = ViewsState::new();
-        let views = state.views_in_category();
-
-        // First category (Overview) should have views
-        assert!(!views.is_empty());
-        for view in views {
-            assert_eq!(view.category, ViewCategory::Overview);
-        }
-    }
-
-    #[test]
-    fn test_current_view() {
-        let state = ViewsState::new();
-        let view = state.current_view();
-
-        assert!(view.is_some());
-        assert_eq!(view.unwrap().category, ViewCategory::Overview);
-    }
-
-    #[test]
-    fn test_get_yank_text() {
-        let state = ViewsState::new();
-        let text = state.get_yank_text();
-
-        assert!(text.is_some());
-        assert!(!text.unwrap().is_empty());
     }
 
     #[test]
@@ -878,25 +536,91 @@ mod tests {
     }
 
     #[test]
-    fn test_category_labels() {
-        assert_eq!(ViewCategory::Overview.label(), "Overview");
-        assert_eq!(ViewCategory::Generation.label(), "Generation");
-        assert_eq!(ViewCategory::Knowledge.label(), "Knowledge");
-        assert_eq!(ViewCategory::Project.label(), "Project");
-        assert_eq!(ViewCategory::Mining.label(), "Mining");
-        assert_eq!(ViewCategory::Contextual.label(), "Contextual");
+    fn test_parse_color() {
+        assert_eq!(parse_color("#ffffff"), Color::Rgb(255, 255, 255));
+        assert_eq!(parse_color("#000000"), Color::Rgb(0, 0, 0));
+        assert_eq!(parse_color("#8b5cf6"), Color::Rgb(139, 92, 246));
+        assert_eq!(parse_color("invalid"), Color::Gray);
     }
 
     #[test]
-    fn test_category_descriptions() {
-        for cat in ViewCategory::all() {
-            assert!(!cat.description().is_empty());
+    fn test_loaded_views_empty() {
+        let loaded = LoadedViews::default();
+        assert_eq!(loaded.category_count(), 0);
+        assert!(loaded.views.is_empty());
+    }
+
+    fn test_root() -> Option<std::path::PathBuf> {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .and_then(|p| p.parent());
+        let root = root?;
+        if !root.join("pnpm-workspace.yaml").exists() {
+            return None;
         }
+        Some(root.to_path_buf())
     }
 
     #[test]
-    fn test_query_first_concept_not_empty() {
-        assert!(!QUERY_FIRST_CONCEPT.is_empty());
-        assert!(QUERY_FIRST_CONCEPT.len() >= 10);
+    fn test_loaded_views_from_yaml() {
+        let Some(root) = test_root() else { return };
+        let loaded = LoadedViews::load(root.to_str().unwrap());
+
+        assert_eq!(loaded.category_count(), 4, "expected 4 categories");
+        assert_eq!(loaded.views.len(), 10, "expected 10 views");
+
+        // Check schema views
+        let schema_views = loaded.views_in_category("schema");
+        assert_eq!(schema_views.len(), 2);
+
+        // Check generation views
+        let gen_views = loaded.views_in_category("generation");
+        assert_eq!(gen_views.len(), 3);
+    }
+
+    #[test]
+    fn test_navigation() {
+        let Some(root) = test_root() else { return };
+        let loaded = LoadedViews::load(root.to_str().unwrap());
+        let mut state = ViewsState::new();
+
+        // Navigate down within category
+        state.navigate_down(&loaded);
+        assert_eq!(state.view_cursor, 1);
+
+        // Navigate up
+        state.navigate_up(&loaded);
+        assert_eq!(state.view_cursor, 0);
+
+        // Next category
+        state.next_category(&loaded);
+        assert_eq!(state.category_cursor, 1);
+        assert_eq!(state.view_cursor, 0);
+
+        // Previous category
+        state.prev_category();
+        assert_eq!(state.category_cursor, 0);
+    }
+
+    #[test]
+    fn test_current_view() {
+        let Some(root) = test_root() else { return };
+        let loaded = LoadedViews::load(root.to_str().unwrap());
+        let state = ViewsState::new();
+
+        let view = state.current_view(&loaded);
+        assert!(view.is_some());
+        assert_eq!(view.unwrap().category, "schema");
+    }
+
+    #[test]
+    fn test_yank_text() {
+        let Some(root) = test_root() else { return };
+        let loaded = LoadedViews::load(root.to_str().unwrap());
+        let state = ViewsState::new();
+
+        let text = state.get_yank_text(&loaded);
+        assert!(text.is_some());
+        assert!(!text.unwrap().is_empty());
     }
 }

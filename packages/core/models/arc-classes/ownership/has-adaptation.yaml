@@ -1,0 +1,14 @@
+# packages/core/models/arc-classes/ownership/has-adaptation.yaml
+arc:
+  name: HAS_ADAPTATION
+  family: ownership
+  scope: intra_realm
+  source: Locale
+  target: Adaptation
+  cardinality: one_to_one
+  llm_context: |
+    USE: when loading cultural adaptation rules for a locale.
+    TRIGGERS: locale adaptation, cultural adaptation, market adaptation, localization.
+    NOT: locale culture (use HAS_CULTURE), locale style (use HAS_STYLE).
+    RELATES: Locale (source), Adaptation (target), 1:1 cardinality.
+  cypher_pattern: (Locale)-[:HAS_ADAPTATION]->(Adaptation)

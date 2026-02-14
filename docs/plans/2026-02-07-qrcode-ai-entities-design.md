@@ -2983,12 +2983,12 @@ qr-code-music:
 
 ### SEO Schema References
 
-- **SEOKeyword**: `packages/core/models/node-kinds/global/seo/seo-keyword.yaml`
-- **SEOKeywordMetrics**: `packages/core/models/node-kinds/global/seo/seo-keyword-metrics.yaml`
-- **SEOQuestion**: `packages/core/models/node-kinds/global/seo/seo-question.yaml`
-- **SEOComparison**: `packages/core/models/node-kinds/global/seo/seo-comparison.yaml`
-- **SEOPreposition**: `packages/core/models/node-kinds/global/seo/seo-preposition.yaml`
-- **SEOMiningRun**: `packages/core/models/node-kinds/global/seo/seo-mining-run.yaml`
+- **SEOKeyword**: `packages/core/models/node-classes/global/seo/seo-keyword.yaml`
+- **SEOKeywordMetrics**: `packages/core/models/node-classes/global/seo/seo-keyword-metrics.yaml`
+- **SEOQuestion**: `packages/core/models/node-classes/global/seo/seo-question.yaml`
+- **SEOComparison**: `packages/core/models/node-classes/global/seo/seo-comparison.yaml`
+- **SEOPreposition**: `packages/core/models/node-classes/global/seo/seo-preposition.yaml`
+- **SEOMiningRun**: `packages/core/models/node-classes/global/seo/seo-mining-run.yaml`
 
 ---
 
@@ -3000,7 +3000,7 @@ This section defines WHERE data lives and HOW it flows from source to Neo4j.
 
 ```
 packages/core/models/
-├── node-kinds/                          ← NODE SCHEMA (what nodes ARE)
+├── node-classes/                          ← NODE SCHEMA (what nodes ARE)
 │   ├── tenant/semantic/
 │   │   ├── entity.yaml                  ✅ 13 types, POPULAR_IN, SEMANTIC_LINK
 │   │   └── entity-l10n.yaml             ✅ TARGETS, ANSWERS, properties
@@ -3052,7 +3052,7 @@ packages/db/seed/
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                 │
 │  1. SCHEMA (YAML)                                                               │
-│     node-kinds/*.yaml ──► cargo run -- schema generate ──► TypeScript + Cypher │
+│     node-classes/*.yaml ──► cargo run -- schema generate ──► TypeScript + Cypher │
 │                                                                                 │
 │  2. ENTITY NODES (Cypher direct)                                                │
 │     Hand-written 40-49-entities-*.cypher ──► pnpm infra:seed ──► Neo4j         │
@@ -3254,7 +3254,7 @@ pnpm infra:reset                       # Drop + reseed
 ### Seed File Numbering Convention
 
 ```
-00-09: Schema (constraints, taxonomy, kinds, arc-kinds)
+00-09: Schema (constraints, taxonomy, kinds, arc-classes)
 20-29: Global data (locales, slugification, formatting, culture, market, geographic)
 30-39: Tenant foundation (organization, project, project details)  ← EXISTING
 40-49: Entity data (pillars, styles, content-types, features)     ← NEW
@@ -3295,8 +3295,8 @@ pnpm infra:reset                       # Drop + reseed
 
 | Path | Status |
 |------|--------|
-| `packages/core/models/node-kinds/tenant/semantic/entity.yaml` | ✅ 13 types, POPULAR_IN, entity_summary |
-| `packages/core/models/node-kinds/tenant/semantic/entity-l10n.yaml` | ✅ TARGETS, ANSWERS |
+| `packages/core/models/node-classes/tenant/semantic/entity.yaml` | ✅ 13 types, POPULAR_IN, entity_summary |
+| `packages/core/models/node-classes/tenant/semantic/entity-l10n.yaml` | ✅ TARGETS, ANSWERS |
 
 ### Files to GENERATE
 

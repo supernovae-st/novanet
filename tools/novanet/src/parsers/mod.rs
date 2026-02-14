@@ -7,7 +7,7 @@
 //! - `trait_def`: Parse trait YAML files (defined, authored, imported, generated, retrieved)
 //! - `arc_family`: Parse arc family YAML files (ownership, localization, semantic, etc.)
 //! - `yaml_node`: Parse node-kind YAML files (59 classes with trait validation)
-//! - `arcs`: Parse arc-kinds/ directory → arc definitions
+//! - `arcs`: Parse arc-classes/ directory → arc definitions
 //!
 //! ## Legacy/Transitional Parsers
 //!

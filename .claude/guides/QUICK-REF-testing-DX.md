@@ -126,7 +126,7 @@ ValidationIssue::error(
     "path_mismatch",
     format!("Page: path '{}' doesn't contain realm 'org'", path)
 )
-.with_hint("Move file to: packages/core/models/node-kinds/org/structure/page.yaml")
+.with_hint("Move file to: packages/core/models/node-classes/org/structure/page.yaml")
 ```
 
 **Benefits**:
@@ -172,9 +172,9 @@ cargo test test_no_old_traits     # FAILS
 ### Step 2: Green (Update YAML)
 
 ```bash
-# Update all 60 node-kinds/*.yaml files
+# Update all 60 node-classes/*.yaml files
 sed -i 's/trait: invariant/trait: defined/' \
-    packages/core/models/node-kinds/**/*.yaml
+    packages/core/models/node-classes/**/*.yaml
 
 # Regenerate code
 cargo run -- schema generate
@@ -208,7 +208,7 @@ cargo test naming_patterns         # PASSES
 | `trait: invariant not found` | YAML not updated | `sed -i 's/invariant/defined/'` |
 | `NodeKind not found in code` | Type not renamed | Rename struct + update imports |
 | `Trait mismatch: defined in output` | Wrong layer | Move node YAML to correct layer |
-| `Arc scope intra but cross_realm` | Scope validation | Update arc-kinds/*.yaml scope field |
+| `Arc scope intra but cross_realm` | Scope validation | Update arc-classes/*.yaml scope field |
 | `Snapshot mismatch` | Generated code outdated | `cargo test -- --ignored` to update |
 
 ---

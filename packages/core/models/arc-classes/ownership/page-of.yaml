@@ -1,0 +1,19 @@
+# packages/core/models/arc-classes/ownership/page-of.yaml
+# ArcKind: PAGE_OF — Inverse of HAS_PAGE (Page belongs to Project)
+
+arc:
+  name: PAGE_OF
+  family: ownership
+  scope: intra_realm
+  source: Page
+  target: Project
+  cardinality: many_to_one
+  inverse_of: HAS_PAGE
+
+  llm_context: |
+    USE: when finding which Project owns a Page.
+    TRIGGERS: page owner, page project, which project.
+    NOT: loading pages for a project (use HAS_PAGE).
+    RELATES: Page (source), Project (target), HAS_PAGE (inverse).
+
+  cypher_pattern: (Page)-[:PAGE_OF]->(Project)

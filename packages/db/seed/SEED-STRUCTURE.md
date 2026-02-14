@@ -42,8 +42,8 @@ This document describes the seed file organization aligned with the YAML archite
 | File | YAML Source | Description |
 |------|-------------|-------------|
 | `00.5-taxonomy.cypher` | `taxonomy.yaml` | 2 Realms, 10 Layers, 5 Traits |
-| `01-classes.cypher` | `node-kinds/**/*.yaml` | 59 NodeClasses (39 shared + 20 org) |
-| `02-arc-classes.cypher` | `arc-kinds/**/*.yaml` | 114 ArcClasses |
+| `01-classes.cypher` | `node-classes/**/*.yaml` | 59 NodeClasses (39 shared + 20 org) |
+| `02-arc-classes.cypher` | `arc-classes/**/*.yaml` | 114 ArcClasses |
 | `99-autowire-classes.cypher` | (computed) | Links data nodes to their Classes |
 
 **Regenerate:** `novanet schema generate` or `pnpm schema:generate`
@@ -100,7 +100,7 @@ cat _legacy/90-concepts-mvp.cypher | cypher-shell -u neo4j -p novanetpassword
 ```
 packages/core/models/                    packages/db/seed/
 ├── taxonomy.yaml                        ├── 00.5-taxonomy.cypher (generated)
-├── node-kinds/                          ├── 01-classes.cypher (generated)
+├── node-classes/                          ├── 01-classes.cypher (generated)
 │   ├── shared/                          │
 │   │   ├── config/      ────────────→   ├── 20-locales.cypher
 │   │   ├── knowledge/   ────────────→   ├── 21-locale-knowledge.cypher
@@ -112,7 +112,7 @@ packages/core/models/                    packages/db/seed/
 │       ├── semantic/    ────────────→   ├── 33-entities-*.cypher
 │       ├── instruction/ ────────────→   ├── 34-prompts-*.cypher
 │       └── output/      ────────────→   └── 35-outputs-*.cypher
-├── arc-kinds/                           ├── 02-arc-classes.cypher (generated)
+├── arc-classes/                           ├── 02-arc-classes.cypher (generated)
 └── (computed)                           └── 99-autowire-classes.cypher (generated)
 ```
 

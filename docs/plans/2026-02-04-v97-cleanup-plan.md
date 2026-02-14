@@ -183,10 +183,10 @@ sed -i '' 's/76 arcs/77 arcs/g' packages/core/models/_index.yaml
 
 ### Task 2.4: Verify arc count
 
-**Step 1: Count actual arc-kinds**
+**Step 1: Count actual arc-classes**
 
 ```bash
-find packages/core/models/arc-kinds -name "*.yaml" -not -name "_index.yaml" | wc -l
+find packages/core/models/arc-classes -name "*.yaml" -not -name "_index.yaml" | wc -l
 ```
 
 Expected: `76` (plus _index.yaml = 77 total arcs defined, but actual arc files = 76)
@@ -195,7 +195,7 @@ Actually, let's verify the exact count:
 
 ```bash
 grep -c "^- key:" packages/core/models/relations.yaml 2>/dev/null || echo "0"
-find packages/core/models/arc-kinds -name "*.yaml" -not -name "_index.yaml" | wc -l
+find packages/core/models/arc-classes -name "*.yaml" -not -name "_index.yaml" | wc -l
 ```
 
 ---
@@ -304,7 +304,7 @@ git commit -m "$(cat <<'EOF'
 docs: fix node/arc counts across codebase
 
 - Update 44 → 46 node types in all documentation
-- Update arc counts to 77 (actual count from arc-kinds/)
+- Update arc counts to 77 (actual count from arc-classes/)
 - Add search limit bounds (1..=10000) for DoS prevention
 
 Co-Authored-By: Claude <noreply@anthropic.com>
@@ -331,4 +331,4 @@ After completion:
 
 - Historical references in CHANGELOG.md are intentionally preserved
 - The actual arc count is 77 (76 arc-kind YAML files + _index.yaml defines the structure)
-- Node count is 46 (confirmed in node-kinds/ directory)
+- Node count is 46 (confirmed in node-classes/ directory)

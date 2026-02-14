@@ -41,26 +41,26 @@ If validation fails -> run `cargo run -- schema generate` first.
 
 | Section | Required YAML Reads |
 |---------|---------------------|
-| `all` | taxonomy.yaml + ALL node-kinds + ALL arc-kinds |
-| `nodes` | taxonomy.yaml + node-kinds/**/*.yaml |
-| `arcs` | taxonomy.yaml + arc-kinds/**/*.yaml |
-| `seo` | node-kinds/shared/knowledge/*.yaml (SEO* nodes) |
-| `geo` | node-kinds/shared/knowledge/*.yaml (GEO* nodes) |
-| `knowledge` | node-kinds/shared/knowledge/*.yaml |
-| `locale` | node-kinds/shared/locale/*.yaml |
-| `geography` | node-kinds/shared/geography/*.yaml |
+| `all` | taxonomy.yaml + ALL node-classes + ALL arc-classes |
+| `nodes` | taxonomy.yaml + node-classes/**/*.yaml |
+| `arcs` | taxonomy.yaml + arc-classes/**/*.yaml |
+| `seo` | node-classes/shared/knowledge/*.yaml (SEO* nodes) |
+| `geo` | node-classes/shared/knowledge/*.yaml (GEO* nodes) |
+| `knowledge` | node-classes/shared/knowledge/*.yaml |
+| `locale` | node-classes/shared/locale/*.yaml |
+| `geography` | node-classes/shared/geography/*.yaml |
 
 **Quick commands to list files:**
 
 ```bash
 # List all node kinds with realm/layer/trait
-grep -r "^  trait:" packages/core/models/node-kinds --include="*.yaml" | sed 's|.*/node-kinds/||' | sort
+grep -r "^  trait:" packages/core/models/node-classes --include="*.yaml" | sed 's|.*/node-classes/||' | sort
 
 # List all arc kinds
-find packages/core/models/arc-kinds -name "*.yaml" -not -name "_index.yaml" | sort
+find packages/core/models/arc-classes -name "*.yaml" -not -name "_index.yaml" | sort
 
 # Count nodes per layer
-find packages/core/models/node-kinds -name "*.yaml" | xargs -I{} dirname {} | sort | uniq -c
+find packages/core/models/node-classes -name "*.yaml" | xargs -I{} dirname {} | sort | uniq -c
 ```
 
 ### Step 3: Extract Data
@@ -141,7 +141,7 @@ Use this structure for consistency:
 
 **Required reads:**
 1. `packages/core/models/taxonomy.yaml` -> realms, layers, colors
-2. `packages/core/models/node-kinds/**/*.yaml` -> all node definitions
+2. `packages/core/models/node-classes/**/*.yaml` -> all node definitions
 
 **Extract from each YAML:**
 ```yaml
@@ -166,7 +166,7 @@ REALM (count) -------------------------------------------- realm_color
 
 **Required reads:**
 1. `packages/core/models/taxonomy.yaml` -> arc_families, arc_scopes
-2. `packages/core/models/arc-kinds/**/*.yaml` -> all arc definitions
+2. `packages/core/models/arc-classes/**/*.yaml` -> all arc definitions
 
 **Extract from each YAML:**
 ```yaml
@@ -184,8 +184,8 @@ arc:
 ## Section: seo
 
 **Required reads:**
-- `packages/core/models/node-kinds/shared/knowledge/*.yaml` (SEO* nodes)
-- `packages/core/models/arc-kinds/mining/*.yaml`
+- `packages/core/models/node-classes/shared/knowledge/*.yaml` (SEO* nodes)
+- `packages/core/models/arc-classes/mining/*.yaml`
 
 Show: SEOKeyword, SEOKeywordMetrics, SEOCluster, etc. and their relationships.
 
@@ -194,7 +194,7 @@ Show: SEOKeyword, SEOKeywordMetrics, SEOCluster, etc. and their relationships.
 ## Section: geo
 
 **Required reads:**
-- `packages/core/models/node-kinds/shared/knowledge/*.yaml` (GEO* nodes)
+- `packages/core/models/node-classes/shared/knowledge/*.yaml` (GEO* nodes)
 
 Show: GEOQuery, GEOAnswer, GEOMetrics and their relationships.
 
@@ -203,8 +203,8 @@ Show: GEOQuery, GEOAnswer, GEOMetrics and their relationships.
 ## Section: knowledge
 
 **Required reads:**
-- `packages/core/models/node-kinds/shared/knowledge/*.yaml`
-- `packages/core/models/node-kinds/org/semantic/*.yaml` (Entity, EntityContent)
+- `packages/core/models/node-classes/shared/knowledge/*.yaml`
+- `packages/core/models/node-classes/org/semantic/*.yaml` (Entity, EntityContent)
 
 Show: All Sets (TermSet, etc.), all Atoms (Term, etc.), Entity/EntityContent from org realm.
 
@@ -214,8 +214,8 @@ Show: All Sets (TermSet, etc.), all Atoms (Term, etc.), Entity/EntityContent fro
 
 ```bash
 /novanet-arch              # Full architecture (reads ALL YAML)
-/novanet-arch nodes        # Node taxonomy from node-kinds/**
-/novanet-arch arcs         # Arc taxonomy from arc-kinds/**
+/novanet-arch nodes        # Node taxonomy from node-classes/**
+/novanet-arch arcs         # Arc taxonomy from arc-classes/**
 /novanet-arch seo          # SEO nodes from shared/knowledge/
 /novanet-arch geo          # GEO nodes from shared/knowledge/
 /novanet-arch knowledge    # Knowledge layer from shared/knowledge/
@@ -244,8 +244,8 @@ PRE-FLIGHT
 ----------
 [x] Ran schema validate (passed)
 [x] Read taxonomy.yaml
-[x] Read relevant node-kinds/**/*.yaml
-[x] Read relevant arc-kinds/**/*.yaml
+[x] Read relevant node-classes/**/*.yaml
+[x] Read relevant arc-classes/**/*.yaml
 
 ACCURACY
 --------

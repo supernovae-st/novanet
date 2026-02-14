@@ -291,7 +291,7 @@ pub fn render_status(f: &mut Frame, area: Rect, app: &App) {
         spans.push(Span::styled(msg.clone(), Style::default().fg(Color::Green)));
     }
 
-    // 4. STATS (full words: nodes.arcs │ kinds.arc-kinds)
+    // 4. STATS (full words: nodes.arcs │ kinds.arc-classes)
     spans.push(Span::styled(" │ ", STYLE_SEPARATOR));
     let stats = &app.tree.stats;
     spans.push(Span::styled(

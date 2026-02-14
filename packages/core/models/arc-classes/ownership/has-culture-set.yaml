@@ -1,0 +1,21 @@
+# packages/core/models/arc-classes/ownership/has-culture-set.yaml
+# v10.7: Renamed from HAS_CULTURE to avoid collision with Culture config node
+# Links Locale to CultureSet knowledge atom containers
+arc:
+  name: HAS_CULTURE_SET
+  family: ownership
+  scope: intra_realm
+  source: Locale
+  target: CultureSet
+  cardinality: one_to_many
+  llm_context: |
+    USE: when loading culture atoms for a locale by type.
+    TRIGGERS: culture set, cultural values, cultural references, locale traditions.
+    NOT: culture config (use HAS_CULTURE), individual atoms (use CONTAINS_CULTURE_REF).
+    RELATES: Locale (source), CultureSet (target), type (property).
+  cypher_pattern: "(Locale)-[:HAS_CULTURE_SET {type: $type}]->(CultureSet)"
+  properties:
+    type:
+      type: string
+      required: true
+      description: "Culture type (values, references, celebrities, calendar)"

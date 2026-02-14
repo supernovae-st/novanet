@@ -181,7 +181,7 @@ ORDER BY term_count DESC
 
 ## Migration Path
 
-1. **Phase 1**: Create atomic node YAMLs in `models/node-kinds/global/knowledge/atoms/`
+1. **Phase 1**: Create atomic node YAMLs in `models/node-classes/global/knowledge/atoms/`
 2. **Phase 2**: Update generators to produce atom Cypher
 3. **Phase 3**: Migrate existing JSON blob data to atoms
 4. **Phase 4**: Remove `knowledge_tier` from Set YAMLs
@@ -190,7 +190,7 @@ ORDER BY term_count DESC
 ## Files to Create
 
 ```
-models/node-kinds/global/knowledge/atoms/
+models/node-classes/global/knowledge/atoms/
 ├── term.yaml
 ├── expression.yaml
 ├── pattern.yaml
@@ -202,7 +202,7 @@ models/node-kinds/global/knowledge/atoms/
 ## Files to Modify
 
 ```
-models/node-kinds/global/knowledge/
+models/node-classes/global/knowledge/
 ├── term-set.yaml         # Remove knowledge_tier, add CONTAINS relation
 ├── expression-set.yaml   # Remove knowledge_tier, add CONTAINS relation
 ├── pattern-set.yaml      # Remove knowledge_tier, add CONTAINS relation

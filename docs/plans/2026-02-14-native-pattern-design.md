@@ -91,15 +91,15 @@ Block   ──[:HAS_NATIVE {locale}]──▶ BlockNative   (generated)
 ### Files to Update
 
 **YAML Node Definitions:**
-- `packages/core/models/node-kinds/org/semantic/entity-content.yaml` → `entity-native.yaml`
-- `packages/core/models/node-kinds/org/foundation/project-content.yaml` → `project-native.yaml`
-- `packages/core/models/node-kinds/org/output/page-generated.yaml` → `page-native.yaml`
-- `packages/core/models/node-kinds/org/output/block-generated.yaml` → `block-native.yaml`
+- `packages/core/models/node-classes/org/semantic/entity-content.yaml` → `entity-native.yaml`
+- `packages/core/models/node-classes/org/foundation/project-content.yaml` → `project-native.yaml`
+- `packages/core/models/node-classes/org/output/page-generated.yaml` → `page-native.yaml`
+- `packages/core/models/node-classes/org/output/block-generated.yaml` → `block-native.yaml`
 
 **YAML Arc Definitions:**
-- `packages/core/models/arc-kinds/ownership/has-content.yaml` → `has-native.yaml`
-- `packages/core/models/arc-kinds/ownership/has-generated.yaml` → DELETE (merged)
-- `packages/core/models/arc-kinds/ownership/content-of.yaml` → `native-of.yaml`
+- `packages/core/models/arc-classes/ownership/has-content.yaml` → `has-native.yaml`
+- `packages/core/models/arc-classes/ownership/has-generated.yaml` → DELETE (merged)
+- `packages/core/models/arc-classes/ownership/content-of.yaml` → `native-of.yaml`
 
 **Documentation:**
 - `.claude/rules/novanet-terminology.md`

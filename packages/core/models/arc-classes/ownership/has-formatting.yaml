@@ -1,0 +1,14 @@
+# packages/core/models/arc-classes/ownership/has-formatting.yaml
+arc:
+  name: HAS_FORMATTING
+  family: ownership
+  scope: intra_realm
+  source: Locale
+  target: Formatting
+  cardinality: one_to_one
+  llm_context: |
+    USE: when loading number/date/currency formatting for a locale.
+    TRIGGERS: locale formatting, number format, date format, currency format.
+    NOT: locale style (use HAS_STYLE), locale culture (use HAS_CULTURE).
+    RELATES: Locale (source), Formatting (target), 1:1 cardinality.
+  cypher_pattern: (Locale)-[:HAS_FORMATTING]->(Formatting)

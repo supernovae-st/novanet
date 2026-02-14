@@ -3,7 +3,7 @@
 // =============================================================================
 // Returns available context views for a selected node with live stats
 //
-// NOTE: Contextual views are now filtered via viewStore based on applicable_types from _registry.yaml.
+// NOTE: Contextual views are now filtered via viewStore based on applicable_types from views.yaml (v0.12.5).
 // Use viewStore.categories and filter by view.applicable_types instead.
 
 import { useMemo, useState, useEffect } from 'react';

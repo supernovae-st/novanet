@@ -1,0 +1,21 @@
+# packages/core/models/arc-classes/localization/content-of.yaml
+# ArcKind: CONTENT_OF — Inverse of HAS_CONTENT (v10.9.0: renamed from L10N_OF)
+
+arc:
+  name: CONTENT_OF
+  family: localization
+  scope: intra_realm
+  source:
+    - EntityContent  # v10.9.0: renamed from EntityContent
+    - ProjectContent
+  target:
+    - Entity
+    - Project
+  cardinality: many_to_one
+  inverse_of: HAS_CONTENT
+  llm_context: |
+    USE: when finding the parent entity/project from localized content.
+    TRIGGERS: content parent, entity from content, reverse content lookup.
+    NOT: forward lookup (use HAS_CONTENT), generated content (use GENERATED_FOR).
+    RELATES: EntityContent/ProjectContent (source), Entity/Project (target), HAS_CONTENT (inverse_of).
+  cypher_pattern: (EntityContent)-[:CONTENT_OF]->(Entity)

@@ -234,9 +234,9 @@ IMPORTANT: Regenerate artifacts with:
 **Trigger:** After editing `.claude/{skills,commands,agents,rules}/**/*.md` files
 
 **Output:** Reminds to verify against YAML sources:
-- Node counts match `node-kinds/` (64 files)
-- Arc counts match `arc-kinds/` (121 files)
-- Paths use `node-kinds/` not `nodes/`
+- Node counts match `node-classes/` (64 files)
+- Arc counts match `arc-classes/` (121 files)
+- Paths use `node-classes/` not `nodes/`
 - Paths use `taxonomy.yaml` not `organizing-principles.yaml`
 
 **Validation command:** `pnpm skill:audit`
@@ -451,7 +451,7 @@ Add a new arc type between nodes.
 1. **Discovery** - Ask about from/to Kinds, cardinality, properties, ArcFamily
 2. **Classification** - Assign to ArcFamily (ownership/localization/semantic/generation/mining)
 3. **Bidirectionality** - Check if inverse arc needed
-4. **Creation** - Add to arc-kinds/ with `family` field, update node YAMLs
+4. **Creation** - Add to arc-classes/ with `family` field, update node YAMLs
 5. **Sync** - Validate and seed
 
 **Naming Conventions:**
@@ -813,8 +813,8 @@ pnpm doc:generate
 - Deprecated 5-mode navigation (use 2-mode: Graph/Nexus)
 
 **`pnpm skill:audit` checks:**
-- Deprecated paths (`nodes/` → `node-kinds/`, `organizing-principles.yaml` → `taxonomy.yaml`)
-- Node/arc counts match YAML sources (59 node-kinds, 114 arc-kinds)
+- Deprecated paths (`nodes/` → `node-classes/`, `organizing-principles.yaml` → `taxonomy.yaml`)
+- Node/arc counts match YAML sources (59 node-classes, 114 arc-classes)
 - Deprecated terminology in skills/commands/rules
 
 **Auto-sync reminders:**

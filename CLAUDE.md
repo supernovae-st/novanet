@@ -89,7 +89,7 @@ All commands implemented: blueprint/data/overlay/query, node/arc CRUD, search, l
 schema generate/validate, doc generate, filter build. Galaxy-themed TUI with unified tree mode (v11.7), boot animation, effects engine, Nexus hub, and onboarding. 980 tests pass.
 
 **YAML-first architecture:** Each Class YAML has explicit `realm:` and `layer:` fields (source of truth).
-Path validation ensures `models/node-kinds/{realm}/{layer}/{name}.yaml` matches YAML content.
+Path validation ensures `models/node-classes/{realm}/{layer}/{name}.yaml` matches YAML content.
 v0.12.4: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 61 nodes, 128 arcs.
 
 **Icons source of truth (v11.5):** `visual-encoding.yaml` → `icons:` section provides dual-format icons:
@@ -443,7 +443,7 @@ See `.claude/README.md` for full documentation.
 ```
 1. /schema:add-node MyNode             # Socratic discovery
    ↓
-2. YAML created                        # packages/core/models/node-kinds/{realm}/{layer}/my-node.yaml
+2. YAML created                        # packages/core/models/node-classes/{realm}/{layer}/my-node.yaml
    ↓                                   # with explicit realm: and layer: fields
 3. cargo run -- schema generate        # Regenerate all artifacts from YAML
    ↓
@@ -455,7 +455,7 @@ See `.claude/README.md` for full documentation.
 ### YAML Class Structure
 
 ```yaml
-# packages/core/models/node-kinds/shared/knowledge/term.yaml
+# packages/core/models/node-classes/shared/knowledge/term.yaml
 node:
   name: Term
   realm: shared               # Source of truth (must match path)
