@@ -238,7 +238,7 @@ layer:
         assert_eq!(doc.layer.key, "semantic");
         assert_eq!(doc.layer.realms, vec!["org"]);
         assert_eq!(doc.layer.classes.len(), 4);
-        assert!(doc.layer.classes.contains(&"Entity".to_string()));
+        assert!(doc.layer.classes.all().contains(&"Entity"));
         assert_eq!(doc.layer.class_count, 4);
         assert!(doc.layer.llm_context.is_some());
         assert_eq!(doc.layer.icon.web, "brain");
