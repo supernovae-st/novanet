@@ -17,8 +17,11 @@ import { memo, useRef, useCallback, useEffect, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { ChevronLeft, ChevronRight, Zap, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { toast } from '@/lib/toast';
 import { iconSizes } from '@/design/tokens';
 import { useViewStore } from '@/stores/viewStore';
+import { useUIStore, selectSelectedNodeId } from '@/stores/uiStore';
+import { useGraphStore } from '@/stores/graphStore';
 import type { ViewRegistryEntry } from '@novanet/core/filters';
 
 // Keyboard shortcut mapping (1-9 keys map to first 9 views)
@@ -49,6 +52,10 @@ export const ViewScrollBar = memo(function ViewScrollBar({
     }))
   );
 
+  // v0.12.5: Get selected node for contextual views
+  const selectedNodeId = useUIStore(selectSelectedNodeId);
+  const getNodeById = useGraphStore((state) => state.getNodeById);
+
   // Flatten views for scroll bar (memoized for performance)
   const allViews = useMemo(
     () => categories.flatMap((cat) => cat.views),
@@ -68,9 +75,27 @@ export const ViewScrollBar = memo(function ViewScrollBar({
   // Handle view selection
   const handleViewClick = useCallback(
     (view: ViewRegistryEntry) => {
+      const isContextual = view.contextual || view.category === 'generation';
+
+      // v0.12.5: For contextual views, require a selected node
+      if (isContextual) {
+        if (!selectedNodeId) {
+          toast.warning(
+            'Select a node first',
+            'This view requires a selected node to show its context.'
+          );
+          return;
+        }
+        const node = getNodeById(selectedNodeId);
+        if (node?.key) {
+          executeView(view.id, { key: node.key });
+          return;
+        }
+      }
+
       executeView(view.id);
     },
-    [executeView]
+    [executeView, selectedNodeId, getNodeById]
   );
 
   // Keyboard shortcuts (1-9 for first 9 views)

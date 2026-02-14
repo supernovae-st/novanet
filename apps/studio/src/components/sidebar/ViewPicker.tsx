@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
+import { toast } from '@/lib/toast';
 import { useViewStore } from '@/stores/viewStore';
 import { useUIStore, selectSelectedNodeId } from '@/stores/uiStore';
 import { useGraphStore } from '@/stores/graphStore';
@@ -420,11 +421,14 @@ export const ViewPicker = memo(function ViewPicker({ className }: ViewPickerProp
       // For contextual views, require a selected node
       if (isContextual) {
         if (!selectedNode) {
-          console.warn(`[ViewPicker] Contextual view "${viewId}" requires a selected node`);
-          // Still execute but it will return empty results or error
-          // TODO: Show toast "Select a node first to use this view"
+          // v0.12.5: Show warning toast instead of silently failing
+          toast.warning(
+            'Select a node first',
+            'This view requires a selected node to show its context.'
+          );
+          return;
         }
-        executeView(viewId, { key: selectedNode?.key });
+        executeView(viewId, { key: selectedNode.key });
       } else {
         executeView(viewId);
       }
