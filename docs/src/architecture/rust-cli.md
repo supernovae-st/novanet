@@ -45,15 +45,15 @@ Query the Neo4j graph in different modes.
 | Command | Description |
 |---------|-------------|
 | `data` | Query data nodes only |
-| `meta` | Query meta-graph (schema) |
+| `blueprint` | Query schema graph (v0.12.0: was `meta`) |
 | `overlay` | Combined data + meta view |
 | `query` | Faceted query with filters |
 | `search` | Fulltext + property search |
 
 ```bash
-cargo run -- meta --format=json
+cargo run -- blueprint --format=json
 cargo run -- query --realm=org --layer=semantic
-cargo run -- search --query="page" --kind=Page --limit=20
+cargo run -- search --query="page" --class=Page --limit=20
 ```
 
 ### Write Commands
@@ -69,8 +69,8 @@ Create, modify, and delete graph nodes.
 | `arc delete` | Remove a relationship |
 
 ```bash
-cargo run -- node create --kind=Page --key=my-page --props='{"title":"My Page"}'
-cargo run -- arc create --from=page1 --to=entity1 --kind=USES_ENTITY
+cargo run -- node create --class=Page --key=my-page --props='{"title":"My Page"}'
+cargo run -- arc create --from=page1 --to=entity1 --class=USES_ENTITY
 ```
 
 ### Schema Commands
@@ -130,7 +130,7 @@ cargo run -- tui
 
 | Key | Mode | Description |
 |-----|------|-------------|
-| `1` | Graph | Unified tree (Realm > Layer > Kind > Instance + Arcs) |
+| `1` | Graph | Unified tree (Realm > Layer > Class > Instance + Arcs) |
 | `2` | Nexus | Hub (Quiz, Audit, Stats, Help) |
 
 ### Graph Mode
@@ -138,15 +138,15 @@ cargo run -- tui
 The unified tree shows everything as clickable nodes:
 
 ```
-▼ Nodes (60)
+▼ Nodes (61)
   ▼ ◉ Realm:shared           ← Clickable
     ▼ ⚙ Layer:config         ← Clickable
-      ▼ ◆ Kind:Locale [200]  ← Expandable
+      ▼ ◆ Class:Locale [200] ← Expandable (v0.12.0: Kind→Class)
         ● Locale:fr-FR       ← Instance
         ● Locale:en-US
-▼ Arcs (114)
+▼ Arcs (128)
   ▼ → ArcFamily:ownership
-    → ArcKind:HAS_PROJECT
+    → ArcClass:HAS_PROJECT   (v0.12.0: ArcKind→ArcClass)
 ```
 
 #### Keybindings

@@ -21,12 +21,13 @@ type NodeLayer =
   | 'instruction'
   | 'output';
 
+// v0.12.0 ADR-024: Trait = Data Origin
 type NodeTrait =
-  | 'invariant'
-  | 'localized'
-  | 'knowledge'
+  | 'defined'     // Human-created once (was invariant)
+  | 'authored'    // Human-written per locale (was localized)
+  | 'imported'    // External data brought in (was knowledge)
   | 'generated'
-  | 'aggregated';
+  | 'retrieved';  // Fetched from external APIs (was aggregated)
 ```
 
 ### Arc Types
@@ -55,7 +56,7 @@ interface FacetFilter {
   realms?: NodeRealm[];
   layers?: NodeLayer[];
   traits?: NodeTrait[];
-  kinds?: string[];
+  classes?: string[];      // v0.12.0: was kinds
   arcFamilies?: ArcFamily[];
   arcScopes?: ArcScope[];
 }
@@ -86,13 +87,14 @@ pub enum NodeLayer {
     Output,
 }
 
+// v0.12.0 ADR-024: Trait = Data Origin
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum NodeTrait {
-    Invariant,
-    Localized,
-    Knowledge,
+    Defined,    // Human-created once (was Invariant)
+    Authored,   // Human-written per locale (was Localized)
+    Imported,   // External data brought in (was Knowledge)
     Generated,
-    Aggregated,
+    Retrieved,  // Fetched from external APIs (was Aggregated)
 }
 ```
 
@@ -122,28 +124,28 @@ pub type Result<T> = std::result::Result<T, NovaNetError>;
 
 ## Neo4j Schema
 
-### Meta Labels
+### Schema Labels
 
-All meta-nodes carry the `:Meta` label:
+All schema nodes carry the `:Schema` label (v0.12.0 ADR-023: was `:Meta`):
 
 | Label | Description |
 |-------|-------------|
-| `:Meta:Realm` | Realm definition |
-| `:Meta:Layer` | Layer definition |
-| `:Meta:Trait` | Trait definition |
-| `:Meta:Kind` | Node type definition |
-| `:Meta:ArcFamily` | Arc family definition |
-| `:Meta:ArcKind` | Arc type definition |
+| `:Schema:Realm` | Realm definition |
+| `:Schema:Layer` | Layer definition |
+| `:Schema:Trait` | Trait definition |
+| `:Schema:Class` | Node type definition (was `:Meta:Kind`) |
+| `:Schema:ArcFamily` | Arc family definition |
+| `:Schema:ArcClass` | Arc type definition (was `:Meta:ArcKind`) |
 
 ### Constraints
 
 ```cypher
-// Key uniqueness
-CREATE CONSTRAINT kind_key IF NOT EXISTS
-FOR (n:Meta:Kind) REQUIRE n.name IS UNIQUE;
+// Key uniqueness (v0.12.0: Meta→Schema, Kind→Class, ArcKind→ArcClass)
+CREATE CONSTRAINT class_key IF NOT EXISTS
+FOR (n:Schema:Class) REQUIRE n.name IS UNIQUE;
 
-CREATE CONSTRAINT arc_key IF NOT EXISTS
-FOR (n:Meta:ArcKind) REQUIRE n.name IS UNIQUE;
+CREATE CONSTRAINT arc_class_key IF NOT EXISTS
+FOR (n:Schema:ArcClass) REQUIRE n.name IS UNIQUE;
 
 // Data node keys
 CREATE CONSTRAINT page_key IF NOT EXISTS
@@ -164,18 +166,18 @@ FOR (n:Page) ON (n.realm);
 
 ## Cypher Patterns
 
-### Query Kinds by Layer
+### Query Classes by Layer
 
 ```cypher
-MATCH (l:Meta:Layer {key: $layer})-[:HAS_KIND]->(k:Meta:Kind)
-RETURN k.name, k.trait
-ORDER BY k.name
+MATCH (l:Schema:Layer {key: $layer})-[:HAS_CLASS]->(c:Schema:Class)
+RETURN c.name, c.trait
+ORDER BY c.name
 ```
 
 ### Query Arcs by Family
 
 ```cypher
-MATCH (f:Meta:ArcFamily {key: $family})-[:HAS_ARC_KIND]->(a:Meta:ArcKind)
+MATCH (f:Schema:ArcFamily {key: $family})-[:HAS_ARC_CLASS]->(a:Schema:ArcClass)
 RETURN a.name, a.source, a.target
 ORDER BY a.name
 ```
@@ -194,7 +196,7 @@ LIMIT $limit
 
 ```cypher
 MATCH (n)
-WHERE any(label IN labels(n) WHERE label IN $kinds)
+WHERE any(label IN labels(n) WHERE label IN $classes)  // v0.12.0: was $kinds
   AND n.realm IN $realms
   AND n.layer IN $layers
 RETURN n
@@ -206,8 +208,8 @@ RETURN n
 
 | File | Content |
 |------|---------|
-| `node-classes.generated.ts` | Kind Zod schemas |
-| `arc-classes.generated.ts` | ArcKind definitions |
+| `node-classes.generated.ts` | Class Zod schemas |
+| `arc-classes.generated.ts` | ArcClass definitions |
 | `taxonomy.generated.ts` | Enums for realm/layer/trait |
 | `visual-encoding.generated.ts` | Colors, icons |
 | `filters.generated.ts` | FacetFilter types |
@@ -217,9 +219,9 @@ RETURN n
 | File | Content |
 |------|---------|
 | `00.0-constraints.cypher` | Uniqueness constraints |
-| `00.5-taxonomy.cypher` | Meta-graph nodes |
-| `01-kinds.cypher` | Kind definitions |
-| `02-arcs.cypher` | ArcKind definitions |
+| `00.5-taxonomy.cypher` | Schema graph nodes |
+| `01-classes.cypher` | Class definitions (v0.12.0: was 01-kinds.cypher) |
+| `02-arcs.cypher` | ArcClass definitions |
 
 ### Rust
 
@@ -241,7 +243,7 @@ POST /api/views/:id/query         # Execute with parameters
 ### Graph API
 
 ```
-GET /api/graph/meta               # Meta-graph nodes
+GET /api/graph/schema             # Schema graph nodes (v0.12.0: was /api/graph/meta)
 GET /api/graph/data               # Data nodes
 POST /api/graph/query             # Execute Cypher
 ```

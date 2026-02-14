@@ -17,7 +17,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 MATCH (p:Project {key: "qrcode-ai"})
-MERGE (p)-[:HAS_BRAND_IDENTITY]->(bi:BrandIdentity {key: "brand-qrcode-ai"})
+MERGE (p)-[:HAS_BRAND]->(bi:Brand {key: "brand-qrcode-ai"}) // v0.12.4 ADR-028: was HAS_BRAND_IDENTITY + BrandIdentity
 SET bi.display_name = "QR Code AI Brand",
     bi.description = "Visual identity and design system for QR Code AI",
     bi.llm_context = "USE: when generating visual content, images, or style decisions. TRIGGERS: brand, colors, fonts, style. NOT: text content (use ProjectContent).",

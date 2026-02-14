@@ -62,7 +62,7 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   HAS_BRAND: 'brand',
   HAS_PROJECT: 'project',
   OF_TYPE: 'blockType',
-  OF_KIND: 'kind',
+  OF_CLASS: 'class', // v0.12.0 ADR-023: was OF_KIND
   // Entity relationships
   USES_ENTITY: 'usedEntity',
   SEMANTIC_LINK: 'relatedEntity',
@@ -222,9 +222,14 @@ export class NovaNetFilter {
     return this;
   }
 
+  /** @deprecated use includeBrand() */
   includeBrandIdentity(): this {
+    return this.includeBrand();
+  }
+
+  includeBrand(): this {
     this.state.includes.push({
-      relation: 'HAS_BRAND_IDENTITY',
+      relation: 'HAS_BRAND', // v0.12.4 ADR-028: was HAS_BRAND_IDENTITY
       direction: 'outgoing',
     });
     return this;

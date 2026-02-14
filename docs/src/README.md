@@ -62,28 +62,30 @@ flowchart TB
     RUST --> NEO4J
 ```
 
-## Key Numbers (v0.12.0)
+## Key Numbers (v0.12.4)
 
 | Metric | Value |
 |--------|-------|
-| Node types (Kinds) | 60 |
-| Arc types (ArcKinds) | 114 |
+| Node types (Classes) | 61 |
+| Arc types (ArcClasses) | 128 |
 | Realms | 2 (shared, org) |
 | Layers | 10 (4 shared + 6 org) |
 | Traits | 5 |
 | Locales supported | 200+ |
 | Tests passing | 998 |
 
+> **v0.12.0 ADR-023**: "Kind" → "Class", "ArcKind" → "ArcClass"
+
 ### v0.12.0 Highlights
 
 - **Unified Tree Architecture**: 2 modes (Graph/Nexus) replace 5 modes
 - **Nexus Hub**: Quiz, Audit, Stats (Matrix Control Tower), Help
-- **Lazy Instance Loading**: Kind nodes expand with pagination
+- **Lazy Instance Loading**: Class nodes expand with pagination
 - **Dual Icons**: Lucide (web) + Unicode (terminal), no emoji
 
 ## Documentation Sections
 
-- **[Architecture](./architecture/overview.md)** — System design, ontology, meta-graph
+- **[Architecture](./architecture/overview.md)** — System design, ontology, schema graph
 - **[Claude Code DX](./claude-dx/overview.md)** — Skills, agents, advanced patterns
 - **[Guides](./guides/quick-start.md)** — Tutorials and how-tos
 - **[Reference](./reference/commands.md)** — Commands, API documentation

@@ -613,7 +613,7 @@ function Graph2DInner({
   // =========================================================================
   // NODE TYPE → LAYER MAPPING (from Neo4j via useMagneticData)
   // =========================================================================
-  // Comes from OF_KIND + IN_LAYER relationships in Neo4j, seeded from YAML.
+  // Comes from OF_CLASS + IN_LAYER relationships in Neo4j, seeded from YAML. (v0.12.0: was OF_KIND)
   // No hardcoded maps - all data flows: YAML → Neo4j → API → here.
   const nodeTypeToLayer = magneticData?.nodeTypeMapping ?? {};
 
@@ -989,7 +989,7 @@ function Graph2DInner({
         }
       }
 
-      // Data node → Layer edges (OF_KIND) - faint magnetic edges
+      // Data node → Layer edges (OF_CLASS) - faint magnetic edges (v0.12.0: was OF_KIND)
       for (const node of graphNodes) {
         const layerId = nodeTypeToLayerId[node.type];
         if (layerId) {
@@ -999,7 +999,7 @@ function Graph2DInner({
             target: layerId,
             type: 'magnetic',
             data: {
-              relationType: 'OF_KIND',
+              relationType: 'OF_CLASS',
               dimmed: false,
               animated: false,
               showLabel: false,
