@@ -23,9 +23,9 @@ use crate::tui::ui::COLOR_UNFOCUSED_BORDER;
 /// Statistics for a single trait.
 #[derive(Debug, Clone)]
 pub struct TraitStats {
-    /// Trait key (e.g., "invariant", "localized").
+    /// Trait key (e.g., "defined", "authored").
     pub key: String,
-    /// Display name (e.g., "Invariant", "Localized").
+    /// Display name (e.g., "Defined", "Authored").
     pub display_name: String,
     /// Unicode symbol for the trait.
     pub symbol: &'static str,

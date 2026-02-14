@@ -36,7 +36,7 @@ Generate culturally-native content across 200+ locales — not translation, but 
 |  |  |  |  |
 |:---:|:---:|:---:|:---:|
 | **Knowledge Graph** | **200+ Locales** | **Graph Studio** | **AI-Powered** |
-| 59 node types, 114 arcs | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
+| 61 node types, 128 arcs | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
 | Neo4j with APOC | Locale knowledge layer | React Flow + ELK.js layouts | Cypher generation from text |
 
 ---
@@ -179,15 +179,15 @@ novanet-hq/
 cargo run -- schema generate        # Regenerate all artifacts
 cargo run -- schema validate        # Validate YAML coherence
 
-# Navigation modes
-cargo run -- meta                   # Mode 1: Meta-graph only
-cargo run -- data                   # Mode 2: Data nodes only
-cargo run -- overlay                # Mode 3: Data + Meta combined
-cargo run -- query --realm=org      # Mode 4: Faceted query
+# Navigation commands (v0.12.4)
+cargo run -- blueprint              # Schema-graph visualization
+cargo run -- data                   # Data nodes only
+cargo run -- overlay                # Data + Schema combined
+cargo run -- query --realm=org      # Faceted query
 
 # CRUD operations
-cargo run -- node create --kind=Page --key=my-page
-cargo run -- search --query="page" --kind=Page
+cargo run -- node create --class=Page --key=my-page
+cargo run -- search --query="page" --class=Page
 
 # Interactive TUI
 cargo run -- tui                    # Galaxy-themed terminal UI
@@ -254,12 +254,12 @@ See [`packages/core/models/taxonomy.yaml`](packages/core/models/taxonomy.yaml) f
 │ │ ...            │  │   [BlockGenerated]               │  │ [Copy JSON]  │ │
 │ └────────────────┘  └──────────────────────────────────┘  └──────────────┘ │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  Mode: Data  │  59 nodes  │  114 arcs  │  Zoom: 100%  │  Locale: fr-FR │
+│  Mode: Graph  │  61 nodes  │  128 arcs  │  Zoom: 100%  │  Locale: fr-FR │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 *Interactive 2D graph visualization with AI-powered queries (⌘J)*
 
-- **4 Navigation Modes** — Meta, Data, Overlay, Query (cycle with `N`)
+- **2 Navigation Modes** — Graph (unified tree), Nexus (hub) — `[1]` `[2]` keys
 - **9 Filter Presets** — Quick views via `1-8, 0` keys
 - **AI Chat** — Natural language to Cypher with `⌘J`
 - **40+ Keyboard Shortcuts** — Full keyboard navigation

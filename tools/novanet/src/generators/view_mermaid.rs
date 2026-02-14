@@ -307,33 +307,34 @@ fn wrap_view_markdown(
         writeln!(out).unwrap();
     }
 
+    // v0.12.0: ADR-024 Data Origin trait names
     writeln!(out, "### Legend").unwrap();
     writeln!(out).unwrap();
     writeln!(out, "| Color | Trait | Description |").unwrap();
     writeln!(out, "|-------|-------|-------------|").unwrap();
     writeln!(
         out,
-        "| \u{1F535} Blue | Invariant | Nodes that don't change between locales |"
+        "| \u{1F535} Blue | Defined | Human-created once, same across all locales |"
     )
     .unwrap();
     writeln!(
         out,
-        "| \u{1F7E2} Green | Localized | Nodes with locale-specific content |"
+        "| \u{1F7E2} Green | Authored | Human-written content, per locale |"
     )
     .unwrap();
     writeln!(
         out,
-        "| \u{1F7E3} Purple | Knowledge | Cultural/linguistic knowledge per locale |"
+        "| \u{1F7E3} Purple | Imported | External data brought in (knowledge atoms) |"
     )
     .unwrap();
     writeln!(
         out,
-        "| \u{26AA} Gray | Derived | Computed/aggregated data |"
+        "| \u{1F7E1} Yellow | Generated | Produced by NovaNet LLM |"
     )
     .unwrap();
     writeln!(
         out,
-        "| \u{2699}\u{FE0F} Gray | Job | Background processing tasks |"
+        "| \u{26AA} Gray | Retrieved | Fetched from external APIs |"
     )
     .unwrap();
     writeln!(out).unwrap();

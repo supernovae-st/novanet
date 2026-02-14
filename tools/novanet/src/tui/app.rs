@@ -2091,7 +2091,7 @@ mod tests {
             llm_context: String::new(),
         };
 
-        let global = RealmInfo {
+        let shared_realm = RealmInfo {
             key: "shared".to_string(),
             display_name: "Shared".to_string(),
             color: "#859900".to_string(),
@@ -2100,7 +2100,7 @@ mod tests {
             llm_context: String::new(),
         };
 
-        let tenant = RealmInfo {
+        let org_realm = RealmInfo {
             key: "org".to_string(),
             display_name: "Org".to_string(),
             color: "#b58900".to_string(),
@@ -2109,7 +2109,7 @@ mod tests {
             llm_context: String::new(),
         };
 
-        let realms = vec![global, tenant];
+        let realms = vec![shared_realm, org_realm];
 
         // Build class_index (mirrors load() behavior)
         let mut class_index = FxHashMap::default();

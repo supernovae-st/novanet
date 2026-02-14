@@ -46,8 +46,8 @@ concurrency:
 env:
   CARGO_TERM_COLOR: always
   RUSTFLAGS: -Dwarnings
-  NOVANET_VERSION: v11.6
-  NOVANET_NODE_COUNT: '60'
+  NOVANET_VERSION: v0.12.4
+  NOVANET_NODE_COUNT: '61'
   NOVANET_LAYER_COUNT: '10'
   # Minimum coverage threshold (%)
   COVERAGE_THRESHOLD: 70

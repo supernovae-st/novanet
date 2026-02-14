@@ -313,9 +313,17 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 |   +-- 01-vector-indexes.cypher     <- Index vectoriels pour recherche semantique                  |
 |   +-- 02-arc-classes.cypher        <- ArcClass meta-nodes (GENERATED)                             |
 |   +-- 20-locales.cypher            <- Locales from CSV + MD (GENERATED)                           |
-|   +-- 21-locale-knowledge.cypher   <- LocaleIdentity, LocaleVoice, LocaleCulture, etc.            |
+|   +-- 22-slugification.cypher      <- Slugification rules per locale (v11.3)                      |
+|   +-- 23-formatting.cypher         <- Formatting rules per locale (v11.3)                         |
+|   +-- 24-culture.cypher            <- Culture sets per locale (v11.3)                             |
+|   +-- 25-market.cypher             <- Market data per locale (v11.3)                              |
+|   +-- 26-expression.cypher         <- Expression sets per locale (v11.3)                          |
+|   +-- 27-geographic-taxonomy.cypher <- Continents, Regions, SubRegions (v11.3)                    |
+|   +-- 28-locale-taxonomy-links.cypher <- Links locales to geographic nodes (v11.5)                |
+|   +-- 29-countries.cypher          <- Countries with ISO codes (v0.12.4)                          |
+|   +-- 30-org-config.cypher         <- OrgConfig (replaces Organization+Tenant, v11.3)             |
 |   +-- 31-project-qrcode-ai.cypher  <- Projet QR Code AI avec Pages, Blocks                        |
-|   +-- 34-instructions.cypher       <- BlockInstruction, PageInstruction                           |
+|   +-- 34-prompts.cypher            <- BlockInstruction, PageInstruction                           |
 |   +-- 99-autowire-classes.cypher   <- Links data nodes to Classes (GENERATED)                     |
 |                                                                                                   |
 |   migrations/ (6 fichiers, idempotents)                                                           |

@@ -9,17 +9,17 @@ use crate::db::Db;
 use crate::output::{self, NodeRow, OutputFormat};
 use tracing::instrument;
 
-/// Build a search query with optional Kind filter.
-pub fn build_search_query(query: &str, kind: Option<&str>, limit: i64) -> CypherStatement {
-    // Pre-allocate: base query ~230 chars + kind filter ~50 chars + return clause ~120 chars
+/// Build a search query with optional Class filter.
+pub fn build_search_query(query: &str, class: Option<&str>, limit: i64) -> CypherStatement {
+    // Pre-allocate: base query ~230 chars + class filter ~50 chars + return clause ~120 chars
     let mut cypher = String::with_capacity(400);
-    // 2-3 params: query, limit, optional kind
+    // 2-3 params: query, limit, optional class
     let mut params: Vec<(String, ParamValue)> = Vec::with_capacity(3);
 
     // Base: search across key, display_name, description
     cypher.push_str(
         "MATCH (n)\n\
-         WHERE NOT n:Meta\n\
+         WHERE NOT n:Schema\n\
          AND (n.key CONTAINS $query\n\
               OR n.display_name CONTAINS $query\n\
               OR n.description CONTAINS $query)",
@@ -31,7 +31,7 @@ pub fn build_search_query(query: &str, kind: Option<&str>, limit: i64) -> Cypher
     ));
 
     // Optional Class filter (parameterized for safety)
-    if let Some(class_label) = kind {
+    if let Some(class_label) = class {
         // Use parameterized label matching instead of direct interpolation
         // This prevents injection even if validation is bypassed
         cypher.push_str("\nAND ANY(label IN labels(n) WHERE label = $class)");
@@ -66,7 +66,7 @@ pub async fn run_search(
     // because CONTAINS needs a plain string param, not a list
     let mut cypher = String::from(
         "MATCH (n)\n\
-         WHERE NOT n:Meta\n\
+         WHERE NOT n:Schema\n\
          AND (toLower(n.key) CONTAINS toLower($query)\n\
               OR toLower(n.display_name) CONTAINS toLower($query)\n\
               OR toLower(n.description) CONTAINS toLower($query))",
@@ -114,7 +114,7 @@ pub async fn run_search(
                 Err(_) => {
                     // Retry without toLower for properties that might not exist
                     let simple_cypher = format!(
-                        "MATCH (n) WHERE NOT n:Meta \
+                        "MATCH (n) WHERE NOT n:Schema \
                          AND n.key CONTAINS $query \
                          RETURN labels(n)[0] AS label, n.key AS key, \
                          n.display_name AS display_name, n.description AS description \
@@ -203,9 +203,9 @@ mod tests {
     }
 
     #[test]
-    fn search_query_excludes_meta() {
+    fn search_query_excludes_schema() {
         let stmt = build_search_query("test", None, 10);
-        assert!(stmt.cypher.contains("NOT n:Meta"));
+        assert!(stmt.cypher.contains("NOT n:Schema"));
     }
 
     #[test]

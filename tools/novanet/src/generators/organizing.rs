@@ -318,7 +318,7 @@ mod tests {
         assert!(cypher.contains("af_owns.stroke_style = 'solid'"));
         assert!(cypher.contains("af_owns.stroke_width = 2"));
 
-        // :Meta double-label in all MERGE statements
+        // :Schema double-label in all MERGE statements
         assert!(cypher.contains(":Schema:Realm"));
         assert!(cypher.contains(":Schema:Layer"));
         assert!(cypher.contains(":Schema:Trait"));

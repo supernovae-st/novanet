@@ -3199,10 +3199,10 @@ impl TaxonomyTree {
     /// Create a minimal mock tree for unit tests.
     ///
     /// Structure:
-    /// - global (1 layer)
+    /// - shared (1 layer)
     ///   - config (1 class)
     ///     - AppConfig
-    /// - tenant (1 layer)
+    /// - org (1 layer)
     ///   - foundation (1 class)
     ///     - Entity
     ///
@@ -3415,10 +3415,10 @@ mod tests {
         let structure = create_test_layer("structure", vec![page_class]);
         let semantic = create_test_layer("semantic", vec![entity_class]);
 
-        let global = create_test_realm("shared", vec![locale_layer]);
-        let tenant = create_test_realm("org", vec![structure, semantic]);
+        let shared_realm = create_test_realm("shared", vec![locale_layer]);
+        let org_realm = create_test_realm("org", vec![structure, semantic]);
 
-        let realms = vec![global, tenant];
+        let realms = vec![shared_realm, org_realm];
 
         // Build class_index (mirrors load() behavior)
         let mut class_index = FxHashMap::default();

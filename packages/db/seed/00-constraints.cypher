@@ -94,7 +94,7 @@ CREATE INDEX seo_difficulty IF NOT EXISTS FOR (s:SEOKeyword) ON (s.difficulty);
 CREATE INDEX seo_traffic_potential IF NOT EXISTS FOR (s:SEOKeyword) ON (s.traffic_potential);
 CREATE TEXT INDEX seo_value_text IF NOT EXISTS FOR (s:SEOKeyword) ON (s.value);
 // REMOVED v7.8.4: SEOVariation indexes (node deleted, variations are SEOKeyword nodes)
-CREATE INDEX seomr_status IF NOT EXISTS FOR (smr:SEOMiningRun) ON (smr.status);
+// REMOVED v11.2: SEOMiningRun index (node deleted, job concept deferred)
 // v7.8.5: SEOSnapshot → SEOKeywordMetrics
 CREATE INDEX seokm_observed IF NOT EXISTS FOR (skm:SEOKeywordMetrics) ON (skm.observed_at);
 CREATE INDEX seokm_source IF NOT EXISTS FOR (skm:SEOKeywordMetrics) ON (skm.source);

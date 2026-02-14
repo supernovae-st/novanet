@@ -65,8 +65,8 @@ describe('ViewPresetSelector', () => {
   });
 
   it('shows active preset with visual indicator', () => {
-    render(<ViewPresetSelector activePresetId="locale-knowledge" />);
-    const activeItem = screen.getByText('Locale').closest('button');
+    render(<ViewPresetSelector activePresetId="shared-layers" />);
+    const activeItem = screen.getByText('Shared').closest('button');
     expect(activeItem).toHaveClass('bg-white/[0.1]');
   });
 

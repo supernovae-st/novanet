@@ -137,7 +137,7 @@
 │  │ │ novanet> arc create \                                           │  │ │
 │  │ │   --from=homepage \                                             │  │ │
 │  │ │   --to=qr-code-generator \                                      │  │ │
-│  │ │   --kind=USES_ENTITY                                            │  │ │
+│  │ │   --class=USES_ENTITY                                            │  │ │
 │  │ │                                                                  │  │ │
 │  │ │ [█                                               ] Executing...  │  │ │
 │  │ └────────────────────────────────────────────────────────────────┘  │ │

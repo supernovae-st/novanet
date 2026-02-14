@@ -622,23 +622,23 @@ Add a new arc type between nodes.
 
 **Specialization:**
 - Graph schema design for AI context
-- v9 Meta-Graph navigation (Realm/Layer/Kind/Trait/ArcFamily)
-- Efficient Cypher queries (data + meta-graph)
+- v0.12.0 Schema-Graph navigation (Realm/Layer/Class/Trait/ArcFamily)
+- Efficient Cypher queries (data + schema-graph)
 - Performance optimization
 - Spreading activation patterns
 
 **Key patterns:**
 ```cypher
--- v9: Navigate meta-graph taxonomy
-MATCH (r:Realm {key: $realm})-[:HAS_LAYER]->(l:Layer)-[:HAS_KIND]->(k:Kind)
-RETURN r.key AS realm, l.key AS layer, collect(k.label) AS kinds
+-- v0.12.0: Navigate schema-graph taxonomy
+MATCH (r:Realm {key: $realm})-[:HAS_LAYER]->(l:Layer)-[:HAS_CLASS]->(c:Class)
+RETURN r.key AS realm, l.key AS layer, collect(c.label) AS classes
 
--- v9: Full Kind context assembly
-MATCH (k:Kind {label: $kindLabel})
-MATCH (k)-[:IN_REALM]->(r:Realm)
-MATCH (k)-[:IN_LAYER]->(l:Layer)
-MATCH (k)-[:HAS_TRAIT]->(t:Trait)
-RETURN k.label, k.schema_hint, r.key AS realm, l.key AS layer, t.key AS trait
+-- v0.12.0: Full Class context assembly
+MATCH (c:Class {label: $classLabel})
+MATCH (c)-[:IN_REALM]->(r:Realm)
+MATCH (c)-[:IN_LAYER]->(l:Layer)
+MATCH (c)-[:HAS_TRAIT]->(t:Trait)
+RETURN c.label, c.schema_hint, r.key AS realm, l.key AS layer, t.key AS trait
 
 -- Spreading activation
 MATCH (e:Entity {key: $key})-[r:SEMANTIC_LINK*1..2]->(related)

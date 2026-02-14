@@ -559,9 +559,9 @@ export const VIEW_PRESETS: ViewPreset[] = [
       .byLayer('instruction', 'output'),
   },
   {
-    id: 'locale-knowledge',
-    name: 'Locale & Knowledge',
-    description: 'Locale, geography, and knowledge nodes',
+    id: 'shared-layers',
+    name: 'Shared Layers',
+    description: 'Locale, geography, and knowledge layers (shared realm)',
     icon: '🌍',
     shortcut: '3',
     filter: () => NovaNetFilter.create()
