@@ -18,6 +18,7 @@
 
 import { memo, useCallback, useEffect, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
+import { toast } from '@/lib/toast';
 import {
   Grid3x3,
   Loader2,
@@ -112,6 +113,17 @@ export const ViewSelector = memo(function ViewSelector({
   // Handle view selection - executes the view's Cypher query with selected node's key
   const handleSelect = useCallback(
     (view: ViewRegistryEntry) => {
+      const isContextual = view.contextual || view.category === 'generation';
+
+      // v0.12.5: For contextual views, require a selected node
+      if (isContextual && !selectedNodeId) {
+        toast.warning(
+          'Select a node first',
+          'This view requires a selected node to show its context.'
+        );
+        return;
+      }
+
       // v11.6: Pass the selected node's key when executing a view
       // This ensures views are scoped to the specific node the user selected
       const params: ViewParams = {};
