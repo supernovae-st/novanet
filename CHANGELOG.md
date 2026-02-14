@@ -7,6 +7,42 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.12.5] - 2026-02-14
+
+### Added
+- **Phase 1: Taxonomy Explosion** - 22 YAML files for realms, layers, traits
+  - Individual YAML per taxonomy concept (shared.yaml, org.yaml, defined.yaml, etc.)
+  - Structured classification with proper inheritance
+- **Phase 2: Icon Dual Format** - Emoji → web/terminal conversion
+  - All node icons now use `{ web: "lucide-name", terminal: "◆" }` format
+  - No emoji in YAML icon definitions
+- **Phase 3: llm_context Standardization** - 100% coverage (was 34%)
+  - All 61 nodes have `llm_context:` with USE/TRIGGERS/NOT/RELATES pattern
+  - All 146 arcs have standardized `llm_context:`
+- **Phase 4: Block.key ADR-028 Format** - Composite key implementation
+  - `{page_key}:{block_type}:{index}` format documented
+  - View examples updated for new key format
+- **Brand Architecture (ADR-028)** - 5 new nodes for brand management
+  - `Brand` (org/foundation) - Atlas Pattern: Soul + Pitch + Voice
+  - `BrandDesign` (org/foundation) - Design philosophy, tokens, typography
+  - `BrandPrinciples` (org/foundation) - Heuristics and do/dont rules
+  - `PromptStyle` (org/foundation) - AI image/video generation presets
+  - Geographic `visual_prompt` properties for AI generation
+
+### Fixed
+- **Inverse arc references** - 9 semantic arcs fixed
+  - Changed circular `inverse:` to proper `inverse_of:` on passive arcs
+  - ENABLED_BY, ENHANCED_BY, REQUIRED_BY, READ_BY, OPERATED_BY, TYPE_OF, VARIANT_OF, INCLUDED_IN, APPLIES_TO
+- **Test assertions** - Updated view count expectations (12 → 5)
+- **Clippy warnings** - Fixed needless borrow in organizing.rs
+
+### Statistics
+- **215 files changed** in main commit
+- **1052 Rust tests passing**, 4 skipped
+- **61 nodes** (40 shared + 21 org)
+- **146 arcs** (5 families)
+- Schema validation: 0 errors, 0 warnings
+
 ## [0.12.1] - 2026-02-13
 
 ### Added

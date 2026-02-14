@@ -38,7 +38,7 @@ arc:
       enum: [primary, secondary, niche, experimental]
       description: "Relevance level for this application"
 
-  inverse: HAS_APPLICATION
+  inverse_of: HAS_APPLICATION
 
   llm_context: |
     USE: when finding use cases or domains where an entity applies.

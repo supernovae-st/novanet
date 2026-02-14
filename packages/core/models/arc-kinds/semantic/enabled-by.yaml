@@ -32,7 +32,7 @@ arc:
       enum: [unlocks, enhances, permits, facilitates]
       description: "Type of enablement relationship"
 
-  inverse: ENABLES
+  inverse_of: ENABLES
 
   llm_context: |
     USE: when finding what enables an entity's capability.
