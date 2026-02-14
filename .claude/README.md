@@ -389,7 +389,7 @@ Master command for schema management.
 
 **Example:**
 ```bash
-/schema status     # Show current schema stats (61 Classes, 128 ArcClasses, 2 Realms, 10 Layers)
+/schema status     # Show current schema stats (61 Classes, 156 ArcClasses, 2 Realms, 10 Layers)
 ```
 
 ---
@@ -725,7 +725,7 @@ Architecture Decision Records (ADRs):
 | Metric | Value |
 |--------|-------|
 | Class (node types) | 61 |
-| ArcClass (relations) | 128 |
+| ArcClass (relations) | 156 |
 | Realms | 2 (shared, org) |
 | Layers | 10 (4 shared + 6 org) |
 | Traits | 5 |
@@ -807,14 +807,14 @@ pnpm doc:generate
 - Outdated version references (current: v0.12.4)
 - Deprecated terminology (EntityL10n → EntityContent, PageL10n → PageGenerated, BlockL10n → BlockGenerated)
 - Deprecated arcs (HAS_L10N → HAS_CONTENT, HAS_OUTPUT → HAS_GENERATED)
-- Incorrect node/arc counts (61 nodes, 128 arcs expected)
+- Incorrect node/arc counts (61 nodes, 156 arcs expected)
 - Outdated realm names (global → shared, tenant → org)
 - Outdated layer structure (4 shared + 6 org = 10 layers)
 - Deprecated 5-mode navigation (use 2-mode: Graph/Nexus)
 
 **`pnpm skill:audit` checks:**
 - Deprecated paths (`nodes/` → `node-classes/`, `organizing-principles.yaml` → `taxonomy.yaml`)
-- Node/arc counts match YAML sources (61 node-classes, 128 arc-classes)
+- Node/arc counts match YAML sources (61 node-classes, 156 arc-classes)
 - Deprecated terminology in skills/commands/rules
 
 **Auto-sync reminders:**

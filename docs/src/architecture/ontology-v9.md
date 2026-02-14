@@ -147,7 +147,7 @@ After:  shared/knowledge (includes all SEO/GEO nodes)
 | Metric | Count |
 |--------|-------|
 | Node types (Classes) | 61 |
-| Arc types (ArcClasses) | 128 |
+| Arc types (ArcClasses) | 156 |
 | Realms | 2 |
 | Layers | 10 |
 | Traits | 5 |

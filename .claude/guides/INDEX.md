@@ -342,7 +342,7 @@ Fixes #123
 **Current NovaNet Version**: v0.12.4
 - **Realms**: shared (4 layers), org (6 layers) = 10 total
 - **Nodes**: 61 total (40 shared + 21 org)
-- **Arcs**: 128 (5 families)
+- **Arcs**: 156 (5 families)
 - **Traits**: defined, authored, imported, generated, retrieved
 - **Latest ADR**: ADR-028 (Brand Architecture)
 

@@ -21,7 +21,7 @@ This file documents key architecture decisions for NovaNet. Reference these when
 ```
 SHARED (4 layers, 40 nodes): config, locale, geography, knowledge — READ-ONLY
 ORG (6 layers, 21 nodes): config, foundation, structure, semantic, instruction, output
-Total: 61 nodes, 128 arcs, 10 layers, 5 traits
+Total: 61 nodes, 156 arcs, 10 layers, 5 traits
 ```
 
 ### v0.12.x Key Changes

@@ -167,7 +167,7 @@ impl StatsState {
 struct SchemaStats {
     /// Total node classes (61)
     classes: i64,
-    /// Total arc classes (128)
+    /// Total arc classes (156)
     arcs: i64,
     /// Number of layers (10)
     layers: usize,
