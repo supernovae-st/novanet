@@ -1,0 +1,18 @@
+# models/arc-kinds/ownership/has-brand.yaml
+# HAS_BRAND - Project owns Brand (ADR-028)
+# Replaces HAS_BRAND_IDENTITY
+
+arc:
+  name: HAS_BRAND
+  family: ownership
+  scope: intra_realm
+  source: Project
+  target: Brand
+  cardinality: one_to_one
+  required: false
+  inverse: BRAND_OF
+  llm_context: |
+    Project has one Brand (optional).
+    Brand defines visual identity, voice, and prompt styles.
+    Use this to get brand context for content generation.
+  cypher_pattern: "(Project)-[:HAS_BRAND]->(Brand)"

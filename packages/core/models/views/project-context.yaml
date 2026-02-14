@@ -9,7 +9,7 @@ root:
   type: Project
 
 include:
-  - relation: HAS_BRAND_IDENTITY
+  - relation: HAS_BRAND
     direction: outgoing
 
   - relation: HAS_CONTENT
@@ -41,7 +41,7 @@ docs:
 
   layers:
     - name: Project Core
-      nodes: [Project, BrandIdentity]
+      nodes: [Project, Brand]
       color: blue
       description: Project definition and brand
 
@@ -60,12 +60,12 @@ docs:
       description: Get project info with all supported locales
       query: |
         MATCH (p:Project {key: $projectKey})
-        OPTIONAL MATCH (p)-[:HAS_BRAND_IDENTITY]->(bi:BrandIdentity)
+        OPTIONAL MATCH (p)-[:HAS_BRAND]->(b:Brand)
         OPTIONAL MATCH (p)-[:SUPPORTS_LOCALE]->(l:Locale)
         OPTIONAL MATCH (p)-[:DEFAULT_LOCALE]->(dl:Locale)
         RETURN p.key AS project,
                p.name AS name,
-               bi.primary_color AS brandColor,
+               b.name AS brandName,
                dl.key AS defaultLocale,
                collect(DISTINCT l.key) AS supportedLocales
       params:
@@ -93,5 +93,5 @@ docs:
 
   notes:
     - Each Project has a unique key used for routing and identification
-    - BrandIdentity contains visual identity (colors, logos, typography)
+    - Brand contains brand identity, linked to BrandDesign (visual) and BrandPrinciples (voice)
     - ProjectContent contains localized project metadata (tagline, description)

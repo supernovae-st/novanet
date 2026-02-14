@@ -250,7 +250,7 @@ export const CARDINALITY_ARROWS: Record<CardinalityKey, CardinalityArrowStyle> =
 };
 
 // =============================================================================
-// KIND ICONS (33) — Lucide icon names
+// KIND ICONS (36) — Lucide icon names
 // =============================================================================
 
 export const KIND_ICONS: Record<string, string> = {
@@ -262,7 +262,9 @@ export const KIND_ICONS: Record<string, string> = {
   BlockInstruction: 'terminal',
   BlockRules: 'shield-check',
   BlockType: 'component',
-  BrandIdentity: 'palette',
+  Brand: 'palette',
+  BrandDesign: 'brush',
+  BrandPrinciples: 'heart-handshake',
   ChannelSurface: 'monitor',
   ContentSlot: 'inbox',
   CultureSet: 'heart',
@@ -281,6 +283,7 @@ export const KIND_ICONS: Record<string, string> = {
   Project: 'folder',
   ProjectContent: 'languages',
   PromptArtifact: 'file-code',
+  PromptStyle: 'sparkles',
   SEOKeyword: 'search',
   SEOKeywordMetrics: 'bar-chart-2',
   Slugification: 'link',

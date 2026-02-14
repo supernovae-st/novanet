@@ -113,10 +113,10 @@ node:
       cardinality: "1:N"
       description: "Target audience personas"
 
-    HAS_BRAND_IDENTITY:
-      to: BrandIdentity
+    HAS_BRAND:
+      to: Brand
       cardinality: "1:1"
-      description: "Visual and artistic direction"
+      description: "Brand identity (visual, voice, prompt styles)"
 
     HAS_ENTITY:
       to: Entity

@@ -1,0 +1,17 @@
+# models/arc-kinds/ownership/has-prompt-style.yaml
+# HAS_PROMPT_STYLE - Brand owns PromptStyle(s) (ADR-028)
+
+arc:
+  name: HAS_PROMPT_STYLE
+  family: ownership
+  scope: intra_realm
+  source: Brand
+  target: PromptStyle
+  cardinality: one_to_many
+  required: false
+  inverse: PROMPT_STYLE_OF
+  llm_context: |
+    Brand has multiple PromptStyles (locale/region specific).
+    Each PromptStyle provides LLM hints for a specific market.
+    Use to get culturally appropriate generation context.
+  cypher_pattern: "(Brand)-[:HAS_PROMPT_STYLE]->(PromptStyle)"

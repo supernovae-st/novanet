@@ -1,5 +1,6 @@
 # packages/core/models/arc-kinds/generation/assembles.yaml
-# ArcKind: ASSEMBLES — PageGenerated assembles BlockGenerateds with position for ordering
+# ArcKind: ASSEMBLES — PageGenerated assembles BlockGenerateds with order for sequencing
+# v0.12.3: Changed position (string) to order (int) for consistency with HAS_BLOCK
 
 arc:
   name: ASSEMBLES
@@ -9,12 +10,13 @@ arc:
   target: BlockGenerated
   cardinality: one_to_many
   properties:
-    - name: position
-      type: string
-      required: false
+    - name: order
+      type: int
+      required: true
+      description: "Rendering sequence (1, 2, 3...). Matches HAS_BLOCK.order for consistency."
   llm_context: |
     USE: when rendering a complete page, loading blocks in order.
-    TRIGGERS: page render, block assembly, content composition.
+    TRIGGERS: page render, block assembly, content composition, final output.
     NOT: for structure definition (use HAS_BLOCK), for single block (use BlockGenerated).
-    RELATES: PageGenerated (source), BlockGenerated (target), position property for ordering.
-  cypher_pattern: (PageGenerated)-[:ASSEMBLES {position}]->(BlockGenerated)
+    RELATES: PageGenerated (source), BlockGenerated (target), order property mirrors HAS_BLOCK.order.
+  cypher_pattern: (PageGenerated)-[:ASSEMBLES {order}]->(BlockGenerated)

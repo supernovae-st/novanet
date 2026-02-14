@@ -92,6 +92,13 @@ node:
       enum: ["draft", "approved", "published"]
       description: "Review and publication status"
 
+    anchor_slug:
+      type: string
+      required: true
+      pattern: "^[\\p{Ll}\\p{N}\\-]+$"  # UTF-8: Unicode lowercase + numbers + hyphens
+      description: "Localized, URL-friendly identifier for the block anchor. Used as the HTML 'id' attribute."
+      example: "comparaison-des-fonctionnalites"
+
     # ─────────────────────────────────────────────────────────────────────────────
     # VERSIONING
     # ─────────────────────────────────────────────────────────────────────────────

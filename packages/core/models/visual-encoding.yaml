@@ -208,9 +208,12 @@ class_icons:
   Entity: lightbulb
   EntityContent: globe
 
-  # Org / Foundation
+  # Org / Foundation (v0.12.4 Brand Architecture)
   Project: folder
-  BrandIdentity: palette
+  Brand: palette
+  BrandDesign: brush
+  BrandPrinciples: heart-handshake
+  PromptStyle: sparkles
   ProjectContent: languages
 
   # Org / Structure

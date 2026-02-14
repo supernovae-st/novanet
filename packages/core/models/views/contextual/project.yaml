@@ -11,7 +11,7 @@ cypher: |
   MATCH (project:Project {key: $nodeKey})
   OPTIONAL MATCH (project)-[r1:HAS_PAGE]->(page:Page)
   OPTIONAL MATCH (project)-[r2:HAS_ENTITY]->(entity:Entity)
-  OPTIONAL MATCH (project)-[r3:HAS_BRAND_IDENTITY]->(brand:BrandIdentity)
+  OPTIONAL MATCH (project)-[r3:HAS_BRAND]->(brand:Brand)
   WITH project,
        collect(DISTINCT page)[0..50] AS pages,
        collect(DISTINCT entity)[0..50] AS entities,

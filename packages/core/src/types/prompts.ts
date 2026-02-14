@@ -1,9 +1,10 @@
 // novanet-core/src/types/prompts.ts
-// Instruction types v0.12.0 - AI Instructions with versioning
+// Instruction types v0.12.4 - AI Instructions with versioning
 //
-// PageInstruction: Orchestrator instructions for page generation
 // BlockInstruction: Sub-agent instructions for block generation
 // BlockRules: Template rules (extracted from BlockType.rules)
+//
+// v0.12.4: PageInstruction removed per ADR-028 - instructions composed from BlockInstructions
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // COMMON INSTRUCTION PROPERTIES
@@ -23,14 +24,8 @@ interface InstructionBase {
   updated_at: Date;
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// PAGEINSTRUCTION - Orchestrator instructions (Category: INSTRUCTION)
-// ═══════════════════════════════════════════════════════════════════════════════
-
-export interface PageInstruction extends InstructionBase {
-  // PageInstruction-specific — Markdown with @ references
-  instruction: string;       // "[GENERATE] Create conversion-focused pricing page..."
-}
+// v0.12.4: PageInstruction removed (ADR-028)
+// Page-level instructions are now composed from BlockInstructions at generation time
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // BLOCKINSTRUCTION - Sub-agent instructions (Category: INSTRUCTION)
@@ -54,4 +49,5 @@ export interface BlockRules extends InstructionBase {
 // TYPE EXPORTS
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export type InstructionNode = PageInstruction | BlockInstruction | BlockRules;
+// v0.12.4: PageInstruction removed from union
+export type InstructionNode = BlockInstruction | BlockRules;

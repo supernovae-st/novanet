@@ -1,13 +1,13 @@
 // packages/core/src/graph/__tests__/layers.test.ts
-// Tests for NODE_LAYERS — v0.12.0 (59 nodes, 10 layers, 2 realms)
+// Tests for NODE_LAYERS — v0.12.4 (61 nodes, 10 layers, 2 realms)
 import { describe, it, expect } from 'vitest';
 import { NODE_LAYERS, getLayer, getNodeTypesByLayer } from '../layers';
 import { NODE_TYPES } from '../../types/nodes';
 
 describe('graph/layers', () => {
-  it('should map all 59 node types to layers', () => {
+  it('should map all 61 node types to layers', () => {
     const mappedTypes = Object.keys(NODE_LAYERS);
-    expect(mappedTypes).toHaveLength(59);
+    expect(mappedTypes).toHaveLength(61);
 
     // Every NODE_TYPE should be mapped
     for (const nodeType of NODE_TYPES) {
@@ -20,9 +20,12 @@ describe('graph/layers', () => {
     // config (1): OrgConfig
     expect(NODE_LAYERS.OrgConfig).toBe('config');
 
-    // foundation (3)
+    // foundation (6) — v0.12.4: Brand Architecture
     expect(NODE_LAYERS.Project).toBe('foundation');
-    expect(NODE_LAYERS.BrandIdentity).toBe('foundation');
+    expect(NODE_LAYERS.Brand).toBe('foundation');
+    expect(NODE_LAYERS.BrandDesign).toBe('foundation');
+    expect(NODE_LAYERS.BrandPrinciples).toBe('foundation');
+    expect(NODE_LAYERS.PromptStyle).toBe('foundation');
     expect(NODE_LAYERS.ProjectContent).toBe('foundation');
 
     // structure (3)
@@ -58,8 +61,9 @@ describe('graph/layers', () => {
     expect(NODE_LAYERS.Culture).toBe('locale');
     expect(NODE_LAYERS.Market).toBe('locale');
 
-    // geography (6) - geographic classifications
+    // geography (7) - geographic classifications — v0.12.4: Country added
     expect(NODE_LAYERS.Continent).toBe('geography');
+    expect(NODE_LAYERS.Country).toBe('geography');
     expect(NODE_LAYERS.GeoRegion).toBe('geography');
     expect(NODE_LAYERS.GeoSubRegion).toBe('geography');
     expect(NODE_LAYERS.EconomicRegion).toBe('geography');
@@ -99,9 +103,12 @@ describe('graph/layers', () => {
   it('getNodeTypesByLayer should return correct node types', () => {
     const foundation = getNodeTypesByLayer('foundation');
     expect(foundation).toContain('Project');
-    expect(foundation).toContain('BrandIdentity');
+    expect(foundation).toContain('Brand');
+    expect(foundation).toContain('BrandDesign');
+    expect(foundation).toContain('BrandPrinciples');
+    expect(foundation).toContain('PromptStyle');
     expect(foundation).toContain('ProjectContent');
-    expect(foundation).toHaveLength(3);
+    expect(foundation).toHaveLength(6);
 
     // semantic layer has 4 nodes
     const semantic = getNodeTypesByLayer('semantic');
@@ -131,11 +138,20 @@ describe('graph/layers', () => {
     expect(locale).toContain('Adaptation');
     expect(locale).toHaveLength(6);
 
-    // v11.5: geography layer has 6 nodes
+    // v0.12.4: geography layer has 7 nodes (Country added)
     const geography = getNodeTypesByLayer('geography');
     expect(geography).toContain('Continent');
+    expect(geography).toContain('Country');
     expect(geography).toContain('GeoRegion');
-    expect(geography).toHaveLength(6);
+    expect(geography).toHaveLength(7);
+
+    // v0.12.4: instruction layer has 4 nodes (PageStructure, PageInstruction deleted)
+    const instruction = getNodeTypesByLayer('instruction');
+    expect(instruction).toContain('BlockType');
+    expect(instruction).toContain('BlockInstruction');
+    expect(instruction).toContain('BlockRules');
+    expect(instruction).toContain('PromptArtifact');
+    expect(instruction).toHaveLength(4);
 
     // v11.5: config layer has 4 nodes (3 shared + 1 org)
     const config = getNodeTypesByLayer('config');

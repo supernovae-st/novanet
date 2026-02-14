@@ -470,6 +470,30 @@ node:
           description: "Regional relevance (0.0 = weak, 1.0 = exclusive to region)"
       description: "Links entity to geographic regions where it's popular/relevant"
 
+    # ─────────────────────────────────────────────────────────────────────────────
+    # HAS_KEYWORD: SEO keyword ownership (v0.12.4: ADR-028)
+    # ─────────────────────────────────────────────────────────────────────────────
+    # PURPOSE:
+    #   Links Entity to its SEO keywords.
+    #   Entity carries the keywords; Page inherits via [:REPRESENTS].
+    #
+    # PATTERN:
+    #   Entity ──[:HAS_KEYWORD {rank}]──> SEOKeyword
+    #
+    # RULES:
+    #   • rank: "primary" (exactly 1 per Entity) or "secondary" (N per Entity)
+    #   • Page gets keywords via: (p:Page)-[:REPRESENTS]->(e:Entity)-[:HAS_KEYWORD]->(k)
+    #
+    # EXAMPLE:
+    #   qr-code ──[:HAS_KEYWORD {rank: "primary"}]──> SEOKeyword:qr-code-generator
+    #   qr-code ──[:HAS_KEYWORD {rank: "secondary"}]──> SEOKeyword:create-qr-code
+    # ─────────────────────────────────────────────────────────────────────────────
+    HAS_KEYWORD:
+      to: SEOKeyword
+      cardinality: "1:N"
+      scope: cross_realm
+      description: "SEO keywords for this entity (primary + secondary)"
+
   # ═══════════════════════════════════════════════════════════════════════════════
   # INCOMING RELATIONS
   # ═══════════════════════════════════════════════════════════════════════════════
@@ -484,6 +508,17 @@ node:
       from: Project
       cardinality: "1:N"
       description: "Project that owns this entity (Organization → Project → Entity)"
+
+    # v0.12.4: ADR-028 Page-Entity Architecture
+    REPRESENTS:
+      from: Page
+      cardinality: "1:1"
+      description: "Page that represents this entity (mandatory 1:1, Page.key == Entity.key)"
+
+    REFERENCES:
+      from: Block
+      cardinality: "N:N"
+      description: "Blocks that reference this entity for content injection or linking"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # EXAMPLES

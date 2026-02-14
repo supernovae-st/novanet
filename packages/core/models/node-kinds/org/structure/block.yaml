@@ -2,13 +2,28 @@
 #
 # v0.12.0: Initial clean schema (ADR-025 naming conventions)
 
+# ------------------------------------------------------------------------------
+# SCHEMA: Block
+# ------------------------------------------------------------------------------
+#
+# ROLE:
+#   A Block is an INVARIANT instance of a BlockType on a specific Page. It
+#   represents a structural 'slot' that will be filled with generated content
+#   for each locale. It holds the canonical, non-translated anchor_id.
+#
+# KEY RELATIONSHIPS:
+#   - <-[:HAS_BLOCK]-(Page): The parent Page that contains this block instance.
+#   - [:OF_TYPE]->(BlockType): The reusable template this block is based on.
+#   - [:HAS_GENERATED]->(BlockGenerated): The localized content generated for this block.
+#
+# ------------------------------------------------------------------------------
 node:
   name: Block
   realm: org
   layer: structure
   trait: defined
   icon: "🔷"
-  description: "Page section instance containing sub-agent instructions and concept references"
+  description: "An instance of a BlockType on a specific Page. Represents an invariant structural 'slot' that will be filled with generated content for each locale."
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # STANDARD PROPERTIES (v7.1.0)
@@ -18,30 +33,30 @@ node:
     key:
       type: string
       required: true
-      description: "Block identifier. Format: block-{page}-{type}"
-      pattern: "^block-[a-z0-9-]+-[a-z0-9-]+$"
+      description: "Unique, stable identifier. Convention: blk-{page_key}-{slugified_display_name}"
+      pattern: "^blk-[a-z0-9-]+-[a-z0-9-]+$"
       examples:
-        - "block-pricing-hero"
-        - "block-homepage-faq"
-        - "block-features-cta"
+        - "blk-pricing-hero"
+        - "blk-homepage-faq"
+        - "blk-custom-qr-code-design-features"
 
     display_name:
       type: string
       required: true
-      description: "Human-readable UI name"
+      description: "Human-readable UI name, in English. Must be unique within the parent Page."
       example: "Pricing Hero"
 
     description:
       type: string
       required: true
-      description: "One-line description of the block"
-      example: "Hero section for pricing page"
+      description: "One-line description of the block's purpose on the page."
+      example: "Hero section for the main pricing page."
 
     llm_context:
       type: string
       required: true
-      description: "LLM generation hints. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation].'"
-      example: "USE: generate pricing page hero content. TRIGGERS: pricing, hero, tier comparison. NOT: FAQ or footer blocks."
+      description: "LLM generation hints for this specific block instance. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation].'"
+      example: "USE: to generate content for the pricing page hero. TRIGGERS: pricing, hero, tier comparison. NOT: FAQ or footer blocks."
 
     created_at:
       type: datetime
@@ -51,7 +66,17 @@ node:
       type: datetime
       required: true
 
-  # No block-specific properties - instructions moved to HAS_INSTRUCTION → BlockInstruction
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOCK-SPECIFIC PROPERTIES (v0.12.6+)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  properties:
+    anchor_id:
+      type: string
+      required: true
+      pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      description: "Canonical, non-translated identifier for the block anchor. Serves as a stable bridge to the localized `anchor_slug` on the BlockGenerated node. Must be unique within the parent page."
+      example: "feature-comparison"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # RELATIONS (FROM this node)
@@ -61,22 +86,36 @@ node:
     OF_TYPE:
       to: BlockType
       cardinality: "N:1"
-      description: "Template type for this block"
+      description: "Links this Block instance to its reusable template (BlockType), from which it inherits its structure and validation rules."
 
     HAS_GENERATED:  # v10.9.0: renamed from HAS_OUTPUT
       to: BlockGenerated  # v10.9.0: renamed from BlockL10n
       cardinality: "1:N"
-      description: "Generated outputs for this block (one per locale)"
+      description: "Points to the localized outputs of this block. Each BlockGenerated node contains the final content and translated `anchor_slug` for a specific locale."
 
     HAS_INSTRUCTION:  # v0.12.0 ADR-025: Renamed from HAS_PROMPT/BlockPrompt
       to: BlockInstruction
       cardinality: "1:N"
-      description: "Sub-agent instructions with versioning (v7.2.0)"
+      description: "Connects the block to its specific generation recipe (the 'prompt')."
 
     USES_ENTITY:
       to: Entity
       cardinality: "N:N"
       description: "Entities referenced in this block's instructions"
+
+    # v0.12.4: ADR-028 Page-Entity Architecture - Aggregated from MENTIONS
+    REFERENCES:
+      to: Entity
+      cardinality: "N:N"
+      props:
+        purpose:
+          type: string
+          enum: [inject, link]
+          description: "inject = embed EntityContent, link = hyperlink to Entity's Page"
+        count:
+          type: integer
+          description: "Number of times entity is referenced in block"
+      description: "Aggregated entity references from BlockInstruction @ refs"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # EXAMPLE

@@ -1,13 +1,29 @@
 # models/node-kinds/org/instruction/block-rules.yaml
 # BlockRules - Template generation rules for BlockType (v7.2.0)
 
+# ------------------------------------------------------------------------------
+# SCHEMA: BlockRules
+# ------------------------------------------------------------------------------
+#
+# ROLE:
+#   A BlockRules node defines a reusable and VERSIONABLE set of generation
+#   constraints for an LLM (e.g., character limits, style guidance).
+#
+# KEY FEATURES:
+#   - Reusability: A single set of rules (e.g., 'standard-text-rules') can
+#     be applied to many different BlockTypes.
+#   - Versioning: Rules can be versioned (v1.0, v1.1) and activated/
+#     deactivated, enabling safe rollouts and A/B testing of different
+#     generation constraints.
+#
+# ------------------------------------------------------------------------------
 node:
   name: BlockRules
   realm: org
   layer: instruction
   trait: defined
   icon: "🔵"
-  description: "Generation rules extracted from BlockType for versioning and A/B testing"
+  description: "Defines a reusable and versionable set of generation constraints. Separating rules from BlockType allows them to be shared across multiple block types and enables powerful patterns like versioning (v1.0, v1.1) and A/B testing of different rule sets."
 
   # ═══════════════════════════════════════════════════════════════════════════
   # STANDARD PROPERTIES (Prompt nodes - no key, v7.2.0)
@@ -17,21 +33,21 @@ node:
     display_name:
       type: string
       required: true
-      description: "Versioned display name"
-      example: "Hero Rules v1.0"
+      description: "Versioned display name for this rule set."
+      example: "Standard Text Rules v1.1"
 
 
     description:
       type: string
       required: true
-      description: "Short description"
-      example: "Generation rules for hero block type"
+      description: "Short description of what these rules validate."
+      example: "Validates title (max 80 chars) and subtitle (max 150 chars)."
 
     llm_context:
       type: string
       required: false
-      description: "Format: USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
-      example: "USE: validate hero generation. TRIGGERS: blocktype-hero rules. NOT: other block types."
+      description: "Hints for an LLM about the purpose of these rules. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation].'"
+      example: "USE: to validate standard text fields in components like heroes and banners."
 
 
 
@@ -53,8 +69,8 @@ node:
     rules:
       type: string
       required: true
-      description: "Generation rules for LLM"
-      example: "Title: action verb, max 8 words. Subtitle: value prop, max 15 words. CTA: urgency, single action."
+      description: "The set of business logic constraints for an LLM, often expressed in a structured format like Gherkin or plain text."
+      example: "Title: action-oriented, max 8 words. Subtitle: explains value proposition, max 15 words. CTA: single, clear action."
 
     version:
       type: string
@@ -66,7 +82,7 @@ node:
       type: boolean
       required: true
       default: false
-      description: "true = current active version"
+      description: "Indicates if this is the current active version of the rules for a given BlockType. Enables safe rollouts and A/B testing."
 
   # ═══════════════════════════════════════════════════════════════════════════
   # RELATIONS
@@ -76,7 +92,7 @@ node:
     incoming:
       - type: HAS_RULES
         from: BlockType
-        description: "BlockType that owns these rules"
+        description: "BlockType that uses this set of rules."
 
   # ═══════════════════════════════════════════════════════════════════════════
   # NEO4J CONFIGURATION

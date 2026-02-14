@@ -132,42 +132,8 @@ export interface Page extends StandardNodeProperties, EmbeddableNode {
   // llm_context: "USE: orchestrate pricing page. TRIGGERS: pricing, tarifs. NOT: individual blocks."
 }
 
-/**
- * PageStructure categories for organization and SEO hierarchy (v7.12.0)
- * - marketing, product, content, legal, support: traditional categories
- * - pillar: comprehensive guide page that links to cluster pages
- * - cluster: focused subtopic page that links to its pillar via :SUBTOPIC_OF
- */
-export type PageStructureCategory = 'marketing' | 'product' | 'content' | 'legal' | 'support' | 'pillar' | 'cluster';
-
-/**
- * PageStructure - JSON defining which BlockTypes in what order (ADR-025)
- * Page -[:HAS_STRUCTURE]-> PageStructure
- */
-export interface PageStructure extends StandardNodeProperties {
-  // key: "pagestructure-landing"
-  // display_name: "Landing Page Structure"
-  // description: "High-conversion landing page structure"
-  // llm_context: "USE: orchestrate landing page. TRIGGERS: landing, conversion. NOT: blog posts."
-
-  /** Page category for organization and SEO hierarchy */
-  category: PageStructureCategory;
-
-  /** JSON schema defining required meta/SEO fields */
-  meta_schema?: Record<string, unknown>;
-
-  /** Constraints on block organization and positioning */
-  layout_rules?: Record<string, unknown>;
-
-  /** BlockType keys that MUST appear on pages of this structure */
-  required_block_types?: string[];
-
-  /** BlockType keys recommended but not required */
-  optional_block_types?: string[];
-
-  /** Custom validation rules for page generation */
-  validation_rules?: Record<string, unknown>;
-}
+// v0.12.4: PageStructureCategory and PageStructure removed (ADR-028)
+// Page structure is now computed from HAS_BLOCK.order at runtime
 
 export interface PageGenerated {
   // Standard properties (v8.2.0 - Content nodes don't have key, no icon/priority/freshness)
@@ -373,11 +339,11 @@ export interface LinksToProps {
 }
 
 // =============================================================================
-// INSTRUCTIONS
+// INSTRUCTIONS (v0.12.4: PageInstruction removed per ADR-028)
 // =============================================================================
 
 export {
-  type PageInstruction,
+  // v0.12.4: PageInstruction removed - instructions composed from BlockInstructions
   type BlockInstruction,
   type BlockRules,
   type InstructionNode,

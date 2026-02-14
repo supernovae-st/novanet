@@ -1,30 +1,49 @@
 # packages/core/models/arc-kinds/semantic/links-to.yaml
-# ArcKind: LINKS_TO — Explicit internal link for SEO
+# ArcKind: LINKS_TO — Page-to-page SEO internal linking
+#
+# v0.12.4: ADR-028 Page-Entity Architecture
+# Calculated from [@page:X] refs in BlockInstructions with purpose: link
 
 arc:
   name: LINKS_TO
   family: semantic
   scope: intra_realm
-  temperature_threshold: 0.4  # v9.9: Internal links for SEO (moderate priority)
+  temperature_threshold: 0.4  # Internal links for SEO maillage
+
   source: Page
   target: Page
   cardinality: many_to_many
   is_self_referential: true
+
   properties:
-    - name: concept_key
-      type: string
+    - name: via_blocks
+      type: array
       required: false
-    - name: context
-      type: string
+      description: "Block keys where link originates (e.g., ['hero', 'pricing'])"
+
+    - name: strength
+      type: integer
       required: false
-    - name: seo_weight
-      type: string
-      required: false
+      default: 1
+      description: "Link strength = count of [@page:X] refs across blocks"
+
     - name: anchor_type
       type: string
       required: false
+      enum: [exact_match, partial_match, branded, generic]
+      description: "SEO anchor text strategy"
+
     - name: nofollow
-      type: string
+      type: boolean
       required: false
-  llm_context: "Explicit internal link for SEO. anchor_type: exact_match/partial_match/branded/generic."
-  cypher_pattern: (Page)-[:LINKS_TO {concept_key, context, seo_weight, anchor_type, nofollow}]->(Page)
+      default: false
+      description: "Whether link should be nofollow"
+
+  llm_context: |
+    Page-to-page internal linking for SEO maillage.
+    Calculated from [@page:X] refs in BlockInstructions with purpose: link.
+    via_blocks: which blocks contain the link (for context).
+    strength: how many times the link appears (1 = single mention).
+    Use: MATCH (p1:Page)-[r:LINKS_TO]->(p2:Page) WHERE r.strength > 1
+
+  cypher_pattern: "(Page)-[:LINKS_TO {via_blocks, strength, anchor_type, nofollow}]->(Page)"

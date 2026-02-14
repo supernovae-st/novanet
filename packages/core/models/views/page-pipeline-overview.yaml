@@ -1,0 +1,83 @@
+id: page-pipeline-overview
+name: Page Generation Pipeline
+description: Displays the full, end-to-end generation pipeline for a single Page in a specific Locale.
+version: "1.1.0"
+# v1.1.0: Fixed order property capture on HAS_BLOCK and ASSEMBLES, explicit locale arcs
+
+root:
+  type: Page
+
+include:
+  - relation: HAS_BLOCK
+    direction: outgoing
+    properties: [order]
+  - relation: REPRESENTS
+    direction: outgoing
+  - relation: HAS_GENERATED
+    direction: outgoing
+  - relation: ASSEMBLES
+    direction: outgoing
+    properties: [order]
+
+filters:
+  locale: $locale
+
+docs:
+  title: "Page Generation Pipeline View"
+  category: "generation"
+  description: |
+    Provides a global and detailed view of a complete page generation pipeline.
+    This is useful for debugging and understanding the flow from the invariant
+    Page/Block structure to the final localized and assembled PageGenerated output.
+
+    Pipeline stages visualized:
+    1. Invariant Structure: Page → Block (ordered) → BlockType → BlockRules
+    2. Instructions: Block → BlockInstruction (with @ refs)
+    3. Semantic Context: Page → Entity → EntityContent
+    4. Locale Context: Locale → Culture, Market, Style, SEOKeyword
+    5. Generated Output: PageGenerated → BlockGenerated (ordered assembly)
+
+  examples:
+    - name: "Full Pipeline for a Page"
+      description: "Visualizes all related nodes for a given page key and locale key."
+      query: |
+        // ULTIMATE VIEW: Full Page Generation Context & Pipeline
+        // Paramètres: $page_key, $locale_key
+        // v1.1.0: Captures order properties, uses explicit locale arcs
+
+        // 1. Point d'entrée: la Page et la Locale
+        MATCH (p:Page {key: $page_key})
+        MATCH (l:Locale {key: $locale_key})
+
+        // 2. Contexte Invariant: la structure et les règles (WITH ORDER!)
+        MATCH (p)-[has_block:HAS_BLOCK]->(b:Block)-[:OF_TYPE]->(bt:BlockType)
+        OPTIONAL MATCH (bt)-[:HAS_RULES]->(br:BlockRules {active: true})
+        OPTIONAL MATCH (b)-[:HAS_INSTRUCTION]->(bi:BlockInstruction)
+
+        // 3. Contexte Sémantique: l'entité principale
+        MATCH (p)-[:REPRESENTS]->(e:Entity)
+        OPTIONAL MATCH (e)-[:HAS_CHILD|SIMILAR_TO]-(related_e:Entity)
+
+        // 4. Contexte Localisé: arcs explicites (pas de generic [])
+        MATCH (e)-[:HAS_CONTENT]->(ec:EntityContent)-[:FOR_LOCALE]->(l)
+        OPTIONAL MATCH (l)-[:HAS_CULTURE]->(culture:Culture)
+        OPTIONAL MATCH (l)-[:HAS_MARKET]->(market:Market)
+        OPTIONAL MATCH (l)-[:HAS_STYLE]->(style:Style)
+        OPTIONAL MATCH (l)-[:HAS_TERMS]->(terms:TermSet)
+        OPTIONAL MATCH (ec)-[:TARGETS]->(kw:SEOKeyword)
+
+        // 5. Output: les résultats générés et assemblés (WITH ORDER!)
+        MATCH (p)-[:HAS_GENERATED]->(pg:PageGenerated)-[:FOR_LOCALE]->(l)
+        MATCH (pg)-[assembles:ASSEMBLES]->(bg:BlockGenerated)
+        MATCH (b)-[:HAS_GENERATED]->(bg)
+
+        // Retourne avec les propriétés order pour le séquençage
+        RETURN p, l,
+               b, has_block.order AS block_order, bt, br, bi,
+               e, related_e, ec,
+               culture, market, style, terms, kw,
+               pg, bg, assembles.order AS assembly_order
+        ORDER BY has_block.order
+      params:
+        page_key: "custom-qr-code"
+        locale_key: "fr-FR"

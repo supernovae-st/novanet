@@ -235,27 +235,13 @@ describe('Type Exports', () => {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// INSTRUCTION TYPES
+// INSTRUCTION TYPES (v0.12.4: PageInstruction removed per ADR-028)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import type { PageInstruction, BlockInstruction, BlockRules } from '../types/prompts.js';
+import type { BlockInstruction, BlockRules } from '../types/prompts.js';
 
-describe('Instruction Types (v11.8.0)', () => {
-  it('PageInstruction has required properties', () => {
-    const instruction: PageInstruction = {
-      display_name: 'Pricing Page Instruction v1.0',
-      description: 'Instructions for pricing page generation',
-      llm_context: 'USE: orchestration. TRIGGERS: page. NOT: blocks.',
-      instruction: '[GENERATE] Create conversion-focused pricing page',
-      version: '1.0',
-      active: true,
-      created_at: new Date(),
-      updated_at: new Date(),
-    };
-    expect(instruction.instruction).toBeDefined();
-    expect(instruction.version).toBe('1.0');
-    expect(instruction.active).toBe(true);
-  });
+describe('Instruction Types (v0.12.4)', () => {
+  // v0.12.4: PageInstruction removed per ADR-028 - page instructions composed from BlockInstructions
 
   it('BlockInstruction has required properties', () => {
     const instruction: BlockInstruction = {

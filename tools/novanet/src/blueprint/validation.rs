@@ -722,8 +722,8 @@ mod tests {
         }
     }
 
-    /// ADR-028: Must have exactly 58 node classes (40 shared + 18 org)
-    /// v0.12.4: PageStructure/PageInstruction deleted (-2), Country added (+1)
+    /// ADR-028: Must have exactly 61 node classes (40 shared + 21 org)
+    /// v0.12.4: PageStructure/PageInstruction deleted, Country added, Brand Architecture (+4 -1)
     #[test]
     fn test_adr023_node_count() {
         let root = crate::config::resolve_root(None).expect("Failed to resolve root");
@@ -738,18 +738,18 @@ mod tests {
         let org_count = data.node_kinds.iter().filter(|n| n.realm == "org").count();
 
         assert_eq!(
-            total, 58,
-            "Expected 58 total nodes (v0.12.4), got {}",
+            total, 61,
+            "Expected 61 total nodes (v0.12.4 + Brand Architecture), got {}",
             total
         );
         assert_eq!(
             shared_count, 40,
-            "Expected 40 shared nodes (v0.12.4: +Country), got {}",
+            "Expected 40 shared nodes, got {}",
             shared_count
         );
         assert_eq!(
-            org_count, 18,
-            "Expected 18 org nodes (v0.12.4: -PageStructure -PageInstruction), got {}",
+            org_count, 21,
+            "Expected 21 org nodes (Brand Architecture: +4 -1), got {}",
             org_count
         );
     }
@@ -928,21 +928,21 @@ mod tests {
             .count();
         let org_count = data.node_kinds.iter().filter(|n| n.realm == "org").count();
 
-        // v0.12.4: 40 shared (Country added), 18 org (PageStructure/PageInstruction deleted)
+        // v0.12.4: 40 shared, 21 org (Brand Architecture: +4 -1)
         assert_eq!(
             shared_count, 40,
-            "Shared realm should have 40 nodes (v0.12.4), got {}",
+            "Shared realm should have 40 nodes, got {}",
             shared_count
         );
         assert_eq!(
-            org_count, 18,
-            "Org realm should have 18 nodes (v0.12.4), got {}",
+            org_count, 21,
+            "Org realm should have 21 nodes (Brand Architecture), got {}",
             org_count
         );
 
-        // Verify layer counts within each realm (v0.12.4)
+        // Verify layer counts within each realm (v0.12.4 + Brand Architecture)
         // Shared: config(3) + locale(6) + geography(7) + knowledge(24) = 40
-        // Org: config(1) + foundation(3) + structure(3) + semantic(4) + instruction(4) + output(3) = 18
+        // Org: config(1) + foundation(6) + structure(3) + semantic(4) + instruction(4) + output(3) = 21
 
         // Check that each realm has the expected layers
         let shared_layers: std::collections::HashSet<&str> = data

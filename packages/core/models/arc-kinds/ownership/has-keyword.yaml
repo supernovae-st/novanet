@@ -1,0 +1,36 @@
+# packages/core/models/arc-kinds/ownership/has-keyword.yaml
+# ArcKind: HAS_KEYWORD — Entity owns SEOKeywords
+#
+# v0.12.4: ADR-028 Page-Entity Architecture
+# Entity carries SEO keywords, Page inherits via [:REPRESENTS]
+
+arc:
+  name: HAS_KEYWORD
+  family: ownership
+  scope: cross_realm  # org/semantic → shared/knowledge
+
+  source: Entity
+  target: SEOKeyword
+  cardinality: one_to_many
+
+  properties:
+    - name: rank
+      type: string
+      required: true
+      enum: [primary, secondary]
+      description: "primary = main keyword (1 per Entity), secondary = supporting keywords (N per Entity)"
+
+    - name: relevance
+      type: float
+      required: false
+      default: 1.0
+      description: "Keyword relevance score (0.0-1.0)"
+
+  llm_context: |
+    Entity owns SEOKeywords for search optimization.
+    rank: primary (exactly 1 per Entity, main targeting keyword) or secondary (N per Entity).
+    Page inherits keywords via its [:REPRESENTS] Entity relationship.
+    Use: MATCH (e:Entity)-[r:HAS_KEYWORD {rank: 'primary'}]->(k:SEOKeyword)
+    For Page keywords: MATCH (p:Page)-[:REPRESENTS]->(e:Entity)-[:HAS_KEYWORD]->(k:SEOKeyword)
+
+  cypher_pattern: "(Entity)-[:HAS_KEYWORD {rank, relevance}]->(SEOKeyword)"
