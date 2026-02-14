@@ -46,7 +46,7 @@ pub struct ArcFamilyCard {
     pub icon: &'static str,
     /// Example arc types.
     pub examples: Vec<String>,
-    /// Number of arc kinds in this family.
+    /// Number of arc classes in this family.
     pub arc_count: usize,
     /// LLM context description.
     pub description: &'static str,

@@ -3406,14 +3406,14 @@ mod tests {
     }
 
     fn create_test_tree() -> TaxonomyTree {
-        let locale_kind = create_test_class("Locale", "Locale");
-        let page_kind = create_test_class("Page", "Page");
-        let entity_kind = create_test_class("Entity", "Entity");
+        let locale_class = create_test_class("Locale", "Locale");
+        let page_class = create_test_class("Page", "Page");
+        let entity_class = create_test_class("Entity", "Entity");
 
         // Minimal test fixture (v11.5 has 4 shared layers: config, locale, geography, knowledge)
-        let locale_layer = create_test_layer("locale", vec![locale_kind]);
-        let structure = create_test_layer("structure", vec![page_kind]);
-        let semantic = create_test_layer("semantic", vec![entity_kind]);
+        let locale_layer = create_test_layer("locale", vec![locale_class]);
+        let structure = create_test_layer("structure", vec![page_class]);
+        let semantic = create_test_layer("semantic", vec![entity_class]);
 
         let global = create_test_realm("shared", vec![locale_layer]);
         let tenant = create_test_realm("org", vec![structure, semantic]);

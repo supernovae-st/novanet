@@ -22,7 +22,7 @@ use crate::tui::unicode::truncate_start_to_width;
 
 /// Compute cache key for realm mini-bar.
 ///
-/// Key includes: bar_width, realm count, and kinds per realm.
+/// Key includes: bar_width, realm count, and classes per realm.
 /// Changes to any of these will invalidate the cache.
 pub(crate) fn compute_mini_bar_cache_key(app: &App, bar_width: usize) -> u64 {
     let mut keys: Vec<u64> = Vec::with_capacity(app.tree.realms.len() + 2);
@@ -81,8 +81,8 @@ pub(crate) fn build_filter_indicator(
     hide_empty: bool,
 ) -> String {
     if is_filtered {
-        if let Some(kind_key) = filter_class {
-            format!(" [{}]", kind_key)
+        if let Some(class_key) = filter_class {
+            format!(" [{}]", class_key)
         } else {
             String::new()
         }
@@ -214,7 +214,7 @@ pub fn render_status(f: &mut Frame, area: Rect, app: &App) {
     let max_breadcrumb_len = (area.width as usize).saturating_sub(60).min(40);
     let breadcrumb_display = truncate_start_to_width(&breadcrumb, max_breadcrumb_len);
 
-    // Determine if current item is instance or kind for contextual shortcuts
+    // Determine if current item is instance or class for contextual shortcuts
     let current_item = app.current_item();
     let is_instance = matches!(current_item, Some(TreeItem::Instance(..)));
     let is_class = matches!(current_item, Some(TreeItem::Class(..)));
@@ -291,7 +291,7 @@ pub fn render_status(f: &mut Frame, area: Rect, app: &App) {
         spans.push(Span::styled(msg.clone(), Style::default().fg(Color::Green)));
     }
 
-    // 4. STATS (full words: nodes.arcs │ kinds.arc-classes)
+    // 4. STATS (full words: nodes.arcs │ classes.arc-classes)
     spans.push(Span::styled(" │ ", STYLE_SEPARATOR));
     let stats = &app.tree.stats;
     spans.push(Span::styled(
@@ -410,14 +410,14 @@ mod tests {
 
     #[test]
     fn test_filter_indicator_filtered_takes_precedence_over_hide() {
-        // When filtered, the filter kind should show, not hide-empty
+        // When filtered, the filter class should show, not hide-empty
         let result = build_filter_indicator(true, Some("Entity"), true);
         assert_eq!(result, " [Entity]");
     }
 
     #[test]
-    fn test_filter_indicator_with_special_chars_in_kind() {
-        // Test hyphen handling in kind names (v11.3: locale-knowledge split into 3 layers)
+    fn test_filter_indicator_with_special_chars_in_class() {
+        // Test hyphen handling in class names (v11.3: locale-knowledge split into 3 layers)
         let result = build_filter_indicator(true, Some("knowledge"), false);
         assert_eq!(result, " [knowledge]");
     }

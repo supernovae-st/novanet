@@ -663,7 +663,7 @@ mod tests {
     // =========================================================================
 
     #[test]
-    fn test_type_label_kinds_section() {
+    fn test_type_label_classes_section() {
         let item = TreeItem::ClassesSection;
         assert_eq!(get_type_label(Some(&item)), "Section");
     }
@@ -733,7 +733,7 @@ mod tests {
     // =========================================================================
 
     #[test]
-    fn test_display_kinds_section() {
+    fn test_display_classes_section() {
         let item = TreeItem::ClassesSection;
         let (prefix, name) = get_item_display(Some(&item));
         assert_eq!(prefix, "");
@@ -801,9 +801,9 @@ mod tests {
     fn test_display_instance_deeply_indented() {
         let realm = make_realm();
         let layer = make_layer();
-        let kind = make_class_info();
+        let class_info = make_class_info();
         let instance = make_instance();
-        let item = TreeItem::Instance(&realm, &layer, &kind, &instance);
+        let item = TreeItem::Instance(&realm, &layer, &class_info, &instance);
         let (prefix, name) = get_item_display(Some(&item));
         assert_eq!(prefix, "      "); // 6 spaces
         assert_eq!(name, "Home Page");
@@ -826,7 +826,7 @@ mod tests {
         // If a new variant is added, this test should fail until get_type_label is updated
         let realm = make_realm();
         let layer = make_layer();
-        let kind = make_class_info();
+        let class_info = make_class_info();
         let instance = make_instance();
         let family = make_arc_family();
         let arc_class = make_arc_class();
@@ -836,10 +836,10 @@ mod tests {
             TreeItem::ArcsSection,
             TreeItem::Realm(&realm),
             TreeItem::Layer(&realm, &layer),
-            TreeItem::Class(&realm, &layer, &kind),
+            TreeItem::Class(&realm, &layer, &class_info),
             TreeItem::ArcFamily(&family),
             TreeItem::ArcClass(&family, &arc_class),
-            TreeItem::Instance(&realm, &layer, &kind, &instance),
+            TreeItem::Instance(&realm, &layer, &class_info, &instance),
         ];
 
         for item in &all_items {

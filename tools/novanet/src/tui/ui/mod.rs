@@ -367,7 +367,7 @@ pub(super) fn wrap_text(text: &str, width: usize) -> Vec<String> {
 pub enum EmptyStateClass {
     /// Neo4j connection failed
     NoConnection,
-    /// Database has no node kinds
+    /// Database has no node classes
     NoClasses,
     /// Query returned no results
     NoResults,
@@ -447,7 +447,7 @@ impl EmptyStateClass {
 }
 
 /// Render an empty state message in a centered box.
-fn render_empty_state(f: &mut Frame, area: Rect, kind: EmptyStateClass, tick: u16) {
+fn render_empty_state(f: &mut Frame, area: Rect, empty_state: EmptyStateClass, tick: u16) {
     // Calculate centered box dimensions
     let box_width = POPUP_BOX_WIDTH.min(area.width.saturating_sub(4));
     let box_height = POPUP_BOX_HEIGHT.min(area.height.saturating_sub(2));
@@ -465,11 +465,11 @@ fn render_empty_state(f: &mut Frame, area: Rect, kind: EmptyStateClass, tick: u1
     let mut lines: Vec<Line> = Vec::new();
 
     // Title with icon
-    let title_icon = kind.icon();
-    let title_text = kind.title();
+    let title_icon = empty_state.icon();
+    let title_text = empty_state.title();
 
     // Loading spinner animation
-    let display_icon = if matches!(kind, EmptyStateClass::Loading) {
+    let display_icon = if matches!(empty_state, EmptyStateClass::Loading) {
         const BRAILLE: &[&str] = &["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
         BRAILLE[(tick / SPINNER_SPEED_DIVISOR as u16) as usize % BRAILLE.len()]
     } else {
@@ -489,7 +489,7 @@ fn render_empty_state(f: &mut Frame, area: Rect, kind: EmptyStateClass, tick: u1
     lines.push(Line::from(""));
 
     // Description lines
-    for desc_line in kind.description() {
+    for desc_line in empty_state.description() {
         lines.push(Line::from(Span::styled(
             format!("  {}", desc_line),
             STYLE_DESC,
@@ -497,7 +497,7 @@ fn render_empty_state(f: &mut Frame, area: Rect, kind: EmptyStateClass, tick: u1
     }
 
     // Hint (if any)
-    let hint = kind.hint();
+    let hint = empty_state.hint();
     if !hint.is_empty() {
         lines.push(Line::from(""));
         lines.push(Line::from(Span::styled(format!("  {}", hint), STYLE_INFO)));
@@ -1127,17 +1127,17 @@ mod tests {
     #[test]
     fn test_empty_state_class_is_copy() {
         // Verify EmptyStateClass is Copy (can be assigned without move)
-        let kind = EmptyStateClass::NoConnection;
-        let kind2 = kind; // Copy
-        let _kind3 = kind; // Still valid - proves Copy
-        assert_eq!(kind2.title(), "Neo4j Not Connected");
+        let empty_state = EmptyStateClass::NoConnection;
+        let empty_state2 = empty_state; // Copy
+        let _empty_state3 = empty_state; // Still valid - proves Copy
+        assert_eq!(empty_state2.title(), "Neo4j Not Connected");
     }
 
     #[test]
     fn test_empty_state_class_debug_trait() {
         // Verify Debug is implemented
-        let kind = EmptyStateClass::Loading;
-        let debug_str = format!("{:?}", kind);
+        let empty_state = EmptyStateClass::Loading;
+        let debug_str = format!("{:?}", empty_state);
         assert!(
             debug_str.contains("Loading"),
             "Debug should contain variant name"
@@ -1145,37 +1145,37 @@ mod tests {
     }
 
     #[test]
-    fn test_all_empty_state_kinds_have_non_empty_icon() {
-        let kinds = [
+    fn test_all_empty_state_variants_have_non_empty_icon() {
+        let variants = [
             EmptyStateClass::NoConnection,
             EmptyStateClass::NoClasses,
             EmptyStateClass::NoResults,
             EmptyStateClass::NoInstances,
             EmptyStateClass::Loading,
         ];
-        for kind in kinds {
+        for empty_state in variants {
             assert!(
-                !kind.icon().is_empty(),
+                !empty_state.icon().is_empty(),
                 "{:?} icon should not be empty",
-                kind
+                empty_state
             );
         }
     }
 
     #[test]
-    fn test_all_empty_state_kinds_have_non_empty_title() {
-        let kinds = [
+    fn test_all_empty_state_variants_have_non_empty_title() {
+        let variants = [
             EmptyStateClass::NoConnection,
             EmptyStateClass::NoClasses,
             EmptyStateClass::NoResults,
             EmptyStateClass::NoInstances,
             EmptyStateClass::Loading,
         ];
-        for kind in kinds {
+        for empty_state in variants {
             assert!(
-                !kind.title().is_empty(),
+                !empty_state.title().is_empty(),
                 "{:?} title should not be empty",
-                kind
+                empty_state
             );
         }
     }

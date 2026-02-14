@@ -396,7 +396,7 @@ fn build_constellation_lines(
             Style::default().fg(base_color)
         };
 
-        // Use heatmap color for count (bright = many kinds, dim = few)
+        // Use heatmap color for count (bright = many classes, dim = few)
         let count_color = heatmap_color(count, max_count);
 
         vec![
@@ -656,15 +656,15 @@ fn render_detail_panel(f: &mut Frame, app: &App, area: Rect) {
         Style::default().fg(Color::Rgb(100, 100, 120)),
     )));
 
-    for (layer_key, kinds) in &stat.classes_by_layer {
+    for (layer_key, classes) in &stat.classes_by_layer {
         let layer_color = theme.layer_color(layer_key);
-        let kinds_str = kinds.join(", ");
+        let classes_str = classes.join(", ");
         lines.push(Line::from(vec![
             Span::styled(
                 format!("\u{2502} {:<12} ", layer_key),
                 Style::default().fg(layer_color),
             ),
-            Span::styled(kinds_str, Style::default().fg(Color::White)),
+            Span::styled(classes_str, Style::default().fg(Color::White)),
         ]));
     }
 

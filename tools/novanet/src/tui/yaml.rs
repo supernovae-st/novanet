@@ -32,7 +32,7 @@ impl YamlSections {
     /// Parse YAML content and identify Class vs Instance sections.
     ///
     /// Returns `None` if the content doesn't look like a NodeClass YAML
-    /// (i.e., doesn't have both kind and instance sections).
+    /// (i.e., doesn't have both class and instance sections).
     pub fn parse(content: &str) -> Option<Self> {
         let lines: Vec<&str> = content.lines().collect();
         let total_lines = lines.len();
