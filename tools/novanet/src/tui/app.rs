@@ -2038,7 +2038,7 @@ mod tests {
 
     // Helper: Create test taxonomy tree
     fn create_test_tree() -> TaxonomyTree {
-        let locale_kind = ClassInfo {
+        let locale_class = ClassInfo {
             key: "Locale".to_string(),
             display_name: "Locale".to_string(),
             description: String::new(),
@@ -2056,7 +2056,7 @@ mod tests {
             issues_count: None,
         };
 
-        let page_kind = ClassInfo {
+        let page_class = ClassInfo {
             key: "Page".to_string(),
             display_name: "Page".to_string(),
             description: String::new(),
@@ -2079,7 +2079,7 @@ mod tests {
             key: "locale".to_string(),
             display_name: "Locale".to_string(),
             color: "#2aa198".to_string(),
-            classes: vec![locale_kind],
+            classes: vec![locale_class],
             llm_context: String::new(),
         };
 
@@ -2087,7 +2087,7 @@ mod tests {
             key: "structure".to_string(),
             display_name: "Structure".to_string(),
             color: "#b58900".to_string(),
-            classes: vec![page_kind],
+            classes: vec![page_class],
             llm_context: String::new(),
         };
 

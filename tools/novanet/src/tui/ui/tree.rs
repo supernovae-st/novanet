@@ -1224,7 +1224,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                         let inst_is_last = ii == inst_count - 1;
                                         let is_cursor = idx == app.tree_cursor;
 
-                                        // Check if primary (for Locale kind)
+                                        // Check if primary (for Locale Class)
                                         let is_primary = instance
                                             .properties
                                             .get("is_primary")
@@ -1502,7 +1502,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     let left_content =
                         format!("{}{}  {}", cursor_char, prefix, arc_class.display_name);
 
-                    // Build center: From→To (abbreviated kind names)
+                    // Build center: From→To (abbreviated class names)
                     let from_abbrev = arc_class.from_class.chars().take(8).collect::<String>();
                     let to_abbrev = arc_class.to_class.chars().take(8).collect::<String>();
                     let flow_str = format!("{}→{}", from_abbrev, to_abbrev);

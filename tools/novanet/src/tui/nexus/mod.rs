@@ -403,7 +403,7 @@ pub struct NexusState {
     // === Shared State ===
 
     // === Drill-down state ===
-    /// Drill depth (0=overview, 1=kinds, 2=instances).
+    /// Drill depth (0=overview, 1=classes, 2=instances).
     pub drill_depth: usize,
     /// Cursor within drill-down list.
     pub drill_cursor: usize,

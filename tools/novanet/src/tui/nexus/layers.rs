@@ -8,7 +8,7 @@
 //! - Icon (from theme)
 //! - Layer name
 //! - Brief description
-//! - Number of kinds in that layer
+//! - Number of classes in that layer
 
 use ratatui::Frame;
 use ratatui::layout::{Constraint, Direction, Layout, Rect};

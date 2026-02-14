@@ -166,7 +166,7 @@ impl StatsState {
 /// Schema statistics extracted from the TaxonomyTree.
 struct SchemaStats {
     /// Total node classes (61)
-    kinds: i64,
+    classes: i64,
     /// Total arc classes (146)
     arcs: i64,
     /// Number of layers (10)
@@ -175,9 +175,9 @@ struct SchemaStats {
     traits: usize,
     /// Number of realms (2)
     realms: usize,
-    /// Classs per realm: (name, count, color)
+    /// Classes per realm: (name, count, color)
     realm_distribution: Vec<(&'static str, usize, Color)>,
-    /// Classs per layer: (name, count)
+    /// Classes per layer: (name, count)
     layer_distribution: Vec<(String, usize)>,
     /// Arcs per family: (name, count)
     arc_family_distribution: Vec<(String, usize)>,
@@ -225,7 +225,7 @@ impl SchemaStats {
         let total_layers: usize = tree.realms.iter().map(|r| r.layers.len()).sum();
 
         Self {
-            kinds: tree.stats.class_count,
+            classes: tree.stats.class_count,
             arcs: tree.stats.arc_class_count,
             layers: total_layers,
             traits: 5, // Fixed: defined, authored, imported, generated, retrieved
@@ -293,7 +293,7 @@ fn render_hero_panel(f: &mut Frame, area: Rect, stats: &SchemaStats, state: &Sta
 /// Render the big animated counter numbers.
 fn render_big_numbers(f: &mut Frame, area: Rect, stats: &SchemaStats, state: &StatsState) {
     // Animated values
-    let kinds_val = state.animated_value(stats.kinds);
+    let classes_val = state.animated_value(stats.classes);
     let arcs_val = state.animated_value(stats.arcs);
     let layers_val = state.animated_value(stats.layers as i64);
     let traits_val = state.animated_value(stats.traits as i64);
@@ -312,7 +312,7 @@ fn render_big_numbers(f: &mut Frame, area: Rect, stats: &SchemaStats, state: &St
         Line::from(""),
         Line::from(vec![
             Span::raw("  "),
-            Span::styled(format!("{:>4}", kinds_val), num_style),
+            Span::styled(format!("{:>4}", classes_val), num_style),
             Span::raw("        "),
             Span::styled(format!("{:>4}", arcs_val), num_style),
             Span::raw("        "),

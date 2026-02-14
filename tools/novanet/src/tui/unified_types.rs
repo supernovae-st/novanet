@@ -370,10 +370,10 @@ pub mod badges {
         abbrev: "fam",
         color_key: "arc.family",
     };
-    pub const ARC_KIND: Badge = Badge {
+    pub const ARC_CLASS: Badge = Badge {
         icon: '●',
         abbrev: "arc",
-        color_key: "arc.kind",
+        color_key: "arc.class",
     };
 
     // Layer badges

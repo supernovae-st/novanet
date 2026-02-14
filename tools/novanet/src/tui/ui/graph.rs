@@ -723,7 +723,7 @@ fn build_graph_distribution_stats(app: &App) -> Vec<Line<'static>> {
     let dim = Style::default().fg(Color::Rgb(100, 100, 100));
     let mut lines: Vec<Line<'static>> = Vec::with_capacity(20);
 
-    // Calculate total kinds
+    // Calculate total classes
     let mut total_classes: usize = 0;
     for realm in &app.tree.realms {
         for layer in &realm.layers {
@@ -788,7 +788,7 @@ fn build_graph_distribution_stats(app: &App) -> Vec<Line<'static>> {
         dim,
     )));
 
-    // Find max kinds per layer for scaling
+    // Find max classes per layer for scaling
     let max_layer_classes = app
         .tree
         .realms
@@ -1119,9 +1119,9 @@ mod tests {
 
     #[test]
     fn test_build_graph_distribution_stats_single_realm() {
-        let kind1 = create_test_class("Page");
-        let kind2 = create_test_class("Block");
-        let layer = create_test_layer("structure", vec![kind1, kind2]);
+        let class1 = create_test_class("Page");
+        let class2 = create_test_class("Block");
+        let layer = create_test_layer("structure", vec![class1, class2]);
         let realm = create_test_realm("org", vec![layer]);
         let tree = create_tree_with_realms(vec![realm]);
         let app = create_test_app_with_tree(tree);
@@ -1239,7 +1239,7 @@ mod tests {
         let shared_blocks = shared_line.matches('\u{2588}').count();
         let org_blocks = org_line.matches('\u{2588}').count();
 
-        // Org should have more blocks than shared (8 kinds vs 2 kinds)
+        // Org should have more blocks than shared (8 classes vs 2 classes)
         assert!(
             org_blocks > shared_blocks,
             "org ({} blocks) should have more than shared ({} blocks)",
@@ -1250,11 +1250,11 @@ mod tests {
 
     #[test]
     fn test_build_graph_distribution_stats_layer_bar_scaling() {
-        // Layer bars scale relative to max layer kinds, not total kinds
+        // Layer bars scale relative to max layer classes, not total classes
         // Create layers with different sizes
 
         let layer1_classes = vec![create_test_class("Class1")];
-        let layer2_kinds = vec![
+        let layer2_classes = vec![
             create_test_class("Class2"),
             create_test_class("Class3"),
             create_test_class("Class4"),
@@ -1262,7 +1262,7 @@ mod tests {
         ];
 
         let layer1 = create_test_layer("config", layer1_classes);
-        let layer2 = create_test_layer("foundation", layer2_kinds);
+        let layer2 = create_test_layer("foundation", layer2_classes);
         let realm = create_test_realm("org", vec![layer1, layer2]);
         let tree = create_tree_with_realms(vec![realm]);
         let app = create_test_app_with_tree(tree);
@@ -1413,10 +1413,10 @@ mod tests {
         // Test with multiple realms to ensure all are displayed
         let realms: Vec<RealmInfo> = (0..3)
             .map(|i| {
-                let kinds: Vec<ClassInfo> = (0..(i + 1))
+                let classes: Vec<ClassInfo> = (0..(i + 1))
                     .map(|j| create_test_class(&format!("Class{}_{}", i, j)))
                     .collect();
-                let layer = create_test_layer(&format!("layer{}", i), kinds);
+                let layer = create_test_layer(&format!("layer{}", i), classes);
                 create_test_realm(&format!("realm{}", i), vec![layer])
             })
             .collect();

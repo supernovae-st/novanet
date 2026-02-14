@@ -144,18 +144,18 @@ pub fn faceted_query(filter: &FacetFilter, limit: i64) -> CypherStatement {
         ));
     }
 
-    if !filter.kinds.is_empty() {
-        where_clauses.push("c.label IN $kinds".to_string());
+    if !filter.classes.is_empty() {
+        where_clauses.push("c.label IN $classes".to_string());
         params.push((
-            "kinds".to_string(),
-            ParamValue::StringList(filter.kinds.clone()),
+            "classes".to_string(),
+            ParamValue::StringList(filter.classes.clone()),
         ));
     }
 
     let where_clause = where_clauses.join("\n  AND ");
 
     // Arc families filter arcs, not nodes — handled separately in output
-    // (included in params for display but not in the WHERE clause for kind resolution)
+    // (included in params for display but not in the WHERE clause for class resolution)
 
     params.push(("limit".to_string(), ParamValue::Int(limit)));
 
@@ -177,7 +177,7 @@ LIMIT $limit"
     CypherStatement { cypher, params }
 }
 
-/// Build a Cypher query that resolves Kind labels from facets without fetching data nodes.
+/// Build a Cypher query that resolves Class labels from facets without fetching data nodes.
 /// Used by `novanet filter build` to output the resolved Cypher for Studio.
 #[must_use]
 pub fn filter_build_query(filter: &FacetFilter) -> CypherStatement {
@@ -220,11 +220,11 @@ pub fn filter_build_query(filter: &FacetFilter) -> CypherStatement {
         ));
     }
 
-    if !filter.kinds.is_empty() {
-        where_clauses.push("c.label IN $kinds".to_string());
+    if !filter.classes.is_empty() {
+        where_clauses.push("c.label IN $classes".to_string());
         params.push((
-            "kinds".to_string(),
-            ParamValue::StringList(filter.kinds.clone()),
+            "classes".to_string(),
+            ParamValue::StringList(filter.classes.clone()),
         ));
     }
 
@@ -304,13 +304,13 @@ mod tests {
     }
 
     #[test]
-    fn faceted_query_kinds_only() {
+    fn faceted_query_classes_only() {
         let filter = FacetFilter {
-            kinds: vec!["Locale".to_string(), "Expression".to_string()],
+            classes: vec!["Locale".to_string(), "Expression".to_string()],
             ..Default::default()
         };
         let stmt = faceted_query(&filter, 50);
-        assert!(stmt.cypher.contains("c.label IN $kinds"));
+        assert!(stmt.cypher.contains("c.label IN $classes"));
         assert!(!stmt.cypher.contains("IN_REALM"));
     }
 
@@ -372,15 +372,15 @@ mod tests {
             realms: vec!["shared".to_string(), "org".to_string()],
             layers: vec!["knowledge".to_string(), "structure".to_string()],
             trait_filters: vec!["defined".to_string(), "authored".to_string()],
-            kinds: vec!["Locale".to_string()],
+            classes: vec!["Locale".to_string()],
             arc_families: vec!["taxonomy".to_string()],
         };
         let stmt = faceted_query(&filter, 100);
         assert!(stmt.cypher.contains("IN_REALM"));
         assert!(stmt.cypher.contains("IN_LAYER"));
         assert!(stmt.cypher.contains("HAS_TRAIT"));
-        assert!(stmt.cypher.contains("c.label IN $kinds"));
-        // 5 params: realms, layers, traits, kinds, limit
+        assert!(stmt.cypher.contains("c.label IN $classes"));
+        // 5 params: realms, layers, traits, classes, limit
         assert_eq!(stmt.params.len(), 5);
     }
 
