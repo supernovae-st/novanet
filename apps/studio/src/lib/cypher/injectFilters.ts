@@ -12,6 +12,8 @@ export interface CypherFilters {
   displayLimit?: number;
   /** Locale key filter - injects WHERE clause for locale-aware queries */
   localeKey?: string;
+  /** Node key for contextual views - substitutes $nodeKey parameter */
+  nodeKey?: string;
 }
 
 /**
@@ -47,7 +49,12 @@ export function injectFilters(query: string, filters: CypherFilters): string {
     }
   }
 
-  // 2. Handle localeKey - substitute parameters OR inject WHERE clause
+  // 2. Handle nodeKey - substitute $nodeKey parameter for contextual views
+  if (filters.nodeKey) {
+    result = result.replace(/\$nodeKey\b/g, `'${filters.nodeKey}'`);
+  }
+
+  // 3. Handle localeKey - substitute parameters OR inject WHERE clause
   // v0.12.5: Also substitute $locale and $nodeKey for Locale-typed queries
   if (filters.localeKey && filters.localeKey !== 'world') {
     // First, try direct parameter substitution for $locale and $nodeKey
