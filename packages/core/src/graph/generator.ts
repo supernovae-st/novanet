@@ -134,7 +134,7 @@ const TRAIT_DESCRIPTIONS: Record<string, string> = {
 // =============================================================================
 
 /**
- * Generate flat schema graph with all 59 node types and arcs.
+ * Generate flat schema graph with all 61 node types and 146 arcs.
  * This is the canonical representation of the NovaNet ontology.
  *
  * @returns SchemaGraphResult with nodes and arcs
@@ -143,7 +143,7 @@ const TRAIT_DESCRIPTIONS: Record<string, string> = {
  * ```typescript
  * const { nodes, arcs } = generateSchemaGraph();
  * console.log(`${nodes.length} nodes, ${arcs.length} arcs`);
- * // Output: "59 nodes, ~114 arcs"
+ * // Output: "61 nodes, 146 arcs"
  * ```
  */
 export function generateSchemaGraph(): SchemaGraphResult {
@@ -151,7 +151,7 @@ export function generateSchemaGraph(): SchemaGraphResult {
   const arcs: SchemaArc[] = [];
 
   // ==========================================================================
-  // GENERATE NODES - All 60 node types
+  // GENERATE NODES - All 61 node types
   // ==========================================================================
 
   for (const nodeType of NODE_TYPES) {
@@ -215,7 +215,7 @@ export function generateSchemaGraph(): SchemaGraphResult {
  * ```typescript
  * const hierarchy = getSchemaHierarchy();
  * console.log(hierarchy.stats);
- * // Output: { totalNodes: 59, totalArcs: ~114, nodesByRealm: { shared: 39, org: 20 } }
+ * // Output: { totalNodes: 61, totalArcs: 146, nodesByRealm: { shared: 40, org: 21 } }
  * ```
  */
 export function getSchemaHierarchy(): HierarchicalSchemaData {

@@ -165,9 +165,9 @@ impl StatsState {
 
 /// Schema statistics extracted from the TaxonomyTree.
 struct SchemaStats {
-    /// Total node kinds (59-60)
+    /// Total node classes (61)
     kinds: i64,
-    /// Total arc kinds (114)
+    /// Total arc classes (146)
     arcs: i64,
     /// Number of layers (10)
     layers: usize,
