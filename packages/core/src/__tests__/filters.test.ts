@@ -108,11 +108,11 @@ describe('NovaNetFilter', () => {
       );
     });
 
-    it('includeBrandIdentity() adds HAS_BRAND_IDENTITY include rule', () => {
-      const filter = NovaNetFilter.create().fromProject('qrcode-ai').includeBrandIdentity();
+    it('includeBrand() adds HAS_BRAND include rule', () => {
+      const filter = NovaNetFilter.create().fromProject('qrcode-ai').includeBrand();
       const criteria = filter.getCriteria();
       expect(criteria.includes).toContainEqual(
-        expect.objectContaining({ relation: 'HAS_BRAND_IDENTITY', direction: 'outgoing' })
+        expect.objectContaining({ relation: 'HAS_BRAND', direction: 'outgoing' })
       );
     });
 
@@ -411,16 +411,16 @@ describe('CypherGenerator', () => {
       expect(result.query).toMatch(/\(root\)-\[r\d+:OF_TYPE\]->\(blockType\)/);
     });
 
-    it('generates Project include relations (v10.3: no HAS_CONCEPT)', () => {
+    it('generates Project include relations (v0.12.4: HAS_BRAND)', () => {
       const filter = NovaNetFilter.create()
         .fromProject('qrcode-ai')
         .includePages()
-        .includeBrandIdentity();
+        .includeBrand();
       const result = CypherGenerator.generate(filter);
 
       // v11.6: Target type not specified, relationship variables still captured
       expect(result.query).toMatch(/\[r\d+:HAS_PAGE\]->\(page\)/);
-      expect(result.query).toMatch(/\[r\d+:HAS_BRAND_IDENTITY\]->\(brandIdentity\)/);
+      expect(result.query).toMatch(/\[r\d+:HAS_BRAND\]->\(brand\)/);
       // REMOVED v10.3: HAS_CONCEPT (Entity is in org realm)
     });
   });

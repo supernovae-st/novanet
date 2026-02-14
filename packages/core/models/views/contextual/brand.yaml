@@ -1,22 +1,24 @@
 # Contextual View: Brand
-# Brand identity configuration
+# Brand identity and design configuration (v0.12.2: BrandIdentity → Brand)
 id: brand
-description: Brand identity configuration
+description: Brand identity and design configuration
 category: contextual
 contextual: true
-applicable_types: [Project, BrandIdentity]
+applicable_types: [Project, Brand]
 modes: [data, overlay, query]
 
 cypher: |
   MATCH (n {key: $nodeKey})
-  WHERE n:Project OR n:BrandIdentity
-  OPTIONAL MATCH (n)-[r:HAS_BRAND|BRAND_OF]-(brand:BrandIdentity)
-  OPTIONAL MATCH (brand)-[r2:HAS_VOICE]->(voice)
-  RETURN [n, brand, voice] AS nodes,
-         collect(DISTINCT r) + collect(DISTINCT r2) AS relationships
+  WHERE n:Project OR n:Brand
+  OPTIONAL MATCH (n)-[r:HAS_BRAND|BRAND_OF]-(brand:Brand)
+  OPTIONAL MATCH (brand)-[r2:HAS_DESIGN]->(design:BrandDesign)
+  OPTIONAL MATCH (brand)-[r3:HAS_PRINCIPLES]->(principles:BrandPrinciples)
+  OPTIONAL MATCH (brand)-[r4:HAS_PROMPT_STYLE]->(style:PromptStyle)
+  RETURN [n, brand, design, principles, style] AS nodes,
+         collect(DISTINCT r) + collect(DISTINCT r2) + collect(DISTINCT r3) + collect(DISTINCT r4) AS relationships
 
 params:
   - name: nodeKey
     type: string
     required: true
-    description: Key of the Project or BrandIdentity
+    description: Key of the Project or Brand
