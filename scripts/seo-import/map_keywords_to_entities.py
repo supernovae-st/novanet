@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Map SEO keywords to EntityL10n based on pattern matching.
+"""Map SEO keywords to EntityContent based on pattern matching.
 
 Mapping rules by category:
 1. Creation keywords -> create-qr-code, qr-code-generator
@@ -95,9 +95,9 @@ def find_entity_for_keyword(keyword: str, entity_keys: set) -> Optional[str]:
 
     return None
 
-def map_keywords_to_entities(keywords: list, entityl10n_list: list) -> tuple:
-    """Map each keyword to an EntityL10n."""
-    entity_keys = {el["entity_key"] for el in entityl10n_list}
+def map_keywords_to_entities(keywords: list, entitycontent_list: list) -> tuple:
+    """Map each keyword to an EntityContent."""
+    entity_keys = {el["entity_key"] for el in entitycontent_list}
 
     mappings = []
     unmapped_count = 0
@@ -125,11 +125,11 @@ if __name__ == "__main__":
     with open("scripts/seo-import/output/keywords_filtered.json", "r") as f:
         keywords = json.load(f)
 
-    with open("scripts/seo-import/output/entityl10n_fr.json", "r") as f:
-        entityl10n_list = json.load(f)
+    with open("scripts/seo-import/output/entitycontent_fr.json", "r") as f:
+        entitycontent_list = json.load(f)
 
     # Map keywords
-    mappings, unmapped = map_keywords_to_entities(keywords, entityl10n_list)
+    mappings, unmapped = map_keywords_to_entities(keywords, entitycontent_list)
 
     # Save output
     output_path = Path("scripts/seo-import/output/keyword_mappings.json")

@@ -269,7 +269,7 @@ impl RealmInfo {
 pub struct GraphStats {
     pub node_count: i64,
     pub arc_count: i64,
-    pub kind_count: i64,
+    pub class_count: i64,
     pub arc_class_count: i64,
 }
 
@@ -786,7 +786,7 @@ pub struct RealmDetails {
 #[derive(Debug, Clone)]
 pub struct TraitClassGroup {
     pub trait_key: String,
-    pub kind_names: Vec<String>,
+    pub class_names: Vec<String>,
 }
 
 /// Complete details for a Layer, loaded from Neo4j.
@@ -820,7 +820,7 @@ pub struct TaxonomyTree {
     pub instance_totals: FxHashMap<String, usize>,
     /// Cache: class_key -> (realm_idx, layer_idx, kind_idx) for O(1) lookups.
     /// Built once on load, never mutated (tree structure is immutable).
-    pub(crate) kind_index: FxHashMap<String, (usize, usize, usize)>,
+    pub(crate) class_index: FxHashMap<String, (usize, usize, usize)>,
     /// Entity categories for Data mode grouping.
     /// Loaded on-demand when viewing Entity instances by category.
     pub entity_categories: Vec<EntityCategory>,
@@ -886,9 +886,9 @@ ORDER BY realm_key, layer_key, class_key
         for row in rows {
             // Extract fields using RowExt for ergonomic defaults
             let class_key = row.str("class_key");
-            let kind_display = row.str("kind_display");
-            let kind_desc = row.str("kind_desc");
-            let kind_icon = row.str("kind_icon");
+            let class_display = row.str("kind_display");
+            let class_desc = row.str("kind_desc");
+            let class_icon = row.str("kind_icon");
             let trait_key = row.str("trait_key");
             let realm_key = row.str("realm_key");
             let realm_display = row.str("realm_display");
@@ -926,11 +926,11 @@ ORDER BY realm_key, layer_key, class_key
             // v10: knowledge_tier (optional, only for knowledge-trait nodes)
             let knowledge_tier = row.opt_str("knowledge_tier");
 
-            let kind = ClassInfo {
+            let class_info = ClassInfo {
                 key: class_key,
-                display_name: kind_display,
-                description: kind_desc,
-                icon: kind_icon,
+                display_name: class_display,
+                description: class_desc,
+                icon: class_icon,
                 trait_name: trait_key,
                 instance_count: instances,
                 arcs: Vec::new(), // Loaded separately
@@ -952,7 +952,7 @@ ORDER BY realm_key, layer_key, class_key
                 .entry(layer_key)
                 .or_insert_with(|| (layer_display, layer_color, Vec::new()))
                 .2
-                .push(kind);
+                .push(class_info);
         }
 
         // Convert to RealmInfo vec with llm_context from realms/*.yaml
@@ -1011,12 +1011,12 @@ ORDER BY realm_key, layer_key, class_key
         // Apply arcs to classes
         let realms = Self::apply_arcs_to_realms(realms, arc_map);
 
-        // Build kind_index for O(1) lookups (replaces O(n*m*k) find_kind)
-        let mut kind_index = FxHashMap::default();
+        // Build class_index for O(1) lookups (replaces O(n*m*k) find_class)
+        let mut class_index = FxHashMap::default();
         for (r_idx, realm) in realms.iter().enumerate() {
             for (l_idx, layer) in realm.layers.iter().enumerate() {
-                for (k_idx, kind) in layer.classes.iter().enumerate() {
-                    kind_index.insert(kind.key.clone(), (r_idx, l_idx, k_idx));
+                for (k_idx, class_info) in layer.classes.iter().enumerate() {
+                    class_index.insert(class_info.key.clone(), (r_idx, l_idx, k_idx));
                 }
             }
         }
@@ -1028,7 +1028,7 @@ ORDER BY realm_key, layer_key, class_key
             collapsed: FxHashSet::default(),
             instances: FxHashMap::default(),
             instance_totals: FxHashMap::default(),
-            kind_index,
+            class_index,
             entity_categories: Vec::new(), // Loaded on-demand via load_entity_categories
             entity_category_instances: FxHashMap::default(), // Loaded on-demand when category expanded
         })
@@ -1079,16 +1079,16 @@ ORDER BY realm_key, layer_key, class_key
         families
     }
 
-    /// Apply arc map to realm/layer/kind tree.
+    /// Apply arc map to realm/layer/class tree.
     fn apply_arcs_to_realms(
         mut realms: Vec<RealmInfo>,
         mut arc_map: BTreeMap<String, Vec<ArcInfo>>,
     ) -> Vec<RealmInfo> {
         for realm in &mut realms {
             for layer in &mut realm.layers {
-                for kind in &mut layer.classes {
-                    if let Some(arcs) = arc_map.remove(&kind.key) {
-                        kind.arcs = arcs;
+                for class_info in &mut layer.classes {
+                    if let Some(arcs) = arc_map.remove(&class_info.key) {
+                        class_info.arcs = arcs;
                     }
                 }
             }
@@ -1176,7 +1176,7 @@ ORDER BY family_key, arc_key
                 continue;
             }
 
-            let arc_kind = ArcClassInfo {
+            let arc_class = ArcClassInfo {
                 key: arc_key,
                 display_name: arc_display,
                 from_class,
@@ -1189,7 +1189,7 @@ ORDER BY family_key, arc_key
                 .entry(family_key)
                 .or_insert_with(|| (family_display, Vec::new()))
                 .1
-                .push(arc_kind);
+                .push(arc_class);
         }
 
         Ok(family_map
@@ -1531,7 +1531,7 @@ RETURN nodes, arcs, classes, count(ak) AS arc_classes
             Ok(GraphStats {
                 node_count: row.get("nodes").unwrap_or(0),
                 arc_count: row.get("arcs").unwrap_or(0),
-                kind_count: row.get("classes").unwrap_or(0),
+                class_count: row.get("classes").unwrap_or(0),
                 arc_class_count: row.get("arc_classes").unwrap_or(0),
             })
         } else {
@@ -1690,7 +1690,7 @@ LIMIT 1
         }
     }
 
-    /// Load Realm details from Neo4j (layers with kind counts, total stats).
+    /// Load Realm details from Neo4j (layers with class counts, total stats).
     pub async fn load_realm_details(db: &Db, realm_key: &str) -> crate::Result<RealmDetails> {
         // Query 1: Get realm info and totals
         let cypher_realm = r#"
@@ -1704,15 +1704,15 @@ RETURN r.key as realm_key,
        count(DISTINCT n) as total_instances
 "#;
 
-        // Query 2: Get layers with their kind counts (separate rows)
+        // Query 2: Get layers with their class counts (separate rows)
         let cypher_layers = r#"
 MATCH (r:Realm {key: $realmKey})-[:HAS_LAYER]->(l:Layer)
 OPTIONAL MATCH (l)<-[:IN_LAYER]-(c:Class)
-WITH l, count(DISTINCT c) as kind_count
+WITH l, count(DISTINCT c) as class_count
 ORDER BY l.order
 RETURN l.key as layer_key,
        coalesce(l.display_name, l.key) as layer_display,
-       kind_count
+       class_count
 "#;
 
         // Execute both queries in parallel using tokio::join!
@@ -1736,7 +1736,7 @@ RETURN l.key as layer_key,
                 .map(|lr| LayerStats {
                     key: lr.get("layer_key").unwrap_or_default(),
                     display_name: lr.get("layer_display").unwrap_or_default(),
-                    class_count: lr.get::<i64>("kind_count").unwrap_or(0) as usize,
+                    class_count: lr.get::<i64>("class_count").unwrap_or(0) as usize,
                 })
                 .collect();
 
@@ -1763,13 +1763,13 @@ OPTIONAL MATCH (c)-[:HAS_TRAIT]->(t:Trait)
 OPTIONAL MATCH (c)<-[:OF_CLASS]-(n)
 WITH l, r, t.key as trait_key, c, count(DISTINCT n) as inst_count
 ORDER BY trait_key, c.label
-WITH l, r, trait_key, collect(coalesce(c.display_name, c.label)) as kind_names, count(c) as trait_kind_count, sum(inst_count) as trait_instances
+WITH l, r, trait_key, collect(coalesce(c.display_name, c.label)) as class_names, count(c) as trait_class_count, sum(inst_count) as trait_instances
 RETURN l.key as layer_key,
        coalesce(l.display_name, l.key) as display_name,
        coalesce(l.llm_context, '') as description,
        coalesce(r.key, '') as realm,
-       collect({trait_key: trait_key, kind_names: kind_names}) as classes_by_trait,
-       sum(trait_kind_count) as total_classes,
+       collect({trait_key: trait_key, class_names: class_names}) as classes_by_trait,
+       sum(trait_class_count) as total_classes,
        sum(trait_instances) as total_instances
 "#;
 
@@ -1792,12 +1792,12 @@ RETURN l.key as layer_key,
             let mut classes_by_trait: Vec<TraitClassGroup> = Vec::with_capacity(groups_list.len());
             for group_map in groups_list {
                 if let Ok(trait_key) = group_map.get::<String>("trait_key") {
-                    let kind_names: Vec<String> = group_map
-                        .get::<Vec<String>>("kind_names")
+                    let class_names: Vec<String> = group_map
+                        .get::<Vec<String>>("class_names")
                         .unwrap_or_default();
                     classes_by_trait.push(TraitClassGroup {
                         trait_key,
-                        kind_names,
+                        class_names,
                     });
                 }
             }
@@ -2019,8 +2019,8 @@ RETURN total,
     pub fn collapse_all_classes(&mut self) {
         for realm in &self.realms {
             for layer in &realm.layers {
-                for kind in &layer.classes {
-                    self.collapsed.insert(format!("class:{}", kind.key));
+                for class_info in &layer.classes {
+                    self.collapsed.insert(format!("class:{}", class_info.key));
                 }
             }
         }
@@ -2040,8 +2040,8 @@ RETURN total,
                 for layer in &realm.layers {
                     self.collapsed
                         .remove(&format!("layer:{}:{}", realm.key, layer.key));
-                    for kind in &layer.classes {
-                        self.collapsed.remove(&format!("class:{}", kind.key));
+                    for class_info in &layer.classes {
+                        self.collapsed.remove(&format!("class:{}", class_info.key));
                     }
                 }
             }
@@ -2056,8 +2056,8 @@ RETURN total,
                 for layer in &realm.layers {
                     self.collapsed
                         .remove(&format!("layer:{}:{}", realm_key, layer.key));
-                    for kind in &layer.classes {
-                        self.collapsed.remove(&format!("class:{}", kind.key));
+                    for class_info in &layer.classes {
+                        self.collapsed.remove(&format!("class:{}", class_info.key));
                     }
                 }
             }
@@ -2067,8 +2067,8 @@ RETURN total,
             if let Some((realm_key, layer_key)) = rest.split_once(':') {
                 if let Some(realm) = self.realms.iter().find(|r| r.key == realm_key) {
                     if let Some(layer) = realm.layers.iter().find(|l| l.key == layer_key) {
-                        for kind in &layer.classes {
-                            self.collapsed.remove(&format!("class:{}", kind.key));
+                        for class_info in &layer.classes {
+                            self.collapsed.remove(&format!("class:{}", class_info.key));
                         }
                     }
                 }
@@ -2077,7 +2077,7 @@ RETURN total,
             // Arc family - nothing more to expand (arc classes aren't collapsible)
             let _ = family_key; // Suppress unused warning
         }
-        // kind: prefix - nothing more to expand (instances aren't collapsible)
+        // class: prefix - nothing more to expand (instances aren't collapsible)
     }
 
     /// Collapse subtree under a specific key.
@@ -2094,8 +2094,8 @@ RETURN total,
                 for layer in &realm.layers {
                     self.collapsed
                         .insert(format!("layer:{}:{}", realm.key, layer.key));
-                    for kind in &layer.classes {
-                        self.collapsed.insert(format!("class:{}", kind.key));
+                    for class_info in &layer.classes {
+                        self.collapsed.insert(format!("class:{}", class_info.key));
                     }
                 }
             }
@@ -2110,8 +2110,8 @@ RETURN total,
                 for layer in &realm.layers {
                     self.collapsed
                         .insert(format!("layer:{}:{}", realm_key, layer.key));
-                    for kind in &layer.classes {
-                        self.collapsed.insert(format!("class:{}", kind.key));
+                    for class_info in &layer.classes {
+                        self.collapsed.insert(format!("class:{}", class_info.key));
                     }
                 }
             }
@@ -2121,8 +2121,8 @@ RETURN total,
             if let Some((realm_key, layer_key)) = rest.split_once(':') {
                 if let Some(realm) = self.realms.iter().find(|r| r.key == realm_key) {
                     if let Some(layer) = realm.layers.iter().find(|l| l.key == layer_key) {
-                        for kind in &layer.classes {
-                            self.collapsed.insert(format!("class:{}", kind.key));
+                        for class_info in &layer.classes {
+                            self.collapsed.insert(format!("class:{}", class_info.key));
                         }
                     }
                 }
@@ -2131,7 +2131,7 @@ RETURN total,
             // Arc family - nothing more to collapse
             let _ = family_key;
         }
-        // kind: prefix - nothing more to collapse
+        // class: prefix - nothing more to collapse
     }
 
     // ========================================================================
@@ -2150,8 +2150,13 @@ RETURN total,
     ) {
         // Get schema info from Class
         let (required_props, all_props) = self
-            .find_kind(class_key)
-            .map(|(_, _, kind)| (kind.required_properties.clone(), kind.properties.clone()))
+            .find_class(class_key)
+            .map(|(_, _, class_info)| {
+                (
+                    class_info.required_properties.clone(),
+                    class_info.properties.clone(),
+                )
+            })
             .unwrap_or_default();
 
         let total_props = all_props.len();
@@ -2233,13 +2238,13 @@ RETURN total,
                     for layer in &realm.layers {
                         count += 1; // layer header
                         if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
-                            for kind in &layer.classes {
-                                count += 1; // kind
+                            for class_info in &layer.classes {
+                                count += 1; // class
 
                                 // In Data mode, add instances if not collapsed
-                                if data_mode && !self.is_collapsed(&format!("class:{}", kind.key)) {
+                                if data_mode && !self.is_collapsed(&format!("class:{}", class_info.key)) {
                                     // Special case: Entity Class shows categories hierarchy
-                                    if kind.key == "Entity" && !self.entity_categories.is_empty() {
+                                    if class_info.key == "Entity" && !self.entity_categories.is_empty() {
                                         for category in &self.entity_categories {
                                             count += 1; // category node
 
@@ -2255,8 +2260,8 @@ RETURN total,
                                             }
                                         }
                                     } else {
-                                        // Regular kind: flat instances
-                                        if let Some(instances) = self.instances.get(&kind.key) {
+                                        // Regular class: flat instances
+                                        if let Some(instances) = self.instances.get(&class_info.key) {
                                             count += instances.len();
                                         }
                                     }
@@ -2309,20 +2314,20 @@ RETURN total,
                         idx += 1;
 
                         if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
-                            for kind in &layer.classes {
+                            for class_info in &layer.classes {
                                 if idx == cursor {
-                                    return Some(TreeItem::Class(realm, layer, kind));
+                                    return Some(TreeItem::Class(realm, layer, class_info));
                                 }
                                 idx += 1;
 
                                 // In Data mode, check for instances (or categories for Entity)
-                                if data_mode && !self.is_collapsed(&format!("class:{}", kind.key)) {
+                                if data_mode && !self.is_collapsed(&format!("class:{}", class_info.key)) {
                                     // Special case: Entity Class shows categories hierarchy
-                                    if kind.key == "Entity" && !self.entity_categories.is_empty() {
+                                    if class_info.key == "Entity" && !self.entity_categories.is_empty() {
                                         for category in &self.entity_categories {
                                             if idx == cursor {
                                                 return Some(TreeItem::EntityCategory(
-                                                    realm, layer, kind, category,
+                                                    realm, layer, class_info, category,
                                                 ));
                                             }
                                             idx += 1;
@@ -2337,7 +2342,7 @@ RETURN total,
                                                     for instance in instances {
                                                         if idx == cursor {
                                                             return Some(TreeItem::Instance(
-                                                                realm, layer, kind, instance,
+                                                                realm, layer, class_info, instance,
                                                             ));
                                                         }
                                                         idx += 1;
@@ -2346,12 +2351,12 @@ RETURN total,
                                             }
                                         }
                                     } else {
-                                        // Regular kind: flat instances
-                                        if let Some(instances) = self.instances.get(&kind.key) {
+                                        // Regular class: flat instances
+                                        if let Some(instances) = self.instances.get(&class_info.key) {
                                             for instance in instances {
                                                 if idx == cursor {
                                                     return Some(TreeItem::Instance(
-                                                        realm, layer, kind, instance,
+                                                        realm, layer, class_info, instance,
                                                     ));
                                                 }
                                                 idx += 1;
@@ -2380,9 +2385,9 @@ RETURN total,
                 idx += 1;
 
                 if !self.is_collapsed(&format!("family:{}", family.key)) {
-                    for arc_kind in &family.arc_classes {
+                    for arc_class in &family.arc_classes {
                         if idx == cursor {
-                            return Some(TreeItem::ArcClass(family, arc_kind));
+                            return Some(TreeItem::ArcClass(family, arc_class));
                         }
                         idx += 1;
                     }
@@ -2452,9 +2457,9 @@ RETURN total,
                         idx += 1;
 
                         if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
-                            for kind in &layer.classes {
+                            for class_info in &layer.classes {
                                 if idx == cursor {
-                                    return Some(TreeItem::Class(realm, layer, kind));
+                                    return Some(TreeItem::Class(realm, layer, class_info));
                                 }
                                 idx += 1;
                             }
@@ -2478,9 +2483,9 @@ RETURN total,
                 idx += 1;
 
                 if !self.is_collapsed(&format!("family:{}", family.key)) {
-                    for arc_kind in &family.arc_classes {
+                    for arc_class in &family.arc_classes {
                         if idx == cursor {
-                            return Some(TreeItem::ArcClass(family, arc_kind));
+                            return Some(TreeItem::ArcClass(family, arc_class));
                         }
                         idx += 1;
                     }
@@ -2602,9 +2607,11 @@ RETURN total,
 
                         if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
                             // Only include matching classes
-                            for kind in layer.classes.iter().filter(|k| k.trait_name == filter) {
+                            for class_info in
+                                layer.classes.iter().filter(|k| k.trait_name == filter)
+                            {
                                 if idx == cursor {
-                                    return Some(TreeItem::Class(realm, layer, kind));
+                                    return Some(TreeItem::Class(realm, layer, class_info));
                                 }
                                 idx += 1;
                             }
@@ -2628,9 +2635,9 @@ RETURN total,
                 idx += 1;
 
                 if !self.is_collapsed(&format!("family:{}", family.key)) {
-                    for arc_kind in &family.arc_classes {
+                    for arc_class in &family.arc_classes {
                         if idx == cursor {
-                            return Some(TreeItem::ArcClass(family, arc_kind));
+                            return Some(TreeItem::ArcClass(family, arc_class));
                         }
                         idx += 1;
                     }
@@ -2690,13 +2697,13 @@ RETURN total,
             }
 
             // EntityCategory's parent is its Class (Entity)
-            Some(TreeItem::EntityCategory(realm, layer, kind, _)) => {
-                self.find_kind_cursor_readonly(&realm.key, &layer.key, &kind.key, data_mode)
+            Some(TreeItem::EntityCategory(realm, layer, class_info, _)) => {
+                self.find_class_cursor_readonly(&realm.key, &layer.key, &class_info.key, data_mode)
             }
 
             // Instance's parent is its Class (or EntityCategory for Entity class)
-            Some(TreeItem::Instance(realm, layer, kind, _)) => {
-                self.find_kind_cursor_readonly(&realm.key, &layer.key, &kind.key, data_mode)
+            Some(TreeItem::Instance(realm, layer, class_info, _)) => {
+                self.find_class_cursor_readonly(&realm.key, &layer.key, &class_info.key, data_mode)
             }
 
             // ArcFamily's parent is ArcsSection
@@ -2766,7 +2773,7 @@ RETURN total,
     }
 
     /// Find cursor position of a Class (readonly, does not modify collapse state).
-    fn find_kind_cursor_readonly(
+    fn find_class_cursor_readonly(
         &self,
         realm_key: &str,
         layer_key: &str,
@@ -2783,17 +2790,17 @@ RETURN total,
                 for layer in &realm.layers {
                     idx += 1; // Layer
                     if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
-                        for kind in &layer.classes {
+                        for class_info in &layer.classes {
                             if realm.key == realm_key
                                 && layer.key == layer_key
-                                && kind.key == class_key
+                                && class_info.key == class_key
                             {
                                 return Some(idx);
                             }
                             idx += 1;
                             // In data mode, count instances
-                            if data_mode && !self.is_collapsed(&format!("class:{}", kind.key)) {
-                                if let Some(instances) = self.instances.get(&kind.key) {
+                            if data_mode && !self.is_collapsed(&format!("class:{}", class_info.key)) {
+                                if let Some(instances) = self.instances.get(&class_info.key) {
                                     idx += instances.len();
                                 }
                             }
@@ -2857,29 +2864,29 @@ RETURN total,
     /// Returns Instance items only.
     pub fn filtered_item_at<'a>(&'a self, cursor: usize, class_key: &str) -> Option<TreeItem<'a>> {
         // Find the Class info for context
-        let kind_info = self.find_kind(class_key)?;
+        let class_tuple = self.find_class(class_key)?;
         let instances = self.instances.get(class_key)?;
         let instance = instances.get(cursor)?;
         Some(TreeItem::Instance(
-            kind_info.0,
-            kind_info.1,
-            kind_info.2,
+            class_tuple.0,
+            class_tuple.1,
+            class_tuple.2,
             instance,
         ))
     }
 
     /// Find a Class by key, returns (Realm, Layer, Class) refs.
     /// O(1) lookup using cached index (built once on load).
-    pub fn find_kind(&self, class_key: &str) -> Option<(&RealmInfo, &LayerInfo, &ClassInfo)> {
-        let (r_idx, l_idx, k_idx) = self.kind_index.get(class_key)?;
+    pub fn find_class(&self, class_key: &str) -> Option<(&RealmInfo, &LayerInfo, &ClassInfo)> {
+        let (r_idx, l_idx, k_idx) = self.class_index.get(class_key)?;
         let realm = self.realms.get(*r_idx)?;
         let layer = realm.layers.get(*l_idx)?;
-        let kind = layer.classes.get(*k_idx)?;
-        Some((realm, layer, kind))
+        let class_info = layer.classes.get(*k_idx)?;
+        Some((realm, layer, class_info))
     }
 
     /// Calculate hierarchical position for the current tree item.
-    /// Returns position info: R:realm L:layer K:kind I:instance (all 1-based).
+    /// Returns position info: R:realm L:layer C:class I:instance (all 1-based).
     pub fn hierarchy_position(&self, cursor: usize, data_mode: bool) -> HierarchyPosition {
         let item = if data_mode {
             self.item_at_for_mode(cursor, true)
@@ -2924,7 +2931,7 @@ RETURN total,
                     ..Default::default()
                 }
             }
-            Some(TreeItem::Class(realm, layer, kind)) => {
+            Some(TreeItem::Class(realm, layer, class_info)) => {
                 let realm_idx = self
                     .realms
                     .iter()
@@ -2937,20 +2944,20 @@ RETURN total,
                     .position(|l| l.key == layer.key)
                     .map(|i| i + 1)
                     .unwrap_or(1);
-                let kind_idx = layer
+                let class_idx = layer
                     .classes
                     .iter()
-                    .position(|k| k.key == kind.key)
+                    .position(|k| k.key == class_info.key)
                     .map(|i| i + 1)
                     .unwrap_or(1);
                 HierarchyPosition {
                     realm: Some((realm_idx, total_realms)),
                     layer: Some((layer_idx, realm.layers.len())),
-                    kind: Some((kind_idx, layer.classes.len())),
+                    class: Some((class_idx, layer.classes.len())),
                     ..Default::default()
                 }
             }
-            Some(TreeItem::Instance(realm, layer, kind, _)) => {
+            Some(TreeItem::Instance(realm, layer, class_info, _)) => {
                 let realm_idx = self
                     .realms
                     .iter()
@@ -2963,26 +2970,26 @@ RETURN total,
                     .position(|l| l.key == layer.key)
                     .map(|i| i + 1)
                     .unwrap_or(1);
-                let kind_idx = layer
+                let class_idx = layer
                     .classes
                     .iter()
-                    .position(|k| k.key == kind.key)
+                    .position(|k| k.key == class_info.key)
                     .map(|i| i + 1)
                     .unwrap_or(1);
                 // Calculate instance position within Class
-                let instances = self.instances.get(&kind.key);
-                let total_instances = self.instance_totals.get(&kind.key).copied().unwrap_or(0);
+                let instances = self.instances.get(&class_info.key);
+                let total_instances = self.instance_totals.get(&class_info.key).copied().unwrap_or(0);
                 // Find instance index by walking the visible items before cursor
                 // For simplicity, use the loaded count as position indicator
                 let loaded_count = instances.map(|v| v.len()).unwrap_or(0);
                 HierarchyPosition {
                     realm: Some((realm_idx, total_realms)),
                     layer: Some((layer_idx, realm.layers.len())),
-                    kind: Some((kind_idx, layer.classes.len())),
+                    class: Some((class_idx, layer.classes.len())),
                     instance: Some((loaded_count.min(INSTANCE_LIMIT), total_instances)),
                 }
             }
-            Some(TreeItem::EntityCategory(realm, layer, kind, _)) => {
+            Some(TreeItem::EntityCategory(realm, layer, class_info, _)) => {
                 let realm_idx = self
                     .realms
                     .iter()
@@ -2995,21 +3002,21 @@ RETURN total,
                     .position(|l| l.key == layer.key)
                     .map(|i| i + 1)
                     .unwrap_or(1);
-                let kind_idx = layer
+                let class_idx = layer
                     .classes
                     .iter()
-                    .position(|k| k.key == kind.key)
+                    .position(|k| k.key == class_info.key)
                     .map(|i| i + 1)
                     .unwrap_or(1);
                 HierarchyPosition {
                     realm: Some((realm_idx, total_realms)),
                     layer: Some((layer_idx, realm.layers.len())),
-                    kind: Some((kind_idx, layer.classes.len())),
+                    class: Some((class_idx, layer.classes.len())),
                     ..Default::default()
                 }
             }
             Some(TreeItem::ArcFamily(_)) | Some(TreeItem::ArcClass(_, _)) => {
-                // Arcs section - no realm/layer/kind hierarchy
+                // Arcs section - no realm/layer/class hierarchy
                 HierarchyPosition::default()
             }
         }
@@ -3053,14 +3060,14 @@ pub struct HierarchyPosition {
     pub realm: Option<(usize, usize)>,
     /// Current layer index (1-based) within realm and total layers in realm
     pub layer: Option<(usize, usize)>,
-    /// Current kind index (1-based) within layer and total classes in layer
-    pub kind: Option<(usize, usize)>,
-    /// Current instance index (1-based) and total instances for this kind
+    /// Current class index (1-based) within layer and total classes in layer
+    pub class: Option<(usize, usize)>,
+    /// Current instance index (1-based) and total instances for this class
     pub instance: Option<(usize, usize)>,
 }
 
 impl HierarchyPosition {
-    /// Format as compact string: "R:1/2 L:2/4 K:3/7 I:42/300"
+    /// Format as compact string: "R:1/2 L:2/4 C:3/7 I:42/300"
     pub fn to_compact_string(&self) -> String {
         let mut parts = Vec::new();
         if let Some((cur, total)) = self.realm {
@@ -3069,8 +3076,8 @@ impl HierarchyPosition {
         if let Some((cur, total)) = self.layer {
             parts.push(format!("L:{}/{}", cur, total));
         }
-        if let Some((cur, total)) = self.kind {
-            parts.push(format!("K:{}/{}", cur, total));
+        if let Some((cur, total)) = self.class {
+            parts.push(format!("C:{}/{}", cur, total));
         }
         if let Some((cur, total)) = self.instance {
             parts.push(format!("I:{}/{}", cur, total));
@@ -3193,10 +3200,10 @@ impl TaxonomyTree {
     ///
     /// Structure:
     /// - global (1 layer)
-    ///   - config (1 kind)
+    ///   - config (1 class)
     ///     - AppConfig
     /// - tenant (1 layer)
-    ///   - foundation (1 kind)
+    ///   - foundation (1 class)
     ///     - Entity
     ///
     /// Empty arc_families and default stats.
@@ -3273,12 +3280,12 @@ impl TaxonomyTree {
 
         let realms = vec![shared_realm, org_realm];
 
-        // Build kind_index for O(1) lookups
-        let mut kind_index = FxHashMap::default();
+        // Build class_index for O(1) lookups
+        let mut class_index = FxHashMap::default();
         for (r_idx, realm) in realms.iter().enumerate() {
             for (l_idx, layer) in realm.layers.iter().enumerate() {
-                for (k_idx, kind) in layer.classes.iter().enumerate() {
-                    kind_index.insert(kind.key.clone(), (r_idx, l_idx, k_idx));
+                for (k_idx, class_info) in layer.classes.iter().enumerate() {
+                    class_index.insert(class_info.key.clone(), (r_idx, l_idx, k_idx));
                 }
             }
         }
@@ -3290,7 +3297,7 @@ impl TaxonomyTree {
             collapsed: FxHashSet::default(),
             instances: FxHashMap::default(),
             instance_totals: FxHashMap::default(),
-            kind_index,
+            class_index,
             entity_categories: Vec::new(),
             entity_category_instances: FxHashMap::default(),
         }
@@ -3324,7 +3331,7 @@ mod tests {
         assert_eq!(
             shared.layers[0].classes.len(),
             1,
-            "config should have 1 kind"
+            "config should have 1 class"
         );
         assert_eq!(shared.layers[0].classes[0].key, "AppConfig");
     }
@@ -3339,18 +3346,18 @@ mod tests {
         assert_eq!(
             org.layers[0].classes.len(),
             1,
-            "foundation should have 1 kind"
+            "foundation should have 1 class"
         );
         assert_eq!(org.layers[0].classes[0].key, "Entity");
     }
 
     #[test]
-    fn test_mock_tree_kind_index() {
+    fn test_mock_tree_class_index() {
         let tree = TaxonomyTree::mock_for_testing();
 
-        // Verify kind_index has correct mappings
-        assert_eq!(tree.kind_index.get("AppConfig"), Some(&(0, 0, 0)));
-        assert_eq!(tree.kind_index.get("Entity"), Some(&(1, 0, 0)));
+        // Verify class_index has correct mappings
+        assert_eq!(tree.class_index.get("AppConfig"), Some(&(0, 0, 0)));
+        assert_eq!(tree.class_index.get("Entity"), Some(&(1, 0, 0)));
     }
 
     // ========================================================================
@@ -3413,12 +3420,12 @@ mod tests {
 
         let realms = vec![global, tenant];
 
-        // Build kind_index (mirrors load() behavior)
-        let mut kind_index = FxHashMap::default();
+        // Build class_index (mirrors load() behavior)
+        let mut class_index = FxHashMap::default();
         for (r_idx, realm) in realms.iter().enumerate() {
             for (l_idx, layer) in realm.layers.iter().enumerate() {
-                for (k_idx, kind) in layer.classes.iter().enumerate() {
-                    kind_index.insert(kind.key.clone(), (r_idx, l_idx, k_idx));
+                for (k_idx, class_info) in layer.classes.iter().enumerate() {
+                    class_index.insert(class_info.key.clone(), (r_idx, l_idx, k_idx));
                 }
             }
         }
@@ -3430,7 +3437,7 @@ mod tests {
             collapsed: FxHashSet::default(),
             instances: FxHashMap::default(),
             instance_totals: FxHashMap::default(),
-            kind_index,
+            class_index,
             entity_categories: Vec::new(),
             entity_category_instances: FxHashMap::default(),
         }
@@ -3640,7 +3647,7 @@ mod tests {
     #[test]
     fn test_yaml_path_fallback_rejects_unknown_realm() {
         // When realm is "unknown", fallback should return empty string
-        // instead of generating invalid path like "node-classes/unknown/layer/kind.yaml"
+        // instead of generating invalid path like "node-classes/unknown/layer/class.yaml"
         let realm_key = "unknown";
         let layer_key = "structure";
         let class_key = "Page";
@@ -3681,7 +3688,6 @@ mod tests {
             )
         };
 
-        // v11.2: org realm (was tenant)
         assert_eq!(
             yaml_path,
             "packages/core/models/node-classes/org/structure/page.yaml"

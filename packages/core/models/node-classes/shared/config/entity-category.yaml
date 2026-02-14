@@ -2,7 +2,6 @@
 # EntityCategory - Semantic classification for Entity nodes
 #
 # v11.4: Moved to shared/config (classification nodes layer)
-#        - layer: config (was knowledge)
 #
 # v11.0: Shared config node for categorizing entities by purpose
 # Enables: filtering, grouping, and LLM context selection by category

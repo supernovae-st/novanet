@@ -163,7 +163,7 @@ export async function GET() {
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to fetch meta-graph from Neo4j',
+        error: 'Failed to fetch schema-graph from Neo4j',
         details: error instanceof Error ? error.message : String(error),
       },
       { status: 500 }

@@ -2,8 +2,6 @@
 # GEOQuery - Generative Engine Optimization query tracked across AI engines
 #
 # v11.4: Moved to shared/knowledge (Knowledge Atoms pattern)
-#        - realm: shared (was org)
-#        - layer: knowledge (was geo)
 #        - REMOVED time-series properties (now in GEOAnswer)
 #        - Static query definition only - metrics tracked in GEOAnswer nodes
 #

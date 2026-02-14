@@ -139,15 +139,15 @@ pub async fn run_doctor(
 
 fn check_models_directory(root: &Path) -> HealthCheck {
     let models = crate::config::models_dir(root);
-    let node_kinds = models.join("node-classes");
-    let arc_kinds = models.join("arc-classes");
+    let node_classes = models.join("node-classes");
+    let arc_classes = models.join("arc-classes");
     let taxonomy = models.join("taxonomy.yaml");
 
     let mut missing = Vec::new();
-    if !node_kinds.exists() {
+    if !node_classes.exists() {
         missing.push("node-classes/");
     }
-    if !arc_kinds.exists() {
+    if !arc_classes.exists() {
         missing.push("arc-classes/");
     }
     if !taxonomy.exists() {

@@ -95,11 +95,11 @@ arc_states:
 # TRAIT BORDER STYLES — Studio (CSS) + TUI (Unicode)
 # =============================================================================
 # v0.12.0 (ADR-024): Trait = "Data Origin"
-#   - defined (was invariant): Human-created once
-#   - authored (was localized): Human-written per locale
-#   - imported (was knowledge): External data brought in
+#   - defined: Human-created once
+#   - authored: Human-written per locale
+#   - imported: External data brought in
 #   - generated: Our LLM produces this
-#   - retrieved (was aggregated): Fetched from external APIs
+#   - retrieved: Fetched from external APIs
 
 trait_borders:
   defined:
@@ -107,7 +107,7 @@ trait_borders:
     css_width: 2px
     unicode_char: "─"
     unicode_style: light
-    description: "Human-created ONCE, structure/template (was invariant)"
+    description: "Human-created ONCE, structure/template"
 
   authored:
     css_style: dashed
@@ -115,7 +115,7 @@ trait_borders:
     css_dash_array: "6 3"
     unicode_char: "┄"
     unicode_style: dashed
-    description: "Human-written content PER locale (was localized)"
+    description: "Human-written content PER locale"
 
   imported:
     css_style: dotted
@@ -123,7 +123,7 @@ trait_borders:
     css_dash_array: "2 2"
     unicode_char: "┈"
     unicode_style: dotted
-    description: "External data brought in from sources (was knowledge)"
+    description: "External data brought in from sources"
 
   generated:
     css_style: double
@@ -138,7 +138,7 @@ trait_borders:
     css_dash_array: "3 2"
     unicode_char: "┅"
     unicode_style: heavy_dotted
-    description: "Fetched from EXTERNAL APIs (was aggregated)"
+    description: "Fetched from EXTERNAL APIs"
 
 # =============================================================================
 # SCOPE STROKE STYLES — Intra vs Cross realm arcs
@@ -596,24 +596,24 @@ icons:
   # TRAIT ICONS — WHERE does data come from? (Data Origin)
   # ---------------------------------------------------------------------------
   # v0.12.0 (ADR-024): Trait = "Data Origin"
-  #   - defined (was invariant): Human-created once
-  #   - authored (was localized): Human-written per locale
-  #   - imported (was knowledge): External data brought in
+  #   - defined: Human-created once
+  #   - authored: Human-written per locale
+  #   - imported: External data brought in
   #   - generated: Our LLM produces this
-  #   - retrieved (was aggregated): Fetched from external APIs
+  #   - retrieved: Fetched from external APIs
   traits:
     defined:
       web: lock
       terminal: "■"
-      description: "Human-created ONCE (was invariant)"
+      description: "Human-created ONCE"
     authored:
       web: pen
       terminal: "□"
-      description: "Human-written PER locale (was localized)"
+      description: "Human-written PER locale"
     imported:
       web: download
       terminal: "◊"
-      description: "External data brought in (was knowledge)"
+      description: "External data brought in"
     generated:
       web: sparkles
       terminal: "★"
@@ -621,7 +621,7 @@ icons:
     retrieved:
       web: cloud-download
       terminal: "▪"
-      description: "Fetched from EXTERNAL APIs (was aggregated)"
+      description: "Fetched from EXTERNAL APIs"
 
   # ---------------------------------------------------------------------------
   # ARC FAMILY ICONS — What kind of relationship?
@@ -819,7 +819,7 @@ icons:
     class:
       web: box
       terminal: "C"
-      description: "Node class definition (was kind)"
+      description: "Node class definition"
     instance:
       web: file
       terminal: "i"
@@ -831,4 +831,4 @@ icons:
     arc_class:
       web: arrow-right
       terminal: "a"
-      description: "Arc class definition (was arc_kind)"
+      description: "Arc class definition"

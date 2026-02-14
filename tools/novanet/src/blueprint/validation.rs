@@ -159,25 +159,25 @@ impl ValidationResult {
             return;
         };
 
-        let yaml_kinds: HashSet<&str> = data
-            .node_kinds
+        let yaml_classes: HashSet<&str> = data
+            .node_classes
             .iter()
             .map(|n| n.def.name.as_str())
             .collect();
-        let neo4j_kinds: HashSet<&str> = neo4j.node_kind_names.iter().map(|s| s.as_str()).collect();
+        let neo4j_classes: HashSet<&str> = neo4j.node_class_names.iter().map(|s| s.as_str()).collect();
 
-        // Check for kinds in YAML but not in Neo4j
-        let missing_in_neo4j: Vec<&str> = yaml_kinds.difference(&neo4j_kinds).copied().collect();
+        // Check for classes in YAML but not in Neo4j
+        let missing_in_neo4j: Vec<&str> = yaml_classes.difference(&neo4j_classes).copied().collect();
         if !missing_in_neo4j.is_empty() {
             self.checks.push(ValidationCheck::fail(
-                "YAML kinds exist in Neo4j",
+                "YAML classes exist in Neo4j",
                 format!("Missing in Neo4j: {}", missing_in_neo4j.join(", ")),
             ));
             self.issues.push(
                 ValidationIssue::warning(
                     "sync",
                     format!(
-                        "{} kinds in YAML but not in Neo4j: {}",
+                        "{} classes in YAML but not in Neo4j: {}",
                         missing_in_neo4j.len(),
                         missing_in_neo4j.join(", ")
                     ),
@@ -186,21 +186,21 @@ impl ValidationResult {
             );
         } else {
             self.checks
-                .push(ValidationCheck::pass("YAML kinds exist in Neo4j"));
+                .push(ValidationCheck::pass("YAML classes exist in Neo4j"));
         }
 
-        // Check for kinds in Neo4j but not in YAML
-        let orphan_in_neo4j: Vec<&str> = neo4j_kinds.difference(&yaml_kinds).copied().collect();
+        // Check for classes in Neo4j but not in YAML
+        let orphan_in_neo4j: Vec<&str> = neo4j_classes.difference(&yaml_classes).copied().collect();
         if !orphan_in_neo4j.is_empty() {
             self.checks.push(ValidationCheck::fail(
-                "Neo4j kinds defined in YAML",
+                "Neo4j classes defined in YAML",
                 format!("Orphan in Neo4j: {}", orphan_in_neo4j.join(", ")),
             ));
             self.issues.push(
                 ValidationIssue::warning(
                     "sync",
                     format!(
-                        "{} kinds in Neo4j but not in YAML: {}",
+                        "{} classes in Neo4j but not in YAML: {}",
                         orphan_in_neo4j.len(),
                         orphan_in_neo4j.join(", ")
                     ),
@@ -209,14 +209,14 @@ impl ValidationResult {
             );
         } else {
             self.checks
-                .push(ValidationCheck::pass("Neo4j kinds defined in YAML"));
+                .push(ValidationCheck::pass("Neo4j classes defined in YAML"));
         }
 
         // ─────────────────────────────────────────────────────────────────────────
-        // ArcClass sync validation (YAML ↔ Neo4j) — v0.12.0: ArcKind → ArcClass
+        // ArcClass sync validation (YAML ↔ Neo4j)
         // ─────────────────────────────────────────────────────────────────────────
         let yaml_arcs: HashSet<&str> = data.arc_defs.iter().map(|a| a.arc_type.as_str()).collect();
-        let neo4j_arcs: HashSet<&str> = neo4j.arc_kind_names.iter().map(|s| s.as_str()).collect();
+        let neo4j_arcs: HashSet<&str> = neo4j.arc_class_names.iter().map(|s| s.as_str()).collect();
 
         // Check for arc classes in YAML but not in Neo4j
         let missing_arcs: Vec<&str> = yaml_arcs.difference(&neo4j_arcs).copied().collect();
@@ -265,10 +265,10 @@ impl ValidationResult {
         }
     }
 
-    /// Check that arc source/target types exist in node kinds.
+    /// Check that arc source/target types exist in node classes.
     fn check_arc_coherence(&mut self, data: &BlueprintData) {
         let valid_kinds: HashSet<&str> = data
-            .node_kinds
+            .node_classes
             .iter()
             .map(|n| n.def.name.as_str())
             .collect();
@@ -309,7 +309,7 @@ impl ValidationResult {
     fn check_path_content_match(&mut self, data: &BlueprintData) {
         let mut mismatches = Vec::new();
 
-        for node in &data.node_kinds {
+        for node in &data.node_classes {
             // Path should be: .../node-classes/{realm}/{layer}/{name}.yaml
             let path_str = node.source_path.to_string_lossy();
 
@@ -354,7 +354,7 @@ impl ValidationResult {
     fn check_arc_scope_coherence(&mut self, data: &BlueprintData) {
         // Build a map of node name -> realm for quick lookup
         let node_realms: std::collections::HashMap<&str, &str> = data
-            .node_kinds
+            .node_classes
             .iter()
             .map(|n| (n.def.name.as_str(), n.realm.as_str()))
             .collect();
@@ -461,7 +461,7 @@ impl ValidationResult {
 
         // All defined node types
         let all_nodes: HashSet<&str> = data
-            .node_kinds
+            .node_classes
             .iter()
             .map(|n| n.def.name.as_str())
             .collect();
@@ -534,7 +534,7 @@ impl ValidationResult {
     fn check_required_fields(&mut self, data: &BlueprintData) {
         let mut missing = Vec::new();
 
-        for node in &data.node_kinds {
+        for node in &data.node_classes {
             if node.def.name.is_empty() {
                 missing.push(format!("{}: missing name", node.source_path.display()));
             }
@@ -704,7 +704,7 @@ mod tests {
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
 
         // All traits must be one of the valid Data Origin values
-        for node in &data.node_kinds {
+        for node in &data.node_classes {
             let is_valid = matches!(
                 node.def.node_trait,
                 NodeTrait::Defined
@@ -729,13 +729,13 @@ mod tests {
         let root = crate::config::resolve_root(None).expect("Failed to resolve root");
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
 
-        let total = data.node_kinds.len();
+        let total = data.node_classes.len();
         let shared_count = data
-            .node_kinds
+            .node_classes
             .iter()
             .filter(|n| n.realm == "shared")
             .count();
-        let org_count = data.node_kinds.iter().filter(|n| n.realm == "org").count();
+        let org_count = data.node_classes.iter().filter(|n| n.realm == "org").count();
 
         assert_eq!(
             total, 61,
@@ -762,7 +762,7 @@ mod tests {
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
 
         let node_names: Vec<&str> = data
-            .node_kinds
+            .node_classes
             .iter()
             .map(|n| n.def.name.as_str())
             .collect();
@@ -871,7 +871,7 @@ mod tests {
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
 
         let content_nodes: Vec<_> = data
-            .node_kinds
+            .node_classes
             .iter()
             .filter(|n| n.def.name.ends_with("Content"))
             .collect();
@@ -897,7 +897,7 @@ mod tests {
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
 
         let generated_nodes: Vec<_> = data
-            .node_kinds
+            .node_classes
             .iter()
             .filter(|n| n.def.name.ends_with("Generated"))
             .collect();
@@ -922,11 +922,11 @@ mod tests {
 
         // Count by realm (the reliable way)
         let shared_count = data
-            .node_kinds
+            .node_classes
             .iter()
             .filter(|n| n.realm == "shared")
             .count();
-        let org_count = data.node_kinds.iter().filter(|n| n.realm == "org").count();
+        let org_count = data.node_classes.iter().filter(|n| n.realm == "org").count();
 
         // v0.12.4: 40 shared, 21 org (Brand Architecture: +4 -1)
         assert_eq!(
@@ -946,7 +946,7 @@ mod tests {
 
         // Check that each realm has the expected layers
         let shared_layers: std::collections::HashSet<&str> = data
-            .node_kinds
+            .node_classes
             .iter()
             .filter(|n| n.realm == "shared")
             .map(|n| n.layer.as_str())
@@ -969,7 +969,7 @@ mod tests {
         );
 
         let org_layers: std::collections::HashSet<&str> = data
-            .node_kinds
+            .node_classes
             .iter()
             .filter(|n| n.realm == "org")
             .map(|n| n.layer.as_str())

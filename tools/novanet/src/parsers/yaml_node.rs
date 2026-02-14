@@ -233,7 +233,7 @@ impl ParsedNode {
 /// - `NovaNetError::Schema` if any YAML file fails to parse (including missing `trait`)
 /// - `NovaNetError::Io` on filesystem errors
 pub fn load_all_nodes(root: &Path) -> crate::Result<Vec<ParsedNode>> {
-    let nodes_dir = crate::config::node_kinds_dir(root);
+    let nodes_dir = crate::config::node_classes_dir(root);
 
     if !nodes_dir.exists() {
         return Err(crate::NovaNetError::Validation(format!(

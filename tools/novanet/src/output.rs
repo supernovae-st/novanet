@@ -130,7 +130,6 @@ mod tests {
             description: "Shared scope".to_string(),
         }];
         let json = format_json(&rows);
-        // v11.2: shared realm (was global)
         assert!(json.contains("\"key\": \"shared\""));
         assert!(json.contains("\"label\": \"Realm\""));
     }

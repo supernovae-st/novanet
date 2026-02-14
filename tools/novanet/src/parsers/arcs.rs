@@ -299,24 +299,24 @@ impl ArcClassDef {
     }
 }
 
-/// Load all arc definitions from individual arc-kind YAML files.
+/// Load all arc definitions from individual arc-class YAML files.
 ///
 /// This is the v10.7+ replacement for `load_arcs()` which reads from relations.yaml.
 /// Returns an ArcsDocument compatible with existing generator code.
-pub fn load_arc_kinds_from_files(root: &Path) -> crate::Result<ArcsDocument> {
-    let arc_kinds_dir = crate::config::arc_kinds_dir(root);
+pub fn load_arc_classes_from_files(root: &Path) -> crate::Result<ArcsDocument> {
+    let arc_classes_dir = crate::config::arc_classes_dir(root);
 
-    if !arc_kinds_dir.exists() {
+    if !arc_classes_dir.exists() {
         return Err(crate::NovaNetError::Validation(format!(
             "arc-classes directory not found: {}",
-            arc_kinds_dir.display()
+            arc_classes_dir.display()
         )));
     }
 
     let mut arcs = Vec::new();
 
     // Scan all family directories
-    for family_dir in std::fs::read_dir(&arc_kinds_dir)? {
+    for family_dir in std::fs::read_dir(&arc_classes_dir)? {
         let family_dir = family_dir?;
         if !family_dir.file_type()?.is_dir() {
             continue;
@@ -335,7 +335,7 @@ pub fn load_arc_kinds_from_files(root: &Path) -> crate::Result<ArcsDocument> {
                 continue;
             }
 
-            // Parse the arc-kind YAML
+            // Parse the arc-class YAML
             match super::utils::load_yaml::<ArcClassYaml>(&path) {
                 Ok(yaml) => {
                     arcs.push(yaml.arc.to_arc_def());
@@ -374,7 +374,7 @@ pub fn load_arc_kinds_from_files(root: &Path) -> crate::Result<ArcsDocument> {
 
     if arcs.is_empty() {
         return Err(crate::NovaNetError::Validation(
-            "No arc-kind YAML files found".to_string(),
+            "No arc-class YAML files found".to_string(),
         ));
     }
 
@@ -393,19 +393,19 @@ pub fn load_arc_kinds_from_files(root: &Path) -> crate::Result<ArcsDocument> {
     })
 }
 
-/// Load temperature_threshold values from individual arc-kind YAML files.
+/// Load temperature_threshold values from individual arc-class YAML files.
 ///
 /// Returns a map of arc_type -> temperature_threshold.
 pub fn load_arc_temperatures(root: &Path) -> crate::Result<HashMap<String, f32>> {
-    let arc_kinds_dir = crate::config::arc_kinds_dir(root);
+    let arc_classes_dir = crate::config::arc_classes_dir(root);
     let mut temps = HashMap::new();
 
-    if !arc_kinds_dir.exists() {
+    if !arc_classes_dir.exists() {
         return Ok(temps);
     }
 
     // Scan all family directories
-    for family_dir in std::fs::read_dir(&arc_kinds_dir)? {
+    for family_dir in std::fs::read_dir(&arc_classes_dir)? {
         let family_dir = family_dir?;
         if !family_dir.file_type()?.is_dir() {
             continue;
@@ -420,7 +420,7 @@ pub fn load_arc_temperatures(root: &Path) -> crate::Result<HashMap<String, f32>>
                 continue;
             }
 
-            // Parse the arc-kind YAML
+            // Parse the arc-class YAML
             if let Ok(yaml) = super::utils::load_yaml::<ArcClassYaml>(&path) {
                 if let Some(threshold) = yaml.arc.temperature_threshold {
                     temps.insert(yaml.arc.name, threshold);
@@ -589,7 +589,7 @@ arcs:
     }
 
     #[test]
-    fn load_arc_kinds_from_files_integration() {
+    fn load_arc_classes_from_files_integration() {
         // Requires actual monorepo
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .parent()
@@ -600,9 +600,9 @@ arcs:
             return;
         }
 
-        let doc = load_arc_kinds_from_files(root).expect("should load arc-classes from files");
+        let doc = load_arc_classes_from_files(root).expect("should load arc-classes from files");
 
-        // v11.0: Total arc count from individual arc-kind files
+        // v11.0: Total arc count from individual arc-class files
         // Should have a reasonable number of arcs (more than legacy relations.yaml)
         assert!(
             doc.arcs.len() > 50,
@@ -657,7 +657,7 @@ arcs:
     }
 
     #[test]
-    fn parse_arc_kind_yaml() {
+    fn parse_arc_class_yaml() {
         let yaml = r#"
 arc:
   name: SEMANTIC_LINK
@@ -675,7 +675,7 @@ arc:
     }
 
     #[test]
-    fn parse_arc_kind_yaml_no_threshold() {
+    fn parse_arc_class_yaml_no_threshold() {
         let yaml = r#"
 arc:
   name: HAS_PAGE
@@ -724,7 +724,7 @@ arc:
 }
 
 #[cfg(test)]
-mod arc_kind_tests {
+mod arc_class_tests {
     use super::*;
 
     #[test]

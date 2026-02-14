@@ -103,7 +103,7 @@ fn walk_rules(
 /// Generate a complete Mermaid-in-Markdown document for a single view.
 pub fn generate_view(root: &Path, view: &ViewDef) -> crate::Result<String> {
     let nodes = yaml_node::load_all_nodes(root)?;
-    let rels_doc = arcs::load_arc_kinds_from_files(root)?;
+    let rels_doc = arcs::load_arc_classes_from_files(root)?;
     let org_doc = organizing::load_organizing(root)?;
 
     let view_graph = resolve_view_graph(view, &rels_doc.arcs);

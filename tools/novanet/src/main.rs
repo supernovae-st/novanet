@@ -31,7 +31,7 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Comprehensive meta-graph visualization and validation (replaces meta)
+    /// Comprehensive schema-graph visualization and validation
     Blueprint {
         /// Specific view to render
         #[arg(long, value_enum)]
@@ -85,9 +85,9 @@ enum Commands {
         /// Search query string
         #[arg(long)]
         query: String,
-        /// Filter by Kind label
-        #[arg(long)]
-        kind: Option<String>,
+        /// Filter by Class label
+        #[arg(long, name = "class")]
+        class: Option<String>,
         /// Maximum results (1-10000)
         #[arg(long, default_value_t = 50, value_parser = clap::value_parser!(i64).range(1..=10000))]
         limit: i64,
@@ -148,8 +148,8 @@ struct QueryArgs {
     trait_filter: Option<String>,
     #[arg(long)]
     arc_family: Option<String>,
-    #[arg(long)]
-    kind: Option<String>,
+    #[arg(long, name = "class")]
+    class: Option<String>,
     #[arg(long, value_enum, default_value_t = OutputFormat::Table)]
     format: OutputFormat,
 }
@@ -158,9 +158,9 @@ struct QueryArgs {
 enum NodeAction {
     /// Create a new node (auto-wires OF_CLASS)
     Create {
-        /// Kind label (e.g., Page, Entity, Project)
-        #[arg(long)]
-        kind: String,
+        /// Class label (e.g., Page, Entity, Project)
+        #[arg(long, name = "class")]
+        class: String,
         /// Unique key for the node
         #[arg(long)]
         key: String,
@@ -198,9 +198,9 @@ enum ArcAction {
         /// Target node key
         #[arg(long)]
         to: String,
-        /// Arc kind (e.g., FOR_LOCALE, HAS_BLOCK)
-        #[arg(long)]
-        kind: String,
+        /// Arc class (e.g., FOR_LOCALE, HAS_BLOCK)
+        #[arg(long, name = "class")]
+        class: String,
         /// Optional JSON properties for the arc
         #[arg(long, default_value = "{}")]
         props: String,
@@ -213,9 +213,9 @@ enum ArcAction {
         /// Target node key
         #[arg(long)]
         to: String,
-        /// Arc kind to delete
-        #[arg(long)]
-        kind: String,
+        /// Arc class to delete
+        #[arg(long, name = "class")]
+        class: String,
     },
 }
 
@@ -414,7 +414,7 @@ async fn main() -> color_eyre::Result<()> {
                 args.layer.as_deref(),
                 args.trait_filter.as_deref(),
                 args.arc_family.as_deref(),
-                args.kind.as_deref(),
+                args.class.as_deref(),
             );
             novanet::commands::read::run_query(&db, filter, args.format).await?;
         }
@@ -533,13 +533,13 @@ async fn main() -> color_eyre::Result<()> {
         // ── Search (Neo4j) ──────────────────────────────────────
         Commands::Search {
             ref query,
-            ref kind,
+            ref class,
             limit,
             format,
         } => {
             let db = connect_db(&cli).await?;
             eprintln!("novanet search --query={query:?}");
-            novanet::commands::search::run_search(&db, query, kind.as_deref(), limit, format)
+            novanet::commands::search::run_search(&db, query, class.as_deref(), limit, format)
                 .await?;
         }
 
@@ -555,9 +555,9 @@ async fn main() -> color_eyre::Result<()> {
         Commands::Node { ref action } => {
             let db = connect_db(&cli).await?;
             match action {
-                NodeAction::Create { kind, key, props } => {
-                    eprintln!("novanet node create --kind={kind} --key={key}");
-                    novanet::commands::node::run_create(&db, kind, key, props).await?;
+                NodeAction::Create { class, key, props } => {
+                    eprintln!("novanet node create --class={class} --key={key}");
+                    novanet::commands::node::run_create(&db, class, key, props).await?;
                 }
                 NodeAction::Edit { key, set_props } => {
                     eprintln!("novanet node edit --key={key}");
@@ -575,15 +575,15 @@ async fn main() -> color_eyre::Result<()> {
                 ArcAction::Create {
                     from,
                     to,
-                    kind,
+                    class,
                     props,
                 } => {
-                    eprintln!("novanet arc create --from={from} --to={to} --kind={kind}");
-                    novanet::commands::arc::run_create(&db, from, to, kind, props).await?;
+                    eprintln!("novanet arc create --from={from} --to={to} --class={class}");
+                    novanet::commands::arc::run_create(&db, from, to, class, props).await?;
                 }
-                ArcAction::Delete { from, to, kind } => {
-                    eprintln!("novanet arc delete --from={from} --to={to} --kind={kind}");
-                    novanet::commands::arc::run_delete(&db, from, to, kind).await?;
+                ArcAction::Delete { from, to, class } => {
+                    eprintln!("novanet arc delete --from={from} --to={to} --class={class}");
+                    novanet::commands::arc::run_delete(&db, from, to, class).await?;
                 }
             }
         }

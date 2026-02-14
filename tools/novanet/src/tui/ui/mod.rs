@@ -74,7 +74,7 @@ pub(super) const COLOR_OVERLAY_BG: Color = Color::Rgb(20, 20, 30);
 const COLOR_BRIGHT_DIM: Color = Color::Rgb(140, 140, 140);
 
 /// Active Class background (subtle highlight for Class with expanded instances).
-const COLOR_ACTIVE_KIND_BG: Color = Color::Rgb(25, 35, 45);
+const COLOR_ACTIVE_CLASS_BG: Color = Color::Rgb(25, 35, 45);
 
 // -----------------------------------------------------------------------------
 // Layout constants (percentages and sizes)
@@ -982,57 +982,57 @@ mod tests {
     // =============================================================================
 
     #[test]
-    fn test_empty_state_kind_icon_no_connection() {
+    fn test_empty_state_class_icon_no_connection() {
         assert_eq!(EmptyStateClass::NoConnection.icon(), "⚠");
     }
 
     #[test]
-    fn test_empty_state_kind_icon_no_kinds() {
+    fn test_empty_state_class_icon_no_classes() {
         assert_eq!(EmptyStateClass::NoClasses.icon(), "∅");
     }
 
     #[test]
-    fn test_empty_state_kind_icon_no_results() {
+    fn test_empty_state_class_icon_no_results() {
         assert_eq!(EmptyStateClass::NoResults.icon(), "◌");
     }
 
     #[test]
-    fn test_empty_state_kind_icon_no_instances() {
+    fn test_empty_state_class_icon_no_instances() {
         assert_eq!(EmptyStateClass::NoInstances.icon(), "□");
     }
 
     #[test]
-    fn test_empty_state_kind_icon_loading() {
+    fn test_empty_state_class_icon_loading() {
         assert_eq!(EmptyStateClass::Loading.icon(), "◐");
     }
 
     #[test]
-    fn test_empty_state_kind_title_no_connection() {
+    fn test_empty_state_class_title_no_connection() {
         assert_eq!(EmptyStateClass::NoConnection.title(), "Neo4j Not Connected");
     }
 
     #[test]
-    fn test_empty_state_kind_title_no_kinds() {
+    fn test_empty_state_class_title_no_classes() {
         assert_eq!(EmptyStateClass::NoClasses.title(), "No Node Classes Found");
     }
 
     #[test]
-    fn test_empty_state_kind_title_no_results() {
+    fn test_empty_state_class_title_no_results() {
         assert_eq!(EmptyStateClass::NoResults.title(), "No Results");
     }
 
     #[test]
-    fn test_empty_state_kind_title_no_instances() {
+    fn test_empty_state_class_title_no_instances() {
         assert_eq!(EmptyStateClass::NoInstances.title(), "No Instances");
     }
 
     #[test]
-    fn test_empty_state_kind_title_loading() {
+    fn test_empty_state_class_title_loading() {
         assert_eq!(EmptyStateClass::Loading.title(), "Loading…");
     }
 
     #[test]
-    fn test_empty_state_kind_description_no_connection() {
+    fn test_empty_state_class_description_no_connection() {
         let desc = EmptyStateClass::NoConnection.description();
         assert!(!desc.is_empty(), "description should not be empty");
         assert!(
@@ -1046,7 +1046,7 @@ mod tests {
     }
 
     #[test]
-    fn test_empty_state_kind_description_no_kinds() {
+    fn test_empty_state_class_description_no_classes() {
         let desc = EmptyStateClass::NoClasses.description();
         assert!(!desc.is_empty());
         assert!(
@@ -1060,7 +1060,7 @@ mod tests {
     }
 
     #[test]
-    fn test_empty_state_kind_description_no_results() {
+    fn test_empty_state_class_description_no_results() {
         let desc = EmptyStateClass::NoResults.description();
         assert!(!desc.is_empty());
         assert!(
@@ -1070,7 +1070,7 @@ mod tests {
     }
 
     #[test]
-    fn test_empty_state_kind_description_no_instances() {
+    fn test_empty_state_class_description_no_instances() {
         let desc = EmptyStateClass::NoInstances.description();
         assert!(!desc.is_empty());
         assert!(
@@ -1080,7 +1080,7 @@ mod tests {
     }
 
     #[test]
-    fn test_empty_state_kind_description_loading() {
+    fn test_empty_state_class_description_loading() {
         let desc = EmptyStateClass::Loading.description();
         assert!(!desc.is_empty());
         assert!(
@@ -1090,19 +1090,19 @@ mod tests {
     }
 
     #[test]
-    fn test_empty_state_kind_hint_no_connection() {
+    fn test_empty_state_class_hint_no_connection() {
         let hint = EmptyStateClass::NoConnection.hint();
         assert!(hint.contains("r"), "hint should suggest retry with 'r'");
     }
 
     #[test]
-    fn test_empty_state_kind_hint_no_kinds() {
+    fn test_empty_state_class_hint_no_classes() {
         let hint = EmptyStateClass::NoClasses.hint();
         assert!(hint.contains("q"), "hint should suggest quit with 'q'");
     }
 
     #[test]
-    fn test_empty_state_kind_hint_no_results() {
+    fn test_empty_state_class_hint_no_results() {
         let hint = EmptyStateClass::NoResults.hint();
         assert!(
             hint.contains("c"),
@@ -1111,13 +1111,13 @@ mod tests {
     }
 
     #[test]
-    fn test_empty_state_kind_hint_no_instances() {
+    fn test_empty_state_class_hint_no_instances() {
         let hint = EmptyStateClass::NoInstances.hint();
         assert!(hint.contains("Esc"), "hint should suggest go back");
     }
 
     #[test]
-    fn test_empty_state_kind_hint_loading() {
+    fn test_empty_state_class_hint_loading() {
         // Loading has no hint - it's a transient state
         let hint = EmptyStateClass::Loading.hint();
         // Just verify it doesn't panic and returns something
@@ -1125,7 +1125,7 @@ mod tests {
     }
 
     #[test]
-    fn test_empty_state_kind_is_copy() {
+    fn test_empty_state_class_is_copy() {
         // Verify EmptyStateClass is Copy (can be assigned without move)
         let kind = EmptyStateClass::NoConnection;
         let kind2 = kind; // Copy
@@ -1134,7 +1134,7 @@ mod tests {
     }
 
     #[test]
-    fn test_empty_state_kind_debug_trait() {
+    fn test_empty_state_class_debug_trait() {
         // Verify Debug is implemented
         let kind = EmptyStateClass::Loading;
         let debug_str = format!("{:?}", kind);

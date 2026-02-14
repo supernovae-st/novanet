@@ -2,8 +2,6 @@
 # SEOKeyword - Target keyword with metrics (v10.6: enriched with Ahrefs/Semrush data)
 #
 # v11.4: SEO Knowledge Atoms refactor
-#        - realm: shared (was org)
-#        - layer: knowledge (was seo)
 #        - Universal market data available to all orgs
 #        - Format now via HAS_FORMAT arc to SEOKeywordFormat
 #        - Removed: HAS_QUESTIONS, HAS_COMPARISONS, HAS_PREPOSITIONS (nodes deleted)

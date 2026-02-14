@@ -603,7 +603,7 @@ mod tests {
         }
     }
 
-    fn make_kind() -> ClassInfo {
+    fn make_class_info() -> ClassInfo {
         ClassInfo {
             key: "page".to_string(),
             display_name: "Page".to_string(),
@@ -632,7 +632,7 @@ mod tests {
         }
     }
 
-    fn make_arc_kind() -> ArcClassInfo {
+    fn make_arc_class() -> ArcClassInfo {
         ArcClassInfo {
             key: "HAS_PAGE".to_string(),
             display_name: "Has Page".to_string(),
@@ -690,11 +690,11 @@ mod tests {
     }
 
     #[test]
-    fn test_type_label_kind() {
+    fn test_type_label_class() {
         let realm = make_realm();
         let layer = make_layer();
-        let kind = make_kind();
-        let item = TreeItem::Class(&realm, &layer, &kind);
+        let class_info = make_class_info();
+        let item = TreeItem::Class(&realm, &layer, &class_info);
         assert_eq!(get_type_label(Some(&item)), "Node Class");
     }
 
@@ -706,10 +706,10 @@ mod tests {
     }
 
     #[test]
-    fn test_type_label_arc_kind() {
+    fn test_type_label_arc_class() {
         let family = make_arc_family();
-        let arc_kind = make_arc_kind();
-        let item = TreeItem::ArcClass(&family, &arc_kind);
+        let arc_class = make_arc_class();
+        let item = TreeItem::ArcClass(&family, &arc_class);
         assert_eq!(get_type_label(Some(&item)), "Arc Class");
     }
 
@@ -717,9 +717,9 @@ mod tests {
     fn test_type_label_instance() {
         let realm = make_realm();
         let layer = make_layer();
-        let kind = make_kind();
+        let class_info = make_class_info();
         let instance = make_instance();
-        let item = TreeItem::Instance(&realm, &layer, &kind, &instance);
+        let item = TreeItem::Instance(&realm, &layer, &class_info, &instance);
         assert_eq!(get_type_label(Some(&item)), "Instance");
     }
 
@@ -768,11 +768,11 @@ mod tests {
     }
 
     #[test]
-    fn test_display_kind_indented() {
+    fn test_display_class_indented() {
         let realm = make_realm();
         let layer = make_layer();
-        let kind = make_kind();
-        let item = TreeItem::Class(&realm, &layer, &kind);
+        let class_info = make_class_info();
+        let item = TreeItem::Class(&realm, &layer, &class_info);
         let (prefix, name) = get_item_display(Some(&item));
         assert_eq!(prefix, "    "); // 4 spaces
         assert_eq!(name, "Page");
@@ -788,10 +788,10 @@ mod tests {
     }
 
     #[test]
-    fn test_display_arc_kind_indented() {
+    fn test_display_arc_class_indented() {
         let family = make_arc_family();
-        let arc_kind = make_arc_kind();
-        let item = TreeItem::ArcClass(&family, &arc_kind);
+        let arc_class = make_arc_class();
+        let item = TreeItem::ArcClass(&family, &arc_class);
         let (prefix, name) = get_item_display(Some(&item));
         assert_eq!(prefix, "    "); // 4 spaces
         assert_eq!(name, "Has Page");
@@ -801,7 +801,7 @@ mod tests {
     fn test_display_instance_deeply_indented() {
         let realm = make_realm();
         let layer = make_layer();
-        let kind = make_kind();
+        let kind = make_class_info();
         let instance = make_instance();
         let item = TreeItem::Instance(&realm, &layer, &kind, &instance);
         let (prefix, name) = get_item_display(Some(&item));
@@ -826,10 +826,10 @@ mod tests {
         // If a new variant is added, this test should fail until get_type_label is updated
         let realm = make_realm();
         let layer = make_layer();
-        let kind = make_kind();
+        let kind = make_class_info();
         let instance = make_instance();
         let family = make_arc_family();
-        let arc_kind = make_arc_kind();
+        let arc_class = make_arc_class();
 
         let all_items: Vec<TreeItem> = vec![
             TreeItem::ClassesSection,
@@ -838,7 +838,7 @@ mod tests {
             TreeItem::Layer(&realm, &layer),
             TreeItem::Class(&realm, &layer, &kind),
             TreeItem::ArcFamily(&family),
-            TreeItem::ArcClass(&family, &arc_kind),
+            TreeItem::ArcClass(&family, &arc_class),
             TreeItem::Instance(&realm, &layer, &kind, &instance),
         ];
 

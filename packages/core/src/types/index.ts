@@ -63,11 +63,11 @@ export interface EmbeddableNode {
 }
 
 // =============================================================================
-// LOCALE (v7.1.0) - Re-exported from locale-knowledge.ts
+// LOCALE (v7.1.0) - Re-exported from shared.ts
 // =============================================================================
 
-// Locale is the primary definition in locale-knowledge.ts (source of truth)
-// Re-exported below in LOCALE KNOWLEDGE section
+// Locale is the primary definition in shared.ts (source of truth)
+// Re-exported below in SHARED section
 
 // =============================================================================
 // PROJECT + NODABLE ARCHITECTURE (v7.1.0)
@@ -78,7 +78,7 @@ export {
   type ProjectContent,
   type VoiceTone,
   // v7.2.5: Audience, AudienceL10n, ValuePropL10n, SocialProofL10n removed
-  type BrandIdentity,
+  // v0.12.4: BrandIdentity removed (use Brand) ADR-028
   type ColorPaletteItem,
   type TypographyScaleItem,
   type ProjectNode,
@@ -217,7 +217,7 @@ export {
   type LocaleRulesSlug,
   type LocaleCultureReferences,
   type LocaleKnowledgeNode,
-} from './locale-knowledge.js';
+} from './shared.js';
 
 // =============================================================================
 // SEO (v7.1.0, v7.8.2: SEOKeyword → SEOKeyword)

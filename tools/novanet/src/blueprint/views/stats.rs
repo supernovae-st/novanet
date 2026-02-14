@@ -8,8 +8,8 @@ use serde::{Deserialize, Serialize};
 /// Stats data structure for JSON output.
 #[derive(Debug, Serialize, Deserialize)]
 pub struct BlueprintStats {
-    pub node_kinds: usize,
-    pub arc_kinds: usize,
+    pub node_classes: usize,
+    pub arc_classes: usize,
     pub realms: usize,
     pub layers: usize,
     pub traits: TraitStats,
@@ -61,8 +61,8 @@ fn collect_stats(data: &BlueprintData) -> BlueprintStats {
     let validation = ValidationResult::validate(data);
 
     BlueprintStats {
-        node_kinds: data.node_kind_count(),
-        arc_kinds: data.arc_count(),
+        node_classes: data.node_class_count(),
+        arc_classes: data.arc_count(),
         realms: data.realm_count(),
         layers: data.layer_count(),
         traits: TraitStats {
@@ -147,8 +147,8 @@ fn render_table(stats: &BlueprintStats) -> String {
          passed:           {}\n\
          errors:           {}\n\
          warnings:         {}\n",
-        stats.node_kinds,
-        stats.arc_kinds,
+        stats.node_classes,
+        stats.arc_classes,
         stats.realms,
         stats.layers,
         stats.traits.defined,
@@ -178,7 +178,7 @@ mod tests {
 
         let output = render(&data, OutputFormat::Json);
 
-        assert!(output.contains("\"node_kinds\""), "Should have node_kinds");
+        assert!(output.contains("\"node_classes\""), "Should have node_classes");
         assert!(output.contains("\"validation\""), "Should have validation");
 
         // Verify it's valid JSON

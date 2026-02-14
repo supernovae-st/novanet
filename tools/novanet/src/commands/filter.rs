@@ -1,6 +1,6 @@
 //! Filter build command: `novanet filter build`.
 //!
-//! Reads a JSON filter spec from stdin, resolves it to Cypher via the meta-graph
+//! Reads a JSON filter spec from stdin, resolves it to Cypher via the schema-graph
 //! query builder, and writes the result to stdout. Designed for Studio subprocess
 //! integration: `echo '{"realms":["org"]}' | novanet filter build`
 
@@ -46,7 +46,6 @@ mod tests {
 
     #[test]
     fn filter_build_with_facets() {
-        // v11.2: org realm (was tenant)
         let filter =
             FacetFilter::from_json(r#"{"realms":["org"],"layers":["structure"]}"#).unwrap();
         let stmt = cypher::filter_build_query(&filter);

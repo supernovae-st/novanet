@@ -225,7 +225,7 @@ impl SchemaStats {
         let total_layers: usize = tree.realms.iter().map(|r| r.layers.len()).sum();
 
         Self {
-            kinds: tree.stats.kind_count,
+            kinds: tree.stats.class_count,
             arcs: tree.stats.arc_class_count,
             layers: total_layers,
             traits: 5, // Fixed: defined, authored, imported, generated, retrieved

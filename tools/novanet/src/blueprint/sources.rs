@@ -15,8 +15,8 @@ use std::path::Path;
 /// Aggregated data from all sources for blueprint rendering.
 #[derive(Debug)]
 pub struct BlueprintData {
-    /// All parsed node kinds from YAML.
-    pub node_kinds: Vec<ParsedNode>,
+    /// All parsed node classes from YAML.
+    pub node_classes: Vec<ParsedNode>,
     /// All arc definitions from YAML.
     pub arc_defs: Vec<ArcDef>,
     /// Taxonomy (realms, layers, traits, arc families).
@@ -28,22 +28,22 @@ pub struct BlueprintData {
 /// Counts from Neo4j for validation.
 #[derive(Debug, Clone)]
 pub struct Neo4jCounts {
-    pub node_kind_count: usize,
-    pub arc_kind_count: usize,
-    pub node_kind_names: Vec<String>,
-    pub arc_kind_names: Vec<String>,
+    pub node_class_count: usize,
+    pub arc_class_count: usize,
+    pub node_class_names: Vec<String>,
+    pub arc_class_names: Vec<String>,
 }
 
 impl BlueprintData {
     /// Load from YAML only (no Neo4j connection required).
     pub fn from_yaml(root: &Path) -> crate::Result<Self> {
-        let node_kinds = crate::parsers::yaml_node::load_all_nodes(root)?;
-        let arcs_doc = crate::parsers::arcs::load_arc_kinds_from_files(root)?;
+        let node_classes = crate::parsers::yaml_node::load_all_nodes(root)?;
+        let arcs_doc = crate::parsers::arcs::load_arc_classes_from_files(root)?;
         // v0.12.5: Load from individual YAML files
         let taxonomy = crate::parsers::taxonomy::load_taxonomy_from_files(root)?;
 
         Ok(Self {
-            node_kinds,
+            node_classes,
             arc_defs: arcs_doc.arcs,
             taxonomy,
             neo4j_counts: None,
@@ -66,7 +66,7 @@ impl BlueprintData {
         // Count Class schema nodes (double-label :Schema:Class, property: label)
         let node_query = "MATCH (c:Schema:Class) RETURN c.label AS name ORDER BY c.label";
         let node_rows = db.execute(node_query).await?;
-        let node_kind_names: Vec<String> = node_rows
+        let node_class_names: Vec<String> = node_rows
             .iter()
             .filter_map(|row: &neo4rs::Row| row.get::<String>("name").ok())
             .collect();
@@ -74,16 +74,16 @@ impl BlueprintData {
         // Count ArcClass schema nodes (double-label :Schema:ArcClass, property: key)
         let arc_query = "MATCH (ac:Schema:ArcClass) RETURN ac.key AS name ORDER BY ac.key";
         let arc_rows = db.execute(arc_query).await?;
-        let arc_kind_names: Vec<String> = arc_rows
+        let arc_class_names: Vec<String> = arc_rows
             .iter()
             .filter_map(|row: &neo4rs::Row| row.get::<String>("name").ok())
             .collect();
 
         Ok(Neo4jCounts {
-            node_kind_count: node_kind_names.len(),
-            arc_kind_count: arc_kind_names.len(),
-            node_kind_names,
-            arc_kind_names,
+            node_class_count: node_class_names.len(),
+            arc_class_count: arc_class_names.len(),
+            node_class_names,
+            arc_class_names,
         })
     }
 
@@ -91,9 +91,9 @@ impl BlueprintData {
     // Statistics helpers
     // ─────────────────────────────────────────────────────────────────────────
 
-    /// Total node kinds count.
-    pub fn node_kind_count(&self) -> usize {
-        self.node_kinds.len()
+    /// Total node classes count.
+    pub fn node_class_count(&self) -> usize {
+        self.node_classes.len()
     }
 
     /// Total arc definitions count.
@@ -115,28 +115,28 @@ impl BlueprintData {
             .sum()
     }
 
-    /// Node kinds grouped by realm.
+    /// Node classes grouped by realm.
     pub fn nodes_by_realm(&self) -> HashMap<&str, Vec<&ParsedNode>> {
         let mut map: HashMap<&str, Vec<&ParsedNode>> = HashMap::new();
-        for node in &self.node_kinds {
+        for node in &self.node_classes {
             map.entry(node.realm.as_str()).or_default().push(node);
         }
         map
     }
 
-    /// Node kinds grouped by layer.
+    /// Node classes grouped by layer.
     pub fn nodes_by_layer(&self) -> HashMap<&str, Vec<&ParsedNode>> {
         let mut map: HashMap<&str, Vec<&ParsedNode>> = HashMap::new();
-        for node in &self.node_kinds {
+        for node in &self.node_classes {
             map.entry(node.layer.as_str()).or_default().push(node);
         }
         map
     }
 
-    /// Node kinds grouped by trait.
+    /// Node classes grouped by trait.
     pub fn nodes_by_trait(&self) -> HashMap<NodeTrait, Vec<&ParsedNode>> {
         let mut map: HashMap<NodeTrait, Vec<&ParsedNode>> = HashMap::new();
-        for node in &self.node_kinds {
+        for node in &self.node_classes {
             map.entry(node.def.node_trait).or_default().push(node);
         }
         map
@@ -185,7 +185,7 @@ mod tests {
         let root = crate::config::resolve_root(None).expect("Failed to resolve root");
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
 
-        assert!(data.node_kind_count() > 0, "Should have node kinds");
+        assert!(data.node_class_count() > 0, "Should have node classes");
         assert!(data.arc_count() > 0, "Should have arc definitions");
         assert!(
             data.realm_count() == 2,

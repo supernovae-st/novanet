@@ -127,7 +127,7 @@ fn build_classes_section_content(app: &App) -> UnifiedContent<'static> {
     content.location.add_empty();
 
     // METRICS
-    let kind_count: usize = app
+    let class_count: usize = app
         .tree
         .realms
         .iter()
@@ -140,16 +140,16 @@ fn build_classes_section_content(app: &App) -> UnifiedContent<'static> {
     );
     content.metrics.add_kv(
         "classes",
-        Span::styled(kind_count.to_string(), STYLE_PRIMARY),
+        Span::styled(class_count.to_string(), STYLE_PRIMARY),
     );
 
     // COVERAGE - realm distribution
-    if kind_count > 0 {
+    if class_count > 0 {
         let bar_width = 16usize;
         for realm in &app.tree.realms {
             let realm_classes: usize = realm.layers.iter().map(|l| l.classes.len()).sum();
-            let percent = (realm_classes as f64 / kind_count as f64 * 100.0).round() as u8;
-            let filled = (realm_classes * bar_width) / kind_count.max(1);
+            let percent = (realm_classes as f64 / class_count as f64 * 100.0).round() as u8;
+            let filled = (realm_classes * bar_width) / class_count.max(1);
             let bar = "█".repeat(filled.max(1));
             let empty = "░".repeat(bar_width.saturating_sub(filled));
 
@@ -228,7 +228,7 @@ fn build_arcs_section_content(app: &App) -> UnifiedContent<'static> {
 fn build_realm_content(app: &App, realm: &crate::tui::data::RealmInfo) -> UnifiedContent<'static> {
     let mut content = UnifiedContent::default();
     let theme = &app.theme;
-    let kind_count: usize = realm.layers.iter().map(|l| l.classes.len()).sum();
+    let class_count: usize = realm.layers.iter().map(|l| l.classes.len()).sum();
 
     // IDENTITY
     content
@@ -261,19 +261,19 @@ fn build_realm_content(app: &App, realm: &crate::tui::data::RealmInfo) -> Unifie
     );
     content.metrics.add_kv(
         "classes",
-        Span::styled(kind_count.to_string(), STYLE_PRIMARY),
+        Span::styled(class_count.to_string(), STYLE_PRIMARY),
     );
 
     // COVERAGE - layer breakdown
-    if kind_count > 0 {
+    if class_count > 0 {
         let bar_width = 12usize;
         for layer in &realm.layers {
             let count = layer.classes.len();
             if count == 0 {
                 continue;
             }
-            let percent = (count as f64 / kind_count as f64 * 100.0).round() as u8;
-            let filled = (count * bar_width) / kind_count.max(1);
+            let percent = (count as f64 / class_count as f64 * 100.0).round() as u8;
+            let filled = (count * bar_width) / class_count.max(1);
             let bar = "█".repeat(filled.max(1));
             let empty = "░".repeat(bar_width.saturating_sub(filled));
             let layer_color = theme.layer_color(&layer.key);
@@ -359,8 +359,8 @@ fn build_layer_content(
     if !layer.classes.is_empty() {
         let mut trait_counts: std::collections::BTreeMap<String, usize> =
             std::collections::BTreeMap::new();
-        for kind in &layer.classes {
-            *trait_counts.entry(kind.trait_name.clone()).or_insert(0) += 1;
+        for class_info in &layer.classes {
+            *trait_counts.entry(class_info.trait_name.clone()).or_insert(0) += 1;
         }
 
         let total = layer.classes.len();
@@ -512,7 +512,7 @@ fn build_class_content(
     }
 
     // PROPERTIES - validated or simple list
-    if let Some(validated) = &app.validated_kind_properties {
+    if let Some(validated) = &app.validated_class_properties {
         for prop in validated {
             let (status_icon, status_style) = match prop.status {
                 ValidationStatus::Sync => ("✓", STYLE_SUCCESS),

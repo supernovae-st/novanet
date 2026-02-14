@@ -29,12 +29,12 @@ pub struct TraitStats {
     pub display_name: String,
     /// Unicode symbol for the trait.
     pub symbol: &'static str,
-    /// Number of kinds with this trait.
-    pub kind_count: usize,
+    /// Number of classes with this trait.
+    pub class_count: usize,
     /// LLM context description.
     pub llm_context: String,
-    /// Classs grouped by layer for this trait.
-    pub kinds_by_layer: Vec<(String, Vec<String>)>,
+    /// Classes grouped by layer for this trait.
+    pub classes_by_layer: Vec<(String, Vec<String>)>,
 }
 
 /// Canonical trait order for constellation.
@@ -268,33 +268,33 @@ impl TaxonomyTree {
                     key: trait_key.to_string(),
                     display_name: trait_display_name(trait_key).to_string(),
                     symbol: trait_symbol(trait_key),
-                    kind_count: 0,
+                    class_count: 0,
                     llm_context: trait_llm_context(trait_key).to_string(),
-                    kinds_by_layer: Vec::new(),
+                    classes_by_layer: Vec::new(),
                 },
             );
         }
 
-        // Collect kinds by trait and layer
+        // Collect classes by trait and layer
         for realm in &self.realms {
             for layer in &realm.layers {
-                for kind in &layer.classes {
-                    let trait_key = kind.trait_name.as_str();
+                for class_info in &layer.classes {
+                    let trait_key = class_info.trait_name.as_str();
                     if let Some(stats) = stats_map.get_mut(trait_key) {
-                        stats.kind_count += 1;
+                        stats.class_count += 1;
 
                         // Find or create layer group
                         let layer_key = &layer.key;
                         if let Some(layer_group) = stats
-                            .kinds_by_layer
+                            .classes_by_layer
                             .iter_mut()
                             .find(|(k, _)| k == layer_key)
                         {
-                            layer_group.1.push(kind.key.clone());
+                            layer_group.1.push(class_info.key.clone());
                         } else {
                             stats
-                                .kinds_by_layer
-                                .push((layer_key.clone(), vec![kind.key.clone()]));
+                                .classes_by_layer
+                                .push((layer_key.clone(), vec![class_info.key.clone()]));
                         }
                     }
                 }
@@ -314,17 +314,17 @@ impl TaxonomyTree {
 // =============================================================================
 
 /// Render the Traits tab with constellation and detail panel.
-/// When drilled down (drill_depth > 0), shows kind list instead of constellation.
+/// When drilled down (drill_depth > 0), shows class list instead of constellation.
 pub fn render_traits_tab(f: &mut Frame, app: &App, area: Rect) {
     if app.nexus.drill_depth > 0 {
-        // Drilled mode: show kind list on left, detail on right
+        // Drilled mode: show class list on left, detail on right
         let chunks = Layout::default()
             .direction(Direction::Horizontal)
             .constraints([Constraint::Percentage(50), Constraint::Percentage(50)])
             .split(area);
 
-        render_kind_list(f, app, chunks[0]);
-        render_kind_detail(f, app, chunks[1]);
+        render_class_list(f, app, chunks[0]);
+        render_class_detail(f, app, chunks[1]);
     } else {
         // Overview mode: constellation and detail panel
         let chunks = Layout::default()
@@ -374,7 +374,7 @@ fn build_constellation_lines(
     let mut lines: Vec<Line<'static>> = Vec::new();
 
     // Calculate max count for heatmap scaling
-    let max_count = stats.iter().map(|s| s.kind_count).max().unwrap_or(1);
+    let max_count = stats.iter().map(|s| s.class_count).max().unwrap_or(1);
 
     // Get stats by trait key for easier lookup
     let get_stat = |key: &str| -> Option<&TraitStats> { stats.iter().find(|s| s.key == key) };
@@ -384,7 +384,7 @@ fn build_constellation_lines(
         let stat = get_stat(key);
         let symbol = trait_symbol(key);
         let name = trait_display_name(key);
-        let count = stat.map(|s| s.kind_count).unwrap_or(0);
+        let count = stat.map(|s| s.class_count).unwrap_or(0);
 
         let is_selected = idx == selected_idx;
         let base_color = theme.trait_color(key);
@@ -656,7 +656,7 @@ fn render_detail_panel(f: &mut Frame, app: &App, area: Rect) {
         Style::default().fg(Color::Rgb(100, 100, 120)),
     )));
 
-    for (layer_key, kinds) in &stat.kinds_by_layer {
+    for (layer_key, kinds) in &stat.classes_by_layer {
         let layer_color = theme.layer_color(layer_key);
         let kinds_str = kinds.join(", ");
         lines.push(Line::from(vec![
@@ -877,11 +877,11 @@ fn render_detail_panel(f: &mut Frame, app: &App, area: Rect) {
 }
 
 // =============================================================================
-// DRILL-DOWN: KIND LIST
+// DRILL-DOWN: CLASS LIST
 // =============================================================================
 
-/// Render the list of kinds for the selected trait (drill-down view).
-fn render_kind_list(f: &mut Frame, app: &App, area: Rect) {
+/// Render the list of classes for the selected trait (drill-down view).
+fn render_class_list(f: &mut Frame, app: &App, area: Rect) {
     let trait_stats = app.tree.get_trait_stats();
     let selected_trait_idx = app.nexus.trait_cursor;
     let theme = &app.theme;
@@ -891,7 +891,7 @@ fn render_kind_list(f: &mut Frame, app: &App, area: Rect) {
 
     let block = Block::default()
         .title(Span::styled(
-            format!(" {} KINDS ", trait_display_name(trait_name)),
+            format!(" {} CLASSES ", trait_display_name(trait_name)),
             Style::default()
                 .fg(trait_color)
                 .add_modifier(Modifier::BOLD),
@@ -902,11 +902,11 @@ fn render_kind_list(f: &mut Frame, app: &App, area: Rect) {
     let inner = block.inner(area);
     f.render_widget(block, area);
 
-    // Get flattened kinds list
-    let kinds = app.nexus.get_trait_kinds(&trait_stats);
+    // Get flattened classes list
+    let classes = app.nexus.get_trait_classes(&trait_stats);
     let visible_height = inner.height as usize;
 
-    if kinds.is_empty() {
+    if classes.is_empty() {
         let empty_line = Line::from(Span::styled(
             "No classes with this trait",
             Style::default().fg(Color::DarkGray),
@@ -917,11 +917,11 @@ fn render_kind_list(f: &mut Frame, app: &App, area: Rect) {
     }
 
     // Calculate scroll window
-    let cursor = app.nexus.drill_cursor.min(kinds.len().saturating_sub(1));
+    let cursor = app.nexus.drill_cursor.min(classes.len().saturating_sub(1));
     let scroll_offset = if cursor < visible_height / 2 {
         0
-    } else if cursor >= kinds.len().saturating_sub(visible_height / 2) {
-        kinds.len().saturating_sub(visible_height)
+    } else if cursor >= classes.len().saturating_sub(visible_height / 2) {
+        classes.len().saturating_sub(visible_height)
     } else {
         cursor.saturating_sub(visible_height / 2)
     };
@@ -931,7 +931,7 @@ fn render_kind_list(f: &mut Frame, app: &App, area: Rect) {
     // Header with count
     lines.push(Line::from(vec![
         Span::styled(
-            format!("{} classes with trait ", kinds.len()),
+            format!("{} classes with trait ", classes.len()),
             Style::default().fg(Color::DarkGray),
         ),
         Span::styled(
@@ -946,7 +946,7 @@ fn render_kind_list(f: &mut Frame, app: &App, area: Rect) {
     lines.push(Line::from(""));
 
     // Class list with scroll
-    for (idx, (layer_key, kind_key)) in kinds.iter().enumerate().skip(scroll_offset) {
+    for (idx, (layer_key, class_key)) in classes.iter().enumerate().skip(scroll_offset) {
         if lines.len() >= visible_height {
             break;
         }
@@ -966,7 +966,7 @@ fn render_kind_list(f: &mut Frame, app: &App, area: Rect) {
 
         lines.push(Line::from(vec![
             Span::styled(prefix, style),
-            Span::styled(kind_key.clone(), style),
+            Span::styled(class_key.clone(), style),
             Span::styled("  ", Style::default()),
             Span::styled(format!("[{}]", layer_key), Style::default().fg(layer_color)),
         ]));
@@ -982,7 +982,7 @@ fn render_kind_list(f: &mut Frame, app: &App, area: Rect) {
             )),
         );
     }
-    if scroll_offset + visible_height < kinds.len() {
+    if scroll_offset + visible_height < classes.len() {
         lines.push(Line::from(Span::styled(
             "  ↓ more below...",
             Style::default().fg(Color::DarkGray),
@@ -993,15 +993,15 @@ fn render_kind_list(f: &mut Frame, app: &App, area: Rect) {
     f.render_widget(paragraph, inner);
 }
 
-/// Render detail panel for the selected kind in drill-down view.
-fn render_kind_detail(f: &mut Frame, app: &App, area: Rect) {
+/// Render detail panel for the selected class in drill-down view.
+fn render_class_detail(f: &mut Frame, app: &App, area: Rect) {
     let trait_stats = app.tree.get_trait_stats();
-    let kinds = app.nexus.get_trait_kinds(&trait_stats);
+    let classes = app.nexus.get_trait_classes(&trait_stats);
     let theme = &app.theme;
 
     let block = Block::default()
         .title(Span::styled(
-            " KIND DETAIL ",
+            " CLASS DETAIL ",
             Style::default()
                 .fg(Color::Cyan)
                 .add_modifier(Modifier::BOLD),
@@ -1012,19 +1012,19 @@ fn render_kind_detail(f: &mut Frame, app: &App, area: Rect) {
     let inner = block.inner(area);
     f.render_widget(block, area);
 
-    let cursor = app.nexus.drill_cursor.min(kinds.len().saturating_sub(1));
+    let cursor = app.nexus.drill_cursor.min(classes.len().saturating_sub(1));
 
-    let Some((layer_key, kind_key)) = kinds.get(cursor) else {
+    let Some((layer_key, class_key)) = classes.get(cursor) else {
         let empty = Paragraph::new("Select a class to see details");
         f.render_widget(empty, inner);
         return;
     };
 
-    // Find the kind in the tree to get full details
-    let kind_data = app.tree.realms.iter().find_map(|realm| {
+    // Find the class in the tree to get full details
+    let class_data = app.tree.realms.iter().find_map(|realm| {
         realm.layers.iter().find_map(|layer| {
             if &layer.key == layer_key {
-                layer.classes.iter().find(|k| &k.key == kind_key).map(|k| {
+                layer.classes.iter().find(|k| &k.key == class_key).map(|k| {
                     (
                         realm.key.clone(),
                         realm.display_name.clone(),
@@ -1038,8 +1038,8 @@ fn render_kind_detail(f: &mut Frame, app: &App, area: Rect) {
         })
     });
 
-    let Some((realm_key, realm_name, layer_name, kind)) = kind_data else {
-        let not_found = Paragraph::new(format!("Class '{}' not found", kind_key));
+    let Some((realm_key, realm_name, layer_name, class)) = class_data else {
+        let not_found = Paragraph::new(format!("Class '{}' not found", class_key));
         f.render_widget(not_found, inner);
         return;
     };
@@ -1056,7 +1056,7 @@ fn render_kind_detail(f: &mut Frame, app: &App, area: Rect) {
             Style::default().fg(trait_color),
         ),
         Span::styled(
-            kind.display_name.clone(),
+            class.display_name.clone(),
             Style::default()
                 .fg(Color::White)
                 .add_modifier(Modifier::BOLD),
@@ -1095,14 +1095,14 @@ fn render_kind_detail(f: &mut Frame, app: &App, area: Rect) {
     lines.push(Line::from(""));
 
     // Description (if not empty)
-    if !kind.description.is_empty() {
+    if !class.description.is_empty() {
         lines.push(Line::from(Span::styled(
             "Description:",
             Style::default()
                 .fg(Color::Yellow)
                 .add_modifier(Modifier::BOLD),
         )));
-        let wrapped = wrap_text(&kind.description, inner.width.saturating_sub(2) as usize);
+        let wrapped = wrap_text(&class.description, inner.width.saturating_sub(2) as usize);
         for line in wrapped {
             lines.push(Line::from(Span::styled(
                 line,
@@ -1113,22 +1113,22 @@ fn render_kind_detail(f: &mut Frame, app: &App, area: Rect) {
     }
 
     // Properties summary
-    if !kind.properties.is_empty() {
+    if !class.properties.is_empty() {
         lines.push(Line::from(Span::styled(
-            format!("Properties ({}):", kind.properties.len()),
+            format!("Properties ({}):", class.properties.len()),
             Style::default()
                 .fg(Color::Cyan)
                 .add_modifier(Modifier::BOLD),
         )));
-        for prop in kind.properties.iter().take(5) {
+        for prop in class.properties.iter().take(5) {
             lines.push(Line::from(vec![
                 Span::styled("  • ", Style::default().fg(Color::DarkGray)),
                 Span::styled(prop.clone(), Style::default().fg(Color::White)),
             ]));
         }
-        if kind.properties.len() > 5 {
+        if class.properties.len() > 5 {
             lines.push(Line::from(Span::styled(
-                format!("  ... and {} more", kind.properties.len() - 5),
+                format!("  ... and {} more", class.properties.len() - 5),
                 Style::default().fg(Color::DarkGray),
             )));
         }

@@ -176,7 +176,7 @@ export const TRAIT_BORDERS: Record<TraitKey, TraitBorderStyle> = {
     cssCornerRadius: null,
     unicodeChar: '┈',
     unicodeStyle: 'dotted',
-    description: 'External data brought in from sources (was knowledge)',
+    description: 'External data brought in from sources',
   },
   retrieved: {
     cssStyle: 'dotted',
@@ -185,7 +185,7 @@ export const TRAIT_BORDERS: Record<TraitKey, TraitBorderStyle> = {
     cssCornerRadius: null,
     unicodeChar: '┅',
     unicodeStyle: 'heavy_dotted',
-    description: 'Fetched from EXTERNAL APIs (was aggregated)',
+    description: 'Fetched from EXTERNAL APIs',
   },
 };
 
