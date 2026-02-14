@@ -77,7 +77,7 @@ v11.5 refines the layer structure with Locale moved to shared/config:
 - **Brand Architecture**: 4 new nodes (Brand, BrandDesign, BrandPrinciples, PromptStyle)
 - **Country added**: shared/geography now has 7 nodes (Country added)
 - **ADR-028**: PageStructure/PageInstruction removed, REFERENCES/HAS_KEYWORD arcs added
-- **61 nodes** total: 40 shared + 21 org, **128 arcs** (5 families)
+- **61 nodes** total: 40 shared + 21 org, **156 arcs** (5 families)
 
 **Architecture (v0.12.4):**
 - 2 realms: SHARED + ORG
@@ -90,7 +90,7 @@ schema generate/validate, doc generate, filter build. Galaxy-themed TUI with uni
 
 **YAML-first architecture:** Each Class YAML has explicit `realm:` and `layer:` fields (source of truth).
 Path validation ensures `models/node-classes/{realm}/{layer}/{name}.yaml` matches YAML content.
-v0.12.4: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 61 nodes, 128 arcs.
+v0.12.4: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 61 nodes, 156 arcs.
 
 **Icons source of truth (v11.5):** `visual-encoding.yaml` → `icons:` section provides dual-format icons:
 - `web`: Lucide icon name for Studio

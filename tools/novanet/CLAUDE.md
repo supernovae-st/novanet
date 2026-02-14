@@ -11,7 +11,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 
 ## Current Status
 
-**v0.12.4 Schema Update** — Proper semantic versioning adopted (0.x = pre-production). Includes ADR-024 Data Origin trait renames (invariant→defined, localized→authored, knowledge→imported, aggregated→retrieved), ADR-025 Instruction Layer renames, and ADR-028 Brand Architecture (Brand, BrandDesign, BrandPrinciples, PromptStyle, Country). SHARED (4 layers: config, locale, geography, knowledge, 40 nodes), ORG (6 layers: config, foundation, structure, semantic, instruction, output, 21 nodes). 61 total nodes, 128 arcs, 10 layers, 5 traits.
+**v0.12.4 Schema Update** — Proper semantic versioning adopted (0.x = pre-production). Includes ADR-024 Data Origin trait renames (invariant→defined, localized→authored, knowledge→imported, aggregated→retrieved), ADR-025 Instruction Layer renames, and ADR-028 Brand Architecture (Brand, BrandDesign, BrandPrinciples, PromptStyle, Country). SHARED (4 layers: config, locale, geography, knowledge, 40 nodes), ORG (6 layers: config, foundation, structure, semantic, instruction, output, 21 nodes). 61 total nodes, 156 arcs, 10 layers, 5 traits.
 
 | Area | Commands | Status |
 |------|----------|--------|

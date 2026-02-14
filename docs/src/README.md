@@ -67,7 +67,7 @@ flowchart TB
 | Metric | Value |
 |--------|-------|
 | Node types (Classes) | 61 |
-| Arc types (ArcClasses) | 128 |
+| Arc types (ArcClasses) | 156 |
 | Realms | 2 (shared, org) |
 | Layers | 10 (4 shared + 6 org) |
 | Traits | 5 |

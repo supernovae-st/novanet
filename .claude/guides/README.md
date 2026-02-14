@@ -299,7 +299,7 @@ Commit 3: Update ADR if decision changed
 - **Latest Traits**: defined, authored, imported, generated, retrieved
 - **Realms**: shared (4 layers), org (6 layers)
 - **Total Nodes**: 61 (40 shared + 21 org)
-- **Total Arcs**: 128 (5 families)
+- **Total Arcs**: 156 (5 families)
 
 ---
 

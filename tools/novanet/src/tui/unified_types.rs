@@ -37,7 +37,7 @@ pub enum NodeId {
 pub enum SectionKind {
     /// "Nodes (61)" section
     Nodes,
-    /// "Arcs (128)" section
+    /// "Arcs (156)" section
     Arcs,
 }
 

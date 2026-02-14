@@ -19,7 +19,7 @@ flowchart TB
         TRAIT["Trait\n5 nodes"]
         CLASS["Class\n61 nodes"]
         ARCFAM["ArcFamily\n5 nodes"]
-        ARCCLASS["ArcClass\n128 nodes"]
+        ARCCLASS["ArcClass\n156 nodes"]
     end
 
     REALM -->|HAS_LAYER| LAYER
@@ -231,7 +231,7 @@ cargo run -- db seed
 | Trait | 5 |
 | Class | 61 |
 | ArcFamily | 5 |
-| ArcClass | 128 |
+| ArcClass | 156 |
 | **Total Schema Nodes** | 211 |
 
 ## Related Documentation

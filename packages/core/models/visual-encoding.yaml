@@ -220,8 +220,7 @@ class_icons:
   Page: file-text
   Block: square
   ContentSlot: inbox
-  PageStructure: layout
-  BlockType: component
+  # v0.12.4: PageStructure removed (now calculated at generation time, ADR-028)
 
   # Org / Semantic
   # v10.3: Concept, ConceptL10n, SearchIntent, TopicCluster removed — see Shared / Semantic
@@ -229,8 +228,9 @@ class_icons:
   ChannelSurface: monitor
 
   # Org / Instruction
-  PageInstruction: message-square
+  # v0.12.4: PageInstruction removed (now calculated at generation time, ADR-028)
   BlockInstruction: terminal
+  BlockType: component
   BlockRules: shield-check
   PromptArtifact: file-code
 

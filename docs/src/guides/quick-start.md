@@ -75,7 +75,7 @@ Expected output (v0.12.4):
 ["Schema", "Class"]      61
 ["Schema", "Trait"]      5
 ["Schema", "ArcFamily"]  5
-["Schema", "ArcClass"]   128
+["Schema", "ArcClass"]   156
 ```
 
 > **v0.12.0 ADR-023**: `:Meta` → `:Schema`, `Kind` → `Class`, `ArcKind` → `ArcClass`

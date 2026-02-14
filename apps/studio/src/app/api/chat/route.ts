@@ -88,7 +88,7 @@ All nodes have: key, display_name, icon, description, llm_context, created_at, u
 - PageGenerated, BlockGenerated: Generated content → FOR_LOCALE
 - OutputArtifact: Pipeline output
 
-### Key Relationships (128 arc types — v0.12.4)
+### Key Relationships (156 arc types — v0.12.4)
 
 **Ownership**: HAS_PAGE, HAS_BLOCK, HAS_ENTITY, HAS_BRAND, SUPPORTS_LOCALE
 **Localization**: FOR_LOCALE, HAS_CONTENT, CONTENT_OF, FALLBACK_TO
