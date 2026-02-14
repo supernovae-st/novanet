@@ -69,23 +69,22 @@ impl std::fmt::Display for KnowledgeTier {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Node Icon (dual format support)
+// Node Icon (dual format)
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// Dual-format icon (web + terminal) for node definitions.
-/// v0.12.5: Supports both legacy string format and new dual format.
+/// v0.12.5: All icons use { web, terminal } format.
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
-#[serde(untagged)]
-pub enum NodeIcon {
-    /// New dual format: { web: "diamond", terminal: "◆" }
-    Dual { web: String, terminal: String },
-    /// Legacy string format (emoji): "🔷"
-    Legacy(String),
+pub struct NodeIcon {
+    /// Web icon (Lucide name): "diamond"
+    pub web: String,
+    /// Terminal icon (Unicode symbol): "◆"
+    pub terminal: String,
 }
 
 impl Default for NodeIcon {
     fn default() -> Self {
-        Self::Dual {
+        Self {
             web: "circle".to_string(),
             terminal: "●".to_string(),
         }
@@ -95,18 +94,12 @@ impl Default for NodeIcon {
 impl NodeIcon {
     /// Get the terminal icon (Unicode symbol).
     pub fn terminal(&self) -> &str {
-        match self {
-            Self::Dual { terminal, .. } => terminal,
-            Self::Legacy(s) => s,
-        }
+        &self.terminal
     }
 
     /// Get the web icon (Lucide name).
     pub fn web(&self) -> &str {
-        match self {
-            Self::Dual { web, .. } => web,
-            Self::Legacy(s) => s,
-        }
+        &self.web
     }
 }
 
@@ -142,7 +135,6 @@ pub struct NodeDef {
     pub knowledge_tier: Option<KnowledgeTier>,
 
     /// Dual-format icon (web + terminal) for diagrams and TUI.
-    /// v0.12.5: Supports both legacy string and new dual format.
     #[serde(default)]
     pub icon: Option<NodeIcon>,
 

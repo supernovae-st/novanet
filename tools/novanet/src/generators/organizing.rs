@@ -254,13 +254,13 @@ mod tests {
             node_realms: vec![NodeRealmDef {
                 key: "test".to_string(),
                 display_name: "Test".to_string(),
-                icon: TaxonomyIcon::Legacy("🧪".to_string()),
+                icon: TaxonomyIcon { web: "flask".to_string(), terminal: "🧪".to_string() },
                 color: "#000000".to_string(),
                 llm_context: "Test realm.".to_string(),
                 layers: vec![NodeLayerDef {
                     key: "base".to_string(),
                     display_name: "Base".to_string(),
-                    icon: TaxonomyIcon::Legacy("📋".to_string()),
+                    icon: TaxonomyIcon { web: "clipboard".to_string(), terminal: "📋".to_string() },
                     color: "#111111".to_string(),
                     llm_context: "Base layer.".to_string(),
                 }],
@@ -342,13 +342,13 @@ mod tests {
             node_realms: vec![NodeRealmDef {
                 key: "r".to_string(),
                 display_name: "R".to_string(),
-                icon: TaxonomyIcon::Legacy("X".to_string()),
+                icon: TaxonomyIcon { web: "x".to_string(), terminal: "X".to_string() },
                 color: "#fff".to_string(),
                 llm_context: "Line one.\n  Line two.\n  Line three.\n".to_string(),
                 layers: vec![NodeLayerDef {
                     key: "l".to_string(),
                     display_name: "L".to_string(),
-                    icon: TaxonomyIcon::Legacy("Y".to_string()),
+                    icon: TaxonomyIcon { web: "y".to_string(), terminal: "Y".to_string() },
                     color: "#000".to_string(),
                     llm_context: "Layer.".to_string(),
                 }],
@@ -478,21 +478,21 @@ mod tests {
             node_realms: vec![NodeRealmDef {
                 key: "test".to_string(),
                 display_name: "Test Realm".to_string(),
-                icon: TaxonomyIcon::Legacy("🧪".to_string()),
+                icon: TaxonomyIcon { web: "flask".to_string(), terminal: "🧪".to_string() },
                 color: "#3b82f6".to_string(),
                 llm_context: "A test realm for snapshot testing.".to_string(),
                 layers: vec![
                     NodeLayerDef {
                         key: "base".to_string(),
                         display_name: "Base Layer".to_string(),
-                        icon: TaxonomyIcon::Legacy("📋".to_string()),
+                        icon: TaxonomyIcon { web: "clipboard".to_string(), terminal: "📋".to_string() },
                         color: "#10b981".to_string(),
                         llm_context: "The base layer.".to_string(),
                     },
                     NodeLayerDef {
                         key: "derived".to_string(),
                         display_name: "Derived Layer".to_string(),
-                        icon: TaxonomyIcon::Legacy("🔧".to_string()),
+                        icon: TaxonomyIcon { web: "wrench".to_string(), terminal: "🔧".to_string() },
                         color: "#f59e0b".to_string(),
                         llm_context: "A derived layer.".to_string(),
                     },
