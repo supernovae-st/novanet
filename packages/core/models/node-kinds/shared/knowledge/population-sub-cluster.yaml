@@ -10,7 +10,9 @@ node:
   realm: shared
   layer: knowledge
   trait: imported
-  icon: "🧑"
+  icon:
+    web: "user"
+    terminal: "◇"
   description: "Population sub-cluster with specific visual traits for image generation"
 
   standard_properties:

@@ -21,7 +21,9 @@ node:
   realm: org
   layer: output
   trait: generated  # v11.2: Split derived → generated (LLM output)
-  icon: "🟠"
+  icon:
+    web: file-check
+    terminal: "★"
   description: "Assembled BlockGenerated content for a page (derived from source content)"
 
   # ═══════════════════════════════════════════════════════════════════════════════
@@ -53,7 +55,9 @@ node:
     llm_context:
       type: string
       required: false
-      description: "Generation context used"
+      description: |
+        Format: USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections].
+        Example: USE: when displaying assembled page content or checking generation status. TRIGGERS: "page output", "generated page", "assembled content", locale code. NOT: for page structure (use Page), for block content (use BlockGenerated). RELATES: Page (source via HAS_GENERATED), Locale (target via FOR_LOCALE), BlockGenerated (assembles via ASSEMBLES), ProjectContent (context via BELONGS_TO_PROJECT_CONTENT).
 
     created_at:
       type: datetime

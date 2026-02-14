@@ -67,7 +67,7 @@ pub fn render(data: &BlueprintData) -> String {
             out.push_str(&format!(
                 "{}{} {} ({} kinds)\n",
                 layer_prefix,
-                layer_def.emoji,
+                layer_def.emoji(),
                 layer_def.key,
                 nodes.len()
             ));

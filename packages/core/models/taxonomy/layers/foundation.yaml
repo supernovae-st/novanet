@@ -1,0 +1,26 @@
+# packages/core/models/taxonomy/layers/foundation.yaml
+# Foundation layer - project identity (org realm only)
+
+layer:
+  key: foundation
+  display_name: Foundation
+  icon:
+    web: landmark
+    terminal: "▣"
+  color: "#3b82f6"
+  realms: [org]
+
+  llm_context: |
+    USE: when loading project identity and brand context.
+    TRIGGERS: "foundation", "project", "brand", "identity", "company".
+    NOT: for pages/blocks (use structure), for entities (use semantic).
+    RELATES: Project, Brand, BrandDesign, BrandPrinciples, ProjectContent, PromptStyle.
+
+  nodes:
+    org:
+      - Project
+      - ProjectContent
+      - Brand
+      - BrandDesign
+      - BrandPrinciples
+      - PromptStyle

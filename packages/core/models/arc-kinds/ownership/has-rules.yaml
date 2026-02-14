@@ -8,5 +8,9 @@ arc:
   source: BlockType
   target: BlockRules
   cardinality: one_to_many
-  llm_context: BlockType defines generation rules templates.
+  llm_context: |
+    USE: when loading generation rules for a block type.
+    TRIGGERS: block rules, generation rules, field constraints, validation.
+    NOT: block schema (use BlockType), block content (use HAS_INSTRUCTION).
+    RELATES: BlockType (source), BlockRules (target).
   cypher_pattern: (BlockType)-[:HAS_RULES]->(BlockRules)

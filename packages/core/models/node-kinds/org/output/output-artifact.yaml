@@ -4,7 +4,9 @@ node:
   realm: org
   layer: output
   trait: generated  # v11.2: Split derived → generated (LLM output)
-  icon: "📦"
+  icon:
+    web: "package"
+    terminal: "■"
   # v10.9.0: Renamed from PageL10n/BlockL10n to PageGenerated/BlockGenerated
   description: "Generated content bundle aggregating PageGenerated and BlockGenerated for a specific locale version."
   llm_context: "USE: when bundling generated content. TRIGGERS: bundle, artifact, deployment. NOT: individual content, drafts."

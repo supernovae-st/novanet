@@ -6,7 +6,11 @@ arc:
   source: Locale
   target: TabooSet
   cardinality: one_to_many
-  llm_context: Locale has multiple taboo sets, one per severity.
+  llm_context: |
+    USE: when loading taboo constraints for a locale by severity.
+    TRIGGERS: taboos, cultural constraints, avoid topics, sensitive content, taboo set.
+    NOT: individual taboos (use CONTAINS_TABOO), culture values (use HAS_CULTURE_SET).
+    RELATES: Locale (source), TabooSet (target), severity (property: avoid/careful/legal).
   cypher_pattern: "(Locale)-[:HAS_TABOOS {severity: $severity}]->(TabooSet)"
   properties:
     severity:

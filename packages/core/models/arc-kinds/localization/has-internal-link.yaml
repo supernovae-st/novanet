@@ -25,8 +25,9 @@ arc:
       description: "Whether the link has rel=nofollow"
 
   llm_context: |
-    BlockGenerated contains an actual HTML internal link to PageGenerated.
-    Links are extracted from generated content for SEO analysis.
-    Use: MATCH (bl:BlockGenerated)-[:HAS_INTERNAL_LINK]->(pl:PageGenerated)
+    USE: when analyzing internal linking structure from generated content.
+    TRIGGERS: internal links, link structure, SEO links, anchor text, content linking.
+    NOT: semantic page linking (use LINKS_TO), entity references (use USES_ENTITY).
+    RELATES: BlockGenerated (source), PageGenerated (target), properties: anchor_text, position, nofollow.
 
   cypher_pattern: "(BlockGenerated)-[:HAS_INTERNAL_LINK {anchor_text, position, nofollow}]->(PageGenerated)"

@@ -1,0 +1,22 @@
+# packages/core/models/taxonomy/layers/structure.yaml
+# Structure layer - information architecture (org realm only)
+
+layer:
+  key: structure
+  display_name: Structure
+  icon:
+    web: layout
+    terminal: "▤"
+  color: "#06b6d4"
+  realms: [org]
+
+  llm_context: |
+    USE: when loading page/block skeleton or content structure.
+    TRIGGERS: "structure", "page", "block", "layout", "architecture".
+    NOT: for entities (use semantic), for instructions (use instruction).
+    RELATES: Page (HAS_BLOCK), Block (OF_TYPE), Entity (REPRESENTS).
+
+  nodes:
+    org:
+      - Page
+      - Block

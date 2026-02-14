@@ -19,7 +19,9 @@ node:
   realm: shared
   layer: knowledge
   trait: imported
-  icon: "🔍"
+  icon:
+    web: "search"
+    terminal: "⌕"
   description: "Target keyword with metrics for SEO optimization (locale-specific knowledge)"
   llm_context: |
     SEOKeyword represents market search behavior for a locale.

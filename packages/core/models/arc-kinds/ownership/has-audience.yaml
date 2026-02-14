@@ -6,7 +6,11 @@ arc:
   source: Locale
   target: AudienceSet
   cardinality: one_to_many
-  llm_context: Locale has multiple audience sets, one per segment.
+  llm_context: |
+    USE: when loading audience segments for a locale.
+    TRIGGERS: locale audience, audience segments, B2B B2C, target market.
+    NOT: individual traits (use CONTAINS_AUDIENCE_TRAIT), personas.
+    RELATES: Locale (source), AudienceSet (target), segment (property).
   cypher_pattern: "(Locale)-[:HAS_AUDIENCE {segment: $segment}]->(AudienceSet)"
   properties:
     segment:

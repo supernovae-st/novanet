@@ -12,7 +12,8 @@ arc:
   required: false
   inverse: BRAND_OF
   llm_context: |
-    Project has one Brand (optional).
-    Brand defines visual identity, voice, and prompt styles.
-    Use this to get brand context for content generation.
+    USE: when loading brand identity for content generation.
+    TRIGGERS: project brand, brand voice, visual identity, content style.
+    NOT: brand design details (use HAS_DESIGN), brand principles (use HAS_PRINCIPLES).
+    RELATES: Project (source), Brand (target), BRAND_OF (inverse).
   cypher_pattern: "(Project)-[:HAS_BRAND]->(Brand)"

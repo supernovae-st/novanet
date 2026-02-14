@@ -10,7 +10,9 @@ node:
   realm: shared
   layer: geography
   trait: defined
-  icon: "💰"
+  icon:
+    web: "dollar-sign"
+    terminal: "$"
   description: "World Bank income classification for market segmentation"
 
   standard_properties:

@@ -12,5 +12,9 @@ arc:
     - name: position_override
       type: string
       required: false
-  llm_context: "Page defines content slot. position_override: optional layout position."
+  llm_context: |
+    USE: when loading content slots for page layout.
+    TRIGGERS: content slot, page layout, slot position, dynamic content.
+    NOT: slot content (use FILLS_SLOT), slot constraints (use ACCEPTS_BLOCK_TYPE).
+    RELATES: Page (source), ContentSlot (target), position_override (property).
   cypher_pattern: (Page)-[:HAS_SLOT {position_override}]->(ContentSlot)

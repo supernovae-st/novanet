@@ -13,10 +13,10 @@ arc:
   target: GEOAnswer
   cardinality: one_to_many
   llm_context: |
-    GEOQuery owns its LLM response samples. Each GEOAnswer is an immutable snapshot.
-    Multiple answers per query: different engines, different observation times.
-    Use to analyze how different AI engines respond to the same query.
-    v10.7: New arc for GEO analysis.
+    USE: when loading AI engine responses for a GEO query.
+    TRIGGERS: geo answers, AI responses, engine snapshots, visibility analysis.
+    NOT: GEO query itself (use CONTAINS_GEO_QUERY), GEO metrics.
+    RELATES: GEOQuery (source), GEOAnswer (target).
 
   cypher_pattern: (GEOQuery)-[:HAS_GEO_ANSWERS]->(GEOAnswer)
 

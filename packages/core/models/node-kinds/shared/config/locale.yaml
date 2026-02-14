@@ -11,7 +11,9 @@ node:
   realm: shared
   layer: config
   trait: defined
-  icon: "🔷"
+  icon:
+    web: "diamond"
+    terminal: "◆"
   description: "First-class locale node (BCP 47) with fallback chains and knowledge graph connections"
 
   # ═══════════════════════════════════════════════════════════════════════════════
@@ -45,8 +47,12 @@ node:
     llm_context:
       type: string
       required: true
-      description: "LLM generation hints. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation].'"
-      example: "USE: for French content targeting France. TRIGGERS: fr-FR, français, france. NOT: Quebec French (use fr-CA)."
+      description: "LLM generation hints. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections].'"
+      example: |
+        USE: when generating content for a specific locale or loading locale-specific knowledge.
+        TRIGGERS: "locale", "language", "market", locale code (e.g., "fr-FR"), native name (e.g., "français").
+        NOT: for other regional variants (use appropriate locale, e.g., fr-CA for Quebec French).
+        RELATES: EntityContent (targets via FOR_LOCALE), Style (communication via HAS_STYLE), TermSet (vocabulary via HAS_TERMS), Culture (cultural context via HAS_CULTURE), Project (supported by via SUPPORTS_LOCALE).
 
     created_at:
       type: datetime

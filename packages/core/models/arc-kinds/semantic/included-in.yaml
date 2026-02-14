@@ -35,8 +35,9 @@ arc:
   inverse: INCLUDES
 
   llm_context: |
-    Inverse of INCLUDES: Entity A is part of Entity B.
-    Use for: finding the whole from a part, context retrieval.
-    Examples: ErrorCorrection INCLUDED_IN QRCode, Amount INCLUDED_IN PaymentQR
+    USE: when finding the containing entity for a part.
+    TRIGGERS: part of, belongs to, contained in, included in.
+    NOT: parent (use CHILD_OF), type hierarchy (use TYPE_OF).
+    RELATES: Entity (source/part), Entity (target/whole), INCLUDES (inverse).
 
   cypher_pattern: "(Entity)-[:INCLUDED_IN {strength, temperature, containment_type}]->(Entity)"

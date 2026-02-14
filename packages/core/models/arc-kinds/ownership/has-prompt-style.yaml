@@ -11,7 +11,8 @@ arc:
   required: false
   inverse: PROMPT_STYLE_OF
   llm_context: |
-    Brand has multiple PromptStyles (locale/region specific).
-    Each PromptStyle provides LLM hints for a specific market.
-    Use to get culturally appropriate generation context.
+    USE: when loading locale-specific LLM generation hints.
+    TRIGGERS: prompt style, locale hints, cultural context, market adaptation.
+    NOT: visual design (use HAS_DESIGN), brand voice (use HAS_PRINCIPLES).
+    RELATES: Brand (source), PromptStyle (target), PROMPT_STYLE_OF (inverse).
   cypher_pattern: "(Brand)-[:HAS_PROMPT_STYLE]->(PromptStyle)"

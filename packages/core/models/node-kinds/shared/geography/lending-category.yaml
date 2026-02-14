@@ -10,7 +10,9 @@ node:
   realm: shared
   layer: geography
   trait: defined
-  icon: "🏦"
+  icon:
+    web: "bank"
+    terminal: "▣"
   description: "World Bank lending classification for development context"
 
   standard_properties:

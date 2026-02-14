@@ -48,8 +48,8 @@ impl KeyResult {
 pub fn dispatch_mode_handler(app: &mut App, key: KeyEvent) -> Option<bool> {
     match app.mode {
         NavMode::Nexus => handle_nexus_key(app, key).as_option(),
-        // Graph mode doesn't have mode-specific preprocessing
-        NavMode::Graph => None,
+        // Graph and Views modes don't have mode-specific preprocessing
+        NavMode::Graph | NavMode::Views => None,
     }
 }
 

@@ -35,8 +35,9 @@ arc:
   inverse: ENHANCES
 
   llm_context: |
-    Inverse of ENHANCES: THING is enhanced by FEATURE.
-    Use for dynamic-qr-code ENHANCED_BY password-protection.
-    Enables traversal from entity to features that enhance it.
+    USE: when finding features that enhance an entity.
+    TRIGGERS: enhanced by, improved by, features, add-ons, extensions.
+    NOT: enablement (use ENABLED_BY), requirement (use REQUIRED_BY).
+    RELATES: Entity (source/thing), Entity (target/feature), ENHANCES (inverse).
 
   cypher_pattern: "(Entity)-[:ENHANCED_BY {strength, temperature, enhancement_type}]->(Entity)"

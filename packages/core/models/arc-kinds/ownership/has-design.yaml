@@ -11,7 +11,8 @@ arc:
   required: false
   inverse: DESIGN_OF
   llm_context: |
-    Brand has one BrandDesign (visual design system).
-    Contains colors, typography, UI patterns.
-    Use for image generation and visual consistency.
+    USE: when loading visual design for image generation.
+    TRIGGERS: brand design, colors, typography, visual style, UI patterns.
+    NOT: brand voice (use Brand), brand rules (use HAS_PRINCIPLES).
+    RELATES: Brand (source), BrandDesign (target), DESIGN_OF (inverse).
   cypher_pattern: "(Brand)-[:HAS_DESIGN]->(BrandDesign)"

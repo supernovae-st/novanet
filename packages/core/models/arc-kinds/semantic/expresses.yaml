@@ -26,9 +26,9 @@ arc:
       description: "Semantic similarity score (0.0-1.0)"
 
   llm_context: |
-    SEO keyword expresses a semantic entity.
-    Multiple keywords can express the same entity.
-    role: primary = exact match, secondary = synonym, long_tail = phrase variation.
-    Use: MATCH (k:SEOKeyword)-[:EXPRESSES]->(e:Entity)
+    USE: when finding which entity an SEO keyword expresses.
+    TRIGGERS: keyword entity, keyword expresses, semantic match, keyword mapping.
+    NOT: entity keywords (use HAS_KEYWORD), keyword format (use HAS_FORMAT).
+    RELATES: SEOKeyword (source), Entity (target), role (property: primary/secondary).
 
   cypher_pattern: "(SEOKeyword)-[:EXPRESSES {role, match_score}]->(Entity)"

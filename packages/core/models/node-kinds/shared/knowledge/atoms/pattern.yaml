@@ -9,7 +9,9 @@ node:
   realm: shared
   layer: knowledge
   trait: imported
-  icon: "📋"
+  icon:
+    web: "clipboard"
+    terminal: "▤"
   description: "Content structure pattern or template belonging to a locale's PatternSet"
 
   standard_properties:

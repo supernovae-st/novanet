@@ -14,8 +14,9 @@ arc:
   inverse: HAS_LOCALE
 
   llm_context: |
-    Locale belongs to a cultural sub-realm for content adaptation.
-    Use to find culturally similar locales: MATCH (l:Locale)-[:IN_CULTURAL_SUBREALM]->(csr)<-[:IN_CULTURAL_SUBREALM]-(similar)
-    Example: fr-FR -[:IN_CULTURAL_SUBREALM]-> Mediterranean
+    USE: when finding cultural context for content adaptation.
+    TRIGGERS: cultural realm, content adaptation, cultural context, similar cultures.
+    NOT: geographic region (use IN_SUBREGION), economic region (use IN_ECONOMIC_REGION).
+    RELATES: Locale (source), CulturalSubRealm (target), HAS_LOCALE (inverse).
 
   cypher_pattern: "(Locale)-[:IN_CULTURAL_SUBREALM]->(CulturalSubRealm)"

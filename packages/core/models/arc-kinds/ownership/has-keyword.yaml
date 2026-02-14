@@ -27,10 +27,9 @@ arc:
       description: "Keyword relevance score (0.0-1.0)"
 
   llm_context: |
-    Entity owns SEOKeywords for search optimization.
-    rank: primary (exactly 1 per Entity, main targeting keyword) or secondary (N per Entity).
-    Page inherits keywords via its [:REPRESENTS] Entity relationship.
-    Use: MATCH (e:Entity)-[r:HAS_KEYWORD {rank: 'primary'}]->(k:SEOKeyword)
-    For Page keywords: MATCH (p:Page)-[:REPRESENTS]->(e:Entity)-[:HAS_KEYWORD]->(k:SEOKeyword)
+    USE: when loading SEO keywords for an entity.
+    TRIGGERS: entity keywords, SEO targeting, primary keyword, secondary keywords.
+    NOT: locale keyword sets (use HAS_SEO_KEYWORDS), keyword metrics (use HAS_METRICS).
+    RELATES: Entity (source), SEOKeyword (target), rank (property: primary/secondary).
 
   cypher_pattern: "(Entity)-[:HAS_KEYWORD {rank, relevance}]->(SEOKeyword)"

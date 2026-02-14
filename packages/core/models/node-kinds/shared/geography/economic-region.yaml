@@ -10,7 +10,9 @@ node:
   realm: shared
   layer: geography
   trait: defined
-  icon: "📊"
+  icon:
+    web: "bar-chart-2"
+    terminal: "▣"
   description: "World Bank economic region for market analysis"
 
   standard_properties:

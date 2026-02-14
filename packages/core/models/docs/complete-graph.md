@@ -26,7 +26,7 @@ This diagram shows the complete NovaNet graph schema with all 42 node types and 
 ```mermaid
 flowchart TB
   %% NovaNet Graph v0.12.0
-  %% Generated: 61 nodes, 169 arcs
+  %% Generated: 61 nodes, 200 arcs
   %% Source: node-kinds/ + arc-kinds/ + taxonomy.yaml
 
   %% Trait styling (node_trait)
@@ -151,17 +151,34 @@ flowchart TB
   BlockInstruction ==>|INCLUDES_STYLE| Style
   BlockInstruction -->|INSTRUCTION_OF| Block
   BlockInstruction -->|INSTRUCTION_OF| Page
+  BlockInstruction -.->|MENTIONS| AudiencePersona
+  BlockInstruction -.->|MENTIONS| Brand
+  BlockInstruction -.->|MENTIONS| Entity
+  BlockInstruction -.->|MENTIONS| Expression
+  BlockInstruction -.->|MENTIONS| Page
+  BlockInstruction -.->|MENTIONS| Project
+  BlockInstruction -.->|MENTIONS| PromptStyle
+  BlockInstruction -.->|MENTIONS| SEOKeyword
+  BlockInstruction -.->|MENTIONS| Term
   BlockInstruction -.->|REFERENCES_ENTITY| Entity
   BlockInstruction -.->|REFERENCES_PAGE| Page
   BlockType -->|HAS_RULES| BlockRules
+  Brand -->|BRAND_OF| Project
   Brand -.->|FOR_MARKET| Market
   Brand -->|HAS_DESIGN| BrandDesign
   Brand -->|HAS_PRINCIPLES| BrandPrinciples
   Brand -->|HAS_PROMPT_STYLE| PromptStyle
   Brand -.->|TARGETS_PERSONA| AudiencePersona
+  BrandDesign -->|DESIGN_OF| Brand
+  BrandPrinciples -->|PRINCIPLES_OF| Brand
   ContentSlot -->|ACCEPTS_BLOCK_TYPE| BlockType
+  Continent -->|HAS_REGION| GeoRegion
+  Country -.->|HAS_LOCALE| Locale
+  CulturalRealm -->|HAS_SUBREALM| CulturalSubRealm
+  CulturalSubRealm -.->|HAS_LOCALE| Locale
   CulturalSubRealm -->|PART_OF_REALM| CulturalRealm
   CultureSet -->|CONTAINS_CULTURE_REF| CultureRef
+  EconomicRegion -.->|HAS_LOCALE| Locale
   Entity -.->|ACTS_ON| Entity
   Entity -.->|ALTERNATIVE_TO| Entity
   Entity -.->|APPLIES_TO| Entity
@@ -189,6 +206,8 @@ flowchart TB
   Entity -.->|POPULAR_IN| GeoSubRegion
   Entity -.->|READS| Entity
   Entity -.->|READ_BY| Entity
+  Entity -.->|REFERENCED_BY| Block
+  Entity -.->|REPRESENTED_BY| Page
   Entity -.->|REQUIRED_BY| Entity
   Entity -.->|REQUIRES| Entity
   Entity -.->|SEMANTIC_LINK| Entity
@@ -206,9 +225,16 @@ flowchart TB
   ExpressionSet -->|CONTAINS_EXPRESSION| Expression
   GEOQuery -->|HAS_GEO_ANSWERS| GEOAnswer
   GEOQuerySet -->|CONTAINS_GEO_QUERY| GEOQuery
+  GeoRegion -.->|HAS_LOCALE| Locale
+  GeoRegion -->|HAS_SUBREGION| GeoSubRegion
   GeoRegion -->|IN_CONTINENT| Continent
+  GeoSubRegion -.->|HAS_LOCALE| Locale
   GeoSubRegion -->|IN_REGION| GeoRegion
+  IncomeGroup -.->|CLASSIFIES| Locale
   LanguageBranch -->|BRANCH_OF| LanguageFamily
+  LanguageBranch -.->|SPOKEN_BY| Locale
+  LanguageFamily -->|HAS_BRANCH| LanguageBranch
+  LendingCategory -.->|CLASSIFIES| Locale
   Locale -.->|CULTURALLY_SIMILAR| Locale
   Locale -.->|FALLBACK_TO| Locale
   Locale -->|HAS_ADAPTATION| Adaptation
@@ -220,6 +246,7 @@ flowchart TB
   Locale -->|HAS_GEO_QUERIES| GEOQuerySet
   Locale -.->|HAS_INCOME_LEVEL| IncomeGroup
   Locale -.->|HAS_LENDING_TYPE| LendingCategory
+  Locale -.->|HAS_LOCALE_VARIANT| Locale
   Locale -.->|HAS_LOCALIZED_CONTENT| BlockGenerated
   Locale -.->|HAS_LOCALIZED_CONTENT| EntityContent
   Locale -.->|HAS_LOCALIZED_CONTENT| PageGenerated
@@ -268,7 +295,10 @@ flowchart TB
   PageGenerated ==>|PREVIOUS_VERSION| OutputArtifact
   PageGenerated ==>|PREVIOUS_VERSION| PageGenerated
   PatternSet -->|CONTAINS_PATTERN| Pattern
+  PopulationCluster -->|HAS_SUBCLUSTER| PopulationSubCluster
+  PopulationCluster -.->|PRIMARY_FOR| Locale
   PopulationSubCluster -->|CLUSTER_OF| PopulationCluster
+  PopulationSubCluster -.->|POPULATION_OF| Locale
   Project -->|BELONGS_TO_ORG| OrgConfig
   Project -->|DEFAULT_LOCALE| Locale
   Project -->|HAS_BRAND| Brand
@@ -285,6 +315,7 @@ flowchart TB
   PromptArtifact ==>|INCLUDES_ENTITY| Entity
   PromptStyle -.->|FOR_LOCALE| Locale
   PromptStyle -.->|INSPIRED_BY_REGION| GeoRegion
+  PromptStyle -->|PROMPT_STYLE_OF| Brand
   SEOKeyword -.->|COMPARES_A| Entity
   SEOKeyword -.->|COMPARES_B| Entity
   SEOKeyword -.->|EXPRESSES| Entity
@@ -297,11 +328,11 @@ flowchart TB
   TermSet -->|CONTAINS_TERM| Term
 
   %% Arc colors by family
-  linkStyle 3,4,12,13,14,16,17,18,19,20,21,22,115,116,118,119,120,122,123,132,136,137,138,139,140,155,156 stroke:#8b5cf6,stroke-width:2px
-  linkStyle 11,15,49,50,72,73,74,84,92,93,94,95,96,97,100,101,107,108,109,110,111,112,113,117,135,146,147,152,153,154,157 stroke:#22c55e,stroke-width:2px
-  linkStyle 163 stroke:#ec4899,stroke-width:2px
-  linkStyle 0,1,5,6,23,24,27,29,30,31,33,34,35,39,40,46,48,51,77,78,79,80,81,82,85,86,87,88,89,90,91,98,99,102,103,104,105,106,114,121,124,125,127,133,141,142,143,144,145,148,149,150,151,162,166,167,168 stroke:#3b82f6,stroke-width:2px
-  linkStyle 2,7,8,9,10,25,26,28,32,36,37,38,41,42,43,44,45,47,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,75,76,83,126,128,129,130,131,134,158,159,160,161,164,165 stroke:#f97316,stroke-width:2px
+  linkStyle 3,4,12,13,14,16,17,18,19,20,21,22,142,143,145,146,147,149,150,159,163,164,165,166,167,185,186 stroke:#8b5cf6,stroke-width:2px
+  linkStyle 11,15,47,49,52,66,67,91,92,93,99,102,104,106,108,110,118,119,120,121,122,123,124,127,128,134,135,136,137,138,139,140,144,162,170,172,176,177,182,183,184,187 stroke:#22c55e,stroke-width:2px
+  linkStyle 194 stroke:#ec4899,stroke-width:2px
+  linkStyle 0,1,5,6,23,24,36,37,39,40,41,43,44,45,46,48,50,51,56,57,63,65,68,96,97,98,100,101,103,105,107,111,112,113,114,115,116,117,125,126,129,130,131,132,133,141,148,151,152,154,160,168,169,171,173,174,175,178,179,180,181,189,193,197,198,199 stroke:#3b82f6,stroke-width:2px
+  linkStyle 2,7,8,9,10,25,26,27,28,29,30,31,32,33,34,35,38,42,53,54,55,58,59,60,61,62,64,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,94,95,109,153,155,156,157,158,161,188,190,191,192,195,196 stroke:#f97316,stroke-width:2px
 
   %% Class assignments
   class Adaptation imported

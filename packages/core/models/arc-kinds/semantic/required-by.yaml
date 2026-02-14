@@ -40,9 +40,9 @@ arc:
   inverse: REQUIRES
 
   llm_context: |
-    Inverse of REQUIRES: Entity A is required by Entity B.
-    Use for: impact analysis (what breaks if A is removed),
-      finding dependents, understanding importance.
-    Examples: URL REQUIRED_BY URLShortener, PaymentProvider REQUIRED_BY PaymentQR
+    USE: when finding what depends on an entity.
+    TRIGGERS: required by, dependents, what needs, impact analysis.
+    NOT: enabling (use ENABLED_BY), enhancement (use ENHANCED_BY).
+    RELATES: Entity (source), Entity (target/dependent), REQUIRES (inverse).
 
   cypher_pattern: "(Entity)-[:REQUIRED_BY {strength, temperature, dependency_type, condition}]->(Entity)"

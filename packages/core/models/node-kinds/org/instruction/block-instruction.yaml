@@ -11,7 +11,9 @@ node:
   realm: org
   layer: instruction
   trait: defined
-  icon: "📝"
+  icon:
+    web: terminal
+    terminal: "▧"
   description: "Instructions for generating a specific block within a page. Contains markdown with @entity: and @link: references. Multiple BlockInstructions are concatenated at runtime to form PageInstruction."
 
   # ═══════════════════════════════════════════════════════════════════════════════
@@ -44,8 +46,12 @@ node:
     llm_context:
       type: string
       required: true
-      description: "LLM generation hints. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation].'"
-      example: "USE: generate hero block for QR generator page. TRIGGERS: qr-generator, hero, above-fold. NOT: other pages or block types."
+      description: "LLM generation hints. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections].'"
+      example: |
+        USE: when loading generation instructions for a specific block or compiling page instructions.
+        TRIGGERS: "block instruction", "generation recipe", "block prompt", "@entity:", "@link:".
+        NOT: for block structure (use Block), for block templates (use BlockType), for generated output (use BlockGenerated).
+        RELATES: Page (owner via HAS_INSTRUCTION), BlockType (template via OF_TYPE), Entity (references via REFERENCES_ENTITY), Page (links via REFERENCES_PAGE).
 
     created_at:
       type: datetime

@@ -23,6 +23,48 @@ use std::collections::HashMap;
 use std::path::Path;
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Dual-format Icon (v0.12.5)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Dual-format icon for taxonomy definitions.
+/// Supports both legacy string format and new dual format.
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[serde(untagged)]
+pub enum TaxonomyIcon {
+    /// New dual format: { web: "diamond", terminal: "◆" }
+    Dual { web: String, terminal: String },
+    /// Legacy string format (emoji): "🔷"
+    Legacy(String),
+}
+
+impl TaxonomyIcon {
+    /// Get the terminal icon (Unicode symbol).
+    pub fn terminal(&self) -> &str {
+        match self {
+            Self::Dual { terminal, .. } => terminal,
+            Self::Legacy(s) => s,
+        }
+    }
+
+    /// Get the web icon (Lucide name).
+    pub fn web(&self) -> &str {
+        match self {
+            Self::Dual { web, .. } => web,
+            Self::Legacy(s) => s,
+        }
+    }
+}
+
+impl Default for TaxonomyIcon {
+    fn default() -> Self {
+        Self::Dual {
+            web: "circle".to_string(),
+            terminal: "●".to_string(),
+        }
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // YAML Structs (taxonomy.yaml)
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -63,10 +105,19 @@ pub struct ClassRetrievalDefaults {
 pub struct NodeRealmDef {
     pub key: String,
     pub display_name: String,
-    pub emoji: String,
+    /// v0.12.5: Dual format icon { web, terminal } or legacy emoji string.
+    #[serde(alias = "emoji")]
+    pub icon: TaxonomyIcon,
     pub color: String,
     pub llm_context: String,
     pub layers: Vec<NodeLayerDef>,
+}
+
+impl NodeRealmDef {
+    /// Backward compatibility: get emoji string (terminal icon).
+    pub fn emoji(&self) -> &str {
+        self.icon.terminal()
+    }
 }
 
 /// Layer definition (nested under its realm).
@@ -74,9 +125,18 @@ pub struct NodeRealmDef {
 pub struct NodeLayerDef {
     pub key: String,
     pub display_name: String,
-    pub emoji: String,
+    /// v0.12.5: Dual format icon { web, terminal } or legacy emoji string.
+    #[serde(alias = "emoji")]
+    pub icon: TaxonomyIcon,
     pub color: String,
     pub llm_context: String,
+}
+
+impl NodeLayerDef {
+    /// Backward compatibility: get emoji string (terminal icon).
+    pub fn emoji(&self) -> &str {
+        self.icon.terminal()
+    }
 }
 
 /// Trait (locale behavior) definition with visual encoding.
@@ -232,7 +292,10 @@ pub fn load_taxonomy_from_files(root: &Path) -> crate::Result<TaxonomyDoc> {
         let layer_def = NodeLayerDef {
             key: layer.key.clone(),
             display_name: layer.display_name.clone(),
-            emoji: layer.icon.terminal.clone(),
+            icon: TaxonomyIcon::Dual {
+                web: layer.icon.web.clone(),
+                terminal: layer.icon.terminal.clone(),
+            },
             color: layer.color.clone(),
             llm_context,
         };
@@ -252,7 +315,10 @@ pub fn load_taxonomy_from_files(root: &Path) -> crate::Result<TaxonomyDoc> {
             NodeRealmDef {
                 key: r.key,
                 display_name: r.display_name,
-                emoji: r.icon.terminal,
+                icon: TaxonomyIcon::Dual {
+                    web: r.icon.web,
+                    terminal: r.icon.terminal,
+                },
                 color: r.color,
                 llm_context: r.llm_context.unwrap_or_default(),
                 layers,
@@ -349,7 +415,7 @@ impl TaxonomyDoc {
                 .map(|r| crate::parsers::organizing::RealmDef {
                     key: r.key.clone(),
                     display_name: r.display_name.clone(),
-                    emoji: r.emoji.clone(),
+                    emoji: r.emoji().to_string(),
                     color: r.color.clone(),
                     llm_context: r.llm_context.clone(),
                     layers: r
@@ -358,7 +424,7 @@ impl TaxonomyDoc {
                         .map(|l| crate::parsers::organizing::LayerDef {
                             key: l.key.clone(),
                             display_name: l.display_name.clone(),
-                            emoji: l.emoji.clone(),
+                            emoji: l.emoji().to_string(),
                             color: l.color.clone(),
                             llm_context: l.llm_context.clone(),
                         })

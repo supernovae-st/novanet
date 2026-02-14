@@ -768,6 +768,12 @@ REALMS (61 nodes total):
 | 022 | v11.7 | Unified Tree Architecture (everything is a node, 2 modes) |
 | 023 | v11.8 | Class/Instance Terminology + Meta Elimination (Kind→Class, Meta→Schema) |
 | 024 | v11.8 | Trait Redefinition as "Data Origin" (defined/authored/imported/generated/retrieved) |
+| 025 | v11.8 | Instruction Layer Renaming (PageType→PageStructure, PagePrompt→PageInstruction) |
+| 026 | v0.12.1 | Inverse Arc Policy (TIER 1/2/3 classification, naming conventions) |
+| 027 | v0.12.1 | Generation Family Arc Semantics (pipeline documentation, arc disambiguation) |
+| 028 | v0.12.3 | Page-Entity Architecture + Brand Architecture (1:1 mandatory, @ refs) |
+| 029 | v0.12.5 | *Native Pattern (EntityContent→EntityNative, PageGenerated→PageNative) |
+| 030 | v0.12.5 | Slug Ownership (Page owns URL, Entity owns semantics) |
 
 ## ADR-020: Schema Refinement
 
@@ -1494,6 +1500,8 @@ llm_context: |
 | 026 | v0.12.1 | Inverse Arc Policy (TIER 1/2/3 classification, naming conventions) |
 | 027 | v0.12.1 | Generation Family Arc Semantics (pipeline documentation, arc disambiguation) |
 | 028 | v0.12.3 | Page-Entity Architecture + Brand Architecture (1:1 mandatory, @ refs, Atlas Pattern Brand, PromptStyle, geographic visual_prompt with AI platform support) |
+| 029 | v0.12.5 | *Native Pattern (EntityContent→EntityNative, PageGenerated→PageNative) |
+| 030 | v0.12.5 | Slug Ownership (Page owns URL, Entity owns semantics) |
 
 ## ADR-028: Page-Entity Architecture
 
@@ -1806,11 +1814,195 @@ This ADR supersedes the **Pipeline** section of ADR-025:
 
 **Reference**: `docs/plans/2026-02-13-page-entity-refs-design.md`
 
+## ADR-029: *Native Pattern
+
+**Status**: Approved (v0.12.5)
+
+**Problem**: Inconsistent naming for locale-specific nodes:
+1. `EntityContent` doesn't convey "locale-specific"
+2. `PageGenerated` implies it's different from `EntityContent`, but both are "native" (not translated)
+3. Inconsistent suffixes: `*Content` vs `*Generated`
+4. NovaNet philosophy: content is GENERATED NATIVELY, not translated from a source
+
+**Decision**: Rename all locale-specific nodes to use `*Native` suffix. Traits distinguish authorship (authored vs generated).
+
+### Node Renames
+
+| Old Name | New Name | Trait | Who Creates |
+|----------|----------|-------|-------------|
+| `EntityContent` | `EntityNative` | authored | Human writes natively |
+| `ProjectContent` | `ProjectNative` | authored | Human writes natively |
+| `PageGenerated` | `PageNative` | generated | LLM generates natively |
+| `BlockGenerated` | `BlockNative` | generated | LLM generates natively |
+
+### Arc Unification
+
+Merge `HAS_CONTENT` and `HAS_GENERATED` into single `HAS_NATIVE`:
+
+| Old Arc | New Arc | Properties |
+|---------|---------|------------|
+| `HAS_CONTENT` | `HAS_NATIVE` | `{locale: "fr-FR"}` |
+| `HAS_GENERATED` | `HAS_NATIVE` | `{locale: "fr-FR"}` |
+| `CONTENT_OF` | `NATIVE_OF` | — |
+| `GENERATED_FOR` | `NATIVE_OF` | — |
+
+### Key Pattern
+
+Composite key unchanged:
+
+```
+{type}:{invariant_key}@{locale}
+
+EntityNative.key  = "entity:qr-code@fr-FR"
+ProjectNative.key = "project:qrcode-ai@fr-FR"
+PageNative.key    = "page:homepage@fr-FR"
+BlockNative.key   = "block:homepage:hero:1@fr-FR"
+```
+
+### Architecture
+
+```
+INVARIANT (defined)              LOCALE-SPECIFIC (*Native)
+────────────────────             ─────────────────────────
+
+Entity  ──[:HAS_NATIVE {locale}]──▶ EntityNative  (authored)
+                                         │
+                                         ├──[:FOR_LOCALE]──▶ Locale
+                                         └──[:TARGETS]──▶ SEOKeyword
+
+Project ──[:HAS_NATIVE {locale}]──▶ ProjectNative (authored)
+
+Page    ──[:HAS_NATIVE {locale}]──▶ PageNative    (generated)
+
+Block   ──[:HAS_NATIVE {locale}]──▶ BlockNative   (generated)
+```
+
+### Rationale
+
+1. **Consistency**: All locale-specific nodes use same suffix pattern
+2. **NovaNet Philosophy**: "Native" emphasizes content is generated natively, not translated
+3. **Clarity**: Node name = "locale-specific content", Trait = "who creates it"
+4. **Simplification**: Single arc type `HAS_NATIVE` instead of `HAS_CONTENT` + `HAS_GENERATED`
+
+**Reference**: `docs/plans/2026-02-14-native-pattern-design.md`
+
+## ADR-030: Slug Ownership
+
+**Status**: Approved (v0.12.5)
+
+**Problem**: Current architecture mixes concerns:
+1. Entity has semantic identity (key)
+2. EntityNative has slug, full_path, parent_slug, depth
+3. Page has slug
+4. Entity.HAS_CHILD comment says "URL path = parent.slug" but Entity has NO slug
+5. Page.REPRESENTS Entity (1:1 mandatory per ADR-028)
+
+Which is source of truth for URLs?
+
+**Decision**: Clear separation of concerns — Entity owns semantics, Page owns URLs.
+
+### Principle
+
+```
+Entity  = QUOI (semantic concept, invariant)
+Page    = OÙ   (URL structure, navigation)
+
+Entity.key     = Semantic identifier (english, invariant)
+Page.slug      = URL segment (english, invariant)
+PageNative.slug = Localized URL segment (per locale)
+```
+
+### Who Has What
+
+| Node | slug? | full_path? | Why |
+|------|-------|------------|-----|
+| Entity | ❌ | ❌ | Semantic concept, not URL-related |
+| EntityNative | ❌ | ❌ | Content for concept, URL lives on Page |
+| Page | ✅ EN | ❌ | URL segment (invariant, english) |
+| PageNative | ✅ L10n | ✅ | Localized URL segment + full path |
+
+### Key Design Decision: Entity.key ≠ Page.slug
+
+```
+Entity.key:  "qr-code-instagram"  (full semantic identity)
+Page.slug:   "instagram"          (just the URL segment)
+```
+
+This avoids: `/qr-code-generator/qr-code-instagram` ❌
+We get: `/qr-code-generator/instagram` ✅
+
+### Concrete Example - 4 Entities
+
+**Entity: instagram (BRAND)**
+- No Page — external brand, not a page on our site
+- Referenced via SEMANTIC_LINK from other entities
+
+**Entity: qr-code-generator (PILLAR)**
+```
+Page.slug: "qr-code-generator"
+PageNative(fr).slug: "générateur-qr-code"
+PageNative(fr).full_path: "/fr/générateur-qr-code"
+```
+
+**Entity: qr-code-instagram (SUBTOPIC of qr-code-generator)**
+```
+Page.slug: "instagram"              # NOT "qr-code-instagram"
+Page.SUBTOPIC_OF: page:qr-code-generator
+PageNative(fr).slug: "instagram"    # Brand unchanged
+PageNative(fr).full_path: "/fr/générateur-qr-code/instagram"
+```
+
+**Entity: template-instagram (SUBTOPIC of templates)**
+```
+Page.slug: "instagram"              # Same segment, different parent!
+Page.SUBTOPIC_OF: page:templates
+PageNative(fr).full_path: "/fr/modeles/instagram"
+```
+
+### Hierarchy Separation
+
+```
+SEMANTIC (Entity)              URL (Page)
+─────────────────              ──────────
+Entity:qr-code                 Page:qr-code
+    │ SUBTOPIC_OF                  │ SUBTOPIC_OF
+    ▼                              ▼
+Entity:qr-code-instagram       Page:qr-code-instagram
+
+SAME STRUCTURE but DIFFERENT PURPOSE:
+- Entity hierarchy = topic/cluster (for content strategy)
+- Page hierarchy = URL/navigation (for routing)
+```
+
+### Migration Required
+
+**Remove from EntityNative**:
+- `slug`, `full_path`, `parent_slug`, `depth`, `slug_history`
+
+**Add to PageNative**:
+- `slug` (required, localized URL segment)
+- `full_path` (required, indexed, full localized path)
+
+**Fix Entity.yaml**: Remove misleading HAS_CHILD comment about URL paths.
+
+### Rationale
+
+1. **Single Source of Truth**: Page owns URL, Entity owns semantics
+2. **No Duplication**: slug/full_path only on Page/PageNative
+3. **Flexibility**: Page.slug can differ from Entity.key
+4. **Localization**: PageNative has localized slug
+5. **Brands Protected**: "instagram" stays "instagram" everywhere
+
+**Reference**: `docs/plans/2026-02-14-entity-page-slug-brainstorm.md`
+
 ## References
 
 - `docs/plans/2026-02-03-nomenclature-v95-design.md` — Full v9.5 design
 - `docs/plans/2026-02-03-v10-brainstorm-decisions.md` — v10 roadmap decisions
 - `docs/plans/2026-02-01-ontology-v9-design.md` — Original v9 design
+- `docs/plans/2026-02-14-native-pattern-design.md` — *Native Pattern v0.12.5 (ADR-029)
+- `docs/plans/2026-02-14-entity-page-slug-brainstorm.md` — Slug Ownership v0.12.5 (ADR-030)
+- `docs/plans/2026-02-14-schema-completion-v0125-plan.md` — Schema Completion Plan (consolidated)
 - `docs/plans/2026-02-10-query-first-architecture-design.md` — Query-First Architecture design
 - `docs/plans/2026-02-11-unified-tree-design.md` — Unified Tree Architecture design
 - `docs/plans/2026-02-13-nomenclature-v118-design.md` — Nomenclature v11.8 (Class/Instance, Meta elimination, Trait renaming)

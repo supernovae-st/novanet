@@ -14,8 +14,9 @@ arc:
   inverse: CLASSIFIES
 
   llm_context: |
-    Locale is classified in a World Bank income group for pricing/messaging.
-    Use to find similar markets: MATCH (l:Locale)-[:HAS_INCOME_LEVEL]->(ig)<-[:HAS_INCOME_LEVEL]-(similar)
-    Example: fr-FR -[:HAS_INCOME_LEVEL]-> HIC (high income)
+    USE: when finding World Bank income classification for pricing/messaging.
+    TRIGGERS: income level, market classification, pricing tier, economic group.
+    NOT: lending type (use HAS_LENDING_TYPE), economic region (use IN_ECONOMIC_REGION).
+    RELATES: Locale (source), IncomeGroup (target), CLASSIFIES (inverse).
 
   cypher_pattern: "(Locale)-[:HAS_INCOME_LEVEL]->(IncomeGroup)"

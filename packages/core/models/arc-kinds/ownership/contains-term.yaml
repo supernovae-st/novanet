@@ -11,5 +11,9 @@ arc:
   source: TermSet
   target: Term
   cardinality: one_to_many
-  llm_context: TermSet contains Term atoms. Use to traverse from set to individual terms.
+  llm_context: |
+    USE: when loading individual terms from a term set.
+    TRIGGERS: term atoms, glossary entries, domain terms, vocabulary items.
+    NOT: term set container (use HAS_TERMS), locale-level terminology.
+    RELATES: TermSet (source), Term (target).
   cypher_pattern: "(TermSet)-[:CONTAINS_TERM]->(Term)"

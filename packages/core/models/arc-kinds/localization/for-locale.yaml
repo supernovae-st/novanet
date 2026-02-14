@@ -17,6 +17,8 @@ arc:
   target: Locale
   cardinality: many_to_one
   llm_context: |
-    All localized content nodes point to their target Locale.
-    PromptStyle can be locale-specific for cultural adaptation.
+    USE: when finding the target locale for any localized content node.
+    TRIGGERS: for locale, content locale, target language, localization target.
+    NOT: locale fallback (use FALLBACK_TO), locale ownership (use HAS_LOCALE).
+    RELATES: EntityContent/ProjectContent/BlockGenerated/PageGenerated/PromptStyle (source), Locale (target).
   cypher_pattern: (EntityContent, PromptStyle)-[:FOR_LOCALE]->(Locale)

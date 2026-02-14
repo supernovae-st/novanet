@@ -22,10 +22,10 @@ arc:
   target: SEOKeywordSet
   cardinality: one_to_one
   llm_context: |
-    Locale owns one SEOKeywordSet container. Follows container pattern (ADR-016).
-    Two-hop traversal to reach individual keywords:
-      Locale --[:HAS_SEO_KEYWORDS]--> SEOKeywordSet --[:CONTAINS_SEO_KEYWORD]--> SEOKeyword
-    Use to load all keywords for a locale's SEO strategy.
+    USE: when loading SEO keyword container for a locale.
+    TRIGGERS: locale keywords, SEO strategy, keyword research, SEO keyword set.
+    NOT: individual keywords (use CONTAINS_SEO_KEYWORD), entity keywords (use HAS_KEYWORD).
+    RELATES: Locale (source), SEOKeywordSet (target), 1:1 cardinality.
 
   example:
     description: "Get all keywords for a locale via container"

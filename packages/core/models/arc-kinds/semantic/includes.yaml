@@ -35,10 +35,9 @@ arc:
   inverse: INCLUDED_IN
 
   llm_context: |
-    Containment relationship: Entity A includes/contains Entity B.
-    Part-whole relationship (mereology).
-    containment_type: part (physical), component (functional),
-      element (collection), member (set), feature (capability)
-    Examples: QRCode INCLUDES ErrorCorrection, PaymentQR INCLUDES Amount
+    USE: when finding parts/components of an entity.
+    TRIGGERS: includes, contains, parts, components, elements.
+    NOT: children (use HAS_CHILD), variants (use HAS_VARIANT).
+    RELATES: Entity (source/whole), Entity (target/part), INCLUDED_IN (inverse).
 
   cypher_pattern: "(Entity)-[:INCLUDES {strength, temperature, containment_type}]->(Entity)"

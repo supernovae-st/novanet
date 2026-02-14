@@ -35,10 +35,9 @@ arc:
   inverse: READ_BY
 
   llm_context: |
-    Read/decode relationship: TOOL entity reads/scans THING.
-    Use for qr-code-scanner READS qr-code, barcode-scanner READS barcode.
-    Different from PRODUCES (creation) or ACTS_ON (general action).
-    read_type: scan (optical), decode (interpret), parse (structure),
-      extract (content), verify (validate)
+    USE: when finding what a scanner/reader tool can read.
+    TRIGGERS: reads, scans, decodes, parses, extracts.
+    NOT: general action (use ACTS_ON), creation (use PRODUCES).
+    RELATES: Entity (source/tool), Entity (target/thing), READ_BY (inverse).
 
   cypher_pattern: "(Entity)-[:READS {strength, temperature, read_type}]->(Entity)"

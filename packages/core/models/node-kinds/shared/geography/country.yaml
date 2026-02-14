@@ -12,7 +12,9 @@ node:
   realm: shared
   layer: geography
   trait: defined
-  icon: "🏳️"
+  icon:
+    web: "flag"
+    terminal: "⚑"
   description: "ISO 3166-1 country/territory with UN M49 geographic classification"
 
   standard_properties:

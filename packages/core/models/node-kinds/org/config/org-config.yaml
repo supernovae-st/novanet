@@ -6,7 +6,9 @@ node:
   realm: org
   layer: config
   trait: defined
-  icon: "🏢"
+  icon:
+    web: building-2
+    terminal: "◎"
   description: "Organization configuration root. Parent of all projects."
 
   # ═══════════════════════════════════════════════════════════════════════════════

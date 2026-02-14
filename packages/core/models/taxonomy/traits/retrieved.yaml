@@ -1,0 +1,26 @@
+# packages/core/models/taxonomy/traits/retrieved.yaml
+# Retrieved trait - fetched from external APIs (Data Origin)
+
+trait:
+  key: retrieved
+  display_name: Retrieved
+  color: "#6c71c4"
+  border_style: dotted
+  border_width: 3
+  unicode_border: "┅"
+
+  llm_context: |
+    USE: when the node contains snapshots fetched from external APIs.
+    TRIGGERS: "retrieved", "API fetch", "snapshot", "external response", "metrics".
+    NOT: for curated imports (use imported), for LLM output (use generated).
+    RELATES: GEOAnswer, SEOKeywordMetrics, GEOMetrics.
+
+  retrieval_defaults:
+    traversal_depth: 1
+    context_budget: 80
+    token_estimate: 20
+
+  examples:
+    - GEOAnswer
+    - SEOKeywordMetrics
+    - GEOMetrics

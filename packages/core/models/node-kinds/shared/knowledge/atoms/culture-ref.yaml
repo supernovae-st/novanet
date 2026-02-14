@@ -9,7 +9,9 @@ node:
   realm: shared
   layer: knowledge
   trait: imported
-  icon: "🎭"
+  icon:
+    web: "drama"
+    terminal: "◎"
   description: "Cultural reference, holiday, custom, or shared knowledge within a locale"
 
   standard_properties:

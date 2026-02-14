@@ -35,9 +35,9 @@ arc:
   inverse: VARIANT_OF
 
   llm_context: |
-    Inverse of VARIANT_OF: Entity A has Entity B as a variant.
-    The target is a specialized form of the source (more specific).
-    Examples: QRCode HAS_VARIANT CustomQRCode, QRCode HAS_VARIANT DynamicQR
-    Use for: finding all variants of a base entity.
+    USE: when finding variants/versions of an entity.
+    TRIGGERS: variants, versions, editions, specializations, customizations.
+    NOT: subtypes (use HAS_TYPE), children (use HAS_CHILD).
+    RELATES: Entity (source/base), Entity (target/variant), VARIANT_OF (inverse).
 
   cypher_pattern: "(Entity)-[:HAS_VARIANT {strength, temperature, variant_type}]->(Entity)"

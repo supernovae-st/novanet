@@ -9,8 +9,14 @@ node:
   realm: shared
   layer: knowledge
   trait: imported
-  icon: "💬"
-  description: "Individual expression, idiom, or phrase template belonging to a locale's ExpressionSet"
+  icon:
+    web: "message-square"
+    terminal: "◇"
+  description: |
+    Individual expression, idiom, or phrase template belonging to a locale's ExpressionSet.
+    USE: When generating locale-native phrases, greetings, or closings.
+    TRIGGERS: expression, idiom, phrase, greeting, closing, native wording.
+    NOT: For terms (use Term), for patterns (use Pattern).
 
   standard_properties:
     key:

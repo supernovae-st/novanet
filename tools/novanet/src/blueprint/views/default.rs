@@ -139,7 +139,7 @@ fn render_layers(data: &BlueprintData) -> String {
             let _ = writeln!(
                 out,
                 "│  {} {:<18} {:<10} {:>2}   {}{}│",
-                &layer_def.emoji,
+                &layer_def.emoji(),
                 layer_def.key,
                 bar,
                 count,

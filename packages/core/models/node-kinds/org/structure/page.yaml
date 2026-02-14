@@ -11,7 +11,9 @@ node:
   realm: org
   layer: structure
   trait: defined
-  icon: "🔷"
+  icon:
+    web: file-text
+    terminal: "◇"
   description: "Invariant page structure containing blocks and orchestrator instructions"
 
   # ═══════════════════════════════════════════════════════════════════════════════
@@ -54,8 +56,12 @@ node:
     llm_context:
       type: string
       required: true
-      description: "LLM generation hints. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation].'"
-      example: "USE: orchestrate pricing page generation. TRIGGERS: pricing, tarifs, plans, abonnement. NOT: individual block generation."
+      description: "LLM generation hints. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections].'"
+      example: |
+        USE: when orchestrating page-level generation, assembling blocks, or querying page structure.
+        TRIGGERS: "page", "content structure", "block composition", "page generation".
+        NOT: for individual block content (use Block), for visual design (use BrandDesign).
+        RELATES: Project (owner via HAS_PAGE), Block (contains via HAS_BLOCK), Entity (represents via REPRESENTS), PageGenerated (output).
 
     created_at:
       type: datetime

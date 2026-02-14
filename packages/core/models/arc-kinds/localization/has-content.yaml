@@ -21,8 +21,9 @@ arc:
   inverse: CONTENT_OF
 
   llm_context: |
-    Links invariant node to its human-curated localized content (one per locale).
-    NOT for LLM-generated content — use HAS_GENERATED for that.
-    Use: MATCH (e:Entity)-[:HAS_CONTENT]->(ec:EntityContent)-[:FOR_LOCALE]->(l:Locale)
+    USE: when loading human-authored localized content for an entity or project.
+    TRIGGERS: has content, localized content, entity content, authored content.
+    NOT: generated content (use HAS_GENERATED), forward locale (use FOR_LOCALE).
+    RELATES: Entity/Project (source), EntityContent/ProjectContent (target), CONTENT_OF (inverse).
 
   cypher_pattern: "(Entity)-[:HAS_CONTENT]->(EntityContent)"

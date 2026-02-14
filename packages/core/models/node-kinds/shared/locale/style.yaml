@@ -12,7 +12,9 @@ node:
   realm: shared
   layer: locale
   trait: imported
-  icon: "🎭"
+  icon:
+    web: "drama"
+    terminal: "◎"
   description: "Communication style: tone, formality, directness, warmth, humor, identity traits"
 
   standard_properties:

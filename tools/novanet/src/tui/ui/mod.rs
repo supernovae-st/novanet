@@ -569,10 +569,10 @@ pub fn render(f: &mut Frame, app: &mut App) {
 }
 
 /// Header: Logo + Mode tabs.
-/// Shows: [1]Graph, [2]Nexus
-/// v11.7: 2 modes with keys 1-2
+/// Shows: [1]Graph, [2]Nexus, [3]Views
+/// v0.12.5: 3 modes with keys 1-3
 fn render_header(f: &mut Frame, area: Rect, app: &App) {
-    let tabs: Vec<Span> = [NavMode::Graph, NavMode::Nexus]
+    let tabs: Vec<Span> = NavMode::all()
         .iter()
         .enumerate()
         .map(|(i, mode)| {
@@ -646,6 +646,12 @@ fn render_main(f: &mut Frame, area: Rect, app: &mut App) {
     // Nexus mode has its own rendering (v11.7: hub for Quiz, Stats, Help)
     if app.mode == NavMode::Nexus {
         super::nexus::render_nexus(f, area, app);
+        return;
+    }
+
+    // Views mode has its own rendering (v0.12.5: Schema views explorer)
+    if app.mode == NavMode::Views {
+        super::nexus::views::render_views_tab(f, app, area);
         return;
     }
 
@@ -818,10 +824,11 @@ fn render_recent_items_overlay(f: &mut Frame, app: &App) {
                 None => ("?", format!("(cursor {})", cursor)),
             };
 
-            // v11.7: 2 modes (Graph, Nexus)
+            // v11.7: 3 modes (Graph, Nexus, Views)
             let mode_badge = match mode {
                 crate::tui::app::NavMode::Graph => "[G]",
                 crate::tui::app::NavMode::Nexus => "[N]",
+                crate::tui::app::NavMode::Views => "[V]",
             };
 
             let prefix = if is_selected { "› " } else { "  " };

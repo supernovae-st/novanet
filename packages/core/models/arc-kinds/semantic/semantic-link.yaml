@@ -18,5 +18,9 @@ arc:
     - name: temperature
       type: string
       required: false
-  llm_context: "Spreading activation links between entities. temperature: 0.0-1.0, cutoff 0.3, max 2 hops."
+  llm_context: |
+    USE: when traversing semantic relationships between entities via spreading activation.
+    TRIGGERS: related entities, semantic connections, entity relationships, spreading activation.
+    NOT: specific relationships like similarity (use SIMILAR_TO), dependency (use REQUIRES).
+    RELATES: Entity (source), Entity (target), temperature 0.0-1.0 (cutoff 0.3, max 2 hops).
   cypher_pattern: (Entity)-[:SEMANTIC_LINK {type, temperature}]->(Entity)

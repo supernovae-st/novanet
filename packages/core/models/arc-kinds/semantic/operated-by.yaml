@@ -35,8 +35,9 @@ arc:
   inverse: ACTS_ON
 
   llm_context: |
-    Inverse of ACTS_ON: THING is operated on by ACTION.
-    Use for qr-code OPERATED_BY create-qr-code, qr-code OPERATED_BY scan-qr-code.
-    Enables traversal from entity to actions that can operate on it.
+    USE: when finding actions that can operate on an entity.
+    TRIGGERS: operated by, actions for, operations on, what can do.
+    NOT: reading (use READ_BY), enhancement (use ENHANCED_BY).
+    RELATES: Entity (source/thing), Entity (target/action), ACTS_ON (inverse).
 
   cypher_pattern: "(Entity)-[:OPERATED_BY {strength, temperature, operation_type}]->(Entity)"

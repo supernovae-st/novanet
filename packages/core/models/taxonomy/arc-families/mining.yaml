@@ -1,0 +1,24 @@
+# packages/core/models/taxonomy/arc-families/mining.yaml
+# Mining family - SEO/GEO data extraction
+
+arc_family:
+  key: mining
+  display_name: Mining
+  color: "#ec4899"
+  stroke_style: dashed
+  stroke_width: 1
+  arrow_style: "--o"
+  default_traversal: skip
+
+  llm_context: |
+    USE: when linking content to SEO/GEO intelligence data.
+    TRIGGERS: "mining", "SEO", "GEO", "keywords", "search", "targeting".
+    NOT: for content ownership (use ownership), for entity links (use semantic).
+    RELATES: TARGETS, MONITORS_GEO, SEO_MINES, HAS_KEYWORD.
+
+  examples:
+    - TARGETS
+    - MONITORS_GEO
+    - SEO_MINES
+    - HAS_KEYWORD
+    - EXPRESSES
