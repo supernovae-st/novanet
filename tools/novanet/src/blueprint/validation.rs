@@ -213,23 +213,23 @@ impl ValidationResult {
         }
 
         // ─────────────────────────────────────────────────────────────────────────
-        // ArcKind sync validation (YAML ↔ Neo4j)
+        // ArcClass sync validation (YAML ↔ Neo4j) — v0.12.0: ArcKind → ArcClass
         // ─────────────────────────────────────────────────────────────────────────
         let yaml_arcs: HashSet<&str> = data.arc_defs.iter().map(|a| a.arc_type.as_str()).collect();
         let neo4j_arcs: HashSet<&str> = neo4j.arc_kind_names.iter().map(|s| s.as_str()).collect();
 
-        // Check for arc kinds in YAML but not in Neo4j
+        // Check for arc classes in YAML but not in Neo4j
         let missing_arcs: Vec<&str> = yaml_arcs.difference(&neo4j_arcs).copied().collect();
         if !missing_arcs.is_empty() {
             self.checks.push(ValidationCheck::fail(
-                "YAML arc kinds exist in Neo4j",
+                "YAML arc classes exist in Neo4j",
                 format!("Missing in Neo4j: {}", missing_arcs.join(", ")),
             ));
             self.issues.push(
                 ValidationIssue::warning(
                     "sync",
                     format!(
-                        "{} arc kinds in YAML but not in Neo4j: {}",
+                        "{} arc classes in YAML but not in Neo4j: {}",
                         missing_arcs.len(),
                         missing_arcs.join(", ")
                     ),
@@ -238,21 +238,21 @@ impl ValidationResult {
             );
         } else {
             self.checks
-                .push(ValidationCheck::pass("YAML arc kinds exist in Neo4j"));
+                .push(ValidationCheck::pass("YAML arc classes exist in Neo4j"));
         }
 
-        // Check for arc kinds in Neo4j but not in YAML
+        // Check for arc classes in Neo4j but not in YAML
         let orphan_arcs: Vec<&str> = neo4j_arcs.difference(&yaml_arcs).copied().collect();
         if !orphan_arcs.is_empty() {
             self.checks.push(ValidationCheck::fail(
-                "Neo4j arc kinds defined in YAML",
+                "Neo4j arc classes defined in YAML",
                 format!("Orphan in Neo4j: {}", orphan_arcs.join(", ")),
             ));
             self.issues.push(
                 ValidationIssue::warning(
                     "sync",
                     format!(
-                        "{} arc kinds in Neo4j but not in YAML: {}",
+                        "{} arc classes in Neo4j but not in YAML: {}",
                         orphan_arcs.len(),
                         orphan_arcs.join(", ")
                     ),
@@ -261,7 +261,7 @@ impl ValidationResult {
             );
         } else {
             self.checks
-                .push(ValidationCheck::pass("Neo4j arc kinds defined in YAML"));
+                .push(ValidationCheck::pass("Neo4j arc classes defined in YAML"));
         }
     }
 
