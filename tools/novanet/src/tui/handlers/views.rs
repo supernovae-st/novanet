@@ -116,7 +116,7 @@ mod tests {
         let mut app = create_test_app();
         // Move down first, then up
         handle_views_key(&mut app, make_key(KeyCode::Char('j')));
-        let after_down = (app.nexus.views.category_cursor, app.nexus.views.view_cursor);
+        let _after_down = (app.nexus.views.category_cursor, app.nexus.views.view_cursor);
 
         handle_views_key(&mut app, make_key(KeyCode::Char('k')));
 

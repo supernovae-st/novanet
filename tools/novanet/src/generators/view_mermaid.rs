@@ -564,62 +564,8 @@ mod tests {
         assert!(md.contains("view: my-view"));
     }
 
-    fn test_root() -> Option<std::path::PathBuf> {
-        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-            .parent()
-            .and_then(|p| p.parent());
-        let root = root?;
-        if !root.join("pnpm-workspace.yaml").exists() {
-            return None;
-        }
-        Some(root.to_path_buf())
-    }
-
-    #[test]
-    fn generate_block_generation_view_integration() {
-        let Some(root) = test_root() else { return };
-        let view = crate::parsers::views::load_view(&root, "block-generation")
-            .expect("should load block-generation");
-        let output = generate_view(&root, &view).expect("should generate view");
-
-        assert!(output.contains("# Block Generation Context"));
-        assert!(output.contains("```mermaid"));
-        assert!(output.contains("flowchart TB"));
-        assert!(output.contains("Block["));
-        assert!(output.contains("view: block-generation"));
-    }
-
-    #[test]
-    #[ignore = "locale-full-knowledge view not yet created (Phase 5)"]
-    fn generate_locale_knowledge_view_integration() {
-        let Some(root) = test_root() else { return };
-        let view = crate::parsers::views::load_view(&root, "locale-full-knowledge")
-            .expect("should load locale-full-knowledge");
-        let output = generate_view(&root, &view).expect("should generate view");
-
-        assert!(output.contains("Locale["));
-        assert!(output.contains("flowchart TB"));
-    }
-
-    #[test]
-    fn generate_all_views_integration() {
-        let Some(root) = test_root() else { return };
-        let views = crate::parsers::views::load_all_views(&root).expect("should load views");
-
-        for view in &views {
-            let result = generate_view(&root, view);
-            assert!(
-                result.is_ok(),
-                "failed to generate view '{}': {:?}",
-                view.id,
-                result.err()
-            );
-            let output = result.unwrap();
-            assert!(
-                output.contains("```mermaid"),
-                "view '{}' missing mermaid block",
-                view.id
-            );
-        }
-    }
+    // NOTE: Integration tests for view generation were removed in v0.12.5.
+    // The old views/ directory was replaced by views.yaml which uses Cypher queries.
+    // The ViewDef-based Mermaid generation is no longer used (doc generate is deprecated).
+    // Unit tests for the generate_* functions remain above.
 }
