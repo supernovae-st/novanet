@@ -43,7 +43,7 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 > **v0.12.4 Changes:**
 > - Brand Architecture: Brand, BrandDesign, BrandPrinciples, PromptStyle nodes added (ADR-028)
 > - Country node added to shared/geography
-> - Total: **61 nodes** (40 shared + 21 org), **128 arcs**, **10 layers** (4 shared + 6 org)
+> - Total: **61 nodes** (40 shared + 21 org), **156 arcs**, **10 layers** (4 shared + 6 org)
 
 ### v11.7 Unified Tree Architecture
 
@@ -135,7 +135,7 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 **v0.12.4 Changes:**
 - Brand Architecture: Brand, BrandDesign, BrandPrinciples, PromptStyle (ADR-028)
 - Country node added to shared/geography
-- 10 layers total (4 shared + 6 org), 61 nodes (40 shared + 21 org), 128 arcs
+- 10 layers total (4 shared + 6 org), 61 nodes (40 shared + 21 org), 156 arcs
 
 **v11.2 Changes:**
 - Trait `derived` split into `generated` (LLM output) and `aggregated` (computed metrics)
@@ -392,7 +392,7 @@ NovaNet Studio uses **Query-First Architecture** where Cypher queries are the si
 | Term | Definition |
 |------|------------|
 | **Query-First** | Architecture pattern where graph display is determined solely by the executed Cypher query |
-| **Schema-Graph** | The schema graph showing NodeClass and ArcClass nodes (61 nodes, 128 arcs) |
+| **Schema-Graph** | The schema graph showing NodeClass and ArcClass nodes (61 nodes, 156 arcs) |
 | **CLASS_QUERY** | Foundational query that fetches all NodeClass instances for schema view |
 | **ARCS_QUERY** | Foundational query that fetches all ArcClass instances for schema view |
 | **View** | Parameterized Cypher template defined in YAML, executable with context parameters |

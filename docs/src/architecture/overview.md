@@ -156,7 +156,7 @@ NovaNet v0.12.0 introduces the **Unified Tree** principle:
       ▼ ◆ Class:Locale [200] ← Expandable (v0.12.0: Kind→Class)
         ● Locale:fr-FR       ← Instance
         ● Locale:en-US
-▼ Arcs (128)
+▼ Arcs (156)
   ▼ → ArcFamily:ownership
     → ArcClass:HAS_PROJECT   (v0.12.0: ArcKind→ArcClass)
 ```

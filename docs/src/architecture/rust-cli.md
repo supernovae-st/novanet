@@ -144,7 +144,7 @@ The unified tree shows everything as clickable nodes:
       ▼ ◆ Class:Locale [200] ← Expandable (v0.12.0: Kind→Class)
         ● Locale:fr-FR       ← Instance
         ● Locale:en-US
-▼ Arcs (128)
+▼ Arcs (156)
   ▼ → ArcFamily:ownership
     → ArcClass:HAS_PROJECT   (v0.12.0: ArcKind→ArcClass)
 ```

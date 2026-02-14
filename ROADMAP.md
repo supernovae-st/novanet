@@ -141,7 +141,7 @@ Trait rename migration per ADR-024 "Data Origin" for clearer semantics.
 - TypeScript Studio (15+ components, design system, tests)
 - ADR-024 added to novanet-decisions.md
 
-**Schema counts:** 61 NodeClasses, 128 ArcClasses, 2 Realms, 10 Layers (4 shared + 6 org)
+**Schema counts:** 61 NodeClasses, 156 ArcClasses, 2 Realms, 10 Layers (4 shared + 6 org)
 
 ---
 
@@ -257,4 +257,4 @@ release/v*      Release preparation (optional, for complex releases)
 | v11.7.0 | 2026-02-11 | Unified Tree Architecture (ADR-022), 5→2 modes, dual icons |
 | v11.8.0 | 2026-02-13 | Class Act (ADR-024), trait renames for data origin semantics |
 | v0.12.0 | 2026-02-13 | SemVer Transition — proper versioning (0.x = pre-production) |
-| v0.12.4 | 2026-02-14 | Brand Architecture (ADR-028), 61 nodes, 128 arcs |
+| v0.12.4 | 2026-02-14 | Brand Architecture (ADR-028), 61 nodes, 156 arcs |

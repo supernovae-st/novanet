@@ -499,7 +499,7 @@ categories:
 views:
   - id: schema-complete
     name: Complete Schema
-    description: All 61 Classes and 128 ArcClasses
+    description: All 61 Classes and 156 ArcClasses
     category: schema
     icon: { web: diamond, terminal: "◆" }
     color: "#8b5cf6"
