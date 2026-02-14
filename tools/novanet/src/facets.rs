@@ -12,7 +12,7 @@ use serde::{Deserialize, Serialize};
 /// Multiple values within a facet are OR-combined; facets are AND-combined.
 ///
 /// Example: `realms=["shared","org"], layers=["knowledge"]`
-///   → Kinds that are (IN_REALM shared OR org) AND (IN_LAYER knowledge)
+///   → Classes that are (IN_REALM shared OR org) AND (IN_LAYER knowledge)
 #[derive(Debug, Clone, Default, Serialize, Deserialize, PartialEq)]
 pub struct FacetFilter {
     #[serde(default)]
@@ -24,7 +24,7 @@ pub struct FacetFilter {
     #[serde(default)]
     pub arc_families: Vec<String>,
     #[serde(default)]
-    pub kinds: Vec<String>,
+    pub classes: Vec<String>,
 }
 
 impl FacetFilter {
@@ -45,14 +45,14 @@ impl FacetFilter {
         layer: Option<&str>,
         trait_filter: Option<&str>,
         arc_family: Option<&str>,
-        kind: Option<&str>,
+        class: Option<&str>,
     ) -> Self {
         Self {
             realms: parse_csv(realm),
             layers: parse_csv(layer),
             trait_filters: parse_csv(trait_filter),
             arc_families: parse_csv(arc_family),
-            kinds: parse_csv(kind),
+            classes: parse_csv(class),
         }
     }
 
@@ -69,7 +69,7 @@ impl FacetFilter {
             && self.layers.is_empty()
             && self.trait_filters.is_empty()
             && self.arc_families.is_empty()
-            && self.kinds.is_empty()
+            && self.classes.is_empty()
     }
 
     /// Count of active facet axes (0–5).
@@ -80,7 +80,7 @@ impl FacetFilter {
             !self.layers.is_empty(),
             !self.trait_filters.is_empty(),
             !self.arc_families.is_empty(),
-            !self.kinds.is_empty(),
+            !self.classes.is_empty(),
         ]
         .iter()
         .filter(|&&v| v)
@@ -143,7 +143,7 @@ mod tests {
         assert_eq!(f.layers, vec!["knowledge"]);
         assert!(f.trait_filters.is_empty());
         assert!(f.arc_families.is_empty());
-        assert_eq!(f.kinds, vec!["Locale", "Expression"]);
+        assert_eq!(f.classes, vec!["Locale", "Expression"]);
         assert!(!f.is_empty());
         assert_eq!(f.active_count(), 3);
     }
@@ -162,14 +162,14 @@ mod tests {
             "layers": ["knowledge", "config"],
             "traits": ["defined"],
             "arc_families": [],
-            "kinds": []
+            "classes": []
         }"#;
         let f = FacetFilter::from_json(json).unwrap();
         assert_eq!(f.realms, vec!["shared"]);
         assert_eq!(f.layers, vec!["knowledge", "config"]);
         assert_eq!(f.trait_filters, vec!["defined"]);
         assert!(f.arc_families.is_empty());
-        assert!(f.kinds.is_empty());
+        assert!(f.classes.is_empty());
     }
 
     #[test]

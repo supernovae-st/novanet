@@ -78,7 +78,7 @@ pub fn hex_to_color(hex: &str) -> Color {
 /// Generate a heatmap color based on count relative to max.
 /// Returns cyan spectrum: dim (few) → bright (many).
 ///
-/// Used in Guide mode to visualize kind density per layer/trait.
+/// Used in Guide mode to visualize class density per layer/trait.
 pub fn heatmap_color(count: usize, max_count: usize) -> Color {
     if max_count == 0 {
         return Color::Rgb(60, 60, 70); // No data = dim gray
