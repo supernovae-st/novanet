@@ -250,7 +250,7 @@ export const CARDINALITY_ARROWS: Record<CardinalityKey, CardinalityArrowStyle> =
 };
 
 // =============================================================================
-// CLASS ICONS (36) — Lucide icon names
+// CLASS ICONS (34) — Lucide icon names
 // =============================================================================
 
 export const CLASS_ICONS: Record<string, string> = {
@@ -277,8 +277,6 @@ export const CLASS_ICONS: Record<string, string> = {
   OutputArtifact: 'package',
   Page: 'file-text',
   PageGenerated: 'file-check',
-  PageInstruction: 'message-square',
-  PageStructure: 'layout',
   PatternSet: 'puzzle',
   Project: 'folder',
   ProjectContent: 'languages',

@@ -21,6 +21,7 @@ arc:
   source: Locale
   target: GEOQuerySet
   cardinality: one_to_one
+  inverse: GEO_QUERIES_OF
   llm_context: |
     USE: when loading GEO query container for a locale.
     TRIGGERS: locale GEO queries, AI search queries, GEO query set.

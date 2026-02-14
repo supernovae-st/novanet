@@ -1,4 +1,5 @@
 # packages/core/models/arc-classes/ownership/has-formatting.yaml
+# v0.13.1: Added TIER 2 inverse (ADR-026)
 arc:
   name: HAS_FORMATTING
   family: ownership
@@ -6,6 +7,7 @@ arc:
   source: Locale
   target: Formatting
   cardinality: one_to_one
+  inverse: FORMATTING_OF
   llm_context: |
     USE: when loading number/date/currency formatting for a locale.
     TRIGGERS: locale formatting, number format, date format, currency format.

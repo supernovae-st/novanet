@@ -225,21 +225,21 @@ pub fn intro_page2(locale: NexusLocale) -> &'static [&'static str] {
 pub fn intro_page3(locale: NexusLocale) -> &'static [&'static str] {
     match locale {
         NexusLocale::En => &[
-            "THE GRAPH STRUCTURE (v0.12.4)",
+            "THE GRAPH STRUCTURE (v0.12.5)",
             "",
             "61 node types organized by:",
             "  • Realm (WHERE): shared (40) | org (21)",
             "  • Layer (WHAT): 10 functional layers",
             "  • Trait (HOW): defined | authored | imported | generated | retrieved",
             "",
-            "156 arc types organized by:",
+            "169 arc types organized by:",
             "  • Family: ownership | localization | semantic | generation | mining",
             "  • Scope: intra_realm | cross_realm",
             "",
             "Navigate with [1]LEARN [2]EXPLORE [3]PRACTICE",
         ],
         NexusLocale::Fr => &[
-            "LA STRUCTURE DU GRAPHE (v0.12.4)",
+            "LA STRUCTURE DU GRAPHE (v0.12.5)",
             "",
             "61 types de nœuds organisés par :",
             "  • Realm (OÙ) : shared (40) | org (21)",
@@ -604,7 +604,7 @@ static QUIZ_EN: [QuizQuestionI18n; 15] = [
         explanation: "Shared (universal, read-only) and Org (organization-specific).",
     },
     QuizQuestionI18n {
-        question: "How many node types are in NovaNet v0.12.4?",
+        question: "How many node types are in NovaNet v0.12.5?",
         options: &["45", "61", "75", "90"],
         correct: 1,
         explanation: "61 nodes: 40 in Shared realm + 21 in Org realm.",
@@ -747,7 +747,7 @@ static QUIZ_FR: [QuizQuestionI18n; 15] = [
         explanation: "Shared (universel, lecture seule) et Org (spécifique à l'organisation).",
     },
     QuizQuestionI18n {
-        question: "Combien de types de nœuds dans NovaNet v0.12.4 ?",
+        question: "Combien de types de nœuds dans NovaNet v0.12.5 ?",
         options: &["45", "61", "75", "90"],
         correct: 1,
         explanation: "61 nœuds : 40 dans Shared + 21 dans Org.",

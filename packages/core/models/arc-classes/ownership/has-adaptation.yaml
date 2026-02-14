@@ -1,4 +1,5 @@
 # packages/core/models/arc-classes/ownership/has-adaptation.yaml
+# v0.13.1: Added TIER 2 inverse (ADR-026)
 arc:
   name: HAS_ADAPTATION
   family: ownership
@@ -6,6 +7,7 @@ arc:
   source: Locale
   target: Adaptation
   cardinality: one_to_one
+  inverse: ADAPTATION_OF
   llm_context: |
     USE: when loading cultural adaptation rules for a locale.
     TRIGGERS: locale adaptation, cultural adaptation, market adaptation, localization.

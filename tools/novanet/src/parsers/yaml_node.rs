@@ -1,4 +1,4 @@
-//! Parse 61 YAML node definitions with trait validation (v0.12.4).
+//! Parse 61 YAML node definitions with trait validation (v0.12.5).
 //!
 //! Fails fast if any YAML is missing `trait`, `realm`, or `layer` — no silent defaults.
 //! Each file at `packages/core/models/node-classes/<realm>/<layer>/<name>.yaml`
@@ -470,7 +470,7 @@ node:
             return;
         }
 
-        // v0.12.4: 61 nodes (40 shared + 21 org)
+        // v0.12.5: 61 nodes (40 shared + 21 org)
         // History:
         // - v10.8: Added geographic nodes (+12)
         // - v10.9: Added GEO nodes (+3)
@@ -480,13 +480,13 @@ node:
         // - v11.4: Added containers (+3), removed obsolete SEO types (-4)
         // - v11.5: Moved Locale to shared/config, consolidated SEO/GEO to shared/knowledge
         // - v0.12.0: ADR-024 trait rename (defined/authored/imported/generated/retrieved)
-        // v0.12.4: ADR-028 - PageStructure/PageInstruction deleted, Country added
-        // v0.12.4: ADR-028 Brand Architecture - BrandIdentity → Brand + BrandDesign + BrandPrinciples + PromptStyle
+        // v0.12.5: ADR-028 - PageStructure/PageInstruction deleted, Country added
+        // v0.12.5: ADR-028 Brand Architecture - BrandIdentity → Brand + BrandDesign + BrandPrinciples + PromptStyle
         let nodes = load_all_nodes(root).expect("should parse all 61 nodes");
         assert_eq!(
             nodes.len(),
             61,
-            "expected 61 YAML node files (v0.12.4: 40 shared + 21 org)"
+            "expected 61 YAML node files (v0.12.5: 40 shared + 21 org)"
         );
 
         // Every node has a non-empty name, realm, and layer
@@ -509,12 +509,12 @@ node:
         }
 
         // Verify trait distribution (2 realms: shared + org)
-        // v0.12.4: 61 nodes (40 shared + 21 org) - ADR-028 Brand Architecture
+        // v0.12.5: 61 nodes (40 shared + 21 org) - ADR-028 Brand Architecture
         let count = |t: NodeTrait| nodes.iter().filter(|n| n.def.node_trait == t).count();
         assert_eq!(
             count(NodeTrait::Defined),
             33,
-            "defined count (v0.12.4: 33 defined nodes incl. Brand, BrandDesign, BrandPrinciples, PromptStyle)"
+            "defined count (v0.12.5: 33 defined nodes incl. Brand, BrandDesign, BrandPrinciples, PromptStyle)"
         );
         assert_eq!(
             count(NodeTrait::Authored),
@@ -537,19 +537,19 @@ node:
             "retrieved count (v0.12.0: GEOAnswer, SEOKeywordMetrics)"
         );
 
-        // v0.12.4: Verify realm distribution (ADR-028 Brand Architecture)
+        // v0.12.5: Verify realm distribution (ADR-028 Brand Architecture)
         // shared: 40 (unchanged)
         // org: 21 (+4 Brand nodes, -1 BrandIdentity)
         let realm_count = |r: &str| nodes.iter().filter(|n| n.realm == r).count();
         assert_eq!(
             realm_count("shared"),
             40,
-            "shared realm count (v0.12.4: 40 shared nodes)"
+            "shared realm count (v0.12.5: 40 shared nodes)"
         );
         assert_eq!(
             realm_count("org"),
             21,
-            "org realm count (v0.12.4: 21 org nodes incl. Brand Architecture)"
+            "org realm count (v0.12.5: 21 org nodes incl. Brand Architecture)"
         );
 
         // Spot-check known nodes

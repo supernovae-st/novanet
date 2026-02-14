@@ -7,7 +7,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
-## [0.12.4] - 2026-02-14
+## [0.12.5] - 2026-02-14
 
 ### Added
 - **Phase 1: Taxonomy Explosion** - 22 YAML files for realms, layers, traits
@@ -18,7 +18,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   - No emoji in YAML icon definitions
 - **Phase 3: llm_context Standardization** - 100% coverage (was 34%)
   - All 61 nodes have `llm_context:` with USE/TRIGGERS/NOT/RELATES pattern
-  - All 156 arcs have standardized `llm_context:`
+  - All 169 arcs have standardized `llm_context:`
 - **Phase 4: Block.key ADR-028 Format** - Composite key implementation
   - `{page_key}:{block_type}:{index}` format documented
   - View examples updated for new key format
@@ -40,7 +40,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - **215 files changed** in main commit
 - **1052 Rust tests passing**, 4 skipped
 - **61 nodes** (40 shared + 21 org)
-- **156 arcs** (5 families)
+- **169 arcs** (5 families)
 - Schema validation: 0 errors, 0 warnings
 
 ## [0.12.1] - 2026-02-13
@@ -150,7 +150,7 @@ cargo run -- db migrate
 - **985 Rust tests passing**
 - **178 TypeScript core tests passing**
 - **All Studio tests passing**
-- **61 nodes** (40 shared + 21 org), **10 layers**, **5 traits**, **156 arcs**
+- **61 nodes** (40 shared + 21 org), **10 layers**, **5 traits**, **169 arcs**
 
 ## [11.7.0] - 2026-02-11
 

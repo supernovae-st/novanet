@@ -3,6 +3,7 @@
 #
 # v0.12.4: ADR-028 Page-Entity Architecture
 # Entity carries SEO keywords, Page inherits via [:REPRESENTS]
+# v0.13.1: Added TIER 2 inverse (ADR-026)
 
 arc:
   name: HAS_KEYWORD
@@ -12,6 +13,7 @@ arc:
   source: Entity
   target: SEOKeyword
   cardinality: one_to_many
+  inverse: KEYWORD_OF
 
   properties:
     - name: rank

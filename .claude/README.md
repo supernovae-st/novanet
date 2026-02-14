@@ -2,7 +2,7 @@
 
 Claude Code configuration for the NovaNet monorepo.
 
-**Version**: v0.12.4 | **Docs**: [Claude Code Official](https://docs.anthropic.com/en/docs/claude-code)
+**Version**: v0.12.5 | **Docs**: [Claude Code Official](https://docs.anthropic.com/en/docs/claude-code)
 
 ---
 
@@ -10,7 +10,7 @@ Claude Code configuration for the NovaNet monorepo.
 
 ```
 ╔═══════════════════════════════════════════════════════════════════════════════════════════════════╗
-║                              NOVANET DX - v0.12.4                                                  ║
+║                              NOVANET DX - v0.12.5                                                  ║
 ╠═══════════════════════════════════════════════════════════════════════════════════════════════════╣
 ║                                                                                                   ║
 ║   COMMANDS (slash commands)                                                                       ║
@@ -389,7 +389,7 @@ Master command for schema management.
 
 **Example:**
 ```bash
-/schema status     # Show current schema stats (61 Classes, 156 ArcClasses, 2 Realms, 10 Layers)
+/schema status     # Show current schema stats (61 Classes, 170 ArcClasses, 2 Realms, 10 Layers)
 ```
 
 ---
@@ -720,7 +720,7 @@ Architecture Decision Records (ADRs):
 
 ---
 
-## Key Numbers (v0.12.4)
+## Key Numbers (v0.12.5)
 
 | Metric | Value |
 |--------|-------|
@@ -801,20 +801,20 @@ pnpm audit:all
 pnpm doc:generate
 ```
 
-**Source of truth:** `/VERSION` file contains the canonical schema version (0.12.4).
+**Source of truth:** `/VERSION` file contains the canonical schema version (0.12.5).
 
 **`pnpm doc:audit` checks:**
-- Outdated version references (current: v0.12.4)
+- Outdated version references (current: v0.12.5)
 - Deprecated terminology (EntityL10n → EntityContent, PageL10n → PageGenerated, BlockL10n → BlockGenerated)
 - Deprecated arcs (HAS_L10N → HAS_CONTENT, HAS_OUTPUT → HAS_GENERATED)
-- Incorrect node/arc counts (61 nodes, 156 arcs expected)
+- Incorrect node/arc counts (61 nodes, 169 arcs expected)
 - Outdated realm names (global → shared, tenant → org)
 - Outdated layer structure (4 shared + 6 org = 10 layers)
 - Deprecated 5-mode navigation (use 2-mode: Graph/Nexus)
 
 **`pnpm skill:audit` checks:**
 - Deprecated paths (`nodes/` → `node-classes/`, `organizing-principles.yaml` → `taxonomy.yaml`)
-- Node/arc counts match YAML sources (61 node-classes, 156 arc-classes)
+- Node/arc counts match YAML sources (61 node-classes, 169 arc-classes)
 - Deprecated terminology in skills/commands/rules
 
 **Auto-sync reminders:**

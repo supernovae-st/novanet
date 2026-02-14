@@ -3,22 +3,26 @@
 #
 # v11.1.0: NEW arc replacing Entity.type property with proper graph relationship
 #          Entity (org/semantic) -> EntityCategory (shared/config)
+# v0.13.1: MOVED from ownership/ to semantic/ (ADR-026 audit)
+#          Classification is semantic, not hierarchical ownership
 
 arc:
   name: BELONGS_TO
-  family: ownership
+  family: semantic
   scope: cross_realm  # org Entity -> shared EntityCategory (ADR-017)
+  temperature_threshold: 0.10  # Lightweight taxonomy classification
 
   source: Entity
   target: EntityCategory
 
   cardinality: many_to_one  # Each Entity has exactly one category
+  inverse: CATEGORY_OF
 
   llm_context: |
-    USE: when categorizing entities or querying by category.
-    TRIGGERS: entity category, entity type, what is entity, categorization.
-    NOT: entity content (use HAS_CONTENT), entity hierarchy (use HAS_CHILD).
-    RELATES: Entity (source), EntityCategory (target), cross_realm (scope).
+    USE: when filtering/clustering entities by semantic category.
+    TRIGGERS: entity category, entity type, what is entity, categorization, taxonomy.
+    NOT: entity content (use HAS_CONTENT), entity hierarchy (use HAS_CHILD), entity ownership (use HAS_ENTITY).
+    RELATES: Entity (source), EntityCategory (target), CATEGORY_OF (inverse), cross_realm (scope).
 
   cypher_pattern: "(Entity)-[:BELONGS_TO]->(EntityCategory)"
 

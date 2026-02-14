@@ -1,0 +1,23 @@
+# packages/core/models/arc-classes/mining/keyword-targeted-by.yaml
+# ArcClass: KEYWORD_TARGETED_BY — SEOKeyword is targeted by Page/Block (inverse of TARGETS_KEYWORD)
+# v0.13.1: NEW TIER 1 inverse arc (ADR-026)
+
+arc:
+  name: KEYWORD_TARGETED_BY
+  family: mining
+  scope: cross_realm  # shared (SEOKeyword) → org (Page/Block)
+
+  source: SEOKeyword
+  target:
+    - Page
+    - Block
+  cardinality: many_to_many
+  inverse_of: TARGETS_KEYWORD
+
+  llm_context: |
+    USE: when finding which pages/blocks target a specific SEO keyword.
+    TRIGGERS: keyword pages, which pages target, keyword usage, content audit.
+    NOT: loading keywords for page (use TARGETS_KEYWORD), keyword metrics (use HAS_METRICS).
+    RELATES: SEOKeyword (source), Page/Block (target), TARGETS_KEYWORD (inverse).
+
+  cypher_pattern: "(SEOKeyword)-[:KEYWORD_TARGETED_BY]->(Page|Block)"

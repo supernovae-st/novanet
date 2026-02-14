@@ -1,6 +1,6 @@
 //! Generate `layers.ts` via MiniJinja template (YAML → TypeScript).
 //!
-//! Reads all 61 YAML node definitions (v0.12.4 / ADR-028), groups by realm and layer,
+//! Reads all 61 YAML node definitions (v0.12.5 / ADR-028), groups by realm and layer,
 //! and produces `packages/core/src/graph/layers.ts`.
 //! Replaces `SubcategoryGenerator.ts` from @novanet/schema-tools.
 //!
@@ -394,13 +394,13 @@ mod tests {
         let generator = LayerGenerator;
         let output = generator.generate(root).expect("should generate layers.ts");
 
-        // v0.12.4 + Brand Architecture: 61 nodes (40 shared + 21 org)
+        // v0.12.5 + Brand Architecture: 61 nodes (40 shared + 21 org)
         assert!(
             output.contains("mapping all 61 node types"),
             "should mention 61 node types"
         );
 
-        // v0.12.4 + Brand Architecture: Realm node counts
+        // v0.12.5 + Brand Architecture: Realm node counts
         assert!(output.contains("SHARED REALM (40 nodes)")); // config (3) + locale (6) + geography (7) + knowledge (24)
         assert!(output.contains("ORG REALM (21 nodes)")); // Brand Architecture: foundation (6)
 
@@ -463,7 +463,7 @@ mod tests {
             make_node("Project", "org", "foundation"),
             make_node("Page", "org", "structure"),
             make_node("Block", "org", "structure"),
-            // v0.12.4: PageInstruction deleted, use BlockInstruction instead
+            // v0.12.5: PageInstruction deleted, use BlockInstruction instead
             make_node("BlockInstruction", "org", "instruction"),
             make_node("PageGenerated", "org", "output"),
         ];

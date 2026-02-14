@@ -1,5 +1,6 @@
 # packages/core/models/arc-classes/mining/has-metrics.yaml
 # ArcClass: HAS_METRICS — Time-series observation link
+# v0.13.1: Added TIER 2 inverse (ADR-026)
 
 arc:
   name: HAS_METRICS
@@ -8,6 +9,7 @@ arc:
   source: SEOKeyword
   target: SEOKeywordMetrics
   cardinality: one_to_many
+  inverse: METRICS_OF
   llm_context: |
     USE: when loading historical metrics for an SEO keyword.
     TRIGGERS: keyword metrics, search volume, historical data, time series, trend analysis.

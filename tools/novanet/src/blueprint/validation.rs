@@ -723,7 +723,7 @@ mod tests {
     }
 
     /// ADR-028: Must have exactly 61 node classes (40 shared + 21 org)
-    /// v0.12.4: PageStructure/PageInstruction deleted, Country added, Brand Architecture (+4 -1)
+    /// v0.12.5: PageStructure/PageInstruction deleted, Country added, Brand Architecture (+4 -1)
     #[test]
     fn test_adr023_node_count() {
         let root = crate::config::resolve_root(None).expect("Failed to resolve root");
@@ -739,7 +739,7 @@ mod tests {
 
         assert_eq!(
             total, 61,
-            "Expected 61 total nodes (v0.12.4 + Brand Architecture), got {}",
+            "Expected 61 total nodes (v0.12.5 + Brand Architecture), got {}",
             total
         );
         assert_eq!(
@@ -754,7 +754,7 @@ mod tests {
         );
     }
 
-    /// ADR-028: Instruction layer nodes (v0.12.4: PageStructure/PageInstruction deleted)
+    /// ADR-028: Instruction layer nodes (v0.12.5: PageStructure/PageInstruction deleted)
     /// PageStructure and PageInstruction are now calculated at runtime from Block order
     #[test]
     fn test_adr025_instruction_layer_nodes() {
@@ -767,7 +767,7 @@ mod tests {
             .map(|n| n.def.name.as_str())
             .collect();
 
-        // v0.12.4: Only BlockInstruction remains in instruction layer (PageStructure/PageInstruction deleted)
+        // v0.12.5: Only BlockInstruction remains in instruction layer (PageStructure/PageInstruction deleted)
         assert!(
             node_names.contains(&"BlockInstruction"),
             "Missing BlockInstruction in instruction layer"
@@ -777,14 +777,14 @@ mod tests {
             "Missing BlockType in instruction layer"
         );
 
-        // v0.12.4: PageStructure and PageInstruction should NOT exist (calculated at runtime)
+        // v0.12.5: PageStructure and PageInstruction should NOT exist (calculated at runtime)
         assert!(
             !node_names.contains(&"PageStructure"),
-            "PageStructure deleted in v0.12.4 (calculated at runtime)"
+            "PageStructure deleted in v0.12.5 (calculated at runtime)"
         );
         assert!(
             !node_names.contains(&"PageInstruction"),
-            "PageInstruction deleted in v0.12.4 (calculated at runtime)"
+            "PageInstruction deleted in v0.12.5 (calculated at runtime)"
         );
 
         // Legacy deprecated names should NOT exist
@@ -799,7 +799,7 @@ mod tests {
         );
     }
 
-    /// ADR-028: Arc types for instruction layer (v0.12.4: HAS_STRUCTURE deleted)
+    /// ADR-028: Arc types for instruction layer (v0.12.5: HAS_STRUCTURE deleted)
     #[test]
     fn test_adr025_instruction_arcs() {
         let root = crate::config::resolve_root(None).expect("Failed to resolve root");
@@ -807,22 +807,22 @@ mod tests {
 
         let arc_names: Vec<&str> = data.arc_defs.iter().map(|a| a.arc_type.as_str()).collect();
 
-        // Current arc names (v0.12.4)
+        // Current arc names (v0.12.5)
         assert!(
             arc_names.contains(&"HAS_INSTRUCTION"),
             "Missing HAS_INSTRUCTION arc (Page/Block -> BlockInstruction)"
         );
 
-        // v0.12.4: REPRESENTS added for Page -> Entity (1:1)
+        // v0.12.5: REPRESENTS added for Page -> Entity (1:1)
         assert!(
             arc_names.contains(&"REPRESENTS"),
             "Missing REPRESENTS arc (Page -> Entity, ADR-028)"
         );
 
-        // v0.12.4: HAS_STRUCTURE deleted (PageStructure no longer exists)
+        // v0.12.5: HAS_STRUCTURE deleted (PageStructure no longer exists)
         assert!(
             !arc_names.contains(&"HAS_STRUCTURE"),
-            "HAS_STRUCTURE deleted in v0.12.4 (PageStructure calculated at runtime)"
+            "HAS_STRUCTURE deleted in v0.12.5 (PageStructure calculated at runtime)"
         );
 
         // Deprecated arc names should NOT exist
@@ -914,7 +914,7 @@ mod tests {
         }
     }
 
-    /// Layer distribution validation (v0.12.4)
+    /// Layer distribution validation (v0.12.5)
     #[test]
     fn test_layer_distribution() {
         let root = crate::config::resolve_root(None).expect("Failed to resolve root");
@@ -928,7 +928,7 @@ mod tests {
             .count();
         let org_count = data.node_classes.iter().filter(|n| n.realm == "org").count();
 
-        // v0.12.4: 40 shared, 21 org (Brand Architecture: +4 -1)
+        // v0.12.5: 40 shared, 21 org (Brand Architecture: +4 -1)
         assert_eq!(
             shared_count, 40,
             "Shared realm should have 40 nodes, got {}",
@@ -940,7 +940,7 @@ mod tests {
             org_count
         );
 
-        // Verify layer counts within each realm (v0.12.4 + Brand Architecture)
+        // Verify layer counts within each realm (v0.12.5 + Brand Architecture)
         // Shared: config(3) + locale(6) + geography(7) + knowledge(24) = 40
         // Org: config(1) + foundation(6) + structure(3) + semantic(4) + instruction(4) + output(3) = 21
 

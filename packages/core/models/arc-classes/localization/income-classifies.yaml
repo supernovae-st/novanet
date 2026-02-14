@@ -1,0 +1,22 @@
+# packages/core/models/arc-classes/localization/income-classifies.yaml
+# ArcClass: INCOME_CLASSIFIES — IncomeGroup classifies Locale (inverse of HAS_INCOME_LEVEL)
+# v0.13.1: Split from generic CLASSIFIES (ADR-026 - 1:1 inverse pairs)
+
+arc:
+  name: INCOME_CLASSIFIES
+  family: localization
+  scope: intra_realm
+
+  source: IncomeGroup
+  target: Locale
+  cardinality: one_to_many
+
+  inverse_of: HAS_INCOME_LEVEL
+
+  llm_context: |
+    USE: when finding all Locales in a World Bank income classification.
+    TRIGGERS: income group locales, HIC countries, LIC markets, economic classification members.
+    NOT: finding a Locale's income level (use HAS_INCOME_LEVEL), lending classification (use LENDING_CLASSIFIES).
+    RELATES: IncomeGroup (source), Locale (target), HAS_INCOME_LEVEL (inverse).
+
+  cypher_pattern: "(IncomeGroup)-[:INCOME_CLASSIFIES]->(Locale)"

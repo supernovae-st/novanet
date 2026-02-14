@@ -1,6 +1,6 @@
 //! Generate Class meta-nodes + schema_hint, context_budget + facet relations.
 //!
-//! Reads all 61 YAML node definitions (v0.12.4 / ADR-028) and produces idempotent MERGE statements
+//! Reads all 61 YAML node definitions (v0.12.5 / ADR-028) and produces idempotent MERGE statements
 //! for Class nodes with auto-computed properties, plus hierarchy and facet rels.
 //!
 //! v11.8 (ADR-023): Kind → Class, :Meta:Kind → :Schema:Class, [:HAS_KIND] → [:HAS_CLASS]
@@ -81,7 +81,7 @@ fn derive_visibility(realm: &str, layer: &str, kind_name: &str) -> &'static str 
     // Kind-name overrides (priority 1)
     match kind_name {
         // Page/Block types and templates are fragments
-        // v0.12.4: PageStructure deleted (ADR-028)
+        // v0.12.5: PageStructure deleted (ADR-028)
         "Page" | "Block" | "BlockType" => return "fragment",
         // Generated and content nodes are publishable
         "PageGenerated" | "BlockGenerated" => return "publishable",
@@ -441,7 +441,7 @@ mod tests {
     #[test]
     fn context_budget_by_layer() {
         // instruction layer → medium (even with invariant trait)
-        // v0.12.4: PageStructure deleted, use BlockType instead
+        // v0.12.5: PageStructure deleted, use BlockType instead
         assert_eq!(
             context_budget(&make_node(
                 "BlockType",
@@ -578,7 +578,7 @@ mod tests {
             .generate(root)
             .expect("should generate kind cypher");
 
-        // v0.12.4: 61 Class MERGE statements (ADR-028 Brand Architecture)
+        // v0.12.5: 61 Class MERGE statements (ADR-028 Brand Architecture)
         // +4 Brand nodes (Brand, BrandDesign, BrandPrinciples, PromptStyle), -1 BrandIdentity
         let class_merges = cypher
             .lines()
@@ -586,7 +586,7 @@ mod tests {
             .count();
         assert_eq!(
             class_merges, 61,
-            "expected 61 Class MERGE statements (v0.12.4: 40 shared + 21 org)"
+            "expected 61 Class MERGE statements (v0.12.5: 40 shared + 21 org)"
         );
 
         // 61 HAS_CLASS relationships (v0.12.0: renamed from HAS_KIND in v11.8)
@@ -646,7 +646,7 @@ mod tests {
             }
         }
 
-        // v0.12.4: Header mentions 61 Class nodes (ADR-028 Brand Architecture)
+        // v0.12.5: Header mentions 61 Class nodes (ADR-028 Brand Architecture)
         assert!(cypher.contains("61 Class nodes"));
 
         // v10.1: knowledge_tier removed from all YAMLs (node type is sufficient)
@@ -748,7 +748,7 @@ mod tests {
 
         // Org internal layers
         assert_eq!(derive_visibility("org", "config", "Org"), "internal");
-        // v0.12.4: PageInstruction deleted, use BlockInstruction
+        // v0.12.5: PageInstruction deleted, use BlockInstruction
         assert_eq!(
             derive_visibility("org", "instruction", "BlockInstruction"),
             "internal"

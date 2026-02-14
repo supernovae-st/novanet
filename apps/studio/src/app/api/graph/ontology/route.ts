@@ -1,7 +1,7 @@
 /**
  * Schema Graph API Route (Query-First Architecture)
  *
- * Returns the ontological schema graph (61 node classes + 128 arc classes)
+ * Returns the ontological schema graph (61 node classes + 170 arc classes)
  * directly from Neo4j schema-nodes. No TypeScript generation - pure Cypher.
  *
  * Schema-graph structure in Neo4j (v0.12.4 ADR-023/ADR-028):

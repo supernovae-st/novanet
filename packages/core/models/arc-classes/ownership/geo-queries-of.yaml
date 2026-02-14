@@ -1,0 +1,18 @@
+# packages/core/models/arc-classes/ownership/geo-queries-of.yaml
+# ArcClass: GEO_QUERIES_OF — GEOQuerySet belongs to Locale (inverse of HAS_GEO_QUERIES)
+# v0.13.1: NEW TIER 2 inverse arc (ADR-026)
+
+arc:
+  name: GEO_QUERIES_OF
+  family: ownership
+  scope: intra_realm
+  source: GEOQuerySet
+  target: Locale
+  cardinality: one_to_one
+  inverse_of: HAS_GEO_QUERIES
+  llm_context: |
+    USE: when finding which Locale owns this GEO query set.
+    TRIGGERS: GEO queries locale, which locale GEO, query set owner.
+    NOT: loading GEO queries for locale (use HAS_GEO_QUERIES), individual queries (use CONTAINS_GEO_QUERY).
+    RELATES: GEOQuerySet (source), Locale (target), HAS_GEO_QUERIES (inverse).
+  cypher_pattern: (GEOQuerySet)-[:GEO_QUERIES_OF]->(Locale)

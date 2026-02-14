@@ -1,7 +1,17 @@
 # packages/core/models/arc-classes/semantic/references-entity.yaml
 # ArcClass: REFERENCES_ENTITY — BlockInstruction references Entity (v10.3)
+#
+# ⚠️ DEPRECATED v0.13.1: Use MENTIONS with ref_type='entity' instead
+# This arc is superseded by the unified MENTIONS arc which provides:
+# - position tracking (char offset)
+# - ref_type classification (entity, page, term, etc.)
+# - purpose distinction (inject vs link)
+# Planned removal: v0.14.0
 
 arc:
+  status: deprecated
+  deprecation_note: "Use MENTIONS with ref_type='entity' instead (v0.13.1)"
+  removal_version: v0.14.0
   name: REFERENCES_ENTITY
   family: semantic
   scope: intra_realm

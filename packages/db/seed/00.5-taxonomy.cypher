@@ -81,13 +81,13 @@ ON CREATE SET
   l_instruction.display_name = 'Instructions',
   l_instruction.emoji = '▤',
   l_instruction.color = '#eab308',
-  l_instruction.llm_context = 'USE: when accessing generation instructions and rules. TRIGGERS: "instruction", "prompt", "rules", "block type", "generation directives". NOT: for generated output (use output layer). RELATES: PageInstruction (defined), BlockInstruction (defined), BlockType (defined).',
+  l_instruction.llm_context = 'USE: when accessing generation instructions and rules. TRIGGERS: "instruction", "prompt", "rules", "block type", "generation directives". NOT: for generated output (use output layer). RELATES: BlockInstruction (defined), BlockType (defined), BlockRules (defined).',
   l_instruction.created_at = datetime()
 ON MATCH SET
   l_instruction.display_name = 'Instructions',
   l_instruction.emoji = '▤',
   l_instruction.color = '#eab308',
-  l_instruction.llm_context = 'USE: when accessing generation instructions and rules. TRIGGERS: "instruction", "prompt", "rules", "block type", "generation directives". NOT: for generated output (use output layer). RELATES: PageInstruction (defined), BlockInstruction (defined), BlockType (defined).',
+  l_instruction.llm_context = 'USE: when accessing generation instructions and rules. TRIGGERS: "instruction", "prompt", "rules", "block type", "generation directives". NOT: for generated output (use output layer). RELATES: BlockInstruction (defined), BlockType (defined), BlockRules (defined).',
   l_instruction.updated_at = datetime();
 
 MATCH (r:Realm {key: 'org'}), (l:Layer {key: 'instruction'})
