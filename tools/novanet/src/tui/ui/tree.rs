@@ -433,7 +433,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     }
 
     // === FILTERED DATA MODE: Show only instances of selected Class ===
-    if let Some(class_key) = app.get_filter_kind() {
+    if let Some(class_key) = app.get_filter_class() {
         render_filtered_instances(
             f,
             area,
@@ -1591,7 +1591,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     let mode_prefix = if app.is_graph_mode() {
         "● Data" // Filled circle = instances/data
     } else {
-        "◆ Schema" // Diamond = structure/meta
+        "◆ Schema" // Diamond = structure/schema
     };
 
     // v11.8: Renamed per ADR-024 Data Origin semantics

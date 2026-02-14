@@ -149,7 +149,7 @@ async fn run_app(
             eprintln!("   • Check Neo4j is running: \x1b[36mdocker ps\x1b[0m");
             eprintln!("   • Verify credentials: \x1b[36mneo4j / novanetpassword\x1b[0m");
             eprintln!("   • Run seed: \x1b[36mpnpm infra:seed\x1b[0m");
-            eprintln!("   • Check connection: \x1b[36mcargo run -- meta\x1b[0m\n");
+            eprintln!("   • Check connection: \x1b[36mcargo run -- blueprint\x1b[0m\n");
 
             return Err(e);
         }
@@ -223,7 +223,7 @@ async fn run_app(
                         }
                         match arcs_result {
                             Some(Ok(arcs)) => {
-                                app.set_kind_arcs(arcs);
+                                app.set_class_arcs(arcs);
                             }
                             Some(Err(e)) => {
                                 app.set_status_error(&format!("Load arcs: {}", e));
@@ -233,9 +233,9 @@ async fn run_app(
                     }
 
                     // Sequential loads for other details (typically only one fires at a time)
-                    if let Some(arc_key) = app.take_pending_arc_kind_load() {
-                        match TaxonomyTree::load_arc_kind_details(db, &arc_key).await {
-                            Ok(details) => app.set_arc_kind_details(details),
+                    if let Some(arc_key) = app.take_pending_arc_class_load() {
+                        match TaxonomyTree::load_arc_class_details(db, &arc_key).await {
+                            Ok(details) => app.set_arc_class_details(details),
                             Err(e) => app.set_status_error(&format!("Load arc: {}", e)),
                         }
                     }

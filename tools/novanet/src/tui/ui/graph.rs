@@ -37,7 +37,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
     };
 
     // Calculate arc counts for title (separate in/out)
-    let (incoming_count, outgoing_count, arcs_loading) = if let Some(ref arcs) = app.kind_arcs {
+    let (incoming_count, outgoing_count, arcs_loading) = if let Some(ref arcs) = app.class_arcs {
         (arcs.incoming.len(), arcs.outgoing.len(), false)
     } else if let Some(TreeItem::Instance(_, _, _, inst)) = app.current_item() {
         (
@@ -76,7 +76,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
     // === LOADING INDICATOR (specific message based on what's loading) ===
     let loading_msg = if app.pending_arcs_load.is_some() {
         Some("Loading arc relationships...")
-    } else if app.pending_arc_kind_load.is_some() {
+    } else if app.pending_arc_class_load.is_some() {
         Some("Loading arc class details...")
     } else if app.pending_realm_load.is_some() {
         Some("Loading realm statistics...")
@@ -404,7 +404,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
     }
 
     // === KIND ARCS VIEW (from Neo4j) ===
-    if let Some(ref arcs) = app.kind_arcs {
+    if let Some(ref arcs) = app.class_arcs {
         // Hierarchy breadcrumb with theme colors
         lines.push(Line::from(vec![
             Span::styled("  ", dim),
@@ -443,7 +443,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
     }
 
     // === ARCKIND DETAILS VIEW ===
-    if let Some(ref details) = app.arc_kind_details {
+    if let Some(ref details) = app.arc_class_details {
         let family_color = theme.arc_family_color(&details.family);
 
         // Arc name with family

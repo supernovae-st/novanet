@@ -509,7 +509,7 @@ impl Icons {
         icons.quality.insert("chart".into(), "≡".into());
 
         // Modes
-        icons.modes.insert("meta".into(), "M".into());
+        icons.modes.insert("schema".into(), "S".into());
         icons.modes.insert("data".into(), "D".into());
         icons.modes.insert("overlay".into(), "O".into());
         icons.modes.insert("query".into(), "Q".into());
@@ -1038,7 +1038,7 @@ mod tests {
         assert_eq!(icons.quality("chart"), "≡");
 
         // Modes
-        assert_eq!(icons.mode("meta"), "M");
+        assert_eq!(icons.mode("schema"), "S");
     }
 
     #[test]

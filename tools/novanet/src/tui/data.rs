@@ -19,7 +19,7 @@ pub const INSTANCE_LIMIT: usize = 300;
 /// Validates that a Neo4j label is safe for interpolation into Cypher queries.
 /// Labels must be alphanumeric (with underscores allowed) and non-empty.
 ///
-/// While our data comes from the meta-graph (not direct user input), this provides
+/// While our data comes from the schema graph (not direct user input), this provides
 /// defense-in-depth against potential injection if the database were compromised.
 fn validate_cypher_label(label: &str) -> crate::Result<()> {
     if label.is_empty() {
@@ -270,7 +270,7 @@ pub struct GraphStats {
     pub node_count: i64,
     pub arc_count: i64,
     pub kind_count: i64,
-    pub arc_kind_count: i64,
+    pub arc_class_count: i64,
 }
 
 // ============================================================================
@@ -1258,14 +1258,14 @@ RETURN collect(key) AS keys, total
 UNWIND $keys AS k
 MATCH (n:{class_label} {{key: k}})
 OPTIONAL MATCH (n)-[out]->(target)
-WHERE NOT target:Meta
+WHERE NOT target:Schema
 WITH n, k, collect(DISTINCT {{
     arc_type: type(out),
     target_key: coalesce(target.key, target.label, id(target)),
     target_class: head(labels(target))
 }}) AS outgoing
 OPTIONAL MATCH (source)-[inc]->(n)
-WHERE NOT source:Meta
+WHERE NOT source:Schema
 WITH n, k, outgoing, collect(DISTINCT {{
     arc_type: type(inc),
     source_key: coalesce(source.key, source.label, id(source)),
@@ -1447,14 +1447,14 @@ RETURN
 UNWIND $keys AS k
 MATCH (n:{class_label} {{key: k}})
 OPTIONAL MATCH (n)-[out]->(target)
-WHERE NOT target:Meta
+WHERE NOT target:Schema
 WITH n, k, collect(DISTINCT {{
     arc_type: type(out),
     target_key: coalesce(target.key, target.label, id(target)),
     target_class: head(labels(target))
 }}) AS outgoing
 OPTIONAL MATCH (source)-[inc]->(n)
-WHERE NOT source:Meta
+WHERE NOT source:Schema
 WITH n, k, outgoing, collect(DISTINCT {{
     arc_type: type(inc),
     source_key: coalesce(source.key, source.label, id(source)),
@@ -1534,7 +1534,7 @@ RETURN nodes, arcs, classes, count(ak) AS arc_classes
                 node_count: row.get("nodes").unwrap_or(0),
                 arc_count: row.get("arcs").unwrap_or(0),
                 kind_count: row.get("classes").unwrap_or(0),
-                arc_kind_count: row.get("arc_classes").unwrap_or(0),
+                arc_class_count: row.get("arc_classes").unwrap_or(0),
             })
         } else {
             Ok(GraphStats::default())
@@ -1623,7 +1623,7 @@ LIMIT 1
     }
 
     /// Load ArcClass details from Neo4j (endpoints, family, cardinality).
-    pub async fn load_arc_kind_details(db: &Db, arc_key: &str) -> crate::Result<ArcClassDetails> {
+    pub async fn load_arc_class_details(db: &Db, arc_key: &str) -> crate::Result<ArcClassDetails> {
         let cypher = r#"
 MATCH (ac:ArcClass {key: $arcKey})
 OPTIONAL MATCH (ac)-[:IN_FAMILY]->(af:ArcFamily)
@@ -1875,14 +1875,14 @@ LIMIT 1000
 WITH total, collect(e) AS entities
 UNWIND entities AS e
 OPTIONAL MATCH (e)-[out]->(target)
-WHERE NOT target:Meta
+WHERE NOT target:Schema
 WITH total, e, collect(DISTINCT {
     arc_type: type(out),
     target_key: coalesce(target.key, target.label, toString(id(target))),
     target_class: head(labels(target))
 }) AS outgoing
 OPTIONAL MATCH (source)-[inc]->(e)
-WHERE NOT source:Meta
+WHERE NOT source:Schema
 WITH total, e, outgoing, collect(DISTINCT {
     arc_type: type(inc),
     source_key: coalesce(source.key, source.label, toString(id(source))),
@@ -3527,7 +3527,7 @@ mod tests {
     // ========================================================================
 
     #[test]
-    fn test_tree_item_count_meta_mode() {
+    fn test_tree_item_count_schema_mode() {
         let tree = create_test_tree();
         // In Schema mode: 1 (Classes) + 1 (shared) + 1 (locale) + 1 (Locale)
         //              + 1 (org) + 1 (structure) + 1 (Page) + 1 (semantic) + 1 (Entity)

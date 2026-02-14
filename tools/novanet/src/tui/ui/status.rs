@@ -76,11 +76,11 @@ pub(crate) fn get_contextual_shortcuts(
 /// - Empty string otherwise
 pub(crate) fn build_filter_indicator(
     is_filtered: bool,
-    filter_kind: Option<&str>,
+    filter_class: Option<&str>,
     hide_empty: bool,
 ) -> String {
     if is_filtered {
-        if let Some(kind_key) = filter_kind {
+        if let Some(kind_key) = filter_class {
             format!(" [{}]", kind_key)
         } else {
             String::new()
@@ -99,11 +99,11 @@ pub(crate) fn format_stats(
     node_count: i64,
     arc_count: i64,
     kind_count: i64,
-    arc_kind_count: i64,
+    arc_class_count: i64,
 ) -> String {
     format!(
         "{} nodes.{} arcs | {} Classes.{} ArcClasses",
-        node_count, arc_count, kind_count, arc_kind_count
+        node_count, arc_count, kind_count, arc_class_count
     )
 }
 
@@ -224,7 +224,7 @@ pub fn render_status(f: &mut Frame, area: Rect, app: &App) {
     // Build filter indicator using extracted pure function
     let filter_indicator = build_filter_indicator(
         app.is_filtered_graph_mode(),
-        app.get_filter_kind(),
+        app.get_filter_class(),
         app.hide_empty,
     );
 
@@ -298,7 +298,7 @@ pub fn render_status(f: &mut Frame, area: Rect, app: &App) {
             stats.node_count,
             stats.arc_count,
             stats.kind_count,
-            stats.arc_kind_count,
+            stats.arc_class_count,
         ),
         STYLE_MUTED,
     ));

@@ -115,7 +115,7 @@ pub struct UnifiedNode {
     pub display: NodeDisplay,
     /// Child loading state
     pub children: LazyChildren,
-    /// Neo4j labels for this node (e.g., [":Meta", ":Realm"])
+    /// Neo4j labels for this node (e.g., [":Schema", ":Realm"])
     pub neo4j_labels: SmallVec<[String; 2]>,
 }
 

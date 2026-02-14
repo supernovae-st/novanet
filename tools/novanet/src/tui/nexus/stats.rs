@@ -226,7 +226,7 @@ impl SchemaStats {
 
         Self {
             kinds: tree.stats.kind_count,
-            arcs: tree.stats.arc_kind_count,
+            arcs: tree.stats.arc_class_count,
             layers: total_layers,
             traits: 5, // Fixed: defined, authored, imported, generated, retrieved
             realms: tree.realms.len(),
