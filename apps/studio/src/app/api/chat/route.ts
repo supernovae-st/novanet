@@ -40,10 +40,10 @@ Key principle: Generation, NOT Translation
 All nodes have: key, display_name, icon, description, llm_context, created_at, updated_at
 
 ### 2-Realm Architecture (v0.12.0)
-- **SHARED** (4 layers): config, locale, geography, knowledge — Universal, READ-ONLY (39 nodes)
-- **ORG** (6 layers): config, foundation, structure, semantic, instruction, output (20 nodes)
+- **SHARED** (4 layers): config, locale, geography, knowledge — Universal, READ-ONLY (40 nodes)
+- **ORG** (6 layers): config, foundation, structure, semantic, instruction, output (21 nodes)
 
-### Node Types (59 total, organized by realm/layer)
+### Node Types (61 total, organized by realm/layer)
 
 **Shared/Config** — Locale and entity category definitions
 - Locale: BCP47 codes (language_code, country_code, fallback_chain)

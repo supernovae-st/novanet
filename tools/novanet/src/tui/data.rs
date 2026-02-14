@@ -850,9 +850,9 @@ OPTIONAL MATCH (n)-[:OF_CLASS]->(k)
 WITH k, r, l, count(n) AS instances
 RETURN
     k.label AS class_key,
-    coalesce(k.display_name, k.label) AS kind_display,
-    coalesce(k.llm_context, '') AS kind_desc,
-    coalesce(k.icon, '') AS kind_icon,
+    coalesce(k.display_name, k.label) AS class_display,
+    coalesce(k.llm_context, '') AS class_desc,
+    coalesce(k.icon, '') AS class_icon,
     coalesce(k.trait, '') AS trait_key,
     coalesce(r.key, 'unknown') AS realm_key,
     coalesce(r.display_name, r.key, 'Unknown') AS realm_display,
@@ -886,9 +886,9 @@ ORDER BY realm_key, layer_key, class_key
         for row in rows {
             // Extract fields using RowExt for ergonomic defaults
             let class_key = row.str("class_key");
-            let class_display = row.str("kind_display");
-            let class_desc = row.str("kind_desc");
-            let class_icon = row.str("kind_icon");
+            let class_display = row.str("class_display");
+            let class_desc = row.str("class_desc");
+            let class_icon = row.str("class_icon");
             let trait_key = row.str("trait_key");
             let realm_key = row.str("realm_key");
             let realm_display = row.str("realm_display");

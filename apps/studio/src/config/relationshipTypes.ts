@@ -1,13 +1,13 @@
 // =============================================================================
-// RELATIONSHIP TYPE CONFIGURATION (v11.1.0)
+// RELATIONSHIP TYPE CONFIGURATION (v0.12.4)
 // =============================================================================
-// Visual configuration for all 51 NovaNet relationship types
+// Visual configuration for all 53 NovaNet relationship types
 // Mirrors nodeTypes.ts pattern for consistency
 
 import { RelationType } from '@novanet/core/schemas/relations.schema';
 
 // =============================================================================
-// RELATIONSHIP CATEGORIES (8 categories, 50 relations)
+// RELATIONSHIP CATEGORIES (8 categories, 53 relations)
 // =============================================================================
 
 /**
@@ -93,7 +93,7 @@ export const RELATIONSHIP_CATEGORIES: Record<RelationshipCategory, RelationType[
     'GENERATED_FROM',
     'INFLUENCED_BY',
   ],
-  // Optimization: SEO/GEO targeting (7 relations)
+  // Optimization: SEO/GEO targeting (5 relations)
   optimization: [
     'HAS_SEO_TARGET',
     'HAS_GEO_TARGET',
@@ -126,13 +126,14 @@ export interface RelationshipTypeConfig {
 }
 
 /**
- * All relationship type configurations (51 relations)
+ * All relationship type configurations (53 relations)
  * v10.3: HAS_CONCEPT removed — Entity in shared realm, use USES_ENTITY
  * v11.1: BELONGS_TO added — Entity → EntityCategory semantic classification
+ * v0.12.4: REFERENCES, HAS_KEYWORD, POPULAR_IN added (ADR-028)
  */
 export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfig> = {
   // ==========================================================================
-  // OWNERSHIP CATEGORY (5 relations) - blue (from taxonomy.yaml)
+  // OWNERSHIP CATEGORY (8 relations) - blue (from taxonomy.yaml)
   // ==========================================================================
   HAS_PAGE: {
     type: 'HAS_PAGE',
@@ -307,7 +308,7 @@ export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfi
   },
 
   // ==========================================================================
-  // SEMANTIC CATEGORY (4 relations) - orange (from taxonomy.yaml)
+  // SEMANTIC CATEGORY (7 relations) - orange (from taxonomy.yaml)
   // ==========================================================================
   USES_ENTITY: {
     type: 'USES_ENTITY',

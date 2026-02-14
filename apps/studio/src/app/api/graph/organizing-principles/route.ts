@@ -1,7 +1,7 @@
 /**
  * Organizing Principles API Route
  *
- * Returns Realm, Layer nodes, and Kind→Layer mapping
+ * Returns Realm, Layer nodes, and Class→Layer mapping
  * from Neo4j. All display metadata (emoji, color) comes from the database,
  * which is seeded from organizing-principles.yaml (the source of truth).
  *
