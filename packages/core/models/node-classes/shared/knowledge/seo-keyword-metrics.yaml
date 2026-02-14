@@ -2,8 +2,6 @@
 # SEOKeywordMetrics - Historical metrics snapshot for a keyword
 #
 # v11.4: Moved to shared/knowledge (Knowledge Atoms pattern)
-#        - realm: shared (was org)
-#        - layer: knowledge (was seo)
 #
 # v10.6: SEO Schema v2
 #        - Added: clicks, traffic_potential (snapshot data)

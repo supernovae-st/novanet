@@ -96,7 +96,7 @@ LIMIT $limit"
 }
 
 // ---------------------------------------------------------------------------
-// Mode 4: Faceted query — resolve kinds via meta-graph, then fetch data nodes
+// Mode 4: Faceted query — resolve classes via schema-graph, then fetch data nodes
 // ---------------------------------------------------------------------------
 
 /// Build a faceted Cypher query from a `FacetFilter`.

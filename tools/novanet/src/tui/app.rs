@@ -220,7 +220,7 @@ pub struct App {
     pub yaml_cache: FxHashMap<String, String>,
     /// Neo4j arc data for current Class (loaded async)
     pub class_arcs: Option<ClassArcsData>,
-    /// Neo4j arc kind details (loaded async when ArcClass selected)
+    /// Neo4j arc class details (loaded async when ArcClass selected)
     pub arc_class_details: Option<ArcClassDetails>,
     // Data view: pending instance load request (Class label to load)
     pub pending_instance_load: Option<String>,
@@ -268,7 +268,7 @@ pub struct App {
     // Class Validation State (Neo4j ↔ YAML)
     // ==========================================================================
     /// Validated properties for current Class (YAML schema vs Neo4j)
-    pub validated_kind_properties: Option<Vec<ValidatedProperty>>,
+    pub validated_class_properties: Option<Vec<ValidatedProperty>>,
     /// Validation stats for current Class
     pub validation_stats: Option<ValidationStats>,
     // ==========================================================================
@@ -354,7 +354,7 @@ impl App {
             matched_properties: None,
             coverage_stats: None,
             // Class validation (Neo4j ↔ YAML)
-            validated_kind_properties: None,
+            validated_class_properties: None,
             validation_stats: None,
             // Property focus (Feature 3)
             focused_property_idx: 0,
@@ -402,7 +402,7 @@ impl App {
         self.pending_instance_load = None;
 
         // Clear Class validation state (only populated for Class items)
-        self.validated_kind_properties = None;
+        self.validated_class_properties = None;
         self.validation_stats = None;
 
         // Get current item using mode-aware method (handles filtered Data mode)
@@ -419,7 +419,7 @@ impl App {
                 self.load_yaml_cached(&yaml_path);
                 self.pending_arcs_load = Some(key);
                 // Load Class validation (Neo4j vs YAML)
-                self.load_validated_kind_properties(&properties);
+                self.load_validated_class_properties(&properties);
             }
             TreeItemData::ArcClass { yaml_path, key } => {
                 self.load_yaml_cached(&yaml_path);
@@ -474,9 +474,9 @@ impl App {
                     .is_some()
                 {
                     // Get the Class's yaml_path for showing schema in YAML panel
-                    if let Some((_, _, kind)) = self.tree.find_kind(class_key) {
+                    if let Some((_, _, class_info)) = self.tree.find_class(class_key) {
                         return TreeItemData::Instance {
-                            class_yaml_path: kind.yaml_path.clone(),
+                            class_yaml_path: class_info.yaml_path.clone(),
                         };
                     }
                     return TreeItemData::Instance {
@@ -495,10 +495,10 @@ impl App {
         };
 
         match item {
-            Some(TreeItem::Class(_, _, kind)) => TreeItemData::Class {
-                yaml_path: kind.yaml_path.clone(),
-                key: kind.key.clone(),
-                properties: kind.properties.clone(),
+            Some(TreeItem::Class(_, _, class_info)) => TreeItemData::Class {
+                yaml_path: class_info.yaml_path.clone(),
+                key: class_info.key.clone(),
+                properties: class_info.properties.clone(),
             },
             Some(TreeItem::ArcClass(family, arc)) => {
                 let arc_file = arc.key.to_lowercase().replace('_', "-");
@@ -520,14 +520,14 @@ impl App {
                 key: family.key.clone(),
             },
             Some(TreeItem::ClassesSection) | Some(TreeItem::ArcsSection) => TreeItemData::Section,
-            Some(TreeItem::Instance(_, _, kind, _)) => TreeItemData::Instance {
-                class_yaml_path: kind.yaml_path.clone(),
+            Some(TreeItem::Instance(_, _, class_info, _)) => TreeItemData::Instance {
+                class_yaml_path: class_info.yaml_path.clone(),
             },
             // EntityCategory shows parent Entity Class's YAML
-            Some(TreeItem::EntityCategory(_, _, kind, _)) => TreeItemData::Class {
-                yaml_path: kind.yaml_path.clone(),
-                key: kind.key.clone(),
-                properties: kind.properties.clone(),
+            Some(TreeItem::EntityCategory(_, _, class_info, _)) => TreeItemData::Class {
+                yaml_path: class_info.yaml_path.clone(),
+                key: class_info.key.clone(),
+                properties: class_info.properties.clone(),
             },
             None => TreeItemData::None,
         }
@@ -721,10 +721,10 @@ impl App {
                             .tree
                             .is_collapsed(&format!("layer:{}:{}", realm.key, layer.key))
                         {
-                            for kind in &layer.classes {
+                            for class_info in &layer.classes {
                                 let match_display =
-                                    fuzzy_match(&kind.display_name, &mut matcher, &pattern);
-                                let match_key = fuzzy_match(&kind.key, &mut matcher, &pattern);
+                                    fuzzy_match(&class_info.display_name, &mut matcher, &pattern);
+                                let match_key = fuzzy_match(&class_info.key, &mut matcher, &pattern);
                                 if let Some((score, indices)) = match_display.or(match_key) {
                                     matches.push((idx, score, indices));
                                 }
@@ -752,10 +752,10 @@ impl App {
                 idx += 1;
 
                 if !self.tree.is_collapsed(&format!("family:{}", family.key)) {
-                    for arc_kind in &family.arc_classes {
+                    for arc_class in &family.arc_classes {
                         let match_display =
-                            fuzzy_match(&arc_kind.display_name, &mut matcher, &pattern);
-                        let match_key = fuzzy_match(&arc_kind.key, &mut matcher, &pattern);
+                            fuzzy_match(&arc_class.display_name, &mut matcher, &pattern);
+                        let match_key = fuzzy_match(&arc_class.key, &mut matcher, &pattern);
                         if let Some((score, indices)) = match_display.or(match_key) {
                             matches.push((idx, score, indices));
                         }
@@ -1582,11 +1582,11 @@ impl App {
                 // Serialize instance properties to JSON
                 serde_json::to_string_pretty(&inst.properties).ok()
             }
-            Some(TreeItem::Class(_, _, kind)) => {
+            Some(TreeItem::Class(_, _, class_info)) => {
                 // For Class, show properties schema
                 Some(format!(
                     "{{\"properties\": {:?}, \"required\": {:?}}}",
-                    kind.properties, kind.required_properties
+                    class_info.properties, class_info.required_properties
                 ))
             }
             _ => None,
@@ -1750,11 +1750,12 @@ impl App {
         }
 
         // Check if current item is a Class
-        if let Some(super::data::TreeItem::Class(_, _, kind)) = self.tree.item_at(self.tree_cursor)
+        if let Some(super::data::TreeItem::Class(_, _, class_info)) =
+            self.tree.item_at(self.tree_cursor)
         {
             // Only request if not already loaded
-            if self.tree.get_instances(&kind.key).is_none() {
-                self.pending_instance_load = Some(kind.key.clone());
+            if self.tree.get_instances(&class_info.key).is_none() {
+                self.pending_instance_load = Some(class_info.key.clone());
             }
         }
 
@@ -1888,7 +1889,7 @@ impl App {
         self.class_arcs = Some(arcs);
     }
 
-    /// Take the pending arc kind details load request (returns Arc key if one was queued).
+    /// Take the pending arc class details load request (returns Arc key if one was queued).
     pub fn take_pending_arc_class_load(&mut self) -> Option<String> {
         self.pending_arc_class_load.take()
     }
@@ -1993,8 +1994,8 @@ impl App {
     /// Load validated properties for the current Class (compares Neo4j vs YAML).
     /// Called when selecting a Class in Meta mode to show validation status.
     /// Uses cached YAML content to avoid redundant file I/O.
-    pub fn load_validated_kind_properties(&mut self, kind_properties: &[String]) {
-        use super::schema::{ValidationStats, parse_schema_properties, validate_kind_properties};
+    pub fn load_validated_class_properties(&mut self, class_properties: &[String]) {
+        use super::schema::{ValidationStats, parse_schema_properties, validate_class_properties};
 
         // Need the Class's YAML path to load schema
         if self.yaml_path.is_empty() {
@@ -2018,10 +2019,10 @@ impl App {
         }
 
         // Validate: compare YAML schema against Neo4j properties
-        let validated = validate_kind_properties(&schema, kind_properties);
+        let validated = validate_class_properties(&schema, class_properties);
         let stats = ValidationStats::from_validated(&validated);
 
-        self.validated_kind_properties = Some(validated);
+        self.validated_class_properties = Some(validated);
         self.validation_stats = Some(stats);
     }
 }
@@ -2110,12 +2111,12 @@ mod tests {
 
         let realms = vec![global, tenant];
 
-        // Build kind_index (mirrors load() behavior)
-        let mut kind_index = FxHashMap::default();
+        // Build class_index (mirrors load() behavior)
+        let mut class_index = FxHashMap::default();
         for (r_idx, realm) in realms.iter().enumerate() {
             for (l_idx, layer) in realm.layers.iter().enumerate() {
-                for (k_idx, kind) in layer.classes.iter().enumerate() {
-                    kind_index.insert(kind.key.clone(), (r_idx, l_idx, k_idx));
+                for (k_idx, class_info) in layer.classes.iter().enumerate() {
+                    class_index.insert(class_info.key.clone(), (r_idx, l_idx, k_idx));
                 }
             }
         }
@@ -2127,7 +2128,7 @@ mod tests {
             collapsed: FxHashSet::default(),
             instances: FxHashMap::default(),
             instance_totals: FxHashMap::default(),
-            kind_index,
+            class_index,
             entity_categories: Vec::new(),
             entity_category_instances: FxHashMap::default(),
         }
@@ -2153,7 +2154,7 @@ mod tests {
     fn test_graph_mode_shows_instances() {
         let mut app = create_test_app();
 
-        // Navigate to Locale kind (index 3)
+        // Navigate to Locale Class (index 3)
         // Classs (0), shared (1), locale (2), Locale (3)
         app.tree_cursor = 3;
 
@@ -2169,7 +2170,7 @@ mod tests {
         // Cursor should be valid
         assert_eq!(app.tree_cursor, 3);
 
-        // Item at cursor should still be Locale kind
+        // Item at cursor should still be Locale Class
         match app.current_item() {
             Some(TreeItem::Class(_, _, k)) => assert_eq!(k.key, "Locale"),
             other => panic!("Expected Class Locale in Graph mode, got {:?}", other),
@@ -2177,10 +2178,10 @@ mod tests {
     }
 
     #[test]
-    fn test_graph_mode_shows_instances_after_kind() {
+    fn test_graph_mode_shows_instances_after_class() {
         let mut app = create_test_app();
 
-        // Add instances to Locale kind
+        // Add instances to Locale Class
         let instances = vec![
             InstanceInfo {
                 key: "fr-FR".to_string(),
@@ -2295,7 +2296,7 @@ mod tests {
     }
 
     #[test]
-    fn test_collapsed_kind_hides_instances_in_graph_mode() {
+    fn test_collapsed_class_hides_instances_in_graph_mode() {
         let mut app = create_test_app();
 
         // Add instances
@@ -2413,7 +2414,7 @@ mod tests {
         let mut app = create_test_app();
         app.mode = NavMode::Graph;
 
-        // Add instances to Locale kind
+        // Add instances to Locale Class
         let instances = vec![
             InstanceInfo {
                 key: "fr-FR".to_string(),
@@ -2702,7 +2703,7 @@ mod tests {
             "Should find at least one result"
         );
 
-        // The result should include the index of "Page" kind
+        // The result should include the index of "Page" Class
         // Tree structure: Classes(0), shared(1), locale(2), Locale(3),
         //                 org(4), structure(5), Page(6), Arcs(7)
         assert!(

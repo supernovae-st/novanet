@@ -43,11 +43,11 @@ pub const LAYERS_STRUCTURE: IconDef = IconDef::new("layout", "▤", "Information
 // TRAITS ICONS (5)
 // =============================================================================
 
-pub const TRAITS_AUTHORED: IconDef = IconDef::new("pen", "□", "Human-written PER locale (was localized)");
-pub const TRAITS_DEFINED: IconDef = IconDef::new("lock", "■", "Human-created ONCE (was invariant)");
+pub const TRAITS_AUTHORED: IconDef = IconDef::new("pen", "□", "Human-written PER locale");
+pub const TRAITS_DEFINED: IconDef = IconDef::new("lock", "■", "Human-created ONCE");
 pub const TRAITS_GENERATED: IconDef = IconDef::new("sparkles", "★", "OUR LLM produces this output");
-pub const TRAITS_IMPORTED: IconDef = IconDef::new("download", "◊", "External data brought in (was knowledge)");
-pub const TRAITS_RETRIEVED: IconDef = IconDef::new("cloud-download", "▪", "Fetched from EXTERNAL APIs (was aggregated)");
+pub const TRAITS_IMPORTED: IconDef = IconDef::new("download", "◊", "External data brought in");
+pub const TRAITS_RETRIEVED: IconDef = IconDef::new("cloud-download", "▪", "Fetched from EXTERNAL APIs");
 
 // =============================================================================
 // ARC_FAMILIES ICONS (5)

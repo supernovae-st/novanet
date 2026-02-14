@@ -223,10 +223,6 @@ export interface PromptStyle {
   updated_at: Date;
 }
 
-// v0.12.4: BrandIdentity deprecated, replaced by Brand + BrandDesign + BrandPrinciples + PromptStyle
-/** @deprecated Use Brand instead (ADR-028) */
-export type BrandIdentity = Brand;
-
 // Export all types
 // v7.2.5: Audience merged into ProjectContent.target_audience
 // v7.2.5: ValuePropL10n + SocialProofL10n removed

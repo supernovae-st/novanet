@@ -516,7 +516,6 @@ mod tests {
 
     #[test]
     fn test_highlight_yaml_line_key_value_indented() {
-        // v11.2: shared realm (was global)
         let line = highlight_yaml_line("  realm: shared");
         assert_eq!(line.spans.len(), 4);
         assert_eq!(line.spans[0].content, "  "); // indent
@@ -625,7 +624,7 @@ mod tests {
     }
 
     #[test]
-    fn test_build_yaml_title_with_sections_kind_active() {
+    fn test_build_yaml_title_with_sections_class_active() {
         let spans = build_yaml_title_with_tabs("file.yaml", YamlViewSection::Class, true);
         let full_text: String = spans.iter().map(|s| s.content.as_ref()).collect();
         // Should have tabs

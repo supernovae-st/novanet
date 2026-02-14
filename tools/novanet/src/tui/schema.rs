@@ -333,7 +333,7 @@ fn json_value_to_string(value: &JsonValue) -> String {
 /// - Sync: property exists in both YAML and Neo4j
 /// - Missing: YAML defines it, but Neo4j doesn't have it
 /// - Extra: Neo4j has it, but not in YAML schema
-pub fn validate_kind_properties(
+pub fn validate_class_properties(
     schema: &[SchemaProperty],
     neo4j_properties: &[String],
 ) -> Vec<ValidatedProperty> {

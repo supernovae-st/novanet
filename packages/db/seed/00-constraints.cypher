@@ -45,7 +45,11 @@ CREATE INDEX entity_content_version IF NOT EXISTS FOR (ec:EntityContent) ON (ec.
 // PROJECT NODES (v7.2.5)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-CREATE CONSTRAINT brandidentity_key IF NOT EXISTS FOR (bi:BrandIdentity) REQUIRE bi.key IS UNIQUE;
+// v0.12.4 ADR-028: Brand Architecture (BrandIdentity → Brand)
+CREATE CONSTRAINT brand_key IF NOT EXISTS FOR (b:Brand) REQUIRE b.key IS UNIQUE;
+CREATE CONSTRAINT branddesign_key IF NOT EXISTS FOR (bd:BrandDesign) REQUIRE bd.key IS UNIQUE;
+CREATE CONSTRAINT brandprinciples_key IF NOT EXISTS FOR (bp:BrandPrinciples) REQUIRE bp.key IS UNIQUE;
+CREATE CONSTRAINT promptstyle_key IF NOT EXISTS FOR (ps:PromptStyle) REQUIRE ps.key IS UNIQUE;
 // v10.9.0: ProjectL10n renamed to ProjectContent (Decision 11)
 CREATE INDEX projectcontent_updated IF NOT EXISTS FOR (pc:ProjectContent) ON (pc.updated_at);
 

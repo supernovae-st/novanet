@@ -61,18 +61,18 @@ fn cardinality_key(c: Cardinality) -> &'static str {
 /// Compute arc scope based on source/target kind realms.
 /// Returns "intra_realm" if all sources and targets are in the same realm,
 /// "cross_realm" if they span different realms, or None if realms can't be determined.
-fn compute_scope(rel: &ArcDef, kind_realms: &HashMap<String, String>) -> Option<&'static str> {
+fn compute_scope(rel: &ArcDef, class_realms: &HashMap<String, String>) -> Option<&'static str> {
     let source_realms: Vec<&String> = rel
         .source
         .labels()
         .iter()
-        .filter_map(|l| kind_realms.get(*l))
+        .filter_map(|l| class_realms.get(*l))
         .collect();
     let target_realms: Vec<&String> = rel
         .target
         .labels()
         .iter()
-        .filter_map(|l| kind_realms.get(*l))
+        .filter_map(|l| class_realms.get(*l))
         .collect();
 
     // If we couldn't find realms for all source/target kinds, return None
@@ -111,23 +111,23 @@ impl super::Generator for ArcClassGenerator {
 
     fn generate(&self, root: &Path) -> crate::Result<String> {
         // Load arc definitions from individual YAML files
-        let doc = arcs::load_arc_kinds_from_files(root)?;
+        let doc = arcs::load_arc_classes_from_files(root)?;
         // Load temperature thresholds separately
         let temps = arcs::load_arc_temperatures(root)?;
-        // Load all nodes to build Kind -> realm map for scope computation
+        // Load all nodes to build Class -> realm map for scope computation
         let nodes = yaml_node::load_all_nodes(root)?;
-        let kind_realms: HashMap<String, String> = nodes
+        let class_realms: HashMap<String, String> = nodes
             .into_iter()
             .map(|n| (n.def.name.clone(), n.realm))
             .collect();
-        generate_arc_schema(&doc, &temps, &kind_realms)
+        generate_arc_schema(&doc, &temps, &class_realms)
     }
 }
 
 fn generate_arc_schema(
     doc: &ArcsDocument,
     temps: &HashMap<String, f32>,
-    kind_realms: &HashMap<String, String>,
+    class_realms: &HashMap<String, String>,
 ) -> crate::Result<String> {
     // Separate forward (non-inverse) from inverse relations
     let forward: Vec<&ArcDef> = doc.arcs.iter().filter(|r| !r.is_inverse()).collect();
@@ -177,7 +177,7 @@ fn generate_arc_schema(
         let dn = cypher_str(&display_name(key));
         let llm = cypher_str(&rel.llm_context);
         let family = &rel.family.to_string();
-        let scope = compute_scope(rel, kind_realms);
+        let scope = compute_scope(rel, class_realms);
         let card = cardinality_key(rel.cardinality);
         let self_ref = rel.is_self_referential.unwrap_or(false);
         // Prefer the direct inverse_name field (from arc-kind YAML), fall back to map (relations.yaml)
@@ -366,8 +366,8 @@ mod tests {
         }
     }
 
-    /// Build a mock kind_realms map for tests.
-    fn mock_kind_realms() -> HashMap<String, String> {
+    /// Build a mock class_realms map for tests.
+    fn mock_class_realms() -> HashMap<String, String> {
         let mut m = HashMap::new();
         // Common test kinds - all in org realm for simplicity
         m.insert("Project".to_string(), "org".to_string());
@@ -462,7 +462,7 @@ mod tests {
             examples: None,
         };
 
-        let cypher = generate_arc_schema(&doc, &HashMap::new(), &mock_kind_realms()).unwrap();
+        let cypher = generate_arc_schema(&doc, &HashMap::new(), &mock_class_realms()).unwrap();
 
         // Header (v11.8: ArcClass terminology)
         assert!(cypher.contains("2 ArcClass nodes"));
@@ -554,7 +554,7 @@ mod tests {
             examples: None,
         };
 
-        let cypher = generate_arc_schema(&doc, &HashMap::new(), &mock_kind_realms()).unwrap();
+        let cypher = generate_arc_schema(&doc, &HashMap::new(), &mock_class_realms()).unwrap();
 
         // 2 FROM_CLASS (Page, Block) — v11.8: renamed from FROM_CLASS
         let from_class = cypher
@@ -591,8 +591,7 @@ mod tests {
             examples: None,
         };
 
-        let cypher = generate_arc_schema(&doc, &HashMap::new(), &mock_kind_realms()).unwrap();
-        // v11.8: ac_ prefix (was ak_)
+        let cypher = generate_arc_schema(&doc, &HashMap::new(), &mock_class_realms()).unwrap();
         assert!(cypher.contains("ac_FALLBACK_TO.is_self_referential = true"));
     }
 
@@ -735,7 +734,7 @@ mod tests {
             examples: None,
         };
 
-        let cypher = generate_arc_schema(&doc, &HashMap::new(), &mock_kind_realms()).unwrap();
+        let cypher = generate_arc_schema(&doc, &HashMap::new(), &mock_class_realms()).unwrap();
         insta::assert_snapshot!(cypher);
     }
 }

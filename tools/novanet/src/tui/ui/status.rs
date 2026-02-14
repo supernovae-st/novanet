@@ -99,12 +99,12 @@ pub(crate) fn build_filter_indicator(
 pub(crate) fn format_stats(
     node_count: i64,
     arc_count: i64,
-    kind_count: i64,
+    class_count: i64,
     arc_class_count: i64,
 ) -> String {
     format!(
         "{} nodes.{} arcs | {} Classes.{} ArcClasses",
-        node_count, arc_count, kind_count, arc_class_count
+        node_count, arc_count, class_count, arc_class_count
     )
 }
 
@@ -298,7 +298,7 @@ pub fn render_status(f: &mut Frame, area: Rect, app: &App) {
         format_stats(
             stats.node_count,
             stats.arc_count,
-            stats.kind_count,
+            stats.class_count,
             stats.arc_class_count,
         ),
         STYLE_MUTED,
@@ -567,8 +567,8 @@ mod tests {
     }
 
     #[test]
-    fn test_filter_indicator_empty_kind_key() {
-        // Empty kind key in filtered mode
+    fn test_filter_indicator_empty_class_key() {
+        // Empty class key in filtered mode
         let result = build_filter_indicator(true, Some(""), false);
         assert_eq!(result, " []");
     }

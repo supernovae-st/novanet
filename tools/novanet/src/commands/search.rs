@@ -2,7 +2,7 @@
 //!
 //! Property-based text search across nodes. Searches `key`, `display_name`,
 //! and `description` properties using case-insensitive CONTAINS matching.
-//! Optional `--kind` filter restricts results to a specific Kind.
+//! Optional `--class` filter restricts results to a specific Class.
 
 use crate::cypher::{CypherStatement, ParamValue};
 use crate::db::Db;
@@ -34,9 +34,9 @@ pub fn build_search_query(query: &str, kind: Option<&str>, limit: i64) -> Cypher
     if let Some(class_label) = kind {
         // Use parameterized label matching instead of direct interpolation
         // This prevents injection even if validation is bypassed
-        cypher.push_str("\nAND ANY(label IN labels(n) WHERE label = $kind)");
+        cypher.push_str("\nAND ANY(label IN labels(n) WHERE label = $class)");
         params.push((
-            "kind".to_string(),
+            "class".to_string(),
             ParamValue::StringList(vec![class_label.to_string()]),
         ));
     }
@@ -75,7 +75,7 @@ pub async fn run_search(
     // Parameterized label matching for safety
     let has_kind = kind.is_some();
     if has_kind {
-        cypher.push_str("\nAND ANY(label IN labels(n) WHERE label = $kind)");
+        cypher.push_str("\nAND ANY(label IN labels(n) WHERE label = $class)");
     }
 
     cypher.push_str(
@@ -92,7 +92,7 @@ pub async fn run_search(
                 .replace("$query", &format!("'{}'", query.replace('\'', "\\'")))
                 .replace("$limit", &limit.to_string());
             if let Some(k) = kind {
-                display = display.replace("$kind", &format!("'{}'", k.replace('\'', "\\'")));
+                display = display.replace("$class", &format!("'{}'", k.replace('\'', "\\'")));
             }
             output::print_output(&display);
         }
@@ -100,7 +100,7 @@ pub async fn run_search(
             let rows = if let Some(k) = kind {
                 db.execute_with_params(
                     &cypher,
-                    [("query", query), ("kind", k), ("limit", &limit.to_string())],
+                    [("query", query), ("class", k), ("limit", &limit.to_string())],
                 )
                 .await
             } else {
@@ -169,36 +169,36 @@ mod tests {
         // Uses parameterized label matching (not direct interpolation)
         assert!(
             stmt.cypher
-                .contains("ANY(label IN labels(n) WHERE label = $kind)")
+                .contains("ANY(label IN labels(n) WHERE label = $class)")
         );
-        let kind = stmt.params.iter().find(|(n, _)| n == "kind");
+        let class_param = stmt.params.iter().find(|(n, _)| n == "class");
         assert!(matches!(
-            kind,
+            class_param,
             Some((_, ParamValue::StringList(v))) if v == &vec!["Page"]
         ));
     }
 
     #[test]
-    fn search_query_kind_injection_safe() {
+    fn search_query_class_injection_safe() {
         // Even malicious input is safely parameterized
         let stmt = build_search_query("test", Some("Page;DROP"), 10);
         // No direct interpolation - uses parameterized query
         assert!(!stmt.cypher.contains("DROP"));
-        assert!(stmt.cypher.contains("$kind"));
+        assert!(stmt.cypher.contains("$class"));
         // Malicious string is safely contained in params
-        let kind = stmt.params.iter().find(|(n, _)| n == "kind");
+        let class = stmt.params.iter().find(|(n, _)| n == "class");
         assert!(matches!(
-            kind,
+            class,
             Some((_, ParamValue::StringList(v))) if v == &vec!["Page;DROP"]
         ));
     }
 
     #[test]
-    fn search_query_kind_with_underscore() {
+    fn search_query_class_with_underscore() {
         let stmt = build_search_query("test", Some("Locale_Identity"), 10);
         assert!(
             stmt.cypher
-                .contains("ANY(label IN labels(n) WHERE label = $kind)")
+                .contains("ANY(label IN labels(n) WHERE label = $class)")
         );
     }
 

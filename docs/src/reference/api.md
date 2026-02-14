@@ -23,11 +23,11 @@ type NodeLayer =
 
 // v0.12.0 ADR-024: Trait = Data Origin
 type NodeTrait =
-  | 'defined'     // Human-created once (was invariant)
-  | 'authored'    // Human-written per locale (was localized)
-  | 'imported'    // External data brought in (was knowledge)
+  | 'defined'     // Human-created once
+  | 'authored'    // Human-written per locale
+  | 'imported'    // External data brought in
   | 'generated'
-  | 'retrieved';  // Fetched from external APIs (was aggregated)
+  | 'retrieved';  // Fetched from external APIs
 ```
 
 ### Arc Types
@@ -90,11 +90,11 @@ pub enum NodeLayer {
 // v0.12.0 ADR-024: Trait = Data Origin
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum NodeTrait {
-    Defined,    // Human-created once (was Invariant)
-    Authored,   // Human-written per locale (was Localized)
-    Imported,   // External data brought in (was Knowledge)
+    Defined,    // Human-created once
+    Authored,   // Human-written per locale
+    Imported,   // External data brought in
     Generated,
-    Retrieved,  // Fetched from external APIs (was Aggregated)
+    Retrieved,  // Fetched from external APIs
 }
 ```
 
