@@ -149,7 +149,7 @@ export const TRAIT_BORDERS: Record<TraitKey, TraitBorderStyle> = {
     cssCornerRadius: null,
     unicodeChar: '┄',
     unicodeStyle: 'dashed',
-    description: 'Human-written content PER locale (was localized)',
+    description: 'Human-written content PER locale',
   },
   defined: {
     cssStyle: 'solid',
@@ -158,7 +158,7 @@ export const TRAIT_BORDERS: Record<TraitKey, TraitBorderStyle> = {
     cssCornerRadius: null,
     unicodeChar: '─',
     unicodeStyle: 'light',
-    description: 'Human-created ONCE, structure/template (was invariant)',
+    description: 'Human-created ONCE, structure/template',
   },
   generated: {
     cssStyle: 'double',
@@ -250,10 +250,10 @@ export const CARDINALITY_ARROWS: Record<CardinalityKey, CardinalityArrowStyle> =
 };
 
 // =============================================================================
-// KIND ICONS (36) — Lucide icon names
+// CLASS ICONS (36) — Lucide icon names
 // =============================================================================
 
-export const KIND_ICONS: Record<string, string> = {
+export const CLASS_ICONS: Record<string, string> = {
   Adaptation: 'sliders',
   AudiencePersona: 'user',
   AudienceSet: 'users',
@@ -294,14 +294,10 @@ export const KIND_ICONS: Record<string, string> = {
 
 /**
  * Get Lucide icon name for a Class.
- * v11.8: renamed from getKindIcon
  */
 export function getClassIcon(className: string): string {
-  return KIND_ICONS[className] ?? 'circle';
+  return CLASS_ICONS[className] ?? 'circle';
 }
-
-/** @deprecated Use getClassIcon instead (v11.8) */
-export const getKindIcon = getClassIcon;
 
 // =============================================================================
 // ANIMATIONS (5) — Studio only
@@ -429,11 +425,11 @@ export const LAYERS_ICONS: Record<string, IconDefinition> = {
 
 // TRAITS ICONS (5)
 export const TRAITS_ICONS: Record<string, IconDefinition> = {
-  'authored': { web: 'pen', terminal: '□', description: 'Human-written PER locale (was localized)' },
-  'defined': { web: 'lock', terminal: '■', description: 'Human-created ONCE (was invariant)' },
+  'authored': { web: 'pen', terminal: '□', description: 'Human-written PER locale' },
+  'defined': { web: 'lock', terminal: '■', description: 'Human-created ONCE' },
   'generated': { web: 'sparkles', terminal: '★', description: 'OUR LLM produces this output' },
-  'imported': { web: 'download', terminal: '◊', description: 'External data brought in (was knowledge)' },
-  'retrieved': { web: 'cloud-download', terminal: '▪', description: 'Fetched from EXTERNAL APIs (was aggregated)' },
+  'imported': { web: 'download', terminal: '◊', description: 'External data brought in' },
+  'retrieved': { web: 'cloud-download', terminal: '▪', description: 'Fetched from EXTERNAL APIs' },
 };
 
 // ARC_FAMILIES ICONS (5)
