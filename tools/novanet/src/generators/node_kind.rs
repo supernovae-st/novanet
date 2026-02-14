@@ -1,6 +1,6 @@
 //! Generate Class meta-nodes + schema_hint, context_budget + facet relations.
 //!
-//! Reads all 58 YAML node definitions (v0.12.4 / ADR-028) and produces idempotent MERGE statements
+//! Reads all 61 YAML node definitions (v0.12.4 / ADR-028) and produces idempotent MERGE statements
 //! for Class nodes with auto-computed properties, plus hierarchy and facet rels.
 //!
 //! v11.8 (ADR-023): Kind → Class, :Meta:Kind → :Schema:Class, [:HAS_KIND] → [:HAS_CLASS]

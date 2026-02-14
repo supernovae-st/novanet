@@ -18,7 +18,7 @@
 //! - [S] Stats: Matrix Control Tower (schema stats, heartbeat, bar charts)
 //! - [V] Views: Schema views explorer (Query-First architecture)
 //!
-//! v0.12.4: 58 nodes (40 shared + 18 org), 10 layers (4 shared + 6 org).
+//! v0.12.4: 61 nodes (40 shared + 21 org), 10 layers (4 shared + 6 org).
 //! Progress persistence to ~/.novanet/tutorial_progress.json
 
 pub mod arch;

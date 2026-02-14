@@ -1,4 +1,4 @@
-//! Parse 58 YAML node definitions with trait validation (v0.12.4).
+//! Parse 61 YAML node definitions with trait validation (v0.12.4).
 //!
 //! Fails fast if any YAML is missing `trait`, `realm`, or `layer` — no silent defaults.
 //! Each file at `packages/core/models/node-kinds/<realm>/<layer>/<name>.yaml`
@@ -435,7 +435,7 @@ node:
             return;
         }
 
-        // v0.12.0: 58 nodes (40 shared + 18 org)
+        // v0.12.4: 61 nodes (40 shared + 21 org)
         // History:
         // - v10.8: Added geographic nodes (+12)
         // - v10.9: Added GEO nodes (+3)

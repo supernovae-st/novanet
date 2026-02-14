@@ -1,7 +1,7 @@
 //! Data loading for TUI — Neo4j queries for taxonomy tree, stats, and detail.
 
 use crate::db::{Db, RowExt};
-use crate::parsers::taxonomy::{TaxonomyDoc, load_taxonomy};
+use crate::parsers::taxonomy::{TaxonomyDoc, load_taxonomy_from_files};
 use rustc_hash::{FxHashMap, FxHashSet};
 use serde_json::Value as JsonValue;
 use std::collections::BTreeMap;
@@ -161,7 +161,7 @@ pub struct ArcFamilyInfo {
     pub key: String,
     pub display_name: String,
     pub arc_classes: Vec<ArcClassInfo>,
-    /// LLM context for this arc family (from taxonomy.yaml).
+    /// LLM context for this arc family (from arc-families/*.yaml).
     pub llm_context: String,
 }
 
@@ -198,7 +198,7 @@ pub struct LayerInfo {
     pub display_name: String,
     pub color: String,
     pub classes: Vec<ClassInfo>,
-    /// LLM context for this layer (from taxonomy.yaml).
+    /// LLM context for this layer (from layers/*.yaml).
     pub llm_context: String,
 }
 
@@ -232,7 +232,7 @@ pub struct RealmInfo {
     pub color: String,
     pub icon: &'static str,
     pub layers: Vec<LayerInfo>,
-    /// LLM context for this realm (from taxonomy.yaml).
+    /// LLM context for this realm (from realms/*.yaml).
     pub llm_context: String,
 }
 
@@ -530,7 +530,7 @@ pub fn get_all_adrs() -> Vec<AdrEntry> {
                 "Generators → TS/Cypher/Mermaid".to_string(),
             ],
             diagram: vec![
-                "taxonomy.yaml ──▶ Rust Generator ──▶ TypeScript + Cypher".to_string(),
+                "YAML models ──▶ Rust Generator ──▶ TypeScript + Cypher".to_string(),
             ],
             key_rules: vec![
                 "Single source prevents drift".to_string(),
@@ -833,10 +833,10 @@ pub struct TaxonomyTree {
 }
 
 impl TaxonomyTree {
-    /// Load taxonomy tree from Neo4j, enriched with llm_context from taxonomy.yaml.
+    /// Load taxonomy tree from Neo4j, enriched with llm_context from individual YAML files.
     pub async fn load(db: &Db, root: &Path) -> crate::Result<Self> {
-        // Load taxonomy.yaml for llm_context enrichment
-        let taxonomy = load_taxonomy(root).ok();
+        // v0.12.5: Load from individual YAML files for llm_context enrichment
+        let taxonomy = load_taxonomy_from_files(root).ok();
 
         // Build lookup maps for realm/layer llm_context
         let (realm_llm_context, layer_llm_context, arc_family_llm_context) =
@@ -957,14 +957,14 @@ ORDER BY realm_key, layer_key, class_key
                 .push(kind);
         }
 
-        // Convert to RealmInfo vec with llm_context from taxonomy.yaml
+        // Convert to RealmInfo vec with llm_context from realms/*.yaml
         let realms: Vec<RealmInfo> = realm_map
             .into_iter()
             .map(|(realm_key, (realm_display, realm_color, layers_map))| {
                 let layers: Vec<LayerInfo> = layers_map
                     .into_iter()
                     .map(|(layer_key, (layer_display, layer_color, classes))| {
-                        // Look up llm_context from taxonomy.yaml
+                        // Look up llm_context from layers/*.yaml
                         let llm_ctx = layer_llm_context
                             .get(&layer_key)
                             .cloned()
@@ -979,7 +979,7 @@ ORDER BY realm_key, layer_key, class_key
                     })
                     .collect();
 
-                // Look up realm llm_context from taxonomy.yaml
+                // Look up realm llm_context from realms/*.yaml
                 let realm_llm_ctx = realm_llm_context
                     .get(&realm_key)
                     .cloned()
@@ -1004,7 +1004,7 @@ ORDER BY realm_key, layer_key, class_key
 
         let stats = stats_result?;
         let arc_map = arcs_result.unwrap_or_default();
-        // Enrich arc_families with llm_context from taxonomy.yaml
+        // Enrich arc_families with llm_context from arc-families/*.yaml
         let arc_families = Self::enrich_arc_families_with_llm_context(
             families_result.unwrap_or_default(),
             &arc_family_llm_context,
@@ -1036,7 +1036,7 @@ ORDER BY realm_key, layer_key, class_key
         })
     }
 
-    /// Build lookup maps for llm_context from taxonomy.yaml.
+    /// Build lookup maps for llm_context from individual YAML files.
     /// Returns (realm_llm_context, layer_llm_context, arc_family_llm_context).
     fn build_llm_context_maps(
         taxonomy: &Option<TaxonomyDoc>,
@@ -1068,7 +1068,7 @@ ORDER BY realm_key, layer_key, class_key
         (realm_map, layer_map, arc_family_map)
     }
 
-    /// Enrich arc_families with llm_context from taxonomy.yaml lookup map.
+    /// Enrich arc_families with llm_context from arc-families/*.yaml lookup map.
     fn enrich_arc_families_with_llm_context(
         mut families: Vec<ArcFamilyInfo>,
         llm_context_map: &FxHashMap<String, String>,
@@ -1200,7 +1200,7 @@ ORDER BY family_key, arc_key
                 key,
                 display_name,
                 arc_classes,
-                llm_context: String::new(), // Enriched later from taxonomy.yaml
+                llm_context: String::new(), // Enriched later from individual YAML files
             })
             .collect())
     }

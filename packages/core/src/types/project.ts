@@ -80,7 +80,8 @@ export interface ProjectContent {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// BRAND IDENTITY (visual/artistic direction) - v7.1.0
+// BRAND ARCHITECTURE (v0.12.4 ADR-028)
+// Brand delegates to: BrandDesign (visual), BrandPrinciples (voice), PromptStyle (LLM hints)
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export interface ColorPaletteItem {
@@ -96,8 +97,41 @@ export interface TypographyScaleItem {
   line_height: string;
 }
 
-export interface BrandIdentity {
-  // Standard properties (v7.1.0)
+/**
+ * Brand - Central brand identity node (ADR-028)
+ * Owns: BrandDesign, BrandPrinciples, PromptStyle
+ */
+export interface Brand {
+  // Standard properties
+  key: string;
+  display_name: string;
+  description: string;
+  llm_context: string;
+
+  // Core Identity
+  brand_name: string;
+  tagline?: string;
+  brand_story?: string;
+
+  // Logo & Assets
+  logo_primary_url?: string;
+  logo_icon_url?: string;
+  logo_usage_rules?: string[];
+
+  // Market Position
+  target_market?: string;
+  value_proposition?: string;
+
+  created_at: Date;
+  updated_at: Date;
+}
+
+/**
+ * BrandDesign - Visual design system (ADR-028)
+ * Colors, typography, UI patterns
+ */
+export interface BrandDesign {
+  // Standard properties
   key: string;
   display_name: string;
   description: string;
@@ -105,46 +139,102 @@ export interface BrandIdentity {
 
   // Colors
   color_primary: string;
-  color_secondary: string;
-  color_accent: string;
-  color_background: string;
-  color_text: string;
-  color_palette: ColorPaletteItem[];
+  color_secondary?: string;
+  color_accent?: string;
+  color_background?: string;
+  color_text?: string;
+  color_palette?: ColorPaletteItem[];
 
   // Typography
   font_primary: string;
-  font_secondary: string;
+  font_secondary?: string;
   font_mono?: string;
-  typography_scale: TypographyScaleItem[];
-
-  // Visual style (for image generation)
-  style_keywords: string[];
-  style_mood: string;
-  style_influences: string[];
-
-  image_style: string;
-  image_do: string[];
-  image_dont: string[];
-  photo_style?: string;
-
-  // Logo & assets
-  logo_primary_url?: string;
-  logo_icon_url?: string;
-  logo_usage_rules: string[];
+  typography_scale?: TypographyScaleItem[];
 
   // UI patterns
-  border_radius: string;
-  shadow_style: string;
-  animation_style: string;
+  border_radius?: string;
+  shadow_style?: 'subtle' | 'pronounced' | 'none';
+  animation_style?: 'smooth' | 'snappy' | 'playful';
 
   created_at: Date;
   updated_at: Date;
 }
 
+/**
+ * BrandPrinciples - Voice, tone, editorial guidelines (ADR-028)
+ */
+export interface BrandPrinciples {
+  // Standard properties
+  key: string;
+  display_name: string;
+  description: string;
+  llm_context: string;
+
+  // Voice & Tone
+  voice_attributes: string[];
+  tone_default: string;
+  tone_variations?: Record<string, string>;
+
+  // Writing Guidelines
+  writing_do?: string[];
+  writing_dont?: string[];
+
+  // Messaging
+  key_messages?: string[];
+  differentiators?: string[];
+
+  // Terminology
+  preferred_terms?: Record<string, string>;
+  forbidden_terms?: string[];
+
+  created_at: Date;
+  updated_at: Date;
+}
+
+/**
+ * PromptStyle - LLM generation style hints (ADR-028)
+ * Can be locale or region specific for cultural adaptation
+ */
+export interface PromptStyle {
+  // Standard properties
+  key: string;
+  display_name: string;
+  description: string;
+  llm_context: string;
+
+  // Visual Style
+  style_keywords: string[];
+  style_mood?: string;
+  style_influences?: string[];
+
+  // Image Generation
+  image_style?: string;
+  image_do?: string[];
+  image_dont?: string[];
+  photo_style?: string;
+
+  // Cultural Adaptation
+  cultural_style?: string;
+  visual_prompt?: string;
+  formality_level?: 'formal' | 'neutral' | 'casual';
+  humor_style?: string;
+
+  created_at: Date;
+  updated_at: Date;
+}
+
+// v0.12.4: BrandIdentity deprecated, replaced by Brand + BrandDesign + BrandPrinciples + PromptStyle
+/** @deprecated Use Brand instead (ADR-028) */
+export type BrandIdentity = Brand;
+
 // Export all types
 // v7.2.5: Audience merged into ProjectContent.target_audience
 // v7.2.5: ValuePropL10n + SocialProofL10n removed
+// v0.12.4: BrandIdentity → Brand + BrandDesign + BrandPrinciples + PromptStyle (ADR-028)
 export type ProjectNode =
   | Project
   | ProjectContent
-  | BrandIdentity;
+  | Brand
+  | BrandDesign
+  | BrandPrinciples
+  | PromptStyle;

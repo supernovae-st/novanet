@@ -165,14 +165,13 @@ fn check_models_directory(root: &Path) -> HealthCheck {
 }
 
 fn check_yaml_validity(root: &Path, verbose: bool) -> HealthCheck {
-    let models_dir = crate::config::models_dir(root);
-
-    match crate::parsers::taxonomy::load_taxonomy(&models_dir) {
+    // v0.12.5: Load from individual YAML files
+    match crate::parsers::taxonomy::load_taxonomy_from_files(root) {
         Ok(taxonomy) => {
             let total_layers: usize = taxonomy.node_realms.iter().map(|r| r.layers.len()).sum();
             let msg = if verbose {
                 format!(
-                    "taxonomy.yaml valid ({} realms, {} layers, {} traits)",
+                    "Taxonomy valid ({} realms, {} layers, {} traits)",
                     taxonomy.node_realms.len(),
                     total_layers,
                     taxonomy.node_traits.len()

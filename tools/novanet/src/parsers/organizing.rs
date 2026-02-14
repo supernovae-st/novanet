@@ -1,6 +1,7 @@
 //! Organizing principles types (realms, layers, traits, arc families).
 //!
-//! Data comes from `taxonomy.yaml` and is exposed via `OrganizingDoc`.
+//! v0.12.5: Data now comes from individual YAML files (realms/, layers/, traits/, arc-families/)
+//! via `load_taxonomy_from_files()`. Legacy `taxonomy.yaml` is still used for arc_scopes and terminal config.
 //!
 //! Used by:
 //! - `generators/organizing.rs` → Cypher seed
@@ -63,17 +64,17 @@ pub struct ArcFamilyDef {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Loader (via taxonomy.yaml conversion)
+// Loader (via individual YAML files conversion)
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Load organizing principles from taxonomy.yaml (with backwards-compatible format).
+/// Load organizing principles from individual YAML files (with backwards-compatible format).
 ///
-/// This function loads `taxonomy.yaml` and converts it to `OrganizingDoc` format.
-/// The underlying data source is now `taxonomy.yaml`, but the return type remains
-/// `OrganizingDoc` for backwards compatibility with existing generators.
+/// v0.12.5: This function now loads from individual YAML files (realms/, layers/, traits/,
+/// arc-families/) via `load_taxonomy_from_files()` and converts to `OrganizingDoc` format.
+/// The return type remains `OrganizingDoc` for backwards compatibility with existing generators.
 pub fn load_organizing(root: &Path) -> crate::Result<OrganizingDoc> {
-    // Load from taxonomy.yaml and convert to OrganizingDoc format
-    let taxonomy = crate::parsers::taxonomy::load_taxonomy(root)?;
+    // v0.12.5: Load from individual YAML files and convert to OrganizingDoc format
+    let taxonomy = crate::parsers::taxonomy::load_taxonomy_from_files(root)?;
     let doc = taxonomy.to_organizing_doc();
 
     // Fail-fast validation (same as before)
