@@ -27,37 +27,30 @@ use std::path::Path;
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// Dual-format icon for taxonomy definitions.
-/// Supports both legacy string format and new dual format.
+/// v0.12.5: Legacy emoji format removed. All icons use { web, terminal } format.
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
-#[serde(untagged)]
-pub enum TaxonomyIcon {
-    /// New dual format: { web: "diamond", terminal: "◆" }
-    Dual { web: String, terminal: String },
-    /// Legacy string format (emoji): "🔷"
-    Legacy(String),
+pub struct TaxonomyIcon {
+    /// Web icon (Lucide name): "diamond"
+    pub web: String,
+    /// Terminal icon (Unicode symbol): "◆"
+    pub terminal: String,
 }
 
 impl TaxonomyIcon {
     /// Get the terminal icon (Unicode symbol).
     pub fn terminal(&self) -> &str {
-        match self {
-            Self::Dual { terminal, .. } => terminal,
-            Self::Legacy(s) => s,
-        }
+        &self.terminal
     }
 
     /// Get the web icon (Lucide name).
     pub fn web(&self) -> &str {
-        match self {
-            Self::Dual { web, .. } => web,
-            Self::Legacy(s) => s,
-        }
+        &self.web
     }
 }
 
 impl Default for TaxonomyIcon {
     fn default() -> Self {
-        Self::Dual {
+        Self {
             web: "circle".to_string(),
             terminal: "●".to_string(),
         }
@@ -74,8 +67,8 @@ pub struct TaxonomyDoc {
     pub version: String,
     pub node_realms: Vec<NodeRealmDef>,
     pub node_traits: Vec<NodeTraitDef>,
-    /// v0.12.0: Per-trait retrieval defaults for context assembly (was kind_retrieval_defaults).
-    #[serde(default, alias = "kind_retrieval_defaults")]
+    /// v0.12.0: Per-trait retrieval defaults for context assembly.
+    #[serde(default)]
     pub class_retrieval_defaults: Option<HashMap<String, ClassRetrievalDefaults>>,
     pub arc_families: Vec<ArcFamilyDef>,
     #[serde(default)]
@@ -104,7 +97,7 @@ pub struct MinimalTaxonomyDoc {
     pub arc_cardinalities: Vec<ArcCardinalityDef>,
     #[serde(default)]
     pub terminal: Option<TerminalPalette>,
-    #[serde(default, alias = "kind_retrieval_defaults")]
+    #[serde(default)]
     pub class_retrieval_defaults: Option<HashMap<String, ClassRetrievalDefaults>>,
 }
 
@@ -131,8 +124,7 @@ pub struct ClassRetrievalDefaults {
 pub struct NodeRealmDef {
     pub key: String,
     pub display_name: String,
-    /// v0.12.5: Dual format icon { web, terminal } or legacy emoji string.
-    #[serde(alias = "emoji")]
+    /// v0.12.5: Dual format icon { web, terminal }.
     pub icon: TaxonomyIcon,
     pub color: String,
     pub llm_context: String,
@@ -140,7 +132,7 @@ pub struct NodeRealmDef {
 }
 
 impl NodeRealmDef {
-    /// Backward compatibility: get emoji string (terminal icon).
+    /// Get terminal icon (Unicode symbol for TUI display).
     pub fn emoji(&self) -> &str {
         self.icon.terminal()
     }
@@ -151,15 +143,14 @@ impl NodeRealmDef {
 pub struct NodeLayerDef {
     pub key: String,
     pub display_name: String,
-    /// v0.12.5: Dual format icon { web, terminal } or legacy emoji string.
-    #[serde(alias = "emoji")]
+    /// v0.12.5: Dual format icon { web, terminal }.
     pub icon: TaxonomyIcon,
     pub color: String,
     pub llm_context: String,
 }
 
 impl NodeLayerDef {
-    /// Backward compatibility: get emoji string (terminal icon).
+    /// Get terminal icon (Unicode symbol for TUI display).
     pub fn emoji(&self) -> &str {
         self.icon.terminal()
     }
@@ -287,7 +278,7 @@ pub fn load_taxonomy_from_files(root: &Path) -> crate::Result<TaxonomyDoc> {
         let layer_def = NodeLayerDef {
             key: layer.key.clone(),
             display_name: layer.display_name.clone(),
-            icon: TaxonomyIcon::Dual {
+            icon: TaxonomyIcon {
                 web: layer.icon.web.clone(),
                 terminal: layer.icon.terminal.clone(),
             },
@@ -310,7 +301,7 @@ pub fn load_taxonomy_from_files(root: &Path) -> crate::Result<TaxonomyDoc> {
             NodeRealmDef {
                 key: r.key,
                 display_name: r.display_name,
-                icon: TaxonomyIcon::Dual {
+                icon: TaxonomyIcon {
                     web: r.icon.web,
                     terminal: r.icon.terminal,
                 },
@@ -466,13 +457,17 @@ version: "9.5.0"
 node_realms:
   - key: shared
     display_name: Shared
-    emoji: "🌍"
+    icon:
+      web: globe
+      terminal: "🌍"
     color: "#2aa198"
     llm_context: "Shared context."
     layers:
       - key: config
         display_name: Configuration
-        emoji: "⚙️"
+        icon:
+          web: settings
+          terminal: "⚙️"
         color: "#64748b"
         llm_context: "Config layer."
 node_traits:
@@ -532,13 +527,17 @@ version: "9.5.0"
 node_realms:
   - key: test
     display_name: Test
-    emoji: "🧪"
+    icon:
+      web: flask
+      terminal: "🧪"
     color: "#000"
     llm_context: "Test."
     layers:
       - key: base
         display_name: Base
-        emoji: "📋"
+        icon:
+          web: clipboard
+          terminal: "📋"
         color: "#111"
         llm_context: "Base."
 node_traits:
@@ -569,13 +568,17 @@ version: "9.5.0"
 node_realms:
   - key: shared
     display_name: Shared
-    emoji: "🌍"
+    icon:
+      web: globe
+      terminal: "🌍"
     color: "#2aa198"
     llm_context: "Shared."
     layers:
       - key: config
         display_name: Configuration
-        emoji: "⚙️"
+        icon:
+          web: settings
+          terminal: "⚙️"
         color: "#64748b"
         llm_context: "Config."
 node_traits:
@@ -668,19 +671,23 @@ arc_families:
 
     #[test]
     fn parse_class_retrieval_defaults() {
-        // v0.12.0: Test both old (kind_retrieval_defaults) and new (class_retrieval_defaults) field names
+        // v0.12.0: Test class_retrieval_defaults field
         let yaml = r##"
 version: "10.5.0"
 node_realms:
   - key: test
     display_name: Test
-    emoji: "🧪"
+    icon:
+      web: flask
+      terminal: "🧪"
     color: "#000"
     llm_context: "Test."
     layers:
       - key: base
         display_name: Base
-        emoji: "📋"
+        icon:
+          web: clipboard
+          terminal: "📋"
         color: "#111"
         llm_context: "Base."
 node_traits:

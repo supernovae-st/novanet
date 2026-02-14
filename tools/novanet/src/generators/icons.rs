@@ -238,7 +238,7 @@ mod tests {
                     layer: "foundation".to_string(),
                     node_trait: NodeTrait::Defined,
                     knowledge_tier: None,
-                    icon: Some(NodeIcon::Dual {
+                    icon: Some(NodeIcon {
                         web: "rocket".to_string(),
                         terminal: "🚀".to_string(),
                     }),

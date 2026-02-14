@@ -1,11 +1,12 @@
 // packages/core/src/graph/__tests__/design-system-coherence.test.ts
-// Comprehensive tests for design system coherence — v0.12.0
+// Comprehensive tests for design system coherence — v0.12.5
 // Validates taxonomy, visual encoding, and TypeScript consistency
 //
+// v0.12.5: Updated to load from individual YAML files (realms/, layers/, traits/, arc-families/)
 // Philosophy: v0 clean architecture — no backward compatibility, no legacy patterns
 
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'fs';
+import { readFileSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { parse as parseYaml } from 'yaml';
 
@@ -57,39 +58,91 @@ const V11_6_ARCHITECTURE = {
 } as const;
 
 // =============================================================================
-// Helper Functions
+// Helper Functions — v0.12.5 Individual YAML Files
 // =============================================================================
 
+const ROOT = join(__dirname, '../../../../..');
+const MODELS_DIR = join(ROOT, 'packages/core/models');
+
 function loadYaml<T>(relativePath: string): T {
-  const root = join(__dirname, '../../../../..');
-  const content = readFileSync(join(root, relativePath), 'utf-8');
+  const content = readFileSync(join(ROOT, relativePath), 'utf-8');
   return parseYaml(content) as T;
 }
 
-interface TaxonomyYaml {
-  version: string;
-  node_realms: Array<{
+// v0.12.5: Load realms from individual YAML files
+interface RealmYaml {
+  realm: {
     key: string;
     display_name: string;
     color: string;
-    layers: Array<{
-      key: string;
-      display_name: string;
-      color: string;
-    }>;
-  }>;
-  node_traits: Array<{
+    layers: string[];
+  };
+}
+
+function loadRealms(): RealmYaml['realm'][] {
+  const realmsDir = join(MODELS_DIR, 'realms');
+  const files = readdirSync(realmsDir).filter(f => f.endsWith('.yaml') && !f.startsWith('_'));
+  return files.map(f => {
+    const content = readFileSync(join(realmsDir, f), 'utf-8');
+    return (parseYaml(content) as RealmYaml).realm;
+  });
+}
+
+// v0.12.5: Load traits from individual YAML files
+interface TraitYaml {
+  trait: {
     key: string;
     display_name: string;
     color: string;
     border_style: string;
-  }>;
-  arc_families: Array<{
+  };
+}
+
+function loadTraits(): TraitYaml['trait'][] {
+  const traitsDir = join(MODELS_DIR, 'traits');
+  const files = readdirSync(traitsDir).filter(f => f.endsWith('.yaml') && !f.startsWith('_'));
+  return files.map(f => {
+    const content = readFileSync(join(traitsDir, f), 'utf-8');
+    return (parseYaml(content) as TraitYaml).trait;
+  });
+}
+
+// v0.12.5: Load arc families from individual YAML files
+interface ArcFamilyYaml {
+  arc_family: {
     key: string;
     display_name: string;
     color: string;
     stroke_style: string;
-  }>;
+  };
+}
+
+function loadArcFamilies(): ArcFamilyYaml['arc_family'][] {
+  const arcFamiliesDir = join(MODELS_DIR, 'arc-families');
+  const files = readdirSync(arcFamiliesDir).filter(f => f.endsWith('.yaml') && !f.startsWith('_'));
+  return files.map(f => {
+    const content = readFileSync(join(arcFamiliesDir, f), 'utf-8');
+    return (parseYaml(content) as ArcFamilyYaml).arc_family;
+  });
+}
+
+// v0.12.5: Load layers from individual YAML files
+interface LayerYaml {
+  layer: {
+    key: string;
+    display_name: string;
+    color: string;
+    realms: string[];
+  };
+}
+
+function loadLayers(): LayerYaml['layer'][] {
+  const layersDir = join(MODELS_DIR, 'layers');
+  const files = readdirSync(layersDir).filter(f => f.endsWith('.yaml') && !f.startsWith('_'));
+  return files.map(f => {
+    const content = readFileSync(join(layersDir, f), 'utf-8');
+    return (parseYaml(content) as LayerYaml).layer;
+  });
 }
 
 interface VisualEncodingYaml {
@@ -106,15 +159,15 @@ interface VisualEncodingYaml {
 // =============================================================================
 
 describe('Design System Coherence: Realms', () => {
-  const taxonomy = loadYaml<TaxonomyYaml>('packages/core/models/taxonomy.yaml');
+  const realms = loadRealms();
 
   it('should have exactly 2 realms', () => {
-    expect(taxonomy.node_realms).toHaveLength(2);
+    expect(realms).toHaveLength(2);
     expect(Object.keys(REALM_HIERARCHY)).toHaveLength(2);
   });
 
   it('should have matching realm keys in YAML and TypeScript', () => {
-    const yamlRealms = taxonomy.node_realms.map(r => r.key).sort();
+    const yamlRealms = realms.map(r => r.key).sort();
     const tsRealms = Object.keys(REALM_HIERARCHY).sort();
 
     expect(yamlRealms).toEqual(['org', 'shared']);
@@ -122,9 +175,9 @@ describe('Design System Coherence: Realms', () => {
   });
 
   it('should have correct realm definitions', () => {
-    for (const realm of V11_6_ARCHITECTURE.realms) {
-      const yamlRealm = taxonomy.node_realms.find(r => r.key === realm);
-      const tsRealm = REALM_HIERARCHY[realm as Realm];
+    for (const realmKey of V11_6_ARCHITECTURE.realms) {
+      const yamlRealm = realms.find(r => r.key === realmKey);
+      const tsRealm = REALM_HIERARCHY[realmKey as Realm];
 
       expect(yamlRealm).toBeDefined();
       expect(tsRealm).toBeDefined();
@@ -134,7 +187,7 @@ describe('Design System Coherence: Realms', () => {
   });
 
   it('should NOT have deprecated realm names', () => {
-    const yamlRealmKeys = taxonomy.node_realms.map(r => r.key);
+    const yamlRealmKeys = realms.map(r => r.key);
     const deprecatedNames = ['global', 'tenant', 'project', 'organization'];
 
     for (const deprecated of deprecatedNames) {
@@ -148,16 +201,17 @@ describe('Design System Coherence: Realms', () => {
 // =============================================================================
 
 describe('Design System Coherence: Layers', () => {
-  const taxonomy = loadYaml<TaxonomyYaml>('packages/core/models/taxonomy.yaml');
+  const realms = loadRealms();
+  const layers = loadLayers();
 
   it('should have correct layer structure per realm', () => {
-    const sharedRealm = taxonomy.node_realms.find(r => r.key === 'shared');
-    const orgRealm = taxonomy.node_realms.find(r => r.key === 'org');
+    const sharedRealm = realms.find(r => r.key === 'shared');
+    const orgRealm = realms.find(r => r.key === 'org');
 
-    expect(sharedRealm!.layers.map(l => l.key).sort()).toEqual(
+    expect(sharedRealm!.layers.sort()).toEqual(
       [...V11_6_ARCHITECTURE.layers.shared].sort()
     );
-    expect(orgRealm!.layers.map(l => l.key).sort()).toEqual(
+    expect(orgRealm!.layers.sort()).toEqual(
       [...V11_6_ARCHITECTURE.layers.org].sort()
     );
   });
@@ -172,11 +226,11 @@ describe('Design System Coherence: Layers', () => {
   });
 
   it('should NOT have deprecated layers', () => {
-    const allLayers = taxonomy.node_realms.flatMap(r => r.layers.map(l => l.key));
+    const allLayerKeys = layers.map(l => l.key);
     const deprecatedLayers = ['seo', 'geo', 'locale-knowledge'];
 
     for (const deprecated of deprecatedLayers) {
-      expect(allLayers).not.toContain(deprecated);
+      expect(allLayerKeys).not.toContain(deprecated);
     }
   });
 
@@ -203,21 +257,21 @@ describe('Design System Coherence: Layers', () => {
 // =============================================================================
 
 describe('Design System Coherence: Traits', () => {
-  const taxonomy = loadYaml<TaxonomyYaml>('packages/core/models/taxonomy.yaml');
+  const traits = loadTraits();
 
   it('should have exactly 5 traits', () => {
-    expect(taxonomy.node_traits).toHaveLength(5);
+    expect(traits).toHaveLength(5);
   });
 
   it('should have correct trait definitions', () => {
-    const yamlTraits = taxonomy.node_traits.map(t => t.key).sort();
+    const yamlTraits = traits.map(t => t.key).sort();
     const expectedTraits = [...V11_6_ARCHITECTURE.traits].sort();
 
     expect(yamlTraits).toEqual(expectedTraits);
   });
 
   it('should NOT have deprecated traits', () => {
-    const yamlTraitKeys = taxonomy.node_traits.map(t => t.key);
+    const yamlTraitKeys = traits.map(t => t.key);
     // v0.12.0: old names (invariant, localized, knowledge, aggregated) are deprecated
     const deprecatedTraits = ['derived', 'job', 'invariant', 'localized', 'knowledge', 'aggregated'];
 
@@ -235,7 +289,7 @@ describe('Design System Coherence: Traits', () => {
       retrieved: 'dotted',
     };
 
-    for (const trait of taxonomy.node_traits) {
+    for (const trait of traits) {
       expect(trait.border_style).toBe(expectedBorders[trait.key]);
     }
   });
@@ -262,21 +316,21 @@ describe('Design System Coherence: Traits', () => {
 // =============================================================================
 
 describe('Design System Coherence: Arc Families', () => {
-  const taxonomy = loadYaml<TaxonomyYaml>('packages/core/models/taxonomy.yaml');
+  const arcFamilies = loadArcFamilies();
 
   it('should have exactly 5 arc families', () => {
-    expect(taxonomy.arc_families).toHaveLength(5);
+    expect(arcFamilies).toHaveLength(5);
   });
 
   it('should have correct arc family definitions', () => {
-    const yamlFamilies = taxonomy.arc_families.map(f => f.key).sort();
+    const yamlFamilies = arcFamilies.map(f => f.key).sort();
     const expectedFamilies = [...V11_6_ARCHITECTURE.arcFamilies].sort();
 
     expect(yamlFamilies).toEqual(expectedFamilies);
   });
 
   it('should have valid colors for all arc families', () => {
-    for (const family of taxonomy.arc_families) {
+    for (const family of arcFamilies) {
       expect(family.color).toMatch(/^#[0-9a-f]{6}$/i);
     }
   });
@@ -290,7 +344,7 @@ describe('Design System Coherence: Arc Families', () => {
       mining: 'dashed',
     };
 
-    for (const family of taxonomy.arc_families) {
+    for (const family of arcFamilies) {
       expect(family.stroke_style).toBe(expectedStrokes[family.key]);
     }
   });
