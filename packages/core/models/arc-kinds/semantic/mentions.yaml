@@ -1,0 +1,54 @@
+# packages/core/models/arc-kinds/semantic/mentions.yaml
+# ArcKind: MENTIONS — BlockInstruction mentions various entities via @ references
+#
+# v0.12.5: ADR-028 Page-Entity Architecture - granular @ reference tracking
+
+arc:
+  name: MENTIONS
+  family: semantic
+  scope: intra_realm
+  temperature_threshold: 0.8  # Very high priority - direct content injection
+
+  source: BlockInstruction
+  target:
+    - Entity
+    - Page
+    - Term
+    - Expression
+    - SEOKeyword
+    - AudiencePersona
+    - Brand
+    - PromptStyle
+    - Project
+
+  cardinality: many_to_many
+
+  properties:
+    - name: position
+      type: integer
+      required: true
+      description: "Character position in instruction where @ reference appears"
+
+    - name: ref_type
+      type: string
+      required: true
+      enum: [entity, page, term, expr, seo, audience, brand, prompt, project]
+      description: "Type of @ reference (matches prefix: @entity:, @page:, etc.)"
+
+    - name: purpose
+      type: string
+      required: true
+      enum: [inject, link]
+      description: "inject = @type:key, link = [@type:key]"
+
+  llm_context: |
+    USE: when tracking granular @ references in BlockInstruction content.
+    TRIGGERS: "@ reference", "injection", "content link", "block instruction parsing".
+    NOT: for aggregated block-level references (use REFERENCES on Block instead).
+    RELATES: BlockInstruction (source), multiple targets, REFERENCES (aggregated).
+
+    Pattern: Parse BlockInstruction.content for @type:key and [@type:key] patterns.
+    @entity:qr-generator → MENTIONS with ref_type=entity, purpose=inject
+    [@page:pricing] → MENTIONS with ref_type=page, purpose=link
+
+  cypher_pattern: "(BlockInstruction)-[:MENTIONS {position, ref_type, purpose}]->(target)"

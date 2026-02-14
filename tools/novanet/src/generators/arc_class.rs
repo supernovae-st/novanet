@@ -612,16 +612,17 @@ mod tests {
             .generate(root)
             .expect("should generate arc schema cypher");
 
-        // v0.12.4 + Brand Architecture + ADR-028: 128 ArcClass nodes
-        // Brand Architecture: +HAS_BRAND, HAS_DESIGN, HAS_PRINCIPLES, HAS_PROMPT_STYLE, FOR_MARKET, INSPIRED_BY_REGION, -HAS_BRAND_IDENTITY
-        // ADR-028: +REFERENCES (Block→Entity), +HAS_KEYWORD (Entity→SEOKeyword)
+        // v0.12.5 + ADR-028 inverse arcs: 134 ArcClass nodes
+        // Brand Architecture: +HAS_BRAND, HAS_DESIGN, HAS_PRINCIPLES, HAS_PROMPT_STYLE, FOR_MARKET, INSPIRED_BY_REGION
+        // ADR-028: +REFERENCES, +HAS_KEYWORD, +MENTIONS, +REFERENCED_BY
+        // ADR-028 inverses: +BRAND_OF, +DESIGN_OF, +PRINCIPLES_OF, +PROMPT_STYLE_OF
         let ac_merges = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Schema:ArcClass"))
             .count();
         assert_eq!(
-            ac_merges, 128,
-            "expected 128 ArcClass MERGE statements (v0.12.4 + Brand Architecture + ADR-028)"
+            ac_merges, 134,
+            "expected 134 ArcClass MERGE statements (v0.12.5 + ADR-028 inverses)"
         );
 
         // HAS_ARC_CLASS relationships match ArcClass count
@@ -629,14 +630,14 @@ mod tests {
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_ARC_CLASS]"))
             .count();
-        assert_eq!(has_ac, 128, "expected 128 HAS_ARC_CLASS relationships");
+        assert_eq!(has_ac, 134, "expected 134 HAS_ARC_CLASS relationships");
 
         // IN_FAMILY relationships match ArcClass count
         let in_family = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_FAMILY]"))
             .count();
-        assert_eq!(in_family, 128, "expected 128 IN_FAMILY relationships");
+        assert_eq!(in_family, 134, "expected 134 IN_FAMILY relationships");
 
         // Family distribution (non-inverse counts)
         // Section 2 MATCH lines have ArcFamily first: "MATCH (af:ArcFamily ..."
@@ -656,11 +657,12 @@ mod tests {
         let generation = count_family("generation");
         let mining = count_family("mining");
 
-        // v0.12.4 + Brand Architecture + ADR-028: Total arcs = 128
-        // ownership=55 (+4 Brand, -1 HAS_BRAND_IDENTITY, +1 HAS_KEYWORD), semantic=45 (+FOR_MARKET, +INSPIRED_BY_REGION, +REFERENCES)
+        // v0.12.5 + ADR-028 inverses: Total arcs = 134
+        // ownership=59 (+4 inverses: BRAND_OF, DESIGN_OF, PRINCIPLES_OF, PROMPT_STYLE_OF)
+        // semantic=47 (+2: MENTIONS, REFERENCED_BY)
         assert!(
-            ownership + localization + semantic + generation + mining == 128,
-            "family counts should sum to 128: o={ownership} l={localization} s={semantic} g={generation} m={mining}"
+            ownership + localization + semantic + generation + mining == 134,
+            "family counts should sum to 134: o={ownership} l={localization} s={semantic} g={generation} m={mining}"
         );
 
         // Spot checks — specific ArcClass nodes (v11.8: renamed from ArcClass)
@@ -690,8 +692,8 @@ mod tests {
             }
         }
 
-        // v0.12.4 + Brand Architecture + ADR-028: Header reflects count (128 total ArcClass nodes)
-        assert!(cypher.contains("128 ArcClass nodes"));
+        // v0.12.5 + ADR-028 inverses: Header reflects count (134 total ArcClass nodes)
+        assert!(cypher.contains("134 ArcClass nodes"));
     }
 
     /// Snapshot test for a minimal ArcSchema generator output.

@@ -1,0 +1,40 @@
+# packages/core/models/arc-kinds/semantic/referenced-by.yaml
+# ArcKind: REFERENCED_BY — Entity is referenced by Block (inverse of REFERENCES)
+#
+# v0.12.5: ADR-028 Page-Entity Architecture
+
+arc:
+  name: REFERENCED_BY
+  family: semantic
+  scope: intra_realm
+  temperature_threshold: 0.7
+
+  source: Entity
+  target: Block
+  cardinality: many_to_many
+
+  inverse_of: REFERENCES
+
+  properties:
+    - name: purpose
+      type: string
+      required: true
+      enum: [inject, link]
+      description: "inject = embedded content, link = hyperlink"
+
+    - name: count
+      type: integer
+      required: false
+      default: 1
+      description: "Number of times block references this entity"
+
+  llm_context: |
+    USE: when finding which Blocks reference an Entity.
+    TRIGGERS: "entity usage", "where is entity used", "blocks using entity".
+    NOT: for traversing from Block to Entity (use REFERENCES).
+    RELATES: Entity (source), Block (target), REFERENCES (inverse).
+
+    Query pattern: "Which blocks inject this entity's content?"
+    MATCH (e:Entity)-[:REFERENCED_BY {purpose: 'inject'}]->(b:Block)
+
+  cypher_pattern: "(Entity)-[:REFERENCED_BY {purpose, count}]->(Block)"
