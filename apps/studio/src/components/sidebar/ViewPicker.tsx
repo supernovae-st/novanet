@@ -399,11 +399,17 @@ export const ViewPicker = memo(function ViewPicker({ className }: ViewPickerProp
       return applicableTypes.includes(selectedNodeType);
     });
 
-    // Sort: contextual views first, then by category
+    // Sort: generation first, then contextual, then global
     return filtered.sort((a, b) => {
-      const aContextual = a.contextual || a.category === 'generation' ? 0 : 1;
-      const bContextual = b.contextual || b.category === 'generation' ? 0 : 1;
-      if (aContextual !== bContextual) return aContextual - bContextual;
+      // Priority: 0 = generation, 1 = contextual, 2 = global
+      const getPriority = (v: typeof a) => {
+        if (v.category === 'generation') return 0;
+        if (v.contextual) return 1;
+        return 2;
+      };
+      const aPriority = getPriority(a);
+      const bPriority = getPriority(b);
+      if (aPriority !== bPriority) return aPriority - bPriority;
       return a.category.localeCompare(b.category);
     });
   }, [categories, selectedNode]);
