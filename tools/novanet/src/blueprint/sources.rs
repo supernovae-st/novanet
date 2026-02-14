@@ -3,7 +3,7 @@
 //! Loads and aggregates data from:
 //! - YAML node-classes and arc-classes
 //! - taxonomy.yaml
-//! - Neo4j meta nodes (optional)
+//! - Neo4j schema nodes (optional)
 
 use crate::db::Db;
 use crate::parsers::arcs::{ArcDef, ArcFamily, Cardinality};
@@ -21,7 +21,7 @@ pub struct BlueprintData {
     pub arc_defs: Vec<ArcDef>,
     /// Taxonomy (realms, layers, traits, arc families).
     pub taxonomy: TaxonomyDoc,
-    /// Neo4j meta node counts (if connected).
+    /// Neo4j schema node counts (if connected).
     pub neo4j_counts: Option<Neo4jCounts>,
 }
 

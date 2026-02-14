@@ -28,14 +28,14 @@ pub struct NodeRow {
     pub description: String,
 }
 
-/// A row returned by overlay mode (includes meta flag).
+/// A row returned by overlay mode (includes schema flag).
 #[derive(Debug, Clone, Serialize, Tabled)]
 pub struct OverlayRow {
     pub label: String,
     pub key: String,
     pub display_name: String,
     pub description: String,
-    pub is_meta: bool,
+    pub is_schema: bool,
 }
 
 /// Format node rows as a table string.
@@ -103,13 +103,13 @@ mod tests {
     fn format_table_rows() {
         let rows = vec![
             NodeRow {
-                label: "Kind".to_string(),
+                label: "Class".to_string(),
                 key: "locale".to_string(),
                 display_name: "Locale".to_string(),
                 description: "Language/region".to_string(),
             },
             NodeRow {
-                label: "Kind".to_string(),
+                label: "Class".to_string(),
                 key: "project".to_string(),
                 display_name: "Project".to_string(),
                 description: "Business entity".to_string(),
@@ -118,7 +118,7 @@ mod tests {
         let table = format_table(&rows);
         assert!(table.contains("Locale"));
         assert!(table.contains("Project"));
-        assert!(table.contains("Kind"));
+        assert!(table.contains("Class"));
     }
 
     #[test]
@@ -155,13 +155,13 @@ mod tests {
     }
 
     #[test]
-    fn overlay_table_shows_is_meta() {
+    fn overlay_table_shows_is_schema() {
         let rows = vec![OverlayRow {
-            label: "Kind".to_string(),
+            label: "Class".to_string(),
             key: "locale".to_string(),
             display_name: "Locale".to_string(),
             description: "".to_string(),
-            is_meta: true,
+            is_schema: true,
         }];
         let table = format_overlay_table(&rows);
         assert!(table.contains("true"));
@@ -182,7 +182,7 @@ mod tests {
     #[test]
     fn format_json_special_characters() {
         let rows = vec![NodeRow {
-            label: "Kind".to_string(),
+            label: "Class".to_string(),
             key: "test\"quotes".to_string(),
             display_name: "Test <html>".to_string(),
             description: "Line1\nLine2".to_string(),
@@ -195,12 +195,12 @@ mod tests {
     #[test]
     fn format_cypher_no_params() {
         let stmt = CypherStatement {
-            cypher: "MATCH (n:Meta) RETURN n".to_string(),
+            cypher: "MATCH (n:Schema) RETURN n".to_string(),
             params: vec![],
         };
         let output = format_cypher(&stmt);
         assert!(output.contains("Parameterized:"));
-        assert!(output.contains("MATCH (n:Meta) RETURN n"));
+        assert!(output.contains("MATCH (n:Schema) RETURN n"));
         assert!(!output.contains("Inlined"));
     }
 
@@ -218,13 +218,13 @@ mod tests {
     }
 
     #[test]
-    fn overlay_row_is_meta_false() {
+    fn overlay_row_is_schema_false() {
         let rows = vec![OverlayRow {
             label: "Page".to_string(),
             key: "home".to_string(),
             display_name: "Home".to_string(),
             description: "Landing page".to_string(),
-            is_meta: false,
+            is_schema: false,
         }];
         let table = format_overlay_table(&rows);
         assert!(table.contains("false"));

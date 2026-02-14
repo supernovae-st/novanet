@@ -184,7 +184,7 @@ pub struct Icons {
     /// Layer icons (locale, geography, knowledge, config, etc.).
     #[serde(default)]
     pub layers: HashMap<String, Icon>,
-    /// Trait icons (invariant, localized, etc.).
+    /// Trait icons (defined, authored, imported, generated, retrieved).
     #[serde(default)]
     pub traits: HashMap<String, Icon>,
     /// Arc family icons (ownership, semantic, etc.).

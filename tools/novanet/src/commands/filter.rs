@@ -41,7 +41,7 @@ mod tests {
         // Directly test the query building (stdin test would be integration)
         let filter = FacetFilter::from_json(r#"{"realms":[]}"#).unwrap();
         let stmt = cypher::filter_build_query(&filter);
-        assert!(stmt.cypher.contains("NOT n:Meta"));
+        assert!(stmt.cypher.contains("NOT n:Schema"));
     }
 
     #[test]

@@ -411,20 +411,20 @@ terminal: "◆"
     #[test]
     fn parse_registry_entry_with_icon() {
         let yaml = r##"
-id: meta-complete
-description: Complete meta-graph
+id: schema-complete
+description: Complete schema-graph
 icon:
   web: diamond
   terminal: "◆"
 color: "#8b5cf6"
-category: meta
-modes: [meta]
+category: schema
+modes: [schema]
 cypher: |
-  MATCH (n:Meta)
+  MATCH (n:Schema)
   RETURN n
 "##;
         let entry: ViewRegistryEntry = serde_yaml::from_str(yaml).unwrap();
-        assert_eq!(entry.id, "meta-complete");
+        assert_eq!(entry.id, "schema-complete");
         let icon = entry.icon.unwrap();
         assert_eq!(icon.web, "diamond");
         assert_eq!(icon.terminal, "◆");
@@ -438,16 +438,16 @@ cypher: |
 version: "0.12.0"
 description: NovaNet Unified View System
 views:
-  - id: meta-complete
-    description: Complete meta-graph
+  - id: schema-complete
+    description: Complete schema-graph
     icon:
       web: diamond
       terminal: "◆"
     color: "#8b5cf6"
-    category: meta
-    modes: [meta]
+    category: schema
+    modes: [schema]
     cypher: |
-      MATCH (n:Meta)
+      MATCH (n:Schema)
       RETURN n
   - id: data-complete
     description: All instance nodes
@@ -458,7 +458,7 @@ views:
     category: data
     modes: [data]
     cypher: |
-      MATCH (n) WHERE NOT n:Meta
+      MATCH (n) WHERE NOT n:Schema
       RETURN n
 "##;
         let reg: ViewRegistry = serde_yaml::from_str(yaml).unwrap();
@@ -467,7 +467,7 @@ views:
 
         // First view
         let v1 = &reg.views[0];
-        assert_eq!(v1.id, "meta-complete");
+        assert_eq!(v1.id, "schema-complete");
         let icon1 = v1.icon.as_ref().unwrap();
         assert_eq!(icon1.web, "diamond");
         assert_eq!(icon1.terminal, "◆");

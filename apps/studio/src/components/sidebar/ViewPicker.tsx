@@ -19,12 +19,7 @@ import {
   Check,
   Search,
   X,
-  Database,
-  Boxes,
   Layers,
-  Eye,
-  Sparkles,
-  type LucideIcon,
 } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
@@ -42,20 +37,12 @@ import {
   useFocusTrap,
 } from '@/hooks';
 import { TRANSITION_DURATION_MS } from '@/config/constants';
-import type { ViewRegistryEntry } from '@novanet/core/filters';
+import type { ViewRegistryEntry, ViewCategory } from '@novanet/core/filters';
 import { NodeSelectorDropdown } from '@/components/views/NodeSelectorDropdown';
+import { VIEW_CATEGORIES } from '@/config/viewCategories';
 
 // Constants
 const GRID_COLUMNS = 3;
-
-// Category colors and icons (v0.12.5 unified view system)
-const CATEGORY_CONFIG: Record<string, { color: string; label: string; icon: LucideIcon }> = {
-  meta: { color: '#8b5cf6', label: 'Meta', icon: Database },
-  data: { color: '#6366f1', label: 'Data', icon: Boxes },
-  overlay: { color: '#f97316', label: 'Overlay', icon: Layers },
-  contextual: { color: '#94a3b8', label: 'Contextual', icon: Eye },
-  generation: { color: '#ec4899', label: 'Generation', icon: Sparkles },
-};
 
 interface ViewPickerProps {
   className?: string;
@@ -75,7 +62,7 @@ const ViewCard = memo(function ViewCard({
   onSelect: (e: React.MouseEvent) => void;
   index: number;
 }) {
-  const config = CATEGORY_CONFIG[view.category] || { color: '#a78bfa', label: 'View', icon: Layers };
+  const config = VIEW_CATEGORIES[view.category as ViewCategory] ?? { id: view.category, color: '#a78bfa', label: 'View', icon: Layers };
   const IconComponent = config.icon;
 
   return (

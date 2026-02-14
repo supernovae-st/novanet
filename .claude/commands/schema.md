@@ -23,7 +23,7 @@ Master command for managing the NovaNet knowledge graph schema.
 YAML (Source of Truth)          TypeScript (Generated)         Neo4j (Runtime)
 packages/core/models/     -->   packages/core/src/types/  -->  bolt://localhost:7687
 ├── node-classes/                 ├── index.ts
-│   ├── shared/                 └── locale-knowledge.ts
+│   ├── shared/                   └── shared.ts (v11.3+)
 │   └── org/
 ├── arc-classes/
 └── taxonomy.yaml
