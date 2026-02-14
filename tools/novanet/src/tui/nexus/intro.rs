@@ -444,7 +444,7 @@ fn render_page_3_classification(f: &mut Frame, theme: &Theme, locale: NexusLocal
                     .fg(theme.realm_color("shared"))
                     .add_modifier(Modifier::BOLD),
             ),
-            Span::styled(" (39 nodes)", Style::default().fg(Color::DarkGray)),
+            Span::styled(" (40 nodes)", Style::default().fg(Color::DarkGray)),
             Span::styled("              ", Style::default()),
             Span::styled(
                 "◎ org",
@@ -452,7 +452,7 @@ fn render_page_3_classification(f: &mut Frame, theme: &Theme, locale: NexusLocal
                     .fg(theme.realm_color("org"))
                     .add_modifier(Modifier::BOLD),
             ),
-            Span::styled(" (20 nodes)", Style::default().fg(Color::DarkGray)),
+            Span::styled(" (21 nodes)", Style::default().fg(Color::DarkGray)),
             Span::styled(
                 "                   │",
                 Style::default().fg(theme.realm_color("shared")),
