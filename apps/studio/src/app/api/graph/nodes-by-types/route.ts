@@ -8,6 +8,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import neo4j from 'neo4j-driver';
 import { getDriver } from '@/lib/neo4j';
 import { logger } from '@/lib/logger';
 
@@ -72,8 +73,10 @@ export async function GET(request: NextRequest) {
     const session = driver.session({ database: 'neo4j' });
 
     try {
+      // Neo4j requires integer for LIMIT - use neo4j.int()
+      const limitPerType = Math.ceil(limit / types.length);
       const result = await session.run(cypher, {
-        limit: Math.ceil(limit / types.length), // Distribute limit across types
+        limit: neo4j.int(limitPerType),
         ...(searchParam ? { search: searchParam } : {}),
       });
 
