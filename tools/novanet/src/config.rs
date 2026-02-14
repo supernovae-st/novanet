@@ -92,10 +92,9 @@ pub fn core_src_dir(root: &Path) -> PathBuf {
     root.join("packages/core/src")
 }
 
-#[must_use]
-pub fn views_dir(root: &Path) -> PathBuf {
-    root.join("packages/core/models/views")
-}
+// NOTE: views_dir was removed in v0.12.5.
+// The old views/ directory was replaced by a single views.yaml file.
+// Use models_dir(root).join("views.yaml") for the new views file.
 
 #[must_use]
 pub fn docs_dir(root: &Path) -> PathBuf {
@@ -180,14 +179,7 @@ mod tests {
         );
     }
 
-    #[test]
-    fn views_dir_joins_correctly() {
-        let root = Path::new("/fake/root");
-        assert_eq!(
-            views_dir(root),
-            PathBuf::from("/fake/root/packages/core/models/views")
-        );
-    }
+    // NOTE: views_dir test removed in v0.12.5 (views/ replaced by views.yaml)
 
     #[test]
     fn docs_dir_joins_correctly() {
