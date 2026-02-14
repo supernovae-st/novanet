@@ -4,7 +4,7 @@
 //!
 //! Resources:
 //! - `entity://{key}` - Entity with localized content
-//! - `kind://{name}` - NodeKind definition from meta-graph
+//! - `class://{name}` - NodeClass definition from schema-graph (v0.12.0: was kind://)
 //! - `locale://{key}` - Locale configuration and knowledge summary
 //! - `view://{id}` - Saved view/query definition
 
@@ -17,8 +17,8 @@ use serde::{Deserialize, Serialize};
 pub enum ResourceType {
     /// Entity resource: entity://{key}
     Entity,
-    /// Kind resource: kind://{name}
-    Kind,
+    /// Class resource: class://{name} (v0.12.0: was Kind)
+    Class,
     /// Locale resource: locale://{key}
     Locale,
     /// View resource: view://{id}
@@ -31,8 +31,8 @@ impl ResourceType {
     pub fn parse_uri(uri: &str) -> Option<(Self, String)> {
         if let Some(key) = uri.strip_prefix("entity://") {
             Some((Self::Entity, key.to_string()))
-        } else if let Some(name) = uri.strip_prefix("kind://") {
-            Some((Self::Kind, name.to_string()))
+        } else if let Some(name) = uri.strip_prefix("class://") {
+            Some((Self::Class, name.to_string()))
         } else if let Some(key) = uri.strip_prefix("locale://") {
             Some((Self::Locale, key.to_string()))
         } else if let Some(id) = uri.strip_prefix("view://") {
@@ -46,7 +46,7 @@ impl ResourceType {
     pub fn scheme(&self) -> &'static str {
         match self {
             Self::Entity => "entity",
-            Self::Kind => "kind",
+            Self::Class => "class",
             Self::Locale => "locale",
             Self::View => "view",
         }
@@ -94,10 +94,10 @@ pub struct RelatedEntity {
     pub direction: String,
 }
 
-/// Kind resource data
+/// Class resource data (v0.12.0: was KindResource)
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct KindResource {
-    /// Kind name
+pub struct ClassResource {
+    /// Class name
     pub name: String,
     /// Display name
     pub display_name: Option<String>,
@@ -113,15 +113,15 @@ pub struct KindResource {
     pub llm_context: Option<String>,
     /// Properties schema
     pub properties: Vec<PropertyDefinition>,
-    /// Outgoing arc kinds
+    /// Outgoing arc classes
     pub outgoing_arcs: Vec<String>,
-    /// Incoming arc kinds
+    /// Incoming arc classes
     pub incoming_arcs: Vec<String>,
     /// Instance count
     pub instance_count: usize,
 }
 
-/// Property definition for a Kind
+/// Property definition for a Class
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PropertyDefinition {
     /// Property name
@@ -279,26 +279,26 @@ pub async fn fetch_entity(state: &State, key: &str) -> Result<EntityResource> {
     })
 }
 
-/// Fetch a kind resource
-pub async fn fetch_kind(state: &State, name: &str) -> Result<KindResource> {
+/// Fetch a class resource (v0.12.0: was fetch_kind)
+pub async fn fetch_class(state: &State, name: &str) -> Result<ClassResource> {
     let query = r#"
-        MATCH (k:Kind {name: $name})
-        OPTIONAL MATCH (k)<-[:OF_KIND]-(instance)
-        WITH k, count(instance) AS instance_count
-        OPTIONAL MATCH (a:ArcKind)
-        WHERE a.source = k.name OR a.target = k.name
-        WITH k, instance_count, collect(DISTINCT a) AS arcs
-        RETURN k.name AS name,
-               k.display_name AS display_name,
-               k.realm AS realm,
-               k.layer AS layer,
-               k.trait AS trait_type,
-               k.description AS description,
-               k.llm_context AS llm_context,
-               k.properties AS properties,
+        MATCH (c:Class {name: $name})
+        OPTIONAL MATCH (c)<-[:OF_CLASS]-(instance)
+        WITH c, count(instance) AS instance_count
+        OPTIONAL MATCH (a:ArcClass)
+        WHERE a.source = c.name OR a.target = c.name
+        WITH c, instance_count, collect(DISTINCT a) AS arcs
+        RETURN c.name AS name,
+               c.display_name AS display_name,
+               c.realm AS realm,
+               c.layer AS layer,
+               c.trait AS trait_type,
+               c.description AS description,
+               c.llm_context AS llm_context,
+               c.properties AS properties,
                instance_count,
-               [a IN arcs WHERE a.source = k.name | a.name] AS outgoing_arcs,
-               [a IN arcs WHERE a.target = k.name | a.name] AS incoming_arcs
+               [a IN arcs WHERE a.source = c.name | a.name] AS outgoing_arcs,
+               [a IN arcs WHERE a.target = c.name | a.name] AS incoming_arcs
     "#;
 
     let mut params = serde_json::Map::new();
@@ -324,7 +324,7 @@ pub async fn fetch_kind(state: &State, name: &str) -> Result<KindResource> {
         })
         .unwrap_or_default();
 
-    Ok(KindResource {
+    Ok(ClassResource {
         name: row["name"].as_str().unwrap_or(name).to_string(),
         display_name: row["display_name"].as_str().map(|s| s.to_string()),
         realm: row["realm"].as_str().unwrap_or("unknown").to_string(),
@@ -422,7 +422,7 @@ pub async fn fetch_view(_state: &State, id: &str) -> Result<ViewResource> {
 pub async fn list_resources(state: &State, resource_type: ResourceType) -> Result<Vec<String>> {
     let query = match resource_type {
         ResourceType::Entity => "MATCH (e:Entity) RETURN e.key AS key ORDER BY key LIMIT 100",
-        ResourceType::Kind => "MATCH (k:Kind) RETURN k.name AS key ORDER BY key",
+        ResourceType::Class => "MATCH (c:Class) RETURN c.name AS key ORDER BY key",
         ResourceType::Locale => "MATCH (l:Locale) RETURN l.key AS key ORDER BY key",
         ResourceType::View => {
             // Views are not stored in Neo4j, return empty for now
@@ -450,9 +450,9 @@ mod tests {
     }
 
     #[test]
-    fn test_parse_uri_kind() {
-        let (rt, key) = ResourceType::parse_uri("kind://Entity").unwrap();
-        assert_eq!(rt, ResourceType::Kind);
+    fn test_parse_uri_class() {
+        let (rt, key) = ResourceType::parse_uri("class://Entity").unwrap();
+        assert_eq!(rt, ResourceType::Class);
         assert_eq!(key, "Entity");
     }
 
@@ -479,7 +479,7 @@ mod tests {
     #[test]
     fn test_resource_type_scheme() {
         assert_eq!(ResourceType::Entity.scheme(), "entity");
-        assert_eq!(ResourceType::Kind.scheme(), "kind");
+        assert_eq!(ResourceType::Class.scheme(), "class");
         assert_eq!(ResourceType::Locale.scheme(), "locale");
         assert_eq!(ResourceType::View.scheme(), "view");
     }

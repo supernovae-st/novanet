@@ -35,7 +35,7 @@ mod prompts {
 }
 
 mod tools_with_seed_data {
-    // Test traverse with real Kind nodes
+    // Test traverse with real Class nodes (v0.12.0: was Kind)
     // Test search with Entity nodes
     // Test assemble with locale knowledge
     // Test atoms retrieval
@@ -52,7 +52,7 @@ mod tools_with_seed_data {
 | `test_generate_token_budget` | Verify budget enforcement | Token management |
 | `test_prompt_cypher_query` | Render cypher_query prompt | Prompt system |
 | `test_prompt_block_generation` | Render block_generation prompt | Prompt with args |
-| `test_traverse_with_kinds` | Traverse from Kind node | Meta-graph traversal |
+| `test_traverse_from_class` | Traverse from Class node | Schema-graph traversal |
 | `test_search_entities` | Search for Entity nodes | Fulltext search |
 | `test_assemble_locale_context` | Assemble fr-FR context | Locale knowledge |
 

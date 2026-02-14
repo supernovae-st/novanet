@@ -221,15 +221,15 @@ mod query_execution {
             .await
             .expect("Pool creation failed");
 
-        // Query for NovaNet Kind nodes (meta-graph)
+        // Query for NovaNet Class nodes (schema-graph, v0.12.0: was Kind)
         let result = pool
-            .execute_query("MATCH (k:Kind) RETURN k.name AS name LIMIT 5", None)
+            .execute_query("MATCH (c:Class) RETURN c.name AS name LIMIT 5", None)
             .await;
 
         // This might fail if database is empty, which is OK
         if let Ok(rows) = result {
             for row in &rows {
-                assert!(row.get("name").is_some(), "Kind node should have name");
+                assert!(row.get("name").is_some(), "Class node should have name");
             }
         }
     }
@@ -680,7 +680,7 @@ mod tools_with_seed_data {
     use super::*;
 
     #[tokio::test]
-    async fn test_traverse_from_kind() {
+    async fn test_traverse_from_class() {
         require_neo4j!();
 
         let uri = env::var("NEO4J_URI").unwrap();
@@ -691,16 +691,16 @@ mod tools_with_seed_data {
             .await
             .expect("Pool creation failed");
 
-        // Query for Kind nodes (meta-graph)
+        // Query for Class nodes (schema-graph, v0.12.0: was Kind)
         let result = pool
             .execute_query(
-                "MATCH (k:Kind)-[r]->(m) RETURN k.name AS source, type(r) AS rel, labels(m)[0] AS target LIMIT 5",
+                "MATCH (c:Class)-[r]->(m) RETURN c.name AS source, type(r) AS rel, labels(m)[0] AS target LIMIT 5",
                 None,
             )
             .await;
 
         if let Ok(rows) = result {
-            eprintln!("Found {} Kind relationships", rows.len());
+            eprintln!("Found {} Class relationships", rows.len());
             for row in &rows {
                 eprintln!(
                     "  {} -[{}]-> {}",
@@ -1903,7 +1903,7 @@ mod resource_uri_comprehensive {
 
     #[test]
     fn test_uri_empty_key() {
-        let empty_key_uris = ["entity://", "kind://", "locale://", "view://"];
+        let empty_key_uris = ["entity://", "class://", "locale://", "view://"];
 
         for uri in empty_key_uris {
             let result = ResourceType::parse_uri(uri);
@@ -2181,9 +2181,9 @@ mod neo4j_special_types {
             .await
             .expect("Pool creation failed");
 
-        // Query that returns a Node object
+        // Query that returns a Node object (v0.12.0: Class, was Kind)
         let result = pool
-            .execute_query("MATCH (n:Kind) RETURN n AS node LIMIT 1", None)
+            .execute_query("MATCH (n:Class) RETURN n AS node LIMIT 1", None)
             .await;
 
         assert!(result.is_ok(), "Node query should succeed");
