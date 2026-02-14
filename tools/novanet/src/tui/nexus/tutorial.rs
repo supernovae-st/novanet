@@ -218,7 +218,7 @@ pub static STEPS: [TutorialStep; 5] = [
             "          Locale:ja-JP",
             "          ...",
             "",
-            "  Arcs (114)",
+            "  Arcs (146)",
             "    ArcFamily:ownership (clickable!)",
             "      ArcClass:HAS_CONTENT (clickable!)",
             "",
