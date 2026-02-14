@@ -50,7 +50,7 @@ impl CypherStatement {
 }
 
 // ---------------------------------------------------------------------------
-// Mode 1: Data — real instances only (no Meta nodes)
+// Mode 1: Data — real instances only (no Schema nodes)
 // ---------------------------------------------------------------------------
 
 #[must_use]
@@ -58,8 +58,8 @@ pub fn data_query(limit: i64) -> CypherStatement {
     CypherStatement {
         cypher: "\
 MATCH (n)
-WHERE NOT n:Meta
-WITH n, [l IN labels(n) WHERE l <> 'Meta'][0] AS label
+WHERE NOT n:Schema
+WITH n, [l IN labels(n) WHERE l <> 'Schema'][0] AS label
 RETURN label,
        n.key AS key,
        coalesce(n.display_name, '') AS display_name,
@@ -72,7 +72,7 @@ LIMIT $limit"
 }
 
 // ---------------------------------------------------------------------------
-// Overlay — data + meta combined
+// Overlay — data + schema combined
 // ---------------------------------------------------------------------------
 
 #[must_use]
@@ -81,14 +81,14 @@ pub fn overlay_query(limit: i64) -> CypherStatement {
         cypher: "\
 MATCH (n)
 WITH n,
-     [l IN labels(n) WHERE l <> 'Meta'][0] AS label,
-     n:Meta AS is_meta
+     [l IN labels(n) WHERE l <> 'Schema'][0] AS label,
+     n:Schema AS is_schema
 RETURN label,
        n.key AS key,
        coalesce(n.display_name, '') AS display_name,
        coalesce(n.description, '') AS description,
-       is_meta
-ORDER BY is_meta DESC, label, n.key
+       is_schema
+ORDER BY is_schema DESC, label, n.key
 LIMIT $limit"
             .to_string(),
         params: vec![("limit".to_string(), ParamValue::Int(limit))],
@@ -183,7 +183,7 @@ LIMIT $limit"
 pub fn filter_build_query(filter: &FacetFilter) -> CypherStatement {
     if filter.is_empty() {
         return CypherStatement {
-            cypher: "MATCH (n) WHERE NOT n:Meta RETURN n".to_string(),
+            cypher: "MATCH (n) WHERE NOT n:Schema RETURN n".to_string(),
             params: vec![],
         };
     }
@@ -251,7 +251,7 @@ mod tests {
     fn data_query_has_limit() {
         let stmt = data_query(100);
         assert!(stmt.cypher.contains("LIMIT $limit"));
-        assert!(stmt.cypher.contains("NOT n:Meta"));
+        assert!(stmt.cypher.contains("NOT n:Schema"));
         assert!(matches!(
             stmt.get_param("limit"),
             Some(ParamValue::Int(100))
@@ -259,9 +259,9 @@ mod tests {
     }
 
     #[test]
-    fn overlay_query_includes_is_meta() {
+    fn overlay_query_includes_is_schema() {
         let stmt = overlay_query(500);
-        assert!(stmt.cypher.contains("is_meta"));
+        assert!(stmt.cypher.contains("is_schema"));
         assert!(stmt.cypher.contains("LIMIT $limit"));
     }
 
@@ -270,7 +270,7 @@ mod tests {
         let filter = FacetFilter::default();
         let stmt = faceted_query(&filter, 100);
         // Empty filter falls back to data_query
-        assert!(stmt.cypher.contains("NOT n:Meta"));
+        assert!(stmt.cypher.contains("NOT n:Schema"));
     }
 
     #[test]
@@ -349,7 +349,7 @@ mod tests {
     #[test]
     fn filter_build_query_empty() {
         let stmt = filter_build_query(&FacetFilter::default());
-        assert!(stmt.cypher.contains("NOT n:Meta"));
+        assert!(stmt.cypher.contains("NOT n:Schema"));
         assert!(stmt.cypher.contains("RETURN n"));
     }
 
@@ -423,6 +423,6 @@ mod tests {
     #[test]
     fn overlay_query_sort_order() {
         let stmt = overlay_query(100);
-        assert!(stmt.cypher.contains("ORDER BY is_meta DESC, label, n.key"));
+        assert!(stmt.cypher.contains("ORDER BY is_schema DESC, label, n.key"));
     }
 }

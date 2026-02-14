@@ -302,10 +302,10 @@ describe('Design System Coherence: Traits', () => {
     }
   });
 
-  it('should use aggregated trait for metrics nodes', () => {
-    const aggregatedNodes = ['SEOKeywordMetrics', 'GEOAnswer'];
+  it('should use retrieved trait for metrics nodes', () => {
+    const retrievedNodes = ['SEOKeywordMetrics', 'GEOAnswer'];
 
-    for (const node of aggregatedNodes) {
+    for (const node of retrievedNodes) {
       expect(CLASS_TAXONOMY[node as keyof typeof CLASS_TAXONOMY].trait).toBe('retrieved');
     }
   });

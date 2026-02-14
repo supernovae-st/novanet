@@ -262,7 +262,7 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     glow: '#05966940',
   },
 
-  // locale-knowledge (18) — Green/Pink tones + Linguistic/Cultural taxonomy
+  // shared/knowledge (v11.3) — Green/Pink tones + Linguistic/Cultural taxonomy
   TermSet: {
     primary: '#22c55e',
     secondary: '#10b981',

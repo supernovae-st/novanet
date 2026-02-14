@@ -91,7 +91,7 @@ fn extract_node_rows(rows: &[neo4rs::Row]) -> Vec<NodeRow> {
         .collect()
 }
 
-/// Extract OverlayRow from neo4rs Row (includes is_meta flag).
+/// Extract OverlayRow from neo4rs Row (includes is_schema flag).
 fn extract_overlay_rows(rows: &[neo4rs::Row]) -> Vec<OverlayRow> {
     rows.iter()
         .map(|row| OverlayRow {
@@ -99,7 +99,7 @@ fn extract_overlay_rows(rows: &[neo4rs::Row]) -> Vec<OverlayRow> {
             key: row.get::<String>("key").unwrap_or_default(),
             display_name: row.get::<String>("display_name").unwrap_or_default(),
             description: row.get::<String>("description").unwrap_or_default(),
-            is_meta: row.get::<bool>("is_meta").unwrap_or(false),
+            is_schema: row.get::<bool>("is_schema").unwrap_or(false),
         })
         .collect()
 }

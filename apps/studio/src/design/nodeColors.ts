@@ -76,11 +76,11 @@ export function getStructuralColors(type: string): GradientColors {
 }
 
 // =============================================================================
-// Locale Knowledge Colors
+// Shared Realm Knowledge Colors (v11.3: locale + knowledge layers)
 // =============================================================================
 
-// Locale knowledge types map to 'knowledge' layer
-const LOCALE_KNOWLEDGE_TYPES = new Set([
+// Knowledge-related types in shared realm (locale + knowledge layers)
+const SHARED_KNOWLEDGE_TYPES = new Set([
   'Formatting', 'Slugification', 'Adaptation', 'Style',
   'TermSet', 'ExpressionSet', 'PatternSet', 'CultureSet', 'TabooSet', 'AudienceSet',
   'Term', 'Expression', 'Pattern', 'CultureRef', 'Taboo', 'AudienceTrait',
@@ -90,11 +90,11 @@ const LOCALE_KNOWLEDGE_TYPES = new Set([
 const KNOWLEDGE_LAYER_GRADIENT: GradientColors = LAYER_GRADIENTS.knowledge;
 
 /**
- * Get gradient colors for locale knowledge node types
- * All locale knowledge types use the 'knowledge' layer color
+ * Get gradient colors for shared realm knowledge types
+ * All shared knowledge types use the 'knowledge' layer color
  */
-export function getLocaleKnowledgeColors(type: string): GradientColors {
-  if (LOCALE_KNOWLEDGE_TYPES.has(type)) {
+export function getSharedKnowledgeColors(type: string): GradientColors {
+  if (SHARED_KNOWLEDGE_TYPES.has(type)) {
     return paletteToGradient(getLayerPalette('knowledge'));
   }
   return KNOWLEDGE_LAYER_GRADIENT;
@@ -106,16 +106,16 @@ export function getLocaleKnowledgeColors(type: string): GradientColors {
 
 /**
  * Get gradient colors for any node type
- * Tries structural colors first, then locale knowledge, then defaults
+ * Tries structural colors first, then shared knowledge, then defaults
  */
 export function getNodeTypeColors(type: NodeType | string): GradientColors {
   // Check structural colors first
   if (type in STRUCTURAL_LAYER_MAP) {
     return getStructuralColors(type);
   }
-  // Check locale knowledge colors
-  if (LOCALE_KNOWLEDGE_TYPES.has(type)) {
-    return getLocaleKnowledgeColors(type);
+  // Check shared realm knowledge colors
+  if (SHARED_KNOWLEDGE_TYPES.has(type)) {
+    return getSharedKnowledgeColors(type);
   }
   // Default to foundation layer
   return paletteToGradient(getLayerPalette('foundation'));

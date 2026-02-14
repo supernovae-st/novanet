@@ -1,18 +1,20 @@
 'use client';
 
 /**
- * LocaleKnowledgeNode - Unified card design for locale/knowledge nodes
+ * LocaleKnowledgeNode - Unified card design for shared realm nodes (v11.3+)
  *
- * Types: v11.5 knowledge atoms - Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait
+ * Handles nodes from 3 shared realm layers:
+ * - locale: Locale, Culture, Style, etc.
+ * - geography: Region, Country, Continent, etc.
+ * - knowledge: Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait
  * Plus containers: TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet
- * And locale/geography nodes: Locale, Culture, Style, Region, Country, etc.
  *
  * Uses CardShell + StructuralCardContent for consistent design system.
  */
 
 import { memo, useMemo } from 'react';
 import { type Node, type NodeProps } from '@xyflow/react';
-import { getLocaleKnowledgeColors } from '@/design/nodeColors';
+import { getSharedKnowledgeColors } from '@/design/nodeColors';
 import type { BaseNodeData } from './BaseNodeWrapper';
 import { CardShell, StructuralCardContent } from './card';
 
@@ -59,7 +61,7 @@ function getCardWidth(type: string): number {
  */
 export const LocaleKnowledgeNode = memo(function LocaleKnowledgeNode(props: NodeProps<LocaleKnowledgeNodeType>) {
   const { data, selected = false } = props;
-  const colors = useMemo(() => getLocaleKnowledgeColors(data.type), [data.type]);
+  const colors = useMemo(() => getSharedKnowledgeColors(data.type), [data.type]);
   const width = getCardWidth(data.type);
 
   // Prepare data for StructuralCardContent

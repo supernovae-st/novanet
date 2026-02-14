@@ -33,11 +33,11 @@ import { useFilterStore } from '@/stores/filterStore';
 import { useGridNavigation } from '@/hooks/useGridNavigation';
 
 // Map preset IDs to Lucide icons for consistent SVG rendering
-// v11.8: Renamed per ADR-024 Data Origin semantics
+// v11.3+: locale-knowledge split to locale/geography/knowledge, renamed to shared-layers
 const PRESET_ICONS: Record<string, LucideIcon> = {
   'project-structure': Building2,
   'generation-chain': Link,
-  'locale-knowledge': Globe,
+  'shared-layers': Globe,
   'concept-network': Network,
   'prompts-rules': FileText,
   'seo-geo': Search,

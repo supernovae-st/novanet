@@ -24,17 +24,17 @@ NovaNet uses Neo4j for native content generation (NOT translation):
 - **Content nodes**: EntityContent, ProjectContent, PageGenerated, BlockGenerated (locale-specific generated content)
 - **Knowledge atoms**: Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait (locale-native)
 
-### v11.0 Meta-Graph (2-Realm Architecture)
+### v0.12.4 Schema-Graph (2-Realm Architecture)
 
-v11.0 uses a self-describing context graph with 6 meta-node types:
-- **Realm** (2): global, tenant — visibility boundary (one-way: global→tenant)
-- **Layer** (9): global (config, locale-knowledge) | tenant (config, foundation, structure, semantic, instruction, seo, output)
-- **Class** (65): 1:1 mapping to Neo4j labels (carries `schema_hint`, `context_budget`)
-- **Trait** (5): invariant, localized, knowledge, derived, job — locale behavior
+v0.12.4 uses a self-describing context graph with 6 schema-node types:
+- **Realm** (2): shared, org — visibility boundary (one-way: shared→org)
+- **Layer** (10): shared (config, locale, geography, knowledge) | org (config, foundation, structure, semantic, instruction, output)
+- **Class** (61): 1:1 mapping to Neo4j labels (carries `schema_hint`, `context_budget`)
+- **Trait** (5): defined, authored, imported, generated, retrieved — data origin (ADR-024)
 - **ArcFamily** (5): ownership, localization, semantic, generation, mining
-- **ArcClass** (125): 1:1 mapping to Neo4j relationship types (carries `cypher_pattern`)
+- **ArcClass** (128): 1:1 mapping to Neo4j relationship types (carries `cypher_pattern`)
 
-All meta-nodes carry `:Schema` double-label. Instance bridge: `DataNode -[:OF_CLASS]-> Class`.
+All schema-nodes carry `:Schema` double-label. Instance bridge: `DataNode -[:OF_CLASS]-> Class`.
 
 ## Key Patterns
 
