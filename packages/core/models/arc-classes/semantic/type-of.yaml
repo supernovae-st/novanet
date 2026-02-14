@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/type-of.yaml
-# ArcKind: TYPE_OF - Entity is a type/category of another Entity (taxonomy)
+# ArcClass: TYPE_OF - Entity is a type/category of another Entity (taxonomy)
 # v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
 
 arc:

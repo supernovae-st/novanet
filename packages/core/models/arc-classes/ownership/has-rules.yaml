@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/has-rules.yaml
-# ArcKind: HAS_RULES — BlockType defines generation rules templates
+# ArcClass: HAS_RULES — BlockType defines generation rules templates
 
 arc:
   name: HAS_RULES

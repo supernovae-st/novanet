@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/belongs-to-org.yaml
-# ArcKind: BELONGS_TO_ORG — Project belongs to OrgConfig (v11.3: unified)
+# ArcClass: BELONGS_TO_ORG — Project belongs to OrgConfig (v11.3: unified)
 
 arc:
   name: BELONGS_TO_ORG

@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/localization/content-of.yaml
-# ArcKind: CONTENT_OF — Inverse of HAS_CONTENT (v10.9.0: renamed from L10N_OF)
+# ArcClass: CONTENT_OF — Inverse of HAS_CONTENT (v10.9.0: renamed from L10N_OF)
 
 arc:
   name: CONTENT_OF

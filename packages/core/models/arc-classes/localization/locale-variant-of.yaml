@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/localization/locale-variant-of.yaml
-# ArcKind: LOCALE_VARIANT_OF — Regional locale variant: (en-AU)-[:LOCALE_VARIANT_OF]->(en-GB) for inheritance
+# ArcClass: LOCALE_VARIANT_OF — Regional locale variant: (en-AU)-[:LOCALE_VARIANT_OF]->(en-GB) for inheritance
 # v10.9.2: Renamed from VARIANT_OF to LOCALE_VARIANT_OF to avoid collision with semantic/VARIANT_OF
 
 arc:

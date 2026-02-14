@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/has-branch.yaml
-# ArcKind: HAS_BRANCH — LanguageFamily contains LanguageBranch (inverse of BRANCH_OF)
+# ArcClass: HAS_BRANCH — LanguageFamily contains LanguageBranch (inverse of BRANCH_OF)
 #
 # v0.12.5: ADR-026 Inverse Arc Policy
 

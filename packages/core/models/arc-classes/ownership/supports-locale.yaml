@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/supports-locale.yaml
-# ArcKind: SUPPORTS_LOCALE — Project supports locales with activation status (active/pending/disabled)
+# ArcClass: SUPPORTS_LOCALE — Project supports locales with activation status (active/pending/disabled)
 
 arc:
   name: SUPPORTS_LOCALE

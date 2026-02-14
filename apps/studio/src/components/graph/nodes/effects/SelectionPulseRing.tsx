@@ -6,7 +6,7 @@
  * Creates a double-ring pulse animation when a node is selected.
  * Uses the node's primary color for consistent theming.
  *
- * Used by: StructuralNode, LocaleKnowledgeNode, SchemaNode, ProjectNode
+ * Used by: StructuralNode, SharedLayerNode, SchemaNode, ProjectNode
  */
 
 import { memo, useMemo } from 'react';

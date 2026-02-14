@@ -17,7 +17,7 @@ trait:
     web: "square"
     terminal: "■"
 
-  node_count: 31  # Computed by generator
+  node_count: 33  # Computed by generator
 
   context_budget:
     min: 500

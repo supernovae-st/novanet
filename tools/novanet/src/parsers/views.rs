@@ -258,14 +258,14 @@ version: "1.0"
 root:
   type: Block
 include:
-  - relation: HAS_PROMPT
+  - relation: HAS_INSTRUCTION
     direction: outgoing
 "#;
         let view: ViewDef = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(view.id, "test-view");
         assert_eq!(view.root.node_type, "Block");
         assert_eq!(view.include.len(), 1);
-        assert_eq!(view.include[0].relation, "HAS_PROMPT");
+        assert_eq!(view.include[0].relation, "HAS_INSTRUCTION");
         assert_eq!(view.include[0].direction, Direction::Outgoing);
         assert!(view.docs.is_none());
     }
@@ -284,14 +284,14 @@ include:
     include:
       - relation: HAS_BLOCK
         direction: outgoing
-      - relation: HAS_PROMPT
+      - relation: HAS_INSTRUCTION
         direction: outgoing
 "#;
         let view: ViewDef = serde_yaml::from_str(yaml).unwrap();
         let nested = view.include[0].include.as_ref().unwrap();
         assert_eq!(nested.len(), 2);
         assert_eq!(nested[0].relation, "HAS_BLOCK");
-        assert_eq!(nested[1].relation, "HAS_PROMPT");
+        assert_eq!(nested[1].relation, "HAS_INSTRUCTION");
     }
 
     #[test]

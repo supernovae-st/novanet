@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/localization/fallback-to.yaml
-# ArcKind: FALLBACK_TO — Fallback chain: (fr-CA)-[:FALLBACK_TO]->(fr-FR)-[:FALLBACK_TO]->(en-US)
+# ArcClass: FALLBACK_TO — Fallback chain: (fr-CA)-[:FALLBACK_TO]->(fr-FR)-[:FALLBACK_TO]->(en-US)
 
 arc:
   name: FALLBACK_TO

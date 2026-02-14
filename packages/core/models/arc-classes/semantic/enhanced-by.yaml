@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/enhanced-by.yaml
-# ArcKind: ENHANCED_BY - Entity is enhanced by a feature
+# ArcClass: ENHANCED_BY - Entity is enhanced by a feature
 # v11.0: Inverse of ENHANCES arc
 
 arc:

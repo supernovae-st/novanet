@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/has-subregion.yaml
-# ArcKind: HAS_SUBREGION — GeoRegion contains GeoSubRegion (inverse of IN_REGION)
+# ArcClass: HAS_SUBREGION — GeoRegion contains GeoSubRegion (inverse of IN_REGION)
 #
 # v0.12.5: ADR-026 Inverse Arc Policy
 

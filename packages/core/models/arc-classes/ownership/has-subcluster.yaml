@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/has-subcluster.yaml
-# ArcKind: HAS_SUBCLUSTER — PopulationCluster contains PopulationSubCluster (inverse of CLUSTER_OF)
+# ArcClass: HAS_SUBCLUSTER — PopulationCluster contains PopulationSubCluster (inverse of CLUSTER_OF)
 #
 # v0.12.5: ADR-026 Inverse Arc Policy
 

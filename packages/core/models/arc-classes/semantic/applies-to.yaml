@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/applies-to.yaml
-# ArcKind: APPLIES_TO - Entity applies to / is applicable to another Entity
+# ArcClass: APPLIES_TO - Entity applies to / is applicable to another Entity
 # v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
 
 arc:

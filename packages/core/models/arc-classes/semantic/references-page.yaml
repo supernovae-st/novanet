@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/references-page.yaml
-# ArcKind: REFERENCES_PAGE — BlockInstruction references Page (v10.3)
+# ArcClass: REFERENCES_PAGE — BlockInstruction references Page (v10.3)
 
 arc:
   name: REFERENCES_PAGE

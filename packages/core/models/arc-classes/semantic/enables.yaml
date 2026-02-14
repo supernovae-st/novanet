@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/enables.yaml
-# ArcKind: ENABLES - Entity enables/unlocks another Entity
+# ArcClass: ENABLES - Entity enables/unlocks another Entity
 # v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
 
 arc:

@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/localization/speaks-branch.yaml
-# ArcKind: SPEAKS_BRANCH - Locale's primary language branch
+# ArcClass: SPEAKS_BRANCH - Locale's primary language branch
 # v10.8: Geographic Taxonomy
 
 arc:

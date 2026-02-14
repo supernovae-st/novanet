@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/generation/bundles.yaml
-# ArcKind: BUNDLES — Output artifact bundles specific generated nodes for deployment
+# ArcClass: BUNDLES — Output artifact bundles specific generated nodes for deployment
 # v10.9.2: Renamed from INCLUDES to BUNDLES to avoid collision with semantic/INCLUDES
 
 arc:

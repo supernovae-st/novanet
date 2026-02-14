@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/localization/population-of.yaml
-# ArcKind: POPULATION_OF — PopulationSubCluster is present in Locale (inverse of HAS_POPULATION)
+# ArcClass: POPULATION_OF — PopulationSubCluster is present in Locale (inverse of HAS_POPULATION)
 #
 # v0.12.5: ADR-026 Inverse Arc Policy
 

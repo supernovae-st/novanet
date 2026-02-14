@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/requires.yaml
-# ArcKind: REQUIRES - Entity requires another Entity (dependency)
+# ArcClass: REQUIRES - Entity requires another Entity (dependency)
 # v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
 
 arc:

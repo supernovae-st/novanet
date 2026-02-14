@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/links-to.yaml
-# ArcKind: LINKS_TO — Page-to-page SEO internal linking
+# ArcClass: LINKS_TO — Page-to-page SEO internal linking
 #
 # v0.12.4: ADR-028 Page-Entity Architecture
 # Calculated from [@page:X] refs in BlockInstructions with purpose: link

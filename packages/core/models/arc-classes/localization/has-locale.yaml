@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/localization/has-locale.yaml
-# ArcKind: HAS_LOCALE — Geographic/Cultural/Economic region contains Locale (inverse of IN_*)
+# ArcClass: HAS_LOCALE — Geographic/Cultural/Economic region contains Locale (inverse of IN_*)
 #
 # v0.12.5: ADR-026 Inverse Arc Policy
 

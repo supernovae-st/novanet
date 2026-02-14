@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/has-entity.yaml
-# ArcKind: HAS_ENTITY — Project owns Entity nodes (v11.3: entities belong to projects)
+# ArcClass: HAS_ENTITY — Project owns Entity nodes (v11.3: entities belong to projects)
 
 arc:
   name: HAS_ENTITY

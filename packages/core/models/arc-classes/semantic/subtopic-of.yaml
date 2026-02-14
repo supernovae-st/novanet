@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/subtopic-of.yaml
-# ArcKind: SUBTOPIC_OF — Cluster page is subtopic of pillar page for SEO topical authority
+# ArcClass: SUBTOPIC_OF — Cluster page is subtopic of pillar page for SEO topical authority
 
 arc:
   name: SUBTOPIC_OF

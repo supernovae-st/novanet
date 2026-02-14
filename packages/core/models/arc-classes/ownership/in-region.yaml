@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/in-region.yaml
-# ArcKind: IN_REGION - GeoSubRegion belongs to GeoRegion
+# ArcClass: IN_REGION - GeoSubRegion belongs to GeoRegion
 # v10.8: Geographic Taxonomy
 
 arc:

@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/in-continent.yaml
-# ArcKind: IN_CONTINENT - GeoRegion belongs to Continent
+# ArcClass: IN_CONTINENT - GeoRegion belongs to Continent
 # v10.8: Geographic Taxonomy
 
 arc:

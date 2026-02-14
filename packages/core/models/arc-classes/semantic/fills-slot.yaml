@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/fills-slot.yaml
-# ArcKind: FILLS_SLOT — Block fills slot (A/B testing)
+# ArcClass: FILLS_SLOT — Block fills slot (A/B testing)
 
 arc:
   name: FILLS_SLOT

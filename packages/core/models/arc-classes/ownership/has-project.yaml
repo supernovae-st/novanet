@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/has-project.yaml
-# ArcKind: HAS_PROJECT — OrgConfig owns projects (v11.3: unified from Tenant+Organization)
+# ArcClass: HAS_PROJECT — OrgConfig owns projects (v11.3: unified from Tenant+Organization)
 
 arc:
   name: HAS_PROJECT

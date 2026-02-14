@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/targets-persona.yaml
-# ArcKind: TARGETS_PERSONA - Content targets a specific audience persona
+# ArcClass: TARGETS_PERSONA - Content targets a specific audience persona
 # v0.12.4: Added Brand as source (ADR-028)
 arc:
   name: TARGETS_PERSONA

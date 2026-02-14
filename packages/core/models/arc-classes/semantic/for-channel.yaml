@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/for-channel.yaml
-# ArcKind: FOR_CHANNEL - Content targets a specific channel/surface
+# ArcClass: FOR_CHANNEL - Content targets a specific channel/surface
 arc:
   name: FOR_CHANNEL
   family: semantic

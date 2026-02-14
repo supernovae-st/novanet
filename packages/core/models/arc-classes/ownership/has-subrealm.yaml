@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/has-subrealm.yaml
-# ArcKind: HAS_SUBREALM — CulturalRealm contains CulturalSubRealm (inverse of PART_OF_REALM)
+# ArcClass: HAS_SUBREALM — CulturalRealm contains CulturalSubRealm (inverse of PART_OF_REALM)
 #
 # v0.12.5: ADR-026 Inverse Arc Policy
 

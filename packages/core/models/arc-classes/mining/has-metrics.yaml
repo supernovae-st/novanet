@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/mining/has-metrics.yaml
-# ArcKind: HAS_METRICS — Time-series observation link
+# ArcClass: HAS_METRICS — Time-series observation link
 
 arc:
   name: HAS_METRICS

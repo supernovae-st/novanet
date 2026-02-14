@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/page-of.yaml
-# ArcKind: PAGE_OF — Inverse of HAS_PAGE (Page belongs to Project)
+# ArcClass: PAGE_OF — Inverse of HAS_PAGE (Page belongs to Project)
 
 arc:
   name: PAGE_OF

@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/brand-of.yaml
-# ArcKind: BRAND_OF — Brand belongs to Project (inverse of HAS_BRAND)
+# ArcClass: BRAND_OF — Brand belongs to Project (inverse of HAS_BRAND)
 #
 # v0.12.5: ADR-028 Brand Architecture
 

@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/localization/for-locale.yaml
-# ArcKind: FOR_LOCALE — All localized content nodes point to their target Locale
+# ArcClass: FOR_LOCALE — All localized content nodes point to their target Locale
 # v10.2: SEOKeyword removed — now owned by Locale via HAS_SEO_KEYWORDS
 # v0.12.4: Added PromptStyle as source (ADR-028)
 

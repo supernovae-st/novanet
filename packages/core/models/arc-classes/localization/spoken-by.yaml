@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/localization/spoken-by.yaml
-# ArcKind: SPOKEN_BY — LanguageBranch is spoken by Locale (inverse of SPEAKS_BRANCH)
+# ArcClass: SPOKEN_BY — LanguageBranch is spoken by Locale (inverse of SPEAKS_BRANCH)
 #
 # v0.12.5: ADR-026 Inverse Arc Policy
 

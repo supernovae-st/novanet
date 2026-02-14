@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/similar-to.yaml
-# ArcKind: SIMILAR_TO - Entity is similar to another Entity (symmetric)
+# ArcClass: SIMILAR_TO - Entity is similar to another Entity (symmetric)
 # v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
 
 arc:

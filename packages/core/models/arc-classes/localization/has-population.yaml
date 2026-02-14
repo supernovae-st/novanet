@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/localization/has-population.yaml
-# ArcKind: HAS_POPULATION - Locale's population sub-clusters with percentages
+# ArcClass: HAS_POPULATION - Locale's population sub-clusters with percentages
 # v10.8: Geographic Taxonomy
 
 arc:

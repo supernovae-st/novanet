@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/has-block.yaml
-# ArcKind: HAS_BLOCK — Page contains Block
+# ArcClass: HAS_BLOCK — Page contains Block
 #
 # v0.12.4: ADR-028 - Renamed position → order for semantic clarity
 
