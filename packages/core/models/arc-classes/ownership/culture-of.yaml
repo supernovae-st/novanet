@@ -1,0 +1,16 @@
+# packages/core/models/arc-classes/ownership/culture-of.yaml
+# v0.13.0: TIER 2 inverse arc (ADR-026) - inverse of HAS_CULTURE
+arc:
+  name: CULTURE_OF
+  family: ownership
+  scope: intra_realm
+  source: Culture
+  target: Locale
+  cardinality: one_to_one
+  inverse_of: HAS_CULTURE
+  llm_context: |
+    USE: when finding which locale owns a Culture config.
+    TRIGGERS: culture owner, culture locale, which locale, formality locale.
+    NOT: loading culture for locale (use HAS_CULTURE), culture atoms (use HAS_CULTURE_SET).
+    RELATES: Culture (source), Locale (target), HAS_CULTURE (inverse).
+  cypher_pattern: (Culture)-[:CULTURE_OF]->(Locale)

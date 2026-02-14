@@ -1,0 +1,32 @@
+# packages/core/models/arc-classes/generation/produced.yaml
+# v0.13.0: Audit trail arc linking PromptArtifact to Generated output
+# Purpose: Complete generation provenance (ADR-027 Generation Family Arc Semantics)
+arc:
+  name: PRODUCED
+  family: generation
+  scope: intra_realm
+  source: PromptArtifact
+  target:
+    - BlockGenerated
+    - PageGenerated
+  cardinality: many_to_many
+  inverse: PRODUCED_BY
+  llm_context: |
+    USE: when tracing which prompt artifact generated a block or page output.
+    TRIGGERS: prompt generation, LLM output, generation provenance, compilation audit.
+    NOT: for instruction→generation (use GENERATED), for page/block composition (use ASSEMBLES).
+    RELATES: PromptArtifact (source), BlockGenerated/PageGenerated (target), PRODUCED_BY (inverse).
+  cypher_pattern: (PromptArtifact)-[:PRODUCED]->(BlockGenerated)
+  properties:
+    generation_timestamp:
+      type: datetime
+      required: true
+      description: "When the LLM generation occurred"
+    model_version:
+      type: string
+      required: false
+      description: "LLM model version used for generation (e.g., claude-3-opus-20240229)"
+    token_usage:
+      type: integer
+      required: false
+      description: "Total tokens consumed for this generation"

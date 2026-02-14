@@ -339,15 +339,16 @@ Fixes #123
 
 ## Version Lock
 
-**Current NovaNet Version**: v11.8
+**Current NovaNet Version**: v0.12.4
 - **Realms**: shared (4 layers), org (6 layers) = 10 total
-- **Nodes**: 59 total (39 shared + 20 org)
+- **Nodes**: 61 total (40 shared + 21 org)
+- **Arcs**: 128 (5 families)
 - **Traits**: defined, authored, imported, generated, retrieved
-- **Latest ADR**: ADR-025 (Instruction Layer Renaming)
+- **Latest ADR**: ADR-028 (Brand Architecture)
 
-These documents are current through v11.8.0 (Class Act).
+These documents are current through v0.12.4 (SemVer).
 
-For v11.9+, update:
+For v0.13+, update:
 - `README.md` § "Version Information"
 - `v11.8-migration-testing.md` → create `v11.9-migration-testing.md`
 - `novanet-terminology.md` § "Deprecated Terms"
