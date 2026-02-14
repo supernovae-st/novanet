@@ -205,8 +205,8 @@ static CLASSIFICATION_CONCEPTS: [GlossaryConcept; 3] = [
         name: "Realm",
         short_desc: "WHERE: shared vs org",
         full_desc: "WHERE a node lives. Two realms exist:\n\
-                    - SHARED (39 classes): Universal knowledge, READ-ONLY\n\
-                    - ORG (20 classes): Organization-specific business content",
+                    - SHARED (40 classes): Universal knowledge, READ-ONLY\n\
+                    - ORG (21 classes): Organization-specific business content",
         classification: None,
         example_yaml: Some(
             "node:\n  realm: shared  # Universal, cannot be modified by org\n  # OR\n  realm: org     # Organization-specific",
