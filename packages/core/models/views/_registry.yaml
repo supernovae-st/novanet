@@ -1,6 +1,6 @@
 # models/views/_registry.yaml
 version: "0.12.5"
-description: NovaNet Unified View System (27 views - 19 in registry + 8 standalone)
+description: NovaNet Unified View System (30 views - 20 in registry + 10 standalone)
 
 # Simplified view registry with WORKING queries
 # All queries return n, r, m pattern for proper graph visualization
@@ -367,7 +367,7 @@ views:
       LIMIT 200
 
 # =============================================================================
-# VIEW SUMMARY (27 views total - 20 inline + 7 standalone)
+# VIEW SUMMARY (v0.12.5 - simplified)
 # =============================================================================
 # | Category    | Count | Description                                          |
 # |-------------|-------|------------------------------------------------------|
@@ -377,18 +377,21 @@ views:
 # | CONTEXTUAL  | 5     | Node-centered subgraphs (generic, flexible)          |
 # | REGISTRY    | 20    | (subtotal in this file)                              |
 # |-------------|-------|------------------------------------------------------|
-# | STANDALONE  | 7     | Separate YAML files in views/ directory              |
+# | STANDALONE  | 10    | Separate YAML files in views/ directory              |
 # |-------------|-------|------------------------------------------------------|
-# | TOTAL       | 27    |                                                      |
+# | TOTAL       | 30    |                                                      |
 # =============================================================================
 #
-# Standalone views (separate YAML files, v0.12.0 compliant):
-#   - block-generation.yaml         (generation, v11.8.0 ADR-025)
-#   - block-semantic-network.yaml   (generation, v11.8.0)
-#   - complete-graph.yaml           (global, v11.8.0 ADR-025)
-#   - entity-ecosystem.yaml         (contextual, v10.3.0)
-#   - locale-full-knowledge.yaml    (contextual, v11.5.0)
-#   - page-generation-context.yaml  (generation, v11.8.0)
-#   - page-pipeline-overview.yaml   (generation, v2.0.0 ADR-028) ✨ UPDATED
+# Standalone views (v0.12.5 - essential only):
+#   - block-generation.yaml         (generation)
+#   - page-generation-context.yaml  (generation)
+#   - complete-graph.yaml           (global)
+#   - project-overview.yaml         (global)
+#   - shared-layer.yaml             (global)
+#   - contextual/brand.yaml         (contextual)
+#   - contextual/composition.yaml   (contextual)
+#   - contextual/entities.yaml      (contextual)
+#   - contextual/generation.yaml    (contextual)
+#   - contextual/locales.yaml       (contextual)
 #
 # =============================================================================
