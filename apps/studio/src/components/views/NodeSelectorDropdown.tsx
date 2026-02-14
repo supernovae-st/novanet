@@ -139,7 +139,7 @@ export const NodeSelectorDropdown = memo(function NodeSelectorDropdown({
 
   return (
     <Modal.Root isOpen={true} onClose={onClose} closeOnEscape={true} closeOnOutsideClick={true}>
-      <Modal.Content size="sm" ariaLabel={`Select a ${applicableTypes.join(' or ')}`}>
+      <Modal.Content size="lg" ariaLabel={`Select a ${applicableTypes.join(' or ')}`}>
         {/* Header */}
         <div className={modalClasses.header}>
           <div className={cn('flex items-center', gapTokens.spacious)}>
