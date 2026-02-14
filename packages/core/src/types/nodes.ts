@@ -185,7 +185,7 @@ export type Layer =
 export type Trait = 'defined' | 'authored' | 'imported' | 'generated' | 'retrieved';
 
 // =============================================================================
-// CLASS_TAXONOMY — unified classification for all 59 node types
+// CLASS_TAXONOMY — unified classification for all 61 node types
 // =============================================================================
 
 /**
@@ -212,7 +212,7 @@ export interface Classification {
 }
 
 /**
- * Complete classification registry for all 59 NovaNet node types.
+ * Complete classification registry for all 61 NovaNet node types.
  *
  * This is the **single source of truth** for node classification. Use this to:
  * - Determine which realm/layer a node belongs to

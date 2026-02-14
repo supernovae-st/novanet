@@ -35,9 +35,9 @@ pub enum NodeId {
 /// Top-level section types in the tree.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum SectionKind {
-    /// "Nodes (60)" section
+    /// "Nodes (61)" section
     Nodes,
-    /// "Arcs (114)" section
+    /// "Arcs (146)" section
     Arcs,
 }
 
