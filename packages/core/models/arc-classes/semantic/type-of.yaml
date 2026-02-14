@@ -1,0 +1,43 @@
+# packages/core/models/arc-classes/semantic/type-of.yaml
+# ArcKind: TYPE_OF - Entity is a type/category of another Entity (taxonomy)
+# v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
+
+arc:
+  name: TYPE_OF
+  family: semantic
+  scope: intra_realm
+  temperature_threshold: 0.15  # Taxonomy - important for classification
+
+  source: Entity
+  target: Entity
+  cardinality: many_to_one
+  is_self_referential: true
+
+  properties:
+    - name: strength
+      type: float
+      required: false
+      default: 0.85
+      description: "Classification strength (0.0-1.0)"
+
+    - name: temperature
+      type: float
+      required: false
+      default: 0.9
+      description: "Spreading activation weight"
+
+    - name: taxonomy_level
+      type: string
+      required: false
+      enum: [genus, species, subspecies, instance]
+      description: "Level in taxonomy hierarchy"
+
+  inverse_of: HAS_TYPE
+
+  llm_context: |
+    USE: when classifying entities in taxonomy hierarchy (ISA relationship).
+    TRIGGERS: is a, type of, kind of, category, classification, taxonomy.
+    NOT: variants (use VARIANT_OF), children (use HAS_CHILD), instances (use data nodes).
+    RELATES: Entity (source/specific), Entity (target/general), HAS_TYPE (inverse).
+
+  cypher_pattern: "(Entity)-[:TYPE_OF {strength, temperature, taxonomy_level}]->(Entity)"

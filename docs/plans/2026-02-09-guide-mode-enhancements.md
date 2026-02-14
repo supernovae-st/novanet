@@ -524,7 +524,7 @@ pub struct CodeExample {
 pub fn trait_example(trait_key: &str) -> Option<CodeExample> {
     match trait_key {
         "invariant" => Some(CodeExample {
-            yaml_path: "node-kinds/tenant/semantic/entity.yaml",
+            yaml_path: "node-classes/tenant/semantic/entity.yaml",
             yaml_snippet: r#"node:
   name: Entity
   realm: tenant
@@ -551,7 +551,7 @@ ORDER BY count DESC"#,
             cli_command: "cargo run -- query --trait=invariant --format=table",
         }),
         "localized" => Some(CodeExample {
-            yaml_path: "node-kinds/tenant/semantic/entity-content.yaml",
+            yaml_path: "node-classes/tenant/semantic/entity-content.yaml",
             yaml_snippet: r#"node:
   name: EntityContent
   realm: tenant
@@ -585,7 +585,7 @@ ORDER BY ec.locale_key"#,
             cli_command: "cargo run -- query --trait=localized --format=json",
         }),
         "knowledge" => Some(CodeExample {
-            yaml_path: "node-kinds/global/locale-knowledge/atoms/term.yaml",
+            yaml_path: "node-classes/global/locale-knowledge/atoms/term.yaml",
             yaml_snippet: r#"node:
   name: Term
   realm: global
@@ -610,7 +610,7 @@ LIMIT 10"#,
             cli_command: "cargo run -- query --trait=knowledge --realm=global",
         }),
         "derived" => Some(CodeExample {
-            yaml_path: "node-kinds/tenant/output/page-generated.yaml",
+            yaml_path: "node-classes/tenant/output/page-generated.yaml",
             yaml_snippet: r#"node:
   name: PageGenerated
   realm: tenant
@@ -642,7 +642,7 @@ ORDER BY pg.generated_at DESC"#,
             cli_command: "cargo run -- query --trait=derived --layer=output",
         }),
         "job" => Some(CodeExample {
-            yaml_path: "node-kinds/tenant/output/generation-job.yaml",
+            yaml_path: "node-classes/tenant/output/generation-job.yaml",
             yaml_snippet: r#"node:
   name: GenerationJob
   realm: tenant
@@ -675,7 +675,7 @@ ORDER BY j.created_at"#,
 pub fn layer_example(layer_key: &str) -> Option<CodeExample> {
     match layer_key {
         "semantic" => Some(CodeExample {
-            yaml_path: "node-kinds/tenant/semantic/",
+            yaml_path: "node-classes/tenant/semantic/",
             yaml_snippet: r#"# Semantic layer contains meaning/knowledge nodes
 # Entity, EntityContent, AudiencePersona, ChannelSurface
 
@@ -703,7 +703,7 @@ ORDER BY count DESC"#,
             cli_command: "cargo run -- query --layer=semantic",
         }),
         "structure" => Some(CodeExample {
-            yaml_path: "node-kinds/tenant/structure/",
+            yaml_path: "node-classes/tenant/structure/",
             yaml_snippet: r#"# Structure layer = page/block hierarchy
 # Page, Block, ContentSlot
 
@@ -726,7 +726,7 @@ ORDER BY b.position"#,
             cli_command: "cargo run -- query --layer=structure",
         }),
         "output" => Some(CodeExample {
-            yaml_path: "node-kinds/tenant/output/",
+            yaml_path: "node-classes/tenant/output/",
             yaml_snippet: r#"# Output layer = generated artifacts
 # PageGenerated, BlockGenerated, GenerationJob, OutputArtifact
 
@@ -764,7 +764,7 @@ ORDER BY pg.locale_key"#,
 pub fn arc_family_example(family_key: &str) -> Option<CodeExample> {
     match family_key {
         "ownership" => Some(CodeExample {
-            yaml_path: "arc-kinds/ownership/",
+            yaml_path: "arc-classes/ownership/",
             yaml_snippet: r#"# Ownership arcs = hierarchical containment
 # HAS_PAGE, HAS_BLOCK, HAS_ENTITY, HAS_CONTENT
 
@@ -794,7 +794,7 @@ RETURN p.key, collect(b.key) AS blocks"#,
             cli_command: "cargo run -- query --arc-family=ownership",
         }),
         "localization" => Some(CodeExample {
-            yaml_path: "arc-kinds/localization/",
+            yaml_path: "arc-classes/localization/",
             yaml_snippet: r#"# Localization arcs = locale content links
 # HAS_CONTENT, FOR_LOCALE, HAS_GENERATED
 
@@ -828,7 +828,7 @@ ORDER BY l.key"#,
             cli_command: "cargo run -- query --arc-family=localization",
         }),
         "semantic" => Some(CodeExample {
-            yaml_path: "arc-kinds/semantic/",
+            yaml_path: "arc-classes/semantic/",
             yaml_snippet: r#"# Semantic arcs = knowledge connections
 # USES_TERM, USES_EXPRESSION, SEMANTIC_LINK, REFERENCES
 

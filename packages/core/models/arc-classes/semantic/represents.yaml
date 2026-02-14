@@ -1,0 +1,24 @@
+# packages/core/models/arc-classes/semantic/represents.yaml
+# ArcKind: REPRESENTS - Page represents its main Entity
+# v0.12.4: ADR-028 Page-Entity Architecture (1:1 mandatory relationship)
+
+arc:
+  name: REPRESENTS
+  family: semantic
+  scope: intra_realm
+
+  source: Page
+  target: Entity
+  cardinality: one_to_one
+
+  inverse: REPRESENTED_BY
+
+  required: true
+
+  llm_context: |
+    USE: when finding the main entity a page represents.
+    TRIGGERS: page entity, page represents, main entity, page identity.
+    NOT: entity usage (use USES_ENTITY), entity references (use REFERENCES).
+    RELATES: Page (source), Entity (target), REPRESENTED_BY (inverse), 1:1 mandatory.
+
+  cypher_pattern: "(Page)-[:REPRESENTS]->(Entity)"

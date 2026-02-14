@@ -9,8 +9,8 @@ FILE_PATH="${CLAUDE_FILE_PATH:-$1}"
 
 # Only remind for significant architecture files, not every YAML read
 if [[ "$FILE_PATH" == *"taxonomy.yaml"* ]] || \
-   [[ "$FILE_PATH" == *"node-kinds"* ]] || \
-   [[ "$FILE_PATH" == *"arc-kinds"* ]] || \
+   [[ "$FILE_PATH" == *"node-classes"* ]] || \
+   [[ "$FILE_PATH" == *"arc-classes"* ]] || \
    [[ "$FILE_PATH" == *"meta/layers"* ]] || \
    [[ "$FILE_PATH" == *"meta/realms"* ]]; then
 

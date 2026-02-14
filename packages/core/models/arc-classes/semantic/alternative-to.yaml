@@ -1,0 +1,49 @@
+# packages/core/models/arc-classes/semantic/alternative-to.yaml
+# ArcKind: ALTERNATIVE_TO - Entity is an alternative to another Entity (symmetric)
+# v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
+
+arc:
+  name: ALTERNATIVE_TO
+  family: semantic
+  scope: intra_realm
+  temperature_threshold: 0.25  # Alternatives - useful for recommendations
+
+  source: Entity
+  target: Entity
+  cardinality: many_to_many
+  is_self_referential: true
+  is_symmetric: true
+
+  properties:
+    - name: strength
+      type: float
+      required: false
+      default: 0.7
+      description: "Substitutability (0.0-1.0)"
+
+    - name: temperature
+      type: float
+      required: false
+      default: 0.75
+      description: "Spreading activation weight"
+
+    - name: alternative_type
+      type: string
+      required: false
+      enum: [equivalent, similar, fallback, upgrade, downgrade]
+      description: "Type of alternative relationship"
+
+    - name: context
+      type: string
+      required: false
+      description: "Context where this alternative applies"
+
+  # No inverse - symmetric relationship
+
+  llm_context: |
+    USE: when finding substitutable entities.
+    TRIGGERS: alternative, substitute, instead of, similar option, fallback.
+    NOT: competition (use COMPETES_WITH), similarity (use SIMILAR_TO).
+    RELATES: Entity (source), Entity (target), symmetric (no inverse needed).
+
+  cypher_pattern: "(Entity)-[:ALTERNATIVE_TO {strength, temperature, alternative_type, context}]->(Entity)"

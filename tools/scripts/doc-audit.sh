@@ -36,8 +36,8 @@ print_taxonomy_summary
 # Optional: Validate YAML syntax
 if [ "$YAML_CHECK" = true ]; then
   echo -e "${BLUE}Validating YAML syntax...${NC}"
-  validate_yaml_directory "packages/core/models/node-kinds" "Node classes"
-  validate_yaml_directory "packages/core/models/arc-kinds" "Arc classes"
+  validate_yaml_directory "packages/core/models/node-classes" "Node classes"
+  validate_yaml_directory "packages/core/models/arc-classes" "Arc classes"
   validate_yaml_directory "packages/core/models/views" "View definitions"
   validate_yaml_syntax "packages/core/models/taxonomy.yaml" && \
     echo -e "${GREEN}OK${NC}: taxonomy.yaml" || \

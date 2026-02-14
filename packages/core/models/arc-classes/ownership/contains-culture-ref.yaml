@@ -1,0 +1,19 @@
+# arc-classes/ownership/contains-culture-ref.yaml
+# CONTAINS_CULTURE_REF - CultureSet contains CultureRef atoms (v10.9.0)
+#
+# v10.9.0: Split from generic CONTAINS for semantic correctness
+#          Each container type can only contain its specific atom type
+
+arc:
+  name: CONTAINS_CULTURE_REF
+  family: ownership
+  scope: intra_realm
+  source: CultureSet
+  target: CultureRef
+  cardinality: one_to_many
+  llm_context: |
+    USE: when loading individual culture references from a culture set.
+    TRIGGERS: culture atoms, cultural references, locale culture, traditions.
+    NOT: culture set container (use HAS_CULTURE_SET), culture config (use HAS_CULTURE).
+    RELATES: CultureSet (source), CultureRef (target).
+  cypher_pattern: "(CultureSet)-[:CONTAINS_CULTURE_REF]->(CultureRef)"

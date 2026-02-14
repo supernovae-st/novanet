@@ -105,8 +105,7 @@ pub enum NexusTab {
     Quiz,
     /// Dynamic learning statistics (sparklines, gauges, achievements)
     Stats,
-    /// Schema views explorer (Query-First architecture)
-    Views,
+    // NOTE: Views removed, now separate NavMode::Views (v0.12.4)
 }
 
 impl NexusTab {
@@ -127,7 +126,6 @@ impl NexusTab {
             NexusTab::Pipeline => 'p',
             NexusTab::Quiz => 'q',
             NexusTab::Stats => 's',
-            NexusTab::Views => 'v',
         }
     }
 
@@ -144,7 +142,6 @@ impl NexusTab {
             NexusTab::Pipeline => "Pipeline",
             NexusTab::Quiz => "Quiz",
             NexusTab::Stats => "Stats",
-            NexusTab::Views => "Views",
         }
     }
 
@@ -164,7 +161,6 @@ impl NexusTab {
             NexusTab::Pipeline,
             NexusTab::Quiz,
             NexusTab::Stats,
-            NexusTab::Views,
         ]
     }
 
@@ -180,15 +176,14 @@ impl NexusTab {
             NexusTab::Arch => NexusTab::Pipeline,
             NexusTab::Pipeline => NexusTab::Quiz,
             NexusTab::Quiz => NexusTab::Stats,
-            NexusTab::Stats => NexusTab::Views,
-            NexusTab::Views => NexusTab::Intro,
+            NexusTab::Stats => NexusTab::Intro, // Wrap to start (Views removed v0.12.4)
         }
     }
 
     /// Cycle to previous tab.
     pub fn prev(&self) -> Self {
         match self {
-            NexusTab::Intro => NexusTab::Views,
+            NexusTab::Intro => NexusTab::Stats, // Wrap to end (Views removed v0.12.4)
             NexusTab::Glossary => NexusTab::Intro,
             NexusTab::Tutorial => NexusTab::Glossary,
             NexusTab::Traits => NexusTab::Tutorial,
@@ -198,7 +193,6 @@ impl NexusTab {
             NexusTab::Pipeline => NexusTab::Arch,
             NexusTab::Quiz => NexusTab::Pipeline,
             NexusTab::Stats => NexusTab::Quiz,
-            NexusTab::Views => NexusTab::Stats,
         }
     }
 
@@ -207,7 +201,7 @@ impl NexusTab {
         match self {
             NexusTab::Intro | NexusTab::Glossary | NexusTab::Tutorial => "LEARN",
             NexusTab::Traits | NexusTab::Layers | NexusTab::Arcs | NexusTab::Arch => "EXPLORE",
-            NexusTab::Pipeline | NexusTab::Quiz | NexusTab::Stats | NexusTab::Views => "PRACTICE",
+            NexusTab::Pipeline | NexusTab::Quiz | NexusTab::Stats => "PRACTICE",
         }
     }
 
@@ -234,11 +228,11 @@ impl NexusTab {
                 ],
                 NexusTab::Layers => vec![
                     (NexusTab::Arcs, "See Arc families"),
-                    (NexusTab::Views, "Query with Views"),
+                    (NexusTab::Stats, "See Stats"),
                 ],
                 NexusTab::Arcs => vec![
                     (NexusTab::Traits, "Back to Traits"),
-                    (NexusTab::Views, "See schema Views"),
+                    (NexusTab::Stats, "See Stats"),
                 ],
                 NexusTab::Arch => vec![
                     (NexusTab::Arcs, "See Arc families"),
@@ -255,10 +249,6 @@ impl NexusTab {
                 NexusTab::Stats => vec![
                     (NexusTab::Quiz, "Take a Quiz"),
                     (NexusTab::Tutorial, "Continue Tutorial"),
-                ],
-                NexusTab::Views => vec![
-                    (NexusTab::Layers, "See Layer structure"),
-                    (NexusTab::Arcs, "See Arc families"),
                 ],
             },
             NexusLocale::Fr => match self {
@@ -280,11 +270,11 @@ impl NexusTab {
                 ],
                 NexusTab::Layers => vec![
                     (NexusTab::Arcs, "Voir les Arcs"),
-                    (NexusTab::Views, "Requêter avec Views"),
+                    (NexusTab::Stats, "Voir Stats"),
                 ],
                 NexusTab::Arcs => vec![
                     (NexusTab::Traits, "Retour aux Traits"),
-                    (NexusTab::Views, "Voir les Vues"),
+                    (NexusTab::Stats, "Voir Stats"),
                 ],
                 NexusTab::Arch => vec![
                     (NexusTab::Arcs, "Voir les Arcs"),
@@ -301,10 +291,6 @@ impl NexusTab {
                 NexusTab::Stats => vec![
                     (NexusTab::Quiz, "Faire un Quiz"),
                     (NexusTab::Tutorial, "Continuer le Tutoriel"),
-                ],
-                NexusTab::Views => vec![
-                    (NexusTab::Layers, "Voir les Couches"),
-                    (NexusTab::Arcs, "Voir les Arcs"),
                 ],
             },
         }
@@ -686,7 +672,7 @@ impl NexusState {
                 }
             }
 
-            // Escape for drill-up (also clears pending_g, closes concept panel, exits review mode)
+            // Escape for drill-up (also clears pending_g, exits review mode)
             KeyCode::Esc => {
                 self.pending_g = false;
                 // In Quiz tab, exit review mode first
@@ -694,22 +680,8 @@ impl NexusState {
                     self.quiz.exit_review_mode();
                     return true;
                 }
-                // In Views tab, close concept panel first
-                if self.tab == NexusTab::Views && self.views.show_concept {
-                    self.views.show_concept = false;
-                    return true;
-                }
+                // NOTE: Views Escape handler removed, now separate NavMode::Views (v0.12.4)
                 self.drill_up()
-            }
-
-            // '?' to toggle Query-First concept panel (Views tab only)
-            KeyCode::Char('?') => {
-                if self.tab == NexusTab::Views {
-                    self.views.toggle_concept();
-                    true
-                } else {
-                    false
-                }
             }
 
             // 'c' to mark tutorial step as complete
@@ -884,10 +856,7 @@ impl NexusState {
                     self.stats.score_history.last().unwrap_or(&0)
                 ))
             }
-            NexusTab::Views => {
-                // Yank the current view ID
-                self.views.get_yank_text()
-            }
+            // NOTE: Views removed, now separate NavMode::Views (v0.12.4)
         }
     }
 
@@ -1034,10 +1003,7 @@ impl NexusState {
                 // Stats tab: scroll stats view
                 false // No vertical navigation in stats
             }
-            NexusTab::Views => {
-                self.views.navigate_up();
-                true
-            }
+            // NOTE: Views removed, now separate NavMode::Views (v0.12.4)
         }
     }
 
@@ -1122,14 +1088,11 @@ impl NexusState {
                 // Stats tab: scroll stats view
                 false // No vertical navigation in stats
             }
-            NexusTab::Views => {
-                self.views.navigate_down();
-                true
-            }
+            // NOTE: Views removed, now separate NavMode::Views (v0.12.4)
         }
     }
 
-    /// Navigate left (realm switching in Layers, category in Views/Glossary, drill-out elsewhere).
+    /// Navigate left (realm switching in Layers, category in Glossary, drill-out elsewhere).
     fn navigate_left(&mut self) -> bool {
         match self.tab {
             // LEARN section
@@ -1163,11 +1126,7 @@ impl NexusState {
                     false
                 }
             }
-            NexusTab::Views => {
-                // Switch to previous category
-                self.views.prev_category();
-                true
-            }
+            // NOTE: Views navigate_left removed, now separate NavMode::Views (v0.12.4)
             _ => {
                 // Drill up as alternative to Escape
                 self.drill_up()
@@ -1175,7 +1134,7 @@ impl NexusState {
         }
     }
 
-    /// Navigate right (realm switching in Layers, category in Views/Glossary, drill-in elsewhere).
+    /// Navigate right (realm switching in Layers, category in Glossary, drill-in elsewhere).
     fn navigate_right(&mut self) -> bool {
         match self.tab {
             // LEARN section
@@ -1209,11 +1168,7 @@ impl NexusState {
                     false
                 }
             }
-            NexusTab::Views => {
-                // Switch to next category
-                self.views.next_category();
-                true
-            }
+            // NOTE: Views navigate_right removed, now separate NavMode::Views (v0.12.4)
             _ => {
                 // Drill down as alternative to Enter
                 self.drill_down()
@@ -1272,10 +1227,7 @@ impl NexusState {
                 // Stats doesn't have drill-down
                 false
             }
-            NexusTab::Views => {
-                // Views doesn't have drill-down
-                false
-            }
+            // NOTE: Views removed, now separate NavMode::Views (v0.12.4)
         }
     }
 
@@ -1417,27 +1369,10 @@ impl NexusState {
                     )
                 }
             }
-            NexusTab::Views => {
-                if self.views.show_concept {
-                    format!("Nexus > {} > {} > Query-First", section, tab_name)
-                } else {
-                    let cat = self.views.current_category();
-                    if let Some(view) = self.views.current_view() {
-                        format!(
-                            "Nexus > {} > {} > {} > {}",
-                            section,
-                            tab_name,
-                            cat.label(),
-                            view.name
-                        )
-                    } else {
-                        format!("Nexus > {} > {} > {}", section, tab_name, cat.label())
-                    }
-                }
-            }
             NexusTab::Stats => {
                 format!("Nexus > {} > {}", section, tab_name)
             }
+            // NOTE: Views removed, now separate NavMode::Views (v0.12.4)
         }
     }
 
@@ -1487,8 +1422,8 @@ impl NexusState {
                     vec![("↑/↓", "option"), ("Enter", "submit"), ("←/→", "hint")]
                 }
             }
-            NexusTab::Views => vec![("↑/↓", "view"), ("Enter", "detail"), ("y", "copy")],
             NexusTab::Stats => vec![("↑/↓", "scroll"), ("y", "copy")],
+            // NOTE: Views removed, now separate NavMode::Views (v0.12.4)
         }
     }
 }
@@ -1531,7 +1466,7 @@ pub fn render_nexus(f: &mut Frame, area: Rect, app: &App) {
         NexusTab::Pipeline => pipeline::render_pipeline_tab(f, app, chunks[2]),
         NexusTab::Quiz => quiz::render_quiz_tab(f, app, chunks[2]),
         NexusTab::Stats => stats::render_stats_tab(f, app, chunks[2]),
-        NexusTab::Views => views::render_views_tab(f, app, chunks[2]),
+        // NOTE: Views removed, now separate NavMode::Views (v0.12.4)
     }
 
     // Render cross-tab navigation hints (v0.12.0)
@@ -1589,7 +1524,7 @@ fn render_tab_bar(f: &mut Frame, area: Rect, app: &App) {
                 NexusTab::Pipeline,
                 NexusTab::Quiz,
                 NexusTab::Stats,
-                NexusTab::Views,
+                // NOTE: Views removed, now separate NavMode::Views (v0.12.4)
             ],
         ),
     ];
@@ -1888,17 +1823,15 @@ mod tests {
         state.handle_key(key_event(KeyCode::Tab));
         assert_eq!(state.tab, NexusTab::Stats);
 
+        // NOTE: Views removed, now separate NavMode::Views (v0.12.4)
         state.handle_key(key_event(KeyCode::Tab));
-        assert_eq!(state.tab, NexusTab::Views);
-
-        state.handle_key(key_event(KeyCode::Tab));
-        assert_eq!(state.tab, NexusTab::Intro); // Wraps around
+        assert_eq!(state.tab, NexusTab::Intro); // Wraps around (Stats is last)
     }
 
     #[test]
     fn test_guide_tab_all() {
         let all = NexusTab::all();
-        assert_eq!(all.len(), 11); // v0.12.3: 11 tabs (added Arch)
+        assert_eq!(all.len(), 10); // v0.12.4: 10 tabs (Views removed, now NavMode::Views)
         // LEARN section
         assert_eq!(all[0], NexusTab::Intro);
         assert_eq!(all[1], NexusTab::Glossary);
@@ -1912,12 +1845,13 @@ mod tests {
         assert_eq!(all[7], NexusTab::Pipeline);
         assert_eq!(all[8], NexusTab::Quiz);
         assert_eq!(all[9], NexusTab::Stats);
-        assert_eq!(all[10], NexusTab::Views);
+        // NOTE: Views removed, now separate NavMode::Views (v0.12.4)
     }
 
     #[test]
     fn test_guide_tab_shortcuts() {
         // v11.7: letter-based shortcuts
+        // v0.12.4: 10 tabs (Views removed, now NavMode::Views)
         assert_eq!(NexusTab::Intro.shortcut(), 'i');
         assert_eq!(NexusTab::Glossary.shortcut(), 'g');
         assert_eq!(NexusTab::Tutorial.shortcut(), 'u');
@@ -1927,12 +1861,11 @@ mod tests {
         assert_eq!(NexusTab::Pipeline.shortcut(), 'p');
         assert_eq!(NexusTab::Quiz.shortcut(), 'q');
         assert_eq!(NexusTab::Stats.shortcut(), 's');
-        assert_eq!(NexusTab::Views.shortcut(), 'v');
     }
 
     #[test]
     fn test_guide_tab_labels() {
-        // v0.12.0: 10 tabs with labels (added Stats)
+        // v0.12.4: 10 tabs with labels (Views removed, now NavMode::Views)
         assert_eq!(NexusTab::Intro.label(), "Intro");
         assert_eq!(NexusTab::Glossary.label(), "Glossary");
         assert_eq!(NexusTab::Tutorial.label(), "Tutorial");
@@ -1942,7 +1875,6 @@ mod tests {
         assert_eq!(NexusTab::Pipeline.label(), "Pipeline");
         assert_eq!(NexusTab::Quiz.label(), "Quiz");
         assert_eq!(NexusTab::Stats.label(), "Stats");
-        assert_eq!(NexusTab::Views.label(), "Views");
     }
 
     // ==========================================================================
@@ -1974,7 +1906,7 @@ mod tests {
         let mut state = NexusState::new();
         assert_eq!(state.tab, NexusTab::Intro); // v11.7: default is Intro
 
-        // Navigate forward through all 11 tabs (v0.12.3: added Arch)
+        // Navigate forward through all 10 tabs (v0.12.4: Views removed)
         state.handle_key(key_event(KeyCode::Char(']')));
         assert_eq!(state.tab, NexusTab::Glossary);
 
@@ -2002,10 +1934,7 @@ mod tests {
         state.handle_key(key_event(KeyCode::Char(']')));
         assert_eq!(state.tab, NexusTab::Stats);
 
-        state.handle_key(key_event(KeyCode::Char(']')));
-        assert_eq!(state.tab, NexusTab::Views);
-
-        // Wrap around
+        // Wrap around (Stats is last, Views removed v0.12.4)
         state.handle_key(key_event(KeyCode::Char(']')));
         assert_eq!(state.tab, NexusTab::Intro);
     }
@@ -2015,10 +1944,10 @@ mod tests {
         let mut state = NexusState::new();
         assert_eq!(state.tab, NexusTab::Intro); // v11.7: default is Intro
 
-        // [ from Intro wraps to Views (last tab)
+        // [ from Intro wraps to Stats (last tab, Views removed v0.12.4)
         let changed = state.handle_key(key_event(KeyCode::Char('[')));
         assert!(changed);
-        assert_eq!(state.tab, NexusTab::Views);
+        assert_eq!(state.tab, NexusTab::Stats);
     }
 
     #[test]
@@ -2041,12 +1970,9 @@ mod tests {
         let mut state = NexusState::new();
         assert_eq!(state.tab, NexusTab::Intro); // v11.7: default is Intro
 
-        // Cycle backward through all 11 tabs (v0.12.3: added Arch)
+        // Cycle backward through all 10 tabs (v0.12.4: Views removed)
         state.handle_key(key_event(KeyCode::BackTab));
-        assert_eq!(state.tab, NexusTab::Views); // Wraps to end
-
-        state.handle_key(key_event(KeyCode::BackTab));
-        assert_eq!(state.tab, NexusTab::Stats);
+        assert_eq!(state.tab, NexusTab::Stats); // Wraps to end (Views removed v0.12.4)
 
         state.handle_key(key_event(KeyCode::BackTab));
         assert_eq!(state.tab, NexusTab::Quiz);
@@ -2163,10 +2089,10 @@ mod tests {
         assert_eq!(NexusTab::Traits.section(), "EXPLORE");
         assert_eq!(NexusTab::Layers.section(), "EXPLORE");
         assert_eq!(NexusTab::Arcs.section(), "EXPLORE");
-        // PRACTICE section
+        // PRACTICE section (v0.12.4: Views removed, now NavMode::Views)
         assert_eq!(NexusTab::Pipeline.section(), "PRACTICE");
         assert_eq!(NexusTab::Quiz.section(), "PRACTICE");
-        assert_eq!(NexusTab::Views.section(), "PRACTICE");
+        assert_eq!(NexusTab::Stats.section(), "PRACTICE");
     }
 
     // ==========================================================================

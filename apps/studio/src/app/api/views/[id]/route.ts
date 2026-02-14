@@ -1,5 +1,5 @@
 // apps/studio/src/app/api/views/[id]/route.ts
-// v11.6.1: Unified view system - all views from _registry.yaml with embedded Cypher
+// v0.12.5: Unified view system - all views from views.yaml (single source of truth)
 import { NextRequest, NextResponse } from 'next/server';
 import { ViewLoader } from '@novanet/core/filters';
 
@@ -13,18 +13,16 @@ const VIEW_ID_REGEX = /^[a-z0-9-]+$/;
 // Valid locale pattern (BCP 47 - permissive to support variants like zh-Hans-CN)
 const LOCALE_REGEX = /^[a-z]{2,3}(-[A-Za-z]{2,4})?(-[A-Z]{2})?(-[a-z0-9]+)*$/;
 
-// View ID aliases for standardized naming
+// View ID aliases for backward compatibility (v0.12.5)
 const VIEW_ID_ALIASES: Record<string, string> = {
-  'complete-graph': 'data-complete',
-  'block-generation': 'ctx-generation',
-  'page-generation': 'ctx-generation',
-  'concept-generation': 'ctx-generation',
-  'knowledge-graph': 'ctx-knowledge',
-  'locale-knowledge': 'ctx-locales',
-  'seo-mining': 'data-seo',
-  'geo-mining': 'data-geo',
-  'project-scope': 'ctx-project',
-  'project-overview': 'data-project',
+  'complete-graph': 'schema-complete',
+  'block-generation': 'gen-block',
+  'page-generation': 'gen-page',
+  'gen-context': 'gen-page',
+  'data-locales': 'data-locales',
+  'data-project': 'data-project',
+  'ctx-neighbors': 'ctx-neighbors',
+  'ctx-entity': 'ctx-entity',
 };
 
 interface ViewParams {
@@ -125,14 +123,14 @@ export async function GET(
       data: {
         view: {
           id: view.id,
-          name: view.id.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+          name: view.name,
           description: view.description,
           category: view.category,
           icon: view.icon,
           color: view.color,
+          rootType: view.root_type,
           contextual: view.contextual || false,
           applicableTypes: view.applicable_types || [],
-          modes: view.modes || [],
         },
         cypher: {
           query: view.cypher.trim(),

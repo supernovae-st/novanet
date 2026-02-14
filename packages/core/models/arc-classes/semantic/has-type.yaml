@@ -1,0 +1,43 @@
+# packages/core/models/arc-classes/semantic/has-type.yaml
+# ArcKind: HAS_TYPE - Entity has subtypes (inverse of TYPE_OF)
+# v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
+
+arc:
+  name: HAS_TYPE
+  family: semantic
+  scope: intra_realm
+  temperature_threshold: 0.15  # Taxonomy - important for classification
+
+  source: Entity
+  target: Entity
+  cardinality: one_to_many
+  is_self_referential: true
+
+  properties:
+    - name: strength
+      type: float
+      required: false
+      default: 0.85
+      description: "Classification strength (0.0-1.0)"
+
+    - name: temperature
+      type: float
+      required: false
+      default: 0.9
+      description: "Spreading activation weight"
+
+    - name: taxonomy_level
+      type: string
+      required: false
+      enum: [genus, species, subspecies, instance]
+      description: "Level in taxonomy hierarchy"
+
+  inverse: TYPE_OF
+
+  llm_context: |
+    USE: when finding subtypes of an entity.
+    TRIGGERS: subtypes, types of, kinds of, taxonomy, classification.
+    NOT: variants (use HAS_VARIANT), children (use HAS_CHILD).
+    RELATES: Entity (source/general), Entity (target/specific), TYPE_OF (inverse).
+
+  cypher_pattern: "(Entity)-[:HAS_TYPE {strength, temperature, taxonomy_level}]->(Entity)"

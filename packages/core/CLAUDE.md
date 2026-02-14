@@ -120,7 +120,7 @@ core/
 ├── models/                    # YAML schema definitions (SOURCE OF TRUTH)
 │   ├── _index.yaml            # MODEL INDEX (graph structure, node categories)
 │   ├── taxonomy.yaml          # v11.7: 2 Realms (shared/org), 10 Layers
-│   ├── node-kinds/            # ONE FILE PER NODE TYPE
+│   ├── node-classes/            # ONE FILE PER NODE TYPE
 │   │   ├── shared/            # Realm: shared (39 nodes)
 │   │   │   ├── config/        #   Layer: config (3 nodes: Locale, EntityCategory, SEOKeywordFormat)
 │   │   │   ├── locale/        #   Layer: locale (6 nodes)
@@ -133,7 +133,7 @@ core/
 │   │       ├── semantic/      #   Layer: semantic (Entity, EntityContent, etc.)
 │   │       ├── instruction/   #   Layer: instruction (PageInstruction, BlockInstruction, etc.)
 │   │       └── output/        #   Layer: output (PageGenerated, BlockGenerated)
-│   ├── arc-kinds/             # ONE FILE PER ARC TYPE (116 files)
+│   ├── arc-classes/             # ONE FILE PER ARC TYPE (116 files)
 │   └── views/                 # YAML view definitions
 ├── src/                       # TypeScript source
 │   ├── config/                # Locale codes configuration

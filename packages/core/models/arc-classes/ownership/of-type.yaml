@@ -1,0 +1,16 @@
+# packages/core/models/arc-classes/ownership/of-type.yaml
+# ArcKind: OF_TYPE — Block references its type template
+
+arc:
+  name: OF_TYPE
+  family: ownership
+  scope: intra_realm
+  source: Block
+  target: BlockType
+  cardinality: many_to_one
+  llm_context: |
+    USE: when loading block schema definition.
+    TRIGGERS: block type, block schema, JSON schema, field definitions.
+    NOT: block content (use HAS_INSTRUCTION), block rules (use HAS_RULES).
+    RELATES: Block (source), BlockType (target), TYPE_OF (inverse).
+  cypher_pattern: (Block)-[:OF_TYPE]->(BlockType)

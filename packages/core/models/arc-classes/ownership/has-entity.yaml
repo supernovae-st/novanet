@@ -1,0 +1,19 @@
+# packages/core/models/arc-classes/ownership/has-entity.yaml
+# ArcKind: HAS_ENTITY — Project owns Entity nodes (v11.3: entities belong to projects)
+
+arc:
+  name: HAS_ENTITY
+  family: ownership
+  scope: intra_realm
+  source: Project
+  target: Entity
+  cardinality: one_to_many
+  inverse: ENTITY_OF
+
+  llm_context: |
+    USE: when loading entities for a project.
+    TRIGGERS: project entities, semantic concepts, project vocabulary.
+    NOT: entity content (use HAS_CONTENT), entity hierarchy (use HAS_CHILD).
+    RELATES: Project (source), Entity (target), ENTITY_OF (inverse).
+
+  cypher_pattern: (Project)-[:HAS_ENTITY]->(Entity)

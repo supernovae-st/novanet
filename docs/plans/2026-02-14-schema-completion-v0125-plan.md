@@ -145,14 +145,14 @@ BlockNative.key   = "block:homepage:hero:1@fr-FR"
 
 **Files to update** (4 node renames + 4 arc renames):
 ```
-packages/core/models/node-kinds/org/semantic/entity-content.yaml → entity-native.yaml
-packages/core/models/node-kinds/org/foundation/project-content.yaml → project-native.yaml
-packages/core/models/node-kinds/org/output/page-generated.yaml → page-native.yaml
-packages/core/models/node-kinds/org/output/block-generated.yaml → block-native.yaml
+packages/core/models/node-classes/org/semantic/entity-content.yaml → entity-native.yaml
+packages/core/models/node-classes/org/foundation/project-content.yaml → project-native.yaml
+packages/core/models/node-classes/org/output/page-generated.yaml → page-native.yaml
+packages/core/models/node-classes/org/output/block-generated.yaml → block-native.yaml
 
-packages/core/models/arc-kinds/ownership/has-content.yaml → has-native.yaml
-packages/core/models/arc-kinds/ownership/has-generated.yaml → DELETE (merged)
-packages/core/models/arc-kinds/ownership/content-of.yaml → native-of.yaml
+packages/core/models/arc-classes/ownership/has-content.yaml → has-native.yaml
+packages/core/models/arc-classes/ownership/has-generated.yaml → DELETE (merged)
+packages/core/models/arc-classes/ownership/content-of.yaml → native-of.yaml
 ```
 
 ### Phase 7: Slug Ownership (ADR-030)
@@ -211,13 +211,13 @@ Entity: template-instagram (SUBTOPIC of templates)
 **Files to update**:
 ```
 # Remove slug properties
-packages/core/models/node-kinds/org/semantic/entity-native.yaml
+packages/core/models/node-classes/org/semantic/entity-native.yaml
 
 # Add slug properties
-packages/core/models/node-kinds/org/output/page-native.yaml
+packages/core/models/node-classes/org/output/page-native.yaml
 
 # Fix misleading comment
-packages/core/models/node-kinds/org/semantic/entity.yaml (line ~312)
+packages/core/models/node-classes/org/semantic/entity.yaml (line ~312)
 ```
 
 ## Execution Order

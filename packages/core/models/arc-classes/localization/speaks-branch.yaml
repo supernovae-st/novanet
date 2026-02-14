@@ -1,0 +1,22 @@
+# packages/core/models/arc-classes/localization/speaks-branch.yaml
+# ArcKind: SPEAKS_BRANCH - Locale's primary language branch
+# v10.8: Geographic Taxonomy
+
+arc:
+  name: SPEAKS_BRANCH
+  family: localization
+  scope: intra_realm
+
+  source: Locale
+  target: LanguageBranch
+  cardinality: many_to_one
+
+  inverse: SPOKEN_BY
+
+  llm_context: |
+    USE: when finding language family/branch for a locale.
+    TRIGGERS: language branch, language family, similar languages, Romance/Germanic.
+    NOT: cultural realm (use IN_CULTURAL_SUBREALM), geographic region (use IN_SUBREGION).
+    RELATES: Locale (source), LanguageBranch (target), SPOKEN_BY (inverse).
+
+  cypher_pattern: "(Locale)-[:SPEAKS_BRANCH]->(LanguageBranch)"

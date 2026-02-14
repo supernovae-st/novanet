@@ -21,7 +21,7 @@ export interface NodeIcon {
  * Dual-format icons for all 61 node types.
  *
  * Each icon is defined in the node's YAML file under `node.icon`.
- * Source: packages/core/models/node-kinds/<realm>/<layer>/<name>.yaml
+ * Source: packages/core/models/node-classes/<realm>/<layer>/<name>.yaml
  *
  * v0.12.5: Updated to dual format { web, terminal }
  */
@@ -78,7 +78,7 @@ export const NODE_ICONS: Record<NodeType, NodeIcon> = {
   PromptArtifact: { web: 'clipboard', terminal: '▤' },
   PromptStyle: { web: 'circle', terminal: '●' },
   SEOKeyword: { web: 'search', terminal: '⌕' },
-  SEOKeywordFormat: { web: 'label', terminal: 'label' },
+  SEOKeywordFormat: { web: 'label', terminal: '⊞' },
   SEOKeywordMetrics: { web: 'camera', terminal: '◇' },
   SEOKeywordSet: { web: 'package', terminal: '■' },
   Slugification: { web: 'link', terminal: '⌘' },

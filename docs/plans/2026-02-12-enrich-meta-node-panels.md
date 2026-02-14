@@ -549,7 +549,7 @@ CYPHER
 
 4. **Load ArcKind scope**
    - Add `scope: String` field to `ArcKind` struct
-   - Parse from arc-kinds/*.yaml files
+   - Parse from arc-classes/*.yaml files
 
 ### Phase 2: Panel Rendering (Rust)
 

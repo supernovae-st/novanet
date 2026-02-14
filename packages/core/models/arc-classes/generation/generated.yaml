@@ -1,0 +1,30 @@
+# packages/core/models/arc-classes/generation/generated.yaml
+# ArcKind: GENERATED — Instruction produced localized content
+#
+# v0.12.4: ADR-028 - PageInstruction deleted (calculated at runtime from BlockInstructions)
+#   Source simplified to BlockInstruction only
+
+arc:
+  name: GENERATED
+  family: generation
+  scope: intra_realm
+
+  source: BlockInstruction
+  target:
+    - PageGenerated
+    - BlockGenerated
+  cardinality: one_to_many
+
+  properties:
+    - name: generated_at
+      type: datetime
+      required: true
+      description: "Timestamp when content was generated"
+
+  llm_context: |
+    USE: when tracing which instruction produced which generated content.
+    TRIGGERS: generation provenance, instruction audit, output source.
+    NOT: for structure ownership (use HAS_GENERATED), for compiled prompts (use COMPILED_FROM).
+    RELATES: BlockInstruction (source), PageGenerated/BlockGenerated (target).
+
+  cypher_pattern: "(BlockInstruction)-[:GENERATED {generated_at}]->(BlockGenerated)"

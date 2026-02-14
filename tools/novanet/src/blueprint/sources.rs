@@ -1,7 +1,7 @@
 //! Data sources for blueprint command.
 //!
 //! Loads and aggregates data from:
-//! - YAML node-kinds and arc-kinds
+//! - YAML node-classes and arc-classes
 //! - taxonomy.yaml
 //! - Neo4j meta nodes (optional)
 

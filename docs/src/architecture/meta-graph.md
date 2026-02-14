@@ -202,8 +202,8 @@ The meta-graph is generated from YAML sources:
 ```
 packages/core/models/
 ├── taxonomy.yaml          → Realms, Layers, Traits, Families
-├── node-kinds/**/*.yaml   → Kind nodes
-└── arc-kinds/**/*.yaml    → ArcKind nodes
+├── node-classes/**/*.yaml   → Kind nodes
+└── arc-classes/**/*.yaml    → ArcKind nodes
 ```
 
 Regenerate with:

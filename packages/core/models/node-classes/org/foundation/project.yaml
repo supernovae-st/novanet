@@ -1,0 +1,170 @@
+# models/node-classes/org/foundation/project.yaml
+# Project - Organization project root node with brand and project configuration
+
+node:
+  name: Project
+  realm: org
+  layer: foundation
+  trait: defined
+  icon:
+    web: folder
+    terminal: "▣"
+  description: "Organization project root node containing project configuration and brand info"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # STANDARD PROPERTIES (v7.1.0)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Unique slug: 'project-qrcode-ai'"
+      example: "project-qrcode-ai"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "QR Code AI"
+
+    description:
+      type: string
+      required: true
+      description: "Short description of the project"
+      example: "AI-powered QR code management platform"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections].'"
+      example: |
+        USE: when loading project-level context or root configuration for content generation.
+        TRIGGERS: "project", "brand context", "project configuration", "qrcode-ai".
+        NOT: for organization-level config (use OrgConfig), for localized project content (use ProjectContent), for visual identity (use Brand).
+        RELATES: OrgConfig (owner via BELONGS_TO_ORG), Brand (identity via HAS_BRAND), Entity (owns via HAS_ENTITY), Page (owns via HAS_PAGE), Locale (supports via SUPPORTS_LOCALE).
+
+    created_at:
+      type: datetime
+      required: true
+
+    updated_at:
+      type: datetime
+      required: true
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PROJECT-SPECIFIC PROPERTIES
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  properties:
+    brand_name:
+      type: string
+      required: true
+      description: "Official brand name"
+      example: "QR Code AI"
+
+    brand_name_legal:
+      type: string
+      required: false
+      description: "Legal entity name"
+      example: "QRCode AI SAS"
+
+    founding_year:
+      type: int
+      required: false
+      description: "Year the project/company was founded"
+      example: 2024
+
+    website_url:
+      type: string
+      required: false
+      description: "Primary website URL"
+      example: "https://qrcode-ai.com"
+
+    core_values:
+      type: string[]
+      required: false
+      description: "3-5 core values that guide decisions"
+      example: ["Innovation", "Simplicity", "Design-first", "Accessibility"]
+
+    category:
+      type: string
+      required: false
+      description: "Market category the project competes in"
+      example: "QR Code Management Platform"
+
+    competitors:
+      type: string[]
+      required: false
+      description: "Main competitors for positioning"
+      example: ["QR Code Generator", "Beaconstac", "QR Tiger"]
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # RELATIONS (FROM this node)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  relations:
+    BELONGS_TO_ORG:
+      to: OrgConfig  # v11.3: Organization merged into OrgConfig
+      cardinality: "N:1"
+      description: "Organization config that owns this project"
+
+    HAS_CONTENT:
+      to: ProjectContent
+      cardinality: "1:N"
+      description: "Localized project identity and messaging"
+
+    HAS_AUDIENCE:
+      to: AudiencePersona
+      cardinality: "1:N"
+      description: "Target audience personas"
+
+    HAS_BRAND:
+      to: Brand
+      cardinality: "1:1"
+      description: "Brand identity (visual, voice, prompt styles)"
+
+    HAS_ENTITY:
+      to: Entity
+      cardinality: "1:N"
+      description: "Project-specific entities (v10.5)"
+
+    HAS_PAGE:
+      to: Page
+      cardinality: "1:N"
+      description: "Pages within the project"
+
+    SUPPORTS_LOCALE:
+      to: Locale
+      cardinality: "1:N"
+      props:
+        default:
+          type: boolean
+          description: "True for the default locale (only one per project)"
+      description: "Locales supported by the project"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # EXAMPLE
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  example:
+    data:
+      key: "project-qrcode-ai"
+      display_name: "QR Code AI"
+      description: "AI-powered QR code management platform"
+      llm_context: "USE: root context for QR Code AI. TRIGGERS: project, brand, qrcode-ai. NOT: other projects."
+      brand_name: "QR Code AI"
+      brand_name_legal: "QRCode AI SAS"
+      founding_year: 2024
+      website_url: "https://qrcode-ai.com"
+      core_values: ["Innovation", "Simplicity", "Design-first", "Accessibility"]
+      category: "QR Code Management Platform"
+      competitors: ["QR Code Generator", "Beaconstac", "QR Tiger"]
+
+    cypher: |
+      // Get project with all related nodes (v0.12.4 ADR-028)
+      MATCH (p:Project {key: $key})
+      OPTIONAL MATCH (p)-[:HAS_BRAND]->(b:Brand)
+      OPTIONAL MATCH (b)-[:TARGETS_PERSONA]->(ap:AudiencePersona)
+      OPTIONAL MATCH (p)-[:SUPPORTS_LOCALE]->(l:Locale)
+      RETURN p, b, collect(DISTINCT ap) AS personas, collect(DISTINCT l) AS locales

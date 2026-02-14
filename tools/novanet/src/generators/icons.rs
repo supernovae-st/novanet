@@ -63,7 +63,7 @@ export interface NodeIcon {
  * Dual-format icons for all {{ node_count }} node types.
  *
  * Each icon is defined in the node's YAML file under `node.icon`.
- * Source: packages/core/models/node-kinds/<realm>/<layer>/<name>.yaml
+ * Source: packages/core/models/node-classes/<realm>/<layer>/<name>.yaml
  *
  * v0.12.5: Updated to dual format { web, terminal }
  */

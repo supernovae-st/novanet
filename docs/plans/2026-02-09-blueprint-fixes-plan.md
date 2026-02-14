@@ -11,7 +11,7 @@
 |---|-------|------|-----|
 | 1 | Arc scope validation missing | validation.rs | Add `check_arc_scope_coherence()` |
 | 2 | Scope field not in ArcDef | parsers/arcs.rs | Add `scope: Option<String>` to ArcDef |
-| 3 | YAML arc files have stale scope | arc-kinds/*.yaml | Update 2 files to `intra_realm` |
+| 3 | YAML arc files have stale scope | arc-classes/*.yaml | Update 2 files to `intra_realm` |
 
 ### Medium (Should Fix)
 
@@ -39,13 +39,13 @@
 
 Fix these 2 files that have incorrect scope after v11.0 SEO migration:
 
-1. `arc-kinds/ownership/has-seo-keywords.yaml`
+1. `arc-classes/ownership/has-seo-keywords.yaml`
    - Source: Locale (global? or tenant?)
    - Target: SEOKeyword (tenant)
    - Current: `scope: cross_realm`
    - Fix: Check actual realms and update
 
-2. `arc-kinds/ownership/has-geo-queries.yaml`
+2. `arc-classes/ownership/has-geo-queries.yaml`
    - Source: Locale
    - Target: GEOQuery
    - Current: `scope: cross_realm`

@@ -33,14 +33,14 @@ This plan fixes arc classifications, directions, and adds missing connections.
 ## Batch 1: Create Missing Arc Types
 
 **Priority**: CRITICAL (blocks Batch 4)
-**Files**: `packages/core/models/arc-kinds/semantic/`
+**Files**: `packages/core/models/arc-classes/semantic/`
 
 ### New Arc Types Required
 
 #### 1.1 ACTS_ON Arc
 
 ```yaml
-# packages/core/models/arc-kinds/semantic/acts-on.yaml
+# packages/core/models/arc-classes/semantic/acts-on.yaml
 arc:
   name: ACTS_ON
   family: semantic
@@ -69,7 +69,7 @@ arc:
 #### 1.2 ENHANCES Arc
 
 ```yaml
-# packages/core/models/arc-kinds/semantic/enhances.yaml
+# packages/core/models/arc-classes/semantic/enhances.yaml
 arc:
   name: ENHANCES
   family: semantic
@@ -98,7 +98,7 @@ arc:
 #### 1.3 READS Arc (optional)
 
 ```yaml
-# packages/core/models/arc-kinds/semantic/reads.yaml
+# packages/core/models/arc-classes/semantic/reads.yaml
 arc:
   name: READS
   family: semantic

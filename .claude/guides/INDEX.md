@@ -196,8 +196,8 @@ novanet-hq/
 │   ├── generators/test_utils.rs          ← Test fixtures
 │   └── parsers/yaml_node.rs              ← Trait enum
 ├── packages/core/models/
-│   ├── node-kinds/                       ← 60 YAML definitions
-│   ├── arc-kinds/                        ← Arc definitions
+│   ├── node-classes/                       ← 60 YAML definitions
+│   ├── arc-classes/                        ← Arc definitions
 │   ├── taxonomy.yaml                     ← Realm/layer definitions
 │   └── visual-encoding.yaml              ← Icons & visual encoding
 └── packages/core/src/graph/

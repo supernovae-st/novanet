@@ -1,0 +1,76 @@
+# models/node-classes/shared/knowledge/expression-set.yaml
+# ExpressionSet — Container for all Expression atoms of a locale
+#
+# v10.7: Simplified model - one ExpressionSet per locale
+# Register is a property on Expression atoms, not on the container
+# Stability: High - structure rarely changes
+
+node:
+  name: ExpressionSet
+  realm: shared
+  layer: knowledge
+  trait: defined  # v11.2: Containers are universal categories (invariant), atoms are locale-native (knowledge)
+  icon:
+    web: "message-square"
+    terminal: "◇"
+  description: |
+    Container for all Expression atoms of a locale.
+    USE: When accessing locale's expression library for content generation.
+    TRIGGERS: expressions, idioms, phrases, locale expressions, expression container.
+    NOT: For individual expressions (use Expression atom via CONTAINS).
+
+  standard_properties:
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "French (France) Expressions"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "Native expressions for fr-FR across all registers"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints"
+      example: "USE: to find expressions for a locale. Filter by semantic_field and register on atoms."
+
+    created_at:
+      type: datetime
+      required: true
+      description: "Creation timestamp"
+
+    updated_at:
+      type: datetime
+      required: true
+      description: "Last update timestamp"
+
+  properties:
+    # Semantic fields summary (metadata about contained atoms)
+    semantic_fields_count:
+      type: integer
+      required: true
+      description: "Number of semantic fields represented"
+      example: 10
+
+    total_expressions:
+      type: integer
+      required: true
+      description: "Total number of Expression atoms"
+      example: 80
+
+  relations:
+    outgoing:
+      - type: CONTAINS
+        to: Expression
+        cardinality: "1:N"
+        description: "ExpressionSet contains multiple Expression atoms"
+
+    incoming:
+      - type: HAS_EXPRESSIONS
+        from: Locale
+        cardinality: "1:1"
+        description: "Locale has exactly one expression set"

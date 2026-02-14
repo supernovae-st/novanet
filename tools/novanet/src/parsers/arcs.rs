@@ -185,12 +185,12 @@ impl ArcDef {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Arc-Class YAML Files (v10.9 - consolidated from arc-kinds/ directory)
+// Arc-Class YAML Files (v10.9 - consolidated from arc-classes/ directory)
 // ─────────────────────────────────────────────────────────────────────────────
 
 use std::collections::HashMap;
 
-/// Individual arc-class YAML file structure (from arc-kinds/{family}/*.yaml).
+/// Individual arc-class YAML file structure (from arc-classes/{family}/*.yaml).
 #[derive(Debug, Clone, Deserialize)]
 pub struct ArcClassYaml {
     pub arc: ArcClassDef,
@@ -308,7 +308,7 @@ pub fn load_arc_kinds_from_files(root: &Path) -> crate::Result<ArcsDocument> {
 
     if !arc_kinds_dir.exists() {
         return Err(crate::NovaNetError::Validation(format!(
-            "arc-kinds directory not found: {}",
+            "arc-classes directory not found: {}",
             arc_kinds_dir.display()
         )));
     }
@@ -600,7 +600,7 @@ arcs:
             return;
         }
 
-        let doc = load_arc_kinds_from_files(root).expect("should load arc-kinds from files");
+        let doc = load_arc_kinds_from_files(root).expect("should load arc-classes from files");
 
         // v11.0: Total arc count from individual arc-kind files
         // Should have a reasonable number of arcs (more than legacy relations.yaml)
@@ -761,7 +761,7 @@ fn parse_has_audience_file() {
         .and_then(|p| p.parent())
         .expect("should find root");
 
-    let path = root.join("packages/core/models/arc-kinds/ownership/has-audience.yaml");
+    let path = root.join("packages/core/models/arc-classes/ownership/has-audience.yaml");
     eprintln!("Loading from: {}", path.display());
 
     let content = std::fs::read_to_string(&path).expect("should read file");

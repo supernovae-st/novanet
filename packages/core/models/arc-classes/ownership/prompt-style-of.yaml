@@ -1,0 +1,23 @@
+# packages/core/models/arc-classes/ownership/prompt-style-of.yaml
+# ArcKind: PROMPT_STYLE_OF — PromptStyle belongs to Brand (inverse of HAS_PROMPT_STYLE)
+#
+# v0.12.5: ADR-028 Brand Architecture
+
+arc:
+  name: PROMPT_STYLE_OF
+  family: ownership
+  scope: intra_realm
+
+  source: PromptStyle
+  target: Brand
+  cardinality: many_to_one
+
+  inverse_of: HAS_PROMPT_STYLE
+
+  llm_context: |
+    USE: when finding which Brand owns a PromptStyle.
+    TRIGGERS: "prompt style owner", "style brand", "which brand".
+    NOT: for loading prompt styles for a brand (use HAS_PROMPT_STYLE).
+    RELATES: PromptStyle (source), Brand (target), HAS_PROMPT_STYLE (inverse).
+
+  cypher_pattern: "(PromptStyle)-[:PROMPT_STYLE_OF]->(Brand)"

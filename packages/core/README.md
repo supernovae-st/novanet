@@ -64,10 +64,10 @@ core/
 |   +-- _index.yaml            # Graph structure overview
 |   +-- taxonomy.yaml          # v11.7: 2 Realms (shared/org), 10 Layers
 |   +-- relations.yaml         # Legacy format (parser compatibility)
-|   +-- node-kinds/            # One file per node type (60 files)
+|   +-- node-classes/            # One file per node type (60 files)
 |   |   +-- shared/            # Realm: shared (config, locale, geography, knowledge) - 39 nodes
 |   |   +-- org/               # Realm: org (6 layers) - 21 nodes
-|   +-- arc-kinds/             # One file per arc type (114 files)
+|   +-- arc-classes/             # One file per arc type (114 files)
 |   +-- views/                 # Predefined view definitions
 +-- src/
 |   +-- types/                 # TypeScript definitions

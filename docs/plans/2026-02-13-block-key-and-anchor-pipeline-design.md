@@ -41,7 +41,7 @@ We designed and implemented a new, robust architecture based on the following pr
 
 The following files were created or modified to implement this architecture:
 
-1.  **Schema Definitions (`packages/core/models/node-kinds/`):**
+1.  **Schema Definitions (`packages/core/models/node-classes/`):**
     -   `.../structure/page.yaml`: Documentation improved.
     -   `.../structure/block.yaml`: Schema updated with `anchor_id` and new key convention; documentation improved.
     -   `.../instruction/block-type.yaml`: Documentation improved.

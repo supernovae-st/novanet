@@ -1,0 +1,24 @@
+# packages/core/models/arc-classes/ownership/has-subregion.yaml
+# ArcKind: HAS_SUBREGION — GeoRegion contains GeoSubRegion (inverse of IN_REGION)
+#
+# v0.12.5: ADR-026 Inverse Arc Policy
+
+arc:
+  name: HAS_SUBREGION
+  family: ownership
+  scope: intra_realm
+
+  source: GeoRegion
+  target: GeoSubRegion
+  cardinality: one_to_many
+
+  inverse_of: IN_REGION
+
+  llm_context: |
+    USE: when finding all sub-regions of a geographic region.
+    TRIGGERS: "region sub-regions", "sub-regions in", "which sub-regions".
+    NOT: for finding a sub-region's parent (use IN_REGION).
+    RELATES: GeoRegion (source), GeoSubRegion (target), IN_REGION (inverse).
+    Example: Western Europe -[:HAS_SUBREGION]-> Benelux, DACH
+
+  cypher_pattern: "(GeoRegion)-[:HAS_SUBREGION]->(GeoSubRegion)"

@@ -310,7 +310,7 @@ impl ValidationResult {
         let mut mismatches = Vec::new();
 
         for node in &data.node_kinds {
-            // Path should be: .../node-kinds/{realm}/{layer}/{name}.yaml
+            // Path should be: .../node-classes/{realm}/{layer}/{name}.yaml
             let path_str = node.source_path.to_string_lossy();
 
             // Check realm in path
@@ -834,7 +834,7 @@ mod tests {
 
     /// ADR-023: No deprecated KIND arc terminology in YAML
     /// Note: OF_CLASS, FROM_CLASS, TO_CLASS, HAS_CLASS are schema-level arcs
-    /// that connect :Schema:Class nodes, created during db seed (not in arc-kinds YAML).
+    /// that connect :Schema:Class nodes, created during db seed (not in arc-classes YAML).
     /// Instance→Class relationship is via Neo4j labels, not explicit arcs.
     #[test]
     fn test_adr023_no_deprecated_kind_arcs() {

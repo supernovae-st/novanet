@@ -17,13 +17,13 @@
 ### Task 1: Create Entity node (rename from Concept)
 
 **Files:**
-- Create: `packages/core/models/node-kinds/global/knowledge/entity.yaml`
-- Delete: `packages/core/models/node-kinds/project/semantic/concept.yaml` (after migration)
+- Create: `packages/core/models/node-classes/global/knowledge/entity.yaml`
+- Delete: `packages/core/models/node-classes/project/semantic/concept.yaml` (after migration)
 
 **Step 1: Create the Entity node YAML**
 
 ```yaml
-# packages/core/models/node-kinds/global/knowledge/entity.yaml
+# packages/core/models/node-classes/global/knowledge/entity.yaml
 # Entity - Universal semantic entity (replaces Concept in v10.3)
 
 node:
@@ -153,13 +153,13 @@ node:
 
 **Step 2: Verify YAML syntax**
 
-Run: `cat packages/core/models/node-kinds/global/knowledge/entity.yaml | head -20`
+Run: `cat packages/core/models/node-classes/global/knowledge/entity.yaml | head -20`
 Expected: Valid YAML header displayed
 
 **Step 3: Commit**
 
 ```bash
-git add packages/core/models/node-kinds/global/knowledge/entity.yaml
+git add packages/core/models/node-classes/global/knowledge/entity.yaml
 git commit -m "feat(schema): add Entity node (replaces Concept in v10.3)
 
 - New global/knowledge/entity.yaml
@@ -175,13 +175,13 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
 ### Task 2: Create EntityL10n node (rename from ConceptL10n)
 
 **Files:**
-- Create: `packages/core/models/node-kinds/global/knowledge/entity-l10n.yaml`
-- Delete: `packages/core/models/node-kinds/project/semantic/concept-l10n.yaml` (after migration)
+- Create: `packages/core/models/node-classes/global/knowledge/entity-l10n.yaml`
+- Delete: `packages/core/models/node-classes/project/semantic/concept-l10n.yaml` (after migration)
 
 **Step 1: Create the EntityL10n node YAML**
 
 ```yaml
-# packages/core/models/node-kinds/global/knowledge/entity-l10n.yaml
+# packages/core/models/node-classes/global/knowledge/entity-l10n.yaml
 # EntityL10n - Localized content for Entity (replaces ConceptL10n in v10.3)
 
 node:
@@ -294,13 +294,13 @@ node:
 
 **Step 2: Verify YAML syntax**
 
-Run: `cat packages/core/models/node-kinds/global/knowledge/entity-l10n.yaml | head -20`
+Run: `cat packages/core/models/node-classes/global/knowledge/entity-l10n.yaml | head -20`
 Expected: Valid YAML header displayed
 
 **Step 3: Commit**
 
 ```bash
-git add packages/core/models/node-kinds/global/knowledge/entity-l10n.yaml
+git add packages/core/models/node-classes/global/knowledge/entity-l10n.yaml
 git commit -m "feat(schema): add EntityL10n node (replaces ConceptL10n in v10.3)
 
 - New global/knowledge/entity-l10n.yaml
@@ -315,12 +315,12 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
 ### Task 3: Create BlockInstruction node
 
 **Files:**
-- Create: `packages/core/models/node-kinds/project/instruction/block-instruction.yaml`
+- Create: `packages/core/models/node-classes/project/instruction/block-instruction.yaml`
 
 **Step 1: Create the BlockInstruction node YAML**
 
 ```yaml
-# packages/core/models/node-kinds/project/instruction/block-instruction.yaml
+# packages/core/models/node-classes/project/instruction/block-instruction.yaml
 # BlockInstruction - Instructions for generating a block within a page (v10.3)
 
 node:
@@ -430,13 +430,13 @@ node:
 
 **Step 2: Verify YAML syntax**
 
-Run: `cat packages/core/models/node-kinds/project/instruction/block-instruction.yaml | head -20`
+Run: `cat packages/core/models/node-classes/project/instruction/block-instruction.yaml | head -20`
 Expected: Valid YAML header displayed
 
 **Step 3: Commit**
 
 ```bash
-git add packages/core/models/node-kinds/project/instruction/block-instruction.yaml
+git add packages/core/models/node-classes/project/instruction/block-instruction.yaml
 git commit -m "feat(schema): add BlockInstruction node for v10.3 instruction model
 
 - Page HAS_INSTRUCTION BlockInstruction OF_TYPE BlockType
@@ -452,23 +452,23 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
 ### Task 4: Delete SearchIntent node (absorbed into Entity.type=ACTION)
 
 **Files:**
-- Delete: `packages/core/models/node-kinds/project/semantic/search-intent.yaml`
+- Delete: `packages/core/models/node-classes/project/semantic/search-intent.yaml`
 
 **Step 1: Remove the file**
 
 ```bash
-rm packages/core/models/node-kinds/project/semantic/search-intent.yaml
+rm packages/core/models/node-classes/project/semantic/search-intent.yaml
 ```
 
 **Step 2: Verify deletion**
 
-Run: `ls packages/core/models/node-kinds/project/semantic/`
+Run: `ls packages/core/models/node-classes/project/semantic/`
 Expected: search-intent.yaml NOT in list
 
 **Step 3: Commit**
 
 ```bash
-git add -u packages/core/models/node-kinds/project/semantic/search-intent.yaml
+git add -u packages/core/models/node-classes/project/semantic/search-intent.yaml
 git commit -m "feat(schema): remove SearchIntent node (absorbed into Entity.type=ACTION)
 
 v10.3: SearchIntent is redundant - use Entity with type=ACTION instead
@@ -481,23 +481,23 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
 ### Task 5: Delete TopicCluster node (absorbed into Entity.is_pillar)
 
 **Files:**
-- Delete: `packages/core/models/node-kinds/project/semantic/topic-cluster.yaml`
+- Delete: `packages/core/models/node-classes/project/semantic/topic-cluster.yaml`
 
 **Step 1: Remove the file**
 
 ```bash
-rm packages/core/models/node-kinds/project/semantic/topic-cluster.yaml
+rm packages/core/models/node-classes/project/semantic/topic-cluster.yaml
 ```
 
 **Step 2: Verify deletion**
 
-Run: `ls packages/core/models/node-kinds/project/semantic/`
+Run: `ls packages/core/models/node-classes/project/semantic/`
 Expected: topic-cluster.yaml NOT in list
 
 **Step 3: Commit**
 
 ```bash
-git add -u packages/core/models/node-kinds/project/semantic/topic-cluster.yaml
+git add -u packages/core/models/node-classes/project/semantic/topic-cluster.yaml
 git commit -m "feat(schema): remove TopicCluster node (absorbed into Entity.is_pillar + SUBTOPIC_OF)
 
 v10.3: Use Entity.is_pillar=true + SUBTOPIC_OF arc instead
@@ -510,25 +510,25 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
 ### Task 6: Delete old Concept and ConceptL10n nodes
 
 **Files:**
-- Delete: `packages/core/models/node-kinds/project/semantic/concept.yaml`
-- Delete: `packages/core/models/node-kinds/project/semantic/concept-l10n.yaml`
+- Delete: `packages/core/models/node-classes/project/semantic/concept.yaml`
+- Delete: `packages/core/models/node-classes/project/semantic/concept-l10n.yaml`
 
 **Step 1: Remove the files**
 
 ```bash
-rm packages/core/models/node-kinds/project/semantic/concept.yaml
-rm packages/core/models/node-kinds/project/semantic/concept-l10n.yaml
+rm packages/core/models/node-classes/project/semantic/concept.yaml
+rm packages/core/models/node-classes/project/semantic/concept-l10n.yaml
 ```
 
 **Step 2: Verify deletion**
 
-Run: `ls packages/core/models/node-kinds/project/semantic/`
+Run: `ls packages/core/models/node-classes/project/semantic/`
 Expected: concept.yaml and concept-l10n.yaml NOT in list
 
 **Step 3: Commit**
 
 ```bash
-git add -u packages/core/models/node-kinds/project/semantic/
+git add -u packages/core/models/node-classes/project/semantic/
 git commit -m "feat(schema): remove Concept/ConceptL10n (replaced by Entity/EntityL10n)
 
 v10.3: Entity is now in global/knowledge/ realm
@@ -543,12 +543,12 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
 ### Task 7: Create EXPRESSES arc (SEOKeyword → Entity)
 
 **Files:**
-- Create: `packages/core/models/arc-kinds/semantic/expresses.yaml`
+- Create: `packages/core/models/arc-classes/semantic/expresses.yaml`
 
 **Step 1: Create the EXPRESSES arc YAML**
 
 ```yaml
-# packages/core/models/arc-kinds/semantic/expresses.yaml
+# packages/core/models/arc-classes/semantic/expresses.yaml
 # EXPRESSES - SEOKeyword expresses an Entity (v10.3)
 #
 # v10.3: Inverted SEO relationship
@@ -593,7 +593,7 @@ arc:
 **Step 2: Commit**
 
 ```bash
-git add packages/core/models/arc-kinds/semantic/expresses.yaml
+git add packages/core/models/arc-classes/semantic/expresses.yaml
 git commit -m "feat(schema): add EXPRESSES arc (SEOKeyword → Entity)
 
 v10.3: Inverted SEO relationship - keywords express entities
@@ -607,12 +607,12 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
 ### Task 8: Create MATERIALIZES_AS arc (Entity → Page)
 
 **Files:**
-- Create: `packages/core/models/arc-kinds/semantic/materializes-as.yaml`
+- Create: `packages/core/models/arc-classes/semantic/materializes-as.yaml`
 
 **Step 1: Create the MATERIALIZES_AS arc YAML**
 
 ```yaml
-# packages/core/models/arc-kinds/semantic/materializes-as.yaml
+# packages/core/models/arc-classes/semantic/materializes-as.yaml
 # MATERIALIZES_AS - Entity materializes as Page(s) (v10.3)
 #
 # v10.3: N:M relationship (many entities can materialize as one page, one entity can have multiple pages)
@@ -652,7 +652,7 @@ arc:
 **Step 2: Commit**
 
 ```bash
-git add packages/core/models/arc-kinds/semantic/materializes-as.yaml
+git add packages/core/models/arc-classes/semantic/materializes-as.yaml
 git commit -m "feat(schema): add MATERIALIZES_AS arc (Entity → Page)
 
 v10.3: N:M relationship, optional (entity may not have page)
@@ -665,12 +665,12 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
 ### Task 9: Create HAS_INSTRUCTION arc (Page → BlockInstruction)
 
 **Files:**
-- Create: `packages/core/models/arc-kinds/ownership/has-instruction.yaml`
+- Create: `packages/core/models/arc-classes/ownership/has-instruction.yaml`
 
 **Step 1: Create the HAS_INSTRUCTION arc YAML**
 
 ```yaml
-# packages/core/models/arc-kinds/ownership/has-instruction.yaml
+# packages/core/models/arc-classes/ownership/has-instruction.yaml
 # HAS_INSTRUCTION - Page owns BlockInstructions (v10.3)
 
 arc:
@@ -696,7 +696,7 @@ arc:
 **Step 2: Commit**
 
 ```bash
-git add packages/core/models/arc-kinds/ownership/has-instruction.yaml
+git add packages/core/models/arc-classes/ownership/has-instruction.yaml
 git commit -m "feat(schema): add HAS_INSTRUCTION arc (Page → BlockInstruction)
 
 v10.3: Page owns ordered block instructions
@@ -709,12 +709,12 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
 ### Task 10: Create REFERENCES_ENTITY arc (BlockInstruction → Entity)
 
 **Files:**
-- Create: `packages/core/models/arc-kinds/semantic/references-entity.yaml`
+- Create: `packages/core/models/arc-classes/semantic/references-entity.yaml`
 
 **Step 1: Create the REFERENCES_ENTITY arc YAML**
 
 ```yaml
-# packages/core/models/arc-kinds/semantic/references-entity.yaml
+# packages/core/models/arc-classes/semantic/references-entity.yaml
 # REFERENCES_ENTITY - BlockInstruction references Entity (v10.3)
 #
 # Auto-parsed from @entity:key syntax in BlockInstruction.content
@@ -744,7 +744,7 @@ arc:
 **Step 2: Commit**
 
 ```bash
-git add packages/core/models/arc-kinds/semantic/references-entity.yaml
+git add packages/core/models/arc-classes/semantic/references-entity.yaml
 git commit -m "feat(schema): add REFERENCES_ENTITY arc (BlockInstruction → Entity)
 
 v10.3: Auto-parsed from @entity:key syntax
@@ -757,12 +757,12 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
 ### Task 11: Create REFERENCES_PAGE arc (BlockInstruction → Page)
 
 **Files:**
-- Create: `packages/core/models/arc-kinds/semantic/references-page.yaml`
+- Create: `packages/core/models/arc-classes/semantic/references-page.yaml`
 
 **Step 1: Create the REFERENCES_PAGE arc YAML**
 
 ```yaml
-# packages/core/models/arc-kinds/semantic/references-page.yaml
+# packages/core/models/arc-classes/semantic/references-page.yaml
 # REFERENCES_PAGE - BlockInstruction references Page (v10.3)
 #
 # Auto-parsed from @link:key syntax in BlockInstruction.content
@@ -793,7 +793,7 @@ arc:
 **Step 2: Commit**
 
 ```bash
-git add packages/core/models/arc-kinds/semantic/references-page.yaml
+git add packages/core/models/arc-classes/semantic/references-page.yaml
 git commit -m "feat(schema): add REFERENCES_PAGE arc (BlockInstruction → Page)
 
 v10.3: Auto-parsed from @link:key syntax
@@ -807,12 +807,12 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
 ### Task 12: Create HAS_INTERNAL_LINK arc (BlockL10n → PageL10n)
 
 **Files:**
-- Create: `packages/core/models/arc-kinds/localization/has-internal-link.yaml`
+- Create: `packages/core/models/arc-classes/localization/has-internal-link.yaml`
 
 **Step 1: Create the HAS_INTERNAL_LINK arc YAML**
 
 ```yaml
-# packages/core/models/arc-kinds/localization/has-internal-link.yaml
+# packages/core/models/arc-classes/localization/has-internal-link.yaml
 # HAS_INTERNAL_LINK - BlockL10n contains link to PageL10n (v10.3)
 #
 # Tracks actual rendered internal links in generated content
@@ -852,7 +852,7 @@ arc:
 **Step 2: Commit**
 
 ```bash
-git add packages/core/models/arc-kinds/localization/has-internal-link.yaml
+git add packages/core/models/arc-classes/localization/has-internal-link.yaml
 git commit -m "feat(schema): add HAS_INTERNAL_LINK arc (BlockL10n → PageL10n)
 
 v10.3: Tracks rendered internal links in generated content
@@ -865,7 +865,7 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
 ### Task 13: Update HAS_SEO_KEYWORDS or remove (replaced by EXPRESSES)
 
 **Files:**
-- Modify or delete: `packages/core/models/arc-kinds/ownership/has-seo-keywords.yaml`
+- Modify or delete: `packages/core/models/arc-classes/ownership/has-seo-keywords.yaml`
 
 **Step 1: Check if HAS_SEO_KEYWORDS is still needed**
 
@@ -877,7 +877,7 @@ EXPRESSES is separate (semantic link from keyword to entity).
 
 **Step 2: Verify no changes needed**
 
-Run: `cat packages/core/models/arc-kinds/ownership/has-seo-keywords.yaml`
+Run: `cat packages/core/models/arc-classes/ownership/has-seo-keywords.yaml`
 Expected: Locale → SEOKeyword (this is still valid)
 
 **Step 3: No commit needed** (no changes)

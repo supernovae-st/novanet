@@ -1,0 +1,34 @@
+# packages/core/models/arc-classes/localization/population-of.yaml
+# ArcKind: POPULATION_OF — PopulationSubCluster is present in Locale (inverse of HAS_POPULATION)
+#
+# v0.12.5: ADR-026 Inverse Arc Policy
+
+arc:
+  name: POPULATION_OF
+  family: localization
+  scope: intra_realm
+
+  source: PopulationSubCluster
+  target: Locale
+  cardinality: many_to_many
+
+  properties:
+    - name: percentage
+      type: float
+      required: true
+      description: "Population percentage (0.0 to 1.0)"
+
+    - name: is_majority
+      type: boolean
+      required: false
+      description: "True if this population is >50%"
+
+  inverse_of: HAS_POPULATION
+
+  llm_context: |
+    USE: when finding all Locales where a population sub-cluster is present.
+    TRIGGERS: "population presence", "where does this population live", "population locales".
+    NOT: for finding a Locale's populations (use HAS_POPULATION).
+    RELATES: PopulationSubCluster (source), Locale (target), HAS_POPULATION (inverse).
+
+  cypher_pattern: "(PopulationSubCluster)-[:POPULATION_OF {percentage, is_majority}]->(Locale)"

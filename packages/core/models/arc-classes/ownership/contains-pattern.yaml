@@ -1,0 +1,19 @@
+# arc-classes/ownership/contains-pattern.yaml
+# CONTAINS_PATTERN - PatternSet contains Pattern atoms (v10.9.0)
+#
+# v10.9.0: Split from generic CONTAINS for semantic correctness
+#          Each container type can only contain its specific atom type
+
+arc:
+  name: CONTAINS_PATTERN
+  family: ownership
+  scope: intra_realm
+  source: PatternSet
+  target: Pattern
+  cardinality: one_to_many
+  llm_context: |
+    USE: when loading individual patterns from a pattern set.
+    TRIGGERS: pattern atoms, content templates, CTA patterns, headline templates.
+    NOT: pattern set container (use HAS_PATTERNS), expressions.
+    RELATES: PatternSet (source), Pattern (target).
+  cypher_pattern: "(PatternSet)-[:CONTAINS_PATTERN]->(Pattern)"

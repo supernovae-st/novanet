@@ -345,7 +345,7 @@ jobs:
         env:
           EXPECTED_COUNT: ${{ env.NOVANET_NODE_COUNT }}
         run: |
-          YAML_COUNT=$(find ../../packages/core/models/node-kinds -name "*.yaml" | wc -l | tr -d ' ')
+          YAML_COUNT=$(find ../../packages/core/models/node-classes -name "*.yaml" | wc -l | tr -d ' ')
           echo "count=$YAML_COUNT" >> $GITHUB_OUTPUT
           echo "YAML node count: $YAML_COUNT (expected: $EXPECTED_COUNT)"
           if [ "$YAML_COUNT" -ne "$EXPECTED_COUNT" ]; then
@@ -358,8 +358,8 @@ jobs:
         env:
           EXPECTED_LAYERS: ${{ env.NOVANET_LAYER_COUNT }}
         run: |
-          SHARED=$(ls -d ../../packages/core/models/node-kinds/shared/*/ 2>/dev/null | wc -l | tr -d ' ')
-          ORG=$(ls -d ../../packages/core/models/node-kinds/org/*/ 2>/dev/null | wc -l | tr -d ' ')
+          SHARED=$(ls -d ../../packages/core/models/node-classes/shared/*/ 2>/dev/null | wc -l | tr -d ' ')
+          ORG=$(ls -d ../../packages/core/models/node-classes/org/*/ 2>/dev/null | wc -l | tr -d ' ')
           TOTAL=$((SHARED + ORG))
           echo "count=$TOTAL" >> $GITHUB_OUTPUT
           echo "Layer count: $TOTAL ($SHARED shared + $ORG org)"
@@ -371,7 +371,7 @@ jobs:
       - name: Count arc kinds
         id: arcs
         run: |
-          ARC_COUNT=$(find ../../packages/core/models/arc-kinds -name "*.yaml" | wc -l | tr -d ' ')
+          ARC_COUNT=$(find ../../packages/core/models/arc-classes -name "*.yaml" | wc -l | tr -d ' ')
           echo "count=$ARC_COUNT" >> $GITHUB_OUTPUT
           echo "Arc kind count: $ARC_COUNT"
 
@@ -407,10 +407,10 @@ jobs:
         run: |
           # Check that each YAML file's realm/layer matches its path
           ERRORS=""
-          for yaml in $(find ../../packages/core/models/node-kinds -name "*.yaml"); do
+          for yaml in $(find ../../packages/core/models/node-classes -name "*.yaml"); do
             # Extract path components
-            PATH_REALM=$(echo "$yaml" | sed 's|.*/node-kinds/\([^/]*\)/.*|\1|')
-            PATH_LAYER=$(echo "$yaml" | sed 's|.*/node-kinds/[^/]*/\([^/]*\)/.*|\1|')
+            PATH_REALM=$(echo "$yaml" | sed 's|.*/node-classes/\([^/]*\)/.*|\1|')
+            PATH_LAYER=$(echo "$yaml" | sed 's|.*/node-classes/[^/]*/\([^/]*\)/.*|\1|')
             
             # Extract YAML realm/layer (if present)
             YAML_REALM=$(grep "^  realm:" "$yaml" 2>/dev/null | awk '{print $2}' | tr -d '"' || true)

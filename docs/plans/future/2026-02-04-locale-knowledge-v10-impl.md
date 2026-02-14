@@ -4,9 +4,9 @@
 
 **Goal:** Refactor 14 locale knowledge nodes into 27 granular nodes with domain-tagged retrieval and clear TUI visualization.
 
-**Architecture:** Delete 14 existing node-kinds, create 27 new node-kinds organized by function (Technical/Style/Semantic), add 10 new arc-kinds for knowledge relationships, update Rust parsers to support `knowledge_tier` property, and modify TUI to display tier groupings within the knowledge layer.
+**Architecture:** Delete 14 existing node-classes, create 27 new node-classes organized by function (Technical/Style/Semantic), add 10 new arc-classes for knowledge relationships, update Rust parsers to support `knowledge_tier` property, and modify TUI to display tier groupings within the knowledge layer.
 
-**Tech Stack:** YAML (node-kinds, arc-kinds), Rust (parsers, generators, TUI), Cypher (seeds), Neo4j (meta-graph)
+**Tech Stack:** YAML (node-classes, arc-classes), Rust (parsers, generators, TUI), Cypher (seeds), Neo4j (meta-graph)
 
 **Design Document:** `docs/plans/2026-02-04-locale-knowledge-v10-design.md`
 
@@ -16,15 +16,15 @@
 
 | Phase | Tasks | Description |
 |-------|-------|-------------|
-| 1 | 1-3 | Create 4 Technical tier node-kinds (Formatting, Slugification, Adaptation, Style) |
+| 1 | 1-3 | Create 4 Technical tier node-classes (Formatting, Slugification, Adaptation, Style) |
 | 2 | 4-9 | Create 6 TermSet nodes (domain-tagged) |
 | 3 | 10-12 | Create 3 ExpressionSet nodes (register-tagged) |
 | 4 | 13-16 | Create 4 PatternSet nodes (usage-tagged) |
 | 5 | 17-20 | Create 4 CultureSet nodes (type-tagged) |
 | 6 | 21-23 | Create 3 TabooSet nodes (severity-tagged) |
 | 7 | 24-26 | Create 3 AudienceSet nodes (segment-tagged) |
-| 8 | 27-36 | Create 10 new arc-kinds for knowledge relationships |
-| 9 | 37-38 | Delete 14 old node-kinds and their arcs |
+| 8 | 27-36 | Create 10 new arc-classes for knowledge relationships |
+| 9 | 37-38 | Delete 14 old node-classes and their arcs |
 | 10 | 39-41 | Update Rust parsers for `knowledge_tier` property |
 | 11 | 42-44 | Update TUI to show tier groupings |
 | 12 | 45-47 | Regenerate all artifacts and validate |
@@ -36,12 +36,12 @@
 ### Task 1: Create Formatting node-kind
 
 **Files:**
-- Create: `packages/core/models/node-kinds/global/knowledge/formatting.yaml`
+- Create: `packages/core/models/node-classes/global/knowledge/formatting.yaml`
 
 **Step 1: Write the node-kind YAML**
 
 ```yaml
-# packages/core/models/node-kinds/global/knowledge/formatting.yaml
+# packages/core/models/node-classes/global/knowledge/formatting.yaml
 # Formatting — Technical formatting rules for a locale (dates, numbers, currency, phone, address, units)
 #
 # Tier: technical (always loaded together)
@@ -189,13 +189,13 @@ node:
 
 **Step 2: Verify YAML syntax**
 
-Run: `cd /Users/thibaut/supernovae-st/novanet-hq && python3 -c "import yaml; yaml.safe_load(open('packages/core/models/node-kinds/global/knowledge/formatting.yaml'))"`
+Run: `cd /Users/thibaut/supernovae-st/novanet-hq && python3 -c "import yaml; yaml.safe_load(open('packages/core/models/node-classes/global/knowledge/formatting.yaml'))"`
 Expected: No output (valid YAML)
 
 **Step 3: Commit**
 
 ```bash
-git add packages/core/models/node-kinds/global/knowledge/formatting.yaml
+git add packages/core/models/node-classes/global/knowledge/formatting.yaml
 git commit -m "feat(schema): add Formatting node-kind (knowledge tier: technical)
 
 Part of Locale Knowledge v10 refactor.
@@ -209,12 +209,12 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ### Task 2: Create Slugification node-kind
 
 **Files:**
-- Create: `packages/core/models/node-kinds/global/knowledge/slugification.yaml`
+- Create: `packages/core/models/node-classes/global/knowledge/slugification.yaml`
 
 **Step 1: Write the node-kind YAML**
 
 ```yaml
-# packages/core/models/node-kinds/global/knowledge/slugification.yaml
+# packages/core/models/node-classes/global/knowledge/slugification.yaml
 # Slugification — URL slug rules for a locale (transliteration, stop words, URL conventions)
 #
 # Tier: technical (always loaded together)
@@ -338,13 +338,13 @@ node:
 
 **Step 2: Verify YAML syntax**
 
-Run: `cd /Users/thibaut/supernovae-st/novanet-hq && python3 -c "import yaml; yaml.safe_load(open('packages/core/models/node-kinds/global/knowledge/slugification.yaml'))"`
+Run: `cd /Users/thibaut/supernovae-st/novanet-hq && python3 -c "import yaml; yaml.safe_load(open('packages/core/models/node-classes/global/knowledge/slugification.yaml'))"`
 Expected: No output (valid YAML)
 
 **Step 3: Commit**
 
 ```bash
-git add packages/core/models/node-kinds/global/knowledge/slugification.yaml
+git add packages/core/models/node-classes/global/knowledge/slugification.yaml
 git commit -m "feat(schema): add Slugification node-kind (knowledge tier: technical)
 
 Part of Locale Knowledge v10 refactor.
@@ -358,12 +358,12 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ### Task 3: Create Adaptation node-kind
 
 **Files:**
-- Create: `packages/core/models/node-kinds/global/knowledge/adaptation.yaml`
+- Create: `packages/core/models/node-classes/global/knowledge/adaptation.yaml`
 
 **Step 1: Write the node-kind YAML**
 
 ```yaml
-# packages/core/models/node-kinds/global/knowledge/adaptation.yaml
+# packages/core/models/node-classes/global/knowledge/adaptation.yaml
 # Adaptation — Content adaptation rules for a locale (length preferences, structure, SEO)
 #
 # Tier: technical (always loaded together)
@@ -491,13 +491,13 @@ node:
 
 **Step 2: Verify YAML syntax**
 
-Run: `cd /Users/thibaut/supernovae-st/novanet-hq && python3 -c "import yaml; yaml.safe_load(open('packages/core/models/node-kinds/global/knowledge/adaptation.yaml'))"`
+Run: `cd /Users/thibaut/supernovae-st/novanet-hq && python3 -c "import yaml; yaml.safe_load(open('packages/core/models/node-classes/global/knowledge/adaptation.yaml'))"`
 Expected: No output (valid YAML)
 
 **Step 3: Commit**
 
 ```bash
-git add packages/core/models/node-kinds/global/knowledge/adaptation.yaml
+git add packages/core/models/node-classes/global/knowledge/adaptation.yaml
 git commit -m "feat(schema): add Adaptation node-kind (knowledge tier: technical)
 
 Part of Locale Knowledge v10 refactor.
@@ -511,12 +511,12 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ### Task 4: Create Style node-kind (merge voice + identity)
 
 **Files:**
-- Create: `packages/core/models/node-kinds/global/knowledge/style.yaml`
+- Create: `packages/core/models/node-classes/global/knowledge/style.yaml`
 
 **Step 1: Write the node-kind YAML**
 
 ```yaml
-# packages/core/models/node-kinds/global/knowledge/style.yaml
+# packages/core/models/node-classes/global/knowledge/style.yaml
 # Style — Communication style for a locale (tone, formality, directness, warmth, humor, identity)
 #
 # Tier: style (loaded as cohesive unit)
@@ -724,13 +724,13 @@ node:
 
 **Step 2: Verify YAML syntax**
 
-Run: `cd /Users/thibaut/supernovae-st/novanet-hq && python3 -c "import yaml; yaml.safe_load(open('packages/core/models/node-kinds/global/knowledge/style.yaml'))"`
+Run: `cd /Users/thibaut/supernovae-st/novanet-hq && python3 -c "import yaml; yaml.safe_load(open('packages/core/models/node-classes/global/knowledge/style.yaml'))"`
 Expected: No output (valid YAML)
 
 **Step 3: Commit**
 
 ```bash
-git add packages/core/models/node-kinds/global/knowledge/style.yaml
+git add packages/core/models/node-classes/global/knowledge/style.yaml
 git commit -m "feat(schema): add Style node-kind (merges voice + identity)
 
 Part of Locale Knowledge v10 refactor.
@@ -746,12 +746,12 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ### Task 5: Create TermSet node-kind template
 
 **Files:**
-- Create: `packages/core/models/node-kinds/global/knowledge/term-set.yaml`
+- Create: `packages/core/models/node-classes/global/knowledge/term-set.yaml`
 
 **Step 1: Write the node-kind YAML**
 
 ```yaml
-# packages/core/models/node-kinds/global/knowledge/term-set.yaml
+# packages/core/models/node-classes/global/knowledge/term-set.yaml
 # TermSet — Domain-specific vocabulary for a locale
 #
 # Tier: semantic (contextual retrieval by domain)
@@ -861,13 +861,13 @@ node:
 
 **Step 2: Verify YAML syntax**
 
-Run: `cd /Users/thibaut/supernovae-st/novanet-hq && python3 -c "import yaml; yaml.safe_load(open('packages/core/models/node-kinds/global/knowledge/term-set.yaml'))"`
+Run: `cd /Users/thibaut/supernovae-st/novanet-hq && python3 -c "import yaml; yaml.safe_load(open('packages/core/models/node-classes/global/knowledge/term-set.yaml'))"`
 Expected: No output (valid YAML)
 
 **Step 3: Commit**
 
 ```bash
-git add packages/core/models/node-kinds/global/knowledge/term-set.yaml
+git add packages/core/models/node-classes/global/knowledge/term-set.yaml
 git commit -m "feat(schema): add TermSet node-kind (6 domains: pricing/features/technical/marketing/support/general)
 
 Part of Locale Knowledge v10 refactor.
@@ -883,12 +883,12 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ### Task 6: Create ExpressionSet node-kind
 
 **Files:**
-- Create: `packages/core/models/node-kinds/global/knowledge/expression-set.yaml`
+- Create: `packages/core/models/node-classes/global/knowledge/expression-set.yaml`
 
 **Step 1: Write the node-kind YAML**
 
 ```yaml
-# packages/core/models/node-kinds/global/knowledge/expression-set.yaml
+# packages/core/models/node-classes/global/knowledge/expression-set.yaml
 # ExpressionSet — Register-specific expressions and idioms for a locale
 #
 # Tier: semantic (contextual retrieval by register)
@@ -995,13 +995,13 @@ node:
 
 **Step 2: Verify YAML syntax**
 
-Run: `cd /Users/thibaut/supernovae-st/novanet-hq && python3 -c "import yaml; yaml.safe_load(open('packages/core/models/node-kinds/global/knowledge/expression-set.yaml'))"`
+Run: `cd /Users/thibaut/supernovae-st/novanet-hq && python3 -c "import yaml; yaml.safe_load(open('packages/core/models/node-classes/global/knowledge/expression-set.yaml'))"`
 Expected: No output (valid YAML)
 
 **Step 3: Commit**
 
 ```bash
-git add packages/core/models/node-kinds/global/knowledge/expression-set.yaml
+git add packages/core/models/node-classes/global/knowledge/expression-set.yaml
 git commit -m "feat(schema): add ExpressionSet node-kind (3 registers: formal/neutral/casual)
 
 Part of Locale Knowledge v10 refactor.
@@ -1017,12 +1017,12 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ### Task 7: Create PatternSet node-kind
 
 **Files:**
-- Create: `packages/core/models/node-kinds/global/knowledge/pattern-set.yaml`
+- Create: `packages/core/models/node-classes/global/knowledge/pattern-set.yaml`
 
 **Step 1: Write the node-kind YAML**
 
 ```yaml
-# packages/core/models/node-kinds/global/knowledge/pattern-set.yaml
+# packages/core/models/node-classes/global/knowledge/pattern-set.yaml
 # PatternSet — Usage-specific content patterns for a locale
 #
 # Tier: semantic (contextual retrieval by usage)
@@ -1125,13 +1125,13 @@ node:
 
 **Step 2: Verify YAML syntax**
 
-Run: `cd /Users/thibaut/supernovae-st/novanet-hq && python3 -c "import yaml; yaml.safe_load(open('packages/core/models/node-kinds/global/knowledge/pattern-set.yaml'))"`
+Run: `cd /Users/thibaut/supernovae-st/novanet-hq && python3 -c "import yaml; yaml.safe_load(open('packages/core/models/node-classes/global/knowledge/pattern-set.yaml'))"`
 Expected: No output (valid YAML)
 
 **Step 3: Commit**
 
 ```bash
-git add packages/core/models/node-kinds/global/knowledge/pattern-set.yaml
+git add packages/core/models/node-classes/global/knowledge/pattern-set.yaml
 git commit -m "feat(schema): add PatternSet node-kind (4 usages: cta/headlines/body/social)
 
 Part of Locale Knowledge v10 refactor.
@@ -1147,12 +1147,12 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ### Task 8: Create CultureSet node-kind
 
 **Files:**
-- Create: `packages/core/models/node-kinds/global/knowledge/culture-set.yaml`
+- Create: `packages/core/models/node-classes/global/knowledge/culture-set.yaml`
 
 **Step 1: Write the node-kind YAML**
 
 ```yaml
-# packages/core/models/node-kinds/global/knowledge/culture-set.yaml
+# packages/core/models/node-classes/global/knowledge/culture-set.yaml
 # CultureSet — Type-specific cultural knowledge for a locale
 #
 # Tier: semantic (contextual retrieval by type)
@@ -1323,13 +1323,13 @@ node:
 
 **Step 2: Verify YAML syntax**
 
-Run: `cd /Users/thibaut/supernovae-st/novanet-hq && python3 -c "import yaml; yaml.safe_load(open('packages/core/models/node-kinds/global/knowledge/culture-set.yaml'))"`
+Run: `cd /Users/thibaut/supernovae-st/novanet-hq && python3 -c "import yaml; yaml.safe_load(open('packages/core/models/node-classes/global/knowledge/culture-set.yaml'))"`
 Expected: No output (valid YAML)
 
 **Step 3: Commit**
 
 ```bash
-git add packages/core/models/node-kinds/global/knowledge/culture-set.yaml
+git add packages/core/models/node-classes/global/knowledge/culture-set.yaml
 git commit -m "feat(schema): add CultureSet node-kind (4 types: values/references/celebrities/calendar)
 
 Part of Locale Knowledge v10 refactor.
@@ -1345,12 +1345,12 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ### Task 9: Create TabooSet node-kind
 
 **Files:**
-- Create: `packages/core/models/node-kinds/global/knowledge/taboo-set.yaml`
+- Create: `packages/core/models/node-classes/global/knowledge/taboo-set.yaml`
 
 **Step 1: Write the node-kind YAML**
 
 ```yaml
-# packages/core/models/node-kinds/global/knowledge/taboo-set.yaml
+# packages/core/models/node-classes/global/knowledge/taboo-set.yaml
 # TabooSet — Severity-specific taboos and constraints for a locale
 #
 # Tier: semantic (contextual retrieval by severity)
@@ -1501,13 +1501,13 @@ node:
 
 **Step 2: Verify YAML syntax**
 
-Run: `cd /Users/thibaut/supernovae-st/novanet-hq && python3 -c "import yaml; yaml.safe_load(open('packages/core/models/node-kinds/global/knowledge/taboo-set.yaml'))"`
+Run: `cd /Users/thibaut/supernovae-st/novanet-hq && python3 -c "import yaml; yaml.safe_load(open('packages/core/models/node-classes/global/knowledge/taboo-set.yaml'))"`
 Expected: No output (valid YAML)
 
 **Step 3: Commit**
 
 ```bash
-git add packages/core/models/node-kinds/global/knowledge/taboo-set.yaml
+git add packages/core/models/node-classes/global/knowledge/taboo-set.yaml
 git commit -m "feat(schema): add TabooSet node-kind (3 severities: avoid/careful/legal)
 
 Part of Locale Knowledge v10 refactor.
@@ -1523,12 +1523,12 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ### Task 10: Create AudienceSet node-kind
 
 **Files:**
-- Create: `packages/core/models/node-kinds/global/knowledge/audience-set.yaml`
+- Create: `packages/core/models/node-classes/global/knowledge/audience-set.yaml`
 
 **Step 1: Write the node-kind YAML**
 
 ```yaml
-# packages/core/models/node-kinds/global/knowledge/audience-set.yaml
+# packages/core/models/node-classes/global/knowledge/audience-set.yaml
 # AudienceSet — Segment-specific audience knowledge for a locale
 #
 # Tier: semantic (contextual retrieval by segment)
@@ -1670,13 +1670,13 @@ node:
 
 **Step 2: Verify YAML syntax**
 
-Run: `cd /Users/thibaut/supernovae-st/novanet-hq && python3 -c "import yaml; yaml.safe_load(open('packages/core/models/node-kinds/global/knowledge/audience-set.yaml'))"`
+Run: `cd /Users/thibaut/supernovae-st/novanet-hq && python3 -c "import yaml; yaml.safe_load(open('packages/core/models/node-classes/global/knowledge/audience-set.yaml'))"`
 Expected: No output (valid YAML)
 
 **Step 3: Commit**
 
 ```bash
-git add packages/core/models/node-kinds/global/knowledge/audience-set.yaml
+git add packages/core/models/node-classes/global/knowledge/audience-set.yaml
 git commit -m "feat(schema): add AudienceSet node-kind (3 segments: b2b/b2c/general)
 
 Part of Locale Knowledge v10 refactor.
@@ -1689,24 +1689,24 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 
 ## Phase 8: New Arc-Kinds (10 knowledge relationship arcs)
 
-### Task 11: Create knowledge arc-kinds
+### Task 11: Create knowledge arc-classes
 
 **Files:**
-- Create: `packages/core/models/arc-kinds/ownership/has-formatting.yaml`
-- Create: `packages/core/models/arc-kinds/ownership/has-slugification.yaml`
-- Create: `packages/core/models/arc-kinds/ownership/has-adaptation.yaml`
-- Create: `packages/core/models/arc-kinds/ownership/has-style.yaml`
-- Create: `packages/core/models/arc-kinds/ownership/has-terms.yaml`
-- Create: `packages/core/models/arc-kinds/ownership/has-expressions.yaml`
-- Create: `packages/core/models/arc-kinds/ownership/has-patterns.yaml`
-- Create: `packages/core/models/arc-kinds/ownership/has-culture.yaml`
-- Create: `packages/core/models/arc-kinds/ownership/has-taboos.yaml`
-- Create: `packages/core/models/arc-kinds/ownership/has-audience.yaml`
+- Create: `packages/core/models/arc-classes/ownership/has-formatting.yaml`
+- Create: `packages/core/models/arc-classes/ownership/has-slugification.yaml`
+- Create: `packages/core/models/arc-classes/ownership/has-adaptation.yaml`
+- Create: `packages/core/models/arc-classes/ownership/has-style.yaml`
+- Create: `packages/core/models/arc-classes/ownership/has-terms.yaml`
+- Create: `packages/core/models/arc-classes/ownership/has-expressions.yaml`
+- Create: `packages/core/models/arc-classes/ownership/has-patterns.yaml`
+- Create: `packages/core/models/arc-classes/ownership/has-culture.yaml`
+- Create: `packages/core/models/arc-classes/ownership/has-taboos.yaml`
+- Create: `packages/core/models/arc-classes/ownership/has-audience.yaml`
 
 **Step 1: Create all arc-kind YAMLs**
 
 ```yaml
-# packages/core/models/arc-kinds/ownership/has-formatting.yaml
+# packages/core/models/arc-classes/ownership/has-formatting.yaml
 arc:
   name: HAS_FORMATTING
   family: ownership
@@ -1719,7 +1719,7 @@ arc:
 ```
 
 ```yaml
-# packages/core/models/arc-kinds/ownership/has-slugification.yaml
+# packages/core/models/arc-classes/ownership/has-slugification.yaml
 arc:
   name: HAS_SLUGIFICATION
   family: ownership
@@ -1732,7 +1732,7 @@ arc:
 ```
 
 ```yaml
-# packages/core/models/arc-kinds/ownership/has-adaptation.yaml
+# packages/core/models/arc-classes/ownership/has-adaptation.yaml
 arc:
   name: HAS_ADAPTATION
   family: ownership
@@ -1745,7 +1745,7 @@ arc:
 ```
 
 ```yaml
-# packages/core/models/arc-kinds/ownership/has-style.yaml
+# packages/core/models/arc-classes/ownership/has-style.yaml
 arc:
   name: HAS_STYLE
   family: ownership
@@ -1758,7 +1758,7 @@ arc:
 ```
 
 ```yaml
-# packages/core/models/arc-kinds/ownership/has-terms.yaml
+# packages/core/models/arc-classes/ownership/has-terms.yaml
 arc:
   name: HAS_TERMS
   family: ownership
@@ -1776,7 +1776,7 @@ arc:
 ```
 
 ```yaml
-# packages/core/models/arc-kinds/ownership/has-expressions.yaml
+# packages/core/models/arc-classes/ownership/has-expressions.yaml
 arc:
   name: HAS_EXPRESSIONS
   family: ownership
@@ -1794,7 +1794,7 @@ arc:
 ```
 
 ```yaml
-# packages/core/models/arc-kinds/ownership/has-patterns.yaml
+# packages/core/models/arc-classes/ownership/has-patterns.yaml
 arc:
   name: HAS_PATTERNS
   family: ownership
@@ -1812,7 +1812,7 @@ arc:
 ```
 
 ```yaml
-# packages/core/models/arc-kinds/ownership/has-culture.yaml
+# packages/core/models/arc-classes/ownership/has-culture.yaml
 arc:
   name: HAS_CULTURE
   family: ownership
@@ -1830,7 +1830,7 @@ arc:
 ```
 
 ```yaml
-# packages/core/models/arc-kinds/ownership/has-taboos.yaml
+# packages/core/models/arc-classes/ownership/has-taboos.yaml
 arc:
   name: HAS_TABOOS
   family: ownership
@@ -1848,7 +1848,7 @@ arc:
 ```
 
 ```yaml
-# packages/core/models/arc-kinds/ownership/has-audience.yaml
+# packages/core/models/arc-classes/ownership/has-audience.yaml
 arc:
   name: HAS_AUDIENCE
   family: ownership
@@ -1867,14 +1867,14 @@ arc:
 
 **Step 2: Verify all arc-kind YAMLs**
 
-Run: `for f in has-formatting has-slugification has-adaptation has-style has-terms has-expressions has-patterns has-culture has-taboos has-audience; do python3 -c "import yaml; yaml.safe_load(open('packages/core/models/arc-kinds/ownership/${f}.yaml'))"; done`
+Run: `for f in has-formatting has-slugification has-adaptation has-style has-terms has-expressions has-patterns has-culture has-taboos has-audience; do python3 -c "import yaml; yaml.safe_load(open('packages/core/models/arc-classes/ownership/${f}.yaml'))"; done`
 Expected: No output (all valid)
 
 **Step 3: Commit**
 
 ```bash
-git add packages/core/models/arc-kinds/ownership/has-*.yaml
-git commit -m "feat(schema): add 10 knowledge arc-kinds for Locale Knowledge v10
+git add packages/core/models/arc-classes/ownership/has-*.yaml
+git commit -m "feat(schema): add 10 knowledge arc-classes for Locale Knowledge v10
 
 HAS_FORMATTING, HAS_SLUGIFICATION, HAS_ADAPTATION, HAS_STYLE (1:1)
 HAS_TERMS, HAS_EXPRESSIONS, HAS_PATTERNS, HAS_CULTURE, HAS_TABOOS, HAS_AUDIENCE (1:N with properties)
@@ -1886,56 +1886,56 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 
 ## Phase 9: Delete Old Node-Kinds
 
-### Task 12: Delete 14 old locale knowledge node-kinds
+### Task 12: Delete 14 old locale knowledge node-classes
 
 **Files:**
-- Delete: `packages/core/models/node-kinds/global/knowledge/locale-voice.yaml`
-- Delete: `packages/core/models/node-kinds/global/knowledge/locale-identity.yaml`
-- Delete: `packages/core/models/node-kinds/global/knowledge/locale-lexicon.yaml`
-- Delete: `packages/core/models/node-kinds/global/knowledge/locale-culture.yaml`
-- Delete: `packages/core/models/node-kinds/global/knowledge/locale-culture-references.yaml`
-- Delete: `packages/core/models/node-kinds/global/knowledge/locale-market.yaml`
-- Delete: `packages/core/models/node-kinds/global/knowledge/locale-rules-formatting.yaml`
-- Delete: `packages/core/models/node-kinds/global/knowledge/locale-rules-adaptation.yaml`
-- Delete: `packages/core/models/node-kinds/global/knowledge/locale-rules-slug.yaml`
-- Delete: `packages/core/models/node-kinds/global/knowledge/constraint.yaml`
-- Delete: `packages/core/models/node-kinds/global/knowledge/expression.yaml`
-- Delete: `packages/core/models/node-kinds/global/knowledge/metaphor.yaml`
-- Delete: `packages/core/models/node-kinds/global/knowledge/pattern.yaml`
-- Delete: `packages/core/models/node-kinds/global/knowledge/reference.yaml`
+- Delete: `packages/core/models/node-classes/global/knowledge/locale-voice.yaml`
+- Delete: `packages/core/models/node-classes/global/knowledge/locale-identity.yaml`
+- Delete: `packages/core/models/node-classes/global/knowledge/locale-lexicon.yaml`
+- Delete: `packages/core/models/node-classes/global/knowledge/locale-culture.yaml`
+- Delete: `packages/core/models/node-classes/global/knowledge/locale-culture-references.yaml`
+- Delete: `packages/core/models/node-classes/global/knowledge/locale-market.yaml`
+- Delete: `packages/core/models/node-classes/global/knowledge/locale-rules-formatting.yaml`
+- Delete: `packages/core/models/node-classes/global/knowledge/locale-rules-adaptation.yaml`
+- Delete: `packages/core/models/node-classes/global/knowledge/locale-rules-slug.yaml`
+- Delete: `packages/core/models/node-classes/global/knowledge/constraint.yaml`
+- Delete: `packages/core/models/node-classes/global/knowledge/expression.yaml`
+- Delete: `packages/core/models/node-classes/global/knowledge/metaphor.yaml`
+- Delete: `packages/core/models/node-classes/global/knowledge/pattern.yaml`
+- Delete: `packages/core/models/node-classes/global/knowledge/reference.yaml`
 
 **Step 1: Delete old node-kind files**
 
 ```bash
 cd /Users/thibaut/supernovae-st/novanet-hq
-rm packages/core/models/node-kinds/global/knowledge/locale-voice.yaml
-rm packages/core/models/node-kinds/global/knowledge/locale-identity.yaml
-rm packages/core/models/node-kinds/global/knowledge/locale-lexicon.yaml
-rm packages/core/models/node-kinds/global/knowledge/locale-culture.yaml
-rm packages/core/models/node-kinds/global/knowledge/locale-culture-references.yaml
-rm packages/core/models/node-kinds/global/knowledge/locale-market.yaml
-rm packages/core/models/node-kinds/global/knowledge/locale-rules-formatting.yaml
-rm packages/core/models/node-kinds/global/knowledge/locale-rules-adaptation.yaml
-rm packages/core/models/node-kinds/global/knowledge/locale-rules-slug.yaml
-rm packages/core/models/node-kinds/global/knowledge/constraint.yaml
-rm packages/core/models/node-kinds/global/knowledge/expression.yaml
-rm packages/core/models/node-kinds/global/knowledge/metaphor.yaml
-rm packages/core/models/node-kinds/global/knowledge/pattern.yaml
-rm packages/core/models/node-kinds/global/knowledge/reference.yaml
+rm packages/core/models/node-classes/global/knowledge/locale-voice.yaml
+rm packages/core/models/node-classes/global/knowledge/locale-identity.yaml
+rm packages/core/models/node-classes/global/knowledge/locale-lexicon.yaml
+rm packages/core/models/node-classes/global/knowledge/locale-culture.yaml
+rm packages/core/models/node-classes/global/knowledge/locale-culture-references.yaml
+rm packages/core/models/node-classes/global/knowledge/locale-market.yaml
+rm packages/core/models/node-classes/global/knowledge/locale-rules-formatting.yaml
+rm packages/core/models/node-classes/global/knowledge/locale-rules-adaptation.yaml
+rm packages/core/models/node-classes/global/knowledge/locale-rules-slug.yaml
+rm packages/core/models/node-classes/global/knowledge/constraint.yaml
+rm packages/core/models/node-classes/global/knowledge/expression.yaml
+rm packages/core/models/node-classes/global/knowledge/metaphor.yaml
+rm packages/core/models/node-classes/global/knowledge/pattern.yaml
+rm packages/core/models/node-classes/global/knowledge/reference.yaml
 ```
 
 **Step 2: Verify deletion**
 
-Run: `ls packages/core/models/node-kinds/global/knowledge/`
+Run: `ls packages/core/models/node-classes/global/knowledge/`
 Expected: Only new files (formatting.yaml, slugification.yaml, adaptation.yaml, style.yaml, term-set.yaml, expression-set.yaml, pattern-set.yaml, culture-set.yaml, taboo-set.yaml, audience-set.yaml)
 
 **Step 3: Commit**
 
 ```bash
-git add -A packages/core/models/node-kinds/global/knowledge/
-git commit -m "refactor(schema): delete 14 old locale knowledge node-kinds
+git add -A packages/core/models/node-classes/global/knowledge/
+git commit -m "refactor(schema): delete 14 old locale knowledge node-classes
 
-Replaced by 10 new granular node-kinds in Locale Knowledge v10:
+Replaced by 10 new granular node-classes in Locale Knowledge v10:
 - locale-voice + locale-identity → Style
 - locale-rules-* → Formatting, Slugification, Adaptation
 - locale-lexicon, expression, metaphor → TermSet, ExpressionSet
@@ -1947,12 +1947,12 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 
 ---
 
-### Task 13: Delete old arc-kinds referencing deleted nodes
+### Task 13: Delete old arc-classes referencing deleted nodes
 
 **Files:**
-- Delete: `packages/core/models/arc-kinds/ownership/has-voice.yaml` (if exists)
-- Delete: `packages/core/models/arc-kinds/ownership/has-identity.yaml` (if exists)
-- Delete: `packages/core/models/arc-kinds/ownership/has-lexicon.yaml` (if exists)
+- Delete: `packages/core/models/arc-classes/ownership/has-voice.yaml` (if exists)
+- Delete: `packages/core/models/arc-classes/ownership/has-identity.yaml` (if exists)
+- Delete: `packages/core/models/arc-classes/ownership/has-lexicon.yaml` (if exists)
 - Update: `packages/core/models/relations.yaml` (remove old relations)
 
 **Step 1: Check for and delete old arc-kind files**
@@ -1960,13 +1960,13 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ```bash
 cd /Users/thibaut/supernovae-st/novanet-hq
 # Check which files exist
-ls packages/core/models/arc-kinds/ownership/ | grep -E "(voice|identity|lexicon|culture|market|rules)"
+ls packages/core/models/arc-classes/ownership/ | grep -E "(voice|identity|lexicon|culture|market|rules)"
 # Delete any that exist
-rm -f packages/core/models/arc-kinds/ownership/has-voice.yaml
-rm -f packages/core/models/arc-kinds/ownership/has-identity.yaml
-rm -f packages/core/models/arc-kinds/ownership/has-lexicon.yaml
-rm -f packages/core/models/arc-kinds/ownership/has-culture-refs.yaml
-rm -f packages/core/models/arc-kinds/ownership/has-market.yaml
+rm -f packages/core/models/arc-classes/ownership/has-voice.yaml
+rm -f packages/core/models/arc-classes/ownership/has-identity.yaml
+rm -f packages/core/models/arc-classes/ownership/has-lexicon.yaml
+rm -f packages/core/models/arc-classes/ownership/has-culture-refs.yaml
+rm -f packages/core/models/arc-classes/ownership/has-market.yaml
 ```
 
 **Step 2: Update relations.yaml to remove old relations**
@@ -1976,9 +1976,9 @@ Read `packages/core/models/relations.yaml` and remove any relations referencing 
 **Step 3: Commit**
 
 ```bash
-git add -A packages/core/models/arc-kinds/
+git add -A packages/core/models/arc-classes/
 git add packages/core/models/relations.yaml
-git commit -m "refactor(schema): remove old arc-kinds for deleted locale knowledge nodes
+git commit -m "refactor(schema): remove old arc-classes for deleted locale knowledge nodes
 
 Co-Authored-By: Claude <noreply@anthropic.com>"
 ```
@@ -2249,7 +2249,7 @@ git add packages/db/seed/
 git add packages/core/src/
 git commit -m "chore(generated): regenerate schema artifacts for Locale Knowledge v10
 
-10 new node-kinds, 10 new arc-kinds, 14 deleted node-kinds.
+10 new node-classes, 10 new arc-classes, 14 deleted node-classes.
 
 Co-Authored-By: Claude <noreply@anthropic.com>"
 ```
@@ -2286,7 +2286,7 @@ Expected: Database reset and seeded successfully
 
 Run: `cargo run -- tui`
 Expected:
-- Knowledge layer shows 10 node-kinds (not 14)
+- Knowledge layer shows 10 node-classes (not 14)
 - Kinds are grouped by tier (Technical, Style, Semantic)
 - No errors in console
 
@@ -2300,7 +2300,7 @@ git commit -m "feat(schema): complete Locale Knowledge v10 refactor
 - Technical tier: Formatting, Slugification, Adaptation
 - Style tier: Style (merged from voice + identity)
 - Semantic tier: TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet
-- 10 new arc-kinds for contextual retrieval
+- 10 new arc-classes for contextual retrieval
 - TUI shows tier groupings for better taxonomy understanding
 
 Closes design: docs/plans/2026-02-04-locale-knowledge-v10-design.md
@@ -2314,9 +2314,9 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 
 After implementation, verify:
 
-- [ ] 14 old node-kinds deleted from `global/knowledge/`
-- [ ] 10 new node-kinds created with `knowledge_tier` property
-- [ ] 10 new arc-kinds created in `ownership/`
+- [ ] 14 old node-classes deleted from `global/knowledge/`
+- [ ] 10 new node-classes created with `knowledge_tier` property
+- [ ] 10 new arc-classes created in `ownership/`
 - [ ] `relations.yaml` updated (old relations removed)
 - [ ] Rust parser supports `knowledge_tier` field
 - [ ] Kind generator emits `knowledge_tier` to Cypher

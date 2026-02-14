@@ -22,10 +22,10 @@ Master command for managing the NovaNet knowledge graph schema.
 ```
 YAML (Source of Truth)          TypeScript (Generated)         Neo4j (Runtime)
 packages/core/models/     -->   packages/core/src/types/  -->  bolt://localhost:7687
-├── node-kinds/                 ├── index.ts
+├── node-classes/                 ├── index.ts
 │   ├── shared/                 └── locale-knowledge.ts
 │   └── org/
-├── arc-kinds/
+├── arc-classes/
 └── taxonomy.yaml
 ```
 
@@ -39,7 +39,7 @@ Show current schema statistics:
 
 ```bash
 # Count YAML node definitions
-find packages/core/models/node-kinds -name "*.yaml" | wc -l
+find packages/core/models/node-classes -name "*.yaml" | wc -l
 
 # Validate sync
 novanet schema validate

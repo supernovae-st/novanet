@@ -36,8 +36,8 @@ print_taxonomy_summary
 # Optional: Validate YAML syntax
 if [ "$YAML_CHECK" = true ]; then
   echo -e "${BLUE}Validating YAML syntax...${NC}"
-  validate_yaml_directory "packages/core/models/node-kinds" "Node classes"
-  validate_yaml_directory "packages/core/models/arc-kinds" "Arc classes"
+  validate_yaml_directory "packages/core/models/node-classes" "Node classes"
+  validate_yaml_directory "packages/core/models/arc-classes" "Arc classes"
   echo ""
 fi
 
@@ -54,7 +54,7 @@ check_file() {
   if grep -qE "nodes/\s*←|nodes/.*\.yaml|models/nodes/" "$file" 2>/dev/null; then
     # Exclude historical notes and migration documentation
     if ! grep -E "nodes/\s*←|nodes/.*\.yaml|models/nodes/" "$file" 2>/dev/null | grep -qE "→|->|renamed|was |former|deprecated|legacy"; then
-      echo -e "${RED}ERROR${NC}: $file references deprecated 'nodes/' path (should be 'node-kinds/')"
+      echo -e "${RED}ERROR${NC}: $file references deprecated 'nodes/' path (should be 'node-classes/')"
       ((ISSUES++))
       file_issues=1
     fi
@@ -134,13 +134,13 @@ if [ $exit_code -ne 0 ]; then
   echo ""
   echo "Source of Truth:"
   echo "  packages/core/models/"
-  echo "  ├── node-kinds/       ← $NODE_COUNT NodeClass YAMLs"
-  echo "  ├── arc-kinds/        ← $ARC_COUNT ArcClass YAMLs"
+  echo "  ├── node-classes/       ← $NODE_COUNT NodeClass YAMLs"
+  echo "  ├── arc-classes/        ← $ARC_COUNT ArcClass YAMLs"
   echo "  ├── taxonomy.yaml     ← Realms, Layers, Traits, ArcFamilies"
-  echo "  └── relations.yaml    ← (deprecated, use arc-kinds/)"
+  echo "  └── relations.yaml    ← (deprecated, use arc-classes/)"
   echo ""
   echo "To fix:"
-  echo "  - 'nodes/' → 'node-kinds/'"
+  echo "  - 'nodes/' → 'node-classes/'"
   echo "  - 'organizing-principles.yaml' → 'taxonomy.yaml'"
   echo "  - 'Concept' → 'Entity'"
   echo "  - 'USES_CONCEPT' → 'USES_ENTITY'"

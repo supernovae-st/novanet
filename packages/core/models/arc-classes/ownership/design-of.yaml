@@ -1,0 +1,23 @@
+# packages/core/models/arc-classes/ownership/design-of.yaml
+# ArcKind: DESIGN_OF — BrandDesign belongs to Brand (inverse of HAS_DESIGN)
+#
+# v0.12.5: ADR-028 Brand Architecture
+
+arc:
+  name: DESIGN_OF
+  family: ownership
+  scope: intra_realm
+
+  source: BrandDesign
+  target: Brand
+  cardinality: one_to_one
+
+  inverse_of: HAS_DESIGN
+
+  llm_context: |
+    USE: when finding which Brand owns a BrandDesign.
+    TRIGGERS: "design owner", "design brand", "which brand".
+    NOT: for loading design for a brand (use HAS_DESIGN).
+    RELATES: BrandDesign (source), Brand (target), HAS_DESIGN (inverse).
+
+  cypher_pattern: "(BrandDesign)-[:DESIGN_OF]->(Brand)"

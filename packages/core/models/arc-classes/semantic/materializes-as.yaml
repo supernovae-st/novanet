@@ -1,0 +1,27 @@
+# packages/core/models/arc-classes/semantic/materializes-as.yaml
+# ArcKind: MATERIALIZES_AS — Entity materializes as Page(s) (v10.3)
+
+arc:
+  name: MATERIALIZES_AS
+  family: semantic
+  scope: intra_realm
+  temperature_threshold: 0.7  # v10.3: Entity→page materialization (high priority)
+
+  source: Entity
+  target: Page
+  cardinality: many_to_many
+
+  properties:
+    - name: role
+      type: string
+      required: false
+      enum: [primary, secondary, comparison]
+      description: "How the entity materializes on the page"
+
+  llm_context: |
+    USE: when finding which pages an entity materializes as.
+    TRIGGERS: entity pages, materialization, entity to page, dedicated page.
+    NOT: page representation (use REPRESENTS), entity usage (use USES_ENTITY).
+    RELATES: Entity (source), Page (target), role (property: primary/secondary).
+
+  cypher_pattern: "(Entity)-[:MATERIALIZES_AS {role}]->(Page)"

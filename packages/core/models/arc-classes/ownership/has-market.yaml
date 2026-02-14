@@ -1,0 +1,16 @@
+# packages/core/models/arc-classes/ownership/has-market.yaml
+# v10.7: NEW arc for 7-node locale knowledge architecture
+# Links Locale to its Market intelligence configuration
+arc:
+  name: HAS_MARKET
+  family: ownership
+  scope: intra_realm
+  source: Locale
+  target: Market
+  cardinality: one_to_one
+  llm_context: |
+    USE: when loading market intelligence config for a locale.
+    TRIGGERS: market config, locale market, market intelligence, business context.
+    NOT: SEO keywords (use HAS_SEO_KEYWORDS), GEO queries (use HAS_GEO_QUERIES).
+    RELATES: Locale (source), Market (target), 1:1 cardinality.
+  cypher_pattern: (Locale)-[:HAS_MARKET]->(Market)

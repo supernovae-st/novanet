@@ -93,7 +93,7 @@ pub struct ValidationIssue {
 
 // Usage:
 issue.error("realm_mismatch", "Page: path doesn't contain realm 'org'")
-    .with_hint("Move file to packages/core/models/node-kinds/org/...")
+    .with_hint("Move file to packages/core/models/node-classes/org/...")
 ```
 
 **Benefits**:
@@ -111,7 +111,7 @@ fn test_realm_layer_consistency() {
     // Test 1: File path matches YAML content
     for node in all_node_kinds() {
         let expected_path = format!(
-            "node-kinds/{}/{}/{}",
+            "node-classes/{}/{}/{}",
             node.realm, node.layer, node.name
         );
         assert!(node.source_path.to_string_lossy().contains(&expected_path));
@@ -243,7 +243,7 @@ fn check_path_content_match(result: &mut ValidationResult, data: &BlueprintData)
                     format!("{}: path doesn't contain realm '{}'",
                         node.def.name, node.realm)
                 ).with_hint(format!(
-                    "Move to: packages/core/models/node-kinds/{}/{}/{}.yaml",
+                    "Move to: packages/core/models/node-classes/{}/{}/{}.yaml",
                     node.realm, node.layer, node.def.name.to_lowercase()
                 ))
             );
@@ -293,7 +293,7 @@ cargo run -- schema validate
 # ✓ Path validation: 60/60 passed
 # ✗ Arc scope coherence: 2 errors
 #   - HAS_CONTENT: cross declared but intra_realm
-#     Fix: Update scope in arc-kinds/semantic/has-content.yaml
+#     Fix: Update scope in arc-classes/semantic/has-content.yaml
 ```
 
 ---

@@ -251,7 +251,7 @@ CONTENU = localisé (résolu 200×)
 - [x] Node/NodeData/NodeKind vocabulary
 - [x] Arc/ArcData/ArcKind vocabulary
 - [x] Symmetric taxonomy
-- [x] taxonomy.yaml, node-kinds/, arc-kinds/
+- [x] taxonomy.yaml, node-classes/, arc-classes/
 - [ ] 5-phase implementation
 
 ### V9.6 — Generation Domain

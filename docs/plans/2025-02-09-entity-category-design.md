@@ -13,12 +13,12 @@
 ## Task 1: Create EntityCategory Node Schema
 
 **Files:**
-- Create: `packages/core/models/node-kinds/global/config/entity-category.yaml`
+- Create: `packages/core/models/node-classes/global/config/entity-category.yaml`
 
 **Step 1: Write the YAML schema**
 
 ```yaml
-# models/node-kinds/global/config/entity-category.yaml
+# models/node-classes/global/config/entity-category.yaml
 # EntityCategory - Semantic classification for Entity nodes (v11.1)
 
 node:
@@ -122,13 +122,13 @@ node:
 
 **Step 2: Validate schema location**
 
-Run: `ls packages/core/models/node-kinds/global/config/`
+Run: `ls packages/core/models/node-classes/global/config/`
 Expected: Directory exists (may need to create)
 
 **Step 3: Commit**
 
 ```bash
-git add packages/core/models/node-kinds/global/config/entity-category.yaml
+git add packages/core/models/node-classes/global/config/entity-category.yaml
 git commit -m "feat(schema): add EntityCategory node type
 
 Introduces global/config EntityCategory for semantic classification
@@ -142,12 +142,12 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ## Task 2: Create BELONGS_TO Arc Schema
 
 **Files:**
-- Create: `packages/core/models/arc-kinds/semantic/belongs-to.yaml`
+- Create: `packages/core/models/arc-classes/semantic/belongs-to.yaml`
 
 **Step 1: Write the YAML schema**
 
 ```yaml
-# models/arc-kinds/semantic/belongs-to.yaml
+# models/arc-classes/semantic/belongs-to.yaml
 # BELONGS_TO - Entity to EntityCategory classification arc (v11.1)
 
 arc:
@@ -179,7 +179,7 @@ arc:
 **Step 2: Commit**
 
 ```bash
-git add packages/core/models/arc-kinds/semantic/belongs-to.yaml
+git add packages/core/models/arc-classes/semantic/belongs-to.yaml
 git commit -m "feat(schema): add BELONGS_TO arc type
 
 Cross-realm arc from Entity (tenant) to EntityCategory (global).
@@ -193,7 +193,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ## Task 3: Update Entity Schema (Remove type)
 
 **Files:**
-- Modify: `packages/core/models/node-kinds/tenant/semantic/entity.yaml`
+- Modify: `packages/core/models/node-classes/tenant/semantic/entity.yaml`
 
 **Step 1: Remove type property from Entity.yaml**
 
@@ -220,7 +220,7 @@ Remove `type: "THING"` etc. from all examples.
 **Step 4: Commit**
 
 ```bash
-git add packages/core/models/node-kinds/tenant/semantic/entity.yaml
+git add packages/core/models/node-classes/tenant/semantic/entity.yaml
 git commit -m "refactor(schema): remove Entity.type, add BELONGS_TO relation
 
 Entity classification now via BELONGS_TO arc to EntityCategory.

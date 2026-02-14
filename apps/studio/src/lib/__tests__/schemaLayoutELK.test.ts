@@ -125,7 +125,8 @@ describe('schemaLayoutELK', () => {
               label: 'Foundation',
               description: 'Core project identity',
               icon: '🏛️',
-              nodeTypes: ['Project', 'BrandIdentity', 'ProjectContent'] as never[],
+              // v0.12.4: BrandIdentity → Brand + BrandDesign + BrandPrinciples + PromptStyle
+              nodeTypes: ['Project', 'Brand', 'BrandDesign', 'BrandPrinciples', 'PromptStyle', 'ProjectContent'] as never[],
             },
             structure: {
               label: 'Structure',
@@ -150,9 +151,12 @@ describe('schemaLayoutELK', () => {
         { id: 'schema-Term', nodeType: 'Term', realm: 'shared', layer: 'knowledge', label: 'Term', description: '', trait: 'imported' },
         // Org realm - config (1)
         { id: 'schema-OrgConfig', nodeType: 'OrgConfig', realm: 'org', layer: 'config', label: 'Org Config', description: '', trait: 'defined' },
-        // Org realm - foundation (3)
+        // Org realm - foundation (6) — v0.12.4: Brand Architecture (ADR-028)
         { id: 'schema-Project', nodeType: 'Project', realm: 'org', layer: 'foundation', label: 'Project', description: '', trait: 'defined' },
-        { id: 'schema-BrandIdentity', nodeType: 'BrandIdentity', realm: 'org', layer: 'foundation', label: 'Brand Identity', description: '', trait: 'defined' },
+        { id: 'schema-Brand', nodeType: 'Brand', realm: 'org', layer: 'foundation', label: 'Brand', description: '', trait: 'defined' },
+        { id: 'schema-BrandDesign', nodeType: 'BrandDesign', realm: 'org', layer: 'foundation', label: 'Brand Design', description: '', trait: 'defined' },
+        { id: 'schema-BrandPrinciples', nodeType: 'BrandPrinciples', realm: 'org', layer: 'foundation', label: 'Brand Principles', description: '', trait: 'defined' },
+        { id: 'schema-PromptStyle', nodeType: 'PromptStyle', realm: 'org', layer: 'foundation', label: 'Prompt Style', description: '', trait: 'defined' },
         { id: 'schema-ProjectContent', nodeType: 'ProjectContent', realm: 'org', layer: 'foundation', label: 'Project Content', description: '', trait: 'authored' },
         // Org realm - structure (2)
         { id: 'schema-Page', nodeType: 'Page', realm: 'org', layer: 'structure', label: 'Page', description: '', trait: 'defined' },
@@ -163,9 +167,9 @@ describe('schemaLayoutELK', () => {
         { id: 'schema-arc-1', relationType: 'HAS_BLOCK', sourceType: 'Page', targetType: 'Block', label: 'HAS_BLOCK', description: '', cardinality: '1:N' },
       ] as SchemaArc[],
       stats: {
-        totalNodes: 13,
+        totalNodes: 16,  // v0.12.4: +3 Brand Architecture nodes (ADR-028)
         totalArcs: 2,
-        nodesByRealm: { shared: 7, org: 6 },
+        nodesByRealm: { shared: 7, org: 9 },
       },
     };
   });
@@ -180,8 +184,8 @@ describe('schemaLayoutELK', () => {
       const result = await applySchemaLayout(mockHierarchy);
 
       // Should have schema badge nodes + schema class nodes
-      // v11.3: 2 realm badges + 6 layer badges + 13 schema nodes = 21
-      expect(result.nodes.length).toBeGreaterThan(13);
+      // v0.12.4: 2 realm badges + 6 layer badges + 16 schema nodes = 24 (Brand Architecture)
+      expect(result.nodes.length).toBeGreaterThan(16);
 
       // All nodes should have positions
       for (const node of result.nodes) {
@@ -225,11 +229,11 @@ describe('schemaLayoutELK', () => {
       const result = await applySchemaLayout(mockHierarchy);
 
       const schemaNodes = result.nodes.filter(n => n.type === 'schemaNode');
-      expect(schemaNodes).toHaveLength(13);
+      expect(schemaNodes).toHaveLength(16);  // v0.12.4: +3 Brand Architecture nodes
 
       // v11.8 ADR-023: Connected by HAS_CLASS edges (not parent relationships)
       const hasClassEdges = result.edges.filter(e => e.data?.relationType === 'HAS_CLASS');
-      expect(hasClassEdges.length).toBe(13);
+      expect(hasClassEdges.length).toBe(16);  // v0.12.4: +3 Brand Architecture nodes
     });
 
     it('should position all nodes with valid coordinates', async () => {
@@ -248,13 +252,13 @@ describe('schemaLayoutELK', () => {
       const result = await applySchemaLayout(mockHierarchy);
 
       // v11.8 ADR-023: Total edges = HAS_LAYER + HAS_CLASS + business edges
-      // 6 HAS_LAYER + 13 HAS_CLASS + 2 business = 21
+      // v0.12.4: 6 HAS_LAYER + 16 HAS_CLASS + 2 business = 24 (Brand Architecture added)
       const hasLayerEdges = result.edges.filter(e => e.data?.relationType === 'HAS_LAYER');
       const hasClassEdges = result.edges.filter(e => e.data?.relationType === 'HAS_CLASS');
       const businessEdges = result.edges.filter(e => !e.data?.isMetaEdge);
 
       expect(hasLayerEdges.length).toBe(6);
-      expect(hasClassEdges.length).toBe(13);
+      expect(hasClassEdges.length).toBe(16);  // v0.12.4: +3 Brand Architecture nodes
       expect(businessEdges.length).toBe(2); // Original mock edges
     });
 

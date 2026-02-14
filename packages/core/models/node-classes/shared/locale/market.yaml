@@ -1,0 +1,183 @@
+# models/node-classes/shared/locale/market.yaml
+# Market — Market intelligence for a locale including demographics, digital maturity, e-commerce landscape, and consumer behavior
+#
+# v10.7: NEW node for 7-node locale knowledge architecture
+# Used for market-appropriate content strategy.
+# Stability: Medium - updates with economic changes
+
+node:
+  name: Market
+  realm: shared
+  layer: locale
+  trait: imported
+  icon:
+    web: "bar-chart-2"
+    terminal: "▣"
+  description: "Market intelligence for a locale including demographics, digital maturity, e-commerce landscape, and consumer behavior. Used for market-appropriate content strategy."
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Unique key (locale code)"
+      example: "fr-FR"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "French (France) Market"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "Market intelligence and consumer data for fr-FR"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints"
+      example: "USE: urgency, value propositions, platform references. TRIGGERS: pricing, payment mentions, tech familiarity. KEY: adapt for market maturity. NOT: cultural norms or formatting."
+
+    created_at:
+      type: datetime
+      required: true
+
+    updated_at:
+      type: datetime
+      required: true
+
+  properties:
+    # ═══════════════════════════════════════════════════════════════════════════
+    # TIER 1: INDEXED SCALARS (Cypher-queryable)
+    # ═══════════════════════════════════════════════════════════════════════════
+    population_millions:
+      type: float
+      required: true
+      description: "Population in millions"
+      example: 67.5
+
+    gdp_per_capita_usd:
+      type: integer
+      required: false
+      description: "GDP per capita in USD"
+      example: 42000
+      llm_context: "High GDP = emphasize premium/quality; Low GDP = emphasize value/affordability"
+
+    internet_penetration:
+      type: float
+      required: true
+      description: "Internet penetration rate (0.0-1.0)"
+      example: 0.92
+      llm_context: "High penetration = assume digital familiarity; Low = explain digital concepts"
+
+    mobile_penetration:
+      type: float
+      required: true
+      description: "Mobile device penetration rate (0.0-1.0)"
+      example: 0.98
+      llm_context: "High mobile = optimize for mobile-first UX references"
+
+    ecommerce_maturity:
+      type: string
+      required: true
+      enum: ["emerging", "growing", "mature", "advanced"]
+      description: "E-commerce market maturity level"
+      example: "mature"
+      llm_context: "Emerging = explain benefits; Advanced = assume familiarity"
+
+    digital_maturity_score:
+      type: integer
+      required: true
+      description: "Digital maturity score 0-100"
+      example: 78
+      llm_context: "Score indicates overall digital sophistication of the market"
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # TIER 2: STRUCTURED JSON (programmatic lookup)
+    # ═══════════════════════════════════════════════════════════════════════════
+    payment_methods:
+      type: json
+      required: true
+      description: "Payment method preferences with market share"
+      example:
+        - method: "card"
+          share: 0.45
+          providers: ["Visa", "Mastercard", "Carte Bancaire"]
+        - method: "bank_transfer"
+          share: 0.25
+          providers: ["SEPA"]
+        - method: "digital_wallet"
+          share: 0.20
+          providers: ["PayPal", "Apple Pay"]
+        - method: "cash_on_delivery"
+          share: 0.10
+          providers: []
+
+    popular_platforms:
+      type: json
+      required: true
+      description: "Popular e-commerce platforms with market share"
+      example:
+        - name: "Amazon"
+          market_share: 0.35
+          category: "marketplace"
+        - name: "Cdiscount"
+          market_share: 0.12
+          category: "marketplace"
+        - name: "Fnac"
+          market_share: 0.08
+          category: "retail"
+
+    social_networks:
+      type: json
+      required: true
+      description: "Social network penetration rates"
+      example:
+        - name: "Facebook"
+          penetration: 0.58
+        - name: "Instagram"
+          penetration: 0.49
+        - name: "TikTok"
+          penetration: 0.32
+        - name: "LinkedIn"
+          penetration: 0.28
+
+    demographics:
+      type: json
+      required: true
+      description: "Key demographic indicators"
+      example:
+        median_age: 42
+        urban_rate: 0.81
+        literacy_rate: 0.99
+        smartphone_ownership: 0.77
+        broadband_households: 0.82
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # TIER 3: LLM CONTEXT (narrative text)
+    # ═══════════════════════════════════════════════════════════════════════════
+    market_summary:
+      type: string
+      required: true
+      description: "200-word narrative summary of market context for LLM"
+      example: "France is a mature European market with high digital adoption and strong e-commerce infrastructure..."
+
+    buying_behavior:
+      type: string
+      required: false
+      description: "Consumer expectations and purchasing patterns"
+      example: "French consumers value quality over price, expect detailed product information, and prefer local payment methods..."
+
+    raw_markdown:
+      type: string
+      required: false
+      description: "Full source markdown for edge case reference"
+
+  relations:
+    incoming:
+      - type: HAS_MARKET
+        from: Locale
+        cardinality: "1:1"
+        description: "Locale has exactly one market intelligence config"

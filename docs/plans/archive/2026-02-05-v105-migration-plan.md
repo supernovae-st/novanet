@@ -40,14 +40,14 @@ MATCH (o:Organization) RETURN o.key, count(*);
 
 ### 1.2 Regenerate Arc-Kinds Seed
 
-**Issue:** HAS_COMPANY_PROJECT, HAS_PROJECT, BELONGS_TO_ORG missing from 02-arc-kinds.cypher
+**Issue:** HAS_COMPANY_PROJECT, HAS_PROJECT, BELONGS_TO_ORG missing from 02-arc-classes.cypher
 
 **Action:**
 ```bash
 cargo run -- schema generate
 ```
 
-**Verify these arcs appear in 02-arc-kinds.cypher:**
+**Verify these arcs appear in 02-arc-classes.cypher:**
 - HAS_COMPANY_PROJECT (Organization → Project, 1:1)
 - HAS_PROJECT (Organization → Project, 1:N)
 - BELONGS_TO_ORG (Project → Organization, N:1)
@@ -339,7 +339,7 @@ const REALM_CONFIG = {
 
 ### 4.1 Update _index.yaml
 
-**File:** `packages/core/models/arc-kinds/_index.yaml`
+**File:** `packages/core/models/arc-classes/_index.yaml`
 
 ```yaml
 # Update ownership count: 25 → 28 (or recalculate)
@@ -355,7 +355,7 @@ ownership:
 
 Actually, run this to get correct count:
 ```bash
-find packages/core/models/arc-kinds/ownership -name "*.yaml" ! -name "_index.yaml" | wc -l
+find packages/core/models/arc-classes/ownership -name "*.yaml" ! -name "_index.yaml" | wc -l
 ```
 
 ---
@@ -412,7 +412,7 @@ MATCH (o:Organization)-[:HAS_PROJECT]->(p:Project) RETURN o.key, collect(p.key);
 ╔═══════════════════════════════════════════════════════════════════════════════╗
 ║  BATCH 1: Schema Foundation (blocks everything)                               ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
-║  1. cargo run -- schema generate (regenerate arc-kinds)                       ║
+║  1. cargo run -- schema generate (regenerate arc-classes)                       ║
 ║  2. Add Organization constraint to 00-constraints.cypher                      ║
 ║  3. Create 03-organization.cypher seed file                                   ║
 ║  4. pnpm infra:reset && verify Organization in Neo4j                          ║
@@ -441,7 +441,7 @@ MATCH (o:Organization)-[:HAS_PROJECT]->(p:Project) RETURN o.key, collect(p.key);
 ╔═══════════════════════════════════════════════════════════════════════════════╗
 ║  BATCH 4: Verification & Cleanup                                              ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
-║  1. Update arc-kinds/_index.yaml                                              ║
+║  1. Update arc-classes/_index.yaml                                              ║
 ║  2. Run doc-audit.sh && skill-audit.sh                                        ║
 ║  3. Full test suite: cargo test && pnpm test                                  ║
 ║  4. Manual verification in Studio UI                                          ║
@@ -488,7 +488,7 @@ MATCH (o:Organization)-[:HAS_PROJECT]->(p:Project) RETURN o.key, collect(p.key);
 - `apps/studio/src/components/sidebar/FacetFilterPanel.tsx` (add org realm)
 - `apps/studio/src/app/api/graph/navigation/route.ts` (add org realm)
 - `apps/studio/src/components/query/ResultsOverview.tsx` (add org realm)
-- `packages/core/models/arc-kinds/_index.yaml` (sync counts)
+- `packages/core/models/arc-classes/_index.yaml` (sync counts)
 - 10+ files with comment updates (2 realms → 3 realms)
 
 **Estimated Time:** 2-3 hours for complete implementation

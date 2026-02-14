@@ -1999,7 +1999,7 @@ DELETE r;
 
 ### Phase 1: YAML Arc Definitions (P0)
 
-Create new arc YAML files in `packages/core/models/arc-kinds/`:
+Create new arc YAML files in `packages/core/models/arc-classes/`:
 
 #### Semantic Family (`semantic/`)
 
@@ -2061,15 +2061,15 @@ properties:
 #### Files to DELETE
 
 ```
-packages/core/models/node-kinds/org/instruction/page-structure.yaml
-packages/core/models/node-kinds/org/instruction/page-instruction.yaml
+packages/core/models/node-classes/org/instruction/page-structure.yaml
+packages/core/models/node-classes/org/instruction/page-instruction.yaml
 ```
 
 #### Arcs to DELETE
 
 ```
-packages/core/models/arc-kinds/ownership/has-structure.yaml  (Page→PageStructure)
-packages/core/models/arc-kinds/ownership/has-instruction.yaml  (Page→PageInstruction)
+packages/core/models/arc-classes/ownership/has-structure.yaml  (Page→PageStructure)
+packages/core/models/arc-classes/ownership/has-instruction.yaml  (Page→PageInstruction)
 ```
 
 > **Note**: BlockInstruction remains (Block→BlockInstruction via HAS_INSTRUCTION)
@@ -2272,6 +2272,6 @@ cargo run -- db seed
 - ADR-025: Instruction Layer Renaming
 - ADR-026: Inverse Arc Policy
 - ADR-028: Page-Entity Architecture (this design)
-- `packages/core/models/node-kinds/org/semantic/entity.yaml`
-- `packages/core/models/node-kinds/org/structure/page.yaml`
-- `packages/core/models/node-kinds/org/instruction/block-type.yaml`
+- `packages/core/models/node-classes/org/semantic/entity.yaml`
+- `packages/core/models/node-classes/org/structure/page.yaml`
+- `packages/core/models/node-classes/org/instruction/block-type.yaml`

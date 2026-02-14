@@ -97,10 +97,10 @@ llm_context: |
 
 ```bash
 # Create child-of.yaml
-packages/core/models/arc-kinds/ownership/child-of.yaml
+packages/core/models/arc-classes/ownership/child-of.yaml
 
 # Create instruction-of.yaml
-packages/core/models/arc-kinds/ownership/instruction-of.yaml
+packages/core/models/arc-classes/ownership/instruction-of.yaml
 ```
 
 **1.2 Migrate ProjectContent to Modern Format**
@@ -216,8 +216,8 @@ llm_context: |
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  1. YAML (source)                                                           │
-│     packages/core/models/node-kinds/*.yaml                                  │
-│     packages/core/models/arc-kinds/*.yaml                                   │
+│     packages/core/models/node-classes/*.yaml                                  │
+│     packages/core/models/arc-classes/*.yaml                                   │
 │     packages/core/models/taxonomy.yaml                                      │
 │                                                                             │
 │  2. Schema Generation                                                       │
@@ -280,8 +280,8 @@ pnpm dev
 
 ### Phase 1: Critical Fixes (Est: 2h)
 
-- [ ] Create `arc-kinds/ownership/child-of.yaml`
-- [ ] Create `arc-kinds/ownership/instruction-of.yaml`
+- [ ] Create `arc-classes/ownership/child-of.yaml`
+- [ ] Create `arc-classes/ownership/instruction-of.yaml`
 - [ ] Migrate `project-content.yaml` to v11 relation format
 - [ ] Run `cargo run -- schema validate`
 - [ ] Commit: `fix(schema): create missing inverse arcs`
@@ -398,18 +398,18 @@ llm_context: |
 ## Appendix C: Files to Modify
 
 ### New Files (4)
-- `arc-kinds/ownership/child-of.yaml`
-- `arc-kinds/ownership/instruction-of.yaml`
-- `arc-kinds/ownership/entity-of.yaml`
-- `arc-kinds/ownership/page-of.yaml`
+- `arc-classes/ownership/child-of.yaml`
+- `arc-classes/ownership/instruction-of.yaml`
+- `arc-classes/ownership/entity-of.yaml`
+- `arc-classes/ownership/page-of.yaml`
 
 ### Modified Files (Priority)
-1. `node-kinds/org/foundation/project-content.yaml` (relation format)
-2. `node-kinds/org/instruction/prompt-artifact.yaml` (add FOR_LOCALE)
-3. `node-kinds/shared/knowledge/geo-answer.yaml` (explicit incoming)
-4. `node-kinds/shared/knowledge/seo-keyword-metrics.yaml` (explicit incoming)
-5. `arc-kinds/ownership/has-child.yaml` (fix inverse ref)
-6. `arc-kinds/ownership/has-instruction.yaml` (fix inverse ref)
+1. `node-classes/org/foundation/project-content.yaml` (relation format)
+2. `node-classes/org/instruction/prompt-artifact.yaml` (add FOR_LOCALE)
+3. `node-classes/shared/knowledge/geo-answer.yaml` (explicit incoming)
+4. `node-classes/shared/knowledge/seo-keyword-metrics.yaml` (explicit incoming)
+5. `arc-classes/ownership/has-child.yaml` (fix inverse ref)
+6. `arc-classes/ownership/has-instruction.yaml` (fix inverse ref)
 
 ### llm_context Updates (Top 20)
 1. GEOQuerySet

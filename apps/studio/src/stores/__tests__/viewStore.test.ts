@@ -38,22 +38,22 @@ jest.mock('@/lib/logger', () => ({
   },
 }));
 
-// Sample test data (v11.6.1 unified view system)
+// Sample test data (v0.12.5 unified view system)
 const mockCategories: ViewCategoryGroup[] = [
   {
     id: 'data',
     name: 'Data',
     views: [
-      { id: 'data-complete', description: 'Complete data graph', cypher: 'MATCH (n) RETURN n', category: 'data' },
-      { id: 'data-realm-shared', description: 'Shared realm nodes', cypher: 'MATCH (n:Shared) RETURN n', category: 'data' },
+      { id: 'data-complete', name: 'Complete Data', description: 'Complete data graph', cypher: 'MATCH (n) RETURN n', category: 'data' },
+      { id: 'data-realm-shared', name: 'Shared Realm', description: 'Shared realm nodes', cypher: 'MATCH (n:Shared) RETURN n', category: 'data' },
     ],
   },
   {
     id: 'contextual',
     name: 'Contextual',
     views: [
-      // v11.6.1: Updated to use new unified view ID
-      { id: 'ctx-generation', description: 'Block generation view', cypher: 'MATCH (b:Block) RETURN b', category: 'contextual' },
+      // v0.12.5: Updated to use new unified view ID
+      { id: 'ctx-generation', name: 'Block Generation', description: 'Block generation view', cypher: 'MATCH (b:Block) RETURN b', category: 'contextual' },
     ],
   },
 ];

@@ -72,51 +72,62 @@ export interface CypherQuery {
 }
 
 // =============================================================================
-// VIEW REGISTRY
+// VIEW REGISTRY (v0.12.5: views.yaml format)
 // =============================================================================
 
 /**
- * View categories for UI grouping (v11.6.1).
- * - meta: Schema exploration (Realm, Layer, Class, ArcClass)
- * - data: Instance exploration by realm/layer/purpose
- * - overlay: Meta + Data combined for debugging
- * - contextual: Node-centered subgraphs
+ * View categories for UI grouping (v0.12.5).
+ * - schema: Schema exploration (Classes, ArcClasses)
+ * - data: Instance exploration (Project, Locales, Geography)
  * - generation: AI agent context assembly
+ * - contextual: Node-centered subgraphs
  */
-export type ViewCategory = 'meta' | 'data' | 'overlay' | 'contextual' | 'generation';
+export type ViewCategory = 'schema' | 'data' | 'generation' | 'contextual';
 
 /**
- * Navigation modes that a view supports.
- * Defined here (not imported from Studio) to avoid circular dependencies.
+ * Dual-format icon (web + terminal).
  */
-export type ViewNavigationMode = 'data' | 'meta' | 'overlay';
+export interface ViewIcon {
+  web: string;
+  terminal: string;
+}
 
 /**
- * View entry from _registry.yaml
+ * Category definition from views.yaml.
+ */
+export interface ViewCategoryDef {
+  label: string;
+  icon?: ViewIcon;
+  color?: string;
+  description?: string;
+}
+
+/**
+ * View entry from views.yaml (v0.12.5 format).
  */
 export interface ViewRegistryEntry {
   id: string;
+  name: string;
   description: string;
   category: ViewCategory;
-  /** Emoji icon for display */
-  icon?: string;
+  /** Dual-format icon (web + terminal) */
+  icon?: ViewIcon;
   /** Hex color for visual identity */
   color?: string;
-  /** Which navigation modes show this view */
-  modes?: ViewNavigationMode[];
+  /** Root node type (null for global views) */
+  root_type?: string | null;
   /** Whether this is a contextual view (shown in node sidebar) */
   contextual?: boolean;
   /** Node types this view applies to (for contextual views) */
   applicable_types?: string[];
-  /** Required params (e.g., ['realm', 'kind']) */
-  params?: string[];
-  /** Cypher query template (embedded in _registry.yaml) */
+  /** Cypher query template */
   cypher?: string;
 }
 
 export interface ViewRegistry {
   version: string;
   description?: string;
+  categories: Record<string, ViewCategoryDef>;
   views: ViewRegistryEntry[];
 }
 
@@ -126,5 +137,7 @@ export interface ViewRegistry {
 export interface ViewCategoryGroup {
   id: ViewCategory;
   name: string;
+  icon?: ViewIcon;
+  color?: string;
   views: ViewRegistryEntry[];
 }

@@ -26,14 +26,14 @@ get_version() {
   cat VERSION 2>/dev/null || echo "unknown"
 }
 
-# Count node-kinds (excluding _index.yaml)
+# Count node-classes (excluding _index.yaml)
 count_node_kinds() {
-  find packages/core/models/node-kinds -name "*.yaml" ! -name "_index.yaml" 2>/dev/null | wc -l | tr -d ' '
+  find packages/core/models/node-classes -name "*.yaml" ! -name "_index.yaml" 2>/dev/null | wc -l | tr -d ' '
 }
 
-# Count arc-kinds (excluding _index.yaml)
+# Count arc-classes (excluding _index.yaml)
 count_arc_kinds() {
-  find packages/core/models/arc-kinds -name "*.yaml" ! -name "_index.yaml" 2>/dev/null | wc -l | tr -d ' '
+  find packages/core/models/arc-classes -name "*.yaml" ! -name "_index.yaml" 2>/dev/null | wc -l | tr -d ' '
 }
 
 # Count realms from taxonomy.yaml (v11.8: 2 realms - shared, org)

@@ -1,0 +1,27 @@
+# packages/core/models/arc-classes/localization/classifies.yaml
+# ArcKind: CLASSIFIES — Classification category contains Locale (inverse of HAS_INCOME_LEVEL, HAS_LENDING_TYPE)
+#
+# v0.12.5: ADR-026 Inverse Arc Policy
+
+arc:
+  name: CLASSIFIES
+  family: localization
+  scope: intra_realm
+
+  source:
+    - IncomeGroup
+    - LendingCategory
+  target: Locale
+  cardinality: one_to_many
+
+  inverse_of:
+    - HAS_INCOME_LEVEL
+    - HAS_LENDING_TYPE
+
+  llm_context: |
+    USE: when finding all Locales in an economic classification.
+    TRIGGERS: "income group locales", "lending category members", "economic classification".
+    NOT: for finding a Locale's classification (use HAS_INCOME_LEVEL or HAS_LENDING_TYPE).
+    RELATES: IncomeGroup/LendingCategory (source), Locale (target), HAS_INCOME_LEVEL/HAS_LENDING_TYPE (inverse).
+
+  cypher_pattern: "(IncomeGroup|LendingCategory)-[:CLASSIFIES]->(Locale)"

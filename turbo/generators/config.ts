@@ -93,10 +93,10 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
     actions: (answers) => {
       const actions: PlopTypes.ActionType[] = [];
 
-      // 1. Create YAML schema file (v11.3 path: node-kinds/{realm}/{layer}/)
+      // 1. Create YAML schema file (v11.3 path: node-classes/{realm}/{layer}/)
       actions.push({
         type: 'add',
-        path: 'packages/core/models/node-kinds/{{realm}}/{{layer}}/{{kebabCase name}}.yaml',
+        path: 'packages/core/models/node-classes/{{realm}}/{{layer}}/{{kebabCase name}}.yaml',
         templateFile: 'templates/node.yaml.hbs',
       });
 
@@ -104,7 +104,7 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
       if (answers?.hasContent) {
         actions.push({
           type: 'add',
-          path: 'packages/core/models/node-kinds/{{realm}}/{{layer}}/{{kebabCase name}}-content.yaml',
+          path: 'packages/core/models/node-classes/{{realm}}/{{layer}}/{{kebabCase name}}-content.yaml',
           templateFile: 'templates/node-content.yaml.hbs',
         });
       }
@@ -113,7 +113,7 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
       actions.push(() => {
         return `
 Node created! Next steps:
-  1. Edit packages/core/models/node-kinds/${answers?.realm}/${answers?.layer}/${plop.getHelper('kebabCase')(answers?.name || '')}.yaml
+  1. Edit packages/core/models/node-classes/${answers?.realm}/${answers?.layer}/${plop.getHelper('kebabCase')(answers?.name || '')}.yaml
   2. Add properties specific to your node
   3. Run: cargo run -- schema generate
   4. Run: cargo run -- schema validate
@@ -242,7 +242,7 @@ View created! Next steps:
     actions: [
       {
         type: 'add',
-        path: 'packages/core/models/arc-kinds/{{family}}/{{kebabCase name}}.yaml',
+        path: 'packages/core/models/arc-classes/{{family}}/{{kebabCase name}}.yaml',
         template: `arc:
   name: {{name}}
   family: {{family}}
@@ -255,7 +255,7 @@ View created! Next steps:
       },
       () => `
 Arc created! Next steps:
-  1. Review packages/core/models/arc-kinds/{{family}}/{{kebabCase name}}.yaml
+  1. Review packages/core/models/arc-classes/{{family}}/{{kebabCase name}}.yaml
   2. Verify scope (intra_realm or cross_realm)
   3. Run: cargo run -- schema generate
   4. Run: cargo run -- schema validate

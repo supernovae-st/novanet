@@ -1,0 +1,216 @@
+# models/views.yaml
+# NovaNet Views - Single Source of Truth (v0.12.5)
+#
+# 10 essential views shared between TUI and Studio.
+# Categories: schema (2), data (3), generation (3), contextual (2)
+
+version: "0.12.5"
+description: NovaNet Essential Views (10 views)
+
+# =============================================================================
+# CATEGORIES
+# =============================================================================
+categories:
+  schema:
+    label: Schema
+    icon: { web: database, terminal: "◆" }
+    color: "#8b5cf6"  # violet-500
+    description: Schema exploration (Class, ArcClass)
+
+  data:
+    label: Data
+    icon: { web: boxes, terminal: "●" }
+    color: "#6366f1"  # indigo-500
+    description: Instance exploration
+
+  generation:
+    label: Generation
+    icon: { web: sparkles, terminal: "⚡" }
+    color: "#ec4899"  # pink-500
+    description: AI agent context assembly
+
+  contextual:
+    label: Contextual
+    icon: { web: eye, terminal: "◎" }
+    color: "#94a3b8"  # slate-400
+    description: Node-centered subgraphs
+
+# =============================================================================
+# VIEWS (10)
+# =============================================================================
+views:
+  # ---------------------------------------------------------------------------
+  # SCHEMA (2) - Schema exploration
+  # ---------------------------------------------------------------------------
+  - id: schema-complete
+    name: Complete Schema
+    description: All 61 Classes and 128 ArcClasses
+    category: schema
+    icon: { web: diamond, terminal: "◆" }
+    color: "#8b5cf6"
+    root_type: null
+    contextual: false
+    cypher: |
+      MATCH (n:Schema)
+      OPTIONAL MATCH (n)-[r]->(m:Schema)
+      RETURN n, r, m
+      LIMIT 500
+
+  - id: schema-arcs
+    name: Arc Families
+    description: ArcClasses grouped by family
+    category: schema
+    icon: { web: git-branch, terminal: "→" }
+    color: "#f59e0b"
+    root_type: null
+    contextual: false
+    cypher: |
+      MATCH (ac:Schema:ArcClass)-[r:BELONGS_TO_FAMILY]->(af:Schema:ArcFamily)
+      RETURN ac, r, af
+      LIMIT 200
+
+  # ---------------------------------------------------------------------------
+  # DATA (3) - Instance exploration
+  # ---------------------------------------------------------------------------
+  - id: data-project
+    name: Project Overview
+    description: Project with pages, entities, and brand
+    category: data
+    icon: { web: folder-kanban, terminal: "■" }
+    color: "#0ea5e9"
+    root_type: Project
+    contextual: true
+    applicable_types: [Project]
+    cypher: |
+      MATCH (p:Project {key: $nodeKey})
+      OPTIONAL MATCH (p)-[r1:HAS_ENTITY]->(e:Entity)
+      OPTIONAL MATCH (p)-[r2:HAS_PAGE]->(pg:Page)
+      OPTIONAL MATCH (p)-[r3:HAS_BRAND]->(b:Brand)
+      RETURN p, r1, e, r2, pg, r3, b
+      LIMIT 200
+
+  - id: data-locales
+    name: Locales
+    description: Locales with knowledge containers
+    category: data
+    icon: { web: languages, terminal: "●" }
+    color: "#22c55e"
+    root_type: Locale
+    contextual: false
+    cypher: |
+      MATCH (l:Locale)
+      OPTIONAL MATCH (l)-[r:HAS_EXPRESSIONS|HAS_CULTURE|HAS_FORMATTING|HAS_MARKET]->(container)
+      RETURN l, r, container
+      LIMIT 300
+
+  - id: data-geography
+    name: Geography
+    description: Continent > Region > SubRegion hierarchy
+    category: data
+    icon: { web: map, terminal: "◇" }
+    color: "#14b8a6"
+    root_type: Continent
+    contextual: false
+    cypher: |
+      MATCH (c:Continent)
+      OPTIONAL MATCH (r:GeoRegion)-[rel1:IN_CONTINENT]->(c)
+      OPTIONAL MATCH (s:GeoSubRegion)-[rel2:IN_REGION]->(r)
+      RETURN c, rel1, r, rel2, s
+      LIMIT 100
+
+  # ---------------------------------------------------------------------------
+  # GENERATION (3) - AI agent context assembly
+  # ---------------------------------------------------------------------------
+  - id: gen-page
+    name: Page Context
+    description: Full context for orchestrator to generate a page
+    category: generation
+    icon: { web: layout, terminal: "P" }
+    color: "#06b6d4"
+    root_type: Page
+    contextual: true
+    applicable_types: [Page]
+    cypher: |
+      MATCH (p:Page {key: $nodeKey})
+      OPTIONAL MATCH (p)-[r1:HAS_BLOCK]->(b:Block)
+      OPTIONAL MATCH (b)-[r2:USES_ENTITY]->(e:Entity)
+      OPTIONAL MATCH (e)-[r3:HAS_CONTENT]->(ec:EntityContent)
+      OPTIONAL MATCH (p)-[r4:REFERENCES_PAGE]->(ref:Page)
+      RETURN p, r1, b, r2, e, r3, ec, r4, ref
+      LIMIT 200
+
+  - id: gen-block
+    name: Block Context
+    description: Block context for sub-agent generation
+    category: generation
+    icon: { web: square, terminal: "B" }
+    color: "#10b981"
+    root_type: Block
+    contextual: true
+    applicable_types: [Block]
+    cypher: |
+      MATCH (b:Block {key: $nodeKey})
+      OPTIONAL MATCH (b)-[r1:USES_ENTITY]->(e:Entity)
+      OPTIONAL MATCH (e)-[r2:HAS_CONTENT]->(ec:EntityContent)
+      OPTIONAL MATCH (ec)-[r3:FOR_LOCALE]->(l:Locale)
+      OPTIONAL MATCH (b)-[r4:OF_TYPE]->(bt:BlockType)
+      OPTIONAL MATCH (b)<-[r5:HAS_BLOCK]-(p:Page)
+      RETURN b, r1, e, r2, ec, r3, l, r4, bt, r5, p
+      LIMIT 100
+
+  - id: gen-pipeline
+    name: Generation Pipeline
+    description: Full pipeline from instruction to output
+    category: generation
+    icon: { web: workflow, terminal: "⚡" }
+    color: "#ec4899"
+    root_type: Page
+    contextual: true
+    applicable_types: [Page, PageGenerated]
+    cypher: |
+      MATCH (p:Page {key: $nodeKey})
+      MATCH (l:Locale {key: $locale})
+      MATCH (p)-[r1:HAS_BLOCK]->(b:Block)-[r2:OF_TYPE]->(bt:BlockType)
+      OPTIONAL MATCH (b)-[r3:HAS_INSTRUCTION]->(bi:BlockInstruction)
+      MATCH (p)-[r4:REPRESENTS]->(e:Entity)
+      OPTIONAL MATCH (e)-[r5:HAS_CONTENT]->(ec:EntityContent)-[r6:FOR_LOCALE]->(l)
+      OPTIONAL MATCH (p)-[r7:HAS_GENERATED]->(pg:PageGenerated)-[r8:FOR_LOCALE]->(l)
+      OPTIONAL MATCH (pg)-[r9:ASSEMBLES]->(bg:BlockGenerated)
+      RETURN DISTINCT p, l, r1, b, r2, bt, r3, bi, r4, e, r5, ec, r6, r7, pg, r8, r9, bg
+      ORDER BY r1.order
+      LIMIT 200
+
+  # ---------------------------------------------------------------------------
+  # CONTEXTUAL (2) - Node-centered subgraphs
+  # ---------------------------------------------------------------------------
+  - id: ctx-neighbors
+    name: Neighbors
+    description: All direct connections (1 hop)
+    category: contextual
+    icon: { web: scan, terminal: "◎" }
+    color: "#f59e0b"
+    root_type: null
+    contextual: true
+    applicable_types: []  # All types
+    cypher: |
+      MATCH (root {key: $nodeKey})
+      OPTIONAL MATCH (root)-[r1]->(out) WHERE NOT out:Schema
+      OPTIONAL MATCH (in)-[r2]->(root) WHERE NOT in:Schema
+      RETURN root, r1, out, r2, in
+      LIMIT 100
+
+  - id: ctx-entity
+    name: Entity Details
+    description: Entity with content and relationships
+    category: contextual
+    icon: { web: link-2, terminal: "◈" }
+    color: "#06b6d4"
+    root_type: Entity
+    contextual: true
+    applicable_types: [Entity, EntityContent]
+    cypher: |
+      MATCH (e:Entity {key: $nodeKey})
+      OPTIONAL MATCH (e)-[r1]->(target) WHERE NOT target:Schema
+      OPTIONAL MATCH (source)-[r2]->(e) WHERE NOT source:Schema
+      RETURN e, r1, target, r2, source
+      LIMIT 100

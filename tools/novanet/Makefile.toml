@@ -440,7 +440,7 @@ fi
 # 5. Verify YAML node count matches expected
 echo ""
 echo "► [5/7] Verifying YAML node count..."
-YAML_COUNT=$(find ../../packages/core/models/node-kinds -name "*.yaml" 2>/dev/null | wc -l | tr -d ' ')
+YAML_COUNT=$(find ../../packages/core/models/node-classes -name "*.yaml" 2>/dev/null | wc -l | tr -d ' ')
 if [ "$YAML_COUNT" -eq "${NOVANET_NODE_COUNT}" ]; then
     echo "    YAML node count: $YAML_COUNT (matches ${NOVANET_VERSION})"
 else
@@ -451,8 +451,8 @@ fi
 # 6. Check layer count
 echo ""
 echo "► [6/7] Verifying layer structure..."
-SHARED_LAYERS=$(ls -d ../../packages/core/models/node-kinds/shared/*/ 2>/dev/null | wc -l | tr -d ' ')
-ORG_LAYERS=$(ls -d ../../packages/core/models/node-kinds/org/*/ 2>/dev/null | wc -l | tr -d ' ')
+SHARED_LAYERS=$(ls -d ../../packages/core/models/node-classes/shared/*/ 2>/dev/null | wc -l | tr -d ' ')
+ORG_LAYERS=$(ls -d ../../packages/core/models/node-classes/org/*/ 2>/dev/null | wc -l | tr -d ' ')
 TOTAL_LAYERS=$((SHARED_LAYERS + ORG_LAYERS))
 if [ "$TOTAL_LAYERS" -eq "${NOVANET_LAYER_COUNT}" ]; then
     echo "    Layer count: $TOTAL_LAYERS (${SHARED_LAYERS} shared + ${ORG_LAYERS} org)"
