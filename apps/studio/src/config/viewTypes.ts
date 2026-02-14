@@ -120,7 +120,7 @@ export const VIEW_TYPES: Record<ViewId, ViewTypeConfig> = {
     label: 'Brand',
     icon: '🎨',
     description: 'Brand identity configuration',
-    applicableTo: ['Project', 'BrandIdentity'],
+    applicableTo: ['Project', 'Brand'],  // v0.12.4: BrandIdentity → Brand
     style: 'tree',
     effect: 'color-wave',
     transitionColor: '#d946ef', // brand fuchsia

@@ -1,0 +1,17 @@
+# models/arc-kinds/ownership/has-principles.yaml
+# HAS_PRINCIPLES - Brand owns BrandPrinciples (ADR-028)
+
+arc:
+  name: HAS_PRINCIPLES
+  family: ownership
+  scope: intra_realm
+  source: Brand
+  target: BrandPrinciples
+  cardinality: one_to_one
+  required: false
+  inverse: PRINCIPLES_OF
+  llm_context: |
+    Brand has one BrandPrinciples (voice and tone guidelines).
+    Contains voice attributes, writing guidelines, terminology.
+    Use for copywriting and messaging consistency.
+  cypher_pattern: "(Brand)-[:HAS_PRINCIPLES]->(BrandPrinciples)"

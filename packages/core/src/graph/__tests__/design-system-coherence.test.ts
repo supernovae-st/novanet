@@ -34,23 +34,23 @@ const V11_6_ARCHITECTURE = {
   // 5 arc families
   arcFamilies: ['ownership', 'localization', 'semantic', 'generation', 'mining'] as const,
 
-  // Node counts (v0.12.0)
+  // Node counts (v0.12.4)
   nodeCounts: {
-    total: 59,
-    shared: 39,
-    org: 20,
+    total: 61,
+    shared: 40,
+    org: 21,
     byLayer: {
-      // shared layers
+      // shared layers — v0.12.4: Country added to geography
       'shared/config': 3,
       'shared/locale': 6,
-      'shared/geography': 6,
+      'shared/geography': 7,
       'shared/knowledge': 24,
-      // org layers
+      // org layers — v0.12.4: Brand Architecture (6 foundation), Instruction (4)
       'org/config': 1,
       'org/semantic': 4,
-      'org/foundation': 3,
+      'org/foundation': 6,
       'org/structure': 3,
-      'org/instruction': 6,
+      'org/instruction': 4,
       'org/output': 3,
     },
   },
@@ -301,10 +301,10 @@ describe('Design System Coherence: Arc Families', () => {
 // =============================================================================
 
 describe('Design System Coherence: Node Counts', () => {
-  it('should have exactly 59 total nodes', () => {
-    expect(NODE_TYPES).toHaveLength(59);
-    expect(Object.keys(NODE_LAYERS)).toHaveLength(59);
-    expect(Object.keys(CLASS_TAXONOMY)).toHaveLength(59);
+  it('should have exactly 61 total nodes', () => {
+    expect(NODE_TYPES).toHaveLength(61);
+    expect(Object.keys(NODE_LAYERS)).toHaveLength(61);
+    expect(Object.keys(CLASS_TAXONOMY)).toHaveLength(61);
   });
 
   it('should have correct node distribution by realm', () => {

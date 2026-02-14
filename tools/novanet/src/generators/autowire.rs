@@ -282,14 +282,14 @@ mod tests {
             .generate(root)
             .expect("should generate autowire cypher");
 
-        // v0.12.4: 58 OF_CLASS statements (ADR-028: -2 deleted, +1 Country)
+        // v0.12.4 + Brand Architecture: 61 OF_CLASS statements
         let of_class = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:OF_CLASS]"))
             .count();
         assert_eq!(
-            of_class, 58,
-            "expected 58 OF_CLASS statements (v0.12.4: 40 shared + 18 org)"
+            of_class, 61,
+            "expected 61 OF_CLASS statements (40 shared + 21 org)"
         );
 
         // 2 realms present (v11.3: shared + org)
@@ -306,8 +306,8 @@ mod tests {
         assert!(cypher.contains("Shared > Geography (7 types)")); // Continent, Region, etc. + Country
         assert!(cypher.contains("Shared > Knowledge (24 types)")); // v11.4: +2 containers, -4 obsolete
 
-        // v0.12.4: Header
-        assert!(cypher.contains("Total: 58 node types"));
+        // v0.12.4 + Brand Architecture: Header
+        assert!(cypher.contains("Total: 61 node types"));
 
         // Verification query present
         assert!(cypher.contains("VERIFICATION QUERY"));

@@ -1,6 +1,7 @@
 # packages/core/models/arc-kinds/localization/for-locale.yaml
 # ArcKind: FOR_LOCALE — All localized content nodes point to their target Locale
 # v10.2: SEOKeyword removed — now owned by Locale via HAS_SEO_KEYWORDS
+# v0.12.4: Added PromptStyle as source (ADR-028)
 
 arc:
   name: FOR_LOCALE
@@ -12,7 +13,10 @@ arc:
     - BlockGenerated
     - PageGenerated
     - OutputArtifact
+    - PromptStyle
   target: Locale
   cardinality: many_to_one
-  llm_context: All localized content nodes point to their target Locale.
-  cypher_pattern: (EntityContent)-[:FOR_LOCALE]->(Locale)
+  llm_context: |
+    All localized content nodes point to their target Locale.
+    PromptStyle can be locale-specific for cultural adaptation.
+  cypher_pattern: (EntityContent, PromptStyle)-[:FOR_LOCALE]->(Locale)

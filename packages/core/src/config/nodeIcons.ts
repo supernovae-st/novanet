@@ -23,8 +23,9 @@ export const NODE_ICONS: Record<NodeType, string> = {
   Culture: '🏺',
   Market: '📊',
 
-  // SHARED — geography (6)
+  // SHARED — geography (7) — v0.12.4: Country added
   Continent: '🗺️',
+  Country: '🏳️',
   GeoRegion: '🌐',
   GeoSubRegion: '🗾',
   IncomeGroup: '💰',
@@ -62,9 +63,12 @@ export const NODE_ICONS: Record<NodeType, string> = {
   // ORG — config (1) — v11.3: Organization + Tenant merged
   OrgConfig: '🏢',
 
-  // ORG — foundation (3)
+  // ORG — foundation (6) — v0.12.4: Brand Architecture
   Project: '📦',
-  BrandIdentity: '🎨',
+  Brand: '🎨',
+  BrandDesign: '🎨',
+  BrandPrinciples: '💡',
+  PromptStyle: '✨',
   ProjectContent: '🌐',
 
   // ORG — structure (3)
@@ -78,10 +82,8 @@ export const NODE_ICONS: Record<NodeType, string> = {
   AudiencePersona: '👤',
   ChannelSurface: '📡',
 
-  // ORG — instruction (6)
-  PageStructure: '📐',
+  // ORG — instruction (4) — v0.12.4: PageStructure, PageInstruction deleted
   BlockType: '📋',
-  PageInstruction: '📝',
   BlockInstruction: '📜',
   BlockRules: '📏',
   PromptArtifact: '📋',

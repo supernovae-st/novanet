@@ -2,13 +2,28 @@
 #
 # v0.12.0: Initial clean schema (ADR-025 naming conventions)
 
+# ------------------------------------------------------------------------------
+# SCHEMA: BlockType
+# ------------------------------------------------------------------------------
+#
+# ROLE:
+#   A BlockType is a reusable, INVARIANT template or 'mold'. It defines the
+#   expected JSON `structure` and links to validation `BlockRules` for a
+#   category of blocks (e.g., 'hero', 'faq'). It is the central schema for
+#   a given type of block.
+#
+# KEY RELATIONSHIPS:
+#   - <-[:OF_TYPE]-(Block): All the instances of this block type on various pages.
+#   - [:HAS_RULES]->(BlockRules): The reusable, versionable validation rules.
+#
+# ------------------------------------------------------------------------------
 node:
   name: BlockType
   realm: org
   layer: instruction
   trait: defined
   icon: "🔷"
-  description: "Template defining rules, structure, and locale-specific requirements for a type of block"
+  description: "A reusable template or 'mold' that defines the expected JSON structure and validation rules for a category of blocks (e.g., 'hero', 'faq'). This is the central schema for a given type of block."
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # STANDARD PROPERTIES (v7.1.0)
@@ -18,31 +33,31 @@ node:
     key:
       type: string
       required: true
-      description: "BlockType identifier. Format: blocktype-{identifier}"
-      pattern: "^blocktype-[a-z0-9-]+$"
+      description: "Unique identifier for the block template."
+      pattern: "^[a-z0-9-]+$"
       examples:
-        - "blocktype-hero"
-        - "blocktype-faq"
-        - "blocktype-pricing-table"
-        - "blocktype-testimonials"
+        - "hero-v1"
+        - "faq-accordion"
+        - "pricing-table"
+        - "testimonials-slider"
 
     display_name:
       type: string
       required: true
-      description: "Human-readable UI name"
-      example: "Hero Section"
+      description: "Human-readable UI name for the block type."
+      example: "Hero Section v1"
 
     description:
       type: string
       required: true
-      description: "One-line description of the block type"
-      example: "Full-width hero with title, subtitle, and CTA"
+      description: "One-line description of the block type's purpose and structure."
+      example: "A full-width hero with a title, subtitle, and a primary CTA button."
 
     llm_context:
       type: string
       required: true
-      description: "LLM generation hints. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation].'"
-      example: "USE: generate attention-grabbing hero sections. TRIGGERS: hero, header, banner, above-fold. NOT: body or footer content."
+      description: "LLM generation hints about the role of this block type. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation].'"
+      example: "USE: for creating attention-grabbing hero sections at the top of a page. TRIGGERS: hero, header, banner, above-fold. NOT: for body or footer content."
 
     created_at:
       type: datetime
@@ -61,14 +76,14 @@ node:
       type: string
       required: true
       enum: [header, body, footer, sidebar]
-      description: "Page section category"
+      description: "General layout category where this block type is typically used."
       example: "header"
 
     structure:
       type: string
       required: true
-      description: "JSON schema reference defining output structure"
-      example: "schemas/hero.json"
+      description: "Defines the expected JSON shape of the `generated` property on the `BlockGenerated` node. This ensures all generated content for this block type is consistent. Can be a reference to a JSON schema file."
+      example: "schemas/hero-v1.json"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # RELATIONS (FROM this node)
@@ -78,7 +93,7 @@ node:
     HAS_RULES:
       to: BlockRules
       cardinality: "1:N"
-      description: "Generation rules with versioning (v7.2.0)"
+      description: "Links to a reusable and versionable set of validation rules (BlockRules)."
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # EXAMPLE

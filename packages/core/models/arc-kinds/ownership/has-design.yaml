@@ -1,0 +1,17 @@
+# models/arc-kinds/ownership/has-design.yaml
+# HAS_DESIGN - Brand owns BrandDesign (ADR-028)
+
+arc:
+  name: HAS_DESIGN
+  family: ownership
+  scope: intra_realm
+  source: Brand
+  target: BrandDesign
+  cardinality: one_to_one
+  required: false
+  inverse: DESIGN_OF
+  llm_context: |
+    Brand has one BrandDesign (visual design system).
+    Contains colors, typography, UI patterns.
+    Use for image generation and visual consistency.
+  cypher_pattern: "(Brand)-[:HAS_DESIGN]->(BrandDesign)"

@@ -128,6 +128,16 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 18,
     layer: 'geography',
   },
+  // v0.12.4: Country added to shared/geography
+  Country: {
+    type: 'Country',
+    label: 'Country',
+    icon: '🏳️',
+    color: '#3b82f6',
+    colorClass: 'bg-blue-500',
+    size: 16,
+    layer: 'geography',
+  },
   GeoRegion: {
     type: 'GeoRegion',
     label: 'Geo Region',
@@ -378,13 +388,41 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 24,
     layer: 'foundation',
   },
-  BrandIdentity: {
-    type: 'BrandIdentity',
-    label: 'Brand Identity',
+  // v0.12.4: BrandIdentity → Brand, new Brand Architecture nodes
+  Brand: {
+    type: 'Brand',
+    label: 'Brand',
     icon: '🎨',
     color: '#6d28d9',
     colorClass: 'bg-violet-700',
     size: 18,
+    layer: 'foundation',
+  },
+  BrandDesign: {
+    type: 'BrandDesign',
+    label: 'Brand Design',
+    icon: '🎨',
+    color: '#7c3aed',
+    colorClass: 'bg-violet-600',
+    size: 16,
+    layer: 'foundation',
+  },
+  BrandPrinciples: {
+    type: 'BrandPrinciples',
+    label: 'Brand Principles',
+    icon: '📜',
+    color: '#8b5cf6',
+    colorClass: 'bg-violet-500',
+    size: 16,
+    layer: 'foundation',
+  },
+  PromptStyle: {
+    type: 'PromptStyle',
+    label: 'Prompt Style',
+    icon: '✨',
+    color: '#a78bfa',
+    colorClass: 'bg-violet-400',
+    size: 16,
     layer: 'foundation',
   },
   ProjectContent: {
@@ -469,17 +507,8 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
 
   // ==========================================================================
-  // ORG REALM — INSTRUCTION LAYER (7 nodes)
+  // ORG REALM — INSTRUCTION LAYER (4 nodes) — v0.12.4: PageStructure, PageInstruction deleted
   // ==========================================================================
-  PageStructure: {
-    type: 'PageStructure',
-    label: 'Page Structure',
-    icon: '📐',
-    color: '#2563eb',
-    colorClass: 'bg-blue-600',
-    size: 16,
-    layer: 'instruction',
-  },
   BlockType: {
     type: 'BlockType',
     label: 'Block Type',
@@ -487,15 +516,6 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#14b8a6',
     colorClass: 'bg-teal-500',
     size: 16,
-    layer: 'instruction',
-  },
-  PageInstruction: {
-    type: 'PageInstruction',
-    label: 'Page Instruction',
-    icon: '📝',
-    color: '#3b82f6',
-    colorClass: 'bg-blue-500',
-    size: 14,
     layer: 'instruction',
   },
   BlockInstruction: {

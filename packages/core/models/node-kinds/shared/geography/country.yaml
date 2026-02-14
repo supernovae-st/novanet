@@ -114,6 +114,48 @@ node:
       description: "Number of Locale nodes for this country"
       example: 1
 
+    # v0.12.4: AI generation properties
+    cultural_style:
+      type: json
+      required: false
+      description: "Country-specific cultural visual preferences for AI content generation"
+      properties:
+        color_preferences:
+          primary_colors: array    # Culturally significant colors
+          avoid_colors: array      # Colors with negative connotations
+          color_meanings: object   # Semantic meaning per color
+        visual_style:
+          aesthetic: string        # Overall aesthetic
+          motifs: array           # Cultural motifs and patterns
+        typography:
+          preferred_styles: array  # Preferred font styles
+          script_direction: string # ltr, rtl, vertical
+        cultural_codes:
+          symbols: array          # Positive symbols
+          avoid_symbols: array    # Symbols to avoid
+
+    visual_prompt:
+      type: json
+      required: false
+      description: "AI visual generation presets for image, video, illustration, product_3d"
+      properties:
+        image:
+          subject: object         # Subject description and elements
+          style: object           # Style modifiers and weighted_modifiers
+          color_palette: object   # Primary, secondary, avoid colors
+          composition: object     # Balance, focal point, framing
+          negative_prompts: object # Content, technical, style exclusions
+        video:
+          inherit_from: string    # Usually "image"
+          cinematography: object  # Camera movements, shot types, transitions
+          pacing: string          # fast, moderate, slow
+        illustration:
+          inherit_from: string    # Usually "image"
+          technique: string       # vector, watercolor, ink, digital
+        product_3d:
+          inherit_from: string    # Usually "image"
+          rendering: object       # Lighting, materials, environment
+
   # ═══════════════════════════════════════════════════════════════════════════════
   # RELATIONS
   # ═══════════════════════════════════════════════════════════════════════════════

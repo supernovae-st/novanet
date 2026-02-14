@@ -1,11 +1,13 @@
 # packages/core/models/arc-kinds/semantic/targets-persona.yaml
 # ArcKind: TARGETS_PERSONA - Content targets a specific audience persona
+# v0.12.4: Added Brand as source (ADR-028)
 arc:
   name: TARGETS_PERSONA
   family: semantic
   scope: intra_realm
 
   source:
+    - Brand
     - Page
     - Block
     - Entity
@@ -14,6 +16,7 @@ arc:
 
   llm_context: |
     Content is tailored for specific audience personas.
+    Brand defines target personas; content inherits or overrides.
     Use to load persona context: MATCH (b:Block)-[:TARGETS_PERSONA]->(p:AudiencePersona)
 
-  cypher_pattern: "(Page, Block, Entity)-[:TARGETS_PERSONA]->(AudiencePersona)"
+  cypher_pattern: "(Brand, Page, Block, Entity)-[:TARGETS_PERSONA]->(AudiencePersona)"

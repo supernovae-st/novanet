@@ -73,15 +73,16 @@ v11.5 refines the layer structure with Locale moved to shared/config:
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**Key changes in v11.5:**
-- **Locale moved**: Locale from shared/locale to shared/config (definitions layer pattern)
-- **SEO/GEO consolidation**: seo/geo layers removed from org, nodes moved to shared/knowledge
-- **59 nodes** total: 39 shared + 20 org
+**Key changes in v0.12.4:**
+- **Brand Architecture**: 4 new nodes (Brand, BrandDesign, BrandPrinciples, PromptStyle)
+- **Country added**: shared/geography now has 7 nodes (Country added)
+- **ADR-028**: PageStructure/PageInstruction removed, REFERENCES/HAS_KEYWORD arcs added
+- **61 nodes** total: 40 shared + 21 org, **128 arcs** (5 families)
 
-**Architecture (v11.5):**
+**Architecture (v0.12.4):**
 - 2 realms: SHARED + ORG
-- SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (39 nodes)
-- ORG (6 layers): config, foundation, structure, semantic, instruction, output (20 nodes)
+- SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (40 nodes)
+- ORG (6 layers): config, foundation, structure, semantic, instruction, output (21 nodes)
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
 All commands implemented: blueprint/data/overlay/query, node/arc CRUD, search, locale, db,
@@ -89,7 +90,7 @@ schema generate/validate, doc generate, filter build. Galaxy-themed TUI with uni
 
 **YAML-first architecture:** Each Class YAML has explicit `realm:` and `layer:` fields (source of truth).
 Path validation ensures `models/node-kinds/{realm}/{layer}/{name}.yaml` matches YAML content.
-v11.5: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 59 nodes.
+v0.12.4: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 61 nodes, 128 arcs.
 
 **Icons source of truth (v11.5):** `visual-encoding.yaml` → `icons:` section provides dual-format icons:
 - `web`: Lucide icon name for Studio
@@ -187,13 +188,13 @@ v11.7 introduces the Unified Tree where Realm, Layer, ArcFamily, ArcClass are al
 │     └─ [:USES_TERM], [:USES_EXPRESSION] on Block nodes                      │
 │                                                                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  STATISTICS (v11.5)                                                         │
+│  STATISTICS (v0.12.4)                                                       │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  Containers (6): TermSet, ExpressionSet, PatternSet,                        │
 │                  CultureSet, TabooSet, AudienceSet                          │
 │  Atoms (6):      Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait│
-│  Total:          59 nodes (39 shared + 20 org)                              │
+│  Total:          61 nodes (40 shared + 21 org)                              │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -352,7 +353,7 @@ pnpm dev    # → http://localhost:3000
 
 1. **Read this file** — Understand the generation philosophy (not translation)
 2. **Explore TUI** — `cargo run -- tui` in `tools/novanet/` for unified tree exploration (v11.7)
-3. **Read `models/_index.yaml`** — Complete schema overview with all 59 nodes
+3. **Read `models/_index.yaml`** — Complete schema overview with all 61 nodes
 4. **Study `taxonomy.yaml`** — Realm/Layer/Trait definitions with visual encoding
 5. **Check ADRs** — `.claude/rules/novanet-decisions.md` explains WHY decisions were made
 6. **Run Studio** — `pnpm dev` and explore the graph visually at http://localhost:3000

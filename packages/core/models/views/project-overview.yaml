@@ -1,8 +1,8 @@
 # models/views/project-overview.yaml
 id: project-overview
 name: Project Overview
-description: Project dashboard with pages, entities, and brand identity
-version: "11.6"
+description: Project dashboard with pages, entities, and brand
+version: "0.12.4"
 
 root:
   type: Project
@@ -11,7 +11,7 @@ include:
   - relation: HAS_PAGE
     direction: outgoing
 
-  - relation: HAS_BRAND_IDENTITY
+  - relation: HAS_BRAND
     direction: outgoing
 
   - relation: HAS_ENTITY

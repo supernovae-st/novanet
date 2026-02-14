@@ -18,8 +18,8 @@ import { REALM_HIERARCHY } from './hierarchy.js';
  */
 const NODE_LABELS: Record<NodeType, string> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // SHARED REALM (39 nodes) — 4 layers: config, locale, geography, knowledge
-  // v11.8.0: 59 total nodes (39 shared + 20 org)
+  // SHARED REALM (40 nodes) — 4 layers: config, locale, geography, knowledge
+  // v0.12.4: 61 total nodes (40 shared + 21 org)
   // ═══════════════════════════════════════════════════════════════════════════
   // config (3) — v11.5: Locale + EntityCategory + SEOKeywordFormat
   EntityCategory: 'Entity Category',
@@ -34,8 +34,9 @@ const NODE_LABELS: Record<NodeType, string> = {
   Culture: 'Culture',
   Market: 'Market',
 
-  // geography (6)
+  // geography (7) — v0.12.4: Country added
   Continent: 'Continent',
+  Country: 'Country',
   GeoRegion: 'Geo Region',
   GeoSubRegion: 'Geo Sub-Region',
   IncomeGroup: 'Income Group',
@@ -71,14 +72,17 @@ const NODE_LABELS: Record<NodeType, string> = {
   GEOAnswer: 'GEO Answer',
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // ORG REALM (20 nodes) — 6 layers
+  // ORG REALM (21 nodes) — 6 layers — v0.12.4: Brand Architecture
   // ═══════════════════════════════════════════════════════════════════════════
   // config (1) — v11.3: Organization + Tenant merged
   OrgConfig: 'Org Config',
 
-  // foundation (3)
+  // foundation (6) — v0.12.4: Brand Architecture
   Project: 'Project',
-  BrandIdentity: 'Brand Identity',
+  Brand: 'Brand',
+  BrandDesign: 'Brand Design',
+  BrandPrinciples: 'Brand Principles',
+  PromptStyle: 'Prompt Style',
   ProjectContent: 'Project Content',
 
   // structure (3)
@@ -92,10 +96,8 @@ const NODE_LABELS: Record<NodeType, string> = {
   AudiencePersona: 'Audience Persona',
   ChannelSurface: 'Channel Surface',
 
-  // instruction (6)
-  PageStructure: 'Page Structure',
+  // instruction (4) — v0.12.4: PageStructure, PageInstruction deleted
   BlockType: 'Block Type',
-  PageInstruction: 'Page Instruction',
   BlockInstruction: 'Block Instruction',
   BlockRules: 'Block Rules',
   PromptArtifact: 'Prompt Artifact',
