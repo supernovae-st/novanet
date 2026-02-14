@@ -1,0 +1,24 @@
+# packages/core/models/arc-kinds/ownership/has-subrealm.yaml
+# ArcKind: HAS_SUBREALM — CulturalRealm contains CulturalSubRealm (inverse of PART_OF_REALM)
+#
+# v0.12.5: ADR-026 Inverse Arc Policy
+
+arc:
+  name: HAS_SUBREALM
+  family: ownership
+  scope: intra_realm
+
+  source: CulturalRealm
+  target: CulturalSubRealm
+  cardinality: one_to_many
+
+  inverse_of: PART_OF_REALM
+
+  llm_context: |
+    USE: when finding all cultural sub-realms of a cultural realm.
+    TRIGGERS: "cultural sub-realms", "realm members", "which sub-realms".
+    NOT: for finding a sub-realm's parent (use PART_OF_REALM).
+    RELATES: CulturalRealm (source), CulturalSubRealm (target), PART_OF_REALM (inverse).
+    Example: Occidental -[:HAS_SUBREALM]-> Mediterranean, Anglo
+
+  cypher_pattern: "(CulturalRealm)-[:HAS_SUBREALM]->(CulturalSubRealm)"
