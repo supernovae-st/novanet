@@ -32,7 +32,7 @@ arc:
       enum: [scan, decode, parse, extract, verify]
       description: "Type of read operation"
 
-  inverse: READS
+  inverse_of: READS
 
   llm_context: |
     USE: when finding tools that can read/scan an entity.

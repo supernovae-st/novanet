@@ -32,7 +32,7 @@ arc:
       enum: [part, component, element, member, feature]
       description: "Type of containment relationship"
 
-  inverse: INCLUDES
+  inverse_of: INCLUDES
 
   llm_context: |
     USE: when finding the containing entity for a part.

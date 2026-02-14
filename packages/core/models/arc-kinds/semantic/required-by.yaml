@@ -37,7 +37,7 @@ arc:
       required: false
       description: "Condition for conditional dependencies"
 
-  inverse: REQUIRES
+  inverse_of: REQUIRES
 
   llm_context: |
     USE: when finding what depends on an entity.

@@ -32,7 +32,7 @@ arc:
       enum: [genus, species, subspecies, instance]
       description: "Level in taxonomy hierarchy"
 
-  inverse: HAS_TYPE
+  inverse_of: HAS_TYPE
 
   llm_context: |
     USE: when classifying entities in taxonomy hierarchy (ISA relationship).

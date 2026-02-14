@@ -32,7 +32,7 @@ arc:
       enum: [adds, improves, extends, optimizes, secures, tracks]
       description: "How the feature enhances the target"
 
-  inverse: ENHANCES
+  inverse_of: ENHANCES
 
   llm_context: |
     USE: when finding features that enhance an entity.
