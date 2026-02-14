@@ -50,7 +50,7 @@ export const NODE_LAYERS: Record<NodeType, Layer> = {
   Project: 'foundation',
 
   // instruction (1 node) - matches models/node-kinds/org/instruction/
-  PageInstruction: 'instruction',
+  BlockInstruction: 'instruction',
 
   // output (1 node) - matches models/node-kinds/org/output/
   PageGenerated: 'output',

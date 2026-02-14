@@ -684,10 +684,12 @@ pub fn get_all_adrs() -> Vec<AdrEntry> {
             category: AdrCategory::ArcPolicies,
             summary: vec![
                 "GENERATED vs HAS_GENERATED".to_string(),
-                "Pipeline: Instruction → Prompt → Generated".to_string(),
+                // v0.12.4: PageInstruction deleted (ADR-028)
+                "Pipeline: BlockInstruction → Prompt → Generated".to_string(),
             ],
             diagram: vec![
-                "PageInstruction ──[:COMPILED_FROM]──< PromptArtifact".to_string(),
+                // v0.12.4: PageInstruction deleted, BlockInstruction is the entry point
+                "BlockInstruction ──[:HAS_ARTIFACT]──▶ PromptArtifact".to_string(),
                 "BlockInstruction ──[:GENERATED]──▶ BlockGenerated".to_string(),
             ],
             key_rules: vec![

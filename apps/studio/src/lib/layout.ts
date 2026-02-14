@@ -57,7 +57,11 @@ const NODE_DIMENSIONS: Record<string, { width: number; height: number }> = {
   Entity: { width: 225, height: 130 },
   Block: { width: 205, height: 120 },
   BlockType: { width: 195, height: 115 },
-  BrandIdentity: { width: 210, height: 120 },
+  // v0.12.4: BrandIdentity → Brand + Brand Architecture nodes
+  Brand: { width: 210, height: 120 },
+  BrandDesign: { width: 190, height: 105 },
+  BrandPrinciples: { width: 190, height: 105 },
+  PromptStyle: { width: 190, height: 105 },
   ProjectContent: { width: 210, height: 120 },
 
   // v10 knowledge nodes - tiered model
@@ -75,8 +79,7 @@ const NODE_DIMENSIONS: Record<string, { width: number; height: number }> = {
   TabooSet: { width: 90, height: 90 },
   AudienceSet: { width: 105, height: 105 },
 
-  // Generation nodes
-  PageInstruction: { width: 200, height: 110 },
+  // Generation nodes (v0.12.4: PageInstruction removed)
   BlockInstruction: { width: 190, height: 105 },
   BlockRules: { width: 190, height: 105 },
   PageOutput: { width: 200, height: 110 },
