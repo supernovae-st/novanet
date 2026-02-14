@@ -339,12 +339,12 @@ tracing::info!(
 Agent                    MCP Server                    Neo4j
   |                          |                           |
   |-- describe(schema) ----->|                           |
-  |                          |-- MATCH (k:Kind) -------->|
+  |                          |-- MATCH (c:Class) ------->|
   |                          |<-- {realms, layers} ------|
   |<-- schema overview ------|                           |
   |                          |                           |
   |-- describe(relations) -->|                           |
-  |                          |-- MATCH (a:ArcKind) ----->|
+  |                          |-- MATCH (a:ArcClass) ---->|
   |                          |<-- {families, arcs} ------|
   |<-- arc definitions ------|                           |
 ```

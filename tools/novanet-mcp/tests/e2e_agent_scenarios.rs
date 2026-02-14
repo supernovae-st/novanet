@@ -993,9 +993,9 @@ mod schema_discovery_flow {
 
         eprintln!("Relations: {} tokens", relations.token_estimate);
 
-        if let Some(arc_kinds) = relations.data.get("arc_kinds") {
-            if let Some(arr) = arc_kinds.as_array() {
-                eprintln!("  Found {} arc kinds", arr.len());
+        if let Some(arc_classes) = relations.data.get("arc_classes") {
+            if let Some(arr) = arc_classes.as_array() {
+                eprintln!("  Found {} arc classes", arr.len());
             }
         }
 
@@ -1633,7 +1633,7 @@ mod cache_behavior {
     async fn test_query_caching_speedup() {
         let state = get_test_state!();
 
-        let cypher = "MATCH (k:Kind) RETURN k.name LIMIT 20".to_string();
+        let cypher = "MATCH (c:Class) RETURN c.name LIMIT 20".to_string();
 
         // First query (cache miss)
         let start1 = Instant::now();

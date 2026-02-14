@@ -799,10 +799,10 @@ This MCP server reads from the same Neo4j instance as NovaNet Studio. Schema:
 Key queries for agent bootstrap:
 
 ```cypher
--- Get schema overview
-MATCH (k:Kind)
-WITH k.realm AS realm, k.layer AS layer, collect(k.name) AS kinds
-RETURN realm, layer, kinds ORDER BY realm, layer
+-- Get schema overview (v0.12.0: Class, was Kind)
+MATCH (c:Class)
+WITH c.realm AS realm, c.layer AS layer, collect(c.name) AS classes
+RETURN realm, layer, classes ORDER BY realm, layer
 
 -- Get entity with context
 MATCH (e:Entity {key: $key})

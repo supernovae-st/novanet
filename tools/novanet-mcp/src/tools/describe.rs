@@ -17,7 +17,7 @@ pub enum DescribeTarget {
     Entity,
     /// EntityCategory members
     Category,
-    /// ArcKind definitions
+    /// ArcClass definitions (v0.12.0: was ArcKind)
     Relations,
     /// Available locales
     Locales,
@@ -63,35 +63,35 @@ pub async fn execute(state: &State, params: DescribeParams) -> Result<DescribeRe
 
 /// Describe the full schema
 async fn describe_schema(state: &State) -> Result<DescribeResult> {
-    // Query for schema overview
-    let kinds_query = r#"
-        MATCH (k:Kind)
-        WITH k.realm AS realm, k.layer AS layer, collect(k.name) AS kinds
-        RETURN realm, layer, kinds
+    // Query for schema overview (v0.12.0: Class, was Kind)
+    let classes_query = r#"
+        MATCH (c:Class)
+        WITH c.realm AS realm, c.layer AS layer, collect(c.name) AS classes
+        RETURN realm, layer, classes
         ORDER BY realm, layer
     "#;
 
     let arc_families_query = r#"
-        MATCH (a:ArcKind)
+        MATCH (a:ArcClass)
         WITH a.family AS family, count(a) AS arc_count
         RETURN family, arc_count
         ORDER BY family
     "#;
 
     let stats_query = r#"
-        MATCH (k:Kind) WITH count(k) AS kind_count
-        MATCH (a:ArcKind) WITH kind_count, count(a) AS arc_kind_count
-        MATCH (l:Locale) WITH kind_count, arc_kind_count, count(l) AS locale_count
-        RETURN kind_count, arc_kind_count, locale_count
+        MATCH (c:Class) WITH count(c) AS class_count
+        MATCH (a:ArcClass) WITH class_count, count(a) AS arc_class_count
+        MATCH (l:Locale) WITH class_count, arc_class_count, count(l) AS locale_count
+        RETURN class_count, arc_class_count, locale_count
     "#;
 
-    let kinds = state.pool().execute_query(kinds_query, None).await?;
+    let classes = state.pool().execute_query(classes_query, None).await?;
     let arc_families = state.pool().execute_query(arc_families_query, None).await?;
     let stats = state.pool().execute_single(stats_query, None).await?;
 
     let data = serde_json::json!({
-        "schema_version": "11.7.0",
-        "realms": organize_by_realm(&kinds),
+        "schema_version": "0.12.0",
+        "realms": organize_by_realm(&classes),
         "arc_families": arc_families,
         "statistics": stats.unwrap_or(serde_json::json!({})),
         "traversal_hints": {
@@ -189,10 +189,10 @@ async fn describe_category(state: &State, category_key: Option<String>) -> Resul
     })
 }
 
-/// Describe available relations (ArcKinds)
+/// Describe available relations (ArcClasses, v0.12.0: was ArcKinds)
 async fn describe_relations(state: &State) -> Result<DescribeResult> {
     let query = r#"
-        MATCH (a:ArcKind)
+        MATCH (a:ArcClass)
         RETURN a.name AS name, a.family AS family, a.scope AS scope,
                a.cardinality AS cardinality, a.source AS source, a.target AS target,
                a.description AS description
@@ -202,7 +202,7 @@ async fn describe_relations(state: &State) -> Result<DescribeResult> {
     let relations = state.pool().execute_query(query, None).await?;
 
     let data = serde_json::json!({
-        "arc_kinds": relations,
+        "arc_classes": relations,
         "families": ["ownership", "localization", "semantic", "generation", "mining"],
         "scopes": ["intra_realm", "cross_realm"]
     });
@@ -296,23 +296,23 @@ async fn describe_stats(state: &State) -> Result<DescribeResult> {
     })
 }
 
-/// Organize kinds by realm and layer
-fn organize_by_realm(kinds: &[serde_json::Value]) -> serde_json::Value {
+/// Organize classes by realm and layer (v0.12.0: was organize kinds)
+fn organize_by_realm(classes: &[serde_json::Value]) -> serde_json::Value {
     let mut realms: std::collections::HashMap<
         String,
         std::collections::HashMap<String, Vec<String>>,
     > = std::collections::HashMap::new();
 
-    for row in kinds {
-        if let (Some(realm), Some(layer), Some(kinds_arr)) = (
+    for row in classes {
+        if let (Some(realm), Some(layer), Some(classes_arr)) = (
             row.get("realm").and_then(|v| v.as_str()),
             row.get("layer").and_then(|v| v.as_str()),
-            row.get("kinds").and_then(|v| v.as_array()),
+            row.get("classes").and_then(|v| v.as_array()),
         ) {
             let realm_entry = realms.entry(realm.to_string()).or_default();
             let layer_entry = realm_entry.entry(layer.to_string()).or_default();
-            for kind in kinds_arr {
-                if let Some(name) = kind.as_str() {
+            for class in classes_arr {
+                if let Some(name) = class.as_str() {
                     layer_entry.push(name.to_string());
                 }
             }
@@ -328,12 +328,12 @@ mod tests {
 
     #[test]
     fn test_organize_by_realm() {
-        let kinds = vec![
-            serde_json::json!({"realm": "shared", "layer": "config", "kinds": ["Locale", "EntityCategory"]}),
-            serde_json::json!({"realm": "org", "layer": "semantic", "kinds": ["Entity", "EntityContent"]}),
+        let classes = vec![
+            serde_json::json!({"realm": "shared", "layer": "config", "classes": ["Locale", "EntityCategory"]}),
+            serde_json::json!({"realm": "org", "layer": "semantic", "classes": ["Entity", "EntityContent"]}),
         ];
 
-        let organized = organize_by_realm(&kinds);
+        let organized = organize_by_realm(&classes);
         assert!(organized.get("shared").is_some());
         assert!(organized.get("org").is_some());
     }

@@ -13,7 +13,7 @@ Complete keyboard shortcuts reference for the NovaNet Terminal UI.
 
 | Key | Mode | Description |
 |-----|------|-------------|
-| `1` | Graph | Unified tree (Realm > Layer > Kind > Instance + Arcs) |
+| `1` | Graph | Unified tree (Realm > Layer > Class > Instance + Arcs) |
 | `2` | Nexus | Hub (Quiz, Audit, Stats, Help) |
 | `/` | Search | Overlay search (filter nodes/arcs) |
 
@@ -29,8 +29,8 @@ Complete keyboard shortcuts reference for the NovaNet Terminal UI.
 The unified tree combines schema (meta) and instances (data) in a single hierarchy:
 
 ```
-Realm > Layer > Kind > Instance
-              > Arc Family > Arc Kind
+Realm > Layer > Class > Instance
+              > Arc Family > Arc Class
 ```
 
 | Key | Action |
@@ -61,17 +61,17 @@ Realm > Layer > Kind > Instance
 
 ## Instance Loading (v0.12.0)
 
-Instances are loaded lazily when expanding a Kind node.
+Instances are loaded lazily when expanding a Class node.
 
 | Key | Action |
 |-----|--------|
-| `Enter` on Kind | Expand to show first 10 instances |
+| `Enter` on Class | Expand to show first 10 instances |
 | `Enter` on "Load more..." | Load next 50 instances |
-| `r` | Refresh instance count for current Kind |
+| `r` | Refresh instance count for current Class |
 | `R` | Refresh all instance counts |
 
 **Visual indicators**:
-- `(42)` after Kind name = instance count
+- `(42)` after Class name = instance count
 - `[+50 more]` = additional instances available
 - Spinner shown while loading
 
@@ -249,5 +249,5 @@ Back:        1 (Graph mode)
 |---------|------------|----------------|
 | `3` | Audit mode | `2` then `A` (Nexus > Audit) |
 | `4` | Nexus mode | `2` (Nexus) |
-| `0` | Hide empty (Data mode) | Removed (unified tree shows all) |
+| `0` | Hide empty (Graph mode) | Removed (unified tree shows all) |
 | `s` | Schema overlay | Removed (unified tree shows schema inline) |
