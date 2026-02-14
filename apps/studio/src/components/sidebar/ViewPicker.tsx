@@ -10,7 +10,7 @@
  * - Keyboard navigation and accessibility
  */
 
-import { useState, useCallback, useMemo, useEffect, useRef, memo, useDeferredValue } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef, memo, useDeferredValue, type MouseEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'motion/react';
 import {
@@ -28,7 +28,6 @@ import {
 } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
-import { toast } from '@/lib/toast';
 import { useViewStore } from '@/stores/viewStore';
 import { useUIStore, selectSelectedNodeId } from '@/stores/uiStore';
 import { useGraphStore } from '@/stores/graphStore';
@@ -44,6 +43,7 @@ import {
 } from '@/hooks';
 import { TRANSITION_DURATION_MS } from '@/config/constants';
 import type { ViewRegistryEntry } from '@novanet/core/filters';
+import { NodeSelectorDropdown } from '@/components/views/NodeSelectorDropdown';
 
 // Constants
 const GRID_COLUMNS = 3;
@@ -351,6 +351,11 @@ const ViewPickerModal = memo(function ViewPickerModal({
 export const ViewPicker = memo(function ViewPicker({ className }: ViewPickerProps) {
   const [isOpen, setOpen] = useState(false);
 
+  // v0.12.5: Node selector dropdown state for contextual views
+  const [pendingContextualView, setPendingContextualView] = useState<ViewRegistryEntry | null>(null);
+  const [dropdownAnchorRect, setDropdownAnchorRect] = useState<DOMRect | null>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+
   const { categories, activeViewId, selectView, executeView, getActiveView, loadRegistry } = useViewStore(
     useShallow((s) => ({
       categories: s.categories,
@@ -413,6 +418,7 @@ export const ViewPicker = memo(function ViewPicker({ className }: ViewPickerProp
 
   // Regular click: select AND execute
   // v0.12.5: Pass selectedNode.key for contextual/generation views
+  // v0.12.5: If no node selected, show dropdown to pick one
   const handleExecute = useCallback(
     (viewId: string) => {
       const view = views.find((v) => v.id === viewId);
@@ -421,11 +427,11 @@ export const ViewPicker = memo(function ViewPicker({ className }: ViewPickerProp
       // For contextual views, require a selected node
       if (isContextual) {
         if (!selectedNode) {
-          // v0.12.5: Show warning toast instead of silently failing
-          toast.warning(
-            'Select a node first',
-            'This view requires a selected node to show its context.'
-          );
+          // v0.12.5: Show node selector dropdown instead of toast
+          if (triggerRef.current) {
+            setDropdownAnchorRect(triggerRef.current.getBoundingClientRect());
+          }
+          setPendingContextualView(view ?? null);
           return;
         }
         executeView(viewId, { key: selectedNode.key });
@@ -436,10 +442,29 @@ export const ViewPicker = memo(function ViewPicker({ className }: ViewPickerProp
     [executeView, views, selectedNode]
   );
 
+  // v0.12.5: Handle node selection from dropdown
+  const handleNodeSelect = useCallback(
+    (nodeKey: string) => {
+      if (pendingContextualView) {
+        executeView(pendingContextualView.id, { key: nodeKey });
+        setPendingContextualView(null);
+        setDropdownAnchorRect(null);
+      }
+    },
+    [pendingContextualView, executeView]
+  );
+
+  // v0.12.5: Close dropdown without selection
+  const handleDropdownClose = useCallback(() => {
+    setPendingContextualView(null);
+    setDropdownAnchorRect(null);
+  }, []);
+
   return (
     <>
       {/* Trigger button */}
       <motion.button
+        ref={triggerRef}
         whileTap={{ scale: 0.97 }}
         onClick={handleOpen}
         className={cn(
@@ -471,6 +496,17 @@ export const ViewPicker = memo(function ViewPicker({ className }: ViewPickerProp
         onSelect={handleSelect}
         onExecute={handleExecute}
       />
+
+      {/* v0.12.5: Node selector dropdown for contextual views */}
+      {pendingContextualView && (
+        <NodeSelectorDropdown
+          applicableTypes={pendingContextualView.applicable_types ?? []}
+          onSelect={handleNodeSelect}
+          onClose={handleDropdownClose}
+          anchorRect={dropdownAnchorRect}
+          viewName={pendingContextualView.description}
+        />
+      )}
     </>
   );
 });
