@@ -7,7 +7,9 @@
 // Generated from YAML - Single Source of Truth
 export {
   NODE_ICONS,
-  getNodeIcon,
+  getNodeWebIcon,
+  getNodeTerminalIcon,
   DEFAULT_NODE_ICON,
 } from './nodeIcons.generated';
+export type { NodeIcon } from './nodeIcons.generated';
 export type { NodeType } from '@novanet/core/types';
