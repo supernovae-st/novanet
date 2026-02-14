@@ -870,7 +870,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
                             // v10.1: Show instance count (always in Data mode)
                             // v10.6: Add trait icon prefix
-                            // v11.3: Colored trait icons (from visual-encoding.yaml + taxonomy.yaml)
+                            // v11.3: Colored trait icons (from visual-encoding.yaml + traits/*.yaml)
                             // v11.5: Enhanced display with all useful metrics
                             // Format: Name (instances) →out←in req/tot
                             let kind_is_empty = kind.instance_count == 0;

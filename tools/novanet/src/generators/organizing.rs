@@ -26,7 +26,8 @@ impl super::Generator for OrganizingGenerator {
     }
 
     fn generate(&self, root: &Path) -> crate::Result<String> {
-        let doc = crate::parsers::taxonomy::load_taxonomy(root)?;
+        // v0.12.5: Load from individual YAML files instead of taxonomy.yaml
+        let doc = crate::parsers::taxonomy::load_taxonomy_from_files(root)?;
         generate_cypher(&doc)
     }
 }

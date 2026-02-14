@@ -151,7 +151,8 @@ export class NovaNetFilter {
   }
 
   /**
-   * Includes PageInstruction/BlockInstruction nodes via HAS_INSTRUCTION.
+   * Includes BlockInstruction nodes via HAS_INSTRUCTION.
+   * v0.12.4: PageInstruction deleted (ADR-028) - page instructions composed from BlockInstructions
    * @param opts - Optional configuration
    * @param opts.activeOnly - Only include active instructions
    */
@@ -281,15 +282,60 @@ export class NovaNetFilter {
   }
 
   /**
-   * Includes BrandIdentity node via HAS_BRAND_IDENTITY.
+   * Includes Brand node via HAS_BRAND.
    * Typically used with fromProject().
+   * v0.12.4: renamed from includeBrandIdentity() (ADR-028)
    */
-  includeBrandIdentity(): this {
+  includeBrand(): this {
     this.state.includes.push({
-      relation: 'HAS_BRAND_IDENTITY',
+      relation: 'HAS_BRAND',
       direction: 'outgoing',
     });
     return this;
+  }
+
+  /**
+   * Includes BrandDesign node via HAS_DESIGN.
+   * Typically used after includeBrand().
+   * v0.12.4: new method (ADR-028)
+   */
+  includeDesign(): this {
+    this.state.includes.push({
+      relation: 'HAS_DESIGN',
+      direction: 'outgoing',
+    });
+    return this;
+  }
+
+  /**
+   * Includes BrandPrinciples node via HAS_PRINCIPLES.
+   * Typically used after includeBrand().
+   * v0.12.4: new method (ADR-028)
+   */
+  includePrinciples(): this {
+    this.state.includes.push({
+      relation: 'HAS_PRINCIPLES',
+      direction: 'outgoing',
+    });
+    return this;
+  }
+
+  /**
+   * Includes PromptStyle nodes via HAS_PROMPT_STYLE.
+   * Typically used after includeBrand().
+   * v0.12.4: new method (ADR-028)
+   */
+  includePromptStyle(): this {
+    this.state.includes.push({
+      relation: 'HAS_PROMPT_STYLE',
+      direction: 'outgoing',
+    });
+    return this;
+  }
+
+  /** @deprecated Use includeBrand() instead (ADR-028) */
+  includeBrandIdentity(): this {
+    return this.includeBrand();
   }
 
   // REMOVED v10.3: includeProjectConcepts() - HAS_CONCEPT arc removed

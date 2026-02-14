@@ -273,8 +273,26 @@ export class ViewLoader {
         filter.includeProjectEntities({ depth: include.depth });
         break;
 
+      // v0.12.4: Brand architecture (ADR-028)
+      case 'HAS_BRAND':
+        filter.includeBrand();
+        break;
+
+      case 'HAS_DESIGN':
+        filter.includeDesign();
+        break;
+
+      case 'HAS_PRINCIPLES':
+        filter.includePrinciples();
+        break;
+
+      case 'HAS_PROMPT_STYLE':
+        filter.includePromptStyle();
+        break;
+
+      // @deprecated - use HAS_BRAND
       case 'HAS_BRAND_IDENTITY':
-        filter.includeBrandIdentity();
+        filter.includeBrand();
         break;
 
       case 'FOR_LOCALE':

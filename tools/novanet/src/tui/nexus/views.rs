@@ -115,7 +115,7 @@ pub const VIEWS: &[ViewEntry] = &[
     ViewEntry {
         id: "complete-graph",
         name: "Complete Graph",
-        description: "Full NovaNet graph with all 58 nodes and relations",
+        description: "Full NovaNet graph with all 61 nodes and relations",
         category: ViewCategory::Overview,
         root_type: "Project",
         notes: &[
@@ -127,7 +127,7 @@ pub const VIEWS: &[ViewEntry] = &[
     ViewEntry {
         id: "shared-layer",
         name: "Shared Layer",
-        description: "Locale configuration and knowledge (39 nodes)",
+        description: "Locale configuration and knowledge (40 nodes)",
         category: ViewCategory::Overview,
         root_type: "Locale",
         notes: &[

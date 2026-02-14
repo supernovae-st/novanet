@@ -1,10 +1,13 @@
-//! TUI Theme — Visual encoding from taxonomy.yaml + visual-encoding.yaml
+//! TUI Theme — Visual encoding from individual YAML files + visual-encoding.yaml
 //!
 //! Provides terminal colors and styles from the NovaNet visual system.
 //! Supports 256-color and 16-color fallback palettes.
 //!
-//! Source of truth:
-//! - Colors: packages/core/models/taxonomy.yaml
+//! v0.12.5: Source of truth (individual files):
+//! - Realm colors: packages/core/models/realms/*.yaml
+//! - Layer colors: packages/core/models/layers/*.yaml
+//! - Trait colors: packages/core/models/traits/*.yaml
+//! - Arc family colors: packages/core/models/arc-families/*.yaml
 //! - Icons: packages/core/models/visual-encoding.yaml (icons section)
 
 use ratatui::style::{Color, Modifier, Style};
@@ -89,7 +92,7 @@ pub fn heatmap_color(count: usize, max_count: usize) -> Color {
 }
 
 // =============================================================================
-// REALM COLORS (from taxonomy.yaml node_realms)
+// REALM COLORS (from realms/*.yaml)
 // =============================================================================
 
 /// Realm color definitions (v11.2: 2 realms - shared + org).
@@ -130,7 +133,7 @@ pub mod realm {
 }
 
 // =============================================================================
-// LAYER COLORS (from taxonomy.yaml node_layers)
+// LAYER COLORS (from layers/*.yaml)
 // =============================================================================
 
 /// Layer color definitions (v11.5: 10 layers - 4 shared + 6 org).
@@ -217,7 +220,7 @@ pub mod layer {
 }
 
 // =============================================================================
-// TRAIT STYLES (from taxonomy.yaml node_traits)
+// TRAIT STYLES (from traits/*.yaml)
 // =============================================================================
 
 /// Trait border styles for visual encoding.
@@ -311,7 +314,7 @@ pub mod traits {
 }
 
 // =============================================================================
-// ARC FAMILY COLORS (from taxonomy.yaml arc_families)
+// ARC FAMILY COLORS (from arc-families/*.yaml)
 // =============================================================================
 
 /// Arc family color definitions.

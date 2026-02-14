@@ -135,7 +135,7 @@ async fn run_app(
     root_path: &Path,
 ) -> crate::Result<()> {
     // Load taxonomy tree from Neo4j with graceful error handling
-    // Pass root_path to load taxonomy.yaml for llm_context enrichment
+    // v0.12.5: Pass root_path to load individual YAML files for llm_context enrichment
     let tree = match TaxonomyTree::load(db, root_path).await {
         Ok(tree) => tree,
         Err(e) => {
