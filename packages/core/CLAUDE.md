@@ -122,7 +122,7 @@ core/
 │   ├── _index.yaml            # MODEL INDEX (graph structure, node categories)
 │   ├── taxonomy.yaml          # v11.7: 2 Realms (shared/org), 10 Layers
 │   ├── node-classes/            # ONE FILE PER NODE TYPE
-│   │   ├── shared/            # Realm: shared (39 nodes)
+│   │   ├── shared/            # Realm: shared (40 nodes)
 │   │   │   ├── config/        #   Layer: config (3 nodes: Locale, EntityCategory, SEOKeywordFormat)
 │   │   │   ├── locale/        #   Layer: locale (6 nodes)
 │   │   │   ├── geography/     #   Layer: geography (6 nodes)

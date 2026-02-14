@@ -342,7 +342,7 @@ RETURN n, r, m
 - **ASCII Preview**:
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  DATA-SHARED: Shared Realm (4 layers, 39 nodes)                             │
+│  DATA-SHARED: Shared Realm (4 layers, 40 nodes)                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  config ─────▶ EntityCategory ──▶ Locale ──▶ SEOKeywordFormat              │

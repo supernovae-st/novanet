@@ -184,7 +184,7 @@
 │                                                                                                     │
 │  ┌─ REALM: Where does it live? ─────────────────────────────────────────────────────────────────┐  │
 │  │                                                                                              │  │
-│  │  ◉ shared (39 nodes)                          ◎ org (21 nodes)                               │  │
+│  │  ◉ shared (40 nodes)                          ◎ org (21 nodes)                               │  │
 │  │  Universal knowledge                          Organization-specific                          │  │
 │  │  READ-ONLY (cannot modify)                    Your business content                          │  │
 │  │                                                                                              │  │

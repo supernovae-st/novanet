@@ -163,7 +163,7 @@ After:  shared/knowledge (includes all SEO/GEO nodes)
 
 ### Layer Breakdown
 
-**Shared (39 nodes)**:
+**Shared (40 nodes)**:
 - config: 3 (EntityCategory, Locale, SEOKeywordFormat)
 - locale: 6 (Culture, Style, Formatting, etc.)
 - geography: 6 (Continent, Region, Country, etc.)
