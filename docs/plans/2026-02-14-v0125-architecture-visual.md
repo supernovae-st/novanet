@@ -729,3 +729,370 @@ LINK HEALTH METRICS:
 ├── Avg internal links per page: 5.2
 └── Broken links: 0
 ```
+
+## Session 6: Graphe SEO Complet - Structure & Dépendances
+
+### 1. Hiérarchie URL - Cascade des Slugs
+
+```
+NIVEAU 0 (Root)
+════════════════
+Page:home
+├── slug: ""
+└── full_path: "/{locale}/"
+
+NIVEAU 1 (Pillar)
+═════════════════
+Page:qr-generator
+├── slug: "qr-code-generator"     ← INVARIANT (EN)
+├── is_pillar: true
+├── SUBTOPIC_OF → Page:home
+└── full_path calculé:
+    PageNative@fr-FR:
+    ├── slug: "créer-qr-code"     ← LOCALISÉ depuis SEOKeyword
+    └── full_path: "/fr-FR/créer-qr-code"
+
+NIVEAU 2 (Cluster)
+══════════════════
+Page:qr-instagram
+├── slug: "instagram"             ← INVARIANT (brand, pas localisé)
+├── is_pillar: false
+├── SUBTOPIC_OF → Page:qr-generator   (URL hierarchy)
+├── CLUSTER_OF → Page:qr-generator    (SEO hierarchy)
+└── full_path calculé:
+    PageNative@fr-FR:
+    ├── slug: "instagram"         ← Hérité (brand invariant)
+    └── full_path: "/fr-FR/créer-qr-code/instagram"
+
+NIVEAU 3 (Sub-cluster / Long-tail)
+═══════════════════════════════════
+Page:qr-instagram-story
+├── slug: "story"                 ← DIFFÉRENCIATEUR EXTRAIT
+├── SUBTOPIC_OF → Page:qr-instagram
+├── CLUSTER_OF → Page:qr-generator    (même pillar!)
+└── full_path:
+    PageNative@fr-FR:
+    ├── slug: "story"             ← Ou "stories" si SEO le dicte
+    └── full_path: "/fr-FR/créer-qr-code/instagram/story"
+
+RÈGLE DE CASCADE:
+─────────────────
+full_path(PageNative) =
+    "/" + locale +
+    parent.full_path +
+    "/" + (PageNative.slug ?? Page.slug)
+```
+
+### 2. Relations Inter-Pages - Types de Liens
+
+```
+TYPE A: SUBTOPIC_OF (Structure URL)
+═══════════════════════════════════
+• Définit la hiérarchie des URLs
+• Trigger le calcul de full_path
+• N:1 (page a UN seul parent URL)
+
+     Page:qr-instagram
+            │
+            │ [:SUBTOPIC_OF]
+            ▼
+     Page:qr-generator
+
+TYPE B: CLUSTER_OF (Structure SEO)
+═══════════════════════════════════
+• Définit le pillar/cluster pour le maillage
+• Peut différer de SUBTOPIC_OF !
+• N:1 (page appartient à UN pillar)
+
+     Page:qr-instagram ─────[:CLUSTER_OF]────▶ Page:qr-generator (pillar)
+     Page:qr-story ─────────[:CLUSTER_OF]────▶ Page:qr-generator (pillar)
+     Page:qr-wifi ──────────[:CLUSTER_OF]────▶ Page:qr-generator (pillar)
+
+TYPE C: LINKS_TO (Liens éditoriaux)
+═══════════════════════════════════
+• Liens dans le contenu des blocs
+• N:M (pages peuvent linker plusieurs pages)
+• Propriétés riches pour le SEO
+
+     Page:qr-generator
+            │
+            │ [:LINKS_TO {
+            │    via_blocks: ["hero", "features"],
+            │    link_type: "internal",
+            │    anchor_text_source: "@entity:qr-instagram.title",
+            │    nofollow: false,
+            │    weight: 0.8  ← Pour PageRank
+            │ }]
+            ▼
+     Page:qr-instagram
+
+TYPE D: SEMANTIC_SIBLING (Liens sémantiques)
+═════════════════════════════════════════════
+• Pages liées par leurs Entities
+• Suggérés pour "Voir aussi"
+• Calculé depuis Entity.SEMANTIC_LINK
+
+     Page:qr-instagram ◄────[dérivé de]────► Page:qr-tiktok
+                            Entity:instagram
+                                  │
+                                  │ [:SEMANTIC_LINK {type: "similar_to"}]
+                                  ▼
+                            Entity:tiktok
+```
+
+### 3. Dépendances Invariantes (Page ↔ Entity)
+
+```
+PRINCIPE: Page.key = Entity.key (ADR-028)
+═════════════════════════════════════════
+
+        Page (STRUCTURE)                    Entity (SEMANTIC)
+┌─────────────────────────┐         ┌─────────────────────────┐
+│ key: "qr-instagram"     │─────────│ key: "qr-instagram"     │
+│ slug: "instagram"       │ :REPRESENTS display_name: "QR..."  │
+│ is_pillar: false        │         │ is_pillar: false        │
+│                         │  1:1    │ category: THING         │
+└─────────────────────────┘         └─────────────────────────┘
+           │                                    │
+           │ [:SUBTOPIC_OF]                     │ [:SUBTOPIC_OF]
+           ▼                                    ▼
+┌─────────────────────────┐         ┌─────────────────────────┐
+│ key: "qr-generator"     │─────────│ key: "qr-generator"     │
+│ slug: "qr-code-generator"  :REPRESENTS display_name: "..."   │
+│ is_pillar: true         │         │ is_pillar: true         │
+└─────────────────────────┘         └─────────────────────────┘
+
+SYNCHRONISATION:
+────────────────
+• Page.key === Entity.key (contrainte)
+• Page.is_pillar === Entity.is_pillar (synchronisé)
+• Page.slug ≠ Entity.key (slug = différenciateur URL)
+• Page.SUBTOPIC_OF PEUT DIFFÉRER de Entity.SUBTOPIC_OF
+
+EXEMPLE OÙ ILS DIFFÈRENT:
+─────────────────────────
+Entity:faq-qr-instagram
+    │ [:SUBTOPIC_OF] → Entity:qr-instagram (sémantique: FAQ de ce topic)
+
+Page:faq-qr-instagram
+    │ [:SUBTOPIC_OF] → Page:faq (URL: /faq/qr-instagram)
+    │ [:CLUSTER_OF] → Page:qr-generator (SEO: cluster du pillar QR)
+
+RÉSULTAT:
+• URL: /fr-FR/faq/qr-instagram
+• Sémantiquement lié à qr-instagram
+• SEO cluster du pillar qr-generator
+```
+
+### 4. Dépendances Localisées - Le Cœur du Système
+
+```
+GRAPHE COMPLET POUR UNE PAGE LOCALISÉE:
+
+                      ┌──────────────────────────────────────┐
+                      │            INVARIANT                 │
+                      └──────────────────────────────────────┘
+
+  Page                              Entity
+┌─────────────────┐              ┌─────────────────┐
+│ key: qr-insta   │──:REPRESENTS─│ key: qr-insta   │
+│ slug: instagram │              │ display_name:.. │
+│ is_pillar: F    │              │                 │
+└────────┬────────┘              └────────┬────────┘
+         │                                │
+         │ :HAS_NATIVE                    │ :HAS_NATIVE
+         │ {locale}                       │ {locale}
+         ▼                                ▼
+                      ┌──────────────────────────────────────┐
+                      │          LOCALE-SPECIFIC             │
+                      │            (fr-FR)                   │
+                      └──────────────────────────────────────┘
+
+PageNative@fr-FR                    EntityNative@fr-FR
+┌─────────────────┐              ┌─────────────────────────┐
+│ slug: instagram │◄─────────────│ display_name: "QR Code  │
+│ full_path: /fr..│  DÉRIVE DE   │   Instagram"            │
+│ meta_title:..   │              │ description: "..."      │
+│ meta_desc:..    │              │                         │
+└─────────────────┘              └───────────┬─────────────┘
+         ▲                                   │
+         │                                   │ :TARGETS (N:M)
+         │                                   ▼
+         │                        ┌─────────────────────────┐
+         │                        │     SEOKeyword@fr-FR    │
+         │                        ├─────────────────────────┤
+         │     SLUG DÉRIVÉ DE     │ "qr code instagram"     │ volume: 2400
+         └────────────────────────│ "créer qr instagram"    │ volume: 800
+                                  │ "qr pour instagram"     │ volume: 450
+                                  └─────────────────────────┘
+
+CALCUL DU SLUG PageNative:
+══════════════════════════
+
+1. Parent.full_path = "/fr-FR/créer-qr-code"
+   parent_terms = {"créer", "qr", "code"}
+
+2. Keywords de EntityNative@fr-FR:
+   ┌─────────────────────────┬────────┬───────────────────┐
+   │ keyword                 │ volume │ différenciateur   │
+   ├─────────────────────────┼────────┼───────────────────┤
+   │ "qr code instagram"     │ 2400   │ "instagram" ✓     │
+   │ "créer qr instagram"    │ 800    │ "instagram" ✓     │
+   │ "qr pour instagram"     │ 450    │ "instagram" ✓     │
+   └─────────────────────────┴────────┴───────────────────┘
+
+3. Tous convergent vers "instagram" → boost convergence
+
+4. RÉSULTAT:
+   PageNative@fr-FR.slug = "instagram"
+   PageNative@fr-FR.full_path = "/fr-FR/créer-qr-code/instagram"
+   PageNative@fr-FR.slug_rationale = "convergence: qr code instagram (2400)"
+```
+
+### 5. Flux PageRank & Maillage Interne
+
+```
+DISTRIBUTION DU PR (PageRank):
+═════════════════════════════
+
+                        Home (PR: 100)
+                            │
+            ┌───────────────┼───────────────┐
+            │               │               │
+            ▼               ▼               ▼
+       QR Generator    Templates       Pricing
+       (PR: 35)        (PR: 30)        (PR: 25)
+      [PILLAR]        [PILLAR]        [PAGE]
+            │
+   ┌────────┼────────┬────────┐
+   │        │        │        │
+   ▼        ▼        ▼        ▼
+QR-Wifi  QR-Insta  QR-Menu  QR-PDF
+(PR: 8)  (PR: 12)  (PR: 7)  (PR: 6)
+[CLUSTER] [CLUSTER] [CLUSTER] [CLUSTER]
+            │
+            ▼
+      QR-Insta-Story
+         (PR: 3)
+      [LONG-TAIL]
+
+RÈGLES DE MAILLAGE:
+───────────────────
+
+R1: Pillar → Clusters (OBLIGATOIRE)
+    • Chaque pillar DOIT linker vers ses clusters
+    • Dans le hero ou section "Découvrez"
+
+R2: Cluster → Pillar (OBLIGATOIRE)
+    • Chaque cluster DOIT linker vers son pillar
+    • Breadcrumb + lien contextuel
+
+R3: Cluster ↔ Cluster (RECOMMANDÉ)
+    • Clusters du même pillar PEUVENT se linker
+    • "Voir aussi: QR WiFi, QR Menu"
+
+R4: Cross-Pillar (MODÉRÉ)
+    • Liens entre pillars différents
+    • Seulement si sémantiquement pertinent
+
+PROPRIÉTÉS [:LINKS_TO]:
+────────────────────────
+
+[:LINKS_TO {
+   via_blocks: ["hero", "related"],   ← Où le lien apparaît
+   link_type: "contextual",           ← contextual|navigation|footer
+   anchor_source: "@entity:X.title",  ← D'où vient l'anchor text
+   pr_weight: 0.85,                   ← Poids pour calcul PR
+   is_reciprocal: false,              ← Lien retour existe?
+   nofollow: false                    ← Pour liens externes
+}]
+```
+
+### 6. Modèle Complet - Tous les Arcs
+
+```
+PAGE-RELATED ARCS:
+══════════════════
+
+┌────────────────────┬──────────────────┬─────────────────────────────────┐
+│ Arc                │ Cardinalité      │ Purpose                         │
+├────────────────────┼──────────────────┼─────────────────────────────────┤
+│ REPRESENTS         │ Page → Entity 1:1│ Identité sémantique             │
+│ SUBTOPIC_OF        │ Page → Page N:1  │ Hiérarchie URL (parent)         │
+│ CLUSTER_OF         │ Page → Page N:1  │ Pillar SEO (peut ≠ parent)      │
+│ LINKS_TO           │ Page → Page N:M  │ Liens éditoriaux                │
+│ HAS_NATIVE         │ Page → PageNat.  │ Version localisée               │
+│ HAS_BLOCK          │ Page → Block 1:N │ Contenu structuré               │
+└────────────────────┴──────────────────┴─────────────────────────────────┘
+
+ENTITY-RELATED ARCS:
+════════════════════
+
+┌────────────────────┬──────────────────┬─────────────────────────────────┐
+│ Arc                │ Cardinalité      │ Purpose                         │
+├────────────────────┼──────────────────┼─────────────────────────────────┤
+│ SUBTOPIC_OF        │ Ent. → Ent. N:1  │ Hiérarchie sémantique           │
+│ SEMANTIC_LINK      │ Ent. ↔ Ent. N:M  │ Relations (used_for, etc.)      │
+│ HAS_NATIVE         │ Ent. → EntNat.   │ Version localisée               │
+│ BELONGS_TO         │ Ent. → Category  │ Catégorie (THING, BRAND...)     │
+└────────────────────┴──────────────────┴─────────────────────────────────┘
+
+NATIVE-RELATED ARCS (locale-specific):
+══════════════════════════════════════
+
+┌────────────────────┬──────────────────┬─────────────────────────────────┐
+│ Arc                │ Cardinalité      │ Purpose                         │
+├────────────────────┼──────────────────┼─────────────────────────────────┤
+│ TARGETS            │ EntNat → SEOKey  │ Keywords associés (N:M)         │
+│ FOR_LOCALE         │ *Native → Locale │ Locale cible                    │
+│ DERIVED_SLUG_FROM  │ PageNat → SEOKey │ Source du slug (audit trail)    │
+└────────────────────┴──────────────────┴─────────────────────────────────┘
+
+SEO/KEYWORD ARCS:
+═════════════════
+
+┌────────────────────┬──────────────────┬─────────────────────────────────┐
+│ Arc                │ Cardinalité      │ Purpose                         │
+├────────────────────┼──────────────────┼─────────────────────────────────┤
+│ TARGETS (inverse)  │ SEOKey → EntNat  │ Quelles entities ce keyword?    │
+│ VARIANT_OF         │ SEOKey → SEOKey  │ Groupes de variantes            │
+│ FOR_LOCALE         │ SEOKey → Locale  │ Locale du keyword               │
+└────────────────────┴──────────────────┴─────────────────────────────────┘
+```
+
+### 7. Nouvel Arc Proposé: DERIVED_SLUG_FROM
+
+```
+[:DERIVED_SLUG_FROM]
+├── Source: PageNative
+├── Target: SEOKeyword
+├── Cardinality: N:1 (un slug vient d'UN keyword principal)
+├── Properties:
+│   ├── extracted_terms: [string]  ← Ce qui a été extrait
+│   ├── excluded_terms: [string]   ← Ce qui a été exclu (parent)
+│   └── derivation_score: float
+└── Purpose: Audit trail du slug
+
+EXEMPLE:
+PageNative:qr-instagram@fr-FR
+    │
+    │ [:DERIVED_SLUG_FROM {
+    │    extracted_terms: ["instagram"],
+    │    excluded_terms: ["qr", "code"],
+    │    derivation_score: 0.95
+    │ }]
+    │
+    ▼
+SEOKeyword:fr-FR:qr-code-instagram
+```
+
+### Récapitulatif Session 6: Insights Clés
+
+| # | Insight |
+|---|---------|
+| 1 | **Trois hiérarchies distinctes**: Entity.SUBTOPIC_OF (sémantique), Page.SUBTOPIC_OF (URL), Page.CLUSTER_OF (SEO) |
+| 2 | **Slug cascade**: Page.slug (invariant) → PageNative.slug (override ou hérité) → full_path (calculé) |
+| 3 | **Dépendances claires**: Page → Entity (1:1), PageNative → EntityNative (content), PageNative.slug ← SEOKeyword (derivation) |
+| 4 | **Nouvel arc DERIVED_SLUG_FROM**: PageNative → SEOKeyword pour audit trail du slug |
+| 5 | **PageRank flow**: Home → Pillars → Clusters → Long-tail, propriété pr_weight sur LINKS_TO |
+| 6 | **Pillar ≠ Parent URL possible**: FAQ pages peuvent être URL sous /faq mais cluster sous /qr-generator |
