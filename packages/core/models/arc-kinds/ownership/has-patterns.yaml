@@ -6,7 +6,11 @@ arc:
   source: Locale
   target: PatternSet
   cardinality: one_to_many
-  llm_context: Locale has multiple pattern sets, one per usage.
+  llm_context: |
+    USE: when loading content patterns for a locale by usage type.
+    TRIGGERS: locale patterns, content patterns, CTA patterns, headline patterns.
+    NOT: individual patterns (use CONTAINS_PATTERN), expressions (use HAS_EXPRESSIONS).
+    RELATES: Locale (source), PatternSet (target), usage (property).
   cypher_pattern: "(Locale)-[:HAS_PATTERNS {usage: $usage}]->(PatternSet)"
   properties:
     usage:

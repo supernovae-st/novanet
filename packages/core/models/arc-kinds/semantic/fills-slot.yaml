@@ -19,6 +19,9 @@ arc:
     - name: is_control
       type: string
       required: false
-  llm_context: "Block fills slot (A/B testing). variant_id: unique variant. traffic_allocation:
-    0.0-1.0. is_control: baseline."
+  llm_context: |
+    USE: when finding which blocks fill a content slot for A/B testing.
+    TRIGGERS: A/B testing, variant, slot content, traffic allocation, control.
+    NOT: slot acceptance (use ACCEPTS_BLOCK_TYPE), page slots (use HAS_SLOT).
+    RELATES: Block (source), ContentSlot (target), variant_id (property).
   cypher_pattern: (Block)-[:FILLS_SLOT {variant_id, traffic_allocation, is_control}]->(ContentSlot)

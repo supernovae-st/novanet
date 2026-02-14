@@ -40,10 +40,9 @@ arc:
   inverse: REQUIRED_BY
 
   llm_context: |
-    Dependency relationship: Entity A requires Entity B to function/exist.
-    dependency_type: hard (mandatory), soft (recommended), optional (nice-to-have),
-      conditional (required under certain conditions)
-    Examples: URLShortener REQUIRES URL, PaymentQR REQUIRES PaymentProvider
-    Use for: dependency resolution, prerequisite checking.
+    USE: when finding dependencies of an entity.
+    TRIGGERS: requires, depends on, needs, prerequisites, dependencies.
+    NOT: enabling (use ENABLES), enhancement (use ENHANCES).
+    RELATES: Entity (source), Entity (target/dependency), REQUIRED_BY (inverse).
 
   cypher_pattern: "(Entity)-[:REQUIRES {strength, temperature, dependency_type, condition}]->(Entity)"

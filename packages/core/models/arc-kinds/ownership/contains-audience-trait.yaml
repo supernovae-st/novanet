@@ -11,5 +11,9 @@ arc:
   source: AudienceSet
   target: AudienceTrait
   cardinality: one_to_many
-  llm_context: AudienceSet contains AudienceTrait atoms. Use to traverse from set to individual audience traits.
+  llm_context: |
+    USE: when loading individual audience traits from an audience set.
+    TRIGGERS: audience atoms, user traits, demographics, target audience.
+    NOT: audience set container (use HAS_AUDIENCE), personas.
+    RELATES: AudienceSet (source), AudienceTrait (target).
   cypher_pattern: "(AudienceSet)-[:CONTAINS_AUDIENCE_TRAIT]->(AudienceTrait)"

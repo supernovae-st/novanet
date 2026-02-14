@@ -35,10 +35,9 @@ arc:
   inverse: ENABLED_BY
 
   llm_context: |
-    Enablement relationship: Entity A enables/unlocks Entity B.
-    Unlike REQUIRES (B needs A), ENABLES means A makes B possible/better.
-    enablement_type: unlocks (gate), enhances (improves), permits (allows),
-      facilitates (makes easier)
-    Examples: API ENABLES Integration, Analytics ENABLES Optimization
+    USE: when finding what capabilities an entity unlocks.
+    TRIGGERS: enables, unlocks, makes possible, facilitates, permits.
+    NOT: requirement (use REQUIRES), enhancement (use ENHANCES).
+    RELATES: Entity (source/enabler), Entity (target), ENABLED_BY (inverse).
 
   cypher_pattern: "(Entity)-[:ENABLES {strength, temperature, enablement_type}]->(Entity)"

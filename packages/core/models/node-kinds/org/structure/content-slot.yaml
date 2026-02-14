@@ -6,7 +6,9 @@ node:
   realm: org
   layer: structure
   trait: defined
-  icon: "🔲"
+  icon:
+    web: inbox
+    terminal: "▢"
   description: |
     Named slot within a page structure for content injection. Enables A/B testing,
     dynamic content, and component-level modularity. Slots are locale-invariant

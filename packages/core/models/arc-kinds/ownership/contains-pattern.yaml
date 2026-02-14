@@ -11,5 +11,9 @@ arc:
   source: PatternSet
   target: Pattern
   cardinality: one_to_many
-  llm_context: PatternSet contains Pattern atoms. Use to traverse from set to individual patterns.
+  llm_context: |
+    USE: when loading individual patterns from a pattern set.
+    TRIGGERS: pattern atoms, content templates, CTA patterns, headline templates.
+    NOT: pattern set container (use HAS_PATTERNS), expressions.
+    RELATES: PatternSet (source), Pattern (target).
   cypher_pattern: "(PatternSet)-[:CONTAINS_PATTERN]->(Pattern)"

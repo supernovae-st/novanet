@@ -21,8 +21,9 @@ arc:
   inverse: BLOCK_OF
 
   llm_context: |
-    Page contains blocks with order property. The order property (1-based) is the source of truth
-    for block sequence. Blocks can be reused across pages with different order values.
-    Use to enumerate blocks for a page: MATCH (p:Page)-[r:HAS_BLOCK]->(b:Block) ORDER BY r.order
+    USE: when loading blocks for a page in render order.
+    TRIGGERS: page blocks, block sequence, content composition, page structure.
+    NOT: block content (use HAS_INSTRUCTION), block schema (use OF_TYPE).
+    RELATES: Page (source), Block (target), BLOCK_OF (inverse), order (property).
 
   cypher_pattern: "(Page)-[:HAS_BLOCK {order}]->(Block)"

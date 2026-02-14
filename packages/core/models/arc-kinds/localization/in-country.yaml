@@ -14,9 +14,9 @@ arc:
   inverse: HAS_LOCALE
 
   llm_context: |
-    Locale belongs to exactly one Country (ISO 3166-1).
-    A Country may have multiple Locales (e.g., CH has de-CH, fr-CH, it-CH, rm-CH).
-    Use to traverse from locale to country: MATCH (l:Locale)-[:IN_COUNTRY]->(c:Country)
-    Geographic hierarchy: Locale → Country → GeoRegion → Continent
+    USE: when finding the country for a locale (ISO 3166-1).
+    TRIGGERS: locale country, which country, national context, country lookup.
+    NOT: geographic region (use IN_SUBREGION), cultural realm (use IN_CULTURAL_SUBREALM).
+    RELATES: Locale (source), Country (target), HAS_LOCALE (inverse), hierarchy: Locale→Country→GeoRegion→Continent.
 
   cypher_pattern: "(Locale)-[:IN_COUNTRY]->(Country)"

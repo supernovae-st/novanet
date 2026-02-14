@@ -36,8 +36,12 @@ node:
     llm_context:
       type: string
       required: true
-      description: "LLM context for brand-aware generation"
-      example: "USE: for any content generation. TRIGGERS: brand voice, tone. NOT: visual design (see BrandDesign)."
+      description: "LLM context for brand-aware generation. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections].'"
+      example: |
+        USE: when loading brand context for content generation or enforcing brand consistency.
+        TRIGGERS: "brand", "brand voice", "brand identity", "brand context", "@brand".
+        NOT: for visual design specifics (use BrandDesign), for voice guidelines (use BrandPrinciples), for locale-specific prompts (use PromptStyle).
+        RELATES: Project (owner via HAS_BRAND), BrandDesign (visuals via HAS_DESIGN), BrandPrinciples (voice via HAS_PRINCIPLES), PromptStyle (AI styles via HAS_PROMPT_STYLE), AudiencePersona (targets via TARGETS_PERSONA).
 
     created_at:
       type: datetime

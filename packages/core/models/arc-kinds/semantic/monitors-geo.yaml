@@ -31,11 +31,10 @@ arc:
       description: "Visibility drop threshold to trigger alert (percentage points)"
 
   llm_context: |
-    EntityContent monitors GEO queries for AI visibility optimization.
-    Parallel to TARGETS (for SEO): EntityContent --[:TARGETS]--> SEOKeyword
-    Use to track which business entities care about which AI queries.
-    CONSTRAINT: EntityContent locale should align with GEOQuery locale.
-    v10.7: New arc for GEO targeting.
+    USE: when finding GEO queries monitored by an entity for AI visibility.
+    TRIGGERS: GEO monitoring, AI visibility, entity queries, GEO tracking.
+    NOT: SEO targeting (use TARGETS), GEO answers (use HAS_GEO_ANSWERS).
+    RELATES: EntityContent (source), GEOQuery (target), priority (property).
 
   cypher_pattern: "(EntityContent)-[:MONITORS_GEO {priority, alert_threshold}]->(GEOQuery)"
 

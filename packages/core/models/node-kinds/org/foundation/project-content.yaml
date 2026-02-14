@@ -30,7 +30,9 @@ node:
   realm: org
   layer: foundation
   trait: authored
-  icon: "🟢"
+  icon:
+    web: languages
+    terminal: "●"
   description: "Localized identity and messaging for a Project"
 
   # ===========================================================================
@@ -53,8 +55,12 @@ node:
     llm_context:
       type: string
       required: true
-      description: "Format: USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
-      example: "USE: for French market messaging. TRIGGERS: fr-FR, french project. NOT: other locales."
+      description: "Format: USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections]."
+      example: |
+        USE: when loading localized project identity, messaging, or voice guidelines for content generation.
+        TRIGGERS: "project content", "localized project", "project messaging", "voice guidelines", locale code.
+        NOT: for invariant project definition (use Project), for entity content (use EntityContent), for generated pages (use PageGenerated).
+        RELATES: Project (parent via HAS_CONTENT), Locale (target via FOR_LOCALE), PageGenerated (consumer via BELONGS_TO_PROJECT_CONTENT).
 
     created_at:
       type: datetime

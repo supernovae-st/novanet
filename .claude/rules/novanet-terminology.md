@@ -1,4 +1,4 @@
-# NovaNet Terminology (v0.12.0)
+# NovaNet Terminology (v0.12.5)
 
 This file defines the canonical terminology for NovaNet. All code, documentation, and UI must use these terms consistently.
 
@@ -91,24 +91,39 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 
 | Type | Convention | Example |
 |------|------------|---------|
-| NodeClass YAML | `kebab-case.yaml` | `locale-voice.yaml`, `entity-content.yaml`, `page-generated.yaml` |
-| ArcClass YAML | `kebab-case.yaml` | `has-page.yaml`, `uses-entity.yaml` |
+| NodeClass YAML | `kebab-case.yaml` | `locale-voice.yaml`, `entity-native.yaml`, `page-native.yaml` |
+| ArcClass YAML | `kebab-case.yaml` | `has-page.yaml`, `has-native.yaml`, `uses-entity.yaml` |
 | TypeScript types | `PascalCase` | `NodeClass`, `ArcFamily`, `NodeRealm` |
 | TypeScript files | `kebab-case.ts` | `arc-classes.ts`, `node-layers.ts` |
 | Rust structs | `PascalCase` | `ArcClass`, `NodeRealm` |
 | Rust files | `snake_case.rs` | `arc_schema.rs`, `taxonomy.rs` |
 
-## Node Naming Convention (v0.12.0)
+## Node Naming Convention (v0.12.5)
 
 > **RULE: Suffix indicates trait and relationship to parent defined node**
 
 | Pattern | Trait | Layer | When to Use | Example |
 |---------|-------|-------|-------------|---------|
-| `FooContent` | authored | semantic | Node has locale-specific content for defined `Foo` | `EntityContent` (parent: `Entity`) |
-| `FooGenerated` | generated | output | Node is generated output from defined `Foo` | `PageGenerated` (parent: `Page`) |
+| `FooNative` | authored/generated | semantic/output | **v0.12.5**: Locale-specific content (written OR generated natively) | `EntityNative`, `PageNative` |
+| `FooContent` | authored | semantic | **DEPRECATED v0.12.5**: Use `FooNative` instead | `EntityContent` → `EntityNative` |
+| `FooGenerated` | generated | output | **DEPRECATED v0.12.5**: Use `FooNative` instead | `PageGenerated` → `PageNative` |
 | `FooCategory` | defined | config | Categorical grouping for defined `Foo` | `EntityCategory` |
 | `FooSet` | defined | knowledge | Container grouping related atoms | `TermSet`, `SEOKeywordSet`, `GEOQuerySet` |
 | `Foo` | varies | varies | Node is standalone (no parent defined) | `SEOKeyword`, `Term`, `Expression` |
+
+> **v0.12.5 *Native Pattern (ADR-029)**: Unified suffix for ALL locale-specific nodes
+> - `*Native` suffix indicates content that exists per-locale (natively written OR generated)
+> - Both `authored` and `generated` traits use the same suffix — the trait indicates WHO creates
+> - Simplifies the model: one pattern instead of two (`*Content` + `*Generated`)
+
+**v0.12.5 Changes (ADR-029 *Native Pattern + ADR-030 Slug Ownership):**
+- `EntityContent` → `EntityNative` (semantic layer, authored trait)
+- `PageGenerated` → `PageNative` (output layer, generated trait)
+- `BlockGenerated` → `BlockNative` (output layer, generated trait)
+- `ProjectContent` → `ProjectNative` (foundation layer, authored trait)
+- `HAS_CONTENT` + `HAS_GENERATED` → unified `HAS_NATIVE` (with `locale` property)
+- Slug properties (`slug`, `full_path`) moved from EntityNative to PageNative
+- Entity.key = semantic identifier, Page.slug = URL segment (can differ)
 
 **v0.12.0 Changes (ADR-024 Data Origin):**
 - `invariant` → `defined` (human-created once)
@@ -140,33 +155,37 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 - `HAS_L10N` renamed to `HAS_CONTENT` (Entity → EntityContent)
 - `HAS_OUTPUT` renamed to `HAS_GENERATED` (Page/Block → PageGenerated/BlockGenerated)
 
-**Examples:**
+**Examples (v0.12.5):**
 
 ```
-✅ Entity (defined) → EntityContent (authored)       # Semantic layer content
+✅ Entity (defined) → EntityNative (authored)        # v0.12.5: Semantic layer native content
+✅ Page (defined) → PageNative (generated)           # v0.12.5: Output layer native content
+✅ Block (defined) → BlockNative (generated)         # v0.12.5: Output layer native content
+✅ Project (defined) → ProjectNative (authored)      # v0.12.5: Foundation layer native content
 ✅ Entity (defined) → EntityCategory (defined)       # shared/config categorization
-✅ Page (defined) → PageGenerated (generated)        # Output layer generated
-✅ Block (defined) → BlockGenerated (generated)      # Output layer generated
-✅ Project (defined) → ProjectContent (authored)     # Foundation layer content
 ✅ SEOKeyword (imported, no parent)                  # Correct: no suffix
 ✅ Term (imported atom, no parent)                   # Correct: no suffix
 ✅ SEOKeywordMetrics (retrieved)                     # Computed metrics
 
-❌ EntityL10n (deprecated)                           # Use EntityContent
-❌ PageL10n (deprecated)                             # Use PageGenerated
-❌ BlockL10n (deprecated)                            # Use BlockGenerated
-❌ ProjectL10n (deprecated)                          # Use ProjectContent
+❌ EntityContent (deprecated v0.12.5)                # Use EntityNative
+❌ PageGenerated (deprecated v0.12.5)                # Use PageNative
+❌ BlockGenerated (deprecated v0.12.5)               # Use BlockNative
+❌ ProjectContent (deprecated v0.12.5)               # Use ProjectNative
+❌ EntityL10n (deprecated v10.9)                     # Use EntityNative (via EntityContent)
+❌ PageL10n (deprecated v10.9)                       # Use PageNative (via PageGenerated)
+❌ BlockL10n (deprecated v10.9)                      # Use BlockNative (via BlockGenerated)
 ❌ invariant/localized/knowledge/aggregated (deprecated) # Use ADR-024 names
 ❌ job (removed trait)                               # Concept deferred to v12+
 ```
 
-**Rationale:**
-- `*Content` suffix indicates locale-specific semantic content (authored trait)
-- `*Generated` suffix indicates LLM-generated output (generated trait)
+**Rationale (v0.12.5):**
+- `*Native` suffix indicates locale-specific content (authored OR generated natively)
+- Trait distinguishes WHO creates: `authored` = human, `generated` = LLM
+- Unified arc `HAS_NATIVE` replaces both `HAS_CONTENT` and `HAS_GENERATED`
 - `*Metrics` suffix indicates computed/retrieved data (retrieved trait)
 - `*Category` suffix indicates categorical grouping/taxonomy structure (defined trait)
-- `*L10n` suffix is DEPRECATED - all authored nodes now use `*Content` suffix
-- Suffix choice reflects both the trait and the layer
+- `*Content` and `*Generated` suffixes are DEPRECATED - use `*Native` instead
+- Suffix choice reflects locale-specificity, trait indicates creation method
 
 ## Property Naming
 
@@ -266,6 +285,20 @@ These terms are deprecated and should NOT be used:
 | `[:OF_TYPE]` (Page→PageType) | `[:HAS_STRUCTURE]` | v0.12.0 arc rename |
 | `[:HAS_PROMPT]` (Page→PagePrompt) | `[:HAS_INSTRUCTION]` | v0.12.0 arc rename |
 | `[:HAS_PROMPT]` (Block→BlockPrompt) | `[:HAS_INSTRUCTION]` | v0.12.0 arc rename |
+| **v0.12.5 *Native Pattern (ADR-029)** | | |
+| `EntityContent` | `EntityNative` | v0.12.5 *Native pattern (semantic layer) |
+| `PageGenerated` | `PageNative` | v0.12.5 *Native pattern (output layer) |
+| `BlockGenerated` | `BlockNative` | v0.12.5 *Native pattern (output layer) |
+| `ProjectContent` | `ProjectNative` | v0.12.5 *Native pattern (foundation layer) |
+| `HAS_CONTENT` | `HAS_NATIVE` | v0.12.5 unified arc (with `locale` property) |
+| `HAS_GENERATED` | `HAS_NATIVE` | v0.12.5 unified arc (with `locale` property) |
+| `CONTENT_OF` | `NATIVE_OF` | v0.12.5 inverse arc rename |
+| `GENERATED_FOR` | `NATIVE_OF` | v0.12.5 inverse arc rename |
+| **v0.12.5 Slug Ownership (ADR-030)** | | |
+| `EntityContent.slug` | `PageNative.slug` | v0.12.5 URL segment moved to Page layer |
+| `EntityContent.full_path` | `PageNative.full_path` | v0.12.5 full URL path moved to Page layer |
+| `EntityContent.parent_slug` | (removed) | v0.12.5 calculated from Page.SUBTOPIC_OF |
+| `EntityContent.depth` | (removed) | v0.12.5 calculated from Page hierarchy |
 
 ## Navigation Modes (v11.7)
 
@@ -445,3 +478,6 @@ cypher: |
 12. **Dual Icons** = `{ web: "lucide-name", terminal: "◉" }` format, NO emoji (v11.7)
 13. **Trait = Data Origin** = WHERE does data come from? (defined/authored/imported/generated/retrieved) (v0.12.0)
 14. **PageStructure/PageInstruction** = replaced PageType/PagePrompt (v0.12.0)
+15. **\*Native Pattern** = unified suffix for locale-specific nodes (EntityNative, PageNative, BlockNative) (v0.12.5)
+16. **HAS_NATIVE** = unified arc replacing HAS_CONTENT + HAS_GENERATED, with `locale` property (v0.12.5)
+17. **Slug Ownership** = Page owns URL (slug, full_path), Entity owns semantics (key) (v0.12.5)

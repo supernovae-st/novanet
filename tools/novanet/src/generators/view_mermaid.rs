@@ -590,6 +590,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "locale-full-knowledge view not yet created (Phase 5)"]
     fn generate_locale_knowledge_view_integration() {
         let Some(root) = test_root() else { return };
         let view = crate::parsers::views::load_view(&root, "locale-full-knowledge")

@@ -11,7 +11,8 @@ arc:
   required: false
   inverse: PRINCIPLES_OF
   llm_context: |
-    Brand has one BrandPrinciples (voice and tone guidelines).
-    Contains voice attributes, writing guidelines, terminology.
-    Use for copywriting and messaging consistency.
+    USE: when loading voice and tone guidelines for copywriting.
+    TRIGGERS: brand principles, voice guidelines, writing rules, terminology.
+    NOT: visual design (use HAS_DESIGN), brand identity (use Brand).
+    RELATES: Brand (source), BrandPrinciples (target), PRINCIPLES_OF (inverse).
   cypher_pattern: "(Brand)-[:HAS_PRINCIPLES]->(BrandPrinciples)"

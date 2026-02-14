@@ -35,8 +35,12 @@ node:
     llm_context:
       type: string
       required: true
-      description: "LLM context for consistent voice"
-      example: "USE: for copywriting. TRIGGERS: tone, voice, messaging. NOT: visual design."
+      description: "LLM context for consistent voice. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections].'"
+      example: |
+        USE: when writing copy, selecting tone, or enforcing editorial guidelines.
+        TRIGGERS: "brand voice", "tone", "writing guidelines", "messaging", "editorial", "@brand.principles".
+        NOT: for visual design (use BrandDesign), for brand identity (use Brand), for locale-specific styles (use PromptStyle).
+        RELATES: Brand (owner via HAS_PRINCIPLES).
 
     created_at:
       type: datetime

@@ -6,7 +6,9 @@ node:
   realm: org
   layer: semantic
   trait: defined
-  icon: "📡"
+  icon:
+    web: "radio"
+    terminal: "◎"
   description: |
     Distribution channel or surface where content is published. Represents a specific
     platform, medium, or touchpoint with its own constraints and best practices.

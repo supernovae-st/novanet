@@ -14,8 +14,9 @@ arc:
   inverse: HAS_BRANCH
 
   llm_context: |
-    LanguageBranch belongs to exactly one LanguageFamily (ISO 639-5).
-    Use to find related languages: MATCH (b:LanguageBranch)-[:BRANCH_OF]->(f:LanguageFamily)
-    Example: Romance (roa) -[:BRANCH_OF]-> Indo-European (ine)
+    USE: when finding language family for a branch.
+    TRIGGERS: language family, language branch, related languages, ISO 639-5.
+    NOT: branch children (use HAS_BRANCH), language locales.
+    RELATES: LanguageBranch (source), LanguageFamily (target), HAS_BRANCH (inverse).
 
   cypher_pattern: "(LanguageBranch)-[:BRANCH_OF]->(LanguageFamily)"

@@ -8,5 +8,9 @@ arc:
   source: Locale
   target: Culture
   cardinality: one_to_one
-  llm_context: Every locale has exactly one culture configuration node.
+  llm_context: |
+    USE: when loading cultural configuration for a locale.
+    TRIGGERS: locale culture, cultural settings, locale config, formality level.
+    NOT: culture atoms (use HAS_CULTURE_SET), expressions (use HAS_EXPRESSIONS).
+    RELATES: Locale (source), Culture (target), 1:1 cardinality.
   cypher_pattern: (Locale)-[:HAS_CULTURE]->(Culture)

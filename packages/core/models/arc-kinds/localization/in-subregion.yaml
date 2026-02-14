@@ -16,8 +16,9 @@ arc:
   inverse: HAS_LOCALE
 
   llm_context: |
-    Locale belongs to a geographic region (or sub-region if available).
-    Use to find similar locales: MATCH (l:Locale)-[:IN_SUBREGION]->(r)<-[:IN_SUBREGION]-(similar)
-    Traversal to continent: (l)-[:IN_SUBREGION]->(r)-[:IN_CONTINENT]->(c)
+    USE: when finding geographic region for a locale.
+    TRIGGERS: geographic region, subregion, regional context, similar locales.
+    NOT: country (use IN_COUNTRY), cultural realm (use IN_CULTURAL_SUBREALM).
+    RELATES: Locale (source), GeoRegion/GeoSubRegion (target), HAS_LOCALE (inverse), traversal: Locale→Region→Continent.
 
   cypher_pattern: "(Locale)-[:IN_SUBREGION]->(GeoRegion|GeoSubRegion)"

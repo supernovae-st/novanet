@@ -40,10 +40,9 @@ arc:
       description: "Whether link should be nofollow"
 
   llm_context: |
-    Page-to-page internal linking for SEO maillage.
-    Calculated from [@page:X] refs in BlockInstructions with purpose: link.
-    via_blocks: which blocks contain the link (for context).
-    strength: how many times the link appears (1 = single mention).
-    Use: MATCH (p1:Page)-[r:LINKS_TO]->(p2:Page) WHERE r.strength > 1
+    USE: when finding internal links between pages for SEO maillage.
+    TRIGGERS: internal linking, page links, SEO maillage, link building.
+    NOT: entity references (use REFERENCES_ENTITY), content mentions (use MENTIONS).
+    RELATES: Page (source), Page (target), via_blocks (property), calculated arc.
 
   cypher_pattern: "(Page)-[:LINKS_TO {via_blocks, strength, anchor_type, nofollow}]->(Page)"

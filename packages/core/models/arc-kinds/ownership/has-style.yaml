@@ -6,5 +6,9 @@ arc:
   source: Locale
   target: Style
   cardinality: one_to_one
-  llm_context: Locale has exactly one style configuration.
+  llm_context: |
+    USE: when loading writing style preferences for a locale.
+    TRIGGERS: locale style, writing style, formality, tone preferences.
+    NOT: formatting (use HAS_FORMATTING), voice (use HAS_VOICE), culture (use HAS_CULTURE).
+    RELATES: Locale (source), Style (target), 1:1 cardinality.
   cypher_pattern: (Locale)-[:HAS_STYLE]->(Style)

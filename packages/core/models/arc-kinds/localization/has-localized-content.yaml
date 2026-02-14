@@ -14,5 +14,9 @@ arc:
     - BlockGenerated
   cardinality: one_to_many
   inverse_of: FOR_LOCALE
-  llm_context: Inverse of FOR_LOCALE — locale knows all its content.
+  llm_context: |
+    USE: when loading all localized content for a specific locale.
+    TRIGGERS: locale content, all content for locale, localized assets, locale lookup.
+    NOT: forward locale lookup (use FOR_LOCALE), keyword ownership (use HAS_SEO_KEYWORDS).
+    RELATES: Locale (source), ProjectContent/EntityContent/PageGenerated/BlockGenerated (target), FOR_LOCALE (inverse_of).
   cypher_pattern: (Locale)-[:HAS_LOCALIZED_CONTENT]->(ProjectContent)

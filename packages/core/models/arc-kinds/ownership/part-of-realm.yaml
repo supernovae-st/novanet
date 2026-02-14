@@ -14,8 +14,9 @@ arc:
   inverse: HAS_SUBREALM
 
   llm_context: |
-    CulturalSubRealm belongs to exactly one CulturalRealm (Broek & Webb).
-    Use to find related cultures: MATCH (csr:CulturalSubRealm)-[:PART_OF_REALM]->(cr:CulturalRealm)
-    Example: Mediterranean -[:PART_OF_REALM]-> Occidental
+    USE: when finding which cultural realm a sub-realm belongs to.
+    TRIGGERS: cultural hierarchy, Broek Webb, cultural sub-realm, culture grouping.
+    NOT: geographic regions (use IN_REGION), language families (use BRANCH_OF).
+    RELATES: CulturalSubRealm (source), CulturalRealm (target), HAS_SUBREALM (inverse).
 
   cypher_pattern: "(CulturalSubRealm)-[:PART_OF_REALM]->(CulturalRealm)"

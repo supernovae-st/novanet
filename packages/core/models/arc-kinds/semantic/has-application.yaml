@@ -41,9 +41,9 @@ arc:
   inverse: APPLIES_TO
 
   llm_context: |
-    Inverse of APPLIES_TO: Entity A has Entity B as an applicable tool/method.
-    Source is a domain/context, target is a tool/method.
-    Use for: finding tools for a domain, discovering applicable technologies.
-    Examples: Marketing HAS_APPLICATION QRCode, Networking HAS_APPLICATION VCard
+    USE: when finding tools/methods applicable to a domain.
+    TRIGGERS: applicable tools, domain tools, use cases, applications.
+    NOT: direct usage (use USES_ENTITY), capability (use ENABLES).
+    RELATES: Entity (source/domain), Entity (target/tool), APPLIES_TO (inverse).
 
   cypher_pattern: "(Entity)-[:HAS_APPLICATION {strength, temperature, application_type, relevance}]->(Entity)"

@@ -12,5 +12,9 @@ arc:
     - name: status
       type: string
       required: false
-  llm_context: Project supports locales with activation status (active/pending/disabled).
+  llm_context: |
+    USE: when loading which locales a project supports.
+    TRIGGERS: project locales, supported locales, locale activation, locale status.
+    NOT: default locale (use DEFAULT_LOCALE), entity content locales (use FOR_LOCALE).
+    RELATES: Project (source), Locale (target), status (property: active/pending/disabled).
   cypher_pattern: (Project)-[:SUPPORTS_LOCALE {status}]->(Locale)

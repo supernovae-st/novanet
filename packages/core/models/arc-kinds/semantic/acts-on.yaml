@@ -35,9 +35,9 @@ arc:
   inverse: OPERATED_BY
 
   llm_context: |
-    Direct operation relationship: ACTION entity operates on THING/CONCEPT.
-    Use for create-qr-code ACTS_ON qr-code, scan-qr-code ACTS_ON qr-code.
-    Different from ENABLES (capability) or APPLIES_TO (domain relevance).
-    operation_type: create, read, update, delete, scan, download, print
+    USE: when finding what entity an action operates on.
+    TRIGGERS: action target, operates on, action entity, direct operation.
+    NOT: capability (use ENABLES), domain relevance (use APPLIES_TO).
+    RELATES: Entity (source/action), Entity (target/thing), OPERATED_BY (inverse).
 
   cypher_pattern: "(Entity)-[:ACTS_ON {strength, temperature, operation_type}]->(Entity)"

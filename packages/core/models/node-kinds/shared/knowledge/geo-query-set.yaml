@@ -15,8 +15,14 @@ node:
   realm: shared
   layer: knowledge
   trait: defined  # Containers are universal categories (invariant), atoms are locale-native (knowledge)
-  icon: "📦"
-  description: "Container for GEO queries belonging to a locale (1:1 with Locale)"
+  icon:
+    web: "package"
+    terminal: "■"
+  description: |
+    Container for GEO queries belonging to a locale (1:1 with Locale).
+    USE: When accessing locale's AI visibility queries for monitoring.
+    TRIGGERS: GEO queries, AI visibility, query set, locale queries.
+    NOT: For individual queries (use GEOQuery via CONTAINS_GEO_QUERY).
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # STANDARD PROPERTIES (v7.1.0)

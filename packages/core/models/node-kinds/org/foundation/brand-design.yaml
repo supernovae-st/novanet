@@ -35,8 +35,12 @@ node:
     llm_context:
       type: string
       required: true
-      description: "LLM context for visual consistency"
-      example: "USE: for image generation. TRIGGERS: colors, styles, visuals. NOT: copywriting."
+      description: "LLM context for visual consistency. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections].'"
+      example: |
+        USE: when generating images, selecting colors, or applying visual styling.
+        TRIGGERS: "design system", "colors", "typography", "visual style", "UI patterns", "@brand.design".
+        NOT: for brand voice/messaging (use BrandPrinciples), for brand identity (use Brand), for locale-specific visuals (use PromptStyle).
+        RELATES: Brand (owner via HAS_DESIGN).
 
     created_at:
       type: datetime

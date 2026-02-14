@@ -1,0 +1,29 @@
+# packages/core/models/taxonomy/arc-families/ownership.yaml
+# Ownership family - parent-child structural relationships
+
+arc_family:
+  key: ownership
+  display_name: Ownership
+  color: "#3b82f6"
+  stroke_style: solid
+  stroke_width: 2
+  arrow_style: "-->"
+  default_traversal: eager
+
+  llm_context: |
+    USE: when traversing structural parent-child relationships.
+    TRIGGERS: "ownership", "has", "contains", "parent", "child", "hierarchy".
+    NOT: for semantic links (use semantic family), for locale links (use localization).
+    RELATES: HAS_PAGE, HAS_BLOCK, HAS_ENTITY, HAS_PROJECT, HAS_CONTENT, HAS_BRAND.
+
+  examples:
+    - HAS_PAGE
+    - HAS_BLOCK
+    - HAS_ENTITY
+    - HAS_PROJECT
+    - HAS_CONTENT
+    - HAS_GENERATED
+    - HAS_BRAND
+    - HAS_DESIGN
+    - HAS_PRINCIPLES
+    - HAS_INSTRUCTION

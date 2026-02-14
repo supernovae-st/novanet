@@ -10,7 +10,9 @@ node:
   realm: shared
   layer: locale
   trait: imported
-  icon: "🔢"
+  icon:
+    web: "hash"
+    terminal: "▦"
   description: "Technical formatting rules: dates, numbers, currency, time, phone, address, units"
 
   standard_properties:

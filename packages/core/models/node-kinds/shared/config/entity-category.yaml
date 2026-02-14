@@ -13,7 +13,9 @@ node:
   realm: shared
   layer: config
   trait: defined
-  icon: "📂"
+  icon:
+    web: "folder"
+    terminal: "▤"
   description: "Semantic category for classifying Entity nodes by their purpose"
 
   # ═══════════════════════════════════════════════════════════════════════════════

@@ -11,9 +11,9 @@ arc:
   cardinality: many_to_one
 
   llm_context: |
-    Comparison keyword (X vs Y) references the first entity (X).
-    Only valid when SEOKeyword has HAS_FORMAT → comparison.
-    Pattern: (SEOKeyword)-[:COMPARES_A]->(Entity)
-    v11.4: New arc for comparison keyword semantics.
+    USE: when linking comparison keyword to first entity (X in "X vs Y").
+    TRIGGERS: comparison keyword, versus first, compared entity A.
+    NOT: second entity (use COMPARES_B), keyword format (use HAS_FORMAT).
+    RELATES: SEOKeyword (source), Entity (target), COMPARES_B (complement).
 
   cypher_pattern: "(SEOKeyword)-[:COMPARES_A]->(Entity)"

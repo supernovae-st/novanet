@@ -41,11 +41,9 @@ arc:
   # No inverse - symmetric relationship
 
   llm_context: |
-    Competition relationship: Entity A competes with Entity B (symmetric).
-    Both entities serve similar purposes or target same audience.
-    competition_type: direct (same solution), indirect (different approach),
-      substitute (replacement), emerging (new competitor)
-    Examples: StaticQR COMPETES_WITH DynamicQR, QRCode COMPETES_WITH NFC
-    Symmetric: A COMPETES_WITH B implies B COMPETES_WITH A.
+    USE: when finding competitive entities in same market.
+    TRIGGERS: competitor, competes, rival, market competition, vs.
+    NOT: alternatives (use ALTERNATIVE_TO), similarity (use SIMILAR_TO).
+    RELATES: Entity (source), Entity (target), symmetric (no inverse needed).
 
   cypher_pattern: "(Entity)-[:COMPETES_WITH {strength, temperature, competition_type, market_segment}]->(Entity)"

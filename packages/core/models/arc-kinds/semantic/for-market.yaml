@@ -10,7 +10,8 @@ arc:
   cardinality: one_to_many
   required: false
   llm_context: |
-    Brand is active in specific markets.
-    Market defines geographic/demographic segment.
-    Use to filter content generation by market.
+    USE: when finding which markets a brand targets.
+    TRIGGERS: brand markets, target market, market segment, geographic market.
+    NOT: locale market (use HAS_MARKET), locale support (use SUPPORTS_LOCALE).
+    RELATES: Brand (source), Market (target), 1:N cardinality.
   cypher_pattern: "(Brand)-[:FOR_MARKET]->(Market)"

@@ -19,8 +19,9 @@ arc:
       description: "How the entity materializes on the page"
 
   llm_context: |
-    Entity materializes as one or more pages. N:M, optional.
-    role: primary = dedicated page, secondary = mentioned, comparison = vs other entities.
-    Use: MATCH (e:Entity)-[:MATERIALIZES_AS]->(p:Page)
+    USE: when finding which pages an entity materializes as.
+    TRIGGERS: entity pages, materialization, entity to page, dedicated page.
+    NOT: page representation (use REPRESENTS), entity usage (use USES_ENTITY).
+    RELATES: Entity (source), Page (target), role (property: primary/secondary).
 
   cypher_pattern: "(Entity)-[:MATERIALIZES_AS {role}]->(Page)"

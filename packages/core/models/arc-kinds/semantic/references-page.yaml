@@ -22,7 +22,9 @@ arc:
       description: "Surrounding context in the instruction"
 
   llm_context: |
-    BlockInstruction references a Page via @link:key syntax. Auto-parsed.
-    Use: MATCH (bi:BlockInstruction)-[:REFERENCES_PAGE]->(p:Page)
+    USE: when finding pages referenced by a block instruction.
+    TRIGGERS: @link reference, instruction pages, page link, internal link.
+    NOT: entity references (use REFERENCES_ENTITY), page-to-page (use LINKS_TO).
+    RELATES: BlockInstruction (source), Page (target), auto-parsed from @ syntax.
 
   cypher_pattern: "(BlockInstruction)-[:REFERENCES_PAGE {syntax, context}]->(Page)"

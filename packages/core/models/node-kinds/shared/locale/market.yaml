@@ -10,7 +10,9 @@ node:
   realm: shared
   layer: locale
   trait: imported
-  icon: "📊"
+  icon:
+    web: "bar-chart-2"
+    terminal: "▣"
   description: "Market intelligence for a locale including demographics, digital maturity, e-commerce landscape, and consumer behavior. Used for market-appropriate content strategy."
 
   standard_properties:

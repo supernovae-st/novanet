@@ -24,10 +24,10 @@ arc:
   inverse: INSTRUCTION_OF
 
   llm_context: |
-    Page owns ordered BlockInstructions (one per block in the page).
-    Block owns its single BlockInstruction (generation instructions).
-    Page use: MATCH (p:Page)-[:HAS_INSTRUCTION]->(bi:BlockInstruction) ORDER BY bi.position
-    Block use: MATCH (b:Block)-[:HAS_INSTRUCTION]->(bi:BlockInstruction)
+    USE: when loading generation instructions for pages or blocks.
+    TRIGGERS: block instruction, generation prompt, LLM instructions, @ references.
+    NOT: block schema (use OF_TYPE), block rules (use HAS_RULES).
+    RELATES: Page/Block (source), BlockInstruction (target), INSTRUCTION_OF (inverse).
 
   cypher_pattern: |
     (Page)-[:HAS_INSTRUCTION {position}]->(BlockInstruction)

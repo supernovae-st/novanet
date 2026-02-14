@@ -14,8 +14,9 @@ arc:
   inverse: PRIMARY_FOR
 
   llm_context: |
-    Locale's majority/primary population cluster for image generation.
-    Use for quick population context: MATCH (l:Locale)-[:HAS_PRIMARY_POPULATION]->(pc:PopulationCluster)
-    Example: fr-FR -[:HAS_PRIMARY_POPULATION]-> West Eurasian
+    USE: when loading primary/majority population for quick visual context.
+    TRIGGERS: primary population, majority ethnicity, main demographic, quick population.
+    NOT: detailed demographics (use HAS_POPULATION), regional population (use POPULATION_OF).
+    RELATES: Locale (source), PopulationCluster (target), PRIMARY_FOR (inverse).
 
   cypher_pattern: "(Locale)-[:HAS_PRIMARY_POPULATION]->(PopulationCluster)"

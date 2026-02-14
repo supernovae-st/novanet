@@ -52,7 +52,9 @@ node:
   realm: org
   layer: semantic
   trait: authored
-  icon: "🟢"
+  icon:
+    web: "circle-check"
+    terminal: "●"
   description: "Locale-native content for an Entity"
 
   # ═══════════════════════════════════════════════════════════════════════════════
@@ -163,7 +165,9 @@ node:
     llm_context:
       type: string
       required: true
-      description: "Format: USE: [when]. TRIGGERS: [locale keywords]. NOT: [disambiguation]."
+      description: |
+        Format: USE: [when]. TRIGGERS: [locale keywords]. NOT: [disambiguation]. RELATES: [connections].
+        Example: USE: when loading localized entity data for content generation. TRIGGERS: "entity content", "localized entity", locale code. NOT: for invariant entity definition (use Entity). RELATES: Entity (parent via HAS_CONTENT), Locale (target via FOR_LOCALE), SEOKeyword (targets via TARGETS).
 
     created_at:
       type: datetime

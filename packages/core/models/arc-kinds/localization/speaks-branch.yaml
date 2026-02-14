@@ -14,8 +14,9 @@ arc:
   inverse: SPOKEN_BY
 
   llm_context: |
-    Locale's primary language belongs to a language branch.
-    Use to find locales with similar languages: MATCH (l:Locale)-[:SPEAKS_BRANCH]->(b)<-[:SPEAKS_BRANCH]-(similar)
-    Example: fr-FR -[:SPEAKS_BRANCH]-> Romance (roa)
+    USE: when finding language family/branch for a locale.
+    TRIGGERS: language branch, language family, similar languages, Romance/Germanic.
+    NOT: cultural realm (use IN_CULTURAL_SUBREALM), geographic region (use IN_SUBREGION).
+    RELATES: Locale (source), LanguageBranch (target), SPOKEN_BY (inverse).
 
   cypher_pattern: "(Locale)-[:SPEAKS_BRANCH]->(LanguageBranch)"

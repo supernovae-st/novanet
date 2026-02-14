@@ -11,9 +11,9 @@ arc:
   cardinality: many_to_one
 
   llm_context: |
-    Preposition keyword (X for Y) references the target entity.
-    Only valid when SEOKeyword has HAS_FORMAT → preposition.
-    Pattern: (SEOKeyword)-[:USE_CASE_FOR]->(Entity)
-    v11.4: New arc for preposition keyword semantics.
+    USE: when linking preposition keywords ("X for Y") to their target entity.
+    TRIGGERS: use case, for keyword, preposition format, keyword target.
+    NOT: keyword targeting (use TARGETS), keyword expression (use EXPRESSES).
+    RELATES: SEOKeyword (source), Entity (target), requires HAS_FORMAT → preposition.
 
   cypher_pattern: "(SEOKeyword)-[:USE_CASE_FOR]->(Entity)"

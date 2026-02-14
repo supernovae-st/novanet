@@ -22,10 +22,10 @@ arc:
   target: GEOQuerySet
   cardinality: one_to_one
   llm_context: |
-    Locale owns its GEO query set (container). Similar to HAS_TERMS pattern.
-    Traversal: Locale --[:HAS_GEO_QUERIES]--> GEOQuerySet --[:CONTAINS_GEO_QUERY]--> GEOQuery
-    Use to load the container, then traverse to individual GEO queries.
-    v11.4: Updated to container pattern (1 Locale has 1 GEOQuerySet).
+    USE: when loading GEO query container for a locale.
+    TRIGGERS: locale GEO queries, AI search queries, GEO query set.
+    NOT: individual queries (use CONTAINS_GEO_QUERY), GEO answers.
+    RELATES: Locale (source), GEOQuerySet (target), 1:1 cardinality.
 
   cypher_pattern: (Locale)-[:HAS_GEO_QUERIES]->(GEOQuerySet)
 

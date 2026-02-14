@@ -35,7 +35,9 @@ node:
   realm: org
   layer: semantic
   trait: defined
-  icon: "🔷"
+  icon:
+    web: "diamond"
+    terminal: "◆"
   description: "Semantic unit representing products, features, concepts, actions, and tools"
 
   # ═══════════════════════════════════════════════════════════════════════════════
@@ -126,8 +128,16 @@ node:
       type: string
       required: true
       examples:
-        - "USE: when discussing QR codes, scanning, 2D barcodes. TRIGGERS: qr, qr code, scan, code qr. NOT: barcode 1D (use Barcode), smart link without QR (use Smart Link)."
-        - "USE: AI QR, artistic QR, generated QR. TRIGGERS: qr art, ai qr, qr artistique. NOT: photo overlay (use QR Code Image), manual design (use Custom QR Code)."
+        - |
+          USE: when discussing QR codes, scanning, 2D barcodes, or loading semantic context.
+          TRIGGERS: "qr", "qr code", "scan", "code qr", "barcode 2D".
+          NOT: for 1D barcodes (use Barcode entity), for smart links without QR (use Smart Link entity).
+          RELATES: Project (owner via HAS_ENTITY), EntityContent (localized via HAS_CONTENT), EntityCategory (type via BELONGS_TO), Page (represented via REPRESENTS).
+        - |
+          USE: when generating AI/artistic QR content or creative QR visuals.
+          TRIGGERS: "qr art", "ai qr", "qr artistique", "generated qr", "artistic qr code".
+          NOT: for photo overlay (use QR Code Image entity), for manual design (use Custom QR Code entity).
+          RELATES: Project (owner), EntityContent (localized content), Page (canonical page via REPRESENTED_BY).
 
     # ─────────────────────────────────────────────────────────────────────────────
     # entity_summary: LLM context summary (v11)
@@ -555,7 +565,11 @@ node:
       key: "qr-code"
       display_name: "QR Code"
       description: "Two-dimensional barcode that encodes data in a scannable visual pattern. Core product pillar of QR Code AI."
-      llm_context: "USE: when discussing QR codes, scanning, 2D barcodes. TRIGGERS: qr, qr code, scan, code qr. NOT: barcode 1D (use Barcode), smart link without QR (use Smart Link)."
+      llm_context: |
+        USE: when discussing QR codes, scanning, 2D barcodes, or loading QR-related semantic context.
+        TRIGGERS: "qr", "qr code", "scan", "code qr", "barcode 2D".
+        NOT: for 1D barcodes (use Barcode entity), for smart links without QR (use Smart Link entity).
+        RELATES: Project (qrcode-ai), EntityContent (localized), EntityCategory (thing), Page (qr-code).
       is_pillar: true
       # BELONGS_TO: thing
 
@@ -564,7 +578,11 @@ node:
       key: "qr-code-art"
       display_name: "QR Code Art"
       description: "AI-generated artistic QR code where pattern is fused into artwork, not layered. The QR becomes part of the art itself."
-      llm_context: "USE: AI QR, artistic QR, generated QR. TRIGGERS: qr art, ai qr, qr artistique. NOT: photo overlay (use QR Code Image), manual design (use Custom QR Code)."
+      llm_context: |
+        USE: when generating AI/artistic QR content or creative QR visuals.
+        TRIGGERS: "qr art", "ai qr", "qr artistique", "generated qr", "artistic qr code".
+        NOT: for photo overlay (use QR Code Image entity), for manual design (use Custom QR Code entity).
+        RELATES: Project (qrcode-ai), EntityContent (localized), qr-code (parent via SUBTOPIC_OF).
       is_pillar: false
       # BELONGS_TO: thing
       # SUBTOPIC_OF: qr-code
@@ -574,7 +592,11 @@ node:
       key: "dynamic-qr-code"
       display_name: "Dynamic QR Code"
       description: "Educational concept: QR code using Short Link as intermediary. Destination editable after printing, fully trackable."
-      llm_context: "USE: when explaining editable QR, trackable QR. TRIGGERS: dynamic, editable, modifiable. NOT: WiFi/vCard QR (use Static QR Code)."
+      llm_context: |
+        USE: when explaining editable QR, trackable QR, or dynamic QR features.
+        TRIGGERS: "dynamic", "editable", "modifiable", "trackable qr", "changeable destination".
+        NOT: for WiFi/vCard QR (use Static QR Code entity), for QR generation action (use create-qr-code).
+        RELATES: EntityCategory (concept), short-link (requires via SEMANTIC_LINK), analytics (enables via SEMANTIC_LINK).
       is_pillar: false
       # BELONGS_TO: concept
 
@@ -583,7 +605,11 @@ node:
       key: "create-qr-code"
       display_name: "Create QR Code"
       description: "Generate a new QR code. Applies to any style (Custom, Image, Art) and content type (URL, WiFi, vCard)."
-      llm_context: "USE: when user wants to generate/make a QR code. TRIGGERS: create qr, generate qr, make qr, creer qr. NOT: scanning (use Scan QR Code)."
+      llm_context: |
+        USE: when user wants to generate/make/create a QR code.
+        TRIGGERS: "create qr", "generate qr", "make qr", "creer qr", "nouveau qr code".
+        NOT: for scanning (use Scan QR Code action), for editing existing (use Edit QR Code action).
+        RELATES: EntityCategory (action), qr-code (is_action_on via SEMANTIC_LINK), Page (create-qr-code).
       is_pillar: false
       # BELONGS_TO: action
 
@@ -592,7 +618,11 @@ node:
       key: "contextual-routing"
       display_name: "Contextual Routing"
       description: "Redirect users to different destinations based on device, location, time, or language. Works via Short Link."
-      llm_context: "USE: conditional redirects, smart routing, targeting. TRIGGERS: routing, device targeting, geo targeting. NOT: analytics data (use Analytics)."
+      llm_context: |
+        USE: when discussing conditional redirects, smart routing, or targeting.
+        TRIGGERS: "routing", "device targeting", "geo targeting", "conditional redirect", "smart routing".
+        NOT: for analytics data (use Analytics entity), for A/B testing (use A/B Testing entity).
+        RELATES: EntityCategory (feature), short-link (requires via SEMANTIC_LINK), dynamic-qr-code (enables via SEMANTIC_LINK).
       is_pillar: false
       # BELONGS_TO: feature
 

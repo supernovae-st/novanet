@@ -10,7 +10,9 @@ node:
   realm: shared
   layer: locale
   trait: imported
-  icon: "🔗"
+  icon:
+    web: "link"
+    terminal: "⌘"
   description: "URL slug rules: transliteration, stop words, URL conventions"
 
   standard_properties:

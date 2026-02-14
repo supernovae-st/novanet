@@ -38,18 +38,10 @@ arc:
       description: "How this relationship was determined"
 
   llm_context: |
-    Geographic relevance relationship: Entity is popular/relevant in a region.
-    Links org-realm entities to shared-realm geographic nodes.
-    Use for: regional content targeting, locale-specific feature promotion,
-    market-specific entity selection in generation context.
-    weight: 0.0 = entity exists but is niche in region
-            0.5 = entity has moderate presence
-            1.0 = entity is dominant/exclusive to region
-    Examples:
-      qr-code-pix POPULAR_IN brazil (weight: 0.95)
-      qr-code-upi POPULAR_IN india (weight: 0.9)
-      qr-code-twint POPULAR_IN switzerland (weight: 0.85)
-    Cross-realm: Entity (org/semantic) -> GeoRegion/GeoSubRegion/Continent (shared/geography)
+    USE: when finding regional popularity/relevance of an entity.
+    TRIGGERS: popular in, regional relevance, geographic targeting, market presence.
+    NOT: locale support (use SUPPORTS_LOCALE), cultural similarity (use CULTURALLY_SIMILAR).
+    RELATES: Entity (source), GeoRegion/GeoSubRegion/Continent (target), weight (property).
 
   cypher_pattern: "(Entity)-[:POPULAR_IN {weight, confidence, source_type}]->(GeoRegion|GeoSubRegion|Continent)"
 

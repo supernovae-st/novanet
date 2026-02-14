@@ -10,7 +10,9 @@ node:
   realm: shared
   layer: knowledge
   trait: imported
-  icon: "🎭"
+  icon:
+    web: "drama"
+    terminal: "◎"
   description: "Major cultural realm for understanding cultural patterns and sensitivities"
 
   standard_properties:

@@ -15,12 +15,10 @@ arc:
   cardinality: many_to_one  # Each Entity has exactly one category
 
   llm_context: |
-    Links Entity to its semantic category (EntityCategory).
-    Replaces the former `type` property with a proper graph relationship.
-    Categories answer: WHAT? (THING, FEATURE, TOOL), HOW? (ACTION, GUIDE),
-    WHY? (USE_CASE), WHO? (INDUSTRY), WHERE? (MEDIUM), ABSTRACT (CONCEPT),
-    EXTERNAL (BRAND, INTEGRATION).
-    Use: MATCH (e:Entity)-[:BELONGS_TO]->(c:EntityCategory)
+    USE: when categorizing entities or querying by category.
+    TRIGGERS: entity category, entity type, what is entity, categorization.
+    NOT: entity content (use HAS_CONTENT), entity hierarchy (use HAS_CHILD).
+    RELATES: Entity (source), EntityCategory (target), cross_realm (scope).
 
   cypher_pattern: "(Entity)-[:BELONGS_TO]->(EntityCategory)"
 

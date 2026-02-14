@@ -22,7 +22,9 @@ node:
   realm: org
   layer: instruction
   trait: defined
-  icon: "🔷"
+  icon:
+    web: component
+    terminal: "▦"
   description: "A reusable template or 'mold' that defines the expected JSON structure and validation rules for a category of blocks (e.g., 'hero', 'faq'). This is the central schema for a given type of block."
 
   # ═══════════════════════════════════════════════════════════════════════════════
@@ -56,8 +58,12 @@ node:
     llm_context:
       type: string
       required: true
-      description: "LLM generation hints about the role of this block type. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation].'"
-      example: "USE: for creating attention-grabbing hero sections at the top of a page. TRIGGERS: hero, header, banner, above-fold. NOT: for body or footer content."
+      description: "LLM generation hints about the role of this block type. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections].'"
+      example: |
+        USE: when validating block structure or selecting a template for new blocks.
+        TRIGGERS: "block type", "block template", "block schema", "hero", "faq", "pricing-table".
+        NOT: for block instances (use Block), for generation instructions (use BlockInstruction), for generated content (use BlockGenerated).
+        RELATES: Block (instances via OF_TYPE), BlockRules (validation via HAS_RULES), BlockInstruction (instructions via OF_TYPE).
 
     created_at:
       type: datetime

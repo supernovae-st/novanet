@@ -14,8 +14,9 @@ arc:
   inverse: HAS_LOCALE
 
   llm_context: |
-    Locale belongs to a World Bank economic region.
-    Use to find regional peers: MATCH (l:Locale)-[:IN_ECONOMIC_REGION]->(er)<-[:IN_ECONOMIC_REGION]-(similar)
-    Example: fr-FR -[:IN_ECONOMIC_REGION]-> ECA
+    USE: when finding World Bank economic region for market analysis.
+    TRIGGERS: economic region, World Bank region, regional peers, market grouping.
+    NOT: income level (use HAS_INCOME_LEVEL), lending type (use HAS_LENDING_TYPE).
+    RELATES: Locale (source), EconomicRegion (target), HAS_LOCALE (inverse).
 
   cypher_pattern: "(Locale)-[:IN_ECONOMIC_REGION]->(EconomicRegion)"

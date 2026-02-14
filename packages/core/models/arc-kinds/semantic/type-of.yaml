@@ -35,10 +35,9 @@ arc:
   inverse: HAS_TYPE
 
   llm_context: |
-    Taxonomy relationship: Entity A is a type/subtype of Entity B.
-    Source is more specific, target is more general (ISA relationship).
-    taxonomy_level: genus (broad category), species (specific type),
-      subspecies (narrow variant), instance (concrete example)
-    Examples: StaticQR TYPE_OF QRCode, VCard TYPE_OF ContactFormat
+    USE: when classifying entities in taxonomy hierarchy (ISA relationship).
+    TRIGGERS: is a, type of, kind of, category, classification, taxonomy.
+    NOT: variants (use VARIANT_OF), children (use HAS_CHILD), instances (use data nodes).
+    RELATES: Entity (source/specific), Entity (target/general), HAS_TYPE (inverse).
 
   cypher_pattern: "(Entity)-[:TYPE_OF {strength, temperature, taxonomy_level}]->(Entity)"

@@ -16,7 +16,9 @@ node:
   realm: shared
   layer: knowledge
   trait: retrieved  # v11.2: Split derived → aggregated (computed metrics)
-  icon: "💬"
+  icon:
+    web: "message-square"
+    terminal: "◇"
   description: |
     LLM response sample for GEO analysis (immutable snapshot).
     Captures actual AI engine responses for visibility tracking and analysis.

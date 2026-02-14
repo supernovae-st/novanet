@@ -12,7 +12,9 @@ node:
   realm: shared
   layer: knowledge
   trait: defined  # v11.4: Containers are universal categories (invariant), atoms are locale-native (knowledge)
-  icon: "📦"
+  icon:
+    web: "package"
+    terminal: "■"
   description: "Container for SEO keywords belonging to a locale (1:1 with Locale)"
 
   standard_properties:

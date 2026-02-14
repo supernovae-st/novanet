@@ -9,7 +9,9 @@ node:
   realm: shared
   layer: knowledge
   trait: imported
-  icon: "📝"
+  icon:
+    web: "edit"
+    terminal: "✎"
   description: "Individual vocabulary term belonging to a locale's TermSet"
 
   standard_properties:

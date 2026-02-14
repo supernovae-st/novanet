@@ -13,10 +13,10 @@ arc:
   target: GEOQuery
   cardinality: one_to_many
   llm_context: |
-    GEOQuerySet contains its GEOQuery atoms.
-    Type-constrained: only GEOQuerySet can use this arc.
-    Pattern: (GEOQuerySet)-[:CONTAINS_GEO_QUERY]->(GEOQuery)
-    v11.4: New arc for container-atom relationship.
+    USE: when loading individual GEO queries from a query set.
+    TRIGGERS: geo queries, AI search queries, GEO atoms, query atoms.
+    NOT: query set container (use HAS_GEO_QUERIES), GEO answers.
+    RELATES: GEOQuerySet (source), GEOQuery (target).
   cypher_pattern: "(GEOQuerySet)-[:CONTAINS_GEO_QUERY]->(GEOQuery)"
   example:
     description: "Get all GEO queries in a locale's query set"

@@ -31,10 +31,9 @@ arc:
       description: "Target ranking position (1-10)"
 
   llm_context: |
-    EntityContent targets SEO keywords for organic search optimization.
-    Multiple EntityContent can target the same keyword.
-    One EntityContent can target multiple keywords.
-    CONSTRAINT: EntityContent locale must match SEOKeyword locale (via Locale ownership).
-    Use: MATCH (el:EntityContent)-[:TARGETS]->(kw:SEOKeyword)
+    USE: when finding SEO keywords targeted by localized content.
+    TRIGGERS: targets keyword, SEO targeting, keyword optimization, organic search.
+    NOT: keyword expression (use EXPRESSES), persona targeting (use TARGETS_PERSONA).
+    RELATES: EntityContent (source), SEOKeyword (target), cross_realm, locale must match.
 
   cypher_pattern: "(EntityContent)-[:TARGETS {priority, target_position}]->(SEOKeyword)"

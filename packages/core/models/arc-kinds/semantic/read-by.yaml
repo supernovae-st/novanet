@@ -35,8 +35,9 @@ arc:
   inverse: READS
 
   llm_context: |
-    Inverse of READS: THING is read/scanned by TOOL.
-    Use for qr-code READ_BY qr-code-scanner, barcode READ_BY barcode-scanner.
-    Enables traversal from entity to tools that can read it.
+    USE: when finding tools that can read/scan an entity.
+    TRIGGERS: read by, scanned by, decoded by, parsed by.
+    NOT: operated by (use OPERATED_BY), created by (inverse direction).
+    RELATES: Entity (source/thing), Entity (target/tool), READS (inverse).
 
   cypher_pattern: "(Entity)-[:READ_BY {strength, temperature, read_type}]->(Entity)"

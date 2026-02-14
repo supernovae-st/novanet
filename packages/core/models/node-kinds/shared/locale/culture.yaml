@@ -10,7 +10,9 @@ node:
   realm: shared
   layer: locale
   trait: imported
-  icon: "🌍"
+  icon:
+    web: "globe"
+    terminal: "◉"
   description: "Cultural context for a locale including calendar, seasons, business norms, communication style, and core values. Used by LLM for culturally-appropriate content generation."
 
   standard_properties:

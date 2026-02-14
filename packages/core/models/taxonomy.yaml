@@ -29,7 +29,9 @@ version: "0.12.0"
 node_realms:
   - key: shared
     display_name: Shared
-    emoji: "🌍"
+    icon:
+      web: globe
+      terminal: "◉"
     color: "#2aa198"
     llm_context: |
       Shared across ALL organizations. Universal locale knowledge that applies
@@ -41,7 +43,9 @@ node_realms:
     layers:
       - key: config
         display_name: Config
-        emoji: "⚙️"
+        icon:
+          web: settings
+          terminal: "⚙"
         color: "#64748b"
         llm_context: |
           Human-defined definitions for shared realm. All nodes have "defined" trait.
@@ -51,7 +55,9 @@ node_realms:
 
       - key: locale
         display_name: Locale
-        emoji: "🌐"
+        icon:
+          web: globe
+          terminal: "⊕"
         color: "#64748b"
         llm_context: |
           Locale-specific SETTINGS (1:1 with Locale). All nodes have "imported" trait.
@@ -61,7 +67,9 @@ node_realms:
 
       - key: geography
         display_name: Geography
-        emoji: "🗺️"
+        icon:
+          web: map
+          terminal: "⊙"
         color: "#10b981"
         llm_context: |
           Geographic and economic classifications. Continents, regions, sub-regions,
@@ -70,7 +78,9 @@ node_realms:
 
       - key: knowledge
         display_name: Knowledge
-        emoji: "📚"
+        icon:
+          web: book-open
+          terminal: "◈"
         color: "#8b5cf6"
         llm_context: |
           Deep locale-specific knowledge for native content generation.
@@ -82,7 +92,9 @@ node_realms:
 
   - key: org
     display_name: Organization
-    emoji: "🏢"
+    icon:
+      web: building-2
+      terminal: "◎"
     color: "#6c71c4"
     llm_context: |
       Organization-specific realm. Contains Projects, Entities, Pages, Blocks,
@@ -92,7 +104,9 @@ node_realms:
     layers:
       - key: config
         display_name: Config
-        emoji: "⚙️"
+        icon:
+          web: settings
+          terminal: "⚙"
         color: "#64748b"
         llm_context: |
           Organization configuration root. OrgConfig node is the entry point
@@ -100,7 +114,9 @@ node_realms:
 
       - key: semantic
         display_name: Semantic Layer
-        emoji: "💡"
+        icon:
+          web: lightbulb
+          terminal: "◆"
         color: "#f97316"
         llm_context: |
           Defined entities (Entity) and their authored content (EntityContent).
@@ -111,7 +127,9 @@ node_realms:
 
       - key: foundation
         display_name: Foundation
-        emoji: "🏛️"
+        icon:
+          web: landmark
+          terminal: "▣"
         color: "#3b82f6"
         llm_context: |
           Project identity. Project, Brand, ProjectContent. Each Organization
@@ -120,7 +138,9 @@ node_realms:
 
       - key: structure
         display_name: Structure
-        emoji: "🏗️"
+        icon:
+          web: layout
+          terminal: "▤"
         color: "#06b6d4"
         llm_context: |
           Information architecture. Pages, blocks, and their types. Defines
@@ -129,7 +149,9 @@ node_realms:
 
       - key: instruction
         display_name: Instructions
-        emoji: "📝"
+        icon:
+          web: file-text
+          terminal: "▧"
         color: "#eab308"
         llm_context: |
           Generation directives. Instructions and rules that guide the LLM during
@@ -139,7 +161,9 @@ node_realms:
 
       - key: output
         display_name: Generated Output
-        emoji: "✨"
+        icon:
+          web: check-circle
+          terminal: "●"
         color: "#22c55e"
         llm_context: |
           LLM-generated content. The final localized pages and blocks ready
