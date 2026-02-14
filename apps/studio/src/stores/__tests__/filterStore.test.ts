@@ -34,11 +34,11 @@ describe('filterStore', () => {
     jest.clearAllMocks();
     localStorageMock.clear();
 
-    // Reset store to initial state
+    // Reset store to initial state (v0.12.5: fr-FR is the default locale)
     useFilterStore.setState({
       enabledNodeTypes: new Set(CORE_TYPES),
       selectedProject: null,
-      selectedLocale: null,
+      selectedLocale: 'fr-FR',  // v0.12.5: Default locale is fr-FR
       searchQuery: '',
       depthLimit: 2,
       activePresetId: DEFAULT_PRESET.id,
@@ -64,10 +64,10 @@ describe('filterStore', () => {
       expect(state.activePresetId).toBe(DEFAULT_PRESET.id);
     });
 
-    it('should have empty filters by default', () => {
+    it('should have default filters', () => {
       const state = useFilterStore.getState();
       expect(state.selectedProject).toBeNull();
-      expect(state.selectedLocale).toBeNull();
+      expect(state.selectedLocale).toBe('fr-FR');  // v0.12.5: Default locale is fr-FR
       expect(state.searchQuery).toBe('');
       expect(state.layerFilter).toEqual([]);
     });
@@ -263,7 +263,7 @@ describe('filterStore', () => {
       const state = useFilterStore.getState();
       expect(state.enabledNodeTypes).toEqual(new Set(CORE_TYPES));
       expect(state.selectedProject).toBeNull();
-      expect(state.selectedLocale).toBeNull();
+      expect(state.selectedLocale).toBe('fr-FR');  // v0.12.5: Default locale is fr-FR
       expect(state.searchQuery).toBe('');
       expect(state.depthLimit).toBe(2);
       expect(state.activePresetId).toBe(DEFAULT_PRESET.id);

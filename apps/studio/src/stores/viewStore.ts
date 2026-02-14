@@ -292,7 +292,7 @@ export const useViewStore = create<ViewStoreState & ViewStoreActions>()(
 
       // Load default view on startup
       loadDefaultView: async () => {
-        const { activeViewId, executeView, isRegistryLoaded, loadRegistry, getViewById } = get();
+        const { activeViewId, params, executeView, isRegistryLoaded, loadRegistry, getViewById } = get();
 
         // Ensure registry is loaded first
         if (!isRegistryLoaded) {
@@ -300,8 +300,12 @@ export const useViewStore = create<ViewStoreState & ViewStoreActions>()(
         }
 
         // Validate that persisted view still exists in registry, fallback to default
-        const viewIdToLoad = activeViewId && getViewById(activeViewId)
-          ? activeViewId
+        const persistedView = activeViewId ? getViewById(activeViewId) : undefined;
+
+        // v0.12.5: If persisted view is contextual but no nodeKey, fallback to default
+        // This prevents errors when reloading with a contextual view selected but no node
+        const viewIdToLoad = persistedView
+          ? (persistedView.contextual && !params.key ? DEFAULT_VIEW_ID : activeViewId)
           : DEFAULT_VIEW_ID;
 
         // Execute the active view (persisted or default)
