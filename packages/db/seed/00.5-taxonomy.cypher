@@ -11,181 +11,83 @@
 // REALMS (2)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-MERGE (r_shared:Schema:Realm {key: 'shared'})
-ON CREATE SET
-  r_shared.display_name = 'Shared',
-  r_shared.emoji = '🌍',
-  r_shared.color = '#2aa198',
-  r_shared.llm_context = 'Shared across ALL organizations. Universal locale knowledge that applies everywhere: cultural norms, linguistic patterns, formatting conventions. These nodes are READ-ONLY. No Entity here - Entity lives in ORG realm. v11.5: Locale moved to config layer (invariant definition). v11.4: SEO/GEO nodes now live in shared/knowledge. SEOKeywordFormat and EntityCategory classifications live in shared/config.',
-  r_shared.created_at = datetime()
-ON MATCH SET
-  r_shared.display_name = 'Shared',
-  r_shared.emoji = '🌍',
-  r_shared.color = '#2aa198',
-  r_shared.llm_context = 'Shared across ALL organizations. Universal locale knowledge that applies everywhere: cultural norms, linguistic patterns, formatting conventions. These nodes are READ-ONLY. No Entity here - Entity lives in ORG realm. v11.5: Locale moved to config layer (invariant definition). v11.4: SEO/GEO nodes now live in shared/knowledge. SEOKeywordFormat and EntityCategory classifications live in shared/config.',
-  r_shared.updated_at = datetime();
-
 MERGE (r_org:Schema:Realm {key: 'org'})
 ON CREATE SET
   r_org.display_name = 'Organization',
-  r_org.emoji = '🏢',
+  r_org.emoji = '◎',
   r_org.color = '#6c71c4',
-  r_org.llm_context = 'Organization-specific realm. Contains Projects, Entities, Pages, Blocks, and all generated outputs. Org A cannot see Org B (multi-tenant isolation). Project owns Entity (HAS_ENTITY). Page/Block reference Entity via USES_ENTITY (N:M). AI context assembly follows arcs via spreading activation.',
+  r_org.llm_context = 'USE: when working with organization-specific content. TRIGGERS: "organization", "project", "entity", "page", "block", "generated". NOT: for universal locale knowledge (use shared realm). RELATES: Project (foundation), Entity (semantic), Page (structure), PageGenerated (output).',
   r_org.created_at = datetime()
 ON MATCH SET
   r_org.display_name = 'Organization',
-  r_org.emoji = '🏢',
+  r_org.emoji = '◎',
   r_org.color = '#6c71c4',
-  r_org.llm_context = 'Organization-specific realm. Contains Projects, Entities, Pages, Blocks, and all generated outputs. Org A cannot see Org B (multi-tenant isolation). Project owns Entity (HAS_ENTITY). Page/Block reference Entity via USES_ENTITY (N:M). AI context assembly follows arcs via spreading activation.',
+  r_org.llm_context = 'USE: when working with organization-specific content. TRIGGERS: "organization", "project", "entity", "page", "block", "generated". NOT: for universal locale knowledge (use shared realm). RELATES: Project (foundation), Entity (semantic), Page (structure), PageGenerated (output).',
   r_org.updated_at = datetime();
+
+MERGE (r_shared:Schema:Realm {key: 'shared'})
+ON CREATE SET
+  r_shared.display_name = 'Shared',
+  r_shared.emoji = '◉',
+  r_shared.color = '#2aa198',
+  r_shared.llm_context = 'USE: when accessing universal locale knowledge. TRIGGERS: "shared data", "universal", "read-only", "locale knowledge". NOT: for organization-specific content (use org realm). RELATES: Locale (config layer), Term (knowledge layer), Culture (locale layer).',
+  r_shared.created_at = datetime()
+ON MATCH SET
+  r_shared.display_name = 'Shared',
+  r_shared.emoji = '◉',
+  r_shared.color = '#2aa198',
+  r_shared.llm_context = 'USE: when accessing universal locale knowledge. TRIGGERS: "shared data", "universal", "read-only", "locale knowledge". NOT: for organization-specific content (use org realm). RELATES: Locale (config layer), Term (knowledge layer), Culture (locale layer).',
+  r_shared.updated_at = datetime();
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // LAYERS (10)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-// Shared layers
-MERGE (l_config:Schema:Layer {key: 'config'})
-ON CREATE SET
-  l_config.display_name = 'Config',
-  l_config.emoji = '⚙️',
-  l_config.color = '#64748b',
-  l_config.llm_context = 'Human-defined definitions for shared realm. All nodes have "defined" trait. v11.5: Locale (BCP-47 codes), EntityCategory (v11.1, ADR-017), SEOKeywordFormat (v11.4). These are universal DEFINITIONS, not locale-specific parameters.',
-  l_config.created_at = datetime()
-ON MATCH SET
-  l_config.display_name = 'Config',
-  l_config.emoji = '⚙️',
-  l_config.color = '#64748b',
-  l_config.llm_context = 'Human-defined definitions for shared realm. All nodes have "defined" trait. v11.5: Locale (BCP-47 codes), EntityCategory (v11.1, ADR-017), SEOKeywordFormat (v11.4). These are universal DEFINITIONS, not locale-specific parameters.',
-  l_config.updated_at = datetime();
-
-MATCH (r:Realm {key: 'shared'}), (l:Layer {key: 'config'})
-MERGE (r)-[:HAS_LAYER]->(l);
-MERGE (l_locale:Schema:Layer {key: 'locale'})
-ON CREATE SET
-  l_locale.display_name = 'Locale',
-  l_locale.emoji = '🌐',
-  l_locale.color = '#64748b',
-  l_locale.llm_context = 'Locale-specific SETTINGS (1:1 with Locale). All nodes have "imported" trait. v11.5: Culture, Style, Formatting, Adaptation, Market, Slugification. These contain discovered/curated data specific to each locale. Pattern: Locale (config) --[:HAS_X]--> Setting (locale).',
-  l_locale.created_at = datetime()
-ON MATCH SET
-  l_locale.display_name = 'Locale',
-  l_locale.emoji = '🌐',
-  l_locale.color = '#64748b',
-  l_locale.llm_context = 'Locale-specific SETTINGS (1:1 with Locale). All nodes have "imported" trait. v11.5: Culture, Style, Formatting, Adaptation, Market, Slugification. These contain discovered/curated data specific to each locale. Pattern: Locale (config) --[:HAS_X]--> Setting (locale).',
-  l_locale.updated_at = datetime();
-
-MATCH (r:Realm {key: 'shared'}), (l:Layer {key: 'locale'})
-MERGE (r)-[:HAS_LAYER]->(l);
-MERGE (l_geography:Schema:Layer {key: 'geography'})
-ON CREATE SET
-  l_geography.display_name = 'Geography',
-  l_geography.emoji = '🗺️',
-  l_geography.color = '#10b981',
-  l_geography.llm_context = 'Geographic and economic classifications. Continents, regions, sub-regions, economic zones, income groups, lending categories. World Bank data structure for geographic context.',
-  l_geography.created_at = datetime()
-ON MATCH SET
-  l_geography.display_name = 'Geography',
-  l_geography.emoji = '🗺️',
-  l_geography.color = '#10b981',
-  l_geography.llm_context = 'Geographic and economic classifications. Continents, regions, sub-regions, economic zones, income groups, lending categories. World Bank data structure for geographic context.',
-  l_geography.updated_at = datetime();
-
-MATCH (r:Realm {key: 'shared'}), (l:Layer {key: 'geography'})
-MERGE (r)-[:HAS_LAYER]->(l);
-MERGE (l_knowledge:Schema:Layer {key: 'knowledge'})
-ON CREATE SET
-  l_knowledge.display_name = 'Knowledge',
-  l_knowledge.emoji = '📚',
-  l_knowledge.color = '#8b5cf6',
-  l_knowledge.llm_context = 'Deep locale-specific knowledge for native content generation. Knowledge containers (TermSet, ExpressionSet, etc.) and atoms (Term, Expression, Pattern, etc.). Language families, cultural realms, population clusters. Expertise that makes content feel NATIVE. v11.4: SEO/GEO nodes now here (SEOKeyword, GEOQuery) — universal market data following Knowledge Atoms pattern.',
-  l_knowledge.created_at = datetime()
-ON MATCH SET
-  l_knowledge.display_name = 'Knowledge',
-  l_knowledge.emoji = '📚',
-  l_knowledge.color = '#8b5cf6',
-  l_knowledge.llm_context = 'Deep locale-specific knowledge for native content generation. Knowledge containers (TermSet, ExpressionSet, etc.) and atoms (Term, Expression, Pattern, etc.). Language families, cultural realms, population clusters. Expertise that makes content feel NATIVE. v11.4: SEO/GEO nodes now here (SEOKeyword, GEOQuery) — universal market data following Knowledge Atoms pattern.',
-  l_knowledge.updated_at = datetime();
-
-MATCH (r:Realm {key: 'shared'}), (l:Layer {key: 'knowledge'})
-MERGE (r)-[:HAS_LAYER]->(l);
-
 // Organization layers
 MERGE (l_config:Schema:Layer {key: 'config'})
 ON CREATE SET
   l_config.display_name = 'Config',
-  l_config.emoji = '⚙️',
+  l_config.emoji = '⚙',
   l_config.color = '#64748b',
-  l_config.llm_context = 'Organization configuration root. OrgConfig node is the entry point for org-level traversal. Links to Projects (HAS_PROJECT).',
+  l_config.llm_context = 'USE: when accessing configuration and definitions. TRIGGERS: "config", "locale", "category", "organization settings". NOT: for locale-specific content (use locale layer). RELATES: Locale (shared), OrgConfig (org), EntityCategory (shared).',
   l_config.created_at = datetime()
 ON MATCH SET
   l_config.display_name = 'Config',
-  l_config.emoji = '⚙️',
+  l_config.emoji = '⚙',
   l_config.color = '#64748b',
-  l_config.llm_context = 'Organization configuration root. OrgConfig node is the entry point for org-level traversal. Links to Projects (HAS_PROJECT).',
+  l_config.llm_context = 'USE: when accessing configuration and definitions. TRIGGERS: "config", "locale", "category", "organization settings". NOT: for locale-specific content (use locale layer). RELATES: Locale (shared), OrgConfig (org), EntityCategory (shared).',
   l_config.updated_at = datetime();
 
 MATCH (r:Realm {key: 'org'}), (l:Layer {key: 'config'})
 MERGE (r)-[:HAS_LAYER]->(l);
-MERGE (l_semantic:Schema:Layer {key: 'semantic'})
-ON CREATE SET
-  l_semantic.display_name = 'Semantic Layer',
-  l_semantic.emoji = '💡',
-  l_semantic.color = '#f97316',
-  l_semantic.llm_context = 'Defined entities (Entity) and their authored content (EntityContent). Entity belongs to Project (HAS_ENTITY) and can be referenced by Pages/Blocks via USES_ENTITY. Entities link via SEMANTIC_LINK for spreading activation during generation. SEO/GEO targeting via cross-realm arcs (TARGETS, MONITORS_GEO) to shared/knowledge.',
-  l_semantic.created_at = datetime()
-ON MATCH SET
-  l_semantic.display_name = 'Semantic Layer',
-  l_semantic.emoji = '💡',
-  l_semantic.color = '#f97316',
-  l_semantic.llm_context = 'Defined entities (Entity) and their authored content (EntityContent). Entity belongs to Project (HAS_ENTITY) and can be referenced by Pages/Blocks via USES_ENTITY. Entities link via SEMANTIC_LINK for spreading activation during generation. SEO/GEO targeting via cross-realm arcs (TARGETS, MONITORS_GEO) to shared/knowledge.',
-  l_semantic.updated_at = datetime();
-
-MATCH (r:Realm {key: 'org'}), (l:Layer {key: 'semantic'})
-MERGE (r)-[:HAS_LAYER]->(l);
 MERGE (l_foundation:Schema:Layer {key: 'foundation'})
 ON CREATE SET
   l_foundation.display_name = 'Foundation',
-  l_foundation.emoji = '🏛️',
+  l_foundation.emoji = '■',
   l_foundation.color = '#3b82f6',
-  l_foundation.llm_context = 'Project identity. Project, Brand, ProjectContent. Each Organization has 1 company project (branding) + N product projects. Core identity that anchors ALL content generation for each project.',
+  l_foundation.llm_context = 'USE: when accessing project identity and branding. TRIGGERS: "project", "brand", "identity", "company project". NOT: for page structure (use structure layer). RELATES: Project (defined), Brand (defined), ProjectContent (authored).',
   l_foundation.created_at = datetime()
 ON MATCH SET
   l_foundation.display_name = 'Foundation',
-  l_foundation.emoji = '🏛️',
+  l_foundation.emoji = '■',
   l_foundation.color = '#3b82f6',
-  l_foundation.llm_context = 'Project identity. Project, Brand, ProjectContent. Each Organization has 1 company project (branding) + N product projects. Core identity that anchors ALL content generation for each project.',
+  l_foundation.llm_context = 'USE: when accessing project identity and branding. TRIGGERS: "project", "brand", "identity", "company project". NOT: for page structure (use structure layer). RELATES: Project (defined), Brand (defined), ProjectContent (authored).',
   l_foundation.updated_at = datetime();
 
 MATCH (r:Realm {key: 'org'}), (l:Layer {key: 'foundation'})
 MERGE (r)-[:HAS_LAYER]->(l);
-MERGE (l_structure:Schema:Layer {key: 'structure'})
-ON CREATE SET
-  l_structure.display_name = 'Structure',
-  l_structure.emoji = '🏗️',
-  l_structure.color = '#06b6d4',
-  l_structure.llm_context = 'Information architecture. Pages, blocks, and their types. Defines the SKELETON of the website - what pages exist, what blocks compose each page, and the rules for each block type.',
-  l_structure.created_at = datetime()
-ON MATCH SET
-  l_structure.display_name = 'Structure',
-  l_structure.emoji = '🏗️',
-  l_structure.color = '#06b6d4',
-  l_structure.llm_context = 'Information architecture. Pages, blocks, and their types. Defines the SKELETON of the website - what pages exist, what blocks compose each page, and the rules for each block type.',
-  l_structure.updated_at = datetime();
-
-MATCH (r:Realm {key: 'org'}), (l:Layer {key: 'structure'})
-MERGE (r)-[:HAS_LAYER]->(l);
 MERGE (l_instruction:Schema:Layer {key: 'instruction'})
 ON CREATE SET
   l_instruction.display_name = 'Instructions',
-  l_instruction.emoji = '📝',
+  l_instruction.emoji = '▤',
   l_instruction.color = '#eab308',
-  l_instruction.llm_context = 'Generation directives. Instructions and rules that guide the LLM during content generation. PageInstruction for page-level guidance, BlockInstruction for block-specific instructions, BlockRules for constraints. v0.12.0: PagePrompt → PageInstruction, BlockPrompt → BlockInstruction.',
+  l_instruction.llm_context = 'USE: when accessing generation instructions and rules. TRIGGERS: "instruction", "prompt", "rules", "block type", "generation directives". NOT: for generated output (use output layer). RELATES: PageInstruction (defined), BlockInstruction (defined), BlockType (defined).',
   l_instruction.created_at = datetime()
 ON MATCH SET
   l_instruction.display_name = 'Instructions',
-  l_instruction.emoji = '📝',
+  l_instruction.emoji = '▤',
   l_instruction.color = '#eab308',
-  l_instruction.llm_context = 'Generation directives. Instructions and rules that guide the LLM during content generation. PageInstruction for page-level guidance, BlockInstruction for block-specific instructions, BlockRules for constraints. v0.12.0: PagePrompt → PageInstruction, BlockPrompt → BlockInstruction.',
+  l_instruction.llm_context = 'USE: when accessing generation instructions and rules. TRIGGERS: "instruction", "prompt", "rules", "block type", "generation directives". NOT: for generated output (use output layer). RELATES: PageInstruction (defined), BlockInstruction (defined), BlockType (defined).',
   l_instruction.updated_at = datetime();
 
 MATCH (r:Realm {key: 'org'}), (l:Layer {key: 'instruction'})
@@ -193,37 +95,121 @@ MERGE (r)-[:HAS_LAYER]->(l);
 MERGE (l_output:Schema:Layer {key: 'output'})
 ON CREATE SET
   l_output.display_name = 'Generated Output',
-  l_output.emoji = '✨',
+  l_output.emoji = '✦',
   l_output.color = '#22c55e',
-  l_output.llm_context = 'LLM-generated content. The final localized pages and blocks ready for rendering. These are the RESULTS of the generation pipeline - created by combining foundation, structure, semantic, and instruction nodes with locale knowledge.',
+  l_output.llm_context = 'USE: when accessing generated content. TRIGGERS: "generated", "output", "final content", "rendered". NOT: for generation instructions (use instruction layer). RELATES: PageGenerated (generated), BlockGenerated (generated), OutputArtifact (generated).',
   l_output.created_at = datetime()
 ON MATCH SET
   l_output.display_name = 'Generated Output',
-  l_output.emoji = '✨',
+  l_output.emoji = '✦',
   l_output.color = '#22c55e',
-  l_output.llm_context = 'LLM-generated content. The final localized pages and blocks ready for rendering. These are the RESULTS of the generation pipeline - created by combining foundation, structure, semantic, and instruction nodes with locale knowledge.',
+  l_output.llm_context = 'USE: when accessing generated content. TRIGGERS: "generated", "output", "final content", "rendered". NOT: for generation instructions (use instruction layer). RELATES: PageGenerated (generated), BlockGenerated (generated), OutputArtifact (generated).',
   l_output.updated_at = datetime();
 
 MATCH (r:Realm {key: 'org'}), (l:Layer {key: 'output'})
+MERGE (r)-[:HAS_LAYER]->(l);
+MERGE (l_semantic:Schema:Layer {key: 'semantic'})
+ON CREATE SET
+  l_semantic.display_name = 'Semantic',
+  l_semantic.emoji = '◆',
+  l_semantic.color = '#f97316',
+  l_semantic.llm_context = 'USE: when working with semantic entities and their content. TRIGGERS: "entity", "meaning", "audience", "channel", "semantic". NOT: for page structure (use structure layer). RELATES: Entity (defined), EntityContent (authored), AudiencePersona (defined).',
+  l_semantic.created_at = datetime()
+ON MATCH SET
+  l_semantic.display_name = 'Semantic',
+  l_semantic.emoji = '◆',
+  l_semantic.color = '#f97316',
+  l_semantic.llm_context = 'USE: when working with semantic entities and their content. TRIGGERS: "entity", "meaning", "audience", "channel", "semantic". NOT: for page structure (use structure layer). RELATES: Entity (defined), EntityContent (authored), AudiencePersona (defined).',
+  l_semantic.updated_at = datetime();
+
+MATCH (r:Realm {key: 'org'}), (l:Layer {key: 'semantic'})
+MERGE (r)-[:HAS_LAYER]->(l);
+MERGE (l_structure:Schema:Layer {key: 'structure'})
+ON CREATE SET
+  l_structure.display_name = 'Structure',
+  l_structure.emoji = '▣',
+  l_structure.color = '#06b6d4',
+  l_structure.llm_context = 'USE: when accessing page and block structure. TRIGGERS: "page", "block", "structure", "layout", "skeleton". NOT: for semantic entities (use semantic layer). RELATES: Page (defined), Block (defined), ContentSlot (defined).',
+  l_structure.created_at = datetime()
+ON MATCH SET
+  l_structure.display_name = 'Structure',
+  l_structure.emoji = '▣',
+  l_structure.color = '#06b6d4',
+  l_structure.llm_context = 'USE: when accessing page and block structure. TRIGGERS: "page", "block", "structure", "layout", "skeleton". NOT: for semantic entities (use semantic layer). RELATES: Page (defined), Block (defined), ContentSlot (defined).',
+  l_structure.updated_at = datetime();
+
+MATCH (r:Realm {key: 'org'}), (l:Layer {key: 'structure'})
+MERGE (r)-[:HAS_LAYER]->(l);
+
+// Shared layers
+MERGE (l_config:Schema:Layer {key: 'config'})
+ON CREATE SET
+  l_config.display_name = 'Config',
+  l_config.emoji = '⚙',
+  l_config.color = '#64748b',
+  l_config.llm_context = 'USE: when accessing configuration and definitions. TRIGGERS: "config", "locale", "category", "organization settings". NOT: for locale-specific content (use locale layer). RELATES: Locale (shared), OrgConfig (org), EntityCategory (shared).',
+  l_config.created_at = datetime()
+ON MATCH SET
+  l_config.display_name = 'Config',
+  l_config.emoji = '⚙',
+  l_config.color = '#64748b',
+  l_config.llm_context = 'USE: when accessing configuration and definitions. TRIGGERS: "config", "locale", "category", "organization settings". NOT: for locale-specific content (use locale layer). RELATES: Locale (shared), OrgConfig (org), EntityCategory (shared).',
+  l_config.updated_at = datetime();
+
+MATCH (r:Realm {key: 'shared'}), (l:Layer {key: 'config'})
+MERGE (r)-[:HAS_LAYER]->(l);
+MERGE (l_geography:Schema:Layer {key: 'geography'})
+ON CREATE SET
+  l_geography.display_name = 'Geography',
+  l_geography.emoji = '◆',
+  l_geography.color = '#10b981',
+  l_geography.llm_context = 'USE: when accessing geographic classifications. TRIGGERS: "continent", "region", "country", "income group", "geography". NOT: for locale-specific settings (use locale layer). RELATES: Continent (top), GeoRegion (hierarchy), Country (leaf).',
+  l_geography.created_at = datetime()
+ON MATCH SET
+  l_geography.display_name = 'Geography',
+  l_geography.emoji = '◆',
+  l_geography.color = '#10b981',
+  l_geography.llm_context = 'USE: when accessing geographic classifications. TRIGGERS: "continent", "region", "country", "income group", "geography". NOT: for locale-specific settings (use locale layer). RELATES: Continent (top), GeoRegion (hierarchy), Country (leaf).',
+  l_geography.updated_at = datetime();
+
+MATCH (r:Realm {key: 'shared'}), (l:Layer {key: 'geography'})
+MERGE (r)-[:HAS_LAYER]->(l);
+MERGE (l_knowledge:Schema:Layer {key: 'knowledge'})
+ON CREATE SET
+  l_knowledge.display_name = 'Knowledge',
+  l_knowledge.emoji = '◊',
+  l_knowledge.color = '#8b5cf6',
+  l_knowledge.llm_context = 'USE: when accessing knowledge atoms for native content generation. TRIGGERS: "term", "expression", "pattern", "SEO", "GEO", "cultural knowledge". NOT: for structural definitions (use config layer). RELATES: TermSet (container), Term (atom), SEOKeyword (market data).',
+  l_knowledge.created_at = datetime()
+ON MATCH SET
+  l_knowledge.display_name = 'Knowledge',
+  l_knowledge.emoji = '◊',
+  l_knowledge.color = '#8b5cf6',
+  l_knowledge.llm_context = 'USE: when accessing knowledge atoms for native content generation. TRIGGERS: "term", "expression", "pattern", "SEO", "GEO", "cultural knowledge". NOT: for structural definitions (use config layer). RELATES: TermSet (container), Term (atom), SEOKeyword (market data).',
+  l_knowledge.updated_at = datetime();
+
+MATCH (r:Realm {key: 'shared'}), (l:Layer {key: 'knowledge'})
+MERGE (r)-[:HAS_LAYER]->(l);
+MERGE (l_locale:Schema:Layer {key: 'locale'})
+ON CREATE SET
+  l_locale.display_name = 'Locale',
+  l_locale.emoji = '●',
+  l_locale.color = '#64748b',
+  l_locale.llm_context = 'USE: when accessing locale-specific settings. TRIGGERS: "culture", "style", "formatting", "market", "adaptation". NOT: for locale definitions (use config layer, Locale node). RELATES: Culture (voice), Style (writing), Formatting (numbers/dates).',
+  l_locale.created_at = datetime()
+ON MATCH SET
+  l_locale.display_name = 'Locale',
+  l_locale.emoji = '●',
+  l_locale.color = '#64748b',
+  l_locale.llm_context = 'USE: when accessing locale-specific settings. TRIGGERS: "culture", "style", "formatting", "market", "adaptation". NOT: for locale definitions (use config layer, Locale node). RELATES: Culture (voice), Style (writing), Formatting (numbers/dates).',
+  l_locale.updated_at = datetime();
+
+MATCH (r:Realm {key: 'shared'}), (l:Layer {key: 'locale'})
 MERGE (r)-[:HAS_LAYER]->(l);
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // TRAITS (5)
 // ═══════════════════════════════════════════════════════════════════════════════
-
-MERGE (t_defined:Schema:Trait {key: 'defined'})
-ON CREATE SET
-  t_defined.created_at = datetime(),
-  t_defined.updated_at = datetime()
-ON MATCH SET
-  t_defined.updated_at = datetime()
-SET
-  t_defined.display_name = 'Defined',
-  t_defined.color = '#3b82f6',
-  t_defined.border_style = 'solid',
-  t_defined.border_width = 2,
-  t_defined.unicode_border = '─',
-  t_defined.llm_context = 'Human-created ONCE. Structural definitions, configuration, templates. Does not change between locales. Page, Block, Entity, PageStructure, BlockType, Locale, OrgConfig, etc. "This is how things are set up."';
 
 MERGE (t_authored:Schema:Trait {key: 'authored'})
 ON CREATE SET
@@ -237,21 +223,21 @@ SET
   t_authored.border_style = 'dashed',
   t_authored.border_width = 2,
   t_authored.unicode_border = '┄',
-  t_authored.llm_context = 'Human-written content, PER locale. Editorial content curated by humans. EntityContent, ProjectContent. NOT translated — each locale version is written natively. "A human wrote this in French/Japanese/etc."';
+  t_authored.llm_context = 'USE: when accessing human-written locale-specific content. TRIGGERS: "content", "editorial", "authored", "written", "per locale". NOT: for structural definitions (use defined trait). RELATES: EntityContent (semantic), ProjectContent (foundation).';
 
-MERGE (t_imported:Schema:Trait {key: 'imported'})
+MERGE (t_defined:Schema:Trait {key: 'defined'})
 ON CREATE SET
-  t_imported.created_at = datetime(),
-  t_imported.updated_at = datetime()
+  t_defined.created_at = datetime(),
+  t_defined.updated_at = datetime()
 ON MATCH SET
-  t_imported.updated_at = datetime()
+  t_defined.updated_at = datetime()
 SET
-  t_imported.display_name = 'Imported',
-  t_imported.color = '#8b5cf6',
-  t_imported.border_style = 'dotted',
-  t_imported.border_width = 2,
-  t_imported.unicode_border = '┈',
-  t_imported.llm_context = 'External data brought in from external sources. Linguistic corpora, market data, discovered keywords. Term, Expression, Pattern, CultureRef, SEOKeyword, GEOQuery. "We imported this from [source]."';
+  t_defined.display_name = 'Defined',
+  t_defined.color = '#3b82f6',
+  t_defined.border_style = 'solid',
+  t_defined.border_width = 2,
+  t_defined.unicode_border = '─',
+  t_defined.llm_context = 'USE: when working with structural definitions. TRIGGERS: "template", "structure", "schema", "config", "definition". NOT: for locale-specific content (use authored trait). RELATES: Page (structure), Block (structure), Locale (config).';
 
 MERGE (t_generated:Schema:Trait {key: 'generated'})
 ON CREATE SET
@@ -265,7 +251,21 @@ SET
   t_generated.border_style = 'double',
   t_generated.border_width = 2,
   t_generated.unicode_border = '═',
-  t_generated.llm_context = 'OUR LLM produces this output. Pages, blocks, and artifacts produced by the NovaNet generation pipeline. PageGenerated, BlockGenerated, OutputArtifact. "NovaNet generated this."';
+  t_generated.llm_context = 'USE: when accessing LLM-generated content. TRIGGERS: "generated", "output", "LLM", "NovaNet", "pipeline result". NOT: for retrieved external data (use retrieved trait). RELATES: PageGenerated (output), BlockGenerated (output), OutputArtifact (output).';
+
+MERGE (t_imported:Schema:Trait {key: 'imported'})
+ON CREATE SET
+  t_imported.created_at = datetime(),
+  t_imported.updated_at = datetime()
+ON MATCH SET
+  t_imported.updated_at = datetime()
+SET
+  t_imported.display_name = 'Imported',
+  t_imported.color = '#8b5cf6',
+  t_imported.border_style = 'dotted',
+  t_imported.border_width = 2,
+  t_imported.unicode_border = '┈',
+  t_imported.llm_context = 'USE: when accessing imported knowledge data. TRIGGERS: "imported", "external", "corpus", "discovered", "market data". NOT: for generated content (use generated trait). RELATES: Term (knowledge), SEOKeyword (knowledge), Culture (locale).';
 
 MERGE (t_retrieved:Schema:Trait {key: 'retrieved'})
 ON CREATE SET
@@ -279,56 +279,11 @@ SET
   t_retrieved.border_style = 'dotted',
   t_retrieved.border_width = 3,
   t_retrieved.unicode_border = '┅',
-  t_retrieved.llm_context = 'Fetched from EXTERNAL APIs. Snapshots from third-party services. We don\'t create it, we capture it. GEOAnswer (Claude/GPT response), SEOKeywordMetrics (Ahrefs data), GEOMetrics. "We fetched this from [API]."';
+  t_retrieved.llm_context = 'USE: when accessing data retrieved from external APIs. TRIGGERS: "retrieved", "API response", "snapshot", "external service". NOT: for our LLM output (use generated trait). RELATES: GEOAnswer (Claude/GPT response), SEOKeywordMetrics (Ahrefs data).';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // ARC FAMILIES (5)
 // ═══════════════════════════════════════════════════════════════════════════════
-
-MERGE (af_ownership:Schema:ArcFamily {key: 'ownership'})
-ON CREATE SET
-  af_ownership.created_at = datetime(),
-  af_ownership.updated_at = datetime()
-ON MATCH SET
-  af_ownership.updated_at = datetime()
-SET
-  af_ownership.display_name = 'Ownership',
-  af_ownership.color = '#3b82f6',
-  af_ownership.arrow_style = '-->',
-  af_ownership.stroke_style = 'solid',
-  af_ownership.stroke_width = 2,
-  af_ownership.default_traversal = 'eager',
-  af_ownership.llm_context = 'Parent-child structural relationships. A node "owns" or "contains" another. Always follow in traversal (structural backbone).';
-
-MERGE (af_localization:Schema:ArcFamily {key: 'localization'})
-ON CREATE SET
-  af_localization.created_at = datetime(),
-  af_localization.updated_at = datetime()
-ON MATCH SET
-  af_localization.updated_at = datetime()
-SET
-  af_localization.display_name = 'Localization',
-  af_localization.color = '#22c55e',
-  af_localization.arrow_style = '.->',
-  af_localization.stroke_style = 'dashed',
-  af_localization.stroke_width = 2,
-  af_localization.default_traversal = 'eager',
-  af_localization.llm_context = 'Links between invariant nodes and their locale-specific content. Includes locale knowledge edges (Locale → LocaleVoice, etc.) and content localization edges (Entity → EntityContent, etc.).';
-
-MERGE (af_semantic:Schema:ArcFamily {key: 'semantic'})
-ON CREATE SET
-  af_semantic.created_at = datetime(),
-  af_semantic.updated_at = datetime()
-ON MATCH SET
-  af_semantic.updated_at = datetime()
-SET
-  af_semantic.display_name = 'Semantic',
-  af_semantic.color = '#f97316',
-  af_semantic.arrow_style = '.->',
-  af_semantic.stroke_style = 'dotted',
-  af_semantic.stroke_width = 2,
-  af_semantic.default_traversal = 'lazy',
-  af_semantic.llm_context = 'Meaning and entity connections. Spreading activation traversal with temperature-based filtering. Links entities to each other and to the pages/blocks that use them.';
 
 MERGE (af_generation:Schema:ArcFamily {key: 'generation'})
 ON CREATE SET
@@ -343,7 +298,22 @@ SET
   af_generation.stroke_style = 'solid',
   af_generation.stroke_width = 3,
   af_generation.default_traversal = 'lazy',
-  af_generation.llm_context = 'LLM generation pipeline flow. Provenance tracking from prompts to outputs, version history, and assembly relationships.';
+  af_generation.llm_context = 'USE: when traversing generation pipeline. TRIGGERS: "generated", "provenance", "pipeline", "compiled", "assembled". NOT: for structural ownership (use ownership family). RELATES: GENERATED (instruction→output), COMPILED_FROM (artifact→instruction).';
+
+MERGE (af_localization:Schema:ArcFamily {key: 'localization'})
+ON CREATE SET
+  af_localization.created_at = datetime(),
+  af_localization.updated_at = datetime()
+ON MATCH SET
+  af_localization.updated_at = datetime()
+SET
+  af_localization.display_name = 'Localization',
+  af_localization.color = '#22c55e',
+  af_localization.arrow_style = '.->',
+  af_localization.stroke_style = 'dashed',
+  af_localization.stroke_width = 2,
+  af_localization.default_traversal = 'eager',
+  af_localization.llm_context = 'USE: when traversing locale-specific relationships. TRIGGERS: "locale", "language", "culture", "localization", "per locale". NOT: for structural ownership (use ownership family). RELATES: FOR_LOCALE (content→locale), HAS_VOICE (locale→voice).';
 
 MERGE (af_mining:Schema:ArcFamily {key: 'mining'})
 ON CREATE SET
@@ -358,7 +328,37 @@ SET
   af_mining.stroke_style = 'dashed',
   af_mining.stroke_width = 1,
   af_mining.default_traversal = 'skip',
-  af_mining.llm_context = 'SEO data extraction and targeting. Links mining runs to their targets and concepts to their SEO keyword targets.';
+  af_mining.llm_context = 'USE: when traversing SEO/GEO mining relationships. TRIGGERS: "SEO", "GEO", "keyword", "mining", "search optimization". NOT: for content generation (use generation family). RELATES: TARGETS_KEYWORD (entity→seo), MONITORS_GEO (content→geo).';
+
+MERGE (af_ownership:Schema:ArcFamily {key: 'ownership'})
+ON CREATE SET
+  af_ownership.created_at = datetime(),
+  af_ownership.updated_at = datetime()
+ON MATCH SET
+  af_ownership.updated_at = datetime()
+SET
+  af_ownership.display_name = 'Ownership',
+  af_ownership.color = '#3b82f6',
+  af_ownership.arrow_style = '-->',
+  af_ownership.stroke_style = 'solid',
+  af_ownership.stroke_width = 2,
+  af_ownership.default_traversal = 'eager',
+  af_ownership.llm_context = 'USE: when traversing ownership hierarchies. TRIGGERS: "parent", "child", "contains", "belongs to", "owns". NOT: for semantic relationships (use semantic family). RELATES: HAS_PAGE, HAS_ENTITY, HAS_BLOCK (key arcs).';
+
+MERGE (af_semantic:Schema:ArcFamily {key: 'semantic'})
+ON CREATE SET
+  af_semantic.created_at = datetime(),
+  af_semantic.updated_at = datetime()
+ON MATCH SET
+  af_semantic.updated_at = datetime()
+SET
+  af_semantic.display_name = 'Semantic',
+  af_semantic.color = '#f97316',
+  af_semantic.arrow_style = '.->',
+  af_semantic.stroke_style = 'dotted',
+  af_semantic.stroke_width = 2,
+  af_semantic.default_traversal = 'lazy',
+  af_semantic.llm_context = 'USE: when traversing semantic relationships. TRIGGERS: "uses", "references", "mentions", "semantic link", "meaning". NOT: for ownership hierarchy (use ownership family). RELATES: USES_ENTITY (page→entity), SEMANTIC_LINK (entity→entity).';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // ARC SCOPES (2)

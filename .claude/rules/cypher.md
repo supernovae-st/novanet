@@ -31,7 +31,7 @@ MATCH (ac)-[:TO_CLASS]->(target:Class)
 - Use APOC for complex operations
 
 ## Seed File Conventions
-- Files numbered: `00-constraints.cypher`, `00.5-taxonomy.cypher`, `01-kinds.cypher`...
+- Files numbered: `00-constraints.cypher`, `00.5-taxonomy.cypher`, `01-classes.cypher`...
 - MERGE for idempotent operations
 - Parameters use `$paramName` syntax
 

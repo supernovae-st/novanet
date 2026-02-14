@@ -1,5 +1,5 @@
 /**
- * YAML View Category Configuration (v11.8)
+ * YAML View Category Configuration (v0.12.5)
  *
  * Centralized configuration for view categories.
  * Used by both API routes and UI components.
@@ -9,6 +9,7 @@
  * - data: Instance exploration by realm/layer/purpose
  * - overlay: Schema + Data combined for debugging
  * - contextual: Node-centered subgraphs
+ * - generation: AI agent context assembly
  */
 
 import {
@@ -16,6 +17,7 @@ import {
   Boxes,
   Layers,
   Eye,
+  Sparkles,
   type LucideIcon,
 } from 'lucide-react';
 import type { ViewCategory } from '@novanet/core/filters';
@@ -66,6 +68,13 @@ export const VIEW_CATEGORIES: Record<ViewCategory, CategoryConfig> = {
     color: '#94a3b8',  // slate-400 (neutral, secondary)
     description: 'Node-centered subgraphs',
   },
+  generation: {
+    id: 'generation',
+    label: 'Generation',
+    icon: Sparkles,
+    color: '#ec4899',  // pink-500 (matches gen-pipeline view color)
+    description: 'AI agent context assembly',
+  },
 };
 
 // Ordered list for display
@@ -74,6 +83,7 @@ export const CATEGORY_ORDER: ViewCategory[] = [
   'data',
   'overlay',
   'contextual',
+  'generation',
 ];
 
 // Display names map (for API routes)

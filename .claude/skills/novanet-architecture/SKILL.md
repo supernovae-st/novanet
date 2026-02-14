@@ -309,14 +309,14 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 |   seed/ (generated + manual, executes en ordre)                                                   |
 |   +-- 00-constraints.cypher        <- Contraintes d'unicite (UNIQUE, EXISTS)                      |
 |   +-- 00.5-taxonomy.cypher         <- Taxonomy: Realms, Layers, Traits (GENERATED)                |
-|   +-- 01-kinds.cypher              <- NodeKinds meta-nodes (GENERATED)                            |
+|   +-- 01-classes.cypher            <- NodeClass meta-nodes (GENERATED)                            |
 |   +-- 01-vector-indexes.cypher     <- Index vectoriels pour recherche semantique                  |
-|   +-- 02-arc-kinds.cypher          <- ArcKinds meta-nodes (GENERATED)                             |
+|   +-- 02-arc-classes.cypher        <- ArcClass meta-nodes (GENERATED)                             |
 |   +-- 20-locales.cypher            <- Locales from CSV + MD (GENERATED)                           |
 |   +-- 21-locale-knowledge.cypher   <- LocaleIdentity, LocaleVoice, LocaleCulture, etc.            |
 |   +-- 31-project-qrcode-ai.cypher  <- Projet QR Code AI avec Pages, Blocks                        |
 |   +-- 34-instructions.cypher       <- BlockInstruction, PageInstruction                           |
-|   +-- 99-autowire-kinds.cypher     <- Links data nodes to Kinds (GENERATED)                       |
+|   +-- 99-autowire-classes.cypher   <- Links data nodes to Classes (GENERATED)                     |
 |                                                                                                   |
 |   migrations/ (6 fichiers, idempotents)                                                           |
 |   +-- 001-inverse-relationships.cypher                                                            |

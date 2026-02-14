@@ -11,25 +11,25 @@
 MERGE (ac_ASSEMBLES:Schema:ArcClass {key: 'ASSEMBLES'})
 ON CREATE SET
   ac_ASSEMBLES.display_name = 'Assembles',
-  ac_ASSEMBLES.llm_context = 'USE: when rendering a complete page, loading blocks in order. TRIGGERS: page render, block assembly, content composition. NOT: for structure definition (use HAS_BLOCK), for single block (use BlockGenerated). RELATES: PageGenerated (source), BlockGenerated (target), position property for ordering.',
+  ac_ASSEMBLES.llm_context = 'USE: when rendering a complete page, loading blocks in order. TRIGGERS: page render, block assembly, content composition, final output. NOT: for structure definition (use HAS_BLOCK), for single block (use BlockGenerated). RELATES: PageGenerated (source), BlockGenerated (target), order property mirrors HAS_BLOCK.order.',
   ac_ASSEMBLES.family = 'generation',
   ac_ASSEMBLES.scope = 'intra_realm',
   ac_ASSEMBLES.cardinality = 'one_to_many',
   ac_ASSEMBLES.is_self_referential = false,
   ac_ASSEMBLES.inverse_name = null,
-  ac_ASSEMBLES.arc_properties = ['position'],
+  ac_ASSEMBLES.arc_properties = ['order'],
   ac_ASSEMBLES.cypher_pattern = '(PageGenerated)-[:ASSEMBLES]->(BlockGenerated)',
   ac_ASSEMBLES.temperature_threshold = null,
   ac_ASSEMBLES.created_at = datetime()
 ON MATCH SET
   ac_ASSEMBLES.display_name = 'Assembles',
-  ac_ASSEMBLES.llm_context = 'USE: when rendering a complete page, loading blocks in order. TRIGGERS: page render, block assembly, content composition. NOT: for structure definition (use HAS_BLOCK), for single block (use BlockGenerated). RELATES: PageGenerated (source), BlockGenerated (target), position property for ordering.',
+  ac_ASSEMBLES.llm_context = 'USE: when rendering a complete page, loading blocks in order. TRIGGERS: page render, block assembly, content composition, final output. NOT: for structure definition (use HAS_BLOCK), for single block (use BlockGenerated). RELATES: PageGenerated (source), BlockGenerated (target), order property mirrors HAS_BLOCK.order.',
   ac_ASSEMBLES.family = 'generation',
   ac_ASSEMBLES.scope = 'intra_realm',
   ac_ASSEMBLES.cardinality = 'one_to_many',
   ac_ASSEMBLES.is_self_referential = false,
   ac_ASSEMBLES.inverse_name = null,
-  ac_ASSEMBLES.arc_properties = ['position'],
+  ac_ASSEMBLES.arc_properties = ['order'],
   ac_ASSEMBLES.cypher_pattern = '(PageGenerated)-[:ASSEMBLES]->(BlockGenerated)',
   ac_ASSEMBLES.temperature_threshold = null,
   ac_ASSEMBLES.updated_at = datetime();

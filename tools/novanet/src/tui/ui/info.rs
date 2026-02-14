@@ -8,31 +8,922 @@ use ratatui::layout::{Constraint, Direction, Layout, Rect};
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{
-    Bar, BarChart, BarGroup, Block, Borders, Paragraph, Scrollbar, ScrollbarOrientation,
-    ScrollbarState, Sparkline,
+    Block, Borders, Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState,
 };
-use std::collections::BTreeMap;
 
 use crate::tui::app::{App, Focus};
 use crate::tui::data::{ArcDirection, InstanceInfo, TreeItem};
-use crate::tui::schema::{PropertyStatus, ValidationStatus};
+use crate::tui::schema::ValidationStatus;
 use crate::tui::theme::hex_to_color;
-use crate::tui::unicode::{display_width, truncate_to_width};
+use crate::tui::unicode::truncate_to_width;
 
 use serde_json::Value as JsonValue;
 
 use super::{
-    COLOR_UNFOCUSED_BORDER, STYLE_ACCENT, STYLE_DESC, STYLE_DIM, STYLE_ERROR, STYLE_HIGHLIGHT,
-    STYLE_HINT, STYLE_INFO, STYLE_MUTED, STYLE_PRIMARY, STYLE_SUCCESS, STYLE_WARNING,
-    scroll_indicator, trait_icon, wrap_text,
+    COLOR_UNFOCUSED_BORDER, STYLE_ACCENT, STYLE_DESC, STYLE_DIM, STYLE_HIGHLIGHT, STYLE_INFO,
+    STYLE_MUTED, STYLE_PRIMARY, STYLE_SUCCESS, STYLE_WARNING, trait_icon, wrap_text,
 };
+
+// =============================================================================
+// FIXED SECTION HEIGHTS
+// =============================================================================
+
+/// Fixed height for top row (IDENTITY | LOCATION side-by-side)
+const SECTION_HEIGHT_TOP: u16 = 6;
+/// Fixed height for METRICS section
+const SECTION_HEIGHT_METRICS: u16 = 4;
+/// Fixed height for COVERAGE section
+const SECTION_HEIGHT_COVERAGE: u16 = 4;
+/// Fixed height for RELATIONSHIPS section
+const SECTION_HEIGHT_RELATIONSHIPS: u16 = 8;
+
+// =============================================================================
+// UNIFIED SECTION TYPES
+// =============================================================================
+
+/// Content for a single info section.
+/// Each section has a title and content lines.
+/// Empty sections display "—" as content.
+#[derive(Default)]
+struct SectionContent<'a> {
+    lines: Vec<Line<'a>>,
+}
+
+impl<'a> SectionContent<'a> {
+    fn is_empty(&self) -> bool {
+        self.lines.is_empty()
+    }
+
+    fn add_line(&mut self, line: Line<'a>) {
+        self.lines.push(line);
+    }
+
+    fn add_kv(&mut self, key: &str, value: Span<'a>) {
+        self.lines.push(Line::from(vec![
+            Span::styled(format!("{:<10} ", key), STYLE_DIM),
+            value,
+        ]));
+    }
+
+    fn add_empty(&mut self) {
+        self.lines.push(Line::from(Span::styled("—", STYLE_DIM)));
+    }
+}
+
+/// Unified info content with 6 fixed sections.
+/// All sections are always present; empty sections show "—".
+#[derive(Default)]
+struct UnifiedContent<'a> {
+    /// IDENTITY: type, category, key, class
+    identity: SectionContent<'a>,
+    /// LOCATION: realm, layer, trait
+    location: SectionContent<'a>,
+    /// METRICS: counts, totals, budgets
+    metrics: SectionContent<'a>,
+    /// COVERAGE: property fill rates, health bars
+    coverage: SectionContent<'a>,
+    /// PROPERTIES: property list with values/schema
+    properties: SectionContent<'a>,
+    /// RELATIONSHIPS: arcs, pipeline context
+    relationships: SectionContent<'a>,
+}
+
+// =============================================================================
+// UNIFIED CONTENT BUILDERS
+// =============================================================================
+
+/// Build unified content for the current tree item.
+/// Returns all 6 sections populated with appropriate content.
+fn build_unified_content(app: &App) -> UnifiedContent<'static> {
+    match app.current_item() {
+        Some(TreeItem::ClassesSection) => build_classes_section_content(app),
+        Some(TreeItem::ArcsSection) => build_arcs_section_content(app),
+        Some(TreeItem::Realm(realm)) => build_realm_content(app, realm),
+        Some(TreeItem::Layer(realm, layer)) => build_layer_content(app, realm, layer),
+        Some(TreeItem::Class(realm, layer, class)) => build_class_content(app, realm, layer, class),
+        Some(TreeItem::ArcFamily(family)) => build_arc_family_content(family),
+        Some(TreeItem::ArcClass(family, arc_class)) => build_arc_class_content(family, arc_class),
+        Some(TreeItem::Instance(realm, layer, class, instance)) => {
+            build_instance_content(app, realm, layer, class, instance)
+        }
+        Some(TreeItem::EntityCategory(_, _, _, cat)) => build_category_content(cat),
+        None => build_empty_content(),
+    }
+}
+
+/// Build content for ClassesSection.
+fn build_classes_section_content(app: &App) -> UnifiedContent<'static> {
+    let mut content = UnifiedContent::default();
+
+    // IDENTITY
+    content
+        .identity
+        .add_kv("type", Span::styled("Section", STYLE_ACCENT));
+    content
+        .identity
+        .add_kv("name", Span::styled("Node Classes", STYLE_PRIMARY));
+
+    // LOCATION - not applicable
+    content.location.add_empty();
+
+    // METRICS
+    let kind_count: usize = app
+        .tree
+        .realms
+        .iter()
+        .flat_map(|r| r.layers.iter())
+        .map(|l| l.classes.len())
+        .sum();
+    content.metrics.add_kv(
+        "realms",
+        Span::styled(app.tree.realms.len().to_string(), STYLE_PRIMARY),
+    );
+    content.metrics.add_kv(
+        "classes",
+        Span::styled(kind_count.to_string(), STYLE_PRIMARY),
+    );
+
+    // COVERAGE - realm distribution
+    if kind_count > 0 {
+        let bar_width = 16usize;
+        for realm in &app.tree.realms {
+            let realm_classes: usize = realm.layers.iter().map(|l| l.classes.len()).sum();
+            let percent = (realm_classes as f64 / kind_count as f64 * 100.0).round() as u8;
+            let filled = (realm_classes * bar_width) / kind_count.max(1);
+            let bar = "█".repeat(filled.max(1));
+            let empty = "░".repeat(bar_width.saturating_sub(filled));
+
+            content.coverage.add_line(Line::from(vec![
+                Span::styled(
+                    format!("{:8} ", realm.display_name),
+                    Style::default().fg(app.theme.realm_color(&realm.key)),
+                ),
+                Span::styled(bar, Style::default().fg(app.theme.realm_color(&realm.key))),
+                Span::styled(empty, STYLE_DIM),
+                Span::styled(format!(" {:>3}%", percent), STYLE_MUTED),
+            ]));
+        }
+    } else {
+        content.coverage.add_empty();
+    }
+
+    // PROPERTIES - not applicable
+    content.properties.add_empty();
+
+    // RELATIONSHIPS
+    content.relationships.add_line(Line::from(Span::styled(
+        "h/l to collapse/expand",
+        STYLE_DIM,
+    )));
+
+    content
+}
+
+/// Build content for ArcsSection.
+fn build_arcs_section_content(app: &App) -> UnifiedContent<'static> {
+    let mut content = UnifiedContent::default();
+
+    // IDENTITY
+    content
+        .identity
+        .add_kv("type", Span::styled("Section", STYLE_HIGHLIGHT));
+    content
+        .identity
+        .add_kv("name", Span::styled("Arcs", STYLE_PRIMARY));
+
+    // LOCATION - not applicable
+    content.location.add_empty();
+
+    // METRICS
+    let arc_count: usize = app
+        .tree
+        .arc_families
+        .iter()
+        .map(|f| f.arc_classes.len())
+        .sum();
+    content.metrics.add_kv(
+        "families",
+        Span::styled(app.tree.arc_families.len().to_string(), STYLE_PRIMARY),
+    );
+    content
+        .metrics
+        .add_kv("arcs", Span::styled(arc_count.to_string(), STYLE_PRIMARY));
+
+    // COVERAGE - not applicable
+    content.coverage.add_empty();
+
+    // PROPERTIES - not applicable
+    content.properties.add_empty();
+
+    // RELATIONSHIPS
+    content.relationships.add_line(Line::from(Span::styled(
+        "h/l to collapse/expand",
+        STYLE_DIM,
+    )));
+
+    content
+}
+
+/// Build content for Realm.
+fn build_realm_content(app: &App, realm: &crate::tui::data::RealmInfo) -> UnifiedContent<'static> {
+    let mut content = UnifiedContent::default();
+    let theme = &app.theme;
+    let kind_count: usize = realm.layers.iter().map(|l| l.classes.len()).sum();
+
+    // IDENTITY
+    content
+        .identity
+        .add_kv("type", Span::styled("Realm", STYLE_ACCENT));
+    content.identity.add_kv(
+        "category",
+        Span::styled("◈ Schema", Style::default().fg(Color::Cyan)),
+    );
+    content
+        .identity
+        .add_kv("key", Span::styled(realm.key.clone(), STYLE_PRIMARY));
+
+    // LOCATION - realm is top-level
+    content.location.add_line(Line::from(vec![
+        Span::styled(
+            format!("{} ", realm.icon),
+            Style::default().fg(hex_to_color(&realm.color)),
+        ),
+        Span::styled(
+            realm.display_name.clone(),
+            Style::default().fg(hex_to_color(&realm.color)),
+        ),
+    ]));
+
+    // METRICS
+    content.metrics.add_kv(
+        "layers",
+        Span::styled(realm.layers.len().to_string(), STYLE_PRIMARY),
+    );
+    content.metrics.add_kv(
+        "classes",
+        Span::styled(kind_count.to_string(), STYLE_PRIMARY),
+    );
+
+    // COVERAGE - layer breakdown
+    if kind_count > 0 {
+        let bar_width = 12usize;
+        for layer in &realm.layers {
+            let count = layer.classes.len();
+            if count == 0 {
+                continue;
+            }
+            let percent = (count as f64 / kind_count as f64 * 100.0).round() as u8;
+            let filled = (count * bar_width) / kind_count.max(1);
+            let bar = "█".repeat(filled.max(1));
+            let empty = "░".repeat(bar_width.saturating_sub(filled));
+            let layer_color = theme.layer_color(&layer.key);
+
+            content.coverage.add_line(Line::from(vec![
+                Span::styled(
+                    format!("{:12} ", layer.display_name),
+                    Style::default().fg(layer_color),
+                ),
+                Span::styled(bar, Style::default().fg(layer_color)),
+                Span::styled(empty, STYLE_DIM),
+                Span::styled(format!(" {:>3}%", percent), STYLE_MUTED),
+            ]));
+        }
+    } else {
+        content.coverage.add_empty();
+    }
+
+    // PROPERTIES - LLM context
+    if !realm.llm_context.is_empty() {
+        for wrapped_line in wrap_text(&realm.llm_context, 38) {
+            content
+                .properties
+                .add_line(Line::from(Span::styled(wrapped_line, STYLE_DESC)));
+        }
+    } else {
+        content.properties.add_empty();
+    }
+
+    // RELATIONSHIPS - not applicable for realm
+    content.relationships.add_empty();
+
+    content
+}
+
+/// Build content for Layer.
+fn build_layer_content(
+    app: &App,
+    realm: &crate::tui::data::RealmInfo,
+    layer: &crate::tui::data::LayerInfo,
+) -> UnifiedContent<'static> {
+    let mut content = UnifiedContent::default();
+    let theme = &app.theme;
+
+    // IDENTITY
+    content
+        .identity
+        .add_kv("type", Span::styled("Layer", STYLE_SUCCESS));
+    content.identity.add_kv(
+        "category",
+        Span::styled("◈ Schema", Style::default().fg(Color::Cyan)),
+    );
+    content
+        .identity
+        .add_kv("key", Span::styled(layer.key.clone(), STYLE_PRIMARY));
+
+    // LOCATION
+    content.location.add_line(Line::from(vec![
+        Span::styled(format!("{} ", realm.icon), STYLE_DIM),
+        Span::styled(
+            realm.display_name.clone(),
+            Style::default().fg(hex_to_color(&realm.color)),
+        ),
+    ]));
+    content.location.add_line(Line::from(vec![
+        Span::styled(
+            format!("{} ", theme.icons.layer(&layer.key)),
+            Style::default().fg(hex_to_color(&layer.color)),
+        ),
+        Span::styled(
+            layer.display_name.clone(),
+            Style::default().fg(hex_to_color(&layer.color)),
+        ),
+    ]));
+
+    // METRICS
+    content.metrics.add_kv(
+        "classes",
+        Span::styled(layer.classes.len().to_string(), STYLE_PRIMARY),
+    );
+
+    // COVERAGE - trait breakdown
+    if !layer.classes.is_empty() {
+        let mut trait_counts: std::collections::BTreeMap<String, usize> =
+            std::collections::BTreeMap::new();
+        for kind in &layer.classes {
+            *trait_counts.entry(kind.trait_name.clone()).or_insert(0) += 1;
+        }
+
+        let total = layer.classes.len();
+        let bar_width = 12usize;
+        for (trait_name, count) in &trait_counts {
+            let percent = (*count as f64 / total as f64 * 100.0).round() as u8;
+            let filled = (*count * bar_width) / total.max(1);
+            let bar = "█".repeat(filled.max(1));
+            let empty = "░".repeat(bar_width.saturating_sub(filled));
+            let icon = trait_icon(trait_name);
+
+            content.coverage.add_line(Line::from(vec![
+                Span::styled(
+                    format!("{} ", icon),
+                    Style::default().fg(theme.trait_color(trait_name)),
+                ),
+                Span::styled(
+                    format!("{:10} ", trait_name),
+                    Style::default().fg(theme.trait_color(trait_name)),
+                ),
+                Span::styled(bar, Style::default().fg(theme.trait_color(trait_name))),
+                Span::styled(empty, STYLE_DIM),
+                Span::styled(format!(" {:>3}%", percent), STYLE_MUTED),
+            ]));
+        }
+    } else {
+        content.coverage.add_empty();
+    }
+
+    // PROPERTIES - LLM context
+    if !layer.llm_context.is_empty() {
+        for wrapped_line in wrap_text(&layer.llm_context, 38) {
+            content
+                .properties
+                .add_line(Line::from(Span::styled(wrapped_line, STYLE_DESC)));
+        }
+    } else {
+        content.properties.add_empty();
+    }
+
+    // RELATIONSHIPS - not applicable for layer
+    content.relationships.add_empty();
+
+    content
+}
+
+/// Build content for Class (NodeClass).
+fn build_class_content(
+    app: &App,
+    realm: &crate::tui::data::RealmInfo,
+    layer: &crate::tui::data::LayerInfo,
+    class: &crate::tui::data::ClassInfo,
+) -> UnifiedContent<'static> {
+    let mut content = UnifiedContent::default();
+    let theme = &app.theme;
+
+    // IDENTITY
+    content
+        .identity
+        .add_kv("type", Span::styled("Node Class", STYLE_INFO));
+    content.identity.add_kv(
+        "category",
+        Span::styled("◈ Schema", Style::default().fg(Color::Cyan)),
+    );
+    content
+        .identity
+        .add_kv("key", Span::styled(class.key.clone(), STYLE_PRIMARY));
+
+    // LOCATION
+    content.location.add_line(Line::from(vec![
+        Span::styled(format!("{} ", realm.icon), STYLE_DIM),
+        Span::styled(
+            realm.display_name.clone(),
+            Style::default().fg(hex_to_color(&realm.color)),
+        ),
+    ]));
+    content.location.add_line(Line::from(vec![
+        Span::styled(format!("{} ", theme.icons.layer(&layer.key)), STYLE_DIM),
+        Span::styled(
+            layer.display_name.clone(),
+            Style::default().fg(hex_to_color(&layer.color)),
+        ),
+    ]));
+    if !class.trait_name.is_empty() {
+        let trait_icon = theme.icons.trait_icon(&class.trait_name);
+        content.location.add_line(Line::from(vec![
+            Span::styled(format!("{} ", trait_icon), STYLE_DIM),
+            Span::styled(
+                class.trait_name.clone(),
+                Style::default().fg(theme.trait_color(&class.trait_name)),
+            ),
+        ]));
+    }
+
+    // METRICS
+    content.metrics.add_kv(
+        "instances",
+        Span::styled(format!("{} total", class.instance_count), STYLE_MUTED),
+    );
+    content.metrics.add_kv(
+        "properties",
+        Span::styled(format!("{} defined", class.properties.len()), STYLE_INFO),
+    );
+    if !class.context_budget.is_empty() {
+        content.metrics.add_kv(
+            "budget",
+            Span::styled(class.context_budget.clone(), STYLE_INFO),
+        );
+    }
+
+    // COVERAGE - property coverage
+    let total_props = class.properties.len();
+    let required_props = class.required_properties.len();
+    let optional_props = total_props.saturating_sub(required_props);
+
+    if total_props > 0 {
+        let bar_width = 12usize;
+        // Required bar
+        let req_percent = (required_props as f64 / total_props as f64 * 100.0).round() as u8;
+        let req_filled = (required_props * bar_width) / total_props.max(1);
+        let req_bar = "█".repeat(req_filled.max(if required_props > 0 { 1 } else { 0 }));
+        let req_empty = "░".repeat(bar_width.saturating_sub(req_filled));
+
+        content.coverage.add_line(Line::from(vec![
+            Span::styled("* ", Style::default().fg(Color::Red)),
+            Span::styled("required   ", Style::default().fg(Color::Yellow)),
+            Span::styled(req_bar, Style::default().fg(Color::Yellow)),
+            Span::styled(req_empty, STYLE_DIM),
+            Span::styled(format!(" {:>3}%", req_percent), STYLE_MUTED),
+            Span::styled(format!("  {}", required_props), STYLE_DIM),
+        ]));
+
+        // Optional bar
+        let opt_percent = (optional_props as f64 / total_props as f64 * 100.0).round() as u8;
+        let opt_filled = (optional_props * bar_width) / total_props.max(1);
+        let opt_bar = "█".repeat(opt_filled.max(if optional_props > 0 { 1 } else { 0 }));
+        let opt_empty = "░".repeat(bar_width.saturating_sub(opt_filled));
+
+        content.coverage.add_line(Line::from(vec![
+            Span::styled("  ", STYLE_DIM),
+            Span::styled("optional   ", Style::default().fg(Color::White)),
+            Span::styled(opt_bar, Style::default().fg(Color::White)),
+            Span::styled(opt_empty, STYLE_DIM),
+            Span::styled(format!(" {:>3}%", opt_percent), STYLE_MUTED),
+            Span::styled(format!("  {}", optional_props), STYLE_DIM),
+        ]));
+    } else {
+        content.coverage.add_empty();
+    }
+
+    // PROPERTIES - validated or simple list
+    if let Some(validated) = &app.validated_kind_properties {
+        for prop in validated {
+            let (status_icon, status_style) = match prop.status {
+                ValidationStatus::Sync => ("✓", STYLE_SUCCESS),
+                ValidationStatus::Missing => ("⚠", STYLE_WARNING),
+                ValidationStatus::Extra => ("?", STYLE_DIM),
+            };
+            let required_marker = if prop.required { "*" } else { " " };
+            let badge = type_badge(&prop.prop_type);
+
+            content.properties.add_line(Line::from(vec![
+                Span::styled(status_icon, status_style),
+                Span::styled(
+                    required_marker,
+                    Style::default().fg(Color::Rgb(255, 100, 100)),
+                ),
+                Span::styled(format!("[{:4}] ", badge), STYLE_DIM),
+                Span::styled(format!("{:<15}", prop.name), STYLE_INFO),
+            ]));
+        }
+    } else if !class.properties.is_empty() {
+        for prop in &class.properties {
+            let is_required = class.required_properties.contains(prop);
+            let marker = if is_required { "*" } else { " " };
+            let prop_color = if is_required {
+                Color::Yellow
+            } else {
+                Color::White
+            };
+
+            content.properties.add_line(Line::from(vec![
+                Span::styled(
+                    format!("  {}", marker),
+                    Style::default().fg(Color::Rgb(255, 100, 100)),
+                ),
+                Span::styled(prop.clone(), Style::default().fg(prop_color)),
+            ]));
+        }
+    } else {
+        content.properties.add_empty();
+    }
+
+    // RELATIONSHIPS - related arcs
+    if !class.arcs.is_empty() {
+        let outgoing_count = class
+            .arcs
+            .iter()
+            .filter(|a| a.direction == ArcDirection::Outgoing)
+            .count();
+        let incoming_count = class
+            .arcs
+            .iter()
+            .filter(|a| a.direction == ArcDirection::Incoming)
+            .count();
+
+        content.relationships.add_line(Line::from(vec![
+            Span::styled("→ ", Style::default().fg(Color::Cyan)),
+            Span::styled(format!("{} out  ", outgoing_count), STYLE_MUTED),
+            Span::styled("← ", Style::default().fg(Color::Magenta)),
+            Span::styled(format!("{} in", incoming_count), STYLE_MUTED),
+        ]));
+
+        // Show first few arcs
+        for arc in class.arcs.iter().take(6) {
+            let (icon, color) = if arc.direction == ArcDirection::Outgoing {
+                ("→", Color::Cyan)
+            } else {
+                ("←", Color::Magenta)
+            };
+            content.relationships.add_line(Line::from(vec![
+                Span::styled(format!("  {} ", icon), Style::default().fg(color)),
+                Span::styled(arc.arc_type.clone(), Style::default().fg(color)),
+                Span::styled(" → ", STYLE_DIM),
+                Span::styled(arc.target_class.clone(), STYLE_HIGHLIGHT),
+            ]));
+        }
+        if class.arcs.len() > 6 {
+            content.relationships.add_line(Line::from(vec![Span::styled(
+                format!("  ... +{} more", class.arcs.len() - 6),
+                STYLE_DIM,
+            )]));
+        }
+    } else {
+        content.relationships.add_empty();
+    }
+
+    content
+}
+
+/// Build content for ArcFamily.
+fn build_arc_family_content(family: &crate::tui::data::ArcFamilyInfo) -> UnifiedContent<'static> {
+    let mut content = UnifiedContent::default();
+
+    // IDENTITY
+    content
+        .identity
+        .add_kv("type", Span::styled("ArcFamily", STYLE_ARC_FAMILY));
+    content.identity.add_kv(
+        "category",
+        Span::styled("◈ Schema", Style::default().fg(Color::Cyan)),
+    );
+    content
+        .identity
+        .add_kv("key", Span::styled(family.key.clone(), STYLE_PRIMARY));
+
+    // LOCATION - not applicable
+    content.location.add_empty();
+
+    // METRICS
+    content.metrics.add_kv(
+        "arcs",
+        Span::styled(family.arc_classes.len().to_string(), STYLE_PRIMARY),
+    );
+
+    // COVERAGE - not applicable
+    content.coverage.add_empty();
+
+    // PROPERTIES - LLM context
+    if !family.llm_context.is_empty() {
+        for wrapped_line in wrap_text(&family.llm_context, 38) {
+            content
+                .properties
+                .add_line(Line::from(Span::styled(wrapped_line, STYLE_DESC)));
+        }
+    } else {
+        content.properties.add_empty();
+    }
+
+    // RELATIONSHIPS
+    content.relationships.add_line(Line::from(Span::styled(
+        "h/l to collapse/expand",
+        STYLE_DIM,
+    )));
+
+    content
+}
+
+/// Build content for ArcClass.
+fn build_arc_class_content(
+    family: &crate::tui::data::ArcFamilyInfo,
+    arc_class: &crate::tui::data::ArcClassInfo,
+) -> UnifiedContent<'static> {
+    let mut content = UnifiedContent::default();
+
+    // IDENTITY
+    content
+        .identity
+        .add_kv("type", Span::styled("ArcClass", STYLE_HIGHLIGHT));
+    content.identity.add_kv(
+        "category",
+        Span::styled("◈ Schema", Style::default().fg(Color::Cyan)),
+    );
+    content
+        .identity
+        .add_kv("key", Span::styled(arc_class.key.clone(), STYLE_PRIMARY));
+    content.identity.add_kv(
+        "family",
+        Span::styled(family.display_name.clone(), STYLE_ARC_FAMILY),
+    );
+
+    // LOCATION - not applicable for arcs
+    content.location.add_empty();
+
+    // METRICS - cardinality
+    if !arc_class.cardinality.is_empty() {
+        content.metrics.add_kv(
+            "cardin.",
+            Span::styled(arc_class.cardinality.clone(), STYLE_ACCENT),
+        );
+    } else {
+        content.metrics.add_empty();
+    }
+
+    // COVERAGE - not applicable
+    content.coverage.add_empty();
+
+    // PROPERTIES - description
+    if !arc_class.description.is_empty() {
+        for wrapped_line in wrap_text(&arc_class.description, 38) {
+            content
+                .properties
+                .add_line(Line::from(Span::styled(wrapped_line, STYLE_DESC)));
+        }
+    } else {
+        content.properties.add_empty();
+    }
+
+    // RELATIONSHIPS - from/to
+    content.relationships.add_line(Line::from(vec![
+        Span::styled("from ", STYLE_DIM),
+        Span::styled(arc_class.from_class.clone(), STYLE_INFO),
+    ]));
+    content.relationships.add_line(Line::from(vec![
+        Span::styled("to   ", STYLE_DIM),
+        Span::styled(arc_class.to_class.clone(), STYLE_INFO),
+    ]));
+
+    content
+}
+
+/// Build content for Instance.
+fn build_instance_content(
+    app: &App,
+    realm: &crate::tui::data::RealmInfo,
+    layer: &crate::tui::data::LayerInfo,
+    class: &crate::tui::data::ClassInfo,
+    instance: &InstanceInfo,
+) -> UnifiedContent<'static> {
+    let mut content = UnifiedContent::default();
+    let theme = &app.theme;
+
+    // IDENTITY
+    content
+        .identity
+        .add_kv("type", Span::styled("Instance", STYLE_SUCCESS));
+    content.identity.add_kv(
+        "category",
+        Span::styled("◆ Data", Style::default().fg(Color::Yellow)),
+    );
+    content
+        .identity
+        .add_kv("key", Span::styled(instance.key.clone(), STYLE_PRIMARY));
+    content.identity.add_kv(
+        "class",
+        Span::styled(class.display_name.clone(), STYLE_INFO),
+    );
+
+    // LOCATION
+    content.location.add_line(Line::from(vec![
+        Span::styled(format!("{} ", realm.icon), STYLE_DIM),
+        Span::styled(
+            realm.display_name.clone(),
+            Style::default().fg(hex_to_color(&realm.color)),
+        ),
+    ]));
+    content.location.add_line(Line::from(vec![
+        Span::styled(format!("{} ", theme.icons.layer(&layer.key)), STYLE_DIM),
+        Span::styled(
+            layer.display_name.clone(),
+            Style::default().fg(hex_to_color(&layer.color)),
+        ),
+    ]));
+    if !class.trait_name.is_empty() {
+        let trait_icon = theme.icons.trait_icon(&class.trait_name);
+        content.location.add_line(Line::from(vec![
+            Span::styled(format!("{} ", trait_icon), STYLE_DIM),
+            Span::styled(
+                class.trait_name.clone(),
+                Style::default().fg(theme.trait_color(&class.trait_name)),
+            ),
+        ]));
+    }
+
+    // METRICS
+    if class.instance_count > 0 {
+        content.metrics.add_kv(
+            "siblings",
+            Span::styled(format!("{} total", class.instance_count), STYLE_MUTED),
+        );
+    }
+    content.metrics.add_kv(
+        "props",
+        Span::styled(instance.properties.len().to_string(), STYLE_INFO),
+    );
+
+    // COVERAGE - property fill rate
+    let total_schema_props = class.properties.len();
+    let filled_props = instance.properties.len();
+    if total_schema_props > 0 && filled_props > 0 {
+        let fill_percent = ((filled_props as f64 / total_schema_props as f64) * 100.0)
+            .round()
+            .min(100.0) as usize;
+        let bar_width = 12usize;
+        let filled = (fill_percent * bar_width) / 100;
+        let bar = "━".repeat(filled.max(1));
+        let empty = "░".repeat(bar_width.saturating_sub(filled));
+
+        content.coverage.add_line(Line::from(vec![
+            Span::styled(
+                format!("{}/{} ", filled_props, total_schema_props),
+                STYLE_INFO,
+            ),
+            Span::styled(bar, STYLE_SUCCESS),
+            Span::styled(empty, STYLE_DIM),
+            Span::styled(format!(" {}%", fill_percent), STYLE_MUTED),
+        ]));
+    } else {
+        content.coverage.add_empty();
+    }
+
+    // PROPERTIES - simple property list
+    if !instance.properties.is_empty() {
+        for (key, value) in &instance.properties {
+            if key.starts_with('_') || key == "key" || key == "display_name" {
+                continue;
+            }
+            let value_str = json_value_to_display(value);
+            let truncated = truncate_str(&value_str, 30);
+            content.properties.add_line(Line::from(vec![
+                Span::styled(format!("{:<14}", key), STYLE_INFO),
+                Span::styled(truncated, STYLE_PRIMARY),
+            ]));
+        }
+    } else {
+        content.properties.add_empty();
+    }
+
+    // RELATIONSHIPS - arc diagram
+    let arc_count = instance.outgoing_arcs.len() + instance.incoming_arcs.len();
+    if arc_count > 0 {
+        content.relationships.add_line(Line::from(vec![
+            Span::styled("→ ", Style::default().fg(Color::Cyan)),
+            Span::styled(
+                format!("{} out  ", instance.outgoing_arcs.len()),
+                STYLE_MUTED,
+            ),
+            Span::styled("← ", Style::default().fg(Color::Magenta)),
+            Span::styled(format!("{} in", instance.incoming_arcs.len()), STYLE_MUTED),
+        ]));
+
+        // Show first few arcs
+        for arc in instance.outgoing_arcs.iter().take(4) {
+            content.relationships.add_line(Line::from(vec![
+                Span::styled("  → ", Style::default().fg(Color::Cyan)),
+                Span::styled(arc.arc_type.clone(), STYLE_HIGHLIGHT),
+                Span::styled(" → ", STYLE_DIM),
+                Span::styled(arc.target_key.clone(), STYLE_PRIMARY),
+            ]));
+        }
+        for arc in instance.incoming_arcs.iter().take(2) {
+            content.relationships.add_line(Line::from(vec![
+                Span::styled("  ← ", Style::default().fg(Color::Magenta)),
+                Span::styled(arc.arc_type.clone(), STYLE_HIGHLIGHT),
+                Span::styled(" ← ", STYLE_DIM),
+                Span::styled(arc.target_key.clone(), STYLE_PRIMARY),
+            ]));
+        }
+    } else {
+        content.relationships.add_empty();
+    }
+
+    content
+}
+
+/// Build content for EntityCategory.
+fn build_category_content(cat: &crate::tui::data::EntityCategory) -> UnifiedContent<'static> {
+    let mut content = UnifiedContent::default();
+
+    // IDENTITY
+    content
+        .identity
+        .add_kv("type", Span::styled("EntityCategory", STYLE_ACCENT));
+    content.identity.add_kv(
+        "category",
+        Span::styled("◈ Schema", Style::default().fg(Color::Cyan)),
+    );
+    content
+        .identity
+        .add_kv("key", Span::styled(cat.key.clone(), STYLE_PRIMARY));
+    content.identity.add_kv(
+        "name",
+        Span::styled(cat.display_name.clone(), STYLE_PRIMARY),
+    );
+
+    // LOCATION - not applicable
+    content.location.add_empty();
+
+    // METRICS
+    content.metrics.add_kv(
+        "entities",
+        Span::styled(cat.instance_count.to_string(), STYLE_PRIMARY),
+    );
+
+    // COVERAGE - not applicable
+    content.coverage.add_empty();
+
+    // PROPERTIES - question + context
+    content.properties.add_line(Line::from(vec![
+        Span::styled("question: ", STYLE_DIM),
+        Span::styled(cat.question.clone(), STYLE_MUTED),
+    ]));
+    if !cat.llm_context.is_empty() {
+        for line in cat.llm_context.lines() {
+            content
+                .properties
+                .add_line(Line::from(Span::styled(format!("  {}", line), STYLE_DIM)));
+        }
+    }
+
+    // RELATIONSHIPS - not applicable
+    content.relationships.add_empty();
+
+    content
+}
+
+/// Build empty content for no selection.
+fn build_empty_content() -> UnifiedContent<'static> {
+    let mut content = UnifiedContent::default();
+    content
+        .identity
+        .add_line(Line::from(Span::styled("Select an item", STYLE_DIM)));
+    content.location.add_empty();
+    content.metrics.add_empty();
+    content.coverage.add_empty();
+    content.properties.add_empty();
+    content.relationships.add_empty();
+    content
+}
 
 // =============================================================================
 // CONSTANTS
 // =============================================================================
-
-/// Major separator line for sections.
-const SEPARATOR_MAJOR: &str = "══════════════════════════";
 
 /// Arc family label style.
 const STYLE_ARC_FAMILY: Style = Style::new().fg(Color::Rgb(180, 140, 80));
@@ -66,396 +957,19 @@ fn truncate_str(s: &str, max_width: usize) -> String {
     truncate_to_width(s, max_width)
 }
 
-// =============================================================================
-// INFO PANEL RENDERING
-// =============================================================================
-
-/// Info panel: displays metadata for selected item with independent scroll.
-/// Shows sparklines and charts based on the selected item type.
-///
-/// v12 Sparkline Stats:
-/// - Realm: Classes/Layer bar chart + Trait distribution + Instance sparkline
-/// - Layer: Instance sparkline per Class
-/// - Class: Arc distribution (incoming vs outgoing)
-pub fn render_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
-    let focused = app.focus == Focus::Info;
-    let border_color = if focused {
-        Color::Cyan
-    } else {
-        COLOR_UNFOCUSED_BORDER
-    };
-
-    // Check if we should show a chart (Realm or Layer item)
-    let is_realm = matches!(app.current_item(), Some(TreeItem::Realm(_)));
-    let is_layer = matches!(app.current_item(), Some(TreeItem::Layer(_, _)));
-
-    if is_realm && area.height > 25 {
-        // v12: Full realm stats with all charts
-        // Split: text (min 6) | bar chart (8) | trait dist (5) | health (5) | instances (5)
-        let chunks = Layout::default()
-            .direction(Direction::Vertical)
-            .constraints([
-                Constraint::Min(6),
-                Constraint::Length(8),
-                Constraint::Length(5),
-                Constraint::Length(5),
-                Constraint::Length(5),
-            ])
-            .split(area);
-
-        render_info_text(f, chunks[0], app, focused, border_color);
-        render_realm_bar_chart(f, chunks[1], app);
-        render_realm_trait_distribution(f, chunks[2], app);
-        render_realm_health_sparkline(f, chunks[3], app);
-        render_realm_instance_sparkline(f, chunks[4], app);
-    } else if is_realm && area.height > 20 {
-        // v12: Three charts (bar, trait, health)
-        let chunks = Layout::default()
-            .direction(Direction::Vertical)
-            .constraints([
-                Constraint::Min(6),
-                Constraint::Length(8),
-                Constraint::Length(5),
-                Constraint::Length(5),
-            ])
-            .split(area);
-
-        render_info_text(f, chunks[0], app, focused, border_color);
-        render_realm_bar_chart(f, chunks[1], app);
-        render_realm_trait_distribution(f, chunks[2], app);
-        render_realm_health_sparkline(f, chunks[3], app);
-    } else if is_realm && area.height > 15 {
-        // Medium height: bar chart + trait distribution
-        let chunks = Layout::default()
-            .direction(Direction::Vertical)
-            .constraints([
-                Constraint::Min(6),
-                Constraint::Length(8),
-                Constraint::Length(5),
-            ])
-            .split(area);
-
-        render_info_text(f, chunks[0], app, focused, border_color);
-        render_realm_bar_chart(f, chunks[1], app);
-        render_realm_trait_distribution(f, chunks[2], app);
-    } else if is_realm && area.height > 12 {
-        // Original: just bar chart
-        let chunks = Layout::default()
-            .direction(Direction::Vertical)
-            .constraints([Constraint::Min(6), Constraint::Length(8)])
-            .split(area);
-
-        render_info_text(f, chunks[0], app, focused, border_color);
-        render_realm_bar_chart(f, chunks[1], app);
-    } else if is_layer && area.height > 10 {
-        // Layer: Instance sparkline per Class
-        let chunks = Layout::default()
-            .direction(Direction::Vertical)
-            .constraints([Constraint::Min(6), Constraint::Length(5)])
-            .split(area);
-
-        render_info_text(f, chunks[0], app, focused, border_color);
-        render_layer_sparkline(f, chunks[1], app);
-    } else {
-        // Normal text-only info panel (fallback for small height)
-        render_info_text(f, area, app, focused, border_color);
+/// Convert JSON value to display string.
+fn json_value_to_display(value: &JsonValue) -> String {
+    match value {
+        JsonValue::Null => "null".to_string(),
+        JsonValue::Bool(b) => b.to_string(),
+        JsonValue::Number(n) => n.to_string(),
+        JsonValue::String(s) => format!("\"{}\"", s),
+        JsonValue::Array(arr) => serde_json::to_string(arr).unwrap_or_else(|_| "[]".to_string()),
+        JsonValue::Object(obj) => serde_json::to_string(obj).unwrap_or_else(|_| "{}".to_string()),
     }
 }
 
-/// Render the text portion of the info panel.
-fn render_info_text(f: &mut Frame, area: Rect, app: &mut App, focused: bool, border_color: Color) {
-    // Build info lines
-    let all_lines = build_info_lines(app);
-
-    // Update line count for scroll bounds
-    app.info_line_count = all_lines.len();
-
-    // Apply scroll
-    let visible_height = area.height.saturating_sub(2) as usize; // Account for borders
-    let lines: Vec<Line> = all_lines
-        .into_iter()
-        .skip(app.info_scroll)
-        .take(visible_height)
-        .collect();
-
-    // Get title from current item
-    let title = get_detail_title(app);
-
-    // Build scroll indicator with directional arrows
-    let scroll_hint = scroll_indicator(app.info_scroll, app.info_line_count, visible_height);
-
-    let block = Block::default()
-        .title(Span::styled(format!(" {} ", title), STYLE_PRIMARY))
-        .title_bottom(Span::styled(scroll_hint, STYLE_DIM))
-        .borders(Borders::ALL)
-        .border_style(Style::default().fg(if focused { Color::Cyan } else { border_color }));
-
-    let paragraph = Paragraph::new(lines).block(block);
-    f.render_widget(paragraph, area);
-
-    // Add scrollbar if content exceeds visible area
-    if app.info_line_count > visible_height {
-        let scrollbar = Scrollbar::new(ScrollbarOrientation::VerticalRight)
-            .begin_symbol(Some("↑"))
-            .end_symbol(Some("↓"))
-            .track_symbol(Some("│"))
-            .thumb_symbol("█");
-
-        let mut scrollbar_state =
-            ScrollbarState::new(app.info_line_count.saturating_sub(visible_height))
-                .position(app.info_scroll);
-
-        let scrollbar_area = Rect {
-            x: area.x + area.width.saturating_sub(2),
-            y: area.y + 1,
-            width: 1,
-            height: area.height.saturating_sub(2),
-        };
-        f.render_stateful_widget(scrollbar, scrollbar_area, &mut scrollbar_state);
-    }
-}
-
-/// Render a bar chart showing kinds per layer for the selected Realm.
-fn render_realm_bar_chart(f: &mut Frame, area: Rect, app: &App) {
-    let Some(TreeItem::Realm(realm)) = app.current_item() else {
-        return;
-    };
-
-    // Build bar data from layers
-    let bars: Vec<Bar> = realm
-        .layers
-        .iter()
-        .map(|layer| {
-            let count = layer.classes.len() as u64;
-            // Use first 4 chars of layer name as label (Unicode-safe)
-            let label: String = layer.display_name.chars().take(4).collect();
-            Bar::default()
-                .value(count)
-                .label(Line::from(label))
-                .style(Style::default().fg(hex_to_color(&layer.color)))
-        })
-        .collect();
-
-    if bars.is_empty() {
-        return;
-    }
-
-    let bar_group = BarGroup::default().bars(&bars);
-
-    let chart = BarChart::default()
-        .block(
-            Block::default()
-                .title(Span::styled(" Classes/Layer ", STYLE_DIM))
-                .borders(Borders::ALL)
-                .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER)),
-        )
-        .data(bar_group)
-        .bar_width(5)
-        .bar_gap(1)
-        .value_style(
-            Style::default()
-                .fg(Color::White)
-                .add_modifier(Modifier::BOLD),
-        )
-        .label_style(Style::default().fg(Color::Gray));
-
-    f.render_widget(chart, area);
-}
-
-/// Render a sparkline showing instance counts per kind for the selected Layer.
-fn render_layer_sparkline(f: &mut Frame, area: Rect, app: &App) {
-    let Some(TreeItem::Layer(_, layer)) = app.current_item() else {
-        return;
-    };
-
-    // Collect instance counts from kinds
-    let data: Vec<u64> = layer
-        .classes
-        .iter()
-        .map(|k| k.instance_count.max(0) as u64)
-        .collect();
-
-    if data.is_empty() {
-        return;
-    }
-
-    // Calculate max for label
-    let max_val = *data.iter().max().unwrap_or(&0);
-    let total: u64 = data.iter().sum();
-
-    let sparkline = Sparkline::default()
-        .block(
-            Block::default()
-                .title(Span::styled(
-                    format!(" Instances ({} total, max {}) ", total, max_val),
-                    STYLE_DIM,
-                ))
-                .borders(Borders::ALL)
-                .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER)),
-        )
-        .data(&data)
-        .style(Style::default().fg(hex_to_color(&layer.color)));
-
-    f.render_widget(sparkline, area);
-}
-
-/// Render a sparkline showing health percentages across all Classes in a Realm.
-/// Provides a quick visual overview of data quality distribution.
-fn render_realm_health_sparkline(f: &mut Frame, area: Rect, app: &App) {
-    let Some(TreeItem::Realm(realm)) = app.current_item() else {
-        return;
-    };
-
-    // Collect health percentages from all kinds in all layers
-    let data: Vec<u64> = realm
-        .layers
-        .iter()
-        .flat_map(|l| l.classes.iter())
-        .map(|k| k.health_percent.unwrap_or(0) as u64)
-        .collect();
-
-    if data.is_empty() {
-        return;
-    }
-
-    // Calculate stats
-    let total: u64 = data.iter().sum();
-    let count = data.len() as u64;
-    let avg = if count > 0 { total / count } else { 0 };
-    let min = *data.iter().min().unwrap_or(&0);
-    let max = *data.iter().max().unwrap_or(&0);
-
-    let sparkline = Sparkline::default()
-        .block(
-            Block::default()
-                .title(Span::styled(
-                    format!(
-                        " Health Distribution (avg {}%, min {}%, max {}%) ",
-                        avg, min, max
-                    ),
-                    STYLE_DIM,
-                ))
-                .borders(Borders::ALL)
-                .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER)),
-        )
-        .data(&data)
-        .style(Style::default().fg(Color::Green));
-
-    f.render_widget(sparkline, area);
-}
-
-/// Render a bar chart showing trait distribution across Classes in a Realm.
-/// Shows how many Classes belong to each trait category.
-fn render_realm_trait_distribution(f: &mut Frame, area: Rect, app: &App) {
-    let Some(TreeItem::Realm(realm)) = app.current_item() else {
-        return;
-    };
-
-    // Count kinds by trait
-    let mut trait_counts: BTreeMap<&str, u64> = BTreeMap::new();
-    for layer in &realm.layers {
-        for kind in &layer.classes {
-            *trait_counts.entry(kind.trait_name.as_str()).or_insert(0) += 1;
-        }
-    }
-
-    if trait_counts.is_empty() {
-        return;
-    }
-
-    // Build bars with trait colors
-    // v11.8: Renamed per ADR-024 Data Origin semantics
-    let trait_colors: [(&str, Color); 5] = [
-        ("defined", Color::Rgb(38, 139, 210)),  // Blue (was: invariant)
-        ("authored", Color::Rgb(211, 54, 130)), // Magenta (was: localized)
-        ("imported", Color::Rgb(181, 137, 0)),  // Yellow (was: knowledge)
-        ("generated", Color::Rgb(133, 153, 0)), // Green
-        ("retrieved", Color::Rgb(108, 113, 196)), // Violet (was: aggregated)
-    ];
-
-    let bars: Vec<Bar> = trait_colors
-        .iter()
-        .filter_map(|(trait_name, color)| {
-            trait_counts.get(trait_name).map(|&count| {
-                // First 3 chars as label
-                let label: String = trait_name.chars().take(3).collect();
-                Bar::default()
-                    .value(count)
-                    .label(Line::from(label))
-                    .style(Style::default().fg(*color))
-            })
-        })
-        .collect();
-
-    if bars.is_empty() {
-        return;
-    }
-
-    let total: u64 = trait_counts.values().sum();
-    let chart = BarChart::default()
-        .block(
-            Block::default()
-                .title(Span::styled(
-                    format!(" Trait Distribution ({} Classes) ", total),
-                    STYLE_DIM,
-                ))
-                .borders(Borders::ALL)
-                .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER)),
-        )
-        .data(BarGroup::default().bars(&bars))
-        .bar_width(4)
-        .bar_gap(1)
-        .value_style(
-            Style::default()
-                .fg(Color::White)
-                .add_modifier(Modifier::BOLD),
-        )
-        .label_style(Style::default().fg(Color::Gray));
-
-    f.render_widget(chart, area);
-}
-
-/// Render a sparkline showing instance counts across Classes in a Realm.
-/// Provides a quick visual overview of data distribution.
-fn render_realm_instance_sparkline(f: &mut Frame, area: Rect, app: &App) {
-    let Some(TreeItem::Realm(realm)) = app.current_item() else {
-        return;
-    };
-
-    // Collect instance counts from all kinds in all layers
-    let data: Vec<u64> = realm
-        .layers
-        .iter()
-        .flat_map(|l| l.classes.iter())
-        .map(|k| k.instance_count.max(0) as u64)
-        .collect();
-
-    if data.is_empty() {
-        return;
-    }
-
-    // Calculate stats
-    let total: u64 = data.iter().sum();
-    let max_val = *data.iter().max().unwrap_or(&0);
-
-    let sparkline = Sparkline::default()
-        .block(
-            Block::default()
-                .title(Span::styled(
-                    format!(" Instance Distribution ({} total, max {}) ", total, max_val),
-                    STYLE_DIM,
-                ))
-                .borders(Borders::ALL)
-                .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER)),
-        )
-        .data(&data)
-        .style(Style::default().fg(Color::Cyan));
-
-    f.render_widget(sparkline, area);
-}
-
-/// Get title for detail panel based on current selection.
-/// Uses [K] badge for Class and [I] badge for Instance for instant recognition.
+/// Get detail panel title for current item.
 fn get_detail_title(app: &App) -> String {
     match app.current_item() {
         Some(TreeItem::ClassesSection) => "Node Classes".to_string(),
@@ -485,1351 +999,205 @@ fn get_detail_title(app: &App) -> String {
 }
 
 // =============================================================================
-// BUILD INFO LINES
+// UNIFIED INFO PANEL RENDERING
 // =============================================================================
 
-/// Build info lines for detail panel.
-fn build_info_lines(app: &App) -> Vec<Line<'static>> {
-    // Use mode-aware item lookup (shows instances in Data mode)
-    match app.current_item() {
-        Some(TreeItem::ClassesSection) => {
-            let theme = &app.theme;
-            let kind_count: usize = app
-                .tree
-                .realms
-                .iter()
-                .flat_map(|r| r.layers.iter())
-                .map(|l| l.classes.len())
-                .sum();
-
-            let mut lines = vec![
-                Line::from(vec![
-                    Span::styled("type      ", STYLE_DIM),
-                    Span::styled("Section", STYLE_ACCENT),
-                ]),
-                Line::from(vec![
-                    Span::styled("realms    ", STYLE_DIM),
-                    Span::styled(app.tree.realms.len().to_string(), STYLE_PRIMARY),
-                ]),
-                Line::from(vec![
-                    Span::styled("classes   ", STYLE_DIM),
-                    Span::styled(kind_count.to_string(), STYLE_PRIMARY),
-                ]),
-                Line::from(""),
-            ];
-
-            // Add realm distribution breakdown
-            if kind_count > 0 {
-                lines.push(Line::from(Span::styled(
-                    "REALM DISTRIBUTION",
-                    Style::default()
-                        .fg(Color::White)
-                        .add_modifier(Modifier::BOLD),
-                )));
-                lines.push(Line::from(Span::styled(SEPARATOR_MAJOR, STYLE_DIM)));
-
-                let bar_width = 16usize;
-                for realm in &app.tree.realms {
-                    let realm_classes: usize = realm.layers.iter().map(|l| l.classes.len()).sum();
-                    let percent = (realm_classes as f64 / kind_count as f64 * 100.0).round() as u8;
-                    let filled = (realm_classes * bar_width) / kind_count.max(1);
-                    let bar = "█".repeat(filled.max(1));
-                    let empty = "░".repeat(bar_width.saturating_sub(filled));
-
-                    lines.push(Line::from(vec![
-                        Span::styled(
-                            format!("{:8} ", realm.display_name),
-                            Style::default().fg(theme.realm_color(&realm.key)),
-                        ),
-                        Span::styled(bar, Style::default().fg(theme.realm_color(&realm.key))),
-                        Span::styled(empty, STYLE_DIM),
-                        Span::styled(format!(" {:>3}%", percent), STYLE_MUTED),
-                        Span::styled(format!("  {} Classes", realm_classes), STYLE_DIM),
-                    ]));
-                }
-                lines.push(Line::from(""));
-            }
-
-            lines.push(Line::from(Span::styled(
-                "h/l to collapse/expand",
-                STYLE_DIM,
-            )));
-            lines
-        }
-        Some(TreeItem::ArcsSection) => {
-            let arc_count: usize = app
-                .tree
-                .arc_families
-                .iter()
-                .map(|f| f.arc_classes.len())
-                .sum();
-            vec![
-                Line::from(vec![
-                    Span::styled("type      ", STYLE_DIM),
-                    Span::styled("Section", STYLE_HIGHLIGHT),
-                ]),
-                Line::from(vec![
-                    Span::styled("families  ", STYLE_DIM),
-                    Span::styled(app.tree.arc_families.len().to_string(), STYLE_PRIMARY),
-                ]),
-                Line::from(vec![
-                    Span::styled("arcs      ", STYLE_DIM),
-                    Span::styled(arc_count.to_string(), STYLE_PRIMARY),
-                ]),
-                Line::from(""),
-                Line::from(Span::styled("h/l to collapse/expand", STYLE_DIM)),
-            ]
-        }
-        Some(TreeItem::Realm(realm)) => {
-            let theme = &app.theme;
-            let kind_count: usize = realm.layers.iter().map(|l| l.classes.len()).sum();
-            let mut lines = vec![
-                Line::from(vec![
-                    Span::styled("type      ", STYLE_DIM),
-                    Span::styled("Realm", STYLE_ACCENT),
-                ]),
-                Line::from(vec![
-                    Span::styled("category  ", STYLE_DIM),
-                    Span::styled("◈ Schema", Style::default().fg(Color::Cyan)),
-                ]),
-                Line::from(vec![
-                    Span::styled("key       ", STYLE_DIM),
-                    Span::styled(realm.key.clone(), STYLE_PRIMARY),
-                ]),
-                Line::from(vec![
-                    Span::styled("layers    ", STYLE_DIM),
-                    Span::styled(realm.layers.len().to_string(), STYLE_PRIMARY),
-                ]),
-                Line::from(vec![
-                    Span::styled("classes   ", STYLE_DIM),
-                    Span::styled(kind_count.to_string(), STYLE_PRIMARY),
-                ]),
-            ];
-
-            // Add layer breakdown if there are layers with kinds
-            if kind_count > 0 {
-                lines.push(Line::from(""));
-                lines.push(Line::from(Span::styled(
-                    "LAYER BREAKDOWN",
-                    Style::default()
-                        .fg(Color::White)
-                        .add_modifier(Modifier::BOLD),
-                )));
-                lines.push(Line::from(Span::styled(SEPARATOR_MAJOR, STYLE_DIM)));
-
-                let bar_width = 12usize;
-                for layer in &realm.layers {
-                    let count = layer.classes.len();
-                    if count == 0 {
-                        continue;
-                    }
-                    let percent = (count as f64 / kind_count as f64 * 100.0).round() as u8;
-                    let filled = (count * bar_width) / kind_count.max(1);
-                    let bar = "█".repeat(filled.max(1));
-                    let empty = "░".repeat(bar_width.saturating_sub(filled));
-                    let layer_color = theme.layer_color(&layer.key);
-
-                    lines.push(Line::from(vec![
-                        Span::styled("  ", Style::default().fg(layer_color)),
-                        Span::styled(
-                            format!("{:16} ", layer.display_name),
-                            Style::default().fg(layer_color),
-                        ),
-                        Span::styled(bar, Style::default().fg(layer_color)),
-                        Span::styled(empty, STYLE_DIM),
-                        Span::styled(format!(" {:>3}%", percent), STYLE_MUTED),
-                        Span::styled(format!("  {}", count), STYLE_DIM),
-                    ]));
-                }
-            }
-
-            // LLM Context (if present)
-            if !realm.llm_context.is_empty() {
-                lines.push(Line::from(""));
-                lines.push(Line::from(Span::styled(
-                    "LLM CONTEXT",
-                    Style::default()
-                        .fg(Color::White)
-                        .add_modifier(Modifier::BOLD),
-                )));
-                lines.push(Line::from(Span::styled(SEPARATOR_MAJOR, STYLE_DIM)));
-                // Wrap the context text to fit panel width
-                for wrapped_line in wrap_text(&realm.llm_context, 38) {
-                    lines.push(Line::from(Span::styled(wrapped_line, STYLE_DESC)));
-                }
-            }
-
-            lines
-        }
-        Some(TreeItem::Layer(realm, layer)) => {
-            let theme = &app.theme;
-            let mut lines = vec![
-                Line::from(vec![
-                    Span::styled("type      ", STYLE_DIM),
-                    Span::styled("Layer", STYLE_SUCCESS),
-                ]),
-                Line::from(vec![
-                    Span::styled("category  ", STYLE_DIM),
-                    Span::styled("◈ Schema", Style::default().fg(Color::Cyan)),
-                ]),
-                Line::from(vec![
-                    Span::styled("key       ", STYLE_DIM),
-                    Span::styled(layer.key.clone(), STYLE_PRIMARY),
-                ]),
-                Line::from(vec![
-                    Span::styled("realm     ", STYLE_DIM),
-                    Span::styled(
-                        realm.display_name.clone(),
-                        Style::default().fg(hex_to_color(&realm.color)),
-                    ),
-                ]),
-                Line::from(vec![
-                    Span::styled("classes   ", STYLE_DIM),
-                    Span::styled(layer.classes.len().to_string(), STYLE_PRIMARY),
-                ]),
-            ];
-
-            // Add trait breakdown if there are kinds
-            if !layer.classes.is_empty() {
-                // Count kinds by trait
-                let mut trait_counts: std::collections::BTreeMap<String, usize> =
-                    std::collections::BTreeMap::new();
-                for kind in &layer.classes {
-                    *trait_counts.entry(kind.trait_name.clone()).or_insert(0) += 1;
-                }
-
-                lines.push(Line::from(""));
-                lines.push(Line::from(Span::styled(
-                    "TRAIT BREAKDOWN",
-                    Style::default()
-                        .fg(Color::White)
-                        .add_modifier(Modifier::BOLD),
-                )));
-                lines.push(Line::from(Span::styled(SEPARATOR_MAJOR, STYLE_DIM)));
-
-                let total = layer.classes.len();
-                let bar_width = 12usize;
-                for (trait_name, count) in &trait_counts {
-                    let percent = (*count as f64 / total as f64 * 100.0).round() as u8;
-                    let filled = (*count * bar_width) / total.max(1);
-                    let bar = "█".repeat(filled.max(1));
-                    let empty = "░".repeat(bar_width.saturating_sub(filled));
-                    let icon = trait_icon(trait_name);
-
-                    lines.push(Line::from(vec![
-                        Span::styled(
-                            format!("{} ", icon),
-                            Style::default().fg(theme.trait_color(trait_name)),
-                        ),
-                        Span::styled(
-                            format!("{:12} ", trait_name),
-                            Style::default().fg(theme.trait_color(trait_name)),
-                        ),
-                        Span::styled(bar, Style::default().fg(theme.trait_color(trait_name))),
-                        Span::styled(empty, STYLE_DIM),
-                        Span::styled(format!(" {:>3}%", percent), STYLE_MUTED),
-                        Span::styled(format!("  {}", count), STYLE_DIM),
-                    ]));
-                }
-            }
-
-            // LLM Context (if present)
-            if !layer.llm_context.is_empty() {
-                lines.push(Line::from(""));
-                lines.push(Line::from(Span::styled(
-                    "LLM CONTEXT",
-                    Style::default()
-                        .fg(Color::White)
-                        .add_modifier(Modifier::BOLD),
-                )));
-                lines.push(Line::from(Span::styled(SEPARATOR_MAJOR, STYLE_DIM)));
-                // Wrap the context text to fit panel width
-                for wrapped_line in wrap_text(&layer.llm_context, 38) {
-                    lines.push(Line::from(Span::styled(wrapped_line, STYLE_DESC)));
-                }
-            }
-
-            lines
-        }
-        Some(TreeItem::Class(realm, layer, kind)) => {
-            let theme = &app.theme;
-
-            // Unified header: type, key, kind, realm, layer, trait (12-char labels)
-            let mut lines = vec![
-                Line::from(vec![
-                    Span::styled("type        ", STYLE_DIM),
-                    Span::styled("Node Class", STYLE_INFO),
-                ]),
-                Line::from(vec![
-                    Span::styled("category    ", STYLE_DIM),
-                    Span::styled("◈ Schema", Style::default().fg(Color::Cyan)),
-                ]),
-                Line::from(vec![
-                    Span::styled("key         ", STYLE_DIM),
-                    Span::styled(kind.key.clone(), STYLE_PRIMARY),
-                ]),
-                Line::from(vec![
-                    Span::styled("class       ", STYLE_DIM),
-                    Span::styled("—", STYLE_DIM),
-                ]),
-                Line::from(vec![
-                    Span::styled("realm       ", STYLE_DIM),
-                    Span::styled(format!("{} ", realm.icon), STYLE_DIM),
-                    Span::styled(
-                        realm.display_name.clone(),
-                        Style::default().fg(hex_to_color(&realm.color)),
-                    ),
-                ]),
-                Line::from(vec![
-                    Span::styled("layer       ", STYLE_DIM),
-                    Span::styled(format!("{} ", theme.icons.layer(&layer.key)), STYLE_DIM),
-                    Span::styled(
-                        layer.display_name.clone(),
-                        Style::default().fg(hex_to_color(&layer.color)),
-                    ),
-                ]),
-            ];
-
-            // Trait with icon (if present)
-            if !kind.trait_name.is_empty() {
-                let trait_icon = theme.icons.trait_icon(&kind.trait_name);
-                lines.push(Line::from(vec![
-                    Span::styled("trait       ", STYLE_DIM),
-                    Span::styled(format!("{} ", trait_icon), STYLE_DIM),
-                    Span::styled(
-                        kind.trait_name.clone(),
-                        Style::default().fg(theme.trait_color(&kind.trait_name)),
-                    ),
-                ]));
-            }
-
-            // v10.1: knowledge_tier removed from display (node type is sufficient)
-
-            // Instances count (aligned with Instance view)
-            let instance_count = kind.instance_count;
-            lines.push(Line::from(vec![
-                Span::styled("instances   ", STYLE_DIM),
-                Span::styled(format!("{} total", instance_count), STYLE_MUTED),
-            ]));
-
-            // Blank line before stats section
-            lines.push(Line::from(""));
-
-            // Properties line (aligned with Instance view)
-            let total_props = kind.properties.len();
-
-            // Format: "properties  8 defined ████░░░░"
-            let bar_width = 10usize;
-            let log_val = if instance_count > 0 {
-                (instance_count as f64).log10().max(0.0)
-            } else {
-                0.0
-            };
-            let filled = ((log_val / 4.0) * bar_width as f64).round() as usize;
-            let filled = filled.clamp(if instance_count > 0 { 1 } else { 0 }, bar_width);
-            let bar = "━".repeat(filled);
-            let empty = "░".repeat(bar_width.saturating_sub(filled));
-
-            lines.push(Line::from(vec![
-                Span::styled("properties  ", STYLE_DIM),
-                Span::styled(format!("{} defined", total_props), STYLE_INFO),
-                Span::styled(" ", STYLE_DIM),
-                Span::styled(bar, STYLE_SUCCESS),
-                Span::styled(empty, STYLE_DIM),
-            ]));
-
-            // Context budget (if present)
-            if !kind.context_budget.is_empty() {
-                lines.push(Line::from(vec![
-                    Span::styled("budget      ", STYLE_DIM),
-                    Span::styled(kind.context_budget.clone(), STYLE_INFO),
-                ]));
-            }
-
-            // Property coverage summary
-            let total_props = kind.properties.len();
-            let required_props = kind.required_properties.len();
-            let optional_props = total_props.saturating_sub(required_props);
-
-            if total_props > 0 {
-                lines.push(Line::from(""));
-                lines.push(Line::from(Span::styled(
-                    "PROPERTY COVERAGE",
-                    Style::default()
-                        .fg(Color::White)
-                        .add_modifier(Modifier::BOLD),
-                )));
-                lines.push(Line::from(Span::styled(SEPARATOR_MAJOR, STYLE_DIM)));
-
-                let bar_width = 12usize;
-                // Required bar
-                let req_percent =
-                    (required_props as f64 / total_props as f64 * 100.0).round() as u8;
-                let req_filled = (required_props * bar_width) / total_props.max(1);
-                let req_bar = "█".repeat(req_filled.max(if required_props > 0 { 1 } else { 0 }));
-                let req_empty = "░".repeat(bar_width.saturating_sub(req_filled));
-
-                lines.push(Line::from(vec![
-                    Span::styled("* ", Style::default().fg(Color::Red)),
-                    Span::styled("required     ", Style::default().fg(Color::Yellow)),
-                    Span::styled(req_bar, Style::default().fg(Color::Yellow)),
-                    Span::styled(req_empty, STYLE_DIM),
-                    Span::styled(format!(" {:>3}%", req_percent), STYLE_MUTED),
-                    Span::styled(format!("  {}", required_props), STYLE_DIM),
-                ]));
-
-                // Optional bar
-                let opt_percent =
-                    (optional_props as f64 / total_props as f64 * 100.0).round() as u8;
-                let opt_filled = (optional_props * bar_width) / total_props.max(1);
-                let opt_bar = "█".repeat(opt_filled.max(if optional_props > 0 { 1 } else { 0 }));
-                let opt_empty = "░".repeat(bar_width.saturating_sub(opt_filled));
-
-                lines.push(Line::from(vec![
-                    Span::styled("  ", STYLE_DIM),
-                    Span::styled("optional     ", Style::default().fg(Color::White)),
-                    Span::styled(opt_bar, Style::default().fg(Color::White)),
-                    Span::styled(opt_empty, STYLE_DIM),
-                    Span::styled(format!(" {:>3}%", opt_percent), STYLE_MUTED),
-                    Span::styled(format!("  {}", optional_props), STYLE_DIM),
-                ]));
-            }
-
-            // Properties section with validation (Neo4j ↔ YAML)
-            // If validated properties available, show with validation status
-            // Otherwise fall back to simple property list
-            if let Some(validated) = &app.validated_kind_properties {
-                lines.push(Line::from(""));
-
-                // Header with validation stats
-                if let Some(stats) = &app.validation_stats {
-                    lines.push(Line::from(vec![
-                        Span::styled(format!("Properties ({}) ", validated.len()), STYLE_MUTED),
-                        Span::styled(format!("✓{}", stats.sync_count), STYLE_SUCCESS),
-                        Span::styled(" ", STYLE_DIM),
-                        if stats.missing_count > 0 {
-                            Span::styled(format!("⚠{}", stats.missing_count), STYLE_WARNING)
-                        } else {
-                            Span::styled("", STYLE_DIM)
-                        },
-                        Span::styled(" ", STYLE_DIM),
-                        if stats.extra_count > 0 {
-                            Span::styled(format!("?{}", stats.extra_count), STYLE_DIM)
-                        } else {
-                            Span::styled("", STYLE_DIM)
-                        },
-                    ]));
-                } else {
-                    lines.push(Line::from(Span::styled(
-                        format!("Properties ({})", validated.len()),
-                        STYLE_MUTED,
-                    )));
-                }
-
-                // Render each validated property
-                for prop in validated {
-                    let (status_icon, status_style) = match prop.status {
-                        ValidationStatus::Sync => ("✓", STYLE_SUCCESS),
-                        ValidationStatus::Missing => ("⚠", STYLE_WARNING),
-                        ValidationStatus::Extra => ("?", STYLE_DIM),
-                    };
-
-                    let required_marker = if prop.required { "*" } else { " " };
-                    let type_badge = type_badge(&prop.prop_type);
-
-                    // Example value (if available)
-                    let example_str = prop
-                        .example
-                        .as_ref()
-                        .map(|e| format!("→ {}", truncate_str(e, 25)))
-                        .unwrap_or_default();
-
-                    lines.push(Line::from(vec![
-                        Span::styled(status_icon, status_style),
-                        Span::styled(
-                            required_marker,
-                            Style::default().fg(Color::Rgb(255, 100, 100)),
-                        ),
-                        Span::styled(format!("[{:4}] ", type_badge), STYLE_DIM),
-                        Span::styled(format!("{:<15}", prop.name), STYLE_INFO),
-                        Span::styled(example_str, STYLE_MUTED),
-                    ]));
-                }
-
-                // Legend
-                lines.push(Line::from(vec![
-                    Span::styled("  ✓=sync ⚠=missing ?=extra  ", STYLE_DIM),
-                    Span::styled("*=required", STYLE_DIM),
-                ]));
-            } else if !kind.properties.is_empty() {
-                // Fallback: simple property list (no YAML loaded)
-                lines.push(Line::from(""));
-                lines.push(Line::from(Span::styled(
-                    format!("Properties ({})", kind.properties.len()),
-                    STYLE_MUTED,
-                )));
-
-                for prop in &kind.properties {
-                    let is_required = kind.required_properties.contains(prop);
-                    let marker = if is_required { "*" } else { " " };
-                    let prop_color = if is_required {
-                        Color::Yellow
-                    } else {
-                        Color::White
-                    };
-
-                    lines.push(Line::from(vec![
-                        Span::styled(
-                            format!("  {}", marker),
-                            Style::default().fg(Color::Rgb(255, 100, 100)),
-                        ),
-                        Span::styled(prop.clone(), Style::default().fg(prop_color)),
-                    ]));
-                }
-
-                // Legend
-                lines.push(Line::from(Span::styled("  * = required", STYLE_DIM)));
-            }
-
-            // Related Arcs section
-            if !kind.arcs.is_empty() {
-                // Count arcs by direction
-                let outgoing_count = kind
-                    .arcs
-                    .iter()
-                    .filter(|a| a.direction == ArcDirection::Outgoing)
-                    .count();
-                let incoming_count = kind
-                    .arcs
-                    .iter()
-                    .filter(|a| a.direction == ArcDirection::Incoming)
-                    .count();
-
-                lines.push(Line::from(""));
-                lines.push(Line::from(Span::styled(
-                    "RELATED ARCS",
-                    Style::default()
-                        .fg(Color::White)
-                        .add_modifier(Modifier::BOLD),
-                )));
-                lines.push(Line::from(Span::styled(SEPARATOR_MAJOR, STYLE_DIM)));
-
-                // Summary line
-                lines.push(Line::from(vec![
-                    Span::styled("→ ", Style::default().fg(Color::Cyan)),
-                    Span::styled(format!("{} outgoing  ", outgoing_count), STYLE_MUTED),
-                    Span::styled("← ", Style::default().fg(Color::Magenta)),
-                    Span::styled(format!("{} incoming", incoming_count), STYLE_MUTED),
-                ]));
-
-                // Group arcs by direction: outgoing first
-                let outgoing: Vec<_> = kind
-                    .arcs
-                    .iter()
-                    .filter(|a| a.direction == ArcDirection::Outgoing)
-                    .collect();
-                let incoming: Vec<_> = kind
-                    .arcs
-                    .iter()
-                    .filter(|a| a.direction == ArcDirection::Incoming)
-                    .collect();
-
-                // Outgoing arcs
-                if !outgoing.is_empty() {
-                    lines.push(Line::from(""));
-                    for arc in outgoing {
-                        lines.push(Line::from(vec![
-                            Span::styled("  → ", Style::default().fg(Color::Cyan)),
-                            Span::styled(arc.arc_type.clone(), Style::default().fg(Color::Cyan)),
-                            Span::styled(" → ", STYLE_DIM),
-                            Span::styled(arc.target_class.clone(), STYLE_HIGHLIGHT),
-                        ]));
-                    }
-                }
-
-                // Incoming arcs
-                if !incoming.is_empty() {
-                    lines.push(Line::from(""));
-                    for arc in incoming {
-                        lines.push(Line::from(vec![
-                            Span::styled("  ← ", Style::default().fg(Color::Magenta)),
-                            Span::styled(arc.arc_type.clone(), Style::default().fg(Color::Magenta)),
-                            Span::styled(" ← ", STYLE_DIM),
-                            Span::styled(arc.target_class.clone(), STYLE_HIGHLIGHT),
-                        ]));
-                    }
-                }
-            }
-
-            // Description
-            if !kind.description.is_empty() {
-                lines.push(Line::from(""));
-                lines.push(Line::from(Span::styled("Description", STYLE_MUTED)));
-                // Wrap description to multiple lines (no Vec<char> allocation)
-                for line in wrap_text(&kind.description, 60) {
-                    lines.push(Line::from(Span::styled(format!("  {}", line), STYLE_DESC)));
-                }
-            }
-
-            // Cypher
-            lines.push(Line::from(""));
-            lines.push(Line::from(Span::styled("Cypher", STYLE_MUTED)));
-            lines.push(Line::from(Span::styled(
-                format!("  MATCH (n:{}) RETURN n LIMIT 100", kind.key),
-                STYLE_HINT,
-            )));
-
-            lines
-        }
-        Some(TreeItem::ArcFamily(family)) => {
-            let mut lines = vec![
-                Line::from(vec![
-                    Span::styled("type      ", STYLE_DIM),
-                    Span::styled("ArcFamily", STYLE_ARC_FAMILY),
-                ]),
-                Line::from(vec![
-                    Span::styled("category  ", STYLE_DIM),
-                    Span::styled("◈ Schema", Style::default().fg(Color::Cyan)),
-                ]),
-                Line::from(vec![
-                    Span::styled("key       ", STYLE_DIM),
-                    Span::styled(family.key.clone(), STYLE_PRIMARY),
-                ]),
-                Line::from(vec![
-                    Span::styled("arcs      ", STYLE_DIM),
-                    Span::styled(family.arc_classes.len().to_string(), STYLE_PRIMARY),
-                ]),
-            ];
-
-            // LLM Context (if present)
-            if !family.llm_context.is_empty() {
-                lines.push(Line::from(""));
-                lines.push(Line::from(Span::styled(
-                    "LLM CONTEXT",
-                    Style::default()
-                        .fg(Color::White)
-                        .add_modifier(Modifier::BOLD),
-                )));
-                lines.push(Line::from(Span::styled(SEPARATOR_MAJOR, STYLE_DIM)));
-                // Wrap the context text to fit panel width
-                for wrapped_line in wrap_text(&family.llm_context, 38) {
-                    lines.push(Line::from(Span::styled(wrapped_line, STYLE_DESC)));
-                }
-            }
-
-            lines.push(Line::from(""));
-            lines.push(Line::from(Span::styled(
-                "h/l to collapse/expand",
-                STYLE_DIM,
-            )));
-            lines
-        }
-        Some(TreeItem::ArcClass(family, arc_kind)) => {
-            let mut lines = vec![
-                Line::from(vec![
-                    Span::styled("type      ", STYLE_DIM),
-                    Span::styled("ArcClass", STYLE_HIGHLIGHT),
-                ]),
-                Line::from(vec![
-                    Span::styled("category  ", STYLE_DIM),
-                    Span::styled("◈ Schema", Style::default().fg(Color::Cyan)),
-                ]),
-                Line::from(vec![
-                    Span::styled("key       ", STYLE_DIM),
-                    Span::styled(arc_kind.key.clone(), STYLE_PRIMARY),
-                ]),
-                Line::from(vec![
-                    Span::styled("family    ", STYLE_DIM),
-                    Span::styled(family.display_name.clone(), STYLE_ARC_FAMILY),
-                ]),
-                Line::from(vec![
-                    Span::styled("from      ", STYLE_DIM),
-                    Span::styled(arc_kind.from_class.clone(), STYLE_INFO),
-                ]),
-                Line::from(vec![
-                    Span::styled("to        ", STYLE_DIM),
-                    Span::styled(arc_kind.to_class.clone(), STYLE_INFO),
-                ]),
-            ];
-
-            // Cardinality (if present)
-            if !arc_kind.cardinality.is_empty() {
-                lines.push(Line::from(vec![
-                    Span::styled("cardin.   ", STYLE_DIM),
-                    Span::styled(arc_kind.cardinality.clone(), STYLE_ACCENT),
-                ]));
-            }
-
-            // Description (if present)
-            if !arc_kind.description.is_empty() {
-                lines.push(Line::from(""));
-                lines.push(Line::from(Span::styled("Description", STYLE_MUTED)));
-                lines.push(Line::from(Span::styled(
-                    format!("  {}", &arc_kind.description),
-                    STYLE_DESC,
-                )));
-            }
-
-            // Cypher
-            lines.push(Line::from(""));
-            lines.push(Line::from(Span::styled("Cypher", STYLE_MUTED)));
-            lines.push(Line::from(Span::styled(
-                format!("  MATCH ()-[r:{}]->() RETURN r LIMIT 100", arc_kind.key),
-                STYLE_HINT,
-            )));
-
-            lines
-        }
-        Some(TreeItem::Instance(realm, layer, kind, instance)) => {
-            // Instance info for Data view
-            // Unified header: type, key, kind, realm, layer, trait (12-char labels + icons)
-            let theme = &app.theme;
-
-            // Header - matches Class view structure for easy comparison
-            let mut lines: Vec<Line<'static>> = vec![
-                Line::from(vec![
-                    Span::styled("type        ", STYLE_DIM),
-                    Span::styled("Instance", STYLE_SUCCESS),
-                ]),
-                Line::from(vec![
-                    Span::styled("category    ", STYLE_DIM),
-                    Span::styled("◆ Data", Style::default().fg(Color::Yellow)),
-                ]),
-                Line::from(vec![
-                    Span::styled("key         ", STYLE_DIM),
-                    Span::styled(instance.key.clone(), STYLE_PRIMARY),
-                ]),
-                Line::from(vec![
-                    Span::styled("class       ", STYLE_DIM),
-                    Span::styled(kind.display_name.clone(), STYLE_INFO),
-                ]),
-                Line::from(vec![
-                    Span::styled("realm       ", STYLE_DIM),
-                    Span::styled(format!("{} ", realm.icon), STYLE_DIM),
-                    Span::styled(
-                        realm.display_name.clone(),
-                        Style::default().fg(hex_to_color(&realm.color)),
-                    ),
-                ]),
-                Line::from(vec![
-                    Span::styled("layer       ", STYLE_DIM),
-                    Span::styled(format!("{} ", theme.icons.layer(&layer.key)), STYLE_DIM),
-                    Span::styled(
-                        layer.display_name.clone(),
-                        Style::default().fg(hex_to_color(&layer.color)),
-                    ),
-                ]),
-            ];
-            // Trait with icon
-            if !kind.trait_name.is_empty() {
-                let trait_icon = theme.icons.trait_icon(&kind.trait_name);
-                lines.push(Line::from(vec![
-                    Span::styled("trait       ", STYLE_DIM),
-                    Span::styled(format!("{} ", trait_icon), STYLE_DIM),
-                    Span::styled(
-                        kind.trait_name.clone(),
-                        Style::default().fg(theme.trait_color(&kind.trait_name)),
-                    ),
-                ]));
-            }
-
-            // Instances count (aligned with Class's "properties" line context)
-            if kind.instance_count > 0 {
-                lines.push(Line::from(vec![
-                    Span::styled("instances   ", STYLE_DIM),
-                    Span::styled(format!("{} total", kind.instance_count), STYLE_MUTED),
-                ]));
-            }
-
-            // Properties with optional Schema Overlay
-            // If schema overlay is enabled and we have matched properties, show schema view
-            // Otherwise, fall back to simple property list
-            if app.schema_overlay_enabled {
-                if let Some(matched) = &app.matched_properties {
-                    // Schema overlay: show all schema properties with status
-                    let stats = app.coverage_stats.as_ref();
-                    let (filled, total) = stats.map(|s| (s.filled, s.total)).unwrap_or((
-                        matched
-                            .iter()
-                            .filter(|p| p.status == PropertyStatus::Filled)
-                            .count(),
-                        matched.len(),
-                    ));
-                    let percent = if total > 0 {
-                        (filled * 100) / total
-                    } else {
-                        100
-                    };
-
-                    lines.push(Line::from(""));
-
-                    // Properties header (aligned with Class view)
-                    // Format: "properties  14/14 filled ━━━━━━━━━━ 100%"
-                    let bar_width = 10usize;
-                    let progress_filled = (percent * bar_width) / 100;
-                    let progress_empty = bar_width.saturating_sub(progress_filled);
-                    lines.push(Line::from(vec![
-                        Span::styled("properties  ", STYLE_DIM),
-                        Span::styled(format!("{}/{} filled", filled, total), STYLE_INFO),
-                        Span::styled(" ", STYLE_DIM),
-                        Span::styled("━".repeat(progress_filled), STYLE_SUCCESS),
-                        Span::styled("░".repeat(progress_empty), STYLE_DIM),
-                        Span::styled(format!(" {}%", percent), STYLE_MUTED),
-                    ]));
-
-                    // Status line (aligned with Class's "budget" line)
-                    let missing_required = matched
-                        .iter()
-                        .filter(|p| p.schema.required && p.status != PropertyStatus::Filled)
-                        .count();
-                    let (status_text, status_style) = if missing_required > 0 {
-                        (
-                            format!("missing {} required", missing_required),
-                            STYLE_ERROR,
-                        )
-                    } else if percent == 100 {
-                        ("complete".to_string(), STYLE_SUCCESS)
-                    } else {
-                        ("partial".to_string(), STYLE_INFO)
-                    };
-                    lines.push(Line::from(vec![
-                        Span::styled("status      ", STYLE_DIM),
-                        Span::styled(status_text, status_style),
-                    ]));
-
-                    // PROPERTY COVERAGE section (aligned with Class view)
-                    let required_count = matched.iter().filter(|p| p.schema.required).count();
-                    let optional_count = matched.len().saturating_sub(required_count);
-                    let required_filled = matched
-                        .iter()
-                        .filter(|p| p.schema.required && p.status == PropertyStatus::Filled)
-                        .count();
-                    let optional_filled = matched
-                        .iter()
-                        .filter(|p| !p.schema.required && p.status == PropertyStatus::Filled)
-                        .count();
-
-                    lines.push(Line::from(""));
-                    lines.push(Line::from(Span::styled(
-                        "PROPERTY COVERAGE",
-                        Style::default()
-                            .fg(Color::White)
-                            .add_modifier(Modifier::BOLD),
-                    )));
-                    lines.push(Line::from(Span::styled(SEPARATOR_MAJOR, STYLE_DIM)));
-
-                    // Required bar
-                    let req_percent = if required_count > 0 {
-                        (required_filled * 100) / required_count
-                    } else {
-                        100
-                    };
-                    let req_bar_filled = (req_percent * bar_width) / 100;
-                    let req_bar_filled =
-                        req_bar_filled.max(if required_filled > 0 { 1 } else { 0 });
-                    lines.push(Line::from(vec![
-                        Span::styled("* ", Style::default().fg(Color::Red)),
-                        Span::styled("required     ", Style::default().fg(Color::Yellow)),
-                        Span::styled(
-                            "█".repeat(req_bar_filled),
-                            Style::default().fg(Color::Yellow),
-                        ),
-                        Span::styled(
-                            "░".repeat(bar_width.saturating_sub(req_bar_filled)),
-                            STYLE_DIM,
-                        ),
-                        Span::styled(format!(" {:>3}%", req_percent), STYLE_MUTED),
-                        Span::styled(
-                            format!("  {}/{}", required_filled, required_count),
-                            STYLE_DIM,
-                        ),
-                    ]));
-
-                    // Optional bar
-                    let opt_percent = if optional_count > 0 {
-                        (optional_filled * 100) / optional_count
-                    } else {
-                        100
-                    };
-                    let opt_bar_filled = (opt_percent * bar_width) / 100;
-                    let opt_bar_filled =
-                        opt_bar_filled.max(if optional_filled > 0 { 1 } else { 0 });
-                    lines.push(Line::from(vec![
-                        Span::styled("  ", Style::default()),
-                        Span::styled("optional     ", Style::default().fg(Color::Gray)),
-                        Span::styled("█".repeat(opt_bar_filled), Style::default().fg(Color::Gray)),
-                        Span::styled(
-                            "░".repeat(bar_width.saturating_sub(opt_bar_filled)),
-                            STYLE_DIM,
-                        ),
-                        Span::styled(format!(" {:>3}%", opt_percent), STYLE_MUTED),
-                        Span::styled(
-                            format!("  {}/{}", optional_filled, optional_count),
-                            STYLE_DIM,
-                        ),
-                    ]));
-
-                    // Properties list header
-                    lines.push(Line::from(""));
-                    lines.push(Line::from(Span::styled(
-                        format!("Properties ({}) ✓{}", matched.len(), filled),
-                        STYLE_MUTED,
-                    )));
-
-                    // Show each property with status
-                    // Feature 3: Track focused property index for intelligent truncation
-                    // Feature 6: Type badges [str], [json], [enum], etc.
-                    for (prop_idx, prop) in matched.iter().enumerate() {
-                        let is_required = prop.schema.required;
-                        let prefix = if is_required { "*" } else { " " };
-                        let badge = type_badge(&prop.schema.prop_type);
-                        // Feature 3: Show full value when property is focused
-                        let is_focused = prop_idx == app.focused_property_idx;
-                        let truncate_limit = if is_focused { 200 } else { 40 };
-
-                        match prop.status {
-                            PropertyStatus::Filled => {
-                                // Has value: show normally with type badge
-                                let value_str = prop
-                                    .value
-                                    .as_ref()
-                                    .map(|v| {
-                                        if app.json_pretty
-                                            && (v.starts_with('{') || v.starts_with('['))
-                                        {
-                                            // Pretty-print JSON
-                                            serde_json::from_str::<serde_json::Value>(v)
-                                                .ok()
-                                                .and_then(|j| serde_json::to_string_pretty(&j).ok())
-                                                .unwrap_or_else(|| v.clone())
-                                        } else {
-                                            v.clone()
-                                        }
-                                    })
-                                    .unwrap_or_default();
-                                // Feature 3: Highlight focused property row
-                                let name_style = if is_focused {
-                                    STYLE_HIGHLIGHT
-                                } else {
-                                    STYLE_INFO
-                                };
-
-                                // Feature 3b: Expand text with Enter toggle
-                                if is_focused && app.expanded_property {
-                                    // Expanded: show full value with word-wrap
-                                    // First line with property name and expand indicator
-                                    lines.push(Line::from(vec![
-                                        Span::styled(
-                                            format!("{}[{:4}] ", prefix, badge),
-                                            STYLE_DIM,
-                                        ),
-                                        Span::styled(
-                                            format!("{:<15}", prop.schema.name),
-                                            name_style,
-                                        ),
-                                        Span::styled("▼ ", STYLE_HINT), // Expanded indicator
-                                    ]));
-                                    // Wrap value text to multiple lines (no Vec<char> allocation)
-                                    let full_value = format!("\"{}\"", value_str);
-                                    for line in wrap_text(&full_value, 50) {
-                                        lines.push(Line::from(vec![
-                                            Span::styled("                        ", STYLE_DIM), // Indent
-                                            Span::styled(line, STYLE_SUCCESS),
-                                        ]));
-                                    }
-                                } else {
-                                    // Collapsed: truncate as before
-                                    let truncated =
-                                        truncate_str(&format!("\"{}\"", value_str), truncate_limit);
-                                    let indicator = if is_focused { "▶ " } else { "" };
-                                    lines.push(Line::from(vec![
-                                        Span::styled(
-                                            format!("{}[{:4}] ", prefix, badge),
-                                            STYLE_DIM,
-                                        ),
-                                        Span::styled(
-                                            format!("{:<15}", prop.schema.name),
-                                            name_style,
-                                        ),
-                                        Span::styled(indicator, STYLE_HINT),
-                                        Span::styled(truncated, STYLE_SUCCESS),
-                                    ]));
-                                }
-                            }
-                            PropertyStatus::EmptyOptional => {
-                                // Optional, empty: dim with type badge + example
-                                let hint = format!(
-                                    "— e.g. {}",
-                                    prop.schema.example.as_deref().unwrap_or("...")
-                                );
-                                lines.push(Line::from(vec![
-                                    Span::styled(format!("{}[{:4}] ", prefix, badge), STYLE_DIM),
-                                    Span::styled(format!("{:<15}", prop.schema.name), STYLE_DIM),
-                                    Span::styled(truncate_str(&hint, 40), STYLE_DIM),
-                                ]));
-                            }
-                            PropertyStatus::MissingRequired => {
-                                // Required, missing: red warning with type badge + example
-                                let hint = format!(
-                                    "⚠ e.g. {}",
-                                    prop.schema.example.as_deref().unwrap_or("...")
-                                );
-                                lines.push(Line::from(vec![
-                                    Span::styled(format!("{}[{:4}] ", prefix, badge), STYLE_ERROR),
-                                    Span::styled(format!("{:<15}", prop.schema.name), STYLE_ERROR),
-                                    Span::styled(truncate_str(&hint, 40), STYLE_ERROR),
-                                ]));
-                            }
-                        }
-                    }
-                } else {
-                    // Schema overlay enabled but no matched properties loaded yet
-                    // Fall back to simple display
-                    render_simple_properties(&mut lines, &instance.properties);
-                }
-            } else {
-                // Schema overlay disabled: simple property list with fill rate header
-                let total_schema_props = kind.properties.len();
-                let filled_props = instance.properties.len();
-
-                if total_schema_props > 0 && filled_props > 0 {
-                    let fill_percent = ((filled_props as f64 / total_schema_props as f64) * 100.0)
-                        .round()
-                        .min(100.0) as usize;
-                    let bar_width = 10usize;
-                    let filled = (fill_percent * bar_width) / 100;
-                    let bar = "━".repeat(filled.max(1));
-                    let empty = "░".repeat(bar_width.saturating_sub(filled));
-
-                    lines.push(Line::from(""));
-                    lines.push(Line::from(vec![
-                        Span::styled(
-                            format!("Properties ({}/{}) ", filled_props, total_schema_props),
-                            STYLE_MUTED,
-                        ),
-                        Span::styled(bar, STYLE_SUCCESS),
-                        Span::styled(empty, STYLE_DIM),
-                        Span::styled(format!(" {}%", fill_percent), STYLE_MUTED),
-                    ]));
-
-                    // Show properties in YAML definition order (kind.properties preserves order)
-                    for prop_name in &kind.properties {
-                        if prop_name.starts_with('_')
-                            || prop_name == "key"
-                            || prop_name == "display_name"
-                        {
-                            continue;
-                        }
-                        if let Some(value) = instance.properties.get(prop_name) {
-                            let value_str = json_value_to_display(value);
-                            let truncated = truncate_str(&value_str, 45);
-                            lines.push(Line::from(vec![
-                                Span::styled(format!("{:<20}", prop_name), STYLE_INFO),
-                                Span::styled(truncated, STYLE_PRIMARY),
-                            ]));
-                        }
-                    }
-                } else {
-                    render_simple_properties(&mut lines, &instance.properties);
-                }
-            }
-
-            // PIPELINE CONTEXT: Special section for Page instances (v0.12.5)
-            // Shows the generation pipeline in a visual format
-            if kind.key == "Page" && !instance.outgoing_arcs.is_empty() {
-                render_page_pipeline(&mut lines, instance);
-            }
-
-            // Arc comparison diagram: schema arcs vs actual arcs
-            // Shows existing (══) and missing (╌╌) connections
-            if !kind.arcs.is_empty() {
-                let comparisons = instance.compare_arcs(&kind.arcs);
-                let existing_count = comparisons.iter().filter(|c| c.exists).count();
-                let missing_count = comparisons.len() - existing_count;
-
-                lines.push(Line::from(""));
-                lines.push(Line::from(Span::styled(
-                    format!(
-                        "Arc Diagram ({} exist, {} missing)",
-                        existing_count, missing_count
-                    ),
-                    STYLE_MUTED,
-                )));
-
-                // Box drawing for instance node (use display width for CJK/emoji alignment)
-                let key_width = display_width(&instance.key);
-                lines.push(Line::from(Span::styled(
-                    format!("  ┌{}┐", "─".repeat(key_width + 2)),
-                    STYLE_INFO,
-                )));
-                lines.push(Line::from(Span::styled(
-                    format!("  │ {} │", instance.key),
-                    STYLE_INFO,
-                )));
-                lines.push(Line::from(Span::styled(
-                    format!("  └{}┘", "─".repeat(key_width + 2)),
-                    STYLE_INFO,
-                )));
-
-                // Arcs with status
-                for cmp in &comparisons {
-                    if cmp.exists {
-                        // Existing arc: solid double line (══)
-                        let target_display = cmp
-                            .target_key
-                            .clone()
-                            .unwrap_or_else(|| cmp.target_class.clone());
-                        lines.push(Line::from(vec![
-                            Span::styled("    ══", STYLE_SUCCESS),
-                            Span::styled(format!("[{}]", cmp.arc_type), STYLE_HIGHLIGHT),
-                            Span::styled("══> ", STYLE_SUCCESS),
-                            Span::styled(target_display, STYLE_PRIMARY),
-                            Span::styled(" ✓", STYLE_SUCCESS),
-                        ]));
-                    } else {
-                        // Missing arc: dashed line (╌╌)
-                        lines.push(Line::from(vec![
-                            Span::styled("    ╌╌", STYLE_ERROR),
-                            Span::styled(format!("[{}]", cmp.arc_type), STYLE_DIM),
-                            Span::styled("╌╌> ", STYLE_ERROR),
-                            Span::styled(
-                                format!("({} - not connected)", cmp.target_class),
-                                STYLE_DIM,
-                            ),
-                            Span::styled(" ✗", STYLE_ERROR),
-                        ]));
-                    }
-                }
-            }
-
-            lines
-        }
-        Some(TreeItem::EntityCategory(_, _, _, cat)) => {
-            // Show category details with consistent panel structure
-            let mut lines = vec![
-                Line::from(vec![
-                    Span::styled("type      ", STYLE_DIM),
-                    Span::styled("EntityCategory", STYLE_ACCENT),
-                ]),
-                Line::from(vec![
-                    Span::styled("category  ", STYLE_DIM),
-                    Span::styled("◈ Schema", Style::default().fg(Color::Cyan)),
-                ]),
-                Line::from(vec![
-                    Span::styled("key       ", STYLE_DIM),
-                    Span::styled(cat.key.clone(), STYLE_PRIMARY),
-                ]),
-                Line::from(vec![
-                    Span::styled("name      ", STYLE_DIM),
-                    Span::styled(cat.display_name.clone(), STYLE_PRIMARY),
-                ]),
-                Line::from(vec![
-                    Span::styled("question  ", STYLE_DIM),
-                    Span::styled(cat.question.clone(), STYLE_MUTED),
-                ]),
-                Line::from(vec![
-                    Span::styled("entities  ", STYLE_DIM),
-                    Span::styled(cat.instance_count.to_string(), STYLE_PRIMARY),
-                ]),
-            ];
-            if !cat.llm_context.is_empty() {
-                lines.push(Line::from(""));
-                lines.push(Line::from(Span::styled("LLM Context:", STYLE_HINT)));
-                for line in cat.llm_context.lines() {
-                    lines.push(Line::from(Span::styled(format!("  {}", line), STYLE_DIM)));
-                }
-            }
-            lines
-        }
-        None => {
-            vec![Line::from(Span::styled("Select an item", STYLE_DIM))]
-        }
-    }
-}
-
-// =============================================================================
-// HELPER: Simple Property Rendering
-// =============================================================================
-
-/// Render instance properties in simple mode (no schema overlay).
-/// Shows each property with key-value format, truncating long values.
-fn render_simple_properties(lines: &mut Vec<Line<'_>>, properties: &BTreeMap<String, JsonValue>) {
-    if properties.is_empty() {
-        return;
-    }
-
-    lines.push(Line::from(""));
-    lines.push(Line::from(Span::styled("Properties", STYLE_MUTED)));
-
-    for (key, value) in properties {
-        // Skip internal properties (starting with underscore or known meta)
-        if key.starts_with('_') || key == "key" || key == "display_name" {
-            continue;
-        }
-
-        let value_str = json_value_to_display(value);
-        let truncated = truncate_str(&value_str, 45);
-
-        lines.push(Line::from(vec![
-            Span::styled(format!("{:<20}", key), STYLE_INFO),
-            Span::styled(truncated, STYLE_PRIMARY),
-        ]));
-    }
-}
-
-/// Convert a JSON value to a display string.
-fn json_value_to_display(value: &JsonValue) -> String {
-    match value {
-        JsonValue::Null => "null".to_string(),
-        JsonValue::Bool(b) => b.to_string(),
-        JsonValue::Number(n) => n.to_string(),
-        JsonValue::String(s) => format!("\"{}\"", s),
-        JsonValue::Array(arr) => serde_json::to_string(arr).unwrap_or_else(|_| "[]".to_string()),
-        JsonValue::Object(obj) => serde_json::to_string(obj).unwrap_or_else(|_| "{}".to_string()),
-    }
-}
-
-// =============================================================================
-// HELPER: Page Pipeline Rendering (v0.12.5 ADR-028)
-// =============================================================================
-
-/// Render pipeline context for Page instances.
-/// Shows the generation pipeline in a visual ASCII flow diagram.
-///
-/// ```text
-/// PIPELINE CONTEXT
-/// ══════════════════════════
-///
-/// ┌──────────┐     ┌──────────┐
-/// │ Project  │────▶│  Page    │
-/// └──────────┘     └──────────┘
-///       │                │
-///       ▼                ▼
-/// ┌──────────┐     ┌──────────┐
-/// │ Entity   │     │  Block×N │
-/// └──────────┘     └──────────┘
-///       │                │
-///       ▼                ▼
-/// ┌──────────┐     ┌──────────┐
-/// │ Keywords │     │Generated │
-/// └──────────┘     └──────────┘
-/// ```
-fn render_page_pipeline(lines: &mut Vec<Line<'static>>, instance: &InstanceInfo) {
-    // Find pipeline-relevant arcs from outgoing connections
-    let represents = instance
-        .outgoing_arcs
-        .iter()
-        .find(|a| a.arc_type == "REPRESENTS");
-    let has_blocks: Vec<_> = instance
-        .outgoing_arcs
-        .iter()
-        .filter(|a| a.arc_type == "HAS_BLOCK")
-        .collect();
-    let has_generated = instance
-        .outgoing_arcs
-        .iter()
-        .find(|a| a.arc_type == "HAS_GENERATED");
-    let uses_entity: Vec<_> = instance
-        .outgoing_arcs
-        .iter()
-        .filter(|a| a.arc_type == "USES_ENTITY")
-        .collect();
-
-    // Check incoming for Project
-    let project_arc = instance
-        .incoming_arcs
-        .iter()
-        .find(|a| a.arc_type == "HAS_PAGE");
-
-    // Only show if we have at least one pipeline relationship
-    if represents.is_none()
-        && has_blocks.is_empty()
-        && has_generated.is_none()
-        && project_arc.is_none()
-    {
-        return;
-    }
-
-    lines.push(Line::from(""));
-    lines.push(Line::from(Span::styled(
-        "PIPELINE CONTEXT",
-        Style::default()
-            .fg(Color::White)
-            .add_modifier(Modifier::BOLD),
-    )));
-    lines.push(Line::from(Span::styled(SEPARATOR_MAJOR, STYLE_DIM)));
-
-    // PROJECT → PAGE relationship (incoming)
-    if let Some(proj) = project_arc {
-        lines.push(Line::from(vec![
-            Span::styled("📁 ", STYLE_INFO),
-            Span::styled("Project: ", STYLE_DIM),
-            Span::styled(proj.target_key.clone(), STYLE_PRIMARY),
-        ]));
-    }
-
-    // REPRESENTS → Entity (semantic link)
-    if let Some(entity) = represents {
-        lines.push(Line::from(vec![
-            Span::styled("◆ ", Style::default().fg(Color::Cyan)),
-            Span::styled("Entity:  ", STYLE_DIM),
-            Span::styled(entity.target_key.clone(), STYLE_SUCCESS),
-        ]));
-    }
-
-    // USES_ENTITY (additional entities)
-    if !uses_entity.is_empty() {
-        lines.push(Line::from(vec![
-            Span::styled("  ", STYLE_DIM),
-            Span::styled(
-                format!("+ {} used entities", uses_entity.len()),
-                STYLE_MUTED,
-            ),
-        ]));
-    }
-
-    // HAS_BLOCK → Blocks (structure)
-    if !has_blocks.is_empty() {
-        lines.push(Line::from(vec![
-            Span::styled("▣ ", Style::default().fg(Color::Yellow)),
-            Span::styled("Blocks:  ", STYLE_DIM),
-            Span::styled(format!("{} blocks", has_blocks.len()), STYLE_INFO),
-        ]));
-        // List first 3 blocks
-        for (i, block) in has_blocks.iter().take(3).enumerate() {
-            let prefix = if i == has_blocks.len().min(3) - 1 {
-                "  └─ "
-            } else {
-                "  ├─ "
-            };
-            lines.push(Line::from(vec![
-                Span::styled(prefix, STYLE_DIM),
-                Span::styled(block.target_key.clone(), STYLE_HIGHLIGHT),
-            ]));
-        }
-        if has_blocks.len() > 3 {
-            lines.push(Line::from(vec![
-                Span::styled("  └─ ", STYLE_DIM),
-                Span::styled(format!("... +{} more", has_blocks.len() - 3), STYLE_DIM),
-            ]));
-        }
-    }
-
-    // HAS_GENERATED → PageGenerated (output)
-    if let Some(generated) = has_generated {
-        lines.push(Line::from(vec![
-            Span::styled("✦ ", Style::default().fg(Color::Magenta)),
-            Span::styled("Generated: ", STYLE_DIM),
-            Span::styled(generated.target_key.clone(), STYLE_ACCENT),
-            Span::styled(" ✓", STYLE_SUCCESS),
-        ]));
+/// Render a section box with title and content (non-scrollable).
+fn render_section_box(
+    f: &mut Frame,
+    area: Rect,
+    title: &str,
+    content: &SectionContent,
+    border_color: Color,
+) {
+    let lines: Vec<Line> = if content.is_empty() {
+        vec![Line::from(Span::styled("—", STYLE_DIM))]
     } else {
-        lines.push(Line::from(vec![
-            Span::styled("⋆ ", STYLE_DIM),
-            Span::styled("Generated: ", STYLE_DIM),
-            Span::styled("not yet", STYLE_WARNING),
-        ]));
+        content.lines.clone()
+    };
+
+    let block = Block::default()
+        .title(Span::styled(format!(" {} ", title), STYLE_MUTED))
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(border_color));
+
+    let paragraph = Paragraph::new(lines).block(block);
+    f.render_widget(paragraph, area);
+}
+
+/// Render a scrollable section box with scroll indicator.
+fn render_scrollable_section_box(
+    f: &mut Frame,
+    area: Rect,
+    title: &str,
+    content: &SectionContent,
+    border_color: Color,
+    scroll_offset: usize,
+    focused: bool,
+) -> usize {
+    let lines: Vec<Line> = if content.is_empty() {
+        vec![Line::from(Span::styled("—", STYLE_DIM))]
+    } else {
+        content.lines.clone()
+    };
+
+    let total_lines = lines.len();
+    // Inner height = area height - 2 (for borders)
+    let visible_height = area.height.saturating_sub(2) as usize;
+    let max_scroll = total_lines.saturating_sub(visible_height);
+    let clamped_scroll = scroll_offset.min(max_scroll);
+
+    // Show scroll indicator in title if scrollable
+    let title_text = if total_lines > visible_height {
+        format!(" {} [{}/{}] ", title, clamped_scroll + 1, total_lines)
+    } else {
+        format!(" {} ", title)
+    };
+
+    let title_style = if focused {
+        Style::default()
+            .fg(Color::Cyan)
+            .add_modifier(Modifier::BOLD)
+    } else {
+        STYLE_MUTED
+    };
+
+    let block = Block::default()
+        .title(Span::styled(title_text, title_style))
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(border_color));
+
+    let paragraph = Paragraph::new(lines)
+        .block(block)
+        .scroll((clamped_scroll as u16, 0));
+
+    f.render_widget(paragraph, area);
+
+    // Render scrollbar if content exceeds visible area
+    if total_lines > visible_height {
+        let scrollbar = Scrollbar::new(ScrollbarOrientation::VerticalRight)
+            .begin_symbol(Some("▲"))
+            .end_symbol(Some("▼"))
+            .track_symbol(Some("│"))
+            .thumb_symbol("█");
+
+        let mut scrollbar_state = ScrollbarState::new(max_scroll).position(clamped_scroll);
+
+        // Scrollbar area is inside the block, right edge
+        let scrollbar_area = Rect {
+            x: area.x + area.width - 2,
+            y: area.y + 1,
+            width: 1,
+            height: area.height.saturating_sub(2),
+        };
+
+        f.render_stateful_widget(scrollbar, scrollbar_area, &mut scrollbar_state);
     }
 
-    lines.push(Line::from(""));
+    // Return total lines for scroll calculation in app
+    total_lines
+}
+
+/// Unified info panel: 6 fixed sections with consistent layout.
+/// - Row 1: IDENTITY | LOCATION (side-by-side, fixed height)
+/// - Row 2: METRICS (fixed height)
+/// - Row 3: COVERAGE (fixed height)
+/// - Row 4: PROPERTIES (fills remaining, scrollable)
+/// - Row 5: RELATIONSHIPS (fixed height)
+pub fn render_unified_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
+    let focused = app.focus == Focus::Info;
+    let border_color = if focused {
+        Color::Cyan
+    } else {
+        COLOR_UNFOCUSED_BORDER
+    };
+
+    // Build unified content
+    let content = build_unified_content(app);
+
+    // Get title from current item
+    let title = get_detail_title(app);
+
+    // Outer block for the entire panel
+    let outer_block = Block::default()
+        .title(Span::styled(format!(" {} ", title), STYLE_PRIMARY))
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(border_color));
+
+    let inner = outer_block.inner(area);
+    f.render_widget(outer_block, area);
+
+    // Check minimum height
+    if inner.height < 15 {
+        // Too small for boxes, fall back to simple layout
+        let all_lines: Vec<Line> = content
+            .identity
+            .lines
+            .into_iter()
+            .chain(content.location.lines)
+            .chain(content.metrics.lines)
+            .chain(content.coverage.lines)
+            .chain(content.properties.lines)
+            .chain(content.relationships.lines)
+            .collect();
+
+        let paragraph = Paragraph::new(all_lines);
+        f.render_widget(paragraph, inner);
+        return;
+    }
+
+    // Fixed section heights - PROPERTIES fills remaining space
+    let main_chunks = Layout::default()
+        .direction(Direction::Vertical)
+        .constraints([
+            Constraint::Length(SECTION_HEIGHT_TOP), // IDENTITY | LOCATION
+            Constraint::Length(SECTION_HEIGHT_METRICS), // METRICS
+            Constraint::Length(SECTION_HEIGHT_COVERAGE), // COVERAGE
+            Constraint::Min(6),                     // PROPERTIES (fills remaining, scrollable)
+            Constraint::Length(SECTION_HEIGHT_RELATIONSHIPS), // RELATIONSHIPS
+        ])
+        .split(inner);
+
+    // Row 1: IDENTITY | LOCATION side-by-side
+    let top_row = Layout::default()
+        .direction(Direction::Horizontal)
+        .constraints([Constraint::Percentage(50), Constraint::Percentage(50)])
+        .split(main_chunks[0]);
+
+    render_section_box(f, top_row[0], "IDENTITY", &content.identity, border_color);
+    render_section_box(f, top_row[1], "LOCATION", &content.location, border_color);
+
+    // Row 2: METRICS
+    render_section_box(f, main_chunks[1], "METRICS", &content.metrics, border_color);
+
+    // Row 3: COVERAGE
+    render_section_box(
+        f,
+        main_chunks[2],
+        "COVERAGE",
+        &content.coverage,
+        border_color,
+    );
+
+    // Row 4: PROPERTIES (scrollable with app.info_scroll)
+    let total_lines = render_scrollable_section_box(
+        f,
+        main_chunks[3],
+        "PROPERTIES",
+        &content.properties,
+        border_color,
+        app.info_scroll,
+        focused,
+    );
+    // Update line count for scroll bounds
+    app.info_line_count = total_lines;
+
+    // Row 5: RELATIONSHIPS
+    render_section_box(
+        f,
+        main_chunks[4],
+        "RELATIONSHIPS",
+        &content.relationships,
+        border_color,
+    );
 }

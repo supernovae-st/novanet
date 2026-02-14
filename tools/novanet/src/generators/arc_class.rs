@@ -7,7 +7,7 @@
 //! v10.7: Migrated from deprecated `relations.yaml` to individual arc-kind YAML files.
 //! v11.8 (ADR-023): ArcKind → ArcClass, :Meta:ArcKind → :Schema:ArcClass, FROM/TO_KIND → FROM/TO_CLASS
 //!
-//! Output target: `packages/db/seed/02-arc-kinds.cypher`
+//! Output target: `packages/db/seed/02-arc-classes.cypher`
 
 use super::cypher_utils::{cypher_list_owned, cypher_str, write_section_header_counted};
 use crate::parsers::arcs;
@@ -102,9 +102,9 @@ fn compute_scope(rel: &ArcDef, kind_realms: &HashMap<String, String>) -> Option<
 // Generator
 // ─────────────────────────────────────────────────────────────────────────────
 
-pub struct ArcKindGenerator;
+pub struct ArcClassGenerator;
 
-impl super::Generator for ArcKindGenerator {
+impl super::Generator for ArcClassGenerator {
     fn name(&self) -> &'static str {
         "arc_schema"
     }
@@ -607,7 +607,7 @@ mod tests {
             return;
         }
 
-        let generator = ArcKindGenerator;
+        let generator = ArcClassGenerator;
         let cypher = generator
             .generate(root)
             .expect("should generate arc schema cypher");

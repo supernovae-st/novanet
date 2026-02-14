@@ -304,8 +304,7 @@ layer:
     #[test]
     fn load_layers_for_realm_integration() {
         let Some(root) = test_root() else { return };
-        let org_layers =
-            load_layers_for_realm(&root, "org").expect("should load org layers");
+        let org_layers = load_layers_for_realm(&root, "org").expect("should load org layers");
         assert!(
             org_layers.len() >= 5,
             "expected at least 5 org layers, got {}",

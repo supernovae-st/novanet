@@ -50,19 +50,42 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
     };
 
     // Build title with in/out counts (show loading if arcs are still loading)
-    let title = if arcs_loading {
-        " Arc Relationships [...] ".to_string()
+    // Order: Out first (→), then In (←) - more logical flow direction
+    let title_spans = if arcs_loading {
+        vec![Span::styled(
+            " Arc Relationships [...] ",
+            Style::default().fg(border_color),
+        )]
     } else if incoming_count > 0 || outgoing_count > 0 {
-        format!(
-            " Arc Relationships [←{} In] [{} Out→] ",
-            incoming_count, outgoing_count
-        )
+        vec![
+            Span::styled(" Arc Relationships ", Style::default().fg(border_color)),
+            Span::styled("[", Style::default().fg(Color::DarkGray)),
+            Span::styled(
+                format!("{} Out", outgoing_count),
+                Style::default()
+                    .fg(Color::Cyan)
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::styled("→", Style::default().fg(Color::Cyan)),
+            Span::styled("] [", Style::default().fg(Color::DarkGray)),
+            Span::styled("←", Style::default().fg(Color::Magenta)),
+            Span::styled(
+                format!("{} In", incoming_count),
+                Style::default()
+                    .fg(Color::Magenta)
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::styled("] ", Style::default().fg(Color::DarkGray)),
+        ]
     } else {
-        " Arc Relationships ".to_string()
+        vec![Span::styled(
+            " Arc Relationships ",
+            Style::default().fg(border_color),
+        )]
     };
 
     let block = Block::default()
-        .title(Span::styled(title, Style::default().fg(border_color)))
+        .title(Line::from(title_spans))
         .borders(Borders::ALL)
         .border_style(Style::default().fg(border_color));
 

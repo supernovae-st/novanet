@@ -185,20 +185,20 @@ impl ArcDef {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Arc-Kind YAML Files (v10.9 - consolidated from arc-kinds/ directory)
+// Arc-Class YAML Files (v10.9 - consolidated from arc-kinds/ directory)
 // ─────────────────────────────────────────────────────────────────────────────
 
 use std::collections::HashMap;
 
-/// Individual arc-kind YAML file structure (from arc-kinds/{family}/*.yaml).
+/// Individual arc-class YAML file structure (from arc-kinds/{family}/*.yaml).
 #[derive(Debug, Clone, Deserialize)]
-pub struct ArcKindYaml {
-    pub arc: ArcKindDef,
+pub struct ArcClassYaml {
+    pub arc: ArcClassDef,
 }
 
-/// Arc definition within individual arc-kind YAML file.
+/// Arc definition within individual arc-class YAML file.
 #[derive(Debug, Clone, Deserialize)]
-pub struct ArcKindDef {
+pub struct ArcClassDef {
     /// Arc type name (SCREAMING_SNAKE_CASE), e.g., "HAS_PAGE".
     pub name: String,
 
@@ -240,7 +240,7 @@ pub struct ArcKindDef {
     pub cypher_pattern: Option<String>,
 }
 
-impl ArcKindDef {
+impl ArcClassDef {
     /// Extract property names from the various formats.
     fn extract_property_names(&self) -> Option<Vec<String>> {
         self.properties.as_ref().and_then(|v| match v {
@@ -336,7 +336,7 @@ pub fn load_arc_kinds_from_files(root: &Path) -> crate::Result<ArcsDocument> {
             }
 
             // Parse the arc-kind YAML
-            match super::utils::load_yaml::<ArcKindYaml>(&path) {
+            match super::utils::load_yaml::<ArcClassYaml>(&path) {
                 Ok(yaml) => {
                     arcs.push(yaml.arc.to_arc_def());
                 }
@@ -421,7 +421,7 @@ pub fn load_arc_temperatures(root: &Path) -> crate::Result<HashMap<String, f32>>
             }
 
             // Parse the arc-kind YAML
-            if let Ok(yaml) = super::utils::load_yaml::<ArcKindYaml>(&path) {
+            if let Ok(yaml) = super::utils::load_yaml::<ArcClassYaml>(&path) {
                 if let Some(threshold) = yaml.arc.temperature_threshold {
                     temps.insert(yaml.arc.name, threshold);
                 }
@@ -668,7 +668,7 @@ arc:
   cardinality: many_to_many
   temperature_threshold: 0.3
 "#;
-        let parsed: ArcKindYaml = serde_yaml::from_str(yaml).unwrap();
+        let parsed: ArcClassYaml = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(parsed.arc.name, "SEMANTIC_LINK");
         assert_eq!(parsed.arc.family, ArcFamily::Semantic);
         assert_eq!(parsed.arc.temperature_threshold, Some(0.3));
@@ -684,7 +684,7 @@ arc:
   target: Page
   cardinality: one_to_many
 "#;
-        let parsed: ArcKindYaml = serde_yaml::from_str(yaml).unwrap();
+        let parsed: ArcClassYaml = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(parsed.arc.name, "HAS_PAGE");
         assert_eq!(parsed.arc.temperature_threshold, None);
     }
@@ -745,7 +745,7 @@ arc:
       required: true
       description: "Audience segment (b2b, b2c, general)"
 "#;
-        let result: Result<ArcKindYaml, _> = serde_yaml::from_str(yaml);
+        let result: Result<ArcClassYaml, _> = serde_yaml::from_str(yaml);
         match &result {
             Ok(v) => println!("Parsed: {}", v.arc.name),
             Err(e) => println!("Error: {}", e),
@@ -767,7 +767,7 @@ fn parse_has_audience_file() {
     let content = std::fs::read_to_string(&path).expect("should read file");
     eprintln!("Content:\n{}", &content[..200.min(content.len())]);
 
-    match serde_yaml::from_str::<ArcKindYaml>(&content) {
+    match serde_yaml::from_str::<ArcClassYaml>(&content) {
         Ok(v) => eprintln!("Parsed: {}", v.arc.name),
         Err(e) => {
             eprintln!("Error: {}", e);

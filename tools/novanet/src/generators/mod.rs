@@ -1,6 +1,6 @@
 //! Code generators that replace @novanet/schema-tools.
 //!
-//! Generator execution order: Organizing → NodeKind → ArcKind → Layer → Mermaid → Autowire → Hierarchy → Colors → Icons → VisualEncoding → TuiIcons
+//! Generator execution order: Organizing → NodeClass → ArcClass → Layer → Mermaid → Autowire → Hierarchy → Colors → Icons → VisualEncoding → TuiIcons
 //!
 //! Each generator reads parsed YAML and produces either:
 //! - Cypher statements (for Neo4j seeding)
@@ -8,7 +8,7 @@
 //! - Rust code (via string building)
 //! - Mermaid diagrams (for documentation)
 
-pub mod arc_kind;
+pub mod arc_class;
 pub mod autowire;
 pub mod colors;
 pub mod culture;
@@ -20,7 +20,7 @@ pub mod icons;
 pub mod layer;
 pub mod market;
 pub mod mermaid;
-pub mod node_kind;
+pub mod node_class;
 pub mod organizing;
 pub mod slugification;
 #[cfg(test)]

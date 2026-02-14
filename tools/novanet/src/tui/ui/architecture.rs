@@ -51,7 +51,9 @@ pub fn render_architecture_panel(f: &mut Frame, area: Rect, app: &App) {
     let block = Block::default()
         .title(Span::styled(
             title,
-            Style::default().fg(border_color).add_modifier(Modifier::BOLD),
+            Style::default()
+                .fg(border_color)
+                .add_modifier(Modifier::BOLD),
         ))
         .borders(Borders::ALL)
         .border_style(Style::default().fg(border_color));

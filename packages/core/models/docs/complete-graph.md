@@ -36,20 +36,49 @@ flowchart TB
   classDef generated fill:#b58900,stroke:#996f00,color:#fff
   classDef retrieved fill:#6c71c4,stroke:#5761b3,color:#fff
 
-  subgraph SHARED_REALM["🌍 SHARED"]
+  subgraph ORG_REALM["◎ ORG"]
+    direction TB
+    subgraph ORG_config["Config"]
+      OrgConfig["🔵 OrgConfig"]
+    end
+    subgraph ORG_foundation["Foundation"]
+      Brand["🔵 Brand"]
+      BrandDesign["🔵 BrandDesign"]
+      BrandPrinciples["🔵 BrandPrinciples"]
+      Project["🔵 Project"]
+      ProjectContent["🟢 ProjectContent"]
+      PromptStyle["🔵 PromptStyle"]
+    end
+    subgraph ORG_instruction["Instructions"]
+      BlockInstruction["🔵 BlockInstruction"]
+      BlockRules["🔵 BlockRules"]
+      BlockType["🔵 BlockType"]
+      PromptArtifact["🌟 PromptArtifact"]
+    end
+    subgraph ORG_output["Generated Output"]
+      BlockGenerated["🌟 BlockGenerated"]
+      OutputArtifact["🌟 OutputArtifact"]
+      PageGenerated["🌟 PageGenerated"]
+    end
+    subgraph ORG_semantic["Semantic"]
+      AudiencePersona["🔵 AudiencePersona"]
+      ChannelSurface["🔵 ChannelSurface"]
+      Entity["🔵 Entity"]
+      EntityContent["🟢 EntityContent"]
+    end
+    subgraph ORG_structure["Structure"]
+      Block["🔵 Block"]
+      ContentSlot["🔵 ContentSlot"]
+      Page["🔵 Page"]
+    end
+  end
+
+  subgraph SHARED_REALM["◉ SHARED"]
     direction TB
     subgraph SHARED_config["Config"]
       EntityCategory["🔵 EntityCategory"]
       Locale["🔵 Locale"]
       SEOKeywordFormat["🔵 SEOKeywordFormat"]
-    end
-    subgraph SHARED_locale["Locale"]
-      Adaptation["🟣 Adaptation"]
-      Culture["🟣 Culture"]
-      Formatting["🟣 Formatting"]
-      Market["🟣 Market"]
-      Slugification["🟣 Slugification"]
-      Style["🟣 Style"]
     end
     subgraph SHARED_geography["Geography"]
       Continent["🔵 Continent"]
@@ -86,42 +115,13 @@ flowchart TB
       Term["🟣 Term"]
       TermSet["🔵 TermSet"]
     end
-  end
-
-  subgraph ORG_REALM["🏢 ORG"]
-    direction TB
-    subgraph ORG_config["Config"]
-      OrgConfig["🔵 OrgConfig"]
-    end
-    subgraph ORG_semantic["Semantic Layer"]
-      AudiencePersona["🔵 AudiencePersona"]
-      ChannelSurface["🔵 ChannelSurface"]
-      Entity["🔵 Entity"]
-      EntityContent["🟢 EntityContent"]
-    end
-    subgraph ORG_foundation["Foundation"]
-      Brand["🔵 Brand"]
-      BrandDesign["🔵 BrandDesign"]
-      BrandPrinciples["🔵 BrandPrinciples"]
-      Project["🔵 Project"]
-      ProjectContent["🟢 ProjectContent"]
-      PromptStyle["🔵 PromptStyle"]
-    end
-    subgraph ORG_structure["Structure"]
-      Block["🔵 Block"]
-      ContentSlot["🔵 ContentSlot"]
-      Page["🔵 Page"]
-    end
-    subgraph ORG_instruction["Instructions"]
-      BlockInstruction["🔵 BlockInstruction"]
-      BlockRules["🔵 BlockRules"]
-      BlockType["🔵 BlockType"]
-      PromptArtifact["🌟 PromptArtifact"]
-    end
-    subgraph ORG_output["Generated Output"]
-      BlockGenerated["🌟 BlockGenerated"]
-      OutputArtifact["🌟 OutputArtifact"]
-      PageGenerated["🌟 PageGenerated"]
+    subgraph SHARED_locale["Locale"]
+      Adaptation["🟣 Adaptation"]
+      Culture["🟣 Culture"]
+      Formatting["🟣 Formatting"]
+      Market["🟣 Market"]
+      Slugification["🟣 Slugification"]
+      Style["🟣 Style"]
     end
   end
 
