@@ -1,0 +1,18 @@
+# packages/core/models/arc-classes/ownership/style-of.yaml
+# ArcClass: STYLE_OF — Style belongs to Locale (inverse of HAS_STYLE)
+# v0.13.1: NEW TIER 2 inverse arc (ADR-026)
+
+arc:
+  name: STYLE_OF
+  family: ownership
+  scope: intra_realm
+  source: Style
+  target: Locale
+  cardinality: one_to_one
+  inverse_of: HAS_STYLE
+  llm_context: |
+    USE: when finding which Locale uses this writing style.
+    TRIGGERS: style locale, which locale style, style owner.
+    NOT: loading style for locale (use HAS_STYLE), formatting (use FORMATTING_OF).
+    RELATES: Style (source), Locale (target), HAS_STYLE (inverse).
+  cypher_pattern: (Style)-[:STYLE_OF]->(Locale)

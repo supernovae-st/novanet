@@ -1,0 +1,22 @@
+# packages/core/models/arc-classes/localization/lending-classifies.yaml
+# ArcClass: LENDING_CLASSIFIES — LendingCategory classifies Locale (inverse of HAS_LENDING_TYPE)
+# v0.13.1: Split from generic CLASSIFIES (ADR-026 - 1:1 inverse pairs)
+
+arc:
+  name: LENDING_CLASSIFIES
+  family: localization
+  scope: intra_realm
+
+  source: LendingCategory
+  target: Locale
+  cardinality: one_to_many
+
+  inverse_of: HAS_LENDING_TYPE
+
+  llm_context: |
+    USE: when finding all Locales in a World Bank lending classification.
+    TRIGGERS: lending category locales, IDA countries, IBRD markets, development classification members.
+    NOT: finding a Locale's lending type (use HAS_LENDING_TYPE), income classification (use INCOME_CLASSIFIES).
+    RELATES: LendingCategory (source), Locale (target), HAS_LENDING_TYPE (inverse).
+
+  cypher_pattern: "(LendingCategory)-[:LENDING_CLASSIFIES]->(Locale)"

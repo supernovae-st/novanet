@@ -506,7 +506,7 @@ mod tests {
 
     #[test]
     fn resolve_multi_source_target() {
-        // v0.12.4: PageStructure deleted, use Entity → EntityCategory as multi-target example
+        // v0.12.5: PageStructure deleted, use Entity → EntityCategory as multi-target example
         let rel = ArcDef {
             arc_type: "BELONGS_TO".to_string(),
             family: ArcFamily::Semantic,

@@ -18,7 +18,7 @@
 //! - [S] Stats: Matrix Control Tower (schema stats, heartbeat, bar charts)
 //! - [V] Views: Schema views explorer (Query-First architecture)
 //!
-//! v0.12.4: 61 nodes (40 shared + 21 org), 10 layers (4 shared + 6 org).
+//! v0.12.5: 61 nodes (40 shared + 21 org), 10 layers (4 shared + 6 org).
 //! Progress persistence to ~/.novanet/tutorial_progress.json
 
 pub mod arch;
@@ -105,7 +105,7 @@ pub enum NexusTab {
     Quiz,
     /// Dynamic learning statistics (sparklines, gauges, achievements)
     Stats,
-    // NOTE: Views removed, now separate NavMode::Views (v0.12.4)
+    // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
 }
 
 impl NexusTab {
@@ -176,14 +176,14 @@ impl NexusTab {
             NexusTab::Arch => NexusTab::Pipeline,
             NexusTab::Pipeline => NexusTab::Quiz,
             NexusTab::Quiz => NexusTab::Stats,
-            NexusTab::Stats => NexusTab::Intro, // Wrap to start (Views removed v0.12.4)
+            NexusTab::Stats => NexusTab::Intro, // Wrap to start (Views removed v0.12.5)
         }
     }
 
     /// Cycle to previous tab.
     pub fn prev(&self) -> Self {
         match self {
-            NexusTab::Intro => NexusTab::Stats, // Wrap to end (Views removed v0.12.4)
+            NexusTab::Intro => NexusTab::Stats, // Wrap to end (Views removed v0.12.5)
             NexusTab::Glossary => NexusTab::Intro,
             NexusTab::Tutorial => NexusTab::Glossary,
             NexusTab::Traits => NexusTab::Tutorial,
@@ -680,7 +680,7 @@ impl NexusState {
                     self.quiz.exit_review_mode();
                     return true;
                 }
-                // NOTE: Views Escape handler removed, now separate NavMode::Views (v0.12.4)
+                // NOTE: Views Escape handler removed, now separate NavMode::Views (v0.12.5)
                 self.drill_up()
             }
 
@@ -856,7 +856,7 @@ impl NexusState {
                     self.stats.score_history.last().unwrap_or(&0)
                 ))
             }
-            // NOTE: Views removed, now separate NavMode::Views (v0.12.4)
+            // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
         }
     }
 
@@ -1003,7 +1003,7 @@ impl NexusState {
                 // Stats tab: scroll stats view
                 false // No vertical navigation in stats
             }
-            // NOTE: Views removed, now separate NavMode::Views (v0.12.4)
+            // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
         }
     }
 
@@ -1088,7 +1088,7 @@ impl NexusState {
                 // Stats tab: scroll stats view
                 false // No vertical navigation in stats
             }
-            // NOTE: Views removed, now separate NavMode::Views (v0.12.4)
+            // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
         }
     }
 
@@ -1126,7 +1126,7 @@ impl NexusState {
                     false
                 }
             }
-            // NOTE: Views navigate_left removed, now separate NavMode::Views (v0.12.4)
+            // NOTE: Views navigate_left removed, now separate NavMode::Views (v0.12.5)
             _ => {
                 // Drill up as alternative to Escape
                 self.drill_up()
@@ -1168,7 +1168,7 @@ impl NexusState {
                     false
                 }
             }
-            // NOTE: Views navigate_right removed, now separate NavMode::Views (v0.12.4)
+            // NOTE: Views navigate_right removed, now separate NavMode::Views (v0.12.5)
             _ => {
                 // Drill down as alternative to Enter
                 self.drill_down()
@@ -1227,7 +1227,7 @@ impl NexusState {
                 // Stats doesn't have drill-down
                 false
             }
-            // NOTE: Views removed, now separate NavMode::Views (v0.12.4)
+            // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
         }
     }
 
@@ -1372,7 +1372,7 @@ impl NexusState {
             NexusTab::Stats => {
                 format!("Nexus > {} > {}", section, tab_name)
             }
-            // NOTE: Views removed, now separate NavMode::Views (v0.12.4)
+            // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
         }
     }
 
@@ -1423,7 +1423,7 @@ impl NexusState {
                 }
             }
             NexusTab::Stats => vec![("↑/↓", "scroll"), ("y", "copy")],
-            // NOTE: Views removed, now separate NavMode::Views (v0.12.4)
+            // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
         }
     }
 }
@@ -1466,7 +1466,7 @@ pub fn render_nexus(f: &mut Frame, area: Rect, app: &App) {
         NexusTab::Pipeline => pipeline::render_pipeline_tab(f, app, chunks[2]),
         NexusTab::Quiz => quiz::render_quiz_tab(f, app, chunks[2]),
         NexusTab::Stats => stats::render_stats_tab(f, app, chunks[2]),
-        // NOTE: Views removed, now separate NavMode::Views (v0.12.4)
+        // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
     }
 
     // Render cross-tab navigation hints (v0.12.0)
@@ -1524,7 +1524,7 @@ fn render_tab_bar(f: &mut Frame, area: Rect, app: &App) {
                 NexusTab::Pipeline,
                 NexusTab::Quiz,
                 NexusTab::Stats,
-                // NOTE: Views removed, now separate NavMode::Views (v0.12.4)
+                // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
             ],
         ),
     ];
@@ -1823,7 +1823,7 @@ mod tests {
         state.handle_key(key_event(KeyCode::Tab));
         assert_eq!(state.tab, NexusTab::Stats);
 
-        // NOTE: Views removed, now separate NavMode::Views (v0.12.4)
+        // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
         state.handle_key(key_event(KeyCode::Tab));
         assert_eq!(state.tab, NexusTab::Intro); // Wraps around (Stats is last)
     }
@@ -1831,7 +1831,7 @@ mod tests {
     #[test]
     fn test_guide_tab_all() {
         let all = NexusTab::all();
-        assert_eq!(all.len(), 10); // v0.12.4: 10 tabs (Views removed, now NavMode::Views)
+        assert_eq!(all.len(), 10); // v0.12.5: 10 tabs (Views removed, now NavMode::Views)
         // LEARN section
         assert_eq!(all[0], NexusTab::Intro);
         assert_eq!(all[1], NexusTab::Glossary);
@@ -1845,13 +1845,13 @@ mod tests {
         assert_eq!(all[7], NexusTab::Pipeline);
         assert_eq!(all[8], NexusTab::Quiz);
         assert_eq!(all[9], NexusTab::Stats);
-        // NOTE: Views removed, now separate NavMode::Views (v0.12.4)
+        // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
     }
 
     #[test]
     fn test_guide_tab_shortcuts() {
         // v11.7: letter-based shortcuts
-        // v0.12.4: 10 tabs (Views removed, now NavMode::Views)
+        // v0.12.5: 10 tabs (Views removed, now NavMode::Views)
         assert_eq!(NexusTab::Intro.shortcut(), 'i');
         assert_eq!(NexusTab::Glossary.shortcut(), 'g');
         assert_eq!(NexusTab::Tutorial.shortcut(), 'u');
@@ -1865,7 +1865,7 @@ mod tests {
 
     #[test]
     fn test_guide_tab_labels() {
-        // v0.12.4: 10 tabs with labels (Views removed, now NavMode::Views)
+        // v0.12.5: 10 tabs with labels (Views removed, now NavMode::Views)
         assert_eq!(NexusTab::Intro.label(), "Intro");
         assert_eq!(NexusTab::Glossary.label(), "Glossary");
         assert_eq!(NexusTab::Tutorial.label(), "Tutorial");
@@ -1906,7 +1906,7 @@ mod tests {
         let mut state = NexusState::new();
         assert_eq!(state.tab, NexusTab::Intro); // v11.7: default is Intro
 
-        // Navigate forward through all 10 tabs (v0.12.4: Views removed)
+        // Navigate forward through all 10 tabs (v0.12.5: Views removed)
         state.handle_key(key_event(KeyCode::Char(']')));
         assert_eq!(state.tab, NexusTab::Glossary);
 
@@ -1934,7 +1934,7 @@ mod tests {
         state.handle_key(key_event(KeyCode::Char(']')));
         assert_eq!(state.tab, NexusTab::Stats);
 
-        // Wrap around (Stats is last, Views removed v0.12.4)
+        // Wrap around (Stats is last, Views removed v0.12.5)
         state.handle_key(key_event(KeyCode::Char(']')));
         assert_eq!(state.tab, NexusTab::Intro);
     }
@@ -1944,7 +1944,7 @@ mod tests {
         let mut state = NexusState::new();
         assert_eq!(state.tab, NexusTab::Intro); // v11.7: default is Intro
 
-        // [ from Intro wraps to Stats (last tab, Views removed v0.12.4)
+        // [ from Intro wraps to Stats (last tab, Views removed v0.12.5)
         let changed = state.handle_key(key_event(KeyCode::Char('[')));
         assert!(changed);
         assert_eq!(state.tab, NexusTab::Stats);
@@ -1970,9 +1970,9 @@ mod tests {
         let mut state = NexusState::new();
         assert_eq!(state.tab, NexusTab::Intro); // v11.7: default is Intro
 
-        // Cycle backward through all 10 tabs (v0.12.4: Views removed)
+        // Cycle backward through all 10 tabs (v0.12.5: Views removed)
         state.handle_key(key_event(KeyCode::BackTab));
-        assert_eq!(state.tab, NexusTab::Stats); // Wraps to end (Views removed v0.12.4)
+        assert_eq!(state.tab, NexusTab::Stats); // Wraps to end (Views removed v0.12.5)
 
         state.handle_key(key_event(KeyCode::BackTab));
         assert_eq!(state.tab, NexusTab::Quiz);
@@ -2089,7 +2089,7 @@ mod tests {
         assert_eq!(NexusTab::Traits.section(), "EXPLORE");
         assert_eq!(NexusTab::Layers.section(), "EXPLORE");
         assert_eq!(NexusTab::Arcs.section(), "EXPLORE");
-        // PRACTICE section (v0.12.4: Views removed, now NavMode::Views)
+        // PRACTICE section (v0.12.5: Views removed, now NavMode::Views)
         assert_eq!(NexusTab::Pipeline.section(), "PRACTICE");
         assert_eq!(NexusTab::Quiz.section(), "PRACTICE");
         assert_eq!(NexusTab::Stats.section(), "PRACTICE");

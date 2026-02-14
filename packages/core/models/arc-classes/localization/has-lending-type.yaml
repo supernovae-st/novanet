@@ -11,7 +11,7 @@ arc:
   target: LendingCategory
   cardinality: many_to_one
 
-  inverse: CLASSIFIES
+  inverse: LENDING_CLASSIFIES
 
   llm_context: |
     USE: when finding World Bank lending classification for development context.

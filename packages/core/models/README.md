@@ -26,7 +26,7 @@ models/
 │       ├── semantic/        #    Entity, EntityContent, Audience, Channel (4)
 │       ├── instruction/     #    PageStructure, PageInstruction, BlockType, BlockInstruction... (6)
 │       └── output/          #    PageGenerated, BlockGenerated, OutputArtifact (3)
-├── arc-classes/               # ONE FILE PER ARC CLASS (156 arcs)
+├── arc-classes/               # ONE FILE PER ARC CLASS (169 arcs)
 │   ├── ownership/           # HAS_* arcs (43)
 │   ├── localization/        # FOR_LOCALE, SUPPORTS_LOCALE (14)
 │   ├── semantic/            # USES_*, SEMANTIC_LINK (26)

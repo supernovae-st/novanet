@@ -75,7 +75,7 @@
 #                               │    │
 #                               │    └──:HAS_GENERATED──> BlockGenerated ──:FOR_LOCALE──> Locale
 #                               │
-#                               │  (v0.12.4: PageStructure/PageInstruction deleted - ADR-028)
+#                               │  (v0.12.5: PageStructure/PageInstruction deleted - ADR-028)
 #                               │  (Block order determines structure; BlockInstructions assembled at runtime)
 #                               │
 #                               ├──:USES_ENTITY──> Entity (invariant)
@@ -87,10 +87,10 @@
 #                               └──:HAS_GENERATED──> PageGenerated ──:FOR_LOCALE──> Locale
 #
 # ═══════════════════════════════════════════════════════════════════════════════
-# INSTRUCTION LAYER (v0.12.4 ADR-028)
+# INSTRUCTION LAYER (v0.12.5 ADR-028)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-#   v0.12.4: PageStructure and PageInstruction DELETED
+#   v0.12.5: PageStructure and PageInstruction DELETED
 #   Block order (HAS_BLOCK {order}) determines page structure
 #   BlockInstructions are assembled at runtime by position order
 #
@@ -159,8 +159,8 @@
 # CHANGES v0.12.0 (SemVer transition from v11.x milestone versions)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-# Statistics: 61 nodes (40 shared + 21 org), 156 arcs (5 arc families)
-# v0.12.4: Added REFERENCES (Block→Entity), HAS_KEYWORD (Entity→SEOKeyword)
+# Statistics: 61 nodes (40 shared + 21 org), 169 arcs (5 arc families)
+# v0.12.5: Added REFERENCES (Block→Entity), HAS_KEYWORD (Entity→SEOKeyword)
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 
@@ -379,10 +379,10 @@ nodes_by_trait:
 # STATISTICS v0.12.0
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-# By Realm (v0.12.4):
+# By Realm (v0.12.5):
 #   🌍 SHARED:  40 nodes (config 3 + geography 7 + knowledge 24 + locale 6)
 #   📦 ORG:     21 nodes (config 1 + foundation 6 + structure 3 + semantic 4 + instruction 4 + output 3)
-#   TOTAL:      61 nodes, 156 arcs (5 arc families)
+#   TOTAL:      61 nodes, 169 arcs (5 arc families)
 #
 # By Trait (v0.12.0 ADR-024):
 #   🔵 DEFINED:   31 nodes (language-independent definitions)

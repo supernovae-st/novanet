@@ -373,7 +373,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
-        question: "What is the total node count in NovaNet v0.12.4?",
+        question: "What is the total node count in NovaNet v0.12.5?",
         options: ["55", "58", "61", "70"],
         correct: 2,
         explanation: "61 total nodes: 40 shared + 21 org.",
@@ -571,7 +571,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         question: "How many total arcs (ArcClass) in NovaNet?",
         options: ["85", "114", "128", "146"],
         correct: 2,
-        explanation: "156 arc types defined across 5 families, covering all node relationships.",
+        explanation: "169 arc types defined across 5 families, covering all node relationships.",
         category: QuizCategory::Arcs,
         question_type: QuizQuestionType::MultipleChoice,
     },

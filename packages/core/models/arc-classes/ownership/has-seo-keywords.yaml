@@ -21,6 +21,7 @@ arc:
   source: Locale
   target: SEOKeywordSet
   cardinality: one_to_one
+  inverse: SEO_KEYWORDS_OF
   llm_context: |
     USE: when loading SEO keyword container for a locale.
     TRIGGERS: locale keywords, SEO strategy, keyword research, SEO keyword set.

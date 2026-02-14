@@ -1,10 +1,12 @@
-# packages/core/models/arc-classes/localization/has-internal-link.yaml
+# packages/core/models/arc-classes/semantic/has-internal-link.yaml
 # ArcClass: HAS_INTERNAL_LINK — BlockGenerated contains link to PageGenerated (v10.3)
+# v0.13.1: MOVED from localization/ to semantic/ (no locale dimension - content navigation)
 
 arc:
   name: HAS_INTERNAL_LINK
-  family: localization
+  family: semantic
   scope: intra_realm
+  temperature_threshold: 0.8  # High priority for content structure analysis
 
   source: BlockGenerated
   target: PageGenerated
@@ -25,9 +27,9 @@ arc:
       description: "Whether the link has rel=nofollow"
 
   llm_context: |
-    USE: when analyzing internal linking structure from generated content.
-    TRIGGERS: internal links, link structure, SEO links, anchor text, content linking.
-    NOT: semantic page linking (use LINKS_TO), entity references (use USES_ENTITY).
+    USE: when analyzing actual hyperlinks rendered in generated block content.
+    TRIGGERS: internal links, rendered links, link structure, SEO links, anchor text, content linking.
+    NOT: page-to-page SEO intent (use LINKS_TO), instruction references (use REFERENCES_PAGE), @ refs (use MENTIONS).
     RELATES: BlockGenerated (source), PageGenerated (target), properties: anchor_text, position, nofollow.
 
   cypher_pattern: "(BlockGenerated)-[:HAS_INTERNAL_LINK {anchor_text, position, nofollow}]->(PageGenerated)"

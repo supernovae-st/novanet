@@ -1,0 +1,21 @@
+# packages/core/models/arc-classes/mining/metrics-of.yaml
+# ArcClass: METRICS_OF — SEOKeywordMetrics belongs to SEOKeyword (inverse of HAS_METRICS)
+# v0.13.1: NEW TIER 2 inverse arc (ADR-026)
+
+arc:
+  name: METRICS_OF
+  family: mining
+  scope: intra_realm  # shared/knowledge → shared/knowledge
+
+  source: SEOKeywordMetrics
+  target: SEOKeyword
+  cardinality: many_to_one
+  inverse_of: HAS_METRICS
+
+  llm_context: |
+    USE: when finding which keyword owns specific metrics data.
+    TRIGGERS: metrics keyword, which keyword metrics, metrics lookup, keyword data.
+    NOT: loading metrics for keyword (use HAS_METRICS), keyword targeting (use TARGETS_KEYWORD).
+    RELATES: SEOKeywordMetrics (source), SEOKeyword (target), HAS_METRICS (inverse).
+
+  cypher_pattern: "(SEOKeywordMetrics)-[:METRICS_OF]->(SEOKeyword)"

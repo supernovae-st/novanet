@@ -114,7 +114,7 @@ impl NodeRef {
 /// Top-level arcs document (from relations.yaml).
 #[derive(Debug, Deserialize)]
 pub struct ArcsDocument {
-    /// The arc definitions (v0.12.4: 146 arcs across 5 families).
+    /// The arc definitions (v0.12.5: 146 arcs across 5 families).
     pub arcs: Vec<ArcDef>,
 
     /// SEMANTIC_LINK subtypes (10 entries: is_action_on, includes, etc.).
@@ -532,7 +532,7 @@ arcs:
     fn parse_multi_source_target() {
         let yaml = r#"
 arcs:
-  # v0.12.4: PageStructure deleted, use BELONGS_TO as multi-source/target example
+  # v0.12.5: PageStructure deleted, use BELONGS_TO as multi-source/target example
   - type: BELONGS_TO
     family: semantic
     source:

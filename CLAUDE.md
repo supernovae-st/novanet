@@ -73,13 +73,13 @@ v11.5 refines the layer structure with Locale moved to shared/config:
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**Key changes in v0.12.4:**
+**Key changes in v0.12.5:**
 - **Brand Architecture**: 4 new nodes (Brand, BrandDesign, BrandPrinciples, PromptStyle)
 - **Country added**: shared/geography now has 7 nodes (Country added)
 - **ADR-028**: PageStructure/PageInstruction removed, REFERENCES/HAS_KEYWORD arcs added
-- **61 nodes** total: 40 shared + 21 org, **156 arcs** (5 families)
+- **61 nodes** total: 40 shared + 21 org, **169 arcs** (5 families)
 
-**Architecture (v0.12.4):**
+**Architecture (v0.12.5):**
 - 2 realms: SHARED + ORG
 - SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (40 nodes)
 - ORG (6 layers): config, foundation, structure, semantic, instruction, output (21 nodes)
@@ -90,7 +90,7 @@ schema generate/validate, doc generate, filter build. Galaxy-themed TUI with uni
 
 **YAML-first architecture:** Each Class YAML has explicit `realm:` and `layer:` fields (source of truth).
 Path validation ensures `models/node-classes/{realm}/{layer}/{name}.yaml` matches YAML content.
-v0.12.4: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 61 nodes, 156 arcs.
+v0.12.5: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 61 nodes, 169 arcs.
 
 **Icons source of truth (v11.5):** `visual-encoding.yaml` → `icons:` section provides dual-format icons:
 - `web`: Lucide icon name for Studio
@@ -188,7 +188,7 @@ v11.7 introduces the Unified Tree where Realm, Layer, ArcFamily, ArcClass are al
 │     └─ [:USES_TERM], [:USES_EXPRESSION] on Block nodes                      │
 │                                                                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  STATISTICS (v0.12.4)                                                       │
+│  STATISTICS (v0.12.5)                                                       │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  Containers (6): TermSet, ExpressionSet, PatternSet,                        │
