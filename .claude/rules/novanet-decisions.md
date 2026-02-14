@@ -258,22 +258,22 @@ v10.6 (2 realms):  global / tenant
 v11.2 (2 realms):  shared / org  (renamed for clarity)
 ```
 
-**Architecture** (v11.2):
-- **SHARED** (2 layers): config, locale-knowledge — Universal, READ-ONLY (32 nodes)
-- **ORG** (7 layers): config, foundation, structure, semantic, instruction, seo, output — Business-specific (30 nodes)
+**Architecture** (v0.12.4):
+- **SHARED** (4 layers): config, locale, geography, knowledge — Universal, READ-ONLY (40 nodes)
+- **ORG** (6 layers): config, foundation, structure, semantic, instruction, output — Business-specific (21 nodes)
 
-> **v11.2 Changes**:
+> **v0.12.4 Changes**:
 > - `global` → `shared` (describes WHAT: shared resources)
 > - `tenant` → `org` (describes WHO: organization-specific, familiar terminology)
-> - 3 job nodes removed (GenerationJob, SEOMiningRun, EvaluationSignal)
-> - Total: 62 nodes (was 65)
+> - Brand Architecture: Brand, BrandDesign, BrandPrinciples, PromptStyle, Country (ADR-028)
+> - Total: 61 nodes (40 shared + 21 org)
 
 **Rationale**:
 - Organization + Project distinction added unnecessary complexity
 - Org is the natural isolation boundary for multi-tenant SaaS
 - Single realm for all business content simplifies queries and permissions
-- 9 total layers (2 shared + 7 org) provides sufficient granularity
-- v11.0: SEO moved to org (business-specific keywords, not universal knowledge)
+- 10 total layers (4 shared + 6 org) provides sufficient granularity
+- v11.5: SEO/GEO consolidated to shared/knowledge
 - v11.2: `shared` describes purpose, `org` is familiar (GitHub/Slack orgs)
 
 **Migration path**:
@@ -293,8 +293,8 @@ v11.2 (2 realms):  shared / org  (renamed for clarity)
 ```yaml
 icons:
   realms:           # shared, org (v11.2: renamed from global, tenant)
-  layers:           # config, locale-knowledge, seo, foundation, structure, semantic, instruction, output
-  traits:           # invariant, localized, knowledge, generated, aggregated (v11.2: derived split, job removed)
+  layers:           # config, locale, geography, knowledge, foundation, structure, semantic, instruction, output
+  traits:           # defined, authored, imported, generated, retrieved (v0.12.0 ADR-024)
   arc_families:     # ownership, localization, semantic, generation, mining
   states:           # no_connection, no_kinds, no_results, no_instances, loading, success, error, warning
   navigation:       # expanded, collapsed, leaf, search, help, back, copy
@@ -325,7 +325,7 @@ icons:
 |----------|---------|---------|
 | realms | Where node lives | ◉ shared, ◎ org |
 | layers | Functional category | ⚙ config, ◆ semantic |
-| traits | Locale behavior | ■ invariant, □ localized, ✦ generated, ⋆ aggregated |
+| traits | Data origin | ■ defined, □ authored, ◊ imported, ✦ generated, ⋆ retrieved |
 | states | UI empty states | ◐ loading, ∅ no_kinds |
 | navigation | Tree controls | ▼ expanded, ▶ collapsed |
 | quality | Data completeness | ● complete, ◐ partial |

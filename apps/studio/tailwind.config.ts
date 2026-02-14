@@ -31,7 +31,7 @@ const config: Config = {
   				concept: '#f59e0b',
   				conceptL10n: '#fbbf24',
   				locale: '#10b981',
-  				localeKnowledge: '#22c55e',
+  				sharedLayer: '#22c55e',
   				expression: '#ec4899'
   			},
   			glass: {

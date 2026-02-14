@@ -30,7 +30,7 @@ export interface FacetFilter {
   layers: string[];
   traits: string[];
   arc_families: string[];
-  kinds: string[];
+  classes: string[];  // v0.12.0 ADR-023: kinds→classes
 }
 
 export class NovanetBridgeError extends Error {
