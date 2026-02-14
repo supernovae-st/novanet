@@ -1,0 +1,24 @@
+# packages/core/models/arc-kinds/localization/spoken-by.yaml
+# ArcKind: SPOKEN_BY — LanguageBranch is spoken by Locale (inverse of SPEAKS_BRANCH)
+#
+# v0.12.5: ADR-026 Inverse Arc Policy
+
+arc:
+  name: SPOKEN_BY
+  family: localization
+  scope: intra_realm
+
+  source: LanguageBranch
+  target: Locale
+  cardinality: one_to_many
+
+  inverse_of: SPEAKS_BRANCH
+
+  llm_context: |
+    USE: when finding all Locales that speak a language branch.
+    TRIGGERS: "speakers of", "language locales", "which locales speak".
+    NOT: for finding a Locale's language branch (use SPEAKS_BRANCH).
+    RELATES: LanguageBranch (source), Locale (target), SPEAKS_BRANCH (inverse).
+    Example: Romance -[:SPOKEN_BY]-> fr-FR, es-ES, pt-BR
+
+  cypher_pattern: "(LanguageBranch)-[:SPOKEN_BY]->(Locale)"
