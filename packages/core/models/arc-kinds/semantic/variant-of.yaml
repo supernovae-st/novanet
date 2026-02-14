@@ -32,7 +32,7 @@ arc:
       enum: [version, flavor, edition, specialization, customization]
       description: "Type of variant relationship"
 
-  inverse: HAS_VARIANT
+  inverse_of: HAS_VARIANT
 
   llm_context: |
     USE: when finding entity variants/versions (specialized forms).

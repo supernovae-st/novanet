@@ -32,7 +32,7 @@ arc:
       enum: [create, read, update, delete, scan, download, print, customize, track]
       description: "Type of operation performed"
 
-  inverse: ACTS_ON
+  inverse_of: ACTS_ON
 
   llm_context: |
     USE: when finding actions that can operate on an entity.
