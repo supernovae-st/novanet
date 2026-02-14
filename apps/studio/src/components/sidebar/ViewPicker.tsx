@@ -379,11 +379,12 @@ export const ViewPicker = memo(function ViewPicker({ className }: ViewPickerProp
 
   // Flatten categories and filter by selected node type
   // v11.6.1: Show all non-contextual views + contextual views applicable to selected node
+  // v0.12.5: Sort contextual views first
   const views = useMemo(() => {
     const allViews = categories.flatMap((cat) => cat.views);
     const selectedNodeType = selectedNode?.type;
 
-    return allViews.filter((view) => {
+    const filtered = allViews.filter((view) => {
       // Non-contextual views are always visible
       if (!view.contextual) return true;
 
@@ -396,6 +397,14 @@ export const ViewPicker = memo(function ViewPicker({ className }: ViewPickerProp
 
       // Check if selected node type is in applicable_types
       return applicableTypes.includes(selectedNodeType);
+    });
+
+    // Sort: contextual views first, then by category
+    return filtered.sort((a, b) => {
+      const aContextual = a.contextual || a.category === 'generation' ? 0 : 1;
+      const bContextual = b.contextual || b.category === 'generation' ? 0 : 1;
+      if (aContextual !== bContextual) return aContextual - bContextual;
+      return a.category.localeCompare(b.category);
     });
   }, [categories, selectedNode]);
   const activeView = getActiveView();
