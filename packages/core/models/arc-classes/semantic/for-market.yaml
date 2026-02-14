@@ -1,0 +1,17 @@
+# models/arc-classes/semantic/for-market.yaml
+# FOR_MARKET - Brand targets Market (ADR-028)
+
+arc:
+  name: FOR_MARKET
+  family: semantic
+  scope: cross_realm
+  source: Brand
+  target: Market
+  cardinality: one_to_many
+  required: false
+  llm_context: |
+    USE: when finding which markets a brand targets.
+    TRIGGERS: brand markets, target market, market segment, geographic market.
+    NOT: locale market (use HAS_MARKET), locale support (use SUPPORTS_LOCALE).
+    RELATES: Brand (source), Market (target), 1:N cardinality.
+  cypher_pattern: "(Brand)-[:FOR_MARKET]->(Market)"

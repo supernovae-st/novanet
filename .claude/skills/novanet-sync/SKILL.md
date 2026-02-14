@@ -15,7 +15,7 @@ Synchronize generated artifacts with YAML source of truth.
 
 ```
 packages/core/models/
-+-- node-kinds/                   <- 59 YAML files (one per NodeClass)
++-- node-classes/                   <- 59 YAML files (one per NodeClass)
 |   +-- shared/                   <- Realm: shared (39 nodes)
 |   |   +-- config/               <-   Layer: config (EntityCategory, Locale, SEOKeywordFormat)
 |   |   +-- locale/               <-   Layer: locale (6 nodes)
@@ -28,7 +28,7 @@ packages/core/models/
 |       +-- semantic/             <-   Layer: semantic (Entity, EntityContent, etc.)
 |       +-- instruction/          <-   Layer: instruction (7 nodes)
 |       +-- output/               <-   Layer: output (3 nodes)
-+-- arc-kinds/                    <- 114 YAML files (one per ArcClass)
++-- arc-classes/                    <- 114 YAML files (one per ArcClass)
 +-- relations.yaml                <- Legacy format (kept for parser compatibility)
 +-- taxonomy.yaml                 <- v12.0: 2 Realms, 10 Layers, 5 Traits (defined/authored/imported/generated/retrieved)
 ```
@@ -40,12 +40,12 @@ packages/core/models/
 | Source | Generator | Output |
 |--------|-----------|--------|
 | taxonomy.yaml | OrganizingGenerator | seed/00.5-taxonomy.cypher |
-| node-kinds/ | NodeClassGenerator | seed/01-classes.cypher |
-| arc-kinds/ | ArcClassGenerator | seed/02-arc-classes.cypher |
-| node-kinds/ | LayerGenerator | src/graph/layers.ts |
+| node-classes/ | NodeClassGenerator | seed/01-classes.cypher |
+| arc-classes/ | ArcClassGenerator | seed/02-arc-classes.cypher |
+| node-classes/ | LayerGenerator | src/graph/layers.ts |
 | models/ | MermaidGenerator | models/docs/complete-graph.md |
-| node-kinds/ | AutowireGenerator | seed/99-autowire-classes.cypher |
-| node-kinds/ | HierarchyGenerator | src/graph/hierarchy.ts |
+| node-classes/ | AutowireGenerator | seed/99-autowire-classes.cypher |
+| node-classes/ | HierarchyGenerator | src/graph/hierarchy.ts |
 | taxonomy.yaml | ColorsGenerator | apps/studio/src/design/colors/generated.ts |
 | visual-encoding.yaml | IconsGenerator | apps/studio/src/design/icons/nodeIcons.generated.ts |
 | visual-encoding.yaml | VisualEncodingGenerator | src/graph/visual-encoding.ts |
@@ -133,12 +133,12 @@ All generators live in `tools/novanet/src/generators/` (Rust-first architecture)
 `@novanet/schema-tools` has been eliminated - the Rust binary handles all generation.
 
 **LayerGenerator (`generators/layer.rs`):**
-- Scans folder structure: `models/node-kinds/{realm}/{layer}/*.yaml`
+- Scans folder structure: `models/node-classes/{realm}/{layer}/*.yaml`
 - Extracts Kind label from filename (kebab-case -> PascalCase)
 - Generates `KIND_LAYERS` mapping (Kind -> Layer/Realm/Trait) via Tera template
 
 **MermaidGenerator (`generators/mermaid.rs`):**
-- Reads `models/node-kinds/` and `models/arc-kinds/`
+- Reads `models/node-classes/` and `models/arc-classes/`
 - Generates Mermaid flowchart with all 59 Classes and 114 arcs
 - Groups by Realm (Shared, Org)
 - Colors by Layer (10 distinct colors)

@@ -38,7 +38,7 @@
  *
  * @see ADR-007 — Generation, Not Translation
  * @see ADR-028 — Page-Entity Architecture
- * @see packages/core/models/node-kinds/org/instruction/ — Instruction YAML definitions
+ * @see packages/core/models/node-classes/org/instruction/ — Instruction YAML definitions
  */
 
 import { z } from 'zod';

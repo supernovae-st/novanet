@@ -103,8 +103,8 @@ interface ArcKind {
 
 ```
 taxonomy.yaml           → Colors, display names, facet definitions
-node-kinds/**/*.yaml    → NodeKind definitions
-arc-kinds/**/*.yaml     → ArcKind definitions
+node-classes/**/*.yaml    → NodeKind definitions
+arc-classes/**/*.yaml     → ArcKind definitions
          ↓
     Rust Generator
          ↓
@@ -404,7 +404,7 @@ MATCH (n:BlockL10n) SET n:BlockGenerated REMOVE n:BlockL10n;
 ```
 
 **Code impact**:
-- YAML: Update `node-kinds/` and `arc-kinds/` files
+- YAML: Update `node-classes/` and `arc-classes/` files
 - Generators: Names propagate automatically via YAML-first architecture
 - Queries: Search-replace in Cypher files and Rust code
 
@@ -512,8 +512,8 @@ Entity (org/semantic) ─[:BELONGS_TO]→ EntityCategory (shared/config)
 4. **Graph-native**: Classification is now part of the knowledge graph, not a buried enum property
 
 **Migration**:
-1. Create EntityCategory YAML definition in `packages/core/models/node-kinds/shared/config/entity-category.yaml`
-2. Create BELONGS_TO arc definition in `packages/core/models/arc-kinds/ownership/belongs-to.yaml`
+1. Create EntityCategory YAML definition in `packages/core/models/node-classes/shared/config/entity-category.yaml`
+2. Create BELONGS_TO arc definition in `packages/core/models/arc-classes/ownership/belongs-to.yaml`
 3. Generate schema artifacts: `cargo run -- schema generate`
 4. Create Neo4j migration to insert 13 EntityCategory nodes and create BELONGS_TO relationships from existing Entity nodes
 5. Remove Entity.type property from Entity node definition
@@ -616,7 +616,7 @@ REALMS (62 nodes total):
 ```
 
 **Migration**:
-- Directory renames: `node-kinds/global/` → `shared/`, `tenant/` → `org/`
+- Directory renames: `node-classes/global/` → `shared/`, `tenant/` → `org/`
 - YAML realm field updates: 65 files
 - Rust code: 250+ occurrences
 - TypeScript code: 80+ occurrences
@@ -1466,7 +1466,7 @@ llm_context: |
 3. **LLM Context**: Standardized llm_context enables better RAG and spreading activation
 4. **Audit Trail**: Complete provenance from instruction through prompt to final output
 
-**Reference**: Generation family arc files in `packages/core/models/arc-kinds/generation/`
+**Reference**: Generation family arc files in `packages/core/models/arc-classes/generation/`
 
 ## Decision Log
 

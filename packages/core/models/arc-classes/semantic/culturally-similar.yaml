@@ -1,0 +1,31 @@
+# packages/core/models/arc-classes/semantic/culturally-similar.yaml
+# ArcKind: CULTURALLY_SIMILAR - Pre-computed locale similarity
+# v10.8: Geographic Taxonomy
+
+arc:
+  name: CULTURALLY_SIMILAR
+  family: semantic
+  scope: intra_realm
+
+  source: Locale
+  target: Locale
+  cardinality: many_to_many
+
+  properties:
+    - name: similarity_score
+      type: float
+      required: true
+      description: "Similarity score (0.0 to 1.0)"
+
+    - name: factors
+      type: json
+      required: false
+      description: "Contributing factors to similarity"
+
+  llm_context: |
+    USE: when finding culturally similar locales for fallback.
+    TRIGGERS: cultural similarity, locale fallback, similar culture, related locales.
+    NOT: language similarity (use SPEAKS_BRANCH), geographic (use IN_REGION).
+    RELATES: Locale (source), Locale (target), similarity_score (property).
+
+  cypher_pattern: "(Locale)-[:CULTURALLY_SIMILAR {similarity_score, factors}]->(Locale)"

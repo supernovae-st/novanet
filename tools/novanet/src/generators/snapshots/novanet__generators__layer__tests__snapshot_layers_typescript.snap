@@ -17,7 +17,7 @@ import { CLASS_TAXONOMY } from '../types/nodes.js';
 
 /**
  * Maps each NodeType to its layer within its realm.
- * AUTO-GENERATED from models/node-kinds/ folder structure.
+ * AUTO-GENERATED from models/node-classes/ folder structure.
  *
  * Layers by realm:
  * - Shared: geography, knowledge, locale
@@ -28,14 +28,14 @@ export const NODE_LAYERS: Record<NodeType, Layer> = {
   // SHARED REALM (5 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
 
-  // geography (1 node) - matches models/node-kinds/shared/geography/
+  // geography (1 node) - matches models/node-classes/shared/geography/
   Continent: 'geography',
 
-  // knowledge (2 nodes) - matches models/node-kinds/shared/knowledge/
+  // knowledge (2 nodes) - matches models/node-classes/shared/knowledge/
   Expression: 'knowledge',
   Term: 'knowledge',
 
-  // locale (2 nodes) - matches models/node-kinds/shared/locale/
+  // locale (2 nodes) - matches models/node-classes/shared/locale/
   Locale: 'locale',
   Style: 'locale',
 
@@ -43,22 +43,22 @@ export const NODE_LAYERS: Record<NodeType, Layer> = {
   // ORG REALM (7 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
 
-  // config (1 node) - matches models/node-kinds/org/config/
+  // config (1 node) - matches models/node-classes/org/config/
   OrgConfig: 'config',
 
-  // foundation (1 node) - matches models/node-kinds/org/foundation/
+  // foundation (1 node) - matches models/node-classes/org/foundation/
   Project: 'foundation',
 
-  // instruction (1 node) - matches models/node-kinds/org/instruction/
+  // instruction (1 node) - matches models/node-classes/org/instruction/
   BlockInstruction: 'instruction',
 
-  // output (1 node) - matches models/node-kinds/org/output/
+  // output (1 node) - matches models/node-classes/org/output/
   PageGenerated: 'output',
 
-  // semantic (1 node) - matches models/node-kinds/org/semantic/
+  // semantic (1 node) - matches models/node-classes/org/semantic/
   Entity: 'semantic',
 
-  // structure (2 nodes) - matches models/node-kinds/org/structure/
+  // structure (2 nodes) - matches models/node-classes/org/structure/
   Block: 'structure',
   Page: 'structure',
 

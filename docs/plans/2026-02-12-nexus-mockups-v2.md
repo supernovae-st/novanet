@@ -217,7 +217,7 @@
 │                                                                                                     │
 │  ┌─ REAL YAML EXAMPLE ──────────────────────────────────────────────────────────────────────────┐  │
 │  │                                                                                              │  │
-│  │  # packages/core/models/node-kinds/org/semantic/entity.yaml                                 │  │
+│  │  # packages/core/models/node-classes/org/semantic/entity.yaml                                 │  │
 │  │  node:                                                                                       │  │
 │  │    name: Entity                          ← The type name                                    │  │
 │  │    realm: org                            ← WHERE: organization-specific                     │  │

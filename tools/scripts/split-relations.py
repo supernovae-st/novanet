@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-Split relations.yaml into individual arc-kinds/{family}/{name}.yaml files.
+Split relations.yaml into individual arc-classes/{family}/{name}.yaml files.
 
 Usage:
     python tools/scripts/split-relations.py
 
 This script:
 1. Reads packages/core/models/relations.yaml
-2. Creates one YAML file per relation in arc-kinds/{family}/{kebab-name}.yaml
+2. Creates one YAML file per relation in arc-classes/{family}/{kebab-name}.yaml
 3. Skips relations that already have arc-kind files
 """
 
@@ -27,7 +27,7 @@ def find_root() -> Path:
 
 ROOT = find_root()
 RELATIONS_PATH = ROOT / "packages/core/models/relations.yaml"
-ARC_KINDS_DIR = ROOT / "packages/core/models/arc-kinds"
+ARC_KINDS_DIR = ROOT / "packages/core/models/arc-classes"
 
 
 def to_kebab_case(name: str) -> str:
@@ -113,7 +113,7 @@ def write_arc_kind(rel: dict, output_path: Path):
     # Create header comment
     short_desc = llm_context.split(".")[0] if llm_context else f"{rel_type} relationship"
     header = f"""\
-# packages/core/models/arc-kinds/{family}/{to_kebab_case(rel_type)}.yaml
+# packages/core/models/arc-classes/{family}/{to_kebab_case(rel_type)}.yaml
 # ArcKind: {rel_type} — {short_desc}
 
 """

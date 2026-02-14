@@ -82,9 +82,9 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | File | Content |
 |------|---------|
 | `taxonomy.yaml` | Realm/Layer/Trait/ArcFamily/ArcScope definitions (v0.12.4: 2 realms, 10 layers, 5 traits) |
-| `node-kinds/shared/` | 40 NodeClass definitions in shared realm (config: 3, locale: 6, geography: 7, knowledge: 24) |
-| `node-kinds/org/` | 21 NodeClass definitions in org realm (config: 1, foundation: 6, structure: 3, semantic: 4, instruction: 4, output: 3) |
-| `arc-kinds/` | 1 file per ArcClass, organized by ArcFamily |
+| `node-classes/shared/` | 40 NodeClass definitions in shared realm (config: 3, locale: 6, geography: 7, knowledge: 24) |
+| `node-classes/org/` | 21 NodeClass definitions in org realm (config: 1, foundation: 6, structure: 3, semantic: 4, instruction: 4, output: 3) |
+| `arc-classes/` | 1 file per ArcClass, organized by ArcFamily |
 | `relations.yaml` | Legacy format (deprecated, kept for parser compatibility) |
 
 ## File Naming

@@ -514,7 +514,8 @@ describe('ViewLoader', () => {
     });
 
     it('getCypher returns query with params', async () => {
-      const cypherResult = await ViewLoader.getCypher('data-complete');
+      // v0.12.5: Use schema-complete instead of deprecated data-complete
+      const cypherResult = await ViewLoader.getCypher('schema-complete');
       expect(cypherResult.query).toBeDefined();
       expect(cypherResult.query.length).toBeGreaterThan(0);
       expect(cypherResult.params).toBeDefined();

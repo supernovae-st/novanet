@@ -1,6 +1,6 @@
 //! `novanet schema generate` and `novanet schema validate` commands.
 //!
-//! - generate: Orchestrates all 12 generators in order
+//! - generate: Orchestrates all 11 generators in order
 //! - validate: YAML-only validation (no Neo4j in Phase 2)
 
 use crate::generators::Generator;
@@ -26,8 +26,7 @@ fn all_generators() -> Vec<GeneratorEntry> {
         arc_class::ArcClassGenerator, autowire::AutowireGenerator, colors::ColorsGenerator,
         hierarchy::HierarchyGenerator, icons::IconsGenerator, layer::LayerGenerator,
         mermaid::MermaidGenerator, node_class::NodeClassGenerator, organizing::OrganizingGenerator,
-        tui_icons::TuiIconsGenerator, views::ViewsGenerator,
-        visual_encoding::VisualEncodingGenerator,
+        tui_icons::TuiIconsGenerator, visual_encoding::VisualEncodingGenerator,
     };
 
     vec![
@@ -81,11 +80,8 @@ fn all_generators() -> Vec<GeneratorEntry> {
             output_path: "packages/core/src/graph/visual-encoding.ts",
             post_process: None,
         },
-        GeneratorEntry {
-            generator: Box::new(ViewsGenerator),
-            output_path: "packages/core/src/filters/views.generated.ts",
-            post_process: None,
-        },
+        // ViewsGenerator removed in v0.12.5 — views.yaml is now loaded dynamically
+        // by ViewLoader.ts (Studio) and nexus/views.rs (TUI)
         GeneratorEntry {
             generator: Box::new(TuiIconsGenerator),
             output_path: "tools/novanet/src/tui/icons.rs",
@@ -106,9 +102,9 @@ pub struct GenerateResult {
     pub duration_ms: u128,
 }
 
-/// Run all 12 generators and optionally write output files.
+/// Run all 11 generators and optionally write output files.
 ///
-/// Generator execution order: Organizing → Kind → ArcSchema → Layer → Mermaid → Autowire → Hierarchy → Colors → Icons → VisualEncoding → Views → TuiIcons
+/// Generator execution order: Organizing → Class → ArcClass → Layer → Mermaid → Autowire → Hierarchy → Colors → Icons → VisualEncoding → TuiIcons
 #[instrument(skip_all, fields(root = %root.display(), dry_run))]
 pub fn schema_generate(root: &Path, dry_run: bool) -> crate::Result<Vec<GenerateResult>> {
     let entries = all_generators();
@@ -182,7 +178,7 @@ pub fn schema_validate(root: &Path) -> crate::Result<Vec<ValidationIssue>> {
     let node_names: std::collections::HashSet<String> =
         nodes.iter().map(|n| n.def.name.clone()).collect();
 
-    // 2. Parse arc definitions (v10.7+: from arc-kinds/ directory)
+    // 2. Parse arc definitions (v10.7+: from arc-classes/ directory)
     let rels_doc = crate::parsers::arcs::load_arc_kinds_from_files(root)?;
 
     // 3. Parse organizing principles
@@ -274,8 +270,8 @@ mod tests {
 
         let results = schema_generate(&root, true).expect("should generate all artifacts");
 
-        // All 12 generators should succeed
-        assert_eq!(results.len(), 12, "expected 12 generator results");
+        // All 11 generators should succeed (views removed in v0.12.5)
+        assert_eq!(results.len(), 11, "expected 11 generator results");
 
         // Verify generator names and order
         let names: Vec<&str> = results.iter().map(|r| r.name.as_str()).collect();
@@ -292,7 +288,6 @@ mod tests {
                 "colors",
                 "icons",
                 "visual_encoding",
-                "views",
                 "tui_icons",
             ]
         );

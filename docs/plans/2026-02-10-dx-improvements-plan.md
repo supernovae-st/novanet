@@ -27,7 +27,7 @@ Clean up remaining inconsistencies, improve schema documentation quality, and en
 
 - [x] **2.1** Audit deprecated properties in YAML (3 from v7.2.0)
 - [x] **2.2** Remove or document deprecated fields (keeping for migration)
-- [x] **2.3** Verify all arc-kinds have consistent structure
+- [x] **2.3** Verify all arc-classes have consistent structure
 - [x] **2.4** Check cypher_pattern consistency
 
 ### Phase 3: Rust Codebase Cleanup (Priority: MEDIUM)

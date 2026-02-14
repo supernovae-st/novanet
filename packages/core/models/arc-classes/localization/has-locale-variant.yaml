@@ -1,0 +1,25 @@
+# packages/core/models/arc-classes/localization/has-locale-variant.yaml
+# ArcKind: HAS_LOCALE_VARIANT — Parent Locale has regional variant (inverse of LOCALE_VARIANT_OF)
+#
+# v0.12.5: ADR-026 Inverse Arc Policy
+
+arc:
+  name: HAS_LOCALE_VARIANT
+  family: localization
+  scope: intra_realm
+
+  source: Locale
+  target: Locale
+  cardinality: one_to_many
+  is_self_referential: true
+
+  inverse_of: LOCALE_VARIANT_OF
+
+  llm_context: |
+    USE: when finding all regional variants of a parent Locale.
+    TRIGGERS: "locale variants", "regional variations", "child locales".
+    NOT: for finding a Locale's parent (use LOCALE_VARIANT_OF).
+    RELATES: Locale (source/parent), Locale (target/variant), LOCALE_VARIANT_OF (inverse).
+    Example: en-GB -[:HAS_LOCALE_VARIANT]-> en-AU
+
+  cypher_pattern: "(Locale)-[:HAS_LOCALE_VARIANT]->(Locale)"

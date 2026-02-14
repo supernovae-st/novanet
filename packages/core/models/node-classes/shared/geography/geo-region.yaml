@@ -1,0 +1,164 @@
+# models/node-classes/shared/geography/geo-region.yaml
+# GeoRegion - UN M49 geographic region for locale clustering
+#
+# v10.8: Geographic Taxonomy - Phase 1
+# v0.12.4: Added cultural_style and visual_prompt for AI generation
+# Data: 22 regions (Northern Africa, Western Europe, etc.)
+# Source: UN M49 Standard (unstats.un.org)
+
+node:
+  name: GeoRegion
+  realm: shared
+  layer: geography
+  trait: defined
+  icon:
+    web: "map"
+    terminal: "⊙"
+  description: "UN M49 geographic region for clustering similar locales"
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Kebab-case region key"
+      pattern: "^[a-z-]+$"
+      examples:
+        - "northern-africa"
+        - "western-europe"
+        - "eastern-asia"
+        - "south-america"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable region name"
+      example: "Western Europe"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "Western European region including France, Germany, Netherlands"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints"
+      example: "USE: for W.European countries (FR, DE, NL, BE, AT, CH). TRIGGERS: western europe, ouest, west. NOT: Southern Europe (Mediterranean)."
+
+    created_at:
+      type: datetime
+      required: true
+
+    updated_at:
+      type: datetime
+      required: true
+
+  properties:
+    m49_code:
+      type: int
+      required: true
+      description: "UN M49 numeric code"
+      examples:
+        - 15   # Northern Africa
+        - 155  # Western Europe
+        - 30   # Eastern Asia
+        - 5    # South America
+
+    parent_continent:
+      type: string
+      required: true
+      description: "Parent continent key"
+      example: "EU"
+
+    locale_count:
+      type: int
+      required: false
+      description: "Number of Locale children"
+      example: 6
+
+    # v0.12.4: AI generation properties
+    cultural_style:
+      type: json
+      required: false
+      description: "Regional cultural visual preferences for AI content generation"
+      properties:
+        color_preferences:
+          primary_colors: array    # Culturally significant colors
+          avoid_colors: array      # Colors with negative connotations
+          color_meanings: object   # Semantic meaning per color
+        visual_style:
+          aesthetic: string        # Overall aesthetic
+          motifs: array           # Cultural motifs and patterns
+        typography:
+          preferred_styles: array  # Preferred font styles
+          script_direction: string # ltr, rtl, vertical
+        cultural_codes:
+          symbols: array          # Positive symbols
+          avoid_symbols: array    # Symbols to avoid
+
+    visual_prompt:
+      type: json
+      required: false
+      description: "AI visual generation presets for image, video, illustration, product_3d"
+      properties:
+        image:
+          subject: object         # Subject description and elements
+          style: object           # Style modifiers and weighted_modifiers
+          color_palette: object   # Primary, secondary, avoid colors
+          composition: object     # Balance, focal point, framing
+          negative_prompts: object # Content, technical, style exclusions
+        video:
+          inherit_from: string    # Usually "image"
+          cinematography: object  # Camera movements, shot types, transitions
+          pacing: string          # fast, moderate, slow
+        illustration:
+          inherit_from: string    # Usually "image"
+          technique: string       # vector, watercolor, ink, digital
+        product_3d:
+          inherit_from: string    # Usually "image"
+          rendering: object       # Lighting, materials, environment
+
+  relations:
+    outgoing:
+      - type: IN_CONTINENT
+        to: Continent
+        cardinality: "N:1"
+        description: "Region belongs to continent"
+
+    incoming:
+      - type: IN_SUBREGION
+        from: Locale
+        cardinality: "N:1"
+        description: "Locales within this region (direct link if no subregion)"
+
+      - type: IN_REGION
+        from: GeoSubRegion
+        cardinality: "N:1"
+        description: "Sub-regions within this region (optional)"
+
+  example:
+    data:
+      key: "western-europe"
+      display_name: "Western Europe"
+      description: "Western European region including France, Germany, Netherlands, Belgium"
+      m49_code: 155
+      parent_continent: "EU"
+      locale_count: 6
+      llm_context: "USE: for W.European countries (FR, DE, NL, BE, AT, CH). TRIGGERS: western europe, ouest, west. NOT: Southern Europe (use mediterranean)."
+
+    cypher: |
+      // Get all locales in a region
+      MATCH (r:GeoRegion {key: $key})<-[:IN_SUBREGION]-(l:Locale)
+      RETURN l.key, l.display_name
+      ORDER BY l.key
+
+      // Get region with its continent
+      MATCH (r:GeoRegion {key: $key})-[:IN_CONTINENT]->(c:Continent)
+      RETURN r.key, r.name, c.key AS continent, c.name AS continent_name
+
+      // Find similar locales via shared region
+      MATCH (l:Locale {key: 'fr-FR'})-[:IN_SUBREGION]->(r:GeoRegion)
+      MATCH (r)<-[:IN_SUBREGION]-(similar:Locale)
+      WHERE similar.key <> 'fr-FR'
+      RETURN similar.key, similar.display_name

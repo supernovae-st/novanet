@@ -15,7 +15,7 @@ describe('graph/hierarchy', () => {
   it('should have correct shared realm structure', () => {
     const shared = REALM_HIERARCHY.shared;
     expect(shared.label).toBe('SHARED');
-    expect(shared.icon).toBe('🌍');
+    expect(shared.icon).toBe('◉');  // v11.7: Unicode icons (no emoji)
     // v11.5: shared realm has 4 layers (config, locale, geography, knowledge)
     expect(Object.keys(shared.layers)).toHaveLength(4);
     expect(shared.layers.config.nodeTypes).toContain('EntityCategory');
@@ -34,7 +34,7 @@ describe('graph/hierarchy', () => {
   it('should have correct org realm structure', () => {
     const org = REALM_HIERARCHY.org;
     expect(org.label).toBe('ORG');
-    expect(org.icon).toBe('🏢');
+    expect(org.icon).toBe('◎');  // v11.7: Unicode icons (no emoji)
     // v11.5: org realm has 6 layers (seo/geo removed)
     expect(Object.keys(org.layers)).toHaveLength(6);
     // config layer has OrgConfig only

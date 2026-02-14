@@ -83,7 +83,7 @@ properties:
 
 ### 3. Create GEO Node Kinds
 
-**New nodes to create** in `packages/core/models/node-kinds/global/seo/`:
+**New nodes to create** in `packages/core/models/node-classes/global/seo/`:
 
 | Node | Description | Key Properties |
 |------|-------------|----------------|
@@ -160,4 +160,4 @@ EntityContent connections:
 
 **Scripts**: `scripts/seo-import/`
 **Seeds**: `packages/db/seed/10-*, 11-*, 12-*`
-**Schemas**: `packages/core/models/node-kinds/global/seo/`
+**Schemas**: `packages/core/models/node-classes/global/seo/`

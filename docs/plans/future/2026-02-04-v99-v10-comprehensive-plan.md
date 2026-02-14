@@ -37,11 +37,11 @@
 
 ```bash
 # NodeKinds
-find packages/core/models/node-kinds -name "*.yaml" | wc -l
+find packages/core/models/node-classes -name "*.yaml" | wc -l
 # Expected: 46
 
 # ArcKinds
-find packages/core/models/arc-kinds -name "*.yaml" | grep -v "_index" | wc -l
+find packages/core/models/arc-classes -name "*.yaml" | grep -v "_index" | wc -l
 # Expected: 77 (per v9.7 plan)
 ```
 
@@ -61,7 +61,7 @@ find packages/core/models/arc-kinds -name "*.yaml" | grep -v "_index" | wc -l
 
 **Step 3: Check for missing ArcKinds**
 
-Compare arc-kinds/ count (75) vs relations.yaml expected (77).
+Compare arc-classes/ count (75) vs relations.yaml expected (77).
 
 ```bash
 cargo run -- schema validate

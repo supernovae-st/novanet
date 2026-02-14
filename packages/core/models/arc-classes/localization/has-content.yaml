@@ -1,0 +1,29 @@
+# packages/core/models/arc-classes/localization/has-content.yaml
+# ArcKind: HAS_CONTENT — Invariant node has localized content (v10.9.0)
+#
+# v10.9.0: Renamed from HAS_L10N → HAS_CONTENT
+#          Target: EntityContent → EntityContent, ProjectContent unchanged
+
+arc:
+  name: HAS_CONTENT
+  family: localization
+  scope: intra_realm
+
+  source:
+    - Entity
+    - Project
+  target:
+    - EntityContent  # v10.9.0: renamed from EntityContent
+    - ProjectContent
+
+  cardinality: one_to_many
+
+  inverse: CONTENT_OF
+
+  llm_context: |
+    USE: when loading human-authored localized content for an entity or project.
+    TRIGGERS: has content, localized content, entity content, authored content.
+    NOT: generated content (use HAS_GENERATED), forward locale (use FOR_LOCALE).
+    RELATES: Entity/Project (source), EntityContent/ProjectContent (target), CONTENT_OF (inverse).
+
+  cypher_pattern: "(Entity)-[:HAS_CONTENT]->(EntityContent)"

@@ -489,7 +489,7 @@ EntityContent (org/semantic)
 #### SEOKeywordFormat (Classification)
 
 ```yaml
-# packages/core/models/node-kinds/shared/config/seo-keyword-format.yaml
+# packages/core/models/node-classes/shared/config/seo-keyword-format.yaml
 node:
   name: SEOKeywordFormat
   realm: shared
@@ -527,7 +527,7 @@ node:
 #### SEOKeywordSet (Container)
 
 ```yaml
-# packages/core/models/node-kinds/shared/knowledge/seo-keyword-set.yaml
+# packages/core/models/node-classes/shared/knowledge/seo-keyword-set.yaml
 node:
   name: SEOKeywordSet
   realm: shared
@@ -560,7 +560,7 @@ node:
 #### SEOKeyword (Knowledge Atom)
 
 ```yaml
-# packages/core/models/node-kinds/shared/knowledge/seo-keyword.yaml
+# packages/core/models/node-classes/shared/knowledge/seo-keyword.yaml
 node:
   name: SEOKeyword
   realm: shared
@@ -636,7 +636,7 @@ node:
 #### SEOKeywordMetrics (Time-Series)
 
 ```yaml
-# packages/core/models/node-kinds/shared/knowledge/seo-keyword-metrics.yaml
+# packages/core/models/node-classes/shared/knowledge/seo-keyword-metrics.yaml
 node:
   name: SEOKeywordMetrics
   realm: shared
@@ -718,7 +718,7 @@ node:
 #### GEOQuerySet (Container)
 
 ```yaml
-# packages/core/models/node-kinds/shared/knowledge/geo-query-set.yaml
+# packages/core/models/node-classes/shared/knowledge/geo-query-set.yaml
 node:
   name: GEOQuerySet
   realm: shared
@@ -745,7 +745,7 @@ node:
 #### GEOQuery (Knowledge Atom)
 
 ```yaml
-# packages/core/models/node-kinds/shared/knowledge/geo-query.yaml
+# packages/core/models/node-classes/shared/knowledge/geo-query.yaml
 node:
   name: GEOQuery
   realm: shared
@@ -786,7 +786,7 @@ node:
 #### GEOAnswer (Time-Series)
 
 ```yaml
-# packages/core/models/node-kinds/shared/knowledge/geo-answer.yaml
+# packages/core/models/node-classes/shared/knowledge/geo-answer.yaml
 node:
   name: GEOAnswer
   realm: shared
@@ -867,7 +867,7 @@ node:
 #### EntityCategory (MOVED to shared/config)
 
 ```yaml
-# packages/core/models/node-kinds/shared/config/entity-category.yaml
+# packages/core/models/node-classes/shared/config/entity-category.yaml
 # MOVED from org/config in v11.4
 node:
   name: EntityCategory
@@ -940,7 +940,7 @@ node:
 
 ### Phase 1: Create shared/config Classifications
 
-**Create directory:** `packages/core/models/node-kinds/shared/config/`
+**Create directory:** `packages/core/models/node-classes/shared/config/`
 
 1. Create `SEOKeywordFormat` node YAML (`shared/config/seo-keyword-format.yaml`)
    - realm: shared, layer: config, trait: invariant
@@ -1019,8 +1019,8 @@ pnpm type-check
 > **CRITICAL**: Update ALL documentation to reflect v11.4 changes.
 
 **Source of Truth:**
-1. `packages/core/models/node-kinds/shared/knowledge/` — SEO/GEO YAML definitions
-2. `packages/core/models/arc-kinds/` — New arc definitions
+1. `packages/core/models/node-classes/shared/knowledge/` — SEO/GEO YAML definitions
+2. `packages/core/models/arc-classes/` — New arc definitions
 3. `packages/core/models/taxonomy.yaml` — Layer updates (remove org/seo, org/geo)
 
 **CLAUDE.md Updates:**
@@ -1297,11 +1297,11 @@ SEOKeyword ──[:INTENT_EVOLVED]──► GEOQuery
 
 **Fixes**:
 ```yaml
-# arc-kinds/semantic/targets.yaml
+# arc-classes/semantic/targets.yaml
 arc:
   scope: cross_realm  # Changed from intra_realm
 
-# arc-kinds/semantic/monitors-geo.yaml
+# arc-classes/semantic/monitors-geo.yaml
 arc:
   scope: cross_realm  # Changed from intra_realm
 ```

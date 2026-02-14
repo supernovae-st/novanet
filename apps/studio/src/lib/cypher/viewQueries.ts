@@ -3,7 +3,7 @@
 // =============================================================================
 // Cypher query builders for each context view type
 //
-// NOTE: Cypher queries are now embedded directly in packages/core/models/views/_registry.yaml.
+// NOTE: Cypher queries are now embedded directly in packages/core/models/views.yaml (v0.12.5).
 // Use ViewLoader.getCypher(viewId) from @novanet/core/filters instead.
 
 import type { ViewId } from '@/config/viewTypes';
@@ -96,7 +96,7 @@ export function getViewQuery(viewId: ViewId, params: ViewQueryParams): ViewQuery
           MATCH (project:Project {key: $nodeKey})
           OPTIONAL MATCH (project)-[r1:HAS_PAGE]->(page:Page)
           OPTIONAL MATCH (project)-[r2:HAS_ENTITY]->(entity:Entity)
-          OPTIONAL MATCH (project)-[r3:HAS_BRAND]->(brand:BrandIdentity)
+          OPTIONAL MATCH (project)-[r3:HAS_BRAND]->(brand:Brand)
           WITH project,
                collect(DISTINCT page)[0..$limit] AS pages,
                collect(DISTINCT entity)[0..$limit] AS entities,
@@ -112,8 +112,8 @@ export function getViewQuery(viewId: ViewId, params: ViewQueryParams): ViewQuery
       return {
         cypher: `
           MATCH (n {key: $nodeKey})
-          WHERE n:Project OR n:BrandIdentity
-          OPTIONAL MATCH (n)-[r:HAS_BRAND|BRAND_OF]-(brand:BrandIdentity)
+          WHERE n:Project OR n:Brand
+          OPTIONAL MATCH (n)-[r:HAS_BRAND|BRAND_OF]-(brand:Brand)
           OPTIONAL MATCH (brand)-[r2:HAS_VOICE]->(voice)
           RETURN [n, brand, voice] AS nodes,
                  collect(DISTINCT r) + collect(DISTINCT r2) AS relationships

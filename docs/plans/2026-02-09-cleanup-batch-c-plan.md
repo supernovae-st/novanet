@@ -107,7 +107,7 @@
 
 **Files to audit and clean:**
 - `packages/db/seed/*.cypher` - Remove any `*L10n` nodes that are legacy
-- `packages/core/models/node-kinds/**/*.yaml` - Remove deprecated L10n definitions
+- `packages/core/models/node-classes/**/*.yaml` - Remove deprecated L10n definitions
 - Neo4j: Delete legacy L10n nodes if present
 
 **v10.9+ Naming Convention:**

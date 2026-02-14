@@ -1,0 +1,30 @@
+# packages/core/models/arc-classes/semantic/references-entity.yaml
+# ArcKind: REFERENCES_ENTITY — BlockInstruction references Entity (v10.3)
+
+arc:
+  name: REFERENCES_ENTITY
+  family: semantic
+  scope: intra_realm
+  temperature_threshold: 0.6  # v10.3: Instruction→entity reference (moderate-high priority)
+
+  source: BlockInstruction
+  target: Entity
+  cardinality: many_to_many
+
+  properties:
+    - name: syntax
+      type: string
+      required: false
+      description: "Original syntax used (e.g., @entity:key)"
+    - name: context
+      type: string
+      required: false
+      description: "Surrounding context in the instruction"
+
+  llm_context: |
+    USE: when finding entities referenced by a block instruction.
+    TRIGGERS: @entity reference, instruction entities, entity mention, entity context.
+    NOT: page references (use REFERENCES_PAGE), block mentions (use MENTIONS).
+    RELATES: BlockInstruction (source), Entity (target), auto-parsed from @ syntax.
+
+  cypher_pattern: "(BlockInstruction)-[:REFERENCES_ENTITY {syntax, context}]->(Entity)"

@@ -75,8 +75,8 @@ interface ArcKind {
 | Old | New |
 |-----|-----|
 | `organizing-principles.yaml` | `taxonomy.yaml` |
-| `nodes/` | `node-kinds/` |
-| `relations.yaml` | `arc-kinds/**/*.yaml` (split by family) |
+| `nodes/` | `node-classes/` |
+| `relations.yaml` | `arc-classes/**/*.yaml` (split by family) |
 | `edge_families` | `arc_families` |
 | `family: ownership` | `family: ownership` (unchanged) |
 | (new) | `scopes: [intra_realm, cross_realm]` |
@@ -131,7 +131,7 @@ packages/core/models/
 ├── _index.yaml
 ├── taxonomy.yaml                    # Realm, Layer, Trait, ArcFamily, ArcScope, ArcCardinality
 │
-├── node-kinds/                      # 1 file per NodeKind, organized by Realm/Layer
+├── node-classes/                      # 1 file per NodeKind, organized by Realm/Layer
 │   ├── global/
 │   │   ├── config/
 │   │   │   └── locale.yaml
@@ -153,7 +153,7 @@ packages/core/models/
 │       ├── seo/
 │       └── geo/
 │
-├── arc-kinds/                       # 1 file per ArcKind, organized by ArcFamily
+├── arc-classes/                       # 1 file per ArcKind, organized by ArcFamily
 │   ├── ownership/
 │   │   ├── has-concept.yaml
 │   │   ├── has-page.yaml
@@ -262,10 +262,10 @@ arc_cardinalities:
     display_name: "N:M"
 ```
 
-### arc-kinds file example
+### arc-classes file example
 
 ```yaml
-# packages/core/models/arc-kinds/ownership/has-page.yaml
+# packages/core/models/arc-classes/ownership/has-page.yaml
 # ArcKind definition
 
 name: HAS_PAGE
@@ -318,9 +318,9 @@ llm_context: |
 3. **Claude Code Skills**
    - `/novanet-arch` — Update ASCII diagrams with Arc terminology
    - `/novanet-sync` — Reference taxonomy.yaml instead of organizing-principles.yaml
-   - `/schema-add-node` — Update prompts for node-kinds/ path
+   - `/schema-add-node` — Update prompts for node-classes/ path
    - `/schema-edit-node` — Update prompts
-   - `/schema-add-relation` — Rename to `/schema-add-arc`, update for arc-kinds/
+   - `/schema-add-relation` — Rename to `/schema-add-arc`, update for arc-classes/
 
 4. **Design Documents**
    - Update `nomenclature-v95-design.md` (this file) — ✓ Done
@@ -328,7 +328,7 @@ llm_context: |
 
 **Checkpoint**:
 - All CLAUDE.md files use Arc terminology
-- All skills reference new paths (taxonomy.yaml, node-kinds/, arc-kinds/)
+- All skills reference new paths (taxonomy.yaml, node-classes/, arc-classes/)
 - Claude Code understands v9.5 nomenclature when asked
 - No "Edge" in documentation (except React Flow references)
 
@@ -338,8 +338,8 @@ llm_context: |
 
 **Zones**:
 1. `taxonomy.yaml` (new file from organizing-principles.yaml)
-2. `node-kinds/` (rename from nodes/)
-3. `arc-kinds/` (split from relations.yaml)
+2. `node-classes/` (rename from nodes/)
+3. `arc-classes/` (split from relations.yaml)
 4. Cleanup (delete old files)
 
 **Checkpoint**:
@@ -455,7 +455,7 @@ llm_context: |
 ## Accepted Risks
 
 - ⚠️ "Arc" ≠ Neo4j "Relationship" — mental translation layer accepted
-- ⚠️ 50+ files in arc-kinds/ — file explosion accepted
+- ⚠️ 50+ files in arc-classes/ — file explosion accepted
 - ⚠️ Scope is derived but stored — explicit > implicit
 
 ---

@@ -112,12 +112,12 @@ describe('graph/generator', () => {
 
       // v11.5: Org realm (6 layers - seo/geo removed)
       expect(result.realms.org.label).toBe('ORG');
-      expect(result.realms.org.icon).toBe('🏢');
+      expect(result.realms.org.icon).toBe('◎');  // v11.7: Unicode icons (no emoji)
       expect(Object.keys(result.realms.org.layers)).toHaveLength(6);
 
       // v11.5: Shared realm (4 layers - config, locale, geography, knowledge)
       expect(result.realms.shared.label).toBe('SHARED');
-      expect(result.realms.shared.icon).toBe('🌍');
+      expect(result.realms.shared.icon).toBe('◉');  // v11.7: Unicode icons (no emoji)
       expect(Object.keys(result.realms.shared.layers)).toHaveLength(4);
     });
 

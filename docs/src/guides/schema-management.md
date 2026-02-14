@@ -19,7 +19,7 @@ packages/core/models/
 ├── _index.yaml               # Schema registry
 ├── taxonomy.yaml             # Realms, Layers, Traits, Colors
 ├── visual-encoding.yaml      # Icons, border styles
-├── node-kinds/
+├── node-classes/
 │   ├── shared/               # 39 nodes
 │   │   ├── config/           # Definitions (Locale, EntityCategory)
 │   │   ├── locale/           # Locale settings
@@ -32,7 +32,7 @@ packages/core/models/
 │       ├── semantic/         # Entity, Content
 │       ├── instruction/      # Types, Prompts
 │       └── output/           # Generated content
-└── arc-kinds/                # 114 arcs by family
+└── arc-classes/                # 114 arcs by family
     ├── ownership/
     ├── localization/
     ├── semantic/
@@ -62,7 +62,7 @@ This guides you through:
 Create a YAML file at the correct path:
 
 ```yaml
-# packages/core/models/node-kinds/org/semantic/my-node.yaml
+# packages/core/models/node-classes/org/semantic/my-node.yaml
 node:
   name: MyNode
   realm: org                    # Must match path
@@ -119,7 +119,7 @@ cargo run -- db seed
 
 1. Find the YAML file:
    ```bash
-   fd entity-content models/node-kinds/
+   fd entity-content models/node-classes/
    ```
 
 2. Edit properties or metadata
@@ -140,7 +140,7 @@ cargo run -- db seed
 ### Manual YAML Creation
 
 ```yaml
-# packages/core/models/arc-kinds/ownership/has-new-thing.yaml
+# packages/core/models/arc-classes/ownership/has-new-thing.yaml
 arc:
   name: HAS_NEW_THING
   family: ownership
@@ -188,8 +188,8 @@ The `schema generate` command produces 12 artifacts:
 
 ```
 packages/core/src/graph/
-├── node-kinds.generated.ts      # Kind type definitions
-├── arc-kinds.generated.ts       # ArcKind type definitions
+├── node-classes.generated.ts      # Kind type definitions
+├── arc-classes.generated.ts       # ArcKind type definitions
 ├── taxonomy.generated.ts        # Realm, Layer, Trait enums
 ├── visual-encoding.generated.ts # Colors, icons
 └── filters.generated.ts         # Facet filter types

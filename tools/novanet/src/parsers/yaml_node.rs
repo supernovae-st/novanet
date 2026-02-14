@@ -1,7 +1,7 @@
 //! Parse 61 YAML node definitions with trait validation (v0.12.4).
 //!
 //! Fails fast if any YAML is missing `trait`, `realm`, or `layer` — no silent defaults.
-//! Each file at `packages/core/models/node-kinds/<realm>/<layer>/<name>.yaml`
+//! Each file at `packages/core/models/node-classes/<realm>/<layer>/<name>.yaml`
 //! is deserialized into a [`ParsedNode`] with realm/layer read from the YAML content.
 //! Validation ensures the file path matches the YAML-declared realm/layer.
 
@@ -221,7 +221,7 @@ impl ParsedNode {
 // Loader
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Load and parse all YAML node definitions under `<root>/packages/core/models/node-kinds/`.
+/// Load and parse all YAML node definitions under `<root>/packages/core/models/node-classes/`.
 ///
 /// Walks the directory recursively, deserializes each `.yaml` file, and
 /// reads `realm`/`layer` from the YAML content (source of truth).

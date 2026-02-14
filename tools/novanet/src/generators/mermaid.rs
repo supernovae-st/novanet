@@ -1,6 +1,6 @@
 //! Generate Mermaid flowchart with Realm/Layer/Trait coloring.
 //!
-//! Reads all node YAMLs, arc-kinds/, and `taxonomy.yaml` (v10.9)
+//! Reads all node YAMLs, arc-classes/, and `taxonomy.yaml` (v10.9)
 //! to produce a complete graph diagram with:
 //! - Subgraphs grouped by Realm → Layer
 //! - Node styling by node_trait (Trait)
@@ -280,7 +280,7 @@ fn render_mermaid(
     writeln!(out, "flowchart TB").unwrap();
     writeln!(out, "  %% NovaNet Graph v0.12.0").unwrap();
     writeln!(out, "  %% Generated: {node_count} nodes, {arc_count} arcs").unwrap();
-    writeln!(out, "  %% Source: node-kinds/ + arc-kinds/ + taxonomy.yaml").unwrap();
+    writeln!(out, "  %% Source: node-classes/ + arc-classes/ + taxonomy.yaml").unwrap();
     writeln!(out).unwrap();
 
     // ── classDef — Trait-based node styling ────────────────────────────────

@@ -16,6 +16,7 @@ use super::data::{
 };
 use super::handlers::dispatch_mode_handler;
 use super::nexus::{NexusState, NexusTab};
+use super::nexus::views::LoadedViews;
 use super::schema::{CoverageStats, MatchedProperty, ValidatedProperty, ValidationStats};
 use super::theme::Theme;
 use super::yaml::{YamlSections, YamlViewSection};
@@ -250,6 +251,8 @@ pub struct App {
     pub hide_empty: bool,
     /// Nexus mode state (gamified learning hub)
     pub nexus: NexusState,
+    /// Loaded views from views.yaml (single source of truth for TUI + Studio)
+    pub loaded_views: LoadedViews,
     /// Animation tick counter (increments each frame, used for spinners)
     pub tick: u16,
     // ==========================================================================
@@ -297,6 +300,9 @@ pub struct App {
 
 impl App {
     pub fn new(tree: TaxonomyTree, root_path: String) -> Self {
+        // Load views before root_path is moved
+        let loaded_views = LoadedViews::load(&root_path);
+
         let mut app = Self {
             theme: Theme::with_root(&root_path), // Load colors + icons from YAML
             mode: NavMode::Graph,
@@ -341,6 +347,7 @@ impl App {
             data_cursor_before_filter: 0,
             hide_empty: false,
             nexus: NexusState::with_persistence(),
+            loaded_views,
             tick: 0,
             // Schema overlay (Feature 1)
             schema_overlay_enabled: true, // Enabled by default

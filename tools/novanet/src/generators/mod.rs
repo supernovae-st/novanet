@@ -27,7 +27,7 @@ pub mod slugification;
 pub mod test_utils;
 pub mod tui_icons;
 pub mod view_mermaid;
-pub mod views;
+// views module removed in v0.12.5 — views.yaml loaded dynamically by ViewLoader.ts (Studio) and nexus/views.rs (TUI)
 pub mod visual_encoding;
 
 use std::path::Path;

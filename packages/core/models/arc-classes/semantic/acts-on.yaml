@@ -1,0 +1,43 @@
+# packages/core/models/arc-classes/semantic/acts-on.yaml
+# ArcKind: ACTS_ON - Action operates directly on entity
+# v10.7: New semantic arc for ACTION → Entity relationships
+
+arc:
+  name: ACTS_ON
+  family: semantic
+  scope: intra_realm
+  temperature_threshold: 0.15  # Direct operation - high precision needed
+
+  source: Entity
+  target: Entity
+  cardinality: many_to_many
+  is_self_referential: false
+
+  properties:
+    - name: strength
+      type: float
+      required: false
+      default: 0.8
+      description: "Relationship strength (0.0-1.0)"
+
+    - name: temperature
+      type: float
+      required: false
+      default: 0.85
+      description: "Spreading activation weight"
+
+    - name: operation_type
+      type: string
+      required: false
+      enum: [create, read, update, delete, scan, download, print, customize, track]
+      description: "Type of operation performed"
+
+  inverse: OPERATED_BY
+
+  llm_context: |
+    USE: when finding what entity an action operates on.
+    TRIGGERS: action target, operates on, action entity, direct operation.
+    NOT: capability (use ENABLES), domain relevance (use APPLIES_TO).
+    RELATES: Entity (source/action), Entity (target/thing), OPERATED_BY (inverse).
+
+  cypher_pattern: "(Entity)-[:ACTS_ON {strength, temperature, operation_type}]->(Entity)"

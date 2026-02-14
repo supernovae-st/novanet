@@ -1,6 +1,6 @@
 //! Generate ArcClass schema-nodes + cypher_pattern + FROM/TO_CLASS + IN_FAMILY relations.
 //!
-//! Reads individual arc-kind YAML files from `packages/core/models/arc-kinds/{family}/*.yaml`,
+//! Reads individual arc-kind YAML files from `packages/core/models/arc-classes/{family}/*.yaml`,
 //! filters out inverse relations, and produces idempotent MERGE statements for ArcClass nodes
 //! plus hierarchy and arc-schema relationships.
 //!

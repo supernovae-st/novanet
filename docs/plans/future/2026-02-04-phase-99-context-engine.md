@@ -100,19 +100,19 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
 ### Task 2: Add temperature_threshold to Semantic ArcKinds
 
 **Files:**
-- Modify: `packages/core/models/arc-kinds/semantic/semantic-link.yaml`
-- Modify: `packages/core/models/arc-kinds/semantic/uses-concept.yaml`
-- Modify: `packages/core/models/arc-kinds/semantic/links-to.yaml`
-- Modify: `packages/core/models/arc-kinds/semantic/subtopic-of.yaml`
-- Modify: `packages/core/models/arc-kinds/semantic/fills-slot.yaml`
-- Modify: `packages/core/models/arc-kinds/semantic/clusters-topic.yaml`
-- Modify: `packages/core/models/arc-kinds/semantic/satisfies-intent.yaml`
-- Modify: `packages/core/models/arc-kinds/semantic/for-intent.yaml`
-- Modify: `packages/core/models/arc-kinds/semantic/maps-to-concept.yaml`
-- Modify: `packages/core/models/arc-kinds/semantic/mentions.yaml`
-- Modify: `packages/core/models/arc-kinds/semantic/covers.yaml`
-- Modify: `packages/core/models/arc-kinds/semantic/specializes.yaml`
-- Modify: `packages/core/models/arc-kinds/semantic/related-thing.yaml`
+- Modify: `packages/core/models/arc-classes/semantic/semantic-link.yaml`
+- Modify: `packages/core/models/arc-classes/semantic/uses-concept.yaml`
+- Modify: `packages/core/models/arc-classes/semantic/links-to.yaml`
+- Modify: `packages/core/models/arc-classes/semantic/subtopic-of.yaml`
+- Modify: `packages/core/models/arc-classes/semantic/fills-slot.yaml`
+- Modify: `packages/core/models/arc-classes/semantic/clusters-topic.yaml`
+- Modify: `packages/core/models/arc-classes/semantic/satisfies-intent.yaml`
+- Modify: `packages/core/models/arc-classes/semantic/for-intent.yaml`
+- Modify: `packages/core/models/arc-classes/semantic/maps-to-concept.yaml`
+- Modify: `packages/core/models/arc-classes/semantic/mentions.yaml`
+- Modify: `packages/core/models/arc-classes/semantic/covers.yaml`
+- Modify: `packages/core/models/arc-classes/semantic/specializes.yaml`
+- Modify: `packages/core/models/arc-classes/semantic/related-thing.yaml`
 
 **Step 1: Add temperature_threshold property to each semantic arc**
 
@@ -152,7 +152,7 @@ Expected: PASS
 **Step 3: Commit**
 
 ```bash
-git add packages/core/models/arc-kinds/semantic/
+git add packages/core/models/arc-classes/semantic/
 git commit -m "feat(schema): add temperature_threshold to semantic arcs (v9.9)
 
 Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"

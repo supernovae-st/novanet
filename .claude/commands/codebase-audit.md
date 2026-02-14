@@ -99,13 +99,13 @@ Analyze NovaNet YAML schema for issues:
 1. Run: cargo run -- schema validate
    Report any validation failures
 
-2. Check node-kinds/**/*.yaml:
+2. Check node-classes/**/*.yaml:
    - realm field matches file path (shared vs org)
    - layer field matches file path
    - trait is valid (invariant|localized|knowledge|generated|aggregated)
-   - All referenced arcs exist in arc-kinds/
+   - All referenced arcs exist in arc-classes/
 
-3. Check arc-kinds/**/*.yaml:
+3. Check arc-classes/**/*.yaml:
    - source/target node types exist
    - family is valid (ownership|localization|semantic|generation|mining)
    - cardinality is valid
@@ -137,7 +137,7 @@ Verify generated artifacts are in sync with YAML:
 
 3. Compare Cypher with YAML:
    - packages/db/seed/*.cypher matches YAML definitions
-   - All node labels in Cypher exist in node-kinds/
+   - All node labels in Cypher exist in node-classes/
 
 4. Check Rust generated files:
    - tools/novanet/src/tui/icons.rs matches visual-encoding.yaml icons
@@ -448,7 +448,7 @@ Findings:   XX total
 +-------------------------------------------------------------------------------+
 | Agent | Issue | Location | Description |
 |-------|-------|----------|-------------|
-| YAML  | Missing realm | node-kinds/foo.yaml:3 | Field required |
+| YAML  | Missing realm | node-classes/foo.yaml:3 | Field required |
 ...
 
 +-------------------------------------------------------------------------------+

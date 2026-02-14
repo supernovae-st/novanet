@@ -18,8 +18,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 # Read current counts from YAML
-NODE_COUNT=$(find "$PROJECT_ROOT/packages/core/models/node-kinds" -name "*.yaml" 2>/dev/null | wc -l | tr -d ' ')
-ARC_COUNT=$(find "$PROJECT_ROOT/packages/core/models/arc-kinds" -name "*.yaml" 2>/dev/null | wc -l | tr -d ' ')
+NODE_COUNT=$(find "$PROJECT_ROOT/packages/core/models/node-classes" -name "*.yaml" 2>/dev/null | wc -l | tr -d ' ')
+ARC_COUNT=$(find "$PROJECT_ROOT/packages/core/models/arc-classes" -name "*.yaml" 2>/dev/null | wc -l | tr -d ' ')
 VERSION=$(cat "$PROJECT_ROOT/VERSION" 2>/dev/null || echo "unknown")
 
 # Check if this is a skill, command, or agent file
@@ -29,7 +29,7 @@ case "$FILE_PATH" in
 {
   "hookSpecificOutput": {
     "hookEventName": "PostToolUse",
-    "additionalContext": "Skill/Command/Rule modified. YAML Source of Truth: $NODE_COUNT node-kinds, $ARC_COUNT arc-kinds, version $VERSION. Verify paths use 'node-kinds/' not 'nodes/', and 'taxonomy.yaml' not 'organizing-principles.yaml'. Run 'pnpm skill:audit' to validate."
+    "additionalContext": "Skill/Command/Rule modified. YAML Source of Truth: $NODE_COUNT node-classes, $ARC_COUNT arc-classes, version $VERSION. Verify paths use 'node-classes/' not 'nodes/', and 'taxonomy.yaml' not 'organizing-principles.yaml'. Run 'pnpm skill:audit' to validate."
   }
 }
 EOF

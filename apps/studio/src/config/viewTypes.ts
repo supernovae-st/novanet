@@ -3,7 +3,7 @@
 // =============================================================================
 // Defines all 14 context views with their visual styles, effects, and node mappings
 //
-// NOTE: Views are now defined in packages/core/models/views/_registry.yaml with embedded Cypher.
+// NOTE: Views are now defined in packages/core/models/views.yaml (v0.12.5).
 // Use @novanet/core/filters ViewLoader.loadRegistry() instead.
 
 import type { NodeType } from '@novanet/core/types';

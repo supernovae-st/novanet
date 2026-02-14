@@ -1,0 +1,43 @@
+# packages/core/models/arc-classes/semantic/enhanced-by.yaml
+# ArcKind: ENHANCED_BY - Entity is enhanced by a feature
+# v11.0: Inverse of ENHANCES arc
+
+arc:
+  name: ENHANCED_BY
+  family: semantic
+  scope: intra_realm
+  temperature_threshold: 0.2
+
+  source: Entity
+  target: Entity
+  cardinality: many_to_many
+  is_self_referential: false
+
+  properties:
+    - name: strength
+      type: float
+      required: false
+      default: 0.75
+      description: "Enhancement strength (0.0-1.0)"
+
+    - name: temperature
+      type: float
+      required: false
+      default: 0.8
+      description: "Spreading activation weight"
+
+    - name: enhancement_type
+      type: string
+      required: false
+      enum: [adds, improves, extends, optimizes, secures, tracks]
+      description: "How the feature enhances the target"
+
+  inverse_of: ENHANCES
+
+  llm_context: |
+    USE: when finding features that enhance an entity.
+    TRIGGERS: enhanced by, improved by, features, add-ons, extensions.
+    NOT: enablement (use ENABLED_BY), requirement (use REQUIRED_BY).
+    RELATES: Entity (source/thing), Entity (target/feature), ENHANCES (inverse).
+
+  cypher_pattern: "(Entity)-[:ENHANCED_BY {strength, temperature, enhancement_type}]->(Entity)"

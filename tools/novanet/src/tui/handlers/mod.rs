@@ -1,7 +1,7 @@
 //! Mode-specific key handlers for TUI.
 //!
-//! v11.7: Two navigation modes (Graph, Nexus).
-//! Graph mode uses global handlers; Nexus mode has its own handler.
+//! v0.12.5: Three navigation modes (Graph, Nexus, Views).
+//! Graph mode uses global handlers; Nexus and Views modes have their own handlers.
 //!
 //! # Architecture
 //!
@@ -9,13 +9,16 @@
 //! App::handle_key()
 //!   ├── Overlays (help, legend, search, filter, recent)
 //!   ├── dispatch_mode_handler() ← Mode-specific preprocessing
-//!   │   └── NexusModeHandler (delegated to nexus state)
+//!   │   ├── NexusModeHandler (delegated to nexus state)
+//!   │   └── ViewsModeHandler (views navigation with loaded_views)
 //!   └── Global handlers (mode switch, panel focus, tree nav, etc.)
 //! ```
 
 mod nexus;
+mod views;
 
 pub use nexus::handle_nexus_key;
+pub use views::handle_views_key;
 
 use crossterm::event::KeyEvent;
 
@@ -48,8 +51,9 @@ impl KeyResult {
 pub fn dispatch_mode_handler(app: &mut App, key: KeyEvent) -> Option<bool> {
     match app.mode {
         NavMode::Nexus => handle_nexus_key(app, key).as_option(),
-        // Graph and Views modes don't have mode-specific preprocessing
-        NavMode::Graph | NavMode::Views => None,
+        NavMode::Views => handle_views_key(app, key).as_option(),
+        // Graph mode uses global handlers directly
+        NavMode::Graph => None,
     }
 }
 

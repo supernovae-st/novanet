@@ -16,7 +16,7 @@ Comprehensive audit of Neo4j database coherence with YAML schema definitions.
 | ArcKind properties | FIXED | Added family/scope to 54 nodes |
 | Legacy Neo4j labels | FIXED | Removed GeoContinent from 6 nodes |
 | Seed idempotency | FIXED | 27-geographic-taxonomy.cypher uses MERGE |
-| YAML path/content | PASS | All 60 node-kinds consistent |
+| YAML path/content | PASS | All 60 node-classes consistent |
 | Arc scope logic | PASS | cross_realm/intra_realm computed correctly |
 
 ---
@@ -69,10 +69,10 @@ MATCH (c:GeoContinent) REMOVE c:GeoContinent
 | Source | Arc Count |
 |--------|-----------|
 | `relations.yaml` (deprecated) | 54 arcs |
-| `arc-kinds/_index.yaml` | 74 arcs listed |
+| `arc-classes/_index.yaml` | 74 arcs listed |
 | Actual YAML files | 89 files |
 
-**Root Cause**: Migration from `relations.yaml` to individual `arc-kinds/**/*.yaml` files is incomplete.
+**Root Cause**: Migration from `relations.yaml` to individual `arc-classes/**/*.yaml` files is incomplete.
 
 **Generator reads**: `relations.yaml` (deprecated, but still primary source)
 **Expected source**: Individual YAML files per arc
@@ -87,7 +87,7 @@ MATCH (c:GeoContinent) REMOVE c:GeoContinent
 - `contains.yaml`
 
 **Recommendation**: Complete arc migration by:
-1. Update generator to read from `arc-kinds/**/*.yaml` instead of `relations.yaml`
+1. Update generator to read from `arc-classes/**/*.yaml` instead of `relations.yaml`
 2. Update `_index.yaml` to include all 89 arc files
 3. Remove `relations.yaml` when migration complete
 
@@ -133,7 +133,7 @@ MATCH (n:Subcategory) RETURN count(n) -- Expected: 0
 | File | Change |
 |------|--------|
 | `tools/novanet/src/generators/arc_kind.rs` | Added family/scope property generation |
-| `packages/db/seed/02-arc-kinds.cypher` | Regenerated with new properties |
+| `packages/db/seed/02-arc-classes.cypher` | Regenerated with new properties |
 | `packages/db/seed/27-geographic-taxonomy.cypher` | CREATE → MERGE |
 
 ---

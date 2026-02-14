@@ -8,7 +8,7 @@
 
 ## Problem
 
-Meta-nodes (Realm, Layer, Trait, ArcFamily) are defined inline in `taxonomy.yaml`, not as individual YAML files like node-kinds and arc-kinds. This breaks the "YAML for everything" principle.
+Meta-nodes (Realm, Layer, Trait, ArcFamily) are defined inline in `taxonomy.yaml`, not as individual YAML files like node-classes and arc-classes. This breaks the "YAML for everything" principle.
 
 ## Actions
 
@@ -54,8 +54,8 @@ models/meta/
 ### Phase 3: Cleanup Duplication
 
 - `relations.yaml` — KEEP for now (parsers still use it)
-- Add deprecation notice pointing to `arc-kinds/`
-- Future: migrate parser to read arc-kinds/ directly
+- Add deprecation notice pointing to `arc-classes/`
+- Future: migrate parser to read arc-classes/ directly
 
 ### Phase 4: Update Versions
 
@@ -65,7 +65,7 @@ models/meta/
 
 ## Not in Scope
 
-- Migrating Rust parser from relations.yaml to arc-kinds/ (separate task)
+- Migrating Rust parser from relations.yaml to arc-classes/ (separate task)
 - Refactoring taxonomy.yaml generator (depends on meta/ structure)
 
 ## Success Criteria

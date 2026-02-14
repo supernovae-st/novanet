@@ -323,7 +323,7 @@ ON MATCH SET
 MERGE (ac_CONTENT_OF:Schema:ArcClass {key: 'CONTENT_OF'})
 ON CREATE SET
   ac_CONTENT_OF.display_name = 'Content Of',
-  ac_CONTENT_OF.llm_context = 'Inverse of HAS_CONTENT — localized content points to parent.',
+  ac_CONTENT_OF.llm_context = 'USE: when finding the parent entity/project from localized content. TRIGGERS: content parent, entity from content, reverse content lookup. NOT: forward lookup (use HAS_CONTENT), generated content (use GENERATED_FOR). RELATES: EntityContent/ProjectContent (source), Entity/Project (target), HAS_CONTENT (inverse_of).',
   ac_CONTENT_OF.family = 'localization',
   ac_CONTENT_OF.scope = 'intra_realm',
   ac_CONTENT_OF.cardinality = 'many_to_one',
@@ -335,7 +335,7 @@ ON CREATE SET
   ac_CONTENT_OF.created_at = datetime()
 ON MATCH SET
   ac_CONTENT_OF.display_name = 'Content Of',
-  ac_CONTENT_OF.llm_context = 'Inverse of HAS_CONTENT — localized content points to parent.',
+  ac_CONTENT_OF.llm_context = 'USE: when finding the parent entity/project from localized content. TRIGGERS: content parent, entity from content, reverse content lookup. NOT: forward lookup (use HAS_CONTENT), generated content (use GENERATED_FOR). RELATES: EntityContent/ProjectContent (source), Entity/Project (target), HAS_CONTENT (inverse_of).',
   ac_CONTENT_OF.family = 'localization',
   ac_CONTENT_OF.scope = 'intra_realm',
   ac_CONTENT_OF.cardinality = 'many_to_one',
@@ -349,7 +349,7 @@ ON MATCH SET
 MERGE (ac_FALLBACK_TO:Schema:ArcClass {key: 'FALLBACK_TO'})
 ON CREATE SET
   ac_FALLBACK_TO.display_name = 'Fallback To',
-  ac_FALLBACK_TO.llm_context = 'Fallback chain: (fr-CA)-[:FALLBACK_TO]->(fr-FR)-[:FALLBACK_TO]->(en-US).',
+  ac_FALLBACK_TO.llm_context = 'USE: when resolving missing content by following locale fallback chain. TRIGGERS: fallback locale, missing translation, locale chain, content resolution. NOT: locale variants (use LOCALE_VARIANT_OF), primary locale (use PRIMARY_FOR). RELATES: Locale (source), Locale (target/fallback), chain: fr-CA→fr-FR→en-US.',
   ac_FALLBACK_TO.family = 'localization',
   ac_FALLBACK_TO.scope = 'intra_realm',
   ac_FALLBACK_TO.cardinality = 'many_to_one',
@@ -361,7 +361,7 @@ ON CREATE SET
   ac_FALLBACK_TO.created_at = datetime()
 ON MATCH SET
   ac_FALLBACK_TO.display_name = 'Fallback To',
-  ac_FALLBACK_TO.llm_context = 'Fallback chain: (fr-CA)-[:FALLBACK_TO]->(fr-FR)-[:FALLBACK_TO]->(en-US).',
+  ac_FALLBACK_TO.llm_context = 'USE: when resolving missing content by following locale fallback chain. TRIGGERS: fallback locale, missing translation, locale chain, content resolution. NOT: locale variants (use LOCALE_VARIANT_OF), primary locale (use PRIMARY_FOR). RELATES: Locale (source), Locale (target/fallback), chain: fr-CA→fr-FR→en-US.',
   ac_FALLBACK_TO.family = 'localization',
   ac_FALLBACK_TO.scope = 'intra_realm',
   ac_FALLBACK_TO.cardinality = 'many_to_one',
@@ -375,7 +375,7 @@ ON MATCH SET
 MERGE (ac_FOR_LOCALE:Schema:ArcClass {key: 'FOR_LOCALE'})
 ON CREATE SET
   ac_FOR_LOCALE.display_name = 'For Locale',
-  ac_FOR_LOCALE.llm_context = 'All localized content nodes point to their target Locale. PromptStyle can be locale-specific for cultural adaptation.',
+  ac_FOR_LOCALE.llm_context = 'USE: when finding the target locale for any localized content node. TRIGGERS: for locale, content locale, target language, localization target. NOT: locale fallback (use FALLBACK_TO), locale ownership (use HAS_LOCALE). RELATES: EntityContent/ProjectContent/BlockGenerated/PageGenerated/PromptStyle (source), Locale (target).',
   ac_FOR_LOCALE.family = 'localization',
   ac_FOR_LOCALE.scope = 'cross_realm',
   ac_FOR_LOCALE.cardinality = 'many_to_one',
@@ -387,7 +387,7 @@ ON CREATE SET
   ac_FOR_LOCALE.created_at = datetime()
 ON MATCH SET
   ac_FOR_LOCALE.display_name = 'For Locale',
-  ac_FOR_LOCALE.llm_context = 'All localized content nodes point to their target Locale. PromptStyle can be locale-specific for cultural adaptation.',
+  ac_FOR_LOCALE.llm_context = 'USE: when finding the target locale for any localized content node. TRIGGERS: for locale, content locale, target language, localization target. NOT: locale fallback (use FALLBACK_TO), locale ownership (use HAS_LOCALE). RELATES: EntityContent/ProjectContent/BlockGenerated/PageGenerated/PromptStyle (source), Locale (target).',
   ac_FOR_LOCALE.family = 'localization',
   ac_FOR_LOCALE.scope = 'cross_realm',
   ac_FOR_LOCALE.cardinality = 'many_to_one',
@@ -401,7 +401,7 @@ ON MATCH SET
 MERGE (ac_HAS_CONTENT:Schema:ArcClass {key: 'HAS_CONTENT'})
 ON CREATE SET
   ac_HAS_CONTENT.display_name = 'Has Content',
-  ac_HAS_CONTENT.llm_context = 'Links invariant node to its human-curated localized content (one per locale). NOT for LLM-generated content — use HAS_GENERATED for that. Use: MATCH (e:Entity)-[:HAS_CONTENT]->(ec:EntityContent)-[:FOR_LOCALE]->(l:Locale)',
+  ac_HAS_CONTENT.llm_context = 'USE: when loading human-authored localized content for an entity or project. TRIGGERS: has content, localized content, entity content, authored content. NOT: generated content (use HAS_GENERATED), forward locale (use FOR_LOCALE). RELATES: Entity/Project (source), EntityContent/ProjectContent (target), CONTENT_OF (inverse).',
   ac_HAS_CONTENT.family = 'localization',
   ac_HAS_CONTENT.scope = 'intra_realm',
   ac_HAS_CONTENT.cardinality = 'one_to_many',
@@ -413,7 +413,7 @@ ON CREATE SET
   ac_HAS_CONTENT.created_at = datetime()
 ON MATCH SET
   ac_HAS_CONTENT.display_name = 'Has Content',
-  ac_HAS_CONTENT.llm_context = 'Links invariant node to its human-curated localized content (one per locale). NOT for LLM-generated content — use HAS_GENERATED for that. Use: MATCH (e:Entity)-[:HAS_CONTENT]->(ec:EntityContent)-[:FOR_LOCALE]->(l:Locale)',
+  ac_HAS_CONTENT.llm_context = 'USE: when loading human-authored localized content for an entity or project. TRIGGERS: has content, localized content, entity content, authored content. NOT: generated content (use HAS_GENERATED), forward locale (use FOR_LOCALE). RELATES: Entity/Project (source), EntityContent/ProjectContent (target), CONTENT_OF (inverse).',
   ac_HAS_CONTENT.family = 'localization',
   ac_HAS_CONTENT.scope = 'intra_realm',
   ac_HAS_CONTENT.cardinality = 'one_to_many',
@@ -427,7 +427,7 @@ ON MATCH SET
 MERGE (ac_HAS_INCOME_LEVEL:Schema:ArcClass {key: 'HAS_INCOME_LEVEL'})
 ON CREATE SET
   ac_HAS_INCOME_LEVEL.display_name = 'Has Income Level',
-  ac_HAS_INCOME_LEVEL.llm_context = 'Locale is classified in a World Bank income group for pricing/messaging. Use to find similar markets: MATCH (l:Locale)-[:HAS_INCOME_LEVEL]->(ig)<-[:HAS_INCOME_LEVEL]-(similar) Example: fr-FR -[:HAS_INCOME_LEVEL]-> HIC (high income)',
+  ac_HAS_INCOME_LEVEL.llm_context = 'USE: when finding World Bank income classification for pricing/messaging. TRIGGERS: income level, market classification, pricing tier, economic group. NOT: lending type (use HAS_LENDING_TYPE), economic region (use IN_ECONOMIC_REGION). RELATES: Locale (source), IncomeGroup (target), CLASSIFIES (inverse).',
   ac_HAS_INCOME_LEVEL.family = 'localization',
   ac_HAS_INCOME_LEVEL.scope = 'intra_realm',
   ac_HAS_INCOME_LEVEL.cardinality = 'many_to_one',
@@ -439,7 +439,7 @@ ON CREATE SET
   ac_HAS_INCOME_LEVEL.created_at = datetime()
 ON MATCH SET
   ac_HAS_INCOME_LEVEL.display_name = 'Has Income Level',
-  ac_HAS_INCOME_LEVEL.llm_context = 'Locale is classified in a World Bank income group for pricing/messaging. Use to find similar markets: MATCH (l:Locale)-[:HAS_INCOME_LEVEL]->(ig)<-[:HAS_INCOME_LEVEL]-(similar) Example: fr-FR -[:HAS_INCOME_LEVEL]-> HIC (high income)',
+  ac_HAS_INCOME_LEVEL.llm_context = 'USE: when finding World Bank income classification for pricing/messaging. TRIGGERS: income level, market classification, pricing tier, economic group. NOT: lending type (use HAS_LENDING_TYPE), economic region (use IN_ECONOMIC_REGION). RELATES: Locale (source), IncomeGroup (target), CLASSIFIES (inverse).',
   ac_HAS_INCOME_LEVEL.family = 'localization',
   ac_HAS_INCOME_LEVEL.scope = 'intra_realm',
   ac_HAS_INCOME_LEVEL.cardinality = 'many_to_one',
@@ -453,7 +453,7 @@ ON MATCH SET
 MERGE (ac_HAS_INTERNAL_LINK:Schema:ArcClass {key: 'HAS_INTERNAL_LINK'})
 ON CREATE SET
   ac_HAS_INTERNAL_LINK.display_name = 'Has Internal Link',
-  ac_HAS_INTERNAL_LINK.llm_context = 'BlockGenerated contains an actual HTML internal link to PageGenerated. Links are extracted from generated content for SEO analysis. Use: MATCH (bl:BlockGenerated)-[:HAS_INTERNAL_LINK]->(pl:PageGenerated)',
+  ac_HAS_INTERNAL_LINK.llm_context = 'USE: when analyzing internal linking structure from generated content. TRIGGERS: internal links, link structure, SEO links, anchor text, content linking. NOT: semantic page linking (use LINKS_TO), entity references (use USES_ENTITY). RELATES: BlockGenerated (source), PageGenerated (target), properties: anchor_text, position, nofollow.',
   ac_HAS_INTERNAL_LINK.family = 'localization',
   ac_HAS_INTERNAL_LINK.scope = 'intra_realm',
   ac_HAS_INTERNAL_LINK.cardinality = 'many_to_many',
@@ -465,7 +465,7 @@ ON CREATE SET
   ac_HAS_INTERNAL_LINK.created_at = datetime()
 ON MATCH SET
   ac_HAS_INTERNAL_LINK.display_name = 'Has Internal Link',
-  ac_HAS_INTERNAL_LINK.llm_context = 'BlockGenerated contains an actual HTML internal link to PageGenerated. Links are extracted from generated content for SEO analysis. Use: MATCH (bl:BlockGenerated)-[:HAS_INTERNAL_LINK]->(pl:PageGenerated)',
+  ac_HAS_INTERNAL_LINK.llm_context = 'USE: when analyzing internal linking structure from generated content. TRIGGERS: internal links, link structure, SEO links, anchor text, content linking. NOT: semantic page linking (use LINKS_TO), entity references (use USES_ENTITY). RELATES: BlockGenerated (source), PageGenerated (target), properties: anchor_text, position, nofollow.',
   ac_HAS_INTERNAL_LINK.family = 'localization',
   ac_HAS_INTERNAL_LINK.scope = 'intra_realm',
   ac_HAS_INTERNAL_LINK.cardinality = 'many_to_many',
@@ -479,7 +479,7 @@ ON MATCH SET
 MERGE (ac_HAS_LENDING_TYPE:Schema:ArcClass {key: 'HAS_LENDING_TYPE'})
 ON CREATE SET
   ac_HAS_LENDING_TYPE.display_name = 'Has Lending Type',
-  ac_HAS_LENDING_TYPE.llm_context = 'Locale is classified in a World Bank lending category. Use to understand development context: MATCH (l:Locale)-[:HAS_LENDING_TYPE]->(lc:LendingCategory) Example: fr-FR -[:HAS_LENDING_TYPE]-> IBRD',
+  ac_HAS_LENDING_TYPE.llm_context = 'USE: when finding World Bank lending classification for development context. TRIGGERS: lending type, development status, World Bank category, IBRD/IDA. NOT: income level (use HAS_INCOME_LEVEL), economic region (use IN_ECONOMIC_REGION). RELATES: Locale (source), LendingCategory (target), CLASSIFIES (inverse).',
   ac_HAS_LENDING_TYPE.family = 'localization',
   ac_HAS_LENDING_TYPE.scope = 'intra_realm',
   ac_HAS_LENDING_TYPE.cardinality = 'many_to_one',
@@ -491,7 +491,7 @@ ON CREATE SET
   ac_HAS_LENDING_TYPE.created_at = datetime()
 ON MATCH SET
   ac_HAS_LENDING_TYPE.display_name = 'Has Lending Type',
-  ac_HAS_LENDING_TYPE.llm_context = 'Locale is classified in a World Bank lending category. Use to understand development context: MATCH (l:Locale)-[:HAS_LENDING_TYPE]->(lc:LendingCategory) Example: fr-FR -[:HAS_LENDING_TYPE]-> IBRD',
+  ac_HAS_LENDING_TYPE.llm_context = 'USE: when finding World Bank lending classification for development context. TRIGGERS: lending type, development status, World Bank category, IBRD/IDA. NOT: income level (use HAS_INCOME_LEVEL), economic region (use IN_ECONOMIC_REGION). RELATES: Locale (source), LendingCategory (target), CLASSIFIES (inverse).',
   ac_HAS_LENDING_TYPE.family = 'localization',
   ac_HAS_LENDING_TYPE.scope = 'intra_realm',
   ac_HAS_LENDING_TYPE.cardinality = 'many_to_one',
@@ -557,7 +557,7 @@ ON MATCH SET
 MERGE (ac_HAS_LOCALIZED_CONTENT:Schema:ArcClass {key: 'HAS_LOCALIZED_CONTENT'})
 ON CREATE SET
   ac_HAS_LOCALIZED_CONTENT.display_name = 'Has Localized Content',
-  ac_HAS_LOCALIZED_CONTENT.llm_context = 'Inverse of FOR_LOCALE — locale knows all its content.',
+  ac_HAS_LOCALIZED_CONTENT.llm_context = 'USE: when loading all localized content for a specific locale. TRIGGERS: locale content, all content for locale, localized assets, locale lookup. NOT: forward locale lookup (use FOR_LOCALE), keyword ownership (use HAS_SEO_KEYWORDS). RELATES: Locale (source), ProjectContent/EntityContent/PageGenerated/BlockGenerated (target), FOR_LOCALE (inverse_of).',
   ac_HAS_LOCALIZED_CONTENT.family = 'localization',
   ac_HAS_LOCALIZED_CONTENT.scope = 'cross_realm',
   ac_HAS_LOCALIZED_CONTENT.cardinality = 'one_to_many',
@@ -569,7 +569,7 @@ ON CREATE SET
   ac_HAS_LOCALIZED_CONTENT.created_at = datetime()
 ON MATCH SET
   ac_HAS_LOCALIZED_CONTENT.display_name = 'Has Localized Content',
-  ac_HAS_LOCALIZED_CONTENT.llm_context = 'Inverse of FOR_LOCALE — locale knows all its content.',
+  ac_HAS_LOCALIZED_CONTENT.llm_context = 'USE: when loading all localized content for a specific locale. TRIGGERS: locale content, all content for locale, localized assets, locale lookup. NOT: forward locale lookup (use FOR_LOCALE), keyword ownership (use HAS_SEO_KEYWORDS). RELATES: Locale (source), ProjectContent/EntityContent/PageGenerated/BlockGenerated (target), FOR_LOCALE (inverse_of).',
   ac_HAS_LOCALIZED_CONTENT.family = 'localization',
   ac_HAS_LOCALIZED_CONTENT.scope = 'cross_realm',
   ac_HAS_LOCALIZED_CONTENT.cardinality = 'one_to_many',
@@ -583,7 +583,7 @@ ON MATCH SET
 MERGE (ac_HAS_POPULATION:Schema:ArcClass {key: 'HAS_POPULATION'})
 ON CREATE SET
   ac_HAS_POPULATION.display_name = 'Has Population',
-  ac_HAS_POPULATION.llm_context = 'Locale has multiple population sub-clusters with percentages for diverse image generation. Use to get visual traits: MATCH (l:Locale)-[hp:HAS_POPULATION]->(ps:PopulationSubCluster) RETURN ps.visual_traits, hp.percentage Example: fr-FR -[:HAS_POPULATION {percentage: 0.6}]-> Mediterranean',
+  ac_HAS_POPULATION.llm_context = 'USE: when loading population demographics for diverse image generation. TRIGGERS: population mix, demographics, visual diversity, ethnic composition. NOT: primary population (use HAS_PRIMARY_POPULATION), geographic region (use IN_SUBREGION). RELATES: Locale (source), PopulationSubCluster (target), POPULATION_OF (inverse), percentage property.',
   ac_HAS_POPULATION.family = 'localization',
   ac_HAS_POPULATION.scope = 'intra_realm',
   ac_HAS_POPULATION.cardinality = 'many_to_many',
@@ -595,7 +595,7 @@ ON CREATE SET
   ac_HAS_POPULATION.created_at = datetime()
 ON MATCH SET
   ac_HAS_POPULATION.display_name = 'Has Population',
-  ac_HAS_POPULATION.llm_context = 'Locale has multiple population sub-clusters with percentages for diverse image generation. Use to get visual traits: MATCH (l:Locale)-[hp:HAS_POPULATION]->(ps:PopulationSubCluster) RETURN ps.visual_traits, hp.percentage Example: fr-FR -[:HAS_POPULATION {percentage: 0.6}]-> Mediterranean',
+  ac_HAS_POPULATION.llm_context = 'USE: when loading population demographics for diverse image generation. TRIGGERS: population mix, demographics, visual diversity, ethnic composition. NOT: primary population (use HAS_PRIMARY_POPULATION), geographic region (use IN_SUBREGION). RELATES: Locale (source), PopulationSubCluster (target), POPULATION_OF (inverse), percentage property.',
   ac_HAS_POPULATION.family = 'localization',
   ac_HAS_POPULATION.scope = 'intra_realm',
   ac_HAS_POPULATION.cardinality = 'many_to_many',
@@ -609,7 +609,7 @@ ON MATCH SET
 MERGE (ac_HAS_PRIMARY_POPULATION:Schema:ArcClass {key: 'HAS_PRIMARY_POPULATION'})
 ON CREATE SET
   ac_HAS_PRIMARY_POPULATION.display_name = 'Has Primary Population',
-  ac_HAS_PRIMARY_POPULATION.llm_context = 'Locale\'s majority/primary population cluster for image generation. Use for quick population context: MATCH (l:Locale)-[:HAS_PRIMARY_POPULATION]->(pc:PopulationCluster) Example: fr-FR -[:HAS_PRIMARY_POPULATION]-> West Eurasian',
+  ac_HAS_PRIMARY_POPULATION.llm_context = 'USE: when loading primary/majority population for quick visual context. TRIGGERS: primary population, majority ethnicity, main demographic, quick population. NOT: detailed demographics (use HAS_POPULATION), regional population (use POPULATION_OF). RELATES: Locale (source), PopulationCluster (target), PRIMARY_FOR (inverse).',
   ac_HAS_PRIMARY_POPULATION.family = 'localization',
   ac_HAS_PRIMARY_POPULATION.scope = 'intra_realm',
   ac_HAS_PRIMARY_POPULATION.cardinality = 'many_to_one',
@@ -621,7 +621,7 @@ ON CREATE SET
   ac_HAS_PRIMARY_POPULATION.created_at = datetime()
 ON MATCH SET
   ac_HAS_PRIMARY_POPULATION.display_name = 'Has Primary Population',
-  ac_HAS_PRIMARY_POPULATION.llm_context = 'Locale\'s majority/primary population cluster for image generation. Use for quick population context: MATCH (l:Locale)-[:HAS_PRIMARY_POPULATION]->(pc:PopulationCluster) Example: fr-FR -[:HAS_PRIMARY_POPULATION]-> West Eurasian',
+  ac_HAS_PRIMARY_POPULATION.llm_context = 'USE: when loading primary/majority population for quick visual context. TRIGGERS: primary population, majority ethnicity, main demographic, quick population. NOT: detailed demographics (use HAS_POPULATION), regional population (use POPULATION_OF). RELATES: Locale (source), PopulationCluster (target), PRIMARY_FOR (inverse).',
   ac_HAS_PRIMARY_POPULATION.family = 'localization',
   ac_HAS_PRIMARY_POPULATION.scope = 'intra_realm',
   ac_HAS_PRIMARY_POPULATION.cardinality = 'many_to_one',
@@ -635,7 +635,7 @@ ON MATCH SET
 MERGE (ac_IN_COUNTRY:Schema:ArcClass {key: 'IN_COUNTRY'})
 ON CREATE SET
   ac_IN_COUNTRY.display_name = 'In Country',
-  ac_IN_COUNTRY.llm_context = 'Locale belongs to exactly one Country (ISO 3166-1). A Country may have multiple Locales (e.g., CH has de-CH, fr-CH, it-CH, rm-CH). Use to traverse from locale to country: MATCH (l:Locale)-[:IN_COUNTRY]->(c:Country) Geographic hierarchy: Locale → Country → GeoRegion → Continent',
+  ac_IN_COUNTRY.llm_context = 'USE: when finding the country for a locale (ISO 3166-1). TRIGGERS: locale country, which country, national context, country lookup. NOT: geographic region (use IN_SUBREGION), cultural realm (use IN_CULTURAL_SUBREALM). RELATES: Locale (source), Country (target), HAS_LOCALE (inverse), hierarchy: Locale→Country→GeoRegion→Continent.',
   ac_IN_COUNTRY.family = 'localization',
   ac_IN_COUNTRY.scope = 'intra_realm',
   ac_IN_COUNTRY.cardinality = 'many_to_one',
@@ -647,7 +647,7 @@ ON CREATE SET
   ac_IN_COUNTRY.created_at = datetime()
 ON MATCH SET
   ac_IN_COUNTRY.display_name = 'In Country',
-  ac_IN_COUNTRY.llm_context = 'Locale belongs to exactly one Country (ISO 3166-1). A Country may have multiple Locales (e.g., CH has de-CH, fr-CH, it-CH, rm-CH). Use to traverse from locale to country: MATCH (l:Locale)-[:IN_COUNTRY]->(c:Country) Geographic hierarchy: Locale → Country → GeoRegion → Continent',
+  ac_IN_COUNTRY.llm_context = 'USE: when finding the country for a locale (ISO 3166-1). TRIGGERS: locale country, which country, national context, country lookup. NOT: geographic region (use IN_SUBREGION), cultural realm (use IN_CULTURAL_SUBREALM). RELATES: Locale (source), Country (target), HAS_LOCALE (inverse), hierarchy: Locale→Country→GeoRegion→Continent.',
   ac_IN_COUNTRY.family = 'localization',
   ac_IN_COUNTRY.scope = 'intra_realm',
   ac_IN_COUNTRY.cardinality = 'many_to_one',
@@ -661,7 +661,7 @@ ON MATCH SET
 MERGE (ac_IN_CULTURAL_SUBREALM:Schema:ArcClass {key: 'IN_CULTURAL_SUBREALM'})
 ON CREATE SET
   ac_IN_CULTURAL_SUBREALM.display_name = 'In Cultural Subrealm',
-  ac_IN_CULTURAL_SUBREALM.llm_context = 'Locale belongs to a cultural sub-realm for content adaptation. Use to find culturally similar locales: MATCH (l:Locale)-[:IN_CULTURAL_SUBREALM]->(csr)<-[:IN_CULTURAL_SUBREALM]-(similar) Example: fr-FR -[:IN_CULTURAL_SUBREALM]-> Mediterranean',
+  ac_IN_CULTURAL_SUBREALM.llm_context = 'USE: when finding cultural context for content adaptation. TRIGGERS: cultural realm, content adaptation, cultural context, similar cultures. NOT: geographic region (use IN_SUBREGION), economic region (use IN_ECONOMIC_REGION). RELATES: Locale (source), CulturalSubRealm (target), HAS_LOCALE (inverse).',
   ac_IN_CULTURAL_SUBREALM.family = 'localization',
   ac_IN_CULTURAL_SUBREALM.scope = 'intra_realm',
   ac_IN_CULTURAL_SUBREALM.cardinality = 'many_to_one',
@@ -673,7 +673,7 @@ ON CREATE SET
   ac_IN_CULTURAL_SUBREALM.created_at = datetime()
 ON MATCH SET
   ac_IN_CULTURAL_SUBREALM.display_name = 'In Cultural Subrealm',
-  ac_IN_CULTURAL_SUBREALM.llm_context = 'Locale belongs to a cultural sub-realm for content adaptation. Use to find culturally similar locales: MATCH (l:Locale)-[:IN_CULTURAL_SUBREALM]->(csr)<-[:IN_CULTURAL_SUBREALM]-(similar) Example: fr-FR -[:IN_CULTURAL_SUBREALM]-> Mediterranean',
+  ac_IN_CULTURAL_SUBREALM.llm_context = 'USE: when finding cultural context for content adaptation. TRIGGERS: cultural realm, content adaptation, cultural context, similar cultures. NOT: geographic region (use IN_SUBREGION), economic region (use IN_ECONOMIC_REGION). RELATES: Locale (source), CulturalSubRealm (target), HAS_LOCALE (inverse).',
   ac_IN_CULTURAL_SUBREALM.family = 'localization',
   ac_IN_CULTURAL_SUBREALM.scope = 'intra_realm',
   ac_IN_CULTURAL_SUBREALM.cardinality = 'many_to_one',
@@ -687,7 +687,7 @@ ON MATCH SET
 MERGE (ac_IN_ECONOMIC_REGION:Schema:ArcClass {key: 'IN_ECONOMIC_REGION'})
 ON CREATE SET
   ac_IN_ECONOMIC_REGION.display_name = 'In Economic Region',
-  ac_IN_ECONOMIC_REGION.llm_context = 'Locale belongs to a World Bank economic region. Use to find regional peers: MATCH (l:Locale)-[:IN_ECONOMIC_REGION]->(er)<-[:IN_ECONOMIC_REGION]-(similar) Example: fr-FR -[:IN_ECONOMIC_REGION]-> ECA',
+  ac_IN_ECONOMIC_REGION.llm_context = 'USE: when finding World Bank economic region for market analysis. TRIGGERS: economic region, World Bank region, regional peers, market grouping. NOT: income level (use HAS_INCOME_LEVEL), lending type (use HAS_LENDING_TYPE). RELATES: Locale (source), EconomicRegion (target), HAS_LOCALE (inverse).',
   ac_IN_ECONOMIC_REGION.family = 'localization',
   ac_IN_ECONOMIC_REGION.scope = 'intra_realm',
   ac_IN_ECONOMIC_REGION.cardinality = 'many_to_one',
@@ -699,7 +699,7 @@ ON CREATE SET
   ac_IN_ECONOMIC_REGION.created_at = datetime()
 ON MATCH SET
   ac_IN_ECONOMIC_REGION.display_name = 'In Economic Region',
-  ac_IN_ECONOMIC_REGION.llm_context = 'Locale belongs to a World Bank economic region. Use to find regional peers: MATCH (l:Locale)-[:IN_ECONOMIC_REGION]->(er)<-[:IN_ECONOMIC_REGION]-(similar) Example: fr-FR -[:IN_ECONOMIC_REGION]-> ECA',
+  ac_IN_ECONOMIC_REGION.llm_context = 'USE: when finding World Bank economic region for market analysis. TRIGGERS: economic region, World Bank region, regional peers, market grouping. NOT: income level (use HAS_INCOME_LEVEL), lending type (use HAS_LENDING_TYPE). RELATES: Locale (source), EconomicRegion (target), HAS_LOCALE (inverse).',
   ac_IN_ECONOMIC_REGION.family = 'localization',
   ac_IN_ECONOMIC_REGION.scope = 'intra_realm',
   ac_IN_ECONOMIC_REGION.cardinality = 'many_to_one',
@@ -713,7 +713,7 @@ ON MATCH SET
 MERGE (ac_IN_SUBREGION:Schema:ArcClass {key: 'IN_SUBREGION'})
 ON CREATE SET
   ac_IN_SUBREGION.display_name = 'In Subregion',
-  ac_IN_SUBREGION.llm_context = 'Locale belongs to a geographic region (or sub-region if available). Use to find similar locales: MATCH (l:Locale)-[:IN_SUBREGION]->(r)<-[:IN_SUBREGION]-(similar) Traversal to continent: (l)-[:IN_SUBREGION]->(r)-[:IN_CONTINENT]->(c)',
+  ac_IN_SUBREGION.llm_context = 'USE: when finding geographic region for a locale. TRIGGERS: geographic region, subregion, regional context, similar locales. NOT: country (use IN_COUNTRY), cultural realm (use IN_CULTURAL_SUBREALM). RELATES: Locale (source), GeoRegion/GeoSubRegion (target), HAS_LOCALE (inverse), traversal: Locale→Region→Continent.',
   ac_IN_SUBREGION.family = 'localization',
   ac_IN_SUBREGION.scope = 'intra_realm',
   ac_IN_SUBREGION.cardinality = 'many_to_one',
@@ -725,7 +725,7 @@ ON CREATE SET
   ac_IN_SUBREGION.created_at = datetime()
 ON MATCH SET
   ac_IN_SUBREGION.display_name = 'In Subregion',
-  ac_IN_SUBREGION.llm_context = 'Locale belongs to a geographic region (or sub-region if available). Use to find similar locales: MATCH (l:Locale)-[:IN_SUBREGION]->(r)<-[:IN_SUBREGION]-(similar) Traversal to continent: (l)-[:IN_SUBREGION]->(r)-[:IN_CONTINENT]->(c)',
+  ac_IN_SUBREGION.llm_context = 'USE: when finding geographic region for a locale. TRIGGERS: geographic region, subregion, regional context, similar locales. NOT: country (use IN_COUNTRY), cultural realm (use IN_CULTURAL_SUBREALM). RELATES: Locale (source), GeoRegion/GeoSubRegion (target), HAS_LOCALE (inverse), traversal: Locale→Region→Continent.',
   ac_IN_SUBREGION.family = 'localization',
   ac_IN_SUBREGION.scope = 'intra_realm',
   ac_IN_SUBREGION.cardinality = 'many_to_one',
@@ -739,7 +739,7 @@ ON MATCH SET
 MERGE (ac_LOCALE_VARIANT_OF:Schema:ArcClass {key: 'LOCALE_VARIANT_OF'})
 ON CREATE SET
   ac_LOCALE_VARIANT_OF.display_name = 'Locale Variant Of',
-  ac_LOCALE_VARIANT_OF.llm_context = 'Regional locale variant: (en-AU)-[:LOCALE_VARIANT_OF]->(en-GB) for inheritance. Use to resolve fallback content.',
+  ac_LOCALE_VARIANT_OF.llm_context = 'USE: when resolving regional variants for content inheritance. TRIGGERS: locale variant, regional variant, en-AU from en-GB, variant inheritance. NOT: fallback chain (use FALLBACK_TO), entity variants (use semantic/VARIANT_OF). RELATES: Locale (source/regional), Locale (target/base), HAS_LOCALE_VARIANT (inverse).',
   ac_LOCALE_VARIANT_OF.family = 'localization',
   ac_LOCALE_VARIANT_OF.scope = 'intra_realm',
   ac_LOCALE_VARIANT_OF.cardinality = 'many_to_one',
@@ -751,7 +751,7 @@ ON CREATE SET
   ac_LOCALE_VARIANT_OF.created_at = datetime()
 ON MATCH SET
   ac_LOCALE_VARIANT_OF.display_name = 'Locale Variant Of',
-  ac_LOCALE_VARIANT_OF.llm_context = 'Regional locale variant: (en-AU)-[:LOCALE_VARIANT_OF]->(en-GB) for inheritance. Use to resolve fallback content.',
+  ac_LOCALE_VARIANT_OF.llm_context = 'USE: when resolving regional variants for content inheritance. TRIGGERS: locale variant, regional variant, en-AU from en-GB, variant inheritance. NOT: fallback chain (use FALLBACK_TO), entity variants (use semantic/VARIANT_OF). RELATES: Locale (source/regional), Locale (target/base), HAS_LOCALE_VARIANT (inverse).',
   ac_LOCALE_VARIANT_OF.family = 'localization',
   ac_LOCALE_VARIANT_OF.scope = 'intra_realm',
   ac_LOCALE_VARIANT_OF.cardinality = 'many_to_one',
@@ -817,7 +817,7 @@ ON MATCH SET
 MERGE (ac_SPEAKS_BRANCH:Schema:ArcClass {key: 'SPEAKS_BRANCH'})
 ON CREATE SET
   ac_SPEAKS_BRANCH.display_name = 'Speaks Branch',
-  ac_SPEAKS_BRANCH.llm_context = 'Locale\'s primary language belongs to a language branch. Use to find locales with similar languages: MATCH (l:Locale)-[:SPEAKS_BRANCH]->(b)<-[:SPEAKS_BRANCH]-(similar) Example: fr-FR -[:SPEAKS_BRANCH]-> Romance (roa)',
+  ac_SPEAKS_BRANCH.llm_context = 'USE: when finding language family/branch for a locale. TRIGGERS: language branch, language family, similar languages, Romance/Germanic. NOT: cultural realm (use IN_CULTURAL_SUBREALM), geographic region (use IN_SUBREGION). RELATES: Locale (source), LanguageBranch (target), SPOKEN_BY (inverse).',
   ac_SPEAKS_BRANCH.family = 'localization',
   ac_SPEAKS_BRANCH.scope = 'intra_realm',
   ac_SPEAKS_BRANCH.cardinality = 'many_to_one',
@@ -829,7 +829,7 @@ ON CREATE SET
   ac_SPEAKS_BRANCH.created_at = datetime()
 ON MATCH SET
   ac_SPEAKS_BRANCH.display_name = 'Speaks Branch',
-  ac_SPEAKS_BRANCH.llm_context = 'Locale\'s primary language belongs to a language branch. Use to find locales with similar languages: MATCH (l:Locale)-[:SPEAKS_BRANCH]->(b)<-[:SPEAKS_BRANCH]-(similar) Example: fr-FR -[:SPEAKS_BRANCH]-> Romance (roa)',
+  ac_SPEAKS_BRANCH.llm_context = 'USE: when finding language family/branch for a locale. TRIGGERS: language branch, language family, similar languages, Romance/Germanic. NOT: cultural realm (use IN_CULTURAL_SUBREALM), geographic region (use IN_SUBREGION). RELATES: Locale (source), LanguageBranch (target), SPOKEN_BY (inverse).',
   ac_SPEAKS_BRANCH.family = 'localization',
   ac_SPEAKS_BRANCH.scope = 'intra_realm',
   ac_SPEAKS_BRANCH.cardinality = 'many_to_one',
@@ -869,7 +869,7 @@ ON MATCH SET
 MERGE (ac_HAS_METRICS:Schema:ArcClass {key: 'HAS_METRICS'})
 ON CREATE SET
   ac_HAS_METRICS.display_name = 'Has Metrics',
-  ac_HAS_METRICS.llm_context = 'Time-series observation link. Not used in spreading activation.',
+  ac_HAS_METRICS.llm_context = 'USE: when loading historical metrics for an SEO keyword. TRIGGERS: keyword metrics, search volume, historical data, time series, trend analysis. NOT: keyword targeting (use TARGETS), keyword expression (use EXPRESSES). RELATES: SEOKeyword (source), SEOKeywordMetrics (target), one_to_many, not for spreading activation.',
   ac_HAS_METRICS.family = 'mining',
   ac_HAS_METRICS.scope = 'intra_realm',
   ac_HAS_METRICS.cardinality = 'one_to_many',
@@ -881,7 +881,7 @@ ON CREATE SET
   ac_HAS_METRICS.created_at = datetime()
 ON MATCH SET
   ac_HAS_METRICS.display_name = 'Has Metrics',
-  ac_HAS_METRICS.llm_context = 'Time-series observation link. Not used in spreading activation.',
+  ac_HAS_METRICS.llm_context = 'USE: when loading historical metrics for an SEO keyword. TRIGGERS: keyword metrics, search volume, historical data, time series, trend analysis. NOT: keyword targeting (use TARGETS), keyword expression (use EXPRESSES). RELATES: SEOKeyword (source), SEOKeywordMetrics (target), one_to_many, not for spreading activation.',
   ac_HAS_METRICS.family = 'mining',
   ac_HAS_METRICS.scope = 'intra_realm',
   ac_HAS_METRICS.cardinality = 'one_to_many',
@@ -895,7 +895,7 @@ ON MATCH SET
 MERGE (ac_ACCEPTS_BLOCK_TYPE:Schema:ArcClass {key: 'ACCEPTS_BLOCK_TYPE'})
 ON CREATE SET
   ac_ACCEPTS_BLOCK_TYPE.display_name = 'Accepts Block Type',
-  ac_ACCEPTS_BLOCK_TYPE.llm_context = 'Slot accepts specific block types. Constraint enforcement.',
+  ac_ACCEPTS_BLOCK_TYPE.llm_context = 'USE: when validating block placement in content slots. TRIGGERS: slot validation, block constraints, allowed types. NOT: block content (use HAS_INSTRUCTION), slot assignment (use FILLS_SLOT). RELATES: ContentSlot (source), BlockType (target).',
   ac_ACCEPTS_BLOCK_TYPE.family = 'ownership',
   ac_ACCEPTS_BLOCK_TYPE.scope = 'intra_realm',
   ac_ACCEPTS_BLOCK_TYPE.cardinality = 'one_to_many',
@@ -907,7 +907,7 @@ ON CREATE SET
   ac_ACCEPTS_BLOCK_TYPE.created_at = datetime()
 ON MATCH SET
   ac_ACCEPTS_BLOCK_TYPE.display_name = 'Accepts Block Type',
-  ac_ACCEPTS_BLOCK_TYPE.llm_context = 'Slot accepts specific block types. Constraint enforcement.',
+  ac_ACCEPTS_BLOCK_TYPE.llm_context = 'USE: when validating block placement in content slots. TRIGGERS: slot validation, block constraints, allowed types. NOT: block content (use HAS_INSTRUCTION), slot assignment (use FILLS_SLOT). RELATES: ContentSlot (source), BlockType (target).',
   ac_ACCEPTS_BLOCK_TYPE.family = 'ownership',
   ac_ACCEPTS_BLOCK_TYPE.scope = 'intra_realm',
   ac_ACCEPTS_BLOCK_TYPE.cardinality = 'one_to_many',
@@ -921,7 +921,7 @@ ON MATCH SET
 MERGE (ac_BELONGS_TO:Schema:ArcClass {key: 'BELONGS_TO'})
 ON CREATE SET
   ac_BELONGS_TO.display_name = 'Belongs To',
-  ac_BELONGS_TO.llm_context = 'Links Entity to its semantic category (EntityCategory). Replaces the former `type` property with a proper graph relationship. Categories answer: WHAT? (THING, FEATURE, TOOL), HOW? (ACTION, GUIDE), WHY? (USE_CASE), WHO? (INDUSTRY), WHERE? (MEDIUM), ABSTRACT (CONCEPT), EXTERNAL (BRAND, INTEGRATION). Use: MATCH (e:Entity)-[:BELONGS_TO]->(c:EntityCategory)',
+  ac_BELONGS_TO.llm_context = 'USE: when categorizing entities or querying by category. TRIGGERS: entity category, entity type, what is entity, categorization. NOT: entity content (use HAS_CONTENT), entity hierarchy (use HAS_CHILD). RELATES: Entity (source), EntityCategory (target), cross_realm (scope).',
   ac_BELONGS_TO.family = 'ownership',
   ac_BELONGS_TO.scope = 'cross_realm',
   ac_BELONGS_TO.cardinality = 'many_to_one',
@@ -933,7 +933,7 @@ ON CREATE SET
   ac_BELONGS_TO.created_at = datetime()
 ON MATCH SET
   ac_BELONGS_TO.display_name = 'Belongs To',
-  ac_BELONGS_TO.llm_context = 'Links Entity to its semantic category (EntityCategory). Replaces the former `type` property with a proper graph relationship. Categories answer: WHAT? (THING, FEATURE, TOOL), HOW? (ACTION, GUIDE), WHY? (USE_CASE), WHO? (INDUSTRY), WHERE? (MEDIUM), ABSTRACT (CONCEPT), EXTERNAL (BRAND, INTEGRATION). Use: MATCH (e:Entity)-[:BELONGS_TO]->(c:EntityCategory)',
+  ac_BELONGS_TO.llm_context = 'USE: when categorizing entities or querying by category. TRIGGERS: entity category, entity type, what is entity, categorization. NOT: entity content (use HAS_CONTENT), entity hierarchy (use HAS_CHILD). RELATES: Entity (source), EntityCategory (target), cross_realm (scope).',
   ac_BELONGS_TO.family = 'ownership',
   ac_BELONGS_TO.scope = 'cross_realm',
   ac_BELONGS_TO.cardinality = 'many_to_one',
@@ -947,7 +947,7 @@ ON MATCH SET
 MERGE (ac_BELONGS_TO_ORG:Schema:ArcClass {key: 'BELONGS_TO_ORG'})
 ON CREATE SET
   ac_BELONGS_TO_ORG.display_name = 'Belongs To Org',
-  ac_BELONGS_TO_ORG.llm_context = 'Project belongs to organization. Use to find org-level context for a project.',
+  ac_BELONGS_TO_ORG.llm_context = 'USE: when loading organization context for a project. TRIGGERS: project org, organization settings, org-level config. NOT: project content (use HAS_PAGE), project entities (use HAS_ENTITY). RELATES: Project (source), OrgConfig (target).',
   ac_BELONGS_TO_ORG.family = 'ownership',
   ac_BELONGS_TO_ORG.scope = 'intra_realm',
   ac_BELONGS_TO_ORG.cardinality = 'many_to_one',
@@ -959,7 +959,7 @@ ON CREATE SET
   ac_BELONGS_TO_ORG.created_at = datetime()
 ON MATCH SET
   ac_BELONGS_TO_ORG.display_name = 'Belongs To Org',
-  ac_BELONGS_TO_ORG.llm_context = 'Project belongs to organization. Use to find org-level context for a project.',
+  ac_BELONGS_TO_ORG.llm_context = 'USE: when loading organization context for a project. TRIGGERS: project org, organization settings, org-level config. NOT: project content (use HAS_PAGE), project entities (use HAS_ENTITY). RELATES: Project (source), OrgConfig (target).',
   ac_BELONGS_TO_ORG.family = 'ownership',
   ac_BELONGS_TO_ORG.scope = 'intra_realm',
   ac_BELONGS_TO_ORG.cardinality = 'many_to_one',
@@ -973,7 +973,7 @@ ON MATCH SET
 MERGE (ac_BELONGS_TO_PROJECT_CONTENT:Schema:ArcClass {key: 'BELONGS_TO_PROJECT_CONTENT'})
 ON CREATE SET
   ac_BELONGS_TO_PROJECT_CONTENT.display_name = 'Belongs To Project Content',
-  ac_BELONGS_TO_PROJECT_CONTENT.llm_context = 'Locale-aligned: PageGenerated (fr-FR) → ProjectContent (fr-FR). Provides voice, tagline, CTAs.',
+  ac_BELONGS_TO_PROJECT_CONTENT.llm_context = 'USE: when loading project-level content for page generation. TRIGGERS: project content, locale voice, project tagline, project CTAs. NOT: project config (use BELONGS_TO_ORG), page structure (use HAS_PAGE). RELATES: PageGenerated (source), ProjectContent (target), locale-aligned.',
   ac_BELONGS_TO_PROJECT_CONTENT.family = 'ownership',
   ac_BELONGS_TO_PROJECT_CONTENT.scope = 'intra_realm',
   ac_BELONGS_TO_PROJECT_CONTENT.cardinality = 'many_to_one',
@@ -985,7 +985,7 @@ ON CREATE SET
   ac_BELONGS_TO_PROJECT_CONTENT.created_at = datetime()
 ON MATCH SET
   ac_BELONGS_TO_PROJECT_CONTENT.display_name = 'Belongs To Project Content',
-  ac_BELONGS_TO_PROJECT_CONTENT.llm_context = 'Locale-aligned: PageGenerated (fr-FR) → ProjectContent (fr-FR). Provides voice, tagline, CTAs.',
+  ac_BELONGS_TO_PROJECT_CONTENT.llm_context = 'USE: when loading project-level content for page generation. TRIGGERS: project content, locale voice, project tagline, project CTAs. NOT: project config (use BELONGS_TO_ORG), page structure (use HAS_PAGE). RELATES: PageGenerated (source), ProjectContent (target), locale-aligned.',
   ac_BELONGS_TO_PROJECT_CONTENT.family = 'ownership',
   ac_BELONGS_TO_PROJECT_CONTENT.scope = 'intra_realm',
   ac_BELONGS_TO_PROJECT_CONTENT.cardinality = 'many_to_one',
@@ -999,7 +999,7 @@ ON MATCH SET
 MERGE (ac_BLOCK_OF:Schema:ArcClass {key: 'BLOCK_OF'})
 ON CREATE SET
   ac_BLOCK_OF.display_name = 'Block Of',
-  ac_BLOCK_OF.llm_context = 'Inverse of HAS_BLOCK — block points to its page.',
+  ac_BLOCK_OF.llm_context = 'USE: when finding which page owns a block. TRIGGERS: block owner, block page, which page, parent page. NOT: block content (use HAS_INSTRUCTION), block siblings (use HAS_BLOCK). RELATES: Block (source), Page (target), HAS_BLOCK (inverse).',
   ac_BLOCK_OF.family = 'ownership',
   ac_BLOCK_OF.scope = 'intra_realm',
   ac_BLOCK_OF.cardinality = 'many_to_one',
@@ -1011,7 +1011,7 @@ ON CREATE SET
   ac_BLOCK_OF.created_at = datetime()
 ON MATCH SET
   ac_BLOCK_OF.display_name = 'Block Of',
-  ac_BLOCK_OF.llm_context = 'Inverse of HAS_BLOCK — block points to its page.',
+  ac_BLOCK_OF.llm_context = 'USE: when finding which page owns a block. TRIGGERS: block owner, block page, which page, parent page. NOT: block content (use HAS_INSTRUCTION), block siblings (use HAS_BLOCK). RELATES: Block (source), Page (target), HAS_BLOCK (inverse).',
   ac_BLOCK_OF.family = 'ownership',
   ac_BLOCK_OF.scope = 'intra_realm',
   ac_BLOCK_OF.cardinality = 'many_to_one',
@@ -1025,7 +1025,7 @@ ON MATCH SET
 MERGE (ac_BRANCH_OF:Schema:ArcClass {key: 'BRANCH_OF'})
 ON CREATE SET
   ac_BRANCH_OF.display_name = 'Branch Of',
-  ac_BRANCH_OF.llm_context = 'LanguageBranch belongs to exactly one LanguageFamily (ISO 639-5). Use to find related languages: MATCH (b:LanguageBranch)-[:BRANCH_OF]->(f:LanguageFamily) Example: Romance (roa) -[:BRANCH_OF]-> Indo-European (ine)',
+  ac_BRANCH_OF.llm_context = 'USE: when finding language family for a branch. TRIGGERS: language family, language branch, related languages, ISO 639-5. NOT: branch children (use HAS_BRANCH), language locales. RELATES: LanguageBranch (source), LanguageFamily (target), HAS_BRANCH (inverse).',
   ac_BRANCH_OF.family = 'ownership',
   ac_BRANCH_OF.scope = 'intra_realm',
   ac_BRANCH_OF.cardinality = 'many_to_one',
@@ -1037,7 +1037,7 @@ ON CREATE SET
   ac_BRANCH_OF.created_at = datetime()
 ON MATCH SET
   ac_BRANCH_OF.display_name = 'Branch Of',
-  ac_BRANCH_OF.llm_context = 'LanguageBranch belongs to exactly one LanguageFamily (ISO 639-5). Use to find related languages: MATCH (b:LanguageBranch)-[:BRANCH_OF]->(f:LanguageFamily) Example: Romance (roa) -[:BRANCH_OF]-> Indo-European (ine)',
+  ac_BRANCH_OF.llm_context = 'USE: when finding language family for a branch. TRIGGERS: language family, language branch, related languages, ISO 639-5. NOT: branch children (use HAS_BRANCH), language locales. RELATES: LanguageBranch (source), LanguageFamily (target), HAS_BRANCH (inverse).',
   ac_BRANCH_OF.family = 'ownership',
   ac_BRANCH_OF.scope = 'intra_realm',
   ac_BRANCH_OF.cardinality = 'many_to_one',
@@ -1103,7 +1103,7 @@ ON MATCH SET
 MERGE (ac_CLUSTER_OF:Schema:ArcClass {key: 'CLUSTER_OF'})
 ON CREATE SET
   ac_CLUSTER_OF.display_name = 'Cluster Of',
-  ac_CLUSTER_OF.llm_context = 'PopulationSubCluster belongs to exactly one PopulationCluster. Use to find related populations: MATCH (ps:PopulationSubCluster)-[:CLUSTER_OF]->(pc:PopulationCluster) Example: Northern European -[:CLUSTER_OF]-> West Eurasian',
+  ac_CLUSTER_OF.llm_context = 'USE: when finding population cluster for a sub-cluster. TRIGGERS: population cluster, genetic group, related populations. NOT: sub-cluster children (use HAS_SUBCLUSTER), geographic regions. RELATES: PopulationSubCluster (source), PopulationCluster (target), HAS_SUBCLUSTER (inverse).',
   ac_CLUSTER_OF.family = 'ownership',
   ac_CLUSTER_OF.scope = 'intra_realm',
   ac_CLUSTER_OF.cardinality = 'many_to_one',
@@ -1115,7 +1115,7 @@ ON CREATE SET
   ac_CLUSTER_OF.created_at = datetime()
 ON MATCH SET
   ac_CLUSTER_OF.display_name = 'Cluster Of',
-  ac_CLUSTER_OF.llm_context = 'PopulationSubCluster belongs to exactly one PopulationCluster. Use to find related populations: MATCH (ps:PopulationSubCluster)-[:CLUSTER_OF]->(pc:PopulationCluster) Example: Northern European -[:CLUSTER_OF]-> West Eurasian',
+  ac_CLUSTER_OF.llm_context = 'USE: when finding population cluster for a sub-cluster. TRIGGERS: population cluster, genetic group, related populations. NOT: sub-cluster children (use HAS_SUBCLUSTER), geographic regions. RELATES: PopulationSubCluster (source), PopulationCluster (target), HAS_SUBCLUSTER (inverse).',
   ac_CLUSTER_OF.family = 'ownership',
   ac_CLUSTER_OF.scope = 'intra_realm',
   ac_CLUSTER_OF.cardinality = 'many_to_one',
@@ -1129,7 +1129,7 @@ ON MATCH SET
 MERGE (ac_CONTAINS_AUDIENCE_TRAIT:Schema:ArcClass {key: 'CONTAINS_AUDIENCE_TRAIT'})
 ON CREATE SET
   ac_CONTAINS_AUDIENCE_TRAIT.display_name = 'Contains Audience Trait',
-  ac_CONTAINS_AUDIENCE_TRAIT.llm_context = 'AudienceSet contains AudienceTrait atoms. Use to traverse from set to individual audience traits.',
+  ac_CONTAINS_AUDIENCE_TRAIT.llm_context = 'USE: when loading individual audience traits from an audience set. TRIGGERS: audience atoms, user traits, demographics, target audience. NOT: audience set container (use HAS_AUDIENCE), personas. RELATES: AudienceSet (source), AudienceTrait (target).',
   ac_CONTAINS_AUDIENCE_TRAIT.family = 'ownership',
   ac_CONTAINS_AUDIENCE_TRAIT.scope = 'intra_realm',
   ac_CONTAINS_AUDIENCE_TRAIT.cardinality = 'one_to_many',
@@ -1141,7 +1141,7 @@ ON CREATE SET
   ac_CONTAINS_AUDIENCE_TRAIT.created_at = datetime()
 ON MATCH SET
   ac_CONTAINS_AUDIENCE_TRAIT.display_name = 'Contains Audience Trait',
-  ac_CONTAINS_AUDIENCE_TRAIT.llm_context = 'AudienceSet contains AudienceTrait atoms. Use to traverse from set to individual audience traits.',
+  ac_CONTAINS_AUDIENCE_TRAIT.llm_context = 'USE: when loading individual audience traits from an audience set. TRIGGERS: audience atoms, user traits, demographics, target audience. NOT: audience set container (use HAS_AUDIENCE), personas. RELATES: AudienceSet (source), AudienceTrait (target).',
   ac_CONTAINS_AUDIENCE_TRAIT.family = 'ownership',
   ac_CONTAINS_AUDIENCE_TRAIT.scope = 'intra_realm',
   ac_CONTAINS_AUDIENCE_TRAIT.cardinality = 'one_to_many',
@@ -1155,7 +1155,7 @@ ON MATCH SET
 MERGE (ac_CONTAINS_CULTURE_REF:Schema:ArcClass {key: 'CONTAINS_CULTURE_REF'})
 ON CREATE SET
   ac_CONTAINS_CULTURE_REF.display_name = 'Contains Culture Ref',
-  ac_CONTAINS_CULTURE_REF.llm_context = 'CultureSet contains CultureRef atoms. Use to traverse from set to individual culture references.',
+  ac_CONTAINS_CULTURE_REF.llm_context = 'USE: when loading individual culture references from a culture set. TRIGGERS: culture atoms, cultural references, locale culture, traditions. NOT: culture set container (use HAS_CULTURE_SET), culture config (use HAS_CULTURE). RELATES: CultureSet (source), CultureRef (target).',
   ac_CONTAINS_CULTURE_REF.family = 'ownership',
   ac_CONTAINS_CULTURE_REF.scope = 'intra_realm',
   ac_CONTAINS_CULTURE_REF.cardinality = 'one_to_many',
@@ -1167,7 +1167,7 @@ ON CREATE SET
   ac_CONTAINS_CULTURE_REF.created_at = datetime()
 ON MATCH SET
   ac_CONTAINS_CULTURE_REF.display_name = 'Contains Culture Ref',
-  ac_CONTAINS_CULTURE_REF.llm_context = 'CultureSet contains CultureRef atoms. Use to traverse from set to individual culture references.',
+  ac_CONTAINS_CULTURE_REF.llm_context = 'USE: when loading individual culture references from a culture set. TRIGGERS: culture atoms, cultural references, locale culture, traditions. NOT: culture set container (use HAS_CULTURE_SET), culture config (use HAS_CULTURE). RELATES: CultureSet (source), CultureRef (target).',
   ac_CONTAINS_CULTURE_REF.family = 'ownership',
   ac_CONTAINS_CULTURE_REF.scope = 'intra_realm',
   ac_CONTAINS_CULTURE_REF.cardinality = 'one_to_many',
@@ -1181,7 +1181,7 @@ ON MATCH SET
 MERGE (ac_CONTAINS_EXPRESSION:Schema:ArcClass {key: 'CONTAINS_EXPRESSION'})
 ON CREATE SET
   ac_CONTAINS_EXPRESSION.display_name = 'Contains Expression',
-  ac_CONTAINS_EXPRESSION.llm_context = 'ExpressionSet contains Expression atoms. Use to traverse from set to individual expressions.',
+  ac_CONTAINS_EXPRESSION.llm_context = 'USE: when loading individual expressions from an expression set. TRIGGERS: expression atoms, idioms, phrases, locale expressions. NOT: expression set container (use HAS_EXPRESSIONS), patterns. RELATES: ExpressionSet (source), Expression (target).',
   ac_CONTAINS_EXPRESSION.family = 'ownership',
   ac_CONTAINS_EXPRESSION.scope = 'intra_realm',
   ac_CONTAINS_EXPRESSION.cardinality = 'one_to_many',
@@ -1193,7 +1193,7 @@ ON CREATE SET
   ac_CONTAINS_EXPRESSION.created_at = datetime()
 ON MATCH SET
   ac_CONTAINS_EXPRESSION.display_name = 'Contains Expression',
-  ac_CONTAINS_EXPRESSION.llm_context = 'ExpressionSet contains Expression atoms. Use to traverse from set to individual expressions.',
+  ac_CONTAINS_EXPRESSION.llm_context = 'USE: when loading individual expressions from an expression set. TRIGGERS: expression atoms, idioms, phrases, locale expressions. NOT: expression set container (use HAS_EXPRESSIONS), patterns. RELATES: ExpressionSet (source), Expression (target).',
   ac_CONTAINS_EXPRESSION.family = 'ownership',
   ac_CONTAINS_EXPRESSION.scope = 'intra_realm',
   ac_CONTAINS_EXPRESSION.cardinality = 'one_to_many',
@@ -1207,7 +1207,7 @@ ON MATCH SET
 MERGE (ac_CONTAINS_GEO_QUERY:Schema:ArcClass {key: 'CONTAINS_GEO_QUERY'})
 ON CREATE SET
   ac_CONTAINS_GEO_QUERY.display_name = 'Contains Geo Query',
-  ac_CONTAINS_GEO_QUERY.llm_context = 'GEOQuerySet contains its GEOQuery atoms. Type-constrained: only GEOQuerySet can use this arc. Pattern: (GEOQuerySet)-[:CONTAINS_GEO_QUERY]->(GEOQuery) v11.4: New arc for container-atom relationship.',
+  ac_CONTAINS_GEO_QUERY.llm_context = 'USE: when loading individual GEO queries from a query set. TRIGGERS: geo queries, AI search queries, GEO atoms, query atoms. NOT: query set container (use HAS_GEO_QUERIES), GEO answers. RELATES: GEOQuerySet (source), GEOQuery (target).',
   ac_CONTAINS_GEO_QUERY.family = 'ownership',
   ac_CONTAINS_GEO_QUERY.scope = 'intra_realm',
   ac_CONTAINS_GEO_QUERY.cardinality = 'one_to_many',
@@ -1219,7 +1219,7 @@ ON CREATE SET
   ac_CONTAINS_GEO_QUERY.created_at = datetime()
 ON MATCH SET
   ac_CONTAINS_GEO_QUERY.display_name = 'Contains Geo Query',
-  ac_CONTAINS_GEO_QUERY.llm_context = 'GEOQuerySet contains its GEOQuery atoms. Type-constrained: only GEOQuerySet can use this arc. Pattern: (GEOQuerySet)-[:CONTAINS_GEO_QUERY]->(GEOQuery) v11.4: New arc for container-atom relationship.',
+  ac_CONTAINS_GEO_QUERY.llm_context = 'USE: when loading individual GEO queries from a query set. TRIGGERS: geo queries, AI search queries, GEO atoms, query atoms. NOT: query set container (use HAS_GEO_QUERIES), GEO answers. RELATES: GEOQuerySet (source), GEOQuery (target).',
   ac_CONTAINS_GEO_QUERY.family = 'ownership',
   ac_CONTAINS_GEO_QUERY.scope = 'intra_realm',
   ac_CONTAINS_GEO_QUERY.cardinality = 'one_to_many',
@@ -1233,7 +1233,7 @@ ON MATCH SET
 MERGE (ac_CONTAINS_PATTERN:Schema:ArcClass {key: 'CONTAINS_PATTERN'})
 ON CREATE SET
   ac_CONTAINS_PATTERN.display_name = 'Contains Pattern',
-  ac_CONTAINS_PATTERN.llm_context = 'PatternSet contains Pattern atoms. Use to traverse from set to individual patterns.',
+  ac_CONTAINS_PATTERN.llm_context = 'USE: when loading individual patterns from a pattern set. TRIGGERS: pattern atoms, content templates, CTA patterns, headline templates. NOT: pattern set container (use HAS_PATTERNS), expressions. RELATES: PatternSet (source), Pattern (target).',
   ac_CONTAINS_PATTERN.family = 'ownership',
   ac_CONTAINS_PATTERN.scope = 'intra_realm',
   ac_CONTAINS_PATTERN.cardinality = 'one_to_many',
@@ -1245,7 +1245,7 @@ ON CREATE SET
   ac_CONTAINS_PATTERN.created_at = datetime()
 ON MATCH SET
   ac_CONTAINS_PATTERN.display_name = 'Contains Pattern',
-  ac_CONTAINS_PATTERN.llm_context = 'PatternSet contains Pattern atoms. Use to traverse from set to individual patterns.',
+  ac_CONTAINS_PATTERN.llm_context = 'USE: when loading individual patterns from a pattern set. TRIGGERS: pattern atoms, content templates, CTA patterns, headline templates. NOT: pattern set container (use HAS_PATTERNS), expressions. RELATES: PatternSet (source), Pattern (target).',
   ac_CONTAINS_PATTERN.family = 'ownership',
   ac_CONTAINS_PATTERN.scope = 'intra_realm',
   ac_CONTAINS_PATTERN.cardinality = 'one_to_many',
@@ -1259,7 +1259,7 @@ ON MATCH SET
 MERGE (ac_CONTAINS_SEO_KEYWORD:Schema:ArcClass {key: 'CONTAINS_SEO_KEYWORD'})
 ON CREATE SET
   ac_CONTAINS_SEO_KEYWORD.display_name = 'Contains Seo Keyword',
-  ac_CONTAINS_SEO_KEYWORD.llm_context = 'SEOKeywordSet contains SEOKeyword atoms. Use to traverse from set to individual keywords.',
+  ac_CONTAINS_SEO_KEYWORD.llm_context = 'USE: when loading individual SEO keywords from a keyword set. TRIGGERS: seo keywords, keyword atoms, search terms, ranking keywords. NOT: keyword set container (use HAS_SEO_KEYWORDS), keyword metrics. RELATES: SEOKeywordSet (source), SEOKeyword (target).',
   ac_CONTAINS_SEO_KEYWORD.family = 'ownership',
   ac_CONTAINS_SEO_KEYWORD.scope = 'intra_realm',
   ac_CONTAINS_SEO_KEYWORD.cardinality = 'one_to_many',
@@ -1271,7 +1271,7 @@ ON CREATE SET
   ac_CONTAINS_SEO_KEYWORD.created_at = datetime()
 ON MATCH SET
   ac_CONTAINS_SEO_KEYWORD.display_name = 'Contains Seo Keyword',
-  ac_CONTAINS_SEO_KEYWORD.llm_context = 'SEOKeywordSet contains SEOKeyword atoms. Use to traverse from set to individual keywords.',
+  ac_CONTAINS_SEO_KEYWORD.llm_context = 'USE: when loading individual SEO keywords from a keyword set. TRIGGERS: seo keywords, keyword atoms, search terms, ranking keywords. NOT: keyword set container (use HAS_SEO_KEYWORDS), keyword metrics. RELATES: SEOKeywordSet (source), SEOKeyword (target).',
   ac_CONTAINS_SEO_KEYWORD.family = 'ownership',
   ac_CONTAINS_SEO_KEYWORD.scope = 'intra_realm',
   ac_CONTAINS_SEO_KEYWORD.cardinality = 'one_to_many',
@@ -1285,7 +1285,7 @@ ON MATCH SET
 MERGE (ac_CONTAINS_TABOO:Schema:ArcClass {key: 'CONTAINS_TABOO'})
 ON CREATE SET
   ac_CONTAINS_TABOO.display_name = 'Contains Taboo',
-  ac_CONTAINS_TABOO.llm_context = 'TabooSet contains Taboo atoms. Use to traverse from set to individual taboos.',
+  ac_CONTAINS_TABOO.llm_context = 'USE: when loading individual taboos from a taboo set. TRIGGERS: taboo atoms, forbidden content, cultural restrictions, avoid topics. NOT: taboo set container (use HAS_TABOOS), culture config. RELATES: TabooSet (source), Taboo (target).',
   ac_CONTAINS_TABOO.family = 'ownership',
   ac_CONTAINS_TABOO.scope = 'intra_realm',
   ac_CONTAINS_TABOO.cardinality = 'one_to_many',
@@ -1297,7 +1297,7 @@ ON CREATE SET
   ac_CONTAINS_TABOO.created_at = datetime()
 ON MATCH SET
   ac_CONTAINS_TABOO.display_name = 'Contains Taboo',
-  ac_CONTAINS_TABOO.llm_context = 'TabooSet contains Taboo atoms. Use to traverse from set to individual taboos.',
+  ac_CONTAINS_TABOO.llm_context = 'USE: when loading individual taboos from a taboo set. TRIGGERS: taboo atoms, forbidden content, cultural restrictions, avoid topics. NOT: taboo set container (use HAS_TABOOS), culture config. RELATES: TabooSet (source), Taboo (target).',
   ac_CONTAINS_TABOO.family = 'ownership',
   ac_CONTAINS_TABOO.scope = 'intra_realm',
   ac_CONTAINS_TABOO.cardinality = 'one_to_many',
@@ -1311,7 +1311,7 @@ ON MATCH SET
 MERGE (ac_CONTAINS_TERM:Schema:ArcClass {key: 'CONTAINS_TERM'})
 ON CREATE SET
   ac_CONTAINS_TERM.display_name = 'Contains Term',
-  ac_CONTAINS_TERM.llm_context = 'TermSet contains Term atoms. Use to traverse from set to individual terms.',
+  ac_CONTAINS_TERM.llm_context = 'USE: when loading individual terms from a term set. TRIGGERS: term atoms, glossary entries, domain terms, vocabulary items. NOT: term set container (use HAS_TERMS), locale-level terminology. RELATES: TermSet (source), Term (target).',
   ac_CONTAINS_TERM.family = 'ownership',
   ac_CONTAINS_TERM.scope = 'intra_realm',
   ac_CONTAINS_TERM.cardinality = 'one_to_many',
@@ -1323,7 +1323,7 @@ ON CREATE SET
   ac_CONTAINS_TERM.created_at = datetime()
 ON MATCH SET
   ac_CONTAINS_TERM.display_name = 'Contains Term',
-  ac_CONTAINS_TERM.llm_context = 'TermSet contains Term atoms. Use to traverse from set to individual terms.',
+  ac_CONTAINS_TERM.llm_context = 'USE: when loading individual terms from a term set. TRIGGERS: term atoms, glossary entries, domain terms, vocabulary items. NOT: term set container (use HAS_TERMS), locale-level terminology. RELATES: TermSet (source), Term (target).',
   ac_CONTAINS_TERM.family = 'ownership',
   ac_CONTAINS_TERM.scope = 'intra_realm',
   ac_CONTAINS_TERM.cardinality = 'one_to_many',
@@ -1337,7 +1337,7 @@ ON MATCH SET
 MERGE (ac_DEFAULT_LOCALE:Schema:ArcClass {key: 'DEFAULT_LOCALE'})
 ON CREATE SET
   ac_DEFAULT_LOCALE.display_name = 'Default Locale',
-  ac_DEFAULT_LOCALE.llm_context = 'Exactly one per project — the primary/fallback locale.',
+  ac_DEFAULT_LOCALE.llm_context = 'USE: when loading primary locale for fallback content. TRIGGERS: default locale, primary locale, fallback language, base locale. NOT: all supported locales (use SUPPORTS_LOCALE), locale config. RELATES: Project (source), Locale (target), cross_realm (scope).',
   ac_DEFAULT_LOCALE.family = 'ownership',
   ac_DEFAULT_LOCALE.scope = 'cross_realm',
   ac_DEFAULT_LOCALE.cardinality = 'many_to_one',
@@ -1349,7 +1349,7 @@ ON CREATE SET
   ac_DEFAULT_LOCALE.created_at = datetime()
 ON MATCH SET
   ac_DEFAULT_LOCALE.display_name = 'Default Locale',
-  ac_DEFAULT_LOCALE.llm_context = 'Exactly one per project — the primary/fallback locale.',
+  ac_DEFAULT_LOCALE.llm_context = 'USE: when loading primary locale for fallback content. TRIGGERS: default locale, primary locale, fallback language, base locale. NOT: all supported locales (use SUPPORTS_LOCALE), locale config. RELATES: Project (source), Locale (target), cross_realm (scope).',
   ac_DEFAULT_LOCALE.family = 'ownership',
   ac_DEFAULT_LOCALE.scope = 'cross_realm',
   ac_DEFAULT_LOCALE.cardinality = 'many_to_one',
@@ -1415,7 +1415,7 @@ ON MATCH SET
 MERGE (ac_HAS_ADAPTATION:Schema:ArcClass {key: 'HAS_ADAPTATION'})
 ON CREATE SET
   ac_HAS_ADAPTATION.display_name = 'Has Adaptation',
-  ac_HAS_ADAPTATION.llm_context = 'Locale has exactly one adaptation configuration.',
+  ac_HAS_ADAPTATION.llm_context = 'USE: when loading cultural adaptation rules for a locale. TRIGGERS: locale adaptation, cultural adaptation, market adaptation, localization. NOT: locale culture (use HAS_CULTURE), locale style (use HAS_STYLE). RELATES: Locale (source), Adaptation (target), 1:1 cardinality.',
   ac_HAS_ADAPTATION.family = 'ownership',
   ac_HAS_ADAPTATION.scope = 'intra_realm',
   ac_HAS_ADAPTATION.cardinality = 'one_to_one',
@@ -1427,7 +1427,7 @@ ON CREATE SET
   ac_HAS_ADAPTATION.created_at = datetime()
 ON MATCH SET
   ac_HAS_ADAPTATION.display_name = 'Has Adaptation',
-  ac_HAS_ADAPTATION.llm_context = 'Locale has exactly one adaptation configuration.',
+  ac_HAS_ADAPTATION.llm_context = 'USE: when loading cultural adaptation rules for a locale. TRIGGERS: locale adaptation, cultural adaptation, market adaptation, localization. NOT: locale culture (use HAS_CULTURE), locale style (use HAS_STYLE). RELATES: Locale (source), Adaptation (target), 1:1 cardinality.',
   ac_HAS_ADAPTATION.family = 'ownership',
   ac_HAS_ADAPTATION.scope = 'intra_realm',
   ac_HAS_ADAPTATION.cardinality = 'one_to_one',
@@ -1441,7 +1441,7 @@ ON MATCH SET
 MERGE (ac_HAS_AUDIENCE:Schema:ArcClass {key: 'HAS_AUDIENCE'})
 ON CREATE SET
   ac_HAS_AUDIENCE.display_name = 'Has Audience',
-  ac_HAS_AUDIENCE.llm_context = 'Locale has multiple audience sets, one per segment.',
+  ac_HAS_AUDIENCE.llm_context = 'USE: when loading audience segments for a locale. TRIGGERS: locale audience, audience segments, B2B B2C, target market. NOT: individual traits (use CONTAINS_AUDIENCE_TRAIT), personas. RELATES: Locale (source), AudienceSet (target), segment (property).',
   ac_HAS_AUDIENCE.family = 'ownership',
   ac_HAS_AUDIENCE.scope = 'intra_realm',
   ac_HAS_AUDIENCE.cardinality = 'one_to_many',
@@ -1453,7 +1453,7 @@ ON CREATE SET
   ac_HAS_AUDIENCE.created_at = datetime()
 ON MATCH SET
   ac_HAS_AUDIENCE.display_name = 'Has Audience',
-  ac_HAS_AUDIENCE.llm_context = 'Locale has multiple audience sets, one per segment.',
+  ac_HAS_AUDIENCE.llm_context = 'USE: when loading audience segments for a locale. TRIGGERS: locale audience, audience segments, B2B B2C, target market. NOT: individual traits (use CONTAINS_AUDIENCE_TRAIT), personas. RELATES: Locale (source), AudienceSet (target), segment (property).',
   ac_HAS_AUDIENCE.family = 'ownership',
   ac_HAS_AUDIENCE.scope = 'intra_realm',
   ac_HAS_AUDIENCE.cardinality = 'one_to_many',
@@ -1467,7 +1467,7 @@ ON MATCH SET
 MERGE (ac_HAS_BLOCK:Schema:ArcClass {key: 'HAS_BLOCK'})
 ON CREATE SET
   ac_HAS_BLOCK.display_name = 'Has Block',
-  ac_HAS_BLOCK.llm_context = 'Page contains blocks with order property. The order property (1-based) is the source of truth for block sequence. Blocks can be reused across pages with different order values. Use to enumerate blocks for a page: MATCH (p:Page)-[r:HAS_BLOCK]->(b:Block) ORDER BY r.order',
+  ac_HAS_BLOCK.llm_context = 'USE: when loading blocks for a page in render order. TRIGGERS: page blocks, block sequence, content composition, page structure. NOT: block content (use HAS_INSTRUCTION), block schema (use OF_TYPE). RELATES: Page (source), Block (target), BLOCK_OF (inverse), order (property).',
   ac_HAS_BLOCK.family = 'ownership',
   ac_HAS_BLOCK.scope = 'intra_realm',
   ac_HAS_BLOCK.cardinality = 'one_to_many',
@@ -1479,7 +1479,7 @@ ON CREATE SET
   ac_HAS_BLOCK.created_at = datetime()
 ON MATCH SET
   ac_HAS_BLOCK.display_name = 'Has Block',
-  ac_HAS_BLOCK.llm_context = 'Page contains blocks with order property. The order property (1-based) is the source of truth for block sequence. Blocks can be reused across pages with different order values. Use to enumerate blocks for a page: MATCH (p:Page)-[r:HAS_BLOCK]->(b:Block) ORDER BY r.order',
+  ac_HAS_BLOCK.llm_context = 'USE: when loading blocks for a page in render order. TRIGGERS: page blocks, block sequence, content composition, page structure. NOT: block content (use HAS_INSTRUCTION), block schema (use OF_TYPE). RELATES: Page (source), Block (target), BLOCK_OF (inverse), order (property).',
   ac_HAS_BLOCK.family = 'ownership',
   ac_HAS_BLOCK.scope = 'intra_realm',
   ac_HAS_BLOCK.cardinality = 'one_to_many',
@@ -1519,7 +1519,7 @@ ON MATCH SET
 MERGE (ac_HAS_BRAND:Schema:ArcClass {key: 'HAS_BRAND'})
 ON CREATE SET
   ac_HAS_BRAND.display_name = 'Has Brand',
-  ac_HAS_BRAND.llm_context = 'Project has one Brand (optional). Brand defines visual identity, voice, and prompt styles. Use this to get brand context for content generation.',
+  ac_HAS_BRAND.llm_context = 'USE: when loading brand identity for content generation. TRIGGERS: project brand, brand voice, visual identity, content style. NOT: brand design details (use HAS_DESIGN), brand principles (use HAS_PRINCIPLES). RELATES: Project (source), Brand (target), BRAND_OF (inverse).',
   ac_HAS_BRAND.family = 'ownership',
   ac_HAS_BRAND.scope = 'intra_realm',
   ac_HAS_BRAND.cardinality = 'one_to_one',
@@ -1531,7 +1531,7 @@ ON CREATE SET
   ac_HAS_BRAND.created_at = datetime()
 ON MATCH SET
   ac_HAS_BRAND.display_name = 'Has Brand',
-  ac_HAS_BRAND.llm_context = 'Project has one Brand (optional). Brand defines visual identity, voice, and prompt styles. Use this to get brand context for content generation.',
+  ac_HAS_BRAND.llm_context = 'USE: when loading brand identity for content generation. TRIGGERS: project brand, brand voice, visual identity, content style. NOT: brand design details (use HAS_DESIGN), brand principles (use HAS_PRINCIPLES). RELATES: Project (source), Brand (target), BRAND_OF (inverse).',
   ac_HAS_BRAND.family = 'ownership',
   ac_HAS_BRAND.scope = 'intra_realm',
   ac_HAS_BRAND.cardinality = 'one_to_one',
@@ -1545,7 +1545,7 @@ ON MATCH SET
 MERGE (ac_HAS_CHILD:Schema:ArcClass {key: 'HAS_CHILD'})
 ON CREATE SET
   ac_HAS_CHILD.display_name = 'Has Child',
-  ac_HAS_CHILD.llm_context = 'Entity hierarchy for URL structure (parent/child). URL path = concatenation of slugs: /fr/blog/category/article Use: MATCH path = (root:Entity)-[:HAS_CHILD*]->(leaf:Entity) WARNING: Max depth = 3 (enforced by validation)',
+  ac_HAS_CHILD.llm_context = 'USE: when building entity hierarchies for URL structure. TRIGGERS: entity hierarchy, parent child, URL path, nested entities. NOT: entity content (use HAS_CONTENT), entity category (use BELONGS_TO). RELATES: Entity (source), Entity (target), CHILD_OF (inverse), max_depth=3.',
   ac_HAS_CHILD.family = 'ownership',
   ac_HAS_CHILD.scope = 'intra_realm',
   ac_HAS_CHILD.cardinality = 'many_to_many',
@@ -1557,7 +1557,7 @@ ON CREATE SET
   ac_HAS_CHILD.created_at = datetime()
 ON MATCH SET
   ac_HAS_CHILD.display_name = 'Has Child',
-  ac_HAS_CHILD.llm_context = 'Entity hierarchy for URL structure (parent/child). URL path = concatenation of slugs: /fr/blog/category/article Use: MATCH path = (root:Entity)-[:HAS_CHILD*]->(leaf:Entity) WARNING: Max depth = 3 (enforced by validation)',
+  ac_HAS_CHILD.llm_context = 'USE: when building entity hierarchies for URL structure. TRIGGERS: entity hierarchy, parent child, URL path, nested entities. NOT: entity content (use HAS_CONTENT), entity category (use BELONGS_TO). RELATES: Entity (source), Entity (target), CHILD_OF (inverse), max_depth=3.',
   ac_HAS_CHILD.family = 'ownership',
   ac_HAS_CHILD.scope = 'intra_realm',
   ac_HAS_CHILD.cardinality = 'many_to_many',
@@ -1571,7 +1571,7 @@ ON MATCH SET
 MERGE (ac_HAS_CULTURE:Schema:ArcClass {key: 'HAS_CULTURE'})
 ON CREATE SET
   ac_HAS_CULTURE.display_name = 'Has Culture',
-  ac_HAS_CULTURE.llm_context = 'Every locale has exactly one culture configuration node.',
+  ac_HAS_CULTURE.llm_context = 'USE: when loading cultural configuration for a locale. TRIGGERS: locale culture, cultural settings, locale config, formality level. NOT: culture atoms (use HAS_CULTURE_SET), expressions (use HAS_EXPRESSIONS). RELATES: Locale (source), Culture (target), 1:1 cardinality.',
   ac_HAS_CULTURE.family = 'ownership',
   ac_HAS_CULTURE.scope = 'intra_realm',
   ac_HAS_CULTURE.cardinality = 'one_to_one',
@@ -1583,7 +1583,7 @@ ON CREATE SET
   ac_HAS_CULTURE.created_at = datetime()
 ON MATCH SET
   ac_HAS_CULTURE.display_name = 'Has Culture',
-  ac_HAS_CULTURE.llm_context = 'Every locale has exactly one culture configuration node.',
+  ac_HAS_CULTURE.llm_context = 'USE: when loading cultural configuration for a locale. TRIGGERS: locale culture, cultural settings, locale config, formality level. NOT: culture atoms (use HAS_CULTURE_SET), expressions (use HAS_EXPRESSIONS). RELATES: Locale (source), Culture (target), 1:1 cardinality.',
   ac_HAS_CULTURE.family = 'ownership',
   ac_HAS_CULTURE.scope = 'intra_realm',
   ac_HAS_CULTURE.cardinality = 'one_to_one',
@@ -1597,7 +1597,7 @@ ON MATCH SET
 MERGE (ac_HAS_CULTURE_SET:Schema:ArcClass {key: 'HAS_CULTURE_SET'})
 ON CREATE SET
   ac_HAS_CULTURE_SET.display_name = 'Has Culture Set',
-  ac_HAS_CULTURE_SET.llm_context = 'Locale has multiple culture sets, one per type (values, references, celebrities, calendar).',
+  ac_HAS_CULTURE_SET.llm_context = 'USE: when loading culture atoms for a locale by type. TRIGGERS: culture set, cultural values, cultural references, locale traditions. NOT: culture config (use HAS_CULTURE), individual atoms (use CONTAINS_CULTURE_REF). RELATES: Locale (source), CultureSet (target), type (property).',
   ac_HAS_CULTURE_SET.family = 'ownership',
   ac_HAS_CULTURE_SET.scope = 'intra_realm',
   ac_HAS_CULTURE_SET.cardinality = 'one_to_many',
@@ -1609,7 +1609,7 @@ ON CREATE SET
   ac_HAS_CULTURE_SET.created_at = datetime()
 ON MATCH SET
   ac_HAS_CULTURE_SET.display_name = 'Has Culture Set',
-  ac_HAS_CULTURE_SET.llm_context = 'Locale has multiple culture sets, one per type (values, references, celebrities, calendar).',
+  ac_HAS_CULTURE_SET.llm_context = 'USE: when loading culture atoms for a locale by type. TRIGGERS: culture set, cultural values, cultural references, locale traditions. NOT: culture config (use HAS_CULTURE), individual atoms (use CONTAINS_CULTURE_REF). RELATES: Locale (source), CultureSet (target), type (property).',
   ac_HAS_CULTURE_SET.family = 'ownership',
   ac_HAS_CULTURE_SET.scope = 'intra_realm',
   ac_HAS_CULTURE_SET.cardinality = 'one_to_many',
@@ -1623,7 +1623,7 @@ ON MATCH SET
 MERGE (ac_HAS_DESIGN:Schema:ArcClass {key: 'HAS_DESIGN'})
 ON CREATE SET
   ac_HAS_DESIGN.display_name = 'Has Design',
-  ac_HAS_DESIGN.llm_context = 'Brand has one BrandDesign (visual design system). Contains colors, typography, UI patterns. Use for image generation and visual consistency.',
+  ac_HAS_DESIGN.llm_context = 'USE: when loading visual design for image generation. TRIGGERS: brand design, colors, typography, visual style, UI patterns. NOT: brand voice (use Brand), brand rules (use HAS_PRINCIPLES). RELATES: Brand (source), BrandDesign (target), DESIGN_OF (inverse).',
   ac_HAS_DESIGN.family = 'ownership',
   ac_HAS_DESIGN.scope = 'intra_realm',
   ac_HAS_DESIGN.cardinality = 'one_to_one',
@@ -1635,7 +1635,7 @@ ON CREATE SET
   ac_HAS_DESIGN.created_at = datetime()
 ON MATCH SET
   ac_HAS_DESIGN.display_name = 'Has Design',
-  ac_HAS_DESIGN.llm_context = 'Brand has one BrandDesign (visual design system). Contains colors, typography, UI patterns. Use for image generation and visual consistency.',
+  ac_HAS_DESIGN.llm_context = 'USE: when loading visual design for image generation. TRIGGERS: brand design, colors, typography, visual style, UI patterns. NOT: brand voice (use Brand), brand rules (use HAS_PRINCIPLES). RELATES: Brand (source), BrandDesign (target), DESIGN_OF (inverse).',
   ac_HAS_DESIGN.family = 'ownership',
   ac_HAS_DESIGN.scope = 'intra_realm',
   ac_HAS_DESIGN.cardinality = 'one_to_one',
@@ -1675,7 +1675,7 @@ ON MATCH SET
 MERGE (ac_HAS_EXPRESSIONS:Schema:ArcClass {key: 'HAS_EXPRESSIONS'})
 ON CREATE SET
   ac_HAS_EXPRESSIONS.display_name = 'Has Expressions',
-  ac_HAS_EXPRESSIONS.llm_context = 'Locale has exactly one expression set containing all expressions across registers.',
+  ac_HAS_EXPRESSIONS.llm_context = 'USE: when loading idiomatic expressions for a locale. TRIGGERS: locale expressions, idioms, phrases, locale-specific text. NOT: individual expressions (use CONTAINS_EXPRESSION), terminology (use HAS_TERMS). RELATES: Locale (source), ExpressionSet (target), 1:1 cardinality.',
   ac_HAS_EXPRESSIONS.family = 'ownership',
   ac_HAS_EXPRESSIONS.scope = 'intra_realm',
   ac_HAS_EXPRESSIONS.cardinality = 'one_to_one',
@@ -1687,7 +1687,7 @@ ON CREATE SET
   ac_HAS_EXPRESSIONS.created_at = datetime()
 ON MATCH SET
   ac_HAS_EXPRESSIONS.display_name = 'Has Expressions',
-  ac_HAS_EXPRESSIONS.llm_context = 'Locale has exactly one expression set containing all expressions across registers.',
+  ac_HAS_EXPRESSIONS.llm_context = 'USE: when loading idiomatic expressions for a locale. TRIGGERS: locale expressions, idioms, phrases, locale-specific text. NOT: individual expressions (use CONTAINS_EXPRESSION), terminology (use HAS_TERMS). RELATES: Locale (source), ExpressionSet (target), 1:1 cardinality.',
   ac_HAS_EXPRESSIONS.family = 'ownership',
   ac_HAS_EXPRESSIONS.scope = 'intra_realm',
   ac_HAS_EXPRESSIONS.cardinality = 'one_to_one',
@@ -1701,7 +1701,7 @@ ON MATCH SET
 MERGE (ac_HAS_FORMAT:Schema:ArcClass {key: 'HAS_FORMAT'})
 ON CREATE SET
   ac_HAS_FORMAT.display_name = 'Has Format',
-  ac_HAS_FORMAT.llm_context = 'SEOKeyword has a format classification. 7 format types: standard, question, comparison, preposition, long_tail, brand, local. Pattern: (SEOKeyword)-[:HAS_FORMAT]->(SEOKeywordFormat) v11.4: Replaces type enum property with graph relationship.',
+  ac_HAS_FORMAT.llm_context = 'USE: when categorizing SEO keywords by format type. TRIGGERS: keyword format, keyword type, question keywords, comparison keywords. NOT: keyword metrics (use HAS_METRICS), keyword set (use CONTAINS_SEO_KEYWORD). RELATES: SEOKeyword (source), SEOKeywordFormat (target).',
   ac_HAS_FORMAT.family = 'ownership',
   ac_HAS_FORMAT.scope = 'intra_realm',
   ac_HAS_FORMAT.cardinality = 'many_to_one',
@@ -1713,7 +1713,7 @@ ON CREATE SET
   ac_HAS_FORMAT.created_at = datetime()
 ON MATCH SET
   ac_HAS_FORMAT.display_name = 'Has Format',
-  ac_HAS_FORMAT.llm_context = 'SEOKeyword has a format classification. 7 format types: standard, question, comparison, preposition, long_tail, brand, local. Pattern: (SEOKeyword)-[:HAS_FORMAT]->(SEOKeywordFormat) v11.4: Replaces type enum property with graph relationship.',
+  ac_HAS_FORMAT.llm_context = 'USE: when categorizing SEO keywords by format type. TRIGGERS: keyword format, keyword type, question keywords, comparison keywords. NOT: keyword metrics (use HAS_METRICS), keyword set (use CONTAINS_SEO_KEYWORD). RELATES: SEOKeyword (source), SEOKeywordFormat (target).',
   ac_HAS_FORMAT.family = 'ownership',
   ac_HAS_FORMAT.scope = 'intra_realm',
   ac_HAS_FORMAT.cardinality = 'many_to_one',
@@ -1727,7 +1727,7 @@ ON MATCH SET
 MERGE (ac_HAS_FORMATTING:Schema:ArcClass {key: 'HAS_FORMATTING'})
 ON CREATE SET
   ac_HAS_FORMATTING.display_name = 'Has Formatting',
-  ac_HAS_FORMATTING.llm_context = 'Locale has exactly one formatting configuration.',
+  ac_HAS_FORMATTING.llm_context = 'USE: when loading number/date/currency formatting for a locale. TRIGGERS: locale formatting, number format, date format, currency format. NOT: locale style (use HAS_STYLE), locale culture (use HAS_CULTURE). RELATES: Locale (source), Formatting (target), 1:1 cardinality.',
   ac_HAS_FORMATTING.family = 'ownership',
   ac_HAS_FORMATTING.scope = 'intra_realm',
   ac_HAS_FORMATTING.cardinality = 'one_to_one',
@@ -1739,7 +1739,7 @@ ON CREATE SET
   ac_HAS_FORMATTING.created_at = datetime()
 ON MATCH SET
   ac_HAS_FORMATTING.display_name = 'Has Formatting',
-  ac_HAS_FORMATTING.llm_context = 'Locale has exactly one formatting configuration.',
+  ac_HAS_FORMATTING.llm_context = 'USE: when loading number/date/currency formatting for a locale. TRIGGERS: locale formatting, number format, date format, currency format. NOT: locale style (use HAS_STYLE), locale culture (use HAS_CULTURE). RELATES: Locale (source), Formatting (target), 1:1 cardinality.',
   ac_HAS_FORMATTING.family = 'ownership',
   ac_HAS_FORMATTING.scope = 'intra_realm',
   ac_HAS_FORMATTING.cardinality = 'one_to_one',
@@ -1753,7 +1753,7 @@ ON MATCH SET
 MERGE (ac_HAS_GEO_ANSWERS:Schema:ArcClass {key: 'HAS_GEO_ANSWERS'})
 ON CREATE SET
   ac_HAS_GEO_ANSWERS.display_name = 'Has Geo Answers',
-  ac_HAS_GEO_ANSWERS.llm_context = 'GEOQuery owns its LLM response samples. Each GEOAnswer is an immutable snapshot. Multiple answers per query: different engines, different observation times. Use to analyze how different AI engines respond to the same query. v10.7: New arc for GEO analysis.',
+  ac_HAS_GEO_ANSWERS.llm_context = 'USE: when loading AI engine responses for a GEO query. TRIGGERS: geo answers, AI responses, engine snapshots, visibility analysis. NOT: GEO query itself (use CONTAINS_GEO_QUERY), GEO metrics. RELATES: GEOQuery (source), GEOAnswer (target).',
   ac_HAS_GEO_ANSWERS.family = 'ownership',
   ac_HAS_GEO_ANSWERS.scope = 'intra_realm',
   ac_HAS_GEO_ANSWERS.cardinality = 'one_to_many',
@@ -1765,7 +1765,7 @@ ON CREATE SET
   ac_HAS_GEO_ANSWERS.created_at = datetime()
 ON MATCH SET
   ac_HAS_GEO_ANSWERS.display_name = 'Has Geo Answers',
-  ac_HAS_GEO_ANSWERS.llm_context = 'GEOQuery owns its LLM response samples. Each GEOAnswer is an immutable snapshot. Multiple answers per query: different engines, different observation times. Use to analyze how different AI engines respond to the same query. v10.7: New arc for GEO analysis.',
+  ac_HAS_GEO_ANSWERS.llm_context = 'USE: when loading AI engine responses for a GEO query. TRIGGERS: geo answers, AI responses, engine snapshots, visibility analysis. NOT: GEO query itself (use CONTAINS_GEO_QUERY), GEO metrics. RELATES: GEOQuery (source), GEOAnswer (target).',
   ac_HAS_GEO_ANSWERS.family = 'ownership',
   ac_HAS_GEO_ANSWERS.scope = 'intra_realm',
   ac_HAS_GEO_ANSWERS.cardinality = 'one_to_many',
@@ -1779,7 +1779,7 @@ ON MATCH SET
 MERGE (ac_HAS_GEO_QUERIES:Schema:ArcClass {key: 'HAS_GEO_QUERIES'})
 ON CREATE SET
   ac_HAS_GEO_QUERIES.display_name = 'Has Geo Queries',
-  ac_HAS_GEO_QUERIES.llm_context = 'Locale owns its GEO query set (container). Similar to HAS_TERMS pattern. Traversal: Locale --[:HAS_GEO_QUERIES]--> GEOQuerySet --[:CONTAINS_GEO_QUERY]--> GEOQuery Use to load the container, then traverse to individual GEO queries. v11.4: Updated to container pattern (1 Locale has 1 GEOQuerySet).',
+  ac_HAS_GEO_QUERIES.llm_context = 'USE: when loading GEO query container for a locale. TRIGGERS: locale GEO queries, AI search queries, GEO query set. NOT: individual queries (use CONTAINS_GEO_QUERY), GEO answers. RELATES: Locale (source), GEOQuerySet (target), 1:1 cardinality.',
   ac_HAS_GEO_QUERIES.family = 'ownership',
   ac_HAS_GEO_QUERIES.scope = 'intra_realm',
   ac_HAS_GEO_QUERIES.cardinality = 'one_to_one',
@@ -1791,7 +1791,7 @@ ON CREATE SET
   ac_HAS_GEO_QUERIES.created_at = datetime()
 ON MATCH SET
   ac_HAS_GEO_QUERIES.display_name = 'Has Geo Queries',
-  ac_HAS_GEO_QUERIES.llm_context = 'Locale owns its GEO query set (container). Similar to HAS_TERMS pattern. Traversal: Locale --[:HAS_GEO_QUERIES]--> GEOQuerySet --[:CONTAINS_GEO_QUERY]--> GEOQuery Use to load the container, then traverse to individual GEO queries. v11.4: Updated to container pattern (1 Locale has 1 GEOQuerySet).',
+  ac_HAS_GEO_QUERIES.llm_context = 'USE: when loading GEO query container for a locale. TRIGGERS: locale GEO queries, AI search queries, GEO query set. NOT: individual queries (use CONTAINS_GEO_QUERY), GEO answers. RELATES: Locale (source), GEOQuerySet (target), 1:1 cardinality.',
   ac_HAS_GEO_QUERIES.family = 'ownership',
   ac_HAS_GEO_QUERIES.scope = 'intra_realm',
   ac_HAS_GEO_QUERIES.cardinality = 'one_to_one',
@@ -1805,7 +1805,7 @@ ON MATCH SET
 MERGE (ac_HAS_INSTRUCTION:Schema:ArcClass {key: 'HAS_INSTRUCTION'})
 ON CREATE SET
   ac_HAS_INSTRUCTION.display_name = 'Has Instruction',
-  ac_HAS_INSTRUCTION.llm_context = 'Page owns ordered BlockInstructions (one per block in the page). Block owns its single BlockInstruction (generation instructions). Page use: MATCH (p:Page)-[:HAS_INSTRUCTION]->(bi:BlockInstruction) ORDER BY bi.position Block use: MATCH (b:Block)-[:HAS_INSTRUCTION]->(bi:BlockInstruction)',
+  ac_HAS_INSTRUCTION.llm_context = 'USE: when loading generation instructions for pages or blocks. TRIGGERS: block instruction, generation prompt, LLM instructions, @ references. NOT: block schema (use OF_TYPE), block rules (use HAS_RULES). RELATES: Page/Block (source), BlockInstruction (target), INSTRUCTION_OF (inverse).',
   ac_HAS_INSTRUCTION.family = 'ownership',
   ac_HAS_INSTRUCTION.scope = 'intra_realm',
   ac_HAS_INSTRUCTION.cardinality = 'one_to_many',
@@ -1817,7 +1817,7 @@ ON CREATE SET
   ac_HAS_INSTRUCTION.created_at = datetime()
 ON MATCH SET
   ac_HAS_INSTRUCTION.display_name = 'Has Instruction',
-  ac_HAS_INSTRUCTION.llm_context = 'Page owns ordered BlockInstructions (one per block in the page). Block owns its single BlockInstruction (generation instructions). Page use: MATCH (p:Page)-[:HAS_INSTRUCTION]->(bi:BlockInstruction) ORDER BY bi.position Block use: MATCH (b:Block)-[:HAS_INSTRUCTION]->(bi:BlockInstruction)',
+  ac_HAS_INSTRUCTION.llm_context = 'USE: when loading generation instructions for pages or blocks. TRIGGERS: block instruction, generation prompt, LLM instructions, @ references. NOT: block schema (use OF_TYPE), block rules (use HAS_RULES). RELATES: Page/Block (source), BlockInstruction (target), INSTRUCTION_OF (inverse).',
   ac_HAS_INSTRUCTION.family = 'ownership',
   ac_HAS_INSTRUCTION.scope = 'intra_realm',
   ac_HAS_INSTRUCTION.cardinality = 'one_to_many',
@@ -1831,7 +1831,7 @@ ON MATCH SET
 MERGE (ac_HAS_KEYWORD:Schema:ArcClass {key: 'HAS_KEYWORD'})
 ON CREATE SET
   ac_HAS_KEYWORD.display_name = 'Has Keyword',
-  ac_HAS_KEYWORD.llm_context = 'Entity owns SEOKeywords for search optimization. rank: primary (exactly 1 per Entity, main targeting keyword) or secondary (N per Entity). Page inherits keywords via its [:REPRESENTS] Entity relationship. Use: MATCH (e:Entity)-[r:HAS_KEYWORD {rank: \'primary\'}]->(k:SEOKeyword) For Page keywords: MATCH (p:Page)-[:REPRESENTS]->(e:Entity)-[:HAS_KEYWORD]->(k:SEOKeyword)',
+  ac_HAS_KEYWORD.llm_context = 'USE: when loading SEO keywords for an entity. TRIGGERS: entity keywords, SEO targeting, primary keyword, secondary keywords. NOT: locale keyword sets (use HAS_SEO_KEYWORDS), keyword metrics (use HAS_METRICS). RELATES: Entity (source), SEOKeyword (target), rank (property: primary/secondary).',
   ac_HAS_KEYWORD.family = 'ownership',
   ac_HAS_KEYWORD.scope = 'cross_realm',
   ac_HAS_KEYWORD.cardinality = 'one_to_many',
@@ -1843,7 +1843,7 @@ ON CREATE SET
   ac_HAS_KEYWORD.created_at = datetime()
 ON MATCH SET
   ac_HAS_KEYWORD.display_name = 'Has Keyword',
-  ac_HAS_KEYWORD.llm_context = 'Entity owns SEOKeywords for search optimization. rank: primary (exactly 1 per Entity, main targeting keyword) or secondary (N per Entity). Page inherits keywords via its [:REPRESENTS] Entity relationship. Use: MATCH (e:Entity)-[r:HAS_KEYWORD {rank: \'primary\'}]->(k:SEOKeyword) For Page keywords: MATCH (p:Page)-[:REPRESENTS]->(e:Entity)-[:HAS_KEYWORD]->(k:SEOKeyword)',
+  ac_HAS_KEYWORD.llm_context = 'USE: when loading SEO keywords for an entity. TRIGGERS: entity keywords, SEO targeting, primary keyword, secondary keywords. NOT: locale keyword sets (use HAS_SEO_KEYWORDS), keyword metrics (use HAS_METRICS). RELATES: Entity (source), SEOKeyword (target), rank (property: primary/secondary).',
   ac_HAS_KEYWORD.family = 'ownership',
   ac_HAS_KEYWORD.scope = 'cross_realm',
   ac_HAS_KEYWORD.cardinality = 'one_to_many',
@@ -1857,7 +1857,7 @@ ON MATCH SET
 MERGE (ac_HAS_MARKET:Schema:ArcClass {key: 'HAS_MARKET'})
 ON CREATE SET
   ac_HAS_MARKET.display_name = 'Has Market',
-  ac_HAS_MARKET.llm_context = 'Every locale has exactly one market intelligence configuration node.',
+  ac_HAS_MARKET.llm_context = 'USE: when loading market intelligence config for a locale. TRIGGERS: market config, locale market, market intelligence, business context. NOT: SEO keywords (use HAS_SEO_KEYWORDS), GEO queries (use HAS_GEO_QUERIES). RELATES: Locale (source), Market (target), 1:1 cardinality.',
   ac_HAS_MARKET.family = 'ownership',
   ac_HAS_MARKET.scope = 'intra_realm',
   ac_HAS_MARKET.cardinality = 'one_to_one',
@@ -1869,7 +1869,7 @@ ON CREATE SET
   ac_HAS_MARKET.created_at = datetime()
 ON MATCH SET
   ac_HAS_MARKET.display_name = 'Has Market',
-  ac_HAS_MARKET.llm_context = 'Every locale has exactly one market intelligence configuration node.',
+  ac_HAS_MARKET.llm_context = 'USE: when loading market intelligence config for a locale. TRIGGERS: market config, locale market, market intelligence, business context. NOT: SEO keywords (use HAS_SEO_KEYWORDS), GEO queries (use HAS_GEO_QUERIES). RELATES: Locale (source), Market (target), 1:1 cardinality.',
   ac_HAS_MARKET.family = 'ownership',
   ac_HAS_MARKET.scope = 'intra_realm',
   ac_HAS_MARKET.cardinality = 'one_to_one',
@@ -1909,7 +1909,7 @@ ON MATCH SET
 MERGE (ac_HAS_PATTERNS:Schema:ArcClass {key: 'HAS_PATTERNS'})
 ON CREATE SET
   ac_HAS_PATTERNS.display_name = 'Has Patterns',
-  ac_HAS_PATTERNS.llm_context = 'Locale has multiple pattern sets, one per usage.',
+  ac_HAS_PATTERNS.llm_context = 'USE: when loading content patterns for a locale by usage type. TRIGGERS: locale patterns, content patterns, CTA patterns, headline patterns. NOT: individual patterns (use CONTAINS_PATTERN), expressions (use HAS_EXPRESSIONS). RELATES: Locale (source), PatternSet (target), usage (property).',
   ac_HAS_PATTERNS.family = 'ownership',
   ac_HAS_PATTERNS.scope = 'intra_realm',
   ac_HAS_PATTERNS.cardinality = 'one_to_many',
@@ -1921,7 +1921,7 @@ ON CREATE SET
   ac_HAS_PATTERNS.created_at = datetime()
 ON MATCH SET
   ac_HAS_PATTERNS.display_name = 'Has Patterns',
-  ac_HAS_PATTERNS.llm_context = 'Locale has multiple pattern sets, one per usage.',
+  ac_HAS_PATTERNS.llm_context = 'USE: when loading content patterns for a locale by usage type. TRIGGERS: locale patterns, content patterns, CTA patterns, headline patterns. NOT: individual patterns (use CONTAINS_PATTERN), expressions (use HAS_EXPRESSIONS). RELATES: Locale (source), PatternSet (target), usage (property).',
   ac_HAS_PATTERNS.family = 'ownership',
   ac_HAS_PATTERNS.scope = 'intra_realm',
   ac_HAS_PATTERNS.cardinality = 'one_to_many',
@@ -1935,7 +1935,7 @@ ON MATCH SET
 MERGE (ac_HAS_PRINCIPLES:Schema:ArcClass {key: 'HAS_PRINCIPLES'})
 ON CREATE SET
   ac_HAS_PRINCIPLES.display_name = 'Has Principles',
-  ac_HAS_PRINCIPLES.llm_context = 'Brand has one BrandPrinciples (voice and tone guidelines). Contains voice attributes, writing guidelines, terminology. Use for copywriting and messaging consistency.',
+  ac_HAS_PRINCIPLES.llm_context = 'USE: when loading voice and tone guidelines for copywriting. TRIGGERS: brand principles, voice guidelines, writing rules, terminology. NOT: visual design (use HAS_DESIGN), brand identity (use Brand). RELATES: Brand (source), BrandPrinciples (target), PRINCIPLES_OF (inverse).',
   ac_HAS_PRINCIPLES.family = 'ownership',
   ac_HAS_PRINCIPLES.scope = 'intra_realm',
   ac_HAS_PRINCIPLES.cardinality = 'one_to_one',
@@ -1947,7 +1947,7 @@ ON CREATE SET
   ac_HAS_PRINCIPLES.created_at = datetime()
 ON MATCH SET
   ac_HAS_PRINCIPLES.display_name = 'Has Principles',
-  ac_HAS_PRINCIPLES.llm_context = 'Brand has one BrandPrinciples (voice and tone guidelines). Contains voice attributes, writing guidelines, terminology. Use for copywriting and messaging consistency.',
+  ac_HAS_PRINCIPLES.llm_context = 'USE: when loading voice and tone guidelines for copywriting. TRIGGERS: brand principles, voice guidelines, writing rules, terminology. NOT: visual design (use HAS_DESIGN), brand identity (use Brand). RELATES: Brand (source), BrandPrinciples (target), PRINCIPLES_OF (inverse).',
   ac_HAS_PRINCIPLES.family = 'ownership',
   ac_HAS_PRINCIPLES.scope = 'intra_realm',
   ac_HAS_PRINCIPLES.cardinality = 'one_to_one',
@@ -1987,7 +1987,7 @@ ON MATCH SET
 MERGE (ac_HAS_PROMPT_STYLE:Schema:ArcClass {key: 'HAS_PROMPT_STYLE'})
 ON CREATE SET
   ac_HAS_PROMPT_STYLE.display_name = 'Has Prompt Style',
-  ac_HAS_PROMPT_STYLE.llm_context = 'Brand has multiple PromptStyles (locale/region specific). Each PromptStyle provides LLM hints for a specific market. Use to get culturally appropriate generation context.',
+  ac_HAS_PROMPT_STYLE.llm_context = 'USE: when loading locale-specific LLM generation hints. TRIGGERS: prompt style, locale hints, cultural context, market adaptation. NOT: visual design (use HAS_DESIGN), brand voice (use HAS_PRINCIPLES). RELATES: Brand (source), PromptStyle (target), PROMPT_STYLE_OF (inverse).',
   ac_HAS_PROMPT_STYLE.family = 'ownership',
   ac_HAS_PROMPT_STYLE.scope = 'intra_realm',
   ac_HAS_PROMPT_STYLE.cardinality = 'one_to_many',
@@ -1999,7 +1999,7 @@ ON CREATE SET
   ac_HAS_PROMPT_STYLE.created_at = datetime()
 ON MATCH SET
   ac_HAS_PROMPT_STYLE.display_name = 'Has Prompt Style',
-  ac_HAS_PROMPT_STYLE.llm_context = 'Brand has multiple PromptStyles (locale/region specific). Each PromptStyle provides LLM hints for a specific market. Use to get culturally appropriate generation context.',
+  ac_HAS_PROMPT_STYLE.llm_context = 'USE: when loading locale-specific LLM generation hints. TRIGGERS: prompt style, locale hints, cultural context, market adaptation. NOT: visual design (use HAS_DESIGN), brand voice (use HAS_PRINCIPLES). RELATES: Brand (source), PromptStyle (target), PROMPT_STYLE_OF (inverse).',
   ac_HAS_PROMPT_STYLE.family = 'ownership',
   ac_HAS_PROMPT_STYLE.scope = 'intra_realm',
   ac_HAS_PROMPT_STYLE.cardinality = 'one_to_many',
@@ -2039,7 +2039,7 @@ ON MATCH SET
 MERGE (ac_HAS_RULES:Schema:ArcClass {key: 'HAS_RULES'})
 ON CREATE SET
   ac_HAS_RULES.display_name = 'Has Rules',
-  ac_HAS_RULES.llm_context = 'BlockType defines generation rules templates.',
+  ac_HAS_RULES.llm_context = 'USE: when loading generation rules for a block type. TRIGGERS: block rules, generation rules, field constraints, validation. NOT: block schema (use BlockType), block content (use HAS_INSTRUCTION). RELATES: BlockType (source), BlockRules (target).',
   ac_HAS_RULES.family = 'ownership',
   ac_HAS_RULES.scope = 'intra_realm',
   ac_HAS_RULES.cardinality = 'one_to_many',
@@ -2051,7 +2051,7 @@ ON CREATE SET
   ac_HAS_RULES.created_at = datetime()
 ON MATCH SET
   ac_HAS_RULES.display_name = 'Has Rules',
-  ac_HAS_RULES.llm_context = 'BlockType defines generation rules templates.',
+  ac_HAS_RULES.llm_context = 'USE: when loading generation rules for a block type. TRIGGERS: block rules, generation rules, field constraints, validation. NOT: block schema (use BlockType), block content (use HAS_INSTRUCTION). RELATES: BlockType (source), BlockRules (target).',
   ac_HAS_RULES.family = 'ownership',
   ac_HAS_RULES.scope = 'intra_realm',
   ac_HAS_RULES.cardinality = 'one_to_many',
@@ -2065,7 +2065,7 @@ ON MATCH SET
 MERGE (ac_HAS_SEO_KEYWORDS:Schema:ArcClass {key: 'HAS_SEO_KEYWORDS'})
 ON CREATE SET
   ac_HAS_SEO_KEYWORDS.display_name = 'Has Seo Keywords',
-  ac_HAS_SEO_KEYWORDS.llm_context = 'Locale owns one SEOKeywordSet container. Follows container pattern (ADR-016). Two-hop traversal to reach individual keywords: Locale --[:HAS_SEO_KEYWORDS]--> SEOKeywordSet --[:CONTAINS_SEO_KEYWORD]--> SEOKeyword Use to load all keywords for a locale\'s SEO strategy.',
+  ac_HAS_SEO_KEYWORDS.llm_context = 'USE: when loading SEO keyword container for a locale. TRIGGERS: locale keywords, SEO strategy, keyword research, SEO keyword set. NOT: individual keywords (use CONTAINS_SEO_KEYWORD), entity keywords (use HAS_KEYWORD). RELATES: Locale (source), SEOKeywordSet (target), 1:1 cardinality.',
   ac_HAS_SEO_KEYWORDS.family = 'ownership',
   ac_HAS_SEO_KEYWORDS.scope = 'intra_realm',
   ac_HAS_SEO_KEYWORDS.cardinality = 'one_to_one',
@@ -2077,7 +2077,7 @@ ON CREATE SET
   ac_HAS_SEO_KEYWORDS.created_at = datetime()
 ON MATCH SET
   ac_HAS_SEO_KEYWORDS.display_name = 'Has Seo Keywords',
-  ac_HAS_SEO_KEYWORDS.llm_context = 'Locale owns one SEOKeywordSet container. Follows container pattern (ADR-016). Two-hop traversal to reach individual keywords: Locale --[:HAS_SEO_KEYWORDS]--> SEOKeywordSet --[:CONTAINS_SEO_KEYWORD]--> SEOKeyword Use to load all keywords for a locale\'s SEO strategy.',
+  ac_HAS_SEO_KEYWORDS.llm_context = 'USE: when loading SEO keyword container for a locale. TRIGGERS: locale keywords, SEO strategy, keyword research, SEO keyword set. NOT: individual keywords (use CONTAINS_SEO_KEYWORD), entity keywords (use HAS_KEYWORD). RELATES: Locale (source), SEOKeywordSet (target), 1:1 cardinality.',
   ac_HAS_SEO_KEYWORDS.family = 'ownership',
   ac_HAS_SEO_KEYWORDS.scope = 'intra_realm',
   ac_HAS_SEO_KEYWORDS.cardinality = 'one_to_one',
@@ -2091,7 +2091,7 @@ ON MATCH SET
 MERGE (ac_HAS_SLOT:Schema:ArcClass {key: 'HAS_SLOT'})
 ON CREATE SET
   ac_HAS_SLOT.display_name = 'Has Slot',
-  ac_HAS_SLOT.llm_context = 'Page defines content slot. position_override: optional layout position.',
+  ac_HAS_SLOT.llm_context = 'USE: when loading content slots for page layout. TRIGGERS: content slot, page layout, slot position, dynamic content. NOT: slot content (use FILLS_SLOT), slot constraints (use ACCEPTS_BLOCK_TYPE). RELATES: Page (source), ContentSlot (target), position_override (property).',
   ac_HAS_SLOT.family = 'ownership',
   ac_HAS_SLOT.scope = 'intra_realm',
   ac_HAS_SLOT.cardinality = 'one_to_many',
@@ -2103,7 +2103,7 @@ ON CREATE SET
   ac_HAS_SLOT.created_at = datetime()
 ON MATCH SET
   ac_HAS_SLOT.display_name = 'Has Slot',
-  ac_HAS_SLOT.llm_context = 'Page defines content slot. position_override: optional layout position.',
+  ac_HAS_SLOT.llm_context = 'USE: when loading content slots for page layout. TRIGGERS: content slot, page layout, slot position, dynamic content. NOT: slot content (use FILLS_SLOT), slot constraints (use ACCEPTS_BLOCK_TYPE). RELATES: Page (source), ContentSlot (target), position_override (property).',
   ac_HAS_SLOT.family = 'ownership',
   ac_HAS_SLOT.scope = 'intra_realm',
   ac_HAS_SLOT.cardinality = 'one_to_many',
@@ -2117,7 +2117,7 @@ ON MATCH SET
 MERGE (ac_HAS_SLUGIFICATION:Schema:ArcClass {key: 'HAS_SLUGIFICATION'})
 ON CREATE SET
   ac_HAS_SLUGIFICATION.display_name = 'Has Slugification',
-  ac_HAS_SLUGIFICATION.llm_context = 'Locale has exactly one slugification configuration.',
+  ac_HAS_SLUGIFICATION.llm_context = 'USE: when loading URL slug rules for a locale. TRIGGERS: slugification, URL generation, slug rules, locale URLs, transliteration. NOT: locale formatting (use HAS_FORMATTING), locale style (use HAS_STYLE). RELATES: Locale (source), Slugification (target), 1:1 cardinality.',
   ac_HAS_SLUGIFICATION.family = 'ownership',
   ac_HAS_SLUGIFICATION.scope = 'intra_realm',
   ac_HAS_SLUGIFICATION.cardinality = 'one_to_one',
@@ -2129,7 +2129,7 @@ ON CREATE SET
   ac_HAS_SLUGIFICATION.created_at = datetime()
 ON MATCH SET
   ac_HAS_SLUGIFICATION.display_name = 'Has Slugification',
-  ac_HAS_SLUGIFICATION.llm_context = 'Locale has exactly one slugification configuration.',
+  ac_HAS_SLUGIFICATION.llm_context = 'USE: when loading URL slug rules for a locale. TRIGGERS: slugification, URL generation, slug rules, locale URLs, transliteration. NOT: locale formatting (use HAS_FORMATTING), locale style (use HAS_STYLE). RELATES: Locale (source), Slugification (target), 1:1 cardinality.',
   ac_HAS_SLUGIFICATION.family = 'ownership',
   ac_HAS_SLUGIFICATION.scope = 'intra_realm',
   ac_HAS_SLUGIFICATION.cardinality = 'one_to_one',
@@ -2143,7 +2143,7 @@ ON MATCH SET
 MERGE (ac_HAS_STYLE:Schema:ArcClass {key: 'HAS_STYLE'})
 ON CREATE SET
   ac_HAS_STYLE.display_name = 'Has Style',
-  ac_HAS_STYLE.llm_context = 'Locale has exactly one style configuration.',
+  ac_HAS_STYLE.llm_context = 'USE: when loading writing style preferences for a locale. TRIGGERS: locale style, writing style, formality, tone preferences. NOT: formatting (use HAS_FORMATTING), voice (use HAS_VOICE), culture (use HAS_CULTURE). RELATES: Locale (source), Style (target), 1:1 cardinality.',
   ac_HAS_STYLE.family = 'ownership',
   ac_HAS_STYLE.scope = 'intra_realm',
   ac_HAS_STYLE.cardinality = 'one_to_one',
@@ -2155,7 +2155,7 @@ ON CREATE SET
   ac_HAS_STYLE.created_at = datetime()
 ON MATCH SET
   ac_HAS_STYLE.display_name = 'Has Style',
-  ac_HAS_STYLE.llm_context = 'Locale has exactly one style configuration.',
+  ac_HAS_STYLE.llm_context = 'USE: when loading writing style preferences for a locale. TRIGGERS: locale style, writing style, formality, tone preferences. NOT: formatting (use HAS_FORMATTING), voice (use HAS_VOICE), culture (use HAS_CULTURE). RELATES: Locale (source), Style (target), 1:1 cardinality.',
   ac_HAS_STYLE.family = 'ownership',
   ac_HAS_STYLE.scope = 'intra_realm',
   ac_HAS_STYLE.cardinality = 'one_to_one',
@@ -2247,7 +2247,7 @@ ON MATCH SET
 MERGE (ac_HAS_TABOOS:Schema:ArcClass {key: 'HAS_TABOOS'})
 ON CREATE SET
   ac_HAS_TABOOS.display_name = 'Has Taboos',
-  ac_HAS_TABOOS.llm_context = 'Locale has multiple taboo sets, one per severity.',
+  ac_HAS_TABOOS.llm_context = 'USE: when loading taboo constraints for a locale by severity. TRIGGERS: taboos, cultural constraints, avoid topics, sensitive content, taboo set. NOT: individual taboos (use CONTAINS_TABOO), culture values (use HAS_CULTURE_SET). RELATES: Locale (source), TabooSet (target), severity (property: avoid/careful/legal).',
   ac_HAS_TABOOS.family = 'ownership',
   ac_HAS_TABOOS.scope = 'intra_realm',
   ac_HAS_TABOOS.cardinality = 'one_to_many',
@@ -2259,7 +2259,7 @@ ON CREATE SET
   ac_HAS_TABOOS.created_at = datetime()
 ON MATCH SET
   ac_HAS_TABOOS.display_name = 'Has Taboos',
-  ac_HAS_TABOOS.llm_context = 'Locale has multiple taboo sets, one per severity.',
+  ac_HAS_TABOOS.llm_context = 'USE: when loading taboo constraints for a locale by severity. TRIGGERS: taboos, cultural constraints, avoid topics, sensitive content, taboo set. NOT: individual taboos (use CONTAINS_TABOO), culture values (use HAS_CULTURE_SET). RELATES: Locale (source), TabooSet (target), severity (property: avoid/careful/legal).',
   ac_HAS_TABOOS.family = 'ownership',
   ac_HAS_TABOOS.scope = 'intra_realm',
   ac_HAS_TABOOS.cardinality = 'one_to_many',
@@ -2273,7 +2273,7 @@ ON MATCH SET
 MERGE (ac_HAS_TERMS:Schema:ArcClass {key: 'HAS_TERMS'})
 ON CREATE SET
   ac_HAS_TERMS.display_name = 'Has Terms',
-  ac_HAS_TERMS.llm_context = 'Locale has multiple term sets, one per domain.',
+  ac_HAS_TERMS.llm_context = 'USE: when loading terminology for a locale by domain. TRIGGERS: locale terms, terminology, domain vocabulary, glossary. NOT: individual terms (use CONTAINS_TERM), locale culture (use HAS_CULTURE). RELATES: Locale (source), TermSet (target), domain (property).',
   ac_HAS_TERMS.family = 'ownership',
   ac_HAS_TERMS.scope = 'intra_realm',
   ac_HAS_TERMS.cardinality = 'one_to_many',
@@ -2285,7 +2285,7 @@ ON CREATE SET
   ac_HAS_TERMS.created_at = datetime()
 ON MATCH SET
   ac_HAS_TERMS.display_name = 'Has Terms',
-  ac_HAS_TERMS.llm_context = 'Locale has multiple term sets, one per domain.',
+  ac_HAS_TERMS.llm_context = 'USE: when loading terminology for a locale by domain. TRIGGERS: locale terms, terminology, domain vocabulary, glossary. NOT: individual terms (use CONTAINS_TERM), locale culture (use HAS_CULTURE). RELATES: Locale (source), TermSet (target), domain (property).',
   ac_HAS_TERMS.family = 'ownership',
   ac_HAS_TERMS.scope = 'intra_realm',
   ac_HAS_TERMS.cardinality = 'one_to_many',
@@ -2325,7 +2325,7 @@ ON MATCH SET
 MERGE (ac_IN_CONTINENT:Schema:ArcClass {key: 'IN_CONTINENT'})
 ON CREATE SET
   ac_IN_CONTINENT.display_name = 'In Continent',
-  ac_IN_CONTINENT.llm_context = 'GeoRegion belongs to exactly one Continent (UN M49 hierarchy). Use to traverse from region to continent: MATCH (r:GeoRegion)-[:IN_CONTINENT]->(c:Continent)',
+  ac_IN_CONTINENT.llm_context = 'USE: when finding which continent a region belongs to. TRIGGERS: region continent, geographic hierarchy, UN M49, continent lookup. NOT: sub-regions (use IN_REGION), countries (use IN_COUNTRY). RELATES: GeoRegion (source), Continent (target), HAS_REGION (inverse).',
   ac_IN_CONTINENT.family = 'ownership',
   ac_IN_CONTINENT.scope = 'intra_realm',
   ac_IN_CONTINENT.cardinality = 'many_to_one',
@@ -2337,7 +2337,7 @@ ON CREATE SET
   ac_IN_CONTINENT.created_at = datetime()
 ON MATCH SET
   ac_IN_CONTINENT.display_name = 'In Continent',
-  ac_IN_CONTINENT.llm_context = 'GeoRegion belongs to exactly one Continent (UN M49 hierarchy). Use to traverse from region to continent: MATCH (r:GeoRegion)-[:IN_CONTINENT]->(c:Continent)',
+  ac_IN_CONTINENT.llm_context = 'USE: when finding which continent a region belongs to. TRIGGERS: region continent, geographic hierarchy, UN M49, continent lookup. NOT: sub-regions (use IN_REGION), countries (use IN_COUNTRY). RELATES: GeoRegion (source), Continent (target), HAS_REGION (inverse).',
   ac_IN_CONTINENT.family = 'ownership',
   ac_IN_CONTINENT.scope = 'intra_realm',
   ac_IN_CONTINENT.cardinality = 'many_to_one',
@@ -2351,7 +2351,7 @@ ON MATCH SET
 MERGE (ac_IN_REGION:Schema:ArcClass {key: 'IN_REGION'})
 ON CREATE SET
   ac_IN_REGION.display_name = 'In Region',
-  ac_IN_REGION.llm_context = 'GeoSubRegion belongs to exactly one GeoRegion (UN M49 optional intermediate level). Use to traverse from sub-region to region: MATCH (sr:GeoSubRegion)-[:IN_REGION]->(r:GeoRegion)',
+  ac_IN_REGION.llm_context = 'USE: when finding which region a sub-region belongs to. TRIGGERS: sub-region parent, geographic hierarchy, UN M49 intermediate level. NOT: continent (use IN_CONTINENT), countries (use IN_COUNTRY). RELATES: GeoSubRegion (source), GeoRegion (target), HAS_SUBREGION (inverse).',
   ac_IN_REGION.family = 'ownership',
   ac_IN_REGION.scope = 'intra_realm',
   ac_IN_REGION.cardinality = 'many_to_one',
@@ -2363,7 +2363,7 @@ ON CREATE SET
   ac_IN_REGION.created_at = datetime()
 ON MATCH SET
   ac_IN_REGION.display_name = 'In Region',
-  ac_IN_REGION.llm_context = 'GeoSubRegion belongs to exactly one GeoRegion (UN M49 optional intermediate level). Use to traverse from sub-region to region: MATCH (sr:GeoSubRegion)-[:IN_REGION]->(r:GeoRegion)',
+  ac_IN_REGION.llm_context = 'USE: when finding which region a sub-region belongs to. TRIGGERS: sub-region parent, geographic hierarchy, UN M49 intermediate level. NOT: continent (use IN_CONTINENT), countries (use IN_COUNTRY). RELATES: GeoSubRegion (source), GeoRegion (target), HAS_SUBREGION (inverse).',
   ac_IN_REGION.family = 'ownership',
   ac_IN_REGION.scope = 'intra_realm',
   ac_IN_REGION.cardinality = 'many_to_one',
@@ -2377,7 +2377,7 @@ ON MATCH SET
 MERGE (ac_OF_TYPE:Schema:ArcClass {key: 'OF_TYPE'})
 ON CREATE SET
   ac_OF_TYPE.display_name = 'Of Type',
-  ac_OF_TYPE.llm_context = 'Block references its type template defining JSON schema.',
+  ac_OF_TYPE.llm_context = 'USE: when loading block schema definition. TRIGGERS: block type, block schema, JSON schema, field definitions. NOT: block content (use HAS_INSTRUCTION), block rules (use HAS_RULES). RELATES: Block (source), BlockType (target), TYPE_OF (inverse).',
   ac_OF_TYPE.family = 'ownership',
   ac_OF_TYPE.scope = 'intra_realm',
   ac_OF_TYPE.cardinality = 'many_to_one',
@@ -2389,7 +2389,7 @@ ON CREATE SET
   ac_OF_TYPE.created_at = datetime()
 ON MATCH SET
   ac_OF_TYPE.display_name = 'Of Type',
-  ac_OF_TYPE.llm_context = 'Block references its type template defining JSON schema.',
+  ac_OF_TYPE.llm_context = 'USE: when loading block schema definition. TRIGGERS: block type, block schema, JSON schema, field definitions. NOT: block content (use HAS_INSTRUCTION), block rules (use HAS_RULES). RELATES: Block (source), BlockType (target), TYPE_OF (inverse).',
   ac_OF_TYPE.family = 'ownership',
   ac_OF_TYPE.scope = 'intra_realm',
   ac_OF_TYPE.cardinality = 'many_to_one',
@@ -2429,7 +2429,7 @@ ON MATCH SET
 MERGE (ac_PART_OF_REALM:Schema:ArcClass {key: 'PART_OF_REALM'})
 ON CREATE SET
   ac_PART_OF_REALM.display_name = 'Part Of Realm',
-  ac_PART_OF_REALM.llm_context = 'CulturalSubRealm belongs to exactly one CulturalRealm (Broek & Webb). Use to find related cultures: MATCH (csr:CulturalSubRealm)-[:PART_OF_REALM]->(cr:CulturalRealm) Example: Mediterranean -[:PART_OF_REALM]-> Occidental',
+  ac_PART_OF_REALM.llm_context = 'USE: when finding which cultural realm a sub-realm belongs to. TRIGGERS: cultural hierarchy, Broek Webb, cultural sub-realm, culture grouping. NOT: geographic regions (use IN_REGION), language families (use BRANCH_OF). RELATES: CulturalSubRealm (source), CulturalRealm (target), HAS_SUBREALM (inverse).',
   ac_PART_OF_REALM.family = 'ownership',
   ac_PART_OF_REALM.scope = 'intra_realm',
   ac_PART_OF_REALM.cardinality = 'many_to_one',
@@ -2441,7 +2441,7 @@ ON CREATE SET
   ac_PART_OF_REALM.created_at = datetime()
 ON MATCH SET
   ac_PART_OF_REALM.display_name = 'Part Of Realm',
-  ac_PART_OF_REALM.llm_context = 'CulturalSubRealm belongs to exactly one CulturalRealm (Broek & Webb). Use to find related cultures: MATCH (csr:CulturalSubRealm)-[:PART_OF_REALM]->(cr:CulturalRealm) Example: Mediterranean -[:PART_OF_REALM]-> Occidental',
+  ac_PART_OF_REALM.llm_context = 'USE: when finding which cultural realm a sub-realm belongs to. TRIGGERS: cultural hierarchy, Broek Webb, cultural sub-realm, culture grouping. NOT: geographic regions (use IN_REGION), language families (use BRANCH_OF). RELATES: CulturalSubRealm (source), CulturalRealm (target), HAS_SUBREALM (inverse).',
   ac_PART_OF_REALM.family = 'ownership',
   ac_PART_OF_REALM.scope = 'intra_realm',
   ac_PART_OF_REALM.cardinality = 'many_to_one',
@@ -2533,7 +2533,7 @@ ON MATCH SET
 MERGE (ac_SUPPORTS_LOCALE:Schema:ArcClass {key: 'SUPPORTS_LOCALE'})
 ON CREATE SET
   ac_SUPPORTS_LOCALE.display_name = 'Supports Locale',
-  ac_SUPPORTS_LOCALE.llm_context = 'Project supports locales with activation status (active/pending/disabled).',
+  ac_SUPPORTS_LOCALE.llm_context = 'USE: when loading which locales a project supports. TRIGGERS: project locales, supported locales, locale activation, locale status. NOT: default locale (use DEFAULT_LOCALE), entity content locales (use FOR_LOCALE). RELATES: Project (source), Locale (target), status (property: active/pending/disabled).',
   ac_SUPPORTS_LOCALE.family = 'ownership',
   ac_SUPPORTS_LOCALE.scope = 'cross_realm',
   ac_SUPPORTS_LOCALE.cardinality = 'many_to_many',
@@ -2545,7 +2545,7 @@ ON CREATE SET
   ac_SUPPORTS_LOCALE.created_at = datetime()
 ON MATCH SET
   ac_SUPPORTS_LOCALE.display_name = 'Supports Locale',
-  ac_SUPPORTS_LOCALE.llm_context = 'Project supports locales with activation status (active/pending/disabled).',
+  ac_SUPPORTS_LOCALE.llm_context = 'USE: when loading which locales a project supports. TRIGGERS: project locales, supported locales, locale activation, locale status. NOT: default locale (use DEFAULT_LOCALE), entity content locales (use FOR_LOCALE). RELATES: Project (source), Locale (target), status (property: active/pending/disabled).',
   ac_SUPPORTS_LOCALE.family = 'ownership',
   ac_SUPPORTS_LOCALE.scope = 'cross_realm',
   ac_SUPPORTS_LOCALE.cardinality = 'many_to_many',
@@ -2559,7 +2559,7 @@ ON MATCH SET
 MERGE (ac_ACTS_ON:Schema:ArcClass {key: 'ACTS_ON'})
 ON CREATE SET
   ac_ACTS_ON.display_name = 'Acts On',
-  ac_ACTS_ON.llm_context = 'Direct operation relationship: ACTION entity operates on THING/CONCEPT. Use for create-qr-code ACTS_ON qr-code, scan-qr-code ACTS_ON qr-code. Different from ENABLES (capability) or APPLIES_TO (domain relevance). operation_type: create, read, update, delete, scan, download, print',
+  ac_ACTS_ON.llm_context = 'USE: when finding what entity an action operates on. TRIGGERS: action target, operates on, action entity, direct operation. NOT: capability (use ENABLES), domain relevance (use APPLIES_TO). RELATES: Entity (source/action), Entity (target/thing), OPERATED_BY (inverse).',
   ac_ACTS_ON.family = 'semantic',
   ac_ACTS_ON.scope = 'intra_realm',
   ac_ACTS_ON.cardinality = 'many_to_many',
@@ -2571,7 +2571,7 @@ ON CREATE SET
   ac_ACTS_ON.created_at = datetime()
 ON MATCH SET
   ac_ACTS_ON.display_name = 'Acts On',
-  ac_ACTS_ON.llm_context = 'Direct operation relationship: ACTION entity operates on THING/CONCEPT. Use for create-qr-code ACTS_ON qr-code, scan-qr-code ACTS_ON qr-code. Different from ENABLES (capability) or APPLIES_TO (domain relevance). operation_type: create, read, update, delete, scan, download, print',
+  ac_ACTS_ON.llm_context = 'USE: when finding what entity an action operates on. TRIGGERS: action target, operates on, action entity, direct operation. NOT: capability (use ENABLES), domain relevance (use APPLIES_TO). RELATES: Entity (source/action), Entity (target/thing), OPERATED_BY (inverse).',
   ac_ACTS_ON.family = 'semantic',
   ac_ACTS_ON.scope = 'intra_realm',
   ac_ACTS_ON.cardinality = 'many_to_many',
@@ -2585,7 +2585,7 @@ ON MATCH SET
 MERGE (ac_ALTERNATIVE_TO:Schema:ArcClass {key: 'ALTERNATIVE_TO'})
 ON CREATE SET
   ac_ALTERNATIVE_TO.display_name = 'Alternative To',
-  ac_ALTERNATIVE_TO.llm_context = 'Alternative relationship: Entity A is an alternative to Entity B (symmetric). Entities can substitute for each other in certain contexts. alternative_type: equivalent (same purpose), similar (close match), fallback (backup option), upgrade (better), downgrade (simpler) Examples: VCard ALTERNATIVE_TO MeCard, PNG ALTERNATIVE_TO JPG Symmetric: A ALTERNATIVE_TO B implies B ALTERNATIVE_TO A. Differs from COMPETES_WITH: alternatives can coexist, competitors fight.',
+  ac_ALTERNATIVE_TO.llm_context = 'USE: when finding substitutable entities. TRIGGERS: alternative, substitute, instead of, similar option, fallback. NOT: competition (use COMPETES_WITH), similarity (use SIMILAR_TO). RELATES: Entity (source), Entity (target), symmetric (no inverse needed).',
   ac_ALTERNATIVE_TO.family = 'semantic',
   ac_ALTERNATIVE_TO.scope = 'intra_realm',
   ac_ALTERNATIVE_TO.cardinality = 'many_to_many',
@@ -2597,7 +2597,7 @@ ON CREATE SET
   ac_ALTERNATIVE_TO.created_at = datetime()
 ON MATCH SET
   ac_ALTERNATIVE_TO.display_name = 'Alternative To',
-  ac_ALTERNATIVE_TO.llm_context = 'Alternative relationship: Entity A is an alternative to Entity B (symmetric). Entities can substitute for each other in certain contexts. alternative_type: equivalent (same purpose), similar (close match), fallback (backup option), upgrade (better), downgrade (simpler) Examples: VCard ALTERNATIVE_TO MeCard, PNG ALTERNATIVE_TO JPG Symmetric: A ALTERNATIVE_TO B implies B ALTERNATIVE_TO A. Differs from COMPETES_WITH: alternatives can coexist, competitors fight.',
+  ac_ALTERNATIVE_TO.llm_context = 'USE: when finding substitutable entities. TRIGGERS: alternative, substitute, instead of, similar option, fallback. NOT: competition (use COMPETES_WITH), similarity (use SIMILAR_TO). RELATES: Entity (source), Entity (target), symmetric (no inverse needed).',
   ac_ALTERNATIVE_TO.family = 'semantic',
   ac_ALTERNATIVE_TO.scope = 'intra_realm',
   ac_ALTERNATIVE_TO.cardinality = 'many_to_many',
@@ -2611,24 +2611,24 @@ ON MATCH SET
 MERGE (ac_APPLIES_TO:Schema:ArcClass {key: 'APPLIES_TO'})
 ON CREATE SET
   ac_APPLIES_TO.display_name = 'Applies To',
-  ac_APPLIES_TO.llm_context = 'Application relationship: Entity A applies to / is used in Entity B. Source is a tool/method, target is a domain/context. application_type: use_case (specific), domain (field), industry (sector), scenario (situation), context (environment) relevance: primary (main use), secondary (common), niche (specialized), experimental (emerging) Examples: QRCode APPLIES_TO Marketing, VCard APPLIES_TO Networking',
+  ac_APPLIES_TO.llm_context = 'USE: when finding use cases or domains where an entity applies. TRIGGERS: applies to, use case, domain, industry, applicable, scenario. NOT: direct operation (use ACTS_ON), capability (use ENABLES). RELATES: Entity (source/tool), Entity (target/domain), HAS_APPLICATION (inverse).',
   ac_APPLIES_TO.family = 'semantic',
   ac_APPLIES_TO.scope = 'intra_realm',
   ac_APPLIES_TO.cardinality = 'many_to_many',
   ac_APPLIES_TO.is_self_referential = false,
-  ac_APPLIES_TO.inverse_name = 'HAS_APPLICATION',
+  ac_APPLIES_TO.inverse_name = null,
   ac_APPLIES_TO.arc_properties = ['strength', 'temperature', 'application_type', 'relevance'],
   ac_APPLIES_TO.cypher_pattern = '(Entity)-[:APPLIES_TO]->(Entity)',
   ac_APPLIES_TO.temperature_threshold = 0.2,
   ac_APPLIES_TO.created_at = datetime()
 ON MATCH SET
   ac_APPLIES_TO.display_name = 'Applies To',
-  ac_APPLIES_TO.llm_context = 'Application relationship: Entity A applies to / is used in Entity B. Source is a tool/method, target is a domain/context. application_type: use_case (specific), domain (field), industry (sector), scenario (situation), context (environment) relevance: primary (main use), secondary (common), niche (specialized), experimental (emerging) Examples: QRCode APPLIES_TO Marketing, VCard APPLIES_TO Networking',
+  ac_APPLIES_TO.llm_context = 'USE: when finding use cases or domains where an entity applies. TRIGGERS: applies to, use case, domain, industry, applicable, scenario. NOT: direct operation (use ACTS_ON), capability (use ENABLES). RELATES: Entity (source/tool), Entity (target/domain), HAS_APPLICATION (inverse).',
   ac_APPLIES_TO.family = 'semantic',
   ac_APPLIES_TO.scope = 'intra_realm',
   ac_APPLIES_TO.cardinality = 'many_to_many',
   ac_APPLIES_TO.is_self_referential = false,
-  ac_APPLIES_TO.inverse_name = 'HAS_APPLICATION',
+  ac_APPLIES_TO.inverse_name = null,
   ac_APPLIES_TO.arc_properties = ['strength', 'temperature', 'application_type', 'relevance'],
   ac_APPLIES_TO.cypher_pattern = '(Entity)-[:APPLIES_TO]->(Entity)',
   ac_APPLIES_TO.temperature_threshold = 0.2,
@@ -2637,7 +2637,7 @@ ON MATCH SET
 MERGE (ac_COMPARES_A:Schema:ArcClass {key: 'COMPARES_A'})
 ON CREATE SET
   ac_COMPARES_A.display_name = 'Compares A',
-  ac_COMPARES_A.llm_context = 'Comparison keyword (X vs Y) references the first entity (X). Only valid when SEOKeyword has HAS_FORMAT → comparison. Pattern: (SEOKeyword)-[:COMPARES_A]->(Entity) v11.4: New arc for comparison keyword semantics.',
+  ac_COMPARES_A.llm_context = 'USE: when linking comparison keyword to first entity (X in "X vs Y"). TRIGGERS: comparison keyword, versus first, compared entity A. NOT: second entity (use COMPARES_B), keyword format (use HAS_FORMAT). RELATES: SEOKeyword (source), Entity (target), COMPARES_B (complement).',
   ac_COMPARES_A.family = 'semantic',
   ac_COMPARES_A.scope = 'cross_realm',
   ac_COMPARES_A.cardinality = 'many_to_one',
@@ -2649,7 +2649,7 @@ ON CREATE SET
   ac_COMPARES_A.created_at = datetime()
 ON MATCH SET
   ac_COMPARES_A.display_name = 'Compares A',
-  ac_COMPARES_A.llm_context = 'Comparison keyword (X vs Y) references the first entity (X). Only valid when SEOKeyword has HAS_FORMAT → comparison. Pattern: (SEOKeyword)-[:COMPARES_A]->(Entity) v11.4: New arc for comparison keyword semantics.',
+  ac_COMPARES_A.llm_context = 'USE: when linking comparison keyword to first entity (X in "X vs Y"). TRIGGERS: comparison keyword, versus first, compared entity A. NOT: second entity (use COMPARES_B), keyword format (use HAS_FORMAT). RELATES: SEOKeyword (source), Entity (target), COMPARES_B (complement).',
   ac_COMPARES_A.family = 'semantic',
   ac_COMPARES_A.scope = 'cross_realm',
   ac_COMPARES_A.cardinality = 'many_to_one',
@@ -2663,7 +2663,7 @@ ON MATCH SET
 MERGE (ac_COMPARES_B:Schema:ArcClass {key: 'COMPARES_B'})
 ON CREATE SET
   ac_COMPARES_B.display_name = 'Compares B',
-  ac_COMPARES_B.llm_context = 'Comparison keyword (X vs Y) references the second entity (Y). Only valid when SEOKeyword has HAS_FORMAT → comparison. Pattern: (SEOKeyword)-[:COMPARES_B]->(Entity) v11.4: New arc for comparison keyword semantics.',
+  ac_COMPARES_B.llm_context = 'USE: when linking comparison keyword to second entity (Y in "X vs Y"). TRIGGERS: comparison keyword, versus second, compared entity B. NOT: first entity (use COMPARES_A), keyword format (use HAS_FORMAT). RELATES: SEOKeyword (source), Entity (target), COMPARES_A (complement).',
   ac_COMPARES_B.family = 'semantic',
   ac_COMPARES_B.scope = 'cross_realm',
   ac_COMPARES_B.cardinality = 'many_to_one',
@@ -2675,7 +2675,7 @@ ON CREATE SET
   ac_COMPARES_B.created_at = datetime()
 ON MATCH SET
   ac_COMPARES_B.display_name = 'Compares B',
-  ac_COMPARES_B.llm_context = 'Comparison keyword (X vs Y) references the second entity (Y). Only valid when SEOKeyword has HAS_FORMAT → comparison. Pattern: (SEOKeyword)-[:COMPARES_B]->(Entity) v11.4: New arc for comparison keyword semantics.',
+  ac_COMPARES_B.llm_context = 'USE: when linking comparison keyword to second entity (Y in "X vs Y"). TRIGGERS: comparison keyword, versus second, compared entity B. NOT: first entity (use COMPARES_A), keyword format (use HAS_FORMAT). RELATES: SEOKeyword (source), Entity (target), COMPARES_A (complement).',
   ac_COMPARES_B.family = 'semantic',
   ac_COMPARES_B.scope = 'cross_realm',
   ac_COMPARES_B.cardinality = 'many_to_one',
@@ -2689,7 +2689,7 @@ ON MATCH SET
 MERGE (ac_COMPETES_WITH:Schema:ArcClass {key: 'COMPETES_WITH'})
 ON CREATE SET
   ac_COMPETES_WITH.display_name = 'Competes With',
-  ac_COMPETES_WITH.llm_context = 'Competition relationship: Entity A competes with Entity B (symmetric). Both entities serve similar purposes or target same audience. competition_type: direct (same solution), indirect (different approach), substitute (replacement), emerging (new competitor) Examples: StaticQR COMPETES_WITH DynamicQR, QRCode COMPETES_WITH NFC Symmetric: A COMPETES_WITH B implies B COMPETES_WITH A.',
+  ac_COMPETES_WITH.llm_context = 'USE: when finding competitive entities in same market. TRIGGERS: competitor, competes, rival, market competition, vs. NOT: alternatives (use ALTERNATIVE_TO), similarity (use SIMILAR_TO). RELATES: Entity (source), Entity (target), symmetric (no inverse needed).',
   ac_COMPETES_WITH.family = 'semantic',
   ac_COMPETES_WITH.scope = 'intra_realm',
   ac_COMPETES_WITH.cardinality = 'many_to_many',
@@ -2701,7 +2701,7 @@ ON CREATE SET
   ac_COMPETES_WITH.created_at = datetime()
 ON MATCH SET
   ac_COMPETES_WITH.display_name = 'Competes With',
-  ac_COMPETES_WITH.llm_context = 'Competition relationship: Entity A competes with Entity B (symmetric). Both entities serve similar purposes or target same audience. competition_type: direct (same solution), indirect (different approach), substitute (replacement), emerging (new competitor) Examples: StaticQR COMPETES_WITH DynamicQR, QRCode COMPETES_WITH NFC Symmetric: A COMPETES_WITH B implies B COMPETES_WITH A.',
+  ac_COMPETES_WITH.llm_context = 'USE: when finding competitive entities in same market. TRIGGERS: competitor, competes, rival, market competition, vs. NOT: alternatives (use ALTERNATIVE_TO), similarity (use SIMILAR_TO). RELATES: Entity (source), Entity (target), symmetric (no inverse needed).',
   ac_COMPETES_WITH.family = 'semantic',
   ac_COMPETES_WITH.scope = 'intra_realm',
   ac_COMPETES_WITH.cardinality = 'many_to_many',
@@ -2715,7 +2715,7 @@ ON MATCH SET
 MERGE (ac_CULTURALLY_SIMILAR:Schema:ArcClass {key: 'CULTURALLY_SIMILAR'})
 ON CREATE SET
   ac_CULTURALLY_SIMILAR.display_name = 'Culturally Similar',
-  ac_CULTURALLY_SIMILAR.llm_context = 'Pre-computed cultural similarity between locales for fast LLM context retrieval. Factors: language branch, cultural sub-realm, geo region, income group, script. Use for fallback: MATCH (l:Locale)-[sim:CULTURALLY_SIMILAR]->(similar) ORDER BY sim.similarity_score DESC',
+  ac_CULTURALLY_SIMILAR.llm_context = 'USE: when finding culturally similar locales for fallback. TRIGGERS: cultural similarity, locale fallback, similar culture, related locales. NOT: language similarity (use SPEAKS_BRANCH), geographic (use IN_REGION). RELATES: Locale (source), Locale (target), similarity_score (property).',
   ac_CULTURALLY_SIMILAR.family = 'semantic',
   ac_CULTURALLY_SIMILAR.scope = 'intra_realm',
   ac_CULTURALLY_SIMILAR.cardinality = 'many_to_many',
@@ -2727,7 +2727,7 @@ ON CREATE SET
   ac_CULTURALLY_SIMILAR.created_at = datetime()
 ON MATCH SET
   ac_CULTURALLY_SIMILAR.display_name = 'Culturally Similar',
-  ac_CULTURALLY_SIMILAR.llm_context = 'Pre-computed cultural similarity between locales for fast LLM context retrieval. Factors: language branch, cultural sub-realm, geo region, income group, script. Use for fallback: MATCH (l:Locale)-[sim:CULTURALLY_SIMILAR]->(similar) ORDER BY sim.similarity_score DESC',
+  ac_CULTURALLY_SIMILAR.llm_context = 'USE: when finding culturally similar locales for fallback. TRIGGERS: cultural similarity, locale fallback, similar culture, related locales. NOT: language similarity (use SPEAKS_BRANCH), geographic (use IN_REGION). RELATES: Locale (source), Locale (target), similarity_score (property).',
   ac_CULTURALLY_SIMILAR.family = 'semantic',
   ac_CULTURALLY_SIMILAR.scope = 'intra_realm',
   ac_CULTURALLY_SIMILAR.cardinality = 'many_to_many',
@@ -2741,24 +2741,24 @@ ON MATCH SET
 MERGE (ac_ENABLED_BY:Schema:ArcClass {key: 'ENABLED_BY'})
 ON CREATE SET
   ac_ENABLED_BY.display_name = 'Enabled By',
-  ac_ENABLED_BY.llm_context = 'Inverse of ENABLES: Entity A is enabled/unlocked by Entity B. Use for: finding prerequisites, capability dependencies. Examples: Integration ENABLED_BY API, Optimization ENABLED_BY Analytics',
+  ac_ENABLED_BY.llm_context = 'USE: when finding what enables an entity\'s capability. TRIGGERS: enabled by, made possible by, unlocked by, prerequisites. NOT: requirement (use REQUIRED_BY), enhancement (use ENHANCED_BY). RELATES: Entity (source), Entity (target/enabler), ENABLES (inverse).',
   ac_ENABLED_BY.family = 'semantic',
   ac_ENABLED_BY.scope = 'intra_realm',
   ac_ENABLED_BY.cardinality = 'many_to_many',
   ac_ENABLED_BY.is_self_referential = false,
-  ac_ENABLED_BY.inverse_name = 'ENABLES',
+  ac_ENABLED_BY.inverse_name = null,
   ac_ENABLED_BY.arc_properties = ['strength', 'temperature', 'enablement_type'],
   ac_ENABLED_BY.cypher_pattern = '(Entity)-[:ENABLED_BY]->(Entity)',
   ac_ENABLED_BY.temperature_threshold = 0.2,
   ac_ENABLED_BY.created_at = datetime()
 ON MATCH SET
   ac_ENABLED_BY.display_name = 'Enabled By',
-  ac_ENABLED_BY.llm_context = 'Inverse of ENABLES: Entity A is enabled/unlocked by Entity B. Use for: finding prerequisites, capability dependencies. Examples: Integration ENABLED_BY API, Optimization ENABLED_BY Analytics',
+  ac_ENABLED_BY.llm_context = 'USE: when finding what enables an entity\'s capability. TRIGGERS: enabled by, made possible by, unlocked by, prerequisites. NOT: requirement (use REQUIRED_BY), enhancement (use ENHANCED_BY). RELATES: Entity (source), Entity (target/enabler), ENABLES (inverse).',
   ac_ENABLED_BY.family = 'semantic',
   ac_ENABLED_BY.scope = 'intra_realm',
   ac_ENABLED_BY.cardinality = 'many_to_many',
   ac_ENABLED_BY.is_self_referential = false,
-  ac_ENABLED_BY.inverse_name = 'ENABLES',
+  ac_ENABLED_BY.inverse_name = null,
   ac_ENABLED_BY.arc_properties = ['strength', 'temperature', 'enablement_type'],
   ac_ENABLED_BY.cypher_pattern = '(Entity)-[:ENABLED_BY]->(Entity)',
   ac_ENABLED_BY.temperature_threshold = 0.2,
@@ -2767,7 +2767,7 @@ ON MATCH SET
 MERGE (ac_ENABLES:Schema:ArcClass {key: 'ENABLES'})
 ON CREATE SET
   ac_ENABLES.display_name = 'Enables',
-  ac_ENABLES.llm_context = 'Enablement relationship: Entity A enables/unlocks Entity B. Unlike REQUIRES (B needs A), ENABLES means A makes B possible/better. enablement_type: unlocks (gate), enhances (improves), permits (allows), facilitates (makes easier) Examples: API ENABLES Integration, Analytics ENABLES Optimization',
+  ac_ENABLES.llm_context = 'USE: when finding what capabilities an entity unlocks. TRIGGERS: enables, unlocks, makes possible, facilitates, permits. NOT: requirement (use REQUIRES), enhancement (use ENHANCES). RELATES: Entity (source/enabler), Entity (target), ENABLED_BY (inverse).',
   ac_ENABLES.family = 'semantic',
   ac_ENABLES.scope = 'intra_realm',
   ac_ENABLES.cardinality = 'many_to_many',
@@ -2779,7 +2779,7 @@ ON CREATE SET
   ac_ENABLES.created_at = datetime()
 ON MATCH SET
   ac_ENABLES.display_name = 'Enables',
-  ac_ENABLES.llm_context = 'Enablement relationship: Entity A enables/unlocks Entity B. Unlike REQUIRES (B needs A), ENABLES means A makes B possible/better. enablement_type: unlocks (gate), enhances (improves), permits (allows), facilitates (makes easier) Examples: API ENABLES Integration, Analytics ENABLES Optimization',
+  ac_ENABLES.llm_context = 'USE: when finding what capabilities an entity unlocks. TRIGGERS: enables, unlocks, makes possible, facilitates, permits. NOT: requirement (use REQUIRES), enhancement (use ENHANCES). RELATES: Entity (source/enabler), Entity (target), ENABLED_BY (inverse).',
   ac_ENABLES.family = 'semantic',
   ac_ENABLES.scope = 'intra_realm',
   ac_ENABLES.cardinality = 'many_to_many',
@@ -2793,24 +2793,24 @@ ON MATCH SET
 MERGE (ac_ENHANCED_BY:Schema:ArcClass {key: 'ENHANCED_BY'})
 ON CREATE SET
   ac_ENHANCED_BY.display_name = 'Enhanced By',
-  ac_ENHANCED_BY.llm_context = 'Inverse of ENHANCES: THING is enhanced by FEATURE. Use for dynamic-qr-code ENHANCED_BY password-protection. Enables traversal from entity to features that enhance it.',
+  ac_ENHANCED_BY.llm_context = 'USE: when finding features that enhance an entity. TRIGGERS: enhanced by, improved by, features, add-ons, extensions. NOT: enablement (use ENABLED_BY), requirement (use REQUIRED_BY). RELATES: Entity (source/thing), Entity (target/feature), ENHANCES (inverse).',
   ac_ENHANCED_BY.family = 'semantic',
   ac_ENHANCED_BY.scope = 'intra_realm',
   ac_ENHANCED_BY.cardinality = 'many_to_many',
   ac_ENHANCED_BY.is_self_referential = false,
-  ac_ENHANCED_BY.inverse_name = 'ENHANCES',
+  ac_ENHANCED_BY.inverse_name = null,
   ac_ENHANCED_BY.arc_properties = ['strength', 'temperature', 'enhancement_type'],
   ac_ENHANCED_BY.cypher_pattern = '(Entity)-[:ENHANCED_BY]->(Entity)',
   ac_ENHANCED_BY.temperature_threshold = 0.2,
   ac_ENHANCED_BY.created_at = datetime()
 ON MATCH SET
   ac_ENHANCED_BY.display_name = 'Enhanced By',
-  ac_ENHANCED_BY.llm_context = 'Inverse of ENHANCES: THING is enhanced by FEATURE. Use for dynamic-qr-code ENHANCED_BY password-protection. Enables traversal from entity to features that enhance it.',
+  ac_ENHANCED_BY.llm_context = 'USE: when finding features that enhance an entity. TRIGGERS: enhanced by, improved by, features, add-ons, extensions. NOT: enablement (use ENABLED_BY), requirement (use REQUIRED_BY). RELATES: Entity (source/thing), Entity (target/feature), ENHANCES (inverse).',
   ac_ENHANCED_BY.family = 'semantic',
   ac_ENHANCED_BY.scope = 'intra_realm',
   ac_ENHANCED_BY.cardinality = 'many_to_many',
   ac_ENHANCED_BY.is_self_referential = false,
-  ac_ENHANCED_BY.inverse_name = 'ENHANCES',
+  ac_ENHANCED_BY.inverse_name = null,
   ac_ENHANCED_BY.arc_properties = ['strength', 'temperature', 'enhancement_type'],
   ac_ENHANCED_BY.cypher_pattern = '(Entity)-[:ENHANCED_BY]->(Entity)',
   ac_ENHANCED_BY.temperature_threshold = 0.2,
@@ -2819,7 +2819,7 @@ ON MATCH SET
 MERGE (ac_ENHANCES:Schema:ArcClass {key: 'ENHANCES'})
 ON CREATE SET
   ac_ENHANCES.display_name = 'Enhances',
-  ac_ENHANCES.llm_context = 'Enhancement relationship: FEATURE entity improves THING/CONCEPT. Use for analytics ENHANCES smart-link, password-protection ENHANCES dynamic-qr-code. Different from ENABLES (unlocks capability) or INCLUDES (containment). enhancement_type: adds (new capability), improves (better), extends (more), optimizes (faster), secures (safer), tracks (monitors)',
+  ac_ENHANCES.llm_context = 'USE: when finding what features enhance an entity. TRIGGERS: enhances, improves, adds capability, extends, feature. NOT: enablement (use ENABLES), containment (use INCLUDES). RELATES: Entity (source/feature), Entity (target/thing), ENHANCED_BY (inverse).',
   ac_ENHANCES.family = 'semantic',
   ac_ENHANCES.scope = 'intra_realm',
   ac_ENHANCES.cardinality = 'many_to_many',
@@ -2831,7 +2831,7 @@ ON CREATE SET
   ac_ENHANCES.created_at = datetime()
 ON MATCH SET
   ac_ENHANCES.display_name = 'Enhances',
-  ac_ENHANCES.llm_context = 'Enhancement relationship: FEATURE entity improves THING/CONCEPT. Use for analytics ENHANCES smart-link, password-protection ENHANCES dynamic-qr-code. Different from ENABLES (unlocks capability) or INCLUDES (containment). enhancement_type: adds (new capability), improves (better), extends (more), optimizes (faster), secures (safer), tracks (monitors)',
+  ac_ENHANCES.llm_context = 'USE: when finding what features enhance an entity. TRIGGERS: enhances, improves, adds capability, extends, feature. NOT: enablement (use ENABLES), containment (use INCLUDES). RELATES: Entity (source/feature), Entity (target/thing), ENHANCED_BY (inverse).',
   ac_ENHANCES.family = 'semantic',
   ac_ENHANCES.scope = 'intra_realm',
   ac_ENHANCES.cardinality = 'many_to_many',
@@ -2845,7 +2845,7 @@ ON MATCH SET
 MERGE (ac_EXPRESSES:Schema:ArcClass {key: 'EXPRESSES'})
 ON CREATE SET
   ac_EXPRESSES.display_name = 'Expresses',
-  ac_EXPRESSES.llm_context = 'SEO keyword expresses a semantic entity. Multiple keywords can express the same entity. role: primary = exact match, secondary = synonym, long_tail = phrase variation. Use: MATCH (k:SEOKeyword)-[:EXPRESSES]->(e:Entity)',
+  ac_EXPRESSES.llm_context = 'USE: when finding which entity an SEO keyword expresses. TRIGGERS: keyword entity, keyword expresses, semantic match, keyword mapping. NOT: entity keywords (use HAS_KEYWORD), keyword format (use HAS_FORMAT). RELATES: SEOKeyword (source), Entity (target), role (property: primary/secondary).',
   ac_EXPRESSES.family = 'semantic',
   ac_EXPRESSES.scope = 'cross_realm',
   ac_EXPRESSES.cardinality = 'many_to_one',
@@ -2857,7 +2857,7 @@ ON CREATE SET
   ac_EXPRESSES.created_at = datetime()
 ON MATCH SET
   ac_EXPRESSES.display_name = 'Expresses',
-  ac_EXPRESSES.llm_context = 'SEO keyword expresses a semantic entity. Multiple keywords can express the same entity. role: primary = exact match, secondary = synonym, long_tail = phrase variation. Use: MATCH (k:SEOKeyword)-[:EXPRESSES]->(e:Entity)',
+  ac_EXPRESSES.llm_context = 'USE: when finding which entity an SEO keyword expresses. TRIGGERS: keyword entity, keyword expresses, semantic match, keyword mapping. NOT: entity keywords (use HAS_KEYWORD), keyword format (use HAS_FORMAT). RELATES: SEOKeyword (source), Entity (target), role (property: primary/secondary).',
   ac_EXPRESSES.family = 'semantic',
   ac_EXPRESSES.scope = 'cross_realm',
   ac_EXPRESSES.cardinality = 'many_to_one',
@@ -2871,7 +2871,7 @@ ON MATCH SET
 MERGE (ac_FILLS_SLOT:Schema:ArcClass {key: 'FILLS_SLOT'})
 ON CREATE SET
   ac_FILLS_SLOT.display_name = 'Fills Slot',
-  ac_FILLS_SLOT.llm_context = 'Block fills slot (A/B testing). variant_id: unique variant. traffic_allocation: 0.0-1.0. is_control: baseline.',
+  ac_FILLS_SLOT.llm_context = 'USE: when finding which blocks fill a content slot for A/B testing. TRIGGERS: A/B testing, variant, slot content, traffic allocation, control. NOT: slot acceptance (use ACCEPTS_BLOCK_TYPE), page slots (use HAS_SLOT). RELATES: Block (source), ContentSlot (target), variant_id (property).',
   ac_FILLS_SLOT.family = 'semantic',
   ac_FILLS_SLOT.scope = 'intra_realm',
   ac_FILLS_SLOT.cardinality = 'many_to_many',
@@ -2883,7 +2883,7 @@ ON CREATE SET
   ac_FILLS_SLOT.created_at = datetime()
 ON MATCH SET
   ac_FILLS_SLOT.display_name = 'Fills Slot',
-  ac_FILLS_SLOT.llm_context = 'Block fills slot (A/B testing). variant_id: unique variant. traffic_allocation: 0.0-1.0. is_control: baseline.',
+  ac_FILLS_SLOT.llm_context = 'USE: when finding which blocks fill a content slot for A/B testing. TRIGGERS: A/B testing, variant, slot content, traffic allocation, control. NOT: slot acceptance (use ACCEPTS_BLOCK_TYPE), page slots (use HAS_SLOT). RELATES: Block (source), ContentSlot (target), variant_id (property).',
   ac_FILLS_SLOT.family = 'semantic',
   ac_FILLS_SLOT.scope = 'intra_realm',
   ac_FILLS_SLOT.cardinality = 'many_to_many',
@@ -2897,7 +2897,7 @@ ON MATCH SET
 MERGE (ac_FOR_CHANNEL:Schema:ArcClass {key: 'FOR_CHANNEL'})
 ON CREATE SET
   ac_FOR_CHANNEL.display_name = 'For Channel',
-  ac_FOR_CHANNEL.llm_context = 'Localized content is tailored for a specific channel surface. Use to filter content: MATCH (c:BlockGenerated)-[:FOR_CHANNEL]->(ch:ChannelSurface {key: "mobile"})',
+  ac_FOR_CHANNEL.llm_context = 'USE: when finding content tailored for a specific channel. TRIGGERS: channel surface, mobile content, channel targeting, platform specific. NOT: locale targeting (use FOR_LOCALE), persona targeting (use TARGETS_PERSONA). RELATES: PageGenerated/BlockGenerated (source), ChannelSurface (target).',
   ac_FOR_CHANNEL.family = 'semantic',
   ac_FOR_CHANNEL.scope = 'intra_realm',
   ac_FOR_CHANNEL.cardinality = 'many_to_one',
@@ -2909,7 +2909,7 @@ ON CREATE SET
   ac_FOR_CHANNEL.created_at = datetime()
 ON MATCH SET
   ac_FOR_CHANNEL.display_name = 'For Channel',
-  ac_FOR_CHANNEL.llm_context = 'Localized content is tailored for a specific channel surface. Use to filter content: MATCH (c:BlockGenerated)-[:FOR_CHANNEL]->(ch:ChannelSurface {key: "mobile"})',
+  ac_FOR_CHANNEL.llm_context = 'USE: when finding content tailored for a specific channel. TRIGGERS: channel surface, mobile content, channel targeting, platform specific. NOT: locale targeting (use FOR_LOCALE), persona targeting (use TARGETS_PERSONA). RELATES: PageGenerated/BlockGenerated (source), ChannelSurface (target).',
   ac_FOR_CHANNEL.family = 'semantic',
   ac_FOR_CHANNEL.scope = 'intra_realm',
   ac_FOR_CHANNEL.cardinality = 'many_to_one',
@@ -2923,7 +2923,7 @@ ON MATCH SET
 MERGE (ac_FOR_MARKET:Schema:ArcClass {key: 'FOR_MARKET'})
 ON CREATE SET
   ac_FOR_MARKET.display_name = 'For Market',
-  ac_FOR_MARKET.llm_context = 'Brand is active in specific markets. Market defines geographic/demographic segment. Use to filter content generation by market.',
+  ac_FOR_MARKET.llm_context = 'USE: when finding which markets a brand targets. TRIGGERS: brand markets, target market, market segment, geographic market. NOT: locale market (use HAS_MARKET), locale support (use SUPPORTS_LOCALE). RELATES: Brand (source), Market (target), 1:N cardinality.',
   ac_FOR_MARKET.family = 'semantic',
   ac_FOR_MARKET.scope = 'cross_realm',
   ac_FOR_MARKET.cardinality = 'one_to_many',
@@ -2935,7 +2935,7 @@ ON CREATE SET
   ac_FOR_MARKET.created_at = datetime()
 ON MATCH SET
   ac_FOR_MARKET.display_name = 'For Market',
-  ac_FOR_MARKET.llm_context = 'Brand is active in specific markets. Market defines geographic/demographic segment. Use to filter content generation by market.',
+  ac_FOR_MARKET.llm_context = 'USE: when finding which markets a brand targets. TRIGGERS: brand markets, target market, market segment, geographic market. NOT: locale market (use HAS_MARKET), locale support (use SUPPORTS_LOCALE). RELATES: Brand (source), Market (target), 1:N cardinality.',
   ac_FOR_MARKET.family = 'semantic',
   ac_FOR_MARKET.scope = 'cross_realm',
   ac_FOR_MARKET.cardinality = 'one_to_many',
@@ -2949,7 +2949,7 @@ ON MATCH SET
 MERGE (ac_HAS_APPLICATION:Schema:ArcClass {key: 'HAS_APPLICATION'})
 ON CREATE SET
   ac_HAS_APPLICATION.display_name = 'Has Application',
-  ac_HAS_APPLICATION.llm_context = 'Inverse of APPLIES_TO: Entity A has Entity B as an applicable tool/method. Source is a domain/context, target is a tool/method. Use for: finding tools for a domain, discovering applicable technologies. Examples: Marketing HAS_APPLICATION QRCode, Networking HAS_APPLICATION VCard',
+  ac_HAS_APPLICATION.llm_context = 'USE: when finding tools/methods applicable to a domain. TRIGGERS: applicable tools, domain tools, use cases, applications. NOT: direct usage (use USES_ENTITY), capability (use ENABLES). RELATES: Entity (source/domain), Entity (target/tool), APPLIES_TO (inverse).',
   ac_HAS_APPLICATION.family = 'semantic',
   ac_HAS_APPLICATION.scope = 'intra_realm',
   ac_HAS_APPLICATION.cardinality = 'many_to_many',
@@ -2961,7 +2961,7 @@ ON CREATE SET
   ac_HAS_APPLICATION.created_at = datetime()
 ON MATCH SET
   ac_HAS_APPLICATION.display_name = 'Has Application',
-  ac_HAS_APPLICATION.llm_context = 'Inverse of APPLIES_TO: Entity A has Entity B as an applicable tool/method. Source is a domain/context, target is a tool/method. Use for: finding tools for a domain, discovering applicable technologies. Examples: Marketing HAS_APPLICATION QRCode, Networking HAS_APPLICATION VCard',
+  ac_HAS_APPLICATION.llm_context = 'USE: when finding tools/methods applicable to a domain. TRIGGERS: applicable tools, domain tools, use cases, applications. NOT: direct usage (use USES_ENTITY), capability (use ENABLES). RELATES: Entity (source/domain), Entity (target/tool), APPLIES_TO (inverse).',
   ac_HAS_APPLICATION.family = 'semantic',
   ac_HAS_APPLICATION.scope = 'intra_realm',
   ac_HAS_APPLICATION.cardinality = 'many_to_many',
@@ -2975,7 +2975,7 @@ ON MATCH SET
 MERGE (ac_HAS_TYPE:Schema:ArcClass {key: 'HAS_TYPE'})
 ON CREATE SET
   ac_HAS_TYPE.display_name = 'Has Type',
-  ac_HAS_TYPE.llm_context = 'Inverse of TYPE_OF: Entity A has Entity B as a subtype. Source is more general, target is more specific. Use for: building taxonomies, finding all subtypes. Examples: QRCode HAS_TYPE StaticQR, ContactFormat HAS_TYPE VCard',
+  ac_HAS_TYPE.llm_context = 'USE: when finding subtypes of an entity. TRIGGERS: subtypes, types of, kinds of, taxonomy, classification. NOT: variants (use HAS_VARIANT), children (use HAS_CHILD). RELATES: Entity (source/general), Entity (target/specific), TYPE_OF (inverse).',
   ac_HAS_TYPE.family = 'semantic',
   ac_HAS_TYPE.scope = 'intra_realm',
   ac_HAS_TYPE.cardinality = 'one_to_many',
@@ -2987,7 +2987,7 @@ ON CREATE SET
   ac_HAS_TYPE.created_at = datetime()
 ON MATCH SET
   ac_HAS_TYPE.display_name = 'Has Type',
-  ac_HAS_TYPE.llm_context = 'Inverse of TYPE_OF: Entity A has Entity B as a subtype. Source is more general, target is more specific. Use for: building taxonomies, finding all subtypes. Examples: QRCode HAS_TYPE StaticQR, ContactFormat HAS_TYPE VCard',
+  ac_HAS_TYPE.llm_context = 'USE: when finding subtypes of an entity. TRIGGERS: subtypes, types of, kinds of, taxonomy, classification. NOT: variants (use HAS_VARIANT), children (use HAS_CHILD). RELATES: Entity (source/general), Entity (target/specific), TYPE_OF (inverse).',
   ac_HAS_TYPE.family = 'semantic',
   ac_HAS_TYPE.scope = 'intra_realm',
   ac_HAS_TYPE.cardinality = 'one_to_many',
@@ -3001,7 +3001,7 @@ ON MATCH SET
 MERGE (ac_HAS_VARIANT:Schema:ArcClass {key: 'HAS_VARIANT'})
 ON CREATE SET
   ac_HAS_VARIANT.display_name = 'Has Variant',
-  ac_HAS_VARIANT.llm_context = 'Inverse of VARIANT_OF: Entity A has Entity B as a variant. The target is a specialized form of the source (more specific). Examples: QRCode HAS_VARIANT CustomQRCode, QRCode HAS_VARIANT DynamicQR Use for: finding all variants of a base entity.',
+  ac_HAS_VARIANT.llm_context = 'USE: when finding variants/versions of an entity. TRIGGERS: variants, versions, editions, specializations, customizations. NOT: subtypes (use HAS_TYPE), children (use HAS_CHILD). RELATES: Entity (source/base), Entity (target/variant), VARIANT_OF (inverse).',
   ac_HAS_VARIANT.family = 'semantic',
   ac_HAS_VARIANT.scope = 'intra_realm',
   ac_HAS_VARIANT.cardinality = 'one_to_many',
@@ -3013,7 +3013,7 @@ ON CREATE SET
   ac_HAS_VARIANT.created_at = datetime()
 ON MATCH SET
   ac_HAS_VARIANT.display_name = 'Has Variant',
-  ac_HAS_VARIANT.llm_context = 'Inverse of VARIANT_OF: Entity A has Entity B as a variant. The target is a specialized form of the source (more specific). Examples: QRCode HAS_VARIANT CustomQRCode, QRCode HAS_VARIANT DynamicQR Use for: finding all variants of a base entity.',
+  ac_HAS_VARIANT.llm_context = 'USE: when finding variants/versions of an entity. TRIGGERS: variants, versions, editions, specializations, customizations. NOT: subtypes (use HAS_TYPE), children (use HAS_CHILD). RELATES: Entity (source/base), Entity (target/variant), VARIANT_OF (inverse).',
   ac_HAS_VARIANT.family = 'semantic',
   ac_HAS_VARIANT.scope = 'intra_realm',
   ac_HAS_VARIANT.cardinality = 'one_to_many',
@@ -3027,24 +3027,24 @@ ON MATCH SET
 MERGE (ac_INCLUDED_IN:Schema:ArcClass {key: 'INCLUDED_IN'})
 ON CREATE SET
   ac_INCLUDED_IN.display_name = 'Included In',
-  ac_INCLUDED_IN.llm_context = 'Inverse of INCLUDES: Entity A is part of Entity B. Use for: finding the whole from a part, context retrieval. Examples: ErrorCorrection INCLUDED_IN QRCode, Amount INCLUDED_IN PaymentQR',
+  ac_INCLUDED_IN.llm_context = 'USE: when finding the containing entity for a part. TRIGGERS: part of, belongs to, contained in, included in. NOT: parent (use CHILD_OF), type hierarchy (use TYPE_OF). RELATES: Entity (source/part), Entity (target/whole), INCLUDES (inverse).',
   ac_INCLUDED_IN.family = 'semantic',
   ac_INCLUDED_IN.scope = 'intra_realm',
   ac_INCLUDED_IN.cardinality = 'many_to_one',
   ac_INCLUDED_IN.is_self_referential = false,
-  ac_INCLUDED_IN.inverse_name = 'INCLUDES',
+  ac_INCLUDED_IN.inverse_name = null,
   ac_INCLUDED_IN.arc_properties = ['strength', 'temperature', 'containment_type'],
   ac_INCLUDED_IN.cypher_pattern = '(Entity)-[:INCLUDED_IN]->(Entity)',
   ac_INCLUDED_IN.temperature_threshold = 0.1,
   ac_INCLUDED_IN.created_at = datetime()
 ON MATCH SET
   ac_INCLUDED_IN.display_name = 'Included In',
-  ac_INCLUDED_IN.llm_context = 'Inverse of INCLUDES: Entity A is part of Entity B. Use for: finding the whole from a part, context retrieval. Examples: ErrorCorrection INCLUDED_IN QRCode, Amount INCLUDED_IN PaymentQR',
+  ac_INCLUDED_IN.llm_context = 'USE: when finding the containing entity for a part. TRIGGERS: part of, belongs to, contained in, included in. NOT: parent (use CHILD_OF), type hierarchy (use TYPE_OF). RELATES: Entity (source/part), Entity (target/whole), INCLUDES (inverse).',
   ac_INCLUDED_IN.family = 'semantic',
   ac_INCLUDED_IN.scope = 'intra_realm',
   ac_INCLUDED_IN.cardinality = 'many_to_one',
   ac_INCLUDED_IN.is_self_referential = false,
-  ac_INCLUDED_IN.inverse_name = 'INCLUDES',
+  ac_INCLUDED_IN.inverse_name = null,
   ac_INCLUDED_IN.arc_properties = ['strength', 'temperature', 'containment_type'],
   ac_INCLUDED_IN.cypher_pattern = '(Entity)-[:INCLUDED_IN]->(Entity)',
   ac_INCLUDED_IN.temperature_threshold = 0.1,
@@ -3053,7 +3053,7 @@ ON MATCH SET
 MERGE (ac_INCLUDES:Schema:ArcClass {key: 'INCLUDES'})
 ON CREATE SET
   ac_INCLUDES.display_name = 'Includes',
-  ac_INCLUDES.llm_context = 'Containment relationship: Entity A includes/contains Entity B. Part-whole relationship (mereology). containment_type: part (physical), component (functional), element (collection), member (set), feature (capability) Examples: QRCode INCLUDES ErrorCorrection, PaymentQR INCLUDES Amount',
+  ac_INCLUDES.llm_context = 'USE: when finding parts/components of an entity. TRIGGERS: includes, contains, parts, components, elements. NOT: children (use HAS_CHILD), variants (use HAS_VARIANT). RELATES: Entity (source/whole), Entity (target/part), INCLUDED_IN (inverse).',
   ac_INCLUDES.family = 'semantic',
   ac_INCLUDES.scope = 'intra_realm',
   ac_INCLUDES.cardinality = 'one_to_many',
@@ -3065,7 +3065,7 @@ ON CREATE SET
   ac_INCLUDES.created_at = datetime()
 ON MATCH SET
   ac_INCLUDES.display_name = 'Includes',
-  ac_INCLUDES.llm_context = 'Containment relationship: Entity A includes/contains Entity B. Part-whole relationship (mereology). containment_type: part (physical), component (functional), element (collection), member (set), feature (capability) Examples: QRCode INCLUDES ErrorCorrection, PaymentQR INCLUDES Amount',
+  ac_INCLUDES.llm_context = 'USE: when finding parts/components of an entity. TRIGGERS: includes, contains, parts, components, elements. NOT: children (use HAS_CHILD), variants (use HAS_VARIANT). RELATES: Entity (source/whole), Entity (target/part), INCLUDED_IN (inverse).',
   ac_INCLUDES.family = 'semantic',
   ac_INCLUDES.scope = 'intra_realm',
   ac_INCLUDES.cardinality = 'one_to_many',
@@ -3079,7 +3079,7 @@ ON MATCH SET
 MERGE (ac_INSPIRED_BY_REGION:Schema:ArcClass {key: 'INSPIRED_BY_REGION'})
 ON CREATE SET
   ac_INSPIRED_BY_REGION.display_name = 'Inspired By Region',
-  ac_INSPIRED_BY_REGION.llm_context = 'PromptStyle is inspired by a geographic region. Region provides cultural context for visual style. E.g., "French elegance", "Japanese minimalism".',
+  ac_INSPIRED_BY_REGION.llm_context = 'USE: when finding the cultural inspiration for a prompt style. TRIGGERS: style inspiration, regional style, cultural aesthetic, visual culture. NOT: locale targeting (use FOR_LOCALE), brand design (use HAS_DESIGN). RELATES: PromptStyle (source), GeoRegion (target), optional relationship.',
   ac_INSPIRED_BY_REGION.family = 'semantic',
   ac_INSPIRED_BY_REGION.scope = 'cross_realm',
   ac_INSPIRED_BY_REGION.cardinality = 'many_to_one',
@@ -3091,7 +3091,7 @@ ON CREATE SET
   ac_INSPIRED_BY_REGION.created_at = datetime()
 ON MATCH SET
   ac_INSPIRED_BY_REGION.display_name = 'Inspired By Region',
-  ac_INSPIRED_BY_REGION.llm_context = 'PromptStyle is inspired by a geographic region. Region provides cultural context for visual style. E.g., "French elegance", "Japanese minimalism".',
+  ac_INSPIRED_BY_REGION.llm_context = 'USE: when finding the cultural inspiration for a prompt style. TRIGGERS: style inspiration, regional style, cultural aesthetic, visual culture. NOT: locale targeting (use FOR_LOCALE), brand design (use HAS_DESIGN). RELATES: PromptStyle (source), GeoRegion (target), optional relationship.',
   ac_INSPIRED_BY_REGION.family = 'semantic',
   ac_INSPIRED_BY_REGION.scope = 'cross_realm',
   ac_INSPIRED_BY_REGION.cardinality = 'many_to_one',
@@ -3105,7 +3105,7 @@ ON MATCH SET
 MERGE (ac_LINKS_TO:Schema:ArcClass {key: 'LINKS_TO'})
 ON CREATE SET
   ac_LINKS_TO.display_name = 'Links To',
-  ac_LINKS_TO.llm_context = 'Page-to-page internal linking for SEO maillage. Calculated from [@page:X] refs in BlockInstructions with purpose: link. via_blocks: which blocks contain the link (for context). strength: how many times the link appears (1 = single mention). Use: MATCH (p1:Page)-[r:LINKS_TO]->(p2:Page) WHERE r.strength > 1',
+  ac_LINKS_TO.llm_context = 'USE: when finding internal links between pages for SEO maillage. TRIGGERS: internal linking, page links, SEO maillage, link building. NOT: entity references (use REFERENCES_ENTITY), content mentions (use MENTIONS). RELATES: Page (source), Page (target), via_blocks (property), calculated arc.',
   ac_LINKS_TO.family = 'semantic',
   ac_LINKS_TO.scope = 'intra_realm',
   ac_LINKS_TO.cardinality = 'many_to_many',
@@ -3117,7 +3117,7 @@ ON CREATE SET
   ac_LINKS_TO.created_at = datetime()
 ON MATCH SET
   ac_LINKS_TO.display_name = 'Links To',
-  ac_LINKS_TO.llm_context = 'Page-to-page internal linking for SEO maillage. Calculated from [@page:X] refs in BlockInstructions with purpose: link. via_blocks: which blocks contain the link (for context). strength: how many times the link appears (1 = single mention). Use: MATCH (p1:Page)-[r:LINKS_TO]->(p2:Page) WHERE r.strength > 1',
+  ac_LINKS_TO.llm_context = 'USE: when finding internal links between pages for SEO maillage. TRIGGERS: internal linking, page links, SEO maillage, link building. NOT: entity references (use REFERENCES_ENTITY), content mentions (use MENTIONS). RELATES: Page (source), Page (target), via_blocks (property), calculated arc.',
   ac_LINKS_TO.family = 'semantic',
   ac_LINKS_TO.scope = 'intra_realm',
   ac_LINKS_TO.cardinality = 'many_to_many',
@@ -3131,7 +3131,7 @@ ON MATCH SET
 MERGE (ac_MATERIALIZES_AS:Schema:ArcClass {key: 'MATERIALIZES_AS'})
 ON CREATE SET
   ac_MATERIALIZES_AS.display_name = 'Materializes As',
-  ac_MATERIALIZES_AS.llm_context = 'Entity materializes as one or more pages. N:M, optional. role: primary = dedicated page, secondary = mentioned, comparison = vs other entities. Use: MATCH (e:Entity)-[:MATERIALIZES_AS]->(p:Page)',
+  ac_MATERIALIZES_AS.llm_context = 'USE: when finding which pages an entity materializes as. TRIGGERS: entity pages, materialization, entity to page, dedicated page. NOT: page representation (use REPRESENTS), entity usage (use USES_ENTITY). RELATES: Entity (source), Page (target), role (property: primary/secondary).',
   ac_MATERIALIZES_AS.family = 'semantic',
   ac_MATERIALIZES_AS.scope = 'intra_realm',
   ac_MATERIALIZES_AS.cardinality = 'many_to_many',
@@ -3143,7 +3143,7 @@ ON CREATE SET
   ac_MATERIALIZES_AS.created_at = datetime()
 ON MATCH SET
   ac_MATERIALIZES_AS.display_name = 'Materializes As',
-  ac_MATERIALIZES_AS.llm_context = 'Entity materializes as one or more pages. N:M, optional. role: primary = dedicated page, secondary = mentioned, comparison = vs other entities. Use: MATCH (e:Entity)-[:MATERIALIZES_AS]->(p:Page)',
+  ac_MATERIALIZES_AS.llm_context = 'USE: when finding which pages an entity materializes as. TRIGGERS: entity pages, materialization, entity to page, dedicated page. NOT: page representation (use REPRESENTS), entity usage (use USES_ENTITY). RELATES: Entity (source), Page (target), role (property: primary/secondary).',
   ac_MATERIALIZES_AS.family = 'semantic',
   ac_MATERIALIZES_AS.scope = 'intra_realm',
   ac_MATERIALIZES_AS.cardinality = 'many_to_many',
@@ -3183,7 +3183,7 @@ ON MATCH SET
 MERGE (ac_MENTIONS_BRAND:Schema:ArcClass {key: 'MENTIONS_BRAND'})
 ON CREATE SET
   ac_MENTIONS_BRAND.display_name = 'Mentions Brand',
-  ac_MENTIONS_BRAND.llm_context = 'Brand keyword mentions a brand entity. Only valid when SEOKeyword has HAS_FORMAT → brand. Pattern: (SEOKeyword)-[:MENTIONS_BRAND]->(Entity) v11.4: New arc for brand keyword semantics.',
+  ac_MENTIONS_BRAND.llm_context = 'USE: when linking brand keyword to the brand entity it mentions. TRIGGERS: brand keyword, brand mention, branded search, brand entity. NOT: keyword format (use HAS_FORMAT), keyword expression (use EXPRESSES). RELATES: SEOKeyword (source), Entity (target/brand), format=brand prerequisite.',
   ac_MENTIONS_BRAND.family = 'semantic',
   ac_MENTIONS_BRAND.scope = 'cross_realm',
   ac_MENTIONS_BRAND.cardinality = 'many_to_one',
@@ -3195,7 +3195,7 @@ ON CREATE SET
   ac_MENTIONS_BRAND.created_at = datetime()
 ON MATCH SET
   ac_MENTIONS_BRAND.display_name = 'Mentions Brand',
-  ac_MENTIONS_BRAND.llm_context = 'Brand keyword mentions a brand entity. Only valid when SEOKeyword has HAS_FORMAT → brand. Pattern: (SEOKeyword)-[:MENTIONS_BRAND]->(Entity) v11.4: New arc for brand keyword semantics.',
+  ac_MENTIONS_BRAND.llm_context = 'USE: when linking brand keyword to the brand entity it mentions. TRIGGERS: brand keyword, brand mention, branded search, brand entity. NOT: keyword format (use HAS_FORMAT), keyword expression (use EXPRESSES). RELATES: SEOKeyword (source), Entity (target/brand), format=brand prerequisite.',
   ac_MENTIONS_BRAND.family = 'semantic',
   ac_MENTIONS_BRAND.scope = 'cross_realm',
   ac_MENTIONS_BRAND.cardinality = 'many_to_one',
@@ -3209,7 +3209,7 @@ ON MATCH SET
 MERGE (ac_MONITORS_GEO:Schema:ArcClass {key: 'MONITORS_GEO'})
 ON CREATE SET
   ac_MONITORS_GEO.display_name = 'Monitors Geo',
-  ac_MONITORS_GEO.llm_context = 'EntityContent monitors GEO queries for AI visibility optimization. Parallel to TARGETS (for SEO): EntityContent --[:TARGETS]--> SEOKeyword Use to track which business entities care about which AI queries. CONSTRAINT: EntityContent locale should align with GEOQuery locale. v10.7: New arc for GEO targeting.',
+  ac_MONITORS_GEO.llm_context = 'USE: when finding GEO queries monitored by an entity for AI visibility. TRIGGERS: GEO monitoring, AI visibility, entity queries, GEO tracking. NOT: SEO targeting (use TARGETS), GEO answers (use HAS_GEO_ANSWERS). RELATES: EntityContent (source), GEOQuery (target), priority (property).',
   ac_MONITORS_GEO.family = 'semantic',
   ac_MONITORS_GEO.scope = 'cross_realm',
   ac_MONITORS_GEO.cardinality = 'many_to_many',
@@ -3221,7 +3221,7 @@ ON CREATE SET
   ac_MONITORS_GEO.created_at = datetime()
 ON MATCH SET
   ac_MONITORS_GEO.display_name = 'Monitors Geo',
-  ac_MONITORS_GEO.llm_context = 'EntityContent monitors GEO queries for AI visibility optimization. Parallel to TARGETS (for SEO): EntityContent --[:TARGETS]--> SEOKeyword Use to track which business entities care about which AI queries. CONSTRAINT: EntityContent locale should align with GEOQuery locale. v10.7: New arc for GEO targeting.',
+  ac_MONITORS_GEO.llm_context = 'USE: when finding GEO queries monitored by an entity for AI visibility. TRIGGERS: GEO monitoring, AI visibility, entity queries, GEO tracking. NOT: SEO targeting (use TARGETS), GEO answers (use HAS_GEO_ANSWERS). RELATES: EntityContent (source), GEOQuery (target), priority (property).',
   ac_MONITORS_GEO.family = 'semantic',
   ac_MONITORS_GEO.scope = 'cross_realm',
   ac_MONITORS_GEO.cardinality = 'many_to_many',
@@ -3235,24 +3235,24 @@ ON MATCH SET
 MERGE (ac_OPERATED_BY:Schema:ArcClass {key: 'OPERATED_BY'})
 ON CREATE SET
   ac_OPERATED_BY.display_name = 'Operated By',
-  ac_OPERATED_BY.llm_context = 'Inverse of ACTS_ON: THING is operated on by ACTION. Use for qr-code OPERATED_BY create-qr-code, qr-code OPERATED_BY scan-qr-code. Enables traversal from entity to actions that can operate on it.',
+  ac_OPERATED_BY.llm_context = 'USE: when finding actions that can operate on an entity. TRIGGERS: operated by, actions for, operations on, what can do. NOT: reading (use READ_BY), enhancement (use ENHANCED_BY). RELATES: Entity (source/thing), Entity (target/action), ACTS_ON (inverse).',
   ac_OPERATED_BY.family = 'semantic',
   ac_OPERATED_BY.scope = 'intra_realm',
   ac_OPERATED_BY.cardinality = 'many_to_many',
   ac_OPERATED_BY.is_self_referential = false,
-  ac_OPERATED_BY.inverse_name = 'ACTS_ON',
+  ac_OPERATED_BY.inverse_name = null,
   ac_OPERATED_BY.arc_properties = ['strength', 'temperature', 'operation_type'],
   ac_OPERATED_BY.cypher_pattern = '(Entity)-[:OPERATED_BY]->(Entity)',
   ac_OPERATED_BY.temperature_threshold = 0.15,
   ac_OPERATED_BY.created_at = datetime()
 ON MATCH SET
   ac_OPERATED_BY.display_name = 'Operated By',
-  ac_OPERATED_BY.llm_context = 'Inverse of ACTS_ON: THING is operated on by ACTION. Use for qr-code OPERATED_BY create-qr-code, qr-code OPERATED_BY scan-qr-code. Enables traversal from entity to actions that can operate on it.',
+  ac_OPERATED_BY.llm_context = 'USE: when finding actions that can operate on an entity. TRIGGERS: operated by, actions for, operations on, what can do. NOT: reading (use READ_BY), enhancement (use ENHANCED_BY). RELATES: Entity (source/thing), Entity (target/action), ACTS_ON (inverse).',
   ac_OPERATED_BY.family = 'semantic',
   ac_OPERATED_BY.scope = 'intra_realm',
   ac_OPERATED_BY.cardinality = 'many_to_many',
   ac_OPERATED_BY.is_self_referential = false,
-  ac_OPERATED_BY.inverse_name = 'ACTS_ON',
+  ac_OPERATED_BY.inverse_name = null,
   ac_OPERATED_BY.arc_properties = ['strength', 'temperature', 'operation_type'],
   ac_OPERATED_BY.cypher_pattern = '(Entity)-[:OPERATED_BY]->(Entity)',
   ac_OPERATED_BY.temperature_threshold = 0.15,
@@ -3261,7 +3261,7 @@ ON MATCH SET
 MERGE (ac_POPULAR_IN:Schema:ArcClass {key: 'POPULAR_IN'})
 ON CREATE SET
   ac_POPULAR_IN.display_name = 'Popular In',
-  ac_POPULAR_IN.llm_context = 'Geographic relevance relationship: Entity is popular/relevant in a region. Links org-realm entities to shared-realm geographic nodes. Use for: regional content targeting, locale-specific feature promotion, market-specific entity selection in generation context. weight: 0.0 = entity exists but is niche in region 0.5 = entity has moderate presence 1.0 = entity is dominant/exclusive to region Examples: qr-code-pix POPULAR_IN brazil (weight: 0.95) qr-code-upi POPULAR_IN india (weight: 0.9) qr-code-twint POPULAR_IN switzerland (weight: 0.85) Cross-realm: Entity (org/semantic) -> GeoRegion/GeoSubRegion/Continent (shared/geography)',
+  ac_POPULAR_IN.llm_context = 'USE: when finding regional popularity/relevance of an entity. TRIGGERS: popular in, regional relevance, geographic targeting, market presence. NOT: locale support (use SUPPORTS_LOCALE), cultural similarity (use CULTURALLY_SIMILAR). RELATES: Entity (source), GeoRegion/GeoSubRegion/Continent (target), weight (property).',
   ac_POPULAR_IN.family = 'semantic',
   ac_POPULAR_IN.scope = 'cross_realm',
   ac_POPULAR_IN.cardinality = 'many_to_many',
@@ -3273,7 +3273,7 @@ ON CREATE SET
   ac_POPULAR_IN.created_at = datetime()
 ON MATCH SET
   ac_POPULAR_IN.display_name = 'Popular In',
-  ac_POPULAR_IN.llm_context = 'Geographic relevance relationship: Entity is popular/relevant in a region. Links org-realm entities to shared-realm geographic nodes. Use for: regional content targeting, locale-specific feature promotion, market-specific entity selection in generation context. weight: 0.0 = entity exists but is niche in region 0.5 = entity has moderate presence 1.0 = entity is dominant/exclusive to region Examples: qr-code-pix POPULAR_IN brazil (weight: 0.95) qr-code-upi POPULAR_IN india (weight: 0.9) qr-code-twint POPULAR_IN switzerland (weight: 0.85) Cross-realm: Entity (org/semantic) -> GeoRegion/GeoSubRegion/Continent (shared/geography)',
+  ac_POPULAR_IN.llm_context = 'USE: when finding regional popularity/relevance of an entity. TRIGGERS: popular in, regional relevance, geographic targeting, market presence. NOT: locale support (use SUPPORTS_LOCALE), cultural similarity (use CULTURALLY_SIMILAR). RELATES: Entity (source), GeoRegion/GeoSubRegion/Continent (target), weight (property).',
   ac_POPULAR_IN.family = 'semantic',
   ac_POPULAR_IN.scope = 'cross_realm',
   ac_POPULAR_IN.cardinality = 'many_to_many',
@@ -3287,7 +3287,7 @@ ON MATCH SET
 MERGE (ac_READS:Schema:ArcClass {key: 'READS'})
 ON CREATE SET
   ac_READS.display_name = 'Reads',
-  ac_READS.llm_context = 'Read/decode relationship: TOOL entity reads/scans THING. Use for qr-code-scanner READS qr-code, barcode-scanner READS barcode. Different from PRODUCES (creation) or ACTS_ON (general action). read_type: scan (optical), decode (interpret), parse (structure), extract (content), verify (validate)',
+  ac_READS.llm_context = 'USE: when finding what a scanner/reader tool can read. TRIGGERS: reads, scans, decodes, parses, extracts. NOT: general action (use ACTS_ON), creation (use PRODUCES). RELATES: Entity (source/tool), Entity (target/thing), READ_BY (inverse).',
   ac_READS.family = 'semantic',
   ac_READS.scope = 'intra_realm',
   ac_READS.cardinality = 'many_to_many',
@@ -3299,7 +3299,7 @@ ON CREATE SET
   ac_READS.created_at = datetime()
 ON MATCH SET
   ac_READS.display_name = 'Reads',
-  ac_READS.llm_context = 'Read/decode relationship: TOOL entity reads/scans THING. Use for qr-code-scanner READS qr-code, barcode-scanner READS barcode. Different from PRODUCES (creation) or ACTS_ON (general action). read_type: scan (optical), decode (interpret), parse (structure), extract (content), verify (validate)',
+  ac_READS.llm_context = 'USE: when finding what a scanner/reader tool can read. TRIGGERS: reads, scans, decodes, parses, extracts. NOT: general action (use ACTS_ON), creation (use PRODUCES). RELATES: Entity (source/tool), Entity (target/thing), READ_BY (inverse).',
   ac_READS.family = 'semantic',
   ac_READS.scope = 'intra_realm',
   ac_READS.cardinality = 'many_to_many',
@@ -3313,24 +3313,24 @@ ON MATCH SET
 MERGE (ac_READ_BY:Schema:ArcClass {key: 'READ_BY'})
 ON CREATE SET
   ac_READ_BY.display_name = 'Read By',
-  ac_READ_BY.llm_context = 'Inverse of READS: THING is read/scanned by TOOL. Use for qr-code READ_BY qr-code-scanner, barcode READ_BY barcode-scanner. Enables traversal from entity to tools that can read it.',
+  ac_READ_BY.llm_context = 'USE: when finding tools that can read/scan an entity. TRIGGERS: read by, scanned by, decoded by, parsed by. NOT: operated by (use OPERATED_BY), created by (inverse direction). RELATES: Entity (source/thing), Entity (target/tool), READS (inverse).',
   ac_READ_BY.family = 'semantic',
   ac_READ_BY.scope = 'intra_realm',
   ac_READ_BY.cardinality = 'many_to_many',
   ac_READ_BY.is_self_referential = false,
-  ac_READ_BY.inverse_name = 'READS',
+  ac_READ_BY.inverse_name = null,
   ac_READ_BY.arc_properties = ['strength', 'temperature', 'read_type'],
   ac_READ_BY.cypher_pattern = '(Entity)-[:READ_BY]->(Entity)',
   ac_READ_BY.temperature_threshold = 0.15,
   ac_READ_BY.created_at = datetime()
 ON MATCH SET
   ac_READ_BY.display_name = 'Read By',
-  ac_READ_BY.llm_context = 'Inverse of READS: THING is read/scanned by TOOL. Use for qr-code READ_BY qr-code-scanner, barcode READ_BY barcode-scanner. Enables traversal from entity to tools that can read it.',
+  ac_READ_BY.llm_context = 'USE: when finding tools that can read/scan an entity. TRIGGERS: read by, scanned by, decoded by, parsed by. NOT: operated by (use OPERATED_BY), created by (inverse direction). RELATES: Entity (source/thing), Entity (target/tool), READS (inverse).',
   ac_READ_BY.family = 'semantic',
   ac_READ_BY.scope = 'intra_realm',
   ac_READ_BY.cardinality = 'many_to_many',
   ac_READ_BY.is_self_referential = false,
-  ac_READ_BY.inverse_name = 'READS',
+  ac_READ_BY.inverse_name = null,
   ac_READ_BY.arc_properties = ['strength', 'temperature', 'read_type'],
   ac_READ_BY.cypher_pattern = '(Entity)-[:READ_BY]->(Entity)',
   ac_READ_BY.temperature_threshold = 0.15,
@@ -3365,7 +3365,7 @@ ON MATCH SET
 MERGE (ac_REFERENCES:Schema:ArcClass {key: 'REFERENCES'})
 ON CREATE SET
   ac_REFERENCES.display_name = 'References',
-  ac_REFERENCES.llm_context = 'Block references an Entity for content injection or linking. Aggregated from [@entity:X] refs parsed in BlockInstruction. purpose: inject (embed EntityContent) vs link (hyperlink to Entity\'s Page). count: how many times the entity appears in the block instruction. Use: MATCH (b:Block)-[r:REFERENCES {purpose: \'inject\'}]->(e:Entity)',
+  ac_REFERENCES.llm_context = 'USE: when finding entities referenced by a block. TRIGGERS: block references, entity injection, block entities, content refs. NOT: instruction-level refs (use REFERENCES_ENTITY), page links (use LINKS_TO). RELATES: Block (source), Entity (target), REFERENCED_BY (inverse).',
   ac_REFERENCES.family = 'semantic',
   ac_REFERENCES.scope = 'intra_realm',
   ac_REFERENCES.cardinality = 'many_to_many',
@@ -3377,7 +3377,7 @@ ON CREATE SET
   ac_REFERENCES.created_at = datetime()
 ON MATCH SET
   ac_REFERENCES.display_name = 'References',
-  ac_REFERENCES.llm_context = 'Block references an Entity for content injection or linking. Aggregated from [@entity:X] refs parsed in BlockInstruction. purpose: inject (embed EntityContent) vs link (hyperlink to Entity\'s Page). count: how many times the entity appears in the block instruction. Use: MATCH (b:Block)-[r:REFERENCES {purpose: \'inject\'}]->(e:Entity)',
+  ac_REFERENCES.llm_context = 'USE: when finding entities referenced by a block. TRIGGERS: block references, entity injection, block entities, content refs. NOT: instruction-level refs (use REFERENCES_ENTITY), page links (use LINKS_TO). RELATES: Block (source), Entity (target), REFERENCED_BY (inverse).',
   ac_REFERENCES.family = 'semantic',
   ac_REFERENCES.scope = 'intra_realm',
   ac_REFERENCES.cardinality = 'many_to_many',
@@ -3391,7 +3391,7 @@ ON MATCH SET
 MERGE (ac_REFERENCES_ENTITY:Schema:ArcClass {key: 'REFERENCES_ENTITY'})
 ON CREATE SET
   ac_REFERENCES_ENTITY.display_name = 'References Entity',
-  ac_REFERENCES_ENTITY.llm_context = 'BlockInstruction references an Entity via @entity:key syntax. Auto-parsed. Use: MATCH (bi:BlockInstruction)-[:REFERENCES_ENTITY]->(e:Entity)',
+  ac_REFERENCES_ENTITY.llm_context = 'USE: when finding entities referenced by a block instruction. TRIGGERS: @entity reference, instruction entities, entity mention, entity context. NOT: page references (use REFERENCES_PAGE), block mentions (use MENTIONS). RELATES: BlockInstruction (source), Entity (target), auto-parsed from @ syntax.',
   ac_REFERENCES_ENTITY.family = 'semantic',
   ac_REFERENCES_ENTITY.scope = 'intra_realm',
   ac_REFERENCES_ENTITY.cardinality = 'many_to_many',
@@ -3403,7 +3403,7 @@ ON CREATE SET
   ac_REFERENCES_ENTITY.created_at = datetime()
 ON MATCH SET
   ac_REFERENCES_ENTITY.display_name = 'References Entity',
-  ac_REFERENCES_ENTITY.llm_context = 'BlockInstruction references an Entity via @entity:key syntax. Auto-parsed. Use: MATCH (bi:BlockInstruction)-[:REFERENCES_ENTITY]->(e:Entity)',
+  ac_REFERENCES_ENTITY.llm_context = 'USE: when finding entities referenced by a block instruction. TRIGGERS: @entity reference, instruction entities, entity mention, entity context. NOT: page references (use REFERENCES_PAGE), block mentions (use MENTIONS). RELATES: BlockInstruction (source), Entity (target), auto-parsed from @ syntax.',
   ac_REFERENCES_ENTITY.family = 'semantic',
   ac_REFERENCES_ENTITY.scope = 'intra_realm',
   ac_REFERENCES_ENTITY.cardinality = 'many_to_many',
@@ -3417,7 +3417,7 @@ ON MATCH SET
 MERGE (ac_REFERENCES_PAGE:Schema:ArcClass {key: 'REFERENCES_PAGE'})
 ON CREATE SET
   ac_REFERENCES_PAGE.display_name = 'References Page',
-  ac_REFERENCES_PAGE.llm_context = 'BlockInstruction references a Page via @link:key syntax. Auto-parsed. Use: MATCH (bi:BlockInstruction)-[:REFERENCES_PAGE]->(p:Page)',
+  ac_REFERENCES_PAGE.llm_context = 'USE: when finding pages referenced by a block instruction. TRIGGERS: @link reference, instruction pages, page link, internal link. NOT: entity references (use REFERENCES_ENTITY), page-to-page (use LINKS_TO). RELATES: BlockInstruction (source), Page (target), auto-parsed from @ syntax.',
   ac_REFERENCES_PAGE.family = 'semantic',
   ac_REFERENCES_PAGE.scope = 'intra_realm',
   ac_REFERENCES_PAGE.cardinality = 'many_to_many',
@@ -3429,7 +3429,7 @@ ON CREATE SET
   ac_REFERENCES_PAGE.created_at = datetime()
 ON MATCH SET
   ac_REFERENCES_PAGE.display_name = 'References Page',
-  ac_REFERENCES_PAGE.llm_context = 'BlockInstruction references a Page via @link:key syntax. Auto-parsed. Use: MATCH (bi:BlockInstruction)-[:REFERENCES_PAGE]->(p:Page)',
+  ac_REFERENCES_PAGE.llm_context = 'USE: when finding pages referenced by a block instruction. TRIGGERS: @link reference, instruction pages, page link, internal link. NOT: entity references (use REFERENCES_ENTITY), page-to-page (use LINKS_TO). RELATES: BlockInstruction (source), Page (target), auto-parsed from @ syntax.',
   ac_REFERENCES_PAGE.family = 'semantic',
   ac_REFERENCES_PAGE.scope = 'intra_realm',
   ac_REFERENCES_PAGE.cardinality = 'many_to_many',
@@ -3469,7 +3469,7 @@ ON MATCH SET
 MERGE (ac_REPRESENTS:Schema:ArcClass {key: 'REPRESENTS'})
 ON CREATE SET
   ac_REPRESENTS.display_name = 'Represents',
-  ac_REPRESENTS.llm_context = 'Every Page MUST represent exactly one Entity (1:1 mandatory). Page.key = Entity.key (Entity is the semantic source of truth). The Page inherits its identity from the Entity it represents. Example: page-qr-code-generator REPRESENTS entity qr-code-generator. For additional Entity references within the page, use USES_ENTITY (N:N).',
+  ac_REPRESENTS.llm_context = 'USE: when finding the main entity a page represents. TRIGGERS: page entity, page represents, main entity, page identity. NOT: entity usage (use USES_ENTITY), entity references (use REFERENCES). RELATES: Page (source), Entity (target), REPRESENTED_BY (inverse), 1:1 mandatory.',
   ac_REPRESENTS.family = 'semantic',
   ac_REPRESENTS.scope = 'intra_realm',
   ac_REPRESENTS.cardinality = 'one_to_one',
@@ -3481,7 +3481,7 @@ ON CREATE SET
   ac_REPRESENTS.created_at = datetime()
 ON MATCH SET
   ac_REPRESENTS.display_name = 'Represents',
-  ac_REPRESENTS.llm_context = 'Every Page MUST represent exactly one Entity (1:1 mandatory). Page.key = Entity.key (Entity is the semantic source of truth). The Page inherits its identity from the Entity it represents. Example: page-qr-code-generator REPRESENTS entity qr-code-generator. For additional Entity references within the page, use USES_ENTITY (N:N).',
+  ac_REPRESENTS.llm_context = 'USE: when finding the main entity a page represents. TRIGGERS: page entity, page represents, main entity, page identity. NOT: entity usage (use USES_ENTITY), entity references (use REFERENCES). RELATES: Page (source), Entity (target), REPRESENTED_BY (inverse), 1:1 mandatory.',
   ac_REPRESENTS.family = 'semantic',
   ac_REPRESENTS.scope = 'intra_realm',
   ac_REPRESENTS.cardinality = 'one_to_one',
@@ -3495,24 +3495,24 @@ ON MATCH SET
 MERGE (ac_REQUIRED_BY:Schema:ArcClass {key: 'REQUIRED_BY'})
 ON CREATE SET
   ac_REQUIRED_BY.display_name = 'Required By',
-  ac_REQUIRED_BY.llm_context = 'Inverse of REQUIRES: Entity A is required by Entity B. Use for: impact analysis (what breaks if A is removed), finding dependents, understanding importance. Examples: URL REQUIRED_BY URLShortener, PaymentProvider REQUIRED_BY PaymentQR',
+  ac_REQUIRED_BY.llm_context = 'USE: when finding what depends on an entity. TRIGGERS: required by, dependents, what needs, impact analysis. NOT: enabling (use ENABLED_BY), enhancement (use ENHANCED_BY). RELATES: Entity (source), Entity (target/dependent), REQUIRES (inverse).',
   ac_REQUIRED_BY.family = 'semantic',
   ac_REQUIRED_BY.scope = 'intra_realm',
   ac_REQUIRED_BY.cardinality = 'many_to_many',
   ac_REQUIRED_BY.is_self_referential = false,
-  ac_REQUIRED_BY.inverse_name = 'REQUIRES',
+  ac_REQUIRED_BY.inverse_name = null,
   ac_REQUIRED_BY.arc_properties = ['strength', 'temperature', 'dependency_type', 'condition'],
   ac_REQUIRED_BY.cypher_pattern = '(Entity)-[:REQUIRED_BY]->(Entity)',
   ac_REQUIRED_BY.temperature_threshold = 0.1,
   ac_REQUIRED_BY.created_at = datetime()
 ON MATCH SET
   ac_REQUIRED_BY.display_name = 'Required By',
-  ac_REQUIRED_BY.llm_context = 'Inverse of REQUIRES: Entity A is required by Entity B. Use for: impact analysis (what breaks if A is removed), finding dependents, understanding importance. Examples: URL REQUIRED_BY URLShortener, PaymentProvider REQUIRED_BY PaymentQR',
+  ac_REQUIRED_BY.llm_context = 'USE: when finding what depends on an entity. TRIGGERS: required by, dependents, what needs, impact analysis. NOT: enabling (use ENABLED_BY), enhancement (use ENHANCED_BY). RELATES: Entity (source), Entity (target/dependent), REQUIRES (inverse).',
   ac_REQUIRED_BY.family = 'semantic',
   ac_REQUIRED_BY.scope = 'intra_realm',
   ac_REQUIRED_BY.cardinality = 'many_to_many',
   ac_REQUIRED_BY.is_self_referential = false,
-  ac_REQUIRED_BY.inverse_name = 'REQUIRES',
+  ac_REQUIRED_BY.inverse_name = null,
   ac_REQUIRED_BY.arc_properties = ['strength', 'temperature', 'dependency_type', 'condition'],
   ac_REQUIRED_BY.cypher_pattern = '(Entity)-[:REQUIRED_BY]->(Entity)',
   ac_REQUIRED_BY.temperature_threshold = 0.1,
@@ -3521,7 +3521,7 @@ ON MATCH SET
 MERGE (ac_REQUIRES:Schema:ArcClass {key: 'REQUIRES'})
 ON CREATE SET
   ac_REQUIRES.display_name = 'Requires',
-  ac_REQUIRES.llm_context = 'Dependency relationship: Entity A requires Entity B to function/exist. dependency_type: hard (mandatory), soft (recommended), optional (nice-to-have), conditional (required under certain conditions) Examples: URLShortener REQUIRES URL, PaymentQR REQUIRES PaymentProvider Use for: dependency resolution, prerequisite checking.',
+  ac_REQUIRES.llm_context = 'USE: when finding dependencies of an entity. TRIGGERS: requires, depends on, needs, prerequisites, dependencies. NOT: enabling (use ENABLES), enhancement (use ENHANCES). RELATES: Entity (source), Entity (target/dependency), REQUIRED_BY (inverse).',
   ac_REQUIRES.family = 'semantic',
   ac_REQUIRES.scope = 'intra_realm',
   ac_REQUIRES.cardinality = 'many_to_many',
@@ -3533,7 +3533,7 @@ ON CREATE SET
   ac_REQUIRES.created_at = datetime()
 ON MATCH SET
   ac_REQUIRES.display_name = 'Requires',
-  ac_REQUIRES.llm_context = 'Dependency relationship: Entity A requires Entity B to function/exist. dependency_type: hard (mandatory), soft (recommended), optional (nice-to-have), conditional (required under certain conditions) Examples: URLShortener REQUIRES URL, PaymentQR REQUIRES PaymentProvider Use for: dependency resolution, prerequisite checking.',
+  ac_REQUIRES.llm_context = 'USE: when finding dependencies of an entity. TRIGGERS: requires, depends on, needs, prerequisites, dependencies. NOT: enabling (use ENABLES), enhancement (use ENHANCES). RELATES: Entity (source), Entity (target/dependency), REQUIRED_BY (inverse).',
   ac_REQUIRES.family = 'semantic',
   ac_REQUIRES.scope = 'intra_realm',
   ac_REQUIRES.cardinality = 'many_to_many',
@@ -3547,7 +3547,7 @@ ON MATCH SET
 MERGE (ac_SEMANTIC_LINK:Schema:ArcClass {key: 'SEMANTIC_LINK'})
 ON CREATE SET
   ac_SEMANTIC_LINK.display_name = 'Semantic Link',
-  ac_SEMANTIC_LINK.llm_context = 'Spreading activation links between entities. temperature: 0.0-1.0, cutoff 0.3, max 2 hops.',
+  ac_SEMANTIC_LINK.llm_context = 'USE: when traversing semantic relationships between entities via spreading activation. TRIGGERS: related entities, semantic connections, entity relationships, spreading activation. NOT: specific relationships like similarity (use SIMILAR_TO), dependency (use REQUIRES). RELATES: Entity (source), Entity (target), temperature 0.0-1.0 (cutoff 0.3, max 2 hops).',
   ac_SEMANTIC_LINK.family = 'semantic',
   ac_SEMANTIC_LINK.scope = 'intra_realm',
   ac_SEMANTIC_LINK.cardinality = 'many_to_many',
@@ -3559,7 +3559,7 @@ ON CREATE SET
   ac_SEMANTIC_LINK.created_at = datetime()
 ON MATCH SET
   ac_SEMANTIC_LINK.display_name = 'Semantic Link',
-  ac_SEMANTIC_LINK.llm_context = 'Spreading activation links between entities. temperature: 0.0-1.0, cutoff 0.3, max 2 hops.',
+  ac_SEMANTIC_LINK.llm_context = 'USE: when traversing semantic relationships between entities via spreading activation. TRIGGERS: related entities, semantic connections, entity relationships, spreading activation. NOT: specific relationships like similarity (use SIMILAR_TO), dependency (use REQUIRES). RELATES: Entity (source), Entity (target), temperature 0.0-1.0 (cutoff 0.3, max 2 hops).',
   ac_SEMANTIC_LINK.family = 'semantic',
   ac_SEMANTIC_LINK.scope = 'intra_realm',
   ac_SEMANTIC_LINK.cardinality = 'many_to_many',
@@ -3573,7 +3573,7 @@ ON MATCH SET
 MERGE (ac_SIMILAR_TO:Schema:ArcClass {key: 'SIMILAR_TO'})
 ON CREATE SET
   ac_SIMILAR_TO.display_name = 'Similar To',
-  ac_SIMILAR_TO.llm_context = 'Similarity relationship: Entity A is similar to Entity B (symmetric). General similarity without implying competition or substitutability. similarity_type: functional (same purpose), structural (same form), semantic (same meaning), visual (same appearance), behavioral (same action) Differs from ALTERNATIVE_TO: similar entities may not be interchangeable. Examples: QRCode SIMILAR_TO DataMatrix, VCard SIMILAR_TO hCard Symmetric: A SIMILAR_TO B implies B SIMILAR_TO A. Use for: exploration, recommendation, related content.',
+  ac_SIMILAR_TO.llm_context = 'USE: when finding entities similar to another (symmetric relationship). TRIGGERS: similar to, like, resembles, related content, recommendations. NOT: interchangeable alternatives (use ALTERNATIVE_TO), competition (use COMPETES_WITH). RELATES: Entity (source), Entity (target), symmetric (A↔B), types: functional/structural/semantic/visual/behavioral.',
   ac_SIMILAR_TO.family = 'semantic',
   ac_SIMILAR_TO.scope = 'intra_realm',
   ac_SIMILAR_TO.cardinality = 'many_to_many',
@@ -3585,7 +3585,7 @@ ON CREATE SET
   ac_SIMILAR_TO.created_at = datetime()
 ON MATCH SET
   ac_SIMILAR_TO.display_name = 'Similar To',
-  ac_SIMILAR_TO.llm_context = 'Similarity relationship: Entity A is similar to Entity B (symmetric). General similarity without implying competition or substitutability. similarity_type: functional (same purpose), structural (same form), semantic (same meaning), visual (same appearance), behavioral (same action) Differs from ALTERNATIVE_TO: similar entities may not be interchangeable. Examples: QRCode SIMILAR_TO DataMatrix, VCard SIMILAR_TO hCard Symmetric: A SIMILAR_TO B implies B SIMILAR_TO A. Use for: exploration, recommendation, related content.',
+  ac_SIMILAR_TO.llm_context = 'USE: when finding entities similar to another (symmetric relationship). TRIGGERS: similar to, like, resembles, related content, recommendations. NOT: interchangeable alternatives (use ALTERNATIVE_TO), competition (use COMPETES_WITH). RELATES: Entity (source), Entity (target), symmetric (A↔B), types: functional/structural/semantic/visual/behavioral.',
   ac_SIMILAR_TO.family = 'semantic',
   ac_SIMILAR_TO.scope = 'intra_realm',
   ac_SIMILAR_TO.cardinality = 'many_to_many',
@@ -3599,7 +3599,7 @@ ON MATCH SET
 MERGE (ac_SUBTOPIC_OF:Schema:ArcClass {key: 'SUBTOPIC_OF'})
 ON CREATE SET
   ac_SUBTOPIC_OF.display_name = 'Subtopic Of',
-  ac_SUBTOPIC_OF.llm_context = 'Cluster page is subtopic of pillar page for SEO topical authority.',
+  ac_SUBTOPIC_OF.llm_context = 'USE: when building SEO topical hierarchy (cluster → pillar structure). TRIGGERS: subtopic of, cluster page, pillar page, topical authority, content hierarchy. NOT: page composition (use HAS_BLOCK), page linking (use LINKS_TO). RELATES: Page (source/cluster), Page (target/pillar), many_to_one cardinality.',
   ac_SUBTOPIC_OF.family = 'semantic',
   ac_SUBTOPIC_OF.scope = 'intra_realm',
   ac_SUBTOPIC_OF.cardinality = 'many_to_one',
@@ -3611,7 +3611,7 @@ ON CREATE SET
   ac_SUBTOPIC_OF.created_at = datetime()
 ON MATCH SET
   ac_SUBTOPIC_OF.display_name = 'Subtopic Of',
-  ac_SUBTOPIC_OF.llm_context = 'Cluster page is subtopic of pillar page for SEO topical authority.',
+  ac_SUBTOPIC_OF.llm_context = 'USE: when building SEO topical hierarchy (cluster → pillar structure). TRIGGERS: subtopic of, cluster page, pillar page, topical authority, content hierarchy. NOT: page composition (use HAS_BLOCK), page linking (use LINKS_TO). RELATES: Page (source/cluster), Page (target/pillar), many_to_one cardinality.',
   ac_SUBTOPIC_OF.family = 'semantic',
   ac_SUBTOPIC_OF.scope = 'intra_realm',
   ac_SUBTOPIC_OF.cardinality = 'many_to_one',
@@ -3625,7 +3625,7 @@ ON MATCH SET
 MERGE (ac_TARGETS:Schema:ArcClass {key: 'TARGETS'})
 ON CREATE SET
   ac_TARGETS.display_name = 'Targets',
-  ac_TARGETS.llm_context = 'EntityContent targets SEO keywords for organic search optimization. Multiple EntityContent can target the same keyword. One EntityContent can target multiple keywords. CONSTRAINT: EntityContent locale must match SEOKeyword locale (via Locale ownership). Use: MATCH (el:EntityContent)-[:TARGETS]->(kw:SEOKeyword)',
+  ac_TARGETS.llm_context = 'USE: when finding SEO keywords targeted by localized content. TRIGGERS: targets keyword, SEO targeting, keyword optimization, organic search. NOT: keyword expression (use EXPRESSES), persona targeting (use TARGETS_PERSONA). RELATES: EntityContent (source), SEOKeyword (target), cross_realm, locale must match.',
   ac_TARGETS.family = 'semantic',
   ac_TARGETS.scope = 'cross_realm',
   ac_TARGETS.cardinality = 'many_to_many',
@@ -3637,7 +3637,7 @@ ON CREATE SET
   ac_TARGETS.created_at = datetime()
 ON MATCH SET
   ac_TARGETS.display_name = 'Targets',
-  ac_TARGETS.llm_context = 'EntityContent targets SEO keywords for organic search optimization. Multiple EntityContent can target the same keyword. One EntityContent can target multiple keywords. CONSTRAINT: EntityContent locale must match SEOKeyword locale (via Locale ownership). Use: MATCH (el:EntityContent)-[:TARGETS]->(kw:SEOKeyword)',
+  ac_TARGETS.llm_context = 'USE: when finding SEO keywords targeted by localized content. TRIGGERS: targets keyword, SEO targeting, keyword optimization, organic search. NOT: keyword expression (use EXPRESSES), persona targeting (use TARGETS_PERSONA). RELATES: EntityContent (source), SEOKeyword (target), cross_realm, locale must match.',
   ac_TARGETS.family = 'semantic',
   ac_TARGETS.scope = 'cross_realm',
   ac_TARGETS.cardinality = 'many_to_many',
@@ -3651,7 +3651,7 @@ ON MATCH SET
 MERGE (ac_TARGETS_PERSONA:Schema:ArcClass {key: 'TARGETS_PERSONA'})
 ON CREATE SET
   ac_TARGETS_PERSONA.display_name = 'Targets Persona',
-  ac_TARGETS_PERSONA.llm_context = 'Content is tailored for specific audience personas. Brand defines target personas; content inherits or overrides. Use to load persona context: MATCH (b:Block)-[:TARGETS_PERSONA]->(p:AudiencePersona)',
+  ac_TARGETS_PERSONA.llm_context = 'USE: when finding which audience personas content is tailored for. TRIGGERS: target audience, persona, who is this for, audience targeting. NOT: locale targeting (use FOR_LOCALE), channel targeting (use FOR_CHANNEL). RELATES: Brand/Page/Block/Entity (source), AudiencePersona (target), inherits from Brand.',
   ac_TARGETS_PERSONA.family = 'semantic',
   ac_TARGETS_PERSONA.scope = 'intra_realm',
   ac_TARGETS_PERSONA.cardinality = 'many_to_many',
@@ -3663,7 +3663,7 @@ ON CREATE SET
   ac_TARGETS_PERSONA.created_at = datetime()
 ON MATCH SET
   ac_TARGETS_PERSONA.display_name = 'Targets Persona',
-  ac_TARGETS_PERSONA.llm_context = 'Content is tailored for specific audience personas. Brand defines target personas; content inherits or overrides. Use to load persona context: MATCH (b:Block)-[:TARGETS_PERSONA]->(p:AudiencePersona)',
+  ac_TARGETS_PERSONA.llm_context = 'USE: when finding which audience personas content is tailored for. TRIGGERS: target audience, persona, who is this for, audience targeting. NOT: locale targeting (use FOR_LOCALE), channel targeting (use FOR_CHANNEL). RELATES: Brand/Page/Block/Entity (source), AudiencePersona (target), inherits from Brand.',
   ac_TARGETS_PERSONA.family = 'semantic',
   ac_TARGETS_PERSONA.scope = 'intra_realm',
   ac_TARGETS_PERSONA.cardinality = 'many_to_many',
@@ -3677,24 +3677,24 @@ ON MATCH SET
 MERGE (ac_TYPE_OF:Schema:ArcClass {key: 'TYPE_OF'})
 ON CREATE SET
   ac_TYPE_OF.display_name = 'Type Of',
-  ac_TYPE_OF.llm_context = 'Taxonomy relationship: Entity A is a type/subtype of Entity B. Source is more specific, target is more general (ISA relationship). taxonomy_level: genus (broad category), species (specific type), subspecies (narrow variant), instance (concrete example) Examples: StaticQR TYPE_OF QRCode, VCard TYPE_OF ContactFormat',
+  ac_TYPE_OF.llm_context = 'USE: when classifying entities in taxonomy hierarchy (ISA relationship). TRIGGERS: is a, type of, kind of, category, classification, taxonomy. NOT: variants (use VARIANT_OF), children (use HAS_CHILD), instances (use data nodes). RELATES: Entity (source/specific), Entity (target/general), HAS_TYPE (inverse).',
   ac_TYPE_OF.family = 'semantic',
   ac_TYPE_OF.scope = 'intra_realm',
   ac_TYPE_OF.cardinality = 'many_to_one',
   ac_TYPE_OF.is_self_referential = false,
-  ac_TYPE_OF.inverse_name = 'HAS_TYPE',
+  ac_TYPE_OF.inverse_name = null,
   ac_TYPE_OF.arc_properties = ['strength', 'temperature', 'taxonomy_level'],
   ac_TYPE_OF.cypher_pattern = '(Entity)-[:TYPE_OF]->(Entity)',
   ac_TYPE_OF.temperature_threshold = 0.15,
   ac_TYPE_OF.created_at = datetime()
 ON MATCH SET
   ac_TYPE_OF.display_name = 'Type Of',
-  ac_TYPE_OF.llm_context = 'Taxonomy relationship: Entity A is a type/subtype of Entity B. Source is more specific, target is more general (ISA relationship). taxonomy_level: genus (broad category), species (specific type), subspecies (narrow variant), instance (concrete example) Examples: StaticQR TYPE_OF QRCode, VCard TYPE_OF ContactFormat',
+  ac_TYPE_OF.llm_context = 'USE: when classifying entities in taxonomy hierarchy (ISA relationship). TRIGGERS: is a, type of, kind of, category, classification, taxonomy. NOT: variants (use VARIANT_OF), children (use HAS_CHILD), instances (use data nodes). RELATES: Entity (source/specific), Entity (target/general), HAS_TYPE (inverse).',
   ac_TYPE_OF.family = 'semantic',
   ac_TYPE_OF.scope = 'intra_realm',
   ac_TYPE_OF.cardinality = 'many_to_one',
   ac_TYPE_OF.is_self_referential = false,
-  ac_TYPE_OF.inverse_name = 'HAS_TYPE',
+  ac_TYPE_OF.inverse_name = null,
   ac_TYPE_OF.arc_properties = ['strength', 'temperature', 'taxonomy_level'],
   ac_TYPE_OF.cypher_pattern = '(Entity)-[:TYPE_OF]->(Entity)',
   ac_TYPE_OF.temperature_threshold = 0.15,
@@ -3703,7 +3703,7 @@ ON MATCH SET
 MERGE (ac_USED_BY:Schema:ArcClass {key: 'USED_BY'})
 ON CREATE SET
   ac_USED_BY.display_name = 'Used By',
-  ac_USED_BY.llm_context = 'Inverse of USES_ENTITY — entity knows who uses it.',
+  ac_USED_BY.llm_context = 'USE: when finding which pages/blocks use an entity (reverse lookup). TRIGGERS: used by, who uses, entity usage, content referencing entity. NOT: forward lookup (use USES_ENTITY), keyword references (use EXPRESSES). RELATES: Entity (source), Page/Block (target), USES_ENTITY (inverse_of).',
   ac_USED_BY.family = 'semantic',
   ac_USED_BY.scope = 'intra_realm',
   ac_USED_BY.cardinality = 'many_to_many',
@@ -3715,7 +3715,7 @@ ON CREATE SET
   ac_USED_BY.created_at = datetime()
 ON MATCH SET
   ac_USED_BY.display_name = 'Used By',
-  ac_USED_BY.llm_context = 'Inverse of USES_ENTITY — entity knows who uses it.',
+  ac_USED_BY.llm_context = 'USE: when finding which pages/blocks use an entity (reverse lookup). TRIGGERS: used by, who uses, entity usage, content referencing entity. NOT: forward lookup (use USES_ENTITY), keyword references (use EXPRESSES). RELATES: Entity (source), Page/Block (target), USES_ENTITY (inverse_of).',
   ac_USED_BY.family = 'semantic',
   ac_USED_BY.scope = 'intra_realm',
   ac_USED_BY.cardinality = 'many_to_many',
@@ -3729,7 +3729,7 @@ ON MATCH SET
 MERGE (ac_USES_ENTITY:Schema:ArcClass {key: 'USES_ENTITY'})
 ON CREATE SET
   ac_USES_ENTITY.display_name = 'Uses Entity',
-  ac_USES_ENTITY.llm_context = 'Page/Block references entities for generation context. purpose: primary = main topic, secondary = supporting, contextual = background. temperature: spreading activation weight (higher = more influence).',
+  ac_USES_ENTITY.llm_context = 'USE: when loading entities referenced by a page or block for generation. TRIGGERS: uses entity, references, page entities, block context, content entities. NOT: entity hierarchy (use HAS_CHILD), block instructions (use MENTIONS). RELATES: Page/Block (source), Entity (target), USED_BY (inverse), purpose: primary/secondary/contextual.',
   ac_USES_ENTITY.family = 'semantic',
   ac_USES_ENTITY.scope = 'intra_realm',
   ac_USES_ENTITY.cardinality = 'many_to_many',
@@ -3741,7 +3741,7 @@ ON CREATE SET
   ac_USES_ENTITY.created_at = datetime()
 ON MATCH SET
   ac_USES_ENTITY.display_name = 'Uses Entity',
-  ac_USES_ENTITY.llm_context = 'Page/Block references entities for generation context. purpose: primary = main topic, secondary = supporting, contextual = background. temperature: spreading activation weight (higher = more influence).',
+  ac_USES_ENTITY.llm_context = 'USE: when loading entities referenced by a page or block for generation. TRIGGERS: uses entity, references, page entities, block context, content entities. NOT: entity hierarchy (use HAS_CHILD), block instructions (use MENTIONS). RELATES: Page/Block (source), Entity (target), USED_BY (inverse), purpose: primary/secondary/contextual.',
   ac_USES_ENTITY.family = 'semantic',
   ac_USES_ENTITY.scope = 'intra_realm',
   ac_USES_ENTITY.cardinality = 'many_to_many',
@@ -3755,7 +3755,7 @@ ON MATCH SET
 MERGE (ac_USE_CASE_FOR:Schema:ArcClass {key: 'USE_CASE_FOR'})
 ON CREATE SET
   ac_USE_CASE_FOR.display_name = 'Use Case For',
-  ac_USE_CASE_FOR.llm_context = 'Preposition keyword (X for Y) references the target entity. Only valid when SEOKeyword has HAS_FORMAT → preposition. Pattern: (SEOKeyword)-[:USE_CASE_FOR]->(Entity) v11.4: New arc for preposition keyword semantics.',
+  ac_USE_CASE_FOR.llm_context = 'USE: when linking preposition keywords ("X for Y") to their target entity. TRIGGERS: use case, for keyword, preposition format, keyword target. NOT: keyword targeting (use TARGETS), keyword expression (use EXPRESSES). RELATES: SEOKeyword (source), Entity (target), requires HAS_FORMAT → preposition.',
   ac_USE_CASE_FOR.family = 'semantic',
   ac_USE_CASE_FOR.scope = 'cross_realm',
   ac_USE_CASE_FOR.cardinality = 'many_to_one',
@@ -3767,7 +3767,7 @@ ON CREATE SET
   ac_USE_CASE_FOR.created_at = datetime()
 ON MATCH SET
   ac_USE_CASE_FOR.display_name = 'Use Case For',
-  ac_USE_CASE_FOR.llm_context = 'Preposition keyword (X for Y) references the target entity. Only valid when SEOKeyword has HAS_FORMAT → preposition. Pattern: (SEOKeyword)-[:USE_CASE_FOR]->(Entity) v11.4: New arc for preposition keyword semantics.',
+  ac_USE_CASE_FOR.llm_context = 'USE: when linking preposition keywords ("X for Y") to their target entity. TRIGGERS: use case, for keyword, preposition format, keyword target. NOT: keyword targeting (use TARGETS), keyword expression (use EXPRESSES). RELATES: SEOKeyword (source), Entity (target), requires HAS_FORMAT → preposition.',
   ac_USE_CASE_FOR.family = 'semantic',
   ac_USE_CASE_FOR.scope = 'cross_realm',
   ac_USE_CASE_FOR.cardinality = 'many_to_one',
@@ -3781,24 +3781,24 @@ ON MATCH SET
 MERGE (ac_VARIANT_OF:Schema:ArcClass {key: 'VARIANT_OF'})
 ON CREATE SET
   ac_VARIANT_OF.display_name = 'Variant Of',
-  ac_VARIANT_OF.llm_context = 'Variant relationship: Entity A is a variant/version of Entity B. The source is a specialized form of the target (more specific). Examples: CustomQRCode VARIANT_OF QRCode, DynamicQR VARIANT_OF QRCode variant_type: version (temporal), flavor (style), edition (release), specialization (domain), customization (user-defined)',
+  ac_VARIANT_OF.llm_context = 'USE: when finding entity variants/versions (specialized forms). TRIGGERS: variant of, version of, flavor, edition, specialization. NOT: taxonomy (use TYPE_OF), alternatives (use ALTERNATIVE_TO). RELATES: Entity (source/specialized), Entity (target/base), HAS_VARIANT (inverse).',
   ac_VARIANT_OF.family = 'semantic',
   ac_VARIANT_OF.scope = 'intra_realm',
   ac_VARIANT_OF.cardinality = 'many_to_one',
   ac_VARIANT_OF.is_self_referential = false,
-  ac_VARIANT_OF.inverse_name = 'HAS_VARIANT',
+  ac_VARIANT_OF.inverse_name = null,
   ac_VARIANT_OF.arc_properties = ['strength', 'temperature', 'variant_type'],
   ac_VARIANT_OF.cypher_pattern = '(Entity)-[:VARIANT_OF]->(Entity)',
   ac_VARIANT_OF.temperature_threshold = 0.2,
   ac_VARIANT_OF.created_at = datetime()
 ON MATCH SET
   ac_VARIANT_OF.display_name = 'Variant Of',
-  ac_VARIANT_OF.llm_context = 'Variant relationship: Entity A is a variant/version of Entity B. The source is a specialized form of the target (more specific). Examples: CustomQRCode VARIANT_OF QRCode, DynamicQR VARIANT_OF QRCode variant_type: version (temporal), flavor (style), edition (release), specialization (domain), customization (user-defined)',
+  ac_VARIANT_OF.llm_context = 'USE: when finding entity variants/versions (specialized forms). TRIGGERS: variant of, version of, flavor, edition, specialization. NOT: taxonomy (use TYPE_OF), alternatives (use ALTERNATIVE_TO). RELATES: Entity (source/specialized), Entity (target/base), HAS_VARIANT (inverse).',
   ac_VARIANT_OF.family = 'semantic',
   ac_VARIANT_OF.scope = 'intra_realm',
   ac_VARIANT_OF.cardinality = 'many_to_one',
   ac_VARIANT_OF.is_self_referential = false,
-  ac_VARIANT_OF.inverse_name = 'HAS_VARIANT',
+  ac_VARIANT_OF.inverse_name = null,
   ac_VARIANT_OF.arc_properties = ['strength', 'temperature', 'variant_type'],
   ac_VARIANT_OF.cypher_pattern = '(Entity)-[:VARIANT_OF]->(Entity)',
   ac_VARIANT_OF.temperature_threshold = 0.2,

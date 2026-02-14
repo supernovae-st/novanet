@@ -1,0 +1,26 @@
+# packages/core/models/arc-classes/semantic/semantic-link.yaml
+# ArcKind: SEMANTIC_LINK — Spreading activation links between entities
+# v10.3: Concept → Entity
+
+arc:
+  name: SEMANTIC_LINK
+  family: semantic
+  scope: intra_realm
+  source: Entity
+  target: Entity
+  cardinality: many_to_many
+  is_self_referential: true
+  temperature_threshold: 0.3  # v9.9: Min temperature for traversal (high-confidence links)
+  properties:
+    - name: type
+      type: string
+      required: false
+    - name: temperature
+      type: string
+      required: false
+  llm_context: |
+    USE: when traversing semantic relationships between entities via spreading activation.
+    TRIGGERS: related entities, semantic connections, entity relationships, spreading activation.
+    NOT: specific relationships like similarity (use SIMILAR_TO), dependency (use REQUIRES).
+    RELATES: Entity (source), Entity (target), temperature 0.0-1.0 (cutoff 0.3, max 2 hops).
+  cypher_pattern: (Entity)-[:SEMANTIC_LINK {type, temperature}]->(Entity)

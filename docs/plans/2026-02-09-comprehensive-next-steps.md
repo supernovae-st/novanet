@@ -182,7 +182,7 @@
 **Skill:** `schema:add-node`
 
 **Files:**
-- Create: `packages/core/models/node-kinds/global/seo/seo-metrics.yaml`
+- Create: `packages/core/models/node-classes/global/seo/seo-metrics.yaml`
 
 **Steps:**
 1. Design SEOMetrics node with time-series properties
@@ -198,7 +198,7 @@
 **Agent:** `spn-rust:rust-pro`
 
 **Files:**
-- Modify: `packages/core/models/node-kinds/global/seo/seo-keyword.yaml`
+- Modify: `packages/core/models/node-classes/global/seo/seo-keyword.yaml`
 
 **Steps:**
 1. Remove volatile properties (volume, difficulty, cpc, etc.)
@@ -214,7 +214,7 @@
 **Skill:** `schema:add-arc`
 
 **Files:**
-- Create: `packages/core/models/arc-kinds/ownership/has-metrics.yaml`
+- Create: `packages/core/models/arc-classes/ownership/has-metrics.yaml`
 
 **Steps:**
 1. Design arc linking SEO/GEO nodes to Metrics
@@ -246,11 +246,11 @@
 **Agent:** `feature-dev:code-architect`
 
 **Files:**
-- Create: `packages/core/models/node-kinds/global/seo/geo-prompt.yaml`
-- Create: `packages/core/models/node-kinds/global/seo/geo-response.yaml`
-- Create: `packages/core/models/node-kinds/global/seo/geo-citation.yaml`
-- Create: `packages/core/models/node-kinds/global/seo/geo-mention.yaml`
-- Create: `packages/core/models/node-kinds/global/seo/geo-metrics.yaml`
+- Create: `packages/core/models/node-classes/global/seo/geo-prompt.yaml`
+- Create: `packages/core/models/node-classes/global/seo/geo-response.yaml`
+- Create: `packages/core/models/node-classes/global/seo/geo-citation.yaml`
+- Create: `packages/core/models/node-classes/global/seo/geo-mention.yaml`
+- Create: `packages/core/models/node-classes/global/seo/geo-metrics.yaml`
 
 **Steps:**
 1. Create each GEO node following plan spec
@@ -266,10 +266,10 @@
 **Agent:** `feature-dev:code-architect`
 
 **Files:**
-- Create: `packages/core/models/arc-kinds/semantic/has-response.yaml`
-- Create: `packages/core/models/arc-kinds/semantic/has-citation.yaml`
-- Create: `packages/core/models/arc-kinds/semantic/has-mention.yaml`
-- Create: `packages/core/models/arc-kinds/semantic/answers.yaml`
+- Create: `packages/core/models/arc-classes/semantic/has-response.yaml`
+- Create: `packages/core/models/arc-classes/semantic/has-citation.yaml`
+- Create: `packages/core/models/arc-classes/semantic/has-mention.yaml`
+- Create: `packages/core/models/arc-classes/semantic/answers.yaml`
 
 **Steps:**
 1. Create arcs for GEO relationships
@@ -346,8 +346,8 @@
 - Modify: `.claude/README.md`
 
 **Steps:**
-1. Count current nodes: `ls packages/core/models/node-kinds/**/*.yaml | wc -l`
-2. Count current arcs: `ls packages/core/models/arc-kinds/**/*.yaml | wc -l`
+1. Count current nodes: `ls packages/core/models/node-classes/**/*.yaml | wc -l`
+2. Count current arcs: `ls packages/core/models/arc-classes/**/*.yaml | wc -l`
 3. Update all documentation with correct counts
 4. Commit
 

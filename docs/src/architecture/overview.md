@@ -102,7 +102,7 @@ packages/core/models/
 ├── _index.yaml               # Schema registry
 ├── taxonomy.yaml             # Realms, Layers, Traits, Colors
 ├── visual-encoding.yaml      # Icons, border styles
-├── node-kinds/
+├── node-classes/
 │   ├── shared/               # 39 nodes (4 layers)
 │   │   ├── config/           # 3 nodes
 │   │   ├── locale/           # 6 nodes
@@ -115,7 +115,7 @@ packages/core/models/
 │       ├── semantic/         # 4 nodes
 │       ├── instruction/      # 7 nodes
 │       └── output/           # 3 nodes
-└── arc-kinds/                # 114 arcs by family
+└── arc-classes/                # 114 arcs by family
     ├── ownership/
     ├── localization/
     ├── semantic/

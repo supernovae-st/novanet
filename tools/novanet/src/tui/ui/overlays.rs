@@ -612,7 +612,7 @@ mod tests {
             trait_name: "defined".to_string(),
             instance_count: 10,
             arcs: vec![],
-            yaml_path: "models/node-kinds/org/structure/page.yaml".to_string(),
+            yaml_path: "models/node-classes/org/structure/page.yaml".to_string(),
             properties: vec!["key".to_string(), "display_name".to_string()],
             required_properties: vec!["key".to_string()],
             schema_hint: "".to_string(),

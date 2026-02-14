@@ -117,7 +117,7 @@ fn yaml_path(node: &ParsedNode) -> String {
         .file_name()
         .map(|f| f.to_string_lossy().to_string())
         .unwrap_or_default();
-    format!("node-kinds/{}/{}/{}", node.realm, node.layer, filename)
+    format!("node-classes/{}/{}/{}", node.realm, node.layer, filename)
 }
 
 /// Collect all property names (standard + business) in YAML definition order.
@@ -528,7 +528,7 @@ mod tests {
         assert!(cypher.contains("c_Page.schema_hint = 'display_name (req), key (req)'"));
         assert!(cypher.contains("c_Page.properties = ['key', 'display_name']"));
         assert!(cypher.contains("c_Page.required_properties = ['key', 'display_name']"));
-        assert!(cypher.contains("c_Page.yaml_path = 'node-kinds/org/structure/page.yaml'"));
+        assert!(cypher.contains("c_Page.yaml_path = 'node-classes/org/structure/page.yaml'"));
 
         // Class node for Locale
         assert!(cypher.contains("MERGE (c_Locale:Schema:Class {label: 'Locale'})"));

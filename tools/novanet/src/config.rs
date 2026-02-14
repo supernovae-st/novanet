@@ -43,7 +43,7 @@ pub fn models_dir(root: &Path) -> PathBuf {
 
 #[must_use]
 pub fn node_kinds_dir(root: &Path) -> PathBuf {
-    root.join("packages/core/models/node-kinds")
+    root.join("packages/core/models/node-classes")
 }
 
 /// Path to taxonomy.yaml (v9.5 - realms, layers, traits, arc families)
@@ -52,10 +52,10 @@ pub fn taxonomy_path(root: &Path) -> PathBuf {
     root.join("packages/core/models/taxonomy.yaml")
 }
 
-/// Directory containing arc-kinds YAML files
+/// Directory containing arc-classes YAML files
 #[must_use]
 pub fn arc_kinds_dir(root: &Path) -> PathBuf {
-    root.join("packages/core/models/arc-kinds")
+    root.join("packages/core/models/arc-classes")
 }
 
 /// Directory containing realm YAML files (v0.12.5)
@@ -143,7 +143,7 @@ mod tests {
         let root = Path::new("/fake/root");
         assert_eq!(
             node_kinds_dir(root),
-            PathBuf::from("/fake/root/packages/core/models/node-kinds")
+            PathBuf::from("/fake/root/packages/core/models/node-classes")
         );
     }
 
@@ -161,7 +161,7 @@ mod tests {
         let root = Path::new("/fake/root");
         assert_eq!(
             arc_kinds_dir(root),
-            PathBuf::from("/fake/root/packages/core/models/arc-kinds")
+            PathBuf::from("/fake/root/packages/core/models/arc-classes")
         );
     }
 
