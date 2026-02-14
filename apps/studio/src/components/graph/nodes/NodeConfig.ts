@@ -5,7 +5,7 @@
  * This eliminates the performance overhead of computing styles on every render,
  * which is critical when rendering 19k+ nodes.
  *
- * 59 nodes across 2 realms (SHARED / ORG)
+ * v0.12.4: 61 nodes across 2 realms (40 SHARED + 21 ORG)
  *
  * @example
  * // Fast lookup
@@ -42,11 +42,11 @@ export interface NodeConfig {
 }
 
 // =============================================================================
-// Size Lookup Table (59 nodes)
+// Size Lookup Table (v0.12.4: 61 nodes)
 // =============================================================================
 
 /**
- * Pre-computed sizes for all 59 node types
+ * Pre-computed sizes for all 61 node types (v0.12.4)
  *
  * Size categories:
  * - Large (280x140): Root nodes (Project, OrgConfig)
@@ -58,25 +58,31 @@ export interface NodeConfig {
  */
 export const NODE_SIZES: Record<NodeType, NodeSize> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // SHARED REALM (39 nodes)
+  // SHARED REALM (40 nodes) — v0.12.4: Country added to geography
   // ═══════════════════════════════════════════════════════════════════════════
-  // config (14) - v11.1: added EntityCategory
-  Locale: { width: 220, height: 110 },
+  // config (3) — Locale definition + classifications + SEO format
   EntityCategory: { width: 200, height: 100 },
+  Locale: { width: 220, height: 110 },
+  SEOKeywordFormat: { width: 180, height: 90 },
+
+  // locale (6) — Locale SETTINGS (not the Locale definition itself)
   Formatting: { width: 160, height: 80 },
   Slugification: { width: 160, height: 80 },
   Adaptation: { width: 160, height: 80 },
   Style: { width: 180, height: 90 },
   Culture: { width: 180, height: 90 },
   Market: { width: 180, height: 90 },
+
+  // geography (7) — v0.12.4: Country added
   Continent: { width: 200, height: 100 },
+  Country: { width: 200, height: 100 },
   GeoRegion: { width: 180, height: 90 },
   GeoSubRegion: { width: 180, height: 90 },
   IncomeGroup: { width: 180, height: 90 },
   LendingCategory: { width: 180, height: 90 },
   EconomicRegion: { width: 180, height: 90 },
 
-  // locale-knowledge (18) — Sets + Atoms + Linguistic/Cultural taxonomy
+  // knowledge (24) — Sets + Atoms + Linguistic/Cultural taxonomy + SEO/GEO
   TermSet: { width: 160, height: 80 },
   ExpressionSet: { width: 160, height: 80 },
   PatternSet: { width: 160, height: 80 },
@@ -95,7 +101,6 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   CulturalSubRealm: { width: 180, height: 90 },
   PopulationCluster: { width: 180, height: 90 },
   PopulationSubCluster: { width: 180, height: 90 },
-
   // knowledge — SEO/GEO (6) — v11.5: moved from org to shared/knowledge
   SEOKeyword: { width: 200, height: 100 },
   SEOKeywordMetrics: { width: 160, height: 80 },
@@ -104,17 +109,18 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   GEOQuerySet: { width: 180, height: 90 },
   GEOAnswer: { width: 180, height: 90 },
 
-  // config (3) — v11.5: Locale + EntityCategory + SEOKeywordFormat
-  SEOKeywordFormat: { width: 180, height: 90 },
-
   // ═══════════════════════════════════════════════════════════════════════════
-  // ORG REALM (20 nodes) — v11.5: SEO/GEO moved to shared/knowledge
+  // ORG REALM (21 nodes) — v0.12.4: Brand Architecture (+4), PageStructure/PageInstruction deleted (-2)
   // ═══════════════════════════════════════════════════════════════════════════
   // config (1)
   OrgConfig: { width: 280, height: 140 },
-  // foundation (3)
+
+  // foundation (6) — v0.12.4: Brand Architecture (Brand, BrandDesign, BrandPrinciples, PromptStyle)
   Project: { width: 280, height: 140 },
-  BrandIdentity: { width: 220, height: 110 },
+  Brand: { width: 220, height: 110 },
+  BrandDesign: { width: 200, height: 100 },
+  BrandPrinciples: { width: 200, height: 100 },
+  PromptStyle: { width: 200, height: 100 },
   ProjectContent: { width: 220, height: 110 },
 
   // structure (3)
@@ -122,50 +128,48 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   Block: { width: 200, height: 100 },
   ContentSlot: { width: 180, height: 90 },
 
-  // semantic (4) — v10.5: Entity/EntityContent here
+  // semantic (4)
   Entity: { width: 240, height: 120 },
   EntityContent: { width: 200, height: 100 },
   AudiencePersona: { width: 200, height: 100 },
   ChannelSurface: { width: 200, height: 100 },
 
-  // instruction (7)
-  PageStructure: { width: 200, height: 100 },
+  // instruction (4) — v0.12.4: PageStructure, PageInstruction deleted
   BlockType: { width: 200, height: 100 },
-  PageInstruction: { width: 200, height: 100 },
   BlockInstruction: { width: 180, height: 90 },
   BlockRules: { width: 180, height: 90 },
   PromptArtifact: { width: 200, height: 100 },
 
-  // output (3) — v11.2: job nodes removed
+  // output (3)
   PageGenerated: { width: 220, height: 110 },
   BlockGenerated: { width: 200, height: 100 },
   OutputArtifact: { width: 180, height: 90 },
 };
 
 // =============================================================================
-// Color Lookup Table (v0.12.0 - 59 nodes)
+// Color Lookup Table (v0.12.4 - 61 nodes)
 // =============================================================================
 
 /**
- * Pre-computed colors for all 59 node types (v0.12.0)
+ * Pre-computed colors for all 61 node types (v0.12.4)
  *
  * Color palette by realm and layer:
  * - SHARED config: Emerald/Cyan tones
  * - SHARED locale: Blue tones
- * - SHARED geography: Green tones
+ * - SHARED geography: Green tones (v0.12.4: Country added)
  * - SHARED knowledge: Green/Pink/Purple tones (incl. SEO/GEO)
  * - ORG config: Sky blue (#0ea5e9 family)
- * - ORG foundation: Violet (#8b5cf6 family)
+ * - ORG foundation: Violet (#8b5cf6 family) — v0.12.4: Brand Architecture
  * - ORG structure: Blue/Cyan (#3b82f6, #06b6d4 family)
  * - ORG semantic: Amber (#f59e0b family)
- * - ORG instruction: Blue (#3b82f6 family)
+ * - ORG instruction: Blue (#3b82f6 family) — v0.12.4: PageStructure/PageInstruction deleted
  * - ORG output: Orange/Red (#f97316, #ef4444 family)
  */
 export const NODE_COLORS: Record<NodeType, NodeColors> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // SHARED REALM (39 nodes)
+  // SHARED REALM (40 nodes) — v0.12.4: Country added to geography
   // ═══════════════════════════════════════════════════════════════════════════
-  // config (14) — Emerald/Cyan tones - v11.1: added EntityCategory
+  // config (3) — Emerald/Cyan tones
   Locale: {
     primary: '#10b981',
     secondary: '#22c55e',
@@ -214,11 +218,18 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     tertiary: '#10b981',
     glow: '#05966940',
   },
+  // geography (7) — v0.12.4: Country added
   Continent: {
     primary: '#2563eb',
     secondary: '#3b82f6',
     tertiary: '#60a5fa',
     glow: '#2563eb40',
+  },
+  Country: {
+    primary: '#1d4ed8',
+    secondary: '#2563eb',
+    tertiary: '#3b82f6',
+    glow: '#1d4ed840',
   },
   GeoRegion: {
     primary: '#3b82f6',
@@ -408,7 +419,7 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
   },
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // ORG REALM (20 nodes) — v11.5: SEO/GEO moved to shared/knowledge
+  // ORG REALM (21 nodes) — v0.12.4: Brand Architecture (+4), PageStructure/PageInstruction deleted (-2)
   // ═══════════════════════════════════════════════════════════════════════════
   // config (1) — Sky blue tone
   OrgConfig: {
@@ -417,18 +428,36 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     tertiary: '#7dd3fc',
     glow: '#0ea5e940',
   },
-  // foundation (3) — Violet tones
+  // foundation (6) — Violet tones — v0.12.4: Brand Architecture
   Project: {
     primary: '#8b5cf6',
     secondary: '#6366f1',
     tertiary: '#a78bfa',
     glow: '#8b5cf640',
   },
-  BrandIdentity: {
+  Brand: {
     primary: '#6d28d9',
     secondary: '#7c3aed',
     tertiary: '#8b5cf6',
     glow: '#6d28d940',
+  },
+  BrandDesign: {
+    primary: '#7c3aed',
+    secondary: '#8b5cf6',
+    tertiary: '#a78bfa',
+    glow: '#7c3aed40',
+  },
+  BrandPrinciples: {
+    primary: '#5b21b6',
+    secondary: '#6d28d9',
+    tertiary: '#7c3aed',
+    glow: '#5b21b640',
+  },
+  PromptStyle: {
+    primary: '#4c1d95',
+    secondary: '#5b21b6',
+    tertiary: '#6d28d9',
+    glow: '#4c1d9540',
   },
   ProjectContent: {
     primary: '#a78bfa',
@@ -483,24 +512,12 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     glow: '#d9770640',
   },
 
-  // instruction (7) — Blue tones
-  PageStructure: {
-    primary: '#2563eb',
-    secondary: '#3b82f6',
-    tertiary: '#60a5fa',
-    glow: '#2563eb40',
-  },
+  // instruction (4) — Blue tones — v0.12.4: PageStructure, PageInstruction deleted
   BlockType: {
     primary: '#14b8a6',
     secondary: '#10b981',
     tertiary: '#2dd4bf',
     glow: '#14b8a640',
-  },
-  PageInstruction: {
-    primary: '#3b82f6',
-    secondary: '#60a5fa',
-    tertiary: '#93c5fd',
-    glow: '#3b82f640',
   },
   BlockInstruction: {
     primary: '#60a5fa',

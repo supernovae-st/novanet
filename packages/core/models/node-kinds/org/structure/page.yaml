@@ -129,10 +129,18 @@ node:
       description: "Entities referenced by this page"
 
     # v7.12.0: Page-to-Page relationships (v7.12.1: anchor_type + nofollow)
+    # v0.12.4: ADR-028 - Added via_blocks + strength (calculated from @ refs)
     LINKS_TO:
       to: Page
       cardinality: "N:N"
       props:
+        via_blocks:
+          type: array
+          description: "Block keys where link originates (e.g., ['hero', 'pricing'])"
+        strength:
+          type: int
+          default: 1
+          description: "Link strength = count of [@page:X] refs across blocks"
         entity_key:
           type: string
           description: "Entity key - anchor text derived from EntityContent.display_name at generation time"
@@ -152,7 +160,7 @@ node:
           type: boolean
           default: false
           description: "Set true for login/legal pages to prevent link equity flow (v7.12.1)"
-      description: "Explicit internal link for SEO. Anchor text is localized via Entity → EntityContent"
+      description: "Explicit internal link for SEO. Calculated from [@page:X] refs in BlockInstructions"
 
     SUBTOPIC_OF:
       to: Page

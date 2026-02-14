@@ -20,17 +20,17 @@ export {
   CLASS_TAXONOMY,
 } from '@novanet/core/types';
 
-// Standard properties and domain types (v10.4: Entity-Centric, no GEO layer)
+// Standard properties and domain types (v0.12.4: Entity-Centric, PageStructure/PageInstruction removed)
 export type {
   StandardNodeProperties,
   // Nodes
   Project,
   ProjectContent,
-  BrandIdentity,
+  // v0.12.4: BrandIdentity renamed to Brand
   Entity,
   EntityContent,
   Page,
-  PageStructure,
+  // v0.12.4: PageStructure removed per ADR-028
   PageGenerated,
   Block,
   BlockType,
@@ -44,8 +44,7 @@ export type {
   Expression,
   SEOKeyword,
   SEOKeywordMetrics,
-  // Instructions (v11.8: renamed from Prompts per ADR-025)
-  PageInstruction,
+  // Instructions (v0.12.4: PageInstruction removed per ADR-028)
   BlockInstruction,
   BlockRules,
   // Relation props

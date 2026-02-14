@@ -26,7 +26,7 @@ This diagram shows the complete NovaNet graph schema with all 42 node types and 
 ```mermaid
 flowchart TB
   %% NovaNet Graph v0.12.0
-  %% Generated: 58 nodes, 160 arcs
+  %% Generated: 61 nodes, 169 arcs
   %% Source: node-kinds/ + arc-kinds/ + taxonomy.yaml
 
   %% Trait styling (node_trait)
@@ -100,9 +100,12 @@ flowchart TB
       EntityContent["🟢 EntityContent"]
     end
     subgraph ORG_foundation["Foundation"]
-      BrandIdentity["🔵 BrandIdentity"]
+      Brand["🔵 Brand"]
+      BrandDesign["🔵 BrandDesign"]
+      BrandPrinciples["🔵 BrandPrinciples"]
       Project["🔵 Project"]
       ProjectContent["🟢 ProjectContent"]
+      PromptStyle["🔵 PromptStyle"]
     end
     subgraph ORG_structure["Structure"]
       Block["🔵 Block"]
@@ -130,6 +133,7 @@ flowchart TB
   Block ==>|HAS_GENERATED| PageGenerated
   Block -->|HAS_INSTRUCTION| BlockInstruction
   Block -->|OF_TYPE| BlockType
+  Block -.->|REFERENCES| Entity
   Block -.->|TARGETS_PERSONA| AudiencePersona
   Block -.->|USES_ENTITY| Entity
   BlockGenerated -.->|FOR_CHANNEL| ChannelSurface
@@ -150,6 +154,11 @@ flowchart TB
   BlockInstruction -.->|REFERENCES_ENTITY| Entity
   BlockInstruction -.->|REFERENCES_PAGE| Page
   BlockType -->|HAS_RULES| BlockRules
+  Brand -.->|FOR_MARKET| Market
+  Brand -->|HAS_DESIGN| BrandDesign
+  Brand -->|HAS_PRINCIPLES| BrandPrinciples
+  Brand -->|HAS_PROMPT_STYLE| PromptStyle
+  Brand -.->|TARGETS_PERSONA| AudiencePersona
   ContentSlot -->|ACCEPTS_BLOCK_TYPE| BlockType
   CulturalSubRealm -->|PART_OF_REALM| CulturalRealm
   CultureSet -->|CONTAINS_CULTURE_REF| CultureRef
@@ -168,6 +177,7 @@ flowchart TB
   Entity -->|HAS_CHILD| Entity
   Entity -.->|HAS_CONTENT| EntityContent
   Entity -.->|HAS_CONTENT| ProjectContent
+  Entity -->|HAS_KEYWORD| SEOKeyword
   Entity -.->|HAS_TYPE| Entity
   Entity -.->|HAS_VARIANT| Entity
   Entity -.->|INCLUDED_IN| Entity
@@ -261,7 +271,7 @@ flowchart TB
   PopulationSubCluster -->|CLUSTER_OF| PopulationCluster
   Project -->|BELONGS_TO_ORG| OrgConfig
   Project -->|DEFAULT_LOCALE| Locale
-  Project -->|HAS_BRAND_IDENTITY| BrandIdentity
+  Project -->|HAS_BRAND| Brand
   Project -.->|HAS_CONTENT| EntityContent
   Project -.->|HAS_CONTENT| ProjectContent
   Project -->|HAS_ENTITY| Entity
@@ -273,6 +283,8 @@ flowchart TB
   ProjectContent -.->|FOR_LOCALE| Locale
   PromptArtifact ==>|COMPILED_FROM| BlockInstruction
   PromptArtifact ==>|INCLUDES_ENTITY| Entity
+  PromptStyle -.->|FOR_LOCALE| Locale
+  PromptStyle -.->|INSPIRED_BY_REGION| GeoRegion
   SEOKeyword -.->|COMPARES_A| Entity
   SEOKeyword -.->|COMPARES_B| Entity
   SEOKeyword -.->|EXPRESSES| Entity
@@ -285,11 +297,11 @@ flowchart TB
   TermSet -->|CONTAINS_TERM| Term
 
   %% Arc colors by family
-  linkStyle 3,4,11,12,13,15,16,17,18,19,20,21,108,109,111,112,113,115,116,125,129,130,131,132,133,148,149 stroke:#8b5cf6,stroke-width:2px
-  linkStyle 10,14,43,44,65,66,67,77,85,86,87,88,89,90,93,94,100,101,102,103,104,105,106,110,128,139,140,145,146,147 stroke:#22c55e,stroke-width:2px
-  linkStyle 154 stroke:#ec4899,stroke-width:2px
-  linkStyle 0,1,5,6,22,23,26,27,28,29,33,34,40,42,70,71,72,73,74,75,78,79,80,81,82,83,84,91,92,95,96,97,98,99,107,114,117,118,120,126,134,135,136,137,138,141,142,143,144,153,157,158,159 stroke:#3b82f6,stroke-width:2px
-  linkStyle 2,7,8,9,24,25,30,31,32,35,36,37,38,39,41,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,68,69,76,119,121,122,123,124,127,150,151,152,155,156 stroke:#f97316,stroke-width:2px
+  linkStyle 3,4,12,13,14,16,17,18,19,20,21,22,115,116,118,119,120,122,123,132,136,137,138,139,140,155,156 stroke:#8b5cf6,stroke-width:2px
+  linkStyle 11,15,49,50,72,73,74,84,92,93,94,95,96,97,100,101,107,108,109,110,111,112,113,117,135,146,147,152,153,154,157 stroke:#22c55e,stroke-width:2px
+  linkStyle 163 stroke:#ec4899,stroke-width:2px
+  linkStyle 0,1,5,6,23,24,27,29,30,31,33,34,35,39,40,46,48,51,77,78,79,80,81,82,85,86,87,88,89,90,91,98,99,102,103,104,105,106,114,121,124,125,127,133,141,142,143,144,145,148,149,150,151,162,166,167,168 stroke:#3b82f6,stroke-width:2px
+  linkStyle 2,7,8,9,10,25,26,28,32,36,37,38,41,42,43,44,45,47,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,75,76,83,126,128,129,130,131,134,158,159,160,161,164,165 stroke:#f97316,stroke-width:2px
 
   %% Class assignments
   class Adaptation imported
@@ -301,7 +313,9 @@ flowchart TB
   class BlockInstruction defined
   class BlockRules defined
   class BlockType defined
-  class BrandIdentity defined
+  class Brand defined
+  class BrandDesign defined
+  class BrandPrinciples defined
   class ChannelSurface defined
   class ContentSlot defined
   class Continent defined
@@ -340,6 +354,7 @@ flowchart TB
   class Project defined
   class ProjectContent authored
   class PromptArtifact generated
+  class PromptStyle defined
   class SEOKeyword imported
   class SEOKeywordFormat defined
   class SEOKeywordMetrics retrieved

@@ -1,6 +1,6 @@
 # models/views/_registry.yaml
-version: "0.12.0"
-description: NovaNet Unified View System (26 views - 19 in registry + 7 standalone)
+version: "0.12.3"
+description: NovaNet Unified View System (27 views - 19 in registry + 8 standalone)
 
 # Simplified view registry with WORKING queries
 # All queries return n, r, m pattern for proper graph visualization
@@ -160,7 +160,7 @@ views:
       MATCH (p:Project)
       OPTIONAL MATCH (p)-[r1:HAS_ENTITY]->(e:Entity)
       OPTIONAL MATCH (p)-[r2:HAS_PAGE]->(pg:Page)
-      OPTIONAL MATCH (p)-[r3:HAS_BRAND_IDENTITY]->(b:BrandIdentity)
+      OPTIONAL MATCH (p)-[r3:HAS_BRAND]->(b:Brand)
       RETURN p, r1, e, r2, pg, r3, b
       LIMIT 200
 
@@ -343,8 +343,37 @@ views:
            collect(DISTINCT ex)[0..20] AS expressions
       RETURN l, culture, style, fmt, ts, es, terms, expressions
 
+  - id: gen-pipeline
+    description: Full page generation pipeline (structure → generation → output)
+    icon:
+      web: workflow
+      terminal: "P"
+    color: "#ec4899"
+    category: generation
+    contextual: true
+    applicable_types: [Page, PageGenerated]
+    modes: [data, overlay]
+    cypher: |
+      MATCH (p:Page {key: $nodeKey})
+      MATCH (l:Locale {key: $locale})
+      MATCH (p)-[has_block:HAS_BLOCK]->(b:Block)-[:OF_TYPE]->(bt:BlockType)
+      OPTIONAL MATCH (bt)-[:HAS_RULES]->(br:BlockRules {active: true})
+      OPTIONAL MATCH (b)-[:HAS_INSTRUCTION]->(bi:BlockInstruction)
+      MATCH (p)-[:REPRESENTS]->(e:Entity)
+      MATCH (e)-[:HAS_CONTENT]->(ec:EntityContent)-[:FOR_LOCALE]->(l)
+      OPTIONAL MATCH (l)-[:HAS_CULTURE]->(culture:Culture)
+      OPTIONAL MATCH (l)-[:HAS_MARKET]->(market:Market)
+      OPTIONAL MATCH (ec)-[:TARGETS]->(kw:SEOKeyword)
+      MATCH (p)-[:HAS_GENERATED]->(pg:PageGenerated)-[:FOR_LOCALE]->(l)
+      MATCH (pg)-[assembles:ASSEMBLES]->(bg:BlockGenerated)
+      MATCH (b)-[:HAS_GENERATED]->(bg)
+      RETURN DISTINCT p, l, b, has_block.order AS block_order, bt, br, bi,
+             e, ec, culture, market, kw, pg, bg, assembles.order AS assembly_order
+      ORDER BY has_block.order
+      LIMIT 200
+
 # =============================================================================
-# VIEW SUMMARY (26 views total)
+# VIEW SUMMARY (27 views total - 20 inline + 7 standalone)
 # =============================================================================
 # | Category    | Count | Description                                          |
 # |-------------|-------|------------------------------------------------------|
@@ -354,9 +383,9 @@ views:
 # | GENERATION  | 4     | AI agent context assembly                            |
 # | REGISTRY    | 19    | (subtotal in this file)                              |
 # |-------------|-------|------------------------------------------------------|
-# | STANDALONE  | 7     | Separate YAML files in views/ directory              |
+# | STANDALONE  | 8     | Separate YAML files in views/ directory              |
 # |-------------|-------|------------------------------------------------------|
-# | TOTAL       | 26    |                                                      |
+# | TOTAL       | 27    |                                                      |
 # =============================================================================
 #
 # Standalone views (separate YAML files, v0.12.0 compliant):
@@ -366,6 +395,7 @@ views:
 #   - entity-ecosystem.yaml         (contextual, v10.3.0)
 #   - locale-full-knowledge.yaml    (contextual, v11.5.0)
 #   - page-generation-context.yaml  (generation, v11.8.0)
+#   - page-pipeline-overview.yaml   (generation, v1.1.0 ADR-028) ✨ NEW
 #   - project-context.yaml          (contextual, v8.0.0)
 #
 # =============================================================================

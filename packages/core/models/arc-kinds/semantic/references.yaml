@@ -1,0 +1,39 @@
+# packages/core/models/arc-kinds/semantic/references.yaml
+# ArcKind: REFERENCES — Block references Entity
+#
+# v0.12.4: ADR-028 Page-Entity Architecture
+# Aggregated from [:MENTIONS] arcs on BlockInstruction
+
+arc:
+  name: REFERENCES
+  family: semantic
+  scope: intra_realm
+  temperature_threshold: 0.7  # High priority - entity injection into blocks
+
+  source: Block
+  target: Entity
+  cardinality: many_to_many
+
+  properties:
+    - name: purpose
+      type: string
+      required: true
+      enum: [inject, link]
+      description: "inject = embed entity content, link = create hyperlink"
+
+    - name: count
+      type: integer
+      required: false
+      default: 1
+      description: "Number of times entity is referenced in block"
+
+  inverse: REFERENCED_BY
+
+  llm_context: |
+    Block references an Entity for content injection or linking.
+    Aggregated from [@entity:X] refs parsed in BlockInstruction.
+    purpose: inject (embed EntityContent) vs link (hyperlink to Entity's Page).
+    count: how many times the entity appears in the block instruction.
+    Use: MATCH (b:Block)-[r:REFERENCES {purpose: 'inject'}]->(e:Entity)
+
+  cypher_pattern: "(Block)-[:REFERENCES {purpose, count}]->(Entity)"

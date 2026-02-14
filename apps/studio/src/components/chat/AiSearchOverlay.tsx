@@ -61,7 +61,7 @@ const AI_SUGGESTIONS = [
   { text: 'Show all French locale components', query: 'Show me all French locale components' },
   { text: 'Find concepts linked to QR codes', query: 'Find concepts linked to QR codes' },
   { text: 'Count expressions per locale', query: 'How many expressions per locale?' },
-  { text: 'List all PageStructure nodes', query: 'List all PageStructure nodes with their properties' },
+  { text: 'List all BlockType nodes', query: 'List all BlockType nodes with their properties' },
   { text: 'Show Project → Locale connections', query: 'Show how Projects connect to Locales' },
   { text: 'Find nodes without relationships', query: 'Find any orphan nodes without relationships' },
 ] as const;

@@ -282,84 +282,11 @@ describe('Relation Naming Conventions', () => {
 // INSTRUCTION SCHEMAS
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import { PageInstructionSchema, BlockInstructionSchema, BlockRulesSchema } from '../schemas/prompts.schema.js';
+import { BlockInstructionSchema, BlockRulesSchema } from '../schemas/prompts.schema.js';
 
-describe('Instruction Schemas (v11.8.0)', () => {
-  describe('PageInstructionSchema', () => {
-    it('validates valid PageInstruction', () => {
-      const valid = {
-        display_name: 'Pricing Page Instruction v1.0',
-        description: 'Instructions for pricing page generation',
-        llm_context: 'USE: orchestration. TRIGGERS: page. NOT: blocks.',
-        instruction: '[GENERATE] Create conversion-focused pricing page',
-        version: '1.0',
-        active: true,
-        created_at: new Date(),
-        updated_at: new Date(),
-      };
-      expect(PageInstructionSchema.parse(valid)).toBeDefined();
-    });
+// v0.12.4: PageInstructionSchema removed per ADR-028 - page instructions composed from BlockInstructions
 
-    it('rejects empty instruction', () => {
-      const invalid = {
-        display_name: 'Test',
-        description: 'Test',
-        llm_context: 'USE: x. TRIGGERS: y. NOT: z.',
-        instruction: '',
-        version: '1.0',
-        active: true,
-        created_at: new Date(),
-        updated_at: new Date(),
-      };
-      expect(() => PageInstructionSchema.parse(invalid)).toThrow();
-    });
-
-    it('rejects invalid llm_context format', () => {
-      const invalid = {
-        display_name: 'Test',
-        description: 'Test',
-        llm_context: 'Invalid format without USE/TRIGGERS/NOT',
-        instruction: '[GENERATE] Test',
-        version: '1.0',
-        active: true,
-        created_at: new Date(),
-        updated_at: new Date(),
-      };
-      expect(() => PageInstructionSchema.parse(invalid)).toThrow();
-    });
-
-    it('rejects invalid version format', () => {
-      const invalid = {
-        display_name: 'Test',
-        description: 'Test',
-        llm_context: 'USE: x. TRIGGERS: y. NOT: z.',
-        instruction: '[GENERATE] Test',
-        version: 'invalid-version',
-        active: true,
-        created_at: new Date(),
-        updated_at: new Date(),
-      };
-      expect(() => PageInstructionSchema.parse(invalid)).toThrow();
-    });
-
-    it('accepts valid semver versions', () => {
-      const validVersions = ['1.0', '1.1.0', '2.0', '10.20.30'];
-      validVersions.forEach((version) => {
-        const valid = {
-          display_name: 'Test',
-          description: 'Test',
-          llm_context: 'USE: x. TRIGGERS: y. NOT: z.',
-          instruction: '[GENERATE] Test',
-          version,
-          active: true,
-          created_at: new Date(),
-          updated_at: new Date(),
-        };
-        expect(PageInstructionSchema.parse(valid)).toBeDefined();
-      });
-    });
-  });
-
+describe('Instruction Schemas (v0.12.4)', () => {
   describe('BlockInstructionSchema', () => {
     it('validates valid BlockInstruction', () => {
       const valid = {
@@ -427,19 +354,19 @@ describe('Instruction Schemas (v11.8.0)', () => {
 
 import { RelationRegistry } from '../schemas/relations.schema.js';
 
-describe('Relations v11.8.0', () => {
+describe('Relations v0.12.4', () => {
   describe('HAS_INSTRUCTION relation', () => {
     it('exists in RelationType and RelationRegistry', () => {
       expect(RelationType.HAS_INSTRUCTION).toBe('HAS_INSTRUCTION');
       expect(RelationRegistry[RelationType.HAS_INSTRUCTION]).toBeDefined();
     });
 
-    it('links Page and Block to PageInstruction and BlockInstruction', () => {
+    it('links Page and Block to BlockInstruction (v0.12.4: PageInstruction removed)', () => {
       const rel = RelationRegistry[RelationType.HAS_INSTRUCTION];
       expect(rel.from).toContain('Page');
       expect(rel.from).toContain('Block');
-      expect(rel.to).toContain('PageInstruction');
-      expect(rel.to).toContain('BlockInstruction');
+      // v0.12.4: PageInstruction removed per ADR-028
+      expect(rel.to).toBe('BlockInstruction');
     });
 
     it('has 1:N cardinality for versioning', () => {
@@ -472,10 +399,10 @@ describe('Relations v11.8.0', () => {
       expect(RelationRegistry[RelationType.GENERATED]).toBeDefined();
     });
 
-    it('links PageInstruction/BlockInstruction to PageGenerated/BlockGenerated', () => {
+    it('links BlockInstruction to PageGenerated/BlockGenerated (v0.12.4)', () => {
       const rel = RelationRegistry[RelationType.GENERATED];
-      expect(rel.from).toContain('PageInstruction');
-      expect(rel.from).toContain('BlockInstruction');
+      // v0.12.4: PageInstruction removed per ADR-028
+      expect(rel.from).toBe('BlockInstruction');
       expect(rel.to).toContain('PageGenerated');
       expect(rel.to).toContain('BlockGenerated');
     });

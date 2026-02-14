@@ -1,15 +1,17 @@
 /**
  * @fileoverview NovaNet Instruction Node Schemas
  * @module @novanet/core/schemas/prompts
- * @version 0.12.0
+ * @version 0.12.4
  *
  * Zod validation schemas for Instruction nodes in the NovaNet knowledge graph.
- * Instructions are AI directives that guide content generation at the page and block level.
+ * Instructions are AI directives that guide content generation at the block level.
  *
  * **Instruction Node Types:**
- * - `PageInstruction`: High-level instructions for entire page generation
  * - `BlockInstruction`: Specific instructions for individual block generation
  * - `BlockRules`: Constraints and guidelines for block types
+ *
+ * v0.12.4: PageInstruction removed per ADR-028 - page instructions are now
+ * composed from BlockInstructions at generation time.
  *
  * **LLM Context Format:**
  * All instructions use a standardized `llm_context` format for efficient context loading:
@@ -19,10 +21,10 @@
  *
  * @example
  * ```typescript
- * import { PageInstructionSchema, BlockInstructionSchema, BlockRulesSchema } from '@novanet/core/schemas/prompts';
+ * import { BlockInstructionSchema, BlockRulesSchema } from '@novanet/core/schemas/prompts';
  *
- * // Validate a page instruction
- * const pageInstruction = PageInstructionSchema.parse({
+ * // Validate a block instruction
+ * const blockInstruction = BlockInstructionSchema.parse({
  *   display_name: 'Homepage Hero',
  *   description: 'Generates the hero section content',
  *   llm_context: 'USE: homepage hero generation. TRIGGERS: hero, banner, headline. NOT: product pages.',
@@ -35,6 +37,7 @@
  * ```
  *
  * @see ADR-007 — Generation, Not Translation
+ * @see ADR-028 — Page-Entity Architecture
  * @see packages/core/models/node-kinds/org/instruction/ — Instruction YAML definitions
  */
 
@@ -90,44 +93,7 @@ const InstructionBaseSchema = z.object({
 });
 
 // =============================================================================
-// PAGEINSTRUCTION SCHEMA
-// =============================================================================
-
-/**
- * Schema for PageInstruction nodes.
- *
- * PageInstructions provide high-level generation instructions for entire pages.
- * They are linked via `HAS_INSTRUCTION` arc from Page nodes.
- *
- * **Graph Position:**
- * ```
- * Page ─[:HAS_INSTRUCTION]→ PageInstruction ─[:GENERATED]→ PageGenerated
- * ```
- *
- * @example
- * ```typescript
- * const validated = PageInstructionSchema.parse({
- *   display_name: 'Product Page Instruction',
- *   description: 'Generates product pages with SEO optimization',
- *   llm_context: 'USE: product pages. TRIGGERS: product, catalog, buy. NOT: blog posts.',
- *   instruction: 'Generate a product page that highlights key features...',
- *   version: '2.1.0',
- *   active: true,
- *   created_at: new Date(),
- *   updated_at: new Date(),
- * });
- * ```
- */
-export const PageInstructionSchema = InstructionBaseSchema.extend({
-  /** The actual instruction text sent to the LLM for page generation */
-  instruction: z.string().min(1, 'instruction cannot be empty')
-    .describe('Page generation instruction text for LLM'),
-});
-
-export type PageInstruction = z.infer<typeof PageInstructionSchema>;
-
-// =============================================================================
-// BLOCKINSTRUCTION SCHEMA
+// BLOCKINSTRUCTION SCHEMA (v0.12.4: PageInstruction removed per ADR-028)
 // =============================================================================
 
 /**
