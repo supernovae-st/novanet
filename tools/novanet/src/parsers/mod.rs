@@ -1,6 +1,6 @@
 //! YAML parsers for NovaNet model definitions.
 //!
-//! ## Core Schema Parsers (v0.12.4)
+//! ## Core Schema Parsers (v0.12.5)
 //!
 //! - `realm`: Parse realm YAML files (shared, org)
 //! - `layer`: Parse layer YAML files (config, semantic, output, etc.)

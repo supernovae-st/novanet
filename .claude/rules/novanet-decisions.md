@@ -16,19 +16,19 @@ This file documents key architecture decisions for NovaNet. Reference these when
 | **003** | YAML-First | YAML = source of truth → generators → TS/Cypher/Mermaid |
 | **001** | Arc Terminology | Use "Arc" (not Edge/Relation) for directed links |
 
-### Current Architecture (v0.12.4)
+### Current Architecture (v0.12.5)
 
 ```
 SHARED (4 layers, 40 nodes): config, locale, geography, knowledge — READ-ONLY
 ORG (6 layers, 21 nodes): config, foundation, structure, semantic, instruction, output
-Total: 61 nodes, 156 arcs, 10 layers, 5 traits
+Total: 61 nodes, 169 arcs, 10 layers, 5 traits
 ```
 
 ### v0.12.x Key Changes
 
 | ADR | Change | Summary |
 |-----|--------|---------|
-| **028** | Brand Architecture | v0.12.4: Brand, BrandDesign, BrandPrinciples, PromptStyle nodes + Country |
+| **028** | Brand Architecture | v0.12.5: Brand, BrandDesign, BrandPrinciples, PromptStyle nodes + Country |
 | **024** | Trait = Data Origin | `invariant→defined`, `localized→authored`, `knowledge→imported`, `aggregated→retrieved` |
 | **023** | Class/Instance | `NodeKind→NodeClass`, `:Meta:Kind→:Schema:Class`, "Meta" eliminated |
 | **025** | Instruction Rename | `PageType→PageStructure`, `*Prompt→*Instruction` |
@@ -258,11 +258,11 @@ v10.6 (2 realms):  global / tenant
 v11.2 (2 realms):  shared / org  (renamed for clarity)
 ```
 
-**Architecture** (v0.12.4):
+**Architecture** (v0.12.5):
 - **SHARED** (4 layers): config, locale, geography, knowledge — Universal, READ-ONLY (40 nodes)
 - **ORG** (6 layers): config, foundation, structure, semantic, instruction, output — Business-specific (21 nodes)
 
-> **v0.12.4 Changes**:
+> **v0.12.5 Changes**:
 > - `global` → `shared` (describes WHAT: shared resources)
 > - `tenant` → `org` (describes WHO: organization-specific, familiar terminology)
 > - Brand Architecture: Brand, BrandDesign, BrandPrinciples, PromptStyle, Country (ADR-028)

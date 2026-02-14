@@ -1,0 +1,18 @@
+# packages/core/models/arc-classes/ownership/adaptation-of.yaml
+# ArcClass: ADAPTATION_OF — Adaptation belongs to Locale (inverse of HAS_ADAPTATION)
+# v0.13.1: NEW TIER 2 inverse arc (ADR-026)
+
+arc:
+  name: ADAPTATION_OF
+  family: ownership
+  scope: intra_realm
+  source: Adaptation
+  target: Locale
+  cardinality: one_to_one
+  inverse_of: HAS_ADAPTATION
+  llm_context: |
+    USE: when finding which Locale uses this cultural adaptation.
+    TRIGGERS: adaptation locale, which locale adaptation, adaptation owner.
+    NOT: loading adaptation for locale (use HAS_ADAPTATION), culture (use CULTURE_OF).
+    RELATES: Adaptation (source), Locale (target), HAS_ADAPTATION (inverse).
+  cypher_pattern: (Adaptation)-[:ADAPTATION_OF]->(Locale)

@@ -611,7 +611,7 @@ mod tests {
             .generate(root)
             .expect("should generate arc schema cypher");
 
-        // v0.13.0 + TIER 2 inverses + PRODUCED arcs: 156 ArcClass nodes
+        // v0.12.5 + TIER 2 inverses + geographic inverses: 169 ArcClass nodes
         // Brand Architecture: +HAS_BRAND, HAS_DESIGN, HAS_PRINCIPLES, HAS_PROMPT_STYLE, FOR_MARKET, INSPIRED_BY_REGION
         // ADR-028: +REFERENCES, +HAS_KEYWORD, +MENTIONS, +REFERENCED_BY, +REPRESENTED_BY (inverse of REPRESENTS)
         // ADR-028 inverses: +BRAND_OF, +DESIGN_OF, +PRINCIPLES_OF, +PROMPT_STYLE_OF
@@ -622,8 +622,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Schema:ArcClass"))
             .count();
         assert_eq!(
-            ac_merges, 156,
-            "expected 156 ArcClass MERGE statements (v0.13.0 + TIER 2 inverses + PRODUCED arcs)"
+            ac_merges, 169,
+            "expected 169 ArcClass MERGE statements (v0.12.5 + TIER 2 inverses + geographic inverses)"
         );
 
         // HAS_ARC_CLASS relationships match ArcClass count
@@ -631,14 +631,14 @@ mod tests {
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_ARC_CLASS]"))
             .count();
-        assert_eq!(has_ac, 156, "expected 156 HAS_ARC_CLASS relationships");
+        assert_eq!(has_ac, 169, "expected 169 HAS_ARC_CLASS relationships");
 
         // IN_FAMILY relationships match ArcClass count
         let in_family = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_FAMILY]"))
             .count();
-        assert_eq!(in_family, 156, "expected 156 IN_FAMILY relationships");
+        assert_eq!(in_family, 169, "expected 169 IN_FAMILY relationships");
 
         // Family distribution (non-inverse counts)
         // Section 2 MATCH lines have ArcFamily first: "MATCH (af:ArcFamily ..."
@@ -658,15 +658,15 @@ mod tests {
         let generation = count_family("generation");
         let mining = count_family("mining");
 
-        // v0.13.0 + TIER 2 inverses + PRODUCED arcs: Total arcs = 156
-        // ownership=71 (+7 TIER 2 inverses: TERMS_OF, EXPRESSIONS_OF, PATTERNS_OF, CULTURE_OF, CULTURE_SET_OF, TABOOS_OF, AUDIENCE_OF)
-        // localization=25 (+1 TIER 2 inverse: LOCALE_OF)
-        // semantic=48 (unchanged)
-        // generation=15 (+2: PRODUCED, PRODUCED_BY)
-        // mining=3 (unchanged: 3 arcs, 0 inverses needed per TIER 3)
+        // v0.12.5 + TIER 2 inverses + geographic inverses: Total arcs = 169
+        // ownership=77 (includes TIER 1 + TIER 2 inverses)
+        // localization=22 (includes LOCALE_OF inverse)
+        // semantic=52 (includes USES_ENTITY/USED_BY, REFERENCES pairs)
+        // generation=13 (includes PRODUCED, PRODUCED_BY)
+        // mining=6 (SEO/GEO mining arcs)
         assert!(
-            ownership + localization + semantic + generation + mining == 156,
-            "family counts should sum to 156: o={ownership} l={localization} s={semantic} g={generation} m={mining}"
+            ownership + localization + semantic + generation + mining == 169,
+            "family counts should sum to 169: o={ownership} l={localization} s={semantic} g={generation} m={mining}"
         );
 
         // Spot checks — specific ArcClass nodes (v11.8: renamed from ArcClass)
@@ -696,8 +696,8 @@ mod tests {
             }
         }
 
-        // v0.12.5 + ADR-028 + ADR-026 geographic inverses: Header reflects count (145 total ArcClass nodes)
-        assert!(cypher.contains("156 ArcClass nodes"));
+        // v0.12.5 + ADR-028 + ADR-026 geographic inverses: Header reflects count (169 total ArcClass nodes)
+        assert!(cypher.contains("169 ArcClass nodes"));
     }
 
     /// Snapshot test for a minimal ArcSchema generator output.

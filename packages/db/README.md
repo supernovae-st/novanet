@@ -69,14 +69,14 @@ db/
 
 ---
 
-## Graph Schema (v0.12.4)
+## Graph Schema (v0.12.5)
 
 | Realm | Nodes | Description |
 |-------|-------|-------------|
 | **Shared** | 40 | Config, locale, geography, knowledge atoms (READ-ONLY) |
 | **Org** | 21 | Organization structure, content, generation |
 
-Total: **61 node types**, **156 arc types**, **~200 schema-nodes** (Realm/Layer/Class/Trait/ArcFamily/ArcClass)
+Total: **61 node types**, **169 arc types**, **~200 schema-nodes** (Realm/Layer/Class/Trait/ArcFamily/ArcClass)
 
 ---
 

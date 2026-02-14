@@ -40,10 +40,10 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | `shared` | config, locale, geography, knowledge | 40 | Universal knowledge (READ-ONLY) |
 | `org` | config, foundation, structure, semantic, instruction, output | 21 | Organization-specific content |
 
-> **v0.12.4 Changes:**
+> **v0.12.5 Changes:**
 > - Brand Architecture: Brand, BrandDesign, BrandPrinciples, PromptStyle nodes added (ADR-028)
 > - Country node added to shared/geography
-> - Total: **61 nodes** (40 shared + 21 org), **156 arcs**, **10 layers** (4 shared + 6 org)
+> - Total: **61 nodes** (40 shared + 21 org), **169 arcs**, **10 layers** (4 shared + 6 org)
 
 ### v11.7 Unified Tree Architecture
 
@@ -77,11 +77,11 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | 2 | FUNCTION? | `ArcFamily` | `family` | `ownership`, `localization`, `semantic`, `generation`, `mining` |
 | 3 | MULTIPLICITY? | `ArcCardinality` | `cardinality` | `zero_to_one`, `one_to_one`, `one_to_many`, `many_to_many` |
 
-## YAML Source Files (v0.12.4)
+## YAML Source Files (v0.12.5)
 
 | File | Content |
 |------|---------|
-| `taxonomy.yaml` | Realm/Layer/Trait/ArcFamily/ArcScope definitions (v0.12.4: 2 realms, 10 layers, 5 traits) |
+| `taxonomy.yaml` | Realm/Layer/Trait/ArcFamily/ArcScope definitions (v0.12.5: 2 realms, 10 layers, 5 traits) |
 | `node-classes/shared/` | 40 NodeClass definitions in shared realm (config: 3, locale: 6, geography: 7, knowledge: 24) |
 | `node-classes/org/` | 21 NodeClass definitions in org realm (config: 1, foundation: 6, structure: 3, semantic: 4, instruction: 4, output: 3) |
 | `arc-classes/` | 1 file per ArcClass, organized by ArcFamily |
@@ -132,10 +132,10 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 - `generated` → `generated` (unchanged, LLM output)
 - `aggregated` → `retrieved` (fetched from external APIs)
 
-**v0.12.4 Changes:**
+**v0.12.5 Changes:**
 - Brand Architecture: Brand, BrandDesign, BrandPrinciples, PromptStyle (ADR-028)
 - Country node added to shared/geography
-- 10 layers total (4 shared + 6 org), 61 nodes (40 shared + 21 org), 156 arcs
+- 10 layers total (4 shared + 6 org), 61 nodes (40 shared + 21 org), 169 arcs
 
 **v11.2 Changes:**
 - Trait `derived` split into `generated` (LLM output) and `aggregated` (computed metrics)
@@ -392,7 +392,7 @@ NovaNet Studio uses **Query-First Architecture** where Cypher queries are the si
 | Term | Definition |
 |------|------------|
 | **Query-First** | Architecture pattern where graph display is determined solely by the executed Cypher query |
-| **Schema-Graph** | The schema graph showing NodeClass and ArcClass nodes (61 nodes, 156 arcs) |
+| **Schema-Graph** | The schema graph showing NodeClass and ArcClass nodes (61 nodes, 169 arcs) |
 | **CLASS_QUERY** | Foundational query that fetches all NodeClass instances for schema view |
 | **ARCS_QUERY** | Foundational query that fetches all ArcClass instances for schema view |
 | **View** | Parameterized Cypher template defined in YAML, executable with context parameters |

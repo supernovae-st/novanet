@@ -282,7 +282,7 @@ mod tests {
             .generate(root)
             .expect("should generate autowire cypher");
 
-        // v0.12.4 + Brand Architecture: 61 OF_CLASS statements
+        // v0.12.5 + Brand Architecture: 61 OF_CLASS statements
         let of_class = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:OF_CLASS]"))
@@ -300,13 +300,13 @@ mod tests {
         assert!(cypher.contains("MATCH (n:Style)"));
         assert!(cypher.contains("MATCH (c:Class {label: 'Style'})"));
 
-        // v0.12.4: Layer counts (4 shared + 6 org = 10 layers, updated for Country)
+        // v0.12.5: Layer counts (4 shared + 6 org = 10 layers, updated for Country)
         assert!(cypher.contains("Shared > Config (3 types)")); // EntityCategory + Locale + SEOKeywordFormat
         assert!(cypher.contains("Shared > Locale (6 types)")); // Formatting, Style, etc.
         assert!(cypher.contains("Shared > Geography (7 types)")); // Continent, Region, etc. + Country
         assert!(cypher.contains("Shared > Knowledge (24 types)")); // v11.4: +2 containers, -4 obsolete
 
-        // v0.12.4 + Brand Architecture: Header
+        // v0.12.5 + Brand Architecture: Header
         assert!(cypher.contains("Total: 61 node types"));
 
         // Verification query present
