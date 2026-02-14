@@ -227,8 +227,8 @@ pub fn intro_page3(locale: NexusLocale) -> &'static [&'static str] {
         NexusLocale::En => &[
             "THE GRAPH STRUCTURE (v0.12.4)",
             "",
-            "58 node types organized by:",
-            "  • Realm (WHERE): shared (40) | org (18)",
+            "61 node types organized by:",
+            "  • Realm (WHERE): shared (40) | org (21)",
             "  • Layer (WHAT): 10 functional layers",
             "  • Trait (HOW): defined | authored | imported | generated | retrieved",
             "",
@@ -239,10 +239,10 @@ pub fn intro_page3(locale: NexusLocale) -> &'static [&'static str] {
             "Navigate with [1]LEARN [2]EXPLORE [3]PRACTICE",
         ],
         NexusLocale::Fr => &[
-            "LA STRUCTURE DU GRAPHE (v0.12.0)",
+            "LA STRUCTURE DU GRAPHE (v0.12.4)",
             "",
-            "59 types de nœuds organisés par :",
-            "  • Realm (OÙ) : shared (39) | org (20)",
+            "61 types de nœuds organisés par :",
+            "  • Realm (OÙ) : shared (40) | org (21)",
             "  • Layer (QUOI) : 10 couches fonctionnelles",
             "  • Trait (COMMENT) : defined | authored | imported | generated | retrieved",
             "",
@@ -401,12 +401,12 @@ static GLOSSARY_EN: [GlossaryCategoryI18n; 4] = [
         concepts: &[
             GlossaryConceptI18n {
                 name: "Shared",
-                short_desc: "Universal knowledge (39 nodes)",
+                short_desc: "Universal knowledge (40 nodes)",
                 full_desc: "READ-ONLY realm containing universal locale knowledge. 4 layers: config, locale, geography, knowledge. Contains BCP-47 locales, knowledge atoms (Terms, Expressions), geographic data.",
             },
             GlossaryConceptI18n {
                 name: "Org",
-                short_desc: "Organization content (20 nodes)",
+                short_desc: "Organization content (21 nodes)",
                 full_desc: "Business-specific content realm. 6 layers: config, foundation, structure, semantic, instruction, output. Contains entities, pages, blocks, and generated content.",
             },
         ],
@@ -605,9 +605,9 @@ static QUIZ_EN: [QuizQuestionI18n; 15] = [
     },
     QuizQuestionI18n {
         question: "How many node types are in NovaNet v0.12.4?",
-        options: &["45", "58", "75", "90"],
+        options: &["45", "61", "75", "90"],
         correct: 1,
-        explanation: "58 nodes: 40 in Shared realm + 18 in Org realm.",
+        explanation: "61 nodes: 40 in Shared realm + 21 in Org realm.",
     },
     QuizQuestionI18n {
         question: "What does the 'defined' trait mean?",
@@ -747,10 +747,10 @@ static QUIZ_FR: [QuizQuestionI18n; 15] = [
         explanation: "Shared (universel, lecture seule) et Org (spécifique à l'organisation).",
     },
     QuizQuestionI18n {
-        question: "Combien de types de nœuds dans NovaNet v0.12.0 ?",
-        options: &["45", "59", "75", "90"],
+        question: "Combien de types de nœuds dans NovaNet v0.12.4 ?",
+        options: &["45", "61", "75", "90"],
         correct: 1,
-        explanation: "59 nœuds : 39 dans Shared + 20 dans Org.",
+        explanation: "61 nœuds : 40 dans Shared + 21 dans Org.",
     },
     QuizQuestionI18n {
         question: "Que signifie le trait 'defined' ?",
