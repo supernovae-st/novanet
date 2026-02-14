@@ -11,6 +11,8 @@ arc:
   target: Entity
   cardinality: one_to_one
 
+  inverse: REPRESENTED_BY
+
   required: true
 
   llm_context: |

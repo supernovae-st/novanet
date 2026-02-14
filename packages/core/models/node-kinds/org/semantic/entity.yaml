@@ -494,6 +494,25 @@ node:
       scope: cross_realm
       description: "SEO keywords for this entity (primary + secondary)"
 
+    # ─────────────────────────────────────────────────────────────────────────────
+    # REPRESENTED_BY: Inverse of REPRESENTS (v0.12.5: ADR-026 TIER 1)
+    # ─────────────────────────────────────────────────────────────────────────────
+    # PURPOSE:
+    #   Navigates from Entity to its canonical Page.
+    #   Inverse of Page -[:REPRESENTS]-> Entity.
+    #
+    # PATTERN:
+    #   Entity ──[:REPRESENTED_BY]──> Page
+    #
+    # RULES:
+    #   • 1:1 mandatory (every Entity has exactly one Page)
+    #   • Page.key == Entity.key
+    # ─────────────────────────────────────────────────────────────────────────────
+    REPRESENTED_BY:
+      to: Page
+      cardinality: "1:1"
+      description: "Canonical Page representing this entity (inverse of REPRESENTS)"
+
   # ═══════════════════════════════════════════════════════════════════════════════
   # INCOMING RELATIONS
   # ═══════════════════════════════════════════════════════════════════════════════

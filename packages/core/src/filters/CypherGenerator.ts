@@ -26,7 +26,8 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   HAS_PAGE: 'page',
   HAS_BLOCK: 'block',
   HAS_ENTITY: 'entity',
-  HAS_BRAND_IDENTITY: 'brandIdentity',
+  HAS_BRAND: 'brand',
+  HAS_BRAND_IDENTITY: 'brandIdentity', // @deprecated - v0.12.4: use HAS_BRAND
   HAS_PROJECT: 'project',
   OF_TYPE: 'blockType',
   OF_KIND: 'kind',
