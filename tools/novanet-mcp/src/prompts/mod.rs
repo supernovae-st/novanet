@@ -212,14 +212,14 @@ fn render_cypher_query(args: &serde_json::Map<String, serde_json::Value>) -> Ren
 - Page (org/structure) - Website pages
 - Block (org/structure) - Content blocks within pages
 - Locale (shared/config) - BCP-47 locale definitions
-- Kind (meta) - Node type definitions with :Meta label
+- Class (schema) - Node type definitions with :Schema label (v0.12.0: was Kind)
 
 **Key Relationships:**
 - HAS_CONTENT: Entity → EntityContent (ownership)
 - HAS_BLOCK: Page → Block (ownership)
 - USES_ENTITY: Block → Entity (semantic)
 - FOR_LOCALE: EntityContent → Locale (localization)
-- OF_KIND: Instance → Kind (meta-bridge)
+- OF_CLASS: Instance → Class (schema-bridge, v0.12.0: was OF_KIND)
 
 ## Rules
 
@@ -227,7 +227,7 @@ fn render_cypher_query(args: &serde_json::Map<String, serde_json::Value>) -> Ren
 2. Always include LIMIT (default 100) to prevent unbounded results
 3. Use parameterized queries with $param syntax for user inputs
 4. Filter by realm/layer when appropriate for performance
-5. Use :Meta label for schema queries
+5. Use :Schema label for schema queries (v0.12.0: was :Meta)
 
 ## Examples
 
@@ -242,10 +242,10 @@ MATCH (p:Page {key: $key})-[:HAS_BLOCK]->(b:Block)
 OPTIONAL MATCH (b)-[:OF_TYPE]->(bt:BlockType)
 RETURN p.key, collect({block: b.key, type: bt.name}) AS blocks
 
--- Schema overview
-MATCH (k:Kind)
-WITH k.realm AS realm, k.layer AS layer, collect(k.name) AS kinds
-RETURN realm, layer, kinds ORDER BY realm, layer
+-- Schema overview (v0.12.0: Class, was Kind)
+MATCH (c:Class)
+WITH c.realm AS realm, c.layer AS layer, collect(c.name) AS classes
+RETURN realm, layer, classes ORDER BY realm, layer
 ```"#;
 
     let user_content = format!(
