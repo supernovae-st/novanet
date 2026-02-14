@@ -251,12 +251,7 @@ trait:
 
     #[test]
     fn parse_trait_with_different_border_styles() {
-        for (style, width) in [
-            ("solid", 2),
-            ("dashed", 2),
-            ("dotted", 2),
-            ("double", 3),
-        ] {
+        for (style, width) in [("solid", 2), ("dashed", 2), ("dotted", 2), ("double", 3)] {
             let yaml = format!(
                 r##"
 trait:

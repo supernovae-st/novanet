@@ -40,11 +40,11 @@ packages/core/models/
 | Source | Generator | Output |
 |--------|-----------|--------|
 | taxonomy.yaml | OrganizingGenerator | seed/00.5-taxonomy.cypher |
-| node-kinds/ | NodeClassGenerator | seed/01-kinds.cypher |
-| arc-kinds/ | ArcClassGenerator | seed/02-arc-kinds.cypher |
+| node-kinds/ | NodeClassGenerator | seed/01-classes.cypher |
+| arc-kinds/ | ArcClassGenerator | seed/02-arc-classes.cypher |
 | node-kinds/ | LayerGenerator | src/graph/layers.ts |
 | models/ | MermaidGenerator | models/docs/complete-graph.md |
-| node-kinds/ | AutowireGenerator | seed/99-autowire-kinds.cypher |
+| node-kinds/ | AutowireGenerator | seed/99-autowire-classes.cypher |
 | node-kinds/ | HierarchyGenerator | src/graph/hierarchy.ts |
 | taxonomy.yaml | ColorsGenerator | apps/studio/src/design/colors/generated.ts |
 | visual-encoding.yaml | IconsGenerator | apps/studio/src/design/icons/nodeIcons.generated.ts |

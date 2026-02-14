@@ -58,7 +58,10 @@ mod tests {
     #[test]
     fn schema_integrity_display() {
         let err = NovaNetError::SchemaIntegrity("missing Realm node".to_string());
-        assert_eq!(err.to_string(), "schema-graph integrity: missing Realm node");
+        assert_eq!(
+            err.to_string(),
+            "schema-graph integrity: missing Realm node"
+        );
     }
 
     #[test]

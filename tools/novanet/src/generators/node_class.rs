@@ -5,7 +5,7 @@
 //!
 //! v11.8 (ADR-023): Kind → Class, :Meta:Kind → :Schema:Class, [:HAS_KIND] → [:HAS_CLASS]
 //!
-//! Output target: `packages/db/seed/01-kinds.cypher`
+//! Output target: `packages/db/seed/01-classes.cypher`
 
 use super::cypher_utils::{cypher_list_ref, cypher_str, write_section_header_counted};
 use crate::parsers::yaml_node::{self, NodeTrait, ParsedNode};
@@ -186,20 +186,20 @@ fn to_kebab_case(s: &str) -> String {
 // Generator
 // ─────────────────────────────────────────────────────────────────────────────
 
-pub struct NodeKindGenerator;
+pub struct NodeClassGenerator;
 
-impl super::Generator for NodeKindGenerator {
+impl super::Generator for NodeClassGenerator {
     fn name(&self) -> &'static str {
-        "kinds"
+        "classes"
     }
 
     fn generate(&self, root: &Path) -> crate::Result<String> {
         let nodes = yaml_node::load_all_nodes(root)?;
-        generate_kind_cypher(&nodes)
+        generate_class_cypher(&nodes)
     }
 }
 
-fn generate_kind_cypher(nodes: &[ParsedNode]) -> crate::Result<String> {
+fn generate_class_cypher(nodes: &[ParsedNode]) -> crate::Result<String> {
     let mut out = String::with_capacity(32 * 1024);
 
     // Header
@@ -512,7 +512,7 @@ mod tests {
             make_node("Locale", "shared", "config", NodeTrait::Defined),
         ];
 
-        let cypher = generate_kind_cypher(&nodes).unwrap();
+        let cypher = generate_class_cypher(&nodes).unwrap();
 
         // Header (v11.8: ADR-023 terminology)
         assert!(cypher.contains("v0.12.0"));
@@ -573,7 +573,7 @@ mod tests {
             return;
         }
 
-        let generator = NodeKindGenerator;
+        let generator = NodeClassGenerator;
         let cypher = generator
             .generate(root)
             .expect("should generate kind cypher");
@@ -677,7 +677,7 @@ mod tests {
             make_node("Concept", "org", "semantic", NodeTrait::Defined),
         ];
 
-        let cypher = generate_kind_cypher(&nodes).unwrap();
+        let cypher = generate_class_cypher(&nodes).unwrap();
         insta::assert_snapshot!(cypher);
     }
 

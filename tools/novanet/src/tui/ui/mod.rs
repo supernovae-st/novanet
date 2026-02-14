@@ -13,7 +13,7 @@ mod yaml_panel;
 
 pub use architecture::render_architecture_panel;
 pub use graph::render_graph_panel;
-pub use info::render_info_panel;
+pub use info::render_unified_info_panel;
 pub use status::render_status;
 pub use tree::render_tree;
 pub use yaml_panel::render_yaml_panel;
@@ -133,9 +133,6 @@ const STYLE_SUCCESS: Style = Style::new().fg(Color::Green);
 
 /// Accent color (e.g., special values).
 pub(super) const STYLE_ACCENT: Style = Style::new().fg(Color::Magenta);
-
-/// Error indicators.
-const STYLE_ERROR: Style = Style::new().fg(Color::Red);
 
 /// Warning indicators.
 const STYLE_WARNING: Style = Style::new().fg(Color::Yellow);
@@ -684,7 +681,7 @@ fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
         ])
         .split(chunks[1]);
 
-    render_info_panel(f, middle_chunks[0], app);
+    render_unified_info_panel(f, middle_chunks[0], app);
     render_graph_panel(f, middle_chunks[1], app);
 
     // Stack YAML and Architecture vertically in the right panel
@@ -722,7 +719,7 @@ fn render_main_narrow(f: &mut Frame, area: Rect, app: &mut App) {
         ])
         .split(h_chunks[1]);
 
-    render_info_panel(f, v_chunks[0], app);
+    render_unified_info_panel(f, v_chunks[0], app);
     render_graph_panel(f, v_chunks[1], app);
     render_yaml_panel(f, v_chunks[2], app);
 }

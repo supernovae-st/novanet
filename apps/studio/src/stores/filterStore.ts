@@ -97,7 +97,7 @@ export const useFilterStore = create<FilterStoreState>()(
       // Initial state
       enabledNodeTypes: new Set(CORE_TYPES),
       selectedProject: null,
-      selectedLocale: null,
+      selectedLocale: 'fr-FR',  // v0.12.5: Default to fr-FR instead of World
       searchQuery: '',
       depthLimit: 2,
       activePresetId: DEFAULT_PRESET.id,
@@ -309,7 +309,7 @@ export const useFilterStore = create<FilterStoreState>()(
         set((state) => {
           state.enabledNodeTypes = new Set(CORE_TYPES);
           state.selectedProject = null;
-          state.selectedLocale = null;
+          state.selectedLocale = 'fr-FR';  // v0.12.5: Reset to fr-FR (default)
           state.searchQuery = '';
           state.depthLimit = 2;
           state.activePresetId = DEFAULT_PRESET.id;
@@ -515,7 +515,7 @@ export const useFilterStore = create<FilterStoreState>()(
           return {
             enabledNodeTypes: new Set(CORE_TYPES),
             selectedProject: null,
-            selectedLocale: null,
+            selectedLocale: 'fr-FR',  // v0.12.5: Default to fr-FR
             depthLimit: 2,
             activePresetId: DEFAULT_PRESET.id,
             customPresets: [],

@@ -217,10 +217,7 @@ arc_family:
         assert_eq!(doc.arc_family.key, "ownership");
         assert_eq!(doc.arc_family.default_traversal, TraversalMode::Eager);
         assert_eq!(doc.arc_family.arc_count, 43);
-        assert_eq!(
-            doc.arc_family.inverse_convention,
-            Some("*_OF".to_string())
-        );
+        assert_eq!(doc.arc_family.inverse_convention, Some("*_OF".to_string()));
         assert_eq!(doc.arc_family.tier_1_inverses.len(), 2);
         assert_eq!(doc.arc_family.key_arcs.len(), 3);
         assert!(doc.arc_family.llm_context.is_some());

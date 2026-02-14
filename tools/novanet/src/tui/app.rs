@@ -599,7 +599,8 @@ impl App {
         // Expand the path: classes header, realm, layer
         self.tree.expand("classes");
         self.tree.expand(&format!("realm:{}", realm_key));
-        self.tree.expand(&format!("layer:{}:{}", realm_key, layer_key));
+        self.tree
+            .expand(&format!("layer:{}:{}", realm_key, layer_key));
 
         // Calculate the index (same logic as update_search)
         let mut idx = 0;

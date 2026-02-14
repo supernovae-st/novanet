@@ -65,7 +65,7 @@ fn render_header(_data: &BlueprintData) -> String {
 fn render_stats(data: &BlueprintData) -> String {
     format!(
         "┌──────────────────────────────────────────────────────────────────────────────┐\n\
-         │  STATS        {} NodeKinds │ {} ArcKinds │ {} Realms │ {} Layers             │\n\
+         │  STATS        {} Classes │ {} ArcClasses │ {} Realms │ {} Layers             │\n\
          └──────────────────────────────────────────────────────────────────────────────┘",
         data.node_kind_count(),
         data.arc_count(),

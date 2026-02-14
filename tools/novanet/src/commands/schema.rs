@@ -23,9 +23,9 @@ struct GeneratorEntry {
 
 fn all_generators() -> Vec<GeneratorEntry> {
     use crate::generators::{
-        arc_kind::ArcKindGenerator, autowire::AutowireGenerator, colors::ColorsGenerator,
+        arc_class::ArcClassGenerator, autowire::AutowireGenerator, colors::ColorsGenerator,
         hierarchy::HierarchyGenerator, icons::IconsGenerator, layer::LayerGenerator,
-        mermaid::MermaidGenerator, node_kind::NodeKindGenerator, organizing::OrganizingGenerator,
+        mermaid::MermaidGenerator, node_class::NodeClassGenerator, organizing::OrganizingGenerator,
         tui_icons::TuiIconsGenerator, views::ViewsGenerator,
         visual_encoding::VisualEncodingGenerator,
     };
@@ -37,13 +37,13 @@ fn all_generators() -> Vec<GeneratorEntry> {
             post_process: None,
         },
         GeneratorEntry {
-            generator: Box::new(NodeKindGenerator),
-            output_path: "packages/db/seed/01-kinds.cypher",
+            generator: Box::new(NodeClassGenerator),
+            output_path: "packages/db/seed/01-classes.cypher",
             post_process: None,
         },
         GeneratorEntry {
-            generator: Box::new(ArcKindGenerator),
-            output_path: "packages/db/seed/02-arc-kinds.cypher",
+            generator: Box::new(ArcClassGenerator),
+            output_path: "packages/db/seed/02-arc-classes.cypher",
             post_process: None,
         },
         GeneratorEntry {
@@ -58,7 +58,7 @@ fn all_generators() -> Vec<GeneratorEntry> {
         },
         GeneratorEntry {
             generator: Box::new(AutowireGenerator),
-            output_path: "packages/db/seed/99-autowire-kinds.cypher",
+            output_path: "packages/db/seed/99-autowire-classes.cypher",
             post_process: None,
         },
         GeneratorEntry {
@@ -283,7 +283,7 @@ mod tests {
             names,
             vec![
                 "taxonomy",
-                "kinds",
+                "classes",
                 "arc_schema",
                 "layers",
                 "mermaid",
