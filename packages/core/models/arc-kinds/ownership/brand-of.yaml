@@ -1,0 +1,23 @@
+# packages/core/models/arc-kinds/ownership/brand-of.yaml
+# ArcKind: BRAND_OF — Brand belongs to Project (inverse of HAS_BRAND)
+#
+# v0.12.5: ADR-028 Brand Architecture
+
+arc:
+  name: BRAND_OF
+  family: ownership
+  scope: intra_realm
+
+  source: Brand
+  target: Project
+  cardinality: one_to_one
+
+  inverse_of: HAS_BRAND
+
+  llm_context: |
+    USE: when finding which Project owns a Brand.
+    TRIGGERS: "brand owner", "brand project", "which project".
+    NOT: for loading brand for a project (use HAS_BRAND).
+    RELATES: Brand (source), Project (target), HAS_BRAND (inverse).
+
+  cypher_pattern: "(Brand)-[:BRAND_OF]->(Project)"
