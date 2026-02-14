@@ -30,7 +30,7 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   HAS_BRAND_IDENTITY: 'brandIdentity', // @deprecated - v0.12.4: use HAS_BRAND
   HAS_PROJECT: 'project',
   OF_TYPE: 'blockType',
-  OF_KIND: 'kind',
+  OF_CLASS: 'class', // v0.12.0 ADR-023: was OF_KIND
   // Entity relationships
   USES_ENTITY: 'usedEntity',
   SEMANTIC_LINK: 'relatedEntity',

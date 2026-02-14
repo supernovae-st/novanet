@@ -127,16 +127,16 @@ After:  shared/knowledge (includes all SEO/GEO nodes)
 |--------|----------------|-----------------|
 | Nav modes | 5 (Meta/Data/Overlay/Query/Atlas) | 2 (Graph/Nexus) |
 | Realm/Layer | Visual groupings | Clickable nodes |
-| Instances | Hidden | Under Kind, expandable |
+| Instances | Hidden | Under Class, expandable |
 | Icons | Mixed emoji | Dual: Lucide + Unicode |
 
 ### Unified Tree Structure
 
 ```
-▼ Nodes (60)
+▼ Nodes (61)
   ▼ ◉ Realm:shared
     ▼ ⚙ Layer:config
-      ▼ ◆ Kind:Locale [200]
+      ▼ ◆ Class:Locale [200]    (v0.12.0: Kind→Class)
         ● Locale:fr-FR
 ```
 
@@ -146,11 +146,13 @@ After:  shared/knowledge (includes all SEO/GEO nodes)
 
 | Metric | Count |
 |--------|-------|
-| Node types (Kinds) | 60 |
-| Arc types (ArcKinds) | 114 |
+| Node types (Classes) | 61 |
+| Arc types (ArcClasses) | 128 |
 | Realms | 2 |
 | Layers | 10 |
 | Traits | 5 |
+
+> **v0.12.0 ADR-023**: "Kind" → "Class", "ArcKind" → "ArcClass"
 
 ### Realm Distribution
 

@@ -28,7 +28,7 @@ novanet data [OPTIONS]
 |--------|-------------|
 | `--realm <REALM>` | Filter by realm (shared, org) |
 | `--layer <LAYER>` | Filter by layer |
-| `--kind <KIND>` | Filter by Kind name |
+| `--class <CLASS>` | Filter by Class name (v0.12.0: was --kind) |
 | `--format <FMT>` | Output format |
 
 **Examples**:
@@ -37,12 +37,12 @@ novanet data --realm=org
 novanet data --kind=Page --format=json
 ```
 
-### meta
+### blueprint
 
-Query meta-graph (schema nodes).
+Query schema graph (v0.12.0: was `meta`).
 
 ```bash
-novanet meta [OPTIONS]
+novanet blueprint [OPTIONS]
 ```
 
 | Option | Description |
@@ -51,8 +51,8 @@ novanet meta [OPTIONS]
 
 **Examples**:
 ```bash
-novanet meta
-novanet meta --format=json
+novanet blueprint
+novanet blueprint --format=json
 ```
 
 ### overlay
@@ -76,7 +76,7 @@ novanet query [OPTIONS]
 | `--realm <REALM>` | Filter by realm |
 | `--layer <LAYER>` | Filter by layer |
 | `--trait <TRAIT>` | Filter by trait |
-| `--kind <KIND>` | Filter by Kind |
+| `--class <CLASS>` | Filter by Class (v0.12.0: was --kind) |
 | `--arc-family <FAM>` | Filter arcs by family |
 
 **Examples**:
@@ -96,7 +96,7 @@ novanet search --query <QUERY> [OPTIONS]
 | Option | Description |
 |--------|-------------|
 | `--query <Q>` | Search string (required) |
-| `--kind <KIND>` | Limit to specific Kind |
+| `--class <CLASS>` | Limit to specific Class (v0.12.0: was --kind) |
 | `--limit <N>` | Maximum results (default: 50) |
 
 **Examples**:
@@ -112,18 +112,18 @@ novanet search --query="qr code" --kind=Entity --limit=10
 Create a new node.
 
 ```bash
-novanet node create --kind <KIND> --key <KEY> [OPTIONS]
+novanet node create --class <CLASS> --key <KEY> [OPTIONS]
 ```
 
 | Option | Description |
 |--------|-------------|
-| `--kind <KIND>` | Node type (required) |
+| `--class <CLASS>` | Node type (required, v0.12.0: was --kind) |
 | `--key <KEY>` | Unique key (required) |
 | `--props <JSON>` | Properties as JSON |
 
 **Examples**:
 ```bash
-novanet node create --kind=Page --key=my-page --props='{"title":"My Page"}'
+novanet node create --class=Page --key=my-page --props='{"title":"My Page"}'
 ```
 
 ### node edit
@@ -152,14 +152,14 @@ novanet node delete --key <KEY> --confirm
 Create a relationship.
 
 ```bash
-novanet arc create --from <KEY> --to <KEY> --kind <ARC_KIND>
+novanet arc create --from <KEY> --to <KEY> --class <ARC_CLASS>
 ```
 
 | Option | Description |
 |--------|-------------|
 | `--from <KEY>` | Source node key |
 | `--to <KEY>` | Target node key |
-| `--kind <KIND>` | Arc type (e.g., HAS_PAGE) |
+| `--class <CLASS>` | Arc type (e.g., HAS_PAGE, v0.12.0: was --kind) |
 
 ### arc delete
 
@@ -260,7 +260,7 @@ novanet blueprint [OPTIONS]
 | `--no-validate` | Skip validation |
 
 **Views**:
-- `tree` — Realm > Layer > Kind hierarchy
+- `tree` — Realm > Layer > Class hierarchy (v0.12.0: Kind→Class)
 - `flow` — Flow diagrams
 - `arcs` — Arc families with relationships
 - `stats` — Raw counts (supports --format=json)

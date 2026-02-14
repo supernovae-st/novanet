@@ -188,17 +188,17 @@ The `schema generate` command produces 12 artifacts:
 
 ```
 packages/core/src/graph/
-├── node-classes.generated.ts      # Kind type definitions
-├── arc-classes.generated.ts       # ArcKind type definitions
+├── node-classes.generated.ts      # Class type definitions (v0.12.0: was Kind)
+├── arc-classes.generated.ts       # ArcClass type definitions (v0.12.0: was ArcKind)
 ├── taxonomy.generated.ts        # Realm, Layer, Trait enums
 ├── visual-encoding.generated.ts # Colors, icons
 └── filters.generated.ts         # Facet filter types
 
 packages/db/seed/
 ├── 00.0-constraints.cypher      # Neo4j constraints
-├── 00.5-taxonomy.cypher         # Meta-graph nodes
-├── 01-kinds.cypher              # Kind definitions
-└── 02-arcs.cypher               # ArcKind definitions
+├── 00.5-taxonomy.cypher         # Schema graph nodes (v0.12.0: was Meta-graph)
+├── 01-classes.cypher            # Class definitions (v0.12.0: was 01-kinds)
+└── 02-arcs.cypher               # ArcClass definitions
 ```
 
 ## Best Practices
@@ -251,7 +251,7 @@ Error: File at shared/knowledge/term.yaml has realm: org
 Error: Arc HAS_FOO references unknown Kind: Foo
 ```
 
-**Fix**: Create the referenced Kind first, or fix the arc source/target.
+**Fix**: Create the referenced Class first, or fix the arc source/target.
 
 ### Regenerate Everything
 

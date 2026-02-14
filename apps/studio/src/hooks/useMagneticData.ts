@@ -33,7 +33,7 @@ export interface LayerData {
 export interface OrganizingPrinciples {
   realms: RealmData[];
   layers: LayerData[];
-  /** nodeType → layer key mapping (from OF_KIND in Neo4j) */
+  /** nodeType → layer key mapping (from OF_CLASS in Neo4j, v0.12.0: was OF_KIND) */
   nodeTypeMapping: Record<string, string>;
 }
 

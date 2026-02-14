@@ -6,7 +6,7 @@
 
 - [Overview](./architecture/overview.md)
 - [Ontology v9](./architecture/ontology-v9.md)
-- [Meta-Graph](./architecture/meta-graph.md)
+- [Schema Graph](./architecture/schema-graph.md)
 - [Rust CLI](./architecture/rust-cli.md)
 
 # Claude Code DX

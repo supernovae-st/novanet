@@ -44,9 +44,11 @@ pnpm infra:seed
 ```
 
 This creates:
-- Meta-graph (Realms, Layers, Kinds, Traits, ArcFamilies, ArcKinds)
+- Schema graph (Realms, Layers, Classes, Traits, ArcFamilies, ArcClasses)
 - Sample data nodes
 - Constraints and indexes
+
+> **v0.12.0**: "Meta" → "Schema", "Kind" → "Class", "ArcKind" → "ArcClass"
 
 ### 5. Start Development
 
@@ -63,18 +65,20 @@ Open http://localhost:3000 to see NovaNet Studio.
 Open http://localhost:7474 and run:
 
 ```cypher
-MATCH (n:Meta) RETURN labels(n), count(n)
+MATCH (n:Schema) RETURN labels(n), count(n)
 ```
 
-Expected output (v0.12.0):
+Expected output (v0.12.4):
 ```
-["Meta", "Realm"]      2
-["Meta", "Layer"]      10
-["Meta", "Kind"]       60
-["Meta", "Trait"]      5
-["Meta", "ArcFamily"]  5
-["Meta", "ArcKind"]    114
+["Schema", "Realm"]      2
+["Schema", "Layer"]      10
+["Schema", "Class"]      61
+["Schema", "Trait"]      5
+["Schema", "ArcFamily"]  5
+["Schema", "ArcClass"]   128
 ```
+
+> **v0.12.0 ADR-023**: `:Meta` → `:Schema`, `Kind` → `Class`, `ArcKind` → `ArcClass`
 
 ### Check Rust CLI
 
@@ -151,7 +155,7 @@ cargo run -- tui
 | Command | Description |
 |---------|-------------|
 | `cargo run -- data` | Query data nodes |
-| `cargo run -- meta` | Query meta-graph |
+| `cargo run -- blueprint` | Query schema graph (v0.12.0: was `meta`) |
 | `cargo run -- schema generate` | Regenerate artifacts |
 | `cargo run -- schema validate` | Validate YAML coherence |
 | `cargo run -- tui` | Interactive terminal UI |
