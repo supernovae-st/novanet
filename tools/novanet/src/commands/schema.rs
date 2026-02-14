@@ -170,7 +170,7 @@ pub enum Severity {
 /// Checks:
 /// - All 42 node YAMLs parse with trait
 /// - relations.yaml parses with family on every relation
-/// - taxonomy.yaml parses (realms, layers, traits, arc_families)
+/// - taxonomy parses (realms, layers, traits, arc_families from individual files)
 /// - Every node's realm/layer exists in taxonomy
 /// - Every relation's source/target labels match known node names
 #[instrument(skip_all, fields(root = %root.display()))]
@@ -203,7 +203,7 @@ pub fn schema_validate(root: &Path) -> crate::Result<Vec<ValidationIssue>> {
             issues.push(ValidationIssue {
                 severity: Severity::Error,
                 message: format!(
-                    "{}: realm '{}' not defined in taxonomy.yaml",
+                    "{}: realm '{}' not defined in taxonomy",
                     node.def.name, node.realm
                 ),
             });
@@ -212,7 +212,7 @@ pub fn schema_validate(root: &Path) -> crate::Result<Vec<ValidationIssue>> {
             issues.push(ValidationIssue {
                 severity: Severity::Error,
                 message: format!(
-                    "{}: layer '{}' not defined in taxonomy.yaml",
+                    "{}: layer '{}' not defined in taxonomy",
                     node.def.name, node.layer
                 ),
             });
