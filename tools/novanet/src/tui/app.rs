@@ -1743,7 +1743,7 @@ impl App {
         let data_mode = self.is_graph_mode();
         if let Some(key) = self.tree.collapse_key_at(self.tree_cursor, data_mode) {
             // Handle Class toggle in Data mode
-            if let Some(class_key) = key.strip_prefix("kind:") {
+            if let Some(class_key) = key.strip_prefix("class:") {
                 if data_mode {
                     let instances_loaded = self.tree.get_instances(class_key).is_some();
 
