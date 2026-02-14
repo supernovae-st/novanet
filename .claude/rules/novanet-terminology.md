@@ -77,13 +77,13 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | 2 | FUNCTION? | `ArcFamily` | `family` | `ownership`, `localization`, `semantic`, `generation`, `mining` |
 | 3 | MULTIPLICITY? | `ArcCardinality` | `cardinality` | `zero_to_one`, `one_to_one`, `one_to_many`, `many_to_many` |
 
-## YAML Source Files (v11.5)
+## YAML Source Files (v0.12.4)
 
 | File | Content |
 |------|---------|
-| `taxonomy.yaml` | Realm/Layer/Trait/ArcFamily/ArcScope definitions (v11.5: 2 realms, 10 layers, 5 traits) |
-| `node-kinds/shared/` | 39 NodeClass definitions in shared realm (config: 3, locale: 6, geography: 6, knowledge: 24 incl. SEO/GEO) |
-| `node-kinds/org/` | 20 NodeClass definitions in org realm (config: 1, foundation: 3, structure: 3, semantic: 4, instruction: 6, output: 3) |
+| `taxonomy.yaml` | Realm/Layer/Trait/ArcFamily/ArcScope definitions (v0.12.4: 2 realms, 10 layers, 5 traits) |
+| `node-kinds/shared/` | 40 NodeClass definitions in shared realm (config: 3, locale: 6, geography: 7, knowledge: 24) |
+| `node-kinds/org/` | 21 NodeClass definitions in org realm (config: 1, foundation: 6, structure: 3, semantic: 4, instruction: 4, output: 3) |
 | `arc-kinds/` | 1 file per ArcClass, organized by ArcFamily |
 | `relations.yaml` | Legacy format (deprecated, kept for parser compatibility) |
 

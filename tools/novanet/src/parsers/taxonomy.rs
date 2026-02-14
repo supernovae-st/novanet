@@ -7,6 +7,16 @@
 //! - `arc_scopes` and `arc_cardinalities` for arc classification
 //! - `terminal` palette for TUI graceful degradation
 //! - `class_retrieval_defaults` per-trait context assembly settings (v0.12.0, was kind_retrieval_defaults)
+//!
+//! ## Migration to Individual Files (v0.12.5)
+//!
+//! Use `load_taxonomy_from_files()` to load taxonomy data from individual YAML files:
+//! - `realms/*.yaml` → Realm definitions
+//! - `layers/*.yaml` → Layer definitions (with `realms` field)
+//! - `traits/*.yaml` → Trait definitions
+//! - `arc-families/*.yaml` → Arc family definitions
+//!
+//! The function constructs a `TaxonomyDoc` compatible with existing generators.
 
 use serde::Deserialize;
 use std::collections::HashMap;
@@ -169,6 +179,159 @@ pub fn load_taxonomy(root: &Path) -> crate::Result<TaxonomyDoc> {
     }
 
     Ok(doc)
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Individual File Loader (v0.12.5)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Load taxonomy from individual YAML files (v0.12.5 migration).
+///
+/// Reads from:
+/// - `realms/*.yaml` → Realm definitions
+/// - `layers/*.yaml` → Layer definitions
+/// - `traits/*.yaml` → Trait definitions
+/// - `arc-families/*.yaml` → Arc family definitions
+/// - `taxonomy.yaml` → arc_scopes, arc_cardinalities, terminal (still centralized)
+///
+/// Returns a `TaxonomyDoc` compatible with existing generators.
+pub fn load_taxonomy_from_files(root: &Path) -> crate::Result<TaxonomyDoc> {
+    use super::{arc_family, layer, realm, trait_def};
+
+    // Load individual files
+    let realms = realm::load_all_realms(root)?;
+    let layers = layer::load_all_layers(root)?;
+    let traits = trait_def::load_all_traits(root)?;
+    let arc_families = arc_family::load_all_arc_families(root)?;
+
+    // Load arc_scopes, arc_cardinalities, terminal from taxonomy.yaml
+    // (these are small and rarely change, kept centralized for now)
+    let taxonomy_path = crate::config::taxonomy_path(root);
+    let (arc_scopes, arc_cardinalities, terminal, class_retrieval_defaults, version) =
+        if taxonomy_path.exists() {
+            let legacy: TaxonomyDoc = super::utils::load_yaml(&taxonomy_path)?;
+            (
+                legacy.arc_scopes,
+                legacy.arc_cardinalities,
+                legacy.terminal,
+                legacy.class_retrieval_defaults,
+                legacy.version,
+            )
+        } else {
+            (vec![], vec![], None, None, "0.12.5".to_string())
+        };
+
+    // Build realm→layers mapping from layer.realms field
+    let mut realm_layers: HashMap<String, Vec<NodeLayerDef>> = HashMap::new();
+    for realm in &realms {
+        realm_layers.insert(realm.key.clone(), vec![]);
+    }
+
+    for layer in &layers {
+        let llm_context = layer.llm_context.clone().unwrap_or_default();
+        let layer_def = NodeLayerDef {
+            key: layer.key.clone(),
+            display_name: layer.display_name.clone(),
+            emoji: layer.icon.terminal.clone(),
+            color: layer.color.clone(),
+            llm_context,
+        };
+
+        for realm_key in &layer.realms {
+            if let Some(layers) = realm_layers.get_mut(realm_key) {
+                layers.push(layer_def.clone());
+            }
+        }
+    }
+
+    // Convert realms to NodeRealmDef with nested layers
+    let node_realms: Vec<NodeRealmDef> = realms
+        .into_iter()
+        .map(|r| {
+            let layers = realm_layers.remove(&r.key).unwrap_or_default();
+            NodeRealmDef {
+                key: r.key,
+                display_name: r.display_name,
+                emoji: r.icon.terminal,
+                color: r.color,
+                llm_context: r.llm_context.unwrap_or_default(),
+                layers,
+            }
+        })
+        .collect();
+
+    // Convert traits to NodeTraitDef
+    let node_traits: Vec<NodeTraitDef> = traits
+        .into_iter()
+        .map(|t| NodeTraitDef {
+            key: t.key,
+            display_name: t.display_name,
+            color: t.color,
+            border_style: Some(t.border_style),
+            border_width: Some(t.border_width as u8),
+            unicode_border: t.unicode_border,
+            llm_context: t.llm_context.unwrap_or_default(),
+        })
+        .collect();
+
+    // Convert arc families to ArcFamilyDef
+    let arc_families: Vec<ArcFamilyDef> = arc_families
+        .into_iter()
+        .map(|f| {
+            let default_traversal = match f.default_traversal {
+                super::arc_family::TraversalMode::Eager => Some("eager".to_string()),
+                super::arc_family::TraversalMode::Lazy => Some("lazy".to_string()),
+                super::arc_family::TraversalMode::OnDemand => Some("ondemand".to_string()),
+                super::arc_family::TraversalMode::Skip => Some("skip".to_string()),
+            };
+            ArcFamilyDef {
+                key: f.key,
+                display_name: f.display_name,
+                color: f.color,
+                stroke_style: Some(f.stroke_style),
+                stroke_width: Some(f.stroke_width as u8),
+                arrow_style: f.arrow_style,
+                default_traversal,
+                llm_context: f.llm_context.unwrap_or_default(),
+            }
+        })
+        .collect();
+
+    // Validate
+    if node_realms.is_empty() {
+        return Err(crate::NovaNetError::Validation(
+            "no realms found in realms/".to_string(),
+        ));
+    }
+    for realm in &node_realms {
+        if realm.layers.is_empty() {
+            return Err(crate::NovaNetError::Validation(format!(
+                "realm '{}' has no layers",
+                realm.key
+            )));
+        }
+    }
+    if node_traits.is_empty() {
+        return Err(crate::NovaNetError::Validation(
+            "no traits found in traits/".to_string(),
+        ));
+    }
+    if arc_families.is_empty() {
+        return Err(crate::NovaNetError::Validation(
+            "no arc families found in arc-families/".to_string(),
+        ));
+    }
+
+    Ok(TaxonomyDoc {
+        version,
+        node_realms,
+        node_traits,
+        class_retrieval_defaults,
+        arc_families,
+        arc_scopes,
+        arc_cardinalities,
+        terminal,
+    })
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -506,5 +669,91 @@ arc_families:
             doc.arc_families[1].default_traversal,
             Some("lazy".to_string())
         );
+    }
+
+    #[test]
+    fn load_taxonomy_from_files_integration() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .and_then(|p| p.parent());
+
+        let Some(root) = root else { return };
+        if !root.join("pnpm-workspace.yaml").exists() {
+            return;
+        }
+
+        let doc = load_taxonomy_from_files(root).expect("should load from individual files");
+
+        // Same expectations as load_taxonomy_integration
+        assert_eq!(doc.node_realms.len(), 2, "expected 2 realms (shared, org)");
+        assert_eq!(doc.node_traits.len(), 5, "expected 5 traits");
+        assert_eq!(doc.arc_families.len(), 5, "expected 5 arc families");
+
+        let total_layers: usize = doc.node_realms.iter().map(|r| r.layers.len()).sum();
+        assert_eq!(total_layers, 10, "expected 10 layers (4 shared + 6 org)");
+
+        // Check realms have their layers
+        let shared = doc.node_realms.iter().find(|r| r.key == "shared").unwrap();
+        assert_eq!(shared.layers.len(), 4, "shared should have 4 layers");
+        let layer_keys: Vec<&str> = shared.layers.iter().map(|l| l.key.as_str()).collect();
+        assert!(layer_keys.contains(&"config"));
+        assert!(layer_keys.contains(&"locale"));
+        assert!(layer_keys.contains(&"geography"));
+        assert!(layer_keys.contains(&"knowledge"));
+
+        let org = doc.node_realms.iter().find(|r| r.key == "org").unwrap();
+        assert_eq!(org.layers.len(), 6, "org should have 6 layers");
+
+        // Check trait visual encoding
+        let defined = doc.node_traits.iter().find(|t| t.key == "defined").unwrap();
+        assert_eq!(defined.border_style, Some("solid".to_string()));
+
+        // Check arc family properties
+        let ownership = doc
+            .arc_families
+            .iter()
+            .find(|f| f.key == "ownership")
+            .unwrap();
+        assert_eq!(ownership.default_traversal, Some("eager".to_string()));
+
+        // arc_scopes and arc_cardinalities come from taxonomy.yaml
+        assert_eq!(doc.arc_scopes.len(), 2);
+        assert_eq!(doc.arc_cardinalities.len(), 5);
+    }
+
+    #[test]
+    fn load_taxonomy_from_files_matches_load_taxonomy() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .and_then(|p| p.parent());
+
+        let Some(root) = root else { return };
+        if !root.join("pnpm-workspace.yaml").exists() {
+            return;
+        }
+
+        let from_yaml = load_taxonomy(root).expect("should load taxonomy.yaml");
+        let from_files = load_taxonomy_from_files(root).expect("should load from files");
+
+        // Compare realm counts
+        assert_eq!(from_yaml.node_realms.len(), from_files.node_realms.len());
+
+        // Compare total layer counts
+        let yaml_layers: usize = from_yaml.node_realms.iter().map(|r| r.layers.len()).sum();
+        let files_layers: usize = from_files.node_realms.iter().map(|r| r.layers.len()).sum();
+        assert_eq!(yaml_layers, files_layers);
+
+        // Compare trait counts
+        assert_eq!(from_yaml.node_traits.len(), from_files.node_traits.len());
+
+        // Compare arc family counts
+        assert_eq!(from_yaml.arc_families.len(), from_files.arc_families.len());
+
+        // Compare realm keys
+        let yaml_realm_keys: Vec<&str> = from_yaml.node_realms.iter().map(|r| r.key.as_str()).collect();
+        let files_realm_keys: Vec<&str> = from_files.node_realms.iter().map(|r| r.key.as_str()).collect();
+        for key in &yaml_realm_keys {
+            assert!(files_realm_keys.contains(key), "missing realm: {key}");
+        }
     }
 }

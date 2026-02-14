@@ -39,7 +39,8 @@ impl BlueprintData {
     pub fn from_yaml(root: &Path) -> crate::Result<Self> {
         let node_kinds = crate::parsers::yaml_node::load_all_nodes(root)?;
         let arcs_doc = crate::parsers::arcs::load_arc_kinds_from_files(root)?;
-        let taxonomy = crate::parsers::taxonomy::load_taxonomy(root)?;
+        // v0.12.5: Load from individual YAML files
+        let taxonomy = crate::parsers::taxonomy::load_taxonomy_from_files(root)?;
 
         Ok(Self {
             node_kinds,

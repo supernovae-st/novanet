@@ -424,7 +424,8 @@ impl App {
                 self.load_yaml_cached(&path);
             }
             TreeItemData::Section => {
-                self.load_yaml_cached("packages/core/models/taxonomy.yaml");
+                // v0.12.5: Show _index.yaml (complete schema overview) instead of taxonomy.yaml
+                self.load_yaml_cached("packages/core/models/_index.yaml");
             }
             TreeItemData::Instance { class_yaml_path } => {
                 // Load the Class's YAML to show Instance schema (standard_properties)
