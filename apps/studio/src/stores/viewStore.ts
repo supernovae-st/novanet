@@ -200,6 +200,12 @@ export const useViewStore = create<ViewStoreState & ViewStoreActions>()(
             throw new Error('View did not return a Cypher query');
           }
 
+          // v0.12.5: Check if view requires $nodeKey but none provided
+          const requiresNodeKey = /\$nodeKey\b/.test(baseCypherQuery);
+          if (requiresNodeKey && !viewParams.key) {
+            throw new Error('This view requires a selected node. Click on a node first, then try again.');
+          }
+
           // v12.1: Query-First - inject filters into the Cypher query
           // This ensures what's displayed = what's executed
           const { displayLimit, selectedLocale } = useFilterStore.getState();
