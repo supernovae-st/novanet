@@ -122,11 +122,11 @@ const REALM_DESCRIPTIONS: Record<Realm, string> = {
 // =============================================================================
 
 const TRAIT_DESCRIPTIONS: Record<string, string> = {
-  defined: 'Human-created ONCE, structure/template (was invariant)',
-  authored: 'Human-written PER locale, editorial content (was localized)',
-  imported: 'External data brought in, corpora/APIs (was knowledge)',
+  defined: 'Human-created ONCE, structure/template',
+  authored: 'Human-written PER locale, editorial content',
+  imported: 'External data brought in, corpora/APIs',
   generated: 'Produced by NovaNet LLM',
-  retrieved: 'Fetched from EXTERNAL APIs, snapshots (was aggregated)',
+  retrieved: 'Fetched from EXTERNAL APIs, snapshots',
 };
 
 // =============================================================================

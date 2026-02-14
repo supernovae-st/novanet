@@ -308,10 +308,10 @@ export const CARDINALITY_ARROWS: Record<CardinalityKey, CardinalityArrowStyle> =
 };
 
 // =============================================================================
-// KIND ICONS ({{ class_icons | length }}) — Lucide icon names
+// CLASS ICONS ({{ class_icons | length }}) — Lucide icon names
 // =============================================================================
 
-export const KIND_ICONS: Record<string, string> = {
+export const CLASS_ICONS: Record<string, string> = {
 {%- for i in class_icons %}
   {{ i.kind }}: '{{ i.icon }}',
 {%- endfor %}
@@ -319,14 +319,10 @@ export const KIND_ICONS: Record<string, string> = {
 
 /**
  * Get Lucide icon name for a Class.
- * v11.8: renamed from getKindIcon
  */
 export function getClassIcon(className: string): string {
-  return KIND_ICONS[className] ?? 'circle';
+  return CLASS_ICONS[className] ?? 'circle';
 }
-
-/** @deprecated Use getClassIcon instead (v11.8) */
-export const getKindIcon = getClassIcon;
 
 // =============================================================================
 // ANIMATIONS ({{ animations | length }}) — Studio only
@@ -777,11 +773,11 @@ mod tests {
         assert!(output.contains("one_to_one"));
         assert!(output.contains("one_to_many"));
 
-        // Class icons (v11.8: renamed from Kind icons)
-        assert!(output.contains("KIND_ICONS:")); // constant name preserved for simplicity
+        // Class icons
+        assert!(output.contains("CLASS_ICONS:"));
         assert!(output.contains("Locale: 'globe'"));
         assert!(output.contains("Page: 'file-text'"));
-        assert!(output.contains("export function getClassIcon")); // v11.8: renamed from getKindIcon
+        assert!(output.contains("export function getClassIcon"));
 
         // Animations
         assert!(output.contains("ANIMATIONS:"));
