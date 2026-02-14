@@ -206,13 +206,14 @@ export const useViewStore = create<ViewStoreState & ViewStoreActions>()(
           const cypherQuery = injectFilters(baseCypherQuery, {
             displayLimit,
             localeKey: selectedLocale || undefined,
+            nodeKey: viewParams.key,  // v0.12.5: Pass nodeKey for contextual views
           });
 
           logger.debug('ViewStore', 'View Cypher loaded', {
             id,
             baseCypher: baseCypherQuery.substring(0, 100) + '...',
             finalCypher: cypherQuery.substring(0, 100) + '...',
-            filters: { displayLimit, selectedLocale },
+            filters: { displayLimit, selectedLocale, nodeKey: viewParams.key },
             params: cypherParams,
           });
 
@@ -221,7 +222,7 @@ export const useViewStore = create<ViewStoreState & ViewStoreActions>()(
             id,
             cypher: cypherQuery,
             params: cypherParams,
-            filters: { displayLimit, selectedLocale },
+            filters: { displayLimit, selectedLocale, nodeKey: viewParams.key },
           });
 
           // Execute the query via queryStore with params
