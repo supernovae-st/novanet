@@ -1,6 +1,6 @@
 # packages/core/models/traits/defined.yaml
 # Defined trait definition (Data Origin: human-created once)
-# v0.12.4
+# v0.12.5
 
 trait:
   key: defined

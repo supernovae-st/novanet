@@ -9,7 +9,7 @@ user-invocable: true
 
 Display the complete NovaNet architecture diagram showing:
 - Source of truth (YAML models)
-- v0.12.0 Schema Graph (faceted classification)
+- v0.12.5 Schema Graph (faceted classification)
 - Generators (Mermaid, Layer, Kind, ArcSchema)
 - Neo4j infrastructure
 - Rust binary (`tools/novanet/`)
@@ -21,7 +21,7 @@ Display the complete NovaNet architecture diagram showing:
 Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 - **"source"** or **"yaml"** - Show Source de Verite section only
-- **"meta"** or **"facets"** - Show Schema Graph (v0.12.0 faceted classification)
+- **"meta"** or **"facets"** - Show Schema Graph (v0.12.5 faceted classification)
 - **"infra"** or **"neo4j"** - Show Infrastructure section only
 - **"studio"** - Show Studio section only
 - **"packages"** or **"deps"** - Show Packages Dependency Graph
@@ -37,7 +37,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 ```
 +===================================================================================================+
-|                              NOVANET - SOURCE DE VERITE (v0.12.0)                                 |
+|                              NOVANET - SOURCE DE VERITE (v0.12.5)                                 |
 +===================================================================================================+
 
 +---------------------------------------------------------------------------------------------------+
@@ -46,8 +46,8 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 |                                                                                                   |
 |   packages/core/models/                                                                           |
 |   +-- _index.yaml                          <- Index du graphe (structure, changelog)              |
-|   +-- taxonomy.yaml                        <- v0.12.0: 2 Realms/10 Layers/5 Traits/5 ArcFamilies  |
-|   +-- node-classes/                          <- 59 fichiers YAML (1 par Class)                      |
+|   +-- taxonomy.yaml                        <- v0.12.5: 2 Realms/10 Layers/5 Traits/5 ArcFamilies  |
+|   +-- node-classes/                          <- 61 fichiers YAML (1 par Class)                      |
 |   |   +-- shared/                          <- Realm: shared (40 nodes)                            |
 |   |   |   +-- config/                      <-   Layer: config (Locale, EntityCategory, etc.)      |
 |   |   |   +-- locale/                      <-   Layer: locale (6 nodes)                           |
@@ -57,7 +57,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 |   |   |       +-- expression-set.yaml, ... <- ExpressionSet, PatternSet, CultureSet, etc.         |
 |   |   |       +-- seo-*.yaml, geo-*.yaml   <- SEO/GEO nodes (moved from org)                      |
 |   |   |                                                                                           |
-|   |   +-- org/                             <- Realm: org (20 nodes)                               |
+|   |   +-- org/                             <- Realm: org (21 nodes)                               |
 |   |       +-- config/                      <-   Layer: config (OrgConfig)                         |
 |   |       +-- foundation/                  <-   Layer: foundation (Project, Brand, ProjectContent)|
 |   |       +-- structure/                   <-   Layer: structure (Page, Block, Types)             |
@@ -65,7 +65,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 |   |       +-- instruction/                 <-   Layer: instruction (Instructions, Rules)          |
 |   |       +-- output/                      <-   Layer: output (PageGenerated, BlockGenerated)     |
 |   |                                                                                               |
-|   +-- arc-classes/                           <- 114 fichiers YAML (1 par ArcClass)                  |
+|   +-- arc-classes/                           <- 169 fichiers YAML (1 par ArcClass)                  |
 |   +-- relations.yaml                       <- Legacy format (kept for parser compatibility)       |
 |   +-- views/                               <- Definitions de vues YAML                            |
 |                                                                                                   |
@@ -74,11 +74,11 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 ---
 
-## Section: SCHEMA-GRAPH (v0.12.0 Faceted Classification)
+## Section: SCHEMA-GRAPH (v0.12.5 Faceted Classification)
 
 ```
 +===================================================================================================+
-|                    SCHEMA-GRAPH (v0.12.0) - Self-Describing Context Graph                         |
+|                    SCHEMA-GRAPH (v0.12.5) - Self-Describing Context Graph                         |
 +===================================================================================================+
 
   Each Class sits at the intersection of 4 classification axes:
@@ -90,14 +90,14 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
   |                                        ORG: config, foundation, structure, semantic,           |
   |                                             instruction, output                                |
   |   Axis 3 - HOW?     :Trait       (5)  defined / authored / imported / generated / retrieved   |
-  |   Axis 4 - LINKS?   :ArcClass  (114)  grouped into 5 ArcFamilies                              |
+  |   Axis 4 - LINKS?   :ArcClass  (169)  grouped into 5 ArcFamilies                              |
   |                                                                                                |
   +------------------------------------------------------------------------------------------------+
 
   6 Schema-Node Types (all carry :Schema double-label):
 
   +-------------+    +--------------+    +--------------+
-  |  Realm (2)  |--->|  Layer (10)  |--->|  Class (59)  |
+  |  Realm (2)  |--->|  Layer (10)  |--->|  Class (61)  |
   |  WHERE?     |    |  WHAT?       |    |  1:1 label   |
   |  HAS_LAYER  |    |  HAS_CLASS   |    |              |
   +-------------+    +--------------+    +------+-------+
@@ -119,7 +119,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
   Arc Schema (OWL-inspired):
 
   +----------------+    FROM_CLASS   +--------------+    TO_CLASS    +----------------+
-  | ArcClass (114) |---------------->|  Class (59)  |<---------------| ArcClass (114) |
+  | ArcClass (169) |---------------->|  Class (61)  |<---------------| ArcClass (169) |
   |  1:1 rel type  |                 +--------------+                |                |
   +-------+--------+                                                 +----------------+
           |
@@ -141,7 +141,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
   |  (e.g. Block)  |                |  label:Block   |
   +----------------+                +----------------+
 
-  TUI Modes (v0.12.0 - 2 modes):
+  TUI Modes (v0.12.5 - 2 modes):
 
   +---------------------------------------------------------------------------------+
   |  Graph  |  Unified tree: Realm > Layer > Class > Instance                      |
@@ -155,14 +155,14 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 ```
 +===================================================================================================+
-|                    SOURCE OF TRUTH PIPELINE - Schema Propagation (v0.12.0)                        |
+|                    SOURCE OF TRUTH PIPELINE - Schema Propagation (v0.12.5)                        |
 +===================================================================================================+
 
      +---------------------------------------------------------------------------------------------+
      |                        YAML (Single Source of Truth)                                        |
      |                        packages/core/models/                                                |
-     |                        +-- node-classes/               <- 59 NodeClass files                  |
-     |                        +-- arc-classes/                <- 114 ArcClass files                  |
+     |                        +-- node-classes/               <- 61 NodeClass files                  |
+     |                        +-- arc-classes/                <- 169 ArcClass files                  |
      |                        +-- taxonomy.yaml             <- 2 Realms, 10 Layers, 5 Traits       |
      +---------------------------------------------+-----------------------------------------------+
                                                    |
@@ -207,7 +207,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 ```
 +===================================================================================================+
-|                    RUST BINARY - tools/novanet/ (v0.12.0)                                         |
+|                    RUST BINARY - tools/novanet/ (v0.12.5)                                         |
 +===================================================================================================+
 
   +-----------------------------------------------------------------------------------------------+
@@ -249,7 +249,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 ```
 +===================================================================================================+
-|                              LOCALE KNOWLEDGE STRUCTURE (v0.12.0)                                 |
+|                              LOCALE KNOWLEDGE STRUCTURE (v0.12.5)                                 |
 +===================================================================================================+
 
      +---------------------------------------------------------------------------------------------+
@@ -365,7 +365,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 |   +---------------------------------------------------+--------------------------------------+   |
 |                                                                                                   |
 |   +-------------------------------------------------------------------------------------------+   |
-|   |  VISUALIZATION - TUI Modes (v0.12.0 - 2 modes)                                            |   |
+|   |  VISUALIZATION - TUI Modes (v0.12.5 - 2 modes)                                            |   |
 |   +-------------------------------------------------------------------------------------------+   |
 |   |                                                                                           |   |
 |   |  +---------------------------------------+  +---------------------------------------+     |   |
@@ -377,7 +377,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 |   |  |  Lazy instance loading                |  |  Schema validation                   |     |   |
 |   |  +---------------------------------------+  +---------------------------------------+     |   |
 |   |                                                                                           |   |
-|   |  Visual Encoding (v0.12.0):                                                               |   |
+|   |  Visual Encoding (v0.12.5):                                                               |   |
 |   |  +-- Fill color   -> Layer (10 colors)                                                    |   |
 |   |  +-- Border style  -> Trait (5 styles: solid/dashed/dotted/double/thin-dotted)            |   |
 |   |  +-- Spatial group -> Realm (2 zones: shared, org)                                        |   |
@@ -400,7 +400,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 |                    +------------------+                                                           |
 |                    |  @novanet/core   |  <- Types, schemas, generators, filters                   |
 |                    |  (source truth)  |     node-classes/ + arc-classes/ + taxonomy.yaml              |
-|                    +--------+---------+     v0.12.0: 2 Realms, 10 Layers                          |
+|                    +--------+---------+     v0.12.5: 2 Realms, 10 Layers                          |
 |                             |                                                                     |
 |              +--------------+--------------+                                                      |
 |              |              |              |                                                      |
@@ -431,7 +431,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 ```
 +===================================================================================================+
-|  DATA FLOW: Generation Pipeline (v0.12.0)                                                         |
+|  DATA FLOW: Generation Pipeline (v0.12.5)                                                         |
 +===================================================================================================+
 |                                                                                                   |
 |   1. INVARIANT NODES (no locale)                                                                  |
@@ -469,12 +469,12 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 ---
 
-## Key Numbers (v0.12.0)
+## Key Numbers (v0.12.5)
 
 | Metric | Value |
 |--------|-------|
-| Class (node types) | 59 |
-| ArcClass (arcs) | 114 |
+| Class (node types) | 61 |
+| ArcClass (arcs) | 169 |
 | Realms | 2 (shared, org) |
 | Layers | 10 (4 shared + 6 org) |
 | Traits | 5 (defined, authored, imported, generated, retrieved) |
@@ -529,7 +529,7 @@ novanet tui                        # Galaxy-themed mission control TUI
 User can invoke with:
 - `/novanet-arch` or `/novanet-architecture`
 - `/novanet-arch source` - YAML source only
-- `/novanet-arch meta` - Schema Graph (v0.12.0 faceted classification)
+- `/novanet-arch meta` - Schema Graph (v0.12.5 faceted classification)
 - `/novanet-arch pipeline` - Source of Truth Pipeline
 - `/novanet-arch locale` - Locale Knowledge Structure
 - `/novanet-arch infra` - Infrastructure only
