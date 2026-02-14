@@ -209,9 +209,9 @@ pub struct App {
     /// Avoids re-reading files on every scroll/navigation.
     pub yaml_cache: FxHashMap<String, String>,
     /// Neo4j arc data for current Class (loaded async)
-    pub kind_arcs: Option<ClassArcsData>,
+    pub class_arcs: Option<ClassArcsData>,
     /// Neo4j arc kind details (loaded async when ArcClass selected)
-    pub arc_kind_details: Option<ArcClassDetails>,
+    pub arc_class_details: Option<ArcClassDetails>,
     // Data view: pending instance load request (Class label to load)
     pub pending_instance_load: Option<String>,
     /// Pending Class arcs load request (Class label to load from Neo4j)
@@ -223,7 +223,7 @@ pub struct App {
     /// Pending category instances load (category key to load)
     pub pending_category_instances_load: Option<String>,
     /// Pending ArcClass details load request (Arc key to load from Neo4j)
-    pub pending_arc_kind_load: Option<String>,
+    pub pending_arc_class_load: Option<String>,
     /// Pending Realm details load request (Realm key to load from Neo4j)
     pub pending_realm_load: Option<String>,
     /// Pending Layer details load request (Layer key to load from Neo4j)
@@ -234,7 +234,7 @@ pub struct App {
     pub layer_details: Option<LayerDetails>,
     /// Data mode filter: when set, show only instances of this Class
     /// None = show full tree, Some(class_key) = show only instances of that Class
-    pub data_filter_kind: Option<String>,
+    pub data_filter_class: Option<String>,
     /// Cursor position before entering filtered Data mode (for restoration)
     pub data_cursor_before_filter: usize,
     /// Hide empty: when true, hide classes/layers with 0 instances in Data mode
@@ -316,19 +316,19 @@ impl App {
             info_line_count: 0,
             root_path,
             yaml_cache: FxHashMap::default(),
-            kind_arcs: None,
-            arc_kind_details: None,
+            class_arcs: None,
+            arc_class_details: None,
             pending_instance_load: None,
             pending_arcs_load: None,
             pending_instance_arcs_load: None,
             pending_entity_categories_load: false,
             pending_category_instances_load: None,
-            pending_arc_kind_load: None,
+            pending_arc_class_load: None,
             pending_realm_load: None,
             pending_layer_load: None,
             realm_details: None,
             layer_details: None,
-            data_filter_kind: None,
+            data_filter_class: None,
             data_cursor_before_filter: 0,
             hide_empty: false,
             nexus: NexusState::with_persistence(),
@@ -375,12 +375,12 @@ impl App {
 
         // Clear Neo4j data AND pending loads when moving away
         // (prevents race condition where pending load completes after navigation)
-        self.kind_arcs = None;
-        self.arc_kind_details = None;
+        self.class_arcs = None;
+        self.arc_class_details = None;
         self.realm_details = None;
         self.layer_details = None;
         self.pending_arcs_load = None;
-        self.pending_arc_kind_load = None;
+        self.pending_arc_class_load = None;
         self.pending_realm_load = None;
         self.pending_layer_load = None;
         self.pending_instance_load = None;
@@ -407,20 +407,20 @@ impl App {
             }
             TreeItemData::ArcClass { yaml_path, key } => {
                 self.load_yaml_cached(&yaml_path);
-                self.pending_arc_kind_load = Some(key);
+                self.pending_arc_class_load = Some(key);
             }
             TreeItemData::Realm { key } => {
-                let path = format!("packages/core/models/meta/realms/{}.yaml", key);
+                let path = format!("packages/core/models/realms/{}.yaml", key);
                 self.load_yaml_cached(&path);
                 self.pending_realm_load = Some(key);
             }
             TreeItemData::Layer { key } => {
-                let path = format!("packages/core/models/meta/layers/{}.yaml", key);
+                let path = format!("packages/core/models/layers/{}.yaml", key);
                 self.load_yaml_cached(&path);
                 self.pending_layer_load = Some(key);
             }
             TreeItemData::ArcFamily { key } => {
-                let path = format!("packages/core/models/meta/arc-families/{}.yaml", key);
+                let path = format!("packages/core/models/arc-families/{}.yaml", key);
                 self.load_yaml_cached(&path);
             }
             TreeItemData::Section => {
@@ -450,8 +450,8 @@ impl App {
     /// Handles filtered Data mode correctly (same logic as current_item()).
     fn get_current_tree_item_data(&self) -> TreeItemData {
         // In filtered Data mode, always return Instance (that's all we show)
-        if self.is_graph_mode() && self.data_filter_kind.is_some() {
-            if let Some(class_key) = &self.data_filter_kind {
+        if self.is_graph_mode() && self.data_filter_class.is_some() {
+            if let Some(class_key) = &self.data_filter_class {
                 if self
                     .tree
                     .filtered_item_at(self.tree_cursor, class_key)
@@ -1579,19 +1579,19 @@ impl App {
     /// Check if in filtered Graph mode (drilling into a specific Class).
     /// v11.7: Renamed from is_filtered_graph_mode() for consistency.
     pub fn is_filtered_graph_mode(&self) -> bool {
-        self.is_graph_mode() && self.data_filter_kind.is_some()
+        self.is_graph_mode() && self.data_filter_class.is_some()
     }
 
     /// Get the current filter Class key (if in filtered Graph mode).
-    pub fn get_filter_kind(&self) -> Option<&str> {
-        self.data_filter_kind.as_deref()
+    pub fn get_filter_class(&self) -> Option<&str> {
+        self.data_filter_class.as_deref()
     }
 
     /// Get item at cursor position for the current mode.
     /// Uses mode-aware method that shows instances in Data mode.
     pub fn current_item(&self) -> Option<super::data::TreeItem<'_>> {
         // Filtered Data mode: show only instances of the filtered Class
-        if let Some(class_key) = &self.data_filter_kind {
+        if let Some(class_key) = &self.data_filter_class {
             if self.is_graph_mode() {
                 return self.tree.filtered_item_at(self.tree_cursor, class_key);
             }
@@ -1609,7 +1609,7 @@ impl App {
     /// Get total item count for the current mode.
     pub fn current_item_count(&self) -> usize {
         // Filtered Data mode: count only instances of the filtered Class
-        if let Some(class_key) = &self.data_filter_kind {
+        if let Some(class_key) = &self.data_filter_class {
             if self.is_graph_mode() {
                 return self.tree.filtered_item_count(class_key);
             }
@@ -1646,7 +1646,7 @@ impl App {
     #[allow(dead_code)]
     pub fn enter_filtered_data_mode(&mut self, class_key: String) {
         self.data_cursor_before_filter = self.tree_cursor;
-        self.data_filter_kind = Some(class_key.clone());
+        self.data_filter_class = Some(class_key.clone());
         self.tree_cursor = 0;
         self.tree_scroll = 0;
         // Reset other scroll states to avoid stale positions
@@ -1706,8 +1706,8 @@ impl App {
     /// Clamps cursor to valid range in case tree structure changed.
     #[allow(dead_code)]
     pub fn exit_filtered_data_mode(&mut self) {
-        if self.data_filter_kind.is_some() {
-            self.data_filter_kind = None;
+        if self.data_filter_class.is_some() {
+            self.data_filter_class = None;
             self.pending_instance_load = None; // Clear pending to prevent race condition
             // Clamp cursor to valid range before restoring
             let max_cursor = self.tree.item_count().saturating_sub(1);
@@ -1858,18 +1858,18 @@ impl App {
     }
 
     /// Set the loaded Class arcs data from Neo4j.
-    pub fn set_kind_arcs(&mut self, arcs: ClassArcsData) {
-        self.kind_arcs = Some(arcs);
+    pub fn set_class_arcs(&mut self, arcs: ClassArcsData) {
+        self.class_arcs = Some(arcs);
     }
 
     /// Take the pending arc kind details load request (returns Arc key if one was queued).
-    pub fn take_pending_arc_kind_load(&mut self) -> Option<String> {
-        self.pending_arc_kind_load.take()
+    pub fn take_pending_arc_class_load(&mut self) -> Option<String> {
+        self.pending_arc_class_load.take()
     }
 
     /// Set the loaded ArcClass details from Neo4j.
-    pub fn set_arc_kind_details(&mut self, details: ArcClassDetails) {
-        self.arc_kind_details = Some(details);
+    pub fn set_arc_class_details(&mut self, details: ArcClassDetails) {
+        self.arc_class_details = Some(details);
     }
 
     /// Take the pending Realm details load request (returns Realm key if one was queued).
@@ -1898,7 +1898,7 @@ impl App {
         self.pending_instance_load.is_some()
             || self.pending_arcs_load.is_some()
             || self.pending_instance_arcs_load.is_some()
-            || self.pending_arc_kind_load.is_some()
+            || self.pending_arc_class_load.is_some()
             || self.pending_realm_load.is_some()
             || self.pending_layer_load.is_some()
             || self.pending_entity_categories_load
@@ -2358,7 +2358,7 @@ mod tests {
         app.mode = NavMode::Graph;
         app.tree_cursor = 100; // Way beyond valid range
         app.data_cursor_before_filter = 100;
-        app.data_filter_kind = Some("Locale".to_string());
+        app.data_filter_class = Some("Locale".to_string());
 
         app.exit_filtered_data_mode();
 
@@ -2376,7 +2376,7 @@ mod tests {
 
         // Should still be in filtered mode
         assert!(app.is_filtered_graph_mode());
-        assert_eq!(app.get_filter_kind(), Some("Page"));
+        assert_eq!(app.get_filter_class(), Some("Page"));
 
         // Count should be 0 (no instances)
         assert_eq!(app.current_item_count(), 0);
