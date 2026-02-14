@@ -168,6 +168,22 @@ node:
       description: "Cluster page is subtopic of pillar page (pillar-cluster SEO hierarchy)"
 
   # ═══════════════════════════════════════════════════════════════════════════════
+  # INCOMING RELATIONS
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  incoming_relations:
+    HAS_PAGE:
+      from: Project
+      cardinality: "1:N"
+      description: "Project that owns this page"
+
+    # v0.12.5: ADR-026 TIER 1 inverse arc
+    REPRESENTED_BY:
+      from: Entity
+      cardinality: "1:1"
+      description: "Entity that this page represents (inverse of REPRESENTS)"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
   # EXAMPLE
   # ═══════════════════════════════════════════════════════════════════════════════
 
