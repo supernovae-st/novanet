@@ -55,7 +55,7 @@ describe('buildCypherViaRust', () => {
     layers: [],
     traits: [],
     arc_families: [],
-    kinds: [],
+    classes: [],  // v0.12.0 ADR-023: kinds→classes
   };
 
   beforeEach(() => {
@@ -64,12 +64,12 @@ describe('buildCypherViaRust', () => {
 
   it('returns Cypher string from stdout', async () => {
     mockExecFile.mockResolvedValue({
-      stdout: 'MATCH (n) WHERE NOT n:Meta RETURN n\n',
+      stdout: 'MATCH (n) WHERE NOT n:Schema RETURN n\n',  // v0.12.0 ADR-023: Meta→Schema
       stderr: '',
     });
 
     const cypher = await buildCypherViaRust(baseFacets);
-    expect(cypher).toBe('MATCH (n) WHERE NOT n:Meta RETURN n');
+    expect(cypher).toBe('MATCH (n) WHERE NOT n:Schema RETURN n');
   });
 
   it('passes correct JSON to stdin', async () => {
@@ -80,7 +80,7 @@ describe('buildCypherViaRust', () => {
       layers: ['structure'],
       traits: ['defined'],  // v0.12.0: renamed from invariant
       arc_families: [],
-      kinds: [],
+      classes: [],  // v0.12.0 ADR-023: kinds→classes
     };
 
     await buildCypherViaRust(facets);

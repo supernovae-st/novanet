@@ -9,7 +9,7 @@
  *
  * Handles are hidden when node is selected (WOW effect - clean selection state).
  *
- * Used by: StructuralNode, LocaleKnowledgeNode, SchemaNode, ProjectNode
+ * Used by: StructuralNode, SharedLayerNode, SchemaNode, ProjectNode
  */
 
 import { memo } from 'react';

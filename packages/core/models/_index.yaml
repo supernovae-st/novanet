@@ -60,7 +60,7 @@
 #             │
 #             ├─[:HAS_CONTENT]─> ProjectContent ──:FOR_LOCALE──> Locale
 #             │
-#             └─[:HAS_PAGE]─> Page ──┬─[:HAS_BLOCK {position}]─> Block ──:OF_TYPE──> BlockType
+#             └─[:HAS_PAGE]─> Page ──┬─[:HAS_BLOCK {order}]─> Block ──:OF_TYPE──> BlockType
 #                               │    │                            │
 #                               │    │                     :HAS_INSTRUCTION──> BlockInstruction
 #                               │    │                            │
@@ -91,10 +91,10 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 #   v0.12.4: PageStructure and PageInstruction DELETED
-#   Block order (HAS_BLOCK {position}) determines page structure
+#   Block order (HAS_BLOCK {order}) determines page structure
 #   BlockInstructions are assembled at runtime by position order
 #
-#   Page ──[:HAS_BLOCK {position}]──> Block ──[:HAS_INSTRUCTION]──> BlockInstruction
+#   Page ──[:HAS_BLOCK {order}]──> Block ──[:HAS_INSTRUCTION]──> BlockInstruction
 #                                       │                              │
 #                                       │                       markdown content with
 #                                       │                       @entity:key, @link:key syntax

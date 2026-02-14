@@ -85,8 +85,6 @@ const nodeTypes = {
   turbo: TurboNode,
   structural: StructuralNode,
   sharedLayer: SharedLayerNode,
-  // Backwards compatibility alias (v0.12.4: LocaleKnowledgeNode → SharedLayerNode)
-  localeKnowledge: SharedLayerNode,
   project: ProjectNode,
   // Schema mode node types (Task 3.2)
   schemaNode: SchemaNode,
@@ -152,7 +150,7 @@ function toTurboNode(node: GraphNodeType): TurboNodeType {
       case 'locale':
       case 'geography':
       case 'knowledge':
-        nodeType = 'localeKnowledge';
+        nodeType = 'sharedLayer';
         break;
       // Default to turbo for seo, geo layers
     }

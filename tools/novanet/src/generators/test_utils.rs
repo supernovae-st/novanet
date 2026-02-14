@@ -172,7 +172,7 @@ mod tests {
     }
 
     #[test]
-    fn test_make_node_simple_defaults_to_invariant() {
+    fn test_make_node_simple_defaults_to_defined() {
         let node = make_node_simple("Term", "shared", "knowledge");
         assert_eq!(node.def.node_trait, NodeTrait::Defined);
     }

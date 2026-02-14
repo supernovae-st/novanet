@@ -39,9 +39,10 @@ v0.12.0 refines the 2-Realm Architecture with ADR-023 (Class/Instance terminolog
 - ADR-023: ":Meta:" → ":Schema:" in Neo4j labels
 - ADR-024: Trait redefinition as "Data Origin" (invariant→defined, localized→authored, knowledge→imported, aggregated→retrieved)
 - ADR-025: PagePrompt→PageInstruction, BlockPrompt→BlockInstruction
-- SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (39 nodes)
-- ORG (6 layers): config, foundation, structure, semantic, instruction, output (20 nodes)
-- 59 node types, 114 arc types
+- ADR-028: Brand Architecture (Brand, BrandDesign, BrandPrinciples, PromptStyle, Country)
+- SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (40 nodes)
+- ORG (6 layers): config, foundation, structure, semantic, instruction, output (21 nodes)
+- 61 node types, 128 arc types
 
 **Boundary rule:** TypeScript (this package) generates code artifacts. Rust (`tools/novanet/`) executes at runtime.
 
