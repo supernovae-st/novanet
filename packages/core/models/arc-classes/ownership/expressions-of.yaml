@@ -1,0 +1,16 @@
+# packages/core/models/arc-classes/ownership/expressions-of.yaml
+# v0.13.0: TIER 2 inverse arc (ADR-026) - inverse of HAS_EXPRESSIONS
+arc:
+  name: EXPRESSIONS_OF
+  family: ownership
+  scope: intra_realm
+  source: ExpressionSet
+  target: Locale
+  cardinality: one_to_one
+  inverse_of: HAS_EXPRESSIONS
+  llm_context: |
+    USE: when finding which locale owns an ExpressionSet.
+    TRIGGERS: expression owner, expressionset locale, which locale, idiom locale.
+    NOT: loading expressions for locale (use HAS_EXPRESSIONS), individual expressions (use CONTAINS_EXPRESSION).
+    RELATES: ExpressionSet (source), Locale (target), HAS_EXPRESSIONS (inverse).
+  cypher_pattern: (ExpressionSet)-[:EXPRESSIONS_OF]->(Locale)

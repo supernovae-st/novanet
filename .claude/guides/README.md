@@ -294,11 +294,12 @@ Commit 3: Update ADR if decision changed
 
 ## Version Information
 
-- **Current NovaNet Version**: v11.8
-- **Latest ADR**: ADR-025 (Instruction Layer)
+- **Current NovaNet Version**: v0.12.4
+- **Latest ADR**: ADR-028 (Brand Architecture)
 - **Latest Traits**: defined, authored, imported, generated, retrieved
 - **Realms**: shared (4 layers), org (6 layers)
-- **Total Nodes**: 59 (39 shared + 20 org)
+- **Total Nodes**: 61 (40 shared + 21 org)
+- **Total Arcs**: 128 (5 families)
 
 ---
 

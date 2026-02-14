@@ -30,7 +30,7 @@ v10.9 Naming Convention Refactor       █████████████�
 v11.0 SEO Tenant + Docs Refactor       ████████████████████  100%  RELEASED
       SEO→tenant (ADR-012 fix), arc coherence, 30-sniper doc audit
 v11.5 Schema Refinement                ████████████████████  100%  RELEASED
-      Locale→config, SEO/GEO→shared/knowledge (ADR-020), 59 nodes, 10 layers
+      Locale→config, SEO/GEO→shared/knowledge (ADR-020), 10 layers
 v11.6 Query-First Architecture         ████████████████████  100%  RELEASED
       Tabbed detail panel, CypherPill, ADR-021 Query-First
 v11.7 Unified Tree Architecture        ████████████████████  100%  RELEASED
@@ -252,8 +252,9 @@ release/v*      Release preparation (optional, for complex releases)
 | v10.8.0 | 2026-02-07 | Icons source of truth (ADR-013), visual-encoding.yaml |
 | v10.9.0 | 2026-02-08 | Naming refactor (ADR-014/015/016), 64 Classes, 120 ArcClasses |
 | v11.0.0 | 2026-02-08 | SEO → tenant migration, arc coherence (22 fixes), docs refactor |
-| v11.5.0 | 2026-02-10 | Schema refinement (ADR-020), Locale→config, 59 nodes, 10 layers |
+| v11.5.0 | 2026-02-10 | Schema refinement (ADR-020), Locale→config, 10 layers |
 | v11.6.0 | 2026-02-10 | Query-First Architecture (ADR-021), tabbed detail panel |
 | v11.7.0 | 2026-02-11 | Unified Tree Architecture (ADR-022), 5→2 modes, dual icons |
 | v11.8.0 | 2026-02-13 | Class Act (ADR-024), trait renames for data origin semantics |
 | v0.12.0 | 2026-02-13 | SemVer Transition — proper versioning (0.x = pre-production) |
+| v0.12.4 | 2026-02-14 | Brand Architecture (ADR-028), 61 nodes, 128 arcs |

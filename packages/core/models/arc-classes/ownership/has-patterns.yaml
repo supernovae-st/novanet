@@ -1,4 +1,5 @@
 # packages/core/models/arc-classes/ownership/has-patterns.yaml
+# v0.13.0: Added TIER 2 inverse (ADR-026)
 arc:
   name: HAS_PATTERNS
   family: ownership
@@ -6,6 +7,7 @@ arc:
   source: Locale
   target: PatternSet
   cardinality: one_to_many
+  inverse: PATTERNS_OF
   llm_context: |
     USE: when loading content patterns for a locale by usage type.
     TRIGGERS: locale patterns, content patterns, CTA patterns, headline patterns.

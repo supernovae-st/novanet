@@ -1,0 +1,21 @@
+# packages/core/models/arc-classes/ownership/patterns-of.yaml
+# v0.13.0: TIER 2 inverse arc (ADR-026) - inverse of HAS_PATTERNS
+arc:
+  name: PATTERNS_OF
+  family: ownership
+  scope: intra_realm
+  source: PatternSet
+  target: Locale
+  cardinality: many_to_one
+  inverse_of: HAS_PATTERNS
+  llm_context: |
+    USE: when finding which locale owns a PatternSet.
+    TRIGGERS: pattern owner, patternset locale, which locale, content pattern locale.
+    NOT: loading patterns for locale (use HAS_PATTERNS), individual patterns (use CONTAINS_PATTERN).
+    RELATES: PatternSet (source), Locale (target), HAS_PATTERNS (inverse), usage (property).
+  cypher_pattern: "(PatternSet)-[:PATTERNS_OF {usage: $usage}]->(Locale)"
+  properties:
+    usage:
+      type: string
+      required: true
+      description: "Pattern usage (mirrors HAS_PATTERNS.usage for bidirectional traversal)"
