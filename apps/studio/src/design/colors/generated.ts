@@ -24,16 +24,9 @@ export interface ColorTokens {
 // REALM COLORS (2)
 // =============================================================================
 
-export type RealmKey = 'shared' | 'org';
+export type RealmKey = 'org' | 'shared';
 
 export const REALM_COLORS: Record<RealmKey, ColorTokens> = {
-  'shared': {
-    color: '#2aa198',
-    bg: 'bg-[#2aa198]/20',
-    text: 'text-[#2aa198]',
-    border: 'border-[#2aa198]/30',
-    bgSolid: 'bg-[#2aa198]',
-  },
   'org': {
     color: '#6c71c4',
     bg: 'bg-[#6c71c4]/20',
@@ -41,18 +34,25 @@ export const REALM_COLORS: Record<RealmKey, ColorTokens> = {
     border: 'border-[#6c71c4]/30',
     bgSolid: 'bg-[#6c71c4]',
   },
+  'shared': {
+    color: '#2aa198',
+    bg: 'bg-[#2aa198]/20',
+    text: 'text-[#2aa198]',
+    border: 'border-[#2aa198]/30',
+    bgSolid: 'bg-[#2aa198]',
+  },
 };
 
 export const REALM_DISPLAY_NAMES: Record<RealmKey, string> = {
-  'shared': 'Shared',
   'org': 'Organization',
+  'shared': 'Shared',
 };
 
 // =============================================================================
 // LAYER COLORS (9)
 // =============================================================================
 
-export type LayerKey = 'config' | 'locale' | 'geography' | 'knowledge' | 'semantic' | 'foundation' | 'structure' | 'instruction' | 'output';
+export type LayerKey = 'config' | 'foundation' | 'instruction' | 'output' | 'semantic' | 'structure' | 'geography' | 'knowledge' | 'locale';
 
 export const LAYER_COLORS: Record<LayerKey, ColorTokens> = {
   'config': {
@@ -62,47 +62,12 @@ export const LAYER_COLORS: Record<LayerKey, ColorTokens> = {
     border: 'border-[#64748b]/30',
     bgSolid: 'bg-[#64748b]',
   },
-  'locale': {
-    color: '#64748b',
-    bg: 'bg-[#64748b]/20',
-    text: 'text-[#64748b]',
-    border: 'border-[#64748b]/30',
-    bgSolid: 'bg-[#64748b]',
-  },
-  'geography': {
-    color: '#10b981',
-    bg: 'bg-[#10b981]/20',
-    text: 'text-[#10b981]',
-    border: 'border-[#10b981]/30',
-    bgSolid: 'bg-[#10b981]',
-  },
-  'knowledge': {
-    color: '#8b5cf6',
-    bg: 'bg-[#8b5cf6]/20',
-    text: 'text-[#8b5cf6]',
-    border: 'border-[#8b5cf6]/30',
-    bgSolid: 'bg-[#8b5cf6]',
-  },
-  'semantic': {
-    color: '#f97316',
-    bg: 'bg-[#f97316]/20',
-    text: 'text-[#f97316]',
-    border: 'border-[#f97316]/30',
-    bgSolid: 'bg-[#f97316]',
-  },
   'foundation': {
     color: '#3b82f6',
     bg: 'bg-[#3b82f6]/20',
     text: 'text-[#3b82f6]',
     border: 'border-[#3b82f6]/30',
     bgSolid: 'bg-[#3b82f6]',
-  },
-  'structure': {
-    color: '#06b6d4',
-    bg: 'bg-[#06b6d4]/20',
-    text: 'text-[#06b6d4]',
-    border: 'border-[#06b6d4]/30',
-    bgSolid: 'bg-[#06b6d4]',
   },
   'instruction': {
     color: '#eab308',
@@ -118,34 +83,62 @@ export const LAYER_COLORS: Record<LayerKey, ColorTokens> = {
     border: 'border-[#22c55e]/30',
     bgSolid: 'bg-[#22c55e]',
   },
+  'semantic': {
+    color: '#f97316',
+    bg: 'bg-[#f97316]/20',
+    text: 'text-[#f97316]',
+    border: 'border-[#f97316]/30',
+    bgSolid: 'bg-[#f97316]',
+  },
+  'structure': {
+    color: '#06b6d4',
+    bg: 'bg-[#06b6d4]/20',
+    text: 'text-[#06b6d4]',
+    border: 'border-[#06b6d4]/30',
+    bgSolid: 'bg-[#06b6d4]',
+  },
+  'geography': {
+    color: '#10b981',
+    bg: 'bg-[#10b981]/20',
+    text: 'text-[#10b981]',
+    border: 'border-[#10b981]/30',
+    bgSolid: 'bg-[#10b981]',
+  },
+  'knowledge': {
+    color: '#8b5cf6',
+    bg: 'bg-[#8b5cf6]/20',
+    text: 'text-[#8b5cf6]',
+    border: 'border-[#8b5cf6]/30',
+    bgSolid: 'bg-[#8b5cf6]',
+  },
+  'locale': {
+    color: '#64748b',
+    bg: 'bg-[#64748b]/20',
+    text: 'text-[#64748b]',
+    border: 'border-[#64748b]/30',
+    bgSolid: 'bg-[#64748b]',
+  },
 };
 
 export const LAYER_DISPLAY_NAMES: Record<LayerKey, string> = {
   'config': 'Config',
-  'locale': 'Locale',
-  'geography': 'Geography',
-  'knowledge': 'Knowledge',
-  'semantic': 'Semantic Layer',
   'foundation': 'Foundation',
-  'structure': 'Structure',
   'instruction': 'Instructions',
   'output': 'Generated Output',
+  'semantic': 'Semantic',
+  'structure': 'Structure',
+  'geography': 'Geography',
+  'knowledge': 'Knowledge',
+  'locale': 'Locale',
 };
 
 // =============================================================================
 // TRAIT COLORS (5)
 // =============================================================================
 
-export type TraitKey = 'defined' | 'authored' | 'imported' | 'generated' | 'retrieved';
+export type TraitKey = 'authored' | 'defined' | 'generated' | 'imported' | 'retrieved';
 
 export const TRAIT_COLORS: Record<TraitKey, ColorTokens> = {
-  'defined': {
-    color: '#3b82f6',
-    bg: 'bg-[#3b82f6]/20',
-    text: 'text-[#3b82f6]',
-    border: 'border-[#3b82f6]/30',
-    bgSolid: 'bg-[#3b82f6]',
-  },
   'authored': {
     color: '#22c55e',
     bg: 'bg-[#22c55e]/20',
@@ -153,12 +146,12 @@ export const TRAIT_COLORS: Record<TraitKey, ColorTokens> = {
     border: 'border-[#22c55e]/30',
     bgSolid: 'bg-[#22c55e]',
   },
-  'imported': {
-    color: '#8b5cf6',
-    bg: 'bg-[#8b5cf6]/20',
-    text: 'text-[#8b5cf6]',
-    border: 'border-[#8b5cf6]/30',
-    bgSolid: 'bg-[#8b5cf6]',
+  'defined': {
+    color: '#3b82f6',
+    bg: 'bg-[#3b82f6]/20',
+    text: 'text-[#3b82f6]',
+    border: 'border-[#3b82f6]/30',
+    bgSolid: 'bg-[#3b82f6]',
   },
   'generated': {
     color: '#b58900',
@@ -166,6 +159,13 @@ export const TRAIT_COLORS: Record<TraitKey, ColorTokens> = {
     text: 'text-[#b58900]',
     border: 'border-[#b58900]/30',
     bgSolid: 'bg-[#b58900]',
+  },
+  'imported': {
+    color: '#8b5cf6',
+    bg: 'bg-[#8b5cf6]/20',
+    text: 'text-[#8b5cf6]',
+    border: 'border-[#8b5cf6]/30',
+    bgSolid: 'bg-[#8b5cf6]',
   },
   'retrieved': {
     color: '#6c71c4',
@@ -177,10 +177,10 @@ export const TRAIT_COLORS: Record<TraitKey, ColorTokens> = {
 };
 
 export const TRAIT_DISPLAY_NAMES: Record<TraitKey, string> = {
-  'defined': 'Defined',
   'authored': 'Authored',
-  'imported': 'Imported',
+  'defined': 'Defined',
   'generated': 'Generated',
+  'imported': 'Imported',
   'retrieved': 'Retrieved',
 };
 
@@ -188,15 +188,15 @@ export const TRAIT_DISPLAY_NAMES: Record<TraitKey, string> = {
 // ARC FAMILY COLORS (5)
 // =============================================================================
 
-export type ArcFamilyKey = 'ownership' | 'localization' | 'semantic' | 'generation' | 'mining';
+export type ArcFamilyKey = 'generation' | 'localization' | 'mining' | 'ownership' | 'semantic';
 
 export const ARC_FAMILY_COLORS: Record<ArcFamilyKey, ColorTokens> = {
-  'ownership': {
-    color: '#3b82f6',
-    bg: 'bg-[#3b82f6]/20',
-    text: 'text-[#3b82f6]',
-    border: 'border-[#3b82f6]/30',
-    bgSolid: 'bg-[#3b82f6]',
+  'generation': {
+    color: '#8b5cf6',
+    bg: 'bg-[#8b5cf6]/20',
+    text: 'text-[#8b5cf6]',
+    border: 'border-[#8b5cf6]/30',
+    bgSolid: 'bg-[#8b5cf6]',
   },
   'localization': {
     color: '#22c55e',
@@ -205,20 +205,6 @@ export const ARC_FAMILY_COLORS: Record<ArcFamilyKey, ColorTokens> = {
     border: 'border-[#22c55e]/30',
     bgSolid: 'bg-[#22c55e]',
   },
-  'semantic': {
-    color: '#f97316',
-    bg: 'bg-[#f97316]/20',
-    text: 'text-[#f97316]',
-    border: 'border-[#f97316]/30',
-    bgSolid: 'bg-[#f97316]',
-  },
-  'generation': {
-    color: '#8b5cf6',
-    bg: 'bg-[#8b5cf6]/20',
-    text: 'text-[#8b5cf6]',
-    border: 'border-[#8b5cf6]/30',
-    bgSolid: 'bg-[#8b5cf6]',
-  },
   'mining': {
     color: '#ec4899',
     bg: 'bg-[#ec4899]/20',
@@ -226,14 +212,28 @@ export const ARC_FAMILY_COLORS: Record<ArcFamilyKey, ColorTokens> = {
     border: 'border-[#ec4899]/30',
     bgSolid: 'bg-[#ec4899]',
   },
+  'ownership': {
+    color: '#3b82f6',
+    bg: 'bg-[#3b82f6]/20',
+    text: 'text-[#3b82f6]',
+    border: 'border-[#3b82f6]/30',
+    bgSolid: 'bg-[#3b82f6]',
+  },
+  'semantic': {
+    color: '#f97316',
+    bg: 'bg-[#f97316]/20',
+    text: 'text-[#f97316]',
+    border: 'border-[#f97316]/30',
+    bgSolid: 'bg-[#f97316]',
+  },
 };
 
 export const ARC_FAMILY_DISPLAY_NAMES: Record<ArcFamilyKey, string> = {
-  'ownership': 'Ownership',
-  'localization': 'Localization',
-  'semantic': 'Semantic',
   'generation': 'Generation',
+  'localization': 'Localization',
   'mining': 'Mining',
+  'ownership': 'Ownership',
+  'semantic': 'Semantic',
 };
 
 // =============================================================================

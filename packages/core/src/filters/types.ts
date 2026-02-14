@@ -77,12 +77,13 @@ export interface CypherQuery {
 
 /**
  * View categories for UI grouping (v11.6.1).
- * - meta: Schema exploration (Realm, Layer, Kind, ArcKind)
+ * - meta: Schema exploration (Realm, Layer, Class, ArcClass)
  * - data: Instance exploration by realm/layer/purpose
  * - overlay: Meta + Data combined for debugging
  * - contextual: Node-centered subgraphs
+ * - generation: AI agent context assembly
  */
-export type ViewCategory = 'meta' | 'data' | 'overlay' | 'contextual';
+export type ViewCategory = 'meta' | 'data' | 'overlay' | 'contextual' | 'generation';
 
 /**
  * Navigation modes that a view supports.

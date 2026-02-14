@@ -16,89 +16,89 @@ import { getNodeTypesByRealmAndLayer } from './layers.js';
  * This is the single source of truth for the ontology structure.
  *
  * 2 Realms (10 layers):
- * - Shared: Shared across ALL organizations. (4 layers)
- * - Organization: Organization-specific realm. (6 layers)
+ * - Organization: USE: when working with organization-specific content. (6 layers)
+ * - Shared: USE: when accessing universal locale knowledge. (4 layers)
  */
 export const REALM_HIERARCHY: Record<Realm, RealmDefinition> = {
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SHARED (4 layers)
-  // ═══════════════════════════════════════════════════════════════════════════
-  shared: {
-    realm: 'shared',
-    label: 'SHARED',
-    icon: '🌍',
-    description: 'Shared across ALL organizations.',
-    layers: {
-      'config': {
-        label: 'Config',
-        description: 'Human-defined definitions for shared realm.',
-        icon: '⚙️',
-        nodeTypes: getNodeTypesByRealmAndLayer('shared', 'config'),
-      },
-      'locale': {
-        label: 'Locale',
-        description: 'Locale-specific SETTINGS (1:1 with Locale).',
-        icon: '🌐',
-        nodeTypes: getNodeTypesByRealmAndLayer('shared', 'locale'),
-      },
-      'geography': {
-        label: 'Geography',
-        description: 'Geographic and economic classifications.',
-        icon: '🗺️',
-        nodeTypes: getNodeTypesByRealmAndLayer('shared', 'geography'),
-      },
-      'knowledge': {
-        label: 'Knowledge',
-        description: 'Deep locale-specific knowledge for native content generation.',
-        icon: '📚',
-        nodeTypes: getNodeTypesByRealmAndLayer('shared', 'knowledge'),
-      },
-    } as Record<Layer, LayerMeta>,
-  },
   // ═══════════════════════════════════════════════════════════════════════════
   // ORG (6 layers)
   // ═══════════════════════════════════════════════════════════════════════════
   org: {
     realm: 'org',
     label: 'ORG',
-    icon: '🏢',
-    description: 'Organization-specific realm.',
+    icon: '◎',
+    description: 'USE: when working with organization-specific content.',
     layers: {
       'config': {
         label: 'Config',
-        description: 'Organization configuration root.',
-        icon: '⚙️',
+        description: 'USE: when accessing configuration and definitions.',
+        icon: '⚙',
         nodeTypes: getNodeTypesByRealmAndLayer('org', 'config'),
-      },
-      'semantic': {
-        label: 'Semantic Layer',
-        description: 'Defined entities (Entity) and their authored content (EntityContent).',
-        icon: '💡',
-        nodeTypes: getNodeTypesByRealmAndLayer('org', 'semantic'),
       },
       'foundation': {
         label: 'Foundation',
-        description: 'Project identity.',
-        icon: '🏛️',
+        description: 'USE: when accessing project identity and branding.',
+        icon: '■',
         nodeTypes: getNodeTypesByRealmAndLayer('org', 'foundation'),
-      },
-      'structure': {
-        label: 'Structure',
-        description: 'Information architecture.',
-        icon: '🏗️',
-        nodeTypes: getNodeTypesByRealmAndLayer('org', 'structure'),
       },
       'instruction': {
         label: 'Instructions',
-        description: 'Generation directives.',
-        icon: '📝',
+        description: 'USE: when accessing generation instructions and rules.',
+        icon: '▤',
         nodeTypes: getNodeTypesByRealmAndLayer('org', 'instruction'),
       },
       'output': {
         label: 'Generated Output',
-        description: 'LLM-generated content.',
-        icon: '✨',
+        description: 'USE: when accessing generated content.',
+        icon: '✦',
         nodeTypes: getNodeTypesByRealmAndLayer('org', 'output'),
+      },
+      'semantic': {
+        label: 'Semantic',
+        description: 'USE: when working with semantic entities and their content.',
+        icon: '◆',
+        nodeTypes: getNodeTypesByRealmAndLayer('org', 'semantic'),
+      },
+      'structure': {
+        label: 'Structure',
+        description: 'USE: when accessing page and block structure.',
+        icon: '▣',
+        nodeTypes: getNodeTypesByRealmAndLayer('org', 'structure'),
+      },
+    } as Record<Layer, LayerMeta>,
+  },
+  // ═══════════════════════════════════════════════════════════════════════════
+  // SHARED (4 layers)
+  // ═══════════════════════════════════════════════════════════════════════════
+  shared: {
+    realm: 'shared',
+    label: 'SHARED',
+    icon: '◉',
+    description: 'USE: when accessing universal locale knowledge.',
+    layers: {
+      'config': {
+        label: 'Config',
+        description: 'USE: when accessing configuration and definitions.',
+        icon: '⚙',
+        nodeTypes: getNodeTypesByRealmAndLayer('shared', 'config'),
+      },
+      'geography': {
+        label: 'Geography',
+        description: 'USE: when accessing geographic classifications.',
+        icon: '◆',
+        nodeTypes: getNodeTypesByRealmAndLayer('shared', 'geography'),
+      },
+      'knowledge': {
+        label: 'Knowledge',
+        description: 'USE: when accessing knowledge atoms for native content generation.',
+        icon: '◊',
+        nodeTypes: getNodeTypesByRealmAndLayer('shared', 'knowledge'),
+      },
+      'locale': {
+        label: 'Locale',
+        description: 'USE: when accessing locale-specific settings.',
+        icon: '●',
+        nodeTypes: getNodeTypesByRealmAndLayer('shared', 'locale'),
       },
     } as Record<Layer, LayerMeta>,
   },

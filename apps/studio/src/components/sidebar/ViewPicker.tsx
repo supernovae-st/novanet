@@ -23,6 +23,7 @@ import {
   Boxes,
   Layers,
   Eye,
+  Sparkles,
   type LucideIcon,
 } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
@@ -46,12 +47,13 @@ import type { ViewRegistryEntry } from '@novanet/core/filters';
 // Constants
 const GRID_COLUMNS = 3;
 
-// Category colors and icons (v11.6.1 unified view system)
+// Category colors and icons (v0.12.5 unified view system)
 const CATEGORY_CONFIG: Record<string, { color: string; label: string; icon: LucideIcon }> = {
   meta: { color: '#8b5cf6', label: 'Meta', icon: Database },
   data: { color: '#6366f1', label: 'Data', icon: Boxes },
   overlay: { color: '#f97316', label: 'Overlay', icon: Layers },
   contextual: { color: '#94a3b8', label: 'Contextual', icon: Eye },
+  generation: { color: '#ec4899', label: 'Generation', icon: Sparkles },
 };
 
 interface ViewPickerProps {
@@ -409,11 +411,25 @@ export const ViewPicker = memo(function ViewPicker({ className }: ViewPickerProp
   );
 
   // Regular click: select AND execute
+  // v0.12.5: Pass selectedNode.key for contextual/generation views
   const handleExecute = useCallback(
     (viewId: string) => {
-      executeView(viewId);
+      const view = views.find((v) => v.id === viewId);
+      const isContextual = view?.contextual || view?.category === 'generation';
+
+      // For contextual views, require a selected node
+      if (isContextual) {
+        if (!selectedNode) {
+          console.warn(`[ViewPicker] Contextual view "${viewId}" requires a selected node`);
+          // Still execute but it will return empty results or error
+          // TODO: Show toast "Select a node first to use this view"
+        }
+        executeView(viewId, { key: selectedNode?.key });
+      } else {
+        executeView(viewId);
+      }
     },
-    [executeView]
+    [executeView, views, selectedNode]
   );
 
   return (

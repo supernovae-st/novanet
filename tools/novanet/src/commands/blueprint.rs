@@ -59,7 +59,7 @@ mod tests {
 
         // Test stats view
         let stats = views::render_view(&data, BlueprintView::Stats, OutputFormat::Table);
-        assert!(stats.contains("NodeKinds"));
+        assert!(stats.contains("Classes"));
     }
 
     #[test]

@@ -3,7 +3,7 @@
 // 13 categories for Entity.type classification.
 // Based on semantic question groups (WHAT? WHERE? WHY? WHO? HOW? ABSTRACT EXTERNAL).
 //
-// Must run after: 00-constraints.cypher, 01-kinds.cypher
+// Must run after: 00-constraints.cypher, 01-classes.cypher
 // Must run before: 10-entities-*.cypher
 
 // =============================================================================

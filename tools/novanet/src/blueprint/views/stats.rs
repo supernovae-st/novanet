@@ -121,8 +121,8 @@ fn render_table(stats: &BlueprintStats) -> String {
     format!(
         "BLUEPRINT STATS\n\
          ───────────────────────────────────────\n\
-         NodeKinds:        {}\n\
-         ArcKinds:         {}\n\
+         Classes:          {}\n\
+         ArcClasses:       {}\n\
          Realms:           {}\n\
          Layers:           {}\n\
          \n\
@@ -194,7 +194,7 @@ mod tests {
         let output = render(&data, OutputFormat::Table);
 
         assert!(output.contains("BLUEPRINT STATS"), "Should have header");
-        assert!(output.contains("NodeKinds:"), "Should have NodeKinds");
+        assert!(output.contains("Classes:"), "Should have Classes");
         assert!(
             output.contains("VALIDATION"),
             "Should have validation section"

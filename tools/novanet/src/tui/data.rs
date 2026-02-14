@@ -510,9 +510,7 @@ pub fn get_all_adrs() -> Vec<AdrEntry> {
                 "Entity → Generate natively → EntityContent".to_string(),
                 "NOT: Source → Translate → Target".to_string(),
             ],
-            diagram: vec![
-                "Entity (defined) ──▶ Generate ──▶ EntityContent (authored)".to_string(),
-            ],
+            diagram: vec!["Entity (defined) ──▶ Generate ──▶ EntityContent (authored)".to_string()],
             key_rules: vec![
                 "Content is generated natively per locale".to_string(),
                 "Translation loses cultural nuance".to_string(),
@@ -529,9 +527,7 @@ pub fn get_all_adrs() -> Vec<AdrEntry> {
                 "YAML = single source of truth".to_string(),
                 "Generators → TS/Cypher/Mermaid".to_string(),
             ],
-            diagram: vec![
-                "YAML models ──▶ Rust Generator ──▶ TypeScript + Cypher".to_string(),
-            ],
+            diagram: vec!["YAML models ──▶ Rust Generator ──▶ TypeScript + Cypher".to_string()],
             key_rules: vec![
                 "Single source prevents drift".to_string(),
                 "CI validates sync".to_string(),
@@ -549,9 +545,7 @@ pub fn get_all_adrs() -> Vec<AdrEntry> {
                 "Graph theory for directed edges".to_string(),
             ],
             diagram: vec![],
-            key_rules: vec![
-                "Single consistent term across all platforms".to_string(),
-            ],
+            key_rules: vec!["Single consistent term across all platforms".to_string()],
             related_classes: vec![],
         },
         // Schema Architecture
@@ -578,7 +572,11 @@ pub fn get_all_adrs() -> Vec<AdrEntry> {
                 "SEO Keywords live on Entity, not Page".to_string(),
                 "Block.key = \"{page_key}:{block_type}:{index}\"".to_string(),
             ],
-            related_classes: vec!["Page".to_string(), "Entity".to_string(), "Block".to_string()],
+            related_classes: vec![
+                "Page".to_string(),
+                "Entity".to_string(),
+                "Block".to_string(),
+            ],
         },
         AdrEntry {
             id: "ADR-024".to_string(),

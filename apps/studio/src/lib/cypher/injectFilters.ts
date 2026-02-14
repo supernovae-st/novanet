@@ -47,43 +47,64 @@ export function injectFilters(query: string, filters: CypherFilters): string {
     }
   }
 
-  // 2. Handle localeKey - inject WHERE clause for locale filtering
-  // Only for queries that match locale-related patterns
+  // 2. Handle localeKey - substitute parameters OR inject WHERE clause
+  // v0.12.5: Also substitute $locale and $nodeKey for Locale-typed queries
   if (filters.localeKey && filters.localeKey !== 'world') {
-    // Check if query references Locale nodes
-    const hasLocaleRef = /\b(Locale|:Locale)\b/i.test(result);
-    if (hasLocaleRef) {
-      // Find a good place to inject the WHERE clause
-      // Look for patterns like (l:Locale) or (locale:Locale)
-      const localeVarMatch = result.match(/\((\w+):Locale\)/i);
-      if (localeVarMatch) {
-        const localeVar = localeVarMatch[1];
-        // Check if there's already a WHERE clause
-        const whereRegex = /\bWHERE\b/i;
-        if (whereRegex.test(result)) {
-          // Add to existing WHERE with AND
-          result = result.replace(
-            whereRegex,
-            `WHERE ${localeVar}.key = "${filters.localeKey}" AND`
-          );
-        } else {
-          // Find MATCH...RETURN pattern and inject WHERE after MATCH block
-          // This is a simplified approach - inject after the locale match
-          const matchEndPattern = new RegExp(
-            `(\\(${localeVar}:Locale\\)[^)]*(?:\\)|\\]))`,
-            'i'
-          );
-          const matchEnd = result.match(matchEndPattern);
-          if (matchEnd) {
-            const insertPos = result.indexOf(matchEnd[0]) + matchEnd[0].length;
-            // Find next MATCH or OPTIONAL MATCH or WITH or RETURN
-            const nextClauseMatch = result.slice(insertPos).match(/\b(MATCH|OPTIONAL|WITH|RETURN)\b/i);
-            if (nextClauseMatch) {
-              const clausePos = insertPos + (nextClauseMatch.index || 0);
-              result =
-                result.slice(0, clausePos) +
-                `WHERE ${localeVar}.key = "${filters.localeKey}"\n` +
-                result.slice(clausePos);
+    // First, try direct parameter substitution for $locale and $nodeKey
+    // This handles queries like: MATCH (l:Locale {key: $locale}) or {key: $nodeKey}
+    const hasLocaleParam = /\$locale\b/.test(result);
+    const hasNodeKeyWithLocale = /\([\w]+:Locale\s*\{key:\s*\$nodeKey\}/.test(result);
+
+    if (hasLocaleParam) {
+      // Replace $locale parameter with actual value
+      result = result.replace(/\$locale\b/g, `'${filters.localeKey}'`);
+    }
+
+    if (hasNodeKeyWithLocale) {
+      // Replace $nodeKey when it's used with a Locale node
+      result = result.replace(
+        /(\([\w]+:Locale\s*\{key:\s*)\$nodeKey(\})/g,
+        `$1'${filters.localeKey}'$2`
+      );
+    }
+
+    // If no parameter substitution happened, try WHERE clause injection
+    if (!hasLocaleParam && !hasNodeKeyWithLocale) {
+      // Check if query references Locale nodes
+      const hasLocaleRef = /\b(Locale|:Locale)\b/i.test(result);
+      if (hasLocaleRef) {
+        // Find a good place to inject the WHERE clause
+        // Look for patterns like (l:Locale) or (locale:Locale)
+        const localeVarMatch = result.match(/\((\w+):Locale\)/i);
+        if (localeVarMatch) {
+          const localeVar = localeVarMatch[1];
+          // Check if there's already a WHERE clause
+          const whereRegex = /\bWHERE\b/i;
+          if (whereRegex.test(result)) {
+            // Add to existing WHERE with AND
+            result = result.replace(
+              whereRegex,
+              `WHERE ${localeVar}.key = "${filters.localeKey}" AND`
+            );
+          } else {
+            // Find MATCH...RETURN pattern and inject WHERE after MATCH block
+            // This is a simplified approach - inject after the locale match
+            const matchEndPattern = new RegExp(
+              `(\\(${localeVar}:Locale\\)[^)]*(?:\\)|\\]))`,
+              'i'
+            );
+            const matchEnd = result.match(matchEndPattern);
+            if (matchEnd) {
+              const insertPos = result.indexOf(matchEnd[0]) + matchEnd[0].length;
+              // Find next MATCH or OPTIONAL MATCH or WITH or RETURN
+              const nextClauseMatch = result.slice(insertPos).match(/\b(MATCH|OPTIONAL|WITH|RETURN)\b/i);
+              if (nextClauseMatch) {
+                const clausePos = insertPos + (nextClauseMatch.index || 0);
+                result =
+                  result.slice(0, clausePos) +
+                  `WHERE ${localeVar}.key = "${filters.localeKey}"\n` +
+                  result.slice(clausePos);
+              }
             }
           }
         }

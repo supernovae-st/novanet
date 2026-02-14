@@ -277,7 +277,8 @@ export const KIND_ICONS: Record<string, string> = {
   OutputArtifact: 'package',
   Page: 'file-text',
   PageGenerated: 'file-check',
-  // v0.12.4: PageInstruction, PageStructure deleted (ADR-028)
+  PageInstruction: 'message-square',
+  PageStructure: 'layout',
   PatternSet: 'puzzle',
   Project: 'folder',
   ProjectContent: 'languages',

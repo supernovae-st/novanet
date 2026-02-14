@@ -750,8 +750,16 @@ arc_families:
         assert_eq!(from_yaml.arc_families.len(), from_files.arc_families.len());
 
         // Compare realm keys
-        let yaml_realm_keys: Vec<&str> = from_yaml.node_realms.iter().map(|r| r.key.as_str()).collect();
-        let files_realm_keys: Vec<&str> = from_files.node_realms.iter().map(|r| r.key.as_str()).collect();
+        let yaml_realm_keys: Vec<&str> = from_yaml
+            .node_realms
+            .iter()
+            .map(|r| r.key.as_str())
+            .collect();
+        let files_realm_keys: Vec<&str> = from_files
+            .node_realms
+            .iter()
+            .map(|r| r.key.as_str())
+            .collect();
         for key in &yaml_realm_keys {
             assert!(files_realm_keys.contains(key), "missing realm: {key}");
         }

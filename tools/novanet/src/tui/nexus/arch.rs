@@ -33,11 +33,11 @@ fn category_icon(cat: &AdrCategory) -> &'static str {
 /// Category colors for visual distinction.
 fn category_color(cat: &AdrCategory) -> Color {
     match cat {
-        AdrCategory::CorePrinciples => Color::Rgb(42, 161, 152),    // Teal (cyan)
+        AdrCategory::CorePrinciples => Color::Rgb(42, 161, 152), // Teal (cyan)
         AdrCategory::SchemaArchitecture => Color::Rgb(38, 139, 210), // Blue
-        AdrCategory::UxArchitecture => Color::Rgb(211, 54, 130),    // Magenta
-        AdrCategory::ArcPolicies => Color::Rgb(181, 137, 0),        // Yellow
-        AdrCategory::LayerEvolution => Color::Rgb(133, 153, 0),     // Green
+        AdrCategory::UxArchitecture => Color::Rgb(211, 54, 130), // Magenta
+        AdrCategory::ArcPolicies => Color::Rgb(181, 137, 0),     // Yellow
+        AdrCategory::LayerEvolution => Color::Rgb(133, 153, 0),  // Green
     }
 }
 
@@ -108,7 +108,10 @@ fn render_category_list(f: &mut Frame, app: &App, area: Rect) {
             Span::raw(prefix),
             Span::styled(format!("{} ", icon), style),
             Span::styled(cat.label().to_string(), style),
-            Span::styled(format!(" ({})", count), Style::default().fg(Color::DarkGray)),
+            Span::styled(
+                format!(" ({})", count),
+                Style::default().fg(Color::DarkGray),
+            ),
         ]));
     }
 
@@ -210,10 +213,7 @@ fn render_adr_details(f: &mut Frame, adrs: &[AdrEntry], selected_idx: usize, are
                 .title(" DETAILS ")
                 .borders(Borders::ALL)
                 .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER));
-            f.render_widget(
-                Paragraph::new("No ADR selected").block(block),
-                area,
-            );
+            f.render_widget(Paragraph::new("No ADR selected").block(block), area);
             return;
         }
     };
