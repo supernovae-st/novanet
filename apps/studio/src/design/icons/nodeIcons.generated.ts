@@ -23,7 +23,7 @@ export interface NodeIcon {
  * Each icon is defined in the node's YAML file under `node.icon`.
  * Source: packages/core/models/node-classes/<realm>/<layer>/<name>.yaml
  *
- * v0.12.4: Updated to dual format { web, terminal }
+ * v0.12.5: Updated to dual format { web, terminal }
  */
 export const NODE_ICONS: Record<NodeType, NodeIcon> = {
   Adaptation: { web: 'droplet', terminal: '◇' },

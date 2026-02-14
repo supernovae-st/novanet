@@ -65,7 +65,7 @@ core/
 |   +-- taxonomy.yaml          # v11.7: 2 Realms (shared/org), 10 Layers
 |   +-- relations.yaml         # Legacy format (parser compatibility)
 |   +-- node-classes/            # One file per node type (60 files)
-|   |   +-- shared/            # Realm: shared (config, locale, geography, knowledge) - 39 nodes
+|   |   +-- shared/            # Realm: shared (config, locale, geography, knowledge) - 40 nodes
 |   |   +-- org/               # Realm: org (6 layers) - 21 nodes
 |   +-- arc-classes/             # One file per arc type (114 files)
 |   +-- views/                 # Predefined view definitions
@@ -82,7 +82,7 @@ core/
 
 | Realm | Layers | Description |
 |-------|--------|-------------|
-| **Shared** | config, locale, geography, knowledge | Universal locale knowledge (READ-ONLY) - 39 nodes |
+| **Shared** | config, locale, geography, knowledge | Universal locale knowledge (READ-ONLY) - 40 nodes |
 | **Org** | config, foundation, structure, semantic, instruction, output | Business-specific content - 21 nodes |
 
 ---

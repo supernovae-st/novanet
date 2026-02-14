@@ -14,7 +14,7 @@ models/
 ├── visual-encoding.yaml     # Visual channel mappings
 ├── README.md                # This file
 ├── node-classes/              # ONE FILE PER NODE CLASS (59 files)
-│   ├── shared/              # ◉ SHARED realm (39 nodes)
+│   ├── shared/              # ◉ SHARED realm (40 nodes)
 │   │   ├── config/          #    Locale, EntityCategory, OrgConfig (3)
 │   │   ├── locale/          #    LocaleVoice, LocaleCulture, LocaleStyle... (6)
 │   │   ├── geography/       #    Region, Country, City... (6)

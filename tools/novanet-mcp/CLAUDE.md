@@ -449,7 +449,7 @@ kind://Entity
   "display_name": "Entity",
   "realm": "org",
   "layer": "semantic",
-  "trait_type": "invariant",
+  "trait_type": "defined",
   "description": "Core semantic entity",
   "llm_context": "Entities represent invariant concepts...",
   "properties": [...],

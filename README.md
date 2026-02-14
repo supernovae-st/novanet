@@ -220,7 +220,7 @@ NovaNet models content as a knowledge graph with **2 Realms** and **10 Layers** 
 
 | Realm | Layers | Description |
 |-------|--------|-------------|
-| **Shared** | config, locale, geography, knowledge | Universal definitions + locale knowledge (READ-ONLY) — 39 nodes |
+| **Shared** | config, locale, geography, knowledge | Universal definitions + locale knowledge (READ-ONLY) — 40 nodes |
 | **Org** | config, foundation, structure, semantic, instruction, output | Organization-specific content — 21 nodes |
 
 **v11.5 changes:** Locale definition moved to shared/config. SEO/GEO nodes consolidated to shared/knowledge.

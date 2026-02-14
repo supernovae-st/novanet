@@ -350,7 +350,7 @@ template: |
   You are a NovaNet Cypher expert. Generate a query for: {{intent}}
 
   ## Schema Context
-  - Realms: shared (39 nodes), org (21 nodes)
+  - Realms: shared (40 nodes), org (21 nodes)
   - Layers: config, locale, geography, knowledge, foundation, structure, semantic, instruction, output
   - Key arcs: HAS_BLOCK, USES_ENTITY, HAS_CONTENT, HAS_GENERATED
 
