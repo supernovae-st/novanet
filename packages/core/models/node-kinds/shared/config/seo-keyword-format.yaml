@@ -11,7 +11,9 @@ node:
   realm: shared
   layer: config
   trait: defined
-  icon: "label"
+  icon:
+    web: label
+    terminal: "⊞"
   description: "Keyword format classification (EntityCategory pattern, ADR-017)"
 
   # ═══════════════════════════════════════════════════════════════════════════════
