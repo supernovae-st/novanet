@@ -1,4 +1,4 @@
-//! Blueprint command — comprehensive meta-graph visualization and validation.
+//! Blueprint command — comprehensive schema-graph visualization and validation.
 //!
 //! Replaces the basic `novanet meta` with rich ASCII output.
 

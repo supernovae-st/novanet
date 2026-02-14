@@ -47,7 +47,7 @@ pub async fn run_overlay(db: &Db, format: OutputFormat) -> crate::Result<()> {
 pub async fn run_query(db: &Db, filter: FacetFilter, format: OutputFormat) -> crate::Result<()> {
     let stmt = cypher::faceted_query(&filter, DEFAULT_LIMIT);
     eprintln!(
-        "novanet query (facets: {} active, resolved via meta-graph)",
+        "novanet query (facets: {} active, resolved via schema-graph)",
         filter.active_count()
     );
     dispatch(db, &stmt, format, extract_node_rows).await

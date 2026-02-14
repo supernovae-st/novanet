@@ -6,7 +6,7 @@ import {
   LocaleSchema,
   LocaleVoiceSchema,
   ExpressionSchema,
-} from '../schemas/locale-knowledge.schema.js';
+} from '../schemas/shared.schema.js';
 import { RelationType } from '../schemas/relations.schema.js';
 
 describe('Locale Knowledge Schemas', () => {

@@ -1,4 +1,4 @@
-//! Default blueprint view — rich overview of the meta-graph.
+//! Default blueprint view — rich overview of the schema-graph.
 
 use crate::blueprint::ascii::{
     self, arc_family_arrow, progress_bar_compact, realm_icon, trait_symbol, truncate,
@@ -67,7 +67,7 @@ fn render_stats(data: &BlueprintData) -> String {
         "┌──────────────────────────────────────────────────────────────────────────────┐\n\
          │  STATS        {} Classes │ {} ArcClasses │ {} Realms │ {} Layers             │\n\
          └──────────────────────────────────────────────────────────────────────────────┘",
-        data.node_kind_count(),
+        data.node_class_count(),
         data.arc_count(),
         data.realm_count(),
         data.layer_count()
@@ -84,7 +84,7 @@ fn render_realms(data: &BlueprintData) -> String {
     );
 
     let by_realm = data.nodes_by_realm();
-    let total = data.node_kind_count();
+    let total = data.node_class_count();
 
     for realm_def in &data.taxonomy.node_realms {
         let count = by_realm

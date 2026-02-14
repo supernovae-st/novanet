@@ -572,11 +572,11 @@ impl NexusState {
         if self.pending_g {
             self.pending_g = false; // Clear pending state
             return match key.code {
-                KeyCode::Char('d') => self.jump_to_trait(0), // defined (was invariant)
-                KeyCode::Char('a') => self.jump_to_trait(1), // authored (was localized)
-                KeyCode::Char('i') => self.jump_to_trait(2), // imported (was knowledge)
+                KeyCode::Char('d') => self.jump_to_trait(0), // defined
+                KeyCode::Char('a') => self.jump_to_trait(1), // authored
+                KeyCode::Char('i') => self.jump_to_trait(2), // imported
                 KeyCode::Char('g') => self.jump_to_trait(3), // generated
-                KeyCode::Char('r') => self.jump_to_trait(4), // retrieved (was aggregated)
+                KeyCode::Char('r') => self.jump_to_trait(4), // retrieved
                 KeyCode::Char('0') => {
                     // g0 = go to top (reset cursors)
                     self.trait_cursor = 0;
@@ -1242,16 +1242,16 @@ impl NexusState {
         }
     }
 
-    /// Get a flattened list of all kinds for the currently selected trait.
-    /// Returns tuples of (layer_key, kind_key) for easy rendering.
-    pub fn get_trait_kinds(&self, trait_stats: &[traits::TraitStats]) -> Vec<(String, String)> {
+    /// Get a flattened list of all classes for the currently selected trait.
+    /// Returns tuples of (layer_key, class_key) for easy rendering.
+    pub fn get_trait_classes(&self, trait_stats: &[traits::TraitStats]) -> Vec<(String, String)> {
         if let Some(stat) = trait_stats.get(self.trait_cursor) {
-            stat.kinds_by_layer
+            stat.classes_by_layer
                 .iter()
-                .flat_map(|(layer_key, kinds)| {
-                    kinds
+                .flat_map(|(layer_key, classes)| {
+                    classes
                         .iter()
-                        .map(|kind_key| (layer_key.clone(), kind_key.clone()))
+                        .map(|class_key| (layer_key.clone(), class_key.clone()))
                 })
                 .collect()
         } else {
@@ -1306,11 +1306,11 @@ impl NexusState {
                 if self.drill_depth == 0 {
                     format!("Nexus > {} > {} > {}", section, tab_name, trait_name)
                 } else {
-                    let kinds = self.get_trait_kinds(trait_stats);
-                    if let Some((layer, kind)) = kinds.get(self.drill_cursor) {
+                    let classes = self.get_trait_classes(trait_stats);
+                    if let Some((layer, class)) = classes.get(self.drill_cursor) {
                         format!(
                             "Nexus > {} > {} > {} > {} ({})",
-                            section, tab_name, trait_name, kind, layer
+                            section, tab_name, trait_name, class, layer
                         )
                     } else {
                         format!("Nexus > {} > {} > {}", section, tab_name, trait_name)
@@ -1376,7 +1376,7 @@ impl NexusState {
         }
     }
 
-    /// Clamp drill_cursor to valid bounds for the current kind list.
+    /// Clamp drill_cursor to valid bounds for the current class list.
     pub fn clamp_drill_cursor(&mut self, max_len: usize) {
         if max_len == 0 {
             self.drill_cursor = 0;
@@ -2638,12 +2638,12 @@ mod tests {
     }
 
     #[test]
-    fn test_get_trait_kinds_empty_stats() {
+    fn test_get_trait_classes_empty_stats() {
         let state = NexusState::new();
         let empty_stats: Vec<traits::TraitStats> = Vec::new();
 
-        let kinds = state.get_trait_kinds(&empty_stats);
-        assert!(kinds.is_empty());
+        let classes = state.get_trait_classes(&empty_stats);
+        assert!(classes.is_empty());
     }
 
     #[test]

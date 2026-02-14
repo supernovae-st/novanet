@@ -17,7 +17,7 @@ use ratatui::widgets::{
 use rustc_hash::FxHashSet;
 
 use super::{
-    COLOR_ACTIVE_KIND_BG, COLOR_ARC_FAMILY, COLOR_CONNECTED, COLOR_DESC_TEXT, COLOR_HIGHLIGHT_BG,
+    COLOR_ACTIVE_CLASS_BG, COLOR_ARC_FAMILY, COLOR_CONNECTED, COLOR_DESC_TEXT, COLOR_HIGHLIGHT_BG,
     COLOR_MUTED_TEXT, COLOR_UNFOCUSED_BORDER, EmptyStateClass, STYLE_DIM, STYLE_HIGHLIGHT,
     STYLE_PRIMARY, STYLE_UNFOCUSED, arc_family_abbrev, arc_family_badge_icon, cardinality_abbrev,
     layer_abbrev, layer_badge_icon, realm_abbrev, realm_badge_icon, render_empty_state, spinner,
@@ -844,22 +844,22 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 }
                             })
                             .collect();
-                        let kind_count = visible_classes.len();
+                        let class_count = visible_classes.len();
 
-                        for (ki, kind) in visible_classes.iter().enumerate() {
-                            let kind_is_last = ki == kind_count - 1;
-                            let class_key_str = format!("class:{}", kind.key);
-                            let kind_collapsed = app.tree.is_collapsed(&class_key_str);
+                        for (ki, class_info) in visible_classes.iter().enumerate() {
+                            let class_is_last = ki == class_count - 1;
+                            let class_key_str = format!("class:{}", class_info.key);
+                            let class_collapsed = app.tree.is_collapsed(&class_key_str);
 
                             // Show collapse icon based on mode:
                             // - Data mode: show chevron if instances exist
                             // - Schema mode: Classes are leaf nodes (no children to expand)
-                            let kind_icon = if is_data_mode && kind.instance_count > 0 {
+                            let class_icon = if is_data_mode && class_info.instance_count > 0 {
                                 // Show expanded (▼) only if instances are actually loaded
                                 // Otherwise show collapsed (▶) even if state says "expanded"
-                                let instances_loaded = app.tree.get_instances(&kind.key).is_some();
+                                let instances_loaded = app.tree.get_instances(&class_info.key).is_some();
                                 if instances_loaded {
-                                    expand_icon(kind_collapsed)
+                                    expand_icon(class_collapsed)
                                 } else {
                                     expand_icon(true) // ▶ - not loaded yet
                                 }
@@ -873,17 +873,17 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             // v11.3: Colored trait icons (from visual-encoding.yaml + traits/*.yaml)
                             // v11.5: Enhanced display with all useful metrics
                             // Format: Name (instances) →out←in req/tot
-                            let kind_is_empty = kind.instance_count == 0;
-                            let t_icon = trait_icon(&kind.trait_name);
-                            let t_color = app.theme.trait_color(&kind.trait_name);
+                            let class_is_empty = class_info.instance_count == 0;
+                            let t_icon = trait_icon(&class_info.trait_name);
+                            let t_color = app.theme.trait_color(&class_info.trait_name);
 
                             // Count arcs by direction
-                            let outgoing = kind
+                            let outgoing = class_info
                                 .arcs
                                 .iter()
                                 .filter(|a| a.direction == ArcDirection::Outgoing)
                                 .count();
-                            let incoming = kind
+                            let incoming = class_info
                                 .arcs
                                 .iter()
                                 .filter(|a| a.direction == ArcDirection::Incoming)
@@ -898,30 +898,30 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             };
 
                             // v11.6.1: Properties count with ⊞ icon: ⊞6/9
-                            let props_suffix = if !kind.properties.is_empty() {
+                            let props_suffix = if !class_info.properties.is_empty() {
                                 format!(
                                     " ⊞{}/{}",
-                                    kind.required_properties.len(),
-                                    kind.properties.len()
+                                    class_info.required_properties.len(),
+                                    class_info.properties.len()
                                 )
                             } else {
                                 String::new()
                             };
 
                             // Build display text with all metrics
-                            let (display_text, kind_text_color) = if is_data_mode {
+                            let (display_text, class_text_color) = if is_data_mode {
                                 // Data mode: instances + arcs + props + health
                                 let health_badge =
-                                    format_health_badge(kind.health_percent, kind.issues_count);
+                                    format_health_badge(class_info.health_percent, class_info.issues_count);
                                 let text = format!(
                                     "{} ({}){}{}{}",
-                                    kind.display_name,
-                                    kind.instance_count,
+                                    class_info.display_name,
+                                    class_info.instance_count,
                                     arc_suffix,
                                     props_suffix,
                                     health_badge
                                 );
-                                let color = if kind_is_empty {
+                                let color = if class_is_empty {
                                     COLOR_MUTED_TEXT // Gray for empty classes
                                 } else {
                                     Color::White
@@ -930,7 +930,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             } else {
                                 // Meta mode: arcs + props (no instance count)
                                 let text =
-                                    format!("{}{}{}", kind.display_name, arc_suffix, props_suffix);
+                                    format!("{}{}{}", class_info.display_name, arc_suffix, props_suffix);
                                 (text, Color::White)
                             };
 
@@ -938,17 +938,17 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 "{}{}{}",
                                 cont(realm_is_last),
                                 cont(layer_is_last),
-                                branch(kind_is_last)
+                                branch(class_is_last)
                             );
                             // Highlight Class if it has expanded instances (active focus)
-                            let kind_has_expanded_instances = is_data_mode
-                                && !kind_collapsed
+                            let class_has_expanded_instances = is_data_mode
+                                && !class_collapsed
                                 && app
                                     .tree
-                                    .get_instances(&kind.key)
+                                    .get_instances(&class_info.key)
                                     .is_some_and(|i| !i.is_empty());
-                            let kind_bg = if kind_has_expanded_instances {
-                                Some(COLOR_ACTIVE_KIND_BG)
+                            let class_bg = if class_has_expanded_instances {
+                                Some(COLOR_ACTIVE_CLASS_BG)
                             } else {
                                 None
                             };
@@ -957,12 +957,12 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             // Format: [cursor] [prefix] [chevron] [trait(abbrev)] [name (count)] │ [badges]
                             let is_cursor = idx == app.tree_cursor;
                             let cursor_char = if is_cursor { ">" } else { " " };
-                            let t_abbrev = trait_abbrev(&kind.trait_name);
+                            let t_abbrev = trait_abbrev(&class_info.trait_name);
 
                             // Build left side content with trait icon + abbrev: ■(i)
                             let left_content = format!(
                                 "{}{}{} {}({}) {}",
-                                cursor_char, prefix, kind_icon, t_icon, t_abbrev, display_text
+                                cursor_char, prefix, class_icon, t_icon, t_abbrev, display_text
                             );
 
                             // Badge format: ●org ●cfg (trait moved to tree icon)
@@ -997,7 +997,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 )));
                             } else {
                                 // Build multi-span line with colors
-                                let base_style = if let Some(bg) = kind_bg {
+                                let base_style = if let Some(bg) = class_bg {
                                     Style::default().bg(bg)
                                 } else {
                                     Style::default()
@@ -1007,8 +1007,8 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                     Span::styled(cursor_char, base_style),
                                     Span::styled(prefix.clone(), base_style.fg(layer_color)),
                                     Span::styled(
-                                        format!("{} ", kind_icon),
-                                        base_style.fg(kind_text_color),
+                                        format!("{} ", class_icon),
+                                        base_style.fg(class_text_color),
                                     ),
                                     // v11.6: trait icon with abbrev in parens: ■(i)
                                     Span::styled(
@@ -1021,8 +1021,8 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 spans.extend(highlight_matches_with_bg(
                                     &display_text,
                                     app.search.matches.get(&idx).map(|v| v.as_slice()),
-                                    kind_text_color,
-                                    kind_bg,
+                                    class_text_color,
+                                    class_bg,
                                 ));
 
                                 // Add padding and right-aligned badges
@@ -1053,9 +1053,9 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             idx += 1;
 
                             // In Data mode, show instances under Class (if not collapsed)
-                            if is_data_mode && !kind_collapsed {
+                            if is_data_mode && !class_collapsed {
                                 // Special case: Entity Class shows categories instead of flat instances
-                                if kind.key == "Entity" && !app.tree.entity_categories.is_empty() {
+                                if class_info.key == "Entity" && !app.tree.entity_categories.is_empty() {
                                     let cat_count = app.tree.entity_categories.len();
                                     for (ci, category) in
                                         app.tree.entity_categories.iter().enumerate()
@@ -1070,7 +1070,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             "{}{}{}{}",
                                             cont(realm_is_last),
                                             cont(layer_is_last),
-                                            cont(kind_is_last),
+                                            cont(class_is_last),
                                             branch(cat_is_last)
                                         );
 
@@ -1144,7 +1144,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                         "{}{}{}{}{}",
                                                         cont(realm_is_last),
                                                         cont(layer_is_last),
-                                                        cont(kind_is_last),
+                                                        cont(class_is_last),
                                                         cont(cat_is_last),
                                                         branch(inst_is_last)
                                                     );
@@ -1217,7 +1217,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             }
                                         }
                                     }
-                                } else if let Some(instances) = app.tree.get_instances(&kind.key) {
+                                } else if let Some(instances) = app.tree.get_instances(&class_info.key) {
                                     // Regular classes: show instances directly
                                     let inst_count = instances.len();
                                     for (ii, instance) in instances.iter().enumerate() {
@@ -1285,7 +1285,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             "{}{}{}{}",
                                             cont(realm_is_last),
                                             cont(layer_is_last),
-                                            cont(kind_is_last),
+                                            cont(class_is_last),
                                             branch(inst_is_last)
                                         );
 
@@ -1489,7 +1489,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
             if !family_collapsed {
                 let arc_count = family.arc_classes.len();
-                for (ai, arc_kind) in family.arc_classes.iter().enumerate() {
+                for (ai, arc_class) in family.arc_classes.iter().enumerate() {
                     let arc_is_last = ai == arc_count - 1;
 
                     // v11.6.1: Custom ArcClass line with source→target and cardinality badge
@@ -1500,15 +1500,15 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
                     // Build left side content: arc name
                     let left_content =
-                        format!("{}{}  {}", cursor_char, prefix, arc_kind.display_name);
+                        format!("{}{}  {}", cursor_char, prefix, arc_class.display_name);
 
                     // Build center: From→To (abbreviated kind names)
-                    let from_abbrev = arc_kind.from_class.chars().take(8).collect::<String>();
-                    let to_abbrev = arc_kind.to_class.chars().take(8).collect::<String>();
+                    let from_abbrev = arc_class.from_class.chars().take(8).collect::<String>();
+                    let to_abbrev = arc_class.to_class.chars().take(8).collect::<String>();
                     let flow_str = format!("{}→{}", from_abbrev, to_abbrev);
 
                     // Build right badge: cardinality
-                    let card_str = cardinality_abbrev(&arc_kind.cardinality);
+                    let card_str = cardinality_abbrev(&arc_class.cardinality);
                     let badge_str = format!("│{}│", card_str);
 
                     // Calculate padding for alignment
@@ -1545,7 +1545,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                         ];
                         // Apply fuzzy match highlighting to display_name
                         spans.extend(highlight_matches_with_bg(
-                            &arc_kind.display_name,
+                            &arc_class.display_name,
                             app.search.matches.get(&idx).map(|v| v.as_slice()),
                             COLOR_DESC_TEXT,
                             None,
@@ -1723,15 +1723,15 @@ fn render_filtered_instances(
     border_color: Color,
 ) {
     // Get Class info for display with full hierarchy
-    let kind_info = app.tree.find_kind(class_key);
-    let (realm_display, realm_color, layer_display, layer_color, kind_display) = kind_info
-        .map(|(realm, layer, kind)| {
+    let class_info = app.tree.find_class(class_key);
+    let (realm_display, realm_color, layer_display, layer_color, class_display) = class_info
+        .map(|(realm, layer, class)| {
             (
                 realm.display_name.clone(),
                 hex_to_color(&realm.color),
                 layer.display_name.clone(),
                 hex_to_color(&layer.color),
-                kind.display_name.clone(),
+                class.display_name.clone(),
             )
         })
         .unwrap_or_else(|| {
@@ -1756,7 +1756,7 @@ fn render_filtered_instances(
         Span::styled(" → ", STYLE_DIM),
         Span::styled(&layer_display, Style::default().fg(layer_color)),
         Span::styled(" → ", STYLE_DIM),
-        Span::styled(&kind_display, STYLE_PRIMARY),
+        Span::styled(&class_display, STYLE_PRIMARY),
     ]));
     all_lines.push(Line::from(Span::styled(
         "─".repeat(area.width.saturating_sub(2) as usize),
@@ -1856,7 +1856,7 @@ fn render_filtered_instances(
         if is_truncated {
             format!(
                 " {} ({}/{} of {}) ",
-                kind_display,
+                class_display,
                 app.tree_cursor + 1,
                 instance_count,
                 total_count
@@ -1864,13 +1864,13 @@ fn render_filtered_instances(
         } else {
             format!(
                 " {} ({}/{}) ",
-                kind_display,
+                class_display,
                 app.tree_cursor + 1,
                 instance_count
             )
         }
     } else {
-        format!(" {} (0) ", kind_display)
+        format!(" {} (0) ", class_display)
     };
 
     let block = Block::default()

@@ -2,8 +2,6 @@
 # GEOAnswer - LLM response sample (immutable snapshot)
 #
 # v11.4: Moved to shared/knowledge (Knowledge Atoms pattern)
-#        - realm: shared (was org)
-#        - layer: knowledge (was geo)
 #
 # v10.7: GEO Schema v1
 #        - Captures actual LLM responses for analysis

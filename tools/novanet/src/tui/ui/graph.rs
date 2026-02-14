@@ -171,7 +171,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
             dim,
         )));
 
-        let max_kinds = details
+        let max_classes = details
             .layers
             .iter()
             .map(|l| l.class_count)
@@ -181,7 +181,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
         let bar_max_width = 20usize;
 
         for layer in &details.layers {
-            let bar_width = (layer.class_count * bar_max_width) / max_kinds;
+            let bar_width = (layer.class_count * bar_max_width) / max_classes;
             let bar = "\u{2588}".repeat(bar_width.max(1));
 
             lines.push(Line::from(vec![
@@ -261,7 +261,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
             lines.push(Line::from(vec![
                 Span::styled("    ", dim),
                 Span::styled(
-                    format!("{} ({})", group.trait_key, group.kind_names.len()),
+                    format!("{} ({})", group.trait_key, group.class_names.len()),
                     Style::default()
                         .fg(trait_color)
                         .add_modifier(Modifier::BOLD),
@@ -269,11 +269,11 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
             ]));
 
             // Class names
-            for kind_name in &group.kind_names {
+            for class_name in &group.class_names {
                 lines.push(Line::from(vec![
                     Span::styled("      \u{2022} ", dim),
                     Span::styled(
-                        kind_name,
+                        class_name,
                         Style::default().fg(theme.layer_color(&details.key)),
                     ),
                 ]));
@@ -286,7 +286,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
     }
 
     // === INSTANCE ARCS VIEW (Data mode) ===
-    if let Some(TreeItem::Instance(realm, layer, kind, instance)) = app.current_item() {
+    if let Some(TreeItem::Instance(realm, layer, class_info, instance)) = app.current_item() {
         // Use references where possible, clone only when Span needs ownership
         let realm_key = &realm.key;
         let layer_key = &layer.key;
@@ -309,7 +309,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
                     .add_modifier(Modifier::BOLD),
             ),
             Span::styled(" \u{2192} ", bright_dim),
-            Span::styled(kind.display_name.clone(), STYLE_SUCCESS),
+            Span::styled(class_info.display_name.clone(), STYLE_SUCCESS),
             Span::styled(" \u{2192} ", bright_dim),
             Span::styled(
                 instance_key.clone(),
@@ -724,14 +724,14 @@ fn build_graph_distribution_stats(app: &App) -> Vec<Line<'static>> {
     let mut lines: Vec<Line<'static>> = Vec::with_capacity(20);
 
     // Calculate total kinds
-    let mut total_kinds: usize = 0;
+    let mut total_classes: usize = 0;
     for realm in &app.tree.realms {
         for layer in &realm.layers {
-            total_kinds += layer.classes.len();
+            total_classes += layer.classes.len();
         }
     }
 
-    if total_kinds == 0 {
+    if total_classes == 0 {
         lines.push(Line::from(Span::styled("  No classes loaded", STYLE_DIM)));
         return lines;
     }
@@ -753,8 +753,8 @@ fn build_graph_distribution_stats(app: &App) -> Vec<Line<'static>> {
     // Realm bars
     for realm in &app.tree.realms {
         let realm_classes: usize = realm.layers.iter().map(|l| l.classes.len()).sum();
-        let percent = (realm_classes as f64 / total_kinds as f64 * 100.0).round() as u8;
-        let bar_width = (realm_classes * bar_max_width) / total_kinds.max(1);
+        let percent = (realm_classes as f64 / total_classes as f64 * 100.0).round() as u8;
+        let bar_width = (realm_classes * bar_max_width) / total_classes.max(1);
         let bar = "\u{2588}".repeat(bar_width.max(1));
         let empty = "\u{2591}".repeat(bar_max_width.saturating_sub(bar_width));
 
@@ -789,7 +789,7 @@ fn build_graph_distribution_stats(app: &App) -> Vec<Line<'static>> {
     )));
 
     // Find max kinds per layer for scaling
-    let max_layer_kinds = app
+    let max_layer_classes = app
         .tree
         .realms
         .iter()
@@ -802,11 +802,11 @@ fn build_graph_distribution_stats(app: &App) -> Vec<Line<'static>> {
     // Layer bars (grouped by realm)
     for realm in &app.tree.realms {
         for layer in &realm.layers {
-            let layer_kinds = layer.classes.len();
-            if layer_kinds == 0 {
+            let layer_classes = layer.classes.len();
+            if layer_classes == 0 {
                 continue; // Skip empty layers
             }
-            let bar_width = (layer_kinds * bar_max_width) / max_layer_kinds;
+            let bar_width = (layer_classes * bar_max_width) / max_layer_classes;
             let bar = "\u{2588}".repeat(bar_width.max(1));
 
             lines.push(Line::from(vec![
@@ -815,7 +815,7 @@ fn build_graph_distribution_stats(app: &App) -> Vec<Line<'static>> {
                     format!("{:16}", layer.display_name),
                     Style::default().fg(theme.layer_color(&layer.key)),
                 ),
-                Span::styled(format!("{:>3} ", layer_kinds), STYLE_MUTED),
+                Span::styled(format!("{:>3} ", layer_classes), STYLE_MUTED),
                 Span::styled(bar, Style::default().fg(theme.layer_color(&layer.key))),
             ]));
         }
@@ -918,19 +918,19 @@ mod tests {
             collapsed: Default::default(),
             instances: Default::default(),
             instance_totals: Default::default(),
-            kind_index: FxHashMap::default(),
+            class_index: FxHashMap::default(),
             entity_categories: Vec::new(),
             entity_category_instances: Default::default(),
         }
     }
 
     fn create_tree_with_realms(realms: Vec<RealmInfo>) -> TaxonomyTree {
-        // Build kind_index for O(1) lookups
-        let mut kind_index = FxHashMap::default();
+        // Build class_index for O(1) lookups
+        let mut class_index = FxHashMap::default();
         for (r_idx, realm) in realms.iter().enumerate() {
             for (l_idx, layer) in realm.layers.iter().enumerate() {
-                for (k_idx, kind) in layer.classes.iter().enumerate() {
-                    kind_index.insert(kind.key.clone(), (r_idx, l_idx, k_idx));
+                for (k_idx, class_info) in layer.classes.iter().enumerate() {
+                    class_index.insert(class_info.key.clone(), (r_idx, l_idx, k_idx));
                 }
             }
         }
@@ -942,7 +942,7 @@ mod tests {
             collapsed: Default::default(),
             instances: Default::default(),
             instance_totals: Default::default(),
-            kind_index,
+            class_index,
             entity_categories: Vec::new(),
             entity_category_instances: Default::default(),
         }
@@ -1085,7 +1085,7 @@ mod tests {
         // Incoming: Source --[ARC]---> Class
         assert!(
             all_content.contains("Class"),
-            "should contain the kind label"
+            "should contain the class label"
         );
         assert!(
             all_content.contains("BELONGS_TO"),
@@ -1150,18 +1150,18 @@ mod tests {
 
     #[test]
     fn test_build_graph_distribution_stats_percentage_calculation() {
-        // Create 2 realms: shared with 1 kind, org with 3 kinds
+        // Create 2 realms: shared with 1 class, org with 3 classes
         // Expected: shared = 25%, org = 75%
-        let shared_kind = create_test_class("Config");
-        let shared_layer = create_test_layer("config", vec![shared_kind]);
+        let shared_class = create_test_class("Config");
+        let shared_layer = create_test_layer("config", vec![shared_class]);
         let shared_realm = create_test_realm("shared", vec![shared_layer]);
 
-        let org_kinds = vec![
+        let org_classes = vec![
             create_test_class("Page"),
             create_test_class("Block"),
             create_test_class("Entity"),
         ];
-        let org_layer = create_test_layer("structure", org_kinds);
+        let org_layer = create_test_layer("structure", org_classes);
         let org_realm = create_test_realm("org", vec![org_layer]);
 
         let tree = create_tree_with_realms(vec![shared_realm, org_realm]);
@@ -1189,22 +1189,22 @@ mod tests {
 
     #[test]
     fn test_build_graph_distribution_stats_bar_width_calculation() {
-        // Create 2 realms with different kind counts
-        // bar_width = (realm_classes * bar_max_width) / total_kinds
+        // Create 2 realms with different class counts
+        // bar_width = (realm_classes * bar_max_width) / total_classes
         // bar_max_width = 20
 
-        // Shared: 2 kinds, Org: 8 kinds, Total: 10
+        // Shared: 2 classes, Org: 8 classes, Total: 10
         // Shared bar = (2 * 20) / 10 = 4
         // Org bar = (8 * 20) / 10 = 16
 
-        let shared_kinds = vec![create_test_class("Config1"), create_test_class("Config2")];
-        let shared_layer = create_test_layer("config", shared_kinds);
+        let shared_classes = vec![create_test_class("Config1"), create_test_class("Config2")];
+        let shared_layer = create_test_layer("config", shared_classes);
         let shared_realm = create_test_realm("shared", vec![shared_layer]);
 
-        let org_kinds: Vec<ClassInfo> = (0..8)
+        let org_classes: Vec<ClassInfo> = (0..8)
             .map(|i| create_test_class(&format!("Class{}", i)))
             .collect();
-        let org_layer = create_test_layer("structure", org_kinds);
+        let org_layer = create_test_layer("structure", org_classes);
         let org_realm = create_test_realm("org", vec![org_layer]);
 
         let tree = create_tree_with_realms(vec![shared_realm, org_realm]);
@@ -1282,7 +1282,7 @@ mod tests {
 
         assert!(layer_section.len() >= 2, "should have 2 layer lines");
 
-        // max_layer_kinds = 4 (foundation), bar_max_width = 20
+        // max_layer_classes = 4 (foundation), bar_max_width = 20
         // config bar = (1 * 20) / 4 = 5
         // foundation bar = (4 * 20) / 4 = 20 (full width)
 
@@ -1307,7 +1307,7 @@ mod tests {
         let config_blocks = config_line.matches('\u{2588}').count();
         let foundation_blocks = foundation_line.matches('\u{2588}').count();
 
-        // Foundation should have more blocks (4 kinds vs 1 kind)
+        // Foundation should have more blocks (4 classes vs 1 class)
         assert!(
             foundation_blocks > config_blocks,
             "foundation ({} blocks) should have more than config ({} blocks)",
@@ -1319,10 +1319,10 @@ mod tests {
     #[test]
     fn test_build_graph_distribution_stats_skips_empty_layers() {
         // Empty layers should not be shown in layer breakdown
-        let kind = create_test_class("Page");
-        let layer_with_kinds = create_test_layer("structure", vec![kind]);
+        let class_info = create_test_class("Page");
+        let layer_with_classes = create_test_layer("structure", vec![class_info]);
         let empty_layer = create_test_layer("empty", Vec::new());
-        let realm = create_test_realm("org", vec![layer_with_kinds, empty_layer]);
+        let realm = create_test_realm("org", vec![layer_with_classes, empty_layer]);
         let tree = create_tree_with_realms(vec![realm]);
         let app = create_test_app_with_tree(tree);
 
@@ -1339,17 +1339,17 @@ mod tests {
             "should contain structure layer"
         );
         // Empty layer should not appear in the layer breakdown
-        // (it may appear if listed, but the function skips layer_kinds == 0)
+        // (it may appear if listed, but the function skips layer_classes == 0)
     }
 
     #[test]
-    fn test_build_graph_distribution_stats_kind_counts_displayed() {
-        let kinds = vec![
+    fn test_build_graph_distribution_stats_class_counts_displayed() {
+        let classes = vec![
             create_test_class("Page"),
             create_test_class("Block"),
             create_test_class("Entity"),
         ];
-        let layer = create_test_layer("structure", kinds);
+        let layer = create_test_layer("structure", classes);
         let realm = create_test_realm("org", vec![layer]);
         let tree = create_tree_with_realms(vec![realm]);
         let app = create_test_app_with_tree(tree);
@@ -1364,7 +1364,7 @@ mod tests {
         // Should show "3 Classes" somewhere in the content
         assert!(
             all_content.contains("3 Classes") || all_content.contains("3"),
-            "should show kind count, got: {}",
+            "should show class count, got: {}",
             all_content
         );
     }

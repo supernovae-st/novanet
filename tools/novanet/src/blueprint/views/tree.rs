@@ -26,7 +26,7 @@ pub fn render(data: &BlueprintData) -> String {
     // Group nodes by realm and layer
     let mut by_realm_layer: HashMap<(&str, &str), Vec<&crate::parsers::yaml_node::ParsedNode>> =
         HashMap::new();
-    for node in &data.node_kinds {
+    for node in &data.node_classes {
         by_realm_layer
             .entry((node.realm.as_str(), node.layer.as_str()))
             .or_default()

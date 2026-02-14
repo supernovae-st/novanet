@@ -284,7 +284,7 @@ export class NovaNetFilter {
   /**
    * Includes Brand node via HAS_BRAND.
    * Typically used with fromProject().
-   * v0.12.4: renamed from includeBrandIdentity() (ADR-028)
+   * v0.12.4: ADR-028 Brand Architecture
    */
   includeBrand(): this {
     this.state.includes.push({
@@ -331,11 +331,6 @@ export class NovaNetFilter {
       direction: 'outgoing',
     });
     return this;
-  }
-
-  /** @deprecated Use includeBrand() instead (ADR-028) */
-  includeBrandIdentity(): this {
-    return this.includeBrand();
   }
 
   // REMOVED v10.3: includeProjectConcepts() - HAS_CONCEPT arc removed

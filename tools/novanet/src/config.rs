@@ -42,7 +42,7 @@ pub fn models_dir(root: &Path) -> PathBuf {
 }
 
 #[must_use]
-pub fn node_kinds_dir(root: &Path) -> PathBuf {
+pub fn node_classes_dir(root: &Path) -> PathBuf {
     root.join("packages/core/models/node-classes")
 }
 
@@ -54,7 +54,7 @@ pub fn taxonomy_path(root: &Path) -> PathBuf {
 
 /// Directory containing arc-classes YAML files
 #[must_use]
-pub fn arc_kinds_dir(root: &Path) -> PathBuf {
+pub fn arc_classes_dir(root: &Path) -> PathBuf {
     root.join("packages/core/models/arc-classes")
 }
 
@@ -138,10 +138,10 @@ mod tests {
     }
 
     #[test]
-    fn node_kinds_dir_joins_correctly() {
+    fn node_classes_dir_joins_correctly() {
         let root = Path::new("/fake/root");
         assert_eq!(
-            node_kinds_dir(root),
+            node_classes_dir(root),
             PathBuf::from("/fake/root/packages/core/models/node-classes")
         );
     }
@@ -156,10 +156,10 @@ mod tests {
     }
 
     #[test]
-    fn arc_kinds_dir_joins_correctly() {
+    fn arc_classes_dir_joins_correctly() {
         let root = Path::new("/fake/root");
         assert_eq!(
-            arc_kinds_dir(root),
+            arc_classes_dir(root),
             PathBuf::from("/fake/root/packages/core/models/arc-classes")
         );
     }

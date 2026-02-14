@@ -105,7 +105,7 @@ fn default_version() -> String {
     "0.12.5".to_string()
 }
 
-/// v0.12.0: Per-trait retrieval settings for context assembly (was KindRetrievalDefaults).
+/// Per-trait retrieval settings for context assembly.
 #[derive(Debug, Clone, Deserialize)]
 pub struct ClassRetrievalDefaults {
     /// Maximum hops for structural traversal.

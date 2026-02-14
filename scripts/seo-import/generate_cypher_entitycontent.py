@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate Cypher seed file for EntityL10n fr-FR."""
+"""Generate Cypher seed file for EntityContent fr-FR."""
 
 import json
 from pathlib import Path
@@ -11,72 +11,72 @@ def escape_cypher(s: str) -> str:
         return ""
     return s.replace("\\", "\\\\").replace('"', '\\"').replace("'", "\\'")
 
-def generate_cypher(entityl10n_list: list) -> str:
-    """Generate Cypher statements for EntityL10n nodes and relationships."""
+def generate_cypher(entitycontent_list: list) -> str:
+    """Generate Cypher statements for EntityContent nodes and relationships."""
     lines = [
         "// ═══════════════════════════════════════════════════════════════════════════════",
-        "// EntityL10n fr-FR — 281 nodes",
+        "// EntityContent fr-FR — 281 nodes",
         "// Generated: " + datetime.now().isoformat(),
         "// ═══════════════════════════════════════════════════════════════════════════════",
         "",
         "// Create constraint for uniqueness",
-        "CREATE CONSTRAINT entityl10n_unique IF NOT EXISTS",
-        "FOR (el:EntityL10n)",
-        "REQUIRE (el.entity_key, el.locale_key) IS UNIQUE;",
+        "CREATE CONSTRAINT entitycontent_unique IF NOT EXISTS",
+        "FOR (ec:EntityContent)",
+        "REQUIRE (ec.entity_key, ec.locale_key) IS UNIQUE;",
         "",
         "// ───────────────────────────────────────────────────────────────────────────────",
-        "// EntityL10n Nodes",
+        "// EntityContent Nodes",
         "// ───────────────────────────────────────────────────────────────────────────────",
         ""
     ]
 
-    for el in entityl10n_list:
-        lines.append(f'MERGE (el:EntityL10n {{entity_key: "{el["entity_key"]}", locale_key: "{el["locale_key"]}"}})')
+    for ec in entitycontent_list:
+        lines.append(f'MERGE (ec:EntityContent {{entity_key: "{ec["entity_key"]}", locale_key: "{ec["locale_key"]}"}})')
         lines.append("ON CREATE SET")
-        lines.append(f'  el.slug = "{escape_cypher(el["slug"])}",')
-        lines.append(f'  el.display_name = "{escape_cypher(el["display_name"])}",')
-        lines.append(f'  el.description = "{escape_cypher(el["description"])}",')
-        lines.append(f'  el.llm_context = "{escape_cypher(el["llm_context"])}",')
-        lines.append(f'  el.version = {el["version"]},')
-        lines.append("  el.created_at = datetime(),")
-        lines.append("  el.updated_at = datetime();")
+        lines.append(f'  ec.slug = "{escape_cypher(ec["slug"])}",')
+        lines.append(f'  ec.display_name = "{escape_cypher(ec["display_name"])}",')
+        lines.append(f'  ec.description = "{escape_cypher(ec["description"])}",')
+        lines.append(f'  ec.llm_context = "{escape_cypher(ec["llm_context"])}",')
+        lines.append(f'  ec.version = {ec["version"]},')
+        lines.append("  ec.created_at = datetime(),")
+        lines.append("  ec.updated_at = datetime();")
         lines.append("")
 
     lines.append("// ───────────────────────────────────────────────────────────────────────────────")
-    lines.append("// Link EntityL10n to Entity via HAS_L10N")
+    lines.append("// Link EntityContent to Entity via HAS_CONTENT")
     lines.append("// ───────────────────────────────────────────────────────────────────────────────")
     lines.append("")
 
-    for el in entityl10n_list:
-        lines.append(f'MATCH (e:Entity {{key: "{el["entity_key"]}"}})')
-        lines.append(f'MATCH (el:EntityL10n {{entity_key: "{el["entity_key"]}", locale_key: "{el["locale_key"]}"}})')
-        lines.append("MERGE (e)-[:HAS_L10N]->(el);")
+    for ec in entitycontent_list:
+        lines.append(f'MATCH (e:Entity {{key: "{ec["entity_key"]}"}})')
+        lines.append(f'MATCH (ec:EntityContent {{entity_key: "{ec["entity_key"]}", locale_key: "{ec["locale_key"]}"}})')
+        lines.append("MERGE (e)-[:HAS_CONTENT]->(ec);")
         lines.append("")
 
     lines.append("// ───────────────────────────────────────────────────────────────────────────────")
-    lines.append("// Link EntityL10n to Locale via FOR_LOCALE")
+    lines.append("// Link EntityContent to Locale via FOR_LOCALE")
     lines.append("// ───────────────────────────────────────────────────────────────────────────────")
     lines.append("")
 
-    for el in entityl10n_list:
-        lines.append(f'MATCH (el:EntityL10n {{entity_key: "{el["entity_key"]}", locale_key: "{el["locale_key"]}"}})')
-        lines.append(f'MATCH (l:Locale {{key: "{el["locale_key"]}"}})')
-        lines.append("MERGE (el)-[:FOR_LOCALE]->(l);")
+    for ec in entitycontent_list:
+        lines.append(f'MATCH (ec:EntityContent {{entity_key: "{ec["entity_key"]}", locale_key: "{ec["locale_key"]}"}})')
+        lines.append(f'MATCH (l:Locale {{key: "{ec["locale_key"]}"}})')
+        lines.append("MERGE (ec)-[:FOR_LOCALE]->(l);")
         lines.append("")
 
     return "\n".join(lines)
 
 if __name__ == "__main__":
-    # Load EntityL10n data
-    with open("scripts/seo-import/output/entityl10n_fr.json", "r") as f:
-        entityl10n_list = json.load(f)
+    # Load EntityContent data
+    with open("scripts/seo-import/output/entitycontent_fr.json", "r") as f:
+        entitycontent_list = json.load(f)
 
     # Generate Cypher
-    cypher = generate_cypher(entityl10n_list)
+    cypher = generate_cypher(entitycontent_list)
 
     # Save to seed file
-    output_path = Path("packages/db/seed/40-entityl10n-fr-fr.cypher")
+    output_path = Path("packages/db/seed/40-entitycontent-fr-fr.cypher")
     with open(output_path, "w") as f:
         f.write(cypher)
 
-    print(f"Generated Cypher for {len(entityl10n_list)} EntityL10n to {output_path}")
+    print(f"Generated Cypher for {len(entitycontent_list)} EntityContent to {output_path}")

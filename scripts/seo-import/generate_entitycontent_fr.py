@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate EntityL10n fr-FR content from Entity definitions.
+"""Generate EntityContent fr-FR content from Entity definitions.
 
 This script creates French localized content for each Entity.
 For production, this would use an LLM API. For now, uses rule-based translation.
@@ -107,12 +107,12 @@ def generate_french_llm_context(en_context: str) -> str:
     result = result.replace("NOT:", "PAS:")
     return result
 
-def generate_entityl10n(entities: list) -> list:
-    """Generate EntityL10n fr-FR for all entities."""
-    entityl10n_list = []
+def generate_entitycontent(entities: list) -> list:
+    """Generate EntityContent fr-FR for all entities."""
+    entitycontent_list = []
 
     for entity in entities:
-        entityl10n = {
+        entitycontent = {
             "entity_key": entity["key"],
             "locale_key": "fr-FR",
             "slug": key_to_slug(entity["key"]),
@@ -121,9 +121,9 @@ def generate_entityl10n(entities: list) -> list:
             "llm_context": generate_french_llm_context(entity.get("llm_context", "")),
             "version": 1
         }
-        entityl10n_list.append(entityl10n)
+        entitycontent_list.append(entitycontent)
 
-    return entityl10n_list
+    return entitycontent_list
 
 if __name__ == "__main__":
     # Load entities
@@ -131,11 +131,11 @@ if __name__ == "__main__":
         entities = json.load(f)
 
     # Generate French versions
-    entityl10n_list = generate_entityl10n(entities)
+    entitycontent_list = generate_entitycontent(entities)
 
     # Save output
-    output_path = Path("scripts/seo-import/output/entityl10n_fr.json")
+    output_path = Path("scripts/seo-import/output/entitycontent_fr.json")
     with open(output_path, "w") as f:
-        json.dump(entityl10n_list, f, indent=2, ensure_ascii=False)
+        json.dump(entitycontent_list, f, indent=2, ensure_ascii=False)
 
-    print(f"Generated {len(entityl10n_list)} EntityL10n fr-FR to {output_path}")
+    print(f"Generated {len(entitycontent_list)} EntityContent fr-FR to {output_path}")

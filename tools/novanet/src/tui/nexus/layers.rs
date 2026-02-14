@@ -35,8 +35,8 @@ pub struct LayerCardInfo {
     pub icon: &'static str,
     /// Brief description of the layer.
     pub description: &'static str,
-    /// Number of kinds in this layer.
-    pub kind_count: usize,
+    /// Number of classes in this layer.
+    pub class_count: usize,
 }
 
 /// Shared realm layers (4 layers) — v11.5: config, locale, geography, knowledge.
@@ -61,7 +61,7 @@ pub const ORG_LAYERS: [(&str, &str, &str); 6] = [
 
 impl TaxonomyTree {
     /// Get layer stats for a specific realm.
-    /// Returns a vector of (layer_key, kind_count) tuples.
+    /// Returns a vector of (layer_key, class_count) tuples.
     pub fn get_layer_stats(&self, realm_key: &str) -> Vec<(String, usize)> {
         self.realms
             .iter()
@@ -150,7 +150,7 @@ fn render_realm_column(
 
     // Render each layer card
     for (idx, (layer_key, icon, description)) in layers.iter().enumerate() {
-        let kind_count = layer_stats
+        let class_count = layer_stats
             .iter()
             .find(|(k, _)| k == *layer_key)
             .map(|(_, count)| *count)
@@ -162,7 +162,7 @@ fn render_realm_column(
             layer_key,
             icon,
             description,
-            kind_count,
+            class_count,
             max_count,
             is_selected,
             theme,
@@ -192,7 +192,7 @@ fn build_layer_card(
     layer_key: &str,
     icon: &str,
     description: &str,
-    kind_count: usize,
+    class_count: usize,
     max_count: usize,
     is_selected: bool,
     theme: &Theme,
@@ -262,8 +262,8 @@ fn build_layer_card(
     ]));
 
     // Row 3: │   N classes         │ (heatmap color based on density)
-    let count_str = format!("{} classes", kind_count);
-    let count_color = heatmap_color(kind_count, max_count);
+    let count_str = format!("{} classes", class_count);
+    let count_color = heatmap_color(class_count, max_count);
     let count_padding = card_width.saturating_sub(count_str.chars().count() + 6);
     lines.push(Line::from(vec![
         Span::styled("\u{2502}   ", border_style),

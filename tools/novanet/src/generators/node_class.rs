@@ -500,7 +500,7 @@ mod tests {
     }
 
     #[test]
-    fn generate_small_kind_cypher() {
+    fn generate_small_class_cypher() {
         let nodes = vec![
             make_node_with_props(
                 "Page",
@@ -563,7 +563,7 @@ mod tests {
     }
 
     #[test]
-    fn generate_kind_integration() {
+    fn generate_class_integration() {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .parent()
             .and_then(|p| p.parent());
@@ -686,7 +686,7 @@ mod tests {
     // =========================================================================
 
     #[test]
-    fn visibility_kind_overrides() {
+    fn visibility_class_overrides() {
         // Kind-name overrides take precedence
         assert_eq!(derive_visibility("org", "structure", "Page"), "fragment");
         assert_eq!(derive_visibility("org", "structure", "Block"), "fragment");

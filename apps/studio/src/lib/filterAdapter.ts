@@ -222,11 +222,6 @@ export class NovaNetFilter {
     return this;
   }
 
-  /** @deprecated use includeBrand() */
-  includeBrandIdentity(): this {
-    return this.includeBrand();
-  }
-
   includeBrand(): this {
     this.state.includes.push({
       relation: 'HAS_BRAND', // v0.12.4 ADR-028: was HAS_BRAND_IDENTITY

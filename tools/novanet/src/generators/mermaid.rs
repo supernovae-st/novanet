@@ -239,7 +239,7 @@ impl super::Generator for MermaidGenerator {
 
     fn generate(&self, root: &Path) -> crate::Result<String> {
         let nodes = yaml_node::load_all_nodes(root)?;
-        let rels_doc = arcs::load_arc_kinds_from_files(root)?;
+        let rels_doc = arcs::load_arc_classes_from_files(root)?;
         let org_doc = organizing::load_organizing(root)?;
         render_mermaid(&nodes, &rels_doc.arcs, &org_doc)
     }

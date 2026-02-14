@@ -1,9 +1,9 @@
 /**
- * @fileoverview NovaNet Locale Knowledge Schemas
- * @module @novanet/core/schemas/locale-knowledge
+ * @fileoverview NovaNet Shared Realm Schemas (was locale-knowledge, renamed v11.3)
+ * @module @novanet/core/schemas/shared
  * @version 11.6.0
  *
- * Zod validation schemas for locale-specific knowledge in the NovaNet knowledge graph.
+ * Zod validation schemas for the shared realm in the NovaNet knowledge graph.
  * These schemas define the structure for locale identity, voice, culture, market data,
  * and lexicon resources used in native content generation.
  *
@@ -17,7 +17,7 @@
  *
  * @example
  * ```typescript
- * import { LocaleSchema, LocaleVoiceSchema } from '@novanet/core/schemas/locale-knowledge';
+ * import { LocaleSchema, LocaleVoiceSchema } from '@novanet/core/schemas/shared';
  *
  * const locale = LocaleSchema.parse({
  *   code: 'fr-FR',

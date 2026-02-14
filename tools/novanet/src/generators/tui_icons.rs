@@ -341,8 +341,8 @@ mod tests {
         // Terminal icons (spot check)
         assert!(output.contains("\"◉\"")); // shared
         assert!(output.contains("\"◎\"")); // org
-        assert!(output.contains("\"■\"")); // defined (was invariant)
-        assert!(output.contains("\"□\"")); // authored (was localized)
+        assert!(output.contains("\"■\"")); // defined
+        assert!(output.contains("\"□\"")); // authored
         assert!(output.contains("\"▼\"")); // expanded
         assert!(output.contains("\"▶\"")); // collapsed
 

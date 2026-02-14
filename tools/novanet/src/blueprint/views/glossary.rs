@@ -17,7 +17,7 @@ pub fn render(data: &BlueprintData) -> String {
         "│                                                                              │\n",
     );
     out.push_str(
-        "│  Definitions of core concepts in the NovaNet meta-graph                      │\n",
+        "│  Definitions of core concepts in the NovaNet schema-graph                    │\n",
     );
     out.push_str(
         "╰──────────────────────────────────────────────────────────────────────────────╯\n\n",

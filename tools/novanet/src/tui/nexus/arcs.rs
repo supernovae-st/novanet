@@ -316,8 +316,8 @@ fn render_arc_scope(f: &mut Frame, app: &App, area: Rect) {
     lines.push(Line::from(""));
 
     // Scope explanations with visual representation
-    let global_color = theme.realm_color("shared");
-    let tenant_color = theme.realm_color("org");
+    let shared_color = theme.realm_color("shared");
+    let org_color = theme.realm_color("org");
 
     // intra_realm (solid line)
     lines.push(Line::from(vec![
@@ -340,12 +340,12 @@ fn render_arc_scope(f: &mut Frame, app: &App, area: Rect) {
     // Example for intra_realm
     lines.push(Line::from(vec![
         Span::raw("        "),
-        Span::styled("Page", Style::default().fg(tenant_color)),
+        Span::styled("Page", Style::default().fg(org_color)),
         Span::styled(
             " \u{2500}\u{2500}\u{2500}[\u{2192}]\u{2500}\u{2500}\u{2500} ",
             Style::default().fg(Color::Yellow),
         ),
-        Span::styled("Block", Style::default().fg(tenant_color)),
+        Span::styled("Block", Style::default().fg(org_color)),
         Span::styled("  (both in org)", Style::default().fg(Color::DarkGray)),
     ]));
 
@@ -372,12 +372,12 @@ fn render_arc_scope(f: &mut Frame, app: &App, area: Rect) {
     // Example for cross_realm
     lines.push(Line::from(vec![
         Span::raw("        "),
-        Span::styled("Locale", Style::default().fg(global_color)),
+        Span::styled("Locale", Style::default().fg(shared_color)),
         Span::styled(
             " \u{254c}\u{254c}\u{254c}[\u{21e2}]\u{254c}\u{254c}\u{254c} ",
             Style::default().fg(Color::Magenta),
         ),
-        Span::styled("PageGenerated", Style::default().fg(tenant_color)),
+        Span::styled("PageGenerated", Style::default().fg(org_color)),
         Span::styled("  (shared -> org)", Style::default().fg(Color::DarkGray)),
     ]));
 

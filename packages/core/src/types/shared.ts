@@ -1,5 +1,5 @@
-// novanet-core/src/types/locale-knowledge.ts
-// Locale Knowledge types v8.2.0
+// novanet-core/src/types/shared.ts
+// Shared realm types v8.2.0 (was locale-knowledge.ts, renamed v11.3)
 //
 // v8.2.0 CHANGES:
 //   - REMOVED: icon, priority, freshness from all interfaces (YAML v7.11.0 alignment)
