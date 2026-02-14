@@ -7,7 +7,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
-## [0.12.5] - 2026-02-14
+## [0.12.4] - 2026-02-14
 
 ### Added
 - **Phase 1: Taxonomy Explosion** - 22 YAML files for realms, layers, traits
@@ -109,10 +109,10 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   - `BlockPrompt` → `BlockInstruction`: Markdown with LLM directives and @ references
   - `[:OF_TYPE]` (Page→PageType) → `[:HAS_STRUCTURE]`: Page structure relationship
   - `[:HAS_PROMPT]` → `[:HAS_INSTRUCTION]`: Instruction relationship for Page/Block
-- **Node count**: 60 → 59 nodes (PageType merged into PageStructure)
+- **Node count**: 59 → 61 nodes (ADR-028: +5 Brand Architecture, +1 Country, -3 PageType/PageStructure/PageInstruction)
 
 ### Changed
-- **YAML Node Definitions**: All 59 node-classes updated with new trait names and class terminology
+- **YAML Node Definitions**: All 61 node-classes updated with new trait names and class terminology
 - **Rust TUI**: Updated across 43 files (721 changes)
   - `traits.rs`: TRAIT_ORDER, descriptions updated for ADR-024
   - `theme.rs`: Icon defaults for new trait names
@@ -150,7 +150,7 @@ cargo run -- db migrate
 - **985 Rust tests passing**
 - **178 TypeScript core tests passing**
 - **All Studio tests passing**
-- **59 nodes, 10 layers, 5 traits**
+- **61 nodes** (40 shared + 21 org), **10 layers**, **5 traits**, **128 arcs**
 
 ## [11.7.0] - 2026-02-11
 

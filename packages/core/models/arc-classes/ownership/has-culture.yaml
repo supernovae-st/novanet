@@ -1,5 +1,6 @@
 # packages/core/models/arc-classes/ownership/has-culture.yaml
 # v10.7: Updated to link Locale -> Culture config node (1:1)
+# v0.13.0: Added TIER 2 inverse (ADR-026)
 # Note: For CultureSet (knowledge atoms), use HAS_CULTURE_SET arc
 arc:
   name: HAS_CULTURE
@@ -8,6 +9,7 @@ arc:
   source: Locale
   target: Culture
   cardinality: one_to_one
+  inverse: CULTURE_OF
   llm_context: |
     USE: when loading cultural configuration for a locale.
     TRIGGERS: locale culture, cultural settings, locale config, formality level.

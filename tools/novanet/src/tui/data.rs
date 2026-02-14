@@ -1267,7 +1267,7 @@ WHERE NOT source:Schema
 WITH n, k, outgoing, collect(DISTINCT {{
     arc_type: type(inc),
     source_key: coalesce(source.key, source.label, id(source)),
-    source_kind: head(labels(source))
+    source_class: head(labels(source))
 }}) AS incoming
 RETURN
     coalesce(n.key, n.label, toString(id(n))) AS key,
@@ -1331,7 +1331,7 @@ ORDER BY key
                     Some(InstanceArc {
                         arc_type,
                         target_key: m.get("source_key").unwrap_or_default(),
-                        target_class: m.get("source_kind").unwrap_or_default(),
+                        target_class: m.get("source_class").unwrap_or_default(),
                         exists: true,
                     })
                 })
@@ -1456,7 +1456,7 @@ WHERE NOT source:Schema
 WITH n, k, outgoing, collect(DISTINCT {{
     arc_type: type(inc),
     source_key: coalesce(source.key, source.label, id(source)),
-    source_kind: head(labels(source))
+    source_class: head(labels(source))
 }}) AS incoming
 RETURN k AS key, outgoing, incoming
 "#,
@@ -1501,7 +1501,7 @@ RETURN k AS key, outgoing, incoming
                     Some(InstanceArc {
                         arc_type,
                         target_key: m.get("source_key").unwrap_or_default(),
-                        target_class: m.get("source_kind").unwrap_or_default(),
+                        target_class: m.get("source_class").unwrap_or_default(),
                         exists: true,
                     })
                 })
@@ -1884,7 +1884,7 @@ WHERE NOT source:Schema
 WITH total, e, outgoing, collect(DISTINCT {
     arc_type: type(inc),
     source_key: coalesce(source.key, source.label, toString(id(source))),
-    source_kind: head(labels(source))
+    source_class: head(labels(source))
 }) AS incoming
 RETURN total,
        coalesce(e.key, toString(id(e))) AS key,
@@ -1950,7 +1950,7 @@ RETURN total,
                     Some(InstanceArc {
                         arc_type,
                         target_key: m.get("source_key").unwrap_or_default(),
-                        target_class: m.get("source_kind").unwrap_or_default(),
+                        target_class: m.get("source_class").unwrap_or_default(),
                         exists: true,
                     })
                 })

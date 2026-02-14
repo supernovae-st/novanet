@@ -1,4 +1,5 @@
 # packages/core/models/arc-classes/ownership/has-audience.yaml
+# v0.13.0: Added TIER 2 inverse (ADR-026)
 arc:
   name: HAS_AUDIENCE
   family: ownership
@@ -6,6 +7,7 @@ arc:
   source: Locale
   target: AudienceSet
   cardinality: one_to_many
+  inverse: AUDIENCE_OF
   llm_context: |
     USE: when loading audience segments for a locale.
     TRIGGERS: locale audience, audience segments, B2B B2C, target market.

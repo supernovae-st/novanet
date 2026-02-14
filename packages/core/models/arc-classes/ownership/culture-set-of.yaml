@@ -1,0 +1,21 @@
+# packages/core/models/arc-classes/ownership/culture-set-of.yaml
+# v0.13.0: TIER 2 inverse arc (ADR-026) - inverse of HAS_CULTURE_SET
+arc:
+  name: CULTURE_SET_OF
+  family: ownership
+  scope: intra_realm
+  source: CultureSet
+  target: Locale
+  cardinality: many_to_one
+  inverse_of: HAS_CULTURE_SET
+  llm_context: |
+    USE: when finding which locale owns a CultureSet.
+    TRIGGERS: cultureset owner, culture atoms locale, which locale, values locale.
+    NOT: loading culture sets for locale (use HAS_CULTURE_SET), individual atoms (use CONTAINS_CULTURE_REF).
+    RELATES: CultureSet (source), Locale (target), HAS_CULTURE_SET (inverse), type (property).
+  cypher_pattern: "(CultureSet)-[:CULTURE_SET_OF {type: $type}]->(Locale)"
+  properties:
+    type:
+      type: string
+      required: true
+      description: "Culture type (mirrors HAS_CULTURE_SET.type for bidirectional traversal)"

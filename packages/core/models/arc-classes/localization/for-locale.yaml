@@ -2,6 +2,7 @@
 # ArcClass: FOR_LOCALE — All localized content nodes point to their target Locale
 # v10.2: SEOKeyword removed — now owned by Locale via HAS_SEO_KEYWORDS
 # v0.12.4: Added PromptStyle as source (ADR-028)
+# v0.13.0: Added TIER 2 inverse (ADR-026)
 
 arc:
   name: FOR_LOCALE
@@ -16,6 +17,7 @@ arc:
     - PromptStyle
   target: Locale
   cardinality: many_to_one
+  inverse: LOCALE_OF
   llm_context: |
     USE: when finding the target locale for any localized content node.
     TRIGGERS: for locale, content locale, target language, localization target.

@@ -1,0 +1,22 @@
+# packages/core/models/arc-classes/localization/locale-of.yaml
+# v0.13.0: TIER 2 inverse arc (ADR-026) - inverse of FOR_LOCALE
+arc:
+  name: LOCALE_OF
+  family: localization
+  scope: cross_realm  # Locale (shared) → org nodes
+  source: Locale
+  target:
+    - EntityContent
+    - ProjectContent
+    - BlockGenerated
+    - PageGenerated
+    - OutputArtifact
+    - PromptStyle
+  cardinality: one_to_many
+  inverse_of: FOR_LOCALE
+  llm_context: |
+    USE: when finding all content nodes for a specific locale.
+    TRIGGERS: locale content, what targets locale, locale outputs, locale content nodes.
+    NOT: content to locale lookup (use FOR_LOCALE), locale ownership (use HAS_LOCALE).
+    RELATES: Locale (source), EntityContent/ProjectContent/BlockGenerated/PageGenerated/PromptStyle (target), FOR_LOCALE (inverse).
+  cypher_pattern: (Locale)-[:LOCALE_OF]->(EntityContent, PromptStyle)

@@ -1,5 +1,6 @@
 # packages/core/models/arc-classes/ownership/has-expressions.yaml
 # v10.7: Simplified to 1:1 - register is a property on Expression atoms
+# v0.13.0: Added TIER 2 inverse (ADR-026)
 arc:
   name: HAS_EXPRESSIONS
   family: ownership
@@ -7,6 +8,7 @@ arc:
   source: Locale
   target: ExpressionSet
   cardinality: one_to_one
+  inverse: EXPRESSIONS_OF
   llm_context: |
     USE: when loading idiomatic expressions for a locale.
     TRIGGERS: locale expressions, idioms, phrases, locale-specific text.
