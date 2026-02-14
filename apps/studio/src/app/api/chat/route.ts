@@ -69,31 +69,30 @@ All nodes have: key, display_name, icon, description, llm_context, created_at, u
 **Org/Config** — Organization setup
 - OrgConfig: Root organization configuration
 
-**Org/Foundation** — Project identity
-- Project, ProjectContent, BrandIdentity
+**Org/Foundation** — Project identity (v0.12.4: Brand Architecture)
+- Project, Brand, BrandDesign, BrandPrinciples, PromptStyle, ProjectContent
 
 **Org/Structure** — Content structure
 - Page, Block, ContentSlot: Page and block hierarchy
-- PageStructure, BlockType: Content templates
 
 **Org/Semantic** — Business content
 - Entity: Defined business entities
 - EntityContent: Authored entity content → FOR_LOCALE
 - AudiencePersona, ChannelSurface: Targeting
 
-**Org/Instruction** — Generation instructions
-- PageInstruction, BlockInstruction: LLM prompts with @ references
-- SEOPrompt, GEOPrompt: Mining instructions
+**Org/Instruction** — Generation instructions (v0.12.4: PageInstruction removed)
+- BlockType, BlockInstruction, BlockRules: Block templates and instructions
+- PromptArtifact: Generated prompt artifacts
 
 **Org/Output** — Generation results
 - PageGenerated, BlockGenerated: Generated content → FOR_LOCALE
 - OutputArtifact: Pipeline output
 
-### Key Relationships (114 arc types)
+### Key Relationships (128 arc types — v0.12.4)
 
-**Ownership**: HAS_PAGE, HAS_BLOCK, HAS_ENTITY, HAS_STRUCTURE, SUPPORTS_LOCALE
+**Ownership**: HAS_PAGE, HAS_BLOCK, HAS_ENTITY, HAS_BRAND, SUPPORTS_LOCALE
 **Localization**: FOR_LOCALE, HAS_CONTENT, CONTENT_OF, FALLBACK_TO
-**Semantic**: USES_ENTITY, SEMANTIC_LINK, SUBTOPIC_OF, TARGETS
+**Semantic**: USES_ENTITY, SEMANTIC_LINK, REFERENCES, HAS_KEYWORD, TARGETS
 **Generation**: HAS_GENERATED, GENERATED_FOR, HAS_INSTRUCTION
 **Mining**: HAS_SEO_KEYWORDS, HAS_GEO_QUERIES, TARGETS
 

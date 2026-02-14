@@ -37,13 +37,13 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 
 | Realm | Layers | Nodes | Description |
 |-------|--------|-------|-------------|
-| `shared` | config, locale, geography, knowledge | 39 | Universal knowledge (READ-ONLY) |
-| `org` | config, foundation, structure, semantic, instruction, output | 20 | Organization-specific content |
+| `shared` | config, locale, geography, knowledge | 40 | Universal knowledge (READ-ONLY) |
+| `org` | config, foundation, structure, semantic, instruction, output | 21 | Organization-specific content |
 
-> **v11.5 Changes:**
-> - Locale moved: shared/locale → shared/config (Locale is a definition, not settings)
-> - SEO/GEO consolidation: seo/geo layers removed from org, nodes in shared/knowledge
-> - Total: **59 nodes** (39 shared + 20 org), **10 layers** (4 shared + 6 org)
+> **v0.12.4 Changes:**
+> - Brand Architecture: Brand, BrandDesign, BrandPrinciples, PromptStyle nodes added (ADR-028)
+> - Country node added to shared/geography
+> - Total: **61 nodes** (40 shared + 21 org), **128 arcs**, **10 layers** (4 shared + 6 org)
 
 ### v11.7 Unified Tree Architecture
 
@@ -117,10 +117,10 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 - `generated` → `generated` (unchanged, LLM output)
 - `aggregated` → `retrieved` (fetched from external APIs)
 
-**v11.5 Changes:**
-- SEO/GEO consolidation: seo/geo layers removed from org, nodes moved to shared/knowledge
-- Locale definition in shared/config (Locale is defined, settings are in locale layer)
-- 10 layers total (4 shared + 6 org), 59 nodes (39 shared + 20 org)
+**v0.12.4 Changes:**
+- Brand Architecture: Brand, BrandDesign, BrandPrinciples, PromptStyle (ADR-028)
+- Country node added to shared/geography
+- 10 layers total (4 shared + 6 org), 61 nodes (40 shared + 21 org), 128 arcs
 
 **v11.2 Changes:**
 - Trait `derived` split into `generated` (LLM output) and `aggregated` (computed metrics)
@@ -359,7 +359,7 @@ NovaNet Studio uses **Query-First Architecture** where Cypher queries are the si
 | Term | Definition |
 |------|------------|
 | **Query-First** | Architecture pattern where graph display is determined solely by the executed Cypher query |
-| **Schema-Graph** | The schema graph showing NodeClass and ArcClass nodes (59 nodes, 114 arcs) |
+| **Schema-Graph** | The schema graph showing NodeClass and ArcClass nodes (61 nodes, 128 arcs) |
 | **CLASS_QUERY** | Foundational query that fetches all NodeClass instances for schema view |
 | **ARCS_QUERY** | Foundational query that fetches all ArcClass instances for schema view |
 | **View** | Parameterized Cypher template defined in YAML, executable with context parameters |

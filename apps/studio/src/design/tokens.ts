@@ -306,7 +306,7 @@ export const nodeCardSizes = {
     sm: { width: 180, height: 90 },
     /** 200×100 - Standard nodes (Block, EntityContent) */
     md: { width: 200, height: 100 },
-    /** 220×110 - Medium-large (Locale, BrandIdentity) */
+    /** 220×110 - Medium-large (Locale, Brand) */
     lg: { width: 220, height: 110 },
     /** 240×120 - Large structural (Page, Entity, Layer attractors) */
     xl: { width: 240, height: 120 },
@@ -326,16 +326,18 @@ export const nodeCardSizes = {
     Entity: 'xl',
     layerAttractor: 'xl',
 
-    // Medium-large (lg)
+    // Medium-large (lg) — v0.12.4: BrandIdentity → Brand
     Locale: 'lg',
-    BrandIdentity: 'lg',
+    Brand: 'lg',
+    BrandDesign: 'md',
+    BrandPrinciples: 'md',
+    PromptStyle: 'md',
     PageGenerated: 'lg',
 
-    // Medium (md) - Standard nodes
+    // Medium (md) - Standard nodes (v0.12.4: PageStructure removed)
     Block: 'md',
     EntityContent: 'md',
     Continent: 'md',
-    PageStructure: 'md',
     BlockType: 'md',
     ContentSlot: 'md',
 

@@ -532,23 +532,24 @@ arcs:
     fn parse_multi_source_target() {
         let yaml = r#"
 arcs:
-  - type: OF_TYPE
-    family: ownership
+  # v0.12.4: PageStructure deleted, use BELONGS_TO as multi-source/target example
+  - type: BELONGS_TO
+    family: semantic
     source:
-      - Page
+      - Entity
       - Block
     target:
-      - PageStructure
+      - EntityCategory
       - BlockType
     cardinality: many_to_one
-    llm_context: "Types."
+    llm_context: "Classification."
 "#;
         let doc: ArcsDocument = serde_yaml::from_str(yaml).unwrap();
         let arc = &doc.arcs[0];
-        assert_eq!(arc.source.labels().as_slice(), ["Page", "Block"]);
+        assert_eq!(arc.source.labels().as_slice(), ["Entity", "Block"]);
         assert_eq!(
             arc.target.labels().as_slice(),
-            ["PageStructure", "BlockType"]
+            ["EntityCategory", "BlockType"]
         );
     }
 

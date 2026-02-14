@@ -505,12 +505,13 @@ mod tests {
 
     #[test]
     fn resolve_multi_source_target() {
+        // v0.12.4: PageStructure deleted, use Entity → EntityCategory as multi-target example
         let rel = ArcDef {
-            arc_type: "OF_TYPE".to_string(),
-            family: ArcFamily::Ownership,
+            arc_type: "BELONGS_TO".to_string(),
+            family: ArcFamily::Semantic,
             scope: None,
-            source: NodeRef::Multiple(vec!["Page".to_string(), "Block".to_string()]),
-            target: NodeRef::Multiple(vec!["PageStructure".to_string(), "BlockType".to_string()]),
+            source: NodeRef::Multiple(vec!["Entity".to_string(), "Block".to_string()]),
+            target: NodeRef::Multiple(vec!["EntityCategory".to_string(), "BlockType".to_string()]),
             cardinality: Cardinality::ManyToOne,
             llm_context: "type".to_string(),
             properties: None,
@@ -518,11 +519,11 @@ mod tests {
             inverse_of: None,
             inverse_name: None,
         };
-        let view = make_view("Block", vec![rule("OF_TYPE", Direction::Outgoing)]);
+        let view = make_view("Block", vec![rule("BELONGS_TO", Direction::Outgoing)]);
         let graph = resolve_view_graph(&view, &[rel]);
 
         assert!(graph.reachable.contains("Block"));
-        assert!(graph.reachable.contains("PageStructure"));
+        assert!(graph.reachable.contains("EntityCategory"));
         assert!(graph.reachable.contains("BlockType"));
         assert_eq!(graph.arcs.len(), 2);
     }

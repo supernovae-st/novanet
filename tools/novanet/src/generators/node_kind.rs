@@ -81,7 +81,8 @@ fn derive_visibility(realm: &str, layer: &str, kind_name: &str) -> &'static str 
     // Kind-name overrides (priority 1)
     match kind_name {
         // Page/Block types and templates are fragments
-        "Page" | "Block" | "PageStructure" | "BlockType" => return "fragment",
+        // v0.12.4: PageStructure deleted (ADR-028)
+        "Page" | "Block" | "BlockType" => return "fragment",
         // Generated and content nodes are publishable
         "PageGenerated" | "BlockGenerated" => return "publishable",
         "Entity" | "EntityContent" => return "publishable",
@@ -440,9 +441,10 @@ mod tests {
     #[test]
     fn context_budget_by_layer() {
         // instruction layer → medium (even with invariant trait)
+        // v0.12.4: PageStructure deleted, use BlockType instead
         assert_eq!(
             context_budget(&make_node(
-                "PageStructure",
+                "BlockType",
                 "org",
                 "instruction",
                 NodeTrait::Defined
@@ -576,43 +578,44 @@ mod tests {
             .generate(root)
             .expect("should generate kind cypher");
 
-        // v0.12.4: 58 Class MERGE statements (ADR-028: PageStructure/PageInstruction deleted, Country added)
+        // v0.12.4: 61 Class MERGE statements (ADR-028 Brand Architecture)
+        // +4 Brand nodes (Brand, BrandDesign, BrandPrinciples, PromptStyle), -1 BrandIdentity
         let class_merges = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Schema:Class"))
             .count();
         assert_eq!(
-            class_merges, 58,
-            "expected 58 Class MERGE statements (v0.12.4: 40 shared + 18 org)"
+            class_merges, 61,
+            "expected 61 Class MERGE statements (v0.12.4: 40 shared + 21 org)"
         );
 
-        // 58 HAS_CLASS relationships (v0.12.0: renamed from HAS_KIND in v11.8)
+        // 61 HAS_CLASS relationships (v0.12.0: renamed from HAS_KIND in v11.8)
         let has_class = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_CLASS]"))
             .count();
-        assert_eq!(has_class, 58, "expected 58 HAS_CLASS relationships");
+        assert_eq!(has_class, 61, "expected 61 HAS_CLASS relationships");
 
-        // 58 IN_REALM relationships
+        // 61 IN_REALM relationships
         let in_realm = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_REALM]"))
             .count();
-        assert_eq!(in_realm, 58, "expected 58 IN_REALM relationships");
+        assert_eq!(in_realm, 61, "expected 61 IN_REALM relationships");
 
-        // 58 IN_LAYER relationships
+        // 61 IN_LAYER relationships
         let in_layer = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_LAYER]"))
             .count();
-        assert_eq!(in_layer, 58, "expected 58 IN_LAYER relationships");
+        assert_eq!(in_layer, 61, "expected 61 IN_LAYER relationships");
 
-        // 58 EXHIBITS relationships
+        // 61 EXHIBITS relationships
         let exhibits = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:EXHIBITS]"))
             .count();
-        assert_eq!(exhibits, 58, "expected 58 EXHIBITS relationships");
+        assert_eq!(exhibits, 61, "expected 61 EXHIBITS relationships");
 
         // Spot checks — specific Classes (v11.8: c_ prefix, :Schema:Class)
         assert!(cypher.contains("c_Project:Schema:Class {label: 'Project'}"));
@@ -643,8 +646,8 @@ mod tests {
             }
         }
 
-        // v0.12.4: Header mentions 58 Class nodes (ADR-028)
-        assert!(cypher.contains("58 Class nodes"));
+        // v0.12.4: Header mentions 61 Class nodes (ADR-028 Brand Architecture)
+        assert!(cypher.contains("61 Class nodes"));
 
         // v10.1: knowledge_tier removed from all YAMLs (node type is sufficient)
         assert!(
@@ -745,8 +748,9 @@ mod tests {
 
         // Org internal layers
         assert_eq!(derive_visibility("org", "config", "Org"), "internal");
+        // v0.12.4: PageInstruction deleted, use BlockInstruction
         assert_eq!(
-            derive_visibility("org", "instruction", "PageInstruction"),
+            derive_visibility("org", "instruction", "BlockInstruction"),
             "internal"
         );
     }

@@ -1,7 +1,7 @@
 /**
  * @fileoverview NovaNet Relation Registry
  * @module @novanet/core/schemas/relations
- * @version 11.6.0
+ * @version 0.12.4
  *
  * Unified registry for all Neo4j relationship types in the NovaNet knowledge graph.
  * This module defines relation types, their property schemas, and the complete registry.
@@ -12,7 +12,7 @@
  * - Locale Knowledge: HAS_IDENTITY, HAS_VOICE, HAS_CULTURE, HAS_MARKET, HAS_LEXICON
  * - Localization: HAS_CONTENT, CONTENT_OF
  * - Page Structure: HAS_BLOCK, OF_TYPE, LINKS_TO, SUBTOPIC_OF
- * - Entity Usage: USES_ENTITY, SEMANTIC_LINK, BELONGS_TO
+ * - Entity Usage: USES_ENTITY, REFERENCES, SEMANTIC_LINK, BELONGS_TO, HAS_KEYWORD
  * - Output: HAS_GENERATED, HAS_METRICS, ASSEMBLES
  * - SEO/GEO Targeting: HAS_SEO_TARGET, HAS_GEO_TARGET, TARGETS_SEO, TARGETS_GEO
  * - Provenance: INFLUENCED_BY, GENERATED_FROM, GENERATED
@@ -39,11 +39,18 @@ import { z } from 'zod';
 
 export const RelationType = {
   // ─────────────────────────────────────────────────────────────────────────────
-  // PROJECT ROOT (v10.3: HAS_CONCEPT removed — Entity in shared realm, use USES_ENTITY)
+  // PROJECT ROOT (v0.12.4: Brand Architecture — HAS_BRAND_IDENTITY → HAS_BRAND)
   // ─────────────────────────────────────────────────────────────────────────────
   HAS_PAGE: 'HAS_PAGE',                   // Project → Page
-  HAS_BRAND_IDENTITY: 'HAS_BRAND_IDENTITY', // Project → BrandIdentity
+  HAS_BRAND: 'HAS_BRAND',                 // Project → Brand (v0.12.4: renamed from HAS_BRAND_IDENTITY)
   SUPPORTS_LOCALE: 'SUPPORTS_LOCALE',     // Project → Locale
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // BRAND ARCHITECTURE (v0.12.4: ADR-028)
+  // ─────────────────────────────────────────────────────────────────────────────
+  HAS_DESIGN: 'HAS_DESIGN',               // Brand → BrandDesign
+  HAS_PRINCIPLES: 'HAS_PRINCIPLES',       // Brand → BrandPrinciples
+  HAS_PROMPT_STYLE: 'HAS_PROMPT_STYLE',   // Brand → PromptStyle
 
   // ─────────────────────────────────────────────────────────────────────────────
   // LOCALE
@@ -82,7 +89,6 @@ export const RelationType = {
   // PAGE STRUCTURE
   // ─────────────────────────────────────────────────────────────────────────────
   HAS_BLOCK: 'HAS_BLOCK',           // Page → Block
-  HAS_STRUCTURE: 'HAS_STRUCTURE',   // Page → PageStructure (v11.8: ADR-025)
   OF_TYPE: 'OF_TYPE',               // Block → BlockType
 
   // ─────────────────────────────────────────────────────────────────────────────
@@ -95,8 +101,11 @@ export const RelationType = {
   // ENTITY USAGE (v10.3: renamed from USES_CONCEPT)
   // ─────────────────────────────────────────────────────────────────────────────
   USES_ENTITY: 'USES_ENTITY',       // Page|Block → Entity (v10.3: renamed from USES_CONCEPT)
+  REFERENCES: 'REFERENCES',         // Block → Entity (v0.12.4: ADR-028 Page-Entity Architecture)
   SEMANTIC_LINK: 'SEMANTIC_LINK',   // Entity → Entity (v10.3: was Concept)
   BELONGS_TO: 'BELONGS_TO',         // Entity → EntityCategory (v11.1: semantic classification)
+  HAS_KEYWORD: 'HAS_KEYWORD',       // Entity → SEOKeyword (v0.12.4: ADR-028 Page-Entity Architecture)
+  POPULAR_IN: 'POPULAR_IN',         // Entity → Country|GeoRegion (v0.12.4: geographic popularity)
 
   // ─────────────────────────────────────────────────────────────────────────────
   // OUTPUT (v7.0.0: unified HAS_GENERATED)
@@ -138,11 +147,11 @@ export const RelationType = {
   BELONGS_TO_PROJECT_CONTENT: 'BELONGS_TO_PROJECT_CONTENT', // PageGenerated → ProjectContent (locale-aligned)
 
   // ─────────────────────────────────────────────────────────────────────────────
-  // INSTRUCTION RELATIONS
+  // INSTRUCTION RELATIONS (v0.12.4: PageInstruction deleted per ADR-028)
   // ─────────────────────────────────────────────────────────────────────────────
-  HAS_INSTRUCTION: 'HAS_INSTRUCTION',   // Page|Block → PageInstruction|BlockInstruction
+  HAS_INSTRUCTION: 'HAS_INSTRUCTION',   // Page|Block → BlockInstruction (v0.12.4: PageInstruction deleted)
   HAS_RULES: 'HAS_RULES',               // BlockType → BlockRules
-  GENERATED: 'GENERATED',               // PageInstruction|BlockInstruction → PageGenerated|BlockGenerated (provenance)
+  GENERATED: 'GENERATED',               // BlockInstruction → PageGenerated|BlockGenerated (provenance, v0.12.4)
 
   // ─────────────────────────────────────────────────────────────────────────────
   // VERSION HISTORY (v7.11.0)
@@ -335,7 +344,8 @@ export const InfluencedByPropsSchema = z.object({
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * Properties for GENERATED relation (PageInstruction|BlockInstruction → PageGenerated|BlockGenerated).
+ * Properties for GENERATED relation (BlockInstruction → PageGenerated|BlockGenerated).
+ * v0.12.4: PageInstruction deleted per ADR-028.
  */
 export const GeneratedPropsSchema = z.object({
   generated_at: z.date()
@@ -358,12 +368,34 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
     cardinality: '1:N',
     description: 'Project contains pages',
   },
-  [RelationType.HAS_BRAND_IDENTITY]: {
-    type: RelationType.HAS_BRAND_IDENTITY,
+  // v0.12.4: HAS_BRAND_IDENTITY → HAS_BRAND + Brand Architecture arcs
+  [RelationType.HAS_BRAND]: {
+    type: RelationType.HAS_BRAND,
     from: 'Project',
-    to: 'BrandIdentity',
+    to: 'Brand',
     cardinality: '1:1',
-    description: 'Project has one brand identity (visual/voice/style)',
+    description: 'Project has one brand (visual/voice/style foundation)',
+  },
+  [RelationType.HAS_DESIGN]: {
+    type: RelationType.HAS_DESIGN,
+    from: 'Brand',
+    to: 'BrandDesign',
+    cardinality: '1:N',
+    description: 'Brand has design tokens (colors, typography, spacing)',
+  },
+  [RelationType.HAS_PRINCIPLES]: {
+    type: RelationType.HAS_PRINCIPLES,
+    from: 'Brand',
+    to: 'BrandPrinciples',
+    cardinality: '1:N',
+    description: 'Brand has guiding principles (voice, tone, writing rules)',
+  },
+  [RelationType.HAS_PROMPT_STYLE]: {
+    type: RelationType.HAS_PROMPT_STYLE,
+    from: 'Brand',
+    to: 'PromptStyle',
+    cardinality: '1:N',
+    description: 'Brand has prompt styles for LLM generation',
   },
   [RelationType.SUPPORTS_LOCALE]: {
     type: RelationType.SUPPORTS_LOCALE,
@@ -532,13 +564,8 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
     props: HasBlockPropsSchema,
     description: 'Page contains blocks with position',
   },
-  [RelationType.HAS_STRUCTURE]: {
-    type: RelationType.HAS_STRUCTURE,
-    from: 'Page',
-    to: 'PageStructure',
-    cardinality: 'N:1',
-    description: 'Page uses a specific structure (v11.8: ADR-025)',
-  },
+  // v0.12.4: HAS_STRUCTURE removed (PageStructure node deleted per ADR-028)
+  // Page structure is now computed from HAS_BLOCK.order at runtime
   [RelationType.OF_TYPE]: {
     type: RelationType.OF_TYPE,
     from: 'Block',
@@ -577,6 +604,13 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
     props: UsesEntityPropsSchema,
     description: 'Page or Block references entities via @key (v10.3: renamed from USES_CONCEPT)',
   },
+  [RelationType.REFERENCES]: {
+    type: RelationType.REFERENCES,
+    from: 'Block',
+    to: 'Entity',
+    cardinality: 'N:M',
+    description: 'Block references Entity for content generation context (v0.12.4: ADR-028)',
+  },
   [RelationType.SEMANTIC_LINK]: {
     type: RelationType.SEMANTIC_LINK,
     from: 'Entity',
@@ -591,6 +625,20 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
     to: 'EntityCategory',
     cardinality: 'N:1',
     description: 'Entity belongs to a semantic category (v11.1: cross-realm classification)',
+  },
+  [RelationType.HAS_KEYWORD]: {
+    type: RelationType.HAS_KEYWORD,
+    from: 'Entity',
+    to: 'SEOKeyword',
+    cardinality: '1:N',
+    description: 'Entity has associated SEO keywords for targeting (v0.12.4: ADR-028)',
+  },
+  [RelationType.POPULAR_IN]: {
+    type: RelationType.POPULAR_IN,
+    from: 'Entity',
+    to: ['Country', 'GeoRegion', 'Continent'],
+    cardinality: 'N:M',
+    description: 'Entity is popular in geographic regions (v0.12.4: cross-realm semantic)',
   },
 
   // ─────────────────────────────────────────────────────────────────────────────
@@ -701,14 +749,14 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   },
 
   // ─────────────────────────────────────────────────────────────────────────────
-  // INSTRUCTION RELATIONS
+  // INSTRUCTION RELATIONS (v0.12.4: PageInstruction deleted per ADR-028)
   // ─────────────────────────────────────────────────────────────────────────────
   [RelationType.HAS_INSTRUCTION]: {
     type: RelationType.HAS_INSTRUCTION,
     from: ['Page', 'Block'],
-    to: ['PageInstruction', 'BlockInstruction'],
+    to: 'BlockInstruction',
     cardinality: '1:N',
-    description: 'Links structure nodes to their AI instructions',
+    description: 'Links structure nodes to their AI instructions (v0.12.4: PageInstruction deleted)',
   },
   [RelationType.HAS_RULES]: {
     type: RelationType.HAS_RULES,
@@ -719,11 +767,11 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   },
   [RelationType.GENERATED]: {
     type: RelationType.GENERATED,
-    from: ['PageInstruction', 'BlockInstruction'],
+    from: 'BlockInstruction',
     to: ['PageGenerated', 'BlockGenerated'],
     cardinality: 'N:M',
     props: GeneratedPropsSchema,
-    description: 'Provenance: which instruction generated which output',
+    description: 'Provenance: which instruction generated which output (v0.12.4)',
   },
 
   // ─────────────────────────────────────────────────────────────────────────────

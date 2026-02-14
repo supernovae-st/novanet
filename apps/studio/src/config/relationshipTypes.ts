@@ -28,11 +28,14 @@ export type RelationshipCategory =
  * Relationship categories with their types
  */
 export const RELATIONSHIP_CATEGORIES: Record<RelationshipCategory, RelationType[]> = {
-  // Ownership: Project/parent owns child entities (5 relations)
-  // v10.3: HAS_CONCEPT removed — Entity in shared realm, use USES_ENTITY
+  // Ownership: Project/parent owns child entities (8 relations)
+  // v0.12.4: HAS_BRAND_IDENTITY → HAS_BRAND + Brand Architecture arcs
   ownership: [
     'HAS_PAGE',
-    'HAS_BRAND_IDENTITY',
+    'HAS_BRAND',
+    'HAS_DESIGN',
+    'HAS_PRINCIPLES',
+    'HAS_PROMPT_STYLE',
     'HAS_BLOCK',
     'HAS_INSTRUCTION',
     'HAS_RULES',
@@ -62,17 +65,20 @@ export const RELATIONSHIP_CATEGORIES: Record<RelationshipCategory, RelationType[
     'HAS_PATTERN',
     'HAS_CONSTRAINT',
   ],
-  // Semantic: Entity usage (4 relations — v11.1: +BELONGS_TO)
+  // Semantic: Entity usage (7 relations — v11.1: +BELONGS_TO, v0.12.4: +REFERENCES, +HAS_KEYWORD, +POPULAR_IN)
   semantic: [
     'USES_ENTITY',
     'SEMANTIC_LINK',
     'USED_BY',
     'BELONGS_TO',
+    'REFERENCES',
+    'HAS_KEYWORD',
+    'POPULAR_IN',
   ],
-  // Structure: Hierarchical structure (5 relations)
+  // Structure: Hierarchical structure (4 relations)
+  // v0.12.4: HAS_STRUCTURE removed per ADR-028
   structure: [
     'OF_TYPE',
-    'HAS_STRUCTURE',
     'SUBTOPIC_OF',
     'BELONGS_TO_PROJECT_CONTENT',
     'BLOCK_OF',
@@ -134,10 +140,29 @@ export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfi
     color: '#3b82f6',  // blue-500
     category: 'ownership',
   },
-  HAS_BRAND_IDENTITY: {
-    type: 'HAS_BRAND_IDENTITY',
-    label: 'Has Brand Identity',
+  // v0.12.4: HAS_BRAND_IDENTITY → HAS_BRAND + Brand Architecture arcs (ADR-028)
+  HAS_BRAND: {
+    type: 'HAS_BRAND',
+    label: 'Has Brand',
     color: '#60a5fa',  // blue-400
+    category: 'ownership',
+  },
+  HAS_DESIGN: {
+    type: 'HAS_DESIGN',
+    label: 'Has Design',
+    color: '#93c5fd',  // blue-300
+    category: 'ownership',
+  },
+  HAS_PRINCIPLES: {
+    type: 'HAS_PRINCIPLES',
+    label: 'Has Principles',
+    color: '#bfdbfe',  // blue-200
+    category: 'ownership',
+  },
+  HAS_PROMPT_STYLE: {
+    type: 'HAS_PROMPT_STYLE',
+    label: 'Has Prompt Style',
+    color: '#dbeafe',  // blue-100
     category: 'ownership',
   },
   HAS_BLOCK: {
@@ -308,9 +333,29 @@ export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfi
     color: '#c2410c',  // orange-700
     category: 'semantic',
   },
+  // v0.12.4: REFERENCES and HAS_KEYWORD added per ADR-028
+  REFERENCES: {
+    type: 'REFERENCES',
+    label: 'References',
+    color: '#ea580c',  // orange-600
+    category: 'semantic',
+  },
+  HAS_KEYWORD: {
+    type: 'HAS_KEYWORD',
+    label: 'Has Keyword',
+    color: '#f97316',  // orange-500
+    category: 'semantic',
+  },
+  // v0.12.4: POPULAR_IN added per ADR-028
+  POPULAR_IN: {
+    type: 'POPULAR_IN',
+    label: 'Popular In',
+    color: '#fdba74',  // orange-300
+    category: 'semantic',
+  },
 
   // ==========================================================================
-  // STRUCTURE CATEGORY (5 relations) - cyan (matches LAYER_COLORS.structure)
+  // STRUCTURE CATEGORY (4 relations) - cyan (matches LAYER_COLORS.structure)
   // ==========================================================================
   OF_TYPE: {
     type: 'OF_TYPE',
@@ -318,12 +363,7 @@ export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfi
     color: '#06b6d4',  // cyan-500
     category: 'structure',
   },
-  HAS_STRUCTURE: {
-    type: 'HAS_STRUCTURE',
-    label: 'Has Structure',
-    color: '#0284c7',  // sky-600
-    category: 'structure',
-  },
+  // v0.12.4: HAS_STRUCTURE removed per ADR-028
   SUBTOPIC_OF: {
     type: 'SUBTOPIC_OF',
     label: 'Subtopic Of',

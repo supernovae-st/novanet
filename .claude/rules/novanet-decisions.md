@@ -16,18 +16,19 @@ This file documents key architecture decisions for NovaNet. Reference these when
 | **003** | YAML-First | YAML = source of truth → generators → TS/Cypher/Mermaid |
 | **001** | Arc Terminology | Use "Arc" (not Edge/Relation) for directed links |
 
-### Current Architecture (v0.12.0)
+### Current Architecture (v0.12.4)
 
 ```
-SHARED (4 layers, 39 nodes): config, locale, geography, knowledge — READ-ONLY
-ORG (6 layers, 20 nodes): config, foundation, structure, semantic, instruction, output
-Total: 59 nodes, 10 layers, 5 traits
+SHARED (4 layers, 40 nodes): config, locale, geography, knowledge — READ-ONLY
+ORG (6 layers, 21 nodes): config, foundation, structure, semantic, instruction, output
+Total: 61 nodes, 128 arcs, 10 layers, 5 traits
 ```
 
-### v0.12.0 "Class Act" Key Changes
+### v0.12.x Key Changes
 
 | ADR | Change | Summary |
 |-----|--------|---------|
+| **028** | Brand Architecture | v0.12.4: Brand, BrandDesign, BrandPrinciples, PromptStyle nodes + Country |
 | **024** | Trait = Data Origin | `invariant→defined`, `localized→authored`, `knowledge→imported`, `aggregated→retrieved` |
 | **023** | Class/Instance | `NodeKind→NodeClass`, `:Meta:Kind→:Schema:Class`, "Meta" eliminated |
 | **025** | Instruction Rename | `PageType→PageStructure`, `*Prompt→*Instruction` |

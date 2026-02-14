@@ -170,7 +170,8 @@ pub const VIEWS: &[ViewEntry] = &[
         notes: &[
             "Used by the generation orchestrator",
             "Collects Page -> Blocks -> Entities -> Knowledge",
-            "Includes PageInstruction and PageStructure for instructions",
+            // v0.12.4: PageInstruction/PageStructure deleted (ADR-028)
+            "Includes BlockInstruction and BlockType for instructions",
         ],
     },
     ViewEntry {
@@ -195,6 +196,19 @@ pub const VIEWS: &[ViewEntry] = &[
             "Semantic activation spreading from Block",
             "Entity relationships form a network",
             "Used for context enrichment",
+        ],
+    },
+    ViewEntry {
+        id: "gen-pipeline",
+        name: "Page Pipeline",
+        description: "Full page generation pipeline (structure → generation → output)",
+        category: ViewCategory::Generation,
+        root_type: "Page",
+        notes: &[
+            "End-to-end view from Page to PageGenerated",
+            "Shows Block ordering (HAS_BLOCK.order)",
+            "Includes BlockType, BlockRules, BlockInstruction",
+            "Assembly sequence via ASSEMBLES.order",
         ],
     },
     // Knowledge views
@@ -243,7 +257,7 @@ pub const VIEWS: &[ViewEntry] = &[
         root_type: "Project",
         notes: &[
             "Dashboard view for project management",
-            "Includes BrandIdentity configuration",
+            "Includes Brand, BrandDesign, BrandPrinciples configuration",
             "Shows page count and entity usage",
         ],
     },
