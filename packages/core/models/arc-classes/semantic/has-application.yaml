@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/has-application.yaml
-# ArcKind: HAS_APPLICATION - Entity has applications (inverse of APPLIES_TO)
+# ArcClass: HAS_APPLICATION - Entity has applications (inverse of APPLIES_TO)
 # v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
 
 arc:

@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/has-slot.yaml
-# ArcKind: HAS_SLOT — Page defines content slot
+# ArcClass: HAS_SLOT — Page defines content slot
 
 arc:
   name: HAS_SLOT

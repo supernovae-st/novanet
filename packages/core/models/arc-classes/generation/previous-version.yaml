@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/generation/previous-version.yaml
-# ArcKind: PREVIOUS_VERSION — Links to previous version in history chain
+# ArcClass: PREVIOUS_VERSION — Links to previous version in history chain
 
 arc:
   name: PREVIOUS_VERSION

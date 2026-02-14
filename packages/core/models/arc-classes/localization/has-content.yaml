@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/localization/has-content.yaml
-# ArcKind: HAS_CONTENT — Invariant node has localized content (v10.9.0)
+# ArcClass: HAS_CONTENT — Invariant node has localized content (v10.9.0)
 #
 # v10.9.0: Renamed from HAS_L10N → HAS_CONTENT
 #          Target: EntityContent → EntityContent, ProjectContent unchanged

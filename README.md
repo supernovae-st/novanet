@@ -23,10 +23,10 @@ Generate culturally-native content across 200+ locales — not translation, but 
 >
 > ```
 > Source → Translate → Target                           ❌ Traditional
-> Entity (invariant) → Generate natively → EntityContent ✅ NovaNet
+> Entity (defined) → Generate natively → EntityContent ✅ NovaNet
 > ```
 >
-> Content is generated natively per locale from invariant semantic entities, not translated from a source language.
+> Content is generated natively per locale from defined semantic entities, not translated from a source language.
 > Each locale gets culturally-native content, preserving local nuances that translation would lose.
 
 ---

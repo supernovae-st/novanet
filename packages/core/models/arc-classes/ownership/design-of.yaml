@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/design-of.yaml
-# ArcKind: DESIGN_OF — BrandDesign belongs to Brand (inverse of HAS_DESIGN)
+# ArcClass: DESIGN_OF — BrandDesign belongs to Brand (inverse of HAS_DESIGN)
 #
 # v0.12.5: ADR-028 Brand Architecture
 

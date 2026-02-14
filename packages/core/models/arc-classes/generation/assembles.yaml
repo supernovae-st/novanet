@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/generation/assembles.yaml
-# ArcKind: ASSEMBLES — PageGenerated assembles BlockGenerateds with order for sequencing
+# ArcClass: ASSEMBLES — PageGenerated assembles BlockGenerateds with order for sequencing
 # v0.12.3: Changed position (string) to order (int) for consistency with HAS_BLOCK
 
 arc:

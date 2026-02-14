@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/child-of.yaml
-# ArcKind: CHILD_OF — Inverse of HAS_CHILD — Entity points to its parent
+# ArcClass: CHILD_OF — Inverse of HAS_CHILD — Entity points to its parent
 
 arc:
   name: CHILD_OF

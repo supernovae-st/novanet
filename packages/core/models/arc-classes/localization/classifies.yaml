@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/localization/classifies.yaml
-# ArcKind: CLASSIFIES — Classification category contains Locale (inverse of HAS_INCOME_LEVEL, HAS_LENDING_TYPE)
+# ArcClass: CLASSIFIES — Classification category contains Locale (inverse of HAS_INCOME_LEVEL, HAS_LENDING_TYPE)
 #
 # v0.12.5: ADR-026 Inverse Arc Policy
 

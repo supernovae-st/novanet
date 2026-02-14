@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/project-of.yaml
-# ArcKind: PROJECT_OF — Inverse of HAS_PROJECT (Project belongs to OrgConfig)
+# ArcClass: PROJECT_OF — Inverse of HAS_PROJECT (Project belongs to OrgConfig)
 
 arc:
   name: PROJECT_OF

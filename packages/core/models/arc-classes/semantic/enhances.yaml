@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/enhances.yaml
-# ArcKind: ENHANCES - Feature enhances entity capabilities
+# ArcClass: ENHANCES - Feature enhances entity capabilities
 # v10.7: New semantic arc for FEATURE → Entity relationships
 
 arc:

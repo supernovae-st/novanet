@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/localization/in-subregion.yaml
-# ArcKind: IN_SUBREGION - Locale belongs to GeoRegion/GeoSubRegion
+# ArcClass: IN_SUBREGION - Locale belongs to GeoRegion/GeoSubRegion
 # v10.8: Geographic Taxonomy
 
 arc:

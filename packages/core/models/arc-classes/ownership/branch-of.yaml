@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/branch-of.yaml
-# ArcKind: BRANCH_OF - LanguageBranch belongs to LanguageFamily
+# ArcClass: BRANCH_OF - LanguageBranch belongs to LanguageFamily
 # v10.8: Geographic Taxonomy
 
 arc:

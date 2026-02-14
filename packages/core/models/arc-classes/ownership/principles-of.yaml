@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/principles-of.yaml
-# ArcKind: PRINCIPLES_OF — BrandPrinciples belongs to Brand (inverse of HAS_PRINCIPLES)
+# ArcClass: PRINCIPLES_OF — BrandPrinciples belongs to Brand (inverse of HAS_PRINCIPLES)
 #
 # v0.12.5: ADR-028 Brand Architecture
 

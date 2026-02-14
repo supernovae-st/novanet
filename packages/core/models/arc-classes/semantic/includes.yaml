@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/includes.yaml
-# ArcKind: INCLUDES - Entity includes/contains another Entity (containment)
+# ArcClass: INCLUDES - Entity includes/contains another Entity (containment)
 # v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
 
 arc:

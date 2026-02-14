@@ -255,7 +255,7 @@ fn render_page_2_two_types_of_nodes(f: &mut Frame, theme: &Theme, locale: NexusL
         Line::from(vec![
             Span::styled("  ", Style::default()),
             Span::styled(
-                "SCHEMA CLASSES (59 total)",
+                "SCHEMA CLASSES (61 total)",
                 Style::default()
                     .fg(Color::Magenta)
                     .add_modifier(Modifier::BOLD),

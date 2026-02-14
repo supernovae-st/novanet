@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/reads.yaml
-# ArcKind: READS - Tool reads/decodes/scans entity
+# ArcClass: READS - Tool reads/decodes/scans entity
 # v10.7: New semantic arc for scanner TOOL → Entity relationships
 
 arc:

@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/competes-with.yaml
-# ArcKind: COMPETES_WITH - Entity competes with another Entity (symmetric)
+# ArcClass: COMPETES_WITH - Entity competes with another Entity (symmetric)
 # v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
 
 arc:

@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/localization/in-economic-region.yaml
-# ArcKind: IN_ECONOMIC_REGION - Locale's World Bank economic region
+# ArcClass: IN_ECONOMIC_REGION - Locale's World Bank economic region
 # v10.8: Geographic Taxonomy
 
 arc:

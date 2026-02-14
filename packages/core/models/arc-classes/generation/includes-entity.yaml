@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/generation/includes-entity.yaml
-# ArcKind: INCLUDES_ENTITY — Prompt artifact includes entity context for generation
+# ArcClass: INCLUDES_ENTITY — Prompt artifact includes entity context for generation
 
 arc:
   name: INCLUDES_ENTITY

@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/alternative-to.yaml
-# ArcKind: ALTERNATIVE_TO - Entity is an alternative to another Entity (symmetric)
+# ArcClass: ALTERNATIVE_TO - Entity is an alternative to another Entity (symmetric)
 # v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
 
 arc:

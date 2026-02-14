@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/has-child.yaml
-# ArcKind: HAS_CHILD — Entity hierarchy for URL structure (v10.9.0)
+# ArcClass: HAS_CHILD — Entity hierarchy for URL structure (v10.9.0)
 #
 # v10.9.0: NEW arc for Entity hierarchies
 #          Replaces generic CONTAINS (which is used for Knowledge Atoms)

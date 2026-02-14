@@ -290,14 +290,14 @@ check_outdated_node_counts() {
     local file="$1"
     local matches
     
-    # Check for old node counts in comments/docs (v0.12.0 = 59 nodes: 39 shared + 20 org)
+    # Check for old node counts in comments/docs (v0.12.4 = 61 nodes: 40 shared + 21 org)
     matches=$(grep -En '//.*\b(42|43|44|45|60|61|62|63|64|65)\b.*node|#.*\b(42|43|44|45|60|61|62|63|64|65)\b.*node' "$file" 2>/dev/null | grep -iv "v10\|v9\|v11\.[0-4]\|deprecated" || true)
 
     if [[ -n "$matches" ]]; then
         while IFS= read -r match; do
             local line_num="${match%%:*}"
             add_issue "$(get_severity outdated_node_count)" \
-                "Possibly outdated node count (v0.12.0 has ${GREEN}59 nodes${NC}: 39 shared + 20 org)" \
+                "Possibly outdated node count (v0.12.4 has ${GREEN}61 nodes${NC}: 40 shared + 21 org)" \
                 "Update comment to reflect v0.12.0 architecture" \
                 "$line_num"
         done <<< "$matches"
@@ -322,7 +322,7 @@ check_magic_numbers() {
             if [[ "$content" =~ (assert|expect|len|count|==|!=) ]]; then
                 add_issue "$(get_severity magic_numbers)" \
                     "Magic number may be outdated node count" \
-                    "Use named constant or verify against v0.12.0 schema (59 nodes)" \
+                    "Use named constant or verify against v0.12.4 schema (61 nodes)" \
                     "$line_num"
             fi
         done <<< "$matches"

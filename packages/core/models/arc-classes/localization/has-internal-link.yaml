@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/localization/has-internal-link.yaml
-# ArcKind: HAS_INTERNAL_LINK — BlockGenerated contains link to PageGenerated (v10.3)
+# ArcClass: HAS_INTERNAL_LINK — BlockGenerated contains link to PageGenerated (v10.3)
 
 arc:
   name: HAS_INTERNAL_LINK

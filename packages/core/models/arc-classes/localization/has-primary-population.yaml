@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/localization/has-primary-population.yaml
-# ArcKind: HAS_PRIMARY_POPULATION - Locale's majority population cluster
+# ArcClass: HAS_PRIMARY_POPULATION - Locale's majority population cluster
 # v10.8: Geographic Taxonomy
 
 arc:

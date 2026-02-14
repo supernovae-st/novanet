@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/materializes-as.yaml
-# ArcKind: MATERIALIZES_AS — Entity materializes as Page(s) (v10.3)
+# ArcClass: MATERIALIZES_AS — Entity materializes as Page(s) (v10.3)
 
 arc:
   name: MATERIALIZES_AS

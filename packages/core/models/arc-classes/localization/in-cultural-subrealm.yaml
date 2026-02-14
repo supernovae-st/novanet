@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/localization/in-cultural-subrealm.yaml
-# ArcKind: IN_CULTURAL_SUBREALM - Locale belongs to CulturalSubRealm
+# ArcClass: IN_CULTURAL_SUBREALM - Locale belongs to CulturalSubRealm
 # v10.8: Geographic Taxonomy
 
 arc:

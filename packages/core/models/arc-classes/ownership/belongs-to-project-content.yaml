@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/belongs-to-project-content.yaml
-# ArcKind: BELONGS_TO_PROJECT_CONTENT — Locale-aligned: PageGenerated (fr-FR) → ProjectContent (fr-FR)
+# ArcClass: BELONGS_TO_PROJECT_CONTENT — Locale-aligned: PageGenerated (fr-FR) → ProjectContent (fr-FR)
 #
 # v11.0.0: Renamed from BELONGS_TO_PROJECT_L10N (ProjectL10n → ProjectContent refactor)
 

@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/accepts-block-type.yaml
-# ArcKind: ACCEPTS_BLOCK_TYPE — Slot accepts specific block types
+# ArcClass: ACCEPTS_BLOCK_TYPE — Slot accepts specific block types
 
 arc:
   name: ACCEPTS_BLOCK_TYPE

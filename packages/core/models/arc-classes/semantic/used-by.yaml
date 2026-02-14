@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/used-by.yaml
-# ArcKind: USED_BY — Inverse of USES_ENTITY — entity knows who uses it
+# ArcClass: USED_BY — Inverse of USES_ENTITY — entity knows who uses it
 
 arc:
   name: USED_BY

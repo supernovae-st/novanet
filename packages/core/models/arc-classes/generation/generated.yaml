@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/generation/generated.yaml
-# ArcKind: GENERATED — Instruction produced localized content
+# ArcClass: GENERATED — Instruction produced localized content
 #
 # v0.12.4: ADR-028 - PageInstruction deleted (calculated at runtime from BlockInstructions)
 #   Source simplified to BlockInstruction only

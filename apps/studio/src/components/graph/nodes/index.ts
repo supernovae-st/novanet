@@ -13,8 +13,10 @@ export { ProjectNode, type ProjectNodeType } from './ProjectNode';
 // Structural nodes (project + content categories)
 export { StructuralNode, type StructuralNodeType } from './StructuralNode';
 
-// Locale knowledge nodes (locale category: LocaleIdentity, LocaleVoice, etc.)
-export { LocaleKnowledgeNode, type LocaleKnowledgeNodeType } from './LocaleKnowledgeNode';
+// Shared layer nodes (shared realm: config, locale, geography, knowledge)
+export { SharedLayerNode, type SharedLayerNodeType } from './SharedLayerNode';
+// Backwards compatibility alias (deprecated, use SharedLayerNode)
+export { SharedLayerNode as LocaleKnowledgeNode, type SharedLayerNodeType as LocaleKnowledgeNodeType } from './SharedLayerNode';
 
 // TurboNode for default/generic display
 export { TurboNode, type TurboNodeData, type TurboNodeType } from '../TurboNode';

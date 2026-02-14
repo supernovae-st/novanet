@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/part-of-realm.yaml
-# ArcKind: PART_OF_REALM - CulturalSubRealm belongs to CulturalRealm
+# ArcClass: PART_OF_REALM - CulturalSubRealm belongs to CulturalRealm
 # v10.8: Geographic Taxonomy
 
 arc:

@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/localization/has-localized-content.yaml
-# ArcKind: HAS_LOCALIZED_CONTENT — Inverse of FOR_LOCALE — locale knows all its content
+# ArcClass: HAS_LOCALIZED_CONTENT — Inverse of FOR_LOCALE — locale knows all its content
 # v10.2: SEOKeyword removed — now via HAS_SEO_KEYWORDS (ownership)
 
 arc:

@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/cluster-of.yaml
-# ArcKind: CLUSTER_OF - PopulationSubCluster belongs to PopulationCluster
+# ArcClass: CLUSTER_OF - PopulationSubCluster belongs to PopulationCluster
 # v10.8: Geographic Taxonomy
 
 arc:

@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/references-entity.yaml
-# ArcKind: REFERENCES_ENTITY — BlockInstruction references Entity (v10.3)
+# ArcClass: REFERENCES_ENTITY — BlockInstruction references Entity (v10.3)
 
 arc:
   name: REFERENCES_ENTITY

@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/enabled-by.yaml
-# ArcKind: ENABLED_BY - Entity is enabled by another Entity (inverse of ENABLES)
+# ArcClass: ENABLED_BY - Entity is enabled by another Entity (inverse of ENABLES)
 # v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
 
 arc:

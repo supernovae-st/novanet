@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/entity-of.yaml
-# ArcKind: ENTITY_OF — Inverse of HAS_ENTITY (Entity belongs to Project)
+# ArcClass: ENTITY_OF — Inverse of HAS_ENTITY (Entity belongs to Project)
 
 arc:
   name: ENTITY_OF

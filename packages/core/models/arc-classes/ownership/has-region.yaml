@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/ownership/has-region.yaml
-# ArcKind: HAS_REGION — Continent contains GeoRegion (inverse of IN_CONTINENT)
+# ArcClass: HAS_REGION — Continent contains GeoRegion (inverse of IN_CONTINENT)
 #
 # v0.12.5: ADR-026 Inverse Arc Policy
 

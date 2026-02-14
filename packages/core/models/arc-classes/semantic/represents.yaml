@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/represents.yaml
-# ArcKind: REPRESENTS - Page represents its main Entity
+# ArcClass: REPRESENTS - Page represents its main Entity
 # v0.12.4: ADR-028 Page-Entity Architecture (1:1 mandatory relationship)
 
 arc:

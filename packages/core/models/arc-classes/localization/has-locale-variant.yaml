@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/localization/has-locale-variant.yaml
-# ArcKind: HAS_LOCALE_VARIANT — Parent Locale has regional variant (inverse of LOCALE_VARIANT_OF)
+# ArcClass: HAS_LOCALE_VARIANT — Parent Locale has regional variant (inverse of LOCALE_VARIANT_OF)
 #
 # v0.12.5: ADR-026 Inverse Arc Policy
 

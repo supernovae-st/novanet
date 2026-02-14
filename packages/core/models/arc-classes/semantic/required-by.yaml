@@ -1,5 +1,5 @@
 # packages/core/models/arc-classes/semantic/required-by.yaml
-# ArcKind: REQUIRED_BY - Entity is required by another Entity (inverse of REQUIRES)
+# ArcClass: REQUIRED_BY - Entity is required by another Entity (inverse of REQUIRES)
 # v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
 
 arc:

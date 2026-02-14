@@ -57,7 +57,7 @@ import { createForceSimulation, runSimulationSync, applyForcePositions } from '@
 import {
   TurboNode,
   StructuralNode,
-  LocaleKnowledgeNode,
+  SharedLayerNode,
   ProjectNode,
   RealmAttractorNode,
   LayerAttractorNode,
@@ -84,7 +84,9 @@ const nodeTypes = {
   // Data mode node types
   turbo: TurboNode,
   structural: StructuralNode,
-  localeKnowledge: LocaleKnowledgeNode,
+  sharedLayer: SharedLayerNode,
+  // Backwards compatibility alias (v0.12.4: LocaleKnowledgeNode → SharedLayerNode)
+  localeKnowledge: SharedLayerNode,
   project: ProjectNode,
   // Schema mode node types (Task 3.2)
   schemaNode: SchemaNode,

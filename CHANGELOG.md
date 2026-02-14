@@ -18,7 +18,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   - No emoji in YAML icon definitions
 - **Phase 3: llm_context Standardization** - 100% coverage (was 34%)
   - All 61 nodes have `llm_context:` with USE/TRIGGERS/NOT/RELATES pattern
-  - All 146 arcs have standardized `llm_context:`
+  - All 128 arcs have standardized `llm_context:`
 - **Phase 4: Block.key ADR-028 Format** - Composite key implementation
   - `{page_key}:{block_type}:{index}` format documented
   - View examples updated for new key format
@@ -40,7 +40,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - **215 files changed** in main commit
 - **1052 Rust tests passing**, 4 skipped
 - **61 nodes** (40 shared + 21 org)
-- **146 arcs** (5 families)
+- **128 arcs** (5 families)
 - Schema validation: 0 errors, 0 warnings
 
 ## [0.12.1] - 2026-02-13
