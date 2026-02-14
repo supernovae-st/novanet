@@ -118,6 +118,21 @@ node:
       description: "Aggregated entity references from BlockInstruction @ refs"
 
   # ═══════════════════════════════════════════════════════════════════════════════
+  # INCOMING RELATIONS
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  incoming_relations:
+    HAS_BLOCK:
+      from: Page
+      cardinality: "1:N"
+      description: "Page that contains this block"
+
+    REFERENCED_BY:
+      from: Entity
+      cardinality: "N:N"
+      description: "Entities that reference this block (inverse of REFERENCES, ADR-026)"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
   # EXAMPLE
   # ═══════════════════════════════════════════════════════════════════════════════
 

@@ -1,0 +1,23 @@
+# packages/core/models/arc-kinds/localization/primary-for.yaml
+# ArcKind: PRIMARY_FOR — PopulationCluster is primary for Locale (inverse of HAS_PRIMARY_POPULATION)
+#
+# v0.12.5: ADR-026 Inverse Arc Policy
+
+arc:
+  name: PRIMARY_FOR
+  family: localization
+  scope: intra_realm
+
+  source: PopulationCluster
+  target: Locale
+  cardinality: one_to_many
+
+  inverse_of: HAS_PRIMARY_POPULATION
+
+  llm_context: |
+    USE: when finding all Locales where this population cluster is the majority.
+    TRIGGERS: "primary population locales", "majority population where", "cluster primary locales".
+    NOT: for finding a Locale's primary population (use HAS_PRIMARY_POPULATION).
+    RELATES: PopulationCluster (source), Locale (target), HAS_PRIMARY_POPULATION (inverse).
+
+  cypher_pattern: "(PopulationCluster)-[:PRIMARY_FOR]->(Locale)"

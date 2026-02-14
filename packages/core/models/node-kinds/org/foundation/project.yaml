@@ -156,9 +156,9 @@ node:
       competitors: ["QR Code Generator", "Beaconstac", "QR Tiger"]
 
     cypher: |
-      // Get project with all related nodes
+      // Get project with all related nodes (v0.12.4 ADR-028)
       MATCH (p:Project {key: $key})
-      OPTIONAL MATCH (p)-[:HAS_BRAND_IDENTITY]->(bi:BrandIdentity)
-      OPTIONAL MATCH (p)-[:HAS_AUDIENCE]->(a:Audience)
+      OPTIONAL MATCH (p)-[:HAS_BRAND]->(b:Brand)
+      OPTIONAL MATCH (b)-[:TARGETS_PERSONA]->(ap:AudiencePersona)
       OPTIONAL MATCH (p)-[:SUPPORTS_LOCALE]->(l:Locale)
-      RETURN p, bi, collect(DISTINCT a) AS audiences, collect(DISTINCT l) AS locales
+      RETURN p, b, collect(DISTINCT ap) AS personas, collect(DISTINCT l) AS locales
