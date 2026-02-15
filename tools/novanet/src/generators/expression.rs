@@ -262,7 +262,7 @@ MERGE (l)-[:HAS_EXPRESSIONS]->(es);
 
         output.push_str(&format!(
             r#"// ----------------------------------------------------------------------------
-// PART 4: Arcs ExpressionSet → Expression (CONTAINS) - {} arcs
+// PART 4: Arcs ExpressionSet → Expression (CONTAINS_EXPRESSION) - {} arcs
 // ----------------------------------------------------------------------------
 
 "#,
@@ -276,7 +276,7 @@ MERGE (l)-[:HAS_EXPRESSIONS]->(es);
                     output.push_str(&format!(
                         r#"MATCH (es:ExpressionSet {{key: '{}'}})
 MATCH (e:Expression {{key: '{}'}})
-MERGE (es)-[:CONTAINS]->(e);
+MERGE (es)-[:CONTAINS_EXPRESSION]->(e);
 
 "#,
                         e.locale_key, atom_key
@@ -392,11 +392,11 @@ mod tests {
         let generator = ExpressionGenerator::new(Some("/tmp/test")).unwrap();
         let cypher = generator.generate_contains_arcs_section(&expressions);
 
-        // Should have 3 CONTAINS arcs (2 SUCCESS + 1 SPEED)
+        // Should have 3 CONTAINS_EXPRESSION arcs (2 SUCCESS + 1 SPEED)
         assert!(cypher.contains("fr-FR/SUCCESS/0"));
         assert!(cypher.contains("fr-FR/SUCCESS/1"));
         assert!(cypher.contains("fr-FR/SPEED/0"));
-        assert!(cypher.contains("MERGE (es)-[:CONTAINS]->(e)"));
+        assert!(cypher.contains("MERGE (es)-[:CONTAINS_EXPRESSION]->(e)"));
     }
 
     #[test]

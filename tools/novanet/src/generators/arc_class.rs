@@ -58,7 +58,7 @@ fn cardinality_key(c: Cardinality) -> &'static str {
     }
 }
 
-/// Compute arc scope based on source/target kind realms.
+/// Compute arc scope based on source/target class realms.
 /// Returns "intra_realm" if all sources and targets are in the same realm,
 /// "cross_realm" if they span different realms, or None if realms can't be determined.
 fn compute_scope(rel: &ArcDef, class_realms: &HashMap<String, String>) -> Option<&'static str> {
@@ -75,7 +75,7 @@ fn compute_scope(rel: &ArcDef, class_realms: &HashMap<String, String>) -> Option
         .filter_map(|l| class_realms.get(*l))
         .collect();
 
-    // If we couldn't find realms for all source/target kinds, return None
+    // If we couldn't find realms for all source/target classes, return None
     if source_realms.len() != rel.source.len() || target_realms.len() != rel.target.len() {
         return None;
     }

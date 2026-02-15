@@ -519,7 +519,7 @@ node:
         assert_eq!(
             count(NodeTrait::Authored),
             2,
-            "authored count (ProjectContent + EntityContent)"
+            "authored count (ProjectNative + EntityNative)"
         );
         assert_eq!(
             count(NodeTrait::Imported),
@@ -529,7 +529,7 @@ node:
         assert_eq!(
             count(NodeTrait::Generated),
             4,
-            "generated count (PageGenerated, BlockGenerated, OutputArtifact, PromptArtifact)"
+            "generated count (PageNative, BlockNative, OutputArtifact, PromptArtifact)"
         );
         assert_eq!(
             count(NodeTrait::Retrieved),

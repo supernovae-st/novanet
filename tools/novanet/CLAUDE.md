@@ -7,11 +7,11 @@ This file provides guidance to Claude Code when working in the `tools/novanet/` 
 `novanet` is a unified Rust CLI + TUI binary for managing the NovaNet context graph.
 It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 
-**Version**: v0.12.5 (SemVer Transition + ADR-024 Data Origin + ADR-025 Instruction Layer + ADR-028 Brand Architecture)
+**Version**: v0.13.0 (*Native Pattern + ADR-029/ADR-030 + ADR-024 Data Origin + ADR-025 Instruction Layer + ADR-028 Brand Architecture)
 
 ## Current Status
 
-**v0.12.5 Schema Update** — Proper semantic versioning adopted (0.x = pre-production). Includes ADR-024 Data Origin trait renames (invariant→defined, localized→authored, knowledge→imported, aggregated→retrieved), ADR-025 Instruction Layer renames, and ADR-028 Brand Architecture (Brand, BrandDesign, BrandPrinciples, PromptStyle, Country). SHARED (4 layers: config, locale, geography, knowledge, 40 nodes), ORG (6 layers: config, foundation, structure, semantic, instruction, output, 21 nodes). 61 total nodes, 169 arcs, 10 layers, 5 traits.
+**v0.13.0 Schema Update** — ADR-029 *Native Pattern (EntityNative→EntityNative, PageNative→PageNative, unified HAS_NATIVE arc), ADR-030 Slug Ownership. Includes ADR-024 Data Origin trait renames (invariant→defined, localized→authored, knowledge→imported, aggregated→retrieved), ADR-025 Instruction Layer renames, and ADR-028 Brand Architecture (Brand, BrandDesign, BrandPrinciples, PromptStyle, Country). SHARED (4 layers: config, locale, geography, knowledge, 40 nodes), ORG (6 layers: config, foundation, structure, semantic, instruction, output, 21 nodes). 61 total nodes, 169 arcs, 10 layers, 5 traits.
 
 | Area | Commands | Status |
 |------|----------|--------|
