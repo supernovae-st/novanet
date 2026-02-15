@@ -6,10 +6,10 @@ arc:
   scope: cross_realm  # Locale (shared) → org nodes
   source: Locale
   target:
-    - EntityContent
-    - ProjectContent
-    - BlockGenerated
-    - PageGenerated
+    - EntityNative
+    - ProjectNative
+    - BlockNative
+    - PageNative
     - OutputArtifact
     - PromptStyle
   cardinality: one_to_many
@@ -18,5 +18,5 @@ arc:
     USE: when finding all content nodes for a specific locale.
     TRIGGERS: locale content, what targets locale, locale outputs, locale content nodes.
     NOT: content to locale lookup (use FOR_LOCALE), locale ownership (use HAS_LOCALE).
-    RELATES: Locale (source), EntityContent/ProjectContent/BlockGenerated/PageGenerated/PromptStyle (target), FOR_LOCALE (inverse).
-  cypher_pattern: (Locale)-[:LOCALE_OF]->(EntityContent, PromptStyle)
+    RELATES: Locale (source), EntityNative/ProjectNative/BlockNative/PageNative/PromptStyle (target), FOR_LOCALE (inverse).
+  cypher_pattern: (Locale)-[:LOCALE_OF]->(EntityNative, PromptStyle)

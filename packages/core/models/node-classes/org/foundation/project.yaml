@@ -109,10 +109,10 @@ node:
       cardinality: "N:1"
       description: "Organization config that owns this project"
 
-    HAS_CONTENT:
-      to: ProjectContent
+    HAS_NATIVE:  # v0.13.0 ADR-029: unified HAS_CONTENT + HAS_GENERATED
+      to: ProjectNative  # v0.13.0: renamed from ProjectContent
       cardinality: "1:N"
-      description: "Localized project identity and messaging"
+      description: "Native project identity and messaging (one per locale)"
 
     HAS_AUDIENCE:
       to: AudiencePersona

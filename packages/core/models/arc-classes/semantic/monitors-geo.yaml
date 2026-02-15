@@ -1,13 +1,13 @@
 # arc-classes/semantic/monitors-geo.yaml
-# MONITORS_GEO - EntityContent monitors GEO queries for AI visibility (v10.7)
+# MONITORS_GEO - EntityNative monitors GEO queries for AI visibility (v10.7)
 #
 # v10.7: GEO Schema v1
-#        - Semantic link from EntityContent to GEOQuery
-#        - Parallel to TARGETS (EntityContent → SEOKeyword) for SEO
+#        - Semantic link from EntityNative to GEOQuery
+#        - Parallel to TARGETS (EntityNative → SEOKeyword) for SEO
 #        - Enables tracking which entities care about which AI queries
 #
 # v11.5: scope fix (intra_realm → cross_realm)
-#        - EntityContent (org/semantic) → GEOQuery (shared/knowledge)
+#        - EntityNative (org/semantic) → GEOQuery (shared/knowledge)
 
 arc:
   name: MONITORS_GEO
@@ -15,7 +15,7 @@ arc:
   scope: cross_realm
   temperature_threshold: 0.6
 
-  source: EntityContent
+  source: EntityNative
   target: GEOQuery
   cardinality: many_to_many
 
@@ -34,13 +34,13 @@ arc:
     USE: when finding GEO queries monitored by an entity for AI visibility.
     TRIGGERS: GEO monitoring, AI visibility, entity queries, GEO tracking.
     NOT: SEO targeting (use TARGETS), GEO answers (use HAS_GEO_ANSWERS).
-    RELATES: EntityContent (source), GEOQuery (target), priority (property).
+    RELATES: EntityNative (source), GEOQuery (target), priority (property).
 
-  cypher_pattern: "(EntityContent)-[:MONITORS_GEO {priority, alert_threshold}]->(GEOQuery)"
+  cypher_pattern: "(EntityNative)-[:MONITORS_GEO {priority, alert_threshold}]->(GEOQuery)"
 
   example:
     description: "Get all GEO queries monitored by an entity"
     cypher: |
-      MATCH (e:EntityContent {key: $entity_key})-[r:MONITORS_GEO]->(q:GEOQuery)
+      MATCH (e:EntityNative {key: $entity_key})-[r:MONITORS_GEO]->(q:GEOQuery)
       RETURN q.value, q.ai_visibility_score, r.priority
       ORDER BY r.priority, q.ai_visibility_score DESC

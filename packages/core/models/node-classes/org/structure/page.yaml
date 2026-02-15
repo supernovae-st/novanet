@@ -1,5 +1,9 @@
 # Page - Invariant page structure with orchestrator instructions
 #
+# v0.13: ADR-031 SEO Pillar/Cluster Architecture
+#   - Added is_pillar, pillar_strategy properties
+#   - Added SEO_CLUSTER_OF relation (Page → Page where is_pillar=true)
+#   - Added pr_weight to LINKS_TO for PageRank flow
 # v0.12.4: ADR-028 - Page-Entity Architecture
 #   - Added REPRESENTS (1:1 to Entity) - every page has one main Entity
 #   - Removed HAS_STRUCTURE (PageStructure is calculated, not stored)
@@ -93,10 +97,51 @@ node:
       description: "Timestamp of last embedding update"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # PAGE-SPECIFIC PROPERTIES
+  # PAGE-SPECIFIC PROPERTIES (v0.13: ADR-031)
   # ═══════════════════════════════════════════════════════════════════════════════
 
-  # No page-specific properties - instructions moved to HAS_INSTRUCTION → BlockInstruction
+  properties:
+    # ─────────────────────────────────────────────────────────────────────────────
+    # is_pillar: SEO pillar page flag
+    # ─────────────────────────────────────────────────────────────────────────────
+    # PURPOSE:
+    #   Marks this page as a pillar page for SEO topical authority.
+    #   Pillar pages are the main landing pages for topic clusters.
+    #
+    # RULES:
+    #   • Pillars are anchor pages (e.g., /qr-code-generator)
+    #   • Cluster pages link to pillars via SEO_CLUSTER_OF
+    #   • MUST sync with Entity.is_pillar (via REPRESENTS)
+    #
+    # ADR-031: Three hierarchies:
+    #   1. Entity.SUBTOPIC_OF → Semantic hierarchy (topic clusters)
+    #   2. Page.SUBTOPIC_OF → URL hierarchy (path structure)
+    #   3. Page.SEO_CLUSTER_OF → SEO pillar/cluster (internal linking)
+    # ─────────────────────────────────────────────────────────────────────────────
+    is_pillar:
+      type: boolean
+      required: false
+      default: false
+      description: "Marks page as pillar page for SEO topical authority"
+
+    # ─────────────────────────────────────────────────────────────────────────────
+    # pillar_strategy: Pillar type for SEO
+    # ─────────────────────────────────────────────────────────────────────────────
+    # PURPOSE:
+    #   Defines the SEO strategy type for this pillar page.
+    #
+    # VALUES:
+    #   • topic_authority: Broad topic coverage (e.g., "QR Code Generator")
+    #   • product_line: Product family pages (e.g., "Pricing", "Features")
+    #   • funnel_stage: Conversion funnel (e.g., "Compare", "Buy", "Support")
+    #
+    # ONLY VALID when is_pillar=true
+    # ─────────────────────────────────────────────────────────────────────────────
+    pillar_strategy:
+      type: string
+      required: false
+      enum: [topic_authority, product_line, funnel_stage]
+      description: "SEO pillar strategy type (only valid when is_pillar=true)"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # RELATIONS (FROM this node)
@@ -119,10 +164,10 @@ node:
           description: "Block order within the page (1-based, source of truth)"
       description: "Content blocks within this page"
 
-    HAS_GENERATED:  # v10.9.0: renamed from HAS_OUTPUT
-      to: PageGenerated  # v10.9.0: renamed from PageL10n
+    HAS_NATIVE:  # v0.13.0 ADR-029: unified HAS_CONTENT + HAS_GENERATED
+      to: PageNative  # v0.13.0: renamed from PageGenerated
       cardinality: "1:N"
-      description: "Generated outputs for this page (one per locale)"
+      description: "Native content for this page (one per locale)"
 
     HAS_INSTRUCTION:  # v0.12.0 ADR-025: Renamed from HAS_PROMPT/PagePrompt
       to: BlockInstruction
@@ -171,7 +216,29 @@ node:
     SUBTOPIC_OF:
       to: Page
       cardinality: "N:1"
-      description: "Cluster page is subtopic of pillar page (pillar-cluster SEO hierarchy)"
+      description: "URL hierarchy for path structure (parent/child pages)"
+
+    # v0.13: ADR-031 SEO Pillar/Cluster Architecture
+    # IMPORTANT: DISTINCT from SUBTOPIC_OF and CLUSTER_OF (population)
+    # - SUBTOPIC_OF: URL hierarchy (builds full_path)
+    # - CLUSTER_OF: Population taxonomy (PopulationSubCluster → PopulationCluster)
+    # - SEO_CLUSTER_OF: SEO pillar/cluster (internal linking, NOT URL)
+    SEO_CLUSTER_OF:
+      to: Page
+      cardinality: "N:1"
+      constraint: "target.is_pillar == true"
+      props:
+        cluster_role:
+          type: string
+          enum: [supporting, comparison, tutorial, case_study, faq]
+          description: "Role of the cluster page in relation to pillar"
+        link_priority:
+          type: int
+          min: 1
+          max: 10
+          default: 1
+          description: "Priority for internal linking (1=highest)"
+      description: "SEO pillar/cluster relationship (target MUST be is_pillar=true)"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # INCOMING RELATIONS

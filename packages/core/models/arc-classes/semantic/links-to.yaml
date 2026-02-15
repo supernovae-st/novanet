@@ -1,7 +1,8 @@
 # packages/core/models/arc-classes/semantic/links-to.yaml
-# ArcClass: LINKS_TO — Page-to-page SEO internal linking
+# ArcClass: LINKS_TO — Page-to-page SEO internal linking with PageRank flow
 #
 # v0.12.4: ADR-028 Page-Entity Architecture
+# v0.13: ADR-031 SEO Pillar/Cluster Architecture — added pr_weight for PageRank flow
 # Calculated from [@page:X] refs in BlockInstructions with purpose: link
 
 arc:
@@ -39,10 +40,24 @@ arc:
       default: false
       description: "Whether link should be nofollow"
 
-  llm_context: |
-    USE: when finding internal links between pages for SEO maillage.
-    TRIGGERS: internal linking, page links, SEO maillage, link building.
-    NOT: entity references (use REFERENCES_ENTITY), content mentions (use MENTIONS).
-    RELATES: Page (source), Page (target), via_blocks (property), calculated arc.
+    - name: pr_weight
+      type: float
+      required: false
+      default: 0.5
+      min: 0.0
+      max: 1.0
+      description: |
+        PageRank flow weight for SEO juice distribution.
+        ADR-031 rules:
+        - Home → Pillar: 1.0
+        - Pillar → Cluster: 0.8
+        - Cluster → Long-tail: 0.6
+        - Cross-cluster: 0.3 max
 
-  cypher_pattern: "(Page)-[:LINKS_TO {via_blocks, strength, anchor_type, nofollow}]->(Page)"
+  llm_context: |
+    USE: when finding internal links between pages for SEO maillage and PageRank flow.
+    TRIGGERS: internal linking, page links, SEO maillage, link building, PageRank, juice.
+    NOT: entity references (use REFERENCES_ENTITY), content mentions (use MENTIONS).
+    RELATES: Page (source), Page (target), via_blocks (property), pr_weight (PageRank), calculated arc.
+
+  cypher_pattern: "(Page)-[:LINKS_TO {via_blocks, strength, anchor_type, nofollow, pr_weight}]->(Page)"

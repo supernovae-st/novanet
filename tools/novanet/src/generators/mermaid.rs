@@ -703,9 +703,9 @@ mod tests {
         assert!(output.contains("Page["));
         assert!(output.contains("Block["));
         assert!(output.contains("Entity["));
-        assert!(output.contains("EntityContent[")); // v10.9: renamed from EntityL10n
-        assert!(output.contains("PageGenerated[")); // v10.9: renamed from PageL10n
-        assert!(output.contains("BlockGenerated[")); // v10.9: renamed from BlockL10n
+        assert!(output.contains("EntityNative[")); // v0.13.0 ADR-029: renamed from EntityContent
+        assert!(output.contains("PageNative[")); // v0.13.0 ADR-029: renamed from PageGenerated
+        assert!(output.contains("BlockNative[")); // v0.13.0 ADR-029: renamed from BlockGenerated
 
         // Edges exist (at least some)
         assert!(output.contains("|HAS_PAGE|"));
@@ -718,7 +718,7 @@ mod tests {
         // Class assignments (v0.12.0: defined, authored, generated)
         assert!(output.contains("class Locale defined"));
         assert!(output.contains("class Project defined"));
-        assert!(output.contains("class PageGenerated generated")); // generated stays same
+        assert!(output.contains("class PageNative generated")); // v0.13.0 ADR-029: renamed to PageNative
 
         // No v8 terms
         assert!(!output.contains("SCOPE_HIERARCHY"));

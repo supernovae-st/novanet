@@ -6,8 +6,8 @@ arc:
   family: generation
   scope: intra_realm
   source:
-    - BlockGenerated
-    - PageGenerated
+    - BlockNative
+    - PageNative
   target: PromptArtifact
   cardinality: many_to_many
   inverse_of: PRODUCED
@@ -15,8 +15,8 @@ arc:
     USE: when finding which compiled prompt produced a generated block or page.
     TRIGGERS: prompt origin, output source, generation source, which prompt, audit trail.
     NOT: for instruction origin (use GENERATED), for generation instructions (use COMPILED_FROM).
-    RELATES: BlockGenerated/PageGenerated (source), PromptArtifact (target), PRODUCED (inverse).
-  cypher_pattern: (BlockGenerated)-[:PRODUCED_BY]->(PromptArtifact)
+    RELATES: BlockNative/PageNative (source), PromptArtifact (target), PRODUCED (inverse).
+  cypher_pattern: (BlockNative)-[:PRODUCED_BY]->(PromptArtifact)
   properties:
     generation_timestamp:
       type: datetime

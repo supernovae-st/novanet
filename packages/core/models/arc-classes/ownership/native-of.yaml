@@ -1,0 +1,53 @@
+# packages/core/models/arc-classes/ownership/native-of.yaml
+# ArcClass: NATIVE_OF — Inverse of HAS_NATIVE (v0.13.0 ADR-029)
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+# v0.13.0 CHANGES (ADR-029 *Native Pattern)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+#   MERGED: CONTENT_OF + GENERATED_FOR → NATIVE_OF
+#   - Unified inverse arc for ALL locale-specific content
+#   - Moved from localization/generation families → ownership family
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+
+arc:
+  name: NATIVE_OF
+  family: ownership
+  scope: intra_realm
+
+  source:
+    - EntityNative    # trait: authored
+    - ProjectNative   # trait: authored
+    - PageNative      # trait: generated
+    - BlockNative     # trait: generated
+  target:
+    - Entity
+    - Project
+    - Page
+    - Block
+
+  cardinality: many_to_one
+
+  inverse_of: HAS_NATIVE
+
+  llm_context: |
+    USE: when finding the parent defined node from native content.
+    TRIGGERS: native parent, content owner, reverse native lookup.
+    NOT: forward lookup (use HAS_NATIVE), for locale lookup (use FOR_LOCALE).
+    RELATES: *Native (source), Entity/Project/Page/Block (target), HAS_NATIVE (inverse_of).
+
+  cypher_pattern: "(EntityNative)-[:NATIVE_OF]->(Entity)"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # EXAMPLES
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  examples:
+    entity_from_native:
+      cypher: "MATCH (en:EntityNative {key: 'entity:qr-code-generator@fr-FR'})-[:NATIVE_OF]->(e:Entity) RETURN e"
+      description: "Find the parent entity from its French native content"
+
+    page_from_native:
+      cypher: "MATCH (pn:PageNative {key: 'page:pricing@ja-JP'})-[:NATIVE_OF]->(p:Page) RETURN p"
+      description: "Find the parent page from its Japanese native content"

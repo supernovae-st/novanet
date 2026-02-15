@@ -260,19 +260,19 @@ node:
   relations:
 
     # ─────────────────────────────────────────────────────────────────────────────
-    # HAS_CONTENT: Localization relation (v10.9.0: renamed from HAS_L10N)
+    # HAS_NATIVE: Locale-specific content (v0.13.0 ADR-029: unified arc)
     # ─────────────────────────────────────────────────────────────────────────────
     # PURPOSE:
-    #   Links invariant Entity to its localized content.
-    #   One EntityContent per locale (fr-FR, en-US, ja-JP, etc.)
+    #   Links invariant Entity to its native content per locale.
+    #   One EntityNative per locale (fr-FR, en-US, ja-JP, etc.)
     #
     # PATTERN:
-    #   Entity ──[:HAS_CONTENT]──> EntityContent ──[:FOR_LOCALE]──> Locale
+    #   Entity ──[:HAS_NATIVE]──> EntityNative ──[:FOR_LOCALE]──> Locale
     # ─────────────────────────────────────────────────────────────────────────────
-    HAS_CONTENT:
-      to: EntityContent
+    HAS_NATIVE:  # v0.13.0 ADR-029: unified HAS_CONTENT + HAS_GENERATED
+      to: EntityNative  # v0.13.0: renamed from EntityContent
       cardinality: "1:N"
-      description: "Localized content for this entity (one per locale)"
+      description: "Native content for this entity (one per locale)"
 
     # ─────────────────────────────────────────────────────────────────────────────
     # BELONGS_TO: Semantic category (v11.1.0: replaces type property)

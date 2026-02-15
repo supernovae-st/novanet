@@ -6,12 +6,12 @@ arc:
   family: generation
   scope: intra_realm
   source:
-    - BlockGenerated
-    - PageGenerated
+    - BlockNative
+    - PageNative
     - OutputArtifact
   target:
-    - BlockGenerated
-    - PageGenerated
+    - BlockNative
+    - PageNative
     - OutputArtifact
   cardinality: one_to_one
   is_self_referential: true
@@ -20,4 +20,4 @@ arc:
     TRIGGERS: version history, rollback, previous version, diff comparison.
     NOT: for current content (use direct node), for deployment (use BUNDLES).
     RELATES: Same type (source/target), self-referential chain for history.
-  cypher_pattern: (BlockGenerated)-[:PREVIOUS_VERSION]->(BlockGenerated)
+  cypher_pattern: (BlockNative)-[:PREVIOUS_VERSION]->(BlockNative)

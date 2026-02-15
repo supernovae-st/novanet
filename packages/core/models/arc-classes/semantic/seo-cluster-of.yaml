@@ -1,0 +1,52 @@
+# packages/core/models/arc-classes/semantic/seo-cluster-of.yaml
+# ArcClass: SEO_CLUSTER_OF — SEO Pillar/Cluster relationship for topical authority
+#
+# v0.13: ADR-031 SEO Pillar/Cluster Architecture
+#
+# IMPORTANT: This is DISTINCT from SUBTOPIC_OF and CLUSTER_OF (population)
+# - SUBTOPIC_OF: URL hierarchy (builds full_path)
+# - CLUSTER_OF: Population taxonomy (PopulationSubCluster → PopulationCluster)
+# - SEO_CLUSTER_OF: SEO pillar/cluster (internal linking, NOT URL)
+#
+# Example:
+#   Page:qr-code-instagram SEO_CLUSTER_OF Page:qr-code-generator (is_pillar=true)
+#   Multiple cluster pages can point to the same pillar page.
+
+arc:
+  name: SEO_CLUSTER_OF
+  family: semantic
+  scope: intra_realm
+  temperature_threshold: 0.3  # SEO structure context
+
+  source: Page
+  target: Page
+  cardinality: many_to_one  # Many clusters → one pillar
+  is_self_referential: true
+
+  constraints:
+    - target_property: is_pillar
+      expected_value: true
+      description: "Target page MUST have is_pillar=true"
+
+  properties:
+    - name: cluster_role
+      type: string
+      required: false
+      enum: [supporting, comparison, tutorial, case_study, faq]
+      description: "Role of the cluster page in relation to pillar"
+
+    - name: link_priority
+      type: integer
+      required: false
+      default: 1
+      min: 1
+      max: 10
+      description: "Priority for internal linking (1=highest)"
+
+  llm_context: |
+    USE: when building SEO pillar/cluster structure for topical authority.
+    TRIGGERS: pillar page, cluster page, topic cluster, SEO architecture, topical authority.
+    NOT: URL hierarchy (use SUBTOPIC_OF), semantic topic (use Entity.SUBTOPIC_OF), population clusters (use CLUSTER_OF).
+    RELATES: Page (cluster), Page (pillar with is_pillar=true), many_to_one cardinality.
+
+  cypher_pattern: "(Page)-[:SEO_CLUSTER_OF {cluster_role, link_priority}]->(Page {is_pillar: true})"
