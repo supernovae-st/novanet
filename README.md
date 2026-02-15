@@ -55,10 +55,10 @@ Generate culturally-native content across 200+ locales — not translation, but 
 flowchart TB
     subgraph MONO["NovaNet Monorepo"]
         direction TB
-        CORE["@novanet/core v0.12.0\nTypes · Schemas · Filters"]
-        DB["@novanet/db v0.12.0\nDocker · Seeds · Migrations"]
-        STUDIO["@novanet/studio v0.12.0\nNext.js 16 · React 19"]
-        RUST["novanet CLI v0.12.0\nRust · 13 commands · TUI"]
+        CORE["@novanet/core v0.13.0\nTypes · Schemas · Filters"]
+        DB["@novanet/db v0.13.0\nDocker · Seeds · Migrations"]
+        STUDIO["@novanet/studio v0.13.0\nNext.js 16 · React 19"]
+        RUST["novanet CLI v0.13.0\nRust · 13 commands · TUI"]
     end
 
     CORE --> STUDIO
@@ -144,10 +144,10 @@ novanet-hq/
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| **@novanet/core** | `0.12.0` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
-| **@novanet/db** | `0.12.0` | Docker Compose for Neo4j, Cypher seeds, migrations |
-| **@novanet/studio** | `0.12.0` | Interactive graph visualization with AI chat |
-| **tools/novanet** | `0.12.0` | Rust CLI + TUI for schema generation, validation, queries |
+| **@novanet/core** | `0.13.0` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
+| **@novanet/db** | `0.13.0` | Docker Compose for Neo4j, Cypher seeds, migrations |
+| **@novanet/studio** | `0.13.0` | Interactive graph visualization with AI chat |
+| **tools/novanet** | `0.13.0` | Rust CLI + TUI for schema generation, validation, queries |
 
 ---
 
@@ -216,7 +216,7 @@ Password: (see NEO4J_PASSWORD env var)
 
 ## Graph Schema
 
-NovaNet models content as a knowledge graph with **2 Realms** and **10 Layers** (v0.12.0):
+NovaNet models content as a knowledge graph with **2 Realms** and **10 Layers** (v0.13.0):
 
 | Realm | Layers | Description |
 |-------|--------|-------------|
@@ -227,7 +227,7 @@ NovaNet models content as a knowledge graph with **2 Realms** and **10 Layers** 
 
 Each node type has a **Trait** (defined / authored / imported / generated / retrieved) and arcs are classified by **ArcFamily**.
 
-> **v0.12.0 ADR-024: Data Origin traits** — Trait now answers "WHERE does data come from?" (defined = human-created once, authored = human-written per locale, imported = external data brought in, generated = LLM output, retrieved = external API snapshots)
+> **v0.13.0 ADR-024: Data Origin traits** — Trait now answers "WHERE does data come from?" (defined = human-created once, authored = human-written per locale, imported = external data brought in, generated = LLM output, retrieved = external API snapshots)
 
 See [`packages/core/models/taxonomy.yaml`](packages/core/models/taxonomy.yaml) for complete schema.
 

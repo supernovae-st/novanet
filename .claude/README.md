@@ -2,7 +2,7 @@
 
 Claude Code configuration for the NovaNet monorepo.
 
-**Version**: v0.12.5 | **Docs**: [Claude Code Official](https://docs.anthropic.com/en/docs/claude-code)
+**Version**: v0.13.0 | **Docs**: [Claude Code Official](https://docs.anthropic.com/en/docs/claude-code)
 
 ---
 
@@ -10,7 +10,7 @@ Claude Code configuration for the NovaNet monorepo.
 
 ```
 ╔═══════════════════════════════════════════════════════════════════════════════════════════════════╗
-║                              NOVANET DX - v0.12.5                                                  ║
+║                              NOVANET DX - v0.13.0                                                  ║
 ╠═══════════════════════════════════════════════════════════════════════════════════════════════════╣
 ║                                                                                                   ║
 ║   COMMANDS (slash commands)                                                                       ║
@@ -720,7 +720,7 @@ Architecture Decision Records (ADRs):
 
 ---
 
-## Key Numbers (v0.12.5)
+## Key Numbers (v0.13.0)
 
 | Metric | Value |
 |--------|-------|
@@ -804,7 +804,7 @@ pnpm doc:generate
 **Source of truth:** `/VERSION` file contains the canonical schema version (0.12.5).
 
 **`pnpm doc:audit` checks:**
-- Outdated version references (current: v0.12.5)
+- Outdated version references (current: v0.13.0)
 - Deprecated terminology (EntityL10n → EntityContent, PageL10n → PageGenerated, BlockL10n → BlockGenerated)
 - Deprecated arcs (HAS_L10N → HAS_CONTENT, HAS_OUTPUT → HAS_GENERATED)
 - Incorrect node/arc counts (61 nodes, 169 arcs expected)
