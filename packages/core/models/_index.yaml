@@ -243,7 +243,7 @@ files:
       - node-classes/org/foundation/brand-design.yaml      # Visual design system
       - node-classes/org/foundation/brand-principles.yaml  # Voice, tone, guidelines
       - node-classes/org/foundation/prompt-style.yaml      # LLM prompt style hints
-      - node-classes/org/foundation/project-content.yaml
+      - node-classes/org/foundation/project-native.yaml    # v0.13.0: ProjectNative (was project-content)
 
     # Structure (3 nodes) - Content scaffolding
     structure:
@@ -253,8 +253,8 @@ files:
 
     # Semantic (4 nodes) - Entity & audience targeting
     semantic:
-      - node-classes/org/semantic/entity.yaml          # Invariant semantic entity
-      - node-classes/org/semantic/entity-content.yaml  # Localized entity content
+      - node-classes/org/semantic/entity.yaml           # Defined semantic entity
+      - node-classes/org/semantic/entity-native.yaml    # v0.13.0: EntityNative (was entity-content)
       - node-classes/org/semantic/audience-persona.yaml
       - node-classes/org/semantic/channel-surface.yaml
 
@@ -267,8 +267,8 @@ files:
 
     # Output (3 nodes) - LLM-generated content
     output:
-      - node-classes/org/output/page-generated.yaml
-      - node-classes/org/output/block-generated.yaml
+      - node-classes/org/output/page-native.yaml       # v0.13.0: PageNative (was page-generated)
+      - node-classes/org/output/block-native.yaml      # v0.13.0: BlockNative (was block-generated)
       - node-classes/org/output/output-artifact.yaml
 
   # ═══════════════════════════════════════════════════════════════════════════

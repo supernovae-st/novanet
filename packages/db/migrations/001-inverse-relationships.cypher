@@ -1,36 +1,28 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// MIGRATION 001: Create Inverse Relationships (v11.0)
+// MIGRATION 001: Create Inverse Relationships (v0.13.0)
 // ═══════════════════════════════════════════════════════════════════════════════
 //
 // This migration creates inverse relationships for bidirectional traversal.
 // The script is idempotent - safe to run multiple times.
 //
-// v11.0 Updates:
-// - HAS_L10N → HAS_CONTENT (Entity → EntityContent)
-// - HAS_OUTPUT → HAS_GENERATED (Page/Block → PageGenerated/BlockGenerated)
-// - L10N_OF → CONTENT_OF
-// - OUTPUT_OF → GENERATED_FOR
-// - USES_CONCEPT → USES_ENTITY
-// - Concept → Entity
+// v0.13.0 Updates (ADR-029 *Native pattern):
+// - HAS_CONTENT/HAS_GENERATED → HAS_NATIVE (Entity/Page/Block → *Native)
+// - CONTENT_OF/GENERATED_FOR → NATIVE_OF (*Native → Entity/Page/Block)
+// - EntityContent → EntityNative
+// - ProjectContent → ProjectNative
+// - PageGenerated → PageNative
+// - BlockGenerated → BlockNative
 //
 // RUN: docker exec -i novanet-neo4j cypher-shell -u neo4j -p novanetpassword < migrations/001-inverse-relationships.cypher
 // ═══════════════════════════════════════════════════════════════════════════════
 
 // ---------------------------------------------------------------------------
-// CONTENT_OF from HAS_CONTENT
-// EntityContent → Entity
+// NATIVE_OF from HAS_NATIVE (v0.13.0)
+// EntityNative/ProjectNative/PageNative/BlockNative → Entity/Project/Page/Block
 // ---------------------------------------------------------------------------
-MATCH (parent)-[:HAS_CONTENT]->(content)
-WHERE NOT (content)-[:CONTENT_OF]->(parent)
-MERGE (content)-[:CONTENT_OF]->(parent);
-
-// ---------------------------------------------------------------------------
-// GENERATED_FOR from HAS_GENERATED
-// PageGenerated/BlockGenerated → Page/Block
-// ---------------------------------------------------------------------------
-MATCH (parent)-[:HAS_GENERATED]->(output)
-WHERE NOT (output)-[:GENERATED_FOR]->(parent)
-MERGE (output)-[:GENERATED_FOR]->(parent);
+MATCH (parent)-[:HAS_NATIVE]->(native)
+WHERE NOT (native)-[:NATIVE_OF]->(parent)
+MERGE (native)-[:NATIVE_OF]->(parent);
 
 // ---------------------------------------------------------------------------
 // BLOCK_OF from HAS_BLOCK
@@ -50,18 +42,16 @@ MERGE (entity)-[:USED_BY]->(user);
 
 // ---------------------------------------------------------------------------
 // HAS_LOCALIZED_CONTENT from FOR_LOCALE
-// Locale → all localized content nodes
+// Locale → all localized native nodes
 // ---------------------------------------------------------------------------
-MATCH (content)-[:FOR_LOCALE]->(locale:Locale)
-WHERE NOT (locale)-[:HAS_LOCALIZED_CONTENT]->(content)
-MERGE (locale)-[:HAS_LOCALIZED_CONTENT]->(content);
+MATCH (native)-[:FOR_LOCALE]->(locale:Locale)
+WHERE NOT (locale)-[:HAS_LOCALIZED_CONTENT]->(native)
+MERGE (locale)-[:HAS_LOCALIZED_CONTENT]->(native);
 
 // ---------------------------------------------------------------------------
 // VERIFICATION: Show counts for all inverse relationships
 // ---------------------------------------------------------------------------
-MATCH ()-[r:CONTENT_OF]->() WITH 'CONTENT_OF' AS rel, count(r) AS count RETURN rel, count
-UNION ALL
-MATCH ()-[r:GENERATED_FOR]->() WITH 'GENERATED_FOR' AS rel, count(r) AS count RETURN rel, count
+MATCH ()-[r:NATIVE_OF]->() WITH 'NATIVE_OF' AS rel, count(r) AS count RETURN rel, count
 UNION ALL
 MATCH ()-[r:BLOCK_OF]->() WITH 'BLOCK_OF' AS rel, count(r) AS count RETURN rel, count
 UNION ALL

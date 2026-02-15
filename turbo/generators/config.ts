@@ -80,8 +80,8 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
       },
       {
         type: 'confirm',
-        name: 'hasContent',
-        message: 'Has localized content variant (e.g., Entity -> EntityContent)?',
+        name: 'hasNative',
+        message: 'Has locale-native variant (e.g., Entity -> EntityNative)?',
         default: false,
       },
       {
@@ -100,12 +100,12 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
         templateFile: 'templates/node.yaml.hbs',
       });
 
-      // 2. If hasContent, create Content variant (v10.9: EntityContent pattern)
-      if (answers?.hasContent) {
+      // 2. If hasNative, create Native variant (v0.13.0 ADR-029: EntityNative pattern)
+      if (answers?.hasNative) {
         actions.push({
           type: 'add',
-          path: 'packages/core/models/node-classes/{{realm}}/{{layer}}/{{kebabCase name}}-content.yaml',
-          templateFile: 'templates/node-content.yaml.hbs',
+          path: 'packages/core/models/node-classes/{{realm}}/{{layer}}/{{kebabCase name}}-native.yaml',
+          templateFile: 'templates/node-native.yaml.hbs',
         });
       }
 

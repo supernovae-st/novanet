@@ -30,7 +30,7 @@ MATCH (c)-[sl:SEMANTIC_LINK*1..2]->(related:Entity)
 WHERE ALL(r IN sl WHERE r.temperature >= $minTemp)
 WITH related, reduce(a = 1.0, r IN sl | a * r.temperature) AS activation
 WHERE activation >= $minActivation
-MATCH (related)-[:HAS_CONTENT]->(rl:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+MATCH (related)-[:HAS_NATIVE]->(rl:EntityNative)-[:FOR_LOCALE]->(l:Locale {key: $locale})
 RETURN related.key AS concept,
        rl.title AS title,
        rl.definition AS definition,
