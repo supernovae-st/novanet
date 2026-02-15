@@ -8,7 +8,7 @@ NovaNet is a **native content generation system** (NOT translation) using Neo4j 
 
 **Target Application**: QR Code AI (https://qrcode-ai.com) - a multilingual SaaS for QR code generation.
 **Supported Locales**: 200+ locales (fr-FR, en-US, es-MX, ja-JP, etc.)
-**Current Version**: v0.12.0
+**Current Version**: v0.13.0
 
 ## CRITICAL: Generation, NOT Translation
 
@@ -23,9 +23,9 @@ Each locale content is **generated natively** from the invariant Entity, NOT tra
 
 For complete graph schema, node categories, and relations, see: **`models/_index.yaml`**
 
-## v0.12.0 Architecture
+## v0.13.0 Architecture
 
-v0.12.0 refines the 2-Realm Architecture with ADR-023 (Class/Instance terminology) and ADR-024 (Data Origin traits):
+v0.13.0 introduces the *Native pattern (ADR-029) and Slug Ownership (ADR-030):
 
 | Axis | Values |
 |------|--------|
@@ -34,12 +34,10 @@ v0.12.0 refines the 2-Realm Architecture with ADR-023 (Class/Instance terminolog
 | **Trait** | defined / authored / imported / generated / retrieved |
 | **ArcFamily** | ownership / localization / semantic / generation / mining |
 
-**Key v0.12.0 changes:**
-- ADR-023: "Kind" → "Class" terminology (NodeKind→NodeClass, ArcKind→ArcClass)
-- ADR-023: ":Meta:" → ":Schema:" in Neo4j labels
-- ADR-024: Trait redefinition as "Data Origin" (invariant→defined, localized→authored, knowledge→imported, aggregated→retrieved)
-- ADR-025: PagePrompt→PageInstruction, BlockPrompt→BlockInstruction
-- ADR-028: Brand Architecture (Brand, BrandDesign, BrandPrinciples, PromptStyle, Country)
+**Key v0.13.0 changes:**
+- ADR-029: *Native pattern (EntityContent→EntityNative, ProjectContent→ProjectNative, PageGenerated→PageNative, BlockGenerated→BlockNative)
+- ADR-029: Unified arcs (HAS_CONTENT/HAS_GENERATED→HAS_NATIVE, CONTENT_OF/GENERATED_FOR→NATIVE_OF)
+- ADR-030: Slug Ownership (URL properties moved from EntityNative to PageNative)
 - SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (40 nodes)
 - ORG (6 layers): config, foundation, structure, semantic, instruction, output (21 nodes)
 - 61 node types, 169 arc types

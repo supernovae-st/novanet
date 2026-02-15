@@ -42,7 +42,7 @@ import {
  */
 const CATEGORY_PATTERNS: Array<{ pattern: RegExp | string; category: RelationCategory }> = [
   // Structural
-  { pattern: /^HAS_(?!CONTENT|GENERATED|PROMPT|RULES|VARIATION|SNAPSHOT|CITATION|REFORMULATION)/, category: 'structural' },
+  { pattern: /^HAS_(?!PROMPT|RULES|VARIATION|SNAPSHOT|CITATION|REFORMULATION)/, category: 'structural' },
   { pattern: 'CONTAINS', category: 'structural' },
 
   // Localization

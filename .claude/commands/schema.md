@@ -66,17 +66,17 @@ Redirect to `/schema:edit-node <name>`
 
 Redirect to `/schema:add-arc <NAME>`
 
-## Current Schema (v11.7.0)
+## Current Schema (v0.13.0)
 
-**60 Kind Types** across 2 Realms:
-- **Shared (39)**: Locale, Geography, Knowledge Atoms (Sets + Atoms), SEO/GEO
+**61 Node Classes** across 2 Realms:
+- **Shared (40)**: Locale, Geography, Knowledge Atoms (Sets + Atoms), SEO/GEO
 - **Org (21)**: OrgConfig, Project structure, Entity, prompts, outputs
 
-**114 Arcs** in 5 ArcFamilies:
+**169 ArcClasses** in 5 ArcFamilies:
 - **Ownership**: HAS_PAGE, HAS_BLOCK, OF_TYPE
-- **Localization**: HAS_CONTENT, FOR_LOCALE (Entity→EntityContent)
+- **Localization**: HAS_NATIVE, FOR_LOCALE (Entity→EntityNative, Page→PageNative)
 - **Semantic**: SEMANTIC_LINK, USES_ENTITY
-- **Generation**: HAS_GENERATED, HAS_PROMPT (Page→PageGenerated, Block→BlockGenerated)
+- **Generation**: HAS_NATIVE, HAS_INSTRUCTION (unified *Native pattern - ADR-029)
 - **Mining**: HAS_SEO_TARGET
 
 ## Validation Commands
