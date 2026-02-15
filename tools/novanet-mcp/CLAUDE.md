@@ -434,12 +434,12 @@ entity://qr-code-generator
 }
 ```
 
-### `kind://{name}`
+### `class://{name}`
 
-Fetch a NodeKind definition from the meta-graph.
+Fetch a NodeClass definition from the schema-graph.
 
 ```
-kind://Entity
+class://Entity
 ```
 
 **Returns:**
@@ -453,7 +453,7 @@ kind://Entity
   "description": "Core semantic entity",
   "llm_context": "Entities represent invariant concepts...",
   "properties": [...],
-  "outgoing_arcs": ["HAS_CONTENT", "USES_ENTITY"],
+  "outgoing_arcs": ["HAS_NATIVE", "USES_ENTITY"],
   "incoming_arcs": ["BELONGS_TO"],
   "instance_count": 150
 }
@@ -590,7 +590,7 @@ Deep analysis of an entity with usage context.
 
 **Returns:**
 - Entity definition summary
-- Locale-specific adaptations (EntityContent)
+- Locale-specific adaptations (EntityNative)
 - Pages/Blocks using this entity
 - Related entities (semantic connections)
 
@@ -644,7 +644,7 @@ src/
 │   ├── assemble.rs      # novanet_assemble implementation
 │   └── atoms.rs         # novanet_atoms implementation
 ├── resources/
-│   └── mod.rs           # MCP resources (entity://, kind://, locale://, view://)
+│   └── mod.rs           # MCP resources (entity://, class://, locale://, view://)
 └── prompts/
     └── mod.rs           # MCP prompts (Phase 3)
 ```
@@ -792,23 +792,23 @@ Error: Token budget exceeded: 150000/100000
 
 This MCP server reads from the same Neo4j instance as NovaNet Studio. Schema:
 
-- **60 NodeKinds** across 2 realms (shared: 39, org: 21)
-- **114 ArcKinds** in 5 families (ownership, localization, semantic, generation, mining)
+- **61 NodeClasses** across 2 realms (shared: 40, org: 21)
+- **169 ArcClasses** in 5 families (ownership, localization, semantic, generation, mining)
 - **200+ Locales** for multi-locale content generation
 
 Key queries for agent bootstrap:
 
 ```cypher
--- Get schema overview (v0.12.0: Class, was Kind)
-MATCH (c:Class)
+-- Get schema overview (v0.13.0: Class, was Kind)
+MATCH (c:Schema:Class)
 WITH c.realm AS realm, c.layer AS layer, collect(c.name) AS classes
 RETURN realm, layer, classes ORDER BY realm, layer
 
 -- Get entity with context
 MATCH (e:Entity {key: $key})
 OPTIONAL MATCH (e)-[:BELONGS_TO]->(c:EntityCategory)
-OPTIONAL MATCH (e)-[:HAS_CONTENT]->(ec:EntityContent)
-RETURN e, c.category_key, collect(DISTINCT ec.locale) AS locales
+OPTIONAL MATCH (e)-[:HAS_NATIVE]->(en:EntityNative)
+RETURN e, c.category_key, collect(DISTINCT en.locale) AS locales
 
 -- Get locale knowledge atoms
 MATCH (l:Locale {key: $locale})-[:HAS_TERMS]->(ts:TermSet)-[:CONTAINS_TERM]->(t:Term)

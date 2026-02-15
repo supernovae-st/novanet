@@ -7,7 +7,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Neo4j](https://img.shields.io/badge/Neo4j-5.26-018bff?style=flat-square&logo=neo4j&logoColor=white)](https://neo4j.com/)
 [![Zod](https://img.shields.io/badge/Zod-3.24-8b5cf6?style=flat-square)](https://zod.dev/)
-[![Version](https://img.shields.io/badge/v0.12.5-06b6d4?style=flat-square)]()
+[![Version](https://img.shields.io/badge/v0.13.0-06b6d4?style=flat-square)]()
 
 ---
 
@@ -62,7 +62,7 @@ pnpm --filter=@novanet/core validate
 core/
 +-- models/                    # YAML schema definitions (source of truth)
 |   +-- _index.yaml            # Graph structure overview
-|   +-- taxonomy.yaml          # v0.12.5: 2 Realms (shared/org), 10 Layers
+|   +-- taxonomy.yaml          # v0.13.0: 2 Realms (shared/org), 10 Layers
 |   +-- relations.yaml         # Legacy format (parser compatibility)
 |   +-- node-classes/            # One file per node type (61 files)
 |   |   +-- shared/            # Realm: shared (config, locale, geography, knowledge) - 40 nodes
@@ -78,7 +78,7 @@ core/
 
 ---
 
-## Node Types (v0.12.5)
+## Node Types (v0.13.0)
 
 | Realm | Layers | Description |
 |-------|--------|-------------|

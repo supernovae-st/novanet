@@ -29,11 +29,11 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
-**Current Version**: v0.12.0 "Class Act" (ADR-023 + ADR-024)
+**Current Version**: v0.13.0 "*Native Pattern" (ADR-029 + ADR-030)
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
 **Related docs**:
-- `.claude/rules/novanet-decisions.md` — Architecture decisions (ADR-001 through ADR-025)
+- `.claude/rules/novanet-decisions.md` — Architecture decisions (ADR-001 through ADR-030)
 - `.claude/rules/novanet-terminology.md` — Canonical terminology reference
 
 ```
@@ -45,9 +45,9 @@ Entity (defined) -> Generate natively -> EntityNative (authored)  <-- RIGHT
 
 ---
 
-## v11.5 Nomenclature
+## v0.13.0 Nomenclature
 
-v11.5 refines the layer structure with Locale moved to shared/config:
+v0.13.0 introduces the *Native pattern with unified arcs:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -73,13 +73,13 @@ v11.5 refines the layer structure with Locale moved to shared/config:
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**Key changes in v0.12.5:**
-- **Brand Architecture**: 4 new nodes (Brand, BrandDesign, BrandPrinciples, PromptStyle)
-- **Country added**: shared/geography now has 7 nodes (Country added)
-- **ADR-028**: PageStructure/PageInstruction removed, REFERENCES/HAS_KEYWORD arcs added
+**Key changes in v0.13.0:**
+- ***Native Pattern** (ADR-029): EntityContent→EntityNative, ProjectContent→ProjectNative, PageGenerated→PageNative, BlockGenerated→BlockNative
+- **Unified Arcs** (ADR-029): HAS_CONTENT/HAS_GENERATED→HAS_NATIVE, CONTENT_OF/GENERATED_FOR→NATIVE_OF
+- **Slug Ownership** (ADR-030): URL properties moved from EntityNative to PageNative
 - **61 nodes** total: 40 shared + 21 org, **169 arcs** (5 families)
 
-**Architecture (v0.12.5):**
+**Architecture (v0.13.0):**
 - 2 realms: SHARED + ORG
 - SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (40 nodes)
 - ORG (6 layers): config, foundation, structure, semantic, instruction, output (21 nodes)
@@ -90,7 +90,7 @@ schema generate/validate, doc generate, filter build. Galaxy-themed TUI with uni
 
 **YAML-first architecture:** Each Class YAML has explicit `realm:` and `layer:` fields (source of truth).
 Path validation ensures `models/node-classes/{realm}/{layer}/{name}.yaml` matches YAML content.
-v0.12.5: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 61 nodes, 169 arcs.
+v0.13.0: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 61 nodes, 169 arcs.
 
 **Icons source of truth (v11.5):** `visual-encoding.yaml` → `icons:` section provides dual-format icons:
 - `web`: Lucide icon name for Studio
@@ -188,7 +188,7 @@ v11.7 introduces the Unified Tree where Realm, Layer, ArcFamily, ArcClass are al
 │     └─ [:USES_TERM], [:USES_EXPRESSION] on Block nodes                      │
 │                                                                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  STATISTICS (v0.12.5)                                                       │
+│  STATISTICS (v0.13.0)                                                       │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  Containers (6): TermSet, ExpressionSet, PatternSet,                        │

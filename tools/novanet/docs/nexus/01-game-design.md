@@ -199,7 +199,7 @@ During mission execution:
 ║                                             ║                                 ║
 ║  ┌─────────────────────────────────────┐    ║  Project ──[:HAS_PAGE]──▶ Page  ║
 ║  │                                     │    ║  Page ────[:HAS_BLOCK]──▶ Block ║
-║  │  INSTRUCTIONS                       │    ║  Entity ──[:HAS_CONTENT]▶ EntityContent  ║
+║  │  INSTRUCTIONS                       │    ║  Entity ──[:HAS_NATIVE]▶ EntityNative  ║
 ║  │  ─────────────────────────────────  │    ║                                 ║
 ║  │                                     │    ║  The parent "owns" the child.   ║
 ║  │  1. Press [1] to switch to Graph    │    ║                                 ║

@@ -1,4 +1,4 @@
-# NovaNet Studio (v0.12.0)
+# NovaNet Studio (v0.13.0)
 
 @.claude/rules/novanet-terminology.md
 @.claude/rules/novanet-decisions.md
@@ -9,13 +9,13 @@ Knowledge graph visualization for the NovaNet native content generation engine.
 
 ## Project Context
 
-**What:** Interactive 2D/3D graph visualization for 59 node classes, 200 locales (~19,000 instances projected)
+**What:** Interactive 2D/3D graph visualization for 61 node classes, 200 locales (~19,000 instances projected)
 **Stack:** Next.js 16 + React 19 + TypeScript 5.9 + Tailwind CSS
 **Graph:** @xyflow/react (2D), @react-three/fiber (3D)
 **State:** Zustand 5 with persist/immer
 **DB:** Neo4j (bolt://localhost:7687)
 **AI:** Claude API for natural language → Cypher
-**Version:** v0.12.0 "Class Act" (ADR-024 Data Origin)
+**Version:** v0.13.0 "*Native Pattern" (ADR-029 + ADR-030)
 
 ---
 
@@ -73,7 +73,7 @@ pnpm test            # Tests
 | `?` | Show shortcuts modal |
 | `Esc` | Close dialog / clear selection |
 
-**View (v0.12.0)**
+**View (v0.13.0)**
 | Key | Action |
 |-----|--------|
 | `1` | Graph mode (unified tree: Realm > Layer > Class > Instance) |
@@ -147,7 +147,7 @@ pnpm test            # Tests
 
 ---
 
-## Neo4j Schema (v0.12.0)
+## Neo4j Schema (v0.13.0)
 
 ### Schema vs Data: The Core Distinction
 
@@ -158,22 +158,22 @@ pnpm test            # Tests
 │                                                                                 │
 │  SCHEMA NODES = Classes (structure)        DATA NODES = Instances (content)     │
 │  ───────────────────────────────────       ─────────────────────────────────    │
-│  :Schema:Class     (59 types)              :Locale, :Page, :Entity (200K+)      │
+│  :Schema:Class     (61 types)              :Locale, :Page, :Entity (200K+)      │
 │  :Schema:Realm     (2: shared, org)        Actual content nodes                 │
 │  :Schema:Layer     (10 layers)             Business data                        │
 │  :Schema:Trait     (5 data origins)                                             │
 │  :Schema:ArcFamily (5 families)            Link: (data)-[:OF_CLASS]->(schema)   │
-│  :Schema:ArcClass  (114 relationships)                                          │
+│  :Schema:ArcClass  (169 relationships)                                          │
 │                                                                                 │
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │  CLASSIFICATION AXES (on NodeClass)        CLASSIFICATION VALUES                │
 │  ──────────────────────────────────        ─────────────────────────────────    │
-│  WHERE? → Realm                            shared (39 nodes, READ-ONLY)         │
-│  WHAT?  → Layer                            org (20 nodes, multi-tenant)         │
+│  WHERE? → Realm                            shared (40 nodes, READ-ONLY)         │
+│  WHAT?  → Layer                            org (21 nodes, multi-tenant)         │
 │  HOW?   → Trait (Data Origin)                                                   │
 │                                                                                 │
 ├─────────────────────────────────────────────────────────────────────────────────┤
-│  LAYERS (v0.12: 10 total = 4 shared + 6 org)                                    │
+│  LAYERS (v0.13: 10 total = 4 shared + 6 org)                                    │
 │  ────────────────────────────────────────────                                   │
 │  SHARED: config → locale → geography → knowledge                                │
 │  ORG:    config → foundation → structure → semantic → instruction → output      │
@@ -198,9 +198,9 @@ pnpm test            # Tests
 └─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Schema Graph (v0.12.0 - Unified Tree Architecture)
+### Schema Graph (v0.13.0 - Unified Tree Architecture)
 
-v0.12.0 establishes faceted classification where **everything is a clickable node**:
+v0.13.0 establishes faceted classification where **everything is a clickable node**:
 
 | Schema-Type | Count | Purpose | Clickable |
 |-------------|-------|---------|-----------|
@@ -208,17 +208,17 @@ v0.12.0 establishes faceted classification where **everything is a clickable nod
 | **Layer** | 10 | WHAT? (4 shared + 6 org) | Yes |
 | **Trait** | 5 | Data Origin (defined / authored / imported / generated / retrieved) | Yes |
 | **ArcFamily** | 5 | Relationship classification | Yes |
-| **ArcClass** | 114 | Individual relationship type | Yes |
-| **Class** | 59 | Node type definitions (39 shared + 20 org) | Yes |
+| **ArcClass** | 169 | Individual relationship type | Yes |
+| **Class** | 61 | Node type definitions (40 shared + 21 org) | Yes |
 
 All schema nodes carry `:Schema` double-label. Instances link via `[:OF_CLASS]`.
 
-### Realm Architecture (v0.12.0)
+### Realm Architecture (v0.13.0)
 
 | Realm | Layers | Nodes | Description |
 |-------|--------|-------|-------------|
-| **Shared** | config, locale, geography, knowledge | 39 | Universal knowledge (READ-ONLY) |
-| **Org** | config, foundation, structure, semantic, instruction, output | 20 | Business-specific content |
+| **Shared** | config, locale, geography, knowledge | 40 | Universal knowledge (READ-ONLY) |
+| **Org** | config, foundation, structure, semantic, instruction, output | 21 | Business-specific content |
 
 ### Key Relations (grouped by ArcFamily)
 - **Ownership:** `HAS_PAGE`, `HAS_BLOCK`, `OF_TYPE`, `SUPPORTS_LOCALE`, `HAS_PROJECT`
@@ -227,7 +227,7 @@ All schema nodes carry `:Schema` double-label. Instances link via `[:OF_CLASS]`.
 - **Generation:** `HAS_NATIVE`, `HAS_PROMPT`
 - **Mining:** `EXPRESSES`, `HAS_SEO_TARGET`
 
-### Navigation Modes (v0.12.0 - ADR-022)
+### Navigation Modes (v0.13.0 - ADR-022)
 
 **Consolidated from 5 modes to 2:**
 
@@ -257,9 +257,11 @@ Path configured in tsconfig.json:
 "@novanet/core/*": ["../../packages/core/src/*"]
 ```
 
-> **v0.12.0 notes:**
+> **v0.13.0 notes:**
 > - `NodeCategory` was replaced by `Layer` in v9.0.0
-> - `EntityL10n` → `EntityNative`, `PageL10n` → `PageNative`, `BlockL10n` → `BlockNative` in v10.9
+> - `EntityContent` → `EntityNative`, `ProjectContent` → `ProjectNative` in v0.13.0 (ADR-029)
+> - `PageGenerated` → `PageNative`, `BlockGenerated` → `BlockNative` in v0.13.0 (ADR-029)
+> - `HAS_CONTENT`/`HAS_GENERATED` → `HAS_NATIVE`, `CONTENT_OF`/`GENERATED_FOR` → `NATIVE_OF` (ADR-029)
 > - 5 navigation modes consolidated into 2 (Graph/Nexus) in v11.7
 > - `Kind` → `Class`, `ArcKind` → `ArcClass`, `:Meta:` → `:Schema:` in v0.12.0
 > - Traits renamed: invariant→defined, localized→authored, knowledge→imported, aggregated→retrieved
