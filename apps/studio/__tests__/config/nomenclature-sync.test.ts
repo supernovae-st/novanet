@@ -126,20 +126,15 @@ describe('Nomenclature Sync (v0.12.4)', () => {
   });
 
   describe('Naming Conventions', () => {
-    it('should use *Content suffix for authored nodes', () => {
-      // EntityContent, ProjectContent follow the pattern
-      const contentNodes = NODE_TYPES.filter((n) => n.endsWith('Content'));
-      expect(contentNodes.length).toBeGreaterThan(0);
-      expect(contentNodes).toContain('EntityContent');
-      expect(contentNodes).toContain('ProjectContent');
-    });
-
-    it('should use *Generated suffix for generated output nodes', () => {
-      // PageGenerated, BlockGenerated follow the pattern
-      const generatedNodes = NODE_TYPES.filter((n) => n.endsWith('Generated'));
-      expect(generatedNodes.length).toBeGreaterThan(0);
-      expect(generatedNodes).toContain('PageGenerated');
-      expect(generatedNodes).toContain('BlockGenerated');
+    it('should use *Native suffix for authored and generated nodes (v0.13.0 ADR-029)', () => {
+      // v0.13.0: EntityContent→EntityNative, ProjectContent→ProjectNative,
+      // PageGenerated→PageNative, BlockGenerated→BlockNative
+      const nativeNodes = NODE_TYPES.filter((n) => n.endsWith('Native'));
+      expect(nativeNodes.length).toBeGreaterThanOrEqual(4);
+      expect(nativeNodes).toContain('EntityNative');
+      expect(nativeNodes).toContain('ProjectNative');
+      expect(nativeNodes).toContain('PageNative');
+      expect(nativeNodes).toContain('BlockNative');
     });
 
     it('should use *Instruction suffix for instruction nodes (v0.12.4)', () => {

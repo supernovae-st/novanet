@@ -181,8 +181,10 @@ export const RELATION_OVERRIDES: Partial<Record<RelationType, ThemeOverride>> = 
     glowIntensity: 0.9,
     strokeWidth: 3,
   },
-  HAS_CONTENT: {
+  HAS_NATIVE: {
     speed: 'normal',
+    glowIntensity: 0.95,
+    // v0.13.0: unified arc for all *Native nodes (was HAS_CONTENT + HAS_GENERATED)
     // effects removed: now uses arcFamily 'localization' → 'dnaHelix'
   },
   FOR_LOCALE: {
@@ -192,11 +194,7 @@ export const RELATION_OVERRIDES: Partial<Record<RelationType, ThemeOverride>> = 
 
   // ─── Generation Overrides ───
   // v11.6.1: Effects now come from arc family, additional effects can be added
-  HAS_GENERATED: {
-    speed: 'ultra',
-    glowIntensity: 0.95,
-    // effects removed: now uses arcFamily 'generation' → 'matrixCode' + category defaults
-  },
+  // v0.13.0: HAS_NATIVE moved to Localization Overrides (unified arc)
   HAS_INSTRUCTION: {
     lineStyle: 'zigzag',
     particlePreset: 'orbit',

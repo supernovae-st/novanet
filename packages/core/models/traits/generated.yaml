@@ -29,8 +29,8 @@ trait:
     token_estimate: 50
 
   examples:
-    - PageGenerated
-    - BlockGenerated
+    - PageNative
+    - BlockNative
     - OutputArtifact
     - PromptArtifact
 
@@ -38,4 +38,4 @@ trait:
     USE: when accessing LLM-generated content.
     TRIGGERS: "generated", "output", "LLM", "NovaNet", "pipeline result".
     NOT: for retrieved external data (use retrieved trait).
-    RELATES: PageGenerated (output), BlockGenerated (output), OutputArtifact (output).
+    RELATES: PageNative (output), BlockNative (output), OutputArtifact (output).

@@ -5,10 +5,10 @@
 # v0.13.0 CHANGES (ADR-029 *Native Pattern)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-#   RENAMED: BlockGenerated → BlockNative
+#   RENAMED: BlockNative → BlockNative
 #   - All locale-specific nodes now use *Native suffix
 #   - Trait (authored vs generated) distinguishes who creates content
-#   - Unified arc: HAS_NATIVE replaces HAS_GENERATED
+#   - Unified arc: HAS_NATIVE replaces HAS_NATIVE
 #
 # TRAIT SEMANTICS:
 #   - authored = human-authored native content (EntityNative, ProjectNative)

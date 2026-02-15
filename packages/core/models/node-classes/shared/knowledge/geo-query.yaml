@@ -26,7 +26,7 @@ node:
     USE: when defining AI search queries to monitor for brand visibility.
     TRIGGERS: "GEO query", "AI search", "LLM visibility", "generative search".
     NOT: for search rankings (use SEOKeyword), for LLM responses (use GEOAnswer).
-    RELATES: GEOAnswer (HAS_GEO_ANSWERS), EntityContent (MONITORS_GEO).
+    RELATES: GEOAnswer (HAS_GEO_ANSWERS), EntityNative (MONITORS_GEO).
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # STANDARD PROPERTIES (v7.1.0)
@@ -53,7 +53,7 @@ node:
     llm_context:
       type: string
       required: false
-      description: "GEOQuery represents an AI search query to monitor for visibility. It is DISCOVERED/CONFIGURED data, not generated content. Static query definition - time-series metrics live in GEOAnswer nodes. v11.4: Now in shared/knowledge (Knowledge Atoms pattern). Access: EntityContent --[:MONITORS_GEO]--> GEOQuery --[:HAS_GEO_ANSWERS]--> GEOAnswer"
+      description: "GEOQuery represents an AI search query to monitor for visibility. It is DISCOVERED/CONFIGURED data, not generated content. Static query definition - time-series metrics live in GEOAnswer nodes. v11.4: Now in shared/knowledge (Knowledge Atoms pattern). Access: EntityNative --[:MONITORS_GEO]--> GEOQuery --[:HAS_GEO_ANSWERS]--> GEOAnswer"
 
     created_at:
       type: datetime
@@ -101,7 +101,7 @@ node:
   # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
-    # Incoming: EntityContent --[:MONITORS_GEO]--> GEOQuery (targeting, v11.4)
+    # Incoming: EntityNative --[:MONITORS_GEO]--> GEOQuery (targeting, v11.4)
 
     - relation: HAS_GEO_ANSWERS
       to: GEOAnswer
@@ -117,7 +117,7 @@ node:
     description: "Get GEO queries monitored by an entity with latest visibility metrics"
     cypher: |
       // v11.4: GEOQuery with time-series answers (metrics in GEOAnswer)
-      MATCH (e:Entity {key: $entity_key})-[:HAS_CONTENT]->(ec:EntityContent)
+      MATCH (e:Entity {key: $entity_key})-[:HAS_NATIVE]->(ec:EntityNative)
       MATCH (ec)-[:MONITORS_GEO]->(q:GEOQuery)
       OPTIONAL MATCH (q)-[:HAS_GEO_ANSWERS]->(a:GEOAnswer)
       WITH q, a ORDER BY a.captured_at DESC

@@ -8,7 +8,7 @@ layer:
   description: |
     Meaning and knowledge relationships. Entities and their locale-specific
     content. Contains the core business concepts that drive content generation.
-    Entity (defined) + EntityContent (authored per locale).
+    Entity (defined) + EntityNative (authored per locale).
   color: "#f97316"
   icon:
     web: "brain"
@@ -19,7 +19,7 @@ layer:
 
   classes:
     - Entity
-    - EntityContent
+    - EntityNative
     - AudiencePersona
     - ChannelSurface
 
@@ -29,4 +29,4 @@ layer:
     USE: when working with semantic entities and their content.
     TRIGGERS: "entity", "meaning", "audience", "channel", "semantic".
     NOT: for page structure (use structure layer).
-    RELATES: Entity (defined), EntityContent (authored), AudiencePersona (defined).
+    RELATES: Entity (defined), EntityNative (authored), AudiencePersona (defined).

@@ -40,7 +40,7 @@ flowchart TB
   end
 
   subgraph LOCALIZATION_CONFIG["Localization Config"]
-    ProjectContent["🟢 ProjectContent"]
+    ProjectNative["🟢 ProjectNative"]
     Locale["🔵 Locale"]
   end
 
@@ -49,17 +49,17 @@ flowchart TB
   end
 
   %% Additional reachable nodes
-  EntityContent["🟢 EntityContent"]
+  EntityNative["🟢 EntityNative"]
 
   %% Relationships (styled by arc family)
-  EntityContent -.->|FOR_LOCALE| Locale
+  EntityNative -.->|FOR_LOCALE| Locale
   Project -->|DEFAULT_LOCALE| Locale
   Project -->|HAS_BRAND_IDENTITY| BrandIdentity
-  Project -.->|HAS_CONTENT| EntityContent
-  Project -.->|HAS_CONTENT| ProjectContent
+  Project -.->|HAS_NATIVE| EntityNative
+  Project -.->|HAS_NATIVE| ProjectNative
   Project -->|HAS_PAGE| Page
   Project -->|SUPPORTS_LOCALE| Locale
-  ProjectContent -.->|FOR_LOCALE| Locale
+  ProjectNative -.->|FOR_LOCALE| Locale
 
   %% Arc colors by family
   linkStyle 0,3,4,7 stroke:#22c55e,stroke-width:2px
@@ -67,18 +67,18 @@ flowchart TB
 
   %% Class assignments
   class BrandIdentity defined
-  class EntityContent authored
+  class EntityNative authored
   class Locale defined
   class Page defined
   class Project defined
-  class ProjectContent authored
+  class ProjectNative authored
 ```
 
 ## Notes
 
 - Each Project has a unique key used for routing and identification
 - BrandIdentity contains visual identity (colors, logos, typography)
-- ProjectContent contains localized project metadata (tagline, description)
+- ProjectNative contains localized project metadata (tagline, description)
 
 ---
 

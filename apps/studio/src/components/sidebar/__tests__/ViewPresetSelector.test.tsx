@@ -34,11 +34,11 @@ describe('ViewPresetSelector', () => {
     // Component displays first word of each preset name for compact display
     expect(screen.getByText('Project')).toBeInTheDocument();    // Project Structure
     expect(screen.getByText('Generation')).toBeInTheDocument(); // Generation Chain
-    expect(screen.getByText('Locale')).toBeInTheDocument();     // Locale Knowledge
+    expect(screen.getByText('Shared')).toBeInTheDocument();     // Shared Layers (v11.3: locale-knowledge → shared-layers)
     expect(screen.getByText('Entity')).toBeInTheDocument();     // Entity Network (v10.4)
     expect(screen.getByText('Prompts')).toBeInTheDocument();    // Prompts & Rules
     expect(screen.getByText('SEO')).toBeInTheDocument();        // SEO Keywords (v10.4)
-    expect(screen.getByText('Defined')).toBeInTheDocument();     // Defined Types
+    expect(screen.getByText('Defined')).toBeInTheDocument();    // Defined Types
     expect(screen.getByText('Authored')).toBeInTheDocument();   // Authored Content
     expect(screen.getByText('All')).toBeInTheDocument();        // All Nodes
   });

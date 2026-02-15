@@ -5,7 +5,7 @@
 # v0.13.0 CHANGES (ADR-029 *Native Pattern)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-#   MERGED: CONTENT_OF + GENERATED_FOR → NATIVE_OF
+#   MERGED: NATIVE_OF + NATIVE_OF → NATIVE_OF
 #   - Unified inverse arc for ALL locale-specific content
 #   - Moved from localization/generation families → ownership family
 #

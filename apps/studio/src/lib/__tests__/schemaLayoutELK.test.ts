@@ -126,7 +126,7 @@ describe('schemaLayoutELK', () => {
               description: 'Core project identity',
               icon: '🏛️',
               // v0.12.4: BrandIdentity → Brand + BrandDesign + BrandPrinciples + PromptStyle
-              nodeTypes: ['Project', 'Brand', 'BrandDesign', 'BrandPrinciples', 'PromptStyle', 'ProjectContent'] as never[],
+              nodeTypes: ['Project', 'Brand', 'BrandDesign', 'BrandPrinciples', 'PromptStyle', 'ProjectNative'] as never[],
             },
             structure: {
               label: 'Structure',
@@ -157,7 +157,7 @@ describe('schemaLayoutELK', () => {
         { id: 'schema-BrandDesign', nodeType: 'BrandDesign', realm: 'org', layer: 'foundation', label: 'Brand Design', description: '', trait: 'defined' },
         { id: 'schema-BrandPrinciples', nodeType: 'BrandPrinciples', realm: 'org', layer: 'foundation', label: 'Brand Principles', description: '', trait: 'defined' },
         { id: 'schema-PromptStyle', nodeType: 'PromptStyle', realm: 'org', layer: 'foundation', label: 'Prompt Style', description: '', trait: 'defined' },
-        { id: 'schema-ProjectContent', nodeType: 'ProjectContent', realm: 'org', layer: 'foundation', label: 'Project Content', description: '', trait: 'authored' },
+        { id: 'schema-ProjectNative', nodeType: 'ProjectNative', realm: 'org', layer: 'foundation', label: 'Project Content', description: '', trait: 'authored' },
         // Org realm - structure (2)
         { id: 'schema-Page', nodeType: 'Page', realm: 'org', layer: 'structure', label: 'Page', description: '', trait: 'defined' },
         { id: 'schema-Block', nodeType: 'Block', realm: 'org', layer: 'structure', label: 'Block', description: '', trait: 'defined' },

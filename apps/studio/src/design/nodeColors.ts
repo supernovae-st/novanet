@@ -60,7 +60,7 @@ const STRUCTURAL_LAYER_MAP: Record<string, Layer> = {
   BrandDesign: 'foundation',
   BrandPrinciples: 'foundation',
   PromptStyle: 'foundation',
-  ProjectContent: 'foundation',
+  ProjectNative: 'foundation',
 };
 
 /**

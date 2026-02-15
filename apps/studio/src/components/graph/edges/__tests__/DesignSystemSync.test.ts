@@ -145,7 +145,7 @@ describe('Theme Resolution Integration', () => {
   it('resolved theme effects start with arc family signature effect', () => {
     const testCases = [
       { relation: 'HAS_PAGE', family: 'ownership', effect: 'energyPulse' },
-      { relation: 'HAS_CONTENT', family: 'localization', effect: 'dnaHelix' },
+      { relation: 'HAS_NATIVE', family: 'localization', effect: 'dnaHelix' },
       { relation: 'USES_ENTITY', family: 'semantic', effect: 'zigzag' },
       { relation: 'GENERATED_BY', family: 'generation', effect: 'matrixCode' },
       { relation: 'HAS_SEO_TARGET', family: 'mining', effect: 'radarSweep' },
@@ -203,7 +203,7 @@ describe('Relation Type Resolution', () => {
   });
 
   it('localization relations resolve to localization family', () => {
-    const localizationRelations = ['HAS_CONTENT', 'FOR_LOCALE'];
+    const localizationRelations = ['HAS_NATIVE', 'FOR_LOCALE'];
     for (const relation of localizationRelations) {
       expect(getArcFamily(relation)).toBe('localization');
     }

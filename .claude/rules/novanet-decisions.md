@@ -12,7 +12,7 @@ This file documents key architecture decisions for NovaNet. Reference these when
 
 | ADR | Principle | Rule |
 |-----|-----------|------|
-| **007** | Generation NOT Translation | `Entity → Generate natively → EntityContent` (not translate) |
+| **007** | Generation NOT Translation | `Entity → Generate natively → EntityNative` (not translate) |
 | **003** | YAML-First | YAML = source of truth → generators → TS/Cypher/Mermaid |
 | **001** | Arc Terminology | Use "Arc" (not Edge/Relation) for directed links |
 
@@ -38,9 +38,9 @@ Total: 61 nodes, 169 arcs, 10 layers, 5 traits
 | Trait | Origin | Examples |
 |-------|--------|----------|
 | `defined` | Human creates ONCE | Page, Block, Entity, Locale, OrgConfig |
-| `authored` | Human writes PER locale | EntityContent, ProjectContent |
+| `authored` | Human writes PER locale | EntityNative, ProjectNative |
 | `imported` | External data brought in | Term, Expression, SEOKeyword, GEOQuery |
-| `generated` | Our LLM produces | PageGenerated, BlockGenerated |
+| `generated` | Our LLM produces | PageNative, BlockNative |
 | `retrieved` | Fetched from external APIs | GEOAnswer, SEOKeywordMetrics |
 
 ### UX Architecture
@@ -179,10 +179,10 @@ Thing (project)  → Brand-specific definition
 
 ```
 WRONG:  Source → Translate → Target
-RIGHT:  Entity (invariant) → Generate natively → EntityContent (local)
+RIGHT:  Entity (invariant) → Generate natively → EntityNative (local)
 ```
 
-> **Note**: v10.9 renamed `EntityL10n` to `EntityContent`. See ADR-014.
+> **Note**: v10.9 renamed `EntityL10n` to `EntityNative`. See ADR-014.
 
 **Rationale**: Translation loses cultural nuance. Native generation preserves it.
 
@@ -230,7 +230,7 @@ truecolor (24-bit RGB)
 
 **Status**: Superseded by ADR-012 (v10.6)
 
-**Decision**: Organization realm contains only the Organization node. Entity/EntityContent live in PROJECT realm only.
+**Decision**: Organization realm contains only the Organization node. Entity/EntityNative live in PROJECT realm only.
 
 ```
 Organization ─[:HAS_COMPANY_PROJECT]→ Project (company project)
@@ -240,11 +240,11 @@ Organization ─[:HAS_COMPANY_PROJECT]→ Project (company project)
 
 **Rationale**:
 - An organization has a "company project" that holds org-wide Entity nodes
-- Entity/EntityContent in organization was redundant (same nodes existed in project)
+- Entity/EntityNative in organization was redundant (same nodes existed in project)
 - Simplifies the schema: 43 nodes instead of 45, 9 layers instead of 10
 - Organization realm becomes a pure multi-tenant isolation boundary
 
-> **Note**: v10.9 renamed `EntityL10n` to `EntityContent`. See ADR-014.
+> **Note**: v10.9 renamed `EntityL10n` to `EntityNative`. See ADR-014.
 
 ## ADR-012: 2-Realm Architecture
 
@@ -341,13 +341,13 @@ icons:
 
 | Old Name | New Name | Reason |
 |----------|----------|--------|
-| `EntityL10n` | `EntityContent` | Stores semantic content, not localization metadata |
-| `PageL10n` | `PageGenerated` | Clarifies this is LLM generation output |
-| `BlockL10n` | `BlockGenerated` | Parallel naming with PageGenerated |
-| `ProjectL10n` | `ProjectContent` | v11.0: Consistent with EntityContent pattern |
-| `HAS_L10N` | `HAS_CONTENT` | Content relationship, not localization |
-| `HAS_OUTPUT` | `HAS_GENERATED` | Moved to generation family, clarifies purpose |
-| `BELONGS_TO_PROJECT_L10N` | `BELONGS_TO_PROJECT_CONTENT` | v11.0: Follows ProjectContent rename |
+| `EntityL10n` | `EntityNative` | Stores semantic content, not localization metadata |
+| `PageL10n` | `PageNative` | Clarifies this is LLM generation output |
+| `BlockL10n` | `BlockNative` | Parallel naming with PageNative |
+| `ProjectL10n` | `ProjectNative` | v11.0: Consistent with EntityNative pattern |
+| `HAS_L10N` | `HAS_NATIVE` | Content relationship, not localization |
+| `HAS_OUTPUT` | `HAS_NATIVE` | Moved to generation family, clarifies purpose |
+| `BELONGS_TO_PROJECT_L10N` | `BELONGS_TO_PROJECT_CONTENT` | v11.0: Follows ProjectNative rename |
 | `GEOSeedL10n` | `GEOQuery` | v10.7: New GEO schema |
 | `GEOSeedMetrics` | `GEOMetrics` | v10.7: New GEO schema |
 
@@ -356,9 +356,9 @@ icons:
 Content and generated nodes use composite keys to ensure uniqueness across locales:
 
 ```
-EntityContent key:  entity:{entity_key}@{locale_key}
-PageGenerated key:  page:{page_key}@{locale_key}
-BlockGenerated key: block:{block_key}@{locale_key}
+EntityNative key:  entity:{entity_key}@{locale_key}
+PageNative key:  page:{page_key}@{locale_key}
+BlockNative key: block:{block_key}@{locale_key}
 
 Examples:
   entity:qr-code-generator@fr-FR
@@ -377,12 +377,12 @@ Examples:
 1. **Semantic clarity**: `L10n` (localization) implies translation, but NovaNet generates natively. `Content` and `Generated` describe what the node actually contains.
 
 2. **Layer distinction**:
-   - `EntityContent` lives in **semantic** layer (meaning, knowledge)
-   - `PageGenerated`/`BlockGenerated` live in **output** layer (rendered artifacts)
+   - `EntityNative` lives in **semantic** layer (meaning, knowledge)
+   - `PageNative`/`BlockNative` live in **output** layer (rendered artifacts)
 
 3. **Arc family alignment**:
-   - `HAS_CONTENT` stays in **semantic** family (content relationship)
-   - `HAS_GENERATED` moves to **generation** family (output relationship)
+   - `HAS_NATIVE` stays in **semantic** family (content relationship)
+   - `HAS_NATIVE` moves to **generation** family (output relationship)
 
 4. **Composite key benefits**:
    - Unique across all locales without additional index
@@ -394,13 +394,13 @@ Examples:
 
 ```cypher
 // Rename node labels
-MATCH (n:EntityL10n) SET n:EntityContent REMOVE n:EntityL10n;
-MATCH (n:PageL10n) SET n:PageGenerated REMOVE n:PageL10n;
-MATCH (n:BlockL10n) SET n:BlockGenerated REMOVE n:BlockL10n;
+MATCH (n:EntityL10n) SET n:EntityNative REMOVE n:EntityL10n;
+MATCH (n:PageL10n) SET n:PageNative REMOVE n:PageL10n;
+MATCH (n:BlockL10n) SET n:BlockNative REMOVE n:BlockL10n;
 
 // Update relationship types (requires recreation in Neo4j)
-// HAS_L10N → HAS_CONTENT
-// HAS_OUTPUT → HAS_GENERATED
+// HAS_L10N → HAS_NATIVE
+// HAS_OUTPUT → HAS_NATIVE
 ```
 
 **Code impact**:
@@ -416,8 +416,8 @@ MATCH (n:BlockL10n) SET n:BlockGenerated REMOVE n:BlockL10n;
 
 **Arcs with inverses**:
 - `HAS_BLOCK` ↔ `BLOCK_OF`
-- `HAS_CONTENT` ↔ `CONTENT_OF`
-- `HAS_GENERATED` ↔ `GENERATED_FOR`
+- `HAS_NATIVE` ↔ `NATIVE_OF`
+- `HAS_NATIVE` ↔ `NATIVE_OF`
 - `HAS_TYPE` ↔ `TYPE_OF`
 
 **Arcs without inverses** (intentional):
@@ -558,8 +558,8 @@ AFTER (clear):
 
 | Node | v11.1 Trait | v11.2 Trait |
 |------|-------------|-------------|
-| PageGenerated | derived | **generated** |
-| BlockGenerated | derived | **generated** |
+| PageNative | derived | **generated** |
+| BlockNative | derived | **generated** |
 | OutputArtifact | derived | **generated** |
 | PromptArtifact | derived | **generated** |
 | GEOAnswer | derived | **aggregated** |
@@ -568,7 +568,7 @@ AFTER (clear):
 
 **Trait summary (v11.2):**
 - `invariant`: 30 nodes (+6 containers)
-- `localized`: 2 nodes (EntityContent, ProjectContent)
+- `localized`: 2 nodes (EntityNative, ProjectNative)
 - `knowledge`: 23 nodes (-6 containers)
 - `generated`: 4 nodes (LLM output)
 - `aggregated`: 3 nodes (computed metrics)
@@ -713,13 +713,13 @@ REALMS (61 nodes total):
 │
 └── org/                 # Organization-specific content — 29 nodes
     ├── config/          # 1 node (OrgConfig)
-    ├── foundation/      # 3 nodes (Project, ProjectContent, Brand)
+    ├── foundation/      # 3 nodes (Project, ProjectNative, Brand)
     ├── structure/       # 3 nodes (Page, PageType, Block, BlockType)
-    ├── semantic/        # 4 nodes (Entity, EntityContent, Thing, Category)
+    ├── semantic/        # 4 nodes (Entity, EntityNative, Thing, Category)
     ├── instruction/     # 7 nodes (PagePrompt, BlockPrompt, SEOPrompt, etc.)
     ├── seo/             # 5 nodes (SEOKeyword, SEOKeywordMetrics, SEOCluster, etc.)
     ├── geo/             # 3 nodes (GEOQuery, GEOAnswer, GEOMetrics)
-    └── output/          # 3 nodes (PageGenerated, BlockGenerated, OutputArtifact)
+    └── output/          # 3 nodes (PageNative, BlockNative, OutputArtifact)
 ```
 
 ### Migration
@@ -772,7 +772,7 @@ REALMS (61 nodes total):
 | 026 | v0.12.1 | Inverse Arc Policy (TIER 1/2/3 classification, naming conventions) |
 | 027 | v0.12.1 | Generation Family Arc Semantics (pipeline documentation, arc disambiguation) |
 | 028 | v0.12.3 | Page-Entity Architecture + Brand Architecture (1:1 mandatory, @ refs) |
-| 029 | v0.12.5 | *Native Pattern (EntityContent→EntityNative, PageGenerated→PageNative) |
+| 029 | v0.12.5 | *Native Pattern (EntityNative→EntityNative, PageNative→PageNative) |
 | 030 | v0.12.5 | Slug Ownership (Page owns URL, Entity owns semantics) |
 | 031 | v0.12.5 | SEO Pillar/Cluster Architecture (is_pillar, SEO_CLUSTER_OF, LINKS_TO, PageRank flow) |
 | 032 | v0.12.5 | URL Slugification Architecture (derivation algorithm, DERIVED_SLUG_FROM, no-repetition) |
@@ -850,11 +850,11 @@ REALMS (61 nodes total):
 │
 └── org/                 # Organization-specific — 20 nodes
     ├── config/          # 1 node (OrgConfig)
-    ├── foundation/      # 3 nodes (Project, ProjectContent, BrandIdentity)
+    ├── foundation/      # 3 nodes (Project, ProjectNative, BrandIdentity)
     ├── structure/       # 3 nodes (Page, Block, ContentSlot)
-    ├── semantic/        # 4 nodes (Entity, EntityContent, AudiencePersona, ChannelSurface)
+    ├── semantic/        # 4 nodes (Entity, EntityNative, AudiencePersona, ChannelSurface)
     ├── instruction/     # 6 nodes (PageStructure, PageInstruction, BlockInstruction, BlockType, BlockRules, PromptArtifact)
-    └── output/          # 3 nodes (PageGenerated, BlockGenerated, OutputArtifact)
+    └── output/          # 3 nodes (PageNative, BlockNative, OutputArtifact)
 ```
 
 ## ADR-021: Query-First Architecture
@@ -1181,8 +1181,8 @@ TRAIT answers:  "WHERE does the data come from?"
 |-------|-------|----------|
 | defined | 31 | Page, Block, Entity, PageStructure, PageInstruction, BlockInstruction, Locale, OrgConfig |
 | imported | 20 | Term, Expression, Pattern, Culture, SEOKeyword, GEOQuery |
-| authored | 2 | EntityContent, ProjectContent |
-| generated | 4 | PageGenerated, BlockGenerated, OutputArtifact, PromptArtifact |
+| authored | 2 | EntityNative, ProjectNative |
+| generated | 4 | PageNative, BlockNative, OutputArtifact, PromptArtifact |
 | retrieved | 2 | GEOAnswer, SEOKeywordMetrics |
 
 **Key Clarification - GEOAnswer**:
@@ -1249,7 +1249,7 @@ See @page:features for product consistency
 ```
 
 At generation time:
-- `@entity:tier-pro` → loads `EntityContent(tier-pro@{locale})`
+- `@entity:tier-pro` → loads `EntityNative(tier-pro@{locale})`
 - `@page:features` → loads `Page(features)` context
 - `[TRANSLATE]` → field needs locale-native generation
 - `[FIXED]` → field is invariant (URLs, technical values)
@@ -1278,7 +1278,7 @@ Page
 **L'ordre des blocs** (propriété `order` sur [:HAS_BLOCK]) détermine:
 1. **PageStructure JSON** — L'ordre des BlockTypes
 2. **PageInstruction** — La compilation séquentielle des BlockInstructions
-3. **PageGenerated** — L'ordre final du contenu généré
+3. **PageNative** — L'ordre final du contenu généré
 
 **Rationale**:
 
@@ -1319,8 +1319,8 @@ These arcs MUST have explicit inverse definitions:
 | `HAS_PAGE` | `PAGE_OF` | "Which project owns this page?" |
 | `HAS_PROJECT` | `PROJECT_OF` | "Which org owns this project?" |
 | `HAS_BLOCK` | `BLOCK_OF` | "Which page contains this block?" (exists) |
-| `HAS_CONTENT` | `CONTENT_OF` | "Which entity owns this content?" (exists) |
-| `HAS_GENERATED` | `GENERATED_FOR` | "Which page owns this output?" (exists) |
+| `HAS_NATIVE` | `NATIVE_OF` | "Which entity owns this content?" (exists) |
+| `HAS_NATIVE` | `NATIVE_OF` | "Which page owns this output?" (exists) |
 | `HAS_CHILD` | `CHILD_OF` | "What is this entity's parent?" (created v0.12.1) |
 | `HAS_INSTRUCTION` | `INSTRUCTION_OF` | "Which page/block owns this instruction?" (created v0.12.1) |
 
@@ -1353,7 +1353,7 @@ These arcs are acceptable without inverses:
 | `HAS_*` | Ownership (parent→child) | `HAS_PAGE`, `HAS_ENTITY` |
 | `*_OF` | Inverse ownership | `PAGE_OF`, `ENTITY_OF` |
 | `CONTAINS_*` | Container→Atom (no inverse) | `CONTAINS_TERM` |
-| `*_FOR` / `*_BY` | Direction indicator | `GENERATED_FOR`, `USED_BY` |
+| `*_FOR` / `*_BY` | Direction indicator | `NATIVE_OF`, `USED_BY` |
 
 ### Implementation
 
@@ -1397,7 +1397,7 @@ arc:
 **Problem**: The generation family arcs lacked clear documentation and consistent llm_context patterns, making it difficult to understand:
 - The generation pipeline flow (Instruction → PromptArtifact → Generated → Output)
 - When to use each arc for different traversal patterns
-- How to distinguish similar arcs (GENERATED vs HAS_GENERATED)
+- How to distinguish similar arcs (GENERATED vs HAS_NATIVE)
 
 **Decision**: Document the generation family semantics with clear flow diagrams and standardized llm_context.
 
@@ -1417,17 +1417,17 @@ arc:
 │     PromptArtifact ──[:INCLUDES_ENTITY]──> Entity                           │
 │                                                                             │
 │  3. GENERATION (prompt → content)                                           │
-│     BlockInstruction ──[:GENERATED]──> BlockGenerated                       │
-│     PageInstruction ──[:GENERATED]──> PageGenerated                         │
+│     BlockInstruction ──[:GENERATED]──> BlockNative                       │
+│     PageInstruction ──[:GENERATED]──> PageNative                         │
 │                                                                             │
 │  4. PROVENANCE (tracking)                                                   │
-│     BlockGenerated ──[:INFLUENCED_BY]──> EntityContent                      │
-│     BlockGenerated ──[:GENERATED_FROM]──> BlockType                         │
+│     BlockNative ──[:INFLUENCED_BY]──> EntityNative                      │
+│     BlockNative ──[:GENERATED_FROM]──> BlockType                         │
 │                                                                             │
 │  5. OUTPUT (assembly & deployment)                                          │
-│     Page ──[:HAS_GENERATED]──> PageGenerated                                │
-│     PageGenerated ──[:ASSEMBLES]──> BlockGenerated                          │
-│     OutputArtifact ──[:BUNDLES]──> PageGenerated                            │
+│     Page ──[:HAS_NATIVE]──> PageNative                                │
+│     PageNative ──[:ASSEMBLES]──> BlockNative                          │
+│     OutputArtifact ──[:BUNDLES]──> PageNative                            │
 │     *Generated ──[:PREVIOUS_VERSION]──> *Generated                          │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -1438,8 +1438,8 @@ arc:
 | Arc | Direction | Purpose | When to Use |
 |-----|-----------|---------|-------------|
 | `GENERATED` | Instruction → Generated | Provenance | "Which instruction made this?" |
-| `HAS_GENERATED` | Structure → Generated | Ownership | "What's the output for this page?" |
-| `GENERATED_FOR` | Generated → Structure | Inverse | "Which page owns this output?" |
+| `HAS_NATIVE` | Structure → Generated | Ownership | "What's the output for this page?" |
+| `NATIVE_OF` | Generated → Structure | Inverse | "Which page owns this output?" |
 | `GENERATED_FROM` | Generated → Type | Validation | "Is this block schema-valid?" |
 | `COMPILED_FROM` | Artifact → Instruction | Audit | "What template made this prompt?" |
 | `INCLUDES_ENTITY` | Artifact → Entity | Context | "What entities were in the prompt?" |
@@ -1464,7 +1464,7 @@ llm_context: |
 **Rationale**:
 
 1. **Pipeline Clarity**: Clear separation of authoring, compilation, generation, and output phases
-2. **Arc Disambiguation**: "GENERATED" (provenance) vs "HAS_GENERATED" (ownership) is now documented
+2. **Arc Disambiguation**: "GENERATED" (provenance) vs "HAS_NATIVE" (ownership) is now documented
 3. **LLM Context**: Standardized llm_context enables better RAG and spreading activation
 4. **Audit Trail**: Complete provenance from instruction through prompt to final output
 
@@ -1502,7 +1502,7 @@ llm_context: |
 | 026 | v0.12.1 | Inverse Arc Policy (TIER 1/2/3 classification, naming conventions) |
 | 027 | v0.12.1 | Generation Family Arc Semantics (pipeline documentation, arc disambiguation) |
 | 028 | v0.12.3 | Page-Entity Architecture + Brand Architecture (1:1 mandatory, @ refs, Atlas Pattern Brand, PromptStyle, geographic visual_prompt with AI platform support) |
-| 029 | v0.12.5 | *Native Pattern (EntityContent→EntityNative, PageGenerated→PageNative) |
+| 029 | v0.12.5 | *Native Pattern (EntityNative→EntityNative, PageNative→PageNative) |
 | 030 | v0.12.5 | Slug Ownership (Page owns URL, Entity owns semantics) |
 | 031 | v0.12.5 | SEO Pillar/Cluster Architecture (is_pillar, SEO_CLUSTER_OF, LINKS_TO, PageRank flow) |
 | 032 | v0.12.5 | URL Slugification Architecture (derivation algorithm, DERIVED_SLUG_FROM, no-repetition) |
@@ -1616,9 +1616,9 @@ Examples:
 
 | Syntaxe | Effet | Exemple |
 |---------|-------|---------|
-| `@entity:X` | Inject EntityContent(X@locale) | `@entity:tier-pro` |
+| `@entity:X` | Inject EntityNative(X@locale) | `@entity:tier-pro` |
 | `@entity:X.field` | Inject specific field | `@entity:tier-pro.tagline` |
-| `@project` | Inject ProjectContent | Global project context |
+| `@project` | Inject ProjectNative | Global project context |
 | `@brand` | Inject Brand (soul, pitch, voice) | `@brand.elevator_pitch` |
 | `@brand.design` | Inject BrandDesign | `@brand.design.style_mood` |
 | `@brand.principles` | Inject BrandPrinciples | `@brand.principles.heuristics` |
@@ -1629,7 +1629,7 @@ Examples:
 | `@geo:X.visual_prompt.image` | Inject image generation preset | `@geo:JP.visual_prompt.image` |
 | `@geo:X.visual_prompt.video` | Inject video generation preset | `@geo:JP.visual_prompt.video` |
 | `@audience:X` | Inject AudiencePersona | `@audience:developers` |
-| `@block:X` | Inject BlockGenerated/Instruction | `@block:shared-footer` |
+| `@block:X` | Inject BlockNative/Instruction | `@block:shared-footer` |
 | `@term:X` | Inject Term(X@locale) | `@term:subscription` |
 | `@expr:X` | Inject Expression(X@locale) | `@expr:call-to-action` |
 | `@seo:X` | Inject SEOKeyword | `@seo:qr-generator` |
@@ -1823,8 +1823,8 @@ This ADR supersedes the **Pipeline** section of ADR-025:
 **Status**: Approved (v0.12.5)
 
 **Problem**: Inconsistent naming for locale-specific nodes:
-1. `EntityContent` doesn't convey "locale-specific"
-2. `PageGenerated` implies it's different from `EntityContent`, but both are "native" (not translated)
+1. `EntityNative` doesn't convey "locale-specific"
+2. `PageNative` implies it's different from `EntityNative`, but both are "native" (not translated)
 3. Inconsistent suffixes: `*Content` vs `*Generated`
 4. NovaNet philosophy: content is GENERATED NATIVELY, not translated from a source
 
@@ -1834,21 +1834,21 @@ This ADR supersedes the **Pipeline** section of ADR-025:
 
 | Old Name | New Name | Trait | Who Creates |
 |----------|----------|-------|-------------|
-| `EntityContent` | `EntityNative` | authored | Human writes natively |
-| `ProjectContent` | `ProjectNative` | authored | Human writes natively |
-| `PageGenerated` | `PageNative` | generated | LLM generates natively |
-| `BlockGenerated` | `BlockNative` | generated | LLM generates natively |
+| `EntityNative` | `EntityNative` | authored | Human writes natively |
+| `ProjectNative` | `ProjectNative` | authored | Human writes natively |
+| `PageNative` | `PageNative` | generated | LLM generates natively |
+| `BlockNative` | `BlockNative` | generated | LLM generates natively |
 
 ### Arc Unification
 
-Merge `HAS_CONTENT` and `HAS_GENERATED` into single `HAS_NATIVE`:
+Merge `HAS_NATIVE` and `HAS_NATIVE` into single `HAS_NATIVE`:
 
 | Old Arc | New Arc | Properties |
 |---------|---------|------------|
-| `HAS_CONTENT` | `HAS_NATIVE` | `{locale: "fr-FR"}` |
-| `HAS_GENERATED` | `HAS_NATIVE` | `{locale: "fr-FR"}` |
-| `CONTENT_OF` | `NATIVE_OF` | — |
-| `GENERATED_FOR` | `NATIVE_OF` | — |
+| `HAS_NATIVE` | `HAS_NATIVE` | `{locale: "fr-FR"}` |
+| `HAS_NATIVE` | `HAS_NATIVE` | `{locale: "fr-FR"}` |
+| `NATIVE_OF` | `NATIVE_OF` | — |
+| `NATIVE_OF` | `NATIVE_OF` | — |
 
 ### Key Pattern
 
@@ -1886,7 +1886,7 @@ Block   ──[:HAS_NATIVE {locale}]──▶ BlockNative   (generated)
 1. **Consistency**: All locale-specific nodes use same suffix pattern
 2. **NovaNet Philosophy**: "Native" emphasizes content is generated natively, not translated
 3. **Clarity**: Node name = "locale-specific content", Trait = "who creates it"
-4. **Simplification**: Single arc type `HAS_NATIVE` instead of `HAS_CONTENT` + `HAS_GENERATED`
+4. **Simplification**: Single arc type `HAS_NATIVE` instead of `HAS_NATIVE` + `HAS_NATIVE`
 
 **Reference**: `docs/plans/2026-02-14-native-pattern-design.md`
 

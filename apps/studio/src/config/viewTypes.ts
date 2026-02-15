@@ -168,7 +168,7 @@ export const VIEW_TYPES: Record<ViewId, ViewTypeConfig> = {
     label: 'Generation',
     icon: '⚡',
     description: 'Generation pipeline and outputs',
-    applicableTo: ['Page', 'Block', 'PageGenerated', 'BlockGenerated'],
+    applicableTo: ['Page', 'Block', 'PageNative', 'BlockNative'],
     style: 'flow',
     effect: 'meteor',
     transitionColor: '#ec4899', // gen pink
@@ -219,7 +219,7 @@ export const VIEW_TYPES: Record<ViewId, ViewTypeConfig> = {
     label: 'Content',
     icon: '📝',
     description: 'Content per locale',
-    applicableTo: ['Entity', 'Project', 'EntityContent', 'ProjectContent'],
+    applicableTo: ['Entity', 'Project', 'EntityNative', 'ProjectNative'],
     style: 'compact',
     effect: 'typewriter',
     transitionColor: '#fbbf24', // content yellow

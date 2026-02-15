@@ -182,18 +182,18 @@ pnpm test            # Tests
 │  TRAITS (5 data origins - WHERE does data come from?)                           │
 │  ─────────────────────────────────────────────────────                          │
 │  defined    : Human-created once (Entity, Page, Block)                          │
-│  authored   : Human-written per locale (EntityContent, ProjectContent)          │
+│  authored   : Human-written per locale (EntityNative, ProjectNative)          │
 │  imported   : External data brought in (Term, Expression, Pattern)              │
-│  generated  : LLM output (PageGenerated, BlockGenerated)                        │
+│  generated  : LLM output (PageNative, BlockNative)                        │
 │  retrieved  : Fetched from external APIs (SEOKeywordMetrics, GEOMetrics)        │
 │                                                                                 │
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │  NATIVE GENERATION (not translation!)                                           │
 │  ────────────────────────────────────                                           │
-│  Entity (defined) + Knowledge atoms (fr-FR) → Generate → EntityContent@fr-FR    │
+│  Entity (defined) + Knowledge atoms (fr-FR) → Generate → EntityNative@fr-FR    │
 │                                                                                 │
 │  X Source → Translate → Target                                                  │
-│  V Entity (defined) → Generate natively → EntityContent (locale-specific)       │
+│  V Entity (defined) → Generate natively → EntityNative (locale-specific)       │
 │                                                                                 │
 └─────────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -222,9 +222,9 @@ All schema nodes carry `:Schema` double-label. Instances link via `[:OF_CLASS]`.
 
 ### Key Relations (grouped by ArcFamily)
 - **Ownership:** `HAS_PAGE`, `HAS_BLOCK`, `OF_TYPE`, `SUPPORTS_LOCALE`, `HAS_PROJECT`
-- **Localization:** `HAS_CONTENT`, `FOR_LOCALE`
+- **Localization:** `HAS_NATIVE`, `FOR_LOCALE`
 - **Semantic:** `USES_ENTITY`, `SEMANTIC_LINK`, `HAS_ENTITY`
-- **Generation:** `HAS_GENERATED`, `HAS_PROMPT`
+- **Generation:** `HAS_NATIVE`, `HAS_PROMPT`
 - **Mining:** `EXPRESSES`, `HAS_SEO_TARGET`
 
 ### Navigation Modes (v0.12.0 - ADR-022)
@@ -259,7 +259,7 @@ Path configured in tsconfig.json:
 
 > **v0.12.0 notes:**
 > - `NodeCategory` was replaced by `Layer` in v9.0.0
-> - `EntityL10n` → `EntityContent`, `PageL10n` → `PageGenerated`, `BlockL10n` → `BlockGenerated` in v10.9
+> - `EntityL10n` → `EntityNative`, `PageL10n` → `PageNative`, `BlockL10n` → `BlockNative` in v10.9
 > - 5 navigation modes consolidated into 2 (Graph/Nexus) in v11.7
 > - `Kind` → `Class`, `ArcKind` → `ArcClass`, `:Meta:` → `:Schema:` in v0.12.0
 > - Traits renamed: invariant→defined, localized→authored, knowledge→imported, aggregated→retrieved

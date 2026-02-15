@@ -16,7 +16,7 @@ arc:
   llm_context: |
     USE: when loading style settings for instruction compilation.
     TRIGGERS: locale style, voice settings, tone configuration.
-    NOT: for generated output (use HAS_GENERATED).
+    NOT: for generated output (use HAS_NATIVE).
     RELATES: BlockInstruction (source), Style (target, cross_realm).
 
   cypher_pattern: "(BlockInstruction)-[:INCLUDES_STYLE]->(Style)"

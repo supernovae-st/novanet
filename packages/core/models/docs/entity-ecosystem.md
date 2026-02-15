@@ -6,9 +6,9 @@
 
 The entity network showing semantic relationships between entities.
 Entities are the core semantic building blocks of NovaNet:
-- Each Entity has localized versions (EntityContent) per locale
+- Each Entity has localized versions (EntityNative) per locale
 - Entities connect via SEMANTIC_LINK with temperature weights
-- EntityContent expresses SEO keywords via EXPRESSES arc
+- EntityNative expresses SEO keywords via EXPRESSES arc
 
 ### Legend
 
@@ -39,18 +39,18 @@ flowchart TB
   end
 
   subgraph LOCALIZATION["Localization"]
-    EntityContent["🟢 EntityContent"]
+    EntityNative["🟢 EntityNative"]
   end
 
   subgraph SEO_TARGETS["SEO Targets"]
   end
 
   %% Additional reachable nodes
-  ProjectContent["🟢 ProjectContent"]
+  ProjectNative["🟢 ProjectNative"]
 
   %% Relationships (styled by arc family)
-  Entity -.->|HAS_CONTENT| EntityContent
-  Entity -.->|HAS_CONTENT| ProjectContent
+  Entity -.->|HAS_NATIVE| EntityNative
+  Entity -.->|HAS_NATIVE| ProjectNative
   Entity -.->|SEMANTIC_LINK| Entity
 
   %% Arc colors by family
@@ -59,15 +59,15 @@ flowchart TB
 
   %% Class assignments
   class Entity defined
-  class EntityContent authored
-  class ProjectContent authored
+  class EntityNative authored
+  class ProjectNative authored
 ```
 
 ## Notes
 
 - Entities are INVARIANT - they exist independently of locale
-- EntityContent provides locale-specific title, definition, examples
-- SEO keywords linked to EntityContent (same locale) via EXPRESSES
+- EntityNative provides locale-specific title, definition, examples
+- SEO keywords linked to EntityNative (same locale) via EXPRESSES
 - SEMANTIC_LINK temperature controls spreading activation strength
 
 ---

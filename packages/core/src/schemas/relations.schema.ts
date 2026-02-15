@@ -1,22 +1,27 @@
 /**
  * @fileoverview NovaNet Relation Registry
  * @module @novanet/core/schemas/relations
- * @version 0.12.4
+ * @version 0.13.0
  *
  * Unified registry for all Neo4j relationship types in the NovaNet knowledge graph.
  * This module defines relation types, their property schemas, and the complete registry.
  *
+ * **v0.13.0 ADR-029 *Native Pattern:**
+ * - HAS_NATIVE + HAS_NATIVE → HAS_NATIVE (unified ownership arc)
+ * - NATIVE_OF + NATIVE_OF → NATIVE_OF (unified inverse arc)
+ * - EntityNative/ProjectNative/PageNative/BlockNative → *Native nodes
+ *
  * **Relation Categories:**
- * - Project Root: HAS_PAGE, HAS_BRAND_IDENTITY, SUPPORTS_LOCALE
+ * - Project Root: HAS_PAGE, HAS_BRAND, SUPPORTS_LOCALE
  * - Locale: DEFAULT_LOCALE, FALLBACK_TO, FOR_LOCALE, VARIANT_OF
  * - Locale Knowledge: HAS_IDENTITY, HAS_VOICE, HAS_CULTURE, HAS_MARKET, HAS_LEXICON
- * - Localization: HAS_CONTENT, CONTENT_OF
+ * - Native Content: HAS_NATIVE, NATIVE_OF (v0.13.0 ADR-029)
  * - Page Structure: HAS_BLOCK, OF_TYPE, LINKS_TO, SUBTOPIC_OF
  * - Entity Usage: USES_ENTITY, REFERENCES, SEMANTIC_LINK, BELONGS_TO, HAS_KEYWORD
- * - Output: HAS_GENERATED, HAS_METRICS, ASSEMBLES
+ * - Output: HAS_METRICS, ASSEMBLES
  * - SEO/GEO Targeting: HAS_SEO_TARGET, HAS_GEO_TARGET, TARGETS_SEO, TARGETS_GEO
  * - Provenance: INFLUENCED_BY, GENERATED_FROM, GENERATED
- * - Inverse: CONTENT_OF, GENERATED_FOR, BLOCK_OF, USED_BY
+ * - Inverse: NATIVE_OF, BLOCK_OF, USED_BY
  *
  * @example
  * ```typescript
@@ -81,9 +86,10 @@ export const RelationType = {
   HAS_CONSTRAINT: 'HAS_CONSTRAINT', // LocaleCulture → Constraint
 
   // ─────────────────────────────────────────────────────────────────────────────
-  // LOCALIZATION (v7.0.0: unified HAS_CONTENT for all *Content nodes - v10.9: L10n suffix deprecated)
+  // NATIVE CONTENT (v0.13.0 ADR-029: unified HAS_NATIVE for all *Native nodes)
+  // Merges: HAS_CONTENT + HAS_GENERATED → HAS_NATIVE
   // ─────────────────────────────────────────────────────────────────────────────
-  HAS_CONTENT: 'HAS_CONTENT',             // Entity|Project → *Content (v10.9: L10n → Content)
+  HAS_NATIVE: 'HAS_NATIVE',               // Entity|Project|Page|Block → *Native (v0.13.0 ADR-029)
 
   // ─────────────────────────────────────────────────────────────────────────────
   // PAGE STRUCTURE
@@ -108,24 +114,23 @@ export const RelationType = {
   POPULAR_IN: 'POPULAR_IN',         // Entity → Country|GeoRegion (v0.12.4: geographic popularity)
 
   // ─────────────────────────────────────────────────────────────────────────────
-  // OUTPUT (v7.0.0: unified HAS_GENERATED)
+  // OUTPUT (v0.13.0: HAS_GENERATED merged into HAS_NATIVE per ADR-029)
   // ─────────────────────────────────────────────────────────────────────────────
-  HAS_GENERATED: 'HAS_GENERATED',         // Page|Block → PageGenerated|BlockGenerated (v7.0.0: unified)
-  HAS_METRICS: 'HAS_METRICS',       // PageGenerated → PageMetrics
-  ASSEMBLES: 'ASSEMBLES',           // PageGenerated → BlockGenerated
+  HAS_METRICS: 'HAS_METRICS',       // PageNative → PageMetrics
+  ASSEMBLES: 'ASSEMBLES',           // PageNative → BlockNative (v0.13.0: ADR-029 *Native)
 
   // ─────────────────────────────────────────────────────────────────────────────
   // SEO/GEO TARGETING (v7.7.0: locale-aligned + cross-locale shortcuts)
   // ─────────────────────────────────────────────────────────────────────────────
   // v7.7.0: Locale-aligned primary targeting
-  HAS_SEO_TARGET: 'HAS_SEO_TARGET',     // EntityContent → SEOKeyword (locale-aligned)
-  HAS_GEO_TARGET: 'HAS_GEO_TARGET',     // EntityContent → GEOQuery (locale-aligned)
+  HAS_SEO_TARGET: 'HAS_SEO_TARGET',     // EntityNative → SEOKeyword (locale-aligned)
+  HAS_GEO_TARGET: 'HAS_GEO_TARGET',     // EntityNative → GEOQuery (locale-aligned)
   // Cross-locale shortcuts (kept for management/reporting)
   TARGETS_SEO: 'TARGETS_SEO',           // Entity → SEOKeyword (v10.3: was Concept)
   TARGETS_GEO: 'TARGETS_GEO',           // Entity → GEOQuery (v10.3: was Concept)
   // REMOVED v7.8.1: PAGE_TARGETS_SEO, PAGE_TARGETS_GEO
   // Reason: Direct Page → SEO/GEO bypasses semantic grouping
-  // Correct flow: Page → Entity → EntityContent → SEOKeyword/GEOQuery
+  // Correct flow: Page → Entity → EntityNative → SEOKeyword/GEOQuery
 
   // ─────────────────────────────────────────────────────────────────────────────
   // SEO/GEO MINING (v11.2: Mining runs removed, deferred to v12+)
@@ -135,35 +140,33 @@ export const RelationType = {
 
   // ─────────────────────────────────────────────────────────────────────────────
   // PROVENANCE (v7.9.0: REMOVED USED_SEO_KEYWORD, USED_GEO_SEED)
-  // SEO/GEO provenance is implicit via: BlockGenerated → INFLUENCED_BY → EntityContent → HAS_*_TARGET → SEO/GEO
+  // SEO/GEO provenance is implicit via: BlockNative → INFLUENCED_BY → EntityNative → HAS_*_TARGET → SEO/GEO
   // ─────────────────────────────────────────────────────────────────────────────
-  INFLUENCED_BY: 'INFLUENCED_BY',       // BlockGenerated → EntityContent
-  // REMOVED v7.9.0: USED_SEO_KEYWORD, USED_GEO_SEED (SEO/GEO is at EntityContent level)
-  GENERATED_FROM: 'GENERATED_FROM',     // BlockGenerated → BlockType
+  INFLUENCED_BY: 'INFLUENCED_BY',       // BlockNative → EntityNative
+  // REMOVED v7.9.0: USED_SEO_KEYWORD, USED_GEO_SEED (SEO/GEO is at EntityNative level)
+  GENERATED_FROM: 'GENERATED_FROM',     // BlockNative → BlockType
 
   // ─────────────────────────────────────────────────────────────────────────────
   // OPTIMIZATION RELATIONS
   // ─────────────────────────────────────────────────────────────────────────────
-  BELONGS_TO_PROJECT_CONTENT: 'BELONGS_TO_PROJECT_CONTENT', // PageGenerated → ProjectContent (locale-aligned)
+  BELONGS_TO_PROJECT_CONTENT: 'BELONGS_TO_PROJECT_CONTENT', // PageNative → ProjectNative (locale-aligned)
 
   // ─────────────────────────────────────────────────────────────────────────────
   // INSTRUCTION RELATIONS (v0.12.4: PageInstruction deleted per ADR-028)
   // ─────────────────────────────────────────────────────────────────────────────
   HAS_INSTRUCTION: 'HAS_INSTRUCTION',   // Page|Block → BlockInstruction (v0.12.4: PageInstruction deleted)
   HAS_RULES: 'HAS_RULES',               // BlockType → BlockRules
-  GENERATED: 'GENERATED',               // BlockInstruction → PageGenerated|BlockGenerated (provenance, v0.12.4)
+  GENERATED: 'GENERATED',               // BlockInstruction → PageNative|BlockNative (provenance, v0.13.0 ADR-029)
 
   // ─────────────────────────────────────────────────────────────────────────────
-  // VERSION HISTORY (v7.11.0)
+  // VERSION HISTORY (v7.11.0, v0.13.0: ADR-029 *Native)
   // ─────────────────────────────────────────────────────────────────────────────
-  PREVIOUS_VERSION: 'PREVIOUS_VERSION', // BlockGenerated|PageGenerated → BlockGenerated|PageGenerated
+  PREVIOUS_VERSION: 'PREVIOUS_VERSION', // BlockNative|PageNative → BlockNative|PageNative (v0.13.0)
 
   // ─────────────────────────────────────────────────────────────────────────────
-  // INVERSE RELATIONSHIPS (v7.8.0 - bidirectional queries without full scans)
-  // v10.9.0: L10N_OF → CONTENT_OF, HAS_LOCALIZED_CONTENT removed (ADR-014)
+  // INVERSE RELATIONSHIPS (v0.13.0 ADR-029: CONTENT_OF + GENERATED_FOR → NATIVE_OF)
   // ─────────────────────────────────────────────────────────────────────────────
-  CONTENT_OF: 'CONTENT_OF',             // EntityContent|ProjectContent → Entity|Project (inverse of HAS_CONTENT)
-  GENERATED_FOR: 'GENERATED_FOR',       // PageGenerated|BlockGenerated → Page|Block (inverse of HAS_GENERATED)
+  NATIVE_OF: 'NATIVE_OF',               // *Native → Entity|Project|Page|Block (inverse of HAS_NATIVE, v0.13.0)
   BLOCK_OF: 'BLOCK_OF',                 // Block → Page (inverse of HAS_BLOCK)
   USED_BY: 'USED_BY',                   // Entity → Page|Block (inverse of USES_ENTITY)
 } as const;
@@ -229,7 +232,7 @@ export const HasBlockPropsSchema = z.object({
 export const LinksToPropsSchema = z.object({
   concept_key: z.string()
     .regex(/^[a-z0-9-]+$/)
-    .describe('Entity key for anchor text derivation from EntityContent.title'),
+    .describe('Entity key for anchor text derivation from EntityNative.title'),
   context: z.enum(['cta', 'body', 'related', 'nav'])
     .describe('Where the link appears: CTA button, body text, related section, or navigation'),
   seo_weight: z.number()
@@ -292,10 +295,11 @@ export const TargetsGEOPropsSchema = z.object({
     .describe('Priority ranking for GEO efforts (1-10 scale)'),
 }).describe('TARGETS_GEO relation properties for cross-locale GEO shortcuts');
 
-// v7.7.0: Locale-aligned targeting (EntityContent → SEO/GEO)
+// v7.7.0: Locale-aligned targeting (v0.13.0: EntityNative → EntityNative)
 
 /**
- * Properties for HAS_SEO_TARGET relation (EntityContent → SEOKeyword).
+ * Properties for HAS_SEO_TARGET relation (EntityNative → SEOKeyword).
+ * v0.13.0: ADR-029 *Native pattern.
  */
 export const HasSEOTargetPropsSchema = z.object({
   role: z.enum(['primary', 'secondary', 'long-tail'])
@@ -306,7 +310,8 @@ export const HasSEOTargetPropsSchema = z.object({
 }).describe('HAS_SEO_TARGET relation properties for locale-aligned SEO');
 
 /**
- * Properties for HAS_GEO_TARGET relation (EntityContent → GEOQuery).
+ * Properties for HAS_GEO_TARGET relation (EntityNative → GEOQuery).
+ * v0.13.0: ADR-029 *Native pattern.
  */
 export const HasGEOTargetPropsSchema = z.object({
   role: z.enum(['primary', 'contextual'])
@@ -317,7 +322,8 @@ export const HasGEOTargetPropsSchema = z.object({
 }).describe('HAS_GEO_TARGET relation properties for locale-aligned GEO');
 
 /**
- * Properties for ASSEMBLES relation (PageGenerated → BlockGenerated).
+ * Properties for ASSEMBLES relation (PageNative → BlockNative).
+ * v0.13.0: ADR-029 *Native pattern.
  */
 export const AssemblesPropsSchema = z.object({
   position: z.number()
@@ -327,7 +333,8 @@ export const AssemblesPropsSchema = z.object({
 }).describe('ASSEMBLES relation properties for page assembly');
 
 /**
- * Properties for INFLUENCED_BY relation (BlockGenerated → EntityContent).
+ * Properties for INFLUENCED_BY relation (BlockNative → EntityNative).
+ * v0.13.0: ADR-029 *Native pattern.
  */
 export const InfluencedByPropsSchema = z.object({
   weight: z.number()
@@ -336,7 +343,7 @@ export const InfluencedByPropsSchema = z.object({
   concept_version: z.number()
     .int()
     .positive()
-    .describe('Version of EntityContent used during generation'),
+    .describe('Version of EntityNative used during generation'),
 }).describe('INFLUENCED_BY relation properties for provenance tracking');
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -344,8 +351,9 @@ export const InfluencedByPropsSchema = z.object({
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * Properties for GENERATED relation (BlockInstruction → PageGenerated|BlockGenerated).
+ * Properties for GENERATED relation (BlockInstruction → PageNative|BlockNative).
  * v0.12.4: PageInstruction deleted per ADR-028.
+ * v0.13.0: ADR-029 *Native pattern.
  */
 export const GeneratedPropsSchema = z.object({
   generated_at: z.date()
@@ -425,10 +433,10 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   },
   [RelationType.FOR_LOCALE]: {
     type: RelationType.FOR_LOCALE,
-    from: ['EntityContent', 'ProjectContent', 'PageGenerated', 'BlockGenerated', 'SEOKeyword', 'GEOQuery'],
+    from: ['EntityNative', 'ProjectNative', 'PageNative', 'BlockNative', 'SEOKeyword', 'GEOQuery'],
     to: 'Locale',
     cardinality: 'N:1',
-    description: 'Content node targets a specific locale',
+    description: 'Native content node targets a specific locale (v0.13.0 ADR-029)',
   },
   [RelationType.VARIANT_OF]: {
     type: RelationType.VARIANT_OF,
@@ -543,14 +551,14 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   },
 
   // ─────────────────────────────────────────────────────────────────────────────
-  // LOCALIZATION (v7.0.0: unified HAS_CONTENT for all *L10n nodes)
+  // NATIVE CONTENT (v0.13.0 ADR-029: unified HAS_NATIVE = HAS_CONTENT + HAS_GENERATED)
   // ─────────────────────────────────────────────────────────────────────────────
-  [RelationType.HAS_CONTENT]: {
-    type: RelationType.HAS_CONTENT,
-    from: ['Entity', 'Project'],
-    to: ['EntityContent', 'ProjectContent'],
+  [RelationType.HAS_NATIVE]: {
+    type: RelationType.HAS_NATIVE,
+    from: ['Entity', 'Project', 'Page', 'Block'],
+    to: ['EntityNative', 'ProjectNative', 'PageNative', 'BlockNative'],
     cardinality: '1:N',
-    description: 'Defined node has authored content (v11.8: ADR-024 renamed)',
+    description: 'Structure node has native content per locale (v0.13.0 ADR-029)',
   },
 
   // ─────────────────────────────────────────────────────────────────────────────
@@ -583,7 +591,7 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
     to: 'Page',
     cardinality: 'N:M',
     props: LinksToPropsSchema,
-    description: 'Explicit internal link for SEO. Anchor text derived from EntityContent.title (v7.12.0)',
+    description: 'Explicit internal link for SEO. Anchor text derived from EntityNative.title (v7.12.0)',
   },
   [RelationType.SUBTOPIC_OF]: {
     type: RelationType.SUBTOPIC_OF,
@@ -642,53 +650,46 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   },
 
   // ─────────────────────────────────────────────────────────────────────────────
-  // OUTPUT (v7.0.0: unified HAS_GENERATED)
+  // OUTPUT RELATIONS (v0.13.0: HAS_GENERATED merged into HAS_NATIVE per ADR-029)
   // ─────────────────────────────────────────────────────────────────────────────
-  [RelationType.HAS_GENERATED]: {
-    type: RelationType.HAS_GENERATED,
-    from: ['Page', 'Block'],
-    to: ['PageGenerated', 'BlockGenerated'],
-    cardinality: '1:N',
-    description: 'Page or Block has generated output per locale (v7.0.0: unified)',
-  },
   [RelationType.HAS_METRICS]: {
     type: RelationType.HAS_METRICS,
     from: ['SEOKeyword', 'GEOQuery'],
     to: ['SEOKeywordMetrics', 'GEOAnswer'],
     cardinality: '1:N',
     description: 'Time-series observations (v7.11.0: PageMetrics removed, query GA/PostHog)',
-    // REMOVED v7.11.0: PageGenerated → PageMetrics (query GA/PostHog with published_at/replaced_at date ranges)
+    // REMOVED v7.11.0: PageNative → PageMetrics (query GA/PostHog with published_at/replaced_at date ranges)
     // SEOKeyword → SEOKeywordMetrics (keyword ranking/volume history)
     // GEOQuery → GEOAnswer (AI citation observations)
   },
   [RelationType.ASSEMBLES]: {
     type: RelationType.ASSEMBLES,
-    from: 'PageGenerated',
-    to: 'BlockGenerated',
+    from: 'PageNative',
+    to: 'BlockNative',
     cardinality: '1:N',
     props: AssemblesPropsSchema,
-    description: 'PageGenerated assembles BlockGenerateds with position',
+    description: 'PageNative assembles BlockNatives with position (v0.13.0 ADR-029)',
   },
 
   // ─────────────────────────────────────────────────────────────────────────────
   // SEO/GEO TARGETING (v7.7.0: locale-aligned + cross-locale shortcuts)
   // ─────────────────────────────────────────────────────────────────────────────
-  // v7.7.0: Locale-aligned primary targeting
+  // v7.7.0: Locale-aligned primary targeting (v0.13.0: EntityNative → EntityNative)
   [RelationType.HAS_SEO_TARGET]: {
     type: RelationType.HAS_SEO_TARGET,
-    from: 'EntityContent',
+    from: 'EntityNative',
     to: 'SEOKeyword',
     cardinality: '1:N',
     props: HasSEOTargetPropsSchema,
-    description: 'Primary SEO targeting - locale-aligned (EntityContent and SEOKeyword share same locale)',
+    description: 'Primary SEO targeting - locale-aligned (EntityNative and SEOKeyword share same locale)',
   },
   [RelationType.HAS_GEO_TARGET]: {
     type: RelationType.HAS_GEO_TARGET,
-    from: 'EntityContent',
+    from: 'EntityNative',
     to: 'GEOQuery',
     cardinality: '1:N',
     props: HasGEOTargetPropsSchema,
-    description: 'Primary GEO targeting - locale-aligned (EntityContent and GEOQuery share same locale)',
+    description: 'Primary GEO targeting - locale-aligned (EntityNative and GEOQuery share same locale)',
   },
   // Cross-locale shortcuts (kept for management/reporting)
   [RelationType.TARGETS_SEO]: {
@@ -709,7 +710,7 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   },
   // REMOVED v7.8.1: PAGE_TARGETS_SEO and PAGE_TARGETS_GEO definitions
   // Reason: Direct Page → SEO/GEO bypasses semantic grouping
-  // Correct flow: Page → Entity → EntityContent → SEOKeyword/GEOQuery
+  // Correct flow: Page → Entity → EntityNative → SEOKeyword/GEOQuery
 
   // ─────────────────────────────────────────────────────────────────────────────
   // SEO/GEO MINING (v11.2: Mining runs removed, deferred to v12+)
@@ -720,32 +721,32 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   // ─────────────────────────────────────────────────────────────────────────────
   [RelationType.INFLUENCED_BY]: {
     type: RelationType.INFLUENCED_BY,
-    from: 'BlockGenerated',
-    to: 'EntityContent',
+    from: 'BlockNative',
+    to: 'EntityNative',
     cardinality: 'N:M',
     props: InfluencedByPropsSchema,
-    description: 'BlockGenerated was influenced by EntityContent (provenance)',
+    description: 'BlockNative was influenced by EntityNative (provenance, v0.13.0 ADR-029)',
   },
-  // REMOVED v7.9.0: USED_SEO_KEYWORD, USED_GEO_SEED (SEO/GEO is at EntityContent level)
-  // Provenance is implicit via: BlockGenerated → INFLUENCED_BY → EntityContent → HAS_*_TARGET → SEO/GEO
+  // REMOVED v7.9.0: USED_SEO_KEYWORD, USED_GEO_SEED (SEO/GEO is at EntityNative level)
+  // Provenance is implicit via: BlockNative → INFLUENCED_BY → EntityNative → HAS_*_TARGET → SEO/GEO (v0.13.0)
 
   [RelationType.GENERATED_FROM]: {
     type: RelationType.GENERATED_FROM,
-    from: 'BlockGenerated',
+    from: 'BlockNative',
     to: 'BlockType',
     cardinality: 'N:1',
-    description: 'BlockGenerated was generated from a BlockType template',
+    description: 'BlockNative was generated from a BlockType template (v0.13.0 ADR-029)',
   },
 
   // ─────────────────────────────────────────────────────────────────────────────
-  // OPTIMIZATION RELATIONS
+  // OPTIMIZATION RELATIONS (v0.13.0: *Content/*Generated → *Native per ADR-029)
   // ─────────────────────────────────────────────────────────────────────────────
   [RelationType.BELONGS_TO_PROJECT_CONTENT]: {
     type: RelationType.BELONGS_TO_PROJECT_CONTENT,
-    from: 'PageGenerated',
-    to: 'ProjectContent',
+    from: 'PageNative',
+    to: 'ProjectNative',
     cardinality: 'N:1',
-    description: 'PageGenerated belongs to ProjectContent for locale-aligned generation context (voice, tagline, CTAs)',
+    description: 'PageNative belongs to ProjectNative for locale-aligned generation context (voice, tagline, CTAs). v0.13.0 ADR-029.',
   },
 
   // ─────────────────────────────────────────────────────────────────────────────
@@ -768,10 +769,10 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   [RelationType.GENERATED]: {
     type: RelationType.GENERATED,
     from: 'BlockInstruction',
-    to: ['PageGenerated', 'BlockGenerated'],
+    to: ['PageNative', 'BlockNative'],
     cardinality: 'N:M',
     props: GeneratedPropsSchema,
-    description: 'Provenance: which instruction generated which output (v0.12.4)',
+    description: 'Provenance: which instruction generated which output (v0.13.0 ADR-029)',
   },
 
   // ─────────────────────────────────────────────────────────────────────────────
@@ -779,31 +780,23 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   // ─────────────────────────────────────────────────────────────────────────────
   [RelationType.PREVIOUS_VERSION]: {
     type: RelationType.PREVIOUS_VERSION,
-    from: ['BlockGenerated', 'PageGenerated'],
-    to: ['BlockGenerated', 'PageGenerated'],
+    from: ['BlockNative', 'PageNative'],
+    to: ['BlockNative', 'PageNative'],
     cardinality: '1:1',
-    description: 'Links to previous version in history chain (v7.11.0)',
+    description: 'Links to previous version in history chain (v0.13.0 ADR-029)',
     // Current version has replaced_at IS NULL
-    // HAS_GENERATED always points to current version
+    // HAS_NATIVE always points to current version
   },
 
   // ─────────────────────────────────────────────────────────────────────────────
-  // INVERSE RELATIONSHIPS (v7.8.0 - bidirectional queries without full scans)
-  // v10.9.0: L10N_OF → CONTENT_OF, OUTPUT_OF → GENERATED_FOR, HAS_LOCALIZED_CONTENT removed
+  // INVERSE RELATIONSHIPS (v0.13.0: CONTENT_OF + GENERATED_FOR → NATIVE_OF per ADR-029)
   // ─────────────────────────────────────────────────────────────────────────────
-  [RelationType.CONTENT_OF]: {
-    type: RelationType.CONTENT_OF,
-    from: ['EntityContent', 'ProjectContent'],
-    to: ['Entity', 'Project'],
+  [RelationType.NATIVE_OF]: {
+    type: RelationType.NATIVE_OF,
+    from: ['EntityNative', 'ProjectNative', 'PageNative', 'BlockNative'],
+    to: ['Entity', 'Project', 'Page', 'Block'],
     cardinality: 'N:1',
-    description: 'Inverse of HAS_CONTENT - authored content points to parent',
-  },
-  [RelationType.GENERATED_FOR]: {
-    type: RelationType.GENERATED_FOR,
-    from: ['PageGenerated', 'BlockGenerated'],
-    to: ['Page', 'Block'],
-    cardinality: 'N:1',
-    description: 'Inverse of HAS_GENERATED - generated content points to structure',
+    description: 'Inverse of HAS_NATIVE - native content points to parent structure (v0.13.0 ADR-029)',
   },
   [RelationType.BLOCK_OF]: {
     type: RelationType.BLOCK_OF,

@@ -78,10 +78,9 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   // Instructions
   HAS_INSTRUCTION: 'instruction',
   HAS_RULES: 'rules',
-  // Output
-  HAS_GENERATED: 'generated',
-  HAS_CONTENT: 'content',
-  CONTENT_OF: 'contentParent',
+  // Native content (v0.13.0 ADR-029: unified HAS_CONTENT + HAS_GENERATED)
+  HAS_NATIVE: 'native',
+  NATIVE_OF: 'nativeParent',
   HAS_AUTHORED_CONTENT: 'authoredContent',
   // Locale knowledge (v11.5 schema)
   HAS_CULTURE: 'culture',
@@ -125,7 +124,7 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
 
 // v11.6: Target type labels are now OPTIONAL
 // The same relation can target different node types depending on context:
-// - HAS_CONTENT: Entity → EntityContent, Project → ProjectContent
+// - HAS_NATIVE: Entity → EntityNative, Project → ProjectNative
 // - HAS_ENTITY: Project → Entity
 // Rather than trying to map every context, we DON'T specify the target label
 // and let Neo4j return whatever node is connected.
@@ -283,7 +282,7 @@ export class NovaNetFilter {
    
   includeOutputs(_opts?: { latestOnly?: boolean }): this {
     this.state.includes.push({
-      relation: 'HAS_GENERATED',
+      relation: 'HAS_NATIVE',
       direction: 'outgoing',
     });
     return this;
@@ -291,7 +290,7 @@ export class NovaNetFilter {
 
   includeContent(): this {
     this.state.includes.push({
-      relation: 'HAS_CONTENT',
+      relation: 'HAS_NATIVE',
       direction: 'outgoing',
     });
     return this;
@@ -448,7 +447,7 @@ export class CypherGenerator {
 
     // 2. OPTIONAL MATCH for includes
     // v11.6: Don't specify target type - let Neo4j return whatever is connected
-    // This handles cases where same relation targets different types (HAS_CONTENT, HAS_ENTITY, etc.)
+    // This handles cases where same relation targets different types (HAS_NATIVE, HAS_ENTITY, etc.)
     for (const include of criteria.includes) {
       const alias = this.relationToAlias(include.relation);
       aliases.add(alias);
@@ -546,7 +545,7 @@ export const VIEW_PRESETS: ViewPreset[] = [
     shortcut: '1',
     filter: () => NovaNetFilter.create()
       .byLayer('foundation', 'structure', 'semantic')
-      .excludeTypes('EntityContent'),
+      .excludeTypes('EntityNative'),
   },
   {
     id: 'generation-chain',
@@ -555,7 +554,7 @@ export const VIEW_PRESETS: ViewPreset[] = [
     icon: '🔗',
     shortcut: '2',
     filter: () => NovaNetFilter.create()
-      .byTypes('Entity', 'EntityContent', 'PageGenerated', 'BlockGenerated')
+      .byTypes('Entity', 'EntityNative', 'PageNative', 'BlockNative')
       .byLayer('instruction', 'output'),
   },
   {
@@ -574,7 +573,7 @@ export const VIEW_PRESETS: ViewPreset[] = [
     icon: '🕸️',
     shortcut: '4',
     filter: () => NovaNetFilter.create()
-      .byTypes('Entity', 'EntityContent', 'ExpressionSet'),
+      .byTypes('Entity', 'EntityNative', 'ExpressionSet'),
   },
   {
     id: 'prompts-rules',
@@ -616,7 +615,7 @@ export const VIEW_PRESETS: ViewPreset[] = [
     shortcut: '8',
     filter: () => NovaNetFilter.create()
       .byTypes(
-        'ProjectContent', 'EntityContent', 'PageGenerated', 'BlockGenerated',
+        'ProjectNative', 'EntityNative', 'PageNative', 'BlockNative',
         'SEOKeyword',
       ),
   },

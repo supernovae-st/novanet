@@ -1,13 +1,15 @@
-// NovaNet Project Data v8.2.0 - QRCode-AI Complete Setup
+// NovaNet Project Data v0.13.0 - QRCode-AI Complete Setup
+// v0.13.0 ADR-029: *Native pattern (ProjectNative→ProjectNative, HAS_CONTENT→HAS_NATIVE)
 // YAML v7.11.0 alignment - icon, priority, freshness removed (managed in YAML views)
 //
 // Creates project-specific nodes:
 // - BrandIdentity (invariant)
-// - ProjectContent (localized identity + CTAs + SEO + target_audience)
+// - ProjectNative (localized identity + CTAs + SEO + target_audience)
 //
 // Removed in v7.2.5: Audience, AudienceL10n, ValuePropL10n, SocialProofL10n
 // Removed in v8.2.0: icon, priority, freshness (now in YAML views)
-// v10.9.0: ProjectL10n renamed to ProjectContent (Decision 11)
+// v10.9.0: ProjectL10n renamed to ProjectNative (Decision 11)
+// v0.13.0: ProjectNative renamed to ProjectNative (ADR-029)
 //
 // STANDARD PROPERTIES:
 //   key, display_name, description, llm_context, created_at, updated_at
@@ -20,7 +22,7 @@ MATCH (p:Project {key: "qrcode-ai"})
 MERGE (p)-[:HAS_BRAND]->(bi:Brand {key: "brand-qrcode-ai"}) // v0.12.4 ADR-028: was HAS_BRAND_IDENTITY + BrandIdentity
 SET bi.display_name = "QR Code AI Brand",
     bi.description = "Visual identity and design system for QR Code AI",
-    bi.llm_context = "USE: when generating visual content, images, or style decisions. TRIGGERS: brand, colors, fonts, style. NOT: text content (use ProjectContent).",
+    bi.llm_context = "USE: when generating visual content, images, or style decisions. TRIGGERS: brand, colors, fonts, style. NOT: text content (use ProjectNative).",
     bi.color_primary = "#6366F1",
     bi.color_secondary = "#8B5CF6",
     bi.color_accent = "#F59E0B",
@@ -46,12 +48,12 @@ SET bi.display_name = "QR Code AI Brand",
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // PROJECT CONTENT (localized identity + CTAs + SEO + target_audience) - v7.2.5
-// v10.9.0: Renamed from ProjectL10n to ProjectContent (Decision 11)
+// v10.9.0: Renamed from ProjectL10n to ProjectNative (Decision 11)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-// ProjectContent: en-US
+// ProjectNative: en-US
 MATCH (p:Project {key: "qrcode-ai"}), (l:Locale {key: "en-US"})
-MERGE (p)-[:HAS_CONTENT]->(pl:ProjectContent {key: "qrcode-ai-en-US"})
+MERGE (p)-[:HAS_NATIVE]->(pl:ProjectNative {key: "qrcode-ai-en-US"})
 MERGE (pl)-[:FOR_LOCALE]->(l)
 SET pl.display_name = "QR Code AI",
     pl.description = "English localization for QR Code AI project identity",
@@ -77,9 +79,9 @@ SET pl.display_name = "QR Code AI",
     pl.created_at = coalesce(pl.created_at, datetime()),
     pl.updated_at = datetime();
 
-// ProjectContent: fr-FR
+// ProjectNative: fr-FR
 MATCH (p:Project {key: "qrcode-ai"}), (l:Locale {key: "fr-FR"})
-MERGE (p)-[:HAS_CONTENT]->(pl:ProjectContent {key: "qrcode-ai-fr-FR"})
+MERGE (p)-[:HAS_NATIVE]->(pl:ProjectNative {key: "qrcode-ai-fr-FR"})
 MERGE (pl)-[:FOR_LOCALE]->(l)
 SET pl.display_name = "QR Code AI",
     pl.description = "Localisation française de l'identité QR Code AI",

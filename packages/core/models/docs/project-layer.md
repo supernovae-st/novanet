@@ -8,15 +8,15 @@ The Project scope contains all nodes specific to a single project.
 This is where content generation happens.
 
 **14 nodes organized by category:**
-- **Foundation (3)**: Project, BrandIdentity, ProjectContent
+- **Foundation (3)**: Project, BrandIdentity, ProjectNative
 - **Structure (2)**: Page, Block
-- **Semantic (2)**: Entity, EntityContent
+- **Semantic (2)**: Entity, EntityNative
 - **Instruction (5)**: PageStructure, PageInstruction, BlockType, BlockInstruction, BlockRules
-- **Output (2)**: PageGenerated, BlockGenerated
+- **Output (2)**: PageNative, BlockNative
 
 **Key insight:**
 The Project layer is where invariant structure meets localized output.
-Pages and Blocks are invariant scaffolding; PageGenerated and BlockGenerated are generated.
+Pages and Blocks are invariant scaffolding; PageNative and BlockNative are generated.
 
 ### Legend
 
@@ -45,7 +45,7 @@ flowchart TB
   subgraph FOUNDATION["Foundation"]
     Project["🔵 Project"]
     BrandIdentity["🔵 BrandIdentity"]
-    ProjectContent["🟢 ProjectContent"]
+    ProjectNative["🟢 ProjectNative"]
   end
 
   subgraph STRUCTURE["Structure"]
@@ -55,7 +55,7 @@ flowchart TB
 
   subgraph SEMANTIC["Semantic"]
     Entity["🔵 Entity"]
-    EntityContent["🟢 EntityContent"]
+    EntityNative["🟢 EntityNative"]
   end
 
   subgraph INSTRUCTION["Instruction"]
@@ -65,8 +65,8 @@ flowchart TB
   end
 
   subgraph OUTPUT["Output"]
-    PageGenerated["🌟 PageGenerated"]
-    BlockGenerated["🌟 BlockGenerated"]
+    PageNative["🌟 PageNative"]
+    BlockNative["🌟 BlockNative"]
   end
 
   %% Additional reachable nodes
@@ -74,23 +74,23 @@ flowchart TB
   Locale["🔵 Locale"]
 
   %% Relationships (styled by arc family)
-  Block ==>|HAS_GENERATED| BlockGenerated
-  Block ==>|HAS_GENERATED| PageGenerated
+  Block ==>|HAS_NATIVE| BlockNative
+  Block ==>|HAS_NATIVE| PageNative
   Block -->|HAS_INSTRUCTION| BlockInstruction
   Block -->|OF_TYPE| BlockType
   Entity -.->|BELONGS_TO| EntityCategory
-  Entity -.->|HAS_CONTENT| EntityContent
-  Entity -.->|HAS_CONTENT| ProjectContent
+  Entity -.->|HAS_NATIVE| EntityNative
+  Entity -.->|HAS_NATIVE| ProjectNative
   Entity -.->|SEMANTIC_LINK| Entity
   Page -->|HAS_BLOCK| Block
-  Page ==>|HAS_GENERATED| BlockGenerated
-  Page ==>|HAS_GENERATED| PageGenerated
+  Page ==>|HAS_NATIVE| BlockNative
+  Page ==>|HAS_NATIVE| PageNative
   Page -->|HAS_INSTRUCTION| BlockInstruction
   Page -->|HAS_STRUCTURE| PageStructure
   Project -->|DEFAULT_LOCALE| Locale
   Project -->|HAS_BRAND_IDENTITY| BrandIdentity
-  Project -.->|HAS_CONTENT| EntityContent
-  Project -.->|HAS_CONTENT| ProjectContent
+  Project -.->|HAS_NATIVE| EntityNative
+  Project -.->|HAS_NATIVE| ProjectNative
   Project -->|HAS_ENTITY| Entity
   Project -->|HAS_PAGE| Page
   Project -->|SUPPORTS_LOCALE| Locale
@@ -103,19 +103,19 @@ flowchart TB
 
   %% Class assignments
   class Block defined
-  class BlockGenerated generated
+  class BlockNative generated
   class BlockInstruction defined
   class BlockType defined
   class BrandIdentity defined
   class Entity defined
   class EntityCategory defined
-  class EntityContent authored
+  class EntityNative authored
   class Locale defined
   class Page defined
-  class PageGenerated generated
+  class PageNative generated
   class PageStructure defined
   class Project defined
-  class ProjectContent authored
+  class ProjectNative authored
 ```
 
 ## Notes
@@ -124,7 +124,7 @@ flowchart TB
 - Invariant nodes (Page, Block, Entity) are defined once per project
 - Localized nodes (*Content/*Generated) are generated for each supported locale
 - The orchestrator uses this view to coordinate generation
-- Output nodes (PageGenerated, BlockGenerated) are LLM-generated, not human-written
+- Output nodes (PageNative, BlockNative) are LLM-generated, not human-written
 
 ---
 

@@ -83,7 +83,7 @@ const NODE_LABELS: Record<NodeType, string> = {
   BrandDesign: 'Brand Design',
   BrandPrinciples: 'Brand Principles',
   PromptStyle: 'Prompt Style',
-  ProjectContent: 'Project Content',
+  ProjectNative: 'Project Content',
 
   // structure (3)
   Page: 'Page',
@@ -92,7 +92,7 @@ const NODE_LABELS: Record<NodeType, string> = {
 
   // semantic (4)
   Entity: 'Entity',
-  EntityContent: 'Entity Content',
+  EntityNative: 'Entity Content',
   AudiencePersona: 'Audience Persona',
   ChannelSurface: 'Channel Surface',
 
@@ -103,8 +103,8 @@ const NODE_LABELS: Record<NodeType, string> = {
   PromptArtifact: 'Prompt Artifact',
 
   // output (3)
-  PageGenerated: 'Page Generated',
-  BlockGenerated: 'Block Generated',
+  PageNative: 'Page Generated',
+  BlockNative: 'Block Generated',
   OutputArtifact: 'Output Artifact',
 };
 

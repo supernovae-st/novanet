@@ -13,7 +13,7 @@ node:
 
     USE: when tracking prompt versions, auditing what was sent to LLM.
     TRIGGERS: "compiled prompt", "prompt artifact", "prompt snapshot", "prompt audit".
-    NOT: for raw templates (use PageInstruction/BlockInstruction), for generated content (use PageGenerated).
+    NOT: for raw templates (use PageInstruction/BlockInstruction), for generated content (use PageNative).
     RELATES: PageInstruction/BlockInstruction (COMPILED_FROM), Entity (INCLUDES_ENTITY), Style (INCLUDES_STYLE).
 
   standard_properties:

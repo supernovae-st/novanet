@@ -26,7 +26,7 @@ describe('graph/layers', () => {
     expect(NODE_LAYERS.BrandDesign).toBe('foundation');
     expect(NODE_LAYERS.BrandPrinciples).toBe('foundation');
     expect(NODE_LAYERS.PromptStyle).toBe('foundation');
-    expect(NODE_LAYERS.ProjectContent).toBe('foundation');
+    expect(NODE_LAYERS.ProjectNative).toBe('foundation');
 
     // structure (3)
     expect(NODE_LAYERS.Page).toBe('structure');
@@ -37,11 +37,11 @@ describe('graph/layers', () => {
     expect(NODE_LAYERS.AudiencePersona).toBe('semantic');
     expect(NODE_LAYERS.ChannelSurface).toBe('semantic');
     expect(NODE_LAYERS.Entity).toBe('semantic');
-    expect(NODE_LAYERS.EntityContent).toBe('semantic');
+    expect(NODE_LAYERS.EntityNative).toBe('semantic');
 
     // output (3)
-    expect(NODE_LAYERS.PageGenerated).toBe('output');
-    expect(NODE_LAYERS.BlockGenerated).toBe('output');
+    expect(NODE_LAYERS.PageNative).toBe('output');
+    expect(NODE_LAYERS.BlockNative).toBe('output');
     expect(NODE_LAYERS.OutputArtifact).toBe('output');
   });
 
@@ -107,7 +107,7 @@ describe('graph/layers', () => {
     expect(foundation).toContain('BrandDesign');
     expect(foundation).toContain('BrandPrinciples');
     expect(foundation).toContain('PromptStyle');
-    expect(foundation).toContain('ProjectContent');
+    expect(foundation).toContain('ProjectNative');
     expect(foundation).toHaveLength(6);
 
     // semantic layer has 4 nodes
@@ -115,7 +115,7 @@ describe('graph/layers', () => {
     expect(semantic).toContain('AudiencePersona');
     expect(semantic).toContain('ChannelSurface');
     expect(semantic).toContain('Entity');
-    expect(semantic).toContain('EntityContent');
+    expect(semantic).toContain('EntityNative');
     expect(semantic).toHaveLength(4);
 
     // v11.5: knowledge layer has 24 nodes (includes SEO/GEO)

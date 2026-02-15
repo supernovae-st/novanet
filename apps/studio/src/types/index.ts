@@ -25,16 +25,16 @@ export type {
   StandardNodeProperties,
   // Nodes
   Project,
-  ProjectContent,
+  ProjectNative,
   // v0.12.4: BrandIdentity renamed to Brand
   Entity,
-  EntityContent,
+  EntityNative,
   Page,
   // v0.12.4: PageStructure removed per ADR-028
-  PageGenerated,
+  PageNative,
   Block,
   BlockType,
-  BlockGenerated,
+  BlockNative,
   Locale,
   LocaleIdentity,
   LocaleVoice,

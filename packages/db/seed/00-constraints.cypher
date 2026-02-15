@@ -1,11 +1,12 @@
-// NovaNet Constraints v10.9.0
+// NovaNet Constraints v0.13.0
 //
 // Schema definitions for Neo4j graph database.
 // Uses IF NOT EXISTS for idempotent execution.
 //
 // NOTE: Locale-based filtering uses :FOR_LOCALE relation traversal (not property indexes).
-// v10.4: Entity-Centric Architecture (Entity/EntityContent), GEO layer removed, 2 realms (global, project)
-// v10.9: Naming convention refactor (EntityL10n→EntityContent, HAS_L10N→HAS_CONTENT, etc.)
+// v10.4: Entity-Centric Architecture (Entity/EntityNative), GEO layer removed, 2 realms (global, project)
+// v10.9: Naming convention refactor (EntityL10n→EntityNative, HAS_L10N→HAS_CONTENT, etc.)
+// v0.13.0 ADR-029: *Native pattern (EntityNative→EntityNative, HAS_CONTENT→HAS_NATIVE, etc.)
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // LOCALE
@@ -32,14 +33,14 @@ CREATE INDEX entity_type IF NOT EXISTS FOR (e:Entity) ON (e.type);
 // v11: Pillar filtering for content hierarchy navigation
 CREATE INDEX entity_is_pillar IF NOT EXISTS FOR (e:Entity) ON (e.is_pillar);
 
-// v10.9.0: EntityContent indexes (Decision 11 - naming convention refactor)
-CREATE CONSTRAINT entity_content_key IF NOT EXISTS FOR (ec:EntityContent) REQUIRE ec.key IS UNIQUE;
-CREATE CONSTRAINT entity_content_slug_unique IF NOT EXISTS FOR (ec:EntityContent) REQUIRE (ec.locale_key, ec.slug) IS UNIQUE;
-CREATE INDEX entity_content_entity_key IF NOT EXISTS FOR (ec:EntityContent) ON (ec.entity_key);
-CREATE INDEX entity_content_locale_key IF NOT EXISTS FOR (ec:EntityContent) ON (ec.locale_key);
-CREATE INDEX entity_content_full_path IF NOT EXISTS FOR (ec:EntityContent) ON (ec.full_path);
-CREATE INDEX entity_content_slug IF NOT EXISTS FOR (ec:EntityContent) ON (ec.slug);
-CREATE INDEX entity_content_version IF NOT EXISTS FOR (ec:EntityContent) ON (ec.version);
+// v10.9.0: EntityNative indexes (Decision 11 - naming convention refactor)
+CREATE CONSTRAINT entity_content_key IF NOT EXISTS FOR (ec:EntityNative) REQUIRE ec.key IS UNIQUE;
+CREATE CONSTRAINT entity_content_slug_unique IF NOT EXISTS FOR (ec:EntityNative) REQUIRE (ec.locale_key, ec.slug) IS UNIQUE;
+CREATE INDEX entity_content_entity_key IF NOT EXISTS FOR (ec:EntityNative) ON (ec.entity_key);
+CREATE INDEX entity_content_locale_key IF NOT EXISTS FOR (ec:EntityNative) ON (ec.locale_key);
+CREATE INDEX entity_content_full_path IF NOT EXISTS FOR (ec:EntityNative) ON (ec.full_path);
+CREATE INDEX entity_content_slug IF NOT EXISTS FOR (ec:EntityNative) ON (ec.slug);
+CREATE INDEX entity_content_version IF NOT EXISTS FOR (ec:EntityNative) ON (ec.version);
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // PROJECT NODES (v7.2.5)
@@ -50,15 +51,15 @@ CREATE CONSTRAINT brand_key IF NOT EXISTS FOR (b:Brand) REQUIRE b.key IS UNIQUE;
 CREATE CONSTRAINT branddesign_key IF NOT EXISTS FOR (bd:BrandDesign) REQUIRE bd.key IS UNIQUE;
 CREATE CONSTRAINT brandprinciples_key IF NOT EXISTS FOR (bp:BrandPrinciples) REQUIRE bp.key IS UNIQUE;
 CREATE CONSTRAINT promptstyle_key IF NOT EXISTS FOR (ps:PromptStyle) REQUIRE ps.key IS UNIQUE;
-// v10.9.0: ProjectL10n renamed to ProjectContent (Decision 11)
-CREATE INDEX projectcontent_updated IF NOT EXISTS FOR (pc:ProjectContent) ON (pc.updated_at);
+// v10.9.0: ProjectL10n renamed to ProjectNative (Decision 11)
+CREATE INDEX projectcontent_updated IF NOT EXISTS FOR (pc:ProjectNative) ON (pc.updated_at);
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // PAGE STRUCTURE
 // ═══════════════════════════════════════════════════════════════════════════════
 
 CREATE CONSTRAINT page_key IF NOT EXISTS FOR (p:Page) REQUIRE p.key IS UNIQUE;
-CREATE INDEX po_date IF NOT EXISTS FOR (po:PageGenerated) ON (po.assembled_at);
+CREATE INDEX po_date IF NOT EXISTS FOR (po:PageNative) ON (po.assembled_at);
 // v8.1.0 REMOVED: PageMetrics (YAGNI - no time-series metrics needed)
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -69,8 +70,8 @@ CREATE CONSTRAINT blocktype_key IF NOT EXISTS FOR (bt:BlockType) REQUIRE bt.key 
 CREATE CONSTRAINT block_key IF NOT EXISTS FOR (b:Block) REQUIRE b.key IS UNIQUE;
 // v10.9: Block order index for TUI ORDER BY optimization
 CREATE INDEX block_order IF NOT EXISTS FOR (b:Block) ON (b.order);
-CREATE INDEX bo_date IF NOT EXISTS FOR (bo:BlockGenerated) ON (bo.generated_at);
-// v7.8.5: BlockGenerated replaces BlockOutput
+CREATE INDEX bo_date IF NOT EXISTS FOR (bo:BlockNative) ON (bo.generated_at);
+// v7.8.5: BlockNative replaces BlockOutput
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // INSTRUCTIONS (v11.8.0 ADR-025: PagePrompt→PageInstruction, BlockPrompt→BlockInstruction)
@@ -110,9 +111,9 @@ CREATE INDEX ue_temp IF NOT EXISTS FOR ()-[r:USES_ENTITY]-() ON (r.temperature);
 // v10.3: EXPRESSES replaces TARGETS_SEO
 CREATE INDEX expresses_status IF NOT EXISTS FOR ()-[r:EXPRESSES]-() ON (r.status);
 // REMOVED v10.3: TARGETS_GEO (GEO layer removed)
-// Correct flow: Page -> Entity -> EntityContent -> SEOKeyword
+// Correct flow: Page -> Entity -> EntityNative -> SEOKeyword
 CREATE INDEX infl_weight IF NOT EXISTS FOR ()-[r:INFLUENCED_BY]-() ON (r.weight);
-// SEO provenance is implicit via: BlockGenerated → INFLUENCED_BY → EntityContent
+// SEO provenance is implicit via: BlockNative → INFLUENCED_BY → EntityNative
 CREATE INDEX gen_date IF NOT EXISTS FOR ()-[r:GENERATED]-() ON (r.generated_at);
 
 // ═══════════════════════════════════════════════════════════════════════════════

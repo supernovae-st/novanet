@@ -206,7 +206,7 @@ class_icons:
 
   # Shared / Semantic — v10.3 Entity-Centric Architecture
   Entity: lightbulb
-  EntityContent: globe
+  EntityNative: globe
 
   # Org / Foundation (v0.12.4 Brand Architecture)
   Project: folder
@@ -214,7 +214,7 @@ class_icons:
   BrandDesign: brush
   BrandPrinciples: heart-handshake
   PromptStyle: sparkles
-  ProjectContent: languages
+  ProjectNative: languages
 
   # Org / Structure
   Page: file-text
@@ -235,8 +235,8 @@ class_icons:
   PromptArtifact: file-code
 
   # Org / Output (v11.2: GenerationJob, EvaluationSignal removed)
-  PageGenerated: file-check
-  BlockGenerated: check-square
+  PageNative: file-check
+  BlockNative: check-square
   OutputArtifact: package
 
   # Shared / Knowledge (v11.5: SEO consolidated here)
@@ -330,8 +330,8 @@ arc_animation_effects:
       high: "3 atoms/strand + 3 connectors + 2 gene markers"
       medium: "2 atoms/strand + 2 connectors + 1 gene marker"
     use_cases:
-      - "HAS_CONTENT, FOR_LOCALE, PRIMARY_LOCALE"
-      - "Invariant ↔ EntityContent bridges"
+      - "HAS_NATIVE, FOR_LOCALE, PRIMARY_LOCALE"
+      - "Invariant ↔ EntityNative bridges"
       - "Locale-specific content relationships"
 
   semantic:
@@ -381,7 +381,7 @@ arc_animation_effects:
       high: "8 chars + 2 bursts + output pulse"
       medium: "5 chars + 1 burst"
     use_cases:
-      - "HAS_GENERATED, GENERATED_BY, USES_MODEL"
+      - "HAS_NATIVE, GENERATED_BY, USES_MODEL"
       - "Prompt → Output relationships"
       - "LLM pipeline flow"
 

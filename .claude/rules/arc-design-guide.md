@@ -58,7 +58,7 @@ Use verb form for semantic relationships:
 arc:
   name: USES_ENTITY    # Page → Entity (semantic reference)
   name: TARGETS_KEYWORD # Page → SEOKeyword (SEO targeting)
-  name: MONITORS_GEO   # EntityContent → GEOQuery (GEO monitoring)
+  name: MONITORS_GEO   # EntityNative → GEOQuery (GEO monitoring)
 ```
 
 ## llm_context Pattern
@@ -79,7 +79,7 @@ llm_context: |
 llm_context: |
   USE: when loading entities for a project.
   TRIGGERS: project entities, semantic concepts, project vocabulary.
-  NOT: entity content (use HAS_CONTENT), entity hierarchy (use HAS_CHILD).
+  NOT: entity content (use HAS_NATIVE), entity hierarchy (use HAS_CHILD).
   RELATES: Project (source), Entity (target), ENTITY_OF (inverse).
 ```
 
@@ -102,8 +102,8 @@ Core ownership arcs with frequent bidirectional traversal:
 | HAS_PAGE | PAGE_OF | Always |
 | HAS_PROJECT | PROJECT_OF | Always |
 | HAS_BLOCK | BLOCK_OF | Always |
-| HAS_CONTENT | CONTENT_OF | Always |
-| HAS_GENERATED | GENERATED_FOR | Always |
+| HAS_NATIVE | NATIVE_OF | Always |
+| HAS_NATIVE | NATIVE_OF | Always |
 | HAS_CHILD | CHILD_OF | Always |
 | HAS_INSTRUCTION | INSTRUCTION_OF | Always |
 
@@ -141,7 +141,7 @@ arc:
   llm_context: |
     USE: when loading entities for a project.
     TRIGGERS: project entities, semantic concepts, project vocabulary.
-    NOT: entity content (use HAS_CONTENT), entity hierarchy (use HAS_CHILD).
+    NOT: entity content (use HAS_NATIVE), entity hierarchy (use HAS_CHILD).
     RELATES: Project (source), Entity (target), ENTITY_OF (inverse).
 
   cypher_pattern: (Project)-[:HAS_ENTITY]->(Entity)
@@ -203,7 +203,7 @@ When creating an inverse, flip the cardinality:
 HAS_PAGE: Project (org) → Page (org)
 
 # Cross-realm (org references shared)
-FOR_LOCALE: EntityContent (org) → Locale (shared)
+FOR_LOCALE: EntityNative (org) → Locale (shared)
 INCLUDES_STYLE: PageInstruction (org) → Style (shared)
 ```
 
