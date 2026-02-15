@@ -285,20 +285,20 @@ These terms are deprecated and should NOT be used:
 | `[:OF_TYPE]` (Page→PageType) | `[:HAS_STRUCTURE]` | v0.12.0 arc rename |
 | `[:HAS_PROMPT]` (Page→PagePrompt) | `[:HAS_INSTRUCTION]` | v0.12.0 arc rename |
 | `[:HAS_PROMPT]` (Block→BlockPrompt) | `[:HAS_INSTRUCTION]` | v0.12.0 arc rename |
-| **v0.12.5 *Native Pattern (ADR-029)** | | |
-| `EntityNative` | `EntityNative` | v0.12.5 *Native pattern (semantic layer) |
-| `PageNative` | `PageNative` | v0.12.5 *Native pattern (output layer) |
-| `BlockNative` | `BlockNative` | v0.12.5 *Native pattern (output layer) |
-| `ProjectNative` | `ProjectNative` | v0.12.5 *Native pattern (foundation layer) |
-| `HAS_NATIVE` | `HAS_NATIVE` | v0.12.5 unified arc (with `locale` property) |
-| `HAS_NATIVE` | `HAS_NATIVE` | v0.12.5 unified arc (with `locale` property) |
-| `NATIVE_OF` | `NATIVE_OF` | v0.12.5 inverse arc rename |
-| `NATIVE_OF` | `NATIVE_OF` | v0.12.5 inverse arc rename |
-| **v0.12.5 Slug Ownership (ADR-030)** | | |
-| `EntityNative.slug` | `PageNative.slug` | v0.12.5 URL segment moved to Page layer |
-| `EntityNative.full_path` | `PageNative.full_path` | v0.12.5 full URL path moved to Page layer |
-| `EntityNative.parent_slug` | (removed) | v0.12.5 calculated from Page.SUBTOPIC_OF |
-| `EntityNative.depth` | (removed) | v0.12.5 calculated from Page hierarchy |
+| **v0.13.0 *Native Pattern (ADR-029)** | | |
+| `EntityContent` | `EntityNative` | v0.13.0 *Native pattern (semantic layer, authored) |
+| `PageGenerated` | `PageNative` | v0.13.0 *Native pattern (output layer, generated) |
+| `BlockGenerated` | `BlockNative` | v0.13.0 *Native pattern (output layer, generated) |
+| `ProjectContent` | `ProjectNative` | v0.13.0 *Native pattern (foundation layer, authored) |
+| `HAS_CONTENT` | `HAS_NATIVE` | v0.13.0 unified arc (replaces HAS_CONTENT + HAS_GENERATED) |
+| `HAS_GENERATED` | `HAS_NATIVE` | v0.13.0 unified arc (with `locale` property) |
+| `CONTENT_OF` | `NATIVE_OF` | v0.13.0 inverse arc rename |
+| `GENERATED_FOR` | `NATIVE_OF` | v0.13.0 inverse arc rename |
+| **v0.13.0 Slug Ownership (ADR-030)** | | |
+| `EntityNative.slug` | `PageNative.slug` | v0.13.0 URL segment moved to Page layer |
+| `EntityNative.full_path` | `PageNative.full_path` | v0.13.0 full URL path moved to Page layer |
+| `EntityNative.parent_slug` | (removed) | v0.13.0 calculated from Page.SUBTOPIC_OF |
+| `EntityNative.depth` | (removed) | v0.13.0 calculated from Page hierarchy |
 
 ## Navigation Modes (v11.7)
 

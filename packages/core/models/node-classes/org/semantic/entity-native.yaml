@@ -264,15 +264,12 @@ node:
   # ═══════════════════════════════════════════════════════════════════════════════
 
   examples:
+    # NOTE: slug/full_path/parent_slug/depth are on PageNative per ADR-030
     fr_fr_create_qr:
       data:
         key: "entity:create-qr-code@fr-FR"
         entity_key: "create-qr-code"
         locale_key: "fr-FR"
-        slug: "créer-qr-code"  # UTF-8 with accent
-        full_path: "/fr/créer-qr-code"
-        parent_slug: null
-        depth: 0
         display_name: "Créer un QR Code"
         description: "Générez un QR Code gratuitement en quelques secondes"
         llm_context: "USE: Contenu français pour création QR. TRIGGERS: fr-FR, création. NOT: Québec (utiliser fr-CA)."
@@ -290,10 +287,6 @@ node:
         key: "entity:qr-code@ja-JP"
         entity_key: "qr-code"
         locale_key: "ja-JP"
-        slug: "qr-code"
-        full_path: "/ja/qr-code"
-        parent_slug: null
-        depth: 0
         display_name: "QRコード"
         description: "スマートフォンでスキャンできる2次元マトリックスバーコード"
         llm_context: "USE: 日本語コンテンツ。TRIGGERS: ja-JP、スキャン。NOT: 中国語（zh-CN使用）。"
