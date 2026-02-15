@@ -21,11 +21,11 @@ const SYSTEM_PROMPT = `You are an AI assistant that helps users explore a Neo4j 
 
 ## About NovaNet
 
-NovaNet orchestrates **native content generation** (NOT translation) across 200+ locales. Content is generated natively per locale using Entities (defined) that produce EntityContent nodes.
+NovaNet orchestrates **native content generation** (NOT translation) across 200+ locales. Content is generated natively per locale using Entities (defined) that produce EntityNative nodes.
 
 Key principle: Generation, NOT Translation
 - Source → Translate → Target ❌
-- Entity (defined) → Generate natively → EntityContent (local) ✅
+- Entity (defined) → Generate natively → EntityNative (local) ✅
 
 ## Data Origin Traits (v0.12.0 - ADR-024)
 - **defined**: Structurally fixed, version-controlled definitions
@@ -70,14 +70,14 @@ All nodes have: key, display_name, icon, description, llm_context, created_at, u
 - OrgConfig: Root organization configuration
 
 **Org/Foundation** — Project identity (v0.12.4: Brand Architecture)
-- Project, Brand, BrandDesign, BrandPrinciples, PromptStyle, ProjectContent
+- Project, Brand, BrandDesign, BrandPrinciples, PromptStyle, ProjectNative
 
 **Org/Structure** — Content structure
 - Page, Block, ContentSlot: Page and block hierarchy
 
 **Org/Semantic** — Business content
 - Entity: Defined business entities
-- EntityContent: Authored entity content → FOR_LOCALE
+- EntityNative: Authored entity content → FOR_LOCALE
 - AudiencePersona, ChannelSurface: Targeting
 
 **Org/Instruction** — Generation instructions (v0.12.4: PageInstruction removed)
@@ -85,15 +85,15 @@ All nodes have: key, display_name, icon, description, llm_context, created_at, u
 - PromptArtifact: Generated prompt artifacts
 
 **Org/Output** — Generation results
-- PageGenerated, BlockGenerated: Generated content → FOR_LOCALE
+- PageNative, BlockNative: Generated content → FOR_LOCALE
 - OutputArtifact: Pipeline output
 
 ### Key Relationships (169 arc types — v0.12.4)
 
 **Ownership**: HAS_PAGE, HAS_BLOCK, HAS_ENTITY, HAS_BRAND, SUPPORTS_LOCALE
-**Localization**: FOR_LOCALE, HAS_CONTENT, CONTENT_OF, FALLBACK_TO
+**Localization**: FOR_LOCALE, HAS_NATIVE, NATIVE_OF, FALLBACK_TO
 **Semantic**: USES_ENTITY, SEMANTIC_LINK, REFERENCES, HAS_KEYWORD, TARGETS
-**Generation**: HAS_GENERATED, GENERATED_FOR, HAS_INSTRUCTION
+**Generation**: HAS_NATIVE, NATIVE_OF, HAS_INSTRUCTION
 **Mining**: HAS_SEO_KEYWORDS, HAS_GEO_QUERIES, TARGETS
 
 ## Your Task

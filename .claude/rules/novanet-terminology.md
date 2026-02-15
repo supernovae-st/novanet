@@ -105,8 +105,8 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | Pattern | Trait | Layer | When to Use | Example |
 |---------|-------|-------|-------------|---------|
 | `FooNative` | authored/generated | semantic/output | **v0.12.5**: Locale-specific content (written OR generated natively) | `EntityNative`, `PageNative` |
-| `FooContent` | authored | semantic | **DEPRECATED v0.12.5**: Use `FooNative` instead | `EntityContent` → `EntityNative` |
-| `FooGenerated` | generated | output | **DEPRECATED v0.12.5**: Use `FooNative` instead | `PageGenerated` → `PageNative` |
+| `FooContent` | authored | semantic | **DEPRECATED v0.12.5**: Use `FooNative` instead | `EntityNative` → `EntityNative` |
+| `FooGenerated` | generated | output | **DEPRECATED v0.12.5**: Use `FooNative` instead | `PageNative` → `PageNative` |
 | `FooCategory` | defined | config | Categorical grouping for defined `Foo` | `EntityCategory` |
 | `FooSet` | defined | knowledge | Container grouping related atoms | `TermSet`, `SEOKeywordSet`, `GEOQuerySet` |
 | `Foo` | varies | varies | Node is standalone (no parent defined) | `SEOKeyword`, `Term`, `Expression` |
@@ -117,11 +117,11 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 > - Simplifies the model: one pattern instead of two (`*Content` + `*Generated`)
 
 **v0.12.5 Changes (ADR-029 *Native Pattern + ADR-030 Slug Ownership):**
-- `EntityContent` → `EntityNative` (semantic layer, authored trait)
-- `PageGenerated` → `PageNative` (output layer, generated trait)
-- `BlockGenerated` → `BlockNative` (output layer, generated trait)
-- `ProjectContent` → `ProjectNative` (foundation layer, authored trait)
-- `HAS_CONTENT` + `HAS_GENERATED` → unified `HAS_NATIVE` (with `locale` property)
+- `EntityNative` → `EntityNative` (semantic layer, authored trait)
+- `PageNative` → `PageNative` (output layer, generated trait)
+- `BlockNative` → `BlockNative` (output layer, generated trait)
+- `ProjectNative` → `ProjectNative` (foundation layer, authored trait)
+- `HAS_NATIVE` + `HAS_NATIVE` → unified `HAS_NATIVE` (with `locale` property)
 - Slug properties (`slug`, `full_path`) moved from EntityNative to PageNative
 - Entity.key = semantic identifier, Page.slug = URL segment (can differ)
 
@@ -147,13 +147,13 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 - `BELONGS_TO` arc added (Entity → EntityCategory, ownership family)
 
 **v10.9 Changes:**
-- `EntityL10n` renamed to `EntityContent` (semantic layer, authored trait)
-- `PageL10n` renamed to `PageGenerated` (output layer, generated trait)
-- `BlockL10n` renamed to `BlockGenerated` (output layer, generated trait)
+- `EntityL10n` renamed to `EntityNative` (semantic layer, authored trait)
+- `PageL10n` renamed to `PageNative` (output layer, generated trait)
+- `BlockL10n` renamed to `BlockNative` (output layer, generated trait)
 
 **Arc Changes (v10.9):**
-- `HAS_L10N` renamed to `HAS_CONTENT` (Entity → EntityContent)
-- `HAS_OUTPUT` renamed to `HAS_GENERATED` (Page/Block → PageGenerated/BlockGenerated)
+- `HAS_L10N` renamed to `HAS_NATIVE` (Entity → EntityNative)
+- `HAS_OUTPUT` renamed to `HAS_NATIVE` (Page/Block → PageNative/BlockNative)
 
 **Examples (v0.12.5):**
 
@@ -167,13 +167,13 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 ✅ Term (imported atom, no parent)                   # Correct: no suffix
 ✅ SEOKeywordMetrics (retrieved)                     # Computed metrics
 
-❌ EntityContent (deprecated v0.12.5)                # Use EntityNative
-❌ PageGenerated (deprecated v0.12.5)                # Use PageNative
-❌ BlockGenerated (deprecated v0.12.5)               # Use BlockNative
-❌ ProjectContent (deprecated v0.12.5)               # Use ProjectNative
-❌ EntityL10n (deprecated v10.9)                     # Use EntityNative (via EntityContent)
-❌ PageL10n (deprecated v10.9)                       # Use PageNative (via PageGenerated)
-❌ BlockL10n (deprecated v10.9)                      # Use BlockNative (via BlockGenerated)
+❌ EntityNative (deprecated v0.12.5)                # Use EntityNative
+❌ PageNative (deprecated v0.12.5)                # Use PageNative
+❌ BlockNative (deprecated v0.12.5)               # Use BlockNative
+❌ ProjectNative (deprecated v0.12.5)               # Use ProjectNative
+❌ EntityL10n (deprecated v10.9)                     # Use EntityNative (via EntityNative)
+❌ PageL10n (deprecated v10.9)                       # Use PageNative (via PageNative)
+❌ BlockL10n (deprecated v10.9)                      # Use BlockNative (via BlockNative)
 ❌ invariant/localized/knowledge/aggregated (deprecated) # Use ADR-024 names
 ❌ job (removed trait)                               # Concept deferred to v12+
 ```
@@ -181,7 +181,7 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 **Rationale (v0.12.5):**
 - `*Native` suffix indicates locale-specific content (authored OR generated natively)
 - Trait distinguishes WHO creates: `authored` = human, `generated` = LLM
-- Unified arc `HAS_NATIVE` replaces both `HAS_CONTENT` and `HAS_GENERATED`
+- Unified arc `HAS_NATIVE` replaces both `HAS_NATIVE` and `HAS_NATIVE`
 - `*Metrics` suffix indicates computed/retrieved data (retrieved trait)
 - `*Category` suffix indicates categorical grouping/taxonomy structure (defined trait)
 - `*Content` and `*Generated` suffixes are DEPRECATED - use `*Native` instead
@@ -234,12 +234,12 @@ These terms are deprecated and should NOT be used:
 | `tenant` | `org` | v11.2 realm rename |
 | `derived` | `generated` / `aggregated` | v11.2 trait split |
 | `job` | (removed) | v11.2 trait removed |
-| `EntityL10n` | `EntityContent` | v10.9 renamed (semantic layer) |
-| `PageL10n` | `PageGenerated` | v10.9 renamed (output layer) |
-| `BlockL10n` | `BlockGenerated` | v10.9 renamed (output layer) |
-| `ProjectL10n` | `ProjectContent` | v11.0 renamed (foundation layer) |
-| `HAS_L10N` | `HAS_CONTENT` | v10.9 renamed (Entity → EntityContent) |
-| `HAS_OUTPUT` | `HAS_GENERATED` | v10.9 renamed (Page/Block → *Generated) |
+| `EntityL10n` | `EntityNative` | v10.9 renamed (semantic layer) |
+| `PageL10n` | `PageNative` | v10.9 renamed (output layer) |
+| `BlockL10n` | `BlockNative` | v10.9 renamed (output layer) |
+| `ProjectL10n` | `ProjectNative` | v11.0 renamed (foundation layer) |
+| `HAS_L10N` | `HAS_NATIVE` | v10.9 renamed (Entity → EntityNative) |
+| `HAS_OUTPUT` | `HAS_NATIVE` | v10.9 renamed (Page/Block → *Generated) |
 | `BELONGS_TO_PROJECT_L10N` | `BELONGS_TO_PROJECT_CONTENT` | v11.0 renamed |
 | `GenerationJob` | (removed) | v11.2 job nodes removed |
 | `SEOMiningRun` | (removed) | v11.2 job nodes removed |
@@ -286,19 +286,19 @@ These terms are deprecated and should NOT be used:
 | `[:HAS_PROMPT]` (Page→PagePrompt) | `[:HAS_INSTRUCTION]` | v0.12.0 arc rename |
 | `[:HAS_PROMPT]` (Block→BlockPrompt) | `[:HAS_INSTRUCTION]` | v0.12.0 arc rename |
 | **v0.12.5 *Native Pattern (ADR-029)** | | |
-| `EntityContent` | `EntityNative` | v0.12.5 *Native pattern (semantic layer) |
-| `PageGenerated` | `PageNative` | v0.12.5 *Native pattern (output layer) |
-| `BlockGenerated` | `BlockNative` | v0.12.5 *Native pattern (output layer) |
-| `ProjectContent` | `ProjectNative` | v0.12.5 *Native pattern (foundation layer) |
-| `HAS_CONTENT` | `HAS_NATIVE` | v0.12.5 unified arc (with `locale` property) |
-| `HAS_GENERATED` | `HAS_NATIVE` | v0.12.5 unified arc (with `locale` property) |
-| `CONTENT_OF` | `NATIVE_OF` | v0.12.5 inverse arc rename |
-| `GENERATED_FOR` | `NATIVE_OF` | v0.12.5 inverse arc rename |
+| `EntityNative` | `EntityNative` | v0.12.5 *Native pattern (semantic layer) |
+| `PageNative` | `PageNative` | v0.12.5 *Native pattern (output layer) |
+| `BlockNative` | `BlockNative` | v0.12.5 *Native pattern (output layer) |
+| `ProjectNative` | `ProjectNative` | v0.12.5 *Native pattern (foundation layer) |
+| `HAS_NATIVE` | `HAS_NATIVE` | v0.12.5 unified arc (with `locale` property) |
+| `HAS_NATIVE` | `HAS_NATIVE` | v0.12.5 unified arc (with `locale` property) |
+| `NATIVE_OF` | `NATIVE_OF` | v0.12.5 inverse arc rename |
+| `NATIVE_OF` | `NATIVE_OF` | v0.12.5 inverse arc rename |
 | **v0.12.5 Slug Ownership (ADR-030)** | | |
-| `EntityContent.slug` | `PageNative.slug` | v0.12.5 URL segment moved to Page layer |
-| `EntityContent.full_path` | `PageNative.full_path` | v0.12.5 full URL path moved to Page layer |
-| `EntityContent.parent_slug` | (removed) | v0.12.5 calculated from Page.SUBTOPIC_OF |
-| `EntityContent.depth` | (removed) | v0.12.5 calculated from Page hierarchy |
+| `EntityNative.slug` | `PageNative.slug` | v0.12.5 URL segment moved to Page layer |
+| `EntityNative.full_path` | `PageNative.full_path` | v0.12.5 full URL path moved to Page layer |
+| `EntityNative.parent_slug` | (removed) | v0.12.5 calculated from Page.SUBTOPIC_OF |
+| `EntityNative.depth` | (removed) | v0.12.5 calculated from Page hierarchy |
 
 ## Navigation Modes (v11.7)
 
@@ -479,5 +479,5 @@ cypher: |
 13. **Trait = Data Origin** = WHERE does data come from? (defined/authored/imported/generated/retrieved) (v0.12.0)
 14. **PageStructure/PageInstruction** = replaced PageType/PagePrompt (v0.12.0)
 15. **\*Native Pattern** = unified suffix for locale-specific nodes (EntityNative, PageNative, BlockNative) (v0.12.5)
-16. **HAS_NATIVE** = unified arc replacing HAS_CONTENT + HAS_GENERATED, with `locale` property (v0.12.5)
+16. **HAS_NATIVE** = unified arc replacing HAS_NATIVE + HAS_NATIVE, with `locale` property (v0.12.5)
 17. **Slug Ownership** = Page owns URL (slug, full_path), Entity owns semantics (key) (v0.12.5)

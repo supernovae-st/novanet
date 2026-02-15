@@ -295,7 +295,7 @@ describe('Design System Coherence: Traits', () => {
   });
 
   it('should use generated trait for LLM output nodes', () => {
-    const generatedNodes = ['PageGenerated', 'BlockGenerated', 'OutputArtifact', 'PromptArtifact'];
+    const generatedNodes = ['PageNative', 'BlockNative', 'OutputArtifact', 'PromptArtifact'];
 
     for (const node of generatedNodes) {
       expect(CLASS_TAXONOMY[node as keyof typeof CLASS_TAXONOMY].trait).toBe('generated');
@@ -474,13 +474,13 @@ describe('Design System Coherence: No Deprecated Terms', () => {
   });
 
   it('should use Content suffix for authored semantic nodes', () => {
-    expect(NODE_TYPES).toContain('EntityContent');
-    expect(NODE_TYPES).toContain('ProjectContent');
+    expect(NODE_TYPES).toContain('EntityNative');
+    expect(NODE_TYPES).toContain('ProjectNative');
   });
 
   it('should use Generated suffix for output nodes', () => {
-    expect(NODE_TYPES).toContain('PageGenerated');
-    expect(NODE_TYPES).toContain('BlockGenerated');
+    expect(NODE_TYPES).toContain('PageNative');
+    expect(NODE_TYPES).toContain('BlockNative');
   });
 
   it('should NOT have job-related nodes', () => {

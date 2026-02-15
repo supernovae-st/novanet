@@ -1,7 +1,8 @@
 // novanet-core/src/types/project.ts
-// Project + nodable architecture types (v7.2.2)
+// Project + nodable architecture types (v0.13.0)
 //
-// v7.2.2: BrandL10n merged into ProjectContent (CTAs, meta, SEO keywords) - L10n suffix deprecated v10.9
+// v0.13.0: ProjectNative → ProjectNative (ADR-029 *Native pattern)
+// v7.2.2: BrandL10n merged into ProjectNative (CTAs, meta, SEO keywords) - L10n suffix deprecated v10.9
 // v7.1.0 STANDARD PROPERTIES:
 //   key, display_name, description, llm_context, created_at, updated_at
 
@@ -30,7 +31,7 @@ export interface Project {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// PROJECTCONTENT (authored identity & messaging) - v7.1.0, renamed v10.9, trait v0.12.0 ADR-024
+// PROJECTNATIVE (authored identity & messaging) - v0.13.0 ADR-029, trait v0.12.0 ADR-024
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export interface VoiceTone {
@@ -40,7 +41,11 @@ export interface VoiceTone {
   reserved_enthusiastic: number;
 }
 
-export interface ProjectContent {
+/**
+ * ProjectNative - Project content per locale (v0.13.0 ADR-029).
+ * Locale-specific project messaging, identity, and voice.
+ */
+export interface ProjectNative {
   // Standard properties (v7.1.0 - Content nodes don't have key)
   display_name: string;
   description: string;
@@ -78,6 +83,9 @@ export interface ProjectContent {
   created_at: Date;
   updated_at: Date;
 }
+
+/** @deprecated Use ProjectNative (v0.13.0 ADR-029) */
+export type ProjectContent = ProjectNative;
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // BRAND ARCHITECTURE (v0.12.4 ADR-028)
@@ -224,12 +232,13 @@ export interface PromptStyle {
 }
 
 // Export all types
-// v7.2.5: Audience merged into ProjectContent.target_audience
+// v7.2.5: Audience merged into ProjectNative.target_audience
 // v7.2.5: ValuePropL10n + SocialProofL10n removed
 // v0.12.4: BrandIdentity → Brand + BrandDesign + BrandPrinciples + PromptStyle (ADR-028)
+// v0.13.0: ProjectNative → ProjectNative (ADR-029)
 export type ProjectNode =
   | Project
-  | ProjectContent
+  | ProjectNative
   | Brand
   | BrandDesign
   | BrandPrinciples

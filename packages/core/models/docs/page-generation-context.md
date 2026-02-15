@@ -48,17 +48,17 @@ flowchart TB
   end
 
   subgraph OUTPUT_LAYER["Output Layer"]
-    PageGenerated["🌟 PageGenerated"]
+    PageNative["🌟 PageNative"]
   end
 
   %% Additional reachable nodes
-  BlockGenerated["🌟 BlockGenerated"]
+  BlockNative["🌟 BlockNative"]
   BlockInstruction["🔵 BlockInstruction"]
 
   %% Relationships (styled by arc family)
   Page -->|HAS_BLOCK| Block
-  Page ==>|HAS_GENERATED| BlockGenerated
-  Page ==>|HAS_GENERATED| PageGenerated
+  Page ==>|HAS_NATIVE| BlockNative
+  Page ==>|HAS_NATIVE| PageNative
   Page -->|HAS_INSTRUCTION| BlockInstruction
   Page -.->|USES_ENTITY| Entity
 
@@ -69,11 +69,11 @@ flowchart TB
 
   %% Class assignments
   class Block defined
-  class BlockGenerated generated
+  class BlockNative generated
   class BlockInstruction defined
   class Entity defined
   class Page defined
-  class PageGenerated generated
+  class PageNative generated
 ```
 
 ## Notes

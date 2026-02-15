@@ -13,7 +13,7 @@ arc:
   llm_context: |
     USE: when loading pages for a project.
     TRIGGERS: project pages, page list, site structure.
-    NOT: page content (use HAS_BLOCK), page output (use HAS_GENERATED).
+    NOT: page content (use HAS_BLOCK), page output (use HAS_NATIVE).
     RELATES: Project (source), Page (target), PAGE_OF (inverse).
 
   cypher_pattern: (Project)-[:HAS_PAGE]->(Page)

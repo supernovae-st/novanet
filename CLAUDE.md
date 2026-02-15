@@ -40,7 +40,7 @@ NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation
 CRITICAL: Generation, NOT Translation
 
 Source -> Translate -> Target        <-- WRONG
-Entity (defined) -> Generate natively -> EntityContent (authored)  <-- RIGHT
+Entity (defined) -> Generate natively -> EntityNative (authored)  <-- RIGHT
 ```
 
 ---

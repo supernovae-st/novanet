@@ -24,7 +24,7 @@ arc:
   llm_context: |
     USE: when tracing which instruction produced which generated content.
     TRIGGERS: generation provenance, instruction audit, output source.
-    NOT: for structure ownership (use HAS_GENERATED), for compiled prompts (use COMPILED_FROM).
+    NOT: for structure ownership (use HAS_NATIVE), for compiled prompts (use COMPILED_FROM).
     RELATES: BlockInstruction (source), PageNative/BlockNative (target).
 
   cypher_pattern: "(BlockInstruction)-[:GENERATED {generated_at}]->(BlockNative)"

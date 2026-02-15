@@ -304,7 +304,7 @@ export const nodeCardSizes = {
     xs: { width: 160, height: 80 },
     /** 180×90 - Compact nodes (ContentSlot, Style, Culture) */
     sm: { width: 180, height: 90 },
-    /** 200×100 - Standard nodes (Block, EntityContent) */
+    /** 200×100 - Standard nodes (Block, EntityNative) */
     md: { width: 200, height: 100 },
     /** 220×110 - Medium-large (Locale, Brand) */
     lg: { width: 220, height: 110 },
@@ -332,11 +332,11 @@ export const nodeCardSizes = {
     BrandDesign: 'md',
     BrandPrinciples: 'md',
     PromptStyle: 'md',
-    PageGenerated: 'lg',
+    PageNative: 'lg',
 
     // Medium (md) - Standard nodes (v0.12.4: PageStructure removed)
     Block: 'md',
-    EntityContent: 'md',
+    EntityNative: 'md',
     Continent: 'md',
     BlockType: 'md',
     ContentSlot: 'md',

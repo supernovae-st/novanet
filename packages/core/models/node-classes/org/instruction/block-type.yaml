@@ -62,7 +62,7 @@ node:
       example: |
         USE: when validating block structure or selecting a template for new blocks.
         TRIGGERS: "block type", "block template", "block schema", "hero", "faq", "pricing-table".
-        NOT: for block instances (use Block), for generation instructions (use BlockInstruction), for generated content (use BlockGenerated).
+        NOT: for block instances (use Block), for generation instructions (use BlockInstruction), for generated content (use BlockNative).
         RELATES: Block (instances via OF_TYPE), BlockRules (validation via HAS_RULES), BlockInstruction (instructions via OF_TYPE).
 
     created_at:
@@ -88,7 +88,7 @@ node:
     structure:
       type: string
       required: true
-      description: "Defines the expected JSON shape of the `generated` property on the `BlockGenerated` node. This ensures all generated content for this block type is consistent. Can be a reference to a JSON schema file."
+      description: "Defines the expected JSON shape of the `generated` property on the `BlockNative` node. This ensures all generated content for this block type is consistent. Can be a reference to a JSON schema file."
       example: "schemas/hero-v1.json"
 
   # ═══════════════════════════════════════════════════════════════════════════════

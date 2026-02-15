@@ -42,8 +42,8 @@ export const RELATIONSHIP_CATEGORIES: Record<RelationshipCategory, RelationType[
   ],
   // Localization: Locale assignment (5 relations)
   localization: [
-    'HAS_CONTENT',
-    'CONTENT_OF',
+    'HAS_NATIVE',
+    'NATIVE_OF',
     'FOR_LOCALE',
     'SUPPORTS_LOCALE',
     'DEFAULT_LOCALE',
@@ -84,12 +84,12 @@ export const RELATIONSHIP_CATEGORIES: Record<RelationshipCategory, RelationType[
     'BLOCK_OF',
   ],
   // Generation: Content generation (6 relations)
-  // v10.9.0: OUTPUT_OF → GENERATED_FOR (ADR-014)
+  // v10.9.0: OUTPUT_OF → NATIVE_OF (ADR-014)
   generation: [
-    'HAS_GENERATED',
+    'HAS_NATIVE',
     'ASSEMBLES',
     'GENERATED',
-    'GENERATED_FOR',
+    'NATIVE_OF',
     'GENERATED_FROM',
     'INFLUENCED_BY',
   ],
@@ -188,9 +188,9 @@ export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfi
   // ==========================================================================
   // LOCALIZATION CATEGORY (5 relations) - green (from taxonomy.yaml)
   // ==========================================================================
-  HAS_CONTENT: {
-    type: 'HAS_CONTENT',
-    label: 'Has Content',
+  HAS_NATIVE: {
+    type: 'HAS_NATIVE',
+    label: 'Has Native',  // v0.13.0: unified arc for all *Native nodes
     color: '#22c55e',  // green-500
     category: 'localization',
   },
@@ -212,9 +212,9 @@ export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfi
     color: '#16a34a',  // green-600
     category: 'localization',
   },
-  CONTENT_OF: {
-    type: 'CONTENT_OF',
-    label: 'Content Of',
+  NATIVE_OF: {
+    type: 'NATIVE_OF',
+    label: 'Native Of',  // v0.13.0: unified inverse arc for all *Native nodes
     color: '#15803d',  // green-700
     category: 'localization',
   },
@@ -385,14 +385,9 @@ export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfi
   },
 
   // ==========================================================================
-  // GENERATION CATEGORY (6 relations) - violet (from taxonomy.yaml)
+  // GENERATION CATEGORY (5 relations) - violet (from taxonomy.yaml)
+  // v0.13.0: HAS_NATIVE/NATIVE_OF moved to LOCALIZATION (unified arc)
   // ==========================================================================
-  HAS_GENERATED: {
-    type: 'HAS_GENERATED',
-    label: 'Has Generated',
-    color: '#8b5cf6',  // violet-500
-    category: 'generation',
-  },
   ASSEMBLES: {
     type: 'ASSEMBLES',
     label: 'Assembles',
@@ -405,12 +400,7 @@ export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfi
     color: '#c4b5fd',  // violet-300
     category: 'generation',
   },
-  GENERATED_FOR: {
-    type: 'GENERATED_FOR',
-    label: 'Generated For',
-    color: '#7c3aed',  // violet-600
-    category: 'generation',
-  },
+  // v0.13.0: NATIVE_OF moved to LOCALIZATION CATEGORY
   GENERATED_FROM: {
     type: 'GENERATED_FROM',
     label: 'Generated From',

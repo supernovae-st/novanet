@@ -24,7 +24,7 @@ node:
   llm_context: |
     SEOKeyword represents market search behavior for a locale.
     It is DISCOVERED data from DataForSEO, not generated content.
-    Use to understand what users search for, then TARGET from EntityContent.
+    Use to understand what users search for, then TARGET from EntityNative.
     Format determined by HAS_FORMAT arc to SEOKeywordFormat.
     Time-series metrics: follow HAS_METRICS arc to SEOKeywordMetrics.
     v11.4: Now in shared/knowledge (Knowledge Atoms pattern).
@@ -197,8 +197,8 @@ node:
   # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
-    # Incoming: EntityContent --[:TARGETS]--> SEOKeyword (targeting)
-    # NOTE: Locale is inferred via EntityContent --[:FOR_LOCALE]--> Locale
+    # Incoming: EntityNative --[:TARGETS]--> SEOKeyword (targeting)
+    # NOTE: Locale is inferred via EntityNative --[:FOR_LOCALE]--> Locale
 
     - relation: HAS_METRICS
       to: SEOKeywordMetrics
@@ -225,8 +225,8 @@ node:
       cardinality: "N:1"
       description: "Second entity being compared (conditional: comparison format only)"
 
-    # v10.8: Removed EXPRESSES (redundant - use TARGETS inverse from EntityContent)
-    # Query: MATCH (kw:SEOKeyword)<-[:TARGETS]-(ec:EntityContent) RETURN ec.entity_key
+    # v10.8: Removed EXPRESSES (redundant - use TARGETS inverse from EntityNative)
+    # Query: MATCH (kw:SEOKeyword)<-[:TARGETS]-(ec:EntityNative) RETURN ec.entity_key
     #
     # v11.4: Removed HAS_QUESTIONS, HAS_COMPARISONS, HAS_PREPOSITIONS
     # These node types (SEOQuestion, SEOComparison, SEOPreposition) are deleted.
@@ -241,7 +241,7 @@ node:
     description: "Get top keywords by traffic potential with format classification"
     cypher: |
       // v11.4: SEOKeyword with format classification
-      MATCH (ec:EntityContent {locale_key: $locale})-[:TARGETS]->(kw:SEOKeyword)
+      MATCH (ec:EntityNative {locale_key: $locale})-[:TARGETS]->(kw:SEOKeyword)
       OPTIONAL MATCH (kw)-[:HAS_FORMAT]->(fmt:SEOKeywordFormat)
       OPTIONAL MATCH (kw)-[:COMPARES_A]->(entityA:Entity)
       OPTIONAL MATCH (kw)-[:COMPARES_B]->(entityB:Entity)

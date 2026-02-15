@@ -21,6 +21,6 @@ arc:
   llm_context: |
     USE: when deploying content, loading all generated nodes in an artifact.
     TRIGGERS: deployment bundle, artifact contents, release package.
-    NOT: for live content (use PageNative), for structure (use HAS_GENERATED).
+    NOT: for live content (use PageNative), for structure (use HAS_NATIVE).
     RELATES: OutputArtifact (source), PageNative/BlockNative (target), checksum for integrity.
   cypher_pattern: (OutputArtifact)-[:BUNDLES {position, checksum}]->(PageNative)

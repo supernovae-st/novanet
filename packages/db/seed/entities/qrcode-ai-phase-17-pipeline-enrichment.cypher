@@ -313,9 +313,9 @@ MERGE (kw)-[:HAS_METRICS]->(m);
 // 7. ENTITY CONTENT: Add content for supporting entities (fr-FR)
 // ─────────────────────────────────────────────────────────────────────────────
 
-// EntityContent for qr-code-color
+// EntityNative for qr-code-color
 MATCH (e:Entity {key: 'qr-code-color'}), (l:Locale {key: 'fr-FR'})
-MERGE (ec:EntityContent {key: 'entity:qr-code-color@fr-FR'})
+MERGE (ec:EntityNative {key: 'entity:qr-code-color@fr-FR'})
 ON CREATE SET
   ec.entity_key = e.key,
   ec.locale_key = l.key,
@@ -326,12 +326,12 @@ ON CREATE SET
   ec.llm_context = 'USE: Color customization features for QR codes in French.',
   ec.created_at = datetime()
 SET ec.updated_at = datetime()
-MERGE (e)-[:HAS_CONTENT]->(ec)
+MERGE (e)-[:HAS_NATIVE]->(ec)
 MERGE (ec)-[:FOR_LOCALE]->(l);
 
-// EntityContent for qr-code-shapes
+// EntityNative for qr-code-shapes
 MATCH (e:Entity {key: 'qr-code-shapes'}), (l:Locale {key: 'fr-FR'})
-MERGE (ec:EntityContent {key: 'entity:qr-code-shapes@fr-FR'})
+MERGE (ec:EntityNative {key: 'entity:qr-code-shapes@fr-FR'})
 ON CREATE SET
   ec.entity_key = e.key,
   ec.locale_key = l.key,
@@ -342,12 +342,12 @@ ON CREATE SET
   ec.llm_context = 'USE: Shape customization features for QR codes in French.',
   ec.created_at = datetime()
 SET ec.updated_at = datetime()
-MERGE (e)-[:HAS_CONTENT]->(ec)
+MERGE (e)-[:HAS_NATIVE]->(ec)
 MERGE (ec)-[:FOR_LOCALE]->(l);
 
-// EntityContent for qr-code-generator
+// EntityNative for qr-code-generator
 MATCH (e:Entity {key: 'qr-code-generator'}), (l:Locale {key: 'fr-FR'})
-MERGE (ec:EntityContent {key: 'entity:qr-code-generator@fr-FR'})
+MERGE (ec:EntityNative {key: 'entity:qr-code-generator@fr-FR'})
 ON CREATE SET
   ec.entity_key = e.key,
   ec.locale_key = l.key,
@@ -358,7 +358,7 @@ ON CREATE SET
   ec.llm_context = 'USE: QR code generator tool description in French.',
   ec.created_at = datetime()
 SET ec.updated_at = datetime()
-MERGE (e)-[:HAS_CONTENT]->(ec)
+MERGE (e)-[:HAS_NATIVE]->(ec)
 MERGE (ec)-[:FOR_LOCALE]->(l);
 
 

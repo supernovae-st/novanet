@@ -121,7 +121,7 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   BrandDesign: { width: 200, height: 100 },
   BrandPrinciples: { width: 200, height: 100 },
   PromptStyle: { width: 200, height: 100 },
-  ProjectContent: { width: 220, height: 110 },
+  ProjectNative: { width: 220, height: 110 },
 
   // structure (3)
   Page: { width: 240, height: 120 },
@@ -130,7 +130,7 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
 
   // semantic (4)
   Entity: { width: 240, height: 120 },
-  EntityContent: { width: 200, height: 100 },
+  EntityNative: { width: 200, height: 100 },
   AudiencePersona: { width: 200, height: 100 },
   ChannelSurface: { width: 200, height: 100 },
 
@@ -141,8 +141,8 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   PromptArtifact: { width: 200, height: 100 },
 
   // output (3)
-  PageGenerated: { width: 220, height: 110 },
-  BlockGenerated: { width: 200, height: 100 },
+  PageNative: { width: 220, height: 110 },
+  BlockNative: { width: 200, height: 100 },
   OutputArtifact: { width: 180, height: 90 },
 };
 
@@ -459,7 +459,7 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     tertiary: '#6d28d9',
     glow: '#4c1d9540',
   },
-  ProjectContent: {
+  ProjectNative: {
     primary: '#a78bfa',
     secondary: '#8b5cf6',
     tertiary: '#c4b5fd',
@@ -493,7 +493,7 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     tertiary: '#fbbf24',
     glow: '#f59e0b40',
   },
-  EntityContent: {
+  EntityNative: {
     primary: '#fbbf24',
     secondary: '#f59e0b',
     tertiary: '#fcd34d',
@@ -539,13 +539,13 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
   },
 
   // output (3) — Orange/Red tones — v11.2: job nodes removed
-  PageGenerated: {
+  PageNative: {
     primary: '#f97316',
     secondary: '#ef4444',
     tertiary: '#fb923c',
     glow: '#f9731640',
   },
-  BlockGenerated: {
+  BlockNative: {
     primary: '#fb923c',
     secondary: '#f97316',
     tertiary: '#fdba74',

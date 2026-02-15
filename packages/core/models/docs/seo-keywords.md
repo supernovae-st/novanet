@@ -15,8 +15,8 @@ SEO keywords bridge Entity localization and search optimization.
 A keyword like "QR code generator" can be targeted by multiple projects.
 
 **v10.1 Architecture:**
-- SEOKeyword is linked to EntityContent (locale-aligned targeting)
-- Pattern: EntityContent -[:EXPRESSES]-> SEOKeyword -[:FOR_LOCALE]-> Locale
+- SEOKeyword is linked to EntityNative (locale-aligned targeting)
+- Pattern: EntityNative -[:EXPRESSES]-> SEOKeyword -[:FOR_LOCALE]-> Locale
 
 ### Legend
 
@@ -52,37 +52,37 @@ flowchart TB
   end
 
   %% Additional reachable nodes
-  BlockGenerated["🌟 BlockGenerated"]
-  EntityContent["🟢 EntityContent"]
+  BlockNative["🌟 BlockNative"]
+  EntityNative["🟢 EntityNative"]
   Locale["🔵 Locale"]
   OutputArtifact["🌟 OutputArtifact"]
-  PageGenerated["🌟 PageGenerated"]
-  ProjectContent["🟢 ProjectContent"]
+  PageNative["🌟 PageNative"]
+  ProjectNative["🟢 ProjectNative"]
 
   %% Relationships (styled by arc family)
-  BlockGenerated -.->|FOR_LOCALE| Locale
-  EntityContent -.->|FOR_LOCALE| Locale
+  BlockNative -.->|FOR_LOCALE| Locale
+  EntityNative -.->|FOR_LOCALE| Locale
   OutputArtifact -.->|FOR_LOCALE| Locale
-  PageGenerated -.->|FOR_LOCALE| Locale
-  ProjectContent -.->|FOR_LOCALE| Locale
+  PageNative -.->|FOR_LOCALE| Locale
+  ProjectNative -.->|FOR_LOCALE| Locale
 
   %% Arc colors by family
   linkStyle 0,1,2,3,4 stroke:#22c55e,stroke-width:2px
 
   %% Class assignments
-  class BlockGenerated generated
-  class EntityContent authored
+  class BlockNative generated
+  class EntityNative authored
   class Locale defined
   class OutputArtifact generated
-  class PageGenerated generated
-  class ProjectContent authored
+  class PageNative generated
+  class ProjectNative authored
 ```
 
 ## Notes
 
 - SEO nodes are project-independent but locale-specific
-- SEO keywords can be targeted by multiple projects via EntityContent
-- v10.4: SEOKeyword linked to EntityContent -[:EXPRESSES]-> SEOKeyword
+- SEO keywords can be targeted by multiple projects via EntityNative
+- v10.4: SEOKeyword linked to EntityNative -[:EXPRESSES]-> SEOKeyword
 - Metrics are time-series - always use latest for current state
 
 ---

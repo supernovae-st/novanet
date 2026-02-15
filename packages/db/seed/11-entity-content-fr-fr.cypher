@@ -1,13 +1,13 @@
 // ===================================================================
-// EntityContent fr-FR for QR Code AI (281 entities)
+// EntityNative fr-FR for QR Code AI (281 entities)
 // Generated: 2026-02-08
 // ===================================================================
 
 // -------------------------------------------------------------------
-// Create EntityContent nodes
+// Create EntityNative nodes
 // -------------------------------------------------------------------
 
-MERGE (el:EntityContent {key: 'entity:qr-code@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code@fr-FR'})
 SET el.entity_key = 'qr-code',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code',
@@ -23,7 +23,7 @@ SET el.entity_key = 'qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:smart-link@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:smart-link@fr-FR'})
 SET el.entity_key = 'smart-link',
     el.locale_key = 'fr-FR',
     el.slug = 'lien-intelligent',
@@ -39,7 +39,7 @@ SET el.entity_key = 'smart-link',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:barcode@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:barcode@fr-FR'})
 SET el.entity_key = 'barcode',
     el.locale_key = 'fr-FR',
     el.slug = 'code-barres',
@@ -55,7 +55,7 @@ SET el.entity_key = 'barcode',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:landing-page@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:landing-page@fr-FR'})
 SET el.entity_key = 'landing-page',
     el.locale_key = 'fr-FR',
     el.slug = 'page-destination',
@@ -71,7 +71,7 @@ SET el.entity_key = 'landing-page',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:short-link@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:short-link@fr-FR'})
 SET el.entity_key = 'short-link',
     el.locale_key = 'fr-FR',
     el.slug = 'lien-court',
@@ -87,7 +87,7 @@ SET el.entity_key = 'short-link',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-style@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-style@fr-FR'})
 SET el.entity_key = 'qr-code-style',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-style',
@@ -103,7 +103,7 @@ SET el.entity_key = 'qr-code-style',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-content@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-content@fr-FR'})
 SET el.entity_key = 'qr-code-content',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-contenu',
@@ -119,7 +119,7 @@ SET el.entity_key = 'qr-code-content',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-frame@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-frame@fr-FR'})
 SET el.entity_key = 'qr-code-frame',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-cadre',
@@ -135,7 +135,7 @@ SET el.entity_key = 'qr-code-frame',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:barcode-format@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:barcode-format@fr-FR'})
 SET el.entity_key = 'barcode-format',
     el.locale_key = 'fr-FR',
     el.slug = 'code-barres-format',
@@ -151,7 +151,7 @@ SET el.entity_key = 'barcode-format',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:landing-page-type@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:landing-page-type@fr-FR'})
 SET el.entity_key = 'landing-page-type',
     el.locale_key = 'fr-FR',
     el.slug = 'page-destination-type',
@@ -167,7 +167,7 @@ SET el.entity_key = 'landing-page-type',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:custom-qr-code@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:custom-qr-code@fr-FR'})
 SET el.entity_key = 'custom-qr-code',
     el.locale_key = 'fr-FR',
     el.slug = 'personnalise-qr-code',
@@ -183,7 +183,7 @@ SET el.entity_key = 'custom-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-image@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-image@fr-FR'})
 SET el.entity_key = 'qr-code-image',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-image',
@@ -199,7 +199,7 @@ SET el.entity_key = 'qr-code-image',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-art@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-art@fr-FR'})
 SET el.entity_key = 'qr-code-art',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-art',
@@ -215,7 +215,7 @@ SET el.entity_key = 'qr-code-art',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-photo@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-photo@fr-FR'})
 SET el.entity_key = 'qr-code-photo',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-photo',
@@ -231,7 +231,7 @@ SET el.entity_key = 'qr-code-photo',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-with-logo@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-with-logo@fr-FR'})
 SET el.entity_key = 'qr-code-with-logo',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-avec-logo',
@@ -247,7 +247,7 @@ SET el.entity_key = 'qr-code-with-logo',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-with-text@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-with-text@fr-FR'})
 SET el.entity_key = 'qr-code-with-text',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-avec-texte',
@@ -263,7 +263,7 @@ SET el.entity_key = 'qr-code-with-text',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-color@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-color@fr-FR'})
 SET el.entity_key = 'qr-code-color',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-color',
@@ -279,7 +279,7 @@ SET el.entity_key = 'qr-code-color',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-shapes@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-shapes@fr-FR'})
 SET el.entity_key = 'qr-code-shapes',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-formes',
@@ -295,7 +295,7 @@ SET el.entity_key = 'qr-code-shapes',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-transparent-background@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-transparent-background@fr-FR'})
 SET el.entity_key = 'qr-code-transparent-background',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-fond-transparent',
@@ -311,7 +311,7 @@ SET el.entity_key = 'qr-code-transparent-background',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-background@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-background@fr-FR'})
 SET el.entity_key = 'qr-code-background',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-background',
@@ -327,7 +327,7 @@ SET el.entity_key = 'qr-code-background',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-background-color@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-background-color@fr-FR'})
 SET el.entity_key = 'qr-code-background-color',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-couleur-fond',
@@ -343,7 +343,7 @@ SET el.entity_key = 'qr-code-background-color',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-background-gradient@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-background-gradient@fr-FR'})
 SET el.entity_key = 'qr-code-background-gradient',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-fond-degrade',
@@ -359,7 +359,7 @@ SET el.entity_key = 'qr-code-background-gradient',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-background-image@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-background-image@fr-FR'})
 SET el.entity_key = 'qr-code-background-image',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-image-fond',
@@ -375,7 +375,7 @@ SET el.entity_key = 'qr-code-background-image',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:dynamic-qr-code@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:dynamic-qr-code@fr-FR'})
 SET el.entity_key = 'dynamic-qr-code',
     el.locale_key = 'fr-FR',
     el.slug = 'dynamique-qr-code',
@@ -391,7 +391,7 @@ SET el.entity_key = 'dynamic-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:static-qr-code@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:static-qr-code@fr-FR'})
 SET el.entity_key = 'static-qr-code',
     el.locale_key = 'fr-FR',
     el.slug = 'statique-qr-code',
@@ -407,7 +407,7 @@ SET el.entity_key = 'static-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-light-mode@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-light-mode@fr-FR'})
 SET el.entity_key = 'qr-code-light-mode',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-light-mode',
@@ -423,7 +423,7 @@ SET el.entity_key = 'qr-code-light-mode',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-dark-mode@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-dark-mode@fr-FR'})
 SET el.entity_key = 'qr-code-dark-mode',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-dark-mode',
@@ -439,7 +439,7 @@ SET el.entity_key = 'qr-code-dark-mode',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-business-card@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-business-card@fr-FR'})
 SET el.entity_key = 'qr-code-business-card',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-carte-visite',
@@ -455,7 +455,7 @@ SET el.entity_key = 'qr-code-business-card',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-email-signature@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-email-signature@fr-FR'})
 SET el.entity_key = 'qr-code-email-signature',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-email-signature',
@@ -471,7 +471,7 @@ SET el.entity_key = 'qr-code-email-signature',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-flyer@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-flyer@fr-FR'})
 SET el.entity_key = 'qr-code-flyer',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-flyer',
@@ -487,7 +487,7 @@ SET el.entity_key = 'qr-code-flyer',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-poster@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-poster@fr-FR'})
 SET el.entity_key = 'qr-code-poster',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-poster',
@@ -503,7 +503,7 @@ SET el.entity_key = 'qr-code-poster',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-table-tent@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-table-tent@fr-FR'})
 SET el.entity_key = 'qr-code-table-tent',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-table-tent',
@@ -519,7 +519,7 @@ SET el.entity_key = 'qr-code-table-tent',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-packaging-label@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-packaging-label@fr-FR'})
 SET el.entity_key = 'qr-code-packaging-label',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-packaging-label',
@@ -535,7 +535,7 @@ SET el.entity_key = 'qr-code-packaging-label',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:link-in-bio@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:link-in-bio@fr-FR'})
 SET el.entity_key = 'link-in-bio',
     el.locale_key = 'fr-FR',
     el.slug = 'lien-en-bio',
@@ -551,7 +551,7 @@ SET el.entity_key = 'link-in-bio',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:menu-restaurant@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:menu-restaurant@fr-FR'})
 SET el.entity_key = 'menu-restaurant',
     el.locale_key = 'fr-FR',
     el.slug = 'menu-restaurant',
@@ -567,7 +567,7 @@ SET el.entity_key = 'menu-restaurant',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:forms@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:forms@fr-FR'})
 SET el.entity_key = 'forms',
     el.locale_key = 'fr-FR',
     el.slug = 'formulaires',
@@ -583,7 +583,7 @@ SET el.entity_key = 'forms',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:announcement@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:announcement@fr-FR'})
 SET el.entity_key = 'announcement',
     el.locale_key = 'fr-FR',
     el.slug = 'annonce',
@@ -599,7 +599,7 @@ SET el.entity_key = 'announcement',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:event-rsvp@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:event-rsvp@fr-FR'})
 SET el.entity_key = 'event-rsvp',
     el.locale_key = 'fr-FR',
     el.slug = 'rsvp-evenement',
@@ -615,7 +615,7 @@ SET el.entity_key = 'event-rsvp',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:booking-appointment@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:booking-appointment@fr-FR'})
 SET el.entity_key = 'booking-appointment',
     el.locale_key = 'fr-FR',
     el.slug = 'reservation-rendez-vous',
@@ -631,7 +631,7 @@ SET el.entity_key = 'booking-appointment',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-url@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-url@fr-FR'})
 SET el.entity_key = 'qr-code-url',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-url',
@@ -647,7 +647,7 @@ SET el.entity_key = 'qr-code-url',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-wifi@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-wifi@fr-FR'})
 SET el.entity_key = 'qr-code-wifi',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-wifi',
@@ -663,7 +663,7 @@ SET el.entity_key = 'qr-code-wifi',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-vcard@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-vcard@fr-FR'})
 SET el.entity_key = 'qr-code-vcard',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-vcard',
@@ -679,7 +679,7 @@ SET el.entity_key = 'qr-code-vcard',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-mecard@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-mecard@fr-FR'})
 SET el.entity_key = 'qr-code-mecard',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-mecard',
@@ -695,7 +695,7 @@ SET el.entity_key = 'qr-code-mecard',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-pdf@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-pdf@fr-FR'})
 SET el.entity_key = 'qr-code-pdf',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-pdf',
@@ -711,7 +711,7 @@ SET el.entity_key = 'qr-code-pdf',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-text@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-text@fr-FR'})
 SET el.entity_key = 'qr-code-text',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-text',
@@ -727,7 +727,7 @@ SET el.entity_key = 'qr-code-text',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-email@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-email@fr-FR'})
 SET el.entity_key = 'qr-code-email',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-email',
@@ -743,7 +743,7 @@ SET el.entity_key = 'qr-code-email',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-sms@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-sms@fr-FR'})
 SET el.entity_key = 'qr-code-sms',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-sms',
@@ -759,7 +759,7 @@ SET el.entity_key = 'qr-code-sms',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-phone@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-phone@fr-FR'})
 SET el.entity_key = 'qr-code-phone',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-phone',
@@ -775,7 +775,7 @@ SET el.entity_key = 'qr-code-phone',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-video@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-video@fr-FR'})
 SET el.entity_key = 'qr-code-video',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-video',
@@ -791,7 +791,7 @@ SET el.entity_key = 'qr-code-video',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-audio@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-audio@fr-FR'})
 SET el.entity_key = 'qr-code-audio',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-audio',
@@ -807,7 +807,7 @@ SET el.entity_key = 'qr-code-audio',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-image-gallery@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-image-gallery@fr-FR'})
 SET el.entity_key = 'qr-code-image-gallery',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-image-gallery',
@@ -823,7 +823,7 @@ SET el.entity_key = 'qr-code-image-gallery',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-coupon@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-coupon@fr-FR'})
 SET el.entity_key = 'qr-code-coupon',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-coupon',
@@ -839,7 +839,7 @@ SET el.entity_key = 'qr-code-coupon',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-social@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-social@fr-FR'})
 SET el.entity_key = 'qr-code-social',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-social',
@@ -855,7 +855,7 @@ SET el.entity_key = 'qr-code-social',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-instagram@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-instagram@fr-FR'})
 SET el.entity_key = 'qr-code-instagram',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-instagram',
@@ -871,7 +871,7 @@ SET el.entity_key = 'qr-code-instagram',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-linkedin@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-linkedin@fr-FR'})
 SET el.entity_key = 'qr-code-linkedin',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-linkedin',
@@ -887,7 +887,7 @@ SET el.entity_key = 'qr-code-linkedin',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-facebook@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-facebook@fr-FR'})
 SET el.entity_key = 'qr-code-facebook',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-facebook',
@@ -903,7 +903,7 @@ SET el.entity_key = 'qr-code-facebook',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-twitter@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-twitter@fr-FR'})
 SET el.entity_key = 'qr-code-twitter',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-twitter',
@@ -919,7 +919,7 @@ SET el.entity_key = 'qr-code-twitter',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-youtube@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-youtube@fr-FR'})
 SET el.entity_key = 'qr-code-youtube',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-youtube',
@@ -935,7 +935,7 @@ SET el.entity_key = 'qr-code-youtube',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-tiktok@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-tiktok@fr-FR'})
 SET el.entity_key = 'qr-code-tiktok',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-tiktok',
@@ -951,7 +951,7 @@ SET el.entity_key = 'qr-code-tiktok',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-snapchat@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-snapchat@fr-FR'})
 SET el.entity_key = 'qr-code-snapchat',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-snapchat',
@@ -967,7 +967,7 @@ SET el.entity_key = 'qr-code-snapchat',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-whatsapp@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-whatsapp@fr-FR'})
 SET el.entity_key = 'qr-code-whatsapp',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-whatsapp',
@@ -983,7 +983,7 @@ SET el.entity_key = 'qr-code-whatsapp',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-telegram@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-telegram@fr-FR'})
 SET el.entity_key = 'qr-code-telegram',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-telegram',
@@ -999,7 +999,7 @@ SET el.entity_key = 'qr-code-telegram',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-pinterest@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-pinterest@fr-FR'})
 SET el.entity_key = 'qr-code-pinterest',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-pinterest',
@@ -1015,7 +1015,7 @@ SET el.entity_key = 'qr-code-pinterest',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-spotify@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-spotify@fr-FR'})
 SET el.entity_key = 'qr-code-spotify',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-spotify',
@@ -1031,7 +1031,7 @@ SET el.entity_key = 'qr-code-spotify',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-apple-music@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-apple-music@fr-FR'})
 SET el.entity_key = 'qr-code-apple-music',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-apple-music',
@@ -1047,7 +1047,7 @@ SET el.entity_key = 'qr-code-apple-music',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-soundcloud@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-soundcloud@fr-FR'})
 SET el.entity_key = 'qr-code-soundcloud',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-soundcloud',
@@ -1063,7 +1063,7 @@ SET el.entity_key = 'qr-code-soundcloud',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-payment@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-payment@fr-FR'})
 SET el.entity_key = 'qr-code-payment',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-payment',
@@ -1079,7 +1079,7 @@ SET el.entity_key = 'qr-code-payment',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-pix@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-pix@fr-FR'})
 SET el.entity_key = 'qr-code-pix',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-pix',
@@ -1095,7 +1095,7 @@ SET el.entity_key = 'qr-code-pix',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-upi@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-upi@fr-FR'})
 SET el.entity_key = 'qr-code-upi',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-upi',
@@ -1111,7 +1111,7 @@ SET el.entity_key = 'qr-code-upi',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-paypal@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-paypal@fr-FR'})
 SET el.entity_key = 'qr-code-paypal',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-paypal',
@@ -1127,7 +1127,7 @@ SET el.entity_key = 'qr-code-paypal',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-venmo@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-venmo@fr-FR'})
 SET el.entity_key = 'qr-code-venmo',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-venmo',
@@ -1143,7 +1143,7 @@ SET el.entity_key = 'qr-code-venmo',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-bitcoin@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-bitcoin@fr-FR'})
 SET el.entity_key = 'qr-code-bitcoin',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-bitcoin',
@@ -1159,7 +1159,7 @@ SET el.entity_key = 'qr-code-bitcoin',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-ethereum@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-ethereum@fr-FR'})
 SET el.entity_key = 'qr-code-ethereum',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-ethereum',
@@ -1175,7 +1175,7 @@ SET el.entity_key = 'qr-code-ethereum',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-crypto@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-crypto@fr-FR'})
 SET el.entity_key = 'qr-code-crypto',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-crypto',
@@ -1191,7 +1191,7 @@ SET el.entity_key = 'qr-code-crypto',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-bank-transfer@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-bank-transfer@fr-FR'})
 SET el.entity_key = 'qr-code-bank-transfer',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-bank-transfer',
@@ -1207,7 +1207,7 @@ SET el.entity_key = 'qr-code-bank-transfer',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-location@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-location@fr-FR'})
 SET el.entity_key = 'qr-code-location',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-location',
@@ -1223,7 +1223,7 @@ SET el.entity_key = 'qr-code-location',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-google-maps@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-google-maps@fr-FR'})
 SET el.entity_key = 'qr-code-google-maps',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-google-maps',
@@ -1239,7 +1239,7 @@ SET el.entity_key = 'qr-code-google-maps',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-apple-maps@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-apple-maps@fr-FR'})
 SET el.entity_key = 'qr-code-apple-maps',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-apple-maps',
@@ -1255,7 +1255,7 @@ SET el.entity_key = 'qr-code-apple-maps',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-waze@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-waze@fr-FR'})
 SET el.entity_key = 'qr-code-waze',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-waze',
@@ -1271,7 +1271,7 @@ SET el.entity_key = 'qr-code-waze',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-coordinates@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-coordinates@fr-FR'})
 SET el.entity_key = 'qr-code-coordinates',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-coordinates',
@@ -1287,7 +1287,7 @@ SET el.entity_key = 'qr-code-coordinates',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-app@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-app@fr-FR'})
 SET el.entity_key = 'qr-code-app',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-app',
@@ -1303,7 +1303,7 @@ SET el.entity_key = 'qr-code-app',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-app-store@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-app-store@fr-FR'})
 SET el.entity_key = 'qr-code-app-store',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-app-store',
@@ -1319,7 +1319,7 @@ SET el.entity_key = 'qr-code-app-store',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-play-store@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-play-store@fr-FR'})
 SET el.entity_key = 'qr-code-play-store',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-play-store',
@@ -1335,7 +1335,7 @@ SET el.entity_key = 'qr-code-play-store',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-app-download@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-app-download@fr-FR'})
 SET el.entity_key = 'qr-code-app-download',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-app-download',
@@ -1351,7 +1351,7 @@ SET el.entity_key = 'qr-code-app-download',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-review@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-review@fr-FR'})
 SET el.entity_key = 'qr-code-review',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-review',
@@ -1367,7 +1367,7 @@ SET el.entity_key = 'qr-code-review',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-survey@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-survey@fr-FR'})
 SET el.entity_key = 'qr-code-survey',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-survey',
@@ -1383,7 +1383,7 @@ SET el.entity_key = 'qr-code-survey',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-feedback@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-feedback@fr-FR'})
 SET el.entity_key = 'qr-code-feedback',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-feedback',
@@ -1399,7 +1399,7 @@ SET el.entity_key = 'qr-code-feedback',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-menu@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-menu@fr-FR'})
 SET el.entity_key = 'qr-code-menu',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-menu',
@@ -1415,7 +1415,7 @@ SET el.entity_key = 'qr-code-menu',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-resume@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-resume@fr-FR'})
 SET el.entity_key = 'qr-code-resume',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-resume',
@@ -1431,7 +1431,7 @@ SET el.entity_key = 'qr-code-resume',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-certificate@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-certificate@fr-FR'})
 SET el.entity_key = 'qr-code-certificate',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-certificate',
@@ -1447,7 +1447,7 @@ SET el.entity_key = 'qr-code-certificate',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-ticket@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-ticket@fr-FR'})
 SET el.entity_key = 'qr-code-ticket',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-ticket',
@@ -1463,7 +1463,7 @@ SET el.entity_key = 'qr-code-ticket',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-attendance@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-attendance@fr-FR'})
 SET el.entity_key = 'qr-code-attendance',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-attendance',
@@ -1479,7 +1479,7 @@ SET el.entity_key = 'qr-code-attendance',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-pet-tag@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-pet-tag@fr-FR'})
 SET el.entity_key = 'qr-code-pet-tag',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-pet-tag',
@@ -1495,7 +1495,7 @@ SET el.entity_key = 'qr-code-pet-tag',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-medical-id@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-medical-id@fr-FR'})
 SET el.entity_key = 'qr-code-medical-id',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-medical-id',
@@ -1511,7 +1511,7 @@ SET el.entity_key = 'qr-code-medical-id',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-file@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-file@fr-FR'})
 SET el.entity_key = 'qr-code-file',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-file',
@@ -1527,7 +1527,7 @@ SET el.entity_key = 'qr-code-file',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-calendar@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-calendar@fr-FR'})
 SET el.entity_key = 'qr-code-calendar',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-calendar',
@@ -1543,7 +1543,7 @@ SET el.entity_key = 'qr-code-calendar',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:ean-13@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:ean-13@fr-FR'})
 SET el.entity_key = 'ean-13',
     el.locale_key = 'fr-FR',
     el.slug = 'ean-13',
@@ -1559,7 +1559,7 @@ SET el.entity_key = 'ean-13',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:ean-8@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:ean-8@fr-FR'})
 SET el.entity_key = 'ean-8',
     el.locale_key = 'fr-FR',
     el.slug = 'ean-8',
@@ -1575,7 +1575,7 @@ SET el.entity_key = 'ean-8',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:upc-a@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:upc-a@fr-FR'})
 SET el.entity_key = 'upc-a',
     el.locale_key = 'fr-FR',
     el.slug = 'upc-a',
@@ -1591,7 +1591,7 @@ SET el.entity_key = 'upc-a',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:upc-e@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:upc-e@fr-FR'})
 SET el.entity_key = 'upc-e',
     el.locale_key = 'fr-FR',
     el.slug = 'upc-e',
@@ -1607,7 +1607,7 @@ SET el.entity_key = 'upc-e',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:code-128@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:code-128@fr-FR'})
 SET el.entity_key = 'code-128',
     el.locale_key = 'fr-FR',
     el.slug = 'code-128',
@@ -1623,7 +1623,7 @@ SET el.entity_key = 'code-128',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:code-39@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:code-39@fr-FR'})
 SET el.entity_key = 'code-39',
     el.locale_key = 'fr-FR',
     el.slug = 'code-39',
@@ -1639,7 +1639,7 @@ SET el.entity_key = 'code-39',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:itf-14@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:itf-14@fr-FR'})
 SET el.entity_key = 'itf-14',
     el.locale_key = 'fr-FR',
     el.slug = 'itf-14',
@@ -1655,7 +1655,7 @@ SET el.entity_key = 'itf-14',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:codabar@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:codabar@fr-FR'})
 SET el.entity_key = 'codabar',
     el.locale_key = 'fr-FR',
     el.slug = 'codabar',
@@ -1671,7 +1671,7 @@ SET el.entity_key = 'codabar',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:msi-plessey@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:msi-plessey@fr-FR'})
 SET el.entity_key = 'msi-plessey',
     el.locale_key = 'fr-FR',
     el.slug = 'msi-plessey',
@@ -1687,7 +1687,7 @@ SET el.entity_key = 'msi-plessey',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:gs1-128@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:gs1-128@fr-FR'})
 SET el.entity_key = 'gs1-128',
     el.locale_key = 'fr-FR',
     el.slug = 'gs1-128',
@@ -1703,7 +1703,7 @@ SET el.entity_key = 'gs1-128',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:data-matrix@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:data-matrix@fr-FR'})
 SET el.entity_key = 'data-matrix',
     el.locale_key = 'fr-FR',
     el.slug = 'data-matrix',
@@ -1719,7 +1719,7 @@ SET el.entity_key = 'data-matrix',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:pdf417@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:pdf417@fr-FR'})
 SET el.entity_key = 'pdf417',
     el.locale_key = 'fr-FR',
     el.slug = 'pdf417',
@@ -1735,7 +1735,7 @@ SET el.entity_key = 'pdf417',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:aztec-code@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:aztec-code@fr-FR'})
 SET el.entity_key = 'aztec-code',
     el.locale_key = 'fr-FR',
     el.slug = 'aztec-code',
@@ -1751,7 +1751,7 @@ SET el.entity_key = 'aztec-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:maxicode@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:maxicode@fr-FR'})
 SET el.entity_key = 'maxicode',
     el.locale_key = 'fr-FR',
     el.slug = 'maxicode',
@@ -1767,7 +1767,7 @@ SET el.entity_key = 'maxicode',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:gs1-datamatrix@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:gs1-datamatrix@fr-FR'})
 SET el.entity_key = 'gs1-datamatrix',
     el.locale_key = 'fr-FR',
     el.slug = 'gs1-datamatrix',
@@ -1783,7 +1783,7 @@ SET el.entity_key = 'gs1-datamatrix',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:barcode-generator@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:barcode-generator@fr-FR'})
 SET el.entity_key = 'barcode-generator',
     el.locale_key = 'fr-FR',
     el.slug = 'code-barres-generateur',
@@ -1799,7 +1799,7 @@ SET el.entity_key = 'barcode-generator',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:barcode-scanner@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:barcode-scanner@fr-FR'})
 SET el.entity_key = 'barcode-scanner',
     el.locale_key = 'fr-FR',
     el.slug = 'code-barres-scanner',
@@ -1815,7 +1815,7 @@ SET el.entity_key = 'barcode-scanner',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:analytics@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:analytics@fr-FR'})
 SET el.entity_key = 'analytics',
     el.locale_key = 'fr-FR',
     el.slug = 'analytiques',
@@ -1831,7 +1831,7 @@ SET el.entity_key = 'analytics',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:click-tracking@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:click-tracking@fr-FR'})
 SET el.entity_key = 'click-tracking',
     el.locale_key = 'fr-FR',
     el.slug = 'click-suivi',
@@ -1847,7 +1847,7 @@ SET el.entity_key = 'click-tracking',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:scan-counting@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:scan-counting@fr-FR'})
 SET el.entity_key = 'scan-counting',
     el.locale_key = 'fr-FR',
     el.slug = 'comptage-scans',
@@ -1863,7 +1863,7 @@ SET el.entity_key = 'scan-counting',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:geo-tracking@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:geo-tracking@fr-FR'})
 SET el.entity_key = 'geo-tracking',
     el.locale_key = 'fr-FR',
     el.slug = 'geo-suivi',
@@ -1879,7 +1879,7 @@ SET el.entity_key = 'geo-tracking',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:device-detection@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:device-detection@fr-FR'})
 SET el.entity_key = 'device-detection',
     el.locale_key = 'fr-FR',
     el.slug = 'detection-appareil',
@@ -1895,7 +1895,7 @@ SET el.entity_key = 'device-detection',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:time-series@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:time-series@fr-FR'})
 SET el.entity_key = 'time-series',
     el.locale_key = 'fr-FR',
     el.slug = 'serie-temporelle',
@@ -1911,7 +1911,7 @@ SET el.entity_key = 'time-series',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:contextual-routing@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:contextual-routing@fr-FR'})
 SET el.entity_key = 'contextual-routing',
     el.locale_key = 'fr-FR',
     el.slug = 'routage-contextuel',
@@ -1927,7 +1927,7 @@ SET el.entity_key = 'contextual-routing',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:custom-domain-name@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:custom-domain-name@fr-FR'})
 SET el.entity_key = 'custom-domain-name',
     el.locale_key = 'fr-FR',
     el.slug = 'domaine-personnalise-name',
@@ -1943,7 +1943,7 @@ SET el.entity_key = 'custom-domain-name',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:custom-link-preview@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:custom-link-preview@fr-FR'})
 SET el.entity_key = 'custom-link-preview',
     el.locale_key = 'fr-FR',
     el.slug = 'personnalise-link-preview',
@@ -1959,7 +1959,7 @@ SET el.entity_key = 'custom-link-preview',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:utm-builder@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:utm-builder@fr-FR'})
 SET el.entity_key = 'utm-builder',
     el.locale_key = 'fr-FR',
     el.slug = 'utm-constructeur',
@@ -1975,7 +1975,7 @@ SET el.entity_key = 'utm-builder',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:bulk-creation@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:bulk-creation@fr-FR'})
 SET el.entity_key = 'bulk-creation',
     el.locale_key = 'fr-FR',
     el.slug = 'masse-creation',
@@ -1991,7 +1991,7 @@ SET el.entity_key = 'bulk-creation',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:team-workspaces@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:team-workspaces@fr-FR'})
 SET el.entity_key = 'team-workspaces',
     el.locale_key = 'fr-FR',
     el.slug = 'espaces-equipe',
@@ -2007,7 +2007,7 @@ SET el.entity_key = 'team-workspaces',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:api@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:api@fr-FR'})
 SET el.entity_key = 'api',
     el.locale_key = 'fr-FR',
     el.slug = 'api',
@@ -2023,7 +2023,7 @@ SET el.entity_key = 'api',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:webhooks@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:webhooks@fr-FR'})
 SET el.entity_key = 'webhooks',
     el.locale_key = 'fr-FR',
     el.slug = 'webhooks',
@@ -2039,7 +2039,7 @@ SET el.entity_key = 'webhooks',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:white-label@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:white-label@fr-FR'})
 SET el.entity_key = 'white-label',
     el.locale_key = 'fr-FR',
     el.slug = 'marque-blanche',
@@ -2055,7 +2055,7 @@ SET el.entity_key = 'white-label',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:password-protection@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:password-protection@fr-FR'})
 SET el.entity_key = 'password-protection',
     el.locale_key = 'fr-FR',
     el.slug = 'protection-mot-de-passe',
@@ -2071,7 +2071,7 @@ SET el.entity_key = 'password-protection',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:expiration@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:expiration@fr-FR'})
 SET el.entity_key = 'expiration',
     el.locale_key = 'fr-FR',
     el.slug = 'expiration',
@@ -2087,7 +2087,7 @@ SET el.entity_key = 'expiration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:scan-limit@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:scan-limit@fr-FR'})
 SET el.entity_key = 'scan-limit',
     el.locale_key = 'fr-FR',
     el.slug = 'limite-scans',
@@ -2103,7 +2103,7 @@ SET el.entity_key = 'scan-limit',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:retargeting-pixel@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:retargeting-pixel@fr-FR'})
 SET el.entity_key = 'retargeting-pixel',
     el.locale_key = 'fr-FR',
     el.slug = 'reciblage-pixel',
@@ -2119,7 +2119,7 @@ SET el.entity_key = 'retargeting-pixel',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-generator@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-generator@fr-FR'})
 SET el.entity_key = 'qr-code-generator',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-generateur',
@@ -2135,7 +2135,7 @@ SET el.entity_key = 'qr-code-generator',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-scanner@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-scanner@fr-FR'})
 SET el.entity_key = 'qr-code-scanner',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-scanner',
@@ -2151,7 +2151,7 @@ SET el.entity_key = 'qr-code-scanner',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-api@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-api@fr-FR'})
 SET el.entity_key = 'qr-code-api',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-api',
@@ -2167,7 +2167,7 @@ SET el.entity_key = 'qr-code-api',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:landing-page-builder@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:landing-page-builder@fr-FR'})
 SET el.entity_key = 'landing-page-builder',
     el.locale_key = 'fr-FR',
     el.slug = 'page-destination-constructeur',
@@ -2183,7 +2183,7 @@ SET el.entity_key = 'landing-page-builder',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:url-shortener@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:url-shortener@fr-FR'})
 SET el.entity_key = 'url-shortener',
     el.locale_key = 'fr-FR',
     el.slug = 'raccourcisseur-url',
@@ -2199,7 +2199,7 @@ SET el.entity_key = 'url-shortener',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:link-in-bio-builder@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:link-in-bio-builder@fr-FR'})
 SET el.entity_key = 'link-in-bio-builder',
     el.locale_key = 'fr-FR',
     el.slug = 'lien-en-bio-constructeur',
@@ -2215,7 +2215,7 @@ SET el.entity_key = 'link-in-bio-builder',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:menu-builder@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:menu-builder@fr-FR'})
 SET el.entity_key = 'menu-builder',
     el.locale_key = 'fr-FR',
     el.slug = 'menu-constructeur',
@@ -2231,7 +2231,7 @@ SET el.entity_key = 'menu-builder',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:vcard-generator@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:vcard-generator@fr-FR'})
 SET el.entity_key = 'vcard-generator',
     el.locale_key = 'fr-FR',
     el.slug = 'vcard-generateur',
@@ -2247,7 +2247,7 @@ SET el.entity_key = 'vcard-generator',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:wifi-qr-generator@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:wifi-qr-generator@fr-FR'})
 SET el.entity_key = 'wifi-qr-generator',
     el.locale_key = 'fr-FR',
     el.slug = 'wifi-qr-generateur',
@@ -2263,7 +2263,7 @@ SET el.entity_key = 'wifi-qr-generator',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:batch-qr-generator@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:batch-qr-generator@fr-FR'})
 SET el.entity_key = 'batch-qr-generator',
     el.locale_key = 'fr-FR',
     el.slug = 'batch-qr-generateur',
@@ -2279,7 +2279,7 @@ SET el.entity_key = 'batch-qr-generator',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:business-cards@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:business-cards@fr-FR'})
 SET el.entity_key = 'business-cards',
     el.locale_key = 'fr-FR',
     el.slug = 'carte-visites',
@@ -2295,7 +2295,7 @@ SET el.entity_key = 'business-cards',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:flyers@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:flyers@fr-FR'})
 SET el.entity_key = 'flyers',
     el.locale_key = 'fr-FR',
     el.slug = 'flyers',
@@ -2311,7 +2311,7 @@ SET el.entity_key = 'flyers',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:posters-billboards@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:posters-billboards@fr-FR'})
 SET el.entity_key = 'posters-billboards',
     el.locale_key = 'fr-FR',
     el.slug = 'affiches-panneaux',
@@ -2327,7 +2327,7 @@ SET el.entity_key = 'posters-billboards',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:brochures@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:brochures@fr-FR'})
 SET el.entity_key = 'brochures',
     el.locale_key = 'fr-FR',
     el.slug = 'brochures',
@@ -2343,7 +2343,7 @@ SET el.entity_key = 'brochures',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:catalogs@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:catalogs@fr-FR'})
 SET el.entity_key = 'catalogs',
     el.locale_key = 'fr-FR',
     el.slug = 'catalogues',
@@ -2359,7 +2359,7 @@ SET el.entity_key = 'catalogs',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:magazines@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:magazines@fr-FR'})
 SET el.entity_key = 'magazines',
     el.locale_key = 'fr-FR',
     el.slug = 'magazines',
@@ -2375,7 +2375,7 @@ SET el.entity_key = 'magazines',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:newspapers@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:newspapers@fr-FR'})
 SET el.entity_key = 'newspapers',
     el.locale_key = 'fr-FR',
     el.slug = 'journaux',
@@ -2391,7 +2391,7 @@ SET el.entity_key = 'newspapers',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:direct-mail@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:direct-mail@fr-FR'})
 SET el.entity_key = 'direct-mail',
     el.locale_key = 'fr-FR',
     el.slug = 'publipostage',
@@ -2407,7 +2407,7 @@ SET el.entity_key = 'direct-mail',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:stickers-labels@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:stickers-labels@fr-FR'})
 SET el.entity_key = 'stickers-labels',
     el.locale_key = 'fr-FR',
     el.slug = 'autocollants-etiquettes',
@@ -2423,7 +2423,7 @@ SET el.entity_key = 'stickers-labels',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:banners@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:banners@fr-FR'})
 SET el.entity_key = 'banners',
     el.locale_key = 'fr-FR',
     el.slug = 'bannieres',
@@ -2439,7 +2439,7 @@ SET el.entity_key = 'banners',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:product-packaging@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:product-packaging@fr-FR'})
 SET el.entity_key = 'product-packaging',
     el.locale_key = 'fr-FR',
     el.slug = 'emballage-produit',
@@ -2455,7 +2455,7 @@ SET el.entity_key = 'product-packaging',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:product-labels@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:product-labels@fr-FR'})
 SET el.entity_key = 'product-labels',
     el.locale_key = 'fr-FR',
     el.slug = 'etiquettes-produit',
@@ -2471,7 +2471,7 @@ SET el.entity_key = 'product-labels',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:receipts@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:receipts@fr-FR'})
 SET el.entity_key = 'receipts',
     el.locale_key = 'fr-FR',
     el.slug = 'recus',
@@ -2487,7 +2487,7 @@ SET el.entity_key = 'receipts',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:table-tents@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:table-tents@fr-FR'})
 SET el.entity_key = 'table-tents',
     el.locale_key = 'fr-FR',
     el.slug = 'chevalets-de-table',
@@ -2503,7 +2503,7 @@ SET el.entity_key = 'table-tents',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:menus-printed@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:menus-printed@fr-FR'})
 SET el.entity_key = 'menus-printed',
     el.locale_key = 'fr-FR',
     el.slug = 'menus-imprimes',
@@ -2519,7 +2519,7 @@ SET el.entity_key = 'menus-printed',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:tickets-physical@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:tickets-physical@fr-FR'})
 SET el.entity_key = 'tickets-physical',
     el.locale_key = 'fr-FR',
     el.slug = 'billets',
@@ -2535,7 +2535,7 @@ SET el.entity_key = 'tickets-physical',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:emails@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:emails@fr-FR'})
 SET el.entity_key = 'emails',
     el.locale_key = 'fr-FR',
     el.slug = 'courriels',
@@ -2551,7 +2551,7 @@ SET el.entity_key = 'emails',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:presentations@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:presentations@fr-FR'})
 SET el.entity_key = 'presentations',
     el.locale_key = 'fr-FR',
     el.slug = 'presentations',
@@ -2567,7 +2567,7 @@ SET el.entity_key = 'presentations',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:documents@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:documents@fr-FR'})
 SET el.entity_key = 'documents',
     el.locale_key = 'fr-FR',
     el.slug = 'documents',
@@ -2583,7 +2583,7 @@ SET el.entity_key = 'documents',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:websites@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:websites@fr-FR'})
 SET el.entity_key = 'websites',
     el.locale_key = 'fr-FR',
     el.slug = 'sites-web',
@@ -2599,7 +2599,7 @@ SET el.entity_key = 'websites',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:create-qr-code@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:create-qr-code@fr-FR'})
 SET el.entity_key = 'create-qr-code',
     el.locale_key = 'fr-FR',
     el.slug = 'creer-qr-code',
@@ -2615,7 +2615,7 @@ SET el.entity_key = 'create-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:scan-qr-code@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:scan-qr-code@fr-FR'})
 SET el.entity_key = 'scan-qr-code',
     el.locale_key = 'fr-FR',
     el.slug = 'scanner-qr-code',
@@ -2631,7 +2631,7 @@ SET el.entity_key = 'scan-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:customize-qr-code@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:customize-qr-code@fr-FR'})
 SET el.entity_key = 'customize-qr-code',
     el.locale_key = 'fr-FR',
     el.slug = 'personnaliser-qr-code',
@@ -2647,7 +2647,7 @@ SET el.entity_key = 'customize-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:download-qr-code@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:download-qr-code@fr-FR'})
 SET el.entity_key = 'download-qr-code',
     el.locale_key = 'fr-FR',
     el.slug = 'telecharger-qr-code',
@@ -2663,7 +2663,7 @@ SET el.entity_key = 'download-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:print-qr-code@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:print-qr-code@fr-FR'})
 SET el.entity_key = 'print-qr-code',
     el.locale_key = 'fr-FR',
     el.slug = 'imprimer-qr-code',
@@ -2679,7 +2679,7 @@ SET el.entity_key = 'print-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:add-logo@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:add-logo@fr-FR'})
 SET el.entity_key = 'add-logo',
     el.locale_key = 'fr-FR',
     el.slug = 'ajouter-logo',
@@ -2695,7 +2695,7 @@ SET el.entity_key = 'add-logo',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:change-colors@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:change-colors@fr-FR'})
 SET el.entity_key = 'change-colors',
     el.locale_key = 'fr-FR',
     el.slug = 'change-couleurs',
@@ -2711,7 +2711,7 @@ SET el.entity_key = 'change-colors',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:edit-destination@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:edit-destination@fr-FR'})
 SET el.entity_key = 'edit-destination',
     el.locale_key = 'fr-FR',
     el.slug = 'modifier-destination',
@@ -2727,7 +2727,7 @@ SET el.entity_key = 'edit-destination',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:share-qr-code@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:share-qr-code@fr-FR'})
 SET el.entity_key = 'share-qr-code',
     el.locale_key = 'fr-FR',
     el.slug = 'partager-qr-code',
@@ -2743,7 +2743,7 @@ SET el.entity_key = 'share-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:track-scans@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:track-scans@fr-FR'})
 SET el.entity_key = 'track-scans',
     el.locale_key = 'fr-FR',
     el.slug = 'suivre-scans',
@@ -2759,7 +2759,7 @@ SET el.entity_key = 'track-scans',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:shorten-url@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:shorten-url@fr-FR'})
 SET el.entity_key = 'shorten-url',
     el.locale_key = 'fr-FR',
     el.slug = 'raccourcir-url',
@@ -2775,7 +2775,7 @@ SET el.entity_key = 'shorten-url',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:create-smart-link@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:create-smart-link@fr-FR'})
 SET el.entity_key = 'create-smart-link',
     el.locale_key = 'fr-FR',
     el.slug = 'creer-lien-intelligent',
@@ -2791,7 +2791,7 @@ SET el.entity_key = 'create-smart-link',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:create-landing-page@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:create-landing-page@fr-FR'})
 SET el.entity_key = 'create-landing-page',
     el.locale_key = 'fr-FR',
     el.slug = 'creer-page-destination',
@@ -2807,7 +2807,7 @@ SET el.entity_key = 'create-landing-page',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:create-barcode@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:create-barcode@fr-FR'})
 SET el.entity_key = 'create-barcode',
     el.locale_key = 'fr-FR',
     el.slug = 'creer-code-barres',
@@ -2823,7 +2823,7 @@ SET el.entity_key = 'create-barcode',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:scan-barcode@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:scan-barcode@fr-FR'})
 SET el.entity_key = 'scan-barcode',
     el.locale_key = 'fr-FR',
     el.slug = 'scanner-code-barres',
@@ -2839,7 +2839,7 @@ SET el.entity_key = 'scan-barcode',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:restaurants@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:restaurants@fr-FR'})
 SET el.entity_key = 'restaurants',
     el.locale_key = 'fr-FR',
     el.slug = 'restaurants',
@@ -2855,7 +2855,7 @@ SET el.entity_key = 'restaurants',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:retail@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:retail@fr-FR'})
 SET el.entity_key = 'retail',
     el.locale_key = 'fr-FR',
     el.slug = 'commerce-detail',
@@ -2871,7 +2871,7 @@ SET el.entity_key = 'retail',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:hospitality@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:hospitality@fr-FR'})
 SET el.entity_key = 'hospitality',
     el.locale_key = 'fr-FR',
     el.slug = 'hotellerie',
@@ -2887,7 +2887,7 @@ SET el.entity_key = 'hospitality',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:healthcare@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:healthcare@fr-FR'})
 SET el.entity_key = 'healthcare',
     el.locale_key = 'fr-FR',
     el.slug = 'sante',
@@ -2903,7 +2903,7 @@ SET el.entity_key = 'healthcare',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:education@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:education@fr-FR'})
 SET el.entity_key = 'education',
     el.locale_key = 'fr-FR',
     el.slug = 'education',
@@ -2919,7 +2919,7 @@ SET el.entity_key = 'education',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:real-estate@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:real-estate@fr-FR'})
 SET el.entity_key = 'real-estate',
     el.locale_key = 'fr-FR',
     el.slug = 'immobilier',
@@ -2935,7 +2935,7 @@ SET el.entity_key = 'real-estate',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:fitness@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:fitness@fr-FR'})
 SET el.entity_key = 'fitness',
     el.locale_key = 'fr-FR',
     el.slug = 'fitness',
@@ -2951,7 +2951,7 @@ SET el.entity_key = 'fitness',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:beauty@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:beauty@fr-FR'})
 SET el.entity_key = 'beauty',
     el.locale_key = 'fr-FR',
     el.slug = 'beaute',
@@ -2967,7 +2967,7 @@ SET el.entity_key = 'beauty',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:entertainment@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:entertainment@fr-FR'})
 SET el.entity_key = 'entertainment',
     el.locale_key = 'fr-FR',
     el.slug = 'divertissement',
@@ -2983,7 +2983,7 @@ SET el.entity_key = 'entertainment',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:transportation@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:transportation@fr-FR'})
 SET el.entity_key = 'transportation',
     el.locale_key = 'fr-FR',
     el.slug = 'transport',
@@ -2999,7 +2999,7 @@ SET el.entity_key = 'transportation',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:manufacturing@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:manufacturing@fr-FR'})
 SET el.entity_key = 'manufacturing',
     el.locale_key = 'fr-FR',
     el.slug = 'industrie',
@@ -3015,7 +3015,7 @@ SET el.entity_key = 'manufacturing',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:logistics@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:logistics@fr-FR'})
 SET el.entity_key = 'logistics',
     el.locale_key = 'fr-FR',
     el.slug = 'logistique',
@@ -3031,7 +3031,7 @@ SET el.entity_key = 'logistics',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:construction@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:construction@fr-FR'})
 SET el.entity_key = 'construction',
     el.locale_key = 'fr-FR',
     el.slug = 'btp',
@@ -3047,7 +3047,7 @@ SET el.entity_key = 'construction',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:finance@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:finance@fr-FR'})
 SET el.entity_key = 'finance',
     el.locale_key = 'fr-FR',
     el.slug = 'finance',
@@ -3063,7 +3063,7 @@ SET el.entity_key = 'finance',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:government@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:government@fr-FR'})
 SET el.entity_key = 'government',
     el.locale_key = 'fr-FR',
     el.slug = 'services-publics',
@@ -3079,7 +3079,7 @@ SET el.entity_key = 'government',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:marketing-agencies@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:marketing-agencies@fr-FR'})
 SET el.entity_key = 'marketing-agencies',
     el.locale_key = 'fr-FR',
     el.slug = 'agences-marketing',
@@ -3095,7 +3095,7 @@ SET el.entity_key = 'marketing-agencies',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:creative-agencies@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:creative-agencies@fr-FR'})
 SET el.entity_key = 'creative-agencies',
     el.locale_key = 'fr-FR',
     el.slug = 'agences-creatives',
@@ -3111,7 +3111,7 @@ SET el.entity_key = 'creative-agencies',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:event-management@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:event-management@fr-FR'})
 SET el.entity_key = 'event-management',
     el.locale_key = 'fr-FR',
     el.slug = 'gestion-evenements',
@@ -3127,7 +3127,7 @@ SET el.entity_key = 'event-management',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:nonprofits@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:nonprofits@fr-FR'})
 SET el.entity_key = 'nonprofits',
     el.locale_key = 'fr-FR',
     el.slug = 'associations',
@@ -3143,7 +3143,7 @@ SET el.entity_key = 'nonprofits',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:consulting@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:consulting@fr-FR'})
 SET el.entity_key = 'consulting',
     el.locale_key = 'fr-FR',
     el.slug = 'conseil',
@@ -3159,7 +3159,7 @@ SET el.entity_key = 'consulting',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:developers@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:developers@fr-FR'})
 SET el.entity_key = 'developers',
     el.locale_key = 'fr-FR',
     el.slug = 'developpeurs',
@@ -3175,7 +3175,7 @@ SET el.entity_key = 'developers',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:enterprise@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:enterprise@fr-FR'})
 SET el.entity_key = 'enterprise',
     el.locale_key = 'fr-FR',
     el.slug = 'entreprise',
@@ -3191,7 +3191,7 @@ SET el.entity_key = 'enterprise',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:agencies@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:agencies@fr-FR'})
 SET el.entity_key = 'agencies',
     el.locale_key = 'fr-FR',
     el.slug = 'agences',
@@ -3207,7 +3207,7 @@ SET el.entity_key = 'agencies',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:small-business@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:small-business@fr-FR'})
 SET el.entity_key = 'small-business',
     el.locale_key = 'fr-FR',
     el.slug = 'petites-entreprises',
@@ -3223,7 +3223,7 @@ SET el.entity_key = 'small-business',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:freelancers@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:freelancers@fr-FR'})
 SET el.entity_key = 'freelancers',
     el.locale_key = 'fr-FR',
     el.slug = 'freelances',
@@ -3239,7 +3239,7 @@ SET el.entity_key = 'freelancers',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:instagram@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:instagram@fr-FR'})
 SET el.entity_key = 'instagram',
     el.locale_key = 'fr-FR',
     el.slug = 'instagram',
@@ -3255,7 +3255,7 @@ SET el.entity_key = 'instagram',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:linkedin@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:linkedin@fr-FR'})
 SET el.entity_key = 'linkedin',
     el.locale_key = 'fr-FR',
     el.slug = 'linkedin',
@@ -3271,7 +3271,7 @@ SET el.entity_key = 'linkedin',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:facebook@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:facebook@fr-FR'})
 SET el.entity_key = 'facebook',
     el.locale_key = 'fr-FR',
     el.slug = 'facebook',
@@ -3287,7 +3287,7 @@ SET el.entity_key = 'facebook',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:twitter@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:twitter@fr-FR'})
 SET el.entity_key = 'twitter',
     el.locale_key = 'fr-FR',
     el.slug = 'twitter',
@@ -3303,7 +3303,7 @@ SET el.entity_key = 'twitter',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:youtube@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:youtube@fr-FR'})
 SET el.entity_key = 'youtube',
     el.locale_key = 'fr-FR',
     el.slug = 'youtube',
@@ -3319,7 +3319,7 @@ SET el.entity_key = 'youtube',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:tiktok@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:tiktok@fr-FR'})
 SET el.entity_key = 'tiktok',
     el.locale_key = 'fr-FR',
     el.slug = 'tiktok',
@@ -3335,7 +3335,7 @@ SET el.entity_key = 'tiktok',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:snapchat@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:snapchat@fr-FR'})
 SET el.entity_key = 'snapchat',
     el.locale_key = 'fr-FR',
     el.slug = 'snapchat',
@@ -3351,7 +3351,7 @@ SET el.entity_key = 'snapchat',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:whatsapp@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:whatsapp@fr-FR'})
 SET el.entity_key = 'whatsapp',
     el.locale_key = 'fr-FR',
     el.slug = 'whatsapp',
@@ -3367,7 +3367,7 @@ SET el.entity_key = 'whatsapp',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:telegram@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:telegram@fr-FR'})
 SET el.entity_key = 'telegram',
     el.locale_key = 'fr-FR',
     el.slug = 'telegram',
@@ -3383,7 +3383,7 @@ SET el.entity_key = 'telegram',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:pinterest@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:pinterest@fr-FR'})
 SET el.entity_key = 'pinterest',
     el.locale_key = 'fr-FR',
     el.slug = 'pinterest',
@@ -3399,7 +3399,7 @@ SET el.entity_key = 'pinterest',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:spotify@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:spotify@fr-FR'})
 SET el.entity_key = 'spotify',
     el.locale_key = 'fr-FR',
     el.slug = 'spotify',
@@ -3415,7 +3415,7 @@ SET el.entity_key = 'spotify',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:apple@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:apple@fr-FR'})
 SET el.entity_key = 'apple',
     el.locale_key = 'fr-FR',
     el.slug = 'apple',
@@ -3431,7 +3431,7 @@ SET el.entity_key = 'apple',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:soundcloud@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:soundcloud@fr-FR'})
 SET el.entity_key = 'soundcloud',
     el.locale_key = 'fr-FR',
     el.slug = 'soundcloud',
@@ -3447,7 +3447,7 @@ SET el.entity_key = 'soundcloud',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:paypal@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:paypal@fr-FR'})
 SET el.entity_key = 'paypal',
     el.locale_key = 'fr-FR',
     el.slug = 'paypal',
@@ -3463,7 +3463,7 @@ SET el.entity_key = 'paypal',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:venmo@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:venmo@fr-FR'})
 SET el.entity_key = 'venmo',
     el.locale_key = 'fr-FR',
     el.slug = 'venmo',
@@ -3479,7 +3479,7 @@ SET el.entity_key = 'venmo',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:google@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:google@fr-FR'})
 SET el.entity_key = 'google',
     el.locale_key = 'fr-FR',
     el.slug = 'google',
@@ -3495,7 +3495,7 @@ SET el.entity_key = 'google',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:waze@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:waze@fr-FR'})
 SET el.entity_key = 'waze',
     el.locale_key = 'fr-FR',
     el.slug = 'waze',
@@ -3511,7 +3511,7 @@ SET el.entity_key = 'waze',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:zapier@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:zapier@fr-FR'})
 SET el.entity_key = 'zapier',
     el.locale_key = 'fr-FR',
     el.slug = 'zapier',
@@ -3527,7 +3527,7 @@ SET el.entity_key = 'zapier',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:make@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:make@fr-FR'})
 SET el.entity_key = 'make',
     el.locale_key = 'fr-FR',
     el.slug = 'make',
@@ -3543,7 +3543,7 @@ SET el.entity_key = 'make',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:n8n@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:n8n@fr-FR'})
 SET el.entity_key = 'n8n',
     el.locale_key = 'fr-FR',
     el.slug = 'n8n',
@@ -3559,7 +3559,7 @@ SET el.entity_key = 'n8n',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:hubspot@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:hubspot@fr-FR'})
 SET el.entity_key = 'hubspot',
     el.locale_key = 'fr-FR',
     el.slug = 'hubspot',
@@ -3575,7 +3575,7 @@ SET el.entity_key = 'hubspot',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:salesforce@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:salesforce@fr-FR'})
 SET el.entity_key = 'salesforce',
     el.locale_key = 'fr-FR',
     el.slug = 'salesforce',
@@ -3591,7 +3591,7 @@ SET el.entity_key = 'salesforce',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:mailchimp@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:mailchimp@fr-FR'})
 SET el.entity_key = 'mailchimp',
     el.locale_key = 'fr-FR',
     el.slug = 'mailchimp',
@@ -3607,7 +3607,7 @@ SET el.entity_key = 'mailchimp',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:shopify@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:shopify@fr-FR'})
 SET el.entity_key = 'shopify',
     el.locale_key = 'fr-FR',
     el.slug = 'shopify',
@@ -3623,7 +3623,7 @@ SET el.entity_key = 'shopify',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:woocommerce@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:woocommerce@fr-FR'})
 SET el.entity_key = 'woocommerce',
     el.locale_key = 'fr-FR',
     el.slug = 'woocommerce',
@@ -3639,7 +3639,7 @@ SET el.entity_key = 'woocommerce',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:zapier-integration@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:zapier-integration@fr-FR'})
 SET el.entity_key = 'zapier-integration',
     el.locale_key = 'fr-FR',
     el.slug = 'zapier-integration',
@@ -3655,7 +3655,7 @@ SET el.entity_key = 'zapier-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:make-integration@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:make-integration@fr-FR'})
 SET el.entity_key = 'make-integration',
     el.locale_key = 'fr-FR',
     el.slug = 'make-integration',
@@ -3671,7 +3671,7 @@ SET el.entity_key = 'make-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:n8n-integration@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:n8n-integration@fr-FR'})
 SET el.entity_key = 'n8n-integration',
     el.locale_key = 'fr-FR',
     el.slug = 'n8n-integration',
@@ -3687,7 +3687,7 @@ SET el.entity_key = 'n8n-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:hubspot-integration@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:hubspot-integration@fr-FR'})
 SET el.entity_key = 'hubspot-integration',
     el.locale_key = 'fr-FR',
     el.slug = 'hubspot-integration',
@@ -3703,7 +3703,7 @@ SET el.entity_key = 'hubspot-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:salesforce-integration@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:salesforce-integration@fr-FR'})
 SET el.entity_key = 'salesforce-integration',
     el.locale_key = 'fr-FR',
     el.slug = 'salesforce-integration',
@@ -3719,7 +3719,7 @@ SET el.entity_key = 'salesforce-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:mailchimp-integration@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:mailchimp-integration@fr-FR'})
 SET el.entity_key = 'mailchimp-integration',
     el.locale_key = 'fr-FR',
     el.slug = 'mailchimp-integration',
@@ -3735,7 +3735,7 @@ SET el.entity_key = 'mailchimp-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:google-sheets-integration@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:google-sheets-integration@fr-FR'})
 SET el.entity_key = 'google-sheets-integration',
     el.locale_key = 'fr-FR',
     el.slug = 'google-sheets-integration',
@@ -3751,7 +3751,7 @@ SET el.entity_key = 'google-sheets-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:notion-integration@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:notion-integration@fr-FR'})
 SET el.entity_key = 'notion-integration',
     el.locale_key = 'fr-FR',
     el.slug = 'notion-integration',
@@ -3767,7 +3767,7 @@ SET el.entity_key = 'notion-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:slack-integration@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:slack-integration@fr-FR'})
 SET el.entity_key = 'slack-integration',
     el.locale_key = 'fr-FR',
     el.slug = 'slack-integration',
@@ -3783,7 +3783,7 @@ SET el.entity_key = 'slack-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:shopify-integration@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:shopify-integration@fr-FR'})
 SET el.entity_key = 'shopify-integration',
     el.locale_key = 'fr-FR',
     el.slug = 'shopify-integration',
@@ -3799,7 +3799,7 @@ SET el.entity_key = 'shopify-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:woocommerce-integration@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:woocommerce-integration@fr-FR'})
 SET el.entity_key = 'woocommerce-integration',
     el.locale_key = 'fr-FR',
     el.slug = 'woocommerce-integration',
@@ -3815,7 +3815,7 @@ SET el.entity_key = 'woocommerce-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:wordpress-integration@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:wordpress-integration@fr-FR'})
 SET el.entity_key = 'wordpress-integration',
     el.locale_key = 'fr-FR',
     el.slug = 'wordpress-integration',
@@ -3831,7 +3831,7 @@ SET el.entity_key = 'wordpress-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:quiet-zone@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:quiet-zone@fr-FR'})
 SET el.entity_key = 'quiet-zone',
     el.locale_key = 'fr-FR',
     el.slug = 'zone-calme',
@@ -3847,7 +3847,7 @@ SET el.entity_key = 'quiet-zone',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:error-correction@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:error-correction@fr-FR'})
 SET el.entity_key = 'error-correction',
     el.locale_key = 'fr-FR',
     el.slug = 'correction-erreur',
@@ -3863,7 +3863,7 @@ SET el.entity_key = 'error-correction',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:data-capacity@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:data-capacity@fr-FR'})
 SET el.entity_key = 'data-capacity',
     el.locale_key = 'fr-FR',
     el.slug = 'capacite-donnees',
@@ -3879,7 +3879,7 @@ SET el.entity_key = 'data-capacity',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-version@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-version@fr-FR'})
 SET el.entity_key = 'qr-code-version',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-version',
@@ -3895,7 +3895,7 @@ SET el.entity_key = 'qr-code-version',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:encoding-mode@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:encoding-mode@fr-FR'})
 SET el.entity_key = 'encoding-mode',
     el.locale_key = 'fr-FR',
     el.slug = 'mode-encodage',
@@ -3911,7 +3911,7 @@ SET el.entity_key = 'encoding-mode',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:module@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:module@fr-FR'})
 SET el.entity_key = 'module',
     el.locale_key = 'fr-FR',
     el.slug = 'module',
@@ -3927,7 +3927,7 @@ SET el.entity_key = 'module',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:finder-pattern@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:finder-pattern@fr-FR'})
 SET el.entity_key = 'finder-pattern',
     el.locale_key = 'fr-FR',
     el.slug = 'motif-detection',
@@ -3943,7 +3943,7 @@ SET el.entity_key = 'finder-pattern',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:timing-pattern@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:timing-pattern@fr-FR'})
 SET el.entity_key = 'timing-pattern',
     el.locale_key = 'fr-FR',
     el.slug = 'motif-synchronisation',
@@ -3959,7 +3959,7 @@ SET el.entity_key = 'timing-pattern',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-messaging@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-messaging@fr-FR'})
 SET el.entity_key = 'qr-code-messaging',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-messagerie',
@@ -3975,7 +3975,7 @@ SET el.entity_key = 'qr-code-messaging',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-video-platform@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-video-platform@fr-FR'})
 SET el.entity_key = 'qr-code-video-platform',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-plateforme-video',
@@ -3991,7 +3991,7 @@ SET el.entity_key = 'qr-code-video-platform',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-professional@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-professional@fr-FR'})
 SET el.entity_key = 'qr-code-professional',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-professionnel',
@@ -4007,7 +4007,7 @@ SET el.entity_key = 'qr-code-professional',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-music-platform@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-music-platform@fr-FR'})
 SET el.entity_key = 'qr-code-music-platform',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-plateforme-musique',
@@ -4023,7 +4023,7 @@ SET el.entity_key = 'qr-code-music-platform',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:funny-qr-codes@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:funny-qr-codes@fr-FR'})
 SET el.entity_key = 'funny-qr-codes',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-codes-amusants',
@@ -4039,7 +4039,7 @@ SET el.entity_key = 'funny-qr-codes',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-tattoo@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-tattoo@fr-FR'})
 SET el.entity_key = 'qr-code-tattoo',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-tatouage',
@@ -4055,7 +4055,7 @@ SET el.entity_key = 'qr-code-tattoo',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-art-installation@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-art-installation@fr-FR'})
 SET el.entity_key = 'qr-code-art-installation',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-installation-artistique',
@@ -4071,7 +4071,7 @@ SET el.entity_key = 'qr-code-art-installation',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-scavenger-hunt@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-scavenger-hunt@fr-FR'})
 SET el.entity_key = 'qr-code-scavenger-hunt',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-chasse-au-tresor',
@@ -4087,7 +4087,7 @@ SET el.entity_key = 'qr-code-scavenger-hunt',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-reviews@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-reviews@fr-FR'})
 SET el.entity_key = 'qr-code-reviews',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-avis',
@@ -4103,7 +4103,7 @@ SET el.entity_key = 'qr-code-reviews',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-contactless-payment@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-contactless-payment@fr-FR'})
 SET el.entity_key = 'qr-code-contactless-payment',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-paiement-sans-contact',
@@ -4119,7 +4119,7 @@ SET el.entity_key = 'qr-code-contactless-payment',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-loyalty-program@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-loyalty-program@fr-FR'})
 SET el.entity_key = 'qr-code-loyalty-program',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-programme-fidelite',
@@ -4135,7 +4135,7 @@ SET el.entity_key = 'qr-code-loyalty-program',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-product-authentication@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-product-authentication@fr-FR'})
 SET el.entity_key = 'qr-code-product-authentication',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-authentification-produit',
@@ -4151,7 +4151,7 @@ SET el.entity_key = 'qr-code-product-authentication',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-event-checkin@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-event-checkin@fr-FR'})
 SET el.entity_key = 'qr-code-event-checkin',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-enregistrement-evenement',
@@ -4167,7 +4167,7 @@ SET el.entity_key = 'qr-code-event-checkin',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-networking@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-networking@fr-FR'})
 SET el.entity_key = 'qr-code-networking',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-reseautage',
@@ -4183,7 +4183,7 @@ SET el.entity_key = 'qr-code-networking',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-wedding@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-wedding@fr-FR'})
 SET el.entity_key = 'qr-code-wedding',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-mariage',
@@ -4199,7 +4199,7 @@ SET el.entity_key = 'qr-code-wedding',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-museum-exhibit@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-museum-exhibit@fr-FR'})
 SET el.entity_key = 'qr-code-museum-exhibit',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-exposition-musee',
@@ -4215,7 +4215,7 @@ SET el.entity_key = 'qr-code-museum-exhibit',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:how-to-create-qr-code@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:how-to-create-qr-code@fr-FR'})
 SET el.entity_key = 'how-to-create-qr-code',
     el.locale_key = 'fr-FR',
     el.slug = 'comment-creer-qr-code',
@@ -4231,7 +4231,7 @@ SET el.entity_key = 'how-to-create-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-design-guide@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-design-guide@fr-FR'})
 SET el.entity_key = 'qr-code-design-guide',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-guide-design',
@@ -4247,7 +4247,7 @@ SET el.entity_key = 'qr-code-design-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-print-guide@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-print-guide@fr-FR'})
 SET el.entity_key = 'qr-code-print-guide',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-imprimer-guide',
@@ -4263,7 +4263,7 @@ SET el.entity_key = 'qr-code-print-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:dynamic-vs-static-guide@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:dynamic-vs-static-guide@fr-FR'})
 SET el.entity_key = 'dynamic-vs-static-guide',
     el.locale_key = 'fr-FR',
     el.slug = 'dynamique-vs-statique-guide',
@@ -4279,7 +4279,7 @@ SET el.entity_key = 'dynamic-vs-static-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-marketing-guide@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-marketing-guide@fr-FR'})
 SET el.entity_key = 'qr-code-marketing-guide',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-guide-marketing',
@@ -4295,7 +4295,7 @@ SET el.entity_key = 'qr-code-marketing-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-restaurant-guide@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-restaurant-guide@fr-FR'})
 SET el.entity_key = 'qr-code-restaurant-guide',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-guide-restaurant',
@@ -4311,7 +4311,7 @@ SET el.entity_key = 'qr-code-restaurant-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-business-card-guide@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-business-card-guide@fr-FR'})
 SET el.entity_key = 'qr-code-business-card-guide',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-carte-visite-guide',
@@ -4327,7 +4327,7 @@ SET el.entity_key = 'qr-code-business-card-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-api-guide@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-api-guide@fr-FR'})
 SET el.entity_key = 'qr-code-api-guide',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-guide-api',
@@ -4343,7 +4343,7 @@ SET el.entity_key = 'qr-code-api-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-analytics-guide@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-analytics-guide@fr-FR'})
 SET el.entity_key = 'qr-code-analytics-guide',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-guide-analytiques',
@@ -4359,7 +4359,7 @@ SET el.entity_key = 'qr-code-analytics-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-security-guide@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-security-guide@fr-FR'})
 SET el.entity_key = 'qr-code-security-guide',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-guide-securite',
@@ -4375,7 +4375,7 @@ SET el.entity_key = 'qr-code-security-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-vs-barcode@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-vs-barcode@fr-FR'})
 SET el.entity_key = 'qr-code-vs-barcode',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-vs-code-barres',
@@ -4391,7 +4391,7 @@ SET el.entity_key = 'qr-code-vs-barcode',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:dynamic-vs-static-qr-code@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:dynamic-vs-static-qr-code@fr-FR'})
 SET el.entity_key = 'dynamic-vs-static-qr-code',
     el.locale_key = 'fr-FR',
     el.slug = 'dynamique-vs-statique-qr-code',
@@ -4407,7 +4407,7 @@ SET el.entity_key = 'dynamic-vs-static-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-vs-nfc@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-vs-nfc@fr-FR'})
 SET el.entity_key = 'qr-code-vs-nfc',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-vs-nfc',
@@ -4423,7 +4423,7 @@ SET el.entity_key = 'qr-code-vs-nfc',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-vs-data-matrix@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-vs-data-matrix@fr-FR'})
 SET el.entity_key = 'qr-code-vs-data-matrix',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-vs-data-matrix',
@@ -4439,7 +4439,7 @@ SET el.entity_key = 'qr-code-vs-data-matrix',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:free-vs-paid-qr-generator@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:free-vs-paid-qr-generator@fr-FR'})
 SET el.entity_key = 'free-vs-paid-qr-generator',
     el.locale_key = 'fr-FR',
     el.slug = 'gratuit-vs-payant-qr-generateur',
@@ -4455,7 +4455,7 @@ SET el.entity_key = 'free-vs-paid-qr-generator',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:qr-code-ai-vs-competitors@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:qr-code-ai-vs-competitors@fr-FR'})
 SET el.entity_key = 'qr-code-ai-vs-competitors',
     el.locale_key = 'fr-FR',
     el.slug = 'qr-code-ai-vs-concurrents',
@@ -4471,7 +4471,7 @@ SET el.entity_key = 'qr-code-ai-vs-competitors',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:short-link-vs-qr-code@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:short-link-vs-qr-code@fr-FR'})
 SET el.entity_key = 'short-link-vs-qr-code',
     el.locale_key = 'fr-FR',
     el.slug = 'lien-court-vs-qr-code',
@@ -4487,7 +4487,7 @@ SET el.entity_key = 'short-link-vs-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {key: 'entity:spotify-code-vs-qr-code@fr-FR'})
+MERGE (el:EntityNative {key: 'entity:spotify-code-vs-qr-code@fr-FR'})
 SET el.entity_key = 'spotify-code-vs-qr-code',
     el.locale_key = 'fr-FR',
     el.slug = 'spotify-code-vs-qr-code',
@@ -4503,1137 +4503,1137 @@ SET el.entity_key = 'spotify-code-vs-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 // -------------------------------------------------------------------
-// Create relations to parent Entity (HAS_CONTENT)
+// Create relations to parent Entity (HAS_NATIVE)
 // -------------------------------------------------------------------
 
 MATCH (e:Entity {key: 'qr-code'})
-MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'smart-link'})
-MATCH (el:EntityContent {entity_key: 'smart-link', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'smart-link', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'barcode'})
-MATCH (el:EntityContent {entity_key: 'barcode', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'barcode', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'landing-page'})
-MATCH (el:EntityContent {entity_key: 'landing-page', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'landing-page', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'short-link'})
-MATCH (el:EntityContent {entity_key: 'short-link', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'short-link', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-style'})
-MATCH (el:EntityContent {entity_key: 'qr-code-style', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-style', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-content'})
-MATCH (el:EntityContent {entity_key: 'qr-code-content', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-content', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-frame'})
-MATCH (el:EntityContent {entity_key: 'qr-code-frame', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-frame', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'barcode-format'})
-MATCH (el:EntityContent {entity_key: 'barcode-format', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'barcode-format', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'landing-page-type'})
-MATCH (el:EntityContent {entity_key: 'landing-page-type', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'landing-page-type', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'custom-qr-code'})
-MATCH (el:EntityContent {entity_key: 'custom-qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'custom-qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-image'})
-MATCH (el:EntityContent {entity_key: 'qr-code-image', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-image', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-art'})
-MATCH (el:EntityContent {entity_key: 'qr-code-art', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-art', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-photo'})
-MATCH (el:EntityContent {entity_key: 'qr-code-photo', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-photo', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-with-logo'})
-MATCH (el:EntityContent {entity_key: 'qr-code-with-logo', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-with-logo', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-with-text'})
-MATCH (el:EntityContent {entity_key: 'qr-code-with-text', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-with-text', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-color'})
-MATCH (el:EntityContent {entity_key: 'qr-code-color', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-color', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-shapes'})
-MATCH (el:EntityContent {entity_key: 'qr-code-shapes', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-shapes', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-transparent-background'})
-MATCH (el:EntityContent {entity_key: 'qr-code-transparent-background', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-transparent-background', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-background'})
-MATCH (el:EntityContent {entity_key: 'qr-code-background', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-background', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-background-color'})
-MATCH (el:EntityContent {entity_key: 'qr-code-background-color', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-background-color', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-background-gradient'})
-MATCH (el:EntityContent {entity_key: 'qr-code-background-gradient', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-background-gradient', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-background-image'})
-MATCH (el:EntityContent {entity_key: 'qr-code-background-image', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-background-image', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'dynamic-qr-code'})
-MATCH (el:EntityContent {entity_key: 'dynamic-qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'dynamic-qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'static-qr-code'})
-MATCH (el:EntityContent {entity_key: 'static-qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'static-qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-light-mode'})
-MATCH (el:EntityContent {entity_key: 'qr-code-light-mode', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-light-mode', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-dark-mode'})
-MATCH (el:EntityContent {entity_key: 'qr-code-dark-mode', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-dark-mode', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-business-card'})
-MATCH (el:EntityContent {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-email-signature'})
-MATCH (el:EntityContent {entity_key: 'qr-code-email-signature', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-email-signature', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-flyer'})
-MATCH (el:EntityContent {entity_key: 'qr-code-flyer', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-flyer', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-poster'})
-MATCH (el:EntityContent {entity_key: 'qr-code-poster', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-poster', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-table-tent'})
-MATCH (el:EntityContent {entity_key: 'qr-code-table-tent', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-table-tent', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-packaging-label'})
-MATCH (el:EntityContent {entity_key: 'qr-code-packaging-label', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-packaging-label', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'link-in-bio'})
-MATCH (el:EntityContent {entity_key: 'link-in-bio', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'link-in-bio', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'menu-restaurant'})
-MATCH (el:EntityContent {entity_key: 'menu-restaurant', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'menu-restaurant', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'forms'})
-MATCH (el:EntityContent {entity_key: 'forms', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'forms', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'announcement'})
-MATCH (el:EntityContent {entity_key: 'announcement', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'announcement', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'event-rsvp'})
-MATCH (el:EntityContent {entity_key: 'event-rsvp', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'event-rsvp', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'booking-appointment'})
-MATCH (el:EntityContent {entity_key: 'booking-appointment', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'booking-appointment', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-url'})
-MATCH (el:EntityContent {entity_key: 'qr-code-url', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-url', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-wifi'})
-MATCH (el:EntityContent {entity_key: 'qr-code-wifi', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-wifi', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-vcard'})
-MATCH (el:EntityContent {entity_key: 'qr-code-vcard', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-vcard', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-mecard'})
-MATCH (el:EntityContent {entity_key: 'qr-code-mecard', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-mecard', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-pdf'})
-MATCH (el:EntityContent {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-text'})
-MATCH (el:EntityContent {entity_key: 'qr-code-text', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-text', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-email'})
-MATCH (el:EntityContent {entity_key: 'qr-code-email', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-email', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-sms'})
-MATCH (el:EntityContent {entity_key: 'qr-code-sms', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-sms', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-phone'})
-MATCH (el:EntityContent {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-video'})
-MATCH (el:EntityContent {entity_key: 'qr-code-video', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-video', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-audio'})
-MATCH (el:EntityContent {entity_key: 'qr-code-audio', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-audio', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-image-gallery'})
-MATCH (el:EntityContent {entity_key: 'qr-code-image-gallery', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-image-gallery', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-coupon'})
-MATCH (el:EntityContent {entity_key: 'qr-code-coupon', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-coupon', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-social'})
-MATCH (el:EntityContent {entity_key: 'qr-code-social', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-social', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-instagram'})
-MATCH (el:EntityContent {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-linkedin'})
-MATCH (el:EntityContent {entity_key: 'qr-code-linkedin', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-linkedin', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-facebook'})
-MATCH (el:EntityContent {entity_key: 'qr-code-facebook', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-facebook', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-twitter'})
-MATCH (el:EntityContent {entity_key: 'qr-code-twitter', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-twitter', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-youtube'})
-MATCH (el:EntityContent {entity_key: 'qr-code-youtube', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-youtube', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-tiktok'})
-MATCH (el:EntityContent {entity_key: 'qr-code-tiktok', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-tiktok', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-snapchat'})
-MATCH (el:EntityContent {entity_key: 'qr-code-snapchat', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-snapchat', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-whatsapp'})
-MATCH (el:EntityContent {entity_key: 'qr-code-whatsapp', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-whatsapp', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-telegram'})
-MATCH (el:EntityContent {entity_key: 'qr-code-telegram', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-telegram', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-pinterest'})
-MATCH (el:EntityContent {entity_key: 'qr-code-pinterest', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-pinterest', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-spotify'})
-MATCH (el:EntityContent {entity_key: 'qr-code-spotify', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-spotify', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-apple-music'})
-MATCH (el:EntityContent {entity_key: 'qr-code-apple-music', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-apple-music', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-soundcloud'})
-MATCH (el:EntityContent {entity_key: 'qr-code-soundcloud', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-soundcloud', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-payment'})
-MATCH (el:EntityContent {entity_key: 'qr-code-payment', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-payment', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-pix'})
-MATCH (el:EntityContent {entity_key: 'qr-code-pix', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-pix', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-upi'})
-MATCH (el:EntityContent {entity_key: 'qr-code-upi', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-upi', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-paypal'})
-MATCH (el:EntityContent {entity_key: 'qr-code-paypal', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-paypal', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-venmo'})
-MATCH (el:EntityContent {entity_key: 'qr-code-venmo', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-venmo', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-bitcoin'})
-MATCH (el:EntityContent {entity_key: 'qr-code-bitcoin', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-bitcoin', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-ethereum'})
-MATCH (el:EntityContent {entity_key: 'qr-code-ethereum', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-ethereum', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-crypto'})
-MATCH (el:EntityContent {entity_key: 'qr-code-crypto', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-crypto', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-bank-transfer'})
-MATCH (el:EntityContent {entity_key: 'qr-code-bank-transfer', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-bank-transfer', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-location'})
-MATCH (el:EntityContent {entity_key: 'qr-code-location', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-location', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-google-maps'})
-MATCH (el:EntityContent {entity_key: 'qr-code-google-maps', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-google-maps', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-apple-maps'})
-MATCH (el:EntityContent {entity_key: 'qr-code-apple-maps', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-apple-maps', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-waze'})
-MATCH (el:EntityContent {entity_key: 'qr-code-waze', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-waze', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-coordinates'})
-MATCH (el:EntityContent {entity_key: 'qr-code-coordinates', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-coordinates', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-app'})
-MATCH (el:EntityContent {entity_key: 'qr-code-app', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-app', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-app-store'})
-MATCH (el:EntityContent {entity_key: 'qr-code-app-store', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-app-store', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-play-store'})
-MATCH (el:EntityContent {entity_key: 'qr-code-play-store', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-play-store', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-app-download'})
-MATCH (el:EntityContent {entity_key: 'qr-code-app-download', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-app-download', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-review'})
-MATCH (el:EntityContent {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-survey'})
-MATCH (el:EntityContent {entity_key: 'qr-code-survey', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-survey', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-feedback'})
-MATCH (el:EntityContent {entity_key: 'qr-code-feedback', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-feedback', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-menu'})
-MATCH (el:EntityContent {entity_key: 'qr-code-menu', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-menu', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-resume'})
-MATCH (el:EntityContent {entity_key: 'qr-code-resume', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-resume', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-certificate'})
-MATCH (el:EntityContent {entity_key: 'qr-code-certificate', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-certificate', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-ticket'})
-MATCH (el:EntityContent {entity_key: 'qr-code-ticket', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-ticket', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-attendance'})
-MATCH (el:EntityContent {entity_key: 'qr-code-attendance', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-attendance', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-pet-tag'})
-MATCH (el:EntityContent {entity_key: 'qr-code-pet-tag', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-pet-tag', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-medical-id'})
-MATCH (el:EntityContent {entity_key: 'qr-code-medical-id', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-medical-id', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-file'})
-MATCH (el:EntityContent {entity_key: 'qr-code-file', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-file', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-calendar'})
-MATCH (el:EntityContent {entity_key: 'qr-code-calendar', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-calendar', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'ean-13'})
-MATCH (el:EntityContent {entity_key: 'ean-13', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'ean-13', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'ean-8'})
-MATCH (el:EntityContent {entity_key: 'ean-8', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'ean-8', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'upc-a'})
-MATCH (el:EntityContent {entity_key: 'upc-a', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'upc-a', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'upc-e'})
-MATCH (el:EntityContent {entity_key: 'upc-e', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'upc-e', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'code-128'})
-MATCH (el:EntityContent {entity_key: 'code-128', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'code-128', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'code-39'})
-MATCH (el:EntityContent {entity_key: 'code-39', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'code-39', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'itf-14'})
-MATCH (el:EntityContent {entity_key: 'itf-14', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'itf-14', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'codabar'})
-MATCH (el:EntityContent {entity_key: 'codabar', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'codabar', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'msi-plessey'})
-MATCH (el:EntityContent {entity_key: 'msi-plessey', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'msi-plessey', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'gs1-128'})
-MATCH (el:EntityContent {entity_key: 'gs1-128', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'gs1-128', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'data-matrix'})
-MATCH (el:EntityContent {entity_key: 'data-matrix', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'data-matrix', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'pdf417'})
-MATCH (el:EntityContent {entity_key: 'pdf417', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'pdf417', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'aztec-code'})
-MATCH (el:EntityContent {entity_key: 'aztec-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'aztec-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'maxicode'})
-MATCH (el:EntityContent {entity_key: 'maxicode', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'maxicode', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'gs1-datamatrix'})
-MATCH (el:EntityContent {entity_key: 'gs1-datamatrix', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'gs1-datamatrix', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'barcode-generator'})
-MATCH (el:EntityContent {entity_key: 'barcode-generator', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'barcode-generator', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'barcode-scanner'})
-MATCH (el:EntityContent {entity_key: 'barcode-scanner', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'barcode-scanner', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'analytics'})
-MATCH (el:EntityContent {entity_key: 'analytics', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'analytics', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'click-tracking'})
-MATCH (el:EntityContent {entity_key: 'click-tracking', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'click-tracking', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'scan-counting'})
-MATCH (el:EntityContent {entity_key: 'scan-counting', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'scan-counting', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'geo-tracking'})
-MATCH (el:EntityContent {entity_key: 'geo-tracking', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'geo-tracking', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'device-detection'})
-MATCH (el:EntityContent {entity_key: 'device-detection', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'device-detection', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'time-series'})
-MATCH (el:EntityContent {entity_key: 'time-series', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'time-series', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'contextual-routing'})
-MATCH (el:EntityContent {entity_key: 'contextual-routing', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'contextual-routing', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'custom-domain-name'})
-MATCH (el:EntityContent {entity_key: 'custom-domain-name', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'custom-domain-name', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'custom-link-preview'})
-MATCH (el:EntityContent {entity_key: 'custom-link-preview', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'custom-link-preview', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'utm-builder'})
-MATCH (el:EntityContent {entity_key: 'utm-builder', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'utm-builder', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'bulk-creation'})
-MATCH (el:EntityContent {entity_key: 'bulk-creation', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'bulk-creation', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'team-workspaces'})
-MATCH (el:EntityContent {entity_key: 'team-workspaces', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'team-workspaces', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'api'})
-MATCH (el:EntityContent {entity_key: 'api', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'api', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'webhooks'})
-MATCH (el:EntityContent {entity_key: 'webhooks', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'webhooks', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'white-label'})
-MATCH (el:EntityContent {entity_key: 'white-label', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'white-label', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'password-protection'})
-MATCH (el:EntityContent {entity_key: 'password-protection', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'password-protection', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'expiration'})
-MATCH (el:EntityContent {entity_key: 'expiration', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'expiration', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'scan-limit'})
-MATCH (el:EntityContent {entity_key: 'scan-limit', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'scan-limit', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'retargeting-pixel'})
-MATCH (el:EntityContent {entity_key: 'retargeting-pixel', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'retargeting-pixel', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-generator'})
-MATCH (el:EntityContent {entity_key: 'qr-code-generator', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-generator', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-scanner'})
-MATCH (el:EntityContent {entity_key: 'qr-code-scanner', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-scanner', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-api'})
-MATCH (el:EntityContent {entity_key: 'qr-code-api', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-api', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'landing-page-builder'})
-MATCH (el:EntityContent {entity_key: 'landing-page-builder', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'landing-page-builder', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'url-shortener'})
-MATCH (el:EntityContent {entity_key: 'url-shortener', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'url-shortener', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'link-in-bio-builder'})
-MATCH (el:EntityContent {entity_key: 'link-in-bio-builder', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'link-in-bio-builder', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'menu-builder'})
-MATCH (el:EntityContent {entity_key: 'menu-builder', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'menu-builder', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'vcard-generator'})
-MATCH (el:EntityContent {entity_key: 'vcard-generator', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'vcard-generator', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'wifi-qr-generator'})
-MATCH (el:EntityContent {entity_key: 'wifi-qr-generator', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'wifi-qr-generator', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'batch-qr-generator'})
-MATCH (el:EntityContent {entity_key: 'batch-qr-generator', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'batch-qr-generator', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'business-cards'})
-MATCH (el:EntityContent {entity_key: 'business-cards', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'business-cards', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'flyers'})
-MATCH (el:EntityContent {entity_key: 'flyers', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'flyers', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'posters-billboards'})
-MATCH (el:EntityContent {entity_key: 'posters-billboards', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'posters-billboards', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'brochures'})
-MATCH (el:EntityContent {entity_key: 'brochures', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'brochures', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'catalogs'})
-MATCH (el:EntityContent {entity_key: 'catalogs', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'catalogs', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'magazines'})
-MATCH (el:EntityContent {entity_key: 'magazines', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'magazines', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'newspapers'})
-MATCH (el:EntityContent {entity_key: 'newspapers', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'newspapers', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'direct-mail'})
-MATCH (el:EntityContent {entity_key: 'direct-mail', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'direct-mail', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'stickers-labels'})
-MATCH (el:EntityContent {entity_key: 'stickers-labels', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'stickers-labels', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'banners'})
-MATCH (el:EntityContent {entity_key: 'banners', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'banners', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'product-packaging'})
-MATCH (el:EntityContent {entity_key: 'product-packaging', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'product-packaging', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'product-labels'})
-MATCH (el:EntityContent {entity_key: 'product-labels', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'product-labels', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'receipts'})
-MATCH (el:EntityContent {entity_key: 'receipts', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'receipts', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'table-tents'})
-MATCH (el:EntityContent {entity_key: 'table-tents', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'table-tents', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'menus-printed'})
-MATCH (el:EntityContent {entity_key: 'menus-printed', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'menus-printed', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'tickets-physical'})
-MATCH (el:EntityContent {entity_key: 'tickets-physical', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'tickets-physical', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'emails'})
-MATCH (el:EntityContent {entity_key: 'emails', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'emails', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'presentations'})
-MATCH (el:EntityContent {entity_key: 'presentations', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'presentations', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'documents'})
-MATCH (el:EntityContent {entity_key: 'documents', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'documents', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'websites'})
-MATCH (el:EntityContent {entity_key: 'websites', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'websites', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'create-qr-code'})
-MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'scan-qr-code'})
-MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'customize-qr-code'})
-MATCH (el:EntityContent {entity_key: 'customize-qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'customize-qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'download-qr-code'})
-MATCH (el:EntityContent {entity_key: 'download-qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'download-qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'print-qr-code'})
-MATCH (el:EntityContent {entity_key: 'print-qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'print-qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'add-logo'})
-MATCH (el:EntityContent {entity_key: 'add-logo', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'add-logo', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'change-colors'})
-MATCH (el:EntityContent {entity_key: 'change-colors', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'change-colors', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'edit-destination'})
-MATCH (el:EntityContent {entity_key: 'edit-destination', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'edit-destination', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'share-qr-code'})
-MATCH (el:EntityContent {entity_key: 'share-qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'share-qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'track-scans'})
-MATCH (el:EntityContent {entity_key: 'track-scans', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'track-scans', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'shorten-url'})
-MATCH (el:EntityContent {entity_key: 'shorten-url', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'shorten-url', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'create-smart-link'})
-MATCH (el:EntityContent {entity_key: 'create-smart-link', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'create-smart-link', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'create-landing-page'})
-MATCH (el:EntityContent {entity_key: 'create-landing-page', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'create-landing-page', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'create-barcode'})
-MATCH (el:EntityContent {entity_key: 'create-barcode', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'create-barcode', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'scan-barcode'})
-MATCH (el:EntityContent {entity_key: 'scan-barcode', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'scan-barcode', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'restaurants'})
-MATCH (el:EntityContent {entity_key: 'restaurants', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'restaurants', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'retail'})
-MATCH (el:EntityContent {entity_key: 'retail', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'retail', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'hospitality'})
-MATCH (el:EntityContent {entity_key: 'hospitality', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'hospitality', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'healthcare'})
-MATCH (el:EntityContent {entity_key: 'healthcare', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'healthcare', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'education'})
-MATCH (el:EntityContent {entity_key: 'education', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'education', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'real-estate'})
-MATCH (el:EntityContent {entity_key: 'real-estate', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'real-estate', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'fitness'})
-MATCH (el:EntityContent {entity_key: 'fitness', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'fitness', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'beauty'})
-MATCH (el:EntityContent {entity_key: 'beauty', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'beauty', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'entertainment'})
-MATCH (el:EntityContent {entity_key: 'entertainment', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'entertainment', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'transportation'})
-MATCH (el:EntityContent {entity_key: 'transportation', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'transportation', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'manufacturing'})
-MATCH (el:EntityContent {entity_key: 'manufacturing', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'manufacturing', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'logistics'})
-MATCH (el:EntityContent {entity_key: 'logistics', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'logistics', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'construction'})
-MATCH (el:EntityContent {entity_key: 'construction', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'construction', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'finance'})
-MATCH (el:EntityContent {entity_key: 'finance', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'finance', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'government'})
-MATCH (el:EntityContent {entity_key: 'government', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'government', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'marketing-agencies'})
-MATCH (el:EntityContent {entity_key: 'marketing-agencies', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'marketing-agencies', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'creative-agencies'})
-MATCH (el:EntityContent {entity_key: 'creative-agencies', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'creative-agencies', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'event-management'})
-MATCH (el:EntityContent {entity_key: 'event-management', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'event-management', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'nonprofits'})
-MATCH (el:EntityContent {entity_key: 'nonprofits', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'nonprofits', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'consulting'})
-MATCH (el:EntityContent {entity_key: 'consulting', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'consulting', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'developers'})
-MATCH (el:EntityContent {entity_key: 'developers', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'developers', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'enterprise'})
-MATCH (el:EntityContent {entity_key: 'enterprise', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'enterprise', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'agencies'})
-MATCH (el:EntityContent {entity_key: 'agencies', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'agencies', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'small-business'})
-MATCH (el:EntityContent {entity_key: 'small-business', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'small-business', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'freelancers'})
-MATCH (el:EntityContent {entity_key: 'freelancers', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'freelancers', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'instagram'})
-MATCH (el:EntityContent {entity_key: 'instagram', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'instagram', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'linkedin'})
-MATCH (el:EntityContent {entity_key: 'linkedin', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'linkedin', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'facebook'})
-MATCH (el:EntityContent {entity_key: 'facebook', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'facebook', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'twitter'})
-MATCH (el:EntityContent {entity_key: 'twitter', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'twitter', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'youtube'})
-MATCH (el:EntityContent {entity_key: 'youtube', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'youtube', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'tiktok'})
-MATCH (el:EntityContent {entity_key: 'tiktok', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'tiktok', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'snapchat'})
-MATCH (el:EntityContent {entity_key: 'snapchat', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'snapchat', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'whatsapp'})
-MATCH (el:EntityContent {entity_key: 'whatsapp', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'whatsapp', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'telegram'})
-MATCH (el:EntityContent {entity_key: 'telegram', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'telegram', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'pinterest'})
-MATCH (el:EntityContent {entity_key: 'pinterest', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'pinterest', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'spotify'})
-MATCH (el:EntityContent {entity_key: 'spotify', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'spotify', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'apple'})
-MATCH (el:EntityContent {entity_key: 'apple', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'apple', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'soundcloud'})
-MATCH (el:EntityContent {entity_key: 'soundcloud', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'soundcloud', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'paypal'})
-MATCH (el:EntityContent {entity_key: 'paypal', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'paypal', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'venmo'})
-MATCH (el:EntityContent {entity_key: 'venmo', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'venmo', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'google'})
-MATCH (el:EntityContent {entity_key: 'google', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'google', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'waze'})
-MATCH (el:EntityContent {entity_key: 'waze', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'waze', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'zapier'})
-MATCH (el:EntityContent {entity_key: 'zapier', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'zapier', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'make'})
-MATCH (el:EntityContent {entity_key: 'make', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'make', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'n8n'})
-MATCH (el:EntityContent {entity_key: 'n8n', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'n8n', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'hubspot'})
-MATCH (el:EntityContent {entity_key: 'hubspot', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'hubspot', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'salesforce'})
-MATCH (el:EntityContent {entity_key: 'salesforce', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'salesforce', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'mailchimp'})
-MATCH (el:EntityContent {entity_key: 'mailchimp', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'mailchimp', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'shopify'})
-MATCH (el:EntityContent {entity_key: 'shopify', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'shopify', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'woocommerce'})
-MATCH (el:EntityContent {entity_key: 'woocommerce', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'woocommerce', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'zapier-integration'})
-MATCH (el:EntityContent {entity_key: 'zapier-integration', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'zapier-integration', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'make-integration'})
-MATCH (el:EntityContent {entity_key: 'make-integration', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'make-integration', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'n8n-integration'})
-MATCH (el:EntityContent {entity_key: 'n8n-integration', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'n8n-integration', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'hubspot-integration'})
-MATCH (el:EntityContent {entity_key: 'hubspot-integration', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'hubspot-integration', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'salesforce-integration'})
-MATCH (el:EntityContent {entity_key: 'salesforce-integration', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'salesforce-integration', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'mailchimp-integration'})
-MATCH (el:EntityContent {entity_key: 'mailchimp-integration', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'mailchimp-integration', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'google-sheets-integration'})
-MATCH (el:EntityContent {entity_key: 'google-sheets-integration', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'google-sheets-integration', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'notion-integration'})
-MATCH (el:EntityContent {entity_key: 'notion-integration', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'notion-integration', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'slack-integration'})
-MATCH (el:EntityContent {entity_key: 'slack-integration', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'slack-integration', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'shopify-integration'})
-MATCH (el:EntityContent {entity_key: 'shopify-integration', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'shopify-integration', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'woocommerce-integration'})
-MATCH (el:EntityContent {entity_key: 'woocommerce-integration', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'woocommerce-integration', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'wordpress-integration'})
-MATCH (el:EntityContent {entity_key: 'wordpress-integration', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'wordpress-integration', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'quiet-zone'})
-MATCH (el:EntityContent {entity_key: 'quiet-zone', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'quiet-zone', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'error-correction'})
-MATCH (el:EntityContent {entity_key: 'error-correction', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'error-correction', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'data-capacity'})
-MATCH (el:EntityContent {entity_key: 'data-capacity', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'data-capacity', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-version'})
-MATCH (el:EntityContent {entity_key: 'qr-code-version', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-version', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'encoding-mode'})
-MATCH (el:EntityContent {entity_key: 'encoding-mode', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'encoding-mode', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'module'})
-MATCH (el:EntityContent {entity_key: 'module', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'module', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'finder-pattern'})
-MATCH (el:EntityContent {entity_key: 'finder-pattern', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'finder-pattern', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'timing-pattern'})
-MATCH (el:EntityContent {entity_key: 'timing-pattern', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'timing-pattern', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-messaging'})
-MATCH (el:EntityContent {entity_key: 'qr-code-messaging', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-messaging', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-video-platform'})
-MATCH (el:EntityContent {entity_key: 'qr-code-video-platform', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-video-platform', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-professional'})
-MATCH (el:EntityContent {entity_key: 'qr-code-professional', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-professional', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-music-platform'})
-MATCH (el:EntityContent {entity_key: 'qr-code-music-platform', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-music-platform', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'funny-qr-codes'})
-MATCH (el:EntityContent {entity_key: 'funny-qr-codes', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'funny-qr-codes', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-tattoo'})
-MATCH (el:EntityContent {entity_key: 'qr-code-tattoo', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-tattoo', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-art-installation'})
-MATCH (el:EntityContent {entity_key: 'qr-code-art-installation', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-art-installation', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-scavenger-hunt'})
-MATCH (el:EntityContent {entity_key: 'qr-code-scavenger-hunt', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-scavenger-hunt', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-reviews'})
-MATCH (el:EntityContent {entity_key: 'qr-code-reviews', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-reviews', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-contactless-payment'})
-MATCH (el:EntityContent {entity_key: 'qr-code-contactless-payment', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-contactless-payment', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-loyalty-program'})
-MATCH (el:EntityContent {entity_key: 'qr-code-loyalty-program', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-loyalty-program', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-product-authentication'})
-MATCH (el:EntityContent {entity_key: 'qr-code-product-authentication', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-product-authentication', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-event-checkin'})
-MATCH (el:EntityContent {entity_key: 'qr-code-event-checkin', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-event-checkin', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-networking'})
-MATCH (el:EntityContent {entity_key: 'qr-code-networking', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-networking', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-wedding'})
-MATCH (el:EntityContent {entity_key: 'qr-code-wedding', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-wedding', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-museum-exhibit'})
-MATCH (el:EntityContent {entity_key: 'qr-code-museum-exhibit', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-museum-exhibit', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'how-to-create-qr-code'})
-MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-design-guide'})
-MATCH (el:EntityContent {entity_key: 'qr-code-design-guide', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-design-guide', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-print-guide'})
-MATCH (el:EntityContent {entity_key: 'qr-code-print-guide', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-print-guide', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'dynamic-vs-static-guide'})
-MATCH (el:EntityContent {entity_key: 'dynamic-vs-static-guide', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'dynamic-vs-static-guide', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-marketing-guide'})
-MATCH (el:EntityContent {entity_key: 'qr-code-marketing-guide', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-marketing-guide', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-restaurant-guide'})
-MATCH (el:EntityContent {entity_key: 'qr-code-restaurant-guide', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-restaurant-guide', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-business-card-guide'})
-MATCH (el:EntityContent {entity_key: 'qr-code-business-card-guide', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-business-card-guide', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-api-guide'})
-MATCH (el:EntityContent {entity_key: 'qr-code-api-guide', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-api-guide', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-analytics-guide'})
-MATCH (el:EntityContent {entity_key: 'qr-code-analytics-guide', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-analytics-guide', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-security-guide'})
-MATCH (el:EntityContent {entity_key: 'qr-code-security-guide', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-security-guide', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-vs-barcode'})
-MATCH (el:EntityContent {entity_key: 'qr-code-vs-barcode', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-vs-barcode', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'dynamic-vs-static-qr-code'})
-MATCH (el:EntityContent {entity_key: 'dynamic-vs-static-qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'dynamic-vs-static-qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-vs-nfc'})
-MATCH (el:EntityContent {entity_key: 'qr-code-vs-nfc', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-vs-nfc', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-vs-data-matrix'})
-MATCH (el:EntityContent {entity_key: 'qr-code-vs-data-matrix', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-vs-data-matrix', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'free-vs-paid-qr-generator'})
-MATCH (el:EntityContent {entity_key: 'free-vs-paid-qr-generator', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'free-vs-paid-qr-generator', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'qr-code-ai-vs-competitors'})
-MATCH (el:EntityContent {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'short-link-vs-qr-code'})
-MATCH (el:EntityContent {entity_key: 'short-link-vs-qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'short-link-vs-qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 MATCH (e:Entity {key: 'spotify-code-vs-qr-code'})
-MATCH (el:EntityContent {entity_key: 'spotify-code-vs-qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_CONTENT]->(el);
+MATCH (el:EntityNative {entity_key: 'spotify-code-vs-qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_NATIVE]->(el);
 
 // -------------------------------------------------------------------
 // Create relations to Locale (FOR_LOCALE)
 // -------------------------------------------------------------------
 
 MATCH (l:Locale {key: 'fr-FR'})
-MATCH (el:EntityContent {locale_key: 'fr-FR'})
+MATCH (el:EntityNative {locale_key: 'fr-FR'})
 MERGE (el)-[:FOR_LOCALE]->(l);

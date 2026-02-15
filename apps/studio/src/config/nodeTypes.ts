@@ -425,8 +425,8 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 16,
     layer: 'foundation',
   },
-  ProjectContent: {
-    type: 'ProjectContent',
+  ProjectNative: {
+    type: 'ProjectNative',
     label: 'Project Content',
     icon: '🌐',
     color: '#a78bfa',
@@ -478,8 +478,8 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 20,
     layer: 'semantic',
   },
-  EntityContent: {
-    type: 'EntityContent',
+  EntityNative: {
+    type: 'EntityNative',
     label: 'Entity Content',
     icon: '💬',
     color: '#fbbf24',
@@ -627,8 +627,8 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   // ==========================================================================
   // ORG REALM — OUTPUT LAYER (3 nodes)
   // ==========================================================================
-  PageGenerated: {
-    type: 'PageGenerated',
+  PageNative: {
+    type: 'PageNative',
     label: 'Page Generated',
     icon: '📃',
     color: '#f97316',
@@ -636,8 +636,8 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 16,
     layer: 'output',
   },
-  BlockGenerated: {
-    type: 'BlockGenerated',
+  BlockNative: {
+    type: 'BlockNative',
     label: 'Block Generated',
     icon: '📝',
     color: '#fb923c',

@@ -96,7 +96,7 @@ function calculateViewStats(
       break;
     case 'locales':
       relevantEdges = connectedEdges.filter((e) =>
-        ['HAS_CONTENT', 'HAS_GENERATED', 'FOR_LOCALE'].includes(e.type)
+        ['HAS_NATIVE', 'HAS_NATIVE', 'FOR_LOCALE'].includes(e.type)
       );
       break;
     case 'geographic':
@@ -116,7 +116,7 @@ function calculateViewStats(
       break;
     case 'generation':
       relevantEdges = connectedEdges.filter((e) =>
-        ['HAS_GENERATED', 'GENERATED_BY'].includes(e.type)
+        ['HAS_NATIVE', 'GENERATED_BY'].includes(e.type)
       );
       break;
     case 'categories':
@@ -187,7 +187,7 @@ function calculateCompletion(
 
   // For locale views, calculate based on content nodes
   const contentEdges = edges.filter((e) =>
-    ['HAS_CONTENT', 'HAS_GENERATED'].includes(e.type)
+    ['HAS_NATIVE', 'HAS_NATIVE'].includes(e.type)
   );
 
   // Assume 12 locales as target (configurable)

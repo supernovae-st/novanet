@@ -11,6 +11,6 @@ arc:
   llm_context: |
     USE: when validating generated content against schema, fast type lookup.
     TRIGGERS: block type validation, schema check, structure verification.
-    NOT: for block ownership (use GENERATED_FOR), for type definition (use BlockType).
+    NOT: for block ownership (use NATIVE_OF), for type definition (use BlockType).
     RELATES: BlockNative (source), BlockType (target).
   cypher_pattern: (BlockNative)-[:GENERATED_FROM]->(BlockType)

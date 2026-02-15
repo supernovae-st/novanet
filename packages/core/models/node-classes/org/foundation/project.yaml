@@ -41,7 +41,7 @@ node:
       example: |
         USE: when loading project-level context or root configuration for content generation.
         TRIGGERS: "project", "brand context", "project configuration", "qrcode-ai".
-        NOT: for organization-level config (use OrgConfig), for localized project content (use ProjectContent), for visual identity (use Brand).
+        NOT: for organization-level config (use OrgConfig), for localized project content (use ProjectNative), for visual identity (use Brand).
         RELATES: OrgConfig (owner via BELONGS_TO_ORG), Brand (identity via HAS_BRAND), Entity (owns via HAS_ENTITY), Page (owns via HAS_PAGE), Locale (supports via SUPPORTS_LOCALE).
 
     created_at:
@@ -109,8 +109,8 @@ node:
       cardinality: "N:1"
       description: "Organization config that owns this project"
 
-    HAS_NATIVE:  # v0.13.0 ADR-029: unified HAS_CONTENT + HAS_GENERATED
-      to: ProjectNative  # v0.13.0: renamed from ProjectContent
+    HAS_NATIVE:  # v0.13.0 ADR-029: unified HAS_NATIVE + HAS_NATIVE
+      to: ProjectNative  # v0.13.0: renamed from ProjectNative
       cardinality: "1:N"
       description: "Native project identity and messaging (one per locale)"
 

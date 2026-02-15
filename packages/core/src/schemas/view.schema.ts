@@ -48,7 +48,7 @@ const NodeTypeEnum = NODE_TYPES as unknown as [string, ...string[]];
  * @example
  * ```yaml
  * filters:
- *   nodeTypes: [Entity, EntityContent]
+ *   nodeTypes: [Entity, EntityNative]
  *   locale: "fr-FR"
  *   active: true
  *   categories: [org]

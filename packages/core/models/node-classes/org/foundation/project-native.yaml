@@ -5,10 +5,10 @@
 # v0.13.0 CHANGES (ADR-029 *Native Pattern)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-#   RENAMED: ProjectContent → ProjectNative
+#   RENAMED: ProjectNative → ProjectNative
 #   - All locale-specific nodes now use *Native suffix
 #   - Trait (authored vs generated) distinguishes who creates content
-#   - Unified arc: HAS_NATIVE replaces HAS_CONTENT
+#   - Unified arc: HAS_NATIVE replaces HAS_NATIVE
 #
 # GRAPH POSITION:
 #   Project ──[:HAS_NATIVE {locale}]──> ProjectNative ──[:FOR_LOCALE]──> Locale

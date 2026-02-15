@@ -44,29 +44,29 @@ MATCH (ac)-[:TO_CLASS]->(target:Class)
 | Family | Pattern | Example |
 |--------|---------|---------|
 | ownership | `HAS_*`, `*_OF` | `HAS_PAGE`, `PAGE_OF` |
-| localization | `HAS_CONTENT`, `FOR_LOCALE` | `Entity-[:HAS_CONTENT]->EntityContent` |
+| localization | `HAS_NATIVE`, `FOR_LOCALE` | `Entity-[:HAS_NATIVE]->EntityNative` |
 | semantic | `USES_*`, `SEMANTIC_LINK` | `Block-[:USES_ENTITY]->Entity` |
-| generation | `HAS_GENERATED` | `Page-[:HAS_GENERATED]->PageGenerated` |
+| generation | `HAS_NATIVE` | `Page-[:HAS_NATIVE]->PageNative` |
 | mining | `TARGETS_*` | `SEOMiningRun-[:TARGETS_SEO]->SEOKeyword` |
 
 ## Composite Key Pattern (v10.9)
 
-EntityContent uses a composite key combining entity and locale:
+EntityNative uses a composite key combining entity and locale:
 
 ```cypher
-// EntityContent composite key: entity:{entity_key}@{locale_key}
+// EntityNative composite key: entity:{entity_key}@{locale_key}
 MATCH (e:Entity {key: 'qr-code'})
-MATCH (ec:EntityContent {key: 'entity:qr-code@en-US'})
-MATCH (e)-[:HAS_CONTENT]->(ec)
+MATCH (ec:EntityNative {key: 'entity:qr-code@en-US'})
+MATCH (e)-[:HAS_NATIVE]->(ec)
 
 // Query all content for an entity
 MATCH (e:Entity {key: $entityKey})
-MATCH (e)-[:HAS_CONTENT]->(ec:EntityContent)
+MATCH (e)-[:HAS_NATIVE]->(ec:EntityNative)
 WHERE ec.key STARTS WITH 'entity:' + $entityKey + '@'
 RETURN ec
 
 // Query entity content for a locale
-MATCH (ec:EntityContent)
+MATCH (ec:EntityNative)
 WHERE ec.key ENDS WITH '@' + $localeKey
 RETURN ec
 ```
@@ -75,6 +75,6 @@ RETURN ec
 
 | v10.8 (deprecated) | v10.9 (current) | Arc |
 |--------------------|-----------------|-----|
-| `EntityL10n` | `EntityContent` | `HAS_CONTENT` |
-| `PageL10n` | `PageGenerated` | `HAS_GENERATED` |
-| `BlockL10n` | `BlockGenerated` | `HAS_GENERATED` |
+| `EntityL10n` | `EntityNative` | `HAS_NATIVE` |
+| `PageL10n` | `PageNative` | `HAS_NATIVE` |
+| `BlockL10n` | `BlockNative` | `HAS_NATIVE` |

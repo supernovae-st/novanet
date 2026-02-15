@@ -134,19 +134,39 @@ describe('NovaNetFilter', () => {
       expect(rulesRule?.filters?.active).toBe(true);
     });
 
-    it('includeOutputs() adds HAS_GENERATED include rule', () => {
-      const filter = NovaNetFilter.create().fromPage('page-pricing').includeOutputs();
+    // v0.13.0 ADR-029: *Native pattern
+    it('includeNative() adds HAS_NATIVE include rule (v0.13.0 ADR-029)', () => {
+      const filter = NovaNetFilter.create().fromPage('page-pricing').includeNative();
       const criteria = filter.getCriteria();
       expect(criteria.includes).toContainEqual(
-        expect.objectContaining({ relation: 'HAS_GENERATED', direction: 'outgoing' })
+        expect.objectContaining({ relation: 'HAS_NATIVE', direction: 'outgoing' })
       );
     });
 
-    it('includeContent() adds HAS_CONTENT include rule (v11.6: renamed from includeL10n)', () => {
+    it('includeNativeParent() adds NATIVE_OF include rule (v0.13.0 ADR-029)', () => {
+      // Start from a *Native node and traverse back to parent
+      const filter = NovaNetFilter.create().fromPage('page-pricing').includeNativeParent();
+      const criteria = filter.getCriteria();
+      expect(criteria.includes).toContainEqual(
+        expect.objectContaining({ relation: 'NATIVE_OF', direction: 'outgoing' })
+      );
+    });
+
+    // @deprecated - v0.13.0: Use includeNative() instead
+    it('includeOutputs() adds HAS_NATIVE include rule (@deprecated)', () => {
+      const filter = NovaNetFilter.create().fromPage('page-pricing').includeOutputs();
+      const criteria = filter.getCriteria();
+      expect(criteria.includes).toContainEqual(
+        expect.objectContaining({ relation: 'HAS_NATIVE', direction: 'outgoing' })
+      );
+    });
+
+    // @deprecated - v0.13.0: Use includeNative() instead
+    it('includeContent() adds HAS_NATIVE include rule (@deprecated)', () => {
       const filter = NovaNetFilter.create().fromEntity('tier-pro').includeContent();
       const criteria = filter.getCriteria();
       expect(criteria.includes).toContainEqual(
-        expect.objectContaining({ relation: 'HAS_CONTENT', direction: 'outgoing' })
+        expect.objectContaining({ relation: 'HAS_NATIVE', direction: 'outgoing' })
       );
     });
 

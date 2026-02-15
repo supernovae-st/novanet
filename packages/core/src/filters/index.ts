@@ -1,6 +1,6 @@
 // src/filters/index.ts
 /**
- * NovaNet Filter System v10.4.0
+ * NovaNet Filter System v0.13.0
  *
  * Provides composable filter/view system for generating Cypher queries.
  *
@@ -8,6 +8,11 @@
  * - NovaNetFilter: Fluent API for building filter criteria
  * - CypherGenerator: Converts filters to executable Cypher queries
  * - ViewLoader: Loads YAML view definitions
+ *
+ * v0.13.0 ADR-029: *Native pattern
+ * - Added includeNative() method for unified HAS_NATIVE arc
+ * - Added includeNativeParent() method for NATIVE_OF inverse arc
+ * - Deprecated includeContent(), includeOutputs()
  *
  * @module filters
  */

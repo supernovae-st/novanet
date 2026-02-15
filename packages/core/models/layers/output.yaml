@@ -19,8 +19,8 @@ layer:
     - org
 
   classes:
-    - PageGenerated
-    - BlockGenerated
+    - PageNative
+    - BlockNative
     - OutputArtifact
 
   class_count: 3  # Computed by generator
@@ -29,4 +29,4 @@ layer:
     USE: when accessing generated content.
     TRIGGERS: "generated", "output", "final content", "rendered".
     NOT: for generation instructions (use instruction layer).
-    RELATES: PageGenerated (generated), BlockGenerated (generated), OutputArtifact (generated).
+    RELATES: PageNative (generated), BlockNative (generated), OutputArtifact (generated).

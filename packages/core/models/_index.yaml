@@ -36,13 +36,13 @@
 #   │  │  📦 ORG (21 nodes) - Organization-specific content                   │  │
 #   │  │  └─ config/      1 node:  OrgConfig                                  │  │
 #   │  │  └─ foundation/  6 nodes: Project, Brand, BrandDesign, BrandPrinciples,│ │
-#   │  │                           PromptStyle, ProjectContent                │  │
+#   │  │                           PromptStyle, ProjectNative                │  │
 #   │  │  └─ structure/   3 nodes: Page, Block, ContentSlot                   │  │
-#   │  │  └─ semantic/    4 nodes: Entity, EntityContent, AudiencePersona,    │  │
+#   │  │  └─ semantic/    4 nodes: Entity, EntityNative, AudiencePersona,    │  │
 #   │  │                           ChannelSurface                             │  │
 #   │  │  └─ instruction/ 4 nodes: BlockType, BlockRules, BlockInstruction,   │  │
 #   │  │                           PromptArtifact                             │  │
-#   │  │  └─ output/      3 nodes: PageGenerated, BlockGenerated,             │  │
+#   │  │  └─ output/      3 nodes: PageNative, BlockNative,             │  │
 #   │  │                           OutputArtifact                             │  │
 #   │  └───────────────────────────────────────────────────────────────────────┘  │
 #   │                                                                             │
@@ -58,7 +58,7 @@
 #             │                    └──[:HAS_PRINCIPLES]─> BrandPrinciples
 #             │                    └──[:HAS_PROMPT_STYLE]─> PromptStyle
 #             │
-#             ├─[:HAS_CONTENT]─> ProjectContent ──:FOR_LOCALE──> Locale
+#             ├─[:HAS_NATIVE]─> ProjectNative ──:FOR_LOCALE──> Locale
 #             │
 #             └─[:HAS_PAGE]─> Page ──┬─[:HAS_BLOCK {order}]─> Block ──:OF_TYPE──> BlockType
 #                               │    │                            │
@@ -66,14 +66,14 @@
 #                               │    │                            │
 #                               │    │                     :USES_ENTITY
 #                               │    │                            v
-#                               │    │                         Entity ──[:HAS_CONTENT]──> EntityContent
+#                               │    │                         Entity ──[:HAS_NATIVE]──> EntityNative
 #                               │    │                            │           ──:FOR_LOCALE──> Locale
 #                               │    │                            │
 #                               │    │                     :SEMANTIC_LINK (spreading activation)
 #                               │    │                            v
 #                               │    │                         Entity
 #                               │    │
-#                               │    └──:HAS_GENERATED──> BlockGenerated ──:FOR_LOCALE──> Locale
+#                               │    └──:HAS_NATIVE──> BlockNative ──:FOR_LOCALE──> Locale
 #                               │
 #                               │  (v0.12.5: PageStructure/PageInstruction deleted - ADR-028)
 #                               │  (Block order determines structure; BlockInstructions assembled at runtime)
@@ -84,7 +84,7 @@
 #                               │
 #                               ├──:SUBTOPIC_OF──> Page (pillar-cluster SEO hierarchy)
 #                               │
-#                               └──:HAS_GENERATED──> PageGenerated ──:FOR_LOCALE──> Locale
+#                               └──:HAS_NATIVE──> PageNative ──:FOR_LOCALE──> Locale
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 # INSTRUCTION LAYER (v0.12.5 ADR-028)
@@ -106,16 +106,16 @@
 #                              (rules, schema)               Entity / Page
 #
 #   At runtime: BlockInstructions assembled by position → sent to LLM
-#                                           PageGenerated output
+#                                           PageNative output
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 # ARC FAMILIES (v0.12.0)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 #   ownership     (54) - Structural containment (HAS_PAGE, HAS_BLOCK, HAS_BRAND, CONTAINS_*, etc.)
-#   localization  (16) - Locale linking (HAS_CONTENT, FOR_LOCALE, FALLBACK_TO, etc.)
+#   localization  (16) - Locale linking (HAS_NATIVE, FOR_LOCALE, FALLBACK_TO, etc.)
 #   semantic      (44) - Meaning connections (SEMANTIC_LINK, USES_ENTITY, FOR_MARKET, etc.)
-#   generation    (11) - AI output (HAS_GENERATED, GENERATED, ASSEMBLES, etc.)
+#   generation    (11) - AI output (HAS_NATIVE, GENERATED, ASSEMBLES, etc.)
 #   mining         (1) - Analytics (HAS_METRICS)
 #
 #   See taxonomy.yaml for full ArcFamily definitions.
@@ -136,8 +136,8 @@
 # NAMING CONVENTIONS (Neo4j official)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-#   NODE LABELS:      CamelCase, uppercase first (EntityContent, PageGenerated)
-#   RELATIONSHIPS:    UPPER_SNAKE_CASE (HAS_CONTENT, FOR_LOCALE)
+#   NODE LABELS:      CamelCase, uppercase first (EntityNative, PageNative)
+#   RELATIONSHIPS:    UPPER_SNAKE_CASE (HAS_NATIVE, FOR_LOCALE)
 #   PROPERTIES:       snake_case (display_name, llm_context)
 #
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -150,8 +150,8 @@
 #   FooMetrics   → computed/retrieved metrics (retrieved trait)
 #
 #   Examples:
-#     Entity → EntityContent (semantic layer, authored)
-#     Page → PageGenerated (output layer, generated)
+#     Entity → EntityNative (semantic layer, authored)
+#     Page → PageNative (output layer, generated)
 #     Term → TermSet (knowledge container, defined)
 #     SEOKeyword → SEOKeywordMetrics (retrieved)
 #
@@ -336,8 +336,8 @@ nodes_by_trait:
     - Country
 
   authored:
-    - ProjectContent        # Org/foundation
-    - EntityContent         # Org/semantic
+    - ProjectNative        # Org/foundation
+    - EntityNative         # Org/semantic
 
   imported:
     # Shared/knowledge atoms
@@ -366,8 +366,8 @@ nodes_by_trait:
     - Market
 
   generated:
-    - PageGenerated         # Org/output
-    - BlockGenerated        # Org/output
+    - PageNative         # Org/output
+    - BlockNative        # Org/output
     - OutputArtifact        # Org/output
     - PromptArtifact        # Org/instruction (LLM-generated prompt)
 

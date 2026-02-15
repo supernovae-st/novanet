@@ -62,7 +62,7 @@ const NODE_DIMENSIONS: Record<string, { width: number; height: number }> = {
   BrandDesign: { width: 190, height: 105 },
   BrandPrinciples: { width: 190, height: 105 },
   PromptStyle: { width: 190, height: 105 },
-  ProjectContent: { width: 210, height: 120 },
+  ProjectNative: { width: 210, height: 120 },
 
   // v10 knowledge nodes - tiered model
   // Technical tier

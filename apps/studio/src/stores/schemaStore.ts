@@ -284,7 +284,7 @@ function getArcFamily(relType: string): string {
     return 'localization';
   }
   // Generation family
-  if (relType.startsWith('HAS_INSTRUCTION') || relType.startsWith('HAS_GENERATED') ||
+  if (relType.startsWith('HAS_INSTRUCTION') || relType.startsWith('HAS_NATIVE') ||
       relType.startsWith('COMPILED_') || relType.includes('_GENERATED')) {
     return 'generation';
   }

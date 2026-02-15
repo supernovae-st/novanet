@@ -17,7 +17,7 @@ describe('useHoverHighlight', () => {
   const createMockEdges = (): GraphEdge[] => [
     { id: 'e1', source: 'node-a', target: 'node-b', type: 'HAS_BLOCK' },
     { id: 'e2', source: 'node-a', target: 'node-c', type: 'USES_ENTITY' },
-    { id: 'e3', source: 'node-b', target: 'node-d', type: 'HAS_GENERATED' },
+    { id: 'e3', source: 'node-b', target: 'node-d', type: 'HAS_NATIVE' },
     { id: 'e4', source: 'node-c', target: 'node-e', type: 'SEMANTIC_LINK' },
   ];
 

@@ -21,16 +21,16 @@ models/
 │   │   └── knowledge/       #    Terms, Expressions, SEO, GEO... (24)
 │   └── org/                 # ◎ ORG realm (20 nodes)
 │       ├── config/          #    Organization (1)
-│       ├── foundation/      #    Project, ProjectContent, BrandIdentity (3)
+│       ├── foundation/      #    Project, ProjectNative, BrandIdentity (3)
 │       ├── structure/       #    Page, Block, ContentSlot (3)
-│       ├── semantic/        #    Entity, EntityContent, Audience, Channel (4)
+│       ├── semantic/        #    Entity, EntityNative, Audience, Channel (4)
 │       ├── instruction/     #    PageStructure, PageInstruction, BlockType, BlockInstruction... (6)
-│       └── output/          #    PageGenerated, BlockGenerated, OutputArtifact (3)
+│       └── output/          #    PageNative, BlockNative, OutputArtifact (3)
 ├── arc-classes/               # ONE FILE PER ARC CLASS (169 arcs)
 │   ├── ownership/           # HAS_* arcs (43)
 │   ├── localization/        # FOR_LOCALE, SUPPORTS_LOCALE (14)
 │   ├── semantic/            # USES_*, SEMANTIC_LINK (26)
-│   ├── generation/          # HAS_GENERATED, GENERATED_BY (18)
+│   ├── generation/          # HAS_NATIVE, GENERATED_BY (18)
 │   └── mining/              # SEO/GEO targeting arcs (13)
 ├── views/                   # View definitions (YAML)
 │   ├── _registry.yaml       # View registry
@@ -61,8 +61,8 @@ Trait answers: **"WHERE does the data come from?"**
 ## Nomenclature v0.12.0
 
 ```
-*Content suffix  = Authored content for defined nodes (EntityContent, ProjectContent)
-*Generated       = LLM-generated output (PageGenerated, BlockGenerated)
+*Content suffix  = Authored content for defined nodes (EntityNative, ProjectNative)
+*Generated       = LLM-generated output (PageNative, BlockNative)
 *Structure       = JSON defining composition (PageStructure)
 *Instruction     = Markdown with @refs for LLM (PageInstruction, BlockInstruction)
 *Set            = Container nodes (TermSet, ExpressionSet, etc.)
@@ -75,9 +75,9 @@ Atoms           = Granular knowledge (Term, Expression, Pattern, etc.)
 ```
 Defined (structure)         Authored/Generated (content)
 ──────────────────          ─────────────────────────────
-Entity.key                  EntityContent.title (per locale)
-Page.key                    PageGenerated.assembled (per locale)
-Block.key                   BlockGenerated.generated (per locale)
+Entity.key                  EntityNative.title (per locale)
+Page.key                    PageNative.assembled (per locale)
+Block.key                   BlockNative.generated (per locale)
 PageStructure.blocks        PageInstruction.markdown (@refs)
 ```
 
@@ -99,7 +99,7 @@ Page
 | **ownership** | 43 | HAS_* parent-child relationships |
 | **localization** | 14 | FOR_LOCALE, SUPPORTS_LOCALE |
 | **semantic** | 26 | USES_*, SEMANTIC_LINK |
-| **generation** | 18 | HAS_GENERATED, GENERATED_BY |
+| **generation** | 18 | HAS_NATIVE, GENERATED_BY |
 | **mining** | 13 | SEO/GEO targeting |
 
 ## Statistics

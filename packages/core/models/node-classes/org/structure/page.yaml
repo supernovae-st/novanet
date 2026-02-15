@@ -65,7 +65,7 @@ node:
         USE: when orchestrating page-level generation, assembling blocks, or querying page structure.
         TRIGGERS: "page", "content structure", "block composition", "page generation".
         NOT: for individual block content (use Block), for visual design (use BrandDesign).
-        RELATES: Project (owner via HAS_PAGE), Block (contains via HAS_BLOCK), Entity (represents via REPRESENTS), PageGenerated (output).
+        RELATES: Project (owner via HAS_PAGE), Block (contains via HAS_BLOCK), Entity (represents via REPRESENTS), PageNative (output).
 
     created_at:
       type: datetime
@@ -164,8 +164,8 @@ node:
           description: "Block order within the page (1-based, source of truth)"
       description: "Content blocks within this page"
 
-    HAS_NATIVE:  # v0.13.0 ADR-029: unified HAS_CONTENT + HAS_GENERATED
-      to: PageNative  # v0.13.0: renamed from PageGenerated
+    HAS_NATIVE:  # v0.13.0 ADR-029: unified HAS_NATIVE + HAS_NATIVE
+      to: PageNative  # v0.13.0: renamed from PageNative
       cardinality: "1:N"
       description: "Native content for this page (one per locale)"
 
@@ -194,7 +194,7 @@ node:
           description: "Link strength = count of [@page:X] refs across blocks"
         entity_key:
           type: string
-          description: "Entity key - anchor text derived from EntityContent.display_name at generation time"
+          description: "Entity key - anchor text derived from EntityNative.display_name at generation time"
         context:
           type: string
           enum: [cta, body, related, nav]
@@ -280,14 +280,14 @@ node:
       RETURN p, main.key AS main_entity, collect(DISTINCT ref.key) AS referenced_entities
 
       // Get page with latest generated output for locale (v10.9.0)
-      MATCH (p:Page {key: $key})-[:HAS_GENERATED]->(pg:PageGenerated)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+      MATCH (p:Page {key: $key})-[:HAS_NATIVE]->(pg:PageNative)-[:FOR_LOCALE]->(l:Locale {key: $locale})
       RETURN p, pg
       ORDER BY pg.assembled_at DESC
       LIMIT 1
 
-      // v7.12.0: Get internal links with localized anchors (v10.9.0: EntityContent)
+      // v7.12.0: Get internal links with localized anchors (v10.9.0: EntityNative)
       MATCH (p:Page {key: $key})-[link:LINKS_TO]->(target:Page)
-      MATCH (e:Entity {key: link.entity_key})-[:HAS_CONTENT]->(ec:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+      MATCH (e:Entity {key: link.entity_key})-[:HAS_NATIVE]->(ec:EntityNative)-[:FOR_LOCALE]->(l:Locale {key: $locale})
       RETURN target.key AS target_page, ec.display_name AS anchor_text, link.context, link.seo_weight
       ORDER BY link.seo_weight DESC
 

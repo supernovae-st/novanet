@@ -8,12 +8,12 @@ SEO keyword mining and optimization workflow.
 
 **Pipeline stages:**
 1. **Mining**: SEOMiningRun discovers keywords per locale
-2. **Targeting**: EntityContent targets SEOKeyword (locale-aligned)
+2. **Targeting**: EntityNative targets SEOKeyword (locale-aligned)
 3. **Metrics**: SEOKeywordMetrics tracks performance
 4. **Linking**: Pages link via LINKS_TO with SEO weight
 
 **v10.1 Architecture:**
-- SEOKeyword is linked to EntityContent (same locale), not Entity
+- SEOKeyword is linked to EntityNative (same locale), not Entity
 - This ensures locale-aligned targeting (fr-FR concept → fr-FR keywords)
 
 ### Legend
@@ -50,39 +50,39 @@ flowchart TB
   end
 
   subgraph TARGETING["Targeting"]
-    EntityContent["🟢 EntityContent"]
+    EntityNative["🟢 EntityNative"]
   end
 
   %% Additional reachable nodes
-  BlockGenerated["🌟 BlockGenerated"]
+  BlockNative["🌟 BlockNative"]
   Locale["🔵 Locale"]
   OutputArtifact["🌟 OutputArtifact"]
-  PageGenerated["🌟 PageGenerated"]
-  ProjectContent["🟢 ProjectContent"]
+  PageNative["🌟 PageNative"]
+  ProjectNative["🟢 ProjectNative"]
 
   %% Relationships (styled by arc family)
-  BlockGenerated -.->|FOR_LOCALE| Locale
-  EntityContent -.->|FOR_LOCALE| Locale
+  BlockNative -.->|FOR_LOCALE| Locale
+  EntityNative -.->|FOR_LOCALE| Locale
   OutputArtifact -.->|FOR_LOCALE| Locale
-  PageGenerated -.->|FOR_LOCALE| Locale
-  ProjectContent -.->|FOR_LOCALE| Locale
+  PageNative -.->|FOR_LOCALE| Locale
+  ProjectNative -.->|FOR_LOCALE| Locale
 
   %% Arc colors by family
   linkStyle 0,1,2,3,4 stroke:#22c55e,stroke-width:2px
 
   %% Class assignments
-  class BlockGenerated generated
-  class EntityContent authored
+  class BlockNative generated
+  class EntityNative authored
   class Locale defined
   class OutputArtifact generated
-  class PageGenerated generated
-  class ProjectContent authored
+  class PageNative generated
+  class ProjectNative authored
 ```
 
 ## Notes
 
 - SEOKeyword is locale-specific (keyword varies by locale)
-- v10.1: SEOKeyword linked to EntityContent (locale-aligned targeting)
+- v10.1: SEOKeyword linked to EntityNative (locale-aligned targeting)
 - Metrics are time-series - use latest for current state
 - LINKS_TO relation includes seo_weight for link juice optimization
 

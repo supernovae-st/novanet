@@ -11,14 +11,14 @@
 #
 #   OrgConfig ──[:HAS_PROJECT]──> Project ──[:HAS_ENTITY]──> Entity (defined)
 #                                   │
-#                                   └──[:HAS_CONTENT]──> EntityContent
+#                                   └──[:HAS_NATIVE]──> EntityNative
 #                                                            │
 #                                                            └──[:FOR_LOCALE]──> Locale
 #
 #   • OrgConfig = Organization configuration (e.g., SuperNovae Studio)
 #   • Project = Product container (e.g., QR Code AI) - holds all entities
 #   • Entity = INVARIANT: defined once, same structure for all locales
-#   • EntityContent = LOCALIZED: generated natively per locale (NOT translated)
+#   • EntityNative = LOCALIZED: generated natively per locale (NOT translated)
 #
 # KEY PRINCIPLE:
 #   Generation, NOT Translation. Content is generated natively per locale,
@@ -132,12 +132,12 @@ node:
           USE: when discussing QR codes, scanning, 2D barcodes, or loading semantic context.
           TRIGGERS: "qr", "qr code", "scan", "code qr", "barcode 2D".
           NOT: for 1D barcodes (use Barcode entity), for smart links without QR (use Smart Link entity).
-          RELATES: Project (owner via HAS_ENTITY), EntityContent (localized via HAS_CONTENT), EntityCategory (type via BELONGS_TO), Page (represented via REPRESENTS).
+          RELATES: Project (owner via HAS_ENTITY), EntityNative (localized via HAS_NATIVE), EntityCategory (type via BELONGS_TO), Page (represented via REPRESENTS).
         - |
           USE: when generating AI/artistic QR content or creative QR visuals.
           TRIGGERS: "qr art", "ai qr", "qr artistique", "generated qr", "artistic qr code".
           NOT: for photo overlay (use QR Code Image entity), for manual design (use Custom QR Code entity).
-          RELATES: Project (owner), EntityContent (localized content), Page (canonical page via REPRESENTED_BY).
+          RELATES: Project (owner), EntityNative (localized content), Page (canonical page via REPRESENTED_BY).
 
     # ─────────────────────────────────────────────────────────────────────────────
     # entity_summary: LLM context summary (v11)
@@ -248,7 +248,7 @@ node:
   # ═══════════════════════════════════════════════════════════════════════════════
   #
   # Entity has 6 relation types:
-  #   1. HAS_CONTENT   → Links to localized content (EntityContent) - v10.9.0
+  #   1. HAS_NATIVE   → Links to localized content (EntityNative) - v10.9.0
   #   2. BELONGS_TO    → Semantic category (EntityCategory) - v11.1.0
   #   3. HAS_CHILD     → URL hierarchy (Entity children) - v10.9.0
   #   4. SUBTOPIC_OF   → Hierarchical parent (pillar/cluster structure)
@@ -269,8 +269,8 @@ node:
     # PATTERN:
     #   Entity ──[:HAS_NATIVE]──> EntityNative ──[:FOR_LOCALE]──> Locale
     # ─────────────────────────────────────────────────────────────────────────────
-    HAS_NATIVE:  # v0.13.0 ADR-029: unified HAS_CONTENT + HAS_GENERATED
-      to: EntityNative  # v0.13.0: renamed from EntityContent
+    HAS_NATIVE:  # v0.13.0 ADR-029: unified HAS_NATIVE + HAS_NATIVE
+      to: EntityNative  # v0.13.0: renamed from EntityNative
       cardinality: "1:N"
       description: "Native content for this entity (one per locale)"
 
@@ -569,7 +569,7 @@ node:
         USE: when discussing QR codes, scanning, 2D barcodes, or loading QR-related semantic context.
         TRIGGERS: "qr", "qr code", "scan", "code qr", "barcode 2D".
         NOT: for 1D barcodes (use Barcode entity), for smart links without QR (use Smart Link entity).
-        RELATES: Project (qrcode-ai), EntityContent (localized), EntityCategory (thing), Page (qr-code).
+        RELATES: Project (qrcode-ai), EntityNative (localized), EntityCategory (thing), Page (qr-code).
       is_pillar: true
       # BELONGS_TO: thing
 
@@ -582,7 +582,7 @@ node:
         USE: when generating AI/artistic QR content or creative QR visuals.
         TRIGGERS: "qr art", "ai qr", "qr artistique", "generated qr", "artistic qr code".
         NOT: for photo overlay (use QR Code Image entity), for manual design (use Custom QR Code entity).
-        RELATES: Project (qrcode-ai), EntityContent (localized), qr-code (parent via SUBTOPIC_OF).
+        RELATES: Project (qrcode-ai), EntityNative (localized), qr-code (parent via SUBTOPIC_OF).
       is_pillar: false
       # BELONGS_TO: thing
       # SUBTOPIC_OF: qr-code
@@ -634,7 +634,7 @@ node:
     # Get entity with all content (v10.9.0: renamed)
     get_with_content: |
       MATCH (p:Project)-[:HAS_ENTITY]->(e:Entity {key: $key})
-      OPTIONAL MATCH (e)-[:HAS_CONTENT]->(ec:EntityContent)-[:FOR_LOCALE]->(l:Locale)
+      OPTIONAL MATCH (e)-[:HAS_NATIVE]->(ec:EntityNative)-[:FOR_LOCALE]->(l:Locale)
       RETURN e, collect({locale: l.key, title: ec.display_name}) AS content
 
     # Get pillar with all subtopics

@@ -21,7 +21,7 @@ arc:
   llm_context: |
     USE: when filtering/clustering entities by semantic category.
     TRIGGERS: entity category, entity type, what is entity, categorization, taxonomy.
-    NOT: entity content (use HAS_CONTENT), entity hierarchy (use HAS_CHILD), entity ownership (use HAS_ENTITY).
+    NOT: entity content (use HAS_NATIVE), entity hierarchy (use HAS_CHILD), entity ownership (use HAS_ENTITY).
     RELATES: Entity (source), EntityCategory (target), CATEGORY_OF (inverse), cross_realm (scope).
 
   cypher_pattern: "(Entity)-[:BELONGS_TO]->(EntityCategory)"

@@ -3,6 +3,7 @@
 // ============================================================================
 //
 // v0.12.0 Update (ADR-023): Kind -> Class, :Meta: -> :Schema:, HAS_KIND -> HAS_CLASS
+// v0.13.0 Update (ADR-029): *Native pattern - HAS_CONTENT/HAS_GENERATED -> HAS_NATIVE
 //
 // This migration adds structural relationships that enable the unified tree:
 // - Realm -[:HAS_LAYER]-> Layer
@@ -17,7 +18,7 @@
 //           └── Class (Locale/Term/Page/Entity/...) (v0.12.0: was Kind)
 //
 //   ArcFamily (ownership/localization/semantic/generation/mining)
-//     └── ArcClass (HAS_PAGE/HAS_CONTENT/USES_ENTITY/...) (v0.12.0: was ArcKind)
+//     └── ArcClass (HAS_PAGE/HAS_NATIVE/USES_ENTITY/...) (v0.12.0: was ArcKind)
 //
 // Run with: cargo run -- db migrate
 // Verify with: cargo run -- meta
@@ -51,11 +52,11 @@ MERGE (r)-[:HAS_LAYER]->(l);
 //   - shared/geography: 6 classes (Continent, Region, Country, etc.)
 //   - shared/knowledge: 24 classes (Terms, Expressions, SEO, GEO, etc.)
 //   - org/config: 1 class (OrgConfig)
-//   - org/foundation: 3 classes (Project, ProjectContent, BrandIdentity)
+//   - org/foundation: 3 classes (Project, ProjectNative, BrandIdentity)
 //   - org/structure: 3 classes (Page, Block, ContentSlot)
-//   - org/semantic: 4 classes (Entity, EntityContent, AudiencePersona, ChannelSurface)
+//   - org/semantic: 4 classes (Entity, EntityNative, AudiencePersona, ChannelSurface)
 //   - org/instruction: 7 classes (PageStructure, BlockType, instructions, etc.)
-//   - org/output: 3 classes (PageGenerated, BlockGenerated, OutputArtifact)
+//   - org/output: 3 classes (PageNative, BlockNative, OutputArtifact)
 
 MATCH (l:Layer:Schema), (c:Class:Schema)
 WHERE c.layer = l.key AND c.realm = l.realm
@@ -71,7 +72,7 @@ MERGE (l)-[:HAS_CLASS]->(c);
 //
 // Expected: 114 relationships total across 5 families
 //   - ownership: 46 arc classes (HAS_PAGE, HAS_BLOCK, HAS_ENTITY, etc.)
-//   - localization: 15 arc classes (HAS_CONTENT, HAS_GENERATED, etc.)
+//   - localization: 15 arc classes (HAS_NATIVE, FOR_LOCALE, etc.)
 //   - semantic: 41 arc classes (USES_ENTITY, REFERENCES, etc.)
 //   - generation: 11 arc classes (GENERATED_BY, PROMPTED_BY, etc.)
 //   - mining: 1 arc class (MINES_KEYWORD)
