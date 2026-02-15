@@ -244,16 +244,6 @@ export class ViewLoader {
         filter.includeNativeParent();
         break;
 
-      // @deprecated - v0.13.0: Use HAS_NATIVE instead
-      case 'HAS_NATIVE':
-        filter.includeOutputs();
-        break;
-
-      // @deprecated - v0.13.0: Use HAS_NATIVE instead
-      case 'HAS_NATIVE':
-        filter.includeContent();
-        break;
-
       // v11.5: Locale knowledge relations
       case 'HAS_CULTURE':
       case 'HAS_MARKET':

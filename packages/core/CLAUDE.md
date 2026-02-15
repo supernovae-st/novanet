@@ -16,7 +16,7 @@ NovaNet is a **native content generation system** (NOT translation) using Neo4j 
 NOVANET = NATIVE GENERATION
 
 Source -> Translate -> Target        <-- WRONG
-Entity (invariant) -> Generate natively -> EntityContent (local)  <-- RIGHT
+Entity (defined) -> Generate natively -> EntityNative (locale)  <-- RIGHT
 ```
 
 Each locale content is **generated natively** from the invariant Entity, NOT translated. The LLM receives context **entirely in the target locale** and generates natively.
@@ -92,7 +92,7 @@ RETURN p.key, collect(page.key) AS pages;
 
 -- Load block context for generation
 MATCH (b:Block {key: "hero-pricing"})
-MATCH (b)-[:USES_ENTITY]->(e:Entity)-[:HAS_CONTENT]->(el:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: "fr-FR"})
+MATCH (b)-[:USES_ENTITY]->(e:Entity)-[:HAS_NATIVE]->(el:EntityNative)-[:FOR_LOCALE]->(l:Locale {key: "fr-FR"})
 MATCH (b)-[:OF_TYPE]->(bt:BlockType)
 MATCH (l)-[:HAS_VOICE]->(v:LocaleVoice)
 MATCH (l)-[:HAS_LEXICON]->(lex:LocaleLexicon)-[:HAS_EXPRESSION]->(e:Expression)
@@ -129,11 +129,11 @@ core/
 │   │   │   └── knowledge/     #   Layer: knowledge (24 nodes incl. SEO/GEO)
 │   │   └── org/               # Realm: org (20 nodes)
 │   │       ├── config/        #   Layer: config (1 node: OrgConfig)
-│   │       ├── foundation/    #   Layer: foundation (Project, BrandIdentity, ProjectContent)
+│   │       ├── foundation/    #   Layer: foundation (Project, Brand, ProjectNative)
 │   │       ├── structure/     #   Layer: structure (Page, Block, ContentSlot)
-│   │       ├── semantic/      #   Layer: semantic (Entity, EntityContent, etc.)
+│   │       ├── semantic/      #   Layer: semantic (Entity, EntityNative, etc.)
 │   │       ├── instruction/   #   Layer: instruction (PageInstruction, BlockInstruction, etc.)
-│   │       └── output/        #   Layer: output (PageGenerated, BlockGenerated)
+│   │       └── output/        #   Layer: output (PageNative, BlockNative)
 │   ├── arc-classes/             # ONE FILE PER ARC TYPE (116 files)
 │   └── views/                 # YAML view definitions
 ├── src/                       # TypeScript source
@@ -147,15 +147,13 @@ core/
 
 > **Note:** `parsers/`, `services/`, `db/`, and `scripts/` were absorbed into the Rust binary (`tools/novanet/`) in v9.0.0.
 
-## Nomenclature (v0.12.0)
+## Nomenclature (v0.13.0 — ADR-029)
 
 ```
-*Content suffix = Human-authored localized content (EntityContent)
-*Generated      = LLM-generated output content (PageGenerated, BlockGenerated)
-:HAS_CONTENT    = Human-authored content arc (Entity→EntityContent)
-:HAS_GENERATED  = LLM-generated content arc (Page→PageGenerated, Block→BlockGenerated)
+*Native suffix  = Locale-specific content (EntityNative, ProjectNative, PageNative, BlockNative)
+:HAS_NATIVE     = Unified arc for all *Native nodes (replaces HAS_CONTENT + HAS_GENERATED)
+:NATIVE_OF      = Inverse arc (replaces CONTENT_OF + GENERATED_FOR)
 :HAS_INSTRUCTION= Instruction arc (Page→PageInstruction, Block→BlockInstruction)
-ProjectContent  = Localized project content
 Locale*         = Locale Knowledge nodes (LocaleVoice, LocaleCulture, etc.)
 *Metrics        = Time-series observations (SEOKeywordMetrics, GEOMetrics)
 ```
@@ -184,10 +182,10 @@ retrieved       = Fetched from external APIs (GEO snapshots) — was "aggregated
 
 ## Language Convention
 
-| English (invariant) | Localized (generated natively) |
-|---------------------|--------------------------------|
-| `*.key`, `*.llm_context`, `*.instructions`, `*.rules` | `*Content.*`, `*Generated.*` fields |
-| Project.key, Entity.key, Page.key, Block.key | EntityContent, PageGenerated, BlockGenerated |
+| English (defined) | Localized (generated natively) |
+|-------------------|--------------------------------|
+| `*.key`, `*.llm_context`, `*.instructions`, `*.rules` | `*Native.*` fields |
+| Project.key, Entity.key, Page.key, Block.key | ProjectNative, EntityNative, PageNative, BlockNative |
 
 **Remember**: Localized content is **generated natively**, not translated.
 

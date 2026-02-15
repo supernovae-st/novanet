@@ -14,7 +14,7 @@ MATCH (b)-[:HAS_INSTRUCTION]->(bi:BlockInstruction)
 MATCH (b)-[:OF_TYPE]->(bt:BlockType)
 OPTIONAL MATCH (bt)-[:HAS_RULES]->(br:BlockRules)
 OPTIONAL MATCH (b)-[:USES_ENTITY]->(c:Entity)
-OPTIONAL MATCH (c)-[:HAS_CONTENT]->(cl:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+OPTIONAL MATCH (c)-[:HAS_NATIVE]->(cl:EntityNative)-[:FOR_LOCALE]->(l:Locale {key: $locale})
 RETURN b.key AS block,
        bi.content AS instructions,
        bt.name AS blockType,
@@ -33,7 +33,7 @@ MATCH (c)-[sl:SEMANTIC_LINK*1..2]->(related:Entity)
 WHERE ALL(r IN sl WHERE r.temperature >= 0.3)
 WITH related, reduce(a = 1.0, r IN sl | a * r.temperature) AS activation
 WHERE activation >= 0.3
-MATCH (related)-[:HAS_CONTENT]->(rl:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+MATCH (related)-[:HAS_NATIVE]->(rl:EntityNative)-[:FOR_LOCALE]->(l:Locale {key: $locale})
 RETURN related.key AS concept,
        rl.title AS title,
        activation

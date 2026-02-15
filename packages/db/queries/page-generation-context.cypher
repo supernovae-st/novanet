@@ -13,7 +13,7 @@ MATCH (p:Page {key: $pageKey})
 MATCH (p)-[:HAS_INSTRUCTION]->(pi:PageInstruction)
 OPTIONAL MATCH (p)-[:HAS_BLOCK]->(b:Block)
 OPTIONAL MATCH (p)-[:USES_ENTITY]->(c:Entity)
-OPTIONAL MATCH (c)-[:HAS_CONTENT]->(cl:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+OPTIONAL MATCH (c)-[:HAS_NATIVE]->(cl:EntityNative)-[:FOR_LOCALE]->(l:Locale {key: $locale})
 RETURN p, pi,
        collect(DISTINCT b) AS blocks,
        collect(DISTINCT {concept: c.key, title: cl.title}) AS concepts

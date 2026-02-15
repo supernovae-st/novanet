@@ -125,9 +125,6 @@ export interface EntityNative extends EmbeddableNode {
   updated_at: Date;
 }
 
-/** @deprecated Use EntityNative (v0.13.0 ADR-029) */
-export type EntityContent = EntityNative;
-
 // =============================================================================
 // PAGE (v0.13.0 - *Native pattern)
 // =============================================================================
@@ -168,9 +165,6 @@ export interface PageNative {
   /** When this version was replaced (null = current) */
   replaced_at?: Date;
 }
-
-/** @deprecated Use PageNative (v0.13.0 ADR-029) */
-export type PageGenerated = PageNative;
 
 // =============================================================================
 // BLOCK (v0.13.0 - *Native pattern)
@@ -218,9 +212,6 @@ export interface BlockNative {
   /** When this version was replaced (null = current) */
   replaced_at?: Date;
 }
-
-/** @deprecated Use BlockNative (v0.13.0 ADR-029) */
-export type BlockGenerated = BlockNative;
 
 // =============================================================================
 // LOCALE KNOWLEDGE (v7.1.0 - replaces deprecated L10NCategory/L10NContent)
