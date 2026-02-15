@@ -19,6 +19,7 @@ import { NovaNetFilter } from './NovaNetFilter.js';
 
 // =============================================================================
 // RELATION TO ALIAS/TARGET TYPE MAPPINGS
+// v0.13.0 ADR-029: Added HAS_NATIVE, NATIVE_OF (merging HAS_NATIVE + HAS_NATIVE)
 // =============================================================================
 
 const RELATION_ALIAS_MAP: Record<string, string> = {
@@ -46,10 +47,9 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   // Instructions
   HAS_INSTRUCTION: 'instruction',
   HAS_RULES: 'rules',
-  // Output
-  HAS_GENERATED: 'generated',
-  HAS_CONTENT: 'content',
-  CONTENT_OF: 'contentParent',
+  // Native content (v0.13.0 ADR-029 - unified HAS_CONTENT + HAS_GENERATED)
+  HAS_NATIVE: 'native', // v0.13.0: unified arc for all *Native nodes
+  NATIVE_OF: 'nativeParent', // v0.13.0: inverse of HAS_NATIVE
   HAS_AUTHORED_CONTENT: 'authoredContent',
   // Locale knowledge (v11.5 schema)
   HAS_CULTURE: 'culture',
@@ -102,7 +102,7 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
 
 // v11.6: Target type labels are now OPTIONAL
 // The same relation can target different node types depending on context:
-// - HAS_CONTENT: Entity → EntityContent, Project → ProjectContent
+// - HAS_NATIVE: Entity → EntityNative, Project → ProjectNative, Page → PageNative, Block → BlockNative (v0.13.0)
 // - HAS_ENTITY: Project → Entity
 // Rather than trying to map every context, we omit the target label and let Neo4j
 // return whatever node is connected. This is more flexible and schema-independent.
@@ -150,7 +150,7 @@ export class CypherGenerator {
       const activeFilter = include.filters?.active ? ' {active: true}' : '';
       // Capture the relationship with a variable (r0, r1, etc.)
       // v11.6: Don't specify target type - let Neo4j return whatever is connected
-      // This handles cases where same relation targets different types (HAS_CONTENT, HAS_ENTITY, etc.)
+      // This handles cases where same relation targets different types (HAS_NATIVE, HAS_ENTITY, etc.)
       const matchLine = `OPTIONAL MATCH (root)${arrow.left}[${relAlias}:${include.relation}]${arrow.right}(${alias}${activeFilter})`;
 
       lines.push(matchLine);

@@ -14,6 +14,6 @@ arc:
   llm_context: |
     USE: when tracing prompt artifact to source instruction for auditing.
     TRIGGERS: prompt source, instruction audit, template origin.
-    NOT: for generated content (use HAS_GENERATED).
+    NOT: for generated content (use HAS_NATIVE).
     RELATES: PromptArtifact (source), BlockInstruction (target).
   cypher_pattern: (PromptArtifact)-[:COMPILED_FROM]->(BlockInstruction)

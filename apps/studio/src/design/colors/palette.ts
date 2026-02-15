@@ -214,7 +214,7 @@ const RELATION_TO_FAMILY: Record<string, ArcFamilyKey> = {
   BELONGS_TO: 'ownership',
 
   // Localization family
-  HAS_CONTENT: 'localization',
+  HAS_NATIVE: 'localization',
   FOR_LOCALE: 'localization',
   PRIMARY_LOCALE: 'localization',
   BELONGS_TO_PROJECT_CONTENT: 'localization',
@@ -226,7 +226,7 @@ const RELATION_TO_FAMILY: Record<string, ArcFamilyKey> = {
   INFLUENCED_BY: 'semantic',
 
   // Generation family
-  HAS_GENERATED: 'generation',
+  // v0.13.0: HAS_NATIVE moved to localization family (unified arc)
   GENERATED_BY: 'generation',
   PREVIOUS_VERSION: 'generation',
   BASED_ON: 'generation',

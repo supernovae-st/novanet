@@ -14,7 +14,7 @@
 # KEY RELATIONSHIPS:
 #   - <-[:HAS_BLOCK]-(Page): The parent Page that contains this block instance.
 #   - [:OF_TYPE]->(BlockType): The reusable template this block is based on.
-#   - [:HAS_GENERATED]->(BlockGenerated): The localized content generated for this block.
+#   - [:HAS_NATIVE]->(BlockNative): The localized content generated for this block.
 #
 # ------------------------------------------------------------------------------
 node:
@@ -63,7 +63,7 @@ node:
         USE: when generating content for a specific page section or loading block context.
         TRIGGERS: "block", "section", "component", "content slot", "hero", "faq".
         NOT: for page-level orchestration (use Page), for block templates (use BlockType).
-        RELATES: Page (parent via HAS_BLOCK), BlockType (template via OF_TYPE), BlockGenerated (output), BlockInstruction (recipe).
+        RELATES: Page (parent via HAS_BLOCK), BlockType (template via OF_TYPE), BlockNative (output), BlockInstruction (recipe).
 
     created_at:
       type: datetime
@@ -82,7 +82,7 @@ node:
       type: string
       required: true
       pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
-      description: "Canonical, non-translated identifier for the block anchor. Serves as a stable bridge to the localized `anchor_slug` on the BlockGenerated node. Must be unique within the parent page."
+      description: "Canonical, non-translated identifier for the block anchor. Serves as a stable bridge to the localized `anchor_slug` on the BlockNative node. Must be unique within the parent page."
       example: "feature-comparison"
 
   # ═══════════════════════════════════════════════════════════════════════════════
@@ -95,8 +95,8 @@ node:
       cardinality: "N:1"
       description: "Links this Block instance to its reusable template (BlockType), from which it inherits its structure and validation rules."
 
-    HAS_NATIVE:  # v0.13.0 ADR-029: unified HAS_CONTENT + HAS_GENERATED
-      to: BlockNative  # v0.13.0: renamed from BlockGenerated
+    HAS_NATIVE:  # v0.13.0 ADR-029: unified HAS_NATIVE + HAS_NATIVE
+      to: BlockNative  # v0.13.0: renamed from BlockNative
       cardinality: "1:N"
       description: "Native content for this block. Each BlockNative node contains the final content and localized `anchor_slug` for a specific locale."
 
@@ -118,7 +118,7 @@ node:
         purpose:
           type: string
           enum: [inject, link]
-          description: "inject = embed EntityContent, link = hyperlink to Entity's Page"
+          description: "inject = embed EntityNative, link = hyperlink to Entity's Page"
         count:
           type: integer
           description: "Number of times entity is referenced in block"
@@ -155,9 +155,9 @@ node:
         RELATES: Page (pricing), BlockType (hero-v1), BlockInstruction (pricing_hero).
 
     cypher: |
-      // Load full context for block generation (v10.9.0: EntityContent)
+      // Load full context for block generation (v10.9.0: EntityNative)
       MATCH (b:Block {key: $key})-[:OF_TYPE]->(bt:BlockType)
-      MATCH (b)-[:USES_ENTITY]->(e:Entity)-[:HAS_CONTENT]->(ec:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+      MATCH (b)-[:USES_ENTITY]->(e:Entity)-[:HAS_NATIVE]->(ec:EntityNative)-[:FOR_LOCALE]->(l:Locale {key: $locale})
       OPTIONAL MATCH (l)-[:HAS_VOICE]->(v:LocaleVoice)
       OPTIONAL MATCH (l)-[:HAS_CULTURE]->(cult:LocaleCulture)
       OPTIONAL MATCH (b)-[:HAS_INSTRUCTION]->(bi:BlockInstruction {active: true})
@@ -166,7 +166,7 @@ node:
              v AS voice, cult AS culture
 
       // Get block with latest generated output for locale (v10.9.0)
-      MATCH (b:Block {key: $key})-[:HAS_GENERATED]->(bg:BlockGenerated)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+      MATCH (b:Block {key: $key})-[:HAS_NATIVE]->(bg:BlockNative)-[:FOR_LOCALE]->(l:Locale {key: $locale})
       RETURN b, bg
       ORDER BY bg.generated_at DESC
       LIMIT 1

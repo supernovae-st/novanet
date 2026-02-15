@@ -7,8 +7,8 @@ node:
   icon:
     web: "package"
     terminal: "■"
-  # v10.9.0: Renamed from PageL10n/BlockL10n to PageGenerated/BlockGenerated
-  description: "Generated content bundle aggregating PageGenerated and BlockGenerated for a specific locale version."
+  # v10.9.0: Renamed from PageL10n/BlockL10n to PageNative/BlockNative
+  description: "Generated content bundle aggregating PageNative and BlockNative for a specific locale version."
   llm_context: "USE: when bundling generated content. TRIGGERS: bundle, artifact, deployment. NOT: individual content, drafts."
 
   standard_properties:
@@ -96,8 +96,8 @@ node:
     outgoing:
       - type: BUNDLES
         to:
-          - PageGenerated
-          - BlockGenerated
+          - PageNative
+          - BlockNative
         description: "Content nodes bundled in this artifact"
 
       - type: FOR_LOCALE

@@ -30,11 +30,11 @@ trait:
     token_estimate: 150
 
   examples:
-    - EntityContent
-    - ProjectContent
+    - EntityNative
+    - ProjectNative
 
   llm_context: |
     USE: when accessing human-written locale-specific content.
     TRIGGERS: "content", "editorial", "authored", "written", "per locale".
     NOT: for structural definitions (use defined trait).
-    RELATES: EntityContent (semantic), ProjectContent (foundation).
+    RELATES: EntityNative (semantic), ProjectNative (foundation).

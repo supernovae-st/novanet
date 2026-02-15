@@ -20,7 +20,7 @@ arc_family:
 
   arc_count: 15  # Computed by generator
 
-  # v0.13.0 ADR-029: HAS_GENERATED/GENERATED_FOR moved to ownership family as HAS_NATIVE/NATIVE_OF
+  # v0.13.0 ADR-029: HAS_NATIVE/NATIVE_OF moved to ownership family as HAS_NATIVE/NATIVE_OF
   key_arcs:
     - GENERATED
     - COMPILED_FROM
@@ -35,7 +35,7 @@ arc_family:
     - authoring: "Instruction → Style"
     - compilation: "Instruction → PromptArtifact"
     - generation: "Instruction → *Native"  # v0.13.0: outputs are *Native nodes
-    - provenance: "*Native → EntityNative"  # v0.13.0: EntityContent → EntityNative
+    - provenance: "*Native → EntityNative"  # v0.13.0: EntityNative → EntityNative
     - output: "PageNative → BlockNative"  # v0.13.0: *Generated → *Native
 
   llm_context: |

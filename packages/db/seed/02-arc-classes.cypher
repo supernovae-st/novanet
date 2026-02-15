@@ -37,7 +37,7 @@ ON MATCH SET
 MERGE (ac_BUNDLES:Schema:ArcClass {key: 'BUNDLES'})
 ON CREATE SET
   ac_BUNDLES.display_name = 'Bundles',
-  ac_BUNDLES.llm_context = 'USE: when deploying content, loading all generated nodes in an artifact. TRIGGERS: deployment bundle, artifact contents, release package. NOT: for live content (use PageNative), for structure (use HAS_GENERATED). RELATES: OutputArtifact (source), PageNative/BlockNative (target), checksum for integrity.',
+  ac_BUNDLES.llm_context = 'USE: when deploying content, loading all generated nodes in an artifact. TRIGGERS: deployment bundle, artifact contents, release package. NOT: for live content (use PageNative), for structure (use HAS_NATIVE). RELATES: OutputArtifact (source), PageNative/BlockNative (target), checksum for integrity.',
   ac_BUNDLES.family = 'generation',
   ac_BUNDLES.scope = 'intra_realm',
   ac_BUNDLES.cardinality = 'one_to_many',
@@ -49,7 +49,7 @@ ON CREATE SET
   ac_BUNDLES.created_at = datetime()
 ON MATCH SET
   ac_BUNDLES.display_name = 'Bundles',
-  ac_BUNDLES.llm_context = 'USE: when deploying content, loading all generated nodes in an artifact. TRIGGERS: deployment bundle, artifact contents, release package. NOT: for live content (use PageNative), for structure (use HAS_GENERATED). RELATES: OutputArtifact (source), PageNative/BlockNative (target), checksum for integrity.',
+  ac_BUNDLES.llm_context = 'USE: when deploying content, loading all generated nodes in an artifact. TRIGGERS: deployment bundle, artifact contents, release package. NOT: for live content (use PageNative), for structure (use HAS_NATIVE). RELATES: OutputArtifact (source), PageNative/BlockNative (target), checksum for integrity.',
   ac_BUNDLES.family = 'generation',
   ac_BUNDLES.scope = 'intra_realm',
   ac_BUNDLES.cardinality = 'one_to_many',
@@ -63,7 +63,7 @@ ON MATCH SET
 MERGE (ac_COMPILED_FROM:Schema:ArcClass {key: 'COMPILED_FROM'})
 ON CREATE SET
   ac_COMPILED_FROM.display_name = 'Compiled From',
-  ac_COMPILED_FROM.llm_context = 'USE: when tracing prompt artifact to source instruction for auditing. TRIGGERS: prompt source, instruction audit, template origin. NOT: for generated content (use HAS_GENERATED). RELATES: PromptArtifact (source), BlockInstruction (target).',
+  ac_COMPILED_FROM.llm_context = 'USE: when tracing prompt artifact to source instruction for auditing. TRIGGERS: prompt source, instruction audit, template origin. NOT: for generated content (use HAS_NATIVE). RELATES: PromptArtifact (source), BlockInstruction (target).',
   ac_COMPILED_FROM.family = 'generation',
   ac_COMPILED_FROM.scope = 'intra_realm',
   ac_COMPILED_FROM.cardinality = 'many_to_one',
@@ -75,7 +75,7 @@ ON CREATE SET
   ac_COMPILED_FROM.created_at = datetime()
 ON MATCH SET
   ac_COMPILED_FROM.display_name = 'Compiled From',
-  ac_COMPILED_FROM.llm_context = 'USE: when tracing prompt artifact to source instruction for auditing. TRIGGERS: prompt source, instruction audit, template origin. NOT: for generated content (use HAS_GENERATED). RELATES: PromptArtifact (source), BlockInstruction (target).',
+  ac_COMPILED_FROM.llm_context = 'USE: when tracing prompt artifact to source instruction for auditing. TRIGGERS: prompt source, instruction audit, template origin. NOT: for generated content (use HAS_NATIVE). RELATES: PromptArtifact (source), BlockInstruction (target).',
   ac_COMPILED_FROM.family = 'generation',
   ac_COMPILED_FROM.scope = 'intra_realm',
   ac_COMPILED_FROM.cardinality = 'many_to_one',
@@ -115,7 +115,7 @@ ON MATCH SET
 MERGE (ac_GENERATED:Schema:ArcClass {key: 'GENERATED'})
 ON CREATE SET
   ac_GENERATED.display_name = 'Generated',
-  ac_GENERATED.llm_context = 'USE: when tracing which instruction produced which generated content. TRIGGERS: generation provenance, instruction audit, output source. NOT: for structure ownership (use HAS_GENERATED), for compiled prompts (use COMPILED_FROM). RELATES: BlockInstruction (source), PageNative/BlockNative (target).',
+  ac_GENERATED.llm_context = 'USE: when tracing which instruction produced which generated content. TRIGGERS: generation provenance, instruction audit, output source. NOT: for structure ownership (use HAS_NATIVE), for compiled prompts (use COMPILED_FROM). RELATES: BlockInstruction (source), PageNative/BlockNative (target).',
   ac_GENERATED.family = 'generation',
   ac_GENERATED.scope = 'intra_realm',
   ac_GENERATED.cardinality = 'one_to_many',
@@ -127,7 +127,7 @@ ON CREATE SET
   ac_GENERATED.created_at = datetime()
 ON MATCH SET
   ac_GENERATED.display_name = 'Generated',
-  ac_GENERATED.llm_context = 'USE: when tracing which instruction produced which generated content. TRIGGERS: generation provenance, instruction audit, output source. NOT: for structure ownership (use HAS_GENERATED), for compiled prompts (use COMPILED_FROM). RELATES: BlockInstruction (source), PageNative/BlockNative (target).',
+  ac_GENERATED.llm_context = 'USE: when tracing which instruction produced which generated content. TRIGGERS: generation provenance, instruction audit, output source. NOT: for structure ownership (use HAS_NATIVE), for compiled prompts (use COMPILED_FROM). RELATES: BlockInstruction (source), PageNative/BlockNative (target).',
   ac_GENERATED.family = 'generation',
   ac_GENERATED.scope = 'intra_realm',
   ac_GENERATED.cardinality = 'one_to_many',
@@ -141,7 +141,7 @@ ON MATCH SET
 MERGE (ac_GENERATED_FROM:Schema:ArcClass {key: 'GENERATED_FROM'})
 ON CREATE SET
   ac_GENERATED_FROM.display_name = 'Generated From',
-  ac_GENERATED_FROM.llm_context = 'USE: when validating generated content against schema, fast type lookup. TRIGGERS: block type validation, schema check, structure verification. NOT: for block ownership (use GENERATED_FOR), for type definition (use BlockType). RELATES: BlockNative (source), BlockType (target).',
+  ac_GENERATED_FROM.llm_context = 'USE: when validating generated content against schema, fast type lookup. TRIGGERS: block type validation, schema check, structure verification. NOT: for block ownership (use NATIVE_OF), for type definition (use BlockType). RELATES: BlockNative (source), BlockType (target).',
   ac_GENERATED_FROM.family = 'generation',
   ac_GENERATED_FROM.scope = 'intra_realm',
   ac_GENERATED_FROM.cardinality = 'many_to_one',
@@ -153,7 +153,7 @@ ON CREATE SET
   ac_GENERATED_FROM.created_at = datetime()
 ON MATCH SET
   ac_GENERATED_FROM.display_name = 'Generated From',
-  ac_GENERATED_FROM.llm_context = 'USE: when validating generated content against schema, fast type lookup. TRIGGERS: block type validation, schema check, structure verification. NOT: for block ownership (use GENERATED_FOR), for type definition (use BlockType). RELATES: BlockNative (source), BlockType (target).',
+  ac_GENERATED_FROM.llm_context = 'USE: when validating generated content against schema, fast type lookup. TRIGGERS: block type validation, schema check, structure verification. NOT: for block ownership (use NATIVE_OF), for type definition (use BlockType). RELATES: BlockNative (source), BlockType (target).',
   ac_GENERATED_FROM.family = 'generation',
   ac_GENERATED_FROM.scope = 'intra_realm',
   ac_GENERATED_FROM.cardinality = 'many_to_one',
@@ -193,7 +193,7 @@ ON MATCH SET
 MERGE (ac_INCLUDES_STYLE:Schema:ArcClass {key: 'INCLUDES_STYLE'})
 ON CREATE SET
   ac_INCLUDES_STYLE.display_name = 'Includes Style',
-  ac_INCLUDES_STYLE.llm_context = 'USE: when loading style settings for instruction compilation. TRIGGERS: locale style, voice settings, tone configuration. NOT: for generated output (use HAS_GENERATED). RELATES: BlockInstruction (source), Style (target, cross_realm).',
+  ac_INCLUDES_STYLE.llm_context = 'USE: when loading style settings for instruction compilation. TRIGGERS: locale style, voice settings, tone configuration. NOT: for generated output (use HAS_NATIVE). RELATES: BlockInstruction (source), Style (target, cross_realm).',
   ac_INCLUDES_STYLE.family = 'generation',
   ac_INCLUDES_STYLE.scope = 'cross_realm',
   ac_INCLUDES_STYLE.cardinality = 'many_to_one',
@@ -205,7 +205,7 @@ ON CREATE SET
   ac_INCLUDES_STYLE.created_at = datetime()
 ON MATCH SET
   ac_INCLUDES_STYLE.display_name = 'Includes Style',
-  ac_INCLUDES_STYLE.llm_context = 'USE: when loading style settings for instruction compilation. TRIGGERS: locale style, voice settings, tone configuration. NOT: for generated output (use HAS_GENERATED). RELATES: BlockInstruction (source), Style (target, cross_realm).',
+  ac_INCLUDES_STYLE.llm_context = 'USE: when loading style settings for instruction compilation. TRIGGERS: locale style, voice settings, tone configuration. NOT: for generated output (use HAS_NATIVE). RELATES: BlockInstruction (source), Style (target, cross_realm).',
   ac_INCLUDES_STYLE.family = 'generation',
   ac_INCLUDES_STYLE.scope = 'cross_realm',
   ac_INCLUDES_STYLE.cardinality = 'many_to_one',
@@ -1805,7 +1805,7 @@ ON MATCH SET
 MERGE (ac_HAS_CHILD:Schema:ArcClass {key: 'HAS_CHILD'})
 ON CREATE SET
   ac_HAS_CHILD.display_name = 'Has Child',
-  ac_HAS_CHILD.llm_context = 'USE: when building entity hierarchies for URL structure. TRIGGERS: entity hierarchy, parent child, URL path, nested entities. NOT: entity content (use HAS_CONTENT), entity category (use BELONGS_TO). RELATES: Entity (source), Entity (target), CHILD_OF (inverse), max_depth=3.',
+  ac_HAS_CHILD.llm_context = 'USE: when building entity hierarchies for URL structure. TRIGGERS: entity hierarchy, parent child, URL path, nested entities. NOT: entity content (use HAS_NATIVE), entity category (use BELONGS_TO). RELATES: Entity (source), Entity (target), CHILD_OF (inverse), max_depth=3.',
   ac_HAS_CHILD.family = 'ownership',
   ac_HAS_CHILD.scope = 'intra_realm',
   ac_HAS_CHILD.cardinality = 'many_to_many',
@@ -1817,7 +1817,7 @@ ON CREATE SET
   ac_HAS_CHILD.created_at = datetime()
 ON MATCH SET
   ac_HAS_CHILD.display_name = 'Has Child',
-  ac_HAS_CHILD.llm_context = 'USE: when building entity hierarchies for URL structure. TRIGGERS: entity hierarchy, parent child, URL path, nested entities. NOT: entity content (use HAS_CONTENT), entity category (use BELONGS_TO). RELATES: Entity (source), Entity (target), CHILD_OF (inverse), max_depth=3.',
+  ac_HAS_CHILD.llm_context = 'USE: when building entity hierarchies for URL structure. TRIGGERS: entity hierarchy, parent child, URL path, nested entities. NOT: entity content (use HAS_NATIVE), entity category (use BELONGS_TO). RELATES: Entity (source), Entity (target), CHILD_OF (inverse), max_depth=3.',
   ac_HAS_CHILD.family = 'ownership',
   ac_HAS_CHILD.scope = 'intra_realm',
   ac_HAS_CHILD.cardinality = 'many_to_many',
@@ -1909,7 +1909,7 @@ ON MATCH SET
 MERGE (ac_HAS_ENTITY:Schema:ArcClass {key: 'HAS_ENTITY'})
 ON CREATE SET
   ac_HAS_ENTITY.display_name = 'Has Entity',
-  ac_HAS_ENTITY.llm_context = 'USE: when loading entities for a project. TRIGGERS: project entities, semantic concepts, project vocabulary. NOT: entity content (use HAS_CONTENT), entity hierarchy (use HAS_CHILD). RELATES: Project (source), Entity (target), ENTITY_OF (inverse).',
+  ac_HAS_ENTITY.llm_context = 'USE: when loading entities for a project. TRIGGERS: project entities, semantic concepts, project vocabulary. NOT: entity content (use HAS_NATIVE), entity hierarchy (use HAS_CHILD). RELATES: Project (source), Entity (target), ENTITY_OF (inverse).',
   ac_HAS_ENTITY.family = 'ownership',
   ac_HAS_ENTITY.scope = 'intra_realm',
   ac_HAS_ENTITY.cardinality = 'one_to_many',
@@ -1921,7 +1921,7 @@ ON CREATE SET
   ac_HAS_ENTITY.created_at = datetime()
 ON MATCH SET
   ac_HAS_ENTITY.display_name = 'Has Entity',
-  ac_HAS_ENTITY.llm_context = 'USE: when loading entities for a project. TRIGGERS: project entities, semantic concepts, project vocabulary. NOT: entity content (use HAS_CONTENT), entity hierarchy (use HAS_CHILD). RELATES: Project (source), Entity (target), ENTITY_OF (inverse).',
+  ac_HAS_ENTITY.llm_context = 'USE: when loading entities for a project. TRIGGERS: project entities, semantic concepts, project vocabulary. NOT: entity content (use HAS_NATIVE), entity hierarchy (use HAS_CHILD). RELATES: Project (source), Entity (target), ENTITY_OF (inverse).',
   ac_HAS_ENTITY.family = 'ownership',
   ac_HAS_ENTITY.scope = 'intra_realm',
   ac_HAS_ENTITY.cardinality = 'one_to_many',
@@ -2169,7 +2169,7 @@ ON MATCH SET
 MERGE (ac_HAS_PAGE:Schema:ArcClass {key: 'HAS_PAGE'})
 ON CREATE SET
   ac_HAS_PAGE.display_name = 'Has Page',
-  ac_HAS_PAGE.llm_context = 'USE: when loading pages for a project. TRIGGERS: project pages, page list, site structure. NOT: page content (use HAS_BLOCK), page output (use HAS_GENERATED). RELATES: Project (source), Page (target), PAGE_OF (inverse).',
+  ac_HAS_PAGE.llm_context = 'USE: when loading pages for a project. TRIGGERS: project pages, page list, site structure. NOT: page content (use HAS_BLOCK), page output (use HAS_NATIVE). RELATES: Project (source), Page (target), PAGE_OF (inverse).',
   ac_HAS_PAGE.family = 'ownership',
   ac_HAS_PAGE.scope = 'intra_realm',
   ac_HAS_PAGE.cardinality = 'one_to_many',
@@ -2181,7 +2181,7 @@ ON CREATE SET
   ac_HAS_PAGE.created_at = datetime()
 ON MATCH SET
   ac_HAS_PAGE.display_name = 'Has Page',
-  ac_HAS_PAGE.llm_context = 'USE: when loading pages for a project. TRIGGERS: project pages, page list, site structure. NOT: page content (use HAS_BLOCK), page output (use HAS_GENERATED). RELATES: Project (source), Page (target), PAGE_OF (inverse).',
+  ac_HAS_PAGE.llm_context = 'USE: when loading pages for a project. TRIGGERS: project pages, page list, site structure. NOT: page content (use HAS_BLOCK), page output (use HAS_NATIVE). RELATES: Project (source), Page (target), PAGE_OF (inverse).',
   ac_HAS_PAGE.family = 'ownership',
   ac_HAS_PAGE.scope = 'intra_realm',
   ac_HAS_PAGE.cardinality = 'one_to_many',
@@ -3131,7 +3131,7 @@ ON MATCH SET
 MERGE (ac_BELONGS_TO:Schema:ArcClass {key: 'BELONGS_TO'})
 ON CREATE SET
   ac_BELONGS_TO.display_name = 'Belongs To',
-  ac_BELONGS_TO.llm_context = 'USE: when filtering/clustering entities by semantic category. TRIGGERS: entity category, entity type, what is entity, categorization, taxonomy. NOT: entity content (use HAS_CONTENT), entity hierarchy (use HAS_CHILD), entity ownership (use HAS_ENTITY). RELATES: Entity (source), EntityCategory (target), CATEGORY_OF (inverse), cross_realm (scope).',
+  ac_BELONGS_TO.llm_context = 'USE: when filtering/clustering entities by semantic category. TRIGGERS: entity category, entity type, what is entity, categorization, taxonomy. NOT: entity content (use HAS_NATIVE), entity hierarchy (use HAS_CHILD), entity ownership (use HAS_ENTITY). RELATES: Entity (source), EntityCategory (target), CATEGORY_OF (inverse), cross_realm (scope).',
   ac_BELONGS_TO.family = 'semantic',
   ac_BELONGS_TO.scope = 'cross_realm',
   ac_BELONGS_TO.cardinality = 'many_to_one',
@@ -3143,7 +3143,7 @@ ON CREATE SET
   ac_BELONGS_TO.created_at = datetime()
 ON MATCH SET
   ac_BELONGS_TO.display_name = 'Belongs To',
-  ac_BELONGS_TO.llm_context = 'USE: when filtering/clustering entities by semantic category. TRIGGERS: entity category, entity type, what is entity, categorization, taxonomy. NOT: entity content (use HAS_CONTENT), entity hierarchy (use HAS_CHILD), entity ownership (use HAS_ENTITY). RELATES: Entity (source), EntityCategory (target), CATEGORY_OF (inverse), cross_realm (scope).',
+  ac_BELONGS_TO.llm_context = 'USE: when filtering/clustering entities by semantic category. TRIGGERS: entity category, entity type, what is entity, categorization, taxonomy. NOT: entity content (use HAS_NATIVE), entity hierarchy (use HAS_CHILD), entity ownership (use HAS_ENTITY). RELATES: Entity (source), EntityCategory (target), CATEGORY_OF (inverse), cross_realm (scope).',
   ac_BELONGS_TO.family = 'semantic',
   ac_BELONGS_TO.scope = 'cross_realm',
   ac_BELONGS_TO.cardinality = 'many_to_one',
@@ -3157,7 +3157,7 @@ ON MATCH SET
 MERGE (ac_CATEGORY_OF:Schema:ArcClass {key: 'CATEGORY_OF'})
 ON CREATE SET
   ac_CATEGORY_OF.display_name = 'Category Of',
-  ac_CATEGORY_OF.llm_context = 'USE: when finding all entities in a semantic category. TRIGGERS: entities in category, category members, what entities, taxonomy query. NOT: assigning category (use BELONGS_TO), entity content (use HAS_CONTENT). RELATES: EntityCategory (source), Entity (target), BELONGS_TO (inverse).',
+  ac_CATEGORY_OF.llm_context = 'USE: when finding all entities in a semantic category. TRIGGERS: entities in category, category members, what entities, taxonomy query. NOT: assigning category (use BELONGS_TO), entity content (use HAS_NATIVE). RELATES: EntityCategory (source), Entity (target), BELONGS_TO (inverse).',
   ac_CATEGORY_OF.family = 'semantic',
   ac_CATEGORY_OF.scope = 'cross_realm',
   ac_CATEGORY_OF.cardinality = 'one_to_many',
@@ -3169,7 +3169,7 @@ ON CREATE SET
   ac_CATEGORY_OF.created_at = datetime()
 ON MATCH SET
   ac_CATEGORY_OF.display_name = 'Category Of',
-  ac_CATEGORY_OF.llm_context = 'USE: when finding all entities in a semantic category. TRIGGERS: entities in category, category members, what entities, taxonomy query. NOT: assigning category (use BELONGS_TO), entity content (use HAS_CONTENT). RELATES: EntityCategory (source), Entity (target), BELONGS_TO (inverse).',
+  ac_CATEGORY_OF.llm_context = 'USE: when finding all entities in a semantic category. TRIGGERS: entities in category, category members, what entities, taxonomy query. NOT: assigning category (use BELONGS_TO), entity content (use HAS_NATIVE). RELATES: EntityCategory (source), Entity (target), BELONGS_TO (inverse).',
   ac_CATEGORY_OF.family = 'semantic',
   ac_CATEGORY_OF.scope = 'cross_realm',
   ac_CATEGORY_OF.cardinality = 'one_to_many',

@@ -40,9 +40,9 @@ describe('graph/hierarchy', () => {
     // config layer has OrgConfig only
     expect(org.layers.config.nodeTypes).toContain('OrgConfig');
     expect(org.layers.foundation.nodeTypes).toContain('Project');
-    // Entity/EntityContent are in org/semantic
+    // Entity/EntityNative are in org/semantic
     expect(org.layers.semantic.nodeTypes).toContain('Entity');
-    expect(org.layers.semantic.nodeTypes).toContain('EntityContent');
+    expect(org.layers.semantic.nodeTypes).toContain('EntityNative');
   });
 
   it('should have correct node counts per layer', () => {

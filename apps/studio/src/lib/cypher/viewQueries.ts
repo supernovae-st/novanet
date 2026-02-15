@@ -188,9 +188,9 @@ export function getViewQuery(viewId: ViewId, params: ViewQueryParams): ViewQuery
       return {
         cypher: `
           MATCH (n {key: $nodeKey})
-          WHERE n:Page OR n:Block OR n:PageGenerated OR n:BlockGenerated
-          OPTIONAL MATCH (n)-[r1:HAS_GENERATED]->(generated)
-          OPTIONAL MATCH (n)<-[r2:GENERATED_FOR]-(generated2)
+          WHERE n:Page OR n:Block OR n:PageNative OR n:BlockNative
+          OPTIONAL MATCH (n)-[r1:HAS_NATIVE]->(generated)
+          OPTIONAL MATCH (n)<-[r2:NATIVE_OF]-(generated2)
           OPTIONAL MATCH (generated)-[r3:FOR_LOCALE]->(locale:Locale)
           WITH n,
                collect(DISTINCT generated) AS gen1,
@@ -243,7 +243,7 @@ export function getViewQuery(viewId: ViewId, params: ViewQueryParams): ViewQuery
         cypher: `
           MATCH (n {key: $nodeKey})
           WHERE n:Page OR n:Entity OR n:Project OR n:Block
-          OPTIONAL MATCH (n)-[r:HAS_CONTENT|HAS_GENERATED]->(content)
+          OPTIONAL MATCH (n)-[r:HAS_NATIVE|HAS_NATIVE]->(content)
           OPTIONAL MATCH (content)-[r2:FOR_LOCALE]->(locale:Locale)
           WITH n,
                collect(DISTINCT content) AS contents,
@@ -261,7 +261,7 @@ export function getViewQuery(viewId: ViewId, params: ViewQueryParams): ViewQuery
         cypher: `
           MATCH (n {key: $nodeKey})
           WHERE n:Entity OR n:Project
-          OPTIONAL MATCH (n)-[r:HAS_CONTENT]->(content)
+          OPTIONAL MATCH (n)-[r:HAS_NATIVE]->(content)
           OPTIONAL MATCH (content)-[r2:FOR_LOCALE]->(locale:Locale)
           WITH n,
                collect(DISTINCT content) AS contents,

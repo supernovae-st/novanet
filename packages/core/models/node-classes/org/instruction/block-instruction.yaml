@@ -50,7 +50,7 @@ node:
       example: |
         USE: when loading generation instructions for a specific block or compiling page instructions.
         TRIGGERS: "block instruction", "generation recipe", "block prompt", "@entity:", "@link:".
-        NOT: for block structure (use Block), for block templates (use BlockType), for generated output (use BlockGenerated).
+        NOT: for block structure (use Block), for block templates (use BlockType), for generated output (use BlockNative).
         RELATES: Page (owner via HAS_INSTRUCTION), BlockType (template via OF_TYPE), Entity (references via REFERENCES_ENTITY), Page (links via REFERENCES_PAGE).
 
     created_at:

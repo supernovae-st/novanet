@@ -14,8 +14,8 @@
  */
 export type RelationCategory =
   | 'structural'    // HAS_*, CONTAINS
-  | 'localization'  // FOR_LOCALE, SUPPORTS, HAS_CONTENT
-  | 'generation'    // HAS_GENERATED, HAS_INSTRUCTION, HAS_RULES
+  | 'localization'  // FOR_LOCALE, SUPPORTS, HAS_NATIVE
+  | 'generation'    // HAS_NATIVE, HAS_INSTRUCTION, HAS_RULES
   | 'semantic'      // USES_ENTITY, SEMANTIC
   | 'seo'           // TARGETS_SEO, HAS_VARIATION
   | 'geo'           // TARGETS_GEO, HAS_CITATION
@@ -31,11 +31,11 @@ export type RelationType =
   | 'HAS_AUDIENCE'
   | 'CONTAINS'
   // Localization
-  | 'HAS_CONTENT'
+  | 'HAS_NATIVE'
   | 'SUPPORTS_LOCALE'
   | 'FOR_LOCALE'
   // Generation
-  | 'HAS_GENERATED'
+  | 'HAS_NATIVE'
   | 'HAS_INSTRUCTION'
   | 'HAS_RULES'
   | 'GENERATED_BY'

@@ -46,12 +46,12 @@ const CATEGORY_PATTERNS: Array<{ pattern: RegExp | string; category: RelationCat
   { pattern: 'CONTAINS', category: 'structural' },
 
   // Localization
-  { pattern: 'HAS_CONTENT', category: 'localization' },
+  { pattern: 'HAS_NATIVE', category: 'localization' },
   { pattern: /LOCALE/, category: 'localization' },
   { pattern: 'SUPPORTS', category: 'localization' },
 
   // Generation
-  { pattern: 'HAS_GENERATED', category: 'generation' },
+  { pattern: 'HAS_NATIVE', category: 'generation' },
   { pattern: 'HAS_INSTRUCTION', category: 'generation' },
   { pattern: 'HAS_RULES', category: 'generation' },
   { pattern: /GENERATED/, category: 'generation' },

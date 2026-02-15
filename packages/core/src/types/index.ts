@@ -1,5 +1,6 @@
-// NovaNet Core Types v11.8.0 - Unified Tree Architecture
+// NovaNet Core Types v0.13.0 - *Native Pattern
 //
+// v0.13.0: ADR-029 *Native pattern (EntityNative→EntityNative, ProjectNative→ProjectNative, PageNative→PageNative, BlockNative→BlockNative)
 // v11.8.0: ADR-023 terminology (Kind→Class, ArcKind→ArcClass), ADR-024 trait renames (defined/authored/imported/generated/retrieved)
 // v11.7.0: Unified tree where Realm, Layer, Class, Instance, ArcFamily, ArcClass are all clickable nodes
 // v11.2.0: 2 realms (shared, org), derived split into generated + retrieved
@@ -51,7 +52,7 @@ export interface StandardNodeProperties {
 
 /**
  * Base interface for nodes that support vector embeddings.
- * Used by Entity, EntityContent, and Page for semantic search.
+ * Used by Entity, EntityNative, and Page for semantic search.
  */
 export interface EmbeddableNode {
   /** OpenAI text-embedding-3-small vector (1536 dimensions) */
@@ -75,7 +76,7 @@ export interface EmbeddableNode {
 
 export {
   type Project,
-  type ProjectContent,
+  type ProjectNative,
   type VoiceTone,
   // v7.2.5: Audience, AudienceL10n, ValuePropL10n, SocialProofL10n removed
   // v0.12.4: BrandIdentity removed (use Brand) ADR-028
@@ -85,7 +86,7 @@ export {
 } from './project.js';
 
 // =============================================================================
-// ENTITY (v11.8 - org realm, semantic layer, defined trait)
+// ENTITY (v0.13.0 - org realm, semantic layer, defined trait)
 // =============================================================================
 
 export interface Entity extends StandardNodeProperties, EmbeddableNode {
@@ -102,13 +103,17 @@ export interface Entity extends StandardNodeProperties, EmbeddableNode {
   search_intent?: 'transactional' | 'informational' | 'navigational';
 }
 
-export interface EntityContent extends EmbeddableNode {
+/**
+ * EntityNative - Entity content per locale (v0.13.0 ADR-029).
+ * Locale-specific content for an Entity node.
+ */
+export interface EntityNative extends EmbeddableNode {
   // Standard properties (v8.2.0 - Content nodes don't have key, no icon/priority/freshness)
   display_name: string;
   description: string;
   llm_context: string;
 
-  // EntityContent-specific (same as former EntityContent)
+  // EntityNative-specific properties
   title: string;
   definition: string;
   purpose?: string;
@@ -120,8 +125,11 @@ export interface EntityContent extends EmbeddableNode {
   updated_at: Date;
 }
 
+/** @deprecated Use EntityNative (v0.13.0 ADR-029) */
+export type EntityContent = EntityNative;
+
 // =============================================================================
-// PAGE (v7.1.0)
+// PAGE (v0.13.0 - *Native pattern)
 // =============================================================================
 
 export interface Page extends StandardNodeProperties, EmbeddableNode {
@@ -135,13 +143,17 @@ export interface Page extends StandardNodeProperties, EmbeddableNode {
 // v0.12.4: PageStructureCategory and PageStructure removed (ADR-028)
 // Page structure is now computed from HAS_BLOCK.order at runtime
 
-export interface PageGenerated {
+/**
+ * PageNative - Page output per locale (v0.13.0 ADR-029).
+ * LLM-generated page content for a specific locale.
+ */
+export interface PageNative {
   // Standard properties (v8.2.0 - Content nodes don't have key, no icon/priority/freshness)
   display_name: string;
   description: string;
   llm_context: string;
 
-  // PageGenerated-specific (v7.6.0: renamed from PageOutput)
+  // PageNative-specific properties (v0.13.0: renamed from PageNative)
   assembled: Record<string, unknown>;
   assembled_at: Date;
   assembler_version: string;
@@ -157,8 +169,11 @@ export interface PageGenerated {
   replaced_at?: Date;
 }
 
+/** @deprecated Use PageNative (v0.13.0 ADR-029) */
+export type PageGenerated = PageNative;
+
 // =============================================================================
-// BLOCK (v7.1.0)
+// BLOCK (v0.13.0 - *Native pattern)
 // =============================================================================
 
 export interface BlockType extends StandardNodeProperties {
@@ -178,13 +193,17 @@ export interface BlockType extends StandardNodeProperties {
  */
 export type Block = StandardNodeProperties;
 
-export interface BlockGenerated {
+/**
+ * BlockNative - Block output per locale (v0.13.0 ADR-029).
+ * LLM-generated block content for a specific locale.
+ */
+export interface BlockNative {
   // Standard properties (v8.2.0 - Content nodes don't have key, no icon/priority/freshness)
   display_name: string;
   description: string;
   llm_context: string;
 
-  // BlockGenerated-specific (v7.6.0: renamed from BlockOutput)
+  // BlockNative-specific properties (v0.13.0: renamed from BlockNative)
   generated: Record<string, unknown>;
   generated_at: Date;
   generator_version: string;
@@ -199,6 +218,9 @@ export interface BlockGenerated {
   /** When this version was replaced (null = current) */
   replaced_at?: Date;
 }
+
+/** @deprecated Use BlockNative (v0.13.0 ADR-029) */
+export type BlockGenerated = BlockNative;
 
 // =============================================================================
 // LOCALE KNOWLEDGE (v7.1.0 - replaces deprecated L10NCategory/L10NContent)
@@ -314,7 +336,7 @@ export interface InfluencedByProps {
 
 /**
  * Anchor text optimization strategy (v8.0.0)
- * - exact_match: anchor = EntityContent.title exactly (5× traffic, use sparingly max 10%)
+ * - exact_match: anchor = EntityNative.title exactly (5× traffic, use sparingly max 10%)
  * - partial_match: anchor includes concept keywords
  * - branded: anchor = brand name (QR Code AI)
  * - generic: anchor = "click here", "learn more" (low SEO value)
@@ -323,10 +345,10 @@ export type AnchorType = 'exact_match' | 'partial_match' | 'branded' | 'generic'
 
 /**
  * LinksToProps - Properties for Page-to-Page internal links (v7.12.0, extended v8.0.0)
- * Anchor text is derived from EntityContent.title at generation time.
+ * Anchor text is derived from EntityNative.title at generation time.
  */
 export interface LinksToProps {
-  /** Concept key - anchor text derived from EntityContent.title for the target locale */
+  /** Concept key - anchor text derived from EntityNative.title for the target locale */
   concept_key: string;
   /** Where the link appears in the content */
   context: 'cta' | 'body' | 'related' | 'nav';

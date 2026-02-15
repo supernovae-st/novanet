@@ -104,7 +104,7 @@ const InstructionBaseSchema = z.object({
  *
  * **Graph Position:**
  * ```
- * Block ─[:HAS_INSTRUCTION]→ BlockInstruction ─[:GENERATED]→ BlockGenerated
+ * Block ─[:HAS_INSTRUCTION]→ BlockInstruction ─[:GENERATED]→ BlockNative
  * ```
  *
  * @example

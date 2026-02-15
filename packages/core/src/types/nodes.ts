@@ -1,10 +1,18 @@
 /**
  * @fileoverview NovaNet Node Type Taxonomy
  * @module @novanet/core/types/nodes
- * @version 0.12.4
+ * @version 0.13.0
  *
  * Defines the complete taxonomy for all 61 NovaNet node types across 2 realms and 10 layers.
  * This is the **single source of truth** for node classification in the knowledge graph.
+ *
+ * ## v0.13.0 *Native Pattern (ADR-029)
+ *
+ * The *Native pattern unifies locale-specific content naming:
+ * - `EntityNative` — Entity content per locale (was EntityNative)
+ * - `ProjectNative` — Project content per locale (was ProjectNative)
+ * - `PageNative` — Page output per locale (was PageNative)
+ * - `BlockNative` — Block output per locale (was BlockNative)
  *
  * ## Architecture Overview
  *
@@ -52,7 +60,7 @@
  * ```
  *
  * @since 7.1.0
- * @version 0.12.4 - Brand Architecture, Country added
+ * @version 0.13.0 - *Native pattern (ADR-029): EntityNative, ProjectNative, PageNative, BlockNative
  */
 export const NODE_TYPES = [
   // ═══════════════════════════════════════════════════════════════════════════
@@ -78,16 +86,16 @@ export const NODE_TYPES = [
   // ═══════════════════════════════════════════════════════════════════════════
   // config (1) — v11.3: Organization + Tenant merged into OrgConfig
   'OrgConfig',
-  // foundation (6) — v0.12.4: Brand Architecture (Brand, BrandDesign, BrandPrinciples, PromptStyle)
-  'Project', 'Brand', 'BrandDesign', 'BrandPrinciples', 'PromptStyle', 'ProjectContent',
+  // foundation (6) — v0.13.0: *Native pattern (ProjectNative → ProjectNative)
+  'Project', 'Brand', 'BrandDesign', 'BrandPrinciples', 'PromptStyle', 'ProjectNative',
   // structure (3)
   'Page', 'Block', 'ContentSlot',
-  // semantic (4)
-  'Entity', 'EntityContent', 'AudiencePersona', 'ChannelSurface',
+  // semantic (4) — v0.13.0: *Native pattern (EntityNative → EntityNative)
+  'Entity', 'EntityNative', 'AudiencePersona', 'ChannelSurface',
   // instruction (4) — v0.12.4: PageStructure, PageInstruction deleted
   'BlockType', 'BlockInstruction', 'BlockRules', 'PromptArtifact',
-  // output (3)
-  'PageGenerated', 'BlockGenerated', 'OutputArtifact',
+  // output (3) — v0.13.0: *Native pattern (PageNative → PageNative, BlockNative → BlockNative)
+  'PageNative', 'BlockNative', 'OutputArtifact',
 ] as const;
 
 /**
@@ -139,17 +147,17 @@ export type Realm = 'shared' | 'org';
  * - **`knowledge`**: Knowledge atoms (Term, Expression, SEOKeyword, GEOQuery, etc.)
  *
  * ## Org Realm Layers (6)
- * - **`foundation`**: Project identity (Project, Brand, BrandDesign, BrandPrinciples, PromptStyle, ProjectContent)
+ * - **`foundation`**: Project identity (Project, Brand, BrandDesign, BrandPrinciples, PromptStyle, ProjectNative)
  * - **`structure`**: Page/Block hierarchy (Page, Block, ContentSlot)
- * - **`semantic`**: Business entities (Entity, EntityContent, AudiencePersona)
+ * - **`semantic`**: Business entities (Entity, EntityNative, AudiencePersona)
  * - **`instruction`**: Generation prompts (BlockType, BlockInstruction, BlockRules, PromptArtifact)
- * - **`output`**: Generated artifacts (PageGenerated, BlockGenerated)
+ * - **`output`**: Native output per locale (PageNative, BlockNative)
  *
  * @example
  * ```typescript
  * // Get all semantic layer nodes
  * const semanticNodes = NODE_TYPES.filter(t => CLASS_TAXONOMY[t].layer === 'semantic');
- * // → ['Entity', 'EntityContent', 'AudiencePersona', 'ChannelSurface']
+ * // → ['Entity', 'EntityNative', 'AudiencePersona', 'ChannelSurface']
  * ```
  *
  * @see ADR-020 — Layer reorganization
@@ -164,9 +172,9 @@ export type Layer =
  * | Trait | Description | Visual Encoding | Example |
  * |-------|-------------|-----------------|---------|
  * | `defined` | Schema-defined, universal | Solid border | Entity, Page, Block |
- * | `authored` | Locale-specific authored content | Dashed border | EntityContent, ProjectContent |
+ * | `authored` | Locale-specific authored content | Dashed border | EntityNative, ProjectNative |
  * | `imported` | Imported from external sources | Dotted border | Term, Expression, Pattern |
- * | `generated` | LLM-generated output | Double border | PageGenerated, BlockGenerated |
+ * | `generated` | LLM-generated output | Double border | PageNative, BlockNative |
  * | `retrieved` | Retrieved/computed metrics | Dotted thin | SEOKeywordMetrics, GEOAnswer |
  *
  * @example
@@ -176,7 +184,7 @@ export type Layer =
  *
  * // Get all generated output nodes
  * const outputs = NODE_TYPES.filter(t => CLASS_TAXONOMY[t].trait === 'generated');
- * // → ['PageGenerated', 'BlockGenerated', 'OutputArtifact', 'PromptArtifact']
+ * // → ['PageNative', 'BlockNative', 'OutputArtifact', 'PromptArtifact']
  * ```
  *
  * @see ADR-005 — Trait-based visual encoding
@@ -233,7 +241,7 @@ export interface Classification {
  *
  * // Get all output layer nodes
  * const outputs = NODE_TYPES.filter(t => CLASS_TAXONOMY[t].layer === 'output');
- * // → ['PageGenerated', 'BlockGenerated', 'OutputArtifact']
+ * // → ['PageNative', 'BlockNative', 'OutputArtifact']
  * ```
  *
  * @version 0.12.0
@@ -288,22 +296,22 @@ export const CLASS_TAXONOMY: Record<NodeType, Classification> = {
   // ═══════════════════════════════════════════════════════════════════════════
   OrgConfig: { realm: 'org', layer: 'config', trait: 'defined' },
 
-  // ORG REALM — foundation (6) — v0.12.4: Brand Architecture
+  // ORG REALM — foundation (6) — v0.13.0: *Native pattern (ProjectNative → ProjectNative)
   Project:         { realm: 'org', layer: 'foundation',  trait: 'defined' },
   Brand:           { realm: 'org', layer: 'foundation',  trait: 'defined' },
   BrandDesign:     { realm: 'org', layer: 'foundation',  trait: 'defined' },
   BrandPrinciples: { realm: 'org', layer: 'foundation',  trait: 'defined' },
   PromptStyle:     { realm: 'org', layer: 'foundation',  trait: 'defined' },
-  ProjectContent:  { realm: 'org', layer: 'foundation',  trait: 'authored' },
+  ProjectNative:   { realm: 'org', layer: 'foundation',  trait: 'authored' },
 
   // ORG REALM — structure (3)
   Page:         { realm: 'org', layer: 'structure',   trait: 'defined' },
   Block:        { realm: 'org', layer: 'structure',   trait: 'defined' },
   ContentSlot:  { realm: 'org', layer: 'structure',   trait: 'defined' },
 
-  // ORG REALM — semantic (4)
+  // ORG REALM — semantic (4) — v0.13.0: *Native pattern (EntityNative → EntityNative)
   Entity:          { realm: 'org', layer: 'semantic', trait: 'defined' },
-  EntityContent:   { realm: 'org', layer: 'semantic', trait: 'authored' },
+  EntityNative:    { realm: 'org', layer: 'semantic', trait: 'authored' },
   AudiencePersona: { realm: 'org', layer: 'semantic', trait: 'defined' },
   ChannelSurface:  { realm: 'org', layer: 'semantic', trait: 'defined' },
 
@@ -321,9 +329,9 @@ export const CLASS_TAXONOMY: Record<NodeType, Classification> = {
   GEOQuerySet:      { realm: 'shared', layer: 'knowledge', trait: 'defined' },
   GEOAnswer:        { realm: 'shared', layer: 'knowledge', trait: 'retrieved' },
 
-  // ORG REALM — output (3)
-  PageGenerated:  { realm: 'org', layer: 'output', trait: 'generated' },
-  BlockGenerated: { realm: 'org', layer: 'output', trait: 'generated' },
+  // ORG REALM — output (3) — v0.13.0: *Native pattern (PageNative → PageNative, BlockNative → BlockNative)
+  PageNative:     { realm: 'org', layer: 'output', trait: 'generated' },
+  BlockNative:    { realm: 'org', layer: 'output', trait: 'generated' },
   OutputArtifact: { realm: 'org', layer: 'output', trait: 'generated' },
 };
 
@@ -360,9 +368,9 @@ export const NODE_REALMS: Record<NodeType, Realm> = deriveMap('realm');
  *
  * @example
  * ```typescript
- * const trait = NODE_TRAITS['Entity'];        // → 'defined'
- * const trait = NODE_TRAITS['EntityContent']; // → 'authored'
- * const trait = NODE_TRAITS['PageGenerated']; // → 'generated'
+ * const trait = NODE_TRAITS['Entity'];       // → 'defined'
+ * const trait = NODE_TRAITS['EntityNative']; // → 'authored'
+ * const trait = NODE_TRAITS['PageNative'];   // → 'generated'
  * ```
  */
 export const NODE_TRAITS: Record<NodeType, Trait> = deriveMap('trait');

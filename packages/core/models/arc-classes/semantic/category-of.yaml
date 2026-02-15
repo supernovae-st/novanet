@@ -17,7 +17,7 @@ arc:
   llm_context: |
     USE: when finding all entities in a semantic category.
     TRIGGERS: entities in category, category members, what entities, taxonomy query.
-    NOT: assigning category (use BELONGS_TO), entity content (use HAS_CONTENT).
+    NOT: assigning category (use BELONGS_TO), entity content (use HAS_NATIVE).
     RELATES: EntityCategory (source), Entity (target), BELONGS_TO (inverse).
 
   cypher_pattern: "(EntityCategory)-[:CATEGORY_OF]->(Entity)"

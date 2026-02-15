@@ -5,7 +5,7 @@
 # v0.13.0 CHANGES (ADR-029 *Native Pattern)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-#   MERGED: HAS_CONTENT + HAS_GENERATED → HAS_NATIVE
+#   MERGED: HAS_NATIVE + HAS_NATIVE → HAS_NATIVE
 #   - Unified arc for ALL locale-specific content (authored + generated)
 #   - Moved from localization/generation families → ownership family
 #   - Trait on target node distinguishes authored vs generated

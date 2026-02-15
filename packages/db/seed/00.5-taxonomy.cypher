@@ -16,13 +16,13 @@ ON CREATE SET
   r_org.display_name = 'Organization',
   r_org.emoji = '◎',
   r_org.color = '#6c71c4',
-  r_org.llm_context = 'USE: when working with organization-specific content. TRIGGERS: "organization", "project", "entity", "page", "block", "generated". NOT: for universal locale knowledge (use shared realm). RELATES: Project (foundation), Entity (semantic), Page (structure), PageGenerated (output).',
+  r_org.llm_context = 'USE: when working with organization-specific content. TRIGGERS: "organization", "project", "entity", "page", "block", "generated". NOT: for universal locale knowledge (use shared realm). RELATES: Project (foundation), Entity (semantic), Page (structure), PageNative (output).',
   r_org.created_at = datetime()
 ON MATCH SET
   r_org.display_name = 'Organization',
   r_org.emoji = '◎',
   r_org.color = '#6c71c4',
-  r_org.llm_context = 'USE: when working with organization-specific content. TRIGGERS: "organization", "project", "entity", "page", "block", "generated". NOT: for universal locale knowledge (use shared realm). RELATES: Project (foundation), Entity (semantic), Page (structure), PageGenerated (output).',
+  r_org.llm_context = 'USE: when working with organization-specific content. TRIGGERS: "organization", "project", "entity", "page", "block", "generated". NOT: for universal locale knowledge (use shared realm). RELATES: Project (foundation), Entity (semantic), Page (structure), PageNative (output).',
   r_org.updated_at = datetime();
 
 MERGE (r_shared:Schema:Realm {key: 'shared'})
@@ -65,13 +65,13 @@ ON CREATE SET
   l_foundation.display_name = 'Foundation',
   l_foundation.emoji = '■',
   l_foundation.color = '#3b82f6',
-  l_foundation.llm_context = 'USE: when accessing project identity and branding. TRIGGERS: "project", "brand", "identity", "company project". NOT: for page structure (use structure layer). RELATES: Project (defined), Brand (defined), ProjectContent (authored).',
+  l_foundation.llm_context = 'USE: when accessing project identity and branding. TRIGGERS: "project", "brand", "identity", "company project". NOT: for page structure (use structure layer). RELATES: Project (defined), Brand (defined), ProjectNative (authored).',
   l_foundation.created_at = datetime()
 ON MATCH SET
   l_foundation.display_name = 'Foundation',
   l_foundation.emoji = '■',
   l_foundation.color = '#3b82f6',
-  l_foundation.llm_context = 'USE: when accessing project identity and branding. TRIGGERS: "project", "brand", "identity", "company project". NOT: for page structure (use structure layer). RELATES: Project (defined), Brand (defined), ProjectContent (authored).',
+  l_foundation.llm_context = 'USE: when accessing project identity and branding. TRIGGERS: "project", "brand", "identity", "company project". NOT: for page structure (use structure layer). RELATES: Project (defined), Brand (defined), ProjectNative (authored).',
   l_foundation.updated_at = datetime();
 
 MATCH (r:Realm {key: 'org'}), (l:Layer {key: 'foundation'})
@@ -97,13 +97,13 @@ ON CREATE SET
   l_output.display_name = 'Generated Output',
   l_output.emoji = '✦',
   l_output.color = '#22c55e',
-  l_output.llm_context = 'USE: when accessing generated content. TRIGGERS: "generated", "output", "final content", "rendered". NOT: for generation instructions (use instruction layer). RELATES: PageGenerated (generated), BlockGenerated (generated), OutputArtifact (generated).',
+  l_output.llm_context = 'USE: when accessing generated content. TRIGGERS: "generated", "output", "final content", "rendered". NOT: for generation instructions (use instruction layer). RELATES: PageNative (generated), BlockNative (generated), OutputArtifact (generated).',
   l_output.created_at = datetime()
 ON MATCH SET
   l_output.display_name = 'Generated Output',
   l_output.emoji = '✦',
   l_output.color = '#22c55e',
-  l_output.llm_context = 'USE: when accessing generated content. TRIGGERS: "generated", "output", "final content", "rendered". NOT: for generation instructions (use instruction layer). RELATES: PageGenerated (generated), BlockGenerated (generated), OutputArtifact (generated).',
+  l_output.llm_context = 'USE: when accessing generated content. TRIGGERS: "generated", "output", "final content", "rendered". NOT: for generation instructions (use instruction layer). RELATES: PageNative (generated), BlockNative (generated), OutputArtifact (generated).',
   l_output.updated_at = datetime();
 
 MATCH (r:Realm {key: 'org'}), (l:Layer {key: 'output'})
@@ -113,13 +113,13 @@ ON CREATE SET
   l_semantic.display_name = 'Semantic',
   l_semantic.emoji = '◆',
   l_semantic.color = '#f97316',
-  l_semantic.llm_context = 'USE: when working with semantic entities and their content. TRIGGERS: "entity", "meaning", "audience", "channel", "semantic". NOT: for page structure (use structure layer). RELATES: Entity (defined), EntityContent (authored), AudiencePersona (defined).',
+  l_semantic.llm_context = 'USE: when working with semantic entities and their content. TRIGGERS: "entity", "meaning", "audience", "channel", "semantic". NOT: for page structure (use structure layer). RELATES: Entity (defined), EntityNative (authored), AudiencePersona (defined).',
   l_semantic.created_at = datetime()
 ON MATCH SET
   l_semantic.display_name = 'Semantic',
   l_semantic.emoji = '◆',
   l_semantic.color = '#f97316',
-  l_semantic.llm_context = 'USE: when working with semantic entities and their content. TRIGGERS: "entity", "meaning", "audience", "channel", "semantic". NOT: for page structure (use structure layer). RELATES: Entity (defined), EntityContent (authored), AudiencePersona (defined).',
+  l_semantic.llm_context = 'USE: when working with semantic entities and their content. TRIGGERS: "entity", "meaning", "audience", "channel", "semantic". NOT: for page structure (use structure layer). RELATES: Entity (defined), EntityNative (authored), AudiencePersona (defined).',
   l_semantic.updated_at = datetime();
 
 MATCH (r:Realm {key: 'org'}), (l:Layer {key: 'semantic'})
@@ -223,7 +223,7 @@ SET
   t_authored.border_style = 'dashed',
   t_authored.border_width = 2,
   t_authored.unicode_border = '┄',
-  t_authored.llm_context = 'USE: when accessing human-written locale-specific content. TRIGGERS: "content", "editorial", "authored", "written", "per locale". NOT: for structural definitions (use defined trait). RELATES: EntityContent (semantic), ProjectContent (foundation).';
+  t_authored.llm_context = 'USE: when accessing human-written locale-specific content. TRIGGERS: "content", "editorial", "authored", "written", "per locale". NOT: for structural definitions (use defined trait). RELATES: EntityNative (semantic), ProjectNative (foundation).';
 
 MERGE (t_defined:Schema:Trait {key: 'defined'})
 ON CREATE SET
@@ -251,7 +251,7 @@ SET
   t_generated.border_style = 'double',
   t_generated.border_width = 2,
   t_generated.unicode_border = '═',
-  t_generated.llm_context = 'USE: when accessing LLM-generated content. TRIGGERS: "generated", "output", "LLM", "NovaNet", "pipeline result". NOT: for retrieved external data (use retrieved trait). RELATES: PageGenerated (output), BlockGenerated (output), OutputArtifact (output).';
+  t_generated.llm_context = 'USE: when accessing LLM-generated content. TRIGGERS: "generated", "output", "LLM", "NovaNet", "pipeline result". NOT: for retrieved external data (use retrieved trait). RELATES: PageNative (output), BlockNative (output), OutputArtifact (output).';
 
 MERGE (t_imported:Schema:Trait {key: 'imported'})
 ON CREATE SET

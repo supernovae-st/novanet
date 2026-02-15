@@ -134,7 +134,7 @@ views:
       MATCH (p:Page {key: $nodeKey})
       OPTIONAL MATCH (p)-[r1:HAS_BLOCK]->(b:Block)
       OPTIONAL MATCH (b)-[r2:USES_ENTITY]->(e:Entity)
-      OPTIONAL MATCH (e)-[r3:HAS_CONTENT]->(ec:EntityContent)
+      OPTIONAL MATCH (e)-[r3:HAS_NATIVE]->(ec:EntityNative)
       OPTIONAL MATCH (p)-[r4:REFERENCES_PAGE]->(ref:Page)
       RETURN p, r1, b, r2, e, r3, ec, r4, ref
       LIMIT 200
@@ -151,7 +151,7 @@ views:
     cypher: |
       MATCH (b:Block {key: $nodeKey})
       OPTIONAL MATCH (b)-[r1:USES_ENTITY]->(e:Entity)
-      OPTIONAL MATCH (e)-[r2:HAS_CONTENT]->(ec:EntityContent)
+      OPTIONAL MATCH (e)-[r2:HAS_NATIVE]->(ec:EntityNative)
       OPTIONAL MATCH (ec)-[r3:FOR_LOCALE]->(l:Locale)
       OPTIONAL MATCH (b)-[r4:OF_TYPE]->(bt:BlockType)
       OPTIONAL MATCH (b)<-[r5:HAS_BLOCK]-(p:Page)
@@ -166,16 +166,16 @@ views:
     color: "#ec4899"
     root_type: Page
     contextual: true
-    applicable_types: [Page, PageGenerated]
+    applicable_types: [Page, PageNative]
     cypher: |
       MATCH (p:Page {key: $nodeKey})
       MATCH (l:Locale {key: $locale})
       MATCH (p)-[r1:HAS_BLOCK]->(b:Block)-[r2:OF_TYPE]->(bt:BlockType)
       OPTIONAL MATCH (b)-[r3:HAS_INSTRUCTION]->(bi:BlockInstruction)
       MATCH (p)-[r4:REPRESENTS]->(e:Entity)
-      OPTIONAL MATCH (e)-[r5:HAS_CONTENT]->(ec:EntityContent)-[r6:FOR_LOCALE]->(l)
-      OPTIONAL MATCH (p)-[r7:HAS_GENERATED]->(pg:PageGenerated)-[r8:FOR_LOCALE]->(l)
-      OPTIONAL MATCH (pg)-[r9:ASSEMBLES]->(bg:BlockGenerated)
+      OPTIONAL MATCH (e)-[r5:HAS_NATIVE]->(ec:EntityNative)-[r6:FOR_LOCALE]->(l)
+      OPTIONAL MATCH (p)-[r7:HAS_NATIVE]->(pg:PageNative)-[r8:FOR_LOCALE]->(l)
+      OPTIONAL MATCH (pg)-[r9:ASSEMBLES]->(bg:BlockNative)
       RETURN DISTINCT p, l, r1, b, r2, bt, r3, bi, r4, e, r5, ec, r6, r7, pg, r8, r9, bg
       ORDER BY r1.order
       LIMIT 200
@@ -207,7 +207,7 @@ views:
     color: "#06b6d4"
     root_type: Entity
     contextual: true
-    applicable_types: [Entity, EntityContent]
+    applicable_types: [Entity, EntityNative]
     cypher: |
       MATCH (e:Entity {key: $nodeKey})
       OPTIONAL MATCH (e)-[r1]->(target) WHERE NOT target:Schema

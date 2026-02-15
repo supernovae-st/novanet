@@ -28,4 +28,4 @@ realm:
     USE: when working with organization-specific content.
     TRIGGERS: "organization", "project", "entity", "page", "block", "generated".
     NOT: for universal locale knowledge (use shared realm).
-    RELATES: Project (foundation), Entity (semantic), Page (structure), PageGenerated (output).
+    RELATES: Project (foundation), Entity (semantic), Page (structure), PageNative (output).

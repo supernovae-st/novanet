@@ -1,4 +1,6 @@
 // src/filters/NovaNetFilter.ts
+// v0.13.0 ADR-029: Added includeNative() for unified *Native pattern
+// Deprecated: includeContent(), includeOutputs() - use includeNative()
 import type {
   NodeType,
   FilterCriteria,
@@ -23,9 +25,11 @@ export interface FilterState {
  *
  * @example
  * ```typescript
+ * // v0.13.0: Use includeNative() for all *Native nodes
  * const filter = NovaNetFilter.create()
  *   .fromPage('page-pricing')
  *   .includeBlocks()
+ *   .includeNative()   // EntityNative, ProjectNative, PageNative, BlockNative
  *   .includeEntities({ spreading: true })
  *   .includeInstructions({ activeOnly: true })
  *   .forLocale('fr-FR')
@@ -207,24 +211,52 @@ export class NovaNetFilter {
   }
 
   /**
-   * Includes PageGenerated/BlockGenerated nodes via HAS_GENERATED.
+   * Includes *Native nodes (EntityNative, ProjectNative, PageNative, BlockNative) via HAS_NATIVE.
+   * v0.13.0 ADR-029: Unified method replacing includeOutputs() and includeContent()
    * @param _opts - Reserved for future options (e.g., latestOnly)
    */
-  includeOutputs(_opts?: { latestOnly?: boolean }): this {
+  includeNative(_opts?: { latestOnly?: boolean }): this {
     this.state.includes.push({
-      relation: 'HAS_GENERATED',
+      relation: 'HAS_NATIVE',
       direction: 'outgoing',
     });
     return this;
   }
 
   /**
-   * Includes content nodes via HAS_CONTENT.
+   * Includes parent structure node (Entity, Project, Page, Block) via NATIVE_OF.
+   * v0.13.0 ADR-029: Inverse of includeNative(), used when starting from *Native nodes.
+   * Typically used with fromEntityNative(), fromPageNative(), etc.
+   */
+  includeNativeParent(): this {
+    this.state.includes.push({
+      relation: 'NATIVE_OF',
+      direction: 'outgoing',
+    });
+    return this;
+  }
+
+  /**
+   * Includes PageNative/BlockNative nodes via HAS_NATIVE.
+   * @deprecated Use includeNative() instead (v0.13.0 ADR-029)
+   * @param _opts - Reserved for future options (e.g., latestOnly)
+   */
+  includeOutputs(_opts?: { latestOnly?: boolean }): this {
+    this.state.includes.push({
+      relation: 'HAS_NATIVE',
+      direction: 'outgoing',
+    });
+    return this;
+  }
+
+  /**
+   * Includes EntityNative/ProjectNative nodes via HAS_NATIVE.
+   * @deprecated Use includeNative() instead (v0.13.0 ADR-029)
    * v11.6: renamed from includeL10n() (ADR-014)
    */
   includeContent(): this {
     this.state.includes.push({
-      relation: 'HAS_CONTENT',
+      relation: 'HAS_NATIVE',
       direction: 'outgoing',
     });
     return this;
@@ -337,8 +369,8 @@ export class NovaNetFilter {
   // Entity is now in shared realm, accessed via USES_ENTITY from Page/Block
 
   /**
-   * Includes authored content via FOR_LOCALE relation.
-   * Used to connect authored content nodes to their Locale.
+   * Includes *Native nodes via FOR_LOCALE relation.
+   * v0.13.0 ADR-029: Used to connect *Native nodes to their Locale.
    */
   includeForLocale(): this {
     this.state.includes.push({

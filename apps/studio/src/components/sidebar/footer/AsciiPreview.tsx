@@ -215,7 +215,7 @@ function renderFlowStyle(
     }
   } else if (viewId === 'generation') {
     // Generation pipeline
-    const generatedCount = (nodesByType['PageGenerated'] || 0) + (nodesByType['BlockGenerated'] || 0);
+    const generatedCount = (nodesByType['PageNative'] || 0) + (nodesByType['BlockNative'] || 0);
     if (generatedCount > 0) {
       lines.push({ text: `${SYM.doubleArrow} Generated (${generatedCount})`, indent: 1, color: 'text-pink-400' });
     }

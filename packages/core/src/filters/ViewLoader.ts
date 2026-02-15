@@ -1,4 +1,5 @@
 // src/filters/ViewLoader.ts
+// v0.13.0: *Native pattern support (ADR-029) - HAS_NATIVE, NATIVE_OF
 // v0.12.5: Unified view system - all views from views.yaml (single source of truth)
 
 import { promises as fs } from 'fs';
@@ -234,11 +235,22 @@ export class ViewLoader {
         filter.includeRules({ activeOnly });
         break;
 
-      case 'HAS_GENERATED':
+      // v0.13.0 ADR-029: *Native pattern - unified method
+      case 'HAS_NATIVE':
+        filter.includeNative();
+        break;
+
+      case 'NATIVE_OF':
+        filter.includeNativeParent();
+        break;
+
+      // @deprecated - v0.13.0: Use HAS_NATIVE instead
+      case 'HAS_NATIVE':
         filter.includeOutputs();
         break;
 
-      case 'HAS_CONTENT':
+      // @deprecated - v0.13.0: Use HAS_NATIVE instead
+      case 'HAS_NATIVE':
         filter.includeContent();
         break;
 

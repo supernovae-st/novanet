@@ -13,7 +13,7 @@ arc:
   llm_context: |
     USE: when loading entities for a project.
     TRIGGERS: project entities, semantic concepts, project vocabulary.
-    NOT: entity content (use HAS_CONTENT), entity hierarchy (use HAS_CHILD).
+    NOT: entity content (use HAS_NATIVE), entity hierarchy (use HAS_CHILD).
     RELATES: Project (source), Entity (target), ENTITY_OF (inverse).
 
   cypher_pattern: (Project)-[:HAS_ENTITY]->(Entity)

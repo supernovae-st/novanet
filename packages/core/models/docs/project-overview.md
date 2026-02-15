@@ -34,12 +34,12 @@ flowchart TB
     direction TB
     subgraph ORG_semantic["Semantic Layer"]
       Entity["🔵 Entity"]
-      EntityContent["🟢 EntityContent"]
+      EntityNative["🟢 EntityNative"]
     end
     subgraph ORG_foundation["Foundation"]
       BrandIdentity["🔵 BrandIdentity"]
       Project["🔵 Project"]
-      ProjectContent["🟢 ProjectContent"]
+      ProjectNative["🟢 ProjectNative"]
     end
     subgraph ORG_structure["Structure"]
       Page["🔵 Page"]
@@ -48,8 +48,8 @@ flowchart TB
 
   %% Relationships (styled by arc family)
   Project -->|HAS_BRAND_IDENTITY| BrandIdentity
-  Project -.->|HAS_CONTENT| EntityContent
-  Project -.->|HAS_CONTENT| ProjectContent
+  Project -.->|HAS_NATIVE| EntityNative
+  Project -.->|HAS_NATIVE| ProjectNative
   Project -->|HAS_ENTITY| Entity
   Project -->|HAS_PAGE| Page
 
@@ -60,10 +60,10 @@ flowchart TB
   %% Class assignments
   class BrandIdentity defined
   class Entity defined
-  class EntityContent authored
+  class EntityNative authored
   class Page defined
   class Project defined
-  class ProjectContent authored
+  class ProjectNative authored
 ```
 
 ---

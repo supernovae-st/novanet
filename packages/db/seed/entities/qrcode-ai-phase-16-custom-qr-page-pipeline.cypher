@@ -16,12 +16,12 @@ MERGE (e:Entity {key: 'custom-qr-code'})
 ON CREATE SET e.display_name = 'Custom QR Code', e.created_at = datetime()
 SET e.updated_at = datetime();
 
-// Create localized EntityContent for the page slug & SEO
+// Create localized EntityNative for the page slug & SEO
 MATCH (e:Entity {key: 'custom-qr-code'}), (l:Locale {key: 'fr-FR'})
-MERGE (ec:EntityContent {key: 'entity:custom-qr-code@fr-FR'})
+MERGE (ec:EntityNative {key: 'entity:custom-qr-code@fr-FR'})
 ON CREATE SET ec.entity_key = e.key, ec.locale_key = l.key, ec.slug = 'qr-code-personnalise', ec.full_path = '/fr/qr-code-personnalise', ec.display_name = 'QR Code Personnalisé', ec.description = 'Créez des QR codes uniques avec vos couleurs, formes et logo.', ec.created_at = datetime()
 SET ec.updated_at = datetime()
-MERGE (e)-[:HAS_CONTENT]->(ec)
+MERGE (e)-[:HAS_NATIVE]->(ec)
 MERGE (ec)-[:FOR_LOCALE]->(l);
 
 // Create associated context nodes for the fr-FR Locale
@@ -119,49 +119,49 @@ MERGE (b4)-[:HAS_INSTRUCTION]->(bi4);
 // 3. GENERATED OUTPUT (Mock data for fr-FR locale)
 // ─────────────────────────────────────────────────────────────────────────────
 
-// 3a. Create mock BlockGenerated nodes
+// 3a. Create mock BlockNative nodes
 MATCH (b1:Block {key: 'blk-custom-qr-code-designer-hero'}), (l:Locale {key: 'fr-FR'})
-MERGE (bg1:BlockGenerated {key: 'block:blk-custom-qr-code-designer-hero@fr-FR'})
+MERGE (bg1:BlockNative {key: 'block:blk-custom-qr-code-designer-hero@fr-FR'})
 ON CREATE SET bg1.anchor_slug = 'designer-hero', bg1.generated = '{"title": "Votre QR Code, Votre Style", "subtitle": "Créez un design unique en quelques clics."}', bg1.created_at = datetime()
 SET bg1.updated_at = datetime()
-MERGE (b1)-[:HAS_GENERATED]->(bg1) MERGE (bg1)-[:FOR_LOCALE]->(l);
+MERGE (b1)-[:HAS_NATIVE]->(bg1) MERGE (bg1)-[:FOR_LOCALE]->(l);
 
 MATCH (b2:Block {key: 'blk-custom-qr-code-design-features'}), (l:Locale {key: 'fr-FR'})
-MERGE (bg2:BlockGenerated {key: 'block:blk-custom-qr-code-design-features@fr-FR'})
+MERGE (bg2:BlockNative {key: 'block:blk-custom-qr-code-design-features@fr-FR'})
 ON CREATE SET bg2.anchor_slug = 'fonctionnalites-design', bg2.generated = '{"title": "Personnalisation Complète", "features": ["Couleurs", "Formes", "Logos"]}', bg2.created_at = datetime()
 SET bg2.updated_at = datetime()
-MERGE (b2)-[:HAS_GENERATED]->(bg2) MERGE (bg2)-[:FOR_LOCALE]->(l);
+MERGE (b2)-[:HAS_NATIVE]->(bg2) MERGE (bg2)-[:FOR_LOCALE]->(l);
 
 MATCH (b3:Block {key: 'blk-custom-qr-code-how-it-works'}), (l:Locale {key: 'fr-FR'})
-MERGE (bg3:BlockGenerated {key: 'block:blk-custom-qr-code-how-it-works@fr-FR'})
+MERGE (bg3:BlockNative {key: 'block:blk-custom-qr-code-how-it-works@fr-FR'})
 ON CREATE SET bg3.anchor_slug = 'comment-ca-marche', bg3.generated = '{"title": "Simple comme 1-2-3", "steps": ["Choisissez", "Personnalisez", "Téléchargez"]}', bg3.created_at = datetime()
 SET bg3.updated_at = datetime()
-MERGE (b3)-[:HAS_GENERATED]->(bg3) MERGE (bg3)-[:FOR_LOCALE]->(l);
+MERGE (b3)-[:HAS_NATIVE]->(bg3) MERGE (bg3)-[:FOR_LOCALE]->(l);
 
 MATCH (b4:Block {key: 'blk-custom-qr-code-generator-cta'}), (l:Locale {key: 'fr-FR'})
-MERGE (bg4:BlockGenerated {key: 'block:blk-custom-qr-code-generator-cta@fr-FR'})
+MERGE (bg4:BlockNative {key: 'block:blk-custom-qr-code-generator-cta@fr-FR'})
 ON CREATE SET bg4.anchor_slug = 'creer-mon-qr', bg4.generated = '{"title": "Prêt à créer ?", "cta_text": "Essayer le générateur"}', bg4.created_at = datetime()
 SET bg4.updated_at = datetime()
-MERGE (b4)-[:HAS_GENERATED]->(bg4) MERGE (bg4)-[:FOR_LOCALE]->(l);
+MERGE (b4)-[:HAS_NATIVE]->(bg4) MERGE (bg4)-[:FOR_LOCALE]->(l);
 
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 4. FINAL ASSEMBLY
 // ─────────────────────────────────────────────────────────────────────────────
 
-// 4a. Create the PageGenerated node
+// 4a. Create the PageNative node
 MATCH (p:Page {key: 'custom-qr-code'}), (l:Locale {key: 'fr-FR'})
-MERGE (pg:PageGenerated {key: 'page:custom-qr-code@fr-FR'})
+MERGE (pg:PageNative {key: 'page:custom-qr-code@fr-FR'})
 ON CREATE SET pg.created_at = datetime()
 SET pg.updated_at = datetime()
-MERGE (p)-[:HAS_GENERATED]->(pg) MERGE (pg)-[:FOR_LOCALE]->(l);
+MERGE (p)-[:HAS_NATIVE]->(pg) MERGE (pg)-[:FOR_LOCALE]->(l);
 
-// 4b. Assemble the BlockGenerated nodes into the PageGenerated node (single statement)
-MATCH (pg:PageGenerated {key: 'page:custom-qr-code@fr-FR'})
-MATCH (bg1:BlockGenerated {key: 'block:blk-custom-qr-code-designer-hero@fr-FR'})
-MATCH (bg2:BlockGenerated {key: 'block:blk-custom-qr-code-design-features@fr-FR'})
-MATCH (bg3:BlockGenerated {key: 'block:blk-custom-qr-code-how-it-works@fr-FR'})
-MATCH (bg4:BlockGenerated {key: 'block:blk-custom-qr-code-generator-cta@fr-FR'})
+// 4b. Assemble the BlockNative nodes into the PageNative node (single statement)
+MATCH (pg:PageNative {key: 'page:custom-qr-code@fr-FR'})
+MATCH (bg1:BlockNative {key: 'block:blk-custom-qr-code-designer-hero@fr-FR'})
+MATCH (bg2:BlockNative {key: 'block:blk-custom-qr-code-design-features@fr-FR'})
+MATCH (bg3:BlockNative {key: 'block:blk-custom-qr-code-how-it-works@fr-FR'})
+MATCH (bg4:BlockNative {key: 'block:blk-custom-qr-code-generator-cta@fr-FR'})
 MERGE (pg)-[r1:ASSEMBLES]->(bg1) SET r1.order = 1
 MERGE (pg)-[r2:ASSEMBLES]->(bg2) SET r2.order = 2
 MERGE (pg)-[r3:ASSEMBLES]->(bg3) SET r3.order = 3

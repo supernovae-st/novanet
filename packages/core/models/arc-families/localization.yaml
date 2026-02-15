@@ -8,7 +8,7 @@ arc_family:
   description: |
     Links between defined nodes and their locale-specific settings or content.
     Includes locale knowledge arcs (Locale → LocaleVoice, etc.) and content
-    localization arcs (Entity → EntityContent, etc.).
+    localization arcs (Entity → EntityNative, etc.).
   color: "#22c55e"
   stroke_style: dashed
   stroke_width: 2

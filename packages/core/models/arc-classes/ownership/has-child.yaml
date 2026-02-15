@@ -39,7 +39,7 @@ arc:
   llm_context: |
     USE: when building entity hierarchies for URL structure.
     TRIGGERS: entity hierarchy, parent child, URL path, nested entities.
-    NOT: entity content (use HAS_CONTENT), entity category (use BELONGS_TO).
+    NOT: entity content (use HAS_NATIVE), entity category (use BELONGS_TO).
     RELATES: Entity (source), Entity (target), CHILD_OF (inverse), max_depth=3.
 
   cypher_pattern: "(Entity)-[:HAS_CHILD {position: 1, visibility: 'public'}]->(Entity)"

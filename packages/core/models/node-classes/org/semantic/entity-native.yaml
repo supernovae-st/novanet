@@ -5,10 +5,10 @@
 # v0.13.0 CHANGES (ADR-029 *Native Pattern)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-#   RENAMED: EntityContent → EntityNative
+#   RENAMED: EntityNative → EntityNative
 #   - All locale-specific nodes now use *Native suffix
 #   - Trait (authored vs generated) distinguishes who creates content
-#   - Unified arc: HAS_NATIVE replaces HAS_CONTENT
+#   - Unified arc: HAS_NATIVE replaces HAS_NATIVE
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 # PURPOSE
@@ -123,7 +123,7 @@ node:
       required: true
       description: |
         Format: USE: [when]. TRIGGERS: [locale keywords]. NOT: [disambiguation]. RELATES: [connections].
-        Example: USE: when loading localized entity data for content generation. TRIGGERS: "entity content", "localized entity", locale code. NOT: for invariant entity definition (use Entity). RELATES: Entity (parent via HAS_CONTENT), Locale (target via FOR_LOCALE), SEOKeyword (targets via TARGETS).
+        Example: USE: when loading localized entity data for content generation. TRIGGERS: "entity content", "localized entity", locale code. NOT: for invariant entity definition (use Entity). RELATES: Entity (parent via HAS_NATIVE), Locale (target via FOR_LOCALE), SEOKeyword (targets via TARGETS).
 
     created_at:
       type: datetime

@@ -44,26 +44,26 @@ flowchart TB
 
   subgraph ENTITY_LAYER["Entity Layer"]
     Entity["🔵 Entity"]
-    EntityContent["🟢 EntityContent"]
+    EntityNative["🟢 EntityNative"]
   end
 
   subgraph OUTPUT_LAYER["Output Layer"]
-    BlockGenerated["🌟 BlockGenerated"]
+    BlockNative["🌟 BlockNative"]
   end
 
   %% Additional reachable nodes
-  PageGenerated["🌟 PageGenerated"]
-  ProjectContent["🟢 ProjectContent"]
+  PageNative["🌟 PageNative"]
+  ProjectNative["🟢 ProjectNative"]
 
   %% Relationships (styled by arc family)
-  Block ==>|HAS_GENERATED| BlockGenerated
-  Block ==>|HAS_GENERATED| PageGenerated
+  Block ==>|HAS_NATIVE| BlockNative
+  Block ==>|HAS_NATIVE| PageNative
   Block -->|HAS_INSTRUCTION| BlockInstruction
   Block -->|OF_TYPE| BlockType
   Block -.->|USES_ENTITY| Entity
   BlockType -->|HAS_RULES| BlockRules
-  Entity -.->|HAS_CONTENT| EntityContent
-  Entity -.->|HAS_CONTENT| ProjectContent
+  Entity -.->|HAS_NATIVE| EntityNative
+  Entity -.->|HAS_NATIVE| ProjectNative
   Entity -.->|SEMANTIC_LINK| Entity
 
   %% Arc colors by family
@@ -74,14 +74,14 @@ flowchart TB
 
   %% Class assignments
   class Block defined
-  class BlockGenerated generated
+  class BlockNative generated
   class BlockInstruction defined
   class BlockRules defined
   class BlockType defined
   class Entity defined
-  class EntityContent authored
-  class PageGenerated generated
-  class ProjectContent authored
+  class EntityNative authored
+  class PageNative generated
+  class ProjectNative authored
 ```
 
 ## Notes
