@@ -1,6 +1,6 @@
 # NovaNet Roadmap
 
-Current version: **v0.12.0** | Last release: v11.7.0 (legacy) | Target: QR Code AI (https://qrcode-ai.com)
+Current version: **v0.13.0** | Last release: v0.12.5 | Target: QR Code AI (https://qrcode-ai.com)
 
 > **Versioning Note**: Starting with v0.12.0, NovaNet follows strict SemVer. Versions v8.x-v11.x were internal milestones.
 
@@ -37,8 +37,10 @@ v11.7 Unified Tree Architecture        █████████████�
       5 modes→2 (Graph/Nexus), ADR-022, dual icons, lazy loading
 v11.8 Class Act (legacy)               ████████████████████  100%  RELEASED
       Trait renames (ADR-024): defined/authored/imported/generated/retrieved
-v0.12 SemVer Transition                ████████████████████  100%  <- CURRENT
+v0.12 SemVer Transition                ████████████████████  100%  RELEASED
       Proper semantic versioning (0.x = pre-production)
+v0.13 *Native Pattern                  ████████████████████  100%  <- CURRENT
+      ADR-029 unified *Native suffix, ADR-030 Slug Ownership
 
 ═══════════════════════════════════════════════════════════════════════════════
 IDEAS (no timeline)
@@ -258,3 +260,4 @@ release/v*      Release preparation (optional, for complex releases)
 | v11.8.0 | 2026-02-13 | Class Act (ADR-024), trait renames for data origin semantics |
 | v0.12.0 | 2026-02-13 | SemVer Transition — proper versioning (0.x = pre-production) |
 | v0.12.5 | 2026-02-14 | Brand Architecture (ADR-028), 61 nodes, 169 arcs |
+| v0.13.0 | 2026-02-15 | *Native Pattern (ADR-029/030): EntityNative, ProjectNative, PageNative, BlockNative, HAS_NATIVE |
