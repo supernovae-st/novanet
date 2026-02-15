@@ -111,7 +111,7 @@ pub fn tips(locale: NexusLocale) -> &'static [&'static str] {
         NexusLocale::En => &[
             "Imported is INPUT (savoir) - Authored is OUTPUT (generated)",
             "Layers define WHAT a node does, Traits define HOW it behaves with locale",
-            "Content/Generated nodes have defined parents (Entity→EntityContent, Page→PageGenerated)",
+            "*Native nodes have defined parents (Entity→EntityNative, Page→PageNative)",
             "Generation, NOT translation: Imported + Structure -> Native content",
             "Shared realm is READ-ONLY - all business content lives in Org",
             "Quick jump: gd=defined, ga=authored, gi=imported, gg=generated, gr=retrieved",
@@ -123,7 +123,7 @@ pub fn tips(locale: NexusLocale) -> &'static [&'static str] {
         NexusLocale::Fr => &[
             "Imported = INPUT (savoir) - Authored = OUTPUT (généré)",
             "Les Layers définissent CE QUE fait un nœud, les Traits définissent COMMENT il se comporte avec la locale",
-            "Les nœuds Content/Generated ont des parents définis (Entity→EntityContent, Page→PageGenerated)",
+            "*Native nodes have defined parents (Entity→EntityNative, Page→PageNative)",
             "Génération, PAS traduction : Imported + Structure -> Contenu natif",
             "Le realm Shared est en LECTURE SEULE - tout le contenu métier vit dans Org",
             "Saut rapide : gd=defined, ga=authored, gi=imported, gg=generated, gr=retrieved",
@@ -225,7 +225,7 @@ pub fn intro_page2(locale: NexusLocale) -> &'static [&'static str] {
 pub fn intro_page3(locale: NexusLocale) -> &'static [&'static str] {
     match locale {
         NexusLocale::En => &[
-            "THE GRAPH STRUCTURE (v0.12.5)",
+            "THE GRAPH STRUCTURE (v0.13.0)",
             "",
             "61 node types organized by:",
             "  • Realm (WHERE): shared (40) | org (21)",
@@ -239,7 +239,7 @@ pub fn intro_page3(locale: NexusLocale) -> &'static [&'static str] {
             "Navigate with [1]LEARN [2]EXPLORE [3]PRACTICE",
         ],
         NexusLocale::Fr => &[
-            "LA STRUCTURE DU GRAPHE (v0.12.5)",
+            "LA STRUCTURE DU GRAPHE (v0.13.0)",
             "",
             "61 types de nœuds organisés par :",
             "  • Realm (OÙ) : shared (40) | org (21)",
@@ -427,12 +427,12 @@ static GLOSSARY_EN: [GlossaryCategoryI18n; 4] = [
             GlossaryConceptI18n {
                 name: "Semantic",
                 short_desc: "Business meaning layer",
-                full_desc: "Contains Entity and EntityContent - the core semantic units that represent business concepts. EntityContent stores locale-specific meaning for each Entity.",
+                full_desc: "Contains Entity and EntityNative - the core semantic units that represent business concepts. EntityNative stores locale-specific meaning for each Entity.",
             },
             GlossaryConceptI18n {
                 name: "Output",
                 short_desc: "Generated artifacts",
-                full_desc: "Contains LLM-generated content: PageGenerated, BlockGenerated, OutputArtifact. These are the final outputs produced by the generation pipeline.",
+                full_desc: "Contains LLM-generated content: PageNative, BlockNative, OutputArtifact. These are the final outputs produced by the generation pipeline.",
             },
         ],
     },
@@ -447,7 +447,7 @@ static GLOSSARY_EN: [GlossaryCategoryI18n; 4] = [
             GlossaryConceptI18n {
                 name: "Authored",
                 short_desc: "Output (dashed border)",
-                full_desc: "Nodes that store locale-specific content. Examples: EntityContent, ProjectContent. One instance per locale, linked to defined parent.",
+                full_desc: "Nodes that store locale-specific content. Examples: EntityNative, ProjectNative. One instance per locale, linked to defined parent via HAS_NATIVE.",
             },
             GlossaryConceptI18n {
                 name: "Imported",
@@ -457,7 +457,7 @@ static GLOSSARY_EN: [GlossaryCategoryI18n; 4] = [
             GlossaryConceptI18n {
                 name: "Generated",
                 short_desc: "LLM output (dotted border)",
-                full_desc: "Content produced by LLM generation. PageGenerated, BlockGenerated, OutputArtifact. Created from defined + imported inputs.",
+                full_desc: "Content produced by LLM generation. PageNative, BlockNative, OutputArtifact. Created from defined + imported inputs via HAS_NATIVE.",
             },
             GlossaryConceptI18n {
                 name: "Retrieved",
@@ -515,12 +515,12 @@ static GLOSSARY_FR: [GlossaryCategoryI18n; 4] = [
             GlossaryConceptI18n {
                 name: "Semantic",
                 short_desc: "Couche de sens métier",
-                full_desc: "Contient Entity et EntityContent - les unités sémantiques de base qui représentent les concepts métier. EntityContent stocke le sens spécifique à la locale pour chaque Entity.",
+                full_desc: "Contient Entity et EntityNative - les unités sémantiques de base qui représentent les concepts métier. EntityNative stocke le sens spécifique à la locale pour chaque Entity.",
             },
             GlossaryConceptI18n {
                 name: "Output",
                 short_desc: "Artefacts générés",
-                full_desc: "Contient le contenu généré par LLM : PageGenerated, BlockGenerated, OutputArtifact. Ce sont les sorties finales produites par le pipeline de génération.",
+                full_desc: "Contient le contenu généré par LLM : PageNative, BlockNative, OutputArtifact. Ce sont les sorties finales produites par le pipeline de génération.",
             },
         ],
     },
@@ -535,7 +535,7 @@ static GLOSSARY_FR: [GlossaryCategoryI18n; 4] = [
             GlossaryConceptI18n {
                 name: "Authored",
                 short_desc: "Sortie (bordure pointillée)",
-                full_desc: "Nœuds qui stockent le contenu spécifique à la locale. Exemples : EntityContent, ProjectContent. Une instance par locale, liée au parent défini.",
+                full_desc: "Nœuds qui stockent le contenu spécifique à la locale. Exemples : EntityNative, ProjectNative. Une instance par locale, liée au parent défini via HAS_NATIVE.",
             },
             GlossaryConceptI18n {
                 name: "Imported",
@@ -545,7 +545,7 @@ static GLOSSARY_FR: [GlossaryCategoryI18n; 4] = [
             GlossaryConceptI18n {
                 name: "Generated",
                 short_desc: "Sortie LLM (bordure pointillée)",
-                full_desc: "Contenu produit par la génération LLM. PageGenerated, BlockGenerated, OutputArtifact. Créé à partir des entrées defined + imported.",
+                full_desc: "Contenu produit par la génération LLM. PageNative, BlockNative, OutputArtifact. Créé à partir des entrées defined + imported via HAS_NATIVE.",
             },
             GlossaryConceptI18n {
                 name: "Retrieved",
@@ -604,7 +604,7 @@ static QUIZ_EN: [QuizQuestionI18n; 15] = [
         explanation: "Shared (universal, read-only) and Org (organization-specific).",
     },
     QuizQuestionI18n {
-        question: "How many node types are in NovaNet v0.12.5?",
+        question: "How many node types are in NovaNet v0.13.0?",
         options: &["45", "61", "75", "90"],
         correct: 1,
         explanation: "61 nodes: 40 in Shared realm + 21 in Org realm.",
@@ -621,10 +621,10 @@ static QUIZ_EN: [QuizQuestionI18n; 15] = [
         explanation: "Defined nodes define structure and don't change with locale.",
     },
     QuizQuestionI18n {
-        question: "Which trait do EntityContent and ProjectContent have?",
+        question: "Which trait do EntityNative and ProjectNative have?",
         options: &["Defined", "Authored", "Imported", "Generated"],
         correct: 1,
-        explanation: "Authored nodes store locale-specific content for defined parents.",
+        explanation: "Authored nodes store locale-specific content for defined parents via HAS_NATIVE.",
     },
     QuizQuestionI18n {
         question: "What is NovaNet's core philosophy?",
@@ -675,12 +675,12 @@ static QUIZ_EN: [QuizQuestionI18n; 15] = [
         question: "Which nodes have the 'generated' trait?",
         options: &[
             "Entity, Page, Block",
-            "PageGenerated, BlockGenerated",
+            "PageNative, BlockNative",
             "Term, Expression, Pattern",
             "Locale, Region, Country",
         ],
         correct: 1,
-        explanation: "Generated trait marks LLM output: PageGenerated, BlockGenerated, OutputArtifact.",
+        explanation: "Generated trait marks LLM output: PageNative, BlockNative, OutputArtifact (v0.13.0).",
     },
     QuizQuestionI18n {
         question: "What is the 'retrieved' trait for?",
@@ -747,7 +747,7 @@ static QUIZ_FR: [QuizQuestionI18n; 15] = [
         explanation: "Shared (universel, lecture seule) et Org (spécifique à l'organisation).",
     },
     QuizQuestionI18n {
-        question: "Combien de types de nœuds dans NovaNet v0.12.5 ?",
+        question: "Combien de types de nœuds dans NovaNet v0.13.0 ?",
         options: &["45", "61", "75", "90"],
         correct: 1,
         explanation: "61 nœuds : 40 dans Shared + 21 dans Org.",
@@ -764,10 +764,10 @@ static QUIZ_FR: [QuizQuestionI18n; 15] = [
         explanation: "Les nœuds defined définissent la structure et ne changent pas avec la locale.",
     },
     QuizQuestionI18n {
-        question: "Quel trait ont EntityContent et ProjectContent ?",
+        question: "Quel trait ont EntityNative et ProjectNative ?",
         options: &["Defined", "Authored", "Imported", "Generated"],
         correct: 1,
-        explanation: "Les nœuds Authored stockent le contenu spécifique à la locale pour les parents defined.",
+        explanation: "Les nœuds Authored stockent le contenu spécifique à la locale pour les parents defined via HAS_NATIVE.",
     },
     QuizQuestionI18n {
         question: "Quelle est la philosophie centrale de NovaNet ?",
@@ -818,12 +818,12 @@ static QUIZ_FR: [QuizQuestionI18n; 15] = [
         question: "Quels nœuds ont le trait 'generated' ?",
         options: &[
             "Entity, Page, Block",
-            "PageGenerated, BlockGenerated",
+            "PageNative, BlockNative",
             "Term, Expression, Pattern",
             "Locale, Region, Country",
         ],
         correct: 1,
-        explanation: "Le trait generated marque les sorties LLM : PageGenerated, BlockGenerated, OutputArtifact.",
+        explanation: "Le trait generated marque les sorties LLM : PageNative, BlockNative, OutputArtifact (v0.13.0).",
     },
     QuizQuestionI18n {
         question: "À quoi sert le trait 'retrieved' ?",
@@ -878,7 +878,7 @@ static QUIZ_FR: [QuizQuestionI18n; 15] = [
 ];
 
 // =============================================================================
-// STATS (v0.12.0)
+// STATS (v0.13.0)
 // =============================================================================
 
 /// Stats tab i18n strings.

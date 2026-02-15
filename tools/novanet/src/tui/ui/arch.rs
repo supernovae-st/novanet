@@ -27,8 +27,8 @@ fn get_architecture_diagram(class_name: &str) -> Option<(Vec<&'static str>, &'st
         "Brand" => Some((BRAND_DIAGRAM.to_vec(), "ADR-028")),
         "Locale" => Some((LOCALE_DIAGRAM.to_vec(), "ADR-020")),
         "Project" => Some((PROJECT_DIAGRAM.to_vec(), "ADR-028")),
-        "EntityContent" => Some((ENTITY_CONTENT_DIAGRAM.to_vec(), "ADR-028")),
-        "PageGenerated" => Some((PAGE_GENERATED_DIAGRAM.to_vec(), "ADR-028")),
+        "EntityNative" => Some((ENTITY_NATIVE_DIAGRAM.to_vec(), "ADR-028")),
+        "PageNative" => Some((PAGE_NATIVE_DIAGRAM.to_vec(), "ADR-028")),
         _ => None,
     }
 }
@@ -47,10 +47,10 @@ const PAGE_DIAGRAM: &[&str] = &[
     "\u{2502} Page \u{2550}\u{2550}[:REPRESENTS]\u{2550}\u{25b6} \u{2502}",
     "\u{2502}  \u{2502}     (1:1)     Entity \u{2502}",
     "\u{2502}  \u{2502}                \u{2502}   \u{2502}",
-    "\u{2502}  \u{2502}[:HAS_BLOCK]    \u{2502}[:HAS_CONTENT]",
+    "\u{2502}  \u{2502}[:HAS_BLOCK]    \u{2502}[:HAS_NATIVE]",
     "\u{2502}  \u{2502}  {order}       \u{2502}   \u{2502}",
     "\u{2502}  \u{25bc}                \u{25bc}   \u{2502}",
-    "\u{2502} Block        EntityContent",
+    "\u{2502} Block        EntityNative",
     "\u{2502}  \u{2502}                    \u{2502}",
     "\u{2502}  \u{2514}\u{2500}[:USES_ENTITY]\u{2500}\u{25b6}  \u{2502}",
     "\u{2502}             Entity     \u{2502}",
@@ -67,9 +67,9 @@ const ENTITY_DIAGRAM: &[&str] = &[
     "\u{2502} Entity \u{2500}[:BELONGS_TO]\u{2500}\u{25b6}",
     "\u{2502}   \u{2502}      EntityCategory \u{2502}",
     "\u{2502}   \u{2502}                    \u{2502}",
-    "\u{2502}   \u{2502}[:HAS_CONTENT]      \u{2502}",
+    "\u{2502}   \u{2502}[:HAS_NATIVE]       \u{2502}",
     "\u{2502}   \u{25bc}                    \u{2502}",
-    "\u{2502} EntityContent          \u{2502}",
+    "\u{2502} EntityNative           \u{2502}",
     "\u{2502}   \u{2502}                    \u{2502}",
     "\u{2502}   \u{2502}[:FOR_LOCALE]       \u{2502}",
     "\u{2502}   \u{25bc}                    \u{2502}",
@@ -119,7 +119,7 @@ const BRAND_DIAGRAM: &[&str] = &[
 ];
 
 const LOCALE_DIAGRAM: &[&str] = &[
-    "   EntityContent",
+    "   EntityNative",
     "        \u{2502}",
     "        \u{2502}[:FOR_LOCALE]",
     "        \u{25bc}",
@@ -155,19 +155,19 @@ const PROJECT_DIAGRAM: &[&str] = &[
     "\u{2502}   \u{2502}\u{2500}[:HAS_BRAND]\u{2500}\u{2500}\u{2500}\u{25b6}   \u{2502}",
     "\u{2502}   \u{2502}           Brand     \u{2502}",
     "\u{2502}   \u{2502}                    \u{2502}",
-    "\u{2502}   \u{2514}\u{2500}[:HAS_CONTENT]\u{2500}\u{2500}\u{25b6}   \u{2502}",
-    "\u{2502}         ProjectContent  \u{2502}",
+    "\u{2502}   \u{2514}\u{2500}[:HAS_NATIVE]\u{2500}\u{2500}\u{2500}\u{25b6}   \u{2502}",
+    "\u{2502}         ProjectNative   \u{2502}",
     "\u{2514}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2518}",
 ];
 
-const ENTITY_CONTENT_DIAGRAM: &[&str] = &[
+const ENTITY_NATIVE_DIAGRAM: &[&str] = &[
     "      Entity",
     "        \u{2502}",
-    "        \u{2502}[:HAS_CONTENT]",
+    "        \u{2502}[:HAS_NATIVE]",
     "        \u{25bc}",
     "\u{250c}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2510}",
     "\u{2502}                        \u{2502}",
-    "\u{2502} EntityContent          \u{2502}",
+    "\u{2502} EntityNative           \u{2502}",
     "\u{2502}   \u{2502}                    \u{2502}",
     "\u{2502}   \u{2502}[:FOR_LOCALE]       \u{2502}",
     "\u{2502}   \u{25bc}                    \u{2502}",
@@ -181,18 +181,18 @@ const ENTITY_CONTENT_DIAGRAM: &[&str] = &[
     "\u{2514}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2518}",
 ];
 
-const PAGE_GENERATED_DIAGRAM: &[&str] = &[
+const PAGE_NATIVE_DIAGRAM: &[&str] = &[
     "      Page",
     "        \u{2502}",
-    "        \u{2502}[:HAS_GENERATED]",
+    "        \u{2502}[:HAS_NATIVE]",
     "        \u{25bc}",
     "\u{250c}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2510}",
     "\u{2502}                        \u{2502}",
-    "\u{2502} PageGenerated          \u{2502}",
+    "\u{2502} PageNative             \u{2502}",
     "\u{2502}   \u{2502}                    \u{2502}",
     "\u{2502}   \u{2502}[:ASSEMBLES]        \u{2502}",
     "\u{2502}   \u{25bc}                    \u{2502}",
-    "\u{2502} BlockGenerated[]       \u{2502}",
+    "\u{2502} BlockNative[]          \u{2502}",
     "\u{2502}                        \u{2502}",
     "\u{2502} Key format:            \u{2502}",
     "\u{2502} page:{key}@{locale}    \u{2502}",
@@ -214,8 +214,8 @@ const NO_DIAGRAM_MESSAGE: &[&str] = &[
     "  \u{2022} Brand",
     "  \u{2022} Locale",
     "  \u{2022} Project",
-    "  \u{2022} EntityContent",
-    "  \u{2022} PageGenerated",
+    "  \u{2022} EntityNative",
+    "  \u{2022} PageNative",
 ];
 
 // =============================================================================

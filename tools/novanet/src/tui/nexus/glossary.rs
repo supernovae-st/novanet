@@ -12,7 +12,7 @@
 //! - `/`: Search
 //!
 //! Provides 15 core concepts organized into 5 categories:
-//! - Graph Basics (4): Class, Instance, Entity, EntityContent
+//! - Graph Basics (4): Class, Instance, Entity, EntityNative
 //! - Classification (3): Realm, Layer, Trait
 //! - Locale System (4): Locale, Term, Expression, Culture
 //! - Relationships (3): Arc, Family, Scope
@@ -184,17 +184,18 @@ static GRAPH_BASICS_CONCEPTS: [GlossaryConcept; 4] = [
             "node:\n  name: Entity\n  realm: org\n  layer: semantic\n  trait: defined",
         ),
         example_neo4j: Some("(:Entity {key: 'qr-code', display_name: 'QR Code', is_pillar: true})"),
-        see_also: &["EntityContent", "Realm", "Trait"],
+        see_also: &["EntityNative", "Realm", "Trait"],
     },
     GlossaryConcept {
-        name: "EntityContent",
-        short_desc: "Authored content (entity:qr-code@fr-FR)",
-        full_desc: "Locale-native content for an Entity. NOT translated - AUTHORED natively \
-                    using locale knowledge (Terms, Culture, Style). One EntityContent per locale.",
+        name: "EntityNative",
+        short_desc: "Locale-native content (entity:qr-code@fr-FR)",
+        full_desc: "Locale-native content for an Entity. NOT translated - GENERATED natively \
+                    using locale knowledge (Terms, Culture, Style). One EntityNative per locale. \
+                    (v0.13.0: renamed from EntityContent)",
         classification: Some("Realm: org | Layer: semantic | Trait: authored"),
         example_yaml: None,
         example_neo4j: Some(
-            "(:EntityContent {\n  key: 'entity:qr-code@fr-FR',\n  display_name: 'QR Code',\n  description: 'Code-barres 2D...'\n})",
+            "(:EntityNative {\n  key: 'entity:qr-code@fr-FR',\n  display_name: 'QR Code',\n  description: 'Code-barres 2D...'\n})",
         ),
         see_also: &["Entity", "Locale", "Term"],
     },
@@ -232,9 +233,9 @@ static CLASSIFICATION_CONCEPTS: [GlossaryConcept; 3] = [
         short_desc: "HOW: data origin",
         full_desc: "WHERE does the data come from? 5 traits:\n\
                     - defined: Human-created once (Entity, Page)\n\
-                    - authored: Human-written per locale (EntityContent)\n\
+                    - authored: Human-written per locale (EntityNative)\n\
                     - imported: External data brought in (Term, Culture)\n\
-                    - generated: Produced by NovaNet LLM (PageGenerated)\n\
+                    - generated: Produced by NovaNet LLM (PageNative)\n\
                     - retrieved: Fetched from external APIs (GEOAnswer)",
         classification: None,
         example_yaml: Some(
@@ -305,7 +306,7 @@ static RELATIONSHIPS_CONCEPTS: [GlossaryConcept; 3] = [
         classification: None,
         example_yaml: None,
         example_neo4j: Some(
-            "(:Entity {key: 'qr-code'})-[:HAS_CONTENT]->(:EntityContent {key: 'entity:qr-code@fr-FR'})",
+            "(:Entity {key: 'qr-code'})-[:HAS_NATIVE]->(:EntityNative {key: 'entity:qr-code@fr-FR'})",
         ),
         see_also: &["Family", "Scope"],
     },
@@ -313,14 +314,14 @@ static RELATIONSHIPS_CONCEPTS: [GlossaryConcept; 3] = [
         name: "Family",
         short_desc: "Arc category (ownership, semantic)",
         full_desc: "Arc families group relationships by function:\n\
-                    - ownership: Parent owns child (HAS_CONTENT)\n\
+                    - ownership: Parent owns child (HAS_NATIVE)\n\
                     - localization: Links to locale (FOR_LOCALE)\n\
                     - semantic: Meaning connections (SEMANTIC_LINK)\n\
-                    - generation: LLM pipeline (HAS_GENERATED)\n\
+                    - generation: LLM pipeline (HAS_NATIVE)\n\
                     - mining: SEO/GEO intelligence (HAS_KEYWORD)",
         classification: None,
         example_yaml: Some(
-            "arc:\n  name: HAS_CONTENT\n  family: ownership\n  source: Entity\n  target: EntityContent",
+            "arc:\n  name: HAS_NATIVE\n  family: ownership\n  source: Entity\n  target: EntityNative",
         ),
         example_neo4j: None,
         see_also: &["Arc", "Scope"],
@@ -329,7 +330,7 @@ static RELATIONSHIPS_CONCEPTS: [GlossaryConcept; 3] = [
         name: "Scope",
         short_desc: "intra_realm vs cross_realm",
         full_desc: "Arc scope indicates whether a relationship stays within one realm or crosses realms:\n\
-                    - intra_realm: Both nodes in same realm (org Entity -> org EntityContent)\n\
+                    - intra_realm: Both nodes in same realm (org Entity -> org EntityNative)\n\
                     - cross_realm: Nodes in different realms (org Entity -> shared EntityCategory)",
         classification: None,
         example_yaml: Some(
@@ -345,13 +346,14 @@ static ARCHITECTURE_CONCEPTS: [GlossaryConcept; 1] = [GlossaryConcept {
     short_desc: "Generate, NOT translate",
     full_desc: "NovaNet's core philosophy: content is GENERATED natively using locale \
                     knowledge, NOT translated from a source language. This preserves cultural \
-                    nuance and produces content that sounds natural to native speakers.",
+                    nuance and produces content that sounds natural to native speakers. \
+                    v0.13.0 unifies all locale-specific nodes with *Native suffix.",
     classification: None,
     example_yaml: Some(
-        "# WRONG:\nSource -> Translate -> Target\n\n# RIGHT:\nEntity (defined)\n  + Imported (fr-FR: Terms, Culture)\n  -> EntityContent@fr-FR (authored natively)",
+        "# WRONG:\nSource -> Translate -> Target\n\n# RIGHT:\nEntity (defined)\n  + Imported (fr-FR: Terms, Culture)\n  -> EntityNative@fr-FR (authored natively)",
     ),
     example_neo4j: None,
-    see_also: &["Entity", "EntityContent", "Term"],
+    see_also: &["Entity", "EntityNative", "Term"],
 }];
 
 // =============================================================================
@@ -1094,7 +1096,7 @@ mod tests {
         state.search_query = "entity".to_string();
 
         let filtered = state.filtered_concepts();
-        // Should find Entity and EntityContent
+        // Should find Entity and EntityNative
         assert!(filtered.len() >= 2);
         assert!(
             filtered

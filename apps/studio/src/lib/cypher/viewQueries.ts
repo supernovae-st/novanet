@@ -114,9 +114,10 @@ export function getViewQuery(viewId: ViewId, params: ViewQueryParams): ViewQuery
           MATCH (n {key: $nodeKey})
           WHERE n:Project OR n:Brand
           OPTIONAL MATCH (n)-[r:HAS_BRAND|BRAND_OF]-(brand:Brand)
-          OPTIONAL MATCH (brand)-[r2:HAS_VOICE]->(voice)
-          RETURN [n, brand, voice] AS nodes,
-                 collect(DISTINCT r) + collect(DISTINCT r2) AS relationships
+          OPTIONAL MATCH (brand)-[r2:HAS_DESIGN]->(design:BrandDesign)
+          OPTIONAL MATCH (brand)-[r3:HAS_PRINCIPLES]->(principles:BrandPrinciples)
+          RETURN [n, brand, design, principles] AS nodes,
+                 collect(DISTINCT r) + collect(DISTINCT r2) + collect(DISTINCT r3) AS relationships
         `,
         params: { nodeKey },
         description: 'Brand identity configuration',
@@ -150,7 +151,7 @@ export function getViewQuery(viewId: ViewId, params: ViewQueryParams): ViewQuery
           MATCH (n {key: $nodeKey})
           WHERE n:Entity OR n:Page OR n:SEOKeyword
           OPTIONAL MATCH (n)-[r1:TARGETS]->(keyword:SEOKeyword)
-          OPTIONAL MATCH (keyword)-[r2:IN_CLUSTER]->(cluster:SEOKeywordSet)
+          OPTIONAL MATCH (keyword)-[r2:SEO_CLUSTER_OF]->(cluster:SEOKeywordSet)
           OPTIONAL MATCH (keyword)-[r3:HAS_METRICS]->(metrics:SEOKeywordMetrics)
           WITH n,
                collect(DISTINCT keyword)[0..$limit] AS keywords,
@@ -170,8 +171,8 @@ export function getViewQuery(viewId: ViewId, params: ViewQueryParams): ViewQuery
           MATCH (n {key: $nodeKey})
           WHERE n:Entity OR n:GEOQuery
           OPTIONAL MATCH (n)-[r1:MONITORS_GEO]->(query:GEOQuery)
-          OPTIONAL MATCH (query)-[r2:HAS_ANSWER]->(answer:GEOAnswer)
-          OPTIONAL MATCH (query)-[r3:IN_QUERY_SET]->(querySet:GEOQuerySet)
+          OPTIONAL MATCH (query)-[r2:HAS_GEO_ANSWERS]->(answer:GEOAnswer)
+          OPTIONAL MATCH (query)-[r3:CONTAINS_GEO_QUERY]->(querySet:GEOQuerySet)
           WITH n,
                collect(DISTINCT query)[0..$limit] AS queries,
                collect(DISTINCT answer) AS answers,
