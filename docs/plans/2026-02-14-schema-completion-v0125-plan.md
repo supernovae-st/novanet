@@ -1,16 +1,19 @@
-# Schema Completion v0.12.5 Plan
+# Schema Completion v0.13 Plan
 
 **Date**: 2026-02-14
 **Status**: In Progress
+**Version**: v0.13 (renamed from v0.12.5)
 **Predecessor**: semantic-coherence-v0121, yaml-panel-taxonomy-migration
 
 ## Overview
 
-Complete all remaining schema coherence work to achieve 100% implementation of ADR-023 through ADR-030.
+Complete all remaining schema coherence work to achieve 100% implementation of ADR-023 through ADR-032.
 
 **New ADRs in this release:**
 - **ADR-029**: *Native Pattern (EntityContent→EntityNative, PageGenerated→PageNative, etc.)
 - **ADR-030**: Slug Ownership (Page owns URL, Entity owns semantics)
+- **ADR-031**: SEO Pillar/Cluster Architecture (SEO_CLUSTER_OF, LINKS_TO, PageRank flow)
+- **ADR-032**: URL Slugification Architecture (DERIVED_SLUG_FROM, derivation algorithm, no-repetition)
 
 ## Tasks
 
@@ -220,6 +223,174 @@ packages/core/models/node-classes/org/output/page-native.yaml
 packages/core/models/node-classes/org/semantic/entity.yaml (line ~312)
 ```
 
+### Phase 8: SEO Pillar/Cluster Architecture (ADR-031)
+
+Three distinct hierarchies for SEO structure.
+
+**Three Hierarchies**:
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  THREE HIERARCHIES (Do NOT confuse!)                                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  1. Entity.SUBTOPIC_OF → Entity                                             │
+│     └── Semantic hierarchy (topic clusters)                                 │
+│     └── "This concept is a sub-topic of that concept"                       │
+│     └── Example: qr-code-instagram SUBTOPIC_OF qr-code-generator           │
+│                                                                             │
+│  2. Page.SUBTOPIC_OF → Page                                                 │
+│     └── URL hierarchy (path structure)                                      │
+│     └── Builds full_path: /parent/child/grandchild                         │
+│     └── Example: /qr-code-generator/instagram                              │
+│                                                                             │
+│  3. Page.SEO_CLUSTER_OF → Page (is_pillar=true)  ← NEW                       │
+│     └── SEO pillar/cluster relationship                                     │
+│     └── For internal linking, NOT for URL                                  │
+│     └── Multiple clusters can point to same pillar                          │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**New Properties**:
+
+| Property | On | Type | Description |
+|----------|-----|------|-------------|
+| `is_pillar` | Page, Entity | boolean | Marks as pillar page/entity |
+| `pillar_strategy` | Page | enum | `topic_authority`, `product_line`, `funnel_stage` |
+
+**New Arcs**:
+
+| Arc | Source | Target | Family | Properties |
+|-----|--------|--------|--------|------------|
+| `SEO_CLUSTER_OF` | Page | Page (is_pillar=true) | semantic | — |
+| `LINKS_TO` | Page | Page | semantic | `pr_weight: 0.0-1.0` |
+| `DERIVED_SLUG_FROM` | PageNative | SEOKeyword | generation | — |
+
+**PageRank Flow Rules**:
+1. Home page: pr_weight=1.0 to pillars
+2. Pillar pages: pr_weight=0.8 to clusters
+3. Cluster pages: pr_weight=0.6 to long-tail
+4. Cross-cluster: pr_weight=0.3 max
+
+**Files to create**:
+```
+packages/core/models/arc-classes/semantic/seo-cluster-of.yaml
+packages/core/models/arc-classes/semantic/links-to.yaml
+packages/core/models/arc-classes/generation/derived-slug-from.yaml
+```
+
+**Files to update**:
+```
+packages/core/models/node-classes/org/structure/page.yaml      # Add is_pillar, pillar_strategy
+packages/core/models/node-classes/org/semantic/entity.yaml    # Add is_pillar
+```
+
+### Phase 9: URL Slugification Architecture (ADR-032)
+
+URL derivation from SEO keywords with no-repetition rule.
+
+**URL Format**:
+```
+/{locale-BCP47}/{parent.slug}/.../slug
+
+Examples:
+/fr-FR/générateur-qr-code/instagram
+/en-US/qr-code-generator/instagram
+```
+
+**Slug Derivation Formula**:
+```
+score = volume × sem_coef × convergence_boost
+
+Where:
+- volume: SEO keyword search volume
+- sem_coef: SEMANTIC_LINK coefficient (0.3-1.0)
+- convergence_boost: 1 + (N × 0.2) where N = other entities targeting same keyword
+```
+
+**SEMANTIC_LINK Coefficients**:
+
+| link_type | sem_coef | Description |
+|-----------|----------|-------------|
+| `same_as` | 1.0 | Exact semantic match |
+| `variant_of` | 0.9 | Close variant |
+| `component_of` | 0.8 | Part/whole |
+| `used_for` | 0.8 | Purpose |
+| `used_with` | 0.7 | Co-occurrence |
+| `enables` | 0.7 | Dependency |
+| `requires` | 0.6 | Prerequisite |
+| `compared_to` | 0.5 | Comparison |
+| `alternative_to` | 0.5 | Substitute |
+| `competes_with` | 0.4 | Competition |
+| `attribute_of` | 0.3 | Property |
+
+**No-Repetition Rule** (CRITICAL):
+```
+❌ WRONG: /qr-code-generator/qr-code-instagram
+✅ RIGHT: /qr-code-generator/instagram
+
+If parent.slug contains term T, child.slug MUST NOT contain T.
+```
+
+**PageNative Schema Properties**:
+```yaml
+properties:
+  slug:
+    type: string
+    required: true
+    description: "Localized URL segment"
+
+  slug_source:
+    type: enum
+    values: [seo_derived, brand_invariant, manual]
+    description: "How slug was determined"
+
+  slug_rationale:
+    type: string
+    description: "LLM explanation of slug choice"
+
+  full_path:
+    type: string
+    required: true
+    indexed: true
+    description: "Full localized URL path"
+```
+
+**Locale Slugification Rules**:
+```yaml
+# In Locale YAML (new slugification property)
+slugification:
+  fr-FR:
+    accents: preserve       # é, è, à, ç kept
+    case: lowercase
+    word_sep: "-"
+    stop_words: [le, la, les, de, du, des, un, une]
+
+  en-US:
+    accents: strip          # résumé → resume
+    case: lowercase
+    word_sep: "-"
+    stop_words: [the, a, an, of, for, to]
+
+  ar-SA:
+    direction: rtl
+    transliteration: required
+```
+
+**Brand Invariance Rule**:
+```
+Brand names NEVER translate or slugify:
+- "Instagram" stays "instagram" in ALL locales
+- "QR Code AI" stays "qrcode-ai" everywhere
+- Check Entity.category = BRAND before slugifying
+```
+
+**Files to update**:
+```
+packages/core/models/node-classes/org/output/page-native.yaml   # Add slug properties
+packages/core/models/node-classes/shared/config/locale.yaml     # Add slugification
+```
+
 ## Execution Order
 
 1. ✅ Phase 2 (Icon dual format) - Independent, can run in parallel
@@ -229,8 +400,13 @@ packages/core/models/node-classes/org/semantic/entity.yaml (line ~312)
 5. ⏸ Phase 5 (TUI YAML Panel) - Depends on Phase 1
 6. 🆕 Phase 6 (*Native Pattern) - ADR-029
 7. 🆕 Phase 7 (Slug Ownership) - ADR-030, depends on Phase 6
+8. 🆕 Phase 8 (SEO Pillar/Cluster) - ADR-031, depends on Phase 6
+9. 🆕 Phase 9 (URL Slugification) - ADR-032, depends on Phase 7 + Phase 8
 
-**Recommended order**: Phase 6 → Phase 7 (rename first, then migrate properties)
+**Recommended order**:
+- Phase 6 → Phase 7 (rename first, then migrate properties)
+- Phase 8 (new arcs + properties for pillar/cluster)
+- Phase 9 (slugification rules, depends on PageNative from Phase 7)
 
 ## Success Criteria
 
@@ -242,8 +418,16 @@ packages/core/models/node-classes/org/semantic/entity.yaml (line ~312)
 - [ ] *Native pattern implemented (4 nodes, 4 arcs renamed)
 - [ ] Slug properties moved from EntityNative to PageNative
 - [ ] Entity.yaml HAS_CHILD comment corrected
+- [ ] SEO_CLUSTER_OF arc created and documented
+- [ ] LINKS_TO arc created with pr_weight property
+- [ ] DERIVED_SLUG_FROM arc created for audit trail
+- [ ] is_pillar property added to Page and Entity
+- [ ] pillar_strategy enum added to Page
+- [ ] Locale.slugification property added
+- [ ] PageNative slug properties (slug, slug_source, slug_rationale, full_path) added
 - [ ] All 1053+ tests pass
 - [ ] Schema validates with 0 errors
+- [ ] Arc count updated: 169 → 172 (3 new arcs)
 
 ---
 
@@ -534,3 +718,5 @@ Complete structure from Page through Block to generated output.
 | ADR-028 | Page-Entity Architecture | 1:1 mandatory, @ refs, Block.key format |
 | ADR-029 | *Native Pattern | EntityContent→EntityNative (NEW) |
 | ADR-030 | Slug Ownership | Page owns URL, Entity owns semantics (NEW) |
+| ADR-031 | SEO Pillar/Cluster Architecture | SEO_CLUSTER_OF, LINKS_TO, PageRank flow (NEW) |
+| ADR-032 | URL Slugification Architecture | DERIVED_SLUG_FROM, derivation algorithm, no-repetition (NEW) |

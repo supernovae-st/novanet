@@ -428,7 +428,7 @@ mod tests {
         assert!(output.contains("Page: 'structure',"));
         assert!(output.contains("Block: 'structure',"));
         assert!(output.contains("Entity: 'semantic',"));
-        assert!(output.contains("PageGenerated: 'output',")); // v10.9: renamed from PageL10n
+        assert!(output.contains("PageNative: 'output',")); // v0.13.0 ADR-029: renamed from PageGenerated
         assert!(output.contains("Locale: 'config',")); // v11.5: moved to shared/config
         assert!(output.contains("Style: 'locale',")); // v11.3: moved to locale layer
         assert!(output.contains("SEOKeyword: 'knowledge',")); // v11.4: moved to shared/knowledge

@@ -168,38 +168,6 @@ ON MATCH SET
   c_Block.generation_count = 0,
   c_Block.updated_at = datetime();
 
-MERGE (c_BlockGenerated:Schema:Class {label: 'BlockGenerated'})
-ON CREATE SET
-  c_BlockGenerated.key = 'block-generated',
-  c_BlockGenerated.realm = 'org',
-  c_BlockGenerated.layer = 'output',
-  c_BlockGenerated.trait = 'generated',
-  c_BlockGenerated.display_name = 'BlockGenerated',
-  c_BlockGenerated.llm_context = 'LLM-generated content for a block (derived from source content)',
-  c_BlockGenerated.yaml_path = 'node-classes/org/output/block-generated.yaml',
-  c_BlockGenerated.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'generated', 'generated_at', 'generator_version', 'status', 'anchor_slug', 'version', 'published_at', 'replaced_at'],
-  c_BlockGenerated.required_properties = ['key', 'display_name', 'description', 'created_at', 'updated_at', 'generated', 'generated_at', 'generator_version', 'status', 'anchor_slug', 'version'],
-  c_BlockGenerated.schema_hint = 'anchor_slug (req), created_at (req), description (req), display_name (req), generated (req), generated_at (req), generator_version (req), key (req), llm_context, published_at, replaced_at, status (req), updated_at (req), version (req)',
-  c_BlockGenerated.context_budget = 'low',
-  c_BlockGenerated.visibility = 'publishable',
-  c_BlockGenerated.generation_count = 0,
-  c_BlockGenerated.created_at = datetime()
-ON MATCH SET
-  c_BlockGenerated.key = 'block-generated',
-  c_BlockGenerated.realm = 'org',
-  c_BlockGenerated.layer = 'output',
-  c_BlockGenerated.trait = 'generated',
-  c_BlockGenerated.display_name = 'BlockGenerated',
-  c_BlockGenerated.llm_context = 'LLM-generated content for a block (derived from source content)',
-  c_BlockGenerated.yaml_path = 'node-classes/org/output/block-generated.yaml',
-  c_BlockGenerated.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'generated', 'generated_at', 'generator_version', 'status', 'anchor_slug', 'version', 'published_at', 'replaced_at'],
-  c_BlockGenerated.required_properties = ['key', 'display_name', 'description', 'created_at', 'updated_at', 'generated', 'generated_at', 'generator_version', 'status', 'anchor_slug', 'version'],
-  c_BlockGenerated.schema_hint = 'anchor_slug (req), created_at (req), description (req), display_name (req), generated (req), generated_at (req), generator_version (req), key (req), llm_context, published_at, replaced_at, status (req), updated_at (req), version (req)',
-  c_BlockGenerated.context_budget = 'low',
-  c_BlockGenerated.visibility = 'publishable',
-  c_BlockGenerated.generation_count = 0,
-  c_BlockGenerated.updated_at = datetime();
-
 MERGE (c_BlockInstruction:Schema:Class {label: 'BlockInstruction'})
 ON CREATE SET
   c_BlockInstruction.key = 'block-instruction',
@@ -231,6 +199,38 @@ ON MATCH SET
   c_BlockInstruction.visibility = 'internal',
   c_BlockInstruction.generation_count = 0,
   c_BlockInstruction.updated_at = datetime();
+
+MERGE (c_BlockNative:Schema:Class {label: 'BlockNative'})
+ON CREATE SET
+  c_BlockNative.key = 'block-native',
+  c_BlockNative.realm = 'org',
+  c_BlockNative.layer = 'output',
+  c_BlockNative.trait = 'generated',
+  c_BlockNative.display_name = 'BlockNative',
+  c_BlockNative.llm_context = 'LLM-generated native content for a block',
+  c_BlockNative.yaml_path = 'node-classes/org/output/block-native.yaml',
+  c_BlockNative.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'generated', 'generated_at', 'generator_version', 'status', 'anchor_slug', 'version', 'published_at', 'replaced_at'],
+  c_BlockNative.required_properties = ['key', 'display_name', 'description', 'created_at', 'updated_at', 'generated', 'generated_at', 'generator_version', 'status', 'anchor_slug', 'version'],
+  c_BlockNative.schema_hint = 'anchor_slug (req), created_at (req), description (req), display_name (req), generated (req), generated_at (req), generator_version (req), key (req), llm_context, published_at, replaced_at, status (req), updated_at (req), version (req)',
+  c_BlockNative.context_budget = 'low',
+  c_BlockNative.visibility = 'publishable',
+  c_BlockNative.generation_count = 0,
+  c_BlockNative.created_at = datetime()
+ON MATCH SET
+  c_BlockNative.key = 'block-native',
+  c_BlockNative.realm = 'org',
+  c_BlockNative.layer = 'output',
+  c_BlockNative.trait = 'generated',
+  c_BlockNative.display_name = 'BlockNative',
+  c_BlockNative.llm_context = 'LLM-generated native content for a block',
+  c_BlockNative.yaml_path = 'node-classes/org/output/block-native.yaml',
+  c_BlockNative.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'generated', 'generated_at', 'generator_version', 'status', 'anchor_slug', 'version', 'published_at', 'replaced_at'],
+  c_BlockNative.required_properties = ['key', 'display_name', 'description', 'created_at', 'updated_at', 'generated', 'generated_at', 'generator_version', 'status', 'anchor_slug', 'version'],
+  c_BlockNative.schema_hint = 'anchor_slug (req), created_at (req), description (req), display_name (req), generated (req), generated_at (req), generator_version (req), key (req), llm_context, published_at, replaced_at, status (req), updated_at (req), version (req)',
+  c_BlockNative.context_budget = 'low',
+  c_BlockNative.visibility = 'publishable',
+  c_BlockNative.generation_count = 0,
+  c_BlockNative.updated_at = datetime();
 
 MERGE (c_BlockRules:Schema:Class {label: 'BlockRules'})
 ON CREATE SET
@@ -776,37 +776,37 @@ ON MATCH SET
   c_EntityCategory.generation_count = 0,
   c_EntityCategory.updated_at = datetime();
 
-MERGE (c_EntityContent:Schema:Class {label: 'EntityContent'})
+MERGE (c_EntityNative:Schema:Class {label: 'EntityNative'})
 ON CREATE SET
-  c_EntityContent.key = 'entity-content',
-  c_EntityContent.realm = 'org',
-  c_EntityContent.layer = 'semantic',
-  c_EntityContent.trait = 'authored',
-  c_EntityContent.display_name = 'EntityContent',
-  c_EntityContent.llm_context = 'Locale-native content for an Entity',
-  c_EntityContent.yaml_path = 'node-classes/org/semantic/entity-content.yaml',
-  c_EntityContent.properties = ['key', 'entity_key', 'locale_key', 'slug', 'full_path', 'parent_slug', 'depth', 'slug_history', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'curation_status', 'status', 'definition', 'purpose', 'benefits', 'usage_examples', 'audience_segment', 'cultural_notes', 'version'],
-  c_EntityContent.required_properties = ['key', 'entity_key', 'locale_key', 'slug', 'full_path', 'depth', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'curation_status', 'version'],
-  c_EntityContent.schema_hint = 'audience_segment, benefits, created_at (req), cultural_notes, curation_status (req), definition, depth (req), description (req), display_name (req), entity_key (req), full_path (req), key (req), llm_context (req), locale_key (req), parent_slug, purpose, slug (req), slug_history, status, updated_at (req), usage_examples, version (req)',
-  c_EntityContent.context_budget = 'high',
-  c_EntityContent.visibility = 'publishable',
-  c_EntityContent.generation_count = 0,
-  c_EntityContent.created_at = datetime()
+  c_EntityNative.key = 'entity-native',
+  c_EntityNative.realm = 'org',
+  c_EntityNative.layer = 'semantic',
+  c_EntityNative.trait = 'authored',
+  c_EntityNative.display_name = 'EntityNative',
+  c_EntityNative.llm_context = 'Human-authored locale-native content for an Entity',
+  c_EntityNative.yaml_path = 'node-classes/org/semantic/entity-native.yaml',
+  c_EntityNative.properties = ['key', 'entity_key', 'locale_key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'curation_status', 'status', 'definition', 'purpose', 'benefits', 'usage_examples', 'audience_segment', 'cultural_notes', 'version'],
+  c_EntityNative.required_properties = ['key', 'entity_key', 'locale_key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'curation_status', 'version'],
+  c_EntityNative.schema_hint = 'audience_segment, benefits, created_at (req), cultural_notes, curation_status (req), definition, description (req), display_name (req), entity_key (req), key (req), llm_context (req), locale_key (req), purpose, status, updated_at (req), usage_examples, version (req)',
+  c_EntityNative.context_budget = 'high',
+  c_EntityNative.visibility = 'publishable',
+  c_EntityNative.generation_count = 0,
+  c_EntityNative.created_at = datetime()
 ON MATCH SET
-  c_EntityContent.key = 'entity-content',
-  c_EntityContent.realm = 'org',
-  c_EntityContent.layer = 'semantic',
-  c_EntityContent.trait = 'authored',
-  c_EntityContent.display_name = 'EntityContent',
-  c_EntityContent.llm_context = 'Locale-native content for an Entity',
-  c_EntityContent.yaml_path = 'node-classes/org/semantic/entity-content.yaml',
-  c_EntityContent.properties = ['key', 'entity_key', 'locale_key', 'slug', 'full_path', 'parent_slug', 'depth', 'slug_history', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'curation_status', 'status', 'definition', 'purpose', 'benefits', 'usage_examples', 'audience_segment', 'cultural_notes', 'version'],
-  c_EntityContent.required_properties = ['key', 'entity_key', 'locale_key', 'slug', 'full_path', 'depth', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'curation_status', 'version'],
-  c_EntityContent.schema_hint = 'audience_segment, benefits, created_at (req), cultural_notes, curation_status (req), definition, depth (req), description (req), display_name (req), entity_key (req), full_path (req), key (req), llm_context (req), locale_key (req), parent_slug, purpose, slug (req), slug_history, status, updated_at (req), usage_examples, version (req)',
-  c_EntityContent.context_budget = 'high',
-  c_EntityContent.visibility = 'publishable',
-  c_EntityContent.generation_count = 0,
-  c_EntityContent.updated_at = datetime();
+  c_EntityNative.key = 'entity-native',
+  c_EntityNative.realm = 'org',
+  c_EntityNative.layer = 'semantic',
+  c_EntityNative.trait = 'authored',
+  c_EntityNative.display_name = 'EntityNative',
+  c_EntityNative.llm_context = 'Human-authored locale-native content for an Entity',
+  c_EntityNative.yaml_path = 'node-classes/org/semantic/entity-native.yaml',
+  c_EntityNative.properties = ['key', 'entity_key', 'locale_key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'curation_status', 'status', 'definition', 'purpose', 'benefits', 'usage_examples', 'audience_segment', 'cultural_notes', 'version'],
+  c_EntityNative.required_properties = ['key', 'entity_key', 'locale_key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'curation_status', 'version'],
+  c_EntityNative.schema_hint = 'audience_segment, benefits, created_at (req), cultural_notes, curation_status (req), definition, description (req), display_name (req), entity_key (req), key (req), llm_context (req), locale_key (req), purpose, status, updated_at (req), usage_examples, version (req)',
+  c_EntityNative.context_budget = 'high',
+  c_EntityNative.visibility = 'publishable',
+  c_EntityNative.generation_count = 0,
+  c_EntityNative.updated_at = datetime();
 
 MERGE (c_Expression:Schema:Class {label: 'Expression'})
 ON CREATE SET
@@ -1329,9 +1329,9 @@ ON CREATE SET
   c_Page.display_name = 'Page',
   c_Page.llm_context = 'Invariant page structure containing blocks and orchestrator instructions',
   c_Page.yaml_path = 'node-classes/org/structure/page.yaml',
-  c_Page.properties = ['key', 'slug', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at'],
+  c_Page.properties = ['key', 'slug', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'is_pillar', 'pillar_strategy'],
   c_Page.required_properties = ['key', 'slug', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at'],
-  c_Page.schema_hint = 'created_at (req), description (req), display_name (req), key (req), llm_context (req), slug (req), updated_at (req)',
+  c_Page.schema_hint = 'created_at (req), description (req), display_name (req), is_pillar, key (req), llm_context (req), pillar_strategy, slug (req), updated_at (req)',
   c_Page.context_budget = 'high',
   c_Page.visibility = 'fragment',
   c_Page.generation_count = 0,
@@ -1344,45 +1344,45 @@ ON MATCH SET
   c_Page.display_name = 'Page',
   c_Page.llm_context = 'Invariant page structure containing blocks and orchestrator instructions',
   c_Page.yaml_path = 'node-classes/org/structure/page.yaml',
-  c_Page.properties = ['key', 'slug', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at'],
+  c_Page.properties = ['key', 'slug', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'is_pillar', 'pillar_strategy'],
   c_Page.required_properties = ['key', 'slug', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at'],
-  c_Page.schema_hint = 'created_at (req), description (req), display_name (req), key (req), llm_context (req), slug (req), updated_at (req)',
+  c_Page.schema_hint = 'created_at (req), description (req), display_name (req), is_pillar, key (req), llm_context (req), pillar_strategy, slug (req), updated_at (req)',
   c_Page.context_budget = 'high',
   c_Page.visibility = 'fragment',
   c_Page.generation_count = 0,
   c_Page.updated_at = datetime();
 
-MERGE (c_PageGenerated:Schema:Class {label: 'PageGenerated'})
+MERGE (c_PageNative:Schema:Class {label: 'PageNative'})
 ON CREATE SET
-  c_PageGenerated.key = 'page-generated',
-  c_PageGenerated.realm = 'org',
-  c_PageGenerated.layer = 'output',
-  c_PageGenerated.trait = 'generated',
-  c_PageGenerated.display_name = 'PageGenerated',
-  c_PageGenerated.llm_context = 'Assembled BlockGenerated content for a page (derived from source content)',
-  c_PageGenerated.yaml_path = 'node-classes/org/output/page-generated.yaml',
-  c_PageGenerated.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'assembled', 'assembled_at', 'assembler_version', 'status', 'version', 'published_at', 'replaced_at'],
-  c_PageGenerated.required_properties = ['key', 'display_name', 'description', 'created_at', 'updated_at', 'assembled', 'assembled_at', 'assembler_version', 'status', 'version'],
-  c_PageGenerated.schema_hint = 'assembled (req), assembled_at (req), assembler_version (req), created_at (req), description (req), display_name (req), key (req), llm_context, published_at, replaced_at, status (req), updated_at (req), version (req)',
-  c_PageGenerated.context_budget = 'low',
-  c_PageGenerated.visibility = 'publishable',
-  c_PageGenerated.generation_count = 0,
-  c_PageGenerated.created_at = datetime()
+  c_PageNative.key = 'page-native',
+  c_PageNative.realm = 'org',
+  c_PageNative.layer = 'output',
+  c_PageNative.trait = 'generated',
+  c_PageNative.display_name = 'PageNative',
+  c_PageNative.llm_context = 'LLM-generated native page content assembled from BlockNative nodes',
+  c_PageNative.yaml_path = 'node-classes/org/output/page-native.yaml',
+  c_PageNative.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'assembled', 'assembled_at', 'assembler_version', 'status', 'version', 'published_at', 'replaced_at'],
+  c_PageNative.required_properties = ['key', 'display_name', 'description', 'created_at', 'updated_at', 'assembled', 'assembled_at', 'assembler_version', 'status', 'version'],
+  c_PageNative.schema_hint = 'assembled (req), assembled_at (req), assembler_version (req), created_at (req), description (req), display_name (req), key (req), llm_context, published_at, replaced_at, status (req), updated_at (req), version (req)',
+  c_PageNative.context_budget = 'low',
+  c_PageNative.visibility = 'publishable',
+  c_PageNative.generation_count = 0,
+  c_PageNative.created_at = datetime()
 ON MATCH SET
-  c_PageGenerated.key = 'page-generated',
-  c_PageGenerated.realm = 'org',
-  c_PageGenerated.layer = 'output',
-  c_PageGenerated.trait = 'generated',
-  c_PageGenerated.display_name = 'PageGenerated',
-  c_PageGenerated.llm_context = 'Assembled BlockGenerated content for a page (derived from source content)',
-  c_PageGenerated.yaml_path = 'node-classes/org/output/page-generated.yaml',
-  c_PageGenerated.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'assembled', 'assembled_at', 'assembler_version', 'status', 'version', 'published_at', 'replaced_at'],
-  c_PageGenerated.required_properties = ['key', 'display_name', 'description', 'created_at', 'updated_at', 'assembled', 'assembled_at', 'assembler_version', 'status', 'version'],
-  c_PageGenerated.schema_hint = 'assembled (req), assembled_at (req), assembler_version (req), created_at (req), description (req), display_name (req), key (req), llm_context, published_at, replaced_at, status (req), updated_at (req), version (req)',
-  c_PageGenerated.context_budget = 'low',
-  c_PageGenerated.visibility = 'publishable',
-  c_PageGenerated.generation_count = 0,
-  c_PageGenerated.updated_at = datetime();
+  c_PageNative.key = 'page-native',
+  c_PageNative.realm = 'org',
+  c_PageNative.layer = 'output',
+  c_PageNative.trait = 'generated',
+  c_PageNative.display_name = 'PageNative',
+  c_PageNative.llm_context = 'LLM-generated native page content assembled from BlockNative nodes',
+  c_PageNative.yaml_path = 'node-classes/org/output/page-native.yaml',
+  c_PageNative.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'assembled', 'assembled_at', 'assembler_version', 'status', 'version', 'published_at', 'replaced_at'],
+  c_PageNative.required_properties = ['key', 'display_name', 'description', 'created_at', 'updated_at', 'assembled', 'assembled_at', 'assembler_version', 'status', 'version'],
+  c_PageNative.schema_hint = 'assembled (req), assembled_at (req), assembler_version (req), created_at (req), description (req), display_name (req), key (req), llm_context, published_at, replaced_at, status (req), updated_at (req), version (req)',
+  c_PageNative.context_budget = 'low',
+  c_PageNative.visibility = 'publishable',
+  c_PageNative.generation_count = 0,
+  c_PageNative.updated_at = datetime();
 
 MERGE (c_Pattern:Schema:Class {label: 'Pattern'})
 ON CREATE SET
@@ -1544,37 +1544,37 @@ ON MATCH SET
   c_Project.generation_count = 0,
   c_Project.updated_at = datetime();
 
-MERGE (c_ProjectContent:Schema:Class {label: 'ProjectContent'})
+MERGE (c_ProjectNative:Schema:Class {label: 'ProjectNative'})
 ON CREATE SET
-  c_ProjectContent.key = 'project-content',
-  c_ProjectContent.realm = 'org',
-  c_ProjectContent.layer = 'foundation',
-  c_ProjectContent.trait = 'authored',
-  c_ProjectContent.display_name = 'ProjectContent',
-  c_ProjectContent.llm_context = 'Localized identity and messaging for a Project',
-  c_ProjectContent.yaml_path = 'node-classes/org/foundation/project-content.yaml',
-  c_ProjectContent.properties = ['display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'status', 'what_short', 'what_medium', 'what_long', 'tagline', 'pitch_one_liner', 'pitch_elevator', 'pitch_detailed', 'voice_personality', 'voice_tone', 'voice_do', 'voice_dont', 'cta_primary', 'cta_secondary', 'cta_tertiary', 'meta_description', 'primary_keywords', 'secondary_keywords'],
-  c_ProjectContent.required_properties = ['display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'what_short', 'what_medium', 'what_long', 'tagline', 'pitch_one_liner', 'pitch_elevator', 'pitch_detailed', 'voice_personality', 'voice_tone', 'voice_do', 'voice_dont', 'cta_primary', 'cta_secondary', 'meta_description'],
-  c_ProjectContent.schema_hint = 'created_at (req), cta_primary (req), cta_secondary (req), cta_tertiary, description (req), display_name (req), llm_context (req), meta_description (req), pitch_detailed (req), pitch_elevator (req), pitch_one_liner (req), primary_keywords, secondary_keywords, status, tagline (req), updated_at (req), voice_do (req), voice_dont (req), voice_personality (req), voice_tone (req), what_long (req), what_medium (req), what_short (req)',
-  c_ProjectContent.context_budget = 'high',
-  c_ProjectContent.visibility = 'fragment',
-  c_ProjectContent.generation_count = 0,
-  c_ProjectContent.created_at = datetime()
+  c_ProjectNative.key = 'project-native',
+  c_ProjectNative.realm = 'org',
+  c_ProjectNative.layer = 'foundation',
+  c_ProjectNative.trait = 'authored',
+  c_ProjectNative.display_name = 'ProjectNative',
+  c_ProjectNative.llm_context = 'Human-authored native identity and messaging for a Project',
+  c_ProjectNative.yaml_path = 'node-classes/org/foundation/project-native.yaml',
+  c_ProjectNative.properties = ['display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'status', 'what_short', 'what_medium', 'what_long', 'tagline', 'pitch_one_liner', 'pitch_elevator', 'pitch_detailed', 'voice_personality', 'voice_tone', 'voice_do', 'voice_dont', 'cta_primary', 'cta_secondary', 'cta_tertiary', 'meta_description', 'primary_keywords', 'secondary_keywords'],
+  c_ProjectNative.required_properties = ['display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'what_short', 'what_medium', 'what_long', 'tagline', 'pitch_one_liner', 'pitch_elevator', 'pitch_detailed', 'voice_personality', 'voice_tone', 'voice_do', 'voice_dont', 'cta_primary', 'cta_secondary', 'meta_description'],
+  c_ProjectNative.schema_hint = 'created_at (req), cta_primary (req), cta_secondary (req), cta_tertiary, description (req), display_name (req), llm_context (req), meta_description (req), pitch_detailed (req), pitch_elevator (req), pitch_one_liner (req), primary_keywords, secondary_keywords, status, tagline (req), updated_at (req), voice_do (req), voice_dont (req), voice_personality (req), voice_tone (req), what_long (req), what_medium (req), what_short (req)',
+  c_ProjectNative.context_budget = 'high',
+  c_ProjectNative.visibility = 'fragment',
+  c_ProjectNative.generation_count = 0,
+  c_ProjectNative.created_at = datetime()
 ON MATCH SET
-  c_ProjectContent.key = 'project-content',
-  c_ProjectContent.realm = 'org',
-  c_ProjectContent.layer = 'foundation',
-  c_ProjectContent.trait = 'authored',
-  c_ProjectContent.display_name = 'ProjectContent',
-  c_ProjectContent.llm_context = 'Localized identity and messaging for a Project',
-  c_ProjectContent.yaml_path = 'node-classes/org/foundation/project-content.yaml',
-  c_ProjectContent.properties = ['display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'status', 'what_short', 'what_medium', 'what_long', 'tagline', 'pitch_one_liner', 'pitch_elevator', 'pitch_detailed', 'voice_personality', 'voice_tone', 'voice_do', 'voice_dont', 'cta_primary', 'cta_secondary', 'cta_tertiary', 'meta_description', 'primary_keywords', 'secondary_keywords'],
-  c_ProjectContent.required_properties = ['display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'what_short', 'what_medium', 'what_long', 'tagline', 'pitch_one_liner', 'pitch_elevator', 'pitch_detailed', 'voice_personality', 'voice_tone', 'voice_do', 'voice_dont', 'cta_primary', 'cta_secondary', 'meta_description'],
-  c_ProjectContent.schema_hint = 'created_at (req), cta_primary (req), cta_secondary (req), cta_tertiary, description (req), display_name (req), llm_context (req), meta_description (req), pitch_detailed (req), pitch_elevator (req), pitch_one_liner (req), primary_keywords, secondary_keywords, status, tagline (req), updated_at (req), voice_do (req), voice_dont (req), voice_personality (req), voice_tone (req), what_long (req), what_medium (req), what_short (req)',
-  c_ProjectContent.context_budget = 'high',
-  c_ProjectContent.visibility = 'fragment',
-  c_ProjectContent.generation_count = 0,
-  c_ProjectContent.updated_at = datetime();
+  c_ProjectNative.key = 'project-native',
+  c_ProjectNative.realm = 'org',
+  c_ProjectNative.layer = 'foundation',
+  c_ProjectNative.trait = 'authored',
+  c_ProjectNative.display_name = 'ProjectNative',
+  c_ProjectNative.llm_context = 'Human-authored native identity and messaging for a Project',
+  c_ProjectNative.yaml_path = 'node-classes/org/foundation/project-native.yaml',
+  c_ProjectNative.properties = ['display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'status', 'what_short', 'what_medium', 'what_long', 'tagline', 'pitch_one_liner', 'pitch_elevator', 'pitch_detailed', 'voice_personality', 'voice_tone', 'voice_do', 'voice_dont', 'cta_primary', 'cta_secondary', 'cta_tertiary', 'meta_description', 'primary_keywords', 'secondary_keywords'],
+  c_ProjectNative.required_properties = ['display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'what_short', 'what_medium', 'what_long', 'tagline', 'pitch_one_liner', 'pitch_elevator', 'pitch_detailed', 'voice_personality', 'voice_tone', 'voice_do', 'voice_dont', 'cta_primary', 'cta_secondary', 'meta_description'],
+  c_ProjectNative.schema_hint = 'created_at (req), cta_primary (req), cta_secondary (req), cta_tertiary, description (req), display_name (req), llm_context (req), meta_description (req), pitch_detailed (req), pitch_elevator (req), pitch_one_liner (req), primary_keywords, secondary_keywords, status, tagline (req), updated_at (req), voice_do (req), voice_dont (req), voice_personality (req), voice_tone (req), what_long (req), what_medium (req), what_short (req)',
+  c_ProjectNative.context_budget = 'high',
+  c_ProjectNative.visibility = 'fragment',
+  c_ProjectNative.generation_count = 0,
+  c_ProjectNative.updated_at = datetime();
 
 MERGE (c_PromptArtifact:Schema:Class {label: 'PromptArtifact'})
 ON CREATE SET
@@ -1979,10 +1979,10 @@ MERGE (l)-[:HAS_CLASS]->(c);
 MATCH (l:Layer {key: 'structure'}), (c:Class {label: 'Block'})
 MERGE (l)-[:HAS_CLASS]->(c);
 
-MATCH (l:Layer {key: 'output'}), (c:Class {label: 'BlockGenerated'})
+MATCH (l:Layer {key: 'instruction'}), (c:Class {label: 'BlockInstruction'})
 MERGE (l)-[:HAS_CLASS]->(c);
 
-MATCH (l:Layer {key: 'instruction'}), (c:Class {label: 'BlockInstruction'})
+MATCH (l:Layer {key: 'output'}), (c:Class {label: 'BlockNative'})
 MERGE (l)-[:HAS_CLASS]->(c);
 
 MATCH (l:Layer {key: 'instruction'}), (c:Class {label: 'BlockRules'})
@@ -2036,7 +2036,7 @@ MERGE (l)-[:HAS_CLASS]->(c);
 MATCH (l:Layer {key: 'config'}), (c:Class {label: 'EntityCategory'})
 MERGE (l)-[:HAS_CLASS]->(c);
 
-MATCH (l:Layer {key: 'semantic'}), (c:Class {label: 'EntityContent'})
+MATCH (l:Layer {key: 'semantic'}), (c:Class {label: 'EntityNative'})
 MERGE (l)-[:HAS_CLASS]->(c);
 
 MATCH (l:Layer {key: 'knowledge'}), (c:Class {label: 'Expression'})
@@ -2090,7 +2090,7 @@ MERGE (l)-[:HAS_CLASS]->(c);
 MATCH (l:Layer {key: 'structure'}), (c:Class {label: 'Page'})
 MERGE (l)-[:HAS_CLASS]->(c);
 
-MATCH (l:Layer {key: 'output'}), (c:Class {label: 'PageGenerated'})
+MATCH (l:Layer {key: 'output'}), (c:Class {label: 'PageNative'})
 MERGE (l)-[:HAS_CLASS]->(c);
 
 MATCH (l:Layer {key: 'knowledge'}), (c:Class {label: 'Pattern'})
@@ -2108,7 +2108,7 @@ MERGE (l)-[:HAS_CLASS]->(c);
 MATCH (l:Layer {key: 'foundation'}), (c:Class {label: 'Project'})
 MERGE (l)-[:HAS_CLASS]->(c);
 
-MATCH (l:Layer {key: 'foundation'}), (c:Class {label: 'ProjectContent'})
+MATCH (l:Layer {key: 'foundation'}), (c:Class {label: 'ProjectNative'})
 MERGE (l)-[:HAS_CLASS]->(c);
 
 MATCH (l:Layer {key: 'instruction'}), (c:Class {label: 'PromptArtifact'})
@@ -2166,10 +2166,10 @@ MERGE (c)-[:IN_REALM]->(r);
 MATCH (c:Class {label: 'Block'}), (r:Realm {key: 'org'})
 MERGE (c)-[:IN_REALM]->(r);
 
-MATCH (c:Class {label: 'BlockGenerated'}), (r:Realm {key: 'org'})
+MATCH (c:Class {label: 'BlockInstruction'}), (r:Realm {key: 'org'})
 MERGE (c)-[:IN_REALM]->(r);
 
-MATCH (c:Class {label: 'BlockInstruction'}), (r:Realm {key: 'org'})
+MATCH (c:Class {label: 'BlockNative'}), (r:Realm {key: 'org'})
 MERGE (c)-[:IN_REALM]->(r);
 
 MATCH (c:Class {label: 'BlockRules'}), (r:Realm {key: 'org'})
@@ -2223,7 +2223,7 @@ MERGE (c)-[:IN_REALM]->(r);
 MATCH (c:Class {label: 'EntityCategory'}), (r:Realm {key: 'shared'})
 MERGE (c)-[:IN_REALM]->(r);
 
-MATCH (c:Class {label: 'EntityContent'}), (r:Realm {key: 'org'})
+MATCH (c:Class {label: 'EntityNative'}), (r:Realm {key: 'org'})
 MERGE (c)-[:IN_REALM]->(r);
 
 MATCH (c:Class {label: 'Expression'}), (r:Realm {key: 'shared'})
@@ -2277,7 +2277,7 @@ MERGE (c)-[:IN_REALM]->(r);
 MATCH (c:Class {label: 'Page'}), (r:Realm {key: 'org'})
 MERGE (c)-[:IN_REALM]->(r);
 
-MATCH (c:Class {label: 'PageGenerated'}), (r:Realm {key: 'org'})
+MATCH (c:Class {label: 'PageNative'}), (r:Realm {key: 'org'})
 MERGE (c)-[:IN_REALM]->(r);
 
 MATCH (c:Class {label: 'Pattern'}), (r:Realm {key: 'shared'})
@@ -2295,7 +2295,7 @@ MERGE (c)-[:IN_REALM]->(r);
 MATCH (c:Class {label: 'Project'}), (r:Realm {key: 'org'})
 MERGE (c)-[:IN_REALM]->(r);
 
-MATCH (c:Class {label: 'ProjectContent'}), (r:Realm {key: 'org'})
+MATCH (c:Class {label: 'ProjectNative'}), (r:Realm {key: 'org'})
 MERGE (c)-[:IN_REALM]->(r);
 
 MATCH (c:Class {label: 'PromptArtifact'}), (r:Realm {key: 'org'})
@@ -2353,10 +2353,10 @@ MERGE (c)-[:IN_LAYER]->(l);
 MATCH (c:Class {label: 'Block'}), (l:Layer {key: 'structure'})
 MERGE (c)-[:IN_LAYER]->(l);
 
-MATCH (c:Class {label: 'BlockGenerated'}), (l:Layer {key: 'output'})
+MATCH (c:Class {label: 'BlockInstruction'}), (l:Layer {key: 'instruction'})
 MERGE (c)-[:IN_LAYER]->(l);
 
-MATCH (c:Class {label: 'BlockInstruction'}), (l:Layer {key: 'instruction'})
+MATCH (c:Class {label: 'BlockNative'}), (l:Layer {key: 'output'})
 MERGE (c)-[:IN_LAYER]->(l);
 
 MATCH (c:Class {label: 'BlockRules'}), (l:Layer {key: 'instruction'})
@@ -2410,7 +2410,7 @@ MERGE (c)-[:IN_LAYER]->(l);
 MATCH (c:Class {label: 'EntityCategory'}), (l:Layer {key: 'config'})
 MERGE (c)-[:IN_LAYER]->(l);
 
-MATCH (c:Class {label: 'EntityContent'}), (l:Layer {key: 'semantic'})
+MATCH (c:Class {label: 'EntityNative'}), (l:Layer {key: 'semantic'})
 MERGE (c)-[:IN_LAYER]->(l);
 
 MATCH (c:Class {label: 'Expression'}), (l:Layer {key: 'knowledge'})
@@ -2464,7 +2464,7 @@ MERGE (c)-[:IN_LAYER]->(l);
 MATCH (c:Class {label: 'Page'}), (l:Layer {key: 'structure'})
 MERGE (c)-[:IN_LAYER]->(l);
 
-MATCH (c:Class {label: 'PageGenerated'}), (l:Layer {key: 'output'})
+MATCH (c:Class {label: 'PageNative'}), (l:Layer {key: 'output'})
 MERGE (c)-[:IN_LAYER]->(l);
 
 MATCH (c:Class {label: 'Pattern'}), (l:Layer {key: 'knowledge'})
@@ -2482,7 +2482,7 @@ MERGE (c)-[:IN_LAYER]->(l);
 MATCH (c:Class {label: 'Project'}), (l:Layer {key: 'foundation'})
 MERGE (c)-[:IN_LAYER]->(l);
 
-MATCH (c:Class {label: 'ProjectContent'}), (l:Layer {key: 'foundation'})
+MATCH (c:Class {label: 'ProjectNative'}), (l:Layer {key: 'foundation'})
 MERGE (c)-[:IN_LAYER]->(l);
 
 MATCH (c:Class {label: 'PromptArtifact'}), (l:Layer {key: 'instruction'})
@@ -2540,10 +2540,10 @@ MERGE (c)-[:EXHIBITS]->(t);
 MATCH (c:Class {label: 'Block'}), (t:Trait {key: 'defined'})
 MERGE (c)-[:EXHIBITS]->(t);
 
-MATCH (c:Class {label: 'BlockGenerated'}), (t:Trait {key: 'generated'})
+MATCH (c:Class {label: 'BlockInstruction'}), (t:Trait {key: 'defined'})
 MERGE (c)-[:EXHIBITS]->(t);
 
-MATCH (c:Class {label: 'BlockInstruction'}), (t:Trait {key: 'defined'})
+MATCH (c:Class {label: 'BlockNative'}), (t:Trait {key: 'generated'})
 MERGE (c)-[:EXHIBITS]->(t);
 
 MATCH (c:Class {label: 'BlockRules'}), (t:Trait {key: 'defined'})
@@ -2597,7 +2597,7 @@ MERGE (c)-[:EXHIBITS]->(t);
 MATCH (c:Class {label: 'EntityCategory'}), (t:Trait {key: 'defined'})
 MERGE (c)-[:EXHIBITS]->(t);
 
-MATCH (c:Class {label: 'EntityContent'}), (t:Trait {key: 'authored'})
+MATCH (c:Class {label: 'EntityNative'}), (t:Trait {key: 'authored'})
 MERGE (c)-[:EXHIBITS]->(t);
 
 MATCH (c:Class {label: 'Expression'}), (t:Trait {key: 'imported'})
@@ -2651,7 +2651,7 @@ MERGE (c)-[:EXHIBITS]->(t);
 MATCH (c:Class {label: 'Page'}), (t:Trait {key: 'defined'})
 MERGE (c)-[:EXHIBITS]->(t);
 
-MATCH (c:Class {label: 'PageGenerated'}), (t:Trait {key: 'generated'})
+MATCH (c:Class {label: 'PageNative'}), (t:Trait {key: 'generated'})
 MERGE (c)-[:EXHIBITS]->(t);
 
 MATCH (c:Class {label: 'Pattern'}), (t:Trait {key: 'imported'})
@@ -2669,7 +2669,7 @@ MERGE (c)-[:EXHIBITS]->(t);
 MATCH (c:Class {label: 'Project'}), (t:Trait {key: 'defined'})
 MERGE (c)-[:EXHIBITS]->(t);
 
-MATCH (c:Class {label: 'ProjectContent'}), (t:Trait {key: 'authored'})
+MATCH (c:Class {label: 'ProjectNative'}), (t:Trait {key: 'authored'})
 MERGE (c)-[:EXHIBITS]->(t);
 
 MATCH (c:Class {label: 'PromptArtifact'}), (t:Trait {key: 'generated'})

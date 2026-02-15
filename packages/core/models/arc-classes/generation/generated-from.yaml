@@ -5,12 +5,12 @@ arc:
   name: GENERATED_FROM
   family: generation
   scope: intra_realm
-  source: BlockGenerated
+  source: BlockNative
   target: BlockType
   cardinality: many_to_one
   llm_context: |
     USE: when validating generated content against schema, fast type lookup.
     TRIGGERS: block type validation, schema check, structure verification.
     NOT: for block ownership (use GENERATED_FOR), for type definition (use BlockType).
-    RELATES: BlockGenerated (source), BlockType (target).
-  cypher_pattern: (BlockGenerated)-[:GENERATED_FROM]->(BlockType)
+    RELATES: BlockNative (source), BlockType (target).
+  cypher_pattern: (BlockNative)-[:GENERATED_FROM]->(BlockType)

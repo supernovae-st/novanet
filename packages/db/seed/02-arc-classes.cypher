@@ -11,52 +11,52 @@
 MERGE (ac_ASSEMBLES:Schema:ArcClass {key: 'ASSEMBLES'})
 ON CREATE SET
   ac_ASSEMBLES.display_name = 'Assembles',
-  ac_ASSEMBLES.llm_context = 'USE: when rendering a complete page, loading blocks in order. TRIGGERS: page render, block assembly, content composition, final output. NOT: for structure definition (use HAS_BLOCK), for single block (use BlockGenerated). RELATES: PageGenerated (source), BlockGenerated (target), order property mirrors HAS_BLOCK.order.',
+  ac_ASSEMBLES.llm_context = 'USE: when rendering a complete page, loading blocks in order. TRIGGERS: page render, block assembly, content composition, final output. NOT: for structure definition (use HAS_BLOCK), for single block (use BlockNative). RELATES: PageNative (source), BlockNative (target), order property mirrors HAS_BLOCK.order.',
   ac_ASSEMBLES.family = 'generation',
   ac_ASSEMBLES.scope = 'intra_realm',
   ac_ASSEMBLES.cardinality = 'one_to_many',
   ac_ASSEMBLES.is_self_referential = false,
   ac_ASSEMBLES.inverse_name = null,
   ac_ASSEMBLES.arc_properties = ['order'],
-  ac_ASSEMBLES.cypher_pattern = '(PageGenerated)-[:ASSEMBLES]->(BlockGenerated)',
+  ac_ASSEMBLES.cypher_pattern = '(PageNative)-[:ASSEMBLES]->(BlockNative)',
   ac_ASSEMBLES.temperature_threshold = null,
   ac_ASSEMBLES.created_at = datetime()
 ON MATCH SET
   ac_ASSEMBLES.display_name = 'Assembles',
-  ac_ASSEMBLES.llm_context = 'USE: when rendering a complete page, loading blocks in order. TRIGGERS: page render, block assembly, content composition, final output. NOT: for structure definition (use HAS_BLOCK), for single block (use BlockGenerated). RELATES: PageGenerated (source), BlockGenerated (target), order property mirrors HAS_BLOCK.order.',
+  ac_ASSEMBLES.llm_context = 'USE: when rendering a complete page, loading blocks in order. TRIGGERS: page render, block assembly, content composition, final output. NOT: for structure definition (use HAS_BLOCK), for single block (use BlockNative). RELATES: PageNative (source), BlockNative (target), order property mirrors HAS_BLOCK.order.',
   ac_ASSEMBLES.family = 'generation',
   ac_ASSEMBLES.scope = 'intra_realm',
   ac_ASSEMBLES.cardinality = 'one_to_many',
   ac_ASSEMBLES.is_self_referential = false,
   ac_ASSEMBLES.inverse_name = null,
   ac_ASSEMBLES.arc_properties = ['order'],
-  ac_ASSEMBLES.cypher_pattern = '(PageGenerated)-[:ASSEMBLES]->(BlockGenerated)',
+  ac_ASSEMBLES.cypher_pattern = '(PageNative)-[:ASSEMBLES]->(BlockNative)',
   ac_ASSEMBLES.temperature_threshold = null,
   ac_ASSEMBLES.updated_at = datetime();
 
 MERGE (ac_BUNDLES:Schema:ArcClass {key: 'BUNDLES'})
 ON CREATE SET
   ac_BUNDLES.display_name = 'Bundles',
-  ac_BUNDLES.llm_context = 'USE: when deploying content, loading all generated nodes in an artifact. TRIGGERS: deployment bundle, artifact contents, release package. NOT: for live content (use PageGenerated), for structure (use HAS_GENERATED). RELATES: OutputArtifact (source), PageGenerated/BlockGenerated (target), checksum for integrity.',
+  ac_BUNDLES.llm_context = 'USE: when deploying content, loading all generated nodes in an artifact. TRIGGERS: deployment bundle, artifact contents, release package. NOT: for live content (use PageNative), for structure (use HAS_GENERATED). RELATES: OutputArtifact (source), PageNative/BlockNative (target), checksum for integrity.',
   ac_BUNDLES.family = 'generation',
   ac_BUNDLES.scope = 'intra_realm',
   ac_BUNDLES.cardinality = 'one_to_many',
   ac_BUNDLES.is_self_referential = false,
   ac_BUNDLES.inverse_name = null,
   ac_BUNDLES.arc_properties = ['position', 'checksum'],
-  ac_BUNDLES.cypher_pattern = '(OutputArtifact)-[:BUNDLES]->(PageGenerated, BlockGenerated)',
+  ac_BUNDLES.cypher_pattern = '(OutputArtifact)-[:BUNDLES]->(PageNative, BlockNative)',
   ac_BUNDLES.temperature_threshold = null,
   ac_BUNDLES.created_at = datetime()
 ON MATCH SET
   ac_BUNDLES.display_name = 'Bundles',
-  ac_BUNDLES.llm_context = 'USE: when deploying content, loading all generated nodes in an artifact. TRIGGERS: deployment bundle, artifact contents, release package. NOT: for live content (use PageGenerated), for structure (use HAS_GENERATED). RELATES: OutputArtifact (source), PageGenerated/BlockGenerated (target), checksum for integrity.',
+  ac_BUNDLES.llm_context = 'USE: when deploying content, loading all generated nodes in an artifact. TRIGGERS: deployment bundle, artifact contents, release package. NOT: for live content (use PageNative), for structure (use HAS_GENERATED). RELATES: OutputArtifact (source), PageNative/BlockNative (target), checksum for integrity.',
   ac_BUNDLES.family = 'generation',
   ac_BUNDLES.scope = 'intra_realm',
   ac_BUNDLES.cardinality = 'one_to_many',
   ac_BUNDLES.is_self_referential = false,
   ac_BUNDLES.inverse_name = null,
   ac_BUNDLES.arc_properties = ['position', 'checksum'],
-  ac_BUNDLES.cypher_pattern = '(OutputArtifact)-[:BUNDLES]->(PageGenerated, BlockGenerated)',
+  ac_BUNDLES.cypher_pattern = '(OutputArtifact)-[:BUNDLES]->(PageNative, BlockNative)',
   ac_BUNDLES.temperature_threshold = null,
   ac_BUNDLES.updated_at = datetime();
 
@@ -86,109 +86,83 @@ ON MATCH SET
   ac_COMPILED_FROM.temperature_threshold = null,
   ac_COMPILED_FROM.updated_at = datetime();
 
+MERGE (ac_DERIVED_SLUG_FROM:Schema:ArcClass {key: 'DERIVED_SLUG_FROM'})
+ON CREATE SET
+  ac_DERIVED_SLUG_FROM.display_name = 'Derived Slug From',
+  ac_DERIVED_SLUG_FROM.llm_context = 'USE: when auditing slug derivation decisions for SEO. TRIGGERS: slug audit, keyword derivation, SEO slug, URL generation audit. NOT: page linking (use LINKS_TO), keyword targeting (use TARGETS). RELATES: PageNative (source), SEOKeyword (target), derivation_score (formula), audit trail.',
+  ac_DERIVED_SLUG_FROM.family = 'generation',
+  ac_DERIVED_SLUG_FROM.scope = 'cross_realm',
+  ac_DERIVED_SLUG_FROM.cardinality = 'many_to_one',
+  ac_DERIVED_SLUG_FROM.is_self_referential = false,
+  ac_DERIVED_SLUG_FROM.inverse_name = null,
+  ac_DERIVED_SLUG_FROM.arc_properties = ['derivation_score', 'derivation_rationale', 'alternatives_considered', 'no_repetition_applied', 'brand_invariant'],
+  ac_DERIVED_SLUG_FROM.cypher_pattern = '(PageNative)-[:DERIVED_SLUG_FROM]->(SEOKeyword)',
+  ac_DERIVED_SLUG_FROM.temperature_threshold = null,
+  ac_DERIVED_SLUG_FROM.created_at = datetime()
+ON MATCH SET
+  ac_DERIVED_SLUG_FROM.display_name = 'Derived Slug From',
+  ac_DERIVED_SLUG_FROM.llm_context = 'USE: when auditing slug derivation decisions for SEO. TRIGGERS: slug audit, keyword derivation, SEO slug, URL generation audit. NOT: page linking (use LINKS_TO), keyword targeting (use TARGETS). RELATES: PageNative (source), SEOKeyword (target), derivation_score (formula), audit trail.',
+  ac_DERIVED_SLUG_FROM.family = 'generation',
+  ac_DERIVED_SLUG_FROM.scope = 'cross_realm',
+  ac_DERIVED_SLUG_FROM.cardinality = 'many_to_one',
+  ac_DERIVED_SLUG_FROM.is_self_referential = false,
+  ac_DERIVED_SLUG_FROM.inverse_name = null,
+  ac_DERIVED_SLUG_FROM.arc_properties = ['derivation_score', 'derivation_rationale', 'alternatives_considered', 'no_repetition_applied', 'brand_invariant'],
+  ac_DERIVED_SLUG_FROM.cypher_pattern = '(PageNative)-[:DERIVED_SLUG_FROM]->(SEOKeyword)',
+  ac_DERIVED_SLUG_FROM.temperature_threshold = null,
+  ac_DERIVED_SLUG_FROM.updated_at = datetime();
+
 MERGE (ac_GENERATED:Schema:ArcClass {key: 'GENERATED'})
 ON CREATE SET
   ac_GENERATED.display_name = 'Generated',
-  ac_GENERATED.llm_context = 'USE: when tracing which instruction produced which generated content. TRIGGERS: generation provenance, instruction audit, output source. NOT: for structure ownership (use HAS_GENERATED), for compiled prompts (use COMPILED_FROM). RELATES: BlockInstruction (source), PageGenerated/BlockGenerated (target).',
+  ac_GENERATED.llm_context = 'USE: when tracing which instruction produced which generated content. TRIGGERS: generation provenance, instruction audit, output source. NOT: for structure ownership (use HAS_GENERATED), for compiled prompts (use COMPILED_FROM). RELATES: BlockInstruction (source), PageNative/BlockNative (target).',
   ac_GENERATED.family = 'generation',
   ac_GENERATED.scope = 'intra_realm',
   ac_GENERATED.cardinality = 'one_to_many',
   ac_GENERATED.is_self_referential = false,
   ac_GENERATED.inverse_name = null,
   ac_GENERATED.arc_properties = ['generated_at'],
-  ac_GENERATED.cypher_pattern = '(BlockInstruction)-[:GENERATED]->(PageGenerated, BlockGenerated)',
+  ac_GENERATED.cypher_pattern = '(BlockInstruction)-[:GENERATED]->(PageNative, BlockNative)',
   ac_GENERATED.temperature_threshold = null,
   ac_GENERATED.created_at = datetime()
 ON MATCH SET
   ac_GENERATED.display_name = 'Generated',
-  ac_GENERATED.llm_context = 'USE: when tracing which instruction produced which generated content. TRIGGERS: generation provenance, instruction audit, output source. NOT: for structure ownership (use HAS_GENERATED), for compiled prompts (use COMPILED_FROM). RELATES: BlockInstruction (source), PageGenerated/BlockGenerated (target).',
+  ac_GENERATED.llm_context = 'USE: when tracing which instruction produced which generated content. TRIGGERS: generation provenance, instruction audit, output source. NOT: for structure ownership (use HAS_GENERATED), for compiled prompts (use COMPILED_FROM). RELATES: BlockInstruction (source), PageNative/BlockNative (target).',
   ac_GENERATED.family = 'generation',
   ac_GENERATED.scope = 'intra_realm',
   ac_GENERATED.cardinality = 'one_to_many',
   ac_GENERATED.is_self_referential = false,
   ac_GENERATED.inverse_name = null,
   ac_GENERATED.arc_properties = ['generated_at'],
-  ac_GENERATED.cypher_pattern = '(BlockInstruction)-[:GENERATED]->(PageGenerated, BlockGenerated)',
+  ac_GENERATED.cypher_pattern = '(BlockInstruction)-[:GENERATED]->(PageNative, BlockNative)',
   ac_GENERATED.temperature_threshold = null,
   ac_GENERATED.updated_at = datetime();
-
-MERGE (ac_GENERATED_FOR:Schema:ArcClass {key: 'GENERATED_FOR'})
-ON CREATE SET
-  ac_GENERATED_FOR.display_name = 'Generated For',
-  ac_GENERATED_FOR.llm_context = 'USE: when finding which Page/Block a generated node belongs to. TRIGGERS: source structure, parent page, parent block. NOT: for loading generated output (use HAS_GENERATED). RELATES: PageGenerated/BlockGenerated (source), Page/Block (target), HAS_GENERATED (inverse).',
-  ac_GENERATED_FOR.family = 'generation',
-  ac_GENERATED_FOR.scope = 'intra_realm',
-  ac_GENERATED_FOR.cardinality = 'many_to_one',
-  ac_GENERATED_FOR.is_self_referential = false,
-  ac_GENERATED_FOR.inverse_name = null,
-  ac_GENERATED_FOR.arc_properties = [],
-  ac_GENERATED_FOR.cypher_pattern = '(PageGenerated, BlockGenerated)-[:GENERATED_FOR]->(Page, Block)',
-  ac_GENERATED_FOR.temperature_threshold = null,
-  ac_GENERATED_FOR.created_at = datetime()
-ON MATCH SET
-  ac_GENERATED_FOR.display_name = 'Generated For',
-  ac_GENERATED_FOR.llm_context = 'USE: when finding which Page/Block a generated node belongs to. TRIGGERS: source structure, parent page, parent block. NOT: for loading generated output (use HAS_GENERATED). RELATES: PageGenerated/BlockGenerated (source), Page/Block (target), HAS_GENERATED (inverse).',
-  ac_GENERATED_FOR.family = 'generation',
-  ac_GENERATED_FOR.scope = 'intra_realm',
-  ac_GENERATED_FOR.cardinality = 'many_to_one',
-  ac_GENERATED_FOR.is_self_referential = false,
-  ac_GENERATED_FOR.inverse_name = null,
-  ac_GENERATED_FOR.arc_properties = [],
-  ac_GENERATED_FOR.cypher_pattern = '(PageGenerated, BlockGenerated)-[:GENERATED_FOR]->(Page, Block)',
-  ac_GENERATED_FOR.temperature_threshold = null,
-  ac_GENERATED_FOR.updated_at = datetime();
 
 MERGE (ac_GENERATED_FROM:Schema:ArcClass {key: 'GENERATED_FROM'})
 ON CREATE SET
   ac_GENERATED_FROM.display_name = 'Generated From',
-  ac_GENERATED_FROM.llm_context = 'USE: when validating generated content against schema, fast type lookup. TRIGGERS: block type validation, schema check, structure verification. NOT: for block ownership (use GENERATED_FOR), for type definition (use BlockType). RELATES: BlockGenerated (source), BlockType (target).',
+  ac_GENERATED_FROM.llm_context = 'USE: when validating generated content against schema, fast type lookup. TRIGGERS: block type validation, schema check, structure verification. NOT: for block ownership (use GENERATED_FOR), for type definition (use BlockType). RELATES: BlockNative (source), BlockType (target).',
   ac_GENERATED_FROM.family = 'generation',
   ac_GENERATED_FROM.scope = 'intra_realm',
   ac_GENERATED_FROM.cardinality = 'many_to_one',
   ac_GENERATED_FROM.is_self_referential = false,
   ac_GENERATED_FROM.inverse_name = null,
   ac_GENERATED_FROM.arc_properties = [],
-  ac_GENERATED_FROM.cypher_pattern = '(BlockGenerated)-[:GENERATED_FROM]->(BlockType)',
+  ac_GENERATED_FROM.cypher_pattern = '(BlockNative)-[:GENERATED_FROM]->(BlockType)',
   ac_GENERATED_FROM.temperature_threshold = null,
   ac_GENERATED_FROM.created_at = datetime()
 ON MATCH SET
   ac_GENERATED_FROM.display_name = 'Generated From',
-  ac_GENERATED_FROM.llm_context = 'USE: when validating generated content against schema, fast type lookup. TRIGGERS: block type validation, schema check, structure verification. NOT: for block ownership (use GENERATED_FOR), for type definition (use BlockType). RELATES: BlockGenerated (source), BlockType (target).',
+  ac_GENERATED_FROM.llm_context = 'USE: when validating generated content against schema, fast type lookup. TRIGGERS: block type validation, schema check, structure verification. NOT: for block ownership (use GENERATED_FOR), for type definition (use BlockType). RELATES: BlockNative (source), BlockType (target).',
   ac_GENERATED_FROM.family = 'generation',
   ac_GENERATED_FROM.scope = 'intra_realm',
   ac_GENERATED_FROM.cardinality = 'many_to_one',
   ac_GENERATED_FROM.is_self_referential = false,
   ac_GENERATED_FROM.inverse_name = null,
   ac_GENERATED_FROM.arc_properties = [],
-  ac_GENERATED_FROM.cypher_pattern = '(BlockGenerated)-[:GENERATED_FROM]->(BlockType)',
+  ac_GENERATED_FROM.cypher_pattern = '(BlockNative)-[:GENERATED_FROM]->(BlockType)',
   ac_GENERATED_FROM.temperature_threshold = null,
   ac_GENERATED_FROM.updated_at = datetime();
-
-MERGE (ac_HAS_GENERATED:Schema:ArcClass {key: 'HAS_GENERATED'})
-ON CREATE SET
-  ac_HAS_GENERATED.display_name = 'Has Generated',
-  ac_HAS_GENERATED.llm_context = 'USE: when loading LLM-generated output for a Page or Block. TRIGGERS: generated content, page output, block output, locale content. NOT: for source structure (use Page/Block directly), for prompts (use HAS_INSTRUCTION). RELATES: Page/Block (source), PageGenerated/BlockGenerated (target), GENERATED_FOR (inverse).',
-  ac_HAS_GENERATED.family = 'generation',
-  ac_HAS_GENERATED.scope = 'intra_realm',
-  ac_HAS_GENERATED.cardinality = 'one_to_many',
-  ac_HAS_GENERATED.is_self_referential = false,
-  ac_HAS_GENERATED.inverse_name = 'GENERATED_FOR',
-  ac_HAS_GENERATED.arc_properties = [],
-  ac_HAS_GENERATED.cypher_pattern = '(Page, Block)-[:HAS_GENERATED]->(PageGenerated, BlockGenerated)',
-  ac_HAS_GENERATED.temperature_threshold = null,
-  ac_HAS_GENERATED.created_at = datetime()
-ON MATCH SET
-  ac_HAS_GENERATED.display_name = 'Has Generated',
-  ac_HAS_GENERATED.llm_context = 'USE: when loading LLM-generated output for a Page or Block. TRIGGERS: generated content, page output, block output, locale content. NOT: for source structure (use Page/Block directly), for prompts (use HAS_INSTRUCTION). RELATES: Page/Block (source), PageGenerated/BlockGenerated (target), GENERATED_FOR (inverse).',
-  ac_HAS_GENERATED.family = 'generation',
-  ac_HAS_GENERATED.scope = 'intra_realm',
-  ac_HAS_GENERATED.cardinality = 'one_to_many',
-  ac_HAS_GENERATED.is_self_referential = false,
-  ac_HAS_GENERATED.inverse_name = 'GENERATED_FOR',
-  ac_HAS_GENERATED.arc_properties = [],
-  ac_HAS_GENERATED.cypher_pattern = '(Page, Block)-[:HAS_GENERATED]->(PageGenerated, BlockGenerated)',
-  ac_HAS_GENERATED.temperature_threshold = null,
-  ac_HAS_GENERATED.updated_at = datetime();
 
 MERGE (ac_INCLUDES_ENTITY:Schema:ArcClass {key: 'INCLUDES_ENTITY'})
 ON CREATE SET
@@ -245,26 +219,26 @@ ON MATCH SET
 MERGE (ac_INFLUENCED_BY:Schema:ArcClass {key: 'INFLUENCED_BY'})
 ON CREATE SET
   ac_INFLUENCED_BY.display_name = 'Influenced By',
-  ac_INFLUENCED_BY.llm_context = 'USE: when tracing provenance, understanding what entity content influenced output. TRIGGERS: provenance, entity influence, content source, attribution. NOT: for current entity (use EntityContent), for generation flow (use GENERATED). RELATES: BlockGenerated (source), EntityContent (target), weight property for influence strength.',
+  ac_INFLUENCED_BY.llm_context = 'USE: when tracing provenance, understanding what entity content influenced output. TRIGGERS: provenance, entity influence, content source, attribution. NOT: for current entity (use EntityNative), for generation flow (use GENERATED). RELATES: BlockNative (source), EntityNative (target), weight property for influence strength.',
   ac_INFLUENCED_BY.family = 'generation',
   ac_INFLUENCED_BY.scope = 'intra_realm',
   ac_INFLUENCED_BY.cardinality = 'many_to_many',
   ac_INFLUENCED_BY.is_self_referential = false,
   ac_INFLUENCED_BY.inverse_name = null,
   ac_INFLUENCED_BY.arc_properties = ['weight', 'entity_version'],
-  ac_INFLUENCED_BY.cypher_pattern = '(BlockGenerated)-[:INFLUENCED_BY]->(EntityContent)',
+  ac_INFLUENCED_BY.cypher_pattern = '(BlockNative)-[:INFLUENCED_BY]->(EntityNative)',
   ac_INFLUENCED_BY.temperature_threshold = null,
   ac_INFLUENCED_BY.created_at = datetime()
 ON MATCH SET
   ac_INFLUENCED_BY.display_name = 'Influenced By',
-  ac_INFLUENCED_BY.llm_context = 'USE: when tracing provenance, understanding what entity content influenced output. TRIGGERS: provenance, entity influence, content source, attribution. NOT: for current entity (use EntityContent), for generation flow (use GENERATED). RELATES: BlockGenerated (source), EntityContent (target), weight property for influence strength.',
+  ac_INFLUENCED_BY.llm_context = 'USE: when tracing provenance, understanding what entity content influenced output. TRIGGERS: provenance, entity influence, content source, attribution. NOT: for current entity (use EntityNative), for generation flow (use GENERATED). RELATES: BlockNative (source), EntityNative (target), weight property for influence strength.',
   ac_INFLUENCED_BY.family = 'generation',
   ac_INFLUENCED_BY.scope = 'intra_realm',
   ac_INFLUENCED_BY.cardinality = 'many_to_many',
   ac_INFLUENCED_BY.is_self_referential = false,
   ac_INFLUENCED_BY.inverse_name = null,
   ac_INFLUENCED_BY.arc_properties = ['weight', 'entity_version'],
-  ac_INFLUENCED_BY.cypher_pattern = '(BlockGenerated)-[:INFLUENCED_BY]->(EntityContent)',
+  ac_INFLUENCED_BY.cypher_pattern = '(BlockNative)-[:INFLUENCED_BY]->(EntityNative)',
   ac_INFLUENCED_BY.temperature_threshold = null,
   ac_INFLUENCED_BY.updated_at = datetime();
 
@@ -278,7 +252,7 @@ ON CREATE SET
   ac_PREVIOUS_VERSION.is_self_referential = false,
   ac_PREVIOUS_VERSION.inverse_name = null,
   ac_PREVIOUS_VERSION.arc_properties = [],
-  ac_PREVIOUS_VERSION.cypher_pattern = '(BlockGenerated, PageGenerated, OutputArtifact)-[:PREVIOUS_VERSION]->(BlockGenerated, PageGenerated, OutputArtifact)',
+  ac_PREVIOUS_VERSION.cypher_pattern = '(BlockNative, PageNative, OutputArtifact)-[:PREVIOUS_VERSION]->(BlockNative, PageNative, OutputArtifact)',
   ac_PREVIOUS_VERSION.temperature_threshold = null,
   ac_PREVIOUS_VERSION.created_at = datetime()
 ON MATCH SET
@@ -290,87 +264,61 @@ ON MATCH SET
   ac_PREVIOUS_VERSION.is_self_referential = false,
   ac_PREVIOUS_VERSION.inverse_name = null,
   ac_PREVIOUS_VERSION.arc_properties = [],
-  ac_PREVIOUS_VERSION.cypher_pattern = '(BlockGenerated, PageGenerated, OutputArtifact)-[:PREVIOUS_VERSION]->(BlockGenerated, PageGenerated, OutputArtifact)',
+  ac_PREVIOUS_VERSION.cypher_pattern = '(BlockNative, PageNative, OutputArtifact)-[:PREVIOUS_VERSION]->(BlockNative, PageNative, OutputArtifact)',
   ac_PREVIOUS_VERSION.temperature_threshold = null,
   ac_PREVIOUS_VERSION.updated_at = datetime();
 
 MERGE (ac_PRODUCED:Schema:ArcClass {key: 'PRODUCED'})
 ON CREATE SET
   ac_PRODUCED.display_name = 'Produced',
-  ac_PRODUCED.llm_context = 'USE: when tracing which prompt artifact generated a block or page output. TRIGGERS: prompt generation, LLM output, generation provenance, compilation audit. NOT: for instruction→generation (use GENERATED), for page/block composition (use ASSEMBLES). RELATES: PromptArtifact (source), BlockGenerated/PageGenerated (target), PRODUCED_BY (inverse).',
+  ac_PRODUCED.llm_context = 'USE: when tracing which prompt artifact generated a block or page output. TRIGGERS: prompt generation, LLM output, generation provenance, compilation audit. NOT: for instruction→generation (use GENERATED), for page/block composition (use ASSEMBLES). RELATES: PromptArtifact (source), BlockNative/PageNative (target), PRODUCED_BY (inverse).',
   ac_PRODUCED.family = 'generation',
   ac_PRODUCED.scope = 'intra_realm',
   ac_PRODUCED.cardinality = 'many_to_many',
   ac_PRODUCED.is_self_referential = false,
   ac_PRODUCED.inverse_name = 'PRODUCED_BY',
   ac_PRODUCED.arc_properties = ['generation_timestamp', 'model_version', 'token_usage'],
-  ac_PRODUCED.cypher_pattern = '(PromptArtifact)-[:PRODUCED]->(BlockGenerated, PageGenerated)',
+  ac_PRODUCED.cypher_pattern = '(PromptArtifact)-[:PRODUCED]->(BlockNative, PageNative)',
   ac_PRODUCED.temperature_threshold = null,
   ac_PRODUCED.created_at = datetime()
 ON MATCH SET
   ac_PRODUCED.display_name = 'Produced',
-  ac_PRODUCED.llm_context = 'USE: when tracing which prompt artifact generated a block or page output. TRIGGERS: prompt generation, LLM output, generation provenance, compilation audit. NOT: for instruction→generation (use GENERATED), for page/block composition (use ASSEMBLES). RELATES: PromptArtifact (source), BlockGenerated/PageGenerated (target), PRODUCED_BY (inverse).',
+  ac_PRODUCED.llm_context = 'USE: when tracing which prompt artifact generated a block or page output. TRIGGERS: prompt generation, LLM output, generation provenance, compilation audit. NOT: for instruction→generation (use GENERATED), for page/block composition (use ASSEMBLES). RELATES: PromptArtifact (source), BlockNative/PageNative (target), PRODUCED_BY (inverse).',
   ac_PRODUCED.family = 'generation',
   ac_PRODUCED.scope = 'intra_realm',
   ac_PRODUCED.cardinality = 'many_to_many',
   ac_PRODUCED.is_self_referential = false,
   ac_PRODUCED.inverse_name = 'PRODUCED_BY',
   ac_PRODUCED.arc_properties = ['generation_timestamp', 'model_version', 'token_usage'],
-  ac_PRODUCED.cypher_pattern = '(PromptArtifact)-[:PRODUCED]->(BlockGenerated, PageGenerated)',
+  ac_PRODUCED.cypher_pattern = '(PromptArtifact)-[:PRODUCED]->(BlockNative, PageNative)',
   ac_PRODUCED.temperature_threshold = null,
   ac_PRODUCED.updated_at = datetime();
 
 MERGE (ac_PRODUCED_BY:Schema:ArcClass {key: 'PRODUCED_BY'})
 ON CREATE SET
   ac_PRODUCED_BY.display_name = 'Produced By',
-  ac_PRODUCED_BY.llm_context = 'USE: when finding which compiled prompt produced a generated block or page. TRIGGERS: prompt origin, output source, generation source, which prompt, audit trail. NOT: for instruction origin (use GENERATED), for generation instructions (use COMPILED_FROM). RELATES: BlockGenerated/PageGenerated (source), PromptArtifact (target), PRODUCED (inverse).',
+  ac_PRODUCED_BY.llm_context = 'USE: when finding which compiled prompt produced a generated block or page. TRIGGERS: prompt origin, output source, generation source, which prompt, audit trail. NOT: for instruction origin (use GENERATED), for generation instructions (use COMPILED_FROM). RELATES: BlockNative/PageNative (source), PromptArtifact (target), PRODUCED (inverse).',
   ac_PRODUCED_BY.family = 'generation',
   ac_PRODUCED_BY.scope = 'intra_realm',
   ac_PRODUCED_BY.cardinality = 'many_to_many',
   ac_PRODUCED_BY.is_self_referential = false,
   ac_PRODUCED_BY.inverse_name = null,
   ac_PRODUCED_BY.arc_properties = ['generation_timestamp', 'model_version', 'token_usage'],
-  ac_PRODUCED_BY.cypher_pattern = '(BlockGenerated, PageGenerated)-[:PRODUCED_BY]->(PromptArtifact)',
+  ac_PRODUCED_BY.cypher_pattern = '(BlockNative, PageNative)-[:PRODUCED_BY]->(PromptArtifact)',
   ac_PRODUCED_BY.temperature_threshold = null,
   ac_PRODUCED_BY.created_at = datetime()
 ON MATCH SET
   ac_PRODUCED_BY.display_name = 'Produced By',
-  ac_PRODUCED_BY.llm_context = 'USE: when finding which compiled prompt produced a generated block or page. TRIGGERS: prompt origin, output source, generation source, which prompt, audit trail. NOT: for instruction origin (use GENERATED), for generation instructions (use COMPILED_FROM). RELATES: BlockGenerated/PageGenerated (source), PromptArtifact (target), PRODUCED (inverse).',
+  ac_PRODUCED_BY.llm_context = 'USE: when finding which compiled prompt produced a generated block or page. TRIGGERS: prompt origin, output source, generation source, which prompt, audit trail. NOT: for instruction origin (use GENERATED), for generation instructions (use COMPILED_FROM). RELATES: BlockNative/PageNative (source), PromptArtifact (target), PRODUCED (inverse).',
   ac_PRODUCED_BY.family = 'generation',
   ac_PRODUCED_BY.scope = 'intra_realm',
   ac_PRODUCED_BY.cardinality = 'many_to_many',
   ac_PRODUCED_BY.is_self_referential = false,
   ac_PRODUCED_BY.inverse_name = null,
   ac_PRODUCED_BY.arc_properties = ['generation_timestamp', 'model_version', 'token_usage'],
-  ac_PRODUCED_BY.cypher_pattern = '(BlockGenerated, PageGenerated)-[:PRODUCED_BY]->(PromptArtifact)',
+  ac_PRODUCED_BY.cypher_pattern = '(BlockNative, PageNative)-[:PRODUCED_BY]->(PromptArtifact)',
   ac_PRODUCED_BY.temperature_threshold = null,
   ac_PRODUCED_BY.updated_at = datetime();
-
-MERGE (ac_CONTENT_OF:Schema:ArcClass {key: 'CONTENT_OF'})
-ON CREATE SET
-  ac_CONTENT_OF.display_name = 'Content Of',
-  ac_CONTENT_OF.llm_context = 'USE: when finding the parent entity/project from localized content. TRIGGERS: content parent, entity from content, reverse content lookup. NOT: forward lookup (use HAS_CONTENT), generated content (use GENERATED_FOR). RELATES: EntityContent/ProjectContent (source), Entity/Project (target), HAS_CONTENT (inverse_of).',
-  ac_CONTENT_OF.family = 'localization',
-  ac_CONTENT_OF.scope = 'intra_realm',
-  ac_CONTENT_OF.cardinality = 'many_to_one',
-  ac_CONTENT_OF.is_self_referential = false,
-  ac_CONTENT_OF.inverse_name = null,
-  ac_CONTENT_OF.arc_properties = [],
-  ac_CONTENT_OF.cypher_pattern = '(EntityContent, ProjectContent)-[:CONTENT_OF]->(Entity, Project)',
-  ac_CONTENT_OF.temperature_threshold = null,
-  ac_CONTENT_OF.created_at = datetime()
-ON MATCH SET
-  ac_CONTENT_OF.display_name = 'Content Of',
-  ac_CONTENT_OF.llm_context = 'USE: when finding the parent entity/project from localized content. TRIGGERS: content parent, entity from content, reverse content lookup. NOT: forward lookup (use HAS_CONTENT), generated content (use GENERATED_FOR). RELATES: EntityContent/ProjectContent (source), Entity/Project (target), HAS_CONTENT (inverse_of).',
-  ac_CONTENT_OF.family = 'localization',
-  ac_CONTENT_OF.scope = 'intra_realm',
-  ac_CONTENT_OF.cardinality = 'many_to_one',
-  ac_CONTENT_OF.is_self_referential = false,
-  ac_CONTENT_OF.inverse_name = null,
-  ac_CONTENT_OF.arc_properties = [],
-  ac_CONTENT_OF.cypher_pattern = '(EntityContent, ProjectContent)-[:CONTENT_OF]->(Entity, Project)',
-  ac_CONTENT_OF.temperature_threshold = null,
-  ac_CONTENT_OF.updated_at = datetime();
 
 MERGE (ac_FALLBACK_TO:Schema:ArcClass {key: 'FALLBACK_TO'})
 ON CREATE SET
@@ -401,54 +349,28 @@ ON MATCH SET
 MERGE (ac_FOR_LOCALE:Schema:ArcClass {key: 'FOR_LOCALE'})
 ON CREATE SET
   ac_FOR_LOCALE.display_name = 'For Locale',
-  ac_FOR_LOCALE.llm_context = 'USE: when finding the target locale for any localized content node. TRIGGERS: for locale, content locale, target language, localization target. NOT: locale fallback (use FALLBACK_TO), locale ownership (use HAS_LOCALE). RELATES: EntityContent/ProjectContent/BlockGenerated/PageGenerated/PromptStyle (source), Locale (target).',
+  ac_FOR_LOCALE.llm_context = 'USE: when finding the target locale for any localized content node. TRIGGERS: for locale, content locale, target language, localization target. NOT: locale fallback (use FALLBACK_TO), locale ownership (use HAS_LOCALE). RELATES: EntityNative/ProjectNative/BlockNative/PageNative/PromptStyle (source), Locale (target).',
   ac_FOR_LOCALE.family = 'localization',
   ac_FOR_LOCALE.scope = 'cross_realm',
   ac_FOR_LOCALE.cardinality = 'many_to_one',
   ac_FOR_LOCALE.is_self_referential = false,
   ac_FOR_LOCALE.inverse_name = 'LOCALE_OF',
   ac_FOR_LOCALE.arc_properties = [],
-  ac_FOR_LOCALE.cypher_pattern = '(EntityContent, ProjectContent, BlockGenerated, PageGenerated, OutputArtifact, PromptStyle)-[:FOR_LOCALE]->(Locale)',
+  ac_FOR_LOCALE.cypher_pattern = '(EntityNative, ProjectNative, BlockNative, PageNative, OutputArtifact, PromptStyle)-[:FOR_LOCALE]->(Locale)',
   ac_FOR_LOCALE.temperature_threshold = null,
   ac_FOR_LOCALE.created_at = datetime()
 ON MATCH SET
   ac_FOR_LOCALE.display_name = 'For Locale',
-  ac_FOR_LOCALE.llm_context = 'USE: when finding the target locale for any localized content node. TRIGGERS: for locale, content locale, target language, localization target. NOT: locale fallback (use FALLBACK_TO), locale ownership (use HAS_LOCALE). RELATES: EntityContent/ProjectContent/BlockGenerated/PageGenerated/PromptStyle (source), Locale (target).',
+  ac_FOR_LOCALE.llm_context = 'USE: when finding the target locale for any localized content node. TRIGGERS: for locale, content locale, target language, localization target. NOT: locale fallback (use FALLBACK_TO), locale ownership (use HAS_LOCALE). RELATES: EntityNative/ProjectNative/BlockNative/PageNative/PromptStyle (source), Locale (target).',
   ac_FOR_LOCALE.family = 'localization',
   ac_FOR_LOCALE.scope = 'cross_realm',
   ac_FOR_LOCALE.cardinality = 'many_to_one',
   ac_FOR_LOCALE.is_self_referential = false,
   ac_FOR_LOCALE.inverse_name = 'LOCALE_OF',
   ac_FOR_LOCALE.arc_properties = [],
-  ac_FOR_LOCALE.cypher_pattern = '(EntityContent, ProjectContent, BlockGenerated, PageGenerated, OutputArtifact, PromptStyle)-[:FOR_LOCALE]->(Locale)',
+  ac_FOR_LOCALE.cypher_pattern = '(EntityNative, ProjectNative, BlockNative, PageNative, OutputArtifact, PromptStyle)-[:FOR_LOCALE]->(Locale)',
   ac_FOR_LOCALE.temperature_threshold = null,
   ac_FOR_LOCALE.updated_at = datetime();
-
-MERGE (ac_HAS_CONTENT:Schema:ArcClass {key: 'HAS_CONTENT'})
-ON CREATE SET
-  ac_HAS_CONTENT.display_name = 'Has Content',
-  ac_HAS_CONTENT.llm_context = 'USE: when loading human-authored localized content for an entity or project. TRIGGERS: has content, localized content, entity content, authored content. NOT: generated content (use HAS_GENERATED), forward locale (use FOR_LOCALE). RELATES: Entity/Project (source), EntityContent/ProjectContent (target), CONTENT_OF (inverse).',
-  ac_HAS_CONTENT.family = 'localization',
-  ac_HAS_CONTENT.scope = 'intra_realm',
-  ac_HAS_CONTENT.cardinality = 'one_to_many',
-  ac_HAS_CONTENT.is_self_referential = false,
-  ac_HAS_CONTENT.inverse_name = 'CONTENT_OF',
-  ac_HAS_CONTENT.arc_properties = [],
-  ac_HAS_CONTENT.cypher_pattern = '(Entity, Project)-[:HAS_CONTENT]->(EntityContent, ProjectContent)',
-  ac_HAS_CONTENT.temperature_threshold = null,
-  ac_HAS_CONTENT.created_at = datetime()
-ON MATCH SET
-  ac_HAS_CONTENT.display_name = 'Has Content',
-  ac_HAS_CONTENT.llm_context = 'USE: when loading human-authored localized content for an entity or project. TRIGGERS: has content, localized content, entity content, authored content. NOT: generated content (use HAS_GENERATED), forward locale (use FOR_LOCALE). RELATES: Entity/Project (source), EntityContent/ProjectContent (target), CONTENT_OF (inverse).',
-  ac_HAS_CONTENT.family = 'localization',
-  ac_HAS_CONTENT.scope = 'intra_realm',
-  ac_HAS_CONTENT.cardinality = 'one_to_many',
-  ac_HAS_CONTENT.is_self_referential = false,
-  ac_HAS_CONTENT.inverse_name = 'CONTENT_OF',
-  ac_HAS_CONTENT.arc_properties = [],
-  ac_HAS_CONTENT.cypher_pattern = '(Entity, Project)-[:HAS_CONTENT]->(EntityContent, ProjectContent)',
-  ac_HAS_CONTENT.temperature_threshold = null,
-  ac_HAS_CONTENT.updated_at = datetime();
 
 MERGE (ac_HAS_INCOME_LEVEL:Schema:ArcClass {key: 'HAS_INCOME_LEVEL'})
 ON CREATE SET
@@ -765,26 +687,26 @@ ON MATCH SET
 MERGE (ac_LOCALE_OF:Schema:ArcClass {key: 'LOCALE_OF'})
 ON CREATE SET
   ac_LOCALE_OF.display_name = 'Locale Of',
-  ac_LOCALE_OF.llm_context = 'USE: when finding all content nodes for a specific locale. TRIGGERS: locale content, what targets locale, locale outputs, locale content nodes. NOT: content to locale lookup (use FOR_LOCALE), locale ownership (use HAS_LOCALE). RELATES: Locale (source), EntityContent/ProjectContent/BlockGenerated/PageGenerated/PromptStyle (target), FOR_LOCALE (inverse).',
+  ac_LOCALE_OF.llm_context = 'USE: when finding all content nodes for a specific locale. TRIGGERS: locale content, what targets locale, locale outputs, locale content nodes. NOT: content to locale lookup (use FOR_LOCALE), locale ownership (use HAS_LOCALE). RELATES: Locale (source), EntityNative/ProjectNative/BlockNative/PageNative/PromptStyle (target), FOR_LOCALE (inverse).',
   ac_LOCALE_OF.family = 'localization',
   ac_LOCALE_OF.scope = 'cross_realm',
   ac_LOCALE_OF.cardinality = 'one_to_many',
   ac_LOCALE_OF.is_self_referential = false,
   ac_LOCALE_OF.inverse_name = null,
   ac_LOCALE_OF.arc_properties = [],
-  ac_LOCALE_OF.cypher_pattern = '(Locale)-[:LOCALE_OF]->(EntityContent, ProjectContent, BlockGenerated, PageGenerated, OutputArtifact, PromptStyle)',
+  ac_LOCALE_OF.cypher_pattern = '(Locale)-[:LOCALE_OF]->(EntityNative, ProjectNative, BlockNative, PageNative, OutputArtifact, PromptStyle)',
   ac_LOCALE_OF.temperature_threshold = null,
   ac_LOCALE_OF.created_at = datetime()
 ON MATCH SET
   ac_LOCALE_OF.display_name = 'Locale Of',
-  ac_LOCALE_OF.llm_context = 'USE: when finding all content nodes for a specific locale. TRIGGERS: locale content, what targets locale, locale outputs, locale content nodes. NOT: content to locale lookup (use FOR_LOCALE), locale ownership (use HAS_LOCALE). RELATES: Locale (source), EntityContent/ProjectContent/BlockGenerated/PageGenerated/PromptStyle (target), FOR_LOCALE (inverse).',
+  ac_LOCALE_OF.llm_context = 'USE: when finding all content nodes for a specific locale. TRIGGERS: locale content, what targets locale, locale outputs, locale content nodes. NOT: content to locale lookup (use FOR_LOCALE), locale ownership (use HAS_LOCALE). RELATES: Locale (source), EntityNative/ProjectNative/BlockNative/PageNative/PromptStyle (target), FOR_LOCALE (inverse).',
   ac_LOCALE_OF.family = 'localization',
   ac_LOCALE_OF.scope = 'cross_realm',
   ac_LOCALE_OF.cardinality = 'one_to_many',
   ac_LOCALE_OF.is_self_referential = false,
   ac_LOCALE_OF.inverse_name = null,
   ac_LOCALE_OF.arc_properties = [],
-  ac_LOCALE_OF.cypher_pattern = '(Locale)-[:LOCALE_OF]->(EntityContent, ProjectContent, BlockGenerated, PageGenerated, OutputArtifact, PromptStyle)',
+  ac_LOCALE_OF.cypher_pattern = '(Locale)-[:LOCALE_OF]->(EntityNative, ProjectNative, BlockNative, PageNative, OutputArtifact, PromptStyle)',
   ac_LOCALE_OF.temperature_threshold = null,
   ac_LOCALE_OF.updated_at = datetime();
 
@@ -1178,31 +1100,31 @@ ON MATCH SET
   ac_BELONGS_TO_ORG.temperature_threshold = null,
   ac_BELONGS_TO_ORG.updated_at = datetime();
 
-MERGE (ac_BELONGS_TO_PROJECT_CONTENT:Schema:ArcClass {key: 'BELONGS_TO_PROJECT_CONTENT'})
+MERGE (ac_BELONGS_TO_PROJECT_NATIVE:Schema:ArcClass {key: 'BELONGS_TO_PROJECT_NATIVE'})
 ON CREATE SET
-  ac_BELONGS_TO_PROJECT_CONTENT.display_name = 'Belongs To Project Content',
-  ac_BELONGS_TO_PROJECT_CONTENT.llm_context = 'USE: when loading project-level content for page generation. TRIGGERS: project content, locale voice, project tagline, project CTAs. NOT: project config (use BELONGS_TO_ORG), page structure (use HAS_PAGE). RELATES: PageGenerated (source), ProjectContent (target), locale-aligned.',
-  ac_BELONGS_TO_PROJECT_CONTENT.family = 'ownership',
-  ac_BELONGS_TO_PROJECT_CONTENT.scope = 'intra_realm',
-  ac_BELONGS_TO_PROJECT_CONTENT.cardinality = 'many_to_one',
-  ac_BELONGS_TO_PROJECT_CONTENT.is_self_referential = false,
-  ac_BELONGS_TO_PROJECT_CONTENT.inverse_name = null,
-  ac_BELONGS_TO_PROJECT_CONTENT.arc_properties = [],
-  ac_BELONGS_TO_PROJECT_CONTENT.cypher_pattern = '(PageGenerated)-[:BELONGS_TO_PROJECT_CONTENT]->(ProjectContent)',
-  ac_BELONGS_TO_PROJECT_CONTENT.temperature_threshold = null,
-  ac_BELONGS_TO_PROJECT_CONTENT.created_at = datetime()
+  ac_BELONGS_TO_PROJECT_NATIVE.display_name = 'Belongs To Project Native',
+  ac_BELONGS_TO_PROJECT_NATIVE.llm_context = 'USE: when loading project-level native content for page generation. TRIGGERS: project native, locale voice, project tagline, project CTAs. NOT: project config (use BELONGS_TO_ORG), page structure (use HAS_PAGE). RELATES: PageNative (source), ProjectNative (target), locale-aligned.',
+  ac_BELONGS_TO_PROJECT_NATIVE.family = 'ownership',
+  ac_BELONGS_TO_PROJECT_NATIVE.scope = 'intra_realm',
+  ac_BELONGS_TO_PROJECT_NATIVE.cardinality = 'many_to_one',
+  ac_BELONGS_TO_PROJECT_NATIVE.is_self_referential = false,
+  ac_BELONGS_TO_PROJECT_NATIVE.inverse_name = null,
+  ac_BELONGS_TO_PROJECT_NATIVE.arc_properties = [],
+  ac_BELONGS_TO_PROJECT_NATIVE.cypher_pattern = '(PageNative)-[:BELONGS_TO_PROJECT_NATIVE]->(ProjectNative)',
+  ac_BELONGS_TO_PROJECT_NATIVE.temperature_threshold = null,
+  ac_BELONGS_TO_PROJECT_NATIVE.created_at = datetime()
 ON MATCH SET
-  ac_BELONGS_TO_PROJECT_CONTENT.display_name = 'Belongs To Project Content',
-  ac_BELONGS_TO_PROJECT_CONTENT.llm_context = 'USE: when loading project-level content for page generation. TRIGGERS: project content, locale voice, project tagline, project CTAs. NOT: project config (use BELONGS_TO_ORG), page structure (use HAS_PAGE). RELATES: PageGenerated (source), ProjectContent (target), locale-aligned.',
-  ac_BELONGS_TO_PROJECT_CONTENT.family = 'ownership',
-  ac_BELONGS_TO_PROJECT_CONTENT.scope = 'intra_realm',
-  ac_BELONGS_TO_PROJECT_CONTENT.cardinality = 'many_to_one',
-  ac_BELONGS_TO_PROJECT_CONTENT.is_self_referential = false,
-  ac_BELONGS_TO_PROJECT_CONTENT.inverse_name = null,
-  ac_BELONGS_TO_PROJECT_CONTENT.arc_properties = [],
-  ac_BELONGS_TO_PROJECT_CONTENT.cypher_pattern = '(PageGenerated)-[:BELONGS_TO_PROJECT_CONTENT]->(ProjectContent)',
-  ac_BELONGS_TO_PROJECT_CONTENT.temperature_threshold = null,
-  ac_BELONGS_TO_PROJECT_CONTENT.updated_at = datetime();
+  ac_BELONGS_TO_PROJECT_NATIVE.display_name = 'Belongs To Project Native',
+  ac_BELONGS_TO_PROJECT_NATIVE.llm_context = 'USE: when loading project-level native content for page generation. TRIGGERS: project native, locale voice, project tagline, project CTAs. NOT: project config (use BELONGS_TO_ORG), page structure (use HAS_PAGE). RELATES: PageNative (source), ProjectNative (target), locale-aligned.',
+  ac_BELONGS_TO_PROJECT_NATIVE.family = 'ownership',
+  ac_BELONGS_TO_PROJECT_NATIVE.scope = 'intra_realm',
+  ac_BELONGS_TO_PROJECT_NATIVE.cardinality = 'many_to_one',
+  ac_BELONGS_TO_PROJECT_NATIVE.is_self_referential = false,
+  ac_BELONGS_TO_PROJECT_NATIVE.inverse_name = null,
+  ac_BELONGS_TO_PROJECT_NATIVE.arc_properties = [],
+  ac_BELONGS_TO_PROJECT_NATIVE.cypher_pattern = '(PageNative)-[:BELONGS_TO_PROJECT_NATIVE]->(ProjectNative)',
+  ac_BELONGS_TO_PROJECT_NATIVE.temperature_threshold = null,
+  ac_BELONGS_TO_PROJECT_NATIVE.updated_at = datetime();
 
 MERGE (ac_BLOCK_OF:Schema:ArcClass {key: 'BLOCK_OF'})
 ON CREATE SET
@@ -2218,6 +2140,32 @@ ON MATCH SET
   ac_HAS_MARKET.temperature_threshold = null,
   ac_HAS_MARKET.updated_at = datetime();
 
+MERGE (ac_HAS_NATIVE:Schema:ArcClass {key: 'HAS_NATIVE'})
+ON CREATE SET
+  ac_HAS_NATIVE.display_name = 'Has Native',
+  ac_HAS_NATIVE.llm_context = 'USE: when loading locale-specific native content for any defined node. TRIGGERS: has native, native content, locale content, entity native, page native. NOT: for invariant structure (use the defined node directly), for locale lookup (use FOR_LOCALE). RELATES: Entity/Project/Page/Block (source), *Native (target), NATIVE_OF (inverse).',
+  ac_HAS_NATIVE.family = 'ownership',
+  ac_HAS_NATIVE.scope = 'intra_realm',
+  ac_HAS_NATIVE.cardinality = 'one_to_many',
+  ac_HAS_NATIVE.is_self_referential = false,
+  ac_HAS_NATIVE.inverse_name = 'NATIVE_OF',
+  ac_HAS_NATIVE.arc_properties = [],
+  ac_HAS_NATIVE.cypher_pattern = '(Entity, Project, Page, Block)-[:HAS_NATIVE]->(EntityNative, ProjectNative, PageNative, BlockNative)',
+  ac_HAS_NATIVE.temperature_threshold = null,
+  ac_HAS_NATIVE.created_at = datetime()
+ON MATCH SET
+  ac_HAS_NATIVE.display_name = 'Has Native',
+  ac_HAS_NATIVE.llm_context = 'USE: when loading locale-specific native content for any defined node. TRIGGERS: has native, native content, locale content, entity native, page native. NOT: for invariant structure (use the defined node directly), for locale lookup (use FOR_LOCALE). RELATES: Entity/Project/Page/Block (source), *Native (target), NATIVE_OF (inverse).',
+  ac_HAS_NATIVE.family = 'ownership',
+  ac_HAS_NATIVE.scope = 'intra_realm',
+  ac_HAS_NATIVE.cardinality = 'one_to_many',
+  ac_HAS_NATIVE.is_self_referential = false,
+  ac_HAS_NATIVE.inverse_name = 'NATIVE_OF',
+  ac_HAS_NATIVE.arc_properties = [],
+  ac_HAS_NATIVE.cypher_pattern = '(Entity, Project, Page, Block)-[:HAS_NATIVE]->(EntityNative, ProjectNative, PageNative, BlockNative)',
+  ac_HAS_NATIVE.temperature_threshold = null,
+  ac_HAS_NATIVE.updated_at = datetime();
+
 MERGE (ac_HAS_PAGE:Schema:ArcClass {key: 'HAS_PAGE'})
 ON CREATE SET
   ac_HAS_PAGE.display_name = 'Has Page',
@@ -2737,6 +2685,32 @@ ON MATCH SET
   ac_MARKET_OF.cypher_pattern = '(Market)-[:MARKET_OF]->(Locale)',
   ac_MARKET_OF.temperature_threshold = null,
   ac_MARKET_OF.updated_at = datetime();
+
+MERGE (ac_NATIVE_OF:Schema:ArcClass {key: 'NATIVE_OF'})
+ON CREATE SET
+  ac_NATIVE_OF.display_name = 'Native Of',
+  ac_NATIVE_OF.llm_context = 'USE: when finding the parent defined node from native content. TRIGGERS: native parent, content owner, reverse native lookup. NOT: forward lookup (use HAS_NATIVE), for locale lookup (use FOR_LOCALE). RELATES: *Native (source), Entity/Project/Page/Block (target), HAS_NATIVE (inverse_of).',
+  ac_NATIVE_OF.family = 'ownership',
+  ac_NATIVE_OF.scope = 'intra_realm',
+  ac_NATIVE_OF.cardinality = 'many_to_one',
+  ac_NATIVE_OF.is_self_referential = false,
+  ac_NATIVE_OF.inverse_name = null,
+  ac_NATIVE_OF.arc_properties = [],
+  ac_NATIVE_OF.cypher_pattern = '(EntityNative, ProjectNative, PageNative, BlockNative)-[:NATIVE_OF]->(Entity, Project, Page, Block)',
+  ac_NATIVE_OF.temperature_threshold = null,
+  ac_NATIVE_OF.created_at = datetime()
+ON MATCH SET
+  ac_NATIVE_OF.display_name = 'Native Of',
+  ac_NATIVE_OF.llm_context = 'USE: when finding the parent defined node from native content. TRIGGERS: native parent, content owner, reverse native lookup. NOT: forward lookup (use HAS_NATIVE), for locale lookup (use FOR_LOCALE). RELATES: *Native (source), Entity/Project/Page/Block (target), HAS_NATIVE (inverse_of).',
+  ac_NATIVE_OF.family = 'ownership',
+  ac_NATIVE_OF.scope = 'intra_realm',
+  ac_NATIVE_OF.cardinality = 'many_to_one',
+  ac_NATIVE_OF.is_self_referential = false,
+  ac_NATIVE_OF.inverse_name = null,
+  ac_NATIVE_OF.arc_properties = [],
+  ac_NATIVE_OF.cypher_pattern = '(EntityNative, ProjectNative, PageNative, BlockNative)-[:NATIVE_OF]->(Entity, Project, Page, Block)',
+  ac_NATIVE_OF.temperature_threshold = null,
+  ac_NATIVE_OF.updated_at = datetime();
 
 MERGE (ac_OF_TYPE:Schema:ArcClass {key: 'OF_TYPE'})
 ON CREATE SET
@@ -3469,26 +3443,26 @@ ON MATCH SET
 MERGE (ac_FOR_CHANNEL:Schema:ArcClass {key: 'FOR_CHANNEL'})
 ON CREATE SET
   ac_FOR_CHANNEL.display_name = 'For Channel',
-  ac_FOR_CHANNEL.llm_context = 'USE: when finding content tailored for a specific channel. TRIGGERS: channel surface, mobile content, channel targeting, platform specific. NOT: locale targeting (use FOR_LOCALE), persona targeting (use TARGETS_PERSONA). RELATES: PageGenerated/BlockGenerated (source), ChannelSurface (target).',
+  ac_FOR_CHANNEL.llm_context = 'USE: when finding content tailored for a specific channel. TRIGGERS: channel surface, mobile content, channel targeting, platform specific. NOT: locale targeting (use FOR_LOCALE), persona targeting (use TARGETS_PERSONA). RELATES: PageNative/BlockNative (source), ChannelSurface (target).',
   ac_FOR_CHANNEL.family = 'semantic',
   ac_FOR_CHANNEL.scope = 'intra_realm',
   ac_FOR_CHANNEL.cardinality = 'many_to_one',
   ac_FOR_CHANNEL.is_self_referential = false,
   ac_FOR_CHANNEL.inverse_name = null,
   ac_FOR_CHANNEL.arc_properties = [],
-  ac_FOR_CHANNEL.cypher_pattern = '(PageGenerated, BlockGenerated)-[:FOR_CHANNEL]->(ChannelSurface)',
+  ac_FOR_CHANNEL.cypher_pattern = '(PageNative, BlockNative)-[:FOR_CHANNEL]->(ChannelSurface)',
   ac_FOR_CHANNEL.temperature_threshold = null,
   ac_FOR_CHANNEL.created_at = datetime()
 ON MATCH SET
   ac_FOR_CHANNEL.display_name = 'For Channel',
-  ac_FOR_CHANNEL.llm_context = 'USE: when finding content tailored for a specific channel. TRIGGERS: channel surface, mobile content, channel targeting, platform specific. NOT: locale targeting (use FOR_LOCALE), persona targeting (use TARGETS_PERSONA). RELATES: PageGenerated/BlockGenerated (source), ChannelSurface (target).',
+  ac_FOR_CHANNEL.llm_context = 'USE: when finding content tailored for a specific channel. TRIGGERS: channel surface, mobile content, channel targeting, platform specific. NOT: locale targeting (use FOR_LOCALE), persona targeting (use TARGETS_PERSONA). RELATES: PageNative/BlockNative (source), ChannelSurface (target).',
   ac_FOR_CHANNEL.family = 'semantic',
   ac_FOR_CHANNEL.scope = 'intra_realm',
   ac_FOR_CHANNEL.cardinality = 'many_to_one',
   ac_FOR_CHANNEL.is_self_referential = false,
   ac_FOR_CHANNEL.inverse_name = null,
   ac_FOR_CHANNEL.arc_properties = [],
-  ac_FOR_CHANNEL.cypher_pattern = '(PageGenerated, BlockGenerated)-[:FOR_CHANNEL]->(ChannelSurface)',
+  ac_FOR_CHANNEL.cypher_pattern = '(PageNative, BlockNative)-[:FOR_CHANNEL]->(ChannelSurface)',
   ac_FOR_CHANNEL.temperature_threshold = null,
   ac_FOR_CHANNEL.updated_at = datetime();
 
@@ -3547,26 +3521,26 @@ ON MATCH SET
 MERGE (ac_HAS_INTERNAL_LINK:Schema:ArcClass {key: 'HAS_INTERNAL_LINK'})
 ON CREATE SET
   ac_HAS_INTERNAL_LINK.display_name = 'Has Internal Link',
-  ac_HAS_INTERNAL_LINK.llm_context = 'USE: when analyzing actual hyperlinks rendered in generated block content. TRIGGERS: internal links, rendered links, link structure, SEO links, anchor text, content linking. NOT: page-to-page SEO intent (use LINKS_TO), instruction references (use REFERENCES_PAGE), @ refs (use MENTIONS). RELATES: BlockGenerated (source), PageGenerated (target), properties: anchor_text, position, nofollow.',
+  ac_HAS_INTERNAL_LINK.llm_context = 'USE: when analyzing actual hyperlinks rendered in generated block content. TRIGGERS: internal links, rendered links, link structure, SEO links, anchor text, content linking. NOT: page-to-page SEO intent (use LINKS_TO), instruction references (use REFERENCES_PAGE), @ refs (use MENTIONS). RELATES: BlockNative (source), PageNative (target), properties: anchor_text, position, nofollow.',
   ac_HAS_INTERNAL_LINK.family = 'semantic',
   ac_HAS_INTERNAL_LINK.scope = 'intra_realm',
   ac_HAS_INTERNAL_LINK.cardinality = 'many_to_many',
   ac_HAS_INTERNAL_LINK.is_self_referential = false,
   ac_HAS_INTERNAL_LINK.inverse_name = null,
   ac_HAS_INTERNAL_LINK.arc_properties = ['anchor_text', 'position', 'nofollow'],
-  ac_HAS_INTERNAL_LINK.cypher_pattern = '(BlockGenerated)-[:HAS_INTERNAL_LINK]->(PageGenerated)',
+  ac_HAS_INTERNAL_LINK.cypher_pattern = '(BlockNative)-[:HAS_INTERNAL_LINK]->(PageNative)',
   ac_HAS_INTERNAL_LINK.temperature_threshold = 0.8,
   ac_HAS_INTERNAL_LINK.created_at = datetime()
 ON MATCH SET
   ac_HAS_INTERNAL_LINK.display_name = 'Has Internal Link',
-  ac_HAS_INTERNAL_LINK.llm_context = 'USE: when analyzing actual hyperlinks rendered in generated block content. TRIGGERS: internal links, rendered links, link structure, SEO links, anchor text, content linking. NOT: page-to-page SEO intent (use LINKS_TO), instruction references (use REFERENCES_PAGE), @ refs (use MENTIONS). RELATES: BlockGenerated (source), PageGenerated (target), properties: anchor_text, position, nofollow.',
+  ac_HAS_INTERNAL_LINK.llm_context = 'USE: when analyzing actual hyperlinks rendered in generated block content. TRIGGERS: internal links, rendered links, link structure, SEO links, anchor text, content linking. NOT: page-to-page SEO intent (use LINKS_TO), instruction references (use REFERENCES_PAGE), @ refs (use MENTIONS). RELATES: BlockNative (source), PageNative (target), properties: anchor_text, position, nofollow.',
   ac_HAS_INTERNAL_LINK.family = 'semantic',
   ac_HAS_INTERNAL_LINK.scope = 'intra_realm',
   ac_HAS_INTERNAL_LINK.cardinality = 'many_to_many',
   ac_HAS_INTERNAL_LINK.is_self_referential = false,
   ac_HAS_INTERNAL_LINK.inverse_name = null,
   ac_HAS_INTERNAL_LINK.arc_properties = ['anchor_text', 'position', 'nofollow'],
-  ac_HAS_INTERNAL_LINK.cypher_pattern = '(BlockGenerated)-[:HAS_INTERNAL_LINK]->(PageGenerated)',
+  ac_HAS_INTERNAL_LINK.cypher_pattern = '(BlockNative)-[:HAS_INTERNAL_LINK]->(PageNative)',
   ac_HAS_INTERNAL_LINK.temperature_threshold = 0.8,
   ac_HAS_INTERNAL_LINK.updated_at = datetime();
 
@@ -3729,25 +3703,25 @@ ON MATCH SET
 MERGE (ac_LINKS_TO:Schema:ArcClass {key: 'LINKS_TO'})
 ON CREATE SET
   ac_LINKS_TO.display_name = 'Links To',
-  ac_LINKS_TO.llm_context = 'USE: when finding internal links between pages for SEO maillage. TRIGGERS: internal linking, page links, SEO maillage, link building. NOT: entity references (use REFERENCES_ENTITY), content mentions (use MENTIONS). RELATES: Page (source), Page (target), via_blocks (property), calculated arc.',
+  ac_LINKS_TO.llm_context = 'USE: when finding internal links between pages for SEO maillage and PageRank flow. TRIGGERS: internal linking, page links, SEO maillage, link building, PageRank, juice. NOT: entity references (use REFERENCES_ENTITY), content mentions (use MENTIONS). RELATES: Page (source), Page (target), via_blocks (property), pr_weight (PageRank), calculated arc.',
   ac_LINKS_TO.family = 'semantic',
   ac_LINKS_TO.scope = 'intra_realm',
   ac_LINKS_TO.cardinality = 'many_to_many',
   ac_LINKS_TO.is_self_referential = false,
   ac_LINKS_TO.inverse_name = null,
-  ac_LINKS_TO.arc_properties = ['via_blocks', 'strength', 'anchor_type', 'nofollow'],
+  ac_LINKS_TO.arc_properties = ['via_blocks', 'strength', 'anchor_type', 'nofollow', 'pr_weight'],
   ac_LINKS_TO.cypher_pattern = '(Page)-[:LINKS_TO]->(Page)',
   ac_LINKS_TO.temperature_threshold = 0.4,
   ac_LINKS_TO.created_at = datetime()
 ON MATCH SET
   ac_LINKS_TO.display_name = 'Links To',
-  ac_LINKS_TO.llm_context = 'USE: when finding internal links between pages for SEO maillage. TRIGGERS: internal linking, page links, SEO maillage, link building. NOT: entity references (use REFERENCES_ENTITY), content mentions (use MENTIONS). RELATES: Page (source), Page (target), via_blocks (property), calculated arc.',
+  ac_LINKS_TO.llm_context = 'USE: when finding internal links between pages for SEO maillage and PageRank flow. TRIGGERS: internal linking, page links, SEO maillage, link building, PageRank, juice. NOT: entity references (use REFERENCES_ENTITY), content mentions (use MENTIONS). RELATES: Page (source), Page (target), via_blocks (property), pr_weight (PageRank), calculated arc.',
   ac_LINKS_TO.family = 'semantic',
   ac_LINKS_TO.scope = 'intra_realm',
   ac_LINKS_TO.cardinality = 'many_to_many',
   ac_LINKS_TO.is_self_referential = false,
   ac_LINKS_TO.inverse_name = null,
-  ac_LINKS_TO.arc_properties = ['via_blocks', 'strength', 'anchor_type', 'nofollow'],
+  ac_LINKS_TO.arc_properties = ['via_blocks', 'strength', 'anchor_type', 'nofollow', 'pr_weight'],
   ac_LINKS_TO.cypher_pattern = '(Page)-[:LINKS_TO]->(Page)',
   ac_LINKS_TO.temperature_threshold = 0.4,
   ac_LINKS_TO.updated_at = datetime();
@@ -3807,26 +3781,26 @@ ON MATCH SET
 MERGE (ac_MONITORS_GEO:Schema:ArcClass {key: 'MONITORS_GEO'})
 ON CREATE SET
   ac_MONITORS_GEO.display_name = 'Monitors Geo',
-  ac_MONITORS_GEO.llm_context = 'USE: when finding GEO queries monitored by an entity for AI visibility. TRIGGERS: GEO monitoring, AI visibility, entity queries, GEO tracking. NOT: SEO targeting (use TARGETS), GEO answers (use HAS_GEO_ANSWERS). RELATES: EntityContent (source), GEOQuery (target), priority (property).',
+  ac_MONITORS_GEO.llm_context = 'USE: when finding GEO queries monitored by an entity for AI visibility. TRIGGERS: GEO monitoring, AI visibility, entity queries, GEO tracking. NOT: SEO targeting (use TARGETS), GEO answers (use HAS_GEO_ANSWERS). RELATES: EntityNative (source), GEOQuery (target), priority (property).',
   ac_MONITORS_GEO.family = 'semantic',
   ac_MONITORS_GEO.scope = 'cross_realm',
   ac_MONITORS_GEO.cardinality = 'many_to_many',
   ac_MONITORS_GEO.is_self_referential = false,
   ac_MONITORS_GEO.inverse_name = null,
   ac_MONITORS_GEO.arc_properties = ['priority', 'alert_threshold'],
-  ac_MONITORS_GEO.cypher_pattern = '(EntityContent)-[:MONITORS_GEO]->(GEOQuery)',
+  ac_MONITORS_GEO.cypher_pattern = '(EntityNative)-[:MONITORS_GEO]->(GEOQuery)',
   ac_MONITORS_GEO.temperature_threshold = 0.6,
   ac_MONITORS_GEO.created_at = datetime()
 ON MATCH SET
   ac_MONITORS_GEO.display_name = 'Monitors Geo',
-  ac_MONITORS_GEO.llm_context = 'USE: when finding GEO queries monitored by an entity for AI visibility. TRIGGERS: GEO monitoring, AI visibility, entity queries, GEO tracking. NOT: SEO targeting (use TARGETS), GEO answers (use HAS_GEO_ANSWERS). RELATES: EntityContent (source), GEOQuery (target), priority (property).',
+  ac_MONITORS_GEO.llm_context = 'USE: when finding GEO queries monitored by an entity for AI visibility. TRIGGERS: GEO monitoring, AI visibility, entity queries, GEO tracking. NOT: SEO targeting (use TARGETS), GEO answers (use HAS_GEO_ANSWERS). RELATES: EntityNative (source), GEOQuery (target), priority (property).',
   ac_MONITORS_GEO.family = 'semantic',
   ac_MONITORS_GEO.scope = 'cross_realm',
   ac_MONITORS_GEO.cardinality = 'many_to_many',
   ac_MONITORS_GEO.is_self_referential = false,
   ac_MONITORS_GEO.inverse_name = null,
   ac_MONITORS_GEO.arc_properties = ['priority', 'alert_threshold'],
-  ac_MONITORS_GEO.cypher_pattern = '(EntityContent)-[:MONITORS_GEO]->(GEOQuery)',
+  ac_MONITORS_GEO.cypher_pattern = '(EntityNative)-[:MONITORS_GEO]->(GEOQuery)',
   ac_MONITORS_GEO.temperature_threshold = 0.6,
   ac_MONITORS_GEO.updated_at = datetime();
 
@@ -4168,6 +4142,32 @@ ON MATCH SET
   ac_SEMANTIC_LINK.temperature_threshold = 0.3,
   ac_SEMANTIC_LINK.updated_at = datetime();
 
+MERGE (ac_SEO_CLUSTER_OF:Schema:ArcClass {key: 'SEO_CLUSTER_OF'})
+ON CREATE SET
+  ac_SEO_CLUSTER_OF.display_name = 'Seo Cluster Of',
+  ac_SEO_CLUSTER_OF.llm_context = 'USE: when building SEO pillar/cluster structure for topical authority. TRIGGERS: pillar page, cluster page, topic cluster, SEO architecture, topical authority. NOT: URL hierarchy (use SUBTOPIC_OF), semantic topic (use Entity.SUBTOPIC_OF), population clusters (use CLUSTER_OF). RELATES: Page (cluster), Page (pillar with is_pillar=true), many_to_one cardinality.',
+  ac_SEO_CLUSTER_OF.family = 'semantic',
+  ac_SEO_CLUSTER_OF.scope = 'intra_realm',
+  ac_SEO_CLUSTER_OF.cardinality = 'many_to_one',
+  ac_SEO_CLUSTER_OF.is_self_referential = false,
+  ac_SEO_CLUSTER_OF.inverse_name = null,
+  ac_SEO_CLUSTER_OF.arc_properties = ['cluster_role', 'link_priority'],
+  ac_SEO_CLUSTER_OF.cypher_pattern = '(Page)-[:SEO_CLUSTER_OF]->(Page)',
+  ac_SEO_CLUSTER_OF.temperature_threshold = 0.3,
+  ac_SEO_CLUSTER_OF.created_at = datetime()
+ON MATCH SET
+  ac_SEO_CLUSTER_OF.display_name = 'Seo Cluster Of',
+  ac_SEO_CLUSTER_OF.llm_context = 'USE: when building SEO pillar/cluster structure for topical authority. TRIGGERS: pillar page, cluster page, topic cluster, SEO architecture, topical authority. NOT: URL hierarchy (use SUBTOPIC_OF), semantic topic (use Entity.SUBTOPIC_OF), population clusters (use CLUSTER_OF). RELATES: Page (cluster), Page (pillar with is_pillar=true), many_to_one cardinality.',
+  ac_SEO_CLUSTER_OF.family = 'semantic',
+  ac_SEO_CLUSTER_OF.scope = 'intra_realm',
+  ac_SEO_CLUSTER_OF.cardinality = 'many_to_one',
+  ac_SEO_CLUSTER_OF.is_self_referential = false,
+  ac_SEO_CLUSTER_OF.inverse_name = null,
+  ac_SEO_CLUSTER_OF.arc_properties = ['cluster_role', 'link_priority'],
+  ac_SEO_CLUSTER_OF.cypher_pattern = '(Page)-[:SEO_CLUSTER_OF]->(Page)',
+  ac_SEO_CLUSTER_OF.temperature_threshold = 0.3,
+  ac_SEO_CLUSTER_OF.updated_at = datetime();
+
 MERGE (ac_SIMILAR_TO:Schema:ArcClass {key: 'SIMILAR_TO'})
 ON CREATE SET
   ac_SIMILAR_TO.display_name = 'Similar To',
@@ -4223,26 +4223,26 @@ ON MATCH SET
 MERGE (ac_TARGETS:Schema:ArcClass {key: 'TARGETS'})
 ON CREATE SET
   ac_TARGETS.display_name = 'Targets',
-  ac_TARGETS.llm_context = 'USE: when finding SEO keywords targeted by localized content. TRIGGERS: targets keyword, SEO targeting, keyword optimization, organic search. NOT: keyword expression (use EXPRESSES), persona targeting (use TARGETS_PERSONA). RELATES: EntityContent (source), SEOKeyword (target), cross_realm, locale must match.',
+  ac_TARGETS.llm_context = 'USE: when finding SEO keywords targeted by localized content. TRIGGERS: targets keyword, SEO targeting, keyword optimization, organic search. NOT: keyword expression (use EXPRESSES), persona targeting (use TARGETS_PERSONA). RELATES: EntityNative (source), SEOKeyword (target), cross_realm, locale must match.',
   ac_TARGETS.family = 'semantic',
   ac_TARGETS.scope = 'cross_realm',
   ac_TARGETS.cardinality = 'many_to_many',
   ac_TARGETS.is_self_referential = false,
   ac_TARGETS.inverse_name = null,
   ac_TARGETS.arc_properties = ['priority', 'target_position'],
-  ac_TARGETS.cypher_pattern = '(EntityContent)-[:TARGETS]->(SEOKeyword)',
+  ac_TARGETS.cypher_pattern = '(EntityNative)-[:TARGETS]->(SEOKeyword)',
   ac_TARGETS.temperature_threshold = 0.6,
   ac_TARGETS.created_at = datetime()
 ON MATCH SET
   ac_TARGETS.display_name = 'Targets',
-  ac_TARGETS.llm_context = 'USE: when finding SEO keywords targeted by localized content. TRIGGERS: targets keyword, SEO targeting, keyword optimization, organic search. NOT: keyword expression (use EXPRESSES), persona targeting (use TARGETS_PERSONA). RELATES: EntityContent (source), SEOKeyword (target), cross_realm, locale must match.',
+  ac_TARGETS.llm_context = 'USE: when finding SEO keywords targeted by localized content. TRIGGERS: targets keyword, SEO targeting, keyword optimization, organic search. NOT: keyword expression (use EXPRESSES), persona targeting (use TARGETS_PERSONA). RELATES: EntityNative (source), SEOKeyword (target), cross_realm, locale must match.',
   ac_TARGETS.family = 'semantic',
   ac_TARGETS.scope = 'cross_realm',
   ac_TARGETS.cardinality = 'many_to_many',
   ac_TARGETS.is_self_referential = false,
   ac_TARGETS.inverse_name = null,
   ac_TARGETS.arc_properties = ['priority', 'target_position'],
-  ac_TARGETS.cypher_pattern = '(EntityContent)-[:TARGETS]->(SEOKeyword)',
+  ac_TARGETS.cypher_pattern = '(EntityNative)-[:TARGETS]->(SEOKeyword)',
   ac_TARGETS.temperature_threshold = 0.6,
   ac_TARGETS.updated_at = datetime();
 
@@ -4415,16 +4415,13 @@ MERGE (af)-[:HAS_ARC_CLASS]->(ac);
 MATCH (af:ArcFamily {key: 'generation'}), (ac:ArcClass {key: 'COMPILED_FROM'})
 MERGE (af)-[:HAS_ARC_CLASS]->(ac);
 
+MATCH (af:ArcFamily {key: 'generation'}), (ac:ArcClass {key: 'DERIVED_SLUG_FROM'})
+MERGE (af)-[:HAS_ARC_CLASS]->(ac);
+
 MATCH (af:ArcFamily {key: 'generation'}), (ac:ArcClass {key: 'GENERATED'})
 MERGE (af)-[:HAS_ARC_CLASS]->(ac);
 
-MATCH (af:ArcFamily {key: 'generation'}), (ac:ArcClass {key: 'GENERATED_FOR'})
-MERGE (af)-[:HAS_ARC_CLASS]->(ac);
-
 MATCH (af:ArcFamily {key: 'generation'}), (ac:ArcClass {key: 'GENERATED_FROM'})
-MERGE (af)-[:HAS_ARC_CLASS]->(ac);
-
-MATCH (af:ArcFamily {key: 'generation'}), (ac:ArcClass {key: 'HAS_GENERATED'})
 MERGE (af)-[:HAS_ARC_CLASS]->(ac);
 
 MATCH (af:ArcFamily {key: 'generation'}), (ac:ArcClass {key: 'INCLUDES_ENTITY'})
@@ -4445,16 +4442,10 @@ MERGE (af)-[:HAS_ARC_CLASS]->(ac);
 MATCH (af:ArcFamily {key: 'generation'}), (ac:ArcClass {key: 'PRODUCED_BY'})
 MERGE (af)-[:HAS_ARC_CLASS]->(ac);
 
-MATCH (af:ArcFamily {key: 'localization'}), (ac:ArcClass {key: 'CONTENT_OF'})
-MERGE (af)-[:HAS_ARC_CLASS]->(ac);
-
 MATCH (af:ArcFamily {key: 'localization'}), (ac:ArcClass {key: 'FALLBACK_TO'})
 MERGE (af)-[:HAS_ARC_CLASS]->(ac);
 
 MATCH (af:ArcFamily {key: 'localization'}), (ac:ArcClass {key: 'FOR_LOCALE'})
-MERGE (af)-[:HAS_ARC_CLASS]->(ac);
-
-MATCH (af:ArcFamily {key: 'localization'}), (ac:ArcClass {key: 'HAS_CONTENT'})
 MERGE (af)-[:HAS_ARC_CLASS]->(ac);
 
 MATCH (af:ArcFamily {key: 'localization'}), (ac:ArcClass {key: 'HAS_INCOME_LEVEL'})
@@ -4541,7 +4532,7 @@ MERGE (af)-[:HAS_ARC_CLASS]->(ac);
 MATCH (af:ArcFamily {key: 'ownership'}), (ac:ArcClass {key: 'BELONGS_TO_ORG'})
 MERGE (af)-[:HAS_ARC_CLASS]->(ac);
 
-MATCH (af:ArcFamily {key: 'ownership'}), (ac:ArcClass {key: 'BELONGS_TO_PROJECT_CONTENT'})
+MATCH (af:ArcFamily {key: 'ownership'}), (ac:ArcClass {key: 'BELONGS_TO_PROJECT_NATIVE'})
 MERGE (af)-[:HAS_ARC_CLASS]->(ac);
 
 MATCH (af:ArcFamily {key: 'ownership'}), (ac:ArcClass {key: 'BLOCK_OF'})
@@ -4661,6 +4652,9 @@ MERGE (af)-[:HAS_ARC_CLASS]->(ac);
 MATCH (af:ArcFamily {key: 'ownership'}), (ac:ArcClass {key: 'HAS_MARKET'})
 MERGE (af)-[:HAS_ARC_CLASS]->(ac);
 
+MATCH (af:ArcFamily {key: 'ownership'}), (ac:ArcClass {key: 'HAS_NATIVE'})
+MERGE (af)-[:HAS_ARC_CLASS]->(ac);
+
 MATCH (af:ArcFamily {key: 'ownership'}), (ac:ArcClass {key: 'HAS_PAGE'})
 MERGE (af)-[:HAS_ARC_CLASS]->(ac);
 
@@ -4719,6 +4713,9 @@ MATCH (af:ArcFamily {key: 'ownership'}), (ac:ArcClass {key: 'IN_REGION'})
 MERGE (af)-[:HAS_ARC_CLASS]->(ac);
 
 MATCH (af:ArcFamily {key: 'ownership'}), (ac:ArcClass {key: 'MARKET_OF'})
+MERGE (af)-[:HAS_ARC_CLASS]->(ac);
+
+MATCH (af:ArcFamily {key: 'ownership'}), (ac:ArcClass {key: 'NATIVE_OF'})
 MERGE (af)-[:HAS_ARC_CLASS]->(ac);
 
 MATCH (af:ArcFamily {key: 'ownership'}), (ac:ArcClass {key: 'OF_TYPE'})
@@ -4886,6 +4883,9 @@ MERGE (af)-[:HAS_ARC_CLASS]->(ac);
 MATCH (af:ArcFamily {key: 'semantic'}), (ac:ArcClass {key: 'SEMANTIC_LINK'})
 MERGE (af)-[:HAS_ARC_CLASS]->(ac);
 
+MATCH (af:ArcFamily {key: 'semantic'}), (ac:ArcClass {key: 'SEO_CLUSTER_OF'})
+MERGE (af)-[:HAS_ARC_CLASS]->(ac);
+
 MATCH (af:ArcFamily {key: 'semantic'}), (ac:ArcClass {key: 'SIMILAR_TO'})
 MERGE (af)-[:HAS_ARC_CLASS]->(ac);
 
@@ -4926,16 +4926,13 @@ MERGE (ac)-[:IN_FAMILY]->(af);
 MATCH (ac:ArcClass {key: 'COMPILED_FROM'}), (af:ArcFamily {key: 'generation'})
 MERGE (ac)-[:IN_FAMILY]->(af);
 
+MATCH (ac:ArcClass {key: 'DERIVED_SLUG_FROM'}), (af:ArcFamily {key: 'generation'})
+MERGE (ac)-[:IN_FAMILY]->(af);
+
 MATCH (ac:ArcClass {key: 'GENERATED'}), (af:ArcFamily {key: 'generation'})
 MERGE (ac)-[:IN_FAMILY]->(af);
 
-MATCH (ac:ArcClass {key: 'GENERATED_FOR'}), (af:ArcFamily {key: 'generation'})
-MERGE (ac)-[:IN_FAMILY]->(af);
-
 MATCH (ac:ArcClass {key: 'GENERATED_FROM'}), (af:ArcFamily {key: 'generation'})
-MERGE (ac)-[:IN_FAMILY]->(af);
-
-MATCH (ac:ArcClass {key: 'HAS_GENERATED'}), (af:ArcFamily {key: 'generation'})
 MERGE (ac)-[:IN_FAMILY]->(af);
 
 MATCH (ac:ArcClass {key: 'INCLUDES_ENTITY'}), (af:ArcFamily {key: 'generation'})
@@ -4956,16 +4953,10 @@ MERGE (ac)-[:IN_FAMILY]->(af);
 MATCH (ac:ArcClass {key: 'PRODUCED_BY'}), (af:ArcFamily {key: 'generation'})
 MERGE (ac)-[:IN_FAMILY]->(af);
 
-MATCH (ac:ArcClass {key: 'CONTENT_OF'}), (af:ArcFamily {key: 'localization'})
-MERGE (ac)-[:IN_FAMILY]->(af);
-
 MATCH (ac:ArcClass {key: 'FALLBACK_TO'}), (af:ArcFamily {key: 'localization'})
 MERGE (ac)-[:IN_FAMILY]->(af);
 
 MATCH (ac:ArcClass {key: 'FOR_LOCALE'}), (af:ArcFamily {key: 'localization'})
-MERGE (ac)-[:IN_FAMILY]->(af);
-
-MATCH (ac:ArcClass {key: 'HAS_CONTENT'}), (af:ArcFamily {key: 'localization'})
 MERGE (ac)-[:IN_FAMILY]->(af);
 
 MATCH (ac:ArcClass {key: 'HAS_INCOME_LEVEL'}), (af:ArcFamily {key: 'localization'})
@@ -5052,7 +5043,7 @@ MERGE (ac)-[:IN_FAMILY]->(af);
 MATCH (ac:ArcClass {key: 'BELONGS_TO_ORG'}), (af:ArcFamily {key: 'ownership'})
 MERGE (ac)-[:IN_FAMILY]->(af);
 
-MATCH (ac:ArcClass {key: 'BELONGS_TO_PROJECT_CONTENT'}), (af:ArcFamily {key: 'ownership'})
+MATCH (ac:ArcClass {key: 'BELONGS_TO_PROJECT_NATIVE'}), (af:ArcFamily {key: 'ownership'})
 MERGE (ac)-[:IN_FAMILY]->(af);
 
 MATCH (ac:ArcClass {key: 'BLOCK_OF'}), (af:ArcFamily {key: 'ownership'})
@@ -5172,6 +5163,9 @@ MERGE (ac)-[:IN_FAMILY]->(af);
 MATCH (ac:ArcClass {key: 'HAS_MARKET'}), (af:ArcFamily {key: 'ownership'})
 MERGE (ac)-[:IN_FAMILY]->(af);
 
+MATCH (ac:ArcClass {key: 'HAS_NATIVE'}), (af:ArcFamily {key: 'ownership'})
+MERGE (ac)-[:IN_FAMILY]->(af);
+
 MATCH (ac:ArcClass {key: 'HAS_PAGE'}), (af:ArcFamily {key: 'ownership'})
 MERGE (ac)-[:IN_FAMILY]->(af);
 
@@ -5230,6 +5224,9 @@ MATCH (ac:ArcClass {key: 'IN_REGION'}), (af:ArcFamily {key: 'ownership'})
 MERGE (ac)-[:IN_FAMILY]->(af);
 
 MATCH (ac:ArcClass {key: 'MARKET_OF'}), (af:ArcFamily {key: 'ownership'})
+MERGE (ac)-[:IN_FAMILY]->(af);
+
+MATCH (ac:ArcClass {key: 'NATIVE_OF'}), (af:ArcFamily {key: 'ownership'})
 MERGE (ac)-[:IN_FAMILY]->(af);
 
 MATCH (ac:ArcClass {key: 'OF_TYPE'}), (af:ArcFamily {key: 'ownership'})
@@ -5397,6 +5394,9 @@ MERGE (ac)-[:IN_FAMILY]->(af);
 MATCH (ac:ArcClass {key: 'SEMANTIC_LINK'}), (af:ArcFamily {key: 'semantic'})
 MERGE (ac)-[:IN_FAMILY]->(af);
 
+MATCH (ac:ArcClass {key: 'SEO_CLUSTER_OF'}), (af:ArcFamily {key: 'semantic'})
+MERGE (ac)-[:IN_FAMILY]->(af);
+
 MATCH (ac:ArcClass {key: 'SIMILAR_TO'}), (af:ArcFamily {key: 'semantic'})
 MERGE (ac)-[:IN_FAMILY]->(af);
 
@@ -5425,10 +5425,10 @@ MATCH (ac:ArcClass {key: 'VARIANT_OF'}), (af:ArcFamily {key: 'semantic'})
 MERGE (ac)-[:IN_FAMILY]->(af);
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// Arc Schema: ArcClass -[:FROM_CLASS]-> Class (193)
+// Arc Schema: ArcClass -[:FROM_CLASS]-> Class (195)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-MATCH (ac:ArcClass {key: 'ASSEMBLES'}), (c:Class {label: 'PageGenerated'})
+MATCH (ac:ArcClass {key: 'ASSEMBLES'}), (c:Class {label: 'PageNative'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'BUNDLES'}), (c:Class {label: 'OutputArtifact'})
@@ -5437,22 +5437,13 @@ MERGE (ac)-[:FROM_CLASS]->(c);
 MATCH (ac:ArcClass {key: 'COMPILED_FROM'}), (c:Class {label: 'PromptArtifact'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
+MATCH (ac:ArcClass {key: 'DERIVED_SLUG_FROM'}), (c:Class {label: 'PageNative'})
+MERGE (ac)-[:FROM_CLASS]->(c);
+
 MATCH (ac:ArcClass {key: 'GENERATED'}), (c:Class {label: 'BlockInstruction'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'GENERATED_FOR'}), (c:Class {label: 'PageGenerated'})
-MERGE (ac)-[:FROM_CLASS]->(c);
-
-MATCH (ac:ArcClass {key: 'GENERATED_FOR'}), (c:Class {label: 'BlockGenerated'})
-MERGE (ac)-[:FROM_CLASS]->(c);
-
-MATCH (ac:ArcClass {key: 'GENERATED_FROM'}), (c:Class {label: 'BlockGenerated'})
-MERGE (ac)-[:FROM_CLASS]->(c);
-
-MATCH (ac:ArcClass {key: 'HAS_GENERATED'}), (c:Class {label: 'Page'})
-MERGE (ac)-[:FROM_CLASS]->(c);
-
-MATCH (ac:ArcClass {key: 'HAS_GENERATED'}), (c:Class {label: 'Block'})
+MATCH (ac:ArcClass {key: 'GENERATED_FROM'}), (c:Class {label: 'BlockNative'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'INCLUDES_ENTITY'}), (c:Class {label: 'PromptArtifact'})
@@ -5461,13 +5452,13 @@ MERGE (ac)-[:FROM_CLASS]->(c);
 MATCH (ac:ArcClass {key: 'INCLUDES_STYLE'}), (c:Class {label: 'BlockInstruction'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'INFLUENCED_BY'}), (c:Class {label: 'BlockGenerated'})
+MATCH (ac:ArcClass {key: 'INFLUENCED_BY'}), (c:Class {label: 'BlockNative'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'PREVIOUS_VERSION'}), (c:Class {label: 'BlockGenerated'})
+MATCH (ac:ArcClass {key: 'PREVIOUS_VERSION'}), (c:Class {label: 'BlockNative'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'PREVIOUS_VERSION'}), (c:Class {label: 'PageGenerated'})
+MATCH (ac:ArcClass {key: 'PREVIOUS_VERSION'}), (c:Class {label: 'PageNative'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'PREVIOUS_VERSION'}), (c:Class {label: 'OutputArtifact'})
@@ -5476,43 +5467,31 @@ MERGE (ac)-[:FROM_CLASS]->(c);
 MATCH (ac:ArcClass {key: 'PRODUCED'}), (c:Class {label: 'PromptArtifact'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'PRODUCED_BY'}), (c:Class {label: 'BlockGenerated'})
+MATCH (ac:ArcClass {key: 'PRODUCED_BY'}), (c:Class {label: 'BlockNative'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'PRODUCED_BY'}), (c:Class {label: 'PageGenerated'})
-MERGE (ac)-[:FROM_CLASS]->(c);
-
-MATCH (ac:ArcClass {key: 'CONTENT_OF'}), (c:Class {label: 'EntityContent'})
-MERGE (ac)-[:FROM_CLASS]->(c);
-
-MATCH (ac:ArcClass {key: 'CONTENT_OF'}), (c:Class {label: 'ProjectContent'})
+MATCH (ac:ArcClass {key: 'PRODUCED_BY'}), (c:Class {label: 'PageNative'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'FALLBACK_TO'}), (c:Class {label: 'Locale'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'FOR_LOCALE'}), (c:Class {label: 'EntityContent'})
+MATCH (ac:ArcClass {key: 'FOR_LOCALE'}), (c:Class {label: 'EntityNative'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'FOR_LOCALE'}), (c:Class {label: 'ProjectContent'})
+MATCH (ac:ArcClass {key: 'FOR_LOCALE'}), (c:Class {label: 'ProjectNative'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'FOR_LOCALE'}), (c:Class {label: 'BlockGenerated'})
+MATCH (ac:ArcClass {key: 'FOR_LOCALE'}), (c:Class {label: 'BlockNative'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'FOR_LOCALE'}), (c:Class {label: 'PageGenerated'})
+MATCH (ac:ArcClass {key: 'FOR_LOCALE'}), (c:Class {label: 'PageNative'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'FOR_LOCALE'}), (c:Class {label: 'OutputArtifact'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'FOR_LOCALE'}), (c:Class {label: 'PromptStyle'})
-MERGE (ac)-[:FROM_CLASS]->(c);
-
-MATCH (ac:ArcClass {key: 'HAS_CONTENT'}), (c:Class {label: 'Entity'})
-MERGE (ac)-[:FROM_CLASS]->(c);
-
-MATCH (ac:ArcClass {key: 'HAS_CONTENT'}), (c:Class {label: 'Project'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'HAS_INCOME_LEVEL'}), (c:Class {label: 'Locale'})
@@ -5617,7 +5596,7 @@ MERGE (ac)-[:FROM_CLASS]->(c);
 MATCH (ac:ArcClass {key: 'BELONGS_TO_ORG'}), (c:Class {label: 'Project'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'BELONGS_TO_PROJECT_CONTENT'}), (c:Class {label: 'PageGenerated'})
+MATCH (ac:ArcClass {key: 'BELONGS_TO_PROJECT_NATIVE'}), (c:Class {label: 'PageNative'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'BLOCK_OF'}), (c:Class {label: 'Block'})
@@ -5740,6 +5719,18 @@ MERGE (ac)-[:FROM_CLASS]->(c);
 MATCH (ac:ArcClass {key: 'HAS_MARKET'}), (c:Class {label: 'Locale'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
+MATCH (ac:ArcClass {key: 'HAS_NATIVE'}), (c:Class {label: 'Entity'})
+MERGE (ac)-[:FROM_CLASS]->(c);
+
+MATCH (ac:ArcClass {key: 'HAS_NATIVE'}), (c:Class {label: 'Project'})
+MERGE (ac)-[:FROM_CLASS]->(c);
+
+MATCH (ac:ArcClass {key: 'HAS_NATIVE'}), (c:Class {label: 'Page'})
+MERGE (ac)-[:FROM_CLASS]->(c);
+
+MATCH (ac:ArcClass {key: 'HAS_NATIVE'}), (c:Class {label: 'Block'})
+MERGE (ac)-[:FROM_CLASS]->(c);
+
 MATCH (ac:ArcClass {key: 'HAS_PAGE'}), (c:Class {label: 'Project'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
@@ -5798,6 +5789,18 @@ MATCH (ac:ArcClass {key: 'IN_REGION'}), (c:Class {label: 'GeoSubRegion'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'MARKET_OF'}), (c:Class {label: 'Market'})
+MERGE (ac)-[:FROM_CLASS]->(c);
+
+MATCH (ac:ArcClass {key: 'NATIVE_OF'}), (c:Class {label: 'EntityNative'})
+MERGE (ac)-[:FROM_CLASS]->(c);
+
+MATCH (ac:ArcClass {key: 'NATIVE_OF'}), (c:Class {label: 'ProjectNative'})
+MERGE (ac)-[:FROM_CLASS]->(c);
+
+MATCH (ac:ArcClass {key: 'NATIVE_OF'}), (c:Class {label: 'PageNative'})
+MERGE (ac)-[:FROM_CLASS]->(c);
+
+MATCH (ac:ArcClass {key: 'NATIVE_OF'}), (c:Class {label: 'BlockNative'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'OF_TYPE'}), (c:Class {label: 'Block'})
@@ -5884,10 +5887,10 @@ MERGE (ac)-[:FROM_CLASS]->(c);
 MATCH (ac:ArcClass {key: 'FILLS_SLOT'}), (c:Class {label: 'Block'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'FOR_CHANNEL'}), (c:Class {label: 'PageGenerated'})
+MATCH (ac:ArcClass {key: 'FOR_CHANNEL'}), (c:Class {label: 'PageNative'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'FOR_CHANNEL'}), (c:Class {label: 'BlockGenerated'})
+MATCH (ac:ArcClass {key: 'FOR_CHANNEL'}), (c:Class {label: 'BlockNative'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'FOR_MARKET'}), (c:Class {label: 'Brand'})
@@ -5896,7 +5899,7 @@ MERGE (ac)-[:FROM_CLASS]->(c);
 MATCH (ac:ArcClass {key: 'HAS_APPLICATION'}), (c:Class {label: 'Entity'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'HAS_INTERNAL_LINK'}), (c:Class {label: 'BlockGenerated'})
+MATCH (ac:ArcClass {key: 'HAS_INTERNAL_LINK'}), (c:Class {label: 'BlockNative'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'HAS_TYPE'}), (c:Class {label: 'Entity'})
@@ -5926,7 +5929,7 @@ MERGE (ac)-[:FROM_CLASS]->(c);
 MATCH (ac:ArcClass {key: 'MENTIONS_BRAND'}), (c:Class {label: 'SEOKeyword'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'MONITORS_GEO'}), (c:Class {label: 'EntityContent'})
+MATCH (ac:ArcClass {key: 'MONITORS_GEO'}), (c:Class {label: 'EntityNative'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'OPERATED_BY'}), (c:Class {label: 'Entity'})
@@ -5968,13 +5971,16 @@ MERGE (ac)-[:FROM_CLASS]->(c);
 MATCH (ac:ArcClass {key: 'SEMANTIC_LINK'}), (c:Class {label: 'Entity'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
+MATCH (ac:ArcClass {key: 'SEO_CLUSTER_OF'}), (c:Class {label: 'Page'})
+MERGE (ac)-[:FROM_CLASS]->(c);
+
 MATCH (ac:ArcClass {key: 'SIMILAR_TO'}), (c:Class {label: 'Entity'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'SUBTOPIC_OF'}), (c:Class {label: 'Page'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'TARGETS'}), (c:Class {label: 'EntityContent'})
+MATCH (ac:ArcClass {key: 'TARGETS'}), (c:Class {label: 'EntityNative'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'TARGETS_PERSONA'}), (c:Class {label: 'Brand'})
@@ -6008,40 +6014,31 @@ MATCH (ac:ArcClass {key: 'VARIANT_OF'}), (c:Class {label: 'Entity'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// Arc Schema: ArcClass -[:TO_CLASS]-> Class (198)
+// Arc Schema: ArcClass -[:TO_CLASS]-> Class (200)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-MATCH (ac:ArcClass {key: 'ASSEMBLES'}), (c:Class {label: 'BlockGenerated'})
+MATCH (ac:ArcClass {key: 'ASSEMBLES'}), (c:Class {label: 'BlockNative'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'BUNDLES'}), (c:Class {label: 'PageGenerated'})
+MATCH (ac:ArcClass {key: 'BUNDLES'}), (c:Class {label: 'PageNative'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'BUNDLES'}), (c:Class {label: 'BlockGenerated'})
+MATCH (ac:ArcClass {key: 'BUNDLES'}), (c:Class {label: 'BlockNative'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'COMPILED_FROM'}), (c:Class {label: 'BlockInstruction'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'GENERATED'}), (c:Class {label: 'PageGenerated'})
+MATCH (ac:ArcClass {key: 'DERIVED_SLUG_FROM'}), (c:Class {label: 'SEOKeyword'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'GENERATED'}), (c:Class {label: 'BlockGenerated'})
+MATCH (ac:ArcClass {key: 'GENERATED'}), (c:Class {label: 'PageNative'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'GENERATED_FOR'}), (c:Class {label: 'Page'})
-MERGE (ac)-[:TO_CLASS]->(c);
-
-MATCH (ac:ArcClass {key: 'GENERATED_FOR'}), (c:Class {label: 'Block'})
+MATCH (ac:ArcClass {key: 'GENERATED'}), (c:Class {label: 'BlockNative'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'GENERATED_FROM'}), (c:Class {label: 'BlockType'})
-MERGE (ac)-[:TO_CLASS]->(c);
-
-MATCH (ac:ArcClass {key: 'HAS_GENERATED'}), (c:Class {label: 'PageGenerated'})
-MERGE (ac)-[:TO_CLASS]->(c);
-
-MATCH (ac:ArcClass {key: 'HAS_GENERATED'}), (c:Class {label: 'BlockGenerated'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'INCLUDES_ENTITY'}), (c:Class {label: 'Entity'})
@@ -6050,43 +6047,31 @@ MERGE (ac)-[:TO_CLASS]->(c);
 MATCH (ac:ArcClass {key: 'INCLUDES_STYLE'}), (c:Class {label: 'Style'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'INFLUENCED_BY'}), (c:Class {label: 'EntityContent'})
+MATCH (ac:ArcClass {key: 'INFLUENCED_BY'}), (c:Class {label: 'EntityNative'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'PREVIOUS_VERSION'}), (c:Class {label: 'BlockGenerated'})
+MATCH (ac:ArcClass {key: 'PREVIOUS_VERSION'}), (c:Class {label: 'BlockNative'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'PREVIOUS_VERSION'}), (c:Class {label: 'PageGenerated'})
+MATCH (ac:ArcClass {key: 'PREVIOUS_VERSION'}), (c:Class {label: 'PageNative'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'PREVIOUS_VERSION'}), (c:Class {label: 'OutputArtifact'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'PRODUCED'}), (c:Class {label: 'BlockGenerated'})
+MATCH (ac:ArcClass {key: 'PRODUCED'}), (c:Class {label: 'BlockNative'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'PRODUCED'}), (c:Class {label: 'PageGenerated'})
+MATCH (ac:ArcClass {key: 'PRODUCED'}), (c:Class {label: 'PageNative'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'PRODUCED_BY'}), (c:Class {label: 'PromptArtifact'})
-MERGE (ac)-[:TO_CLASS]->(c);
-
-MATCH (ac:ArcClass {key: 'CONTENT_OF'}), (c:Class {label: 'Entity'})
-MERGE (ac)-[:TO_CLASS]->(c);
-
-MATCH (ac:ArcClass {key: 'CONTENT_OF'}), (c:Class {label: 'Project'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'FALLBACK_TO'}), (c:Class {label: 'Locale'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'FOR_LOCALE'}), (c:Class {label: 'Locale'})
-MERGE (ac)-[:TO_CLASS]->(c);
-
-MATCH (ac:ArcClass {key: 'HAS_CONTENT'}), (c:Class {label: 'EntityContent'})
-MERGE (ac)-[:TO_CLASS]->(c);
-
-MATCH (ac:ArcClass {key: 'HAS_CONTENT'}), (c:Class {label: 'ProjectContent'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'HAS_INCOME_LEVEL'}), (c:Class {label: 'IncomeGroup'})
@@ -6128,16 +6113,16 @@ MERGE (ac)-[:TO_CLASS]->(c);
 MATCH (ac:ArcClass {key: 'LENDING_CLASSIFIES'}), (c:Class {label: 'Locale'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'LOCALE_OF'}), (c:Class {label: 'EntityContent'})
+MATCH (ac:ArcClass {key: 'LOCALE_OF'}), (c:Class {label: 'EntityNative'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'LOCALE_OF'}), (c:Class {label: 'ProjectContent'})
+MATCH (ac:ArcClass {key: 'LOCALE_OF'}), (c:Class {label: 'ProjectNative'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'LOCALE_OF'}), (c:Class {label: 'BlockGenerated'})
+MATCH (ac:ArcClass {key: 'LOCALE_OF'}), (c:Class {label: 'BlockNative'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'LOCALE_OF'}), (c:Class {label: 'PageGenerated'})
+MATCH (ac:ArcClass {key: 'LOCALE_OF'}), (c:Class {label: 'PageNative'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'LOCALE_OF'}), (c:Class {label: 'OutputArtifact'})
@@ -6197,7 +6182,7 @@ MERGE (ac)-[:TO_CLASS]->(c);
 MATCH (ac:ArcClass {key: 'BELONGS_TO_ORG'}), (c:Class {label: 'OrgConfig'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'BELONGS_TO_PROJECT_CONTENT'}), (c:Class {label: 'ProjectContent'})
+MATCH (ac:ArcClass {key: 'BELONGS_TO_PROJECT_NATIVE'}), (c:Class {label: 'ProjectNative'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'BLOCK_OF'}), (c:Class {label: 'Page'})
@@ -6317,6 +6302,18 @@ MERGE (ac)-[:TO_CLASS]->(c);
 MATCH (ac:ArcClass {key: 'HAS_MARKET'}), (c:Class {label: 'Market'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
+MATCH (ac:ArcClass {key: 'HAS_NATIVE'}), (c:Class {label: 'EntityNative'})
+MERGE (ac)-[:TO_CLASS]->(c);
+
+MATCH (ac:ArcClass {key: 'HAS_NATIVE'}), (c:Class {label: 'ProjectNative'})
+MERGE (ac)-[:TO_CLASS]->(c);
+
+MATCH (ac:ArcClass {key: 'HAS_NATIVE'}), (c:Class {label: 'PageNative'})
+MERGE (ac)-[:TO_CLASS]->(c);
+
+MATCH (ac:ArcClass {key: 'HAS_NATIVE'}), (c:Class {label: 'BlockNative'})
+MERGE (ac)-[:TO_CLASS]->(c);
+
 MATCH (ac:ArcClass {key: 'HAS_PAGE'}), (c:Class {label: 'Page'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
@@ -6378,6 +6375,18 @@ MATCH (ac:ArcClass {key: 'IN_REGION'}), (c:Class {label: 'GeoRegion'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'MARKET_OF'}), (c:Class {label: 'Locale'})
+MERGE (ac)-[:TO_CLASS]->(c);
+
+MATCH (ac:ArcClass {key: 'NATIVE_OF'}), (c:Class {label: 'Entity'})
+MERGE (ac)-[:TO_CLASS]->(c);
+
+MATCH (ac:ArcClass {key: 'NATIVE_OF'}), (c:Class {label: 'Project'})
+MERGE (ac)-[:TO_CLASS]->(c);
+
+MATCH (ac:ArcClass {key: 'NATIVE_OF'}), (c:Class {label: 'Page'})
+MERGE (ac)-[:TO_CLASS]->(c);
+
+MATCH (ac:ArcClass {key: 'NATIVE_OF'}), (c:Class {label: 'Block'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'OF_TYPE'}), (c:Class {label: 'BlockType'})
@@ -6473,7 +6482,7 @@ MERGE (ac)-[:TO_CLASS]->(c);
 MATCH (ac:ArcClass {key: 'HAS_APPLICATION'}), (c:Class {label: 'Entity'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'HAS_INTERNAL_LINK'}), (c:Class {label: 'PageGenerated'})
+MATCH (ac:ArcClass {key: 'HAS_INTERNAL_LINK'}), (c:Class {label: 'PageNative'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'HAS_TYPE'}), (c:Class {label: 'Entity'})
@@ -6573,6 +6582,9 @@ MATCH (ac:ArcClass {key: 'REQUIRES'}), (c:Class {label: 'Entity'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'SEMANTIC_LINK'}), (c:Class {label: 'Entity'})
+MERGE (ac)-[:TO_CLASS]->(c);
+
+MATCH (ac:ArcClass {key: 'SEO_CLUSTER_OF'}), (c:Class {label: 'Page'})
 MERGE (ac)-[:TO_CLASS]->(c);
 
 MATCH (ac:ArcClass {key: 'SIMILAR_TO'}), (c:Class {label: 'Entity'})

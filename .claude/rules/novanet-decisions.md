@@ -774,6 +774,8 @@ REALMS (61 nodes total):
 | 028 | v0.12.3 | Page-Entity Architecture + Brand Architecture (1:1 mandatory, @ refs) |
 | 029 | v0.12.5 | *Native Pattern (EntityContent→EntityNative, PageGenerated→PageNative) |
 | 030 | v0.12.5 | Slug Ownership (Page owns URL, Entity owns semantics) |
+| 031 | v0.12.5 | SEO Pillar/Cluster Architecture (is_pillar, SEO_CLUSTER_OF, LINKS_TO, PageRank flow) |
+| 032 | v0.12.5 | URL Slugification Architecture (derivation algorithm, DERIVED_SLUG_FROM, no-repetition) |
 
 ## ADR-020: Schema Refinement
 
@@ -1502,6 +1504,8 @@ llm_context: |
 | 028 | v0.12.3 | Page-Entity Architecture + Brand Architecture (1:1 mandatory, @ refs, Atlas Pattern Brand, PromptStyle, geographic visual_prompt with AI platform support) |
 | 029 | v0.12.5 | *Native Pattern (EntityContent→EntityNative, PageGenerated→PageNative) |
 | 030 | v0.12.5 | Slug Ownership (Page owns URL, Entity owns semantics) |
+| 031 | v0.12.5 | SEO Pillar/Cluster Architecture (is_pillar, SEO_CLUSTER_OF, LINKS_TO, PageRank flow) |
+| 032 | v0.12.5 | URL Slugification Architecture (derivation algorithm, DERIVED_SLUG_FROM, no-repetition) |
 
 ## ADR-028: Page-Entity Architecture
 
@@ -1994,6 +1998,360 @@ SAME STRUCTURE but DIFFERENT PURPOSE:
 5. **Brands Protected**: "instagram" stays "instagram" everywhere
 
 **Reference**: `docs/plans/2026-02-14-entity-page-slug-brainstorm.md`
+
+## ADR-031: SEO Pillar/Cluster Architecture
+
+**Status**: Approved (v0.12.5)
+
+**Problem**: NovaNet lacked explicit SEO structure for pillar/cluster content strategy:
+1. No way to mark pages as "pillars" (main topic hubs)
+2. No arc to express "this cluster page belongs to this pillar"
+3. No PageRank flow tracking for internal linking
+4. SUBTOPIC_OF used for both URL hierarchy and SEO clustering
+
+**Decision**: Introduce explicit pillar/cluster architecture with three distinct hierarchies.
+
+### Three Hierarchies
+
+```
+1. Entity.SUBTOPIC_OF  = SEMANTIC hierarchy (topic clusters)
+2. Page.SUBTOPIC_OF    = URL hierarchy (routing, navigation)
+3. Page.SEO_CLUSTER_OF = SEO hierarchy (pillar/cluster strategy)
+
+Often identical, but CAN differ!
+```
+
+**Example where they differ**:
+```
+Entity:faq-qr-instagram
+    │ [:SUBTOPIC_OF] → Entity:qr-instagram (semantically about QR Instagram)
+
+Page:faq-qr-instagram
+    │ [:SUBTOPIC_OF] → Page:faq (URL: /faq/qr-instagram)
+    │ [:SEO_CLUSTER_OF] → Page:qr-generator (SEO: cluster of QR pillar)
+```
+
+### New Properties
+
+**Page (org/structure, defined)**:
+```yaml
+is_pillar: boolean              # True if this is a pillar page
+pillar_strategy: string         # Description of pillar strategy (optional)
+```
+
+**Entity (org/semantic, defined)**:
+```yaml
+is_pillar: boolean              # True if this is a pillar entity
+```
+
+**Constraint**: `Page.is_pillar === Entity.is_pillar` (synchronized)
+
+### New Arcs
+
+**SEO_CLUSTER_OF**:
+```yaml
+arc:
+  name: SEO_CLUSTER_OF
+  family: semantic
+  scope: intra_realm
+  source: Page
+  target: Page
+  cardinality: many_to_one      # Many clusters → one pillar
+  properties:
+    cluster_role: enum          # supporting, comparison, tutorial, case_study, faq
+    link_priority: integer      # Priority for internal linking (1=highest)
+  llm_context: |
+    USE: when determining SEO pillar/cluster relationships.
+    TRIGGERS: pillar, cluster, topic hub, content strategy.
+    NOT: URL hierarchy (use SUBTOPIC_OF), semantic meaning (use Entity.SUBTOPIC_OF), population clusters (use CLUSTER_OF).
+    RELATES: Page (cluster), Page (pillar).
+```
+
+**LINKS_TO** (with PageRank properties):
+```yaml
+arc:
+  name: LINKS_TO
+  family: semantic
+  scope: intra_realm
+  source: Page
+  target: Page
+  cardinality: many_to_many
+  properties:
+    via_blocks: [string]        # Which blocks contain this link
+    link_type: enum             # contextual | navigation | footer | pillar_backlink
+    anchor_source: string       # @entity:X.title | keyword:X | custom
+    pr_weight: float            # PageRank weight (0.0-1.0)
+    is_reciprocal: boolean      # Does inverse link exist?
+    nofollow: boolean           # For external links
+  llm_context: |
+    USE: when tracking internal links and PageRank flow.
+    TRIGGERS: internal links, maillage, link juice, PageRank.
+    NOT: URL hierarchy (use SUBTOPIC_OF), SEO clustering (use SEO_CLUSTER_OF).
+    RELATES: Page (source), Page (target).
+```
+
+### PageRank Flow Rules
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│  PAGERANK DISTRIBUTION                                              │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│                        Home (PR: 100)                               │
+│                            │                                        │
+│            ┌───────────────┼───────────────┐                        │
+│            ▼               ▼               ▼                        │
+│       QR Generator    Templates       Pricing                       │
+│       (PR: 35)        (PR: 30)        (PR: 25)                      │
+│      [PILLAR]        [PILLAR]        [PAGE]                         │
+│            │                                                        │
+│   ┌────────┼────────┬────────┐                                      │
+│   ▼        ▼        ▼        ▼                                      │
+│ QR-Wifi QR-Insta QR-Menu  QR-PDF                                    │
+│ (PR: 8) (PR: 12) (PR: 7)  (PR: 6)                                   │
+│ [CLUSTER][CLUSTER][CLUSTER][CLUSTER]                                │
+│                                                                     │
+├─────────────────────────────────────────────────────────────────────┤
+│  MAILLAGE RULES                                                     │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  R1: Pillar → Clusters (OBLIGATOIRE)                                │
+│      └── Each pillar MUST link to its clusters                      │
+│                                                                     │
+│  R2: Cluster → Pillar (OBLIGATOIRE)                                 │
+│      └── Each cluster MUST link back to its pillar                  │
+│                                                                     │
+│  R3: Cluster ↔ Cluster (RECOMMANDÉ)                                 │
+│      └── Siblings CAN link to each other                            │
+│                                                                     │
+│  R4: Cross-Pillar (MODÉRÉ)                                          │
+│      └── Only if semantically relevant                              │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### Query Examples
+
+```cypher
+// Get all clusters for a pillar
+MATCH (pillar:Page {key: $pillar_key, is_pillar: true})
+MATCH (cluster:Page)-[:SEO_CLUSTER_OF]->(pillar)
+RETURN cluster.key, cluster.slug
+ORDER BY cluster.key
+
+// Calculate PageRank flow
+MATCH (source:Page)-[l:LINKS_TO]->(target:Page)
+WHERE l.pr_weight > 0
+RETURN source.key, target.key, l.pr_weight, l.link_type
+ORDER BY l.pr_weight DESC
+
+// Audit: clusters without pillar backlink
+MATCH (cluster:Page)-[:SEO_CLUSTER_OF]->(pillar:Page)
+WHERE NOT (cluster)-[:LINKS_TO {link_type: "pillar_backlink"}]->(pillar)
+RETURN cluster.key AS missing_backlink
+```
+
+**Reference**: `docs/plans/2026-02-14-v0125-architecture-visual.md` (Session 5-6)
+
+## ADR-032: URL Slugification Architecture
+
+**Status**: Approved (v0.12.5)
+
+**Problem**: Slug derivation lacked clear rules:
+1. How to derive PageNative.slug from SEOKeyword data?
+2. How to avoid repetition in full_path?
+3. How to handle brand names vs translatable slugs?
+4. How to weight keywords semantically (not just by volume)?
+
+**Decision**: Implement algorithmic slug derivation with semantic weighting.
+
+### URL Format
+
+```
+/{locale-BCP47}/{parent.slug}/.../slug
+
+Examples:
+├── /fr-FR/générateur-qr-code/instagram
+├── /en-US/qr-code-generator/instagram
+├── /ar-SA/مولد-qr/انستغرام
+└── /ja-JP/qrコードジェネレーター/インスタグラム
+```
+
+### Slug Derivation Algorithm
+
+```
+INPUTS for Page:qr-instagram @fr-FR:
+═════════════════════════════════════
+├── Entity:qr-instagram (definition)
+├── EntityNative@fr-FR (title, keywords via TARGETS)
+├── Parent: Page:qr-generator
+│   └── PageNative@fr-FR.slug = "créer-qr-code"
+├── SEMANTIC_LINK entities (with coefficients)
+└── Locale:fr-FR (slugification rules)
+
+FORMULA: score = volume × sem_coef × convergence_boost
+```
+
+### SEMANTIC_LINK Coefficients (11 types)
+
+```yaml
+STRUCTURAL:
+  component_of:    0.85   # X is part of Y
+  variant_of:      0.9    # X is a variant of Y
+  instance_of:     0.8    # X is an instance of Y
+
+USAGE:
+  used_for:        0.95   # X is used for Y (action = tool)
+  used_with:       0.7    # X is used with Y
+  enables:         0.8    # X enables Y
+  requires:        0.6    # X requires Y
+
+COMPARISON:
+  compared_to:     0.4    # X is compared to Y
+  alternative_to:  0.5    # X is an alternative to Y
+  competes_with:   0.3    # X competes with Y
+
+ASSOCIATION:
+  associated_with: 0.5    # Catch-all
+
+SPECIAL:
+  same_as:         1.0    # Synonym (perfect match)
+  attribute_of:    0.3    # X is attribute of Y (penalized!)
+```
+
+### No-Repetition Rule (CRITICAL)
+
+```
+❌ MAUVAIS:
+full_path = /fr-FR/créer-qr-code/qr-code-pour-instagram
+                   ^^^^^^          ^^^^^^
+                   RÉPÉTITION de "qr-code" = pénalité SEO!
+
+✅ BON:
+full_path = /fr-FR/créer-qr-code/instagram
+                                 ^^^^^^^^^
+               Juste la partie différenciante
+```
+
+**Algorithm**:
+```
+1. Collect parent path terms: parent_terms = {"créer", "qr", "code"}
+2. For each candidate keyword: new_terms = keyword_terms - parent_terms
+3. Score: volume × sem_coef × convergence_boost
+4. Winner: highest score, extract ONLY new_terms as slug
+```
+
+### Convergence Boost
+
+When multiple related entities target the same keyword:
+```
+convergence_boost = 1 + (N × 0.2)
+
+Example:
+SEOKeyword:"créer qr code" is TARGETS by:
+├── EntityNative:create-qr@fr-FR      (l'action)
+├── EntityNative:qr-generator@fr-FR   (l'outil)
+└── EntityNative:make-qr-code@fr-FR   (synonyme)
+
+convergence_boost = 1 + (3 × 0.2) = 1.6
+```
+
+### New Arc: DERIVED_SLUG_FROM
+
+```yaml
+arc:
+  name: DERIVED_SLUG_FROM
+  family: generation
+  scope: intra_realm
+  source: PageNative
+  target: SEOKeyword
+  cardinality: many_to_one      # One slug from one primary keyword
+  properties:
+    extracted_terms: [string]   # Terms kept in slug
+    excluded_terms: [string]    # Terms excluded (from parent)
+    derivation_score: float     # Final score
+  llm_context: |
+    USE: when auditing slug derivation or understanding slug source.
+    TRIGGERS: slug source, keyword origin, derivation audit.
+    NOT: content targeting (use TARGETS).
+    RELATES: PageNative (derived), SEOKeyword (source).
+```
+
+### PageNative Schema (v0.12.5)
+
+```yaml
+PageNative:
+  slug: string                  # URL segment (différenciateur only)
+  slug_source: enum
+    - "keyword:{key}"           # Direct from keyword
+    - "extracted:{key}"         # Extracted (sans répétition)
+    - "merged:{key1}+{key2}"    # Fusion de keywords
+    - "generated"               # Generated by system
+  slug_rationale: string        # Explanation du choix
+  full_path: string             # Calculé: parent.full_path + "/" + slug
+```
+
+### Locale Slugification Rules
+
+```yaml
+Locale:fr-FR:
+  slugification:
+    allow_accents: true         # UTF-8 slugs
+    allowed_chars: "a-zà-ÿ0-9-"
+    transform: "lowercase, normalize_nfd, hyphenate"
+  # Result: "créer-qr-code" (accents conservés)
+
+Locale:en-US:
+  slugification:
+    allow_accents: false        # ASCII only
+    allowed_chars: "a-z0-9-"
+  # Result: "create-qr-code"
+
+Locale:ar-SA:
+  slugification:
+    allow_arabic: true
+    direction: rtl
+  # Result: "مولد-qr"
+```
+
+### Brand Invariance
+
+Brands don't translate:
+```
+"instagram" → "instagram" (all locales)
+"facebook"  → "facebook"  (all locales)
+
+Exception: Only if native keyword has MORE volume than brand
+(rare case, requires explicit override)
+```
+
+### Query: Slug Derivation
+
+```cypher
+// Derive best slug for a Page in a Locale
+MATCH (p:Page)-[:REPRESENTS]->(e:Entity)
+MATCH (e)-[:HAS_NATIVE {locale: $locale}]->(en:EntityNative)
+MATCH (en)-[:TARGETS]->(kw:SEOKeyword)
+
+// Get parent terms to exclude
+MATCH (p)-[:SUBTOPIC_OF]->(parent:Page)
+MATCH (parent)-[:HAS_NATIVE {locale: $locale}]->(pn:PageNative)
+WITH p, kw, pn.slug AS parent_slug
+
+// Calculate score with convergence
+WITH p, kw,
+     kw.volume AS base_vol,
+     SIZE([(en2:EntityNative {locale: $locale})-[:TARGETS]->(kw) | en2]) AS conv_count
+
+WITH p, kw,
+     base_vol * (1 + conv_count * 0.2) AS final_score
+ORDER BY final_score DESC
+LIMIT 1
+
+RETURN kw.slug_form AS slug, final_score, kw.key AS source
+```
+
+**Reference**: `docs/plans/2026-02-14-v0125-architecture-visual.md` (Sessions 3-4, 6)
 
 ## References
 

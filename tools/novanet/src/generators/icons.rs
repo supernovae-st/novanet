@@ -215,8 +215,8 @@ mod tests {
             "should have Entity with dual format"
         );
         assert!(
-            output.contains("PageGenerated: { web:"),
-            "should have PageGenerated with dual format"
+            output.contains("PageNative: { web:"),
+            "should have PageNative with dual format (v0.13.0 ADR-029)"
         );
 
         // v0.12.5: Updated helper functions

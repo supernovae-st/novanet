@@ -20,10 +20,9 @@ arc_family:
 
   arc_count: 15  # Computed by generator
 
+  # v0.13.0 ADR-029: HAS_GENERATED/GENERATED_FOR moved to ownership family as HAS_NATIVE/NATIVE_OF
   key_arcs:
     - GENERATED
-    - HAS_GENERATED
-    - GENERATED_FOR
     - COMPILED_FROM
     - ASSEMBLES
     - BUNDLES
@@ -35,9 +34,9 @@ arc_family:
   pipeline_stages:
     - authoring: "Instruction → Style"
     - compilation: "Instruction → PromptArtifact"
-    - generation: "Instruction → Generated"
-    - provenance: "Generated → EntityContent"
-    - output: "PageGenerated → BlockGenerated"
+    - generation: "Instruction → *Native"  # v0.13.0: outputs are *Native nodes
+    - provenance: "*Native → EntityNative"  # v0.13.0: EntityContent → EntityNative
+    - output: "PageNative → BlockNative"  # v0.13.0: *Generated → *Native
 
   llm_context: |
     USE: when traversing generation pipeline.

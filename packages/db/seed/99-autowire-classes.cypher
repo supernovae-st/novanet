@@ -201,8 +201,8 @@ MATCH (n:Project)
 MATCH (c:Class {label: 'Project'})
 MERGE (n)-[:OF_CLASS]->(c);
 
-MATCH (n:ProjectContent)
-MATCH (c:Class {label: 'ProjectContent'})
+MATCH (n:ProjectNative)
+MATCH (c:Class {label: 'ProjectNative'})
 MERGE (n)-[:OF_CLASS]->(c);
 
 MATCH (n:PromptStyle)
@@ -227,16 +227,16 @@ MATCH (c:Class {label: 'PromptArtifact'})
 MERGE (n)-[:OF_CLASS]->(c);
 
 // Org > Output (3 types)
-MATCH (n:BlockGenerated)
-MATCH (c:Class {label: 'BlockGenerated'})
+MATCH (n:BlockNative)
+MATCH (c:Class {label: 'BlockNative'})
 MERGE (n)-[:OF_CLASS]->(c);
 
 MATCH (n:OutputArtifact)
 MATCH (c:Class {label: 'OutputArtifact'})
 MERGE (n)-[:OF_CLASS]->(c);
 
-MATCH (n:PageGenerated)
-MATCH (c:Class {label: 'PageGenerated'})
+MATCH (n:PageNative)
+MATCH (c:Class {label: 'PageNative'})
 MERGE (n)-[:OF_CLASS]->(c);
 
 // Org > Semantic (4 types)
@@ -252,8 +252,8 @@ MATCH (n:Entity)
 MATCH (c:Class {label: 'Entity'})
 MERGE (n)-[:OF_CLASS]->(c);
 
-MATCH (n:EntityContent)
-MATCH (c:Class {label: 'EntityContent'})
+MATCH (n:EntityNative)
+MATCH (c:Class {label: 'EntityNative'})
 MERGE (n)-[:OF_CLASS]->(c);
 
 // Org > Structure (3 types)
