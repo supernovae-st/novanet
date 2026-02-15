@@ -296,11 +296,6 @@ export class ViewLoader {
         filter.includePromptStyle();
         break;
 
-      // @deprecated - use HAS_BRAND
-      case 'HAS_BRAND_IDENTITY':
-        filter.includeBrand();
-        break;
-
       case 'FOR_LOCALE':
         filter.includeForLocale();
         break;

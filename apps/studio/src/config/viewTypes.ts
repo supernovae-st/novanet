@@ -74,7 +74,7 @@ export const VIEW_TYPES: Record<ViewId, ViewTypeConfig> = {
   composition: {
     id: 'composition',
     label: 'Composition',
-    icon: '📦',
+    icon: 'package',
     description: 'Page and Block hierarchy',
     applicableTo: ['Page', 'Block'],
     style: 'tree',
@@ -85,7 +85,7 @@ export const VIEW_TYPES: Record<ViewId, ViewTypeConfig> = {
   knowledge: {
     id: 'knowledge',
     label: 'Knowledge',
-    icon: '🧠',
+    icon: 'brain',
     description: 'Knowledge atoms (Terms, Expressions, Patterns)',
     applicableTo: ['Locale'],
     style: 'tree',
@@ -96,7 +96,7 @@ export const VIEW_TYPES: Record<ViewId, ViewTypeConfig> = {
   geographic: {
     id: 'geographic',
     label: 'Geographic',
-    icon: '🗺️',
+    icon: 'map',
     description: 'Country and Region hierarchy',
     applicableTo: ['Locale', 'Continent', 'GeoRegion', 'GeoSubRegion'],
     style: 'tree',
@@ -107,7 +107,7 @@ export const VIEW_TYPES: Record<ViewId, ViewTypeConfig> = {
   project: {
     id: 'project',
     label: 'Project',
-    icon: '🏗️',
+    icon: 'folder-kanban',
     description: 'Project structure (Pages, Entities)',
     applicableTo: ['Project'],
     style: 'tree',
@@ -118,7 +118,7 @@ export const VIEW_TYPES: Record<ViewId, ViewTypeConfig> = {
   brand: {
     id: 'brand',
     label: 'Brand',
-    icon: '🎨',
+    icon: 'palette',
     description: 'Brand identity configuration',
     applicableTo: ['Project', 'Brand'],  // v0.12.4: BrandIdentity → Brand
     style: 'tree',
@@ -133,7 +133,7 @@ export const VIEW_TYPES: Record<ViewId, ViewTypeConfig> = {
   entities: {
     id: 'entities',
     label: 'Entities',
-    icon: '🔗',
+    icon: 'link',
     description: 'Connected entities and semantic links',
     applicableTo: ['Page', 'Block', 'Entity'],
     style: 'flow',
@@ -144,7 +144,7 @@ export const VIEW_TYPES: Record<ViewId, ViewTypeConfig> = {
   'seo-intel': {
     id: 'seo-intel',
     label: 'SEO Intel',
-    icon: '🎯',
+    icon: 'target',
     description: 'SEO keywords and clusters',
     applicableTo: ['Entity', 'Page', 'SEOKeyword', 'SEOKeywordSet'],
     style: 'flow',
@@ -155,7 +155,7 @@ export const VIEW_TYPES: Record<ViewId, ViewTypeConfig> = {
   'geo-intel': {
     id: 'geo-intel',
     label: 'GEO Intel',
-    icon: '🔮',
+    icon: 'sparkles',
     description: 'GEO queries and AI answers',
     applicableTo: ['Entity', 'GEOQuery', 'GEOQuerySet', 'GEOAnswer'],
     style: 'flow',
@@ -166,7 +166,7 @@ export const VIEW_TYPES: Record<ViewId, ViewTypeConfig> = {
   generation: {
     id: 'generation',
     label: 'Generation',
-    icon: '⚡',
+    icon: 'zap',
     description: 'Generation pipeline and outputs',
     applicableTo: ['Page', 'Block', 'PageNative', 'BlockNative'],
     style: 'flow',
@@ -177,7 +177,7 @@ export const VIEW_TYPES: Record<ViewId, ViewTypeConfig> = {
   categories: {
     id: 'categories',
     label: 'Categories',
-    icon: '🏷️',
+    icon: 'tag',
     description: 'Entity category classification',
     applicableTo: ['Entity', 'EntityCategory'],
     style: 'flow',
@@ -188,7 +188,7 @@ export const VIEW_TYPES: Record<ViewId, ViewTypeConfig> = {
   'cross-realm': {
     id: 'cross-realm',
     label: 'Cross-Realm',
-    icon: '🔄',
+    icon: 'refresh-cw',
     description: 'Cross-realm connections (org ↔ shared)',
     applicableTo: [
       'Entity', 'Page', 'Block', 'Locale', 'Project',
@@ -206,7 +206,7 @@ export const VIEW_TYPES: Record<ViewId, ViewTypeConfig> = {
   locales: {
     id: 'locales',
     label: 'Locales',
-    icon: '🌍',
+    icon: 'globe',
     description: 'Locale coverage and content status',
     applicableTo: ['Page', 'Entity', 'Project', 'Block'],
     style: 'compact',
@@ -217,7 +217,7 @@ export const VIEW_TYPES: Record<ViewId, ViewTypeConfig> = {
   content: {
     id: 'content',
     label: 'Content',
-    icon: '📝',
+    icon: 'pencil',
     description: 'Content per locale',
     applicableTo: ['Entity', 'Project', 'EntityNative', 'ProjectNative'],
     style: 'compact',
@@ -228,7 +228,7 @@ export const VIEW_TYPES: Record<ViewId, ViewTypeConfig> = {
   metrics: {
     id: 'metrics',
     label: 'Metrics',
-    icon: '📊',
+    icon: 'bar-chart-2',
     description: 'Performance metrics and analytics',
     applicableTo: ['SEOKeyword', 'SEOKeywordMetrics', 'GEOQuery', 'GEOAnswer'],
     style: 'compact',
