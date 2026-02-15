@@ -23,7 +23,7 @@ Generate culturally-native content across 200+ locales — not translation, but 
 >
 > ```
 > Source → Translate → Target                           ❌ Traditional
-> Entity (defined) → Generate natively → EntityContent ✅ NovaNet
+> Entity (defined) → Generate natively → EntityNative ✅ NovaNet
 > ```
 >
 > Content is generated natively per locale from defined semantic entities, not translated from a source language.
@@ -248,10 +248,10 @@ See [`packages/core/models/taxonomy.yaml`](packages/core/models/taxonomy.yaml) f
 │ │                │  │   [Project]──[Page]──[Block]     │  │ layer: struc │ │
 │ │                │  │          │     │                 │  │              │ │
 │ │ Layer          │  │          ▼     ▼                 │  │ Relations:   │ │
-│ │ ☑ Foundation   │  │   [Entity]──[EntityContent]      │  │ → 3 blocks   │ │
+│ │ ☑ Foundation   │  │   [Entity]──[EntityNative]       │  │ → 3 blocks   │ │
 │ │ ☑ Structure    │  │          │                       │  │ → 1 project  │ │
 │ │ ☑ Semantic     │  │          ▼                       │  │              │ │
-│ │ ...            │  │   [BlockGenerated]               │  │ [Copy JSON]  │ │
+│ │ ...            │  │   [BlockNative]                  │  │ [Copy JSON]  │ │
 │ └────────────────┘  └──────────────────────────────────┘  └──────────────┘ │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │  Mode: Graph  │  61 nodes  │  169 arcs  │  Zoom: 100%  │  Locale: fr-FR │

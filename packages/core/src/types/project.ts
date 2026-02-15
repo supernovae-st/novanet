@@ -84,9 +84,6 @@ export interface ProjectNative {
   updated_at: Date;
 }
 
-/** @deprecated Use ProjectNative (v0.13.0 ADR-029) */
-export type ProjectContent = ProjectNative;
-
 // ═══════════════════════════════════════════════════════════════════════════════
 // BRAND ARCHITECTURE (v0.12.4 ADR-028)
 // Brand delegates to: BrandDesign (visual), BrandPrinciples (voice), PromptStyle (LLM hints)

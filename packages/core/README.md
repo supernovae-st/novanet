@@ -110,7 +110,7 @@ const { query, params } = CypherGenerator.generate(filter);
 import type {
   Project,
   Entity,
-  EntityContent,   // v10.9+: renamed from EntityL10n
+  EntityNative,   // v0.13.0: ADR-029 *Native pattern
   Locale,
   NodeType,
   RelationType,
