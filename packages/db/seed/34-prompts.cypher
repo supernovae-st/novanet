@@ -15,8 +15,8 @@
 //   version: "1.0" (semver)
 //   active: true (only one active per parent node)
 //
-// NOTE: Original properties (instructions, rules) are KEPT for backward compatibility.
-//       Remove after confirming migration success.
+// NOTE: Instruction extraction creates dedicated nodes (PageInstruction, BlockInstruction, BlockRules).
+//       v0.13.0: Migration complete. Properties moved to instruction nodes.
 
 // =============================================================================
 // PAGEINSTRUCTION - Orchestrator Instructions (Category: INSTRUCTIONS)
@@ -115,15 +115,5 @@ CREATE (bt)-[:HAS_RULES]->(br:BlockRules {
 });
 
 // =============================================================================
-// BACKWARD COMPATIBILITY NOTE
-// =============================================================================
-//
-// DO NOT remove original properties yet:
-//   - Page.instructions
-//   - Block.instructions
-//   - BlockType.rules
-//
-// Keep for backward compatibility until v7.3.0 confirms migration success.
-// Removal will be done via separate migration script in v7.3.0.
-//
+// END OF FILE
 // =============================================================================
