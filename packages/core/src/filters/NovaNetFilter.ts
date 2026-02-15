@@ -237,32 +237,6 @@ export class NovaNetFilter {
   }
 
   /**
-   * Includes PageNative/BlockNative nodes via HAS_NATIVE.
-   * @deprecated Use includeNative() instead (v0.13.0 ADR-029)
-   * @param _opts - Reserved for future options (e.g., latestOnly)
-   */
-  includeOutputs(_opts?: { latestOnly?: boolean }): this {
-    this.state.includes.push({
-      relation: 'HAS_NATIVE',
-      direction: 'outgoing',
-    });
-    return this;
-  }
-
-  /**
-   * Includes EntityNative/ProjectNative nodes via HAS_NATIVE.
-   * @deprecated Use includeNative() instead (v0.13.0 ADR-029)
-   * v11.6: renamed from includeL10n() (ADR-014)
-   */
-  includeContent(): this {
-    this.state.includes.push({
-      relation: 'HAS_NATIVE',
-      direction: 'outgoing',
-    });
-    return this;
-  }
-
-  /**
    * Includes SEO keyword nodes via EXPRESSES (v10.3: replaces TARGETS_SEO).
    */
   includeSEO(): this {

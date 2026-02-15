@@ -55,7 +55,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   Locale: {
     type: 'Locale',
     label: 'Locale',
-    icon: '🌍',
+    icon: 'globe',
     color: '#10b981',
     colorClass: 'bg-emerald-500',
     size: 20,
@@ -64,7 +64,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   Formatting: {
     type: 'Formatting',
     label: 'Formatting',
-    icon: '📝',
+    icon: 'hash',
     color: '#06b6d4',
     colorClass: 'bg-cyan-500',
     size: 12,
@@ -73,7 +73,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   Slugification: {
     type: 'Slugification',
     label: 'Slugification',
-    icon: '🔗',
+    icon: 'link',
     color: '#0891b2',
     colorClass: 'bg-cyan-600',
     size: 12,
@@ -82,7 +82,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   Adaptation: {
     type: 'Adaptation',
     label: 'Adaptation',
-    icon: '🔄',
+    icon: 'droplet',
     color: '#0e7490',
     colorClass: 'bg-cyan-700',
     size: 12,
@@ -91,7 +91,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   Style: {
     type: 'Style',
     label: 'Style',
-    icon: '🎭',
+    icon: 'palette',
     color: '#8b5cf6',
     colorClass: 'bg-violet-500',
     size: 14,
@@ -100,7 +100,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   Culture: {
     type: 'Culture',
     label: 'Culture',
-    icon: '🏺',
+    icon: 'globe',
     color: '#d97706',
     colorClass: 'bg-amber-600',
     size: 16,
@@ -109,7 +109,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   Market: {
     type: 'Market',
     label: 'Market',
-    icon: '📊',
+    icon: 'bar-chart-2',
     color: '#059669',
     colorClass: 'bg-emerald-600',
     size: 16,
@@ -122,7 +122,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   Continent: {
     type: 'Continent',
     label: 'Continent',
-    icon: '🗺️',
+    icon: 'globe',
     color: '#2563eb',
     colorClass: 'bg-blue-600',
     size: 18,
@@ -132,7 +132,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   Country: {
     type: 'Country',
     label: 'Country',
-    icon: '🏳️',
+    icon: 'flag',
     color: '#3b82f6',
     colorClass: 'bg-blue-500',
     size: 16,
@@ -141,7 +141,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   GeoRegion: {
     type: 'GeoRegion',
     label: 'Geo Region',
-    icon: '🌐',
+    icon: 'map',
     color: '#3b82f6',
     colorClass: 'bg-blue-500',
     size: 16,
@@ -150,7 +150,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   GeoSubRegion: {
     type: 'GeoSubRegion',
     label: 'Geo Sub-Region',
-    icon: '🗾',
+    icon: 'map-pin',
     color: '#60a5fa',
     colorClass: 'bg-blue-400',
     size: 14,
@@ -159,7 +159,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   IncomeGroup: {
     type: 'IncomeGroup',
     label: 'Income Group',
-    icon: '💰',
+    icon: 'dollar-sign',
     color: '#16a34a',
     colorClass: 'bg-green-600',
     size: 14,
@@ -168,7 +168,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   LendingCategory: {
     type: 'LendingCategory',
     label: 'Lending Category',
-    icon: '🏦',
+    icon: 'landmark',
     color: '#0891b2',
     colorClass: 'bg-cyan-600',
     size: 14,
@@ -177,7 +177,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   EconomicRegion: {
     type: 'EconomicRegion',
     label: 'Economic Region',
-    icon: '💹',
+    icon: 'bar-chart-2',
     color: '#059669',
     colorClass: 'bg-emerald-600',
     size: 14,
@@ -190,7 +190,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   EntityCategory: {
     type: 'EntityCategory',
     label: 'Entity Category',
-    icon: '🏷️',
+    icon: 'folder',
     color: '#64748b',
     colorClass: 'bg-slate-500',
     size: 16,
@@ -203,7 +203,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   TermSet: {
     type: 'TermSet',
     label: 'Term Set',
-    icon: '📚',
+    icon: 'book-open',
     color: '#22c55e',
     colorClass: 'bg-green-500',
     size: 10,
@@ -212,7 +212,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   ExpressionSet: {
     type: 'ExpressionSet',
     label: 'Expression Set',
-    icon: '💭',
+    icon: 'message-square',
     color: '#ec4899',
     colorClass: 'bg-pink-500',
     size: 10,
@@ -221,7 +221,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   PatternSet: {
     type: 'PatternSet',
     label: 'Pattern Set',
-    icon: '🔣',
+    icon: 'clipboard',
     color: '#f472b6',
     colorClass: 'bg-pink-400',
     size: 10,
@@ -230,7 +230,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   CultureSet: {
     type: 'CultureSet',
     label: 'Culture Set',
-    icon: '🏛️',
+    icon: 'drama',
     color: '#86efac',
     colorClass: 'bg-green-300',
     size: 10,
@@ -239,7 +239,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   TabooSet: {
     type: 'TabooSet',
     label: 'Taboo Set',
-    icon: '⛔',
+    icon: 'ban',
     color: '#ef4444',
     colorClass: 'bg-red-500',
     size: 10,
@@ -248,7 +248,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   AudienceSet: {
     type: 'AudienceSet',
     label: 'Audience Set',
-    icon: '👥',
+    icon: 'users',
     color: '#f59e0b',
     colorClass: 'bg-amber-500',
     size: 10,
@@ -257,7 +257,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   Term: {
     type: 'Term',
     label: 'Term',
-    icon: '📖',
+    icon: 'book',
     color: '#22c55e',
     colorClass: 'bg-green-500',
     size: 8,
@@ -266,7 +266,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   Expression: {
     type: 'Expression',
     label: 'Expression',
-    icon: '💬',
+    icon: 'message-square',
     color: '#ec4899',
     colorClass: 'bg-pink-500',
     size: 8,
@@ -275,7 +275,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   Pattern: {
     type: 'Pattern',
     label: 'Pattern',
-    icon: '🔣',
+    icon: 'clipboard',
     color: '#f472b6',
     colorClass: 'bg-pink-400',
     size: 8,
@@ -284,7 +284,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   CultureRef: {
     type: 'CultureRef',
     label: 'Culture Ref',
-    icon: '🌍',
+    icon: 'globe',
     color: '#86efac',
     colorClass: 'bg-green-300',
     size: 8,
@@ -293,7 +293,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   Taboo: {
     type: 'Taboo',
     label: 'Taboo',
-    icon: '🚫',
+    icon: 'ban',
     color: '#ef4444',
     colorClass: 'bg-red-500',
     size: 8,
@@ -302,7 +302,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   AudienceTrait: {
     type: 'AudienceTrait',
     label: 'Audience Trait',
-    icon: '👤',
+    icon: 'user',
     color: '#f59e0b',
     colorClass: 'bg-amber-500',
     size: 8,
@@ -311,7 +311,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   LanguageFamily: {
     type: 'LanguageFamily',
     label: 'Language Family',
-    icon: '🗣️',
+    icon: 'message-circle',
     color: '#7c3aed',
     colorClass: 'bg-violet-600',
     size: 14,
@@ -320,7 +320,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   LanguageBranch: {
     type: 'LanguageBranch',
     label: 'Language Branch',
-    icon: '🌿',
+    icon: 'leaf',
     color: '#8b5cf6',
     colorClass: 'bg-violet-500',
     size: 12,
@@ -329,7 +329,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   CulturalRealm: {
     type: 'CulturalRealm',
     label: 'Cultural Realm',
-    icon: '🎪',
+    icon: 'drama',
     color: '#db2777',
     colorClass: 'bg-pink-600',
     size: 14,
@@ -338,7 +338,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   CulturalSubRealm: {
     type: 'CulturalSubRealm',
     label: 'Cultural Sub-Realm',
-    icon: '🎭',
+    icon: 'palette',
     color: '#ec4899',
     colorClass: 'bg-pink-500',
     size: 12,
@@ -347,7 +347,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   PopulationCluster: {
     type: 'PopulationCluster',
     label: 'Population Cluster',
-    icon: '👨‍👩‍👧‍👦',
+    icon: 'users',
     color: '#0284c7',
     colorClass: 'bg-sky-600',
     size: 14,
@@ -356,7 +356,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   PopulationSubCluster: {
     type: 'PopulationSubCluster',
     label: 'Population Sub-Cluster',
-    icon: '👥',
+    icon: 'users',
     color: '#0ea5e9',
     colorClass: 'bg-sky-500',
     size: 12,
@@ -369,7 +369,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   OrgConfig: {
     type: 'OrgConfig',
     label: 'Org Config',
-    icon: '🏢',
+    icon: 'building-2',
     color: '#0ea5e9',
     colorClass: 'bg-sky-500',
     size: 22,
@@ -382,7 +382,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   Project: {
     type: 'Project',
     label: 'Project',
-    icon: '📦',
+    icon: 'folder',
     color: '#8b5cf6',
     colorClass: 'bg-violet-500',
     size: 24,
@@ -392,7 +392,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   Brand: {
     type: 'Brand',
     label: 'Brand',
-    icon: '🎨',
+    icon: 'circle',
     color: '#6d28d9',
     colorClass: 'bg-violet-700',
     size: 18,
@@ -401,7 +401,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   BrandDesign: {
     type: 'BrandDesign',
     label: 'Brand Design',
-    icon: '🎨',
+    icon: 'circle',
     color: '#7c3aed',
     colorClass: 'bg-violet-600',
     size: 16,
@@ -410,7 +410,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   BrandPrinciples: {
     type: 'BrandPrinciples',
     label: 'Brand Principles',
-    icon: '📜',
+    icon: 'circle',
     color: '#8b5cf6',
     colorClass: 'bg-violet-500',
     size: 16,
@@ -419,7 +419,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   PromptStyle: {
     type: 'PromptStyle',
     label: 'Prompt Style',
-    icon: '✨',
+    icon: 'circle',
     color: '#a78bfa',
     colorClass: 'bg-violet-400',
     size: 16,
@@ -428,7 +428,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   ProjectNative: {
     type: 'ProjectNative',
     label: 'Project Content',
-    icon: '🌐',
+    icon: 'map',
     color: '#a78bfa',
     colorClass: 'bg-violet-400',
     size: 18,
@@ -441,7 +441,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   Page: {
     type: 'Page',
     label: 'Page',
-    icon: '📄',
+    icon: 'file-text',
     color: '#3b82f6',
     colorClass: 'bg-blue-500',
     size: 20,
@@ -450,7 +450,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   Block: {
     type: 'Block',
     label: 'Block',
-    icon: '🧱',
+    icon: 'square',
     color: '#06b6d4',
     colorClass: 'bg-cyan-500',
     size: 16,
@@ -459,7 +459,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   ContentSlot: {
     type: 'ContentSlot',
     label: 'Content Slot',
-    icon: '🔲',
+    icon: 'inbox',
     color: '#0891b2',
     colorClass: 'bg-cyan-600',
     size: 14,
@@ -472,7 +472,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   Entity: {
     type: 'Entity',
     label: 'Entity',
-    icon: '💡',
+    icon: 'diamond',
     color: '#f59e0b',
     colorClass: 'bg-amber-500',
     size: 20,
@@ -481,7 +481,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   EntityNative: {
     type: 'EntityNative',
     label: 'Entity Content',
-    icon: '💬',
+    icon: 'message-square',
     color: '#fbbf24',
     colorClass: 'bg-yellow-400',
     size: 16,
@@ -490,7 +490,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   AudiencePersona: {
     type: 'AudiencePersona',
     label: 'Audience Persona',
-    icon: '👤',
+    icon: 'user',
     color: '#92400e',
     colorClass: 'bg-amber-800',
     size: 16,
@@ -499,7 +499,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   ChannelSurface: {
     type: 'ChannelSurface',
     label: 'Channel Surface',
-    icon: '📡',
+    icon: 'radio',
     color: '#78350f',
     colorClass: 'bg-amber-900',
     size: 16,
@@ -512,7 +512,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   BlockType: {
     type: 'BlockType',
     label: 'Block Type',
-    icon: '📋',
+    icon: 'component',
     color: '#14b8a6',
     colorClass: 'bg-teal-500',
     size: 16,
@@ -521,7 +521,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   BlockInstruction: {
     type: 'BlockInstruction',
     label: 'Block Instruction',
-    icon: '📝',
+    icon: 'hash',
     color: '#60a5fa',
     colorClass: 'bg-blue-400',
     size: 12,
@@ -530,7 +530,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   BlockRules: {
     type: 'BlockRules',
     label: 'Block Rules',
-    icon: '📏',
+    icon: 'ruler',
     color: '#93c5fd',
     colorClass: 'bg-blue-300',
     size: 12,
@@ -539,7 +539,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   PromptArtifact: {
     type: 'PromptArtifact',
     label: 'Prompt Artifact',
-    icon: '📋',
+    icon: 'component',
     color: '#bfdbfe',
     colorClass: 'bg-blue-200',
     size: 10,
@@ -553,7 +553,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   SEOKeywordFormat: {
     type: 'SEOKeywordFormat',
     label: 'SEO Keyword Format',
-    icon: '📋',
+    icon: 'component',
     color: '#64748b',
     colorClass: 'bg-slate-500',
     size: 14,
@@ -567,7 +567,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   SEOKeyword: {
     type: 'SEOKeyword',
     label: 'SEO Keyword',
-    icon: '🔍',
+    icon: 'search',
     color: '#8b5cf6',
     colorClass: 'bg-violet-500',
     size: 16,
@@ -576,7 +576,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   SEOKeywordMetrics: {
     type: 'SEOKeywordMetrics',
     label: 'SEO Metrics',
-    icon: '📊',
+    icon: 'bar-chart-2',
     color: '#a78bfa',
     colorClass: 'bg-violet-400',
     size: 10,
@@ -585,7 +585,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   SEOKeywordSet: {
     type: 'SEOKeywordSet',
     label: 'SEO Keyword Set',
-    icon: '📑',
+    icon: 'package',
     color: '#7c3aed',
     colorClass: 'bg-violet-600',
     size: 12,
@@ -599,7 +599,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   GEOQuery: {
     type: 'GEOQuery',
     label: 'GEO Query',
-    icon: '🤖',
+    icon: 'bot',
     color: '#8b5cf6',
     colorClass: 'bg-violet-500',
     size: 16,
@@ -608,7 +608,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   GEOQuerySet: {
     type: 'GEOQuerySet',
     label: 'GEO Query Set',
-    icon: '🗃️',
+    icon: 'package',
     color: '#6d28d9',
     colorClass: 'bg-violet-700',
     size: 12,
@@ -617,7 +617,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   GEOAnswer: {
     type: 'GEOAnswer',
     label: 'GEO Answer',
-    icon: '💬',
+    icon: 'message-square',
     color: '#a78bfa',
     colorClass: 'bg-violet-400',
     size: 14,
@@ -630,7 +630,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   PageNative: {
     type: 'PageNative',
     label: 'Page Generated',
-    icon: '📃',
+    icon: 'clipboard',
     color: '#f97316',
     colorClass: 'bg-orange-500',
     size: 16,
@@ -639,7 +639,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   BlockNative: {
     type: 'BlockNative',
     label: 'Block Generated',
-    icon: '📝',
+    icon: 'hash',
     color: '#fb923c',
     colorClass: 'bg-orange-400',
     size: 14,
@@ -648,7 +648,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   OutputArtifact: {
     type: 'OutputArtifact',
     label: 'Output Artifact',
-    icon: '📦',
+    icon: 'folder',
     color: '#c2410c',
     colorClass: 'bg-orange-700',
     size: 12,
@@ -705,7 +705,7 @@ export const NODE_VISUAL_LAYERS: LayerConfig[] = [
   {
     id: 'locale',
     label: 'Locale',
-    icon: '🌐',
+    icon: 'map',
     color: '#64748b',  // slate-500 (from taxonomy.yaml)
     colorLight: '#94a3b8',  // slate-400
     nodeTypes: getNodeTypesByLayer('locale'),
@@ -713,7 +713,7 @@ export const NODE_VISUAL_LAYERS: LayerConfig[] = [
   {
     id: 'geography',
     label: 'Geography',
-    icon: '🗺️',
+    icon: 'globe',
     color: '#10b981',  // emerald-500 (from taxonomy.yaml)
     colorLight: '#34d399',  // emerald-400
     nodeTypes: getNodeTypesByLayer('geography'),
@@ -721,7 +721,7 @@ export const NODE_VISUAL_LAYERS: LayerConfig[] = [
   {
     id: 'knowledge',
     label: 'Knowledge',
-    icon: '📚',
+    icon: 'book-open',
     color: '#8b5cf6',  // violet-500 (from taxonomy.yaml)
     colorLight: '#a78bfa',  // violet-400
     nodeTypes: getNodeTypesByLayer('knowledge'),
@@ -731,7 +731,7 @@ export const NODE_VISUAL_LAYERS: LayerConfig[] = [
   {
     id: 'config',
     label: 'Config',
-    icon: '⚙️',
+    icon: 'terminal',
     color: '#64748b',  // slate-500 (from taxonomy.yaml)
     colorLight: '#94a3b8',  // slate-400
     nodeTypes: getNodeTypesByLayer('config'),
@@ -739,7 +739,7 @@ export const NODE_VISUAL_LAYERS: LayerConfig[] = [
   {
     id: 'foundation',
     label: 'Foundation',
-    icon: '🏛️',
+    icon: 'drama',
     color: '#3b82f6',  // blue-500 (from taxonomy.yaml)
     colorLight: '#60a5fa',  // blue-400
     nodeTypes: getNodeTypesByLayer('foundation'),
@@ -747,7 +747,7 @@ export const NODE_VISUAL_LAYERS: LayerConfig[] = [
   {
     id: 'structure',
     label: 'Structure',
-    icon: '🏗️',
+    icon: 'layout-grid',
     color: '#06b6d4',  // cyan-500 (from taxonomy.yaml)
     colorLight: '#22d3ee',  // cyan-400
     nodeTypes: getNodeTypesByLayer('structure'),
@@ -755,7 +755,7 @@ export const NODE_VISUAL_LAYERS: LayerConfig[] = [
   {
     id: 'semantic',
     label: 'Semantic',
-    icon: '💡',
+    icon: 'diamond',
     color: '#f97316',  // orange-500 (from taxonomy.yaml)
     colorLight: '#fb923c',  // orange-400
     nodeTypes: getNodeTypesByLayer('semantic'),
@@ -763,7 +763,7 @@ export const NODE_VISUAL_LAYERS: LayerConfig[] = [
   {
     id: 'instruction',
     label: 'Instruction',
-    icon: '📝',
+    icon: 'hash',
     color: '#eab308',  // yellow-500 (from taxonomy.yaml)
     colorLight: '#facc15',  // yellow-400
     nodeTypes: getNodeTypesByLayer('instruction'),
@@ -772,7 +772,7 @@ export const NODE_VISUAL_LAYERS: LayerConfig[] = [
   {
     id: 'output',
     label: 'Output',
-    icon: '✨',
+    icon: 'circle',
     color: '#22c55e',  // green-500 (from taxonomy.yaml)
     colorLight: '#4ade80',  // green-400
     nodeTypes: getNodeTypesByLayer('output'),
