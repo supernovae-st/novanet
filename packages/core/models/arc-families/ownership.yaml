@@ -20,13 +20,13 @@ arc_family:
   arc_count: 43  # Computed by generator
 
   inverse_convention: "*_OF"
+  # v0.13.0 ADR-029: HAS_CONTENT + HAS_GENERATED merged → HAS_NATIVE
   tier_1_inverses:
     - HAS_ENTITY / ENTITY_OF
     - HAS_PAGE / PAGE_OF
     - HAS_PROJECT / PROJECT_OF
     - HAS_BLOCK / BLOCK_OF
-    - HAS_CONTENT / CONTENT_OF
-    - HAS_GENERATED / GENERATED_FOR
+    - HAS_NATIVE / NATIVE_OF  # v0.13.0: merged HAS_CONTENT + HAS_GENERATED
     - HAS_CHILD / CHILD_OF
     - HAS_INSTRUCTION / INSTRUCTION_OF
 
@@ -35,9 +35,8 @@ arc_family:
     - HAS_PAGE
     - HAS_ENTITY
     - HAS_BLOCK
-    - HAS_CONTENT
+    - HAS_NATIVE  # v0.13.0: merged HAS_CONTENT + HAS_GENERATED
     - HAS_CHILD
-    - HAS_GENERATED
 
   llm_context: |
     USE: when traversing ownership hierarchies.

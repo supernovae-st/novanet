@@ -84,7 +84,7 @@ export const NODE_LAYERS: Record<NodeType, Layer> = {
   BrandDesign: 'foundation',
   BrandPrinciples: 'foundation',
   Project: 'foundation',
-  ProjectContent: 'foundation',
+  ProjectNative: 'foundation',
   PromptStyle: 'foundation',
 
   // instruction (4 nodes) - matches models/node-classes/org/instruction/
@@ -94,15 +94,15 @@ export const NODE_LAYERS: Record<NodeType, Layer> = {
   PromptArtifact: 'instruction',
 
   // output (3 nodes) - matches models/node-classes/org/output/
-  BlockGenerated: 'output',
+  BlockNative: 'output',
   OutputArtifact: 'output',
-  PageGenerated: 'output',
+  PageNative: 'output',
 
   // semantic (4 nodes) - matches models/node-classes/org/semantic/
   AudiencePersona: 'semantic',
   ChannelSurface: 'semantic',
   Entity: 'semantic',
-  EntityContent: 'semantic',
+  EntityNative: 'semantic',
 
   // structure (3 nodes) - matches models/node-classes/org/structure/
   Block: 'structure',

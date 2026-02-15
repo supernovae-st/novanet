@@ -1,61 +1,58 @@
-# models/node-classes/org/semantic/entity-content.yaml
-# EntityContent - Localized content for Entity nodes (v10.9.0)
+# models/node-classes/org/semantic/entity-native.yaml
+# EntityNative - Human-authored native content for Entity nodes (v0.13.0 ADR-029)
 #
 # ═══════════════════════════════════════════════════════════════════════════════
-# v10.9.0 CHANGES (Naming Convention Refactor)
+# v0.13.0 CHANGES (ADR-029 *Native Pattern)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-#   RENAMED: EntityL10n → EntityContent
-#   - Clearer semantics: this is CONTENT, not just "localization"
-#   - Composite key pattern: entity:base-key@locale
-#   - New properties: curation_status, slug_history, parent_slug, full_path, depth
-#   - UTF-8 slug pattern (accented characters allowed)
+#   RENAMED: EntityContent → EntityNative
+#   - All locale-specific nodes now use *Native suffix
+#   - Trait (authored vs generated) distinguishes who creates content
+#   - Unified arc: HAS_NATIVE replaces HAS_CONTENT
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 # PURPOSE
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-# EntityContent provides locale-native content for a parent Entity. This is the
-# LOCALIZED half of the Entity/EntityContent pair.
+# EntityNative provides locale-native content for a parent Entity. This is the
+# LOCALIZED half of the Entity/EntityNative pair.
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 # ARCHITECTURE (Full Hierarchy)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-#   Tenant ──[:HAS_ENTITY]──> Entity (invariant)
+#   Project ──[:HAS_ENTITY]──> Entity (defined)
 #                                  │
-#                                  └──[:HAS_CONTENT]──> EntityContent
-#                                                            │
-#                                                            ├──[:FOR_LOCALE]──> Locale
-#                                                            │
-#                                                            ├──[:TARGETS]──> SEOKeyword (N:N)
-#                                                            │
-#                                                            └──[:ANSWERS]──> SEOQuestion
+#                                  └──[:HAS_NATIVE {locale}]──> EntityNative
+#                                                                   │
+#                                                                   ├──[:FOR_LOCALE]──> Locale
+#                                                                   │
+#                                                                   └──[:TARGETS]──> SEOKeyword (N:N)
 #
 # Entity: Invariant definition (EN key, universal properties)
-# EntityContent: Locale-native content + SEO keywords for THAT locale
+# EntityNative: Human-authored locale-native content for THAT locale
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 # KEY PRINCIPLE: Generation, NOT Translation
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-#   WRONG:  Entity(EN) → Translate → EntityContent(FR)
-#   RIGHT:  Entity(invariant) → Generate natively → EntityContent(FR)
+#   WRONG:  Entity(EN) → Translate → EntityNative(FR)
+#   RIGHT:  Entity(defined) → Author natively → EntityNative(FR)
 #
-# EntityContent is GENERATED natively for each locale, not translated.
+# EntityNative is AUTHORED natively for each locale, not translated.
 # This preserves cultural nuance and locale-specific expressions.
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 
 node:
-  name: EntityContent
+  name: EntityNative
   realm: org
   layer: semantic
   trait: authored
   icon:
     web: "circle-check"
     terminal: "●"
-  description: "Locale-native content for an Entity"
+  description: "Human-authored locale-native content for an Entity"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # STANDARD PROPERTIES
@@ -101,53 +98,12 @@ node:
         - "ja-JP"
 
     # ─────────────────────────────────────────────────────────────────────────────
-    # URL/ROUTING (v10.9.0)
+    # v0.13.0 ADR-030: Slug properties moved to PageNative
     # ─────────────────────────────────────────────────────────────────────────────
-    slug:
-      type: string
-      required: true
-      pattern: "^[\\p{Ll}\\p{N}\\-]+$"  # UTF-8: Unicode lowercase + numbers + hyphens
-      indexed: true
-      unique_with: locale_key  # UNIQUE(locale_key, slug)
-      description: "URL-safe localized identifier (UTF-8 allowed)"
-      examples:
-        - "créer-qr-code"        # fr-FR (with accent)
-        - "qr-code-wifi"         # same in many locales
-        - "qr-code-dynamique"    # fr-FR
-
-    full_path:
-      type: string
-      required: true
-      indexed: true
-      description: "Denormalized full URL path from root (O(1) lookup)"
-      examples:
-        - "/fr/créer-qr-code"
-        - "/fr/blog/qr-code-restaurant"
-        - "/ja/qrコード"
-
-    parent_slug:
-      type: string
-      required: false
-      description: "Parent EntityContent slug (null if root)"
-      examples:
-        - "blog"
-        - "features"
-
-    depth:
-      type: int
-      required: true
-      description: "Hierarchy depth (0 = root, max 3)"
-      examples:
-        - 0  # /fr/créer-qr-code
-        - 1  # /fr/blog/article
-        - 2  # /fr/blog/category/article
-
-    slug_history:
-      type: "string[]"
-      required: false
-      description: "Previous slugs for redirect support"
-      examples:
-        - '["creer-qr-code", "creer-code-qr"]'
+    # URL/routing properties (slug, full_path, parent_slug, depth, slug_history)
+    # are now on PageNative, not EntityNative.
+    # EntityNative focuses on semantic content; PageNative handles URL routing.
+    # ─────────────────────────────────────────────────────────────────────────────
 
     # ─────────────────────────────────────────────────────────────────────────────
     # CONTENT PROPERTIES
@@ -286,25 +242,22 @@ node:
       description: "SEO keywords this localized entity is targeting for ranking"
 
   incoming_relations:
-    HAS_CONTENT:
+    HAS_NATIVE:
       from: Entity
       cardinality: "1:N"
-      description: "Parent entity that owns this content"
+      description: "Parent entity that owns this native content"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # NEO4J CONFIGURATION (v10.9.0)
+  # NEO4J CONFIGURATION (v0.13.0)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   neo4j:
     constraints:
-      - "CREATE CONSTRAINT entity_content_key IF NOT EXISTS FOR (ec:EntityContent) REQUIRE ec.key IS UNIQUE"
-      - "CREATE CONSTRAINT entity_content_slug_unique IF NOT EXISTS FOR (ec:EntityContent) REQUIRE (ec.locale_key, ec.slug) IS UNIQUE"
+      - "CREATE CONSTRAINT entity_native_key IF NOT EXISTS FOR (en:EntityNative) REQUIRE en.key IS UNIQUE"
 
     indexes:
-      - "CREATE INDEX entity_content_entity_key IF NOT EXISTS FOR (ec:EntityContent) ON (ec.entity_key)"
-      - "CREATE INDEX entity_content_locale_key IF NOT EXISTS FOR (ec:EntityContent) ON (ec.locale_key)"
-      - "CREATE INDEX entity_content_full_path IF NOT EXISTS FOR (ec:EntityContent) ON (ec.full_path)"
-      - "CREATE INDEX entity_content_slug IF NOT EXISTS FOR (ec:EntityContent) ON (ec.slug)"
+      - "CREATE INDEX entity_native_entity_key IF NOT EXISTS FOR (en:EntityNative) ON (en.entity_key)"
+      - "CREATE INDEX entity_native_locale_key IF NOT EXISTS FOR (en:EntityNative) ON (en.locale_key)"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # EXAMPLES

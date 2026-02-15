@@ -164,10 +164,12 @@ impl ValidationResult {
             .iter()
             .map(|n| n.def.name.as_str())
             .collect();
-        let neo4j_classes: HashSet<&str> = neo4j.node_class_names.iter().map(|s| s.as_str()).collect();
+        let neo4j_classes: HashSet<&str> =
+            neo4j.node_class_names.iter().map(|s| s.as_str()).collect();
 
         // Check for classes in YAML but not in Neo4j
-        let missing_in_neo4j: Vec<&str> = yaml_classes.difference(&neo4j_classes).copied().collect();
+        let missing_in_neo4j: Vec<&str> =
+            yaml_classes.difference(&neo4j_classes).copied().collect();
         if !missing_in_neo4j.is_empty() {
             self.checks.push(ValidationCheck::fail(
                 "YAML classes exist in Neo4j",
@@ -735,7 +737,11 @@ mod tests {
             .iter()
             .filter(|n| n.realm == "shared")
             .count();
-        let org_count = data.node_classes.iter().filter(|n| n.realm == "org").count();
+        let org_count = data
+            .node_classes
+            .iter()
+            .filter(|n| n.realm == "org")
+            .count();
 
         assert_eq!(
             total, 61,
@@ -862,56 +868,63 @@ mod tests {
         );
     }
 
-    /// Naming convention: *Content suffix indicates authored trait
+    /// Naming convention: *Native suffix for locale-specific nodes (ADR-029)
+    /// Trait distinguishes between authored (EntityNative, ProjectNative) and generated (PageNative, BlockNative)
     #[test]
-    fn test_naming_convention_content_suffix() {
+    fn test_naming_convention_native_suffix() {
         use crate::parsers::yaml_node::NodeTrait;
 
         let root = crate::config::resolve_root(None).expect("Failed to resolve root");
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
 
-        let content_nodes: Vec<_> = data
+        let native_nodes: Vec<_> = data
             .node_classes
             .iter()
-            .filter(|n| n.def.name.ends_with("Content"))
+            .filter(|n| n.def.name.ends_with("Native"))
             .collect();
 
-        assert!(!content_nodes.is_empty(), "Should have *Content nodes");
+        assert!(
+            !native_nodes.is_empty(),
+            "Should have *Native nodes (ADR-029)"
+        );
 
-        for node in content_nodes {
+        // EntityNative and ProjectNative should have Authored trait
+        let authored_natives: Vec<_> = native_nodes
+            .iter()
+            .filter(|n| n.def.name == "EntityNative" || n.def.name == "ProjectNative")
+            .collect();
+
+        for node in &authored_natives {
             assert!(
                 matches!(node.def.node_trait, NodeTrait::Authored),
-                "Node '{}' ends with 'Content' but has trait '{:?}' (should be Authored)",
+                "Node '{}' should have Authored trait, got '{:?}'",
                 node.def.name,
                 node.def.node_trait
             );
         }
-    }
 
-    /// Naming convention: *Generated suffix indicates generated trait
-    #[test]
-    fn test_naming_convention_generated_suffix() {
-        use crate::parsers::yaml_node::NodeTrait;
-
-        let root = crate::config::resolve_root(None).expect("Failed to resolve root");
-        let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
-
-        let generated_nodes: Vec<_> = data
-            .node_classes
+        // PageNative and BlockNative should have Generated trait
+        let generated_natives: Vec<_> = native_nodes
             .iter()
-            .filter(|n| n.def.name.ends_with("Generated"))
+            .filter(|n| n.def.name == "PageNative" || n.def.name == "BlockNative")
             .collect();
 
-        assert!(!generated_nodes.is_empty(), "Should have *Generated nodes");
-
-        for node in generated_nodes {
+        for node in &generated_natives {
             assert!(
                 matches!(node.def.node_trait, NodeTrait::Generated),
-                "Node '{}' ends with 'Generated' but has trait '{:?}' (should be Generated)",
+                "Node '{}' should have Generated trait, got '{:?}'",
                 node.def.name,
                 node.def.node_trait
             );
         }
+
+        // Should have all 4 *Native nodes
+        assert_eq!(
+            native_nodes.len(),
+            4,
+            "Should have 4 *Native nodes (EntityNative, ProjectNative, PageNative, BlockNative), got {}",
+            native_nodes.len()
+        );
     }
 
     /// Layer distribution validation (v0.12.5)
@@ -926,7 +939,11 @@ mod tests {
             .iter()
             .filter(|n| n.realm == "shared")
             .count();
-        let org_count = data.node_classes.iter().filter(|n| n.realm == "org").count();
+        let org_count = data
+            .node_classes
+            .iter()
+            .filter(|n| n.realm == "org")
+            .count();
 
         // v0.12.5: 40 shared, 21 org (Brand Architecture: +4 -1)
         assert_eq!(

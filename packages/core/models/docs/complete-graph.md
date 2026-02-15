@@ -26,7 +26,7 @@ This diagram shows the complete NovaNet graph schema with all 42 node types and 
 ```mermaid
 flowchart TB
   %% NovaNet Graph v0.12.0
-  %% Generated: 61 nodes, 230 arcs
+  %% Generated: 61 nodes, 248 arcs
   %% Source: node-classes/ + arc-classes/ + taxonomy.yaml
 
   %% Trait styling (node_trait)
@@ -46,7 +46,7 @@ flowchart TB
       BrandDesign["🔵 BrandDesign"]
       BrandPrinciples["🔵 BrandPrinciples"]
       Project["🔵 Project"]
-      ProjectContent["🟢 ProjectContent"]
+      ProjectNative["🟢 ProjectNative"]
       PromptStyle["🔵 PromptStyle"]
     end
     subgraph ORG_instruction["Instructions"]
@@ -56,15 +56,15 @@ flowchart TB
       PromptArtifact["🌟 PromptArtifact"]
     end
     subgraph ORG_output["Generated Output"]
-      BlockGenerated["🌟 BlockGenerated"]
+      BlockNative["🌟 BlockNative"]
       OutputArtifact["🌟 OutputArtifact"]
-      PageGenerated["🌟 PageGenerated"]
+      PageNative["🌟 PageNative"]
     end
     subgraph ORG_semantic["Semantic"]
       AudiencePersona["🔵 AudiencePersona"]
       ChannelSurface["🔵 ChannelSurface"]
       Entity["🔵 Entity"]
-      EntityContent["🟢 EntityContent"]
+      EntityNative["🟢 EntityNative"]
     end
     subgraph ORG_structure["Structure"]
       Block["🔵 Block"]
@@ -131,28 +131,19 @@ flowchart TB
   AudienceSet -->|CONTAINS_AUDIENCE_TRAIT| AudienceTrait
   Block -->|BLOCK_OF| Page
   Block -.->|FILLS_SLOT| ContentSlot
-  Block ==>|HAS_GENERATED| BlockGenerated
-  Block ==>|HAS_GENERATED| PageGenerated
   Block -->|HAS_INSTRUCTION| BlockInstruction
+  Block -->|HAS_NATIVE| BlockNative
+  Block -->|HAS_NATIVE| EntityNative
+  Block -->|HAS_NATIVE| PageNative
+  Block -->|HAS_NATIVE| ProjectNative
   Block -->|OF_TYPE| BlockType
   Block -.->|REFERENCES| Entity
   Block --o|TARGETS_GEO| GEOQuery
   Block --o|TARGETS_KEYWORD| SEOKeyword
   Block -.->|TARGETS_PERSONA| AudiencePersona
   Block -.->|USES_ENTITY| Entity
-  BlockGenerated -.->|FOR_CHANNEL| ChannelSurface
-  BlockGenerated -.->|FOR_LOCALE| Locale
-  BlockGenerated ==>|GENERATED_FOR| Block
-  BlockGenerated ==>|GENERATED_FOR| Page
-  BlockGenerated ==>|GENERATED_FROM| BlockType
-  BlockGenerated -.->|HAS_INTERNAL_LINK| PageGenerated
-  BlockGenerated ==>|INFLUENCED_BY| EntityContent
-  BlockGenerated ==>|PREVIOUS_VERSION| BlockGenerated
-  BlockGenerated ==>|PREVIOUS_VERSION| OutputArtifact
-  BlockGenerated ==>|PREVIOUS_VERSION| PageGenerated
-  BlockGenerated ==>|PRODUCED_BY| PromptArtifact
-  BlockInstruction ==>|GENERATED| BlockGenerated
-  BlockInstruction ==>|GENERATED| PageGenerated
+  BlockInstruction ==>|GENERATED| BlockNative
+  BlockInstruction ==>|GENERATED| PageNative
   BlockInstruction ==>|INCLUDES_STYLE| Style
   BlockInstruction -->|INSTRUCTION_OF| Block
   BlockInstruction -->|INSTRUCTION_OF| Page
@@ -167,6 +158,19 @@ flowchart TB
   BlockInstruction -.->|MENTIONS| Term
   BlockInstruction -.->|REFERENCES_ENTITY| Entity
   BlockInstruction -.->|REFERENCES_PAGE| Page
+  BlockNative -.->|FOR_CHANNEL| ChannelSurface
+  BlockNative -.->|FOR_LOCALE| Locale
+  BlockNative ==>|GENERATED_FROM| BlockType
+  BlockNative -.->|HAS_INTERNAL_LINK| PageNative
+  BlockNative ==>|INFLUENCED_BY| EntityNative
+  BlockNative -->|NATIVE_OF| Block
+  BlockNative -->|NATIVE_OF| Entity
+  BlockNative -->|NATIVE_OF| Page
+  BlockNative -->|NATIVE_OF| Project
+  BlockNative ==>|PREVIOUS_VERSION| BlockNative
+  BlockNative ==>|PREVIOUS_VERSION| OutputArtifact
+  BlockNative ==>|PREVIOUS_VERSION| PageNative
+  BlockNative ==>|PRODUCED_BY| PromptArtifact
   BlockType -->|HAS_RULES| BlockRules
   Brand -->|BRAND_OF| Project
   Brand -.->|FOR_MARKET| Market
@@ -199,9 +203,11 @@ flowchart TB
   Entity -->|ENTITY_OF| Project
   Entity -.->|HAS_APPLICATION| Entity
   Entity -->|HAS_CHILD| Entity
-  Entity -.->|HAS_CONTENT| EntityContent
-  Entity -.->|HAS_CONTENT| ProjectContent
   Entity -->|HAS_KEYWORD| SEOKeyword
+  Entity -->|HAS_NATIVE| BlockNative
+  Entity -->|HAS_NATIVE| EntityNative
+  Entity -->|HAS_NATIVE| PageNative
+  Entity -->|HAS_NATIVE| ProjectNative
   Entity -.->|HAS_TYPE| Entity
   Entity -.->|HAS_VARIANT| Entity
   Entity -.->|INCLUDED_IN| Entity
@@ -224,11 +230,13 @@ flowchart TB
   Entity -.->|USED_BY| Page
   Entity -.->|VARIANT_OF| Entity
   EntityCategory -.->|CATEGORY_OF| Entity
-  EntityContent -.->|CONTENT_OF| Entity
-  EntityContent -.->|CONTENT_OF| Project
-  EntityContent -.->|FOR_LOCALE| Locale
-  EntityContent -.->|MONITORS_GEO| GEOQuery
-  EntityContent -.->|TARGETS| SEOKeyword
+  EntityNative -.->|FOR_LOCALE| Locale
+  EntityNative -.->|MONITORS_GEO| GEOQuery
+  EntityNative -->|NATIVE_OF| Block
+  EntityNative -->|NATIVE_OF| Entity
+  EntityNative -->|NATIVE_OF| Page
+  EntityNative -->|NATIVE_OF| Project
+  EntityNative -.->|TARGETS| SEOKeyword
   ExpressionSet -->|CONTAINS_EXPRESSION| Expression
   ExpressionSet -->|EXPRESSIONS_OF| Locale
   Formatting -->|FORMATTING_OF| Locale
@@ -273,45 +281,51 @@ flowchart TB
   Locale -.->|IN_ECONOMIC_REGION| EconomicRegion
   Locale -.->|IN_SUBREGION| GeoRegion
   Locale -.->|IN_SUBREGION| GeoSubRegion
-  Locale -.->|LOCALE_OF| BlockGenerated
-  Locale -.->|LOCALE_OF| EntityContent
+  Locale -.->|LOCALE_OF| BlockNative
+  Locale -.->|LOCALE_OF| EntityNative
   Locale -.->|LOCALE_OF| OutputArtifact
-  Locale -.->|LOCALE_OF| PageGenerated
-  Locale -.->|LOCALE_OF| ProjectContent
+  Locale -.->|LOCALE_OF| PageNative
+  Locale -.->|LOCALE_OF| ProjectNative
   Locale -.->|LOCALE_OF| PromptStyle
   Locale -.->|LOCALE_VARIANT_OF| Locale
   Locale -.->|SPEAKS_BRANCH| LanguageBranch
   Market -->|MARKET_OF| Locale
   OrgConfig -->|HAS_PROJECT| Project
-  OutputArtifact ==>|BUNDLES| BlockGenerated
-  OutputArtifact ==>|BUNDLES| PageGenerated
+  OutputArtifact ==>|BUNDLES| BlockNative
+  OutputArtifact ==>|BUNDLES| PageNative
   OutputArtifact -.->|FOR_LOCALE| Locale
-  OutputArtifact ==>|PREVIOUS_VERSION| BlockGenerated
+  OutputArtifact ==>|PREVIOUS_VERSION| BlockNative
   OutputArtifact ==>|PREVIOUS_VERSION| OutputArtifact
-  OutputArtifact ==>|PREVIOUS_VERSION| PageGenerated
+  OutputArtifact ==>|PREVIOUS_VERSION| PageNative
   Page -->|HAS_BLOCK| Block
-  Page ==>|HAS_GENERATED| BlockGenerated
-  Page ==>|HAS_GENERATED| PageGenerated
   Page -->|HAS_INSTRUCTION| BlockInstruction
+  Page -->|HAS_NATIVE| BlockNative
+  Page -->|HAS_NATIVE| EntityNative
+  Page -->|HAS_NATIVE| PageNative
+  Page -->|HAS_NATIVE| ProjectNative
   Page -->|HAS_SLOT| ContentSlot
   Page -.->|LINKS_TO| Page
   Page -->|PAGE_OF| Project
   Page -.->|REPRESENTS| Entity
+  Page -.->|SEO_CLUSTER_OF| Page
   Page -.->|SUBTOPIC_OF| Page
   Page --o|TARGETS_GEO| GEOQuery
   Page --o|TARGETS_KEYWORD| SEOKeyword
   Page -.->|TARGETS_PERSONA| AudiencePersona
   Page -.->|USES_ENTITY| Entity
-  PageGenerated ==>|ASSEMBLES| BlockGenerated
-  PageGenerated -->|BELONGS_TO_PROJECT_CONTENT| ProjectContent
-  PageGenerated -.->|FOR_CHANNEL| ChannelSurface
-  PageGenerated -.->|FOR_LOCALE| Locale
-  PageGenerated ==>|GENERATED_FOR| Block
-  PageGenerated ==>|GENERATED_FOR| Page
-  PageGenerated ==>|PREVIOUS_VERSION| BlockGenerated
-  PageGenerated ==>|PREVIOUS_VERSION| OutputArtifact
-  PageGenerated ==>|PREVIOUS_VERSION| PageGenerated
-  PageGenerated ==>|PRODUCED_BY| PromptArtifact
+  PageNative ==>|ASSEMBLES| BlockNative
+  PageNative -->|BELONGS_TO_PROJECT_NATIVE| ProjectNative
+  PageNative ==>|DERIVED_SLUG_FROM| SEOKeyword
+  PageNative -.->|FOR_CHANNEL| ChannelSurface
+  PageNative -.->|FOR_LOCALE| Locale
+  PageNative -->|NATIVE_OF| Block
+  PageNative -->|NATIVE_OF| Entity
+  PageNative -->|NATIVE_OF| Page
+  PageNative -->|NATIVE_OF| Project
+  PageNative ==>|PREVIOUS_VERSION| BlockNative
+  PageNative ==>|PREVIOUS_VERSION| OutputArtifact
+  PageNative ==>|PREVIOUS_VERSION| PageNative
+  PageNative ==>|PRODUCED_BY| PromptArtifact
   PatternSet -->|CONTAINS_PATTERN| Pattern
   PatternSet -->|PATTERNS_OF| Locale
   PopulationCluster -->|HAS_SUBCLUSTER| PopulationSubCluster
@@ -321,19 +335,23 @@ flowchart TB
   Project -->|BELONGS_TO_ORG| OrgConfig
   Project -->|DEFAULT_LOCALE| Locale
   Project -->|HAS_BRAND| Brand
-  Project -.->|HAS_CONTENT| EntityContent
-  Project -.->|HAS_CONTENT| ProjectContent
   Project -->|HAS_ENTITY| Entity
+  Project -->|HAS_NATIVE| BlockNative
+  Project -->|HAS_NATIVE| EntityNative
+  Project -->|HAS_NATIVE| PageNative
+  Project -->|HAS_NATIVE| ProjectNative
   Project -->|HAS_PAGE| Page
   Project -->|PROJECT_OF| OrgConfig
   Project -->|SUPPORTS_LOCALE| Locale
-  ProjectContent -.->|CONTENT_OF| Entity
-  ProjectContent -.->|CONTENT_OF| Project
-  ProjectContent -.->|FOR_LOCALE| Locale
+  ProjectNative -.->|FOR_LOCALE| Locale
+  ProjectNative -->|NATIVE_OF| Block
+  ProjectNative -->|NATIVE_OF| Entity
+  ProjectNative -->|NATIVE_OF| Page
+  ProjectNative -->|NATIVE_OF| Project
   PromptArtifact ==>|COMPILED_FROM| BlockInstruction
   PromptArtifact ==>|INCLUDES_ENTITY| Entity
-  PromptArtifact ==>|PRODUCED| BlockGenerated
-  PromptArtifact ==>|PRODUCED| PageGenerated
+  PromptArtifact ==>|PRODUCED| BlockNative
+  PromptArtifact ==>|PRODUCED| PageNative
   PromptStyle -.->|FOR_LOCALE| Locale
   PromptStyle -.->|INSPIRED_BY_REGION| GeoRegion
   PromptStyle -->|PROMPT_STYLE_OF| Brand
@@ -358,11 +376,11 @@ flowchart TB
   TermSet -->|TERMS_OF| Locale
 
   %% Arc colors by family
-  linkStyle 5,6,16,17,18,20,21,22,23,24,25,26,27,157,158,160,161,162,164,165,176,180,181,182,183,184,185,204,205,206,207 stroke:#8b5cf6,stroke-width:2px
-  linkStyle 15,52,54,59,73,74,98,99,100,111,114,116,118,120,122,130,131,132,135,136,142,143,144,145,146,147,148,149,150,151,152,153,154,159,179,189,191,195,196,201,202,203,208 stroke:#22c55e,stroke-width:2px
-  linkStyle 10,11,106,107,172,173,215,217,218,221 stroke:#ec4899,stroke-width:2px
-  linkStyle 0,1,2,3,7,8,28,29,41,42,44,45,46,48,49,50,51,53,55,56,57,58,64,70,72,75,103,104,105,108,109,110,112,113,115,117,119,123,124,125,126,127,128,129,133,134,137,138,139,140,141,155,156,163,166,167,169,177,186,187,188,190,192,193,194,197,198,199,200,210,214,222,223,224,225,226,227,228,229 stroke:#3b82f6,stroke-width:2px
-  linkStyle 4,9,12,13,14,19,30,31,32,33,34,35,36,37,38,39,40,43,47,60,61,62,63,65,66,67,68,69,71,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,101,102,121,168,170,171,174,175,178,209,211,212,213,216,219,220 stroke:#f97316,stroke-width:2px
+  linkStyle 16,17,18,34,36,41,42,43,44,165,166,168,169,170,187,189,196,197,198,199,222,223,224,225 stroke:#8b5cf6,stroke-width:2px
+  linkStyle 33,56,58,63,104,119,122,124,126,128,130,138,139,140,143,144,150,151,152,153,154,155,156,157,158,159,160,161,162,167,191,203,205,217,226 stroke:#22c55e,stroke-width:2px
+  linkStyle 12,13,114,115,183,184,233,235,236,239 stroke:#ec4899,stroke-width:2px
+  linkStyle 0,1,2,3,5,6,7,8,9,10,19,20,37,38,39,40,45,46,48,49,50,52,53,54,55,57,59,60,61,62,68,74,76,77,78,79,80,81,106,107,108,109,111,112,113,116,117,118,120,121,123,125,127,131,132,133,134,135,136,137,141,142,145,146,147,148,149,163,164,171,172,173,174,175,176,177,179,188,192,193,194,195,200,201,202,204,206,207,208,209,210,211,212,213,214,215,216,218,219,220,221,228,232,240,241,242,243,244,245,246,247 stroke:#3b82f6,stroke-width:2px
+  linkStyle 4,11,14,15,21,22,23,24,25,26,27,28,29,30,31,32,35,47,51,64,65,66,67,69,70,71,72,73,75,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,105,110,129,178,180,181,182,185,186,190,227,229,230,231,234,237,238 stroke:#f97316,stroke-width:2px
 
   %% Class assignments
   class Adaptation imported
@@ -370,8 +388,8 @@ flowchart TB
   class AudienceSet defined
   class AudienceTrait imported
   class Block defined
-  class BlockGenerated generated
   class BlockInstruction defined
+  class BlockNative generated
   class BlockRules defined
   class BlockType defined
   class Brand defined
@@ -389,7 +407,7 @@ flowchart TB
   class EconomicRegion defined
   class Entity defined
   class EntityCategory defined
-  class EntityContent authored
+  class EntityNative authored
   class Expression imported
   class ExpressionSet defined
   class Formatting imported
@@ -407,13 +425,13 @@ flowchart TB
   class OrgConfig defined
   class OutputArtifact generated
   class Page defined
-  class PageGenerated generated
+  class PageNative generated
   class Pattern imported
   class PatternSet defined
   class PopulationCluster imported
   class PopulationSubCluster imported
   class Project defined
-  class ProjectContent authored
+  class ProjectNative authored
   class PromptArtifact generated
   class PromptStyle defined
   class SEOKeyword imported

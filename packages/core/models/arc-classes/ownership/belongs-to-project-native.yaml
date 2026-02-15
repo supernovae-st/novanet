@@ -1,0 +1,19 @@
+# packages/core/models/arc-classes/ownership/belongs-to-project-native.yaml
+# ArcClass: BELONGS_TO_PROJECT_NATIVE — Locale-aligned: PageNative (fr-FR) → ProjectNative (fr-FR)
+#
+# v0.13.0: Renamed from BELONGS_TO_PROJECT_CONTENT (ADR-029 *Native pattern)
+# v11.0.0: Renamed from BELONGS_TO_PROJECT_L10N (ProjectL10n → ProjectContent refactor)
+
+arc:
+  name: BELONGS_TO_PROJECT_NATIVE
+  family: ownership
+  scope: intra_realm
+  source: PageNative  # v0.13.0: renamed from PageGenerated
+  target: ProjectNative  # v0.13.0: renamed from ProjectContent
+  cardinality: many_to_one
+  llm_context: |
+    USE: when loading project-level native content for page generation.
+    TRIGGERS: project native, locale voice, project tagline, project CTAs.
+    NOT: project config (use BELONGS_TO_ORG), page structure (use HAS_PAGE).
+    RELATES: PageNative (source), ProjectNative (target), locale-aligned.
+  cypher_pattern: (PageNative)-[:BELONGS_TO_PROJECT_NATIVE]->(ProjectNative)

@@ -1,13 +1,13 @@
 # packages/core/models/arc-classes/generation/assembles.yaml
-# ArcClass: ASSEMBLES — PageGenerated assembles BlockGenerateds with order for sequencing
+# ArcClass: ASSEMBLES — PageNative assembles BlockNatives with order for sequencing
 # v0.12.3: Changed position (string) to order (int) for consistency with HAS_BLOCK
 
 arc:
   name: ASSEMBLES
   family: generation
   scope: intra_realm
-  source: PageGenerated
-  target: BlockGenerated
+  source: PageNative
+  target: BlockNative
   cardinality: one_to_many
   properties:
     - name: order
@@ -17,6 +17,6 @@ arc:
   llm_context: |
     USE: when rendering a complete page, loading blocks in order.
     TRIGGERS: page render, block assembly, content composition, final output.
-    NOT: for structure definition (use HAS_BLOCK), for single block (use BlockGenerated).
-    RELATES: PageGenerated (source), BlockGenerated (target), order property mirrors HAS_BLOCK.order.
-  cypher_pattern: (PageGenerated)-[:ASSEMBLES {order}]->(BlockGenerated)
+    NOT: for structure definition (use HAS_BLOCK), for single block (use BlockNative).
+    RELATES: PageNative (source), BlockNative (target), order property mirrors HAS_BLOCK.order.
+  cypher_pattern: (PageNative)-[:ASSEMBLES {order}]->(BlockNative)

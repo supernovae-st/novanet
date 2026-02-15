@@ -11,8 +11,8 @@ arc:
 
   source: BlockInstruction
   target:
-    - PageGenerated
-    - BlockGenerated
+    - PageNative
+    - BlockNative
   cardinality: one_to_many
 
   properties:
@@ -25,6 +25,6 @@ arc:
     USE: when tracing which instruction produced which generated content.
     TRIGGERS: generation provenance, instruction audit, output source.
     NOT: for structure ownership (use HAS_GENERATED), for compiled prompts (use COMPILED_FROM).
-    RELATES: BlockInstruction (source), PageGenerated/BlockGenerated (target).
+    RELATES: BlockInstruction (source), PageNative/BlockNative (target).
 
-  cypher_pattern: "(BlockInstruction)-[:GENERATED {generated_at}]->(BlockGenerated)"
+  cypher_pattern: "(BlockInstruction)-[:GENERATED {generated_at}]->(BlockNative)"

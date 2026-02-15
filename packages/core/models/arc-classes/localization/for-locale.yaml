@@ -9,10 +9,10 @@ arc:
   family: localization
   scope: cross_realm  # org nodes → Locale (shared)
   source:
-    - EntityContent
-    - ProjectContent
-    - BlockGenerated
-    - PageGenerated
+    - EntityNative
+    - ProjectNative
+    - BlockNative
+    - PageNative
     - OutputArtifact
     - PromptStyle
   target: Locale
@@ -22,5 +22,5 @@ arc:
     USE: when finding the target locale for any localized content node.
     TRIGGERS: for locale, content locale, target language, localization target.
     NOT: locale fallback (use FALLBACK_TO), locale ownership (use HAS_LOCALE).
-    RELATES: EntityContent/ProjectContent/BlockGenerated/PageGenerated/PromptStyle (source), Locale (target).
-  cypher_pattern: (EntityContent, PromptStyle)-[:FOR_LOCALE]->(Locale)
+    RELATES: EntityNative/ProjectNative/BlockNative/PageNative/PromptStyle (source), Locale (target).
+  cypher_pattern: (EntityNative, PromptStyle)-[:FOR_LOCALE]->(Locale)

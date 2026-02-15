@@ -1,0 +1,60 @@
+# packages/core/models/arc-classes/generation/derived-slug-from.yaml
+# ArcClass: DERIVED_SLUG_FROM — Audit trail for slug derivation
+#
+# v0.13: ADR-032 URL Slugification Architecture
+#
+# Tracks which SEO keyword was used to derive a page's localized slug.
+# This creates an audit trail for SEO decisions.
+#
+# Example:
+#   PageNative:page:qr-code-generator@fr-FR DERIVED_SLUG_FROM SEOKeyword:"générateur qr code"
+#   → slug = "generateur-qr-code" (highest scoring keyword)
+
+arc:
+  name: DERIVED_SLUG_FROM
+  family: generation
+  scope: cross_realm  # PageNative (org) → SEOKeyword (shared)
+
+  source: PageNative  # Will become PageNative in v0.13
+  target: SEOKeyword
+  cardinality: many_to_one  # One slug derived from one keyword
+
+  properties:
+    - name: derivation_score
+      type: float
+      required: true
+      description: |
+        Score = volume × sem_coef × convergence_boost
+        - volume: SEO keyword search volume
+        - sem_coef: SEMANTIC_LINK coefficient (0.3-1.0)
+        - convergence_boost: 1 + (N × 0.2)
+
+    - name: derivation_rationale
+      type: string
+      required: false
+      description: "LLM explanation of why this keyword was chosen"
+
+    - name: alternatives_considered
+      type: array
+      required: false
+      description: "Other keywords considered with their scores"
+
+    - name: no_repetition_applied
+      type: boolean
+      required: false
+      default: false
+      description: "Whether the no-repetition rule modified the slug"
+
+    - name: brand_invariant
+      type: boolean
+      required: false
+      default: false
+      description: "Whether slug is brand name (no translation)"
+
+  llm_context: |
+    USE: when auditing slug derivation decisions for SEO.
+    TRIGGERS: slug audit, keyword derivation, SEO slug, URL generation audit.
+    NOT: page linking (use LINKS_TO), keyword targeting (use TARGETS).
+    RELATES: PageNative (source), SEOKeyword (target), derivation_score (formula), audit trail.
+
+  cypher_pattern: "(PageNative)-[:DERIVED_SLUG_FROM {derivation_score, derivation_rationale, no_repetition_applied, brand_invariant}]->(SEOKeyword)"

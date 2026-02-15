@@ -8,8 +8,8 @@ arc:
   scope: intra_realm
   source: OutputArtifact
   target:
-    - PageGenerated
-    - BlockGenerated
+    - PageNative
+    - BlockNative
   cardinality: one_to_many
   properties:
     - name: position
@@ -21,6 +21,6 @@ arc:
   llm_context: |
     USE: when deploying content, loading all generated nodes in an artifact.
     TRIGGERS: deployment bundle, artifact contents, release package.
-    NOT: for live content (use PageGenerated), for structure (use HAS_GENERATED).
-    RELATES: OutputArtifact (source), PageGenerated/BlockGenerated (target), checksum for integrity.
-  cypher_pattern: (OutputArtifact)-[:BUNDLES {position, checksum}]->(PageGenerated)
+    NOT: for live content (use PageNative), for structure (use HAS_GENERATED).
+    RELATES: OutputArtifact (source), PageNative/BlockNative (target), checksum for integrity.
+  cypher_pattern: (OutputArtifact)-[:BUNDLES {position, checksum}]->(PageNative)

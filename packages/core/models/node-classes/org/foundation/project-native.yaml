@@ -1,39 +1,39 @@
-# models/node-classes/org/foundation/project-content.yaml
-# ProjectContent - Localized identity and messaging for Project (v11.0.0)
+# models/node-classes/org/foundation/project-native.yaml
+# ProjectNative - Human-authored native identity for Project (v0.13.0 ADR-029)
 #
 # ═══════════════════════════════════════════════════════════════════════════════
-# v11.0.0 CHANGES (Naming Convention Refactor)
+# v0.13.0 CHANGES (ADR-029 *Native Pattern)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-#   RENAMED: ProjectL10n → ProjectContent
-#   - Clearer semantics: this is CONTENT, not just "localization"
-#   - Consistent with EntityContent pattern (v10.9)
-#   - Arc renamed: BELONGS_TO_PROJECT_L10N → BELONGS_TO_PROJECT_CONTENT
+#   RENAMED: ProjectContent → ProjectNative
+#   - All locale-specific nodes now use *Native suffix
+#   - Trait (authored vs generated) distinguishes who creates content
+#   - Unified arc: HAS_NATIVE replaces HAS_CONTENT
 #
 # GRAPH POSITION:
-#   Project ──[:HAS_CONTENT]──> ProjectContent ──[:FOR_LOCALE]──> Locale
-#                                │
-#                                └──[:CONTENT_OF]──> Project (inverse)
+#   Project ──[:HAS_NATIVE {locale}]──> ProjectNative ──[:FOR_LOCALE]──> Locale
+#                                           │
+#                                           └──[:NATIVE_OF]──> Project (inverse)
 #
 # NOTE: BrandL10n fields (CTAs, meta, SEO keywords) merged here in v7.2.2
 #
 # PURPOSE:
-#   Localized identity and messaging for a Project.
+#   Human-authored native identity and messaging for a Project.
 #   Contains what (descriptions), how (pitches), and voice guidelines.
 #
 # IDENTIFICATION:
 #   No key property - identified by relation chain:
-#   (Project)--[:HAS_CONTENT]-->(ProjectContent)--[:FOR_LOCALE]-->(Locale)
+#   (Project)--[:HAS_NATIVE]-->(ProjectNative)--[:FOR_LOCALE]-->(Locale)
 
 node:
-  name: ProjectContent
+  name: ProjectNative
   realm: org
   layer: foundation
   trait: authored
   icon:
     web: languages
     terminal: "●"
-  description: "Localized identity and messaging for a Project"
+  description: "Human-authored native identity and messaging for a Project"
 
   # ===========================================================================
   # STANDARD PROPERTIES (Content nodes - no key, relation-identified)
@@ -57,10 +57,10 @@ node:
       required: true
       description: "Format: USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections]."
       example: |
-        USE: when loading localized project identity, messaging, or voice guidelines for content generation.
-        TRIGGERS: "project content", "localized project", "project messaging", "voice guidelines", locale code.
-        NOT: for invariant project definition (use Project), for entity content (use EntityContent), for generated pages (use PageGenerated).
-        RELATES: Project (parent via HAS_CONTENT), Locale (target via FOR_LOCALE), PageGenerated (consumer via BELONGS_TO_PROJECT_CONTENT).
+        USE: when loading native project identity, messaging, or voice guidelines for content generation.
+        TRIGGERS: "project native", "project identity", "project messaging", "voice guidelines", locale code.
+        NOT: for invariant project definition (use Project), for entity native (use EntityNative), for page native (use PageNative).
+        RELATES: Project (parent via HAS_NATIVE), Locale (target via FOR_LOCALE), PageNative (consumer via BELONGS_TO_PROJECT_NATIVE).
 
     created_at:
       type: datetime
@@ -71,7 +71,7 @@ node:
       required: true
 
   # ===========================================================================
-  # PROJECTCONTENT-SPECIFIC PROPERTIES
+  # PROJECTNATIVE-SPECIFIC PROPERTIES
   # ===========================================================================
 
   properties:
@@ -243,15 +243,15 @@ node:
   # ===========================================================================
 
   incoming_relations:
-    - relation: HAS_CONTENT
+    HAS_NATIVE:
       from: Project
       cardinality: "1:N"
-      description: "Parent project that owns this localization"
+      description: "Parent project that owns this native content"
 
-    - relation: BELONGS_TO_PROJECT_CONTENT
-      from: PageGenerated
+    BELONGS_TO_PROJECT_NATIVE:
+      from: PageNative
       cardinality: "1:N"
-      description: "PageGenerated nodes generated for this project locale"
+      description: "PageNative nodes generated for this project locale"
 
   # ===========================================================================
   # EXAMPLE
@@ -259,8 +259,8 @@ node:
 
   example:
     display_name: "QR Code AI (fr-FR)"
-    description: "French localization for QR Code AI"
-    llm_context: "USE: for French market messaging. TRIGGERS: fr-FR, french project. NOT: other locales."
+    description: "French native identity for QR Code AI"
+    llm_context: "USE: for French market messaging. TRIGGERS: fr-FR, french project. NOT: other locales. RELATES: Project (via HAS_NATIVE)."
     what_short: "QR Code AI est la plateforme de creation de QR codes personnalises propulsee par l'IA."
     what_medium: "QR Code AI combine intelligence artificielle et design pour creer des QR codes uniques qui refletent votre marque."
     what_long: "QR Code AI est la plateforme leader de creation de QR codes personnalises..."
