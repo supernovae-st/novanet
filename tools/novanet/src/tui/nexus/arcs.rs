@@ -83,7 +83,7 @@ fn arc_family_description(key: &str) -> &str {
             "Hierarchical containment. Parent-child relationships like Page HAS_BLOCK, Org HAS_PAGE."
         }
         "localization" => {
-            "Locale-specific content. Links defined to authored nodes like Entity HAS_CONTENT EntityContent."
+            "Locale-specific content. Links defined to authored nodes like Entity HAS_NATIVE EntityNative."
         }
         "semantic" => {
             "Semantic relationships. Content uses imported atoms like Block USES_TERM, USES_EXPRESSION."
@@ -98,7 +98,7 @@ fn arc_family_description(key: &str) -> &str {
 fn arc_family_examples(key: &str) -> Vec<&'static str> {
     match key {
         "ownership" => vec!["HAS_PAGE", "HAS_BLOCK", "HAS_ENTITY"],
-        "localization" => vec!["HAS_CONTENT", "FOR_LOCALE"],
+        "localization" => vec!["HAS_NATIVE", "FOR_LOCALE"],
         "semantic" => vec!["USES_TERM", "REFERENCES", "USES_EXPRESSION"],
         "generation" => vec!["GENERATES", "PRODUCES"],
         "mining" => vec!["EXTRACTS", "DERIVES"],
@@ -377,7 +377,7 @@ fn render_arc_scope(f: &mut Frame, app: &App, area: Rect) {
             " \u{254c}\u{254c}\u{254c}[\u{21e2}]\u{254c}\u{254c}\u{254c} ",
             Style::default().fg(Color::Magenta),
         ),
-        Span::styled("PageGenerated", Style::default().fg(org_color)),
+        Span::styled("PageNative", Style::default().fg(org_color)),
         Span::styled("  (shared -> org)", Style::default().fg(Color::DarkGray)),
     ]));
 

@@ -65,7 +65,7 @@ views:
     root_type: null
     contextual: false
     cypher: |
-      MATCH (ac:Schema:ArcClass)-[r:BELONGS_TO_FAMILY]->(af:Schema:ArcFamily)
+      MATCH (ac:Schema:ArcClass)-[r:IN_FAMILY]->(af:Schema:ArcFamily)
       RETURN ac, r, af
       LIMIT 200
 

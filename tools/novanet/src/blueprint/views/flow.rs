@@ -35,14 +35,14 @@ fn render_header() -> String {
 }
 
 fn render_ownership_flow() -> String {
-    // v11.3: Organization + Tenant → OrgConfig, ProjectL10n → ProjectContent
+    // v0.13: ADR-029 *Native pattern - unified HAS_NATIVE arc
     "┌──────────────────────────────────────────────────────────────────────────────┐\n\
      │  1. OWNERSHIP FLOW — Who owns what (org hierarchy)                           │\n\
      ├──────────────────────────────────────────────────────────────────────────────┤\n\
      │                                                                              │\n\
      │  OrgConfig                                                                   │\n\
      │    │                                                                         │\n\
-     │    ├──[HAS_PROJECT]──► Project ──[HAS_CONTENT]──► ProjectContent             │\n\
+     │    ├──[HAS_PROJECT]──► Project ──[HAS_NATIVE]──► ProjectNative               │\n\
      │    │                      │                                                  │\n\
      │    │                      ├──[HAS_PAGE]──► Page ──[HAS_BLOCK]──► Block       │\n\
      │    │                      │                                                  │\n\
@@ -58,14 +58,14 @@ fn render_ownership_flow() -> String {
 
 fn render_localization_flow() -> String {
     "┌──────────────────────────────────────────────────────────────────────────────┐\n\
-     │  2. LOCALIZATION FLOW — Invariant → Locale-specific content                  │\n\
+     │  2. LOCALIZATION FLOW — Invariant → Locale-specific content (ADR-029)        │\n\
      ├──────────────────────────────────────────────────────────────────────────────┤\n\
      │                                                                              │\n\
      │  ┌─────────────────────────────────────────────────────────────────────────┐ │\n\
-     │  │ INVARIANT (defined 1×)              LOCALIZED (exists per locale)       │ │\n\
+     │  │ INVARIANT (defined 1×)              *NATIVE (exists per locale)         │ │\n\
      │  ├─────────────────────────────────────────────────────────────────────────┤ │\n\
      │  │                                                                         │ │\n\
-     │  │  Entity ─────[HAS_CONTENT]─────►  EntityContent                         │ │\n\
+     │  │  Entity ─────[HAS_NATIVE]──────►  EntityNative                          │ │\n\
      │  │  (key: \"qr-generator\")            (key: \"entity:qr-generator@fr-FR\")    │ │\n\
      │  │                                   (key: \"entity:qr-generator@de-DE\")    │ │\n\
      │  │                                   (key: \"entity:qr-generator@ja-JP\")    │ │\n\
@@ -109,18 +109,18 @@ fn render_knowledge_flow() -> String {
 }
 
 fn render_generation_flow() -> String {
-    // v11.2: GenerationJob removed, generation now handled by instruction layer
+    // v0.13: ADR-029 *Native pattern - unified naming
     "┌──────────────────────────────────────────────────────────────────────────────┐\n\
-     │  4. GENERATION FLOW — LLM pipeline from content to output                    │\n\
+     │  4. GENERATION FLOW — LLM pipeline from content to output (ADR-029)          │\n\
      ├──────────────────────────────────────────────────────────────────────────────┤\n\
      │                                                                              │\n\
      │         INPUTS                      PROCESS                    OUTPUT        │\n\
      │  ┌─────────────────┐          ┌─────────────────┐       ┌─────────────────┐  │\n\
      │  │                 │          │                 │       │                 │  │\n\
-     │  │ EntityContent   │─────────►│                 │       │ PageGenerated   │  │\n\
+     │  │ EntityNative    │─────────►│                 │       │ PageNative      │  │\n\
      │  │ (semantic)      │          │   LLM Pipeline  │──────►│ ★ generated     │  │\n\
      │  │                 │          │                 │       │                 │  │\n\
-     │  │ Term ◊          │─────────►│                 │       │ BlockGenerated  │  │\n\
+     │  │ Term ◊          │─────────►│                 │       │ BlockNative     │  │\n\
      │  │ Expression ◊    │          │   Uses:         │       │                 │  │\n\
      │  │ Pattern ◊       │─────────►│   - LLM model   │       └─────────────────┘  │\n\
      │  │                 │          │   - Instruction │              │             │\n\
@@ -178,7 +178,7 @@ fn render_cross_realm_flow() -> String {
      │  ╔═══════════════════════════▼═══════════════════════════════════════════╗   │\n\
      │  ║  ORG REALM (read-write)                                               ║   │\n\
      │  ║                                                                       ║   │\n\
-     │  ║  EntityContent ─────────────────► uses shared Terms                   ║   │\n\
+     │  ║  EntityNative ──────────────────► uses shared Terms                   ║   │\n\
      │  ║  (org-specific meaning)           (universal vocabulary)              ║   │\n\
      │  ║                                                                       ║   │\n\
      │  ╚═══════════════════════════════════════════════════════════════════════╝   │\n\

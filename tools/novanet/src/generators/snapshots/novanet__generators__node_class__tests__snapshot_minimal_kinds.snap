@@ -76,37 +76,37 @@ ON MATCH SET
   c_Page.generation_count = 0,
   c_Page.updated_at = datetime();
 
-MERGE (c_PageGenerated:Schema:Class {label: 'PageGenerated'})
+MERGE (c_PageNative:Schema:Class {label: 'PageNative'})
 ON CREATE SET
-  c_PageGenerated.key = 'page-generated',
-  c_PageGenerated.realm = 'org',
-  c_PageGenerated.layer = 'output',
-  c_PageGenerated.trait = 'generated',
-  c_PageGenerated.display_name = 'PageGenerated',
-  c_PageGenerated.llm_context = 'PageGenerated description.',
-  c_PageGenerated.yaml_path = 'node-classes/org/output/pagegenerated.yaml',
-  c_PageGenerated.properties = [],
-  c_PageGenerated.required_properties = [],
-  c_PageGenerated.schema_hint = '',
-  c_PageGenerated.context_budget = 'low',
-  c_PageGenerated.visibility = 'publishable',
-  c_PageGenerated.generation_count = 0,
-  c_PageGenerated.created_at = datetime()
+  c_PageNative.key = 'page-native',
+  c_PageNative.realm = 'org',
+  c_PageNative.layer = 'output',
+  c_PageNative.trait = 'generated',
+  c_PageNative.display_name = 'PageNative',
+  c_PageNative.llm_context = 'PageNative description.',
+  c_PageNative.yaml_path = 'node-classes/org/output/pagenative.yaml',
+  c_PageNative.properties = [],
+  c_PageNative.required_properties = [],
+  c_PageNative.schema_hint = '',
+  c_PageNative.context_budget = 'low',
+  c_PageNative.visibility = 'publishable',
+  c_PageNative.generation_count = 0,
+  c_PageNative.created_at = datetime()
 ON MATCH SET
-  c_PageGenerated.key = 'page-generated',
-  c_PageGenerated.realm = 'org',
-  c_PageGenerated.layer = 'output',
-  c_PageGenerated.trait = 'generated',
-  c_PageGenerated.display_name = 'PageGenerated',
-  c_PageGenerated.llm_context = 'PageGenerated description.',
-  c_PageGenerated.yaml_path = 'node-classes/org/output/pagegenerated.yaml',
-  c_PageGenerated.properties = [],
-  c_PageGenerated.required_properties = [],
-  c_PageGenerated.schema_hint = '',
-  c_PageGenerated.context_budget = 'low',
-  c_PageGenerated.visibility = 'publishable',
-  c_PageGenerated.generation_count = 0,
-  c_PageGenerated.updated_at = datetime();
+  c_PageNative.key = 'page-native',
+  c_PageNative.realm = 'org',
+  c_PageNative.layer = 'output',
+  c_PageNative.trait = 'generated',
+  c_PageNative.display_name = 'PageNative',
+  c_PageNative.llm_context = 'PageNative description.',
+  c_PageNative.yaml_path = 'node-classes/org/output/pagenative.yaml',
+  c_PageNative.properties = [],
+  c_PageNative.required_properties = [],
+  c_PageNative.schema_hint = '',
+  c_PageNative.context_budget = 'low',
+  c_PageNative.visibility = 'publishable',
+  c_PageNative.generation_count = 0,
+  c_PageNative.updated_at = datetime();
 
 MERGE (c_Concept:Schema:Class {label: 'Concept'})
 ON CREATE SET
@@ -150,7 +150,7 @@ MERGE (l)-[:HAS_CLASS]->(c);
 MATCH (l:Layer {key: 'structure'}), (c:Class {label: 'Page'})
 MERGE (l)-[:HAS_CLASS]->(c);
 
-MATCH (l:Layer {key: 'output'}), (c:Class {label: 'PageGenerated'})
+MATCH (l:Layer {key: 'output'}), (c:Class {label: 'PageNative'})
 MERGE (l)-[:HAS_CLASS]->(c);
 
 MATCH (l:Layer {key: 'semantic'}), (c:Class {label: 'Concept'})
@@ -166,7 +166,7 @@ MERGE (c)-[:IN_REALM]->(r);
 MATCH (c:Class {label: 'Page'}), (r:Realm {key: 'org'})
 MERGE (c)-[:IN_REALM]->(r);
 
-MATCH (c:Class {label: 'PageGenerated'}), (r:Realm {key: 'org'})
+MATCH (c:Class {label: 'PageNative'}), (r:Realm {key: 'org'})
 MERGE (c)-[:IN_REALM]->(r);
 
 MATCH (c:Class {label: 'Concept'}), (r:Realm {key: 'org'})
@@ -182,7 +182,7 @@ MERGE (c)-[:IN_LAYER]->(l);
 MATCH (c:Class {label: 'Page'}), (l:Layer {key: 'structure'})
 MERGE (c)-[:IN_LAYER]->(l);
 
-MATCH (c:Class {label: 'PageGenerated'}), (l:Layer {key: 'output'})
+MATCH (c:Class {label: 'PageNative'}), (l:Layer {key: 'output'})
 MERGE (c)-[:IN_LAYER]->(l);
 
 MATCH (c:Class {label: 'Concept'}), (l:Layer {key: 'semantic'})
@@ -198,7 +198,7 @@ MERGE (c)-[:EXHIBITS]->(t);
 MATCH (c:Class {label: 'Page'}), (t:Trait {key: 'defined'})
 MERGE (c)-[:EXHIBITS]->(t);
 
-MATCH (c:Class {label: 'PageGenerated'}), (t:Trait {key: 'generated'})
+MATCH (c:Class {label: 'PageNative'}), (t:Trait {key: 'generated'})
 MERGE (c)-[:EXHIBITS]->(t);
 
 MATCH (c:Class {label: 'Concept'}), (t:Trait {key: 'defined'})

@@ -1,6 +1,6 @@
 //! Tutorial Tab - Guided learning journey for NovaNet.
 //!
-//! v0.12.0: Enhanced visual progress tracking with:
+//! v0.13.0: Enhanced visual progress tracking with:
 //! - Gradient progress bar with percentage
 //! - Step badges with completion status (◯→◉→✓)
 //! - Task completion checkboxes with XP
@@ -11,7 +11,7 @@
 //! 2. Classification - Realm, Layer, Trait
 //! 3. Arcs & Relationships - Family, Scope, Cardinality
 //! 4. Generation Flow - NOT translation
-//! 5. Unified Tree - v0.12.0 navigation
+//! 5. Unified Tree - v0.13.0 navigation
 
 use ratatui::Frame;
 use ratatui::layout::{Constraint, Direction, Layout, Rect};
@@ -103,9 +103,9 @@ pub static STEPS: [TutorialStep; 5] = [
             "",
             "HOW?    Trait  (5 data origins - ADR-024)",
             "  defined   = Human-created once (Entity, Page)",
-            "  authored  = Human-written per locale (EntityContent)",
+            "  authored  = Human-written per locale (EntityNative)",
             "  imported  = External data brought in (Term, Culture)",
-            "  generated = LLM output (PageGenerated)",
+            "  generated = LLM output (PageNative, BlockNative)",
             "  retrieved = Fetched from external APIs (SEOKeywordMetrics)",
         ],
         tasks: &[
@@ -115,11 +115,11 @@ pub static STEPS: [TutorialStep; 5] = [
             },
             TutorialTask {
                 description: "Find a node with trait 'authored' (look for dashed border)",
-                hint: Some("EntityContent in org/semantic has authored trait"),
+                hint: Some("EntityNative in org/semantic has authored trait"),
             },
             TutorialTask {
                 description: "Find a node in org/semantic layer",
-                hint: Some("Entity and EntityContent are in org/semantic"),
+                hint: Some("Entity and EntityNative are in org/semantic"),
             },
         ],
     },
@@ -131,14 +131,14 @@ pub static STEPS: [TutorialStep; 5] = [
         explanation: &[
             "Nodes are connected by ARCS (directed relationships).",
             "",
-            "The main pattern:",
-            "  Entity (defined) --HAS_CONTENT--> EntityContent (authored)",
+            "The main pattern (v0.13.0 ADR-029):",
+            "  Entity (defined) --HAS_NATIVE--> EntityNative (authored)",
             "",
             "ARC FAMILIES group relationships by function:",
-            "  ownership     - Parent owns child (HAS_CONTENT, HAS_BLOCK)",
+            "  ownership     - Parent owns child (HAS_NATIVE, HAS_BLOCK)",
             "  localization  - Links to locale (FOR_LOCALE)",
             "  semantic      - Meaning connections (SEMANTIC_LINK)",
-            "  generation    - LLM pipeline (HAS_GENERATED)",
+            "  generation    - LLM pipeline (GENERATED, ASSEMBLES)",
             "  mining        - SEO/GEO intelligence (HAS_KEYWORD)",
             "",
             "ARC SCOPE indicates realm crossing:",
@@ -152,7 +152,7 @@ pub static STEPS: [TutorialStep; 5] = [
             },
             TutorialTask {
                 description: "Look at Entity's outgoing arcs",
-                hint: Some("HAS_CONTENT goes to EntityContent"),
+                hint: Some("HAS_NATIVE goes to EntityNative"),
             },
             TutorialTask {
                 description: "Find a cross_realm arc (org -> shared)",
@@ -173,7 +173,7 @@ pub static STEPS: [TutorialStep; 5] = [
             "RIGHT approach (native generation):",
             "  Entity (defined, created once)",
             "    + Knowledge (fr-FR: Terms, Culture, Style)",
-            "    -> EntityContent@fr-FR (authored natively)",
+            "    -> EntityNative@fr-FR (authored natively)",
             "",
             "The pipeline:",
             "  1. Knowledge - Load locale expertise (Terms, Culture)",
@@ -181,7 +181,7 @@ pub static STEPS: [TutorialStep; 5] = [
             "  3. Structure - Page/Block layout",
             "  4. Instructions - Prompts and constraints",
             "  5. Generation - LLM produces native content",
-            "  6. Output - PageGenerated, BlockGenerated",
+            "  6. Output - PageNative, BlockNative (v0.13.0)",
         ],
         tasks: &[
             TutorialTask {
@@ -218,9 +218,9 @@ pub static STEPS: [TutorialStep; 5] = [
             "          Locale:ja-JP",
             "          ...",
             "",
-            "  Arcs (156)",
+            "  Arcs (169)",
             "    ArcFamily:ownership (clickable!)",
-            "      ArcClass:HAS_CONTENT (clickable!)",
+            "      ArcClass:HAS_NATIVE (clickable!)",
             "",
             "Navigation modes:",
             "  [1] Graph - Unified tree (you are here normally)",
@@ -415,7 +415,7 @@ pub fn render_tutorial_tab(f: &mut Frame, app: &App, area: Rect) {
     render_navigation(f, tutorial, locale, chunks[2]);
 }
 
-/// v0.12.0 Enhanced progress bar with visual badges and XP system.
+/// v0.13.0 Enhanced progress bar with visual badges and XP system.
 fn render_progress_bar(f: &mut Frame, tutorial: &TutorialState, locale: NexusLocale, area: Rect) {
     let progress = tutorial.progress_percent();
     let step = tutorial.current_step + 1;
@@ -537,7 +537,7 @@ fn render_progress_bar(f: &mut Frame, tutorial: &TutorialState, locale: NexusLoc
     f.render_widget(paragraph, area);
 }
 
-/// Calculate XP based on completed tasks (v0.12.0).
+/// Calculate XP based on completed tasks (v0.13.0).
 fn calculate_xp(tutorial: &TutorialState) -> usize {
     let mut xp = 0;
     for (step_idx, tasks) in tutorial.tasks_completed.iter().enumerate() {

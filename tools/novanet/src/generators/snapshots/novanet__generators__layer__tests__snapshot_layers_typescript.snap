@@ -53,7 +53,7 @@ export const NODE_LAYERS: Record<NodeType, Layer> = {
   BlockInstruction: 'instruction',
 
   // output (1 node) - matches models/node-classes/org/output/
-  PageGenerated: 'output',
+  PageNative: 'output',
 
   // semantic (1 node) - matches models/node-classes/org/semantic/
   Entity: 'semantic',

@@ -15,7 +15,7 @@
 //! 1. DEFINED - Structural templates (Page, Entity, Block)
 //! 2. CONTEXT_LOAD - Knowledge atoms loaded into LLM context
 //! 3. LLM_GENERATE - LLM generation process
-//! 4. AUTHORED - Output generated content (PageGenerated, EntityContent, BlockGenerated)
+//! 4. AUTHORED - Output generated content (PageNative, EntityNative, BlockNative)
 //! 5. COMPLETE - Generation complete
 
 use ratatui::Frame;
