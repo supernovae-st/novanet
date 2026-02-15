@@ -177,7 +177,7 @@ fn render_traits(data: &BlueprintData) -> String {
             NodeTrait::Authored,
             "authored",
             "Native content per locale",
-            "EntityContent, ProjectContent",
+            "EntityNative, ProjectNative",
         ),
         (
             NodeTrait::Imported,
@@ -189,7 +189,7 @@ fn render_traits(data: &BlueprintData) -> String {
             NodeTrait::Generated,
             "generated",
             "LLM-generated output",
-            "PageGenerated, BlockGenerated",
+            "PageNative, BlockNative",
         ),
         (
             NodeTrait::Retrieved,
@@ -224,14 +224,14 @@ fn render_traits(data: &BlueprintData) -> String {
 
 fn render_core_flow() -> String {
     "┌──────────────────────────────────────────────────────────────────────────────┐\n\
-     │  CORE FLOW                                                                   │\n\
+     │  CORE FLOW (v0.13 ADR-029 *Native Pattern)                                   │\n\
      │                                                                              │\n\
-     │  Entity ────[HAS_CONTENT]────► EntityContent ────[USES_TERM]────► Term       │\n\
+     │  Entity ────[HAS_NATIVE]────► EntityNative ────[USES_TERM]────► Term         │\n\
      │     │                               │                                        │\n\
      │     │                               ▼                                        │\n\
      │     │                         (LLM generation)                               │\n\
      │     │                               │                                        │\n\
-     │     └────[HAS_GENERATED]────► PageGenerated ◄────[GENERATED_FOR]──── Page    │\n\
+     │     └────[HAS_NATIVE]─────► PageNative ◄────[NATIVE_OF]───────── Page        │\n\
      │                                                                              │\n\
      └──────────────────────────────────────────────────────────────────────────────┘"
         .to_string()
@@ -250,9 +250,9 @@ fn render_arc_families(data: &BlueprintData) -> String {
 
     let family_info = [
         ("ownership", "Parent-child hierarchy (HAS_PAGE, HAS_BLOCK)"),
-        ("localization", "Defined↔authored links (HAS_CONTENT)"),
+        ("localization", "Defined↔authored links (HAS_NATIVE)"),
         ("semantic", "Meaning connections (USES_ENTITY)"),
-        ("generation", "LLM pipeline (HAS_GENERATED)"),
+        ("generation", "LLM pipeline (HAS_NATIVE)"),
         ("mining", "Knowledge extraction (EXTRACTS_TERM)"),
     ];
 

@@ -74,7 +74,7 @@ ON CREATE SET
   ac_FOR_LOCALE.is_self_referential = false,
   ac_FOR_LOCALE.inverse_name = null,
   ac_FOR_LOCALE.arc_properties = [],
-  ac_FOR_LOCALE.cypher_pattern = '(PageGenerated)-[:FOR_LOCALE]->(Locale)',
+  ac_FOR_LOCALE.cypher_pattern = '(PageNative)-[:FOR_LOCALE]->(Locale)',
   ac_FOR_LOCALE.temperature_threshold = null,
   ac_FOR_LOCALE.created_at = datetime()
 ON MATCH SET
@@ -86,7 +86,7 @@ ON MATCH SET
   ac_FOR_LOCALE.is_self_referential = false,
   ac_FOR_LOCALE.inverse_name = null,
   ac_FOR_LOCALE.arc_properties = [],
-  ac_FOR_LOCALE.cypher_pattern = '(PageGenerated)-[:FOR_LOCALE]->(Locale)',
+  ac_FOR_LOCALE.cypher_pattern = '(PageNative)-[:FOR_LOCALE]->(Locale)',
   ac_FOR_LOCALE.temperature_threshold = null,
   ac_FOR_LOCALE.updated_at = datetime();
 
@@ -126,7 +126,7 @@ MERGE (ac)-[:FROM_CLASS]->(c);
 MATCH (ac:ArcClass {key: 'USES_ENTITY'}), (c:Class {label: 'Page'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
-MATCH (ac:ArcClass {key: 'FOR_LOCALE'}), (c:Class {label: 'PageGenerated'})
+MATCH (ac:ArcClass {key: 'FOR_LOCALE'}), (c:Class {label: 'PageNative'})
 MERGE (ac)-[:FROM_CLASS]->(c);
 
 // ═══════════════════════════════════════════════════════════════════════════════

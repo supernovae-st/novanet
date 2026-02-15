@@ -541,7 +541,7 @@ fn render_page_3_classification(f: &mut Frame, theme: &Theme, locale: NexusLocal
                 Style::default().fg(theme.realm_color("org")),
             ),
             Span::styled(
-                " → Entity, EntityContent         ",
+                " → Entity, EntityNative          ",
                 Style::default().fg(Color::DarkGray),
             ),
             Span::styled("(your content)", Style::default().fg(Color::DarkGray)),
@@ -564,7 +564,7 @@ fn render_page_3_classification(f: &mut Frame, theme: &Theme, locale: NexusLocal
             Span::styled("  │  ", Style::default().fg(Color::Blue)),
             Span::styled("org/output", Style::default().fg(theme.realm_color("org"))),
             Span::styled(
-                " → PageGenerated, BlockGenerated ",
+                " → PageNative, BlockNative       ",
                 Style::default().fg(Color::DarkGray),
             ),
             Span::styled("(LLM output)", Style::default().fg(Color::DarkGray)),
@@ -598,7 +598,7 @@ fn render_page_3_classification(f: &mut Frame, theme: &Theme, locale: NexusLocal
             Span::styled("□", Style::default().fg(theme.trait_color("authored"))),
             Span::styled(" authored    ", Style::default().fg(Color::White)),
             Span::styled(
-                "Generated per locale EntityContent@fr-FR",
+                "Generated per locale EntityNative@fr-FR",
                 Style::default().fg(Color::DarkGray),
             ),
             Span::styled(
@@ -624,11 +624,11 @@ fn render_page_3_classification(f: &mut Frame, theme: &Theme, locale: NexusLocal
             Span::styled("★", Style::default().fg(theme.trait_color("generated"))),
             Span::styled(" generated   ", Style::default().fg(Color::White)),
             Span::styled(
-                "LLM output           PageGenerated",
+                "LLM output           PageNative",
                 Style::default().fg(Color::DarkGray),
             ),
             Span::styled(
-                "                     │",
+                "                        │",
                 Style::default().fg(theme.trait_color("defined")),
             ),
         ]),

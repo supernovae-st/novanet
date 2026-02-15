@@ -1,6 +1,6 @@
 //! Quiz mode for Nexus - Interactive learning about NovaNet taxonomy.
 //!
-//! v0.12.0 Enhanced Quiz with:
+//! v0.13.0 Enhanced Quiz with:
 //! - 5 question categories: Realms, Layers, Traits, Arcs, Generation
 //! - Category badges with color-coded progress
 //! - Visual category indicators in question display
@@ -17,7 +17,7 @@ use ratatui::widgets::{Block, Borders, Paragraph, Wrap};
 use super::NexusLocale;
 use crate::tui::app::App;
 
-/// Question categories aligned with NovaNet classification (v0.12.0).
+/// Question categories aligned with NovaNet classification (v0.13.0).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum QuizCategory {
     /// Questions about shared/org realms.
@@ -33,7 +33,7 @@ pub enum QuizCategory {
 }
 
 impl QuizCategory {
-    /// Get category icon (v0.12.0).
+    /// Get category icon (v0.13.0).
     pub fn icon(&self) -> &'static str {
         match self {
             QuizCategory::Realms => "◉",
@@ -44,7 +44,7 @@ impl QuizCategory {
         }
     }
 
-    /// Get category color (v0.12.0).
+    /// Get category color (v0.13.0).
     pub fn color(&self) -> Color {
         match self {
             QuizCategory::Realms => Color::Cyan,
@@ -134,7 +134,7 @@ pub struct QuizQuestion {
     pub correct: usize,
     /// Explanation shown after answering.
     pub explanation: &'static str,
-    /// Category for grouping and badges (v0.12.0).
+    /// Category for grouping and badges (v0.13.0).
     pub category: QuizCategory,
     /// Question type: MultipleChoice (default) or TrueFalse.
     pub question_type: QuizQuestionType,
@@ -165,11 +165,11 @@ pub struct QuizState {
     pub complete: bool,
     /// High score (persisted across sessions).
     pub high_score: Option<usize>,
-    /// Track correct/incorrect per question for category breakdown (v0.12.0).
+    /// Track correct/incorrect per question for category breakdown (v0.13.0).
     /// Index matches QUESTIONS, true = correct, false = incorrect.
     pub answers: Vec<bool>,
     // ═══════════════════════════════════════════════════════════════════════════
-    // REVIEW MODE (v0.12.0) - Review wrong answers after quiz completion
+    // REVIEW MODE (v0.13.0) - Review wrong answers after quiz completion
     // ═══════════════════════════════════════════════════════════════════════════
     /// Whether we're in review mode (reviewing wrong answers).
     pub review_mode: bool,
@@ -218,13 +218,13 @@ impl QuizState {
             if is_correct {
                 self.score += 1;
             }
-            // Track answer for category breakdown (v0.12.0)
+            // Track answer for category breakdown (v0.13.0)
             self.answers.push(is_correct);
             self.answered = true;
         }
     }
 
-    /// Calculate score per category (v0.12.0).
+    /// Calculate score per category (v0.13.0).
     /// Returns (correct, total) for each category.
     pub fn category_scores(&self, questions: &[QuizQuestion]) -> Vec<(QuizCategory, usize, usize)> {
         let mut scores: Vec<(QuizCategory, usize, usize)> = Vec::new();
@@ -252,7 +252,7 @@ impl QuizState {
         scores
     }
 
-    /// Get badge emoji for category performance (v0.12.0).
+    /// Get badge emoji for category performance (v0.13.0).
     pub fn category_badge(correct: usize, total: usize) -> &'static str {
         if total == 0 {
             return "○";
@@ -293,7 +293,7 @@ impl QuizState {
     }
 
     // ═══════════════════════════════════════════════════════════════════════════
-    // REVIEW MODE (v0.12.0) - Review wrong answers for reinforced learning
+    // REVIEW MODE (v0.13.0) - Review wrong answers for reinforced learning
     // ═══════════════════════════════════════════════════════════════════════════
 
     /// Get indices of questions answered incorrectly.
@@ -311,7 +311,7 @@ impl QuizState {
         self.answers.iter().any(|&correct| !correct)
     }
 
-    /// Enter review mode (v0.12.0).
+    /// Enter review mode (v0.13.0).
     pub fn enter_review_mode(&mut self) {
         if self.complete && self.has_wrong_answers() {
             self.review_mode = true;
@@ -359,7 +359,7 @@ impl QuizState {
 }
 
 /// All quiz questions about NovaNet taxonomy.
-/// v0.12.0: 36 questions (30 multiple choice + 6 True/False) across 5 categories.
+/// v0.13.0: 36 questions (30 multiple choice + 6 True/False) across 5 categories.
 pub const QUESTIONS: &[QuizQuestion] = &[
     // ═══════════════════════════════════════════════════════════════════════════
     // REALMS (6 questions)
@@ -445,18 +445,18 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
-        question: "Which layer contains Entity and EntityContent?",
+        question: "Which layer contains Entity and EntityNative?",
         options: ["structure", "semantic", "foundation", "output"],
         correct: 1,
-        explanation: "Entity and EntityContent live in the semantic layer - they represent meaning and knowledge.",
+        explanation: "Entity and EntityNative live in the semantic layer - they represent meaning and knowledge.",
         category: QuizCategory::Layers,
         question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
-        question: "PageGenerated and BlockGenerated live in which layer?",
+        question: "PageNative and BlockNative live in which layer?",
         options: ["semantic", "structure", "instruction", "output"],
         correct: 3,
-        explanation: "Generated nodes (PageGenerated, BlockGenerated, OutputArtifact) live in the output layer.",
+        explanation: "Native output nodes (PageNative, BlockNative, OutputArtifact) live in the output layer.",
         category: QuizCategory::Layers,
         question_type: QuizQuestionType::MultipleChoice,
     },
@@ -483,7 +483,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         question: "Which trait indicates LLM-generated output?",
         options: ["authored", "imported", "generated", "retrieved"],
         correct: 2,
-        explanation: "'generated' = AI/LLM produces the content. PageGenerated and BlockGenerated contain the natively generated locale content. Think: 'LLM wrote this'.",
+        explanation: "'generated' = AI/LLM produces the content. PageNative and BlockNative contain the natively generated locale content. Think: 'LLM wrote this'.",
         category: QuizCategory::Traits,
         question_type: QuizQuestionType::MultipleChoice,
     },
@@ -507,7 +507,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         question: "Which trait is for human-written locale content?",
         options: ["defined", "authored", "imported", "generated"],
         correct: 1,
-        explanation: "'authored' = human writes per-locale. EntityContent (fr-FR, de-DE, etc.) is authored because a human writes each locale's content. Think: 'A person wrote this in this language'.",
+        explanation: "'authored' = human writes per-locale. EntityNative (fr-FR, de-DE, etc.) is authored because a human writes each locale's content. Think: 'A person wrote this in this language'.",
         category: QuizCategory::Traits,
         question_type: QuizQuestionType::MultipleChoice,
     },
@@ -541,21 +541,21 @@ pub const QUESTIONS: &[QuizQuestion] = &[
     QuizQuestion {
         question: "What node stores localized entity content?",
         options: [
-            "EntityContent",
+            "EntityNative",
             "EntityGenerated",
             "EntityOutput",
             "EntityData",
         ],
         correct: 0,
-        explanation: "EntityContent stores locale-specific authored content for Entities (semantic layer, 'authored' trait).",
+        explanation: "EntityNative stores locale-specific authored content for Entities (semantic layer, 'authored' trait). v0.13.0: renamed from EntityContent.",
         category: QuizCategory::Arcs,
         question_type: QuizQuestionType::MultipleChoice,
     },
     QuizQuestion {
-        question: "HAS_CONTENT arc connects Entity to what?",
-        options: ["Page", "Block", "EntityContent", "Locale"],
+        question: "HAS_NATIVE arc connects Entity to what?",
+        options: ["Page", "Block", "EntityNative", "Locale"],
         correct: 2,
-        explanation: "HAS_CONTENT: Entity → EntityContent (ownership family, localization purpose).",
+        explanation: "HAS_NATIVE: Entity → EntityNative (ownership family, localization purpose). v0.13.0: unified from HAS_CONTENT + HAS_GENERATED.",
         category: QuizCategory::Arcs,
         question_type: QuizQuestionType::MultipleChoice,
     },
@@ -563,7 +563,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         question: "Which arc family is for Page-Block relationships?",
         options: ["localization", "semantic", "ownership", "generation"],
         correct: 2,
-        explanation: "Ownership family includes HAS_BLOCK, HAS_PAGE, HAS_CONTENT - parent-child relationships.",
+        explanation: "Ownership family includes HAS_BLOCK, HAS_PAGE, HAS_NATIVE - parent-child relationships.",
         category: QuizCategory::Arcs,
         question_type: QuizQuestionType::MultipleChoice,
     },
@@ -588,9 +588,9 @@ pub const QUESTIONS: &[QuizQuestion] = &[
     },
     QuizQuestion {
         question: "What node stores generated page output?",
-        options: ["PageContent", "PageGenerated", "PageOutput", "PageLocal"],
+        options: ["PageContent", "PageNative", "PageOutput", "PageLocal"],
         correct: 1,
-        explanation: "PageGenerated stores LLM-generated page content (output layer, 'generated' trait).",
+        explanation: "PageNative stores LLM-generated page content (output layer, 'generated' trait). v0.13.0: renamed from PageGenerated.",
         category: QuizCategory::Generation,
         question_type: QuizQuestionType::MultipleChoice,
     },
@@ -664,7 +664,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         question: "Entity nodes have the 'defined' trait (same across all locales).",
         options: ["True", "False", "", ""],
         correct: 0, // True
-        explanation: "Entity nodes have the 'defined' trait - they're written once and stay the same across all locales. The locale-specific content goes in EntityContent nodes (which have 'authored' trait).",
+        explanation: "Entity nodes have the 'defined' trait - they're written once and stay the same across all locales. The locale-specific content goes in EntityNative nodes (which have 'authored' trait).",
         category: QuizCategory::Traits,
         question_type: QuizQuestionType::TrueFalse,
     },
@@ -677,10 +677,10 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         question_type: QuizQuestionType::TrueFalse,
     },
     QuizQuestion {
-        question: "HAS_CONTENT is part of the 'generation' arc family.",
+        question: "HAS_NATIVE is part of the 'generation' arc family.",
         options: ["True", "False", "", ""],
         correct: 1, // False
-        explanation: "HAS_CONTENT is in the 'localization' family. HAS_GENERATED is in the 'generation' family.",
+        explanation: "HAS_NATIVE is in the 'ownership' family. v0.13.0: HAS_NATIVE unified HAS_CONTENT + HAS_GENERATED.",
         category: QuizCategory::Arcs,
         question_type: QuizQuestionType::TrueFalse,
     },

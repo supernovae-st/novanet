@@ -215,7 +215,7 @@ pub fn render(data: &BlueprintData) -> String {
         "│  ❌ WRONG:  Source → Translate → Target                                      │\n",
     );
     out.push_str(
-        "│  ✓ RIGHT:  Entity (defined) → Generate natively → EntityContent (authored)    │\n",
+        "│  ✓ RIGHT:  Entity (defined) → Generate natively → EntityNative (authored)      │\n",
     );
     out.push_str(
         "│                                                                              │\n",

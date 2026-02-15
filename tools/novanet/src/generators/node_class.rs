@@ -84,8 +84,9 @@ fn derive_visibility(realm: &str, layer: &str, kind_name: &str) -> &'static str 
         // v0.12.5: PageStructure deleted (ADR-028)
         "Page" | "Block" | "BlockType" => return "fragment",
         // Generated and content nodes are publishable
-        "PageGenerated" | "BlockGenerated" => return "publishable",
-        "Entity" | "EntityContent" => return "publishable",
+        // v0.13.0 ADR-029: PageGenerated→PageNative, BlockGenerated→BlockNative, EntityContent→EntityNative
+        "PageNative" | "BlockNative" => return "publishable",
+        "Entity" | "EntityNative" => return "publishable",
         // SEO/GEO data is publishable (v11.4: GEOMetrics removed)
         "GEOQuery" | "GEOAnswer" | "SEOKeyword" | "SEOKeywordMetrics" => return "publishable",
         _ => {}
@@ -418,9 +419,10 @@ mod tests {
             context_budget(&make_node("Metrics", "org", "seo", NodeTrait::Retrieved)),
             "minimal"
         );
+        // v0.13.0 ADR-029: PageGenerated→PageNative
         assert_eq!(
             context_budget(&make_node(
-                "PageGenerated",
+                "PageNative",
                 "org",
                 "output",
                 NodeTrait::Generated
@@ -462,9 +464,10 @@ mod tests {
             "high"
         );
         // output layer + generated → low (v11.2: generated trait takes precedence)
+        // v0.13.0 ADR-029: PageGenerated→PageNative
         assert_eq!(
             context_budget(&make_node(
-                "PageGenerated",
+                "PageNative",
                 "org",
                 "output",
                 NodeTrait::Generated
@@ -493,10 +496,12 @@ mod tests {
     }
 
     #[test]
-    fn to_kebab_case_content_generated() {
-        assert_eq!(to_kebab_case("EntityContent"), "entity-content");
-        assert_eq!(to_kebab_case("PageGenerated"), "page-generated");
-        assert_eq!(to_kebab_case("BlockGenerated"), "block-generated");
+    fn to_kebab_case_native() {
+        // v0.13.0 ADR-029: *Content/*Generated → *Native
+        assert_eq!(to_kebab_case("EntityNative"), "entity-native");
+        assert_eq!(to_kebab_case("PageNative"), "page-native");
+        assert_eq!(to_kebab_case("BlockNative"), "block-native");
+        assert_eq!(to_kebab_case("ProjectNative"), "project-native");
     }
 
     #[test]
@@ -673,7 +678,7 @@ mod tests {
                     ("slug", "string", false),
                 ],
             ),
-            make_node("PageGenerated", "org", "output", NodeTrait::Generated),
+            make_node("PageNative", "org", "output", NodeTrait::Generated),
             make_node("Concept", "org", "semantic", NodeTrait::Defined),
         ];
 
@@ -690,20 +695,22 @@ mod tests {
         // Kind-name overrides take precedence
         assert_eq!(derive_visibility("org", "structure", "Page"), "fragment");
         assert_eq!(derive_visibility("org", "structure", "Block"), "fragment");
+        // v0.13.0 ADR-029: PageGenerated→PageNative, BlockGenerated→BlockNative
         assert_eq!(
-            derive_visibility("org", "output", "PageGenerated"),
+            derive_visibility("org", "output", "PageNative"),
             "publishable"
         );
         assert_eq!(
-            derive_visibility("org", "output", "BlockGenerated"),
+            derive_visibility("org", "output", "BlockNative"),
             "publishable"
         );
         assert_eq!(
             derive_visibility("org", "semantic", "Entity"),
             "publishable"
         );
+        // v0.13.0 ADR-029: EntityContent→EntityNative
         assert_eq!(
-            derive_visibility("org", "semantic", "EntityContent"),
+            derive_visibility("org", "semantic", "EntityNative"),
             "publishable"
         );
         // v11.4: SEO/GEO nodes in shared/knowledge but still publishable (kind-name override)

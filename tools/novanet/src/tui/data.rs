@@ -362,10 +362,10 @@ pub fn get_architecture_diagram(class_name: &str) -> Option<ArchitectureDiagram>
                 "│ Page ══[:REPRESENTS]══▶    │".to_string(),
                 "│   │      (1:1)      Entity │".to_string(),
                 "│   │                   │    │".to_string(),
-                "│   │[:HAS_BLOCK]       │[:HAS_CONTENT]".to_string(),
+                "│   │[:HAS_BLOCK]       │[:HAS_NATIVE]".to_string(),
                 "│   │  {order}          │    │".to_string(),
                 "│   ▼                   ▼    │".to_string(),
-                "│ Block          EntityContent".to_string(),
+                "│ Block          EntityNative".to_string(),
                 "│   │                        │".to_string(),
                 "│   └──[:USES_ENTITY]──▶     │".to_string(),
                 "│              Entity        │".to_string(),
@@ -385,9 +385,9 @@ pub fn get_architecture_diagram(class_name: &str) -> Option<ArchitectureDiagram>
                 "│ Entity ──[:BELONGS_TO]──▶  │".to_string(),
                 "│   │         EntityCategory │".to_string(),
                 "│   │                        │".to_string(),
-                "│   │[:HAS_CONTENT]          │".to_string(),
+                "│   │[:HAS_NATIVE]           │".to_string(),
                 "│   ▼                        │".to_string(),
-                "│ EntityContent              │".to_string(),
+                "│ EntityNative               │".to_string(),
                 "│   │                        │".to_string(),
                 "│   │[:FOR_LOCALE]           │".to_string(),
                 "│   ▼                        │".to_string(),
@@ -464,7 +464,7 @@ pub fn get_architecture_diagram(class_name: &str) -> Option<ArchitectureDiagram>
                 "│   │         TermSet        │".to_string(),
                 "│   │                        │".to_string(),
                 "│   └──[:FOR_LOCALE]◀──      │".to_string(),
-                "│          EntityContent     │".to_string(),
+                "│          EntityNative      │".to_string(),
                 "└────────────────────────────┘".to_string(),
             ],
         }),
@@ -487,8 +487,8 @@ pub fn get_architecture_diagram(class_name: &str) -> Option<ArchitectureDiagram>
                 "│   │──[:HAS_BRAND]──▶       │".to_string(),
                 "│   │              Brand     │".to_string(),
                 "│   │                        │".to_string(),
-                "│   └──[:HAS_CONTENT]──▶     │".to_string(),
-                "│          ProjectContent    │".to_string(),
+                "│   └──[:HAS_NATIVE]──▶      │".to_string(),
+                "│          ProjectNative     │".to_string(),
                 "└────────────────────────────┘".to_string(),
             ],
         }),
@@ -507,15 +507,15 @@ pub fn get_all_adrs() -> Vec<AdrEntry> {
             status: "Approved".to_string(),
             category: AdrCategory::CorePrinciples,
             summary: vec![
-                "Entity → Generate natively → EntityContent".to_string(),
+                "Entity → Generate natively → EntityNative".to_string(),
                 "NOT: Source → Translate → Target".to_string(),
             ],
-            diagram: vec!["Entity (defined) ──▶ Generate ──▶ EntityContent (authored)".to_string()],
+            diagram: vec!["Entity (defined) ──▶ Generate ──▶ EntityNative (authored)".to_string()],
             key_rules: vec![
                 "Content is generated natively per locale".to_string(),
                 "Translation loses cultural nuance".to_string(),
             ],
-            related_classes: vec!["Entity".to_string(), "EntityContent".to_string()],
+            related_classes: vec!["Entity".to_string(), "EntityNative".to_string()],
         },
         AdrEntry {
             id: "ADR-003".to_string(),
@@ -563,9 +563,9 @@ pub fn get_all_adrs() -> Vec<AdrEntry> {
             diagram: vec![
                 "Page ──[:REPRESENTS]──▶ Entity (1:1 mandatory)".to_string(),
                 "  │                        │".to_string(),
-                "  │[:HAS_BLOCK {order}]    │[:HAS_CONTENT]".to_string(),
+                "  │[:HAS_BLOCK {order}]    │[:HAS_NATIVE]".to_string(),
                 "  ▼                        ▼".to_string(),
-                "Block                 EntityContent@locale".to_string(),
+                "Block                 EntityNative@locale".to_string(),
             ],
             key_rules: vec![
                 "Every Page MUST have exactly one Entity".to_string(),
@@ -681,20 +681,20 @@ pub fn get_all_adrs() -> Vec<AdrEntry> {
             status: "Approved".to_string(),
             category: AdrCategory::ArcPolicies,
             summary: vec![
-                "GENERATED vs HAS_GENERATED".to_string(),
-                // v0.12.5: PageInstruction deleted (ADR-028)
-                "Pipeline: BlockInstruction → Prompt → Generated".to_string(),
+                "GENERATED vs HAS_NATIVE".to_string(),
+                // v0.13 ADR-029: Unified *Native pattern
+                "Pipeline: BlockInstruction → Prompt → *Native".to_string(),
             ],
             diagram: vec![
-                // v0.12.5: PageInstruction deleted, BlockInstruction is the entry point
+                // v0.13 ADR-029: *Native pattern, unified HAS_NATIVE arc
                 "BlockInstruction ──[:HAS_ARTIFACT]──▶ PromptArtifact".to_string(),
-                "BlockInstruction ──[:GENERATED]──▶ BlockGenerated".to_string(),
+                "BlockInstruction ──[:GENERATED]──▶ BlockNative".to_string(),
             ],
             key_rules: vec![
                 "GENERATED = provenance (what made this?)".to_string(),
-                "HAS_GENERATED = ownership (what's the output?)".to_string(),
+                "HAS_NATIVE = ownership (what's the output?)".to_string(),
             ],
-            related_classes: vec!["PageGenerated".to_string(), "BlockGenerated".to_string()],
+            related_classes: vec!["PageNative".to_string(), "BlockNative".to_string()],
         },
     ]
 }

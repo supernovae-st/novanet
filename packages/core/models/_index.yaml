@@ -181,6 +181,7 @@ files:
       - node-classes/shared/geography/continent.yaml
       - node-classes/shared/geography/geo-region.yaml
       - node-classes/shared/geography/geo-sub-region.yaml
+      - node-classes/shared/geography/country.yaml
       - node-classes/shared/geography/economic-region.yaml
       - node-classes/shared/geography/income-group.yaml
       - node-classes/shared/geography/lending-category.yaml

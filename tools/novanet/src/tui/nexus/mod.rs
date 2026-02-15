@@ -65,7 +65,7 @@ pub use tutorial::TutorialState;
 pub const TIPS: &[&str] = &[
     "Imported is INPUT (savoir) - Authored is OUTPUT (generated)",
     "Layers define WHAT a node does, Traits define HOW it behaves with locale",
-    "Content/Generated nodes have defined parents (Entity→EntityContent, Page→PageGenerated)",
+    "Native nodes have defined parents (Entity→EntityNative, Page→PageNative)",
     "Generation, NOT translation: Imported + Structure -> Native content",
     "Shared realm is READ-ONLY - all business content lives in Org",
     "Quick jump: gd=defined, ga=authored, gi=imported, gg=generated, gr=retrieved",

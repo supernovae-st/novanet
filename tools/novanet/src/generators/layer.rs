@@ -465,7 +465,7 @@ mod tests {
             make_node("Block", "org", "structure"),
             // v0.12.5: PageInstruction deleted, use BlockInstruction instead
             make_node("BlockInstruction", "org", "instruction"),
-            make_node("PageGenerated", "org", "output"),
+            make_node("PageNative", "org", "output"),
         ];
 
         let output = render_layers(&nodes).unwrap();
