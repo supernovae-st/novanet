@@ -505,7 +505,7 @@ export const RELATIONSHIP_VISUAL_CATEGORIES: RelationshipCategoryConfig[] = [
   {
     id: 'ownership',
     label: 'Ownership',
-    icon: '📦',
+    icon: 'package',
     color: '#3b82f6',  // blue-500 (from taxonomy.yaml arc_families.ownership)
     colorLight: '#60a5fa',  // blue-400
     relationTypes: getRelationTypesByCategory('ownership'),
@@ -513,7 +513,7 @@ export const RELATIONSHIP_VISUAL_CATEGORIES: RelationshipCategoryConfig[] = [
   {
     id: 'localization',
     label: 'Localization',
-    icon: '🌍',
+    icon: 'globe',
     color: '#22c55e',  // green-500 (from taxonomy.yaml arc_families.localization)
     colorLight: '#4ade80',  // green-400
     relationTypes: getRelationTypesByCategory('localization'),
@@ -521,7 +521,7 @@ export const RELATIONSHIP_VISUAL_CATEGORIES: RelationshipCategoryConfig[] = [
   {
     id: 'knowledge',
     label: 'Knowledge',
-    icon: '📚',
+    icon: 'book-open',
     color: '#8b5cf6',  // violet-500 (matches LAYER_COLORS.knowledge)
     colorLight: '#a78bfa',  // violet-400
     relationTypes: getRelationTypesByCategory('knowledge'),
@@ -529,7 +529,7 @@ export const RELATIONSHIP_VISUAL_CATEGORIES: RelationshipCategoryConfig[] = [
   {
     id: 'semantic',
     label: 'Semantic',
-    icon: '💡',
+    icon: 'lightbulb',
     color: '#f97316',  // orange-500 (from taxonomy.yaml arc_families.semantic)
     colorLight: '#fb923c',  // orange-400
     relationTypes: getRelationTypesByCategory('semantic'),
@@ -537,7 +537,7 @@ export const RELATIONSHIP_VISUAL_CATEGORIES: RelationshipCategoryConfig[] = [
   {
     id: 'structure',
     label: 'Structure',
-    icon: '🏗️',
+    icon: 'layout-grid',
     color: '#06b6d4',  // cyan-500 (matches LAYER_COLORS.structure)
     colorLight: '#22d3ee',  // cyan-400
     relationTypes: getRelationTypesByCategory('structure'),
@@ -545,7 +545,7 @@ export const RELATIONSHIP_VISUAL_CATEGORIES: RelationshipCategoryConfig[] = [
   {
     id: 'generation',
     label: 'Generation',
-    icon: '🤖',
+    icon: 'bot',
     color: '#8b5cf6',  // violet-500 (from taxonomy.yaml arc_families.generation)
     colorLight: '#a78bfa',  // violet-400
     relationTypes: getRelationTypesByCategory('generation'),
@@ -553,7 +553,7 @@ export const RELATIONSHIP_VISUAL_CATEGORIES: RelationshipCategoryConfig[] = [
   {
     id: 'optimization',
     label: 'Optimization',
-    icon: '🎯',
+    icon: 'target',
     color: '#ec4899',  // pink-500 (from taxonomy.yaml arc_families.mining)
     colorLight: '#f472b6',  // pink-400
     relationTypes: getRelationTypesByCategory('optimization'),
@@ -561,7 +561,7 @@ export const RELATIONSHIP_VISUAL_CATEGORIES: RelationshipCategoryConfig[] = [
   {
     id: 'navigation',
     label: 'Navigation',
-    icon: '🔗',
+    icon: 'link',
     color: '#6366f1',  // indigo-500 (UI-only category, no arc family match)
     colorLight: '#818cf8',  // indigo-400
     relationTypes: getRelationTypesByCategory('navigation'),

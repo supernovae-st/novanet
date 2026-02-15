@@ -152,24 +152,6 @@ describe('NovaNetFilter', () => {
       );
     });
 
-    // @deprecated - v0.13.0: Use includeNative() instead
-    it('includeOutputs() adds HAS_NATIVE include rule (@deprecated)', () => {
-      const filter = NovaNetFilter.create().fromPage('page-pricing').includeOutputs();
-      const criteria = filter.getCriteria();
-      expect(criteria.includes).toContainEqual(
-        expect.objectContaining({ relation: 'HAS_NATIVE', direction: 'outgoing' })
-      );
-    });
-
-    // @deprecated - v0.13.0: Use includeNative() instead
-    it('includeContent() adds HAS_NATIVE include rule (@deprecated)', () => {
-      const filter = NovaNetFilter.create().fromEntity('tier-pro').includeContent();
-      const criteria = filter.getCriteria();
-      expect(criteria.includes).toContainEqual(
-        expect.objectContaining({ relation: 'HAS_NATIVE', direction: 'outgoing' })
-      );
-    });
-
     it('includeSEO() adds EXPRESSES include rule (v10.3: TARGETS_SEO → EXPRESSES)', () => {
       const filter = NovaNetFilter.create().fromEntity('tier-pro').includeSEO();
       const criteria = filter.getCriteria();
