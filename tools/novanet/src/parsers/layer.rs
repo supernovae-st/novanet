@@ -226,7 +226,7 @@ layer:
     - org
   classes:
     - Entity
-    - EntityContent
+    - EntityNative
     - AudiencePersona
     - ChannelSurface
   class_count: 4

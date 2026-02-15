@@ -69,7 +69,7 @@ fn context_budget(node: &ParsedNode) -> &'static str {
     }
 }
 
-/// Derive visibility from realm, layer, and kind name.
+/// Derive visibility from realm, layer, and class name.
 ///
 /// Visibility levels:
 /// - `internal`: Not exposed (config, instruction, locale knowledge)
@@ -77,9 +77,9 @@ fn context_budget(node: &ParsedNode) -> &'static str {
 /// - `publishable`: Can be published to end users (semantic, output)
 ///
 /// v11.2: Added as derived property, not classification axis.
-fn derive_visibility(realm: &str, layer: &str, kind_name: &str) -> &'static str {
-    // Kind-name overrides (priority 1)
-    match kind_name {
+fn derive_visibility(realm: &str, layer: &str, class_name: &str) -> &'static str {
+    // Class-name overrides (priority 1)
+    match class_name {
         // Page/Block types and templates are fragments
         // v0.12.5: PageStructure deleted (ADR-028)
         "Page" | "Block" | "BlockType" => return "fragment",
@@ -152,7 +152,7 @@ fn required_properties(node: &ParsedNode) -> Vec<&str> {
 /// Examples:
 /// - `"LocaleVoice"` → `"locale-voice"`
 /// - `"SEOKeyword"` → `"seo-keyword"`
-/// - `"EntityContent"` → `"entity-content"`
+/// - `"EntityNative"` → `"entity-native"`
 fn to_kebab_case(s: &str) -> String {
     let chars: Vec<char> = s.chars().collect();
     let mut result = String::with_capacity(s.len() + 4);
