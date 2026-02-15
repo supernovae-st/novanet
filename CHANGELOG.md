@@ -7,6 +7,47 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-02-15
+
+### Breaking Changes
+- **ADR-029: *Native Pattern** - All locale-specific nodes use `*Native` suffix
+  - `EntityContent` → `EntityNative` (trait: authored)
+  - `ProjectContent` → `ProjectNative` (trait: authored)
+  - `PageGenerated` → `PageNative` (trait: generated)
+  - `BlockGenerated` → `BlockNative` (trait: generated)
+- **ADR-029: Arc Merges** - Unified arc pattern for native content
+  - `HAS_CONTENT` + `HAS_GENERATED` → `HAS_NATIVE` (single arc for all native content)
+  - `CONTENT_OF` + `GENERATED_FOR` → `NATIVE_OF` (unified inverse)
+  - Arc count: 171 → 169 (merged 4 arcs into 2)
+- **ADR-030: Slug Ownership** - Slugs moved from Entity to Page
+  - Removed from EntityNative: `slug`, `slug_prefix`, `slug_max_length`
+  - Added to PageNative: `slug`, `slug_source`, `slug_generation_strategy`
+
+### Changed
+- Node trait distinguishes data origin (authored vs generated), not suffix
+- All 16 arc files updated with *Native node references
+- Test assertions updated for new arc count (169)
+
+### Migration
+
+```cypher
+// Node renames
+MATCH (n:EntityContent) SET n:EntityNative REMOVE n:EntityContent;
+MATCH (n:ProjectContent) SET n:ProjectNative REMOVE n:ProjectContent;
+MATCH (n:PageGenerated) SET n:PageNative REMOVE n:PageGenerated;
+MATCH (n:BlockGenerated) SET n:BlockNative REMOVE n:BlockGenerated;
+
+// Arc migration - recreate with new type
+// (Relationships cannot be renamed in Neo4j, must recreate)
+```
+
+### Statistics
+- **51 files changed** in commit
+- **1030 Rust tests passing**
+- **61 nodes** (40 shared + 21 org)
+- **169 arcs** (was 171, merged 4 → 2)
+- Schema validation: 0 errors, 0 warnings
+
 ## [0.12.5] - 2026-02-14
 
 ### Added
