@@ -1,15 +1,20 @@
 //! Nexus mode key handler.
 //!
 //! Handles keys in the Nexus mode (gamified learning hub).
-//! Most keys are delegated to the NexusState for tab navigation.
+//! Tree navigation is handled here; other keys delegated to NexusState.
 //!
 //! # Keys
 //!
-//! - `?`: Open help overlay (handled here)
-//! - `/` or `f`: Open search (handled here)
-//! - `F1`: Open legend (handled here)
+//! - `?`: Open help overlay
+//! - `/` or `f`: Open search
+//! - `F1`: Open legend
+//! - `j`/`Down`: Move cursor down in tree
+//! - `k`/`Up`: Move cursor up in tree
+//! - `h`/`Left`: Collapse current section
+//! - `l`/`Right`: Expand current section
+//! - `Enter`: Select tab under cursor (or jump in Arch tab)
 //! - `1-5`: Fall through to global mode switching
-//! - All other keys: Delegated to NexusState (tab switching, navigation)
+//! - All other keys: Delegated to NexusState ([ ] for tabs, shortcuts, etc.)
 
 use crossterm::event::{KeyCode, KeyEvent};
 
@@ -42,34 +47,106 @@ pub fn handle_nexus_key(app: &mut App, key: KeyEvent) -> KeyResult {
             KeyResult::Handled
         }
 
+        // Tree navigation (v0.13.0)
+        KeyCode::Char('j') | KeyCode::Down => {
+            // Move cursor down in tree
+            let section = app.nexus.tree_section;
+            let sec_idx = section as usize;
+            let is_expanded = app.nexus.tree_expanded[sec_idx];
+            let tab_count = section.tabs().len();
+
+            if is_expanded {
+                // Within expanded section: move through tabs
+                if app.nexus.tree_cursor < tab_count {
+                    app.nexus.tree_cursor += 1;
+                } else {
+                    // Move to next section
+                    app.nexus.tree_section = section.next();
+                    app.nexus.tree_cursor = 0;
+                }
+            } else {
+                // Section collapsed: move to next section
+                app.nexus.tree_section = section.next();
+                app.nexus.tree_cursor = 0;
+            }
+            KeyResult::Handled
+        }
+
+        KeyCode::Char('k') | KeyCode::Up => {
+            // Move cursor up in tree
+            let section = app.nexus.tree_section;
+
+            if app.nexus.tree_cursor > 0 {
+                app.nexus.tree_cursor -= 1;
+            } else {
+                // Move to previous section
+                let prev_section = section.prev();
+                let prev_idx = prev_section as usize;
+                app.nexus.tree_section = prev_section;
+                if app.nexus.tree_expanded[prev_idx] {
+                    app.nexus.tree_cursor = prev_section.tabs().len();
+                } else {
+                    app.nexus.tree_cursor = 0;
+                }
+            }
+            KeyResult::Handled
+        }
+
+        KeyCode::Char('h') | KeyCode::Left => {
+            // Collapse current section
+            let sec_idx = app.nexus.tree_section as usize;
+            app.nexus.tree_expanded[sec_idx] = false;
+            app.nexus.tree_cursor = 0;
+            KeyResult::Handled
+        }
+
+        KeyCode::Char('l') | KeyCode::Right => {
+            // Expand current section
+            let sec_idx = app.nexus.tree_section as usize;
+            app.nexus.tree_expanded[sec_idx] = true;
+            KeyResult::Handled
+        }
+
+        KeyCode::Enter => {
+            // In Arch tab, Enter jumps to related class in Graph mode
+            if app.nexus.tab == NexusTab::Arch {
+                let adrs = get_all_adrs();
+                if let Some(adr) = adrs.get(app.nexus.arch_adr_index) {
+                    if let Some(class_key) = adr.related_classes.first() {
+                        // Switch to Graph mode and navigate to the class
+                        app.save_mode_cursor();
+                        app.mode = NavMode::Graph;
+                        if app.navigate_to_class(class_key) {
+                            app.set_status(&format!("Jumped to {} ({})", class_key, adr.id));
+                        } else {
+                            app.set_status(&format!("Class {} not found", class_key));
+                        }
+                        return KeyResult::Handled;
+                    } else {
+                        app.set_status(&format!("{}: no related classes", adr.id));
+                        return KeyResult::Handled;
+                    }
+                }
+                return KeyResult::Handled;
+            }
+
+            // Tree navigation: select tab under cursor (if cursor > 0)
+            if app.nexus.tree_cursor > 0 {
+                let section = app.nexus.tree_section;
+                let tabs = section.tabs();
+                if let Some(tab) = tabs.get(app.nexus.tree_cursor - 1) {
+                    app.nexus.tab = *tab;
+                }
+            }
+            KeyResult::Handled
+        }
+
         // Mode switching keys fall through to global handlers
         KeyCode::Char('1')
         | KeyCode::Char('2')
         | KeyCode::Char('3')
         | KeyCode::Char('4')
         | KeyCode::Char('5') => KeyResult::FallThrough,
-
-        // Enter in Arch tab: jump to first related class in Graph mode
-        KeyCode::Enter if app.nexus.tab == NexusTab::Arch => {
-            let adrs = get_all_adrs();
-            if let Some(adr) = adrs.get(app.nexus.arch_adr_index) {
-                if let Some(class_key) = adr.related_classes.first() {
-                    // Switch to Graph mode and navigate to the class
-                    app.save_mode_cursor();
-                    app.mode = NavMode::Graph;
-                    if app.navigate_to_class(class_key) {
-                        app.set_status(&format!("Jumped to {} ({})", class_key, adr.id));
-                    } else {
-                        app.set_status(&format!("Class {} not found", class_key));
-                    }
-                    return KeyResult::Handled;
-                } else {
-                    app.set_status(&format!("{}: no related classes", adr.id));
-                    return KeyResult::Handled;
-                }
-            }
-            KeyResult::Handled
-        }
 
         // All other keys handled by NexusState ([ ] for tabs, j/k for nav, etc.)
         _ => {
