@@ -276,12 +276,27 @@ impl NexusTab {
         }
     }
 
-    /// Get the section this tab belongs to.
-    pub fn section(&self) -> &'static str {
+    /// Get which section this tab belongs to.
+    pub fn section(&self) -> NexusSection {
         match self {
-            NexusTab::Intro | NexusTab::Glossary | NexusTab::Tutorial => "LEARN",
-            NexusTab::Traits | NexusTab::Layers | NexusTab::Arcs | NexusTab::Arch => "EXPLORE",
-            NexusTab::Pipeline | NexusTab::Quiz | NexusTab::Stats => "PRACTICE",
+            NexusTab::Intro | NexusTab::Glossary | NexusTab::Tutorial => NexusSection::Learn,
+            NexusTab::Traits | NexusTab::Layers | NexusTab::Arcs | NexusTab::Arch => {
+                NexusSection::Explore
+            }
+            NexusTab::Pipeline | NexusTab::Quiz | NexusTab::Stats => NexusSection::Practice,
+        }
+    }
+
+    /// Get index within section (0-based).
+    /// Learn: Intro=0, Glossary=1, Tutorial=2
+    /// Explore: Traits=0, Layers=1, Arcs=2, Arch=3
+    /// Practice: Pipeline=0, Quiz=1, Stats=2
+    pub fn index_in_section(&self) -> usize {
+        match self {
+            NexusTab::Intro | NexusTab::Traits | NexusTab::Pipeline => 0,
+            NexusTab::Glossary | NexusTab::Layers | NexusTab::Quiz => 1,
+            NexusTab::Tutorial | NexusTab::Arcs | NexusTab::Stats => 2,
+            NexusTab::Arch => 3,
         }
     }
 
@@ -657,6 +672,17 @@ impl NexusState {
         self.drill_cursor = 0;
     }
 
+    /// Sync tree state when tab is changed via shortcut.
+    /// Ensures tree section, expansion, and cursor match the current tab.
+    pub fn sync_tree_to_tab(&mut self) {
+        let section = self.tab.section();
+        let sec_idx = section as usize;
+
+        self.tree_section = section;
+        self.tree_expanded[sec_idx] = true;
+        self.tree_cursor = self.tab.index_in_section() + 1;
+    }
+
     /// Handle key input in Nexus mode. Returns true if state changed.
     pub fn handle_key(&mut self, key: KeyEvent) -> bool {
         // Handle pending 'g' state for quick jump shortcuts (gd, ga, gi, gg, gr)
@@ -693,11 +719,13 @@ impl NexusState {
             KeyCode::Char('[') => {
                 self.tab = self.tab.prev();
                 self.reset_drill();
+                self.sync_tree_to_tab();
                 true
             }
             KeyCode::Char(']') => {
                 self.tab = self.tab.next();
                 self.reset_drill();
+                self.sync_tree_to_tab();
                 true
             }
 
@@ -705,11 +733,13 @@ impl NexusState {
             KeyCode::Tab => {
                 self.tab = self.tab.next();
                 self.reset_drill();
+                self.sync_tree_to_tab();
                 true
             }
             KeyCode::BackTab => {
                 self.tab = self.tab.prev();
                 self.reset_drill();
+                self.sync_tree_to_tab();
                 true
             }
 
@@ -963,37 +993,38 @@ impl NexusState {
     }
 
     /// Jump to a specific trait in the Traits tab.
-    /// Used by quick jump shortcuts (gi, gl, gk, gg, ga).
+    /// Used by quick jump shortcuts (gd, ga, gi, gg, gr).
     fn jump_to_trait(&mut self, trait_index: usize) -> bool {
         self.tab = NexusTab::Traits;
         self.trait_cursor = trait_index.min(4); // Clamp to 0-4
         self.reset_drill();
+        self.sync_tree_to_tab();
         true
     }
 
     /// Navigate to next section (LEARN → EXPLORE → PRACTICE → LEARN).
     fn next_section(&mut self) -> bool {
         let target_tab = match self.tab.section() {
-            "LEARN" => NexusTab::Traits,     // → EXPLORE
-            "EXPLORE" => NexusTab::Pipeline, // → PRACTICE
-            "PRACTICE" => NexusTab::Intro,   // → LEARN (wrap)
-            _ => return false,
+            NexusSection::Learn => NexusTab::Traits,     // → EXPLORE
+            NexusSection::Explore => NexusTab::Pipeline, // → PRACTICE
+            NexusSection::Practice => NexusTab::Intro,   // → LEARN (wrap)
         };
         self.tab = target_tab;
         self.reset_drill();
+        self.sync_tree_to_tab();
         true
     }
 
     /// Navigate to previous section (LEARN ← EXPLORE ← PRACTICE ← LEARN).
     fn prev_section(&mut self) -> bool {
         let target_tab = match self.tab.section() {
-            "LEARN" => NexusTab::Pipeline,  // ← PRACTICE (wrap)
-            "EXPLORE" => NexusTab::Intro,   // ← LEARN
-            "PRACTICE" => NexusTab::Traits, // ← EXPLORE
-            _ => return false,
+            NexusSection::Learn => NexusTab::Pipeline,  // ← PRACTICE (wrap)
+            NexusSection::Explore => NexusTab::Intro,   // ← LEARN
+            NexusSection::Practice => NexusTab::Traits, // ← EXPLORE
         };
         self.tab = target_tab;
         self.reset_drill();
+        self.sync_tree_to_tab();
         true
     }
 
@@ -1354,7 +1385,7 @@ impl NexusState {
     /// Get breadcrumb for current Nexus mode state.
     /// Returns path like "Nexus > LEARN > Intro > Page 1"
     pub fn breadcrumb(&self, trait_stats: &[traits::TraitStats]) -> String {
-        let section = self.tab.section();
+        let section = self.tab.section().label().to_uppercase();
         let tab_name = self.tab.label();
         match self.tab {
             // LEARN section
@@ -1480,7 +1511,7 @@ impl NexusState {
     /// Get short breadcrumb for status bar display.
     /// Returns "SECTION > Tab" format (e.g., "LEARN > Intro").
     pub fn status_breadcrumb(&self) -> String {
-        let section = self.tab.section();
+        let section = self.tab.section().label().to_uppercase();
         let tab_name = self.tab.label();
         format!("{} > {}", section, tab_name)
     }
@@ -1718,6 +1749,7 @@ fn render_cross_tab_hints(f: &mut Frame, area: Rect, app: &App) {
 #[allow(dead_code)] // Will be removed in Task 7 cleanup
 fn render_tab_bar(f: &mut Frame, area: Rect, app: &App) {
     let current_section = app.nexus.tab.section();
+    let current_section_label = current_section.label().to_uppercase();
 
     // Section definitions: (name, tabs)
     let sections = [
@@ -1743,7 +1775,7 @@ fn render_tab_bar(f: &mut Frame, area: Rect, app: &App) {
     let mut spans: Vec<Span> = Vec::new();
 
     for (i, (name, tabs)) in sections.iter().enumerate() {
-        let is_current_section = *name == current_section;
+        let is_current_section = *name == current_section_label;
 
         // Section header with indicator
         let indicator = if is_current_section { "▼" } else { "▶" };
@@ -2294,17 +2326,35 @@ mod tests {
     #[test]
     fn test_section_method() {
         // LEARN section
-        assert_eq!(NexusTab::Intro.section(), "LEARN");
-        assert_eq!(NexusTab::Glossary.section(), "LEARN");
-        assert_eq!(NexusTab::Tutorial.section(), "LEARN");
+        assert_eq!(NexusTab::Intro.section(), NexusSection::Learn);
+        assert_eq!(NexusTab::Glossary.section(), NexusSection::Learn);
+        assert_eq!(NexusTab::Tutorial.section(), NexusSection::Learn);
         // EXPLORE section
-        assert_eq!(NexusTab::Traits.section(), "EXPLORE");
-        assert_eq!(NexusTab::Layers.section(), "EXPLORE");
-        assert_eq!(NexusTab::Arcs.section(), "EXPLORE");
+        assert_eq!(NexusTab::Traits.section(), NexusSection::Explore);
+        assert_eq!(NexusTab::Layers.section(), NexusSection::Explore);
+        assert_eq!(NexusTab::Arcs.section(), NexusSection::Explore);
+        assert_eq!(NexusTab::Arch.section(), NexusSection::Explore);
         // PRACTICE section (v0.12.5: Views removed, now NavMode::Views)
-        assert_eq!(NexusTab::Pipeline.section(), "PRACTICE");
-        assert_eq!(NexusTab::Quiz.section(), "PRACTICE");
-        assert_eq!(NexusTab::Stats.section(), "PRACTICE");
+        assert_eq!(NexusTab::Pipeline.section(), NexusSection::Practice);
+        assert_eq!(NexusTab::Quiz.section(), NexusSection::Practice);
+        assert_eq!(NexusTab::Stats.section(), NexusSection::Practice);
+    }
+
+    #[test]
+    fn test_index_in_section() {
+        // Learn section: Intro=0, Glossary=1, Tutorial=2
+        assert_eq!(NexusTab::Intro.index_in_section(), 0);
+        assert_eq!(NexusTab::Glossary.index_in_section(), 1);
+        assert_eq!(NexusTab::Tutorial.index_in_section(), 2);
+        // Explore section: Traits=0, Layers=1, Arcs=2, Arch=3
+        assert_eq!(NexusTab::Traits.index_in_section(), 0);
+        assert_eq!(NexusTab::Layers.index_in_section(), 1);
+        assert_eq!(NexusTab::Arcs.index_in_section(), 2);
+        assert_eq!(NexusTab::Arch.index_in_section(), 3);
+        // Practice section: Pipeline=0, Quiz=1, Stats=2
+        assert_eq!(NexusTab::Pipeline.index_in_section(), 0);
+        assert_eq!(NexusTab::Quiz.index_in_section(), 1);
+        assert_eq!(NexusTab::Stats.index_in_section(), 2);
     }
 
     // ==========================================================================

@@ -80,7 +80,7 @@ describe('schemaLayoutELK', () => {
 
   beforeEach(() => {
     // Create a minimal mock hierarchy for testing
-    // v11.3: 2 realms (shared, org), 11 layers (3 shared + 8 org)
+    // v0.13.0: 2 realms (shared, org), 10 layers (4 shared + 6 org)
     mockHierarchy = {
       realms: {
         shared: {
@@ -157,7 +157,7 @@ describe('schemaLayoutELK', () => {
         { id: 'schema-BrandDesign', nodeType: 'BrandDesign', realm: 'org', layer: 'foundation', label: 'Brand Design', description: '', trait: 'defined' },
         { id: 'schema-BrandPrinciples', nodeType: 'BrandPrinciples', realm: 'org', layer: 'foundation', label: 'Brand Principles', description: '', trait: 'defined' },
         { id: 'schema-PromptStyle', nodeType: 'PromptStyle', realm: 'org', layer: 'foundation', label: 'Prompt Style', description: '', trait: 'defined' },
-        { id: 'schema-ProjectNative', nodeType: 'ProjectNative', realm: 'org', layer: 'foundation', label: 'Project Content', description: '', trait: 'authored' },
+        { id: 'schema-ProjectNative', nodeType: 'ProjectNative', realm: 'org', layer: 'foundation', label: 'Project Native', description: '', trait: 'authored' },
         // Org realm - structure (2)
         { id: 'schema-Page', nodeType: 'Page', realm: 'org', layer: 'structure', label: 'Page', description: '', trait: 'defined' },
         { id: 'schema-Block', nodeType: 'Block', realm: 'org', layer: 'structure', label: 'Block', description: '', trait: 'defined' },

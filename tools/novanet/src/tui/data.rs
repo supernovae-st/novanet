@@ -2812,6 +2812,32 @@ RETURN total,
         None
     }
 
+    /// Find cursor position of the first instance for a Class.
+    /// v0.13 A' Tree Sync: Used when switching to Instance tab.
+    ///
+    /// Requires the class to be expanded (not collapsed).
+    /// Returns cursor position right after the class node (where first instance would be).
+    pub fn find_first_instance_cursor(
+        &self,
+        realm_key: &str,
+        layer_key: &str,
+        class_key: &str,
+    ) -> Option<usize> {
+        // First check if instances exist for this class
+        if self.instances.get(class_key).map(|v| v.is_empty()).unwrap_or(true) {
+            return None;
+        }
+
+        // Class must be expanded for instances to be visible
+        if self.is_collapsed(&format!("class:{}", class_key)) {
+            return None;
+        }
+
+        // Find the class cursor, then add 1 for first instance
+        let class_cursor = self.find_class_cursor_readonly(realm_key, layer_key, class_key, true)?;
+        Some(class_cursor + 1)
+    }
+
     /// Find cursor position of ArcsSection.
     fn find_arcs_section_cursor(&self) -> Option<usize> {
         let mut idx = 1; // Skip ClassesSection

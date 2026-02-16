@@ -1,6 +1,6 @@
 # packages/core/models/taxonomy.yaml
 # MINIMAL VERSION - Most taxonomy data now in individual YAML files
-# v0.12.5
+# v0.13.0
 #
 # This file now contains ONLY centralized config that isn't per-item:
 # - arc_scopes (2 values, not worth individual files)
@@ -17,7 +17,7 @@
 # - load_taxonomy_from_files() reads individual files + this file
 # - load_taxonomy() (legacy) reads only this file
 
-version: "0.12.5"
+version: "0.13.0"
 
 # =============================================================================
 # ARC SCOPES (2) — WHERE does the arc connect?

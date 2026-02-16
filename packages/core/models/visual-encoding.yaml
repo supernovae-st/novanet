@@ -16,7 +16,7 @@
 # - apps/studio/src/design/visual-encoding.json (runtime config)
 # - tools/novanet/src/generated/visual_encoding.rs (TUI compile-time)
 
-version: "0.12.5"
+version: "0.13.0"
 
 # =============================================================================
 # CHANNEL MAPPING — Which visual channel encodes which facet

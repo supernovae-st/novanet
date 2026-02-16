@@ -391,7 +391,7 @@ function Graph2DInner({
   } = useGraphInteractions({ setNodes: setSchemaNodes });
 
   // Load schema graph with hierarchical layout (v9.5)
-  // Generates pure graph nodes (Realm, Layer, Kind) with edges
+  // Generates pure graph nodes (Realm, Layer, Class) with edges
   // Responds to layoutDirection and layoutVersion changes (like data mode)
   const loadSchemaGraph = useCallback(async () => {
     setIsSchemaLayouting(true);
@@ -402,18 +402,18 @@ function Graph2DInner({
       const { nodes: layoutedNodes, edges: layoutedEdges } = await applySchemaLayout(hierarchy, layoutDirection);
 
       // v9.5: No container filtering needed - all nodes are regular graph nodes
-      // Apply z-index based on meta type (Realm < Layer < Kind)
+      // Apply z-index based on schema type (Realm < Layer < Class)
       const nodesWithZIndex = layoutedNodes.map((node) => {
         let zIndex: number = Z_INDEX.BASE;
 
-        // Meta nodes get lower z-index so Class nodes appear on top
+        // Schema grouping nodes get lower z-index so Class nodes appear on top
         const metaType = node.data?.metaType as string | undefined;
         if (metaType === 'realm') {
           zIndex = Z_INDEX.REALM_ORG; // Realms at base level
         } else if (metaType === 'layer') {
           zIndex = Z_INDEX.LAYER_ORG; // Layers above realms
         }
-        // Kind nodes (metaType === 'kind' or undefined) use BASE (highest)
+        // Class nodes (metaType === 'class' or undefined) use BASE (highest)
 
         return { ...node, zIndex };
       });

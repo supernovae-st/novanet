@@ -23,16 +23,15 @@ Add a new arc type (directed relationship) between nodes in the NovaNet ontology
 
 2. **Classification**: Determine ArcFamily:
    - **ownership**: Structural containment (HAS_PAGE, HAS_BLOCK, OF_TYPE)
-   - **localization**: Locale-specific content (HAS_CONTENT, FOR_LOCALE)
+   - **localization**: Locale-specific content (HAS_NATIVE, FOR_LOCALE)
    - **semantic**: Content relationships (USES_ENTITY, SEMANTIC_LINK)
-   - **generation**: AI-generated content (HAS_GENERATED, HAS_PROMPT)
+   - **generation**: AI-generated content (HAS_INSTRUCTION, GENERATED)
    - **mining**: SEO/GEO data (HAS_SEO_TARGET, HAS_GEO_TARGET)
 
 3. **Bidirectionality Check**: Does it need an inverse?
-   - HAS_CONTENT needs CONTENT_OF
-   - HAS_GENERATED needs GENERATED_OF
+   - HAS_NATIVE needs NATIVE_OF (ADR-029)
    - HAS_BLOCK needs BLOCK_OF
-   - Not all arcs need inverses
+   - Not all arcs need inverses (see ADR-026)
 
 4. **Creation Phase**:
    - Add to `packages/core/models/arc-classes/{family}/{arc-name}.yaml`
@@ -49,27 +48,32 @@ Add a new arc type (directed relationship) between nodes in the NovaNet ontology
 | Family | Purpose | Arrow Style | Examples |
 |--------|---------|-------------|----------|
 | `ownership` | Structural containment | `-->` | HAS_PAGE, HAS_BLOCK, OF_TYPE |
-| `localization` | Locale variants | `-.->` | HAS_CONTENT, FOR_LOCALE |
+| `localization` | Locale variants | `-.->` | HAS_NATIVE, FOR_LOCALE |
 | `semantic` | Content relationships | `-.->` | USES_ENTITY, SEMANTIC_LINK |
-| `generation` | AI-generated | `==>` | HAS_GENERATED, HAS_PROMPT |
+| `generation` | AI-generated | `==>` | GENERATED, HAS_INSTRUCTION |
 | `mining` | SEO/GEO data | `--o` | HAS_SEO_TARGET, HAS_GEO_TARGET |
 
-## Naming Conventions (v0.12.0)
+## Naming Conventions (v0.13.0)
 
 | Pattern | Use For | Examples |
 |---------|---------|----------|
 | `HAS_*` | Ownership/containment | HAS_PAGE, HAS_BLOCK |
-| `HAS_CONTENT` | Localized content (human-curated) | Entity→EntityContent |
-| `HAS_GENERATED` | Localized content (LLM-generated) | Page→PageGenerated, Block→BlockGenerated |
-| `*_OF` | Inverse of HAS_* | CONTENT_OF, BLOCK_OF, GENERATED_OF |
+| `HAS_NATIVE` | Locale-specific content (ADR-029) | Entity→EntityNative, Page→PageNative |
+| `*_OF` | Inverse of HAS_* | NATIVE_OF, BLOCK_OF |
 | `FOR_*` | Target association | FOR_LOCALE |
 | `USES_*` | Reference/usage | USES_ENTITY |
-| `EXPRESSES` | SEO targeting | EntityContent→SEOKeyword |
+| `EXPRESSES` | SEO targeting | EntityNative→SEOKeyword |
+
+**Deprecated arcs (do not use):**
+- `HAS_CONTENT` - Use `HAS_NATIVE` instead (v0.13.0)
+- `HAS_GENERATED` - Use `HAS_NATIVE` instead (v0.13.0)
+- `CONTENT_OF` - Use `NATIVE_OF` instead (v0.13.0)
+- `GENERATED_OF` - Use `NATIVE_OF` instead (v0.13.0)
 
 ## Naming Requirements
 
 - **Arc names**: UPPER_SNAKE_CASE (e.g., `HAS_HUMOR`, `FOR_LOCALE`)
-- **Node names in source/target**: PascalCase (e.g., `LocaleLexicon`, `EntityContent`)
+- **Node names in source/target**: PascalCase (e.g., `LocaleLexicon`, `EntityNative`)
 
 ## Example
 

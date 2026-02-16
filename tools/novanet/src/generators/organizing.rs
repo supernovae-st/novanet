@@ -250,7 +250,7 @@ mod tests {
     #[test]
     fn generate_small_cypher() {
         let doc = TaxonomyDoc {
-            version: "10.5.0".to_string(),
+            version: "0.13.0".to_string(),
             node_realms: vec![NodeRealmDef {
                 key: "test".to_string(),
                 display_name: "Test".to_string(),
@@ -329,7 +329,7 @@ mod tests {
         assert!(cypher.contains("updated_at = datetime()"));
 
         // Header
-        assert!(cypher.contains("v10.5.0"));
+        assert!(cypher.contains("v0.13.0"));
         assert!(cypher.contains("AUTO-GENERATED"));
         assert!(cypher.contains("1 Realms, 1 Layers, 1 Traits, 1 ArcFamilies"));
         assert!(cypher.contains("Includes visual encoding properties"));
@@ -457,7 +457,7 @@ mod tests {
         assert!(cypher.contains("ac_one_to_many:Schema:ArcCardinality {key: 'one_to_many'}"));
 
         // Header mentions version
-        assert!(cypher.contains("v0.12.5"));
+        assert!(cypher.contains("v0.13.0"));
 
         // HAS_LAYER wiring — specific pairs (v11.4: shared has config, locale, geography, knowledge)
         assert!(cypher.contains("(r:Realm {key: 'shared'}), (l:Layer {key: 'config'})"));
@@ -474,7 +474,7 @@ mod tests {
     #[test]
     fn snapshot_minimal_taxonomy() {
         let doc = TaxonomyDoc {
-            version: "10.5.0".to_string(),
+            version: "0.13.0".to_string(),
             node_realms: vec![NodeRealmDef {
                 key: "test".to_string(),
                 display_name: "Test Realm".to_string(),

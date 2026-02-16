@@ -427,7 +427,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
   ProjectNative: {
     type: 'ProjectNative',
-    label: 'Project Content',
+    label: 'Project Native',
     icon: 'map',
     color: '#a78bfa',
     colorClass: 'bg-violet-400',
@@ -480,7 +480,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
   EntityNative: {
     type: 'EntityNative',
-    label: 'Entity Content',
+    label: 'Entity Native',
     icon: 'message-square',
     color: '#fbbf24',
     colorClass: 'bg-yellow-400',
@@ -629,7 +629,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   // ==========================================================================
   PageNative: {
     type: 'PageNative',
-    label: 'Page Generated',
+    label: 'Page Native',
     icon: 'clipboard',
     color: '#f97316',
     colorClass: 'bg-orange-500',
@@ -638,7 +638,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
   BlockNative: {
     type: 'BlockNative',
-    label: 'Block Generated',
+    label: 'Block Native',
     icon: 'hash',
     color: '#fb923c',
     colorClass: 'bg-orange-400',
