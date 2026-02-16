@@ -152,13 +152,7 @@ impl YamlSections {
     }
 }
 
-/// Which section is currently active in the YAML view.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
-pub enum YamlViewSection {
-    #[default]
-    Class,
-    Instance,
-}
+// v0.13.1: YamlViewSection enum removed (collapse/peek eliminated)
 
 #[cfg(test)]
 mod tests {

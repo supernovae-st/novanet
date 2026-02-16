@@ -1,18 +1,30 @@
-# packages/core/models/arc-classes/ownership/formatting-of.yaml
+# ═══════════════════════════════════════════════════════════════════════════════
 # ArcClass: FORMATTING_OF — Formatting belongs to Locale (inverse of HAS_FORMATTING)
+# v0.13.1: LLM-First property ordering
 # v0.13.1: NEW TIER 2 inverse arc (ADR-026)
+# ═══════════════════════════════════════════════════════════════════════════════
 
 arc:
+  # IDENTITY
   name: FORMATTING_OF
   family: ownership
   scope: intra_realm
-  source: Formatting
-  target: Locale
-  cardinality: one_to_one
-  inverse_of: HAS_FORMATTING
+
+  # SEMANTIC (LLM-CRITICAL)
+  description: "Formatting belongs to Locale (inverse of HAS_FORMATTING)"
   llm_context: |
     USE: when finding which Locale uses this formatting rules.
     TRIGGERS: formatting locale, which locale formatting, formatting owner.
     NOT: loading formatting for locale (use HAS_FORMATTING), style (use STYLE_OF).
     RELATES: Formatting (source), Locale (target), HAS_FORMATTING (inverse).
+
+  # GRAPH STRUCTURE
+  source: Formatting
+  target: Locale
+  cardinality: one_to_one
+
+  # FLAGS
+  inverse_of: HAS_FORMATTING
+
+  # REFERENCE
   cypher_pattern: (Formatting)-[:FORMATTING_OF]->(Locale)

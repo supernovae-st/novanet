@@ -1,0 +1,80 @@
+# packages/core/models/arc-classes/semantic/uses-term.yaml
+# ArcClass: USES_TERM — EntityNative uses specific Term atoms
+#
+# v0.13.0: Direct connection between EntityNative and Term
+# Bypasses 4-hop path: EntityNative → FOR_LOCALE → Locale → HAS_TERMS → TermSet → Term
+# Enables selective loading of ~50 relevant terms instead of ALL 20K
+#
+# ADR-026: TIER 2 (Recommended inverse) - high value for spreading activation
+
+arc:
+  name: USES_TERM
+  family: semantic
+  scope: cross_realm  # EntityNative (org/semantic) → Term (shared/knowledge)
+  temperature_threshold: 0.3  # Load on medium activation (vocabulary is important)
+
+  source: EntityNative
+  target: Term
+  cardinality: many_to_many
+
+  properties:
+    - name: purpose
+      type: string
+      required: false
+      enum: [primary, secondary, contextual, avoid]
+      description: |
+        How this term relates to the entity:
+        - primary: Core vocabulary for this entity
+        - secondary: Related but not central
+        - contextual: Use in specific contexts only
+        - avoid: Term exists but should NOT be used for this entity
+
+    - name: temperature
+      type: float
+      required: false
+      default: 0.8
+      description: "Activation weight for spreading activation (0.0-1.0)"
+
+    - name: semantic_field
+      type: string
+      required: false
+      enum: [domain, action, benefit, feature, comparison, technical]
+      description: |
+        Which aspect of the entity this term describes:
+        - domain: Product/service category terms
+        - action: What user can DO (créer, générer, scanner)
+        - benefit: Value proposition terms (gratuit, rapide, facile)
+        - feature: Capability terms (personnalisable, dynamique)
+        - comparison: Competitor/alternative terms
+        - technical: Technical specification terms
+
+  inverse: TERM_USED_BY
+
+  llm_context: |
+    USE: when loading locale-specific vocabulary for EntityNative generation.
+    TRIGGERS: uses term, vocabulary, glossary, domain terms, native phrasing.
+    NOT: all locale terms (use HAS_TERMS for bulk), entity hierarchy (use HAS_CHILD).
+    RELATES: EntityNative (source), Term (target), TERM_USED_BY (inverse),
+             semantic_field: domain/action/benefit/feature/comparison/technical.
+    EXAMPLE: "qr-code@fr-FR" USES_TERM {purpose: "primary", semantic_field: "action"} "creer_qr_code"
+
+  cypher_pattern: "(EntityNative)-[:USES_TERM {purpose, temperature, semantic_field}]->(Term)"
+
+  examples:
+    cypher: |
+      // Link EntityNative to its primary action terms
+      MATCH (en:EntityNative {key: "entity:qr-code@fr-FR"})
+      MATCH (t:Term {key: "creer_qr_code"})
+      MERGE (en)-[:USES_TERM {
+        purpose: "primary",
+        temperature: 0.9,
+        semantic_field: "action"
+      }]->(t)
+
+      // Load relevant terms for generation context (selective, not bulk)
+      MATCH (en:EntityNative {key: $entityNativeKey})
+      MATCH (en)-[ut:USES_TERM]->(t:Term)
+      WHERE ut.purpose IN ["primary", "secondary"]
+      RETURN t.value AS term, t.domain, ut.semantic_field
+      ORDER BY ut.temperature DESC
+      LIMIT 50

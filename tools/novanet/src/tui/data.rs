@@ -287,6 +287,7 @@ pub struct ArchitectureDiagram {
     /// Related ADR identifier (e.g., "ADR-028")
     pub adr_id: String,
     /// ASCII diagram lines
+    #[allow(dead_code)] // v0.13.1: Diagram panel removed, but kept for potential future use
     pub diagram: Vec<String>,
 }
 
@@ -2242,9 +2243,13 @@ RETURN total,
                                 count += 1; // class
 
                                 // In Data mode, add instances if not collapsed
-                                if data_mode && !self.is_collapsed(&format!("class:{}", class_info.key)) {
+                                if data_mode
+                                    && !self.is_collapsed(&format!("class:{}", class_info.key))
+                                {
                                     // Special case: Entity Class shows categories hierarchy
-                                    if class_info.key == "Entity" && !self.entity_categories.is_empty() {
+                                    if class_info.key == "Entity"
+                                        && !self.entity_categories.is_empty()
+                                    {
                                         for category in &self.entity_categories {
                                             count += 1; // category node
 
@@ -2261,7 +2266,8 @@ RETURN total,
                                         }
                                     } else {
                                         // Regular class: flat instances
-                                        if let Some(instances) = self.instances.get(&class_info.key) {
+                                        if let Some(instances) = self.instances.get(&class_info.key)
+                                        {
                                             count += instances.len();
                                         }
                                     }
@@ -2321,9 +2327,13 @@ RETURN total,
                                 idx += 1;
 
                                 // In Data mode, check for instances (or categories for Entity)
-                                if data_mode && !self.is_collapsed(&format!("class:{}", class_info.key)) {
+                                if data_mode
+                                    && !self.is_collapsed(&format!("class:{}", class_info.key))
+                                {
                                     // Special case: Entity Class shows categories hierarchy
-                                    if class_info.key == "Entity" && !self.entity_categories.is_empty() {
+                                    if class_info.key == "Entity"
+                                        && !self.entity_categories.is_empty()
+                                    {
                                         for category in &self.entity_categories {
                                             if idx == cursor {
                                                 return Some(TreeItem::EntityCategory(
@@ -2352,7 +2362,8 @@ RETURN total,
                                         }
                                     } else {
                                         // Regular class: flat instances
-                                        if let Some(instances) = self.instances.get(&class_info.key) {
+                                        if let Some(instances) = self.instances.get(&class_info.key)
+                                        {
                                             for instance in instances {
                                                 if idx == cursor {
                                                     return Some(TreeItem::Instance(
@@ -2773,7 +2784,7 @@ RETURN total,
     }
 
     /// Find cursor position of a Class (readonly, does not modify collapse state).
-    fn find_class_cursor_readonly(
+    pub(crate) fn find_class_cursor_readonly(
         &self,
         realm_key: &str,
         layer_key: &str,
@@ -2799,7 +2810,8 @@ RETURN total,
                             }
                             idx += 1;
                             // In data mode, count instances
-                            if data_mode && !self.is_collapsed(&format!("class:{}", class_info.key)) {
+                            if data_mode && !self.is_collapsed(&format!("class:{}", class_info.key))
+                            {
                                 if let Some(instances) = self.instances.get(&class_info.key) {
                                     idx += instances.len();
                                 }
@@ -2824,7 +2836,12 @@ RETURN total,
         class_key: &str,
     ) -> Option<usize> {
         // First check if instances exist for this class
-        if self.instances.get(class_key).map(|v| v.is_empty()).unwrap_or(true) {
+        if self
+            .instances
+            .get(class_key)
+            .map(|v| v.is_empty())
+            .unwrap_or(true)
+        {
             return None;
         }
 
@@ -2834,7 +2851,8 @@ RETURN total,
         }
 
         // Find the class cursor, then add 1 for first instance
-        let class_cursor = self.find_class_cursor_readonly(realm_key, layer_key, class_key, true)?;
+        let class_cursor =
+            self.find_class_cursor_readonly(realm_key, layer_key, class_key, true)?;
         Some(class_cursor + 1)
     }
 
@@ -3004,7 +3022,11 @@ RETURN total,
                     .unwrap_or(1);
                 // Calculate instance position within Class
                 let instances = self.instances.get(&class_info.key);
-                let total_instances = self.instance_totals.get(&class_info.key).copied().unwrap_or(0);
+                let total_instances = self
+                    .instance_totals
+                    .get(&class_info.key)
+                    .copied()
+                    .unwrap_or(0);
                 // Find instance index by walking the visible items before cursor
                 // For simplicity, use the loaded count as position indicator
                 let loaded_count = instances.map(|v| v.len()).unwrap_or(0);
@@ -3849,5 +3871,105 @@ mod tests {
                 panic!("load_class_arcs failed: {}", e);
             }
         }
+    }
+
+    // ========================================================================
+    // v0.13 A' Tree Sync: find_first_instance_cursor tests
+    // ========================================================================
+
+    #[test]
+    fn test_find_first_instance_cursor_with_collapsed_class() {
+        let mut tree = TaxonomyTree::mock_for_testing();
+
+        // Add an instance to AppConfig (which exists in mock tree)
+        tree.instances.insert(
+            "AppConfig".to_string(),
+            vec![InstanceInfo {
+                key: "instance1".to_string(),
+                display_name: "Instance 1".to_string(),
+                class_key: "AppConfig".to_string(),
+                properties: BTreeMap::new(),
+                outgoing_arcs: vec![],
+                incoming_arcs: vec![],
+                arcs_loading: false,
+                missing_required_count: 0,
+                filled_properties: 0,
+                total_properties: 0,
+            }],
+        );
+
+        // Explicitly collapse the class (default is expanded)
+        tree.collapse_subtree("class:AppConfig");
+
+        // Class is collapsed, so should return None
+        let result = tree.find_first_instance_cursor("shared", "config", "AppConfig");
+        assert!(result.is_none(), "Collapsed class should return None");
+    }
+
+    #[test]
+    fn test_find_first_instance_cursor_with_expanded_class() {
+        let mut tree = TaxonomyTree::mock_for_testing();
+
+        // Add an instance to AppConfig (which exists in mock tree)
+        tree.instances.insert(
+            "AppConfig".to_string(),
+            vec![InstanceInfo {
+                key: "instance1".to_string(),
+                display_name: "Instance 1".to_string(),
+                class_key: "AppConfig".to_string(),
+                properties: BTreeMap::new(),
+                outgoing_arcs: vec![],
+                incoming_arcs: vec![],
+                arcs_loading: false,
+                missing_required_count: 0,
+                filled_properties: 0,
+                total_properties: 0,
+            }],
+        );
+
+        // Expand necessary nodes
+        tree.expand("classes");
+        tree.expand("realm:shared");
+        tree.expand("layer:shared:config");
+        tree.expand("class:AppConfig");
+
+        // Now should find the first instance
+        let result = tree.find_first_instance_cursor("shared", "config", "AppConfig");
+        assert!(
+            result.is_some(),
+            "Expanded class with instances should return Some"
+        );
+
+        // The cursor should be after the class node
+        let class_cursor = tree.find_class_cursor_readonly("shared", "config", "AppConfig", true);
+        assert!(class_cursor.is_some());
+        assert_eq!(result.unwrap(), class_cursor.unwrap() + 1);
+    }
+
+    #[test]
+    fn test_find_first_instance_cursor_no_instances() {
+        let mut tree = TaxonomyTree::mock_for_testing();
+
+        // Expand necessary nodes but don't add instances
+        tree.expand("classes");
+        tree.expand("realm:shared");
+        tree.expand("layer:shared:config");
+        tree.expand("class:AppConfig");
+
+        // No instances, should return None
+        let result = tree.find_first_instance_cursor("shared", "config", "AppConfig");
+        assert!(
+            result.is_none(),
+            "Class with no instances should return None"
+        );
+    }
+
+    #[test]
+    fn test_find_first_instance_cursor_invalid_class() {
+        let tree = TaxonomyTree::mock_for_testing();
+
+        // Non-existent class
+        let result = tree.find_first_instance_cursor("shared", "config", "NonExistent");
+        assert!(result.is_none(), "Invalid class should return None");
     }
 }

@@ -1,20 +1,37 @@
 # models/node-classes/org/foundation/project.yaml
+# v0.13.1 LLM-First Schema - Canonical field ordering for optimal AI comprehension
 # Project - Organization project root node with brand and project configuration
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: Project
   realm: org
   layer: foundation
   trait: defined
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (description, llm_context)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  description: "Organization project root node containing project configuration and brand info"
+
+  llm_context: |
+    USE: when loading project-level context or root configuration for content generation.
+    TRIGGERS: "project", "brand context", "project configuration", "qrcode-ai".
+    NOT: for organization-level config (use OrgConfig), for localized project content (use ProjectNative), for visual identity (use Brand).
+    RELATES: OrgConfig (owner via BELONGS_TO_ORG), Brand (identity via HAS_BRAND), Entity (owns via HAS_ENTITY), Page (owns via HAS_PAGE), Locale (supports via SUPPORTS_LOCALE).
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL (icon)
+  # ═══════════════════════════════════════════════════════════════════════════════
   icon:
     web: folder
     terminal: "▣"
-  description: "Organization project root node containing project configuration and brand info"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # STANDARD PROPERTIES (v7.1.0)
+  # BLOC 4: DATA (standard_properties, properties)
   # ═══════════════════════════════════════════════════════════════════════════════
-
   standard_properties:
     key:
       type: string
@@ -34,16 +51,6 @@ node:
       description: "Short description of the project"
       example: "AI-powered QR code management platform"
 
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections].'"
-      example: |
-        USE: when loading project-level context or root configuration for content generation.
-        TRIGGERS: "project", "brand context", "project configuration", "qrcode-ai".
-        NOT: for organization-level config (use OrgConfig), for localized project content (use ProjectNative), for visual identity (use Brand).
-        RELATES: OrgConfig (owner via BELONGS_TO_ORG), Brand (identity via HAS_BRAND), Entity (owns via HAS_ENTITY), Page (owns via HAS_PAGE), Locale (supports via SUPPORTS_LOCALE).
-
     created_at:
       type: datetime
       required: true
@@ -51,10 +58,6 @@ node:
     updated_at:
       type: datetime
       required: true
-
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # PROJECT-SPECIFIC PROPERTIES
-  # ═══════════════════════════════════════════════════════════════════════════════
 
   properties:
     brand_name:
@@ -100,9 +103,8 @@ node:
       example: ["QR Code Generator", "Beaconstac", "QR Tiger"]
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # RELATIONS (FROM this node)
+  # BLOC 5: GRAPH (relations)
   # ═══════════════════════════════════════════════════════════════════════════════
-
   relations:
     BELONGS_TO_ORG:
       to: OrgConfig  # v11.3: Organization merged into OrgConfig
@@ -144,15 +146,13 @@ node:
       description: "Locales supported by the project"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # EXAMPLE
+  # BLOC 6: REFERENCE (example)
   # ═══════════════════════════════════════════════════════════════════════════════
-
   example:
     data:
       key: "project-qrcode-ai"
       display_name: "QR Code AI"
       description: "AI-powered QR code management platform"
-      llm_context: "USE: root context for QR Code AI. TRIGGERS: project, brand, qrcode-ai. NOT: other projects."
       brand_name: "QR Code AI"
       brand_name_legal: "QRCode AI SAS"
       founding_year: 2024

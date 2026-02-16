@@ -9,7 +9,7 @@
 //! in each node's YAML file and generated here for Studio consumption.
 
 use crate::parsers::yaml_node::{self, NodeIcon, ParsedNode};
-use minijinja::{context, Environment};
+use minijinja::{Environment, context};
 use serde::Serialize;
 use std::path::Path;
 

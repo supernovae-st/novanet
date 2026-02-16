@@ -1,18 +1,31 @@
-# packages/core/models/arc-classes/ownership/has-market.yaml
+# ═══════════════════════════════════════════════════════════════════════════════
+# ArcClass: HAS_MARKET — Locale owns Market intelligence config
+# v0.13.1: LLM-First property ordering
 # v10.7: NEW arc for 7-node locale knowledge architecture
-# Links Locale to its Market intelligence configuration
 # v0.13.1: Added TIER 2 inverse (ADR-026)
+# ═══════════════════════════════════════════════════════════════════════════════
+
 arc:
+  # IDENTITY
   name: HAS_MARKET
   family: ownership
   scope: intra_realm
-  source: Locale
-  target: Market
-  cardinality: one_to_one
-  inverse: MARKET_OF
+
+  # SEMANTIC (LLM-CRITICAL)
+  description: "Locale owns Market intelligence config"
   llm_context: |
     USE: when loading market intelligence config for a locale.
     TRIGGERS: market config, locale market, market intelligence, business context.
     NOT: SEO keywords (use HAS_SEO_KEYWORDS), GEO queries (use HAS_GEO_QUERIES).
     RELATES: Locale (source), Market (target), 1:1 cardinality.
+
+  # GRAPH STRUCTURE
+  source: Locale
+  target: Market
+  cardinality: one_to_one
+
+  # FLAGS
+  inverse: MARKET_OF
+
+  # REFERENCE
   cypher_pattern: (Locale)-[:HAS_MARKET]->(Market)

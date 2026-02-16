@@ -1,23 +1,32 @@
 # packages/core/models/arc-classes/semantic/category-of.yaml
 # ArcClass: CATEGORY_OF — EntityCategory classifies Entity (inverse of BELONGS_TO)
-# v0.13.1: NEW TIER 2 inverse arc (ADR-026)
+# v0.13.1: LLM-First field ordering (semantic fields before structure)
 
 arc:
+  # --- IDENTITY ---
   name: CATEGORY_OF
   family: semantic
-  scope: cross_realm  # shared EntityCategory -> org Entity
-  temperature_threshold: 0.10  # Lightweight taxonomy traversal
+  scope: cross_realm
 
-  source: EntityCategory
-  target: Entity
-
-  cardinality: one_to_many  # One category can classify many entities
-  inverse_of: BELONGS_TO
-
+  # --- SEMANTIC (LLM-critical) ---
+  description: |
+    Inverse of BELONGS_TO. EntityCategory classifies multiple Entity nodes.
+    Use for traversing from a category to find all entities it classifies.
+    Cross-realm arc from shared EntityCategory to org Entity.
   llm_context: |
     USE: when finding all entities in a semantic category.
     TRIGGERS: entities in category, category members, what entities, taxonomy query.
     NOT: assigning category (use BELONGS_TO), entity content (use HAS_NATIVE).
     RELATES: EntityCategory (source), Entity (target), BELONGS_TO (inverse).
 
+  # --- GRAPH STRUCTURE ---
+  source: EntityCategory
+  target: Entity
+  cardinality: one_to_many
+
+  # --- FLAGS ---
+  inverse_of: BELONGS_TO
+  temperature_threshold: 0.10
+
+  # --- REFERENCE ---
   cypher_pattern: "(EntityCategory)-[:CATEGORY_OF]->(Entity)"

@@ -1,3 +1,6 @@
+# models/node-classes/org/structure/page.yaml
+# v0.13.1 LLM-First Schema - Canonical field ordering for optimal AI comprehension
+#
 # Page - Invariant page structure with orchestrator instructions
 #
 # v0.13: ADR-031 SEO Pillar/Cluster Architecture
@@ -11,19 +14,35 @@
 # v0.12.0: Initial clean schema (ADR-025 naming conventions)
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: Page
   realm: org
   layer: structure
   trait: defined
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC
+  # ═══════════════════════════════════════════════════════════════════════════════
+  description: "Invariant page structure containing blocks and orchestrator instructions"
+
+  llm_context: |
+    USE: when orchestrating page-level generation, assembling blocks, or querying page structure.
+    TRIGGERS: "page", "content structure", "block composition", "page generation".
+    NOT: for individual block content (use Block), for visual design (use BrandDesign).
+    RELATES: Project (owner via HAS_PAGE), Block (contains via HAS_BLOCK), Entity (represents via REPRESENTS), PageNative (output).
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════════
   icon:
     web: file-text
     terminal: "◇"
-  description: "Invariant page structure containing blocks and orchestrator instructions"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # STANDARD PROPERTIES (v7.1.0)
+  # BLOC 4: DATA
   # ═══════════════════════════════════════════════════════════════════════════════
-
   standard_properties:
     key:
       type: string
@@ -75,10 +94,6 @@ node:
       type: datetime
       required: true
 
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # VECTOR EMBEDDING (v7.8.0 - Hybrid OntologyRAG)
-  # ═══════════════════════════════════════════════════════════════════════════════
-
   embedding_properties:
     embedding:
       type: vector
@@ -95,10 +110,6 @@ node:
       type: datetime
       required: false
       description: "Timestamp of last embedding update"
-
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # PAGE-SPECIFIC PROPERTIES (v0.13: ADR-031)
-  # ═══════════════════════════════════════════════════════════════════════════════
 
   properties:
     # ─────────────────────────────────────────────────────────────────────────────
@@ -144,9 +155,8 @@ node:
       description: "SEO pillar strategy type (only valid when is_pillar=true)"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # RELATIONS (FROM this node)
+  # BLOC 5: GRAPH
   # ═══════════════════════════════════════════════════════════════════════════════
-
   relations:
     # v0.12.4 ADR-028: 1:1 mandatory relationship to main Entity
     REPRESENTS:
@@ -240,10 +250,6 @@ node:
           description: "Priority for internal linking (1=highest)"
       description: "SEO pillar/cluster relationship (target MUST be is_pillar=true)"
 
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # INCOMING RELATIONS
-  # ═══════════════════════════════════════════════════════════════════════════════
-
   incoming_relations:
     HAS_PAGE:
       from: Project
@@ -257,9 +263,8 @@ node:
       description: "Entity that this page represents (inverse of REPRESENTS)"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # EXAMPLE
+  # BLOC 6: REFERENCE
   # ═══════════════════════════════════════════════════════════════════════════════
-
   example:
     data:
       key: "page-pricing"

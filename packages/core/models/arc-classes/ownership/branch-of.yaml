@@ -1,22 +1,30 @@
-# packages/core/models/arc-classes/ownership/branch-of.yaml
-# ArcClass: BRANCH_OF - LanguageBranch belongs to LanguageFamily
+# ═══════════════════════════════════════════════════════════════════════════════
+# ArcClass: BRANCH_OF — LanguageBranch belongs to LanguageFamily
+# v0.13.1: LLM-First property ordering
 # v10.8: Geographic Taxonomy
+# ═══════════════════════════════════════════════════════════════════════════════
 
 arc:
+  # IDENTITY
   name: BRANCH_OF
   family: ownership
   scope: intra_realm
 
-  source: LanguageBranch
-  target: LanguageFamily
-  cardinality: many_to_one
-
-  inverse: HAS_BRANCH
-
+  # SEMANTIC (LLM-CRITICAL)
+  description: "LanguageBranch belongs to LanguageFamily (ISO 639-5 hierarchy)"
   llm_context: |
     USE: when finding language family for a branch.
     TRIGGERS: language family, language branch, related languages, ISO 639-5.
     NOT: branch children (use HAS_BRANCH), language locales.
     RELATES: LanguageBranch (source), LanguageFamily (target), HAS_BRANCH (inverse).
 
+  # GRAPH STRUCTURE
+  source: LanguageBranch
+  target: LanguageFamily
+  cardinality: many_to_one
+
+  # FLAGS
+  inverse: HAS_BRANCH
+
+  # REFERENCE
   cypher_pattern: "(LanguageBranch)-[:BRANCH_OF]->(LanguageFamily)"

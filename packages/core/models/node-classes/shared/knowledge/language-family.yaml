@@ -1,20 +1,42 @@
-# models/node-classes/shared/knowledge/language-family.yaml
-# LanguageFamily - ISO 639-5 top-level language family
-#
+# ─────────────────────────────────────────────────────────────────────────────
+# LanguageFamily — ISO 639-5 top-level language family
+# ─────────────────────────────────────────────────────────────────────────────
+# v0.13.1: LLM-First field ordering (ADR-031)
 # v10.8: Geographic Taxonomy - Phase 2
 # Data: ~15 families (Indo-European, Sino-Tibetan, Afro-Asiatic, etc.)
 # Source: ISO 639-5 (loc.gov)
+# ─────────────────────────────────────────────────────────────────────────────
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════
   name: LanguageFamily
   realm: shared
   layer: knowledge
   trait: imported
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC
+  # ═══════════════════════════════════════════════════════════════════════════
+  description: "ISO 639-5 language family for clustering linguistically related locales"
+
+  llm_context: |
+    USE: for clustering linguistically related locales at top level.
+    TRIGGERS: indo-european, sino-tibetan, afro-asiatic, language family.
+    NOT: fine-grained linguistic clustering (use LanguageBranch).
+    RELATES: LanguageBranch (BRANCH_OF).
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════
   icon:
     web: "message-circle"
     terminal: "◇"
-  description: "ISO 639-5 language family for clustering linguistically related locales"
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA
+  # ═══════════════════════════════════════════════════════════════════════════
   standard_properties:
     key:
       type: string
@@ -39,12 +61,6 @@ node:
       required: true
       description: "Short description"
       example: "Largest language family, includes Romance, Germanic, Slavic, Indo-Iranian"
-
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints"
-      example: "USE: for European, Iranian, Indian languages. TRIGGERS: indo-european, romance, germanic, slavic. SHARE: cognates, grammatical structures."
 
     created_at:
       type: datetime
@@ -73,6 +89,9 @@ node:
       description: "Estimated number of speakers"
       example: "3.2 billion"
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH
+  # ═══════════════════════════════════════════════════════════════════════════
   relations:
     incoming:
       - type: BRANCH_OF
@@ -80,6 +99,9 @@ node:
         cardinality: "N:1"
         description: "Language branches within this family"
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE
+  # ═══════════════════════════════════════════════════════════════════════════
   example:
     data:
       key: "ine"

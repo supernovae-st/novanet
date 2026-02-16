@@ -1,4 +1,5 @@
 # models/node-classes/org/foundation/project-native.yaml
+# v0.13.1 LLM-First Schema - Canonical field ordering for optimal AI comprehension
 # ProjectNative - Human-authored native identity for Project (v0.13.0 ADR-029)
 #
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -26,19 +27,35 @@
 #   (Project)--[:HAS_NATIVE]-->(ProjectNative)--[:FOR_LOCALE]-->(Locale)
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: ProjectNative
   realm: org
   layer: foundation
   trait: authored
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (description, llm_context)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  description: "Human-authored native identity and messaging for a Project"
+
+  llm_context: |
+    USE: when loading native project identity, messaging, or voice guidelines for content generation.
+    TRIGGERS: "project native", "project identity", "project messaging", "voice guidelines", locale code.
+    NOT: for invariant project definition (use Project), for entity native (use EntityNative), for page native (use PageNative).
+    RELATES: Project (parent via HAS_NATIVE), Locale (target via FOR_LOCALE), PageNative (consumer via BELONGS_TO_PROJECT_NATIVE).
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL (icon)
+  # ═══════════════════════════════════════════════════════════════════════════════
   icon:
     web: languages
     terminal: "●"
-  description: "Human-authored native identity and messaging for a Project"
 
-  # ===========================================================================
-  # STANDARD PROPERTIES (Content nodes - no key, relation-identified)
-  # ===========================================================================
-
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA (standard_properties, properties)
+  # ═══════════════════════════════════════════════════════════════════════════════
   standard_properties:
     display_name:
       type: string
@@ -52,16 +69,6 @@ node:
       description: "Short description of this localization"
       example: "French localization for QR Code AI"
 
-    llm_context:
-      type: string
-      required: true
-      description: "Format: USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections]."
-      example: |
-        USE: when loading native project identity, messaging, or voice guidelines for content generation.
-        TRIGGERS: "project native", "project identity", "project messaging", "voice guidelines", locale code.
-        NOT: for invariant project definition (use Project), for entity native (use EntityNative), for page native (use PageNative).
-        RELATES: Project (parent via HAS_NATIVE), Locale (target via FOR_LOCALE), PageNative (consumer via BELONGS_TO_PROJECT_NATIVE).
-
     created_at:
       type: datetime
       required: true
@@ -70,26 +77,20 @@ node:
       type: datetime
       required: true
 
-  # ===========================================================================
-  # PROJECTNATIVE-SPECIFIC PROPERTIES
-  # ===========================================================================
-
   properties:
-    # -------------------------------------------------------------------------
+    # ─────────────────────────────────────────────────────────────────────────────
     # PUBLICATION STATUS (v11.2)
-    # -------------------------------------------------------------------------
+    # ─────────────────────────────────────────────────────────────────────────────
     status:
       type: string
       required: false
       default: "draft"
       enum: ["draft", "reviewed", "published"]
       description: "Publication workflow status"
-      llm_context: "Content lifecycle stage - draft (not reviewed), reviewed (human validated), published (live)"
 
-    # -------------------------------------------------------------------------
+    # ─────────────────────────────────────────────────────────────────────────────
     # Identity - What is it (various lengths)
-    # -------------------------------------------------------------------------
-
+    # ─────────────────────────────────────────────────────────────────────────────
     what_short:
       type: string
       required: true
@@ -108,10 +109,9 @@ node:
       description: "200+ words - for about pages"
       example: "QR Code AI est la plateforme leader de creation de QR codes personnalises..."
 
-    # -------------------------------------------------------------------------
+    # ─────────────────────────────────────────────────────────────────────────────
     # Messaging - How we say it
-    # -------------------------------------------------------------------------
-
+    # ─────────────────────────────────────────────────────────────────────────────
     tagline:
       type: string
       required: true
@@ -136,10 +136,9 @@ node:
       description: "1 paragraph, ~100 words"
       example: "..."
 
-    # -------------------------------------------------------------------------
+    # ─────────────────────────────────────────────────────────────────────────────
     # Voice - Tone guidelines
-    # -------------------------------------------------------------------------
-
+    # ─────────────────────────────────────────────────────────────────────────────
     voice_personality:
       type: string[]
       required: true
@@ -181,10 +180,9 @@ node:
       description: "What we NEVER do"
       example: ["Utiliser du jargon", "Sonner desespere"]
 
-    # -------------------------------------------------------------------------
+    # ─────────────────────────────────────────────────────────────────────────────
     # CTAs - Call to Actions (merged from BrandL10n v7.2.2)
-    # -------------------------------------------------------------------------
-
+    # ─────────────────────────────────────────────────────────────────────────────
     cta_primary:
       type: string
       required: true
@@ -203,10 +201,9 @@ node:
       description: "Soft CTA"
       example: "En savoir plus"
 
-    # -------------------------------------------------------------------------
+    # ─────────────────────────────────────────────────────────────────────────────
     # SEO - Meta and Keywords (merged from BrandL10n v7.2.2)
-    # -------------------------------------------------------------------------
-
+    # ─────────────────────────────────────────────────────────────────────────────
     meta_description:
       type: string
       required: true
@@ -225,10 +222,9 @@ node:
       description: "Supporting keywords"
       example: ["QR code personnalise", "QR code design"]
 
-  # ===========================================================================
-  # RELATIONS (v11 format)
-  # ===========================================================================
-
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH (relations, incoming_relations)
+  # ═══════════════════════════════════════════════════════════════════════════════
   relations:
     FOR_LOCALE:
       to: Locale
@@ -237,10 +233,6 @@ node:
 
     # NOTE: ValuePropL10n and SocialProofL10n removed in v7.8.0
     # Value props and social proof are now inline properties if needed
-
-  # ===========================================================================
-  # INCOMING RELATIONS
-  # ===========================================================================
 
   incoming_relations:
     HAS_NATIVE:
@@ -253,14 +245,12 @@ node:
       cardinality: "1:N"
       description: "PageNative nodes generated for this project locale"
 
-  # ===========================================================================
-  # EXAMPLE
-  # ===========================================================================
-
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE (example)
+  # ═══════════════════════════════════════════════════════════════════════════════
   example:
     display_name: "QR Code AI (fr-FR)"
     description: "French native identity for QR Code AI"
-    llm_context: "USE: for French market messaging. TRIGGERS: fr-FR, french project. NOT: other locales. RELATES: Project (via HAS_NATIVE)."
     what_short: "QR Code AI est la plateforme de creation de QR codes personnalises propulsee par l'IA."
     what_medium: "QR Code AI combine intelligence artificielle et design pour creer des QR codes uniques qui refletent votre marque."
     what_long: "QR Code AI est la plateforme leader de creation de QR codes personnalises..."

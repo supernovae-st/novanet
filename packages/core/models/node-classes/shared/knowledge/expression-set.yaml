@@ -1,24 +1,42 @@
-# models/node-classes/shared/knowledge/expression-set.yaml
+# ─────────────────────────────────────────────────────────────────────────────
 # ExpressionSet — Container for all Expression atoms of a locale
-#
+# ─────────────────────────────────────────────────────────────────────────────
+# v0.13.1: LLM-First field ordering (ADR-031)
 # v10.7: Simplified model - one ExpressionSet per locale
 # Register is a property on Expression atoms, not on the container
 # Stability: High - structure rarely changes
+# ─────────────────────────────────────────────────────────────────────────────
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════
   name: ExpressionSet
   realm: shared
   layer: knowledge
   trait: defined  # v11.2: Containers are universal categories (invariant), atoms are locale-native (knowledge)
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC
+  # ═══════════════════════════════════════════════════════════════════════════
+  description: "Container for all Expression atoms of a locale"
+
+  llm_context: |
+    USE: when accessing locale's expression library for content generation.
+    TRIGGERS: expressions, idioms, phrases, locale expressions, expression container.
+    NOT: for individual expressions (use Expression atom via CONTAINS).
+    RELATES: Expression (CONTAINS), Locale (HAS_EXPRESSIONS).
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════
   icon:
     web: "message-square"
     terminal: "◇"
-  description: |
-    Container for all Expression atoms of a locale.
-    USE: When accessing locale's expression library for content generation.
-    TRIGGERS: expressions, idioms, phrases, locale expressions, expression container.
-    NOT: For individual expressions (use Expression atom via CONTAINS).
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA
+  # ═══════════════════════════════════════════════════════════════════════════
   standard_properties:
     display_name:
       type: string
@@ -31,12 +49,6 @@ node:
       required: true
       description: "Short description"
       example: "Native expressions for fr-FR across all registers"
-
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints"
-      example: "USE: to find expressions for a locale. Filter by semantic_field and register on atoms."
 
     created_at:
       type: datetime
@@ -62,6 +74,9 @@ node:
       description: "Total number of Expression atoms"
       example: 80
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH
+  # ═══════════════════════════════════════════════════════════════════════════
   relations:
     outgoing:
       - type: CONTAINS

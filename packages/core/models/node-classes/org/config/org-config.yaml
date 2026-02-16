@@ -1,20 +1,37 @@
 # models/node-classes/org/config/org-config.yaml
+# v0.13.1 LLM-First Schema - Canonical field ordering for optimal AI comprehension
 # v11.3: Merged from Organization + Tenant (simpler, unified model)
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: OrgConfig
   realm: org
   layer: config
   trait: defined
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (description, llm_context)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  description: "Organization configuration root. Parent of all projects."
+
+  llm_context: |
+    USE: when loading org-level context, configuration, or project hierarchy.
+    TRIGGERS: "organization", "org config", "company settings", "project parent".
+    NOT: for project-specific settings (use Project), for brand identity (use Brand).
+    RELATES: Project (children via HAS_PROJECT).
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL (icon)
+  # ═══════════════════════════════════════════════════════════════════════════════
   icon:
     web: building-2
     terminal: "◎"
-  description: "Organization configuration root. Parent of all projects."
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # STANDARD PROPERTIES
+  # BLOC 4: DATA (standard_properties, properties)
   # ═══════════════════════════════════════════════════════════════════════════════
-
   standard_properties:
     key:
       type: string
@@ -34,12 +51,6 @@ node:
       description: "Brief description of the organization"
       example: "AI-powered content localization"
 
-    llm_context:
-      type: string
-      required: true
-      description: "LLM routing context (USE/TRIGGERS/NOT format)"
-      example: "USE: org-level context. TRIGGERS: supernovae, company. NOT: project-specific."
-
     created_at:
       type: datetime
       required: true
@@ -47,10 +58,6 @@ node:
     updated_at:
       type: datetime
       required: true
-
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # ORG-SPECIFIC PROPERTIES
-  # ═══════════════════════════════════════════════════════════════════════════════
 
   properties:
     domain:
@@ -72,9 +79,8 @@ node:
       example: "Software / AI / Localization"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # RELATIONS (FROM this node)
+  # BLOC 5: GRAPH (relations)
   # ═══════════════════════════════════════════════════════════════════════════════
-
   relations:
     HAS_PROJECT:
       to: Project
@@ -82,15 +88,13 @@ node:
       description: "Projects owned by this organization"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # EXAMPLE
+  # BLOC 6: REFERENCE (example)
   # ═══════════════════════════════════════════════════════════════════════════════
-
   example:
     data:
       key: "supernovae"
       display_name: "SuperNovae"
       description: "AI-powered content localization"
-      llm_context: "USE: org-level context. TRIGGERS: supernovae, company. NOT: project-specific."
       domain: "supernovae.studio"
       website_url: "https://supernovae.studio"
       industry: "Software / AI / Localization"

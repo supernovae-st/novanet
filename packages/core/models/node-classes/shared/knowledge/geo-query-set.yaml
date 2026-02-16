@@ -1,33 +1,48 @@
-# models/node-classes/shared/knowledge/geo-query-set.yaml
+# ─────────────────────────────────────────────────────────────────────────────
 # GEOQuerySet — Container for GEO queries belonging to a locale (1:1 with Locale)
-#
+# ─────────────────────────────────────────────────────────────────────────────
+# v0.13.1: LLM-First field ordering (ADR-031)
 # v11.4: Knowledge Atoms pattern - container for GEOQuery atoms
 #        - realm: shared (universal GEO tracking)
 #        - layer: knowledge (locale knowledge infrastructure)
 #        - trait: defined (container is universal category)
 #        - 1:1 with Locale (one container per locale)
 #        - Access: Locale -[:HAS_GEO_QUERIES]-> GEOQuerySet -[:CONTAINS_GEO_QUERY]-> GEOQuery
-#
 # Stability: High - structure rarely changes
+# ─────────────────────────────────────────────────────────────────────────────
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════
   name: GEOQuerySet
   realm: shared
   layer: knowledge
   trait: defined  # Containers are universal categories (invariant), atoms are locale-native (knowledge)
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC
+  # ═══════════════════════════════════════════════════════════════════════════
+  description: "Container for GEO queries belonging to a locale (1:1 with Locale)"
+
+  llm_context: |
+    GEOQuerySet groups all GEO queries for a locale.
+    One GEOQuerySet per Locale (1:1 cardinality).
+    USE: when accessing locale's AI visibility queries for monitoring.
+    TRIGGERS: GEO queries, AI visibility, query set, locale queries.
+    NOT: for individual queries (use GEOQuery via CONTAINS_GEO_QUERY).
+    RELATES: GEOQuery (CONTAINS_GEO_QUERY), Locale (HAS_GEO_QUERIES).
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════
   icon:
     web: "package"
     terminal: "■"
-  description: |
-    Container for GEO queries belonging to a locale (1:1 with Locale).
-    USE: When accessing locale's AI visibility queries for monitoring.
-    TRIGGERS: GEO queries, AI visibility, query set, locale queries.
-    NOT: For individual queries (use GEOQuery via CONTAINS_GEO_QUERY).
 
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # STANDARD PROPERTIES (v7.1.0)
-  # ═══════════════════════════════════════════════════════════════════════════════
-
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA
+  # ═══════════════════════════════════════════════════════════════════════════
   standard_properties:
     key:
       type: string
@@ -50,12 +65,6 @@ node:
       description: "Short description of the query set"
       example: "AI visibility queries for the French market"
 
-    llm_context:
-      type: string
-      required: false
-      description: "LLM generation hints"
-      example: "USE: to access all GEO queries for a locale. Contains AI visibility tracking queries. Access individual queries via CONTAINS_GEO_QUERY."
-
     created_at:
       type: datetime
       required: true
@@ -65,10 +74,6 @@ node:
       type: datetime
       required: true
       description: "Last update timestamp"
-
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # NODE-SPECIFIC PROPERTIES
-  # ═══════════════════════════════════════════════════════════════════════════════
 
   properties:
     # Sync metadata
@@ -85,10 +90,9 @@ node:
       description: "Count of GEOQuery atoms in this set"
       example: 342
 
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # RELATIONS
-  # ═══════════════════════════════════════════════════════════════════════════════
-
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH
+  # ═══════════════════════════════════════════════════════════════════════════
   relations:
     outgoing:
       - type: CONTAINS_GEO_QUERY
@@ -102,21 +106,9 @@ node:
         cardinality: "1:1"
         description: "Locale has exactly one GEO query set"
 
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # LLM CONTEXT
-  # ═══════════════════════════════════════════════════════════════════════════════
-
-  llm_context: |
-    GEOQuerySet groups all GEO queries for a locale.
-    One GEOQuerySet per Locale (1:1 cardinality).
-    Access: (Locale)-[:HAS_GEO_QUERIES]->(GEOQuerySet)
-    Then: (GEOQuerySet)-[:CONTAINS_GEO_QUERY]->(GEOQuery)
-    trait=invariant because the container category is universal.
-
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # EXAMPLE
-  # ═══════════════════════════════════════════════════════════════════════════════
-
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE
+  # ═══════════════════════════════════════════════════════════════════════════
   example:
     description: "Get query set with count of GEO queries for a locale"
     data:

@@ -1,16 +1,30 @@
-# packages/core/models/arc-classes/ownership/expressions-of.yaml
-# v0.13.0: TIER 2 inverse arc (ADR-026) - inverse of HAS_EXPRESSIONS
+# ═══════════════════════════════════════════════════════════════════════════════
+# ArcClass: EXPRESSIONS_OF — ExpressionSet belongs to Locale (inverse of HAS_EXPRESSIONS)
+# v0.13.1: LLM-First property ordering
+# v0.13.0: TIER 2 inverse arc (ADR-026)
+# ═══════════════════════════════════════════════════════════════════════════════
+
 arc:
+  # IDENTITY
   name: EXPRESSIONS_OF
   family: ownership
   scope: intra_realm
-  source: ExpressionSet
-  target: Locale
-  cardinality: one_to_one
-  inverse_of: HAS_EXPRESSIONS
+
+  # SEMANTIC (LLM-CRITICAL)
+  description: "ExpressionSet belongs to Locale (inverse of HAS_EXPRESSIONS)"
   llm_context: |
     USE: when finding which locale owns an ExpressionSet.
     TRIGGERS: expression owner, expressionset locale, which locale, idiom locale.
     NOT: loading expressions for locale (use HAS_EXPRESSIONS), individual expressions (use CONTAINS_EXPRESSION).
     RELATES: ExpressionSet (source), Locale (target), HAS_EXPRESSIONS (inverse).
+
+  # GRAPH STRUCTURE
+  source: ExpressionSet
+  target: Locale
+  cardinality: one_to_one
+
+  # FLAGS
+  inverse_of: HAS_EXPRESSIONS
+
+  # REFERENCE
   cypher_pattern: (ExpressionSet)-[:EXPRESSIONS_OF]->(Locale)

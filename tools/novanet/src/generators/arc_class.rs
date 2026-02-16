@@ -414,10 +414,7 @@ mod tests {
             "HAS_NATIVE",
             ArcFamily::Localization,
             NodeRef::Multiple(vec!["Page".to_string(), "Block".to_string()]),
-            NodeRef::Multiple(vec![
-                "PageNative".to_string(),
-                "BlockNative".to_string(),
-            ]),
+            NodeRef::Multiple(vec!["PageNative".to_string(), "BlockNative".to_string()]),
             Cardinality::OneToMany,
         );
         assert_eq!(
@@ -544,10 +541,7 @@ mod tests {
                 "HAS_NATIVE",
                 ArcFamily::Localization,
                 NodeRef::Multiple(vec!["Page".to_string(), "Block".to_string()]),
-                NodeRef::Multiple(vec![
-                    "PageNative".to_string(),
-                    "BlockNative".to_string(),
-                ]),
+                NodeRef::Multiple(vec!["PageNative".to_string(), "BlockNative".to_string()]),
                 Cardinality::OneToMany,
             )],
             semantic_link_types: None,
@@ -625,8 +619,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Schema:ArcClass"))
             .count();
         assert_eq!(
-            ac_merges, 169,
-            "expected 169 ArcClass MERGE statements (v0.13 ADR-029: merged HAS_CONTENT/HAS_GENERATED)"
+            ac_merges, 177,
+            "expected 177 ArcClass MERGE statements (v0.13 ADR-029 + USES_TERM/EXPRESSION/PATTERN/CULTURE_REF)"
         );
 
         // HAS_ARC_CLASS relationships match ArcClass count
@@ -635,8 +629,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_ARC_CLASS]"))
             .count();
         assert_eq!(
-            has_ac, 169,
-            "expected 169 HAS_ARC_CLASS relationships (v0.13 ADR-029)"
+            has_ac, 177,
+            "expected 177 HAS_ARC_CLASS relationships (v0.13 ADR-029 + USES_TERM/EXPRESSION/PATTERN/CULTURE_REF)"
         );
 
         // IN_FAMILY relationships match ArcClass count
@@ -645,8 +639,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_FAMILY]"))
             .count();
         assert_eq!(
-            in_family, 169,
-            "expected 169 IN_FAMILY relationships (v0.13 ADR-029: merged HAS_CONTENT/HAS_GENERATED)"
+            in_family, 177,
+            "expected 177 IN_FAMILY relationships (v0.13 ADR-029 + USES_TERM/EXPRESSION/PATTERN/CULTURE_REF)"
         );
 
         // Family distribution (non-inverse counts)
@@ -667,15 +661,15 @@ mod tests {
         let generation = count_family("generation");
         let mining = count_family("mining");
 
-        // v0.13 ADR-029: Total arcs = 169 (merged HAS_CONTENT/HAS_GENERATED → HAS_NATIVE)
+        // v0.13 ADR-029 + knowledge atom arcs: Total arcs = 177
         // ownership=79 (includes TIER 1 + TIER 2 inverses + HAS_NATIVE/NATIVE_OF)
         // localization=20
-        // semantic=52
+        // semantic=60 (52 + 8 new: USES_TERM/EXPRESSION/PATTERN/CULTURE_REF + inverses)
         // generation=12 (PRODUCED, PRODUCED_BY, minus merged arcs)
         // mining=6 (SEO/GEO mining arcs)
         assert!(
-            ownership + localization + semantic + generation + mining == 169,
-            "family counts should sum to 169: o={ownership} l={localization} s={semantic} g={generation} m={mining}"
+            ownership + localization + semantic + generation + mining == 177,
+            "family counts should sum to 177: o={ownership} l={localization} s={semantic} g={generation} m={mining}"
         );
 
         // Spot checks — specific ArcClass nodes (v11.8: renamed from ArcClass)
@@ -705,8 +699,8 @@ mod tests {
             }
         }
 
-        // v0.13 ADR-029: Header reflects count (169 total ArcClass nodes)
-        assert!(cypher.contains("169 ArcClass nodes"));
+        // v0.13 ADR-029 + knowledge atom arcs: Header reflects count (177 total ArcClass nodes)
+        assert!(cypher.contains("177 ArcClass nodes"));
     }
 
     /// Snapshot test for a minimal ArcSchema generator output.

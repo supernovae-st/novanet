@@ -1,20 +1,42 @@
-# models/node-classes/shared/knowledge/culture-set.yaml
+# ─────────────────────────────────────────────────────────────────────────────
 # CultureSet — Container grouping CultureRef atoms by type
-#
+# ─────────────────────────────────────────────────────────────────────────────
+# v0.13.1: LLM-First field ordering (ADR-031)
 # v10.1: Pure container (no JSON blobs - data lives in CultureRef atoms)
 # Types: values, references, celebrities, calendar
 # Stability: High - structure rarely changes
+# ─────────────────────────────────────────────────────────────────────────────
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════
   name: CultureSet
   realm: shared
   layer: knowledge
   trait: defined  # v11.2: Containers are universal categories (invariant), atoms are locale-native (knowledge)
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC
+  # ═══════════════════════════════════════════════════════════════════════════
+  description: "Container grouping CultureRef atoms by type"
+
+  llm_context: |
+    USE: to find culture refs by type.
+    TRIGGERS: values, holidays, cultural references, culture container.
+    NOT: individual refs (use CultureRef via CONTAINS).
+    RELATES: CultureRef (CONTAINS), Locale (HAS_CULTURE_SET).
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════
   icon:
     web: "drama"
     terminal: "◎"
-  description: "Container grouping CultureRef atoms by type"
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA
+  # ═══════════════════════════════════════════════════════════════════════════
   standard_properties:
     display_name:
       type: string
@@ -27,12 +49,6 @@ node:
       required: true
       description: "Short description"
       example: "Core cultural values for fr-FR"
-
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints"
-      example: "USE: to find culture refs by type. TRIGGERS: values, holidays. NOT: individual refs."
 
     created_at:
       type: datetime
@@ -53,6 +69,9 @@ node:
       description: "Cultural knowledge type this set groups"
       example: "values"
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH
+  # ═══════════════════════════════════════════════════════════════════════════
   relations:
     outgoing:
       - type: CONTAINS

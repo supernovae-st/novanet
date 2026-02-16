@@ -1,20 +1,42 @@
-# models/node-classes/shared/knowledge/pattern-set.yaml
+# ─────────────────────────────────────────────────────────────────────────────
 # PatternSet — Container grouping Pattern atoms by usage
-#
+# ─────────────────────────────────────────────────────────────────────────────
+# v0.13.1: LLM-First field ordering (ADR-031)
 # v10.1: Pure container (no JSON blobs - data lives in Pattern atoms)
 # Usages: cta, headlines, body, social
 # Stability: High - structure rarely changes
+# ─────────────────────────────────────────────────────────────────────────────
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════
   name: PatternSet
   realm: shared
   layer: knowledge
   trait: defined  # v11.2: Containers are universal categories (invariant), atoms are locale-native (knowledge)
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC
+  # ═══════════════════════════════════════════════════════════════════════════
+  description: "Container grouping Pattern atoms by usage"
+
+  llm_context: |
+    USE: to find patterns by usage category.
+    TRIGGERS: CTA, headline, body, social, pattern container.
+    NOT: individual templates (use Pattern via CONTAINS).
+    RELATES: Pattern (CONTAINS), Locale (HAS_PATTERNS).
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════
   icon:
     web: "clipboard"
     terminal: "▤"
-  description: "Container grouping Pattern atoms by usage"
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA
+  # ═══════════════════════════════════════════════════════════════════════════
   standard_properties:
     display_name:
       type: string
@@ -27,12 +49,6 @@ node:
       required: true
       description: "Short description"
       example: "Call-to-action patterns for fr-FR"
-
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints"
-      example: "USE: to find patterns by usage. TRIGGERS: CTA, headline. NOT: individual templates."
 
     created_at:
       type: datetime
@@ -53,6 +69,9 @@ node:
       description: "Pattern usage category this set groups"
       example: "cta"
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH
+  # ═══════════════════════════════════════════════════════════════════════════
   relations:
     outgoing:
       - type: CONTAINS

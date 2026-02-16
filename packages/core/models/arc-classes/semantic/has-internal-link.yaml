@@ -1,35 +1,49 @@
 # packages/core/models/arc-classes/semantic/has-internal-link.yaml
-# ArcClass: HAS_INTERNAL_LINK — BlockNative contains link to PageNative (v10.3)
-# v0.13.1: MOVED from localization/ to semantic/ (no locale dimension - content navigation)
+# ArcClass: HAS_INTERNAL_LINK — BlockNative contains link to PageNative
+# v0.13.1: LLM-First field ordering (semantic fields before structure)
 
 arc:
+  # --- IDENTITY ---
   name: HAS_INTERNAL_LINK
   family: semantic
   scope: intra_realm
-  temperature_threshold: 0.8  # High priority for content structure analysis
 
-  source: BlockNative
-  target: PageNative
-  cardinality: many_to_many
-
-  properties:
-    - name: anchor_text
-      type: string
-      required: false
-      description: "Visible anchor text of the link"
-    - name: position
-      type: integer
-      required: false
-      description: "Position of the link within the block content"
-    - name: nofollow
-      type: boolean
-      required: false
-      description: "Whether the link has rel=nofollow"
-
+  # --- SEMANTIC (LLM-critical) ---
+  description: |
+    BlockNative contains an actual hyperlink to a PageNative. Tracks rendered
+    links in generated content for SEO analysis and link structure auditing.
+    Different from LINKS_TO (page-to-page intent) and MENTIONS (@ references
+    in instructions).
   llm_context: |
     USE: when analyzing actual hyperlinks rendered in generated block content.
     TRIGGERS: internal links, rendered links, link structure, SEO links, anchor text, content linking.
     NOT: page-to-page SEO intent (use LINKS_TO), instruction references (use REFERENCES_PAGE), @ refs (use MENTIONS).
     RELATES: BlockNative (source), PageNative (target), properties: anchor_text, position, nofollow.
 
+  # --- GRAPH STRUCTURE ---
+  source: BlockNative
+  target: PageNative
+  cardinality: many_to_many
+
+  # --- FLAGS ---
+  temperature_threshold: 0.8
+
+  # --- DATA ---
+  properties:
+    - name: anchor_text
+      type: string
+      required: false
+      description: "Visible anchor text of the link"
+
+    - name: position
+      type: integer
+      required: false
+      description: "Position of the link within the block content"
+
+    - name: nofollow
+      type: boolean
+      required: false
+      description: "Whether the link has rel=nofollow"
+
+  # --- REFERENCE ---
   cypher_pattern: "(BlockNative)-[:HAS_INTERNAL_LINK {anchor_text, position, nofollow}]->(PageNative)"

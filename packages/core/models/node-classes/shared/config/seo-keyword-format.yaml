@@ -1,23 +1,39 @@
-# models/node-classes/shared/config/seo-keyword-format.yaml
-# SEOKeywordFormat - Keyword format classification for SEOKeyword nodes
-#
-# v11.4: Classification node following EntityCategory pattern (ADR-017)
-#        - realm: shared (universal taxonomy, applies to all orgs)
-#        - layer: config (classification nodes layer)
-#        - trait: defined (7 static format definitions)
+# ═══════════════════════════════════════════════════════════════════════════════
+# NodeClass: SEOKeywordFormat — Keyword format classification for SEOKeyword nodes
+# v0.13.1: LLM-First property ordering
+# ═══════════════════════════════════════════════════════════════════════════════
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════════
+
   name: SEOKeywordFormat
   realm: shared
   layer: config
   trait: defined
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  description: "Keyword format classification (EntityCategory pattern, ADR-017)"
+  llm_context: |
+    USE: when classifying SEO keywords by structural format.
+    TRIGGERS: "keyword format", "keyword type", "question keyword", "comparison keyword", "brand keyword".
+    NOT: for keyword instances (use SEOKeyword), for entity classification (use EntityCategory).
+    RELATES: SEOKeyword (via HAS_FORMAT), 7 invariant instances (standard, question, comparison, preposition, long_tail, brand, local).
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════════
+
   icon:
     web: label
     terminal: "⊞"
-  description: "Keyword format classification (EntityCategory pattern, ADR-017)"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # STANDARD PROPERTIES
+  # BLOC 4: DATA — Standard Properties
   # ═══════════════════════════════════════════════════════════════════════════════
 
   standard_properties:
@@ -62,7 +78,7 @@ node:
       required: true
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # FORMAT-SPECIFIC PROPERTIES
+  # BLOC 4: DATA — Format-Specific Properties
   # ═══════════════════════════════════════════════════════════════════════════════
 
   properties:
@@ -81,7 +97,7 @@ node:
       example: 1
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # INCOMING RELATIONS (TO this node)
+  # BLOC 5: GRAPH — Incoming Relations
   # ═══════════════════════════════════════════════════════════════════════════════
 
   incoming_relations:
@@ -92,17 +108,7 @@ node:
       description: "Keywords classified under this format (shared SEOKeyword -> shared SEOKeywordFormat)"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # LLM CONTEXT
-  # ═══════════════════════════════════════════════════════════════════════════════
-
-  llm_context: |
-    SEOKeywordFormat classifies keywords by structural format.
-    7 invariant instances: standard, question, comparison, preposition,
-    long_tail, brand, local. Use HAS_FORMAT arc from SEOKeyword.
-    Formats with has_entity_links=true have COMPARES_A/B or USE_CASE_FOR arcs.
-
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # EXAMPLES
+  # BLOC 6: REFERENCE — Examples
   # ═══════════════════════════════════════════════════════════════════════════════
 
   example:

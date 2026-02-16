@@ -1,21 +1,42 @@
 # models/node-classes/shared/geography/continent.yaml
 # Continent - UN M49 continental region for geographic hierarchy
 #
-# v10.8: Geographic Taxonomy - Phase 1
+# v0.13.1: LLM-First field ordering (llm_context promoted to BLOC 2)
 # v0.12.4: Added cultural_style and visual_prompt for AI generation
+# v10.8: Geographic Taxonomy - Phase 1
 # Data: 6 continents (AF, AM, AN, AS, EU, OC)
 # Source: UN M49 Standard (unstats.un.org)
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: Continent
   realm: shared
   layer: geography
   trait: defined
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (LLM-First)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  description: "UN M49 continental region for geographic clustering and LLM retrieval"
+
+  llm_context: |
+    USE: when generating content for a geographic continent.
+    TRIGGERS: "continent", "continental", "region", "geographic area".
+    NOT: for country-specific content (use Country), for locale-specific (use Locale).
+    RELATES: GeoRegion (child via IN_CONTINENT), Country (grandchild).
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════════
   icon:
     web: "globe"
     terminal: "◉"
-  description: "UN M49 continental region for geographic clustering and LLM retrieval"
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA
+  # ═══════════════════════════════════════════════════════════════════════════════
   standard_properties:
     key:
       type: string
@@ -41,12 +62,6 @@ node:
       required: true
       description: "Short description"
       example: "European continent covering 44 countries"
-
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints for geographic context"
-      example: "USE: for European countries and markets. TRIGGERS: europe, european, eu. NOT: Eurasia (use separate)."
 
     created_at:
       type: datetime
@@ -117,6 +132,9 @@ node:
           inherit_from: string    # Usually "image"
           rendering: object       # Lighting, materials, environment
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH
+  # ═══════════════════════════════════════════════════════════════════════════════
   relations:
     incoming:
       - type: IN_CONTINENT
@@ -124,6 +142,9 @@ node:
         cardinality: "N:1"
         description: "Geographic regions within this continent"
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE
+  # ═══════════════════════════════════════════════════════════════════════════════
   example:
     data:
       key: "EU"

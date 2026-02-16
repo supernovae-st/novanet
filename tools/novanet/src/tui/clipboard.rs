@@ -19,6 +19,7 @@ pub fn copy_to_clipboard(text: &str) -> Result<(), String> {
 
 /// Copy content based on the currently selected box.
 /// Returns (content, format_name) for status message.
+/// v0.13.1: Diagram and Architecture removed
 pub fn get_box_content(app: &App) -> Option<(String, &'static str)> {
     match app.selected_box {
         InfoBox::Tree => get_tree_content(app),
@@ -26,8 +27,6 @@ pub fn get_box_content(app: &App) -> Option<(String, &'static str)> {
         InfoBox::Properties => get_properties_content(app),
         InfoBox::Arcs => get_arcs_content(app),
         InfoBox::Source => get_source_content(app),
-        InfoBox::Diagram => get_diagram_content(app),
-        InfoBox::Architecture => get_architecture_content(app),
     }
 }
 
@@ -48,10 +47,7 @@ fn get_tree_content(app: &App) -> Option<(String, &'static str)> {
         TreeItem::ClassesSection => "classes".to_string(),
         TreeItem::ArcsSection => "arcs".to_string(),
         TreeItem::EntityCategory(realm, layer, class, cat) => {
-            format!(
-                "{}/{}/{}/{}",
-                realm.key, layer.key, class.key, cat.key
-            )
+            format!("{}/{}/{}/{}", realm.key, layer.key, class.key, cat.key)
         }
     };
     Some((path, "path"))
@@ -107,7 +103,10 @@ fn get_header_content(app: &App) -> Option<(String, &'static str)> {
         }
         _ => return None,
     };
-    Some((serde_json::to_string_pretty(&json).unwrap_or_default(), "JSON"))
+    Some((
+        serde_json::to_string_pretty(&json).unwrap_or_default(),
+        "JSON",
+    ))
 }
 
 /// PROPERTIES box: JSON schema or property list.
@@ -167,7 +166,10 @@ fn get_arcs_content(app: &App) -> Option<(String, &'static str)> {
             })
         }).collect::<Vec<_>>()
     });
-    Some((serde_json::to_string_pretty(&json).unwrap_or_default(), "JSON arcs"))
+    Some((
+        serde_json::to_string_pretty(&json).unwrap_or_default(),
+        "JSON arcs",
+    ))
 }
 
 /// SOURCE box: Raw YAML content.
@@ -179,57 +181,7 @@ fn get_source_content(app: &App) -> Option<(String, &'static str)> {
     }
 }
 
-/// DIAGRAM box: ASCII/Mermaid diagram content.
-/// Currently returns a simple hierarchy representation.
-fn get_diagram_content(app: &App) -> Option<(String, &'static str)> {
-    let item = app.current_item()?;
-    match item {
-        TreeItem::Class(realm, layer, class) => {
-            // Generate simple hierarchy diagram
-            let diagram = format!(
-                "REALM: {}\n  \u{2514}\u{2500}\u{2500} LAYER: {}\n        \u{2514}\u{2500}\u{2500} CLASS: {} ({})",
-                realm.display_name, layer.display_name, class.display_name, class.trait_name
-            );
-            Some((diagram, "ASCII"))
-        }
-        TreeItem::Realm(realm) => {
-            let layers: Vec<String> = app
-                .tree
-                .realms
-                .iter()
-                .find(|r| r.key == realm.key)
-                .map(|r| r.layers.iter().map(|l| l.display_name.clone()).collect())
-                .unwrap_or_default();
-            let diagram = format!(
-                "REALM: {}\n{}",
-                realm.display_name,
-                layers
-                    .iter()
-                    .map(|l| format!("  \u{2514}\u{2500}\u{2500} {}", l))
-                    .collect::<Vec<_>>()
-                    .join("\n")
-            );
-            Some((diagram, "ASCII"))
-        }
-        _ => None,
-    }
-}
-
-/// ARCHITECTURE box: ADR-028 architecture diagram content.
-fn get_architecture_content(app: &App) -> Option<(String, &'static str)> {
-    use super::data::get_architecture_diagram;
-
-    let item = app.current_item()?;
-    let class_name = match item {
-        TreeItem::Class(_, _, info) => Some(info.key.as_str()),
-        TreeItem::Instance(_, _, class_info, _) => Some(class_info.key.as_str()),
-        _ => None,
-    }?;
-
-    let diagram = get_architecture_diagram(class_name)?;
-    let content = diagram.diagram.join("\n");
-    Some((content, "ASCII"))
-}
+// v0.13.1: get_diagram_content and get_architecture_content removed (panel simplification)
 
 #[cfg(test)]
 mod tests {

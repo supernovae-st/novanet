@@ -25,7 +25,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | Entity | `entity seed`, `entity list`, `entity validate` | Implemented (phase-based) |
 | DB | `db seed`, `db migrate`, `db reset` | Implemented |
 | Filter | `filter build` | Implemented (JSON stdin, Studio subprocess) |
-| Blueprint | `blueprint [--view=X]` | Implemented (10 views) |
+| Blueprint | `blueprint [--view=X]` | Implemented (11 views) |
 | TUI | `tui` | Unified tree (Graph/Nexus modes), lazy loading, async channels |
 | System | `completions`, `doctor` | Implemented |
 

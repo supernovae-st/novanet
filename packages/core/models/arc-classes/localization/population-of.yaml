@@ -1,17 +1,34 @@
 # packages/core/models/arc-classes/localization/population-of.yaml
+# NovaNet v0.13.1 — LLM-First YAML Ordering
 # ArcClass: POPULATION_OF — PopulationSubCluster is present in Locale (inverse of HAS_POPULATION)
-#
 # v0.12.5: ADR-026 Inverse Arc Policy
 
 arc:
+  # IDENTITY
   name: POPULATION_OF
   family: localization
   scope: intra_realm
 
+  # SEMANTIC (LLM-CRITICAL)
+  description: >-
+    Links a PopulationSubCluster to all Locales where it is present.
+    Inverse of HAS_POPULATION. Used for finding which locales have a
+    specific demographic population with percentage breakdown.
+  llm_context: |
+    USE: when finding all Locales where a population sub-cluster is present.
+    TRIGGERS: "population presence", "where does this population live", "population locales".
+    NOT: for finding a Locale's populations (use HAS_POPULATION).
+    RELATES: PopulationSubCluster (source), Locale (target), HAS_POPULATION (inverse).
+
+  # GRAPH STRUCTURE
   source: PopulationSubCluster
   target: Locale
   cardinality: many_to_many
 
+  # FLAGS
+  inverse_of: HAS_POPULATION
+
+  # DATA
   properties:
     - name: percentage
       type: float
@@ -23,12 +40,5 @@ arc:
       required: false
       description: "True if this population is >50%"
 
-  inverse_of: HAS_POPULATION
-
-  llm_context: |
-    USE: when finding all Locales where a population sub-cluster is present.
-    TRIGGERS: "population presence", "where does this population live", "population locales".
-    NOT: for finding a Locale's populations (use HAS_POPULATION).
-    RELATES: PopulationSubCluster (source), Locale (target), HAS_POPULATION (inverse).
-
+  # REFERENCE
   cypher_pattern: "(PopulationSubCluster)-[:POPULATION_OF {percentage, is_majority}]->(Locale)"

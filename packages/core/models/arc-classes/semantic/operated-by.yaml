@@ -1,18 +1,35 @@
 # packages/core/models/arc-classes/semantic/operated-by.yaml
-# ArcClass: OPERATED_BY - Entity is operated on by an action
-# v11.0: Inverse of ACTS_ON arc
+# ArcClass: OPERATED_BY — Entity is operated on by an action (inverse of ACTS_ON)
+# v0.13.1: LLM-First field ordering (semantic fields before structure)
 
 arc:
+  # --- IDENTITY ---
   name: OPERATED_BY
   family: semantic
   scope: intra_realm
-  temperature_threshold: 0.15
 
+  # --- SEMANTIC (LLM-critical) ---
+  description: |
+    Inverse of ACTS_ON. Entity is operated on by an action entity.
+    Use to find what actions can be performed on an entity.
+    Models the "what can I do with this?" relationship.
+  llm_context: |
+    USE: when finding actions that can operate on an entity.
+    TRIGGERS: operated by, actions for, operations on, what can do.
+    NOT: reading (use READ_BY), enhancement (use ENHANCED_BY).
+    RELATES: Entity (source/thing), Entity (target/action), ACTS_ON (inverse).
+
+  # --- GRAPH STRUCTURE ---
   source: Entity
   target: Entity
   cardinality: many_to_many
-  is_self_referential: false
 
+  # --- FLAGS ---
+  inverse_of: ACTS_ON
+  is_self_referential: false
+  temperature_threshold: 0.15
+
+  # --- DATA ---
   properties:
     - name: strength
       type: float
@@ -32,12 +49,5 @@ arc:
       enum: [create, read, update, delete, scan, download, print, customize, track]
       description: "Type of operation performed"
 
-  inverse_of: ACTS_ON
-
-  llm_context: |
-    USE: when finding actions that can operate on an entity.
-    TRIGGERS: operated by, actions for, operations on, what can do.
-    NOT: reading (use READ_BY), enhancement (use ENHANCED_BY).
-    RELATES: Entity (source/thing), Entity (target/action), ACTS_ON (inverse).
-
+  # --- REFERENCE ---
   cypher_pattern: "(Entity)-[:OPERATED_BY {strength, temperature, operation_type}]->(Entity)"

@@ -1,28 +1,24 @@
-# packages/core/models/arc-classes/ownership/has-native.yaml
-# ArcClass: HAS_NATIVE — Defined node links to its native content (v0.13.0 ADR-029)
-#
 # ═══════════════════════════════════════════════════════════════════════════════
-# v0.13.0 CHANGES (ADR-029 *Native Pattern)
-# ═══════════════════════════════════════════════════════════════════════════════
-#
-#   MERGED: HAS_NATIVE + HAS_NATIVE → HAS_NATIVE
-#   - Unified arc for ALL locale-specific content (authored + generated)
-#   - Moved from localization/generation families → ownership family
-#   - Trait on target node distinguishes authored vs generated
-#
-# SOURCES:
-#   - Entity → EntityNative (authored)
-#   - Project → ProjectNative (authored)
-#   - Page → PageNative (generated)
-#   - Block → BlockNative (generated)
-#
+# ArcClass: HAS_NATIVE — Defined node links to its native content
+# v0.13.1: LLM-First property ordering
+# v0.13.0: ADR-029 *Native Pattern — MERGED HAS_CONTENT + HAS_GENERATED
 # ═══════════════════════════════════════════════════════════════════════════════
 
 arc:
+  # IDENTITY
   name: HAS_NATIVE
   family: ownership
   scope: intra_realm
 
+  # SEMANTIC (LLM-CRITICAL)
+  description: "Defined node links to its native content (unified arc for authored + generated)"
+  llm_context: |
+    USE: when loading locale-specific native content for any defined node.
+    TRIGGERS: has native, native content, locale content, entity native, page native.
+    NOT: for invariant structure (use the defined node directly), for locale lookup (use FOR_LOCALE).
+    RELATES: Entity/Project/Page/Block (source), *Native (target), NATIVE_OF (inverse).
+
+  # GRAPH STRUCTURE
   source:
     - Entity
     - Project
@@ -33,22 +29,13 @@ arc:
     - ProjectNative   # trait: authored
     - PageNative      # trait: generated
     - BlockNative     # trait: generated
-
   cardinality: one_to_many
 
+  # FLAGS
   inverse: NATIVE_OF
 
-  llm_context: |
-    USE: when loading locale-specific native content for any defined node.
-    TRIGGERS: has native, native content, locale content, entity native, page native.
-    NOT: for invariant structure (use the defined node directly), for locale lookup (use FOR_LOCALE).
-    RELATES: Entity/Project/Page/Block (source), *Native (target), NATIVE_OF (inverse).
-
+  # REFERENCE
   cypher_pattern: "(Entity)-[:HAS_NATIVE]->(EntityNative)"
-
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # EXAMPLES
-  # ═══════════════════════════════════════════════════════════════════════════════
 
   examples:
     entity_native:

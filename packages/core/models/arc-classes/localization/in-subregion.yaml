@@ -1,24 +1,34 @@
 # packages/core/models/arc-classes/localization/in-subregion.yaml
-# ArcClass: IN_SUBREGION - Locale belongs to GeoRegion/GeoSubRegion
+# NovaNet v0.13.1 — LLM-First YAML Ordering
+# ArcClass: IN_SUBREGION — Locale belongs to GeoRegion/GeoSubRegion
 # v10.8: Geographic Taxonomy
 
 arc:
+  # IDENTITY
   name: IN_SUBREGION
   family: localization
   scope: intra_realm  # Both Locale and GeoRegion are in shared realm
 
+  # SEMANTIC (LLM-CRITICAL)
+  description: >-
+    Links a Locale to its geographic region or sub-region. Part of the
+    geographic hierarchy enabling traversal from Locale up to Continent
+    through Region nodes.
+  llm_context: |
+    USE: when finding geographic region for a locale.
+    TRIGGERS: geographic region, subregion, regional context, similar locales.
+    NOT: country (use IN_COUNTRY), cultural realm (use IN_CULTURAL_SUBREALM).
+    RELATES: Locale (source), GeoRegion/GeoSubRegion (target), HAS_LOCALE (inverse), traversal: Locale->Region->Continent.
+
+  # GRAPH STRUCTURE
   source: Locale
   target:
     - GeoRegion
     - GeoSubRegion
   cardinality: many_to_one
 
+  # FLAGS
   inverse: HAS_LOCALE
 
-  llm_context: |
-    USE: when finding geographic region for a locale.
-    TRIGGERS: geographic region, subregion, regional context, similar locales.
-    NOT: country (use IN_COUNTRY), cultural realm (use IN_CULTURAL_SUBREALM).
-    RELATES: Locale (source), GeoRegion/GeoSubRegion (target), HAS_LOCALE (inverse), traversal: Locale→Region→Continent.
-
+  # REFERENCE
   cypher_pattern: "(Locale)-[:IN_SUBREGION]->(GeoRegion|GeoSubRegion)"

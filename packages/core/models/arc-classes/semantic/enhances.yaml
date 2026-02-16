@@ -1,18 +1,36 @@
 # packages/core/models/arc-classes/semantic/enhances.yaml
-# ArcClass: ENHANCES - Feature enhances entity capabilities
-# v10.7: New semantic arc for FEATURE → Entity relationships
+# ArcClass: ENHANCES — Feature enhances entity capabilities
+# v0.13.1: LLM-First field ordering (semantic fields before structure)
 
 arc:
+  # --- IDENTITY ---
   name: ENHANCES
   family: semantic
   scope: intra_realm
-  temperature_threshold: 0.2  # Enhancement - important for capability discovery
 
+  # --- SEMANTIC (LLM-critical) ---
+  description: |
+    Feature entity enhances capability of another entity. Models optional
+    improvements and extensions. Different from ENABLES (prerequisite) and
+    REQUIRES (hard dependency). Use for features that add value but aren't
+    strictly necessary.
+  llm_context: |
+    USE: when finding what features enhance an entity.
+    TRIGGERS: enhances, improves, adds capability, extends, feature.
+    NOT: enablement (use ENABLES), containment (use INCLUDES).
+    RELATES: Entity (source/feature), Entity (target/thing), ENHANCED_BY (inverse).
+
+  # --- GRAPH STRUCTURE ---
   source: Entity
   target: Entity
   cardinality: many_to_many
-  is_self_referential: false
 
+  # --- FLAGS ---
+  inverse: ENHANCED_BY
+  is_self_referential: false
+  temperature_threshold: 0.2
+
+  # --- DATA ---
   properties:
     - name: strength
       type: float
@@ -32,12 +50,5 @@ arc:
       enum: [adds, improves, extends, optimizes, secures, tracks]
       description: "How the feature enhances the target"
 
-  inverse: ENHANCED_BY
-
-  llm_context: |
-    USE: when finding what features enhance an entity.
-    TRIGGERS: enhances, improves, adds capability, extends, feature.
-    NOT: enablement (use ENABLES), containment (use INCLUDES).
-    RELATES: Entity (source/feature), Entity (target/thing), ENHANCED_BY (inverse).
-
+  # --- REFERENCE ---
   cypher_pattern: "(Entity)-[:ENHANCES {strength, temperature, enhancement_type}]->(Entity)"

@@ -8,6 +8,34 @@ use super::KeyResult;
 use crate::tui::app::App;
 use crate::tui::clipboard;
 
+/// Open a URL in the system browser.
+///
+/// Uses `open` on macOS, `xdg-open` on Linux, `start` on Windows.
+fn open_in_browser(url: &str) -> std::io::Result<()> {
+    #[cfg(target_os = "macos")]
+    {
+        std::process::Command::new("open").arg(url).spawn()?;
+    }
+    #[cfg(target_os = "linux")]
+    {
+        std::process::Command::new("xdg-open").arg(url).spawn()?;
+    }
+    #[cfg(target_os = "windows")]
+    {
+        std::process::Command::new("cmd")
+            .args(["/C", "start", url])
+            .spawn()?;
+    }
+    Ok(())
+}
+
+/// Get Studio URL for a view.
+///
+/// Studio uses query parameters: `?view={id}` (not path `/views/{id}`)
+fn studio_url(view_id: &str) -> String {
+    format!("http://localhost:3000/?view={view_id}")
+}
+
 /// Handle key events in Views mode.
 ///
 /// Returns `KeyResult::Handled` if the key was consumed,
@@ -96,10 +124,48 @@ pub fn handle_views_key(app: &mut App, key: KeyEvent) -> KeyResult {
             KeyResult::Handled
         }
 
-        // Enter: could execute the view (future feature)
+        // Enter: copy Cypher and show Studio link
         KeyCode::Enter => {
             if let Some(view) = app.nexus.views.current_view(&app.loaded_views) {
-                app.set_status(&format!("View: {} (Execute not yet implemented)", view.id));
+                if let Some(ref cypher) = view.cypher {
+                    match clipboard::copy_to_clipboard(cypher) {
+                        Ok(()) => {
+                            let url = studio_url(&view.id);
+                            // Warn if contextual view
+                            if view.contextual.unwrap_or(false) {
+                                app.set_status(&format!(
+                                    "Cypher copied! ⚠ Contextual view needs ?key=... → {}",
+                                    url
+                                ));
+                            } else {
+                                app.set_status(&format!("Cypher copied! Open Studio: {}", url));
+                            }
+                        }
+                        Err(e) => app.set_status(&format!("Clipboard error: {}", e)),
+                    }
+                } else {
+                    app.set_status("No Cypher query for this view");
+                }
+            }
+            KeyResult::Handled
+        }
+
+        // Open view in Studio (browser)
+        KeyCode::Char('o') => {
+            if let Some(view) = app.nexus.views.current_view(&app.loaded_views) {
+                // Check if view is contextual (requires a node key)
+                if view.contextual.unwrap_or(false) {
+                    app.set_status(&format!(
+                        "⚠ {} is contextual — select a node in Graph mode first",
+                        view.name
+                    ));
+                } else {
+                    let url = studio_url(&view.id);
+                    match open_in_browser(&url) {
+                        Ok(()) => app.set_status(&format!("Opening {} in browser...", view.name)),
+                        Err(e) => app.set_status(&format!("Failed to open browser: {}", e)),
+                    }
+                }
             }
             KeyResult::Handled
         }

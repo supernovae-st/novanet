@@ -1,19 +1,28 @@
-# packages/core/models/arc-classes/ownership/belongs-to-project-native.yaml
-# ArcClass: BELONGS_TO_PROJECT_NATIVE — Locale-aligned: PageNative (fr-FR) → ProjectNative (fr-FR)
-#
+# ═══════════════════════════════════════════════════════════════════════════════
+# ArcClass: BELONGS_TO_PROJECT_NATIVE — PageNative belongs to ProjectNative
+# v0.13.1: LLM-First property ordering
 # v0.13.0: Renamed from BELONGS_TO_PROJECT_CONTENT (ADR-029 *Native pattern)
-# v11.0.0: Renamed from BELONGS_TO_PROJECT_L10N (ProjectL10n → ProjectNative refactor)
+# v11.0.0: Renamed from BELONGS_TO_PROJECT_L10N (ProjectL10n refactor)
+# ═══════════════════════════════════════════════════════════════════════════════
 
 arc:
+  # IDENTITY
   name: BELONGS_TO_PROJECT_NATIVE
   family: ownership
   scope: intra_realm
-  source: PageNative  # v0.13.0: renamed from PageNative
-  target: ProjectNative  # v0.13.0: renamed from ProjectNative
-  cardinality: many_to_one
+
+  # SEMANTIC (LLM-CRITICAL)
+  description: "PageNative belongs to ProjectNative (locale-aligned ownership)"
   llm_context: |
     USE: when loading project-level native content for page generation.
     TRIGGERS: project native, locale voice, project tagline, project CTAs.
     NOT: project config (use BELONGS_TO_ORG), page structure (use HAS_PAGE).
     RELATES: PageNative (source), ProjectNative (target), locale-aligned.
+
+  # GRAPH STRUCTURE
+  source: PageNative
+  target: ProjectNative
+  cardinality: many_to_one
+
+  # REFERENCE
   cypher_pattern: (PageNative)-[:BELONGS_TO_PROJECT_NATIVE]->(ProjectNative)

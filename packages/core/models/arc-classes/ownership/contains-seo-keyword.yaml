@@ -1,19 +1,27 @@
-# arc-classes/ownership/contains-seo-keyword.yaml
-# CONTAINS_SEO_KEYWORD - SEOKeywordSet contains SEOKeyword atoms (v11.4)
-#
+# ═══════════════════════════════════════════════════════════════════════════════
+# ArcClass: CONTAINS_SEO_KEYWORD — SEOKeywordSet contains SEOKeyword atoms
+# v0.13.1: LLM-First property ordering
 # v11.4: Split from generic CONTAINS for semantic correctness (ADR-016)
-#        Each container type can only contain its specific atom type
+# ═══════════════════════════════════════════════════════════════════════════════
 
 arc:
+  # IDENTITY
   name: CONTAINS_SEO_KEYWORD
   family: ownership
   scope: intra_realm
-  source: SEOKeywordSet
-  target: SEOKeyword
-  cardinality: one_to_many
+
+  # SEMANTIC (LLM-CRITICAL)
+  description: "SEOKeywordSet contains SEOKeyword atoms (each container type contains its specific atom type)"
   llm_context: |
     USE: when loading individual SEO keywords from a keyword set.
     TRIGGERS: seo keywords, keyword atoms, search terms, ranking keywords.
     NOT: keyword set container (use HAS_SEO_KEYWORDS), keyword metrics.
     RELATES: SEOKeywordSet (source), SEOKeyword (target).
+
+  # GRAPH STRUCTURE
+  source: SEOKeywordSet
+  target: SEOKeyword
+  cardinality: one_to_many
+
+  # REFERENCE
   cypher_pattern: "(SEOKeywordSet)-[:CONTAINS_SEO_KEYWORD]->(SEOKeyword)"

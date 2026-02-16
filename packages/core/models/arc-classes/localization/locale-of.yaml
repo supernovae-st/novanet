@@ -1,9 +1,26 @@
 # packages/core/models/arc-classes/localization/locale-of.yaml
-# v0.13.0: TIER 2 inverse arc (ADR-026) - inverse of FOR_LOCALE
+# NovaNet v0.13.1 — LLM-First YAML Ordering
+# ArcClass: LOCALE_OF — Inverse of FOR_LOCALE (TIER 2)
+# v0.13.0: TIER 2 inverse arc (ADR-026)
+
 arc:
+  # IDENTITY
   name: LOCALE_OF
   family: localization
-  scope: cross_realm  # Locale (shared) → org nodes
+  scope: cross_realm  # Locale (shared) -> org nodes
+
+  # SEMANTIC (LLM-CRITICAL)
+  description: >-
+    Links a Locale to all content nodes targeting it. Inverse of FOR_LOCALE.
+    Used for finding all content (EntityNative, PageNative, etc.) that targets
+    a specific locale.
+  llm_context: |
+    USE: when finding all content nodes for a specific locale.
+    TRIGGERS: locale content, what targets locale, locale outputs, locale content nodes.
+    NOT: content to locale lookup (use FOR_LOCALE), locale ownership (use HAS_LOCALE).
+    RELATES: Locale (source), EntityNative/ProjectNative/BlockNative/PageNative/PromptStyle (target), FOR_LOCALE (inverse).
+
+  # GRAPH STRUCTURE
   source: Locale
   target:
     - EntityNative
@@ -13,10 +30,9 @@ arc:
     - OutputArtifact
     - PromptStyle
   cardinality: one_to_many
+
+  # FLAGS
   inverse_of: FOR_LOCALE
-  llm_context: |
-    USE: when finding all content nodes for a specific locale.
-    TRIGGERS: locale content, what targets locale, locale outputs, locale content nodes.
-    NOT: content to locale lookup (use FOR_LOCALE), locale ownership (use HAS_LOCALE).
-    RELATES: Locale (source), EntityNative/ProjectNative/BlockNative/PageNative/PromptStyle (target), FOR_LOCALE (inverse).
+
+  # REFERENCE
   cypher_pattern: (Locale)-[:LOCALE_OF]->(EntityNative, PromptStyle)

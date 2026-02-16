@@ -1,18 +1,38 @@
 # models/node-classes/org/foundation/brand-principles.yaml
+# v0.13.1 LLM-First Schema - Canonical field ordering for optimal AI comprehension
 # BrandPrinciples - Brand guidelines and voice (ADR-028)
 # Tone, voice, and editorial guidelines
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: BrandPrinciples
   realm: org
   layer: foundation
   trait: defined
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (description, llm_context)
+  # ═══════════════════════════════════════════════════════════════════════════════
   description: "Brand voice, tone, and editorial guidelines"
 
-  # =============================================================================
-  # STANDARD PROPERTIES
-  # =============================================================================
+  llm_context: |
+    USE: when writing copy, selecting tone, or enforcing editorial guidelines.
+    TRIGGERS: "brand voice", "tone", "writing guidelines", "messaging", "editorial", "@brand.principles".
+    NOT: for visual design (use BrandDesign), for brand identity (use Brand), for locale-specific styles (use PromptStyle).
+    RELATES: Brand (owner via HAS_PRINCIPLES).
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL (icon)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  icon:
+    web: book-open
+    terminal: "□"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA (standard_properties, properties)
+  # ═══════════════════════════════════════════════════════════════════════════════
   standard_properties:
     key:
       type: string
@@ -32,16 +52,6 @@ node:
       required: true
       description: "Guidelines overview"
 
-    llm_context:
-      type: string
-      required: true
-      description: "LLM context for consistent voice. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections].'"
-      example: |
-        USE: when writing copy, selecting tone, or enforcing editorial guidelines.
-        TRIGGERS: "brand voice", "tone", "writing guidelines", "messaging", "editorial", "@brand.principles".
-        NOT: for visual design (use BrandDesign), for brand identity (use Brand), for locale-specific styles (use PromptStyle).
-        RELATES: Brand (owner via HAS_PRINCIPLES).
-
     created_at:
       type: datetime
       required: true
@@ -49,10 +59,6 @@ node:
     updated_at:
       type: datetime
       required: true
-
-  # =============================================================================
-  # PRINCIPLES-SPECIFIC PROPERTIES
-  # =============================================================================
 
   properties:
     # ─────────────────────────────────────────────────────────────────────────────
@@ -126,23 +132,20 @@ node:
       description: "Terms to avoid"
       example: ["cheap", "basic", "simple"]
 
-  # =============================================================================
-  # RELATIONS
-  # =============================================================================
-
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH (relations)
+  # ═══════════════════════════════════════════════════════════════════════════════
   relations: {}
     # BrandPrinciples is owned by Brand via HAS_PRINCIPLES (incoming)
 
-  # =============================================================================
-  # EXAMPLE
-  # =============================================================================
-
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE (example)
+  # ═══════════════════════════════════════════════════════════════════════════════
   example:
     data:
       key: "principles-qrcodeai"
       display_name: "QR Code AI Brand Guidelines"
       description: "Voice and tone guidelines for QR Code AI"
-      llm_context: "USE: for copywriting. TRIGGERS: tone, voice. NOT: visual design."
       voice_attributes: ["Friendly", "Expert", "Clear", "Encouraging"]
       tone_default: "Professional yet approachable"
       writing_do: ["Use active voice", "Be specific"]

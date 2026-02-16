@@ -1,21 +1,37 @@
-# packages/core/models/arc-classes/ownership/has-patterns.yaml
+# ═══════════════════════════════════════════════════════════════════════════════
+# ArcClass: HAS_PATTERNS — Locale owns PatternSet containers
+# v0.13.1: LLM-First property ordering
 # v0.13.0: Added TIER 2 inverse (ADR-026)
+# ═══════════════════════════════════════════════════════════════════════════════
+
 arc:
+  # IDENTITY
   name: HAS_PATTERNS
   family: ownership
   scope: intra_realm
-  source: Locale
-  target: PatternSet
-  cardinality: one_to_many
-  inverse: PATTERNS_OF
+
+  # SEMANTIC (LLM-CRITICAL)
+  description: "Locale owns PatternSet containers (CTA, headlines, body, social)"
   llm_context: |
     USE: when loading content patterns for a locale by usage type.
     TRIGGERS: locale patterns, content patterns, CTA patterns, headline patterns.
     NOT: individual patterns (use CONTAINS_PATTERN), expressions (use HAS_EXPRESSIONS).
     RELATES: Locale (source), PatternSet (target), usage (property).
-  cypher_pattern: "(Locale)-[:HAS_PATTERNS {usage: $usage}]->(PatternSet)"
+
+  # GRAPH STRUCTURE
+  source: Locale
+  target: PatternSet
+  cardinality: one_to_many
+
+  # FLAGS
+  inverse: PATTERNS_OF
+
+  # DATA
   properties:
     usage:
       type: string
       required: true
       description: "Pattern usage (cta, headlines, body, social)"
+
+  # REFERENCE
+  cypher_pattern: "(Locale)-[:HAS_PATTERNS {usage: $usage}]->(PatternSet)"

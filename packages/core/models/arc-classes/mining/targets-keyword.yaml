@@ -1,19 +1,35 @@
 # packages/core/models/arc-classes/mining/targets-keyword.yaml
-# ArcClass: TARGETS_KEYWORD — Page/Block targets SEOKeyword for search optimization
-# v0.13.1: NEW arc for mining family expansion (ADR-026 audit)
+# ArcClass: TARGETS_KEYWORD
+# v0.13.1: LLM-First field ordering (ADR-026 audit)
 
 arc:
+  # --- BLOC 2: IDENTITY ---
   name: TARGETS_KEYWORD
   family: mining
-  scope: cross_realm  # org (Page/Block) → shared (SEOKeyword)
+  scope: cross_realm  # org (Page/Block) -> shared (SEOKeyword)
 
+  # --- BLOC 3: SEMANTIC (LLM-CRITICAL) ---
+  description: >
+    Links a Page or Block to SEO keywords it targets for search optimization.
+    Supports priority ranking (primary/secondary/tertiary), target SERP position,
+    and targeting strategy (main keyword, long tail, semantic variant, etc.).
+  llm_context: |
+    USE: when finding SEO keywords targeted by a page or block for search optimization.
+    TRIGGERS: page targets keyword, SEO strategy, keyword ranking, search optimization, block keywords.
+    NOT: entity keywords (use HAS_KEYWORD), keyword metrics (use HAS_METRICS), GEO (use TARGETS_GEO).
+    RELATES: Page/Block (source), SEOKeyword (target), priority/strategy (properties).
+
+  # --- BLOC 4: GRAPH STRUCTURE ---
   source:
     - Page
     - Block
   target: SEOKeyword
   cardinality: many_to_many
+
+  # --- BLOC 5: FLAGS ---
   inverse: KEYWORD_TARGETED_BY
 
+  # --- BLOC 6: DATA (properties) ---
   properties:
     - name: priority
       type: string
@@ -30,10 +46,5 @@ arc:
       enum: [main_keyword, long_tail, semantic_variant, featured_snippet, voice_search]
       description: "SEO targeting strategy"
 
-  llm_context: |
-    USE: when finding SEO keywords targeted by a page or block for search optimization.
-    TRIGGERS: page targets keyword, SEO strategy, keyword ranking, search optimization, block keywords.
-    NOT: entity keywords (use HAS_KEYWORD), keyword metrics (use HAS_METRICS), GEO (use TARGETS_GEO).
-    RELATES: Page/Block (source), SEOKeyword (target), priority/strategy (properties).
-
+  # --- BLOC 7: REFERENCE ---
   cypher_pattern: "(Page|Block)-[:TARGETS_KEYWORD {priority, target_position, strategy}]->(SEOKeyword)"

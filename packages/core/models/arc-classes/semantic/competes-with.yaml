@@ -1,19 +1,35 @@
 # packages/core/models/arc-classes/semantic/competes-with.yaml
-# ArcClass: COMPETES_WITH - Entity competes with another Entity (symmetric)
-# v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
+# ArcClass: COMPETES_WITH — Entity competes with another Entity (symmetric)
+# v0.13.1: LLM-First field ordering (semantic fields before structure)
 
 arc:
+  # --- IDENTITY ---
   name: COMPETES_WITH
   family: semantic
   scope: intra_realm
-  temperature_threshold: 0.3  # Competition - moderate importance
 
+  # --- SEMANTIC (LLM-critical) ---
+  description: |
+    Symmetric relationship indicating market competition between entities.
+    Different from ALTERNATIVE_TO (substitutability) and SIMILAR_TO
+    (general similarity). Use for entities that compete in the same market.
+  llm_context: |
+    USE: when finding competitive entities in same market.
+    TRIGGERS: competitor, competes, rival, market competition, vs.
+    NOT: alternatives (use ALTERNATIVE_TO), similarity (use SIMILAR_TO).
+    RELATES: Entity (source), Entity (target), symmetric (no inverse needed).
+
+  # --- GRAPH STRUCTURE ---
   source: Entity
   target: Entity
   cardinality: many_to_many
+
+  # --- FLAGS ---
   is_self_referential: true
   is_symmetric: true
+  temperature_threshold: 0.3
 
+  # --- DATA ---
   properties:
     - name: strength
       type: float
@@ -38,12 +54,5 @@ arc:
       required: false
       description: "Market segment where competition occurs"
 
-  # No inverse - symmetric relationship
-
-  llm_context: |
-    USE: when finding competitive entities in same market.
-    TRIGGERS: competitor, competes, rival, market competition, vs.
-    NOT: alternatives (use ALTERNATIVE_TO), similarity (use SIMILAR_TO).
-    RELATES: Entity (source), Entity (target), symmetric (no inverse needed).
-
+  # --- REFERENCE ---
   cypher_pattern: "(Entity)-[:COMPETES_WITH {strength, temperature, competition_type, market_segment}]->(Entity)"

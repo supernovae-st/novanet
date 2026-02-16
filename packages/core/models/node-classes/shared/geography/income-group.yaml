@@ -1,20 +1,41 @@
 # models/node-classes/shared/geography/income-group.yaml
 # IncomeGroup - World Bank income classification
 #
+# v0.13.1: LLM-First field ordering (llm_context promoted to BLOC 2)
 # v10.8: Geographic Taxonomy - Phase 4
 # Data: 4 income groups (LIC, LMIC, UMIC, HIC)
 # Source: World Bank (data.worldbank.org)
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: IncomeGroup
   realm: shared
   layer: geography
   trait: defined
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (LLM-First)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  description: "World Bank income classification for market segmentation"
+
+  llm_context: |
+    USE: when generating pricing, messaging, or market strategy by income level.
+    TRIGGERS: "income group", "income level", "HIC", "LMIC", "UMIC", "LIC", "high income", "low income", "pricing tier".
+    NOT: for economic regions (use EconomicRegion), for lending classification (use LendingCategory).
+    RELATES: Locale (child via HAS_INCOME_LEVEL).
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════════
   icon:
     web: "dollar-sign"
     terminal: "$"
-  description: "World Bank income classification for market segmentation"
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA
+  # ═══════════════════════════════════════════════════════════════════════════════
   standard_properties:
     key:
       type: string
@@ -37,12 +58,6 @@ node:
       required: true
       description: "Short description with threshold info"
       example: "High income economies (GNI > $13,935 per capita)"
-
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints for pricing and messaging"
-      example: "USE: for premium pricing, quality-focused messaging. TRIGGERS: high income, developed, hic. STYLE: value-focused, quality over price."
 
     created_at:
       type: datetime
@@ -84,6 +99,9 @@ node:
       description: "Recommended messaging focus"
       example: "quality, innovation, sustainability"
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH
+  # ═══════════════════════════════════════════════════════════════════════════════
   relations:
     incoming:
       - type: HAS_INCOME_LEVEL
@@ -91,6 +109,9 @@ node:
         cardinality: "N:1"
         description: "Locales classified in this income group"
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE
+  # ═══════════════════════════════════════════════════════════════════════════════
   example:
     data:
       key: "hic"

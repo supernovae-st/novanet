@@ -1,17 +1,31 @@
 # packages/core/models/arc-classes/localization/fallback-to.yaml
+# NovaNet v0.13.1 — LLM-First YAML Ordering
 # ArcClass: FALLBACK_TO — Fallback chain: (fr-CA)-[:FALLBACK_TO]->(fr-FR)-[:FALLBACK_TO]->(en-US)
 
 arc:
+  # IDENTITY
   name: FALLBACK_TO
   family: localization
   scope: intra_realm
-  source: Locale
-  target: Locale
-  cardinality: many_to_one
-  is_self_referential: true
+
+  # SEMANTIC (LLM-CRITICAL)
+  description: >-
+    Defines the fallback chain between Locales for content resolution.
+    When content is missing in a locale, the system traverses this chain
+    to find the nearest available content (e.g., fr-CA -> fr-FR -> en-US).
   llm_context: |
     USE: when resolving missing content by following locale fallback chain.
     TRIGGERS: fallback locale, missing translation, locale chain, content resolution.
     NOT: locale variants (use LOCALE_VARIANT_OF), primary locale (use PRIMARY_FOR).
-    RELATES: Locale (source), Locale (target/fallback), chain: fr-CA→fr-FR→en-US.
+    RELATES: Locale (source), Locale (target/fallback), chain: fr-CA->fr-FR->en-US.
+
+  # GRAPH STRUCTURE
+  source: Locale
+  target: Locale
+  cardinality: many_to_one
+
+  # FLAGS
+  is_self_referential: true
+
+  # REFERENCE
   cypher_pattern: (Locale)-[:FALLBACK_TO]->(Locale)

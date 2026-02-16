@@ -114,6 +114,11 @@ enum Commands {
         #[command(subcommand)]
         action: EntityAction,
     },
+    /// Views validation and export for cross-validation (TUI/Studio)
+    Views {
+        #[command(subcommand)]
+        action: ViewsAction,
+    },
     /// Interactive terminal UI
     #[cfg(feature = "tui")]
     Tui {
@@ -342,6 +347,22 @@ enum EntityAction {
         /// Project name (e.g., qrcode-ai)
         #[arg(long)]
         project: String,
+    },
+}
+
+#[derive(Subcommand)]
+enum ViewsAction {
+    /// Export views as canonical JSON for cross-validation
+    Export {
+        /// Output format (only json supported)
+        #[arg(long, default_value = "json")]
+        format: String,
+    },
+    /// Validate views match between Rust and TypeScript parsers
+    Validate {
+        /// Show details for each view
+        #[arg(long)]
+        verbose: bool,
     },
 }
 
@@ -820,6 +841,32 @@ async fn main() -> color_eyre::Result<()> {
                 }
             }
         }
+
+        // ── Views (YAML, no Neo4j) ─────────────────────────────────
+        Commands::Views { ref action } => {
+            let root = root?;
+            match action {
+                ViewsAction::Export { format } => {
+                    if format != "json" {
+                        eprintln!("Only JSON format supported");
+                        std::process::exit(1);
+                    }
+                    let json = novanet::commands::views::views_export(&root)?;
+                    println!("{}", json);
+                }
+                ViewsAction::Validate { verbose } => {
+                    eprintln!("novanet views validate{}", if *verbose { " --verbose" } else { "" });
+                    match novanet::commands::views::views_validate(&root, *verbose) {
+                        Ok(()) => {}
+                        Err(e) => {
+                            eprintln!("✗ {}", e);
+                            std::process::exit(1);
+                        }
+                    }
+                }
+            }
+        }
+
         #[cfg(feature = "tui")]
         Commands::Tui { fresh } => {
             let root = root?;
