@@ -1,25 +1,37 @@
 # models/node-classes/org/instruction/block-instruction.yaml
-# BlockInstruction - Per-block generation instructions with entity/page references (v10.3)
-#
-# v10.3.0: NEW NODE
-#   - Instructions for generating a specific block within a page
-#   - Contains markdown with @entity:key, @link:key, and generation tags
-#   - Multiple BlockInstructions concatenated at runtime to form PageInstruction
+# v0.13.1 LLM-First Schema - Canonical field ordering for optimal AI comprehension
+# BlockInstruction - Per-block generation instructions with entity/page references
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: BlockInstruction
   realm: org
   layer: instruction
   trait: defined
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (description, llm_context)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  description: "Instructions for generating a specific block within a page. Contains markdown with @entity: and @link: references. Multiple BlockInstructions are concatenated at runtime to form PageInstruction."
+
+  llm_context: |
+    USE: when loading generation instructions for a specific block or compiling page instructions.
+    TRIGGERS: "block instruction", "generation recipe", "block prompt", "@entity:", "@link:".
+    NOT: for block structure (use Block), for block templates (use BlockType), for generated output (use BlockNative).
+    RELATES: Page (owner via HAS_INSTRUCTION), BlockType (template via OF_TYPE), Entity (references via REFERENCES_ENTITY), Page (links via REFERENCES_PAGE).
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL (icon)
+  # ═══════════════════════════════════════════════════════════════════════════════
   icon:
     web: terminal
     terminal: "▧"
-  description: "Instructions for generating a specific block within a page. Contains markdown with @entity: and @link: references. Multiple BlockInstructions are concatenated at runtime to form PageInstruction."
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # STANDARD PROPERTIES
+  # BLOC 4: DATA (standard_properties, properties)
   # ═══════════════════════════════════════════════════════════════════════════════
-
   standard_properties:
     key:
       type: string
@@ -43,16 +55,6 @@ node:
       description: "One-line description of this instruction"
       example: "Hero section instructions for the QR generator page"
 
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections].'"
-      example: |
-        USE: when loading generation instructions for a specific block or compiling page instructions.
-        TRIGGERS: "block instruction", "generation recipe", "block prompt", "@entity:", "@link:".
-        NOT: for block structure (use Block), for block templates (use BlockType), for generated output (use BlockNative).
-        RELATES: Page (owner via HAS_INSTRUCTION), BlockType (template via OF_TYPE), Entity (references via REFERENCES_ENTITY), Page (links via REFERENCES_PAGE).
-
     created_at:
       type: datetime
       required: true
@@ -60,10 +62,6 @@ node:
     updated_at:
       type: datetime
       required: true
-
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOCKINSTRUCTION-SPECIFIC PROPERTIES
-  # ═══════════════════════════════════════════════════════════════════════════════
 
   properties:
     content:
@@ -95,7 +93,7 @@ node:
       example: 1
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # RELATIONS (FROM this node)
+  # BLOC 5: GRAPH (relations)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
@@ -131,10 +129,6 @@ node:
           description: "Why this page is referenced"
       description: "Pages referenced via @link:key syntax (auto-parsed from content)"
 
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # INCOMING RELATIONS (documented for reference)
-  # ═══════════════════════════════════════════════════════════════════════════════
-
   incoming_relations:
     HAS_INSTRUCTION:
       from: Page
@@ -142,17 +136,13 @@ node:
       description: "Page that owns this instruction"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # NEO4J CONFIGURATION
+  # BLOC 6: REFERENCE (example, neo4j)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   neo4j:
     indexes:
       - "CREATE INDEX blockinstruction_key IF NOT EXISTS FOR (bi:BlockInstruction) ON (bi.key)"
       - "CREATE INDEX blockinstruction_order IF NOT EXISTS FOR (bi:BlockInstruction) ON (bi.order)"
-
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # EXAMPLE
-  # ═══════════════════════════════════════════════════════════════════════════════
 
   example:
     data:

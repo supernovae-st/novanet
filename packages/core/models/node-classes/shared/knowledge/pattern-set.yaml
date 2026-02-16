@@ -1,42 +1,37 @@
-# ─────────────────────────────────────────────────────────────────────────────
-# PatternSet — Container grouping Pattern atoms by usage
-# ─────────────────────────────────────────────────────────────────────────────
-# v0.13.1: LLM-First field ordering (ADR-031)
-# v10.1: Pure container (no JSON blobs - data lives in Pattern atoms)
-# Usages: cta, headlines, body, social
-# Stability: High - structure rarely changes
-# ─────────────────────────────────────────────────────────────────────────────
+# models/node-classes/shared/knowledge/pattern-set.yaml
+# v0.13.1 LLM-First Schema - Canonical field ordering for optimal AI comprehension
+# PatternSet - Container grouping Pattern atoms by usage
 
 node:
-  # ═══════════════════════════════════════════════════════════════════════════
-  # BLOC 1: IDENTITY
-  # ═══════════════════════════════════════════════════════════════════════════
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: PatternSet
   realm: shared
   layer: knowledge
-  trait: defined  # v11.2: Containers are universal categories (invariant), atoms are locale-native (knowledge)
+  trait: defined  # Containers are universal categories (defined), atoms are locale-native (imported)
 
-  # ═══════════════════════════════════════════════════════════════════════════
-  # BLOC 2: SEMANTIC
-  # ═══════════════════════════════════════════════════════════════════════════
-  description: "Container grouping Pattern atoms by usage"
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (description, llm_context)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  description: "Container grouping Pattern atoms by usage. Pure container (data lives in Pattern atoms)."
 
   llm_context: |
-    USE: to find patterns by usage category.
-    TRIGGERS: CTA, headline, body, social, pattern container.
-    NOT: individual templates (use Pattern via CONTAINS).
-    RELATES: Pattern (CONTAINS), Locale (HAS_PATTERNS).
+    USE: when finding patterns by usage category (CTA, headlines, body, social).
+    TRIGGERS: "CTA", "headline", "body", "social", "pattern container".
+    NOT: for individual templates (use Pattern via CONTAINS_PATTERN).
+    RELATES: Pattern (contains via CONTAINS_PATTERN), Locale (owner via HAS_PATTERNS).
 
-  # ═══════════════════════════════════════════════════════════════════════════
-  # BLOC 3: VISUAL
-  # ═══════════════════════════════════════════════════════════════════════════
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL (icon)
+  # ═══════════════════════════════════════════════════════════════════════════════
   icon:
-    web: "clipboard"
+    web: clipboard
     terminal: "▤"
 
-  # ═══════════════════════════════════════════════════════════════════════════
-  # BLOC 4: DATA
-  # ═══════════════════════════════════════════════════════════════════════════
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA (standard_properties, properties)
+  # ═══════════════════════════════════════════════════════════════════════════════
   standard_properties:
     display_name:
       type: string
@@ -61,7 +56,6 @@ node:
       description: "Last update timestamp"
 
   properties:
-    # Usage identification (only property - data is in atoms)
     usage:
       type: string
       required: true
@@ -69,12 +63,12 @@ node:
       description: "Pattern usage category this set groups"
       example: "cta"
 
-  # ═══════════════════════════════════════════════════════════════════════════
-  # BLOC 5: GRAPH
-  # ═══════════════════════════════════════════════════════════════════════════
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH (relations)
+  # ═══════════════════════════════════════════════════════════════════════════════
   relations:
     outgoing:
-      - type: CONTAINS
+      - type: CONTAINS_PATTERN
         to: Pattern
         cardinality: "1:N"
         description: "PatternSet contains multiple Pattern atoms"
@@ -84,5 +78,27 @@ node:
         from: Locale
         cardinality: "1:N"
         description: "Locale has multiple pattern sets (one per usage)"
-        properties:
-          usage: string
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE (example, neo4j)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  neo4j:
+    indexes:
+      - "CREATE INDEX patternset_usage IF NOT EXISTS FOR (ps:PatternSet) ON (ps.usage)"
+
+  example:
+    data:
+      display_name: "French (France) CTA Patterns"
+      description: "Call-to-action patterns for fr-FR"
+      usage: "cta"
+    cypher: |
+      MATCH (l:Locale {key: "fr-FR"})
+      CREATE (ps:PatternSet {
+        display_name: 'French (France) CTA Patterns',
+        description: 'Call-to-action patterns for fr-FR',
+        usage: 'cta',
+        created_at: datetime(),
+        updated_at: datetime()
+      })
+      CREATE (l)-[:HAS_PATTERNS]->(ps)
+      RETURN ps

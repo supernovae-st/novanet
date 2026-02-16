@@ -1,42 +1,37 @@
-# ─────────────────────────────────────────────────────────────────────────────
-# CultureSet — Container grouping CultureRef atoms by type
-# ─────────────────────────────────────────────────────────────────────────────
-# v0.13.1: LLM-First field ordering (ADR-031)
-# v10.1: Pure container (no JSON blobs - data lives in CultureRef atoms)
-# Types: values, references, celebrities, calendar
-# Stability: High - structure rarely changes
-# ─────────────────────────────────────────────────────────────────────────────
+# models/node-classes/shared/knowledge/culture-set.yaml
+# v0.13.1 LLM-First Schema - Canonical field ordering for optimal AI comprehension
+# CultureSet - Container grouping CultureRef atoms by type
 
 node:
-  # ═══════════════════════════════════════════════════════════════════════════
-  # BLOC 1: IDENTITY
-  # ═══════════════════════════════════════════════════════════════════════════
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: CultureSet
   realm: shared
   layer: knowledge
-  trait: defined  # v11.2: Containers are universal categories (invariant), atoms are locale-native (knowledge)
+  trait: defined  # Containers are universal categories (defined), atoms are locale-native (imported)
 
-  # ═══════════════════════════════════════════════════════════════════════════
-  # BLOC 2: SEMANTIC
-  # ═══════════════════════════════════════════════════════════════════════════
-  description: "Container grouping CultureRef atoms by type"
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (description, llm_context)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  description: "Container grouping CultureRef atoms by type. Pure container (data lives in CultureRef atoms)."
 
   llm_context: |
-    USE: to find culture refs by type.
-    TRIGGERS: values, holidays, cultural references, culture container.
-    NOT: individual refs (use CultureRef via CONTAINS).
-    RELATES: CultureRef (CONTAINS), Locale (HAS_CULTURE_SET).
+    USE: when finding cultural references by type (values, holidays, celebrities).
+    TRIGGERS: "values", "holidays", "cultural references", "culture container".
+    NOT: for individual refs (use CultureRef via CONTAINS_CULTURE_REF).
+    RELATES: CultureRef (contains via CONTAINS_CULTURE_REF), Locale (owner via HAS_CULTURE).
 
-  # ═══════════════════════════════════════════════════════════════════════════
-  # BLOC 3: VISUAL
-  # ═══════════════════════════════════════════════════════════════════════════
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL (icon)
+  # ═══════════════════════════════════════════════════════════════════════════════
   icon:
-    web: "drama"
+    web: drama
     terminal: "◎"
 
-  # ═══════════════════════════════════════════════════════════════════════════
-  # BLOC 4: DATA
-  # ═══════════════════════════════════════════════════════════════════════════
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA (standard_properties, properties)
+  # ═══════════════════════════════════════════════════════════════════════════════
   standard_properties:
     display_name:
       type: string
@@ -61,7 +56,6 @@ node:
       description: "Last update timestamp"
 
   properties:
-    # Type identification (only property - data is in atoms)
     culture_type:
       type: string
       required: true
@@ -69,20 +63,42 @@ node:
       description: "Cultural knowledge type this set groups"
       example: "values"
 
-  # ═══════════════════════════════════════════════════════════════════════════
-  # BLOC 5: GRAPH
-  # ═══════════════════════════════════════════════════════════════════════════
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH (relations)
+  # ═══════════════════════════════════════════════════════════════════════════════
   relations:
     outgoing:
-      - type: CONTAINS
+      - type: CONTAINS_CULTURE_REF
         to: CultureRef
         cardinality: "1:N"
         description: "CultureSet contains multiple CultureRef atoms"
 
     incoming:
-      - type: HAS_CULTURE_SET
+      - type: HAS_CULTURE
         from: Locale
         cardinality: "1:N"
         description: "Locale has culture sets (one per type)"
-        properties:
-          type: string
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE (example, neo4j)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  neo4j:
+    indexes:
+      - "CREATE INDEX cultureset_type IF NOT EXISTS FOR (cs:CultureSet) ON (cs.culture_type)"
+
+  example:
+    data:
+      display_name: "French (France) Cultural Values"
+      description: "Core cultural values for fr-FR"
+      culture_type: "values"
+    cypher: |
+      MATCH (l:Locale {key: "fr-FR"})
+      CREATE (cs:CultureSet {
+        display_name: 'French (France) Cultural Values',
+        description: 'Core cultural values for fr-FR',
+        culture_type: 'values',
+        created_at: datetime(),
+        updated_at: datetime()
+      })
+      CREATE (l)-[:HAS_CULTURE]->(cs)
+      RETURN cs

@@ -5,7 +5,7 @@
 
 node:
   # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 1: IDENTITY
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   name: Culture
@@ -14,7 +14,7 @@ node:
   trait: imported
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 2: SEMANTIC
+  # BLOC 2: SEMANTIC (description, llm_context)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   description: "Cultural context for a locale including calendar, seasons, business norms, communication style, and core values. Used by LLM for culturally-appropriate content generation."
@@ -25,7 +25,7 @@ node:
     RELATES: Locale (via HAS_CULTURE), calendar/seasons, holidays, business_hours, values, communication_norms.
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 3: VISUAL
+  # BLOC 3: VISUAL (icon)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   icon:
@@ -33,7 +33,7 @@ node:
     terminal: "◉"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 4: DATA — Standard Properties
+  # BLOC 4: DATA (standard_properties, properties)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   standard_properties:
@@ -55,12 +55,6 @@ node:
       description: "Short description"
       example: "Cultural context and norms for fr-FR"
 
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints"
-      example: "USE: cultural tone, timing references, value expressions. TRIGGERS: seasonal refs, holiday mentions, formality choices. KEY: adapt for cultural context. NOT: formatting or technical rules."
-
     created_at:
       type: datetime
       required: true
@@ -69,10 +63,7 @@ node:
       type: datetime
       required: true
 
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 4: DATA — Culture-Specific Properties
-  # ═══════════════════════════════════════════════════════════════════════════════
-
+  
   properties:
     # ═══════════════════════════════════════════════════════════════════════════
     # TIER 1: INDEXED SCALARS (Cypher-queryable)
@@ -204,7 +195,7 @@ node:
       description: "Full source markdown for edge case reference"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 5: GRAPH — Relations
+  # BLOC 5: GRAPH (relations)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
@@ -213,3 +204,21 @@ node:
         from: Locale
         cardinality: "1:1"
         description: "Locale has exactly one culture config"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE (example, neo4j)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  neo4j:
+    indexes:
+      - "CREATE INDEX culture_key IF NOT EXISTS FOR (c:Culture) ON (c.key)"
+
+  example:
+    data:
+      key: "fr-FR"
+      display_name: "French (France) Culture"
+      hemisphere: "northern"
+      work_week_start: "monday"
+      communication_directness: "indirect"
+    cypher: |
+      MATCH (l:Locale {key: $locale})-[:HAS_CULTURE]->(c:Culture)
+      RETURN c.key, c.hemisphere, c.seasons, c.holidays, c.values

@@ -7,11 +7,11 @@ This file provides guidance to Claude Code when working in the `tools/novanet/` 
 `novanet` is a unified Rust CLI + TUI binary for managing the NovaNet context graph.
 It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 
-**Version**: v0.13.0 (*Native Pattern + ADR-029/ADR-030 + ADR-024 Data Origin + ADR-025 Instruction Layer + ADR-028 Brand Architecture)
+**Version**: v0.13.1 (*Native Pattern + LLM-First BLOC Schema + ADR-029/ADR-030 + ADR-024 Data Origin + ADR-025 Instruction Layer + ADR-028 Brand Architecture)
 
 ## Current Status
 
-**v0.13.0 Schema Update** — ADR-029 *Native Pattern (EntityNative→EntityNative, PageNative→PageNative, unified HAS_NATIVE arc), ADR-030 Slug Ownership. Includes ADR-024 Data Origin trait renames (invariant→defined, localized→authored, knowledge→imported, aggregated→retrieved), ADR-025 Instruction Layer renames, and ADR-028 Brand Architecture (Brand, BrandDesign, BrandPrinciples, PromptStyle, Country). SHARED (4 layers: config, locale, geography, knowledge, 40 nodes), ORG (6 layers: config, foundation, structure, semantic, instruction, output, 21 nodes). 61 total nodes, 169 arcs, 10 layers, 5 traits.
+**v0.13.1 LLM-First BLOC Schema** — All 61 node-class YAML files standardized with canonical 6-BLOC property ordering for optimal AI comprehension: BLOC 1 (Identity), BLOC 2 (Semantic), BLOC 3 (Visual), BLOC 4 (Data), BLOC 5 (Graph), BLOC 6 (Reference). Includes v0.13.0 changes: ADR-029 *Native Pattern, ADR-030 Slug Ownership, ADR-024 Data Origin traits (defined/authored/imported/generated/retrieved), ADR-025 Instruction Layer, ADR-028 Brand Architecture. SHARED (4 layers: config, locale, geography, knowledge, 40 nodes), ORG (6 layers: config, foundation, structure, semantic, instruction, output, 21 nodes). 61 total nodes, 169 arcs, 10 layers, 5 traits.
 
 | Area | Commands | Status |
 |------|----------|--------|
@@ -29,7 +29,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | TUI | `tui` | Unified tree (Graph/Nexus modes), lazy loading, async channels |
 | System | `completions`, `doctor` | Implemented |
 
-**1031 tests pass** (`cargo test`). Zero clippy warnings.
+**1082 tests pass** (`cargo test`). Zero clippy warnings.
 
 **Testing stack:**
 - `insta` — Snapshot testing (5 generator outputs)
@@ -177,7 +177,7 @@ cargo run -- doctor --skip-db                     # Skip Neo4j connectivity chec
 # Quality
 cargo clippy -- -D warnings    # Zero warnings policy
 cargo fmt --check              # Formatting check
-cargo nextest run              # 1031 tests (fast, parallel)
+cargo nextest run              # 1082 tests (fast, parallel)
 cargo test -- --ignored        # Neo4j integration tests (requires running Neo4j)
 
 # Security & auditing
@@ -240,7 +240,7 @@ src/
 - **YAML-first architecture**: Each Class YAML has explicit `realm:` and `layer:` fields (source of truth)
   - Path validation: file must be at `models/node-classes/{realm}/{layer}/{name}.yaml`
   - Generators read realm/layer from YAML content, validate against path
-  - v0.12.5: 2 realms (shared, org), 10 layers (4 shared + 6 org), 61 node types
+  - v0.13.1: 2 realms (shared, org), 10 layers (4 shared + 6 org), 61 node types, all with standardized BLOC ordering
 - **Query-First architecture (v11.6)**: Cypher is the single source of truth for graph display
   - Schema mode uses CLASSES_QUERY + ARCS_QUERY to build the schema graph
   - `cargo run -- blueprint` executes these foundational queries

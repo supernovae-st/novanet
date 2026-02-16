@@ -5,7 +5,7 @@
 
 node:
   # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 1: IDENTITY
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   name: Market
@@ -14,7 +14,7 @@ node:
   trait: imported
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 2: SEMANTIC
+  # BLOC 2: SEMANTIC (description, llm_context)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   description: "Market intelligence for a locale including demographics, digital maturity, e-commerce landscape, and consumer behavior. Used for market-appropriate content strategy."
@@ -25,7 +25,7 @@ node:
     RELATES: Locale (via HAS_MARKET), ecommerce_maturity, payment_methods, popular_platforms, demographics.
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 3: VISUAL
+  # BLOC 3: VISUAL (icon)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   icon:
@@ -33,7 +33,7 @@ node:
     terminal: "▣"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 4: DATA — Standard Properties
+  # BLOC 4: DATA (standard_properties, properties)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   standard_properties:
@@ -55,12 +55,6 @@ node:
       description: "Short description"
       example: "Market intelligence and consumer data for fr-FR"
 
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints"
-      example: "USE: urgency, value propositions, platform references. TRIGGERS: pricing, payment mentions, tech familiarity. KEY: adapt for market maturity. NOT: cultural norms or formatting."
-
     created_at:
       type: datetime
       required: true
@@ -69,10 +63,7 @@ node:
       type: datetime
       required: true
 
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 4: DATA — Market-Specific Properties
-  # ═══════════════════════════════════════════════════════════════════════════════
-
+  
   properties:
     # ═══════════════════════════════════════════════════════════════════════════
     # TIER 1: INDEXED SCALARS (Cypher-queryable)
@@ -201,7 +192,7 @@ node:
       description: "Full source markdown for edge case reference"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 5: GRAPH — Relations
+  # BLOC 5: GRAPH (relations)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
@@ -210,3 +201,22 @@ node:
         from: Locale
         cardinality: "1:1"
         description: "Locale has exactly one market intelligence config"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE (example, neo4j)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  neo4j:
+    indexes:
+      - "CREATE INDEX market_key IF NOT EXISTS FOR (m:Market) ON (m.key)"
+      - "CREATE INDEX market_ecommerce IF NOT EXISTS FOR (m:Market) ON (m.ecommerce_maturity)"
+
+  example:
+    data:
+      key: "fr-FR"
+      display_name: "French (France) Market"
+      population_millions: 67.5
+      internet_penetration: 0.92
+      ecommerce_maturity: "mature"
+    cypher: |
+      MATCH (l:Locale {key: $locale})-[:HAS_MARKET]->(m:Market)
+      RETURN m.key, m.ecommerce_maturity, m.payment_methods, m.popular_platforms

@@ -1,35 +1,37 @@
 # models/node-classes/org/output/block-native.yaml
+# v0.13.1 LLM-First Schema - Canonical field ordering for optimal AI comprehension
 # BlockNative - LLM-generated native block content (v0.13.0 ADR-029)
-#
-# ═══════════════════════════════════════════════════════════════════════════════
-# v0.13.0 CHANGES (ADR-029 *Native Pattern)
-# ═══════════════════════════════════════════════════════════════════════════════
-#
-#   RENAMED: BlockNative → BlockNative
-#   - All locale-specific nodes now use *Native suffix
-#   - Trait (authored vs generated) distinguishes who creates content
-#   - Unified arc: HAS_NATIVE replaces HAS_NATIVE
-#
-# TRAIT SEMANTICS:
-#   - authored = human-authored native content (EntityNative, ProjectNative)
-#   - generated = LLM-generated native content (PageNative, BlockNative)
-#
-# ═══════════════════════════════════════════════════════════════════════════════
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: BlockNative
   realm: org
   layer: output
   trait: generated  # v11.2: Split derived → generated (LLM output)
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (description, llm_context)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  description: "LLM-generated native content for a block"
+
+  llm_context: |
+    USE: when displaying generated native block content or checking block output status.
+    TRIGGERS: "block native", "generated block", "block content", locale code.
+    NOT: for block structure (use Block), for block templates (use BlockType), for generation instructions (use BlockInstruction).
+    RELATES: Block (source via HAS_NATIVE), Locale (target via FOR_LOCALE), EntityNative (influenced by via INFLUENCED_BY), PageNative (assembled into via ASSEMBLES).
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL (icon)
+  # ═══════════════════════════════════════════════════════════════════════════════
   icon:
     web: check-square
     terminal: "★"
-  description: "LLM-generated native content for a block"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # STANDARD PROPERTIES
+  # BLOC 4: DATA (standard_properties, properties)
   # ═══════════════════════════════════════════════════════════════════════════════
-
   standard_properties:
     key:
       type: string
@@ -39,6 +41,27 @@ node:
       examples:
         - "block:pricing-hero@fr-FR"
         - "block:feature-list@ja-JP"
+
+    block_key:
+      type: string
+      required: true
+      pattern: "^[a-z][a-z0-9-]*$"
+      indexed: true
+      description: "Parent Block key (denormalized for fast lookup)"
+      examples:
+        - "pricing-hero"
+        - "feature-list"
+
+    locale_key:
+      type: string
+      required: true
+      pattern: "^[a-z]{2}-[A-Z]{2}$"
+      indexed: true
+      description: "Target Locale key (denormalized). BCP 47 format."
+      examples:
+        - "fr-FR"
+        - "en-US"
+        - "ja-JP"
 
     display_name:
       type: string
@@ -51,13 +74,6 @@ node:
       required: true
       description: "Short description"
       example: "Generated hero section for French market"
-
-    llm_context:
-      type: string
-      required: false
-      description: |
-        Format: USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections].
-        Example: USE: when displaying generated native block content or checking block output status. TRIGGERS: "block native", "generated block", "block content", locale code. NOT: for block structure (use Block), for block templates (use BlockType), for generation instructions (use BlockInstruction). RELATES: Block (source via HAS_NATIVE), Locale (target via FOR_LOCALE), EntityNative (influenced by via INFLUENCED_BY), PageNative (assembled into via ASSEMBLES).
 
     created_at:
       type: datetime
@@ -123,7 +139,7 @@ node:
       description: "When this version was replaced (null = current)"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # RELATIONS
+  # BLOC 5: GRAPH (relations)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
@@ -155,20 +171,20 @@ node:
         description: "Link to previous version in history chain"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # NEO4J CONFIGURATION
+  # BLOC 6: REFERENCE (example, neo4j)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   neo4j:
     indexes:
       - "CREATE INDEX blocknative_status IF NOT EXISTS FOR (bn:BlockNative) ON (bn.status)"
       - "CREATE INDEX blocknative_date IF NOT EXISTS FOR (bn:BlockNative) ON (bn.generated_at)"
-
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # EXAMPLE
-  # ═══════════════════════════════════════════════════════════════════════════════
+      - "CREATE INDEX blocknative_block_key IF NOT EXISTS FOR (bn:BlockNative) ON (bn.block_key)"
+      - "CREATE INDEX blocknative_locale_key IF NOT EXISTS FOR (bn:BlockNative) ON (bn.locale_key)"
 
   example:
     key: "block:pricing-hero@fr-FR"
+    block_key: "pricing-hero"
+    locale_key: "fr-FR"
     display_name: "Pricing Hero (fr-FR)"
     description: "Hero tarifs généré pour le marché français"
     llm_context: "USE: display generated hero content. TRIGGERS: pricing hero, fr-FR output."

@@ -1,36 +1,37 @@
+# models/node-classes/org/instruction/block-type.yaml
+# v0.13.1 LLM-First Schema - Canonical field ordering for optimal AI comprehension
 # BlockType - Template rules and structure for block generation
-#
-# v0.12.0: Initial clean schema (ADR-025 naming conventions)
 
-# ------------------------------------------------------------------------------
-# SCHEMA: BlockType
-# ------------------------------------------------------------------------------
-#
-# ROLE:
-#   A BlockType is a reusable, INVARIANT template or 'mold'. It defines the
-#   expected JSON `structure` and links to validation `BlockRules` for a
-#   category of blocks (e.g., 'hero', 'faq'). It is the central schema for
-#   a given type of block.
-#
-# KEY RELATIONSHIPS:
-#   - <-[:OF_TYPE]-(Block): All the instances of this block type on various pages.
-#   - [:HAS_RULES]->(BlockRules): The reusable, versionable validation rules.
-#
-# ------------------------------------------------------------------------------
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: BlockType
   realm: org
   layer: instruction
   trait: defined
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (description, llm_context)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  description: "A reusable template or 'mold' that defines the expected JSON structure and validation rules for a category of blocks (e.g., 'hero', 'faq'). This is the central schema for a given type of block."
+
+  llm_context: |
+    USE: when validating block structure or selecting a template for new blocks.
+    TRIGGERS: "block type", "block template", "block schema", "hero", "faq", "pricing-table".
+    NOT: for block instances (use Block), for generation instructions (use BlockInstruction), for generated content (use BlockNative).
+    RELATES: Block (instances via OF_TYPE), BlockRules (validation via HAS_RULES), BlockInstruction (instructions via OF_TYPE).
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL (icon)
+  # ═══════════════════════════════════════════════════════════════════════════════
   icon:
     web: component
     terminal: "▦"
-  description: "A reusable template or 'mold' that defines the expected JSON structure and validation rules for a category of blocks (e.g., 'hero', 'faq'). This is the central schema for a given type of block."
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # STANDARD PROPERTIES (v7.1.0)
+  # BLOC 4: DATA (standard_properties, properties)
   # ═══════════════════════════════════════════════════════════════════════════════
-
   standard_properties:
     key:
       type: string
@@ -55,16 +56,6 @@ node:
       description: "One-line description of the block type's purpose and structure."
       example: "A full-width hero with a title, subtitle, and a primary CTA button."
 
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints about the role of this block type. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections].'"
-      example: |
-        USE: when validating block structure or selecting a template for new blocks.
-        TRIGGERS: "block type", "block template", "block schema", "hero", "faq", "pricing-table".
-        NOT: for block instances (use Block), for generation instructions (use BlockInstruction), for generated content (use BlockNative).
-        RELATES: Block (instances via OF_TYPE), BlockRules (validation via HAS_RULES), BlockInstruction (instructions via OF_TYPE).
-
     created_at:
       type: datetime
       required: true
@@ -72,10 +63,6 @@ node:
     updated_at:
       type: datetime
       required: true
-
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOCKTYPE-SPECIFIC PROPERTIES
-  # ═══════════════════════════════════════════════════════════════════════════════
 
   properties:
     category:
@@ -92,25 +79,39 @@ node:
       example: "schemas/hero-v1.json"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # RELATIONS (FROM this node)
+  # BLOC 5: GRAPH (relations)
   # ═══════════════════════════════════════════════════════════════════════════════
-
   relations:
-    HAS_RULES:
-      to: BlockRules
-      cardinality: "1:N"
-      description: "Links to a reusable and versionable set of validation rules (BlockRules)."
+    outgoing:
+      - type: HAS_RULES
+        to: BlockRules
+        cardinality: "1:N"
+        description: "Links to a reusable and versionable set of validation rules (BlockRules)."
+
+    incoming:
+      - type: OF_TYPE
+        from: Block
+        cardinality: "N:1"
+        description: "Block instances of this type."
+
+      - type: OF_TYPE
+        from: BlockInstruction
+        cardinality: "N:1"
+        description: "Instructions for this block type."
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # EXAMPLE
+  # BLOC 6: REFERENCE (example, neo4j)
   # ═══════════════════════════════════════════════════════════════════════════════
+  neo4j:
+    indexes:
+      - "CREATE INDEX blocktype_key IF NOT EXISTS FOR (bt:BlockType) ON (bt.key)"
+      - "CREATE INDEX blocktype_category IF NOT EXISTS FOR (bt:BlockType) ON (bt.category)"
 
   example:
     data:
       key: "blocktype-hero"
       display_name: "Hero Section"
       description: "Full-width hero with title, subtitle, and CTA"
-      llm_context: "USE: generate attention-grabbing hero sections. TRIGGERS: hero, header, banner, above-fold. NOT: body or footer content."
       category: "header"
       structure: "schemas/hero.json"
 
