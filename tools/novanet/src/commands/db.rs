@@ -1,13 +1,15 @@
-//! Database commands: `novanet db seed`, `novanet db migrate`, `novanet db reset`.
+//! Database commands: `novanet db seed`, `novanet db migrate`, `novanet db reset`, `novanet db verify`.
 //!
 //! Reads `.cypher` files from `packages/db/seed/` and `packages/db/migrations/`,
 //! splits them into individual statements, and executes against Neo4j.
 
+use std::collections::HashSet;
 use std::path::{Path, PathBuf};
 use std::time::Instant;
 use tracing::{debug, info, instrument};
 
 use crate::db::Db;
+use crate::parsers::arcs::load_arc_classes_from_files;
 
 /// Run `novanet db seed`: execute all seed files + migrations.
 #[instrument(skip(db), fields(root = %root.display()))]
@@ -90,6 +92,141 @@ pub async fn run_reset(db: &Db, root: &Path) -> crate::Result<()> {
 
     // Re-seed from scratch
     run_seed(db, root).await
+}
+
+/// Run `novanet db verify`: verify YAML↔Neo4j arc consistency.
+///
+/// Compares arc types defined in YAML (packages/core/models/arc-classes/)
+/// with relationship types actually present in Neo4j.
+#[instrument(skip(db), fields(root = %root.display()))]
+pub async fn run_verify(db: &Db, root: &Path) -> crate::Result<VerifyResult> {
+    info!("Verifying YAML↔Neo4j arc consistency");
+
+    // 1. Load arc names from YAML
+    let arcs_doc = load_arc_classes_from_files(root)?;
+    let yaml_arcs: HashSet<String> = arcs_doc.arcs.iter().map(|a| a.arc_type.clone()).collect();
+    info!(yaml_count = yaml_arcs.len(), "Loaded arc types from YAML");
+
+    // 2. Query Neo4j for all relationship types in use
+    let neo4j_arcs = query_relationship_types(db).await?;
+    info!(neo4j_count = neo4j_arcs.len(), "Found relationship types in Neo4j");
+
+    // 3. Compute differences
+    let in_yaml_not_neo4j: Vec<String> = yaml_arcs
+        .difference(&neo4j_arcs)
+        .cloned()
+        .collect::<Vec<_>>()
+        .into_iter()
+        .collect();
+
+    let in_neo4j_not_yaml: Vec<String> = neo4j_arcs
+        .difference(&yaml_arcs)
+        .cloned()
+        .collect::<Vec<_>>()
+        .into_iter()
+        .collect();
+
+    let matching: Vec<String> = yaml_arcs
+        .intersection(&neo4j_arcs)
+        .cloned()
+        .collect::<Vec<_>>()
+        .into_iter()
+        .collect();
+
+    let result = VerifyResult {
+        yaml_count: yaml_arcs.len(),
+        neo4j_count: neo4j_arcs.len(),
+        matching_count: matching.len(),
+        in_yaml_not_neo4j,
+        in_neo4j_not_yaml,
+    };
+
+    Ok(result)
+}
+
+/// Result of YAML↔Neo4j verification.
+#[derive(Debug, Clone)]
+pub struct VerifyResult {
+    /// Number of arc types defined in YAML
+    pub yaml_count: usize,
+    /// Number of relationship types in Neo4j
+    pub neo4j_count: usize,
+    /// Number of matching arc types
+    pub matching_count: usize,
+    /// Arc types in YAML but not used in Neo4j
+    pub in_yaml_not_neo4j: Vec<String>,
+    /// Relationship types in Neo4j but not defined in YAML
+    pub in_neo4j_not_yaml: Vec<String>,
+}
+
+impl VerifyResult {
+    /// Returns true if YAML and Neo4j are fully synchronized
+    pub fn is_synced(&self) -> bool {
+        self.in_yaml_not_neo4j.is_empty() && self.in_neo4j_not_yaml.is_empty()
+    }
+
+    /// Print human-readable report
+    pub fn print_report(&self) {
+        println!("╭─────────────────────────────────────────╮");
+        println!("│  YAML↔Neo4j Arc Verification Report    │");
+        println!("╰─────────────────────────────────────────╯");
+        println!();
+        println!("  YAML arc types:    {:>4}", self.yaml_count);
+        println!("  Neo4j rel types:   {:>4}", self.neo4j_count);
+        println!("  Matching:          {:>4}", self.matching_count);
+        println!();
+
+        if !self.in_yaml_not_neo4j.is_empty() {
+            println!("  ⚠ In YAML but not in Neo4j ({}):", self.in_yaml_not_neo4j.len());
+            let mut sorted = self.in_yaml_not_neo4j.clone();
+            sorted.sort();
+            for arc in &sorted {
+                println!("    • {}", arc);
+            }
+            println!();
+        }
+
+        if !self.in_neo4j_not_yaml.is_empty() {
+            println!("  ⚠ In Neo4j but not in YAML ({}):", self.in_neo4j_not_yaml.len());
+            let mut sorted = self.in_neo4j_not_yaml.clone();
+            sorted.sort();
+            for arc in &sorted {
+                println!("    • {}", arc);
+            }
+            println!();
+        }
+
+        if self.is_synced() {
+            println!("  ✓ YAML and Neo4j are fully synchronized!");
+        } else {
+            println!("  ✗ YAML and Neo4j are NOT synchronized.");
+            println!();
+            println!("  Hints:");
+            if !self.in_yaml_not_neo4j.is_empty() {
+                println!("    - Arcs in YAML but not Neo4j: may be unused or seed data missing");
+            }
+            if !self.in_neo4j_not_yaml.is_empty() {
+                println!("    - Arcs in Neo4j but not YAML: may be legacy or schema drift");
+            }
+        }
+    }
+}
+
+/// Query Neo4j for all relationship types currently in use.
+async fn query_relationship_types(db: &Db) -> crate::Result<HashSet<String>> {
+    // Use db.schema() if available, otherwise use CALL db.relationshipTypes()
+    let rows = db
+        .execute("CALL db.relationshipTypes() YIELD relationshipType RETURN relationshipType")
+        .await?;
+
+    let mut types = HashSet::new();
+    for row in &rows {
+        if let Ok(rel_type) = row.get::<String>("relationshipType") {
+            types.insert(rel_type);
+        }
+    }
+
+    Ok(types)
 }
 
 /// Collect `.cypher` files from a directory recursively, sorted alphabetically.

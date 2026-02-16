@@ -652,68 +652,36 @@ fn render_arcs_by_family(
         return;
     }
 
-    let class_label = &arcs.class_label;
-
-    // Render each family group
+    // v0.13: Render arcs in flat list (no family sub-headers to avoid "boxes within boxes")
+    // Each arc shows: direction indicator + arc key (colored by family) + target/source class
     for (family, family_arcs) in &by_family {
         let family_color = theme.arc_family_color(family);
-        let incoming_count = family_arcs.iter().filter(|(is_out, _, _)| !is_out).count();
-        let outgoing_count = family_arcs.iter().filter(|(is_out, _, _)| *is_out).count();
 
-        // Family header with counts
-        lines.push(Line::from(vec![
-            Span::styled("  ", *dim),
-            Span::styled(
-                family.to_uppercase(),
-                Style::default()
-                    .fg(family_color)
-                    .add_modifier(Modifier::BOLD),
-            ),
-            Span::styled(
-                format!("  (\u{25c0}{} \u{25b6}{})", incoming_count, outgoing_count),
-                STYLE_DIM,
-            ),
-        ]));
-        lines.push(Line::from(Span::styled(
-            "  \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}",
-            *dim,
-        )));
-
-        // Render arcs in this family (convert &str to owned String only for Span)
         for (is_outgoing, arc_key, other_class) in family_arcs {
             if *is_outgoing {
-                // Outgoing: Class --[ARC]---> Target
+                // Outgoing: → [ARC] → Target
                 lines.push(Line::from(vec![
-                    Span::styled("    ", *dim),
-                    Span::styled(class_label.to_string(), STYLE_PRIMARY),
-                    Span::styled(" \u{2500}\u{2500}[", *dim),
+                    Span::styled("  → ", Style::default().fg(family_color).add_modifier(Modifier::BOLD)),
                     Span::styled(
                         (*arc_key).to_string(),
-                        Style::default()
-                            .fg(family_color)
-                            .add_modifier(Modifier::BOLD),
+                        Style::default().fg(family_color),
                     ),
-                    Span::styled("]\u{2500}\u{2500}\u{25b6} ", *dim),
+                    Span::styled(" → ", *dim),
                     Span::styled((*other_class).to_string(), STYLE_SUCCESS),
                 ]));
             } else {
-                // Incoming: Source --[ARC]---> Class
+                // Incoming: ← Source ← [ARC]
                 lines.push(Line::from(vec![
-                    Span::styled("    ", *dim),
+                    Span::styled("  ← ", Style::default().fg(family_color).add_modifier(Modifier::BOLD)),
                     Span::styled((*other_class).to_string(), STYLE_SUCCESS),
-                    Span::styled(" \u{2500}\u{2500}[", *dim),
+                    Span::styled(" ← ", *dim),
                     Span::styled(
                         (*arc_key).to_string(),
-                        Style::default()
-                            .fg(family_color)
-                            .add_modifier(Modifier::BOLD),
+                        Style::default().fg(family_color),
                     ),
-                    Span::styled("]\u{2500}\u{2500}\u{25b6} ", *dim),
-                    Span::styled(class_label.to_string(), STYLE_PRIMARY),
                 ]));
             }
         }
-        lines.push(Line::from(Span::raw("")));
     }
 }
 
@@ -996,16 +964,19 @@ mod tests {
         let mut lines: Vec<Line> = Vec::new();
         render_arcs_by_family(&mut lines, &arcs, &theme, &dim);
 
-        // Should have family header + separator + 2 arcs + blank line = 5 lines
-        assert!(lines.len() >= 4, "should have header, separator, and arcs");
+        // v0.13: Flat list format - 2 arcs = 2 lines (no headers/separators)
+        assert_eq!(lines.len(), 2, "should have 2 arc lines");
 
-        // First line should be family header (SEMANTIC)
-        let header: String = lines[0].spans.iter().map(|s| s.content.as_ref()).collect();
-        assert!(
-            header.contains("SEMANTIC"),
-            "header should contain 'SEMANTIC', got: {}",
-            header
-        );
+        let all_content: String = lines
+            .iter()
+            .flat_map(|l| l.spans.iter())
+            .map(|s| s.content.as_ref())
+            .collect();
+
+        // Should contain arc keys and target classes
+        assert!(all_content.contains("USES_ENTITY"), "should contain arc key");
+        assert!(all_content.contains("Entity"), "should contain target class");
+        assert!(all_content.contains("→"), "should contain direction indicator");
     }
 
     #[test]
@@ -1020,20 +991,23 @@ mod tests {
         let mut lines: Vec<Line> = Vec::new();
         render_arcs_by_family(&mut lines, &arcs, &theme, &dim);
 
-        // Should have 2 family sections
+        // v0.13: Flat list - 2 arcs = 2 lines (no family headers)
+        assert_eq!(lines.len(), 2, "should have 2 arc lines");
+
         let all_content: String = lines
             .iter()
             .flat_map(|l| l.spans.iter())
             .map(|s| s.content.as_ref())
             .collect();
 
+        // Should contain both arc keys (no family headers)
         assert!(
-            all_content.contains("OWNERSHIP"),
-            "should contain OWNERSHIP family"
+            all_content.contains("BELONGS_TO"),
+            "should contain BELONGS_TO arc"
         );
         assert!(
-            all_content.contains("SEMANTIC"),
-            "should contain SEMANTIC family"
+            all_content.contains("USES_ENTITY"),
+            "should contain USES_ENTITY arc"
         );
     }
 
@@ -1053,14 +1027,20 @@ mod tests {
         let mut lines: Vec<Line> = Vec::new();
         render_arcs_by_family(&mut lines, &arcs, &theme, &dim);
 
-        // Find the header line with counts
-        let header: String = lines[0].spans.iter().map(|s| s.content.as_ref()).collect();
-        // Should show (◀2 ▶1) for 2 incoming, 1 outgoing
-        assert!(
-            header.contains("2") && header.contains("1"),
-            "header should show counts, got: {}",
-            header
-        );
+        // v0.13: Flat list - 3 arcs = 3 lines (no count headers)
+        assert_eq!(lines.len(), 3, "should have 3 arc lines");
+
+        let all_content: String = lines
+            .iter()
+            .flat_map(|l| l.spans.iter())
+            .map(|s| s.content.as_ref())
+            .collect();
+
+        // Should contain all arc keys and both direction indicators
+        assert!(all_content.contains("USED_BY_PAGE"), "should contain incoming arc");
+        assert!(all_content.contains("USES_ENTITY"), "should contain outgoing arc");
+        assert!(all_content.contains("←"), "should contain incoming direction");
+        assert!(all_content.contains("→"), "should contain outgoing direction");
     }
 
     #[test]
@@ -1075,18 +1055,18 @@ mod tests {
         let mut lines: Vec<Line> = Vec::new();
         render_arcs_by_family(&mut lines, &arcs, &theme, &dim);
 
+        // v0.13: Flat list - 2 arcs = 2 lines
+        assert_eq!(lines.len(), 2, "should have 2 arc lines");
+
         let all_content: String = lines
             .iter()
             .flat_map(|l| l.spans.iter())
             .map(|s| s.content.as_ref())
             .collect();
 
-        // Outgoing: Class --[ARC]---> Target
-        // Incoming: Source --[ARC]---> Class
-        assert!(
-            all_content.contains("Class"),
-            "should contain the class label"
-        );
+        // v0.13 format:
+        // Outgoing: → [ARC] → Target
+        // Incoming: ← Source ← [ARC]
         assert!(
             all_content.contains("BELONGS_TO"),
             "should contain incoming arc"
@@ -1094,6 +1074,14 @@ mod tests {
         assert!(
             all_content.contains("HAS_PAGE"),
             "should contain outgoing arc"
+        );
+        assert!(
+            all_content.contains("Project"),
+            "should contain source class for incoming"
+        );
+        assert!(
+            all_content.contains("Page"),
+            "should contain target class for outgoing"
         );
     }
 
@@ -1391,21 +1379,21 @@ mod tests {
         let mut lines: Vec<Line> = Vec::new();
         render_arcs_by_family(&mut lines, &arcs, &theme, &dim);
 
+        // v0.13: Flat list - 5 arcs = 5 lines (no family headers)
+        assert_eq!(lines.len(), 5, "should have 5 arc lines");
+
         let all_content: String = lines
             .iter()
             .flat_map(|l| l.spans.iter())
             .map(|s| s.content.as_ref())
             .collect();
 
-        // All families should be present (BTreeMap sorts alphabetically)
-        assert!(all_content.contains("GENERATION"), "should have generation");
-        assert!(
-            all_content.contains("LOCALIZATION"),
-            "should have localization"
-        );
-        assert!(all_content.contains("MINING"), "should have mining");
-        assert!(all_content.contains("OWNERSHIP"), "should have ownership");
-        assert!(all_content.contains("SEMANTIC"), "should have semantic");
+        // All arc keys should be present (no family headers in flat format)
+        assert!(all_content.contains("BELONGS_TO"), "should have ownership arc");
+        assert!(all_content.contains("LOCALIZES"), "should have localization arc");
+        assert!(all_content.contains("USES_ENTITY"), "should have semantic arc");
+        assert!(all_content.contains("GENERATES"), "should have generation arc");
+        assert!(all_content.contains("MINES_DATA"), "should have mining arc");
     }
 
     #[test]

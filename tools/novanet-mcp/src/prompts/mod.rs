@@ -208,17 +208,17 @@ fn render_cypher_query(args: &serde_json::Map<String, serde_json::Value>) -> Ren
 
 **Key Node Types:**
 - Entity (org/semantic) - Core semantic entities
-- EntityContent (org/semantic) - Locale-specific content for entities
+- EntityNative (org/semantic) - Locale-specific content for entities (v0.13.0: was EntityContent)
 - Page (org/structure) - Website pages
 - Block (org/structure) - Content blocks within pages
 - Locale (shared/config) - BCP-47 locale definitions
 - Class (schema) - Node type definitions with :Schema label (v0.12.0: was Kind)
 
 **Key Relationships:**
-- HAS_CONTENT: Entity → EntityContent (ownership)
+- HAS_NATIVE: Entity → EntityNative (ownership, v0.13.0: was HAS_CONTENT)
 - HAS_BLOCK: Page → Block (ownership)
 - USES_ENTITY: Block → Entity (semantic)
-- FOR_LOCALE: EntityContent → Locale (localization)
+- FOR_LOCALE: EntityNative → Locale (localization)
 - OF_CLASS: Instance → Class (schema-bridge, v0.12.0: was OF_KIND)
 
 ## Rules
@@ -232,9 +232,9 @@ fn render_cypher_query(args: &serde_json::Map<String, serde_json::Value>) -> Ren
 ## Examples
 
 ```cypher
--- Get entities with content for a locale
-MATCH (e:Entity)-[:HAS_CONTENT]->(ec:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
-RETURN e.key, e.name, ec.title, ec.description
+-- Get entities with content for a locale (v0.13.0: HAS_NATIVE, EntityNative)
+MATCH (e:Entity)-[:HAS_NATIVE]->(en:EntityNative)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+RETURN e.key, e.name, en.title, en.description
 LIMIT 50
 
 -- Get page structure
@@ -289,7 +289,7 @@ NovaNet is a native content generation system for multilingual websites. It does
 
 **Key Concepts:**
 - Entity: Universal semantic concept (e.g., "QR Code Generator")
-- EntityContent: Locale-specific content for an entity
+- EntityNative: Locale-specific content for an entity (v0.13.0: was EntityContent)
 - Page/Block: Structure for generated content
 - Locale: BCP-47 locale with voice, culture, formatting settings
 
@@ -533,7 +533,7 @@ fn render_entity_analysis(args: &serde_json::Map<String, serde_json::Value>) -> 
 
 In NovaNet:
 - **Entity** (defined): Core semantic concept, defined once
-- **EntityContent** (authored): Locale-specific content (title, description, etc.)
+- **EntityNative** (authored): Locale-specific content (title, description, etc.) — v0.13.0: was EntityContent
 - **EntityCategory**: Categorical grouping (product, service, concept, etc.)
 
 ## Analysis Queries
@@ -547,10 +547,10 @@ Use these to gather comprehensive entity data:
    RETURN e, c.category_key AS category
    ```
 
-2. **Locale adaptations**:
+2. **Locale adaptations** (v0.13.0: HAS_NATIVE, EntityNative):
    ```cypher
-   MATCH (e:Entity {key: $key})-[:HAS_CONTENT]->(ec:EntityContent)-[:FOR_LOCALE]->(l:Locale)
-   RETURN l.key AS locale, ec.title, ec.description, ec.keywords
+   MATCH (e:Entity {key: $key})-[:HAS_NATIVE]->(en:EntityNative)-[:FOR_LOCALE]->(l:Locale)
+   RETURN l.key AS locale, en.title, en.description, en.keywords
    ```
 
 3. **Usage in content**:

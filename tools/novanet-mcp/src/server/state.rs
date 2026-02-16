@@ -31,7 +31,6 @@ pub struct ServerStats {
     pub queries_executed: u64,
     pub cache_hits: u64,
     pub cache_misses: u64,
-    pub total_tokens_counted: u64,
 }
 
 impl State {
@@ -110,7 +109,6 @@ impl Clone for ServerStats {
             queries_executed: self.queries_executed,
             cache_hits: self.cache_hits,
             cache_misses: self.cache_misses,
-            total_tokens_counted: self.total_tokens_counted,
         }
     }
 }

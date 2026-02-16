@@ -126,7 +126,8 @@ pub async fn execute(state: &State, params: GenerateParams) -> Result<GenerateRe
 
     let token_budget = params.token_budget.unwrap_or(50_000);
     let spreading_depth = params.spreading_depth.unwrap_or(2).min(3);
-    let _include_examples = params.include_examples.unwrap_or(false);
+    // Note: include_examples param exists for future enhancement (example injection)
+    let _ = params.include_examples;
 
     // Phase 1: Get focus node and structure
     let structure_result =
@@ -326,13 +327,13 @@ async fn get_context_anchors(
     let query = r#"
         MATCH (focus {key: $key})
         OPTIONAL MATCH (focus)-[:REFERENCES_PAGE]->(p:Page)
-        OPTIONAL MATCH (p)-[:HAS_GENERATED]->(pg:PageGenerated)
-        WHERE pg.locale = $locale OR pg IS NULL
-        WITH p, pg
+        OPTIONAL MATCH (p)-[:HAS_NATIVE]->(pn:PageNative)
+        WHERE pn.locale = $locale OR pn IS NULL
+        WITH p, pn
         WHERE p IS NOT NULL
         RETURN p.key AS page_key,
-               COALESCE(pg.title, p.name, p.key) AS anchor_text,
-               COALESCE(pg.slug, p.slug, '/' + p.key) AS slug
+               COALESCE(pn.title, p.name, p.key) AS anchor_text,
+               COALESCE(pn.slug, p.slug, '/' + p.key) AS slug
     "#;
 
     let mut params = serde_json::Map::new();

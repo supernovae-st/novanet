@@ -16,6 +16,8 @@
 mod app;
 pub mod cache;
 pub mod clipboard;
+#[path = "colors.generated.rs"]
+pub mod colors;
 mod data;
 mod handlers;
 pub mod icons;

@@ -200,17 +200,18 @@ pub struct ViewParameter {
 
 /// Fetch an entity resource
 pub async fn fetch_entity(state: &State, key: &str) -> Result<EntityResource> {
+    // v0.13.0: HAS_CONTENT → HAS_NATIVE, EntityContent → EntityNative
     let query = r#"
         MATCH (e:Entity {key: $key})
         OPTIONAL MATCH (e)-[:BELONGS_TO]->(c:EntityCategory)
-        OPTIONAL MATCH (e)-[:HAS_CONTENT]->(ec:EntityContent)
+        OPTIONAL MATCH (e)-[:HAS_NATIVE]->(en:EntityNative)
         OPTIONAL MATCH (e)-[r1]->(related:Entity)
         OPTIONAL MATCH (e)<-[r2]-(incoming:Entity)
         RETURN e.key AS key,
                e.name AS name,
                e.definition AS definition,
                c.category_key AS category,
-               collect(DISTINCT {locale: ec.locale, name: ec.name, description: ec.description}) AS content,
+               collect(DISTINCT {locale: en.locale, name: en.name, description: en.description}) AS content,
                collect(DISTINCT {key: related.key, name: related.name, rel: type(r1), dir: 'outgoing'}) AS outgoing,
                collect(DISTINCT {key: incoming.key, name: incoming.name, rel: type(r2), dir: 'incoming'}) AS incoming
     "#;

@@ -19,75 +19,222 @@ import { NovaNetFilter } from './NovaNetFilter.js';
 
 // =============================================================================
 // RELATION TO ALIAS/TARGET TYPE MAPPINGS
-// v0.13.0 ADR-029: Added HAS_NATIVE, NATIVE_OF (merging HAS_NATIVE + HAS_NATIVE)
+// v0.13.0 ADR-029: Complete mapping of all 169 arcs from YAML source of truth
+// Generated from: packages/core/models/arc-classes/**/*.yaml
 // =============================================================================
 
 const RELATION_ALIAS_MAP: Record<string, string> = {
-  // Core structure (v11.6)
+  // ---------------------------------------------------------------------------
+  // OWNERSHIP FAMILY (79 arcs) - Parent→Child hierarchy
+  // ---------------------------------------------------------------------------
+  // Core structure
   HAS_PAGE: 'page',
+  PAGE_OF: 'pageParent',
   HAS_BLOCK: 'block',
+  BLOCK_OF: 'blockParent',
   HAS_ENTITY: 'entity',
-  HAS_BRAND: 'brand',
+  ENTITY_OF: 'entityParent',
   HAS_PROJECT: 'project',
+  PROJECT_OF: 'projectParent',
+  HAS_BRAND: 'brand',
+  BRAND_OF: 'brandParent',
+  HAS_CHILD: 'child',
+  CHILD_OF: 'parent',
+  // Type relationships
   OF_TYPE: 'blockType',
-  OF_CLASS: 'class', // v0.12.0 ADR-023: was OF_KIND
-  // Entity relationships
-  USES_ENTITY: 'usedEntity',
-  SEMANTIC_LINK: 'relatedEntity',
-  BELONGS_TO: 'category',
-  INCLUDES: 'includedEntity',
-  APPLIES_TO: 'applicableEntity',
-  ENABLES: 'enabledEntity',
-  SIMILAR_TO: 'similarEntity',
-  REQUIRES: 'requiredEntity',
-  TYPE_OF: 'typeEntity',
-  VARIANT_OF: 'variantEntity',
-  ALTERNATIVE_TO: 'alternativeEntity',
-  // Instructions
+  TYPE_OF: 'typeTarget',
+  HAS_TYPE: 'hasType',
+  ACCEPTS_BLOCK_TYPE: 'acceptsBlockType',
+  // Instructions & rules
   HAS_INSTRUCTION: 'instruction',
+  INSTRUCTION_OF: 'instructionParent',
   HAS_RULES: 'rules',
-  // Native content (v0.13.0 ADR-029 - unified HAS_CONTENT + HAS_GENERATED)
-  HAS_NATIVE: 'native', // v0.13.0: unified arc for all *Native nodes
-  NATIVE_OF: 'nativeParent', // v0.13.0: inverse of HAS_NATIVE
-  HAS_AUTHORED_CONTENT: 'authoredContent',
-  // Locale knowledge (v11.5 schema)
-  HAS_CULTURE: 'culture',
-  HAS_MARKET: 'market',
+  HAS_ADAPTATION: 'adaptation',
+  ADAPTATION_OF: 'adaptationParent',
+  // Native content (v0.13.0 ADR-029)
+  HAS_NATIVE: 'native',
+  NATIVE_OF: 'nativeParent',
+  BELONGS_TO_PROJECT_NATIVE: 'projectNative',
+  // Brand architecture (ADR-028)
+  HAS_DESIGN: 'design',
+  DESIGN_OF: 'designParent',
+  HAS_PRINCIPLES: 'principles',
+  PRINCIPLES_OF: 'principlesParent',
+  HAS_PROMPT_STYLE: 'promptStyle',
+  PROMPT_STYLE_OF: 'promptStyleParent',
+  // Locale settings
+  HAS_STYLE: 'style',
+  STYLE_OF: 'styleParent',
   HAS_FORMATTING: 'formatting',
+  FORMATTING_OF: 'formattingParent',
   HAS_SLUGIFICATION: 'slugification',
-  HAS_EXPRESSIONS: 'expressionSet',
-  HAS_EXPRESSION: 'expression',
-  CONTAINS: 'contained',
-  FOLLOWS_RULE: 'slugRule',
-  // Geographic
-  HAS_INCOME_LEVEL: 'incomeLevel',
-  IN_CULTURAL_SUBREALM: 'culturalSubrealm',
-  SPEAKS_BRANCH: 'languageBranch',
-  IN_SUBREGION: 'subregion',
-  HAS_PRIMARY_POPULATION: 'population',
+  SLUGIFICATION_OF: 'slugificationParent',
+  HAS_CULTURE: 'culture',
+  CULTURE_OF: 'cultureParent',
+  HAS_CULTURE_SET: 'cultureSet',
+  CULTURE_SET_OF: 'cultureSetParent',
+  HAS_MARKET: 'market',
+  MARKET_OF: 'marketParent',
+  HAS_AUDIENCE: 'audience',
+  AUDIENCE_OF: 'audienceParent',
+  // Knowledge containers
+  HAS_TERMS: 'terms',
+  TERMS_OF: 'termsParent',
+  HAS_EXPRESSIONS: 'expressions',
+  EXPRESSIONS_OF: 'expressionsParent',
+  HAS_PATTERNS: 'patterns',
+  PATTERNS_OF: 'patternsParent',
+  HAS_TABOOS: 'taboos',
+  TABOOS_OF: 'taboosParent',
+  // Container contents
+  CONTAINS_TERM: 'containedTerm',
+  CONTAINS_EXPRESSION: 'containedExpression',
+  CONTAINS_PATTERN: 'containedPattern',
+  CONTAINS_TABOO: 'containedTaboo',
+  CONTAINS_CULTURE_REF: 'containedCultureRef',
+  CONTAINS_AUDIENCE_TRAIT: 'containedAudienceTrait',
+  CONTAINS_SEO_KEYWORD: 'containedSeoKeyword',
+  CONTAINS_GEO_QUERY: 'containedGeoQuery',
+  // SEO/GEO sets
+  HAS_SEO_KEYWORDS: 'seoKeywords',
+  SEO_KEYWORDS_OF: 'seoKeywordsParent',
+  HAS_GEO_QUERIES: 'geoQueries',
+  GEO_QUERIES_OF: 'geoQueriesParent',
+  HAS_GEO_ANSWERS: 'geoAnswers',
+  HAS_KEYWORD: 'keyword',
+  KEYWORD_OF: 'keywordParent',
+  // Geographic hierarchy
   IN_CONTINENT: 'continent',
   IN_REGION: 'region',
+  IN_SUBREGION: 'subregion',
+  IN_COUNTRY: 'country',
+  IN_CULTURAL_SUBREALM: 'culturalSubrealm',
+  IN_ECONOMIC_REGION: 'economicRegion',
+  HAS_REGION: 'hasRegion',
+  HAS_SUBREGION: 'hasSubregion',
+  HAS_SUBREALM: 'subrealm',
+  HAS_BRANCH: 'branch',
+  BRANCH_OF: 'branchParent',
+  HAS_SUBCLUSTER: 'subcluster',
   PART_OF_REALM: 'culturalRealm',
-  BRANCH_OF: 'languageFamily',
-  CLUSTER_OF: 'populationCluster',
-  // SEO
-  EXPRESSES: 'seoKeyword',
-  TARGETS: 'target',
-  SEO_MINES: 'minedSeoKeyword',
-  // Locale
+  CLUSTER_OF: 'clusterParent',
+  // Population
+  HAS_POPULATION: 'population',
+  POPULATION_OF: 'populationParent',
+  HAS_PRIMARY_POPULATION: 'primaryPopulation',
+  // Income/Lending
+  HAS_INCOME_LEVEL: 'incomeLevel',
+  INCOME_CLASSIFIES: 'incomeClassifies',
+  HAS_LENDING_TYPE: 'lendingType',
+  LENDING_CLASSIFIES: 'lendingClassifies',
+  // Locale support
   SUPPORTS_LOCALE: 'supportedLocale',
   DEFAULT_LOCALE: 'defaultLocale',
   FALLBACK_TO: 'fallbackLocale',
-  FOR_LOCALE: 'forLocale',
-  // Metrics & Assembly
+  HAS_LOCALE: 'locale',
+  HAS_LOCALE_VARIANT: 'localeVariant',
+  LOCALE_VARIANT_OF: 'localeVariantParent',
+  // Org structure
+  BELONGS_TO_ORG: 'organization',
+  HAS_SLOT: 'slot',
+  HAS_FORMAT: 'format',
+  HAS_VARIANT: 'variant',
   HAS_METRICS: 'metrics',
-  ASSEMBLES: 'assembledBlock',
-  // Provenance
-  GENERATED: 'generatedOutput',
-  INFLUENCED_BY: 'influencingEntity',
-  GENERATED_FROM: 'generatedFromType',
-  BELONGS_TO_PROJECT_CONTENT: 'projectContent',
-  // Schema-graph (Class/ArcClass) - v11.8 ADR-023
+  METRICS_OF: 'metricsParent',
+
+  // ---------------------------------------------------------------------------
+  // LOCALIZATION FAMILY (20 arcs) - Locale relationships
+  // ---------------------------------------------------------------------------
+  FOR_LOCALE: 'forLocale',
+  LOCALE_OF: 'localeTarget',
+  FOR_MARKET: 'forMarket',
+  FOR_CHANNEL: 'forChannel',
+  SPEAKS_BRANCH: 'speaksBranch',
+  SPOKEN_BY: 'spokenByLocale',
+  POPULAR_IN: 'popularIn',
+  PRIMARY_FOR: 'primaryFor',
+  CULTURALLY_SIMILAR: 'culturallySimilar',
+  INSPIRED_BY_REGION: 'inspiredByRegion',
+
+  // ---------------------------------------------------------------------------
+  // SEMANTIC FAMILY (52 arcs) - Meaning relationships
+  // ---------------------------------------------------------------------------
+  // Entity references
+  USES_ENTITY: 'usedEntity',
+  USED_BY: 'usedByNode',
+  REFERENCES: 'references',
+  REFERENCED_BY: 'referencedBy',
+  REFERENCES_ENTITY: 'referencesEntity',
+  REFERENCES_PAGE: 'referencesPage', // deprecated v0.13.1
+  MENTIONS: 'mentions',
+  MENTIONS_BRAND: 'mentionsBrand',
+  // Page relationships
+  LINKS_TO: 'linksTo',
+  REPRESENTS: 'represents',
+  REPRESENTED_BY: 'representedBy',
+  SUBTOPIC_OF: 'subtopic',
+  SEO_CLUSTER_OF: 'seoCluster',
+  HAS_INTERNAL_LINK: 'internalLink',
+  // Entity semantics
+  SEMANTIC_LINK: 'semanticLink',
+  SIMILAR_TO: 'similarTo',
+  ALTERNATIVE_TO: 'alternativeTo',
+  COMPETES_WITH: 'competesWith',
+  COMPARES_A: 'comparesA',
+  COMPARES_B: 'comparesB',
+  VARIANT_OF: 'variantOf',
+  CATEGORY_OF: 'categoryOf',
+  BELONGS_TO: 'belongsTo',
+  INCLUDES: 'includes',
+  INCLUDED_IN: 'includedIn',
+  INCLUDES_ENTITY: 'includesEntity',
+  APPLIES_TO: 'appliesTo',
+  // Capabilities
+  ENABLES: 'enables',
+  ENABLED_BY: 'enabledBy',
+  ENHANCES: 'enhances',
+  ENHANCED_BY: 'enhancedBy',
+  REQUIRES: 'requires',
+  REQUIRED_BY: 'requiredBy',
+  HAS_APPLICATION: 'application',
+  USE_CASE_FOR: 'useCaseFor',
+  ACTS_ON: 'actsOn',
+  OPERATED_BY: 'operatedBy',
+  FILLS_SLOT: 'fillsSlot',
+  // Targeting
+  TARGETS: 'target',
+  TARGETS_PERSONA: 'targetsPersona',
+  EXPRESSES: 'expresses',
+
+  // ---------------------------------------------------------------------------
+  // GENERATION FAMILY (12 arcs) - LLM pipeline
+  // ---------------------------------------------------------------------------
+  GENERATED: 'generated',
+  GENERATED_FROM: 'generatedFrom',
+  COMPILED_FROM: 'compiledFrom',
+  INFLUENCED_BY: 'influencedBy',
+  INCLUDES_STYLE: 'includesStyle',
+  ASSEMBLES: 'assembles',
+  BUNDLES: 'bundles',
+  PREVIOUS_VERSION: 'previousVersion',
+  PRODUCED: 'produced',
+  PRODUCED_BY: 'producedBy',
+  READS: 'reads',
+  READ_BY: 'readBy',
+  DERIVED_SLUG_FROM: 'derivedSlugFrom',
+
+  // ---------------------------------------------------------------------------
+  // MINING FAMILY (6 arcs) - SEO/GEO intelligence
+  // ---------------------------------------------------------------------------
+  TARGETS_KEYWORD: 'targetsKeyword',
+  KEYWORD_TARGETED_BY: 'keywordTargetedBy',
+  TARGETS_GEO: 'targetsGeo',
+  GEO_TARGETED_BY: 'geoTargetedBy',
+  MONITORS_GEO: 'monitorsGeo',
+
+  // ---------------------------------------------------------------------------
+  // SCHEMA-GRAPH (internal - v11.8 ADR-023)
+  // ---------------------------------------------------------------------------
   HAS_CLASS: 'hasClass',
   HAS_ARC_CLASS: 'arcClass',
   IN_REALM: 'inRealm',
