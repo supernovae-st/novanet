@@ -9,9 +9,22 @@ use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, Borders, Paragraph, Wrap};
 
-use super::super::app::{App, Focus};
+use super::super::app::{App, InfoBox};
 use super::super::data::{TreeItem, get_architecture_diagram};
-use super::{COLOR_UNFOCUSED_BORDER, STYLE_DIM};
+use super::STYLE_DIM;
+
+// =============================================================================
+// BOX VISUAL STATES (matching yaml_panel.rs)
+// =============================================================================
+
+/// Unfocused: Nord Polar Night (dim)
+const BOX_BORDER_UNFOCUSED: Color = Color::Rgb(59, 66, 82); // #3B4252
+
+/// Focused: Nord Snow Storm (subtle highlight) - panel has focus but not this box
+const BOX_BORDER_FOCUSED: Color = Color::Rgb(129, 161, 193); // #81A1C1
+
+/// Selected: Solarized Cyan (bright, active) - this specific box is selected
+const BOX_BORDER_SELECTED: Color = Color::Rgb(42, 161, 152); // #2AA198
 
 // =============================================================================
 // ARCHITECTURE PANEL
@@ -23,12 +36,19 @@ use super::{COLOR_UNFOCUSED_BORDER, STYLE_DIM};
 /// - Page, Entity, Block, Brand, Locale, Project
 ///
 /// For other selections, shows a hint message.
+///
+/// v0.13.0: Uses InfoBox::Architecture for independent selection state.
 pub fn render_architecture_panel(f: &mut Frame, area: Rect, app: &App) {
-    let focused = app.focus == Focus::Yaml; // Share focus with YAML panel
-    let border_color = if focused {
-        Color::Cyan
+    // Determine if this box is selected or just focused
+    let selected = app.selected_box == InfoBox::Architecture;
+    let panel_focused = app.selected_box.is_right_panel();
+
+    let border_color = if selected {
+        BOX_BORDER_SELECTED
+    } else if panel_focused {
+        BOX_BORDER_FOCUSED
     } else {
-        COLOR_UNFOCUSED_BORDER
+        BOX_BORDER_UNFOCUSED
     };
 
     // Get current class name if applicable
@@ -41,20 +61,40 @@ pub fn render_architecture_panel(f: &mut Frame, area: Rect, app: &App) {
     // Try to get diagram for the current class
     let diagram = class_name.and_then(get_architecture_diagram);
 
-    // Build title
-    let title = if let Some(ref diag) = diagram {
-        format!(" Architecture [{}] ", diag.adr_id)
+    // Build enhanced title with selection indicator (matches SOURCE/DIAGRAM pattern)
+    let adr_badge = diagram.as_ref().map(|d| d.adr_id.as_str()).unwrap_or("—");
+
+    let title = if selected {
+        Line::from(vec![
+            Span::styled(
+                " \u{25B6} ",  // ▶
+                Style::default()
+                    .fg(BOX_BORDER_SELECTED)
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::styled(
+                "ARCHITECTURE ",
+                Style::default()
+                    .fg(BOX_BORDER_SELECTED)
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::styled(
+                format!("[{}] ", adr_badge),
+                Style::default().fg(Color::Rgb(180, 142, 173)), // Nord Aurora Purple
+            ),
+        ])
     } else {
-        " Architecture ".to_string()
+        Line::from(vec![
+            Span::styled(" ARCHITECTURE ", Style::default().fg(Color::DarkGray)),
+            Span::styled(
+                format!("[{}] ", adr_badge),
+                Style::default().fg(Color::DarkGray),
+            ),
+        ])
     };
 
     let block = Block::default()
-        .title(Span::styled(
-            title,
-            Style::default()
-                .fg(border_color)
-                .add_modifier(Modifier::BOLD),
-        ))
+        .title(title)
         .borders(Borders::ALL)
         .border_style(Style::default().fg(border_color));
 

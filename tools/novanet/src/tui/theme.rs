@@ -508,11 +508,9 @@ impl Icons {
         icons.quality.insert("optional".into(), " ".into());
         icons.quality.insert("chart".into(), "≡".into());
 
-        // Modes
-        icons.modes.insert("schema".into(), "S".into());
-        icons.modes.insert("data".into(), "D".into());
-        icons.modes.insert("overlay".into(), "O".into());
-        icons.modes.insert("query".into(), "Q".into());
+        // Modes (v11.7: Graph + Nexus only)
+        icons.modes.insert("graph".into(), "G".into());
+        icons.modes.insert("nexus".into(), "N".into());
 
         icons
     }
@@ -666,48 +664,39 @@ impl Theme {
 // NAV MODE COLORS — Colors for navigation modes
 // =============================================================================
 
-/// Navigation mode color definitions.
+/// Navigation mode color definitions (v11.7: Graph + Nexus only).
 pub mod nav_mode {
     use super::*;
 
-    // Mode colors (hex)
-    pub const META_HEX: &str = "#06b6d4"; // Cyan - schema exploration
-    pub const DATA_HEX: &str = "#22c55e"; // Green - live data
-    pub const OVERLAY_HEX: &str = "#f97316"; // Orange - combined view
-    pub const QUERY_HEX: &str = "#eab308"; // Yellow - search/filter
-    pub const ATLAS_HEX: &str = "#8b5cf6"; // Purple - architecture
+    // Mode colors (hex) — v11.7: 2-mode structure
+    pub const GRAPH_HEX: &str = "#06b6d4"; // Cyan - unified tree exploration
+    pub const NEXUS_HEX: &str = "#8b5cf6"; // Purple - hub (Quiz, Stats, Help)
 
     // 256-color palette
-    pub const META_256: u8 = 45;
-    pub const DATA_256: u8 = 41;
-    pub const OVERLAY_256: u8 = 208;
-    pub const QUERY_256: u8 = 178;
-    pub const ATLAS_256: u8 = 141;
+    pub const GRAPH_256: u8 = 45;
+    pub const NEXUS_256: u8 = 141;
 
     // 16-color palette
-    pub const META_16: Color = Color::Cyan;
-    pub const DATA_16: Color = Color::Green;
-    pub const OVERLAY_16: Color = Color::Yellow;
-    pub const QUERY_16: Color = Color::LightYellow;
-    pub const ATLAS_16: Color = Color::Magenta;
+    pub const GRAPH_16: Color = Color::Cyan;
+    pub const NEXUS_16: Color = Color::Magenta;
 
     /// Get nav mode color for a given color mode.
     /// v11.7: 2-mode structure (Graph, Nexus)
     pub fn color(nav_mode: &str, mode: ColorMode) -> Color {
         match mode {
             ColorMode::TrueColor => match nav_mode {
-                "graph" | "Graph" => hex_to_color(META_HEX), // Graph inherits Meta color
-                "nexus" | "Nexus" => hex_to_color(ATLAS_HEX), // Nexus mode color
+                "graph" | "Graph" => hex_to_color(GRAPH_HEX),
+                "nexus" | "Nexus" => hex_to_color(NEXUS_HEX),
                 _ => Color::White,
             },
             ColorMode::Color256 => match nav_mode {
-                "graph" | "Graph" => Color::Indexed(META_256),
-                "nexus" | "Nexus" => Color::Indexed(ATLAS_256),
+                "graph" | "Graph" => Color::Indexed(GRAPH_256),
+                "nexus" | "Nexus" => Color::Indexed(NEXUS_256),
                 _ => Color::White,
             },
             ColorMode::Color16 => match nav_mode {
-                "graph" | "Graph" => META_16,
-                "nexus" | "Nexus" => ATLAS_16,
+                "graph" | "Graph" => GRAPH_16,
+                "nexus" | "Nexus" => NEXUS_16,
                 _ => Color::White,
             },
         }
@@ -1037,8 +1026,9 @@ mod tests {
         assert_eq!(icons.quality("required"), "*");
         assert_eq!(icons.quality("chart"), "≡");
 
-        // Modes
-        assert_eq!(icons.mode("schema"), "S");
+        // Modes (v11.7: Graph + Nexus only)
+        assert_eq!(icons.mode("graph"), "G");
+        assert_eq!(icons.mode("nexus"), "N");
     }
 
     #[test]

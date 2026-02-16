@@ -27,6 +27,7 @@ pub fn get_box_content(app: &App) -> Option<(String, &'static str)> {
         InfoBox::Arcs => get_arcs_content(app),
         InfoBox::Source => get_source_content(app),
         InfoBox::Diagram => get_diagram_content(app),
+        InfoBox::Architecture => get_architecture_content(app),
     }
 }
 
@@ -186,7 +187,7 @@ fn get_diagram_content(app: &App) -> Option<(String, &'static str)> {
         TreeItem::Class(realm, layer, class) => {
             // Generate simple hierarchy diagram
             let diagram = format!(
-                "REALM: {}\n  └── LAYER: {}\n        └── CLASS: {} ({})",
+                "REALM: {}\n  \u{2514}\u{2500}\u{2500} LAYER: {}\n        \u{2514}\u{2500}\u{2500} CLASS: {} ({})",
                 realm.display_name, layer.display_name, class.display_name, class.trait_name
             );
             Some((diagram, "ASCII"))
@@ -204,7 +205,7 @@ fn get_diagram_content(app: &App) -> Option<(String, &'static str)> {
                 realm.display_name,
                 layers
                     .iter()
-                    .map(|l| format!("  └── {}", l))
+                    .map(|l| format!("  \u{2514}\u{2500}\u{2500} {}", l))
                     .collect::<Vec<_>>()
                     .join("\n")
             );
@@ -212,6 +213,22 @@ fn get_diagram_content(app: &App) -> Option<(String, &'static str)> {
         }
         _ => None,
     }
+}
+
+/// ARCHITECTURE box: ADR-028 architecture diagram content.
+fn get_architecture_content(app: &App) -> Option<(String, &'static str)> {
+    use super::data::get_architecture_diagram;
+
+    let item = app.current_item()?;
+    let class_name = match item {
+        TreeItem::Class(_, _, info) => Some(info.key.as_str()),
+        TreeItem::Instance(_, _, class_info, _) => Some(class_info.key.as_str()),
+        _ => None,
+    }?;
+
+    let diagram = get_architecture_diagram(class_name)?;
+    let content = diagram.diagram.join("\n");
+    Some((content, "ASCII"))
 }
 
 #[cfg(test)]
