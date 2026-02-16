@@ -19,9 +19,6 @@ import {
   type GradientColors,
 } from '@/design/colors/palette';
 
-// Re-export GradientColors type for backwards compatibility
-export type { GradientColors } from '@/design/colors/palette';
-
 // =============================================================================
 // Unified Palette Conversion
 // =============================================================================
@@ -133,10 +130,3 @@ export function getRelationColors(type: string): GradientColors {
   return paletteToGradient(getArcPalette(type));
 }
 
-// =============================================================================
-// Exports for constants (backwards compatibility)
-// =============================================================================
-
-export const COLORS = {
-  DEFAULT: DEFAULT_LAYER_GRADIENT,
-} as const;
