@@ -22,21 +22,21 @@ domain: schema-architecture
 
 | Old Name | New Name | Trait | Who Creates |
 |----------|----------|-------|-------------|
-| `EntityNative` | `EntityNative` | authored | Human writes natively |
-| `ProjectNative` | `ProjectNative` | authored | Human writes natively |
-| `PageNative` | `PageNative` | generated | LLM generates natively |
-| `BlockNative` | `BlockNative` | generated | LLM generates natively |
+| `EntityContent` | `EntityNative` | authored | Human writes natively |
+| `ProjectContent` | `ProjectNative` | authored | Human writes natively |
+| `PageGenerated` | `PageNative` | generated | LLM generates natively |
+| `BlockGenerated` | `BlockNative` | generated | LLM generates natively |
 
 ## Arc Unification
 
-Merge `HAS_NATIVE` and `HAS_NATIVE` into single `HAS_NATIVE`:
+Merge `HAS_CONTENT` + `HAS_GENERATED` into single `HAS_NATIVE`:
 
 | Old Arc | New Arc | Properties |
 |---------|---------|------------|
-| `HAS_NATIVE` | `HAS_NATIVE` | `{locale: "fr-FR"}` |
-| `HAS_NATIVE` | `HAS_NATIVE` | `{locale: "fr-FR"}` |
-| `NATIVE_OF` | `NATIVE_OF` | — |
-| `NATIVE_OF` | `NATIVE_OF` | — |
+| `HAS_CONTENT` | `HAS_NATIVE` | `{locale: "fr-FR"}` |
+| `HAS_GENERATED` | `HAS_NATIVE` | `{locale: "fr-FR"}` |
+| `CONTENT_OF` | `NATIVE_OF` | — |
+| `GENERATED_FOR` | `NATIVE_OF` | — |
 
 ## Key Pattern
 
