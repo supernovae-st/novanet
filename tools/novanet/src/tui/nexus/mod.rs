@@ -206,6 +206,25 @@ impl NexusTab {
         }
     }
 
+    /// Get emoji for this tab.
+    pub fn emoji(&self) -> &'static str {
+        match self {
+            // LEARN section
+            NexusTab::Intro => "🌟",
+            NexusTab::Glossary => "📚",
+            NexusTab::Tutorial => "🎓",
+            // EXPLORE section
+            NexusTab::Traits => "🏷️",
+            NexusTab::Layers => "📊",
+            NexusTab::Arcs => "🔗",
+            NexusTab::Arch => "🏛️",
+            // PRACTICE section
+            NexusTab::Pipeline => "⚡",
+            NexusTab::Quiz => "❓",
+            NexusTab::Stats => "📈",
+        }
+    }
+
     /// Get all tabs in order.
     pub fn all() -> &'static [NexusTab] {
         &[
