@@ -119,9 +119,9 @@ export function useFilteredGraph(): FilteredGraphResult {
   const currentQuery = useQueryStore((state) => state.currentQuery);
   const hasActiveQuery = currentQuery !== null && currentQuery.trim().length > 0;
 
-  // Detect schema mode based on node types (Realm, Layer, Kind, etc.)
+  // Detect schema mode based on node types (Realm, Layer, Class, etc.)
   // v12.1: Changed from ID prefix detection to type-based detection
-  // Schema mode is true if ALL nodes are schema types (Realm, Layer, Kind, etc.)
+  // Schema mode is true if ALL nodes are schema types (Realm, Layer, Class, etc.)
   const isSchemaMode = useMemo(() => {
     if (allNodes.length === 0) return false;
     // Check if all nodes are schema types

@@ -8,7 +8,7 @@ import { waitForGraphLoaded } from './helpers';
  *
  * Tests:
  * 1. Toggle between data and schema mode
- * 2. Schema mode shows 42 nodes in grouped layout (v10.4)
+ * 2. Schema mode shows 61 nodes in grouped layout (v0.13.0)
  * 3. URL sync works (?mode=schema)
  * 4. Scope groups are visible
  * 5. Filter panel shows hierarchical filters
@@ -34,14 +34,14 @@ async function waitForSchemaMode(page: Page) {
   await page.waitForTimeout(500);
 }
 
-// Helper: Get the Meta mode badge (modern UI uses "Meta"/"Data" badges in StatsCounter)
+// Helper: Get the Schema mode badge (v0.13.0: renamed from "Meta" to "Schema")
 function getMetaBadge(page: Page) {
-  return page.locator('button').filter({ hasText: 'Meta' }).first();
+  return page.locator('button').filter({ hasText: 'Schema' }).first();
 }
 
-// Helper: Get the Data mode badge
+// Helper: Get the Graph mode badge (v0.13.0: renamed from "Data" to "Graph")
 function getDataBadge(page: Page) {
-  return page.locator('button').filter({ hasText: 'Data' }).first();
+  return page.locator('button').filter({ hasText: 'Graph' }).first();
 }
 
 // Helper: Check if currently in meta mode by looking at the badge text
@@ -124,26 +124,25 @@ test.describe.skip('Schema Mode - Schema Graph Display', () => {
   });
 
   test('should display grouped layout with scope groups', async ({ page }) => {
-    // v10.4: 2 realms (SHARED merged into GLOBAL)
-    // The scope groups are rendered with icon + label (e.g., "PROJECT", "GLOBAL")
+    // v0.13.0: 2 realms (shared, org)
+    // The scope groups are rendered with icon + label (e.g., "ORG", "SHARED")
 
     // Check schema filter panel for scope groups (these are always visible)
     const filterPanel = page.locator('[data-testid="schema-filter-panel"]');
     await expect(filterPanel).toBeVisible();
 
     // Use section label IDs to find specific scope headers (more reliable)
-    await expect(filterPanel.locator('#section-label-project')).toBeVisible();
-    await expect(filterPanel.locator('#section-label-global')).toBeVisible();
-    // v10.4: shared removed, merged into global
+    await expect(filterPanel.locator('#section-label-org')).toBeVisible();
+    await expect(filterPanel.locator('#section-label-shared')).toBeVisible();
   });
 
   test('should display schema stats in header', async ({ page }) => {
-    // The stats are shown in the header as "42 node types · 2 realms" (v10.4)
+    // The stats are shown in the header as "61 node types · 2 realms" (v0.13.0)
     const filterPanel = page.locator('[data-testid="schema-filter-panel"]');
     await expect(filterPanel).toBeVisible();
 
     // Check for stats text format in header
-    const statsText = filterPanel.getByText(/42 node types/);
+    const statsText = filterPanel.getByText(/61 node types/);
     await expect(statsText).toBeVisible({ timeout: 10000 });
   });
 
@@ -251,9 +250,9 @@ test.describe.skip('Schema Mode - Filter Panel', () => {
   test('should show all 2 realms with icons', async ({ page }) => {
     const filterPanel = page.locator('[data-testid="schema-filter-panel"]');
 
-    // v10.4: 2 realms (SHARED merged into GLOBAL)
-    await expect(filterPanel.locator('#section-label-project')).toBeVisible();
-    await expect(filterPanel.locator('#section-label-global')).toBeVisible();
+    // v0.13.0: 2 realms (shared, org)
+    await expect(filterPanel.locator('#section-label-org')).toBeVisible();
+    await expect(filterPanel.locator('#section-label-shared')).toBeVisible();
   });
 
   test('should display subcategories for each realm', async ({ page }) => {
@@ -266,10 +265,9 @@ test.describe.skip('Schema Mode - Filter Panel', () => {
     await expect(filterPanel.getByText('Instruction')).toBeVisible();
     await expect(filterPanel.getByText('Output')).toBeVisible();
 
-    // Global layers (v10.4: SEO moved from SHARED)
+    // Shared layers (v0.13.0: config, locale, geography, knowledge)
     await expect(filterPanel.getByText('Configuration')).toBeVisible();
     await expect(filterPanel.getByText('Knowledge')).toBeVisible();
-    await expect(filterPanel.getByText('SEO')).toBeVisible();
   });
 
   test('should show node counts for layers', async ({ page }) => {
@@ -290,10 +288,9 @@ test.describe.skip('Schema Mode - Filter Panel', () => {
   test('should show legend footer with realm icons', async ({ page }) => {
     const filterPanel = page.locator('[data-testid="schema-filter-panel"]');
 
-    // v10.4: 2 realms - "📦 Project · 🌍 Global"
-    await expect(filterPanel.getByText('📦 Project')).toBeVisible();
-    await expect(filterPanel.getByText('🌍 Global')).toBeVisible();
-    // v10.4: shared removed, merged into global
+    // v0.13.0: 2 realms - "📦 Org · 🌍 Shared"
+    await expect(filterPanel.getByText('📦 Org')).toBeVisible();
+    await expect(filterPanel.getByText('🌍 Shared')).toBeVisible();
   });
 });
 
@@ -307,28 +304,28 @@ test.describe.skip('Schema Mode - Scope Collapse', () => {
   test('should collapse scope when header is clicked', async ({ page }) => {
     const filterPanel = page.locator('[data-testid="schema-filter-panel"]');
 
-    // Find the GLOBAL scope header button using aria-label that includes "GLOBAL"
-    const globalScopeHeader = filterPanel.getByRole('button', { name: /GLOBAL/ });
-    await expect(globalScopeHeader).toBeVisible();
+    // Find the SHARED scope header button using aria-label that includes "SHARED"
+    const sharedScopeHeader = filterPanel.getByRole('button', { name: /SHARED/ });
+    await expect(sharedScopeHeader).toBeVisible();
 
     // Initially expanded - aria-expanded should be true
-    await expect(globalScopeHeader).toHaveAttribute('aria-expanded', 'true');
+    await expect(sharedScopeHeader).toHaveAttribute('aria-expanded', 'true');
 
     // Click to collapse
-    await globalScopeHeader.click();
+    await sharedScopeHeader.click();
 
     // Wait for CSS transition to complete
     await page.waitForTimeout(400);
 
     // aria-expanded should now be false
-    await expect(globalScopeHeader).toHaveAttribute('aria-expanded', 'false');
+    await expect(sharedScopeHeader).toHaveAttribute('aria-expanded', 'false');
 
     // Click again to expand
-    await globalScopeHeader.click();
+    await sharedScopeHeader.click();
     await page.waitForTimeout(400);
 
     // aria-expanded should be true again
-    await expect(globalScopeHeader).toHaveAttribute('aria-expanded', 'true');
+    await expect(sharedScopeHeader).toHaveAttribute('aria-expanded', 'true');
   });
 
   test('should update graph when scope visibility changes', async ({ page }) => {
@@ -340,13 +337,13 @@ test.describe.skip('Schema Mode - Scope Collapse', () => {
     const initialCount = await getNodeCount();
     expect(initialCount).toBeGreaterThan(0);
 
-    // Toggle the GLOBAL scope checkbox to hide its nodes
+    // Toggle the SHARED scope checkbox to hide its nodes
     const filterPanel = page.locator('[data-testid="schema-filter-panel"]');
 
-    // Find the GLOBAL scope's tri-state checkbox (separate from header button)
+    // Find the SHARED scope's tri-state checkbox (separate from header button)
     // The checkbox is the first button child of the section header area
-    const globalSection = filterPanel.locator('[aria-labelledby="section-label-global"]');
-    await expect(globalSection).toBeVisible();
+    const sharedSection = filterPanel.locator('[aria-labelledby="section-label-shared"]');
+    await expect(sharedSection).toBeVisible();
 
     // Wait for graph to settle
     await page.waitForTimeout(500);
@@ -359,26 +356,26 @@ test.describe.skip('Schema Mode - Scope Collapse', () => {
     const filterPanel = page.locator('[data-testid="schema-filter-panel"]');
 
     // Scope headers should have aria-expanded
-    const projectHeader = filterPanel.getByRole('button', { name: /PROJECT/ });
-    await expect(projectHeader).toHaveAttribute('aria-expanded', 'true');
+    const orgHeader = filterPanel.getByRole('button', { name: /ORG/ });
+    await expect(orgHeader).toHaveAttribute('aria-expanded', 'true');
 
     // Scope sections should have aria-labelledby
-    const projectSection = filterPanel.locator('[aria-labelledby="section-label-project"]');
-    await expect(projectSection).toBeVisible();
+    const orgSection = filterPanel.locator('[aria-labelledby="section-label-org"]');
+    await expect(orgSection).toBeVisible();
 
     // Click to collapse
-    await projectHeader.click();
+    await orgHeader.click();
     await page.waitForTimeout(400);
 
     // Should now be collapsed
-    await expect(projectHeader).toHaveAttribute('aria-expanded', 'false');
+    await expect(orgHeader).toHaveAttribute('aria-expanded', 'false');
 
     // Expand again
-    await projectHeader.click();
+    await orgHeader.click();
     await page.waitForTimeout(400);
 
     // Should be expanded again
-    await expect(projectHeader).toHaveAttribute('aria-expanded', 'true');
+    await expect(orgHeader).toHaveAttribute('aria-expanded', 'true');
   });
 });
 

@@ -282,7 +282,7 @@ Commit 3: Update ADR if decision changed
 ## Version Information
 
 - **Current NovaNet Version**: v0.13.0
-- **Latest ADR**: ADR-028 (Brand Architecture)
+- **Latest ADR**: ADR-032 (URL Slugification Architecture)
 - **Latest Traits**: defined, authored, imported, generated, retrieved
 - **Realms**: shared (4 layers), org (6 layers)
 - **Total Nodes**: 61 (40 shared + 21 org)

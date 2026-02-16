@@ -77,22 +77,22 @@ const NODE_LABELS: Record<NodeType, string> = {
   // config (1) — v11.3: Organization + Tenant merged
   OrgConfig: 'Org Config',
 
-  // foundation (6) — v0.12.4: Brand Architecture
+  // foundation (6) — v0.12.4: Brand Architecture, v0.13.0: *Native Pattern (ADR-029)
   Project: 'Project',
   Brand: 'Brand',
   BrandDesign: 'Brand Design',
   BrandPrinciples: 'Brand Principles',
   PromptStyle: 'Prompt Style',
-  ProjectNative: 'Project Content',
+  ProjectNative: 'Project Native',
 
   // structure (3)
   Page: 'Page',
   Block: 'Block',
   ContentSlot: 'Content Slot',
 
-  // semantic (4)
+  // semantic (4) — v0.13.0: *Native Pattern (ADR-029)
   Entity: 'Entity',
-  EntityNative: 'Entity Content',
+  EntityNative: 'Entity Native',
   AudiencePersona: 'Audience Persona',
   ChannelSurface: 'Channel Surface',
 
@@ -102,9 +102,9 @@ const NODE_LABELS: Record<NodeType, string> = {
   BlockRules: 'Block Rules',
   PromptArtifact: 'Prompt Artifact',
 
-  // output (3)
-  PageNative: 'Page Generated',
-  BlockNative: 'Block Generated',
+  // output (3) — v0.13.0: *Native Pattern (ADR-029)
+  PageNative: 'Page Native',
+  BlockNative: 'Block Native',
   OutputArtifact: 'Output Artifact',
 };
 

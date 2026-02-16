@@ -32,23 +32,24 @@ Add a new node type to the NovaNet ontology using Socratic discovery.
 
 ## Naming Requirements
 
-- **Node names**: PascalCase (e.g., `LocaleHumor`, `EntityContent`)
-- **YAML filename**: kebab-case (e.g., `locale-humor.yaml`, `entity-content.yaml`)
+- **Node names**: PascalCase (e.g., `LocaleHumor`, `EntityNative`)
+- **YAML filename**: kebab-case (e.g., `locale-humor.yaml`, `entity-native.yaml`)
 - **Property names**: snake_case (e.g., `display_name`, `llm_context`)
 
-## Nomenclature Rules (v0.12.5)
+## Nomenclature Rules (v0.13.0)
 
 | Pattern | Trait | Use For | Examples |
 |---------|-------|---------|----------|
-| `*Content` | authored | Human-curated localized content | EntityContent, ProjectContent |
-| `*Generated` | generated | LLM-generated output content | PageGenerated, BlockGenerated |
+| `*Native` | authored/generated | Locale-specific content (ADR-029) | EntityNative, PageNative, BlockNative |
 | `*Metrics` | retrieved | External API snapshots | SEOKeywordMetrics, GEOMetrics |
 | `*Category` | defined | Categorical groupings | EntityCategory |
 | `Locale*` | imported | Locale knowledge atoms | LocaleVoice, LocaleCulture |
 | `*Set` | defined | Container nodes for atoms | TermSet, ExpressionSet |
 
 **Deprecated patterns (do not use):**
-- `*L10n` - Use `*Content` or `*Generated` instead
+- `*L10n` - Use `*Native` instead
+- `*Content` - Use `*Native` instead (v0.13.0)
+- `*Generated` - Use `*Native` instead (v0.13.0)
 
 ## Realm/Layer (v0.12.5)
 

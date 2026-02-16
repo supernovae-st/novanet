@@ -15,7 +15,7 @@ fi
 
 # Get project root
 PROJECT_ROOT="${CLAUDE_PROJECT_DIR:-$(pwd)}"
-VERSION=$(cat "$PROJECT_ROOT/VERSION" 2>/dev/null || echo "10.6.0")
+VERSION=$(cat "$PROJECT_ROOT/VERSION" 2>/dev/null || echo "0.13.0")
 
 # Check if this is a documentation file that needs consistency
 case "$FILE_PATH" in

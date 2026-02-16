@@ -456,7 +456,7 @@ mod tests {
 
     fn make_org_doc() -> OrganizingDoc {
         OrganizingDoc {
-            version: "9.0.0".to_string(),
+            version: "0.13.0".to_string(),
             realms: vec![
                 RealmDef {
                     key: "shared".to_string(),

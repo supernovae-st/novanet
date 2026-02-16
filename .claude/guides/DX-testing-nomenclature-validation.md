@@ -312,8 +312,8 @@ fn test_schema_generation_with_all_traits() {
     //        Generated (output), Retrieved (metrics)
     let nodes = vec![
         make_node("Page", "org", "structure", NodeTrait::Defined),
-        make_node("PageGenerated", "org", "output", NodeTrait::Generated),
-        make_node("EntityContent", "org", "semantic", NodeTrait::Authored),
+        make_node("PageNative", "org", "output", NodeTrait::Generated),
+        make_node("EntityNative", "org", "semantic", NodeTrait::Authored),
     ];
     let output = generate_schema(&nodes);
     assert!(output.contains("trait: defined"));
@@ -340,7 +340,7 @@ fn test_deprecated_terminology_detection() {
     }
 
     // POSITIVE: Should use new terms
-    let should_exist = vec!["PageStructure", "PageInstruction", "EntityContent"];
+    let should_exist = vec!["PageStructure", "PageInstruction", "EntityNative"];
     let all_names: Vec<_> = all_node_kinds()
         .iter()
         .map(|n| n.def.name.as_str())

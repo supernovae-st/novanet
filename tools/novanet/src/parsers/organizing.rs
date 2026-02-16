@@ -166,8 +166,8 @@ arc_families:
 
         let doc = load_organizing(root).expect("should load from taxonomy.yaml");
 
-        // v0.12.5: Version from minimal taxonomy.yaml
-        assert_eq!(doc.version, "0.12.5");
+        // v0.13.0: Version from minimal taxonomy.yaml
+        assert_eq!(doc.version, "0.13.0");
         assert_eq!(doc.realms.len(), 2); // v11.2: 2 realms (shared, org)
         assert_eq!(doc.traits.len(), 5); // v11.2: split derived → generated + aggregated
         assert_eq!(doc.arc_families.len(), 5);

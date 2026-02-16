@@ -1123,38 +1123,6 @@ fn box_styles(state: BoxVisualState) -> (Color, Style) {
     }
 }
 
-/// Render a section box with title and content (non-scrollable).
-fn render_section_box(
-    f: &mut Frame,
-    area: Rect,
-    title: &str,
-    content: &SectionContent,
-    state: BoxVisualState,
-) {
-    let lines: Vec<Line> = if content.is_empty() {
-        vec![Line::from(Span::styled("—", STYLE_DIM))]
-    } else {
-        content.lines.clone()
-    };
-
-    let (border_color, title_style) = box_styles(state);
-
-    // Selected box gets a ▶ indicator
-    let title_text = if state == BoxVisualState::Selected {
-        format!(" ▶ {} ", title)
-    } else {
-        format!(" {} ", title)
-    };
-
-    let block = Block::default()
-        .title(Span::styled(title_text, title_style))
-        .borders(Borders::ALL)
-        .border_style(Style::default().fg(border_color));
-
-    let paragraph = Paragraph::new(lines).block(block);
-    f.render_widget(paragraph, area);
-}
-
 /// Render a scrollable section box with scroll indicator.
 fn render_scrollable_section_box(
     f: &mut Frame,
@@ -1295,7 +1263,7 @@ fn render_mini_section(f: &mut Frame, area: Rect, _title: &str, content: &Sectio
 }
 
 /// Compute visual state for a box in the Detail panel.
-/// Info panel contains: HEADER, PROPERTIES, ARCS.
+/// Info panel contains: HEADER, PROPERTIES (v0.13: ARCS moved to dedicated panel).
 fn detail_box_state(panel_focused: bool, selected_box: InfoBox, this_box: InfoBox) -> BoxVisualState {
     if !panel_focused {
         BoxVisualState::Unfocused
@@ -1306,13 +1274,13 @@ fn detail_box_state(panel_focused: bool, selected_box: InfoBox, this_box: InfoBo
     }
 }
 
-/// Unified info panel with 3 individual boxes: HEADER, PROPERTIES, ARCS.
-/// v0.13: No outer panel border - each box is independently navigable via Tab.
+/// Unified info panel with 2 individual boxes: HEADER, PROPERTIES.
+/// v0.13: ARCS moved to dedicated consolidated panel (graph.rs).
+/// No outer panel border - each box is independently navigable via Tab.
 ///
 /// Layout:
-/// - HEADER: Combined Identity + Location + Metrics + Coverage (~40% height)
-/// - PROPERTIES: Scrollable property list (~40% height)
-/// - ARCS: Incoming/outgoing relationships (~20% height)
+/// - HEADER: Combined Identity + Location + Metrics + Coverage (~45% height)
+/// - PROPERTIES: Scrollable property list (~55% height)
 pub fn render_unified_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
     let panel_focused = app.focus == Focus::Info;
     let selected_box = app.selected_box;
@@ -1330,7 +1298,6 @@ pub fn render_unified_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
             .chain(content.metrics.lines)
             .chain(content.coverage.lines)
             .chain(content.properties.lines)
-            .chain(content.relationships.lines)
             .collect();
 
         let paragraph = Paragraph::new(all_lines);
@@ -1338,14 +1305,13 @@ pub fn render_unified_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
         return;
     }
 
-    // v0.13: 3 individual boxes (no outer panel border)
-    // Each box navigable via Tab: [2]HEADER → [3]PROPERTIES → [4]ARCS
+    // v0.13: 2 individual boxes (ARCS moved to dedicated panel)
+    // Each box navigable via Tab: [2]HEADER → [3]PROPERTIES
     let main_chunks = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
-            Constraint::Percentage(40), // HEADER (consolidated)
-            Constraint::Percentage(40), // PROPERTIES (scrollable)
-            Constraint::Percentage(20), // ARCS
+            Constraint::Percentage(45), // HEADER (consolidated)
+            Constraint::Percentage(55), // PROPERTIES (scrollable)
         ])
         .split(area);
 
@@ -1365,14 +1331,4 @@ pub fn render_unified_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
         app.info_scroll,
     );
     app.info_line_count = total_lines;
-
-    // === BOX 3: ARCS ===
-    let arcs_state = detail_box_state(panel_focused, selected_box, InfoBox::Arcs);
-    render_section_box(
-        f,
-        main_chunks[2],
-        "ARCS",
-        &content.relationships,
-        arcs_state,
-    );
 }

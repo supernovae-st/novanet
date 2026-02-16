@@ -19,7 +19,7 @@ use super::{
     COLOR_HINT_TEXT, COLOR_MUTED_TEXT, STYLE_DIM, STYLE_UNFOCUSED, colorize_path_inline,
     scroll_indicator,
 };
-use crate::tui::app::{App, InfoBox};
+use crate::tui::app::{App, InfoBox, SourceTab};
 use crate::tui::yaml::YamlViewSection;
 
 // =============================================================================
@@ -110,7 +110,8 @@ pub fn render_yaml_panel(f: &mut Frame, area: Rect, app: &App) {
     render_diagram_box(f, chunks[1], app, diagram_selected);
 }
 
-/// Render the SOURCE box with YAML content.
+/// Render the SOURCE box with YAML content and tab bar.
+/// v0.13: A' Tree Sync design - Schema/Instance tabs with tree sync.
 fn render_source_box(f: &mut Frame, area: Rect, app: &App, selected: bool) {
     let visible_height = area.height.saturating_sub(2) as usize;
 
@@ -121,28 +122,99 @@ fn render_source_box(f: &mut Frame, area: Rect, app: &App, selected: bool) {
         BOX_BORDER_UNFOCUSED
     };
 
-    // Build enhanced title with line count badge
+    // Check if Instance tab should be available
+    let has_instances = app.has_instances_for_current_class();
+    let current_tab = app.source_tab;
+
+    // Build enhanced title with tab bar
     let line_count = app.yaml_content.lines().count();
-    let title = if selected {
-        Line::from(vec![
-            Span::styled(" ▶ ", Style::default().fg(BOX_BORDER_SELECTED).add_modifier(Modifier::BOLD)),
-            Span::styled("SOURCE ", Style::default().fg(BOX_BORDER_SELECTED).add_modifier(Modifier::BOLD)),
-            Span::styled(
-                format!("⊞{} ", line_count),
-                Style::default().fg(Color::Rgb(136, 192, 208)), // Nord Frost
-            ),
-        ])
-    } else {
-        Line::from(vec![
-            Span::styled(" SOURCE ", Style::default().fg(COLOR_MUTED_TEXT)),
-            Span::styled(
-                format!("⊞{} ", line_count),
-                Style::default().fg(Color::DarkGray),
-            ),
-        ])
-    };
+    let title = build_source_title(selected, current_tab, has_instances, line_count);
 
     render_yaml_content_in_box(f, area, app, visible_height, border_color, title);
+}
+
+/// Build the SOURCE panel title with tab bar.
+/// Format: ` ▶ SOURCE [Schema] [Instance] ⊞N `
+fn build_source_title(
+    selected: bool,
+    current_tab: SourceTab,
+    has_instances: bool,
+    line_count: usize,
+) -> Line<'static> {
+    let mut spans = Vec::new();
+
+    if selected {
+        // Selected: bright indicator
+        spans.push(Span::styled(
+            " ▶ ",
+            Style::default()
+                .fg(BOX_BORDER_SELECTED)
+                .add_modifier(Modifier::BOLD),
+        ));
+        spans.push(Span::styled(
+            "SOURCE ",
+            Style::default()
+                .fg(BOX_BORDER_SELECTED)
+                .add_modifier(Modifier::BOLD),
+        ));
+    } else {
+        // Unfocused: dim
+        spans.push(Span::styled(
+            " SOURCE ",
+            Style::default().fg(COLOR_MUTED_TEXT),
+        ));
+    }
+
+    // Tab bar: [Schema] [Instance]
+    let schema_style = if current_tab == SourceTab::Schema {
+        if selected {
+            Style::default()
+                .fg(Color::Rgb(136, 192, 208)) // Nord Frost (active tab)
+                .add_modifier(Modifier::BOLD)
+        } else {
+            Style::default().fg(Color::Rgb(100, 140, 160))
+        }
+    } else {
+        Style::default().fg(Color::DarkGray)
+    };
+
+    let instance_style = if current_tab == SourceTab::Instance {
+        if selected {
+            Style::default()
+                .fg(Color::Rgb(163, 190, 140)) // Nord Aurora Green (active tab)
+                .add_modifier(Modifier::BOLD)
+        } else {
+            Style::default().fg(Color::Rgb(100, 150, 110))
+        }
+    } else if !has_instances {
+        // Grayed out when no instances available
+        Style::default()
+            .fg(Color::Rgb(60, 60, 60))
+            .add_modifier(Modifier::DIM)
+    } else {
+        Style::default().fg(Color::DarkGray)
+    };
+
+    spans.push(Span::styled("[", Style::default().fg(Color::DarkGray)));
+    spans.push(Span::styled("Schema", schema_style));
+    spans.push(Span::styled("] ", Style::default().fg(Color::DarkGray)));
+
+    spans.push(Span::styled("[", Style::default().fg(Color::DarkGray)));
+    spans.push(Span::styled("Instance", instance_style));
+    if !has_instances {
+        spans.push(Span::styled("—", instance_style)); // Dash indicates unavailable
+    }
+    spans.push(Span::styled("] ", Style::default().fg(Color::DarkGray)));
+
+    // Line count badge
+    let badge_style = if selected {
+        Style::default().fg(Color::Rgb(136, 192, 208)) // Nord Frost
+    } else {
+        Style::default().fg(Color::DarkGray)
+    };
+    spans.push(Span::styled(format!("⊞{} ", line_count), badge_style));
+
+    Line::from(spans)
 }
 
 /// Render the DIAGRAM box with ASCII hierarchy and arc graph.
@@ -500,9 +572,126 @@ fn arc_family_color(family: &str) -> Color {
     }
 }
 
+/// Get layer color from key.
+fn layer_color(layer: &str) -> Color {
+    match layer {
+        "config" => Color::Rgb(59, 130, 246),    // Blue
+        "locale" => Color::Rgb(236, 72, 153),    // Pink
+        "geography" => Color::Rgb(34, 197, 94),  // Green
+        "knowledge" => COLOR_LAYER_KNOWLEDGE,
+        "foundation" => Color::Rgb(168, 85, 247), // Purple
+        "structure" => Color::Rgb(59, 130, 246),  // Blue
+        "semantic" => COLOR_LAYER_SEMANTIC,
+        "instruction" => Color::Rgb(181, 137, 0), // Gold
+        "output" => COLOR_LAYER_OUTPUT,
+        _ => Color::White,
+    }
+}
+
+/// Get arc scope color.
+fn scope_color(scope: &str) -> Color {
+    match scope {
+        "intra_realm" => Color::Rgb(42, 161, 152), // Cyan
+        "cross_realm" => Color::Rgb(249, 115, 22), // Orange
+        _ => Color::White,
+    }
+}
+
+/// Get cardinality color.
+fn cardinality_color(cardinality: &str) -> Color {
+    match cardinality {
+        "one_to_one" | "1:1" => Color::Rgb(34, 197, 94),   // Green
+        "one_to_many" | "1:N" => Color::Rgb(59, 130, 246), // Blue
+        "many_to_one" | "N:1" => Color::Rgb(168, 85, 247), // Purple
+        "many_to_many" | "N:M" => Color::Rgb(249, 115, 22), // Orange
+        _ => Color::White,
+    }
+}
+
+/// Check if a YAML key should have semantic coloring for its value.
+/// Returns Some(color_fn) if the key is semantic, None otherwise.
+fn semantic_value_color(key: &str, value: &str) -> Option<Color> {
+    let key_trimmed = key.trim().trim_end_matches(':');
+    let value_trimmed = value.trim();
+
+    match key_trimmed {
+        "realm" => Some(realm_color(value_trimmed)),
+        "layer" => Some(layer_color(value_trimmed)),
+        "trait" => Some(trait_color(value_trimmed)),
+        "family" => Some(arc_family_color(value_trimmed)),
+        "scope" => Some(scope_color(value_trimmed)),
+        "cardinality" => Some(cardinality_color(value_trimmed)),
+        _ => None,
+    }
+}
+
 // =============================================================================
 // INTERNAL FUNCTIONS
 // =============================================================================
+
+/// Generate arc badge lines for ArcClass items.
+/// v0.13 Option C: Shows source→target relationship with colored badges.
+/// Format: ┌ [Source] ──[:ARC_NAME]──► [Target] ┐
+fn generate_arc_badge(app: &App) -> Vec<Line<'static>> {
+    use crate::tui::data::TreeItem;
+
+    let mut badge_lines = Vec::new();
+
+    if let Some(TreeItem::ArcClass(family, arc)) = app.current_item() {
+        let fc = arc_family_color(&family.key);
+
+        // Get source/target class colors (use layer colors if we can resolve them)
+        let source_color = Color::Rgb(136, 192, 208); // Nord Frost (default)
+        let target_color = Color::Rgb(163, 190, 140); // Nord Aurora Green (default)
+
+        // Line 1: Source ──[:ARC]──► Target
+        badge_lines.push(Line::from(vec![
+            Span::styled("┌ ", Style::default().fg(Color::DarkGray)),
+            Span::styled(
+                format!("[{}]", arc.from_class),
+                Style::default().fg(source_color).add_modifier(Modifier::BOLD),
+            ),
+            Span::styled(" ──[:", Style::default().fg(Color::DarkGray)),
+            Span::styled(
+                arc.key.clone(),
+                Style::default().fg(fc).add_modifier(Modifier::BOLD),
+            ),
+            Span::styled("]──► ", Style::default().fg(Color::DarkGray)),
+            Span::styled(
+                format!("[{}]", arc.to_class),
+                Style::default().fg(target_color).add_modifier(Modifier::BOLD),
+            ),
+            Span::styled(" ┐", Style::default().fg(Color::DarkGray)),
+        ]));
+
+        // Line 2: Family + Cardinality badges
+        let card_color = cardinality_color(&arc.cardinality);
+        badge_lines.push(Line::from(vec![
+            Span::styled("│ ", Style::default().fg(Color::DarkGray)),
+            Span::styled(
+                format!("◇{}", family.key),
+                Style::default().fg(fc),
+            ),
+            Span::styled(" ", Style::default()),
+            Span::styled(
+                format!("⊞{}", arc.cardinality),
+                Style::default().fg(card_color),
+            ),
+            Span::styled(
+                " │",
+                Style::default().fg(Color::DarkGray),
+            ),
+        ]));
+
+        // Line 3: Separator
+        badge_lines.push(Line::from(Span::styled(
+            "└────────────────────────────────────────┘",
+            Style::default().fg(Color::DarkGray),
+        )));
+    }
+
+    badge_lines
+}
 
 /// Render YAML content in a box with given border color and title.
 fn render_yaml_content_in_box(
@@ -520,6 +709,14 @@ fn render_yaml_content_in_box(
     // Build YAML lines with syntax highlighting
     let mut lines: Vec<Line> = Vec::new();
 
+    // v0.13 Option C: Add arc badge for ArcClass items
+    let arc_badge = generate_arc_badge(app);
+    let badge_height = arc_badge.len();
+    lines.extend(arc_badge);
+
+    // Adjust visible height for badge
+    let content_visible_height = visible_height.saturating_sub(badge_height);
+
     if let Some(sections) = sections_opt {
         // Contextual view: show active section with ellipsis for hidden section
 
@@ -529,12 +726,12 @@ fn render_yaml_content_in_box(
                 for yaml_line in sections
                     .class_lines_iter()
                     .skip(app.yaml_scroll)
-                    .take(visible_height.saturating_sub(1))
+                    .take(content_visible_height.saturating_sub(1))
                 {
                     lines.push(highlight_yaml_line(yaml_line));
                 }
                 // Add ellipsis for hidden Instance section (if not in peek mode)
-                if !app.yaml_peek && lines.len() < visible_height {
+                if !app.yaml_peek && lines.len() < content_visible_height {
                     let hint = "[Enter: peek]";
                     lines.push(Line::from(vec![
                         Span::styled("... ", Style::default().fg(COLOR_MUTED_TEXT)),
@@ -558,7 +755,7 @@ fn render_yaml_content_in_box(
                         "................................................",
                         Style::default().fg(COLOR_MUTED_TEXT),
                     )));
-                    let remaining = visible_height.saturating_sub(lines.len()).saturating_sub(1);
+                    let remaining = content_visible_height.saturating_sub(lines.len()).saturating_sub(1);
                     for yaml_line in sections.instance_lines_iter().take(remaining) {
                         lines.push(highlight_yaml_line_dim(yaml_line));
                     }
@@ -598,7 +795,7 @@ fn render_yaml_content_in_box(
                         Span::styled(hint, Style::default().fg(COLOR_HINT_TEXT)),
                         Span::styled(" ............", Style::default().fg(COLOR_MUTED_TEXT)),
                     ]));
-                    let peek_lines = visible_height / 3; // Show ~1/3 of the hidden section
+                    let peek_lines = content_visible_height / 3; // Show ~1/3 of the hidden section
                     for yaml_line in sections.class_lines_iter().take(peek_lines) {
                         lines.push(highlight_yaml_line_dim(yaml_line));
                     }
@@ -608,7 +805,7 @@ fn render_yaml_content_in_box(
                     )));
                 }
                 // Show Instance section
-                let remaining = visible_height.saturating_sub(lines.len());
+                let remaining = content_visible_height.saturating_sub(lines.len());
                 for yaml_line in sections
                     .instance_lines_iter()
                     .skip(app.yaml_scroll)
@@ -624,7 +821,7 @@ fn render_yaml_content_in_box(
             .yaml_content
             .lines()
             .skip(app.yaml_scroll)
-            .take(visible_height)
+            .take(content_visible_height)
         {
             lines.push(highlight_yaml_line(yaml_line));
         }
@@ -740,6 +937,7 @@ fn build_yaml_title_with_tabs(
 }
 
 /// Highlight a YAML line with syntax coloring.
+/// v0.13: Enhanced with semantic coloring for realm, layer, trait, family, scope, cardinality.
 fn highlight_yaml_line(line: &str) -> Line<'static> {
     // Comment line
     if line.trim_start().starts_with('#') {
@@ -771,7 +969,8 @@ fn highlight_yaml_line(line: &str) -> Line<'static> {
             let key = &after_dash[..colon_pos + 1];
             let value = &after_dash[colon_pos + 1..];
             spans.push(Span::styled(key.to_string(), STYLE_YAML_KEY));
-            spans.push(highlight_yaml_value(value));
+            // v0.13: Semantic coloring for values
+            spans.push(highlight_yaml_value_semantic(key, value));
         } else {
             spans.push(highlight_yaml_value(after_dash));
         }
@@ -785,7 +984,8 @@ fn highlight_yaml_line(line: &str) -> Line<'static> {
         if colon_and_rest.len() > 1 {
             spans.push(Span::styled(":", STYLE_YAML_TEXT));
             let value = &colon_and_rest[1..];
-            spans.push(highlight_yaml_value(value));
+            // v0.13: Semantic coloring for values
+            spans.push(highlight_yaml_value_semantic(key, value));
         } else {
             spans.push(Span::styled(":", STYLE_YAML_TEXT));
         }
@@ -795,6 +995,22 @@ fn highlight_yaml_line(line: &str) -> Line<'static> {
     }
 
     Line::from(spans)
+}
+
+/// Highlight a YAML value with semantic coloring if applicable.
+/// v0.13: Checks if the key is a semantic key (realm, layer, trait, family, scope, cardinality)
+/// and applies the appropriate color from the taxonomy.
+fn highlight_yaml_value_semantic(key: &str, value: &str) -> Span<'static> {
+    // Check for semantic coloring first
+    if let Some(color) = semantic_value_color(key, value) {
+        return Span::styled(
+            value.to_string(),
+            Style::default().fg(color).add_modifier(Modifier::BOLD),
+        );
+    }
+
+    // Fall back to default value highlighting
+    highlight_yaml_value(value)
 }
 
 /// Highlight a YAML value with appropriate color.
@@ -1189,5 +1405,173 @@ mod tests {
     fn test_highlight_yaml_value_negative_float() {
         let span = highlight_yaml_value(" -0.5");
         assert_eq!(span.style, STYLE_YAML_NUMBER);
+    }
+
+    // =========================================================================
+    // v0.13 semantic_value_color tests (Option B)
+    // =========================================================================
+
+    #[test]
+    fn test_semantic_value_color_realm_shared() {
+        let color = semantic_value_color("realm", " shared");
+        assert_eq!(color, Some(COLOR_REALM_SHARED));
+    }
+
+    #[test]
+    fn test_semantic_value_color_realm_org() {
+        let color = semantic_value_color("realm", " org");
+        assert_eq!(color, Some(COLOR_REALM_ORG));
+    }
+
+    #[test]
+    fn test_semantic_value_color_layer_semantic() {
+        let color = semantic_value_color("layer", " semantic");
+        assert_eq!(color, Some(COLOR_LAYER_SEMANTIC));
+    }
+
+    #[test]
+    fn test_semantic_value_color_layer_output() {
+        let color = semantic_value_color("layer", " output");
+        assert_eq!(color, Some(COLOR_LAYER_OUTPUT));
+    }
+
+    #[test]
+    fn test_semantic_value_color_trait_defined() {
+        let color = semantic_value_color("trait", " defined");
+        assert_eq!(color, Some(COLOR_TRAIT_DEFINED));
+    }
+
+    #[test]
+    fn test_semantic_value_color_trait_authored() {
+        let color = semantic_value_color("trait", " authored");
+        assert_eq!(color, Some(COLOR_TRAIT_AUTHORED));
+    }
+
+    #[test]
+    fn test_semantic_value_color_trait_imported() {
+        let color = semantic_value_color("trait", " imported");
+        assert_eq!(color, Some(COLOR_TRAIT_IMPORTED));
+    }
+
+    #[test]
+    fn test_semantic_value_color_trait_generated() {
+        let color = semantic_value_color("trait", " generated");
+        assert_eq!(color, Some(COLOR_TRAIT_GENERATED));
+    }
+
+    #[test]
+    fn test_semantic_value_color_trait_retrieved() {
+        let color = semantic_value_color("trait", " retrieved");
+        assert_eq!(color, Some(COLOR_TRAIT_RETRIEVED));
+    }
+
+    #[test]
+    fn test_semantic_value_color_family_ownership() {
+        let color = semantic_value_color("family", " ownership");
+        assert_eq!(color, Some(COLOR_FAMILY_OWNERSHIP));
+    }
+
+    #[test]
+    fn test_semantic_value_color_family_semantic() {
+        let color = semantic_value_color("family", " semantic");
+        assert_eq!(color, Some(COLOR_FAMILY_SEMANTIC));
+    }
+
+    #[test]
+    fn test_semantic_value_color_scope_intra() {
+        let color = semantic_value_color("scope", " intra_realm");
+        assert!(color.is_some()); // Should have a color
+    }
+
+    #[test]
+    fn test_semantic_value_color_scope_cross() {
+        let color = semantic_value_color("scope", " cross_realm");
+        assert!(color.is_some()); // Should have a color
+    }
+
+    #[test]
+    fn test_semantic_value_color_cardinality() {
+        let color = semantic_value_color("cardinality", " one_to_many");
+        assert!(color.is_some()); // Should have a color
+    }
+
+    #[test]
+    fn test_semantic_value_color_non_semantic_key() {
+        let color = semantic_value_color("name", " Page");
+        assert_eq!(color, None); // Not a semantic key
+    }
+
+    #[test]
+    fn test_semantic_value_color_with_colon() {
+        // Key might have trailing colon from parsing
+        let color = semantic_value_color("realm:", " shared");
+        assert_eq!(color, Some(COLOR_REALM_SHARED));
+    }
+
+    // =========================================================================
+    // v0.13 highlight_yaml_value_semantic tests
+    // =========================================================================
+
+    #[test]
+    fn test_highlight_yaml_value_semantic_realm() {
+        let span = highlight_yaml_value_semantic("realm", " shared");
+        assert_eq!(span.content, " shared");
+        // Should be bold with COLOR_REALM_SHARED
+        assert!(span.style.add_modifier.contains(Modifier::BOLD));
+    }
+
+    #[test]
+    fn test_highlight_yaml_value_semantic_fallback() {
+        // Non-semantic key should fall back to default highlighting
+        let span = highlight_yaml_value_semantic("name", " Page");
+        assert_eq!(span.content, " Page");
+        // Should be string style (green), not bold
+        assert_eq!(span.style, STYLE_YAML_STRING);
+    }
+
+    // =========================================================================
+    // v0.13 layer_color tests
+    // =========================================================================
+
+    #[test]
+    fn test_layer_color_knowledge() {
+        assert_eq!(layer_color("knowledge"), COLOR_LAYER_KNOWLEDGE);
+    }
+
+    #[test]
+    fn test_layer_color_semantic() {
+        assert_eq!(layer_color("semantic"), COLOR_LAYER_SEMANTIC);
+    }
+
+    #[test]
+    fn test_layer_color_output() {
+        assert_eq!(layer_color("output"), COLOR_LAYER_OUTPUT);
+    }
+
+    #[test]
+    fn test_layer_color_unknown() {
+        assert_eq!(layer_color("unknown"), Color::White);
+    }
+
+    // =========================================================================
+    // v0.13 cardinality_color tests
+    // =========================================================================
+
+    #[test]
+    fn test_cardinality_color_one_to_one() {
+        let color = cardinality_color("one_to_one");
+        assert_eq!(color, Color::Rgb(34, 197, 94)); // Green
+    }
+
+    #[test]
+    fn test_cardinality_color_one_to_many() {
+        let color = cardinality_color("one_to_many");
+        assert_eq!(color, Color::Rgb(59, 130, 246)); // Blue
+    }
+
+    #[test]
+    fn test_cardinality_color_many_to_many() {
+        let color = cardinality_color("many_to_many");
+        assert_eq!(color, Color::Rgb(249, 115, 22)); // Orange
     }
 }

@@ -373,7 +373,7 @@ export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfi
   },
   BELONGS_TO_PROJECT_CONTENT: {
     type: 'BELONGS_TO_PROJECT_CONTENT',
-    label: 'Belongs To Project Content',
+    label: 'Belongs To Project Native',
     color: '#0891b2',  // cyan-600
     category: 'structure',
   },
