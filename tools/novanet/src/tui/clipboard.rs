@@ -24,7 +24,7 @@ pub fn get_box_content(app: &App) -> Option<(String, &'static str)> {
         InfoBox::Tree => get_tree_content(app),
         InfoBox::Header => get_header_content(app),
         InfoBox::Properties => get_properties_content(app),
-        InfoBox::Arcs => get_arcs_content(app),
+        InfoBox::Arcs | InfoBox::Graph => get_arcs_content(app),
         InfoBox::Source => get_source_content(app),
         InfoBox::Diagram => get_diagram_content(app),
         InfoBox::Architecture => get_architecture_content(app),
