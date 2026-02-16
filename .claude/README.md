@@ -124,19 +124,32 @@ When implementing v11.7 Unified Tree Architecture, use these skills per phase:
 │   ├── typescript.md            ← TypeScript patterns (packages/, apps/)
 │   ├── cypher.md                ← Cypher patterns (packages/db/seed/)
 │   ├── security.md              ← Security patterns (all code)
-│   ├── novanet-terminology.md   ← Domain vocabulary (v9.5)
-│   └── novanet-decisions.md     ← Architecture decisions (ADRs)
+│   ├── novanet-terminology.md   ← Domain vocabulary (v0.13.0)
+│   ├── novanet-decisions.md     ← ADR index (quick reference)
+│   ├── arc-design-guide.md      ← Arc design best practices
+│   └── adr/                     ← Full ADR content by domain
+│       ├── _index.yaml          ← Machine-readable ADR metadata
+│       ├── core-principles/     ← ADRs 001, 003, 007, 010, 021
+│       ├── schema-architecture/ ← ADRs 006, 012, 017, 028, 029, 030
+│       ├── node-classification/ ← ADRs 002, 023, 024, 025
+│       ├── arc-design/          ← ADRs 015, 016, 026, 027
+│       ├── visual-encoding/     ← ADRs 004, 005, 009, 013
+│       ├── ux-architecture/     ← ADRs 008, 022
+│       ├── seo-geo/             ← ADRs 031, 032
+│       └── deprecated/          ← ADRs 011, 014, 018, 019, 020
 ├── commands/                    ← Slash commands
 │   ├── novanet-arch.md          ← /novanet-arch
 │   ├── novanet-sync.md          ← /novanet-sync
 │   ├── schema.md                ← /schema (master command)
 │   ├── schema-add-node.md       ← /schema:add-node
 │   ├── schema-edit-node.md      ← /schema:edit-node
-│   └── schema-add-arc.md        ← /schema:add-arc
+│   ├── schema-add-arc.md        ← /schema:add-arc
+│   └── adr.md                   ← /adr (ADR quick lookup)
 ├── skills/                      ← Skill definitions
 │   ├── novanet-architecture/    ← ASCII architecture diagrams
 │   ├── novanet-sync/            ← Schema sync validation
 │   ├── novanet-tui/             ← Terminal UI keybindings
+│   ├── novanet-adr/             ← ADR navigation and lookup
 │   ├── security-audit/          ← Security audit (Rust + TS)
 │   ├── codebase-audit/          ← Parallel codebase analysis
 │   └── token-audit/             ← Design token adoption
@@ -250,11 +263,13 @@ Rules that apply only when working with matching files.
 | Rule File | Paths | Content |
 |-----------|-------|---------|
 | `rust.md` | `tools/novanet/**/*.rs` | Error handling, async patterns, module structure |
-| `typescript.md` | `packages/**/*.ts`, `apps/**/*.tsx` | Type safety, React patterns, v9 terminology |
-| `cypher.md` | `packages/db/seed/**/*.cypher` | Meta-graph navigation, ArcFamily patterns |
+| `typescript.md` | `packages/**/*.ts`, `apps/**/*.tsx` | Type safety, React patterns, v0.13.0 terminology |
+| `cypher.md` | `packages/db/seed/**/*.cypher` | Schema-graph navigation, ArcFamily patterns |
 | `security.md` | `**/*.rs`, `**/*.ts`, `**/*.cypher` | Security patterns, pre-commit checklist |
-| `novanet-terminology.md` | All files | v9.5 domain vocabulary |
-| `novanet-decisions.md` | All files | Architecture Decision Records (ADRs) |
+| `novanet-terminology.md` | All files | v0.13.0 domain vocabulary |
+| `novanet-decisions.md` | All files | ADR index (quick reference) |
+| `arc-design-guide.md` | All files | Arc design best practices |
+| `adr/*.md` | All files | Full ADR content by domain (32 ADRs) |
 
 Rules use YAML frontmatter with `paths:` field for scoping:
 
@@ -345,6 +360,39 @@ Clean up and end development session.
 2. Check for uncommitted changes
 3. Summarize completed work
 4. Sign off
+
+---
+
+### `/adr` - ADR Quick Lookup
+
+Look up Architecture Decision Records by number, keyword, or domain.
+
+| Argument | Description |
+|----------|-------------|
+| `<number>` | Look up by ADR number (e.g., `029`, `21`) |
+| `<keyword>` | Search by keyword (e.g., `native`, `slug`, `trait`) |
+| `list` | List all ADRs with status |
+| `domain <name>` | List ADRs in a domain (e.g., `schema-architecture`) |
+| `must-know` | Show essential ADRs for v0.13.0 |
+
+**Examples:**
+```bash
+/adr 029               # Show ADR-029 (*Native Pattern)
+/adr native            # Find ADRs containing "native"
+/adr list              # List all 32 ADRs
+/adr domain arc-design # List ADRs in arc-design domain
+/adr must-know         # Show 6 essential ADRs for v0.13.0
+```
+
+**ADR Domains:**
+- `core-principles` (5): Philosophy and methodology
+- `schema-architecture` (6): Realm, layer, node organization
+- `node-classification` (4): Naming, traits, classification
+- `arc-design` (4): Arc families, inverses, patterns
+- `visual-encoding` (4): Colors, icons, representation
+- `ux-architecture` (2): TUI/Studio navigation
+- `seo-geo` (2): SEO pillar/cluster, URL architecture
+- `deprecated` (5): Historical/superseded ADRs
 
 ---
 

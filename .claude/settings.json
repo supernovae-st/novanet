@@ -104,6 +104,16 @@
             "command": ".claude/hooks/yaml-source-reminder.sh"
           }
         ]
+      },
+      {
+        "matcher": "Read",
+        "pathPattern": "**/.claude/rules/adr/**/*.md",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/adr-context.sh"
+          }
+        ]
       }
     ]
   }
