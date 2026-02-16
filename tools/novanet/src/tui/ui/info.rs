@@ -66,6 +66,17 @@ impl<'a> SectionContent<'a> {
         ]));
     }
 
+    /// Add a classification entry with explicit key:value format.
+    /// Format: `key: icon value` (e.g., `realm: ◎ org`)
+    /// Uses narrower 8-char width for compact CLASSIFICATION section.
+    fn add_classification(&mut self, key: &str, icon: &str, value: &str, color: Color) {
+        self.lines.push(Line::from(vec![
+            Span::styled(format!("{:<8}", format!("{}:", key)), STYLE_DIM),
+            Span::styled(format!("{} ", icon), Style::default().fg(color)),
+            Span::styled(value.to_string(), Style::default().fg(color)),
+        ]));
+    }
+
     fn add_empty(&mut self) {
         self.lines.push(Line::from(Span::styled("—", STYLE_DIM)));
     }
