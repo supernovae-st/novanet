@@ -13,18 +13,6 @@ const VIEW_ID_REGEX = /^[a-z0-9-]+$/;
 // Valid locale pattern (BCP 47 - permissive to support variants like zh-Hans-CN)
 const LOCALE_REGEX = /^[a-z]{2,3}(-[A-Za-z]{2,4})?(-[A-Z]{2})?(-[a-z0-9]+)*$/;
 
-// View ID aliases for backward compatibility (v0.12.5)
-const VIEW_ID_ALIASES: Record<string, string> = {
-  'complete-graph': 'schema-complete',
-  'block-generation': 'gen-block',
-  'page-generation': 'gen-page',
-  'gen-context': 'gen-page',
-  'data-locales': 'data-locales',
-  'data-project': 'data-project',
-  'ctx-neighbors': 'ctx-neighbors',
-  'ctx-entity': 'ctx-entity',
-};
-
 interface ViewParams {
   key?: string;
   locale?: string;
@@ -62,8 +50,8 @@ export async function GET(
     );
   }
 
-  // Apply alias for standardized view IDs
-  const id = VIEW_ID_ALIASES[rawId] || rawId;
+  // Use raw ID directly (no aliases since v0.13.0)
+  const id = rawId;
 
   try {
     // Extract query parameters
