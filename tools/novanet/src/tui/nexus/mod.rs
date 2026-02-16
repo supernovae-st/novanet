@@ -1526,7 +1526,6 @@ impl NexusState {
 
 /// Render the Nexus tree panel (left side).
 /// Shows 3 sections with expandable tabs.
-#[allow(dead_code)] // Will be used in Task 4 when render_nexus() is refactored
 fn render_nexus_tree(f: &mut Frame, area: Rect, app: &App) {
     use ratatui::widgets::Wrap;
 
@@ -1643,45 +1642,45 @@ fn render_nexus_tree(f: &mut Frame, area: Rect, app: &App) {
     f.render_widget(paragraph, inner);
 }
 
-/// Render the Nexus mode with tab bar, breadcrumb, and content.
-/// Note: Action bar hints are now in the unified status bar (ui/status.rs).
+/// Render Nexus mode with tree layout (25% tree | 75% content).
 pub fn render_nexus(f: &mut Frame, area: Rect, app: &App) {
-    let chunks = Layout::default()
-        .direction(Direction::Vertical)
-        .constraints([
-            Constraint::Length(3), // Tab bar
-            Constraint::Length(1), // Breadcrumb
-            Constraint::Min(1),    // Content
-            Constraint::Length(1), // Cross-tab hints (v0.12.0)
-        ])
+    // Split into tree (25%) and content (75%)
+    let main_chunks = Layout::default()
+        .direction(Direction::Horizontal)
+        .constraints([Constraint::Percentage(25), Constraint::Percentage(75)])
         .split(area);
 
-    // Render tab bar
-    render_tab_bar(f, chunks[0], app);
+    // Left: Tree panel
+    render_nexus_tree(f, main_chunks[0], app);
 
-    // Render breadcrumb
-    render_breadcrumb(f, chunks[1], app);
+    // Right: Content with cross-tab hints at bottom
+    let content_chunks = Layout::default()
+        .direction(Direction::Vertical)
+        .constraints([
+            Constraint::Min(1),    // Content
+            Constraint::Length(1), // Cross-tab hints
+        ])
+        .split(main_chunks[1]);
 
     // Render content based on active tab
     match app.nexus.tab {
         // LEARN section
-        NexusTab::Intro => intro::render_intro_tab(f, app, chunks[2]),
-        NexusTab::Glossary => glossary::render_glossary_tab(f, app, chunks[2]),
-        NexusTab::Tutorial => tutorial::render_tutorial_tab(f, app, chunks[2]),
+        NexusTab::Intro => intro::render_intro_tab(f, app, content_chunks[0]),
+        NexusTab::Glossary => glossary::render_glossary_tab(f, app, content_chunks[0]),
+        NexusTab::Tutorial => tutorial::render_tutorial_tab(f, app, content_chunks[0]),
         // EXPLORE section
-        NexusTab::Traits => traits::render_traits_tab(f, app, chunks[2]),
-        NexusTab::Layers => layers::render_layers_tab(f, app, chunks[2]),
-        NexusTab::Arcs => arcs::render_arcs_tab(f, app, chunks[2]),
-        NexusTab::Arch => arch::render_arch_tab(f, app, chunks[2]),
+        NexusTab::Traits => traits::render_traits_tab(f, app, content_chunks[0]),
+        NexusTab::Layers => layers::render_layers_tab(f, app, content_chunks[0]),
+        NexusTab::Arcs => arcs::render_arcs_tab(f, app, content_chunks[0]),
+        NexusTab::Arch => arch::render_arch_tab(f, app, content_chunks[0]),
         // PRACTICE section
-        NexusTab::Pipeline => pipeline::render_pipeline_tab(f, app, chunks[2]),
-        NexusTab::Quiz => quiz::render_quiz_tab(f, app, chunks[2]),
-        NexusTab::Stats => stats::render_stats_tab(f, app, chunks[2]),
-        // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
+        NexusTab::Pipeline => pipeline::render_pipeline_tab(f, app, content_chunks[0]),
+        NexusTab::Quiz => quiz::render_quiz_tab(f, app, content_chunks[0]),
+        NexusTab::Stats => stats::render_stats_tab(f, app, content_chunks[0]),
     }
 
-    // Render cross-tab navigation hints (v0.12.0)
-    render_cross_tab_hints(f, chunks[3], app);
+    // Render cross-tab navigation hints
+    render_cross_tab_hints(f, content_chunks[1], app);
 }
 
 /// Render cross-tab navigation hints at the bottom (v0.12.0).
@@ -1716,6 +1715,7 @@ fn render_cross_tab_hints(f: &mut Frame, area: Rect, app: &App) {
 
 /// Render the tab bar at the top of Nexus mode.
 /// Minimalist design: section names + tab names only, no shortcuts displayed.
+#[allow(dead_code)] // Will be removed in Task 7 cleanup
 fn render_tab_bar(f: &mut Frame, area: Rect, app: &App) {
     let current_section = app.nexus.tab.section();
 
@@ -1802,6 +1802,7 @@ fn render_tab_bar(f: &mut Frame, area: Rect, app: &App) {
 }
 
 /// Render the breadcrumb bar showing current location in Nexus mode.
+#[allow(dead_code)] // Will be removed in Task 7 cleanup
 fn render_breadcrumb(f: &mut Frame, area: Rect, app: &App) {
     let trait_stats = app.tree.get_trait_stats();
     let breadcrumb = app.nexus.breadcrumb(&trait_stats);
