@@ -19,7 +19,7 @@ use super::{
     COLOR_HINT_TEXT, COLOR_MUTED_TEXT, STYLE_DIM, STYLE_UNFOCUSED, colorize_path_inline,
     scroll_indicator,
 };
-use crate::tui::app::{App, Focus, InfoBox};
+use crate::tui::app::{App, InfoBox};
 use crate::tui::yaml::YamlViewSection;
 
 // =============================================================================
@@ -92,9 +92,15 @@ const STYLE_YAML_TEXT: Style = Style::new().fg(Color::White);
 // =============================================================================
 
 /// Render the YAML panel split into SOURCE and DIAGRAM boxes.
-/// v0.13.0: Two boxes with independent selected states.
+/// v0.13.0: Two boxes with independent selected states using InfoBox.
+///
+/// Visual states:
+/// - Selected (cyan): This specific box is active (Tab target)
+/// - Focused (light blue): Another box in right panel is active
+/// - Unfocused (dim): Focus is in different panel
 pub fn render_yaml_panel(f: &mut Frame, area: Rect, app: &App) {
-    let panel_focused = app.focus == Focus::Yaml;
+    // Check if ANY box in right panel is selected (Source, Diagram, or Architecture)
+    let panel_focused = app.selected_box.is_right_panel();
 
     // Split into SOURCE (60%) and DIAGRAM (40%)
     let chunks = Layout::default()
