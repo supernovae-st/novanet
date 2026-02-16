@@ -118,20 +118,20 @@ impl Focus {
 /// ┌─────────┬─────────────────┬───────────────┐
 /// │  TREE   │ HEADER          │ SOURCE        │
 /// │         │ PROPERTIES      ├───────────────┤
-/// │         │ ARCS            │ DIAGRAM       │
-/// │         ├─────────────────┼───────────────┤
-/// │         │ GRAPH           │ ARCHITECTURE  │
+/// │         ├─────────────────│ DIAGRAM       │
+/// │         │ ARCS            ├───────────────┤
+/// │         │ (consolidated)  │ ARCHITECTURE  │
 /// └─────────┴─────────────────┴───────────────┘
 /// ```
-/// Tab cycles: Tree -> Header -> Properties -> Arcs -> Graph -> Source -> Diagram -> Architecture -> Tree
+/// Tab cycles: Tree -> Header -> Properties -> Arcs -> Source -> Diagram -> Architecture -> Tree
+/// v0.13: ARCS consolidates former "Arcs" summary + "Graph" detail panels
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum InfoBox {
     #[default]
     Tree,
     Header,
     Properties,
-    Arcs,
-    Graph, // Arc Relationships panel (v0.13: now focusable)
+    Arcs, // v0.13: Consolidated arc relationships panel (was Graph + Arcs)
     Source,
     Diagram,
     Architecture,
@@ -139,14 +139,13 @@ pub enum InfoBox {
 
 impl InfoBox {
     /// Cycle to next box (Tab or right arrow).
-    /// 8-box cycle: Tree → Header → Properties → Arcs → Graph → Source → Diagram → Architecture → Tree
+    /// 7-box cycle: Tree → Header → Properties → Arcs → Source → Diagram → Architecture → Tree
     pub fn next(self) -> Self {
         match self {
             Self::Tree => Self::Header,
             Self::Header => Self::Properties,
             Self::Properties => Self::Arcs,
-            Self::Arcs => Self::Graph,
-            Self::Graph => Self::Source,
+            Self::Arcs => Self::Source,
             Self::Source => Self::Diagram,
             Self::Diagram => Self::Architecture,
             Self::Architecture => Self::Tree,
@@ -160,8 +159,7 @@ impl InfoBox {
             Self::Header => Self::Tree,
             Self::Properties => Self::Header,
             Self::Arcs => Self::Properties,
-            Self::Graph => Self::Arcs,
-            Self::Source => Self::Graph,
+            Self::Source => Self::Arcs,
             Self::Diagram => Self::Source,
             Self::Architecture => Self::Diagram,
         }
@@ -174,7 +172,6 @@ impl InfoBox {
             Self::Header => "HEADER",
             Self::Properties => "PROPERTIES",
             Self::Arcs => "ARCS",
-            Self::Graph => "GRAPH",
             Self::Source => "SOURCE",
             Self::Diagram => "DIAGRAM",
             Self::Architecture => "ARCH",
@@ -467,8 +464,8 @@ impl App {
     pub fn focus_for_selected_box(&self) -> Focus {
         match self.selected_box {
             InfoBox::Tree => Focus::Tree,
-            InfoBox::Header | InfoBox::Properties | InfoBox::Arcs => Focus::Info,
-            InfoBox::Graph => Focus::Graph,
+            InfoBox::Header | InfoBox::Properties => Focus::Info,
+            InfoBox::Arcs => Focus::Graph, // v0.13: Arcs panel uses Graph focus
             InfoBox::Source | InfoBox::Diagram | InfoBox::Architecture => Focus::Yaml,
         }
     }
@@ -3564,25 +3561,24 @@ mod tests {
 
     #[test]
     fn test_infobox_cycle_includes_architecture() {
-        // Tab cycle should include Architecture and Graph
+        // v0.13: 7-box cycle (Graph removed, Arcs is the consolidated arc relationships panel)
         let mut current = InfoBox::Tree;
         let mut visited = vec![current];
 
-        for _ in 0..8 {
+        for _ in 0..7 {
             current = current.next();
             visited.push(current);
         }
 
-        // Should cycle: Tree -> Header -> Properties -> Arcs -> Graph -> Source -> Diagram -> Architecture -> Tree
+        // Should cycle: Tree -> Header -> Properties -> Arcs -> Source -> Diagram -> Architecture -> Tree
         assert_eq!(visited[0], InfoBox::Tree);
         assert_eq!(visited[1], InfoBox::Header);
         assert_eq!(visited[2], InfoBox::Properties);
         assert_eq!(visited[3], InfoBox::Arcs);
-        assert_eq!(visited[4], InfoBox::Graph);
-        assert_eq!(visited[5], InfoBox::Source);
-        assert_eq!(visited[6], InfoBox::Diagram);
-        assert_eq!(visited[7], InfoBox::Architecture);
-        assert_eq!(visited[8], InfoBox::Tree); // Full cycle
+        assert_eq!(visited[4], InfoBox::Source);
+        assert_eq!(visited[5], InfoBox::Diagram);
+        assert_eq!(visited[6], InfoBox::Architecture);
+        assert_eq!(visited[7], InfoBox::Tree); // Full cycle
     }
 
     #[test]
