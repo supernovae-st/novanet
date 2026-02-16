@@ -263,7 +263,7 @@ fn build_realm_content(app: &App, realm: &crate::tui::data::RealmInfo) -> Unifie
     let realm_color = hex_to_color(&realm.color);
     content
         .location
-        .add_classification("realm", &realm.icon, &realm.key, realm_color);
+        .add_classification("realm", realm.icon, &realm.key, realm_color);
 
     // METRICS
     content.metrics.add_kv(
@@ -350,7 +350,7 @@ fn build_layer_content(
 
     content.location.add_classification(
         "realm",
-        &realm.icon,
+        realm.icon,
         &realm.key,
         realm_color,
     );
@@ -450,7 +450,7 @@ fn build_class_content(
     // LOCATION (Classification) - explicit key:value format for all 3 axes
     content.location.add_classification(
         "realm",
-        &realm.icon,
+        realm.icon,
         &realm.key,
         realm_color,
     );
@@ -811,15 +811,10 @@ fn build_instance_content(
     let layer_color = colors::layer::color(&layer.key, mode);
     let trait_color = colors::traits::color(&class.trait_name, mode);
 
-    // IDENTITY - v0.13: with colored badges
-    content.identity.add_line(Line::from(vec![
-        Span::styled("●", Style::default().fg(realm_color).add_modifier(Modifier::BOLD)),
-        Span::styled(format!("{} ", realm.key.to_uppercase()), Style::default().fg(realm_color)),
-        Span::styled("◆", Style::default().fg(layer_color).add_modifier(Modifier::BOLD)),
-        Span::styled(format!("{} ", layer.key), Style::default().fg(layer_color)),
-        Span::styled("◇", Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD)),
-        Span::styled("Instance", Style::default().fg(Color::Yellow)),
-    ]));
+    // IDENTITY - clean explicit key:value format (no inline badges)
+    content
+        .identity
+        .add_kv("type", Span::styled("Instance", STYLE_HIGHLIGHT));
     content
         .identity
         .add_kv("key", Span::styled(instance.key.clone(), Style::default().fg(Color::White).add_modifier(Modifier::BOLD)));
@@ -828,32 +823,26 @@ fn build_instance_content(
         Span::styled(class.display_name.clone(), Style::default().fg(layer_color)),
     );
 
-    // LOCATION - v0.13: with semantic colors
-    content.location.add_line(Line::from(vec![
-        Span::styled(format!("{} ", realm.icon), Style::default().fg(realm_color)),
-        Span::styled(
-            realm.display_name.clone(),
-            Style::default().fg(realm_color),
-        ),
-    ]));
-    content.location.add_line(Line::from(vec![
-        Span::styled(format!("{} ", theme.icons.layer(&layer.key)), Style::default().fg(layer_color)),
-        Span::styled(
-            layer.display_name.clone(),
-            Style::default().fg(layer_color),
-        ),
-    ]));
+    // LOCATION (Classification) - explicit key:value format for all 3 axes
+    content.location.add_classification(
+        "realm",
+        &realm.icon,
+        &realm.key,
+        realm_color,
+    );
+    content.location.add_classification(
+        "layer",
+        theme.icons.layer(&layer.key),
+        &layer.key,
+        layer_color,
+    );
     if !class.trait_name.is_empty() {
-        let trait_icon_str = theme.icons.trait_icon(&class.trait_name);
-        let trait_border = colors::traits::border_char(&class.trait_name);
-        content.location.add_line(Line::from(vec![
-            Span::styled(format!("{} ", trait_icon_str), Style::default().fg(trait_color)),
-            Span::styled(
-                class.trait_name.clone(),
-                Style::default().fg(trait_color),
-            ),
-            Span::styled(format!(" {}{}{}", trait_border, trait_border, trait_border), Style::default().fg(trait_color)),
-        ]));
+        content.location.add_classification(
+            "trait",
+            trait_icon(&class.trait_name),
+            &class.trait_name,
+            trait_color,
+        );
     }
 
     // METRICS
