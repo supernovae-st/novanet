@@ -8,7 +8,7 @@
 # - No outdated node counts in new/modified content
 # - No TODO/FIXME without issue references
 # - No panic!/unwrap without context
-# - No deprecated L10n terminology (use Content/Generated)
+# - No deprecated L10n terminology (use *Native pattern per ADR-029)
 # - No outdated layer names (locale-knowledge)
 # - No hardcoded magic numbers for node counts
 #
@@ -237,32 +237,60 @@ check_edge_family() {
 check_l10n_terminology() {
     local file="$1"
     local matches
-    
-    # Check for deprecated L10n node names
-    matches=$(grep -n 'EntityL10n\|PageL10n\|BlockL10n\|ProjectL10n\|HAS_L10N\|HAS_OUTPUT' "$file" 2>/dev/null | grep -v "deprecated\|migration\|// v10" || true)
-    
+
+    # Check for deprecated L10n node names (pre-v10.9) AND v10.9 terminology (pre-v0.13.0)
+    # v0.13.0 *Native pattern (ADR-029): EntityNative, PageNative, BlockNative, ProjectNative, HAS_NATIVE
+    matches=$(grep -n 'EntityL10n\|PageL10n\|BlockL10n\|ProjectL10n\|HAS_L10N\|HAS_OUTPUT\|EntityContent\|PageGenerated\|BlockGenerated\|ProjectContent\|HAS_CONTENT\|HAS_GENERATED' "$file" 2>/dev/null | grep -v "deprecated\|migration\|// v10\|// v0.12" || true)
+
     if [[ -n "$matches" ]]; then
         while IFS= read -r match; do
             local line_num="${match%%:*}"
             local content="${match#*:}"
             local fix_suggestion=""
-            
+            local version_note=""
+
+            # v10.9 L10n terminology (very old)
             if [[ "$content" =~ EntityL10n ]]; then
-                fix_suggestion="Replace 'EntityL10n' with 'EntityContent'"
+                fix_suggestion="Replace 'EntityL10n' with 'EntityNative' (ADR-029)"
+                version_note="v10.9 -> v0.13.0"
             elif [[ "$content" =~ PageL10n ]]; then
-                fix_suggestion="Replace 'PageL10n' with 'PageGenerated'"
+                fix_suggestion="Replace 'PageL10n' with 'PageNative' (ADR-029)"
+                version_note="v10.9 -> v0.13.0"
             elif [[ "$content" =~ BlockL10n ]]; then
-                fix_suggestion="Replace 'BlockL10n' with 'BlockGenerated'"
+                fix_suggestion="Replace 'BlockL10n' with 'BlockNative' (ADR-029)"
+                version_note="v10.9 -> v0.13.0"
             elif [[ "$content" =~ ProjectL10n ]]; then
-                fix_suggestion="Replace 'ProjectL10n' with 'ProjectContent'"
+                fix_suggestion="Replace 'ProjectL10n' with 'ProjectNative' (ADR-029)"
+                version_note="v10.9 -> v0.13.0"
             elif [[ "$content" =~ HAS_L10N ]]; then
-                fix_suggestion="Replace 'HAS_L10N' with 'HAS_CONTENT'"
+                fix_suggestion="Replace 'HAS_L10N' with 'HAS_NATIVE' (ADR-029)"
+                version_note="v10.9 -> v0.13.0"
             elif [[ "$content" =~ HAS_OUTPUT ]]; then
-                fix_suggestion="Replace 'HAS_OUTPUT' with 'HAS_GENERATED'"
+                fix_suggestion="Replace 'HAS_OUTPUT' with 'HAS_NATIVE' (ADR-029)"
+                version_note="v10.9 -> v0.13.0"
+            # v0.12.x Content/Generated terminology (now deprecated per v0.13.0 *Native pattern)
+            elif [[ "$content" =~ EntityContent ]]; then
+                fix_suggestion="Replace 'EntityContent' with 'EntityNative' (ADR-029)"
+                version_note="v0.12.x -> v0.13.0"
+            elif [[ "$content" =~ PageGenerated ]]; then
+                fix_suggestion="Replace 'PageGenerated' with 'PageNative' (ADR-029)"
+                version_note="v0.12.x -> v0.13.0"
+            elif [[ "$content" =~ BlockGenerated ]]; then
+                fix_suggestion="Replace 'BlockGenerated' with 'BlockNative' (ADR-029)"
+                version_note="v0.12.x -> v0.13.0"
+            elif [[ "$content" =~ ProjectContent ]]; then
+                fix_suggestion="Replace 'ProjectContent' with 'ProjectNative' (ADR-029)"
+                version_note="v0.12.x -> v0.13.0"
+            elif [[ "$content" =~ HAS_CONTENT ]]; then
+                fix_suggestion="Replace 'HAS_CONTENT' with 'HAS_NATIVE' (ADR-029)"
+                version_note="v0.12.x -> v0.13.0"
+            elif [[ "$content" =~ HAS_GENERATED ]]; then
+                fix_suggestion="Replace 'HAS_GENERATED' with 'HAS_NATIVE' (ADR-029)"
+                version_note="v0.12.x -> v0.13.0"
             fi
-            
+
             add_issue "$(get_severity l10n_terminology)" \
-                "Deprecated L10n terminology found (v10.9 renamed)" \
+                "Deprecated terminology found ($version_note)" \
                 "$fix_suggestion" \
                 "$line_num"
         done <<< "$matches"
