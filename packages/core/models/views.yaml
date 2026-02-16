@@ -1,11 +1,11 @@
 # models/views.yaml
-# NovaNet Views - Single Source of Truth (v0.12.5)
+# NovaNet Views - Single Source of Truth (v0.13.0)
 #
-# 11 essential views shared between TUI and Studio.
-# Categories: schema (2), data (4), generation (3), contextual (2)
+# 12 essential views shared between TUI and Studio.
+# Categories: schema (2), data (4), generation (3), contextual (3)
 
-version: "0.12.5"
-description: NovaNet Essential Views (11 views)
+version: "0.13.0"
+description: NovaNet Essential Views (12 views)
 
 # =============================================================================
 # CATEGORIES
@@ -36,7 +36,7 @@ categories:
     description: Node-centered subgraphs
 
 # =============================================================================
-# VIEWS (11)
+# VIEWS (12)
 # =============================================================================
 views:
   # ---------------------------------------------------------------------------
@@ -199,7 +199,7 @@ views:
       LIMIT 200
 
   # ---------------------------------------------------------------------------
-  # CONTEXTUAL (2) - Node-centered subgraphs
+  # CONTEXTUAL (3) - Node-centered subgraphs
   # ---------------------------------------------------------------------------
   - id: ctx-neighbors
     name: Neighbors
@@ -232,3 +232,60 @@ views:
       OPTIONAL MATCH (source)-[r2]->(e) WHERE NOT source:Schema
       RETURN e, r1, target, r2, source
       LIMIT 100
+
+  - id: entity-truth
+    name: Entity Truth
+    description: Complete entity view with all locales, pages, keywords, GEO, and knowledge atoms
+    category: contextual
+    icon: { web: scan-search, terminal: "⊛" }
+    color: "#f59e0b"
+    root_type: Entity
+    contextual: true
+    applicable_types: [Entity, EntityNative]
+    cypher: |
+      // Entity Truth: La vérité complète sur une Entity
+      MATCH (e:Entity {key: $nodeKey})
+
+      // Project owner
+      OPTIONAL MATCH (proj:Project)-[r_proj:HAS_ENTITY]->(e)
+
+      // EntityNative for 3 locales (en-US, fr-FR, es-MX)
+      OPTIONAL MATCH (e)-[r_native:HAS_NATIVE]->(en:EntityNative)
+      WHERE en.locale_key IN ['en-US', 'fr-FR', 'es-MX']
+
+      // Pages that REPRESENT this Entity (ADR-028: 1:1)
+      OPTIONAL MATCH (page:Page)-[r_repr:REPRESENTS]->(e)
+      OPTIONAL MATCH (page)-[r_pn:HAS_NATIVE]->(pn:PageNative)
+      WHERE pn.locale_key IN ['en-US', 'fr-FR', 'es-MX']
+
+      // Locale nodes
+      OPTIONAL MATCH (en)-[r_loc:FOR_LOCALE]->(l:Locale)
+
+      // Locale Settings (Culture, Style, Formatting)
+      OPTIONAL MATCH (l)-[r_cult:HAS_CULTURE]->(culture:CultureSet)
+      OPTIONAL MATCH (l)-[r_style:HAS_STYLE]->(style:Style)
+      OPTIONAL MATCH (l)-[r_fmt:HAS_FORMATTING]->(format:Formatting)
+
+      // Knowledge Atoms via USES_* arcs (ADR-029)
+      OPTIONAL MATCH (en)-[r_term:USES_TERM]->(term:Term)
+      OPTIONAL MATCH (en)-[r_expr:USES_EXPRESSION]->(expr:Expression)
+      OPTIONAL MATCH (en)-[r_patt:USES_PATTERN]->(pattern:Pattern)
+      OPTIONAL MATCH (en)-[r_cref:USES_CULTURE_REF]->(cref:CultureRef)
+
+      // SEO Keywords + Metrics
+      OPTIONAL MATCH (en)-[r_kw:TARGETS]->(kw:SEOKeyword)
+      OPTIONAL MATCH (kw)-[r_kwm:HAS_METRICS]->(kwm:SEOKeywordMetrics)
+
+      // GEO Intelligence
+      OPTIONAL MATCH (kw)-[r_gq:HAS_GEO_QUERY]->(gq:GEOQuery)
+      OPTIONAL MATCH (gq)-[r_ga:HAS_ANSWER]->(ga:GEOAnswer)
+      OPTIONAL MATCH (ga)-[r_gm:HAS_METRICS]->(gm:GEOMetrics)
+
+      RETURN e, proj, r_proj,
+             en, r_native, l, r_loc,
+             page, r_repr, pn, r_pn,
+             culture, r_cult, style, r_style, format, r_fmt,
+             term, r_term, expr, r_expr, pattern, r_patt, cref, r_cref,
+             kw, r_kw, kwm, r_kwm,
+             gq, r_gq, ga, r_ga, gm, r_gm
+      LIMIT 400

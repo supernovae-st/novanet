@@ -547,7 +547,7 @@ views:
     fn load_simple_views_integration() {
         let Some(root) = test_root() else { return };
         let file = load_simple_views(&root).expect("should load views.yaml");
-        assert_eq!(file.views.len(), 11, "expected 11 views");
+        assert_eq!(file.views.len(), 12, "expected 12 views");
         assert_eq!(file.categories.len(), 4, "expected 4 categories");
 
         // Check categories exist

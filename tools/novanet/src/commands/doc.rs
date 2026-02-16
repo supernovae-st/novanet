@@ -104,11 +104,11 @@ mod tests {
 
         let entries = doc_list(&root).expect("should list views");
 
-        // v0.12.5: 11 views in views.yaml (added data-complete)
+        // v0.13.0: 12 views in views.yaml (added entity-truth)
         assert_eq!(
             entries.len(),
-            11,
-            "expected 11 views, got {}",
+            12,
+            "expected 12 views, got {}",
             entries.len()
         );
 
