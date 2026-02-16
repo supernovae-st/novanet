@@ -178,7 +178,10 @@ mod tests {
 
         let output = render(&data, OutputFormat::Json);
 
-        assert!(output.contains("\"node_classes\""), "Should have node_classes");
+        assert!(
+            output.contains("\"node_classes\""),
+            "Should have node_classes"
+        );
         assert!(output.contains("\"validation\""), "Should have validation");
 
         // Verify it's valid JSON

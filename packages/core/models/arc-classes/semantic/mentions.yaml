@@ -1,14 +1,30 @@
 # packages/core/models/arc-classes/semantic/mentions.yaml
 # ArcClass: MENTIONS — BlockInstruction mentions various entities via @ references
-#
-# v0.12.5: ADR-028 Page-Entity Architecture - granular @ reference tracking
+# v0.13.1: LLM-First field ordering (semantic fields before structure)
 
 arc:
+  # --- IDENTITY ---
   name: MENTIONS
   family: semantic
   scope: cross_realm
-  temperature_threshold: 0.8  # Very high priority - direct content injection
 
+  # --- SEMANTIC (LLM-critical) ---
+  description: |
+    BlockInstruction mentions entities via @ references. Tracks granular
+    references in instruction content for injection (@type:key) or linking
+    ([@type:key]). Cross-realm arc from org BlockInstruction to various
+    shared and org targets.
+  llm_context: |
+    USE: when tracking granular @ references in BlockInstruction content.
+    TRIGGERS: "@ reference", "injection", "content link", "block instruction parsing".
+    NOT: for aggregated block-level references (use REFERENCES on Block instead).
+    RELATES: BlockInstruction (source), multiple targets, REFERENCES (aggregated).
+
+    Pattern: Parse BlockInstruction.content for @type:key and [@type:key] patterns.
+    @entity:qr-generator -> MENTIONS with ref_type=entity, purpose=inject
+    [@page:pricing] -> MENTIONS with ref_type=page, purpose=link
+
+  # --- GRAPH STRUCTURE ---
   source: BlockInstruction
   target:
     - Entity
@@ -20,9 +36,12 @@ arc:
     - Brand
     - PromptStyle
     - Project
-
   cardinality: many_to_many
 
+  # --- FLAGS ---
+  temperature_threshold: 0.8
+
+  # --- DATA ---
   properties:
     - name: position
       type: integer
@@ -41,14 +60,5 @@ arc:
       enum: [inject, link]
       description: "inject = @type:key, link = [@type:key]"
 
-  llm_context: |
-    USE: when tracking granular @ references in BlockInstruction content.
-    TRIGGERS: "@ reference", "injection", "content link", "block instruction parsing".
-    NOT: for aggregated block-level references (use REFERENCES on Block instead).
-    RELATES: BlockInstruction (source), multiple targets, REFERENCES (aggregated).
-
-    Pattern: Parse BlockInstruction.content for @type:key and [@type:key] patterns.
-    @entity:qr-generator → MENTIONS with ref_type=entity, purpose=inject
-    [@page:pricing] → MENTIONS with ref_type=page, purpose=link
-
+  # --- REFERENCE ---
   cypher_pattern: "(BlockInstruction)-[:MENTIONS {position, ref_type, purpose}]->(target)"

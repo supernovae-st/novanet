@@ -1,20 +1,41 @@
 # models/node-classes/shared/geography/lending-category.yaml
 # LendingCategory - World Bank lending classification
 #
+# v0.13.1: LLM-First field ordering (llm_context promoted to BLOC 2)
 # v10.8: Geographic Taxonomy - Phase 4
 # Data: 3 categories (IDA, Blend, IBRD)
 # Source: World Bank (data.worldbank.org)
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: LendingCategory
   realm: shared
   layer: geography
   trait: defined
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (LLM-First)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  description: "World Bank lending classification for development context"
+
+  llm_context: |
+    USE: when generating content considering development/lending context.
+    TRIGGERS: "lending category", "IDA", "IBRD", "Blend", "World Bank lending", "development financing".
+    NOT: for income classification (use IncomeGroup), for economic regions (use EconomicRegion).
+    RELATES: Locale (child via HAS_LENDING_TYPE).
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════════
   icon:
     web: "bank"
     terminal: "▣"
-  description: "World Bank lending classification for development context"
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA
+  # ═══════════════════════════════════════════════════════════════════════════════
   standard_properties:
     key:
       type: string
@@ -37,12 +58,6 @@ node:
       description: "Short description"
       example: "Middle-income and creditworthy low-income countries"
 
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints"
-      example: "USE: for established emerging markets. TRIGGERS: ibrd, middle income, developing. CONTEXT: growing economies, aspirational messaging."
-
     created_at:
       type: datetime
       required: true
@@ -64,6 +79,9 @@ node:
       description: "Description of target countries"
       example: "Middle-income and creditworthy low-income countries"
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH
+  # ═══════════════════════════════════════════════════════════════════════════════
   relations:
     incoming:
       - type: HAS_LENDING_TYPE
@@ -71,6 +89,9 @@ node:
         cardinality: "N:1"
         description: "Locales classified in this lending category"
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE
+  # ═══════════════════════════════════════════════════════════════════════════════
   example:
     data:
       key: "ibrd"

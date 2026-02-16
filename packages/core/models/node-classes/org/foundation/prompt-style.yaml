@@ -1,18 +1,38 @@
 # models/node-classes/org/foundation/prompt-style.yaml
+# v0.13.1 LLM-First Schema - Canonical field ordering for optimal AI comprehension
 # PromptStyle - LLM generation style hints (ADR-028)
 # Can be locale or region specific for cultural adaptation
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: PromptStyle
   realm: org
   layer: foundation
   trait: defined
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (description, llm_context)
+  # ═══════════════════════════════════════════════════════════════════════════════
   description: "LLM prompt style hints - can be locale or region specific"
 
-  # =============================================================================
-  # STANDARD PROPERTIES
-  # =============================================================================
+  llm_context: |
+    USE: when generating locale-specific or culturally-adapted content.
+    TRIGGERS: "prompt style", "locale style", "cultural adaptation", "regional variation", "@prompt:".
+    NOT: for brand identity (use Brand), for design system (use BrandDesign), for voice guidelines (use BrandPrinciples).
+    RELATES: Brand (owner via HAS_PROMPT_STYLE), GeoRegion (inspiration via INSPIRED_BY_REGION), Locale (target via FOR_LOCALE).
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL (icon)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  icon:
+    web: sparkles
+    terminal: "✦"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA (standard_properties, properties)
+  # ═══════════════════════════════════════════════════════════════════════════════
   standard_properties:
     key:
       type: string
@@ -32,12 +52,6 @@ node:
       required: true
       description: "Style description"
 
-    llm_context:
-      type: string
-      required: true
-      description: "Master LLM context for this style"
-      example: "USE: for French content. TRIGGERS: fr-FR locale. STYLE: formal, sophisticated."
-
     created_at:
       type: datetime
       required: true
@@ -45,10 +59,6 @@ node:
     updated_at:
       type: datetime
       required: true
-
-  # =============================================================================
-  # STYLE-SPECIFIC PROPERTIES
-  # =============================================================================
 
   properties:
     # ─────────────────────────────────────────────────────────────────────────────
@@ -126,10 +136,9 @@ node:
       description: "Type of humor appropriate for this market"
       example: "Witty wordplay, subtle irony"
 
-  # =============================================================================
-  # RELATIONS
-  # =============================================================================
-
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH (relations)
+  # ═══════════════════════════════════════════════════════════════════════════════
   relations:
     INSPIRED_BY_REGION:
       target: GeoRegion
@@ -141,16 +150,14 @@ node:
       cardinality: many_to_one
       description: "Specific locale this style applies to"
 
-  # =============================================================================
-  # EXAMPLE
-  # =============================================================================
-
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE (example)
+  # ═══════════════════════════════════════════════════════════════════════════════
   example:
     data:
       key: "style-qrcodeai-fr-fr"
       display_name: "QR Code AI French Style"
       description: "LLM style hints for French market"
-      llm_context: "USE: for French content. STYLE: formal, sophisticated."
       style_keywords: ["elegant", "refined", "sophisticated"]
       style_mood: "Elegant and professional"
       cultural_style: "Sophisticated, formal, literary references welcome"

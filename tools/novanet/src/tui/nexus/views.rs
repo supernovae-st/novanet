@@ -4,12 +4,12 @@
 //! Shows available views organized by category.
 //! Enhanced with full Cypher display, Studio links, relation colors, and ASCII schemas.
 
-use regex::Regex;
 use ratatui::Frame;
 use ratatui::layout::{Constraint, Direction, Layout, Rect};
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, Borders, Paragraph, Wrap};
+use regex::Regex;
 
 use crate::parsers::views::{SimpleViewEntry, SimpleViewsFile, ViewCategoryDef, ViewIcon};
 use crate::tui::app::App;
@@ -43,13 +43,8 @@ impl LoadedViews {
     fn from_file(file: SimpleViewsFile) -> Self {
         // Sort categories in display order
         let category_order = ["schema", "data", "generation", "contextual"];
-        let mut categories: Vec<(String, ViewCategoryDef)> = file
-            .categories
-            .into_iter()
-            .collect();
-        categories.sort_by_key(|(k, _)| {
-            category_order.iter().position(|&c| c == k).unwrap_or(99)
-        });
+        let mut categories: Vec<(String, ViewCategoryDef)> = file.categories.into_iter().collect();
+        categories.sort_by_key(|(k, _)| category_order.iter().position(|&c| c == k).unwrap_or(99));
 
         Self {
             categories,
@@ -59,7 +54,10 @@ impl LoadedViews {
 
     /// Get views in a category.
     pub fn views_in_category(&self, category: &str) -> Vec<&SimpleViewEntry> {
-        self.views.iter().filter(|v| v.category == category).collect()
+        self.views
+            .iter()
+            .filter(|v| v.category == category)
+            .collect()
     }
 
     /// Get category count.
@@ -255,7 +253,9 @@ fn parse_color(hex: &str) -> Color {
 
 /// Get terminal icon from ViewIcon or default.
 fn terminal_icon<'a>(icon: &'a Option<ViewIcon>, default: &'a str) -> &'a str {
-    icon.as_ref().map(|i| i.terminal.as_str()).unwrap_or(default)
+    icon.as_ref()
+        .map(|i| i.terminal.as_str())
+        .unwrap_or(default)
 }
 
 // =============================================================================
@@ -336,7 +336,7 @@ fn infer_arc_family(arc_name: &str) -> &'static str {
 
 /// Get Studio link for a view.
 fn studio_link(view_id: &str) -> String {
-    format!("http://localhost:3000/views/{view_id}")
+    format!("http://localhost:3000/?view={view_id}")
 }
 
 /// Generate ASCII schema diagram for a view's traversal pattern.
@@ -378,9 +378,7 @@ fn generate_ascii_schema(view: &SimpleViewEntry) -> Vec<String> {
     // Show relations
     for (i, rel) in relations.iter().take(5).enumerate() {
         let arrow = if i < relations.len() - 1 { "│" } else { " " };
-        lines.push(format!(
-            "  │       {arrow}                               │"
-        ));
+        lines.push(format!("  │       {arrow}                               │"));
         lines.push(format!(
             "  │       ├──[{}]──▶              │",
             &rel.name[..rel.name.len().min(20)]
@@ -480,7 +478,11 @@ fn render_views_list(f: &mut Frame, state: &ViewsState, loaded: &LoadedViews, ar
     // Categories and views
     for (cat_idx, (cat_key, cat_def)) in loaded.categories.iter().enumerate() {
         let is_selected_cat = cat_idx == state.category_cursor;
-        let cat_color = cat_def.color.as_deref().map(parse_color).unwrap_or(Color::Cyan);
+        let cat_color = cat_def
+            .color
+            .as_deref()
+            .map(parse_color)
+            .unwrap_or(Color::Cyan);
 
         // Category header
         let cat_style = if is_selected_cat {
@@ -517,19 +519,34 @@ fn render_views_list(f: &mut Frame, state: &ViewsState, loaded: &LoadedViews, ar
                     Style::default().fg(Color::Rgb(180, 180, 180))
                 };
 
-                lines.push(Line::from(vec![
-                    Span::styled(prefix, style),
-                    Span::styled(&view.name, style),
-                ]));
+                // Add contextual badge if needed
+                let mut spans = vec![Span::styled(prefix, style), Span::styled(&view.name, style)];
+                if view.contextual.unwrap_or(false) {
+                    spans.push(Span::styled(
+                        " ◎",
+                        Style::default().fg(Color::Rgb(34, 197, 94)), // Green
+                    ));
+                }
+                lines.push(Line::from(spans));
             }
         }
 
         lines.push(Line::from(""));
     }
 
+    // Legend for contextual indicator
+    lines.push(Line::from(vec![
+        Span::styled("◎", Style::default().fg(Color::Rgb(34, 197, 94))),
+        Span::styled(
+            " = contextual (requires node)",
+            Style::default().fg(Color::DarkGray),
+        ),
+    ]));
+    lines.push(Line::from(""));
+
     // Navigation hints
     lines.push(Line::from(Span::styled(
-        "[j/k:nav] [h/l:category] [?:concept]",
+        "[j/k:nav] [Tab:section] [Enter:copy] [o:open] [y:yank] [?:concept]",
         Style::default().fg(Color::DarkGray),
     )));
 
@@ -586,12 +603,7 @@ fn render_concept_panel(f: &mut Frame, area: Rect) {
 // =============================================================================
 
 /// Render Info box (top-left).
-fn render_info_box(
-    f: &mut Frame,
-    view: &SimpleViewEntry,
-    state: &ViewsState,
-    area: Rect,
-) {
+fn render_info_box(f: &mut Frame, view: &SimpleViewEntry, state: &ViewsState, area: Rect) {
     let is_selected = state.detail_section == ViewDetailSection::Info;
     let border_color = if is_selected {
         Color::Cyan
@@ -602,7 +614,9 @@ fn render_info_box(
     let block = Block::default()
         .title(Span::styled(
             " INFO ",
-            Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD),
+            Style::default()
+                .fg(Color::Cyan)
+                .add_modifier(Modifier::BOLD),
         ))
         .borders(Borders::ALL)
         .border_style(Style::default().fg(border_color));
@@ -610,7 +624,11 @@ fn render_info_box(
     let inner = block.inner(area);
     f.render_widget(block, area);
 
-    let view_color = view.color.as_deref().map(parse_color).unwrap_or(Color::Cyan);
+    let view_color = view
+        .color
+        .as_deref()
+        .map(parse_color)
+        .unwrap_or(Color::Cyan);
     let view_icon = terminal_icon(&view.icon, "●");
 
     let mut lines: Vec<Line> = Vec::new();
@@ -829,7 +847,10 @@ fn render_relations_box(f: &mut Frame, view: &SimpleViewEntry, state: &ViewsStat
                 _ => "○",
             };
             lines.push(Line::from(vec![
-                Span::styled(format!("  {family_icon} "), Style::default().fg(family_color)),
+                Span::styled(
+                    format!("  {family_icon} "),
+                    Style::default().fg(family_color),
+                ),
                 Span::styled(&rel.name, Style::default().fg(Color::White)),
                 Span::styled(
                     format!("  [{}]", rel.family),
@@ -852,11 +873,11 @@ fn render_relations_box(f: &mut Frame, view: &SimpleViewEntry, state: &ViewsStat
 /// Get color for arc family.
 fn arc_family_color(family: &str) -> Color {
     match family {
-        "ownership" => Color::Rgb(14, 165, 233),    // sky-500
-        "localization" => Color::Rgb(34, 197, 94),  // green-500
-        "semantic" => Color::Rgb(168, 85, 247),     // purple-500
-        "generation" => Color::Rgb(236, 72, 153),   // pink-500
-        "mining" => Color::Rgb(245, 158, 11),       // amber-500
+        "ownership" => Color::Rgb(14, 165, 233),   // sky-500
+        "localization" => Color::Rgb(34, 197, 94), // green-500
+        "semantic" => Color::Rgb(168, 85, 247),    // purple-500
+        "generation" => Color::Rgb(236, 72, 153),  // pink-500
+        "mining" => Color::Rgb(245, 158, 11),      // amber-500
         _ => Color::Gray,
     }
 }
@@ -1014,7 +1035,7 @@ mod tests {
         let loaded = LoadedViews::load(root.to_str().unwrap());
 
         assert_eq!(loaded.category_count(), 4, "expected 4 categories");
-        assert_eq!(loaded.views.len(), 10, "expected 10 views");
+        assert_eq!(loaded.views.len(), 11, "expected 11 views");
 
         // Check schema views
         let schema_views = loaded.views_in_category("schema");
@@ -1145,7 +1166,7 @@ mod tests {
     #[test]
     fn test_studio_link() {
         let link = studio_link("gen-page");
-        assert_eq!(link, "http://localhost:3000/views/gen-page");
+        assert_eq!(link, "http://localhost:3000/?view=gen-page");
     }
 
     #[test]

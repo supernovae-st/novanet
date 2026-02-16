@@ -1,20 +1,33 @@
-# packages/core/models/arc-classes/ownership/has-keyword.yaml
+# ═══════════════════════════════════════════════════════════════════════════════
 # ArcClass: HAS_KEYWORD — Entity owns SEOKeywords
-#
+# v0.13.1: LLM-First property ordering
 # v0.12.4: ADR-028 Page-Entity Architecture
-# Entity carries SEO keywords, Page inherits via [:REPRESENTS]
 # v0.13.1: Added TIER 2 inverse (ADR-026)
+# ═══════════════════════════════════════════════════════════════════════════════
 
 arc:
+  # IDENTITY
   name: HAS_KEYWORD
   family: ownership
   scope: cross_realm  # org/semantic → shared/knowledge
 
+  # SEMANTIC (LLM-CRITICAL)
+  description: "Entity owns SEOKeywords (primary and secondary)"
+  llm_context: |
+    USE: when loading SEO keywords for an entity.
+    TRIGGERS: entity keywords, SEO targeting, primary keyword, secondary keywords.
+    NOT: locale keyword sets (use HAS_SEO_KEYWORDS), keyword metrics (use HAS_METRICS).
+    RELATES: Entity (source), SEOKeyword (target), rank (property: primary/secondary).
+
+  # GRAPH STRUCTURE
   source: Entity
   target: SEOKeyword
   cardinality: one_to_many
+
+  # FLAGS
   inverse: KEYWORD_OF
 
+  # DATA
   properties:
     - name: rank
       type: string
@@ -28,10 +41,5 @@ arc:
       default: 1.0
       description: "Keyword relevance score (0.0-1.0)"
 
-  llm_context: |
-    USE: when loading SEO keywords for an entity.
-    TRIGGERS: entity keywords, SEO targeting, primary keyword, secondary keywords.
-    NOT: locale keyword sets (use HAS_SEO_KEYWORDS), keyword metrics (use HAS_METRICS).
-    RELATES: Entity (source), SEOKeyword (target), rank (property: primary/secondary).
-
+  # REFERENCE
   cypher_pattern: "(Entity)-[:HAS_KEYWORD {rank, relevance}]->(SEOKeyword)"

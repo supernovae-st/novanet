@@ -1,19 +1,40 @@
-# models/node-classes/shared/locale/market.yaml
-# Market — Market intelligence for a locale including demographics, digital maturity, e-commerce landscape, and consumer behavior
-#
-# v10.7: NEW node for 7-node locale knowledge architecture
-# Used for market-appropriate content strategy.
-# Stability: Medium - updates with economic changes
+# ═══════════════════════════════════════════════════════════════════════════════
+# NodeClass: Market — Market intelligence for locale-appropriate content strategy
+# v0.13.1: LLM-First property ordering
+# ═══════════════════════════════════════════════════════════════════════════════
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════════
+
   name: Market
   realm: shared
   layer: locale
   trait: imported
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  description: "Market intelligence for a locale including demographics, digital maturity, e-commerce landscape, and consumer behavior. Used for market-appropriate content strategy."
+  llm_context: |
+    USE: when crafting market-appropriate value propositions, urgency, pricing references.
+    TRIGGERS: "market", "demographics", "pricing", "payment mentions", "tech familiarity", "ecommerce".
+    NOT: for cultural norms (use Culture), for formatting (use Formatting).
+    RELATES: Locale (via HAS_MARKET), ecommerce_maturity, payment_methods, popular_platforms, demographics.
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════════
+
   icon:
     web: "bar-chart-2"
     terminal: "▣"
-  description: "Market intelligence for a locale including demographics, digital maturity, e-commerce landscape, and consumer behavior. Used for market-appropriate content strategy."
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA — Standard Properties
+  # ═══════════════════════════════════════════════════════════════════════════════
 
   standard_properties:
     key:
@@ -47,6 +68,10 @@ node:
     updated_at:
       type: datetime
       required: true
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA — Market-Specific Properties
+  # ═══════════════════════════════════════════════════════════════════════════════
 
   properties:
     # ═══════════════════════════════════════════════════════════════════════════
@@ -174,6 +199,10 @@ node:
       type: string
       required: false
       description: "Full source markdown for edge case reference"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH — Relations
+  # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
     incoming:

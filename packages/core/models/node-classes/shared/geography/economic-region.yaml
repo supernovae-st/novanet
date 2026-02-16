@@ -1,20 +1,41 @@
 # models/node-classes/shared/geography/economic-region.yaml
 # EconomicRegion - World Bank economic region
 #
+# v0.13.1: LLM-First field ordering (llm_context promoted to BLOC 2)
 # v10.8: Geographic Taxonomy - Phase 4
 # Data: 7 regions (EAP, ECA, LAC, MENA, NA, SA, SSA)
 # Source: World Bank (data.worldbank.org)
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: EconomicRegion
   realm: shared
   layer: geography
   trait: defined
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (LLM-First)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  description: "World Bank economic region for market analysis"
+
+  llm_context: |
+    USE: when generating content for economic/market analysis by World Bank region.
+    TRIGGERS: "economic region", "market region", "World Bank region", "EAP", "ECA", "LAC", "MENA", "SSA".
+    NOT: for geographic regions (use GeoRegion), for income classification (use IncomeGroup).
+    RELATES: Locale (child via IN_ECONOMIC_REGION).
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════════
   icon:
     web: "bar-chart-2"
     terminal: "▣"
-  description: "World Bank economic region for market analysis"
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA
+  # ═══════════════════════════════════════════════════════════════════════════════
   standard_properties:
     key:
       type: string
@@ -40,12 +61,6 @@ node:
       required: true
       description: "Short description"
       example: "Europe and Central Asia region including EU, Russia, Turkey"
-
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints for regional context"
-      example: "USE: for European and Central Asian markets. TRIGGERS: eca, europe, central asia. CONTEXT: diverse economies, mix of developed and emerging."
 
     created_at:
       type: datetime
@@ -75,6 +90,9 @@ node:
         - "EU integration"
         - "post-Soviet transition"
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH
+  # ═══════════════════════════════════════════════════════════════════════════════
   relations:
     incoming:
       - type: IN_ECONOMIC_REGION
@@ -82,6 +100,9 @@ node:
         cardinality: "N:1"
         description: "Locales in this economic region"
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE
+  # ═══════════════════════════════════════════════════════════════════════════════
   example:
     data:
       key: "eca"

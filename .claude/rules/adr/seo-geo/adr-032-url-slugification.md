@@ -45,32 +45,43 @@ INPUTS for Page:qr-instagram @fr-FR:
 FORMULA: score = volume × sem_coef × convergence_boost
 ```
 
-## SEMANTIC_LINK Coefficients (11 types)
+## SEMANTIC_LINK Coefficients (12 types)
+
+> **Source of truth**: `packages/core/models/node-classes/org/semantic/entity.yaml` → `link_type` enum
 
 ```yaml
-STRUCTURAL:
-  component_of:    0.85   # X is part of Y
-  variant_of:      0.9    # X is a variant of Y
-  instance_of:     0.8    # X is an instance of Y
+HIERARCHICAL:
+  type_of:         0.8    # X is a type of Y (taxonomy)
+  variant_of:      0.9    # X is a variant of Y (high relevance)
+  includes:        0.75   # X includes Y (containment)
 
-USAGE:
-  used_for:        0.95   # X is used for Y (action = tool)
-  used_with:       0.7    # X is used with Y
-  enables:         0.8    # X enables Y
-  requires:        0.6    # X requires Y
+DEPENDENCY:
+  requires:        0.6    # X requires Y (prerequisite)
+  enables:         0.8    # X enables Y (capability)
 
-COMPARISON:
-  compared_to:     0.4    # X is compared to Y
-  alternative_to:  0.5    # X is an alternative to Y
-  competes_with:   0.3    # X competes with Y
+BEHAVIORAL:
+  exhibits:        0.7    # X exhibits Y (characteristic)
+  contrasts:       0.4    # X contrasts with Y (comparison, alternatives, competition)
 
-ASSOCIATION:
-  associated_with: 0.5    # Catch-all
+FUNCTIONAL:
+  is_action_on:    0.85   # X is action performed on Y
+  used_for:        0.95   # X is used for Y (tool → action, highest relevance)
+  part_of:         0.85   # X is part of Y (structural component)
 
-SPECIAL:
+ASSOCIATIVE:
+  related_to:      0.5    # General association (catch-all)
+
+IDENTITY:
   same_as:         1.0    # Synonym (perfect match)
-  attribute_of:    0.3    # X is attribute of Y (penalized!)
 ```
+
+**Mapping notes** (for legacy data migration):
+- `component_of` → use `part_of` (0.85)
+- `instance_of` → use `type_of` (0.8)
+- `used_with` → use `related_to` (0.5)
+- `compared_to`, `alternative_to`, `competes_with` → use `contrasts` (0.4)
+- `associated_with` → use `related_to` (0.5)
+- `attribute_of` → use `part_of` (0.85) or `related_to` (0.5) if weak relation
 
 ## No-Repetition Rule (CRITICAL)
 

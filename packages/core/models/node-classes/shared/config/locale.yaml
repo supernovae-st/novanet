@@ -1,23 +1,39 @@
-# models/node-classes/shared/config/locale.yaml
-# Locale - Graph-native locale node with fallback chains and knowledge links
-#
-# v11.5: Moved from shared/locale to shared/config
-#        - Locale is a DEFINITION (invariant), not a parameter
-#        - shared/locale now contains only locale SETTINGS (Culture, Style, etc.)
-#        - Follows EntityCategory pattern: definitions in config layer
+# ═══════════════════════════════════════════════════════════════════════════════
+# NodeClass: Locale — First-class locale node (BCP 47) with fallback chains
+# v0.13.1: LLM-First property ordering
+# ═══════════════════════════════════════════════════════════════════════════════
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════════
+
   name: Locale
   realm: shared
   layer: config
   trait: defined
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  description: "First-class locale node (BCP 47) with fallback chains and knowledge graph connections"
+  llm_context: |
+    USE: when generating content for a specific locale or loading locale-specific knowledge.
+    TRIGGERS: "locale", "language", "market", locale code (e.g., "fr-FR"), native name (e.g., "français").
+    NOT: for other regional variants (use appropriate locale, e.g., fr-CA for Quebec French).
+    RELATES: EntityNative (targets via FOR_LOCALE), Style (communication via HAS_STYLE), TermSet (vocabulary via HAS_TERMS), Culture (cultural context via HAS_CULTURE), Project (supported by via SUPPORTS_LOCALE).
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════════
+
   icon:
     web: "diamond"
     terminal: "◆"
-  description: "First-class locale node (BCP 47) with fallback chains and knowledge graph connections"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # STANDARD PROPERTIES (v7.1.0)
+  # BLOC 4: DATA — Standard Properties
   # ═══════════════════════════════════════════════════════════════════════════════
 
   standard_properties:
@@ -63,7 +79,7 @@ node:
       required: true
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # LOCALE-SPECIFIC PROPERTIES
+  # BLOC 4: DATA — Locale-Specific Properties
   # ═══════════════════════════════════════════════════════════════════════════════
 
   properties:
@@ -123,7 +139,7 @@ node:
       example: "ltr"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # RELATIONS (FROM this node)
+  # BLOC 5: GRAPH — Outgoing Relations
   # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
@@ -196,7 +212,7 @@ node:
       description: "Audience trait sets by segment (b2b, b2c, enterprise)"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # INCOMING RELATIONS (TO this node)
+  # BLOC 5: GRAPH — Incoming Relations
   # ═══════════════════════════════════════════════════════════════════════════════
 
   incoming_relations:
@@ -209,7 +225,7 @@ node:
       description: "Projects that support this locale"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # EXAMPLE
+  # BLOC 6: REFERENCE — Examples
   # ═══════════════════════════════════════════════════════════════════════════════
 
   example:

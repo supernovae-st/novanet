@@ -1,20 +1,42 @@
-# models/node-classes/shared/knowledge/cultural-sub-realm.yaml
-# CulturalSubRealm - Cultural sub-realm within a major realm
-#
+# ─────────────────────────────────────────────────────────────────────────────
+# CulturalSubRealm — Cultural sub-realm within a major realm
+# ─────────────────────────────────────────────────────────────────────────────
+# v0.13.1: LLM-First field ordering (ADR-031)
 # v10.8: Geographic Taxonomy - Phase 3
 # Data: ~20 sub-realms (West European, Mediterranean, Anglo-American, etc.)
 # Source: Broek & Webb cultural geography, regional studies
+# ─────────────────────────────────────────────────────────────────────────────
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════
   name: CulturalSubRealm
   realm: shared
   layer: knowledge
   trait: imported
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC
+  # ═══════════════════════════════════════════════════════════════════════════
+  description: "Cultural sub-realm for fine-grained cultural adaptation"
+
+  llm_context: |
+    USE: for fine-grained cultural adaptation within a major realm.
+    TRIGGERS: mediterranean, anglo-american, west european, cultural subrealm.
+    NOT: macro cultural patterns (use CulturalRealm).
+    RELATES: CulturalRealm (PART_OF_REALM), Locale (IN_CULTURAL_SUBREALM).
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════
   icon:
     web: "palette"
     terminal: "◈"
-  description: "Cultural sub-realm for fine-grained cultural adaptation"
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA
+  # ═══════════════════════════════════════════════════════════════════════════
   standard_properties:
     key:
       type: string
@@ -39,12 +61,6 @@ node:
       required: true
       description: "Short description"
       example: "Mediterranean European culture: France, Italy, Spain, Portugal, Greece"
-
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints for content adaptation"
-      example: "USE: for France, Italy, Spain, Portugal, Greece. TRIGGERS: mediterranean, latin, southern european. STYLE: warm, expressive, relationship-focused."
 
     created_at:
       type: datetime
@@ -90,6 +106,9 @@ node:
         - "religious comparisons"
         - "historical conflicts"
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH
+  # ═══════════════════════════════════════════════════════════════════════════
   relations:
     outgoing:
       - type: PART_OF_REALM
@@ -103,6 +122,9 @@ node:
         cardinality: "N:1"
         description: "Locales within this cultural sub-realm"
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE
+  # ═══════════════════════════════════════════════════════════════════════════
   example:
     data:
       key: "mediterranean"

@@ -1,0 +1,80 @@
+# packages/core/models/arc-classes/semantic/uses-expression.yaml
+# ArcClass: USES_EXPRESSION — EntityNative uses specific Expression atoms
+#
+# v0.13.0: Direct connection between EntityNative and Expression
+# Bypasses 4-hop path: EntityNative → FOR_LOCALE → Locale → HAS_EXPRESSIONS → ExpressionSet → Expression
+# Enables selective loading of relevant expressions for tone/voice consistency
+#
+# ADR-026: TIER 2 (Recommended inverse) - high value for spreading activation
+
+arc:
+  name: USES_EXPRESSION
+  family: semantic
+  scope: cross_realm  # EntityNative (org/semantic) → Expression (shared/knowledge)
+  temperature_threshold: 0.4  # Load on moderate activation (style is contextual)
+
+  source: EntityNative
+  target: Expression
+  cardinality: many_to_many
+
+  properties:
+    - name: purpose
+      type: string
+      required: false
+      enum: [cta, headline, tagline, description, warning, celebration]
+      description: |
+        Where this expression is used:
+        - cta: Call-to-action phrasing
+        - headline: Title/headline style
+        - tagline: Tagline/slogan phrasing
+        - description: Body copy style
+        - warning: Alert/warning phrasing
+        - celebration: Success/celebration phrasing
+
+    - name: temperature
+      type: float
+      required: false
+      default: 0.7
+      description: "Activation weight for spreading activation (0.0-1.0)"
+
+    - name: context
+      type: string
+      required: false
+      enum: [homepage, pricing, features, support, landing_page, email]
+      description: "Page/channel context where this expression applies"
+
+    - name: tone_match
+      type: float
+      required: false
+      description: "How well this expression matches entity's required tone (0.0-1.0)"
+
+  inverse: EXPRESSION_USED_BY
+
+  llm_context: |
+    USE: when loading locale-specific expressions/phrases for EntityNative generation.
+    TRIGGERS: uses expression, phrase, idiom, tone, voice, style, native phrasing.
+    NOT: all locale expressions (use HAS_EXPRESSIONS for bulk), content generation output.
+    RELATES: EntityNative (source), Expression (target), EXPRESSION_USED_BY (inverse),
+             purpose: cta/headline/tagline/description/warning/celebration.
+    EXAMPLE: "qr-code-generator@fr-FR" USES_EXPRESSION {purpose: "cta"} "cta_generate_now"
+
+  cypher_pattern: "(EntityNative)-[:USES_EXPRESSION {purpose, temperature, context, tone_match}]->(Expression)"
+
+  examples:
+    cypher: |
+      // Link EntityNative to its CTA expressions
+      MATCH (en:EntityNative {key: "entity:qr-code-generator@fr-FR"})
+      MATCH (e:Expression {use_case: "greeting", tone: "energetic"})
+      MERGE (en)-[:USES_EXPRESSION {
+        purpose: "cta",
+        temperature: 0.9,
+        context: "homepage"
+      }]->(e)
+
+      // Load relevant expressions for generation
+      MATCH (en:EntityNative {key: $entityNativeKey})
+      MATCH (en)-[ue:USES_EXPRESSION]->(e:Expression)
+      WHERE ue.purpose IN ["cta", "headline"]
+      RETURN e.text AS expression, e.tone, ue.purpose
+      ORDER BY ue.temperature DESC
+      LIMIT 20

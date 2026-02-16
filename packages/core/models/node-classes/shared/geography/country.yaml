@@ -1,22 +1,43 @@
 # models/node-classes/shared/geography/country.yaml
 # Country - ISO 3166-1 country/territory for geographic mapping
 #
+# v0.13.1: LLM-First field ordering (llm_context promoted to BLOC 2)
 # v0.12.3: Page-Entity Architecture - Complete geographic hierarchy
 # Data: 249 countries/territories (ISO 3166-1)
 # Sources: ISO 3166-1 (alpha-2/alpha-3), UN M49 (numeric codes)
 #
-# Hierarchy: Continent → GeoRegion → GeoSubRegion (optional) → Country → Locale
+# Hierarchy: Continent -> GeoRegion -> GeoSubRegion (optional) -> Country -> Locale
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: Country
   realm: shared
   layer: geography
   trait: defined
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (LLM-First)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  description: "ISO 3166-1 country/territory with UN M49 geographic classification"
+
+  llm_context: |
+    USE: when generating content for a specific country or territory.
+    TRIGGERS: "country", "nation", "territory", "market", "ISO country".
+    NOT: for locale-specific content (use Locale), for regional content (use GeoRegion).
+    RELATES: Locale (child via IN_COUNTRY), GeoRegion (parent via IN_REGION), GeoSubRegion (optional parent via IN_SUBREGION).
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════════
   icon:
     web: "flag"
     terminal: "⚑"
-  description: "ISO 3166-1 country/territory with UN M49 geographic classification"
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA
+  # ═══════════════════════════════════════════════════════════════════════════════
   standard_properties:
     key:
       type: string
@@ -45,12 +66,6 @@ node:
       description: "Short geographic context"
       example: "France, Western European country, EU member state"
 
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints for cultural context"
-      example: "USE: for French market content. TRIGGERS: france, français, french. NOT: Quebec (use CA with fr-CA locale)."
-
     created_at:
       type: datetime
       required: true
@@ -58,10 +73,6 @@ node:
     updated_at:
       type: datetime
       required: true
-
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # COUNTRY-SPECIFIC PROPERTIES
-  # ═══════════════════════════════════════════════════════════════════════════════
 
   properties:
     alpha3:
@@ -159,9 +170,8 @@ node:
           rendering: object       # Lighting, materials, environment
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # RELATIONS
+  # BLOC 5: GRAPH
   # ═══════════════════════════════════════════════════════════════════════════════
-
   relations:
     outgoing:
       - type: IN_REGION
@@ -187,9 +197,8 @@ node:
         description: "Locales within this country"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # EXAMPLE
+  # BLOC 6: REFERENCE
   # ═══════════════════════════════════════════════════════════════════════════════
-
   example:
     data:
       key: "FR"

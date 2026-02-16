@@ -1,9 +1,8 @@
 //! UI rendering for TUI v2.
 //!
 //! v11.7: Two modes (Graph, Nexus). Renders tree, info, yaml, graph panels.
-//! v0.12.3: Architecture panel for contextual ADR diagrams.
+//! v0.13.1: Architecture panel removed (panel simplification).
 
-mod architecture;
 mod graph;
 mod info;
 mod overlays;
@@ -11,7 +10,6 @@ mod status;
 mod tree;
 mod yaml_panel;
 
-pub use architecture::render_architecture_panel;
 pub use graph::render_graph_panel;
 pub use info::render_unified_info_panel;
 pub use status::render_status;
@@ -54,6 +52,9 @@ const COLOR_HIGHLIGHT_BG: Color = Color::Rgb(30, 40, 50);
 
 /// Connected/active status indicator.
 const COLOR_CONNECTED: Color = Color::Rgb(100, 180, 100);
+
+/// Instance color (v0.13.1: unified yellow for all instances).
+pub(super) const COLOR_INSTANCE: Color = Color::Yellow;
 
 /// Arc family label color.
 const COLOR_ARC_FAMILY: Color = Color::Rgb(180, 140, 80);
@@ -221,16 +222,6 @@ pub(super) fn trait_icon(trait_name: &str) -> &'static str {
 // CLASSIFICATION BADGE HELPERS (v11.5 TreeView Enhancement)
 // =============================================================================
 
-/// Get short abbreviation for realm display in tree badges.
-/// Format: ◎xxx where xxx is 3-letter abbreviation
-pub(super) fn realm_abbrev(realm_key: &str) -> &'static str {
-    match realm_key {
-        "shared" => "shd",
-        "org" => "org",
-        _ => "???",
-    }
-}
-
 /// Get icon for realm badge (from visual-encoding.yaml via icons.rs).
 /// Named `_badge` to avoid collision with expand_icon variables in tree.rs
 /// v11.7: Uses icons.rs as source of truth (fixes swapped icons bug)
@@ -239,25 +230,6 @@ pub(super) fn realm_badge_icon(realm_key: &str) -> &'static str {
         "shared" => icons::REALMS_SHARED.terminal,
         "org" => icons::REALMS_ORG.terminal,
         _ => "○",
-    }
-}
-
-/// Get short abbreviation for layer display in tree badges.
-/// v11.5: 10 layers (4 shared + 6 org)
-pub(super) fn layer_abbrev(layer_key: &str) -> &'static str {
-    match layer_key {
-        // v11.5: 4 shared layers
-        "config" => "cfg",
-        "locale" => "loc",
-        "geography" => "geo",
-        "knowledge" => "kno",
-        // v11.5: 6 org layers
-        "foundation" => "fnd",
-        "structure" => "str",
-        "semantic" => "sem",
-        "instruction" => "ins",
-        "output" => "out",
-        _ => "???",
     }
 }
 
@@ -295,18 +267,6 @@ pub(super) fn trait_abbrev(trait_name: &str) -> &'static str {
 }
 
 // v11.6.1: Arc Family helpers for tree visual enrichment
-
-/// Get short abbreviation for arc family display in tree badges.
-pub(super) fn arc_family_abbrev(family_key: &str) -> &'static str {
-    match family_key {
-        "ownership" => "own",
-        "localization" => "loc",
-        "semantic" => "sem",
-        "generation" => "gen",
-        "mining" => "min",
-        _ => "???",
-    }
-}
 
 /// Get icon for arc family badge (from visual-encoding.yaml via icons.rs).
 /// v11.7: Uses icons.rs as source of truth
@@ -665,8 +625,8 @@ fn render_main(f: &mut Frame, area: Rect, app: &mut App) {
     }
 }
 
-/// Wide layout: Tree | Info+Graph | YAML+Arch.
-/// v0.12.3: Right column split to show contextual architecture diagrams.
+/// Wide layout: Tree | Info+Graph | YAML.
+/// v0.13.1: Architecture removed, YAML takes full right column.
 fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
     let chunks = Layout::default()
         .direction(Direction::Horizontal)
@@ -691,17 +651,8 @@ fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
     render_unified_info_panel(f, middle_chunks[0], app);
     render_graph_panel(f, middle_chunks[1], app);
 
-    // Stack YAML and Architecture vertically in the right panel
-    let right_chunks = Layout::default()
-        .direction(Direction::Vertical)
-        .constraints([
-            Constraint::Percentage(LAYOUT_WIDE_TOP_PCT),
-            Constraint::Percentage(LAYOUT_WIDE_BOTTOM_PCT),
-        ])
-        .split(chunks[2]);
-
-    render_yaml_panel(f, right_chunks[0], app);
-    render_architecture_panel(f, right_chunks[1], app);
+    // v0.13.1: YAML takes full right column (Architecture removed)
+    render_yaml_panel(f, chunks[2], app);
 }
 
 /// Narrow layout: Tree | Info+Graph+YAML stacked.

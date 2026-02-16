@@ -26,7 +26,7 @@ This diagram shows the complete NovaNet graph schema with all 61 node types and 
 ```mermaid
 flowchart TB
   %% NovaNet Graph v0.13.0
-  %% Generated: 61 nodes, 248 arcs
+  %% Generated: 61 nodes, 256 arcs
   %% Source: node-classes/ + arc-classes/ + taxonomy.yaml
 
   %% Trait styling (node_trait)
@@ -187,6 +187,7 @@ flowchart TB
   CulturalSubRealm -.->|HAS_LOCALE| Locale
   CulturalSubRealm -->|PART_OF_REALM| CulturalRealm
   Culture -->|CULTURE_OF| Locale
+  CultureRef -.->|CULTURE_REF_USED_BY| EntityNative
   CultureSet -->|CONTAINS_CULTURE_REF| CultureRef
   CultureSet -->|CULTURE_SET_OF| Locale
   EconomicRegion -.->|HAS_LOCALE| Locale
@@ -237,6 +238,11 @@ flowchart TB
   EntityNative -->|NATIVE_OF| Page
   EntityNative -->|NATIVE_OF| Project
   EntityNative -.->|TARGETS| SEOKeyword
+  EntityNative -.->|USES_CULTURE_REF| CultureRef
+  EntityNative -.->|USES_EXPRESSION| Expression
+  EntityNative -.->|USES_PATTERN| Pattern
+  EntityNative -.->|USES_TERM| Term
+  Expression -.->|EXPRESSION_USED_BY| EntityNative
   ExpressionSet -->|CONTAINS_EXPRESSION| Expression
   ExpressionSet -->|EXPRESSIONS_OF| Locale
   Formatting -->|FORMATTING_OF| Locale
@@ -326,6 +332,7 @@ flowchart TB
   PageNative ==>|PREVIOUS_VERSION| OutputArtifact
   PageNative ==>|PREVIOUS_VERSION| PageNative
   PageNative ==>|PRODUCED_BY| PromptArtifact
+  Pattern -.->|PATTERN_USED_BY| EntityNative
   PatternSet -->|CONTAINS_PATTERN| Pattern
   PatternSet -->|PATTERNS_OF| Locale
   PopulationCluster -->|HAS_SUBCLUSTER| PopulationSubCluster
@@ -372,15 +379,16 @@ flowchart TB
   Style -->|STYLE_OF| Locale
   TabooSet -->|CONTAINS_TABOO| Taboo
   TabooSet -->|TABOOS_OF| Locale
+  Term -.->|TERM_USED_BY| EntityNative
   TermSet -->|CONTAINS_TERM| Term
   TermSet -->|TERMS_OF| Locale
 
   %% Arc colors by family
-  linkStyle 16,17,18,34,36,41,42,43,44,165,166,168,169,170,187,189,196,197,198,199,222,223,224,225 stroke:#8b5cf6,stroke-width:2px
-  linkStyle 33,56,58,63,104,119,122,124,126,128,130,138,139,140,143,144,150,151,152,153,154,155,156,157,158,159,160,161,162,167,191,203,205,217,226 stroke:#22c55e,stroke-width:2px
-  linkStyle 12,13,114,115,183,184,233,235,236,239 stroke:#ec4899,stroke-width:2px
-  linkStyle 0,1,2,3,5,6,7,8,9,10,19,20,37,38,39,40,45,46,48,49,50,52,53,54,55,57,59,60,61,62,68,74,76,77,78,79,80,81,106,107,108,109,111,112,113,116,117,118,120,121,123,125,127,131,132,133,134,135,136,137,141,142,145,146,147,148,149,163,164,171,172,173,174,175,176,177,179,188,192,193,194,195,200,201,202,204,206,207,208,209,210,211,212,213,214,215,216,218,219,220,221,228,232,240,241,242,243,244,245,246,247 stroke:#3b82f6,stroke-width:2px
-  linkStyle 4,11,14,15,21,22,23,24,25,26,27,28,29,30,31,32,35,47,51,64,65,66,67,69,70,71,72,73,75,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,105,110,129,178,180,181,182,185,186,190,227,229,230,231,234,237,238 stroke:#f97316,stroke-width:2px
+  linkStyle 16,17,18,34,36,41,42,43,44,171,172,174,175,176,193,195,202,203,204,205,229,230,231,232 stroke:#8b5cf6,stroke-width:2px
+  linkStyle 33,56,58,64,105,125,128,130,132,134,136,144,145,146,149,150,156,157,158,159,160,161,162,163,164,165,166,167,168,173,197,210,212,224,233 stroke:#22c55e,stroke-width:2px
+  linkStyle 12,13,120,121,189,190,240,242,243,246 stroke:#ec4899,stroke-width:2px
+  linkStyle 0,1,2,3,5,6,7,8,9,10,19,20,37,38,39,40,45,46,48,49,50,52,53,54,55,57,59,60,62,63,69,75,77,78,79,80,81,82,107,108,109,110,117,118,119,122,123,124,126,127,129,131,133,137,138,139,140,141,142,143,147,148,151,152,153,154,155,169,170,177,178,179,180,181,182,183,185,194,198,199,200,201,207,208,209,211,213,214,215,216,217,218,219,220,221,222,223,225,226,227,228,235,239,247,248,249,250,251,252,254,255 stroke:#3b82f6,stroke-width:2px
+  linkStyle 4,11,14,15,21,22,23,24,25,26,27,28,29,30,31,32,35,47,51,61,65,66,67,68,70,71,72,73,74,76,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,106,111,112,113,114,115,116,135,184,186,187,188,191,192,196,206,234,236,237,238,241,244,245,253 stroke:#f97316,stroke-width:2px
 
   %% Class assignments
   class Adaptation imported

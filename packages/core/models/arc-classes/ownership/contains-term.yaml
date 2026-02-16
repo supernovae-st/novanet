@@ -1,19 +1,27 @@
-# arc-classes/ownership/contains-term.yaml
-# CONTAINS_TERM - TermSet contains Term atoms (v10.9.0)
-#
+# ═══════════════════════════════════════════════════════════════════════════════
+# ArcClass: CONTAINS_TERM — TermSet contains Term atoms
+# v0.13.1: LLM-First property ordering
 # v10.9.0: Split from generic CONTAINS for semantic correctness
-#          Each container type can only contain its specific atom type
+# ═══════════════════════════════════════════════════════════════════════════════
 
 arc:
+  # IDENTITY
   name: CONTAINS_TERM
   family: ownership
   scope: intra_realm
-  source: TermSet
-  target: Term
-  cardinality: one_to_many
+
+  # SEMANTIC (LLM-CRITICAL)
+  description: "TermSet contains Term atoms (each container type contains its specific atom type)"
   llm_context: |
     USE: when loading individual terms from a term set.
     TRIGGERS: term atoms, glossary entries, domain terms, vocabulary items.
     NOT: term set container (use HAS_TERMS), locale-level terminology.
     RELATES: TermSet (source), Term (target).
+
+  # GRAPH STRUCTURE
+  source: TermSet
+  target: Term
+  cardinality: one_to_many
+
+  # REFERENCE
   cypher_pattern: "(TermSet)-[:CONTAINS_TERM]->(Term)"

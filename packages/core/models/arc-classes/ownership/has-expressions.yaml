@@ -1,17 +1,31 @@
-# packages/core/models/arc-classes/ownership/has-expressions.yaml
+# ═══════════════════════════════════════════════════════════════════════════════
+# ArcClass: HAS_EXPRESSIONS — Locale owns ExpressionSet
+# v0.13.1: LLM-First property ordering
 # v10.7: Simplified to 1:1 - register is a property on Expression atoms
 # v0.13.0: Added TIER 2 inverse (ADR-026)
+# ═══════════════════════════════════════════════════════════════════════════════
+
 arc:
+  # IDENTITY
   name: HAS_EXPRESSIONS
   family: ownership
   scope: intra_realm
-  source: Locale
-  target: ExpressionSet
-  cardinality: one_to_one
-  inverse: EXPRESSIONS_OF
+
+  # SEMANTIC (LLM-CRITICAL)
+  description: "Locale owns ExpressionSet (idiomatic expressions)"
   llm_context: |
     USE: when loading idiomatic expressions for a locale.
     TRIGGERS: locale expressions, idioms, phrases, locale-specific text.
     NOT: individual expressions (use CONTAINS_EXPRESSION), terminology (use HAS_TERMS).
     RELATES: Locale (source), ExpressionSet (target), 1:1 cardinality.
+
+  # GRAPH STRUCTURE
+  source: Locale
+  target: ExpressionSet
+  cardinality: one_to_one
+
+  # FLAGS
+  inverse: EXPRESSIONS_OF
+
+  # REFERENCE
   cypher_pattern: (Locale)-[:HAS_EXPRESSIONS]->(ExpressionSet)

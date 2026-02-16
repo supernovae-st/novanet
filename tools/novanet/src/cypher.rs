@@ -423,6 +423,9 @@ mod tests {
     #[test]
     fn overlay_query_sort_order() {
         let stmt = overlay_query(100);
-        assert!(stmt.cypher.contains("ORDER BY is_schema DESC, label, n.key"));
+        assert!(
+            stmt.cypher
+                .contains("ORDER BY is_schema DESC, label, n.key")
+        );
     }
 }

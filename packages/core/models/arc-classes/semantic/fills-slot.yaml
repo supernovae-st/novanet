@@ -1,27 +1,48 @@
 # packages/core/models/arc-classes/semantic/fills-slot.yaml
 # ArcClass: FILLS_SLOT — Block fills slot (A/B testing)
+# v0.13.1: LLM-First field ordering (semantic fields before structure)
 
 arc:
+  # --- IDENTITY ---
   name: FILLS_SLOT
   family: semantic
   scope: intra_realm
-  temperature_threshold: 0.0  # v9.9: A/B testing slot (always follow)
-  source: Block
-  target: ContentSlot
-  cardinality: many_to_many
-  properties:
-    - name: variant_id
-      type: string
-      required: false
-    - name: traffic_allocation
-      type: string
-      required: false
-    - name: is_control
-      type: string
-      required: false
+
+  # --- SEMANTIC (LLM-critical) ---
+  description: |
+    Block fills a ContentSlot for A/B testing purposes. Multiple blocks
+    can fill the same slot as variants, with traffic allocation determining
+    which variant is shown. Use for experimentation and optimization.
   llm_context: |
     USE: when finding which blocks fill a content slot for A/B testing.
     TRIGGERS: A/B testing, variant, slot content, traffic allocation, control.
     NOT: slot acceptance (use ACCEPTS_BLOCK_TYPE), page slots (use HAS_SLOT).
     RELATES: Block (source), ContentSlot (target), variant_id (property).
-  cypher_pattern: (Block)-[:FILLS_SLOT {variant_id, traffic_allocation, is_control}]->(ContentSlot)
+
+  # --- GRAPH STRUCTURE ---
+  source: Block
+  target: ContentSlot
+  cardinality: many_to_many
+
+  # --- FLAGS ---
+  temperature_threshold: 0.0
+
+  # --- DATA ---
+  properties:
+    - name: variant_id
+      type: string
+      required: false
+      description: "Identifier for this A/B test variant"
+
+    - name: traffic_allocation
+      type: string
+      required: false
+      description: "Percentage of traffic allocated to this variant"
+
+    - name: is_control
+      type: string
+      required: false
+      description: "Whether this is the control variant"
+
+  # --- REFERENCE ---
+  cypher_pattern: "(Block)-[:FILLS_SLOT {variant_id, traffic_allocation, is_control}]->(ContentSlot)"

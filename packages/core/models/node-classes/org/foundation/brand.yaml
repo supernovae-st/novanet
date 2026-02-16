@@ -1,18 +1,38 @@
 # models/node-classes/org/foundation/brand.yaml
+# v0.13.1 LLM-First Schema - Canonical field ordering for optimal AI comprehension
 # Brand - Central brand identity node (ADR-028)
 # v0.12.4: Replaces BrandIdentity, delegates to BrandDesign, BrandPrinciples, PromptStyle
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: Brand
   realm: org
   layer: foundation
   trait: defined
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (description, llm_context)
+  # ═══════════════════════════════════════════════════════════════════════════════
   description: "Central brand identity - owns design, principles, and prompt style"
 
-  # =============================================================================
-  # STANDARD PROPERTIES
-  # =============================================================================
+  llm_context: |
+    USE: when loading brand context for content generation or enforcing brand consistency.
+    TRIGGERS: "brand", "brand voice", "brand identity", "brand context", "@brand".
+    NOT: for visual design specifics (use BrandDesign), for voice guidelines (use BrandPrinciples), for locale-specific prompts (use PromptStyle).
+    RELATES: Project (owner via HAS_BRAND), BrandDesign (visuals via HAS_DESIGN), BrandPrinciples (voice via HAS_PRINCIPLES), PromptStyle (AI styles via HAS_PROMPT_STYLE), AudiencePersona (targets via TARGETS_PERSONA).
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL (icon)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  icon:
+    web: badge
+    terminal: "◆"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA (standard_properties, properties)
+  # ═══════════════════════════════════════════════════════════════════════════════
   standard_properties:
     key:
       type: string
@@ -33,16 +53,6 @@ node:
       description: "Brand positioning statement"
       example: "AI-powered QR code generation platform"
 
-    llm_context:
-      type: string
-      required: true
-      description: "LLM context for brand-aware generation. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections].'"
-      example: |
-        USE: when loading brand context for content generation or enforcing brand consistency.
-        TRIGGERS: "brand", "brand voice", "brand identity", "brand context", "@brand".
-        NOT: for visual design specifics (use BrandDesign), for voice guidelines (use BrandPrinciples), for locale-specific prompts (use PromptStyle).
-        RELATES: Project (owner via HAS_BRAND), BrandDesign (visuals via HAS_DESIGN), BrandPrinciples (voice via HAS_PRINCIPLES), PromptStyle (AI styles via HAS_PROMPT_STYLE), AudiencePersona (targets via TARGETS_PERSONA).
-
     created_at:
       type: datetime
       required: true
@@ -50,10 +60,6 @@ node:
     updated_at:
       type: datetime
       required: true
-
-  # =============================================================================
-  # BRAND-SPECIFIC PROPERTIES
-  # =============================================================================
 
   properties:
     # Core Identity
@@ -104,10 +110,9 @@ node:
       description: "Core value proposition"
       example: "Fastest way to create professional QR codes"
 
-  # =============================================================================
-  # RELATIONS
-  # =============================================================================
-
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH (relations, incoming_relations)
+  # ═══════════════════════════════════════════════════════════════════════════════
   relations:
     HAS_DESIGN:
       target: BrandDesign
@@ -134,16 +139,25 @@ node:
       cardinality: one_to_many
       description: "Target markets"
 
-  # =============================================================================
-  # EXAMPLE
-  # =============================================================================
+  incoming_relations:
+    HAS_BRAND:
+      from: Project
+      cardinality: "1:1"
+      description: "Project that owns this brand"
 
+    BRAND_OF:
+      from: Project
+      cardinality: "1:1"
+      description: "Inverse of HAS_BRAND (query helper)"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE (example)
+  # ═══════════════════════════════════════════════════════════════════════════════
   example:
     data:
       key: "brand-qrcodeai"
       display_name: "QR Code AI"
       description: "AI-powered QR code generation platform"
-      llm_context: "USE: for content generation. TRIGGERS: brand voice. NOT: visual design."
       brand_name: "QR Code AI"
       tagline: "Create beautiful QR codes in seconds"
       target_market: "Small businesses and marketers"
@@ -156,18 +170,3 @@ node:
       OPTIONAL MATCH (b)-[:HAS_PRINCIPLES]->(p:BrandPrinciples)
       OPTIONAL MATCH (b)-[:HAS_PROMPT_STYLE]->(s:PromptStyle)
       RETURN b, d, p, collect(s) AS styles
-
-  # =============================================================================
-  # INCOMING RELATIONS
-  # =============================================================================
-
-  incoming_relations:
-    HAS_BRAND:
-      from: Project
-      cardinality: "1:1"
-      description: "Project that owns this brand"
-
-    BRAND_OF:
-      from: Project
-      cardinality: "1:1"
-      description: "Inverse of HAS_BRAND (query helper)"

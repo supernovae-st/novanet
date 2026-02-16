@@ -109,7 +109,10 @@ pub async fn run_verify(db: &Db, root: &Path) -> crate::Result<VerifyResult> {
 
     // 2. Query Neo4j for all relationship types in use
     let neo4j_arcs = query_relationship_types(db).await?;
-    info!(neo4j_count = neo4j_arcs.len(), "Found relationship types in Neo4j");
+    info!(
+        neo4j_count = neo4j_arcs.len(),
+        "Found relationship types in Neo4j"
+    );
 
     // 3. Compute differences
     let in_yaml_not_neo4j: Vec<String> = yaml_arcs
@@ -177,7 +180,10 @@ impl VerifyResult {
         println!();
 
         if !self.in_yaml_not_neo4j.is_empty() {
-            println!("  ⚠ In YAML but not in Neo4j ({}):", self.in_yaml_not_neo4j.len());
+            println!(
+                "  ⚠ In YAML but not in Neo4j ({}):",
+                self.in_yaml_not_neo4j.len()
+            );
             let mut sorted = self.in_yaml_not_neo4j.clone();
             sorted.sort();
             for arc in &sorted {
@@ -187,7 +193,10 @@ impl VerifyResult {
         }
 
         if !self.in_neo4j_not_yaml.is_empty() {
-            println!("  ⚠ In Neo4j but not in YAML ({}):", self.in_neo4j_not_yaml.len());
+            println!(
+                "  ⚠ In Neo4j but not in YAML ({}):",
+                self.in_neo4j_not_yaml.len()
+            );
             let mut sorted = self.in_neo4j_not_yaml.clone();
             sorted.sort();
             for arc in &sorted {

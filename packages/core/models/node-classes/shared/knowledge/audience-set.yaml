@@ -1,20 +1,42 @@
-# models/node-classes/shared/knowledge/audience-set.yaml
+# ─────────────────────────────────────────────────────────────────────────────
 # AudienceSet — Container grouping AudienceTrait atoms by segment
-#
+# ─────────────────────────────────────────────────────────────────────────────
+# v0.13.1: LLM-First field ordering (ADR-031)
 # v10.1: Pure container (no JSON blobs - data lives in AudienceTrait atoms)
 # Segments: b2b, b2c, general
 # Stability: High - structure rarely changes
+# ─────────────────────────────────────────────────────────────────────────────
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════
   name: AudienceSet
   realm: shared
   layer: knowledge
   trait: defined  # v11.2: Containers are universal categories (invariant), atoms are locale-native (knowledge)
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC
+  # ═══════════════════════════════════════════════════════════════════════════
+  description: "Container grouping AudienceTrait atoms by segment"
+
+  llm_context: |
+    USE: to find traits by segment.
+    TRIGGERS: B2B, B2C, audience segment, audience container.
+    NOT: individual behaviors (use AudienceTrait via CONTAINS).
+    RELATES: AudienceTrait (CONTAINS), Locale (HAS_AUDIENCE).
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════
   icon:
     web: "users"
     terminal: "◎"
-  description: "Container grouping AudienceTrait atoms by segment"
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA
+  # ═══════════════════════════════════════════════════════════════════════════
   standard_properties:
     display_name:
       type: string
@@ -27,12 +49,6 @@ node:
       required: true
       description: "Short description"
       example: "B2B audience behavior for fr-FR"
-
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints"
-      example: "USE: to find traits by segment. TRIGGERS: B2B, B2C. NOT: individual behaviors."
 
     created_at:
       type: datetime
@@ -53,6 +69,9 @@ node:
       description: "Audience segment this set groups"
       example: "b2b"
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH
+  # ═══════════════════════════════════════════════════════════════════════════
   relations:
     outgoing:
       - type: CONTAINS

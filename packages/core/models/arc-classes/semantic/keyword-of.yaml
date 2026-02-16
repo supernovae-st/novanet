@@ -1,22 +1,32 @@
 # packages/core/models/arc-classes/semantic/keyword-of.yaml
 # ArcClass: KEYWORD_OF — SEOKeyword belongs to Entity (inverse of HAS_KEYWORD)
-# v0.13.1: NEW TIER 2 inverse arc (ADR-026)
+# v0.13.1: LLM-First field ordering (semantic fields before structure)
 
 arc:
+  # --- IDENTITY ---
   name: KEYWORD_OF
   family: semantic
-  scope: cross_realm  # shared (SEOKeyword) → org (Entity)
-  temperature_threshold: 0.5
+  scope: cross_realm
 
-  source: SEOKeyword
-  target: Entity
-  cardinality: many_to_one
-  inverse_of: HAS_KEYWORD  # ownership/has-keyword.yaml
-
+  # --- SEMANTIC (LLM-critical) ---
+  description: |
+    Inverse of HAS_KEYWORD. SEOKeyword is semantically associated with an Entity.
+    Use for navigating from keywords to find which entities they belong to.
+    Cross-realm arc from shared SEOKeyword to org Entity.
   llm_context: |
     USE: when finding which entities are semantically associated with a keyword.
     TRIGGERS: keyword entities, which entities, keyword semantic, entity lookup.
     NOT: loading keywords for entity (use HAS_KEYWORD), page targeting (use KEYWORD_TARGETED_BY).
     RELATES: SEOKeyword (source), Entity (target), HAS_KEYWORD (inverse).
 
+  # --- GRAPH STRUCTURE ---
+  source: SEOKeyword
+  target: Entity
+  cardinality: many_to_one
+
+  # --- FLAGS ---
+  inverse_of: HAS_KEYWORD
+  temperature_threshold: 0.5
+
+  # --- REFERENCE ---
   cypher_pattern: "(SEOKeyword)-[:KEYWORD_OF]->(Entity)"

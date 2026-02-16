@@ -1,19 +1,31 @@
-# arc-classes/semantic/mentions-brand.yaml
-# MENTIONS_BRAND - Brand keyword mentions a brand entity (v11.4)
+# packages/core/models/arc-classes/semantic/mentions-brand.yaml
+# ArcClass: MENTIONS_BRAND — Brand keyword mentions a brand entity
+# v0.13.1: LLM-First field ordering (semantic fields before structure)
 
 arc:
+  # --- IDENTITY ---
   name: MENTIONS_BRAND
   family: semantic
   scope: cross_realm
-  temperature_threshold: 0.7
-  source: SEOKeyword
-  target: Entity
-  cardinality: many_to_one
 
+  # --- SEMANTIC (LLM-critical) ---
+  description: |
+    SEOKeyword with format=brand mentions a specific brand entity.
+    Links branded search terms to the entities they reference.
+    Cross-realm arc from shared SEOKeyword to org Entity.
   llm_context: |
     USE: when linking brand keyword to the brand entity it mentions.
     TRIGGERS: brand keyword, brand mention, branded search, brand entity.
     NOT: keyword format (use HAS_FORMAT), keyword expression (use EXPRESSES).
     RELATES: SEOKeyword (source), Entity (target/brand), format=brand prerequisite.
 
+  # --- GRAPH STRUCTURE ---
+  source: SEOKeyword
+  target: Entity
+  cardinality: many_to_one
+
+  # --- FLAGS ---
+  temperature_threshold: 0.7
+
+  # --- REFERENCE ---
   cypher_pattern: "(SEOKeyword)-[:MENTIONS_BRAND]->(Entity)"

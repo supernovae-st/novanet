@@ -1,23 +1,42 @@
 # models/node-classes/org/structure/content-slot.yaml
-# v0.12.0: ContentSlot for A/B testing and dynamic content injection
+# v0.13.1 LLM-First Schema - Canonical field ordering for optimal AI comprehension
+#
+# ContentSlot - Named slot for A/B testing and dynamic content injection
+# v0.12.0: Initial schema for content modularity
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: ContentSlot
   realm: org
   layer: structure
   trait: defined
-  icon:
-    web: inbox
-    terminal: "▢"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC
+  # ═══════════════════════════════════════════════════════════════════════════════
   description: |
     Named slot within a page structure for content injection. Enables A/B testing,
     dynamic content, and component-level modularity. Slots are locale-invariant
     definitions filled by locale-specific blocks.
 
+  llm_context: |
     USE: When defining reusable page structure positions for content variants.
     TRIGGERS: "content slot", "A/B testing", "component slot", "dynamic block".
     NOT: For actual content (use Block), for page structure (use Page).
+    RELATES: Page (parent via HAS_SLOT), Block (fills via FILLS_SLOT), BlockType (accepts via ACCEPTS_BLOCK_TYPE).
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════════
+  icon:
+    web: inbox
+    terminal: "▢"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA
+  # ═══════════════════════════════════════════════════════════════════════════════
   standard_properties:
     key:
       type: string
@@ -117,15 +136,9 @@ node:
       description: "Order in which slots are rendered (lower = first)"
       example: 10
 
-  neo4j:
-    indexes:
-      - name: contentslot_type
-        property: slot_type
-      - name: contentslot_position
-        property: position
-      - name: contentslot_required
-        property: is_required
-
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH
+  # ═══════════════════════════════════════════════════════════════════════════════
   relations:
     incoming:
       - type: HAS_SLOT
@@ -140,6 +153,18 @@ node:
       - type: ACCEPTS_BLOCK_TYPE
         to: BlockType
         description: "Block types allowed in this slot"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE
+  # ═══════════════════════════════════════════════════════════════════════════════
+  neo4j:
+    indexes:
+      - name: contentslot_type
+        property: slot_type
+      - name: contentslot_position
+        property: position
+      - name: contentslot_required
+        property: is_required
 
   example:
     data: |

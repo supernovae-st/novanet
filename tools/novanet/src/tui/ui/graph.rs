@@ -14,8 +14,8 @@ use super::super::app::{App, InfoBox};
 use super::super::data::TreeItem;
 use super::super::theme;
 use super::{
-    STYLE_ACCENT, STYLE_BRIGHT_DIM, STYLE_DIM, STYLE_HIGHLIGHT, STYLE_INFO,
-    STYLE_MUTED, STYLE_PRIMARY, STYLE_SUCCESS, spinner, wrap_text,
+    STYLE_ACCENT, STYLE_BRIGHT_DIM, STYLE_DIM, STYLE_HIGHLIGHT, STYLE_INFO, STYLE_MUTED,
+    STYLE_PRIMARY, STYLE_SUCCESS, spinner, wrap_text,
 };
 
 // =============================================================================
@@ -68,7 +68,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
         // Selected: ▶ ARCS with arc counts
         let mut spans = vec![
             Span::styled(
-                " \u{25B6} ",  // ▶
+                " \u{25B6} ", // ▶
                 Style::default()
                     .fg(BOX_BORDER_SELECTED)
                     .add_modifier(Modifier::BOLD),
@@ -98,9 +98,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
         spans
     } else {
         // Unfocused: dim ARCS with arc counts
-        let mut spans = vec![
-            Span::styled(" ARCS ", Style::default().fg(Color::DarkGray)),
-        ];
+        let mut spans = vec![Span::styled(" ARCS ", Style::default().fg(Color::DarkGray))];
         if arcs_loading {
             spans.push(Span::styled("[...] ", Style::default().fg(Color::DarkGray)));
         } else if incoming_count > 0 || outgoing_count > 0 {
@@ -688,7 +686,12 @@ fn render_arcs_by_direction(
             let badge = class_badge(&arc.other_class, app, theme);
 
             lines.push(Line::from(vec![
-                Span::styled("    → ", Style::default().fg(family_color).add_modifier(Modifier::BOLD)),
+                Span::styled(
+                    "    → ",
+                    Style::default()
+                        .fg(family_color)
+                        .add_modifier(Modifier::BOLD),
+                ),
                 Span::styled(arc.arc_key.clone(), Style::default().fg(family_color)),
                 Span::styled(" → ", *dim),
                 badge,
@@ -720,7 +723,12 @@ fn render_arcs_by_direction(
             let badge = class_badge(&arc.other_class, app, theme);
 
             lines.push(Line::from(vec![
-                Span::styled("    ← ", Style::default().fg(family_color).add_modifier(Modifier::BOLD)),
+                Span::styled(
+                    "    ← ",
+                    Style::default()
+                        .fg(family_color)
+                        .add_modifier(Modifier::BOLD),
+                ),
                 badge,
                 Span::styled(arc.other_class.clone(), STYLE_SUCCESS),
                 Span::styled(" ← ", *dim),
@@ -1091,10 +1099,22 @@ mod tests {
             .collect();
 
         // Should contain arc keys and target classes
-        assert!(all_content.contains("OUTGOING"), "should have OUTGOING header");
-        assert!(all_content.contains("USES_ENTITY"), "should contain arc key");
-        assert!(all_content.contains("Entity"), "should contain target class");
-        assert!(all_content.contains("→"), "should contain direction indicator");
+        assert!(
+            all_content.contains("OUTGOING"),
+            "should have OUTGOING header"
+        );
+        assert!(
+            all_content.contains("USES_ENTITY"),
+            "should contain arc key"
+        );
+        assert!(
+            all_content.contains("Entity"),
+            "should contain target class"
+        );
+        assert!(
+            all_content.contains("→"),
+            "should contain direction indicator"
+        );
         assert!(all_content.contains("[sem]"), "should contain family short");
     }
 
@@ -1119,10 +1139,22 @@ mod tests {
             .collect();
 
         // Should have both OUTGOING and INCOMING headers
-        assert!(all_content.contains("OUTGOING"), "should have OUTGOING header");
-        assert!(all_content.contains("INCOMING"), "should have INCOMING header");
-        assert!(all_content.contains("BELONGS_TO"), "should contain incoming arc");
-        assert!(all_content.contains("USES_ENTITY"), "should contain outgoing arc");
+        assert!(
+            all_content.contains("OUTGOING"),
+            "should have OUTGOING header"
+        );
+        assert!(
+            all_content.contains("INCOMING"),
+            "should have INCOMING header"
+        );
+        assert!(
+            all_content.contains("BELONGS_TO"),
+            "should contain incoming arc"
+        );
+        assert!(
+            all_content.contains("USES_ENTITY"),
+            "should contain outgoing arc"
+        );
     }
 
     #[test]
@@ -1149,12 +1181,21 @@ mod tests {
             .collect();
 
         // Should contain classification badges [org/str] (structure layer)
-        assert!(all_content.contains("[org/str]"), "should contain realm/layer badge");
+        assert!(
+            all_content.contains("[org/str]"),
+            "should contain realm/layer badge"
+        );
         // Should contain trait icon (■ for defined)
         assert!(all_content.contains("■"), "should contain trait icon");
         // Both direction indicators
-        assert!(all_content.contains("←"), "should contain incoming direction");
-        assert!(all_content.contains("→"), "should contain outgoing direction");
+        assert!(
+            all_content.contains("←"),
+            "should contain incoming direction"
+        );
+        assert!(
+            all_content.contains("→"),
+            "should contain outgoing direction"
+        );
     }
 
     #[test]
@@ -1178,8 +1219,14 @@ mod tests {
             .collect();
 
         // Headers should show counts
-        assert!(all_content.contains("OUTGOING (1)"), "should show outgoing count");
-        assert!(all_content.contains("INCOMING (1)"), "should show incoming count");
+        assert!(
+            all_content.contains("OUTGOING (1)"),
+            "should show outgoing count"
+        );
+        assert!(
+            all_content.contains("INCOMING (1)"),
+            "should show incoming count"
+        );
     }
 
     // =========================================================================
@@ -1490,7 +1537,11 @@ mod tests {
         render_arcs_by_direction(&mut lines, &arcs, &app, &theme, &dim);
 
         // v0.13: OUTGOING header + separator + 5 arcs + empty line = 8 lines
-        assert_eq!(lines.len(), 8, "should have header + separator + 5 arcs + empty");
+        assert_eq!(
+            lines.len(),
+            8,
+            "should have header + separator + 5 arcs + empty"
+        );
 
         let all_content: String = lines
             .iter()
@@ -1515,7 +1566,10 @@ mod tests {
             all_content.contains("USES_ENTITY"),
             "should have semantic arc"
         );
-        assert!(all_content.contains("GENERATES"), "should have generation arc");
+        assert!(
+            all_content.contains("GENERATES"),
+            "should have generation arc"
+        );
         assert!(all_content.contains("MINES_DATA"), "should have mining arc");
     }
 

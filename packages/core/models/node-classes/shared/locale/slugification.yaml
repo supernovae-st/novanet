@@ -1,19 +1,40 @@
-# models/node-classes/shared/locale/slugification.yaml
-# Slugification — URL slug rules for a locale (transliteration, stop words, URL conventions)
-#
-# v10.6: Added slug_rule enum, preserve_diacritics, unicode_normalization, raw_markdown (hybrid approach)
-# v10.6.1: Added stopwords_by_category (optional, for analysis)
-# Stability: High - changes rarely
+# ═══════════════════════════════════════════════════════════════════════════════
+# NodeClass: Slugification — URL slug generation rules for a locale
+# v0.13.1: LLM-First property ordering
+# ═══════════════════════════════════════════════════════════════════════════════
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════════
+
   name: Slugification
   realm: shared
   layer: locale
   trait: imported
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  description: "URL slug rules: transliteration, stop words, URL conventions"
+  llm_context: |
+    USE: when generating URL slugs from titles or content.
+    TRIGGERS: "slug", "URL", "permalink", "SEO URL", "transliteration".
+    NOT: for content text (use Style), for translation decisions (use Adaptation).
+    RELATES: Locale (via HAS_SLUGIFICATION), slug_rule (latin_preserve/native_script), stopwords, transliteration_map.
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════════
+
   icon:
     web: "link"
     terminal: "⌘"
-  description: "URL slug rules: transliteration, stop words, URL conventions"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA — Standard Properties
+  # ═══════════════════════════════════════════════════════════════════════════════
 
   standard_properties:
     key:
@@ -48,6 +69,10 @@ node:
       type: datetime
       required: true
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA — Slugification-Specific Properties
+  # ═══════════════════════════════════════════════════════════════════════════════
+
   properties:
     # ═══════════════════════════════════════════════════════════════════════════
     # CORE SLUG RULE
@@ -58,8 +83,8 @@ node:
       enum: ["latin_preserve", "latin_strip", "native_script", "transliterate"]
       description: |
         Base slug generation strategy:
-        - latin_preserve: Keep diacritics (é, ç, ü) in UTF-8 (French, German, Spanish)
-        - latin_strip: Remove diacritics (é→e, ç→c) to ASCII (US English, SEO-focused)
+        - latin_preserve: Keep diacritics (e, c, u) in UTF-8 (French, German, Spanish)
+        - latin_strip: Remove diacritics (e->e, c->c) to ASCII (US English, SEO-focused)
         - native_script: Preserve non-Latin scripts in UTF-8 (Arabic, Chinese, Japanese, Korean, Thai, Hebrew)
         - transliterate: Convert all to ASCII via transliteration map (legacy systems)
       example: "latin_preserve"
@@ -164,7 +189,7 @@ node:
       type: json
       required: true
       description: "Words to remove from slugs"
-      example: ["le", "la", "les", "un", "une", "des", "du", "de", "et", "ou", "à", "en", "pour", "par", "sur", "avec"]
+      example: ["le", "la", "les", "un", "une", "des", "du", "de", "et", "ou", "a", "en", "pour", "par", "sur", "avec"]
 
     locale_specific_stopwords:
       type: json
@@ -178,10 +203,10 @@ node:
       description: "Stopwords organized by grammatical category (for analysis, optional)"
       example:
         articles: ["le", "la", "les", "un", "une"]
-        prepositions: ["de", "du", "des", "à", "au", "aux", "en", "dans", "pour", "par", "sur", "avec"]
+        prepositions: ["de", "du", "des", "a", "au", "aux", "en", "dans", "pour", "par", "sur", "avec"]
         conjunctions: ["et", "ou", "mais", "car"]
         pronouns: ["que", "qui", "ce", "se", "il", "elle", "on"]
-        verbs: ["est", "sont", "être", "avoir"]
+        verbs: ["est", "sont", "etre", "avoir"]
 
     # ═══════════════════════════════════════════════════════════════════════════
     # SCRIPT-SPECIFIC (for native_script rule)
@@ -205,6 +230,10 @@ node:
       type: string
       required: false
       description: "Full source markdown for LLM context (includes examples, edge cases, implementation)"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH — Relations
+  # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
     incoming:

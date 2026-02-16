@@ -1,20 +1,42 @@
-# models/node-classes/shared/knowledge/language-branch.yaml
-# LanguageBranch - ISO 639-5 language branch/sub-family
-#
+# ─────────────────────────────────────────────────────────────────────────────
+# LanguageBranch — ISO 639-5 language branch/sub-family
+# ─────────────────────────────────────────────────────────────────────────────
+# v0.13.1: LLM-First field ordering (ADR-031)
 # v10.8: Geographic Taxonomy - Phase 2
 # Data: ~30 branches (Romance, Germanic, Slavic, Semitic, etc.)
 # Source: ISO 639-5 (loc.gov)
+# ─────────────────────────────────────────────────────────────────────────────
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════
   name: LanguageBranch
   realm: shared
   layer: knowledge
   trait: imported
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC
+  # ═══════════════════════════════════════════════════════════════════════════
+  description: "ISO 639-5 language branch for fine-grained linguistic clustering"
+
+  llm_context: |
+    USE: for fine-grained linguistic clustering within a language family.
+    TRIGGERS: romance, germanic, slavic, semitic, language branch, linguistic family.
+    NOT: top-level language families (use LanguageFamily).
+    RELATES: LanguageFamily (BRANCH_OF), Locale (SPEAKS_BRANCH).
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════
   icon:
     web: "leaf"
     terminal: "◇"
-  description: "ISO 639-5 language branch for fine-grained linguistic clustering"
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA
+  # ═══════════════════════════════════════════════════════════════════════════
   standard_properties:
     key:
       type: string
@@ -39,12 +61,6 @@ node:
       required: true
       description: "Short description"
       example: "Romance languages derived from Latin: French, Spanish, Italian, Portuguese"
-
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints"
-      example: "USE: for French, Spanish, Italian, Portuguese. TRIGGERS: romance, latin-derived. SHARE: similar vocabulary, grammar structures, gender agreement."
 
     created_at:
       type: datetime
@@ -76,6 +92,9 @@ node:
         - "verb conjugation"
         - "Latin-derived vocabulary"
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH
+  # ═══════════════════════════════════════════════════════════════════════════
   relations:
     outgoing:
       - type: BRANCH_OF
@@ -89,6 +108,9 @@ node:
         cardinality: "N:1"
         description: "Locales whose primary language is in this branch"
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE
+  # ═══════════════════════════════════════════════════════════════════════════
   example:
     data:
       key: "roa"

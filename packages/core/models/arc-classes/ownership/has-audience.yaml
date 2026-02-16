@@ -1,21 +1,37 @@
-# packages/core/models/arc-classes/ownership/has-audience.yaml
+# ═══════════════════════════════════════════════════════════════════════════════
+# ArcClass: HAS_AUDIENCE — Locale owns audience segments
+# v0.13.1: LLM-First property ordering
 # v0.13.0: Added TIER 2 inverse (ADR-026)
+# ═══════════════════════════════════════════════════════════════════════════════
+
 arc:
+  # IDENTITY
   name: HAS_AUDIENCE
   family: ownership
   scope: intra_realm
-  source: Locale
-  target: AudienceSet
-  cardinality: one_to_many
-  inverse: AUDIENCE_OF
+
+  # SEMANTIC (LLM-CRITICAL)
+  description: "Locale owns audience segments (B2B, B2C, general)"
   llm_context: |
     USE: when loading audience segments for a locale.
     TRIGGERS: locale audience, audience segments, B2B B2C, target market.
     NOT: individual traits (use CONTAINS_AUDIENCE_TRAIT), personas.
     RELATES: Locale (source), AudienceSet (target), segment (property).
-  cypher_pattern: "(Locale)-[:HAS_AUDIENCE {segment: $segment}]->(AudienceSet)"
+
+  # GRAPH STRUCTURE
+  source: Locale
+  target: AudienceSet
+  cardinality: one_to_many
+
+  # FLAGS
+  inverse: AUDIENCE_OF
+
+  # DATA
   properties:
     segment:
       type: string
       required: true
       description: "Audience segment (b2b, b2c, general)"
+
+  # REFERENCE
+  cypher_pattern: "(Locale)-[:HAS_AUDIENCE {segment: $segment}]->(AudienceSet)"
