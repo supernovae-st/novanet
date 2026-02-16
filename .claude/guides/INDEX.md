@@ -13,8 +13,8 @@
 | **README.md** | Overview & navigation | 10 min | Getting oriented |
 | **QUICK-REF-testing-DX.md** | Test patterns, templates, checklists | 5 min | Quick reference while coding |
 | **DX-testing-nomenclature-validation.md** | Complete philosophy & patterns | 20 min | Understanding & learning |
-| **v11.8-migration-testing.md** | Phased testing for v11.8 | 30 min | Implementing the migration |
-| **v11.7-implementation-guide.md** | v11.7 TUI architecture | 20 min | Understanding unified tree |
+| **archive/v11.8-migration-testing.md** | Historical: Phased testing for v11.8 | 30 min | Reference only |
+| **archive/v11.7-implementation-guide.md** | Historical: v11.7 TUI architecture | 20 min | Reference only |
 
 ### 📋 Reference Documents (In `.claude/rules/`)
 

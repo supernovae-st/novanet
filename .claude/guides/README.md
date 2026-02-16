@@ -10,7 +10,7 @@ Complete documentation for testing terminology, nomenclature consistency, and sc
 
 1. **[QUICK-REF-testing-DX.md](./QUICK-REF-testing-DX.md)** — 5-minute overview with templates and checklists
 2. **[DX-testing-nomenclature-validation.md](./DX-testing-nomenclature-validation.md)** — Complete patterns and philosophy
-3. **[v11.8-migration-testing.md](./v11.8-migration-testing.md)** — Specific testing for v11.8 Class/Instance/Data Origin
+3. **[archive/v11.8-migration-testing.md](./archive/v11.8-migration-testing.md)** — Historical: Testing for v11.8 migration (archived)
 
 ---
 
@@ -54,28 +54,13 @@ Complete documentation for testing terminology, nomenclature consistency, and sc
 
 ---
 
-### 3. v11.8-migration-testing.md
+### 3. archive/v11.8-migration-testing.md (Historical)
 
-**For**: Testing the v11.8 nomenclature migration (Class/Instance/Data Origin).
+**Status**: Archived — migration completed, kept for reference.
 
-**Contains**:
-- What changed in v11.8 (tables of old vs new terminology)
-- 3 testing phases:
-  - Phase 1: Prepare (Red tests)
-  - Phase 2: Execute (Green tests)
-  - Phase 3: Validate (Refactor tests)
-- Step-by-step implementation:
-  - Update YAML files
-  - Regenerate artifacts
-  - Update trait parsing
-  - Update type names
-  - Test everything
-- Specific test code for each phase
-- How to run the migration test suite
-- Rollback plan
-- Post-migration maintenance
+**Contains**: Historical documentation for the v11.8 nomenclature migration (Class/Instance/Data Origin). This migration is now complete as of v0.13.0.
 
-**Best for**: Implementing or validating the v11.8 migration, understanding phased testing approach
+**Best for**: Understanding the migration history, reference for future migrations
 
 ---
 
@@ -130,7 +115,9 @@ ValidationIssue::error("trait_mismatch", "Page: wrong trait")
 ├── README.md (you are here)
 ├── QUICK-REF-testing-DX.md
 ├── DX-testing-nomenclature-validation.md
-└── v11.8-migration-testing.md
+└── archive/
+    ├── v11.7-implementation-guide.md (historical)
+    └── v11.8-migration-testing.md (historical)
 ```
 
 ---
@@ -287,7 +274,7 @@ Commit 3: Update ADR if decision changed
 | Trait definitions | `.claude/rules/novanet-terminology.md` → "YAML Source Files" |
 | Node structure | `.claude/rules/novanet-decisions.md` → ADR-024 |
 | Testing patterns | `DX-testing-nomenclature-validation.md` → "Testing Patterns" |
-| v11.8 migration | `v11.8-migration-testing.md` → "Testing Phases" |
+| v11.8 migration | `archive/v11.8-migration-testing.md` (historical) |
 | Test templates | `QUICK-REF-testing-DX.md` → "Test Templates" |
 
 ---
@@ -299,7 +286,7 @@ Commit 3: Update ADR if decision changed
 - **Latest Traits**: defined, authored, imported, generated, retrieved
 - **Realms**: shared (4 layers), org (6 layers)
 - **Total Nodes**: 61 (40 shared + 21 org)
-- **Total Arcs**: 156 (5 families)
+- **Total Arcs**: 169 (5 families)
 
 ---
 
@@ -307,6 +294,6 @@ Commit 3: Update ADR if decision changed
 
 - Questions about tests? → See `DX-testing-nomenclature-validation.md`
 - Need a test template? → See `QUICK-REF-testing-DX.md`
-- Implementing v11.8? → See `v11.8-migration-testing.md`
+- Migration history? → See `archive/v11.8-migration-testing.md` (historical)
 - Terminology definitions? → See `.claude/rules/novanet-terminology.md`
 - Architecture decisions? → See `.claude/rules/novanet-decisions.md`

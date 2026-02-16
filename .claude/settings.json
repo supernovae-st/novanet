@@ -67,41 +67,11 @@
       },
       {
         "matcher": "Write|Edit",
-        "pathPattern": "**/{CLAUDE,README}.md",
+        "pathPattern": "**/{CLAUDE,README}.md|**/.claude/**/*.md",
         "hooks": [
           {
             "type": "command",
             "command": ".claude/hooks/doc-sync-reminder.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "Write|Edit",
-        "pathPattern": "**/.claude/**/*.md",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/doc-sync-reminder.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "Write|Edit",
-        "pathPattern": "**/.claude/{skills,commands,agents,rules}/**/*.md",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/skill-sync-reminder.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "Read",
-        "pathPattern": "**/models/**/*.yaml",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/yaml-source-reminder.sh"
           }
         ]
       },

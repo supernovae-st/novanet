@@ -16,22 +16,14 @@ fi
 # Check if this is a YAML model file
 case "$FILE_PATH" in
   *packages/core/models/*.yaml|*packages/core/models/**/*.yaml)
-    echo "YAML_MODEL_CHANGE_DETECTED"
-    echo ""
-    echo "You modified a YAML model file: $(basename "$FILE_PATH")"
-    echo ""
-    echo "IMPORTANT: Regenerate artifacts with:"
-    echo "  cargo run --manifest-path tools/novanet/Cargo.toml -- schema generate"
-    echo ""
-    echo "Or use pnpm:"
-    echo "  pnpm schema:generate"
-    echo ""
-    echo "Files that will be regenerated:"
-    echo "  - packages/core/src/graph/layers.ts"
-    echo "  - packages/core/src/graph/hierarchy.ts"
-    echo "  - packages/core/src/graph/visual-encoding.ts"
-    echo "  - packages/db/seed/*.cypher"
-    echo "  - apps/studio/src/design/colors/generated.ts"
+    cat << EOF
+{
+  "hookSpecificOutput": {
+    "hookEventName": "PostToolUse",
+    "additionalContext": "YAML model modified. Regenerate: cargo run -- schema generate (tools/novanet)"
+  }
+}
+EOF
     ;;
   *)
     exit 0

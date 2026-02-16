@@ -1,6 +1,7 @@
-//! Graph panel rendering for TUI.
+//! Arc relationships panel rendering for TUI.
 //!
-//! Displays Neo4j relationships for the selected Class or Instance,
+//! v0.13: Consolidated ARCS panel (merged Graph + Arcs boxes).
+//! Displays Neo4j arc relationships for the selected Class or Instance,
 //! realm/layer statistics, and arc details.
 
 use ratatui::Frame;
@@ -11,13 +12,23 @@ use ratatui::widgets::{Block, Borders, Paragraph};
 
 use std::collections::BTreeMap;
 
-use super::super::app::{App, Focus};
+use super::super::app::{App, InfoBox};
 use super::super::data::TreeItem;
 use super::super::theme;
 use super::{
-    COLOR_UNFOCUSED_BORDER, STYLE_ACCENT, STYLE_BRIGHT_DIM, STYLE_DIM, STYLE_HIGHLIGHT, STYLE_INFO,
+    STYLE_ACCENT, STYLE_BRIGHT_DIM, STYLE_DIM, STYLE_HIGHLIGHT, STYLE_INFO,
     STYLE_MUTED, STYLE_PRIMARY, STYLE_SUCCESS, spinner, wrap_text,
 };
+
+// =============================================================================
+// BOX VISUAL STATES (matching yaml_panel.rs pattern)
+// =============================================================================
+
+/// Unfocused: Nord Polar Night (dim) - box is NOT selected
+const BOX_BORDER_UNFOCUSED: Color = Color::Rgb(59, 66, 82); // #3B4252
+
+/// Selected: Solarized Cyan (bright, active) - this specific box is Tab-selected
+const BOX_BORDER_SELECTED: Color = Color::Rgb(42, 161, 152); // #2AA198
 
 // =============================================================================
 // GRAPH PANEL
@@ -27,13 +38,17 @@ use super::{
 ///
 /// Shows real arc data from Neo4j when a Class is selected,
 /// instance arcs in Data mode, or contextual messages for other selections.
+///
+/// v0.13.0: Uses InfoBox::Arcs for consolidated arc relationships panel.
 pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
     let theme = &app.theme; // Use cached theme from App
-    let focused = app.focus == Focus::Graph;
-    let border_color = if focused {
-        Color::Magenta
+
+    // Determine if this box is selected (v0.13: consolidated Arcs panel)
+    let selected = app.selected_box == InfoBox::Arcs;
+    let border_color = if selected {
+        BOX_BORDER_SELECTED
     } else {
-        COLOR_UNFOCUSED_BORDER
+        BOX_BORDER_UNFOCUSED
     };
 
     // Calculate arc counts for title (separate in/out)
@@ -49,39 +64,56 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
         (0, 0, false)
     };
 
-    // Build title with in/out counts (show loading if arcs are still loading)
+    // Build enhanced title with selection indicator (matches SOURCE/DIAGRAM/ARCHITECTURE pattern)
     // Order: Out first (→), then In (←) - more logical flow direction
-    let title_spans = if arcs_loading {
-        vec![Span::styled(
-            " Arc Relationships [...] ",
-            Style::default().fg(border_color),
-        )]
-    } else if incoming_count > 0 || outgoing_count > 0 {
-        vec![
-            Span::styled(" Arc Relationships ", Style::default().fg(border_color)),
-            Span::styled("[", Style::default().fg(Color::DarkGray)),
+    let title_spans = if selected {
+        // Selected: ▶ ARCS with arc counts
+        let mut spans = vec![
             Span::styled(
-                format!("{} Out", outgoing_count),
+                " \u{25B6} ",  // ▶
                 Style::default()
-                    .fg(Color::Cyan)
+                    .fg(BOX_BORDER_SELECTED)
                     .add_modifier(Modifier::BOLD),
             ),
-            Span::styled("→", Style::default().fg(Color::Cyan)),
-            Span::styled("] [", Style::default().fg(Color::DarkGray)),
-            Span::styled("←", Style::default().fg(Color::Magenta)),
             Span::styled(
-                format!("{} In", incoming_count),
+                "ARCS ",
                 Style::default()
-                    .fg(Color::Magenta)
+                    .fg(BOX_BORDER_SELECTED)
                     .add_modifier(Modifier::BOLD),
             ),
-            Span::styled("] ", Style::default().fg(Color::DarkGray)),
-        ]
+        ];
+        if arcs_loading {
+            spans.push(Span::styled("[...] ", Style::default().fg(Color::DarkGray)));
+        } else if incoming_count > 0 || outgoing_count > 0 {
+            spans.push(Span::styled("[", Style::default().fg(Color::DarkGray)));
+            spans.push(Span::styled(
+                format!("{}→", outgoing_count),
+                Style::default().fg(Color::Cyan),
+            ));
+            spans.push(Span::styled(" ", Style::default().fg(Color::DarkGray)));
+            spans.push(Span::styled(
+                format!("←{}", incoming_count),
+                Style::default().fg(Color::Magenta),
+            ));
+            spans.push(Span::styled("] ", Style::default().fg(Color::DarkGray)));
+        }
+        spans
     } else {
-        vec![Span::styled(
-            " Arc Relationships ",
-            Style::default().fg(border_color),
-        )]
+        // Unfocused: dim ARCS with arc counts
+        let mut spans = vec![
+            Span::styled(" ARCS ", Style::default().fg(Color::DarkGray)),
+        ];
+        if arcs_loading {
+            spans.push(Span::styled("[...] ", Style::default().fg(Color::DarkGray)));
+        } else if incoming_count > 0 || outgoing_count > 0 {
+            spans.push(Span::styled("[", Style::default().fg(Color::DarkGray)));
+            spans.push(Span::styled(
+                format!("{}→ ←{}", outgoing_count, incoming_count),
+                Style::default().fg(Color::DarkGray),
+            ));
+            spans.push(Span::styled("] ", Style::default().fg(Color::DarkGray)));
+        }
+        spans
     };
 
     let block = Block::default()
@@ -457,8 +489,8 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
         ]));
         lines.push(Line::from(Span::raw("")));
 
-        // Group all arcs by family
-        render_arcs_by_family(&mut lines, arcs, theme, &dim);
+        // v0.13: Group arcs by direction with classification badges
+        render_arcs_by_direction(&mut lines, arcs, app, theme, &dim);
 
         let paragraph = Paragraph::new(lines);
         f.render_widget(paragraph, inner);
