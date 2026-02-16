@@ -134,7 +134,8 @@ const STYLE_SUCCESS: Style = Style::new().fg(Color::Green);
 /// Accent color (e.g., special values).
 pub(super) const STYLE_ACCENT: Style = Style::new().fg(Color::Magenta);
 
-/// Warning indicators.
+/// Warning indicators (v0.13: kept for future use).
+#[allow(dead_code)]
 const STYLE_WARNING: Style = Style::new().fg(Color::Yellow);
 
 /// Muted/secondary text (custom RGB).
@@ -731,6 +732,7 @@ fn render_main_narrow(f: &mut Frame, area: Rect, app: &mut App) {
 }
 
 /// Colorize path inline for title.
+#[allow(dead_code)] // Used in tests
 pub(super) fn colorize_path_inline(path: &str) -> Vec<Span<'static>> {
     let parts: Vec<&str> = path.split('/').collect();
     let mut spans: Vec<Span<'static>> = Vec::new();

@@ -2,11 +2,108 @@
 //!
 //! Retrieve knowledge atoms (Terms, Expressions, Patterns, CultureRefs, Taboos, AudienceTraits)
 //! for a specific locale and domain. Enables selective LLM context loading.
+//!
+//! Uses a generic `fetch_atoms` function to avoid code duplication across 6 atom types.
 
 use crate::error::Result;
 use crate::server::State;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+
+/// Configuration for fetching a specific atom type
+struct AtomConfig {
+    /// Arc from Locale to container (e.g., "HAS_TERMS")
+    locale_arc: &'static str,
+    /// Container label (e.g., "TermSet")
+    container_label: &'static str,
+    /// Arc from container to atom (e.g., "CONTAINS_TERM")
+    contains_arc: &'static str,
+    /// Atom label (e.g., "Term")
+    atom_label: &'static str,
+    /// Atom type string for output (e.g., "Term")
+    atom_type_name: &'static str,
+    /// Property name for main value (e.g., "value", "template", "reference")
+    value_property: &'static str,
+    /// Filter field name if any (e.g., "domain", "register")
+    filter_field: Option<&'static str>,
+    /// Additional properties to extract
+    extra_properties: &'static [(&'static str, &'static str)],
+    /// Search fields for query filter
+    search_fields: &'static [&'static str],
+}
+
+/// Static configurations for each atom type
+const TERM_CONFIG: AtomConfig = AtomConfig {
+    locale_arc: "HAS_TERMS",
+    container_label: "TermSet",
+    contains_arc: "CONTAINS_TERM",
+    atom_label: "Term",
+    atom_type_name: "Term",
+    value_property: "value",
+    filter_field: Some("domain"),
+    extra_properties: &[("definition", "definition")],
+    search_fields: &["key", "value"],
+};
+
+const EXPRESSION_CONFIG: AtomConfig = AtomConfig {
+    locale_arc: "HAS_EXPRESSIONS",
+    container_label: "ExpressionSet",
+    contains_arc: "CONTAINS_EXPRESSION",
+    atom_label: "Expression",
+    atom_type_name: "Expression",
+    value_property: "value",
+    filter_field: Some("register"),
+    extra_properties: &[("context", "context")],
+    search_fields: &["key", "value"],
+};
+
+const PATTERN_CONFIG: AtomConfig = AtomConfig {
+    locale_arc: "HAS_PATTERNS",
+    container_label: "PatternSet",
+    contains_arc: "CONTAINS_PATTERN",
+    atom_label: "Pattern",
+    atom_type_name: "Pattern",
+    value_property: "template",
+    filter_field: None,
+    extra_properties: &[("purpose", "purpose")],
+    search_fields: &["key", "template"],
+};
+
+const CULTURE_REF_CONFIG: AtomConfig = AtomConfig {
+    locale_arc: "HAS_CULTURE",
+    container_label: "CultureSet",
+    contains_arc: "CONTAINS_CULTURE_REF",
+    atom_label: "CultureRef",
+    atom_type_name: "CultureRef",
+    value_property: "reference",
+    filter_field: None,
+    extra_properties: &[("context", "context"), ("appropriateness", "appropriateness")],
+    search_fields: &["key", "reference"],
+};
+
+const TABOO_CONFIG: AtomConfig = AtomConfig {
+    locale_arc: "HAS_TABOOS",
+    container_label: "TabooSet",
+    contains_arc: "CONTAINS_TABOO",
+    atom_label: "Taboo",
+    atom_type_name: "Taboo",
+    value_property: "description",
+    filter_field: None,
+    extra_properties: &[("severity", "severity"), ("category", "category")],
+    search_fields: &["key", "description"],
+};
+
+const AUDIENCE_TRAIT_CONFIG: AtomConfig = AtomConfig {
+    locale_arc: "HAS_AUDIENCE",
+    container_label: "AudienceSet",
+    contains_arc: "CONTAINS_AUDIENCE_TRAIT",
+    atom_label: "AudienceTrait",
+    atom_type_name: "AudienceTrait",
+    value_property: "trait",
+    filter_field: None,
+    extra_properties: &[("demographic", "demographic"), ("behavior", "behavior")],
+    search_fields: &["key", "trait"],
+};
 
 /// Type of knowledge atom to retrieve
 #[derive(Debug, Clone, Default, Deserialize, JsonSchema)]
@@ -118,34 +215,34 @@ pub async fn execute(state: &State, params: AtomsParams) -> Result<AtomsResult> 
 
     let mut all_atoms = Vec::new();
 
-    // Retrieve atoms based on type
+    // Retrieve atoms based on type using generic fetch function
     match params.atom_type {
         AtomType::Term => {
-            all_atoms.extend(get_terms(state, &params, limit).await?);
+            all_atoms.extend(fetch_atoms(state, &params, &TERM_CONFIG, limit).await?);
         }
         AtomType::Expression => {
-            all_atoms.extend(get_expressions(state, &params, limit).await?);
+            all_atoms.extend(fetch_atoms(state, &params, &EXPRESSION_CONFIG, limit).await?);
         }
         AtomType::Pattern => {
-            all_atoms.extend(get_patterns(state, &params, limit).await?);
+            all_atoms.extend(fetch_atoms(state, &params, &PATTERN_CONFIG, limit).await?);
         }
         AtomType::CultureRef => {
-            all_atoms.extend(get_culture_refs(state, &params, limit).await?);
+            all_atoms.extend(fetch_atoms(state, &params, &CULTURE_REF_CONFIG, limit).await?);
         }
         AtomType::Taboo => {
-            all_atoms.extend(get_taboos(state, &params, limit).await?);
+            all_atoms.extend(fetch_atoms(state, &params, &TABOO_CONFIG, limit).await?);
         }
         AtomType::AudienceTrait => {
-            all_atoms.extend(get_audience_traits(state, &params, limit).await?);
+            all_atoms.extend(fetch_atoms(state, &params, &AUDIENCE_TRAIT_CONFIG, limit).await?);
         }
         AtomType::All => {
             let per_type_limit = (limit / 6).max(5);
-            all_atoms.extend(get_terms(state, &params, per_type_limit).await?);
-            all_atoms.extend(get_expressions(state, &params, per_type_limit).await?);
-            all_atoms.extend(get_patterns(state, &params, per_type_limit).await?);
-            all_atoms.extend(get_culture_refs(state, &params, per_type_limit).await?);
-            all_atoms.extend(get_taboos(state, &params, per_type_limit).await?);
-            all_atoms.extend(get_audience_traits(state, &params, per_type_limit).await?);
+            all_atoms.extend(fetch_atoms(state, &params, &TERM_CONFIG, per_type_limit).await?);
+            all_atoms.extend(fetch_atoms(state, &params, &EXPRESSION_CONFIG, per_type_limit).await?);
+            all_atoms.extend(fetch_atoms(state, &params, &PATTERN_CONFIG, per_type_limit).await?);
+            all_atoms.extend(fetch_atoms(state, &params, &CULTURE_REF_CONFIG, per_type_limit).await?);
+            all_atoms.extend(fetch_atoms(state, &params, &TABOO_CONFIG, per_type_limit).await?);
+            all_atoms.extend(fetch_atoms(state, &params, &AUDIENCE_TRAIT_CONFIG, per_type_limit).await?);
         }
     }
 
@@ -170,266 +267,65 @@ pub async fn execute(state: &State, params: AtomsParams) -> Result<AtomsResult> 
     })
 }
 
-/// Get Terms for a locale
-async fn get_terms(state: &State, params: &AtomsParams, limit: usize) -> Result<Vec<Atom>> {
-    let domain_filter = params
-        .domain
-        .as_ref()
-        .map(|d| format!("AND t.domain = '{}'", d))
-        .unwrap_or_default();
-
-    let query_filter = params.query.as_ref()
-        .map(|_| "AND (toLower(t.key) CONTAINS toLower($query) OR toLower(t.value) CONTAINS toLower($query))")
-        .unwrap_or_default();
-
-    let cypher = format!(
-        r#"
-        MATCH (l:Locale {{key: $locale}})-[:HAS_TERMS]->(ts:TermSet)-[:CONTAINS_TERM]->(t:Term)
-        WHERE true {domain_filter} {query_filter}
-        RETURN t.key AS key, t.value AS value, t.domain AS domain,
-               t.definition AS definition, ts.key AS container_key
-        LIMIT {limit}
-        "#,
-        domain_filter = domain_filter,
-        query_filter = query_filter,
-        limit = limit
-    );
-
-    let mut query_params = serde_json::Map::new();
-    query_params.insert("locale".to_string(), serde_json::json!(params.locale));
-    if let Some(q) = &params.query {
-        query_params.insert("query".to_string(), serde_json::json!(q));
-    }
-
-    let rows = state
-        .pool()
-        .execute_query(&cypher, Some(query_params))
-        .await?;
-
-    Ok(rows
-        .into_iter()
-        .map(|row| Atom {
-            key: row["key"].as_str().unwrap_or_default().to_string(),
-            atom_type: "Term".to_string(),
-            value: row["value"].as_str().unwrap_or_default().to_string(),
-            domain: row["domain"].as_str().map(|s| s.to_string()),
-            register: None,
-            properties: row
-                .get("definition")
-                .map(|d| serde_json::json!({"definition": d})),
-            container_key: row["container_key"].as_str().map(|s| s.to_string()),
-        })
-        .collect())
-}
-
-/// Get Expressions for a locale
-async fn get_expressions(state: &State, params: &AtomsParams, limit: usize) -> Result<Vec<Atom>> {
-    let register_filter = params
-        .register
-        .as_ref()
-        .map(|r| format!("AND e.register = '{}'", r))
-        .unwrap_or_default();
-
-    let query_filter = params.query.as_ref()
-        .map(|_| "AND (toLower(e.key) CONTAINS toLower($query) OR toLower(e.value) CONTAINS toLower($query))")
-        .unwrap_or_default();
-
-    let cypher = format!(
-        r#"
-        MATCH (l:Locale {{key: $locale}})-[:HAS_EXPRESSIONS]->(es:ExpressionSet)-[:CONTAINS_EXPRESSION]->(e:Expression)
-        WHERE true {register_filter} {query_filter}
-        RETURN e.key AS key, e.value AS value, e.register AS register,
-               e.context AS context, es.key AS container_key
-        LIMIT {limit}
-        "#,
-        register_filter = register_filter,
-        query_filter = query_filter,
-        limit = limit
-    );
-
-    let mut query_params = serde_json::Map::new();
-    query_params.insert("locale".to_string(), serde_json::json!(params.locale));
-    if let Some(q) = &params.query {
-        query_params.insert("query".to_string(), serde_json::json!(q));
-    }
-
-    let rows = state
-        .pool()
-        .execute_query(&cypher, Some(query_params))
-        .await?;
-
-    Ok(rows
-        .into_iter()
-        .map(|row| Atom {
-            key: row["key"].as_str().unwrap_or_default().to_string(),
-            atom_type: "Expression".to_string(),
-            value: row["value"].as_str().unwrap_or_default().to_string(),
-            domain: None,
-            register: row["register"].as_str().map(|s| s.to_string()),
-            properties: row
-                .get("context")
-                .map(|c| serde_json::json!({"context": c})),
-            container_key: row["container_key"].as_str().map(|s| s.to_string()),
-        })
-        .collect())
-}
-
-/// Get Patterns for a locale
-async fn get_patterns(state: &State, params: &AtomsParams, limit: usize) -> Result<Vec<Atom>> {
-    let query_filter = params.query.as_ref()
-        .map(|_| "AND (toLower(p.key) CONTAINS toLower($query) OR toLower(p.template) CONTAINS toLower($query))")
-        .unwrap_or_default();
-
-    let cypher = format!(
-        r#"
-        MATCH (l:Locale {{key: $locale}})-[:HAS_PATTERNS]->(ps:PatternSet)-[:CONTAINS_PATTERN]->(p:Pattern)
-        WHERE true {query_filter}
-        RETURN p.key AS key, p.template AS value, p.purpose AS purpose,
-               ps.key AS container_key
-        LIMIT {limit}
-        "#,
-        query_filter = query_filter,
-        limit = limit
-    );
-
-    let mut query_params = serde_json::Map::new();
-    query_params.insert("locale".to_string(), serde_json::json!(params.locale));
-    if let Some(q) = &params.query {
-        query_params.insert("query".to_string(), serde_json::json!(q));
-    }
-
-    let rows = state
-        .pool()
-        .execute_query(&cypher, Some(query_params))
-        .await?;
-
-    Ok(rows
-        .into_iter()
-        .map(|row| Atom {
-            key: row["key"].as_str().unwrap_or_default().to_string(),
-            atom_type: "Pattern".to_string(),
-            value: row["value"].as_str().unwrap_or_default().to_string(),
-            domain: None,
-            register: None,
-            properties: row
-                .get("purpose")
-                .map(|p| serde_json::json!({"purpose": p})),
-            container_key: row["container_key"].as_str().map(|s| s.to_string()),
-        })
-        .collect())
-}
-
-/// Get CultureRefs for a locale
-async fn get_culture_refs(state: &State, params: &AtomsParams, limit: usize) -> Result<Vec<Atom>> {
-    let query_filter = params.query.as_ref()
-        .map(|_| "AND (toLower(c.key) CONTAINS toLower($query) OR toLower(c.reference) CONTAINS toLower($query))")
-        .unwrap_or_default();
-
-    let cypher = format!(
-        r#"
-        MATCH (l:Locale {{key: $locale}})-[:HAS_CULTURE]->(cs:CultureSet)-[:CONTAINS_CULTURE_REF]->(c:CultureRef)
-        WHERE true {query_filter}
-        RETURN c.key AS key, c.reference AS value, c.context AS context,
-               c.appropriateness AS appropriateness, cs.key AS container_key
-        LIMIT {limit}
-        "#,
-        query_filter = query_filter,
-        limit = limit
-    );
-
-    let mut query_params = serde_json::Map::new();
-    query_params.insert("locale".to_string(), serde_json::json!(params.locale));
-    if let Some(q) = &params.query {
-        query_params.insert("query".to_string(), serde_json::json!(q));
-    }
-
-    let rows = state
-        .pool()
-        .execute_query(&cypher, Some(query_params))
-        .await?;
-
-    Ok(rows
-        .into_iter()
-        .map(|row| Atom {
-            key: row["key"].as_str().unwrap_or_default().to_string(),
-            atom_type: "CultureRef".to_string(),
-            value: row["value"].as_str().unwrap_or_default().to_string(),
-            domain: None,
-            register: None,
-            properties: Some(serde_json::json!({
-                "context": row.get("context"),
-                "appropriateness": row.get("appropriateness")
-            })),
-            container_key: row["container_key"].as_str().map(|s| s.to_string()),
-        })
-        .collect())
-}
-
-/// Get Taboos for a locale
-async fn get_taboos(state: &State, params: &AtomsParams, limit: usize) -> Result<Vec<Atom>> {
-    let query_filter = params.query.as_ref()
-        .map(|_| "AND (toLower(t.key) CONTAINS toLower($query) OR toLower(t.description) CONTAINS toLower($query))")
-        .unwrap_or_default();
-
-    let cypher = format!(
-        r#"
-        MATCH (l:Locale {{key: $locale}})-[:HAS_TABOOS]->(ts:TabooSet)-[:CONTAINS_TABOO]->(t:Taboo)
-        WHERE true {query_filter}
-        RETURN t.key AS key, t.description AS value, t.severity AS severity,
-               t.category AS category, ts.key AS container_key
-        LIMIT {limit}
-        "#,
-        query_filter = query_filter,
-        limit = limit
-    );
-
-    let mut query_params = serde_json::Map::new();
-    query_params.insert("locale".to_string(), serde_json::json!(params.locale));
-    if let Some(q) = &params.query {
-        query_params.insert("query".to_string(), serde_json::json!(q));
-    }
-
-    let rows = state
-        .pool()
-        .execute_query(&cypher, Some(query_params))
-        .await?;
-
-    Ok(rows
-        .into_iter()
-        .map(|row| Atom {
-            key: row["key"].as_str().unwrap_or_default().to_string(),
-            atom_type: "Taboo".to_string(),
-            value: row["value"].as_str().unwrap_or_default().to_string(),
-            domain: None,
-            register: None,
-            properties: Some(serde_json::json!({
-                "severity": row.get("severity"),
-                "category": row.get("category")
-            })),
-            container_key: row["container_key"].as_str().map(|s| s.to_string()),
-        })
-        .collect())
-}
-
-/// Get AudienceTraits for a locale
-async fn get_audience_traits(
+/// Generic function to fetch atoms of any type using configuration
+async fn fetch_atoms(
     state: &State,
     params: &AtomsParams,
+    config: &AtomConfig,
     limit: usize,
 ) -> Result<Vec<Atom>> {
-    let query_filter = params.query.as_ref()
-        .map(|_| "AND (toLower(a.key) CONTAINS toLower($query) OR toLower(a.trait) CONTAINS toLower($query))")
-        .unwrap_or_default();
+    // Build filter for domain/register (if applicable)
+    let field_filter = match config.filter_field {
+        Some("domain") => params
+            .domain
+            .as_ref()
+            .map(|d| format!("AND a.domain = '{}'", d))
+            .unwrap_or_default(),
+        Some("register") => params
+            .register
+            .as_ref()
+            .map(|r| format!("AND a.register = '{}'", r))
+            .unwrap_or_default(),
+        _ => String::new(),
+    };
+
+    // Build search query filter
+    let query_filter = params.query.as_ref().map(|_| {
+        let fields: Vec<String> = config
+            .search_fields
+            .iter()
+            .map(|f| format!("toLower(a.{}) CONTAINS toLower($query)", f))
+            .collect();
+        format!("AND ({})", fields.join(" OR "))
+    }).unwrap_or_default();
+
+    // Build extra properties return clause
+    let extra_props: Vec<String> = config
+        .extra_properties
+        .iter()
+        .map(|(prop, alias)| format!("a.{} AS {}", prop, alias))
+        .collect();
+    let extra_props_clause = if extra_props.is_empty() {
+        String::new()
+    } else {
+        format!(", {}", extra_props.join(", "))
+    };
 
     let cypher = format!(
         r#"
-        MATCH (l:Locale {{key: $locale}})-[:HAS_AUDIENCE]->(as:AudienceSet)-[:CONTAINS_AUDIENCE_TRAIT]->(a:AudienceTrait)
-        WHERE true {query_filter}
-        RETURN a.key AS key, a.trait AS value, a.demographic AS demographic,
-               a.behavior AS behavior, as.key AS container_key
+        MATCH (l:Locale {{key: $locale}})-[:{locale_arc}]->(c:{container})-[:{contains_arc}]->(a:{atom})
+        WHERE true {field_filter} {query_filter}
+        RETURN a.key AS key, a.{value_prop} AS value, c.key AS container_key{extra_props}
         LIMIT {limit}
         "#,
+        locale_arc = config.locale_arc,
+        container = config.container_label,
+        contains_arc = config.contains_arc,
+        atom = config.atom_label,
+        value_prop = config.value_property,
+        field_filter = field_filter,
         query_filter = query_filter,
+        extra_props = extra_props_clause,
         limit = limit
     );
 
@@ -446,17 +342,43 @@ async fn get_audience_traits(
 
     Ok(rows
         .into_iter()
-        .map(|row| Atom {
-            key: row["key"].as_str().unwrap_or_default().to_string(),
-            atom_type: "AudienceTrait".to_string(),
-            value: row["value"].as_str().unwrap_or_default().to_string(),
-            domain: None,
-            register: None,
-            properties: Some(serde_json::json!({
-                "demographic": row.get("demographic"),
-                "behavior": row.get("behavior")
-            })),
-            container_key: row["container_key"].as_str().map(|s| s.to_string()),
+        .map(|row| {
+            // Build properties object from extra_properties
+            let properties = if config.extra_properties.is_empty() {
+                None
+            } else {
+                let mut props = serde_json::Map::new();
+                for (_, alias) in config.extra_properties {
+                    if let Some(val) = row.get(*alias) {
+                        if !val.is_null() {
+                            props.insert(alias.to_string(), val.clone());
+                        }
+                    }
+                }
+                if props.is_empty() {
+                    None
+                } else {
+                    Some(serde_json::Value::Object(props))
+                }
+            };
+
+            Atom {
+                key: row["key"].as_str().unwrap_or_default().to_string(),
+                atom_type: config.atom_type_name.to_string(),
+                value: row["value"].as_str().unwrap_or_default().to_string(),
+                domain: if config.filter_field == Some("domain") {
+                    row.get("domain").and_then(|v| v.as_str()).map(|s| s.to_string())
+                } else {
+                    None
+                },
+                register: if config.filter_field == Some("register") {
+                    row.get("register").and_then(|v| v.as_str()).map(|s| s.to_string())
+                } else {
+                    None
+                },
+                properties,
+                container_key: row["container_key"].as_str().map(|s| s.to_string()),
+            }
         })
         .collect())
 }

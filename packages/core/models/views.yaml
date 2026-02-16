@@ -135,7 +135,7 @@ views:
       OPTIONAL MATCH (p)-[r1:HAS_BLOCK]->(b:Block)
       OPTIONAL MATCH (b)-[r2:USES_ENTITY]->(e:Entity)
       OPTIONAL MATCH (e)-[r3:HAS_NATIVE]->(ec:EntityNative)
-      OPTIONAL MATCH (p)-[r4:REFERENCES_PAGE]->(ref:Page)
+      OPTIONAL MATCH (p)-[r4:LINKS_TO]->(ref:Page)
       RETURN p, r1, b, r2, e, r3, ec, r4, ref
       LIMIT 200
 

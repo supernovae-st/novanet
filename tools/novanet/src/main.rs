@@ -295,6 +295,8 @@ enum DbAction {
     Migrate,
     /// Reset database (drop + seed)
     Reset,
+    /// Verify YAML↔Neo4j arc consistency
+    Verify,
 }
 
 #[derive(Subcommand)]
@@ -633,6 +635,14 @@ async fn main() -> color_eyre::Result<()> {
                 DbAction::Reset => {
                     eprintln!("novanet db reset (root: {})", root.display());
                     novanet::commands::db::run_reset(&db, &root).await?;
+                }
+                DbAction::Verify => {
+                    eprintln!("novanet db verify (root: {})", root.display());
+                    let result = novanet::commands::db::run_verify(&db, &root).await?;
+                    result.print_report();
+                    if !result.is_synced() {
+                        std::process::exit(1);
+                    }
                 }
             }
         }

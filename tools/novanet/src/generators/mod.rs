@@ -1,6 +1,6 @@
 //! Code generators that replace @novanet/schema-tools.
 //!
-//! Generator execution order: Organizing → NodeClass → ArcClass → Layer → Mermaid → Autowire → Hierarchy → Colors → Icons → VisualEncoding → TuiIcons
+//! Generator execution order: Organizing → NodeClass → ArcClass → Layer → Mermaid → Autowire → Hierarchy → Colors → Icons → VisualEncoding → TuiIcons → TuiColors
 //!
 //! Each generator reads parsed YAML and produces either:
 //! - Cypher statements (for Neo4j seeding)
@@ -25,6 +25,7 @@ pub mod organizing;
 pub mod slugification;
 #[cfg(test)]
 pub mod test_utils;
+pub mod tui_colors;
 pub mod tui_icons;
 pub mod view_mermaid;
 // views module removed in v0.12.5 — views.yaml loaded dynamically by ViewLoader.ts (Studio) and nexus/views.rs (TUI)
