@@ -11,11 +11,12 @@
 //   OBJECT = qr-code-instagram, etc. (the created thing)
 //
 // Semantic Coefficients (ADR-032):
-//   used_for:     0.95 (tool is used for action)
-//   creates:      0.85 (tool creates object)
-//   enables:      0.80
-//   variant_of:   0.90
-//   same_as:      1.00
+//   used_for:     0.95 (tool is used_for action)
+//   used_for:     0.85 (tool is used_for object)
+//   type_of:      0.95 (object is type_of parent)
+//   enables:      0.80 (feature enables action)
+//   variant_of:   0.90 (object is variant of base)
+//   same_as:      1.00 (synonym relationship)
 
 // ============================================================================
 // 1. SEMANTIC ARCS: TOOL → ACTION (USED_FOR)
@@ -25,23 +26,21 @@
 MATCH (tool:Entity {key: 'qr-code-generator'})
 MATCH (action:Entity {key: 'create-qr-code'})
 MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(action)
-SET r.strength = 0.95,
-    r.temperature = 0.9,
+SET r.temperature = 0.95,
     r.llm_context = 'TOOL → ACTION: Le générateur est utilisé pour créer des QR codes'
 ;
 
 // ============================================================================
-// 2. SEMANTIC ARCS: TOOL → OBJECTs (CREATES)
+// 2. SEMANTIC ARCS: TOOL → OBJECTs (USED_FOR)
 // ============================================================================
-// qr-code-generator CREATES qr-code-instagram, qr-code-wifi, etc.
+// qr-code-generator USED_FOR qr-code-instagram, qr-code-wifi, etc.
 
 MATCH (tool:Entity {key: 'qr-code-generator'})
 MATCH (obj:Entity)
 WHERE obj.key IN ['qr-code-instagram', 'qr-code-wifi', 'qr-code-vcard', 'qr-code-menu']
-MERGE (tool)-[r:SEMANTIC_LINK {type: 'creates'}]->(obj)
-SET r.strength = 0.85,
-    r.temperature = 0.85,
-    r.llm_context = 'TOOL → OBJECT: Le générateur crée ce type de QR code'
+MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(obj)
+SET r.temperature = 0.85,
+    r.llm_context = 'TOOL → OBJECT: Le générateur est utilisé pour créer ce type de QR code'
 ;
 
 // ============================================================================

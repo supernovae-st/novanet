@@ -3,9 +3,12 @@
 //
 // Fixes:
 // 1. EntityNative with NULL locale (275 nodes) → extract from key
-// 2. Entity missing entity_type → classify by key pattern
+// 2. Entity missing classification → link to EntityCategory via BELONGS_TO
 // 3. EntityNative missing title → derive from Entity.display_name
 // 4. TARGETS arcs missing semantic_coef → set default 1.0
+//
+// Valid EntityCategory keys (from entity-category.yaml):
+//   THING, CONTENT_TYPE, ACTION, FEATURE, TOOL, BENEFIT
 
 // ============================================================================
 // 1. FIX NULL LOCALE ON EntityNative (extract from composite key)
@@ -19,12 +22,13 @@ SET en.locale = extracted_locale
 ;
 
 // ============================================================================
-// 2. CLASSIFY Entity BY KEY PATTERN → entity_type
+// 2. CLASSIFY Entity VIA BELONGS_TO → EntityCategory
 // ============================================================================
+// Pattern: Match entities by key pattern, link to appropriate category
 
 // TOOL = generators, builders, scanners, API endpoints
 MATCH (e:Entity)
-WHERE e.entity_type IS NULL
+WHERE NOT EXISTS { (e)-[:BELONGS_TO]->(:EntityCategory) }
   AND (e.key ENDS WITH '-generator'
     OR e.key ENDS WITH '-builder'
     OR e.key ENDS WITH '-scanner'
@@ -32,12 +36,14 @@ WHERE e.entity_type IS NULL
     OR e.key = 'api'
     OR e.key = 'url-shortener'
     OR e.key = 'utm-builder')
-SET e.entity_type = 'TOOL'
+WITH e
+MATCH (cat:EntityCategory {key: 'TOOL'})
+MERGE (e)-[:BELONGS_TO]->(cat)
 ;
 
 // ACTION = verbs (create, customize, download, share, scan, print, edit, add, track)
 MATCH (e:Entity)
-WHERE e.entity_type IS NULL
+WHERE NOT EXISTS { (e)-[:BELONGS_TO]->(:EntityCategory) }
   AND (e.key STARTS WITH 'create-'
     OR e.key STARTS WITH 'customize-'
     OR e.key STARTS WITH 'download-'
@@ -50,110 +56,68 @@ WHERE e.entity_type IS NULL
     OR e.key STARTS WITH 'shorten-'
     OR e.key = 'change-colors'
     OR e.key = 'bulk-creation')
-SET e.entity_type = 'ACTION'
+WITH e
+MATCH (cat:EntityCategory {key: 'ACTION'})
+MERGE (e)-[:BELONGS_TO]->(cat)
 ;
 
-// GUIDE = educational content (how-to, vs, comparison, guide suffix)
+// CONTENT_TYPE = educational content (how-to, vs, comparison, guide suffix)
 MATCH (e:Entity)
-WHERE e.entity_type IS NULL
+WHERE NOT EXISTS { (e)-[:BELONGS_TO]->(:EntityCategory) }
   AND (e.key STARTS WITH 'how-to-'
     OR e.key ENDS WITH '-guide'
     OR e.key CONTAINS '-vs-')
-SET e.entity_type = 'GUIDE'
-;
-
-// BRAND = social platforms and payment providers
-MATCH (e:Entity)
-WHERE e.entity_type IS NULL
-  AND e.key IN [
-    'instagram', 'facebook', 'linkedin', 'twitter', 'pinterest', 'snapchat',
-    'tiktok', 'youtube', 'spotify', 'soundcloud', 'telegram', 'whatsapp',
-    'apple', 'google', 'paypal', 'venmo', 'waze',
-    'hubspot', 'mailchimp', 'salesforce', 'shopify', 'woocommerce',
-    'zapier', 'make', 'n8n', 'slack'
-  ]
-SET e.entity_type = 'BRAND'
-;
-
-// INTEGRATION = connector plugins
-MATCH (e:Entity)
-WHERE e.entity_type IS NULL
-  AND e.key ENDS WITH '-integration'
-SET e.entity_type = 'INTEGRATION'
-;
-
-// INDUSTRY = business verticals
-MATCH (e:Entity)
-WHERE e.entity_type IS NULL
-  AND e.key IN [
-    'healthcare', 'real-estate', 'restaurants', 'retail', 'education',
-    'hospitality', 'manufacturing', 'logistics', 'transportation',
-    'entertainment', 'fitness', 'beauty', 'finance', 'government',
-    'construction', 'consulting', 'nonprofits', 'agencies',
-    'marketing-agencies', 'creative-agencies', 'event-management',
-    'small-business', 'enterprise', 'freelancers', 'developers'
-  ]
-SET e.entity_type = 'INDUSTRY'
-;
-
-// CATEGORY = classification groupings
-MATCH (e:Entity)
-WHERE e.entity_type IS NULL
-  AND (e.key ENDS WITH '-style'
-    OR e.key ENDS WITH '-content'
-    OR e.key ENDS WITH '-format'
-    OR e.key ENDS WITH '-type'
-    OR e.key ENDS WITH '-mode'
-    OR e.key ENDS WITH '-pattern')
-SET e.entity_type = 'CATEGORY'
+WITH e
+MATCH (cat:EntityCategory {key: 'CONTENT_TYPE'})
+MERGE (e)-[:BELONGS_TO]->(cat)
 ;
 
 // FEATURE = product capabilities
+// Note: dynamic-qr-code and static-qr-code are QR code TYPES (THING), not features
 MATCH (e:Entity)
-WHERE e.entity_type IS NULL
+WHERE NOT EXISTS { (e)-[:BELONGS_TO]->(:EntityCategory) }
   AND e.key IN [
-    'analytics', 'password-protection', 'dynamic-qr-code', 'static-qr-code',
+    'analytics', 'password-protection',
     'click-tracking', 'geo-tracking', 'device-detection', 'contextual-routing',
     'custom-domain-name', 'custom-link-preview', 'retargeting-pixel',
     'team-workspaces', 'white-label', 'webhooks', 'expiration', 'scan-limit',
     'scan-counting', 'time-series', 'data-capacity', 'error-correction',
     'booking-appointment', 'event-rsvp', 'link-in-bio'
   ]
-SET e.entity_type = 'FEATURE'
+WITH e
+MATCH (cat:EntityCategory {key: 'FEATURE'})
+MERGE (e)-[:BELONGS_TO]->(cat)
 ;
 
-// OBJECT = QR code types (the created thing)
-// All qr-code-* that aren't already classified as something else
+// INTEGRATION = external service integrations
 MATCH (e:Entity)
-WHERE e.entity_type IS NULL
-  AND e.key STARTS WITH 'qr-code-'
-SET e.entity_type = 'OBJECT'
+WHERE NOT EXISTS { (e)-[:BELONGS_TO]->(:EntityCategory) }
+  AND e.key ENDS WITH '-integration'
+WITH e
+MATCH (cat:EntityCategory {key: 'INTEGRATION'})
+MERGE (e)-[:BELONGS_TO]->(cat)
 ;
 
-// OBJECT = other product outputs (smart-link, landing-page, barcode, short-link)
+// THING = QR code types (the created thing)
+// Includes: qr-code-*, dynamic-qr-code, static-qr-code, barcode formats
 MATCH (e:Entity)
-WHERE e.entity_type IS NULL
-  AND e.key IN [
-    'qr-code', 'smart-link', 'landing-page', 'barcode', 'short-link',
-    'custom-qr-code', 'dynamic-qr-code', 'static-qr-code'
-  ]
-SET e.entity_type = 'OBJECT'
+WHERE NOT EXISTS { (e)-[:BELONGS_TO]->(:EntityCategory) }
+  AND (e.key STARTS WITH 'qr-code-'
+    OR e.key IN [
+      'qr-code', 'smart-link', 'landing-page', 'barcode', 'short-link',
+      'custom-qr-code', 'dynamic-qr-code', 'static-qr-code',
+      'aztec-code', 'data-matrix', 'pdf417', 'maxicode',
+      'codabar', 'code-128', 'code-39', 'gs1-128', 'gs1-datamatrix',
+      'ean-13', 'ean-8', 'upc-a', 'upc-e', 'itf-14', 'msi-plessey'
+    ])
+WITH e
+MATCH (cat:EntityCategory {key: 'THING'})
+MERGE (e)-[:BELONGS_TO]->(cat)
 ;
 
-// OBJECT = barcode formats
+// THING = print media types
 MATCH (e:Entity)
-WHERE e.entity_type IS NULL
-  AND e.key IN [
-    'aztec-code', 'data-matrix', 'pdf417', 'maxicode',
-    'codabar', 'code-128', 'code-39', 'gs1-128', 'gs1-datamatrix',
-    'ean-13', 'ean-8', 'upc-a', 'upc-e', 'itf-14', 'msi-plessey'
-  ]
-SET e.entity_type = 'OBJECT'
-;
-
-// OBJECT = print media types
-MATCH (e:Entity)
-WHERE e.entity_type IS NULL
+WHERE NOT EXISTS { (e)-[:BELONGS_TO]->(:EntityCategory) }
   AND e.key IN [
     'business-cards', 'flyers', 'posters-billboards', 'brochures',
     'magazines', 'newspapers', 'catalogs', 'stickers-labels',
@@ -161,36 +125,48 @@ WHERE e.entity_type IS NULL
     'banners', 'direct-mail', 'receipts', 'tickets-physical',
     'presentations', 'documents', 'emails', 'websites', 'forms'
   ]
-SET e.entity_type = 'OBJECT'
+WITH e
+MATCH (cat:EntityCategory {key: 'THING'})
+MERGE (e)-[:BELONGS_TO]->(cat)
 ;
 
-// OBJECT = technical components (module, finder, timing, quiet zone, version)
+// THING = technical components (module, finder, timing, quiet zone, version)
 MATCH (e:Entity)
-WHERE e.entity_type IS NULL
+WHERE NOT EXISTS { (e)-[:BELONGS_TO]->(:EntityCategory) }
   AND e.key IN [
     'module', 'finder-pattern', 'timing-pattern', 'quiet-zone',
     'encoding-mode', 'qr-code-version', 'menu-restaurant'
   ]
-SET e.entity_type = 'OBJECT'
+WITH e
+MATCH (cat:EntityCategory {key: 'THING'})
+MERGE (e)-[:BELONGS_TO]->(cat)
 ;
 
-// Catch-all: remaining unclassified → OBJECT (safe default)
+// THING = classification groupings (style, content, format, type, mode, pattern)
+// These are conceptual things, not categories in the EntityCategory sense
 MATCH (e:Entity)
-WHERE e.entity_type IS NULL
-SET e.entity_type = 'OBJECT'
+WHERE NOT EXISTS { (e)-[:BELONGS_TO]->(:EntityCategory) }
+  AND (e.key ENDS WITH '-style'
+    OR e.key ENDS WITH '-content'
+    OR e.key ENDS WITH '-format'
+    OR e.key ENDS WITH '-type'
+    OR e.key ENDS WITH '-mode'
+    OR e.key ENDS WITH '-pattern')
+WITH e
+MATCH (cat:EntityCategory {key: 'THING'})
+MERGE (e)-[:BELONGS_TO]->(cat)
+;
+
+// Catch-all: remaining unclassified → THING (safe default)
+MATCH (e:Entity)
+WHERE NOT EXISTS { (e)-[:BELONGS_TO]->(:EntityCategory) }
+WITH e
+MATCH (cat:EntityCategory {key: 'THING'})
+MERGE (e)-[:BELONGS_TO]->(cat)
 ;
 
 // ============================================================================
-// 3. PROPAGATE entity_type FROM Entity TO EntityNative
-// ============================================================================
-
-MATCH (e:Entity)-[:HAS_NATIVE]->(en:EntityNative)
-WHERE en.entity_type IS NULL AND e.entity_type IS NOT NULL
-SET en.entity_type = e.entity_type
-;
-
-// ============================================================================
-// 4. SET title ON EntityNative FROM Entity.display_name (if NULL)
+// 3. SET title ON EntityNative FROM Entity.display_name (if NULL)
 // ============================================================================
 // Note: For fr-FR, these would ideally be French translations,
 // but Entity.display_name is English. A future pass can translate.
@@ -201,7 +177,7 @@ SET en.title = e.display_name
 ;
 
 // ============================================================================
-// 5. FIX TARGETS ARCS MISSING semantic_coef (default = 1.0 for primary)
+// 4. FIX TARGETS ARCS MISSING semantic_coef (default = 1.0 for primary)
 // ============================================================================
 
 MATCH (en:EntityNative)-[t:TARGETS]->(k:SEOKeyword)
@@ -214,7 +190,7 @@ END
 ;
 
 // ============================================================================
-// 6. FIX TARGETS ARCS MISSING rank (default = 'primary')
+// 5. FIX TARGETS ARCS MISSING rank (default = 'primary')
 // ============================================================================
 
 MATCH (en:EntityNative)-[t:TARGETS]->(k:SEOKeyword)
@@ -223,7 +199,7 @@ SET t.rank = 'primary'
 ;
 
 // ============================================================================
-// 7. CONNECT EntityNative TO Locale (FOR_LOCALE arc)
+// 6. CONNECT EntityNative TO Locale (FOR_LOCALE arc)
 // ============================================================================
 
 MATCH (en:EntityNative)

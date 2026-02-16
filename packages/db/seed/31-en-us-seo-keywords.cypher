@@ -466,8 +466,7 @@ SET r.rank = 'secondary',
 MATCH (tool:Entity {key: 'qr-code-generator'})
 MATCH (action:Entity {key: 'create-qr-code'})
 MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(action)
-SET r.strength = 0.95,
-    r.temperature = 0.9,
+SET r.temperature = 0.95,
     r.llm_context = 'TOOL → ACTION: The generator is used to create QR codes'
 ;
 
@@ -475,7 +474,7 @@ SET r.strength = 0.95,
 MATCH (tool:Entity {key: 'wifi-qr-generator'})
 MATCH (action:Entity {key: 'create-qr-code'})
 MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(action)
-SET r.strength = 0.9,
+SET r.temperature = 0.9,
     r.llm_context = 'TOOL → ACTION: WiFi generator is used to create WiFi QR codes'
 ;
 
@@ -483,33 +482,32 @@ SET r.strength = 0.9,
 MATCH (tool:Entity {key: 'qr-code-scanner'})
 MATCH (action:Entity {key: 'scan-qr-code'})
 MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(action)
-SET r.strength = 0.95,
+SET r.temperature = 0.95,
     r.llm_context = 'TOOL → ACTION: Scanner is used to scan/read QR codes'
 ;
 
 // ============================================================================
-// 10. SEMANTIC_LINK ARCS: TOOL → OBJECTs (CREATES)
+// 10. SEMANTIC_LINK ARCS: TOOL → OBJECTs (USED_FOR)
 // ============================================================================
 
-// qr-code-generator CREATES various QR code objects
+// qr-code-generator USED_FOR various QR code objects
 MATCH (tool:Entity {key: 'qr-code-generator'})
 MATCH (obj:Entity)
 WHERE obj.key IN [
   'qr-code-instagram', 'qr-code-wifi', 'qr-code-vcard', 'qr-code-menu',
   'qr-code-pdf', 'qr-code-url', 'qr-code-business-card', 'dynamic-qr-code'
 ]
-MERGE (tool)-[r:SEMANTIC_LINK {type: 'creates'}]->(obj)
-SET r.strength = 0.85,
-    r.temperature = 0.85,
-    r.llm_context = 'TOOL → OBJECT: The generator creates this type of QR code'
+MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(obj)
+SET r.temperature = 0.85,
+    r.llm_context = 'TOOL → OBJECT: The generator is used to create this type of QR code'
 ;
 
-// wifi-qr-generator CREATES qr-code-wifi specifically
+// wifi-qr-generator USED_FOR qr-code-wifi specifically
 MATCH (tool:Entity {key: 'wifi-qr-generator'})
 MATCH (obj:Entity {key: 'qr-code-wifi'})
-MERGE (tool)-[r:SEMANTIC_LINK {type: 'creates'}]->(obj)
-SET r.strength = 0.95,
-    r.llm_context = 'TOOL → OBJECT: WiFi generator specifically creates WiFi QR codes'
+MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(obj)
+SET r.temperature = 0.95,
+    r.llm_context = 'TOOL → OBJECT: WiFi generator is specifically used for WiFi QR codes'
 ;
 
 // ============================================================================
