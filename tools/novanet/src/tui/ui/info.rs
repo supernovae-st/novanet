@@ -333,32 +333,33 @@ fn build_layer_content(
     content
         .identity
         .add_kv("type", Span::styled("Layer", STYLE_SUCCESS));
-    content.identity.add_kv(
-        "category",
-        Span::styled("◈ Schema", Style::default().fg(Color::Cyan)),
-    );
     content
         .identity
         .add_kv("key", Span::styled(layer.key.clone(), STYLE_PRIMARY));
-
-    // LOCATION
-    content.location.add_line(Line::from(vec![
-        Span::styled(format!("{} ", realm.icon), STYLE_DIM),
-        Span::styled(
-            realm.display_name.clone(),
-            Style::default().fg(hex_to_color(&realm.color)),
-        ),
-    ]));
-    content.location.add_line(Line::from(vec![
-        Span::styled(
-            format!("{} ", theme.icons.layer(&layer.key)),
-            Style::default().fg(hex_to_color(&layer.color)),
-        ),
+    content.identity.add_kv(
+        "display",
         Span::styled(
             layer.display_name.clone(),
-            Style::default().fg(hex_to_color(&layer.color)),
+            Style::default().fg(Color::White).add_modifier(Modifier::BOLD),
         ),
-    ]));
+    );
+
+    // LOCATION (Classification)
+    let realm_color = hex_to_color(&realm.color);
+    let layer_color = hex_to_color(&layer.color);
+
+    content.location.add_classification(
+        "realm",
+        &realm.icon,
+        &realm.key,
+        realm_color,
+    );
+    content.location.add_classification(
+        "layer",
+        theme.icons.layer(&layer.key),
+        &layer.key,
+        layer_color,
+    );
 
     // METRICS
     content.metrics.add_kv(
