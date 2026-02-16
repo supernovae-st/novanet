@@ -2,16 +2,17 @@
 
 Catalog of all Claude Code skills for the NovaNet monorepo.
 
-**Version**: v11.7.0 | **Total Skills**: 17 (7 core + 10 studio-specific)
+**Version**: v0.13.0 | **Total Skills**: 18 (8 core + 10 studio-specific)
 
 ---
 
-## Core Skills (7)
+## Core Skills (8)
 
 Located in `.claude/skills/`
 
 | Skill | Invocation | Description |
 |-------|------------|-------------|
+| **novanet-adr** | `/novanet-adr` | Navigate ADRs by number, domain, status, or keyword |
 | **novanet-architecture** | `/novanet-arch` | ASCII architecture diagrams (schema graph, pipeline, Rust, Studio) |
 | **novanet-sync** | `/novanet-sync` | Schema validation/regeneration (YAML → artifacts) |
 | **novanet-tui** | `/novanet-tui` | Galaxy-themed terminal UI keybindings and features |
@@ -45,6 +46,7 @@ Located in `apps/studio/.claude/skills/`
 
 | Trigger Keywords | Skill |
 |------------------|-------|
+| ADR, architecture decision, decision record, why design | novanet-adr |
 | architecture, overview, structure, schema graph, codebase | novanet-architecture |
 | sync, validate, generate, schema, YAML | novanet-sync |
 | tui, terminal, keybindings, galaxy | novanet-tui |
@@ -62,6 +64,10 @@ Located in `apps/studio/.claude/skills/`
 Invoke directly with slash command:
 
 ```bash
+/novanet-adr               # List all domains
+/novanet-adr 029           # Look up ADR-029
+/novanet-adr must-know     # Essential ADRs for v0.13.0
+/novanet-adr native        # Search by keyword/tag
 /novanet-arch              # Full architecture
 /novanet-arch meta         # Meta-graph only
 /novanet-sync              # Check sync status

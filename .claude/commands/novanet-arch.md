@@ -262,3 +262,25 @@ OUTPUT
 [ ] Included trait legend
 [ ] Included statistics
 ```
+
+---
+
+## ADR References
+
+Include relevant ADR citations in diagrams. Use `/adr <number>` for full details.
+
+| Section | Key ADRs | Topic |
+|---------|----------|-------|
+| `nodes` | ADR-012, ADR-024 | 2-Realm architecture, Trait = Data Origin |
+| `arcs` | ADR-026, ADR-027 | Inverse arc policy, Generation family |
+| `org` | ADR-028, ADR-029 | Page-Entity architecture, *Native pattern |
+| `seo` | ADR-031, ADR-032 | Pillar/cluster, URL slugification |
+| `visual` | ADR-005, ADR-013 | Trait encoding, Icons source |
+| `pipeline` | ADR-003, ADR-021 | YAML-first, Query-first |
+
+**In diagram footer, cite relevant ADRs:**
+```
++-------------------------------------------------------------------------------+
+|  ADRs: 012 (2-Realm), 024 (Trait=Origin) | /adr <number> for details          |
++-------------------------------------------------------------------------------+
+```

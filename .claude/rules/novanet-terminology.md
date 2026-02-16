@@ -1,6 +1,10 @@
-# NovaNet Terminology (v0.12.5)
+# NovaNet Terminology (v0.13.0)
 
-This file defines the canonical terminology for NovaNet. All code, documentation, and UI must use these terms consistently.
+This file defines the **canonical terminology** for NovaNet. All code, documentation, and UI must use these terms consistently.
+
+> **Purpose**: Quick lookup reference for current terminology. For rationale and history, see individual ADR files in `.claude/rules/adr/`.
+
+---
 
 ## Core Vocabulary
 
@@ -12,13 +16,10 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | **Instance (data)** | NodeData | ArcData |
 | **Class (schema)** | NodeClass | ArcClass |
 
-> **v0.12.0 Change**: "Kind" → "Class", "Meta" eliminated. See ADR-023.
+> **Arc terminology**: See [ADR-001](adr/core-principles/adr-001-arc-terminology.md).
+> Exception: React Flow uses "Edge" internally.
 
-> **CRITICAL**: We use "Arc" (not "Edge" or "Relation") for directed links between nodes.
-> This aligns with graph theory terminology for directed graphs.
-> Exception: React Flow uses "Edge" internally — that's acceptable in React Flow-specific code.
-
-### Node Classification (Faceted)
+### Node Classification (3 Axes)
 
 | Axis | Question | Type | Property | Values |
 |------|----------|------|----------|--------|
@@ -26,50 +27,20 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | 2 | WHAT? | `NodeLayer` | `layer` | `config`, `locale`, `geography`, `knowledge`, `foundation`, `structure`, `semantic`, `instruction`, `output` |
 | 3 | HOW? | `NodeTrait` | `trait` | `defined`, `authored`, `imported`, `generated`, `retrieved` |
 
-> **v0.12.0 Trait Redefinition (ADR-024)**: Trait now answers "WHERE does data come from?" (Data Origin)
-> - `defined` = Human-created once (templates, configs) — was `invariant`
-> - `authored` = Human-written per locale (editorial content) — was `localized`
-> - `imported` = External data brought in (corpora, SEO keywords) — was `knowledge`
-> - `generated` = Produced by NovaNet LLM (unchanged)
-> - `retrieved` = Fetched from external APIs (GEO snapshots) — was `aggregated`
+> **Trait as Data Origin**: See [ADR-024](adr/node-classification/adr-024-trait-data-origin.md).
 
-### v11.5 Realm Architecture
+### Current Architecture (v0.13.0)
 
 | Realm | Layers | Nodes | Description |
 |-------|--------|-------|-------------|
 | `shared` | config, locale, geography, knowledge | 40 | Universal knowledge (READ-ONLY) |
 | `org` | config, foundation, structure, semantic, instruction, output | 21 | Organization-specific content |
 
-> **v0.12.5 Changes:**
-> - Brand Architecture: Brand, BrandDesign, BrandPrinciples, PromptStyle nodes added (ADR-028)
-> - Country node added to shared/geography
-> - Total: **61 nodes** (40 shared + 21 org), **169 arcs**, **10 layers** (4 shared + 6 org)
+**Totals**: 61 nodes, 169 arcs, 10 layers (4 shared + 6 org), 5 traits
 
-### v11.7 Unified Tree Architecture
+> **Architecture details**: See [ADR-012](adr/schema-architecture/adr-012-two-realm.md), [ADR-028](adr/schema-architecture/adr-028-page-entity.md).
 
-| Change | Before (v11.6) | After (v11.7) |
-|--------|----------------|---------------|
-| Nav modes | 5 (Meta/Data/Overlay/Query/Atlas) | 2 (Graph/Nexus) |
-| Realm/Layer | Visual groupings | Clickable nodes |
-| Instances | Hidden | Under Class, expandable |
-| Icons | Mixed emoji | Dual: Lucide (web) + Unicode (terminal) |
-
-> **v11.7 Principle**: "If it's a node in Neo4j, it's a node everywhere"
-> - Realm nodes: clickable, show properties in detail panel
-> - Layer nodes: clickable, show HAS_LAYER relationships
-> - ArcFamily/ArcClass nodes: clickable with `[fam]`/`[arc]` badges
-
-> **v11.3 Changes:**
-> - Layer split: `locale-knowledge` → `locale`, `geography`, `knowledge` (3 layers)
-> - New layer: `geo` added to org realm for GEO intelligence
-> - Node merge: Organization + Tenant → OrgConfig
-
-> **v11.2 Changes:**
-> - Realm renames: `global` → `shared`, `tenant` → `org`
-> - Trait split: `derived` → `generated` + `aggregated`, `job` removed
-> - 3 job nodes removed (GenerationJob, SEOMiningRun, EvaluationSignal)
-
-### Arc Classification (Faceted)
+### Arc Classification (3 Axes)
 
 | Axis | Question | Type | Property | Values |
 |------|----------|------|----------|--------|
@@ -77,15 +48,21 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | 2 | FUNCTION? | `ArcFamily` | `family` | `ownership`, `localization`, `semantic`, `generation`, `mining` |
 | 3 | MULTIPLICITY? | `ArcCardinality` | `cardinality` | `zero_to_one`, `one_to_one`, `one_to_many`, `many_to_many` |
 
-## YAML Source Files (v0.12.5)
+> **Arc design**: See [ADR-026](adr/arc-design/adr-026-inverse-arc-policy.md), [ADR-027](adr/arc-design/adr-027-generation-family.md).
+
+---
+
+## YAML Source Files
 
 | File | Content |
 |------|---------|
-| `taxonomy.yaml` | Realm/Layer/Trait/ArcFamily/ArcScope definitions (v0.12.5: 2 realms, 10 layers, 5 traits) |
-| `node-classes/shared/` | 40 NodeClass definitions in shared realm (config: 3, locale: 6, geography: 7, knowledge: 24) |
-| `node-classes/org/` | 21 NodeClass definitions in org realm (config: 1, foundation: 6, structure: 3, semantic: 4, instruction: 4, output: 3) |
+| `taxonomy.yaml` | Realm/Layer/Trait/ArcFamily/ArcScope definitions |
+| `node-classes/shared/` | 40 NodeClass definitions (config: 3, locale: 6, geography: 7, knowledge: 24) |
+| `node-classes/org/` | 21 NodeClass definitions (config: 1, foundation: 6, structure: 3, semantic: 4, instruction: 4, output: 3) |
 | `arc-classes/` | 1 file per ArcClass, organized by ArcFamily |
-| `relations.yaml` | Legacy format (deprecated, kept for parser compatibility) |
+| `visual-encoding.yaml` | Icons and visual encoding rules |
+
+> **YAML-first architecture**: See [ADR-003](adr/core-principles/adr-003-yaml-first.md).
 
 ## File Naming
 
@@ -98,119 +75,54 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | Rust structs | `PascalCase` | `ArcClass`, `NodeRealm` |
 | Rust files | `snake_case.rs` | `arc_schema.rs`, `taxonomy.rs` |
 
-## Node Naming Convention (v0.12.5)
+## Node Naming Convention
 
-> **RULE: Suffix indicates trait and relationship to parent defined node**
+| Pattern | Trait | When to Use | Example |
+|---------|-------|-------------|---------|
+| `FooNative` | authored/generated | Locale-specific content | `EntityNative`, `PageNative` |
+| `FooCategory` | defined | Categorical grouping | `EntityCategory` |
+| `FooSet` | defined | Container grouping atoms | `TermSet`, `SEOKeywordSet` |
+| `Foo` | varies | Standalone node | `SEOKeyword`, `Term` |
 
-| Pattern | Trait | Layer | When to Use | Example |
-|---------|-------|-------|-------------|---------|
-| `FooNative` | authored/generated | semantic/output | **v0.12.5**: Locale-specific content (written OR generated natively) | `EntityNative`, `PageNative` |
-| `FooContent` | authored | semantic | **DEPRECATED v0.12.5**: Use `FooNative` instead | `EntityNative` → `EntityNative` |
-| `FooGenerated` | generated | output | **DEPRECATED v0.12.5**: Use `FooNative` instead | `PageNative` → `PageNative` |
-| `FooCategory` | defined | config | Categorical grouping for defined `Foo` | `EntityCategory` |
-| `FooSet` | defined | knowledge | Container grouping related atoms | `TermSet`, `SEOKeywordSet`, `GEOQuerySet` |
-| `Foo` | varies | varies | Node is standalone (no parent defined) | `SEOKeyword`, `Term`, `Expression` |
+> **\*Native Pattern**: See [ADR-029](adr/schema-architecture/adr-029-native-pattern.md).
+> **Slug Ownership**: See [ADR-030](adr/schema-architecture/adr-030-slug-ownership.md).
 
-> **v0.12.5 *Native Pattern (ADR-029)**: Unified suffix for ALL locale-specific nodes
-> - `*Native` suffix indicates content that exists per-locale (natively written OR generated)
-> - Both `authored` and `generated` traits use the same suffix — the trait indicates WHO creates
-> - Simplifies the model: one pattern instead of two (`*Content` + `*Generated`)
+### Current \*Native Nodes
 
-**v0.12.5 Changes (ADR-029 *Native Pattern + ADR-030 Slug Ownership):**
-- `EntityNative` → `EntityNative` (semantic layer, authored trait)
-- `PageNative` → `PageNative` (output layer, generated trait)
-- `BlockNative` → `BlockNative` (output layer, generated trait)
-- `ProjectNative` → `ProjectNative` (foundation layer, authored trait)
-- `HAS_NATIVE` + `HAS_NATIVE` → unified `HAS_NATIVE` (with `locale` property)
-- Slug properties (`slug`, `full_path`) moved from EntityNative to PageNative
-- Entity.key = semantic identifier, Page.slug = URL segment (can differ)
+| Node | Layer | Trait | Description |
+|------|-------|-------|-------------|
+| `EntityNative` | semantic | authored | Human-written entity content |
+| `ProjectNative` | foundation | authored | Human-written project content |
+| `PageNative` | output | generated | LLM-generated page content |
+| `BlockNative` | output | generated | LLM-generated block content |
 
-**v0.12.0 Changes (ADR-024 Data Origin):**
-- `invariant` → `defined` (human-created once)
-- `localized` → `authored` (human-written per locale)
-- `knowledge` → `imported` (external data brought in)
-- `generated` → `generated` (unchanged, LLM output)
-- `aggregated` → `retrieved` (fetched from external APIs)
+### Key Arcs
 
-**v0.12.5 Changes:**
-- Brand Architecture: Brand, BrandDesign, BrandPrinciples, PromptStyle (ADR-028)
-- Country node added to shared/geography
-- 10 layers total (4 shared + 6 org), 61 nodes (40 shared + 21 org), 169 arcs
-
-**v11.2 Changes:**
-- Trait `derived` split into `generated` (LLM output) and `aggregated` (computed metrics)
-- `job` trait removed (3 nodes deleted)
-- Realms renamed: `global` → `shared`, `tenant` → `org`
-
-**v11.1 Changes:**
-- `EntityCategory` added (shared/knowledge layer, defined trait, categorical grouping)
-- `BELONGS_TO` arc added (Entity → EntityCategory, ownership family)
-
-**v10.9 Changes:**
-- `EntityL10n` renamed to `EntityNative` (semantic layer, authored trait)
-- `PageL10n` renamed to `PageNative` (output layer, generated trait)
-- `BlockL10n` renamed to `BlockNative` (output layer, generated trait)
-
-**Arc Changes (v10.9):**
-- `HAS_L10N` renamed to `HAS_NATIVE` (Entity → EntityNative)
-- `HAS_OUTPUT` renamed to `HAS_NATIVE` (Page/Block → PageNative/BlockNative)
-
-**Examples (v0.12.5):**
-
-```
-✅ Entity (defined) → EntityNative (authored)        # v0.12.5: Semantic layer native content
-✅ Page (defined) → PageNative (generated)           # v0.12.5: Output layer native content
-✅ Block (defined) → BlockNative (generated)         # v0.12.5: Output layer native content
-✅ Project (defined) → ProjectNative (authored)      # v0.12.5: Foundation layer native content
-✅ Entity (defined) → EntityCategory (defined)       # shared/config categorization
-✅ SEOKeyword (imported, no parent)                  # Correct: no suffix
-✅ Term (imported atom, no parent)                   # Correct: no suffix
-✅ SEOKeywordMetrics (retrieved)                     # Computed metrics
-
-❌ EntityNative (deprecated v0.12.5)                # Use EntityNative
-❌ PageNative (deprecated v0.12.5)                # Use PageNative
-❌ BlockNative (deprecated v0.12.5)               # Use BlockNative
-❌ ProjectNative (deprecated v0.12.5)               # Use ProjectNative
-❌ EntityL10n (deprecated v10.9)                     # Use EntityNative (via EntityNative)
-❌ PageL10n (deprecated v10.9)                       # Use PageNative (via PageNative)
-❌ BlockL10n (deprecated v10.9)                      # Use BlockNative (via BlockNative)
-❌ invariant/localized/knowledge/aggregated (deprecated) # Use ADR-024 names
-❌ job (removed trait)                               # Concept deferred to v12+
-```
-
-**Rationale (v0.12.5):**
-- `*Native` suffix indicates locale-specific content (authored OR generated natively)
-- Trait distinguishes WHO creates: `authored` = human, `generated` = LLM
-- Unified arc `HAS_NATIVE` replaces both `HAS_NATIVE` and `HAS_NATIVE`
-- `*Metrics` suffix indicates computed/retrieved data (retrieved trait)
-- `*Category` suffix indicates categorical grouping/taxonomy structure (defined trait)
-- `*Content` and `*Generated` suffixes are DEPRECATED - use `*Native` instead
-- Suffix choice reflects locale-specificity, trait indicates creation method
+| Arc | Direction | Purpose |
+|-----|-----------|---------|
+| `HAS_NATIVE` | Parent → Native | Unified arc with `locale` property |
+| `NATIVE_OF` | Native → Parent | Inverse |
 
 ## Property Naming
 
 Properties use `snake_case` in YAML and TypeScript:
 
 ```yaml
-# YAML
 node:
   name: LocaleVoice
-  realm: shared             # v11.2: renamed from global
-  layer: knowledge          # v11.5: 10 layers (4 shared + 6 org)
-  trait: imported           # v0.12.0: ADR-024 renamed from knowledge
+  realm: shared
+  layer: knowledge
+  trait: imported
   display_name: "Locale Voice"
-  llm_context: "..."
 ```
 
 ```typescript
-// TypeScript
 interface NodeClass {
   name: string;
   realm: NodeRealm;
   layer: NodeLayer;
   trait: NodeTrait;
   display_name: string;
-  llm_context?: string;
 }
 ```
 
@@ -300,184 +212,97 @@ These terms are deprecated and should NOT be used:
 | `EntityNative.parent_slug` | (removed) | v0.13.0 calculated from Page.SUBTOPIC_OF |
 | `EntityNative.depth` | (removed) | v0.13.0 calculated from Page hierarchy |
 
-## Navigation Modes (v11.7)
+---
+
+## Navigation Modes
 
 | Mode | Content | Use Case |
 |------|---------|----------|
 | `graph` | Unified tree (Realm > Layer > Class > Instance + Arcs) | Default exploration |
 | `nexus` | Hub (Quiz, Audit, Stats, Help) | Learning & validation |
 
-> **v11.7 Change**: Consolidated from 5 modes (Meta/Data/Overlay/Query/Atlas) to 2 modes (Graph/Nexus).
-> The unified tree in Graph mode shows meta AND data together — no mode switching needed.
+> **Unified Tree Architecture**: See [ADR-022](adr/ux-architecture/adr-022-unified-tree.md).
 
-**Deprecated modes** (v11.6 and earlier):
-
-| Deprecated | Replacement | Notes |
-|------------|-------------|-------|
-| `data` | `graph` | Instances now under Class nodes |
-| `meta` | `graph` | Meta-graph integrated in unified tree |
-| `overlay` | `graph` | Unified tree shows both |
-| `query` | `graph` + filters | Use tree filters instead |
-| `atlas` | `nexus` | Renamed, expanded functionality |
+---
 
 ## Visual Encoding
 
 | Visual Channel | Encodes | Source |
 |----------------|---------|--------|
-| Fill color | Layer | `taxonomy.yaml` node_layers[].color |
-| Border style | Trait | `visual-encoding.yaml` trait_borders |
-| Border color | Realm | `taxonomy.yaml` node_realms[].color |
-| Arc stroke | ArcFamily | `taxonomy.yaml` arc_families[].color |
+| Fill color | Layer | `taxonomy.yaml` |
+| Border style | Trait | `visual-encoding.yaml` |
+| Border color | Realm | `taxonomy.yaml` |
+| Arc stroke | ArcFamily | `taxonomy.yaml` |
 | Arc dash | ArcScope | solid (intra) / dashed (cross) |
 
-## Icons (v11.7)
+> **Visual encoding details**: See [ADR-005](adr/visual-encoding/adr-005-trait-visual-encoding.md).
+
+---
+
+## Icons
 
 Source of truth: `packages/core/models/visual-encoding.yaml` → `icons:` section
 
-### Dual Icon Format (v11.7)
+> **Icons architecture**: See [ADR-013](adr/visual-encoding/adr-013-icons-source.md).
 
-Icons use dual format for different rendering contexts:
+### Dual Format
 
-| Context | Format | Source |
-|---------|--------|--------|
-| Studio (web) | Lucide icon name | `icon.web` |
-| TUI (terminal) | Unicode symbol | `icon.terminal` |
+| Context | Format | Example |
+|---------|--------|---------|
+| Studio (web) | Lucide name | `icon.web: "globe"` |
+| TUI (terminal) | Unicode | `icon.terminal: "◉"` |
 
-> **Rule**: NO emoji in code. Use `{ web: "globe", terminal: "◉" }` format.
-
-```typescript
-// Correct (v11.7)
-const realmIcon = { web: "globe", terminal: "◉" };
-
-// Wrong - NO emoji
-const realmIcon = "🌐";  // DEPRECATED
-```
+> **Rule**: NO emoji in code. Use `{ web, terminal }` format.
 
 ### Icon Categories
 
-| Category | Purpose | Examples (terminal) |
-|----------|---------|---------------------|
+| Category | Purpose | Examples |
+|----------|---------|----------|
 | `realms` | Node ownership | ◉ shared, ◎ org |
-| `layers` | Functional layer | ⚙ config, ● locale, ◆ geography, ◊ knowledge, ■ semantic, ▣ output |
-| `traits` | Data origin | ■ defined, □ authored, ◊ imported, ✦ generated, ⋆ retrieved |
+| `layers` | Functional layer | ⚙ config, ◆ geography, ■ semantic |
+| `traits` | Data origin | ■ defined, □ authored, ✦ generated |
 | `arc_families` | Arc type | → ownership, ⇢ localization |
-| `states` | UI empty states | ◐ loading, ∅ no_kinds, ⚠ error |
+| `states` | UI states | ◐ loading, ⚠ error |
 | `navigation` | Tree controls | ▼ expanded, ▶ collapsed |
-| `quality` | Data completeness | ● complete, ◐ partial, * required |
-| `modes` | Nav modes | G graph, N nexus |
 
-**TUI loading**: `Theme::with_root()` loads icons from YAML at startup.
+---
 
-**Fallback**: Default icons used if YAML loading fails (graceful degradation).
+## Query-First Architecture
 
-## Commands
+Cypher queries are the single source of truth for graph visualization.
 
-Use Arc terminology in commands:
+> **Full architecture**: See [ADR-021](adr/core-principles/adr-021-query-first.md).
 
-```bash
-# Correct (v9.5)
-novanet arc create --from=page1 --to=entity1 --kind=USES_ENTITY
-novanet arc delete --id=abc123
-
-# Deprecated (v9.0)
-novanet relation create ...  # Still works, but deprecated
-```
-
-## Query-First Architecture (v11.6)
-
-NovaNet Studio uses **Query-First Architecture** where Cypher queries are the single source of truth for graph visualization.
-
-### Core Concepts
+### Key Terms
 
 | Term | Definition |
 |------|------------|
-| **Query-First** | Architecture pattern where graph display is determined solely by the executed Cypher query |
-| **Schema-Graph** | The schema graph showing NodeClass and ArcClass nodes (61 nodes, 169 arcs) |
-| **CLASS_QUERY** | Foundational query that fetches all NodeClass instances for schema view |
-| **ARCS_QUERY** | Foundational query that fetches all ArcClass instances for schema view |
-| **View** | Parameterized Cypher template defined in YAML, executable with context parameters |
-| **ViewPicker** | UI component for selecting and executing views |
-| **QueryPill** | UI component displaying the current query, with edit capability |
+| **Schema-Graph** | NodeClass + ArcClass nodes (61 nodes, 169 arcs) |
+| **CLASS_QUERY** | Query fetching all NodeClass instances |
+| **ARCS_QUERY** | Query fetching all ArcClass instances |
+| **View** | Parameterized Cypher template in YAML |
 
 ### View Categories
 
-| Category | Purpose | Contextual |
-|----------|---------|------------|
-| `global` | Full graph exploration (complete-graph, shared-layer) | No |
-| `contextual` | Node-specific subgraph (composition, knowledge) | Yes |
-| `generation` | AI agent context (block-generation) | Yes |
-| `mining` | SEO/GEO intelligence (seo-intel, geo-intel) | Yes |
+| Category | Purpose |
+|----------|---------|
+| `global` | Full graph exploration |
+| `contextual` | Node-specific subgraph |
+| `generation` | AI agent context |
+| `mining` | SEO/GEO intelligence |
 
-### Foundational Queries
+---
 
-```cypher
--- CLASS_QUERY: Fetch all NodeClass instances (SCHEMA mode)
-MATCH (k:Class)
-RETURN k.name AS name, k.realm AS realm, k.layer AS layer,
-       k.trait AS trait, k.display_name AS display_name
+## Quick Reference
 
--- ARCS_QUERY: Fetch all ArcClass instances (SCHEMA mode)
-MATCH (a:ArcClass)
-RETURN a.name AS name, a.family AS family, a.scope AS scope,
-       a.cardinality AS cardinality, a.source AS source, a.target AS target
-```
-
-### View Execution Flow
-
-```
-User clicks ViewPicker
-    ↓
-viewStore.executeView(viewId, params)
-    ↓
-/api/views/:id/query (fetch YAML + substitute params)
-    ↓
-Neo4j executes Cypher
-    ↓
-queryStore.setQuery(cypher)   # QueryPill displays
-graphStore.setNodes(results)  # Graph renders
-```
-
-### Interactions
-
-| Action | Behavior |
-|--------|----------|
-| Click view | `executeView()` → auto-run query → update graph |
-| Ctrl+Click view | `loadQueryOnly()` → load query without executing |
-| Edit QueryPill | Manual changes → click ▶️ to run |
-| Context view card | `executeView()` with `nodeKey` param |
-
-### YAML View Schema
-
-```yaml
-id: composition
-description: Page/Block composition hierarchy
-category: contextual         # global | contextual | generation | mining
-contextual: true             # appears in node sidebar
-applicable_types: [Page, Block]  # compatible node types
-modes: [data, meta, overlay, query]
-cypher: |
-  MATCH (root {key: $nodeKey})
-  ...
-```
-
-> **Reference**: See ADR-021 in `novanet-decisions.md` for full architecture rationale.
-
-## Summary
-
-1. **Arc** = directed link (not Edge, not Relation)
-2. **NodeClass** = node type definition (v0.12.0: was NodeKind)
-3. **ArcClass** = arc type definition (v0.12.0: was ArcKind)
-4. **Realm/Layer/Trait** = node classification axes
-5. **ArcFamily/ArcScope/ArcCardinality** = arc classification axes
-6. **taxonomy.yaml** = source of truth for facet definitions
-7. **Query-First** = Cypher query determines graph display (v11.6)
-8. **Schema-Graph** = schema graph of NodeClass + ArcClass nodes (v0.12.0: was Meta-Graph)
-9. **CLASS_QUERY / ARCS_QUERY** = foundational queries for schema view (v0.12.0)
-10. **Unified Tree** = single tree showing Realm > Layer > Class > Instance + Arcs (v11.7/v0.12.0)
-11. **Graph/Nexus** = two navigation modes replacing 5 previous modes (v11.7)
-12. **Dual Icons** = `{ web: "lucide-name", terminal: "◉" }` format, NO emoji (v11.7)
-13. **Trait = Data Origin** = WHERE does data come from? (defined/authored/imported/generated/retrieved) (v0.12.0)
-14. **PageStructure/PageInstruction** = replaced PageType/PagePrompt (v0.12.0)
-15. **\*Native Pattern** = unified suffix for locale-specific nodes (EntityNative, PageNative, BlockNative) (v0.12.5)
-16. **HAS_NATIVE** = unified arc replacing HAS_NATIVE + HAS_NATIVE, with `locale` property (v0.12.5)
-17. **Slug Ownership** = Page owns URL (slug, full_path), Entity owns semantics (key) (v0.12.5)
+| Concept | Current Term | ADR |
+|---------|--------------|-----|
+| Directed link | **Arc** | [001](adr/core-principles/adr-001-arc-terminology.md) |
+| Node type definition | **NodeClass** | [023](adr/node-classification/adr-023-class-instance.md) |
+| Arc type definition | **ArcClass** | [023](adr/node-classification/adr-023-class-instance.md) |
+| Data origin | **Trait** (defined/authored/imported/generated/retrieved) | [024](adr/node-classification/adr-024-trait-data-origin.md) |
+| Locale-specific nodes | **\*Native** suffix | [029](adr/schema-architecture/adr-029-native-pattern.md) |
+| URL ownership | **Page** owns slug, **Entity** owns semantics | [030](adr/schema-architecture/adr-030-slug-ownership.md) |
+| Graph display | **Query-First** (Cypher = source of truth) | [021](adr/core-principles/adr-021-query-first.md) |
+| TUI navigation | **Graph/Nexus** modes | [022](adr/ux-architecture/adr-022-unified-tree.md) |
+| Icons | **Dual format** `{ web, terminal }` | [013](adr/visual-encoding/adr-013-icons-source.md) |
