@@ -103,7 +103,6 @@ Core ownership arcs with frequent bidirectional traversal:
 | HAS_PROJECT | PROJECT_OF | Always |
 | HAS_BLOCK | BLOCK_OF | Always |
 | HAS_NATIVE | NATIVE_OF | Always |
-| HAS_NATIVE | NATIVE_OF | Always |
 | HAS_CHILD | CHILD_OF | Always |
 | HAS_INSTRUCTION | INSTRUCTION_OF | Always |
 

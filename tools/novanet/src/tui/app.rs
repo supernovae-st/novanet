@@ -112,6 +112,18 @@ impl Focus {
 
 /// Which info box is selected for copy/scroll within the Graph mode.
 /// Implements "Focusable Box" pattern from TUI Box Navigation design.
+///
+/// Layout (3 columns):
+/// ```text
+/// ┌─────────┬─────────────────┬───────────────┐
+/// │  TREE   │ HEADER          │ SOURCE        │
+/// │         │ PROPERTIES      ├───────────────┤
+/// │         │ ARCS            │ DIAGRAM       │
+/// │         ├─────────────────┼───────────────┤
+/// │         │ GRAPH           │ ARCHITECTURE  │
+/// └─────────┴─────────────────┴───────────────┘
+/// ```
+/// Tab cycles: Tree -> Header -> Properties -> Arcs -> Source -> Diagram -> Architecture -> Tree
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum InfoBox {
     #[default]
@@ -121,10 +133,11 @@ pub enum InfoBox {
     Arcs,
     Source,
     Diagram,
+    Architecture,
 }
 
 impl InfoBox {
-    /// Cycle to next box (Tab or →).
+    /// Cycle to next box (Tab or right arrow).
     pub fn next(self) -> Self {
         match self {
             Self::Tree => Self::Header,
@@ -132,19 +145,21 @@ impl InfoBox {
             Self::Properties => Self::Arcs,
             Self::Arcs => Self::Source,
             Self::Source => Self::Diagram,
-            Self::Diagram => Self::Tree,
+            Self::Diagram => Self::Architecture,
+            Self::Architecture => Self::Tree,
         }
     }
 
-    /// Cycle to previous box (Shift+Tab or ←).
+    /// Cycle to previous box (Shift+Tab or left arrow).
     pub fn prev(self) -> Self {
         match self {
-            Self::Tree => Self::Diagram,
+            Self::Tree => Self::Architecture,
             Self::Header => Self::Tree,
             Self::Properties => Self::Header,
             Self::Arcs => Self::Properties,
             Self::Source => Self::Arcs,
             Self::Diagram => Self::Source,
+            Self::Architecture => Self::Diagram,
         }
     }
 
@@ -157,7 +172,13 @@ impl InfoBox {
             Self::Arcs => "ARCS",
             Self::Source => "SOURCE",
             Self::Diagram => "DIAGRAM",
+            Self::Architecture => "ARCH",
         }
+    }
+
+    /// Check if this box is in the right panel (YAML column).
+    pub fn is_right_panel(self) -> bool {
+        matches!(self, Self::Source | Self::Diagram | Self::Architecture)
     }
 }
 
@@ -442,7 +463,7 @@ impl App {
         match self.selected_box {
             InfoBox::Tree => Focus::Tree,
             InfoBox::Header | InfoBox::Properties | InfoBox::Arcs => Focus::Info,
-            InfoBox::Source | InfoBox::Diagram => Focus::Yaml,
+            InfoBox::Source | InfoBox::Diagram | InfoBox::Architecture => Focus::Yaml,
         }
     }
 
@@ -3529,5 +3550,90 @@ mod tests {
         app.set_status("Loading...");
         let (msg, _) = app.status_message.as_ref().unwrap();
         assert!(!msg.starts_with("⚠"), "Regular status should not have ⚠");
+    }
+
+    // =========================================================================
+    // InfoBox Selection Tests (v0.13.0)
+    // =========================================================================
+
+    #[test]
+    fn test_infobox_cycle_includes_architecture() {
+        // Tab cycle should include Architecture
+        let mut current = InfoBox::Tree;
+        let mut visited = vec![current];
+
+        for _ in 0..7 {
+            current = current.next();
+            visited.push(current);
+        }
+
+        // Should cycle: Tree -> Header -> Properties -> Arcs -> Source -> Diagram -> Architecture -> Tree
+        assert_eq!(visited[0], InfoBox::Tree);
+        assert_eq!(visited[1], InfoBox::Header);
+        assert_eq!(visited[2], InfoBox::Properties);
+        assert_eq!(visited[3], InfoBox::Arcs);
+        assert_eq!(visited[4], InfoBox::Source);
+        assert_eq!(visited[5], InfoBox::Diagram);
+        assert_eq!(visited[6], InfoBox::Architecture);
+        assert_eq!(visited[7], InfoBox::Tree); // Full cycle
+    }
+
+    #[test]
+    fn test_infobox_prev_cycle() {
+        // Shift+Tab cycle should go in reverse
+        let mut current = InfoBox::Tree;
+        current = current.prev();
+        assert_eq!(current, InfoBox::Architecture);
+
+        current = current.prev();
+        assert_eq!(current, InfoBox::Diagram);
+
+        current = current.prev();
+        assert_eq!(current, InfoBox::Source);
+    }
+
+    #[test]
+    fn test_infobox_is_right_panel() {
+        // Right panel boxes: Source, Diagram, Architecture
+        assert!(!InfoBox::Tree.is_right_panel());
+        assert!(!InfoBox::Header.is_right_panel());
+        assert!(!InfoBox::Properties.is_right_panel());
+        assert!(!InfoBox::Arcs.is_right_panel());
+
+        assert!(InfoBox::Source.is_right_panel());
+        assert!(InfoBox::Diagram.is_right_panel());
+        assert!(InfoBox::Architecture.is_right_panel());
+    }
+
+    #[test]
+    fn test_focus_for_selected_box_architecture() {
+        let mut app = create_test_app();
+
+        app.selected_box = InfoBox::Architecture;
+        assert_eq!(app.focus_for_selected_box(), Focus::Yaml);
+
+        app.selected_box = InfoBox::Source;
+        assert_eq!(app.focus_for_selected_box(), Focus::Yaml);
+
+        app.selected_box = InfoBox::Diagram;
+        assert_eq!(app.focus_for_selected_box(), Focus::Yaml);
+
+        // Verify other boxes map to their panels
+        app.selected_box = InfoBox::Tree;
+        assert_eq!(app.focus_for_selected_box(), Focus::Tree);
+
+        app.selected_box = InfoBox::Header;
+        assert_eq!(app.focus_for_selected_box(), Focus::Info);
+    }
+
+    #[test]
+    fn test_infobox_names() {
+        assert_eq!(InfoBox::Tree.name(), "TREE");
+        assert_eq!(InfoBox::Header.name(), "HEADER");
+        assert_eq!(InfoBox::Properties.name(), "PROPERTIES");
+        assert_eq!(InfoBox::Arcs.name(), "ARCS");
+        assert_eq!(InfoBox::Source.name(), "SOURCE");
+        assert_eq!(InfoBox::Diagram.name(), "DIAGRAM");
+        assert_eq!(InfoBox::Architecture.name(), "ARCH");
     }
 }
