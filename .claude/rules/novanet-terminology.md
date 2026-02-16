@@ -1,3 +1,14 @@
+---
+paths:
+  - "packages/**/*.ts"
+  - "packages/**/*.yaml"
+  - "apps/**/*.ts"
+  - "apps/**/*.tsx"
+  - "tools/novanet/**/*.rs"
+  - "packages/db/**/*.cypher"
+description: NovaNet domain vocabulary - load when editing NovaNet code
+---
+
 # NovaNet Terminology (v0.13.0)
 
 This file defines the **canonical terminology** for NovaNet. All code, documentation, and UI must use these terms consistently.

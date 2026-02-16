@@ -1,3 +1,15 @@
+---
+paths:
+  - "packages/**/*.ts"
+  - "packages/**/*.yaml"
+  - "apps/**/*.ts"
+  - "apps/**/*.tsx"
+  - "tools/novanet/**/*.rs"
+  - "packages/db/**/*.cypher"
+  - "docs/plans/**/*.md"
+description: ADR index - load when editing NovaNet code or planning
+---
+
 # NovaNet Architecture Decisions (v0.13.0)
 
 This file is the **index** for NovaNet's Architecture Decision Records.
