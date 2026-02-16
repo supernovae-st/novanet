@@ -100,7 +100,11 @@ pub async fn run_search(
             let rows = if let Some(k) = kind {
                 db.execute_with_params(
                     &cypher,
-                    [("query", query), ("class", k), ("limit", &limit.to_string())],
+                    [
+                        ("query", query),
+                        ("class", k),
+                        ("limit", &limit.to_string()),
+                    ],
                 )
                 .await
             } else {

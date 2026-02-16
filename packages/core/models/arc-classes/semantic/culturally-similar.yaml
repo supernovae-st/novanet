@@ -1,16 +1,30 @@
 # packages/core/models/arc-classes/semantic/culturally-similar.yaml
-# ArcClass: CULTURALLY_SIMILAR - Pre-computed locale similarity
-# v10.8: Geographic Taxonomy
+# ArcClass: CULTURALLY_SIMILAR — Pre-computed locale similarity
+# v0.13.1: LLM-First field ordering (semantic fields before structure)
 
 arc:
+  # --- IDENTITY ---
   name: CULTURALLY_SIMILAR
   family: semantic
   scope: intra_realm
 
+  # --- SEMANTIC (LLM-critical) ---
+  description: |
+    Pre-computed similarity between locales based on cultural factors.
+    Used for fallback content selection when a locale lacks native content.
+    Symmetric relationship (if A is similar to B, B is similar to A).
+  llm_context: |
+    USE: when finding culturally similar locales for fallback.
+    TRIGGERS: cultural similarity, locale fallback, similar culture, related locales.
+    NOT: language similarity (use SPEAKS_BRANCH), geographic (use IN_REGION).
+    RELATES: Locale (source), Locale (target), similarity_score (property).
+
+  # --- GRAPH STRUCTURE ---
   source: Locale
   target: Locale
   cardinality: many_to_many
 
+  # --- DATA ---
   properties:
     - name: similarity_score
       type: float
@@ -22,10 +36,5 @@ arc:
       required: false
       description: "Contributing factors to similarity"
 
-  llm_context: |
-    USE: when finding culturally similar locales for fallback.
-    TRIGGERS: cultural similarity, locale fallback, similar culture, related locales.
-    NOT: language similarity (use SPEAKS_BRANCH), geographic (use IN_REGION).
-    RELATES: Locale (source), Locale (target), similarity_score (property).
-
+  # --- REFERENCE ---
   cypher_pattern: "(Locale)-[:CULTURALLY_SIMILAR {similarity_score, factors}]->(Locale)"

@@ -1,18 +1,38 @@
 # models/node-classes/org/foundation/brand-design.yaml
+# v0.13.1 LLM-First Schema - Canonical field ordering for optimal AI comprehension
 # BrandDesign - Visual design system (ADR-028)
 # Colors, typography, UI patterns - universal across locales
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: BrandDesign
   realm: org
   layer: foundation
   trait: defined
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (description, llm_context)
+  # ═══════════════════════════════════════════════════════════════════════════════
   description: "Visual design system - colors, typography, and UI patterns"
 
-  # =============================================================================
-  # STANDARD PROPERTIES
-  # =============================================================================
+  llm_context: |
+    USE: when generating images, selecting colors, or applying visual styling.
+    TRIGGERS: "design system", "colors", "typography", "visual style", "UI patterns", "@brand.design".
+    NOT: for brand voice/messaging (use BrandPrinciples), for brand identity (use Brand), for locale-specific visuals (use PromptStyle).
+    RELATES: Brand (owner via HAS_DESIGN).
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL (icon)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  icon:
+    web: palette
+    terminal: "◇"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA (standard_properties, properties)
+  # ═══════════════════════════════════════════════════════════════════════════════
   standard_properties:
     key:
       type: string
@@ -32,16 +52,6 @@ node:
       required: true
       description: "Design system overview"
 
-    llm_context:
-      type: string
-      required: true
-      description: "LLM context for visual consistency. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections].'"
-      example: |
-        USE: when generating images, selecting colors, or applying visual styling.
-        TRIGGERS: "design system", "colors", "typography", "visual style", "UI patterns", "@brand.design".
-        NOT: for brand voice/messaging (use BrandPrinciples), for brand identity (use Brand), for locale-specific visuals (use PromptStyle).
-        RELATES: Brand (owner via HAS_DESIGN).
-
     created_at:
       type: datetime
       required: true
@@ -49,10 +59,6 @@ node:
     updated_at:
       type: datetime
       required: true
-
-  # =============================================================================
-  # DESIGN-SPECIFIC PROPERTIES
-  # =============================================================================
 
   properties:
     # ─────────────────────────────────────────────────────────────────────────────
@@ -148,23 +154,20 @@ node:
       required: false
       description: "Spacing scale (4px grid)"
 
-  # =============================================================================
-  # RELATIONS
-  # =============================================================================
-
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH (relations)
+  # ═══════════════════════════════════════════════════════════════════════════════
   relations: {}
     # BrandDesign is owned by Brand via HAS_DESIGN (incoming)
 
-  # =============================================================================
-  # EXAMPLE
-  # =============================================================================
-
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE (example)
+  # ═══════════════════════════════════════════════════════════════════════════════
   example:
     data:
       key: "design-qrcodeai"
       display_name: "QR Code AI Design System"
       description: "Visual design system for QR Code AI"
-      llm_context: "USE: for image generation. TRIGGERS: colors, visuals. NOT: copywriting."
       color_primary: "#6366F1"
       color_secondary: "#EC4899"
       color_accent: "#10B981"

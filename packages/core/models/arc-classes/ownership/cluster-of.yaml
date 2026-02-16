@@ -1,22 +1,30 @@
-# packages/core/models/arc-classes/ownership/cluster-of.yaml
-# ArcClass: CLUSTER_OF - PopulationSubCluster belongs to PopulationCluster
+# ═══════════════════════════════════════════════════════════════════════════════
+# ArcClass: CLUSTER_OF — PopulationSubCluster belongs to PopulationCluster
+# v0.13.1: LLM-First property ordering
 # v10.8: Geographic Taxonomy
+# ═══════════════════════════════════════════════════════════════════════════════
 
 arc:
+  # IDENTITY
   name: CLUSTER_OF
   family: ownership
   scope: intra_realm
 
-  source: PopulationSubCluster
-  target: PopulationCluster
-  cardinality: many_to_one
-
-  inverse: HAS_SUBCLUSTER
-
+  # SEMANTIC (LLM-CRITICAL)
+  description: "PopulationSubCluster belongs to PopulationCluster (genetic hierarchy)"
   llm_context: |
     USE: when finding population cluster for a sub-cluster.
     TRIGGERS: population cluster, genetic group, related populations.
     NOT: sub-cluster children (use HAS_SUBCLUSTER), geographic regions.
     RELATES: PopulationSubCluster (source), PopulationCluster (target), HAS_SUBCLUSTER (inverse).
 
+  # GRAPH STRUCTURE
+  source: PopulationSubCluster
+  target: PopulationCluster
+  cardinality: many_to_one
+
+  # FLAGS
+  inverse: HAS_SUBCLUSTER
+
+  # REFERENCE
   cypher_pattern: "(PopulationSubCluster)-[:CLUSTER_OF]->(PopulationCluster)"

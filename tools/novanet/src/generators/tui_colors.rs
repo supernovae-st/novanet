@@ -14,7 +14,7 @@
 
 use crate::parsers::organizing::{self, OrganizingDoc};
 use crate::parsers::taxonomy::{self, TerminalPalette};
-use minijinja::{context, Environment};
+use minijinja::{Environment, context};
 use serde::Serialize;
 use std::collections::HashMap;
 use std::path::Path;
@@ -733,10 +733,7 @@ mod tests {
 
         // Should have all 5 traits (v0.12.0: ADR-024 Data Origin)
         for tr in ["DEFINED", "AUTHORED", "IMPORTED", "GENERATED", "RETRIEVED"] {
-            assert!(
-                output.contains(&format!("{tr}_HEX")),
-                "missing trait: {tr}"
-            );
+            assert!(output.contains(&format!("{tr}_HEX")), "missing trait: {tr}");
         }
 
         // Should have all 5 arc families

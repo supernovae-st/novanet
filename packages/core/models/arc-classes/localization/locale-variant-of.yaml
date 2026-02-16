@@ -1,19 +1,33 @@
 # packages/core/models/arc-classes/localization/locale-variant-of.yaml
-# ArcClass: LOCALE_VARIANT_OF — Regional locale variant: (en-AU)-[:LOCALE_VARIANT_OF]->(en-GB) for inheritance
+# NovaNet v0.13.1 — LLM-First YAML Ordering
+# ArcClass: LOCALE_VARIANT_OF — Regional locale variant for inheritance
 # v10.9.2: Renamed from VARIANT_OF to LOCALE_VARIANT_OF to avoid collision with semantic/VARIANT_OF
 
 arc:
+  # IDENTITY
   name: LOCALE_VARIANT_OF
   family: localization
   scope: intra_realm
-  source: Locale
-  target: Locale
-  cardinality: many_to_one
-  is_self_referential: true
-  inverse: HAS_LOCALE_VARIANT
+
+  # SEMANTIC (LLM-CRITICAL)
+  description: >-
+    Links a regional locale variant to its base locale for content inheritance.
+    Example: (en-AU)-[:LOCALE_VARIANT_OF]->(en-GB) means Australian English
+    inherits from British English.
   llm_context: |
     USE: when resolving regional variants for content inheritance.
     TRIGGERS: locale variant, regional variant, en-AU from en-GB, variant inheritance.
     NOT: fallback chain (use FALLBACK_TO), entity variants (use semantic/VARIANT_OF).
     RELATES: Locale (source/regional), Locale (target/base), HAS_LOCALE_VARIANT (inverse).
+
+  # GRAPH STRUCTURE
+  source: Locale
+  target: Locale
+  cardinality: many_to_one
+
+  # FLAGS
+  is_self_referential: true
+  inverse: HAS_LOCALE_VARIANT
+
+  # REFERENCE
   cypher_pattern: (Locale)-[:LOCALE_VARIANT_OF]->(Locale)

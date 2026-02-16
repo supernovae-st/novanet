@@ -1,18 +1,35 @@
 # packages/core/models/arc-classes/semantic/includes.yaml
-# ArcClass: INCLUDES - Entity includes/contains another Entity (containment)
-# v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
+# ArcClass: INCLUDES — Entity includes/contains another Entity (containment)
+# v0.13.1: LLM-First field ordering (semantic fields before structure)
 
 arc:
+  # --- IDENTITY ---
   name: INCLUDES
   family: semantic
   scope: intra_realm
-  temperature_threshold: 0.1  # Containment - always follow for completeness
 
+  # --- SEMANTIC (LLM-critical) ---
+  description: |
+    Entity includes or contains another entity. Models part-whole relationships
+    where one entity is composed of or contains other entities. Different from
+    HAS_CHILD (hierarchical ownership) and HAS_VARIANT (variations).
+  llm_context: |
+    USE: when finding parts/components of an entity.
+    TRIGGERS: includes, contains, parts, components, elements.
+    NOT: children (use HAS_CHILD), variants (use HAS_VARIANT).
+    RELATES: Entity (source/whole), Entity (target/part), INCLUDED_IN (inverse).
+
+  # --- GRAPH STRUCTURE ---
   source: Entity
   target: Entity
   cardinality: one_to_many
-  is_self_referential: true
 
+  # --- FLAGS ---
+  inverse: INCLUDED_IN
+  is_self_referential: true
+  temperature_threshold: 0.1
+
+  # --- DATA ---
   properties:
     - name: strength
       type: float
@@ -32,12 +49,5 @@ arc:
       enum: [part, component, element, member, feature]
       description: "Type of containment relationship"
 
-  inverse: INCLUDED_IN
-
-  llm_context: |
-    USE: when finding parts/components of an entity.
-    TRIGGERS: includes, contains, parts, components, elements.
-    NOT: children (use HAS_CHILD), variants (use HAS_VARIANT).
-    RELATES: Entity (source/whole), Entity (target/part), INCLUDED_IN (inverse).
-
+  # --- REFERENCE ---
   cypher_pattern: "(Entity)-[:INCLUDES {strength, temperature, containment_type}]->(Entity)"

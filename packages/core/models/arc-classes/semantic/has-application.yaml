@@ -1,18 +1,35 @@
 # packages/core/models/arc-classes/semantic/has-application.yaml
-# ArcClass: HAS_APPLICATION - Entity has applications (inverse of APPLIES_TO)
-# v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
+# ArcClass: HAS_APPLICATION — Entity has applications (inverse of APPLIES_TO)
+# v0.13.1: LLM-First field ordering (semantic fields before structure)
 
 arc:
+  # --- IDENTITY ---
   name: HAS_APPLICATION
   family: semantic
   scope: intra_realm
-  temperature_threshold: 0.2  # Application - important for use case discovery
 
+  # --- SEMANTIC (LLM-critical) ---
+  description: |
+    Inverse of APPLIES_TO. Entity (domain/industry) has applicable tools or
+    methods. Use to find what can be applied to a specific domain or use case.
+    Models the "what works here" relationship.
+  llm_context: |
+    USE: when finding tools/methods applicable to a domain.
+    TRIGGERS: applicable tools, domain tools, use cases, applications.
+    NOT: direct usage (use USES_ENTITY), capability (use ENABLES).
+    RELATES: Entity (source/domain), Entity (target/tool), APPLIES_TO (inverse).
+
+  # --- GRAPH STRUCTURE ---
   source: Entity
   target: Entity
   cardinality: many_to_many
-  is_self_referential: true
 
+  # --- FLAGS ---
+  inverse: APPLIES_TO
+  is_self_referential: true
+  temperature_threshold: 0.2
+
+  # --- DATA ---
   properties:
     - name: strength
       type: float
@@ -38,12 +55,5 @@ arc:
       enum: [primary, secondary, niche, experimental]
       description: "Relevance level for this application"
 
-  inverse: APPLIES_TO
-
-  llm_context: |
-    USE: when finding tools/methods applicable to a domain.
-    TRIGGERS: applicable tools, domain tools, use cases, applications.
-    NOT: direct usage (use USES_ENTITY), capability (use ENABLES).
-    RELATES: Entity (source/domain), Entity (target/tool), APPLIES_TO (inverse).
-
+  # --- REFERENCE ---
   cypher_pattern: "(Entity)-[:HAS_APPLICATION {strength, temperature, application_type, relevance}]->(Entity)"

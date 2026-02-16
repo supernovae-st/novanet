@@ -140,14 +140,23 @@ impl NexusSection {
     pub fn tabs(&self) -> &'static [NexusTab] {
         match self {
             NexusSection::Learn => &[NexusTab::Intro, NexusTab::Glossary, NexusTab::Tutorial],
-            NexusSection::Explore => &[NexusTab::Traits, NexusTab::Layers, NexusTab::Arcs, NexusTab::Arch],
+            NexusSection::Explore => &[
+                NexusTab::Traits,
+                NexusTab::Layers,
+                NexusTab::Arcs,
+                NexusTab::Arch,
+            ],
             NexusSection::Practice => &[NexusTab::Pipeline, NexusTab::Quiz, NexusTab::Stats],
         }
     }
 
     /// Get all sections.
     pub fn all() -> &'static [NexusSection] {
-        &[NexusSection::Learn, NexusSection::Explore, NexusSection::Practice]
+        &[
+            NexusSection::Learn,
+            NexusSection::Explore,
+            NexusSection::Practice,
+        ]
     }
 
     /// Next section (wraps).
@@ -977,8 +986,7 @@ impl NexusState {
                     "Quiz score: {}%",
                     self.stats.score_history.last().unwrap_or(&0)
                 ))
-            }
-            // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
+            } // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
         }
     }
 
@@ -1018,8 +1026,8 @@ impl NexusState {
     /// Navigate to previous section (LEARN ← EXPLORE ← PRACTICE ← LEARN).
     fn prev_section(&mut self) -> bool {
         let target_tab = match self.tab.section() {
-            NexusSection::Learn => NexusTab::Pipeline,  // ← PRACTICE (wrap)
-            NexusSection::Explore => NexusTab::Intro,   // ← LEARN
+            NexusSection::Learn => NexusTab::Pipeline, // ← PRACTICE (wrap)
+            NexusSection::Explore => NexusTab::Intro,  // ← LEARN
             NexusSection::Practice => NexusTab::Traits, // ← EXPLORE
         };
         self.tab = target_tab;
@@ -1125,8 +1133,7 @@ impl NexusState {
             NexusTab::Stats => {
                 // Stats tab: scroll stats view
                 false // No vertical navigation in stats
-            }
-            // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
+            } // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
         }
     }
 
@@ -1210,8 +1217,7 @@ impl NexusState {
             NexusTab::Stats => {
                 // Stats tab: scroll stats view
                 false // No vertical navigation in stats
-            }
-            // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
+            } // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
         }
     }
 
@@ -1349,8 +1355,7 @@ impl NexusState {
             NexusTab::Stats => {
                 // Stats doesn't have drill-down
                 false
-            }
-            // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
+            } // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
         }
     }
 
@@ -1494,8 +1499,7 @@ impl NexusState {
             }
             NexusTab::Stats => {
                 format!("Nexus > {} > {}", section, tab_name)
-            }
-            // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
+            } // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
         }
     }
 

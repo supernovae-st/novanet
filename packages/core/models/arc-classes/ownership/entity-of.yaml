@@ -1,19 +1,29 @@
-# packages/core/models/arc-classes/ownership/entity-of.yaml
-# ArcClass: ENTITY_OF — Inverse of HAS_ENTITY (Entity belongs to Project)
+# ═══════════════════════════════════════════════════════════════════════════════
+# ArcClass: ENTITY_OF — Entity belongs to Project (inverse of HAS_ENTITY)
+# v0.13.1: LLM-First property ordering
+# ═══════════════════════════════════════════════════════════════════════════════
 
 arc:
+  # IDENTITY
   name: ENTITY_OF
   family: ownership
   scope: intra_realm
-  source: Entity
-  target: Project
-  cardinality: many_to_one
-  inverse_of: HAS_ENTITY
 
+  # SEMANTIC (LLM-CRITICAL)
+  description: "Entity belongs to Project (inverse of HAS_ENTITY)"
   llm_context: |
     USE: when finding which Project owns an Entity.
     TRIGGERS: entity owner, entity project, which project.
     NOT: loading entities for a project (use HAS_ENTITY).
     RELATES: Entity (source), Project (target), HAS_ENTITY (inverse).
 
+  # GRAPH STRUCTURE
+  source: Entity
+  target: Project
+  cardinality: many_to_one
+
+  # FLAGS
+  inverse_of: HAS_ENTITY
+
+  # REFERENCE
   cypher_pattern: (Entity)-[:ENTITY_OF]->(Project)

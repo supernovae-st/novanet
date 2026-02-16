@@ -1,17 +1,28 @@
-# packages/core/models/arc-classes/generation/includes-style.yaml
-# ArcClass: INCLUDES_STYLE - Instruction includes style directives
-#
-# v0.12.4: ADR-028 - PageInstruction deleted (calculated at runtime from BlockInstructions)
-#   Source simplified to BlockInstruction only
+# =============================================================================
+# ArcClass: INCLUDES_STYLE
+# NovaNet v0.13.1 — LLM-First Ordering
+# =============================================================================
+# Instruction includes style directives
+# v0.12.4: ADR-028 - PageInstruction deleted (calculated at runtime)
+#          Source simplified to BlockInstruction only
+# =============================================================================
 
 arc:
+  # ─────────────────────────────────────────────────────────────────────────
+  # BLOC 2: IDENTITY
+  # ─────────────────────────────────────────────────────────────────────────
   name: INCLUDES_STYLE
   family: generation
   scope: cross_realm
 
-  source: BlockInstruction
-  target: Style
-  cardinality: many_to_one
+  # ─────────────────────────────────────────────────────────────────────────
+  # BLOC 3: SEMANTIC (LLM-Critical)
+  # ─────────────────────────────────────────────────────────────────────────
+  description: >-
+    Links a block instruction to the locale-specific style settings it should
+    apply during generation. This cross-realm arc connects org-level instructions
+    to shared-level style definitions, enabling locale-aware voice, tone, and
+    formatting configuration for LLM content generation.
 
   llm_context: |
     USE: when loading style settings for instruction compilation.
@@ -19,4 +30,14 @@ arc:
     NOT: for generated output (use HAS_NATIVE).
     RELATES: BlockInstruction (source), Style (target, cross_realm).
 
+  # ─────────────────────────────────────────────────────────────────────────
+  # BLOC 4: GRAPH STRUCTURE
+  # ─────────────────────────────────────────────────────────────────────────
+  source: BlockInstruction
+  target: Style
+  cardinality: many_to_one
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # BLOC 7: REFERENCE
+  # ─────────────────────────────────────────────────────────────────────────
   cypher_pattern: "(BlockInstruction)-[:INCLUDES_STYLE]->(Style)"

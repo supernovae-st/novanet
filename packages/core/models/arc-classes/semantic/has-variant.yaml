@@ -1,18 +1,35 @@
 # packages/core/models/arc-classes/semantic/has-variant.yaml
-# ArcClass: HAS_VARIANT - Entity has variants/versions (inverse of VARIANT_OF)
-# v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
+# ArcClass: HAS_VARIANT — Entity has variants/versions (inverse of VARIANT_OF)
+# v0.13.1: LLM-First field ordering (semantic fields before structure)
 
 arc:
+  # --- IDENTITY ---
   name: HAS_VARIANT
   family: semantic
   scope: intra_realm
-  temperature_threshold: 0.2  # Follow in most spreading activation scenarios
 
+  # --- SEMANTIC (LLM-critical) ---
+  description: |
+    Entity has variants or versions. Models alternative forms of the same
+    core concept (editions, flavors, specializations). Different from
+    HAS_TYPE (taxonomy) and HAS_CHILD (hierarchical ownership).
+  llm_context: |
+    USE: when finding variants/versions of an entity.
+    TRIGGERS: variants, versions, editions, specializations, customizations.
+    NOT: subtypes (use HAS_TYPE), children (use HAS_CHILD).
+    RELATES: Entity (source/base), Entity (target/variant), VARIANT_OF (inverse).
+
+  # --- GRAPH STRUCTURE ---
   source: Entity
   target: Entity
   cardinality: one_to_many
-  is_self_referential: true
 
+  # --- FLAGS ---
+  inverse: VARIANT_OF
+  is_self_referential: true
+  temperature_threshold: 0.2
+
+  # --- DATA ---
   properties:
     - name: strength
       type: float
@@ -32,12 +49,5 @@ arc:
       enum: [version, flavor, edition, specialization, customization]
       description: "Type of variant relationship"
 
-  inverse: VARIANT_OF
-
-  llm_context: |
-    USE: when finding variants/versions of an entity.
-    TRIGGERS: variants, versions, editions, specializations, customizations.
-    NOT: subtypes (use HAS_TYPE), children (use HAS_CHILD).
-    RELATES: Entity (source/base), Entity (target/variant), VARIANT_OF (inverse).
-
+  # --- REFERENCE ---
   cypher_pattern: "(Entity)-[:HAS_VARIANT {strength, temperature, variant_type}]->(Entity)"

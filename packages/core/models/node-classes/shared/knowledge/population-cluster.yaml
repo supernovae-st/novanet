@@ -1,20 +1,42 @@
-# models/node-classes/shared/knowledge/population-cluster.yaml
-# PopulationCluster - Macro population cluster for image generation diversity
-#
+# ─────────────────────────────────────────────────────────────────────────────
+# PopulationCluster — Macro population cluster for image generation diversity
+# ─────────────────────────────────────────────────────────────────────────────
+# v0.13.1: LLM-First field ordering (ADR-031)
 # v10.8: Geographic Taxonomy - Phase 5
 # Data: 7 macro clusters (West Eurasian, East Asian, South Asian, etc.)
 # Use case: Generate diverse, representative images for different markets
+# ─────────────────────────────────────────────────────────────────────────────
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════
   name: PopulationCluster
   realm: shared
   layer: knowledge
   trait: imported
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC
+  # ═══════════════════════════════════════════════════════════════════════════
+  description: "Macro population cluster for generating diverse, representative imagery"
+
+  llm_context: |
+    USE: for generating diverse, representative imagery by macro population cluster.
+    TRIGGERS: west eurasian, east asian, south asian, population cluster, image diversity.
+    NOT: fine-grained population diversity (use PopulationSubCluster).
+    RELATES: PopulationSubCluster (CLUSTER_OF), Locale (HAS_PRIMARY_POPULATION).
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════
   icon:
     web: "users"
     terminal: "◎"
-  description: "Macro population cluster for generating diverse, representative imagery"
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA
+  # ═══════════════════════════════════════════════════════════════════════════
   standard_properties:
     key:
       type: string
@@ -41,12 +63,6 @@ node:
       required: true
       description: "Short description"
       example: "European, Middle Eastern, and South Asian populations"
-
-    llm_context:
-      type: string
-      required: true
-      description: "LLM hints for image generation"
-      example: "USE: for European, MENA, South Asian imagery. TRIGGERS: europe, middle east, caucasian. IMAGE: varied skin tones from light to olive, varied hair/eye colors."
 
     created_at:
       type: datetime
@@ -82,6 +98,9 @@ node:
       description: "Number of PopulationSubCluster children"
       example: 5
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH
+  # ═══════════════════════════════════════════════════════════════════════════
   relations:
     incoming:
       - type: CLUSTER_OF
@@ -94,6 +113,9 @@ node:
         cardinality: "N:1"
         description: "Locales where this is the primary population"
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE
+  # ═══════════════════════════════════════════════════════════════════════════
   example:
     data:
       key: "west-eurasian"

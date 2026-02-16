@@ -14,3 +14,4 @@ pub mod node;
 pub mod read;
 pub mod schema;
 pub mod search;
+pub mod views;

@@ -1,24 +1,39 @@
-# models/node-classes/shared/config/entity-category.yaml
-# EntityCategory - Semantic classification for Entity nodes
-#
-# v11.4: Moved to shared/config (classification nodes layer)
-#
-# v11.0: Shared config node for categorizing entities by purpose
-# Enables: filtering, grouping, and LLM context selection by category
-# Source: Universal taxonomy (applies to all orgs)
+# ═══════════════════════════════════════════════════════════════════════════════
+# NodeClass: EntityCategory — Semantic category for classifying Entity nodes
+# v0.13.1: LLM-First property ordering
+# ═══════════════════════════════════════════════════════════════════════════════
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════════
+
   name: EntityCategory
   realm: shared
   layer: config
   trait: defined
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  description: "Semantic category for classifying Entity nodes by their purpose"
+  llm_context: |
+    USE: when categorizing entities by purpose (THING, ACTION, FEATURE, etc.).
+    TRIGGERS: "entity category", "entity type", "classification", "what kind of entity".
+    NOT: for entity instances (use Entity), for arc classification (use ArcFamily).
+    RELATES: Entity (via BELONGS_TO), shared/config layer.
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════════
+
   icon:
     web: "folder"
     terminal: "▤"
-  description: "Semantic category for classifying Entity nodes by their purpose"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # STANDARD PROPERTIES
+  # BLOC 4: DATA — Standard Properties
   # ═══════════════════════════════════════════════════════════════════════════════
 
   standard_properties:
@@ -62,7 +77,7 @@ node:
       required: true
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # CATEGORY-SPECIFIC PROPERTIES
+  # BLOC 4: DATA — Category-Specific Properties
   # ═══════════════════════════════════════════════════════════════════════════════
 
   properties:
@@ -88,7 +103,7 @@ node:
       example: 1
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # INCOMING RELATIONS (TO this node)
+  # BLOC 5: GRAPH — Incoming Relations
   # ═══════════════════════════════════════════════════════════════════════════════
 
   incoming_relations:
@@ -99,7 +114,7 @@ node:
       description: "Entities classified under this category (org Entity -> shared EntityCategory)"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # EXAMPLES
+  # BLOC 6: REFERENCE — Examples
   # ═══════════════════════════════════════════════════════════════════════════════
 
   example:

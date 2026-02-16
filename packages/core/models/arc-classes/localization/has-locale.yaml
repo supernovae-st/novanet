@@ -1,13 +1,26 @@
 # packages/core/models/arc-classes/localization/has-locale.yaml
+# NovaNet v0.13.1 — LLM-First YAML Ordering
 # ArcClass: HAS_LOCALE — Geographic/Cultural/Economic region contains Locale (inverse of IN_*)
-#
 # v0.12.5: ADR-026 Inverse Arc Policy
 
 arc:
+  # IDENTITY
   name: HAS_LOCALE
   family: localization
   scope: intra_realm
 
+  # SEMANTIC (LLM-CRITICAL)
+  description: >-
+    Links geographic, cultural, or economic regions to the Locales they contain.
+    Inverse of IN_COUNTRY, IN_CULTURAL_SUBREALM, IN_ECONOMIC_REGION, IN_SUBREGION.
+    Used for finding all locales within a given region.
+  llm_context: |
+    USE: when finding all Locales in a geographic/cultural/economic region.
+    TRIGGERS: "country locales", "region languages", "locales in", "which locales".
+    NOT: for finding a Locale's region (use IN_COUNTRY, IN_CULTURAL_SUBREALM, IN_ECONOMIC_REGION, IN_SUBREGION).
+    RELATES: Country/CulturalSubRealm/EconomicRegion/GeoRegion/GeoSubRegion (source), Locale (target).
+
+  # GRAPH STRUCTURE
   source:
     - Country
     - CulturalSubRealm
@@ -17,16 +30,12 @@ arc:
   target: Locale
   cardinality: one_to_many
 
+  # FLAGS
   inverse_of:
     - IN_COUNTRY
     - IN_CULTURAL_SUBREALM
     - IN_ECONOMIC_REGION
     - IN_SUBREGION
 
-  llm_context: |
-    USE: when finding all Locales in a geographic/cultural/economic region.
-    TRIGGERS: "country locales", "region languages", "locales in", "which locales".
-    NOT: for finding a Locale's region (use IN_COUNTRY, IN_CULTURAL_SUBREALM, IN_ECONOMIC_REGION, IN_SUBREGION).
-    RELATES: Country/CulturalSubRealm/EconomicRegion/GeoRegion/GeoSubRegion (source), Locale (target).
-
+  # REFERENCE
   cypher_pattern: "(Country|CulturalSubRealm|EconomicRegion|GeoRegion|GeoSubRegion)-[:HAS_LOCALE]->(Locale)"

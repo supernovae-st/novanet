@@ -1,21 +1,41 @@
-# models/node-classes/shared/locale/adaptation.yaml
-# Adaptation - Content adaptation rules for FACTS vs ILLUSTRATIONS classification
-#
-# v10.7: REFACTORED - Simplified to core FACTS/ILLUSTRATIONS + technical terms
-# Migrated: formality (-> Style), calendar/seasons (-> Culture), measurement (-> Formatting)
-# Stability: Medium - update quarterly
+# ═══════════════════════════════════════════════════════════════════════════════
+# NodeClass: Adaptation — Content adaptation rules for FACTS vs ILLUSTRATIONS
+# v0.13.1: LLM-First property ordering
+# ═══════════════════════════════════════════════════════════════════════════════
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════════
+
   name: Adaptation
   realm: shared
   layer: locale
   trait: imported
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  display_name: "Adaptation"
+  description: "Content adaptation rules for FACTS vs ILLUSTRATIONS classification and technical term handling. Core decision engine for what to translate literally vs generate natively."
+  llm_context: |
+    USE: when deciding content adaptation strategy (FACT vs ILLUSTRATION).
+    TRIGGERS: "localization", "adaptation", "idioms", "metaphors", "technical terms", "translate vs generate".
+    NOT: for formatting (use Formatting), for style (use Style), for culture (use Culture).
+    RELATES: Locale (via HAS_ADAPTATION), FACTS=translate literally, ILLUSTRATIONS=generate native.
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════════
+
   icon:
     web: "droplet"
     terminal: "◇"
-  display_name: "Adaptation"
-  description: "Content adaptation rules for FACTS vs ILLUSTRATIONS classification and technical term handling. Core decision engine for what to translate literally vs generate natively."
-  llm_context: "Use this to decide: Is this content a FACT (translate literally) or ILLUSTRATION (generate natively)? Also handles technical term preferences."
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA — Standard Properties
+  # ═══════════════════════════════════════════════════════════════════════════════
 
   standard_properties:
     key:
@@ -49,6 +69,10 @@ node:
     updated_at:
       type: datetime
       required: true
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA — Adaptation-Specific Properties
+  # ═══════════════════════════════════════════════════════════════════════════════
 
   properties:
     # =========================================================================
@@ -177,6 +201,10 @@ node:
       type: text
       required: false
       description: "Full source markdown for edge cases"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH — Relations
+  # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
     incoming:

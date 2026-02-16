@@ -1,22 +1,32 @@
 # packages/core/models/arc-classes/localization/has-income-level.yaml
-# ArcClass: HAS_INCOME_LEVEL - Locale's World Bank income classification
+# NovaNet v0.13.1 — LLM-First YAML Ordering
+# ArcClass: HAS_INCOME_LEVEL — Locale's World Bank income classification
 # v10.8: Geographic Taxonomy
 
 arc:
+  # IDENTITY
   name: HAS_INCOME_LEVEL
   family: localization
   scope: intra_realm
 
-  source: Locale
-  target: IncomeGroup
-  cardinality: many_to_one
-
-  inverse: INCOME_CLASSIFIES
-
+  # SEMANTIC (LLM-CRITICAL)
+  description: >-
+    Links a Locale to its World Bank income classification (IncomeGroup).
+    Used for pricing strategies, messaging adaptation, and market segmentation
+    based on economic development level (HIC, UMIC, LMIC, LIC).
   llm_context: |
     USE: when finding World Bank income classification for pricing/messaging.
     TRIGGERS: income level, market classification, pricing tier, economic group.
     NOT: lending type (use HAS_LENDING_TYPE), economic region (use IN_ECONOMIC_REGION).
     RELATES: Locale (source), IncomeGroup (target), CLASSIFIES (inverse).
 
+  # GRAPH STRUCTURE
+  source: Locale
+  target: IncomeGroup
+  cardinality: many_to_one
+
+  # FLAGS
+  inverse: INCOME_CLASSIFIES
+
+  # REFERENCE
   cypher_pattern: "(Locale)-[:HAS_INCOME_LEVEL]->(IncomeGroup)"

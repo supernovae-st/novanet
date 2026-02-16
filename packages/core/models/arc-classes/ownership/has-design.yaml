@@ -1,18 +1,31 @@
-# models/arc-classes/ownership/has-design.yaml
-# HAS_DESIGN - Brand owns BrandDesign (ADR-028)
+# ═══════════════════════════════════════════════════════════════════════════════
+# ArcClass: HAS_DESIGN — Brand owns BrandDesign
+# v0.13.1: LLM-First property ordering
+# ADR-028: Brand Architecture
+# ═══════════════════════════════════════════════════════════════════════════════
 
 arc:
+  # IDENTITY
   name: HAS_DESIGN
   family: ownership
   scope: intra_realm
-  source: Brand
-  target: BrandDesign
-  cardinality: one_to_one
-  required: false
-  inverse: DESIGN_OF
+
+  # SEMANTIC (LLM-CRITICAL)
+  description: "Brand owns BrandDesign (visual identity, colors, typography)"
   llm_context: |
     USE: when loading visual design for image generation.
     TRIGGERS: brand design, colors, typography, visual style, UI patterns.
     NOT: brand voice (use Brand), brand rules (use HAS_PRINCIPLES).
     RELATES: Brand (source), BrandDesign (target), DESIGN_OF (inverse).
+
+  # GRAPH STRUCTURE
+  source: Brand
+  target: BrandDesign
+  cardinality: one_to_one
+
+  # FLAGS
+  inverse: DESIGN_OF
+  required: false
+
+  # REFERENCE
   cypher_pattern: "(Brand)-[:HAS_DESIGN]->(BrandDesign)"

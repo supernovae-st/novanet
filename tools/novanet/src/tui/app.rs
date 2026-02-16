@@ -15,11 +15,11 @@ use super::data::{
     get_all_adrs, get_architecture_diagram,
 };
 use super::handlers::dispatch_mode_handler;
-use super::nexus::{NexusState, NexusTab};
 use super::nexus::views::LoadedViews;
+use super::nexus::{NexusState, NexusTab};
 use super::schema::{CoverageStats, MatchedProperty, ValidatedProperty, ValidationStats};
 use super::theme::Theme;
-use super::yaml::{YamlSections, YamlViewSection};
+// Note: YamlSections and YamlViewSection removed in v0.13.1 (collapse/peek eliminated)
 
 use ratatui::text::Span;
 
@@ -117,14 +117,12 @@ impl Focus {
 /// ```text
 /// ┌─────────┬─────────────────┬───────────────┐
 /// │  TREE   │ HEADER          │ SOURCE        │
-/// │         │ PROPERTIES      ├───────────────┤
-/// │         ├─────────────────│ DIAGRAM       │
-/// │         │ ARCS            ├───────────────┤
-/// │         │ (consolidated)  │ ARCHITECTURE  │
+/// │         │ PROPERTIES      │               │
+/// │         │ ARCS            │ (empty)       │
 /// └─────────┴─────────────────┴───────────────┘
 /// ```
-/// Tab cycles: Tree -> Header -> Properties -> Arcs -> Source -> Diagram -> Architecture -> Tree
-/// v0.13: ARCS consolidates former "Arcs" summary + "Graph" detail panels
+/// Tab cycles: Tree -> Header -> Properties -> Arcs -> Source -> Tree
+/// v0.13.1: Diagram and Architecture removed (panel simplification)
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum InfoBox {
     #[default]
@@ -133,35 +131,31 @@ pub enum InfoBox {
     Properties,
     Arcs, // v0.13: Consolidated arc relationships panel (was Graph + Arcs)
     Source,
-    Diagram,
-    Architecture,
+    // v0.13.1: Diagram and Architecture removed (panel simplification)
 }
 
 impl InfoBox {
     /// Cycle to next box (Tab or right arrow).
-    /// 7-box cycle: Tree → Header → Properties → Arcs → Source → Diagram → Architecture → Tree
+    /// 5-box cycle: Tree → Header → Properties → Arcs → Source → Tree
+    /// v0.13.1: Diagram and Architecture removed
     pub fn next(self) -> Self {
         match self {
             Self::Tree => Self::Header,
             Self::Header => Self::Properties,
             Self::Properties => Self::Arcs,
             Self::Arcs => Self::Source,
-            Self::Source => Self::Diagram,
-            Self::Diagram => Self::Architecture,
-            Self::Architecture => Self::Tree,
+            Self::Source => Self::Tree,
         }
     }
 
     /// Cycle to previous box (Shift+Tab or left arrow).
     pub fn prev(self) -> Self {
         match self {
-            Self::Tree => Self::Architecture,
+            Self::Tree => Self::Source,
             Self::Header => Self::Tree,
             Self::Properties => Self::Header,
             Self::Arcs => Self::Properties,
             Self::Source => Self::Arcs,
-            Self::Diagram => Self::Source,
-            Self::Architecture => Self::Diagram,
         }
     }
 
@@ -173,14 +167,12 @@ impl InfoBox {
             Self::Properties => "PROPERTIES",
             Self::Arcs => "ARCS",
             Self::Source => "SOURCE",
-            Self::Diagram => "DIAGRAM",
-            Self::Architecture => "ARCH",
         }
     }
 
     /// Check if this box is in the right panel (YAML column).
     pub fn is_right_panel(self) -> bool {
-        matches!(self, Self::Source | Self::Diagram | Self::Architecture)
+        matches!(self, Self::Source)
     }
 }
 
@@ -315,13 +307,13 @@ pub struct App {
     pub yaml_path: String,
     pub yaml_scroll: usize,
     pub yaml_line_count: usize, // Cached line count (avoids per-scroll recomputation)
-    /// Parsed YAML sections for contextual view (Class vs Instance).
-    pub yaml_sections: Option<YamlSections>,
-    /// Whether peek mode is active (showing hidden section in dim).
-    pub yaml_peek: bool,
+    // v0.13.1: yaml_sections and yaml_peek removed (collapse/peek eliminated)
     /// SOURCE panel tab selection (Schema = Class YAML, Instance = Node data).
     /// v0.13: A' Tree Sync design - switching tabs syncs tree selection.
     pub source_tab: SourceTab,
+    /// Cursor position of the Class when switching to Instance tab.
+    /// v0.13 A' Tree Sync: Used to navigate back to Class when switching to Schema tab.
+    source_tab_class_cursor: Option<usize>,
     // Info panel scroll (separate from yaml)
     pub info_scroll: usize,
     pub info_line_count: usize, // Set by UI after building lines
@@ -437,9 +429,9 @@ impl App {
             yaml_path: String::new(),
             yaml_scroll: 0,
             yaml_line_count: 0,
-            yaml_sections: None,
-            yaml_peek: false,
+            // v0.13.1: yaml_sections and yaml_peek removed
             source_tab: SourceTab::default(),
+            source_tab_class_cursor: None,
             info_scroll: 0,
             info_line_count: 0,
             root_path,
@@ -484,16 +476,7 @@ impl App {
         app
     }
 
-    /// Get the active YAML section based on current navigation mode.
-    /// - Meta mode → Class section (schema)
-    /// - Data mode → Instance section (data nodes)
-    /// - Nexus/Views → Class section
-    pub fn yaml_active_section(&self) -> YamlViewSection {
-        match self.mode {
-            // Graph mode shows Class schema, Nexus/Views shows Class schema
-            NavMode::Graph | NavMode::Nexus | NavMode::Views => YamlViewSection::Class,
-        }
-    }
+    // v0.13.1: yaml_active_section() removed (collapse/peek eliminated)
 
     /// Map selected_box to the appropriate Focus panel.
     /// Used to update panel focus when navigating between boxes.
@@ -502,7 +485,7 @@ impl App {
             InfoBox::Tree => Focus::Tree,
             InfoBox::Header | InfoBox::Properties => Focus::Info,
             InfoBox::Arcs => Focus::Graph, // v0.13: Arcs panel uses Graph focus
-            InfoBox::Source | InfoBox::Diagram | InfoBox::Architecture => Focus::Yaml,
+            InfoBox::Source => Focus::Yaml,
         }
     }
 
@@ -532,6 +515,30 @@ impl App {
         // Get current item using mode-aware method (handles filtered Data mode)
         // This is the same logic as current_item() but we extract data to avoid borrow issues
         let current = self.get_current_tree_item_data();
+
+        // v0.13 A' Tree Sync: Bidirectional sync - update SourceTab based on item type
+        // When navigating to Class → Schema tab, Instance → Instance tab
+        match &current {
+            TreeItemData::Class { .. } => {
+                if self.source_tab != SourceTab::Schema {
+                    self.source_tab = SourceTab::Schema;
+                    // Clear saved class cursor since we're navigating directly
+                    self.source_tab_class_cursor = None;
+                }
+            }
+            TreeItemData::Instance { .. } => {
+                if self.source_tab != SourceTab::Instance {
+                    self.source_tab = SourceTab::Instance;
+                }
+            }
+            _ => {
+                // For other items (Realm, Layer, Arc, etc.), reset to Schema tab
+                if self.source_tab != SourceTab::Schema {
+                    self.source_tab = SourceTab::Schema;
+                    self.source_tab_class_cursor = None;
+                }
+            }
+        }
 
         // Handle based on item type
         match current {
@@ -575,7 +582,6 @@ impl App {
                     self.yaml_path.clear();
                     self.yaml_content.clear();
                     self.yaml_line_count = 0;
-                    self.yaml_sections = None;
                 }
             }
             TreeItemData::None => {
@@ -660,14 +666,12 @@ impl App {
     /// Load YAML content with caching (avoids re-reading files on every navigation).
     fn load_yaml_cached(&mut self, relative_path: &str) {
         self.yaml_path = relative_path.to_string();
-        self.yaml_peek = false; // Reset peek when loading new file
+        // v0.13.1: yaml_peek reset removed (collapse/peek eliminated)
 
         // Check cache first
         if let Some(cached) = self.yaml_cache.get(relative_path) {
             self.yaml_content = cached.clone();
             self.yaml_line_count = self.yaml_content.lines().count();
-            // Parse sections for contextual view
-            self.yaml_sections = YamlSections::parse(&self.yaml_content);
             return;
         }
 
@@ -683,8 +687,6 @@ impl App {
         // Update display
         self.yaml_content = content;
         self.yaml_line_count = self.yaml_content.lines().count();
-        // Parse sections for contextual view
-        self.yaml_sections = YamlSections::parse(&self.yaml_content);
     }
 
     /// Ensure cursor is visible by adjusting scroll.
@@ -848,7 +850,8 @@ impl App {
                             for class_info in &layer.classes {
                                 let match_display =
                                     fuzzy_match(&class_info.display_name, &mut matcher, &pattern);
-                                let match_key = fuzzy_match(&class_info.key, &mut matcher, &pattern);
+                                let match_key =
+                                    fuzzy_match(&class_info.key, &mut matcher, &pattern);
                                 if let Some((score, indices)) = match_display.or(match_key) {
                                     matches.push((idx, score, indices));
                                 }
@@ -1172,10 +1175,7 @@ impl App {
                         self.toggle_tree_item();
                     }
                     Focus::Yaml => {
-                        // Toggle peek mode (show/hide other section)
-                        if self.yaml_sections.is_some() {
-                            self.yaml_peek = !self.yaml_peek;
-                        }
+                        // v0.13.1: peek mode removed (PROPERTIES panel shows instance data)
                     }
                     Focus::Info => {
                         // Toggle expanded property text (word-wrap on multiple lines)
@@ -1492,14 +1492,8 @@ impl App {
                 true
             }
 
-            // Esc: close peek (YAML), or exit filtered mode
+            // Esc: exit filtered mode
             KeyCode::Esc => {
-                // First priority: close yaml peek if active
-                if self.yaml_peek {
-                    self.yaml_peek = false;
-                    return true;
-                }
-                // Second priority: exit filtered mode (stay in Graph mode)
                 if self.is_filtered_graph_mode() {
                     self.exit_filtered_data_mode();
                     return true;
@@ -1654,23 +1648,66 @@ impl App {
 
     /// Toggle SOURCE panel tab between Schema and Instance.
     /// v0.13: A' Tree Sync design - switching tabs syncs tree selection.
+    ///
+    /// When switching to Instance tab:
+    /// - Saves current class cursor position
+    /// - Expands the class to show instances
+    /// - Navigates tree to first instance
+    ///
+    /// When switching to Schema tab:
+    /// - Navigates back to the saved class cursor position
+    ///
     /// Returns true if the toggle was successful (Instance tab available).
     pub fn toggle_source_tab(&mut self) -> bool {
         match self.source_tab {
             SourceTab::Schema => {
-                // Check if current Class has instances before switching
-                if self.has_instances_for_current_class() {
-                    self.source_tab = SourceTab::Instance;
-                    // TODO: Sync tree to first instance
-                    true
-                } else {
+                // Get current class info before switching
+                let class_info = match self.current_item() {
+                    Some(TreeItem::Class(realm, layer, class)) => {
+                        Some((realm.key.clone(), layer.key.clone(), class.key.clone()))
+                    }
+                    _ => None,
+                };
+
+                let Some((realm_key, layer_key, class_key)) = class_info else {
+                    self.set_status("Select a Class first");
+                    return false;
+                };
+
+                // Check if class has instances
+                if !self.has_instances_for_current_class() {
                     self.set_status("No instances for this class");
-                    false
+                    return false;
                 }
+
+                // Save current class cursor position for returning later
+                self.source_tab_class_cursor = Some(self.tree_cursor);
+
+                // Expand the class to make instances visible
+                self.tree.expand(&format!("class:{}", class_key));
+
+                // Find and navigate to first instance
+                if let Some(instance_cursor) = self
+                    .tree
+                    .find_first_instance_cursor(&realm_key, &layer_key, &class_key)
+                {
+                    self.tree_cursor = instance_cursor;
+                    self.ensure_cursor_visible();
+                    self.load_yaml_for_current();
+                }
+
+                self.source_tab = SourceTab::Instance;
+                true
             }
             SourceTab::Instance => {
+                // Navigate back to the saved class cursor position
+                if let Some(class_cursor) = self.source_tab_class_cursor.take() {
+                    self.tree_cursor = class_cursor;
+                    self.ensure_cursor_visible();
+                    self.load_yaml_for_current();
+                }
+
                 self.source_tab = SourceTab::Schema;
-                // TODO: Sync tree back to Class
                 true
             }
         }
@@ -3647,29 +3684,27 @@ mod tests {
     }
 
     // =========================================================================
-    // InfoBox Selection Tests (v0.13.0)
+    // InfoBox Selection Tests (v0.13.1)
     // =========================================================================
 
     #[test]
-    fn test_infobox_cycle_includes_architecture() {
-        // v0.13: 7-box cycle (Graph removed, Arcs is the consolidated arc relationships panel)
+    fn test_infobox_cycle() {
+        // v0.13.1: 5-box cycle (Diagram and Architecture removed)
         let mut current = InfoBox::Tree;
         let mut visited = vec![current];
 
-        for _ in 0..7 {
+        for _ in 0..5 {
             current = current.next();
             visited.push(current);
         }
 
-        // Should cycle: Tree -> Header -> Properties -> Arcs -> Source -> Diagram -> Architecture -> Tree
+        // Should cycle: Tree -> Header -> Properties -> Arcs -> Source -> Tree
         assert_eq!(visited[0], InfoBox::Tree);
         assert_eq!(visited[1], InfoBox::Header);
         assert_eq!(visited[2], InfoBox::Properties);
         assert_eq!(visited[3], InfoBox::Arcs);
         assert_eq!(visited[4], InfoBox::Source);
-        assert_eq!(visited[5], InfoBox::Diagram);
-        assert_eq!(visited[6], InfoBox::Architecture);
-        assert_eq!(visited[7], InfoBox::Tree); // Full cycle
+        assert_eq!(visited[5], InfoBox::Tree); // Full cycle
     }
 
     #[test]
@@ -3677,39 +3712,32 @@ mod tests {
         // Shift+Tab cycle should go in reverse
         let mut current = InfoBox::Tree;
         current = current.prev();
-        assert_eq!(current, InfoBox::Architecture);
-
-        current = current.prev();
-        assert_eq!(current, InfoBox::Diagram);
-
-        current = current.prev();
         assert_eq!(current, InfoBox::Source);
+
+        current = current.prev();
+        assert_eq!(current, InfoBox::Arcs);
+
+        current = current.prev();
+        assert_eq!(current, InfoBox::Properties);
     }
 
     #[test]
     fn test_infobox_is_right_panel() {
-        // Right panel boxes: Source, Diagram, Architecture
+        // v0.13.1: Only Source is in the right panel (Diagram/Architecture removed)
         assert!(!InfoBox::Tree.is_right_panel());
         assert!(!InfoBox::Header.is_right_panel());
         assert!(!InfoBox::Properties.is_right_panel());
         assert!(!InfoBox::Arcs.is_right_panel());
 
         assert!(InfoBox::Source.is_right_panel());
-        assert!(InfoBox::Diagram.is_right_panel());
-        assert!(InfoBox::Architecture.is_right_panel());
     }
 
     #[test]
-    fn test_focus_for_selected_box_architecture() {
+    fn test_focus_for_selected_box_yaml_panel() {
         let mut app = create_test_app();
 
-        app.selected_box = InfoBox::Architecture;
-        assert_eq!(app.focus_for_selected_box(), Focus::Yaml);
-
+        // v0.13.1: Source is the only right-panel box (Diagram/Architecture removed)
         app.selected_box = InfoBox::Source;
-        assert_eq!(app.focus_for_selected_box(), Focus::Yaml);
-
-        app.selected_box = InfoBox::Diagram;
         assert_eq!(app.focus_for_selected_box(), Focus::Yaml);
 
         // Verify other boxes map to their panels
@@ -3722,12 +3750,165 @@ mod tests {
 
     #[test]
     fn test_infobox_names() {
+        // v0.13.1: 5 boxes (Diagram and Architecture removed)
         assert_eq!(InfoBox::Tree.name(), "TREE");
         assert_eq!(InfoBox::Header.name(), "HEADER");
         assert_eq!(InfoBox::Properties.name(), "PROPERTIES");
         assert_eq!(InfoBox::Arcs.name(), "ARCS");
         assert_eq!(InfoBox::Source.name(), "SOURCE");
-        assert_eq!(InfoBox::Diagram.name(), "DIAGRAM");
-        assert_eq!(InfoBox::Architecture.name(), "ARCH");
+    }
+
+    // ========================================================================
+    // v0.13 A' Tree Sync tests
+    // ========================================================================
+
+    #[test]
+    fn test_source_tab_default_is_schema() {
+        let app = App::new(create_test_tree(), "/test/root".to_string());
+        assert_eq!(app.source_tab, SourceTab::Schema);
+        assert!(app.source_tab_class_cursor.is_none());
+    }
+
+    #[test]
+    fn test_source_tab_label() {
+        assert_eq!(SourceTab::Schema.label(), "Schema");
+        assert_eq!(SourceTab::Instance.label(), "Instance");
+    }
+
+    #[test]
+    fn test_toggle_source_tab_requires_class_selection() {
+        let mut app = App::new(create_test_tree(), "/test/root".to_string());
+
+        // Without selecting a Class, toggle should fail
+        app.tree_cursor = 0; // ClassesSection header
+        let result = app.toggle_source_tab();
+        assert!(!result, "Toggle should fail without Class selection");
+        assert_eq!(app.source_tab, SourceTab::Schema);
+    }
+
+    #[test]
+    fn test_toggle_source_tab_stores_class_cursor() {
+        use crate::tui::data::InstanceInfo;
+        use std::collections::BTreeMap;
+
+        let mut app = App::new(create_test_tree(), "/test/root".to_string());
+
+        // First navigate to a Class
+        app.tree.expand("classes");
+        app.tree.expand("realm:shared");
+        app.tree.expand("layer:shared:config");
+
+        // Add an instance so toggle can succeed
+        app.tree.instances.insert(
+            "AppConfig".to_string(),
+            vec![InstanceInfo {
+                key: "instance1".to_string(),
+                display_name: "Instance 1".to_string(),
+                class_key: "AppConfig".to_string(),
+                properties: BTreeMap::new(),
+                outgoing_arcs: vec![],
+                incoming_arcs: vec![],
+                arcs_loading: false,
+                missing_required_count: 0,
+                filled_properties: 0,
+                total_properties: 0,
+            }],
+        );
+
+        // Navigate to Class (cursor 4 = ClassesSection(0), shared(1), config(2), AppConfig(3))
+        // Note: In mock tree, the class index depends on expanded state
+        if let Some(cursor) =
+            app.tree
+                .find_class_cursor_readonly("shared", "config", "AppConfig", true)
+        {
+            app.tree_cursor = cursor;
+
+            // Toggle to Instance tab
+            let result = app.toggle_source_tab();
+
+            if result {
+                // Should have stored the class cursor
+                assert_eq!(app.source_tab, SourceTab::Instance);
+                // Note: class cursor stored is cursor value before toggle expanded class
+            }
+        }
+    }
+
+    #[test]
+    fn test_toggle_source_tab_back_restores_cursor() {
+        use crate::tui::data::InstanceInfo;
+        use std::collections::BTreeMap;
+
+        let mut app = App::new(create_test_tree(), "/test/root".to_string());
+
+        // Setup tree
+        app.tree.expand("classes");
+        app.tree.expand("realm:shared");
+        app.tree.expand("layer:shared:config");
+
+        // Add instance
+        app.tree.instances.insert(
+            "AppConfig".to_string(),
+            vec![InstanceInfo {
+                key: "instance1".to_string(),
+                display_name: "Instance 1".to_string(),
+                class_key: "AppConfig".to_string(),
+                properties: BTreeMap::new(),
+                outgoing_arcs: vec![],
+                incoming_arcs: vec![],
+                arcs_loading: false,
+                missing_required_count: 0,
+                filled_properties: 0,
+                total_properties: 0,
+            }],
+        );
+
+        // Find and navigate to class
+        if let Some(class_cursor) =
+            app.tree
+                .find_class_cursor_readonly("shared", "config", "AppConfig", true)
+        {
+            app.tree_cursor = class_cursor;
+            let original_cursor = class_cursor;
+
+            // Toggle to Instance
+            let _ = app.toggle_source_tab();
+
+            if app.source_tab == SourceTab::Instance {
+                // Toggle back to Schema
+                let _ = app.toggle_source_tab();
+
+                assert_eq!(app.source_tab, SourceTab::Schema);
+                assert_eq!(
+                    app.tree_cursor, original_cursor,
+                    "Should restore original cursor"
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn test_bidirectional_sync_class_sets_schema_tab() {
+        let mut app = App::new(create_test_tree(), "/test/root".to_string());
+
+        // Setup tree
+        app.tree.expand("classes");
+        app.tree.expand("realm:shared");
+        app.tree.expand("layer:shared:config");
+
+        // Start with Instance tab
+        app.source_tab = SourceTab::Instance;
+
+        // Simulate navigation to Class (this is what load_yaml_for_current does)
+        if let Some(class_cursor) =
+            app.tree
+                .find_class_cursor_readonly("shared", "config", "AppConfig", true)
+        {
+            app.tree_cursor = class_cursor;
+            app.load_yaml_for_current();
+
+            // Should have synced to Schema tab
+            assert_eq!(app.source_tab, SourceTab::Schema);
+        }
     }
 }

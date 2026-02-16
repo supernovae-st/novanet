@@ -17,15 +17,15 @@ use ratatui::widgets::{
 use rustc_hash::FxHashSet;
 
 use super::{
-    COLOR_ACTIVE_CLASS_BG, COLOR_ARC_FAMILY, COLOR_CONNECTED, COLOR_DESC_TEXT, COLOR_HIGHLIGHT_BG,
+    COLOR_ACTIVE_CLASS_BG, COLOR_ARC_FAMILY, COLOR_DESC_TEXT, COLOR_HIGHLIGHT_BG, COLOR_INSTANCE,
     COLOR_MUTED_TEXT, COLOR_UNFOCUSED_BORDER, EmptyStateClass, STYLE_DIM, STYLE_HIGHLIGHT,
-    STYLE_PRIMARY, STYLE_UNFOCUSED, arc_family_abbrev, arc_family_badge_icon, cardinality_abbrev,
-    layer_abbrev, layer_badge_icon, realm_abbrev, realm_badge_icon, render_empty_state, spinner,
-    trait_abbrev, trait_icon,
+    STYLE_PRIMARY, STYLE_UNFOCUSED, cardinality_abbrev, layer_badge_icon, realm_badge_icon,
+    render_empty_state, spinner, trait_abbrev, trait_icon,
 };
 use crate::tui::app::{App, Focus};
 use crate::tui::data::ArcDirection;
 use crate::tui::theme::hex_to_color;
+use crate::tui::unicode::display_width;
 
 /// Create styled spans with fuzzy match highlighting and optional background.
 /// Matched character positions are shown with a yellow highlight.
@@ -192,7 +192,7 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
             path.push(BreadcrumbLevel {
                 icon: "►",
                 label: inst.display_name.clone(),
-                color: Color::Yellow,
+                color: COLOR_INSTANCE,
             });
         }
         Some(TreeItem::ArcFamily(f)) => {
@@ -606,35 +606,18 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
             };
             let stats_str = format!("▦{} ◇{}{}", layers_count, classes_count, health_str);
 
-            // Build right badge: ●org │R│
-            let badge_str = format!(
-                "{}{} │R│",
-                realm_badge_icon(&realm.key),
-                realm_abbrev(&realm.key)
-            );
-
-            // Calculate padding for alignment
+            // v0.13.1: No right badge for Realm (bar starts at Layer level)
+            // Calculate padding for alignment (using display_width for Unicode support)
             let tree_width = area.width.saturating_sub(4) as usize;
-            let left_width = left_content.chars().count();
-            let stats_width = stats_str.chars().count();
-            let right_side = format!(" │ {}", badge_str);
-            let right_width = right_side.chars().count();
+            let left_width = display_width(&left_content);
+            let stats_width = display_width(&stats_str);
 
-            // Distribute remaining space: some before stats, rest after
-            let total_content = left_width + stats_width + right_width + 2; // +2 for spaces around stats
-            let total_padding = tree_width.saturating_sub(total_content);
-            let padding_before_stats = total_padding / 2;
-            let padding_after_stats = total_padding - padding_before_stats;
+            // Simple padding: left content + space + stats (no right badge)
+            let total_content = left_width + stats_width + 2; // +2 for space around stats
+            let padding = tree_width.saturating_sub(total_content);
 
             if is_cursor && focused {
-                let full_line = format!(
-                    "{}{}{}{}{}",
-                    left_content,
-                    " ".repeat(padding_before_stats + 1),
-                    stats_str,
-                    " ".repeat(padding_after_stats + 1),
-                    right_side
-                );
+                let full_line = format!("{} {}{}", left_content, stats_str, " ".repeat(padding));
                 all_lines.push(Line::from(Span::styled(
                     full_line,
                     Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White),
@@ -658,30 +641,12 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     realm_color,
                     None,
                 ));
-                // Padding + stats
-                spans.push(Span::styled(
-                    " ".repeat(padding_before_stats + 1),
-                    Style::default(),
-                ));
+                // Padding + stats (v0.13.1: no right badge - bar starts at Layer)
+                spans.push(Span::styled(" ", Style::default()));
                 spans.push(Span::styled(
                     stats_str,
                     Style::default().fg(COLOR_MUTED_TEXT),
                 ));
-                spans.push(Span::styled(
-                    " ".repeat(padding_after_stats + 1),
-                    Style::default(),
-                ));
-                // Right badge
-                spans.push(Span::styled(" │ ", Style::default().fg(COLOR_MUTED_TEXT)));
-                spans.push(Span::styled(
-                    format!(
-                        "{}{}",
-                        realm_badge_icon(&realm.key),
-                        realm_abbrev(&realm.key)
-                    ),
-                    Style::default().fg(realm_color),
-                ));
-                spans.push(Span::styled(" │R│", Style::default().fg(COLOR_MUTED_TEXT)));
 
                 all_lines.push(Line::from(spans));
             }
@@ -738,7 +703,6 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     let is_cursor = idx == app.tree_cursor;
                     let cursor_char = if is_cursor { ">" } else { " " };
                     let prefix = format!("{}{}", cont(realm_is_last), branch(layer_is_last));
-                    let layer_badge = layer_badge_icon(&layer.key);
                     let classes_in_layer = layer.classes.len();
 
                     // Display name with instance count in Data mode
@@ -760,15 +724,13 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     };
                     let stats_str = format!("◇{}{}", classes_in_layer, health_str);
 
-                    // Build right badge: ◆sem │L│
-                    let badge_str = format!("{}{} │L│", layer_badge, layer_abbrev(&layer.key));
-
+                    // v0.13.1: Simple color bar (layer color) - starts at Layer level
                     // Calculate padding for alignment
                     let tree_width = area.width.saturating_sub(4) as usize;
-                    let left_width = left_content.chars().count();
-                    let stats_width = stats_str.chars().count();
-                    let right_side = format!(" │ {}", badge_str);
-                    let right_width = right_side.chars().count();
+                    let left_width = display_width(&left_content);
+                    let stats_width = display_width(&stats_str);
+                    let right_side = "│"; // Simple color bar
+                    let right_width = 1;
 
                     let total_content = left_width + stats_width + right_width + 2;
                     let total_padding = tree_width.saturating_sub(total_content);
@@ -802,23 +764,21 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             text_color,
                             None,
                         ));
-                        // Padding + stats
+                        // Padding + stats + color bar
                         spans.push(Span::styled(
                             " ".repeat(padding_before_stats + 1),
                             base_style,
                         ));
-                        spans.push(Span::styled(stats_str, base_style.fg(COLOR_MUTED_TEXT)));
+                        spans.push(Span::styled(
+                            stats_str.clone(),
+                            base_style.fg(COLOR_MUTED_TEXT),
+                        ));
                         spans.push(Span::styled(
                             " ".repeat(padding_after_stats + 1),
                             base_style,
                         ));
-                        // Right badge
-                        spans.push(Span::styled(" │ ", base_style.fg(COLOR_MUTED_TEXT)));
-                        spans.push(Span::styled(
-                            format!("{}{}", layer_badge, layer_abbrev(&layer.key)),
-                            base_style.fg(layer_color),
-                        ));
-                        spans.push(Span::styled(" │L│", base_style.fg(COLOR_MUTED_TEXT)));
+                        // v0.13.1: Simple color bar (layer color)
+                        spans.push(Span::styled("│", base_style.fg(layer_color)));
 
                         all_lines.push(Line::from(spans));
                     }
@@ -857,7 +817,8 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             let class_icon = if is_data_mode && class_info.instance_count > 0 {
                                 // Show expanded (▼) only if instances are actually loaded
                                 // Otherwise show collapsed (▶) even if state says "expanded"
-                                let instances_loaded = app.tree.get_instances(&class_info.key).is_some();
+                                let instances_loaded =
+                                    app.tree.get_instances(&class_info.key).is_some();
                                 if instances_loaded {
                                     expand_icon(class_collapsed)
                                 } else {
@@ -911,8 +872,10 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             // Build display text with all metrics
                             let (display_text, class_text_color) = if is_data_mode {
                                 // Data mode: instances + arcs + props + health
-                                let health_badge =
-                                    format_health_badge(class_info.health_percent, class_info.issues_count);
+                                let health_badge = format_health_badge(
+                                    class_info.health_percent,
+                                    class_info.issues_count,
+                                );
                                 let text = format!(
                                     "{} ({}){}{}{}",
                                     class_info.display_name,
@@ -929,8 +892,10 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 (text, color)
                             } else {
                                 // Meta mode: arcs + props (no instance count)
-                                let text =
-                                    format!("{}{}{}", class_info.display_name, arc_suffix, props_suffix);
+                                let text = format!(
+                                    "{}{}{}",
+                                    class_info.display_name, arc_suffix, props_suffix
+                                );
                                 (text, Color::White)
                             };
 
@@ -965,22 +930,14 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 cursor_char, prefix, class_icon, t_icon, t_abbrev, display_text
                             );
 
-                            // Badge format: ●org ●cfg (trait moved to tree icon)
-                            let badge_str = format!(
-                                "{}{} {}{}",
-                                realm_badge_icon(&realm.key),
-                                realm_abbrev(&realm.key),
-                                layer_badge_icon(&layer.key),
-                                layer_abbrev(&layer.key)
-                            );
+                            // v0.13.1: Simple color bar only (no repeated text badges)
+                            // Just a colored │ at the right edge, matching layer color
 
                             // Calculate padding for right-alignment
-                            // tree panel is typically 25% of screen, ~40-60 chars
-                            // Leave 2 chars for borders, 20 chars for badges+separator
-                            let tree_width = area.width.saturating_sub(4) as usize; // subtract borders + scrollbar
-                            let left_width = left_content.chars().count();
-                            let right_side = format!(" │ {}", badge_str);
-                            let right_width = right_side.chars().count();
+                            let tree_width = area.width.saturating_sub(4) as usize;
+                            let left_width = display_width(&left_content);
+                            let right_side = "│"; // Simple color bar
+                            let right_width = 1;
                             let padding_width = tree_width.saturating_sub(left_width + right_width);
 
                             if is_cursor && focused {
@@ -1025,28 +982,9 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                     class_bg,
                                 ));
 
-                                // Add padding and right-aligned badges
+                                // v0.13.1: Simple color bar (layer color) - no text badges
                                 spans.push(Span::styled(" ".repeat(padding_width), base_style));
-                                spans.push(Span::styled(" │ ", base_style.fg(COLOR_MUTED_TEXT)));
-                                // Realm badge
-                                spans.push(Span::styled(
-                                    format!(
-                                        "{}{}",
-                                        realm_badge_icon(&realm.key),
-                                        realm_abbrev(&realm.key)
-                                    ),
-                                    base_style.fg(realm_color),
-                                ));
-                                spans.push(Span::styled(" ", base_style));
-                                // Layer badge (trait moved to tree icon as ■(i))
-                                spans.push(Span::styled(
-                                    format!(
-                                        "{}{}",
-                                        layer_badge_icon(&layer.key),
-                                        layer_abbrev(&layer.key)
-                                    ),
-                                    base_style.fg(layer_color),
-                                ));
+                                spans.push(Span::styled("│", base_style.fg(layer_color)));
 
                                 all_lines.push(Line::from(spans));
                             }
@@ -1055,7 +993,9 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             // In Data mode, show instances under Class (if not collapsed)
                             if is_data_mode && !class_collapsed {
                                 // Special case: Entity Class shows categories instead of flat instances
-                                if class_info.key == "Entity" && !app.tree.entity_categories.is_empty() {
+                                if class_info.key == "Entity"
+                                    && !app.tree.entity_categories.is_empty()
+                                {
                                     let cat_count = app.tree.entity_categories.len();
                                     for (ci, category) in
                                         app.tree.entity_categories.iter().enumerate()
@@ -1112,7 +1052,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                             .bg(COLOR_HIGHLIGHT_BG)
                                                             .fg(Color::White)
                                                     } else {
-                                                        Style::default().fg(COLOR_CONNECTED)
+                                                        Style::default().fg(COLOR_INSTANCE)
                                                     };
 
                                                     let cursor_char =
@@ -1217,7 +1157,9 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             }
                                         }
                                     }
-                                } else if let Some(instances) = app.tree.get_instances(&class_info.key) {
+                                } else if let Some(instances) =
+                                    app.tree.get_instances(&class_info.key)
+                                {
                                     // Regular classes: show instances directly
                                     let inst_count = instances.len();
                                     for (ii, instance) in instances.iter().enumerate() {
@@ -1242,11 +1184,9 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             0
                                         };
 
-                                        let (icon, base_color) = if is_primary {
-                                            ("●", Color::Yellow)
-                                        } else {
-                                            ("○", COLOR_CONNECTED)
-                                        };
+                                        // v0.13.1: Unified instance color (yellow)
+                                        let icon = if is_primary { "●" } else { "○" };
+                                        let base_color = COLOR_INSTANCE;
 
                                         let style = if is_cursor && focused {
                                             Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White)
@@ -1398,12 +1338,11 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
             let family_collapsed = app.tree.is_collapsed(&family_key);
             let family_icon = expand_icon(family_collapsed);
 
-            // v11.6.1: Custom ArcFamily line with counts and right-aligned badge
-            // Format: [cursor][prefix][chevron] [icon] [name]  [◇arcs]  │ [badge] │F│
+            // v0.13.1: Simplified ArcFamily line - no right badge (like Realm)
+            // Format: [cursor][prefix][chevron] [icon] [name]  [◇arcs]
             let is_cursor = idx == app.tree_cursor;
             let cursor_char = if is_cursor { ">" } else { " " };
             let arcs_in_family = family.arc_classes.len();
-            let family_badge = arc_family_badge_icon(&family.key);
 
             // Build left side content
             let left_content = format!(
@@ -1417,30 +1356,8 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
             // Build center stats: ◇43
             let stats_str = format!("◇{}", arcs_in_family);
 
-            // Build right badge: →own │F│
-            let badge_str = format!("{}{} │F│", family_badge, arc_family_abbrev(&family.key));
-
-            // Calculate padding for alignment
-            let tree_width = area.width.saturating_sub(4) as usize;
-            let left_width = left_content.chars().count();
-            let stats_width = stats_str.chars().count();
-            let right_side = format!(" │ {}", badge_str);
-            let right_width = right_side.chars().count();
-
-            let total_content = left_width + stats_width + right_width + 2;
-            let total_padding = tree_width.saturating_sub(total_content);
-            let padding_before_stats = total_padding / 2;
-            let padding_after_stats = total_padding - padding_before_stats;
-
             if is_cursor && focused {
-                let full_line = format!(
-                    "{}{}{}{}{}",
-                    left_content,
-                    " ".repeat(padding_before_stats + 1),
-                    stats_str,
-                    " ".repeat(padding_after_stats + 1),
-                    right_side
-                );
+                let full_line = format!("{} {}", left_content, stats_str);
                 all_lines.push(Line::from(Span::styled(
                     full_line,
                     Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White),
@@ -1465,23 +1382,9 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     COLOR_ARC_FAMILY,
                     None,
                 ));
-                // Padding + stats
-                spans.push(Span::styled(
-                    " ".repeat(padding_before_stats + 1),
-                    base_style,
-                ));
+                // v0.13.1: stats only, no right badge
+                spans.push(Span::styled(" ", base_style));
                 spans.push(Span::styled(stats_str, base_style.fg(COLOR_MUTED_TEXT)));
-                spans.push(Span::styled(
-                    " ".repeat(padding_after_stats + 1),
-                    base_style,
-                ));
-                // Right badge
-                spans.push(Span::styled(" │ ", base_style.fg(COLOR_MUTED_TEXT)));
-                spans.push(Span::styled(
-                    format!("{}{}", family_badge, arc_family_abbrev(&family.key)),
-                    base_style.fg(COLOR_ARC_FAMILY),
-                ));
-                spans.push(Span::styled(" │F│", base_style.fg(COLOR_MUTED_TEXT)));
 
                 all_lines.push(Line::from(spans));
             }
@@ -1492,8 +1395,8 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                 for (ai, arc_class) in family.arc_classes.iter().enumerate() {
                     let arc_is_last = ai == arc_count - 1;
 
-                    // v11.6.1: Custom ArcClass line with source→target and cardinality badge
-                    // Format: [cursor][prefix] [name]  [From→To]  │ [cardinality] │
+                    // v0.13.1: Simplified ArcClass line with color bar
+                    // Format: [cursor][prefix] [name]  [From→To]  [card] │
                     let is_cursor = idx == app.tree_cursor;
                     let cursor_char = if is_cursor { ">" } else { " " };
                     let prefix = format!("{}{}", cont(family_is_last), branch(arc_is_last));
@@ -1507,31 +1410,23 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     let to_abbrev = arc_class.to_class.chars().take(8).collect::<String>();
                     let flow_str = format!("{}→{}", from_abbrev, to_abbrev);
 
-                    // Build right badge: cardinality
+                    // Cardinality (useful info, keep it)
                     let card_str = cardinality_abbrev(&arc_class.cardinality);
-                    let badge_str = format!("│{}│", card_str);
 
-                    // Calculate padding for alignment
+                    // Calculate padding for alignment (using display_width for Unicode support)
                     let tree_width = area.width.saturating_sub(4) as usize;
-                    let left_width = left_content.chars().count();
-                    let flow_width = flow_str.chars().count();
-                    let right_side = format!(" {}", badge_str);
-                    let right_width = right_side.chars().count();
+                    let left_width = display_width(&left_content);
+                    let flow_width = display_width(&flow_str);
+                    let card_width = display_width(card_str);
+                    let right_side = "│"; // v0.13.1: Simple color bar
+                    let right_width = 1;
 
-                    let total_content = left_width + flow_width + right_width + 2;
-                    let total_padding = tree_width.saturating_sub(total_content);
-                    let padding_before_flow = total_padding / 2;
-                    let padding_after_flow = total_padding - padding_before_flow;
+                    let total_content = left_width + flow_width + card_width + right_width + 3;
+                    let padding = tree_width.saturating_sub(total_content);
 
                     if is_cursor && focused {
-                        let full_line = format!(
-                            "{}{}{}{}{}",
-                            left_content,
-                            " ".repeat(padding_before_flow + 1),
-                            flow_str,
-                            " ".repeat(padding_after_flow + 1),
-                            right_side
-                        );
+                        let full_line =
+                            format!("{} {} {} {}", left_content, flow_str, card_str, right_side);
                         all_lines.push(Line::from(Span::styled(
                             full_line,
                             Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White),
@@ -1550,18 +1445,14 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             COLOR_DESC_TEXT,
                             None,
                         ));
-                        // Padding + flow
-                        spans.push(Span::styled(
-                            " ".repeat(padding_before_flow + 1),
-                            base_style,
-                        ));
+                        // Flow + cardinality
+                        spans.push(Span::styled(" ", base_style));
                         spans.push(Span::styled(flow_str, base_style.fg(COLOR_MUTED_TEXT)));
-                        spans.push(Span::styled(" ".repeat(padding_after_flow + 1), base_style));
-                        // Right badge (cardinality)
-                        spans.push(Span::styled(
-                            format!(" │{}│", card_str),
-                            base_style.fg(Color::Cyan),
-                        ));
+                        spans.push(Span::styled(" ", base_style));
+                        spans.push(Span::styled(card_str, base_style.fg(Color::Cyan)));
+                        // v0.13.1: Simple color bar (arc family color)
+                        spans.push(Span::styled(" ".repeat(padding), base_style));
+                        spans.push(Span::styled("│", base_style.fg(COLOR_ARC_FAMILY)));
 
                         all_lines.push(Line::from(spans));
                     }
@@ -1812,13 +1703,10 @@ fn render_filtered_instances(
                 0
             };
 
-            // Primary locales: filled circle, yellow
-            // Secondary locales: empty circle, green
-            let (icon, base_color) = if is_primary {
-                ("●", Color::Yellow)
-            } else {
-                ("○", COLOR_CONNECTED)
-            };
+            // v0.13.1: Unified instance color (yellow)
+            // Primary locales: filled circle ●, secondary: empty circle ○
+            let icon = if is_primary { "●" } else { "○" };
+            let base_color = COLOR_INSTANCE;
 
             let style = if is_cursor && focused {
                 Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White)

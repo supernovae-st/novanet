@@ -1,19 +1,40 @@
-# models/node-classes/shared/locale/culture.yaml
-# Culture — Cultural context for a locale including calendar, seasons, business norms, communication style, and core values
-#
-# v10.7: NEW node for 7-node locale knowledge architecture
-# Used by LLM for culturally-appropriate content generation.
-# Stability: High - changes rarely
+# ═══════════════════════════════════════════════════════════════════════════════
+# NodeClass: Culture — Cultural context for locale-appropriate content generation
+# v0.13.1: LLM-First property ordering
+# ═══════════════════════════════════════════════════════════════════════════════
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════════
+
   name: Culture
   realm: shared
   layer: locale
   trait: imported
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  description: "Cultural context for a locale including calendar, seasons, business norms, communication style, and core values. Used by LLM for culturally-appropriate content generation."
+  llm_context: |
+    USE: when generating culturally-appropriate content (timing, values, communication style).
+    TRIGGERS: "culture", "cultural", "seasonal refs", "holiday mentions", "formality choices", "business norms".
+    NOT: for formatting (use Formatting), for technical rules (use Slugification).
+    RELATES: Locale (via HAS_CULTURE), calendar/seasons, holidays, business_hours, values, communication_norms.
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════════
+
   icon:
     web: "globe"
     terminal: "◉"
-  description: "Cultural context for a locale including calendar, seasons, business norms, communication style, and core values. Used by LLM for culturally-appropriate content generation."
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA — Standard Properties
+  # ═══════════════════════════════════════════════════════════════════════════════
 
   standard_properties:
     key:
@@ -47,6 +68,10 @@ node:
     updated_at:
       type: datetime
       required: true
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA — Culture-Specific Properties
+  # ═══════════════════════════════════════════════════════════════════════════════
 
   properties:
     # ═══════════════════════════════════════════════════════════════════════════
@@ -177,6 +202,10 @@ node:
       type: string
       required: false
       description: "Full source markdown for edge case reference"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH — Relations
+  # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
     incoming:

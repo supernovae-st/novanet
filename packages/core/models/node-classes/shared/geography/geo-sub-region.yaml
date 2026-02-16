@@ -1,22 +1,43 @@
 # models/node-classes/shared/geography/geo-sub-region.yaml
 # GeoSubRegion - UN M49 intermediate/sub-region (optional level)
 #
-# v10.8: Geographic Taxonomy - Phase 1
+# v0.13.1: LLM-First field ordering (llm_context promoted to BLOC 2)
 # v0.12.4: Added cultural_style and visual_prompt for AI generation
+# v10.8: Geographic Taxonomy - Phase 1
 # Data: ~15 sub-regions (Channel Islands, Caribbean sub-areas, etc.)
 # Source: UN M49 Standard (unstats.un.org)
 # Note: Optional intermediate level - most locales link directly to GeoRegion
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: GeoSubRegion
   realm: shared
   layer: geography
   trait: defined
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (LLM-First)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  description: "UN M49 intermediate region for fine-grained geographic clustering"
+
+  llm_context: |
+    USE: when generating content for a sub-region (e.g., Channel Islands, Caribbean).
+    TRIGGERS: "sub-region", "intermediate region", "sub-area", "channel islands", "caribbean".
+    NOT: for main regions (use GeoRegion), for continents (use Continent).
+    RELATES: GeoRegion (parent via IN_REGION), Locale (child via IN_SUBREGION).
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════════
   icon:
     web: "map-pin"
     terminal: "◎"
-  description: "UN M49 intermediate region for fine-grained geographic clustering"
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA
+  # ═══════════════════════════════════════════════════════════════════════════════
   standard_properties:
     key:
       type: string
@@ -39,12 +60,6 @@ node:
       required: true
       description: "Short description"
       example: "Channel Islands between England and France"
-
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints"
-      example: "USE: for Channel Islands markets (Jersey, Guernsey). TRIGGERS: channel islands, jersey, guernsey. NOT: UK mainland."
 
     created_at:
       type: datetime
@@ -109,6 +124,9 @@ node:
           inherit_from: string    # Usually "image"
           rendering: object       # Lighting, materials, environment
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH
+  # ═══════════════════════════════════════════════════════════════════════════════
   relations:
     outgoing:
       - type: IN_REGION
@@ -122,6 +140,9 @@ node:
         cardinality: "N:1"
         description: "Locales within this sub-region"
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE
+  # ═══════════════════════════════════════════════════════════════════════════════
   example:
     data:
       key: "channel-islands"

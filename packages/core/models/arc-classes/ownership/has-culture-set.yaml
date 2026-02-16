@@ -1,23 +1,38 @@
-# packages/core/models/arc-classes/ownership/has-culture-set.yaml
+# ═══════════════════════════════════════════════════════════════════════════════
+# ArcClass: HAS_CULTURE_SET — Locale owns CultureSet knowledge containers
+# v0.13.1: LLM-First property ordering
 # v10.7: Renamed from HAS_CULTURE to avoid collision with Culture config node
 # v0.13.0: Added TIER 2 inverse (ADR-026)
-# Links Locale to CultureSet knowledge atom containers
+# ═══════════════════════════════════════════════════════════════════════════════
+
 arc:
+  # IDENTITY
   name: HAS_CULTURE_SET
   family: ownership
   scope: intra_realm
-  source: Locale
-  target: CultureSet
-  cardinality: one_to_many
-  inverse: CULTURE_SET_OF
+
+  # SEMANTIC (LLM-CRITICAL)
+  description: "Locale owns CultureSet knowledge containers (values, references, celebrities)"
   llm_context: |
     USE: when loading culture atoms for a locale by type.
     TRIGGERS: culture set, cultural values, cultural references, locale traditions.
     NOT: culture config (use HAS_CULTURE), individual atoms (use CONTAINS_CULTURE_REF).
     RELATES: Locale (source), CultureSet (target), type (property).
-  cypher_pattern: "(Locale)-[:HAS_CULTURE_SET {type: $type}]->(CultureSet)"
+
+  # GRAPH STRUCTURE
+  source: Locale
+  target: CultureSet
+  cardinality: one_to_many
+
+  # FLAGS
+  inverse: CULTURE_SET_OF
+
+  # DATA
   properties:
     type:
       type: string
       required: true
       description: "Culture type (values, references, celebrities, calendar)"
+
+  # REFERENCE
+  cypher_pattern: "(Locale)-[:HAS_CULTURE_SET {type: $type}]->(CultureSet)"

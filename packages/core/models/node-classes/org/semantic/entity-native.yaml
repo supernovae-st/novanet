@@ -27,7 +27,13 @@
 #                                                                   │
 #                                                                   ├──[:FOR_LOCALE]──> Locale
 #                                                                   │
-#                                                                   └──[:TARGETS]──> SEOKeyword (N:N)
+#                                                                   ├──[:TARGETS]──> SEOKeyword (N:N)
+#                                                                   │
+#                                                                   ├──[:USES_TERM]──> Term (N:N)
+#                                                                   │   └── Direct vocabulary loading
+#                                                                   │
+#                                                                   └──[:USES_EXPRESSION]──> Expression (N:N)
+#                                                                       └── Direct tone/voice loading
 #
 # Entity: Invariant definition (EN key, universal properties)
 # EntityNative: Human-authored locale-native content for THAT locale
@@ -241,11 +247,62 @@ node:
       cardinality: "N:N"
       description: "SEO keywords this localized entity is targeting for ranking"
 
+    # ─────────────────────────────────────────────────────────────────────────────
+    # KNOWLEDGE ATOM CONNECTIONS (v0.13.0)
+    # ─────────────────────────────────────────────────────────────────────────────
+    # Direct connections to locale-native knowledge atoms for selective LLM loading.
+    # Bypasses 4-hop path: EntityNative → FOR_LOCALE → Locale → HAS_TERMS → TermSet → Term
+    # Enables loading ~50 relevant terms instead of ALL 20K terms.
+    # ─────────────────────────────────────────────────────────────────────────────
+
+    USES_TERM:
+      to: Term
+      cardinality: "N:N"
+      description: "Direct link to locale-specific terms for vocabulary loading"
+
+    USES_EXPRESSION:
+      to: Expression
+      cardinality: "N:N"
+      description: "Direct link to locale-specific expressions for tone/voice consistency"
+
+    USES_PATTERN:
+      to: Pattern
+      cardinality: "N:N"
+      description: "Direct link to locale-specific patterns for structural consistency"
+
+    USES_CULTURE_REF:
+      to: CultureRef
+      cardinality: "N:N"
+      description: "Direct link to locale-specific cultural references for cultural sensitivity"
+
   incoming_relations:
     HAS_NATIVE:
       from: Entity
       cardinality: "1:N"
       description: "Parent entity that owns this native content"
+
+    # ─────────────────────────────────────────────────────────────────────────────
+    # KNOWLEDGE ATOM INVERSES (v0.13.0)
+    # ─────────────────────────────────────────────────────────────────────────────
+    TERM_USED_BY:
+      from: Term
+      cardinality: "N:N"
+      description: "Inverse of USES_TERM - find which EntityNatives use a term"
+
+    EXPRESSION_USED_BY:
+      from: Expression
+      cardinality: "N:N"
+      description: "Inverse of USES_EXPRESSION - find which EntityNatives use an expression"
+
+    PATTERN_USED_BY:
+      from: Pattern
+      cardinality: "N:N"
+      description: "Inverse of USES_PATTERN - find which EntityNatives use a pattern"
+
+    CULTURE_REF_USED_BY:
+      from: CultureRef
+      cardinality: "N:N"
+      description: "Inverse of USES_CULTURE_REF - find which EntityNatives use a cultural reference"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # NEO4J CONFIGURATION (v0.13.0)

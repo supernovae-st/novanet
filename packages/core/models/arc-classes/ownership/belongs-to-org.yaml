@@ -1,16 +1,27 @@
-# packages/core/models/arc-classes/ownership/belongs-to-org.yaml
-# ArcClass: BELONGS_TO_ORG — Project belongs to OrgConfig (v11.3: unified)
+# ═══════════════════════════════════════════════════════════════════════════════
+# ArcClass: BELONGS_TO_ORG — Project belongs to OrgConfig
+# v0.13.1: LLM-First property ordering
+# v11.3: Unified organization config
+# ═══════════════════════════════════════════════════════════════════════════════
 
 arc:
+  # IDENTITY
   name: BELONGS_TO_ORG
   family: ownership
   scope: intra_realm
-  source: Project
-  target: OrgConfig
-  cardinality: many_to_one
+
+  # SEMANTIC (LLM-CRITICAL)
+  description: "Project belongs to OrgConfig (organization-level configuration)"
   llm_context: |
     USE: when loading organization context for a project.
     TRIGGERS: project org, organization settings, org-level config.
     NOT: project content (use HAS_PAGE), project entities (use HAS_ENTITY).
     RELATES: Project (source), OrgConfig (target).
+
+  # GRAPH STRUCTURE
+  source: Project
+  target: OrgConfig
+  cardinality: many_to_one
+
+  # REFERENCE
   cypher_pattern: (Project)-[:BELONGS_TO_ORG]->(OrgConfig)

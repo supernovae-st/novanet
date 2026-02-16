@@ -1,18 +1,36 @@
 # packages/core/models/arc-classes/semantic/enables.yaml
-# ArcClass: ENABLES - Entity enables/unlocks another Entity
-# v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
+# ArcClass: ENABLES — Entity enables/unlocks another Entity
+# v0.13.1: LLM-First field ordering (semantic fields before structure)
 
 arc:
+  # --- IDENTITY ---
   name: ENABLES
   family: semantic
   scope: intra_realm
-  temperature_threshold: 0.2  # Enablement - important for capability mapping
 
+  # --- SEMANTIC (LLM-critical) ---
+  description: |
+    Entity unlocks or enables capability in another entity. Models
+    prerequisite and dependency relationships where one entity makes
+    another entity's functionality possible. Different from REQUIRES
+    (hard dependency) and ENHANCES (optional improvement).
+  llm_context: |
+    USE: when finding what capabilities an entity unlocks.
+    TRIGGERS: enables, unlocks, makes possible, facilitates, permits.
+    NOT: requirement (use REQUIRES), enhancement (use ENHANCES).
+    RELATES: Entity (source/enabler), Entity (target), ENABLED_BY (inverse).
+
+  # --- GRAPH STRUCTURE ---
   source: Entity
   target: Entity
   cardinality: many_to_many
-  is_self_referential: true
 
+  # --- FLAGS ---
+  inverse: ENABLED_BY
+  is_self_referential: true
+  temperature_threshold: 0.2
+
+  # --- DATA ---
   properties:
     - name: strength
       type: float
@@ -32,12 +50,5 @@ arc:
       enum: [unlocks, enhances, permits, facilitates]
       description: "Type of enablement relationship"
 
-  inverse: ENABLED_BY
-
-  llm_context: |
-    USE: when finding what capabilities an entity unlocks.
-    TRIGGERS: enables, unlocks, makes possible, facilitates, permits.
-    NOT: requirement (use REQUIRES), enhancement (use ENHANCES).
-    RELATES: Entity (source/enabler), Entity (target), ENABLED_BY (inverse).
-
+  # --- REFERENCE ---
   cypher_pattern: "(Entity)-[:ENABLES {strength, temperature, enablement_type}]->(Entity)"

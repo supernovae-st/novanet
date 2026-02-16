@@ -1,22 +1,32 @@
 # packages/core/models/arc-classes/localization/income-classifies.yaml
+# NovaNet v0.13.1 — LLM-First YAML Ordering
 # ArcClass: INCOME_CLASSIFIES — IncomeGroup classifies Locale (inverse of HAS_INCOME_LEVEL)
 # v0.13.1: Split from generic CLASSIFIES (ADR-026 - 1:1 inverse pairs)
 
 arc:
+  # IDENTITY
   name: INCOME_CLASSIFIES
   family: localization
   scope: intra_realm
 
-  source: IncomeGroup
-  target: Locale
-  cardinality: one_to_many
-
-  inverse_of: HAS_INCOME_LEVEL
-
+  # SEMANTIC (LLM-CRITICAL)
+  description: >-
+    Links an IncomeGroup to all Locales it classifies. Inverse of HAS_INCOME_LEVEL.
+    Used for finding all locales in a World Bank income classification
+    (HIC, UMIC, LMIC, LIC).
   llm_context: |
     USE: when finding all Locales in a World Bank income classification.
     TRIGGERS: income group locales, HIC countries, LIC markets, economic classification members.
     NOT: finding a Locale's income level (use HAS_INCOME_LEVEL), lending classification (use LENDING_CLASSIFIES).
     RELATES: IncomeGroup (source), Locale (target), HAS_INCOME_LEVEL (inverse).
 
+  # GRAPH STRUCTURE
+  source: IncomeGroup
+  target: Locale
+  cardinality: one_to_many
+
+  # FLAGS
+  inverse_of: HAS_INCOME_LEVEL
+
+  # REFERENCE
   cypher_pattern: "(IncomeGroup)-[:INCOME_CLASSIFIES]->(Locale)"

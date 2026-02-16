@@ -1,26 +1,57 @@
-# packages/core/models/arc-classes/generation/bundles.yaml
-# ArcClass: BUNDLES — Output artifact bundles specific generated nodes for deployment
+# =============================================================================
+# ArcClass: BUNDLES
+# NovaNet v0.13.1 — LLM-First Ordering
+# =============================================================================
+# Output artifact bundles specific generated nodes for deployment
 # v10.9.2: Renamed from INCLUDES to BUNDLES to avoid collision with semantic/INCLUDES
+# =============================================================================
 
 arc:
+  # ─────────────────────────────────────────────────────────────────────────
+  # BLOC 2: IDENTITY
+  # ─────────────────────────────────────────────────────────────────────────
   name: BUNDLES
   family: generation
   scope: intra_realm
-  source: OutputArtifact
-  target:
-    - PageNative
-    - BlockNative
-  cardinality: one_to_many
-  properties:
-    - name: position
-      type: string
-      required: false
-    - name: checksum
-      type: string
-      required: false
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # BLOC 3: SEMANTIC (LLM-Critical)
+  # ─────────────────────────────────────────────────────────────────────────
+  description: >-
+    Links an output artifact to the generated pages and blocks it contains for
+    deployment. Each artifact represents a deployable bundle of generated content,
+    with optional position for ordering and checksum for integrity verification.
+    Used during deployment to package and verify content artifacts.
+
   llm_context: |
     USE: when deploying content, loading all generated nodes in an artifact.
     TRIGGERS: deployment bundle, artifact contents, release package.
     NOT: for live content (use PageNative), for structure (use HAS_NATIVE).
     RELATES: OutputArtifact (source), PageNative/BlockNative (target), checksum for integrity.
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # BLOC 4: GRAPH STRUCTURE
+  # ─────────────────────────────────────────────────────────────────────────
+  source: OutputArtifact
+  target:
+    - PageNative
+    - BlockNative
+  cardinality: one_to_many
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # BLOC 6: DATA
+  # ─────────────────────────────────────────────────────────────────────────
+  properties:
+    - name: position
+      type: string
+      required: false
+      description: "Ordering position within the bundle"
+    - name: checksum
+      type: string
+      required: false
+      description: "Integrity checksum for verification"
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # BLOC 7: REFERENCE
+  # ─────────────────────────────────────────────────────────────────────────
   cypher_pattern: (OutputArtifact)-[:BUNDLES {position, checksum}]->(PageNative)

@@ -26,6 +26,24 @@ use super::{
 };
 
 // =============================================================================
+// v0.13.1 YAML-STYLE COLORS FOR PROPERTIES
+// =============================================================================
+
+/// YAML key style (cyan) - matches SOURCE panel styling.
+const STYLE_PROP_KEY: Style = Style::new().fg(Color::Rgb(139, 233, 253)); // Cyan
+
+/// YAML colon style.
+const STYLE_PROP_COLON: Style = Style::new().fg(Color::Cyan);
+
+/// JSON value colors - match yaml_panel.rs json_value_color().
+const COLOR_VALUE_NULL: Color = Color::DarkGray;
+const COLOR_VALUE_BOOL: Color = Color::Rgb(189, 147, 249); // Purple
+const COLOR_VALUE_NUMBER: Color = Color::Rgb(249, 226, 175); // Yellow
+const COLOR_VALUE_STRING: Color = Color::Rgb(166, 227, 161); // Green
+const COLOR_VALUE_ARRAY: Color = Color::Rgb(137, 180, 250); // Blue
+const COLOR_VALUE_OBJECT: Color = Color::Rgb(245, 194, 231); // Pink
+
+// =============================================================================
 // VISUAL STATES FOR BOX NAVIGATION
 // =============================================================================
 
@@ -340,7 +358,9 @@ fn build_layer_content(
         "display",
         Span::styled(
             layer.display_name.clone(),
-            Style::default().fg(Color::White).add_modifier(Modifier::BOLD),
+            Style::default()
+                .fg(Color::White)
+                .add_modifier(Modifier::BOLD),
         ),
     );
 
@@ -348,12 +368,9 @@ fn build_layer_content(
     let realm_color = hex_to_color(&realm.color);
     let layer_color = hex_to_color(&layer.color);
 
-    content.location.add_classification(
-        "realm",
-        realm.icon,
-        &realm.key,
-        realm_color,
-    );
+    content
+        .location
+        .add_classification("realm", realm.icon, &realm.key, realm_color);
     content.location.add_classification(
         "layer",
         theme.icons.layer(&layer.key),
@@ -372,7 +389,9 @@ fn build_layer_content(
         let mut trait_counts: std::collections::BTreeMap<String, usize> =
             std::collections::BTreeMap::new();
         for class_info in &layer.classes {
-            *trait_counts.entry(class_info.trait_name.clone()).or_insert(0) += 1;
+            *trait_counts
+                .entry(class_info.trait_name.clone())
+                .or_insert(0) += 1;
         }
 
         let total = layer.classes.len();
@@ -444,16 +463,18 @@ fn build_class_content(
         .add_kv("key", Span::styled(class.key.clone(), STYLE_PRIMARY));
     content.identity.add_kv(
         "display",
-        Span::styled(class.display_name.clone(), Style::default().fg(Color::White).add_modifier(Modifier::BOLD)),
+        Span::styled(
+            class.display_name.clone(),
+            Style::default()
+                .fg(Color::White)
+                .add_modifier(Modifier::BOLD),
+        ),
     );
 
     // LOCATION (Classification) - explicit key:value format for all 3 axes
-    content.location.add_classification(
-        "realm",
-        realm.icon,
-        &realm.key,
-        realm_color,
-    );
+    content
+        .location
+        .add_classification("realm", realm.icon, &realm.key, realm_color);
     content.location.add_classification(
         "layer",
         theme.icons.layer(&layer.key),
@@ -525,11 +546,19 @@ fn build_class_content(
         content.coverage.add_empty();
     }
 
-    // PROPERTIES - v0.13: with colored type badges and validation status
+    // PROPERTIES - v0.13.1: YAML-style with cyan keys, type badges, and aligned colons
     if let Some(validated) = &app.validated_class_properties {
+        // Calculate max property name length for colon alignment
+        let max_name_len = validated
+            .iter()
+            .map(|p| p.name.len())
+            .max()
+            .unwrap_or(0)
+            .min(18); // Cap at 18 chars for readability
+
         for prop in validated {
             let (status_icon, status_style) = match prop.status {
-                ValidationStatus::Sync => ("✓", Style::default().fg(Color::Rgb(133, 153, 0))),   // green
+                ValidationStatus::Sync => ("✓", Style::default().fg(Color::Rgb(133, 153, 0))), // green
                 ValidationStatus::Missing => ("⚠", Style::default().fg(Color::Rgb(203, 75, 22))), // orange
                 ValidationStatus::Extra => ("?", STYLE_DIM),
             };
@@ -537,36 +566,56 @@ fn build_class_content(
             let badge = type_badge(&prop.prop_type);
             let badge_color = type_color(&prop.prop_type);
 
-            // v0.13: Colored type badge
+            // v0.13.1: YAML-style with aligned colons
+            // Format: `✓* property_name: [type]`
             content.properties.add_line(Line::from(vec![
                 Span::styled(status_icon, status_style),
                 Span::styled(
                     required_marker,
                     Style::default().fg(Color::Rgb(220, 50, 47)), // red asterisk
                 ),
-                Span::styled(format!("[{:4}]", badge), Style::default().fg(badge_color)),
-                Span::styled(" ", STYLE_DIM),
-                Span::styled(format!("{:<15}", prop.name), Style::default().fg(Color::White)),
+                Span::styled(
+                    format!("{:width$}", prop.name, width = max_name_len),
+                    STYLE_PROP_KEY,
+                ),
+                Span::styled(": ", STYLE_PROP_COLON),
+                Span::styled(
+                    format!("[{}]", badge.trim()),
+                    Style::default().fg(badge_color),
+                ),
             ]));
         }
     } else if !class.properties.is_empty() {
-        // Fallback: simple property list without type info
+        // Fallback: simple property list without type info (YAML-style)
+        let max_name_len = class
+            .properties
+            .iter()
+            .map(|p| p.len())
+            .max()
+            .unwrap_or(0)
+            .min(18);
+
         for prop in &class.properties {
             let is_required = class.required_properties.contains(prop);
             let marker = if is_required { "*" } else { " " };
-            let prop_color = if is_required {
-                Color::Rgb(181, 137, 0)  // yellow for required
-            } else {
-                Color::White
-            };
 
+            // v0.13.1: YAML-style with aligned colons
             content.properties.add_line(Line::from(vec![
                 Span::styled("  ", STYLE_DIM),
+                Span::styled(marker, Style::default().fg(Color::Rgb(220, 50, 47))),
                 Span::styled(
-                    marker,
-                    Style::default().fg(Color::Rgb(220, 50, 47)),
+                    format!("{:width$}", prop, width = max_name_len),
+                    STYLE_PROP_KEY,
                 ),
-                Span::styled(format!(" {}", prop), Style::default().fg(prop_color)),
+                Span::styled(": ", STYLE_PROP_COLON),
+                Span::styled(
+                    if is_required { "[req]" } else { "[opt]" },
+                    if is_required {
+                        Style::default().fg(Color::Rgb(181, 137, 0)) // yellow for required
+                    } else {
+                        STYLE_DIM
+                    },
+                ),
             ]));
         }
     } else {
@@ -580,9 +629,19 @@ fn build_class_content(
         let incoming_count = arcs_data.incoming.len();
 
         content.relationships.add_line(Line::from(vec![
-            Span::styled("→ ", Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD)),
+            Span::styled(
+                "→ ",
+                Style::default()
+                    .fg(Color::Cyan)
+                    .add_modifier(Modifier::BOLD),
+            ),
             Span::styled(format!("{} out  ", outgoing_count), STYLE_MUTED),
-            Span::styled("← ", Style::default().fg(Color::Magenta).add_modifier(Modifier::BOLD)),
+            Span::styled(
+                "← ",
+                Style::default()
+                    .fg(Color::Magenta)
+                    .add_modifier(Modifier::BOLD),
+            ),
             Span::styled(format!("{} in", incoming_count), STYLE_MUTED),
         ]));
 
@@ -590,11 +649,21 @@ fn build_class_content(
         for arc in arcs_data.outgoing.iter().take(4) {
             let family_color = colors::arc_family::color(&arc.family, mode);
             content.relationships.add_line(Line::from(vec![
-                Span::styled("  → ", Style::default().fg(family_color).add_modifier(Modifier::BOLD)),
+                Span::styled(
+                    "  → ",
+                    Style::default()
+                        .fg(family_color)
+                        .add_modifier(Modifier::BOLD),
+                ),
                 Span::styled(arc.arc_key.clone(), Style::default().fg(family_color)),
                 Span::styled(" → ", STYLE_DIM),
                 Span::styled(arc.other_class.clone(), STYLE_HIGHLIGHT),
-                Span::styled(format!(" [{}]", arc.family), Style::default().fg(family_color).add_modifier(Modifier::DIM)),
+                Span::styled(
+                    format!(" [{}]", arc.family),
+                    Style::default()
+                        .fg(family_color)
+                        .add_modifier(Modifier::DIM),
+                ),
             ]));
         }
         if outgoing_count > 4 {
@@ -608,11 +677,21 @@ fn build_class_content(
         for arc in arcs_data.incoming.iter().take(3) {
             let family_color = colors::arc_family::color(&arc.family, mode);
             content.relationships.add_line(Line::from(vec![
-                Span::styled("  ← ", Style::default().fg(family_color).add_modifier(Modifier::BOLD)),
+                Span::styled(
+                    "  ← ",
+                    Style::default()
+                        .fg(family_color)
+                        .add_modifier(Modifier::BOLD),
+                ),
                 Span::styled(arc.arc_key.clone(), Style::default().fg(family_color)),
                 Span::styled(" ← ", STYLE_DIM),
                 Span::styled(arc.other_class.clone(), STYLE_HIGHLIGHT),
-                Span::styled(format!(" [{}]", arc.family), Style::default().fg(family_color).add_modifier(Modifier::DIM)),
+                Span::styled(
+                    format!(" [{}]", arc.family),
+                    Style::default()
+                        .fg(family_color)
+                        .add_modifier(Modifier::DIM),
+                ),
             ]));
         }
         if incoming_count > 3 {
@@ -676,15 +755,28 @@ fn build_arc_family_content(family: &crate::tui::data::ArcFamilyInfo) -> Unified
     let family_color = colors::arc_family::color(&family.key, mode);
 
     // IDENTITY - explicit key:value format
-    content
-        .identity
-        .add_kv("type", Span::styled("ArcFamily", Style::default().fg(family_color)));
-    content
-        .identity
-        .add_kv("key", Span::styled(family.key.clone(), Style::default().fg(family_color).add_modifier(Modifier::BOLD)));
-    content
-        .identity
-        .add_kv("display", Span::styled(family.display_name.clone(), Style::default().fg(Color::White).add_modifier(Modifier::BOLD)));
+    content.identity.add_kv(
+        "type",
+        Span::styled("ArcFamily", Style::default().fg(family_color)),
+    );
+    content.identity.add_kv(
+        "key",
+        Span::styled(
+            family.key.clone(),
+            Style::default()
+                .fg(family_color)
+                .add_modifier(Modifier::BOLD),
+        ),
+    );
+    content.identity.add_kv(
+        "display",
+        Span::styled(
+            family.display_name.clone(),
+            Style::default()
+                .fg(Color::White)
+                .add_modifier(Modifier::BOLD),
+        ),
+    );
 
     // LOCATION - not applicable
     content.location.add_empty();
@@ -730,15 +822,28 @@ fn build_arc_class_content(
     let family_color = colors::arc_family::color(&family.key, mode);
 
     // IDENTITY - explicit key:value format
-    content
-        .identity
-        .add_kv("type", Span::styled("ArcClass", Style::default().fg(family_color)));
-    content
-        .identity
-        .add_kv("key", Span::styled(arc_class.key.clone(), Style::default().fg(family_color).add_modifier(Modifier::BOLD)));
-    content
-        .identity
-        .add_kv("display", Span::styled(arc_class.display_name.clone(), Style::default().fg(Color::White).add_modifier(Modifier::BOLD)));
+    content.identity.add_kv(
+        "type",
+        Span::styled("ArcClass", Style::default().fg(family_color)),
+    );
+    content.identity.add_kv(
+        "key",
+        Span::styled(
+            arc_class.key.clone(),
+            Style::default()
+                .fg(family_color)
+                .add_modifier(Modifier::BOLD),
+        ),
+    );
+    content.identity.add_kv(
+        "display",
+        Span::styled(
+            arc_class.display_name.clone(),
+            Style::default()
+                .fg(Color::White)
+                .add_modifier(Modifier::BOLD),
+        ),
+    );
 
     // LOCATION (Classification) - family as classification
     content.location.add_classification(
@@ -776,16 +881,31 @@ fn build_arc_class_content(
     content.relationships.add_line(Line::from(vec![
         Span::styled("● ", Style::default().fg(family_color)),
         Span::styled("from ", STYLE_DIM),
-        Span::styled(arc_class.from_class.clone(), Style::default().fg(Color::White).add_modifier(Modifier::BOLD)),
+        Span::styled(
+            arc_class.from_class.clone(),
+            Style::default()
+                .fg(Color::White)
+                .add_modifier(Modifier::BOLD),
+        ),
     ]));
     content.relationships.add_line(Line::from(vec![
-        Span::styled("→ ", Style::default().fg(family_color).add_modifier(Modifier::BOLD)),
+        Span::styled(
+            "→ ",
+            Style::default()
+                .fg(family_color)
+                .add_modifier(Modifier::BOLD),
+        ),
         Span::styled(arc_class.key.clone(), Style::default().fg(family_color)),
     ]));
     content.relationships.add_line(Line::from(vec![
         Span::styled("○ ", Style::default().fg(family_color)),
         Span::styled("to   ", STYLE_DIM),
-        Span::styled(arc_class.to_class.clone(), Style::default().fg(Color::White).add_modifier(Modifier::BOLD)),
+        Span::styled(
+            arc_class.to_class.clone(),
+            Style::default()
+                .fg(Color::White)
+                .add_modifier(Modifier::BOLD),
+        ),
     ]));
 
     content
@@ -812,21 +932,24 @@ fn build_instance_content(
     content
         .identity
         .add_kv("type", Span::styled("Instance", STYLE_HIGHLIGHT));
-    content
-        .identity
-        .add_kv("key", Span::styled(instance.key.clone(), Style::default().fg(Color::White).add_modifier(Modifier::BOLD)));
+    content.identity.add_kv(
+        "key",
+        Span::styled(
+            instance.key.clone(),
+            Style::default()
+                .fg(Color::White)
+                .add_modifier(Modifier::BOLD),
+        ),
+    );
     content.identity.add_kv(
         "class",
         Span::styled(class.display_name.clone(), Style::default().fg(layer_color)),
     );
 
     // LOCATION (Classification) - explicit key:value format for all 3 axes
-    content.location.add_classification(
-        "realm",
-        realm.icon,
-        &realm.key,
-        realm_color,
-    );
+    content
+        .location
+        .add_classification("realm", realm.icon, &realm.key, realm_color);
     content.location.add_classification(
         "layer",
         theme.icons.layer(&layer.key),
@@ -879,18 +1002,97 @@ fn build_instance_content(
         content.coverage.add_empty();
     }
 
-    // PROPERTIES - simple property list
-    if !instance.properties.is_empty() {
-        for (key, value) in &instance.properties {
-            if key.starts_with('_') || key == "key" || key == "display_name" {
-                continue;
-            }
-            let value_str = json_value_to_display(value);
-            let truncated = truncate_str(&value_str, 30);
+    // PROPERTIES - v0.13.1: Match Class format exactly
+    // Format: `✓* property_name: value` (same width, order, icons as Class)
+    let schema_keys: Vec<&String> = class
+        .properties
+        .iter()
+        .filter(|k| !k.starts_with('_') && k.as_str() != "key" && k.as_str() != "display_name")
+        .collect();
+
+    // Collect extra instance props not in schema (e.g., computed fields)
+    let extra_keys: Vec<&String> = instance
+        .properties
+        .keys()
+        .filter(|k| {
+            !k.starts_with('_')
+                && k.as_str() != "key"
+                && k.as_str() != "display_name"
+                && !schema_keys.contains(k)
+        })
+        .collect();
+
+    if !schema_keys.is_empty() || !extra_keys.is_empty() {
+        // Same max width as Class (18 chars)
+        let max_key_len = schema_keys
+            .iter()
+            .chain(extra_keys.iter())
+            .map(|k| k.len())
+            .max()
+            .unwrap_or(0)
+            .min(18); // Same cap as Class for visual alignment
+
+        // Schema properties in YAML order (same format as Class)
+        for key in &schema_keys {
+            let is_required = class.required_properties.contains(*key);
+            let has_value = instance
+                .properties
+                .get(*key)
+                .map(|v| !v.is_null())
+                .unwrap_or(false);
+
+            // Status icon: ✓ if filled, ⚠ if required+missing, space otherwise
+            let (status_icon, status_style) = if has_value {
+                ("✓", Style::default().fg(Color::Rgb(133, 153, 0))) // green
+            } else if is_required {
+                ("⚠", Style::default().fg(Color::Rgb(203, 75, 22))) // orange warning
+            } else {
+                (" ", STYLE_DIM)
+            };
+
+            // Required marker: * for required, space for optional
+            let required_marker = if is_required { "*" } else { " " };
+
+            let (value_str, value_color) = if let Some(value) = instance.properties.get(*key) {
+                (json_value_to_display(value), json_value_color(value))
+            } else {
+                ("~".to_string(), COLOR_VALUE_NULL)
+            };
+            let truncated = truncate_str(&value_str, 24);
+
             content.properties.add_line(Line::from(vec![
-                Span::styled(format!("{:<14}", key), STYLE_INFO),
-                Span::styled(truncated, STYLE_PRIMARY),
+                Span::styled(status_icon, status_style),
+                Span::styled(
+                    required_marker,
+                    Style::default().fg(Color::Rgb(220, 50, 47)),
+                ),
+                Span::styled(
+                    format!("{:width$}", key, width = max_key_len),
+                    STYLE_PROP_KEY,
+                ),
+                Span::styled(": ", STYLE_PROP_COLON),
+                Span::styled(truncated, Style::default().fg(value_color)),
             ]));
+        }
+
+        // Extra instance props not in schema (marked with ?)
+        for key in &extra_keys {
+            if let Some(value) = instance.properties.get(*key) {
+                let value_str = json_value_to_display(value);
+                let value_color = json_value_color(value);
+                let truncated = truncate_str(&value_str, 24);
+
+                content.properties.add_line(Line::from(vec![
+                    Span::styled("?", STYLE_DIM), // Unknown/extra property
+                    Span::styled(" ", STYLE_DIM),
+                    Span::styled(
+                        format!("{:width$}", key, width = max_key_len),
+                        STYLE_PROP_KEY,
+                    ),
+                    Span::styled(": ", STYLE_PROP_COLON),
+                    Span::styled(truncated, Style::default().fg(value_color)),
+                ]));
+            }
         }
     } else {
         content.properties.add_empty();
@@ -1030,18 +1232,18 @@ fn type_badge(prop_type: &str) -> &'static str {
 /// v0.13: Return semantic color for property type.
 fn type_color(prop_type: &str) -> Color {
     match prop_type.to_lowercase().as_str() {
-        "string" => Color::Rgb(42, 161, 152),      // cyan/teal - text
-        "json" => Color::Rgb(108, 113, 196),       // violet - complex
-        "enum" => Color::Rgb(181, 137, 0),         // yellow - constrained
-        "datetime" => Color::Rgb(211, 54, 130),    // magenta - temporal
-        "int" | "integer" => Color::Rgb(38, 139, 210),  // blue - numeric
+        "string" => Color::Rgb(42, 161, 152),   // cyan/teal - text
+        "json" => Color::Rgb(108, 113, 196),    // violet - complex
+        "enum" => Color::Rgb(181, 137, 0),      // yellow - constrained
+        "datetime" => Color::Rgb(211, 54, 130), // magenta - temporal
+        "int" | "integer" => Color::Rgb(38, 139, 210), // blue - numeric
         "float" | "number" => Color::Rgb(38, 139, 210), // blue - numeric
-        "bool" | "boolean" => Color::Rgb(133, 153, 0),  // green - binary
-        "array" | "list" => Color::Rgb(203, 75, 22),    // orange - collection
-        "object" | "map" => Color::Rgb(220, 50, 47),    // red - complex
-        "url" | "uri" => Color::Rgb(42, 161, 152),      // cyan - reference
-        "?" => Color::DarkGray,                         // unknown
-        _ => Color::Gray,                               // fallback
+        "bool" | "boolean" => Color::Rgb(133, 153, 0), // green - binary
+        "array" | "list" => Color::Rgb(203, 75, 22), // orange - collection
+        "object" | "map" => Color::Rgb(220, 50, 47), // red - complex
+        "url" | "uri" => Color::Rgb(42, 161, 152), // cyan - reference
+        "?" => Color::DarkGray,                 // unknown
+        _ => Color::Gray,                       // fallback
     }
 }
 
@@ -1058,8 +1260,35 @@ fn json_value_to_display(value: &JsonValue) -> String {
         JsonValue::Bool(b) => b.to_string(),
         JsonValue::Number(n) => n.to_string(),
         JsonValue::String(s) => format!("\"{}\"", s),
-        JsonValue::Array(arr) => serde_json::to_string(arr).unwrap_or_else(|_| "[]".to_string()),
-        JsonValue::Object(obj) => serde_json::to_string(obj).unwrap_or_else(|_| "{}".to_string()),
+        JsonValue::Array(arr) => {
+            if arr.is_empty() {
+                "[]".to_string()
+            } else if arr.len() <= 3 {
+                format!("[{} items]", arr.len())
+            } else {
+                format!("[{} items...]", arr.len())
+            }
+        }
+        JsonValue::Object(obj) => {
+            if obj.is_empty() {
+                "{}".to_string()
+            } else {
+                format!("{{...{} keys}}", obj.len())
+            }
+        }
+    }
+}
+
+/// Get color for JSON value type.
+/// v0.13.1: Matches yaml_panel.rs json_value_color() for consistency.
+fn json_value_color(value: &JsonValue) -> Color {
+    match value {
+        JsonValue::Null => COLOR_VALUE_NULL,
+        JsonValue::Bool(_) => COLOR_VALUE_BOOL,
+        JsonValue::Number(_) => COLOR_VALUE_NUMBER,
+        JsonValue::String(_) => COLOR_VALUE_STRING,
+        JsonValue::Array(_) => COLOR_VALUE_ARRAY,
+        JsonValue::Object(_) => COLOR_VALUE_OBJECT,
     }
 }
 
@@ -1197,12 +1426,7 @@ fn render_scrollable_section_box(
 }
 
 /// Render the consolidated HEADER box (Identity + Location + Metrics + Coverage).
-fn render_header_box(
-    f: &mut Frame,
-    area: Rect,
-    content: &UnifiedContent,
-    state: BoxVisualState,
-) {
+fn render_header_box(f: &mut Frame, area: Rect, content: &UnifiedContent, state: BoxVisualState) {
     let (border_color, title_style) = box_styles(state);
 
     // Selected box gets a ▶ indicator
@@ -1264,7 +1488,11 @@ fn render_mini_section(f: &mut Frame, area: Rect, _title: &str, content: &Sectio
 
 /// Compute visual state for a box in the Detail panel.
 /// Info panel contains: HEADER, PROPERTIES (v0.13: ARCS moved to dedicated panel).
-fn detail_box_state(panel_focused: bool, selected_box: InfoBox, this_box: InfoBox) -> BoxVisualState {
+fn detail_box_state(
+    panel_focused: bool,
+    selected_box: InfoBox,
+    this_box: InfoBox,
+) -> BoxVisualState {
     if !panel_focused {
         BoxVisualState::Unfocused
     } else if selected_box == this_box {

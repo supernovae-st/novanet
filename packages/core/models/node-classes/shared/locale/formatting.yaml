@@ -1,19 +1,40 @@
-# models/node-classes/shared/locale/formatting.yaml
-# Formatting — Technical formatting rules for a locale (dates, numbers, currency, time, phone, address)
-#
-# v10.6: Added time_system, percentage_space, raw_markdown (hybrid approach)
-# v10.6.1: Added month/day names, street_types, postal_code_format, national_id_patterns
-# Stability: High - changes rarely
+# ═══════════════════════════════════════════════════════════════════════════════
+# NodeClass: Formatting — Technical formatting rules for dates, numbers, currency
+# v0.13.1: LLM-First property ordering
+# ═══════════════════════════════════════════════════════════════════════════════
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════════
+
   name: Formatting
   realm: shared
   layer: locale
   trait: imported
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  description: "Technical formatting rules: dates, numbers, currency, time, phone, address, units"
+  llm_context: |
+    USE: when formatting numbers, dates, currency, phone numbers, addresses.
+    TRIGGERS: "formatting", "dates", "prices", "numbers", "phone", "address", "currency".
+    NOT: for content style (use Style), for adaptation decisions (use Adaptation).
+    RELATES: Locale (via HAS_FORMATTING), decimal_separator, date_format, currency_code, phone_format.
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════════
+
   icon:
     web: "hash"
     terminal: "▦"
-  description: "Technical formatting rules: dates, numbers, currency, time, phone, address, units"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA — Standard Properties
+  # ═══════════════════════════════════════════════════════════════════════════════
 
   standard_properties:
     key:
@@ -47,6 +68,10 @@ node:
     updated_at:
       type: datetime
       required: true
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA — Formatting-Specific Properties
+  # ═══════════════════════════════════════════════════════════════════════════════
 
   properties:
     # ═══════════════════════════════════════════════════════════════════════════
@@ -284,6 +309,10 @@ node:
       type: string
       required: false
       description: "Full source markdown for LLM context (includes examples, edge cases)"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH — Relations
+  # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
     incoming:

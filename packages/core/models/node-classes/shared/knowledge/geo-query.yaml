@@ -1,37 +1,51 @@
-# models/node-classes/shared/knowledge/geo-query.yaml
-# GEOQuery - Generative Engine Optimization query tracked across AI engines
-#
+# ─────────────────────────────────────────────────────────────────────────────
+# GEOQuery — Generative Engine Optimization query tracked across AI engines
+# ─────────────────────────────────────────────────────────────────────────────
+# v0.13.1: LLM-First field ordering (ADR-031)
 # v11.4: Moved to shared/knowledge (Knowledge Atoms pattern)
 #        - REMOVED time-series properties (now in GEOAnswer)
 #        - Static query definition only - metrics tracked in GEOAnswer nodes
-#
 # v10.7: GEO Schema v1
 #        - New node type for AI visibility tracking (Gemini, GPT, Perplexity, Claude)
 #        - Different from SEO: tracks LLM citations, not search rankings
 #        - Owned by Locale via HAS_GEO_QUERIES
 #        - Links to GEOAnswer (snapshots) and GEOMetrics (time-series)
+# ─────────────────────────────────────────────────────────────────────────────
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════
   name: GEOQuery
   realm: shared
   layer: knowledge
   trait: imported
-  icon:
-    web: "bot"
-    terminal: "⚙"
-  description: |
-    Query tracked across AI engines for generative engine optimization (GEO).
-    Static query definition - time-series metrics live in GEOAnswer nodes.
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC
+  # ═══════════════════════════════════════════════════════════════════════════
+  description: "Query tracked across AI engines for generative engine optimization (GEO)"
+
+  llm_context: |
+    GEOQuery represents an AI search query to monitor for visibility.
+    It is DISCOVERED/CONFIGURED data, not generated content.
+    Static query definition - time-series metrics live in GEOAnswer nodes.
     USE: when defining AI search queries to monitor for brand visibility.
     TRIGGERS: "GEO query", "AI search", "LLM visibility", "generative search".
     NOT: for search rankings (use SEOKeyword), for LLM responses (use GEOAnswer).
     RELATES: GEOAnswer (HAS_GEO_ANSWERS), EntityNative (MONITORS_GEO).
+    Access: EntityNative --[:MONITORS_GEO]--> GEOQuery --[:HAS_GEO_ANSWERS]--> GEOAnswer
 
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # STANDARD PROPERTIES (v7.1.0)
-  # ═══════════════════════════════════════════════════════════════════════════════
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════
+  icon:
+    web: "bot"
+    terminal: "⚙"
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA
+  # ═══════════════════════════════════════════════════════════════════════════
   standard_properties:
     key:
       type: string
@@ -50,11 +64,6 @@ node:
       required: false
       description: "Short description"
 
-    llm_context:
-      type: string
-      required: false
-      description: "GEOQuery represents an AI search query to monitor for visibility. It is DISCOVERED/CONFIGURED data, not generated content. Static query definition - time-series metrics live in GEOAnswer nodes. v11.4: Now in shared/knowledge (Knowledge Atoms pattern). Access: EntityNative --[:MONITORS_GEO]--> GEOQuery --[:HAS_GEO_ANSWERS]--> GEOAnswer"
-
     created_at:
       type: datetime
       required: false
@@ -62,10 +71,6 @@ node:
     updated_at:
       type: datetime
       required: false
-
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # NODE-SPECIFIC PROPERTIES
-  # ═══════════════════════════════════════════════════════════════════════════════
 
   properties:
     # --- Core query data (static definition) ---
@@ -96,10 +101,9 @@ node:
     # NOTE: Time-series metrics (visibility scores, share_of_voice, citation_frequency)
     # are tracked in GEOAnswer nodes, not here. This node is static query definition only.
 
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # RELATIONS
-  # ═══════════════════════════════════════════════════════════════════════════════
-
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH
+  # ═══════════════════════════════════════════════════════════════════════════
   relations:
     # Incoming: EntityNative --[:MONITORS_GEO]--> GEOQuery (targeting, v11.4)
 
@@ -109,10 +113,9 @@ node:
       cardinality: "1:N"
       description: "Time-series LLM response samples with visibility metrics (v11.4)"
 
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # EXAMPLE
-  # ═══════════════════════════════════════════════════════════════════════════════
-
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE
+  # ═══════════════════════════════════════════════════════════════════════════
   example:
     description: "Get GEO queries monitored by an entity with latest visibility metrics"
     cypher: |

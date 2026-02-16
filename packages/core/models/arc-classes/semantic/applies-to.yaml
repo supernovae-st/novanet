@@ -1,18 +1,35 @@
 # packages/core/models/arc-classes/semantic/applies-to.yaml
-# ArcClass: APPLIES_TO - Entity applies to / is applicable to another Entity
-# v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
+# ArcClass: APPLIES_TO — Entity applies to / is applicable to another Entity
+# v0.13.1: LLM-First field ordering (semantic fields before structure)
 
 arc:
+  # --- IDENTITY ---
   name: APPLIES_TO
   family: semantic
   scope: intra_realm
-  temperature_threshold: 0.2  # Application - important for use case discovery
 
+  # --- SEMANTIC (LLM-critical) ---
+  description: |
+    Entity is relevant or applicable to another entity. Used to model
+    domain relevance where one entity (like a feature, tool, or concept)
+    applies to another entity (like a product, service, or domain).
+  llm_context: |
+    USE: when finding use cases or domains where an entity applies.
+    TRIGGERS: applies to, use case, domain, industry, applicable, scenario.
+    NOT: direct operation (use ACTS_ON), capability (use ENABLES).
+    RELATES: Entity (source/tool), Entity (target/domain), HAS_APPLICATION (inverse).
+
+  # --- GRAPH STRUCTURE ---
   source: Entity
   target: Entity
   cardinality: many_to_many
-  is_self_referential: true
 
+  # --- FLAGS ---
+  inverse_of: HAS_APPLICATION
+  is_self_referential: true
+  temperature_threshold: 0.2
+
+  # --- DATA ---
   properties:
     - name: strength
       type: float
@@ -38,12 +55,5 @@ arc:
       enum: [primary, secondary, niche, experimental]
       description: "Relevance level for this application"
 
-  inverse_of: HAS_APPLICATION
-
-  llm_context: |
-    USE: when finding use cases or domains where an entity applies.
-    TRIGGERS: applies to, use case, domain, industry, applicable, scenario.
-    NOT: direct operation (use ACTS_ON), capability (use ENABLES).
-    RELATES: Entity (source/tool), Entity (target/domain), HAS_APPLICATION (inverse).
-
+  # --- REFERENCE ---
   cypher_pattern: "(Entity)-[:APPLIES_TO {strength, temperature, application_type, relevance}]->(Entity)"

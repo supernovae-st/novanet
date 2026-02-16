@@ -1,21 +1,42 @@
 # models/node-classes/shared/geography/geo-region.yaml
 # GeoRegion - UN M49 geographic region for locale clustering
 #
-# v10.8: Geographic Taxonomy - Phase 1
+# v0.13.1: LLM-First field ordering (llm_context promoted to BLOC 2)
 # v0.12.4: Added cultural_style and visual_prompt for AI generation
+# v10.8: Geographic Taxonomy - Phase 1
 # Data: 22 regions (Northern Africa, Western Europe, etc.)
 # Source: UN M49 Standard (unstats.un.org)
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: GeoRegion
   realm: shared
   layer: geography
   trait: defined
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (LLM-First)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  description: "UN M49 geographic region for clustering similar locales"
+
+  llm_context: |
+    USE: when generating content for a geographic region (e.g., Western Europe, Eastern Asia).
+    TRIGGERS: "region", "geographic region", "UN M49 region", "western", "eastern", "northern", "southern".
+    NOT: for continent-level (use Continent), for country-level (use Country), for economic regions (use EconomicRegion).
+    RELATES: Continent (parent via IN_CONTINENT), GeoSubRegion (child via IN_REGION), Locale (child via IN_SUBREGION).
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════════
   icon:
     web: "map"
     terminal: "⊙"
-  description: "UN M49 geographic region for clustering similar locales"
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA
+  # ═══════════════════════════════════════════════════════════════════════════════
   standard_properties:
     key:
       type: string
@@ -39,12 +60,6 @@ node:
       required: true
       description: "Short description"
       example: "Western European region including France, Germany, Netherlands"
-
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints"
-      example: "USE: for W.European countries (FR, DE, NL, BE, AT, CH). TRIGGERS: western europe, ouest, west. NOT: Southern Europe (Mediterranean)."
 
     created_at:
       type: datetime
@@ -119,6 +134,9 @@ node:
           inherit_from: string    # Usually "image"
           rendering: object       # Lighting, materials, environment
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH
+  # ═══════════════════════════════════════════════════════════════════════════════
   relations:
     outgoing:
       - type: IN_CONTINENT
@@ -137,6 +155,9 @@ node:
         cardinality: "N:1"
         description: "Sub-regions within this region (optional)"
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE
+  # ═══════════════════════════════════════════════════════════════════════════════
   example:
     data:
       key: "western-europe"

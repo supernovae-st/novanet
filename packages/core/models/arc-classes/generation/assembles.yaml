@@ -1,22 +1,51 @@
-# packages/core/models/arc-classes/generation/assembles.yaml
-# ArcClass: ASSEMBLES — PageNative assembles BlockNatives with order for sequencing
+# =============================================================================
+# ArcClass: ASSEMBLES
+# NovaNet v0.13.1 — LLM-First Ordering
+# =============================================================================
+# PageNative assembles BlockNatives with order for sequencing
 # v0.12.3: Changed position (string) to order (int) for consistency with HAS_BLOCK
+# =============================================================================
 
 arc:
+  # ─────────────────────────────────────────────────────────────────────────
+  # BLOC 2: IDENTITY
+  # ─────────────────────────────────────────────────────────────────────────
   name: ASSEMBLES
   family: generation
   scope: intra_realm
-  source: PageNative
-  target: BlockNative
-  cardinality: one_to_many
-  properties:
-    - name: order
-      type: int
-      required: true
-      description: "Rendering sequence (1, 2, 3...). Matches HAS_BLOCK.order for consistency."
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # BLOC 3: SEMANTIC (LLM-Critical)
+  # ─────────────────────────────────────────────────────────────────────────
+  description: >-
+    Links a generated page to its constituent generated blocks in rendering order.
+    The order property ensures blocks are assembled in the correct sequence for
+    final page output. This arc is used during page rendering to compose the
+    complete page from its generated block content.
+
   llm_context: |
     USE: when rendering a complete page, loading blocks in order.
     TRIGGERS: page render, block assembly, content composition, final output.
     NOT: for structure definition (use HAS_BLOCK), for single block (use BlockNative).
     RELATES: PageNative (source), BlockNative (target), order property mirrors HAS_BLOCK.order.
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # BLOC 4: GRAPH STRUCTURE
+  # ─────────────────────────────────────────────────────────────────────────
+  source: PageNative
+  target: BlockNative
+  cardinality: one_to_many
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # BLOC 6: DATA
+  # ─────────────────────────────────────────────────────────────────────────
+  properties:
+    - name: order
+      type: int
+      required: true
+      description: "Rendering sequence (1, 2, 3...). Matches HAS_BLOCK.order for consistency."
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # BLOC 7: REFERENCE
+  # ─────────────────────────────────────────────────────────────────────────
   cypher_pattern: (PageNative)-[:ASSEMBLES {order}]->(BlockNative)

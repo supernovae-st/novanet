@@ -1,0 +1,53 @@
+# packages/core/models/arc-classes/semantic/term-used-by.yaml
+# ArcClass: TERM_USED_BY — Inverse of USES_TERM
+#
+# v0.13.0: Inverse arc for Term → EntityNative navigation
+# ADR-026: TIER 2 inverse for semantic arcs
+
+arc:
+  name: TERM_USED_BY
+  family: semantic
+  scope: cross_realm  # Term (shared/knowledge) → EntityNative (org/semantic)
+  temperature_threshold: 0.5
+
+  source: Term
+  target: EntityNative
+  cardinality: many_to_many
+
+  properties:
+    - name: purpose
+      type: string
+      required: false
+      enum: [primary, secondary, contextual, avoid]
+      description: "Inherited from USES_TERM relationship"
+
+    - name: temperature
+      type: float
+      required: false
+      default: 0.8
+      description: "Activation weight for spreading activation (0.0-1.0)"
+
+    - name: semantic_field
+      type: string
+      required: false
+      enum: [domain, action, benefit, feature, comparison, technical]
+      description: "Inherited from USES_TERM relationship"
+
+  inverse_of: USES_TERM
+
+  llm_context: |
+    USE: when finding which EntityNative nodes use a specific term.
+    TRIGGERS: term usage, vocabulary analysis, term consistency check.
+    NOT: term containers (use CONTAINS_TERM), term definitions.
+    RELATES: Term (source), EntityNative (target), USES_TERM (forward arc).
+    EXAMPLE: Find all entities using "QR Code" term across locales.
+
+  cypher_pattern: "(Term)-[:TERM_USED_BY {purpose, temperature, semantic_field}]->(EntityNative)"
+
+  examples:
+    cypher: |
+      // Find all EntityNative using a specific term
+      MATCH (t:Term {key: "qr_code"})
+      MATCH (t)-[r:TERM_USED_BY]->(en:EntityNative)
+      RETURN en.key, en.display_name, r.purpose
+      ORDER BY r.temperature DESC

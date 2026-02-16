@@ -1,11 +1,11 @@
 # models/views.yaml
 # NovaNet Views - Single Source of Truth (v0.12.5)
 #
-# 10 essential views shared between TUI and Studio.
-# Categories: schema (2), data (3), generation (3), contextual (2)
+# 11 essential views shared between TUI and Studio.
+# Categories: schema (2), data (4), generation (3), contextual (2)
 
 version: "0.12.5"
-description: NovaNet Essential Views (10 views)
+description: NovaNet Essential Views (11 views)
 
 # =============================================================================
 # CATEGORIES
@@ -36,7 +36,7 @@ categories:
     description: Node-centered subgraphs
 
 # =============================================================================
-# VIEWS (10)
+# VIEWS (11)
 # =============================================================================
 views:
   # ---------------------------------------------------------------------------
@@ -70,8 +70,26 @@ views:
       LIMIT 200
 
   # ---------------------------------------------------------------------------
-  # DATA (3) - Instance exploration
+  # DATA (4) - Instance exploration
   # ---------------------------------------------------------------------------
+  - id: data-complete
+    name: All Instances
+    description: All data instances (non-schema)
+    category: data
+    icon: { web: database, terminal: "●" }
+    color: "#6366f1"
+    root_type: null
+    contextual: false
+    cypher: |
+      MATCH (n)
+      WHERE NOT n:Schema AND NOT n:Class AND NOT n:ArcClass AND NOT n:ArcFamily
+        AND NOT n:Realm AND NOT n:Layer AND NOT n:Trait
+      OPTIONAL MATCH (n)-[r]->(m)
+      WHERE NOT m:Schema AND NOT m:Class AND NOT m:ArcClass AND NOT m:ArcFamily
+        AND NOT m:Realm AND NOT m:Layer AND NOT m:Trait
+      RETURN n, r, m
+      LIMIT 500
+
   - id: data-project
     name: Project Overview
     description: Project with pages, entities, and brand

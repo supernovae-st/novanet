@@ -1,32 +1,66 @@
-# packages/core/models/arc-classes/generation/produced-by.yaml
-# v0.13.0: Inverse of PRODUCED - for audit trail traversal
+# =============================================================================
+# ArcClass: PRODUCED_BY
+# NovaNet v0.13.1 — LLM-First Ordering
+# =============================================================================
+# Inverse of PRODUCED - for audit trail traversal
 # Allows: "Which prompt produced this output?" queries
+# =============================================================================
+
 arc:
+  # ─────────────────────────────────────────────────────────────────────────
+  # BLOC 2: IDENTITY
+  # ─────────────────────────────────────────────────────────────────────────
   name: PRODUCED_BY
   family: generation
   scope: intra_realm
-  source:
-    - BlockNative
-    - PageNative
-  target: PromptArtifact
-  cardinality: many_to_many
-  inverse_of: PRODUCED
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # BLOC 3: SEMANTIC (LLM-Critical)
+  # ─────────────────────────────────────────────────────────────────────────
+  description: >-
+    Inverse of PRODUCED arc. Links generated content back to the compiled
+    prompt artifact that produced it. Essential for answering "which prompt
+    generated this output?" queries during audit and debugging. Properties
+    mirror PRODUCED for bidirectional consistency.
+
   llm_context: |
     USE: when finding which compiled prompt produced a generated block or page.
     TRIGGERS: prompt origin, output source, generation source, which prompt, audit trail.
     NOT: for instruction origin (use GENERATED), for generation instructions (use COMPILED_FROM).
     RELATES: BlockNative/PageNative (source), PromptArtifact (target), PRODUCED (inverse).
-  cypher_pattern: (BlockNative)-[:PRODUCED_BY]->(PromptArtifact)
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # BLOC 4: GRAPH STRUCTURE
+  # ─────────────────────────────────────────────────────────────────────────
+  source:
+    - BlockNative
+    - PageNative
+  target: PromptArtifact
+  cardinality: many_to_many
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # BLOC 5: FLAGS
+  # ─────────────────────────────────────────────────────────────────────────
+  inverse_of: PRODUCED
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # BLOC 6: DATA
+  # ─────────────────────────────────────────────────────────────────────────
   properties:
-    generation_timestamp:
+    - name: generation_timestamp
       type: datetime
       required: true
       description: "When the LLM generation occurred (mirrors PRODUCED.generation_timestamp)"
-    model_version:
+    - name: model_version
       type: string
       required: false
       description: "LLM model version used (mirrors PRODUCED.model_version)"
-    token_usage:
+    - name: token_usage
       type: integer
       required: false
       description: "Total tokens consumed (mirrors PRODUCED.token_usage)"
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # BLOC 7: REFERENCE
+  # ─────────────────────────────────────────────────────────────────────────
+  cypher_pattern: (BlockNative)-[:PRODUCED_BY]->(PromptArtifact)

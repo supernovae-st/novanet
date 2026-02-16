@@ -1,0 +1,53 @@
+# packages/core/models/arc-classes/semantic/uses-culture-ref.yaml
+# ArcClass: USES_CULTURE_REF — Direct EntityNative → CultureRef connection
+#
+# v0.13.0: Direct knowledge atom loading (ADR-029 extension)
+# Bypasses 4-hop: EntityNative → FOR_LOCALE → Locale → HAS_CULTURE → CultureSet → CultureRef
+# Enables selective LLM context loading (~10 relevant cultural refs vs ALL refs)
+
+arc:
+  name: USES_CULTURE_REF
+  family: semantic
+  scope: cross_realm  # EntityNative (org/semantic) → CultureRef (shared/knowledge)
+  temperature_threshold: 0.6
+
+  source: EntityNative
+  target: CultureRef
+  cardinality: many_to_many
+
+  properties:
+    - name: relevance
+      type: string
+      required: false
+      enum: [essential, recommended, optional]
+      description: "How important this cultural reference is for the content"
+
+    - name: temperature
+      type: float
+      required: false
+      default: 0.7
+      description: "Activation weight for spreading activation (0.0-1.0)"
+
+    - name: context_note
+      type: string
+      required: false
+      description: "Why this cultural reference is relevant for this entity"
+
+  inverse: CULTURE_REF_USED_BY
+
+  llm_context: |
+    USE: when loading locale-specific cultural references for content generation.
+    TRIGGERS: cultural context, local references, cultural sensitivity, locale nuances.
+    NOT: taboos (use locale knowledge), expressions (use USES_EXPRESSION).
+    RELATES: EntityNative (source), CultureRef (target), locale cultural knowledge.
+    EXAMPLE: Load French cultural references for a marketing entity.
+
+  cypher_pattern: "(EntityNative)-[:USES_CULTURE_REF {relevance, temperature, context_note}]->(CultureRef)"
+
+  examples:
+    cypher: |
+      // Load cultural references for an entity's native content
+      MATCH (en:EntityNative {key: $entity_native_key})
+      MATCH (en)-[r:USES_CULTURE_REF]->(cr:CultureRef)
+      RETURN cr.key, cr.reference, cr.domain, r.relevance, r.context_note
+      ORDER BY r.relevance, r.temperature DESC

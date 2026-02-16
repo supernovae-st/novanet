@@ -1,20 +1,42 @@
-# models/node-classes/shared/knowledge/cultural-realm.yaml
-# CulturalRealm - Major cultural realm (Broek & Webb classification)
-#
+# ─────────────────────────────────────────────────────────────────────────────
+# CulturalRealm — Major cultural realm (Broek & Webb classification)
+# ─────────────────────────────────────────────────────────────────────────────
+# v0.13.1: LLM-First field ordering (ADR-031)
 # v10.8: Geographic Taxonomy - Phase 3
 # Data: 6 major realms (Occidental, Islamic, Indic, East Asian, Southeast Asian, Meso-African)
 # Source: Broek & Webb cultural geography
+# ─────────────────────────────────────────────────────────────────────────────
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY
+  # ═══════════════════════════════════════════════════════════════════════════
   name: CulturalRealm
   realm: shared
   layer: knowledge
   trait: imported
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC
+  # ═══════════════════════════════════════════════════════════════════════════
+  description: "Major cultural realm for understanding cultural patterns and sensitivities"
+
+  llm_context: |
+    USE: for understanding major cultural patterns across regions.
+    TRIGGERS: cultural realm, occidental, islamic, indic, east asian, cultural geography.
+    NOT: fine-grained cultural adaptation (use CulturalSubRealm).
+    RELATES: CulturalSubRealm (PART_OF_REALM).
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL
+  # ═══════════════════════════════════════════════════════════════════════════
   icon:
     web: "drama"
     terminal: "◎"
-  description: "Major cultural realm for understanding cultural patterns and sensitivities"
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA
+  # ═══════════════════════════════════════════════════════════════════════════
   standard_properties:
     key:
       type: string
@@ -40,12 +62,6 @@ node:
       required: true
       description: "Short description of the cultural realm"
       example: "Western civilization rooted in Greco-Roman and Judeo-Christian traditions"
-
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints for cultural context"
-      example: "USE: for Western Europe, Americas, Australia/NZ. TRIGGERS: western, occidental, european-influenced. VALUES: individualism, rationalism, directness."
 
     created_at:
       type: datetime
@@ -92,6 +108,9 @@ node:
       description: "Number of CulturalSubRealm children"
       example: 6
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH
+  # ═══════════════════════════════════════════════════════════════════════════
   relations:
     incoming:
       - type: PART_OF_REALM
@@ -99,6 +118,9 @@ node:
         cardinality: "N:1"
         description: "Cultural sub-realms within this realm"
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE
+  # ═══════════════════════════════════════════════════════════════════════════
   example:
     data:
       key: "occidental"

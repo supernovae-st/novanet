@@ -1,24 +1,29 @@
-# arc-classes/ownership/has-format.yaml
-# HAS_FORMAT - SEOKeyword has a format classification (v11.4)
-#
-# v11.4: New arc for keyword format classification
-#        - Follows EntityCategory pattern (ADR-017)
-#        - SEOKeyword classifies into SEOKeywordFormat
+# ═══════════════════════════════════════════════════════════════════════════════
+# ArcClass: HAS_FORMAT — SEOKeyword has format classification
+# v0.13.1: LLM-First property ordering
+# v11.4: New arc for keyword format classification (follows ADR-017 EntityCategory pattern)
+# ═══════════════════════════════════════════════════════════════════════════════
 
 arc:
+  # IDENTITY
   name: HAS_FORMAT
   family: ownership
   scope: intra_realm
-  source: SEOKeyword
-  target: SEOKeywordFormat
-  cardinality: many_to_one
 
+  # SEMANTIC (LLM-CRITICAL)
+  description: "SEOKeyword has format classification (question, comparison, etc.)"
   llm_context: |
     USE: when categorizing SEO keywords by format type.
     TRIGGERS: keyword format, keyword type, question keywords, comparison keywords.
     NOT: keyword metrics (use HAS_METRICS), keyword set (use CONTAINS_SEO_KEYWORD).
     RELATES: SEOKeyword (source), SEOKeywordFormat (target).
 
+  # GRAPH STRUCTURE
+  source: SEOKeyword
+  target: SEOKeywordFormat
+  cardinality: many_to_one
+
+  # REFERENCE
   cypher_pattern: "(SEOKeyword)-[:HAS_FORMAT]->(SEOKeywordFormat)"
 
   example:
