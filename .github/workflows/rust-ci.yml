@@ -275,7 +275,7 @@ jobs:
 
       - name: Create security issue on vulnerabilities (scheduled only)
         if: github.event_name == 'schedule' && steps.audit.outputs.vulnerabilities != '0'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const vulns = '${{ steps.audit.outputs.vulnerabilities }}';
@@ -494,7 +494,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Generate summary comment
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const checkResult = '${{ needs.check.result }}';
