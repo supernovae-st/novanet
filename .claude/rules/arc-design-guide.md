@@ -1,3 +1,11 @@
+---
+paths:
+  - "packages/core/models/arc-classes/**/*.yaml"
+  - "packages/db/**/*.cypher"
+  - "tools/novanet/src/generators/*.rs"
+description: Arc design patterns - load when editing arc definitions
+---
+
 # NovaNet Arc Design Best Practices
 
 This guide documents best practices for designing, naming, and documenting arcs in NovaNet.
