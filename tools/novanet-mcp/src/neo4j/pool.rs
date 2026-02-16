@@ -87,6 +87,92 @@ impl Neo4jPool {
     }
 }
 
+/// Check if keyword appears with valid boundaries (no allocations)
+/// Checks for keyword preceded/followed by: space, newline, tab, parenthesis, brace, pipe
+#[inline]
+fn contains_keyword_with_boundary(query: &str, keyword: &str) -> bool {
+    // Pre-boundary characters that can appear before keyword
+    const PRE_BOUNDARIES: &[char] = &[' ', '\n', '\t', '(', '{', '|'];
+    // Post-boundary characters that can appear after keyword
+    const POST_BOUNDARIES: &[char] = &[' ', '\n', '\t', '(', '{'];
+
+    let mut start = 0;
+    while let Some(pos) = query[start..].find(keyword) {
+        let abs_pos = start + pos;
+
+        // Check pre-boundary (or start of string)
+        let has_pre_boundary = abs_pos == 0
+            || query[..abs_pos]
+                .chars()
+                .last()
+                .is_some_and(|c| PRE_BOUNDARIES.contains(&c));
+
+        // Check post-boundary (or end of string)
+        let end_pos = abs_pos + keyword.len();
+        let has_post_boundary = end_pos >= query.len()
+            || query[end_pos..]
+                .chars()
+                .next()
+                .is_some_and(|c| POST_BOUNDARIES.contains(&c));
+
+        if has_pre_boundary && has_post_boundary {
+            return true;
+        }
+
+        // Move past this occurrence
+        start = abs_pos + 1;
+    }
+
+    false
+}
+
+/// Check if query starts with keyword (with proper boundary)
+#[inline]
+fn starts_with_keyword(query: &str, keyword: &str) -> bool {
+    if !query.starts_with(keyword) {
+        return false;
+    }
+    // Check what follows the keyword
+    let rest = &query[keyword.len()..];
+    rest.is_empty()
+        || rest.starts_with(' ')
+        || rest.starts_with('(')
+        || rest.starts_with('\n')
+        || rest.starts_with('\t')
+}
+
+/// Check for FOREACH ... | WRITE pattern without heap allocations
+/// Matches both "|CREATE" and "| CREATE" patterns
+#[inline]
+fn contains_foreach_write(query: &str, keyword: &str) -> bool {
+    // Pattern 1: |KEYWORD (pipe directly followed by keyword)
+    if let Some(pos) = query.find('|') {
+        let after_pipe = &query[pos + 1..];
+        // Check |KEYWORD
+        if let Some(rest) = after_pipe.strip_prefix(keyword) {
+            if rest.is_empty()
+                || rest.starts_with(' ')
+                || rest.starts_with('(')
+                || rest.starts_with('\n')
+            {
+                return true;
+            }
+        }
+        // Check | KEYWORD (with space)
+        let trimmed = after_pipe.trim_start();
+        if let Some(rest) = trimmed.strip_prefix(keyword) {
+            if rest.is_empty()
+                || rest.starts_with(' ')
+                || rest.starts_with('(')
+                || rest.starts_with('\n')
+            {
+                return true;
+            }
+        }
+    }
+    false
+}
+
 /// Validate that a Cypher query is read-only
 ///
 /// Security checks:
@@ -102,38 +188,21 @@ fn validate_read_only(cypher: &str) -> Result<()> {
     let upper = cleaned.to_uppercase();
 
     // Step 2: Block write keywords anywhere in the query
-    let write_keywords = [
+    // Use static patterns to avoid format!() allocations in hot path
+    static WRITE_KEYWORDS: &[&str] = &[
         "CREATE", "DELETE", "MERGE", "SET", "REMOVE", "DROP", "DETACH",
     ];
 
-    for keyword in write_keywords {
-        // Check for keyword with various boundaries (space, newline, tab, parenthesis, brace)
-        let patterns = [
-            format!(" {} ", keyword),
-            format!(" {}\n", keyword),
-            format!(" {}\t", keyword),
-            format!(" {}(", keyword),
-            format!(" {}{}", keyword, "{"),
-            format!("\n{} ", keyword),
-            format!("\n{}(", keyword),
-            format!("\t{} ", keyword),
-            format!("({}", keyword),    // Inside parens (subquery)
-            format!("{}{}", "{", keyword), // Inside braces
-            format!("|{}", keyword),    // FOREACH ... | CREATE
-            format!("| {} ", keyword),  // FOREACH ... | CREATE
-        ];
-
-        for pattern in patterns {
-            if upper.contains(&pattern) {
-                return Err(Error::write_not_allowed(keyword));
-            }
+    for keyword in WRITE_KEYWORDS {
+        // Check if keyword appears with valid boundaries (no allocations)
+        if contains_keyword_with_boundary(&upper, keyword) {
+            return Err(Error::write_not_allowed(*keyword));
         }
 
-        // Also check if query starts with keyword
-        if upper.trim_start().starts_with(&format!("{} ", keyword))
-            || upper.trim_start().starts_with(&format!("{}(", keyword))
-        {
-            return Err(Error::write_not_allowed(keyword));
+        // Check if query starts with keyword
+        let trimmed = upper.trim_start();
+        if starts_with_keyword(trimmed, keyword) {
+            return Err(Error::write_not_allowed(*keyword));
         }
     }
 
@@ -177,12 +246,13 @@ fn validate_read_only(cypher: &str) -> Result<()> {
     }
 
     // Step 5: Block FOREACH with write operations (extra safety)
+    // Check for FOREACH ... | WRITE pattern without allocations
     if upper.contains("FOREACH") {
-        for keyword in write_keywords {
-            // Check for FOREACH ... | WRITE pattern
-            if upper.contains("FOREACH") && upper.contains(&format!("|{}", keyword))
-                || upper.contains(&format!("| {}", keyword))
-            {
+        for keyword in WRITE_KEYWORDS {
+            // Build patterns for FOREACH | keyword matching
+            // Pattern 1: |KEYWORD (no space)
+            // Pattern 2: | KEYWORD (with space)
+            if contains_foreach_write(&upper, keyword) {
                 return Err(Error::write_not_allowed(format!(
                     "FOREACH with {}",
                     keyword

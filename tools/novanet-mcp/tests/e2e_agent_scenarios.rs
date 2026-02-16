@@ -161,7 +161,7 @@ mod content_generation_flow {
                 target_kinds: Some(vec![
                     "Block".to_string(),
                     "Entity".to_string(),
-                    "EntityContent".to_string(),
+                    "EntityNative".to_string(),
                 ]),
                 limit: Some(50),
                 include_properties: Some(true),

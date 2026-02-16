@@ -497,19 +497,21 @@ mod tests {
     }
 
     // =========================================================================
-    // NavMode tests (v11.7: 2 modes - Graph, Nexus)
+    // NavMode tests (v0.13.0: 3 modes - Graph, Views, Nexus)
     // =========================================================================
 
     #[test]
     fn test_nav_mode_labels() {
         assert_eq!(NavMode::Graph.label(), "Graph");
+        assert_eq!(NavMode::Views.label(), "Views");
         assert_eq!(NavMode::Nexus.label(), "Nexus");
     }
 
     #[test]
     fn test_nav_mode_index() {
         assert_eq!(NavMode::Graph.index(), 0);
-        assert_eq!(NavMode::Nexus.index(), 1);
+        assert_eq!(NavMode::Views.index(), 1);
+        assert_eq!(NavMode::Nexus.index(), 2);
     }
 
     // =========================================================================

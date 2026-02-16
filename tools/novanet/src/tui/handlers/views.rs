@@ -13,14 +13,48 @@ use crate::tui::clipboard;
 /// Returns `KeyResult::Handled` if the key was consumed,
 /// or `KeyResult::FallThrough` if it should be processed by global handlers.
 pub fn handle_views_key(app: &mut App, key: KeyEvent) -> KeyResult {
-    // No modifier keys for Views navigation
-    if key.modifiers.contains(KeyModifiers::CONTROL)
-        || key.modifiers.contains(KeyModifiers::ALT)
-    {
+    // Handle Ctrl+d/u for scrolling in Cypher section
+    if key.modifiers.contains(KeyModifiers::CONTROL) {
+        match key.code {
+            KeyCode::Char('d') => {
+                app.nexus.views.scroll_down(10);
+                return KeyResult::Handled;
+            }
+            KeyCode::Char('u') => {
+                app.nexus.views.scroll_up(10);
+                return KeyResult::Handled;
+            }
+            _ => return KeyResult::FallThrough,
+        }
+    }
+
+    // Handle Shift+Tab for previous section
+    if key.modifiers.contains(KeyModifiers::SHIFT) && key.code == KeyCode::BackTab {
+        app.nexus.views.prev_section();
+        return KeyResult::Handled;
+    }
+
+    // No other modifier keys for Views navigation
+    if key.modifiers.contains(KeyModifiers::ALT) {
         return KeyResult::FallThrough;
     }
 
     match key.code {
+        // Tab: cycle detail sections (Info → Cypher → Relations → Schema)
+        KeyCode::Tab => {
+            app.nexus.views.next_section();
+            KeyResult::Handled
+        }
+
+        // Page scroll in Cypher section
+        KeyCode::PageDown => {
+            app.nexus.views.scroll_down(10);
+            KeyResult::Handled
+        }
+        KeyCode::PageUp => {
+            app.nexus.views.scroll_up(10);
+            KeyResult::Handled
+        }
         // Navigation: j/k/↑/↓
         KeyCode::Down | KeyCode::Char('j') => {
             app.nexus.views.navigate_down(&app.loaded_views);

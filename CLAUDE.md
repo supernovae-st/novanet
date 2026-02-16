@@ -33,8 +33,10 @@ NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
 **Related docs**:
-- `.claude/rules/novanet-decisions.md` — Architecture decisions (ADR-001 through ADR-030)
+- `.claude/rules/novanet-decisions.md` — ADR index (quick reference)
 - `.claude/rules/novanet-terminology.md` — Canonical terminology reference
+- `.claude/rules/adr/` — Full ADR content by domain (32 ADRs)
+- `.claude/rules/adr/_index.yaml` — Machine-readable ADR metadata
 
 ```
 CRITICAL: Generation, NOT Translation
@@ -355,7 +357,7 @@ pnpm dev    # → http://localhost:3000
 2. **Explore TUI** — `cargo run -- tui` in `tools/novanet/` for unified tree exploration (v11.7)
 3. **Read `models/_index.yaml`** — Complete schema overview with all 61 nodes
 4. **Study `taxonomy.yaml`** — Realm/Layer/Trait definitions with visual encoding
-5. **Check ADRs** — `.claude/rules/novanet-decisions.md` explains WHY decisions were made
+5. **Check ADRs** — `.claude/rules/adr/` for full ADRs, or `/adr` command for quick lookup
 6. **Run Studio** — `pnpm dev` and explore the graph visually at http://localhost:3000
 
 **Key concepts progression**: Realm → Layer → Trait → Class → Arc → ArcFamily
@@ -437,6 +439,7 @@ See `.claude/README.md` for full documentation.
 | `/schema:add-node <name>` | Add new node type |
 | `/schema:edit-node <name>` | Modify existing node |
 | `/schema:add-arc <ARC>` | Add new arc type |
+| `/adr [query]` | Quick ADR lookup by number or keyword |
 
 ### Schema Management Workflow
 

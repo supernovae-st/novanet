@@ -101,16 +101,9 @@ pub struct TraverseResult {
 pub async fn execute(state: &State, params: TraverseParams) -> Result<TraverseResult> {
     let start = std::time::Instant::now();
 
-    let max_depth = params.max_depth.unwrap_or(2).min(5);
+    let max_depth = params.max_depth.unwrap_or(2).min(state.config().max_hops as usize);
     let limit = params.limit.unwrap_or(50).min(200);
     let include_props = params.include_properties.unwrap_or(true);
-
-    // Build direction pattern (used in APOC query format string below)
-    let _direction_pattern = match params.direction {
-        TraversalDirection::Outgoing => "-[r]->",
-        TraversalDirection::Incoming => "<-[r]-",
-        TraversalDirection::Both => "-[r]-",
-    };
 
     // Build arc filter
     let arc_filter = build_arc_filter(&params.arc_families, &params.arc_kinds);
@@ -352,25 +345,8 @@ async fn simple_traverse(
         });
     }
 
-    // Get arcs separately (unused in simplified fallback, but kept for future enhancement)
-    let _arcs_query = format!(
-        r#"
-        MATCH (start {{key: $key}})
-        MATCH (start){direction_pattern}(end)
-        WHERE length(path) <= {max_depth}
-        MATCH (a)-[r]->(b)
-        WHERE a.key IN [start.key] + [n IN nodes(path) | n.key]
-          AND b.key IN [start.key] + [n IN nodes(path) | n.key]
-        RETURN DISTINCT a.key AS source, b.key AS target, type(r) AS arc_kind
-        LIMIT {limit}
-        "#,
-        direction_pattern = direction_pattern,
-        max_depth = max_depth,
-        limit = limit * 2
-    );
-
-    // This is a simplified arc query - in practice we'd need better path tracking
-    let arcs = Vec::new(); // Simplified for non-APOC fallback
+    // Arc extraction not implemented in non-APOC fallback (requires path tracking)
+    let arcs = Vec::new();
 
     Ok((nodes, arcs, max_depth_reached))
 }
@@ -390,7 +366,7 @@ fn build_arc_filter(families: &Option<Vec<String>>, kinds: &Option<Vec<String>>)
         for family in families {
             match family.as_str() {
                 "ownership" => filters.push("HAS_*|BELONGS_TO*|CONTAINS_*".to_string()),
-                "localization" => filters.push("HAS_CONTENT|HAS_GENERATED|FOR_LOCALE".to_string()),
+                "localization" => filters.push("HAS_NATIVE|FOR_LOCALE".to_string()),
                 "semantic" => filters.push("USES_*|REFERENCES|SIMILAR_TO".to_string()),
                 "generation" => filters.push("GENERATES|DERIVED_FROM".to_string()),
                 "mining" => filters.push("TARGETS|RANKS_FOR".to_string()),

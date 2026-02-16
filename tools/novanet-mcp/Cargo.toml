@@ -35,19 +35,12 @@ rmcp = { version = "0.15", features = ["server", "transport-io"] }
 # Async Runtime
 # ═══════════════════════════════════════════════════════════════════════════════
 tokio = { version = "1.43", features = ["full"] }
-futures = "0.3"
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Neo4j Driver
 # v0.8 supports direct serde deserialization: let entity: Entity = row.get("e")?;
 # ═══════════════════════════════════════════════════════════════════════════════
 neo4rs = "0.8"
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# Connection Pooling
-# deadpool provides async connection pooling with managed lifecycle
-# ═══════════════════════════════════════════════════════════════════════════════
-deadpool = { version = "0.12", features = ["managed"] }
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Caching
@@ -88,29 +81,10 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 dotenvy = "0.15"
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# Regex for Cypher validation (read-only enforcement)
+# Concurrency
+# parking_lot 0.12: 1.5-5x faster Mutex/RwLock than std
 # ═══════════════════════════════════════════════════════════════════════════════
-regex = "1"
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# PERFORMANCE OPTIMIZATION CRATES (Context7 Verified - 2026-02-12)
-# ═══════════════════════════════════════════════════════════════════════════════
-
-# Stack allocation for small collections (avoid heap for <8 elements)
-# Use for property lists, evidence packets, traversal paths
-smallvec = "1.15"
-
-# 1.5-5x faster Mutex/RwLock than std
-# Use for shared state (AppState, caches)
 parking_lot = "0.12"
-
-# Concurrent HashMap for cache/state sharing
-# Use for query cache, schema cache
-dashmap = "6.1"
-
-# Zero-copy byte buffers for efficient serialization
-# Use for Cypher query results, JSON serialization
-bytes = "1.11"
 
 [dev-dependencies]
 tokio-test = "0.4"

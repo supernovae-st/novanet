@@ -11,31 +11,32 @@ use ratatui::widgets::{
     Block, Borders, Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState,
 };
 
-use crate::tui::app::{App, Focus};
+use crate::tui::app::{App, Focus, InfoBox};
+use crate::tui::colors;
 use crate::tui::data::{ArcDirection, InstanceInfo, TreeItem};
 use crate::tui::schema::ValidationStatus;
-use crate::tui::theme::hex_to_color;
+use crate::tui::theme::{ColorMode, hex_to_color};
 use crate::tui::unicode::truncate_to_width;
 
 use serde_json::Value as JsonValue;
 
 use super::{
-    COLOR_UNFOCUSED_BORDER, STYLE_ACCENT, STYLE_DESC, STYLE_DIM, STYLE_HIGHLIGHT, STYLE_INFO,
-    STYLE_MUTED, STYLE_PRIMARY, STYLE_SUCCESS, STYLE_WARNING, trait_icon, wrap_text,
+    STYLE_ACCENT, STYLE_DESC, STYLE_DIM, STYLE_HIGHLIGHT, STYLE_INFO, STYLE_MUTED, STYLE_PRIMARY,
+    STYLE_SUCCESS, trait_icon, wrap_text,
 };
 
 // =============================================================================
-// FIXED SECTION HEIGHTS
+// VISUAL STATES FOR BOX NAVIGATION
 // =============================================================================
 
-/// Fixed height for top row (IDENTITY | LOCATION side-by-side)
-const SECTION_HEIGHT_TOP: u16 = 6;
-/// Fixed height for METRICS section
-const SECTION_HEIGHT_METRICS: u16 = 4;
-/// Fixed height for COVERAGE section
-const SECTION_HEIGHT_COVERAGE: u16 = 4;
-/// Fixed height for RELATIONSHIPS section
-const SECTION_HEIGHT_RELATIONSHIPS: u16 = 8;
+/// Border color for unfocused boxes (dim gray - panel not active)
+const BOX_BORDER_UNFOCUSED: Color = Color::Rgb(59, 66, 82); // #3B4252
+
+/// Border color for focused but not selected boxes (light gray - panel active, other box selected)
+const BOX_BORDER_FOCUSED: Color = Color::Rgb(76, 86, 106); // #4C566A
+
+/// Border color for selected box (cyan bright - active box for copy/scroll)
+const BOX_BORDER_SELECTED: Color = Color::Cyan;
 
 // =============================================================================
 // UNIFIED SECTION TYPES
@@ -416,42 +417,55 @@ fn build_class_content(
 ) -> UnifiedContent<'static> {
     let mut content = UnifiedContent::default();
     let theme = &app.theme;
+    let mode = ColorMode::TrueColor; // v0.13: Use TrueColor for semantic colors
 
-    // IDENTITY
-    content
-        .identity
-        .add_kv("type", Span::styled("Node Class", STYLE_INFO));
-    content.identity.add_kv(
-        "category",
-        Span::styled("◈ Schema", Style::default().fg(Color::Cyan)),
-    );
+    // v0.13: Get semantic colors from colors.generated.rs
+    let realm_color = colors::realm::color(&realm.key, mode);
+    let layer_color = colors::layer::color(&layer.key, mode);
+    let trait_color = colors::traits::color(&class.trait_name, mode);
+
+    // IDENTITY - with v0.13 colored badges
+    content.identity.add_line(Line::from(vec![
+        Span::styled("●", Style::default().fg(realm_color).add_modifier(Modifier::BOLD)),
+        Span::styled(format!("{} ", realm.key.to_uppercase()), Style::default().fg(realm_color)),
+        Span::styled("◆", Style::default().fg(layer_color).add_modifier(Modifier::BOLD)),
+        Span::styled(format!("{} ", layer.key), Style::default().fg(layer_color)),
+        Span::styled(trait_icon(&class.trait_name), Style::default().fg(trait_color)),
+        Span::styled(class.trait_name.clone(), Style::default().fg(trait_color)),
+    ]));
     content
         .identity
         .add_kv("key", Span::styled(class.key.clone(), STYLE_PRIMARY));
+    content.identity.add_kv(
+        "display",
+        Span::styled(class.display_name.clone(), Style::default().fg(Color::White).add_modifier(Modifier::BOLD)),
+    );
 
-    // LOCATION
+    // LOCATION - with v0.13 semantic colors
     content.location.add_line(Line::from(vec![
-        Span::styled(format!("{} ", realm.icon), STYLE_DIM),
+        Span::styled(format!("{} ", realm.icon), Style::default().fg(realm_color)),
         Span::styled(
             realm.display_name.clone(),
-            Style::default().fg(hex_to_color(&realm.color)),
+            Style::default().fg(realm_color),
         ),
     ]));
     content.location.add_line(Line::from(vec![
-        Span::styled(format!("{} ", theme.icons.layer(&layer.key)), STYLE_DIM),
+        Span::styled(format!("{} ", theme.icons.layer(&layer.key)), Style::default().fg(layer_color)),
         Span::styled(
             layer.display_name.clone(),
-            Style::default().fg(hex_to_color(&layer.color)),
+            Style::default().fg(layer_color),
         ),
     ]));
     if !class.trait_name.is_empty() {
-        let trait_icon = theme.icons.trait_icon(&class.trait_name);
+        let trait_icon_str = theme.icons.trait_icon(&class.trait_name);
+        let trait_border = colors::traits::border_char(&class.trait_name);
         content.location.add_line(Line::from(vec![
-            Span::styled(format!("{} ", trait_icon), STYLE_DIM),
+            Span::styled(format!("{} ", trait_icon_str), Style::default().fg(trait_color)),
             Span::styled(
                 class.trait_name.clone(),
-                Style::default().fg(theme.trait_color(&class.trait_name)),
+                Style::default().fg(trait_color),
             ),
+            Span::styled(format!(" {}{}{}", trait_border, trait_border, trait_border), Style::default().fg(trait_color)),
         ]));
     }
 
@@ -511,51 +525,104 @@ fn build_class_content(
         content.coverage.add_empty();
     }
 
-    // PROPERTIES - validated or simple list
+    // PROPERTIES - v0.13: with colored type badges and validation status
     if let Some(validated) = &app.validated_class_properties {
         for prop in validated {
             let (status_icon, status_style) = match prop.status {
-                ValidationStatus::Sync => ("✓", STYLE_SUCCESS),
-                ValidationStatus::Missing => ("⚠", STYLE_WARNING),
+                ValidationStatus::Sync => ("✓", Style::default().fg(Color::Rgb(133, 153, 0))),   // green
+                ValidationStatus::Missing => ("⚠", Style::default().fg(Color::Rgb(203, 75, 22))), // orange
                 ValidationStatus::Extra => ("?", STYLE_DIM),
             };
             let required_marker = if prop.required { "*" } else { " " };
             let badge = type_badge(&prop.prop_type);
+            let badge_color = type_color(&prop.prop_type);
 
+            // v0.13: Colored type badge
             content.properties.add_line(Line::from(vec![
                 Span::styled(status_icon, status_style),
                 Span::styled(
                     required_marker,
-                    Style::default().fg(Color::Rgb(255, 100, 100)),
+                    Style::default().fg(Color::Rgb(220, 50, 47)), // red asterisk
                 ),
-                Span::styled(format!("[{:4}] ", badge), STYLE_DIM),
-                Span::styled(format!("{:<15}", prop.name), STYLE_INFO),
+                Span::styled(format!("[{:4}]", badge), Style::default().fg(badge_color)),
+                Span::styled(" ", STYLE_DIM),
+                Span::styled(format!("{:<15}", prop.name), Style::default().fg(Color::White)),
             ]));
         }
     } else if !class.properties.is_empty() {
+        // Fallback: simple property list without type info
         for prop in &class.properties {
             let is_required = class.required_properties.contains(prop);
             let marker = if is_required { "*" } else { " " };
             let prop_color = if is_required {
-                Color::Yellow
+                Color::Rgb(181, 137, 0)  // yellow for required
             } else {
                 Color::White
             };
 
             content.properties.add_line(Line::from(vec![
+                Span::styled("  ", STYLE_DIM),
                 Span::styled(
-                    format!("  {}", marker),
-                    Style::default().fg(Color::Rgb(255, 100, 100)),
+                    marker,
+                    Style::default().fg(Color::Rgb(220, 50, 47)),
                 ),
-                Span::styled(prop.clone(), Style::default().fg(prop_color)),
+                Span::styled(format!(" {}", prop), Style::default().fg(prop_color)),
             ]));
         }
     } else {
         content.properties.add_empty();
     }
 
-    // RELATIONSHIPS - related arcs
-    if !class.arcs.is_empty() {
+    // RELATIONSHIPS - v0.13: with arc family colors from Neo4j data
+    if let Some(arcs_data) = &app.class_arcs {
+        // v0.13: Use Neo4j arc data with family-based colors
+        let outgoing_count = arcs_data.outgoing.len();
+        let incoming_count = arcs_data.incoming.len();
+
+        content.relationships.add_line(Line::from(vec![
+            Span::styled("→ ", Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD)),
+            Span::styled(format!("{} out  ", outgoing_count), STYLE_MUTED),
+            Span::styled("← ", Style::default().fg(Color::Magenta).add_modifier(Modifier::BOLD)),
+            Span::styled(format!("{} in", incoming_count), STYLE_MUTED),
+        ]));
+
+        // v0.13: Show outgoing arcs with family colors
+        for arc in arcs_data.outgoing.iter().take(4) {
+            let family_color = colors::arc_family::color(&arc.family, mode);
+            content.relationships.add_line(Line::from(vec![
+                Span::styled("  → ", Style::default().fg(family_color).add_modifier(Modifier::BOLD)),
+                Span::styled(arc.arc_key.clone(), Style::default().fg(family_color)),
+                Span::styled(" → ", STYLE_DIM),
+                Span::styled(arc.other_class.clone(), STYLE_HIGHLIGHT),
+                Span::styled(format!(" [{}]", arc.family), Style::default().fg(family_color).add_modifier(Modifier::DIM)),
+            ]));
+        }
+        if outgoing_count > 4 {
+            content.relationships.add_line(Line::from(vec![Span::styled(
+                format!("     ... +{} more outgoing", outgoing_count - 4),
+                STYLE_DIM,
+            )]));
+        }
+
+        // v0.13: Show incoming arcs with family colors
+        for arc in arcs_data.incoming.iter().take(3) {
+            let family_color = colors::arc_family::color(&arc.family, mode);
+            content.relationships.add_line(Line::from(vec![
+                Span::styled("  ← ", Style::default().fg(family_color).add_modifier(Modifier::BOLD)),
+                Span::styled(arc.arc_key.clone(), Style::default().fg(family_color)),
+                Span::styled(" ← ", STYLE_DIM),
+                Span::styled(arc.other_class.clone(), STYLE_HIGHLIGHT),
+                Span::styled(format!(" [{}]", arc.family), Style::default().fg(family_color).add_modifier(Modifier::DIM)),
+            ]));
+        }
+        if incoming_count > 3 {
+            content.relationships.add_line(Line::from(vec![Span::styled(
+                format!("     ... +{} more incoming", incoming_count - 3),
+                STYLE_DIM,
+            )]));
+        }
+    } else if !class.arcs.is_empty() {
+        // Fallback: use schema arcs without family colors
         let outgoing_count = class
             .arcs
             .iter()
@@ -574,7 +641,6 @@ fn build_class_content(
             Span::styled(format!("{} in", incoming_count), STYLE_MUTED),
         ]));
 
-        // Show first few arcs
         for arc in class.arcs.iter().take(6) {
             let (icon, color) = if arc.direction == ArcDirection::Outgoing {
                 ("→", Color::Cyan)
@@ -604,18 +670,23 @@ fn build_class_content(
 /// Build content for ArcFamily.
 fn build_arc_family_content(family: &crate::tui::data::ArcFamilyInfo) -> UnifiedContent<'static> {
     let mut content = UnifiedContent::default();
+    let mode = ColorMode::TrueColor; // v0.13: semantic colors
 
-    // IDENTITY
-    content
-        .identity
-        .add_kv("type", Span::styled("ArcFamily", STYLE_ARC_FAMILY));
+    // v0.13: Get family-specific color
+    let family_color = colors::arc_family::color(&family.key, mode);
+
+    // IDENTITY - v0.13: with family color badge
+    content.identity.add_line(Line::from(vec![
+        Span::styled("◈ ", Style::default().fg(family_color).add_modifier(Modifier::BOLD)),
+        Span::styled("ArcFamily", Style::default().fg(family_color)),
+    ]));
     content.identity.add_kv(
         "category",
         Span::styled("◈ Schema", Style::default().fg(Color::Cyan)),
     );
     content
         .identity
-        .add_kv("key", Span::styled(family.key.clone(), STYLE_PRIMARY));
+        .add_kv("key", Span::styled(family.key.clone(), Style::default().fg(family_color).add_modifier(Modifier::BOLD)));
 
     // LOCATION - not applicable
     content.location.add_empty();
@@ -655,21 +726,26 @@ fn build_arc_class_content(
     arc_class: &crate::tui::data::ArcClassInfo,
 ) -> UnifiedContent<'static> {
     let mut content = UnifiedContent::default();
+    let mode = ColorMode::TrueColor; // v0.13: semantic colors
 
-    // IDENTITY
-    content
-        .identity
-        .add_kv("type", Span::styled("ArcClass", STYLE_HIGHLIGHT));
+    // v0.13: Get family-specific color
+    let family_color = colors::arc_family::color(&family.key, mode);
+
+    // IDENTITY - v0.13: with family color badge
+    content.identity.add_line(Line::from(vec![
+        Span::styled("→ ", Style::default().fg(family_color).add_modifier(Modifier::BOLD)),
+        Span::styled("ArcClass", Style::default().fg(family_color)),
+    ]));
     content.identity.add_kv(
         "category",
         Span::styled("◈ Schema", Style::default().fg(Color::Cyan)),
     );
     content
         .identity
-        .add_kv("key", Span::styled(arc_class.key.clone(), STYLE_PRIMARY));
+        .add_kv("key", Span::styled(arc_class.key.clone(), Style::default().fg(family_color).add_modifier(Modifier::BOLD)));
     content.identity.add_kv(
         "family",
-        Span::styled(family.display_name.clone(), STYLE_ARC_FAMILY),
+        Span::styled(family.display_name.clone(), Style::default().fg(family_color)),
     );
 
     // LOCATION - not applicable for arcs
@@ -699,14 +775,20 @@ fn build_arc_class_content(
         content.properties.add_empty();
     }
 
-    // RELATIONSHIPS - from/to
+    // RELATIONSHIPS - v0.13: from/to with family color
     content.relationships.add_line(Line::from(vec![
+        Span::styled("● ", Style::default().fg(family_color)),
         Span::styled("from ", STYLE_DIM),
-        Span::styled(arc_class.from_class.clone(), STYLE_INFO),
+        Span::styled(arc_class.from_class.clone(), Style::default().fg(Color::White).add_modifier(Modifier::BOLD)),
     ]));
     content.relationships.add_line(Line::from(vec![
+        Span::styled("→ ", Style::default().fg(family_color).add_modifier(Modifier::BOLD)),
+        Span::styled(arc_class.key.clone(), Style::default().fg(family_color)),
+    ]));
+    content.relationships.add_line(Line::from(vec![
+        Span::styled("○ ", Style::default().fg(family_color)),
         Span::styled("to   ", STYLE_DIM),
-        Span::styled(arc_class.to_class.clone(), STYLE_INFO),
+        Span::styled(arc_class.to_class.clone(), Style::default().fg(Color::White).add_modifier(Modifier::BOLD)),
     ]));
 
     content
@@ -722,46 +804,55 @@ fn build_instance_content(
 ) -> UnifiedContent<'static> {
     let mut content = UnifiedContent::default();
     let theme = &app.theme;
+    let mode = ColorMode::TrueColor; // v0.13: semantic colors
 
-    // IDENTITY
+    // v0.13: Get semantic colors from colors.generated.rs
+    let realm_color = colors::realm::color(&realm.key, mode);
+    let layer_color = colors::layer::color(&layer.key, mode);
+    let trait_color = colors::traits::color(&class.trait_name, mode);
+
+    // IDENTITY - v0.13: with colored badges
+    content.identity.add_line(Line::from(vec![
+        Span::styled("●", Style::default().fg(realm_color).add_modifier(Modifier::BOLD)),
+        Span::styled(format!("{} ", realm.key.to_uppercase()), Style::default().fg(realm_color)),
+        Span::styled("◆", Style::default().fg(layer_color).add_modifier(Modifier::BOLD)),
+        Span::styled(format!("{} ", layer.key), Style::default().fg(layer_color)),
+        Span::styled("◇", Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD)),
+        Span::styled("Instance", Style::default().fg(Color::Yellow)),
+    ]));
     content
         .identity
-        .add_kv("type", Span::styled("Instance", STYLE_SUCCESS));
-    content.identity.add_kv(
-        "category",
-        Span::styled("◆ Data", Style::default().fg(Color::Yellow)),
-    );
-    content
-        .identity
-        .add_kv("key", Span::styled(instance.key.clone(), STYLE_PRIMARY));
+        .add_kv("key", Span::styled(instance.key.clone(), Style::default().fg(Color::White).add_modifier(Modifier::BOLD)));
     content.identity.add_kv(
         "class",
-        Span::styled(class.display_name.clone(), STYLE_INFO),
+        Span::styled(class.display_name.clone(), Style::default().fg(layer_color)),
     );
 
-    // LOCATION
+    // LOCATION - v0.13: with semantic colors
     content.location.add_line(Line::from(vec![
-        Span::styled(format!("{} ", realm.icon), STYLE_DIM),
+        Span::styled(format!("{} ", realm.icon), Style::default().fg(realm_color)),
         Span::styled(
             realm.display_name.clone(),
-            Style::default().fg(hex_to_color(&realm.color)),
+            Style::default().fg(realm_color),
         ),
     ]));
     content.location.add_line(Line::from(vec![
-        Span::styled(format!("{} ", theme.icons.layer(&layer.key)), STYLE_DIM),
+        Span::styled(format!("{} ", theme.icons.layer(&layer.key)), Style::default().fg(layer_color)),
         Span::styled(
             layer.display_name.clone(),
-            Style::default().fg(hex_to_color(&layer.color)),
+            Style::default().fg(layer_color),
         ),
     ]));
     if !class.trait_name.is_empty() {
-        let trait_icon = theme.icons.trait_icon(&class.trait_name);
+        let trait_icon_str = theme.icons.trait_icon(&class.trait_name);
+        let trait_border = colors::traits::border_char(&class.trait_name);
         content.location.add_line(Line::from(vec![
-            Span::styled(format!("{} ", trait_icon), STYLE_DIM),
+            Span::styled(format!("{} ", trait_icon_str), Style::default().fg(trait_color)),
             Span::styled(
                 class.trait_name.clone(),
-                Style::default().fg(theme.trait_color(&class.trait_name)),
+                Style::default().fg(trait_color),
             ),
+            Span::styled(format!(" {}{}{}", trait_border, trait_border, trait_border), Style::default().fg(trait_color)),
         ]));
     }
 
@@ -925,8 +1016,7 @@ fn build_empty_content() -> UnifiedContent<'static> {
 // CONSTANTS
 // =============================================================================
 
-/// Arc family label style.
-const STYLE_ARC_FAMILY: Style = Style::new().fg(Color::Rgb(180, 140, 80));
+// v0.13: STYLE_ARC_FAMILY removed - now using colors::arc_family::color() from colors.generated.rs
 
 // =============================================================================
 // HELPER FUNCTIONS (local to this module)
@@ -951,6 +1041,24 @@ fn type_badge(prop_type: &str) -> &'static str {
     }
 }
 
+/// v0.13: Return semantic color for property type.
+fn type_color(prop_type: &str) -> Color {
+    match prop_type.to_lowercase().as_str() {
+        "string" => Color::Rgb(42, 161, 152),      // cyan/teal - text
+        "json" => Color::Rgb(108, 113, 196),       // violet - complex
+        "enum" => Color::Rgb(181, 137, 0),         // yellow - constrained
+        "datetime" => Color::Rgb(211, 54, 130),    // magenta - temporal
+        "int" | "integer" => Color::Rgb(38, 139, 210),  // blue - numeric
+        "float" | "number" => Color::Rgb(38, 139, 210), // blue - numeric
+        "bool" | "boolean" => Color::Rgb(133, 153, 0),  // green - binary
+        "array" | "list" => Color::Rgb(203, 75, 22),    // orange - collection
+        "object" | "map" => Color::Rgb(220, 50, 47),    // red - complex
+        "url" | "uri" => Color::Rgb(42, 161, 152),      // cyan - reference
+        "?" => Color::DarkGray,                         // unknown
+        _ => Color::Gray,                               // fallback
+    }
+}
+
 /// Safely truncate a UTF-8 string to N terminal columns (not chars).
 /// Appends "..." if truncated. Handles CJK, emoji, and combining characters.
 fn truncate_str(s: &str, max_width: usize) -> String {
@@ -970,6 +1078,8 @@ fn json_value_to_display(value: &JsonValue) -> String {
 }
 
 /// Get detail panel title for current item.
+/// v0.13: Not currently used (outer panel removed), kept for future use.
+#[allow(dead_code)]
 fn get_detail_title(app: &App) -> String {
     match app.current_item() {
         Some(TreeItem::ClassesSection) => "Node Classes".to_string(),
@@ -1002,13 +1112,38 @@ fn get_detail_title(app: &App) -> String {
 // UNIFIED INFO PANEL RENDERING
 // =============================================================================
 
+/// Visual state for a box in the info panel.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum BoxVisualState {
+    /// Panel not active
+    Unfocused,
+    /// Panel active, but this box is not selected
+    Focused,
+    /// This box is selected (active for copy/scroll)
+    Selected,
+}
+
+/// Get border color and title style based on visual state.
+fn box_styles(state: BoxVisualState) -> (Color, Style) {
+    match state {
+        BoxVisualState::Unfocused => (BOX_BORDER_UNFOCUSED, STYLE_DIM),
+        BoxVisualState::Focused => (BOX_BORDER_FOCUSED, STYLE_MUTED),
+        BoxVisualState::Selected => (
+            BOX_BORDER_SELECTED,
+            Style::default()
+                .fg(Color::Cyan)
+                .add_modifier(Modifier::BOLD),
+        ),
+    }
+}
+
 /// Render a section box with title and content (non-scrollable).
 fn render_section_box(
     f: &mut Frame,
     area: Rect,
     title: &str,
     content: &SectionContent,
-    border_color: Color,
+    state: BoxVisualState,
 ) {
     let lines: Vec<Line> = if content.is_empty() {
         vec![Line::from(Span::styled("—", STYLE_DIM))]
@@ -1016,8 +1151,17 @@ fn render_section_box(
         content.lines.clone()
     };
 
+    let (border_color, title_style) = box_styles(state);
+
+    // Selected box gets a ▶ indicator
+    let title_text = if state == BoxVisualState::Selected {
+        format!(" ▶ {} ", title)
+    } else {
+        format!(" {} ", title)
+    };
+
     let block = Block::default()
-        .title(Span::styled(format!(" {} ", title), STYLE_MUTED))
+        .title(Span::styled(title_text, title_style))
         .borders(Borders::ALL)
         .border_style(Style::default().fg(border_color));
 
@@ -1031,9 +1175,8 @@ fn render_scrollable_section_box(
     area: Rect,
     title: &str,
     content: &SectionContent,
-    border_color: Color,
+    state: BoxVisualState,
     scroll_offset: usize,
-    focused: bool,
 ) -> usize {
     let lines: Vec<Line> = if content.is_empty() {
         vec![Line::from(Span::styled("—", STYLE_DIM))]
@@ -1047,23 +1190,24 @@ fn render_scrollable_section_box(
     let max_scroll = total_lines.saturating_sub(visible_height);
     let clamped_scroll = scroll_offset.min(max_scroll);
 
+    let (border_color, base_title_style) = box_styles(state);
+
     // Show scroll indicator in title if scrollable
-    let title_text = if total_lines > visible_height {
-        format!(" {} [{}/{}] ", title, clamped_scroll + 1, total_lines)
+    let scroll_info = if total_lines > visible_height {
+        format!(" [{}/{}]", clamped_scroll + 1, total_lines)
     } else {
-        format!(" {} ", title)
+        String::new()
     };
 
-    let title_style = if focused {
-        Style::default()
-            .fg(Color::Cyan)
-            .add_modifier(Modifier::BOLD)
+    // Selected box gets a ▶ indicator
+    let title_text = if state == BoxVisualState::Selected {
+        format!(" ▶ {}{} ", title, scroll_info)
     } else {
-        STYLE_MUTED
+        format!(" {}{} ", title, scroll_info)
     };
 
     let block = Block::default()
-        .title(Span::styled(title_text, title_style))
+        .title(Span::styled(title_text, base_title_style))
         .borders(Borders::ALL)
         .border_style(Style::default().fg(border_color));
 
@@ -1098,38 +1242,100 @@ fn render_scrollable_section_box(
     total_lines
 }
 
-/// Unified info panel: 6 fixed sections with consistent layout.
-/// - Row 1: IDENTITY | LOCATION (side-by-side, fixed height)
-/// - Row 2: METRICS (fixed height)
-/// - Row 3: COVERAGE (fixed height)
-/// - Row 4: PROPERTIES (fills remaining, scrollable)
-/// - Row 5: RELATIONSHIPS (fixed height)
-pub fn render_unified_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
-    let focused = app.focus == Focus::Info;
-    let border_color = if focused {
-        Color::Cyan
+/// Render the consolidated HEADER box (Identity + Location + Metrics + Coverage).
+fn render_header_box(
+    f: &mut Frame,
+    area: Rect,
+    content: &UnifiedContent,
+    state: BoxVisualState,
+) {
+    let (border_color, title_style) = box_styles(state);
+
+    // Selected box gets a ▶ indicator
+    let title_text = if state == BoxVisualState::Selected {
+        " ▶ HEADER "
     } else {
-        COLOR_UNFOCUSED_BORDER
+        " HEADER "
     };
+
+    let block = Block::default()
+        .title(Span::styled(title_text, title_style))
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(border_color));
+
+    let inner = block.inner(area);
+    f.render_widget(block, area);
+
+    // Split into 2 columns: left (identity + metrics), right (location + coverage)
+    let columns = Layout::default()
+        .direction(Direction::Horizontal)
+        .constraints([Constraint::Percentage(50), Constraint::Percentage(50)])
+        .split(inner);
+
+    // Left column: Identity on top, Metrics below
+    let left_rows = Layout::default()
+        .direction(Direction::Vertical)
+        .constraints([Constraint::Percentage(60), Constraint::Percentage(40)])
+        .split(columns[0]);
+
+    // Right column: Location on top, Coverage below
+    let right_rows = Layout::default()
+        .direction(Direction::Vertical)
+        .constraints([Constraint::Percentage(60), Constraint::Percentage(40)])
+        .split(columns[1]);
+
+    // Render sub-sections without borders (just content)
+    render_mini_section(f, left_rows[0], "Identity", &content.identity);
+    render_mini_section(f, left_rows[1], "Metrics", &content.metrics);
+    render_mini_section(f, right_rows[0], "Location", &content.location);
+    render_mini_section(f, right_rows[1], "Coverage", &content.coverage);
+}
+
+/// Render a mini-section within a box (content only, no title/border).
+/// v0.13: Removed mini-titles to avoid "boxes within boxes" visual.
+fn render_mini_section(f: &mut Frame, area: Rect, _title: &str, content: &SectionContent) {
+    if area.height < 1 {
+        return;
+    }
+
+    let lines: Vec<Line> = if content.is_empty() {
+        vec![Line::from(Span::styled("—", STYLE_DIM))]
+    } else {
+        content.lines.to_vec()
+    };
+
+    let paragraph = Paragraph::new(lines);
+    f.render_widget(paragraph, area);
+}
+
+/// Compute visual state for a box in the Detail panel.
+/// Info panel contains: HEADER, PROPERTIES, ARCS.
+fn detail_box_state(panel_focused: bool, selected_box: InfoBox, this_box: InfoBox) -> BoxVisualState {
+    if !panel_focused {
+        BoxVisualState::Unfocused
+    } else if selected_box == this_box {
+        BoxVisualState::Selected
+    } else {
+        BoxVisualState::Focused
+    }
+}
+
+/// Unified info panel with 3 individual boxes: HEADER, PROPERTIES, ARCS.
+/// v0.13: No outer panel border - each box is independently navigable via Tab.
+///
+/// Layout:
+/// - HEADER: Combined Identity + Location + Metrics + Coverage (~40% height)
+/// - PROPERTIES: Scrollable property list (~40% height)
+/// - ARCS: Incoming/outgoing relationships (~20% height)
+pub fn render_unified_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
+    let panel_focused = app.focus == Focus::Info;
+    let selected_box = app.selected_box;
 
     // Build unified content
     let content = build_unified_content(app);
 
-    // Get title from current item
-    let title = get_detail_title(app);
-
-    // Outer block for the entire panel
-    let outer_block = Block::default()
-        .title(Span::styled(format!(" {} ", title), STYLE_PRIMARY))
-        .borders(Borders::ALL)
-        .border_style(Style::default().fg(border_color));
-
-    let inner = outer_block.inner(area);
-    f.render_widget(outer_block, area);
-
-    // Check minimum height
-    if inner.height < 15 {
-        // Too small for boxes, fall back to simple layout
+    // Check minimum height - fall back to simple layout if too small
+    if area.height < 12 {
         let all_lines: Vec<Line> = content
             .identity
             .lines
@@ -1142,62 +1348,45 @@ pub fn render_unified_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
             .collect();
 
         let paragraph = Paragraph::new(all_lines);
-        f.render_widget(paragraph, inner);
+        f.render_widget(paragraph, area);
         return;
     }
 
-    // Fixed section heights - PROPERTIES fills remaining space
+    // v0.13: 3 individual boxes (no outer panel border)
+    // Each box navigable via Tab: [2]HEADER → [3]PROPERTIES → [4]ARCS
     let main_chunks = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
-            Constraint::Length(SECTION_HEIGHT_TOP), // IDENTITY | LOCATION
-            Constraint::Length(SECTION_HEIGHT_METRICS), // METRICS
-            Constraint::Length(SECTION_HEIGHT_COVERAGE), // COVERAGE
-            Constraint::Min(6),                     // PROPERTIES (fills remaining, scrollable)
-            Constraint::Length(SECTION_HEIGHT_RELATIONSHIPS), // RELATIONSHIPS
+            Constraint::Percentage(40), // HEADER (consolidated)
+            Constraint::Percentage(40), // PROPERTIES (scrollable)
+            Constraint::Percentage(20), // ARCS
         ])
-        .split(inner);
+        .split(area);
 
-    // Row 1: IDENTITY | LOCATION side-by-side
-    let top_row = Layout::default()
-        .direction(Direction::Horizontal)
-        .constraints([Constraint::Percentage(50), Constraint::Percentage(50)])
-        .split(main_chunks[0]);
+    // === BOX 1: HEADER (consolidated) ===
+    // Combines: Identity, Location, Metrics, Coverage
+    let header_state = detail_box_state(panel_focused, selected_box, InfoBox::Header);
+    render_header_box(f, main_chunks[0], &content, header_state);
 
-    render_section_box(f, top_row[0], "IDENTITY", &content.identity, border_color);
-    render_section_box(f, top_row[1], "LOCATION", &content.location, border_color);
+    // === BOX 2: PROPERTIES (scrollable) ===
+    let props_state = detail_box_state(panel_focused, selected_box, InfoBox::Properties);
+    let total_lines = render_scrollable_section_box(
+        f,
+        main_chunks[1],
+        "PROPERTIES",
+        &content.properties,
+        props_state,
+        app.info_scroll,
+    );
+    app.info_line_count = total_lines;
 
-    // Row 2: METRICS
-    render_section_box(f, main_chunks[1], "METRICS", &content.metrics, border_color);
-
-    // Row 3: COVERAGE
+    // === BOX 3: ARCS ===
+    let arcs_state = detail_box_state(panel_focused, selected_box, InfoBox::Arcs);
     render_section_box(
         f,
         main_chunks[2],
-        "COVERAGE",
-        &content.coverage,
-        border_color,
-    );
-
-    // Row 4: PROPERTIES (scrollable with app.info_scroll)
-    let total_lines = render_scrollable_section_box(
-        f,
-        main_chunks[3],
-        "PROPERTIES",
-        &content.properties,
-        border_color,
-        app.info_scroll,
-        focused,
-    );
-    // Update line count for scroll bounds
-    app.info_line_count = total_lines;
-
-    // Row 5: RELATIONSHIPS
-    render_section_box(
-        f,
-        main_chunks[4],
-        "RELATIONSHIPS",
+        "ARCS",
         &content.relationships,
-        border_color,
+        arcs_state,
     );
 }

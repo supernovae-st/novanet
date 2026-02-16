@@ -40,7 +40,7 @@ pub const INFO_SCROLL_MARGIN: usize = 5;
 pub const DEFAULT_TREE_HEIGHT: usize = 20;
 
 /// Navigation mode — 3 modes in v0.12.5.
-/// Order: 1:Graph 2:Nexus 3:Views
+/// Order: 1:Graph 2:Views 3:Nexus
 /// Keys 1-3 switch modes GLOBALLY from anywhere.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum NavMode {
@@ -48,18 +48,18 @@ pub enum NavMode {
     /// Replaces Meta/Data/Overlay modes from v11.6
     #[default]
     Graph,
-    /// Nexus mode: Hub for Quiz, Stats, Help
-    Nexus,
     /// Views mode: Schema views explorer (Query-First architecture)
     Views,
+    /// Nexus mode: Hub for Quiz, Stats, Help
+    Nexus,
 }
 
 impl NavMode {
     pub fn label(&self) -> &'static str {
         match self {
             NavMode::Graph => "Graph",
-            NavMode::Nexus => "Nexus",
             NavMode::Views => "Views",
+            NavMode::Nexus => "Nexus",
         }
     }
 
@@ -67,14 +67,14 @@ impl NavMode {
     pub fn index(&self) -> usize {
         match self {
             NavMode::Graph => 0,
-            NavMode::Nexus => 1,
-            NavMode::Views => 2,
+            NavMode::Views => 1,
+            NavMode::Nexus => 2,
         }
     }
 
     /// Get all modes in order.
     pub fn all() -> &'static [NavMode] {
-        &[NavMode::Graph, NavMode::Nexus, NavMode::Views]
+        &[NavMode::Graph, NavMode::Views, NavMode::Nexus]
     }
 }
 
@@ -106,6 +106,57 @@ impl Focus {
             Focus::Info => Focus::Tree,
             Focus::Graph => Focus::Info,
             Focus::Yaml => Focus::Graph,
+        }
+    }
+}
+
+/// Which info box is selected for copy/scroll within the Graph mode.
+/// Implements "Focusable Box" pattern from TUI Box Navigation design.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum InfoBox {
+    #[default]
+    Tree,
+    Header,
+    Properties,
+    Arcs,
+    Source,
+    Diagram,
+}
+
+impl InfoBox {
+    /// Cycle to next box (Tab or →).
+    pub fn next(self) -> Self {
+        match self {
+            Self::Tree => Self::Header,
+            Self::Header => Self::Properties,
+            Self::Properties => Self::Arcs,
+            Self::Arcs => Self::Source,
+            Self::Source => Self::Diagram,
+            Self::Diagram => Self::Tree,
+        }
+    }
+
+    /// Cycle to previous box (Shift+Tab or ←).
+    pub fn prev(self) -> Self {
+        match self {
+            Self::Tree => Self::Diagram,
+            Self::Header => Self::Tree,
+            Self::Properties => Self::Header,
+            Self::Arcs => Self::Properties,
+            Self::Source => Self::Arcs,
+            Self::Diagram => Self::Source,
+        }
+    }
+
+    /// Display name for status bar.
+    pub fn name(self) -> &'static str {
+        match self {
+            Self::Tree => "TREE",
+            Self::Header => "HEADER",
+            Self::Properties => "PROPERTIES",
+            Self::Arcs => "ARCS",
+            Self::Source => "SOURCE",
+            Self::Diagram => "DIAGRAM",
         }
     }
 }
@@ -180,6 +231,8 @@ pub struct App {
     pub theme: Theme,
     pub mode: NavMode,
     pub focus: Focus,
+    /// Currently selected info box for copy/scroll (Graph mode).
+    pub selected_box: InfoBox,
     pub tree_cursor: usize,
     /// Remember cursor position per mode (Graph, Nexus, Views).
     pub mode_cursors: [usize; 3],
@@ -307,6 +360,7 @@ impl App {
             theme: Theme::with_root(&root_path), // Load colors + icons from YAML
             mode: NavMode::Graph,
             focus: Focus::Tree,
+            selected_box: InfoBox::default(),
             tree_cursor: 0,
             mode_cursors: [0; 3], // Init all modes at cursor 0 (Graph, Nexus, Views)
             tree_scroll: 0,
@@ -379,6 +433,16 @@ impl App {
         match self.mode {
             // Graph mode shows Class schema, Nexus/Views shows Class schema
             NavMode::Graph | NavMode::Nexus | NavMode::Views => YamlViewSection::Class,
+        }
+    }
+
+    /// Map selected_box to the appropriate Focus panel.
+    /// Used to update panel focus when navigating between boxes.
+    pub fn focus_for_selected_box(&self) -> Focus {
+        match self.selected_box {
+            InfoBox::Tree => Focus::Tree,
+            InfoBox::Header | InfoBox::Properties | InfoBox::Arcs => Focus::Info,
+            InfoBox::Source | InfoBox::Diagram => Focus::Yaml,
         }
     }
 
@@ -967,7 +1031,7 @@ impl App {
                 true
             }
 
-            // Mode switching: 1-3 global (1=Graph, 2=Nexus, 3=Views)
+            // Mode switching: 1-3 global (1=Graph, 2=Views, 3=Nexus)
             KeyCode::Char('1') => {
                 // Switch to Graph mode (unified tree view)
                 if self.mode != NavMode::Graph {
@@ -979,15 +1043,6 @@ impl App {
                 true
             }
             KeyCode::Char('2') => {
-                // Switch to Nexus mode (hub for Quiz, Stats, Help)
-                if self.mode != NavMode::Nexus {
-                    self.save_mode_cursor();
-                    self.mode = NavMode::Nexus;
-                    self.restore_mode_cursor(NavMode::Nexus);
-                }
-                true
-            }
-            KeyCode::Char('3') => {
                 // Switch to Views mode (Schema views explorer)
                 if self.mode != NavMode::Views {
                     self.save_mode_cursor();
@@ -996,24 +1051,43 @@ impl App {
                 }
                 true
             }
+            KeyCode::Char('3') => {
+                // Switch to Nexus mode (hub for Quiz, Stats, Help)
+                if self.mode != NavMode::Nexus {
+                    self.save_mode_cursor();
+                    self.mode = NavMode::Nexus;
+                    self.restore_mode_cursor(NavMode::Nexus);
+                }
+                true
+            }
 
-            // Panel focus: Tab cycles, ←→ always switch panels
+            // Box navigation: Tab cycles through 6 boxes (Tree, Header, Properties, Arcs, Source, Diagram)
+            // ←/→ are aliases for box navigation
             KeyCode::Tab => {
-                self.focus = self.focus.next();
+                self.selected_box = self.selected_box.next();
+                // Update panel focus based on which box is selected
+                self.focus = self.focus_for_selected_box();
+                self.set_status(self.selected_box.name());
                 true
             }
             KeyCode::BackTab => {
-                self.focus = self.focus.prev();
+                self.selected_box = self.selected_box.prev();
+                self.focus = self.focus_for_selected_box();
+                self.set_status(self.selected_box.name());
                 true
             }
             KeyCode::Left => {
-                // Left: always go to previous panel
-                self.focus = self.focus.prev();
+                // Left: previous box (alias for Shift+Tab)
+                self.selected_box = self.selected_box.prev();
+                self.focus = self.focus_for_selected_box();
+                self.set_status(self.selected_box.name());
                 true
             }
             KeyCode::Right => {
-                // Right: always go to next panel
-                self.focus = self.focus.next();
+                // Right: next box (alias for Tab)
+                self.selected_box = self.selected_box.next();
+                self.focus = self.focus_for_selected_box();
+                self.set_status(self.selected_box.name());
                 true
             }
 
@@ -1253,13 +1327,13 @@ impl App {
                 true
             }
 
-            // Yank (copy node key to clipboard)
+            // Yank (smart copy based on selected box)
             KeyCode::Char('y') => {
-                self.yank_current_key();
+                self.yank_selected_box();
                 true
             }
 
-            // Yank JSON properties (Y)
+            // Yank JSON properties (Y) - legacy, kept for compatibility
             KeyCode::Char('Y') => {
                 self.yank_current_json();
                 true
@@ -1599,6 +1673,29 @@ impl App {
                 json
             };
             self.set_status(&format!("JSON: {}", preview));
+        }
+    }
+
+    /// Yank (copy) content based on the selected box (smart copy).
+    pub fn yank_selected_box(&mut self) {
+        use super::clipboard::{copy_to_clipboard, get_box_content};
+        if let Some((content, format_name)) = get_box_content(self) {
+            match copy_to_clipboard(&content) {
+                Ok(()) => {
+                    // Show preview of copied content
+                    let preview = if content.len() > 40 {
+                        format!("{}...", &content[..40])
+                    } else {
+                        content.clone()
+                    };
+                    self.set_status(&format!("✓ {} copied: {}", format_name, preview));
+                }
+                Err(e) => {
+                    self.set_status(&format!("✗ Copy failed: {}", e));
+                }
+            }
+        } else {
+            self.set_status("Nothing to copy");
         }
     }
 
@@ -2267,13 +2364,16 @@ mod tests {
     #[test]
     fn test_nav_mode_label() {
         assert_eq!(NavMode::Graph.label(), "Graph");
+        assert_eq!(NavMode::Views.label(), "Views");
         assert_eq!(NavMode::Nexus.label(), "Nexus");
     }
 
     #[test]
     fn test_nav_mode_index() {
+        // Order: 1=Graph, 2=Views, 3=Nexus
         assert_eq!(NavMode::Graph.index(), 0);
-        assert_eq!(NavMode::Nexus.index(), 1);
+        assert_eq!(NavMode::Views.index(), 1);
+        assert_eq!(NavMode::Nexus.index(), 2);
     }
 
     #[test]
@@ -2287,12 +2387,12 @@ mod tests {
     }
 
     #[test]
-    fn test_key_2_switches_to_nexus() {
+    fn test_key_2_switches_to_views() {
         let mut app = create_test_app();
 
         app.handle_key(crossterm::event::KeyEvent::from(KeyCode::Char('2')));
 
-        assert_eq!(app.mode, NavMode::Nexus);
+        assert_eq!(app.mode, NavMode::Views);
     }
 
     #[test]
