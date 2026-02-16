@@ -95,7 +95,7 @@ async fn describe_schema(state: &State) -> Result<DescribeResult> {
         "arc_families": arc_families,
         "statistics": stats.unwrap_or(serde_json::json!({})),
         "traversal_hints": {
-            "for_generation": ["USES_ENTITY", "HAS_CONTENT", "HAS_TERMS"],
+            "for_generation": ["USES_ENTITY", "HAS_NATIVE", "HAS_TERMS"],
             "for_exploration": ["INCLUDES", "ENABLES", "SEMANTIC_LINK", "SIMILAR_TO"]
         }
     });
@@ -119,9 +119,9 @@ async fn describe_entity(state: &State, entity_key: Option<String>) -> Result<De
     let query = r#"
         MATCH (e:Entity {key: $key})
         OPTIONAL MATCH (e)-[:BELONGS_TO]->(c:EntityCategory)
-        OPTIONAL MATCH (e)-[:HAS_CONTENT]->(ec:EntityContent)
+        OPTIONAL MATCH (e)-[:HAS_NATIVE]->(en:EntityNative)
         OPTIONAL MATCH (e)-[r]-(related)
-        WITH e, c, collect(DISTINCT {locale: ec.locale, has_content: true}) AS contents,
+        WITH e, c, collect(DISTINCT {locale: en.locale, has_content: true}) AS contents,
              collect(DISTINCT {type: type(r), target_key: related.key, target_labels: labels(related)}) AS relations
         RETURN e {.*, category: c.category_key, contents: contents, relations: relations}
     "#;
@@ -131,12 +131,7 @@ async fn describe_entity(state: &State, entity_key: Option<String>) -> Result<De
 
     let result = state.pool().execute_single(query, Some(params)).await?;
 
-    let data = result.unwrap_or_else(|| {
-        serde_json::json!({
-            "error": "Entity not found",
-            "key": key
-        })
-    });
+    let data = result.ok_or_else(|| crate::error::Error::not_found(&key))?;
 
     let json_string = serde_json::to_string(&data).unwrap_or_default();
     let token_estimate = json_string.len().div_ceil(4);
@@ -150,9 +145,10 @@ async fn describe_entity(state: &State, entity_key: Option<String>) -> Result<De
 
 /// Describe a category and its members
 async fn describe_category(state: &State, category_key: Option<String>) -> Result<DescribeResult> {
-    let query = if let Some(key) = category_key {
+    let data = if let Some(key) = category_key {
+        // Specific category requested - must exist or error
         let mut params = serde_json::Map::new();
-        params.insert("key".to_string(), serde_json::Value::String(key));
+        params.insert("key".to_string(), serde_json::Value::String(key.clone()));
 
         let q = r#"
             MATCH (c:EntityCategory {category_key: $key})
@@ -161,8 +157,13 @@ async fn describe_category(state: &State, category_key: Option<String>) -> Resul
                    collect(e.key) AS entity_keys, count(e) AS entity_count
         "#;
 
-        state.pool().execute_single(q, Some(params)).await?
+        state
+            .pool()
+            .execute_single(q, Some(params))
+            .await?
+            .ok_or_else(|| crate::error::Error::not_found(&key))?
     } else {
+        // List all categories - empty is valid
         let q = r#"
             MATCH (c:EntityCategory)
             OPTIONAL MATCH (e:Entity)-[:BELONGS_TO]->(c)
@@ -174,10 +175,12 @@ async fn describe_category(state: &State, category_key: Option<String>) -> Resul
             }) AS categories
         "#;
 
-        state.pool().execute_single(q, None).await?
+        state
+            .pool()
+            .execute_single(q, None)
+            .await?
+            .unwrap_or_else(|| serde_json::json!({"categories": []}))
     };
-
-    let data = query.unwrap_or_else(|| serde_json::json!({"categories": []}));
 
     let json_string = serde_json::to_string(&data).unwrap_or_default();
     let token_estimate = json_string.len().div_ceil(4);
@@ -245,28 +248,46 @@ async fn describe_locales(state: &State) -> Result<DescribeResult> {
 
 /// Describe graph statistics
 async fn describe_stats(state: &State) -> Result<DescribeResult> {
-    let queries = [
-        ("node_count", "MATCH (n) RETURN count(n) AS count"),
-        (
-            "relationship_count",
-            "MATCH ()-[r]->() RETURN count(r) AS count",
-        ),
-        ("entity_count", "MATCH (e:Entity) RETURN count(e) AS count"),
-        ("locale_count", "MATCH (l:Locale) RETURN count(l) AS count"),
-        (
-            "expression_count",
-            "MATCH (e:Expression) RETURN count(e) AS count",
-        ),
-    ];
+    // Execute all count queries in parallel for ~5x speedup
+    let (node_count, rel_count, entity_count, locale_count, expr_count) = tokio::join!(
+        state
+            .pool()
+            .execute_single("MATCH (n) RETURN count(n) AS count", None),
+        state
+            .pool()
+            .execute_single("MATCH ()-[r]->() RETURN count(r) AS count", None),
+        state
+            .pool()
+            .execute_single("MATCH (e:Entity) RETURN count(e) AS count", None),
+        state
+            .pool()
+            .execute_single("MATCH (l:Locale) RETURN count(l) AS count", None),
+        state
+            .pool()
+            .execute_single("MATCH (e:Expression) RETURN count(e) AS count", None),
+    );
 
     let mut stats = serde_json::Map::new();
 
-    for (name, query) in queries {
-        if let Some(result) = state.pool().execute_single(query, None).await? {
-            if let Some(count) = result.get("count") {
-                stats.insert(name.to_string(), count.clone());
-            }
-        }
+    // Helper to extract count from query result
+    let extract_count = |result: Result<Option<serde_json::Value>>| -> Option<serde_json::Value> {
+        result.ok()?.and_then(|r| r.get("count").cloned())
+    };
+
+    if let Some(count) = extract_count(node_count) {
+        stats.insert("node_count".to_string(), count);
+    }
+    if let Some(count) = extract_count(rel_count) {
+        stats.insert("relationship_count".to_string(), count);
+    }
+    if let Some(count) = extract_count(entity_count) {
+        stats.insert("entity_count".to_string(), count);
+    }
+    if let Some(count) = extract_count(locale_count) {
+        stats.insert("locale_count".to_string(), count);
+    }
+    if let Some(count) = extract_count(expr_count) {
+        stats.insert("expression_count".to_string(), count);
     }
 
     // Add server stats
@@ -330,7 +351,7 @@ mod tests {
     fn test_organize_by_realm() {
         let classes = vec![
             serde_json::json!({"realm": "shared", "layer": "config", "classes": ["Locale", "EntityCategory"]}),
-            serde_json::json!({"realm": "org", "layer": "semantic", "classes": ["Entity", "EntityContent"]}),
+            serde_json::json!({"realm": "org", "layer": "semantic", "classes": ["Entity", "EntityNative"]}),
         ];
 
         let organized = organize_by_realm(&classes);
