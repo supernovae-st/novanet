@@ -125,8 +125,8 @@ pub struct FocusNode {
 pub async fn execute(state: &State, params: AssembleParams) -> Result<AssembleResult> {
     let start = std::time::Instant::now();
 
-    let token_budget = params.token_budget.unwrap_or(100_000);
-    let max_depth = params.max_depth.unwrap_or(3).min(5);
+    let token_budget = params.token_budget.unwrap_or(state.config().default_token_budget);
+    let max_depth = params.max_depth.unwrap_or(3).min(state.config().max_hops as usize);
     let include_entities = params.include_entities.unwrap_or(true);
     let include_knowledge = params.include_knowledge.unwrap_or(true);
     let include_structure = params.include_structure.unwrap_or(true);
@@ -157,48 +157,57 @@ pub async fn execute(state: &State, params: AssembleParams) -> Result<AssembleRe
         description: focus_row["description"].as_str().map(|s| s.to_string()),
     };
 
-    // Get locale context
-    let locale_context = get_locale_context(state, &params.locale).await?;
+    // Run all independent queries in parallel for ~4x speedup
+    // (locale_context + 3 assemble functions are independent)
+    let focus_key = &params.focus_key;
+    let locale = &params.locale;
 
+    let (locale_context, entity_evidence, knowledge_evidence, structure_evidence) = tokio::join!(
+        get_locale_context(state, locale),
+        async {
+            if include_entities {
+                assemble_entities(state, focus_key, locale, max_depth).await
+            } else {
+                Ok(Vec::new())
+            }
+        },
+        async {
+            if include_knowledge {
+                assemble_knowledge(state, focus_key, locale).await
+            } else {
+                Ok(Vec::new())
+            }
+        },
+        async {
+            if include_structure {
+                assemble_structure(state, focus_key, max_depth).await
+            } else {
+                Ok(Vec::new())
+            }
+        },
+    );
+
+    // Unwrap results (propagate first error)
+    let locale_context = locale_context?;
+    let entity_evidence = entity_evidence?;
+    let knowledge_evidence = knowledge_evidence?;
+    let structure_evidence = structure_evidence?;
+
+    // Aggregate evidence with token budget management
     let mut evidence = Vec::new();
     let mut total_tokens = 0;
     let mut nodes_visited = 0;
 
-    // Assemble entity definitions if requested
-    if include_entities {
-        let entity_evidence =
-            assemble_entities(state, &params.focus_key, &params.locale, max_depth).await?;
-        for packet in entity_evidence {
-            if total_tokens + packet.tokens <= token_budget {
-                total_tokens += packet.tokens;
-                nodes_visited += 1;
-                evidence.push(packet);
-            }
-        }
-    }
-
-    // Assemble locale knowledge if requested
-    if include_knowledge {
-        let knowledge_evidence =
-            assemble_knowledge(state, &params.focus_key, &params.locale).await?;
-        for packet in knowledge_evidence {
-            if total_tokens + packet.tokens <= token_budget {
-                total_tokens += packet.tokens;
-                nodes_visited += 1;
-                evidence.push(packet);
-            }
-        }
-    }
-
-    // Assemble structure if requested
-    if include_structure {
-        let structure_evidence = assemble_structure(state, &params.focus_key, max_depth).await?;
-        for packet in structure_evidence {
-            if total_tokens + packet.tokens <= token_budget {
-                total_tokens += packet.tokens;
-                nodes_visited += 1;
-                evidence.push(packet);
-            }
+    // Process all evidence in order: entities, knowledge, structure
+    for packet in entity_evidence
+        .into_iter()
+        .chain(knowledge_evidence)
+        .chain(structure_evidence)
+    {
+        if total_tokens + packet.tokens <= token_budget {
+            total_tokens += packet.tokens;
+            nodes_visited += 1;
+            evidence.push(packet);
         }
     }
 
@@ -272,12 +281,12 @@ async fn assemble_entities(
         r#"
         MATCH (focus {{key: $key}})
         MATCH path = (focus)-[:USES_ENTITY|REFERENCES|HAS_ENTITY*1..{max_depth}]->(e:Entity)
-        OPTIONAL MATCH (e)-[:HAS_CONTENT]->(ec:EntityContent {{locale: $locale}})
-        WITH e, ec, length(path) AS distance
+        OPTIONAL MATCH (e)-[:HAS_NATIVE]->(en:EntityNative {{locale: $locale}})
+        WITH e, en, length(path) AS distance
         RETURN DISTINCT e.key AS key,
                'Entity' AS kind,
-               COALESCE(ec.name, e.name) AS name,
-               COALESCE(ec.description, e.definition) AS description,
+               COALESCE(en.name, e.name) AS name,
+               COALESCE(en.description, e.definition) AS description,
                distance
         ORDER BY distance
         LIMIT 20

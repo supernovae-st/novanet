@@ -65,9 +65,10 @@ impl QueryCache {
         let mut hasher = DefaultHasher::new();
         cypher.hash(&mut hasher);
         if let Some(p) = params {
-            for (k, v) in p {
-                k.hash(&mut hasher);
-                v.to_string().hash(&mut hasher);
+            // Serialize params map once (vs. N per-value serializations)
+            // serde_json guarantees deterministic key ordering for Map
+            if let Ok(serialized) = serde_json::to_string(p) {
+                serialized.hash(&mut hasher);
             }
         }
         format!("query:{:016x}", hasher.finish())
