@@ -1524,6 +1524,125 @@ impl NexusState {
 // RENDERING
 // =============================================================================
 
+/// Render the Nexus tree panel (left side).
+/// Shows 3 sections with expandable tabs.
+#[allow(dead_code)] // Will be used in Task 4 when render_nexus() is refactored
+fn render_nexus_tree(f: &mut Frame, area: Rect, app: &App) {
+    use ratatui::widgets::Wrap;
+
+    let block = Block::default()
+        .title(Span::styled(
+            " NEXUS ",
+            Style::default()
+                .fg(Color::Magenta)
+                .add_modifier(Modifier::BOLD),
+        ))
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER));
+
+    let inner = block.inner(area);
+    f.render_widget(block, area);
+
+    let mut lines: Vec<Line> = Vec::new();
+
+    // Header
+    lines.push(Line::from(vec![
+        Span::styled(
+            "Learning Hub ",
+            Style::default().fg(Color::Rgb(180, 180, 180)),
+        ),
+        Span::styled("v0.13.0", Style::default().fg(Color::DarkGray)),
+    ]));
+    lines.push(Line::from(Span::styled(
+        "\u{2500}".repeat(inner.width.saturating_sub(2) as usize),
+        Style::default().fg(COLOR_UNFOCUSED_BORDER),
+    )));
+    lines.push(Line::from(""));
+
+    // Current section for comparison
+    let current_section = app.nexus.tree_section;
+    let current_tab = app.nexus.tab;
+
+    // Render each section
+    for (sec_idx, section) in NexusSection::all().iter().enumerate() {
+        let is_current_section = *section == current_section;
+        let is_expanded = app.nexus.tree_expanded[sec_idx];
+
+        // Section header
+        let expand_icon = if is_expanded { "▼" } else { "▶" };
+        let section_style = if is_current_section && app.nexus.tree_cursor == 0 {
+            Style::default()
+                .fg(Color::White)
+                .bg(Color::Rgb(50, 30, 70))
+                .add_modifier(Modifier::BOLD)
+        } else if is_current_section {
+            Style::default()
+                .fg(Color::Magenta)
+                .add_modifier(Modifier::BOLD)
+        } else {
+            Style::default().fg(Color::Rgb(150, 150, 150))
+        };
+
+        lines.push(Line::from(vec![
+            Span::styled(format!("{} ", expand_icon), section_style),
+            Span::styled(format!("{} ", section.emoji()), section_style),
+            Span::styled(section.label(), section_style),
+        ]));
+
+        // Tabs in section (only if expanded)
+        if is_expanded {
+            for (tab_idx, tab) in section.tabs().iter().enumerate() {
+                let is_selected = *tab == current_tab;
+                let is_cursor = is_current_section && app.nexus.tree_cursor == tab_idx + 1;
+
+                let prefix = if is_selected { "  ▸ " } else { "    " };
+
+                let style = if is_cursor {
+                    Style::default()
+                        .fg(Color::White)
+                        .bg(Color::Rgb(30, 50, 70))
+                        .add_modifier(Modifier::BOLD)
+                } else if is_selected {
+                    Style::default()
+                        .fg(Color::Cyan)
+                        .add_modifier(Modifier::BOLD)
+                } else {
+                    Style::default().fg(Color::Rgb(180, 180, 180))
+                };
+
+                lines.push(Line::from(vec![
+                    Span::styled(prefix, style),
+                    Span::styled(format!("{} ", tab.emoji()), style),
+                    Span::styled(tab.label(), style),
+                ]));
+            }
+        }
+
+        lines.push(Line::from(""));
+    }
+
+    // Navigation hints
+    lines.push(Line::from(Span::styled(
+        "─".repeat(inner.width.saturating_sub(2) as usize),
+        Style::default().fg(COLOR_UNFOCUSED_BORDER),
+    )));
+    lines.push(Line::from(vec![
+        Span::styled("[j/k] ", Style::default().fg(Color::Cyan)),
+        Span::styled("nav", Style::default().fg(Color::DarkGray)),
+    ]));
+    lines.push(Line::from(vec![
+        Span::styled("[h/l] ", Style::default().fg(Color::Cyan)),
+        Span::styled("expand", Style::default().fg(Color::DarkGray)),
+    ]));
+    lines.push(Line::from(vec![
+        Span::styled("[Enter] ", Style::default().fg(Color::Cyan)),
+        Span::styled("select", Style::default().fg(Color::DarkGray)),
+    ]));
+
+    let paragraph = Paragraph::new(lines).wrap(Wrap { trim: false });
+    f.render_widget(paragraph, inner);
+}
+
 /// Render the Nexus mode with tab bar, breadcrumb, and content.
 /// Note: Action bar hints are now in the unified status bar (ui/status.rs).
 pub fn render_nexus(f: &mut Frame, area: Rect, app: &App) {
