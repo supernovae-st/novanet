@@ -22,7 +22,7 @@ use serde_json::Value as JsonValue;
 
 use super::{
     STYLE_ACCENT, STYLE_DESC, STYLE_DIM, STYLE_HIGHLIGHT, STYLE_INFO, STYLE_MUTED, STYLE_PRIMARY,
-    STYLE_SUCCESS, trait_icon, wrap_text,
+    STYLE_SUCCESS, arc_family_badge_icon, trait_icon, wrap_text,
 };
 
 // =============================================================================
@@ -675,18 +675,16 @@ fn build_arc_family_content(family: &crate::tui::data::ArcFamilyInfo) -> Unified
     // v0.13: Get family-specific color
     let family_color = colors::arc_family::color(&family.key, mode);
 
-    // IDENTITY - v0.13: with family color badge
-    content.identity.add_line(Line::from(vec![
-        Span::styled("◈ ", Style::default().fg(family_color).add_modifier(Modifier::BOLD)),
-        Span::styled("ArcFamily", Style::default().fg(family_color)),
-    ]));
-    content.identity.add_kv(
-        "category",
-        Span::styled("◈ Schema", Style::default().fg(Color::Cyan)),
-    );
+    // IDENTITY - explicit key:value format
+    content
+        .identity
+        .add_kv("type", Span::styled("ArcFamily", Style::default().fg(family_color)));
     content
         .identity
         .add_kv("key", Span::styled(family.key.clone(), Style::default().fg(family_color).add_modifier(Modifier::BOLD)));
+    content
+        .identity
+        .add_kv("display", Span::styled(family.display_name.clone(), Style::default().fg(Color::White).add_modifier(Modifier::BOLD)));
 
     // LOCATION - not applicable
     content.location.add_empty();
@@ -731,25 +729,24 @@ fn build_arc_class_content(
     // v0.13: Get family-specific color
     let family_color = colors::arc_family::color(&family.key, mode);
 
-    // IDENTITY - v0.13: with family color badge
-    content.identity.add_line(Line::from(vec![
-        Span::styled("→ ", Style::default().fg(family_color).add_modifier(Modifier::BOLD)),
-        Span::styled("ArcClass", Style::default().fg(family_color)),
-    ]));
-    content.identity.add_kv(
-        "category",
-        Span::styled("◈ Schema", Style::default().fg(Color::Cyan)),
-    );
+    // IDENTITY - explicit key:value format
+    content
+        .identity
+        .add_kv("type", Span::styled("ArcClass", Style::default().fg(family_color)));
     content
         .identity
         .add_kv("key", Span::styled(arc_class.key.clone(), Style::default().fg(family_color).add_modifier(Modifier::BOLD)));
-    content.identity.add_kv(
-        "family",
-        Span::styled(family.display_name.clone(), Style::default().fg(family_color)),
-    );
+    content
+        .identity
+        .add_kv("display", Span::styled(arc_class.display_name.clone(), Style::default().fg(Color::White).add_modifier(Modifier::BOLD)));
 
-    // LOCATION - not applicable for arcs
-    content.location.add_empty();
+    // LOCATION (Classification) - family as classification
+    content.location.add_classification(
+        "family",
+        arc_family_badge_icon(&family.key),
+        &family.key,
+        family_color,
+    );
 
     // METRICS - cardinality
     if !arc_class.cardinality.is_empty() {
