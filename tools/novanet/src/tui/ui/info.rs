@@ -246,25 +246,24 @@ fn build_realm_content(app: &App, realm: &crate::tui::data::RealmInfo) -> Unifie
     content
         .identity
         .add_kv("type", Span::styled("Realm", STYLE_ACCENT));
-    content.identity.add_kv(
-        "category",
-        Span::styled("◈ Schema", Style::default().fg(Color::Cyan)),
-    );
     content
         .identity
         .add_kv("key", Span::styled(realm.key.clone(), STYLE_PRIMARY));
-
-    // LOCATION - realm is top-level
-    content.location.add_line(Line::from(vec![
-        Span::styled(
-            format!("{} ", realm.icon),
-            Style::default().fg(hex_to_color(&realm.color)),
-        ),
+    content.identity.add_kv(
+        "display",
         Span::styled(
             realm.display_name.clone(),
-            Style::default().fg(hex_to_color(&realm.color)),
+            Style::default()
+                .fg(Color::White)
+                .add_modifier(Modifier::BOLD),
         ),
-    ]));
+    );
+
+    // LOCATION - explicit classification with key:value
+    let realm_color = hex_to_color(&realm.color);
+    content
+        .location
+        .add_classification("realm", &realm.icon, &realm.key, realm_color);
 
     // METRICS
     content.metrics.add_kv(
