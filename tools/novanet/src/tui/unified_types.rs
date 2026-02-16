@@ -4,9 +4,7 @@
 //! where Realm, Layer, Class, Instance, ArcFamily, and ArcClass are all represented
 //! as clickable nodes with detail panels.
 
-use rustc_hash::FxHashSet;
 use smallvec::SmallVec;
-use std::collections::HashMap;
 
 // ============================================================================
 // Node Identification
@@ -221,128 +219,6 @@ pub const INSTANCE_PAGE_SIZE: usize = 50;
 
 /// Maximum instances to load before showing "too many" warning.
 pub const MAX_INSTANCE_DISPLAY: usize = 1000;
-
-// ============================================================================
-// Async Communication
-// ============================================================================
-
-/// Commands sent from TUI to async worker.
-#[derive(Debug, Clone)]
-pub enum AsyncCommand {
-    /// Load instances for a Class
-    LoadInstances {
-        class: String,
-        offset: usize,
-        limit: usize,
-    },
-    /// Load details for a Realm node
-    LoadRealmDetails(String),
-    /// Load details for a Layer node
-    LoadLayerDetails { realm: String, layer: String },
-    /// Load details for an ArcFamily node
-    LoadArcFamilyDetails(String),
-    /// Load details for an ArcClass node
-    LoadArcClassDetails(String),
-    /// Refresh the entire tree
-    RefreshTree,
-    /// Shutdown the async worker
-    Shutdown,
-}
-
-/// Events sent from async worker to TUI.
-#[derive(Debug)]
-pub enum AsyncEvent {
-    /// Instances loaded for a Class
-    InstancesLoaded(InstanceLoadResponse),
-    /// Realm details loaded
-    RealmDetailsLoaded(RealmDetails),
-    /// Layer details loaded
-    LayerDetailsLoaded(LayerDetails),
-    /// ArcFamily details loaded
-    ArcFamilyDetailsLoaded(ArcFamilyDetails),
-    /// ArcClass details loaded
-    ArcClassDetailsLoaded(ArcClassDetails),
-    /// Tree data refreshed
-    TreeRefreshed(Box<UnifiedTreeData>),
-    /// Error occurred
-    Error(String),
-}
-
-// ============================================================================
-// Response Types
-// ============================================================================
-
-/// Response from loading instances.
-#[derive(Debug)]
-pub struct InstanceLoadResponse {
-    pub class: String,
-    pub instances: Vec<InstanceInfo>,
-    pub total: usize,
-    pub offset: usize,
-}
-
-/// Information about a single instance.
-#[derive(Debug, Clone)]
-pub struct InstanceInfo {
-    pub key: String,
-    pub display_name: String,
-    pub labels: Vec<String>,
-}
-
-/// Details for a Realm node panel.
-#[derive(Debug)]
-pub struct RealmDetails {
-    pub key: String,
-    pub display_name: String,
-    pub color: String,
-    pub description: String,
-    pub layer_count: usize,
-    pub class_count: usize,
-    pub instance_count: usize,
-}
-
-/// Details for a Layer node panel.
-#[derive(Debug)]
-pub struct LayerDetails {
-    pub key: String,
-    pub realm: String,
-    pub display_name: String,
-    pub color: String,
-    pub description: String,
-    pub class_count: usize,
-    pub instance_count: usize,
-}
-
-/// Details for an ArcFamily node panel.
-#[derive(Debug)]
-pub struct ArcFamilyDetails {
-    pub key: String,
-    pub display_name: String,
-    pub color: String,
-    pub description: String,
-    pub arc_class_count: usize,
-    pub instance_count: usize,
-}
-
-/// Details for an ArcClass node panel.
-#[derive(Debug)]
-pub struct ArcClassDetails {
-    pub name: String,
-    pub family: String,
-    pub source: String,
-    pub target: String,
-    pub cardinality: String,
-    pub description: String,
-    pub instance_count: usize,
-}
-
-/// Complete unified tree data.
-#[derive(Debug)]
-pub struct UnifiedTreeData {
-    pub nodes: HashMap<NodeId, UnifiedNode>,
-    pub root_order: Vec<NodeId>,
-    pub collapsed: FxHashSet<String>,
-}
 
 // ============================================================================
 // Badge Presets
