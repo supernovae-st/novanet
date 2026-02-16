@@ -108,6 +108,67 @@ pub enum NexusTab {
     // NOTE: Views removed, now separate NavMode::Views (v0.12.5)
 }
 
+/// Nexus tree sections with emojis.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum NexusSection {
+    #[default]
+    Learn,
+    Explore,
+    Practice,
+}
+
+impl NexusSection {
+    /// Get emoji for this section.
+    pub fn emoji(&self) -> &'static str {
+        match self {
+            NexusSection::Learn => "📖",
+            NexusSection::Explore => "🔍",
+            NexusSection::Practice => "🎯",
+        }
+    }
+
+    /// Get label for this section.
+    pub fn label(&self) -> &'static str {
+        match self {
+            NexusSection::Learn => "Learn",
+            NexusSection::Explore => "Explore",
+            NexusSection::Practice => "Practice",
+        }
+    }
+
+    /// Get tabs in this section.
+    pub fn tabs(&self) -> &'static [NexusTab] {
+        match self {
+            NexusSection::Learn => &[NexusTab::Intro, NexusTab::Glossary, NexusTab::Tutorial],
+            NexusSection::Explore => &[NexusTab::Traits, NexusTab::Layers, NexusTab::Arcs, NexusTab::Arch],
+            NexusSection::Practice => &[NexusTab::Pipeline, NexusTab::Quiz, NexusTab::Stats],
+        }
+    }
+
+    /// Get all sections.
+    pub fn all() -> &'static [NexusSection] {
+        &[NexusSection::Learn, NexusSection::Explore, NexusSection::Practice]
+    }
+
+    /// Next section (wraps).
+    pub fn next(&self) -> NexusSection {
+        match self {
+            NexusSection::Learn => NexusSection::Explore,
+            NexusSection::Explore => NexusSection::Practice,
+            NexusSection::Practice => NexusSection::Learn,
+        }
+    }
+
+    /// Previous section (wraps).
+    pub fn prev(&self) -> NexusSection {
+        match self {
+            NexusSection::Learn => NexusSection::Practice,
+            NexusSection::Explore => NexusSection::Learn,
+            NexusSection::Practice => NexusSection::Explore,
+        }
+    }
+}
+
 impl NexusTab {
     /// Get the shortcut key for this tab.
     /// Letter-based shortcuts for mnemonic navigation.
@@ -429,6 +490,14 @@ pub struct NexusState {
     // === Achievement display state (v0.12.0) ===
     /// Newly unlocked achievements to display on quiz completion.
     pub new_achievements: Vec<persistence::Achievement>,
+
+    // Tree navigation state (v0.13.0)
+    /// Which section is currently focused in the tree.
+    pub tree_section: NexusSection,
+    /// Whether each section is expanded [Learn, Explore, Practice].
+    pub tree_expanded: [bool; 3],
+    /// Cursor position within the current section (0 = section header, 1+ = tabs).
+    pub tree_cursor: usize,
 }
 
 impl Default for NexusState {
@@ -468,6 +537,10 @@ impl NexusState {
             clipboard_message_time: None,
             progress_cache: None,
             new_achievements: Vec::new(),
+            // Tree navigation state (v0.13.0)
+            tree_section: NexusSection::Learn,
+            tree_expanded: [true, false, false], // Learn expanded by default
+            tree_cursor: 1,                      // First tab selected
         }
     }
 
