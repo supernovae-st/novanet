@@ -40,7 +40,7 @@ src/
 ## Testing
 - Unit tests in same file with `#[cfg(test)]`
 - Integration tests require Neo4j: `cargo test -- --ignored`
-- Current target: 396+ tests passing
+- Current: 1055+ tests passing (use `cargo nextest run` for speed)
 
 ## TUI (ratatui)
 - Feature-gated behind `tui` feature

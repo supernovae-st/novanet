@@ -27,12 +27,13 @@ paths:
 - `useCallback` for handlers passed to children
 - Avoid inline objects in JSX props
 
-## NovaNet v12 Terminology
-- `Realm` not Scope
-- `Layer` not Subcategory/NodeCategory
-- `Class` not Kind/NodeTypeMeta (v12: Kind → Class)
-- `NavigationMode` not DataMode
-- `Trait` for data origin classification (defined, authored, imported, generated, retrieved)
+## NovaNet v0.13.0 Terminology
+- `Realm` not Scope (shared, org)
+- `Layer` not Subcategory (10 layers: 4 shared + 6 org)
+- `Class` not Kind (NodeClass, ArcClass)
+- `Trait` = data origin (defined, authored, imported, generated, retrieved)
+- `*Native` suffix for locale-specific nodes (EntityNative, PageNative, BlockNative)
+- `HAS_NATIVE` arc (replaces HAS_CONTENT/HAS_GENERATED)
 
 ## Imports
 ```typescript

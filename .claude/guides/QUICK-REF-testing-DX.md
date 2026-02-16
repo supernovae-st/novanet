@@ -264,7 +264,7 @@ echo "✓ All checks passed"
 
 For full details, see:
 - `DX-testing-nomenclature-validation.md` — Complete patterns and philosophy
-- `v11.8-migration-testing.md` — Detailed Phase 1/2/3 testing for v11.8
+- `archive/v11.8-migration-testing.md` — Historical: Phase 1/2/3 testing for v11.8
 - `.claude/rules/novanet-terminology.md` — Terminology source of truth
 - `.claude/rules/novanet-decisions.md` — ADR-023, ADR-024 decisions
 

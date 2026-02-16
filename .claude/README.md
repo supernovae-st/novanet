@@ -110,15 +110,15 @@ When implementing v11.7 Unified Tree Architecture, use these skills per phase:
 ├── README.md                    ← This file
 ├── settings.json                ← Project settings (permissions, env, hooks)
 ├── settings.local.json          ← Local overrides (gitignored)
-├── hooks/                       ← Hook scripts
+├── hooks/                       ← Hook scripts (7 active, see settings.json)
 │   ├── session-start.sh         ← SessionStart: show project status
 │   ├── post-edit-format.sh      ← PostToolUse: auto-format after edits
 │   ├── keybindings-reminder.sh  ← TUI file edit reminder
 │   ├── yaml-sync-reminder.sh    ← YAML model edit reminder
-│   ├── yaml-source-reminder.sh  ← YAML read context (source of truth)
 │   ├── doc-sync-reminder.sh     ← Documentation edit reminder
-│   ├── skill-sync-reminder.sh   ← Skill/command/rule edit reminder
-│   └── security-deps-reminder.sh ← Dependency security reminder (NEW)
+│   ├── semantic-check.sh        ← Rust code semantic validation
+│   ├── adr-context.sh           ← ADR context loading
+│   └── archive/                 ← Archived hooks (not active)
 ├── rules/                       ← Path-specific rules
 │   ├── rust.md                  ← Rust patterns (tools/novanet/**/*.rs)
 │   ├── typescript.md            ← TypeScript patterns (packages/, apps/)
@@ -183,76 +183,19 @@ packages/core/.claude/
 
 ## Hooks
 
-Automated scripts that run at specific lifecycle events.
+Automated scripts at lifecycle events. See `.claude/settings.json` for configuration.
 
-### SessionStart Hook
+| Event | Hook | Purpose |
+|-------|------|---------|
+| SessionStart | `session-start.sh` | Show project status (version, branch, changes) |
+| PostToolUse | `post-edit-format.sh` | Auto-format `.rs`/`.ts` after edits |
+| PostToolUse | `keybindings-reminder.sh` | Remind on TUI file edits |
+| PostToolUse | `yaml-sync-reminder.sh` | Remind to regenerate after YAML edits |
+| PostToolUse | `doc-sync-reminder.sh` | Remind on documentation edits |
+| PostToolUse | `semantic-check.sh` | Validate Rust code semantics |
+| PostToolUse | `adr-context.sh` | Load ADR context when reading ADRs |
 
-**File:** `.claude/hooks/session-start.sh`
-**Trigger:** When a Claude Code session starts
-
-**Output:** Shows project version, git branch, and uncommitted changes count.
-
-```
-NovaNet v11.0.0 | Branch: main | Uncommitted: 3 files
-```
-
-### PostToolUse Hook (Write|Edit)
-
-**File:** `.claude/hooks/post-edit-format.sh`
-**Trigger:** After Write or Edit tool completes
-
-**Actions:**
-- `.rs` files → `rustfmt` (edition 2021)
-- `.ts`, `.tsx`, `.js`, `.jsx`, `.json` → `prettier`
-
-### PostToolUse Hook (TUI Keybindings)
-
-**File:** `.claude/hooks/keybindings-reminder.sh`
-**Trigger:** After editing `tools/novanet/src/tui/*.rs` files
-
-**Output:** Reminds to update `KEYBINDINGS.md` if keybindings changed.
-
-### PostToolUse Hook (YAML Models)
-
-**File:** `.claude/hooks/yaml-sync-reminder.sh`
-**Trigger:** After editing `packages/core/models/**/*.yaml` files
-
-**Output:** Reminds to regenerate artifacts:
-```
-YAML_MODEL_CHANGE_DETECTED
-
-You modified a YAML model file: entity.yaml
-
-IMPORTANT: Regenerate artifacts with:
-  pnpm schema:generate
-```
-
-### PostToolUse Hook (Documentation)
-
-**File:** `.claude/hooks/doc-sync-reminder.sh`
-**Trigger:** After editing `CLAUDE.md`, `README.md`, or `.claude/**/*.md` files
-
-**Output:** Returns JSON context for Claude with VERSION and expected counts.
-
-### PostToolUse Hook (YAML Read)
-
-**File:** `.claude/hooks/yaml-source-reminder.sh`
-**Trigger:** After reading `packages/core/models/**/*.yaml` files
-
-**Output:** Reminds that YAML is the source of truth, not generated TypeScript.
-
-### PostToolUse Hook (Skills/Commands/Rules)
-
-**File:** `.claude/hooks/skill-sync-reminder.sh`
-**Trigger:** After editing `.claude/{skills,commands,agents,rules}/**/*.md` files
-
-**Output:** Reminds to verify against YAML sources:
-- Node counts match `node-classes/` (64 files)
-- Arc counts match `arc-classes/` (121 files)
-- Paths use `node-classes/` not `nodes/`
-- Paths use `taxonomy.yaml` not `organizing-principles.yaml`
-
-**Validation command:** `pnpm skill:audit`
+Archived hooks are in `.claude/hooks/archive/`.
 
 ---
 
@@ -437,7 +380,7 @@ Master command for schema management.
 
 **Example:**
 ```bash
-/schema status     # Show current schema stats (61 Classes, 170 ArcClasses, 2 Realms, 10 Layers)
+/schema status     # Show current schema stats (61 Classes, 169 ArcClasses, 2 Realms, 10 Layers)
 ```
 
 ---

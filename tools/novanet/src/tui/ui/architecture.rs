@@ -17,13 +17,10 @@ use super::STYLE_DIM;
 // BOX VISUAL STATES (matching yaml_panel.rs)
 // =============================================================================
 
-/// Unfocused: Nord Polar Night (dim)
+/// Unfocused: Nord Polar Night (dim) - box is NOT selected
 const BOX_BORDER_UNFOCUSED: Color = Color::Rgb(59, 66, 82); // #3B4252
 
-/// Focused: Nord Snow Storm (subtle highlight) - panel has focus but not this box
-const BOX_BORDER_FOCUSED: Color = Color::Rgb(129, 161, 193); // #81A1C1
-
-/// Selected: Solarized Cyan (bright, active) - this specific box is selected
+/// Selected: Solarized Cyan (bright, active) - this specific box is Tab-selected
 const BOX_BORDER_SELECTED: Color = Color::Rgb(42, 161, 152); // #2AA198
 
 // =============================================================================
@@ -39,14 +36,12 @@ const BOX_BORDER_SELECTED: Color = Color::Rgb(42, 161, 152); // #2AA198
 ///
 /// v0.13.0: Uses InfoBox::Architecture for independent selection state.
 pub fn render_architecture_panel(f: &mut Frame, area: Rect, app: &App) {
-    // Determine if this box is selected or just focused
+    // Determine if this box is selected
     let selected = app.selected_box == InfoBox::Architecture;
-    let panel_focused = app.selected_box.is_right_panel();
 
+    // Border color: selected = cyan, otherwise = dim
     let border_color = if selected {
         BOX_BORDER_SELECTED
-    } else if panel_focused {
-        BOX_BORDER_FOCUSED
     } else {
         BOX_BORDER_UNFOCUSED
     };

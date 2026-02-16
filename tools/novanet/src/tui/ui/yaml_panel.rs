@@ -26,13 +26,10 @@ use crate::tui::yaml::YamlViewSection;
 // BOX VISUAL STATES v0.13 (enhanced palette)
 // =============================================================================
 
-/// Unfocused: Nord Polar Night (dim)
+/// Unfocused: Nord Polar Night (dim) - box is NOT selected
 const BOX_BORDER_UNFOCUSED: Color = Color::Rgb(59, 66, 82); // #3B4252
 
-/// Focused: Nord Snow Storm (subtle highlight)
-const BOX_BORDER_FOCUSED: Color = Color::Rgb(129, 161, 193); // #81A1C1
-
-/// Selected: Solarized Cyan (bright, active)
+/// Selected: Solarized Cyan (bright, active) - this specific box is Tab-selected
 const BOX_BORDER_SELECTED: Color = Color::Rgb(42, 161, 152); // #2AA198
 
 // =============================================================================
@@ -96,12 +93,8 @@ const STYLE_YAML_TEXT: Style = Style::new().fg(Color::White);
 ///
 /// Visual states:
 /// - Selected (cyan): This specific box is active (Tab target)
-/// - Focused (light blue): Another box in right panel is active
-/// - Unfocused (dim): Focus is in different panel
+/// - Unfocused (dim): This box is NOT selected
 pub fn render_yaml_panel(f: &mut Frame, area: Rect, app: &App) {
-    // Check if ANY box in right panel is selected (Source, Diagram, or Architecture)
-    let panel_focused = app.selected_box.is_right_panel();
-
     // Split into SOURCE (60%) and DIAGRAM (40%)
     let chunks = Layout::default()
         .direction(Direction::Vertical)
@@ -110,22 +103,20 @@ pub fn render_yaml_panel(f: &mut Frame, area: Rect, app: &App) {
 
     // Render SOURCE box (YAML content)
     let source_selected = app.selected_box == InfoBox::Source;
-    render_source_box(f, chunks[0], app, panel_focused, source_selected);
+    render_source_box(f, chunks[0], app, source_selected);
 
     // Render DIAGRAM box (ASCII hierarchy)
     let diagram_selected = app.selected_box == InfoBox::Diagram;
-    render_diagram_box(f, chunks[1], app, panel_focused, diagram_selected);
+    render_diagram_box(f, chunks[1], app, diagram_selected);
 }
 
 /// Render the SOURCE box with YAML content.
-fn render_source_box(f: &mut Frame, area: Rect, app: &App, panel_focused: bool, selected: bool) {
+fn render_source_box(f: &mut Frame, area: Rect, app: &App, selected: bool) {
     let visible_height = area.height.saturating_sub(2) as usize;
 
-    // Determine border color based on state
+    // Determine border color: selected = cyan, otherwise = dim
     let border_color = if selected {
         BOX_BORDER_SELECTED
-    } else if panel_focused {
-        BOX_BORDER_FOCUSED
     } else {
         BOX_BORDER_UNFOCUSED
     };
@@ -155,12 +146,10 @@ fn render_source_box(f: &mut Frame, area: Rect, app: &App, panel_focused: bool, 
 }
 
 /// Render the DIAGRAM box with ASCII hierarchy and arc graph.
-fn render_diagram_box(f: &mut Frame, area: Rect, app: &App, panel_focused: bool, selected: bool) {
-    // Determine border color based on state
+fn render_diagram_box(f: &mut Frame, area: Rect, app: &App, selected: bool) {
+    // Determine border color: selected = cyan, otherwise = dim
     let border_color = if selected {
         BOX_BORDER_SELECTED
-    } else if panel_focused {
-        BOX_BORDER_FOCUSED
     } else {
         BOX_BORDER_UNFOCUSED
     };
