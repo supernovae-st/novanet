@@ -342,9 +342,9 @@ Fixes #123
 **Current NovaNet Version**: v0.13.0
 - **Realms**: shared (4 layers), org (6 layers) = 10 total
 - **Nodes**: 61 total (40 shared + 21 org)
-- **Arcs**: 156 (5 families)
+- **Arcs**: 169 (5 families)
 - **Traits**: defined, authored, imported, generated, retrieved
-- **Latest ADR**: ADR-028 (Brand Architecture)
+- **Latest ADR**: ADR-032 (URL Slugification Architecture)
 
 These documents are current through v0.13.0 (SemVer).
 
@@ -382,8 +382,8 @@ TOOLS & EXAMPLES
 
 ---
 
-**Last Updated**: 2026-02-13
-**Current Version**: v11.8.0 (Class Act)
+**Last Updated**: 2026-02-16
+**Current Version**: v0.13.0 (*Native Pattern)
 **Total Documentation**: 18,200+ words, 90+ code examples, 67 sections
 
 Start with README.md and choose your reading path above. Happy testing!

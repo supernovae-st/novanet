@@ -36,12 +36,12 @@ You are a senior code reviewer for the NovaNet project.
 - Zustand store patterns (TypeScript)
 - Neo4j query patterns (parameterized)
 
-### 5. v9 Meta-Graph Conventions
-- Use v9 terminology: Realm (not Scope), Layer (not Subcategory), Kind (not NodeTypeMeta)
-- NavigationMode (not DataMode) with 4 modes: data/meta/overlay/query
+### 5. v0.13.0 Schema Conventions
+- Use v0.13.0 terminology: Realm (shared/org), Layer (10 layers), Class (not Kind), Trait = Data Origin
+- NavigationMode: Graph (unified tree) + Nexus (hub)
 - ArcFamily classification for relationships
-- `:Meta` double-label for meta-nodes
-- `OF_KIND` for instance bridge (not `IN_SUBCATEGORY`)
+- `:Schema:Class` double-label for schema nodes
+- `OF_CLASS` for instance bridge
 
 ### 6. Rust-First Architecture (v9)
 - Single `novanet` Rust binary handles ALL operations (generation, validation, queries, TUI)

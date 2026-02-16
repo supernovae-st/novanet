@@ -20,19 +20,19 @@ You are a Neo4j graph database expert specializing in the NovaNet localization s
 ## NovaNet Context
 
 NovaNet uses Neo4j for native content generation (NOT translation):
-- **Invariant nodes**: Entity, Project, Page, Block, Organization (language-agnostic)
-- **Content nodes**: EntityContent, ProjectContent, PageGenerated, BlockGenerated (locale-specific generated content)
+- **Invariant nodes**: Entity, Project, Page, Block, OrgConfig (language-agnostic)
+- **Native nodes**: EntityNative, ProjectNative, PageNative, BlockNative (locale-specific content via HAS_NATIVE)
 - **Knowledge atoms**: Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait (locale-native)
 
-### v0.12.4 Schema-Graph (2-Realm Architecture)
+### v0.13.0 Schema-Graph (2-Realm Architecture)
 
-v0.12.4 uses a self-describing context graph with 6 schema-node types:
+v0.13.0 uses a self-describing context graph with 6 schema-node types:
 - **Realm** (2): shared, org — visibility boundary (one-way: shared→org)
 - **Layer** (10): shared (config, locale, geography, knowledge) | org (config, foundation, structure, semantic, instruction, output)
 - **Class** (61): 1:1 mapping to Neo4j labels (carries `schema_hint`, `context_budget`)
 - **Trait** (5): defined, authored, imported, generated, retrieved — data origin (ADR-024)
 - **ArcFamily** (5): ownership, localization, semantic, generation, mining
-- **ArcClass** (128): 1:1 mapping to Neo4j relationship types (carries `cypher_pattern`)
+- **ArcClass** (169): 1:1 mapping to Neo4j relationship types (carries `cypher_pattern`)
 
 All schema-nodes carry `:Schema` double-label. Instance bridge: `DataNode -[:OF_CLASS]-> Class`.
 
@@ -50,9 +50,9 @@ RETURN related.key, activation ORDER BY activation DESC
 ### Context Loading
 ```cypher
 MATCH (b:Block {key: $blockKey})
-MATCH (b)-[:USES_ENTITY]->(e:Entity)-[:HAS_CONTENT]->(el:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
-MATCH (l)-[:HAS_VOICE]->(v:LocaleVoice)
-RETURN b.instructions, e.key, el.title, v.formality_score
+MATCH (b)-[:USES_ENTITY]->(e:Entity)-[:HAS_NATIVE {locale: $locale}]->(en:EntityNative)
+MATCH (l:Locale {key: $locale})-[:HAS_VOICE]->(v:LocaleVoice)
+RETURN b.instructions, e.key, en.title, v.formality_score
 ```
 
 ### Schema Graph: Navigate Taxonomy (v11.0)

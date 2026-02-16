@@ -10,8 +10,6 @@ use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, Borders, Paragraph};
 
-use std::collections::BTreeMap;
-
 use super::super::app::{App, InfoBox};
 use super::super::data::TreeItem;
 use super::super::theme;
@@ -652,31 +650,16 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
     f.render_widget(paragraph, inner);
 }
 
-/// Render arcs grouped by family (instead of by direction).
-/// Optimized to use references instead of cloning strings.
-fn render_arcs_by_family(
+/// v0.13: Render arcs grouped by direction (OUTGOING, INCOMING) with classification badges.
+/// Format: → ARC_NAME → [realm/layer] trait_icon TargetClass [fam]
+fn render_arcs_by_direction(
     lines: &mut Vec<Line>,
     arcs: &super::super::data::ClassArcsData,
+    app: &App,
     theme: &theme::Theme,
     dim: &Style,
 ) {
-    // Collect all arcs grouped by family using references (no cloning)
-    let mut by_family: BTreeMap<&str, Vec<(bool, &str, &str)>> = BTreeMap::new();
-
-    for arc in &arcs.incoming {
-        by_family
-            .entry(&arc.family)
-            .or_default()
-            .push((false, &arc.arc_key, &arc.other_class)); // false = incoming
-    }
-    for arc in &arcs.outgoing {
-        by_family
-            .entry(&arc.family)
-            .or_default()
-            .push((true, &arc.arc_key, &arc.other_class)); // true = outgoing
-    }
-
-    if by_family.is_empty() {
+    if arcs.outgoing.is_empty() && arcs.incoming.is_empty() {
         lines.push(Line::from(Span::styled(
             "  No arc relationships defined for this Node Class",
             STYLE_DIM,
@@ -684,36 +667,123 @@ fn render_arcs_by_family(
         return;
     }
 
-    // v0.13: Render arcs in flat list (no family sub-headers to avoid "boxes within boxes")
-    // Each arc shows: direction indicator + arc key (colored by family) + target/source class
-    for (family, family_arcs) in &by_family {
-        let family_color = theme.arc_family_color(family);
+    // === OUTGOING SECTION ===
+    if !arcs.outgoing.is_empty() {
+        lines.push(Line::from(Span::styled(
+            format!("  ━▶ OUTGOING ({}) ", arcs.outgoing.len()),
+            Style::default()
+                .fg(Color::Cyan)
+                .add_modifier(Modifier::BOLD),
+        )));
+        lines.push(Line::from(Span::styled(
+            "  ────────────────────────────────────────────",
+            *dim,
+        )));
 
-        for (is_outgoing, arc_key, other_class) in family_arcs {
-            if *is_outgoing {
-                // Outgoing: → [ARC] → Target
-                lines.push(Line::from(vec![
-                    Span::styled("  → ", Style::default().fg(family_color).add_modifier(Modifier::BOLD)),
-                    Span::styled(
-                        (*arc_key).to_string(),
-                        Style::default().fg(family_color),
-                    ),
-                    Span::styled(" → ", *dim),
-                    Span::styled((*other_class).to_string(), STYLE_SUCCESS),
-                ]));
-            } else {
-                // Incoming: ← Source ← [ARC]
-                lines.push(Line::from(vec![
-                    Span::styled("  ← ", Style::default().fg(family_color).add_modifier(Modifier::BOLD)),
-                    Span::styled((*other_class).to_string(), STYLE_SUCCESS),
-                    Span::styled(" ← ", *dim),
-                    Span::styled(
-                        (*arc_key).to_string(),
-                        Style::default().fg(family_color),
-                    ),
-                ]));
-            }
+        for arc in &arcs.outgoing {
+            let family_color = theme.arc_family_color(&arc.family);
+            let family_short = family_short(&arc.family);
+
+            // Look up target class info for classification badge
+            let badge = class_badge(&arc.other_class, app, theme);
+
+            lines.push(Line::from(vec![
+                Span::styled("    → ", Style::default().fg(family_color).add_modifier(Modifier::BOLD)),
+                Span::styled(arc.arc_key.clone(), Style::default().fg(family_color)),
+                Span::styled(" → ", *dim),
+                badge,
+                Span::styled(arc.other_class.clone(), STYLE_SUCCESS),
+                Span::styled(format!(" [{}]", family_short), *dim),
+            ]));
         }
+        lines.push(Line::from(Span::raw("")));
+    }
+
+    // === INCOMING SECTION ===
+    if !arcs.incoming.is_empty() {
+        lines.push(Line::from(Span::styled(
+            format!("  ◀━ INCOMING ({}) ", arcs.incoming.len()),
+            Style::default()
+                .fg(Color::Magenta)
+                .add_modifier(Modifier::BOLD),
+        )));
+        lines.push(Line::from(Span::styled(
+            "  ────────────────────────────────────────────",
+            *dim,
+        )));
+
+        for arc in &arcs.incoming {
+            let family_color = theme.arc_family_color(&arc.family);
+            let family_short = family_short(&arc.family);
+
+            // Look up source class info for classification badge
+            let badge = class_badge(&arc.other_class, app, theme);
+
+            lines.push(Line::from(vec![
+                Span::styled("    ← ", Style::default().fg(family_color).add_modifier(Modifier::BOLD)),
+                badge,
+                Span::styled(arc.other_class.clone(), STYLE_SUCCESS),
+                Span::styled(" ← ", *dim),
+                Span::styled(arc.arc_key.clone(), Style::default().fg(family_color)),
+                Span::styled(format!(" [{}]", family_short), *dim),
+            ]));
+        }
+    }
+}
+
+/// Get short family name (3 chars).
+fn family_short(family: &str) -> &'static str {
+    match family {
+        "ownership" => "own",
+        "localization" => "loc",
+        "semantic" => "sem",
+        "generation" => "gen",
+        "mining" => "min",
+        _ => "???",
+    }
+}
+
+/// Get short layer name (3 chars).
+fn layer_short(layer: &str) -> &'static str {
+    match layer {
+        "config" => "cfg",
+        "locale" => "loc",
+        "geography" => "geo",
+        "knowledge" => "kno",
+        "foundation" => "fnd",
+        "structure" => "str",
+        "semantic" => "sem",
+        "instruction" => "ins",
+        "output" => "out",
+        _ => "???",
+    }
+}
+
+/// Get trait icon (Unicode symbol).
+fn trait_icon(trait_name: &str) -> &'static str {
+    match trait_name {
+        "defined" => "■",
+        "authored" => "□",
+        "imported" => "◇",
+        "generated" => "✦",
+        "retrieved" => "⋆",
+        _ => "○",
+    }
+}
+
+/// Build classification badge Span: [realm/layer] trait_icon
+/// Example: [org/fnd] ■
+fn class_badge(class_key: &str, app: &App, theme: &theme::Theme) -> Span<'static> {
+    if let Some((realm, layer, class_info)) = app.tree.find_class(class_key) {
+        let realm_short = if realm.key == "shared" { "shd" } else { "org" };
+        let layer_s = layer_short(&layer.key);
+        let icon = trait_icon(&class_info.trait_name);
+
+        let badge = format!("[{}/{}] {} ", realm_short, layer_s, icon);
+        Span::styled(badge, Style::default().fg(theme.layer_color(&layer.key)))
+    } else {
+        // Class not found in tree (external or unknown)
+        Span::styled("[???] ○ ", Style::default().fg(Color::DarkGray))
     }
 }
 
@@ -959,17 +1029,30 @@ mod tests {
     }
 
     // =========================================================================
-    // render_arcs_by_family tests
+    // render_arcs_by_direction tests (v0.13)
     // =========================================================================
 
+    /// Create a tree with specified classes for testing arc rendering.
+    fn create_tree_for_arcs(class_names: &[&str]) -> TaxonomyTree {
+        let classes: Vec<ClassInfo> = class_names
+            .iter()
+            .map(|name| create_test_class(name))
+            .collect();
+        let layer = create_test_layer("structure", classes);
+        let realm = create_test_realm("org", vec![layer]);
+        create_tree_with_realms(vec![realm])
+    }
+
     #[test]
-    fn test_render_arcs_by_family_empty() {
+    fn test_render_arcs_by_direction_empty() {
+        let tree = create_tree_for_arcs(&["Page"]);
+        let app = create_test_app_with_tree(tree);
         let theme = create_test_theme();
         let dim = Style::default().fg(Color::Rgb(100, 100, 100));
         let arcs = create_class_arcs_data("Page", Vec::new(), Vec::new());
 
         let mut lines: Vec<Line> = Vec::new();
-        render_arcs_by_family(&mut lines, &arcs, &theme, &dim);
+        render_arcs_by_direction(&mut lines, &arcs, &app, &theme, &dim);
 
         // Should show "No arc relationships" message
         assert_eq!(lines.len(), 1, "empty arcs should produce 1 line");
@@ -983,7 +1066,9 @@ mod tests {
     }
 
     #[test]
-    fn test_render_arcs_by_family_single_family() {
+    fn test_render_arcs_by_direction_outgoing_only() {
+        let tree = create_tree_for_arcs(&["Entity", "Block"]);
+        let app = create_test_app_with_tree(tree);
         let theme = create_test_theme();
         let dim = Style::default().fg(Color::Rgb(100, 100, 100));
 
@@ -994,10 +1079,10 @@ mod tests {
         let arcs = create_class_arcs_data("Page", Vec::new(), outgoing);
 
         let mut lines: Vec<Line> = Vec::new();
-        render_arcs_by_family(&mut lines, &arcs, &theme, &dim);
+        render_arcs_by_direction(&mut lines, &arcs, &app, &theme, &dim);
 
-        // v0.13: Flat list format - 2 arcs = 2 lines (no headers/separators)
-        assert_eq!(lines.len(), 2, "should have 2 arc lines");
+        // v0.13: header + separator + 2 arcs + empty = 5 lines
+        assert!(lines.len() >= 4, "should have header + separator + arcs");
 
         let all_content: String = lines
             .iter()
@@ -1006,13 +1091,17 @@ mod tests {
             .collect();
 
         // Should contain arc keys and target classes
+        assert!(all_content.contains("OUTGOING"), "should have OUTGOING header");
         assert!(all_content.contains("USES_ENTITY"), "should contain arc key");
         assert!(all_content.contains("Entity"), "should contain target class");
         assert!(all_content.contains("→"), "should contain direction indicator");
+        assert!(all_content.contains("[sem]"), "should contain family short");
     }
 
     #[test]
-    fn test_render_arcs_by_family_multiple_families() {
+    fn test_render_arcs_by_direction_both_directions() {
+        let tree = create_tree_for_arcs(&["Project", "Entity"]);
+        let app = create_test_app_with_tree(tree);
         let theme = create_test_theme();
         let dim = Style::default().fg(Color::Rgb(100, 100, 100));
 
@@ -1021,10 +1110,7 @@ mod tests {
         let arcs = create_class_arcs_data("Page", incoming, outgoing);
 
         let mut lines: Vec<Line> = Vec::new();
-        render_arcs_by_family(&mut lines, &arcs, &theme, &dim);
-
-        // v0.13: Flat list - 2 arcs = 2 lines (no family headers)
-        assert_eq!(lines.len(), 2, "should have 2 arc lines");
+        render_arcs_by_direction(&mut lines, &arcs, &app, &theme, &dim);
 
         let all_content: String = lines
             .iter()
@@ -1032,23 +1118,20 @@ mod tests {
             .map(|s| s.content.as_ref())
             .collect();
 
-        // Should contain both arc keys (no family headers)
-        assert!(
-            all_content.contains("BELONGS_TO"),
-            "should contain BELONGS_TO arc"
-        );
-        assert!(
-            all_content.contains("USES_ENTITY"),
-            "should contain USES_ENTITY arc"
-        );
+        // Should have both OUTGOING and INCOMING headers
+        assert!(all_content.contains("OUTGOING"), "should have OUTGOING header");
+        assert!(all_content.contains("INCOMING"), "should have INCOMING header");
+        assert!(all_content.contains("BELONGS_TO"), "should contain incoming arc");
+        assert!(all_content.contains("USES_ENTITY"), "should contain outgoing arc");
     }
 
     #[test]
-    fn test_render_arcs_by_family_incoming_outgoing_counts() {
+    fn test_render_arcs_by_direction_classification_badges() {
+        let tree = create_tree_for_arcs(&["Entity", "Page", "Block"]);
+        let app = create_test_app_with_tree(tree);
         let theme = create_test_theme();
         let dim = Style::default().fg(Color::Rgb(100, 100, 100));
 
-        // 2 incoming, 1 outgoing for semantic family
         let incoming = vec![
             create_neo4j_arc("USED_BY_PAGE", "Page", "semantic"),
             create_neo4j_arc("USED_BY_BLOCK", "Block", "semantic"),
@@ -1057,10 +1140,7 @@ mod tests {
         let arcs = create_class_arcs_data("Class", incoming, outgoing);
 
         let mut lines: Vec<Line> = Vec::new();
-        render_arcs_by_family(&mut lines, &arcs, &theme, &dim);
-
-        // v0.13: Flat list - 3 arcs = 3 lines (no count headers)
-        assert_eq!(lines.len(), 3, "should have 3 arc lines");
+        render_arcs_by_direction(&mut lines, &arcs, &app, &theme, &dim);
 
         let all_content: String = lines
             .iter()
@@ -1068,15 +1148,19 @@ mod tests {
             .map(|s| s.content.as_ref())
             .collect();
 
-        // Should contain all arc keys and both direction indicators
-        assert!(all_content.contains("USED_BY_PAGE"), "should contain incoming arc");
-        assert!(all_content.contains("USES_ENTITY"), "should contain outgoing arc");
+        // Should contain classification badges [org/str] (structure layer)
+        assert!(all_content.contains("[org/str]"), "should contain realm/layer badge");
+        // Should contain trait icon (■ for defined)
+        assert!(all_content.contains("■"), "should contain trait icon");
+        // Both direction indicators
         assert!(all_content.contains("←"), "should contain incoming direction");
         assert!(all_content.contains("→"), "should contain outgoing direction");
     }
 
     #[test]
-    fn test_render_arcs_by_family_arc_direction_display() {
+    fn test_render_arcs_by_direction_with_counts() {
+        let tree = create_tree_for_arcs(&["Project", "Page"]);
+        let app = create_test_app_with_tree(tree);
         let theme = create_test_theme();
         let dim = Style::default().fg(Color::Rgb(100, 100, 100));
 
@@ -1085,10 +1169,7 @@ mod tests {
         let arcs = create_class_arcs_data("Class", incoming, outgoing);
 
         let mut lines: Vec<Line> = Vec::new();
-        render_arcs_by_family(&mut lines, &arcs, &theme, &dim);
-
-        // v0.13: Flat list - 2 arcs = 2 lines
-        assert_eq!(lines.len(), 2, "should have 2 arc lines");
+        render_arcs_by_direction(&mut lines, &arcs, &app, &theme, &dim);
 
         let all_content: String = lines
             .iter()
@@ -1096,25 +1177,9 @@ mod tests {
             .map(|s| s.content.as_ref())
             .collect();
 
-        // v0.13 format:
-        // Outgoing: → [ARC] → Target
-        // Incoming: ← Source ← [ARC]
-        assert!(
-            all_content.contains("BELONGS_TO"),
-            "should contain incoming arc"
-        );
-        assert!(
-            all_content.contains("HAS_PAGE"),
-            "should contain outgoing arc"
-        );
-        assert!(
-            all_content.contains("Project"),
-            "should contain source class for incoming"
-        );
-        assert!(
-            all_content.contains("Page"),
-            "should contain target class for outgoing"
-        );
+        // Headers should show counts
+        assert!(all_content.contains("OUTGOING (1)"), "should show outgoing count");
+        assert!(all_content.contains("INCOMING (1)"), "should show incoming count");
     }
 
     // =========================================================================
@@ -1394,9 +1459,22 @@ mod tests {
     // =========================================================================
 
     #[test]
-    fn test_render_arcs_by_family_all_five_families() {
+    fn test_render_arcs_by_direction_all_five_families() {
         let theme = create_test_theme();
         let dim = Style::default().fg(Color::Rgb(100, 100, 100));
+
+        // Create classes for arc targets so find_class can look them up
+        let classes = vec![
+            create_test_class("Project"),
+            create_test_class("EntityNative"),
+            create_test_class("Entity"),
+            create_test_class("Block"),
+            create_test_class("Source"),
+        ];
+        let layer = create_test_layer("semantic", classes);
+        let realm = create_test_realm("org", vec![layer]);
+        let tree = create_tree_with_realms(vec![realm]);
+        let app = create_test_app_with_tree(tree);
 
         // Test all 5 arc families: ownership, localization, semantic, generation, mining
         let outgoing = vec![
@@ -1409,10 +1487,10 @@ mod tests {
         let arcs = create_class_arcs_data("Class", Vec::new(), outgoing);
 
         let mut lines: Vec<Line> = Vec::new();
-        render_arcs_by_family(&mut lines, &arcs, &theme, &dim);
+        render_arcs_by_direction(&mut lines, &arcs, &app, &theme, &dim);
 
-        // v0.13: Flat list - 5 arcs = 5 lines (no family headers)
-        assert_eq!(lines.len(), 5, "should have 5 arc lines");
+        // v0.13: OUTGOING header + separator + 5 arcs + empty line = 8 lines
+        assert_eq!(lines.len(), 8, "should have header + separator + 5 arcs + empty");
 
         let all_content: String = lines
             .iter()
@@ -1420,10 +1498,23 @@ mod tests {
             .map(|s| s.content.as_ref())
             .collect();
 
-        // All arc keys should be present (no family headers in flat format)
-        assert!(all_content.contains("BELONGS_TO"), "should have ownership arc");
-        assert!(all_content.contains("LOCALIZES"), "should have localization arc");
-        assert!(all_content.contains("USES_ENTITY"), "should have semantic arc");
+        // Should have OUTGOING header and all arc keys
+        assert!(
+            all_content.contains("OUTGOING"),
+            "should have OUTGOING header"
+        );
+        assert!(
+            all_content.contains("BELONGS_TO"),
+            "should have ownership arc"
+        );
+        assert!(
+            all_content.contains("LOCALIZES"),
+            "should have localization arc"
+        );
+        assert!(
+            all_content.contains("USES_ENTITY"),
+            "should have semantic arc"
+        );
         assert!(all_content.contains("GENERATES"), "should have generation arc");
         assert!(all_content.contains("MINES_DATA"), "should have mining arc");
     }

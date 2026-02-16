@@ -100,8 +100,8 @@ export const ACTION_PRESETS: Record<ActionCategory, ActionPreset[]> = {
     {
       id: 'mode-meta',
       category: 'modes',
-      label: 'Meta Mode',
-      shortLabel: 'META',
+      label: 'Schema Mode',
+      shortLabel: 'SCHEMA',
       key: '1',
       keycode: 'KC_1',
       icon: 'Database',
@@ -109,8 +109,8 @@ export const ACTION_PRESETS: Record<ActionCategory, ActionPreset[]> = {
     {
       id: 'mode-data',
       category: 'modes',
-      label: 'Data Mode',
-      shortLabel: 'DATA',
+      label: 'Graph Mode',
+      shortLabel: 'GRAPH',
       key: '2',
       keycode: 'KC_2',
       icon: 'FileText',

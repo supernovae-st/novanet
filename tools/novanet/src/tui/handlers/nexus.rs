@@ -136,6 +136,7 @@ pub fn handle_nexus_key(app: &mut App, key: KeyEvent) -> KeyResult {
                 let tabs = section.tabs();
                 if let Some(tab) = tabs.get(app.nexus.tree_cursor - 1) {
                     app.nexus.tab = *tab;
+                    app.nexus.sync_tree_to_tab();
                 }
             }
             KeyResult::Handled

@@ -102,7 +102,7 @@ Analyze NovaNet YAML schema for issues:
 2. Check node-classes/**/*.yaml:
    - realm field matches file path (shared vs org)
    - layer field matches file path
-   - trait is valid (invariant|localized|knowledge|generated|aggregated)
+   - trait is valid (defined|authored|imported|generated|retrieved)
    - All referenced arcs exist in arc-classes/
 
 3. Check arc-classes/**/*.yaml:

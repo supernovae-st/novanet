@@ -204,9 +204,9 @@ Show: GEOQuery, GEOAnswer, GEOMetrics and their relationships.
 
 **Required reads:**
 - `packages/core/models/node-classes/shared/knowledge/*.yaml`
-- `packages/core/models/node-classes/org/semantic/*.yaml` (Entity, EntityContent)
+- `packages/core/models/node-classes/org/semantic/*.yaml` (Entity, EntityNative)
 
-Show: All Sets (TermSet, etc.), all Atoms (Term, etc.), Entity/EntityContent from org realm.
+Show: All Sets (TermSet, etc.), all Atoms (Term, etc.), Entity/EntityNative from org realm.
 
 ---
 

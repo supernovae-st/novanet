@@ -102,7 +102,7 @@ pub struct MinimalTaxonomyDoc {
 }
 
 fn default_version() -> String {
-    "0.12.5".to_string()
+    "0.13.0".to_string()
 }
 
 /// Per-trait retrieval settings for context assembly.
@@ -619,8 +619,8 @@ arc_families:
         // v0.12.5: load_taxonomy() now delegates to load_taxonomy_from_files()
         let doc = load_taxonomy(root).expect("should load taxonomy from individual files");
 
-        // v0.12.5: Version comes from minimal taxonomy.yaml
-        assert_eq!(doc.version, "0.12.5");
+        // v0.13.0: Version comes from minimal taxonomy.yaml
+        assert_eq!(doc.version, "0.13.0");
         assert_eq!(doc.node_realms.len(), 2); // v11.2: 2 realms (shared, org)
         assert_eq!(doc.node_traits.len(), 5); // v11.2: split derived → generated + aggregated
         assert_eq!(doc.arc_families.len(), 5);

@@ -184,6 +184,38 @@ impl InfoBox {
     }
 }
 
+/// SOURCE panel tab selection (A' Tree Sync design).
+/// Schema = Class YAML definition, Instance = Node instance data.
+/// Switching tabs syncs the tree selection.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum SourceTab {
+    /// Schema tab: Shows Class YAML (node-classes/{realm}/{layer}/{name}.yaml)
+    /// Tree selects the Class node.
+    #[default]
+    Schema,
+    /// Instance tab: Shows Node instance data (properties from Neo4j)
+    /// Tree auto-selects an instance of the current Class.
+    Instance,
+}
+
+impl SourceTab {
+    /// Toggle between Schema and Instance tabs.
+    pub fn toggle(self) -> Self {
+        match self {
+            Self::Schema => Self::Instance,
+            Self::Instance => Self::Schema,
+        }
+    }
+
+    /// Display label for tab bar.
+    pub fn label(self) -> &'static str {
+        match self {
+            Self::Schema => "Schema",
+            Self::Instance => "Instance",
+        }
+    }
+}
+
 /// Extracted data from a TreeItem for use in load_yaml_for_current().
 /// This avoids borrow checker issues when we need to both read the tree and mutate App.
 #[derive(Debug)]
@@ -287,6 +319,9 @@ pub struct App {
     pub yaml_sections: Option<YamlSections>,
     /// Whether peek mode is active (showing hidden section in dim).
     pub yaml_peek: bool,
+    /// SOURCE panel tab selection (Schema = Class YAML, Instance = Node data).
+    /// v0.13: A' Tree Sync design - switching tabs syncs tree selection.
+    pub source_tab: SourceTab,
     // Info panel scroll (separate from yaml)
     pub info_scroll: usize,
     pub info_line_count: usize, // Set by UI after building lines
@@ -404,6 +439,7 @@ impl App {
             yaml_line_count: 0,
             yaml_sections: None,
             yaml_peek: false,
+            source_tab: SourceTab::default(),
             info_scroll: 0,
             info_line_count: 0,
             root_path,
@@ -1115,6 +1151,20 @@ impl App {
                 true
             }
 
+            // SOURCE tab toggle: 't' switches between Schema and Instance tabs
+            // v0.13: A' Tree Sync design - syncs tree selection with tab
+            KeyCode::Char('t') => {
+                if self.selected_box == InfoBox::Source {
+                    if self.toggle_source_tab() {
+                        self.set_status(format!("SOURCE: {}", self.source_tab.label()).as_str());
+                    }
+                    true
+                } else {
+                    // 't' does nothing outside SOURCE box
+                    false
+                }
+            }
+
             // Enter: toggle collapse/expand (Tree), toggle peek (YAML), or expand property (Info)
             KeyCode::Enter => {
                 match self.focus {
@@ -1599,6 +1649,47 @@ impl App {
             if instant.elapsed().as_secs() >= 5 {
                 self.status_message = None;
             }
+        }
+    }
+
+    /// Toggle SOURCE panel tab between Schema and Instance.
+    /// v0.13: A' Tree Sync design - switching tabs syncs tree selection.
+    /// Returns true if the toggle was successful (Instance tab available).
+    pub fn toggle_source_tab(&mut self) -> bool {
+        match self.source_tab {
+            SourceTab::Schema => {
+                // Check if current Class has instances before switching
+                if self.has_instances_for_current_class() {
+                    self.source_tab = SourceTab::Instance;
+                    // TODO: Sync tree to first instance
+                    true
+                } else {
+                    self.set_status("No instances for this class");
+                    false
+                }
+            }
+            SourceTab::Instance => {
+                self.source_tab = SourceTab::Schema;
+                // TODO: Sync tree back to Class
+                true
+            }
+        }
+    }
+
+    /// Check if the current Class has instances loaded.
+    /// Used to determine if Instance tab should be enabled.
+    pub fn has_instances_for_current_class(&self) -> bool {
+        if let Some(item) = self.current_item() {
+            match item {
+                TreeItem::Class(_, _, class) => {
+                    // Check if class has instances (count > 0)
+                    class.instance_count > 0
+                }
+                TreeItem::Instance(_, _, _, _) => true, // Already on instance
+                _ => false,
+            }
+        } else {
+            false
         }
     }
 

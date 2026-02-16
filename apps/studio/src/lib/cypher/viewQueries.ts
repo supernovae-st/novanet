@@ -244,7 +244,7 @@ export function getViewQuery(viewId: ViewId, params: ViewQueryParams): ViewQuery
         cypher: `
           MATCH (n {key: $nodeKey})
           WHERE n:Page OR n:Entity OR n:Project OR n:Block
-          OPTIONAL MATCH (n)-[r:HAS_NATIVE|HAS_NATIVE]->(content)
+          OPTIONAL MATCH (n)-[r:HAS_NATIVE]->(content)
           OPTIONAL MATCH (content)-[r2:FOR_LOCALE]->(locale:Locale)
           WITH n,
                collect(DISTINCT content) AS contents,
