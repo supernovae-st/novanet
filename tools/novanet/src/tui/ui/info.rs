@@ -823,7 +823,7 @@ fn build_instance_content(
     // LOCATION (Classification) - explicit key:value format for all 3 axes
     content.location.add_classification(
         "realm",
-        &realm.icon,
+        realm.icon,
         &realm.key,
         realm_color,
     );
