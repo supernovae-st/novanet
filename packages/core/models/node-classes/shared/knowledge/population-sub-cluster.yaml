@@ -1,20 +1,37 @@
 # models/node-classes/shared/knowledge/population-sub-cluster.yaml
+# v0.13.1 LLM-First Schema - Canonical field ordering for optimal AI comprehension
 # PopulationSubCluster - Sub-cluster for fine-grained image generation diversity
-#
-# v10.8: Geographic Taxonomy - Phase 5
-# Data: ~25 sub-clusters (Northern European, Mediterranean, Han Chinese, etc.)
-# Use case: Generate specific, representative images for different markets
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: PopulationSubCluster
   realm: shared
   layer: knowledge
   trait: imported
-  icon:
-    web: "user"
-    terminal: "◇"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (description, llm_context)
+  # ═══════════════════════════════════════════════════════════════════════════════
   description: "Population sub-cluster with specific visual traits for image generation"
 
+  llm_context: |
+    USE: for fine-grained image generation diversity within a macro population cluster.
+    TRIGGERS: "northern european", "mediterranean", "han chinese", "population diversity", "image generation".
+    NOT: for macro population patterns (use PopulationCluster).
+    RELATES: PopulationCluster (CLUSTER_OF), Locale (HAS_POPULATION).
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL (icon)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  icon:
+    web: user
+    terminal: "◇"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA (standard_properties, properties)
+  # ═══════════════════════════════════════════════════════════════════════════════
   standard_properties:
     key:
       type: string
@@ -41,19 +58,15 @@ node:
       description: "Short description"
       example: "Nordic and Germanic populations (Scandinavia, Germany, Netherlands, UK)"
 
-    llm_context:
-      type: string
-      required: true
-      description: "LLM hints for image generation"
-      example: "USE: for Nordic/Germanic markets. TRIGGERS: scandinavia, germany, netherlands, uk. IMAGE: light skin, blonde to light brown hair, blue/green/grey eyes."
-
     created_at:
       type: datetime
       required: true
+      description: "Creation timestamp"
 
     updated_at:
       type: datetime
       required: true
+      description: "Last update timestamp"
 
   properties:
     parent_cluster:
@@ -103,6 +116,9 @@ node:
       description: "Template for image generation prompts"
       example: "professional person with {skin_tone_range} skin, {hair_colors} hair"
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH (relations)
+  # ═══════════════════════════════════════════════════════════════════════════════
   relations:
     outgoing:
       - type: CLUSTER_OF
@@ -122,6 +138,13 @@ node:
             type: bool
             description: "True if >50%"
         description: "Locales with this population sub-cluster"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE (example, neo4j)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  neo4j:
+    indexes:
+      - "CREATE INDEX populationsubcluster_key IF NOT EXISTS FOR (ps:PopulationSubCluster) ON (ps.key)"
 
   example:
     data:
@@ -144,26 +167,11 @@ node:
         - "green"
         - "grey"
         - "light brown"
-      image_prompt_template: "professional person with {skin_tone_range} skin, {hair_colors} hair, {eye_colors} eyes"
-      llm_context: "USE: for Nordic/Germanic markets (SE, NO, DK, FI, DE, NL, UK). TRIGGERS: scandinavia, nordic, germanic. IMAGE: light skin, fair hair, light eyes. NOT: Mediterranean, Slavic."
-
     cypher: |
-      // Get sub-cluster visual traits
       MATCH (ps:PopulationSubCluster {key: $key})
       RETURN ps.visual_traits, ps.skin_tone_range, ps.hair_colors, ps.eye_colors
 
       // Get all locales with this population
       MATCH (ps:PopulationSubCluster {key: $key})<-[hp:HAS_POPULATION]-(l:Locale)
       RETURN l.key, l.display_name, hp.percentage, hp.is_majority
-      ORDER BY hp.percentage DESC
-
-      // Build image prompt for a locale
-      MATCH (l:Locale {key: 'de-DE'})-[hp:HAS_POPULATION]->(ps:PopulationSubCluster)
-      WHERE hp.percentage > 0.1
-      RETURN ps.name,
-             ps.skin_tone_range,
-             ps.hair_colors,
-             ps.eye_colors,
-             hp.percentage,
-             'professional person, ' + ps.skin_tone_range + ' skin, ' + ps.hair_colors[0] + ' hair' AS image_prompt
       ORDER BY hp.percentage DESC

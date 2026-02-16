@@ -5,7 +5,7 @@
 
 node:
   # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 1: IDENTITY
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   name: Formatting
@@ -14,7 +14,7 @@ node:
   trait: imported
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 2: SEMANTIC
+  # BLOC 2: SEMANTIC (description, llm_context)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   description: "Technical formatting rules: dates, numbers, currency, time, phone, address, units"
@@ -25,7 +25,7 @@ node:
     RELATES: Locale (via HAS_FORMATTING), decimal_separator, date_format, currency_code, phone_format.
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 3: VISUAL
+  # BLOC 3: VISUAL (icon)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   icon:
@@ -33,7 +33,7 @@ node:
     terminal: "▦"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 4: DATA — Standard Properties
+  # BLOC 4: DATA (standard_properties, properties)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   standard_properties:
@@ -55,12 +55,6 @@ node:
       description: "Short description"
       example: "Date, number, currency formatting for fr-FR"
 
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints"
-      example: "USE: numeric/date/currency formatting. TRIGGERS: dates, prices, numbers, phone, address. KEY: format only, never translate content. NOT: content style or adaptation."
-
     created_at:
       type: datetime
       required: true
@@ -69,10 +63,7 @@ node:
       type: datetime
       required: true
 
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 4: DATA — Formatting-Specific Properties
-  # ═══════════════════════════════════════════════════════════════════════════════
-
+  
   properties:
     # ═══════════════════════════════════════════════════════════════════════════
     # NUMBER FORMATTING
@@ -311,7 +302,7 @@ node:
       description: "Full source markdown for LLM context (includes examples, edge cases)"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 5: GRAPH — Relations
+  # BLOC 5: GRAPH (relations)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
@@ -320,3 +311,22 @@ node:
         from: Locale
         cardinality: "1:1"
         description: "Locale has exactly one formatting config"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE (example, neo4j)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  neo4j:
+    indexes:
+      - "CREATE INDEX formatting_key IF NOT EXISTS FOR (f:Formatting) ON (f.key)"
+
+  example:
+    data:
+      key: "fr-FR"
+      display_name: "French (France) Formatting"
+      decimal_separator: ","
+      date_format: "DD/MM/YYYY"
+      currency_code: "EUR"
+      currency_symbol: "€"
+    cypher: |
+      MATCH (l:Locale {key: $locale})-[:HAS_FORMATTING]->(f:Formatting)
+      RETURN f.key, f.decimal_separator, f.date_format, f.currency_format, f.phone_format

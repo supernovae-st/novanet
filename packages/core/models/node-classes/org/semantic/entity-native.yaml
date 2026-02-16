@@ -1,96 +1,56 @@
 # models/node-classes/org/semantic/entity-native.yaml
-# EntityNative - Human-authored native content for Entity nodes (v0.13.0 ADR-029)
-#
-# ═══════════════════════════════════════════════════════════════════════════════
-# v0.13.0 CHANGES (ADR-029 *Native Pattern)
-# ═══════════════════════════════════════════════════════════════════════════════
-#
-#   RENAMED: EntityNative → EntityNative
-#   - All locale-specific nodes now use *Native suffix
-#   - Trait (authored vs generated) distinguishes who creates content
-#   - Unified arc: HAS_NATIVE replaces HAS_NATIVE
-#
-# ═══════════════════════════════════════════════════════════════════════════════
-# PURPOSE
-# ═══════════════════════════════════════════════════════════════════════════════
-#
-# EntityNative provides locale-native content for a parent Entity. This is the
-# LOCALIZED half of the Entity/EntityNative pair.
-#
-# ═══════════════════════════════════════════════════════════════════════════════
-# ARCHITECTURE (Full Hierarchy)
-# ═══════════════════════════════════════════════════════════════════════════════
-#
-#   Project ──[:HAS_ENTITY]──> Entity (defined)
-#                                  │
-#                                  └──[:HAS_NATIVE {locale}]──> EntityNative
-#                                                                   │
-#                                                                   ├──[:FOR_LOCALE]──> Locale
-#                                                                   │
-#                                                                   ├──[:TARGETS]──> SEOKeyword (N:N)
-#                                                                   │
-#                                                                   ├──[:USES_TERM]──> Term (N:N)
-#                                                                   │   └── Direct vocabulary loading
-#                                                                   │
-#                                                                   └──[:USES_EXPRESSION]──> Expression (N:N)
-#                                                                       └── Direct tone/voice loading
-#
-# Entity: Invariant definition (EN key, universal properties)
-# EntityNative: Human-authored locale-native content for THAT locale
-#
-# ═══════════════════════════════════════════════════════════════════════════════
-# KEY PRINCIPLE: Generation, NOT Translation
-# ═══════════════════════════════════════════════════════════════════════════════
-#
-#   WRONG:  Entity(EN) → Translate → EntityNative(FR)
-#   RIGHT:  Entity(defined) → Author natively → EntityNative(FR)
-#
-# EntityNative is AUTHORED natively for each locale, not translated.
-# This preserves cultural nuance and locale-specific expressions.
-#
-# ═══════════════════════════════════════════════════════════════════════════════
+# v0.13.1 LLM-First Schema - Canonical field ordering for optimal AI comprehension
+# EntityNative - Human-authored locale-native content for Entity nodes (v0.13.0 ADR-029)
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: EntityNative
   realm: org
   layer: semantic
-  trait: authored
-  icon:
-    web: "circle-check"
-    terminal: "●"
+  trait: authored  # Human writes natively per locale
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (description, llm_context)
+  # ═══════════════════════════════════════════════════════════════════════════════
   description: "Human-authored locale-native content for an Entity"
 
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # STANDARD PROPERTIES
-  # ═══════════════════════════════════════════════════════════════════════════════
+  llm_context: |
+    USE: when loading localized entity data for content generation.
+    TRIGGERS: "entity content", "localized entity", "entity native", locale code.
+    NOT: for invariant entity definition (use Entity), for generated page content (use PageNative).
+    RELATES: Entity (parent via HAS_NATIVE), Locale (target via FOR_LOCALE), SEOKeyword (targets via TARGETS), Term (vocabulary via USES_TERM).
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL (icon)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  icon:
+    web: circle-check
+    terminal: "●"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA (standard_properties, properties)
+  # ═══════════════════════════════════════════════════════════════════════════════
   standard_properties:
-    # ─────────────────────────────────────────────────────────────────────────────
-    # COMPOSITE KEY (v10.9.0)
-    # ─────────────────────────────────────────────────────────────────────────────
     key:
       type: string
       required: true
       pattern: "^entity:[a-z][a-z0-9-]*@[a-z]{2}-[A-Z]{2}$"
-      description: "Composite key: entity:{base_key}@{locale_key}"
+      description: "Composite key: entity:{entity_key}@{locale_key}"
       examples:
         - "entity:create-qr-code@fr-FR"
         - "entity:qr-code-wifi@ja-JP"
-        - "entity:dynamic-qr-code@de-DE"
 
-    # ─────────────────────────────────────────────────────────────────────────────
-    # IDENTITY PROPERTIES (denormalized for fast lookup)
-    # ─────────────────────────────────────────────────────────────────────────────
     entity_key:
       type: string
       required: true
       pattern: "^[a-z][a-z0-9-]*$"
       indexed: true
-      description: "Parent Entity key (denormalized)"
+      description: "Parent Entity key (denormalized for fast lookup)"
       examples:
         - "create-qr-code"
         - "qr-code-wifi"
-        - "dynamic-qr-code"
 
     locale_key:
       type: string
@@ -103,17 +63,6 @@ node:
         - "en-US"
         - "ja-JP"
 
-    # ─────────────────────────────────────────────────────────────────────────────
-    # v0.13.0 ADR-030: Slug properties moved to PageNative
-    # ─────────────────────────────────────────────────────────────────────────────
-    # URL/routing properties (slug, full_path, parent_slug, depth, slug_history)
-    # are now on PageNative, not EntityNative.
-    # EntityNative focuses on semantic content; PageNative handles URL routing.
-    # ─────────────────────────────────────────────────────────────────────────────
-
-    # ─────────────────────────────────────────────────────────────────────────────
-    # CONTENT PROPERTIES
-    # ─────────────────────────────────────────────────────────────────────────────
     display_name:
       type: string
       required: true
@@ -124,25 +73,19 @@ node:
       required: true
       description: "Localized short description"
 
-    llm_context:
-      type: string
-      required: true
-      description: |
-        Format: USE: [when]. TRIGGERS: [locale keywords]. NOT: [disambiguation]. RELATES: [connections].
-        Example: USE: when loading localized entity data for content generation. TRIGGERS: "entity content", "localized entity", locale code. NOT: for invariant entity definition (use Entity). RELATES: Entity (parent via HAS_NATIVE), Locale (target via FOR_LOCALE), SEOKeyword (targets via TARGETS).
-
     created_at:
       type: datetime
       required: true
+      description: "Creation timestamp"
 
     updated_at:
       type: datetime
       required: true
+      description: "Last update timestamp"
 
-  # ═══════════════════════════════════════════════════════════════════════════════
+  # ─────────────────────────────────────────────────────────────────────────────
   # VECTOR EMBEDDING
-  # ═══════════════════════════════════════════════════════════════════════════════
-
+  # ─────────────────────────────────────────────────────────────────────────────
   embedding_properties:
     embedding:
       type: vector
@@ -157,38 +100,27 @@ node:
       type: datetime
       required: false
 
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # ENTITYCONTENT-SPECIFIC PROPERTIES
-  # ═══════════════════════════════════════════════════════════════════════════════
-
+  # ─────────────────────────────────────────────────────────────────────────────
+  # ENTITYNATIVE-SPECIFIC PROPERTIES
+  # ─────────────────────────────────────────────────────────────────────────────
   properties:
-    # ─────────────────────────────────────────────────────────────────────────────
-    # CURATION STATUS (v10.9.0)
-    # ─────────────────────────────────────────────────────────────────────────────
     curation_status:
       type: string
       required: true
       enum:
-        - "human_authored"        # Tier 1: Native expert wrote it
-        - "machine_translated"    # Tier 2: DeepL/Google Translate
-        - "ai_generated"          # Tier 3: LLM generated
-        - "ai_generated_reviewed" # Tier 3+: LLM + human review
+        - "human_authored"
+        - "machine_translated"
+        - "ai_generated"
+        - "ai_generated_reviewed"
       description: "Content origin and quality tier"
 
-    # ─────────────────────────────────────────────────────────────────────────────
-    # PUBLICATION STATUS (v11.2)
-    # ─────────────────────────────────────────────────────────────────────────────
     status:
       type: string
       required: false
       default: "draft"
       enum: ["draft", "reviewed", "published"]
       description: "Publication workflow status"
-      llm_context: "Content lifecycle stage - draft (not reviewed), reviewed (human validated), published (live)"
 
-    # ─────────────────────────────────────────────────────────────────────────────
-    # CONTENT PROPERTIES
-    # ─────────────────────────────────────────────────────────────────────────────
     definition:
       type: string
       required: false
@@ -212,7 +144,6 @@ node:
     audience_segment:
       type: string
       required: false
-      description: "Target audience for this locale variant"
       enum:
         - professional
         - consumer
@@ -224,90 +155,60 @@ node:
       required: false
       description: "Locale-specific cultural considerations"
 
-    # ─────────────────────────────────────────────────────────────────────────────
-    # VERSIONING
-    # ─────────────────────────────────────────────────────────────────────────────
     version:
       type: int
       required: true
       description: "Content version for staleness detection"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # RELATIONS
+  # BLOC 5: GRAPH (relations)
   # ═══════════════════════════════════════════════════════════════════════════════
-
   relations:
-    FOR_LOCALE:
-      to: Locale
-      cardinality: "N:1"
-      description: "Links to the locale this content is for"
+    outgoing:
+      - type: FOR_LOCALE
+        to: Locale
+        cardinality: "N:1"
+        description: "Links to the locale this content is for"
 
-    TARGETS:
-      to: SEOKeyword
-      cardinality: "N:N"
-      description: "SEO keywords this localized entity is targeting for ranking"
+      - type: TARGETS
+        to: SEOKeyword
+        cardinality: "N:N"
+        description: "SEO keywords this localized entity targets"
 
-    # ─────────────────────────────────────────────────────────────────────────────
-    # KNOWLEDGE ATOM CONNECTIONS (v0.13.0)
-    # ─────────────────────────────────────────────────────────────────────────────
-    # Direct connections to locale-native knowledge atoms for selective LLM loading.
-    # Bypasses 4-hop path: EntityNative → FOR_LOCALE → Locale → HAS_TERMS → TermSet → Term
-    # Enables loading ~50 relevant terms instead of ALL 20K terms.
-    # ─────────────────────────────────────────────────────────────────────────────
+      - type: USES_TERM
+        to: Term
+        cardinality: "N:N"
+        description: "Direct link to locale-specific terms for vocabulary loading"
 
-    USES_TERM:
-      to: Term
-      cardinality: "N:N"
-      description: "Direct link to locale-specific terms for vocabulary loading"
+      - type: USES_EXPRESSION
+        to: Expression
+        cardinality: "N:N"
+        description: "Direct link to locale-specific expressions for tone/voice"
 
-    USES_EXPRESSION:
-      to: Expression
-      cardinality: "N:N"
-      description: "Direct link to locale-specific expressions for tone/voice consistency"
+      - type: USES_PATTERN
+        to: Pattern
+        cardinality: "N:N"
+        description: "Direct link to locale-specific patterns"
 
-    USES_PATTERN:
-      to: Pattern
-      cardinality: "N:N"
-      description: "Direct link to locale-specific patterns for structural consistency"
+      - type: USES_CULTURE_REF
+        to: CultureRef
+        cardinality: "N:N"
+        description: "Direct link to locale-specific cultural references"
 
-    USES_CULTURE_REF:
-      to: CultureRef
-      cardinality: "N:N"
-      description: "Direct link to locale-specific cultural references for cultural sensitivity"
+    incoming:
+      - type: HAS_NATIVE
+        from: Entity
+        cardinality: "1:N"
+        description: "Parent entity that owns this native content"
 
-  incoming_relations:
-    HAS_NATIVE:
-      from: Entity
-      cardinality: "1:N"
-      description: "Parent entity that owns this native content"
-
-    # ─────────────────────────────────────────────────────────────────────────────
-    # KNOWLEDGE ATOM INVERSES (v0.13.0)
-    # ─────────────────────────────────────────────────────────────────────────────
-    TERM_USED_BY:
-      from: Term
-      cardinality: "N:N"
-      description: "Inverse of USES_TERM - find which EntityNatives use a term"
-
-    EXPRESSION_USED_BY:
-      from: Expression
-      cardinality: "N:N"
-      description: "Inverse of USES_EXPRESSION - find which EntityNatives use an expression"
-
-    PATTERN_USED_BY:
-      from: Pattern
-      cardinality: "N:N"
-      description: "Inverse of USES_PATTERN - find which EntityNatives use a pattern"
-
-    CULTURE_REF_USED_BY:
-      from: CultureRef
-      cardinality: "N:N"
-      description: "Inverse of USES_CULTURE_REF - find which EntityNatives use a cultural reference"
+      - type: INFLUENCED_BY
+        from: BlockNative
+        cardinality: "N:N"
+        description: "BlockNative nodes influenced by this content"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # NEO4J CONFIGURATION (v0.13.0)
+  # BLOC 6: REFERENCE (example, neo4j)
   # ═══════════════════════════════════════════════════════════════════════════════
-
   neo4j:
     constraints:
       - "CREATE CONSTRAINT entity_native_key IF NOT EXISTS FOR (en:EntityNative) REQUIRE en.key IS UNIQUE"
@@ -315,38 +216,24 @@ node:
     indexes:
       - "CREATE INDEX entity_native_entity_key IF NOT EXISTS FOR (en:EntityNative) ON (en.entity_key)"
       - "CREATE INDEX entity_native_locale_key IF NOT EXISTS FOR (en:EntityNative) ON (en.locale_key)"
+      - "CREATE INDEX entity_native_status IF NOT EXISTS FOR (en:EntityNative) ON (en.status)"
 
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # EXAMPLES
-  # ═══════════════════════════════════════════════════════════════════════════════
-
-  examples:
-    # NOTE: slug/full_path/parent_slug/depth are on PageNative per ADR-030
-    fr_fr_create_qr:
-      data:
-        key: "entity:create-qr-code@fr-FR"
-        entity_key: "create-qr-code"
-        locale_key: "fr-FR"
-        display_name: "Créer un QR Code"
-        description: "Générez un QR Code gratuitement en quelques secondes"
-        llm_context: "USE: Contenu français pour création QR. TRIGGERS: fr-FR, création. NOT: Québec (utiliser fr-CA)."
-        curation_status: "human_authored"
-        definition: "Processus de génération d'un QR Code à partir de données."
-        purpose: "Permettre aux utilisateurs de créer rapidement des QR Codes."
-        benefits:
-          - "Création en quelques secondes"
-          - "Personnalisation complète"
-          - "Téléchargement gratuit"
-        version: 1
-
-    ja_jp_qr_code:
-      data:
-        key: "entity:qr-code@ja-JP"
-        entity_key: "qr-code"
-        locale_key: "ja-JP"
-        display_name: "QRコード"
-        description: "スマートフォンでスキャンできる2次元マトリックスバーコード"
-        llm_context: "USE: 日本語コンテンツ。TRIGGERS: ja-JP、スキャン。NOT: 中国語（zh-CN使用）。"
-        curation_status: "human_authored"
-        cultural_notes: "Use formal keigo for business contexts. QR Code invented by Denso Wave."
-        version: 1
+  example:
+    data:
+      key: "entity:create-qr-code@fr-FR"
+      entity_key: "create-qr-code"
+      locale_key: "fr-FR"
+      display_name: "Créer un QR Code"
+      description: "Générez un QR Code gratuitement en quelques secondes"
+      curation_status: "human_authored"
+      status: "published"
+      definition: "Processus de génération d'un QR Code à partir de données."
+      purpose: "Permettre aux utilisateurs de créer rapidement des QR Codes."
+      benefits:
+        - "Création en quelques secondes"
+        - "Personnalisation complète"
+        - "Téléchargement gratuit"
+      version: 1
+    cypher: |
+      MATCH (e:Entity {key: "create-qr-code"})-[:HAS_NATIVE]->(en:EntityNative {locale_key: "fr-FR"})
+      RETURN en

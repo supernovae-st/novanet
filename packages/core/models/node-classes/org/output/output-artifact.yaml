@@ -1,16 +1,37 @@
 # models/node-classes/org/output/output-artifact.yaml
+# v0.13.1 LLM-First Schema - Canonical field ordering for optimal AI comprehension
+# OutputArtifact - Generated content bundle for deployment
+
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: OutputArtifact
   realm: org
   layer: output
   trait: generated  # v11.2: Split derived → generated (LLM output)
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (description, llm_context)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  description: "Generated content bundle aggregating PageNative and BlockNative for a specific locale version."
+
+  llm_context: |
+    USE: when bundling generated content for deployment or versioning releases.
+    TRIGGERS: "bundle", "artifact", "deployment", "release", "output bundle".
+    NOT: for individual page content (use PageNative), for block content (use BlockNative), for draft content.
+    RELATES: PageNative (BUNDLES), BlockNative (BUNDLES), Locale (FOR_LOCALE).
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL (icon)
+  # ═══════════════════════════════════════════════════════════════════════════════
   icon:
     web: "package"
     terminal: "■"
-  # v10.9.0: Renamed from PageL10n/BlockL10n to PageNative/BlockNative
-  description: "Generated content bundle aggregating PageNative and BlockNative for a specific locale version."
-  llm_context: "USE: when bundling generated content. TRIGGERS: bundle, artifact, deployment. NOT: individual content, drafts."
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA (standard_properties, properties)
+  # ═══════════════════════════════════════════════════════════════════════════════
   standard_properties:
     key:
       type: string
@@ -18,20 +39,21 @@ node:
       description: "Artifact bundle identifier"
       pattern: "^outputartifact-[a-z0-9-]+-[a-z]{2}-[A-Z]{2}-v[0-9]+$"
       example: "outputartifact-project-qrcode-fr-FR-v1"
+
     display_name:
       type: string
       required: true
       description: "Bundle name with locale"
       example: "QRCode AI - French (v1)"
+
     description:
       type: string
       required: false
-    llm_context:
-      type: string
-      required: false
+
     created_at:
       type: datetime
       required: true
+
     updated_at:
       type: datetime
       required: true
@@ -58,6 +80,7 @@ node:
       type: int
       required: true
       description: "Count of pages in bundle"
+
     blocks_included:
       type: int
       required: true
@@ -66,6 +89,7 @@ node:
     bundled_at:
       type: datetime
       required: true
+
     bundler_version:
       type: string
       required: true
@@ -75,6 +99,7 @@ node:
       type: int
       required: false
       description: "Total size of bundled content"
+
     checksum:
       type: string
       required: false
@@ -83,15 +108,14 @@ node:
     published_at:
       type: datetime
       required: false
+
     published_by:
       type: string
       required: false
 
-  neo4j:
-    indexes:
-      - "CREATE INDEX outputartifact_locale IF NOT EXISTS FOR (oa:OutputArtifact) ON (oa.locale_code)"
-      - "CREATE INDEX outputartifact_status IF NOT EXISTS FOR (oa:OutputArtifact) ON (oa.status)"
-
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH (relations)
+  # ═══════════════════════════════════════════════════════════════════════════════
   relations:
     outgoing:
       - type: BUNDLES
@@ -108,3 +132,35 @@ node:
         to: OutputArtifact
         cardinality: "1:1"
         description: "Previous version of this artifact"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE (example, neo4j)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  neo4j:
+    indexes:
+      - "CREATE INDEX outputartifact_key IF NOT EXISTS FOR (oa:OutputArtifact) ON (oa.key)"
+      - "CREATE INDEX outputartifact_locale IF NOT EXISTS FOR (oa:OutputArtifact) ON (oa.locale_code)"
+      - "CREATE INDEX outputartifact_status IF NOT EXISTS FOR (oa:OutputArtifact) ON (oa.status)"
+
+  example:
+    data:
+      key: "outputartifact-project-qrcode-fr-FR-v1"
+      display_name: "QRCode AI - French (v1)"
+      description: "Production release bundle for French market"
+      locale_code: "fr-FR"
+      version: 1
+      status: "published"
+      pages_included: 15
+      blocks_included: 45
+      bundled_at: "2024-01-15T12:00:00Z"
+      bundler_version: "1.0.0"
+      total_size_bytes: 256000
+      checksum: "sha256:abc123..."
+      published_at: "2024-01-15T14:00:00Z"
+
+    cypher: |
+      // Get artifact with all bundled content
+      MATCH (oa:OutputArtifact {key: $key})
+      OPTIONAL MATCH (oa)-[:BUNDLES]->(pg:PageNative)
+      OPTIONAL MATCH (oa)-[:BUNDLES]->(bg:BlockNative)
+      RETURN oa, collect(DISTINCT pg.key) AS pages, collect(DISTINCT bg.key) AS blocks

@@ -1,38 +1,38 @@
 # models/node-classes/shared/knowledge/seo-keyword.yaml
-# SEOKeyword - Target keyword with metrics (v10.6: enriched with Ahrefs/Semrush data)
-#
-# v11.4: SEO Knowledge Atoms refactor
-#        - Universal market data available to all orgs
-#        - Format now via HAS_FORMAT arc to SEOKeywordFormat
-#        - Removed: HAS_QUESTIONS, HAS_COMPARISONS, HAS_PREPOSITIONS (nodes deleted)
-#        - Added: format-specific properties (question_word, entity_a_key, etc.)
-#        - Added: COMPARES_A/COMPARES_B arcs for comparison keywords
-#
-# v10.6: SEO Schema v2
-#        - Added: traffic_potential, clicks, clicks_per_search, serp_features
-#        - Added: competition, trend, seasonality
+# v0.13.1 LLM-First Schema - Canonical field ordering for optimal AI comprehension
+# SEOKeyword - Target keyword with metrics for SEO optimization
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: SEOKeyword
   realm: shared
   layer: knowledge
   trait: imported
-  icon:
-    web: "search"
-    terminal: "⌕"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (description, llm_context)
+  # ═══════════════════════════════════════════════════════════════════════════════
   description: "Target keyword with metrics for SEO optimization (locale-specific knowledge)"
+
   llm_context: |
-    SEOKeyword represents market search behavior for a locale.
-    It is DISCOVERED data from DataForSEO, not generated content.
-    Use to understand what users search for, then TARGET from EntityNative.
-    Format determined by HAS_FORMAT arc to SEOKeywordFormat.
-    Time-series metrics: follow HAS_METRICS arc to SEOKeywordMetrics.
-    v11.4: Now in shared/knowledge (Knowledge Atoms pattern).
+    USE: when loading SEO keyword data for content optimization.
+    TRIGGERS: "SEO", "keyword", "search volume", "traffic potential", "SERP".
+    NOT: for keyword history (use SEOKeywordMetrics via HAS_METRICS).
+    RELATES: SEOKeywordSet (parent via CONTAINS_SEO_KEYWORD), EntityNative (TARGETS), SEOKeywordFormat (HAS_FORMAT).
+    NOTE: Discovered data from DataForSEO, not generated content.
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # STANDARD PROPERTIES (v7.1.0)
+  # BLOC 3: VISUAL (icon)
   # ═══════════════════════════════════════════════════════════════════════════════
+  icon:
+    web: search
+    terminal: "⌕"
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA (standard_properties, properties)
+  # ═══════════════════════════════════════════════════════════════════════════════
   standard_properties:
     key:
       type: string
@@ -51,22 +51,15 @@ node:
       required: false
       description: "Short description"
 
-    llm_context:
-      type: string
-      required: false
-      description: "Format: USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
-
     created_at:
       type: datetime
       required: false
+      description: "Creation timestamp"
 
     updated_at:
       type: datetime
       required: false
-
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # NODE-SPECIFIC PROPERTIES
-  # ═══════════════════════════════════════════════════════════════════════════════
+      description: "Last update timestamp"
 
   properties:
     # --- Core keyword data ---
@@ -156,15 +149,12 @@ node:
       example: "[80, 85, 90, 100, 95, 88, 82, 78, 85, 92, 98, 105]"
 
     # --- v11.4: Format-specific properties ---
-
-    # For question format
     question_word:
       type: string
       required: false
       enum: [what, how, why, when, where, who, which, can, is, does]
       description: "Question word for question-format keywords"
 
-    # For comparison format
     entity_a_key:
       type: string
       required: false
@@ -181,7 +171,6 @@ node:
       enum: [versus, alternative, difference, better, best]
       description: "Type of comparison"
 
-    # For preposition format
     preposition:
       type: string
       required: false
@@ -193,66 +182,66 @@ node:
       description: "Use case description"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # RELATIONS
+  # BLOC 5: GRAPH (relations)
   # ═══════════════════════════════════════════════════════════════════════════════
-
   relations:
-    # Incoming: EntityNative --[:TARGETS]--> SEOKeyword (targeting)
-    # NOTE: Locale is inferred via EntityNative --[:FOR_LOCALE]--> Locale
+    outgoing:
+      - type: HAS_METRICS
+        to: SEOKeywordMetrics
+        cardinality: "1:N"
+        description: "Historical metrics snapshots (time-series)"
 
-    - relation: HAS_METRICS
-      to: SEOKeywordMetrics
-      direction: outgoing
-      description: "Historical metrics snapshots (time-series)"
+      - type: HAS_FORMAT
+        to: SEOKeywordFormat
+        cardinality: "N:1"
+        description: "Keyword format (stem, question, comparison, preposition)"
 
-    # v11.4: Format classification via SEOKeywordFormat
-    - relation: HAS_FORMAT
-      to: SEOKeywordFormat
-      direction: outgoing
-      cardinality: "N:1"
-      description: "Keyword format (stem, question, comparison, preposition)"
+      - type: COMPARES_A
+        to: Entity
+        cardinality: "N:1"
+        description: "First entity being compared (conditional: comparison format only)"
 
-    # v11.4: Entity references for comparison keywords
-    - relation: COMPARES_A
-      to: Entity
-      direction: outgoing
-      cardinality: "N:1"
-      description: "First entity being compared (conditional: comparison format only)"
+      - type: COMPARES_B
+        to: Entity
+        cardinality: "N:1"
+        description: "Second entity being compared (conditional: comparison format only)"
 
-    - relation: COMPARES_B
-      to: Entity
-      direction: outgoing
-      cardinality: "N:1"
-      description: "Second entity being compared (conditional: comparison format only)"
+    incoming:
+      - type: TARGETS
+        from: EntityNative
+        cardinality: "N:M"
+        description: "EntityNative targets this keyword for SEO"
 
-    # v10.8: Removed EXPRESSES (redundant - use TARGETS inverse from EntityNative)
-    # Query: MATCH (kw:SEOKeyword)<-[:TARGETS]-(ec:EntityNative) RETURN ec.entity_key
-    #
-    # v11.4: Removed HAS_QUESTIONS, HAS_COMPARISONS, HAS_PREPOSITIONS
-    # These node types (SEOQuestion, SEOComparison, SEOPreposition) are deleted.
-    # Format is now indicated by HAS_FORMAT arc to SEOKeywordFormat.
-    # Format-specific data stored in properties (question_word, entity_a_key, etc.)
+      - type: CONTAINS_SEO_KEYWORD
+        from: SEOKeywordSet
+        cardinality: "N:1"
+        description: "Belongs to a keyword set"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # EXAMPLE
+  # BLOC 6: REFERENCE (example, neo4j)
   # ═══════════════════════════════════════════════════════════════════════════════
+  neo4j:
+    indexes:
+      - "CREATE INDEX seokeyword_value IF NOT EXISTS FOR (kw:SEOKeyword) ON (kw.value)"
+      - "CREATE INDEX seokeyword_volume IF NOT EXISTS FOR (kw:SEOKeyword) ON (kw.volume)"
 
   example:
-    description: "Get top keywords by traffic potential with format classification"
+    data:
+      key: "seo-creer-qr-code-gratuit-fr"
+      display_name: "créer qr code gratuit"
+      value: "créer qr code gratuit"
+      volume: 12100
+      difficulty: 35
+      traffic_potential: 8500
+      intent: "transactional"
+      serp_features: ["featured_snippet", "people_also_ask"]
     cypher: |
-      // v11.4: SEOKeyword with format classification
       MATCH (ec:EntityNative {locale_key: $locale})-[:TARGETS]->(kw:SEOKeyword)
       OPTIONAL MATCH (kw)-[:HAS_FORMAT]->(fmt:SEOKeywordFormat)
-      OPTIONAL MATCH (kw)-[:COMPARES_A]->(entityA:Entity)
-      OPTIONAL MATCH (kw)-[:COMPARES_B]->(entityB:Entity)
       RETURN kw.value AS keyword,
              kw.volume,
              kw.traffic_potential,
              kw.serp_features,
-             fmt.format_key AS format,
-             kw.question_word,
-             entityA.key AS compared_entity_a,
-             entityB.key AS compared_entity_b,
-             ec.entity_key AS entity
+             fmt.format_key AS format
       ORDER BY kw.traffic_potential DESC
       LIMIT 20

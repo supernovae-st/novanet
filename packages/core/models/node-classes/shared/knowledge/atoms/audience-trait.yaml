@@ -1,33 +1,44 @@
 # models/node-classes/shared/knowledge/atoms/audience-trait.yaml
-# AudienceTrait — Audience segment behavior within an AudienceSet
-#
-# Locale-native: each locale has unique audience insights (no invariant parent)
-# Parent: AudienceSet (via CONTAINS arc)
+# v0.13.1 LLM-First Schema - Canonical field ordering for optimal AI comprehension
+# AudienceTrait - Audience segment behavior within an AudienceSet
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: AudienceTrait
   realm: shared
   layer: knowledge
   trait: imported
-  icon:
-    web: "users"
-    terminal: "◎"
-  description: |
-    Audience segment behavior, preference, or characteristic within a locale.
-    USE: When loading audience-specific content adaptation hints.
-    TRIGGERS: audience trait, segment behavior, user preferences, persona characteristics.
-    NOT: For personas (use AudiencePersona), for demographics (use population nodes).
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (description, llm_context)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  description: "Audience segment behavior, preference, or characteristic within a locale."
+
+  llm_context: |
+    USE: when loading audience-specific content adaptation hints.
+    TRIGGERS: "audience trait", "segment behavior", "user preferences", "persona characteristics".
+    NOT: for personas (use AudiencePersona), for demographics (use population nodes).
+    RELATES: AudienceSet (parent via CONTAINS), Locale (owner via HAS_AUDIENCE).
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL (icon)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  icon:
+    web: users
+    terminal: "◎"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA (standard_properties, properties)
+  # ═══════════════════════════════════════════════════════════════════════════════
   standard_properties:
     key:
       type: string
       required: true
-      description: "Unique identifier within the AudienceSet"
       pattern: "^[a-z][a-z0-9_]*$"
-      examples:
-        - "b2b_enterprise"
-        - "gen_z_consumer"
-        - "smb_owner"
+      description: "Unique identifier within the AudienceSet"
+      example: "b2b_enterprise"
 
     display_name:
       type: string
@@ -39,21 +50,16 @@ node:
       type: string
       required: false
       description: "Who this audience segment is"
-      example: "Decision makers at large enterprises (500+ employees)"
-
-    llm_context:
-      type: string
-      required: false
-      description: "How to adapt content for this audience"
-      example: "USE: formal tone, ROI focus, compliance mentions. NOT: casual language, consumer pricing."
 
     created_at:
       type: datetime
       required: true
+      description: "Creation timestamp"
 
     updated_at:
       type: datetime
       required: true
+      description: "Last update timestamp"
 
   properties:
     segment:
@@ -71,7 +77,6 @@ node:
         decision_speed: "slow"
         research_depth: "extensive"
         stakeholders: "multiple"
-        price_sensitivity: "low"
 
     preferences:
       type: json
@@ -80,61 +85,55 @@ node:
       example:
         tone: "professional"
         detail_level: "comprehensive"
-        proof_types:
-          - "case_studies"
-          - "ROI_calculators"
-          - "analyst_reports"
+        proof_types: ["case_studies", "ROI_calculators"]
 
     pain_points:
-      type: json
+      type: "string[]"
       required: false
       description: "Key challenges and concerns"
-      example:
-        - "security_compliance"
-        - "integration_complexity"
-        - "vendor_lock_in"
 
     motivators:
-      type: json
+      type: "string[]"
       required: false
       description: "What drives purchasing decisions"
-      example:
-        - "risk_reduction"
-        - "efficiency_gains"
-        - "competitive_advantage"
 
     channels:
-      type: json
+      type: "string[]"
       required: false
       description: "Preferred communication channels"
-      example:
-        - "email"
-        - "linkedin"
-        - "webinars"
-        - "whitepapers"
+      example: ["email", "linkedin", "webinars"]
 
     content_length:
       type: string
       required: false
       enum: [brief, moderate, detailed, comprehensive]
       description: "Preferred content depth"
-      example: "comprehensive"
 
     trust_signals:
-      type: json
+      type: "string[]"
       required: false
       description: "What builds trust with this audience"
-      example:
-        - "certifications"
-        - "customer_logos"
-        - "security_badges"
+      example: ["certifications", "customer_logos", "security_badges"]
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH (relations)
+  # ═══════════════════════════════════════════════════════════════════════════════
   relations:
     incoming:
-      - type: CONTAINS
+      - type: CONTAINS_AUDIENCE_TRAIT
         from: AudienceSet
         cardinality: "1:N"
         description: "AudienceSet contains multiple AudienceTraits"
+
+    outgoing: []
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE (example, neo4j)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  neo4j:
+    indexes:
+      - "CREATE INDEX audiencetrait_segment IF NOT EXISTS FOR (at:AudienceTrait) ON (at.segment)"
+      - "CREATE INDEX audiencetrait_length IF NOT EXISTS FOR (at:AudienceTrait) ON (at.content_length)"
 
   example:
     data:
@@ -148,28 +147,17 @@ node:
       preferences:
         tone: "professional"
         detail_level: "comprehensive"
-        proof_types:
-          - "case_studies"
-          - "references"
-      pain_points:
-        - "GDPR_compliance"
-        - "data_sovereignty"
-
+        proof_types: ["case_studies", "references"]
+      pain_points: ["GDPR_compliance", "data_sovereignty"]
     cypher: |
-      // Create an audience trait
       MATCH (as:AudienceSet)<-[:HAS_AUDIENCE]-(l:Locale {key: "fr-FR"})
       CREATE (at:AudienceTrait {
-        key: "b2b_enterprise",
-        display_name: "French Enterprise Buyer",
-        segment: "b2b_enterprise",
-        content_length: "comprehensive",
+        key: 'b2b_enterprise',
+        display_name: 'French Enterprise Buyer',
+        segment: 'b2b_enterprise',
+        content_length: 'comprehensive',
         created_at: datetime(),
         updated_at: datetime()
       })
-      CREATE (as)-[:CONTAINS]->(at)
+      CREATE (as)-[:CONTAINS_AUDIENCE_TRAIT]->(at)
       RETURN at
-
-      // Find audience preferences for content adaptation
-      MATCH (at:AudienceTrait {segment: $segment})
-      MATCH (at)<-[:CONTAINS]-(as:AudienceSet)<-[:HAS_AUDIENCE]-(l:Locale {key: $locale})
-      RETURN at.preferences AS prefs, at.pain_points AS concerns

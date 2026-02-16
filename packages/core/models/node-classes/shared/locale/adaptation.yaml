@@ -5,7 +5,7 @@
 
 node:
   # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 1: IDENTITY
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   name: Adaptation
@@ -14,10 +14,9 @@ node:
   trait: imported
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 2: SEMANTIC
+  # BLOC 2: SEMANTIC (description, llm_context)
   # ═══════════════════════════════════════════════════════════════════════════════
 
-  display_name: "Adaptation"
   description: "Content adaptation rules for FACTS vs ILLUSTRATIONS classification and technical term handling. Core decision engine for what to translate literally vs generate natively."
   llm_context: |
     USE: when deciding content adaptation strategy (FACT vs ILLUSTRATION).
@@ -26,7 +25,7 @@ node:
     RELATES: Locale (via HAS_ADAPTATION), FACTS=translate literally, ILLUSTRATIONS=generate native.
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 3: VISUAL
+  # BLOC 3: VISUAL (icon)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   icon:
@@ -34,7 +33,7 @@ node:
     terminal: "◇"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 4: DATA — Standard Properties
+  # BLOC 4: DATA (standard_properties, properties)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   standard_properties:
@@ -56,12 +55,6 @@ node:
       description: "Short description"
       example: "FACTS/ILLUSTRATIONS content adaptation rules for fr-FR"
 
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints"
-      example: "USE: content adaptation decisions. TRIGGERS: localization, examples, idioms, metaphors. KEY: FACTS=translate literally, ILLUSTRATIONS=generate native. NOT: formatting (use Formatting), style (use Style), culture (use Culture)."
-
     created_at:
       type: datetime
       required: true
@@ -70,10 +63,7 @@ node:
       type: datetime
       required: true
 
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 4: DATA — Adaptation-Specific Properties
-  # ═══════════════════════════════════════════════════════════════════════════════
-
+  
   properties:
     # =========================================================================
     # TIER 1: INDEXED SCALARS (Cypher-queryable)
@@ -203,7 +193,7 @@ node:
       description: "Full source markdown for edge cases"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 5: GRAPH — Relations
+  # BLOC 5: GRAPH (relations)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
@@ -212,3 +202,20 @@ node:
         from: Locale
         cardinality: "1:1"
         description: "Locale has exactly one adaptation config"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE (example, neo4j)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  neo4j:
+    indexes:
+      - "CREATE INDEX adaptation_key IF NOT EXISTS FOR (a:Adaptation) ON (a.key)"
+
+  example:
+    data:
+      key: "fr-FR"
+      display_name: "French (France) Adaptation"
+      technical_terms_approach: "mixed"
+      illustration_density: "medium"
+    cypher: |
+      MATCH (l:Locale {key: $locale})-[:HAS_ADAPTATION]->(a:Adaptation)
+      RETURN a.key, a.technical_terms_approach, a.illustration_density, a.facts_classification

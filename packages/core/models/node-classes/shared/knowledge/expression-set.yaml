@@ -1,42 +1,37 @@
-# ─────────────────────────────────────────────────────────────────────────────
-# ExpressionSet — Container for all Expression atoms of a locale
-# ─────────────────────────────────────────────────────────────────────────────
-# v0.13.1: LLM-First field ordering (ADR-031)
-# v10.7: Simplified model - one ExpressionSet per locale
-# Register is a property on Expression atoms, not on the container
-# Stability: High - structure rarely changes
-# ─────────────────────────────────────────────────────────────────────────────
+# models/node-classes/shared/knowledge/expression-set.yaml
+# v0.13.1 LLM-First Schema - Canonical field ordering for optimal AI comprehension
+# ExpressionSet - Container for all Expression atoms of a locale
 
 node:
-  # ═══════════════════════════════════════════════════════════════════════════
-  # BLOC 1: IDENTITY
-  # ═══════════════════════════════════════════════════════════════════════════
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: ExpressionSet
   realm: shared
   layer: knowledge
-  trait: defined  # v11.2: Containers are universal categories (invariant), atoms are locale-native (knowledge)
+  trait: defined  # Containers are universal categories (defined), atoms are locale-native (imported)
 
-  # ═══════════════════════════════════════════════════════════════════════════
-  # BLOC 2: SEMANTIC
-  # ═══════════════════════════════════════════════════════════════════════════
-  description: "Container for all Expression atoms of a locale"
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (description, llm_context)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  description: "Container for all Expression atoms of a locale. One ExpressionSet per locale."
 
   llm_context: |
     USE: when accessing locale's expression library for content generation.
-    TRIGGERS: expressions, idioms, phrases, locale expressions, expression container.
-    NOT: for individual expressions (use Expression atom via CONTAINS).
-    RELATES: Expression (CONTAINS), Locale (HAS_EXPRESSIONS).
+    TRIGGERS: "expressions", "idioms", "phrases", "locale expressions", "expression container".
+    NOT: for individual expressions (use Expression via CONTAINS_EXPRESSION).
+    RELATES: Expression (contains via CONTAINS_EXPRESSION), Locale (owner via HAS_EXPRESSIONS).
 
-  # ═══════════════════════════════════════════════════════════════════════════
-  # BLOC 3: VISUAL
-  # ═══════════════════════════════════════════════════════════════════════════
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL (icon)
+  # ═══════════════════════════════════════════════════════════════════════════════
   icon:
-    web: "message-square"
+    web: message-square
     terminal: "◇"
 
-  # ═══════════════════════════════════════════════════════════════════════════
-  # BLOC 4: DATA
-  # ═══════════════════════════════════════════════════════════════════════════
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA (standard_properties, properties)
+  # ═══════════════════════════════════════════════════════════════════════════════
   standard_properties:
     display_name:
       type: string
@@ -61,25 +56,24 @@ node:
       description: "Last update timestamp"
 
   properties:
-    # Semantic fields summary (metadata about contained atoms)
     semantic_fields_count:
-      type: integer
+      type: int
       required: true
       description: "Number of semantic fields represented"
       example: 10
 
     total_expressions:
-      type: integer
+      type: int
       required: true
       description: "Total number of Expression atoms"
       example: 80
 
-  # ═══════════════════════════════════════════════════════════════════════════
-  # BLOC 5: GRAPH
-  # ═══════════════════════════════════════════════════════════════════════════
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH (relations)
+  # ═══════════════════════════════════════════════════════════════════════════════
   relations:
     outgoing:
-      - type: CONTAINS
+      - type: CONTAINS_EXPRESSION
         to: Expression
         cardinality: "1:N"
         description: "ExpressionSet contains multiple Expression atoms"
@@ -89,3 +83,29 @@ node:
         from: Locale
         cardinality: "1:1"
         description: "Locale has exactly one expression set"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE (example, neo4j)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  neo4j:
+    indexes:
+      - "CREATE INDEX expressionset_count IF NOT EXISTS FOR (es:ExpressionSet) ON (es.total_expressions)"
+
+  example:
+    data:
+      display_name: "French (France) Expressions"
+      description: "Native expressions for fr-FR"
+      semantic_fields_count: 10
+      total_expressions: 80
+    cypher: |
+      MATCH (l:Locale {key: "fr-FR"})
+      CREATE (es:ExpressionSet {
+        display_name: 'French (France) Expressions',
+        description: 'Native expressions for fr-FR',
+        semantic_fields_count: 10,
+        total_expressions: 80,
+        created_at: datetime(),
+        updated_at: datetime()
+      })
+      CREATE (l)-[:HAS_EXPRESSIONS]->(es)
+      RETURN es

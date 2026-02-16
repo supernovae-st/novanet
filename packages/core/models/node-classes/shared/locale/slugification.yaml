@@ -5,7 +5,7 @@
 
 node:
   # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 1: IDENTITY
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   name: Slugification
@@ -14,7 +14,7 @@ node:
   trait: imported
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 2: SEMANTIC
+  # BLOC 2: SEMANTIC (description, llm_context)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   description: "URL slug rules: transliteration, stop words, URL conventions"
@@ -25,7 +25,7 @@ node:
     RELATES: Locale (via HAS_SLUGIFICATION), slug_rule (latin_preserve/native_script), stopwords, transliteration_map.
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 3: VISUAL
+  # BLOC 3: VISUAL (icon)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   icon:
@@ -33,7 +33,7 @@ node:
     terminal: "⌘"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 4: DATA — Standard Properties
+  # BLOC 4: DATA (standard_properties, properties)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   standard_properties:
@@ -55,12 +55,6 @@ node:
       description: "Short description"
       example: "URL slug generation rules for fr-FR"
 
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints"
-      example: "USE: URL slug generation from titles. TRIGGERS: slug, URL, permalink, SEO. KEY: check slug_rule (latin_preserve/native_script). NOT: content text or translation."
-
     created_at:
       type: datetime
       required: true
@@ -69,10 +63,7 @@ node:
       type: datetime
       required: true
 
-  # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 4: DATA — Slugification-Specific Properties
-  # ═══════════════════════════════════════════════════════════════════════════════
-
+  
   properties:
     # ═══════════════════════════════════════════════════════════════════════════
     # CORE SLUG RULE
@@ -232,7 +223,7 @@ node:
       description: "Full source markdown for LLM context (includes examples, edge cases, implementation)"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # BLOC 5: GRAPH — Relations
+  # BLOC 5: GRAPH (relations)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
@@ -241,3 +232,21 @@ node:
         from: Locale
         cardinality: "1:1"
         description: "Locale has exactly one slugification config"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE (example, neo4j)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  neo4j:
+    indexes:
+      - "CREATE INDEX slugification_key IF NOT EXISTS FOR (s:Slugification) ON (s.key)"
+
+  example:
+    data:
+      key: "fr-FR"
+      display_name: "French (France) Slugification"
+      slug_rule: "latin_preserve"
+      preserve_diacritics: true
+      separator: "-"
+    cypher: |
+      MATCH (l:Locale {key: $locale})-[:HAS_SLUGIFICATION]->(s:Slugification)
+      RETURN s.key, s.slug_rule, s.stop_words, s.transliteration_map
