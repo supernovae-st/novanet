@@ -1,21 +1,37 @@
 # models/node-classes/org/instruction/prompt-artifact.yaml
+# v0.13.1 LLM-First Schema - Canonical field ordering for optimal AI comprehension
+# PromptArtifact - Compiled prompt with all context resolved
+
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: PromptArtifact
   realm: org
   layer: instruction
   trait: generated  # v11.2: Split derived → generated (LLM output)
-  icon:
-    web: "clipboard"
-    terminal: "▤"
-  description: |
-    Compiled prompt artifact with all context resolved. Immutable snapshot of prompt state.
-    Contains the full prompt text with all entity, voice, and culture injections.
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (description, llm_context)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  description: "Compiled prompt artifact with all context resolved. Immutable snapshot of prompt state. Contains the full prompt text with all entity, voice, and culture injections."
+
+  llm_context: |
     USE: when tracking prompt versions, auditing what was sent to LLM.
     TRIGGERS: "compiled prompt", "prompt artifact", "prompt snapshot", "prompt audit".
     NOT: for raw templates (use PageInstruction/BlockInstruction), for generated content (use PageNative).
     RELATES: PageInstruction/BlockInstruction (COMPILED_FROM), Entity (INCLUDES_ENTITY), Style (INCLUDES_STYLE).
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL (icon)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  icon:
+    web: "clipboard"
+    terminal: "▤"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA (standard_properties, properties)
+  # ═══════════════════════════════════════════════════════════════════════════════
   standard_properties:
     key:
       type: string
@@ -23,21 +39,21 @@ node:
       description: "Artifact identifier"
       pattern: "^promptartifact-[a-z0-9-]+-v[0-9]+$"
       example: "promptartifact-page-pricing-v1"
+
     display_name:
       type: string
       required: true
       description: "Semantic prompt name"
       example: "Page Pricing Prompt v1"
+
     description:
       type: string
       required: false
-    llm_context:
-      type: string
-      required: false
-      description: "Generation context embedded in artifact"
+
     created_at:
       type: datetime
       required: true
+
     updated_at:
       type: datetime
       required: true
@@ -82,15 +98,15 @@ node:
     compiled_at:
       type: datetime
       required: true
+
     compiler_version:
       type: string
       required: true
       description: "Version of the prompt compiler"
 
-  neo4j:
-    indexes:
-      - "CREATE INDEX promptartifact_base IF NOT EXISTS FOR (pa:PromptArtifact) ON (pa.base_prompt_key)"
-
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH (relations)
+  # ═══════════════════════════════════════════════════════════════════════════════
   relations:
     outgoing:
       - type: COMPILED_FROM
@@ -106,3 +122,32 @@ node:
       - type: INCLUDES_STYLE
         to: Style
         description: "Locale style (voice, tone, formality) parameters included"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE (example, neo4j)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  neo4j:
+    indexes:
+      - "CREATE INDEX promptartifact_key IF NOT EXISTS FOR (pa:PromptArtifact) ON (pa.key)"
+      - "CREATE INDEX promptartifact_base IF NOT EXISTS FOR (pa:PromptArtifact) ON (pa.base_prompt_key)"
+
+  example:
+    data:
+      key: "promptartifact-page-pricing-v1"
+      display_name: "Page Pricing Prompt v1"
+      description: "Compiled prompt for pricing page generation"
+      compiled_prompt: "Generate a pricing page for QR Code AI..."
+      base_prompt_key: "page-instruction-pricing"
+      base_prompt_version: "1.0"
+      includes_concepts: true
+      includes_voice: true
+      includes_culture: true
+      token_count: 2500
+      compiled_at: "2024-01-15T10:00:00Z"
+      compiler_version: "1.0.0"
+
+    cypher: |
+      // Get prompt artifact with source instruction
+      MATCH (pa:PromptArtifact {key: $key})
+      OPTIONAL MATCH (pa)-[:COMPILED_FROM]->(instr)
+      RETURN pa, instr

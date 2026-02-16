@@ -1,29 +1,43 @@
 # models/node-classes/org/semantic/audience-persona.yaml
-# Path: packages/core/models/nodes/project/semantic/audience-persona.yaml
+# v0.13.1 LLM-First Schema - Canonical field ordering for optimal AI comprehension
+# AudiencePersona - Target audience archetype for content personalization
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: AudiencePersona
   realm: org
   layer: semantic
   trait: defined
-  icon:
-    web: "user"
-    terminal: "◇"
-  description: |
-    Target audience archetype for content personalization. Represents a specific
-    user segment with defined characteristics, goals, and pain points. Used to
-    tailor content tone, examples, and messaging to resonate with specific audiences.
 
-    USE: When defining who the content is for, enabling persona-based generation.
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (description, llm_context)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  description: "Target audience archetype for content personalization. Represents a specific user segment with defined characteristics, goals, and pain points."
+
+  llm_context: |
+    USE: when defining who the content is for, enabling persona-based generation.
     TRIGGERS: "persona", "audience", "user segment", "target user", "buyer persona".
-    NOT: For actual users (use analytics), for demographics only (include psychographics).
+    NOT: for actual users (use analytics), for demographics only (include psychographics).
+    RELATES: Page (targeted via TARGETS_PERSONA), Brand (targets via TARGETS_PERSONA).
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL (icon)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  icon:
+    web: user
+    terminal: "◇"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA (standard_properties, properties)
+  # ═══════════════════════════════════════════════════════════════════════════════
   standard_properties:
     key:
       type: string
       required: true
-      description: "Unique identifier"
       pattern: "^persona-[a-z0-9-]+$"
+      description: "Unique identifier"
       example: "persona-startup-founder"
 
     display_name:
@@ -36,12 +50,6 @@ node:
       type: string
       required: true
       description: "Detailed persona description"
-
-    llm_context:
-      type: string
-      required: true
-      description: "LLM prompt context for this persona"
-      example: "Target: early-stage startup founder. Time-poor, ROI-focused, values efficiency."
 
     created_at:
       type: datetime
@@ -57,13 +65,13 @@ node:
     persona_type:
       type: string
       required: true
-      description: "Category of persona"
       enum:
         - decision_maker
         - influencer
         - end_user
         - technical_evaluator
         - budget_holder
+      description: "Category of persona"
       example: "decision_maker"
 
     industry_focus:
@@ -75,7 +83,6 @@ node:
     company_size:
       type: string
       required: false
-      description: "Typical company size"
       enum:
         - solo
         - startup
@@ -99,13 +106,13 @@ node:
     preferred_tone:
       type: string
       required: true
-      description: "Communication style that resonates"
       enum:
         - professional
         - casual
         - technical
         - inspirational
         - direct
+      description: "Communication style that resonates"
       example: "direct"
 
     content_preferences:
@@ -132,56 +139,51 @@ node:
       description: "Priority for content creation (1=highest)"
       example: 1
 
-  neo4j:
-    indexes:
-      - name: audiencepersona_type
-        property: persona_type
-      - name: audiencepersona_size
-        property: company_size
-      - name: audiencepersona_priority
-        property: priority
-
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH (relations)
+  # ═══════════════════════════════════════════════════════════════════════════════
   relations:
     incoming:
       - type: TARGETS_PERSONA
         from: Page
         description: "Pages targeted at this persona"
 
+      - type: TARGETS_PERSONA
+        from: Brand
+        description: "Brand targeting this persona"
+
     outgoing: []
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE (example, neo4j)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  neo4j:
+    indexes:
+      - "CREATE INDEX audiencepersona_type IF NOT EXISTS FOR (ap:AudiencePersona) ON (ap.persona_type)"
+      - "CREATE INDEX audiencepersona_size IF NOT EXISTS FOR (ap:AudiencePersona) ON (ap.company_size)"
+      - "CREATE INDEX audiencepersona_priority IF NOT EXISTS FOR (ap:AudiencePersona) ON (ap.priority)"
+
   example:
-    data: |
-      {
-        "key": "persona-startup-founder",
-        "display_name": "Startup Founder",
-        "description": "Early-stage startup founder building an MVP. Time-constrained, wears multiple hats, needs quick wins.",
-        "llm_context": "Target: early-stage startup founder. Time-poor, ROI-focused, values efficiency and speed. Skeptical of enterprise solutions.",
-        "persona_type": "decision_maker",
-        "industry_focus": ["technology", "saas"],
-        "company_size": "startup",
-        "pain_points": ["time constraints", "limited budget", "need to ship fast"],
-        "goals": ["launch MVP quickly", "automate repetitive tasks", "look professional"],
-        "preferred_tone": "direct",
-        "content_preferences": ["quick tutorials", "templates", "ROI examples"],
-        "decision_factors": ["price", "time to value", "ease of use"],
-        "objections": ["too complex", "overkill for our size"],
-        "priority": 1
-      }
+    data:
+      key: "persona-startup-founder"
+      display_name: "Startup Founder"
+      description: "Early-stage startup founder building an MVP. Time-constrained, wears multiple hats, needs quick wins."
+      persona_type: "decision_maker"
+      industry_focus: ["technology", "saas"]
+      company_size: "startup"
+      pain_points: ["time constraints", "limited budget", "need to ship fast"]
+      goals: ["launch MVP quickly", "automate repetitive tasks", "look professional"]
+      preferred_tone: "direct"
+      content_preferences: ["quick tutorials", "templates", "ROI examples"]
+      decision_factors: ["price", "time to value", "ease of use"]
+      objections: ["too complex", "overkill for our size"]
+      priority: 1
     cypher: |
       CREATE (p:AudiencePersona {
         key: 'persona-startup-founder',
         display_name: 'Startup Founder',
-        description: 'Early-stage startup founder building an MVP. Time-constrained, wears multiple hats, needs quick wins.',
-        llm_context: 'Target: early-stage startup founder. Time-poor, ROI-focused, values efficiency and speed.',
         persona_type: 'decision_maker',
-        industry_focus: ['technology', 'saas'],
-        company_size: 'startup',
-        pain_points: ['time constraints', 'limited budget', 'need to ship fast'],
-        goals: ['launch MVP quickly', 'automate repetitive tasks', 'look professional'],
         preferred_tone: 'direct',
-        content_preferences: ['quick tutorials', 'templates', 'ROI examples'],
-        decision_factors: ['price', 'time to value', 'ease of use'],
-        objections: ['too complex', 'overkill for our size'],
         priority: 1,
         created_at: datetime(),
         updated_at: datetime()

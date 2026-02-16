@@ -1,22 +1,37 @@
 # models/node-classes/shared/locale/style.yaml
-# Style — Communication style for a locale (tone, formality, directness, warmth, humor, identity)
-#
-# v10.7: Added formality properties from Adaptation migration (formality_default, pronoun_preference,
-#        directness_level, warmth_level, formality_rules, length_preferences, seo_preferences, tone_modifiers)
-# v10.6: Added context_matrix, register_transitions, formality_scale, raw_markdown (hybrid approach)
-# Stability: Medium - update quarterly
-# Merges: locale-voice + locale-identity + style-related Adaptation properties
+# v0.13.1 LLM-First Schema - Canonical field ordering for optimal AI comprehension
+# Style - Communication style for a locale (tone, formality, directness, warmth, humor, identity)
 
 node:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: Style
   realm: shared
   layer: locale
   trait: imported
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (description, llm_context)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  description: "Communication style: tone, formality, directness, warmth, humor, identity traits"
+
+  llm_context: |
+    USE: when generating content with appropriate tone, formality, and style.
+    TRIGGERS: "formality", "tone", "vous/tu", "register", "punctuation", "humor", "directness".
+    NOT: for formatting (use Formatting), for content adaptation (use Adaptation).
+    RELATES: Locale (via HAS_STYLE), context_matrix, pronoun_rules, register_transitions.
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL (icon)
+  # ═══════════════════════════════════════════════════════════════════════════════
   icon:
     web: "drama"
     terminal: "◎"
-  description: "Communication style: tone, formality, directness, warmth, humor, identity traits"
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA (standard_properties, properties)
+  # ═══════════════════════════════════════════════════════════════════════════════
   standard_properties:
     key:
       type: string
@@ -35,12 +50,6 @@ node:
       required: true
       description: "Short description"
       example: "Tone, formality, and communication identity for fr-FR"
-
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints"
-      example: "USE: tone/voice/formality decisions. TRIGGERS: formality, vous/tu, register, punctuation, humor. KEY: check context_matrix for audience. NOT: formatting (use Formatting) or content adaptation (use Adaptation)."
 
     created_at:
       type: datetime
@@ -94,9 +103,6 @@ node:
         never_switch_mid_conversation: true
         escalation_increases_formality: true
 
-    # ═══════════════════════════════════════════════════════════════════════════
-    # ADAPTATION MIGRATION: TIER 1 INDEXED SCALARS
-    # ═══════════════════════════════════════════════════════════════════════════
     formality_default:
       type: string
       required: true
@@ -129,9 +135,6 @@ node:
       example: "neutral"
       llm_context: "Warm = expressive; Neutral = professional; Reserved = restrained"
 
-    # ═══════════════════════════════════════════════════════════════════════════
-    # ADAPTATION MIGRATION: TIER 2 STRUCTURED JSON
-    # ═══════════════════════════════════════════════════════════════════════════
     formality_rules:
       type: json
       required: false
@@ -181,9 +184,7 @@ node:
     context_matrix:
       type: json
       required: true
-      description: |
-        Decision matrix for formality by context, industry, and audience.
-        Key for consistent tone across different scenarios.
+      description: "Decision matrix for formality by context, industry, and audience"
       example:
         b2b_corporate:
           industry: "Finance, Legal, Insurance"
@@ -200,16 +201,6 @@ node:
           audience: "35+, affluent"
           formality: "very_formal"
           notes: "Sophistication expected"
-        b2c_standard:
-          industry: "E-commerce, Retail"
-          audience: "General public"
-          formality: "high"
-          notes: "Respectful default"
-        b2c_youth:
-          industry: "Gaming, Streaming"
-          audience: "18-24"
-          formality: "casual"
-          notes: "Only if brand explicitly targets youth"
 
     # ═══════════════════════════════════════════════════════════════════════════
     # DIRECTNESS
@@ -399,16 +390,39 @@ node:
       example: ["professional", "trustworthy", "innovative"]
 
     # ═══════════════════════════════════════════════════════════════════════════
-    # RAW MARKDOWN (Hybrid approach)
+    # RAW MARKDOWN
     # ═══════════════════════════════════════════════════════════════════════════
     raw_markdown:
       type: string
       required: false
       description: "Full source markdown for LLM context (includes examples, edge cases)"
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH (relations)
+  # ═══════════════════════════════════════════════════════════════════════════════
   relations:
     incoming:
       - type: HAS_STYLE
         from: Locale
         cardinality: "1:1"
         description: "Locale has exactly one style config"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE (example, neo4j)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  neo4j:
+    indexes:
+      - "CREATE INDEX style_key IF NOT EXISTS FOR (s:Style) ON (s.key)"
+      - "CREATE INDEX style_formality IF NOT EXISTS FOR (s:Style) ON (s.formality_score)"
+
+  example:
+    data:
+      key: "fr-FR"
+      display_name: "French (France) Style"
+      formality_score: 72
+      default_formality: "formal"
+      directness_score: 45
+      directness_style: "indirect"
+    cypher: |
+      MATCH (l:Locale {key: $locale})-[:HAS_STYLE]->(s:Style)
+      RETURN s.key, s.formality_score, s.context_matrix, s.pronoun_rules

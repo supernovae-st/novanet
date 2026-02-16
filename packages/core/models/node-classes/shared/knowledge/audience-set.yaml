@@ -1,42 +1,37 @@
-# ─────────────────────────────────────────────────────────────────────────────
-# AudienceSet — Container grouping AudienceTrait atoms by segment
-# ─────────────────────────────────────────────────────────────────────────────
-# v0.13.1: LLM-First field ordering (ADR-031)
-# v10.1: Pure container (no JSON blobs - data lives in AudienceTrait atoms)
-# Segments: b2b, b2c, general
-# Stability: High - structure rarely changes
-# ─────────────────────────────────────────────────────────────────────────────
+# models/node-classes/shared/knowledge/audience-set.yaml
+# v0.13.1 LLM-First Schema - Canonical field ordering for optimal AI comprehension
+# AudienceSet - Container grouping AudienceTrait atoms by segment
 
 node:
-  # ═══════════════════════════════════════════════════════════════════════════
-  # BLOC 1: IDENTITY
-  # ═══════════════════════════════════════════════════════════════════════════
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 1: IDENTITY (name, realm, layer, trait)
+  # ═══════════════════════════════════════════════════════════════════════════════
   name: AudienceSet
   realm: shared
   layer: knowledge
-  trait: defined  # v11.2: Containers are universal categories (invariant), atoms are locale-native (knowledge)
+  trait: defined  # Containers are universal categories (defined), atoms are locale-native (imported)
 
-  # ═══════════════════════════════════════════════════════════════════════════
-  # BLOC 2: SEMANTIC
-  # ═══════════════════════════════════════════════════════════════════════════
-  description: "Container grouping AudienceTrait atoms by segment"
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 2: SEMANTIC (description, llm_context)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  description: "Container grouping AudienceTrait atoms by segment. Pure container (data lives in AudienceTrait atoms)."
 
   llm_context: |
-    USE: to find traits by segment.
-    TRIGGERS: B2B, B2C, audience segment, audience container.
-    NOT: individual behaviors (use AudienceTrait via CONTAINS).
-    RELATES: AudienceTrait (CONTAINS), Locale (HAS_AUDIENCE).
+    USE: when finding audience traits by segment (B2B, B2C, general).
+    TRIGGERS: "B2B", "B2C", "audience segment", "audience container".
+    NOT: for individual behaviors (use AudienceTrait via CONTAINS_AUDIENCE_TRAIT).
+    RELATES: AudienceTrait (contains via CONTAINS_AUDIENCE_TRAIT), Locale (owner via HAS_AUDIENCE).
 
-  # ═══════════════════════════════════════════════════════════════════════════
-  # BLOC 3: VISUAL
-  # ═══════════════════════════════════════════════════════════════════════════
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 3: VISUAL (icon)
+  # ═══════════════════════════════════════════════════════════════════════════════
   icon:
-    web: "users"
+    web: users
     terminal: "◎"
 
-  # ═══════════════════════════════════════════════════════════════════════════
-  # BLOC 4: DATA
-  # ═══════════════════════════════════════════════════════════════════════════
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 4: DATA (standard_properties, properties)
+  # ═══════════════════════════════════════════════════════════════════════════════
   standard_properties:
     display_name:
       type: string
@@ -61,7 +56,6 @@ node:
       description: "Last update timestamp"
 
   properties:
-    # Segment identification (only property - data is in atoms)
     segment:
       type: string
       required: true
@@ -69,12 +63,12 @@ node:
       description: "Audience segment this set groups"
       example: "b2b"
 
-  # ═══════════════════════════════════════════════════════════════════════════
-  # BLOC 5: GRAPH
-  # ═══════════════════════════════════════════════════════════════════════════
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 5: GRAPH (relations)
+  # ═══════════════════════════════════════════════════════════════════════════════
   relations:
     outgoing:
-      - type: CONTAINS
+      - type: CONTAINS_AUDIENCE_TRAIT
         to: AudienceTrait
         cardinality: "1:N"
         description: "AudienceSet contains multiple AudienceTrait atoms"
@@ -83,6 +77,28 @@ node:
       - type: HAS_AUDIENCE
         from: Locale
         cardinality: "1:N"
-        description: "Locale has audience sets"
-        properties:
-          segment: string
+        description: "Locale has audience sets (one per segment)"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOC 6: REFERENCE (example, neo4j)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  neo4j:
+    indexes:
+      - "CREATE INDEX audienceset_segment IF NOT EXISTS FOR (as:AudienceSet) ON (as.segment)"
+
+  example:
+    data:
+      display_name: "French (France) B2B Audience"
+      description: "B2B audience behavior for fr-FR"
+      segment: "b2b"
+    cypher: |
+      MATCH (l:Locale {key: "fr-FR"})
+      CREATE (as:AudienceSet {
+        display_name: 'French (France) B2B Audience',
+        description: 'B2B audience behavior for fr-FR',
+        segment: 'b2b',
+        created_at: datetime(),
+        updated_at: datetime()
+      })
+      CREATE (l)-[:HAS_AUDIENCE]->(as)
+      RETURN as
