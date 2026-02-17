@@ -170,7 +170,38 @@ For ALL nodes:
 5. `created_at`
 6. `updated_at`
 
-**Note:** `llm_context` is at BLOC 2 level (schema metadata), NOT in standard_properties.
+## llm_context: Dual Pattern
+
+`llm_context` exists at TWO distinct levels — same name, different purposes:
+
+### BLOC 2: Schema-level (CLASS directive, required)
+```yaml
+node:
+  llm_context: |
+    USE: when [primary use case].
+    TRIGGERS: "keyword1", "keyword2".
+    NOT: for [disambiguation] (use [alternative] instead).
+    RELATES: [Source] (role), [Target] (role).
+```
+→ Describes how Claude should USE this node CLASS.
+→ Generic, applies to ALL instances of this class.
+→ Required for all nodes.
+
+### BLOC 4: Instance-level (data property, optional)
+```yaml
+  properties:
+    llm_context:
+      type: string
+      required: false
+      description: "Instance-specific context for LLM generation."
+```
+→ Contains specific context for THIS particular instance.
+→ Optional — not all instances need it, but it can be set in seed files.
+→ Best practices: focused (2-4 key points), include data provenance if relevant.
+→ Example seed: `s.llm_context = 'URL slugification rules for fr-FR. latin_preserve rule.'`
+
+**Note on standard_properties**: `llm_context` is NOT in standard_properties (it's in `properties:`).
+Standard properties order remains: `key → *_key → display_name → description → created_at → updated_at`
 
 ## Composite Key Nodes
 
