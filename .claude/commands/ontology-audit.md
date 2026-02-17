@@ -88,7 +88,7 @@ Page (org/structure)
   Layer 1: YAML Coherence
   -----------------------
   [PASS] 61 nodes validated
-  [PASS] 169 arcs validated
+  [PASS] 182 arcs validated
   [PASS] Path/content alignment verified
 
   Layer 2: Mermaid Diagrams
