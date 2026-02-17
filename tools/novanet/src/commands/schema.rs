@@ -7,7 +7,7 @@ use crate::generators::Generator;
 use std::fs;
 use std::path::Path;
 use std::time::Instant;
-use tracing::instrument;
+use tracing::{debug, instrument};
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Output mappings
@@ -263,6 +263,196 @@ pub fn schema_validate(root: &Path) -> crate::Result<Vec<ValidationIssue>> {
     Ok(issues)
 }
 
+/// Convert a NodeDef back to YAML structure for writing.
+///
+/// Manually builds a serde_yaml::Value that matches the expected YAML structure.
+fn node_def_to_yaml(node: &crate::parsers::yaml_node::ParsedNode) -> serde_yaml::Value {
+    use serde_yaml::{Mapping, Value};
+
+    let mut node_map = Mapping::new();
+
+    // Basic fields
+    node_map.insert(Value::String("name".to_string()), Value::String(node.def.name.clone()));
+    node_map.insert(Value::String("realm".to_string()), Value::String(node.def.realm.clone()));
+    node_map.insert(Value::String("layer".to_string()), Value::String(node.def.layer.clone()));
+    node_map.insert(Value::String("trait".to_string()), Value::String(node.def.node_trait.to_string()));
+
+    // Optional knowledge_tier
+    if let Some(tier) = node.def.knowledge_tier {
+        node_map.insert(Value::String("knowledge_tier".to_string()), Value::String(tier.to_string()));
+    }
+
+    // Description
+    node_map.insert(Value::String("description".to_string()), Value::String(node.def.description.clone()));
+
+    // Icon
+    if let Some(ref icon) = node.def.icon {
+        let mut icon_map = Mapping::new();
+        icon_map.insert(Value::String("web".to_string()), Value::String(icon.web.clone()));
+        icon_map.insert(Value::String("terminal".to_string()), Value::String(icon.terminal.clone()));
+        node_map.insert(Value::String("icon".to_string()), Value::Mapping(icon_map));
+    }
+
+    // standard_properties
+    if let Some(ref props) = node.def.standard_properties {
+        let props_value = serde_yaml::to_value(props).unwrap_or(Value::Null);
+        node_map.insert(Value::String("standard_properties".to_string()), props_value);
+    }
+
+    // properties
+    if let Some(ref props) = node.def.properties {
+        let props_value = serde_yaml::to_value(props).unwrap_or(Value::Null);
+        node_map.insert(Value::String("properties".to_string()), props_value);
+    }
+
+    // neo4j
+    if let Some(ref neo4j) = node.def.neo4j {
+        let neo4j_value = serde_yaml::to_value(neo4j).unwrap_or(Value::Null);
+        node_map.insert(Value::String("neo4j".to_string()), neo4j_value);
+    }
+
+    // example
+    if let Some(ref example) = node.def.example {
+        let example_value = serde_yaml::to_value(example).unwrap_or(Value::Null);
+        node_map.insert(Value::String("example".to_string()), example_value);
+    }
+
+    // Wrap in { node: {...} }
+    let mut root_map = Mapping::new();
+    root_map.insert(Value::String("node".to_string()), Value::Mapping(node_map));
+
+    Value::Mapping(root_map)
+}
+
+/// Validate schema YAML files with auto-fix capability.
+///
+/// Runs validation and optionally applies auto-fixes for violations.
+/// Returns validation issues with fix status annotations.
+#[instrument(skip_all)]
+pub fn schema_validate_with_fix(
+    root: &Path,
+    strategy: crate::validation::FixStrategy,
+) -> crate::Result<Vec<ValidationIssue>> {
+    use crate::validation::{FixAction, FixEngine};
+
+    // Load all nodes
+    let mut nodes = crate::parsers::yaml_node::load_all_nodes(root)?;
+
+    // Create fix engine with all registered fixers
+    let engine = FixEngine::default();
+
+    debug!(
+        "Loaded {} nodes, fix engine has {} fixers",
+        nodes.len(),
+        engine.count()
+    );
+
+    // Validate all nodes and collect issues
+    let schema_issues = crate::parsers::schema_rules::validate_all_nodes(&nodes);
+
+    let mut result_issues = Vec::new();
+    let mut modified_node_indices = Vec::new();
+
+    // Group issues by node for efficient processing
+    use std::collections::HashMap;
+    let mut issues_by_node: HashMap<String, Vec<crate::parsers::schema_rules::SchemaIssue>> =
+        HashMap::new();
+    for issue in schema_issues {
+        issues_by_node
+            .entry(issue.node_name.clone())
+            .or_insert_with(Vec::new)
+            .push(issue);
+    }
+
+    // Process each node's issues
+    for (idx, node) in nodes.iter_mut().enumerate() {
+        if let Some(node_issues) = issues_by_node.get(&node.def.name) {
+            let mut node_modified = false;
+
+            for issue in node_issues {
+                // Try to apply fix
+                let fix_result = engine.apply_fix(node, issue)?;
+
+                let severity = match issue.severity {
+                    crate::parsers::schema_rules::IssueSeverity::Error => Severity::Error,
+                    crate::parsers::schema_rules::IssueSeverity::Warning => Severity::Warning,
+                };
+
+                match fix_result {
+                    FixAction::Modified { changes } => {
+                        node_modified = true;
+                        let change_desc = changes
+                            .iter()
+                            .map(|c| c.field.clone())
+                            .collect::<Vec<_>>()
+                            .join(", ");
+
+                        let status = match strategy {
+                            crate::validation::FixStrategy::DryRun => {
+                                "(Would fix)"
+                            }
+                            crate::validation::FixStrategy::Safe
+                            | crate::validation::FixStrategy::Auto => "(FIXED)",
+                        };
+
+                        result_issues.push(ValidationIssue {
+                            severity,
+                            message: format!(
+                                "[{}] {}: {} {} [{}]",
+                                issue.rule, issue.node_name, issue.message, status, change_desc
+                            ),
+                        });
+                    }
+                    FixAction::Skipped { reason } => {
+                        result_issues.push(ValidationIssue {
+                            severity,
+                            message: format!(
+                                "[{}] {}: {} (Can't auto-fix: {})",
+                                issue.rule, issue.node_name, issue.message, reason
+                            ),
+                        });
+                    }
+                }
+            }
+
+            // Mark node index for writing if modified and not DryRun
+            if node_modified && strategy != crate::validation::FixStrategy::DryRun {
+                modified_node_indices.push(idx);
+            }
+        }
+    }
+
+    // Write fixed nodes back to YAML
+    if !modified_node_indices.is_empty() {
+        debug!(
+            "Writing {} fixed nodes to YAML",
+            modified_node_indices.len()
+        );
+
+        for idx in modified_node_indices {
+            let node = &nodes[idx];
+
+            // Reconstruct YAML content using helper function
+            let yaml_value = node_def_to_yaml(node);
+
+            let yaml_content = serde_yaml::to_string(&yaml_value)
+                .map_err(|e| crate::NovaNetError::Validation(e.to_string()))?;
+
+            // Write to original file path
+            std::fs::write(&node.source_path, yaml_content).map_err(|e| {
+                crate::NovaNetError::Validation(format!(
+                    "Failed to write fixed YAML to {:?}: {}",
+                    node.source_path, e
+                ))
+            })?;
+
+            debug!("Wrote fixed YAML to {:?}", node.source_path);
+        }
+    }
+
+    Ok(result_issues)
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Schema Stats
 // ─────────────────────────────────────────────────────────────────────────────
@@ -465,5 +655,219 @@ mod tests {
             "unexpected validation errors: {:?}",
             errors.iter().map(|e| &e.message).collect::<Vec<_>>()
         );
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Cycle 3.2: CLI Integration (RED Phase)
+    // ─────────────────────────────────────────────────────────────────────────
+
+    // Static mutex to serialize tests that create files in schema directory
+    use std::sync::Mutex;
+    static SCHEMA_TEST_LOCK: Mutex<()> = Mutex::new(());
+
+    /// Helper to clean up any leftover test files from previous test runs.
+    /// Scans the entire node-classes directory tree, not just one subdirectory.
+    fn cleanup_test_files(root: &std::path::Path) {
+        use walkdir::WalkDir;
+
+        let node_classes_dir = crate::config::node_classes_dir(root);
+        if !node_classes_dir.exists() {
+            return;
+        }
+
+        // Remove all files starting with "test-" or containing "-test"
+        for entry in WalkDir::new(node_classes_dir)
+            .into_iter()
+            .filter_map(|e| e.ok())
+            .filter(|e| e.file_type().is_file())
+        {
+            if let Some(name) = entry.path().file_name().and_then(|n| n.to_str()) {
+                if name.starts_with("test-") || name.contains("-test") {
+                    let _ = std::fs::remove_file(entry.path());
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn test_schema_validate_with_fix_dry_run() {
+        use crate::validation::FixStrategy;
+        use std::time::SystemTime;
+
+        // Acquire lock to serialize with other tests that create schema files
+        let _lock = SCHEMA_TEST_LOCK.lock().unwrap();
+
+        let Some(root) = test_root() else { return };
+
+        // Create a test directory for temporary nodes
+        let test_dir = root.join("packages/core/models/node-classes/shared/config");
+        std::fs::create_dir_all(&test_dir).expect("should create test dir");
+
+        // Clean up any leftover test files from previous runs
+        cleanup_test_files(&root);
+
+        // Use timestamp to create unique filename for parallel test execution
+        let timestamp = SystemTime::now()
+            .duration_since(SystemTime::UNIX_EPOCH)
+            .unwrap()
+            .as_nanos();
+        let test_node_path = test_dir.join(format!("test-fix-node-{}.yaml", timestamp));
+        let yaml_content = r#"node:
+  name: TestFixNode
+  realm: shared
+  layer: config
+  trait: defined
+  description: "Test node for auto-fix"
+  icon:
+    web: test-icon
+    terminal: "T"
+  standard_properties:
+    # WRONG ORDER: description before key
+    description:
+      type: string
+      required: true
+    key:
+      type: string
+      required: true
+    display_name:
+      type: string
+      required: true
+    # Missing created_at and updated_at
+"#;
+        std::fs::write(&test_node_path, yaml_content).expect("should write test node");
+
+        // Run validation with DryRun strategy (should not modify files)
+        let result = schema_validate_with_fix(&root, FixStrategy::DryRun);
+
+        // Clean up
+        std::fs::remove_file(&test_node_path).ok();
+
+        // Verify function succeeded
+        assert!(result.is_ok(), "schema_validate_with_fix should succeed");
+
+        // Verify issues were reported (should have PROP_ORDER and TIMESTAMP_REQUIRED)
+        let issues = result.unwrap();
+        let prop_order_issues: Vec<_> = issues
+            .iter()
+            .filter(|i| i.message.contains("PROP_ORDER"))
+            .collect();
+        let timestamp_issues: Vec<_> = issues
+            .iter()
+            .filter(|i| i.message.contains("TIMESTAMP_REQUIRED"))
+            .collect();
+
+        assert!(
+            !prop_order_issues.is_empty(),
+            "should report property order violation"
+        );
+        assert!(
+            !timestamp_issues.is_empty(),
+            "should report missing timestamps"
+        );
+    }
+
+    #[test]
+    fn test_schema_validate_with_fix_safe_strategy() {
+        use crate::validation::FixStrategy;
+        use std::time::SystemTime;
+
+        // Acquire lock to serialize with other tests that create schema files
+        let _lock = SCHEMA_TEST_LOCK.lock().unwrap();
+
+        let Some(root) = test_root() else { return };
+
+        // Create a test directory for temporary nodes
+        let test_dir = root.join("packages/core/models/node-classes/shared/config");
+        std::fs::create_dir_all(&test_dir).expect("should create test dir");
+
+        // Clean up any leftover test files from previous runs
+        cleanup_test_files(&root);
+
+        // Use timestamp to create unique filename for parallel test execution
+        let timestamp = SystemTime::now()
+            .duration_since(SystemTime::UNIX_EPOCH)
+            .unwrap()
+            .as_nanos();
+        let test_node_path = test_dir.join(format!("test-auto-fix-{}.yaml", timestamp));
+        let yaml_content = r#"node:
+  name: TestAutoFix
+  realm: shared
+  layer: config
+  trait: defined
+  description: "Test node for auto-fix"
+  icon:
+    web: test-icon
+    terminal: "T"
+  standard_properties:
+    # WRONG ORDER
+    display_name:
+      type: string
+      required: true
+    key:
+      type: string
+      required: true
+    description:
+      type: string
+      required: true
+"#;
+        std::fs::write(&test_node_path, yaml_content).expect("should write test node");
+
+        // Run validation with Safe strategy (should apply fixes)
+        let result = schema_validate_with_fix(&root, FixStrategy::Safe);
+
+        // Verify function succeeded
+        assert!(result.is_ok(), "schema_validate_with_fix should succeed");
+
+        // Verify YAML was actually fixed
+        let fixed_content =
+            std::fs::read_to_string(&test_node_path).expect("should read fixed file");
+
+        // Check property order is now correct
+        // Need to find properties within standard_properties section only
+        let lines: Vec<&str> = fixed_content.lines().collect();
+
+        // Find the standard_properties section
+        let std_props_start = lines.iter().position(|l| l.trim() == "standard_properties:").expect("should have standard_properties");
+
+        // Look for properties after standard_properties line
+        // Properties are at 4-space indentation (standard_properties + 2)
+        // But nested fields (like description: inside a property) are at 6 spaces
+        let key_line = lines[std_props_start..].iter().position(|l| {
+            l.starts_with("    ") && !l.starts_with("      ") && l.trim().starts_with("key:")
+        })
+            .map(|pos| std_props_start + pos)
+            .expect("should have key property");
+        let display_name_line = lines[std_props_start..].iter().position(|l| {
+            l.starts_with("    ") && !l.starts_with("      ") && l.trim().starts_with("display_name:")
+        })
+            .map(|pos| std_props_start + pos)
+            .expect("should have display_name property");
+        let description_prop_line = lines[std_props_start..].iter().position(|l| {
+            l.starts_with("    ") && !l.starts_with("      ") && l.trim().starts_with("description:")
+        })
+            .map(|pos| std_props_start + pos)
+            .expect("should have description property");
+
+        assert!(
+            key_line < display_name_line,
+            "key should come before display_name"
+        );
+        assert!(
+            display_name_line < description_prop_line,
+            "display_name should come before description property"
+        );
+
+        // Check timestamps were added
+        assert!(
+            fixed_content.contains("created_at:"),
+            "should add created_at"
+        );
+        assert!(
+            fixed_content.contains("updated_at:"),
+            "should add updated_at"
+        );
+
+        // Clean up
+        std::fs::remove_file(&test_node_path).ok();
     }
 }

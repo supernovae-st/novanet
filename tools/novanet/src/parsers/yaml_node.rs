@@ -7,7 +7,7 @@
 
 use indexmap::IndexMap;
 use rayon::prelude::*;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use smallvec::SmallVec;
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
@@ -18,7 +18,7 @@ use walkdir::WalkDir;
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// The 5 node traits (v0.12.0 ADR-024): defined, authored, imported, generated, retrieved.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Deserialize, Serialize)]
 #[serde(rename_all = "lowercase")]
 pub enum NodeTrait {
     Defined,
@@ -50,7 +50,7 @@ impl std::fmt::Display for NodeTrait {
 /// - Technical: formatting, slugification, adaptation
 /// - Style: voice/identity merged, term glossaries
 /// - Semantic: expressions, patterns, culture, taboos, audience
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Deserialize, Serialize)]
 #[serde(rename_all = "lowercase")]
 pub enum KnowledgeTier {
     Technical,
@@ -74,7 +74,7 @@ impl std::fmt::Display for KnowledgeTier {
 
 /// Dual-format icon (web + terminal) for node definitions.
 /// v0.12.5: All icons use { web, terminal } format.
-#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub struct NodeIcon {
     /// Web icon (Lucide name): "diamond"
     pub web: String,
@@ -114,7 +114,7 @@ pub struct NodeDocument {
 }
 
 /// Core node definition from YAML.
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct NodeDef {
     /// Neo4j label (PascalCase), e.g. "Project", "PageGenerated".
     pub name: String,
@@ -164,7 +164,7 @@ pub struct NodeDef {
 ///
 /// Captures the typed fields generators need; additional YAML fields
 /// (example, enum, pattern, examples, default) are collected in `extra`.
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct PropertyDef {
     /// YAML type string: "string", "int", "float", "boolean", "datetime", "json", "string[]".
     #[serde(rename = "type")]

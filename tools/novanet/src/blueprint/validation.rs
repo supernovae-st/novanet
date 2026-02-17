@@ -731,17 +731,23 @@ mod tests {
         let root = crate::config::resolve_root(None).expect("Failed to resolve root");
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
 
-        let total = data.node_classes.len();
-        let shared_count = data
+        // Filter out test files (test-*.yaml) from validation
+        let node_classes: Vec<_> = data
             .node_classes
+            .iter()
+            .filter(|n| {
+                !n.def.name.starts_with("Test")
+                    && !n.def.name.contains("test-")
+                    && !n.def.name.contains("-test")
+            })
+            .collect();
+
+        let total = node_classes.len();
+        let shared_count = node_classes
             .iter()
             .filter(|n| n.realm == "shared")
             .count();
-        let org_count = data
-            .node_classes
-            .iter()
-            .filter(|n| n.realm == "org")
-            .count();
+        let org_count = node_classes.iter().filter(|n| n.realm == "org").count();
 
         assert_eq!(
             total, 61,
@@ -933,17 +939,23 @@ mod tests {
         let root = crate::config::resolve_root(None).expect("Failed to resolve root");
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
 
-        // Count by realm (the reliable way)
-        let shared_count = data
+        // Filter out test files (test-*.yaml) from validation
+        let node_classes: Vec<_> = data
             .node_classes
+            .iter()
+            .filter(|n| {
+                !n.def.name.starts_with("Test")
+                    && !n.def.name.contains("test-")
+                    && !n.def.name.contains("-test")
+            })
+            .collect();
+
+        // Count by realm (the reliable way)
+        let shared_count = node_classes
             .iter()
             .filter(|n| n.realm == "shared")
             .count();
-        let org_count = data
-            .node_classes
-            .iter()
-            .filter(|n| n.realm == "org")
-            .count();
+        let org_count = node_classes.iter().filter(|n| n.realm == "org").count();
 
         // v0.12.5: 40 shared, 21 org (Brand Architecture: +4 -1)
         assert_eq!(
