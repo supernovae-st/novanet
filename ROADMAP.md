@@ -143,7 +143,7 @@ Trait rename migration per ADR-024 "Data Origin" for clearer semantics.
 - TypeScript Studio (15+ components, design system, tests)
 - ADR-024 added to novanet-decisions.md
 
-**Schema counts:** 61 NodeClasses, 169 ArcClasses, 2 Realms, 10 Layers (4 shared + 6 org)
+**Schema counts:** 61 NodeClasses, 182 ArcClasses, 2 Realms, 10 Layers (4 shared + 6 org), 6 ArcFamilies
 
 ---
 

@@ -35,7 +35,7 @@ Full ADR content is in `.claude/rules/adr/{domain}/adr-XXX-*.md`.
 ```
 SHARED (4 layers, 40 nodes): config, locale, geography, knowledge — READ-ONLY
 ORG (6 layers, 21 nodes): config, foundation, structure, semantic, instruction, output
-Total: 61 nodes, 169 arcs, 10 layers, 5 traits
+Total: 61 nodes, 182 arcs, 10 layers, 6 arc families, 5 traits
 ```
 
 ### v0.13.0 Key Changes
