@@ -404,11 +404,12 @@ export const EntityCategoryCardContent = memo(function EntityCategoryCardContent
       </div>
 
       {/* ═══════════════════════════════════════════════════════════════════════ */}
-      {/* ICON: Large centered icon with glow                                     */}
+      {/* MAIN CONTENT: Left-aligned icon + text layout                          */}
       {/* ═══════════════════════════════════════════════════════════════════════ */}
-      <div className="relative z-10 flex justify-center mb-4">
+      <div className="relative z-10 flex items-start gap-4 mb-4">
+        {/* Icon with pulsing halo */}
         <IconWrapper
-          className="p-5 rounded-2xl"
+          className="relative p-4 rounded-xl flex-shrink-0"
           style={iconContainerStyle}
           {...(animationsEnabled && {
             variants: iconVariants,
@@ -416,8 +417,26 @@ export const EntityCategoryCardContent = memo(function EntityCategoryCardContent
             animate: animationState,
           })}
         >
+          {/* Pulsing halo behind icon */}
+          {animationsEnabled && (selected || isHovered) && (
+            <motion.div
+              className="absolute inset-0 rounded-xl"
+              style={{
+                background: `radial-gradient(circle, ${primaryColor}40 0%, transparent 70%)`,
+              }}
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.5, 0.8, 0.5],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+            />
+          )}
           <CategoryIcon
-            size={48}
+            size={40}
             strokeWidth={1.5}
             style={{
               color: primaryColor,
@@ -429,51 +448,45 @@ export const EntityCategoryCardContent = memo(function EntityCategoryCardContent
             }}
           />
         </IconWrapper>
-      </div>
 
-      {/* ═══════════════════════════════════════════════════════════════════════ */}
-      {/* HERO: Category name                                                     */}
-      {/* ═══════════════════════════════════════════════════════════════════════ */}
-      <h2
-        className="relative z-10 text-2xl font-bold text-center text-white mb-3"
-        style={{
-          textShadow: selected
-            ? `0 0 30px ${primaryColor}70, 0 0 60px ${primaryColor}40`
-            : isHovered
-              ? `0 0 20px ${primaryColor}50`
-              : `0 0 10px ${primaryColor}30`,
-        }}
-      >
-        {data.displayName}
-      </h2>
-
-      {/* ═══════════════════════════════════════════════════════════════════════ */}
-      {/* QUESTION BADGE: Semantic question (WHAT?, WHERE?, etc.)                 */}
-      {/* ═══════════════════════════════════════════════════════════════════════ */}
-      {data.question && (
-        <div className="relative z-10 flex justify-center mb-3">
-          <span
-            className="px-4 py-1.5 rounded-full text-sm font-bold"
+        {/* Text content aligned left */}
+        <div className="flex-1 min-w-0">
+          {/* Category name */}
+          <h2
+            className="text-xl font-bold text-white mb-1"
             style={{
-              background: `linear-gradient(135deg, ${primaryColor}25 0%, ${primaryColor}15 100%)`,
-              color: primaryColor,
-              border: `1px solid ${primaryColor}40`,
-              boxShadow: `0 0 15px ${primaryColor}20`,
+              textShadow: selected
+                ? `0 0 30px ${primaryColor}70, 0 0 60px ${primaryColor}40`
+                : isHovered
+                  ? `0 0 20px ${primaryColor}50`
+                  : `0 0 10px ${primaryColor}30`,
             }}
           >
-            {data.question}
-          </span>
-        </div>
-      )}
+            {data.displayName}
+          </h2>
 
-      {/* ═══════════════════════════════════════════════════════════════════════ */}
-      {/* DESCRIPTION                                                             */}
-      {/* ═══════════════════════════════════════════════════════════════════════ */}
-      {data.description && (
-        <p className="relative z-10 text-sm text-white/55 text-center line-clamp-2 mb-4 px-2">
-          {data.description}
-        </p>
-      )}
+          {/* Question badge inline */}
+          {data.question && (
+            <span
+              className="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold mb-2"
+              style={{
+                background: `linear-gradient(135deg, ${primaryColor}25 0%, ${primaryColor}15 100%)`,
+                color: primaryColor,
+                border: `1px solid ${primaryColor}40`,
+              }}
+            >
+              {data.question}
+            </span>
+          )}
+
+          {/* Description */}
+          {data.description && (
+            <p className="text-sm text-white/55 line-clamp-2">
+              {data.description}
+            </p>
+          )}
+        </div>
+      </div>
 
       {/* Spacer */}
       <div className="flex-1" />
