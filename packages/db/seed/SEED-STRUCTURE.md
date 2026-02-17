@@ -9,21 +9,27 @@ This document describes the seed file organization aligned with the YAML archite
        └── 00-constraints.cypher      ← Constraints (runs first)
        └── 00.5-taxonomy.cypher       ← Taxonomy (generated from YAML)
        └── 01-classes.cypher          ← NodeClasses (generated)
-       └── 01-vector-indexes.cypher   ← Vector indexes
        └── 02-arc-classes.cypher      ← ArcClasses (generated)
+       └── 02.5-entity-categories.cypher ← 13 EntityCategory nodes
        └── Generated via: novanet schema generate
+
+10-19  ENTITY DATA (initial entities)
+       └── Entity and EntityNative nodes for project data
 
 20-29  SHARED REALM DATA (reference data)
        └── Locales, locale knowledge (terms, expressions, patterns)
-       └── SEO keywords, metrics
+       └── Geographic data (continents, regions, countries)
+       └── Decimal numbering (29.5) for logical grouping
        └── Shared across all projects
 
-30-39  ORG REALM DATA (business data)
+30-52  ORG REALM DATA (business data)
        └── Organizations, Projects, Pages, Blocks, Entities
-       └── Your production content
+       └── SEO keywords, BlockTypes, PageNative, arcs
+       └── Decimal numbering (32.5, 33.5, 43.5) for logical grouping
        └── Layer-ordered: config → foundation → structure → semantic → instruction → output
 
-99     AUTOWIRE (generated)
+98-99  FINALIZATION (generated)
+       └── 98-vector-indexes.cypher   ← Vector indexes (after data, before autowire)
        └── 99-autowire-classes.cypher ← Links data nodes to their Classes
        └── Generated via: novanet schema generate
 ```
@@ -35,7 +41,6 @@ This document describes the seed file organization aligned with the YAML archite
 | File | Description | Generated? |
 |------|-------------|------------|
 | `00-constraints.cypher` | Uniqueness constraints on key properties | Manual |
-| `01-vector-indexes.cypher` | Vector similarity indexes for embeddings | Manual |
 
 ### 00.5-99 SCHEMA GRAPH (generated)
 
@@ -43,7 +48,9 @@ This document describes the seed file organization aligned with the YAML archite
 |------|-------------|-------------|
 | `00.5-taxonomy.cypher` | `taxonomy.yaml` | 2 Realms, 10 Layers, 5 Traits |
 | `01-classes.cypher` | `node-classes/**/*.yaml` | 61 NodeClasses (40 shared + 21 org) |
-| `02-arc-classes.cypher` | `arc-classes/**/*.yaml` | 169 ArcClasses |
+| `02-arc-classes.cypher` | `arc-classes/**/*.yaml` | 182 ArcClasses (6 families) |
+| `02.5-entity-categories.cypher` | (manual) | 13 EntityCategory nodes |
+| `98-vector-indexes.cypher` | (manual) | Vector indexes for OntologyRAG (after data) |
 | `99-autowire-classes.cypher` | (computed) | Links data nodes to their Classes |
 
 **Regenerate:** `novanet schema generate` or `pnpm schema:generate`
