@@ -8,11 +8,14 @@ arc:
   scope: cross_realm  # org (Entity) -> shared (geography nodes)
   temperature_threshold: 0.25  # Geographic relevance - lower for regional filtering
 
-  source: Entity
+  source:
+    - Entity
+    - SEOKeyword
   target:
+    - Continent
     - GeoRegion
     - GeoSubRegion
-    - Continent
+    - Country
   cardinality: many_to_many
 
   properties:
@@ -38,12 +41,12 @@ arc:
       description: "How this relationship was determined"
 
   llm_context: |
-    USE: when finding regional popularity/relevance of an entity.
-    TRIGGERS: popular in, regional relevance, geographic targeting, market presence.
+    USE: when finding regional popularity/relevance of an entity or keyword.
+    TRIGGERS: popular in, regional relevance, geographic targeting, market presence, search volume by country.
     NOT: locale support (use SUPPORTS_LOCALE), cultural similarity (use CULTURALLY_SIMILAR).
-    RELATES: Entity (source), GeoRegion/GeoSubRegion/Continent (target), weight (property).
+    RELATES: Entity/SEOKeyword (source), Continent/GeoRegion/GeoSubRegion/Country (target), weight (property).
 
-  cypher_pattern: "(Entity)-[:POPULAR_IN {weight, confidence, source_type}]->(GeoRegion|GeoSubRegion|Continent)"
+  cypher_pattern: "(Entity|SEOKeyword)-[:POPULAR_IN {weight, confidence, source_type}]->(Continent|GeoRegion|GeoSubRegion|Country)"
 
   example:
     description: "PIX QR Code is popular in Brazil"
