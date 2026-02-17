@@ -7,12 +7,11 @@
  * Each category (Thing, Content Type, Feature, Tool, etc.) classifies entities
  * via the [:BELONGS_TO] arc.
  *
- * Visual Design: Large, centered, classification-focused with grid background
+ * Visual Design: LEFT-ALIGNED layout for better readability
  * - GridPattern background for "system/matrix" feel
  * - AuroraBackground + BorderBeam + HolographicOverlay premium effects
- * - Large centered icon with intense glow
- * - Prominent question badge (WHAT?, WHERE?, WHO?, HOW?)
- * - Stats display for entity count
+ * - Icon on left with pulsing halo effect
+ * - Name + question + description aligned left
  *
  * Data format from Neo4j:
  * - key: "THING", "CONTENT_TYPE", "FEATURE" (uppercase, underscore-separated)
@@ -26,33 +25,18 @@
  * - Border → Realm (shared = teal cyan)
  * - Effects → Premium (GridPattern + Aurora + BorderBeam)
  *
- * Layout:
+ * Layout (v0.13.1 - LEFT ALIGNED):
  * ┌──────────────────────────────────────────────────────────────────────────┐
  * │  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  │
+ * │  ░░  ◇ CONFIG                                          ● shared  ░░░░  │
  * │  ░░                                                               ░░░░  │
- * │  ░░        ┌─────────────────────────────────────────┐           ░░░░  │
- * │  ░░        │        ◇ CONFIG     ● shared            │           ░░░░  │
- * │  ░░        └─────────────────────────────────────────┘           ░░░░  │
+ * │  ░░  ┌───────────┐                                               ░░░░  │
+ * │  ░░  │    📦     │   Thing                                       ░░░░  │
+ * │  ░░  │  (icon)   │   "WHAT?"                                     ░░░░  │
+ * │  ░░  └───────────┘   Core products and objects...                ░░░░  │
  * │  ░░                                                               ░░░░  │
- * │  ░░                      ┌───────────┐                           ░░░░  │
- * │  ░░                      │           │                           ░░░░  │
- * │  ░░                      │    📦     │  ← Large icon with glow    ░░░░  │
- * │  ░░                      │           │                           ░░░░  │
- * │  ░░                      └───────────┘                           ░░░░  │
- * │  ░░                                                               ░░░░  │
- * │  ░░                        Thing                                  ░░░░  │  ← displayName (hero)
- * │  ░░                                                               ░░░░  │
- * │  ░░                  ┌──────────────┐                            ░░░░  │
- * │  ░░                  │   "WHAT?"    │  ← question badge           ░░░░  │
- * │  ░░                  └──────────────┘                            ░░░░  │
- * │  ░░                                                               ░░░░  │
- * │  ░░          Core products and objects that exist...             ░░░░  │  ← description
- * │  ░░                                                               ░░░░  │
- * │  ░░        ───────────────────────────────────────────           ░░░░  │
- * │  ░░                                                               ░░░░  │
- * │  ░░        ┌─────────────────┐  ┌─────────────────┐              ░░░░  │
- * │  ░░        │ ◆ CATEGORY      │  │ classifies →    │              ░░░░  │
- * │  ░░        └─────────────────┘  └─────────────────┘              ░░░░  │
+ * │  ░░  ────────────────────────────────────────────────────────    ░░░░  │
+ * │  ░░  ◆ ENTITY_CATEGORY                         classifies →      ░░░░  │
  * │  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  │
  * └──────────────────────────────────────────────────────────────────────────┘
  */
