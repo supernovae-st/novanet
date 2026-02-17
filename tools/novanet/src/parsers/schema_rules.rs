@@ -56,11 +56,11 @@ const KEYLESS_NODES: &[&str] = &[
 ];
 
 /// Nodes with composite keys that MUST have denormalized properties.
-/// Format: (NodeName, &[required_denormalized_properties])
-const COMPOSITE_KEY_NODES: &[(&str, &[&str])] = &[
-    ("EntityNative", &["entity_key", "locale_key"]),
-    ("PageNative", &["page_key", "locale_key"]),
-    ("BlockNative", &["block_key", "locale_key"]),
+/// Format: (NodeName, prefix, parent_key_name, &[required_denormalized_properties])
+const COMPOSITE_KEY_NODES: &[(&str, &str, &str, &[&str])] = &[
+    ("EntityNative", "entity", "entity_key", &["entity_key", "locale_key"]),
+    ("PageNative", "page", "page_key", &["page_key", "locale_key"]),
+    ("BlockNative", "block", "block_key", &["block_key", "locale_key"]),
 ];
 
 /// Expected order for standard properties.
@@ -103,7 +103,7 @@ pub fn validate_node(node: &ParsedNode) -> Vec<SchemaIssue> {
     }
 
     // Rule 2: Composite key nodes must have denormalized properties
-    for (composite_node, required_props) in COMPOSITE_KEY_NODES {
+    for (composite_node, _prefix, _parent_key_name, required_props) in COMPOSITE_KEY_NODES {
         if node.def.name == *composite_node {
             if let Some(ref sp) = node.def.standard_properties {
                 for prop in *required_props {
@@ -173,6 +173,149 @@ pub fn validate_node(node: &ParsedNode) -> Vec<SchemaIssue> {
         }
     }
 
+    // Rule 5: Composite key format validation
+    // Validates that composite key nodes follow the pattern: {type}:{parent_key}@{locale}
+    // and that denormalized properties match their respective parts
+    for (composite_node, prefix, parent_key_name, _required_props) in COMPOSITE_KEY_NODES {
+        if node.def.name == *composite_node {
+            if let Some(ref sp) = node.def.standard_properties {
+                // Get the key property
+                if let Some(key_prop) = sp.get("key") {
+                    if let Some(key_pattern) = key_prop.extra.get("pattern").and_then(|v| v.as_str()) {
+                        // Expected pattern: "^{prefix}:[^@]+@[a-z]{2}-[A-Z]{2}$"
+                        let expected_prefix = format!("{}:", prefix);
+
+                        // Check if pattern starts with correct prefix
+                        if !key_pattern.starts_with(&format!("^{}", expected_prefix)) {
+                            issues.push(SchemaIssue {
+                                node_name: node.def.name.clone(),
+                                severity: IssueSeverity::Error,
+                                rule: "COMPOSITE_KEY_FORMAT",
+                                message: format!(
+                                    "Composite key pattern should start with '{}'. Found: {}",
+                                    expected_prefix, key_pattern
+                                ),
+                            });
+                        }
+
+                        // Check if pattern includes @ separator
+                        if !key_pattern.contains('@') {
+                            issues.push(SchemaIssue {
+                                node_name: node.def.name.clone(),
+                                severity: IssueSeverity::Error,
+                                rule: "COMPOSITE_KEY_FORMAT",
+                                message: format!(
+                                    "Composite key pattern must include '@' separator. Found: {}",
+                                    key_pattern
+                                ),
+                            });
+                        }
+                    } else {
+                        issues.push(SchemaIssue {
+                            node_name: node.def.name.clone(),
+                            severity: IssueSeverity::Warning,
+                            rule: "COMPOSITE_KEY_FORMAT",
+                            message: format!(
+                                "Composite key node should have 'pattern' regex: ^{}:[^@]+@[a-z]{{2}}-[A-Z]{{2}}$",
+                                prefix
+                            ),
+                        });
+                    }
+
+                    // Check examples if present
+                    if let Some(examples) = key_prop.extra.get("examples").and_then(|v| v.as_sequence()) {
+                        for (idx, example) in examples.iter().enumerate() {
+                            if let Some(example_str) = example.as_str() {
+                                // Validate format: {prefix}:{key}@{locale}
+                                if !example_str.starts_with(&format!("{}:", prefix)) {
+                                    issues.push(SchemaIssue {
+                                        node_name: node.def.name.clone(),
+                                        severity: IssueSeverity::Error,
+                                        rule: "COMPOSITE_KEY_FORMAT",
+                                        message: format!(
+                                            "Example[{}] '{}' should start with '{}:'",
+                                            idx, example_str, prefix
+                                        ),
+                                    });
+                                }
+
+                                if !example_str.contains('@') {
+                                    issues.push(SchemaIssue {
+                                        node_name: node.def.name.clone(),
+                                        severity: IssueSeverity::Error,
+                                        rule: "COMPOSITE_KEY_FORMAT",
+                                        message: format!(
+                                            "Example[{}] '{}' must include '@' separator",
+                                            idx, example_str
+                                        ),
+                                    });
+                                }
+
+                                // Validate that parts match denormalized properties if available
+                                if let Some(at_pos) = example_str.rfind('@') {
+                                    let before_at = &example_str[..at_pos];
+                                    let locale_part = &example_str[at_pos + 1..];
+
+                                    // Extract parent key part (everything after "prefix:")
+                                    if let Some(parent_part) = before_at.strip_prefix(&format!("{}:", prefix)) {
+                                        // Check if parent_key matches (if present in example description)
+                                        if let Some(parent_key_prop) = sp.get(*parent_key_name) {
+                                            if let Some(parent_examples) = parent_key_prop.extra
+                                                .get("examples")
+                                                .and_then(|v| v.as_sequence())
+                                            {
+                                                // At least one parent example should match
+                                                let any_match = parent_examples
+                                                    .iter()
+                                                    .any(|e| e.as_str() == Some(parent_part));
+
+                                                if !any_match && !parent_examples.is_empty() {
+                                                    issues.push(SchemaIssue {
+                                                        node_name: node.def.name.clone(),
+                                                        severity: IssueSeverity::Warning,
+                                                        rule: "COMPOSITE_KEY_FORMAT",
+                                                        message: format!(
+                                                            "Example[{}] parent part '{}' doesn't match any {} examples",
+                                                            idx, parent_part, parent_key_name
+                                                        ),
+                                                    });
+                                                }
+                                            }
+                                        }
+
+                                        // Check if locale part matches locale_key examples
+                                        if let Some(locale_key_prop) = sp.get("locale_key") {
+                                            if let Some(locale_examples) = locale_key_prop.extra
+                                                .get("examples")
+                                                .and_then(|v| v.as_sequence())
+                                            {
+                                                let any_match = locale_examples
+                                                    .iter()
+                                                    .any(|e| e.as_str() == Some(locale_part));
+
+                                                if !any_match && !locale_examples.is_empty() {
+                                                    issues.push(SchemaIssue {
+                                                        node_name: node.def.name.clone(),
+                                                        severity: IssueSeverity::Warning,
+                                                        rule: "COMPOSITE_KEY_FORMAT",
+                                                        message: format!(
+                                                            "Example[{}] locale part '{}' doesn't match any locale_key examples",
+                                                            idx, locale_part
+                                                        ),
+                                                    });
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     issues
 }
 
@@ -232,7 +375,7 @@ mod tests {
         let nodes =
             crate::parsers::yaml_node::load_all_nodes(&root).expect("should load all nodes");
 
-        for (node_name, required_props) in COMPOSITE_KEY_NODES {
+        for (node_name, _prefix, _parent_key_name, required_props) in COMPOSITE_KEY_NODES {
             let node = nodes.iter().find(|n| n.def.name == *node_name);
             assert!(node.is_some(), "Node {} not found", node_name);
 
