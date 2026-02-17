@@ -238,6 +238,12 @@ enum SchemaAction {
         #[arg(long)]
         strict: bool,
     },
+    /// Extract schema statistics (node/arc counts) in JSON format
+    Stats {
+        /// Output format (json or table)
+        #[arg(long, value_enum, default_value_t = OutputFormat::Json)]
+        format: OutputFormat,
+    },
 }
 
 #[derive(Subcommand)]
@@ -501,6 +507,11 @@ async fn main() -> color_eyre::Result<()> {
                 if !errors.is_empty() || (strict && !warnings.is_empty()) {
                     std::process::exit(1);
                 }
+            }
+            SchemaAction::Stats { format } => {
+                let root = root?;
+                eprintln!("novanet schema stats (root: {})", root.display());
+                novanet::commands::schema::schema_stats(&root, format)?;
             }
         },
         Commands::Doc { action } => match action {
