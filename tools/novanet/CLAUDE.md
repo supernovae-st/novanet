@@ -18,6 +18,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | Read | `blueprint`, `data`, `overlay`, `query` | Implemented (faceted Cypher) |
 | Write | `node create/edit/delete`, `arc create/delete` | Implemented (label validation) |
 | Schema | `schema generate`, `schema validate` | Implemented (12 artifacts) |
+| Auto-Fix | 6 fixers via FixEngine | Implemented (TDD + property-based tests) |
 | Docs | `doc generate`, `doc generate --list` | Implemented (40 views) |
 | Search | `search --query=... [--class=...]` | Implemented (fulltext + property) |
 | Locale | `locale list`, `locale import`, `locale generate` | Implemented |
@@ -29,11 +30,11 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | TUI | `tui` | Unified tree (Graph/Nexus modes), lazy loading, async channels |
 | System | `completions`, `doctor` | Implemented |
 
-**1082 tests pass** (`cargo test`). Zero clippy warnings.
+**1139 tests pass** (`cargo test`). Zero clippy warnings.
 
 **Testing stack:**
 - `insta` — Snapshot testing (5 generator outputs)
-- `proptest` — Property-based testing (cypher_utils edge cases)
+- `proptest` — Property-based testing (auto-fix invariants + cypher_utils)
 - `pretty_assertions` — Colorful diffs
 - `cargo-nextest` — Fast parallel test runner (CI)
 
@@ -222,6 +223,15 @@ src/
     filter.rs     filter build (JSON stdin → Cypher stdout)
   parsers/        YAML parsers (yaml_node, relations, taxonomy, organizing, views)
   generators/     Code generators (organizing, kind, arc_schema, layer, mermaid, view_mermaid, autowire, hierarchy, colors, icons, visual_encoding, views, tui_icons)
+  validation/     Schema validation + auto-fix system
+    mod.rs        ValidationEngine + rule registry
+    autofix/      AutoFix trait + 6 fixers (FixEngine registry)
+      composite_key.rs      Adds pattern to composite key fields
+      denormalized_key.rs   Adds denormalized keys for composite nodes
+      description.rs        Generates default descriptions
+      example_data.rs       Generates type-aware example data
+      property_order.rs     Reorders properties to canonical order
+      timestamps.rs         Adds created_at/updated_at properties
   tui/            Terminal UI v3 — Unified Tree Architecture (feature-gated)
     mod.rs        Entry point (terminal setup + event loop)
     app.rs        State machine (NavMode: Graph/Nexus, async channels for lazy loading)
@@ -252,6 +262,90 @@ src/
   - TypeScript generated: `packages/core/src/graph/visual-encoding.ts` (ICONS export)
   - Rust compile-time: `tools/novanet/src/tui/icons.rs` (generated constants)
   - Runtime fallback: `Theme::with_root()` loads from YAML with graceful defaults
+
+## Auto-Fix System
+
+**Architecture**: Trait-based auto-fix system with registry pattern for automatically correcting schema validation violations.
+
+### AutoFix Trait
+
+```rust
+pub trait AutoFix: Send + Sync {
+    fn can_fix(&self, issue: &SchemaIssue) -> bool;
+    fn fix(&self, node: &mut ParsedNode, issue: &SchemaIssue) -> Result<FixAction>;
+    fn description(&self) -> &str;
+}
+```
+
+### FixEngine Registry
+
+Central registry that applies the first matching fixer for validation issues:
+
+```rust
+let engine = FixEngine::default();  // 6 fixers registered
+let result = engine.apply_fix(&mut node, &issue)?;
+
+match result {
+    FixAction::Modified { changes } => { /* applied */ },
+    FixAction::Skipped { reason } => { /* not applicable */ },
+}
+```
+
+### Registered Fixers
+
+| Fixer | Rule | Action | Example |
+|-------|------|--------|---------|
+| **CompositeKeyFixer** | COMPOSITE_KEY_FORMAT | Adds `pattern` property to composite key fields | `pattern: "^entity:[a-z0-9-]+@[a-z]{2}-[A-Z]{2}$"` |
+| **DenormalizedKeyFixer** | DENORM_REQUIRED | Adds denormalized keys (entity_key, page_key, locale_key) | For EntityNative composite keys |
+| **DescriptionFixer** | DESCRIPTION_REQUIRED | Generates contextual description | `"{name} node in the {layer} layer (realm: {realm})"` |
+| **ExampleDataFixer** | EXAMPLE_DATA | Generates type-aware example data for required properties | string → "example-{prop}", integer → 1 |
+| **PropertyOrderFixer** | PROP_ORDER | Reorders standard_properties to canonical order | key, display_name, description, created_at, updated_at |
+| **TimestampFixer** | TIMESTAMP_REQUIRED | Adds created_at/updated_at datetime properties | Required for all nodes |
+
+### Testing Methodology
+
+**TDD RED-GREEN-REFACTOR** cycle:
+
+1. **RED**: Write failing tests (expected behavior, not yet implemented)
+2. **GREEN**: Implement minimal code to make tests pass
+3. **REFACTOR**: Add property-based tests with `proptest` to verify invariants
+
+**Property-based tests** verify:
+- **Correctness**: Required elements always added
+- **Idempotence**: Applying fix twice = applying once
+- **Identity preservation**: Node metadata (name, realm, layer, trait) unchanged
+- **Property preservation**: Existing properties intact
+
+**Coverage**: 52 tests (24 unit + 24 property-based + 4 integration)
+
+### Usage Pattern
+
+```rust
+use novanet::validation::autofix::{FixEngine, FixAction};
+
+let mut engine = FixEngine::default();
+let result = engine.apply_fix(&mut node, &issue)?;
+
+match result {
+    FixAction::Modified { changes } => {
+        for change in changes {
+            println!("✓ Fixed {}: {:?} → {:?}",
+                change.field, change.old_value, change.new_value);
+        }
+    }
+    FixAction::Skipped { reason } => {
+        println!("⊘ Skipped: {}", reason);
+    }
+}
+```
+
+### Future Integration
+
+The auto-fix system is ready for integration into `schema validate`:
+
+```bash
+cargo run -- schema validate --fix  # Apply automatic fixes (future feature)
+```
 
 ## TUI Keybindings
 
