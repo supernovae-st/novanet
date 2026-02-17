@@ -39,7 +39,7 @@ export const ProjectNode = memo(function ProjectNode(props: NodeProps<ProjectNod
     <CardShell
       colors={colors}
       selected={selected}
-      width={280}
+      width={420}
       isDimmed={data.dimmed === true}
       isHoverDimmed={data.hoverDimmed === true}
       isSchemaMode={data.isSchemaMode === true}

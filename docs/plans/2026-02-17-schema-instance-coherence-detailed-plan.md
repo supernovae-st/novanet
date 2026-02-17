@@ -490,13 +490,214 @@ RETURN labels(n) AS type, count(n) AS count;
 
 ---
 
+---
+
+## Phase 5: Multi-Agent YAML Verification
+
+After adding llm_context to all 61 YAMLs, launch 3 parallel agents to cross-verify:
+
+### Agent 1 — YAML Structure Audit
+```bash
+# Check every YAML has both BLOC 2 and BLOC 4 llm_context
+for f in $(find packages/core/models/node-classes -name "*.yaml"); do
+  has_bloc2=$(grep -c "^  llm_context:" "$f" || true)
+  has_bloc4=$(grep -c "^    llm_context:" "$f" || true)
+  if [ "$has_bloc2" -eq 0 ] || [ "$has_bloc4" -eq 0 ]; then
+    echo "MISSING: $f (BLOC2=$has_bloc2 BLOC4=$has_bloc4)"
+  fi
+done
+```
+
+### Agent 2 — YAML vs Seed Coherence
+```bash
+# Check every property declared in YAML exists in seed files
+# Focus on required properties
+```
+
+### Agent 3 — Property Order Check
+```bash
+# Check standard_properties order in each YAML
+# key → *_key → display_name → description → created_at → updated_at
+```
+
+---
+
+## Phase 6: Neo4j Seed + Instance Verification
+
+### Step 6.1 — Re-seed database
+
+```bash
+cd /path/to/novanet-hq
+pnpm infra:seed
+```
+
+Or run migrations only (faster, if DB already seeded):
+```bash
+# Apply migration 001
+cat packages/db/seed/migrations/001-slugification-timestamps.cypher | \
+  cypher-shell -u neo4j -p novanetpassword
+
+# Apply migration 002
+cat packages/db/seed/migrations/002-brand-design-split.cypher | \
+  cypher-shell -u neo4j -p novanetpassword
+```
+
+### Step 6.2 — Instance vs Schema verification queries
+
+```cypher
+// ─────────────────────────────────────────────────
+// VERIFICATION 1: All Slugification have timestamps
+// ─────────────────────────────────────────────────
+MATCH (s:Slugification)
+WHERE s.created_at IS NULL OR s.updated_at IS NULL
+RETURN count(s) AS missing_timestamps;
+// Expected: 0
+
+// ─────────────────────────────────────────────────
+// VERIFICATION 2: Brand has brand_name
+// ─────────────────────────────────────────────────
+MATCH (b:Brand)
+WHERE b.brand_name IS NULL
+RETURN b.key, b.display_name;
+// Expected: 0 rows
+
+// ─────────────────────────────────────────────────
+// VERIFICATION 3: BrandDesign exists + HAS_DESIGN arc
+// ─────────────────────────────────────────────────
+MATCH (b:Brand)-[:HAS_DESIGN]->(bd:BrandDesign)
+RETURN b.key, bd.key, bd.color_primary, bd.font_primary;
+// Expected: brand-qrcode-ai | brand-design-qrcode-ai | #6366F1 | Inter
+
+// ─────────────────────────────────────────────────
+// VERIFICATION 4: Brand no longer has design props
+// ─────────────────────────────────────────────────
+MATCH (b:Brand {key: "brand-qrcode-ai"})
+RETURN keys(b) AS all_properties;
+// Expected: no color_*, font_*, border_radius, shadow_style, animation_style
+
+// ─────────────────────────────────────────────────
+// VERIFICATION 5: All nodes have llm_context (sample)
+// ─────────────────────────────────────────────────
+MATCH (s:Slugification {key: "fr-FR"})
+RETURN s.llm_context, s.created_at, s.updated_at;
+// Expected: non-null for all 3
+
+// ─────────────────────────────────────────────────
+// VERIFICATION 6: Schema coherence - count all node types
+// ─────────────────────────────────────────────────
+MATCH (n)
+WHERE NOT n:_Bloom_Perspective_
+RETURN labels(n) AS type, count(n) AS count,
+       sum(CASE WHEN n.created_at IS NULL THEN 1 ELSE 0 END) AS missing_created_at,
+       sum(CASE WHEN n.updated_at IS NULL THEN 1 ELSE 0 END) AS missing_updated_at
+ORDER BY count DESC;
+
+// ─────────────────────────────────────────────────
+// VERIFICATION 7: Brand-BrandDesign full graph
+// ─────────────────────────────────────────────────
+MATCH (p:Project)-[:HAS_BRAND]->(b:Brand)
+OPTIONAL MATCH (b)-[:HAS_DESIGN]->(bd:BrandDesign)
+OPTIONAL MATCH (b)-[:HAS_PRINCIPLES]->(bp)
+RETURN p.key, b.key, b.brand_name, bd.key, bp.key;
+```
+
+### Step 6.3 — YAML Schema vs Neo4j Instance property comparison
+
+For each node type, compare declared properties in YAML vs actual properties in Neo4j:
+
+```cypher
+// Get all properties for a specific node type
+MATCH (b:Brand {key: "brand-qrcode-ai"})
+RETURN keys(b) AS neo4j_properties;
+```
+
+Then compare against brand.yaml `standard_properties` + `properties` keys.
+
+---
+
+## Phase 7: TUI Visual Verification
+
+### What to verify in TUI
+
+```bash
+cargo run -- tui
+```
+
+Navigate to:
+
+1. **Realm:org → Layer:foundation → Class:Brand**
+   - Should show Brand node with properties (NO design props)
+   - `brand_name` should be visible in info panel
+   - `llm_context` should show instance context
+
+2. **Realm:org → Layer:foundation → Class:BrandDesign** (NEW)
+   - Should appear in tree (didn't exist before!)
+   - Should show all design tokens (colors, fonts, etc.)
+   - Should show `[:HAS_DESIGN]` arc from Brand
+
+3. **Realm:shared → Layer:locale → Class:Slugification**
+   - Sample instance (fr-FR, en-US, ar-SA) should show
+   - `created_at` and `updated_at` visible in properties
+   - `llm_context` summary visible
+
+4. **Arc:HAS_DESIGN** in arc families
+   - Should show Brand → BrandDesign relationship
+   - Visible in ownership family
+
+### TUI display improvement checks
+
+| What | Expected TUI display | If wrong |
+|------|---------------------|----------|
+| Brand instance | Shows brand_name, no color_primary | Re-seed required |
+| BrandDesign instance | Shows color_primary, font_primary | Run migration 002 |
+| Slugification fr-FR | Shows created_at, llm_context | Run migration 001 |
+| HAS_DESIGN arc | Visible in tree | Schema generate needed |
+
+### Visual test command
+```bash
+# Quick non-interactive check
+cargo run -- data --class=Brand --format=json | jq '.[] | {key, brand_name, color_primary}'
+# Expected: brand_name present, color_primary absent
+
+cargo run -- data --class=BrandDesign --format=json | jq '.[] | {key, color_primary, font_primary}'
+# Expected: color_primary and font_primary present
+
+cargo run -- data --class=Slugification --format=table | head -5
+# Expected: created_at column visible
+```
+
+---
+
+## Execution Order (Updated)
+
+```
+✅ DONE - Phase 1.1: Fix Slugification timestamps (22-slugification.cypher + migration 001)
+✅ DONE - Phase 1.2: Fix Brand brand_name (31-project-qrcode-ai.cypher)
+✅ DONE - Phase 1.3: Create BrandDesign node (31-project-qrcode-ai.cypher + migration 002)
+✅ DONE - Phase 1.4: schema-standard.md dual llm_context documented
+✅ DONE - Phase 1.5: brand.yaml + slugification.yaml BLOC 4 llm_context added
+🔄 IN PROGRESS - Phase 2: Add llm_context to 59 remaining YAMLs (batch agents)
+⏳ NEXT - Phase 3: Commit YAML changes
+⏳ NEXT - Phase 4: Implement coherence_check.rs
+⏳ NEXT - Phase 5: Multi-agent YAML verification (3 parallel agents)
+⏳ NEXT - Phase 6: Neo4j seed + instance verification queries
+⏳ NEXT - Phase 7: TUI visual verification + data commands
+```
+
+---
+
 ## Success Criteria
 
-- [ ] 0 Slugification nodes without timestamps
-- [ ] 0 Brand nodes without brand_name
-- [ ] BrandDesign node exists with HAS_DESIGN arc from Brand
-- [ ] Brand has 0 design properties (moved to BrandDesign)
-- [ ] 61/61 YAMLs declare llm_context in properties
+- [ ] 0 Slugification nodes without timestamps (Neo4j verified)
+- [ ] 0 Brand nodes without brand_name (Neo4j verified)
+- [ ] BrandDesign node exists with HAS_DESIGN arc from Brand (Neo4j verified)
+- [ ] Brand has 0 design properties (Neo4j verified - keys() check)
+- [ ] 61/61 YAMLs declare llm_context in BLOC 2 (schema-level)
+- [ ] 61/61 YAMLs declare llm_context in BLOC 4 (properties-level)
 - [ ] schema-standard.md documents dual llm_context pattern
 - [ ] `cargo run -- schema validate --strict` exits 0
-- [ ] `cargo test` still passes 1082 tests
+- [ ] `cargo test` still passes (1082+ tests)
+- [ ] TUI shows BrandDesign as new node in org/foundation layer
+- [ ] TUI shows Slugification instances with timestamps visible
+- [ ] `cargo run -- data --class=Brand` shows brand_name, no design props
+- [ ] `cargo run -- data --class=BrandDesign` shows design tokens

@@ -623,7 +623,7 @@ export const ProjectCardContent = memo(function ProjectCardContent({
 
         {/* Project Logo */}
         <LogoWrapper
-          className="w-14 h-14 rounded-2xl overflow-hidden"
+          className="w-20 h-20 rounded-2xl overflow-hidden"
           style={logoContainerStyle}
           {...(animationsEnabled && {
             variants: logoVariants,
@@ -635,8 +635,8 @@ export const ProjectCardContent = memo(function ProjectCardContent({
             <Image
               src={logoUrl}
               alt={data.displayName}
-              width={56}
-              height={56}
+              width={80}
+              height={80}
               className="object-cover w-full h-full"
               unoptimized
               onError={() => setImageError(true)}
@@ -646,7 +646,7 @@ export const ProjectCardContent = memo(function ProjectCardContent({
               className="w-full h-full flex items-center justify-center"
               style={{ background: `${primaryColor}20` }}
             >
-              <Briefcase size={28} style={{ color: primaryColor }} />
+              <Briefcase size={36} style={{ color: primaryColor }} />
             </div>
           )}
         </LogoWrapper>
