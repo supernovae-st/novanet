@@ -41,3 +41,11 @@ export {
   type RealmNodeData,
   type RealmOrbitalCardProps,
 } from './RealmOrbitalCardContent';
+
+// Taxonomy cards (Premium TAXONOMY level design - Realm/Layer/Trait/ArcFamily)
+export {
+  TaxonomyCardContent,
+  type TaxonomyNodeData,
+  type TaxonomyCardContentProps,
+  type TaxonomyVariant,
+} from './TaxonomyCardContent';

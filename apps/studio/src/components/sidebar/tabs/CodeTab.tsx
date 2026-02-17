@@ -1,54 +1,139 @@
 'use client';
 
 /**
- * CodeTab - Code representations of the node
+ * CodeTab - Premium code representations of the node
  *
  * Features:
  * - Format switcher: JSON, YAML, Cypher, TypeScript
- * - Syntax-highlighted code viewer
- * - Copy to clipboard
+ * - Premium syntax-highlighted code viewer with glow effects
+ * - Copy to clipboard with feedback
+ * - Language-specific color themes
+ * - Line numbers option
+ *
+ * Design System:
+ * - Uses glass.surface hierarchy
+ * - Language-specific accent colors
+ * - Premium code block with subtle gradients
  */
 
 import { memo, useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Copy, Check } from 'lucide-react';
+import { Copy, Check, FileJson, FileCode, Database, FileType } from 'lucide-react';
 import { CLASS_TAXONOMY } from '@novanet/core/types';
 import { cn } from '@/lib/utils';
 import { useCopyFeedback } from '@/hooks';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
+import { glass } from '@/design/tokens';
 import type { GraphNode } from '@/types';
 
-// Code format types
+// Code format types with metadata
 type CodeFormat = 'json' | 'yaml' | 'cypher' | 'typescript';
+
+interface FormatConfig {
+  id: CodeFormat;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  color: string;
+  bgColor: string;
+  description: string;
+}
+
+const FORMAT_CONFIGS: FormatConfig[] = [
+  {
+    id: 'json',
+    label: 'JSON',
+    icon: FileJson,
+    color: '#10b981',
+    bgColor: 'rgba(16, 185, 129, 0.1)',
+    description: 'Standard JSON representation',
+  },
+  {
+    id: 'yaml',
+    label: 'YAML',
+    icon: FileCode,
+    color: '#3b82f6',
+    bgColor: 'rgba(59, 130, 246, 0.1)',
+    description: 'NovaNet YAML node definition',
+  },
+  {
+    id: 'cypher',
+    label: 'Cypher',
+    icon: Database,
+    color: '#a855f7',
+    bgColor: 'rgba(168, 85, 247, 0.1)',
+    description: 'Neo4j Cypher query statements',
+  },
+  {
+    id: 'typescript',
+    label: 'TypeScript',
+    icon: FileType,
+    color: '#f59e0b',
+    bgColor: 'rgba(245, 158, 11, 0.1)',
+    description: 'TypeScript interface and example',
+  },
+];
 
 interface CodeTabProps {
   node: GraphNode;
   colors: { primary: string; secondary: string };
 }
 
-interface FormatButtonProps {
-  format: CodeFormat;
-  label: string;
-  isActive: boolean;
-  onClick: () => void;
-}
-
 /**
- * Format switcher button
+ * Premium format switcher with icons and active state
  */
-function FormatButton({ format: _format, label, isActive, onClick }: FormatButtonProps) {
+function FormatSwitcher({
+  activeFormat,
+  onFormatChange,
+}: {
+  activeFormat: CodeFormat;
+  onFormatChange: (format: CodeFormat) => void;
+}) {
   return (
-    <button
-      onClick={onClick}
-      className={cn(
-        'px-3 py-1.5 rounded-lg text-xs font-medium transition-all',
-        isActive
-          ? 'bg-white/10 text-white'
-          : 'text-white/50 hover:text-white/70 hover:bg-white/5'
-      )}
+    <div
+      className="flex items-center gap-1 p-1.5"
+      style={{
+        background: `linear-gradient(180deg, ${glass.surface[2]}, ${glass.surface[1]})`,
+        borderBottom: `1px solid ${glass.border.subtle}`,
+      }}
     >
-      {label}
-    </button>
+      {FORMAT_CONFIGS.map((config) => {
+        const isActive = config.id === activeFormat;
+        const Icon = config.icon;
+
+        return (
+          <button
+            key={config.id}
+            onClick={() => onFormatChange(config.id)}
+            className={cn(
+              'relative flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium',
+              'transition-all duration-200 ease-out',
+              'focus:outline-none focus-visible:ring-2 focus-visible:ring-white/20',
+              isActive ? 'text-white' : 'text-white/40 hover:text-white/60'
+            )}
+            style={isActive ? {
+              background: config.bgColor,
+              boxShadow: `0 0 12px ${config.color}20`,
+            } : undefined}
+            title={config.description}
+          >
+            <span style={isActive ? { color: config.color } : undefined}>
+              <Icon className="w-3.5 h-3.5" />
+            </span>
+            <span>{config.label}</span>
+
+            {/* Active indicator dot */}
+            {isActive && (
+              <motion.div
+                layoutId="codeFormatIndicator"
+                className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full"
+                style={{ background: config.color }}
+                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+              />
+            )}
+          </button>
+        );
+      })}
+    </div>
   );
 }
 
@@ -208,7 +293,7 @@ const ${node.key.replace(/-/g, '_')}: ${node.type}Data = ${JSON.stringify({
 }
 
 /**
- * Code viewer with copy button
+ * Premium code viewer with syntax highlighting and glow effects
  */
 function CodeViewer({
   code,
@@ -221,44 +306,114 @@ function CodeViewer({
   onCopy: () => void;
   isCopied: boolean;
 }) {
-  // Simple syntax highlighting colors by format
-  const getLanguageClass = (fmt: CodeFormat) => {
-    switch (fmt) {
-      case 'json': return 'text-emerald-400/80';
-      case 'yaml': return 'text-blue-400/80';
-      case 'cypher': return 'text-purple-400/80';
-      case 'typescript': return 'text-amber-400/80';
-      default: return 'text-white/70';
-    }
-  };
+  const formatConfig = FORMAT_CONFIGS.find((c) => c.id === format)!;
+  const lines = code.split('\n');
 
   return (
     <div className="relative group">
-      {/* Copy button */}
-      <button
-        onClick={onCopy}
-        className={cn(
-          'absolute top-3 right-3 p-2 rounded-lg transition-all',
-          'opacity-0 group-hover:opacity-100',
-          isCopied
-            ? 'bg-emerald-500/20 text-emerald-400'
-            : 'bg-white/10 text-white/60 hover:text-white hover:bg-white/20'
-        )}
-        title={isCopied ? 'Copied!' : 'Copy code'}
+      {/* Premium code container with glass effect */}
+      <div
+        className="relative rounded-xl overflow-hidden"
+        style={{
+          background: `linear-gradient(135deg, ${glass.surface[0]}, ${glass.surface[1]})`,
+          border: `1px solid ${glass.border.subtle}`,
+          boxShadow: `
+            inset 0 1px 0 ${glass.highlight.subtle},
+            0 4px 24px rgba(0, 0, 0, 0.4)
+          `,
+        }}
       >
-        {isCopied ? (
-          <Check className="w-4 h-4" />
-        ) : (
-          <Copy className="w-4 h-4" />
-        )}
-      </button>
+        {/* Header bar with format indicator */}
+        <div
+          className="flex items-center justify-between px-4 py-2"
+          style={{
+            background: `linear-gradient(90deg, ${formatConfig.bgColor}, transparent)`,
+            borderBottom: `1px solid ${glass.border.subtle}`,
+          }}
+        >
+          <div className="flex items-center gap-2">
+            {/* Traffic light dots */}
+            <div className="flex items-center gap-1.5">
+              <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
+              <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
+              <div className="w-2.5 h-2.5 rounded-full bg-green-500/60" />
+            </div>
+            <span
+              className="text-[10px] font-mono uppercase tracking-wider"
+              style={{ color: formatConfig.color }}
+            >
+              {format}
+            </span>
+          </div>
 
-      {/* Code block */}
-      <pre className="p-4 bg-black/40 rounded-lg overflow-x-auto">
-        <code className={cn('font-mono text-xs leading-relaxed whitespace-pre-wrap', getLanguageClass(format))}>
-          {code}
-        </code>
-      </pre>
+          {/* Copy button */}
+          <motion.button
+            onClick={onCopy}
+            className={cn(
+              'flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium',
+              'transition-all duration-200',
+              isCopied
+                ? 'bg-emerald-500/20 text-emerald-400'
+                : 'bg-white/[0.06] text-white/50 hover:text-white hover:bg-white/10'
+            )}
+            whileTap={{ scale: 0.95 }}
+          >
+            {isCopied ? (
+              <>
+                <Check className="w-3 h-3" />
+                <span>Copied</span>
+              </>
+            ) : (
+              <>
+                <Copy className="w-3 h-3" />
+                <span>Copy</span>
+              </>
+            )}
+          </motion.button>
+        </div>
+
+        {/* Code content with line numbers */}
+        <div className="overflow-x-auto">
+          <pre className="p-4 text-xs leading-relaxed">
+            <code className="flex">
+              {/* Line numbers column */}
+              <div
+                className="flex-shrink-0 pr-4 select-none text-right font-mono"
+                style={{ color: `${formatConfig.color}40` }}
+              >
+                {lines.map((_, i) => (
+                  <div key={i} className="leading-relaxed">
+                    {i + 1}
+                  </div>
+                ))}
+              </div>
+
+              {/* Code column */}
+              <div
+                className="flex-1 font-mono whitespace-pre"
+                style={{ color: `${formatConfig.color}cc` }}
+              >
+                {lines.map((line, i) => (
+                  <div
+                    key={i}
+                    className="leading-relaxed hover:bg-white/[0.02] -mx-2 px-2 rounded transition-colors"
+                  >
+                    {line || ' '}
+                  </div>
+                ))}
+              </div>
+            </code>
+          </pre>
+        </div>
+
+        {/* Bottom glow accent */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-px"
+          style={{
+            background: `linear-gradient(90deg, transparent, ${formatConfig.color}30, transparent)`,
+          }}
+        />
+      </div>
     </div>
   );
 }
@@ -282,45 +437,29 @@ export const CodeTab = memo(function CodeTab({ node, colors: _colors }: CodeTabP
     copy(code);
   }, [copy, code]);
 
+  const formatConfig = FORMAT_CONFIGS.find((c) => c.id === activeFormat)!;
+  const lineCount = code.split('\n').length;
+
   return (
     <div className="flex flex-col h-full">
-      {/* Format switcher */}
-      <div className="flex items-center gap-1 p-2 border-b border-white/[0.06]">
-        <FormatButton
-          format="json"
-          label="JSON"
-          isActive={activeFormat === 'json'}
-          onClick={() => setActiveFormat('json')}
-        />
-        <FormatButton
-          format="yaml"
-          label="YAML"
-          isActive={activeFormat === 'yaml'}
-          onClick={() => setActiveFormat('yaml')}
-        />
-        <FormatButton
-          format="cypher"
-          label="Cypher"
-          isActive={activeFormat === 'cypher'}
-          onClick={() => setActiveFormat('cypher')}
-        />
-        <FormatButton
-          format="typescript"
-          label="TypeScript"
-          isActive={activeFormat === 'typescript'}
-          onClick={() => setActiveFormat('typescript')}
-        />
-      </div>
+      {/* Premium format switcher */}
+      <FormatSwitcher
+        activeFormat={activeFormat}
+        onFormatChange={setActiveFormat}
+      />
 
-      {/* Code viewer */}
-      <div className="flex-1 overflow-y-auto scrollbar-thin p-4">
+      {/* Code viewer with animations */}
+      <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/10 p-4">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeFormat}
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            transition={{ duration: 0.1 }}
+            initial={{ opacity: 0, y: 8, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.98 }}
+            transition={{
+              duration: 0.15,
+              ease: [0.25, 0.46, 0.45, 0.94],
+            }}
           >
             <CodeViewer
               code={code}
@@ -332,14 +471,27 @@ export const CodeTab = memo(function CodeTab({ node, colors: _colors }: CodeTabP
         </AnimatePresence>
       </div>
 
-      {/* Footer with format info */}
-      <div className="px-4 py-2 border-t border-white/[0.06] bg-black/20">
-        <p className="text-[10px] text-white/30 text-center">
-          {activeFormat === 'json' && 'Standard JSON representation'}
-          {activeFormat === 'yaml' && 'NovaNet YAML node definition format'}
-          {activeFormat === 'cypher' && 'Neo4j Cypher query statements'}
-          {activeFormat === 'typescript' && 'TypeScript interface and example'}
-        </p>
+      {/* Premium footer with format info and stats */}
+      <div
+        className="px-4 py-2.5 flex items-center justify-between"
+        style={{
+          background: `linear-gradient(180deg, ${glass.surface[1]}, ${glass.surface[0]})`,
+          borderTop: `1px solid ${glass.border.subtle}`,
+        }}
+      >
+        <div className="flex items-center gap-2">
+          <div
+            className="w-2 h-2 rounded-full"
+            style={{ background: formatConfig.color }}
+          />
+          <span className="text-[10px] text-white/40">
+            {formatConfig.description}
+          </span>
+        </div>
+        <div className="flex items-center gap-3 text-[10px] text-white/30">
+          <span>{lineCount} lines</span>
+          <span>{code.length} chars</span>
+        </div>
       </div>
     </div>
   );

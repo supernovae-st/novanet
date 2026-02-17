@@ -4,33 +4,37 @@
  * LocaleCardContent - "Passport Élégant" design for Locale nodes
  *
  * Features:
- * - Large flag in dedicated left zone with radial glow
- * - BCP-47 code as hero element (28px mono bold)
+ * - Large flag in dedicated left zone (75px) with radial glow + pulse
+ * - BCP-47 code as hero element (28px mono bold, premium letter-spacing)
  * - Vertical glowing separator
- * - Display name and region context
- * - Layer badge with pulse effect
+ * - Display name with region chip
+ * - Layer badge with prominent glow effect
  *
  * Layout:
- * ┌─────────────────────────────────────────┐
- * │  🇫🇷  │  🌐 LOCALE                    ● │
- * │      │                                  │
- * │ glow │     fr-FR                        │
- * │ zone │                                  │
- * │      │  French (France)                 │
- * │      │  ─────────────────────────────── │
- * │      │  Europe • Western Europe ●config │
- * └──────┴──────────────────────────────────┘
+ * ┌──────────────────────────────────────────────┐
+ * │  🇫🇷   │  🌐 LOCALE                       ● │
+ * │       │                                     │
+ * │ glow  │     fr-FR                           │
+ * │ zone  │                                     │
+ * │ pulse │  French  [France]                   │
+ * │       │  ────────────────────────────────── │
+ * │       │  Europe • Western Europe  ●config   │
+ * └───────┴─────────────────────────────────────┘
  */
 
 import { memo, useMemo } from 'react';
+import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
 import { LayerIcon } from '@/components/ui/CategoryIcon';
 import { localeToFlag } from '@/lib/localeUtils';
 import { gapTokens } from '@/design/tokens';
 import type { CardContext } from '../CardShell';
+import type { PerformanceConfig } from '@/contexts/PerformanceContext';
 import type { Layer } from '@novanet/core/types';
 import type { NodeLayer, NodeRealm, NodeTrait } from '../taxonomyColors';
 import { TaxonomyBadge } from '../TaxonomyBadge';
+import { BorderBeam, GlowEffect } from '../effects';
+import { SPRING_CONFIGS } from '../animationPresets';
 
 // =============================================================================
 // Types
@@ -54,6 +58,8 @@ export interface LocaleTaxonomyProps {
 
 export interface LocaleCardContentProps extends CardContext {
   data: LocaleNodeData;
+  /** Performance configuration for conditional effect rendering */
+  performanceConfig?: PerformanceConfig;
   /** Optional taxonomy info for TaxonomyBadge (ADR-005) */
   taxonomy?: LocaleTaxonomyProps;
   /** Show TaxonomyBadge instead of simple header (default: false) */
@@ -89,6 +95,11 @@ export const LocaleCardContent = memo(function LocaleCardContent({
   taxonomy,
   showTaxonomyBadge = false,
 }: LocaleCardContentProps) {
+  // Performance flags
+  const animationsEnabled = performanceConfig?.animation?.enabled ?? true;
+  const showPremiumEffects = performanceConfig?.effects?.premiumEffects ?? true;
+  const showGlow = performanceConfig?.effects?.outerGlow ?? true;
+
   // Use TaxonomyBadge if taxonomy props provided and showTaxonomyBadge is true
   const useTaxonomyBadge = showTaxonomyBadge && taxonomy;
   // Extract BCP-47 code from key (e.g., "Locale:fr-FR" → "fr-FR")
@@ -106,63 +117,157 @@ export const LocaleCardContent = memo(function LocaleCardContent({
     [data.displayName]
   );
 
-  // Icon style with glow
+  const animationState = selected ? 'selected' : isHovered ? 'hover' : 'idle';
+
+  // Animation variants for card - SUBTLE, NO SCALE to prevent layout shift
+  const cardVariants = {
+    idle: { y: 0 },
+    hover: { y: -1, transition: SPRING_CONFIGS.gentle },
+    selected: { y: -2, transition: SPRING_CONFIGS.smooth },
+  };
+
+  // v0.13.1 UX: DRAMATIC background gradient (40-50% opacity for clear impact)
+  const backgroundStyle = useMemo(
+    () => ({
+      background: `
+        linear-gradient(135deg,
+          ${colors.primary}45 0%,
+          ${colors.primary}28 25%,
+          rgba(18,18,28,0.90) 50%,
+          ${colors.secondary}22 75%,
+          ${colors.primary}38 100%
+        )
+      `,
+    }),
+    [colors.primary, colors.secondary]
+  );
+
+  // v0.13.1 UX: DRAMATIC card shadow with multi-layer glow
+  const cardShadowStyle = useMemo(
+    () => ({
+      boxShadow: selected
+        ? `
+            0 0 25px ${colors.primary}50,
+            0 0 50px ${colors.primary}25,
+            0 8px 32px -8px ${colors.secondary}30,
+            inset 0 1px 0 rgba(255,255,255,0.1)
+          `
+        : isHovered
+          ? `
+              0 12px 32px -8px rgba(0,0,0,0.5),
+              0 0 20px ${colors.primary}35,
+              0 0 40px ${colors.primary}15,
+              inset 0 1px 0 rgba(255,255,255,0.08)
+            `
+          : `
+              0 4px 16px -4px rgba(0,0,0,0.4),
+              0 0 12px ${colors.primary}20,
+              inset 0 1px 0 rgba(255,255,255,0.05)
+            `,
+    }),
+    [colors.primary, colors.secondary, selected, isHovered]
+  );
+
+  // Icon style with DRAMATIC glow (v0.13.1)
   const iconStyle = useMemo(
     () => ({
       color: colors.primary,
-      filter: `drop-shadow(0 0 ${selected ? '10px' : '6px'} ${colors.primary}80)`,
+      filter: `drop-shadow(0 0 ${selected ? '14px' : '8px'} ${colors.primary})`,
     }),
     [colors.primary, selected]
   );
 
-  // Flag zone gradient (radial glow effect)
+  // Flag zone gradient - BRIGHTER radial glow with pulse-ready layers (v0.13.1)
   const flagZoneStyle = useMemo(
     () => ({
-      background: `radial-gradient(circle at center, ${colors.primary}20 0%, transparent 70%)`,
+      background: `radial-gradient(circle at center, ${colors.primary}40 0%, ${colors.primary}20 35%, ${colors.primary}08 60%, transparent 80%)`,
     }),
     [colors.primary]
   );
 
-  // Separator glow style
+  // Separator glow style - BRIGHTER (v0.13.1)
   const separatorStyle = useMemo(
     () => ({
-      background: `linear-gradient(180deg, transparent 0%, ${colors.primary}40 50%, transparent 100%)`,
-      boxShadow: `0 0 8px ${colors.primary}30`,
+      background: `linear-gradient(180deg, transparent 0%, ${colors.primary}60 50%, transparent 100%)`,
+      boxShadow: `0 0 12px ${colors.primary}40`,
     }),
     [colors.primary]
   );
 
+  // Wrapper component
+  const CardWrapper = animationsEnabled ? motion.div : 'div';
+
   return (
-    <div className="flex h-full">
-      {/* Flag Zone (left) */}
+    <CardWrapper
+      className="relative flex h-full rounded-xl overflow-hidden"
+      style={{
+        ...backgroundStyle,
+        ...cardShadowStyle,
+        border: `2px solid ${colors.primary}${selected ? '80' : '40'}`,
+        minHeight: 100,
+      }}
+      {...(animationsEnabled && {
+        variants: cardVariants,
+        initial: 'idle',
+        animate: animationState,
+      })}
+    >
+      {/* Premium glow effect */}
+      {showGlow && (selected || isHovered) && (
+        <GlowEffect
+          color={colors.primary}
+          intensity={selected ? 'high' : 'medium'}
+          selected={selected}
+          isHovered={isHovered}
+          performanceConfig={performanceConfig}
+        />
+      )}
+
+      {/* Rotating border beam (v0.13.1 premium effect) */}
+      {showPremiumEffects && animationsEnabled && (selected || isHovered) && (
+        <BorderBeam
+          color={colors.primary}
+          secondaryColor={colors.secondary}
+          borderRadius={12}
+          thickness={2}
+          duration={selected ? 4 : 7}
+          selected={selected}
+          isHovered={isHovered}
+          performanceConfig={performanceConfig}
+          beamLength={0.2}
+        />
+      )}
+
+      {/* Flag Zone (left) - FIXED 75px, no layout-shifting animations */}
       <div
-        className="flex items-center justify-center shrink-0"
+        className="relative flex items-center justify-center shrink-0 z-10"
         style={{
-          width: 60,
+          width: 75,
           ...flagZoneStyle,
         }}
       >
         <span
-          className={cn(
-            'text-4xl transition-transform duration-200',
-            (selected || isHovered) && 'scale-110'
-          )}
+          className="text-5xl"
           style={{
-            filter: selected ? `drop-shadow(0 0 12px ${colors.primary}60)` : undefined,
+            filter: selected
+              ? `drop-shadow(0 0 20px ${colors.primary}90)`
+              : isHovered
+                ? `drop-shadow(0 0 14px ${colors.primary}70)`
+                : `drop-shadow(0 0 8px ${colors.primary}40)`,
           }}
         >
           {flag}
         </span>
       </div>
 
-      {/* Vertical Separator */}
+      {/* Vertical Separator - GLOWING (v0.13.1) */}
       <div
-        className="w-[1px] shrink-0 self-stretch my-2"
+        className="w-[2px] shrink-0 self-stretch my-2 z-10"
         style={separatorStyle}
       />
 
       {/* Content Zone (right) */}
-      <div className="flex-1 px-3 py-2.5 min-w-0">
+      <div className="relative flex-1 px-3 py-2.5 min-w-0 z-10">
         {/* Header: TaxonomyBadge or Icon + Type Label + Status Dot */}
         {useTaxonomyBadge ? (
           <div className="mb-1">
@@ -193,85 +298,102 @@ export const LocaleCardContent = memo(function LocaleCardContent({
                 style={iconStyle}
               />
               <span
-                className="text-[9px] font-bold uppercase tracking-wider"
+                className="text-[10px] font-bold uppercase tracking-wider"
                 style={{ color: colors.primary }}
               >
                 Locale
               </span>
             </div>
 
-            {/* Status dot */}
+            {/* Status dot - LARGER with glow (v0.13.1) */}
             <div
-              className={cn('w-2 h-2 rounded-full', selected && 'animate-pulse')}
+              className={cn('w-2.5 h-2.5 rounded-full', selected && 'animate-pulse')}
               style={{
                 background: colors.primary,
-                boxShadow: `0 0 6px ${colors.primary}`,
+                boxShadow: `0 0 10px ${colors.primary}`,
               }}
             />
           </div>
         )}
 
-        {/* BCP-47 Hero */}
+        {/* BCP-47 Hero - FIXED SIZE, NO LETTER-SPACING ANIMATION (v0.13.1 fix) */}
         <h3
-          className={cn(
-            'text-2xl font-bold font-mono tracking-wide text-white',
-            'transition-all duration-200',
-            (selected || isHovered) && 'tracking-wider'
-          )}
+          className="text-2xl font-bold font-mono text-white whitespace-nowrap"
           style={{
-            textShadow: selected ? `0 0 20px ${colors.primary}60` : undefined,
+            letterSpacing: '0.05em',
+            textShadow: selected
+              ? `0 0 28px ${colors.primary}90, 0 0 56px ${colors.primary}50, 0 2px 4px rgba(0,0,0,0.5)`
+              : isHovered
+                ? `0 0 20px ${colors.primary}70, 0 0 40px ${colors.primary}30, 0 2px 4px rgba(0,0,0,0.4)`
+                : `0 0 12px ${colors.primary}40, 0 2px 4px rgba(0,0,0,0.3)`,
           }}
         >
           {bcp47}
         </h3>
 
-        {/* Display Name */}
-        <p className="text-xs text-white/70 mt-0.5 truncate">
-          {language}
-          {region && <span className="text-white/40"> ({region})</span>}
-        </p>
+        {/* Display Name with Region Chip */}
+        <div className="flex items-center gap-2 mt-1">
+          <span className="text-xs text-white/80 font-medium truncate">
+            {language}
+          </span>
+          {region && (
+            <span
+              className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium shrink-0"
+              style={{
+                background: `${colors.primary}20`,
+                color: `${colors.primary}`,
+                border: `1px solid ${colors.primary}35`,
+              }}
+            >
+              {region}
+            </span>
+          )}
+        </div>
 
-        {/* Divider */}
+        {/* Divider - GLOWING (v0.13.1) */}
         <div
           className="h-px mt-2 mb-1.5"
           style={{
-            background: `linear-gradient(90deg, ${colors.primary}30, transparent)`,
+            background: `linear-gradient(90deg, ${colors.primary}50, transparent)`,
+            boxShadow: `0 0 6px ${colors.primary}20`,
           }}
         />
 
-        {/* Footer: Region + Layer Badge */}
+        {/* Footer: Region + Layer Badge - FIXED, no animations */}
         <div className={cn('flex items-center justify-between', gapTokens.compact)}>
           {/* Region context */}
           {data.region && (
-            <span className="text-[9px] text-white/40 truncate flex-1">
+            <span className="text-[9px] text-white/50 truncate flex-1">
               {data.region}
             </span>
           )}
 
-          {/* Layer badge */}
+          {/* Layer badge - FIXED pill, no jarring animations */}
           <div
             className={cn(
-              'inline-flex items-center px-1.5 py-0.5 rounded-full shrink-0',
-              'text-[8px] font-semibold uppercase tracking-wider border',
-              gapTokens.compact
+              'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full shrink-0',
+              'text-[9px] font-bold uppercase tracking-widest'
             )}
             style={{
-              background: `${colors.primary}15`,
-              borderColor: `${colors.primary}35`,
+              background: `linear-gradient(135deg, ${colors.primary}35 0%, ${colors.primary}18 100%)`,
+              border: `1.5px solid ${colors.primary}60`,
               color: colors.primary,
+              boxShadow: selected
+                ? `0 0 20px ${colors.primary}60, inset 0 1px 0 rgba(255,255,255,0.15)`
+                : `0 0 12px ${colors.primary}30, inset 0 1px 0 rgba(255,255,255,0.1)`,
             }}
           >
             <span
-              className={cn('w-1 h-1 rounded-full', selected && 'animate-pulse')}
+              className={cn('w-2 h-2 rounded-full', selected && 'animate-pulse')}
               style={{
                 background: colors.primary,
-                boxShadow: `0 0 4px ${colors.primary}`,
+                boxShadow: `0 0 8px ${colors.primary}`,
               }}
             />
             config
           </div>
         </div>
       </div>
-    </div>
+    </CardWrapper>
   );
 });

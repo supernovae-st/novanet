@@ -787,6 +787,32 @@ body {
   animation: gradient-rotate 3s linear infinite;
 }
 
+/* Premium rotating selection ring for TurboNode */
+@property --ring-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes ring-rotate {
+  0% {
+    --ring-angle: 0deg;
+  }
+  100% {
+    --ring-angle: 360deg;
+  }
+}
+
+.animate-ring-rotate {
+  animation: ring-rotate 3s linear infinite;
+}
+
+/* TurboNode wrapper hover enhancement */
+.turbo-node-wrapper {
+  /* Ensure proper stacking context for blur effects */
+  isolation: isolate;
+}
+
 /* ============================================================================
    GALAXY / MISSION CONTROL ANIMATIONS - Schema Node Effects
    ============================================================================ */
