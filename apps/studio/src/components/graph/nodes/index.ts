@@ -11,7 +11,8 @@ export type { BaseNodeWrapperProps } from './BaseNodeWrapper';
 export { ProjectNode, type ProjectNodeType } from './ProjectNode';
 
 // Structural nodes (project + content categories)
-export { StructuralNode, type StructuralNodeType } from './StructuralNode';
+// v0.13.1: Enhanced with hierarchy visualization, depth indicators, premium hover states
+export { StructuralNode, type StructuralNodeType, type StructuralNodeData } from './StructuralNode';
 
 // Shared layer nodes (shared realm: config, locale, geography, knowledge)
 export { SharedLayerNode, type SharedLayerNodeType } from './SharedLayerNode';

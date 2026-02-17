@@ -110,11 +110,12 @@ export const ClassNode = memo(function ClassNode(props: NodeProps<ClassNodeType>
   }), [data]);
 
   // Container opacity for dimming
+  // NOTE: dimmed = 0.15 (15%), hoverDimmed = 0.25 (25%) - must stay visible!
   const containerStyle = useMemo(() => ({
-    opacity: data.dimmed ? 0.06 : data.hoverDimmed ? 0.25 : 1,
+    opacity: data.dimmed ? 0.15 : data.hoverDimmed ? 0.25 : 1,
     transition: 'opacity 0.3s ease-out, transform 0.3s ease-out',
-    transform: selected ? 'scale(1.02)' : 'scale(1)',
-  }), [data.dimmed, data.hoverDimmed, selected]);
+    transform: 'scale(1)', // No scale animation to prevent layout shift
+  }), [data.dimmed, data.hoverDimmed]);
 
   return (
     <div

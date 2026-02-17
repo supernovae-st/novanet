@@ -142,6 +142,14 @@ export {
   type ClassTaxonomyProps,
 } from './presets/ClassCardContent';
 
+// Taxonomy cards (Premium TAXONOMY level design - v0.13.1)
+export {
+  TaxonomyCardContent,
+  type TaxonomyCardContentProps,
+  type TaxonomyNodeData as TaxonomyCardNodeData, // Aliased to avoid conflict with types
+  type TaxonomyVariant as TaxonomyCardVariant,   // Aliased to avoid conflict with types
+} from './presets/TaxonomyCardContent';
+
 export {
   RealmOrbitalCardContent,
   type RealmOrbitalCardProps,
@@ -396,6 +404,14 @@ export {
   type SlugificationNodeData,
   type MarketNodeData,
 } from './presets/locale';
+
+// Config Layer cards (EntityCategory - Crystal Badge design)
+export {
+  EntityCategoryCardContent,
+  type EntityCategoryCardContentProps,
+  type EntityCategoryNodeData,
+  type EntityCategoryTaxonomyProps,
+} from './presets/config';
 
 // Card Content Selector - Routes node types to specialized cards
 export {

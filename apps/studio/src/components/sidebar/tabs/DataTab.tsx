@@ -1,21 +1,28 @@
 'use client';
 
 /**
- * DataTab - Node properties and statistics
+ * DataTab - Premium node properties and statistics
  *
  * Features:
- * - Stats bar (incoming/outgoing arcs, properties count)
- * - Properties table with type badges
- * - Property coverage progress bar
+ * - Premium stats bar with animated counters
+ * - Property table with type badges and glow effects
+ * - Property coverage progress bar with gradient
+ * - Collapsible sections with smooth animations
+ *
+ * Design System:
+ * - Uses glass.surface hierarchy
+ * - Color-coded stat cards
+ * - Premium progress bar with gradient
  */
 
 import { memo, useMemo, useState } from 'react';
-import { ArrowDownLeft, ArrowUpRight, Braces } from 'lucide-react';
+import { motion } from 'motion/react';
+import { ArrowDownLeft, ArrowUpRight, Braces, ChevronRight, LayoutGrid } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useCopyFieldFeedback } from '@/hooks';
 import { PropertyRow, formatValue } from '@/components/ui/detail-panel';
 import { CollapsibleSection } from '@/components/ui/detail-panel';
-import { gapTokens } from '@/design/tokens';
+import { gapTokens, glass } from '@/design/tokens';
 import type { GraphNode } from '@/types';
 import type { Edge } from '@xyflow/react';
 
@@ -26,7 +33,7 @@ interface DataTabProps {
 }
 
 /**
- * Stats bar showing arc counts and properties
+ * Premium stats bar with animated counters and glass cards
  */
 function StatsBar({
   incomingCount,
@@ -39,87 +46,182 @@ function StatsBar({
   propertiesCount: number;
   colors: { primary: string; secondary: string };
 }) {
+  const stats = [
+    {
+      label: 'Incoming',
+      value: incomingCount,
+      icon: ArrowDownLeft,
+      color: colors.primary,
+    },
+    {
+      label: 'Outgoing',
+      value: outgoingCount,
+      icon: ArrowUpRight,
+      color: colors.secondary,
+    },
+    {
+      label: 'Properties',
+      value: propertiesCount,
+      icon: Braces,
+      color: '#a3a3a3',
+    },
+  ];
+
   return (
-    <div className="grid grid-cols-3 gap-2 p-4 border-b border-white/[0.06]">
-      <div
-        className="flex flex-col items-center p-3 rounded-lg"
-        style={{ background: `${colors.primary}10` }}
-      >
-        <div className="flex items-center gap-1 text-white/50 mb-1">
-          <ArrowDownLeft className="w-3.5 h-3.5" />
-          <span className="text-[10px] uppercase tracking-wider">In</span>
-        </div>
-        <span className="text-lg font-semibold text-white">{incomingCount}</span>
-      </div>
-      <div
-        className="flex flex-col items-center p-3 rounded-lg"
-        style={{ background: `${colors.secondary}10` }}
-      >
-        <div className="flex items-center gap-1 text-white/50 mb-1">
-          <ArrowUpRight className="w-3.5 h-3.5" />
-          <span className="text-[10px] uppercase tracking-wider">Out</span>
-        </div>
-        <span className="text-lg font-semibold text-white">{outgoingCount}</span>
-      </div>
-      <div className="flex flex-col items-center p-3 rounded-lg bg-white/[0.03]">
-        <div className="flex items-center gap-1 text-white/50 mb-1">
-          <Braces className="w-3.5 h-3.5" />
-          <span className="text-[10px] uppercase tracking-wider">Props</span>
-        </div>
-        <span className="text-lg font-semibold text-white">{propertiesCount}</span>
-      </div>
+    <div
+      className="grid grid-cols-3 gap-2 p-3"
+      style={{
+        background: `linear-gradient(180deg, ${glass.surface[1]}, ${glass.surface[0]})`,
+        borderBottom: `1px solid ${glass.border.subtle}`,
+      }}
+    >
+      {stats.map((stat, i) => {
+        const Icon = stat.icon;
+        return (
+          <motion.div
+            key={stat.label}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.05 }}
+            className="relative flex flex-col items-center p-3 rounded-xl overflow-hidden"
+            style={{
+              background: `linear-gradient(135deg, ${stat.color}15, ${stat.color}05)`,
+              border: `1px solid ${stat.color}20`,
+            }}
+          >
+            {/* Subtle glow effect */}
+            <div
+              className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-300"
+              style={{
+                background: `radial-gradient(circle at center, ${stat.color}10, transparent 70%)`,
+              }}
+            />
+
+            {/* Icon and label */}
+            <div className="flex items-center gap-1.5 mb-1.5 relative z-10">
+              <Icon
+                className="w-3.5 h-3.5"
+                style={{ color: `${stat.color}99` }}
+              />
+              <span
+                className="text-[10px] font-medium uppercase tracking-wider"
+                style={{ color: `${stat.color}99` }}
+              >
+                {stat.label.slice(0, 2)}
+              </span>
+            </div>
+
+            {/* Animated value */}
+            <motion.span
+              className="text-xl font-bold text-white relative z-10"
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              transition={{ type: 'spring', stiffness: 300, delay: i * 0.05 + 0.1 }}
+            >
+              {stat.value}
+            </motion.span>
+          </motion.div>
+        );
+      })}
     </div>
   );
 }
 
 /**
- * Property type badge
+ * Premium property type badge with glow
  */
 function TypeBadge({ type }: { type: string }) {
-  const colors: Record<string, string> = {
-    string: 'text-emerald-400 bg-emerald-500/10',
-    number: 'text-blue-400 bg-blue-500/10',
-    boolean: 'text-amber-400 bg-amber-500/10',
-    object: 'text-purple-400 bg-purple-500/10',
-    array: 'text-pink-400 bg-pink-500/10',
-    null: 'text-gray-400 bg-gray-500/10',
-    undefined: 'text-gray-400 bg-gray-500/10',
+  const config: Record<string, { color: string; bgColor: string }> = {
+    string: { color: '#10b981', bgColor: 'rgba(16, 185, 129, 0.15)' },
+    number: { color: '#3b82f6', bgColor: 'rgba(59, 130, 246, 0.15)' },
+    boolean: { color: '#f59e0b', bgColor: 'rgba(245, 158, 11, 0.15)' },
+    object: { color: '#a855f7', bgColor: 'rgba(168, 85, 247, 0.15)' },
+    array: { color: '#ec4899', bgColor: 'rgba(236, 72, 153, 0.15)' },
+    null: { color: '#6b7280', bgColor: 'rgba(107, 114, 128, 0.15)' },
+    undefined: { color: '#6b7280', bgColor: 'rgba(107, 114, 128, 0.15)' },
   };
 
+  const { color, bgColor } = config[type] || config.undefined;
+
   return (
-    <span className={cn(
-      'px-1.5 py-0.5 rounded text-[10px] font-mono uppercase',
-      colors[type] || 'text-gray-400 bg-gray-500/10'
-    )}>
+    <span
+      className="px-1.5 py-0.5 rounded text-[9px] font-mono uppercase tracking-wide"
+      style={{
+        color,
+        background: bgColor,
+        boxShadow: `0 0 8px ${color}20`,
+      }}
+    >
       {type}
     </span>
   );
 }
 
 /**
- * Property coverage progress bar
+ * Premium property coverage progress bar with gradient
  */
 function PropertyCoverage({
   filled,
   total,
+  colors,
 }: {
   filled: number;
   total: number;
+  colors: { primary: string; secondary: string };
 }) {
   const percentage = total > 0 ? (filled / total) * 100 : 0;
 
   return (
-    <div className="p-4 border-t border-white/[0.06]">
-      <div className="flex items-center justify-between text-xs mb-2">
-        <span className="text-white/40">Property Coverage</span>
-        <span className="text-white/60 font-mono">
-          {filled}/{total} ({percentage.toFixed(0)}%)
-        </span>
+    <div
+      className="p-4"
+      style={{
+        background: `linear-gradient(180deg, ${glass.surface[1]}, ${glass.surface[0]})`,
+        borderTop: `1px solid ${glass.border.subtle}`,
+      }}
+    >
+      <div className="flex items-center justify-between text-xs mb-2.5">
+        <div className="flex items-center gap-2">
+          <LayoutGrid className="w-3.5 h-3.5 text-white/40" />
+          <span className="text-white/50 font-medium">Coverage</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-white/70 font-mono tabular-nums">
+            {filled}/{total}
+          </span>
+          <span
+            className="px-1.5 py-0.5 rounded text-[10px] font-bold"
+            style={{
+              background: percentage >= 80
+                ? 'rgba(16, 185, 129, 0.2)'
+                : percentage >= 50
+                  ? 'rgba(245, 158, 11, 0.2)'
+                  : 'rgba(239, 68, 68, 0.2)',
+              color: percentage >= 80
+                ? '#10b981'
+                : percentage >= 50
+                  ? '#f59e0b'
+                  : '#ef4444',
+            }}
+          >
+            {percentage.toFixed(0)}%
+          </span>
+        </div>
       </div>
-      <div className="h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
-        <div
-          className="h-full bg-emerald-500 rounded-full transition-all duration-300"
-          style={{ width: `${percentage}%` }}
+
+      {/* Progress bar with gradient */}
+      <div
+        className="h-2 rounded-full overflow-hidden"
+        style={{ background: glass.surface[2] }}
+      >
+        <motion.div
+          className="h-full rounded-full"
+          initial={{ width: 0 }}
+          animate={{ width: `${percentage}%` }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          style={{
+            background: `linear-gradient(90deg, ${colors.primary}, ${colors.secondary})`,
+            boxShadow: `0 0 12px ${colors.primary}40`,
+          }}
         />
       </div>
     </div>
@@ -247,7 +349,7 @@ export const DataTab = memo(function DataTab({
       </div>
 
       {/* Coverage bar */}
-      <PropertyCoverage filled={filledProps} total={totalProps} />
+      <PropertyCoverage filled={filledProps} total={totalProps} colors={colors} />
     </div>
   );
 });

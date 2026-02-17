@@ -24,6 +24,16 @@ import type { CardContext } from './types';
 // Default fallback
 import { StructuralCardContent, type StructuralNodeData } from './presets/StructuralCardContent';
 
+// =============================================================================
+// TAXONOMY LEVEL (Meta-meta: Realm, Layer, Trait, ArcFamily)
+// =============================================================================
+import { TaxonomyCardContent, type TaxonomyNodeData } from './presets/TaxonomyCardContent';
+
+// =============================================================================
+// SCHEMA LEVEL (Meta: NodeClass, ArcClass)
+// =============================================================================
+import { ClassCardContent, type ClassNodeData } from './presets/ClassCardContent';
+
 // =====================================================================
 // SHARED REALM IMPORTS
 // =====================================================================
@@ -56,6 +66,12 @@ import {
   LocaleSettingsCardContent,
   type LocaleSettingsNodeData,
 } from './presets/locale';
+
+// Config layer (shared) - EntityCategory
+import {
+  EntityCategoryCardContent,
+  type EntityCategoryNodeData,
+} from './presets/config';
 
 // =====================================================================
 // ORG REALM IMPORTS
@@ -122,6 +138,10 @@ import {
 export type CardContentData =
   // Fallback
   | StructuralNodeData
+  // Taxonomy level (M2: classification system)
+  | TaxonomyNodeData
+  // Schema level (M1: definitions)
+  | ClassNodeData
   // Shared realm
   | GeographyNodeData
   | KnowledgeSetNodeData
@@ -133,6 +153,7 @@ export type CardContentData =
   | AudienceTraitNodeData
   | SEOKeywordNodeData
   | LocaleSettingsNodeData
+  | EntityCategoryNodeData
   // Org realm - Foundation
   | ProjectNodeData
   | BrandNodeData
@@ -176,6 +197,40 @@ export type CardContentComponent = ComponentType<CardContentProps>;
  */
 const CARD_CONTENT_REGISTRY: Record<string, CardContentComponent> = {
   // =========================================================================
+  // TAXONOMY LEVEL (M2) - Classification system (21 types: Realm, Layer, Trait, ArcFamily)
+  // Premium visual treatment: 4px border, triple glow, always-animated
+  // =========================================================================
+  // Realms (2)
+  Realm: TaxonomyCardContent as CardContentComponent,
+  NodeRealm: TaxonomyCardContent as CardContentComponent,
+  // Layers (10 - includes both Layer node and specific layer attractors)
+  Layer: TaxonomyCardContent as CardContentComponent,
+  NodeLayer: TaxonomyCardContent as CardContentComponent,
+  ConfigLayer: TaxonomyCardContent as CardContentComponent,
+  LocaleLayer: TaxonomyCardContent as CardContentComponent,
+  GeographyLayer: TaxonomyCardContent as CardContentComponent,
+  KnowledgeLayer: TaxonomyCardContent as CardContentComponent,
+  FoundationLayer: TaxonomyCardContent as CardContentComponent,
+  StructureLayer: TaxonomyCardContent as CardContentComponent,
+  SemanticLayer: TaxonomyCardContent as CardContentComponent,
+  InstructionLayer: TaxonomyCardContent as CardContentComponent,
+  OutputLayer: TaxonomyCardContent as CardContentComponent,
+  // Traits (5)
+  Trait: TaxonomyCardContent as CardContentComponent,
+  NodeTrait: TaxonomyCardContent as CardContentComponent,
+  // ArcFamilies (5)
+  ArcFamily: TaxonomyCardContent as CardContentComponent,
+
+  // =========================================================================
+  // SCHEMA LEVEL (M1) - Definitions (61 NodeClass + 178 ArcClass)
+  // Elevated visual treatment: 2px border, single glow, interaction-based animation
+  // =========================================================================
+  NodeClass: ClassCardContent as CardContentComponent,
+  ArcClass: ClassCardContent as CardContentComponent,
+  Class: ClassCardContent as CardContentComponent,
+  Schema: ClassCardContent as CardContentComponent,
+
+  // =========================================================================
   // SHARED REALM - Geography layer (7 types)
   // =========================================================================
   Continent: GeographyCardContent as CardContentComponent,
@@ -185,6 +240,12 @@ const CARD_CONTENT_REGISTRY: Record<string, CardContentComponent> = {
   City: GeographyCardContent as CardContentComponent,
   StateProvince: GeographyCardContent as CardContentComponent,
   PostalCode: GeographyCardContent as CardContentComponent,
+
+  // =========================================================================
+  // SHARED REALM - Config layer (EntityCategory - ADR-017)
+  // Crystal Badge design: glassmorphism + BorderBeam for classification nodes
+  // =========================================================================
+  EntityCategory: EntityCategoryCardContent as CardContentComponent,
 
   // =========================================================================
   // SHARED REALM - Locale layer settings (6 types)

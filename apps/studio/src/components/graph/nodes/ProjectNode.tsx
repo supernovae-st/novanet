@@ -16,6 +16,7 @@ import { type Node, type NodeProps } from '@xyflow/react';
 import type { BaseNodeData } from './BaseNodeWrapper';
 import { getStructuralColors } from '@/design/nodeColors';
 import { CardShell, ProjectCardContent } from './card';
+import { getNodeConfig } from './NodeConfig';
 
 export type ProjectNodeType = Node<BaseNodeData>;
 

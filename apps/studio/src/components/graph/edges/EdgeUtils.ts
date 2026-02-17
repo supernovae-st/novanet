@@ -56,17 +56,56 @@ export function getRelationIcon(): string {
 }
 
 /**
+ * Format cardinality for display (v0.13.1: ADR-027)
+ *
+ * Converts cardinality patterns to visual badges:
+ * - 1:1 → •──• (one-to-one)
+ * - 1:N → •──○ (one-to-many)
+ * - N:1 → ○──• (many-to-one)
+ * - N:M → ○──○ (many-to-many)
+ */
+export function formatCardinality(cardinality?: string): string {
+  if (!cardinality) return '';
+
+  // Normalize the cardinality string
+  const normalized = cardinality.toUpperCase().replace(/\s+/g, '');
+
+  switch (normalized) {
+    case '1:1':
+    case 'ONE_TO_ONE':
+      return '1:1';
+    case '1:N':
+    case '1:MANY':
+    case 'ONE_TO_MANY':
+      return '1:N';
+    case 'N:1':
+    case 'MANY:1':
+    case 'MANY_TO_ONE':
+      return 'N:1';
+    case 'N:M':
+    case 'N:N':
+    case 'MANY_TO_MANY':
+      return 'N:M';
+    default:
+      return cardinality;
+  }
+}
+
+/**
  * Get smart label based on available space (edge length)
  *
  * @param relationType - The relationship type (e.g., "HAS_CONCEPT")
  * @param edgeLength - Length of the edge in pixels
- * @returns Object with icon and text for the label
+ * @param cardinality - Optional cardinality (1:1, 1:N, N:1, N:M)
+ * @returns Object with icon, text, and cardinality for the label
  */
 export function getSmartLabel(
   relationType: string,
-  edgeLength: number
-): { icon: string; text: string } {
+  edgeLength: number,
+  cardinality?: string
+): { icon: string; text: string; cardinality: string } {
   const icon = getRelationIcon();
+  const cardinalityLabel = formatCardinality(cardinality);
 
   // Simple space-based logic: use edge length directly
   // Labels scale inversely with zoom, so actual available space = edgeLength
@@ -84,7 +123,7 @@ export function getSmartLabel(
     text = '';
   }
 
-  return { icon, text };
+  return { icon, text, cardinality: cardinalityLabel };
 }
 
 /**
