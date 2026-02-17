@@ -264,6 +264,126 @@ pub fn schema_validate(root: &Path) -> crate::Result<Vec<ValidationIssue>> {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Schema Stats
+// ─────────────────────────────────────────────────────────────────────────────
+
+use serde::Serialize;
+use std::collections::HashMap;
+
+#[derive(Debug, Serialize)]
+struct SchemaStats {
+    nodes: NodeStats,
+    arcs: ArcStats,
+}
+
+#[derive(Debug, Serialize)]
+struct NodeStats {
+    total: usize,
+    by_realm: HashMap<String, usize>,
+    by_layer: HashMap<String, usize>,
+    by_trait: HashMap<String, usize>,
+}
+
+#[derive(Debug, Serialize)]
+struct ArcStats {
+    total: usize,
+    by_family: HashMap<String, usize>,
+}
+
+/// Extract schema statistics (node/arc counts) from YAML files.
+///
+/// Outputs counts in JSON or table format for documentation synchronization.
+#[instrument(skip_all)]
+pub fn schema_stats(root: &Path, format: crate::output::OutputFormat) -> crate::Result<()> {
+    // Load all nodes
+    let nodes = crate::parsers::yaml_node::load_all_nodes(root)?;
+
+    // Count nodes by realm, layer, trait
+    let mut by_realm: HashMap<String, usize> = HashMap::new();
+    let mut by_layer: HashMap<String, usize> = HashMap::new();
+    let mut by_trait: HashMap<String, usize> = HashMap::new();
+
+    for node in &nodes {
+        *by_realm.entry(node.def.realm.clone()).or_insert(0) += 1;
+        *by_layer.entry(node.def.layer.clone()).or_insert(0) += 1;
+        *by_trait.entry(node.def.node_trait.to_string()).or_insert(0) += 1;
+    }
+
+    // Load all arcs
+    let arcs_doc = crate::parsers::arcs::load_arc_classes_from_files(root)?;
+
+    // Count arcs by family
+    let mut by_family: HashMap<String, usize> = HashMap::new();
+    for arc in &arcs_doc.arcs {
+        *by_family.entry(arc.family.to_string()).or_insert(0) += 1;
+    }
+
+    let stats = SchemaStats {
+        nodes: NodeStats {
+            total: nodes.len(),
+            by_realm,
+            by_layer,
+            by_trait,
+        },
+        arcs: ArcStats {
+            total: arcs_doc.arcs.len(),
+            by_family,
+        },
+    };
+
+    match format {
+        crate::output::OutputFormat::Json => {
+            println!(
+                "{}",
+                serde_json::to_string_pretty(&stats)
+                    .map_err(|e| crate::NovaNetError::Validation(e.to_string()))?
+            );
+        }
+        crate::output::OutputFormat::Table => {
+            // Table output for human readability
+            println!("\nNODE STATISTICS");
+            println!("─────────────────────────────────────────────────────");
+            println!("Total: {} nodes", stats.nodes.total);
+            println!("\nBy Realm:");
+            let mut realms: Vec<_> = stats.nodes.by_realm.iter().collect();
+            realms.sort_by_key(|(name, _)| *name);
+            for (realm, count) in realms {
+                println!("  {:<15} {}", realm, count);
+            }
+            println!("\nBy Layer:");
+            let mut layers: Vec<_> = stats.nodes.by_layer.iter().collect();
+            layers.sort_by_key(|(name, _)| *name);
+            for (layer, count) in layers {
+                println!("  {:<15} {}", layer, count);
+            }
+            println!("\nBy Trait:");
+            let mut traits: Vec<_> = stats.nodes.by_trait.iter().collect();
+            traits.sort_by_key(|(name, _)| *name);
+            for (trait_name, count) in traits {
+                println!("  {:<15} {}", trait_name, count);
+            }
+
+            println!("\nARC STATISTICS");
+            println!("─────────────────────────────────────────────────────");
+            println!("Total: {} arcs", stats.arcs.total);
+            println!("\nBy Family:");
+            let mut families: Vec<_> = stats.arcs.by_family.iter().collect();
+            families.sort_by(|(_, a), (_, b)| b.cmp(a)); // Sort by count descending
+            for (family, count) in families {
+                println!("  {:<15} {}", family, count);
+            }
+        }
+        _ => {
+            return Err(crate::NovaNetError::Validation(
+                "Unsupported format for stats (use json or table)".into(),
+            ));
+        }
+    }
+
+    Ok(())
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Tests
 // ─────────────────────────────────────────────────────────────────────────────
 
