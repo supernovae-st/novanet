@@ -54,10 +54,22 @@ import {
 } from '@/config/layoutConfig';
 import { applyDagreLayout } from '@/lib/layout';
 import { createForceSimulation, runSimulationSync, applyForcePositions } from '@/lib/forceSimulation';
+import { extractLocaleFromKey } from '@/lib/localeUtils';
+import {
+  REALM_COLORS,
+  REALM_DISPLAY_NAMES,
+  LAYER_COLORS,
+  LAYER_DISPLAY_NAMES,
+  type RealmKey,
+  type LayerKey,
+} from '@/design/colors/generated';
 import {
   TurboNode,
   StructuralNode,
   SharedLayerNode,
+  LocaleNode,
+  ClassNode,
+  RealmNode,
   ProjectNode,
   RealmAttractorNode,
   LayerAttractorNode,
@@ -85,6 +97,9 @@ const nodeTypes = {
   turbo: TurboNode,
   structural: StructuralNode,
   sharedLayer: SharedLayerNode,
+  locale: LocaleNode,  // v0.13.0: "Passport Élégant" design for Locale nodes
+  classNode: ClassNode,  // v0.13.0: "Holographic Blueprint" design for Class nodes
+  realmNode: RealmNode,  // v0.13.1: "Orbital Gateway" design for Realm nodes (shared, org)
   project: ProjectNode,
   // Schema mode node types (Task 3.2)
   schemaNode: SchemaNode,
@@ -134,9 +149,24 @@ function toTurboNode(node: GraphNodeType): TurboNodeType {
   // Select node type based on layer (v9)
   let nodeType: string = 'turbo';
 
+  // Cast to string once for schema meta-type comparisons
+  // (Realm/Layer/NodeClass/ArcClass are not in the NodeType enum)
+  const nodeTypeStr = node.type as string;
+
   // Special case: Project nodes get premium social network card style
-  if (node.type === 'Project') {
+  if (nodeTypeStr === 'Project') {
     nodeType = 'project';
+  // v0.13.0: Locale nodes get "Passport Élégant" design
+  } else if (nodeTypeStr === 'Locale') {
+    nodeType = 'locale';
+  // v0.13.0: Realm gets "Orbital Gateway" design, Layer gets compact badge
+  } else if (nodeTypeStr === 'Realm') {
+    nodeType = 'realmNode';
+  } else if (nodeTypeStr === 'Layer') {
+    nodeType = 'schemaBadge';
+  // v0.13.0: NodeClass and ArcClass get "Holographic Blueprint" design
+  } else if (['NodeClass', 'ArcClass', 'ArcFamily'].includes(nodeTypeStr)) {
+    nodeType = 'classNode';
   } else {
     switch (config.layer) {
       case 'foundation':
@@ -156,11 +186,48 @@ function toTurboNode(node: GraphNodeType): TurboNodeType {
     }
   }
 
-  return {
-    id: node.id,
-    type: nodeType,
-    position: { x: 0, y: 0 }, // Will be set by dagre layout
-    data: {
+  // Extract locale from composite key pattern: {type}:{key}@{locale}
+  // Applies to: *Native nodes, Knowledge atoms, Locale layer nodes
+  const locale = extractLocaleFromKey(node.key);
+
+  // v0.13.0: Build data object based on node type
+  // SchemaBadgeNode (Realm/Layer) requires specific fields: metaType, label, color, realmKey/layerKey
+  let data: TurboNodeData;
+
+  // Use nodeTypeStr (already cast above) for schema meta-type comparisons
+  if (nodeTypeStr === 'Realm') {
+    // Realm nodes: metaType='realm', color from REALM_COLORS
+    const realmKey = node.key as RealmKey;
+    data = {
+      id: node.id,
+      type: node.type,
+      key: node.key,
+      displayName: node.displayName,
+      // SchemaBadgeNode specific fields
+      label: node.displayName || REALM_DISPLAY_NAMES[realmKey] || node.key,
+      description: node.description || `${REALM_DISPLAY_NAMES[realmKey] || node.key} realm`,
+      metaType: 'realm',
+      color: REALM_COLORS[realmKey]?.color ?? '#2aa198',
+      realmKey,
+    };
+  } else if (nodeTypeStr === 'Layer') {
+    // Layer nodes: metaType='layer', color from LAYER_COLORS
+    const layerKey = node.key as LayerKey;
+    data = {
+      id: node.id,
+      type: node.type,
+      key: node.key,
+      displayName: node.displayName,
+      // SchemaBadgeNode specific fields
+      label: node.displayName || LAYER_DISPLAY_NAMES[layerKey] || node.key,
+      description: node.description || `${LAYER_DISPLAY_NAMES[layerKey] || node.key} layer`,
+      metaType: 'layer',
+      color: LAYER_COLORS[layerKey]?.color ?? '#64748b',
+      layerKey,
+    };
+  } else {
+    // Default data structure for all other node types
+    data = {
       id: node.id,
       type: node.type,
       key: node.key,
@@ -168,7 +235,15 @@ function toTurboNode(node: GraphNodeType): TurboNodeType {
       icon: nodeTypeConfigs[node.type]?.icon,
       description: node.description,
       category: config.layer,
-    },
+      locale,
+    };
+  }
+
+  return {
+    id: node.id,
+    type: nodeType,
+    position: { x: 0, y: 0 }, // Will be set by dagre layout
+    data,
   };
 }
 

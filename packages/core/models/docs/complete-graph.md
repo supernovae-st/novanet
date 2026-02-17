@@ -26,7 +26,7 @@ This diagram shows the complete NovaNet graph schema with all 61 node types and 
 ```mermaid
 flowchart TB
   %% NovaNet Graph v0.13.0
-  %% Generated: 61 nodes, 256 arcs
+  %% Generated: 61 nodes, 265 arcs
   %% Source: node-classes/ + arc-classes/ + taxonomy.yaml
 
   %% Trait styling (node_trait)
@@ -127,6 +127,8 @@ flowchart TB
 
   %% Relationships (styled by arc family)
   Adaptation -->|ADAPTATION_OF| Locale
+  ArcClass ..->|FROM_CLASS| Class
+  ArcClass ..->|TO_CLASS| Class
   AudienceSet -->|AUDIENCE_OF| Locale
   AudienceSet -->|CONTAINS_AUDIENCE_TRAIT| AudienceTrait
   Block -->|BLOCK_OF| Page
@@ -158,6 +160,7 @@ flowchart TB
   BlockInstruction -.->|MENTIONS| Term
   BlockInstruction -.->|REFERENCES_ENTITY| Entity
   BlockInstruction -.->|REFERENCES_PAGE| Page
+  BlockNative ==>|DERIVED_SLUG_FROM| SEOKeyword
   BlockNative -.->|FOR_CHANNEL| ChannelSurface
   BlockNative -.->|FOR_LOCALE| Locale
   BlockNative ==>|GENERATED_FROM| BlockType
@@ -171,6 +174,7 @@ flowchart TB
   BlockNative ==>|PREVIOUS_VERSION| OutputArtifact
   BlockNative ==>|PREVIOUS_VERSION| PageNative
   BlockNative ==>|PRODUCED_BY| PromptArtifact
+  BlockNative -.->|SLUGIFIED_BY| Slugification
   BlockType -->|HAS_RULES| BlockRules
   Brand -->|BRAND_OF| Project
   Brand -.->|FOR_MARKET| Market
@@ -215,6 +219,7 @@ flowchart TB
   Entity -.->|INCLUDES| Entity
   Entity -.->|OPERATED_BY| Entity
   Entity -.->|POPULAR_IN| Continent
+  Entity -.->|POPULAR_IN| Country
   Entity -.->|POPULAR_IN| GeoRegion
   Entity -.->|POPULAR_IN| GeoSubRegion
   Entity -.->|READS| Entity
@@ -321,7 +326,6 @@ flowchart TB
   Page -.->|USES_ENTITY| Entity
   PageNative ==>|ASSEMBLES| BlockNative
   PageNative -->|BELONGS_TO_PROJECT_NATIVE| ProjectNative
-  PageNative ==>|DERIVED_SLUG_FROM| SEOKeyword
   PageNative -.->|FOR_CHANNEL| ChannelSurface
   PageNative -.->|FOR_LOCALE| Locale
   PageNative -->|NATIVE_OF| Block
@@ -371,11 +375,16 @@ flowchart TB
   SEOKeyword --o|KEYWORD_TARGETED_BY| Block
   SEOKeyword --o|KEYWORD_TARGETED_BY| Page
   SEOKeyword -.->|MENTIONS_BRAND| Entity
+  SEOKeyword -.->|POPULAR_IN| Continent
+  SEOKeyword -.->|POPULAR_IN| Country
+  SEOKeyword -.->|POPULAR_IN| GeoRegion
+  SEOKeyword -.->|POPULAR_IN| GeoSubRegion
   SEOKeyword -.->|USE_CASE_FOR| Entity
   SEOKeywordMetrics --o|METRICS_OF| SEOKeyword
   SEOKeywordSet -->|CONTAINS_SEO_KEYWORD| SEOKeyword
   SEOKeywordSet -->|SEO_KEYWORDS_OF| Locale
   Slugification -->|SLUGIFICATION_OF| Locale
+  Slugification -.->|SLUGIFIES| BlockNative
   Style -->|STYLE_OF| Locale
   TabooSet -->|CONTAINS_TABOO| Taboo
   TabooSet -->|TABOOS_OF| Locale
@@ -384,11 +393,11 @@ flowchart TB
   TermSet -->|TERMS_OF| Locale
 
   %% Arc colors by family
-  linkStyle 16,17,18,34,36,41,42,43,44,171,172,174,175,176,193,195,202,203,204,205,229,230,231,232 stroke:#8b5cf6,stroke-width:2px
-  linkStyle 33,56,58,64,105,125,128,130,132,134,136,144,145,146,149,150,156,157,158,159,160,161,162,163,164,165,166,167,168,173,197,210,212,224,233 stroke:#22c55e,stroke-width:2px
-  linkStyle 12,13,120,121,189,190,240,242,243,246 stroke:#ec4899,stroke-width:2px
-  linkStyle 0,1,2,3,5,6,7,8,9,10,19,20,37,38,39,40,45,46,48,49,50,52,53,54,55,57,59,60,62,63,69,75,77,78,79,80,81,82,107,108,109,110,117,118,119,122,123,124,126,127,129,131,133,137,138,139,140,141,142,143,147,148,151,152,153,154,155,169,170,177,178,179,180,181,182,183,185,194,198,199,200,201,207,208,209,211,213,214,215,216,217,218,219,220,221,222,223,225,226,227,228,235,239,247,248,249,250,251,252,254,255 stroke:#3b82f6,stroke-width:2px
-  linkStyle 4,11,14,15,21,22,23,24,25,26,27,28,29,30,31,32,35,47,51,61,65,66,67,68,70,71,72,73,74,76,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,106,111,112,113,114,115,116,135,184,186,187,188,191,192,196,206,234,236,237,238,241,244,245,253 stroke:#f97316,stroke-width:2px
+  linkStyle 18,19,20,34,37,39,44,45,46,47,176,177,179,180,181,198,206,207,208,209,233,234,235,236 stroke:#8b5cf6,stroke-width:2px
+  linkStyle 36,60,62,68,110,130,133,135,137,139,141,149,150,151,154,155,161,162,163,164,165,166,167,168,169,170,171,172,173,178,201,214,216,228,237 stroke:#22c55e,stroke-width:2px
+  linkStyle 14,15,125,126,194,195,244,246,247,254 stroke:#ec4899,stroke-width:2px
+  linkStyle 0,3,4,5,7,8,9,10,11,12,21,22,40,41,42,43,49,50,52,53,54,56,57,58,59,61,63,64,66,67,73,79,81,82,83,84,85,86,112,113,114,115,122,123,124,127,128,129,131,132,134,136,138,142,143,144,145,146,147,148,152,153,156,157,158,159,160,174,175,182,183,184,185,186,187,188,190,199,202,203,204,205,211,212,213,215,217,218,219,220,221,222,223,224,225,226,227,229,230,231,232,239,243,255,256,257,259,260,261,263,264 stroke:#3b82f6,stroke-width:2px
+  linkStyle 6,13,16,17,23,24,25,26,27,28,29,30,31,32,33,35,38,48,51,55,65,69,70,71,72,74,75,76,77,78,80,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,111,116,117,118,119,120,121,140,189,191,192,193,196,197,200,210,238,240,241,242,245,248,249,250,251,252,253,258,262 stroke:#f97316,stroke-width:2px
 
   %% Class assignments
   class Adaptation imported

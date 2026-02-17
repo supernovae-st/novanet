@@ -11,7 +11,7 @@ domain: "ux-architecture"
 **Status**: Approved (v11.7)
 
 **Problem**: NovaNet had inconsistent behavior between Neo4j and UI:
-1. Realm, Layer, Trait ARE nodes in Neo4j (`:Meta:Realm`, `:Meta:Layer`)
+1. Realm, Layer, Trait ARE nodes in Neo4j (`:Schema:Realm`, `:Schema:Layer`)
 2. But TUI/Studio treated them as visual groupings, not clickable nodes
 3. 5 separate modes (Meta/Data/Overlay/Query/Atlas) created confusion
 4. Emoji icons in code instead of proper icon system
@@ -20,15 +20,15 @@ domain: "ux-architecture"
 
 **Changes**:
 - 5 modes → 2 modes: `[1]Graph` (unified tree) + `[2]Nexus` (hub)
-- Realm, Layer, ArcFamily, ArcKind are clickable nodes with detail panels
-- Kind nodes expand to show instances (lazy loading, 10 + "load more")
+- Realm, Layer, ArcFamily, ArcClass are clickable nodes with detail panels
+- Class nodes expand to show instances (lazy loading, 10 + "load more")
 - Dual icons: `{ web: "lucide-name", terminal: "◆" }` - no emoji
 - Atlas removed, Audit moved to Nexus hub
 
 **Principle**: "If it's a node in Neo4j, it's a node everywhere"
 
 **Consequences**:
-- Neo4j migration needed (HAS_LAYER, HAS_KIND, BELONGS_TO_FAMILY arcs)
+- Neo4j migration needed (HAS_LAYER, HAS_CLASS, BELONGS_TO_FAMILY arcs)
 - Types defined before generators
 - Backward compatibility shim for old nav modes
 - Performance optimization for large instance counts (200K+)
@@ -51,7 +51,7 @@ AFTER (v11.7):  [1]Graph [2]Nexus
 |--------|--------|-------|
 | Modes | 5 (Meta/Data/Overlay/Query/Atlas) | 2 (Graph/Nexus) |
 | Realm/Layer | Visual groupings (folders) | Clickable nodes |
-| Instances | Hidden or separate Data mode | Expandable under Kind |
+| Instances | Hidden or separate Data mode | Expandable under Class |
 | Search | Separate Query mode | `[/]` overlay in Graph |
 | Atlas | Separate mode | Removed |
 | Audit | In Atlas | In Nexus hub |
@@ -60,15 +60,15 @@ AFTER (v11.7):  [1]Graph [2]Nexus
 ## Unified Tree Structure
 
 ```
-▼ Nodes (60)
-  ▼ ◉ Realm:shared           ← Clickable :Meta:Realm node
-    ▼ ⚙ Layer:config         ← Clickable :Meta:Layer node
-      ▼ ◆ Kind:Locale [200]  ← Clickable :Meta:Kind node
-        ● Locale:fr-FR       ← Clickable :Locale instance
+▼ Nodes (61)
+  ▼ ◉ Realm:shared            ← Clickable :Schema:Realm node
+    ▼ ⚙ Layer:config          ← Clickable :Schema:Layer node
+      ▼ ◆ Class:Locale [200]  ← Clickable :Schema:Class node
+        ● Locale:fr-FR        ← Clickable :Locale instance
         ● Locale:en-US
-▼ Arcs (169)
+▼ Arcs (179)
   ▼ → ArcFamily:ownership
-    → ArcKind:HAS_PROJECT
+    → ArcClass:HAS_PROJECT
 ```
 
 ## Nexus Hub
@@ -94,7 +94,7 @@ From current TUI (keep these):
 - Trait icons: `■(inv)` `□(loc)` `◇(kno)` `★(gen)` `⋆(agg)`
 - Arc counts: `→N` (outgoing) `←N` (incoming)
 - Property counts: `⊞required/total`
-- Instance counts: `Kind (N)`, `Layer (N)`
+- Instance counts: `Class (N)`, `Layer (N)`
 - Colored badges: `●org` `◎shd` `◆sem` etc.
 - Layer headers with kind count: `◇3`
 

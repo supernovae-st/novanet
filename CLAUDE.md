@@ -29,7 +29,7 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
-**Current Version**: v0.13.0 "*Native Pattern" (ADR-029 + ADR-030)
+**Current Version**: v0.13.1 "*Native Pattern" (ADR-029 + ADR-030)
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
 **Related docs**:
@@ -79,7 +79,7 @@ v0.13.0 introduces the *Native pattern with unified arcs:
 - ***Native Pattern** (ADR-029): EntityContent→EntityNative, ProjectContent→ProjectNative, PageGenerated→PageNative, BlockGenerated→BlockNative
 - **Unified Arcs** (ADR-029): HAS_CONTENT/HAS_GENERATED→HAS_NATIVE, CONTENT_OF/GENERATED_FOR→NATIVE_OF
 - **Slug Ownership** (ADR-030): URL properties moved from EntityNative to PageNative
-- **61 nodes** total: 40 shared + 21 org, **169 arcs** (5 families)
+- **61 nodes** total: 40 shared + 21 org, **179 arcs** (5 families)
 
 **Architecture (v0.13.0):**
 - 2 realms: SHARED + ORG
@@ -88,11 +88,11 @@ v0.13.0 introduces the *Native pattern with unified arcs:
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
 All commands implemented: blueprint/data/overlay/query, node/arc CRUD, search, locale, db,
-schema generate/validate, doc generate, filter build. Galaxy-themed TUI with unified tree mode (v11.7), boot animation, effects engine, Nexus hub, and onboarding. 980 tests pass.
+schema generate/validate, doc generate, filter build. Galaxy-themed TUI with unified tree mode (v11.7), boot animation, effects engine, Nexus hub, and onboarding. 1082 tests pass.
 
 **YAML-first architecture:** Each Class YAML has explicit `realm:` and `layer:` fields (source of truth).
 Path validation ensures `models/node-classes/{realm}/{layer}/{name}.yaml` matches YAML content.
-v0.13.0: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 61 nodes, 169 arcs.
+v0.13.1: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 61 nodes, 179 arcs.
 
 **Icons source of truth (v11.5):** `visual-encoding.yaml` → `icons:` section provides dual-format icons:
 - `web`: Lucide icon name for Studio
@@ -305,7 +305,7 @@ pnpm test --filter=@novanet/studio      # Test only studio
 | @novanet/core | Types, schemas, filters, generators |
 | @novanet/db | Neo4j Docker, seeds, migrations |
 | @novanet/studio | Web-based graph visualization |
-| tools/novanet | Rust CLI + TUI — all runtime commands (985 tests) |
+| tools/novanet | Rust CLI + TUI — all runtime commands (1082 tests) |
 
 ---
 

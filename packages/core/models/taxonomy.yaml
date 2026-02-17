@@ -124,6 +124,7 @@ terminal:
     semantic_arc: 208   # orange
     generation_arc: 141 # purple
     mining_arc: 205     # pink
+    schema_arc: 99      # indigo (#6366f1)
 
   palette_16:
     # Realms (v11.2: shared + org)
@@ -153,3 +154,4 @@ terminal:
     semantic_arc: 3     # yellow
     generation_arc: 5   # magenta
     mining_arc: 13      # bright magenta
+    schema_arc: 4       # blue (shared with ownership)

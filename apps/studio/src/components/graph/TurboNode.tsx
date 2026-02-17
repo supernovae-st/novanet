@@ -24,6 +24,7 @@ import { iconSizes, gapTokens } from '@/design/tokens';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
 import { LayerIcon } from '@/components/ui/CategoryIcon';
 import { useNodeInteractions } from '@/hooks';
+import { localeToFlag } from '@/lib/localeUtils';
 import { getNodeConfig } from './nodes/NodeConfig';
 import {
   getGradientBorderStyle,
@@ -53,6 +54,8 @@ export interface TurboNodeData extends Record<string, unknown> {
   dimmed?: boolean;
   /** Lighter dimming (hover mode - 25% opacity) */
   hoverDimmed?: boolean;
+  /** BCP-47 locale code for locale-specific nodes (*Native, Knowledge atoms, Locale layer) */
+  locale?: string;
 }
 
 export type TurboNodeType = Node<TurboNodeData>;
@@ -181,16 +184,33 @@ export const TurboNode = memo(function TurboNode(props: NodeProps<TurboNodeType>
             )}
           </div>
 
-          {/* Category badge */}
-          <div
-            className={cn('inline-flex items-center px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider border', gapTokens.default)}
-            style={getCategoryBadgeStyle(colors.primary)}
-          >
-            <span
-              className={cn('w-2 h-2 rounded-full', selected && 'animate-pulse')}
-              style={getStatusDotStyle(colors.primary)}
-            />
-            {typeConfig.layer}
+          {/* Badges row: Category + Locale */}
+          <div className={cn('flex items-center flex-wrap', gapTokens.default)}>
+            {/* Category badge */}
+            <div
+              className={cn('inline-flex items-center px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider border', gapTokens.default)}
+              style={getCategoryBadgeStyle(colors.primary)}
+            >
+              <span
+                className={cn('w-2 h-2 rounded-full', selected && 'animate-pulse')}
+                style={getStatusDotStyle(colors.primary)}
+              />
+              {typeConfig.layer}
+            </div>
+
+            {/* Locale tag badge - only shown for locale-specific nodes */}
+            {data.locale && (
+              <div
+                className="inline-flex items-center px-2.5 py-1.5 rounded-full text-[10px] font-medium border gap-1.5"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  borderColor: 'rgba(255, 255, 255, 0.15)',
+                }}
+              >
+                <span className="text-base leading-none">{localeToFlag(data.locale)}</span>
+                <span className="text-white/70 font-mono">{data.locale}</span>
+              </div>
+            )}
           </div>
 
           {/* Source Handle - HOLLOW (outgoing) */}

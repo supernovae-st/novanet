@@ -62,12 +62,6 @@ node:
       description: "Detailed explanation of what this category represents"
       example: "Tangible or abstract objects that exist as nouns (products, concepts, entities)"
 
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation].'"
-      example: "USE: for nouns representing products, concepts, or entities. TRIGGERS: thing, product, object, concept, item. NOT: actions (use ACTION), content formats (use CONTENT_TYPE)."
-
     created_at:
       type: datetime
       required: true
@@ -81,6 +75,12 @@ node:
   # ═══════════════════════════════════════════════════════════════════════════════
 
   properties:
+    llm_context:
+      type: string
+      required: true
+      description: "Per-instance LLM generation hints for this category. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation].'"
+      example: "USE: for nouns representing products, concepts, or entities. TRIGGERS: thing, product, object, concept, item. NOT: actions (use ACTION), content formats (use CONTENT_TYPE)."
+
     question:
       type: string
       required: true

@@ -1,8 +1,8 @@
 # NovaNet ADR Index
 # Machine-readable metadata for all Architecture Decision Records
-# Generated: 2026-02-15 | Version: v0.13.0
+# Generated: 2026-02-15 | Version: v0.13.1
 
-version: "0.13.0"
+version: "0.13.1"
 total_adrs: 32
 last_updated: "2026-02-15"
 
@@ -202,7 +202,7 @@ adrs:
 
   - id: 23
     name: "Class/Instance Terminology"
-    version: "v0.12.0"
+    version: "v11.8"
     status: active
     domain: node-classification
     file: "node-classification/adr-023-class-instance.md"
@@ -214,7 +214,7 @@ adrs:
 
   - id: 24
     name: "Trait = Data Origin"
-    version: "v0.12.0"
+    version: "v11.8"
     status: active
     domain: node-classification
     file: "node-classification/adr-024-trait-data-origin.md"
@@ -226,7 +226,7 @@ adrs:
 
   - id: 25
     name: "Instruction Layer Renaming"
-    version: "v0.12.0"
+    version: "v11.8"
     status: active
     domain: node-classification
     file: "node-classification/adr-025-instruction-layer.md"

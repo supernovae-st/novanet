@@ -111,6 +111,7 @@ describe('Effect Mapping', () => {
     semantic: 'zigzag',
     generation: 'matrixCode',
     mining: 'radarSweep',
+    schema: 'schemaFlow',
   };
 
   it('each arc family has the correct signature effect', () => {

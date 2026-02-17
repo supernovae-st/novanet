@@ -1,6 +1,11 @@
 # models/node-classes/org/output/page-native.yaml
 # v0.13.1 LLM-First Schema - Canonical field ordering for optimal AI comprehension
 # PageNative - LLM-generated native page content (v0.13.0 ADR-029)
+# =============================================================================
+# NOTE: URL routing (slug, full_path) is owned by BlockNative:head-seo-meta.
+# PageNative only contains assembled block content, not routing metadata.
+# See ADR-030 (Slug Ownership) for details.
+# =============================================================================
 
 node:
   # ═══════════════════════════════════════════════════════════════════════════════
@@ -19,8 +24,9 @@ node:
   llm_context: |
     USE: when displaying assembled native page content or checking generation status.
     TRIGGERS: "page native", "generated page", "assembled content", locale code.
-    NOT: for page structure (use Page), for block content (use BlockNative).
-    RELATES: Page (source via HAS_NATIVE), Locale (target via FOR_LOCALE), BlockNative (assembles via ASSEMBLES), ProjectNative (context via BELONGS_TO_PROJECT_NATIVE).
+    NOT: for page structure (use Page), for block content (use BlockNative), for URL/slug (use BlockNative:head-seo-meta).
+    RELATES: Page (source via HAS_NATIVE), Locale (target via FOR_LOCALE), BlockNative (assembles via ASSEMBLES), BlockNative:head-seo-meta (slug/URL via ASSEMBLES), ProjectNative (context via BELONGS_TO_PROJECT_NATIVE).
+    NOTE: URL routing (slug, full_path) is owned by the head-seo-meta BlockNative, not PageNative.
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # BLOC 3: VISUAL (icon)
@@ -85,54 +91,8 @@ node:
       required: true
       description: "Last update timestamp"
 
-  # ADR-030 Slug Ownership: PageNative owns URL routing, not EntityNative.
-  routing_properties:
-    slug:
-      type: string
-      required: true
-      pattern: "^[\\p{Ll}\\p{N}\\-]+$"  # UTF-8: Unicode lowercase + numbers + hyphens
-      indexed: true
-      unique_with: locale_key  # UNIQUE(locale_key, slug)
-      description: "URL-safe localized page identifier (UTF-8 allowed)"
-      examples:
-        - "tarifs"                # fr-FR
-        - "pricing"               # en-US
-        - "料金"                   # ja-JP
-
-    full_path:
-      type: string
-      required: true
-      indexed: true
-      description: "Denormalized full URL path from root (O(1) lookup)"
-      examples:
-        - "/fr/tarifs"
-        - "/fr/blog/qr-code-restaurant"
-        - "/ja/料金"
-
-    parent_slug:
-      type: string
-      required: false
-      description: "Parent PageNative slug (null if root page)"
-      examples:
-        - "blog"
-        - "features"
-
-    depth:
-      type: int
-      required: true
-      default: 0
-      description: "URL hierarchy depth (0 = root, max 3)"
-      examples:
-        - 0  # /fr/tarifs
-        - 1  # /fr/blog/article
-        - 2  # /fr/blog/category/article
-
-    slug_history:
-      type: "string[]"
-      required: false
-      description: "Previous slugs for redirect support (301 redirects)"
-      examples:
-        - '["prix", "tarification"]'
+  # NOTE: routing_properties (slug, full_path, etc.) moved to BlockNative:head-seo-meta
+  # See ADR-030 (Slug Ownership) - slug is now owned by the first block of each page.
 
   properties:
     assembled:

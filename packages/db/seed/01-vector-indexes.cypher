@@ -61,9 +61,9 @@ OPTIONS {
 CREATE FULLTEXT INDEX entity_fulltext IF NOT EXISTS
 FOR (e:Entity) ON EACH [e.key, e.display_name, e.description, e.llm_context];
 
-// EntityNative fulltext (v10.3: replaces ConceptL10n, localized content)
+// EntityNative fulltext (v0.13.1: standard_properties display_name + description)
 CREATE FULLTEXT INDEX entity_l10n_fulltext IF NOT EXISTS
-FOR (el:EntityNative) ON EACH [el.title, el.definition, el.summary];
+FOR (el:EntityNative) ON EACH [el.display_name, el.description];
 
 // ---------------------------------------------------------------------------
 // VERIFICATION

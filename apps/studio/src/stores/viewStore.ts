@@ -146,6 +146,16 @@ export const useViewStore = create<ViewStoreState & ViewStoreActions>()(
 
       // Select and execute a view (fetches Cypher and runs query)
       executeView: async (id, params) => {
+        // v0.13.0: Early check for contextual views without nodeKey
+        // This catches ALL code paths (URL routing, direct calls, loadDefaultView)
+        const viewParams = params || get().params;
+        const view = get().getViewById(id);
+        if (view?.contextual && !viewParams.key) {
+          logger.warn('ViewStore', 'Contextual view requires nodeKey, falling back to default', { id });
+          // Fall back to default view instead of throwing later
+          return get().executeView(DEFAULT_VIEW_ID);
+        }
+
         // v11.6.1: Cancel any in-flight request to prevent race conditions
         const currentAbort = get()._abortController;
         if (currentAbort) {
@@ -174,7 +184,7 @@ export const useViewStore = create<ViewStoreState & ViewStoreActions>()(
         try {
           // Build query params for the API
           const queryParams = new URLSearchParams();
-          const viewParams = params || get().params;
+          // viewParams already defined at function start for early contextual check
           if (viewParams.key) queryParams.set('key', viewParams.key);
           if (viewParams.locale) queryParams.set('locale', viewParams.locale);
           if (viewParams.project) queryParams.set('project', viewParams.project);
@@ -384,13 +394,24 @@ export const useViewStore = create<ViewStoreState & ViewStoreActions>()(
     })),
     {
       name: 'novanet-view-store',
-      version: 12, // v12: View-based navigation
+      version: 13, // v13: Added migrate function
       // Only persist view selection, not registry or custom query state
       partialize: (state) => ({
         activeViewId: state.activeViewId,
         params: state.params,
         // NOT persisted: isCustomQuery, customQueryText, categories (reset on reload)
       }),
+      // Migration from older versions
+      migrate: (persistedState, version) => {
+        // v12 → v13: No schema changes, just ensures clean migration
+        if (version < 13) {
+          return {
+            activeViewId: (persistedState as { activeViewId?: string })?.activeViewId ?? DEFAULT_VIEW_ID,
+            params: (persistedState as { params?: Record<string, string> })?.params ?? {},
+          };
+        }
+        return persistedState as { activeViewId: string; params: Record<string, string> };
+      },
     }
   )
 );

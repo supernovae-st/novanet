@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * SharedLayerNode - Unified card design for shared realm nodes (v0.12.4)
+ * SharedLayerNode - Unified card design for shared realm nodes (v0.12.5)
  *
  * Handles nodes from 4 shared realm layers:
  * - config: Locale, EntityCategory
@@ -10,14 +10,15 @@
  * - knowledge: Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait
  * Plus containers: TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet
  *
- * Uses CardShell + StructuralCardContent for consistent design system.
+ * v0.12.5: Uses card content selector to route to specialized card components
+ * based on node type (ADR-005 visual encoding).
  */
 
 import { memo, useMemo } from 'react';
 import { type Node, type NodeProps } from '@xyflow/react';
 import { getSharedKnowledgeColors } from '@/design/nodeColors';
 import type { BaseNodeData } from './BaseNodeWrapper';
-import { CardShell, StructuralCardContent } from './card';
+import { CardShell, getCardContentComponent } from './card';
 
 export type SharedLayerNodeType = Node<BaseNodeData>;
 
@@ -59,20 +60,36 @@ function getCardWidth(type: string): number {
 }
 
 /**
- * SharedLayerNode - Uses unified CardShell + StructuralCardContent
+ * SharedLayerNode - Uses card content selector for specialized rendering
+ *
+ * The selector routes to specialized card components based on node type:
+ * - Geography types → GeographyCardContent
+ * - Locale settings → LocaleSettingsCardContent
+ * - Knowledge containers → KnowledgeSetCardContent
+ * - Knowledge atoms → Individual card components (TermCardContent, etc.)
+ * - Fallback → StructuralCardContent
  */
 export const SharedLayerNode = memo(function SharedLayerNode(props: NodeProps<SharedLayerNodeType>) {
   const { data, selected = false } = props;
   const colors = useMemo(() => getSharedKnowledgeColors(data.type), [data.type]);
   const width = getCardWidth(data.type);
 
-  // Prepare data for StructuralCardContent
+  // Get the specialized card content component for this node type
+  const CardContent = useMemo(() => getCardContentComponent(data.type), [data.type]);
+
+  // Prepare data for card content
+  // Note: The specialized components expect their specific data shapes,
+  // but all extend the base structure with id, type, key, displayName.
+  // BaseNodeData extends Record<string, unknown>, so all Neo4j properties
+  // are available directly on data (not nested under data.properties).
   const contentData = useMemo(() => ({
+    ...data, // Spread all properties from Neo4j
     id: data.id,
     type: data.type,
     key: data.key,
     displayName: data.displayName,
-  }), [data.id, data.type, data.key, data.displayName]);
+    locale: data.locale,
+  }), [data]);
 
   return (
     <CardShell
@@ -84,7 +101,7 @@ export const SharedLayerNode = memo(function SharedLayerNode(props: NodeProps<Sh
       isSchemaMode={data.isSchemaMode === true}
       ariaLabel={`${data.type} node: ${data.displayName}`}
       renderContent={(ctx) => (
-        <StructuralCardContent data={contentData} {...ctx} />
+        <CardContent data={contentData} {...ctx} />
       )}
     />
   );

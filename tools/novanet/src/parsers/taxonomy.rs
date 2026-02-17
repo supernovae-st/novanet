@@ -623,7 +623,7 @@ arc_families:
         assert_eq!(doc.version, "0.13.0");
         assert_eq!(doc.node_realms.len(), 2); // v11.2: 2 realms (shared, org)
         assert_eq!(doc.node_traits.len(), 5); // v11.2: split derived → generated + aggregated
-        assert_eq!(doc.arc_families.len(), 5);
+        assert_eq!(doc.arc_families.len(), 6); // v0.13.1: added schema family
         assert_eq!(doc.arc_scopes.len(), 2);
         assert_eq!(doc.arc_cardinalities.len(), 5); // zero_to_one, one_to_one, one_to_many, many_to_one, many_to_many
 
@@ -756,7 +756,7 @@ arc_families:
         // Same expectations as load_taxonomy_integration
         assert_eq!(doc.node_realms.len(), 2, "expected 2 realms (shared, org)");
         assert_eq!(doc.node_traits.len(), 5, "expected 5 traits");
-        assert_eq!(doc.arc_families.len(), 5, "expected 5 arc families");
+        assert_eq!(doc.arc_families.len(), 6, "expected 6 arc families (v0.13.1: added schema)");
 
         let total_layers: usize = doc.node_realms.iter().map(|r| r.layers.len()).sum();
         assert_eq!(total_layers, 10, "expected 10 layers (4 shared + 6 org)");

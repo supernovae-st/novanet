@@ -56,12 +56,6 @@ node:
       required: true
       description: "Purpose and usage of this slot"
 
-    llm_context:
-      type: string
-      required: true
-      description: "LLM prompt context for content in this slot"
-      example: "Primary call-to-action in hero section. Should be compelling and action-oriented."
-
     created_at:
       type: datetime
       required: true
@@ -73,6 +67,12 @@ node:
       description: "Last update timestamp"
 
   properties:
+    llm_context:
+      type: string
+      required: true
+      description: "Per-instance LLM generation hints for this slot. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation].'"
+      example: "Primary call-to-action in hero section. Should be compelling and action-oriented."
+
     slot_type:
       type: string
       required: true
