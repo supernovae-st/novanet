@@ -141,6 +141,7 @@ impl Default for FixEngine {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::parsers::schema_rules::IssueSeverity;
 
     /// Test implementation of AutoFix trait.
     struct TestFixer;
