@@ -70,6 +70,12 @@ node:
       required: true
 
   properties:
+    # Instance-level LLM context (BLOC 4 - optional, distinct from BLOC 2 llm_context above)
+    llm_context:
+      type: string
+      required: false
+      description: "Instance-specific context for LLM generation. Focused characteristics for this particular node instance."
+
     m49_code:
       type: int
       required: true
