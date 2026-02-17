@@ -11,7 +11,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 
 ## Current Status
 
-**v0.13.1 LLM-First BLOC Schema** — All 61 node-class YAML files standardized with canonical 6-BLOC property ordering for optimal AI comprehension: BLOC 1 (Identity), BLOC 2 (Semantic), BLOC 3 (Visual), BLOC 4 (Data), BLOC 5 (Graph), BLOC 6 (Reference). Includes v0.13.0 changes: ADR-029 *Native Pattern, ADR-030 Slug Ownership, ADR-024 Data Origin traits (defined/authored/imported/generated/retrieved), ADR-025 Instruction Layer, ADR-028 Brand Architecture. SHARED (4 layers: config, locale, geography, knowledge, 40 nodes), ORG (6 layers: config, foundation, structure, semantic, instruction, output, 21 nodes). 61 total nodes, 169 arcs, 10 layers, 5 traits.
+**v0.13.1 LLM-First BLOC Schema** — All 61 node-class YAML files standardized with canonical 6-BLOC property ordering for optimal AI comprehension: BLOC 1 (Identity), BLOC 2 (Semantic), BLOC 3 (Visual), BLOC 4 (Data), BLOC 5 (Graph), BLOC 6 (Reference). Includes v0.13.0 changes: ADR-029 *Native Pattern, ADR-030 Slug Ownership, ADR-024 Data Origin traits (defined/authored/imported/generated/retrieved), ADR-025 Instruction Layer, ADR-028 Brand Architecture. SHARED (4 layers: config, locale, geography, knowledge, 40 nodes), ORG (6 layers: config, foundation, structure, semantic, instruction, output, 21 nodes). 61 total nodes, 182 arcs, 10 layers, 6 arc families.
 
 | Area | Commands | Status |
 |------|----------|--------|

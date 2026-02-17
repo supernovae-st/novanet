@@ -47,7 +47,7 @@ This file defines the **canonical terminology** for NovaNet. All code, documenta
 | `shared` | config, locale, geography, knowledge | 40 | Universal knowledge (READ-ONLY) |
 | `org` | config, foundation, structure, semantic, instruction, output | 21 | Organization-specific content |
 
-**Totals**: 61 nodes, 169 arcs, 10 layers (4 shared + 6 org), 5 traits
+**Totals**: 61 nodes, 182 arcs, 10 layers (4 shared + 6 org), 6 arc families, 5 traits
 
 > **Architecture details**: See [ADR-012](adr/schema-architecture/adr-012-two-realm.md), [ADR-028](adr/schema-architecture/adr-028-page-entity.md).
 
@@ -56,7 +56,7 @@ This file defines the **canonical terminology** for NovaNet. All code, documenta
 | Axis | Question | Type | Property | Values |
 |------|----------|------|----------|--------|
 | 1 | SCOPE? | `ArcScope` | `scope` | `intra_realm`, `cross_realm` |
-| 2 | FUNCTION? | `ArcFamily` | `family` | `ownership`, `localization`, `semantic`, `generation`, `mining` |
+| 2 | FUNCTION? | `ArcFamily` | `family` | `ownership`, `localization`, `semantic`, `generation`, `mining`, `schema` |
 | 3 | MULTIPLICITY? | `ArcCardinality` | `cardinality` | `zero_to_one`, `one_to_one`, `one_to_many`, `many_to_many` |
 
 > **Arc design**: See [ADR-026](adr/arc-design/adr-026-inverse-arc-policy.md), [ADR-027](adr/arc-design/adr-027-generation-family.md).
@@ -288,7 +288,7 @@ Cypher queries are the single source of truth for graph visualization.
 
 | Term | Definition |
 |------|------------|
-| **Schema-Graph** | NodeClass + ArcClass nodes (61 nodes, 169 arcs) |
+| **Schema-Graph** | NodeClass + ArcClass nodes (61 nodes, 182 arcs) |
 | **CLASS_QUERY** | Query fetching all NodeClass instances |
 | **ARCS_QUERY** | Query fetching all ArcClass instances |
 | **View** | Parameterized Cypher template in YAML |

@@ -28,7 +28,7 @@ packages/core/models/
 |       +-- semantic/             <-   Layer: semantic (Entity, EntityContent, etc.)
 |       +-- instruction/          <-   Layer: instruction (7 nodes)
 |       +-- output/               <-   Layer: output (3 nodes)
-+-- arc-classes/                    <- 169 YAML files (one per ArcClass)
++-- arc-classes/                    <- 182 YAML files (one per ArcClass)
 +-- relations.yaml                <- Legacy format (kept for parser compatibility)
 +-- taxonomy.yaml                 <- v0.12.5: 2 Realms, 10 Layers, 5 Traits (defined/authored/imported/generated/retrieved)
 ```
@@ -139,6 +139,6 @@ All generators live in `tools/novanet/src/generators/` (Rust-first architecture)
 
 **MermaidGenerator (`generators/mermaid.rs`):**
 - Reads `models/node-classes/` and `models/arc-classes/`
-- Generates Mermaid flowchart with all 61 Classes and 169 arcs
+- Generates Mermaid flowchart with all 61 Classes and 182 arcs
 - Groups by Realm (Shared, Org)
 - Colors by Layer (10 distinct colors)

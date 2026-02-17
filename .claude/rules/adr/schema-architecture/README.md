@@ -34,7 +34,7 @@ Realm, layer, and node organization for the NovaNet knowledge graph.
 │  ├── instruction (4)  PageStructure, BlockInstruction...        │
 │  └── output      (3)  PageNative, BlockNative, OutputArtifact   │
 │                                                                 │
-│  TOTAL: 61 nodes, 169 arcs, 10 layers, 5 traits                 │
+│  TOTAL: 61 nodes, 182 arcs, 10 layers, 6 arc families, 5 traits │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```

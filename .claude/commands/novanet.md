@@ -42,7 +42,7 @@ Read essential context files:
 
   [1] /novanet-arch          View architecture diagrams
   [2] /novanet-sync          Validate/regenerate from YAML
-  [3] /schema status         Schema statistics (61 nodes, 169 arcs)
+  [3] /schema status         Schema statistics (61 nodes, 182 arcs)
   [4] /ontology-audit        Full synchronization audit
 
   Schema:
@@ -73,7 +73,7 @@ Type Check: Passing
 
 Context Loaded:
   - v0.13.0 (*Native Pattern)
-  - 61 nodes, 169 arcs, 10 layers
+  - 61 nodes, 182 arcs, 10 layers, 6 arc families
 
 What would you like to work on?
 ```
