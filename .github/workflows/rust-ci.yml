@@ -7,8 +7,9 @@
 # 3. coverage: Code coverage with codecov
 # 4. security: cargo-deny + cargo-audit
 # 5. semantic: Semantic coherence validation
-# 6. build: Release build (main only)
-# 7. summary: PR comment with results
+# 6. schema-drift: Automated schema count verification
+# 7. build: Release build (main only)
+# 8. summary: PR comment with results
 #
 # Scheduled: Weekly security scan (Sundays 02:00 UTC)
 
@@ -46,8 +47,9 @@ concurrency:
 env:
   CARGO_TERM_COLOR: always
   RUSTFLAGS: -Dwarnings
-  NOVANET_VERSION: v0.12.4
+  NOVANET_VERSION: v0.13.1
   NOVANET_NODE_COUNT: '61'
+  NOVANET_ARC_COUNT: '182'
   NOVANET_LAYER_COUNT: '10'
   # Minimum coverage threshold (%)
   COVERAGE_THRESHOLD: 70
@@ -440,12 +442,85 @@ jobs:
           fi
 
   # ─────────────────────────────────────────────────────────────────────────────
+  # Schema Drift Detection (automated count verification)
+  # ─────────────────────────────────────────────────────────────────────────────
+  schema-drift:
+    name: Schema Drift Detection
+    runs-on: ubuntu-latest
+    if: github.event.inputs.run_security_only != 'true'
+    needs: check
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo registry and build
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: tools/novanet -> target
+          cache-on-failure: true
+          shared-key: schema-drift
+
+      - name: Build novanet binary
+        run: cargo build --quiet
+
+      - name: Extract schema stats
+        id: stats
+        run: |
+          # Run novanet schema stats and capture JSON output
+          STATS_JSON=$(cargo run --quiet -- schema stats --format=json 2>/dev/null)
+
+          # Extract counts using jq (GitHub Actions has jq pre-installed)
+          NODE_COUNT=$(echo "$STATS_JSON" | jq -r '.nodes.total')
+          ARC_COUNT=$(echo "$STATS_JSON" | jq -r '.arcs.total')
+
+          echo "node_count=$NODE_COUNT" >> $GITHUB_OUTPUT
+          echo "arc_count=$ARC_COUNT" >> $GITHUB_OUTPUT
+
+          echo "Detected schema counts:"
+          echo "  Nodes: $NODE_COUNT"
+          echo "  Arcs: $ARC_COUNT"
+
+      - name: Verify node count
+        env:
+          EXPECTED: ${{ env.NOVANET_NODE_COUNT }}
+          ACTUAL: ${{ steps.stats.outputs.node_count }}
+        run: |
+          echo "Verifying node count: $ACTUAL (expected: $EXPECTED)"
+          if [ "$ACTUAL" != "$EXPECTED" ]; then
+            echo "::error::Node count mismatch! Actual: $ACTUAL, Expected: $EXPECTED"
+            echo "::error::Update NOVANET_NODE_COUNT in .github/workflows/rust-ci.yml"
+            exit 1
+          fi
+          echo "✓ Node count matches expected value"
+
+      - name: Verify arc count
+        env:
+          EXPECTED: ${{ env.NOVANET_ARC_COUNT }}
+          ACTUAL: ${{ steps.stats.outputs.arc_count }}
+        run: |
+          echo "Verifying arc count: $ACTUAL (expected: $EXPECTED)"
+          if [ "$ACTUAL" != "$EXPECTED" ]; then
+            echo "::error::Arc count mismatch! Actual: $ACTUAL, Expected: $EXPECTED"
+            echo "::error::Update NOVANET_ARC_COUNT in .github/workflows/rust-ci.yml"
+            exit 1
+          fi
+          echo "✓ Arc count matches expected value"
+
+      - name: Display arc family breakdown
+        run: |
+          echo "Arc family breakdown:"
+          cargo run --quiet -- schema stats --format=json 2>/dev/null | jq -r '.arcs.by_family | to_entries[] | "  \(.key): \(.value)"' | sort
+
+  # ─────────────────────────────────────────────────────────────────────────────
   # Build Release (main only)
   # ─────────────────────────────────────────────────────────────────────────────
   build:
     name: Build (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
-    needs: [test, security, semantic]
+    needs: [test, security, semantic, schema-drift]
     if: github.ref == 'refs/heads/main' && github.event.inputs.run_security_only != 'true'
     strategy:
       matrix:
