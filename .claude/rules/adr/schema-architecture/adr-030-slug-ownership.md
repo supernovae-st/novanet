@@ -221,6 +221,6 @@ SAME STRUCTURE but DIFFERENT PURPOSE:
 - `packages/core/models/node-classes/org/output/page-native.yaml` - routing_properties removed
 - `packages/core/models/arc-classes/semantic/slugified-by.yaml` - validation arc
 - `packages/core/models/arc-classes/generation/derived-slug-from.yaml` - provenance arc (source: BlockNative)
-- `packages/db/seed/53-blocktype-head-seo-meta.cypher` - BlockType seed
-- `packages/db/seed/54-slugified-by-arcs.cypher` - SLUGIFIED_BY arcs seed
+- `packages/db/seed/45-blocktype-head-seo-meta.cypher` - BlockType seed (head-seo-meta BlockType definition)
+- `packages/db/seed/49-blocknative-head-seo-meta.cypher` - BlockNative:head-seo-meta instances with slug/meta_title/meta_description
 - `docs/plans/2026-02-14-entity-page-slug-brainstorm.md`
