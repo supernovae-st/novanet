@@ -310,8 +310,8 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 |   +-- 00-constraints.cypher        <- Contraintes d'unicite (UNIQUE, EXISTS)                      |
 |   +-- 00.5-taxonomy.cypher         <- Taxonomy: Realms, Layers, Traits (GENERATED)                |
 |   +-- 01-classes.cypher            <- NodeClass meta-nodes (GENERATED)                            |
-|   +-- 01-vector-indexes.cypher     <- Index vectoriels pour recherche semantique                  |
 |   +-- 02-arc-classes.cypher        <- ArcClass meta-nodes (GENERATED)                             |
+|   +-- 02.5-entity-categories.cypher <- 13 EntityCategory nodes (after arc-classes)                |
 |   +-- 20-locales.cypher            <- Locales from CSV + MD (GENERATED)                           |
 |   +-- 22-slugification.cypher      <- Slugification rules per locale (v11.3)                      |
 |   +-- 23-formatting.cypher         <- Formatting rules per locale (v11.3)                         |
@@ -321,9 +321,15 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 |   +-- 27-geographic-taxonomy.cypher <- Continents, Regions, SubRegions (v11.3)                    |
 |   +-- 28-locale-taxonomy-links.cypher <- Links locales to geographic nodes (v11.5)                |
 |   +-- 29-countries.cypher          <- Countries with ISO codes (v0.12.4)                          |
+|   +-- 29.5-locale-country-links.cypher <- Locale ↔ Country relationships (after countries)       |
 |   +-- 30-org-config.cypher         <- OrgConfig (replaces Organization+Tenant, v11.3)             |
 |   +-- 31-project-qrcode-ai.cypher  <- Projet QR Code AI avec Pages, Blocks                        |
+|   +-- 32.5-entity-semantic-arcs.cypher <- Multi-Entity Keyword Convergence arcs                   |
+|   +-- 33.5-en-us-seo-keywords.cypher <- en-US SEO Keywords with Entity Classification             |
 |   +-- 34-prompts.cypher            <- BlockInstruction, PageInstruction                           |
+|   +-- 43.5-seokeywords-fr-fr.cypher <- fr-FR SEO Keywords (1424 keywords)                         |
+|   +-- 45-blocktype-head-seo-meta.cypher <- BlockType for SEO metadata (v0.13.1)                   |
+|   +-- 98-vector-indexes.cypher     <- Vector indexes for OntologyRAG (after data, before autowire)|
 |   +-- 99-autowire-classes.cypher   <- Links data nodes to Classes (GENERATED)                     |
 |                                                                                                   |
 |   migrations/ (6 fichiers, idempotents)                                                           |
