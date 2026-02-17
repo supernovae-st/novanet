@@ -247,6 +247,19 @@ pub fn schema_validate(root: &Path) -> crate::Result<Vec<ValidationIssue>> {
         }
     }
 
+    // 7. Validate schema standardization rules (v0.13.1)
+    let schema_issues = crate::parsers::schema_rules::validate_all_nodes(&nodes);
+    for issue in schema_issues {
+        let severity = match issue.severity {
+            crate::parsers::schema_rules::IssueSeverity::Error => Severity::Error,
+            crate::parsers::schema_rules::IssueSeverity::Warning => Severity::Warning,
+        };
+        issues.push(ValidationIssue {
+            severity,
+            message: format!("[{}] {}: {}", issue.rule, issue.node_name, issue.message),
+        });
+    }
+
     Ok(issues)
 }
 

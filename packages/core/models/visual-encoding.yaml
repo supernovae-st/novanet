@@ -141,6 +141,108 @@ trait_borders:
     description: "Fetched from EXTERNAL APIs"
 
 # =============================================================================
+# TRAIT ANIMATIONS — Node glow/pulse effects per trait (Studio only)
+# =============================================================================
+# These animations complement border styles to provide immediate visual
+# recognition of data origin. Applied to CardShell and LayerCardWrapper.
+# Implementation: apps/studio/src/components/graph/nodes/card/effects/
+
+trait_animations:
+  defined:
+    effect_name: steady_glow
+    description: "Subtle, stable glow indicating foundational structure"
+    visual_metaphor: "Bedrock - solid, unchanging foundation"
+    layers:
+      - base_glow: "Soft shadow at 15% opacity, 8px blur"
+      - accent_ring: "1px inner ring at 30% opacity"
+    timing:
+      glow_pulse_s: 0  # No pulse - intentionally static
+    hover_behavior:
+      glow_increase: "+20% opacity"
+      scale: 1.02
+    selected_behavior:
+      glow_increase: "+40% opacity"
+      ring_visible: true
+      ring_animation: none
+
+  authored:
+    effect_name: breathing_pulse
+    description: "Gentle breathing effect suggesting human editorial touch"
+    visual_metaphor: "Living document - breathing with human attention"
+    layers:
+      - base_glow: "Soft shadow at 12% opacity, 10px blur"
+      - breathing_ring: "Outer ring pulsing 85%-100% opacity"
+    timing:
+      breathing_cycle_s: 3  # Slow, natural rhythm
+      easing: ease-in-out
+    hover_behavior:
+      glow_increase: "+25% opacity"
+      scale: 1.03
+    selected_behavior:
+      glow_increase: "+45% opacity"
+      breathing_faster: true  # 1.5s cycle when selected
+
+  imported:
+    effect_name: shimmer_sweep
+    description: "Horizontal shimmer suggesting external data flowing in"
+    visual_metaphor: "Data stream - information arriving from outside"
+    layers:
+      - base_glow: "Soft shadow at 10% opacity, 6px blur"
+      - shimmer_line: "Bright highlight sweeping left-to-right"
+    timing:
+      shimmer_duration_s: 2
+      shimmer_interval_s: 4  # Pause between shimmers
+      easing: linear
+    hover_behavior:
+      shimmer_faster: true  # 1s duration on hover
+      glow_increase: "+20% opacity"
+    selected_behavior:
+      shimmer_continuous: true
+      glow_increase: "+35% opacity"
+
+  generated:
+    effect_name: matrix_pulse
+    description: "Digital pulse with data-like character suggesting AI output"
+    visual_metaphor: "AI processor - digital transformation in progress"
+    layers:
+      - base_glow: "Stronger shadow at 18% opacity, 12px blur"
+      - pulse_ring: "Expanding ring from center outward"
+      - data_particles: "Tiny squares fading in/out at edges (optional)"
+    timing:
+      pulse_interval_s: 2.5
+      pulse_duration_s: 0.4
+      particle_lifetime_s: 0.8
+      easing: ease-out
+    hover_behavior:
+      pulse_faster: true  # 1.5s interval
+      glow_increase: "+30% opacity"
+    selected_behavior:
+      continuous_pulse: true
+      particle_count: 8
+      glow_increase: "+50% opacity"
+
+  retrieved:
+    effect_name: radar_scan
+    description: "Rotating scan line suggesting periodic external polling"
+    visual_metaphor: "Radar dish - scanning external sources for updates"
+    layers:
+      - base_glow: "Soft shadow at 8% opacity, 6px blur"
+      - scan_line: "Thin line rotating 360° around node"
+      - blip_dots: "Bright dots appearing at scan completion"
+    timing:
+      scan_rotation_s: 4  # Full rotation time
+      blip_flash_s: 0.3
+      blip_fade_s: 0.5
+      easing: linear
+    hover_behavior:
+      scan_faster: true  # 2s rotation
+      glow_increase: "+20% opacity"
+    selected_behavior:
+      scan_visible: true
+      blip_at_quarters: true  # Blips at 0°, 90°, 180°, 270°
+      glow_increase: "+40% opacity"
+
+# =============================================================================
 # SCOPE STROKE STYLES — Intra vs Cross realm arcs
 # =============================================================================
 

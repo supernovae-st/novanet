@@ -2,7 +2,7 @@
 
 Claude Code configuration for the NovaNet monorepo.
 
-**Version**: v0.13.0 | **Updated**: 2026-02-16 (Context7 research completed)
+**Version**: v0.13.1 | **Updated**: 2026-02-17 (Codebase audit + terminology fixes)
 
 ---
 

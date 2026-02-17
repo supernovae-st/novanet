@@ -58,16 +58,6 @@ node:
       description: "One-line description of the block's purpose on the page."
       example: "Hero section for the main pricing page."
 
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints for this specific block instance. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections].'"
-      example: |
-        USE: when generating content for a specific page section or loading block context.
-        TRIGGERS: "block", "section", "component", "content slot", "hero", "faq".
-        NOT: for page-level orchestration (use Page), for block templates (use BlockType).
-        RELATES: Page (parent via HAS_BLOCK), BlockType (template via OF_TYPE), BlockNative (output), BlockInstruction (recipe).
-
     created_at:
       type: datetime
       required: true
@@ -77,6 +67,12 @@ node:
       required: true
 
   properties:
+    llm_context:
+      type: string
+      required: true
+      description: "Per-instance LLM generation hints for this block. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections].'"
+      example: "USE: when generating content for the pricing page hero section. TRIGGERS: pricing hero, tier comparison. NOT: for FAQ blocks (use pricing:faq:1)."
+
     anchor_id:
       type: string
       required: true

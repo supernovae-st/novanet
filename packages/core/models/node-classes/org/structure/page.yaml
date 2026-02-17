@@ -76,16 +76,6 @@ node:
       description: "One-line description of the page"
       example: "Main pricing page with tier comparison and CTAs"
 
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections].'"
-      example: |
-        USE: when orchestrating page-level generation, assembling blocks, or querying page structure.
-        TRIGGERS: "page", "content structure", "block composition", "page generation".
-        NOT: for individual block content (use Block), for visual design (use BrandDesign).
-        RELATES: Project (owner via HAS_PAGE), Block (contains via HAS_BLOCK), Entity (represents via REPRESENTS), PageNative (output).
-
     created_at:
       type: datetime
       required: true
@@ -112,6 +102,12 @@ node:
       description: "Timestamp of last embedding update"
 
   properties:
+    llm_context:
+      type: string
+      required: true
+      description: "Per-instance LLM generation hints for this page. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections].'"
+      example: "USE: orchestrate pricing page generation. TRIGGERS: pricing, tarifs, plans, abonnement. NOT: individual block generation."
+
     # ─────────────────────────────────────────────────────────────────────────────
     # is_pillar: SEO pillar page flag
     # ─────────────────────────────────────────────────────────────────────────────

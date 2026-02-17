@@ -63,12 +63,6 @@ node:
       description: "Detailed explanation of what this format represents"
       example: "Keywords comparing two entities (X vs Y)"
 
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation].'"
-      example: "USE: for X vs Y keywords. TRIGGERS: versus, vs, compare. NOT: simple feature mentions."
-
     created_at:
       type: datetime
       required: true
@@ -82,6 +76,12 @@ node:
   # ═══════════════════════════════════════════════════════════════════════════════
 
   properties:
+    llm_context:
+      type: string
+      required: true
+      description: "Per-instance LLM generation hints for this keyword format. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation].'"
+      example: "USE: for X vs Y keywords. TRIGGERS: versus, vs, compare. NOT: simple feature mentions."
+
     has_entity_links:
       type: boolean
       required: false

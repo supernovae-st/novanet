@@ -87,6 +87,7 @@ pub fn family_arrow(family: ArcFamily) -> &'static str {
         ArcFamily::Semantic => "-.->",
         ArcFamily::Generation => "==>",
         ArcFamily::Mining => "--o",
+        ArcFamily::Schema => "..->",
     }
 }
 
@@ -98,6 +99,7 @@ pub fn family_color(family: ArcFamily) -> &'static str {
         ArcFamily::Semantic => "#f97316",
         ArcFamily::Generation => "#8b5cf6",
         ArcFamily::Mining => "#ec4899",
+        ArcFamily::Schema => "#6366f1",
     }
 }
 

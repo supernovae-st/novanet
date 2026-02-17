@@ -68,7 +68,8 @@ export type ArcFamilyEffect =
   | 'dnaHelix'       // localization: content DNA adapts
   | 'zigzag'         // semantic: neural sparks (existing primitive)
   | 'matrixCode'     // generation: AI processing data
-  | 'radarSweep';    // mining: scanning for intel
+  | 'radarSweep'     // mining: scanning for intel
+  | 'schemaFlow';    // schema: structured definition flow
 
 /**
  * Map arc families to their signature effect primitives
@@ -79,6 +80,7 @@ export const ARC_FAMILY_EFFECTS: Record<ArcFamilyKey, ArcFamilyEffect> = {
   semantic: 'zigzag',
   generation: 'matrixCode',
   mining: 'radarSweep',
+  schema: 'schemaFlow',
 } as const;
 
 /**

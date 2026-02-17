@@ -155,6 +155,7 @@ export const ARC_PALETTES: Record<ArcFamilyKey, ColorPalette> = {
   semantic: createPalette(ARC_FAMILY_COLORS.semantic.color),
   generation: createPalette(ARC_FAMILY_COLORS.generation.color),
   mining: createPalette(ARC_FAMILY_COLORS.mining.color),
+  schema: createPalette(ARC_FAMILY_COLORS.schema.color),
 };
 
 export const ARC_GRADIENTS: Record<ArcFamilyKey, GradientColors> = {
@@ -163,6 +164,7 @@ export const ARC_GRADIENTS: Record<ArcFamilyKey, GradientColors> = {
   semantic: createGradient(ARC_FAMILY_COLORS.semantic.color),
   generation: createGradient(ARC_FAMILY_COLORS.generation.color),
   mining: createGradient(ARC_FAMILY_COLORS.mining.color),
+  schema: createGradient(ARC_FAMILY_COLORS.schema.color),
 };
 
 /**
@@ -174,6 +176,7 @@ export const ARC_STROKES: Record<ArcFamilyKey, StrokeStyle> = {
   semantic: { style: 'dotted', width: 2, dashArray: '2 2' },
   generation: { style: 'solid', width: 3 },
   mining: { style: 'dashed', width: 1, dashArray: '4 2' },
+  schema: { style: 'solid', width: 2, dashArray: '8 2' }, // Schema arcs: solid with subtle dash
 };
 
 // =============================================================================
@@ -416,6 +419,7 @@ export const ARC_FAMILY_HEX: Record<ArcFamilyKey, string> = {
   semantic: ARC_FAMILY_COLORS.semantic.color,
   generation: ARC_FAMILY_COLORS.generation.color,
   mining: ARC_FAMILY_COLORS.mining.color,
+  schema: ARC_FAMILY_COLORS.schema.color,
 };
 
 // =============================================================================
@@ -495,6 +499,10 @@ export const ARC_PARTICLE_COLORS: Record<ArcFamilyKey, ParticleColors> = {
   mining: {
     particleColor: brightenColor(ARC_FAMILY_COLORS.mining.color, 0.4),
     linkColor: darkenColor(ARC_FAMILY_COLORS.mining.color, 0.7),
+  },
+  schema: {
+    particleColor: brightenColor(ARC_FAMILY_COLORS.schema.color, 0.4),
+    linkColor: darkenColor(ARC_FAMILY_COLORS.schema.color, 0.7),
   },
 };
 

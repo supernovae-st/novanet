@@ -64,23 +64,23 @@ This caused:
 └─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
 ```
 
-## META Mode: KINDS_QUERY + ARCS_QUERY
+## SCHEMA Mode: CLASSES_QUERY + ARCS_QUERY
 
-META mode uses two foundational queries to build the meta-graph:
+SCHEMA mode uses two foundational queries to build the schema graph:
 
 ```cypher
-// KINDS_QUERY: Fetch all NodeKind instances
-MATCH (k:Kind)
+// CLASSES_QUERY: Fetch all NodeClass instances
+MATCH (k:Class)
 RETURN k.name AS name, k.realm AS realm, k.layer AS layer,
        k.trait AS trait, k.display_name AS display_name
 
-// ARCS_QUERY: Fetch all ArcKind instances
-MATCH (a:ArcKind)
+// ARCS_QUERY: Fetch all ArcClass instances
+MATCH (a:ArcClass)
 RETURN a.name AS name, a.family AS family, a.scope AS scope,
        a.cardinality AS cardinality, a.source AS source, a.target AS target
 ```
 
-These queries are executed by `cargo run -- meta` and populate the meta-graph for schema exploration.
+These queries are executed by `cargo run -- blueprint` and populate the schema graph for class exploration.
 
 ## View Categories
 

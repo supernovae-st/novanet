@@ -421,7 +421,7 @@ mod tests {
         assert_eq!(count_merges("Realm"), 2, "expected 2 Realm nodes"); // v11.4: shared + org
         assert_eq!(count_merges("Layer"), 10, "expected 10 Layer nodes"); // v11.4: 4 shared + 6 org
         assert_eq!(count_merges("Trait"), 5, "expected 5 Trait nodes"); // v11.2: split derived → generated + aggregated
-        assert_eq!(count_merges("ArcFamily"), 5, "expected 5 ArcFamily nodes");
+        assert_eq!(count_merges("ArcFamily"), 6, "expected 6 ArcFamily nodes"); // v0.13.1: added schema family
         assert_eq!(count_merges("ArcScope"), 2, "expected 2 ArcScope nodes");
         assert_eq!(
             count_merges("ArcCardinality"),

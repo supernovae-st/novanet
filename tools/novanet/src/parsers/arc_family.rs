@@ -263,8 +263,8 @@ arc_family:
         let families = load_all_arc_families(&root).expect("should load all arc families");
         assert_eq!(
             families.len(),
-            5,
-            "expected 5 arc families (ownership, localization, semantic, generation, mining)"
+            6,
+            "expected 6 arc families (ownership, localization, semantic, generation, mining, schema)"
         );
 
         let keys: Vec<&str> = families.iter().map(|f| f.key.as_str()).collect();

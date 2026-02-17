@@ -170,7 +170,7 @@ arc_families:
         assert_eq!(doc.version, "0.13.0");
         assert_eq!(doc.realms.len(), 2); // v11.2: 2 realms (shared, org)
         assert_eq!(doc.traits.len(), 5); // v11.2: split derived → generated + aggregated
-        assert_eq!(doc.arc_families.len(), 5);
+        assert_eq!(doc.arc_families.len(), 6); // v0.13.1: added schema family
 
         let total_layers: usize = doc.realms.iter().map(|r| r.layers.len()).sum();
         assert_eq!(total_layers, 10); // v11.4: 4 shared + 6 org layers

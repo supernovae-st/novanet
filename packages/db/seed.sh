@@ -9,8 +9,8 @@
 set -euo pipefail
 
 # UTF-8 encoding for proper diacritics support (é, ü, ñ, etc.)
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
+export LANG=C.UTF-8
+export LC_ALL=C.UTF-8
 
 # SECURITY: Use environment variables with defaults for dev only
 NEO4J_USER="${NEO4J_USER:-neo4j}"
@@ -42,7 +42,7 @@ echo ""
 echo -e "${YELLOW}[2/3] Attente que Neo4j soit prêt...${NC}"
 MAX_ATTEMPTS=30
 ATTEMPT=0
-while ! docker exec "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" "RETURN 1" > /dev/null 2>&1; do
+while ! docker exec -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" "RETURN 1" > /dev/null 2>&1; do
     ATTEMPT=$((ATTEMPT + 1))
     if [ $ATTEMPT -ge $MAX_ATTEMPTS ]; then
         echo -e "${RED}✗ Neo4j n'est pas prêt après ${MAX_ATTEMPTS} tentatives${NC}"
@@ -63,13 +63,16 @@ for file in "$SEED_DIR"/*.cypher; do
     filename=$(basename "$file")
     echo -e "  ${YELLOW}→ $filename${NC}"
 
-    if docker exec -i "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" < "$file" > /dev/null 2>&1; then
+    # Use --file option to read file inside container (preserves UTF-8 encoding)
+    # Files are mounted at /import/seed/ via docker-compose.yml
+    # LANG/LC_ALL required for proper diacritics handling (ó, é, ñ, etc.)
+    if docker exec -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" --file "/import/seed/$filename" > /dev/null 2>&1; then
         echo -e "    ${GREEN}✓ OK${NC}"
     else
         echo -e "    ${RED}✗ Erreur${NC}"
         echo ""
         echo "Détails de l'erreur:"
-        docker exec -i "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" < "$file"
+        docker exec -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" --file "/import/seed/$filename"
         exit 1
     fi
 done
@@ -90,13 +93,16 @@ if [ -d "$MIGRATION_DIR" ]; then
             filename=$(basename "$file")
             echo -e "  ${YELLOW}→ $filename${NC}"
 
-            if docker exec -i "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" < "$file" > /dev/null 2>&1; then
+            # Use --file option to read file inside container (preserves UTF-8 encoding)
+            # Files are mounted at /import/migrations/ via docker-compose.yml
+            # LANG/LC_ALL required for proper diacritics handling (ó, é, ñ, etc.)
+            if docker exec -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" --file "/import/migrations/$filename" > /dev/null 2>&1; then
                 echo -e "    ${GREEN}✓ OK${NC}"
             else
                 echo -e "    ${RED}✗ Erreur${NC}"
                 echo ""
                 echo "Détails de l'erreur:"
-                docker exec -i "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" < "$file"
+                docker exec -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" --file "/import/migrations/$filename"
                 exit 1
             fi
         done
@@ -114,5 +120,5 @@ echo ""
 
 # Stats rapides
 echo -e "${YELLOW}Stats:${NC}"
-docker exec "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" \
+docker exec -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" \
     "MATCH (n) RETURN labels(n)[0] AS label, count(*) AS count ORDER BY count DESC" 2>/dev/null | tail -n +2

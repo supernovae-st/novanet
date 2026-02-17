@@ -13,7 +13,7 @@
 
 import { memo, useMemo, useEffect, useRef } from 'react';
 import { useInternalNode, useStore, type Edge, type EdgeProps } from '@xyflow/react';
-import { useUIStore, selectHoveredEdgeId, selectHoveredNodeId, selectSelectedNodeId, selectSelectedEdgeId } from '@/stores/uiStore';
+import { useUIStore, selectHoveredEdgeId, selectHoveredNodeId, selectSelectedNodeId, selectSelectedEdgeId, selectSelectedEdgeData } from '@/stores/uiStore';
 import { useEdgeVisibility, type EffectTier } from './EdgeVisibilityManager';
 
 // New modular system
@@ -21,7 +21,7 @@ import { useEdgeTheme } from './hooks/useEdgeTheme';
 import { useEdgeLOD } from './hooks/useEdgeLOD';
 import { useAnimationBudget } from './hooks/useAnimationBudget';
 import { releaseEdgeAnimationSlot } from './effects/EffectRenderer';
-import { getSmartLabel, getNodeIntersection, generateCurvedPath, generateReversedPath, generateParallelPath } from './EdgeUtils';
+import { getSmartLabel, getNodeIntersection, generateCurvedPath, generateReversedPath, generateParallelPath, generateReversedParallelPath } from './EdgeUtils';
 import type { EdgeState } from './system/types';
 
 // Arc family detection from unified palette system (v11.7.0)
@@ -242,6 +242,14 @@ export const FloatingEdge = memo(function FloatingEdge({
   const hoveredNodeId = useUIStore(selectHoveredNodeId);
   const selectedNodeId = useUIStore(selectSelectedNodeId);
   const selectedEdgeId = useUIStore(selectSelectedEdgeId);
+  const selectedEdgeData = useUIStore(selectSelectedEdgeData);
+
+  // Check if this edge is a sibling of the selected edge (same source+target but different edge)
+  // Handles both directions: A→B and B→A are considered siblings
+  const isSiblingOfSelected = selectedEdgeData !== null &&
+    selectedEdgeId !== id &&
+    ((source === selectedEdgeData.source && target === selectedEdgeData.target) ||
+     (source === selectedEdgeData.target && target === selectedEdgeData.source));
 
   // Compute local state
   const isDimmed = data?.dimmed === true;
@@ -328,8 +336,10 @@ export const FloatingEdge = memo(function FloatingEdge({
     const path = hasParallelInfo
       ? generateParallelPath(sourcePt, targetPt, parallelIndex, parallelTotal)
       : generateCurvedPath(sourcePt, targetPt);
-    // Note: reversedPath doesn't use parallel offset (animation direction stays consistent)
-    const revPath = generateReversedPath(sourcePt, targetPt);
+    // v11.6.1: Reversed path also uses parallel offset for correct label positioning
+    const revPath = hasParallelInfo
+      ? generateReversedParallelPath(sourcePt, targetPt, parallelIndex, parallelTotal)
+      : generateReversedPath(sourcePt, targetPt);
 
     const dx = targetPt.x - sourcePt.x;
     const dy = targetPt.y - sourcePt.y;
@@ -389,7 +399,8 @@ export const FloatingEdge = memo(function FloatingEdge({
     ? baseStrokeWidth * 0.5
     : baseStrokeWidth;
 
-  const groupOpacity = isDimmed ? 0.06 : isHoverDimmed ? 0.25 : 1;
+  // Opacity hierarchy: focus dimmed (6%) < hover dimmed (25%) < sibling dimmed (50%) < full (100%)
+  const groupOpacity = isDimmed ? 0.06 : isHoverDimmed ? 0.25 : isSiblingOfSelected ? 0.5 : 1;
 
   // Label
   const smartLabel = getSmartLabel(relationType, edgeLength);
@@ -403,11 +414,24 @@ export const FloatingEdge = memo(function FloatingEdge({
   const baseFontSize = isHovered || isSelected ? 13 : 10;
   const scaledFontSize = baseFontSize * labelScale;
 
+  // v11.6.1: Stagger label positions for parallel edges so they don't overlap
+  // Single edge: 50%, Two edges: 40%/60%, Three edges: 35%/50%/65%
+  const hasParallelEdges = typeof parallelIndex === 'number' && typeof parallelTotal === 'number' && parallelTotal > 1;
+  let labelStartOffset = '50%';
+  if (hasParallelEdges) {
+    // Spread labels from 35% to 65% of the path
+    const spread = 30; // Total spread in percentage points
+    const step = spread / (parallelTotal - 1);
+    const offsetPercent = 35 + (parallelIndex * step);
+    labelStartOffset = `${offsetPercent}%`;
+  }
+
   // PERFORMANCE: Disable animations when edge count exceeds threshold
   // Simplified effects are handled by passing the simplified prop
   // v11.6.4: ALWAYS animate selected edge (even when global animations disabled)
   // This gives the "wow" effect when focusing on a single edge
-  const shouldAnimate = isAnimated && !effectiveDimmed && (!disableAnimations || isSelected);
+  // v11.6.10: Disable animation for sibling edges (same endpoints) to emphasize selected edge
+  const shouldAnimate = isAnimated && !effectiveDimmed && !isSiblingOfSelected && (!disableAnimations || isSelected);
 
   // PERFORMANCE: Disable opacity transition for large graphs to prevent flash effect
   // When many edges update simultaneously, the transition causes a visible "blink"
@@ -490,50 +514,53 @@ export const FloatingEdge = memo(function FloatingEdge({
         />
       )}
 
-      {/* Label */}
+      {/* Label - v11.6.1: Color-coded + staggered position for parallel edge clarity */}
       {shouldShowLabel && (
         <g style={{ pointerEvents: 'none' }}>
+          {/* Dark stroke outline for readability */}
           <text
             style={{
               fontSize: `${scaledFontSize}px`,
-              fontWeight: 600,
+              fontWeight: 700,
               fill: 'transparent',
               fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
               letterSpacing: '0.05em',
               textTransform: 'uppercase',
               stroke: 'rgba(0, 0, 0, 0.95)',
-              strokeWidth: scaledFontSize * 0.15,
+              strokeWidth: scaledFontSize * 0.25,
               strokeLinejoin: 'round',
               paintOrder: 'stroke fill',
             }}
           >
-            <textPath href={`#${labelPathId}`} startOffset="50%" textAnchor="middle">{labelText}</textPath>
+            <textPath href={`#${labelPathId}`} startOffset={labelStartOffset} textAnchor="middle">{labelText}</textPath>
           </text>
+          {/* Glow layer matching edge color */}
           <text
             style={{
               fontSize: `${scaledFontSize}px`,
-              fontWeight: 600,
+              fontWeight: 700,
               fill: theme.colors.glow,
               fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
               letterSpacing: '0.05em',
               textTransform: 'uppercase',
-              filter: `blur(${isHovered || isSelected ? 3 : 1.5}px)`,
-              opacity: isHovered || isSelected ? 0.5 : 0.25,
+              filter: `blur(${isHovered || isSelected ? 4 : 2}px)`,
+              opacity: isHovered || isSelected ? 0.7 : 0.4,
             }}
           >
-            <textPath href={`#${labelPathId}`} startOffset="50%" textAnchor="middle">{labelText}</textPath>
+            <textPath href={`#${labelPathId}`} startOffset={labelStartOffset} textAnchor="middle">{labelText}</textPath>
           </text>
+          {/* Main label - colored to match edge */}
           <text
             style={{
               fontSize: `${scaledFontSize}px`,
-              fontWeight: 600,
-              fill: 'rgba(255, 255, 255, 0.98)',
+              fontWeight: 700,
+              fill: theme.colors.primary,
               fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
               letterSpacing: '0.05em',
               textTransform: 'uppercase',
             }}
           >
-            <textPath href={`#${labelPathId}`} startOffset="50%" textAnchor="middle">{labelText}</textPath>
+            <textPath href={`#${labelPathId}`} startOffset={labelStartOffset} textAnchor="middle">{labelText}</textPath>
           </text>
         </g>
       )}

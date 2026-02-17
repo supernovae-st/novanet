@@ -219,6 +219,11 @@ export function generateReversedPath(
  * different curve to prevent overlap. This function generates paths
  * with varying perpendicular offsets.
  *
+ * IMPORTANT: The perpendicular vector must be computed from a CANONICAL
+ * direction (not the actual edge direction) to ensure edges A→B and B→A
+ * get consistent offsets. Otherwise, their perpendicular vectors would
+ * be opposite, causing offsets to cancel out and edges to overlap.
+ *
  * @param source - Source point coordinates
  * @param target - Target point coordinates
  * @param index - Index of this edge in the parallel group (0-based)
@@ -243,8 +248,17 @@ export function generateParallelPath(
     return generateCurvedPath(source, target);
   }
 
-  const dx = target.x - source.x;
-  const dy = target.y - source.y;
+  // CRITICAL FIX: Use CANONICAL direction for perpendicular calculation
+  // This ensures edges A→B and B→A use the same perpendicular vector,
+  // so their offsets don't cancel out when going opposite directions.
+  // Canonical = always from "smaller" point to "larger" point (x, then y)
+  const isSourceCanonicallyFirst =
+    source.x < target.x || (source.x === target.x && source.y < target.y);
+  const canonicalStart = isSourceCanonicallyFirst ? source : target;
+  const canonicalEnd = isSourceCanonicallyFirst ? target : source;
+
+  const dx = canonicalEnd.x - canonicalStart.x;
+  const dy = canonicalEnd.y - canonicalStart.y;
   const distance = Math.sqrt(dx * dx + dy * dy);
 
   // Handle zero distance
@@ -252,33 +266,110 @@ export function generateParallelPath(
     return `M ${source.x} ${source.y} L ${target.x} ${target.y}`;
   }
 
-  // Perpendicular unit vector
+  // Perpendicular unit vector (consistent for A→B and B→A)
   const perpX = -dy / distance;
   const perpY = dx / distance;
 
   // Calculate offset from center line
-  // For total=2: offsets are -0.5, +0.5
+  // v11.6.1: Use mathematical spacing for beautiful equal distribution
+  // For total=2: offsets are -1, +1 (not -0.5, +0.5)
   // For total=3: offsets are -1, 0, +1
   // For total=4: offsets are -1.5, -0.5, +0.5, +1.5
   const normalizedOffset = (index - (total - 1) / 2);
 
-  // Base offset per edge, capped for readability
-  const baseOffset = 25;
-  const maxSpread = 75;
-  const offsetPixels = normalizedOffset * baseOffset * Math.min(total / 3, 1);
+  // v11.6.1: Much larger base offset for dramatic, beautiful curves
+  const baseOffset = 80;
+  const maxSpread = 300;
+
+  // Scale offset by total edges so spacing stays consistent regardless of count
+  // 2 edges: each gets ±80px
+  // 3 edges: -80px, 0, +80px
+  // 4 edges: -120px, -40px, +40px, +120px
+  const offsetPixels = normalizedOffset * baseOffset;
   const clampedOffset = Math.max(-maxSpread, Math.min(maxSpread, offsetPixels));
 
   // Midpoint with perpendicular offset
   const midX = (source.x + target.x) / 2 + perpX * clampedOffset;
   const midY = (source.y + target.y) / 2 + perpY * clampedOffset;
 
-  // Add additional curve based on offset magnitude for better separation
-  const curveBoost = Math.abs(clampedOffset) * 0.4;
-  const direction = (source.x + source.y) > (target.x + target.y) ? 1 : -1;
+  // v11.6.1: Always add some curve, even for center edge (index in middle)
+  // This prevents the middle edge from being a straight line
+  const baseCurve = 30; // Minimum curve for all edges
+  const curveBoost = Math.abs(clampedOffset) * 0.3 + baseCurve;
+  const direction = (canonicalStart.x + canonicalStart.y) > (canonicalEnd.x + canonicalEnd.y) ? 1 : -1;
   const controlX = midX + perpX * curveBoost * direction;
   const controlY = midY + perpY * curveBoost * direction;
 
   return `M ${source.x} ${source.y} Q ${controlX} ${controlY} ${target.x} ${target.y}`;
+}
+
+/**
+ * Generate REVERSED parallel path (for labels when text needs to be flipped)
+ *
+ * Same offset logic as generateParallelPath but path goes target → source
+ * so that SVG textPath renders text in readable direction.
+ *
+ * @param source - Source point coordinates
+ * @param target - Target point coordinates
+ * @param index - Index of this edge in the parallel group (0-based)
+ * @param total - Total number of parallel edges
+ * @returns SVG path string, or empty string if positions invalid
+ */
+export function generateReversedParallelPath(
+  source: { x: number; y: number },
+  target: { x: number; y: number },
+  index: number,
+  total: number
+): string {
+  // Validate positions
+  if (!isValidPosition(source) || !isValidPosition(target)) {
+    return '';
+  }
+
+  // Single edge - use standard reversed path
+  if (total === 1) {
+    return generateReversedPath(source, target);
+  }
+
+  // Use same CANONICAL direction for perpendicular calculation as forward path
+  const isSourceCanonicallyFirst =
+    source.x < target.x || (source.x === target.x && source.y < target.y);
+  const canonicalStart = isSourceCanonicallyFirst ? source : target;
+  const canonicalEnd = isSourceCanonicallyFirst ? target : source;
+
+  const dx = canonicalEnd.x - canonicalStart.x;
+  const dy = canonicalEnd.y - canonicalStart.y;
+  const distance = Math.sqrt(dx * dx + dy * dy);
+
+  // Handle zero distance
+  if (distance === 0) {
+    return `M ${target.x} ${target.y} L ${source.x} ${source.y}`;
+  }
+
+  // Perpendicular unit vector (consistent for A→B and B→A)
+  const perpX = -dy / distance;
+  const perpY = dx / distance;
+
+  // Same offset calculation as forward path (must match exactly)
+  const normalizedOffset = (index - (total - 1) / 2);
+  const baseOffset = 80;
+  const maxSpread = 300;
+  const offsetPixels = normalizedOffset * baseOffset;
+  const clampedOffset = Math.max(-maxSpread, Math.min(maxSpread, offsetPixels));
+
+  // Midpoint with perpendicular offset
+  const midX = (source.x + target.x) / 2 + perpX * clampedOffset;
+  const midY = (source.y + target.y) / 2 + perpY * clampedOffset;
+
+  // Always add some curve, even for center edge
+  const baseCurve = 30;
+  const curveBoost = Math.abs(clampedOffset) * 0.3 + baseCurve;
+  const direction = (canonicalStart.x + canonicalStart.y) > (canonicalEnd.x + canonicalEnd.y) ? 1 : -1;
+  const controlX = midX + perpX * curveBoost * direction;
+  const controlY = midY + perpY * curveBoost * direction;
+
+  // Path goes from TARGET to SOURCE (reversed for text direction)
+  return `M ${target.x} ${target.y} Q ${controlX} ${controlY} ${source.x} ${source.y}`;
 }
 
 /**

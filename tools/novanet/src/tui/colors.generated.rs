@@ -222,7 +222,7 @@ pub mod traits {
 }
 
 // =============================================================================
-// ARC FAMILY COLORS (5)
+// ARC FAMILY COLORS (6)
 // =============================================================================
 
 pub mod arc_family {
@@ -233,6 +233,7 @@ pub mod arc_family {
     pub const LOCALIZATION_HEX: &str = "#22c55e";
     pub const MINING_HEX: &str = "#ec4899";
     pub const OWNERSHIP_HEX: &str = "#3b82f6";
+    pub const SCHEMA_HEX: &str = "#6366f1";
     pub const SEMANTIC_HEX: &str = "#f97316";
 
     // 256-color palette indices
@@ -240,6 +241,7 @@ pub mod arc_family {
     pub const LOCALIZATION_256: u8 = 41;
     pub const MINING_256: u8 = 205;
     pub const OWNERSHIP_256: u8 = 33;
+    pub const SCHEMA_256: u8 = 99;
     pub const SEMANTIC_256: u8 = 208;
 
     // 16-color palette
@@ -247,6 +249,7 @@ pub mod arc_family {
     pub const LOCALIZATION_16: Color = Color::Green;
     pub const MINING_16: Color = Color::LightMagenta;
     pub const OWNERSHIP_16: Color = Color::Blue;
+    pub const SCHEMA_16: Color = Color::Blue;
     pub const SEMANTIC_16: Color = Color::Yellow;
 
     /// Get arc family color for a given color mode.
@@ -257,6 +260,7 @@ pub mod arc_family {
                 "localization" => super::hex_to_color(LOCALIZATION_HEX),
                 "mining" => super::hex_to_color(MINING_HEX),
                 "ownership" => super::hex_to_color(OWNERSHIP_HEX),
+                "schema" => super::hex_to_color(SCHEMA_HEX),
                 "semantic" => super::hex_to_color(SEMANTIC_HEX),
                 _ => Color::White,
             },
@@ -265,6 +269,7 @@ pub mod arc_family {
                 "localization" => Color::Indexed(LOCALIZATION_256),
                 "mining" => Color::Indexed(MINING_256),
                 "ownership" => Color::Indexed(OWNERSHIP_256),
+                "schema" => Color::Indexed(SCHEMA_256),
                 "semantic" => Color::Indexed(SEMANTIC_256),
                 _ => Color::White,
             },
@@ -273,6 +278,7 @@ pub mod arc_family {
                 "localization" => LOCALIZATION_16,
                 "mining" => MINING_16,
                 "ownership" => OWNERSHIP_16,
+                "schema" => SCHEMA_16,
                 "semantic" => SEMANTIC_16,
                 _ => Color::White,
             },
