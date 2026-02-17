@@ -21,7 +21,9 @@ SET s.display_name = 'Afrikaans (South Africa) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/af-ZA.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for Afrikaans (South Africa). Uses latin_strip rule. 27 stopwords across 6 categories including verb, pronoun, conjunction. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for Afrikaans (South Africa). Uses latin_strip rule. 27 stopwords across 6 categories including verb, pronoun, conjunction. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ar-AE'})
 SET s.display_name = 'Arabic (UAE) Slugification',
@@ -36,7 +38,9 @@ SET s.display_name = 'Arabic (UAE) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-AE.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for Arabic (UAE). Uses native_script rule. 16 stopwords across 6 categories including currency, pronoun, preposition. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for Arabic (UAE). Uses native_script rule. 16 stopwords across 6 categories including currency, pronoun, preposition. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ar-BH'})
 SET s.display_name = 'AR (BH) Slugification',
@@ -51,7 +55,9 @@ SET s.display_name = 'AR (BH) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-BH.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for AR (BH). Uses native_script rule. 0 stopwords across 0 categories including . Has 11 regional additions.';
+    s.llm_context = 'URL slugification rules for AR (BH). Uses native_script rule. 0 stopwords across 0 categories including . Has 11 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ar-DZ'})
 SET s.display_name = 'AR (DZ) Slugification',
@@ -66,7 +72,9 @@ SET s.display_name = 'AR (DZ) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-DZ.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for AR (DZ). Uses native_script rule. 1 stopwords across 1 categories including adverb. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for AR (DZ). Uses native_script rule. 1 stopwords across 1 categories including adverb. Has 6 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ar-EG'})
 SET s.display_name = 'AR (EG) Slugification',
@@ -81,7 +89,9 @@ SET s.display_name = 'AR (EG) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-EG.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for AR (EG). Uses native_script rule. 29 stopwords across 10 categories including conjunction, pronoun, preposition. Has 12 regional additions.';
+    s.llm_context = 'URL slugification rules for AR (EG). Uses native_script rule. 29 stopwords across 10 categories including conjunction, pronoun, preposition. Has 12 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ar-IQ'})
 SET s.display_name = 'AR (IQ) Slugification',
@@ -96,7 +106,9 @@ SET s.display_name = 'AR (IQ) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-IQ.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for AR (IQ). Uses native_script rule. 23 stopwords across 8 categories including preposition, pronoun, interrogative. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for AR (IQ). Uses native_script rule. 23 stopwords across 8 categories including preposition, pronoun, interrogative. Has 6 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ar-JO'})
 SET s.display_name = 'AR (JO) Slugification',
@@ -111,7 +123,9 @@ SET s.display_name = 'AR (JO) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-JO.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for AR (JO). Uses native_script rule. 0 stopwords across 0 categories including . Has 12 regional additions.';
+    s.llm_context = 'URL slugification rules for AR (JO). Uses native_script rule. 0 stopwords across 0 categories including . Has 12 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ar-KW'})
 SET s.display_name = 'AR (KW) Slugification',
@@ -126,7 +140,9 @@ SET s.display_name = 'AR (KW) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-KW.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for AR (KW). Uses native_script rule. 16 stopwords across 6 categories including pronoun, verb, demonstrative. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for AR (KW). Uses native_script rule. 16 stopwords across 6 categories including pronoun, verb, demonstrative. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ar-LB'})
 SET s.display_name = 'AR (LB) Slugification',
@@ -141,7 +157,9 @@ SET s.display_name = 'AR (LB) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-LB.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for AR (LB). Uses native_script rule. 22 stopwords across 6 categories including verb, adverb, conjunction. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for AR (LB). Uses native_script rule. 22 stopwords across 6 categories including verb, adverb, conjunction. Has 6 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ar-LY'})
 SET s.display_name = 'AR (LY) Slugification',
@@ -156,7 +174,9 @@ SET s.display_name = 'AR (LY) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-LY.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for AR (LY). Uses native_script rule. 23 stopwords across 6 categories including conjunction, adverb, article. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for AR (LY). Uses native_script rule. 23 stopwords across 6 categories including conjunction, adverb, article. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ar-MA'})
 SET s.display_name = 'AR (MA) Slugification',
@@ -171,7 +191,9 @@ SET s.display_name = 'AR (MA) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-MA.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for AR (MA). Uses native_script rule. 25 stopwords across 8 categories including pronoun, conjunction, preposition. Has 8 regional additions.';
+    s.llm_context = 'URL slugification rules for AR (MA). Uses native_script rule. 25 stopwords across 8 categories including pronoun, conjunction, preposition. Has 8 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ar-OM'})
 SET s.display_name = 'AR (OM) Slugification',
@@ -186,7 +208,9 @@ SET s.display_name = 'AR (OM) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-OM.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for AR (OM). Uses native_script rule. 0 stopwords across 0 categories including . Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for AR (OM). Uses native_script rule. 0 stopwords across 0 categories including . Has 6 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ar-QA'})
 SET s.display_name = 'AR (QA) Slugification',
@@ -201,7 +225,9 @@ SET s.display_name = 'AR (QA) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-QA.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for AR (QA). Uses native_script rule. 12 stopwords across 5 categories including verb, preposition, demonstrative. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for AR (QA). Uses native_script rule. 12 stopwords across 5 categories including verb, preposition, demonstrative. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ar-SA'})
 SET s.display_name = 'Arabic (Saudi Arabia) Slugification',
@@ -216,7 +242,9 @@ SET s.display_name = 'Arabic (Saudi Arabia) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-SA.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for Arabic (Saudi Arabia). Uses native_script rule. 11 stopwords across 6 categories including verb, negation, currency. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for Arabic (Saudi Arabia). Uses native_script rule. 11 stopwords across 6 categories including verb, negation, currency. Has 6 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ar-TN'})
 SET s.display_name = 'AR (TN) Slugification',
@@ -231,7 +259,9 @@ SET s.display_name = 'AR (TN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-TN.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for AR (TN). Uses native_script rule. 22 stopwords across 8 categories including interrogative, article, pronoun. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for AR (TN). Uses native_script rule. 22 stopwords across 8 categories including interrogative, article, pronoun. Has 6 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'as-IN'})
 SET s.display_name = 'AS (IN) Slugification',
@@ -246,7 +276,9 @@ SET s.display_name = 'AS (IN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/as-IN.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for AS (IN). Uses native_script rule. 16 stopwords across 5 categories including verb, article, demonstrative. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for AS (IN). Uses native_script rule. 16 stopwords across 5 categories including verb, article, demonstrative. Has 3 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'az-AZ'})
 SET s.display_name = 'AZ (AZ) Slugification',
@@ -261,7 +293,9 @@ SET s.display_name = 'AZ (AZ) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/az-AZ.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for AZ (AZ). Uses native_script rule. 17 stopwords across 5 categories including article, pronoun, conjunction. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for AZ (AZ). Uses native_script rule. 17 stopwords across 5 categories including article, pronoun, conjunction. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'be-BY'})
 SET s.display_name = 'BE (BY) Slugification',
@@ -276,7 +310,9 @@ SET s.display_name = 'BE (BY) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/be-BY.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for BE (BY). Uses native_script rule. 34 stopwords across 4 categories including pronoun, conjunction, preposition.';
+    s.llm_context = 'URL slugification rules for BE (BY). Uses native_script rule. 34 stopwords across 4 categories including pronoun, conjunction, preposition.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'bg-BG'})
 SET s.display_name = 'Bulgarian (Bulgaria) Slugification',
@@ -291,7 +327,9 @@ SET s.display_name = 'Bulgarian (Bulgaria) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/bg-BG.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for Bulgarian (Bulgaria). Uses native_script rule. 15 stopwords across 3 categories including conjunction, preposition, verb. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for Bulgarian (Bulgaria). Uses native_script rule. 15 stopwords across 3 categories including conjunction, preposition, verb. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'bn-BD'})
 SET s.display_name = 'Bengali (Bangladesh) Slugification',
@@ -306,7 +344,9 @@ SET s.display_name = 'Bengali (Bangladesh) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/bn-BD.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for Bengali (Bangladesh). Uses native_script rule. 35 stopwords across 6 categories including article, pronoun, verb. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for Bengali (Bangladesh). Uses native_script rule. 35 stopwords across 6 categories including article, pronoun, verb. Has 6 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'bn-IN'})
 SET s.display_name = 'BN (IN) Slugification',
@@ -321,7 +361,9 @@ SET s.display_name = 'BN (IN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/bn-IN.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for BN (IN). Uses native_script rule. 10 stopwords across 4 categories including article, verb, conjunction. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for BN (IN). Uses native_script rule. 10 stopwords across 4 categories including article, verb, conjunction. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'bs-BA'})
 SET s.display_name = 'BS (BA) Slugification',
@@ -336,7 +378,9 @@ SET s.display_name = 'BS (BA) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/bs-BA.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for BS (BA). Uses latin_preserve rule. 19 stopwords across 2 categories including conjunction, preposition. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for BS (BA). Uses latin_preserve rule. 19 stopwords across 2 categories including conjunction, preposition. Has 6 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ca-AD'})
 SET s.display_name = 'CA (AD) Slugification',
@@ -351,7 +395,9 @@ SET s.display_name = 'CA (AD) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ca-AD.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for CA (AD). Uses latin_preserve rule. 18 stopwords across 5 categories including article, conjunction, contraction. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for CA (AD). Uses latin_preserve rule. 18 stopwords across 5 categories including article, conjunction, contraction. Has 3 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ca-ES'})
 SET s.display_name = 'CA (ES) Slugification',
@@ -366,7 +412,9 @@ SET s.display_name = 'CA (ES) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ca-ES.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for CA (ES). Uses latin_preserve rule. 34 stopwords across 5 categories including article, conjunction, pronoun.';
+    s.llm_context = 'URL slugification rules for CA (ES). Uses latin_preserve rule. 34 stopwords across 5 categories including article, conjunction, pronoun.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ceb-PH'})
 SET s.display_name = 'CEB (PH) Slugification',
@@ -381,7 +429,9 @@ SET s.display_name = 'CEB (PH) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ceb-PH.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for CEB (PH). Uses latin_strip rule. 14 stopwords across 6 categories including demonstrative, preposition, conjunction. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for CEB (PH). Uses latin_strip rule. 14 stopwords across 6 categories including demonstrative, preposition, conjunction. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'cs-CZ'})
 SET s.display_name = 'Czech (Czechia) Slugification',
@@ -396,7 +446,9 @@ SET s.display_name = 'Czech (Czechia) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/cs-CZ.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Czech (Czechia). Uses latin_preserve rule. 40 stopwords across 4 categories including verb, preposition, pronoun.';
+    s.llm_context = 'URL slugification rules for Czech (Czechia). Uses latin_preserve rule. 40 stopwords across 4 categories including verb, preposition, pronoun.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'cy-GB'})
 SET s.display_name = 'CY (GB) Slugification',
@@ -411,7 +463,9 @@ SET s.display_name = 'CY (GB) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/cy-GB.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for CY (GB). Uses latin_preserve rule. 5 stopwords across 1 categories including preposition. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for CY (GB). Uses latin_preserve rule. 5 stopwords across 1 categories including preposition. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'da-DK'})
 SET s.display_name = 'Danish (Denmark) Slugification',
@@ -426,7 +480,9 @@ SET s.display_name = 'Danish (Denmark) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/da-DK.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Danish (Denmark). Uses latin_preserve rule. 20 stopwords across 5 categories including pronoun, verb, article.';
+    s.llm_context = 'URL slugification rules for Danish (Denmark). Uses latin_preserve rule. 20 stopwords across 5 categories including pronoun, verb, article.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'de-AT'})
 SET s.display_name = 'German (Austria) Slugification',
@@ -441,7 +497,9 @@ SET s.display_name = 'German (Austria) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/de-AT.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for German (Austria). Uses latin_transform rule. 33 stopwords across 4 categories including verb, conjunction, article.';
+    s.llm_context = 'URL slugification rules for German (Austria). Uses latin_transform rule. 33 stopwords across 4 categories including verb, conjunction, article.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'de-CH'})
 SET s.display_name = 'German (Switzerland) Slugification',
@@ -456,7 +514,9 @@ SET s.display_name = 'German (Switzerland) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/de-CH.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for German (Switzerland). Uses latin_transform rule. 26 stopwords across 4 categories including conjunction, verb, preposition. Has 7 regional additions.';
+    s.llm_context = 'URL slugification rules for German (Switzerland). Uses latin_transform rule. 26 stopwords across 4 categories including conjunction, verb, preposition. Has 7 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'de-DE'})
 SET s.display_name = 'German (Germany) Slugification',
@@ -471,7 +531,9 @@ SET s.display_name = 'German (Germany) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/de-DE.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for German (Germany). Uses latin_transform rule. 31 stopwords across 5 categories including conjunction, verb, article. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for German (Germany). Uses latin_transform rule. 31 stopwords across 5 categories including conjunction, verb, article. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'de-LU'})
 SET s.display_name = 'DE (LU) Slugification',
@@ -486,7 +548,9 @@ SET s.display_name = 'DE (LU) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/de-LU.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for DE (LU). Uses latin_strip rule. 31 stopwords across 5 categories including contraction, preposition, conjunction. Has 7 regional additions.';
+    s.llm_context = 'URL slugification rules for DE (LU). Uses latin_strip rule. 31 stopwords across 5 categories including contraction, preposition, conjunction. Has 7 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'el-CY'})
 SET s.display_name = 'EL (CY) Slugification',
@@ -501,7 +565,9 @@ SET s.display_name = 'EL (CY) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/el-CY.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for EL (CY). Uses native_script rule. 21 stopwords across 8 categories including adverb, interrogative, conjunction. Has 10 regional additions.';
+    s.llm_context = 'URL slugification rules for EL (CY). Uses native_script rule. 21 stopwords across 8 categories including adverb, interrogative, conjunction. Has 10 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'el-GR'})
 SET s.display_name = 'Greek (Greece) Slugification',
@@ -516,7 +582,9 @@ SET s.display_name = 'Greek (Greece) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/el-GR.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for Greek (Greece). Uses native_script rule. 47 stopwords across 6 categories including conjunction, verb, article. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for Greek (Greece). Uses native_script rule. 47 stopwords across 6 categories including conjunction, verb, article. Has 6 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-AE'})
 SET s.display_name = 'EN (AE) Slugification',
@@ -531,7 +599,9 @@ SET s.display_name = 'EN (AE) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-AE.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (AE). Uses latin_strip rule. 22 stopwords across 6 categories including preposition, verb, pronoun. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (AE). Uses latin_strip rule. 22 stopwords across 6 categories including preposition, verb, pronoun. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-AU'})
 SET s.display_name = 'EN (AU) Slugification',
@@ -546,7 +616,9 @@ SET s.display_name = 'EN (AU) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-AU.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (AU). Uses latin_strip rule. 24 stopwords across 5 categories including preposition, article, conjunction. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (AU). Uses latin_strip rule. 24 stopwords across 5 categories including preposition, article, conjunction. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-BB'})
 SET s.display_name = 'EN (BB) Slugification',
@@ -561,7 +633,9 @@ SET s.display_name = 'EN (BB) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-BB.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for EN (BB). Uses latin_strip rule. 30 stopwords across 5 categories including pronoun, conjunction, article. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (BB). Uses latin_strip rule. 30 stopwords across 5 categories including pronoun, conjunction, article. Has 6 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-BW'})
 SET s.display_name = 'EN (BW) Slugification',
@@ -576,7 +650,9 @@ SET s.display_name = 'EN (BW) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-BW.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (BW). Uses latin_strip rule. 17 stopwords across 5 categories including conjunction, preposition, verb. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (BW). Uses latin_strip rule. 17 stopwords across 5 categories including conjunction, preposition, verb. Has 3 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-CA'})
 SET s.display_name = 'EN (CA) Slugification',
@@ -591,7 +667,9 @@ SET s.display_name = 'EN (CA) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-CA.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (CA). Uses latin_strip rule. 26 stopwords across 7 categories including pronoun, conjunction, adverb. Has 2 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (CA). Uses latin_strip rule. 26 stopwords across 7 categories including pronoun, conjunction, adverb. Has 2 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-CY'})
 SET s.display_name = 'EN (CY) Slugification',
@@ -606,7 +684,9 @@ SET s.display_name = 'EN (CY) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-CY.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (CY). Uses latin_strip rule. 26 stopwords across 5 categories including article, preposition, pronoun.';
+    s.llm_context = 'URL slugification rules for EN (CY). Uses latin_strip rule. 26 stopwords across 5 categories including article, preposition, pronoun.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-FJ'})
 SET s.display_name = 'EN (FJ) Slugification',
@@ -621,7 +701,9 @@ SET s.display_name = 'EN (FJ) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-FJ.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for EN (FJ). Uses latin_strip rule. 29 stopwords across 5 categories including conjunction, preposition, article. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (FJ). Uses latin_strip rule. 29 stopwords across 5 categories including conjunction, preposition, article. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-GB'})
 SET s.display_name = 'English (United Kingdom) Slugification',
@@ -636,7 +718,9 @@ SET s.display_name = 'English (United Kingdom) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-GB.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for English (United Kingdom). Uses latin_strip rule. 22 stopwords across 5 categories including preposition, article, verb.';
+    s.llm_context = 'URL slugification rules for English (United Kingdom). Uses latin_strip rule. 22 stopwords across 5 categories including preposition, article, verb.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-GH'})
 SET s.display_name = 'EN (GH) Slugification',
@@ -651,7 +735,9 @@ SET s.display_name = 'EN (GH) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-GH.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for EN (GH). Uses latin_strip rule. 27 stopwords across 6 categories including pronoun, article, verb. Has 8 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (GH). Uses latin_strip rule. 27 stopwords across 6 categories including pronoun, article, verb. Has 8 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-HK'})
 SET s.display_name = 'EN (HK) Slugification',
@@ -666,7 +752,9 @@ SET s.display_name = 'EN (HK) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-HK.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (HK). Uses latin_strip rule. 31 stopwords across 6 categories including conjunction, article, preposition. Has 2 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (HK). Uses latin_strip rule. 31 stopwords across 6 categories including conjunction, article, preposition. Has 2 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-IE'})
 SET s.display_name = 'EN (IE) Slugification',
@@ -681,7 +769,9 @@ SET s.display_name = 'EN (IE) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-IE.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for EN (IE). Uses latin_strip rule. 31 stopwords across 7 categories including contraction, article, preposition. Has 8 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (IE). Uses latin_strip rule. 31 stopwords across 7 categories including contraction, article, preposition. Has 8 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-IN'})
 SET s.display_name = 'EN (IN) Slugification',
@@ -696,7 +786,9 @@ SET s.display_name = 'EN (IN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-IN.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (IN). Uses latin_strip rule. 22 stopwords across 5 categories including verb, pronoun, conjunction.';
+    s.llm_context = 'URL slugification rules for EN (IN). Uses latin_strip rule. 22 stopwords across 5 categories including verb, pronoun, conjunction.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-JM'})
 SET s.display_name = 'EN (JM) Slugification',
@@ -711,7 +803,9 @@ SET s.display_name = 'EN (JM) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-JM.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for EN (JM). Uses latin_strip rule. 26 stopwords across 5 categories including verb, article, pronoun.';
+    s.llm_context = 'URL slugification rules for EN (JM). Uses latin_strip rule. 26 stopwords across 5 categories including verb, article, pronoun.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-KE'})
 SET s.display_name = 'EN (KE) Slugification',
@@ -726,7 +820,9 @@ SET s.display_name = 'EN (KE) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-KE.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for EN (KE). Uses latin_strip rule. 41 stopwords across 6 categories including adverb, preposition, conjunction. Has 16 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (KE). Uses latin_strip rule. 41 stopwords across 6 categories including adverb, preposition, conjunction. Has 16 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-KY'})
 SET s.display_name = 'EN (KY) Slugification',
@@ -741,7 +837,9 @@ SET s.display_name = 'EN (KY) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-KY.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (KY). Uses latin_strip rule. 18 stopwords across 5 categories including pronoun, preposition, verb. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (KY). Uses latin_strip rule. 18 stopwords across 5 categories including pronoun, preposition, verb. Has 3 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-MU'})
 SET s.display_name = 'EN (MU) Slugification',
@@ -756,7 +854,9 @@ SET s.display_name = 'EN (MU) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-MU.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (MU). Uses latin_strip rule. 19 stopwords across 5 categories including article, pronoun, verb. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (MU). Uses latin_strip rule. 19 stopwords across 5 categories including article, pronoun, verb. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-MY'})
 SET s.display_name = 'EN (MY) Slugification',
@@ -771,7 +871,9 @@ SET s.display_name = 'EN (MY) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-MY.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for EN (MY). Uses latin_strip rule. 25 stopwords across 5 categories including conjunction, article, verb. Has 8 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (MY). Uses latin_strip rule. 25 stopwords across 5 categories including conjunction, article, verb. Has 8 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-NG'})
 SET s.display_name = 'EN (NG) Slugification',
@@ -786,7 +888,9 @@ SET s.display_name = 'EN (NG) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-NG.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (NG). Uses latin_strip rule. 29 stopwords across 7 categories including conjunction, pronoun, auxiliary. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (NG). Uses latin_strip rule. 29 stopwords across 7 categories including conjunction, pronoun, auxiliary. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-NZ'})
 SET s.display_name = 'EN (NZ) Slugification',
@@ -801,7 +905,9 @@ SET s.display_name = 'EN (NZ) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-NZ.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (NZ). Uses latin_strip rule. 18 stopwords across 5 categories including pronoun, article, preposition. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (NZ). Uses latin_strip rule. 18 stopwords across 5 categories including pronoun, article, preposition. Has 3 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-PH'})
 SET s.display_name = 'EN (PH) Slugification',
@@ -816,7 +922,9 @@ SET s.display_name = 'EN (PH) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-PH.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for EN (PH). Uses latin_strip rule. 28 stopwords across 6 categories including pronoun, conjunction, preposition. Has 12 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (PH). Uses latin_strip rule. 28 stopwords across 6 categories including pronoun, conjunction, preposition. Has 12 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-PK'})
 SET s.display_name = 'EN (PK) Slugification',
@@ -831,7 +939,9 @@ SET s.display_name = 'EN (PK) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-PK.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (PK). Uses latin_strip rule. 32 stopwords across 6 categories including preposition, verb, article. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (PK). Uses latin_strip rule. 32 stopwords across 6 categories including preposition, verb, article. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-SA'})
 SET s.display_name = 'EN (SA) Slugification',
@@ -846,7 +956,9 @@ SET s.display_name = 'EN (SA) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-SA.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (SA). Uses latin_strip rule. 16 stopwords across 4 categories including preposition, conjunction, verb.';
+    s.llm_context = 'URL slugification rules for EN (SA). Uses latin_strip rule. 16 stopwords across 4 categories including preposition, conjunction, verb.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-SG'})
 SET s.display_name = 'EN (SG) Slugification',
@@ -861,7 +973,9 @@ SET s.display_name = 'EN (SG) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-SG.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for EN (SG). Uses latin_strip rule. 27 stopwords across 6 categories including classifier, preposition, article. Has 8 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (SG). Uses latin_strip rule. 27 stopwords across 6 categories including classifier, preposition, article. Has 8 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-TT'})
 SET s.display_name = 'EN (TT) Slugification',
@@ -876,7 +990,9 @@ SET s.display_name = 'EN (TT) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-TT.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for EN (TT). Uses latin_strip rule. 27 stopwords across 6 categories including verb, pronoun, article. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (TT). Uses latin_strip rule. 27 stopwords across 6 categories including verb, pronoun, article. Has 6 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-TZ'})
 SET s.display_name = 'EN (TZ) Slugification',
@@ -891,7 +1007,9 @@ SET s.display_name = 'EN (TZ) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-TZ.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for EN (TZ). Uses latin_strip rule. 38 stopwords across 5 categories including conjunction, preposition, pronoun. Has 12 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (TZ). Uses latin_strip rule. 38 stopwords across 5 categories including conjunction, preposition, pronoun. Has 12 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-UG'})
 SET s.display_name = 'EN (UG) Slugification',
@@ -906,7 +1024,9 @@ SET s.display_name = 'EN (UG) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-UG.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for EN (UG). Uses latin_strip rule. 37 stopwords across 6 categories including article, preposition, conjunction. Has 12 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (UG). Uses latin_strip rule. 37 stopwords across 6 categories including article, preposition, conjunction. Has 12 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-US'})
 SET s.display_name = 'English (United States) Slugification',
@@ -921,7 +1041,9 @@ SET s.display_name = 'English (United States) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-US.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for English (United States). Uses latin_strip rule. 26 stopwords across 5 categories including verb, preposition, conjunction.';
+    s.llm_context = 'URL slugification rules for English (United States). Uses latin_strip rule. 26 stopwords across 5 categories including verb, preposition, conjunction.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-VN'})
 SET s.display_name = 'EN (VN) Slugification',
@@ -936,7 +1058,9 @@ SET s.display_name = 'EN (VN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-VN.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (VN). Uses latin_strip rule. 21 stopwords across 5 categories including article, verb, conjunction. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (VN). Uses latin_strip rule. 21 stopwords across 5 categories including article, verb, conjunction. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-ZA'})
 SET s.display_name = 'EN (ZA) Slugification',
@@ -951,7 +1075,9 @@ SET s.display_name = 'EN (ZA) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-ZA.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (ZA). Uses latin_strip rule. 44 stopwords across 7 categories including adverb, article, conjunction. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (ZA). Uses latin_strip rule. 44 stopwords across 7 categories including adverb, article, conjunction. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-ZM'})
 SET s.display_name = 'EN (ZM) Slugification',
@@ -966,7 +1092,9 @@ SET s.display_name = 'EN (ZM) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-ZM.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (ZM). Uses latin_strip rule. 24 stopwords across 5 categories including verb, adverb, article. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (ZM). Uses latin_strip rule. 24 stopwords across 5 categories including verb, adverb, article. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'en-ZW'})
 SET s.display_name = 'EN (ZW) Slugification',
@@ -981,7 +1109,9 @@ SET s.display_name = 'EN (ZW) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-ZW.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (ZW). Uses latin_strip rule. 54 stopwords across 6 categories including article, verb, adverb.';
+    s.llm_context = 'URL slugification rules for EN (ZW). Uses latin_strip rule. 54 stopwords across 6 categories including article, verb, adverb.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'es-AR'})
 SET s.display_name = 'ES (AR) Slugification',
@@ -996,7 +1126,9 @@ SET s.display_name = 'ES (AR) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-AR.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for ES (AR). Uses latin_preserve rule. 27 stopwords across 7 categories including verb, interjection, preposition. Has 10 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (AR). Uses latin_preserve rule. 27 stopwords across 7 categories including verb, interjection, preposition. Has 10 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'es-BO'})
 SET s.display_name = 'ES (BO) Slugification',
@@ -1011,7 +1143,9 @@ SET s.display_name = 'ES (BO) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-BO.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for ES (BO). Uses latin_preserve rule. 23 stopwords across 8 categories including verb, adverb, preposition. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (BO). Uses latin_preserve rule. 23 stopwords across 8 categories including verb, adverb, preposition. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'es-CL'})
 SET s.display_name = 'ES (CL) Slugification',
@@ -1026,7 +1160,9 @@ SET s.display_name = 'ES (CL) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-CL.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for ES (CL). Uses latin_preserve rule. 26 stopwords across 7 categories including verb, article, contraction. Has 2 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (CL). Uses latin_preserve rule. 26 stopwords across 7 categories including verb, article, contraction. Has 2 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'es-CO'})
 SET s.display_name = 'ES (CO) Slugification',
@@ -1041,7 +1177,9 @@ SET s.display_name = 'ES (CO) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-CO.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for ES (CO). Uses latin_preserve rule. 21 stopwords across 6 categories including article, adverb, filler. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (CO). Uses latin_preserve rule. 21 stopwords across 6 categories including article, adverb, filler. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'es-CR'})
 SET s.display_name = 'ES (CR) Slugification',
@@ -1056,7 +1194,9 @@ SET s.display_name = 'ES (CR) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-CR.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for ES (CR). Uses latin_preserve rule. 20 stopwords across 6 categories including preposition, conjunction, verb. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (CR). Uses latin_preserve rule. 20 stopwords across 6 categories including preposition, conjunction, verb. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'es-CU'})
 SET s.display_name = 'ES (CU) Slugification',
@@ -1071,7 +1211,9 @@ SET s.display_name = 'ES (CU) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-CU.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for ES (CU). Uses latin_preserve rule. 20 stopwords across 7 categories including conjunction, article, pronoun. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (CU). Uses latin_preserve rule. 20 stopwords across 7 categories including conjunction, article, pronoun. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'es-DO'})
 SET s.display_name = 'ES (DO) Slugification',
@@ -1086,7 +1228,9 @@ SET s.display_name = 'ES (DO) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-DO.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for ES (DO). Uses latin_preserve rule. 20 stopwords across 7 categories including verb, interjection, adverb. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (DO). Uses latin_preserve rule. 20 stopwords across 7 categories including verb, interjection, adverb. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'es-EC'})
 SET s.display_name = 'ES (EC) Slugification',
@@ -1101,7 +1245,9 @@ SET s.display_name = 'ES (EC) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-EC.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for ES (EC). Uses latin_preserve rule. 20 stopwords across 6 categories including preposition, contraction, conjunction. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (EC). Uses latin_preserve rule. 20 stopwords across 6 categories including preposition, contraction, conjunction. Has 3 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'es-ES'})
 SET s.display_name = 'Spanish (Spain) Slugification',
@@ -1116,7 +1262,9 @@ SET s.display_name = 'Spanish (Spain) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-ES.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for Spanish (Spain). Uses latin_preserve rule. 28 stopwords across 8 categories including conjunction, verb, adverb. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for Spanish (Spain). Uses latin_preserve rule. 28 stopwords across 8 categories including conjunction, verb, adverb. Has 3 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'es-GT'})
 SET s.display_name = 'ES (GT) Slugification',
@@ -1131,7 +1279,9 @@ SET s.display_name = 'ES (GT) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-GT.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for ES (GT). Uses latin_preserve rule. 21 stopwords across 6 categories including pronoun, contraction, preposition. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (GT). Uses latin_preserve rule. 21 stopwords across 6 categories including pronoun, contraction, preposition. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'es-HN'})
 SET s.display_name = 'ES (HN) Slugification',
@@ -1146,7 +1296,9 @@ SET s.display_name = 'ES (HN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-HN.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for ES (HN). Uses latin_preserve rule. 22 stopwords across 7 categories including article, verb, pronoun. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (HN). Uses latin_preserve rule. 22 stopwords across 7 categories including article, verb, pronoun. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'es-MX'})
 SET s.display_name = 'Spanish (Mexico) Slugification',
@@ -1161,7 +1313,9 @@ SET s.display_name = 'Spanish (Mexico) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-MX.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for Spanish (Mexico). Uses latin_preserve rule. 28 stopwords across 7 categories including adverb, article, preposition. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for Spanish (Mexico). Uses latin_preserve rule. 28 stopwords across 7 categories including adverb, article, preposition. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'es-NI'})
 SET s.display_name = 'ES (NI) Slugification',
@@ -1176,7 +1330,9 @@ SET s.display_name = 'ES (NI) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-NI.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for ES (NI). Uses latin_preserve rule. 28 stopwords across 8 categories including preposition, conjunction, adverb. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (NI). Uses latin_preserve rule. 28 stopwords across 8 categories including preposition, conjunction, adverb. Has 3 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'es-PA'})
 SET s.display_name = 'ES (PA) Slugification',
@@ -1191,7 +1347,9 @@ SET s.display_name = 'ES (PA) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-PA.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for ES (PA). Uses latin_preserve rule. 28 stopwords across 4 categories including verb, article, conjunction.';
+    s.llm_context = 'URL slugification rules for ES (PA). Uses latin_preserve rule. 28 stopwords across 4 categories including verb, article, conjunction.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'es-PE'})
 SET s.display_name = 'ES (PE) Slugification',
@@ -1206,7 +1364,9 @@ SET s.display_name = 'ES (PE) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-PE.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for ES (PE). Uses latin_preserve rule. 22 stopwords across 7 categories including conjunction, pronoun, article. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (PE). Uses latin_preserve rule. 22 stopwords across 7 categories including conjunction, pronoun, article. Has 6 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'es-PR'})
 SET s.display_name = 'ES (PR) Slugification',
@@ -1221,7 +1381,9 @@ SET s.display_name = 'ES (PR) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-PR.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for ES (PR). Uses latin_preserve rule. 19 stopwords across 5 categories including verb, article, conjunction. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (PR). Uses latin_preserve rule. 19 stopwords across 5 categories including verb, article, conjunction. Has 3 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'es-PY'})
 SET s.display_name = 'ES (PY) Slugification',
@@ -1236,7 +1398,9 @@ SET s.display_name = 'ES (PY) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-PY.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for ES (PY). Uses latin_preserve rule. 20 stopwords across 8 categories including article, interjection, pronoun. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (PY). Uses latin_preserve rule. 20 stopwords across 8 categories including article, interjection, pronoun. Has 6 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'es-SV'})
 SET s.display_name = 'ES (SV) Slugification',
@@ -1251,7 +1415,9 @@ SET s.display_name = 'ES (SV) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-SV.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for ES (SV). Uses latin_preserve rule. 19 stopwords across 5 categories including article, preposition, contraction. Has 2 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (SV). Uses latin_preserve rule. 19 stopwords across 5 categories including article, preposition, contraction. Has 2 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'es-UY'})
 SET s.display_name = 'ES (UY) Slugification',
@@ -1266,7 +1432,9 @@ SET s.display_name = 'ES (UY) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-UY.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for ES (UY). Uses latin_preserve rule. 31 stopwords across 8 categories including pronoun, conjunction, article. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (UY). Uses latin_preserve rule. 31 stopwords across 8 categories including pronoun, conjunction, article. Has 6 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'es-VE'})
 SET s.display_name = 'ES (VE) Slugification',
@@ -1281,7 +1449,9 @@ SET s.display_name = 'ES (VE) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-VE.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for ES (VE). Uses latin_preserve rule. 28 stopwords across 7 categories including verb, interjection, preposition. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (VE). Uses latin_preserve rule. 28 stopwords across 7 categories including verb, interjection, preposition. Has 3 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'et-EE'})
 SET s.display_name = 'Estonian (Estonia) Slugification',
@@ -1296,7 +1466,9 @@ SET s.display_name = 'Estonian (Estonia) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/et-EE.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for Estonian (Estonia). Uses latin_preserve rule. 20 stopwords across 6 categories including conjunction, verb, pronoun. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for Estonian (Estonia). Uses latin_preserve rule. 20 stopwords across 6 categories including conjunction, verb, pronoun. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'eu-ES'})
 SET s.display_name = 'EU (ES) Slugification',
@@ -1311,7 +1483,9 @@ SET s.display_name = 'EU (ES) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/eu-ES.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EU (ES). Uses latin_preserve rule. 2 stopwords across 1 categories including quantifier. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for EU (ES). Uses latin_preserve rule. 2 stopwords across 1 categories including quantifier. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'fa-IR'})
 SET s.display_name = 'Persian (Iran) Slugification',
@@ -1326,7 +1500,9 @@ SET s.display_name = 'Persian (Iran) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fa-IR.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Persian (Iran). Uses native_script rule. 14 stopwords across 5 categories including preposition, auxiliary, adverb. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for Persian (Iran). Uses native_script rule. 14 stopwords across 5 categories including preposition, auxiliary, adverb. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'fi-FI'})
 SET s.display_name = 'Finnish (Finland) Slugification',
@@ -1341,7 +1517,9 @@ SET s.display_name = 'Finnish (Finland) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fi-FI.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Finnish (Finland). Uses latin_preserve rule. 22 stopwords across 5 categories including verb, pronoun, conjunction. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for Finnish (Finland). Uses latin_preserve rule. 22 stopwords across 5 categories including verb, pronoun, conjunction. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'fr-BE'})
 SET s.display_name = 'FR (BE) Slugification',
@@ -1356,7 +1534,9 @@ SET s.display_name = 'FR (BE) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-BE.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for FR (BE). Uses latin_preserve rule. 18 stopwords across 3 categories including preposition, article, conjunction. Has 8 regional additions.';
+    s.llm_context = 'URL slugification rules for FR (BE). Uses latin_preserve rule. 18 stopwords across 3 categories including preposition, article, conjunction. Has 8 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'fr-BF'})
 SET s.display_name = 'FR (BF) Slugification',
@@ -1371,7 +1551,9 @@ SET s.display_name = 'FR (BF) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-BF.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for FR (BF). Uses latin_preserve rule. 26 stopwords across 6 categories including article, interjection, filler. Has 8 regional additions.';
+    s.llm_context = 'URL slugification rules for FR (BF). Uses latin_preserve rule. 26 stopwords across 6 categories including article, interjection, filler. Has 8 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'fr-CA'})
 SET s.display_name = 'French (Canada) Slugification',
@@ -1386,7 +1568,9 @@ SET s.display_name = 'French (Canada) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-CA.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for French (Canada). Uses latin_preserve rule. 31 stopwords across 6 categories including adverb, pronoun, article. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for French (Canada). Uses latin_preserve rule. 31 stopwords across 6 categories including adverb, pronoun, article. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'fr-CD'})
 SET s.display_name = 'FR (CD) Slugification',
@@ -1401,7 +1585,9 @@ SET s.display_name = 'FR (CD) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-CD.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for FR (CD). Uses latin_preserve rule. 25 stopwords across 8 categories including verb, preposition, article. Has 8 regional additions.';
+    s.llm_context = 'URL slugification rules for FR (CD). Uses latin_preserve rule. 25 stopwords across 8 categories including verb, preposition, article. Has 8 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'fr-CH'})
 SET s.display_name = 'FR (CH) Slugification',
@@ -1416,7 +1602,9 @@ SET s.display_name = 'FR (CH) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-CH.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for FR (CH). Uses latin_preserve rule. 23 stopwords across 5 categories including conjunction, article, preposition. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for FR (CH). Uses latin_preserve rule. 23 stopwords across 5 categories including conjunction, article, preposition. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'fr-CI'})
 SET s.display_name = 'FR (CI) Slugification',
@@ -1431,7 +1619,9 @@ SET s.display_name = 'FR (CI) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-CI.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for FR (CI). Uses latin_preserve rule. 24 stopwords across 7 categories including filler, conjunction, adverb. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for FR (CI). Uses latin_preserve rule. 24 stopwords across 7 categories including filler, conjunction, adverb. Has 6 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'fr-CM'})
 SET s.display_name = 'FR (CM) Slugification',
@@ -1446,7 +1636,9 @@ SET s.display_name = 'FR (CM) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-CM.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for FR (CM). Uses latin_preserve rule. 24 stopwords across 7 categories including adverb, conjunction, contraction. Has 8 regional additions.';
+    s.llm_context = 'URL slugification rules for FR (CM). Uses latin_preserve rule. 24 stopwords across 7 categories including adverb, conjunction, contraction. Has 8 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'fr-DZ'})
 SET s.display_name = 'FR (DZ) Slugification',
@@ -1461,7 +1653,9 @@ SET s.display_name = 'FR (DZ) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-DZ.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for FR (DZ). Uses latin_preserve rule. 35 stopwords across 5 categories including pronoun, conjunction, article. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for FR (DZ). Uses latin_preserve rule. 35 stopwords across 5 categories including pronoun, conjunction, article. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'fr-FR'})
 SET s.display_name = 'French (France) Slugification',
@@ -1476,7 +1670,9 @@ SET s.display_name = 'French (France) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-FR.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for French (France). Uses latin_preserve rule. 32 stopwords across 5 categories including conjunction, preposition, article.';
+    s.llm_context = 'URL slugification rules for French (France). Uses latin_preserve rule. 32 stopwords across 5 categories including conjunction, preposition, article.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'fr-LU'})
 SET s.display_name = 'FR (LU) Slugification',
@@ -1491,7 +1687,9 @@ SET s.display_name = 'FR (LU) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-LU.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for FR (LU). Uses latin_preserve rule. 18 stopwords across 3 categories including preposition, article, conjunction. Has 8 regional additions.';
+    s.llm_context = 'URL slugification rules for FR (LU). Uses latin_preserve rule. 18 stopwords across 3 categories including preposition, article, conjunction. Has 8 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'fr-MA'})
 SET s.display_name = 'FR (MA) Slugification',
@@ -1506,7 +1704,9 @@ SET s.display_name = 'FR (MA) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-MA.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for FR (MA). Uses latin_preserve rule. 22 stopwords across 5 categories including pronoun, conjunction, verb.';
+    s.llm_context = 'URL slugification rules for FR (MA). Uses latin_preserve rule. 22 stopwords across 5 categories including pronoun, conjunction, verb.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'fr-MG'})
 SET s.display_name = 'FR (MG) Slugification',
@@ -1521,7 +1721,9 @@ SET s.display_name = 'FR (MG) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-MG.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for FR (MG). Uses latin_preserve rule. 23 stopwords across 3 categories including preposition, article, conjunction. Has 9 regional additions.';
+    s.llm_context = 'URL slugification rules for FR (MG). Uses latin_preserve rule. 23 stopwords across 3 categories including preposition, article, conjunction. Has 9 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'fr-RW'})
 SET s.display_name = 'FR (RW) Slugification',
@@ -1536,7 +1738,9 @@ SET s.display_name = 'FR (RW) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-RW.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for FR (RW). Uses latin_preserve rule. 29 stopwords across 6 categories including verb, conjunction, pronoun. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for FR (RW). Uses latin_preserve rule. 29 stopwords across 6 categories including verb, conjunction, pronoun. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'fr-SN'})
 SET s.display_name = 'FR (SN) Slugification',
@@ -1551,7 +1755,9 @@ SET s.display_name = 'FR (SN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-SN.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for FR (SN). Uses latin_preserve rule. 22 stopwords across 5 categories including conjunction, preposition, filler. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for FR (SN). Uses latin_preserve rule. 22 stopwords across 5 categories including conjunction, preposition, filler. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'fr-TN'})
 SET s.display_name = 'FR (TN) Slugification',
@@ -1566,7 +1772,9 @@ SET s.display_name = 'FR (TN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-TN.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for FR (TN). Uses latin_preserve rule. 22 stopwords across 5 categories including abbreviation, conjunction, pronoun. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for FR (TN). Uses latin_preserve rule. 22 stopwords across 5 categories including abbreviation, conjunction, pronoun. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ga-IE'})
 SET s.display_name = 'GA (IE) Slugification',
@@ -1581,7 +1789,9 @@ SET s.display_name = 'GA (IE) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ga-IE.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for GA (IE). Uses latin_preserve rule. 19 stopwords across 6 categories including preposition, pronoun, conjunction. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for GA (IE). Uses latin_preserve rule. 19 stopwords across 6 categories including preposition, pronoun, conjunction. Has 6 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'gl-ES'})
 SET s.display_name = 'GL (ES) Slugification',
@@ -1596,7 +1806,9 @@ SET s.display_name = 'GL (ES) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/gl-ES.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for GL (ES). Uses latin_preserve rule. 35 stopwords across 5 categories including conjunction, verb, article.';
+    s.llm_context = 'URL slugification rules for GL (ES). Uses latin_preserve rule. 35 stopwords across 5 categories including conjunction, verb, article.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'gn-PY'})
 SET s.display_name = 'GN (PY) Slugification',
@@ -1611,7 +1823,9 @@ SET s.display_name = 'GN (PY) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/gn-PY.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for GN (PY). Uses latin_strip rule. 3 stopwords across 1 categories including adverb. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for GN (PY). Uses latin_strip rule. 3 stopwords across 1 categories including adverb. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'gu-IN'})
 SET s.display_name = 'GU (IN) Slugification',
@@ -1626,7 +1840,9 @@ SET s.display_name = 'GU (IN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/gu-IN.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for GU (IN). Uses native_script rule. 5 stopwords across 2 categories including conjunction, quantifier.';
+    s.llm_context = 'URL slugification rules for GU (IN). Uses native_script rule. 5 stopwords across 2 categories including conjunction, quantifier.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ha-NG'})
 SET s.display_name = 'HA (NG) Slugification',
@@ -1641,7 +1857,9 @@ SET s.display_name = 'HA (NG) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ha-NG.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for HA (NG). Uses latin_strip rule. 12 stopwords across 5 categories including conjunction, negation, preposition. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for HA (NG). Uses latin_strip rule. 12 stopwords across 5 categories including conjunction, negation, preposition. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'he-IL'})
 SET s.display_name = 'Hebrew (Israel) Slugification',
@@ -1656,7 +1874,9 @@ SET s.display_name = 'Hebrew (Israel) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/he-IL.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Hebrew (Israel). Uses native_script rule. 3 stopwords across 2 categories including conjunction, adverb. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for Hebrew (Israel). Uses native_script rule. 3 stopwords across 2 categories including conjunction, adverb. Has 6 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'hi-IN'})
 SET s.display_name = 'Hindi (India) Slugification',
@@ -1671,7 +1891,9 @@ SET s.display_name = 'Hindi (India) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/hi-IN.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Hindi (India). Uses native_script rule. 2 stopwords across 2 categories including preposition, honorific. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for Hindi (India). Uses native_script rule. 2 stopwords across 2 categories including preposition, honorific. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'hr-HR'})
 SET s.display_name = 'Croatian (Croatia) Slugification',
@@ -1686,7 +1908,9 @@ SET s.display_name = 'Croatian (Croatia) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/hr-HR.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for Croatian (Croatia). Uses latin_preserve rule. 35 stopwords across 5 categories including pronoun, adverb, preposition. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for Croatian (Croatia). Uses latin_preserve rule. 35 stopwords across 5 categories including pronoun, adverb, preposition. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ht-HT'})
 SET s.display_name = 'HT (HT) Slugification',
@@ -1701,7 +1925,9 @@ SET s.display_name = 'HT (HT) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ht-HT.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for HT (HT). Uses latin_strip rule. 4 stopwords across 4 categories including demonstrative, quantifier, verb. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for HT (HT). Uses latin_strip rule. 4 stopwords across 4 categories including demonstrative, quantifier, verb. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'hu-HU'})
 SET s.display_name = 'Hungarian (Hungary) Slugification',
@@ -1716,7 +1942,9 @@ SET s.display_name = 'Hungarian (Hungary) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/hu-HU.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Hungarian (Hungary). Uses latin_preserve rule. 4 stopwords across 1 categories including conjunction. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for Hungarian (Hungary). Uses latin_preserve rule. 4 stopwords across 1 categories including conjunction. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'hy-AM'})
 SET s.display_name = 'HY (AM) Slugification',
@@ -1731,7 +1959,9 @@ SET s.display_name = 'HY (AM) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/hy-AM.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for HY (AM). Uses native_script rule. 14 stopwords across 6 categories including article, adverb, verb.';
+    s.llm_context = 'URL slugification rules for HY (AM). Uses native_script rule. 14 stopwords across 6 categories including article, adverb, verb.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'id-ID'})
 SET s.display_name = 'Indonesian (Indonesia) Slugification',
@@ -1746,7 +1976,9 @@ SET s.display_name = 'Indonesian (Indonesia) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/id-ID.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Indonesian (Indonesia). Uses latin_strip rule. 14 stopwords across 3 categories including conjunction, adverb, preposition.';
+    s.llm_context = 'URL slugification rules for Indonesian (Indonesia). Uses latin_strip rule. 14 stopwords across 3 categories including conjunction, adverb, preposition.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ig-NG'})
 SET s.display_name = 'IG (NG) Slugification',
@@ -1761,7 +1993,9 @@ SET s.display_name = 'IG (NG) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ig-NG.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for IG (NG). Uses latin_strip rule. 1 stopwords across 1 categories including demonstrative. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for IG (NG). Uses latin_strip rule. 1 stopwords across 1 categories including demonstrative. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'is-IS'})
 SET s.display_name = 'IS (IS) Slugification',
@@ -1776,7 +2010,9 @@ SET s.display_name = 'IS (IS) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/is-IS.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for IS (IS). Uses latin_preserve rule. 28 stopwords across 5 categories including pronoun, verb, conjunction.';
+    s.llm_context = 'URL slugification rules for IS (IS). Uses latin_preserve rule. 28 stopwords across 5 categories including pronoun, verb, conjunction.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'it-CH'})
 SET s.display_name = 'IT (CH) Slugification',
@@ -1791,7 +2027,9 @@ SET s.display_name = 'IT (CH) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/it-CH.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for IT (CH). Uses latin_preserve rule. 23 stopwords across 3 categories including article, preposition, conjunction. Has 10 regional additions.';
+    s.llm_context = 'URL slugification rules for IT (CH). Uses latin_preserve rule. 23 stopwords across 3 categories including article, preposition, conjunction. Has 10 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'it-IT'})
 SET s.display_name = 'Italian (Italy) Slugification',
@@ -1806,7 +2044,9 @@ SET s.display_name = 'Italian (Italy) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/it-IT.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Italian (Italy). Uses latin_preserve rule. 21 stopwords across 3 categories including preposition, conjunction, article. Has 8 regional additions.';
+    s.llm_context = 'URL slugification rules for Italian (Italy). Uses latin_preserve rule. 21 stopwords across 3 categories including preposition, conjunction, article. Has 8 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ja-JP'})
 SET s.display_name = 'Japanese (Japan) Slugification',
@@ -1821,7 +2061,9 @@ SET s.display_name = 'Japanese (Japan) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ja-JP.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Japanese (Japan). Uses native_script rule. 0 stopwords across 0 categories including .';
+    s.llm_context = 'URL slugification rules for Japanese (Japan). Uses native_script rule. 0 stopwords across 0 categories including .',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'jv-ID'})
 SET s.display_name = 'JV (ID) Slugification',
@@ -1836,7 +2078,9 @@ SET s.display_name = 'JV (ID) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/jv-ID.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for JV (ID). Uses latin_strip rule. 10 stopwords across 3 categories including preposition, conjunction, adverb. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for JV (ID). Uses latin_strip rule. 10 stopwords across 3 categories including preposition, conjunction, adverb. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ka-GE'})
 SET s.display_name = 'KA (GE) Slugification',
@@ -1851,7 +2095,9 @@ SET s.display_name = 'KA (GE) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ka-GE.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for KA (GE). Uses native_script rule. 20 stopwords across 4 categories including adverb, verb, conjunction. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for KA (GE). Uses native_script rule. 20 stopwords across 4 categories including adverb, verb, conjunction. Has 3 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'kk-KZ'})
 SET s.display_name = 'KK (KZ) Slugification',
@@ -1866,7 +2112,9 @@ SET s.display_name = 'KK (KZ) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/kk-KZ.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for KK (KZ). Uses native_script rule. 9 stopwords across 4 categories including currency, abbreviation, pronoun. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for KK (KZ). Uses native_script rule. 9 stopwords across 4 categories including currency, abbreviation, pronoun. Has 3 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'km-KH'})
 SET s.display_name = 'KM (KH) Slugification',
@@ -1881,7 +2129,9 @@ SET s.display_name = 'KM (KH) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/km-KH.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for KM (KH). Uses native_script rule. 10 stopwords across 5 categories including preposition, adverb, demonstrative. Has 2 regional additions.';
+    s.llm_context = 'URL slugification rules for KM (KH). Uses native_script rule. 10 stopwords across 5 categories including preposition, adverb, demonstrative. Has 2 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'kn-IN'})
 SET s.display_name = 'KN (IN) Slugification',
@@ -1896,7 +2146,9 @@ SET s.display_name = 'KN (IN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/kn-IN.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for KN (IN). Uses native_script rule. 23 stopwords across 6 categories including verb, demonstrative, pronoun.';
+    s.llm_context = 'URL slugification rules for KN (IN). Uses native_script rule. 23 stopwords across 6 categories including verb, demonstrative, pronoun.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ko-KR'})
 SET s.display_name = 'Korean (South Korea) Slugification',
@@ -1911,7 +2163,9 @@ SET s.display_name = 'Korean (South Korea) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ko-KR.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Korean (South Korea). Uses native_script rule. 0 stopwords across 0 categories including .';
+    s.llm_context = 'URL slugification rules for Korean (South Korea). Uses native_script rule. 0 stopwords across 0 categories including .',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ku-TR'})
 SET s.display_name = 'KU (TR) Slugification',
@@ -1926,7 +2180,9 @@ SET s.display_name = 'KU (TR) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ku-TR.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for KU (TR). Uses native_script rule. 32 stopwords across 6 categories including conjunction, article, verb. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for KU (TR). Uses native_script rule. 32 stopwords across 6 categories including conjunction, article, verb. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ky-KG'})
 SET s.display_name = 'KY (KG) Slugification',
@@ -1941,7 +2197,9 @@ SET s.display_name = 'KY (KG) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ky-KG.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for KY (KG). Uses native_script rule. 6 stopwords across 4 categories including conjunction, verb, pronoun. Has 2 regional additions.';
+    s.llm_context = 'URL slugification rules for KY (KG). Uses native_script rule. 6 stopwords across 4 categories including conjunction, verb, pronoun. Has 2 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ln-CD'})
 SET s.display_name = 'LN (CD) Slugification',
@@ -1956,7 +2214,9 @@ SET s.display_name = 'LN (CD) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ln-CD.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for LN (CD). Uses latin_strip rule. 4 stopwords across 3 categories including preposition, conjunction, adverb. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for LN (CD). Uses latin_strip rule. 4 stopwords across 3 categories including preposition, conjunction, adverb. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'lt-LT'})
 SET s.display_name = 'Lithuanian (Lithuania) Slugification',
@@ -1971,7 +2231,9 @@ SET s.display_name = 'Lithuanian (Lithuania) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/lt-LT.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for Lithuanian (Lithuania). Uses latin_preserve rule. 26 stopwords across 4 categories including verb, pronoun, preposition.';
+    s.llm_context = 'URL slugification rules for Lithuanian (Lithuania). Uses latin_preserve rule. 26 stopwords across 4 categories including verb, pronoun, preposition.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'lv-LV'})
 SET s.display_name = 'Latvian (Latvia) Slugification',
@@ -1986,7 +2248,9 @@ SET s.display_name = 'Latvian (Latvia) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/lv-LV.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for Latvian (Latvia). Uses latin_preserve rule. 25 stopwords across 4 categories including conjunction, pronoun, verb. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for Latvian (Latvia). Uses latin_preserve rule. 25 stopwords across 4 categories including conjunction, pronoun, verb. Has 6 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'mg-MG'})
 SET s.display_name = 'MG (MG) Slugification',
@@ -2001,7 +2265,9 @@ SET s.display_name = 'MG (MG) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/mg-MG.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for MG (MG). Uses latin_strip rule. 16 stopwords across 3 categories including article, preposition, conjunction. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for MG (MG). Uses latin_strip rule. 16 stopwords across 3 categories including article, preposition, conjunction. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'mi-NZ'})
 SET s.display_name = 'MI (NZ) Slugification',
@@ -2016,7 +2282,9 @@ SET s.display_name = 'MI (NZ) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/mi-NZ.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for MI (NZ). Uses latin_strip rule. 0 stopwords across 0 categories including . Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for MI (NZ). Uses latin_strip rule. 0 stopwords across 0 categories including . Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'mk-MK'})
 SET s.display_name = 'MK (MK) Slugification',
@@ -2031,7 +2299,9 @@ SET s.display_name = 'MK (MK) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/mk-MK.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for MK (MK). Uses native_script rule. 31 stopwords across 5 categories including preposition, conjunction, pronoun.';
+    s.llm_context = 'URL slugification rules for MK (MK). Uses native_script rule. 31 stopwords across 5 categories including preposition, conjunction, pronoun.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ml-IN'})
 SET s.display_name = 'ML (IN) Slugification',
@@ -2046,7 +2316,9 @@ SET s.display_name = 'ML (IN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ml-IN.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for ML (IN). Uses native_script rule. 0 stopwords across 0 categories including .';
+    s.llm_context = 'URL slugification rules for ML (IN). Uses native_script rule. 0 stopwords across 0 categories including .',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'mn-MN'})
 SET s.display_name = 'MN (MN) Slugification',
@@ -2061,7 +2333,9 @@ SET s.display_name = 'MN (MN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/mn-MN.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for MN (MN). Uses native_script rule. 13 stopwords across 3 categories including interrogative, conjunction, demonstrative.';
+    s.llm_context = 'URL slugification rules for MN (MN). Uses native_script rule. 13 stopwords across 3 categories including interrogative, conjunction, demonstrative.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'mr-IN'})
 SET s.display_name = 'MR (IN) Slugification',
@@ -2076,7 +2350,9 @@ SET s.display_name = 'MR (IN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/mr-IN.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for MR (IN). Uses native_script rule. 24 stopwords across 5 categories including interrogative, verb, quantifier. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for MR (IN). Uses native_script rule. 24 stopwords across 5 categories including interrogative, verb, quantifier. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ms-BN'})
 SET s.display_name = 'MS (BN) Slugification',
@@ -2091,7 +2367,9 @@ SET s.display_name = 'MS (BN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ms-BN.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for MS (BN). Uses latin_strip rule. 20 stopwords across 6 categories including auxiliary, honorific, conjunction. Has 10 regional additions.';
+    s.llm_context = 'URL slugification rules for MS (BN). Uses latin_strip rule. 20 stopwords across 6 categories including auxiliary, honorific, conjunction. Has 10 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ms-MY'})
 SET s.display_name = 'Malay (Malaysia) Slugification',
@@ -2106,7 +2384,9 @@ SET s.display_name = 'Malay (Malaysia) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ms-MY.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for Malay (Malaysia). Uses latin_strip rule. 18 stopwords across 6 categories including negation, preposition, demonstrative. Has 15 regional additions.';
+    s.llm_context = 'URL slugification rules for Malay (Malaysia). Uses latin_strip rule. 18 stopwords across 6 categories including negation, preposition, demonstrative. Has 15 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ms-SG'})
 SET s.display_name = 'MS (SG) Slugification',
@@ -2121,7 +2401,9 @@ SET s.display_name = 'MS (SG) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ms-SG.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for MS (SG). Uses latin_strip rule. 14 stopwords across 7 categories including conjunction, possessive, demonstrative. Has 7 regional additions.';
+    s.llm_context = 'URL slugification rules for MS (SG). Uses latin_strip rule. 14 stopwords across 7 categories including conjunction, possessive, demonstrative. Has 7 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'mt-MT'})
 SET s.display_name = 'MT (MT) Slugification',
@@ -2136,7 +2418,9 @@ SET s.display_name = 'MT (MT) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/mt-MT.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for MT (MT). Uses latin_preserve rule. 9 stopwords across 5 categories including demonstrative, adverb, quantifier. Has 9 regional additions.';
+    s.llm_context = 'URL slugification rules for MT (MT). Uses latin_preserve rule. 9 stopwords across 5 categories including demonstrative, adverb, quantifier. Has 9 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'my-MM'})
 SET s.display_name = 'MY (MM) Slugification',
@@ -2151,7 +2435,9 @@ SET s.display_name = 'MY (MM) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/my-MM.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for MY (MM). Uses native_script rule. 0 stopwords across 0 categories including . Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for MY (MM). Uses native_script rule. 0 stopwords across 0 categories including . Has 3 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ne-NP'})
 SET s.display_name = 'NE (NP) Slugification',
@@ -2166,7 +2452,9 @@ SET s.display_name = 'NE (NP) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ne-NP.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for NE (NP). Uses native_script rule. 16 stopwords across 4 categories including pronoun, adverb, conjunction.';
+    s.llm_context = 'URL slugification rules for NE (NP). Uses native_script rule. 16 stopwords across 4 categories including pronoun, adverb, conjunction.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'nl-BE'})
 SET s.display_name = 'NL (BE) Slugification',
@@ -2181,7 +2469,9 @@ SET s.display_name = 'NL (BE) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/nl-BE.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for NL (BE). Uses latin_preserve rule. 29 stopwords across 5 categories including article, preposition, conjunction. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for NL (BE). Uses latin_preserve rule. 29 stopwords across 5 categories including article, preposition, conjunction. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'nl-NL'})
 SET s.display_name = 'Dutch (Netherlands) Slugification',
@@ -2196,7 +2486,9 @@ SET s.display_name = 'Dutch (Netherlands) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/nl-NL.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Dutch (Netherlands). Uses latin_preserve rule. 36 stopwords across 6 categories including pronoun, conjunction, verb. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for Dutch (Netherlands). Uses latin_preserve rule. 36 stopwords across 6 categories including pronoun, conjunction, verb. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'no-NO'})
 SET s.display_name = 'Norwegian (Norway) Slugification',
@@ -2211,7 +2503,9 @@ SET s.display_name = 'Norwegian (Norway) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/no-NO.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Norwegian (Norway). Uses latin_preserve rule. 4 stopwords across 1 categories including preposition. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for Norwegian (Norway). Uses latin_preserve rule. 4 stopwords across 1 categories including preposition. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ny-MW'})
 SET s.display_name = 'NY (MW) Slugification',
@@ -2226,7 +2520,9 @@ SET s.display_name = 'NY (MW) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ny-MW.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for NY (MW). Uses latin_strip rule. 2 stopwords across 1 categories including interrogative. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for NY (MW). Uses latin_strip rule. 2 stopwords across 1 categories including interrogative. Has 3 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'pa-IN'})
 SET s.display_name = 'PA (IN) Slugification',
@@ -2241,7 +2537,9 @@ SET s.display_name = 'PA (IN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/pa-IN.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for PA (IN). Uses native_script rule. 1 stopwords across 1 categories including honorific. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for PA (IN). Uses native_script rule. 1 stopwords across 1 categories including honorific. Has 6 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'pa-PK'})
 SET s.display_name = 'PA (PK) Slugification',
@@ -2256,7 +2554,9 @@ SET s.display_name = 'PA (PK) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/pa-PK.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for PA (PK). Uses native_script rule. 0 stopwords across 0 categories including . Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for PA (PK). Uses native_script rule. 0 stopwords across 0 categories including . Has 3 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'pl-PL'})
 SET s.display_name = 'Polish (Poland) Slugification',
@@ -2271,7 +2571,9 @@ SET s.display_name = 'Polish (Poland) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/pl-PL.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Polish (Poland). Uses latin_preserve rule. 23 stopwords across 5 categories including preposition, negation, conjunction.';
+    s.llm_context = 'URL slugification rules for Polish (Poland). Uses latin_preserve rule. 23 stopwords across 5 categories including preposition, negation, conjunction.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ps-AF'})
 SET s.display_name = 'PS (AF) Slugification',
@@ -2286,7 +2588,9 @@ SET s.display_name = 'PS (AF) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ps-AF.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for PS (AF). Uses native_script rule. 3 stopwords across 2 categories including adverb, conjunction. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for PS (AF). Uses native_script rule. 3 stopwords across 2 categories including adverb, conjunction. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'pt-AO'})
 SET s.display_name = 'PT (AO) Slugification',
@@ -2301,7 +2605,9 @@ SET s.display_name = 'PT (AO) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/pt-AO.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for PT (AO). Uses latin_preserve rule. 27 stopwords across 7 categories including adverb, verb, interjection. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for PT (AO). Uses latin_preserve rule. 27 stopwords across 7 categories including adverb, verb, interjection. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'pt-BR'})
 SET s.display_name = 'Portuguese (Brazil) Slugification',
@@ -2316,7 +2622,9 @@ SET s.display_name = 'Portuguese (Brazil) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/pt-BR.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Portuguese (Brazil). Uses latin_preserve rule. 27 stopwords across 6 categories including pronoun, article, preposition. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for Portuguese (Brazil). Uses latin_preserve rule. 27 stopwords across 6 categories including pronoun, article, preposition. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'pt-CH'})
 SET s.display_name = 'PT (CH) Slugification',
@@ -2331,7 +2639,9 @@ SET s.display_name = 'PT (CH) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/pt-CH.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for PT (CH). Uses latin_preserve rule. 29 stopwords across 5 categories including article, pronoun, verb. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for PT (CH). Uses latin_preserve rule. 29 stopwords across 5 categories including article, pronoun, verb. Has 6 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'pt-MZ'})
 SET s.display_name = 'PT (MZ) Slugification',
@@ -2346,7 +2656,9 @@ SET s.display_name = 'PT (MZ) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/pt-MZ.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for PT (MZ). Uses latin_preserve rule. 25 stopwords across 6 categories including conjunction, article, pronoun. Has 7 regional additions.';
+    s.llm_context = 'URL slugification rules for PT (MZ). Uses latin_preserve rule. 25 stopwords across 6 categories including conjunction, article, pronoun. Has 7 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'pt-PT'})
 SET s.display_name = 'Portuguese (Portugal) Slugification',
@@ -2361,7 +2673,9 @@ SET s.display_name = 'Portuguese (Portugal) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/pt-PT.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for Portuguese (Portugal). Uses latin_preserve rule. 32 stopwords across 5 categories including article, preposition, pronoun. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for Portuguese (Portugal). Uses latin_preserve rule. 32 stopwords across 5 categories including article, preposition, pronoun. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'qu-PE'})
 SET s.display_name = 'QU (PE) Slugification',
@@ -2376,7 +2690,9 @@ SET s.display_name = 'QU (PE) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/qu-PE.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for QU (PE). Uses latin_strip rule. 0 stopwords across 0 categories including . Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for QU (PE). Uses latin_strip rule. 0 stopwords across 0 categories including . Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ro-MD'})
 SET s.display_name = 'RO (MD) Slugification',
@@ -2391,7 +2707,9 @@ SET s.display_name = 'RO (MD) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ro-MD.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for RO (MD). Uses latin_preserve rule. 25 stopwords across 5 categories including pronoun, conjunction, preposition. Has 10 regional additions.';
+    s.llm_context = 'URL slugification rules for RO (MD). Uses latin_preserve rule. 25 stopwords across 5 categories including pronoun, conjunction, preposition. Has 10 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ro-RO'})
 SET s.display_name = 'Romanian (Romania) Slugification',
@@ -2406,7 +2724,9 @@ SET s.display_name = 'Romanian (Romania) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ro-RO.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for Romanian (Romania). Uses latin_preserve rule. 0 stopwords across 0 categories including .';
+    s.llm_context = 'URL slugification rules for Romanian (Romania). Uses latin_preserve rule. 0 stopwords across 0 categories including .',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ru-BY'})
 SET s.display_name = 'RU (BY) Slugification',
@@ -2421,7 +2741,9 @@ SET s.display_name = 'RU (BY) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ru-BY.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for RU (BY). Uses native_script rule. 29 stopwords across 3 categories including conjunction, preposition, pronoun.';
+    s.llm_context = 'URL slugification rules for RU (BY). Uses native_script rule. 29 stopwords across 3 categories including conjunction, preposition, pronoun.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ru-IL'})
 SET s.display_name = 'RU (IL) Slugification',
@@ -2436,7 +2758,9 @@ SET s.display_name = 'RU (IL) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ru-IL.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for RU (IL). Uses native_script rule. 35 stopwords across 4 categories including conjunction, preposition, pronoun. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for RU (IL). Uses native_script rule. 35 stopwords across 4 categories including conjunction, preposition, pronoun. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ru-KG'})
 SET s.display_name = 'RU (KG) Slugification',
@@ -2451,7 +2775,9 @@ SET s.display_name = 'RU (KG) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ru-KG.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for RU (KG). Uses native_script rule. 20 stopwords across 4 categories including pronoun, adverb, preposition. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for RU (KG). Uses native_script rule. 20 stopwords across 4 categories including pronoun, adverb, preposition. Has 3 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ru-KZ'})
 SET s.display_name = 'RU (KZ) Slugification',
@@ -2466,7 +2792,9 @@ SET s.display_name = 'RU (KZ) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ru-KZ.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for RU (KZ). Uses native_script rule. 35 stopwords across 5 categories including preposition, adverb, conjunction. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for RU (KZ). Uses native_script rule. 35 stopwords across 5 categories including preposition, adverb, conjunction. Has 6 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ru-MD'})
 SET s.display_name = 'RU (MD) Slugification',
@@ -2481,7 +2809,9 @@ SET s.display_name = 'RU (MD) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ru-MD.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for RU (MD). Uses native_script rule. 23 stopwords across 4 categories including conjunction, adverb, preposition. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for RU (MD). Uses native_script rule. 23 stopwords across 4 categories including conjunction, adverb, preposition. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ru-RU'})
 SET s.display_name = 'Russian (Russia) Slugification',
@@ -2496,7 +2826,9 @@ SET s.display_name = 'Russian (Russia) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ru-RU.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Russian (Russia). Uses native_script rule. 29 stopwords across 3 categories including pronoun, preposition, conjunction.';
+    s.llm_context = 'URL slugification rules for Russian (Russia). Uses native_script rule. 29 stopwords across 3 categories including pronoun, preposition, conjunction.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'rw-RW'})
 SET s.display_name = 'RW (RW) Slugification',
@@ -2511,7 +2843,9 @@ SET s.display_name = 'RW (RW) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/rw-RW.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for RW (RW). Uses latin_strip rule. 4 stopwords across 3 categories including preposition, conjunction, interrogative. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for RW (RW). Uses latin_strip rule. 4 stopwords across 3 categories including preposition, conjunction, interrogative. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'sd-PK'})
 SET s.display_name = 'SD (PK) Slugification',
@@ -2526,7 +2860,9 @@ SET s.display_name = 'SD (PK) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/sd-PK.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for SD (PK). Uses native_script rule. 19 stopwords across 4 categories including article, conjunction, pronoun.';
+    s.llm_context = 'URL slugification rules for SD (PK). Uses native_script rule. 19 stopwords across 4 categories including article, conjunction, pronoun.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'si-LK'})
 SET s.display_name = 'SI (LK) Slugification',
@@ -2541,7 +2877,9 @@ SET s.display_name = 'SI (LK) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/si-LK.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for SI (LK). Uses native_script rule. 13 stopwords across 5 categories including verb, pronoun, demonstrative. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for SI (LK). Uses native_script rule. 13 stopwords across 5 categories including verb, pronoun, demonstrative. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'sk-SK'})
 SET s.display_name = 'Slovak (Slovakia) Slugification',
@@ -2556,7 +2894,9 @@ SET s.display_name = 'Slovak (Slovakia) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/sk-SK.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for Slovak (Slovakia). Uses latin_preserve rule. 57 stopwords across 5 categories including conjunction, verb, pronoun. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for Slovak (Slovakia). Uses latin_preserve rule. 57 stopwords across 5 categories including conjunction, verb, pronoun. Has 6 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'sl-SI'})
 SET s.display_name = 'Slovenian (Slovenia) Slugification',
@@ -2571,7 +2911,9 @@ SET s.display_name = 'Slovenian (Slovenia) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/sl-SI.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for Slovenian (Slovenia). Uses latin_preserve rule. 75 stopwords across 6 categories including conjunction, pronoun, adverb.';
+    s.llm_context = 'URL slugification rules for Slovenian (Slovenia). Uses latin_preserve rule. 75 stopwords across 6 categories including conjunction, pronoun, adverb.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'sn-ZW'})
 SET s.display_name = 'SN (ZW) Slugification',
@@ -2586,7 +2928,9 @@ SET s.display_name = 'SN (ZW) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/sn-ZW.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for SN (ZW). Uses latin_strip rule. 3 stopwords across 2 categories including adverb, pronoun. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for SN (ZW). Uses latin_strip rule. 3 stopwords across 2 categories including adverb, pronoun. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'so-SO'})
 SET s.display_name = 'SO (SO) Slugification',
@@ -2601,7 +2945,9 @@ SET s.display_name = 'SO (SO) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/so-SO.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for SO (SO). Uses latin_strip rule. 20 stopwords across 5 categories including preposition, adverb, pronoun. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for SO (SO). Uses latin_strip rule. 20 stopwords across 5 categories including preposition, adverb, pronoun. Has 6 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'sq-AL'})
 SET s.display_name = 'SQ (AL) Slugification',
@@ -2616,7 +2962,9 @@ SET s.display_name = 'SQ (AL) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/sq-AL.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for SQ (AL). Uses latin_preserve rule. 13 stopwords across 2 categories including preposition, conjunction. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for SQ (AL). Uses latin_preserve rule. 13 stopwords across 2 categories including preposition, conjunction. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'sr-RS'})
 SET s.display_name = 'SR (RS) Slugification',
@@ -2631,7 +2979,9 @@ SET s.display_name = 'SR (RS) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/sr-RS.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for SR (RS). Uses native_script rule. 36 stopwords across 3 categories including preposition, pronoun, conjunction.';
+    s.llm_context = 'URL slugification rules for SR (RS). Uses native_script rule. 36 stopwords across 3 categories including preposition, pronoun, conjunction.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'su-ID'})
 SET s.display_name = 'SU (ID) Slugification',
@@ -2646,7 +2996,9 @@ SET s.display_name = 'SU (ID) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/su-ID.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for SU (ID). Uses latin_strip rule. 5 stopwords across 2 categories including preposition, conjunction. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for SU (ID). Uses latin_strip rule. 5 stopwords across 2 categories including preposition, conjunction. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'sv-SE'})
 SET s.display_name = 'Swedish (Sweden) Slugification',
@@ -2661,7 +3013,9 @@ SET s.display_name = 'Swedish (Sweden) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/sv-SE.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Swedish (Sweden). Uses latin_preserve rule. 28 stopwords across 5 categories including conjunction, preposition, article. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for Swedish (Sweden). Uses latin_preserve rule. 28 stopwords across 5 categories including conjunction, preposition, article. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'sw-KE'})
 SET s.display_name = 'Swahili (Kenya) Slugification',
@@ -2676,7 +3030,9 @@ SET s.display_name = 'Swahili (Kenya) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/sw-KE.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for Swahili (Kenya). Uses latin_strip rule. 4 stopwords across 2 categories including adverb, interjection. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for Swahili (Kenya). Uses latin_strip rule. 4 stopwords across 2 categories including adverb, interjection. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'sw-TZ'})
 SET s.display_name = 'SW (TZ) Slugification',
@@ -2691,7 +3047,9 @@ SET s.display_name = 'SW (TZ) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/sw-TZ.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for SW (TZ). Uses latin_strip rule. 15 stopwords across 4 categories including adverb, preposition, conjunction. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for SW (TZ). Uses latin_strip rule. 15 stopwords across 4 categories including adverb, preposition, conjunction. Has 3 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ta-IN'})
 SET s.display_name = 'TA (IN) Slugification',
@@ -2706,7 +3064,9 @@ SET s.display_name = 'TA (IN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ta-IN.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for TA (IN). Uses native_script rule. 17 stopwords across 5 categories including verb, pronoun, interrogative. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for TA (IN). Uses native_script rule. 17 stopwords across 5 categories including verb, pronoun, interrogative. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ta-LK'})
 SET s.display_name = 'TA (LK) Slugification',
@@ -2721,7 +3081,9 @@ SET s.display_name = 'TA (LK) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ta-LK.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for TA (LK). Uses native_script rule. 8 stopwords across 3 categories including article, pronoun, conjunction. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for TA (LK). Uses native_script rule. 8 stopwords across 3 categories including article, pronoun, conjunction. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'te-IN'})
 SET s.display_name = 'TE (IN) Slugification',
@@ -2736,7 +3098,9 @@ SET s.display_name = 'TE (IN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/te-IN.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for TE (IN). Uses native_script rule. 2 stopwords across 1 categories including quantifier. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for TE (IN). Uses native_script rule. 2 stopwords across 1 categories including quantifier. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'tg-TJ'})
 SET s.display_name = 'TG (TJ) Slugification',
@@ -2751,7 +3115,9 @@ SET s.display_name = 'TG (TJ) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/tg-TJ.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for TG (TJ). Uses native_script rule. 0 stopwords across 0 categories including .';
+    s.llm_context = 'URL slugification rules for TG (TJ). Uses native_script rule. 0 stopwords across 0 categories including .',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'th-TH'})
 SET s.display_name = 'Thai (Thailand) Slugification',
@@ -2766,7 +3132,9 @@ SET s.display_name = 'Thai (Thailand) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/th-TH.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Thai (Thailand). Uses native_script rule. 0 stopwords across 0 categories including .';
+    s.llm_context = 'URL slugification rules for Thai (Thailand). Uses native_script rule. 0 stopwords across 0 categories including .',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'tk-TM'})
 SET s.display_name = 'TK (TM) Slugification',
@@ -2781,7 +3149,9 @@ SET s.display_name = 'TK (TM) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/tk-TM.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for TK (TM). Uses latin_preserve rule. 16 stopwords across 6 categories including article, verb, adverb. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for TK (TM). Uses latin_preserve rule. 16 stopwords across 6 categories including article, verb, adverb. Has 3 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'tl-PH'})
 SET s.display_name = 'TL (PH) Slugification',
@@ -2796,7 +3166,9 @@ SET s.display_name = 'TL (PH) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/tl-PH.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for TL (PH). Uses latin_strip rule. 1 stopwords across 1 categories including conjunction. Has 8 regional additions.';
+    s.llm_context = 'URL slugification rules for TL (PH). Uses latin_strip rule. 1 stopwords across 1 categories including conjunction. Has 8 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'tr-TR'})
 SET s.display_name = 'Turkish (Turkey) Slugification',
@@ -2811,7 +3183,9 @@ SET s.display_name = 'Turkish (Turkey) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/tr-TR.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Turkish (Turkey). Uses latin_preserve rule. 15 stopwords across 5 categories including pronoun, article, adverb. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for Turkish (Turkey). Uses latin_preserve rule. 15 stopwords across 5 categories including pronoun, article, adverb. Has 3 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'uk-UA'})
 SET s.display_name = 'Ukrainian (Ukraine) Slugification',
@@ -2826,7 +3200,9 @@ SET s.display_name = 'Ukrainian (Ukraine) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/uk-UA.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Ukrainian (Ukraine). Uses native_script rule. 15 stopwords across 4 categories including adverb, conjunction, preposition.';
+    s.llm_context = 'URL slugification rules for Ukrainian (Ukraine). Uses native_script rule. 15 stopwords across 4 categories including adverb, conjunction, preposition.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'ur-PK'})
 SET s.display_name = 'UR (PK) Slugification',
@@ -2841,7 +3217,9 @@ SET s.display_name = 'UR (PK) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ur-PK.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for UR (PK). Uses native_script rule. 4 stopwords across 3 categories including adverb, demonstrative, conjunction. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for UR (PK). Uses native_script rule. 4 stopwords across 3 categories including adverb, demonstrative, conjunction. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'uz-UZ'})
 SET s.display_name = 'UZ (UZ) Slugification',
@@ -2856,7 +3234,9 @@ SET s.display_name = 'UZ (UZ) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/uz-UZ.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for UZ (UZ). Uses latin_preserve rule. 9 stopwords across 3 categories including conjunction, pronoun, adverb. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for UZ (UZ). Uses latin_preserve rule. 9 stopwords across 3 categories including conjunction, pronoun, adverb. Has 3 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'vi-VN'})
 SET s.display_name = 'Vietnamese (Vietnam) Slugification',
@@ -2871,7 +3251,9 @@ SET s.display_name = 'Vietnamese (Vietnam) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/vi-VN.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Vietnamese (Vietnam). Uses latin_strip rule. 20 stopwords across 5 categories including preposition, article, conjunction.';
+    s.llm_context = 'URL slugification rules for Vietnamese (Vietnam). Uses latin_strip rule. 20 stopwords across 5 categories including preposition, article, conjunction.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'wo-SN'})
 SET s.display_name = 'WO (SN) Slugification',
@@ -2886,7 +3268,9 @@ SET s.display_name = 'WO (SN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/wo-SN.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for WO (SN). Uses latin_strip rule. 0 stopwords across 0 categories including . Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for WO (SN). Uses latin_strip rule. 0 stopwords across 0 categories including . Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'xh-ZA'})
 SET s.display_name = 'XH (ZA) Slugification',
@@ -2901,7 +3285,9 @@ SET s.display_name = 'XH (ZA) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/xh-ZA.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for XH (ZA). Uses latin_strip rule. 23 stopwords across 5 categories including preposition, pronoun, demonstrative. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for XH (ZA). Uses latin_strip rule. 23 stopwords across 5 categories including preposition, pronoun, demonstrative. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'yo-NG'})
 SET s.display_name = 'YO (NG) Slugification',
@@ -2916,7 +3302,9 @@ SET s.display_name = 'YO (NG) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/yo-NG.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for YO (NG). Uses latin_strip rule. 1 stopwords across 1 categories including negation. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for YO (NG). Uses latin_strip rule. 1 stopwords across 1 categories including negation. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'zh-CN'})
 SET s.display_name = 'Chinese (Simplified) Slugification',
@@ -2931,7 +3319,9 @@ SET s.display_name = 'Chinese (Simplified) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/zh-CN.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Chinese (Simplified). Uses romanized rule. 0 stopwords across 0 categories including . Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for Chinese (Simplified). Uses romanized rule. 0 stopwords across 0 categories including . Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'zh-HK'})
 SET s.display_name = 'ZH (HK) Slugification',
@@ -2946,7 +3336,9 @@ SET s.display_name = 'ZH (HK) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/zh-HK.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for ZH (HK). Uses native_script rule. 4 stopwords across 3 categories including preposition, verb, conjunction. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for ZH (HK). Uses native_script rule. 4 stopwords across 3 categories including preposition, verb, conjunction. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'zh-SG'})
 SET s.display_name = 'ZH (SG) Slugification',
@@ -2961,7 +3353,9 @@ SET s.display_name = 'ZH (SG) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/zh-SG.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for ZH (SG). Uses romanized rule. 10 stopwords across 5 categories including verb, pronoun, classifier. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for ZH (SG). Uses romanized rule. 10 stopwords across 5 categories including verb, pronoun, classifier. Has 5 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'zh-TH'})
 SET s.display_name = 'ZH (TH) Slugification',
@@ -2976,7 +3370,9 @@ SET s.display_name = 'ZH (TH) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/zh-TH.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for ZH (TH). Uses romanized rule. 7 stopwords across 5 categories including preposition, demonstrative, classifier. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for ZH (TH). Uses romanized rule. 7 stopwords across 5 categories including preposition, demonstrative, classifier. Has 3 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'zh-TW'})
 SET s.display_name = 'Chinese (Traditional) Slugification',
@@ -2991,7 +3387,9 @@ SET s.display_name = 'Chinese (Traditional) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/zh-TW.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for Chinese (Traditional). Uses native_script rule. 3 stopwords across 3 categories including preposition, adverb, conjunction. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for Chinese (Traditional). Uses native_script rule. 3 stopwords across 3 categories including preposition, adverb, conjunction. Has 6 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 MERGE (s:Slugification {key: 'zu-ZA'})
 SET s.display_name = 'ZU (ZA) Slugification',
@@ -3006,7 +3404,9 @@ SET s.display_name = 'ZU (ZA) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/zu-ZA.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for ZU (ZA). Uses latin_strip rule. 3 stopwords across 2 categories including conjunction, adverb. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for ZU (ZA). Uses latin_strip rule. 3 stopwords across 2 categories including conjunction, adverb. Has 4 regional additions.',
+    s.created_at = coalesce(s.created_at, datetime()),
+    s.updated_at = datetime();
 
 // ----------------------------------------------------------------------------
 // PART 3: Arcs Locale → Slugification

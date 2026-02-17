@@ -62,6 +62,17 @@ node:
       required: true
 
   properties:
+    # Instance-level LLM context (BLOC 4 - optional, distinct from BLOC 2 llm_context above)
+    llm_context:
+      type: string
+      required: false
+      description: |
+        Instance-specific context for LLM generation.
+        Describes unique brand characteristics, positioning, or generation constraints
+        specific to this brand instance.
+        Best practices: 2-4 focused points, include confidence/provenance if relevant.
+      example: "Modern tech-forward brand targeting SMBs. Emphasis on simplicity. Avoid corporate jargon."
+
     # Core Identity
     brand_name:
       type: string

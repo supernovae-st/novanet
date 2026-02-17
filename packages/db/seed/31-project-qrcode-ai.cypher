@@ -21,30 +21,40 @@
 MATCH (p:Project {key: "qrcode-ai"})
 MERGE (p)-[:HAS_BRAND]->(bi:Brand {key: "brand-qrcode-ai"}) // v0.12.4 ADR-028: was HAS_BRAND_IDENTITY + BrandIdentity
 SET bi.display_name = "QR Code AI Brand",
+    bi.brand_name = "QR Code AI",
     bi.description = "Visual identity and design system for QR Code AI",
     bi.llm_context = "USE: when generating visual content, images, or style decisions. TRIGGERS: brand, colors, fonts, style. NOT: text content (use ProjectNative).",
-    bi.color_primary = "#6366F1",
-    bi.color_secondary = "#8B5CF6",
-    bi.color_accent = "#F59E0B",
-    bi.color_background = "#FFFFFF",
-    bi.color_text = "#1F2937",
-    bi.color_palette = '["#6366F1", "#8B5CF6", "#F59E0B", "#10B981", "#EF4444"]',
-    bi.font_primary = "Inter",
-    bi.font_secondary = "Poppins",
-    bi.font_mono = "JetBrains Mono",
-    bi.typography_scale = '[{"name": "h1", "size": "3rem", "weight": "700"}, {"name": "body", "size": "1rem", "weight": "400"}]',
     bi.style_keywords = '["modern", "clean", "professional", "tech-forward"]',
     bi.style_mood = "Professional yet approachable, tech-savvy but accessible",
     bi.style_influences = '["Apple", "Stripe", "Linear"]',
     bi.image_style = "Clean product shots, abstract QR patterns, tech illustrations",
     bi.image_do = '["Use gradient overlays", "Show QR codes in context", "Modern devices"]',
     bi.image_dont = '["Stock photos with obvious poses", "Cluttered backgrounds", "Outdated devices"]',
-    bi.border_radius = "0.75rem",
-    bi.shadow_style = "soft",
-    bi.animation_style = "smooth",
     bi.logo_usage_rules = '["Min size 32px", "Clear space equal to height", "No rotation"]',
     bi.created_at = coalesce(bi.created_at, datetime()),
     bi.updated_at = datetime();
+
+// BrandDesign (visual design system - ADR-028)
+MATCH (bi:Brand {key: "brand-qrcode-ai"})
+MERGE (bi)-[:HAS_DESIGN]->(bd:BrandDesign {key: "brand-design-qrcode-ai"})
+SET bd.display_name = "QR Code AI Design System",
+    bd.description = "Visual design tokens and guidelines for QR Code AI",
+    bd.color_primary = "#6366F1",
+    bd.color_secondary = "#8B5CF6",
+    bd.color_accent = "#F59E0B",
+    bd.color_background = "#FFFFFF",
+    bd.color_text = "#1F2937",
+    bd.color_palette = '["#6366F1", "#8B5CF6", "#F59E0B", "#10B981", "#EF4444"]',
+    bd.font_primary = "Inter",
+    bd.font_secondary = "Poppins",
+    bd.font_mono = "JetBrains Mono",
+    bd.typography_scale = '[{"name": "h1", "size": "3rem", "weight": "700"}, {"name": "body", "size": "1rem", "weight": "400"}]',
+    bd.border_radius = "0.75rem",
+    bd.shadow_style = "soft",
+    bd.animation_style = "smooth",
+    bd.llm_context = "USE: when generating visual content or applying brand design tokens. TRIGGERS: colors, fonts, design tokens, @brand.design.",
+    bd.created_at = coalesce(bd.created_at, datetime()),
+    bd.updated_at = datetime();
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // PROJECT CONTENT (localized identity + CTAs + SEO + target_audience) - v7.2.5
