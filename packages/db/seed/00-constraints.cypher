@@ -74,11 +74,10 @@ CREATE INDEX bo_date IF NOT EXISTS FOR (bo:BlockNative) ON (bo.generated_at);
 // v7.8.5: BlockNative replaces BlockOutput
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// INSTRUCTIONS (v11.8.0 ADR-025: PagePrompt→PageInstruction, BlockPrompt→BlockInstruction)
+// INSTRUCTIONS (v0.13.1 ADR-025: BlockInstruction, BlockRules, BlockType, PromptArtifact only)
+// Note: PageInstruction does NOT exist in v0.13.1 schema
 // ═══════════════════════════════════════════════════════════════════════════════
 
-CREATE INDEX pageinstruction_active IF NOT EXISTS FOR (pi:PageInstruction) ON (pi.active);
-CREATE INDEX pageinstruction_version IF NOT EXISTS FOR (pi:PageInstruction) ON (pi.version);
 CREATE INDEX blockinstruction_active IF NOT EXISTS FOR (bi:BlockInstruction) ON (bi.active);
 CREATE INDEX blockinstruction_version IF NOT EXISTS FOR (bi:BlockInstruction) ON (bi.version);
 CREATE INDEX blockrules_active IF NOT EXISTS FOR (br:BlockRules) ON (br.active);
@@ -141,8 +140,7 @@ CREATE INDEX expr_register IF NOT EXISTS FOR (e:Expression) ON (e.register);
 CREATE INDEX expr_locale_key IF NOT EXISTS FOR (e:Expression) ON (e.locale_key);
 CREATE FULLTEXT INDEX expr_text_fulltext IF NOT EXISTS FOR (e:Expression) ON EACH [e.text, e.intention, e.context];
 
-// ExpressionSet container
-CREATE CONSTRAINT expressionset_key IF NOT EXISTS FOR (es:ExpressionSet) REQUIRE es.key IS UNIQUE;
+// ExpressionSet container (satellite node - no key constraint, identified by Locale→HAS_EXPRESSIONS→ExpressionSet)
 
 // Culture and Market (already have key from locale)
 CREATE CONSTRAINT culture_key IF NOT EXISTS FOR (c:Culture) REQUIRE c.key IS UNIQUE;
@@ -151,3 +149,46 @@ CREATE CONSTRAINT market_key IF NOT EXISTS FOR (m:Market) REQUIRE m.key IS UNIQU
 // Formatting and Slugification
 CREATE CONSTRAINT formatting_key IF NOT EXISTS FOR (f:Formatting) REQUIRE f.key IS UNIQUE;
 CREATE CONSTRAINT slugification_key IF NOT EXISTS FOR (s:Slugification) REQUIRE s.key IS UNIQUE;
+
+// =============================================================================
+// MISSING KEY CONSTRAINTS (37 nodes)
+// Added 2026-02-17 - Cypher audit cleanup
+// =============================================================================
+
+CREATE CONSTRAINT adaptation_key IF NOT EXISTS FOR (a:Adaptation) REQUIRE a.key IS UNIQUE;
+CREATE CONSTRAINT audiencepersona_key IF NOT EXISTS FOR (ap:AudiencePersona) REQUIRE ap.key IS UNIQUE;
+CREATE CONSTRAINT audiencetrait_key IF NOT EXISTS FOR (at:AudienceTrait) REQUIRE at.key IS UNIQUE;
+CREATE CONSTRAINT blockinstruction_key IF NOT EXISTS FOR (bi:BlockInstruction) REQUIRE bi.key IS UNIQUE;
+CREATE CONSTRAINT blocknative_key IF NOT EXISTS FOR (bn:BlockNative) REQUIRE bn.key IS UNIQUE;
+CREATE CONSTRAINT channelsurface_key IF NOT EXISTS FOR (cs:ChannelSurface) REQUIRE cs.key IS UNIQUE;
+CREATE CONSTRAINT contentslot_key IF NOT EXISTS FOR (cs:ContentSlot) REQUIRE cs.key IS UNIQUE;
+CREATE CONSTRAINT continent_key IF NOT EXISTS FOR (c:Continent) REQUIRE c.key IS UNIQUE;
+CREATE CONSTRAINT country_key IF NOT EXISTS FOR (c:Country) REQUIRE c.key IS UNIQUE;
+CREATE CONSTRAINT culturalrealm_key IF NOT EXISTS FOR (cr:CulturalRealm) REQUIRE cr.key IS UNIQUE;
+CREATE CONSTRAINT culturalsubrealm_key IF NOT EXISTS FOR (csr:CulturalSubRealm) REQUIRE csr.key IS UNIQUE;
+CREATE CONSTRAINT cultureref_key IF NOT EXISTS FOR (cr:CultureRef) REQUIRE cr.key IS UNIQUE;
+CREATE CONSTRAINT economicregion_key IF NOT EXISTS FOR (er:EconomicRegion) REQUIRE er.key IS UNIQUE;
+CREATE CONSTRAINT entitycategory_key IF NOT EXISTS FOR (ec:EntityCategory) REQUIRE ec.key IS UNIQUE;
+CREATE CONSTRAINT geoanswer_key IF NOT EXISTS FOR (ga:GEOAnswer) REQUIRE ga.key IS UNIQUE;
+CREATE CONSTRAINT geoquery_key IF NOT EXISTS FOR (gq:GEOQuery) REQUIRE gq.key IS UNIQUE;
+CREATE CONSTRAINT geoqueryset_key IF NOT EXISTS FOR (gqs:GEOQuerySet) REQUIRE gqs.key IS UNIQUE;
+CREATE CONSTRAINT georegion_key IF NOT EXISTS FOR (gr:GeoRegion) REQUIRE gr.key IS UNIQUE;
+CREATE CONSTRAINT geosubregion_key IF NOT EXISTS FOR (gsr:GeoSubRegion) REQUIRE gsr.key IS UNIQUE;
+CREATE CONSTRAINT incomegroup_key IF NOT EXISTS FOR (ig:IncomeGroup) REQUIRE ig.key IS UNIQUE;
+CREATE CONSTRAINT languagebranch_key IF NOT EXISTS FOR (lb:LanguageBranch) REQUIRE lb.key IS UNIQUE;
+CREATE CONSTRAINT languagefamily_key IF NOT EXISTS FOR (lf:LanguageFamily) REQUIRE lf.key IS UNIQUE;
+CREATE CONSTRAINT lendingcategory_key IF NOT EXISTS FOR (lc:LendingCategory) REQUIRE lc.key IS UNIQUE;
+CREATE CONSTRAINT orgconfig_key IF NOT EXISTS FOR (oc:OrgConfig) REQUIRE oc.key IS UNIQUE;
+CREATE CONSTRAINT outputartifact_key IF NOT EXISTS FOR (oa:OutputArtifact) REQUIRE oa.key IS UNIQUE;
+CREATE CONSTRAINT pagenative_key IF NOT EXISTS FOR (pn:PageNative) REQUIRE pn.key IS UNIQUE;
+CREATE CONSTRAINT pattern_key IF NOT EXISTS FOR (p:Pattern) REQUIRE p.key IS UNIQUE;
+CREATE CONSTRAINT populationcluster_key IF NOT EXISTS FOR (pc:PopulationCluster) REQUIRE pc.key IS UNIQUE;
+CREATE CONSTRAINT populationsubcluster_key IF NOT EXISTS FOR (psc:PopulationSubCluster) REQUIRE psc.key IS UNIQUE;
+CREATE CONSTRAINT promptartifact_key IF NOT EXISTS FOR (pa:PromptArtifact) REQUIRE pa.key IS UNIQUE;
+CREATE CONSTRAINT seokeyword_key IF NOT EXISTS FOR (kw:SEOKeyword) REQUIRE kw.key IS UNIQUE;
+CREATE CONSTRAINT seokeywordformat_key IF NOT EXISTS FOR (kwf:SEOKeywordFormat) REQUIRE kwf.key IS UNIQUE;
+CREATE CONSTRAINT seokeywordmetrics_key IF NOT EXISTS FOR (kwm:SEOKeywordMetrics) REQUIRE kwm.key IS UNIQUE;
+CREATE CONSTRAINT seokeywordset_key IF NOT EXISTS FOR (kws:SEOKeywordSet) REQUIRE kws.key IS UNIQUE;
+CREATE CONSTRAINT style_key IF NOT EXISTS FOR (s:Style) REQUIRE s.key IS UNIQUE;
+CREATE CONSTRAINT taboo_key IF NOT EXISTS FOR (t:Taboo) REQUIRE t.key IS UNIQUE;
+CREATE CONSTRAINT term_key IF NOT EXISTS FOR (t:Term) REQUIRE t.key IS UNIQUE;
