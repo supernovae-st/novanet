@@ -61,7 +61,7 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   // SHARED REALM (40 nodes) — v0.12.4: Country added to geography
   // ═══════════════════════════════════════════════════════════════════════════
   // config (3) — Locale definition + classifications + SEO format
-  EntityCategory: { width: 200, height: 100 },
+  EntityCategory: { width: 420, height: 280 },  // v0.13.1: Large "Classification Nexus" card (widened for content)
   Locale: { width: 220, height: 110 },
   SEOKeywordFormat: { width: 180, height: 90 },
 
@@ -116,7 +116,8 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   OrgConfig: { width: 280, height: 140 },
 
   // foundation (6) — v0.12.4: Brand Architecture (Brand, BrandDesign, BrandPrinciples, PromptStyle)
-  Project: { width: 280, height: 140 },
+  // v0.13.1: Project "Mission Control" premium card - holographic/matrix effects (widened for content)
+  Project: { width: 540, height: 380 },
   Brand: { width: 220, height: 110 },
   BrandDesign: { width: 200, height: 100 },
   BrandPrinciples: { width: 200, height: 100 },

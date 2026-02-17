@@ -11,16 +11,23 @@
  * Features:
  * - 2px gradient border (category colors)
  * - Solid/hollow handles for direction indication
- * - Animated border on selection
- * - Enhanced hover effects (scale, glow)
+ * - Animated gradient ring on selection with rotation
+ * - Premium hover effects (scale, shadow, backdrop blur)
+ * - Enhanced connection port visibility on hover
  * - Press feedback (scale down on mousedown)
  * - Hover info displayed in centralized bottom pill (via uiStore.hoveredNodeId)
+ *
+ * v11.7 Premium enhancements:
+ * - Animated conic gradient selection ring
+ * - Backdrop blur on hover for depth
+ * - Enhanced handle glow and positioning
+ * - Smoother spring-based transitions
  */
 
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { Handle, Position, type Node, type NodeProps } from '@xyflow/react';
 import { cn } from '@/lib/utils';
-import { iconSizes, gapTokens } from '@/design/tokens';
+import { gapTokens } from '@/design/tokens';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
 import { LayerIcon } from '@/components/ui/CategoryIcon';
 import { useNodeInteractions } from '@/hooks';
@@ -30,7 +37,6 @@ import {
   getGradientBorderStyle,
   getIconStyle,
   getIconContainerStyle,
-  getHandleStyle,
   getBadgeStyle,
   getCategoryBadgeStyle,
   getStatusDotStyle,
@@ -38,6 +44,10 @@ import {
   DISPLAY_NAME_CONTAINER_STYLE,
 } from './nodes/NodeStyles';
 import type { NodeType } from '@/types';
+
+// Premium easing curves
+const SPRING_EASING = 'cubic-bezier(0.34, 1.56, 0.64, 1)';
+const SMOOTH_EASING = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';
 
 /**
  * Data structure for TurboNode
@@ -59,6 +69,32 @@ export interface TurboNodeData extends Record<string, unknown> {
 }
 
 export type TurboNodeType = Node<TurboNodeData>;
+
+/**
+ * Premium handle style with enhanced visibility
+ */
+function getPremiumHandleStyle(
+  primaryColor: string,
+  isSelected: boolean,
+  isHovered: boolean,
+  isSolid: boolean
+): React.CSSProperties {
+  const glowIntensity = isSelected ? 1 : isHovered ? 0.7 : 0.3;
+  const size = isHovered || isSelected ? 14 : 12;
+
+  return {
+    width: size,
+    height: size,
+    backgroundColor: isSolid ? primaryColor : 'rgba(24, 24, 31, 0.95)',
+    borderColor: primaryColor,
+    borderWidth: isSolid ? 0 : 2,
+    boxShadow: `
+      0 0 ${8 * glowIntensity}px ${primaryColor}${isSelected ? 'cc' : isHovered ? '99' : '66'},
+      0 0 ${16 * glowIntensity}px ${primaryColor}${isSelected ? '66' : isHovered ? '44' : '22'}
+    `,
+    transition: `all 200ms ${SMOOTH_EASING}`,
+  };
+}
 
 /**
  * TurboNode Component - Gradient Edge Design
@@ -90,38 +126,103 @@ export const TurboNode = memo(function TurboNode(props: NodeProps<TurboNodeType>
   const iconStyle = getIconStyle(typeConfig.color, !!selected);
   const iconContainerStyle = getIconContainerStyle(colors.primary, colors.secondary);
 
+  // Premium wrapper style with enhanced hover effects
+  const wrapperStyle = useMemo<React.CSSProperties>(() => ({
+    ...containerStyle,
+    // Enhanced shadow on hover
+    boxShadow: isHovered && !isDimmed
+      ? `0 20px 40px -12px rgba(0, 0, 0, 0.4), 0 0 60px ${colors.primary}25`
+      : containerStyle.boxShadow,
+  }), [containerStyle, isHovered, isDimmed, colors.primary]);
+
+  // Selection ring style with animated gradient
+  const selectionRingStyle = useMemo<React.CSSProperties>(() => {
+    if (!selected) return {};
+
+    return {
+      position: 'absolute' as const,
+      inset: -4,
+      borderRadius: 18,
+      background: `conic-gradient(from var(--ring-angle, 0deg), ${colors.primary}, ${colors.secondary}, ${colors.primary})`,
+      opacity: 0.8,
+      filter: 'blur(2px)',
+      zIndex: -1,
+    };
+  }, [selected, colors.primary, colors.secondary]);
+
+  // Backdrop blur layer for hover depth
+  const backdropStyle = useMemo<React.CSSProperties>(() => ({
+    position: 'absolute' as const,
+    inset: -8,
+    borderRadius: 20,
+    background: isHovered && !isDimmed
+      ? `radial-gradient(ellipse at center, ${colors.primary}08 0%, transparent 70%)`
+      : 'transparent',
+    backdropFilter: isHovered && !isDimmed ? 'blur(8px)' : 'none',
+    opacity: isHovered ? 1 : 0,
+    transition: `all 300ms ${SMOOTH_EASING}`,
+    pointerEvents: 'none' as const,
+    zIndex: -2,
+  }), [isHovered, isDimmed, colors.primary]);
+
   return (
     <div
-      className={containerClassName}
-      style={containerStyle}
+      className={cn(containerClassName, 'turbo-node-wrapper')}
+      style={wrapperStyle}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
     >
+      {/* Backdrop blur layer for depth on hover */}
+      <div style={backdropStyle} aria-hidden="true" />
+
+      {/* Animated selection ring */}
+      {selected && (
+        <div
+          className="animate-ring-rotate"
+          style={selectionRingStyle}
+          aria-hidden="true"
+        />
+      )}
+
       {/* Gradient border wrapper */}
       <div
         className={cn(
-          'relative p-0.5 rounded-[14px] transition-all duration-300',
-          selected && 'animate-gradient-rotate',
+          'relative p-0.5 rounded-[14px]',
+          'transition-all duration-300',
           isHovered && !selected && 'animate-glow-pulse'
         )}
-        style={gradientBorderStyle}
+        style={{
+          ...gradientBorderStyle,
+          transition: `all 250ms ${SPRING_EASING}`,
+        }}
       >
         {/* Inner card */}
         <div
           className={cn(
-            'relative px-4 py-3 rounded-[12px] transition-colors duration-300',
-            'min-w-[200px] max-w-[280px]'
+            'relative px-4 py-3 rounded-[12px]',
+            'min-w-[200px] max-w-[280px]',
+            'transition-all duration-200'
           )}
-          style={getInnerCardStyle(!!selected)}
+          style={{
+            ...getInnerCardStyle(!!selected),
+            // Subtle inner glow on hover
+            boxShadow: isHovered && !isDimmed
+              ? `inset 0 1px 0 rgba(255,255,255,0.08), inset 0 0 20px ${colors.primary}08`
+              : 'inset 0 1px 0 rgba(255,255,255,0.04)',
+          }}
         >
-          {/* Target Handle - SOLID (incoming) */}
+          {/* Target Handle - SOLID (incoming) - Enhanced positioning */}
           <Handle
             type="target"
             position={Position.Top}
-            className={cn(iconSizes.xs, '!rounded-full !border-2 !-top-1.5 transition duration-200')}
-            style={getHandleStyle(colors.primary, !!selected, true)}
+            className={cn(
+              '!rounded-full !border-0',
+              '!-top-2',
+              'transition-all duration-200'
+            )}
+            style={getPremiumHandleStyle(colors.primary, !!selected, isHovered, true)}
           />
 
           {/* Header: Icon + Type label */}
@@ -213,16 +314,19 @@ export const TurboNode = memo(function TurboNode(props: NodeProps<TurboNodeType>
             )}
           </div>
 
-          {/* Source Handle - HOLLOW (outgoing) */}
+          {/* Source Handle - HOLLOW (outgoing) - Enhanced positioning */}
           <Handle
             type="source"
             position={Position.Bottom}
-            className={cn(iconSizes.xs, '!rounded-full !border-2 !-bottom-1.5 transition duration-200')}
-            style={getHandleStyle(colors.primary, !!selected, false)}
+            className={cn(
+              '!rounded-full',
+              '!-bottom-2',
+              'transition-all duration-200'
+            )}
+            style={getPremiumHandleStyle(colors.primary, !!selected, isHovered, false)}
           />
         </div>
       </div>
-
     </div>
   );
 });

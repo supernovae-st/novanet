@@ -30,6 +30,8 @@ export interface PerformanceConfig {
     outerGlow: boolean;
     particles: boolean;
     glassmorphism: boolean;
+    /** Premium effects: Aurora, BorderBeam, Holographic, LiquidGlass, MouseSpotlight */
+    premiumEffects: boolean;
   };
   animation: {
     enabled: boolean;
@@ -62,6 +64,7 @@ const TIER_CONFIGS: Record<PerformanceTier, PerformanceConfig> = {
       outerGlow: true,
       particles: true,
       glassmorphism: true,
+      premiumEffects: true, // All premium effects
     },
     animation: { enabled: true, duration: 'normal', spring: true },
   },
@@ -76,6 +79,7 @@ const TIER_CONFIGS: Record<PerformanceTier, PerformanceConfig> = {
       outerGlow: true,
       particles: false,
       glassmorphism: true,
+      premiumEffects: true, // Premium effects (no SVG filters)
     },
     animation: { enabled: true, duration: 'fast', spring: true },
   },
@@ -90,6 +94,7 @@ const TIER_CONFIGS: Record<PerformanceTier, PerformanceConfig> = {
       outerGlow: true,
       particles: false,
       glassmorphism: false,
+      premiumEffects: false, // No premium effects (too expensive)
     },
     animation: { enabled: true, duration: 'fast', spring: false },
   },
@@ -104,6 +109,7 @@ const TIER_CONFIGS: Record<PerformanceTier, PerformanceConfig> = {
       outerGlow: false,
       particles: false,
       glassmorphism: false,
+      premiumEffects: false,
     },
     animation: { enabled: false, duration: 'none', spring: false },
   },
@@ -118,6 +124,7 @@ const TIER_CONFIGS: Record<PerformanceTier, PerformanceConfig> = {
       outerGlow: false,
       particles: false,
       glassmorphism: false,
+      premiumEffects: false,
     },
     animation: { enabled: false, duration: 'none', spring: false },
   },

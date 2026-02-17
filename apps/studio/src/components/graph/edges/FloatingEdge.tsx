@@ -3,12 +3,19 @@
 /**
  * FloatingEdge - Modular edge component with composable effects
  *
- * Architecture (v2):
+ * Architecture (v2.1):
  * - Uses new type system for discriminated unions
  * - Uses theme registry for relation-based styling
  * - Uses LOD controller for zoom-based quality
  * - Uses animation budget for performance limits
  * - Uses EffectRenderer for composable primitives
+ *
+ * v0.13.1 Enhancements:
+ * - Gradient paths based on arc family colors
+ * - Animated dash patterns for semantic/generation arcs
+ * - Enhanced hover glow with blur and scale
+ * - Improved arrow markers with proper sizing
+ * - Label styling with frosted glass background
  */
 
 import { memo, useMemo, useEffect, useRef } from 'react';
@@ -25,7 +32,7 @@ import { getSmartLabel, getNodeIntersection, generateCurvedPath, generateReverse
 import type { EdgeState } from './system/types';
 
 // Arc family detection from unified palette system (v11.7.0)
-import { getArcFamily } from '@/design/colors/palette';
+import { getArcFamily, getArcStroke, type ArcFamilyKey } from '@/design/colors/palette';
 
 // Signature effects (v11.6.2 - Full Redesign)
 import { PowerConduit, DNAHelix, SynapticFiring, MatrixCodeRain, SonarPulse, SelectionEffect } from './effects';
@@ -178,6 +185,10 @@ export interface FloatingEdgeData extends Record<string, unknown> {
   /** Parallel edge support (v11.6.1) */
   parallelIndex?: number;
   parallelTotal?: number;
+  /** Cardinality from arc definition (v0.13.1: ADR-027) */
+  cardinality?: '1:1' | '1:N' | 'N:1' | 'N:M' | string;
+  /** Arc family (ownership, localization, semantic, generation, mining) */
+  arcFamily?: string;
 }
 
 export type FloatingEdgeType = Edge<FloatingEdgeData>;
@@ -261,6 +272,8 @@ export const FloatingEdge = memo(function FloatingEdge({
   // Parallel edge info (v11.6.1)
   const parallelIndex = data?.parallelIndex;
   const parallelTotal = data?.parallelTotal;
+  // Cardinality info (v0.13.1: ADR-027)
+  const cardinality = data?.cardinality;
 
   // Hover state computation
   const isHovered = hoveredEdgeId === id;
@@ -391,6 +404,10 @@ export const FloatingEdge = memo(function FloatingEdge({
     return null;
   }
 
+  // Get arc family for styling (v0.13.1)
+  const arcFamily = getArcFamily(relationType);
+  const arcStroke = getArcStroke(relationType);
+
   // Visual calculations
   const baseStrokeWidth = 6;
   const finalStrokeWidth = isSelected || isHovered
@@ -402,12 +419,23 @@ export const FloatingEdge = memo(function FloatingEdge({
   // Opacity hierarchy: focus dimmed (6%) < hover dimmed (25%) < sibling dimmed (50%) < full (100%)
   const groupOpacity = isDimmed ? 0.06 : isHoverDimmed ? 0.25 : isSiblingOfSelected ? 0.5 : 1;
 
+  // Animated dash patterns for semantic/generation arcs (v0.13.1)
+  const useAnimatedDash = !effectiveDimmed && (arcFamily === 'semantic' || arcFamily === 'generation' || arcFamily === 'localization');
+  const dashArray = arcStroke.dashArray || undefined;
+
+  // Unique gradient/marker IDs for this edge
+  const gradientId = `edge-gradient-${id}`;
+  const markerId = `edge-marker-${id}`;
+  const glowFilterId = `edge-glow-${id}`;
+
   // Label
-  const smartLabel = getSmartLabel(relationType, edgeLength);
+  const smartLabel = getSmartLabel(relationType, edgeLength, cardinality);
   // v11.6.9: Flip arrow direction when text path is reversed (so arrow still points source→target)
   const isTextFlipped = sourcePoint.x > targetPoint.x;
   const directionIcon = isTextFlipped ? '←' : '→';
   const labelText = smartLabel.text ? `${directionIcon} ${smartLabel.text}` : directionIcon;
+  // v0.13.1: Cardinality badge (shown when edge is hovered/selected)
+  const showCardinality = smartLabel.cardinality && (isHovered || isSelected);
   const shouldShowLabel = showLabel && !effectiveDimmed && (edgeLength > 30 || isHovered || isSelected);
   const labelPathId = isTextFlipped ? `edge-path-label-${id}` : `edge-path-${id}`;
   const labelScale = Math.min(2.5, Math.max(0.6, 1 / zoom));
@@ -446,43 +474,156 @@ export const FloatingEdge = memo(function FloatingEdge({
       {/* Visibility tracking path */}
       <path ref={pathRef} d={edgePath} fill="none" stroke="transparent" strokeWidth={20} pointerEvents="none" aria-hidden="true" />
 
-      {/* Definitions */}
+      {/* Definitions - Gradients, Markers, Filters (v0.13.1) */}
       <defs>
+        {/* Path definitions */}
         <path id={`edge-path-${id}`} d={edgePath} />
         <path id={`edge-path-reversed-${id}`} d={reversedPath} />
         {isTextFlipped && <path id={`edge-path-label-${id}`} d={reversedPath} />}
+
+        {/* Gradient along path based on arc family colors */}
+        <linearGradient
+          id={gradientId}
+          gradientUnits="userSpaceOnUse"
+          x1={sourcePoint.x}
+          y1={sourcePoint.y}
+          x2={targetPoint.x}
+          y2={targetPoint.y}
+        >
+          <stop offset="0%" stopColor={theme.colors.secondary} stopOpacity={0.7} />
+          <stop offset="35%" stopColor={theme.colors.primary} stopOpacity={1} />
+          <stop offset="65%" stopColor={theme.colors.primary} stopOpacity={1} />
+          <stop offset="100%" stopColor={theme.colors.tertiary} stopOpacity={0.8} />
+        </linearGradient>
+
+        {/* Arrow marker with proper sizing */}
+        <marker
+          id={markerId}
+          markerWidth={isHovered || isSelected ? 14 : 10}
+          markerHeight={isHovered || isSelected ? 14 : 10}
+          refX={isHovered || isSelected ? 11 : 8}
+          refY={isHovered || isSelected ? 7 : 5}
+          orient="auto"
+          markerUnits="userSpaceOnUse"
+        >
+          <path
+            d={isHovered || isSelected
+              ? "M 0 0 L 14 7 L 0 14 L 3 7 Z"
+              : "M 0 0 L 10 5 L 0 10 L 2 5 Z"
+            }
+            fill={isHovered || isSelected ? '#ffffff' : theme.colors.primary}
+            style={{
+              filter: isHovered || isSelected ? `drop-shadow(0 0 3px ${theme.colors.glow})` : 'none',
+            }}
+          />
+        </marker>
+
+        {/* Glow filter for hover/selection effect */}
+        <filter id={glowFilterId} x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation={isHovered ? 6 : isSelected ? 8 : 3} result="blur" />
+          <feColorMatrix
+            in="blur"
+            type="matrix"
+            values={`1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 ${isHovered ? 0.8 : isSelected ? 1 : 0.5} 0`}
+          />
+          <feMerge>
+            <feMergeNode />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+
+        {/* Frosted glass filter for labels (v0.13.1) */}
+        <filter id={`label-glass-${id}`} x="-20%" y="-30%" width="140%" height="160%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
+          <feColorMatrix
+            in="blur"
+            type="matrix"
+            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.85 0"
+          />
+        </filter>
       </defs>
+
+      {/* Outer glow layer (v0.13.1 - enhanced with filter) */}
+      {(isHovered || isSelected) && (
+        <path
+          d={edgePath}
+          fill="none"
+          stroke={theme.colors.glow}
+          strokeWidth={finalStrokeWidth + 20}
+          strokeLinecap="round"
+          opacity={0.3}
+          style={{ filter: `blur(12px)` }}
+        />
+      )}
 
       {/* Base glow layer */}
       <path
         d={edgePath}
         fill="none"
         stroke={theme.colors.primary}
-        strokeWidth={finalStrokeWidth + 4}
+        strokeWidth={finalStrokeWidth + 6}
         strokeLinecap="round"
-        opacity={effectiveDimmed ? 0.2 : 0.35}
+        opacity={effectiveDimmed ? 0.15 : isHovered ? 0.5 : 0.3}
+        style={{
+          filter: isHovered || isSelected ? `url(#${glowFilterId})` : 'none',
+          transition: 'opacity 0.2s ease-out',
+        }}
       />
 
-      {/* Main edge stroke */}
+      {/* Main edge stroke with gradient (v0.13.1) */}
       <path
         d={edgePath}
         fill="none"
-        stroke={theme.colors.primary}
+        stroke={effectiveDimmed ? theme.colors.primary : `url(#${gradientId})`}
         strokeWidth={finalStrokeWidth}
         strokeLinecap="round"
-        opacity={effectiveDimmed ? 0.5 : 0.8}
-      />
+        strokeDasharray={useAnimatedDash ? dashArray : undefined}
+        markerEnd={!effectiveDimmed ? `url(#${markerId})` : undefined}
+        opacity={effectiveDimmed ? 0.4 : 0.9}
+        style={{
+          transition: 'stroke-width 0.2s ease-out, opacity 0.15s ease-out',
+        }}
+      >
+        {/* Animated dash for semantic/generation/localization arcs */}
+        {useAnimatedDash && dashArray && (
+          <animate
+            attributeName="stroke-dashoffset"
+            values={arcFamily === 'generation' ? '0;-20' : '0;20'}
+            dur={arcFamily === 'generation' ? '0.8s' : arcFamily === 'semantic' ? '1.2s' : '1.5s'}
+            repeatCount="indefinite"
+          />
+        )}
+      </path>
 
-      {/* Bright center line */}
+      {/* Bright center line - enhanced glow on hover */}
       {!effectiveDimmed && (
         <path
           d={edgePath}
           fill="none"
           stroke="#ffffff"
-          strokeWidth={Math.max(1.5, finalStrokeWidth * 0.25)}
+          strokeWidth={Math.max(1.5, finalStrokeWidth * (isHovered || isSelected ? 0.35 : 0.25))}
           strokeLinecap="round"
-          opacity={0.9}
-          style={{ mixBlendMode: 'screen' }}
+          opacity={isHovered || isSelected ? 0.95 : 0.85}
+          style={{
+            mixBlendMode: 'screen',
+            filter: isHovered || isSelected ? 'blur(0.5px)' : 'none',
+          }}
+        />
+      )}
+
+      {/* Secondary highlight line for depth (v0.13.1) */}
+      {!effectiveDimmed && (isHovered || isSelected) && (
+        <path
+          d={edgePath}
+          fill="none"
+          stroke={theme.colors.tertiary}
+          strokeWidth={Math.max(2, finalStrokeWidth * 0.4)}
+          strokeLinecap="round"
+          opacity={0.6}
+          style={{
+            filter: 'blur(1px)',
+            mixBlendMode: 'overlay',
+          }}
         />
       )}
 
@@ -514,9 +655,49 @@ export const FloatingEdge = memo(function FloatingEdge({
         />
       )}
 
-      {/* Label - v11.6.1: Color-coded + staggered position for parallel edge clarity */}
+      {/* Label - v0.13.1: Enhanced with frosted glass background and improved styling */}
       {shouldShowLabel && (
         <g style={{ pointerEvents: 'none' }}>
+          {/* Frosted glass background (v0.13.1) */}
+          {(isHovered || isSelected) && (
+            <>
+              {/* Background blur pill */}
+              <text
+                style={{
+                  fontSize: `${scaledFontSize}px`,
+                  fontWeight: 700,
+                  fill: 'none',
+                  stroke: 'rgba(10, 10, 20, 0.75)',
+                  strokeWidth: scaledFontSize * 0.8,
+                  strokeLinecap: 'round',
+                  strokeLinejoin: 'round',
+                  fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
+                  letterSpacing: '0.05em',
+                  textTransform: 'uppercase',
+                  filter: 'blur(3px)',
+                }}
+              >
+                <textPath href={`#${labelPathId}`} startOffset={labelStartOffset} textAnchor="middle">{labelText}</textPath>
+              </text>
+              {/* Glass edge highlight */}
+              <text
+                style={{
+                  fontSize: `${scaledFontSize}px`,
+                  fontWeight: 700,
+                  fill: 'none',
+                  stroke: `rgba(255, 255, 255, 0.15)`,
+                  strokeWidth: scaledFontSize * 0.6,
+                  strokeLinecap: 'round',
+                  strokeLinejoin: 'round',
+                  fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
+                  letterSpacing: '0.05em',
+                  textTransform: 'uppercase',
+                }}
+              >
+                <textPath href={`#${labelPathId}`} startOffset={labelStartOffset} textAnchor="middle">{labelText}</textPath>
+              </text>
+            </>
+          )}
           {/* Dark stroke outline for readability */}
           <text
             style={{
@@ -526,15 +707,15 @@ export const FloatingEdge = memo(function FloatingEdge({
               fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
               letterSpacing: '0.05em',
               textTransform: 'uppercase',
-              stroke: 'rgba(0, 0, 0, 0.95)',
-              strokeWidth: scaledFontSize * 0.25,
+              stroke: 'rgba(0, 0, 0, 0.9)',
+              strokeWidth: scaledFontSize * 0.22,
               strokeLinejoin: 'round',
               paintOrder: 'stroke fill',
             }}
           >
             <textPath href={`#${labelPathId}`} startOffset={labelStartOffset} textAnchor="middle">{labelText}</textPath>
           </text>
-          {/* Glow layer matching edge color */}
+          {/* Glow layer matching edge color - enhanced for hover */}
           <text
             style={{
               fontSize: `${scaledFontSize}px`,
@@ -543,24 +724,85 @@ export const FloatingEdge = memo(function FloatingEdge({
               fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
               letterSpacing: '0.05em',
               textTransform: 'uppercase',
-              filter: `blur(${isHovered || isSelected ? 4 : 2}px)`,
-              opacity: isHovered || isSelected ? 0.7 : 0.4,
+              filter: `blur(${isHovered || isSelected ? 5 : 2}px)`,
+              opacity: isHovered || isSelected ? 0.85 : 0.45,
             }}
           >
             <textPath href={`#${labelPathId}`} startOffset={labelStartOffset} textAnchor="middle">{labelText}</textPath>
           </text>
-          {/* Main label - colored to match edge */}
+          {/* Main label - white on hover/select, colored otherwise */}
           <text
             style={{
               fontSize: `${scaledFontSize}px`,
               fontWeight: 700,
-              fill: theme.colors.primary,
+              fill: isHovered || isSelected ? '#ffffff' : theme.colors.primary,
               fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
               letterSpacing: '0.05em',
               textTransform: 'uppercase',
+              textShadow: isHovered || isSelected ? `0 0 8px ${theme.colors.glow}` : 'none',
             }}
           >
             <textPath href={`#${labelPathId}`} startOffset={labelStartOffset} textAnchor="middle">{labelText}</textPath>
+          </text>
+        </g>
+      )}
+
+      {/* Cardinality badge - v0.13.1: ADR-027 visual encoding with enhanced styling */}
+      {/* Shows cardinality (1:1, 1:N, N:1, N:M) near target when edge is hovered/selected */}
+      {showCardinality && (
+        <g
+          style={{ pointerEvents: 'none' }}
+          transform={`translate(${targetPoint.x}, ${targetPoint.y})`}
+        >
+          {/* Badge glow */}
+          <rect
+            x={-22 * labelScale}
+            y={-30 * labelScale}
+            width={44 * labelScale}
+            height={22 * labelScale}
+            rx={6 * labelScale}
+            fill={theme.colors.glow}
+            opacity={0.3}
+            style={{ filter: 'blur(4px)' }}
+          />
+          {/* Badge background with gradient border */}
+          <rect
+            x={-20 * labelScale}
+            y={-28 * labelScale}
+            width={40 * labelScale}
+            height={18 * labelScale}
+            rx={4 * labelScale}
+            fill="rgba(5, 5, 15, 0.9)"
+            stroke={`url(#${gradientId})`}
+            strokeWidth={1.5}
+          />
+          {/* Inner highlight */}
+          <rect
+            x={-18 * labelScale}
+            y={-26 * labelScale}
+            width={36 * labelScale}
+            height={14 * labelScale}
+            rx={3 * labelScale}
+            fill="none"
+            stroke="rgba(255, 255, 255, 0.1)"
+            strokeWidth={0.5}
+          />
+          {/* Badge text */}
+          <text
+            x={0}
+            y={-16 * labelScale}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            style={{
+              fontSize: `${10 * labelScale}px`,
+              fontWeight: 700,
+              fill: '#ffffff',
+              fontFamily: 'JetBrains Mono, monospace',
+              letterSpacing: '0.1em',
+              textShadow: `0 0 6px ${theme.colors.glow}`,
+            }}
+          >
+            {smartLabel.cardinality}
           </text>
         </g>
       )}

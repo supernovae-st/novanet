@@ -70,7 +70,9 @@ export const PERF_THRESHOLDS = {
   LOW_MAX: 150,
   // Above LOW_MAX: MINIMAL tier (no animations)
   /** Hub node threshold: nodes with more visible connections force LOW tier */
-  HUB_NODE_THRESHOLD: 10,
+  HUB_NODE_THRESHOLD: 6,
+  /** Super hub threshold: nodes with many connections force MINIMAL tier (no animations) */
+  SUPER_HUB_THRESHOLD: 12,
 } as const;
 
 /**

@@ -1,7 +1,9 @@
 'use client';
 
 /**
- * LocaleSettingsCardContent - Unified card for Locale Settings nodes
+ * LocaleSettingsCardContent - "Passport Élégant" design for Locale Settings nodes
+ *
+ * v0.13.1 UX REDESIGN: Magic UI inspired clean composition
  *
  * Visual Encoding (ADR-005):
  * - Primary color (from Layer = locale) -> indigo #6366f1
@@ -16,20 +18,20 @@
  * - Slugification: URL slug rules, transliteration, stop words
  * - Market: demographics, digital maturity, e-commerce landscape
  *
- * Layout:
- * ┌──────────────────────────────────────┐
- * │ 🌍 CULTURE            northern       │ <- Type icon + key property
- * │ ═════════════════════════════════   │ <- Double line (imported)
- * │ fr-FR                                │
- * │ ┌────────────────────────────────┐  │
- * │ │ ◉ Hemisphere: Northern         │  │ <- Type-specific details
- * │ │ ◉ Work Week: Monday            │  │
- * │ └────────────────────────────────┘  │
- * │ ◉ locale                            │
- * └──────────────────────────────────────┘
+ * Layout (Passport Style):
+ * ┌────────────────────────────────────────────────┐
+ * │  🌍  │  CULTURE                      ◉ locale  │
+ * │      │                                         │
+ * │ glow │       northern                          │
+ * │ zone │                                         │
+ * │      │  Monday • Gregorian • 15 holidays       │
+ * │      │  ─────────────────────────────────────  │
+ * │      │  fr-FR                                  │
+ * └──────┴─────────────────────────────────────────┘
  */
 
 import { memo, useMemo } from 'react';
+import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
 import {
   Globe,
@@ -45,7 +47,8 @@ import type { CardContext } from '../../CardShell';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
 import type { NodeLayer, NodeRealm, NodeTrait } from '../../taxonomyColors';
 import { TaxonomyBadge } from '../../TaxonomyBadge';
-import { GlowEffect } from '../../effects';
+import { GlowEffect, BorderBeam } from '../../effects';
+import { SPRING_CONFIGS } from '../../animationPresets';
 
 // =============================================================================
 // Types
@@ -185,52 +188,51 @@ const TYPE_DESCRIPTIONS: Record<LocaleSettingsType, string> = {
 };
 
 // =============================================================================
-// Helper Components
+// Helper Components - Compact Chips
 // =============================================================================
 
-interface PropertyRowProps {
-  label: string;
-  value: string | number | boolean | undefined;
+interface ChipProps {
+  children: React.ReactNode;
   color: string;
+  variant?: 'default' | 'accent';
 }
 
-const PropertyRow = memo(function PropertyRow({ label, value, color }: PropertyRowProps) {
-  if (value === undefined || value === null) return null;
-
-  const displayValue = typeof value === 'boolean'
-    ? (value ? 'Yes' : 'No')
-    : String(value);
+const Chip = memo(function Chip({ children, color, variant = 'default' }: ChipProps) {
+  if (!children) return null;
 
   return (
-    <div className="flex items-center justify-between text-[10px]">
-      <span className="text-white/50">{label}:</span>
-      <span style={{ color }} className="font-medium">
-        {displayValue}
-      </span>
-    </div>
+    <span
+      className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium whitespace-nowrap"
+      style={{
+        background: variant === 'accent' ? `${color}25` : `${color}12`,
+        color: variant === 'accent' ? color : 'rgba(255,255,255,0.8)',
+        border: variant === 'accent' ? `1px solid ${color}40` : undefined,
+      }}
+    >
+      {children}
+    </span>
   );
 });
 
-interface FormalityGaugeProps {
-  score: number;
+interface MiniGaugeProps {
+  value: number;
+  label: string;
   color: string;
 }
 
-const FormalityGauge = memo(function FormalityGauge({ score, color }: FormalityGaugeProps) {
-  const percentage = Math.min(100, Math.max(0, score));
-
+const MiniGauge = memo(function MiniGauge({ value, label, color }: MiniGaugeProps) {
   return (
-    <div className="mb-2">
-      <div className="flex items-center justify-between text-[9px] mb-1">
-        <span className="text-white/50">Formality</span>
-        <span style={{ color }} className="font-semibold">{score}%</span>
+    <div className="flex-1 min-w-0">
+      <div className="flex items-center justify-between text-[8px] mb-0.5">
+        <span className="text-white/40 truncate">{label}</span>
+        <span style={{ color }} className="font-bold">{value}%</span>
       </div>
-      <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+      <div className="h-1 rounded-full bg-white/10 overflow-hidden">
         <div
-          className="h-full rounded-full transition-all duration-300"
+          className="h-full rounded-full"
           style={{
-            width: `${percentage}%`,
-            background: `linear-gradient(90deg, ${color}40, ${color})`,
+            width: `${Math.min(100, value)}%`,
+            background: `linear-gradient(90deg, ${color}50, ${color})`,
           }}
         />
       </div>
@@ -238,196 +240,120 @@ const FormalityGauge = memo(function FormalityGauge({ score, color }: FormalityG
   );
 });
 
-interface SlugRuleBadgeProps {
-  rule: string;
-  color: string;
-}
-
-const SlugRuleBadge = memo(function SlugRuleBadge({ rule, color }: SlugRuleBadgeProps) {
-  const RULE_LABELS: Record<string, string> = {
-    latin_strip: 'Strip Diacritics',
-    latin_preserve: 'Preserve Diacritics',
-    native_script: 'Native Script',
-    latin_transform: 'Transform (ü→ue)',
-    transliterate: 'Transliterate',
-  };
-
-  return (
-    <span
-      className="px-2 py-0.5 rounded text-[9px] font-semibold"
-      style={{
-        background: `${color}20`,
-        color: color,
-        border: `1px solid ${color}40`,
-      }}
-    >
-      {RULE_LABELS[rule] || rule}
-    </span>
-  );
-});
-
-interface MaturityBadgeProps {
-  maturity: string;
-  color: string;
-}
-
-const MaturityBadge = memo(function MaturityBadge({ maturity, color }: MaturityBadgeProps) {
-  const MATURITY_COLORS: Record<string, string> = {
-    emerging: '#f59e0b',
-    growing: '#22c55e',
-    mature: '#3b82f6',
-    advanced: '#8b5cf6',
-  };
-
-  const maturityColor = MATURITY_COLORS[maturity] || color;
-
-  return (
-    <span
-      className="px-2 py-0.5 rounded text-[9px] font-semibold"
-      style={{
-        background: `${maturityColor}20`,
-        color: maturityColor,
-      }}
-    >
-      {maturity.charAt(0).toUpperCase() + maturity.slice(1)}
-    </span>
-  );
-});
-
 // =============================================================================
-// Type-specific content renderers
+// Type-specific Hero + Chips extractors
 // =============================================================================
 
-const renderCultureContent = (data: CultureNodeData, colors: { primary: string }) => (
-  <>
-    <PropertyRow label="Hemisphere" value={data.hemisphere} color={colors.primary} />
-    <PropertyRow label="Work Week" value={data.work_week_start} color={colors.primary} />
-    <PropertyRow label="Calendar" value={data.calendar_system} color={colors.primary} />
-    {data.holidays_count !== undefined && (
-      <PropertyRow label="Holidays" value={`${data.holidays_count} holidays`} color={colors.primary} />
-    )}
-  </>
-);
+interface TypeContent {
+  heroValue: string;  // ALWAYS has a value (with fallback)
+  chips: string[];    // ALWAYS has at least one chip (with fallback)
+  gauge?: { value: number; label: string };
+  description?: string;
+}
 
-const renderStyleContent = (data: StyleNodeData, colors: { primary: string }) => (
-  <>
-    {data.formality_score !== undefined && (
-      <FormalityGauge score={data.formality_score} color={colors.primary} />
-    )}
-    <PropertyRow label="Formality" value={data.default_formality} color={colors.primary} />
-    <PropertyRow label="Pronoun" value={data.default_pronoun} color={colors.primary} />
-    <PropertyRow label="Directness" value={data.directness_level} color={colors.primary} />
-    {data.humor_style && (
-      <PropertyRow label="Humor" value={data.humor_style} color={colors.primary} />
-    )}
-  </>
-);
+const SLUG_RULE_LABELS: Record<string, string> = {
+  latin_strip: 'Strip Diacritics',
+  latin_preserve: 'Preserve',
+  native_script: 'Native Script',
+  latin_transform: 'Transform',
+  transliterate: 'Transliterate',
+};
 
-const renderFormattingContent = (data: FormattingNodeData, colors: { primary: string }) => (
-  <>
-    <div className="grid grid-cols-2 gap-2 mb-2">
-      {data.decimal_separator && (
-        <div className="text-center p-1.5 rounded" style={{ background: `${colors.primary}10` }}>
-          <span className="text-[8px] text-white/40 block">Decimal</span>
-          <span className="text-sm font-mono" style={{ color: colors.primary }}>
-            {data.decimal_separator}
-          </span>
-        </div>
-      )}
-      {data.thousands_separator && (
-        <div className="text-center p-1.5 rounded" style={{ background: `${colors.primary}10` }}>
-          <span className="text-[8px] text-white/40 block">Thousands</span>
-          <span className="text-sm font-mono" style={{ color: colors.primary }}>
-            {data.thousands_separator || 'space'}
-          </span>
-        </div>
-      )}
-    </div>
-    <PropertyRow label="Date" value={data.date_format} color={colors.primary} />
-    <PropertyRow label="Time" value={data.time_format} color={colors.primary} />
-    {data.currency_code && (
-      <PropertyRow
-        label="Currency"
-        value={`${data.currency_symbol || ''} ${data.currency_code}`}
-        color={colors.primary}
-      />
-    )}
-  </>
-);
+/**
+ * Extract type-specific content with GUARANTEED fallbacks
+ * Never returns empty - always shows meaningful content
+ */
+function extractTypeContent(data: LocaleSettingsNodeData): TypeContent {
+  // Base fallback - ALWAYS works
+  const baseFallback: TypeContent = {
+    heroValue: data.displayName || TYPE_LABELS[data.type],
+    chips: [TYPE_LABELS[data.type]],
+    description: data.description || TYPE_DESCRIPTIONS[data.type],
+  };
 
-const renderAdaptationContent = (data: AdaptationNodeData, colors: { primary: string }) => (
-  <>
-    <PropertyRow label="Idioms" value={data.idiom_preference} color={colors.primary} />
-    <PropertyRow label="Metaphors" value={data.metaphor_handling} color={colors.primary} />
-    <PropertyRow label="Tech Terms" value={data.technical_terms} color={colors.primary} />
-    {data.facts_strategy && (
-      <div className="mt-2 p-2 rounded text-[9px]" style={{ background: `${colors.primary}10` }}>
-        <span className="text-white/50">FACTS:</span>{' '}
-        <span className="text-white/80">{data.facts_strategy}</span>
-      </div>
-    )}
-  </>
-);
+  // Helper to filter undefined and ensure at least one chip
+  const filterChips = (chips: (string | undefined)[]): string[] => {
+    const filtered = chips.filter((c): c is string => Boolean(c));
+    return filtered.length > 0 ? filtered : baseFallback.chips;
+  };
 
-const renderSlugificationContent = (data: SlugificationNodeData, colors: { primary: string }) => (
-  <>
-    {data.slug_rule && (
-      <div className="mb-2">
-        <SlugRuleBadge rule={data.slug_rule} color={colors.primary} />
-      </div>
-    )}
-    <PropertyRow label="Diacritics" value={data.allow_diacritics} color={colors.primary} />
-    <PropertyRow label="Stopwords" value={data.stopwords_count} color={colors.primary} />
-    <PropertyRow label="Max Length" value={data.max_length} color={colors.primary} />
-    <PropertyRow label="Transliterate" value={data.transliteration_enabled} color={colors.primary} />
-  </>
-);
-
-const renderMarketContent = (data: MarketNodeData, colors: { primary: string }) => (
-  <>
-    {data.ecommerce_maturity && (
-      <div className="mb-2">
-        <MaturityBadge maturity={data.ecommerce_maturity} color={colors.primary} />
-      </div>
-    )}
-    {data.digital_adoption !== undefined && (
-      <div className="mb-2">
-        <div className="flex items-center justify-between text-[9px] mb-1">
-          <span className="text-white/50">Digital Adoption</span>
-          <span style={{ color: colors.primary }} className="font-semibold">
-            {data.digital_adoption}%
-          </span>
-        </div>
-        <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
-          <div
-            className="h-full rounded-full"
-            style={{
-              width: `${data.digital_adoption}%`,
-              background: `linear-gradient(90deg, ${colors.primary}40, ${colors.primary})`,
-            }}
-          />
-        </div>
-      </div>
-    )}
-    <PropertyRow label="Mobile First" value={data.mobile_first} color={colors.primary} />
-    {data.popular_payment_methods && data.popular_payment_methods.length > 0 && (
-      <div className="mt-2">
-        <span className="text-[8px] text-white/40 block mb-1">Payment Methods:</span>
-        <div className={cn('flex flex-wrap', gapTokens.compact)}>
-          {data.popular_payment_methods.slice(0, 3).map((method) => (
-            <span
-              key={method}
-              className="px-1 py-0.5 rounded text-[8px]"
-              style={{ background: `${colors.primary}15`, color: colors.primary }}
-            >
-              {method}
-            </span>
-          ))}
-        </div>
-      </div>
-    )}
-  </>
-);
+  switch (data.type) {
+    case 'Culture': {
+      const d = data as CultureNodeData;
+      const heroValue = d.hemisphere || d.calendar_system || d.work_week_start;
+      return {
+        heroValue: heroValue || baseFallback.heroValue,
+        chips: filterChips([
+          d.work_week_start ? `Week: ${d.work_week_start}` : undefined,
+          d.calendar_system,
+          d.holidays_count !== undefined ? `${d.holidays_count} holidays` : undefined,
+        ]),
+        description: data.description,
+      };
+    }
+    case 'Style': {
+      const d = data as StyleNodeData;
+      const heroValue = d.default_formality || d.directness_level;
+      return {
+        heroValue: heroValue || baseFallback.heroValue,
+        chips: filterChips([d.default_pronoun, d.directness_level, d.humor_style]),
+        gauge: d.formality_score !== undefined ? { value: d.formality_score, label: 'Formality' } : undefined,
+        description: data.description,
+      };
+    }
+    case 'Formatting': {
+      const d = data as FormattingNodeData;
+      const separators = [d.decimal_separator, d.thousands_separator].filter(Boolean).join('/');
+      const heroValue = d.currency_code ? `${d.currency_symbol || ''}${d.currency_code}` : d.date_format;
+      return {
+        heroValue: heroValue || baseFallback.heroValue,
+        chips: filterChips([
+          separators || undefined,
+          d.date_format,
+          d.time_format,
+        ]),
+        description: data.description,
+      };
+    }
+    case 'Adaptation': {
+      const d = data as AdaptationNodeData;
+      const heroValue = d.idiom_preference || d.metaphor_handling;
+      return {
+        heroValue: heroValue || baseFallback.heroValue,
+        chips: filterChips([d.metaphor_handling, d.technical_terms, d.facts_strategy]),
+        description: data.description,
+      };
+    }
+    case 'Slugification': {
+      const d = data as SlugificationNodeData;
+      const heroValue = d.slug_rule ? SLUG_RULE_LABELS[d.slug_rule] : undefined;
+      return {
+        heroValue: heroValue || baseFallback.heroValue,
+        chips: filterChips([
+          d.allow_diacritics ? 'Diacritics ✓' : d.allow_diacritics === false ? 'No Diacritics' : undefined,
+          d.max_length !== undefined ? `Max ${d.max_length}` : undefined,
+          d.transliteration_enabled ? 'Translit ✓' : undefined,
+        ]),
+        description: data.description,
+      };
+    }
+    case 'Market': {
+      const d = data as MarketNodeData;
+      const heroValue = d.ecommerce_maturity;
+      return {
+        heroValue: heroValue || baseFallback.heroValue,
+        chips: filterChips([
+          d.mobile_first ? 'Mobile First' : undefined,
+          ...(d.popular_payment_methods?.slice(0, 2) || []),
+        ]),
+        gauge: d.digital_adoption !== undefined ? { value: d.digital_adoption, label: 'Digital' } : undefined,
+        description: data.description,
+      };
+    }
+    default:
+      return baseFallback;
+  }
+}
 
 // =============================================================================
 // Main Component
@@ -440,47 +366,114 @@ export const LocaleSettingsCardContent = memo(function LocaleSettingsCardContent
   isHovered = false,
   performanceConfig,
   taxonomy,
-  showTaxonomyBadge = true,
+  showTaxonomyBadge = false, // Default false for cleaner layout
 }: LocaleSettingsCardContentProps) {
   const useTaxonomyBadge = showTaxonomyBadge && taxonomy;
   const IconComponent = TYPE_ICONS[data.type];
-
-  const glowStyle = useMemo(
-    () => ({
-      textShadow: selected
-        ? `0 0 12px ${colors.primary}60`
-        : isHovered
-          ? `0 0 8px ${colors.primary}40`
-          : 'none',
-    }),
-    [colors.primary, selected, isHovered]
-  );
-
+  const animationsEnabled = performanceConfig?.animation?.enabled ?? true;
+  const showPremiumEffects = performanceConfig?.effects?.premiumEffects ?? true;
   const showGlow = performanceConfig?.effects?.outerGlow ?? true;
 
-  // Render type-specific content
-  const renderContent = () => {
-    switch (data.type) {
-      case 'Culture':
-        return renderCultureContent(data as CultureNodeData, colors);
-      case 'Style':
-        return renderStyleContent(data as StyleNodeData, colors);
-      case 'Formatting':
-        return renderFormattingContent(data as FormattingNodeData, colors);
-      case 'Adaptation':
-        return renderAdaptationContent(data as AdaptationNodeData, colors);
-      case 'Slugification':
-        return renderSlugificationContent(data as SlugificationNodeData, colors);
-      case 'Market':
-        return renderMarketContent(data as MarketNodeData, colors);
-      default:
-        return null;
-    }
+  // Extract type-specific content
+  const typeContent = useMemo(() => extractTypeContent(data), [data]);
+
+  // Animation state
+  const animationState = selected ? 'selected' : isHovered ? 'hover' : 'idle';
+
+  // Card variants - SUBTLE, NO SCALE to prevent layout shift
+  const cardVariants = {
+    idle: { y: 0 },
+    hover: { y: -1, transition: SPRING_CONFIGS.gentle },
+    selected: { y: -2, transition: SPRING_CONFIGS.smooth },
   };
 
+  // v0.13.1 UX: DRAMATIC background gradient
+  const backgroundStyle = useMemo(
+    () => ({
+      background: `
+        linear-gradient(135deg,
+          ${colors.primary}45 0%,
+          ${colors.primary}28 25%,
+          rgba(18,18,28,0.90) 50%,
+          ${colors.secondary}22 75%,
+          ${colors.primary}38 100%
+        )
+      `,
+    }),
+    [colors.primary, colors.secondary]
+  );
+
+  // v0.13.1 UX: Multi-layer card shadow
+  const cardShadowStyle = useMemo(
+    () => ({
+      boxShadow: selected
+        ? `
+            0 0 25px ${colors.primary}50,
+            0 0 50px ${colors.primary}25,
+            0 8px 32px -8px ${colors.secondary}30,
+            inset 0 1px 0 rgba(255,255,255,0.1)
+          `
+        : isHovered
+          ? `
+              0 12px 32px -8px rgba(0,0,0,0.5),
+              0 0 20px ${colors.primary}35,
+              0 0 40px ${colors.primary}15,
+              inset 0 1px 0 rgba(255,255,255,0.08)
+            `
+          : `
+              0 4px 16px -4px rgba(0,0,0,0.4),
+              0 0 12px ${colors.primary}20,
+              inset 0 1px 0 rgba(255,255,255,0.05)
+            `,
+    }),
+    [colors.primary, colors.secondary, selected, isHovered]
+  );
+
+  // Icon glow style
+  const iconStyle = useMemo(
+    () => ({
+      color: colors.primary,
+      filter: `drop-shadow(0 0 ${selected ? '14px' : '8px'} ${colors.primary})`,
+    }),
+    [colors.primary, selected]
+  );
+
+  // Icon zone radial glow
+  const iconZoneStyle = useMemo(
+    () => ({
+      background: `radial-gradient(circle at center, ${colors.primary}35 0%, ${colors.primary}15 40%, transparent 70%)`,
+    }),
+    [colors.primary]
+  );
+
+  // Separator glow
+  const separatorStyle = useMemo(
+    () => ({
+      background: `linear-gradient(180deg, transparent 0%, ${colors.primary}60 50%, transparent 100%)`,
+      boxShadow: `0 0 12px ${colors.primary}40`,
+    }),
+    [colors.primary]
+  );
+
+  // Wrapper
+  const CardWrapper = animationsEnabled ? motion.div : 'div';
+
   return (
-    <div className="relative px-4 py-4">
-      {/* Premium glow effect */}
+    <CardWrapper
+      className="relative flex h-full rounded-xl overflow-hidden"
+      style={{
+        ...backgroundStyle,
+        ...cardShadowStyle,
+        border: `2px double ${colors.primary}${selected ? '80' : '40'}`,
+        minHeight: 100,
+      }}
+      {...(animationsEnabled && {
+        variants: cardVariants,
+        initial: 'idle',
+        animate: animationState,
+      })}
+    >
+      {/* Glow effect */}
       {showGlow && (selected || isHovered) && (
         <GlowEffect
           color={colors.primary}
@@ -491,135 +484,145 @@ export const LocaleSettingsCardContent = memo(function LocaleSettingsCardContent
         />
       )}
 
-      {/* Header: TaxonomyBadge or Icon + Type Label */}
-      {useTaxonomyBadge ? (
-        <div className="mb-2">
-          <TaxonomyBadge
-            layer={taxonomy.layer}
-            realm={taxonomy.realm}
-            trait={taxonomy.trait}
-            className={data.type}
-            selected={selected}
-            isHovered={isHovered}
-            performanceConfig={performanceConfig}
-            size="sm"
-            showLayerLabel={true}
-            showTraitIndicator={true}
-          />
-        </div>
-      ) : (
-        <div className="flex items-center justify-between mb-2">
-          <div className={cn('flex items-center', gapTokens.default)}>
-            <IconComponent
-              size={18}
-              strokeWidth={2}
-              className={cn(
-                'transition-transform duration-200',
-                (selected || isHovered) && 'scale-110'
-              )}
-              style={{
-                color: colors.primary,
-                filter: `drop-shadow(0 0 ${selected ? '10px' : '6px'} ${colors.primary}80)`,
-              }}
+      {/* Border beam */}
+      {showPremiumEffects && animationsEnabled && (selected || isHovered) && (
+        <BorderBeam
+          color={colors.primary}
+          secondaryColor={colors.secondary}
+          borderRadius={12}
+          thickness={2}
+          duration={selected ? 4 : 7}
+          selected={selected}
+          isHovered={isHovered}
+          performanceConfig={performanceConfig}
+          beamLength={0.2}
+        />
+      )}
+
+      {/* ICON ZONE (left) */}
+      <div
+        className="relative flex items-center justify-center shrink-0 z-10"
+        style={{ width: 60, ...iconZoneStyle }}
+      >
+        <IconComponent
+          size={28}
+          strokeWidth={1.8}
+          className={cn(
+            'transition-transform duration-200',
+            (selected || isHovered) && 'scale-110'
+          )}
+          style={iconStyle}
+        />
+      </div>
+
+      {/* VERTICAL SEPARATOR */}
+      <div className="w-[2px] shrink-0 self-stretch my-2 z-10" style={separatorStyle} />
+
+      {/* CONTENT ZONE (right) */}
+      <div className="relative flex-1 px-3 py-2.5 min-w-0 z-10 flex flex-col">
+        {/* HEADER: Type label + Layer badge */}
+        <div className="flex items-center justify-between mb-1.5">
+          {useTaxonomyBadge ? (
+            <TaxonomyBadge
+              layer={taxonomy.layer}
+              realm={taxonomy.realm}
+              trait={taxonomy.trait}
+              className={data.type}
+              selected={selected}
+              isHovered={isHovered}
+              performanceConfig={performanceConfig}
+              size="sm"
+              showLayerLabel={true}
+              showTraitIndicator={true}
             />
+          ) : (
             <span
-              className="text-[9px] font-bold uppercase tracking-widest font-mono"
+              className="text-[10px] font-bold uppercase tracking-wider"
               style={{ color: colors.primary }}
             >
               {TYPE_LABELS[data.type]}
             </span>
-          </div>
+          )}
 
-          {/* Type description badge */}
-          <span
-            className="px-1.5 py-0.5 rounded text-[8px] font-medium"
+          {/* Layer badge */}
+          <div
+            className={cn(
+              'inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full shrink-0',
+              'text-[8px] font-bold uppercase tracking-wider'
+            )}
             style={{
-              background: `${colors.primary}15`,
-              color: `${colors.primary}cc`,
+              background: `linear-gradient(135deg, ${colors.primary}30 0%, ${colors.primary}15 100%)`,
+              border: `1px solid ${colors.primary}50`,
+              color: colors.primary,
+              boxShadow: `0 0 8px ${colors.primary}20`,
             }}
           >
-            {TYPE_DESCRIPTIONS[data.type]}
-          </span>
+            <span
+              className={cn('w-1 h-1 rounded-full', selected && 'animate-pulse')}
+              style={{ background: colors.primary, boxShadow: `0 0 4px ${colors.primary}` }}
+            />
+            locale
+          </div>
         </div>
-      )}
 
-      {/* Double line separator (imported trait) */}
-      <div className="mb-3">
-        <div
-          className="h-[2px] mb-[2px]"
-          style={{
-            background: `linear-gradient(90deg, ${colors.primary}60, ${colors.primary}20, transparent)`,
-          }}
-        />
-        <div
-          className="h-[1px]"
-          style={{
-            background: `linear-gradient(90deg, ${colors.primary}40, transparent)`,
-          }}
-        />
-      </div>
-
-      {/* Key */}
-      <h3
-        className="text-sm font-semibold text-white mb-2 truncate"
-        style={glowStyle}
-      >
-        {data.key}
-      </h3>
-
-      {/* Display name */}
-      <p className="text-xs text-white/70 mb-3 truncate">{data.displayName}</p>
-
-      {/* Type-specific content box */}
-      <div
-        className="p-2 rounded-lg mb-2"
-        style={{
-          backgroundColor: `${colors.primary}08`,
-          border: `1px solid ${colors.primary}20`,
-        }}
-      >
-        {renderContent()}
-      </div>
-
-      {/* Description */}
-      {data.description && (
-        <p className="text-[10px] text-white/50 line-clamp-2 mb-2">
-          {data.description}
-        </p>
-      )}
-
-      {/* Divider */}
-      <div
-        className="h-px my-2"
-        style={{
-          background: `linear-gradient(90deg, transparent, ${colors.primary}30, transparent)`,
-        }}
-      />
-
-      {/* Layer badge */}
-      <div className="flex justify-center">
-        <div
-          className={cn(
-            'inline-flex items-center px-1.5 py-0.5 rounded-full',
-            'text-[8px] font-semibold uppercase tracking-wider border',
-            gapTokens.compact
-          )}
-          style={{
-            background: `${colors.primary}15`,
-            borderColor: `${colors.primary}35`,
-            color: colors.primary,
-          }}
-        >
-          <span
-            className={cn('w-1 h-1 rounded-full', selected && 'animate-pulse')}
+        {/* HERO VALUE - Type-specific primary value - FIXED SIZE */}
+        {typeContent.heroValue && (
+          <h3
+            className="text-xl font-bold text-white tracking-wide capitalize whitespace-nowrap"
             style={{
-              background: colors.primary,
-              boxShadow: `0 0 4px ${colors.primary}`,
+              textShadow: selected
+                ? `0 0 24px ${colors.primary}80, 0 0 48px ${colors.primary}40`
+                : isHovered
+                  ? `0 0 18px ${colors.primary}60, 0 0 36px ${colors.primary}25`
+                  : `0 0 10px ${colors.primary}30`,
             }}
-          />
-          locale
+          >
+            {typeContent.heroValue}
+          </h3>
+        )}
+
+        {/* GAUGE (if present) */}
+        {typeContent.gauge && (
+          <div className="mt-1.5 mb-1">
+            <MiniGauge
+              value={typeContent.gauge.value}
+              label={typeContent.gauge.label}
+              color={colors.primary}
+            />
+          </div>
+        )}
+
+        {/* CHIPS - Type-specific properties */}
+        {typeContent.chips.some(Boolean) && (
+          <div className={cn('flex flex-wrap mt-1.5', gapTokens.compact)}>
+            {typeContent.chips
+              .filter((c): c is string => Boolean(c))
+              .slice(0, 3)
+              .map((chip, i) => (
+                <Chip key={i} color={colors.primary} variant={i === 0 ? 'accent' : 'default'}>
+                  {chip}
+                </Chip>
+              ))}
+          </div>
+        )}
+
+        {/* SPACER */}
+        <div className="flex-1 min-h-1" />
+
+        {/* DIVIDER */}
+        <div
+          className="h-px mt-2 mb-1.5"
+          style={{
+            background: `linear-gradient(90deg, ${colors.primary}50, transparent)`,
+            boxShadow: `0 0 6px ${colors.primary}20`,
+          }}
+        />
+
+        {/* FOOTER: Key */}
+        <div className="text-xs text-white/60 truncate font-mono">
+          {data.key}
         </div>
       </div>
-    </div>
+    </CardWrapper>
   );
 });

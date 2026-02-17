@@ -1,36 +1,33 @@
 'use client';
 
 /**
- * SchemaBadgeNode - "Holographic Matrix" design for Realm & Layer badges
+ * SchemaBadgeNode - Premium Glassmorphism Badge for Realm & Layer
  *
  * Visual Encoding (ADR-005, visual-encoding.yaml):
  * - Primary color → from Realm (shared=cyan, org=violet) or Layer
- * - Scanline overlay effect (horizontal animated lines)
- * - Grid pattern background (blueprint/matrix paper)
- * - Holographic shimmer on hover
- * - Corner tech decorations
- * - Matrix rain effect on selection
+ * - Glassmorphism background with blur
+ * - Glowing border on hover/select
+ * - Compact pill shape with icon + label
+ * - Animated pulse for active states
+ * - Shimmer effect on hover
  *
  * Layout:
- * ┌─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─┐
- * ╎ ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ ╎  ← Scanlines + Grid
- * ╎  ┌───┐                      ┌─────────┐  ╎
- * ╎  │ ⬡ │                      │ REALM   │  ╎  ← Badge type
- * ╎  └───┘                      │ SHARED  │  ╎  ← Badge value
- * ╎                             └─────────┘  ╎
- * ╎  ════════════════════════════════════    ╎  ← Double line
- * ╎  Shared                                  ╎  ← Label (glow)
- * ╎  40 node types                           ╎  ← Subtitle
- * └─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─┘
+ * ┌─────────────────────────────────────────────┐
+ * │  [Icon]  REALM: SHARED          40 types   │
+ * │          ═══════════════                   │
+ * │          Universal locale knowledge        │
+ * └─────────────────────────────────────────────┘
  */
 
 import { memo, useMemo } from 'react';
 import { type NodeProps, type Node, Handle, Position } from '@xyflow/react';
+import { motion, type Variants } from 'motion/react';
 import { cn } from '@/lib/utils';
 import { useNodeInteractions } from '@/hooks';
 import { LayerIcon, RealmIcon } from '@/components/ui/CategoryIcon';
 import type { Realm, Layer } from '@novanet/core/types';
 import { REALM_COLORS, LAYER_COLORS } from '@/design/colors/generated';
+import { SPRING_CONFIGS, DURATIONS } from '../nodes/card/animationPresets';
 
 // =============================================================================
 // Types
@@ -49,7 +46,7 @@ export interface SchemaBadgeNodeData extends Record<string, unknown> {
 export type SchemaBadgeNodeType = Node<SchemaBadgeNodeData, 'schemaBadge'>;
 
 // =============================================================================
-// Helper
+// Helpers
 // =============================================================================
 
 /** Convert hex to RGB string for rgba usage */
@@ -61,136 +58,213 @@ const hexToRgb = (hex: string): string => {
 };
 
 // =============================================================================
+// Animation Variants
+// =============================================================================
+
+const containerVariants: Variants = {
+  idle: {
+    scale: 1,
+    y: 0,
+  },
+  hover: {
+    scale: 1.02,
+    y: -2,
+    transition: SPRING_CONFIGS.gentle,
+  },
+  selected: {
+    scale: 1.03,
+    y: -3,
+    transition: SPRING_CONFIGS.smooth,
+  },
+};
+
+const iconContainerVariants: Variants = {
+  idle: {
+    scale: 1,
+    rotate: 0,
+  },
+  hover: {
+    scale: 1.1,
+    rotate: [0, -5, 5, 0],
+    transition: { duration: DURATIONS.normal },
+  },
+  selected: {
+    scale: 1.15,
+    transition: SPRING_CONFIGS.snappy,
+  },
+};
+
+const pulseVariants: Variants = {
+  idle: {
+    scale: 1,
+    opacity: 0,
+  },
+  selected: {
+    scale: [1, 1.5, 1],
+    opacity: [0.6, 0, 0.6],
+    transition: {
+      duration: 2,
+      ease: 'easeInOut',
+      repeat: Infinity,
+    },
+  },
+};
+
+const shimmerVariants: Variants = {
+  idle: {
+    x: '-100%',
+    opacity: 0,
+  },
+  hover: {
+    x: '100%',
+    opacity: 1,
+    transition: {
+      duration: 1.5,
+      ease: 'easeInOut',
+    },
+  },
+};
+
+const glowRingVariants: Variants = {
+  idle: {
+    opacity: 0,
+    scale: 0.95,
+  },
+  hover: {
+    opacity: 0.5,
+    scale: 1,
+    transition: { duration: DURATIONS.normal },
+  },
+  selected: {
+    opacity: 1,
+    scale: 1.02,
+    transition: SPRING_CONFIGS.gentle,
+  },
+};
+
+// =============================================================================
 // Subcomponents
 // =============================================================================
 
 /**
- * Scanline overlay effect - horizontal lines that drift slowly
+ * Premium glassmorphism background with subtle gradient
  */
-const ScanlineOverlay = memo(function ScanlineOverlay({
-  intensity,
+const GlassBackground = memo(function GlassBackground({
   color,
+  selected,
+  isHovered,
 }: {
-  intensity: 'idle' | 'hover' | 'selected';
   color: string;
+  selected: boolean;
+  isHovered: boolean;
 }) {
-  const opacity = intensity === 'selected' ? 0.15 : intensity === 'hover' ? 0.1 : 0.05;
   const rgb = hexToRgb(color);
 
   return (
     <div
-      className="absolute inset-0 pointer-events-none overflow-hidden rounded-xl"
-      style={{
-        background: `repeating-linear-gradient(
-          0deg,
-          transparent,
-          transparent 3px,
-          rgba(${rgb}, ${opacity}) 3px,
-          rgba(${rgb}, ${opacity}) 6px
-        )`,
-        animation: intensity !== 'idle' ? 'scanline-drift 6s linear infinite' : undefined,
-      }}
-    />
-  );
-});
-
-/**
- * Grid pattern background - matrix/blueprint paper effect
- */
-const GridPattern = memo(function GridPattern({
-  intensity,
-  color,
-}: {
-  intensity: 'idle' | 'hover' | 'selected';
-  color: string;
-}) {
-  const rgb = hexToRgb(color);
-  const opacity = intensity === 'selected' ? 0.08 : intensity === 'hover' ? 0.05 : 0.03;
-
-  return (
-    <div
-      className="absolute inset-0 pointer-events-none rounded-xl transition-opacity duration-500"
-      style={{
-        backgroundImage: `
-          linear-gradient(rgba(${rgb}, ${opacity}) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(${rgb}, ${opacity}) 1px, transparent 1px)
-        `,
-        backgroundSize: '16px 16px',
-      }}
-    />
-  );
-});
-
-/**
- * Holographic shimmer effect on hover
- */
-const HolographicShimmer = memo(function HolographicShimmer({
-  active,
-  color,
-}: {
-  active: boolean;
-  color: string;
-}) {
-  if (!active) return null;
-
-  const rgb = hexToRgb(color);
-
-  return (
-    <div
-      className="absolute inset-0 pointer-events-none rounded-xl"
+      className="absolute inset-0 rounded-2xl transition-all duration-300"
       style={{
         background: `linear-gradient(
-          105deg,
-          transparent 35%,
-          rgba(${rgb}, 0.15) 42%,
-          rgba(${rgb}, 0.25) 50%,
-          rgba(${rgb}, 0.15) 58%,
-          transparent 65%
+          135deg,
+          rgba(${rgb}, ${selected ? 0.15 : isHovered ? 0.1 : 0.08}) 0%,
+          rgba(${rgb}, ${selected ? 0.08 : isHovered ? 0.05 : 0.03}) 50%,
+          rgba(0, 0, 0, 0.4) 100%
         )`,
-        backgroundSize: '250% 100%',
-        animation: 'shimmer-slide 2.5s ease-in-out infinite',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
       }}
     />
   );
 });
 
 /**
- * Matrix rain effect for selected state
+ * Animated glow ring effect for selection
  */
-const MatrixRain = memo(function MatrixRain({
-  active,
+const GlowRing = memo(function GlowRing({
   color,
+  animationState,
 }: {
-  active: boolean;
   color: string;
+  animationState: 'idle' | 'hover' | 'selected';
+}) {
+  return (
+    <motion.div
+      className="absolute -inset-1 rounded-[20px] pointer-events-none"
+      variants={glowRingVariants}
+      initial="idle"
+      animate={animationState}
+      style={{
+        background: `radial-gradient(ellipse at center, ${color}40 0%, transparent 70%)`,
+        filter: 'blur(8px)',
+      }}
+    />
+  );
+});
+
+/**
+ * Selection pulse rings
+ */
+const SelectionPulse = memo(function SelectionPulse({
+  color,
+  active,
+}: {
+  color: string;
+  active: boolean;
 }) {
   if (!active) return null;
 
+  return (
+    <>
+      <motion.div
+        className="absolute -inset-2 rounded-[24px] pointer-events-none"
+        variants={pulseVariants}
+        initial="idle"
+        animate="selected"
+        style={{
+          border: `2px solid ${color}`,
+        }}
+      />
+      <motion.div
+        className="absolute -inset-3 rounded-[28px] pointer-events-none"
+        variants={pulseVariants}
+        initial="idle"
+        animate="selected"
+        style={{
+          border: `1px solid ${color}`,
+          animationDelay: '0.5s',
+        }}
+      />
+    </>
+  );
+});
+
+/**
+ * Shimmer overlay effect on hover
+ */
+const ShimmerOverlay = memo(function ShimmerOverlay({
+  color,
+  animationState,
+}: {
+  color: string;
+  animationState: 'idle' | 'hover' | 'selected';
+}) {
   const rgb = hexToRgb(color);
 
   return (
-    <div
-      className="absolute inset-0 pointer-events-none rounded-xl overflow-hidden"
-      style={{
-        background: `
-          linear-gradient(180deg,
-            rgba(${rgb}, 0.1) 0%,
-            transparent 20%,
-            transparent 80%,
-            rgba(${rgb}, 0.1) 100%
-          )
-        `,
-      }}
-    >
-      {/* Vertical falling lines */}
-      <div
+    <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
+      <motion.div
         className="absolute inset-0"
+        variants={shimmerVariants}
+        initial="idle"
+        animate={animationState === 'hover' ? 'hover' : 'idle'}
         style={{
-          backgroundImage: `
-            linear-gradient(0deg, transparent 50%, rgba(${rgb}, 0.3) 50%)
-          `,
-          backgroundSize: '4px 8px',
-          animation: 'matrix-rain 1.5s linear infinite',
+          background: `linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(${rgb}, 0.3) 50%,
+            transparent 100%
+          )`,
+          width: '50%',
         }}
       />
     </div>
@@ -198,63 +272,28 @@ const MatrixRain = memo(function MatrixRain({
 });
 
 /**
- * Corner tech decorations
+ * Status indicator dot with pulse
  */
-const CornerDecorations = memo(function CornerDecorations({
+const StatusDot = memo(function StatusDot({
   color,
   selected,
 }: {
   color: string;
   selected: boolean;
 }) {
-  const opacity = selected ? 0.8 : 0.4;
-
   return (
-    <>
-      {/* Top-left corner */}
+    <div className="relative">
       <div
-        className="absolute top-2 left-2 pointer-events-none"
-        style={{ color, opacity }}
-      >
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M0 8L0 0L8 0" stroke="currentColor" strokeWidth="1.5" />
-          <circle cx="0" cy="0" r="2" fill="currentColor" />
-        </svg>
-      </div>
-
-      {/* Top-right corner */}
-      <div
-        className="absolute top-2 right-2 pointer-events-none"
-        style={{ color, opacity }}
-      >
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M16 8L16 0L8 0" stroke="currentColor" strokeWidth="1.5" />
-          <circle cx="16" cy="0" r="2" fill="currentColor" />
-        </svg>
-      </div>
-
-      {/* Bottom-left corner */}
-      <div
-        className="absolute bottom-2 left-2 pointer-events-none"
-        style={{ color, opacity }}
-      >
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M0 8L0 16L8 16" stroke="currentColor" strokeWidth="1.5" />
-          <circle cx="0" cy="16" r="2" fill="currentColor" />
-        </svg>
-      </div>
-
-      {/* Bottom-right corner */}
-      <div
-        className="absolute bottom-2 right-2 pointer-events-none"
-        style={{ color, opacity }}
-      >
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M16 8L16 16L8 16" stroke="currentColor" strokeWidth="1.5" />
-          <circle cx="16" cy="16" r="2" fill="currentColor" />
-        </svg>
-      </div>
-    </>
+        className={cn(
+          'w-2 h-2 rounded-full transition-all duration-300',
+          selected && 'animate-pulse'
+        )}
+        style={{
+          background: color,
+          boxShadow: `0 0 ${selected ? '12px' : '6px'} ${color}`,
+        }}
+      />
+    </div>
   );
 });
 
@@ -266,7 +305,7 @@ export const SchemaBadgeNode = memo(function SchemaBadgeNode({
   data,
   selected = false,
 }: NodeProps<SchemaBadgeNodeType>) {
-  const { metaType, label, typeCount = 0, realmKey = 'shared', layerKey = 'foundation' } = data;
+  const { metaType, label, description, typeCount = 0, realmKey = 'shared', layerKey = 'foundation' } = data;
 
   // Get design system color based on meta type
   const isRealm = metaType === 'realm';
@@ -282,44 +321,40 @@ export const SchemaBadgeNode = memo(function SchemaBadgeNode({
     handleMouseUp,
   } = useNodeInteractions({ selected });
 
-  // Intensity level for effects
-  const intensity = selected ? 'selected' : isHovered ? 'hover' : 'idle';
+  // Animation state
+  const animationState = selected ? 'selected' : isHovered ? 'hover' : 'idle';
 
-  // Glow style for label
+  // Glow style for border
+  const borderGlowStyle = useMemo(
+    () => ({
+      boxShadow: selected
+        ? `0 0 30px ${primaryColor}40, 0 0 60px ${primaryColor}20, inset 0 1px 0 rgba(255,255,255,0.1)`
+        : isHovered
+          ? `0 0 20px ${primaryColor}30, inset 0 1px 0 rgba(255,255,255,0.08)`
+          : `0 0 10px ${primaryColor}15, inset 0 1px 0 rgba(255,255,255,0.05)`,
+    }),
+    [primaryColor, selected, isHovered]
+  );
+
+  // Label text glow
   const labelGlowStyle = useMemo(
     () => ({
       textShadow: selected
         ? `0 0 20px ${primaryColor}80, 0 0 40px ${primaryColor}40`
         : isHovered
-          ? `0 0 12px ${primaryColor}60`
-          : `0 0 6px ${primaryColor}30`,
+          ? `0 0 12px ${primaryColor}50`
+          : undefined,
     }),
     [primaryColor, selected, isHovered]
   );
-
-  // Border glow animation
-  const containerGlowStyle = useMemo(
-    () => ({
-      boxShadow: selected
-        ? `0 0 30px ${primaryColor}50, 0 0 60px ${primaryColor}25, inset 0 0 30px ${primaryColor}15`
-        : isHovered
-          ? `0 0 20px ${primaryColor}35, inset 0 0 15px ${primaryColor}10`
-          : `0 0 12px ${primaryColor}20`,
-    }),
-    [primaryColor, selected, isHovered]
-  );
-
-  // Container opacity for dimming
-  const containerStyle = useMemo(() => ({
-    opacity: 1,
-    transition: 'all 0.3s ease-out',
-    transform: selected ? 'scale(1.02)' : 'scale(1)',
-  }), [selected]);
 
   return (
-    <div
+    <motion.div
       className="relative"
-      style={{ width: 280, ...containerStyle }}
+      style={{ width: 280 }}
+      variants={containerVariants}
+      initial="idle"
+      animate={animationState}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onMouseDown={handleMouseDown}
@@ -330,159 +365,135 @@ export const SchemaBadgeNode = memo(function SchemaBadgeNode({
       <Handle type="target" position={Position.Left} className="!opacity-0 !w-1 !h-1" />
       <Handle type="source" position={Position.Right} className="!opacity-0 !w-1 !h-1" />
 
-      {/* Outer glow layer */}
-      <div
-        className="absolute -inset-1 rounded-[16px] transition-all duration-300"
-        style={containerGlowStyle}
-      />
+      {/* Outer glow ring */}
+      <GlowRing color={primaryColor} animationState={animationState} />
 
-      {/* Main container */}
+      {/* Selection pulse rings */}
+      <SelectionPulse color={primaryColor} active={selected} />
+
+      {/* Main container - Premium Pill Shape */}
       <div
-        className={cn(
-          'relative overflow-hidden rounded-xl transition-all duration-300',
-          selected && 'ring-2',
-        )}
+        className="relative overflow-hidden rounded-2xl transition-all duration-300"
         style={{
-          minHeight: 160,
-          background: 'rgba(0, 0, 0, 0.85)',
-          backdropFilter: 'blur(12px)',
-          border: `2px solid ${selected ? primaryColor : `${primaryColor}50`}`,
-          // Use CSS variable for ring color (Tailwind ring-2 reads --tw-ring-color)
-          '--tw-ring-color': primaryColor,
-        } as React.CSSProperties}
+          background: 'rgba(13, 13, 18, 0.95)',
+          border: `1.5px solid ${selected ? primaryColor : isHovered ? `${primaryColor}80` : `${primaryColor}40`}`,
+          ...borderGlowStyle,
+        }}
       >
-        {/* Background effects */}
-        <GridPattern intensity={intensity} color={primaryColor} />
-        <ScanlineOverlay intensity={intensity} color={primaryColor} />
-        <HolographicShimmer active={isHovered && !selected} color={primaryColor} />
-        <MatrixRain active={selected} color={primaryColor} />
-        <CornerDecorations color={primaryColor} selected={selected} />
+        {/* Glassmorphism background */}
+        <GlassBackground color={primaryColor} selected={selected} isHovered={isHovered} />
+
+        {/* Shimmer effect on hover */}
+        <ShimmerOverlay color={primaryColor} animationState={animationState} />
 
         {/* Content */}
-        <div className="relative z-10 px-5 py-4">
-          {/* Top row: Icon left, Badges right */}
-          <div className="flex justify-between items-start mb-4">
-            {/* Hexagonal icon container */}
-            <div
-              className={cn(
-                'flex items-center justify-center w-14 h-14 rounded-lg transition-all duration-300',
-                selected && 'animate-pulse'
-              )}
+        <div className="relative z-10 px-4 py-3">
+          {/* Top row: Icon + Type badge + Count */}
+          <div className="flex items-center gap-3 mb-2">
+            {/* Icon container with glow */}
+            <motion.div
+              className="flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-300"
+              variants={iconContainerVariants}
+              initial="idle"
+              animate={animationState}
               style={{
-                background: `linear-gradient(135deg, ${primaryColor}30, ${primaryColor}10)`,
-                border: `2px solid ${primaryColor}60`,
-                boxShadow: `0 0 20px ${primaryColor}30, inset 0 0 15px ${primaryColor}15`,
+                background: `linear-gradient(135deg, ${primaryColor}25, ${primaryColor}10)`,
+                border: `1px solid ${primaryColor}50`,
+                boxShadow: `0 0 ${selected ? '16px' : '8px'} ${primaryColor}30`,
               }}
             >
               {isRealm ? (
                 <RealmIcon
                   realm={realmKey}
-                  size={28}
+                  size={22}
                   strokeWidth={1.5}
                   style={{
                     color: primaryColor,
-                    filter: `drop-shadow(0 0 6px ${primaryColor})`,
+                    filter: `drop-shadow(0 0 ${selected ? '8px' : '4px'} ${primaryColor})`,
                   }}
                 />
               ) : (
                 <LayerIcon
                   layer={layerKey}
-                  size={28}
+                  size={22}
                   strokeWidth={1.5}
                   style={{
                     color: primaryColor,
-                    filter: `drop-shadow(0 0 6px ${primaryColor})`,
+                    filter: `drop-shadow(0 0 ${selected ? '8px' : '4px'} ${primaryColor})`,
                   }}
                 />
               )}
+            </motion.div>
+
+            {/* Type + Value labels */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                {/* Type badge pill */}
+                <span
+                  className="inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full font-mono"
+                  style={{
+                    background: `${primaryColor}20`,
+                    color: primaryColor,
+                    border: `1px solid ${primaryColor}35`,
+                  }}
+                >
+                  {isRealm ? 'REALM' : 'LAYER'}
+                </span>
+
+                {/* Value pill */}
+                <span
+                  className="text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full font-mono"
+                  style={{
+                    background: `${primaryColor}15`,
+                    color: `${primaryColor}ee`,
+                    border: `1px solid ${primaryColor}25`,
+                  }}
+                >
+                  {isRealm ? realmKey : layerKey}
+                </span>
+              </div>
             </div>
 
-            {/* Stacked badges */}
-            <div className="flex flex-col gap-1.5 items-end">
-              {/* Type badge */}
+            {/* Count badge + Status dot */}
+            <div className="flex items-center gap-2">
               <span
-                className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded font-mono"
+                className="text-[10px] font-mono font-medium tabular-nums px-2 py-0.5 rounded"
                 style={{
-                  background: `${primaryColor}20`,
-                  color: primaryColor,
-                  border: `1px solid ${primaryColor}40`,
-                  boxShadow: `0 0 10px ${primaryColor}20`,
+                  background: `${primaryColor}10`,
+                  color: `${primaryColor}cc`,
                 }}
               >
-                {isRealm ? (
-                  <RealmIcon realm={realmKey} size={10} strokeWidth={2} style={{ color: primaryColor }} />
-                ) : (
-                  <LayerIcon layer={layerKey} size={10} strokeWidth={2} style={{ color: primaryColor }} />
-                )}
-                {isRealm ? 'REALM' : 'LAYER'}
+                {typeCount}
               </span>
-
-              {/* Value badge */}
-              <span
-                className="text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded font-mono"
-                style={{
-                  background: `${primaryColor}15`,
-                  color: primaryColor,
-                  border: `1px solid ${primaryColor}30`,
-                }}
-              >
-                {isRealm ? realmKey.toUpperCase() : layerKey.toUpperCase()}
-              </span>
+              <StatusDot color={primaryColor} selected={selected} />
             </div>
           </div>
 
-          {/* Double line separator */}
-          <div className="mb-3">
-            <div
-              className="h-[2px] mb-[2px]"
-              style={{
-                background: `linear-gradient(90deg, ${primaryColor}60, ${primaryColor}20, transparent)`,
-              }}
-            />
-            <div
-              className="h-[1px]"
-              style={{
-                background: `linear-gradient(90deg, ${primaryColor}40, transparent)`,
-              }}
-            />
-          </div>
+          {/* Gradient separator line */}
+          <div
+            className="h-px mb-2.5"
+            style={{
+              background: `linear-gradient(90deg, ${primaryColor}50, ${primaryColor}20, transparent)`,
+            }}
+          />
 
           {/* Label - hero element */}
           <h3
-            className={cn(
-              'text-xl font-bold text-white mb-1',
-              'transition-all duration-200'
-            )}
+            className="text-lg font-bold text-white mb-0.5 transition-all duration-200"
             style={labelGlowStyle}
           >
             {label}
           </h3>
 
-          {/* Subtitle - type count */}
+          {/* Description - muted subtitle */}
           <p
-            className="text-sm font-mono"
-            style={{ color: `${primaryColor}cc` }}
+            className="text-[11px] leading-tight line-clamp-2"
+            style={{ color: `${primaryColor}99` }}
           >
-            {isRealm ? `${typeCount} node types` : `${typeCount} types`}
+            {description || (isRealm ? `${typeCount} node types in this realm` : `${typeCount} types in this layer`)}
           </p>
         </div>
       </div>
-
-      {/* CSS for animations */}
-      <style jsx>{`
-        @keyframes scanline-drift {
-          0% { background-position: 0 0; }
-          100% { background-position: 0 120px; }
-        }
-        @keyframes shimmer-slide {
-          0% { background-position: 250% 0; }
-          100% { background-position: -250% 0; }
-        }
-        @keyframes matrix-rain {
-          0% { transform: translateY(-8px); }
-          100% { transform: translateY(0); }
-        }
-      `}</style>
-    </div>
+    </motion.div>
   );
 });
