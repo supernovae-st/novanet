@@ -10,12 +10,12 @@ paths:
 description: ADR index - load when editing NovaNet code or planning
 ---
 
-# NovaNet Architecture Decisions (v0.13.0)
+# NovaNet Architecture Decisions (v0.13.1)
 
 This file is the **index** for NovaNet's Architecture Decision Records.
 Full ADR content is in `.claude/rules/adr/{domain}/adr-XXX-*.md`.
 
-> **Version**: v0.13.0 "*Native Pattern" (ADR-029 + ADR-030)
+> **Version**: v0.13.1 "Auto-Fix System" (ADR-033) + *Native Pattern (ADR-029 + ADR-030)
 
 ---
 
@@ -35,8 +35,14 @@ Full ADR content is in `.claude/rules/adr/{domain}/adr-XXX-*.md`.
 ```
 SHARED (4 layers, 40 nodes): config, locale, geography, knowledge — READ-ONLY
 ORG (6 layers, 21 nodes): config, foundation, structure, semantic, instruction, output
-Total: 61 nodes, 182 arcs, 10 layers, 6 arc families, 5 traits
+Total: 61 nodes, 169 arcs, 10 layers, 5 arc families, 5 traits, 33 ADRs
 ```
+
+### v0.13.1 Key Changes
+
+| ADR | Change | Summary |
+|-----|--------|---------|
+| **033** | Auto-Fix System | Trait-based FixEngine with 6 fixers for schema validation (52 tests) |
 
 ### v0.13.0 Key Changes
 
@@ -144,6 +150,14 @@ SEO pillar/cluster and URL architecture.
 |-----|-------|---------|--------|------|
 | 031 | SEO Pillar/Cluster Architecture | v0.12.5 | active | [adr-031](adr/seo-geo/adr-031-seo-pillar-cluster.md) |
 | 032 | URL Slugification Architecture | v0.12.5 | active | [adr-032](adr/seo-geo/adr-032-url-slugification.md) |
+
+### Development Tools (1 ADR)
+
+Tooling and automation for development workflows.
+
+| ADR | Title | Version | Status | File |
+|-----|-------|---------|--------|------|
+| 033 | Auto-Fix System for Schema Validation | v0.13.1 | active | [adr-033](adr/development-tools/adr-033-autofix-system.md) |
 
 ### Deprecated (5 ADRs)
 
