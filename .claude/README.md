@@ -2,7 +2,7 @@
 
 Claude Code configuration for the NovaNet monorepo.
 
-**Version**: v0.13.1 | **Updated**: 2026-02-17 (Codebase audit + terminology fixes)
+**Version**: v0.13.1 | **Updated**: 2026-02-17 (Auto-Fix System + Codebase audit + terminology fixes)
 
 ---
 
@@ -80,9 +80,9 @@ Claude Code configuration for the NovaNet monorepo.
 | Layers | 10 (4 shared + 6 org) |
 | Traits | 5 (defined, authored, imported, generated, retrieved) |
 | ArcFamilies | 5 (ownership, localization, semantic, generation, mining) |
-| Rust tests | 1031 |
+| Rust tests | 1139 (52 auto-fix: 24 unit + 24 property + 4 integration) |
 | TUI Modes | 2 (Graph, Nexus) |
-| ADRs | 32 |
+| ADRs | 33 (latest: ADR-033 Auto-Fix System) |
 
 ---
 

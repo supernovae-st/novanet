@@ -68,6 +68,21 @@ novanet schema validate
 
 Reports errors and warnings about YAML coherence (duplicate keys, missing refs, etc.).
 
+**Auto-Fix Support (v0.13.1)**:
+```bash
+novanet schema validate --fix
+```
+
+Automatically corrects common validation issues:
+- Composite key patterns (COMPOSITE_KEY_FORMAT)
+- Denormalized key properties (DENORM_REQUIRED)
+- Missing descriptions (DESCRIPTION_REQUIRED)
+- Missing example data (EXAMPLE_DATA)
+- Property ordering (PROP_ORDER)
+- Missing timestamps (TIMESTAMP_REQUIRED)
+
+Uses trait-based FixEngine with 6 registered fixers. See ADR-033 for architecture details.
+
 ### `generate` or `fix`
 
 Regenerate all artifacts from YAML:
@@ -102,9 +117,11 @@ The GitHub Actions CI has a `schema-sync` job that:
 When you modify YAML models:
 
 1. Edit YAML files in `packages/core/models/`
-2. Run `/novanet-sync generate` to regenerate
-3. Commit both YAML changes AND generated files
-4. CI will verify sync on PR
+2. Run `/novanet-sync validate` to check for issues
+3. If validation fails with fixable issues, run `novanet schema validate --fix`
+4. Run `/novanet-sync generate` to regenerate
+5. Commit YAML changes, auto-fixes, AND generated files
+6. CI will verify sync on PR
 
 ## Troubleshooting
 
