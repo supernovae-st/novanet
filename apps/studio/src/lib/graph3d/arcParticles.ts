@@ -94,6 +94,16 @@ export const ARC_PARTICLE_CONFIG: Record<ArcFamily, ArcParticleConfig> = {
     linkOpacity: 0.29,         // Bright tubes
     curvature: 0.25,           // Curved sweep
   },
+  schema: {
+    particles: 10,             // Structured flow
+    particleSpeed: 0.01,       // Steady pace
+    particleWidth: 5,          // Medium orbs
+    particleColor: ARC_PARTICLE_COLORS.schema.particleColor,
+    linkColor: ARC_PARTICLE_COLORS.schema.linkColor,
+    linkWidth: 0.3,            // Medium width
+    linkOpacity: 0.25,         // Subtle tubes
+    curvature: 0,              // Straight schema links
+  },
 };
 
 /**

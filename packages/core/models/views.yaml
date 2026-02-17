@@ -278,7 +278,7 @@ views:
 
       // GEO Intelligence
       OPTIONAL MATCH (kw)-[r_gq:HAS_GEO_QUERY]->(gq:GEOQuery)
-      OPTIONAL MATCH (gq)-[r_ga:HAS_ANSWER]->(ga:GEOAnswer)
+      OPTIONAL MATCH (gq)-[r_ga:HAS_GEO_ANSWERS]->(ga:GEOAnswer)
       OPTIONAL MATCH (ga)-[r_gm:HAS_METRICS]->(gm:GEOMetrics)
 
       RETURN e, proj, r_proj,

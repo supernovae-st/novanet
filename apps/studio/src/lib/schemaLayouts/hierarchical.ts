@@ -190,17 +190,26 @@ export function applyHierarchicalLayout(
         });
 
         // Create React Flow node
+        // v0.13.0: Use classNode type for "Holographic Blueprint" design
         nodes.push({
           id: classNodeId,
-          type: 'schemaNode',
+          type: 'classNode',
           position: { x: 0, y: 0 },
           data: {
-            nodeType,
-            label: schemaNode?.label || nodeType,
-            description: schemaNode?.description || '',
+            // ClassNodeExtendedData fields (from BaseNodeData)
+            id: classNodeId,
+            type: nodeType.includes('Arc') ? 'ArcClass' : 'NodeClass',
+            key: `NodeClass:${nodeType}`,
+            displayName: schemaNode?.label || nodeType,
+            // ClassNodeExtendedData specific fields
             realm,
             layer: layerKey,
             trait: schemaNode?.trait || 'defined',
+            propCount: undefined, // TODO: could be computed from schema
+            // Legacy fields for compatibility
+            nodeType,
+            label: schemaNode?.label || nodeType,
+            description: schemaNode?.description || '',
             isSchemaNode: false,
             metaType: 'class',
           },

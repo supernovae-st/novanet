@@ -30,7 +30,8 @@ services:
       - novanet_neo4j_data:/data
       - novanet_neo4j_logs:/logs
       - novanet_neo4j_plugins:/plugins
-      - ../core/neo4j/seed:/import
+      - ./seed:/import/seed
+      - ./migrations:/import/migrations
     networks:
       - novanet-network
     healthcheck:

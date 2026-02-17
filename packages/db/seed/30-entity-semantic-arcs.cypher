@@ -25,7 +25,7 @@
 
 MATCH (tool:Entity {key: 'qr-code-generator'})
 MATCH (action:Entity {key: 'create-qr-code'})
-MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(action)
+MERGE (tool)-[r:SEMANTIC_LINK {link_type: 'used_for'}]->(action)
 SET r.temperature = 0.95,
     r.llm_context = 'TOOL → ACTION: Le générateur est utilisé pour créer des QR codes'
 ;
@@ -38,7 +38,7 @@ SET r.temperature = 0.95,
 MATCH (tool:Entity {key: 'qr-code-generator'})
 MATCH (obj:Entity)
 WHERE obj.key IN ['qr-code-instagram', 'qr-code-wifi', 'qr-code-vcard', 'qr-code-menu']
-MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(obj)
+MERGE (tool)-[r:SEMANTIC_LINK {link_type: 'used_for'}]->(obj)
 SET r.temperature = 0.85,
     r.llm_context = 'TOOL → OBJECT: Le générateur est utilisé pour créer ce type de QR code'
 ;

@@ -33,6 +33,7 @@ pub mod trait_def;
 
 // Core schema parsers
 pub mod arcs;
+pub mod schema_rules;
 pub mod yaml_node;
 
 // Legacy/transitional parsers (to be replaced)

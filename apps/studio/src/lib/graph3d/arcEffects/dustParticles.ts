@@ -85,6 +85,14 @@ export const DUST_CONFIG: Record<ArcFamily, DustConfig> = {
     opacity: 0.85,
     color: '#ec4899', // pink
   },
+  schema: {
+    shape: 'diamond',
+    count: 6,
+    size: 2.5,
+    drift: 'gravitational',
+    opacity: 0.8,
+    color: '#6366f1', // indigo
+  },
 };
 
 // =============================================================================

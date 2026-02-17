@@ -1,7 +1,7 @@
 // apps/studio/src/lib/graph3d/arcEffects/types.ts
 import * as THREE from 'three';
 
-export type ArcFamily = 'ownership' | 'localization' | 'semantic' | 'generation' | 'mining';
+export type ArcFamily = 'ownership' | 'localization' | 'semantic' | 'generation' | 'mining' | 'schema';
 
 export type LODLevel = 'ultra' | 'high' | 'medium' | 'low';
 
@@ -46,4 +46,5 @@ export const ARC_FAMILY_COLORS: Record<ArcFamily, string> = {
   semantic: '#f97316',      // orange-500
   generation: '#8b5cf6',    // violet-500
   mining: '#ec4899',        // pink-500
+  schema: '#6366f1',        // indigo-500
 };

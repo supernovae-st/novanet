@@ -62,6 +62,7 @@ export const PRIMITIVE_REGISTRY: Record<EffectPrimitive, ComponentType<EffectPri
   dnaHelix: DNAHelixPrimitive,
   matrixCode: MatrixCodePrimitive,
   radarSweep: RadarSweepPrimitive,
+  schemaFlow: GlowPrimitive, // Schema family: uses glow effect (structured, stable)
 };
 
 /**

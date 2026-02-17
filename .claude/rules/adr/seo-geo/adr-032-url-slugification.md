@@ -18,6 +18,8 @@ domain: seo-geo
 
 **Decision**: Implement algorithmic slug derivation with semantic weighting.
 
+> **Related**: ADR-030 (Slug Ownership) defines WHO owns slugs (Page owns URL, Entity owns semantics). This ADR defines HOW slugs are derived from SEOKeyword data.
+
 ## URL Format
 
 ```

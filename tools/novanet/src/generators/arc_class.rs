@@ -619,8 +619,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Schema:ArcClass"))
             .count();
         assert_eq!(
-            ac_merges, 177,
-            "expected 177 ArcClass MERGE statements (v0.13 ADR-029 + USES_TERM/EXPRESSION/PATTERN/CULTURE_REF)"
+            ac_merges, 182,
+            "expected 182 ArcClass MERGE statements (v0.13.1 ADR-030 +SLUGIFIED_BY +SLUGIFIES +3 schema arcs)"
         );
 
         // HAS_ARC_CLASS relationships match ArcClass count
@@ -629,8 +629,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_ARC_CLASS]"))
             .count();
         assert_eq!(
-            has_ac, 177,
-            "expected 177 HAS_ARC_CLASS relationships (v0.13 ADR-029 + USES_TERM/EXPRESSION/PATTERN/CULTURE_REF)"
+            has_ac, 182,
+            "expected 182 HAS_ARC_CLASS relationships (v0.13.1 ADR-030 +SLUGIFIED_BY +SLUGIFIES +3 schema arcs)"
         );
 
         // IN_FAMILY relationships match ArcClass count
@@ -639,8 +639,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_FAMILY]"))
             .count();
         assert_eq!(
-            in_family, 177,
-            "expected 177 IN_FAMILY relationships (v0.13 ADR-029 + USES_TERM/EXPRESSION/PATTERN/CULTURE_REF)"
+            in_family, 182,
+            "expected 182 IN_FAMILY relationships (v0.13.1 ADR-030 +SLUGIFIED_BY +SLUGIFIES +3 schema arcs)"
         );
 
         // Family distribution (non-inverse counts)
@@ -661,15 +661,15 @@ mod tests {
         let generation = count_family("generation");
         let mining = count_family("mining");
 
-        // v0.13 ADR-029 + knowledge atom arcs: Total arcs = 177
+        // v0.13.1 ADR-030 + knowledge atom arcs: Total arcs = 179
         // ownership=79 (includes TIER 1 + TIER 2 inverses + HAS_NATIVE/NATIVE_OF)
         // localization=20
-        // semantic=60 (52 + 8 new: USES_TERM/EXPRESSION/PATTERN/CULTURE_REF + inverses)
+        // semantic=62 (60 + 2 new: SLUGIFIED_BY + SLUGIFIES from ADR-030)
         // generation=12 (PRODUCED, PRODUCED_BY, minus merged arcs)
         // mining=6 (SEO/GEO mining arcs)
         assert!(
-            ownership + localization + semantic + generation + mining == 177,
-            "family counts should sum to 177: o={ownership} l={localization} s={semantic} g={generation} m={mining}"
+            ownership + localization + semantic + generation + mining == 179,
+            "family counts should sum to 179: o={ownership} l={localization} s={semantic} g={generation} m={mining}"
         );
 
         // Spot checks — specific ArcClass nodes (v11.8: renamed from ArcClass)
@@ -699,8 +699,8 @@ mod tests {
             }
         }
 
-        // v0.13 ADR-029 + knowledge atom arcs: Header reflects count (177 total ArcClass nodes)
-        assert!(cypher.contains("177 ArcClass nodes"));
+        // v0.13.1 ADR-030 + knowledge atom arcs + schema arcs: Header reflects count (182 total ArcClass nodes)
+        assert!(cypher.contains("182 ArcClass nodes"));
     }
 
     /// Snapshot test for a minimal ArcSchema generator output.

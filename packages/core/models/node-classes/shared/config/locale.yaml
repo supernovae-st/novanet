@@ -60,16 +60,6 @@ node:
       description: "One-line description of the locale"
       example: "French locale for France market"
 
-    llm_context:
-      type: string
-      required: true
-      description: "LLM generation hints. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections].'"
-      example: |
-        USE: when generating content for a specific locale or loading locale-specific knowledge.
-        TRIGGERS: "locale", "language", "market", locale code (e.g., "fr-FR"), native name (e.g., "français").
-        NOT: for other regional variants (use appropriate locale, e.g., fr-CA for Quebec French).
-        RELATES: EntityNative (targets via FOR_LOCALE), Style (communication via HAS_STYLE), TermSet (vocabulary via HAS_TERMS), Culture (cultural context via HAS_CULTURE), Project (supported by via SUPPORTS_LOCALE).
-
     created_at:
       type: datetime
       required: true
@@ -83,6 +73,12 @@ node:
   # ═══════════════════════════════════════════════════════════════════════════════
 
   properties:
+    llm_context:
+      type: string
+      required: true
+      description: "Per-instance LLM generation hints for this locale. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]. RELATES: [connections].'"
+      example: "USE: for French content targeting France. TRIGGERS: fr-FR, français, france. NOT: Quebec French (use fr-CA)."
+
     language_code:
       type: string
       required: true

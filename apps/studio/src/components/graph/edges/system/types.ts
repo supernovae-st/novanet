@@ -80,7 +80,8 @@ export type EffectPrimitive =
   | 'energyPulse'   // Intense power packets with glow trail (ownership)
   | 'dnaHelix'      // Double helix spiral animation (localization)
   | 'matrixCode'    // Flowing code characters (generation)
-  | 'radarSweep';   // Gradient sweep like radar (mining)
+  | 'radarSweep'    // Gradient sweep like radar (mining)
+  | 'schemaFlow';   // Structured definition flow (schema)
 
 /**
  * Animation speed presets
@@ -198,7 +199,8 @@ export type ArcFamilyType =
   | 'localization'   // Invariant↔locale-specific bridges
   | 'semantic'       // Concept connections + spreading activation
   | 'generation'     // LLM pipeline: prompts → outputs
-  | 'mining';        // SEO/GEO targeting and metrics
+  | 'mining'         // SEO/GEO targeting and metrics
+  | 'schema';        // Schema-level relationships (IN_REALM, IN_LAYER, etc.)
 
 /**
  * Resolved theme (after merging category base + relation overrides)

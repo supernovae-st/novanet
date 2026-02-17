@@ -23,7 +23,7 @@
 MATCH (tool:Entity {key: 'qr-code-generator'})
 UNWIND ['customize-qr-code', 'download-qr-code', 'print-qr-code', 'share-qr-code', 'add-logo', 'change-colors'] AS action_key
 MATCH (action:Entity {key: action_key})
-MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(action)
+MERGE (tool)-[r:SEMANTIC_LINK {link_type: 'used_for'}]->(action)
 SET r.temperature = 0.95,
     r.llm_context = 'USED_FOR: Le générateur QR est utilisé pour effectuer cette action'
 ;
@@ -31,7 +31,7 @@ SET r.temperature = 0.95,
 // barcode-generator → create-barcode
 MATCH (tool:Entity {key: 'barcode-generator'})
 MATCH (action:Entity {key: 'create-barcode'})
-MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(action)
+MERGE (tool)-[r:SEMANTIC_LINK {link_type: 'used_for'}]->(action)
 SET r.temperature = 0.95,
     r.llm_context = 'USED_FOR: Le générateur code-barres est utilisé pour créer des codes-barres'
 ;
@@ -39,7 +39,7 @@ SET r.temperature = 0.95,
 // barcode-scanner → scan-barcode
 MATCH (tool:Entity {key: 'barcode-scanner'})
 MATCH (action:Entity {key: 'scan-barcode'})
-MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(action)
+MERGE (tool)-[r:SEMANTIC_LINK {link_type: 'used_for'}]->(action)
 SET r.temperature = 0.95,
     r.llm_context = 'USED_FOR: Le scanner code-barres est utilisé pour scanner des codes-barres'
 ;
@@ -47,7 +47,7 @@ SET r.temperature = 0.95,
 // url-shortener → shorten-url
 MATCH (tool:Entity {key: 'url-shortener'})
 MATCH (action:Entity {key: 'shorten-url'})
-MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(action)
+MERGE (tool)-[r:SEMANTIC_LINK {link_type: 'used_for'}]->(action)
 SET r.temperature = 0.95,
     r.llm_context = 'USED_FOR: Le raccourcisseur URL est utilisé pour raccourcir des liens'
 ;
@@ -55,7 +55,7 @@ SET r.temperature = 0.95,
 // batch-qr-generator → bulk-creation
 MATCH (tool:Entity {key: 'batch-qr-generator'})
 MATCH (action:Entity {key: 'bulk-creation'})
-MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(action)
+MERGE (tool)-[r:SEMANTIC_LINK {link_type: 'used_for'}]->(action)
 SET r.temperature = 0.95,
     r.llm_context = 'USED_FOR: Le générateur QR par lot est utilisé pour créer des QR codes en masse'
 ;
@@ -63,7 +63,7 @@ SET r.temperature = 0.95,
 // batch-qr-generator also used for create-qr-code
 MATCH (tool:Entity {key: 'batch-qr-generator'})
 MATCH (action:Entity {key: 'create-qr-code'})
-MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(action)
+MERGE (tool)-[r:SEMANTIC_LINK {link_type: 'used_for'}]->(action)
 SET r.temperature = 0.90,
     r.llm_context = 'USED_FOR: Le générateur par lot peut aussi créer des QR codes individuels'
 ;
@@ -71,7 +71,7 @@ SET r.temperature = 0.90,
 // landing-page-builder → create-landing-page
 MATCH (tool:Entity {key: 'landing-page-builder'})
 MATCH (action:Entity {key: 'create-landing-page'})
-MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(action)
+MERGE (tool)-[r:SEMANTIC_LINK {link_type: 'used_for'}]->(action)
 SET r.temperature = 0.95,
     r.llm_context = 'USED_FOR: Le constructeur landing page est utilisé pour créer des pages de destination'
 ;
@@ -79,7 +79,7 @@ SET r.temperature = 0.95,
 // link-in-bio-builder → create-smart-link
 MATCH (tool:Entity {key: 'link-in-bio-builder'})
 MATCH (action:Entity {key: 'create-smart-link'})
-MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(action)
+MERGE (tool)-[r:SEMANTIC_LINK {link_type: 'used_for'}]->(action)
 SET r.temperature = 0.95,
     r.llm_context = 'USED_FOR: Le constructeur link-in-bio est utilisé pour créer des liens intelligents'
 ;
@@ -87,7 +87,7 @@ SET r.temperature = 0.95,
 // vcard-generator → create-qr-code
 MATCH (tool:Entity {key: 'vcard-generator'})
 MATCH (action:Entity {key: 'create-qr-code'})
-MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(action)
+MERGE (tool)-[r:SEMANTIC_LINK {link_type: 'used_for'}]->(action)
 SET r.temperature = 0.90,
     r.llm_context = 'USED_FOR: Le générateur vCard crée un QR code contenant des informations de contact'
 ;
@@ -95,7 +95,7 @@ SET r.temperature = 0.90,
 // menu-builder → create-qr-code
 MATCH (tool:Entity {key: 'menu-builder'})
 MATCH (action:Entity {key: 'create-qr-code'})
-MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(action)
+MERGE (tool)-[r:SEMANTIC_LINK {link_type: 'used_for'}]->(action)
 SET r.temperature = 0.90,
     r.llm_context = 'USED_FOR: Le constructeur de menu crée un QR code pour menu de restaurant'
 ;
@@ -103,7 +103,7 @@ SET r.temperature = 0.90,
 // utm-builder → track-scans
 MATCH (tool:Entity {key: 'utm-builder'})
 MATCH (action:Entity {key: 'track-scans'})
-MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(action)
+MERGE (tool)-[r:SEMANTIC_LINK {link_type: 'used_for'}]->(action)
 SET r.temperature = 0.90,
     r.llm_context = 'USED_FOR: Le constructeur UTM est utilisé pour suivre les scans avec des paramètres de tracking'
 ;
@@ -121,7 +121,7 @@ UNWIND [
   'qr-code-app-store', 'qr-code-google-play', 'static-qr-code'
 ] AS object_key
 MATCH (obj:Entity {key: object_key})
-MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(obj)
+MERGE (tool)-[r:SEMANTIC_LINK {link_type: 'used_for'}]->(obj)
 SET r.temperature = 0.85,
     r.llm_context = 'USED_FOR: Le générateur QR crée ce type de QR code spécialisé'
 ;
@@ -134,7 +134,7 @@ UNWIND [
   'pdf417', 'data-matrix', 'aztec-code', 'maxicode'
 ] AS barcode_key
 MATCH (barcode:Entity {key: barcode_key})
-MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(barcode)
+MERGE (tool)-[r:SEMANTIC_LINK {link_type: 'used_for'}]->(barcode)
 SET r.temperature = 0.85,
     r.llm_context = 'USED_FOR: Le générateur code-barres crée ce type de code-barres'
 ;
@@ -142,7 +142,7 @@ SET r.temperature = 0.85,
 // vcard-generator is used_for vcard qr
 MATCH (tool:Entity {key: 'vcard-generator'})
 MATCH (obj:Entity {key: 'qr-code-vcard'})
-MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(obj)
+MERGE (tool)-[r:SEMANTIC_LINK {link_type: 'used_for'}]->(obj)
 SET r.temperature = 0.95,
     r.llm_context = 'USED_FOR: Le générateur vCard crée des QR codes de cartes de visite'
 ;
@@ -152,7 +152,7 @@ SET r.temperature = 0.95,
 // menu-builder is used_for menu qr
 MATCH (tool:Entity {key: 'menu-builder'})
 MATCH (obj:Entity {key: 'qr-code-menu'})
-MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(obj)
+MERGE (tool)-[r:SEMANTIC_LINK {link_type: 'used_for'}]->(obj)
 SET r.temperature = 0.95,
     r.llm_context = 'USED_FOR: Le constructeur de menu crée des QR codes pour menus de restaurant'
 ;
@@ -160,7 +160,7 @@ SET r.temperature = 0.95,
 // landing-page-builder is used_for landing-page
 MATCH (tool:Entity {key: 'landing-page-builder'})
 MATCH (obj:Entity {key: 'landing-page'})
-MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(obj)
+MERGE (tool)-[r:SEMANTIC_LINK {link_type: 'used_for'}]->(obj)
 SET r.temperature = 0.95,
     r.llm_context = 'USED_FOR: Le constructeur landing page crée des pages de destination'
 ;
@@ -168,7 +168,7 @@ SET r.temperature = 0.95,
 // link-in-bio-builder is used_for link-in-bio
 MATCH (tool:Entity {key: 'link-in-bio-builder'})
 MATCH (obj:Entity {key: 'link-in-bio'})
-MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(obj)
+MERGE (tool)-[r:SEMANTIC_LINK {link_type: 'used_for'}]->(obj)
 SET r.temperature = 0.95,
     r.llm_context = 'USED_FOR: Le constructeur link-in-bio crée des pages de liens intelligents'
 ;
@@ -176,7 +176,7 @@ SET r.temperature = 0.95,
 // url-shortener is used_for short-link
 MATCH (tool:Entity {key: 'url-shortener'})
 MATCH (obj:Entity {key: 'short-link'})
-MERGE (tool)-[r:SEMANTIC_LINK {type: 'used_for'}]->(obj)
+MERGE (tool)-[r:SEMANTIC_LINK {link_type: 'used_for'}]->(obj)
 SET r.temperature = 0.95,
     r.llm_context = 'USED_FOR: Le raccourcisseur URL crée des liens courts'
 ;
@@ -202,7 +202,7 @@ UNWIND [
 ] AS pair
 MATCH (qr:Entity {key: pair.qr})
 MATCH (brand:Entity {key: pair.brand})
-MERGE (qr)-[r:SEMANTIC_LINK {type: 'related_to'}]->(brand)
+MERGE (qr)-[r:SEMANTIC_LINK {link_type: 'related_to'}]->(brand)
 SET r.temperature = 0.50,
     r.llm_context = 'RELATED_TO: Ce type de QR code est associé à cette marque/plateforme'
 ;
@@ -214,7 +214,7 @@ SET r.temperature = 0.50,
 // Analytics enables track-scans
 MATCH (feature:Entity {key: 'analytics'})
 MATCH (action:Entity {key: 'track-scans'})
-MERGE (feature)-[r:SEMANTIC_LINK {type: 'enables'}]->(action)
+MERGE (feature)-[r:SEMANTIC_LINK {link_type: 'enables'}]->(action)
 SET r.temperature = 0.80,
     r.llm_context = 'ENABLES: La fonctionnalité analytics permet le suivi des scans'
 ;
@@ -222,7 +222,7 @@ SET r.temperature = 0.80,
 // Dynamic QR enables edit-destination
 MATCH (feature:Entity {key: 'dynamic-qr-code'})
 MATCH (action:Entity {key: 'edit-destination'})
-MERGE (feature)-[r:SEMANTIC_LINK {type: 'enables'}]->(action)
+MERGE (feature)-[r:SEMANTIC_LINK {link_type: 'enables'}]->(action)
 SET r.temperature = 0.85,
     r.llm_context = 'ENABLES: Le QR dynamique permet de modifier la destination sans réimprimer'
 ;
@@ -230,7 +230,7 @@ SET r.temperature = 0.85,
 // Password protection (if exists)
 MATCH (feature:Entity {key: 'password-protection'})
 MATCH (action:Entity {key: 'scan-limit'})
-MERGE (feature)-[r:SEMANTIC_LINK {type: 'enables'}]->(action)
+MERGE (feature)-[r:SEMANTIC_LINK {link_type: 'enables'}]->(action)
 SET r.temperature = 0.80,
     r.llm_context = 'ENABLES: La protection par mot de passe permet de limiter les scans'
 ;
@@ -242,7 +242,7 @@ SET r.temperature = 0.80,
 // Dynamic vs static QR codes
 MATCH (dynamic:Entity {key: 'dynamic-qr-code'})
 MATCH (static:Entity {key: 'static-qr-code'})
-MERGE (dynamic)-[r:SEMANTIC_LINK {type: 'variant_of'}]->(static)
+MERGE (dynamic)-[r:SEMANTIC_LINK {link_type: 'variant_of'}]->(static)
 SET r.temperature = 0.90,
     r.llm_context = 'Dynamic QR is an editable variant of static QR'
 ;
@@ -250,7 +250,7 @@ SET r.temperature = 0.90,
 // Custom QR is variant of QR code
 MATCH (custom:Entity {key: 'custom-qr-code'})
 MATCH (base:Entity {key: 'qr-code'})
-MERGE (custom)-[r:SEMANTIC_LINK {type: 'variant_of'}]->(base)
+MERGE (custom)-[r:SEMANTIC_LINK {link_type: 'variant_of'}]->(base)
 SET r.temperature = 0.90,
     r.llm_context = 'VARIANT_OF: QR code personnalisé avec logo et couleurs'
 ;
@@ -262,7 +262,7 @@ SET r.temperature = 0.90,
 // Restaurants use menu QR
 MATCH (industry:Entity {key: 'restaurants'})
 MATCH (obj:Entity {key: 'qr-code-menu'})
-MERGE (industry)-[r:SEMANTIC_LINK {type: 'related_to'}]->(obj)
+MERGE (industry)-[r:SEMANTIC_LINK {link_type: 'related_to'}]->(obj)
 SET r.temperature = 0.70,
     r.llm_context = 'Restaurant industry commonly uses menu QR codes'
 ;
@@ -270,7 +270,7 @@ SET r.temperature = 0.70,
 // Healthcare uses vCard QR
 MATCH (industry:Entity {key: 'healthcare'})
 MATCH (obj:Entity {key: 'qr-code-vcard'})
-MERGE (industry)-[r:SEMANTIC_LINK {type: 'related_to'}]->(obj)
+MERGE (industry)-[r:SEMANTIC_LINK {link_type: 'related_to'}]->(obj)
 SET r.temperature = 0.60,
     r.llm_context = 'INDUSTRY: Le secteur de la santé utilise les QR codes vCard pour les contacts médicaux'
 ;
@@ -279,7 +279,7 @@ SET r.temperature = 0.60,
 MATCH (industry:Entity {key: 'real-estate'})
 UNWIND ['qr-code-vcard', 'qr-code-location'] AS obj_key
 MATCH (obj:Entity {key: obj_key})
-MERGE (industry)-[r:SEMANTIC_LINK {type: 'related_to'}]->(obj)
+MERGE (industry)-[r:SEMANTIC_LINK {link_type: 'related_to'}]->(obj)
 SET r.temperature = 0.60,
     r.llm_context = 'INDUSTRY: Le secteur immobilier utilise les QR codes vCard et localisation pour les annonces'
 ;
@@ -287,7 +287,7 @@ SET r.temperature = 0.60,
 // Retail uses product/payment QR
 MATCH (industry:Entity {key: 'retail'})
 MATCH (obj:Entity {key: 'qr-code-url'})
-MERGE (industry)-[r:SEMANTIC_LINK {type: 'related_to'}]->(obj)
+MERGE (industry)-[r:SEMANTIC_LINK {link_type: 'related_to'}]->(obj)
 SET r.temperature = 0.60,
     r.llm_context = 'INDUSTRY: Le commerce de détail utilise les QR codes URL pour les produits et paiements'
 ;
@@ -295,7 +295,7 @@ SET r.temperature = 0.60,
 // Event management uses event QR
 MATCH (industry:Entity {key: 'event-management'})
 MATCH (obj:Entity {key: 'qr-code-event'})
-MERGE (industry)-[r:SEMANTIC_LINK {type: 'related_to'}]->(obj)
+MERGE (industry)-[r:SEMANTIC_LINK {link_type: 'related_to'}]->(obj)
 SET r.temperature = 0.80,
     r.llm_context = 'INDUSTRY → OBJECT: Event management commonly uses event QR codes'
 ;
@@ -314,7 +314,7 @@ UNWIND [
   'qr-code-telegram', 'qr-code-snapchat', 'qr-code-pinterest', 'qr-code-soundcloud'
 ] AS child_key
 MATCH (child:Entity {key: child_key})
-MERGE (child)-[r:SEMANTIC_LINK {type: 'type_of'}]->(base)
+MERGE (child)-[r:SEMANTIC_LINK {link_type: 'type_of'}]->(base)
 SET r.temperature = 0.95,
     r.llm_context = 'TYPE_OF: QR code spécialisé pour une plateforme sociale'
 ;
@@ -327,7 +327,7 @@ UNWIND [
   'qr-code-app-store', 'qr-code-google-play'
 ] AS child_key
 MATCH (child:Entity {key: child_key})
-MERGE (child)-[r:SEMANTIC_LINK {type: 'type_of'}]->(base)
+MERGE (child)-[r:SEMANTIC_LINK {link_type: 'type_of'}]->(base)
 SET r.temperature = 0.95,
     r.llm_context = 'TYPE_OF: QR code spécialisé pour un usage utilitaire'
 ;
@@ -346,7 +346,7 @@ UNWIND [
   'customize-qr-code', 'download-qr-code', 'print-qr-code', 'share-qr-code'
 ] AS secondary_key
 MATCH (secondary:Entity {key: secondary_key})
-MERGE (secondary)-[r:SEMANTIC_LINK {type: 'is_action_on'}]->(primary)
+MERGE (secondary)-[r:SEMANTIC_LINK {link_type: 'is_action_on'}]->(primary)
 SET r.temperature = 0.85,
     r.llm_context = 'IS_ACTION_ON: Action effectuée sur un QR code créé'
 ;
@@ -357,7 +357,7 @@ UNWIND [
   'add-logo', 'change-colors'
 ] AS secondary_key
 MATCH (secondary:Entity {key: secondary_key})
-MERGE (secondary)-[r:SEMANTIC_LINK {type: 'is_action_on'}]->(primary)
+MERGE (secondary)-[r:SEMANTIC_LINK {link_type: 'is_action_on'}]->(primary)
 SET r.temperature = 0.85,
     r.llm_context = 'IS_ACTION_ON: Action de personnalisation du QR code'
 ;
@@ -373,7 +373,7 @@ UNWIND [
   'gs1-128', 'itf-14', 'codabar', 'msi-plessey'
 ] AS child_key
 MATCH (child:Entity {key: child_key})
-MERGE (child)-[r:SEMANTIC_LINK {type: 'type_of'}]->(base)
+MERGE (child)-[r:SEMANTIC_LINK {link_type: 'type_of'}]->(base)
 SET r.temperature = 0.90,
     r.llm_context = 'TYPE_OF: Code-barres 1D linéaire'
 ;
@@ -384,7 +384,7 @@ UNWIND [
   'pdf417', 'data-matrix', 'aztec-code', 'maxicode', 'gs1-datamatrix'
 ] AS child_key
 MATCH (child:Entity {key: child_key})
-MERGE (child)-[r:SEMANTIC_LINK {type: 'type_of'}]->(base)
+MERGE (child)-[r:SEMANTIC_LINK {link_type: 'type_of'}]->(base)
 SET r.temperature = 0.90,
     r.llm_context = 'TYPE_OF: Code-barres 2D matriciel'
 ;

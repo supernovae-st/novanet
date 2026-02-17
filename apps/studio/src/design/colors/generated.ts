@@ -185,10 +185,10 @@ export const TRAIT_DISPLAY_NAMES: Record<TraitKey, string> = {
 };
 
 // =============================================================================
-// ARC FAMILY COLORS (5)
+// ARC FAMILY COLORS (6)
 // =============================================================================
 
-export type ArcFamilyKey = 'generation' | 'localization' | 'mining' | 'ownership' | 'semantic';
+export type ArcFamilyKey = 'generation' | 'localization' | 'mining' | 'ownership' | 'schema' | 'semantic';
 
 export const ARC_FAMILY_COLORS: Record<ArcFamilyKey, ColorTokens> = {
   'generation': {
@@ -219,6 +219,13 @@ export const ARC_FAMILY_COLORS: Record<ArcFamilyKey, ColorTokens> = {
     border: 'border-[#3b82f6]/30',
     bgSolid: 'bg-[#3b82f6]',
   },
+  'schema': {
+    color: '#6366f1',
+    bg: 'bg-[#6366f1]/20',
+    text: 'text-[#6366f1]',
+    border: 'border-[#6366f1]/30',
+    bgSolid: 'bg-[#6366f1]',
+  },
   'semantic': {
     color: '#f97316',
     bg: 'bg-[#f97316]/20',
@@ -233,6 +240,7 @@ export const ARC_FAMILY_DISPLAY_NAMES: Record<ArcFamilyKey, string> = {
   'localization': 'Localization',
   'mining': 'Mining',
   'ownership': 'Ownership',
+  'schema': 'Schema',
   'semantic': 'Semantic',
 };
 

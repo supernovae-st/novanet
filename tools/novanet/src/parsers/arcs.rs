@@ -16,7 +16,7 @@ use std::path::Path;
 // Enums
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// The 5 arc families in v9.5.
+/// The 6 arc families in v0.13.1.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum ArcFamily {
@@ -25,6 +25,7 @@ pub enum ArcFamily {
     Semantic,
     Generation,
     Mining,
+    Schema,
 }
 
 impl std::fmt::Display for ArcFamily {
@@ -35,6 +36,7 @@ impl std::fmt::Display for ArcFamily {
             Self::Semantic => write!(f, "semantic"),
             Self::Generation => write!(f, "generation"),
             Self::Mining => write!(f, "mining"),
+            Self::Schema => write!(f, "schema"),
         }
     }
 }

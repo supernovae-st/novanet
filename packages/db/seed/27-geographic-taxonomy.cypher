@@ -1051,17 +1051,5 @@ MATCH (cr:CulturalRealm), (csr:CulturalSubRealm) WHERE csr.parent_realm = cr.key
 // PopulationCluster -> PopulationSubCluster
 MATCH (pc:PopulationCluster), (psc:PopulationSubCluster) WHERE psc.parent_cluster = pc.key MERGE (psc)-[:CLUSTER_OF]->(pc);
 
-// -----------------------------------------------------------------------------
-// CONNECT TO CLASS SCHEMA-NODES (OF_CLASS relationships)
-// -----------------------------------------------------------------------------
-
-MATCH (n:Continent), (c:Schema:Class {label: 'Continent'}) MERGE (n)-[:OF_CLASS]->(c);
-MATCH (n:GeoRegion), (c:Schema:Class {label: 'GeoRegion'}) MERGE (n)-[:OF_CLASS]->(c);
-MATCH (n:GeoSubRegion), (c:Schema:Class {label: 'GeoSubRegion'}) MERGE (n)-[:OF_CLASS]->(c);
-MATCH (n:IncomeGroup), (c:Schema:Class {label: 'IncomeGroup'}) MERGE (n)-[:OF_CLASS]->(c);
-MATCH (n:LanguageFamily), (c:Schema:Class {label: 'LanguageFamily'}) MERGE (n)-[:OF_CLASS]->(c);
-MATCH (n:LanguageBranch), (c:Schema:Class {label: 'LanguageBranch'}) MERGE (n)-[:OF_CLASS]->(c);
-MATCH (n:CulturalRealm), (c:Schema:Class {label: 'CulturalRealm'}) MERGE (n)-[:OF_CLASS]->(c);
-MATCH (n:CulturalSubRealm), (c:Schema:Class {label: 'CulturalSubRealm'}) MERGE (n)-[:OF_CLASS]->(c);
-MATCH (n:PopulationCluster), (c:Schema:Class {label: 'PopulationCluster'}) MERGE (n)-[:OF_CLASS]->(c);
-MATCH (n:PopulationSubCluster), (c:Schema:Class {label: 'PopulationSubCluster'}) MERGE (n)-[:OF_CLASS]->(c);
+// OF_CLASS arc removed (v0.13.1): arc does not exist in schema
+// Instance→Class relationships are auto-wired via seed/99-autowire-classes.cypher

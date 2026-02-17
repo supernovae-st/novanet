@@ -43,6 +43,8 @@ export interface BaseNodeData extends Record<string, unknown> {
   hoverDimmed?: boolean;
   /** Whether this node is in schema mode (blueprint styling) */
   isSchemaMode?: boolean;
+  /** BCP-47 locale code for locale-specific nodes (*Native, Knowledge atoms, Locale layer) */
+  locale?: string;
 }
 
 export interface BaseNodeWrapperProps {
