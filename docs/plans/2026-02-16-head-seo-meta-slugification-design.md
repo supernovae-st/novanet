@@ -1,9 +1,15 @@
 # Design: HeadSeoMeta Block & Slugification Architecture
 
 **Date**: 2026-02-16
-**Status**: Approved
+**Status**: Approved (see correction below)
 **Version**: v0.13.1
 **ADRs impactés**: ADR-030 (mise à jour), ADR-031, ADR-032
+
+> **⚠️ v0.13.1 CORRECTION (2026-02-18):** The "EXACT COPY" / "COPIED" rule documented in this design was superseded during implementation.
+> SEOKeyword.slug_form is an **INPUT REFERENCE**, not a direct copy source.
+> The LLM **derives** the slug using one of 5 modes: `copy` / `extract` / `merge` / `modify` / `derive`.
+> Diacritics and locale rules (ADR-032) apply to the final derived value.
+> See updated ADR-030 for the canonical rule.
 
 ---
 
