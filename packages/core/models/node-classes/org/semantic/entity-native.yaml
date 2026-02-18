@@ -161,6 +161,59 @@ node:
       required: false
       description: "Locale-specific cultural considerations"
 
+    denomination_forms:
+      type: array
+      required: true
+      description: |
+        Official and prescriptive denomination forms for this entity in this locale.
+
+        ABSOLUTE RULE: The LLM MUST use only these forms when referring to this entity —
+        in generated content, internal link anchors, headings, and slug derivations.
+        No invention, paraphrase, or unlisted variation is allowed.
+
+        Usage by type:
+          text   → prose and body content
+          title  → H1, H2, meta_title
+          abbrev → after first mention, short text
+          mixed  → native_script locales only: tech/brand hybrid (e.g. "QR码" for zh-CN)
+          base   → native_script locales only: international reference form (e.g. "QR Code" in zh-CN content)
+          url    → URL-safe slug for this entity in this locale.
+                   Populated POST-SEO pipeline (do not set manually).
+                   MUST follow locale slugification rule (ADR-032):
+                     latin_preserve  (fr-FR, es-MX, es-ES, pt-BR) → keep diacritics (e.g. "créer-un-qr-code")
+                     latin_strip     (en-US, en-GB)                → remove diacritics (e.g. "qr-code")
+                     latin_transform (de-DE, de-AT)                → ü→ue, ö→oe, ä→ae, ß→ss
+                     transliterate   (ru-RU, uk-UA, el-GR)         → Cyrillic/Greek → Latin
+                     native_script   (ja-JP, ko-KR, zh-CN, ar-SA)  → ALWAYS romanized ASCII for url type
+                   Written back to EntityNative after SEO pipeline runs — enables cross-page URL consistency.
+
+        priority: 1 = LLM default form, 2+ = acceptable variation within same paragraph
+      items:
+        type: object
+        properties:
+          type:
+            type: string
+            enum: [text, title, abbrev, mixed, base, url]
+          value:
+            type: string
+          priority:
+            type: integer
+            default: 1
+      examples:
+        - locale: "fr-FR"
+          forms:
+            - { type: text,   value: "qr code",           priority: 1 }
+            - { type: title,  value: "QR Code",            priority: 1 }
+            - { type: abbrev, value: "qr",                 priority: 1 }
+            - { type: url,    value: "créer-un-qr-code",   priority: 1 }
+        - locale: "zh-CN"
+          forms:
+            - { type: text,   value: "二维码",             priority: 1 }
+            - { type: mixed,  value: "QR码",               priority: 2 }
+            - { type: abbrev, value: "QR",                 priority: 1 }
+            - { type: base,   value: "QR Code",            priority: 3 }
+            - { type: url,    value: "qr-code-sakusei",    priority: 1 }
+
     version:
       type: int
       required: true

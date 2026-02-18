@@ -66,6 +66,36 @@ node:
       description: "2-3 sentence prose summary for LLM reasoning context (GraphRAG)"
       example: "A QR Code is a two-dimensional barcode that encodes data in a scannable visual pattern. It is the core product of QR Code AI."
 
+    denomination_forms:
+      type: array
+      required: true
+      description: |
+        Official and prescriptive denomination forms for this entity (invariant English).
+
+        ABSOLUTE RULE: The LLM MUST use only these forms when referring to this entity —
+        in generated content, internal link anchors, headings, and slug derivations.
+        No invention, paraphrase, or unlisted variation is allowed.
+
+        Usage by type:
+          text   → prose and body content (e.g. "qr code")
+          title  → H1, H2, meta_title (e.g. "QR Code")
+          abbrev → after first mention, short text (e.g. "qr")
+
+        NOTE: No 'url' form on Entity — English URL lives on Page.slug (ADR-030).
+        Locale-specific forms (including url) live on EntityNative.denomination_forms.
+      items:
+        type: object
+        properties:
+          type:
+            type: string
+            enum: [text, title, abbrev]
+          value:
+            type: string
+      examples:
+        - - { type: text,   value: "qr code" }
+          - { type: title,  value: "QR Code" }
+          - { type: abbrev, value: "qr" }
+
     created_at:
       type: datetime
       required: true
