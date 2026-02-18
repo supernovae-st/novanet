@@ -82,6 +82,7 @@ export const BorderBeam = memo(function BorderBeam({
         style={{
           borderRadius,
           border: `${thickness}px solid ${color}40`,
+          zIndex: -1,
         }}
       />
     );
@@ -90,7 +91,7 @@ export const BorderBeam = memo(function BorderBeam({
   return (
     <div
       className="absolute inset-0 pointer-events-none overflow-hidden"
-      style={{ borderRadius }}
+      style={{ borderRadius, zIndex: -1 }}
     >
       {/* Rotating conic gradient */}
       <motion.div

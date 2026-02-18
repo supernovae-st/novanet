@@ -54,6 +54,18 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
     writeln!(out, "// Includes visual encoding properties").unwrap();
     writeln!(out, "// All schema-nodes have :Schema double-label").unwrap();
     writeln!(out, "// Uses MERGE for idempotent execution").unwrap();
+    writeln!(out, "//").unwrap();
+    writeln!(out, "// ADR References:").unwrap();
+    writeln!(
+        out,
+        "//   ADR-012: 2-Realm Architecture (SHARED read-only + ORG business)"
+    )
+    .unwrap();
+    writeln!(
+        out,
+        "//   ADR-024: Trait = Data Origin (defined/authored/imported/generated/retrieved)"
+    )
+    .unwrap();
 
     // ── Realms ───────────────────────────────────────────────────────────
     writeln!(out).unwrap();

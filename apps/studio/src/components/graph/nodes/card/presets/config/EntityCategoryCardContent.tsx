@@ -25,7 +25,7 @@
  * - Border → Realm (shared = teal cyan)
  * - Effects → Premium (GridPattern + Aurora + BorderBeam)
  *
- * Layout (v0.13.1 - LEFT ALIGNED):
+ * Layout (v0.13.1 - LEFT ALIGNED, 420x320):
  * ┌──────────────────────────────────────────────────────────────────────────┐
  * │  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  │
  * │  ░░  ◇ CONFIG                                          ● shared  ░░░░  │
@@ -34,7 +34,7 @@
  * │  ░░  │    📦     │   Thing                                       ░░░░  │
  * │  ░░  │  (icon)   │   "WHAT?"                                     ░░░░  │
  * │  ░░  └───────────┘   Core products and objects...                ░░░░  │
- * │  ░░                                                               ░░░░  │
+ * │  ░░                  (up to 3 lines description)                 ░░░░  │
  * │  ░░  ────────────────────────────────────────────────────────    ░░░░  │
  * │  ░░  ◆ ENTITY_CATEGORY                         classifies →      ░░░░  │
  * │  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  │
@@ -271,7 +271,7 @@ export const EntityCategoryCardContent = memo(function EntityCategoryCardContent
 
   return (
     <CardWrapper
-      className="relative p-6 min-h-[220px] w-full rounded-2xl overflow-hidden flex flex-col"
+      className="relative p-6 min-h-[280px] w-full rounded-2xl overflow-hidden flex flex-col"
       style={{
         ...backgroundStyle,
         ...shadowStyle,
@@ -481,7 +481,7 @@ export const EntityCategoryCardContent = memo(function EntityCategoryCardContent
 
           {/* Description */}
           {data.description && (
-            <p className="text-sm text-white/55 line-clamp-2">
+            <p className="text-sm text-white/55 line-clamp-3">
               {data.description}
             </p>
           )}

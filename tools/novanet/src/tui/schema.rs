@@ -24,6 +24,8 @@ pub struct SchemaProperty {
     pub prop_type: String,
     /// Whether this property is required
     pub required: bool,
+    /// Whether this property is from standard_properties (vs properties)
+    pub is_standard: bool,
     /// Example value from schema (for display when empty)
     pub example: Option<String>,
     /// Property description (parsed for future tooltip/detail view)
@@ -228,14 +230,14 @@ pub fn parse_schema_properties(content: &str) -> Vec<SchemaProperty> {
     // Process standard_properties first (these are typically required)
     if let Some(std_props) = node.standard_properties {
         for (name, prop) in std_props {
-            properties.push(yaml_to_schema_property(name, prop));
+            properties.push(yaml_to_schema_property(name, prop, true));
         }
     }
 
     // Then process custom properties
     if let Some(custom_props) = node.properties {
         for (name, prop) in custom_props {
-            properties.push(yaml_to_schema_property(name, prop));
+            properties.push(yaml_to_schema_property(name, prop, false));
         }
     }
 
@@ -243,7 +245,7 @@ pub fn parse_schema_properties(content: &str) -> Vec<SchemaProperty> {
 }
 
 /// Convert YAML property to schema property.
-fn yaml_to_schema_property(name: String, prop: YamlProperty) -> SchemaProperty {
+fn yaml_to_schema_property(name: String, prop: YamlProperty, is_standard: bool) -> SchemaProperty {
     // Convert example to string representation
     let example = prop.example.map(|v| match v {
         serde_yaml::Value::String(s) => s,
@@ -270,6 +272,7 @@ fn yaml_to_schema_property(name: String, prop: YamlProperty) -> SchemaProperty {
         name,
         prop_type: prop.prop_type.unwrap_or_else(|| "string".to_string()),
         required: prop.required.unwrap_or(false),
+        is_standard,
         example,
         description: prop.description,
         enum_values: prop.enum_values,
@@ -530,6 +533,7 @@ node:
             name: name.to_string(),
             prop_type: "string".to_string(),
             required,
+            is_standard: false,
             example: Some("example_value".to_string()),
             description: Some("Test property".to_string()),
             enum_values: None,
@@ -590,6 +594,7 @@ node:
                 name: name.to_string(),
                 prop_type: "string".to_string(),
                 required: status == PropertyStatus::MissingRequired,
+                is_standard: false,
                 example: None,
                 description: None,
                 enum_values: None,

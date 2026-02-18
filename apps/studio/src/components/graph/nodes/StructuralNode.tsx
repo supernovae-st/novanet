@@ -55,13 +55,25 @@ function getCardWidth(type: string): number {
   switch (type) {
     // Project: v0.13.1 "Mission Control" premium card with holographic/matrix effects
     case 'Project': return 440;
-    case 'Page': return 220;
-    case 'Entity': return 205;
-    case 'Block': return 185;
-    case 'BlockType': return 175;
-    case 'Locale': return 210;
-    case 'Brand': return 200;
-    default: return 190;
+    case 'Page': return 320;
+    // Semantic layer: Entity and EntityNative with "joined" visual design
+    case 'Entity': return 360;
+    case 'EntityNative': return 340;
+    case 'Block': return 280;
+    case 'BlockNative': return 300;
+    case 'PageNative': return 320;
+    case 'BlockType': return 200;
+    case 'BlockInstruction': return 180;
+    case 'Locale': return 220;
+    case 'Brand': return 220;
+    case 'BrandDesign': return 200;
+    case 'BrandPrinciples': return 200;
+    case 'PromptStyle': return 200;
+    case 'ProjectNative': return 220;
+    // v0.13.1: shared/config nodes (backup - normally routed to SharedLayerNode)
+    case 'EntityCategory': return 420;
+    case 'SEOKeywordFormat': return 175;
+    default: return 200;
   }
 }
 
@@ -483,13 +495,18 @@ export const StructuralNode = memo(function StructuralNode(props: NodeProps<Stru
   const CardContent = useMemo(() => getCardContentComponent(data.type), [data.type]);
 
   // Prepare data for card content
+  // Neo4j transformation puts extra properties in data.data, flatten them for card components
+  // Priority order: data.data (raw) < data (computed) < explicit overrides
   const contentData = useMemo(() => ({
+    // Raw Neo4j properties (lowest priority)
+    ...(data.data || {}),
+    // Computed top-level properties (higher priority)
     ...data,
+    // Explicit overrides (highest priority) - ensure these are never shadowed
     id: data.id,
     type: data.type,
     key: data.key,
     displayName: data.displayName,
-    locale: data.locale,
   }), [data]);
 
   // Handle expand/collapse toggle

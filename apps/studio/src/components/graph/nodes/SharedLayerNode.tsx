@@ -134,7 +134,7 @@ function getCardWidth(type: string): number {
       return 180;
     // EntityCategory (large "Classification Nexus" design - v0.13.1)
     case 'EntityCategory':
-      return 340;
+      return 420;
     // Config nodes (important, slightly larger)
     case 'Locale':
     case 'SEOKeywordFormat':
