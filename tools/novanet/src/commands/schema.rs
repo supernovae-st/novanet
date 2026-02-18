@@ -360,7 +360,7 @@ pub fn schema_validate_with_fix(
     for issue in schema_issues {
         issues_by_node
             .entry(issue.node_name.clone())
-            .or_insert_with(Vec::new)
+            .or_default()
             .push(issue);
     }
 
@@ -640,7 +640,13 @@ mod tests {
 
     #[test]
     fn schema_validate_integration() {
+        // Acquire lock to serialize with other tests that create files in schema directory
+        let _lock = SCHEMA_TEST_LOCK.lock().unwrap();
+
         let Some(root) = test_root() else { return };
+
+        // Clean up any leftover test files from parallel test execution
+        cleanup_test_files(&root);
 
         let issues = schema_validate(&root).expect("should validate schema");
 
