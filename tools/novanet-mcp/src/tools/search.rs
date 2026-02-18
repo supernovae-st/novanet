@@ -116,8 +116,9 @@ async fn fulltext_search(
 ) -> Result<Vec<SearchHit>> {
     // Build fulltext query
     // NovaNet uses fulltext indexes on key, name, description properties
-    let kind_filter = build_kind_filter(&params.kinds);
-    let realm_filter = build_realm_filter(&params.realm);
+    // Note: fulltext YIELD uses 'node' as variable name
+    let kind_filter = build_kind_filter(&params.kinds, "node");
+    let realm_filter = build_realm_filter(&params.realm, "node");
 
     let cypher = format!(
         r#"
@@ -174,8 +175,9 @@ async fn property_search(
         ]
     });
 
-    let kind_filter = build_kind_filter(&params.kinds);
-    let realm_filter = build_realm_filter(&params.realm);
+    // Note: MATCH uses 'n' as variable name
+    let kind_filter = build_kind_filter(&params.kinds, "n");
+    let realm_filter = build_realm_filter(&params.realm, "n");
 
     // Build property conditions
     let prop_conditions: Vec<String> = properties
@@ -249,10 +251,14 @@ async fn hybrid_search(
 }
 
 /// Build kind filter clause
-fn build_kind_filter(kinds: &Option<Vec<String>>) -> String {
+///
+/// # Arguments
+/// * `kinds` - Optional list of node kinds to filter by
+/// * `var` - Cypher variable name (e.g., "n" for MATCH, "node" for fulltext YIELD)
+fn build_kind_filter(kinds: &Option<Vec<String>>, var: &str) -> String {
     match kinds {
         Some(k) if !k.is_empty() => {
-            let labels: Vec<String> = k.iter().map(|l| format!("n:{}", l)).collect();
+            let labels: Vec<String> = k.iter().map(|l| format!("{}:{}", var, l)).collect();
             format!("AND ({})", labels.join(" OR "))
         }
         _ => String::new(),
@@ -260,9 +266,13 @@ fn build_kind_filter(kinds: &Option<Vec<String>>) -> String {
 }
 
 /// Build realm filter clause
-fn build_realm_filter(realm: &Option<String>) -> String {
+///
+/// # Arguments
+/// * `realm` - Optional realm to filter by
+/// * `var` - Cypher variable name (e.g., "n" for MATCH, "node" for fulltext YIELD)
+fn build_realm_filter(realm: &Option<String>, var: &str) -> String {
     match realm {
-        Some(r) => format!("AND n.realm = '{}'", r),
+        Some(r) => format!("AND {}.realm = '{}'", var, r),
         None => String::new(),
     }
 }
@@ -292,24 +302,42 @@ mod tests {
 
     #[test]
     fn test_build_kind_filter() {
-        assert_eq!(build_kind_filter(&None), "");
-        assert_eq!(build_kind_filter(&Some(vec![])), "");
+        // Test with 'n' variable (property search)
+        assert_eq!(build_kind_filter(&None, "n"), "");
+        assert_eq!(build_kind_filter(&Some(vec![]), "n"), "");
         assert_eq!(
-            build_kind_filter(&Some(vec!["Entity".to_string()])),
+            build_kind_filter(&Some(vec!["Entity".to_string()]), "n"),
             "AND (n:Entity)"
         );
         assert_eq!(
-            build_kind_filter(&Some(vec!["Entity".to_string(), "Page".to_string()])),
+            build_kind_filter(&Some(vec!["Entity".to_string(), "Page".to_string()]), "n"),
             "AND (n:Entity OR n:Page)"
+        );
+
+        // Test with 'node' variable (fulltext search)
+        assert_eq!(
+            build_kind_filter(&Some(vec!["Entity".to_string()]), "node"),
+            "AND (node:Entity)"
+        );
+        assert_eq!(
+            build_kind_filter(&Some(vec!["Entity".to_string(), "Page".to_string()]), "node"),
+            "AND (node:Entity OR node:Page)"
         );
     }
 
     #[test]
     fn test_build_realm_filter() {
-        assert_eq!(build_realm_filter(&None), "");
+        // Test with 'n' variable (property search)
+        assert_eq!(build_realm_filter(&None, "n"), "");
         assert_eq!(
-            build_realm_filter(&Some("shared".to_string())),
+            build_realm_filter(&Some("shared".to_string()), "n"),
             "AND n.realm = 'shared'"
+        );
+
+        // Test with 'node' variable (fulltext search)
+        assert_eq!(
+            build_realm_filter(&Some("shared".to_string()), "node"),
+            "AND node.realm = 'shared'"
         );
     }
 
