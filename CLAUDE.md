@@ -35,8 +35,8 @@ NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation
 **Related docs**:
 - `.claude/rules/novanet-decisions.md` — ADR index (quick reference)
 - `.claude/rules/novanet-terminology.md` — Canonical terminology reference
-- `.claude/rules/adr/` — Full ADR content by domain (32 ADRs)
-- `.claude/rules/adr/_index.yaml` — Machine-readable ADR metadata
+- `../.claude/rules/adr/` — Full ADR content by domain (32 ADRs, in parent workspace)
+- Use `/adr <number>` command for quick lookup
 
 ```
 CRITICAL: Generation, NOT Translation
@@ -357,7 +357,7 @@ pnpm dev    # → http://localhost:3000
 2. **Explore TUI** — `cargo run -- tui` in `tools/novanet/` for unified tree exploration (v11.7)
 3. **Read `models/_index.yaml`** — Complete schema overview with all 61 nodes
 4. **Study `taxonomy.yaml`** — Realm/Layer/Trait definitions with visual encoding
-5. **Check ADRs** — `.claude/rules/adr/` for full ADRs, or `/adr` command for quick lookup
+5. **Check ADRs** — Use `/adr <number>` command for quick lookup (full ADRs in parent `supernovae-agi` workspace)
 6. **Run Studio** — `pnpm dev` and explore the graph visually at http://localhost:3000
 
 **Key concepts progression**: Realm → Layer → Trait → Class → Arc → ArcFamily
