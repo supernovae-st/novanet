@@ -238,6 +238,15 @@ enum SchemaAction {
         #[arg(long)]
         strict: bool,
     },
+    /// Validate Cypher seed files against YAML definitions
+    CypherValidate {
+        /// Strict mode: fail on warnings
+        #[arg(long)]
+        strict: bool,
+        /// Only validate specific file(s)
+        #[arg(long)]
+        file: Option<Vec<std::path::PathBuf>>,
+    },
     /// Extract schema statistics (node/arc counts) in JSON format
     Stats {
         /// Output format (json or table)
@@ -512,6 +521,47 @@ async fn main() -> color_eyre::Result<()> {
                 let root = root?;
                 eprintln!("novanet schema stats (root: {})", root.display());
                 novanet::commands::schema::schema_stats(&root, format)?;
+            }
+            SchemaAction::CypherValidate { strict, file } => {
+                let root = root?;
+                eprintln!(
+                    "novanet schema cypher-validate{} (root: {})",
+                    if strict { " --strict" } else { "" },
+                    root.display()
+                );
+                let issues = novanet::validation::validate_cypher_files(&root, file)?;
+                let errors: Vec<_> = issues
+                    .iter()
+                    .filter(|i| i.severity == novanet::validation::IssueSeverity::Error)
+                    .collect();
+                let warnings: Vec<_> = issues
+                    .iter()
+                    .filter(|i| i.severity == novanet::validation::IssueSeverity::Warning)
+                    .collect();
+
+                // Print issues with file:line reference
+                for issue in &issues {
+                    let tag = match issue.severity {
+                        novanet::validation::IssueSeverity::Error => "ERROR",
+                        novanet::validation::IssueSeverity::Warning => "WARN",
+                    };
+                    let location = if let Some(line) = issue.line {
+                        format!("{}:{}", issue.file.display(), line)
+                    } else {
+                        issue.file.display().to_string()
+                    };
+                    eprintln!(
+                        "  [{}] [{}] {}: {}",
+                        tag, issue.rule, location, issue.message
+                    );
+                }
+
+                // Print summary
+                eprintln!("{}", novanet::validation::format_summary(&issues));
+
+                if !errors.is_empty() || (strict && !warnings.is_empty()) {
+                    std::process::exit(1);
+                }
             }
         },
         Commands::Doc { action } => match action {

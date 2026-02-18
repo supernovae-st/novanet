@@ -48,20 +48,15 @@ pub struct Change {
 }
 
 /// Strategy for applying fixes.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum FixStrategy {
     /// Only apply fixes with 100% confidence (default).
+    #[default]
     Safe,
     /// Apply all available fixes aggressively.
     Auto,
     /// Preview fixes without writing (dry-run).
     DryRun,
-}
-
-impl Default for FixStrategy {
-    fn default() -> Self {
-        Self::Safe
-    }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

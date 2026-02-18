@@ -29,6 +29,35 @@ echo -e "${YELLOW}  NovaNet Neo4j Seed${NC}"
 echo -e "${YELLOW}═══════════════════════════════════════════════════════════════${NC}"
 echo ""
 
+# ─────────────────────────────────────────────────────────────────────────────
+# [0] YAML Schema Validation (pre-flight, ADR-003: YAML is source of truth)
+# Blocks seed if YAML has errors; warns on warnings but does not block.
+# ─────────────────────────────────────────────────────────────────────────────
+MONOREPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+NOVANET_BINARY="$MONOREPO_ROOT/tools/target/debug/novanet"
+
+echo -e "${YELLOW}[0/3] Validation du schéma YAML (ADR-003)...${NC}"
+
+if [ -f "$NOVANET_BINARY" ]; then
+    if (cd "$MONOREPO_ROOT" && "$NOVANET_BINARY" schema validate) 2>&1; then
+        echo -e "${GREEN}✓ Schéma YAML valide${NC}"
+    else
+        echo -e "${RED}✗ Erreurs dans le schéma YAML — corriger avant de seeder${NC}"
+        echo "  Lance: cargo run -- schema validate"
+        exit 1
+    fi
+elif command -v cargo &> /dev/null; then
+    if (cd "$MONOREPO_ROOT/tools/novanet" && cargo run --quiet -- schema validate) 2>&1; then
+        echo -e "${GREEN}✓ Schéma YAML valide${NC}"
+    else
+        echo -e "${RED}✗ Erreurs dans le schéma YAML — corriger avant de seeder${NC}"
+        exit 1
+    fi
+else
+    echo -e "${YELLOW}⚠ Validation schéma ignorée (binaire novanet introuvable, cargo absent)${NC}"
+fi
+echo ""
+
 # Vérifier que Neo4j est lancé
 echo -e "${YELLOW}[1/3] Vérification de Neo4j...${NC}"
 if ! docker ps --format '{{.Names}}' | grep -q "^${CONTAINER}$"; then

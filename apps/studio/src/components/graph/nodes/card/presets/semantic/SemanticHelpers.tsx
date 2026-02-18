@@ -19,6 +19,34 @@ import { memo, useState } from 'react';
 import { motion, type Variants } from 'motion/react';
 import { cn } from '@/lib/utils';
 import { DURATIONS } from '../../animationPresets';
+import { Pencil, Bot, Brain, CheckCircle, FileText, Globe, Check } from 'lucide-react';
+
+// =============================================================================
+// Neo4j Integer Helper
+// =============================================================================
+
+/**
+ * Convert Neo4j Integer {low, high} to JavaScript number
+ * Neo4j uses 64-bit integers which are returned as objects
+ *
+ * WARNING: For integers > 2^31-1, only the low 32 bits are used.
+ * If high !== 0, we log a warning (data may be incorrect).
+ */
+export function toNumber(value: unknown): number {
+  if (value === undefined || value === null) return 0;
+  if (typeof value === 'number') return value;
+  // Neo4j Integer type: {low: number, high: number}
+  if (typeof value === 'object' && 'low' in value && 'high' in value) {
+    const neo4jInt = value as { low: number; high: number };
+    if (neo4jInt.high !== 0) {
+      console.warn(
+        `[toNumber] Neo4j integer has non-zero high bits (${neo4jInt.high}), value may be truncated`
+      );
+    }
+    return neo4jInt.low;
+  }
+  return Number(value) || 0;
+}
 
 // =============================================================================
 // PillarBadge - Shows if entity is a pillar
@@ -85,25 +113,26 @@ export interface CurationBadgeProps {
   animate?: boolean;
 }
 
+// ADR-013: Use Lucide icons, not emoji
 const curationConfig = {
   human_authored: {
     label: 'Human',
-    icon: '✍️',
+    Icon: Pencil,
     color: '#22c55e',
   },
   machine_translated: {
     label: 'MT',
-    icon: '🤖',
+    Icon: Bot,
     color: '#eab308',
   },
   ai_generated: {
     label: 'AI',
-    icon: '🧠',
+    Icon: Brain,
     color: '#a855f7',
   },
   ai_generated_reviewed: {
     label: 'AI+Rev',
-    icon: '✅',
+    Icon: CheckCircle,
     color: '#06b6d4',
   },
 };
@@ -114,6 +143,7 @@ export const CurationBadge = memo(function CurationBadge({
 }: CurationBadgeProps) {
   const config = curationConfig[status];
   const Badge = animate ? motion.span : 'span';
+  const { Icon } = config;
 
   return (
     <Badge
@@ -128,7 +158,7 @@ export const CurationBadge = memo(function CurationBadge({
         transition: { duration: DURATIONS.fast },
       })}
     >
-      <span>{config.icon}</span>
+      <Icon size={10} />
       <span>{config.label}</span>
     </Badge>
   );
@@ -143,22 +173,115 @@ export interface LocaleBadgeProps {
   color?: string;
 }
 
-// Simple locale to flag mapping
+// Locale to flag emoji mapping (comprehensive BCP-47 coverage)
 const localeFlags: Record<string, string> = {
+  // English
   'en-US': '🇺🇸',
   'en-GB': '🇬🇧',
+  'en-AU': '🇦🇺',
+  'en-CA': '🇨🇦',
+  'en-NZ': '🇳🇿',
+  'en-IE': '🇮🇪',
+  // French
   'fr-FR': '🇫🇷',
+  'fr-CA': '🇨🇦',
+  'fr-BE': '🇧🇪',
+  'fr-CH': '🇨🇭',
+  // German
   'de-DE': '🇩🇪',
+  'de-AT': '🇦🇹',
+  'de-CH': '🇨🇭',
+  // Spanish
   'es-ES': '🇪🇸',
   'es-MX': '🇲🇽',
+  'es-AR': '🇦🇷',
+  'es-CO': '🇨🇴',
+  'es-CL': '🇨🇱',
+  // Portuguese
   'pt-BR': '🇧🇷',
+  'pt-PT': '🇵🇹',
+  // Asian
   'ja-JP': '🇯🇵',
   'ko-KR': '🇰🇷',
   'zh-CN': '🇨🇳',
+  'zh-TW': '🇹🇼',
+  'zh-HK': '🇭🇰',
+  'vi-VN': '🇻🇳',
+  'th-TH': '🇹🇭',
+  'id-ID': '🇮🇩',
+  'ms-MY': '🇲🇾',
+  // European
   'it-IT': '🇮🇹',
   'nl-NL': '🇳🇱',
-  'ar-SA': '🇸🇦',
+  'nl-BE': '🇧🇪',
+  'pl-PL': '🇵🇱',
   'ru-RU': '🇷🇺',
+  'uk-UA': '🇺🇦',
+  'cs-CZ': '🇨🇿',
+  'sk-SK': '🇸🇰',
+  'hu-HU': '🇭🇺',
+  'ro-RO': '🇷🇴',
+  'el-GR': '🇬🇷',
+  'bg-BG': '🇧🇬',
+  'hr-HR': '🇭🇷',
+  'sr-RS': '🇷🇸',
+  'sl-SI': '🇸🇮',
+  // Nordic
+  'sv-SE': '🇸🇪',
+  'da-DK': '🇩🇰',
+  'nb-NO': '🇳🇴',
+  'fi-FI': '🇫🇮',
+  'is-IS': '🇮🇸',
+  // Middle Eastern
+  'ar-SA': '🇸🇦',
+  'ar-AE': '🇦🇪',
+  'ar-EG': '🇪🇬',
+  'he-IL': '🇮🇱',
+  'tr-TR': '🇹🇷',
+  'fa-IR': '🇮🇷',
+  // Indian subcontinent
+  'hi-IN': '🇮🇳',
+  'bn-BD': '🇧🇩',
+  'ta-IN': '🇮🇳',
+  'te-IN': '🇮🇳',
+};
+
+// Locale-specific accent colors for flag ribbons
+// Each language family has a distinct primary color for easy visual differentiation
+const localeColors: Record<string, string> = {
+  // French family - Bleu France (distinct bright blue)
+  'fr-FR': '#2563eb', // Bleu France
+  'fr-CA': '#1d4ed8', // Bleu Québec (slightly darker)
+  'fr-BE': '#3b82f6', // Bleu Belgique
+  // English family - Red/Crimson
+  'en-US': '#dc2626', // American red
+  'en-GB': '#b91c1c', // British darker red
+  'en-AU': '#fbbf24', // Australian gold
+  // Spanish family - Warm yellow/gold
+  'es-ES': '#ca8a04', // Spanish gold
+  'es-MX': '#16a34a', // Mexican green
+  'es-AR': '#0ea5e9', // Argentine sky blue
+  // German family - Gray/Steel
+  'de-DE': '#6b7280', // German steel gray
+  'de-AT': '#dc2626', // Austrian red
+  // Portuguese - Green
+  'pt-BR': '#22c55e', // Brazilian green
+  'pt-PT': '#16a34a', // Portuguese darker green
+  // Asian languages - distinct per language
+  'ja-JP': '#dc2626', // Japanese red sun
+  'ko-KR': '#3b82f6', // Korean blue
+  'zh-CN': '#dc2626', // Chinese red
+  'zh-TW': '#22c55e', // Taiwanese green
+  // Other European
+  'it-IT': '#16a34a', // Italian green
+  'nl-NL': '#f97316', // Dutch orange
+  'pl-PL': '#dc2626', // Polish red
+  'ru-RU': '#3b82f6', // Russian blue
+  'uk-UA': '#fbbf24', // Ukrainian yellow
+  // Middle Eastern
+  'ar-SA': '#16a34a', // Saudi green
+  'he-IL': '#3b82f6', // Israeli blue
+  'tr-TR': '#dc2626', // Turkish red
 };
 
 export const LocaleBadge = memo(function LocaleBadge({
@@ -181,6 +304,70 @@ export const LocaleBadge = memo(function LocaleBadge({
     </span>
   );
 });
+
+// =============================================================================
+// LocaleFlagRibbon - Diagonal corner ribbon with flag (Flag Badge Prominent)
+// =============================================================================
+
+export interface LocaleFlagRibbonProps {
+  locale: string;
+  animate?: boolean;
+}
+
+const ribbonVariants: Variants = {
+  idle: { scale: 1, opacity: 0.95 },
+  hover: { scale: 1.02, opacity: 1 },
+  selected: {
+    scale: 1.05,
+    opacity: 1,
+    boxShadow: '0 0 12px rgba(255, 255, 255, 0.3)',
+  },
+};
+
+export const LocaleFlagRibbon = memo(function LocaleFlagRibbon({
+  locale,
+  animate = true,
+}: LocaleFlagRibbonProps) {
+  // Guard against undefined locale
+  if (!locale) return null;
+
+  const flag = localeFlags[locale] || '🌐';
+  const accentColor = localeColors[locale] || '#6366f1';
+  const localeCode = locale.split('-')[0]?.toUpperCase() || '??';
+  const Ribbon = animate ? motion.div : 'div';
+
+  return (
+    <div className="absolute top-0 left-0 overflow-hidden w-24 h-24 pointer-events-none z-10">
+      <Ribbon
+        className="absolute top-5 -left-8 transform -rotate-45 w-32 text-center py-1.5 shadow-lg"
+        style={{
+          background: `linear-gradient(135deg, ${accentColor}, ${accentColor}dd)`,
+          boxShadow: `0 2px 8px ${accentColor}60`,
+        }}
+        {...(animate && {
+          variants: ribbonVariants,
+          initial: 'idle',
+          whileHover: 'hover',
+        })}
+      >
+        <span className="text-lg">{flag}</span>
+        <span className="ml-1 text-[10px] font-bold text-white/90 drop-shadow-sm">
+          {localeCode}
+        </span>
+      </Ribbon>
+    </div>
+  );
+});
+
+// Helper to get flag for a locale
+export function getLocaleFlag(locale: string): string {
+  return localeFlags[locale] || '🌐';
+}
+
+// Helper to get accent color for a locale
+export function getLocaleAccentColor(locale: string): string {
+  return localeColors[locale] || '#6366f1';
+}
 
 // =============================================================================
 // SemanticLinkCounter - Shows semantic relationship counts
@@ -304,7 +491,7 @@ export const BenefitsList = memo(function BenefitsList({
               animate: 'visible',
             })}
           >
-            <span style={{ color }}>✓</span>
+            <Check size={9} style={{ color }} className="flex-shrink-0 mt-0.5" />
             <span className="text-white/70 line-clamp-1">{benefit}</span>
           </ListItem>
         ))}
@@ -349,13 +536,15 @@ export const ContentStats = memo(function ContentStats({
     >
       <div className="flex items-center gap-3">
         {benefitsCount > 0 && (
-          <span className="text-white/60">
-            <span style={{ color }}>✓</span> {benefitsCount}
+          <span className="flex items-center gap-1 text-white/60">
+            <Check size={10} style={{ color }} />
+            {benefitsCount}
           </span>
         )}
         {examplesCount > 0 && (
-          <span className="text-white/60">
-            <span style={{ color }}>📝</span> {examplesCount}
+          <span className="flex items-center gap-1 text-white/60">
+            <FileText size={10} style={{ color }} />
+            {examplesCount}
           </span>
         )}
       </div>

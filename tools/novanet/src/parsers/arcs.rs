@@ -6,7 +6,8 @@
 //! Key types:
 //! - `ArcsDocument` — top-level document with all arc definitions
 //! - `ArcDef` — single arc definition (type, family, source, target, cardinality)
-//! - `ArcFamily` — the 5 arc families
+//! - `ArcFamily` — the 6 arc families
+//! - `ArcPropertyDef` — detailed arc property definition (v0.13.1: ADR-030 alignment)
 
 use serde::Deserialize;
 use smallvec::{SmallVec, smallvec};
@@ -110,6 +111,42 @@ impl NodeRef {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// ArcPropertyDef — detailed arc property definition (v0.13.1: ADR-030 alignment)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Detailed arc property definition extracted from YAML.
+/// Captures type, required status, enum values per ADR-030 (TARGETS arc properties).
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ArcPropertyDef {
+    /// Property name (e.g., "rank", "is_slug_source").
+    pub name: String,
+    /// Property type (e.g., "string", "boolean", "int", "float", "datetime", "array").
+    pub prop_type: String,
+    /// Whether the property is required.
+    pub required: bool,
+    /// Enum values if property is constrained (e.g., ["primary", "secondary", "tertiary"]).
+    pub enum_values: Option<Vec<String>>,
+    /// Property description for documentation.
+    pub description: Option<String>,
+    /// Default value if specified.
+    pub default: Option<String>,
+}
+
+impl ArcPropertyDef {
+    /// Create a simple property with just a name (for backward compatibility).
+    pub fn simple(name: String) -> Self {
+        Self {
+            name,
+            prop_type: "string".to_string(),
+            required: false,
+            enum_values: None,
+            description: None,
+            default: None,
+        }
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // YAML Structs
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -158,6 +195,11 @@ pub struct ArcDef {
     /// Arc property names (optional).
     #[serde(default)]
     pub properties: Option<Vec<String>>,
+
+    /// Detailed arc property definitions (v0.13.1: ADR-030).
+    /// Populated by load_arc_classes_from_files() for detailed property info.
+    #[serde(skip)]
+    pub property_defs: Option<Vec<ArcPropertyDef>>,
 
     /// True if source and target can be the same type (e.g. SEMANTIC_LINK).
     #[serde(default)]
@@ -275,6 +317,140 @@ impl ArcClassDef {
         })
     }
 
+    /// Extract detailed property definitions (v0.13.1: ADR-030 alignment).
+    /// Returns full property info including type, required, enum values.
+    fn extract_property_defs(&self) -> Option<Vec<ArcPropertyDef>> {
+        self.properties.as_ref().and_then(|v| match v {
+            // List format: [{name: "rank", type: "string", required: true, enum: [...]}]
+            serde_yaml::Value::Sequence(seq) => {
+                let defs: Vec<ArcPropertyDef> = seq
+                    .iter()
+                    .filter_map(|item| {
+                        match item {
+                            // Simple string: just the name
+                            serde_yaml::Value::String(s) => Some(ArcPropertyDef::simple(s.clone())),
+                            // Object with full definition
+                            serde_yaml::Value::Mapping(m) => {
+                                let name = m
+                                    .get(serde_yaml::Value::String("name".to_string()))
+                                    .and_then(|v| v.as_str())
+                                    .map(|s| s.to_string())?;
+
+                                let prop_type = m
+                                    .get(serde_yaml::Value::String("type".to_string()))
+                                    .and_then(|v| v.as_str())
+                                    .map(|s| s.to_string())
+                                    .unwrap_or_else(|| "string".to_string());
+
+                                let required = m
+                                    .get(serde_yaml::Value::String("required".to_string()))
+                                    .and_then(|v| v.as_bool())
+                                    .unwrap_or(false);
+
+                                let enum_values = m
+                                    .get(serde_yaml::Value::String("enum".to_string()))
+                                    .and_then(|v| v.as_sequence())
+                                    .map(|seq| {
+                                        seq.iter()
+                                            .filter_map(|v| v.as_str().map(|s| s.to_string()))
+                                            .collect()
+                                    });
+
+                                let description = m
+                                    .get(serde_yaml::Value::String("description".to_string()))
+                                    .and_then(|v| v.as_str())
+                                    .map(|s| s.to_string());
+
+                                let default = m
+                                    .get(serde_yaml::Value::String("default".to_string()))
+                                    .map(|v| {
+                                        match v {
+                                            serde_yaml::Value::Bool(b) => b.to_string(),
+                                            serde_yaml::Value::Number(n) => n.to_string(),
+                                            serde_yaml::Value::String(s) => s.clone(),
+                                            _ => format!("{:?}", v),
+                                        }
+                                    });
+
+                                Some(ArcPropertyDef {
+                                    name,
+                                    prop_type,
+                                    required,
+                                    enum_values,
+                                    description,
+                                    default,
+                                })
+                            }
+                            _ => None,
+                        }
+                    })
+                    .collect();
+                if defs.is_empty() { None } else { Some(defs) }
+            }
+            // Map format: {segment: {type: string, ...}}
+            serde_yaml::Value::Mapping(m) => {
+                let defs: Vec<ArcPropertyDef> = m
+                    .iter()
+                    .filter_map(|(k, v)| {
+                        let name = k.as_str()?.to_string();
+
+                        if let Some(def_map) = v.as_mapping() {
+                            let prop_type = def_map
+                                .get(serde_yaml::Value::String("type".to_string()))
+                                .and_then(|v| v.as_str())
+                                .map(|s| s.to_string())
+                                .unwrap_or_else(|| "string".to_string());
+
+                            let required = def_map
+                                .get(serde_yaml::Value::String("required".to_string()))
+                                .and_then(|v| v.as_bool())
+                                .unwrap_or(false);
+
+                            let enum_values = def_map
+                                .get(serde_yaml::Value::String("enum".to_string()))
+                                .and_then(|v| v.as_sequence())
+                                .map(|seq| {
+                                    seq.iter()
+                                        .filter_map(|v| v.as_str().map(|s| s.to_string()))
+                                        .collect()
+                                });
+
+                            let description = def_map
+                                .get(serde_yaml::Value::String("description".to_string()))
+                                .and_then(|v| v.as_str())
+                                .map(|s| s.to_string());
+
+                            let default = def_map
+                                .get(serde_yaml::Value::String("default".to_string()))
+                                .map(|v| {
+                                    match v {
+                                        serde_yaml::Value::Bool(b) => b.to_string(),
+                                        serde_yaml::Value::Number(n) => n.to_string(),
+                                        serde_yaml::Value::String(s) => s.clone(),
+                                        _ => format!("{:?}", v),
+                                    }
+                                });
+
+                            Some(ArcPropertyDef {
+                                name,
+                                prop_type,
+                                required,
+                                enum_values,
+                                description,
+                                default,
+                            })
+                        } else {
+                            // Simple string value: treat as type
+                            Some(ArcPropertyDef::simple(name))
+                        }
+                    })
+                    .collect();
+                if defs.is_empty() { None } else { Some(defs) }
+            }
+            _ => None,
+        })
+    }
+
     /// Convert to ArcDef format for generator compatibility.
     ///
     /// Note: The `inverse` field in arc-kind YAML means "the inverse of THIS arc is called X",
@@ -290,6 +466,7 @@ impl ArcClassDef {
             cardinality: self.cardinality,
             llm_context: self.llm_context.clone().unwrap_or_default(),
             properties: self.extract_property_names(),
+            property_defs: self.extract_property_defs(),
             is_self_referential: None,
             // Don't set inverse_of here - the `inverse` field means "this arc's inverse IS X",
             // not "this arc IS the inverse OF X". Setting inverse_of would incorrectly filter
@@ -775,5 +952,331 @@ fn parse_has_audience_file() {
             eprintln!("Error: {}", e);
             panic!("Failed to parse: {}", e);
         }
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// v0.13.1: YAML/Cypher Alignment Tests for Arc Properties (ADR-030, ADR-032)
+// ─────────────────────────────────────────────────────────────────────────────
+
+#[cfg(test)]
+mod arc_yaml_cypher_alignment_tests {
+    use super::*;
+
+    fn test_root() -> Option<std::path::PathBuf> {
+        let manifest_dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR"));
+        let root = manifest_dir.parent().and_then(|p| p.parent());
+        let root = root?;
+        if !root.join("pnpm-workspace.yaml").exists() {
+            return None;
+        }
+        Some(root.to_path_buf())
+    }
+
+    /// Parse the TARGETS arc YAML and verify rank + is_slug_source properties.
+    /// ADR-030: is_slug_source marks the keyword used for URL slug derivation.
+    #[test]
+    fn targets_arc_has_rank_and_is_slug_source_properties() {
+        let Some(root) = test_root() else {
+            eprintln!("Skipping: not in monorepo");
+            return;
+        };
+
+        let path = root.join("packages/core/models/arc-classes/semantic/targets.yaml");
+        let content = std::fs::read_to_string(&path).expect("should read TARGETS arc YAML");
+        let parsed: ArcClassYaml =
+            serde_yaml::from_str(&content).expect("should parse TARGETS arc YAML");
+
+        assert_eq!(parsed.arc.name, "TARGETS", "arc name mismatch");
+        assert_eq!(
+            parsed.arc.family,
+            ArcFamily::Semantic,
+            "TARGETS must be semantic family"
+        );
+
+        // Check properties contains rank and is_slug_source
+        let props = parsed
+            .arc
+            .properties
+            .as_ref()
+            .expect("TARGETS must have properties");
+
+        // Properties can be list of objects with name field
+        if let serde_yaml::Value::Sequence(seq) = props {
+            let prop_names: Vec<String> = seq
+                .iter()
+                .filter_map(|item| {
+                    if let serde_yaml::Value::Mapping(m) = item {
+                        m.get(serde_yaml::Value::String("name".to_string()))
+                            .and_then(|v| v.as_str().map(|s| s.to_string()))
+                    } else {
+                        None
+                    }
+                })
+                .collect();
+
+            assert!(
+                prop_names.contains(&"rank".to_string()),
+                "TARGETS must have 'rank' property (primary/secondary/tertiary)"
+            );
+            assert!(
+                prop_names.contains(&"is_slug_source".to_string()),
+                "TARGETS must have 'is_slug_source' property (ADR-030)"
+            );
+        }
+    }
+
+    /// Parse the TARGETS arc YAML and verify the rank enum values.
+    #[test]
+    fn targets_arc_rank_property_has_enum_values() {
+        let Some(root) = test_root() else {
+            eprintln!("Skipping: not in monorepo");
+            return;
+        };
+
+        let path = root.join("packages/core/models/arc-classes/semantic/targets.yaml");
+        let content = std::fs::read_to_string(&path).expect("should read TARGETS arc YAML");
+        let parsed: ArcClassYaml =
+            serde_yaml::from_str(&content).expect("should parse TARGETS arc YAML");
+
+        let props = parsed.arc.properties.as_ref().unwrap();
+        if let serde_yaml::Value::Sequence(seq) = props {
+            // Find the rank property
+            let rank_prop = seq.iter().find(|item| {
+                if let serde_yaml::Value::Mapping(m) = item {
+                    m.get(serde_yaml::Value::String("name".to_string()))
+                        .and_then(|v| v.as_str())
+                        == Some("rank")
+                } else {
+                    false
+                }
+            });
+
+            let rank_prop = rank_prop.expect("rank property must exist");
+            if let serde_yaml::Value::Mapping(m) = rank_prop {
+                let enum_val = m
+                    .get(serde_yaml::Value::String("enum".to_string()))
+                    .expect("rank property must have enum");
+
+                if let serde_yaml::Value::Sequence(enum_seq) = enum_val {
+                    let enum_strs: Vec<&str> =
+                        enum_seq.iter().filter_map(|v| v.as_str()).collect();
+                    assert!(
+                        enum_strs.contains(&"primary"),
+                        "rank enum must contain 'primary'"
+                    );
+                    assert!(
+                        enum_strs.contains(&"secondary"),
+                        "rank enum must contain 'secondary'"
+                    );
+                    assert!(
+                        enum_strs.contains(&"tertiary"),
+                        "rank enum must contain 'tertiary'"
+                    );
+                }
+            }
+        }
+    }
+
+    /// Parse the DERIVED_SLUG_FROM arc YAML and verify derivation properties.
+    /// ADR-030: Audit trail for slug derivation decisions.
+    #[test]
+    fn derived_slug_from_arc_has_derivation_properties() {
+        let Some(root) = test_root() else {
+            eprintln!("Skipping: not in monorepo");
+            return;
+        };
+
+        let path = root.join("packages/core/models/arc-classes/generation/derived-slug-from.yaml");
+        let content = std::fs::read_to_string(&path).expect("should read DERIVED_SLUG_FROM arc YAML");
+        let parsed: ArcClassYaml =
+            serde_yaml::from_str(&content).expect("should parse DERIVED_SLUG_FROM arc YAML");
+
+        assert_eq!(parsed.arc.name, "DERIVED_SLUG_FROM", "arc name mismatch");
+        assert_eq!(
+            parsed.arc.family,
+            ArcFamily::Generation,
+            "DERIVED_SLUG_FROM must be generation family"
+        );
+
+        // Verify source and target
+        assert_eq!(
+            parsed.arc.source.labels().as_slice(),
+            ["BlockNative"],
+            "DERIVED_SLUG_FROM source must be BlockNative"
+        );
+        assert_eq!(
+            parsed.arc.target.labels().as_slice(),
+            ["EntityNative"],
+            "DERIVED_SLUG_FROM target must be EntityNative"
+        );
+
+        // Check properties
+        let props = parsed
+            .arc
+            .properties
+            .as_ref()
+            .expect("DERIVED_SLUG_FROM must have properties");
+
+        if let serde_yaml::Value::Sequence(seq) = props {
+            let prop_names: Vec<String> = seq
+                .iter()
+                .filter_map(|item| {
+                    if let serde_yaml::Value::Mapping(m) = item {
+                        m.get(serde_yaml::Value::String("name".to_string()))
+                            .and_then(|v| v.as_str().map(|s| s.to_string()))
+                    } else {
+                        None
+                    }
+                })
+                .collect();
+
+            assert!(
+                prop_names.contains(&"derivation_score".to_string()),
+                "DERIVED_SLUG_FROM must have 'derivation_score' property"
+            );
+            assert!(
+                prop_names.contains(&"derivation_rationale".to_string()),
+                "DERIVED_SLUG_FROM must have 'derivation_rationale' property"
+            );
+            assert!(
+                prop_names.contains(&"derivation_timestamp".to_string()),
+                "DERIVED_SLUG_FROM must have 'derivation_timestamp' property"
+            );
+            assert!(
+                prop_names.contains(&"no_repetition_applied".to_string()),
+                "DERIVED_SLUG_FROM must have 'no_repetition_applied' property (ADR-032)"
+            );
+        }
+    }
+
+    /// Unit test: Parse TARGETS arc with all properties inline.
+    #[test]
+    fn parse_targets_arc_yaml_inline() {
+        let yaml = r#"
+arc:
+  name: TARGETS
+  family: semantic
+  scope: cross_realm
+  temperature_threshold: 0.6
+  source: EntityNative
+  target: SEOKeyword
+  cardinality: many_to_many
+  properties:
+    - name: rank
+      type: string
+      required: true
+      enum: [primary, secondary, tertiary]
+      description: "Targeting rank for this keyword"
+    - name: is_slug_source
+      type: boolean
+      required: false
+      default: false
+      description: "True if this keyword's slug_form was used for the URL slug"
+    - name: target_position
+      type: int
+      required: false
+      description: "Target ranking position (1-10)"
+    - name: created_at
+      type: datetime
+      required: false
+      description: "Arc creation timestamp"
+  llm_context: |
+    USE: when finding SEO keywords targeted by localized content.
+    TRIGGERS: targets keyword, SEO targeting.
+"#;
+        let parsed: ArcClassYaml = serde_yaml::from_str(yaml).expect("should parse TARGETS yaml");
+        assert_eq!(parsed.arc.name, "TARGETS");
+        assert_eq!(parsed.arc.family, ArcFamily::Semantic);
+        assert_eq!(parsed.arc.temperature_threshold, Some(0.6));
+
+        // Convert to ArcDef and verify properties are extracted
+        let arc_def = parsed.arc.to_arc_def();
+        let props = arc_def.properties.expect("should have properties");
+        assert!(props.contains(&"rank".to_string()), "should extract 'rank'");
+        assert!(
+            props.contains(&"is_slug_source".to_string()),
+            "should extract 'is_slug_source'"
+        );
+    }
+
+    /// Unit test: Parse DERIVED_SLUG_FROM arc with all properties inline.
+    #[test]
+    fn parse_derived_slug_from_arc_yaml_inline() {
+        let yaml = r#"
+arc:
+  name: DERIVED_SLUG_FROM
+  family: generation
+  scope: intra_realm
+  source: BlockNative
+  target: EntityNative
+  cardinality: many_to_one
+  properties:
+    - name: derivation_score
+      type: float
+      required: true
+      description: "Score = volume x sem_coef x convergence_boost"
+    - name: derivation_rationale
+      type: string
+      required: false
+      description: "LLM explanation of why this keyword was chosen"
+    - name: derivation_timestamp
+      type: datetime
+      required: false
+      description: "When the slug derivation was computed"
+    - name: no_repetition_applied
+      type: boolean
+      required: false
+      default: false
+      description: "Whether the no-repetition rule modified the slug"
+    - name: brand_invariant
+      type: boolean
+      required: false
+      default: false
+      description: "Whether slug is brand name (no translation)"
+"#;
+        let parsed: ArcClassYaml =
+            serde_yaml::from_str(yaml).expect("should parse DERIVED_SLUG_FROM yaml");
+        assert_eq!(parsed.arc.name, "DERIVED_SLUG_FROM");
+        assert_eq!(parsed.arc.family, ArcFamily::Generation);
+        assert_eq!(parsed.arc.cardinality, Cardinality::ManyToOne);
+
+        // Convert to ArcDef and verify properties are extracted
+        let arc_def = parsed.arc.to_arc_def();
+        let props = arc_def.properties.expect("should have properties");
+        assert!(
+            props.contains(&"derivation_score".to_string()),
+            "should extract 'derivation_score'"
+        );
+        assert!(
+            props.contains(&"derivation_timestamp".to_string()),
+            "should extract 'derivation_timestamp'"
+        );
+        assert!(
+            props.contains(&"no_repetition_applied".to_string()),
+            "should extract 'no_repetition_applied'"
+        );
+    }
+
+    /// Integration test: Verify all arc files load successfully.
+    #[test]
+    fn all_arc_yaml_files_parse_successfully() {
+        let Some(root) = test_root() else {
+            eprintln!("Skipping: not in monorepo");
+            return;
+        };
+
+        let doc = load_arc_classes_from_files(&root).expect("should load all arc classes");
+
+        // v0.13.1: Should have TARGETS and DERIVED_SLUG_FROM
+        let targets = doc.arcs.iter().find(|a| a.arc_type == "TARGETS");
+        assert!(targets.is_some(), "TARGETS arc must exist");
+        let targets = targets.unwrap();
+        assert_eq!(targets.family, ArcFamily::Semantic);
+
+        let derived = doc.arcs.iter().find(|a| a.arc_type == "DERIVED_SLUG_FROM");
+        assert!(derived.is_some(), "DERIVED_SLUG_FROM arc must exist");
+        let derived = derived.unwrap();
+        assert_eq!(derived.family, ArcFamily::Generation);
     }
 }
