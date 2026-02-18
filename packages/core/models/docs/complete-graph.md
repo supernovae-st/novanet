@@ -160,7 +160,7 @@ flowchart TB
   BlockInstruction -.->|MENTIONS| Term
   BlockInstruction -.->|REFERENCES_ENTITY| Entity
   BlockInstruction -.->|REFERENCES_PAGE| Page
-  BlockNative ==>|DERIVED_SLUG_FROM| SEOKeyword
+  BlockNative ==>|DERIVED_SLUG_FROM| EntityNative
   BlockNative -.->|FOR_CHANNEL| ChannelSurface
   BlockNative -.->|FOR_LOCALE| Locale
   BlockNative ==>|GENERATED_FROM| BlockType
