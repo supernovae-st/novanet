@@ -190,6 +190,28 @@ mod tests {
     use crate::generators::Generator;
     use crate::generators::test_utils::make_node_simple as make_node;
 
+    /// Clean up any test files left by other tests to avoid pollution.
+    fn cleanup_test_files(root: &std::path::Path) {
+        use walkdir::WalkDir;
+
+        let node_classes_dir = crate::config::node_classes_dir(root);
+        if !node_classes_dir.exists() {
+            return;
+        }
+
+        for entry in WalkDir::new(node_classes_dir)
+            .into_iter()
+            .filter_map(|e| e.ok())
+            .filter(|e| e.file_type().is_file())
+        {
+            if let Some(name) = entry.path().file_name().and_then(|n| n.to_str()) {
+                if name.starts_with("test-") || name.contains("-test") {
+                    let _ = std::fs::remove_file(entry.path());
+                }
+            }
+        }
+    }
+
     #[test]
     fn generate_small_autowire() {
         let nodes = vec![
@@ -276,6 +298,9 @@ mod tests {
         if !root.join("pnpm-workspace.yaml").exists() {
             return;
         }
+
+        // Clean up any test files from parallel tests
+        cleanup_test_files(root);
 
         let generator = AutowireGenerator;
         let cypher = generator
