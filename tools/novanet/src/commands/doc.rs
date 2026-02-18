@@ -104,11 +104,11 @@ mod tests {
 
         let entries = doc_list(&root).expect("should list views");
 
-        // v0.13.0: 12 views in views.yaml (added entity-truth)
+        // v0.13.1: 13 views in views.yaml (added denomination-forms-context, ADR-033)
         assert_eq!(
             entries.len(),
-            12,
-            "expected 12 views, got {}",
+            13,
+            "expected 13 views, got {}",
             entries.len()
         );
 

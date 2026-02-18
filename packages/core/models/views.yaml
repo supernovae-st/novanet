@@ -289,3 +289,28 @@ views:
              kw, r_kw, kwm, r_kwm,
              gq, r_gq, ga, r_ga, gm, r_gm
       LIMIT 400
+
+  - id: denomination-forms-context
+    name: Denomination Forms Context
+    description: Load denomination_forms for an entity in a specific locale — used by MCP agents for naming authority (ADR-033)
+    category: contextual
+    icon: { web: type, terminal: "Ⅹ" }
+    color: "#94a3b8"
+    root_type: EntityNative
+    contextual: true
+    cypher: |
+      // denomination-forms-context
+      // Load canonical naming forms for entity in locale
+      // Params: $entityKey (e.g. "qr-code"), $localeKey (e.g. "fr-FR")
+      MATCH (e:Entity {key: $entityKey})
+      OPTIONAL MATCH (e)-[:HAS_NATIVE]->(en:EntityNative {locale_key: $localeKey})
+      OPTIONAL MATCH (en)-[:FOR_LOCALE]->(l:Locale)
+      WITH e, en, l
+      RETURN
+        e.key AS entity_key,
+        e.denomination_forms AS entity_forms,
+        en.key AS entity_native_key,
+        en.locale_key AS locale_key,
+        en.denomination_forms AS locale_forms,
+        l.slugification AS slugification_rule
+      LIMIT 1
