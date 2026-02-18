@@ -988,38 +988,99 @@ fn build_instance_content(
         );
     }
 
-    // METRICS
-    if class.instance_count > 0 {
+    // METRICS - unified with Class view (same labels, same positions)
+    content.metrics.add_kv(
+        "instances",
+        Span::styled(format!("{} total", class.instance_count), STYLE_MUTED),
+    );
+    content.metrics.add_kv(
+        "properties",
+        Span::styled(
+            format!(
+                "{}/{} filled",
+                instance.properties.len(),
+                class.properties.len()
+            ),
+            STYLE_INFO,
+        ),
+    );
+    if !class.context_budget.is_empty() {
         content.metrics.add_kv(
-            "siblings",
-            Span::styled(format!("{} total", class.instance_count), STYLE_MUTED),
+            "budget",
+            Span::styled(class.context_budget.clone(), STYLE_INFO),
         );
     }
-    content.metrics.add_kv(
-        "props",
-        Span::styled(instance.properties.len().to_string(), STYLE_INFO),
-    );
 
-    // COVERAGE - property fill rate
-    let total_schema_props = class.properties.len();
-    let filled_props = instance.properties.len();
-    if total_schema_props > 0 && filled_props > 0 {
-        let fill_percent = ((filled_props as f64 / total_schema_props as f64) * 100.0)
-            .round()
-            .min(100.0) as usize;
+    // COVERAGE - required/optional bars (unified with Class view)
+    let total_props = class.properties.len();
+    let required_props = class.required_properties.len();
+    let optional_props = total_props.saturating_sub(required_props);
+
+    // Count filled required and optional properties
+    let filled_required = instance
+        .properties
+        .keys()
+        .filter(|k| class.required_properties.contains(*k))
+        .count();
+    let filled_optional = instance
+        .properties
+        .keys()
+        .filter(|k| !class.required_properties.contains(*k) && class.properties.contains(*k))
+        .count();
+
+    if total_props > 0 {
         let bar_width = 12usize;
-        let filled = (fill_percent * bar_width) / 100;
-        let bar = "━".repeat(filled.max(1));
-        let empty = "░".repeat(bar_width.saturating_sub(filled));
+
+        // Required bar - shows filled/total required
+        let req_percent = if required_props > 0 {
+            (filled_required as f64 / required_props as f64 * 100.0).round() as u8
+        } else {
+            0
+        };
+        let req_filled = if required_props > 0 {
+            (filled_required * bar_width) / required_props.max(1)
+        } else {
+            0
+        };
+        let req_bar = "█".repeat(req_filled.max(if filled_required > 0 { 1 } else { 0 }));
+        let req_empty = "░".repeat(bar_width.saturating_sub(req_filled));
 
         content.coverage.add_line(Line::from(vec![
+            Span::styled("* ", Style::default().fg(Color::Red)),
+            Span::styled("required   ", Style::default().fg(Color::Yellow)),
+            Span::styled(req_bar, Style::default().fg(Color::Yellow)),
+            Span::styled(req_empty, STYLE_DIM),
+            Span::styled(format!(" {:>3}%", req_percent), STYLE_MUTED),
             Span::styled(
-                format!("{}/{} ", filled_props, total_schema_props),
-                STYLE_INFO,
+                format!("  {}/{}", filled_required, required_props),
+                STYLE_DIM,
             ),
-            Span::styled(bar, STYLE_SUCCESS),
-            Span::styled(empty, STYLE_DIM),
-            Span::styled(format!(" {}%", fill_percent), STYLE_MUTED),
+        ]));
+
+        // Optional bar - shows filled/total optional
+        let opt_percent = if optional_props > 0 {
+            (filled_optional as f64 / optional_props as f64 * 100.0).round() as u8
+        } else {
+            0
+        };
+        let opt_filled = if optional_props > 0 {
+            (filled_optional * bar_width) / optional_props.max(1)
+        } else {
+            0
+        };
+        let opt_bar = "█".repeat(opt_filled.max(if filled_optional > 0 { 1 } else { 0 }));
+        let opt_empty = "░".repeat(bar_width.saturating_sub(opt_filled));
+
+        content.coverage.add_line(Line::from(vec![
+            Span::styled("  ", STYLE_DIM),
+            Span::styled("optional   ", Style::default().fg(Color::White)),
+            Span::styled(opt_bar, Style::default().fg(Color::White)),
+            Span::styled(opt_empty, STYLE_DIM),
+            Span::styled(format!(" {:>3}%", opt_percent), STYLE_MUTED),
+            Span::styled(
+                format!("  {}/{}", filled_optional, optional_props),
+                STYLE_DIM,
+            ),
         ]));
     } else {
         content.coverage.add_empty();
@@ -1085,12 +1146,11 @@ fn build_instance_content(
                 };
                 let required_marker = if is_required { "*" } else { " " };
 
-                let (value_str, _value_color) =
-                    if let Some(value) = instance.properties.get(*key) {
-                        (json_value_to_display(value), json_value_color(value))
-                    } else {
-                        ("~".to_string(), COLOR_VALUE_NULL)
-                    };
+                let (value_str, _value_color) = if let Some(value) = instance.properties.get(*key) {
+                    (json_value_to_display(value), json_value_color(value))
+                } else {
+                    ("~".to_string(), COLOR_VALUE_NULL)
+                };
                 let truncated = truncate_str(&value_str, 24);
 
                 // Standard properties use dim styling for key and value
@@ -1130,12 +1190,11 @@ fn build_instance_content(
                 };
                 let required_marker = if is_required { "*" } else { " " };
 
-                let (value_str, value_color) =
-                    if let Some(value) = instance.properties.get(*key) {
-                        (json_value_to_display(value), json_value_color(value))
-                    } else {
-                        ("~".to_string(), COLOR_VALUE_NULL)
-                    };
+                let (value_str, value_color) = if let Some(value) = instance.properties.get(*key) {
+                    (json_value_to_display(value), json_value_color(value))
+                } else {
+                    ("~".to_string(), COLOR_VALUE_NULL)
+                };
                 let truncated = truncate_str(&value_str, 24);
 
                 content.properties.add_line(Line::from(vec![
