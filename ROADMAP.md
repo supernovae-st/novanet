@@ -1,263 +1,478 @@
-# NovaNet Roadmap
+# spn-agi Master Roadmap
 
-Current version: **v0.13.0** | Last release: v0.12.5 | Target: QR Code AI (https://qrcode-ai.com)
+**Last Updated:** 2026-02-18
+**Status:** Active - MVP-Based Execution
 
-> **Versioning Note**: Starting with v0.12.0, NovaNet follows strict SemVer. Versions v8.x-v11.x were internal milestones.
+---
 
-## Milestones Overview
+## Overview
+
+Ce document est le "plan des plans" - il orchestre tous les plans de développement de spn-agi (NovaNet + Nika) selon une approche **MVP incrémentale**.
 
 ```
-═══════════════════════════════════════════════════════════════════════════════
-COMPLETED
-═══════════════════════════════════════════════════════════════════════════════
-v9.0  Self-Describing Context Graph    ████████████████████  100%  RELEASED
-v9.1  TUI v2 Stability                 ████████████████████  100%  RELEASED
-v9.5  Nomenclature (Arc, Realm/Layer)  ████████████████████  100%  RELEASED
-v9.6  Generation Domain Nodes          ████████████████████  100%  RELEASED
-v9.7  Intent Layer + Thing Model       ████████████████████  100%  RELEASED
-v9.8  Polish + Cleanup                 ████████████████████  100%  RELEASED
-v9.9  Tiered Knowledge Model           ████████████████████  100%  RELEASED
-v10.4 Entity-Centric Architecture      ████████████████████  100%  RELEASED
-v10.5 3-Realm Architecture             ████████████████████  100%  RELEASED
-v10.6 2-Realm Architecture             ████████████████████  100%  RELEASED
-      2 Realms (GLOBAL/TENANT), 9 Layers, simplified tenant isolation
-v10.7 Geographic Taxonomy              ████████████████████  100%  RELEASED
-      Population clusters, economic regions, cultural realms
-v10.8 Icons Source of Truth            ████████████████████  100%  RELEASED
-      visual-encoding.yaml icons (web+terminal), ADR-013
-v10.9 Naming Convention Refactor       ████████████████████  100%  RELEASED
-      ADR-014 (L10n→Content/Generated), ADR-015 (unidirectional arcs), ADR-016 (CONTAINS→6 typed)
-v11.0 SEO Tenant + Docs Refactor       ████████████████████  100%  RELEASED
-      SEO→tenant (ADR-012 fix), arc coherence, 30-sniper doc audit
-v11.5 Schema Refinement                ████████████████████  100%  RELEASED
-      Locale→config, SEO/GEO→shared/knowledge (ADR-020), 10 layers
-v11.6 Query-First Architecture         ████████████████████  100%  RELEASED
-      Tabbed detail panel, CypherPill, ADR-021 Query-First
-v11.7 Unified Tree Architecture        ████████████████████  100%  RELEASED
-      5 modes→2 (Graph/Nexus), ADR-022, dual icons, lazy loading
-v11.8 Class Act (legacy)               ████████████████████  100%  RELEASED
-      Trait renames (ADR-024): defined/authored/imported/generated/retrieved
-v0.12 SemVer Transition                ████████████████████  100%  RELEASED
-      Proper semantic versioning (0.x = pre-production)
-v0.13 *Native Pattern                  ████████████████████  100%  <- CURRENT
-      ADR-029 unified *Native suffix, ADR-030 Slug Ownership
-
-═══════════════════════════════════════════════════════════════════════════════
-IDEAS (no timeline)
-═══════════════════════════════════════════════════════════════════════════════
-• Dynamic Retrieval — Context Assembly Engine, token-aware traversal
-• Autonomous Learning — Feedback loops, meta-graph self-improvement
-• Content Pipeline — CLI-driven generation, orchestrator integration
-• See: docs/plans/future/ for detailed specs
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  spn-agi MVP EXECUTION ORDER                                                    │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  ✅ FOUNDATION (DONE)                                                           │
+│  ├── NovaNet Schema v0.13.1                                                     │
+│  ├── NovaNet MCP Server (7 tools)                                               │
+│  └── Nika v0.1 (infer, exec, fetch)                                             │
+│                                                                                 │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │  MVP 0: DX SETUP CORE (~2-3h)                              ▶ CURRENT   │   │
+│  │  ├── Cargo.toml dependencies                                            │   │
+│  │  ├── CLAUDE.md + .claude/ rules                                         │   │
+│  │  ├── Error codes (NIKA-000 to NIKA-112)                                 │   │
+│  │  └── Test utilities                                                     │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+│                          │                                                      │
+│                          ▼                                                      │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │  MVP 1: INVOKE VERB (~4-6h)                                             │   │
+│  │  ├── MCP client (types, client)                                         │   │
+│  │  ├── invoke: verb (AST + execution)                                     │   │
+│  │  ├── Workflow MCP config                                                │   │
+│  │  └── Integration test with NovaNet                                      │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+│                          │                                                      │
+│                          ▼                                                      │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │  MVP 2: AGENT + OBSERVABILITY (~6-8h)                                   │   │
+│  │  ├── Provider tool calling                                              │   │
+│  │  ├── agent: verb + AgentLoop                                            │   │
+│  │  ├── EventLog v2 (16 variants)                                          │   │
+│  │  └── NDJSON trace writer                                                │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+│                          │                                                      │
+│                          ▼                                                      │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │  MVP 3: TUI + CLI TRACE (~8-10h)                                        │   │
+│  │  ├── 4-panel TUI (ratatui)                                              │   │
+│  │  ├── Real-time event streaming                                          │   │
+│  │  └── CLI trace commands (list, show, export)                            │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                 │
+│  🎯 MILESTONE: Nika v0.2 with full NovaNet observability                       │
+│                                                                                 │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                          │                                                      │
+│                          ▼                                                      │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │  MVP 4: REAL INTEGRATION (~4-6h)                                       │   │
+│  │  ├── Remove mock mode, test with real NovaNet MCP                      │   │
+│  │  ├── End-to-end tests with Neo4j running                               │   │
+│  │  ├── denomination_forms ADR-033 validation                             │   │
+│  │  └── CI pipeline for integration tests                                 │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+│                          │                                                      │
+│                          ▼                                                      │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │  MVP 5: PRODUCTION HARDENING (~6-8h)                                   │   │
+│  │  ├── OpenAI provider tool calling                                      │   │
+│  │  ├── Error recovery patterns (retry, circuit breaker)                  │   │
+│  │  ├── Rate limiting / exponential backoff                               │   │
+│  │  └── Performance metrics & benchmarks                                  │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+│                          │                                                      │
+│                          ▼                                                      │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │  MVP 6: V0.3 FEATURES (~8-10h)                                         │   │
+│  │  ├── for_each parallelism (parallel task execution)                    │   │
+│  │  ├── Workspace split (multi-crate Cargo)                               │   │
+│  │  ├── User documentation (README, examples/, guides)                    │   │
+│  │  └── NovaNet MCP enhancements (context_build_log)                      │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                 │
+│  🎯 RESULT: Nika v0.3 production-ready with full feature set                   │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-## v9.0.0 — Self-Describing Context Graph
+---
 
-Refactor from flat tree (Scope > Subcategory > NodeTypeMeta) to faceted classification
-with 6 meta-node types, dual navigation, and Rust-first tooling.
+## Foundation (COMPLETED)
 
-| Phase | Description | Status | Key Deliverables |
-|-------|-------------|--------|------------------|
-| 0 | Preparation | DONE | `v8.3.0-stable` tag, feature branch |
-| 1 | YAML Foundation | DONE | 44 node YAMLs with `locale_behavior`, relations.yaml v9 |
-| 2 | Rust Generators | DONE | 8 generators, 4 parsers, 279 tests |
-| 3 | TypeScript Types | DONE | KIND_META, NodeCategory removed, old TS deleted |
-| 4 | Neo4j Migration | DONE | v9 seeds, constraints, 8 facet indexes |
-| 5 | Studio Migration | DONE | Realm/Layer components, visual system, nodeColors.ts |
-| 6 | Studio Navigation | DONE | 4-mode navigation, FacetFilterPanel, ViewPicker context-aware, T/E presets |
-| 7A | Rust CLI + TUI | DONE | All commands, basic TUI with taxonomy tree |
-| 8 | Final Verification | DONE | Audit, 955 tests, lint, type-check, benchmarks, code review |
+Ces éléments sont déjà implémentés et fonctionnels.
 
-### Remaining for v9.0.0 release
+### NovaNet
+| Item | Status | Location |
+|------|--------|----------|
+| Schema v0.13.1 (62 nodes) | ✅ Done | `novanet-dev/.claude/rules/schema-standard.md` |
+| Neo4j + Seed data | ✅ Done | `novanet-dev/packages/db/` |
+| MCP Server (7 tools) | ✅ Done | `novanet-dev/tools/novanet-mcp/` |
+| TUI (novanet tui) | ✅ Done | `novanet-dev/tools/novanet/src/tui/` |
 
-- [x] Migrate `categoryColors` imports to `design/nodeColors.ts` (Phase 5)
-- [x] Verify ViewPicker context-awareness (Phase 6) — 13 views with `modes` field, filtering works
-- [x] Verify keyboard presets T/E (Phase 6) — implemented + in help modal
-- [x] Commit TUI work in progress (Phase 7B Batches 1-7 complete)
-- [x] Run `/codebase-audit` — Ralph Wiggum #8 (Phase 8) — 6 findings fixed
-- [x] `pnpm test` — 559 tests pass, 34 suites (Phase 8)
-- [x] `pnpm type-check` — zero errors, 3/3 packages (Phase 8)
-- [x] `pnpm lint` — zero errors (Phase 8)
-- [x] `cargo test` — 396 tests pass, zero clippy warnings (Phase 8)
-- [x] Performance benchmarks — data 1056ms, meta 159ms, overlay 646ms, query 125ms (Phase 8)
-- [x] Code review — PRODUCTION READY, 0 critical/high issues (Phase 8)
-- [x] Create GitHub Release v9.0.0 (Phase 8)
+### Nika v0.1
+| Item | Status | Location |
+|------|--------|----------|
+| Core (AST, DAG, Runtime) | ✅ Done | `nika-dev/tools/nika/src/` |
+| Verbs: infer, exec, fetch | ✅ Done | `nika-dev/tools/nika/src/ast/action.rs` |
+| EventLog (10 variants) | ✅ Done | `nika-dev/tools/nika/src/event/log.rs` |
+| Providers: Claude, OpenAI | ✅ Done | `nika-dev/tools/nika/src/provider/` |
 
-## v9.1.0 — TUI v2 Stability (shipped in v9.0.1)
+---
 
-Complete TUI rebuild focusing on stability and simplicity.
+## MVP 0: DX Setup Core
 
+**Plan:** `nika-dev/docs/plans/2026-02-18-mvp0-dx-setup-core.md`
+**Estimated:** 2-3 hours
+**Prerequisites:** None
+
+### Tasks
 | Task | Description | Status |
 |------|-------------|--------|
-| Rebuild | Consolidate 12 modules → 3 (app, data, ui) | DONE |
-| Tree nav | Realm > Layer > Kind hierarchy | DONE |
-| Detail | YAML preview + edge explorer | DONE |
-| Modes | 4 navigation modes [1-4] | DONE |
+| 1 | Update Cargo.toml with v0.2 deps | ⏳ Pending |
+| 2 | Create CLAUDE.md | ⏳ Pending |
+| 3 | Create deny.toml | ⏳ Pending |
+| 4 | Create .claude/ directory | ⏳ Pending |
+| 5 | Add error codes to NikaError | ⏳ Pending |
+| 6 | Create test utilities module | ⏳ Pending |
 
-**Stats:** -7,600 lines deleted, +1,200 lines added. 179 tests pass.
+### Deliverables
+- [ ] `cargo check` passes
+- [ ] CLAUDE.md provides AI context
+- [ ] Error codes NIKA-000 to NIKA-112
+- [ ] Test fixtures available
 
-## v9.5.0 — Advanced TUI (Galaxy Theme)
+---
 
-**STATUS: DEFERRED** — Galaxy features removed during v9.1 stability rebuild.
-Will be reimplemented on stable v2 foundation when prioritized.
+## MVP 1: Invoke Verb
 
+**Plan:** `nika-dev/docs/plans/2026-02-18-mvp1-invoke-verb.md`
+**Estimated:** 4-6 hours
+**Prerequisites:** MVP 0
+
+### Tasks
 | Task | Description | Status |
 |------|-------------|--------|
-| 7.8d | Search + detail pane | DEFERRED |
-| 7.8e | CRUD dialogs | DEFERRED |
-| 7.8f | Galaxy visual theme | DEFERRED |
-| 7.8g | Dashboard mode | DEFERRED |
-| 7.8h | Animations (boot, matrix rain) | DEFERRED |
-| 7.8i | ASCII logo + branding | DEFERRED |
-| 7.8j | Onboarding flow | DEFERRED |
-| 7.8k | Command palette + UX | DEFERRED |
-| 7.8l | Wow effects (CRT, shake, glitch, pulse) | DEFERRED |
+| 1 | Create MCP types module | ⏳ Pending |
+| 2 | Create MCP client | ⏳ Pending |
+| 3 | Add InvokeParams to AST | ⏳ Pending |
+| 4 | Add Invoke to TaskAction | ⏳ Pending |
+| 5 | Add MCP config to Workflow | ⏳ Pending |
+| 6 | Implement invoke execution | ⏳ Pending |
+| 7 | Add MCP events to EventLog | ⏳ Pending |
+| 8 | Create example workflow | ⏳ Pending |
+| 9 | Integration test | ⏳ Pending |
 
-## v0.12.0 — SemVer Transition ← CURRENT
-
-Adopted proper semantic versioning. v0.x.y indicates pre-production status.
-
-| Change | Description |
-|--------|-------------|
-| **SemVer adoption** | 0.x.y versioning indicates pre-1.0 status |
-| **ADR-024 traits** | defined/authored/imported/generated/retrieved |
-| **Unified packages** | All packages now at 0.12.0 |
+### Deliverables
+- [ ] `invoke:` verb works
+- [ ] MCP client connects to NovaNet
+- [ ] `examples/invoke-novanet.yaml` functional
+- [ ] Events: McpToolCalled, McpToolResponded
 
 ---
 
-## v11.8.0 — Class Act (Legacy)
+## MVP 2: Agent + Observability
 
-Trait rename migration per ADR-024 "Data Origin" for clearer semantics.
+**Plan:** `nika-dev/docs/plans/2026-02-18-mvp2-agent-observability.md`
+**Estimated:** 6-8 hours
+**Prerequisites:** MVP 1
 
-| Old Trait | New Trait | Description |
-|-----------|-----------|-------------|
-| `invariant` | `defined` | Structurally fixed, version-controlled definitions |
-| `localized` | `authored` | Human-authored locale-specific content |
-| `knowledge` | `imported` | External data imported from authoritative sources |
-| `generated` | `generated` | LLM-generated output (unchanged) |
-| `aggregated` | `retrieved` | Computed/aggregated from external APIs |
+### Tasks
+| Task | Description | Status |
+|------|-------------|--------|
+| 1 | Add provider types for tools | ⏳ Pending |
+| 2 | Update LlmProvider trait | ⏳ Pending |
+| 3 | Implement chat for Claude | ⏳ Pending |
+| 4 | Create AgentParams | ⏳ Pending |
+| 5 | Create AgentLoop | ⏳ Pending |
+| 6 | Add agent execution to executor | ⏳ Pending |
+| 7 | Enhanced EventLog (generation_id, tokens) | ⏳ Pending |
+| 8 | Create NDJSON trace writer | ⏳ Pending |
+| 9 | Create example agent workflow | ⏳ Pending |
 
-**Files updated:**
-- 60+ YAML node definitions (realm: shared/org)
-- Rust TUI (traits.rs, theme.rs)
-- TypeScript Studio (15+ components, design system, tests)
-- ADR-024 added to novanet-decisions.md
-
-**Schema counts:** 61 NodeClasses, 182 ArcClasses, 2 Realms, 10 Layers (4 shared + 6 org), 6 ArcFamilies
-
----
-
-## v11.0.0 — SEO Tenant + Docs Refactor
-
-Major architectural cleanup with 30-sniper comprehensive audit.
-
-| Change | Description |
-|--------|-------------|
-| **SEO → Tenant** | Moved 9 SEO/GEO nodes from `global/seo` to `tenant/seo` |
-| **ADR-012 Fix** | Eliminated all global→tenant arc violations |
-| **Arc Coherence** | Fixed 22 arc scopes (cross_realm → intra_realm) |
-| **Docs Refactor** | 30-sniper audit of CLAUDE.md, DX, skills, agents, roadmap |
-
-**Schema counts:** 64 NodeClasses, 123 ArcClasses, 2 Realms, 9 Layers (2 global + 7 tenant)
+### Deliverables
+- [ ] `agent:` verb with tool calling
+- [ ] Multi-turn agentic execution
+- [ ] `.nika/traces/*.ndjson` files
+- [ ] Events: AgentTurnStarted/Completed, ContextAssembled
 
 ---
 
-## v10.9.0 — Naming Convention Refactor
+## MVP 3: TUI + CLI Trace
 
-Semantic renaming for clearer architecture. Three ADRs implemented:
+**Plan:** `nika-dev/docs/plans/2026-02-18-mvp3-tui-trace.md`
+**Estimated:** 8-10 hours
+**Prerequisites:** MVP 2
 
-| ADR | Change | Details |
-|-----|--------|---------|
-| **ADR-014** | L10n → Content/Generated | `EntityL10n` → `EntityContent`, `PageL10n` → `PageGenerated`, `BlockL10n` → `BlockGenerated` |
-| **ADR-015** | Unidirectional ownership | All `IS_*` arcs reversed to `HAS_*` (parent → child) |
-| **ADR-016** | CONTAINS → 6 typed arcs | `CONTAINS_TERM`, `CONTAINS_EXPRESSION`, `CONTAINS_PATTERN`, `CONTAINS_CULTURE_REF`, `CONTAINS_TABOO`, `CONTAINS_AUDIENCE_TRAIT` |
+### Tasks
+| Task | Description | Status |
+|------|-------------|--------|
+| 1 | Setup TUI feature flag | ⏳ Pending |
+| 2 | Create App state machine | ⏳ Pending |
+| 3 | Create UI renderer (4 panels) | ⏳ Pending |
+| 4 | Create panels module | ⏳ Pending |
+| 5 | Create event loop module | ⏳ Pending |
+| 6 | Add CLI trace commands | ⏳ Pending |
+| 7 | Integration test for TUI | ⏳ Pending |
+| 8 | Add TUI entry point to CLI | ⏳ Pending |
 
-**Schema counts:** 64 NodeClasses, 123 ArcClasses, 2 Realms (global/tenant), 9 Layers
+### Deliverables
+- [ ] `nika tui workflow.yaml` runs 4-panel TUI
+- [ ] `nika trace list` shows traces
+- [ ] `nika trace show <id>` displays events
+- [ ] `nika trace export <id>` exports JSON/YAML
+- [ ] Real-time event updates in TUI
 
 ---
 
-## v9.9.0 — Tiered Knowledge Model
+## MVP 4: Real Integration
 
-Refactor locale knowledge from 14 flat nodes to 10 tiered nodes organized by retrieval purpose.
+**Plan:** `nika-dev/docs/plans/2026-02-18-mvp4-real-integration.md`
+**Prerequisites:** MVP 3
 
-| Tier | Nodes | Purpose |
-|------|-------|---------|
-| **Technical** | Formatting, Slugification, Adaptation | Deterministic rules (always needed) |
-| **Style** | Style | Voice/tone configuration |
-| **Semantic** | TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet | Domain-specific contextual content |
+### Tasks
+| Task | Description | Status |
+|------|-------------|--------|
+| 1 | Remove mock mode from McpClient | ⏳ Pending |
+| 2 | Create integration test infrastructure | ⏳ Pending |
+| 3 | Test invoke: with real NovaNet MCP | ⏳ Pending |
+| 4 | Test agent: with real NovaNet MCP | ⏳ Pending |
+| 5 | Validate denomination_forms (ADR-033) | ⏳ Pending |
+| 6 | End-to-end workflow tests with Neo4j | ⏳ Pending |
+| 7 | Setup CI pipeline for integration tests | ⏳ Pending |
+
+### Deliverables
+- [ ] Real NovaNet MCP connection works
+- [ ] `cargo test --features integration` passes
+- [ ] CI runs integration tests on PR
+- [ ] denomination_forms validated in responses
 
 ---
 
-## Ideas Backlog
+## MVP 5: Production Hardening
 
-Future ideas without timeline. Detailed specs in `docs/plans/future/`.
+**Plan:** `nika-dev/docs/plans/2026-02-18-mvp5-production-hardening.md`
+**Prerequisites:** MVP 4
 
-| Idea | Description |
-|------|-------------|
-| **Dynamic Retrieval** | Context Assembly Engine that reads meta-graph to assemble token-aware context windows autonomously |
-| **Autonomous Learning** | Feedback loops where quality scores improve meta-graph weights over time |
-| **Content Pipeline** | Full CLI-driven generation: `novanet generate --project=qrcode-ai --locale=fr-FR` |
-| **GEO Intelligence** | Geographic localization layer: Thing (invariant), ThingL10n, GEOSeed, GEOSeedMetrics, GEOMiningRun. Deferred from v10.1 — add when needed for location-based content. |
+### Tasks
+| Task | Description | Status |
+|------|-------------|--------|
+| 1 | Add tool calling to OpenAI provider | ⏳ Pending |
+| 2 | Create retry module with backoff | ⏳ Pending |
+| 3 | Add circuit breaker pattern | ⏳ Pending |
+| 4 | Implement rate limiting for providers | ⏳ Pending |
+| 5 | Add performance metrics collection | ⏳ Pending |
+| 6 | Create benchmarks | ⏳ Pending |
+| 7 | Error recovery patterns | ⏳ Pending |
 
-## Versioning Strategy
+### Deliverables
+- [ ] OpenAI agent: works with tool calling
+- [ ] Automatic retry with exponential backoff
+- [ ] Circuit breaker prevents cascade failures
+- [ ] `cargo bench` shows performance baseline
+- [ ] Graceful degradation on provider errors
 
-### Semantic Versioning (SemVer)
+---
+
+## MVP 6: v0.3 Features
+
+**Plan:** `nika-dev/docs/plans/2026-02-18-mvp6-v03-features.md`
+**Prerequisites:** MVP 5
+
+### Tasks
+| Task | Description | Status |
+|------|-------------|--------|
+| 1 | Design for_each parallelism | ⏳ Pending |
+| 2 | Implement parallel task execution | ⏳ Pending |
+| 3 | Split into multi-crate workspace | ⏳ Pending |
+| 4 | Write user documentation (README) | ⏳ Pending |
+| 5 | Create examples/ directory with guides | ⏳ Pending |
+| 6 | NovaNet: add context_build_log to generate | ⏳ Pending |
+| 7 | Final integration validation | ⏳ Pending |
+
+### Deliverables
+- [ ] `for_each:` enables parallel execution
+- [ ] Workspace: nika-core, nika-mcp, nika-tui crates
+- [ ] README.md with getting started guide
+- [ ] examples/ with 5+ documented workflows
+- [ ] context_build_log in NovaNet responses
+
+---
+
+## Plans Index
+
+### MVP Plans (Execute in Order)
+| MVP | Plan File | Status | Milestone |
+|-----|-----------|--------|-----------|
+| 0 | `nika-dev/docs/plans/2026-02-18-mvp0-dx-setup-core.md` | ⏳ Pending | v0.2 |
+| 1 | `nika-dev/docs/plans/2026-02-18-mvp1-invoke-verb.md` | ⏳ Pending | v0.2 |
+| 2 | `nika-dev/docs/plans/2026-02-18-mvp2-agent-observability.md` | ⏳ Pending | v0.2 |
+| 3 | `nika-dev/docs/plans/2026-02-18-mvp3-tui-trace.md` | ⏳ Pending | v0.2 |
+| 4 | `nika-dev/docs/plans/2026-02-18-mvp4-real-integration.md` | ⏳ Pending | v0.2.1 |
+| 5 | `nika-dev/docs/plans/2026-02-18-mvp5-production-hardening.md` | ⏳ Pending | v0.2.2 |
+| 6 | `nika-dev/docs/plans/2026-02-18-mvp6-v03-features.md` | ⏳ Pending | v0.3 |
+
+### Reference Documents
+| Document | Location | Description |
+|----------|----------|-------------|
+| Observability Design | `spn-agi/docs/brainstorming/2026-02-18-nika-novanet-observability.md` | Full design spec |
+| Integration Research | `nika-dev/docs/research/2026-02-18-nika-novanet-integration.md` | MCP patterns |
+| DX Setup (Full) | `nika-dev/docs/plans/2026-02-18-nika-v02-dx-setup.md` | Extended DX reference |
+| NovaNet Integration (Full) | `nika-dev/docs/plans/2026-02-18-nika-v02-novanet-integration.md` | Extended reference |
+
+### Legacy Plans (Review/Archive)
+| Category | Files | Recommendation |
+|----------|-------|----------------|
+| Nika v0.1 refactoring | `2026-01-0*.md` | Review for v0.2 applicability |
+| NovaNet schema v9-v11 | 20+ files | Archive (superseded by v0.13.1) |
+| NovaNet Studio UI | 20+ files | Review status |
+
+---
+
+## Dependencies
 
 ```
-MAJOR.MINOR.PATCH[-prerelease]
-
-MAJOR  = Breaking changes (ontology restructure, API changes)
-MINOR  = New features (commands, UI components, generators)
-PATCH  = Bug fixes, documentation, refactoring
+┌──────────────────────────────────────────────────────────────────────────┐
+│  RUST DEPENDENCIES (Cargo.toml)                                          │
+├──────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  CORE (existing):                                                        │
+│  ├── tokio, serde, serde_yaml, serde_json                               │
+│  ├── clap, reqwest, regex, colored                                      │
+│  ├── thiserror, anyhow, tracing                                         │
+│  └── parking_lot, dashmap, rustc-hash                                   │
+│                                                                          │
+│  NEW for v0.2:                                                           │
+│  ├── rmcp = "0.1" (MCP client)                                          │
+│  ├── ratatui = "0.29" (TUI, optional)                                   │
+│  ├── crossterm = "0.28" (TUI, optional)                                 │
+│  ├── uuid = "1.0" (call IDs)                                            │
+│  ├── xxhash-rust = "0.8" (prompt hashing)                               │
+│  ├── chrono = "0.4" (timestamps)                                        │
+│  └── rand = "0.8" (generation IDs)                                      │
+│                                                                          │
+│  DEV-DEPENDENCIES:                                                       │
+│  ├── proptest = "1.4" (fuzzing)                                         │
+│  ├── insta = "1.34" (snapshots)                                         │
+│  └── pretty_assertions = "1.4"                                          │
+│                                                                          │
+└──────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Pre-release tags
+---
+
+## Architecture Target
 
 ```
-v9.0.0-rc.1    Release candidate (feature-complete, needs verification)
-v9.0.0-rc.2    Second release candidate (after fixes)
-v9.0.0         Stable release (Phase 8 passed)
+┌─────────────────────────────────────────────────────────────────────────┐
+│  NIKA v0.2 ARCHITECTURE                                                 │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  tools/nika/src/                                                        │
+│  ├── main.rs              # CLI (run, validate, tui, trace)            │
+│  ├── lib.rs               # Public API                                 │
+│  ├── error.rs             # NikaError (40+ variants with codes)        │
+│  │                                                                      │
+│  ├── ast/                 # YAML → Rust structs                        │
+│  │   ├── workflow.rs      # Workflow + MCP config                      │
+│  │   ├── action.rs        # TaskAction (5 variants)                    │
+│  │   ├── invoke.rs        # InvokeParams                               │
+│  │   └── agent.rs         # AgentParams                                │
+│  │                                                                      │
+│  ├── mcp/                 # MCP Client (NEW v0.2)                      │
+│  │   ├── types.rs         # McpConfig, ToolResult                      │
+│  │   └── client.rs        # McpClient                                  │
+│  │                                                                      │
+│  ├── runtime/             # Execution engine                           │
+│  │   ├── executor.rs      # Task dispatch (5 verbs)                    │
+│  │   ├── runner.rs        # Workflow orchestration                     │
+│  │   └── agent_loop.rs    # Agentic execution (NEW v0.2)               │
+│  │                                                                      │
+│  ├── provider/            # LLM providers                              │
+│  │   ├── types.rs         # Message, ToolCall, Usage (NEW)             │
+│  │   ├── claude.rs        # +chat() with tools                         │
+│  │   └── openai.rs        # +chat() with tools                         │
+│  │                                                                      │
+│  ├── event/               # Observability                              │
+│  │   ├── log.rs           # EventLog (16 variants)                     │
+│  │   └── trace.rs         # NDJSON writer (NEW v0.2)                   │
+│  │                                                                      │
+│  └── tui/                 # Terminal UI (feature-gated)                │
+│      ├── app.rs           # State machine                              │
+│      ├── ui.rs            # 4-panel renderer                           │
+│      └── panels/          # Individual panels                          │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Release process
+---
 
-1. Ensure all tests, lint, type-check pass
-2. Update `CHANGELOG.md` with release notes
-3. Create annotated git tag: `git tag -a v<version> -m "v<version>"`
-4. Push tag: `git push origin v<version>`
-5. **GitHub Release is created automatically** via `.github/workflows/release.yml`
-6. Update this ROADMAP.md
+## How to Execute
 
-### Branch strategy
+### For AI (Claude Code)
 
 ```
-main            Stable releases only
-feat/*          Feature branches (merged via PR)
-fix/*           Bug fix branches
-release/v*      Release preparation (optional, for complex releases)
+To execute a plan:
+1. Read the plan file
+2. Use superpowers:executing-plans skill
+3. Execute task-by-task with TDD
+4. Update ROADMAP status after each MVP
 ```
 
-## History
+### For Humans
 
-| Version | Date | Highlights |
-|---------|------|------------|
-| v8.0.0 | 2026-01-30 | Turborepo monorepo |
-| v8.1.0 | 2026-01-30 | Security hardening, generators |
-| v8.2.0 | 2026-01-30 | YAML views, deprecated props removed |
-| v8.3.0 | 2026-02-01 | Meta-graph, magnetic layout, v9 design |
-| v9.0.0-rc.1 | 2026-02-02 | Ontology v9, Rust CLI, 4-mode navigation |
-| v9.0.0 | 2026-02-02 | Phase 8 complete: 955 tests, audit clean, benchmarked |
-| v9.0.1 | 2026-02-03 | TUI v2 rebuild, DX improvements, auto-release workflow |
-| v9.7.1 | 2026-02-04 | Intent layer, generation domain, Thing model |
-| v10.6.0 | 2026-02-05 | 2-Realm architecture (ADR-012), tenant isolation |
-| v10.7.0 | 2026-02-06 | Geographic taxonomy, population clusters |
-| v10.8.0 | 2026-02-07 | Icons source of truth (ADR-013), visual-encoding.yaml |
-| v10.9.0 | 2026-02-08 | Naming refactor (ADR-014/015/016), 64 Classes, 120 ArcClasses |
-| v11.0.0 | 2026-02-08 | SEO → tenant migration, arc coherence (22 fixes), docs refactor |
-| v11.5.0 | 2026-02-10 | Schema refinement (ADR-020), Locale→config, 10 layers |
-| v11.6.0 | 2026-02-10 | Query-First Architecture (ADR-021), tabbed detail panel |
-| v11.7.0 | 2026-02-11 | Unified Tree Architecture (ADR-022), 5→2 modes, dual icons |
-| v11.8.0 | 2026-02-13 | Class Act (ADR-024), trait renames for data origin semantics |
-| v0.12.0 | 2026-02-13 | SemVer Transition — proper versioning (0.x = pre-production) |
-| v0.12.5 | 2026-02-14 | Brand Architecture (ADR-028), 61 nodes, 169 arcs |
-| v0.13.0 | 2026-02-15 | *Native Pattern (ADR-029/030): EntityNative, ProjectNative, PageNative, BlockNative, HAS_NATIVE |
+```bash
+# Check current status
+cat ROADMAP.md | grep "▶ CURRENT"
+
+# Execute MVP 0
+cd nika-dev/tools/nika
+# Follow 2026-02-18-mvp0-dx-setup-core.md
+
+# Execute MVP 1
+# Follow 2026-02-18-mvp1-invoke-verb.md
+
+# And so on...
+```
+
+---
+
+## Success Criteria
+
+### MVP 0 Done When:
+- `cargo check` passes with new deps
+- `cargo test error` passes
+- CLAUDE.md exists
+
+### MVP 1 Done When:
+- `cargo run -- run examples/invoke-novanet.yaml` succeeds (with mock)
+- `invoke:` verb parses and executes
+- MCP events logged
+
+### MVP 2 Done When:
+- `cargo run -- run examples/agent-novanet.yaml` succeeds (with mock)
+- `.nika/traces/` contains NDJSON files
+- `agent:` verb with tool calling works
+
+### MVP 3 Done When:
+- `cargo run -- tui examples/invoke-novanet.yaml` shows 4-panel UI
+- `cargo run -- trace list` shows traces
+- Real-time updates work
+
+### MVP 4 Done When:
+- `cargo test --features integration` passes with real NovaNet
+- denomination_forms appear correctly in responses
+- CI pipeline runs integration tests
+
+### MVP 5 Done When:
+- OpenAI provider works with `agent:` verb
+- Retry/backoff handles transient failures
+- `cargo bench` baseline established
+
+### MVP 6 Done When:
+- `for_each:` executes tasks in parallel
+- Workspace split into 3 crates compiles
+- README + examples/ fully documented
+- v0.3.0 tag created
+
+---
+
+## Notes
+
+- **Parallelizable:** NovaNet MCP extensions (context_build_log) can be done in parallel
+- **Optional:** Workspace split (multi-crate) deferred to v0.3 if complexity justifies
+- **Testing:** TDD for all MVPs - write failing test first
+- **Commits:** Atomic commits per task, conventional commit format
