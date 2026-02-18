@@ -1035,7 +1035,7 @@ mod tests {
         let loaded = LoadedViews::load(root.to_str().unwrap());
 
         assert_eq!(loaded.category_count(), 4, "expected 4 categories");
-        assert_eq!(loaded.views.len(), 12, "expected 12 views");
+        assert_eq!(loaded.views.len(), 13, "expected 13 views");
 
         // Check schema views
         let schema_views = loaded.views_in_category("schema");
