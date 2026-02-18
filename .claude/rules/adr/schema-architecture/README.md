@@ -12,6 +12,7 @@ Realm, layer, and node organization for the NovaNet knowledge graph.
 | [028](adr-028-page-entity.md) | Page-Entity Architecture | active | 1:1 mandatory, @ refs, Brand Architecture |
 | [029](adr-029-native-pattern.md) | *Native Pattern | active | Unified suffix: EntityNative, PageNative |
 | [030](adr-030-slug-ownership.md) | Slug Ownership | active | Page owns URL, Entity owns semantics |
+| [033](adr-033-denomination-forms.md) | Denomination Forms | active | Prescriptive canonical forms for LLM entity references |
 
 ## Quick Reference
 

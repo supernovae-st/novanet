@@ -8,11 +8,12 @@ Quick reference for daily development. Use `/adr <number>` for full details.
 
 ```
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  ESSENTIAL ADRs FOR v0.13.0                                                   ║
+║  ESSENTIAL ADRs FOR v0.13.1                                                   ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
 ║                                                                               ║
 ║  ADR-029  *Native Pattern      EntityNative, PageNative (unified suffix)      ║
 ║  ADR-030  Slug Ownership       Page owns URL, Entity owns semantics           ║
+║  ADR-033  Denomination Forms   Prescriptive canonical forms for LLM refs      ║
 ║  ADR-024  Trait = Data Origin  defined/authored/imported/generated/retrieved  ║
 ║  ADR-025  Instruction Layer    PageStructure, PageInstruction naming          ║
 ║  ADR-021  Query-First          Cypher = source of truth                       ║
@@ -168,6 +169,8 @@ Use this guide to find the right ADR for your situation:
 |-------------------|-----|-------------|
 | "Should this node have locale-specific content?" | **029** | Use `*Native` suffix, trait determines who creates |
 | "Where should the URL slug live?" | **030** | Page owns URL (slug), Entity owns semantics (key) |
+| "What forms can the LLM use for entity names?" | **033** | denomination_forms: text/title/abbrev/mixed/base/url — ABSOLUTE RULE, no invention |
+| "How is the url form populated?" | **033** | SEO pipeline write-back after slug derivation (ADR-030) |
 | "What trait should this node have?" | **024** | Trait = Data Origin (defined/authored/imported/generated/retrieved) |
 | "How should I name this instruction node?" | **025** | PageStructure (JSON), PageInstruction (markdown with @ refs) |
 | "Do I need an inverse arc?" | **026** | Check tier: TIER 1 required, TIER 2 recommended, TIER 3 optional |
