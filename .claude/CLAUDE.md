@@ -1,4 +1,4 @@
-# spn-agi — Claude Code Context
+# supernovae-agi — Claude Code Context
 
 This workspace contains two complementary AI systems:
 
@@ -6,7 +6,7 @@ This workspace contains two complementary AI systems:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  spn-agi ARCHITECTURE                                                       │
+│  supernovae-agi ARCHITECTURE                                                       │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  ┌─────────────────────┐         MCP Protocol        ┌─────────────────┐   │
@@ -87,7 +87,7 @@ Both Rust CLIs follow identical structure:
 ## Documentation Structure
 
 ```
-spn-agi/
+supernovae-agi/
 ├── docs/                   ← Cross-project (this workspace)
 │   ├── plans/
 │   └── research/
@@ -107,3 +107,9 @@ pnpm test             # Test all
 cd novanet-dev && pnpm dev
 cd nika-dev && cargo run
 ```
+
+## Claude Code DX
+
+**Skills**: `/workspace-nav` to switch projects. See `.claude/skills/INDEX.md` for all 19 skills.
+
+**Hooks**: Auto-formatting, schema sync reminders, ADR context. See `.claude/settings.json`.

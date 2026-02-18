@@ -1,10 +1,10 @@
-# spn-agi Monorepo Restructuration — Implementation Plan
+# supernovae-agi Monorepo Restructuration — Implementation Plan
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
-**Goal:** Reorganize novanet-hq and nika into a unified spn-agi workspace with consistent folder structures, pnpm workspace root, and shared documentation.
+**Goal:** Reorganize novanet-hq and nika into a unified supernovae-agi workspace with consistent folder structures, pnpm workspace root, and shared documentation.
 
-**Architecture:** spn-agi/ becomes the parent workspace containing two independent git repos (novanet-dev, nika-dev) with mirrored folder structures. Each has `tools/<name>/src/` with shared `core/` and `tui/` modules. A pnpm workspace at the root enables unified installation.
+**Architecture:** supernovae-agi/ becomes the parent workspace containing two independent git repos (novanet-dev, nika-dev) with mirrored folder structures. Each has `tools/<name>/src/` with shared `core/` and `tui/` modules. A pnpm workspace at the root enables unified installation.
 
 **Tech Stack:** pnpm workspaces, git, Rust (cargo workspaces), TypeScript
 
@@ -17,12 +17,12 @@
 ```
 BEFORE:                                 AFTER:
 ═══════                                 ══════
-supernovae-st/                          supernovae-st/spn-agi/
+supernovae-st/                          supernovae-st/supernovae-agi/
 ├── novanet-hq/         (repo)          ├── .claude/              ← NEW: relation docs
 │   ├── packages/                       ├── package.json          ← NEW: workspace root
 │   └── tools/novanet/                  ├── pnpm-workspace.yaml   ← NEW
 │                                       │
-└── spn-agi/                            ├── novanet-dev/          ← MOVED from novanet-hq
+└── supernovae-agi/                            ├── novanet-dev/          ← MOVED from novanet-hq
     └── nika/           (repo)          │   ├── .git/             (separate repo)
         └── src/                        │   ├── packages/
                                         │   │   ├── core/
@@ -44,23 +44,23 @@ supernovae-st/                          supernovae-st/spn-agi/
 
 ---
 
-## Phase 1: Prepare spn-agi Workspace Root
+## Phase 1: Prepare supernovae-agi Workspace Root
 
-### Task 1.1: Create spn-agi Workspace Structure
+### Task 1.1: Create supernovae-agi Workspace Structure
 
 **Files:**
-- Create: `~/supernovae-st/spn-agi/package.json`
-- Create: `~/supernovae-st/spn-agi/pnpm-workspace.yaml`
-- Create: `~/supernovae-st/spn-agi/README.md`
-- Create: `~/supernovae-st/spn-agi/.gitignore`
-- Create: `~/supernovae-st/spn-agi/docs/plans/` (for cross-project plans)
-- Create: `~/supernovae-st/spn-agi/docs/research/` (for cross-project research)
+- Create: `~/supernovae-st/supernovae-agi/package.json`
+- Create: `~/supernovae-st/supernovae-agi/pnpm-workspace.yaml`
+- Create: `~/supernovae-st/supernovae-agi/README.md`
+- Create: `~/supernovae-st/supernovae-agi/.gitignore`
+- Create: `~/supernovae-st/supernovae-agi/docs/plans/` (for cross-project plans)
+- Create: `~/supernovae-st/supernovae-agi/docs/research/` (for cross-project research)
 
 **Step 1: Create workspace package.json**
 
 ```json
 {
-  "name": "spn-agi",
+  "name": "supernovae-agi",
   "version": "0.1.0",
   "private": true,
   "description": "SuperNovae AGI - NovaNet + Nika unified workspace",
@@ -92,7 +92,7 @@ packages:
 **Step 3: Create README.md**
 
 ```markdown
-# spn-agi
+# supernovae-agi
 
 SuperNovae AGI workspace - unified development environment for NovaNet and Nika.
 
@@ -153,31 +153,31 @@ node_modules/
 
 **Step 5: Verify structure**
 
-Run: `ls -la ~/supernovae-st/spn-agi/`
+Run: `ls -la ~/supernovae-st/supernovae-agi/`
 Expected: package.json, pnpm-workspace.yaml, README.md, .gitignore, nika/ (existing)
 
 **Step 6: Commit note**
 
-No commit needed - spn-agi/ is not a git repo, just a workspace container.
+No commit needed - supernovae-agi/ is not a git repo, just a workspace container.
 
 ---
 
-### Task 1.2: Create spn-agi Claude Documentation
+### Task 1.2: Create supernovae-agi Claude Documentation
 
 **Files:**
-- Create: `~/supernovae-st/spn-agi/.claude/CLAUDE.md`
-- Create: `~/supernovae-st/spn-agi/.claude/rules/architecture.md`
+- Create: `~/supernovae-st/supernovae-agi/.claude/CLAUDE.md`
+- Create: `~/supernovae-st/supernovae-agi/.claude/rules/architecture.md`
 
 **Step 1: Create .claude directory**
 
 ```bash
-mkdir -p ~/supernovae-st/spn-agi/.claude/rules
+mkdir -p ~/supernovae-st/supernovae-agi/.claude/rules
 ```
 
 **Step 2: Create CLAUDE.md**
 
 ```markdown
-# spn-agi — Claude Code Context
+# supernovae-agi — Claude Code Context
 
 This workspace contains two complementary AI systems:
 
@@ -185,7 +185,7 @@ This workspace contains two complementary AI systems:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  spn-agi ARCHITECTURE                                                       │
+│  supernovae-agi ARCHITECTURE                                                       │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  ┌─────────────────────┐         MCP Protocol        ┌─────────────────┐   │
@@ -280,7 +280,7 @@ cd nika-dev && cargo run
 **Step 3: Create architecture.md rules**
 
 ```markdown
-# spn-agi Architecture Rules
+# supernovae-agi Architecture Rules
 
 ## Rule 1: Mirrored Structure
 
@@ -338,17 +338,17 @@ Nika workflows NEVER use raw Cypher. Use semantic MCP tools:
 
 **Step 4: Verify**
 
-Run: `ls -la ~/supernovae-st/spn-agi/.claude/`
+Run: `ls -la ~/supernovae-st/supernovae-agi/.claude/`
 Expected: CLAUDE.md, rules/
 
 ---
 
 ## Phase 2: Move NovaNet
 
-### Task 2.1: Move novanet-hq to spn-agi/novanet-dev
+### Task 2.1: Move novanet-hq to supernovae-agi/novanet-dev
 
 **Files:**
-- Move: `~/supernovae-st/novanet-hq/` → `~/supernovae-st/spn-agi/novanet-dev/`
+- Move: `~/supernovae-st/novanet-hq/` → `~/supernovae-st/supernovae-agi/novanet-dev/`
 
 **Step 1: Verify no uncommitted changes in novanet-hq**
 
@@ -361,13 +361,13 @@ Expected: Clean working tree (or commit pending changes first)
 **Step 2: Move the directory**
 
 ```bash
-mv ~/supernovae-st/novanet-hq ~/supernovae-st/spn-agi/novanet-dev
+mv ~/supernovae-st/novanet-hq ~/supernovae-st/supernovae-agi/novanet-dev
 ```
 
 **Step 3: Verify git history preserved**
 
 ```bash
-cd ~/supernovae-st/spn-agi/novanet-dev && git log --oneline -5
+cd ~/supernovae-st/supernovae-agi/novanet-dev && git log --oneline -5
 ```
 
 Expected: Recent commits visible (git history intact)
@@ -382,7 +382,7 @@ Check these files for hardcoded paths:
 **Step 5: Test that novanet still works**
 
 ```bash
-cd ~/supernovae-st/spn-agi/novanet-dev
+cd ~/supernovae-st/supernovae-agi/novanet-dev
 pnpm install
 cargo build --manifest-path tools/novanet/Cargo.toml
 cargo test --manifest-path tools/novanet/Cargo.toml
@@ -393,11 +393,11 @@ Expected: Build succeeds, tests pass
 **Step 6: Commit in novanet-dev noting the move**
 
 ```bash
-cd ~/supernovae-st/spn-agi/novanet-dev
+cd ~/supernovae-st/supernovae-agi/novanet-dev
 git add -A
-git commit -m "chore: move to spn-agi/novanet-dev
+git commit -m "chore: move to supernovae-agi/novanet-dev
 
-Part of spn-agi workspace unification.
+Part of supernovae-agi workspace unification.
 Previous path: ~/supernovae-st/novanet-hq
 
 Co-Authored-By: Claude <noreply@anthropic.com>"
@@ -410,22 +410,22 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ### Task 3.1: Create nika-dev Structure
 
 **Files:**
-- Create: `~/supernovae-st/spn-agi/nika-dev/`
-- Create: `~/supernovae-st/spn-agi/nika-dev/tools/`
-- Move: `~/supernovae-st/spn-agi/nika/*` → `~/supernovae-st/spn-agi/nika-dev/tools/nika/`
+- Create: `~/supernovae-st/supernovae-agi/nika-dev/`
+- Create: `~/supernovae-st/supernovae-agi/nika-dev/tools/`
+- Move: `~/supernovae-st/supernovae-agi/nika/*` → `~/supernovae-st/supernovae-agi/nika-dev/tools/nika/`
 
 **Step 1: Create nika-dev directory structure**
 
 ```bash
-mkdir -p ~/supernovae-st/spn-agi/nika-dev/tools
-mkdir -p ~/supernovae-st/spn-agi/nika-dev/packages/core/src
-mkdir -p ~/supernovae-st/spn-agi/nika-dev/docs
+mkdir -p ~/supernovae-st/supernovae-agi/nika-dev/tools
+mkdir -p ~/supernovae-st/supernovae-agi/nika-dev/packages/core/src
+mkdir -p ~/supernovae-st/supernovae-agi/nika-dev/docs
 ```
 
 **Step 2: Move nika content to tools/nika (preserving git)**
 
 ```bash
-cd ~/supernovae-st/spn-agi/nika
+cd ~/supernovae-st/supernovae-agi/nika
 
 # Move docs to nika-dev root level
 git mv docs ../nika-dev/docs 2>/dev/null || mv docs ../nika-dev/
@@ -453,15 +453,15 @@ mv .git ../nika-dev/
 **Step 3: Remove old nika directory**
 
 ```bash
-cd ~/supernovae-st/spn-agi
+cd ~/supernovae-st/supernovae-agi
 rm -rf nika
 ```
 
 **Step 4: Verify structure**
 
 ```bash
-ls -la ~/supernovae-st/spn-agi/nika-dev/
-ls -la ~/supernovae-st/spn-agi/nika-dev/tools/nika/
+ls -la ~/supernovae-st/supernovae-agi/nika-dev/
+ls -la ~/supernovae-st/supernovae-agi/nika-dev/tools/nika/
 ```
 
 Expected:
@@ -484,7 +484,7 @@ nika-dev/
 **Step 5: Test that nika still works**
 
 ```bash
-cd ~/supernovae-st/spn-agi/nika-dev/tools/nika
+cd ~/supernovae-st/supernovae-agi/nika-dev/tools/nika
 cargo build
 cargo test
 ```
@@ -494,7 +494,7 @@ Expected: Build succeeds, tests pass
 **Step 6: Commit the restructure**
 
 ```bash
-cd ~/supernovae-st/spn-agi/nika-dev
+cd ~/supernovae-st/supernovae-agi/nika-dev
 git add -A
 git commit -m "refactor: restructure to nika-dev/tools/nika pattern
 
@@ -503,7 +503,7 @@ Aligns with novanet-dev structure for consistency:
 - docs/ at project root
 - packages/ ready for @nika/core
 
-Part of spn-agi workspace unification.
+Part of supernovae-agi workspace unification.
 
 Co-Authored-By: Claude <noreply@anthropic.com>"
 ```
@@ -513,10 +513,10 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ### Task 3.2: Create nika-dev Root Files
 
 **Files:**
-- Create: `~/supernovae-st/spn-agi/nika-dev/package.json`
-- Create: `~/supernovae-st/spn-agi/nika-dev/README.md`
-- Create: `~/supernovae-st/spn-agi/nika-dev/.claude/CLAUDE.md`
-- Create: `~/supernovae-st/spn-agi/nika-dev/packages/core/package.json`
+- Create: `~/supernovae-st/supernovae-agi/nika-dev/package.json`
+- Create: `~/supernovae-st/supernovae-agi/nika-dev/README.md`
+- Create: `~/supernovae-st/supernovae-agi/nika-dev/.claude/CLAUDE.md`
+- Create: `~/supernovae-st/supernovae-agi/nika-dev/packages/core/package.json`
 
 **Step 1: Create root package.json**
 
@@ -580,7 +580,7 @@ nika run workflow.yaml
 nika tui
 ```
 
-## Part of spn-agi
+## Part of supernovae-agi
 
 Nika is the "body" that executes workflows. NovaNet is the "brain" that provides context.
 
@@ -629,7 +629,7 @@ cargo run -- tui
 ## Related
 
 - **NovaNet**: `../novanet-dev/` - Knowledge graph (the brain)
-- **spn-agi**: `../` - Unified workspace documentation
+- **supernovae-agi**: `../` - Unified workspace documentation
 ```
 
 **Step 4: Create packages/core/package.json placeholder**
@@ -677,7 +677,7 @@ export interface Step {
 **Step 6: Commit**
 
 ```bash
-cd ~/supernovae-st/spn-agi/nika-dev
+cd ~/supernovae-st/supernovae-agi/nika-dev
 git add -A
 git commit -m "chore: add nika-dev root structure
 
@@ -695,10 +695,10 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 
 ### Task 4.1: Verify Workspace Installation
 
-**Step 1: Test pnpm install from spn-agi root**
+**Step 1: Test pnpm install from supernovae-agi root**
 
 ```bash
-cd ~/supernovae-st/spn-agi
+cd ~/supernovae-st/supernovae-agi
 pnpm install
 ```
 
@@ -707,8 +707,8 @@ Expected: Installs packages from both novanet-dev and nika-dev
 **Step 2: Test individual project installs**
 
 ```bash
-cd ~/supernovae-st/spn-agi/novanet-dev && pnpm install
-cd ~/supernovae-st/spn-agi/nika-dev && pnpm install
+cd ~/supernovae-st/supernovae-agi/novanet-dev && pnpm install
+cd ~/supernovae-st/supernovae-agi/nika-dev && pnpm install
 ```
 
 Expected: Both work independently
@@ -716,8 +716,8 @@ Expected: Both work independently
 **Step 3: Test Rust builds**
 
 ```bash
-cd ~/supernovae-st/spn-agi/novanet-dev/tools/novanet && cargo build
-cd ~/supernovae-st/spn-agi/nika-dev/tools/nika && cargo build
+cd ~/supernovae-st/supernovae-agi/novanet-dev/tools/novanet && cargo build
+cd ~/supernovae-st/supernovae-agi/nika-dev/tools/nika && cargo build
 ```
 
 Expected: Both compile successfully
@@ -727,8 +727,8 @@ Expected: Both compile successfully
 ### Task 4.2: Update Existing Plans
 
 **Files:**
-- Modify: `~/supernovae-st/spn-agi/nika-dev/docs/plans/2026-02-18-nika-v02-dx-setup.md`
-- Modify: `~/supernovae-st/spn-agi/nika-dev/docs/plans/2026-02-18-nika-v02-novanet-integration.md`
+- Modify: `~/supernovae-st/supernovae-agi/nika-dev/docs/plans/2026-02-18-nika-v02-dx-setup.md`
+- Modify: `~/supernovae-st/supernovae-agi/nika-dev/docs/plans/2026-02-18-nika-v02-novanet-integration.md`
 
 **Step 1: Update file paths in DX Setup plan**
 
@@ -747,13 +747,13 @@ Same replacements as above.
 Add to top of each plan:
 
 ```markdown
-> **PREREQUISITE:** Execute `2026-02-18-spn-agi-restructuration.md` first!
+> **PREREQUISITE:** Execute `2026-02-18-supernovae-agi-restructuration.md` first!
 ```
 
 **Step 4: Commit updates**
 
 ```bash
-cd ~/supernovae-st/spn-agi/nika-dev
+cd ~/supernovae-st/supernovae-agi/nika-dev
 git add docs/plans/
 git commit -m "docs: update plans with new paths after restructuration
 
@@ -764,48 +764,48 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 
 ---
 
-### Task 4.3: Move Restructuration Plan to spn-agi/docs/
+### Task 4.3: Move Restructuration Plan to supernovae-agi/docs/
 
 **Files:**
-- Move: `~/supernovae-st/spn-agi/nika-dev/docs/plans/2026-02-18-spn-agi-restructuration.md` → `~/supernovae-st/spn-agi/docs/plans/`
+- Move: `~/supernovae-st/supernovae-agi/nika-dev/docs/plans/2026-02-18-supernovae-agi-restructuration.md` → `~/supernovae-st/supernovae-agi/docs/plans/`
 
-**Step 1: Create spn-agi/docs structure**
+**Step 1: Create supernovae-agi/docs structure**
 
 ```bash
-mkdir -p ~/supernovae-st/spn-agi/docs/plans
-mkdir -p ~/supernovae-st/spn-agi/docs/research
+mkdir -p ~/supernovae-st/supernovae-agi/docs/plans
+mkdir -p ~/supernovae-st/supernovae-agi/docs/research
 ```
 
 **Step 2: Move this plan (it's cross-project)**
 
 ```bash
-mv ~/supernovae-st/spn-agi/nika-dev/docs/plans/2026-02-18-spn-agi-restructuration.md \
-   ~/supernovae-st/spn-agi/docs/plans/
+mv ~/supernovae-st/supernovae-agi/nika-dev/docs/plans/2026-02-18-supernovae-agi-restructuration.md \
+   ~/supernovae-st/supernovae-agi/docs/plans/
 ```
 
 **Step 3: Commit in nika-dev (removing the file)**
 
 ```bash
-cd ~/supernovae-st/spn-agi/nika-dev
+cd ~/supernovae-st/supernovae-agi/nika-dev
 git add -A
-git commit -m "docs: move restructuration plan to spn-agi/docs/
+git commit -m "docs: move restructuration plan to supernovae-agi/docs/
 
 Cross-project plans belong at workspace level.
 
 Co-Authored-By: Claude <noreply@anthropic.com>"
 ```
 
-**Rationale:** The restructuration plan concerns BOTH projects, so it belongs at spn-agi/ level, not inside nika-dev/.
+**Rationale:** The restructuration plan concerns BOTH projects, so it belongs at supernovae-agi/ level, not inside nika-dev/.
 
 ---
 
 ## Docs Placement Summary
 
 ```
-spn-agi/
+supernovae-agi/
 ├── docs/                          ← Cross-project documentation
 │   ├── plans/
-│   │   └── 2026-02-18-spn-agi-restructuration.md  ← THIS PLAN
+│   │   └── 2026-02-18-supernovae-agi-restructuration.md  ← THIS PLAN
 │   └── research/
 │       └── (future cross-project research)
 │
@@ -831,7 +831,7 @@ spn-agi/
 After completing this plan:
 
 ```
-~/supernovae-st/spn-agi/
+~/supernovae-st/supernovae-agi/
 ├── .claude/CLAUDE.md           ← Relationship docs
 ├── docs/                       ← Cross-project documentation
 │   ├── plans/                  ← This plan lives here

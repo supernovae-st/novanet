@@ -1,4 +1,4 @@
-# spn-agi Architecture Rules
+# supernovae-agi Architecture Rules
 
 ## Rule 1: Mirrored Structure
 
@@ -55,8 +55,8 @@ Nika workflows NEVER use raw Cypher. Use semantic MCP tools:
 
 ## Rule 5: Documentation Placement
 
-- **spn-agi/docs/** → Cross-project plans/research (affects both)
+- **supernovae-agi/docs/** → Cross-project plans/research (affects both)
 - **novanet-dev/docs/** → NovaNet-specific documentation
 - **nika-dev/docs/** → Nika-specific documentation
 
-When in doubt: if a plan/research involves BOTH projects, it goes in spn-agi/docs/.
+When in doubt: if a plan/research involves BOTH projects, it goes in supernovae-agi/docs/.

@@ -2,16 +2,17 @@
 
 Catalog of all Claude Code skills for the NovaNet monorepo.
 
-**Version**: v0.13.0 | **Total Skills**: 18 (8 core + 10 studio-specific)
+**Version**: v0.13.1 | **Total Skills**: 19 (9 core + 10 studio-specific)
 
 ---
 
-## Core Skills (8)
+## Core Skills (9)
 
 Located in `.claude/skills/`
 
 | Skill | Invocation | Description |
 |-------|------------|-------------|
+| **workspace-nav** | `/workspace-nav` | Navigate between NovaNet (brain) and Nika (body) projects |
 | **novanet-adr** | `/novanet-adr` | Navigate ADRs by number, domain, status, or keyword |
 | **novanet-architecture** | `/novanet-arch` | ASCII architecture diagrams (schema graph, pipeline, Rust, Studio) |
 | **novanet-sync** | `/novanet-sync` | Schema validation/regeneration (YAML → artifacts) |
@@ -46,6 +47,7 @@ Located in `apps/studio/.claude/skills/`
 
 | Trigger Keywords | Skill |
 |------------------|-------|
+| workspace, switch project, novanet, nika, brain, body | workspace-nav |
 | ADR, architecture decision, decision record, why design | novanet-adr |
 | architecture, overview, structure, schema graph, codebase | novanet-architecture |
 | sync, validate, generate, schema, YAML | novanet-sync |

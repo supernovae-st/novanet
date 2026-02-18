@@ -1,4 +1,4 @@
-# spn-agi Master Roadmap
+# supernovae-agi Master Roadmap
 
 **Last Updated:** 2026-02-18
 **Status:** Active - MVP-Based Execution
@@ -7,11 +7,11 @@
 
 ## Overview
 
-Ce document est le "plan des plans" - il orchestre tous les plans de développement de spn-agi (NovaNet + Nika) selon une approche **MVP incrémentale**.
+Ce document est le "plan des plans" - il orchestre tous les plans de développement de supernovae-agi (NovaNet + Nika) selon une approche **MVP incrémentale**.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│  spn-agi MVP EXECUTION ORDER                                                    │
+│  supernovae-agi MVP EXECUTION ORDER                                                    │
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                 │
 │  ✅ FOUNDATION (DONE)                                                           │
@@ -308,7 +308,7 @@ Ces éléments sont déjà implémentés et fonctionnels.
 ### Reference Documents
 | Document | Location | Description |
 |----------|----------|-------------|
-| Observability Design | `spn-agi/docs/brainstorming/2026-02-18-nika-novanet-observability.md` | Full design spec |
+| Observability Design | `supernovae-agi/docs/brainstorming/2026-02-18-nika-novanet-observability.md` | Full design spec |
 | Integration Research | `nika-dev/docs/research/2026-02-18-nika-novanet-integration.md` | MCP patterns |
 | DX Setup (Full) | `nika-dev/docs/plans/2026-02-18-nika-v02-dx-setup.md` | Extended DX reference |
 | NovaNet Integration (Full) | `nika-dev/docs/plans/2026-02-18-nika-v02-novanet-integration.md` | Extended reference |
