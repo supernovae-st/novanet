@@ -1154,6 +1154,16 @@ fn build_instance_content(
                 let truncated = truncate_str(&value_str, 24);
 
                 // Standard properties use dim styling for key and value
+                // Look up type from validated_class_properties
+                let prop_type = app
+                    .validated_class_properties
+                    .as_ref()
+                    .and_then(|props| props.iter().find(|p| p.name.as_str() == *key))
+                    .map(|p| p.prop_type.as_str())
+                    .unwrap_or("???");
+                let badge = type_badge(prop_type);
+                let badge_color = type_color(prop_type);
+
                 content.properties.add_line(Line::from(vec![
                     Span::styled(status_icon, status_style),
                     Span::styled(
@@ -1162,6 +1172,10 @@ fn build_instance_content(
                     ),
                     Span::styled(format!("{:width$}", key, width = max_key_len), STYLE_DIM),
                     Span::styled(": ", STYLE_PROP_COLON),
+                    Span::styled(
+                        format!("[{}] ", badge.trim()),
+                        Style::default().fg(badge_color),
+                    ),
                     Span::styled(truncated, STYLE_DIM),
                 ]));
             }
@@ -1197,6 +1211,16 @@ fn build_instance_content(
                 };
                 let truncated = truncate_str(&value_str, 24);
 
+                // Look up type from validated_class_properties
+                let prop_type = app
+                    .validated_class_properties
+                    .as_ref()
+                    .and_then(|props| props.iter().find(|p| p.name.as_str() == *key))
+                    .map(|p| p.prop_type.as_str())
+                    .unwrap_or("???");
+                let badge = type_badge(prop_type);
+                let badge_color = type_color(prop_type);
+
                 content.properties.add_line(Line::from(vec![
                     Span::styled(status_icon, status_style),
                     Span::styled(
@@ -1208,6 +1232,10 @@ fn build_instance_content(
                         STYLE_PROP_KEY,
                     ),
                     Span::styled(": ", STYLE_PROP_COLON),
+                    Span::styled(
+                        format!("[{}] ", badge.trim()),
+                        Style::default().fg(badge_color),
+                    ),
                     Span::styled(truncated, Style::default().fg(value_color)),
                 ]));
             }

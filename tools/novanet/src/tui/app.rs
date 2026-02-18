@@ -231,9 +231,11 @@ enum TreeItemData {
         key: String,
     },
     Section,
-    /// Instance with its parent Class's yaml_path (to show schema in YAML panel).
+    /// Instance with its parent Class's yaml_path (to show schema in YAML panel)
+    /// and class_properties for loading validated properties with types.
     Instance {
         class_yaml_path: String,
+        class_properties: Vec<String>,
     },
     None,
 }
@@ -574,10 +576,15 @@ impl App {
                 // v0.12.5: Show _index.yaml (complete schema overview) instead of taxonomy.yaml
                 self.load_yaml_cached("packages/core/models/_index.yaml");
             }
-            TreeItemData::Instance { class_yaml_path } => {
+            TreeItemData::Instance {
+                class_yaml_path,
+                class_properties,
+            } => {
                 // Load the Class's YAML to show Instance schema (standard_properties)
                 if !class_yaml_path.is_empty() {
                     self.load_yaml_cached(&class_yaml_path);
+                    // Load validated properties with types (same as Class view)
+                    self.load_validated_class_properties(&class_properties);
                 } else {
                     self.yaml_path.clear();
                     self.yaml_content.clear();
@@ -607,10 +614,12 @@ impl App {
                     if let Some((_, _, class_info)) = self.tree.find_class(class_key) {
                         return TreeItemData::Instance {
                             class_yaml_path: class_info.yaml_path.clone(),
+                            class_properties: class_info.properties.clone(),
                         };
                     }
                     return TreeItemData::Instance {
                         class_yaml_path: String::new(),
+                        class_properties: Vec::new(),
                     };
                 }
             }
@@ -652,6 +661,7 @@ impl App {
             Some(TreeItem::ClassesSection) | Some(TreeItem::ArcsSection) => TreeItemData::Section,
             Some(TreeItem::Instance(_, _, class_info, _)) => TreeItemData::Instance {
                 class_yaml_path: class_info.yaml_path.clone(),
+                class_properties: class_info.properties.clone(),
             },
             // EntityCategory shows parent Entity Class's YAML
             Some(TreeItem::EntityCategory(_, _, class_info, _)) => TreeItemData::Class {
