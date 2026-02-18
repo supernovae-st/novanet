@@ -536,6 +536,7 @@ mod tests {
             cardinality: Cardinality::OneToMany,
             llm_context: "output".to_string(),
             properties: None,
+            property_defs: None,
             is_self_referential: None,
             inverse_of: None,
             inverse_name: None,

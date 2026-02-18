@@ -61,7 +61,7 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   // SHARED REALM (40 nodes) — v0.12.4: Country added to geography
   // ═══════════════════════════════════════════════════════════════════════════
   // config (3) — Locale definition + classifications + SEO format
-  EntityCategory: { width: 420, height: 280 },  // v0.13.1: Large "Classification Nexus" card (widened for content)
+  EntityCategory: { width: 420, height: 320 },  // v0.13.1: Large "Classification Nexus" card (taller to prevent truncation)
   Locale: { width: 220, height: 110 },
   SEOKeywordFormat: { width: 180, height: 90 },
 
@@ -125,13 +125,13 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   ProjectNative: { width: 220, height: 110 },
 
   // structure (3)
-  Page: { width: 240, height: 120 },
-  Block: { width: 200, height: 100 },
-  ContentSlot: { width: 180, height: 90 },
+  Page: { width: 320, height: 180 },
+  Block: { width: 280, height: 160 },
+  ContentSlot: { width: 200, height: 100 },
 
-  // semantic (4)
-  Entity: { width: 240, height: 120 },
-  EntityNative: { width: 200, height: 100 },
+  // semantic (4) - v0.13.1: Increased sizes for icon + title layout
+  Entity: { width: 360, height: 220 },
+  EntityNative: { width: 340, height: 200 },
   AudiencePersona: { width: 200, height: 100 },
   ChannelSurface: { width: 200, height: 100 },
 
@@ -141,10 +141,10 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   BlockRules: { width: 180, height: 90 },
   PromptArtifact: { width: 200, height: 100 },
 
-  // output (3)
-  PageNative: { width: 220, height: 110 },
-  BlockNative: { width: 200, height: 100 },
-  OutputArtifact: { width: 180, height: 90 },
+  // output (3) - v0.13.1: Increased sizes for parent reference indicator
+  PageNative: { width: 320, height: 180 },
+  BlockNative: { width: 300, height: 170 },
+  OutputArtifact: { width: 200, height: 100 },
 };
 
 // =============================================================================

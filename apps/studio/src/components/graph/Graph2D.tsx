@@ -167,6 +167,10 @@ function toTurboNode(node: GraphNodeType): TurboNodeType {
   // v0.13.0: NodeClass and ArcClass get "Holographic Blueprint" design
   } else if (['NodeClass', 'ArcClass', 'ArcFamily'].includes(nodeTypeStr)) {
     nodeType = 'classNode';
+  // v0.13.1: shared/config nodes get SharedLayerNode (not StructuralNode)
+  // EntityCategory width=420px, SEOKeywordFormat width=175px defined in SharedLayerNode
+  } else if (['EntityCategory', 'SEOKeywordFormat'].includes(nodeTypeStr)) {
+    nodeType = 'sharedLayer';
   } else {
     switch (config.layer) {
       case 'foundation':
@@ -227,6 +231,7 @@ function toTurboNode(node: GraphNodeType): TurboNodeType {
     };
   } else {
     // Default data structure for all other node types
+    // Spread node.data to include Neo4j properties like entity_key, locale_key, etc.
     data = {
       id: node.id,
       type: node.type,
@@ -236,6 +241,8 @@ function toTurboNode(node: GraphNodeType): TurboNodeType {
       description: node.description,
       category: config.layer,
       locale,
+      // Include all other Neo4j properties (entity_key, locale_key, benefits, etc.)
+      ...(node.data || {}),
     };
   }
 

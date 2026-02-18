@@ -46,18 +46,23 @@ export function getLayerGradientColors(layer: Layer | undefined): GradientColors
 // Type-specific colors that extend layer colors
 // These provide more granular styling for specific node types
 // v0.12.4: BrandIdentity → Brand + BrandDesign + BrandPrinciples + PromptStyle (ADR-028)
+// v0.13.1: EntityNative added for parent-child visual coherence with Entity
 const STRUCTURAL_LAYER_MAP: Record<string, Layer> = {
   Project: 'foundation',
   Page: 'structure',
   Block: 'structure',
   BlockType: 'instruction',
   Entity: 'semantic',
+  EntityNative: 'semantic', // Same layer as Entity for visual parent-child relationship
   Locale: 'config',
   Brand: 'foundation',
   BrandDesign: 'foundation',
   BrandPrinciples: 'foundation',
   PromptStyle: 'foundation',
   ProjectNative: 'foundation',
+  // Output layer nodes
+  PageNative: 'output',
+  BlockNative: 'output',
 };
 
 /**

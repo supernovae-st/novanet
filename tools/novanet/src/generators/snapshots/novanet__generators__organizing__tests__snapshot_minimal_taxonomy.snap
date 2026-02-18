@@ -10,6 +10,10 @@ expression: cypher
 // Includes visual encoding properties
 // All schema-nodes have :Schema double-label
 // Uses MERGE for idempotent execution
+//
+// ADR References:
+//   ADR-012: 2-Realm Architecture (SHARED read-only + ORG business)
+//   ADR-024: Trait = Data Origin (defined/authored/imported/generated/retrieved)
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // REALMS (1)

@@ -44,6 +44,29 @@ const COLOR_VALUE_ARRAY: Color = Color::Rgb(137, 180, 250); // Blue
 const COLOR_VALUE_OBJECT: Color = Color::Rgb(245, 194, 231); // Pink
 
 // =============================================================================
+// v0.13.1 STANDARD PROPERTIES (schema-standard.md)
+// =============================================================================
+
+/// Standard properties that ALL nodes have (from standard_properties in YAML).
+/// Order: key → *_key (denormalized) → display_name → description → created_at → updated_at
+const STANDARD_PROPERTY_NAMES: &[&str] = &[
+    "key",
+    "entity_key",
+    "page_key",
+    "block_key",
+    "locale_key",
+    "display_name",
+    "description",
+    "created_at",
+    "updated_at",
+];
+
+/// Check if a property name is a standard property.
+fn is_standard_property(name: &str) -> bool {
+    STANDARD_PROPERTY_NAMES.contains(&name)
+}
+
+// =============================================================================
 // VISUAL STATES FOR BOX NAVIGATION
 // =============================================================================
 
@@ -1002,29 +1025,36 @@ fn build_instance_content(
         content.coverage.add_empty();
     }
 
-    // PROPERTIES - v0.13.1: Match Class format exactly
-    // Format: `✓* property_name: value` (same width, order, icons as Class)
-    let schema_keys: Vec<&String> = class
+    // PROPERTIES - v0.13.1: Display ALL properties with STANDARD/SPECIFIC sections
+    // Format: `✓* property_name: value` with section headers
+    let all_schema_keys: Vec<&String> = class
         .properties
         .iter()
-        .filter(|k| !k.starts_with('_') && k.as_str() != "key" && k.as_str() != "display_name")
+        .filter(|k| !k.starts_with('_'))
+        .collect();
+
+    // Split into standard vs specific properties
+    let standard_keys: Vec<&String> = all_schema_keys
+        .iter()
+        .filter(|k| is_standard_property(k.as_str()))
+        .copied()
+        .collect();
+    let specific_keys: Vec<&String> = all_schema_keys
+        .iter()
+        .filter(|k| !is_standard_property(k.as_str()))
+        .copied()
         .collect();
 
     // Collect extra instance props not in schema (e.g., computed fields)
     let extra_keys: Vec<&String> = instance
         .properties
         .keys()
-        .filter(|k| {
-            !k.starts_with('_')
-                && k.as_str() != "key"
-                && k.as_str() != "display_name"
-                && !schema_keys.contains(k)
-        })
+        .filter(|k| !k.starts_with('_') && !all_schema_keys.contains(k))
         .collect();
 
-    if !schema_keys.is_empty() || !extra_keys.is_empty() {
+    if !all_schema_keys.is_empty() || !extra_keys.is_empty() {
         // Same max width as Class (18 chars)
-        let max_key_len = schema_keys
+        let max_key_len = all_schema_keys
             .iter()
             .chain(extra_keys.iter())
             .map(|k| k.len())
@@ -1032,47 +1062,96 @@ fn build_instance_content(
             .unwrap_or(0)
             .min(18); // Same cap as Class for visual alignment
 
-        // Schema properties in YAML order (same format as Class)
-        for key in &schema_keys {
-            let is_required = class.required_properties.contains(*key);
-            let has_value = instance
-                .properties
-                .get(*key)
-                .map(|v| !v.is_null())
-                .unwrap_or(false);
+        // STANDARD section (dim styling)
+        if !standard_keys.is_empty() {
+            content.properties.add_line(Line::from(vec![Span::styled(
+                format!("── STANDARD ({}) ──", standard_keys.len()),
+                STYLE_DIM,
+            )]));
+            for key in &standard_keys {
+                let is_required = class.required_properties.contains(*key);
+                let has_value = instance
+                    .properties
+                    .get(*key)
+                    .map(|v| !v.is_null())
+                    .unwrap_or(false);
 
-            // Status icon: ✓ if filled, ⚠ if required+missing, space otherwise
-            let (status_icon, status_style) = if has_value {
-                ("✓", Style::default().fg(Color::Rgb(133, 153, 0))) // green
-            } else if is_required {
-                ("⚠", Style::default().fg(Color::Rgb(203, 75, 22))) // orange warning
-            } else {
-                (" ", STYLE_DIM)
-            };
+                let (status_icon, status_style) = if has_value {
+                    ("✓", Style::default().fg(Color::Rgb(133, 153, 0)))
+                } else if is_required {
+                    ("⚠", Style::default().fg(Color::Rgb(203, 75, 22)))
+                } else {
+                    (" ", STYLE_DIM)
+                };
+                let required_marker = if is_required { "*" } else { " " };
 
-            // Required marker: * for required, space for optional
-            let required_marker = if is_required { "*" } else { " " };
+                let (value_str, _value_color) =
+                    if let Some(value) = instance.properties.get(*key) {
+                        (json_value_to_display(value), json_value_color(value))
+                    } else {
+                        ("~".to_string(), COLOR_VALUE_NULL)
+                    };
+                let truncated = truncate_str(&value_str, 24);
 
-            let (value_str, value_color) = if let Some(value) = instance.properties.get(*key) {
-                (json_value_to_display(value), json_value_color(value))
-            } else {
-                ("~".to_string(), COLOR_VALUE_NULL)
-            };
-            let truncated = truncate_str(&value_str, 24);
+                // Standard properties use dim styling for key and value
+                content.properties.add_line(Line::from(vec![
+                    Span::styled(status_icon, status_style),
+                    Span::styled(
+                        required_marker,
+                        Style::default().fg(Color::Rgb(220, 50, 47)),
+                    ),
+                    Span::styled(format!("{:width$}", key, width = max_key_len), STYLE_DIM),
+                    Span::styled(": ", STYLE_PROP_COLON),
+                    Span::styled(truncated, STYLE_DIM),
+                ]));
+            }
+        }
 
-            content.properties.add_line(Line::from(vec![
-                Span::styled(status_icon, status_style),
-                Span::styled(
-                    required_marker,
-                    Style::default().fg(Color::Rgb(220, 50, 47)),
-                ),
-                Span::styled(
-                    format!("{:width$}", key, width = max_key_len),
-                    STYLE_PROP_KEY,
-                ),
-                Span::styled(": ", STYLE_PROP_COLON),
-                Span::styled(truncated, Style::default().fg(value_color)),
-            ]));
+        // SPECIFIC section (full color)
+        if !specific_keys.is_empty() {
+            content.properties.add_line(Line::from(vec![Span::styled(
+                format!("── SPECIFIC ({}) ──", specific_keys.len()),
+                STYLE_MUTED,
+            )]));
+            for key in &specific_keys {
+                let is_required = class.required_properties.contains(*key);
+                let has_value = instance
+                    .properties
+                    .get(*key)
+                    .map(|v| !v.is_null())
+                    .unwrap_or(false);
+
+                let (status_icon, status_style) = if has_value {
+                    ("✓", Style::default().fg(Color::Rgb(133, 153, 0)))
+                } else if is_required {
+                    ("⚠", Style::default().fg(Color::Rgb(203, 75, 22)))
+                } else {
+                    (" ", STYLE_DIM)
+                };
+                let required_marker = if is_required { "*" } else { " " };
+
+                let (value_str, value_color) =
+                    if let Some(value) = instance.properties.get(*key) {
+                        (json_value_to_display(value), json_value_color(value))
+                    } else {
+                        ("~".to_string(), COLOR_VALUE_NULL)
+                    };
+                let truncated = truncate_str(&value_str, 24);
+
+                content.properties.add_line(Line::from(vec![
+                    Span::styled(status_icon, status_style),
+                    Span::styled(
+                        required_marker,
+                        Style::default().fg(Color::Rgb(220, 50, 47)),
+                    ),
+                    Span::styled(
+                        format!("{:width$}", key, width = max_key_len),
+                        STYLE_PROP_KEY,
+                    ),
+                    Span::styled(": ", STYLE_PROP_COLON),
+                    Span::styled(truncated, Style::default().fg(value_color)),
+                ]));
+            }
         }
 
         // Extra instance props not in schema (marked with ?)

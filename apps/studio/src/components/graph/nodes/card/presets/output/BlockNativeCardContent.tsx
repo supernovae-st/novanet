@@ -44,6 +44,7 @@ import {
   AnchorSlugBadge,
 } from './OutputHelpers';
 import { TaxonomyBadge } from '../../TaxonomyBadge';
+import { Box, ArrowUpRight } from 'lucide-react';
 
 // =============================================================================
 // Types
@@ -160,6 +161,37 @@ export const BlockNativeCardContent = memo(function BlockNativeCardContent({
       <h4 className="text-base font-bold text-white mb-2" style={glowStyle}>
         {data.displayName}
       </h4>
+
+      {/* === PARENT REFERENCE: Shows this belongs to a Block === */}
+      {data.block_key && (
+        <div className="flex items-center gap-2 mb-3">
+          {/* Dashed connector line */}
+          <div
+            className="flex-shrink-0 w-5 h-px"
+            style={{
+              background: `repeating-linear-gradient(90deg, ${colors.primary}40 0, ${colors.primary}40 3px, transparent 3px, transparent 6px)`,
+            }}
+          />
+          {/* Parent badge */}
+          <div
+            className="flex items-center gap-1.5 px-2 py-0.5 rounded-md"
+            style={{
+              background: `${colors.primary}08`,
+              border: `1px dashed ${colors.primary}25`,
+            }}
+          >
+            <Box size={9} style={{ color: colors.primary }} />
+            <span className="text-[8px] font-mono text-white/50">parent:</span>
+            <span
+              className="text-[8px] font-mono font-medium truncate max-w-[100px]"
+              style={{ color: `${colors.primary}90` }}
+            >
+              {data.block_key}
+            </span>
+            <ArrowUpRight size={7} className="text-white/30" />
+          </div>
+        </div>
+      )}
 
       {/* Content section */}
       <ContentWrapper
