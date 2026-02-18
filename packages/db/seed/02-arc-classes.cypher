@@ -95,7 +95,7 @@ ON CREATE SET
   ac_DERIVED_SLUG_FROM.cardinality = 'many_to_one',
   ac_DERIVED_SLUG_FROM.is_self_referential = false,
   ac_DERIVED_SLUG_FROM.inverse_name = null,
-  ac_DERIVED_SLUG_FROM.arc_properties = ['derivation_score', 'derivation_rationale', 'alternatives_considered', 'no_repetition_applied', 'brand_invariant'],
+  ac_DERIVED_SLUG_FROM.arc_properties = ['derivation_score', 'derivation_rationale', 'alternatives_considered', 'no_repetition_applied', 'brand_invariant', 'derivation_timestamp'],
   ac_DERIVED_SLUG_FROM.cypher_pattern = '(BlockNative)-[:DERIVED_SLUG_FROM]->(EntityNative)',
   ac_DERIVED_SLUG_FROM.temperature_threshold = null,
   ac_DERIVED_SLUG_FROM.created_at = datetime()
@@ -107,7 +107,7 @@ ON MATCH SET
   ac_DERIVED_SLUG_FROM.cardinality = 'many_to_one',
   ac_DERIVED_SLUG_FROM.is_self_referential = false,
   ac_DERIVED_SLUG_FROM.inverse_name = null,
-  ac_DERIVED_SLUG_FROM.arc_properties = ['derivation_score', 'derivation_rationale', 'alternatives_considered', 'no_repetition_applied', 'brand_invariant'],
+  ac_DERIVED_SLUG_FROM.arc_properties = ['derivation_score', 'derivation_rationale', 'alternatives_considered', 'no_repetition_applied', 'brand_invariant', 'derivation_timestamp'],
   ac_DERIVED_SLUG_FROM.cypher_pattern = '(BlockNative)-[:DERIVED_SLUG_FROM]->(EntityNative)',
   ac_DERIVED_SLUG_FROM.temperature_threshold = null,
   ac_DERIVED_SLUG_FROM.updated_at = datetime();
@@ -4431,25 +4431,25 @@ ON MATCH SET
 MERGE (ac_TARGETS:Schema:ArcClass {key: 'TARGETS'})
 ON CREATE SET
   ac_TARGETS.display_name = 'Targets',
-  ac_TARGETS.llm_context = 'USE: when finding SEO keywords targeted by localized content. TRIGGERS: targets keyword, SEO targeting, keyword optimization, organic search. NOT: keyword expression (use EXPRESSES), persona targeting (use TARGETS_PERSONA). RELATES: EntityNative (source), SEOKeyword (target), cross_realm, locale must match.',
+  ac_TARGETS.llm_context = 'USE: when finding SEO keywords targeted by localized content. TRIGGERS: targets keyword, SEO targeting, keyword optimization, organic search, slug source. NOT: keyword expression (use EXPRESSES), persona targeting (use TARGETS_PERSONA). RELATES: EntityNative (source), SEOKeyword (target), cross_realm, locale must match. CRITICAL: is_slug_source marks the keyword used for URL slug derivation. primary ≠ slug source (ADR-030).',
   ac_TARGETS.family = 'semantic',
   ac_TARGETS.scope = 'cross_realm',
   ac_TARGETS.cardinality = 'many_to_many',
   ac_TARGETS.is_self_referential = false,
   ac_TARGETS.inverse_name = null,
-  ac_TARGETS.arc_properties = ['priority', 'target_position'],
+  ac_TARGETS.arc_properties = ['rank', 'is_slug_source', 'target_position', 'created_at'],
   ac_TARGETS.cypher_pattern = '(EntityNative)-[:TARGETS]->(SEOKeyword)',
   ac_TARGETS.temperature_threshold = 0.6,
   ac_TARGETS.created_at = datetime()
 ON MATCH SET
   ac_TARGETS.display_name = 'Targets',
-  ac_TARGETS.llm_context = 'USE: when finding SEO keywords targeted by localized content. TRIGGERS: targets keyword, SEO targeting, keyword optimization, organic search. NOT: keyword expression (use EXPRESSES), persona targeting (use TARGETS_PERSONA). RELATES: EntityNative (source), SEOKeyword (target), cross_realm, locale must match.',
+  ac_TARGETS.llm_context = 'USE: when finding SEO keywords targeted by localized content. TRIGGERS: targets keyword, SEO targeting, keyword optimization, organic search, slug source. NOT: keyword expression (use EXPRESSES), persona targeting (use TARGETS_PERSONA). RELATES: EntityNative (source), SEOKeyword (target), cross_realm, locale must match. CRITICAL: is_slug_source marks the keyword used for URL slug derivation. primary ≠ slug source (ADR-030).',
   ac_TARGETS.family = 'semantic',
   ac_TARGETS.scope = 'cross_realm',
   ac_TARGETS.cardinality = 'many_to_many',
   ac_TARGETS.is_self_referential = false,
   ac_TARGETS.inverse_name = null,
-  ac_TARGETS.arc_properties = ['priority', 'target_position'],
+  ac_TARGETS.arc_properties = ['rank', 'is_slug_source', 'target_position', 'created_at'],
   ac_TARGETS.cypher_pattern = '(EntityNative)-[:TARGETS]->(SEOKeyword)',
   ac_TARGETS.temperature_threshold = 0.6,
   ac_TARGETS.updated_at = datetime();

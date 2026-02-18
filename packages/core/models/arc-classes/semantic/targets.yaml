@@ -8,6 +8,10 @@
 #
 # v11.5: scope fix (intra_realm → cross_realm)
 #        - EntityNative (org/semantic) → SEOKeyword (shared/knowledge)
+#
+# v0.13.1: ADR-030 alignment
+#        - Renamed priority → rank (align with Cypher seed files)
+#        - Added is_slug_source property (slug derivation provenance)
 
 arc:
   name: TARGETS
@@ -20,20 +24,30 @@ arc:
   cardinality: many_to_many
 
   properties:
-    - name: priority
+    - name: rank
       type: string
-      required: false
+      required: true
       enum: [primary, secondary, tertiary]
-      description: "Targeting priority for this keyword"
+      description: "Targeting rank for this keyword. Primary = dominant market signal, but may NOT be slug source (ADR-030)"
+    - name: is_slug_source
+      type: boolean
+      required: false
+      default: false
+      description: "True if this keyword's slug_form was used for the URL slug. Can be on secondary keyword for differentiation strategy (ADR-030)"
     - name: target_position
       type: int
       required: false
       description: "Target ranking position (1-10)"
+    - name: created_at
+      type: datetime
+      required: false
+      description: "Arc creation timestamp"
 
   llm_context: |
     USE: when finding SEO keywords targeted by localized content.
-    TRIGGERS: targets keyword, SEO targeting, keyword optimization, organic search.
+    TRIGGERS: targets keyword, SEO targeting, keyword optimization, organic search, slug source.
     NOT: keyword expression (use EXPRESSES), persona targeting (use TARGETS_PERSONA).
     RELATES: EntityNative (source), SEOKeyword (target), cross_realm, locale must match.
+    CRITICAL: is_slug_source marks the keyword used for URL slug derivation. primary ≠ slug source (ADR-030).
 
-  cypher_pattern: "(EntityNative)-[:TARGETS {priority, target_position}]->(SEOKeyword)"
+  cypher_pattern: "(EntityNative)-[:TARGETS {rank, is_slug_source, target_position}]->(SEOKeyword)"
