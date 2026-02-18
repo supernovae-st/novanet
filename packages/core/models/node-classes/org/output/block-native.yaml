@@ -96,10 +96,22 @@ node:
       required: false
       description: "Instance-specific context for LLM generation. Focused characteristics for this particular node instance."
 
-    generated:
+    content:
       type: json
       required: true
-      description: "LLM output matching BlockType.structure"
+      description: "Block content matching BlockType.structure. For head-seo-meta: {slug, meta_title, meta_description}"
+      examples:
+        - '{"slug": "créer-un-qr-code", "meta_title": "Créer un QR Code", "meta_description": "..."}'
+        - '{"title": "Hero Section", "cta_label": "Get Started"}'
+
+    block_type:
+      type: string
+      required: true
+      description: "Reference to BlockType.key (denormalized for fast filtering)"
+      examples:
+        - "head-seo-meta"
+        - "hero"
+        - "features"
 
     generated_at:
       type: datetime
@@ -194,7 +206,8 @@ node:
     display_name: "Pricing Hero (fr-FR)"
     description: "Hero tarifs généré pour le marché français"
     llm_context: "USE: display generated hero content. TRIGGERS: pricing hero, fr-FR output."
-    generated:
+    block_type: "hero"
+    content:
       title: "Des QR Codes Pro pour votre Business"
       subtitle: "Créez, personnalisez et suivez vos QR codes en illimité"
       cta:
@@ -203,6 +216,7 @@ node:
     generated_at: "2024-01-15T10:25:00Z"
     generator_version: "1.2.0"
     status: "published"
+    anchor_slug: "tarification"
     version: 2
     published_at: "2024-01-15T10:30:00Z"
     replaced_at: null

@@ -37,8 +37,23 @@ node:
     key:
       type: string
       required: true
-      description: "Unique identifier"
-      example: "seo-creer-qr-code-gratuit-fr"
+      pattern: "^seo:[a-z0-9-]+@[a-z]{2}-[A-Z]{2}$"
+      description: "Composite key: seo:{slug}@{locale_key} (ADR-029)"
+      examples:
+        - "seo:qr-code-generator@en-US"
+        - "seo:creer-un-qr-code@fr-FR"
+        - "seo:qr-code-erstellen@de-DE"
+
+    locale_key:
+      type: string
+      required: true
+      pattern: "^[a-z]{2}-[A-Z]{2}$"
+      indexed: true
+      description: "Locale key (denormalized for fast lookup). BCP 47 format."
+      examples:
+        - "fr-FR"
+        - "en-US"
+        - "ja-JP"
 
     display_name:
       type: string
@@ -53,12 +68,12 @@ node:
 
     created_at:
       type: datetime
-      required: false
+      required: true
       description: "Creation timestamp"
 
     updated_at:
       type: datetime
-      required: false
+      required: true
       description: "Last update timestamp"
 
   properties:
@@ -72,8 +87,23 @@ node:
     value:
       type: string
       required: true
-      description: "The keyword string"
+      description: "The keyword string (original form with diacritics)"
       example: "créer qr code gratuit"
+
+    slug_form:
+      type: string
+      required: true
+      description: "URL-safe slug form of the keyword. Used as INPUT for slug derivation (ADR-032). Contains diacritics per locale rules (latin_preserve, latin_strip, etc.)"
+      examples:
+        - "créer-un-qr-code"
+        - "qr-code-generator"
+        - "qrコード作成"
+
+    source_date:
+      type: date
+      required: false
+      description: "Date when keyword data was fetched from source (Ahrefs/Semrush). Used for data freshness tracking."
+      example: "2026-02-17"
 
     volume:
       type: int
@@ -233,21 +263,28 @@ node:
 
   example:
     data:
-      key: "seo-creer-qr-code-gratuit-fr"
-      display_name: "créer qr code gratuit"
-      value: "créer qr code gratuit"
-      volume: 12100
-      difficulty: 35
+      key: "seo:creer-un-qr-code@fr-FR"
+      locale_key: "fr-FR"
+      display_name: "créer un qr code (fr-FR)"
+      value: "créer un qr code"
+      slug_form: "créer-un-qr-code"
+      volume: 14000
+      difficulty: 31
       traffic_potential: 8500
       intent: "transactional"
+      source: "ahrefs"
+      source_date: "2026-02-17"
       serp_features: ["featured_snippet", "people_also_ask"]
     cypher: |
-      MATCH (ec:EntityNative {locale_key: $locale})-[:TARGETS]->(kw:SEOKeyword)
+      // Get all keywords targeted by an EntityNative with slug source info
+      MATCH (en:EntityNative {locale_key: $locale})-[t:TARGETS]->(kw:SEOKeyword)
       OPTIONAL MATCH (kw)-[:HAS_FORMAT]->(fmt:SEOKeywordFormat)
       RETURN kw.value AS keyword,
+             kw.slug_form,
              kw.volume,
              kw.traffic_potential,
-             kw.serp_features,
+             t.rank,
+             t.is_slug_source,
              fmt.format_key AS format
       ORDER BY kw.traffic_potential DESC
       LIMIT 20
