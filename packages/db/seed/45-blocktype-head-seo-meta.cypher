@@ -27,7 +27,7 @@ ON CREATE SET
       "slug": {
         "type": "string",
         "pattern": "^[\\\\p{Ll}\\\\p{N}\\\\-]+$",
-        "description": "URL-safe localized slug (UTF-8 allowed). COPIED from SEOKeyword.slug_form."
+        "description": "URL-safe localized slug (UTF-8 allowed). Derived from SEOKeyword.slug_form via copy/extract/merge/modify/derive (ADR-030)."
       },
       "meta_title": {
         "type": "string",
