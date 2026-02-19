@@ -7,7 +7,7 @@ This file provides guidance to Claude Code when working in the `tools/novanet/` 
 `novanet` is a unified Rust CLI + TUI binary for managing the NovaNet context graph.
 It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 
-**Version**: v0.13.1 (*Native Pattern + LLM-First BLOC Schema + ADR-029/ADR-030 + ADR-024 Data Origin + ADR-025 Instruction Layer + ADR-028 Brand Architecture)
+**Version**: v0.14.0 (*Native Pattern + LLM-First BLOC Schema + context_build_log + ADR-029/ADR-030 + ADR-024 Data Origin + ADR-025 Instruction Layer + ADR-028 Brand Architecture)
 
 ## Current Status
 
