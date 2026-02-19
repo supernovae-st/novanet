@@ -145,7 +145,7 @@ export const MacropadVisualizer = memo(function MacropadVisualizer() {
   const [activeLayer, setActiveLayer] = useState(0);
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [syncStatus, setSyncStatus] = useState<SyncStatus>('idle');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   const [_hoveredKey, setHoveredKey] = useState<string | null>(null);
 
   // Edit mode state

@@ -38,13 +38,13 @@ describe('Icon Synchronization', () => {
       // Valid Lucide icon names (lowercase with hyphens)
       const lucidePattern = /^[a-z][a-z0-9-]*$/;
 
-      for (const [layer, icon] of Object.entries(ICONS.layers)) {
+      for (const [_layer, icon] of Object.entries(ICONS.layers)) {
         expect(icon.web).toMatch(lucidePattern);
       }
     });
 
     it('layer icons should have single-width Unicode symbols (terminal)', () => {
-      for (const [layer, icon] of Object.entries(ICONS.layers)) {
+      for (const [_layer, icon] of Object.entries(ICONS.layers)) {
         // Terminal icons should be non-empty strings
         expect(icon.terminal).toBeTruthy();
         expect(typeof icon.terminal).toBe('string');
@@ -128,7 +128,7 @@ describe('Icon Synchronization', () => {
 
     it('all icons should have web and terminal properties', () => {
       const checkCategory = (category: Record<string, { web: string; terminal: string }>) => {
-        for (const [key, icon] of Object.entries(category)) {
+        for (const [_key, icon] of Object.entries(category)) {
           expect(icon).toHaveProperty('web');
           expect(icon).toHaveProperty('terminal');
           expect(typeof icon.web).toBe('string');
