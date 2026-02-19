@@ -356,6 +356,11 @@ NovaNet exposes an MCP (Model Context Protocol) server for workflow automation a
 │                               context_anchors, denomination_forms (ADR-033),│
 │                               context_build_log (DX-11)                     │
 │                                                                             │
+│  novanet_introspect  Schema introspection for agents to query metadata      │
+│                      params: target (classes|class|arcs|arc), name,         │
+│                              realm, layer, family, include_arcs             │
+│                      returns: target, data, token_estimate                  │
+│                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 

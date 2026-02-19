@@ -3,11 +3,13 @@
 //! Phase 1: novanet_query, novanet_describe
 //! Phase 2: novanet_search, novanet_traverse, novanet_assemble, novanet_atoms
 //! Phase 3: novanet_generate
+//! MVP 8 Phase 3: novanet_introspect (schema introspection)
 
 pub mod assemble;
 pub mod atoms;
 pub mod describe;
 pub mod generate;
+pub mod introspect;
 pub mod query;
 pub mod search;
 pub mod traverse;
@@ -17,6 +19,7 @@ pub use assemble::{AssembleParams, AssembleResult};
 pub use atoms::{AtomsParams, AtomsResult};
 pub use describe::{DescribeParams, DescribeResult, DescribeTarget};
 pub use generate::{GenerateParams, GenerateResult};
+pub use introspect::{IntrospectParams, IntrospectResult, IntrospectTarget};
 pub use query::{QueryParams, QueryResult};
 pub use search::{SearchParams, SearchResult};
 pub use traverse::{TraverseParams, TraverseResult};
