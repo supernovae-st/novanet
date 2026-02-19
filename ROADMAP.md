@@ -73,17 +73,17 @@ Ce document est le "plan des plans" - il orchestre tous les plans de développem
 │  ├── ✅ Deleted ClaudeProvider, OpenAIProvider, old AgentLoop                │
 │  ├── ✅ RigProvider wrapper (provider/rig.rs)                                │
 │  ├── ✅ NikaMcpTool implements rig::ToolDyn                                  │
-│  └── ✅ 621 tests passing, v0.4 complete                                     │
+│  └── ✅ 679 tests passing, v0.4.1 complete                                   │
 │                                                                                 │
 │  🎯 MILESTONE: Nika v0.4 ✅ ACHIEVED (pure rig-core)                          │
 │                                                                                 │
 │  ┌─────────────────────────────────────────────────────────────────────────┐   │
-│  │  MVP 8: RLM ENHANCEMENTS (0%)                              ▶ NEXT      │   │
-│  │  ├── ⏳ Phase 1: Reasoning capture (thinking field in AgentTurn)       │   │
+│  │  MVP 8: RLM ENHANCEMENTS (60%)                             ▶ CURRENT   │   │
+│  │  ├── ✅ Phase 1: Reasoning capture (thinking field in AgentTurn)       │   │
 │  │  ├── ⏳ Phase 2: Nested agents (spawn_agent internal tool)             │   │
 │  │  ├── ⏳ Phase 3: Schema introspection (novanet_introspect MCP)         │   │
-│  │  ├── ⏳ Phase 4: Dynamic decomposition (decompose: modifier)           │   │
-│  │  └── ⏳ Phase 5: Lazy context loading (lazy: binding modifier)         │   │
+│  │  ├── ✅ Phase 4: Dynamic decomposition (decompose: modifier)           │   │
+│  │  └── ✅ Phase 5: Lazy context loading (lazy: binding modifier)         │   │
 │  └─────────────────────────────────────────────────────────────────────────┘   │
 │                                                                                 │
 │  🎯 RESULT: Nika v0.5 with full RLM-on-KG capabilities                        │
@@ -364,7 +364,7 @@ Replace custom LLM provider implementations with `rig-core` v0.31.0 for:
 
 ### Success Criteria
 - [x] `cargo build` succeeds
-- [x] All 621 tests pass
+- [x] All 679 tests pass
 - [x] Agent workflows work with RigAgentLoop
 - [x] MCP integration works via NikaMcpTool
 - [x] CLAUDE.md updated with v0.4 changes
@@ -374,7 +374,7 @@ Replace custom LLM provider implementations with `rig-core` v0.31.0 for:
 ## MVP 8: RLM Enhancements ⏳ (CURRENT)
 
 **Plan:** `docs/research/rlm-knowledge-graph-patterns-2025.md` (Section 11)
-**Status:** IN PROGRESS (Phase 1 ✅ complete)
+**Status:** IN PROGRESS (Phases 1, 4, 5 ✅ complete — 60%)
 **Prerequisites:** MVP 7 ✅
 
 ### Overview
@@ -383,13 +383,13 @@ Enhance NovaNet + Nika with full RLM-on-KG (Recursive Language Model on Knowledg
 Research finding: NovaNet + Nika is ALREADY RLM-on-KG but missing key features from rig-rlm pattern.
 
 ### Phases
-| Phase | Feature | Target | Effort | Files |
-|-------|---------|--------|--------|-------|
-| 1 | **Reasoning capture** ✅ | v0.4.1 | Low | `rig_agent_loop.rs`, `tests/thinking_capture_test.rs` |
-| 2 | **Nested agents** (`spawn_agent` tool) | v0.5 | Medium | `runtime/spawn.rs`, `executor.rs` |
-| 3 | **Schema introspection** (`novanet_introspect`) | v0.5 | Medium | NovaNet MCP server |
-| 4 | **Dynamic decomposition** (`decompose:` modifier) | v0.6 | High | `ast/decompose.rs`, `runtime/decomposer.rs` |
-| 5 | **Lazy bindings** (`lazy: true`) | v0.6 | Medium | `binding/lazy.rs` |
+| Phase | Feature | Target | Effort | Files | Status |
+|-------|---------|--------|--------|-------|--------|
+| 1 | **Reasoning capture** | v0.4.1 | Low | `rig_agent_loop.rs`, `tests/thinking_capture_test.rs` | ✅ Done |
+| 2 | **Nested agents** (`spawn_agent` tool) | v0.5 | Medium | `runtime/spawn.rs`, `executor.rs` | ⏳ Stub |
+| 3 | **Schema introspection** (`novanet_introspect`) | v0.5 | Medium | NovaNet MCP server | ⏳ Pending |
+| 4 | **Dynamic decomposition** (`decompose:` modifier) | v0.5 | High | `ast/decompose.rs`, `runtime/decomposer.rs` | ✅ Done |
+| 5 | **Lazy bindings** (`lazy: true`) | v0.5 | Medium | `binding/entry.rs`, `binding/resolve.rs` | ✅ Done |
 
 ### Phase 1: Reasoning Capture (v0.4.1) ✅ COMPLETE
 
@@ -433,7 +433,7 @@ New MCP tool for agents to query graph SCHEMA:
 }
 ```
 
-### Phase 4: Dynamic Decomposition (v0.6)
+### Phase 4: Dynamic Decomposition (v0.5) ✅ COMPLETE
 New `decompose:` modifier for runtime DAG expansion:
 
 ```yaml
@@ -446,12 +446,29 @@ tasks:
     infer: "Generate for {{item}}"
 ```
 
+### Phase 5: Lazy Bindings (v0.5) ✅ COMPLETE
+Defer binding resolution until first access:
+
+```yaml
+use:
+  eager: task1.result           # Resolved immediately
+  lazy_val:
+    path: future.result
+    lazy: true                  # Resolved on access
+    default: "fallback"         # Optional default
+```
+
+**Files changed:**
+- `binding/entry.rs` - UseEntry with `lazy: bool` field
+- `binding/resolve.rs` - LazyBinding enum (Resolved | Pending)
+- `tests/lazy_binding_test.rs` - 15 integration tests
+
 ### Success Criteria
-- [ ] Phase 1: `thinking` captured in NDJSON traces
+- [x] Phase 1: `thinking` captured in NDJSON traces ✅
 - [ ] Phase 2: Nested agents work with depth limit
 - [ ] Phase 3: `novanet_introspect` returns schema info
-- [ ] Phase 4: `decompose:` creates runtime subtasks
-- [ ] Phase 5: Lazy bindings defer context loading
+- [x] Phase 4: `decompose:` creates runtime subtasks ✅
+- [x] Phase 5: Lazy bindings defer context loading ✅
 
 ---
 
@@ -645,14 +662,14 @@ cd nika-dev/tools/nika
 ### MVP 7 Done When: ✅ ACHIEVED
 - ✅ RigAgentLoop with rig::AgentBuilder
 - ✅ Old providers deleted (claude.rs, openai.rs, types.rs)
-- ✅ 621 tests passing
+- ✅ 679 tests passing
 
-### MVP 8 Done When:
-- Phase 1: `thinking` field captured in AgentTurn events
-- Phase 2: Nested agents with `spawn_agent` tool
-- Phase 3: `novanet_introspect` MCP tool in NovaNet
-- Phase 4: `decompose:` modifier for dynamic DAG
-- Phase 5: `lazy: true` binding modifier
+### MVP 8 Done When: (60% complete)
+- [x] Phase 1: `thinking` field captured in AgentTurn events ✅
+- [ ] Phase 2: Nested agents with `spawn_agent` tool
+- [ ] Phase 3: `novanet_introspect` MCP tool in NovaNet
+- [x] Phase 4: `decompose:` modifier for dynamic DAG ✅
+- [x] Phase 5: `lazy: true` binding modifier ✅
 
 ---
 

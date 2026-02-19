@@ -1,4 +1,4 @@
-# ADR Cheat Sheet (NovaNet v0.14.0 + Nika v0.4.0)
+# ADR Cheat Sheet (NovaNet v0.14.0 + Nika v0.4.1)
 
 Quick reference for daily development. Use `/adr <number>` for full details.
 
