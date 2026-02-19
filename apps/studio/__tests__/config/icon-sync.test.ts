@@ -94,13 +94,15 @@ describe('Icon Synchronization', () => {
   });
 
   describe('Arc Family Icons (from visual-encoding.yaml)', () => {
-    it('should have all 5 arc family icons defined', () => {
+    it('should have all 6 arc family icons defined', () => {
+      // v0.13.1: 6 arc families (added schema family)
       const expectedFamilies = [
         'ownership',
         'localization',
         'semantic',
         'generation',
         'mining',
+        'schema',
       ];
 
       for (const family of expectedFamilies) {

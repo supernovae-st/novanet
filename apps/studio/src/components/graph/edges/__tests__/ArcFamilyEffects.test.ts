@@ -23,6 +23,7 @@ describe('Arc Family Effects Integration', () => {
       expect(getArcFamilyEffect('semantic')).toBe('zigzag');
       expect(getArcFamilyEffect('generation')).toBe('matrixCode');
       expect(getArcFamilyEffect('mining')).toBe('radarSweep');
+      expect(getArcFamilyEffect('schema')).toBe('schemaFlow');
     });
   });
 
@@ -80,13 +81,14 @@ describe('Arc Family Effects Integration', () => {
   });
 
   describe('ARC_FAMILY_EFFECTS mapping', () => {
-    it('has an effect for all 5 arc families', () => {
-      expect(Object.keys(ARC_FAMILY_EFFECTS)).toHaveLength(5);
+    it('has an effect for all 6 arc families', () => {
+      expect(Object.keys(ARC_FAMILY_EFFECTS)).toHaveLength(6);
       expect(ARC_FAMILY_EFFECTS.ownership).toBeDefined();
       expect(ARC_FAMILY_EFFECTS.localization).toBeDefined();
       expect(ARC_FAMILY_EFFECTS.semantic).toBeDefined();
       expect(ARC_FAMILY_EFFECTS.generation).toBeDefined();
       expect(ARC_FAMILY_EFFECTS.mining).toBeDefined();
+      expect(ARC_FAMILY_EFFECTS.schema).toBeDefined();
     });
   });
 });

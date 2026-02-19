@@ -61,16 +61,17 @@ describe('StructuralCardContent', () => {
       expect(screen.getByText('homepage')).toBeInTheDocument();
     });
 
-    it('does not render key when same as displayName', () => {
+    it('renders key in footer even when same as displayName (v0.13.1 Passport design)', () => {
+      // v0.13.1 Passport design: key is always shown in footer for DX
       const props = {
         ...defaultProps,
         data: { ...defaultProps.data, key: 'Homepage', displayName: 'Homepage' },
       };
       render(<StructuralCardContent {...props} />);
 
-      // Should only have one "Homepage" (the display name)
+      // Should have two "Homepage" - display name + key in footer
       const elements = screen.getAllByText('Homepage');
-      expect(elements).toHaveLength(1);
+      expect(elements).toHaveLength(2);
     });
 
     it('renders layer badge', () => {
@@ -135,12 +136,14 @@ describe('StructuralCardContent', () => {
   });
 
   describe('Layout', () => {
-    it('has consistent padding', () => {
+    it('has consistent padding on content zone', () => {
       const { container } = render(<StructuralCardContent {...defaultProps} />);
 
-      // Root content div should have padding
-      const content = container.firstChild;
-      expect(content).toHaveClass('px-3', 'py-2.5');
+      // v0.13.1 Passport design: padding is on Content Zone inner div, not root CardWrapper
+      // Root is flex container: "relative flex h-full rounded-xl overflow-hidden"
+      // Content Zone has: "relative flex-1 px-3 py-2.5 min-w-0 z-10"
+      const contentZone = container.querySelector('.px-3.py-2\\.5');
+      expect(contentZone).toBeInTheDocument();
     });
   });
 });
