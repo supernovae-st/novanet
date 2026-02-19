@@ -25,4 +25,35 @@ module.exports = {
     'node_modules/(?!(zustand|@xyflow|d3-force|d3-dispatch|d3-quadtree|d3-timer)/)',
   ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  // Coverage configuration
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx}',
+    '!src/**/*.d.ts',
+    '!src/**/*.stories.{ts,tsx}',
+    '!src/**/index.ts',
+    '!src/app/api/**/*', // API routes tested via integration
+  ],
+  coverageThreshold: {
+    global: {
+      branches: 60,
+      functions: 60,
+      lines: 70,
+      statements: 70,
+    },
+    // Higher thresholds for critical modules
+    'src/stores/**/*.ts': {
+      branches: 80,
+      functions: 80,
+      lines: 85,
+      statements: 85,
+    },
+    'src/lib/**/*.ts': {
+      branches: 75,
+      functions: 75,
+      lines: 80,
+      statements: 80,
+    },
+  },
+  coverageReporters: ['text', 'text-summary', 'lcov', 'html'],
+  coverageDirectory: 'coverage',
 };
