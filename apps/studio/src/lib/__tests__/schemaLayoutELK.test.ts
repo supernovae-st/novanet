@@ -1,79 +1,15 @@
 /**
- * Schema Layout ELK Tests
+ * Schema Layout Tests
  *
- * Tests for the ELK-based hierarchical layout engine for schema mode.
- * Validates group nodes, parent relationships, and position conversion.
+ * Tests for the Dagre-based hierarchical layout engine for schema mode.
+ * v9.5: ELK was replaced with Dagre for hierarchical layouts.
+ * Validates badge nodes, class nodes, and hierarchical edges.
  */
 
 import { applySchemaLayout } from '../schemaLayoutELK';
 import { getSchemaHierarchy } from '@novanet/core/graph';
 import type { Layer, SchemaNode, SchemaArc, HierarchicalSchemaData } from '@novanet/core/graph';
 import type { Realm } from '@novanet/core/types';
-
-// Mock ELK.js
-jest.mock('elkjs/lib/elk.bundled.js', () => {
-  return class ELK {
-    async layout(graph: {
-      id: string;
-      children?: Array<{ id: string; children?: Array<{ id: string; children?: unknown[] }> }>;
-    }) {
-      // Simple mock that returns positions for each node
-      const _x = 0;
-      const _y = 0;
-
-      const processChildren = (
-        children: Array<{ id: string; children?: Array<{ id: string; children?: unknown[] }> }> | undefined,
-        parentX = 0,
-        parentY = 0
-      ): Array<{
-        id: string;
-        x: number;
-        y: number;
-        width: number;
-        height: number;
-        children?: Array<{
-          id: string;
-          x: number;
-          y: number;
-          width: number;
-          height: number;
-          children?: Array<{
-            id: string;
-            x: number;
-            y: number;
-            width: number;
-            height: number;
-          }>;
-        }>;
-      }> => {
-        if (!children) return [];
-
-        return children.map((child, i) => {
-          const childX = 20 + i * 200; // Relative position within parent
-          const childY = 60 + i * 100;
-
-          return {
-            id: child.id,
-            x: childX,
-            y: childY,
-            width: child.children ? 600 : 140,
-            height: child.children ? 400 : 50,
-            children: child.children ? processChildren(
-              child.children as Array<{ id: string; children?: Array<{ id: string; children?: unknown[] }> }>,
-              parentX + childX,
-              parentY + childY
-            ) : undefined,
-          };
-        });
-      };
-
-      return {
-        ...graph,
-        children: processChildren(graph.children),
-      };
-    }
-  };
-});
 
 describe('schemaLayoutELK', () => {
   let mockHierarchy: HierarchicalSchemaData;
@@ -225,11 +161,12 @@ describe('schemaLayoutELK', () => {
       expect(hasLayerEdges.length).toBe(6);
     });
 
-    it('should create schema nodes with layer connections', async () => {
+    it('should create class nodes with layer connections', async () => {
       const result = await applySchemaLayout(mockHierarchy);
 
-      const schemaNodes = result.nodes.filter(n => n.type === 'schemaNode');
-      expect(schemaNodes).toHaveLength(16);  // v0.12.4: +3 Brand Architecture nodes
+      // v0.13.0: Uses classNode type for "Holographic Blueprint" design
+      const classNodes = result.nodes.filter(n => n.type === 'classNode');
+      expect(classNodes).toHaveLength(16);  // v0.12.4: +3 Brand Architecture nodes
 
       // v11.8 ADR-023: Connected by HAS_CLASS edges (not parent relationships)
       const hasClassEdges = result.edges.filter(e => e.data?.relationType === 'HAS_CLASS');
@@ -239,9 +176,10 @@ describe('schemaLayoutELK', () => {
     it('should position all nodes with valid coordinates', async () => {
       const result = await applySchemaLayout(mockHierarchy);
 
-      const schemaNodes = result.nodes.filter(n => n.type === 'schemaNode');
+      // v0.13.0: Uses classNode type
+      const classNodes = result.nodes.filter(n => n.type === 'classNode');
 
-      for (const node of schemaNodes) {
+      for (const node of classNodes) {
         // All positions should be valid numbers
         expect(node.position.x).toBeGreaterThanOrEqual(0);
         expect(node.position.y).toBeGreaterThanOrEqual(0);
@@ -285,24 +223,12 @@ describe('schemaLayoutELK', () => {
 
       const result = await applySchemaLayout(hierarchyWithEmpty);
 
-      // Should NOT create a layer group for the empty one
-      const emptyLayer = result.nodes.find(n =>
-        n.type === 'layerGroup' && n.data.layer === 'empty'
+      // v9.5: Should NOT create a layer badge for the empty one
+      // v11.3: Layers are schemaBadge nodes with metaType: 'layer'
+      const emptyLayerBadge = result.nodes.find(n =>
+        n.type === 'schemaBadge' && n.data.metaType === 'layer' && n.data.layerKey === 'empty'
       );
-      expect(emptyLayer).toBeUndefined();
-    });
-
-    it('should set realm group dimensions from ELK layout', async () => {
-      const result = await applySchemaLayout(mockHierarchy);
-
-      const realmGroups = result.nodes.filter(n => n.type === 'realmGroup');
-
-      for (const realmGroup of realmGroups) {
-        // Realm groups should have width and height from ELK
-        expect(realmGroup.style).toBeDefined();
-        expect(realmGroup.style?.width).toBeDefined();
-        expect(realmGroup.style?.height).toBeDefined();
-      }
+      expect(emptyLayerBadge).toBeUndefined();
     });
   });
 
@@ -311,7 +237,7 @@ describe('schemaLayoutELK', () => {
       const hierarchy = getSchemaHierarchy();
       const result = await applySchemaLayout(hierarchy);
 
-      // v11.8: Uses schemaBadge for Realm and Layer, schemaNode for Class
+      // v11.8: Uses schemaBadge for Realm and Layer, classNode for Class
       // Should have 2 realm schema badges (shared, org)
       const realmBadges = result.nodes.filter(n =>
         n.type === 'schemaBadge' && n.data.metaType === 'realm'
@@ -324,13 +250,13 @@ describe('schemaLayoutELK', () => {
       );
       expect(layerBadges.length).toBeGreaterThan(0);
 
-      // Should have schema nodes (count varies with ontology)
-      const schemaNodes = result.nodes.filter(n => n.type === 'schemaNode');
-      expect(schemaNodes.length).toBeGreaterThan(0);
+      // v0.13.0: Should have class nodes (count varies with ontology)
+      const classNodes = result.nodes.filter(n => n.type === 'classNode');
+      expect(classNodes.length).toBeGreaterThan(0);
 
-      // Total should match: realm + layer + kind nodes
+      // Total should match: realm + layer + class nodes
       expect(result.nodes.length).toBe(
-        realmBadges.length + layerBadges.length + schemaNodes.length
+        realmBadges.length + layerBadges.length + classNodes.length
       );
     });
 

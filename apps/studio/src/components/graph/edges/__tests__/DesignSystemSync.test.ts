@@ -34,9 +34,9 @@ import type { RelationCategory } from '../system/types';
 // =============================================================================
 
 describe('Arc Family Completeness', () => {
-  const ALL_ARC_FAMILIES: ArcFamily[] = ['ownership', 'localization', 'semantic', 'generation', 'mining'];
+  const ALL_ARC_FAMILIES: ArcFamily[] = ['ownership', 'localization', 'semantic', 'generation', 'mining', 'schema'];
 
-  it('ARC_FAMILY_COLORS has all 5 families', () => {
+  it('ARC_FAMILY_COLORS has all 6 families', () => {
     for (const family of ALL_ARC_FAMILIES) {
       expect(ARC_FAMILY_COLORS[family]).toBeDefined();
       // v11.7.0: ARC_FAMILY_COLORS now has ColorTokens structure with .color property
@@ -44,7 +44,7 @@ describe('Arc Family Completeness', () => {
     }
   });
 
-  it('ARC_PALETTES has all 5 families with complete palettes', () => {
+  it('ARC_PALETTES has all 6 families with complete palettes', () => {
     for (const family of ALL_ARC_FAMILIES) {
       const palette = ARC_PALETTES[family];
       expect(palette).toBeDefined();
@@ -56,7 +56,7 @@ describe('Arc Family Completeness', () => {
     }
   });
 
-  it('ARC_FAMILY_EFFECTS has all 5 families with unique effects', () => {
+  it('ARC_FAMILY_EFFECTS has all 6 families with unique effects', () => {
     const effects = new Set<string>();
     for (const family of ALL_ARC_FAMILIES) {
       const effect = ARC_FAMILY_EFFECTS[family];
@@ -64,10 +64,10 @@ describe('Arc Family Completeness', () => {
       expect(effects.has(effect)).toBe(false); // Must be unique
       effects.add(effect);
     }
-    expect(effects.size).toBe(5);
+    expect(effects.size).toBe(6);
   });
 
-  it('ARC_STROKES has all 5 families', () => {
+  it('ARC_STROKES has all 6 families', () => {
     for (const family of ALL_ARC_FAMILIES) {
       const stroke = ARC_STROKES[family];
       expect(stroke).toBeDefined();
@@ -140,7 +140,7 @@ describe('Theme Resolution Integration', () => {
   it('resolveTheme returns arcFamily in resolved theme', () => {
     const theme = resolveTheme('HAS_PAGE');
     expect(theme.arcFamily).toBeDefined();
-    expect(['ownership', 'localization', 'semantic', 'generation', 'mining']).toContain(theme.arcFamily);
+    expect(['ownership', 'localization', 'semantic', 'generation', 'mining', 'schema']).toContain(theme.arcFamily);
   });
 
   it('resolved theme effects start with arc family signature effect', () => {
