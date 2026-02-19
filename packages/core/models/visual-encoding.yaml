@@ -749,6 +749,10 @@ icons:
       web: pickaxe
       terminal: "⇝"
       description: "SEO data extraction"
+    schema:
+      web: git-branch
+      terminal: "◇"
+      description: "Meta-schema relationships"
 
   # ---------------------------------------------------------------------------
   # UI STATE ICONS — Empty states, loading, status indicators
