@@ -66,7 +66,9 @@ fn build_property_info_json(defs: &[ArcPropertyDef]) -> String {
     // Sort: required first, then by name
     let mut sorted: Vec<&ArcPropertyDef> = defs.iter().collect();
     sorted.sort_by(|a, b| {
-        b.required.cmp(&a.required).then_with(|| a.name.cmp(&b.name))
+        b.required
+            .cmp(&a.required)
+            .then_with(|| a.name.cmp(&b.name))
     });
 
     let props: Vec<String> = sorted
@@ -222,9 +224,21 @@ fn generate_arc_schema(
     .unwrap();
     writeln!(out, "//").unwrap();
     writeln!(out, "// ADR References:").unwrap();
-    writeln!(out, "//   ADR-029: *Native Pattern (EntityNative, PageNative, HAS_NATIVE)").unwrap();
-    writeln!(out, "//   ADR-030: Slug Ownership (TARGETS.is_slug_source, DERIVED_SLUG_FROM)").unwrap();
-    writeln!(out, "//   ADR-031: SEO Pillar/Cluster (SEO_CLUSTER_OF, LINKS_TO)").unwrap();
+    writeln!(
+        out,
+        "//   ADR-029: *Native Pattern (EntityNative, PageNative, HAS_NATIVE)"
+    )
+    .unwrap();
+    writeln!(
+        out,
+        "//   ADR-030: Slug Ownership (TARGETS.is_slug_source, DERIVED_SLUG_FROM)"
+    )
+    .unwrap();
+    writeln!(
+        out,
+        "//   ADR-031: SEO Pillar/Cluster (SEO_CLUSTER_OF, LINKS_TO)"
+    )
+    .unwrap();
     writeln!(
         out,
         "// ═══════════════════════════════════════════════════════════════════════════════"
@@ -257,7 +271,10 @@ fn generate_arc_schema(
         let adr_refs = get_adr_references(rel);
 
         // Build detailed property info if available (v0.13.1: ADR-030)
-        let prop_info: Option<String> = rel.property_defs.as_ref().map(|defs| build_property_info_json(defs));
+        let prop_info: Option<String> = rel
+            .property_defs
+            .as_ref()
+            .map(|defs| build_property_info_json(defs));
 
         // Add ADR reference comment if applicable
         if !adr_refs.is_empty() {
