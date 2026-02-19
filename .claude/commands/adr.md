@@ -67,10 +67,10 @@ Based on `$ARGUMENTS`:
 
 ### Step 2: Read Index
 
-Read the ADR index file:
+Read the ADR index file (in parent workspace):
 
 ```
-.claude/rules/adr/_index.yaml
+../docs/adr/_index.yaml
 ```
 
 Parse the YAML to get:
