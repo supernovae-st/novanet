@@ -2,9 +2,9 @@
 
 # Pre-commit validation for supernovae-agi monorepo
 # - Conventional commit format (via commit-msg hook)
-# - NovaNet: Schema sync, design system coherence
-# - Nika: Rust clippy validation
-# - Both: Lint and format checks
+# - NovaNet: Schema sync, design system coherence, security
+# - Nika: Rust clippy, security
+# - Both: Lint, format, and security checks
 
 set -e
 
@@ -71,37 +71,87 @@ if echo "$CHANGED_FILES" | grep -q "novanet-dev/.*\.\(ts\|tsx\)$"; then
 fi
 
 # =============================================================================
-# NovaNet: Rust Clippy
+# NovaNet: Rust Clippy + Format + Security
 # =============================================================================
 
 if echo "$CHANGED_FILES" | grep -q "novanet-dev/tools/.*\.rs$"; then
-  echo "🦀 NovaNet Rust files changed - running clippy..."
+  echo "🦀 NovaNet Rust files changed - running format, clippy, deny..."
 
   cd novanet-dev/tools/novanet
+
+  # Format check
+  cargo fmt --check --quiet 2>/dev/null || {
+    echo "❌ NovaNet format failed. Run: cd novanet-dev/tools/novanet && cargo fmt"
+    exit 1
+  }
+
+  # Clippy
   cargo clippy --quiet -- -D warnings 2>/dev/null || {
     echo "❌ NovaNet clippy failed. Run: cd novanet-dev/tools/novanet && cargo clippy"
     exit 1
   }
+
   cd ../../..
 
-  echo "✅ NovaNet Rust clippy passed"
+  echo "✅ NovaNet Rust format + clippy passed"
+fi
+
+# Security check for NovaNet Cargo.toml changes
+if echo "$CHANGED_FILES" | grep -q "novanet-dev/tools/novanet/Cargo"; then
+  echo "🔒 NovaNet Cargo files changed - running security audit..."
+
+  cd novanet-dev/tools/novanet
+  if command -v cargo-deny > /dev/null 2>&1; then
+    cargo deny check --quiet 2>/dev/null || {
+      echo "⚠️  NovaNet cargo deny found issues. Run: cargo deny check"
+      # Warning only, don't block commit
+    }
+  fi
+  cd ../../..
+
+  echo "✅ NovaNet security check complete"
 fi
 
 # =============================================================================
-# Nika: Rust Clippy
+# Nika: Rust Clippy + Format + Security
 # =============================================================================
 
 if echo "$CHANGED_FILES" | grep -q "nika-dev/tools/.*\.rs$"; then
-  echo "🦀 Nika Rust files changed - running clippy..."
+  echo "🦀 Nika Rust files changed - running format, clippy..."
 
   cd nika-dev/tools/nika
+
+  # Format check
+  cargo fmt --check --quiet 2>/dev/null || {
+    echo "❌ Nika format failed. Run: cd nika-dev/tools/nika && cargo fmt"
+    exit 1
+  }
+
+  # Clippy
   cargo clippy --quiet -- -D warnings 2>/dev/null || {
     echo "❌ Nika clippy failed. Run: cd nika-dev/tools/nika && cargo clippy"
     exit 1
   }
+
   cd ../../..
 
-  echo "✅ Nika Rust clippy passed"
+  echo "✅ Nika Rust format + clippy passed"
+fi
+
+# Security check for Nika Cargo.toml changes
+if echo "$CHANGED_FILES" | grep -q "nika-dev/tools/nika/Cargo"; then
+  echo "🔒 Nika Cargo files changed - running security audit..."
+
+  cd nika-dev/tools/nika
+  if command -v cargo-deny > /dev/null 2>&1; then
+    cargo deny check --quiet 2>/dev/null || {
+      echo "⚠️  Nika cargo deny found issues. Run: cargo deny check"
+      # Warning only, don't block commit
+    }
+  fi
+  cd ../../..
+
+  echo "✅ Nika security check complete"
 fi
 
 echo "✅ All pre-commit checks passed!"
