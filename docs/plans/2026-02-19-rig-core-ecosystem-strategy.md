@@ -4,7 +4,7 @@
 **Status:** Research Complete, Ready for Implementation
 **Priority:** Medium (future enhancements after MVP 6)
 **Estimated Effort:** Multiple sprints
-**Last Updated:** 2026-02-19 (COMPLETE: 0xPlaygrounds + kg-node deep dive + 20+ crates researched)
+**Last Updated:** 2026-02-19 (COMPLETE: 0xPlaygrounds + kg-node + MCP libraries + GraphRAG techniques + 25+ crates)
 
 ---
 
@@ -73,6 +73,103 @@ Research shows **rig-core v0.31+** already covers most multi-provider needs. The
 | **tower-mcp** | new | Tower middleware, HTTP/WebSocket/stdio | ⭐⭐ For HTTP transport |
 | **rust-mcp-sdk** | 0.1 | Alternative SDK | ⭐ Backup option |
 
+### MCP Schema Libraries (2026-02-19 Research)
+
+**Deep dive into rust-mcp-schema and mcp-attr for Nika/NovaNet:**
+
+#### rust-mcp-schema (v0.9.5)
+
+| Aspect | Details |
+|--------|---------|
+| **Purpose** | Type-safe MCP protocol implementation |
+| **Downloads** | 241K (high adoption) |
+| **Protocol versions** | 5: 2025-11-25, 2025-06-18, 2025-03-26, 2024-11-05, draft |
+| **Key feature** | Auto-generated from official MCP spec via TypeScript→Rust transpilation |
+
+```rust
+// rust-mcp-schema: Type-safe message handling
+use rust_mcp_schema::{ClientMessage, ClientRequest, schema_utils};
+
+pub fn handle_message(payload: &str) -> Result<(), RpcError> {
+    let message = ClientMessage::from_str(payload)?;
+    if let ClientMessage::Request(message_object) = message {
+        if let ClientRequest::InitializeRequest(req) = message_object.request {
+            handle_initialize_request(req);
+        }
+    }
+    Ok(())
+}
+```
+
+**Nika use case:** Could provide stronger type safety for MCP client responses, but rmcp already handles this via serde.
+
+#### mcp-attr (v0.0.7)
+
+| Aspect | Details |
+|--------|---------|
+| **Purpose** | Declarative MCP server building with attribute macros |
+| **Downloads** | 6K |
+| **Protocol versions** | 2025-03-26, 2024-11-05 |
+| **Key feature** | `#[mcp_server]`, `#[tool]`, `#[prompt]`, `#[resource]` macros |
+
+```rust
+// mcp-attr: Declarative server definition
+use mcp_attr::server::{mcp_server, McpServer, serve_stdio};
+
+struct NovaNetServer {
+    neo4j: Graph,
+    embedding: Arc<TextEmbedding>,
+}
+
+#[mcp_server]
+impl McpServer for NovaNetServer {
+    /// Generate native content for an entity (AI tool description)
+    #[tool]
+    async fn novanet_generate(
+        &self,
+        focus_key: String,
+        locale: String,
+    ) -> Result<GenerateResponse> {
+        // Implementation...
+    }
+
+    #[resource("novanet://entities/{key}")]
+    async fn get_entity(&self, key: String) -> Result<String> {
+        // Implementation...
+    }
+
+    #[prompt]
+    async fn entity_prompt(&self) -> Result<&str> {
+        Ok("Generate content for the given entity...")
+    }
+}
+```
+
+**NovaNet use case:** Cleaner than raw rmcp for tool definitions. Docstrings become AI tool descriptions automatically.
+
+#### MCP Library Comparison
+
+| Feature | rmcp (current) | mcp-attr | rust-mcp-schema |
+|---------|----------------|----------|-----------------|
+| **Server building** | `#[tool_router]` | `#[mcp_server]` | Manual |
+| **Client building** | Yes (Service/Transport) | No | Message types only |
+| **Type safety** | serde + schemars | serde + auto | Auto-generated types |
+| **Resource support** | Yes | `#[resource]` | Message types only |
+| **Prompt support** | Yes | `#[prompt]` | Message types only |
+| **Maturity** | Official SDK | Early (0.0.7) | Mature (0.9.5) |
+
+#### Recommendations
+
+| Project | Current | Recommendation | Rationale |
+|---------|---------|----------------|-----------|
+| **Nika (MCP Client)** | rmcp | ⭐ Stay with rmcp | Working well, RmcpClientAdapter pattern is clean |
+| **NovaNet (MCP Server)** | rmcp | 🔄 Evaluate mcp-attr for v0.15 | Cleaner tool definitions, but wait for maturity |
+
+**Action items:**
+- [ ] Keep rmcp as primary SDK for both projects
+- [ ] Monitor mcp-attr for v0.1.0 release (consider for NovaNet refactor)
+- [ ] rust-mcp-schema not needed (rmcp covers type safety)
+
 ### Memory & State Crates
 
 | Crate | Purpose | Use Case |
@@ -88,6 +185,158 @@ Research shows **rig-core v0.31+** already covers most multi-provider needs. The
 | **petgraph** | 11,578 | In-memory graph ops (BFS, DFS, PageRank) |
 | **Memgraph** | 8,435 | Neo4j-compatible streaming graph DB |
 | **KnowGraph** | 296 | MCP server for code graph analysis |
+
+### GraphRAG & Context Retrieval Techniques (2026-02-19 Research)
+
+**Research for Nika/NovaNet knowledge graph context assembly:**
+
+#### Core GraphRAG Patterns
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  GRAPHRAG RETRIEVAL PIPELINE                                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  1. SEMANTIC SEARCH (Vector)                                                │
+│     └─ Query → Embedding → Vector similarity → Top-K candidates             │
+│                                                                             │
+│  2. GRAPH EXPANSION (Traversal)                                             │
+│     └─ Candidates → Multi-hop neighbors → Subgraph extraction              │
+│                                                                             │
+│  3. RANKING (PageRank/Relevance)                                            │
+│     └─ Subgraph nodes → Score by centrality + query relevance              │
+│                                                                             │
+│  4. CONTEXT ASSEMBLY (Token-aware)                                          │
+│     └─ Ranked nodes → Select within token budget → Structured prompt       │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Two-Stage Retrieval Pattern
+
+**Stage 1: Semantic Search (Vector)**
+- Dense retrieval using embeddings (fastembed, rig embedding models)
+- Returns top-K semantically similar nodes
+- Fast initial filtering
+
+**Stage 2: Graph Traversal (Structural)**
+- Expand from seed nodes via relationships
+- Multi-hop reasoning (2-3 hops typical)
+- Capture interconnected knowledge
+
+```rust
+// Pseudo-code: Two-stage GraphRAG retrieval
+pub struct GraphRAGRetriever {
+    vector_index: VectorIndex,  // Neo4j vector index or external
+    graph: Neo4jClient,
+}
+
+impl GraphRAGRetriever {
+    async fn retrieve(&self, query: &str, budget: usize) -> Vec<Evidence> {
+        // Stage 1: Vector search
+        let embedding = self.embed(query).await?;
+        let seeds = self.vector_index.search(embedding, 10).await?;
+
+        // Stage 2: Graph expansion
+        let subgraph = self.graph.traverse(
+            seeds.iter().map(|n| n.id).collect(),
+            TraverseParams {
+                max_depth: 2,
+                arc_families: vec!["semantic", "localization"],
+                direction: Direction::Both,
+            }
+        ).await?;
+
+        // Stage 3: Rank by PageRank + query relevance
+        let ranked = self.rank_nodes(subgraph, query);
+
+        // Stage 4: Token-aware selection
+        self.select_within_budget(ranked, budget)
+    }
+}
+```
+
+#### Ontology-Grounded RAG (OG-RAG)
+
+Research shows **ontology-grounded retrieval** outperforms naive RAG:
+
+| Technique | Description | NovaNet Applicability |
+|-----------|-------------|----------------------|
+| **Hypergraph retrieval** | Group related facts into hyperedges | ⭐⭐⭐ Knowledge atoms (TermSet→Terms) |
+| **Spreading activation** | Propagate relevance through graph | ⭐⭐⭐ `novanet_traverse` depth parameter |
+| **SPARQL/Cypher queries** | Structured retrieval from ontology | ⭐⭐⭐ NovaNet's Query-First architecture |
+| **Entity linking** | Map query terms to graph entities | ⭐⭐ `novanet_search` hybrid mode |
+
+#### NovaNet-Specific Patterns
+
+**Current implementation (novanet_generate):**
+```
+Entity → HAS_NATIVE → EntityNative (locale content)
+       → BELONGS_TO → EntityCategory (classification)
+       → RELATES_TO → Entity (semantic links)
+
+Locale → HAS_TERMS → TermSet → CONTAINS_TERM → Term (knowledge atoms)
+       → HAS_EXPRESSIONS → ExpressionSet → ...
+```
+
+**Recommended enhancements:**
+
+1. **Vector index on EntityNative.llm_context**
+   ```cypher
+   CREATE VECTOR INDEX entity_native_embedding IF NOT EXISTS
+   FOR (n:EntityNative) ON (n.embedding)
+   OPTIONS {indexConfig: {`vector.dimensions`: 384, `vector.similarity_function`: 'cosine'}}
+   ```
+
+2. **Spreading activation via arc weights**
+   ```yaml
+   # arc-classes with retrieval_weight
+   HAS_NATIVE:
+     retrieval_weight: 1.0  # Always include
+   RELATES_TO:
+     retrieval_weight: 0.7  # Contextually relevant
+   BELONGS_TO:
+     retrieval_weight: 0.3  # Classification context
+   ```
+
+3. **Context build log (v0.14.0)**
+   - NovaNet now returns `context_build_log` showing retrieval decisions
+   - Enables debugging and tuning of traversal parameters
+
+#### Multi-Hop Reasoning Patterns
+
+| Hops | Use Case | Example Query |
+|------|----------|---------------|
+| 1-hop | Direct relations | "Get EntityNative for qr-code in fr-FR" |
+| 2-hop | Contextual expansion | "Get Terms used by Blocks on this Page" |
+| 3-hop | Deep reasoning | "Find related Entities via shared Categories" |
+
+**NovaNet traversal example:**
+```yaml
+# Nika workflow: 2-hop context assembly
+- invoke: novanet_traverse
+  params:
+    start_key: "qr-code"
+    max_depth: 2
+    arc_families: ["semantic", "localization"]
+    target_kinds: ["EntityNative", "Term", "Expression"]
+```
+
+#### Implementation Priority for NovaNet
+
+| Enhancement | Priority | Sprint | Impact |
+|-------------|----------|--------|--------|
+| Vector index on EntityNative | 🔴 High | v0.15 | Semantic search capability |
+| Spreading activation weights | 🟡 Medium | v0.16 | Better context ranking |
+| Subgraph extraction API | 🟡 Medium | v0.16 | LLM-ready context bundles |
+| PageRank scoring | 🟢 Low | v0.17 | Entity importance ranking |
+
+#### Research Sources
+
+- **Microsoft GraphRAG**: Two-stage retrieval, community summarization
+- **OG-RAG (Ontology-Grounded)**: Hypergraph retrieval, spreading activation
+- **kg-node (0xPlaygrounds)**: fastembed + Neo4j prefiltered search pattern
+- **Neo4j GenAI**: Native vector index + graph traversal integration
 
 ### Extended Crate Research (2026-02-19)
 
@@ -803,18 +1052,26 @@ tools/nika/src/
 
 ### Searches Performed
 1. **0xPlaygrounds exploration** — 62 repositories analyzed
-2. **Perplexity searches** (5):
+2. **Perplexity searches** (6):
    - LLM orchestration crates
    - Knowledge graph RAG
    - MCP protocol implementations
    - AI agent memory
    - Rig alternatives
-3. **Context7 queries** (12+):
+   - GraphRAG context retrieval Neo4j techniques
+3. **Context7 queries** (14+):
    - rig-core, rmcp, petgraph, async-openai, qdrant-client
    - lancedb, tokenizers, text-splitter, fastembed, safetensors
    - rstructor, strands-agents
-4. **Source code analysis**:
+   - modelcontextprotocol/rust-sdk (rmcp patterns)
+4. **Firecrawl scrapes** (2):
+   - crates.io/crates/rust-mcp-schema — Type-safe MCP protocol (v0.9.5, 241K downloads)
+   - crates.io/crates/mcp-attr — Declarative MCP server (v0.0.7, 6K downloads)
+5. **Source code analysis**:
    - kg-node/mcp-server/src/main.rs — Complete MCP server pattern
+   - novanet-mcp/src/main.rs — Current NovaNet MCP implementation
+   - nika/src/mcp/client.rs — Nika MCP client pattern
+   - nika/src/mcp/rmcp_adapter.rs — rmcp SDK wrapper
 
 ### Key Discoveries
 1. **kg-node** provides production MCP server pattern with rmcp + neo4rs + fastembed
@@ -822,3 +1079,7 @@ tools/nika/src/
 3. **text-splitter** offers semantic chunking for RAG pipelines
 4. **fastembed** provides local ONNX embeddings (no API calls)
 5. **rig-core** already covers 20+ providers and 10+ vector stores
+6. **mcp-attr** (v0.0.7) offers cleaner server definitions than raw rmcp — monitor for v0.1.0
+7. **rust-mcp-schema** (v0.9.5) provides type-safe protocol types — rmcp already covers this
+8. **GraphRAG** two-stage retrieval pattern aligns perfectly with NovaNet's architecture
+9. **OG-RAG** ontology-grounded retrieval validates NovaNet's knowledge atoms design
