@@ -1,7 +1,7 @@
 # supernovae-agi Master Roadmap
 
 **Last Updated:** 2026-02-19
-**Status:** Active - MVP 0-7 Complete, MVP 8 RLM Enhancements Next
+**Status:** Active - MVP 0-8 Complete, Nika v0.5.0 Released
 
 ---
 
@@ -73,7 +73,7 @@ Ce document est le "plan des plans" - il orchestre tous les plans de développem
 │  ├── ✅ Deleted ClaudeProvider, OpenAIProvider, old AgentLoop                │
 │  ├── ✅ RigProvider wrapper (provider/rig.rs)                                │
 │  ├── ✅ NikaMcpTool implements rig::ToolDyn                                  │
-│  └── ✅ 683 tests passing, v0.4.1 complete                                   │
+│  └── ✅ 683+ tests passing, v0.4 complete                                    │
 │                                                                                 │
 │  🎯 MILESTONE: Nika v0.4 ✅ ACHIEVED (pure rig-core)                          │
 │                                                                                 │
@@ -371,10 +371,11 @@ Replace custom LLM provider implementations with `rig-core` v0.31.0 for:
 
 ---
 
-## MVP 8: RLM Enhancements ⏳ (CURRENT)
+## MVP 8: RLM Enhancements ✅ (COMPLETE)
 
 **Plan:** `docs/research/rlm-knowledge-graph-patterns-2025.md` (Section 11)
-**Status:** IN PROGRESS (Phases 1, 4, 5 ✅ complete — 60%)
+**Status:** COMPLETE (100%)
+**Completed:** 2026-02-19
 **Prerequisites:** MVP 7 ✅
 
 ### Overview
@@ -386,8 +387,8 @@ Research finding: NovaNet + Nika is ALREADY RLM-on-KG but missing key features f
 | Phase | Feature | Target | Effort | Files | Status |
 |-------|---------|--------|--------|-------|--------|
 | 1 | **Reasoning capture** | v0.4.1 | Low | `rig_agent_loop.rs`, `tests/thinking_capture_test.rs` | ✅ Done |
-| 2 | **Nested agents** (`spawn_agent` tool) | v0.5 | Medium | `runtime/spawn.rs`, `executor.rs` | ⏳ Stub |
-| 3 | **Schema introspection** (`novanet_introspect`) | v0.5 | Medium | NovaNet MCP server | ⏳ Pending |
+| 2 | **Nested agents** (`spawn_agent` tool) | v0.5 | Medium | `runtime/spawn.rs`, `executor.rs` | ✅ Done |
+| 3 | **Schema introspection** (`novanet_introspect`) | v0.5 | Medium | NovaNet MCP server | ✅ Done |
 | 4 | **Dynamic decomposition** (`decompose:` modifier) | v0.5 | High | `ast/decompose.rs`, `runtime/decomposer.rs` | ✅ Done |
 | 5 | **Lazy bindings** (`lazy: true`) | v0.5 | Medium | `binding/entry.rs`, `binding/resolve.rs` | ✅ Done |
 
@@ -465,8 +466,8 @@ use:
 
 ### Success Criteria
 - [x] Phase 1: `thinking` captured in NDJSON traces ✅
-- [ ] Phase 2: Nested agents work with depth limit
-- [ ] Phase 3: `novanet_introspect` returns schema info
+- [x] Phase 2: Nested agents work with depth limit ✅
+- [x] Phase 3: `novanet_introspect` returns schema info ✅
 - [x] Phase 4: `decompose:` creates runtime subtasks ✅
 - [x] Phase 5: Lazy bindings defer context loading ✅
 
@@ -485,7 +486,7 @@ use:
 | 5 | `nika-dev/docs/plans/2026-02-18-mvp5-production-hardening.md` | ✅ Done | v0.2.2 |
 | 6 | `nika-dev/docs/plans/2026-02-18-mvp6-v03-features.md` | ✅ Done | v0.3 |
 | 7 | `docs/plans/2026-02-19-rig-core-migration.md` | ✅ Done | v0.4 |
-| 8 | `docs/research/rlm-knowledge-graph-patterns-2025.md` (Sec 11) | ⏳ Not Started | v0.5 |
+| 8 | `docs/research/rlm-knowledge-graph-patterns-2025.md` (Sec 11) | ✅ Done | v0.5 |
 
 ### Reference Documents
 | Document | Location | Description |
@@ -662,12 +663,12 @@ cd nika-dev/tools/nika
 ### MVP 7 Done When: ✅ ACHIEVED
 - ✅ RigAgentLoop with rig::AgentBuilder
 - ✅ Old providers deleted (claude.rs, openai.rs, types.rs)
-- ✅ 679 tests passing
+- ✅ 683+ tests passing
 
-### MVP 8 Done When: (60% complete)
+### MVP 8 Done When: ✅ ACHIEVED
 - [x] Phase 1: `thinking` field captured in AgentTurn events ✅
-- [ ] Phase 2: Nested agents with `spawn_agent` tool
-- [ ] Phase 3: `novanet_introspect` MCP tool in NovaNet
+- [x] Phase 2: Nested agents with `spawn_agent` tool ✅
+- [x] Phase 3: `novanet_introspect` MCP tool in NovaNet ✅
 - [x] Phase 4: `decompose:` modifier for dynamic DAG ✅
 - [x] Phase 5: `lazy: true` binding modifier ✅
 
@@ -675,10 +676,10 @@ cd nika-dev/tools/nika
 
 ## Notes
 
-- **MVP 4-7 Complete:** NovaNet MCP v0.14.0 + Nika v0.4 (pure rig-core)
+- **MVP 4-8 Complete:** NovaNet MCP v0.14.0 + Nika v0.5.0 (full RLM-on-KG)
 - **MVP 6 Complete:** 4 v0.3 showcase examples + README quick-start guide
-- **MVP 7 Complete:** v0.4 achieved - pure rig-core, 611+ tests passing
-- **MVP 8 Next:** RLM enhancements based on rig-rlm research
+- **MVP 7 Complete:** v0.4 achieved - pure rig-core, 683+ tests passing
+- **MVP 8 Complete:** v0.5.0 with spawn_agent, novanet_introspect, decompose:, lazy:
 - **RLM Insight:** NovaNet + Nika is ALREADY RLM-on-KG with better safety/observability than rig-rlm
 - **Resilience Module Removed:** Deleted in v0.4 cleanup (was never wired into runtime)
 - **Testing:** TDD for all MVPs - write failing test first
