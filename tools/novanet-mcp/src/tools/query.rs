@@ -7,6 +7,7 @@ use crate::error::{Error, Result};
 use crate::server::State;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+use tracing::{debug, instrument};
 
 /// Parameters for novanet_query tool
 #[derive(Debug, Clone, Deserialize, JsonSchema)]
@@ -40,11 +41,13 @@ pub struct QueryResult {
 }
 
 /// Execute the novanet_query tool
+#[instrument(name = "novanet_query", skip(state), fields(limit = params.limit, cached))]
 pub async fn execute(state: &State, params: QueryParams) -> Result<QueryResult> {
     let start = std::time::Instant::now();
 
     // Apply limit to query
     let cypher = apply_limit(&params.cypher, params.limit.unwrap_or(100));
+    debug!(cypher = %cypher, "Executing query");
 
     // Check cache first
     let cache_key = QueryCache::cache_key(&cypher, &params.params);
