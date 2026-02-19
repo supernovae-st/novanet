@@ -317,7 +317,7 @@ NovaNet exposes an MCP (Model Context Protocol) server for workflow automation a
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  MCP TOOLS (7 tools)                                                        │
+│  MCP TOOLS (8 tools)                                                        │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  novanet_query       Execute read-only Cypher against Neo4j                 │
