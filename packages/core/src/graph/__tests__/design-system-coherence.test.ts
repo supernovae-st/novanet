@@ -32,8 +32,8 @@ const V11_6_ARCHITECTURE = {
   // 5 traits
   traits: ['defined', 'authored', 'imported', 'generated', 'retrieved'] as const,
 
-  // 5 arc families
-  arcFamilies: ['ownership', 'localization', 'semantic', 'generation', 'mining'] as const,
+  // 6 arc families (v0.13.1: added schema family)
+  arcFamilies: ['ownership', 'localization', 'semantic', 'generation', 'mining', 'schema'] as const,
 
   // Node counts (v0.12.4)
   nodeCounts: {
@@ -318,8 +318,8 @@ describe('Design System Coherence: Traits', () => {
 describe('Design System Coherence: Arc Families', () => {
   const arcFamilies = loadArcFamilies();
 
-  it('should have exactly 5 arc families', () => {
-    expect(arcFamilies).toHaveLength(5);
+  it('should have exactly 6 arc families', () => {
+    expect(arcFamilies).toHaveLength(6);
   });
 
   it('should have correct arc family definitions', () => {
@@ -342,6 +342,7 @@ describe('Design System Coherence: Arc Families', () => {
       semantic: 'dotted',
       generation: 'solid',
       mining: 'dashed',
+      schema: 'dotted',
     };
 
     for (const family of arcFamilies) {

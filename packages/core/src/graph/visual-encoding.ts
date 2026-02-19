@@ -430,12 +430,13 @@ export const TRAITS_ICONS: Record<string, IconDefinition> = {
   'retrieved': { web: 'cloud-download', terminal: '▪', description: 'Fetched from EXTERNAL APIs' },
 };
 
-// ARC_FAMILIES ICONS (5)
+// ARC_FAMILIES ICONS (6)
 export const ARC_FAMILIES_ICONS: Record<string, IconDefinition> = {
   'generation': { web: 'sparkles', terminal: '⇒', description: 'LLM pipeline flow' },
   'localization': { web: 'languages', terminal: '⇢', description: 'Locale content links' },
   'mining': { web: 'pickaxe', terminal: '⇝', description: 'SEO data extraction' },
   'ownership': { web: 'arrow-right', terminal: '→', description: 'Parent-child structural' },
+  'schema': { web: 'git-branch', terminal: '◇', description: 'Meta-schema relationships' },
   'semantic': { web: 'link', terminal: '~', description: 'Meaning connections' },
 };
 
