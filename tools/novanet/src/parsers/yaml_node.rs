@@ -243,12 +243,34 @@ pub fn load_all_nodes(root: &Path) -> crate::Result<Vec<ParsedNode>> {
     }
 
     // Collect paths first (WalkDir is not Send, so collect before parallel)
+    // Filter out test files (test-*.yaml) to avoid interference during parallel test runs
     let paths: Vec<PathBuf> = WalkDir::new(&nodes_dir)
         .follow_links(true)
         .into_iter()
         .filter_map(|e| e.ok())
         .filter(|e| {
-            e.file_type().is_file() && e.path().extension().is_some_and(|ext| ext == "yaml")
+            if !e.file_type().is_file() {
+                return false;
+            }
+            if e.path().extension().is_none_or(|ext| ext != "yaml") {
+                return false;
+            }
+            // Exclude test files created during integration tests to avoid parallel test interference.
+            // Patterns excluded:
+            // - test-*.yaml: Legacy test file naming
+            // - _tmp-*.yaml: Temporary test files
+            // - __test__*.yaml: Current test file naming
+            // - *-test*.yaml: Files containing "-test" in name
+            if let Some(name) = e.path().file_name().and_then(|n| n.to_str()) {
+                if name.starts_with("test-")
+                    || name.starts_with("_tmp-")
+                    || name.starts_with("__test__")
+                    || name.contains("-test")
+                {
+                    return false;
+                }
+            }
+            true
         })
         .map(|e| e.path().to_path_buf())
         .collect();

@@ -205,7 +205,11 @@ mod tests {
             .filter(|e| e.file_type().is_file())
         {
             if let Some(name) = entry.path().file_name().and_then(|n| n.to_str()) {
-                if name.starts_with("test-") || name.contains("-test") {
+                if name.starts_with("test-")
+                    || name.starts_with("_tmp-")
+                    || name.starts_with("__test__")
+                    || name.contains("-test")
+                {
                     let _ = std::fs::remove_file(entry.path());
                 }
             }
