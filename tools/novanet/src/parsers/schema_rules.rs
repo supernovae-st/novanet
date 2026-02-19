@@ -67,9 +67,24 @@ const KEYLESS_NODES: &[&str] = &[
 /// Nodes with composite keys that MUST have denormalized properties.
 /// Format: (NodeName, prefix, parent_key_name, &[required_denormalized_properties])
 const COMPOSITE_KEY_NODES: &[(&str, &str, &str, &[&str])] = &[
-    ("EntityNative", "entity", "entity_key", &["entity_key", "locale_key"]),
-    ("PageNative", "page", "page_key", &["page_key", "locale_key"]),
-    ("BlockNative", "block", "block_key", &["block_key", "locale_key"]),
+    (
+        "EntityNative",
+        "entity",
+        "entity_key",
+        &["entity_key", "locale_key"],
+    ),
+    (
+        "PageNative",
+        "page",
+        "page_key",
+        &["page_key", "locale_key"],
+    ),
+    (
+        "BlockNative",
+        "block",
+        "block_key",
+        &["block_key", "locale_key"],
+    ),
 ];
 
 /// Valid realm values (ADR-012).
@@ -79,7 +94,14 @@ const VALID_REALMS: &[&str] = &["shared", "org"];
 const SHARED_LAYERS: &[&str] = &["config", "locale", "geography", "knowledge"];
 
 /// Valid layer values for the org realm (ADR-012, v11.5).
-const ORG_LAYERS: &[&str] = &["config", "foundation", "structure", "semantic", "instruction", "output"];
+const ORG_LAYERS: &[&str] = &[
+    "config",
+    "foundation",
+    "structure",
+    "semantic",
+    "instruction",
+    "output",
+];
 
 /// Expected order for standard properties.
 /// Properties present in the node must appear in this order (others can be interspersed).
@@ -199,7 +221,9 @@ pub fn validate_node(node: &ParsedNode) -> Vec<SchemaIssue> {
             if let Some(ref sp) = node.def.standard_properties {
                 // Get the key property
                 if let Some(key_prop) = sp.get("key") {
-                    if let Some(key_pattern) = key_prop.extra.get("pattern").and_then(|v| v.as_str()) {
+                    if let Some(key_pattern) =
+                        key_prop.extra.get("pattern").and_then(|v| v.as_str())
+                    {
                         // Expected pattern: "^{prefix}:[^@]+@[a-z]{2}-[A-Z]{2}$"
                         let expected_prefix = format!("{}:", prefix);
 
@@ -241,7 +265,9 @@ pub fn validate_node(node: &ParsedNode) -> Vec<SchemaIssue> {
                     }
 
                     // Check examples if present
-                    if let Some(examples) = key_prop.extra.get("examples").and_then(|v| v.as_sequence()) {
+                    if let Some(examples) =
+                        key_prop.extra.get("examples").and_then(|v| v.as_sequence())
+                    {
                         for (idx, example) in examples.iter().enumerate() {
                             if let Some(example_str) = example.as_str() {
                                 // Validate format: {prefix}:{key}@{locale}
@@ -275,10 +301,13 @@ pub fn validate_node(node: &ParsedNode) -> Vec<SchemaIssue> {
                                     let locale_part = &example_str[at_pos + 1..];
 
                                     // Extract parent key part (everything after "prefix:")
-                                    if let Some(parent_part) = before_at.strip_prefix(&format!("{}:", prefix)) {
+                                    if let Some(parent_part) =
+                                        before_at.strip_prefix(&format!("{}:", prefix))
+                                    {
                                         // Check if parent_key matches (if present in example description)
                                         if let Some(parent_key_prop) = sp.get(*parent_key_name) {
-                                            if let Some(parent_examples) = parent_key_prop.extra
+                                            if let Some(parent_examples) = parent_key_prop
+                                                .extra
                                                 .get("examples")
                                                 .and_then(|v| v.as_sequence())
                                             {
@@ -303,7 +332,8 @@ pub fn validate_node(node: &ParsedNode) -> Vec<SchemaIssue> {
 
                                         // Check if locale part matches locale_key examples
                                         if let Some(locale_key_prop) = sp.get("locale_key") {
-                                            if let Some(locale_examples) = locale_key_prop.extra
+                                            if let Some(locale_examples) = locale_key_prop
+                                                .extra
                                                 .get("examples")
                                                 .and_then(|v| v.as_sequence())
                                             {
@@ -348,7 +378,11 @@ pub fn validate_node(node: &ParsedNode) -> Vec<SchemaIssue> {
     }
 
     // Rule 7: Layer must be valid (ADR-012)
-    let all_valid_layers: Vec<&str> = SHARED_LAYERS.iter().chain(ORG_LAYERS.iter()).copied().collect();
+    let all_valid_layers: Vec<&str> = SHARED_LAYERS
+        .iter()
+        .chain(ORG_LAYERS.iter())
+        .copied()
+        .collect();
     if !all_valid_layers.contains(&node.def.layer.as_str()) {
         issues.push(SchemaIssue {
             node_name: node.def.name.clone(),
@@ -387,7 +421,9 @@ pub fn validate_node(node: &ParsedNode) -> Vec<SchemaIssue> {
             node_name: node.def.name.clone(),
             severity: IssueSeverity::Warning,
             rule: "ICON_REQUIRED",
-            message: "Missing icon section. Expected: icon: { web: \"lucide-name\", terminal: \"◆\" }".into(),
+            message:
+                "Missing icon section. Expected: icon: { web: \"lucide-name\", terminal: \"◆\" }"
+                    .into(),
         });
     } else if let Some(ref icon) = node.def.icon {
         if icon.web.is_empty() {
@@ -632,10 +668,13 @@ pub fn validate_node(node: &ParsedNode) -> Vec<SchemaIssue> {
                                 node_name: node.def.name.clone(),
                                 severity: IssueSeverity::Warning,
                                 rule: "LOCALE_KEY_PATTERN",
-                                message: "locale_key should have pattern: ^[a-z]{2}-[A-Z]{2}$".into(),
+                                message: "locale_key should have pattern: ^[a-z]{2}-[A-Z]{2}$"
+                                    .into(),
                             });
                         }
-                        Some(pattern) if !pattern.contains("[a-z]") || !pattern.contains("[A-Z]") => {
+                        Some(pattern)
+                            if !pattern.contains("[a-z]") || !pattern.contains("[A-Z]") =>
+                        {
                             issues.push(SchemaIssue {
                                 node_name: node.def.name.clone(),
                                 severity: IssueSeverity::Warning,
@@ -655,7 +694,8 @@ pub fn validate_node(node: &ParsedNode) -> Vec<SchemaIssue> {
                             node_name: node.def.name.clone(),
                             severity: IssueSeverity::Warning,
                             rule: "LOCALE_KEY_INDEXED",
-                            message: "locale_key should be indexed: true for fast locale filtering".into(),
+                            message: "locale_key should be indexed: true for fast locale filtering"
+                                .into(),
                         });
                     }
                 }
@@ -684,24 +724,33 @@ type ArcPropsEntry = (&'static str, &'static [ArcPropSpec]);
 /// Arcs with required properties for ADR-030/032 compliance.
 const ADR030_ARC_PROPERTIES: &[ArcPropsEntry] = &[
     // TARGETS arc must have is_slug_source property (ADR-030)
-    ("TARGETS", &[
-        ("rank", true, "string"),
-        ("is_slug_source", false, "boolean"),  // Optional but critical for slug derivation
-        ("target_position", false, "int"),
-    ]),
+    (
+        "TARGETS",
+        &[
+            ("rank", true, "string"),
+            ("is_slug_source", false, "boolean"), // Optional but critical for slug derivation
+            ("target_position", false, "int"),
+        ],
+    ),
     // DERIVED_SLUG_FROM arc must have derivation properties (ADR-030)
-    ("DERIVED_SLUG_FROM", &[
-        ("derivation_score", true, "float"),
-        ("derivation_rationale", false, "string"),
-        ("no_repetition_applied", false, "boolean"),
-        ("brand_invariant", false, "boolean"),
-        ("derivation_timestamp", false, "datetime"),
-    ]),
+    (
+        "DERIVED_SLUG_FROM",
+        &[
+            ("derivation_score", true, "float"),
+            ("derivation_rationale", false, "string"),
+            ("no_repetition_applied", false, "boolean"),
+            ("brand_invariant", false, "boolean"),
+            ("derivation_timestamp", false, "datetime"),
+        ],
+    ),
     // SLUGIFIED_BY arc for locale rule validation
-    ("SLUGIFIED_BY", &[
-        ("validated", false, "boolean"),
-        ("applied_rule", false, "string"),
-    ]),
+    (
+        "SLUGIFIED_BY",
+        &[
+            ("validated", false, "boolean"),
+            ("applied_rule", false, "string"),
+        ],
+    ),
 ];
 
 /// Arc issue for schema validation (distinct from node issues).
@@ -844,7 +893,7 @@ pub fn validate_arc(arc: &ArcClassDef) -> Vec<ArcIssue> {
             rule: "ARC_LLM_CONTEXT_REQUIRED",
             message: "Semantic family arcs should have llm_context for LLM comprehension".into(),
             fix_suggestion: Some(
-                "Add llm_context with USE/TRIGGERS/NOT/RELATES pattern (ADR-027)".into()
+                "Add llm_context with USE/TRIGGERS/NOT/RELATES pattern (ADR-027)".into(),
             ),
         });
     }
@@ -855,9 +904,10 @@ pub fn validate_arc(arc: &ArcClassDef) -> Vec<ArcIssue> {
             arc_name: arc.name.clone(),
             severity: IssueSeverity::Warning,
             rule: "ARC_LLM_CONTEXT_REQUIRED",
-            message: "Generation family arcs should have llm_context for pipeline documentation".into(),
+            message: "Generation family arcs should have llm_context for pipeline documentation"
+                .into(),
             fix_suggestion: Some(
-                "Add llm_context with USE/TRIGGERS/NOT/RELATES pattern (ADR-027)".into()
+                "Add llm_context with USE/TRIGGERS/NOT/RELATES pattern (ADR-027)".into(),
             ),
         });
     }
@@ -896,22 +946,21 @@ fn extract_arc_property_names(arc: &ArcClassDef) -> Vec<(String, Option<String>)
                 .collect()
         }
         // Map format: {prop_name: {type: ..., ...}}
-        serde_yaml::Value::Mapping(m) => {
-            m.iter()
-                .filter_map(|(k, v)| {
-                    let name = k.as_str()?.to_string();
-                    let prop_type = if let serde_yaml::Value::Mapping(prop_map) = v {
-                        prop_map
-                            .get(serde_yaml::Value::String("type".to_string()))
-                            .and_then(|t| t.as_str())
-                            .map(|s| s.to_string())
-                    } else {
-                        None
-                    };
-                    Some((name, prop_type))
-                })
-                .collect()
-        }
+        serde_yaml::Value::Mapping(m) => m
+            .iter()
+            .filter_map(|(k, v)| {
+                let name = k.as_str()?.to_string();
+                let prop_type = if let serde_yaml::Value::Mapping(prop_map) = v {
+                    prop_map
+                        .get(serde_yaml::Value::String("type".to_string()))
+                        .and_then(|t| t.as_str())
+                        .map(|s| s.to_string())
+                } else {
+                    None
+                };
+                Some((name, prop_type))
+            })
+            .collect(),
         _ => Vec::new(),
     }
 }
@@ -938,7 +987,10 @@ pub fn validate_all_arcs(arcs: &[crate::parsers::arcs::ArcDef]) -> Vec<ArcIssue>
                 },
                 properties: arc.properties.as_ref().map(|props| {
                     serde_yaml::Value::Sequence(
-                        props.iter().map(|p| serde_yaml::Value::String(p.clone())).collect()
+                        props
+                            .iter()
+                            .map(|p| serde_yaml::Value::String(p.clone()))
+                            .collect(),
                     )
                 }),
                 inverse: arc.inverse_name.clone(),
@@ -1021,7 +1073,11 @@ mod tests {
             .filter(|e| e.file_type().is_file())
         {
             if let Some(name) = entry.path().file_name().and_then(|n| n.to_str()) {
-                if name.starts_with("test-") || name.contains("-test") {
+                if name.starts_with("test-")
+                    || name.starts_with("_tmp-")
+                    || name.starts_with("__test__")
+                    || name.contains("-test")
+                {
                     let _ = std::fs::remove_file(entry.path());
                 }
             }
@@ -1104,10 +1160,8 @@ mod tests {
             if let Some(node) = node {
                 // Should not error about missing key
                 let issues = validate_node(node);
-                let key_errors: Vec<_> = issues
-                    .iter()
-                    .filter(|i| i.rule == "KEY_REQUIRED")
-                    .collect();
+                let key_errors: Vec<_> =
+                    issues.iter().filter(|i| i.rule == "KEY_REQUIRED").collect();
                 assert!(
                     key_errors.is_empty(),
                     "{} should not error about missing key",
@@ -1127,12 +1181,19 @@ mod tests {
             eprintln!("Skipping: not in monorepo");
             return;
         };
-        let nodes = crate::parsers::yaml_node::load_all_nodes(&root).expect("should load all nodes");
-        let errors: Vec<_> = nodes.iter().flat_map(validate_node)
+        // Clean up any test files from parallel tests
+        cleanup_test_files(&root);
+        let nodes =
+            crate::parsers::yaml_node::load_all_nodes(&root).expect("should load all nodes");
+        let errors: Vec<_> = nodes
+            .iter()
+            .flat_map(validate_node)
             .filter(|i| i.rule == "REALM_VALID" && i.severity == IssueSeverity::Error)
             .collect();
         if !errors.is_empty() {
-            for e in &errors { eprintln!("REALM_VALID ERROR: {} — {}", e.node_name, e.message); }
+            for e in &errors {
+                eprintln!("REALM_VALID ERROR: {} — {}", e.node_name, e.message);
+            }
             panic!("Found {} REALM_VALID errors", errors.len());
         }
     }
@@ -1143,12 +1204,19 @@ mod tests {
             eprintln!("Skipping: not in monorepo");
             return;
         };
-        let nodes = crate::parsers::yaml_node::load_all_nodes(&root).expect("should load all nodes");
-        let errors: Vec<_> = nodes.iter().flat_map(validate_node)
+        // Clean up any test files from parallel tests
+        cleanup_test_files(&root);
+        let nodes =
+            crate::parsers::yaml_node::load_all_nodes(&root).expect("should load all nodes");
+        let errors: Vec<_> = nodes
+            .iter()
+            .flat_map(validate_node)
             .filter(|i| i.rule == "LAYER_VALID" && i.severity == IssueSeverity::Error)
             .collect();
         if !errors.is_empty() {
-            for e in &errors { eprintln!("LAYER_VALID ERROR: {} — {}", e.node_name, e.message); }
+            for e in &errors {
+                eprintln!("LAYER_VALID ERROR: {} — {}", e.node_name, e.message);
+            }
             panic!("Found {} LAYER_VALID errors", errors.len());
         }
     }
@@ -1159,12 +1227,22 @@ mod tests {
             eprintln!("Skipping: not in monorepo");
             return;
         };
-        let nodes = crate::parsers::yaml_node::load_all_nodes(&root).expect("should load all nodes");
-        let errors: Vec<_> = nodes.iter().flat_map(validate_node)
+        // Clean up any test files from parallel tests
+        cleanup_test_files(&root);
+        let nodes =
+            crate::parsers::yaml_node::load_all_nodes(&root).expect("should load all nodes");
+        let errors: Vec<_> = nodes
+            .iter()
+            .flat_map(validate_node)
             .filter(|i| i.rule == "REALM_LAYER_COHERENCE" && i.severity == IssueSeverity::Error)
             .collect();
         if !errors.is_empty() {
-            for e in &errors { eprintln!("REALM_LAYER_COHERENCE ERROR: {} — {}", e.node_name, e.message); }
+            for e in &errors {
+                eprintln!(
+                    "REALM_LAYER_COHERENCE ERROR: {} — {}",
+                    e.node_name, e.message
+                );
+            }
             panic!("Found {} REALM_LAYER_COHERENCE errors", errors.len());
         }
     }
@@ -1175,12 +1253,19 @@ mod tests {
             eprintln!("Skipping: not in monorepo");
             return;
         };
-        let nodes = crate::parsers::yaml_node::load_all_nodes(&root).expect("should load all nodes");
-        let warnings: Vec<_> = nodes.iter().flat_map(validate_node)
+        // Clean up any test files from parallel tests
+        cleanup_test_files(&root);
+        let nodes =
+            crate::parsers::yaml_node::load_all_nodes(&root).expect("should load all nodes");
+        let warnings: Vec<_> = nodes
+            .iter()
+            .flat_map(validate_node)
             .filter(|i| i.rule == "ICON_REQUIRED")
             .collect();
         if !warnings.is_empty() {
-            for w in &warnings { eprintln!("ICON_REQUIRED WARNING: {} — {}", w.node_name, w.message); }
+            for w in &warnings {
+                eprintln!("ICON_REQUIRED WARNING: {} — {}", w.node_name, w.message);
+            }
             panic!("Found {} nodes with missing/empty icon", warnings.len());
         }
     }
@@ -1191,12 +1276,20 @@ mod tests {
             eprintln!("Skipping: not in monorepo");
             return;
         };
-        let nodes = crate::parsers::yaml_node::load_all_nodes(&root).expect("should load all nodes");
-        let errors: Vec<_> = nodes.iter().flat_map(validate_node)
+        let nodes =
+            crate::parsers::yaml_node::load_all_nodes(&root).expect("should load all nodes");
+        let errors: Vec<_> = nodes
+            .iter()
+            .flat_map(validate_node)
             .filter(|i| i.rule == "DISPLAY_NAME_REQUIRED" && i.severity == IssueSeverity::Error)
             .collect();
         if !errors.is_empty() {
-            for e in &errors { eprintln!("DISPLAY_NAME_REQUIRED ERROR: {} — {}", e.node_name, e.message); }
+            for e in &errors {
+                eprintln!(
+                    "DISPLAY_NAME_REQUIRED ERROR: {} — {}",
+                    e.node_name, e.message
+                );
+            }
             panic!("Found {} DISPLAY_NAME_REQUIRED errors", errors.len());
         }
     }
@@ -1207,12 +1300,22 @@ mod tests {
             eprintln!("Skipping: not in monorepo");
             return;
         };
-        let nodes = crate::parsers::yaml_node::load_all_nodes(&root).expect("should load all nodes");
-        let warnings: Vec<_> = nodes.iter().flat_map(validate_node)
+        // Clean up any test files from parallel tests
+        cleanup_test_files(&root);
+        let nodes =
+            crate::parsers::yaml_node::load_all_nodes(&root).expect("should load all nodes");
+        let warnings: Vec<_> = nodes
+            .iter()
+            .flat_map(validate_node)
             .filter(|i| i.rule == "DESCRIPTION_NOT_EMPTY")
             .collect();
         if !warnings.is_empty() {
-            for w in &warnings { eprintln!("DESCRIPTION_NOT_EMPTY WARNING: {} — {}", w.node_name, w.message); }
+            for w in &warnings {
+                eprintln!(
+                    "DESCRIPTION_NOT_EMPTY WARNING: {} — {}",
+                    w.node_name, w.message
+                );
+            }
             panic!("Found {} nodes with empty description", warnings.len());
         }
     }
@@ -1223,12 +1326,17 @@ mod tests {
             eprintln!("Skipping: not in monorepo");
             return;
         };
-        let nodes = crate::parsers::yaml_node::load_all_nodes(&root).expect("should load all nodes");
-        let errors: Vec<_> = nodes.iter().flat_map(validate_node)
+        let nodes =
+            crate::parsers::yaml_node::load_all_nodes(&root).expect("should load all nodes");
+        let errors: Vec<_> = nodes
+            .iter()
+            .flat_map(validate_node)
             .filter(|i| i.rule == "KEY_TYPE_STRING" && i.severity == IssueSeverity::Error)
             .collect();
         if !errors.is_empty() {
-            for e in &errors { eprintln!("KEY_TYPE_STRING ERROR: {} — {}", e.node_name, e.message); }
+            for e in &errors {
+                eprintln!("KEY_TYPE_STRING ERROR: {} — {}", e.node_name, e.message);
+            }
             panic!("Found {} KEY_TYPE_STRING errors", errors.len());
         }
     }
@@ -1239,12 +1347,17 @@ mod tests {
             eprintln!("Skipping: not in monorepo");
             return;
         };
-        let nodes = crate::parsers::yaml_node::load_all_nodes(&root).expect("should load all nodes");
-        let errors: Vec<_> = nodes.iter().flat_map(validate_node)
+        let nodes =
+            crate::parsers::yaml_node::load_all_nodes(&root).expect("should load all nodes");
+        let errors: Vec<_> = nodes
+            .iter()
+            .flat_map(validate_node)
             .filter(|i| i.rule == "TIMESTAMPS_DATETIME" && i.severity == IssueSeverity::Error)
             .collect();
         if !errors.is_empty() {
-            for e in &errors { eprintln!("TIMESTAMPS_DATETIME ERROR: {} — {}", e.node_name, e.message); }
+            for e in &errors {
+                eprintln!("TIMESTAMPS_DATETIME ERROR: {} — {}", e.node_name, e.message);
+            }
             panic!("Found {} TIMESTAMPS_DATETIME errors", errors.len());
         }
     }
@@ -1292,10 +1405,15 @@ mod tests {
         let nodes =
             crate::parsers::yaml_node::load_all_nodes(&root).expect("should load all nodes");
 
-        let entity_native = nodes.iter().find(|n| n.def.name == "EntityNative")
+        let entity_native = nodes
+            .iter()
+            .find(|n| n.def.name == "EntityNative")
             .expect("EntityNative node must exist");
 
-        let props = entity_native.def.properties.as_ref()
+        let props = entity_native
+            .def
+            .properties
+            .as_ref()
             .expect("EntityNative must have properties");
 
         assert!(
@@ -1346,7 +1464,8 @@ mod tests {
         };
 
         let issues = validate_node(&node);
-        let denom_errors: Vec<_> = issues.iter()
+        let denom_errors: Vec<_> = issues
+            .iter()
             .filter(|i| i.rule == "DENOMINATION_FORMS_REQUIRED")
             .collect();
 
@@ -1451,6 +1570,8 @@ mod tests {
             eprintln!("Skipping: not in monorepo");
             return;
         };
+        // Clean up any test files from parallel tests
+        cleanup_test_files(&root);
 
         let nodes =
             crate::parsers::yaml_node::load_all_nodes(&root).expect("should load all nodes");
@@ -1472,10 +1593,7 @@ mod tests {
             "BlockNative.properties must contain 'content' (JSON matching BlockType.structure)"
         );
         let content = &props["content"];
-        assert_eq!(
-            content.prop_type, "json",
-            "content must be type json"
-        );
+        assert_eq!(content.prop_type, "json", "content must be type json");
 
         // v0.13.1: block_type denormalized for fast filtering
         assert!(
@@ -1495,6 +1613,9 @@ mod tests {
             eprintln!("Skipping: not in monorepo");
             return;
         };
+
+        // Clean up any test files left by other tests to avoid pollution
+        cleanup_test_files(&root);
 
         let nodes =
             crate::parsers::yaml_node::load_all_nodes(&root).expect("should load all nodes");
@@ -1529,6 +1650,9 @@ mod tests {
             return;
         };
 
+        // Clean up any test files left by other tests to avoid pollution
+        cleanup_test_files(&root);
+
         let nodes =
             crate::parsers::yaml_node::load_all_nodes(&root).expect("should load all nodes");
 
@@ -1544,9 +1668,7 @@ mod tests {
             .expect("SEOKeyword must have standard_properties");
 
         // Check key format: seo:{slug}@{locale_key}
-        let key_prop = sp
-            .get("key")
-            .expect("SEOKeyword must have 'key' property");
+        let key_prop = sp.get("key").expect("SEOKeyword must have 'key' property");
 
         // Verify pattern if present
         if let Some(pattern) = key_prop.extra.get("pattern") {
@@ -1634,7 +1756,9 @@ mod tests {
         }
 
         // derivation_score is required
-        let score_missing = derived_issues.iter().any(|i| i.message.contains("derivation_score"));
+        let score_missing = derived_issues
+            .iter()
+            .any(|i| i.message.contains("derivation_score"));
         assert!(
             !score_missing,
             "DERIVED_SLUG_FROM arc should have 'derivation_score' property defined"
@@ -1660,7 +1784,10 @@ mod tests {
         assert!(
             source_target_issues.is_empty(),
             "DERIVED_SLUG_FROM should have correct source (BlockNative) and target (EntityNative). Found issues: {:?}",
-            source_target_issues.iter().map(|i| &i.message).collect::<Vec<_>>()
+            source_target_issues
+                .iter()
+                .map(|i| &i.message)
+                .collect::<Vec<_>>()
         );
     }
 
@@ -1704,7 +1831,10 @@ mod tests {
 
         // Log warnings but don't fail - some arcs may not need llm_context
         if !semantic_issues.is_empty() {
-            eprintln!("Warning: {} semantic/generation arcs missing llm_context:", semantic_issues.len());
+            eprintln!(
+                "Warning: {} semantic/generation arcs missing llm_context:",
+                semantic_issues.len()
+            );
             for issue in &semantic_issues {
                 eprintln!("  - {}: {}", issue.arc_name, issue.message);
             }
@@ -1733,9 +1863,9 @@ mod tests {
         let issues = validate_arc(&arc);
 
         // Should have error for missing 'rank' property
-        let rank_error = issues.iter().find(|i|
-            i.rule == "ARC_PROP_REQUIRED" && i.message.contains("rank")
-        );
+        let rank_error = issues
+            .iter()
+            .find(|i| i.rule == "ARC_PROP_REQUIRED" && i.message.contains("rank"));
 
         assert!(
             rank_error.is_some(),
@@ -1762,14 +1892,14 @@ mod tests {
                     let mut m = serde_yaml::Mapping::new();
                     m.insert(
                         serde_yaml::Value::String("name".to_string()),
-                        serde_yaml::Value::String("derivation_score".to_string())
+                        serde_yaml::Value::String("derivation_score".to_string()),
                     );
                     m.insert(
                         serde_yaml::Value::String("type".to_string()),
-                        serde_yaml::Value::String("float".to_string())
+                        serde_yaml::Value::String("float".to_string()),
                     );
                     m
-                })
+                }),
             ])),
             inverse: None,
             cypher_pattern: None,
@@ -1778,9 +1908,9 @@ mod tests {
         let issues = validate_arc(&arc);
 
         // Should have error for wrong source
-        let source_error = issues.iter().find(|i|
-            i.rule == "ARC_SOURCE_TARGET" && i.message.contains("BlockNative")
-        );
+        let source_error = issues
+            .iter()
+            .find(|i| i.rule == "ARC_SOURCE_TARGET" && i.message.contains("BlockNative"));
 
         assert!(
             source_error.is_some(),
@@ -1796,11 +1926,11 @@ mod tests {
                 let mut m = serde_yaml::Mapping::new();
                 m.insert(
                     serde_yaml::Value::String("name".to_string()),
-                    serde_yaml::Value::String("rank".to_string())
+                    serde_yaml::Value::String("rank".to_string()),
                 );
                 m.insert(
                     serde_yaml::Value::String("type".to_string()),
-                    serde_yaml::Value::String("string".to_string())
+                    serde_yaml::Value::String("string".to_string()),
                 );
                 m
             }),
@@ -1808,11 +1938,11 @@ mod tests {
                 let mut m = serde_yaml::Mapping::new();
                 m.insert(
                     serde_yaml::Value::String("name".to_string()),
-                    serde_yaml::Value::String("is_slug_source".to_string())
+                    serde_yaml::Value::String("is_slug_source".to_string()),
                 );
                 m.insert(
                     serde_yaml::Value::String("type".to_string()),
-                    serde_yaml::Value::String("boolean".to_string())
+                    serde_yaml::Value::String("boolean".to_string()),
                 );
                 m
             }),
@@ -1837,8 +1967,16 @@ mod tests {
         let extracted = extract_arc_property_names(&arc);
 
         assert_eq!(extracted.len(), 2);
-        assert!(extracted.iter().any(|(n, t)| n == "rank" && t.as_deref() == Some("string")));
-        assert!(extracted.iter().any(|(n, t)| n == "is_slug_source" && t.as_deref() == Some("boolean")));
+        assert!(
+            extracted
+                .iter()
+                .any(|(n, t)| n == "rank" && t.as_deref() == Some("string"))
+        );
+        assert!(
+            extracted
+                .iter()
+                .any(|(n, t)| n == "is_slug_source" && t.as_deref() == Some("boolean"))
+        );
     }
 
     #[test]
@@ -1852,10 +1990,10 @@ mod tests {
                     let mut pm = serde_yaml::Mapping::new();
                     pm.insert(
                         serde_yaml::Value::String("type".to_string()),
-                        serde_yaml::Value::String("integer".to_string())
+                        serde_yaml::Value::String("integer".to_string()),
                     );
                     pm
-                })
+                }),
             );
             m
         });
@@ -1879,7 +2017,11 @@ mod tests {
         let extracted = extract_arc_property_names(&arc);
 
         assert_eq!(extracted.len(), 1);
-        assert!(extracted.iter().any(|(n, t)| n == "priority" && t.as_deref() == Some("integer")));
+        assert!(
+            extracted
+                .iter()
+                .any(|(n, t)| n == "priority" && t.as_deref() == Some("integer"))
+        );
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -1905,18 +2047,14 @@ mod tests {
 
     /// Strategy for generating valid org layer names.
     fn prop_org_layer() -> impl Strategy<Value = String> {
-        prop::sample::select(
-            ORG_LAYERS
-                .iter()
-                .map(|s| s.to_string())
-                .collect::<Vec<_>>(),
-        )
+        prop::sample::select(ORG_LAYERS.iter().map(|s| s.to_string()).collect::<Vec<_>>())
     }
 
     /// Strategy for generating invalid realm names.
     fn prop_invalid_realm() -> impl Strategy<Value = String> {
-        "[a-z]{3,10}"
-            .prop_filter("must not be valid realm", |s| !VALID_REALMS.contains(&s.as_str()))
+        "[a-z]{3,10}".prop_filter("must not be valid realm", |s| {
+            !VALID_REALMS.contains(&s.as_str())
+        })
     }
 
     /// Strategy for generating a simple slug-like key.
@@ -1959,7 +2097,7 @@ mod tests {
 
     /// Create a minimal valid node for property testing.
     fn create_valid_proptest_node(name: &str, realm: &str, layer: &str) -> ParsedNode {
-        use crate::parsers::yaml_node::{NodeDef, NodeTrait, PropertyDef, NodeIcon};
+        use crate::parsers::yaml_node::{NodeDef, NodeIcon, NodeTrait, PropertyDef};
         use indexmap::IndexMap;
         use std::collections::BTreeMap;
 
