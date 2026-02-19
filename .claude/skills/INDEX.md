@@ -2,7 +2,7 @@
 
 Catalog of all Claude Code skills for the supernovae-agi workspace (NovaNet + Nika).
 
-**NovaNet**: v0.13.1 | **Nika**: v0.3.0 | **Total Skills**: 27 (10 core + 10 studio + 7 nika)
+**NovaNet**: v0.14.0 | **Nika**: v0.4.0 | **Total Skills**: 27 (10 core + 10 studio + 7 nika) | **MVP**: 7 complete, 8 next
 
 ---
 

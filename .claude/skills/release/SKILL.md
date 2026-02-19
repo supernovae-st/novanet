@@ -37,8 +37,8 @@ Shows current state:
 ╠═══════════════════════════════════════════════════════════════════════════════╣
 ║                                                                               ║
 ║  supernovae-agi: v0.14.0                                                      ║
-║  ├── NovaNet:    v0.13.1  (3 unreleased commits)                             ║
-║  └── Nika:       v0.2.0   (7 unreleased commits)                             ║
+║  ├── NovaNet:    v0.14.0  (context_build_log, denomination_forms)            ║
+║  └── Nika:       v0.4.0   (rig-core migration complete, MVP 7)               ║
 ║                                                                               ║
 ║  Pending Changes:                                                             ║
 ║  ├── feat(mcp): add denomination_forms to novanet_generate                   ║
@@ -88,7 +88,7 @@ Release Nika:
 
 ```bash
 /release nika              # Auto-determine version
-/release nika 0.3.0        # Explicit version
+/release nika 0.4.0        # Explicit version
 /release nika --dry-run    # Preview without executing
 ```
 

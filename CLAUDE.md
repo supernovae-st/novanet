@@ -40,8 +40,8 @@ Entity (defined) → Generate natively → Native  ✅ RIGHT
 
 | Project | Version | Key Changes |
 |---------|---------|-------------|
-| NovaNet | v0.13.1 | 6 arc families, schema meta-arcs, 1082 tests |
-| Nika | v0.3 | for_each parallelism, resilience patterns, invoke/agent verbs |
+| NovaNet | v0.14.0 | 7 MCP tools, denomination_forms, context_build_log, 1082 tests |
+| Nika | v0.4.0 | rig-core v0.31, RigAgentLoop, RigProvider, 621+ tests, pure rig-core |
 
 ## Commands
 

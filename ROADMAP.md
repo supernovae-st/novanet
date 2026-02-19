@@ -1,7 +1,7 @@
 # supernovae-agi Master Roadmap
 
 **Last Updated:** 2026-02-19
-**Status:** Active - MVP 7 Complete, MVP 8 RLM Enhancements Next
+**Status:** Active - MVP 0-7 Complete, MVP 8 RLM Enhancements Next
 
 ---
 
@@ -59,15 +59,14 @@ Ce document est le "plan des plans" - il orchestre tous les plans de développem
 │  └── Performance metrics (resilience/metrics.rs)                                │
 │                                                                                 │
 │  ┌─────────────────────────────────────────────────────────────────────────┐   │
-│  │  MVP 6: V0.3 FEATURES (~98%)                               ▶ CURRENT   │   │
-│  │  ├── ✅ for_each parallelism (tokio::spawn JoinSet)                    │   │
-│  │  ├── ✅ rig-core 0.31 + rmcp 0.16 in Cargo.toml                        │   │
-│  │  ├── ✅ RigProvider wrapper (provider/rig.rs - 761 lines)              │   │
-│  │  ├── ✅ v0.3 examples + demo.sh (other session completing)             │   │
-│  │  └── ⏳ Documentation polish (README, CLAUDE.md)                       │   │
-│  └─────────────────────────────────────────────────────────────────────────┘   │
+│  ✅ MVP 6: V0.3 FEATURES                                       ✓ DONE      │
+│  ├── ✅ for_each parallelism (tokio::spawn JoinSet)                         │
+│  ├── ✅ rig-core 0.31 + rmcp 0.16 in Cargo.toml                             │
+│  ├── ✅ RigProvider wrapper (provider/rig.rs - 761 lines)                   │
+│  ├── ✅ v0.3 showcase examples (4 demos + UC1-UC10)                         │
+│  └── ✅ examples/README.md quick-start guide                                │
 │                                                                                 │
-│  🎯 MILESTONE: Nika v0.3 ⏳ IMMINENT                                            │
+│  🎯 MILESTONE: Nika v0.3 ✅ ACHIEVED                                            │
 │                                                                                 │
 │  ✅ MVP 7: RIG-CORE MIGRATION                                    ✓ DONE      │
 │  ├── ✅ RigAgentLoop with rig::AgentBuilder (runtime/rig_agent_loop.rs)      │
@@ -290,10 +289,11 @@ All critical gaps resolved:
 
 ---
 
-## MVP 6: v0.3 Features ⏳ (CURRENT - 98%)
+## MVP 6: v0.3 Features ✅
 
 **Plan:** `nika-dev/docs/plans/2026-02-18-mvp6-v03-features.md`
-**Status:** IN PROGRESS (~98%) - Documentation polish remaining
+**Status:** COMPLETE
+**Completed:** 2026-02-19
 **Prerequisites:** MVP 5 ✅, MVP 4 ✅
 
 ### Tasks
@@ -303,26 +303,26 @@ All critical gaps resolved:
 | 2 | Implement parallel task execution | ✅ Done (`tokio::spawn` JoinSet) |
 | 3 | Add rig-core 0.31 + rmcp 0.16 | ✅ Done (Cargo.toml) |
 | 4 | Create RigProvider wrapper | ✅ Done (`provider/rig.rs` - 761 lines, 50+ tests) |
-| 5 | v0.3 showcase examples | ✅ Done (other session completing) |
+| 5 | v0.3 showcase examples | ✅ Done (4 v03-* demos) |
 | 6 | NovaNet: context_build_log + denomination_forms | ✅ Done (MCP v0.14.0) |
-| 7 | Documentation polish (README, CLAUDE.md) | ⏳ In Progress (other session) |
+| 7 | examples/README.md quick-start guide | ✅ Done |
 
 ### Deliverables
 - [x] `for_each:` enables parallel execution (truly concurrent with tokio::spawn)
 - [x] rig-core 0.31 in Cargo.toml with `rmcp` feature
 - [x] RigProvider wrapper ready for AgentLoop migration
 - [x] NovaNet MCP v0.14.0 with full ADR-033/035 compliance
-- [ ] README.md with getting started guide (other session)
-- [ ] CLAUDE.md updates for v0.3 features (other session)
+- [x] examples/README.md with getting started guide
+- [x] v0.3 showcase examples with for_each + invoke + agent
 
-### Use Cases Ready (UC1-UC10)
-16 example workflows in `nika-dev/tools/nika/examples/`:
-- UC1: Entity generation for single locale
-- UC2: Multi-locale generation pipeline
-- UC3: Agent-based content refinement
-- UC4-UC10: Various production workflows
-- v03-parallel-locales.yaml (NEW)
-- v03-agent-refinement.yaml (NEW)
+### v0.3 Showcase Examples
+4 feature demos in `nika-dev/tools/nika/examples/`:
+- `v03-parallel-locales.yaml` - for_each with concurrency: 5
+- `v03-denomination-forms.yaml` - ADR-033 prescriptive naming
+- `v03-entity-pipeline.yaml` - invoke + for_each + infer pipeline
+- `v03-agent-with-tools.yaml` - multi-turn agent with MCP tools
+
+Plus UC1-UC10 production workflow patterns.
 
 ---
 
@@ -464,7 +464,7 @@ tasks:
 | 3 | `nika-dev/docs/plans/2026-02-18-mvp3-tui-trace.md` | ✅ Done | v0.2 |
 | 4 | `nika-dev/docs/plans/2026-02-18-mvp4-real-integration.md` | ✅ Done | v0.2.1 |
 | 5 | `nika-dev/docs/plans/2026-02-18-mvp5-production-hardening.md` | ✅ Done | v0.2.2 |
-| 6 | `nika-dev/docs/plans/2026-02-18-mvp6-v03-features.md` | ⏳ In Progress (~98%) | v0.3 |
+| 6 | `nika-dev/docs/plans/2026-02-18-mvp6-v03-features.md` | ✅ Done | v0.3 |
 | 7 | `docs/plans/2026-02-19-rig-core-migration.md` | ✅ Done | v0.4 |
 | 8 | `docs/research/rlm-knowledge-graph-patterns-2025.md` (Sec 11) | ⏳ Not Started | v0.5 |
 
@@ -529,7 +529,7 @@ tasks:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│  NIKA v0.3 ARCHITECTURE                                                 │
+│  NIKA v0.4 ARCHITECTURE                                                 │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                         │
 │  tools/nika/src/                                                        │
@@ -553,18 +553,9 @@ tasks:
 │  │   ├── runner.rs        # Workflow orchestration                     │
 │  │   └── agent_loop.rs    # Agentic execution                          │
 │  │                                                                      │
-│  ├── provider/            # LLM providers                              │
+│  ├── provider/            # LLM providers (v0.4 - rig-core only)       │
 │  │   ├── mod.rs           # Provider trait + factory                   │
-│  │   ├── rig.rs           # RigProvider wrapper (NEW v0.3, 761 lines)  │
-│  │   ├── claude.rs        # ClaudeProvider (will be removed in v0.3.1) │
-│  │   ├── openai.rs        # OpenAIProvider (will be removed in v0.3.1) │
-│  │   └── types.rs         # Message, ToolCall (will be removed)        │
-│  │                                                                      │
-│  ├── resilience/          # Production hardening (NEW v0.3)            │
-│  │   ├── retry.rs         # Exponential backoff (21 tests)             │
-│  │   ├── circuit_breaker.rs # Closed→Open→HalfOpen (12 tests)          │
-│  │   ├── rate_limiter.rs  # Token bucket (11 tests)                    │
-│  │   └── metrics.rs       # Performance metrics                        │
+│  │   └── rig.rs           # RigProvider wrapper (761 lines)            │
 │  │                                                                      │
 │  ├── event/               # Observability                              │
 │  │   ├── log.rs           # EventLog (16 variants)                     │
@@ -642,13 +633,12 @@ cd nika-dev/tools/nika
 - Retry/backoff handles transient failures
 - `cargo bench` baseline established
 
-### MVP 6 Done When:
-- `for_each:` executes tasks in parallel ✅
-- rig-core 0.31 in Cargo.toml ✅
-- RigProvider wrapper implemented ✅
-- README + examples/ documented (other session)
-- CLAUDE.md updates complete (other session)
-- v0.3.0 tag created
+### MVP 6 Done When: ✅ ACHIEVED
+- ✅ `for_each:` executes tasks in parallel
+- ✅ rig-core 0.31 in Cargo.toml
+- ✅ RigProvider wrapper implemented
+- ✅ examples/README.md with quick-start guide
+- ✅ 4 v0.3 showcase examples (parallel-locales, denomination-forms, entity-pipeline, agent-with-tools)
 
 ### MVP 7 Done When: ✅ ACHIEVED
 - ✅ RigAgentLoop with rig::AgentBuilder
@@ -666,11 +656,11 @@ cd nika-dev/tools/nika
 
 ## Notes
 
-- **MVP 4 + MCP Complete:** NovaNet MCP v0.14.0 has denomination_forms + context_build_log
-- **MVP 6 Near Complete:** Documentation polish in progress
-- **MVP 7 Complete:** v0.4 achieved - pure rig-core, 621 tests passing
+- **MVP 4-7 Complete:** NovaNet MCP v0.14.0 + Nika v0.4 (pure rig-core)
+- **MVP 6 Complete:** 4 v0.3 showcase examples + README quick-start guide
+- **MVP 7 Complete:** v0.4 achieved - pure rig-core, 611+ tests passing
 - **MVP 8 Next:** RLM enhancements based on rig-rlm research
 - **RLM Insight:** NovaNet + Nika is ALREADY RLM-on-KG with better safety/observability than rig-rlm
-- **Workspace Split Deferred:** Single crate works fine, no complexity benefit yet
+- **Resilience Module Removed:** Deleted in v0.4 cleanup (was never wired into runtime)
 - **Testing:** TDD for all MVPs - write failing test first
 - **Commits:** Atomic commits per task, conventional commit format

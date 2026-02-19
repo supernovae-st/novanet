@@ -1,6 +1,8 @@
-# NovaNet ADR Cheat Sheet (v0.13.0)
+# ADR Cheat Sheet (NovaNet v0.14.0 + Nika v0.4.0)
 
 Quick reference for daily development. Use `/adr <number>` for full details.
+
+**MVP Status:** 7 complete (rig-core migration) | 8 next (RLM enhancements)
 
 ---
 
@@ -8,7 +10,7 @@ Quick reference for daily development. Use `/adr <number>` for full details.
 
 ```
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  ESSENTIAL ADRs FOR v0.13.1                                                   ║
+║  ESSENTIAL ADRs FOR v0.14.0                                                   ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
 ║                                                                               ║
 ║  ADR-029  *Native Pattern      EntityNative, PageNative (unified suffix)      ║
@@ -19,7 +21,24 @@ Quick reference for daily development. Use `/adr <number>` for full details.
 ║  ADR-021  Query-First          Cypher = source of truth                       ║
 ║  ADR-022  Unified Tree         2 modes: Graph + Nexus                         ║
 ║                                                                               ║
+║  Nika ADRs (nika-dev/tools/nika/.claude/rules/adr/):                          ║
+║  ADR-001  5 Semantic Verbs     infer, exec, fetch, invoke, agent              ║
+║  ADR-002  YAML-First           Workflows as YAML files, not code              ║
+║  ADR-003  MCP-Only             Zero Cypher Rule (via MCP tools only)          ║
+║                                                                               ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+## MVP 8: RLM Enhancements (Next)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  Phase 1: Reasoning capture (thinking field in AgentTurn events)                │
+│  Phase 2: Nested agents (spawn_agent internal tool)                             │
+│  Phase 3: Schema introspection (novanet_introspect MCP tool)                    │
+│  Phase 4: Dynamic decomposition (decompose: modifier)                           │
+│  Phase 5: Lazy context loading (lazy: binding modifier)                         │
+└─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
