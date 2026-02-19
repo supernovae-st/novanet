@@ -1,464 +1,361 @@
-# Plan B: Fix Test Coverage Gaps
+# Plan B: Test Coverage Gaps
 
-> Achieve 90%+ test coverage for NovaNet MCP Server and Studio API
-
-**Status:** Ready for Implementation
-**Effort:** 26-37 hours (can be parallelized)
-**Priority:** Medium (improves reliability)
-**Prerequisites:** None (independent work)
+**Date:** 2026-02-19
+**Status:** Ready for Execution
+**Effort:** ~4-6 hours
+**Methodology:** TDD (Red-Green-Refactor)
 
 ---
 
 ## Overview
 
-NovaNet MCP Server has 65% test coverage with 8 files lacking tests. Studio API routes have partial coverage. This plan adds ~102 tests to achieve 90%+ coverage across both projects.
+L'audit a identifié des modules avec une couverture de tests insuffisante dans Nika v0.5.0.
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'lineColor': '#64748b'}}}%%
-flowchart TD
-    classDef critical fill:#ef4444,stroke:#dc2626,stroke-width:2px,color:#ffffff
-    classDef high fill:#f59e0b,stroke:#d97706,stroke-width:2px,color:#ffffff
-    classDef medium fill:#6366f1,stroke:#4f46e5,stroke-width:2px,color:#ffffff
-    classDef low fill:#10b981,stroke:#059669,stroke-width:2px,color:#ffffff
-
-    subgraph "NovaNet MCP Server (40 tests needed)"
-        A[state.rs - 114 lines]:::critical
-        B[error.rs - 132 lines]:::critical
-        C[config.rs - 101 lines]:::high
-        D[main.rs - 35 lines]:::high
-        E[mod.rs - 47 lines]:::high
-        F[7 tool files - partial]:::medium
-    end
-
-    subgraph "Studio API (62 tests needed)"
-        G[/api/tree - partial]:::high
-        H[/api/filter - partial]:::high
-        I[/api/cypher - security]:::critical
-        J[/api/novanet - bridge]:::medium
-    end
-
-    subgraph "Target"
-        K[90%+ Coverage]:::low
-    end
-
-    A & B & C & D & E & F --> K
-    G & H & I & J --> K
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  TEST COVERAGE GAPS IDENTIFIED                                                  │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  Module              Current Tests    Target    Gap                             │
+│  ─────────────────────────────────────────────────────────────────────────────  │
+│  store/              7                20+       13+ tests needed                │
+│  provider/           8                15+       7+ tests needed                 │
+│  mcp/ describe       1                5+        4+ tests needed                 │
+│  mcp/ atoms          1                5+        4+ tests needed                 │
+│  runtime/executor    Low coverage     10+       Token tracking = 0 bug          │
+│                                                                                 │
+│  TOTAL EFFORT: ~30 new tests                                                    │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Current Coverage Analysis
+## Phase 1: Store Module (7 → 20+ tests)
 
-### NovaNet MCP Server
+**Location:** `nika-dev/tools/nika/src/store/`
 
-**Location:** `novanet-dev/tools/novanet-mcp/`
+### Current State
+- 7 tests existing
+- DataStore, TaskOutputStore, ConfigStore
 
-| File | Lines | Tests | Coverage | Priority |
-|------|-------|-------|----------|----------|
-| `src/server/state.rs` | 114 | 0 | 0% | 🔴 CRITICAL |
-| `src/error.rs` | 132 | 0 | 0% | 🔴 CRITICAL |
-| `src/server/config.rs` | 101 | 0 | 0% | 🟡 HIGH |
-| `src/main.rs` | 35 | 0 | 0% | 🟡 HIGH |
-| `src/server/mod.rs` | 47 | 0 | 0% | 🟡 HIGH |
-| `src/tools/*.rs` | ~800 | partial | ~60% | 🟢 MEDIUM |
+### Tasks
 
-**Tests Needed:** ~40
+| # | Task | Tests to Add | Status |
+|---|------|--------------|--------|
+| 1.1 | DataStore concurrent access | 3 tests | ⏳ |
+| 1.2 | DataStore serialization/deserialization | 2 tests | ⏳ |
+| 1.3 | TaskOutputStore ordering guarantees | 3 tests | ⏳ |
+| 1.4 | TaskOutputStore memory limits | 2 tests | ⏳ |
+| 1.5 | ConfigStore reload behavior | 3 tests | ⏳ |
 
-### Studio API Routes
-
-**Location:** `novanet-dev/packages/studio/app/api/`
-
-| Route | Tests | Coverage | Priority |
-|-------|-------|----------|----------|
-| `/api/tree/[id]/children` | 2 | 40% | 🟡 HIGH |
-| `/api/filter/build` | 1 | 30% | 🟡 HIGH |
-| `/api/cypher/execute` | 3 | 50% | 🔴 CRITICAL (security) |
-| `/api/novanet/bridge` | 0 | 0% | 🟢 MEDIUM |
-| Error responses | 0 | 0% | 🟡 HIGH |
-| Edge cases | 0 | 0% | 🟢 MEDIUM |
-
-**Tests Needed:** ~62
-
----
-
-## Implementation Plan
-
-### Phase 1: Critical Files (8-12 hours)
-
-#### 1.1 state.rs Tests (3 hours)
-
-**File:** `novanet-dev/tools/novanet-mcp/tests/state_test.rs`
+### Test Templates
 
 ```rust
-// Test categories:
-// 1. ServerState initialization
-// 2. Neo4j connection handling
-// 3. Tool registration
-// 4. Concurrent access (parking_lot RwLock)
+// tests/store_concurrent_test.rs
 
 #[tokio::test]
-async fn test_server_state_initializes_with_neo4j() {
-    let config = McpConfig::test_default();
-    let state = ServerState::new(config).await.unwrap();
-    assert!(state.neo4j_client().is_connected());
-}
+async fn test_datastore_concurrent_writes() {
+    let store = DataStore::new();
+    let store = Arc::new(store);
 
-#[tokio::test]
-async fn test_server_state_registers_all_tools() {
-    let state = ServerState::test_instance().await;
-    let tools = state.list_tools();
-    assert_eq!(tools.len(), 7);
-    assert!(tools.iter().any(|t| t.name == "novanet_generate"));
-}
-
-#[tokio::test]
-async fn test_concurrent_tool_access() {
-    let state = Arc::new(ServerState::test_instance().await);
-    let handles: Vec<_> = (0..10).map(|i| {
-        let s = state.clone();
+    let handles: Vec<_> = (0..100).map(|i| {
+        let store = store.clone();
         tokio::spawn(async move {
-            s.get_tool("novanet_describe").unwrap()
+            store.set(&format!("key_{}", i), json!({"value": i}));
         })
     }).collect();
 
-    for handle in handles {
-        assert!(handle.await.is_ok());
+    for h in handles { h.await.unwrap(); }
+
+    // All 100 keys should exist
+    for i in 0..100 {
+        assert!(store.get(&format!("key_{}", i)).is_some());
+    }
+}
+
+#[tokio::test]
+async fn test_datastore_concurrent_reads_writes() {
+    // Test that reads don't block during writes
+}
+
+#[test]
+fn test_datastore_serialization_roundtrip() {
+    let store = DataStore::new();
+    store.set("nested", json!({"a": {"b": {"c": 1}}}));
+
+    let serialized = store.serialize().unwrap();
+    let restored = DataStore::deserialize(&serialized).unwrap();
+
+    assert_eq!(store.get("nested"), restored.get("nested"));
+}
+```
+
+---
+
+## Phase 2: Provider Module (8 → 15+ tests)
+
+**Location:** `nika-dev/tools/nika/src/provider/`
+
+### Current State
+- 8 tests existing
+- RigProvider wrapper (761 lines)
+
+### Tasks
+
+| # | Task | Tests to Add | Status |
+|---|------|--------------|--------|
+| 2.1 | RigProvider error handling | 3 tests | ⏳ |
+| 2.2 | RigProvider model selection | 2 tests | ⏳ |
+| 2.3 | RigProvider streaming behavior | 2 tests | ⏳ |
+
+### Test Templates
+
+```rust
+// tests/provider_error_test.rs
+
+#[tokio::test]
+async fn test_rig_provider_handles_rate_limit() {
+    let provider = RigProvider::new_mock();
+    provider.set_response(MockResponse::RateLimit { retry_after: 5 });
+
+    let result = provider.chat(messages).await;
+
+    assert!(matches!(result, Err(NikaError::RateLimited { .. })));
+}
+
+#[tokio::test]
+async fn test_rig_provider_handles_invalid_api_key() {
+    let provider = RigProvider::with_invalid_key();
+
+    let result = provider.chat(messages).await;
+
+    assert!(matches!(result, Err(NikaError::AuthenticationError { .. })));
+}
+
+#[tokio::test]
+async fn test_rig_provider_handles_context_too_long() {
+    let provider = RigProvider::new_mock();
+    let huge_message = "x".repeat(1_000_000);
+
+    let result = provider.chat(vec![Message::user(huge_message)]).await;
+
+    assert!(matches!(result, Err(NikaError::ContextTooLong { .. })));
+}
+```
+
+---
+
+## Phase 3: MCP Tools Integration (2 → 10+ tests)
+
+**Location:** `nika-dev/tools/nika/tests/`
+
+### Current State
+- novanet_describe: 1 test
+- novanet_atoms: 1 test
+- Other MCP tools have better coverage
+
+### Tasks
+
+| # | Task | Tests to Add | Status |
+|---|------|--------------|--------|
+| 3.1 | novanet_describe edge cases | 4 tests | ⏳ |
+| 3.2 | novanet_atoms edge cases | 4 tests | ⏳ |
+
+### Test Templates
+
+```rust
+// tests/mcp_describe_test.rs
+
+#[tokio::test]
+async fn test_describe_schema_returns_all_classes() {
+    let client = MockMcpClient::new();
+
+    let result = client.call_tool("novanet_describe", json!({
+        "describe": "schema"
+    })).await.unwrap();
+
+    let classes = result["data"]["classes"].as_array().unwrap();
+    assert!(classes.len() >= 61); // All 61 node classes
+}
+
+#[tokio::test]
+async fn test_describe_entity_not_found() {
+    let client = MockMcpClient::new();
+
+    let result = client.call_tool("novanet_describe", json!({
+        "describe": "entity",
+        "entity_key": "non-existent-key"
+    })).await;
+
+    assert!(matches!(result, Err(McpError::NotFound { .. })));
+}
+
+#[tokio::test]
+async fn test_describe_relations_returns_arc_info() {
+    let client = MockMcpClient::new();
+
+    let result = client.call_tool("novanet_describe", json!({
+        "describe": "relations"
+    })).await.unwrap();
+
+    let arcs = result["data"]["arcs"].as_array().unwrap();
+    assert!(arcs.len() >= 182); // All 182 arc classes
+}
+
+// tests/mcp_atoms_test.rs
+
+#[tokio::test]
+async fn test_atoms_returns_terms_for_locale() {
+    let client = MockMcpClient::new();
+
+    let result = client.call_tool("novanet_atoms", json!({
+        "locale": "fr-FR",
+        "atom_type": "term"
+    })).await.unwrap();
+
+    assert!(result["atoms"].as_array().unwrap().len() > 0);
+}
+
+#[tokio::test]
+async fn test_atoms_invalid_locale_returns_error() {
+    let client = MockMcpClient::new();
+
+    let result = client.call_tool("novanet_atoms", json!({
+        "locale": "invalid-locale",
+        "atom_type": "term"
+    })).await;
+
+    assert!(result.is_err());
+}
+```
+
+---
+
+## Phase 4: Token Tracking Bug Fix
+
+**Location:** `nika-dev/tools/nika/src/runtime/executor.rs:380-385`
+
+### Current Bug
+
+```rust
+// executor.rs:380-385 — Currently returns 0
+AgentTurnMetadata {
+    input_tokens: 0,   // BUG: Always 0
+    output_tokens: 0,  // BUG: Always 0
+    thinking: None,
+}
+```
+
+### Tasks
+
+| # | Task | Tests to Add | Status |
+|---|------|--------------|--------|
+| 4.1 | Write failing test for token tracking | 1 test | ⏳ |
+| 4.2 | Fix token extraction from rig-core | Fix | ⏳ |
+| 4.3 | Verify token counts are accurate | 1 test | ⏳ |
+
+### Test Template (RED first)
+
+```rust
+// tests/token_tracking_test.rs
+
+#[tokio::test]
+async fn test_token_tracking_returns_nonzero() {
+    let workflow = load_workflow("examples/simple-agent.yaml");
+    let result = Runner::new(workflow).run().await.unwrap();
+
+    // Find agent task output
+    let agent_output = result.task_outputs.get("agent_task").unwrap();
+    let metadata = agent_output.metadata.as_ref().unwrap();
+
+    // CRITICAL: Token counts must be non-zero after agent execution
+    assert!(metadata.input_tokens > 0, "input_tokens should be > 0");
+    assert!(metadata.output_tokens > 0, "output_tokens should be > 0");
+}
+```
+
+### Fix Strategy
+
+```rust
+// rig_agent_loop.rs — Extract tokens from streaming
+
+impl RigAgentLoop {
+    async fn extract_tokens(&self, response: &StreamedAssistantContent) -> TokenUsage {
+        match response {
+            StreamedAssistantContent::Final { usage, .. } => {
+                TokenUsage {
+                    input_tokens: usage.input_tokens,
+                    output_tokens: usage.output_tokens,
+                }
+            }
+            _ => TokenUsage::default(),
+        }
     }
 }
 ```
 
-**Tests to add:** 12
-
-#### 1.2 error.rs Tests (2 hours)
-
-**File:** `novanet-dev/tools/novanet-mcp/tests/error_test.rs`
-
-```rust
-// Test categories:
-// 1. Error code mapping
-// 2. Error message formatting
-// 3. Error conversion (From impls)
-// 4. Serialization (MCP protocol)
-
-#[test]
-fn test_error_codes_are_unique() {
-    let codes: HashSet<_> = NovanetMcpError::all_codes().collect();
-    assert_eq!(codes.len(), NovanetMcpError::VARIANT_COUNT);
-}
-
-#[test]
-fn test_neo4j_error_converts_correctly() {
-    let neo4j_err = neo4j::Error::connection_failed("localhost");
-    let mcp_err: NovanetMcpError = neo4j_err.into();
-    assert!(matches!(mcp_err, NovanetMcpError::DatabaseConnection { .. }));
-}
-
-#[test]
-fn test_error_serializes_to_mcp_format() {
-    let err = NovanetMcpError::EntityNotFound { key: "qr-code".into() };
-    let mcp_response = err.to_mcp_error();
-    assert_eq!(mcp_response.code, -32001);
-    assert!(mcp_response.message.contains("qr-code"));
-}
-```
-
-**Tests to add:** 10
-
-#### 1.3 config.rs Tests (2 hours)
-
-**File:** `novanet-dev/tools/novanet-mcp/tests/config_test.rs`
-
-```rust
-// Test categories:
-// 1. Environment variable parsing
-// 2. Default values
-// 3. Validation rules
-// 4. Config file loading
-
-#[test]
-fn test_config_from_env_variables() {
-    std::env::set_var("NOVANET_MCP_NEO4J_URI", "bolt://test:7687");
-    let config = McpConfig::from_env().unwrap();
-    assert_eq!(config.neo4j_uri, "bolt://test:7687");
-}
-
-#[test]
-fn test_config_defaults_when_env_missing() {
-    std::env::remove_var("NOVANET_MCP_NEO4J_URI");
-    let config = McpConfig::from_env().unwrap();
-    assert_eq!(config.neo4j_uri, "bolt://localhost:7687");
-}
-
-#[test]
-fn test_config_validates_neo4j_uri_format() {
-    let config = McpConfig { neo4j_uri: "invalid".into(), ..Default::default() };
-    assert!(config.validate().is_err());
-}
-```
-
-**Tests to add:** 8
-
-### Phase 2: High Priority Files (6-8 hours)
-
-#### 2.1 main.rs Tests (1 hour)
-
-- CLI argument parsing
-- Server startup sequence
-- Graceful shutdown
-
-**Tests to add:** 5
-
-#### 2.2 mod.rs Tests (1 hour)
-
-- Module exports
-- Tool initialization
-- Feature flags
-
-**Tests to add:** 5
-
-#### 2.3 Studio API Tests (4-6 hours)
-
-**File:** `novanet-dev/packages/studio/__tests__/api/`
-
-```typescript
-// /api/tree/[id]/children
-describe('GET /api/tree/[id]/children', () => {
-  it('returns children for realm node', async () => {
-    const res = await GET('/api/tree/realm:shared/children');
-    expect(res.status).toBe(200);
-    expect(res.json().children).toContainEqual(
-      expect.objectContaining({ type: 'layer' })
-    );
-  });
-
-  it('returns 404 for unknown node', async () => {
-    const res = await GET('/api/tree/unknown:xyz/children');
-    expect(res.status).toBe(404);
-  });
-
-  it('handles pagination correctly', async () => {
-    const res = await GET('/api/tree/layer:knowledge/children?limit=5');
-    expect(res.json().children.length).toBeLessThanOrEqual(5);
-    expect(res.json().hasMore).toBeDefined();
-  });
-});
-
-// /api/cypher/execute (CRITICAL - security)
-describe('POST /api/cypher/execute', () => {
-  it('executes read-only queries', async () => {
-    const res = await POST('/api/cypher/execute', {
-      query: 'MATCH (n:Entity) RETURN count(n)'
-    });
-    expect(res.status).toBe(200);
-  });
-
-  it('rejects write queries', async () => {
-    const res = await POST('/api/cypher/execute', {
-      query: 'CREATE (n:Test)'
-    });
-    expect(res.status).toBe(403);
-    expect(res.json().error).toContain('read-only');
-  });
-
-  it('sanitizes injection attempts', async () => {
-    const res = await POST('/api/cypher/execute', {
-      query: "MATCH (n) WHERE n.name = 'x' OR 1=1 --'"
-    });
-    expect(res.status).toBe(400);
-  });
-});
-```
-
-**Tests to add:** 44
-
-### Phase 3: Medium Priority (8-12 hours)
-
-#### 3.1 Tool Files Enhancement (4-6 hours)
-
-Add edge case tests to all 7 MCP tools:
-
-| Tool | Missing Tests |
-|------|---------------|
-| `novanet_generate` | Empty forms array, invalid locale |
-| `novanet_describe` | Non-existent entity, malformed key |
-| `novanet_traverse` | Circular references, depth limits |
-| `novanet_search` | Empty results, special characters |
-| `novanet_atoms` | Missing domain, large result sets |
-| `novanet_assemble` | Context overflow, missing refs |
-| `novanet_query` | Complex filters, performance |
-
-**Tests to add:** 21
-
-#### 3.2 Studio API Bridge Tests (4-6 hours)
-
-**File:** `novanet-dev/packages/studio/__tests__/api/novanet-bridge.test.ts`
-
-- Subprocess spawning
-- Timeout handling
-- Error propagation
-- JSON parsing edge cases
-
-**Tests to add:** 18
-
 ---
 
-## Execution Timeline
+## Verification Checklist
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'lineColor': '#64748b'}}}%%
-gantt
-    title Plan B: Test Coverage Timeline
-    dateFormat YYYY-MM-DD
-    axisFormat %d
-
-    section Phase 1 (Critical)
-    state.rs tests           :p1a, 2026-02-19, 3h
-    error.rs tests           :p1b, after p1a, 2h
-    config.rs tests          :p1c, after p1b, 2h
-
-    section Phase 2 (High)
-    main.rs + mod.rs tests   :p2a, after p1c, 2h
-    Studio API tree tests    :p2b, after p2a, 2h
-    Studio API cypher tests  :p2c, after p2b, 2h
-
-    section Phase 3 (Medium)
-    Tool edge cases          :p3a, after p2c, 5h
-    Bridge tests             :p3b, after p3a, 5h
-
-    section Verification
-    Coverage report          :v1, after p3b, 1h
-    CI integration           :v2, after v1, 1h
+### Phase 1: Store Module
+```bash
+cargo test store --all-features
+# Expected: 20+ tests passing
 ```
 
----
-
-## Parallel Execution Option
-
-These can be parallelized across 3 work streams:
-
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'lineColor': '#64748b'}}}%%
-flowchart LR
-    classDef stream1 fill:#6366f1,stroke:#4f46e5,stroke-width:2px,color:#ffffff
-    classDef stream2 fill:#10b981,stroke:#059669,stroke-width:2px,color:#ffffff
-    classDef stream3 fill:#f59e0b,stroke:#d97706,stroke-width:2px,color:#ffffff
-
-    subgraph "Stream 1: Rust MCP (12-16h)"
-        A1[state.rs]:::stream1 --> A2[error.rs]:::stream1 --> A3[config.rs]:::stream1
-    end
-
-    subgraph "Stream 2: Studio API (10-14h)"
-        B1[tree routes]:::stream2 --> B2[cypher routes]:::stream2 --> B3[bridge]:::stream2
-    end
-
-    subgraph "Stream 3: Tool Edge Cases (4-7h)"
-        C1[generate]:::stream3 --> C2[describe]:::stream3 --> C3[traverse]:::stream3
-    end
+### Phase 2: Provider Module
+```bash
+cargo test provider --all-features
+# Expected: 15+ tests passing
 ```
 
-**With 3 parallel streams:** 12-16 hours total (instead of 26-37 sequential)
+### Phase 3: MCP Tools
+```bash
+cargo test mcp_describe mcp_atoms --all-features
+# Expected: 10+ tests passing
+```
+
+### Phase 4: Token Tracking
+```bash
+cargo test token_tracking --all-features
+# Expected: Non-zero token counts
+```
+
+### Final
+```bash
+cargo test --all-features
+# Expected: 730+ tests (was 703)
+```
 
 ---
 
 ## Success Criteria
 
-- [ ] NovaNet MCP Server: 90%+ line coverage
-- [ ] Studio API Routes: 85%+ line coverage
-- [ ] All new tests follow TDD (written before implementation fixes)
-- [ ] CI pipeline runs all tests on PR
-- [ ] Coverage report generated and tracked
+| Metric | Before | After |
+|--------|--------|-------|
+| Total Nika tests | 703 | 730+ |
+| Store module tests | 7 | 20+ |
+| Provider module tests | 8 | 15+ |
+| MCP describe tests | 1 | 5+ |
+| MCP atoms tests | 1 | 5+ |
+| Token tracking bug | Returns 0 | Returns actual counts |
 
 ---
 
-## Files Changed
+## Execution Order
 
-```
-novanet-dev/
-├── tools/novanet-mcp/
-│   ├── tests/
-│   │   ├── state_test.rs          # NEW: 12 tests
-│   │   ├── error_test.rs          # NEW: 10 tests
-│   │   ├── config_test.rs         # NEW: 8 tests
-│   │   ├── main_test.rs           # NEW: 5 tests
-│   │   └── tools/                 # Enhanced: 21 tests
-│   └── src/
-│       └── lib.rs                 # Test helpers
-├── packages/studio/
-│   ├── __tests__/api/
-│   │   ├── tree.test.ts           # Enhanced: 15 tests
-│   │   ├── cypher.test.ts         # Enhanced: 12 tests
-│   │   ├── filter.test.ts         # Enhanced: 10 tests
-│   │   └── novanet-bridge.test.ts # NEW: 18 tests
-│   └── jest.config.js             # Coverage thresholds
-└── .github/workflows/ci.yml       # Coverage gates
-```
+1. **Phase 4 FIRST** (Token tracking) — It's a bug, not coverage
+2. **Phase 1** (Store) — Core infrastructure
+3. **Phase 2** (Provider) — LLM integration
+4. **Phase 3** (MCP) — External tool integration
 
 ---
 
-## Test Infrastructure Improvements
+## Notes
 
-### 1. Test Fixtures
-
-Create shared fixtures in `tests/fixtures/`:
-
-```rust
-// novanet-dev/tools/novanet-mcp/tests/fixtures/mod.rs
-pub fn mock_neo4j_client() -> MockNeo4jClient {
-    MockNeo4jClient::new()
-        .with_entity("qr-code", entity_fixture())
-        .with_locale("fr-FR", locale_fixture())
-}
-
-pub fn entity_fixture() -> Entity {
-    Entity {
-        key: "qr-code".into(),
-        display_name: "QR Code".into(),
-        // ...
-    }
-}
-```
-
-### 2. Coverage Gates
-
-Add to CI pipeline:
-
-```yaml
-# .github/workflows/ci.yml
-- name: Check coverage
-  run: |
-    cargo llvm-cov --workspace --lcov --output-path lcov.info
-    # Fail if under 90%
-    cargo llvm-cov report --fail-under 90
-```
-
-### 3. Snapshot Testing
-
-For complex MCP responses:
-
-```rust
-#[test]
-fn test_generate_response_format() {
-    let response = novanet_generate(params).unwrap();
-    insta::assert_yaml_snapshot!(response);
-}
-```
-
----
-
-## Risks & Mitigations
-
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| Tests slow down CI | Medium | Use test parallelization, mock heavy deps |
-| Flaky Neo4j tests | High | Use testcontainers or in-memory mode |
-| API tests need auth | Low | Add test auth bypass for CI |
-| Coverage gaming | Low | Focus on behavior tests, not line coverage |
-
----
-
-## Next Steps After Completion
-
-1. **Enable coverage gates** in GitHub Actions
-2. **Add coverage badges** to README
-3. **Document test patterns** in CONTRIBUTING.md
-4. **Schedule mutation testing** for critical paths
+- Use TDD: Write failing test first, then implement
+- Each test file should be self-contained
+- Mock external services (Neo4j, LLM APIs)
+- Run `cargo test` after each phase to verify
