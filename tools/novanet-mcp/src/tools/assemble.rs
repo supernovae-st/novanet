@@ -7,6 +7,7 @@ use crate::error::Result;
 use crate::server::State;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+use tracing::instrument;
 
 /// Context assembly strategy
 #[derive(Debug, Clone, Default, Deserialize, JsonSchema)]
@@ -122,6 +123,7 @@ pub struct FocusNode {
 }
 
 /// Execute the novanet_assemble tool
+#[instrument(name = "novanet_assemble", skip(state), fields(focus = %params.focus_key, locale = %params.locale))]
 pub async fn execute(state: &State, params: AssembleParams) -> Result<AssembleResult> {
     let start = std::time::Instant::now();
 

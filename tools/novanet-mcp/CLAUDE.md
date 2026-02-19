@@ -2,7 +2,7 @@
 
 MCP (Model Context Protocol) server exposing the NovaNet knowledge graph to AI agents.
 
-**Version**: 0.4.0 | **Rust**: 1.86 | **Edition**: 2024 | **rmcp**: 0.15
+**Version**: 0.5.0 | **Rust**: 1.86 | **Edition**: 2024 | **rmcp**: 0.16
 
 ---
 
@@ -655,7 +655,7 @@ src/
 
 | Crate | Version | Purpose |
 |-------|---------|---------|
-| `rmcp` | 0.15 | MCP protocol SDK (Anthropic official) |
+| `rmcp` | 0.16 | MCP protocol SDK (Anthropic official) |
 | `neo4rs` | 0.8 | Neo4j driver with serde support |
 | `tokio` | 1.43 | Async runtime |
 | `moka` | 0.12 | High-performance concurrent cache |

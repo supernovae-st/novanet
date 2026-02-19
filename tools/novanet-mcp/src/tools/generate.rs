@@ -16,6 +16,7 @@ use crate::tools::traverse::{self, TraversalDirection, TraverseParams};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use tracing::instrument;
 
 /// Generation mode
 #[derive(Debug, Clone, Default, Deserialize, JsonSchema)]
@@ -174,6 +175,7 @@ pub struct GenerateResult {
 }
 
 /// Execute the novanet_generate tool
+#[instrument(name = "novanet_generate", skip(state), fields(focus = %params.focus_key, locale = %params.locale, mode = ?params.mode))]
 pub async fn execute(state: &State, params: GenerateParams) -> Result<GenerateResult> {
     let start = std::time::Instant::now();
 

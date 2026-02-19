@@ -9,6 +9,7 @@ use crate::error::Result;
 use crate::server::State;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+use tracing::instrument;
 
 /// Configuration for fetching a specific atom type
 struct AtomConfig {
@@ -210,6 +211,7 @@ pub struct AtomsResult {
 }
 
 /// Execute the novanet_atoms tool
+#[instrument(name = "novanet_atoms", skip(state), fields(locale = %params.locale, atom_type = ?params.atom_type))]
 pub async fn execute(state: &State, params: AtomsParams) -> Result<AtomsResult> {
     let start = std::time::Instant::now();
 

@@ -7,6 +7,7 @@ use crate::error::Result;
 use crate::server::State;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+use tracing::instrument;
 
 /// Traversal direction
 #[derive(Debug, Clone, Default, Deserialize, JsonSchema)]
@@ -98,6 +99,7 @@ pub struct TraverseResult {
 }
 
 /// Execute the novanet_traverse tool
+#[instrument(name = "novanet_traverse", skip(state), fields(start = %params.start_key, max_depth = params.max_depth))]
 pub async fn execute(state: &State, params: TraverseParams) -> Result<TraverseResult> {
     let start = std::time::Instant::now();
 
