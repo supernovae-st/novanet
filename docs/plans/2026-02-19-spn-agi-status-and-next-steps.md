@@ -169,12 +169,12 @@ My initial options (A-E) were **based on incomplete understanding**:
 | DX-6 | ✅ Done | ADR-030 Slug Ownership |
 | DX-7 | ✅ Done | ADR-033 Denomination Forms |
 | DX-8 | ✅ Done | MCP tools documented in CLAUDE.md (7 tools with params/returns) |
-| DX-9 | ⏳ Pending | Integration test workflow |
-| DX-10 | ⏳ Pending | Remove mock mode default |
-| DX-11 | ⏳ Pending | Add context_build_log to MCP |
-| DX-12 | ⏳ Pending | v0.3 example workflows |
+| DX-9 | ✅ Done | Integration test workflow (`.github/workflows/integration.yml`) |
+| DX-10 | ✅ Done | Mock mode verified (was false alarm - NOT default) |
+| DX-11 | ✅ Done | Add context_build_log to MCP (`generate.rs`) |
+| DX-12 | ✅ Done | v0.3 example workflows (`quickstart-*.nika.yaml`) |
 
-**Progress**: 8/12 done (67%)
+**Progress**: 12/12 done (100%) 🎉
 
 ---
 
@@ -285,13 +285,18 @@ Each agent explored independently with `subagent_type=Explore`, providing verifi
 
 ## Next Action
 
-**Recommended immediate action**: Fix the 4 pending DX items (DX-9 through DX-12) to reach 100% audit completion, then cut v0.3.0 releases for both projects.
+**✅ DX Audit Complete (100%)** — All items done!
 
 ```bash
-# Quick checklist
-- [x] DX-8: MCP tools in CLAUDE.md ✓ (7 tools with params/returns documented)
-- [ ] DX-9: Integration test workflow
-- [ ] DX-10: Remove mock mode default
-- [ ] DX-11: Add context_build_log to MCP
-- [ ] DX-12: v0.3 example workflows
+# Completed checklist
+- [x] DX-8: MCP tools in CLAUDE.md ✓
+- [x] DX-9: Integration test workflow ✓ (.github/workflows/integration.yml)
+- [x] DX-10: Mock mode verified ✓ (was false alarm)
+- [x] DX-11: Add context_build_log to MCP ✓ (generate.rs updated)
+- [x] DX-12: v0.3 example workflows ✓ (quickstart-mcp.nika.yaml, quickstart-multilang.nika.yaml)
 ```
+
+**Next recommended actions:**
+1. Run integration test workflow locally to verify
+2. Cut v0.3.0 releases for NovaNet and Nika
+3. Update version numbers in Cargo.toml files
