@@ -1,7 +1,7 @@
 #!/bin/bash
-# Claude Code Hook: YAML Sync Reminder
+# Claude Code Hook: YAML Sync Enforcement
 # Triggered when editing YAML model files
-# Reminds to regenerate artifacts
+# STRONGLY reminds to regenerate artifacts with validation
 
 set -e
 
@@ -16,11 +16,15 @@ fi
 # Check if this is a YAML model file
 case "$FILE_PATH" in
   *packages/core/models/*.yaml|*packages/core/models/**/*.yaml)
-    cat << EOF
+    # Track modified YAML files for batch validation
+    TRACKING_FILE="/tmp/novanet-yaml-modified.txt"
+    echo "$FILE_PATH" >> "$TRACKING_FILE"
+
+    cat << 'EOF'
 {
   "hookSpecificOutput": {
     "hookEventName": "PostToolUse",
-    "additionalContext": "YAML model modified. Regenerate: cargo run -- schema generate (tools/novanet)"
+    "additionalContext": "⚠️ SCHEMA SYNC REQUIRED\n\nYAML model modified. You MUST run:\n\n  cd novanet-dev/tools/novanet\n  cargo run -- schema validate\n  cargo run -- schema generate\n\nDO NOT commit without validating and regenerating artifacts.\nThis ensures TypeScript, Cypher, and Mermaid stay in sync."
   }
 }
 EOF
