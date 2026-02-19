@@ -1,19 +1,15 @@
 <div align="center">
 
-# 🪽 NovaNet
+# 🧠 supernovae-agi
 
-**Native content generation engine powered by Neo4j knowledge graphs**
+**AI-Powered Content Generation System**
 
-Generate culturally-native content across 200+ locales — not translation, but true localization from semantic concepts.
+NovaNet (brain) + Nika (body) — Generate culturally-native content across 200+ locales
 
-[![CI](https://img.shields.io/github/actions/workflow/status/supernovae-st/novanet-dev/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/supernovae-st/novanet-dev/actions)
-[![Tests](https://img.shields.io/badge/tests-1632_passing-success?style=flat-square)](https://github.com/supernovae-st/novanet-dev)
 [![Rust](https://img.shields.io/badge/Rust-1.84-DEA584?style=flat-square&logo=rust&logoColor=white)](https://rust-lang.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://typescriptlang.org)
 [![Neo4j](https://img.shields.io/badge/Neo4j-5.26-018bff?style=flat-square&logo=neo4j&logoColor=white)](https://neo4j.com)
-[![Turborepo](https://img.shields.io/badge/Turborepo-2.8-EF4444?style=flat-square&logo=turborepo&logoColor=white)](https://turbo.build)
-[![pnpm](https://img.shields.io/badge/pnpm-9-F69220?style=flat-square&logo=pnpm&logoColor=white)](https://pnpm.io)
-[![Node](https://img.shields.io/badge/Node-≥20-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org)
+[![Tests](https://img.shields.io/badge/tests-1811_passing-success?style=flat-square)](https://github.com/supernovae-st/supernovae-agi)
 
 </div>
 
@@ -43,39 +39,36 @@ Generate culturally-native content across 200+ locales — not translation, but 
 
 ## Architecture
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {
-  'primaryColor': '#6366f1',
-  'primaryTextColor': '#fff',
-  'primaryBorderColor': '#4f46e5',
-  'lineColor': '#94a3b8',
-  'secondaryColor': '#06b6d4',
-  'tertiaryColor': '#f8fafc'
-}}}%%
-flowchart TB
-    subgraph MONO["NovaNet Monorepo"]
-        direction TB
-        CORE["@novanet/core v0.13.0\nTypes · Schemas · Filters"]
-        DB["@novanet/db v0.13.0\nDocker · Seeds · Migrations"]
-        STUDIO["@novanet/studio v0.13.0\nNext.js 16 · React 19"]
-        RUST["novanet CLI v0.13.0\nRust · 13 commands · TUI"]
-    end
-
-    CORE --> STUDIO
-    RUST -.->|reads YAML| CORE
-    RUST -.->|generates| DB
-
-    NEO4J[("Neo4j 5.26\n~19,000 nodes")]
-    DB -.-> NEO4J
-    STUDIO --> NEO4J
-    RUST --> NEO4J
-
-    style CORE fill:#06b6d4,stroke:#0891b2,color:#fff
-    style DB fill:#10b981,stroke:#059669,color:#fff
-    style STUDIO fill:#8b5cf6,stroke:#7c3aed,color:#fff
-    style RUST fill:#DEA584,stroke:#B7410E,color:#fff
-    style NEO4J fill:#018bff,stroke:#0284c7,color:#fff
 ```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  supernovae-agi ARCHITECTURE                                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌─────────────────────┐         MCP Protocol        ┌─────────────────┐   │
+│  │     NOVANET         │◄──────────────────────────►│      NIKA       │   │
+│  │     (Brain)         │                             │     (Body)      │   │
+│  │     v0.14.0         │                             │     v0.4.0      │   │
+│  ├─────────────────────┤                             ├─────────────────┤   │
+│  │ • Knowledge Graph   │    novanet_generate         │ • YAML Workflows│   │
+│  │ • 61 NodeClasses    │    novanet_describe         │ • 5 Verbs       │   │
+│  │ • 182 ArcClasses    │    novanet_traverse         │ • DAG Execution │   │
+│  │ • Neo4j + Rust TUI  │◄────────────────────────────│ • rig-core LLM  │   │
+│  │ • 1194 tests        │                             │ • 617 tests     │   │
+│  └─────────────────────┘                             └─────────────────┘   │
+│         │                                                     │            │
+│         ▼                                                     ▼            │
+│  novanet-dev/                                          nika-dev/           │
+│  └── tools/novanet/                                    └── tools/nika/     │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+## Projects
+
+| Project | Version | Description | Tests |
+|---------|---------|-------------|-------|
+| **NovaNet** | v0.14.0 | Knowledge graph + MCP Server | 1194 |
+| **Nika** | v0.4.0 | YAML workflow engine + MCP Client | 617 |
 
 ---
 
@@ -109,45 +102,50 @@ Open [http://localhost:3000](http://localhost:3000) — Neo4j Browser at [http:/
 
 ---
 
-## Monorepo Structure
+## Workspace Structure
 
 ```
-novanet-hq/
-├── turbo.json                 # Turborepo pipeline config
-├── pnpm-workspace.yaml        # Workspace definitions
-├── packages/
-│   ├── core/                  # @novanet/core — types, schemas, filters
-│   │   ├── models/            # YAML schema definitions (source of truth)
-│   │   │   ├── taxonomy.yaml  # 2 realms (shared 4 + org 6), 10 layers, 5 traits
-│   │   │   ├── node-classes/    # node definitions by realm/layer
-│   │   │   └── arc-classes/     # arc definitions by family
-│   │   └── src/               # TypeScript implementation
-│   └── db/                    # @novanet/db — Neo4j infrastructure
-│       ├── docker-compose.yml # Neo4j 5.26 + APOC
-│       ├── seed/              # Cypher seed scripts
-│       └── seed.sh            # Seed runner
-├── tools/
-│   └── novanet/               # Rust CLI + TUI binary
-│       ├── src/               # Rust source (13 commands, 8 generators)
-│       └── Cargo.toml         # 950 tests, zero clippy warnings
-└── apps/
-    └── studio/                # @novanet/studio — web visualization
-        ├── src/app/           # Next.js App Router
-        ├── src/components/    # React components
-        ├── src/stores/        # Zustand state management
-        └── src/lib/           # Utilities
+supernovae-agi/
+├── ROADMAP.md                 # Master roadmap (MVP tracking)
+├── CHANGELOG.md               # Combined changelog
+├── .claude/                   # Claude Code DX (skills, hooks, rules)
+│
+├── novanet-dev/               # NovaNet (Brain) — git submodule
+│   ├── packages/
+│   │   ├── core/              # @novanet/core — types, schemas, filters
+│   │   └── db/                # @novanet/db — Neo4j infrastructure
+│   ├── tools/novanet/         # Rust CLI + TUI (1194 tests)
+│   └── apps/studio/           # Web visualization (Next.js)
+│
+└── nika-dev/                  # Nika (Body) — git submodule
+    └── tools/nika/            # Rust CLI (617 tests)
+        └── src/
+            ├── ast/           # YAML → Rust structs
+            ├── mcp/           # MCP client (rmcp v0.16)
+            ├── runtime/       # Execution engine
+            ├── provider/      # rig-core LLM providers
+            └── tui/           # Terminal UI
 ```
 
 ---
 
 ## Packages
 
+### NovaNet
+
 | Package | Version | Description |
 |---------|---------|-------------|
-| **@novanet/core** | `0.13.0` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
-| **@novanet/db** | `0.13.0` | Docker Compose for Neo4j, Cypher seeds, migrations |
-| **@novanet/studio** | `0.13.0` | Interactive graph visualization with AI chat |
-| **tools/novanet** | `0.13.0` | Rust CLI + TUI for schema generation, validation, queries |
+| **@novanet/core** | `0.14.0` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
+| **@novanet/db** | `0.14.0` | Docker Compose for Neo4j, Cypher seeds, migrations |
+| **@novanet/studio** | `0.14.0` | Interactive graph visualization with AI chat |
+| **tools/novanet** | `0.14.0` | Rust CLI + TUI for schema generation, validation, queries |
+| **tools/novanet-mcp** | `0.4.0` | MCP Server (7 tools) |
+
+### Nika
+
+| Package | Version | Description |
+|---------|---------|-------------|
+| **tools/nika** | `0.4.0` | Rust CLI + TUI for YAML workflow execution |
 
 ---
 
@@ -172,25 +170,26 @@ novanet-hq/
 | `pnpm infra:seed` | Seed database with initial data |
 | `pnpm infra:reset` | Reset database (down + up + seed) |
 
-### Rust CLI (tools/novanet)
+### NovaNet CLI (tools/novanet)
 
 ```bash
-# Schema operations (YAML → Cypher/TS/Mermaid)
+cd novanet-dev/tools/novanet
+
 cargo run -- schema generate        # Regenerate all artifacts
 cargo run -- schema validate        # Validate YAML coherence
-
-# Navigation commands (v0.12.5)
 cargo run -- blueprint              # Schema-graph visualization
-cargo run -- data                   # Data nodes only
-cargo run -- overlay                # Data + Schema combined
-cargo run -- query --realm=org      # Faceted query
+cargo run -- tui                    # Interactive TUI
+```
 
-# CRUD operations
-cargo run -- node create --class=Page --key=my-page
-cargo run -- search --query="page" --class=Page
+### Nika CLI (tools/nika)
 
-# Interactive TUI
-cargo run -- tui                    # Galaxy-themed terminal UI
+```bash
+cd nika-dev/tools/nika
+
+cargo run -- run workflow.yaml      # Execute workflow
+cargo run -- validate workflow.yaml # Validate only
+cargo run -- tui workflow.yaml      # Interactive TUI
+cargo run -- trace list             # List traces
 ```
 
 ### Turborepo Filters
