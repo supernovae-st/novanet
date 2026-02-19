@@ -7,14 +7,23 @@ For complete history, see [CHANGELOG.md](./CHANGELOG.md).
 ## [0.14.0] - 2026-02-19
 
 ### Added
-- **MCP: context_build_log** - New debugging feature in `novanet_generate` showing step-by-step context assembly
+- **MCP Tool: novanet_introspect** - 8th MCP tool for schema introspection
+  - Query NodeClasses filtered by realm/layer
+  - Query ArcClasses filtered by family
+  - Get specific class/arc details with relationships
+  - Schema: IntrospectParams, IntrospectResult with JsonSchema derives
+- **MCP: context_build_log** - New debugging feature in `novanet_generate`
   - 5 phases logged: structure_phase, entities_phase, atoms_phase, anchors_phase, token_decisions
   - Helps debug and understand how context is assembled for LLM generation
   - Schema: `ContextBuildLog` struct with `JsonSchema` derive for MCP clients
 
 ### Changed
-- NovaNet MCP version: 0.3.0 → 0.4.0
-- NovaNet CLI version: 0.13.0 → 0.14.0
+- MCP tool count: 7 → 8 (added novanet_introspect)
+- NovaNet MCP version: 0.4.0 → 0.5.0
+- Documentation updated with 8 tools references
+
+### Statistics
+- **8 MCP tools**: query, describe, search, traverse, assemble, atoms, generate, introspect
 
 ## [0.13.1] - 2026-02-17
 

@@ -22,10 +22,7 @@
 //! - Environment variables: NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD
 
 use std::env;
-#[allow(unused_imports)]
 use std::sync::Arc;
-#[allow(unused_imports)]
-use std::time::Duration;
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // TEST SETUP HELPERS

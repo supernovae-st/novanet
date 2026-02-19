@@ -6,7 +6,7 @@
 //!
 //! # Architecture
 //!
-//! - 7 Tools: search, traverse, assemble, atoms, describe, query, generate
+//! - 8 Tools: search, traverse, assemble, atoms, describe, query, generate, introspect
 //! - 4 Resources: entity://, kind://, locale://, view://
 //! - 6 Prompts: cypher_query, cypher_explain, block_generation, page_generation,
 //!   entity_analysis, locale_briefing
