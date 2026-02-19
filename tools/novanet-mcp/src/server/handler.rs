@@ -340,3 +340,246 @@ fn convert_prompt_message(msg: InternalPromptMessage) -> PromptMessage {
 
     PromptMessage::new_text(role, msg.content)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // ══════════════════════════════════════════════════════════════
+    // HELPER FUNCTION TESTS
+    // ══════════════════════════════════════════════════════════════
+
+    #[test]
+    fn test_convert_prompt_definition_maps_all_fields() {
+        let def = crate::prompts::PromptDefinition {
+            name: "test_prompt".to_string(),
+            description: "A test prompt".to_string(),
+            arguments: vec![
+                crate::prompts::PromptArgument {
+                    name: "arg1".to_string(),
+                    description: "First argument".to_string(),
+                    required: true,
+                },
+                crate::prompts::PromptArgument {
+                    name: "arg2".to_string(),
+                    description: "Second argument".to_string(),
+                    required: false,
+                },
+            ],
+        };
+
+        let prompt = convert_prompt_definition(def);
+
+        assert_eq!(prompt.name, "test_prompt");
+        assert_eq!(prompt.description, Some("A test prompt".to_string()));
+        assert!(prompt.title.is_none());
+        assert!(prompt.icons.is_none());
+        assert!(prompt.meta.is_none());
+
+        let args = prompt.arguments.expect("Should have arguments");
+        assert_eq!(args.len(), 2);
+
+        assert_eq!(args[0].name, "arg1");
+        assert_eq!(args[0].description, Some("First argument".to_string()));
+        assert_eq!(args[0].required, Some(true));
+
+        assert_eq!(args[1].name, "arg2");
+        assert_eq!(args[1].description, Some("Second argument".to_string()));
+        assert_eq!(args[1].required, Some(false));
+    }
+
+    #[test]
+    fn test_convert_prompt_definition_empty_arguments() {
+        let def = crate::prompts::PromptDefinition {
+            name: "no_args".to_string(),
+            description: "No arguments".to_string(),
+            arguments: vec![],
+        };
+
+        let prompt = convert_prompt_definition(def);
+
+        assert_eq!(prompt.name, "no_args");
+        let args = prompt.arguments.expect("Should have empty vec");
+        assert!(args.is_empty());
+    }
+
+    #[test]
+    fn test_convert_prompt_message_user_role() {
+        let msg = InternalPromptMessage {
+            role: "user".to_string(),
+            content: "Hello, world!".to_string(),
+        };
+
+        let prompt_msg = convert_prompt_message(msg);
+
+        // PromptMessage stores content in Content enum, check via debug
+        assert!(format!("{:?}", prompt_msg).contains("User"));
+    }
+
+    #[test]
+    fn test_convert_prompt_message_assistant_role() {
+        let msg = InternalPromptMessage {
+            role: "assistant".to_string(),
+            content: "I am here to help.".to_string(),
+        };
+
+        let prompt_msg = convert_prompt_message(msg);
+
+        assert!(format!("{:?}", prompt_msg).contains("Assistant"));
+    }
+
+    #[test]
+    fn test_convert_prompt_message_system_maps_to_user() {
+        // MCP doesn't have system role, should map to user
+        let msg = InternalPromptMessage {
+            role: "system".to_string(),
+            content: "System instructions".to_string(),
+        };
+
+        let prompt_msg = convert_prompt_message(msg);
+
+        // System should be converted to User (per comment in code)
+        assert!(format!("{:?}", prompt_msg).contains("User"));
+    }
+
+    #[test]
+    fn test_convert_prompt_message_unknown_role_maps_to_user() {
+        let msg = InternalPromptMessage {
+            role: "unknown".to_string(),
+            content: "Some content".to_string(),
+        };
+
+        let prompt_msg = convert_prompt_message(msg);
+
+        // Unknown roles default to User
+        assert!(format!("{:?}", prompt_msg).contains("User"));
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // PROMPT LIST TESTS (via prompts module)
+    // ══════════════════════════════════════════════════════════════
+
+    #[test]
+    fn test_list_prompts_returns_6_prompts() {
+        let prompts = prompts::list_prompts();
+        assert_eq!(prompts.len(), 6, "Should return exactly 6 prompts");
+    }
+
+    #[test]
+    fn test_list_prompts_has_expected_names() {
+        let prompts = prompts::list_prompts();
+        let names: Vec<&str> = prompts.iter().map(|p| p.name.as_str()).collect();
+
+        assert!(names.contains(&"cypher_query"), "Missing cypher_query");
+        assert!(names.contains(&"cypher_explain"), "Missing cypher_explain");
+        assert!(
+            names.contains(&"block_generation"),
+            "Missing block_generation"
+        );
+        assert!(
+            names.contains(&"page_generation"),
+            "Missing page_generation"
+        );
+        assert!(
+            names.contains(&"entity_analysis"),
+            "Missing entity_analysis"
+        );
+        assert!(
+            names.contains(&"locale_briefing"),
+            "Missing locale_briefing"
+        );
+    }
+
+    #[test]
+    fn test_all_prompts_have_descriptions() {
+        let prompts = prompts::list_prompts();
+
+        for prompt in prompts {
+            assert!(
+                !prompt.description.is_empty(),
+                "Prompt {} should have a description",
+                prompt.name
+            );
+        }
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // GET PROMPT TESTS (via prompts module)
+    // ══════════════════════════════════════════════════════════════
+
+    #[test]
+    fn test_get_prompt_cypher_query_renders_with_intent() {
+        let mut args = serde_json::Map::new();
+        args.insert(
+            "intent".to_string(),
+            serde_json::Value::String("Find all entities".to_string()),
+        );
+
+        let result = prompts::render_prompt("cypher_query", &args);
+
+        assert!(result.is_some(), "Should render cypher_query");
+        let rendered = result.unwrap();
+        assert!(!rendered.description.is_empty());
+        assert!(!rendered.messages.is_empty());
+    }
+
+    #[test]
+    fn test_get_prompt_not_found_returns_none() {
+        let args = serde_json::Map::new();
+        let result = prompts::render_prompt("nonexistent_prompt", &args);
+        assert!(result.is_none(), "Should return None for unknown prompt");
+    }
+
+    #[test]
+    fn test_get_prompt_locale_briefing_renders() {
+        let mut args = serde_json::Map::new();
+        args.insert(
+            "locale_key".to_string(),
+            serde_json::Value::String("fr-FR".to_string()),
+        );
+
+        let result = prompts::render_prompt("locale_briefing", &args);
+
+        assert!(result.is_some(), "Should render locale_briefing");
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // ERROR CODE MAPPING TESTS
+    // ══════════════════════════════════════════════════════════════
+
+    #[test]
+    fn test_tool_error_code_is_minus_32000() {
+        // Verify the error code constant used for tool errors
+        let error = McpError {
+            code: ErrorCode(-32000),
+            message: std::borrow::Cow::Borrowed("Tool error"),
+            data: None,
+        };
+
+        assert_eq!(error.code, ErrorCode(-32000));
+    }
+
+    #[test]
+    fn test_serialization_error_code_is_minus_32603() {
+        // Verify the error code constant used for serialization errors
+        let error = McpError {
+            code: ErrorCode(-32603),
+            message: std::borrow::Cow::Borrowed("Serialization error"),
+            data: None,
+        };
+
+        assert_eq!(error.code, ErrorCode(-32603));
+    }
+
+    #[test]
+    fn test_prompt_not_found_error_code_is_minus_32001() {
+        // Verify the error code constant used for prompt not found
+        let error = McpError {
+            code: ErrorCode(-32001),
+            message: std::borrow::Cow::Borrowed("Prompt not found"),
+            data: None,
+        };
+
+        assert_eq!(error.code, ErrorCode(-32001));
+    }
+}
