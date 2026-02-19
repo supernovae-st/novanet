@@ -309,7 +309,7 @@ pnpm test --filter=@novanet/studio      # Test only studio
 
 ---
 
-## MCP Server (v0.13.1)
+## MCP Server (v0.14.0)
 
 NovaNet exposes an MCP (Model Context Protocol) server for workflow automation and AI agent integration.
 
@@ -353,7 +353,8 @@ NovaNet exposes an MCP (Model Context Protocol) server for workflow automation a
 │                      params: focus_key, locale, mode (block|page),          │
 │                              token_budget, spreading_depth                  │
 │                      returns: prompt, evidence_summary, locale_context,     │
-│                               context_anchors, denomination_forms (ADR-033) │
+│                               context_anchors, denomination_forms (ADR-033),│
+│                               context_build_log (DX-11)                     │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -381,6 +382,13 @@ tasks:
     infer: "Generate landing page content"
     context: $entity_context
 ```
+
+**v0.14.0 Additions:**
+
+| Feature | Description | Reference |
+|---------|-------------|-----------|
+| `denomination_forms` | Prescriptive canonical forms for LLM entity references | ADR-033 |
+| `context_build_log` | Step-by-step context assembly debugging | DX-11 |
 
 **ADR-033 Denomination Forms:**
 

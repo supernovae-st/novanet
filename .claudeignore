@@ -41,5 +41,10 @@ Cargo.lock
 *.zip
 *.tar.gz
 
+# Large documentation files (use condensed versions or /adr command)
+CHANGELOG.md
+# Note: Use CHANGELOG-LATEST.md for recent changes (auto-imported in CLAUDE.md)
+# Note: Full ADRs in supernovae-agi/.claude/rules/adr/ - use /adr command
+
 # mdbook build output
 docs/book/
