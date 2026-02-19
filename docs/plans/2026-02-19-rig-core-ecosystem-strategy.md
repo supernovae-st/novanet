@@ -4,7 +4,7 @@
 **Status:** Research Complete, Ready for Implementation
 **Priority:** Medium (future enhancements after MVP 6)
 **Estimated Effort:** Multiple sprints
-**Last Updated:** 2026-02-19 (added 0xPlaygrounds research + Context7 + Perplexity findings)
+**Last Updated:** 2026-02-19 (COMPLETE: 0xPlaygrounds + kg-node deep dive + 20+ crates researched)
 
 ---
 
@@ -88,6 +88,225 @@ Research shows **rig-core v0.31+** already covers most multi-provider needs. The
 | **petgraph** | 11,578 | In-memory graph ops (BFS, DFS, PageRank) |
 | **Memgraph** | 8,435 | Neo4j-compatible streaming graph DB |
 | **KnowGraph** | 296 | MCP server for code graph analysis |
+
+### Extended Crate Research (2026-02-19)
+
+#### Structured Output & Schema
+
+| Crate | Score | Snippets | Description |
+|-------|-------|----------|-------------|
+| **rstructor** | 88.2 | 92 | Structured LLM output via derive macros, JSON Schema generation, multi-provider |
+
+```rust
+use rstructor::{Instructor, LLMClient, OpenAIClient};
+
+#[derive(Instructor, Serialize, Deserialize)]
+#[llm(description = "Movie information")]
+struct Movie {
+    #[llm(description = "Title of the movie")]
+    title: String,
+    #[llm(description = "Year released", example = 2010)]
+    release_year: u16,
+}
+
+let client = OpenAIClient::from_env()?;
+let movie: Movie = client.materialize("Tell me about Inception").await?;
+```
+
+#### Agent Frameworks
+
+| Crate | Score | Snippets | Description |
+|-------|-------|----------|-------------|
+| **strands-agents** | 82.9 | 6,749 | Model-driven agent SDK with MCP integration, multi-agent |
+
+```python
+# strands-agents MCP integration
+from strands.tools.mcp import MCPClient
+from strands import Agent
+
+agent = Agent(tools=[mcp_client])
+response = agent("What is AWS Lambda?")
+```
+
+#### LLM API Clients
+
+| Crate | Score | Snippets | Description |
+|-------|-------|----------|-------------|
+| **async-openai** | 72.1 | 91 | Unofficial OpenAI Rust client, streaming, function calling |
+| **ollama** (API) | 89.3 | 1,464 | Local LLM inference via Ollama API |
+
+```rust
+// async-openai function calling
+use async_openai::{types::*, Client};
+
+let request = CreateChatCompletionRequestArgs::default()
+    .model("gpt-4o-mini")
+    .messages([ChatCompletionRequestUserMessageArgs::default()
+        .content("What's the weather?")
+        .build()?])
+    .functions([ChatCompletionFunctionsArgs::default()
+        .name("get_weather")
+        .description("Get current weather")
+        .parameters(json!({"type": "object", "properties": {...}}))
+        .build()?])
+    .function_call("auto")
+    .build()?;
+```
+
+#### Vector Databases
+
+| Crate | Score | Snippets | Description |
+|-------|-------|----------|-------------|
+| **qdrant-client** | 87.7 | 40 | Official Qdrant Rust client, gRPC |
+| **lancedb** | 90.1 | 585 | Embedded vector DB, multimodal |
+
+```rust
+// qdrant-client search with filters
+use qdrant_client::{Qdrant, qdrant::*};
+
+let search_result = client.search_points(
+    SearchPointsBuilder::new("collection", vec![0.9, 0.1, 0.1], 10)
+        .filter(Filter::all([
+            Condition::matches("category", "tutorial".to_string()),
+            Condition::range("views", Range { gte: Some(1000.0), ..Default::default() }),
+        ]))
+        .with_payload(true),
+).await?;
+```
+
+#### Text Processing
+
+| Crate | Score | Snippets | Description |
+|-------|-------|----------|-------------|
+| **tokenizers** | 80.6 | 208 | HuggingFace BPE tokenizers, fast |
+| **text-splitter** | — | 174 | Semantic text chunking for RAG |
+| **tiktoken** | 94.9 | 34 | OpenAI's BPE tokenizer |
+
+```rust
+// text-splitter for RAG chunking
+use text_splitter::{MarkdownSplitter, CodeSplitter};
+
+let splitter = MarkdownSplitter::new(1000);  // max chars
+let chunks = splitter.chunks("# Header\n\nDocument text...");
+
+// Code-aware splitting with tree-sitter
+let code_splitter = CodeSplitter::new(tree_sitter_rust::LANGUAGE, 1000)?;
+let chunks = code_splitter.chunks("fn main() { ... }");
+```
+
+#### Embeddings
+
+| Crate | Score | Snippets | Description |
+|-------|-------|----------|-------------|
+| **fastembed** | 60.9 | 6 | Local ONNX embeddings, fast inference |
+| **safetensors** | — | 68 | Safe model weight storage |
+
+```rust
+// fastembed for local embeddings (used by kg-node)
+use fastembed::{TextEmbedding, InitOptions, EmbeddingModel};
+
+let model = TextEmbedding::try_new(
+    InitOptions::new(EmbeddingModel::AllMiniLML6V2)
+        .with_show_download_progress(true)
+)?;
+
+let embeddings = model.embed(vec!["Hello, World!"], None)?;
+println!("Dimension: {}", embeddings[0].len());  // 384
+```
+
+---
+
+### kg-node Deep Dive (0xPlaygrounds)
+
+**Architecture discovered from source code analysis:**
+
+```
+kg-node/
+├── mcp-server/src/
+│   ├── main.rs         # SSE server + MCP handler
+│   ├── lib.rs          # Tool implementations
+│   └── input_types.rs  # Request schemas
+├── grc20-core/         # Entity/Relation abstractions
+├── api/                # REST API
+└── sink/               # Data ingestion
+```
+
+**Key implementation patterns from kg-node main.rs:**
+
+```rust
+use rmcp::{tool, tool_router, RoleServer, ServerHandler};
+use fastembed::{TextEmbedding, EmbeddingModel};
+use neo4rs::Graph;
+
+#[derive(Clone)]
+pub struct KnowledgeGraph {
+    neo4j: neo4rs::Graph,
+    embedding_model: Arc<TextEmbedding>,
+}
+
+#[tool(tool_box)]
+impl KnowledgeGraph {
+    #[tool(description = include_str!("../resources/search_entity_description.md"))]
+    async fn search_entity(
+        &self,
+        #[tool(param)]
+        #[schemars(description = "Search query")]
+        search_traversal_filter: SearchTraversalInputFilter,
+    ) -> Result<CallToolResult, McpError> {
+        // 1. Generate embedding from query
+        let embedding = self.embedding_model
+            .embed(vec![&search_traversal_filter.query], None)?;
+
+        // 2. Pre-filtered semantic search
+        let results = entity::prefiltered_search::<EntityNode>(&self.neo4j, embedding)
+            .filter(filter)
+            .limit(10)
+            .send()
+            .await?;
+
+        Ok(CallToolResult::success(vec![Content::json(results)?]))
+    }
+
+    #[tool(description = "Get entity info by ID")]
+    async fn get_entity_info(&self, id: String) -> Result<CallToolResult, McpError> {
+        let attributes = triple::find_many(&self.neo4j)
+            .entity_id(prop_filter::value(&id))
+            .send().await?;
+
+        let relations = relation::find_many::<RelationEdge<EntityNode>>(&self.neo4j)
+            .filter(relation::RelationFilter::default().from_(EntityFilter::default().id(prop_filter::value(&id))))
+            .send().await?;
+
+        Ok(CallToolResult::success(vec![Content::json(json!({
+            "id": id,
+            "attributes": attributes,
+            "relations": relations,
+        }))?]))
+    }
+}
+
+#[tool(tool_box)]
+impl ServerHandler for KnowledgeGraph {
+    fn get_info(&self) -> ServerInfo {
+        ServerInfo {
+            protocol_version: ProtocolVersion::V_2024_11_05,
+            capabilities: ServerCapabilities::builder()
+                .enable_tools()
+                .enable_resources()
+                .build(),
+            instructions: Some(include_str!("../resources/instructions.md").to_string()),
+        }
+    }
+}
+```
+
+**kg-node MCP tools (discovered):**
+- `search_types` — Search for type definitions
+- `search_relation_types` — Search relation types
+- `search_entity` — Semantic entity search with traversal filters
+- `search_entity_using_ids` — Search using known IDs
+- `get_entity_info` — Get entity details + relations
+- `get_relations_between_entities` — Find paths between entities
 
 ---
 
@@ -406,19 +625,100 @@ ai-agents uses state machines for agent control:
 
 ---
 
-## Cargo.toml Additions
+## Cargo.toml Recommendations
+
+### Nika (Workflow Engine / MCP Client)
 
 ```toml
-# Phase 1: Already have
-rig-core = "0.31"
+[dependencies]
+# ═══════════════════════════════════════════════════════════════════════════════
+# TIER 1: CORE (already using or must have)
+# ═══════════════════════════════════════════════════════════════════════════════
+rig-core = "0.31"                  # LLM orchestration, 20+ providers
+rmcp = "0.16"                      # MCP client/server SDK
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
 
-# Phase 2: GraphRAG (when ready)
-graphrag-core = "0.1"  # If stable
+# ═══════════════════════════════════════════════════════════════════════════════
+# TIER 2: HIGH VALUE (add for v0.4+)
+# ═══════════════════════════════════════════════════════════════════════════════
+# Text Processing for RAG
+text-splitter = { version = "0.16", features = ["markdown", "code"] }
+tokenizers = "0.20"                # HuggingFace BPE tokenizers
 
-# Phase 3: Memory patterns
-# Implement in-house, don't depend on ai-agents
-# (ai-agents is framework, we want patterns)
+# Structured Output
+rstructor = "0.2"                  # Derive macro for LLM structured output
+
+# Vector Search (choose one based on deployment)
+qdrant-client = "1.12"             # Production: managed Qdrant
+# lancedb = "0.15"                 # Embedded: local vector DB
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# TIER 3: NICE TO HAVE (evaluate for v0.5+)
+# ═══════════════════════════════════════════════════════════════════════════════
+# Local Embeddings (for offline/privacy)
+fastembed = "5"                    # ONNX embeddings, no API calls
+
+# Direct API Clients (if rig doesn't cover)
+async-openai = "0.25"              # OpenAI streaming + function calling
+# ollama-rs = "0.2"                # Local Ollama (rig covers this)
+
+# Graph Processing (in-memory)
+petgraph = "0.6"                   # BFS/DFS/PageRank for local graph ops
+
+[dev-dependencies]
+insta = { version = "1.41", features = ["yaml"] }
+proptest = "1.5"
 ```
+
+### NovaNet (Knowledge Graph / MCP Server)
+
+```toml
+[dependencies]
+# ═══════════════════════════════════════════════════════════════════════════════
+# TIER 1: CORE (must have for MCP server)
+# ═══════════════════════════════════════════════════════════════════════════════
+rmcp = "0.16"                      # MCP server SDK with #[tool] macro
+neo4rs = "0.8"                     # Async Neo4j driver
+tokio = { version = "1", features = ["full"] }
+axum = "0.7"                       # HTTP/SSE server
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+schemars = "0.8"                   # JSON Schema for tool params
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# TIER 2: HIGH VALUE (add for semantic search)
+# ═══════════════════════════════════════════════════════════════════════════════
+# Embeddings (following kg-node pattern)
+fastembed = "5"                    # Local ONNX embeddings
+# rig-core = "0.31"                # If using rig for embeddings
+
+# Text Processing
+text-splitter = { version = "0.16", features = ["markdown"] }
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# TIER 3: NICE TO HAVE
+# ═══════════════════════════════════════════════════════════════════════════════
+petgraph = "0.6"                   # In-memory graph for caching/analysis
+safetensors = "0.4"                # If loading local models
+```
+
+### Crate Selection Matrix
+
+| Need | Crate | Why |
+|------|-------|-----|
+| Multi-provider LLM | `rig-core` | 20+ providers, maintained, ToolDyn trait |
+| MCP protocol | `rmcp` | Official SDK, `#[tool]` macro, async |
+| Neo4j access | `neo4rs` | Async, production-ready (used by kg-node) |
+| Local embeddings | `fastembed` | ONNX, no API, used by kg-node |
+| Text chunking | `text-splitter` | Semantic boundaries, markdown/code aware |
+| Tokenization | `tokenizers` | HuggingFace, BPE, fast |
+| Structured output | `rstructor` | Derive macro, JSON Schema, validation |
+| Vector search | `qdrant-client` | Production-ready, filtered search |
+| Embedded vectors | `lancedb` | Zero-config, embedded, multimodal |
+| OpenAI direct | `async-openai` | If rig doesn't cover specific features |
+| Graph ops | `petgraph` | In-memory BFS/DFS/PageRank |
 
 ---
 
@@ -471,8 +771,54 @@ tools/nika/src/
 
 ## References
 
-- rig-core docs: https://docs.rs/rig-core
-- graphrag-core: https://crates.io/crates/graphrag-core
-- ai-agents: https://lib.rs/crates/ai-agents
+### Primary Sources
+- **rig-core docs**: https://docs.rs/rig-core
+- **rmcp docs**: https://docs.rs/rmcp
+- **0xPlaygrounds/kg-node**: https://github.com/0xPlaygrounds/kg-node (MCP + Neo4j reference)
+
+### Crate Documentation
+| Crate | Docs | Repo |
+|-------|------|------|
+| rig-core | https://docs.rs/rig-core | https://github.com/0xPlaygrounds/rig |
+| rmcp | https://docs.rs/rmcp | https://github.com/anthropics/rmcp |
+| fastembed | https://docs.rs/fastembed | https://github.com/anush008/fastembed-rs |
+| text-splitter | https://docs.rs/text-splitter | https://github.com/benbrandt/text-splitter |
+| qdrant-client | https://docs.rs/qdrant-client | https://github.com/qdrant/rust-client |
+| async-openai | https://docs.rs/async-openai | https://github.com/64bit/async-openai |
+| tokenizers | https://docs.rs/tokenizers | https://github.com/huggingface/tokenizers |
+| petgraph | https://docs.rs/petgraph | https://github.com/petgraph/petgraph |
+
+### Project Files
 - NovaNet MCP: `novanet-dev/tools/novanet-mcp/`
 - Nika provider: `nika-dev/tools/nika/src/provider/rig.rs`
+
+### Research Tools Used
+- **Context7**: Library documentation search (28,000+ snippets accessed)
+- **Firecrawl**: GitHub repository scraping
+- **Perplexity**: Web search for crate discovery
+
+---
+
+## Appendix: Research Summary
+
+### Searches Performed
+1. **0xPlaygrounds exploration** — 62 repositories analyzed
+2. **Perplexity searches** (5):
+   - LLM orchestration crates
+   - Knowledge graph RAG
+   - MCP protocol implementations
+   - AI agent memory
+   - Rig alternatives
+3. **Context7 queries** (12+):
+   - rig-core, rmcp, petgraph, async-openai, qdrant-client
+   - lancedb, tokenizers, text-splitter, fastembed, safetensors
+   - rstructor, strands-agents
+4. **Source code analysis**:
+   - kg-node/mcp-server/src/main.rs — Complete MCP server pattern
+
+### Key Discoveries
+1. **kg-node** provides production MCP server pattern with rmcp + neo4rs + fastembed
+2. **rstructor** enables structured LLM output via derive macros
+3. **text-splitter** offers semantic chunking for RAG pipelines
+4. **fastembed** provides local ONNX embeddings (no API calls)
+5. **rig-core** already covers 20+ providers and 10+ vector stores
