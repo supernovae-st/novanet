@@ -4,12 +4,19 @@
 **Status:** Research Complete, Ready for Implementation
 **Priority:** Medium (future enhancements after MVP 6)
 **Estimated Effort:** Multiple sprints
+**Last Updated:** 2026-02-19 (added 0xPlaygrounds research + Context7 + Perplexity findings)
 
 ---
 
 ## Executive Summary
 
 Research shows **rig-core v0.31+** already covers most multi-provider needs. The ecosystem has complementary crates for specialized use cases. This plan outlines how to maximize rig-core and selectively integrate other crates.
+
+**Key Discovery:** 0xPlaygrounds (rig creators) has 62 repositories including:
+- **kg-node** — Knowledge graph indexer with MCP server (Neo4j backend)
+- **rig-onchain-kit** — Multi-tenant AI agents for blockchain
+- **rig-agent-state-machine-example** — State machine pattern for agents
+- **rig-rag-system-example** — Complete RAG implementation
 
 ---
 
@@ -44,6 +51,153 @@ Research shows **rig-core v0.31+** already covers most multi-provider needs. The
 | **rllm** | Local model inference | Covered by Ollama | ❌ Skip, use rig+Ollama |
 | **candle** | Tensor ops | Low-level | ❌ Skip, too low-level |
 | **mistral-rs** | Mistral inference | Covered by Ollama | ❌ Skip |
+
+### 0xPlaygrounds Ecosystem (rig creators)
+
+**62 repositories** — Key ones for Nika/NovaNet:
+
+| Repo | Stars | Purpose | Relevance |
+|------|-------|---------|-----------|
+| **rig** | 6k | Main LLM framework | ⭐⭐⭐ Core dependency |
+| **kg-node** | 10 | Knowledge graph + MCP server (Neo4j) | ⭐⭐⭐ Study for NovaNet MCP patterns |
+| **rig-onchain-kit** | 61 | Multi-tenant AI agents | ⭐⭐ SignerContext pattern |
+| **rig-rag-system-example** | 12 | Complete RAG with vector store | ⭐⭐ Reference implementation |
+| **rig-agent-state-machine-example** | 5 | Agent state machine | ⭐⭐ Pattern for agent: loop |
+| **posthog-rs** | 0 | Analytics SDK | ⭐ Observability pattern |
+
+### MCP SDK Options (Rust)
+
+| Crate | Version | Features | Recommendation |
+|-------|---------|----------|----------------|
+| **rmcp** (official) | 0.16+ | Full MCP 2025-11-25, async-first, `#[tool_router]` macro | ⭐⭐⭐ Primary |
+| **tower-mcp** | new | Tower middleware, HTTP/WebSocket/stdio | ⭐⭐ For HTTP transport |
+| **rust-mcp-sdk** | 0.1 | Alternative SDK | ⭐ Backup option |
+
+### Memory & State Crates
+
+| Crate | Purpose | Use Case |
+|-------|---------|----------|
+| **OpenViking** | Context database for AI agents | Conversation history, state |
+| **SurrealDB** | Multi-model DB with Rust SDK | Persistent agent memory |
+| **ZeroClaw** | Lightweight agent runtime | Pluggable memory backends |
+
+### Graph Libraries
+
+| Crate | Snippets | Use Case |
+|-------|----------|----------|
+| **petgraph** | 11,578 | In-memory graph ops (BFS, DFS, PageRank) |
+| **Memgraph** | 8,435 | Neo4j-compatible streaming graph DB |
+| **KnowGraph** | 296 | MCP server for code graph analysis |
+
+---
+
+---
+
+## Code Examples from Research
+
+### rig-core: RAG Agent with Vector Store
+
+```rust
+use rig::{
+    completion::Prompt,
+    embeddings::EmbeddingsBuilder,
+    providers::openai,
+    vector_store::{in_memory_store::InMemoryVectorStore, VectorStore},
+};
+
+// Initialize and build embeddings
+let openai = openai::Client::from_env();
+let embedding_model = openai.embedding_model(openai::TEXT_EMBEDDING_ADA_002);
+
+let mut vector_store = InMemoryVectorStore::default();
+let embeddings = EmbeddingsBuilder::new(embedding_model.clone())
+    .simple_document("doc0", "Definition of *flurbo*: A green alien")
+    .build().await?;
+
+vector_store.add_documents(embeddings).await?;
+let index = vector_store.index(embedding_model);
+
+// Build agent with dynamic context (RAG)
+let agent = openai.agent(openai::GPT_4O)
+    .preamble("You are a dictionary assistant.")
+    .dynamic_context(1, index)  // ← RAG magic
+    .build();
+
+let response = agent.prompt("What is a flurbo?").await?;
+```
+
+### rmcp: MCP Client (what Nika uses)
+
+```rust
+use rmcp::{model::CallToolRequestParam, service::ServiceExt, transport::TokioChildProcess};
+use tokio::process::Command;
+
+let service = ().serve(TokioChildProcess::new(
+    Command::new("novanet-mcp")
+)?).await?;
+
+// List and call tools
+let tools = service.list_tools(Default::default()).await?;
+let result = service.call_tool(CallToolRequestParam {
+    name: "novanet_generate".into(),
+    arguments: serde_json::json!({
+        "focus_key": "qr-code",
+        "locale": "fr-FR"
+    }).as_object().cloned(),
+}).await?;
+```
+
+### rmcp: MCP Server with `#[tool_router]`
+
+```rust
+use rmcp::{tool, tool_router, handler::server::tool::ToolRouter};
+
+#[derive(Clone)]
+pub struct NovaNetTools {
+    tool_router: ToolRouter<Self>,
+}
+
+#[tool_router]
+impl NovaNetTools {
+    #[tool(description = "Generate native content for an entity")]
+    async fn novanet_generate(
+        &self,
+        params: Parameters<GenerateRequest>
+    ) -> Result<Json<GenerateResponse>, String> {
+        // Implementation...
+    }
+}
+```
+
+### petgraph: Graph Traversal
+
+```rust
+use petgraph::Graph;
+use petgraph::visit::{Bfs, Dfs};
+
+let mut graph = Graph::<String, ()>::new();
+let a = graph.add_node("Entity".to_string());
+let b = graph.add_node("EntityNative".to_string());
+graph.add_edge(a, b, ());
+
+// BFS traversal
+let mut bfs = Bfs::new(&graph, a);
+while let Some(nx) = bfs.next(&graph) {
+    println!("Visited: {}", graph[nx]);
+}
+```
+
+### rig-onchain-kit: SignerContext Pattern
+
+```rust
+use rig_onchain_kit::signer::SignerContext;
+
+// Thread-local signer for multi-tenant agents
+SignerContext::with_signer(Arc::new(signer), async {
+    let agent = create_agent();
+    let response = agent.prompt("Execute task").await?;
+}).await;
+```
 
 ---
 
