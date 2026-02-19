@@ -19,7 +19,7 @@ Nika is the MCP CLIENT that consumes NovaNet (MCP SERVER) knowledge.
 
 ## Current Version
 
-**v0.3** | 5 verbs + for_each | TUI | 16 EventLog variants | Resilience patterns | Real-time tracing
+**v0.3** | 5 verbs + for_each | TUI | 16 EventLog variants | Real-time tracing
 
 ## Verbs (5)
 
@@ -78,9 +78,9 @@ tools/nika/src/
 ├── ast/          # YAML → Rust structs
 ├── mcp/          # MCP client
 ├── runtime/      # Execution engine
-├── provider/     # LLM providers (Claude, OpenAI)
+├── provider/     # LLM providers (rig-core)
 ├── event/        # Observability (16 variants)
-├── resilience/   # Retry, circuit breaker, rate limiter
+├── binding/      # Data flow ({{use.alias}})
 └── tui/          # Terminal UI (4 panels)
 ```
 
@@ -109,26 +109,6 @@ tasks:
 | `as` | required | Loop variable name |
 | `concurrency` | 1 | Max parallel executions |
 | `fail_fast` | true | Stop all on first error |
-
-## Resilience Patterns (v0.2)
-
-| Pattern | Module | Description | Tests |
-|---------|--------|-------------|-------|
-| **retry** | `resilience/retry.rs` | Exponential backoff with jitter | 21 |
-| **circuit_breaker** | `resilience/circuit_breaker.rs` | Fail-fast on repeated errors | 12 |
-| **rate_limiter** | `resilience/rate_limiter.rs` | Provider API throttling | 11 |
-
-```yaml
-providers:
-  claude:
-    resilience:
-      retry:
-        max_attempts: 3
-        backoff: exponential
-      circuit_breaker:
-        failure_threshold: 5
-        reset_timeout_ms: 30000
-```
 
 ## EventLog Variants (16)
 
