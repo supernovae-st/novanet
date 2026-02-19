@@ -2,13 +2,14 @@
 //!
 //! Contains the MCP server implementation using rmcp.
 
-mod config;
 mod handler;
-mod state;
+
+pub mod config;
+pub mod state;
 
 pub use config::Config;
 pub use handler::NovaNetHandler;
-pub use state::State;
+pub use state::{ServerStats, State};
 
 use crate::error::Result;
 use rmcp::ServiceExt;
