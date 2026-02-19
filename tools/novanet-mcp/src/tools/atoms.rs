@@ -77,7 +77,10 @@ const CULTURE_REF_CONFIG: AtomConfig = AtomConfig {
     atom_type_name: "CultureRef",
     value_property: "reference",
     filter_field: None,
-    extra_properties: &[("context", "context"), ("appropriateness", "appropriateness")],
+    extra_properties: &[
+        ("context", "context"),
+        ("appropriateness", "appropriateness"),
+    ],
     search_fields: &["key", "reference"],
 };
 
@@ -238,11 +241,14 @@ pub async fn execute(state: &State, params: AtomsParams) -> Result<AtomsResult> 
         AtomType::All => {
             let per_type_limit = (limit / 6).max(5);
             all_atoms.extend(fetch_atoms(state, &params, &TERM_CONFIG, per_type_limit).await?);
-            all_atoms.extend(fetch_atoms(state, &params, &EXPRESSION_CONFIG, per_type_limit).await?);
+            all_atoms
+                .extend(fetch_atoms(state, &params, &EXPRESSION_CONFIG, per_type_limit).await?);
             all_atoms.extend(fetch_atoms(state, &params, &PATTERN_CONFIG, per_type_limit).await?);
-            all_atoms.extend(fetch_atoms(state, &params, &CULTURE_REF_CONFIG, per_type_limit).await?);
+            all_atoms
+                .extend(fetch_atoms(state, &params, &CULTURE_REF_CONFIG, per_type_limit).await?);
             all_atoms.extend(fetch_atoms(state, &params, &TABOO_CONFIG, per_type_limit).await?);
-            all_atoms.extend(fetch_atoms(state, &params, &AUDIENCE_TRAIT_CONFIG, per_type_limit).await?);
+            all_atoms
+                .extend(fetch_atoms(state, &params, &AUDIENCE_TRAIT_CONFIG, per_type_limit).await?);
         }
     }
 
@@ -290,14 +296,18 @@ async fn fetch_atoms(
     };
 
     // Build search query filter
-    let query_filter = params.query.as_ref().map(|_| {
-        let fields: Vec<String> = config
-            .search_fields
-            .iter()
-            .map(|f| format!("toLower(a.{}) CONTAINS toLower($query)", f))
-            .collect();
-        format!("AND ({})", fields.join(" OR "))
-    }).unwrap_or_default();
+    let query_filter = params
+        .query
+        .as_ref()
+        .map(|_| {
+            let fields: Vec<String> = config
+                .search_fields
+                .iter()
+                .map(|f| format!("toLower(a.{}) CONTAINS toLower($query)", f))
+                .collect();
+            format!("AND ({})", fields.join(" OR "))
+        })
+        .unwrap_or_default();
 
     // Build extra properties return clause
     let extra_props: Vec<String> = config
@@ -367,12 +377,16 @@ async fn fetch_atoms(
                 atom_type: config.atom_type_name.to_string(),
                 value: row["value"].as_str().unwrap_or_default().to_string(),
                 domain: if config.filter_field == Some("domain") {
-                    row.get("domain").and_then(|v| v.as_str()).map(|s| s.to_string())
+                    row.get("domain")
+                        .and_then(|v| v.as_str())
+                        .map(|s| s.to_string())
                 } else {
                     None
                 },
                 register: if config.filter_field == Some("register") {
-                    row.get("register").and_then(|v| v.as_str()).map(|s| s.to_string())
+                    row.get("register")
+                        .and_then(|v| v.as_str())
+                        .map(|s| s.to_string())
                 } else {
                     None
                 },

@@ -12,9 +12,9 @@ use crate::tools::{
 use rmcp::handler::server::tool::ToolRouter;
 use rmcp::handler::server::wrapper::Parameters;
 use rmcp::model::{
-    CallToolResult, Content, ErrorCode, GetPromptRequestParams, GetPromptResult,
-    ListPromptsResult, PaginatedRequestParams, Prompt, PromptArgument,
-    PromptMessage, PromptMessageRole, ServerCapabilities, ServerInfo,
+    CallToolResult, Content, ErrorCode, GetPromptRequestParams, GetPromptResult, ListPromptsResult,
+    PaginatedRequestParams, Prompt, PromptArgument, PromptMessage, PromptMessageRole,
+    ServerCapabilities, ServerInfo,
 };
 use rmcp::service::{RequestContext, RoleServer};
 use rmcp::{ErrorData as McpError, ServerHandler, tool, tool_handler, tool_router};
@@ -290,11 +290,12 @@ impl ServerHandler for NovaNetHandler {
         async move {
             let args = request.arguments.unwrap_or_default();
 
-            let rendered = prompts::render_prompt(&request.name, &args).ok_or_else(|| McpError {
-                code: ErrorCode(-32001),
-                message: Cow::Owned(format!("Prompt not found: {}", request.name)),
-                data: None,
-            })?;
+            let rendered =
+                prompts::render_prompt(&request.name, &args).ok_or_else(|| McpError {
+                    code: ErrorCode(-32001),
+                    message: Cow::Owned(format!("Prompt not found: {}", request.name)),
+                    data: None,
+                })?;
 
             Ok(GetPromptResult {
                 description: Some(rendered.description),

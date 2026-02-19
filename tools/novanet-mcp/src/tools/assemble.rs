@@ -125,8 +125,13 @@ pub struct FocusNode {
 pub async fn execute(state: &State, params: AssembleParams) -> Result<AssembleResult> {
     let start = std::time::Instant::now();
 
-    let token_budget = params.token_budget.unwrap_or(state.config().default_token_budget);
-    let max_depth = params.max_depth.unwrap_or(3).min(state.config().max_hops as usize);
+    let token_budget = params
+        .token_budget
+        .unwrap_or(state.config().default_token_budget);
+    let max_depth = params
+        .max_depth
+        .unwrap_or(3)
+        .min(state.config().max_hops as usize);
     let include_entities = params.include_entities.unwrap_or(true);
     let include_knowledge = params.include_knowledge.unwrap_or(true);
     let include_structure = params.include_structure.unwrap_or(true);

@@ -556,24 +556,24 @@ mod tests {
     #[test]
     fn test_apoc_dangerous_procedures_blocked() {
         // Dynamic Cypher execution
-        assert!(validate_read_only(
-            "CALL apoc.cypher.run('CREATE (n:Evil)', {}) YIELD value RETURN value"
-        )
-        .is_err());
-        assert!(validate_read_only(
-            "CALL apoc.cypher.doIt('DELETE (n)', {}) YIELD value RETURN value"
-        )
-        .is_err());
+        assert!(
+            validate_read_only(
+                "CALL apoc.cypher.run('CREATE (n:Evil)', {}) YIELD value RETURN value"
+            )
+            .is_err()
+        );
+        assert!(
+            validate_read_only("CALL apoc.cypher.doIt('DELETE (n)', {}) YIELD value RETURN value")
+                .is_err()
+        );
 
         // Periodic execution
-        assert!(validate_read_only(
-            "CALL apoc.periodic.commit('CREATE (n)', {}) YIELD value"
-        )
-        .is_err());
-        assert!(validate_read_only(
-            "CALL apoc.periodic.iterate('MATCH (n)', 'DELETE n', {})"
-        )
-        .is_err());
+        assert!(
+            validate_read_only("CALL apoc.periodic.commit('CREATE (n)', {}) YIELD value").is_err()
+        );
+        assert!(
+            validate_read_only("CALL apoc.periodic.iterate('MATCH (n)', 'DELETE n', {})").is_err()
+        );
 
         // File system access
         assert!(validate_read_only("CALL apoc.export.csv.all('/tmp/data.csv', {})").is_err());
@@ -631,8 +631,12 @@ mod tests {
     #[test]
     fn test_load_csv_blocked() {
         // LOAD CSV should be blocked (SSRF risk)
-        assert!(validate_read_only("LOAD CSV FROM 'http://example.com' AS line RETURN line").is_err());
-        assert!(validate_read_only("LOAD CSV FROM 'file:///etc/passwd' AS line RETURN line").is_err());
+        assert!(
+            validate_read_only("LOAD CSV FROM 'http://example.com' AS line RETURN line").is_err()
+        );
+        assert!(
+            validate_read_only("LOAD CSV FROM 'file:///etc/passwd' AS line RETURN line").is_err()
+        );
         assert!(
             validate_read_only("LOAD CSV WITH HEADERS FROM 'http://example.com' AS row RETURN row")
                 .is_err()
@@ -666,9 +670,6 @@ mod tests {
         );
 
         // Multiple comments
-        assert_eq!(
-            strip_cypher_comments("A /* 1 */ B /* 2 */ C"),
-            "A   B   C"
-        );
+        assert_eq!(strip_cypher_comments("A /* 1 */ B /* 2 */ C"), "A   B   C");
     }
 }

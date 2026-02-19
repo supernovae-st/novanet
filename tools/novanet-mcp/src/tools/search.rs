@@ -320,7 +320,10 @@ mod tests {
             "AND (node:Entity)"
         );
         assert_eq!(
-            build_kind_filter(&Some(vec!["Entity".to_string(), "Page".to_string()]), "node"),
+            build_kind_filter(
+                &Some(vec!["Entity".to_string(), "Page".to_string()]),
+                "node"
+            ),
             "AND (node:Entity OR node:Page)"
         );
     }
