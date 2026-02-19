@@ -2,16 +2,17 @@
 
 Catalog of all Claude Code skills for the supernovae-agi workspace (NovaNet + Nika).
 
-**NovaNet**: v0.13.1 | **Nika**: v0.3.0 | **Total Skills**: 26 (9 core + 10 studio + 7 nika)
+**NovaNet**: v0.13.1 | **Nika**: v0.3.0 | **Total Skills**: 27 (10 core + 10 studio + 7 nika)
 
 ---
 
-## Core Skills (9)
+## Core Skills (10)
 
 Located in `.claude/skills/`
 
 | Skill | Invocation | Description |
 |-------|------------|-------------|
+| **release** | `/release` | Release workflow for NovaNet, Nika, or coordinated releases |
 | **workspace-nav** | `/workspace-nav` | Navigate between NovaNet (brain) and Nika (body) projects |
 | **novanet-adr** | `/novanet-adr` | Navigate ADRs by number, domain, status, or keyword |
 | **novanet-architecture** | `/novanet-arch` | ASCII architecture diagrams (schema graph, pipeline, Rust, Studio) |
@@ -63,6 +64,7 @@ Located in `apps/studio/.claude/skills/`
 
 | Trigger Keywords | Skill |
 |------------------|-------|
+| release, version, tag, changelog, publish, deploy | release |
 | workspace, switch project, novanet, nika, brain, body | workspace-nav |
 | ADR, architecture decision, decision record, why design | novanet-adr |
 | architecture, overview, structure, schema graph, codebase | novanet-architecture |
@@ -82,6 +84,11 @@ Located in `apps/studio/.claude/skills/`
 Invoke directly with slash command:
 
 ```bash
+/release status            # Current versions and pending changes
+/release preview           # Preview changelog for next release
+/release novanet           # Release NovaNet
+/release nika              # Release Nika
+/release coordinated       # Coordinated release (both projects)
 /novanet-adr               # List all domains
 /novanet-adr 029           # Look up ADR-029
 /novanet-adr must-know     # Essential ADRs for v0.13.0

@@ -4,14 +4,35 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 0.15.0)'
+        required: true
+        type: string
+      dry_run:
+        description: 'Dry run (no actual release)'
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
+  pull-requests: write
+
+env:
+  CARGO_TERM_COLOR: always
 
 jobs:
-  release:
-    name: Create Release
+  # =============================================================================
+  # Generate Changelog with git-cliff
+  # =============================================================================
+  changelog:
+    name: Generate Changelog
     runs-on: ubuntu-latest
+    outputs:
+      changelog: ${{ steps.read_changelog.outputs.content }}
+      version: ${{ steps.version.outputs.version }}
 
     steps:
       - name: Checkout
@@ -19,68 +40,114 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get version from tag
+      - name: Determine version
         id: version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-
-      - name: Get previous tag
-        id: prev_tag
-        run: |
-          VERSION="${{ steps.version.outputs.VERSION }}"
-          PREV_TAG=$(git describe --tags --abbrev=0 "${VERSION}^" 2>/dev/null || echo "")
-          echo "PREV_TAG=$PREV_TAG" >> $GITHUB_OUTPUT
-
-      - name: Generate release notes
-        id: notes
         env:
-          VERSION: ${{ steps.version.outputs.VERSION }}
-          PREV_TAG: ${{ steps.prev_tag.outputs.PREV_TAG }}
-          REPO: ${{ github.repository }}
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_VERSION: ${{ inputs.version }}
+          REF: ${{ github.ref }}
         run: |
-          # Count commits
-          if [ -n "$PREV_TAG" ]; then
-            COMMITS=$(git log --oneline "${PREV_TAG}..${VERSION}" | wc -l | tr -d ' ')
-            COMPARE_URL="https://github.com/${REPO}/compare/${PREV_TAG}...${VERSION}"
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            VERSION="v${INPUT_VERSION}"
           else
-            COMMITS=$(git log --oneline "${VERSION}" | wc -l | tr -d ' ')
-            COMPARE_URL="https://github.com/${REPO}/commits/${VERSION}"
+            VERSION="${REF#refs/tags/}"
           fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION"
 
-          # Build release notes
-          cat << EOF > release_notes.md
-          ## What's Changed
+      - name: Generate changelog with git-cliff
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+          args: --latest --strip header
+        env:
+          OUTPUT: CHANGELOG_RELEASE.md
+          GITHUB_REPO: ${{ github.repository }}
 
-          See [CHANGELOG.md](https://github.com/${REPO}/blob/main/CHANGELOG.md) for detailed changes.
+      - name: Read changelog
+        id: read_changelog
+        run: |
+          echo "content<<EOF" >> $GITHUB_OUTPUT
+          cat CHANGELOG_RELEASE.md >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
-          ## Stats
+      - name: Upload changelog artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: changelog
+          path: CHANGELOG_RELEASE.md
 
-          | Metric | Value |
-          |--------|-------|
-          | Commits | $COMMITS |
+  # =============================================================================
+  # Create GitHub Release
+  # =============================================================================
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: changelog
+    if: ${{ !inputs.dry_run }}
 
-          ## Full Changelog
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-          $COMPARE_URL
-          EOF
+      - name: Download changelog
+        uses: actions/download-artifact@v4
+        with:
+          name: changelog
 
       - name: Determine pre-release
         id: prerelease
         env:
-          VERSION: ${{ steps.version.outputs.VERSION }}
+          VERSION: ${{ needs.changelog.outputs.version }}
         run: |
-          if [[ "$VERSION" == *"-"* ]]; then
-            echo "IS_PRERELEASE=true" >> $GITHUB_OUTPUT
+          if [[ "$VERSION" == *"-"* ]] || [[ "$VERSION" == v0.* ]]; then
+            echo "is_prerelease=true" >> $GITHUB_OUTPUT
           else
-            echo "IS_PRERELEASE=false" >> $GITHUB_OUTPUT
+            echo "is_prerelease=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.version.outputs.VERSION }}
-          name: ${{ steps.version.outputs.VERSION }}
-          body_path: release_notes.md
-          prerelease: ${{ steps.prerelease.outputs.IS_PRERELEASE }}
-          generate_release_notes: true
+          tag_name: ${{ needs.changelog.outputs.version }}
+          name: ${{ needs.changelog.outputs.version }}
+          body_path: CHANGELOG_RELEASE.md
+          prerelease: ${{ steps.prerelease.outputs.is_prerelease }}
+          generate_release_notes: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # =============================================================================
+  # Update CHANGELOG.md (on tag push)
+  # =============================================================================
+  update-changelog:
+    name: Update CHANGELOG.md
+    runs-on: ubuntu-latest
+    needs: [changelog, release]
+    if: github.event_name == 'push'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - name: Update CHANGELOG.md with git-cliff
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+          args: --verbose
+        env:
+          OUTPUT: CHANGELOG.md
+          GITHUB_REPO: ${{ github.repository }}
+
+      - name: Commit CHANGELOG.md
+        env:
+          VERSION: ${{ needs.changelog.outputs.version }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md
+          git diff --cached --quiet || git commit -m "docs: update CHANGELOG.md for ${VERSION} [skip ci]"
+          git push origin main

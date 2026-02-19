@@ -1,0 +1,302 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://supernovae.studio/schemas/mcp-tools.json",
+  "title": "NovaNet MCP Tools Schema",
+  "description": "JSON Schema for NovaNet MCP Server tools. Used by Nika for contract validation.",
+  "version": "0.13.0",
+  "type": "object",
+  "properties": {
+    "tools": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Tool"
+      }
+    }
+  },
+  "$defs": {
+    "Tool": {
+      "type": "object",
+      "required": ["name", "description", "inputSchema"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^novanet_[a-z_]+$"
+        },
+        "description": {
+          "type": "string"
+        },
+        "inputSchema": {
+          "$ref": "#/$defs/InputSchema"
+        }
+      }
+    },
+    "InputSchema": {
+      "type": "object",
+      "required": ["type", "properties"],
+      "properties": {
+        "type": {
+          "const": "object"
+        },
+        "properties": {
+          "type": "object"
+        },
+        "required": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Locale": {
+      "type": "string",
+      "pattern": "^[a-z]{2}-[A-Z]{2}$",
+      "description": "BCP-47 locale code (e.g., fr-FR, en-US)"
+    },
+    "EntityKey": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Entity key in kebab-case"
+    },
+    "DenominationForms": {
+      "type": "object",
+      "description": "Prescriptive canonical forms for LLM entity references (ADR-033)",
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Full sentence form (e.g., 'un code QR')"
+        },
+        "title": {
+          "type": "string",
+          "description": "Title case form (e.g., 'Code QR')"
+        },
+        "abbrev": {
+          "type": "string",
+          "description": "Abbreviated form (e.g., 'QR')"
+        },
+        "mixed": {
+          "type": "string",
+          "description": "Mixed language form (e.g., 'QR code')"
+        },
+        "base": {
+          "type": "string",
+          "description": "Base untranslated form"
+        },
+        "url": {
+          "type": "string",
+          "description": "URL-safe slug form"
+        }
+      },
+      "required": ["text", "title"]
+    }
+  },
+  "tools": [
+    {
+      "name": "novanet_generate",
+      "description": "Generate locale-specific content for an entity. Returns EntityNative with denomination_forms.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "entity": {
+            "$ref": "#/$defs/EntityKey",
+            "description": "Entity key to generate content for"
+          },
+          "locale": {
+            "$ref": "#/$defs/Locale",
+            "description": "Target locale for generation"
+          },
+          "forms": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["text", "title", "abbrev", "mixed", "base", "url"]
+            },
+            "description": "Which denomination forms to include in response"
+          }
+        },
+        "required": ["entity", "locale"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "entity_key": {
+            "$ref": "#/$defs/EntityKey"
+          },
+          "locale_key": {
+            "$ref": "#/$defs/Locale"
+          },
+          "denomination_forms": {
+            "$ref": "#/$defs/DenominationForms"
+          },
+          "description": {
+            "type": "string"
+          },
+          "llm_context": {
+            "type": "string"
+          }
+        },
+        "required": ["entity_key", "locale_key", "denomination_forms"]
+      }
+    },
+    {
+      "name": "novanet_describe",
+      "description": "Get detailed description of an entity with its classification and relationships.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "entity": {
+            "$ref": "#/$defs/EntityKey"
+          },
+          "locale": {
+            "$ref": "#/$defs/Locale"
+          },
+          "include": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["relations", "classification", "seo", "all"]
+            }
+          }
+        },
+        "required": ["entity"]
+      }
+    },
+    {
+      "name": "novanet_traverse",
+      "description": "Traverse the knowledge graph from a starting node following specified arc types.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "start": {
+            "type": "string",
+            "description": "Starting node identifier (e.g., 'entity:qr-code')"
+          },
+          "arc": {
+            "type": "string",
+            "description": "Arc type to follow (e.g., 'HAS_NATIVE', 'BELONGS_TO')"
+          },
+          "direction": {
+            "type": "string",
+            "enum": ["outgoing", "incoming", "both"],
+            "default": "outgoing"
+          },
+          "depth": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5,
+            "default": 1
+          },
+          "locale": {
+            "$ref": "#/$defs/Locale"
+          }
+        },
+        "required": ["start", "arc"]
+      }
+    },
+    {
+      "name": "novanet_search",
+      "description": "Search the knowledge graph with fulltext and property filters.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Search query (fulltext)"
+          },
+          "node_class": {
+            "type": "string",
+            "description": "Filter by node class (e.g., 'Entity', 'Page')"
+          },
+          "realm": {
+            "type": "string",
+            "enum": ["shared", "org"]
+          },
+          "layer": {
+            "type": "string"
+          },
+          "locale": {
+            "$ref": "#/$defs/Locale"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 10
+          }
+        },
+        "required": ["query"]
+      }
+    },
+    {
+      "name": "novanet_list",
+      "description": "List nodes of a specific class with optional filtering.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "node_class": {
+            "type": "string",
+            "description": "Node class to list (e.g., 'Entity', 'Locale')"
+          },
+          "realm": {
+            "type": "string",
+            "enum": ["shared", "org"]
+          },
+          "layer": {
+            "type": "string"
+          },
+          "locale": {
+            "$ref": "#/$defs/Locale"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000,
+            "default": 100
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 0
+          }
+        },
+        "required": ["node_class"]
+      }
+    },
+    {
+      "name": "novanet_stats",
+      "description": "Get statistics about the knowledge graph.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "scope": {
+            "type": "string",
+            "enum": ["all", "nodes", "arcs", "realms", "layers"],
+            "default": "all"
+          },
+          "realm": {
+            "type": "string",
+            "enum": ["shared", "org"]
+          }
+        }
+      }
+    },
+    {
+      "name": "novanet_validate",
+      "description": "Validate schema consistency and data integrity.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "scope": {
+            "type": "string",
+            "enum": ["schema", "data", "relations", "all"],
+            "default": "all"
+          },
+          "strict": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      }
+    }
+  ]
+}
