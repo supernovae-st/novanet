@@ -1,8 +1,8 @@
-# NovaNet Skills Index
+# supernovae-agi Skills Index
 
-Catalog of all Claude Code skills for the NovaNet monorepo.
+Catalog of all Claude Code skills for the supernovae-agi workspace (NovaNet + Nika).
 
-**Version**: v0.13.1 | **Total Skills**: 19 (9 core + 10 studio-specific)
+**NovaNet**: v0.13.1 | **Nika**: v0.3.0 | **Total Skills**: 26 (9 core + 10 studio + 7 nika)
 
 ---
 
@@ -21,6 +21,22 @@ Located in `.claude/skills/`
 | **security-audit** | `/security-audit` | Comprehensive security audit (cargo-deny, pnpm audit) |
 | **codebase-audit** | `/codebase-audit` | Parallel codebase health analysis (Ralph Wiggum Loop) |
 | **token-audit** | — | Design system token adoption verification |
+
+---
+
+## Nika Skills (7)
+
+Located in `nika-dev/.claude/skills/`
+
+| Skill | Invocation | Description |
+|-------|------------|-------------|
+| **nika-arch** | `/nika-arch` | Architecture diagram and module structure |
+| **nika-run** | `/nika-run` | Run workflows with validation |
+| **nika-diagnose** | `/nika-diagnose` | Systematic workflow diagnosis |
+| **nika-debug** | `/nika-debug` | Debug with traces and logging |
+| **nika-binding** | `/nika-binding` | Data binding syntax reference |
+| **workflow-validate** | `/workflow-validate` | Validate YAML syntax and DAG |
+| **nika-spec** | `/nika-spec` | Workflow specification reference |
 
 ---
 
