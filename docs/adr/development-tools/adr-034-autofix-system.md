@@ -1,12 +1,12 @@
 ---
-id: 33
+id: 34
 title: "Auto-Fix System for Schema Validation"
 version: "v0.13.1"
 status: active
 domain: development-tools
 ---
 
-# ADR-033: Auto-Fix System for Schema Validation
+# ADR-034: Auto-Fix System for Schema Validation
 
 **Status**: Approved (v0.13.1)
 

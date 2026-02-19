@@ -1,4 +1,4 @@
-# NovaNet ADR Cheat Sheet (v0.13.0)
+# NovaNet ADR Cheat Sheet (v0.14.0)
 
 Quick reference for daily development. Use `/adr <number>` for full details.
 
@@ -8,14 +8,14 @@ Quick reference for daily development. Use `/adr <number>` for full details.
 
 ```
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  ESSENTIAL ADRs FOR v0.13.1                                                   ║
+║  ESSENTIAL ADRs FOR v0.14.0                                                   ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
 ║                                                                               ║
 ║  ADR-029  *Native Pattern      EntityNative, PageNative (unified suffix)      ║
 ║  ADR-030  Slug Ownership       Page owns URL, Entity owns semantics           ║
 ║  ADR-033  Denomination Forms   Prescriptive canonical forms for LLM refs      ║
+║  ADR-035  Context Build Log    Step-by-step context assembly debugging        ║
 ║  ADR-024  Trait = Data Origin  defined/authored/imported/generated/retrieved  ║
-║  ADR-025  Instruction Layer    PageStructure, PageInstruction naming          ║
 ║  ADR-021  Query-First          Cypher = source of truth                       ║
 ║  ADR-022  Unified Tree         2 modes: Graph + Nexus                         ║
 ║                                                                               ║
@@ -153,8 +153,8 @@ Is it universal (same for all orgs)?
 ```
 /adr 029         → Full ADR-029 content
 /adr native      → Search "native" in all ADRs
-/adr list        → All 32 ADRs by domain
-/adr must-know   → Essential 6 ADRs
+/adr list        → All 35 ADRs by domain
+/adr must-know   → Essential 7 ADRs
 /adr domain arc  → Arc-design domain ADRs
 /novanet-arch    → Architecture diagrams (cites ADRs)
 ```
@@ -171,6 +171,7 @@ Use this guide to find the right ADR for your situation:
 | "Where should the URL slug live?" | **030** | Page owns URL (slug), Entity owns semantics (key) |
 | "What forms can the LLM use for entity names?" | **033** | denomination_forms: text/title/abbrev/mixed/base/url — ABSOLUTE RULE, no invention |
 | "How is the url form populated?" | **033** | SEO pipeline write-back after slug derivation (ADR-030) |
+| "How can I debug context assembly?" | **035** | context_build_log: 5 phases (structure, entities, atoms, anchors, tokens) |
 | "What trait should this node have?" | **024** | Trait = Data Origin (defined/authored/imported/generated/retrieved) |
 | "How should I name this instruction node?" | **025** | PageStructure (JSON), PageInstruction (markdown with @ refs) |
 | "Do I need an inverse arc?" | **026** | Check tier: TIER 1 required, TIER 2 recommended, TIER 3 optional |
@@ -207,6 +208,7 @@ RELATES: Entity (parent), EntityNative (locale content), FOR_LOCALE (locale link
 
 | Version | Key Changes |
 |---------|-------------|
+| v0.14.0 | context_build_log, ADR renumbering (034, 035) |
 | v0.13.0 | *Native pattern, Slug ownership |
 | v0.12.5 | SEO pillar/cluster, URL slugification |
 | v0.12.3 | Page-Entity 1:1, Brand architecture |
@@ -222,6 +224,6 @@ RELATES: Entity (parent), EntityNative (locale content), FOR_LOCALE (locale link
 | `/adr <number>` | Full ADR content |
 | `/novanet-arch` | Architecture diagrams |
 | `/schema:add-node` | Add new node type |
-| `.claude/rules/adr/` | All 32 ADRs by domain |
+| `docs/adr/` | All 35 ADRs by domain |
 | `novanet-decisions.md` | Consolidated ADR reference |
 | `novanet-terminology.md` | Canonical terminology |
