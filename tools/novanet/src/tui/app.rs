@@ -1228,12 +1228,15 @@ impl App {
                 true
             }
             KeyCode::Char('c') => {
-                // c = Collapse subtree under cursor
+                // c = Collapse subtree under cursor (Tree) OR copy property value (Info/Properties)
                 if self.focus == Focus::Tree {
                     let data_mode = self.is_graph_mode();
                     if let Some(key) = self.tree.collapse_key_at(self.tree_cursor, data_mode) {
                         self.tree.collapse_subtree(&key);
                     }
+                } else if self.focus == Focus::Info && self.selected_box == InfoBox::Properties {
+                    // v0.13.1: Feature 3 - copy focused property value
+                    self.copy_focused_property();
                 }
                 true
             }
@@ -1307,7 +1310,13 @@ impl App {
                         }
                     }
                     Focus::Info => {
-                        if self.info_scroll > 0 {
+                        // If Properties box is selected, navigate properties with j/k
+                        if self.selected_box == InfoBox::Properties {
+                            if self.matched_properties.is_some() && self.focused_property_idx > 0 {
+                                self.focused_property_idx -= 1;
+                                self.expanded_property = false;
+                            }
+                        } else if self.info_scroll > 0 {
                             self.info_scroll -= 1;
                         }
                     }
@@ -1332,9 +1341,20 @@ impl App {
                         }
                     }
                     Focus::Info => {
-                        let max_scroll = self.info_line_count.saturating_sub(INFO_SCROLL_MARGIN);
-                        if self.info_scroll < max_scroll {
-                            self.info_scroll += 1;
+                        // If Properties box is selected, navigate properties with j/k
+                        if self.selected_box == InfoBox::Properties {
+                            if let Some(matched) = &self.matched_properties {
+                                let max_idx = matched.len().saturating_sub(1);
+                                if self.focused_property_idx < max_idx {
+                                    self.focused_property_idx += 1;
+                                    self.expanded_property = false;
+                                }
+                            }
+                        } else {
+                            let max_scroll = self.info_line_count.saturating_sub(INFO_SCROLL_MARGIN);
+                            if self.info_scroll < max_scroll {
+                                self.info_scroll += 1;
+                            }
                         }
                     }
                     Focus::Graph => {} // Display-only panel, no navigation
@@ -1858,6 +1878,30 @@ impl App {
             }
         } else {
             self.set_status("Nothing to copy");
+        }
+    }
+
+    /// Copy focused property value to clipboard (c key in Properties box).
+    /// v0.13.1: Feature 3 - single property copy.
+    pub fn copy_focused_property(&mut self) {
+        use super::clipboard::{copy_to_clipboard, get_focused_property};
+        if let Some((key, value)) = get_focused_property(self) {
+            // Truncate preview for long values
+            let preview = if value.len() > 30 {
+                format!("{}...", &value[..30])
+            } else {
+                value.clone()
+            };
+            match copy_to_clipboard(&value) {
+                Ok(()) => {
+                    self.set_status(&format!("✓ Copied: {} = {}", key, preview));
+                }
+                Err(e) => {
+                    self.set_status(&format!("✗ Copy failed: {}", e));
+                }
+            }
+        } else {
+            self.set_status("No property selected");
         }
     }
 
