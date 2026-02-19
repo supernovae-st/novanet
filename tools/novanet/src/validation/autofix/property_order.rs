@@ -3,10 +3,10 @@
 //! Handles PROP_ORDER rule violations by reordering standard_properties
 //! to match the canonical order defined in schema_rules.rs.
 
-use super::{AutoFix, FixAction, Change};
+use super::{AutoFix, Change, FixAction};
+use crate::Result;
 use crate::parsers::schema_rules::SchemaIssue;
 use crate::parsers::yaml_node::ParsedNode;
-use crate::Result;
 use indexmap::IndexMap;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -103,7 +103,7 @@ impl AutoFix for PropertyOrderFixer {
 mod tests {
     use super::*;
     use crate::parsers::schema_rules::IssueSeverity;
-    use crate::parsers::yaml_node::{ParsedNode, NodeDef, PropertyDef, NodeTrait};
+    use crate::parsers::yaml_node::{NodeDef, NodeTrait, ParsedNode, PropertyDef};
     use indexmap::IndexMap;
     use std::collections::BTreeMap;
     use std::path::PathBuf;
@@ -200,7 +200,13 @@ mod tests {
             .collect();
         assert_eq!(
             keys_before,
-            vec!["description", "key", "display_name", "updated_at", "created_at"]
+            vec![
+                "description",
+                "key",
+                "display_name",
+                "updated_at",
+                "created_at"
+            ]
         );
 
         let issue = SchemaIssue {
@@ -227,7 +233,13 @@ mod tests {
 
                 assert_eq!(
                     keys_after,
-                    vec!["key", "display_name", "description", "created_at", "updated_at"]
+                    vec![
+                        "key",
+                        "display_name",
+                        "description",
+                        "created_at",
+                        "updated_at"
+                    ]
                 );
             }
             _ => panic!("Expected Modified, got {:?}", result),
@@ -238,18 +250,24 @@ mod tests {
     fn test_skips_if_already_ordered() {
         // Create node with correct order
         let mut props = IndexMap::new();
-        props.insert("key".to_string(), PropertyDef {
-            prop_type: "string".to_string(),
-            required: Some(true),
-            description: Some("Key".to_string()),
-            extra: BTreeMap::new(),
-        });
-        props.insert("display_name".to_string(), PropertyDef {
-            prop_type: "string".to_string(),
-            required: Some(true),
-            description: Some("Name".to_string()),
-            extra: BTreeMap::new(),
-        });
+        props.insert(
+            "key".to_string(),
+            PropertyDef {
+                prop_type: "string".to_string(),
+                required: Some(true),
+                description: Some("Key".to_string()),
+                extra: BTreeMap::new(),
+            },
+        );
+        props.insert(
+            "display_name".to_string(),
+            PropertyDef {
+                prop_type: "string".to_string(),
+                required: Some(true),
+                description: Some("Name".to_string()),
+                extra: BTreeMap::new(),
+            },
+        );
 
         let mut node = ParsedNode {
             def: NodeDef {

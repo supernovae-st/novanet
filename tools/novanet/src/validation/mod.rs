@@ -10,8 +10,8 @@ pub mod autofix;
 pub mod cypher_validator;
 
 // Re-exports for convenience
-pub use autofix::{AutoFix, FixAction, FixStrategy, Change, FixEngine};
+pub use autofix::{AutoFix, Change, FixAction, FixEngine, FixStrategy};
 pub use cypher_validator::{
-    validate_cypher_files, CypherValidationIssue, CypherValidationRule, IssueSeverity,
-    format_summary,
+    CypherValidationIssue, CypherValidationRule, IssueSeverity, format_summary,
+    validate_cypher_files,
 };

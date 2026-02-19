@@ -363,13 +363,11 @@ impl ArcClassDef {
 
                                 let default = m
                                     .get(serde_yaml::Value::String("default".to_string()))
-                                    .map(|v| {
-                                        match v {
-                                            serde_yaml::Value::Bool(b) => b.to_string(),
-                                            serde_yaml::Value::Number(n) => n.to_string(),
-                                            serde_yaml::Value::String(s) => s.clone(),
-                                            _ => format!("{:?}", v),
-                                        }
+                                    .map(|v| match v {
+                                        serde_yaml::Value::Bool(b) => b.to_string(),
+                                        serde_yaml::Value::Number(n) => n.to_string(),
+                                        serde_yaml::Value::String(s) => s.clone(),
+                                        _ => format!("{:?}", v),
                                     });
 
                                 Some(ArcPropertyDef {
@@ -422,13 +420,11 @@ impl ArcClassDef {
 
                             let default = def_map
                                 .get(serde_yaml::Value::String("default".to_string()))
-                                .map(|v| {
-                                    match v {
-                                        serde_yaml::Value::Bool(b) => b.to_string(),
-                                        serde_yaml::Value::Number(n) => n.to_string(),
-                                        serde_yaml::Value::String(s) => s.clone(),
-                                        _ => format!("{:?}", v),
-                                    }
+                                .map(|v| match v {
+                                    serde_yaml::Value::Bool(b) => b.to_string(),
+                                    serde_yaml::Value::Number(n) => n.to_string(),
+                                    serde_yaml::Value::String(s) => s.clone(),
+                                    _ => format!("{:?}", v),
                                 });
 
                             Some(ArcPropertyDef {
@@ -1059,8 +1055,7 @@ mod arc_yaml_cypher_alignment_tests {
                     .expect("rank property must have enum");
 
                 if let serde_yaml::Value::Sequence(enum_seq) = enum_val {
-                    let enum_strs: Vec<&str> =
-                        enum_seq.iter().filter_map(|v| v.as_str()).collect();
+                    let enum_strs: Vec<&str> = enum_seq.iter().filter_map(|v| v.as_str()).collect();
                     assert!(
                         enum_strs.contains(&"primary"),
                         "rank enum must contain 'primary'"
@@ -1088,7 +1083,8 @@ mod arc_yaml_cypher_alignment_tests {
         };
 
         let path = root.join("packages/core/models/arc-classes/generation/derived-slug-from.yaml");
-        let content = std::fs::read_to_string(&path).expect("should read DERIVED_SLUG_FROM arc YAML");
+        let content =
+            std::fs::read_to_string(&path).expect("should read DERIVED_SLUG_FROM arc YAML");
         let parsed: ArcClassYaml =
             serde_yaml::from_str(&content).expect("should parse DERIVED_SLUG_FROM arc YAML");
 

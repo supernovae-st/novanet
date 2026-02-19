@@ -1351,7 +1351,8 @@ impl App {
                                 }
                             }
                         } else {
-                            let max_scroll = self.info_line_count.saturating_sub(INFO_SCROLL_MARGIN);
+                            let max_scroll =
+                                self.info_line_count.saturating_sub(INFO_SCROLL_MARGIN);
                             if self.info_scroll < max_scroll {
                                 self.info_scroll += 1;
                             }

@@ -756,7 +756,11 @@ arc_families:
         // Same expectations as load_taxonomy_integration
         assert_eq!(doc.node_realms.len(), 2, "expected 2 realms (shared, org)");
         assert_eq!(doc.node_traits.len(), 5, "expected 5 traits");
-        assert_eq!(doc.arc_families.len(), 6, "expected 6 arc families (v0.13.1: added schema)");
+        assert_eq!(
+            doc.arc_families.len(),
+            6,
+            "expected 6 arc families (v0.13.1: added schema)"
+        );
 
         let total_layers: usize = doc.node_realms.iter().map(|r| r.layers.len()).sum();
         assert_eq!(total_layers, 10, "expected 10 layers (4 shared + 6 org)");

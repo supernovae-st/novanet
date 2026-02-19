@@ -105,7 +105,10 @@ pub fn views_validate(root: &Path, verbose: bool) -> Result<()> {
     // Check for TypeScript script
     let ts_script = root.join("packages/core/scripts/export-views.mjs");
     if !ts_script.exists() {
-        eprintln!("⚠  TypeScript export script not found: {}", ts_script.display());
+        eprintln!(
+            "⚠  TypeScript export script not found: {}",
+            ts_script.display()
+        );
         eprintln!("   Run Task 4 to create: packages/core/scripts/export-views.mjs");
         eprintln!();
         eprintln!("   For now, Rust export works. Cross-validation pending.");
@@ -123,8 +126,9 @@ pub fn views_validate(root: &Path, verbose: bool) -> Result<()> {
     match output {
         Ok(output) if output.status.success() => {
             let ts_json = String::from_utf8_lossy(&output.stdout);
-            let ts_parsed: serde_json::Value = serde_json::from_str(&ts_json)
-                .map_err(|e| crate::NovaNetError::Validation(format!("TS JSON parse failed: {}", e)))?;
+            let ts_parsed: serde_json::Value = serde_json::from_str(&ts_json).map_err(|e| {
+                crate::NovaNetError::Validation(format!("TS JSON parse failed: {}", e))
+            })?;
 
             let ts_count = ts_parsed["count"].as_u64().unwrap_or(0);
             eprintln!("✓ TypeScript parsed {} views", ts_count);
@@ -145,8 +149,14 @@ pub fn views_validate(root: &Path, verbose: bool) -> Result<()> {
                                 eprintln!("  ✓ {}: match", id);
                             } else {
                                 eprintln!("  ✗ {}: MISMATCH", id);
-                                eprintln!("    Rust: {}", serde_json::to_string(r).unwrap_or_default());
-                                eprintln!("    TS:   {}", serde_json::to_string(t).unwrap_or_default());
+                                eprintln!(
+                                    "    Rust: {}",
+                                    serde_json::to_string(r).unwrap_or_default()
+                                );
+                                eprintln!(
+                                    "    TS:   {}",
+                                    serde_json::to_string(t).unwrap_or_default()
+                                );
                             }
                         }
                     }
@@ -286,7 +296,10 @@ mod tests {
             assert!(view["category"].is_string(), "missing category");
             assert!(view["color"].is_string(), "missing color");
             assert!(view["icon"]["web"].is_string(), "missing icon.web");
-            assert!(view["icon"]["terminal"].is_string(), "missing icon.terminal");
+            assert!(
+                view["icon"]["terminal"].is_string(),
+                "missing icon.terminal"
+            );
             assert!(view["cypher_hash"].is_string(), "missing cypher_hash");
             // contextual is bool
             assert!(view["contextual"].is_boolean(), "contextual should be bool");
@@ -302,7 +315,12 @@ mod tests {
         for i in 1..views.len() {
             let prev = views[i - 1]["id"].as_str().unwrap();
             let curr = views[i]["id"].as_str().unwrap();
-            assert!(prev < curr, "views should be sorted by id: {} < {}", prev, curr);
+            assert!(
+                prev < curr,
+                "views should be sorted by id: {} < {}",
+                prev,
+                curr
+            );
         }
     }
 }

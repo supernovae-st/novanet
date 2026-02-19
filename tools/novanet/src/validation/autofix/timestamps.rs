@@ -3,12 +3,12 @@
 //! Handles TIMESTAMP_REQUIRED rule violations by adding missing
 //! created_at and updated_at properties to standard_properties.
 
-use super::{AutoFix, FixAction, Change};
+use super::{AutoFix, Change, FixAction};
+use crate::Result;
 use crate::parsers::schema_rules::SchemaIssue;
 use crate::parsers::yaml_node::{ParsedNode, PropertyDef};
-use crate::Result;
-use std::collections::BTreeMap;
 use serde_yaml::Value;
+use std::collections::BTreeMap;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TimestampFixer Implementation (GREEN Phase)
@@ -94,7 +94,7 @@ impl AutoFix for TimestampFixer {
 mod tests {
     use super::*;
     use crate::parsers::schema_rules::IssueSeverity;
-    use crate::parsers::yaml_node::{ParsedNode, NodeDef, PropertyDef, NodeTrait};
+    use crate::parsers::yaml_node::{NodeDef, NodeTrait, ParsedNode, PropertyDef};
     use indexmap::IndexMap;
     use std::collections::BTreeMap;
     use std::path::PathBuf;
@@ -180,24 +180,33 @@ mod tests {
     #[test]
     fn test_skips_if_timestamps_present() {
         let mut props = IndexMap::new();
-        props.insert("key".to_string(), PropertyDef {
-            prop_type: "string".to_string(),
-            required: Some(true),
-            description: Some("Key".to_string()),
-            extra: BTreeMap::new(),
-        });
-        props.insert("created_at".to_string(), PropertyDef {
-            prop_type: "datetime".to_string(),
-            required: Some(true),
-            description: Some("Created".to_string()),
-            extra: BTreeMap::new(),
-        });
-        props.insert("updated_at".to_string(), PropertyDef {
-            prop_type: "datetime".to_string(),
-            required: Some(true),
-            description: Some("Updated".to_string()),
-            extra: BTreeMap::new(),
-        });
+        props.insert(
+            "key".to_string(),
+            PropertyDef {
+                prop_type: "string".to_string(),
+                required: Some(true),
+                description: Some("Key".to_string()),
+                extra: BTreeMap::new(),
+            },
+        );
+        props.insert(
+            "created_at".to_string(),
+            PropertyDef {
+                prop_type: "datetime".to_string(),
+                required: Some(true),
+                description: Some("Created".to_string()),
+                extra: BTreeMap::new(),
+            },
+        );
+        props.insert(
+            "updated_at".to_string(),
+            PropertyDef {
+                prop_type: "datetime".to_string(),
+                required: Some(true),
+                description: Some("Updated".to_string()),
+                extra: BTreeMap::new(),
+            },
+        );
 
         let mut node = ParsedNode {
             def: NodeDef {
@@ -239,19 +248,25 @@ mod tests {
     #[test]
     fn test_adds_only_missing_timestamp() {
         let mut props = IndexMap::new();
-        props.insert("key".to_string(), PropertyDef {
-            prop_type: "string".to_string(),
-            required: Some(true),
-            description: Some("Key".to_string()),
-            extra: BTreeMap::new(),
-        });
+        props.insert(
+            "key".to_string(),
+            PropertyDef {
+                prop_type: "string".to_string(),
+                required: Some(true),
+                description: Some("Key".to_string()),
+                extra: BTreeMap::new(),
+            },
+        );
         // Only created_at, missing updated_at
-        props.insert("created_at".to_string(), PropertyDef {
-            prop_type: "datetime".to_string(),
-            required: Some(true),
-            description: Some("Created".to_string()),
-            extra: BTreeMap::new(),
-        });
+        props.insert(
+            "created_at".to_string(),
+            PropertyDef {
+                prop_type: "datetime".to_string(),
+                required: Some(true),
+                description: Some("Created".to_string()),
+                extra: BTreeMap::new(),
+            },
+        );
 
         let mut node = ParsedNode {
             def: NodeDef {
@@ -288,7 +303,7 @@ mod tests {
 
                 let props = node.def.standard_properties.as_ref().unwrap();
                 assert!(props.contains_key("created_at")); // Still present
-                assert!(props.contains_key("updated_at"));  // Now added
+                assert!(props.contains_key("updated_at")); // Now added
 
                 let updated_at = &props["updated_at"];
                 assert_eq!(updated_at.prop_type, "datetime");

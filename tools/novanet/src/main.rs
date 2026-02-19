@@ -916,7 +916,10 @@ async fn main() -> color_eyre::Result<()> {
                     println!("{}", json);
                 }
                 ViewsAction::Validate { verbose } => {
-                    eprintln!("novanet views validate{}", if *verbose { " --verbose" } else { "" });
+                    eprintln!(
+                        "novanet views validate{}",
+                        if *verbose { " --verbose" } else { "" }
+                    );
                     match novanet::commands::views::views_validate(&root, *verbose) {
                         Ok(()) => {}
                         Err(e) => {
