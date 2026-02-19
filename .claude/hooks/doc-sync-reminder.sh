@@ -25,7 +25,7 @@ case "$FILE_PATH" in
 {
   "hookSpecificOutput": {
     "hookEventName": "PostToolUse",
-    "additionalContext": "Documentation file edited. Ensure version ($VERSION) and counts (61 nodes, 169 arcs, 2 realms, 10 layers) are consistent. Run: cargo run -- schema validate"
+    "additionalContext": "Documentation file edited. Ensure version ($VERSION) and counts (61 nodes, 182 arcs, 6 arc families, 10 layers) are consistent."
   }
 }
 EOF

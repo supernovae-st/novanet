@@ -34,7 +34,7 @@ Claude Code configuration for the NovaNet monorepo.
 
 ```
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║                           NOVANET DX - v0.13.0                                ║
+║                           NOVANET DX - v0.13.1                                ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
 ║  COMMANDS           → See COMMANDS.md                                         ║
 ║  ├── /novanet-arch    Architecture diagrams (ASCII)                           ║
@@ -70,16 +70,16 @@ Claude Code configuration for the NovaNet monorepo.
 
 ---
 
-## Key Numbers (v0.13.0)
+## Key Numbers (v0.13.1)
 
 | Metric | Value |
 |--------|-------|
 | Classes (node types) | 61 |
-| ArcClasses (relations) | 169 |
+| ArcClasses (relations) | 182 |
 | Realms | 2 (shared, org) |
 | Layers | 10 (4 shared + 6 org) |
 | Traits | 5 (defined, authored, imported, generated, retrieved) |
-| ArcFamilies | 5 (ownership, localization, semantic, generation, mining) |
+| ArcFamilies | 6 (ownership, localization, semantic, generation, mining, schema) |
 | Rust tests | 1139 (52 auto-fix: 24 unit + 24 property + 4 integration) |
 | TUI Modes | 2 (Graph, Nexus) |
 | ADRs | 33 (latest: ADR-033 Auto-Fix System) |
