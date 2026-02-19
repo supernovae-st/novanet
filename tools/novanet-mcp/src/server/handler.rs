@@ -6,8 +6,8 @@
 use crate::prompts::{self, PromptDefinition, PromptMessage as InternalPromptMessage};
 use crate::server::State;
 use crate::tools::{
-    AssembleParams, AtomsParams, DescribeParams, GenerateParams, QueryParams, SearchParams,
-    TraverseParams,
+    AssembleParams, AtomsParams, DescribeParams, GenerateParams, IntrospectParams, QueryParams,
+    SearchParams, TraverseParams,
 };
 use rmcp::handler::server::tool::ToolRouter;
 use rmcp::handler::server::wrapper::Parameters;
@@ -224,6 +224,36 @@ impl NovaNetHandler {
         params: Parameters<GenerateParams>,
     ) -> Result<CallToolResult, McpError> {
         let result = crate::tools::generate::execute(&self.state, params.0)
+            .await
+            .map_err(|e| McpError {
+                code: ErrorCode(-32000),
+                message: Cow::Owned(e.to_string()),
+                data: None,
+            })?;
+
+        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
+            code: ErrorCode(-32603),
+            message: Cow::Owned(format!("Serialization error: {}", e)),
+            data: None,
+        })?;
+
+        Ok(CallToolResult::success(vec![Content::text(json)]))
+    }
+
+    /// Introspect the NovaNet schema: query NodeClasses and ArcClasses.
+    ///
+    /// Enables agents to understand the knowledge graph schema for dynamic
+    /// query generation and task decomposition.
+    /// MVP 8 Phase 3: 8th MCP tool for schema introspection.
+    #[tool(
+        name = "novanet_introspect",
+        description = "Introspect NovaNet schema: query NodeClasses, ArcClasses, and their relationships. Filter by realm, layer, or arc family."
+    )]
+    async fn novanet_introspect(
+        &self,
+        params: Parameters<IntrospectParams>,
+    ) -> Result<CallToolResult, McpError> {
+        let result = crate::tools::introspect::execute(&self.state, params.0)
             .await
             .map_err(|e| McpError {
                 code: ErrorCode(-32000),

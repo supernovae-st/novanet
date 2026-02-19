@@ -23,7 +23,8 @@ NovaNet MCP implements **RLM-on-KG** (Recursive Language Model on Knowledge Grap
 │                    │              ├── novanet_traverse   (Graph traversal)  │
 │                    │              ├── novanet_assemble   (Context assembly) │
 │                    │              ├── novanet_atoms      (Knowledge atoms)  │
-│                    │              └── novanet_generate   (RLM-on-KG context)│
+│                    │              ├── novanet_generate   (RLM-on-KG context)│
+│                    │              └── novanet_introspect (Schema queries)   │
 │                    │                                                        │
 │               MCP Protocol                                                  │
 │               (JSON-RPC 2.0)                                                │
@@ -403,6 +404,82 @@ Anchor syntax in generated content: `{{anchor:page_key|display text}}`
 
 Example: `"Découvrez notre {{anchor:pricing|page de tarifs}} pour..."` resolves to a proper link.
 
+### `novanet_introspect`
+
+Introspect the NovaNet schema: query NodeClasses, ArcClasses, and their relationships. Enables agents to understand the knowledge graph structure.
+
+**Parameters:**
+```json
+{
+  "target": "classes",
+  "name": null,
+  "realm": "org",
+  "layer": "semantic",
+  "family": null,
+  "include_arcs": false
+}
+```
+
+**Targets:**
+| Target | Description | Required Params |
+|--------|-------------|-----------------|
+| `classes` | List all NodeClasses (optionally filtered by realm/layer) | None |
+| `class` | Get a specific NodeClass with optional arc info | `name` |
+| `arcs` | List all ArcClasses (optionally filtered by family) | None |
+| `arc` | Get a specific ArcClass | `name` |
+
+**Example - List org realm classes:**
+```json
+{
+  "target": "classes",
+  "realm": "org"
+}
+```
+
+**Returns:**
+```json
+{
+  "target": "classes",
+  "data": {
+    "classes": [
+      {"name": "Entity", "realm": "org", "layer": "semantic", "trait_type": "defined"},
+      {"name": "EntityNative", "realm": "org", "layer": "semantic", "trait_type": "authored"}
+    ],
+    "total_count": 21,
+    "filters": {"realm": "org", "layer": null}
+  },
+  "token_estimate": 850
+}
+```
+
+**Example - Get specific class with arcs:**
+```json
+{
+  "target": "class",
+  "name": "Entity",
+  "include_arcs": true
+}
+```
+
+**Returns:**
+```json
+{
+  "target": "class",
+  "data": {
+    "name": "Entity",
+    "realm": "org",
+    "layer": "semantic",
+    "trait_type": "defined",
+    "description": "Core semantic entity",
+    "llm_context": "USE: when...",
+    "incoming_arcs": ["HAS_ENTITY"],
+    "outgoing_arcs": ["HAS_NATIVE", "BELONGS_TO"],
+    "include_arcs": true
+  },
+  "token_estimate": 320
+}
+```
+
 ---
 
 ## Resources
@@ -642,7 +719,9 @@ src/
 │   ├── search.rs        # novanet_search implementation
 │   ├── traverse.rs      # novanet_traverse implementation
 │   ├── assemble.rs      # novanet_assemble implementation
-│   └── atoms.rs         # novanet_atoms implementation
+│   ├── atoms.rs         # novanet_atoms implementation
+│   ├── generate.rs      # novanet_generate implementation
+│   └── introspect.rs    # novanet_introspect implementation
 ├── resources/
 │   └── mod.rs           # MCP resources (entity://, class://, locale://, view://)
 └── prompts/
@@ -740,7 +819,7 @@ cargo test test_validate_read_only
 cargo test --test integration
 ```
 
-**Current test count:** 335 tests (unit + edge cases, integration tests require Neo4j)
+**Current test count:** 348 tests (unit + integration tests, Neo4j integration tests require `NOVANET_MCP_NEO4J_PASSWORD` env var)
 
 ---
 
