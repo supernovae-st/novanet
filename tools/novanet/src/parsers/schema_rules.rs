@@ -504,23 +504,23 @@ pub fn validate_node(node: &ParsedNode) -> Vec<SchemaIssue> {
         }
     }
 
-    // Rule 14: Entity must declare denomination_forms in standard_properties;
-    //          EntityNative must declare denomination_forms in properties (ADR-033).
+    // Rule 14: Entity and EntityNative must declare denomination_forms in properties (ADR-033).
     //          ABSOLUTE RULE: LLM must use only these forms — missing declaration = warning.
+    //          Note: denomination_forms is entity-specific, so it belongs in properties (not standard_properties).
     match node.def.name.as_str() {
         "Entity" => {
             let has = node
                 .def
-                .standard_properties
+                .properties
                 .as_ref()
-                .map(|sp| sp.contains_key("denomination_forms"))
+                .map(|p| p.contains_key("denomination_forms"))
                 .unwrap_or(false);
             if !has {
                 issues.push(SchemaIssue {
                     node_name: node.def.name.clone(),
                     severity: IssueSeverity::Warning,
                     rule: "DENOMINATION_FORMS_REQUIRED",
-                    message: "Entity.standard_properties must declare 'denomination_forms' \
+                    message: "Entity.properties must declare 'denomination_forms' \
                               (ADR-033: ABSOLUTE RULE — LLM must use only these forms)"
                         .into(),
                 });
@@ -1425,7 +1425,7 @@ mod tests {
     #[test]
     fn denomination_forms_validation_catches_missing_entity() {
         // Unit test: validate_node should emit DENOMINATION_FORMS_REQUIRED for Entity
-        // that lacks denomination_forms.
+        // that lacks denomination_forms in its properties.
         use crate::parsers::yaml_node::{NodeDef, NodeTrait, PropertyDef};
         use indexmap::IndexMap;
         use std::collections::BTreeMap;
@@ -1442,7 +1442,11 @@ mod tests {
         sp.insert("description".into(), make_prop("string"));
         sp.insert("created_at".into(), make_prop("datetime"));
         sp.insert("updated_at".into(), make_prop("datetime"));
-        // NOTE: denomination_forms intentionally absent — that's what we're testing.
+
+        // Create properties map WITHOUT denomination_forms — that's what we're testing
+        let mut props: IndexMap<String, PropertyDef> = IndexMap::new();
+        props.insert("entity_summary".into(), make_prop("string"));
+        // NOTE: denomination_forms intentionally absent
 
         let node = ParsedNode {
             def: NodeDef {
@@ -1454,7 +1458,7 @@ mod tests {
                 icon: None,
                 description: "An entity".into(),
                 standard_properties: Some(sp),
-                properties: None,
+                properties: Some(props), // Has properties but missing denomination_forms
                 neo4j: None,
                 example: None,
             },
@@ -1471,7 +1475,7 @@ mod tests {
 
         assert!(
             !denom_errors.is_empty(),
-            "validate_node should emit DENOMINATION_FORMS_REQUIRED for Entity missing denomination_forms"
+            "validate_node should emit DENOMINATION_FORMS_REQUIRED for Entity missing denomination_forms in properties"
         );
     }
 
