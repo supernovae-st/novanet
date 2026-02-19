@@ -27,7 +27,7 @@ let registryCache: YAMLRegistry | null = null;
  * Single source of truth for TUI and Studio.
  */
 async function loadRegistryYAML(): Promise<YAMLRegistry> {
-  if (registryCache) return registryCache;
+  if (registryCache != null) return registryCache;
 
   // Try multiple paths (for different execution contexts)
   const possiblePaths = [
@@ -70,6 +70,7 @@ async function loadRegistryYAML(): Promise<YAMLRegistry> {
  * }
  * ```
  */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class -- Namespace for view loading utilities
 export class ViewLoader {
   /**
    * Loads the unified view registry from views.yaml.
@@ -80,8 +81,8 @@ export class ViewLoader {
     const registry = await loadRegistryYAML();
     return {
       version: registry.version,
-      description: registry.description || 'NovaNet Essential Views',
-      categories: registry.categories || {},
+      description: registry.description ?? 'NovaNet Essential Views',
+      categories: registry.categories ?? {},
       views: registry.views,
     };
   }
@@ -106,10 +107,10 @@ export class ViewLoader {
    */
   static async getCypher(viewId: string, params: Record<string, unknown> = {}): Promise<CypherQuery> {
     const view = await this.getViewById(viewId);
-    if (!view) {
+    if (view == null) {
       throw new Error(`View '${viewId}' not found`);
     }
-    if (!view.cypher) {
+    if (view.cypher == null || view.cypher === '') {
       throw new Error(`View '${viewId}' has no Cypher query`);
     }
 
@@ -145,8 +146,8 @@ export class ViewLoader {
   static async getViewsForNodeType(nodeType: string): Promise<ViewRegistryEntry[]> {
     const registry = await loadRegistryYAML();
     return registry.views.filter(v =>
-      v.contextual &&
-      v.applicable_types &&
+      v.contextual === true &&
+      v.applicable_types != null &&
       (v.applicable_types.length === 0 || v.applicable_types.includes(nodeType))
     );
   }
@@ -165,7 +166,7 @@ export class ViewLoader {
     const filter = NovaNetFilter.create();
 
     // Set root node
-    const rootKey = params.key || view.root.key || '';
+    const rootKey = params.key ?? view.root.key ?? '';
     switch (view.root.type) {
       case 'Page':
         filter.fromPage(rootKey);
@@ -192,11 +193,11 @@ export class ViewLoader {
     }
 
     // Apply filters
-    if (view.filters) {
+    if (view.filters != null) {
       // Handle locale - support $locale placeholder
-      if (view.filters.locale === '$locale' && params.locale) {
+      if (view.filters.locale === '$locale' && params.locale != null && params.locale !== '') {
         filter.forLocale(params.locale);
-      } else if (view.filters.locale && view.filters.locale !== '$locale') {
+      } else if (view.filters.locale != null && view.filters.locale !== '' && view.filters.locale !== '$locale') {
         filter.forLocale(view.filters.locale);
       }
 
@@ -223,7 +224,7 @@ export class ViewLoader {
       case 'USES_ENTITY':
         filter.includeEntities({
           depth: include.depth,
-          spreading: (include.depth || 1) > 1
+          spreading: (include.depth ?? 1) > 1
         });
         break;
 
@@ -355,7 +356,7 @@ export class ViewLoader {
         // This makes views more flexible and schema-independent
         filter.getCriteria().includes.push({
           relation: include.relation,
-          direction: include.direction || 'outgoing',
+          direction: include.direction ?? 'outgoing',
           depth: include.depth,
           filters: include.filters,
         });

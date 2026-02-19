@@ -8,7 +8,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync } from 'fs';
 import { join } from 'path';
-import { parse as parseYaml } from 'yaml';
+import { load as parseYaml } from 'js-yaml';
 
 import { REALM_HIERARCHY } from '../hierarchy';
 import { NODE_LAYERS, getNodeTypesByRealmAndLayer } from '../layers';

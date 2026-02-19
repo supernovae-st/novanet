@@ -92,7 +92,7 @@ describe('Color Synchronization', () => {
     });
 
     it('LAYER_COLORS should have valid ColorTokens structure', () => {
-      for (const [key, tokens] of Object.entries(LAYER_COLORS)) {
+      for (const [_key, tokens] of Object.entries(LAYER_COLORS)) {
         expect(tokens).toHaveProperty('color');
         expect(tokens).toHaveProperty('bg');
         expect(tokens).toHaveProperty('text');

@@ -29,12 +29,11 @@ const config = [
       '@typescript-eslint/no-explicit-any': 'error', // v0.14.1: error (no any in production)
       '@typescript-eslint/no-non-null-assertion': 'warn',
 
-      // v0.14.1: New strict rules for async/promise safety
-      '@typescript-eslint/no-floating-promises': 'error',
-      '@typescript-eslint/no-misused-promises': ['error', {
-        checksConditionals: true,
-        checksVoidReturn: { attributes: false }, // Allow async onClick handlers
-      }],
+      // TODO(typed-linting): Re-enable when parserOptions.project is configured
+      // These rules require type information which isn't available with current setup
+      // See: https://tseslint.com/typed-linting
+      // '@typescript-eslint/no-floating-promises': 'error',
+      // '@typescript-eslint/no-misused-promises': ['error', { checksConditionals: true, checksVoidReturn: { attributes: false } }],
 
       // React 19 compiler rules — downgrade to warn for v9.0.0
       // TODO(v9.1): Fix and promote back to error
@@ -50,10 +49,9 @@ const config = [
   },
   {
     // Relax rules for test files
-    files: ['**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', '**/*.spec.tsx'],
+    files: ['**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', '**/*.spec.tsx', '**/__tests__/**/*.ts', '**/__tests__/**/*.tsx'],
     rules: {
       '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/no-floating-promises': 'off',
       'no-console': 'off',
     },
   },

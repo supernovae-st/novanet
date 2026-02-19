@@ -257,6 +257,7 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
 // CYPHER GENERATOR
 // =============================================================================
 
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class -- Namespace for Cypher generation utilities
 export class CypherGenerator {
   /**
    * Generate a Cypher query from a NovaNetFilter
@@ -271,10 +272,10 @@ export class CypherGenerator {
     const relAliases: string[] = [];
 
     // 1. MATCH root node
-    if (criteria.root) {
+    if (criteria.root != null) {
       // If a specific key is provided, match that node
       // Otherwise, match all nodes of the specified type
-      if (criteria.root.key) {
+      if (criteria.root.key != null && criteria.root.key !== '') {
         lines.push(`MATCH (root:${criteria.root.type} {key: $rootKey})`);
         params.rootKey = criteria.root.key;
       } else {
@@ -302,7 +303,7 @@ export class CypherGenerator {
       lines.push(matchLine);
 
       // Handle spreading activation for entities (v10.3: USES_ENTITY replaces USES_CONCEPT)
-      if (include.relation === 'USES_ENTITY' && include.depth && include.depth > 1) {
+      if (include.relation === 'USES_ENTITY' && include.depth != null && include.depth > 1) {
         const relatedAlias = `related${this.capitalize(alias)}`;
         const spreadRelAlias = `r${relIndex++}`;
         relAliases.push(spreadRelAlias);
@@ -314,25 +315,25 @@ export class CypherGenerator {
     // 3. WHERE clauses
     const whereConditions: string[] = [];
 
-    if (criteria.filters.locale) {
+    if (criteria.filters.locale != null && criteria.filters.locale !== '') {
       params.locale = criteria.filters.locale;
     }
 
     // Node type filtering (byTypes)
-    if (criteria.filters.nodeTypes?.length) {
+    if (criteria.filters.nodeTypes != null && criteria.filters.nodeTypes.length > 0) {
       const typeConditions = criteria.filters.nodeTypes.map(t => `root:${t}`).join(' OR ');
       whereConditions.push(`(${typeConditions})`);
     }
 
     // Exclude types
-    if (criteria.filters.excludeTypes?.length) {
+    if (criteria.filters.excludeTypes != null && criteria.filters.excludeTypes.length > 0) {
       const excludeConditions = criteria.filters.excludeTypes.map(t => `NOT root:${t}`).join(' AND ');
       whereConditions.push(`(${excludeConditions})`);
     }
 
     // Fulltext search
-    if (criteria.filters.searchQuery) {
-      const fields = criteria.filters.searchFields || ['key', 'display_name', 'description'];
+    if (criteria.filters.searchQuery != null && criteria.filters.searchQuery !== '') {
+      const fields = criteria.filters.searchFields ?? ['key', 'display_name', 'description'];
       const searchConditions = fields.map(f => `toLower(root.${f}) CONTAINS toLower($searchQuery)`).join(' OR ');
       whereConditions.push(`(${searchConditions})`);
       params.searchQuery = criteria.filters.searchQuery;
@@ -370,7 +371,7 @@ export class CypherGenerator {
   // ===========================================================================
 
   private static relationToAlias(relation: string): string {
-    return RELATION_ALIAS_MAP[relation] || relation.toLowerCase();
+    return RELATION_ALIAS_MAP[relation] ?? relation.toLowerCase();
   }
 
   private static directionToArrow(direction?: string): { left: string; right: string } {

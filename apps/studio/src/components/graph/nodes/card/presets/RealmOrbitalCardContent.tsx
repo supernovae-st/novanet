@@ -131,7 +131,7 @@ const MatrixRain = memo(function MatrixRain({
     const columns = Math.floor(CARD_WIDTH / fontSize);
     columnsRef.current = Array(columns).fill(1);
 
-    let opacity = isActive ? 0.15 : 0.08;
+    const opacity = isActive ? 0.15 : 0.08;
 
     const draw = () => {
       ctx.fillStyle = `rgba(0, 0, 0, 0.05)`;

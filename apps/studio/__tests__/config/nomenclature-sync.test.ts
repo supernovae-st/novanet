@@ -16,7 +16,7 @@
  * @see .claude/rules/novanet-decisions.md - ADR documentation
  */
 
-import { NODE_TYPES, NODE_REALMS, NODE_TRAITS, CLASS_TAXONOMY, type Trait } from '@novanet/core/types';
+import { NODE_TYPES, NODE_REALMS, NODE_TRAITS, type Trait } from '@novanet/core/types';
 import { RelationRegistry } from '@novanet/core/schemas';
 
 describe('Nomenclature Sync (v0.12.4)', () => {
@@ -37,7 +37,7 @@ describe('Nomenclature Sync (v0.12.4)', () => {
     });
 
     it('should not use deprecated trait names anywhere', () => {
-      Object.entries(NODE_TRAITS).forEach(([nodeType, trait]) => {
+      Object.entries(NODE_TRAITS).forEach(([_nodeType, trait]) => {
         expect(DEPRECATED_TRAITS).not.toContain(trait);
       });
     });
