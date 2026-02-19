@@ -371,10 +371,10 @@ Replace custom LLM provider implementations with `rig-core` v0.31.0 for:
 
 ---
 
-## MVP 8: RLM Enhancements ⏳ (NEXT)
+## MVP 8: RLM Enhancements ⏳ (CURRENT)
 
 **Plan:** `docs/research/rlm-knowledge-graph-patterns-2025.md` (Section 11)
-**Status:** NOT STARTED (0%)
+**Status:** IN PROGRESS (Phase 1 ✅ complete)
 **Prerequisites:** MVP 7 ✅
 
 ### Overview
@@ -385,25 +385,27 @@ Research finding: NovaNet + Nika is ALREADY RLM-on-KG but missing key features f
 ### Phases
 | Phase | Feature | Target | Effort | Files |
 |-------|---------|--------|--------|-------|
-| 1 | **Reasoning capture** | v0.4.1 | Low | `rig_agent_loop.rs`, `event/log.rs` |
+| 1 | **Reasoning capture** ✅ | v0.4.1 | Low | `rig_agent_loop.rs`, `tests/thinking_capture_test.rs` |
 | 2 | **Nested agents** (`spawn_agent` tool) | v0.5 | Medium | `runtime/spawn.rs`, `executor.rs` |
 | 3 | **Schema introspection** (`novanet_introspect`) | v0.5 | Medium | NovaNet MCP server |
 | 4 | **Dynamic decomposition** (`decompose:` modifier) | v0.6 | High | `ast/decompose.rs`, `runtime/decomposer.rs` |
 | 5 | **Lazy bindings** (`lazy: true`) | v0.6 | Medium | `binding/lazy.rs` |
 
-### Phase 1: Reasoning Capture (v0.4.1)
-Add `thinking` field to `AgentTurn` events to capture Claude's reasoning:
+### Phase 1: Reasoning Capture (v0.4.1) ✅ COMPLETE
 
-```rust
-pub enum EventKind {
-    AgentTurn {
-        turn: u32,
-        thinking: Option<String>,  // NEW: Claude's <thinking> content
-        tool_calls: Vec<ToolCall>,
-        response: String,
-    },
-}
-```
+Token tracking and thinking capture now work correctly:
+
+| Feature | Status |
+|---------|--------|
+| Token extraction from streaming | ✅ Done (via `GetTokenUsage` trait) |
+| `AgentTurnMetadata.input_tokens` | ✅ Populated correctly |
+| `AgentTurnMetadata.output_tokens` | ✅ Populated correctly |
+| `AgentTurnMetadata.thinking` | ✅ Already implemented |
+| Integration tests | ✅ `tests/thinking_capture_test.rs` |
+
+**Files changed:**
+- `rig_agent_loop.rs` - Extract tokens from `StreamedAssistantContent::Final`
+- `tests/thinking_capture_test.rs` - Integration tests for token capture
 
 ### Phase 2: Nested Agent Spawning (v0.5)
 Enable true recursion with `spawn_agent` internal tool:

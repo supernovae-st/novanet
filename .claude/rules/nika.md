@@ -19,7 +19,14 @@ Nika is the MCP CLIENT that consumes NovaNet (MCP SERVER) knowledge.
 
 ## Current Version
 
-**v0.4** | rig-core v0.31 | RigAgentLoop | RigProvider | 621+ tests | MVP 7 complete
+**v0.4.1** | rig-core v0.31 | RigAgentLoop | RigProvider | 621+ tests | MVP 8 Phase 1 complete
+
+### v0.4.1 Changes (Token Tracking Fix)
+
+Token tracking in streaming mode now works correctly:
+- `run_claude_with_thinking()` extracts tokens from `StreamedAssistantContent::Final`
+- `AgentTurnMetadata.input_tokens` and `output_tokens` are now populated
+- Uses rig's `GetTokenUsage` trait for extraction
 
 ### v0.4 Changes (rig-core Migration)
 
@@ -114,22 +121,28 @@ Parallel iteration over arrays with `tokio::spawn` JoinSet:
 ```yaml
 tasks:
   - id: generate_pages
-    for_each:
-      items: $locales
-      as: locale
-      concurrency: 5
+    for_each: ["fr-FR", "en-US", "de-DE"]  # Array or binding expression
+    as: locale                              # Loop variable name
+    concurrency: 5                          # Max parallel executions
+    fail_fast: true                         # Stop on first error
     invoke:
       mcp: novanet
       tool: novanet_generate
       params:
         entity: "qr-code"
-        locale: "{{locale}}"
+        locale: "{{use.locale}}"
+```
+
+Binding expressions are supported (resolved at runtime):
+```yaml
+    for_each: "{{use.items}}"   # Reference to array in context
+    for_each: "$items"          # Alternative binding syntax
 ```
 
 | Property | Default | Description |
 |----------|---------|-------------|
-| `items` | required | Array to iterate over |
-| `as` | required | Loop variable name |
+| `for_each` | required | Array or binding expression to iterate over |
+| `as` | "item" | Loop variable name |
 | `concurrency` | 1 | Max parallel executions |
 | `fail_fast` | true | Stop all on first error |
 
