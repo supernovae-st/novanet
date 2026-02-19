@@ -222,8 +222,16 @@ pub fn schema_validate(root: &Path) -> crate::Result<Vec<ValidationIssue>> {
     }
 
     // 6. Validate arc source/target labels match known node names
+    // Exception: Schema family arcs reference meta-types (Class, ArcClass) that are not runtime node types
+    use crate::parsers::arcs::ArcFamily;
+    const SCHEMA_META_TYPES: &[&str] = &["Class", "ArcClass"];
     for arc in &rels_doc.arcs {
+        let is_schema_arc = arc.family == ArcFamily::Schema;
         for label in arc.source.labels() {
+            // Skip validation for schema arcs referencing meta-types
+            if is_schema_arc && SCHEMA_META_TYPES.contains(&label) {
+                continue;
+            }
             if label != "*" && !node_names.contains(label) {
                 issues.push(ValidationIssue {
                     severity: Severity::Warning,
@@ -235,6 +243,10 @@ pub fn schema_validate(root: &Path) -> crate::Result<Vec<ValidationIssue>> {
             }
         }
         for label in arc.target.labels() {
+            // Skip validation for schema arcs referencing meta-types
+            if is_schema_arc && SCHEMA_META_TYPES.contains(&label) {
+                continue;
+            }
             if label != "*" && !node_names.contains(label) {
                 issues.push(ValidationIssue {
                     severity: Severity::Warning,
