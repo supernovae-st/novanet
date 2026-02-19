@@ -7,6 +7,29 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.14.0] - 2026-02-19
+
+### Added
+- **MCP Tool: novanet_introspect** - 8th MCP tool for schema introspection
+  - Query NodeClasses filtered by realm/layer
+  - Query ArcClasses filtered by family
+  - Get specific class/arc details with relationships
+  - Schema: IntrospectParams, IntrospectResult with JsonSchema derives
+- **MCP: context_build_log** - New debugging feature in `novanet_generate`
+  - 5 phases logged: structure_phase, entities_phase, atoms_phase, anchors_phase, token_decisions
+  - Helps debug and understand how context is assembled for LLM generation
+  - Schema: `ContextBuildLog` struct with `JsonSchema` derive for MCP clients
+
+### Changed
+- MCP tool count: 7 → 8 (added novanet_introspect)
+- NovaNet MCP version: 0.4.0 → 0.5.0
+- Documentation updated with 8 tools references
+
+### Statistics
+- **61 nodes** (40 shared + 21 org), **10 layers**, **5 traits**
+- **182 arcs** (6 families: ownership, localization, semantic, generation, mining, schema)
+- **8 MCP tools**: query, describe, search, traverse, assemble, atoms, generate, introspect
+
 ## [0.13.1] - 2026-02-17
 
 ### Added
