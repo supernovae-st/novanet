@@ -73,15 +73,15 @@ Ce document est le "plan des plans" - il orchestre tous les plans de développem
 │  ├── ✅ Deleted ClaudeProvider, OpenAIProvider, old AgentLoop                │
 │  ├── ✅ RigProvider wrapper (provider/rig.rs)                                │
 │  ├── ✅ NikaMcpTool implements rig::ToolDyn                                  │
-│  └── ✅ 679 tests passing, v0.4.1 complete                                   │
+│  └── ✅ 683 tests passing, v0.4.1 complete                                   │
 │                                                                                 │
 │  🎯 MILESTONE: Nika v0.4 ✅ ACHIEVED (pure rig-core)                          │
 │                                                                                 │
 │  ┌─────────────────────────────────────────────────────────────────────────┐   │
-│  │  MVP 8: RLM ENHANCEMENTS (60%)                             ▶ CURRENT   │   │
+│  │  MVP 8: RLM ENHANCEMENTS (100%)                            ▶ COMPLETE  │   │
 │  │  ├── ✅ Phase 1: Reasoning capture (thinking field in AgentTurn)       │   │
-│  │  ├── ⏳ Phase 2: Nested agents (spawn_agent internal tool)             │   │
-│  │  ├── ⏳ Phase 3: Schema introspection (novanet_introspect MCP)         │   │
+│  │  ├── ✅ Phase 2: Nested agents (spawn_agent internal tool)             │   │
+│  │  ├── ✅ Phase 3: Schema introspection (novanet_introspect MCP)         │   │
 │  │  ├── ✅ Phase 4: Dynamic decomposition (decompose: modifier)           │   │
 │  │  └── ✅ Phase 5: Lazy context loading (lazy: binding modifier)         │   │
 │  └─────────────────────────────────────────────────────────────────────────┘   │

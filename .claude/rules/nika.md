@@ -19,7 +19,7 @@ Nika is the MCP CLIENT that consumes NovaNet (MCP SERVER) knowledge.
 
 ## Current Version
 
-**v0.4.1** | rig-core v0.31 | RigAgentLoop | RigProvider | 679+ tests | MVP 8 Phase 5 complete
+**v0.4.1** | rig-core v0.31 | RigAgentLoop | RigProvider | 683+ tests | MVP 8 Phase 2 complete
 
 ### v0.4.1 Changes (Token Tracking Fix)
 
