@@ -14,7 +14,7 @@
 
 [package]
 name = "novanet-mcp"
-version = "0.4.0"
+version = "0.5.0"
 edition = "2024"
 license = "LicenseRef-Proprietary"
 rust-version = "1.86"
@@ -27,14 +27,14 @@ categories = ["development-tools", "database"]
 [dependencies]
 # ═══════════════════════════════════════════════════════════════════════════════
 # MCP Protocol - Official Anthropic SDK
-# v0.15 adds OAuth support, improved macros: #[tool_router], #[tool], #[tool_handler]
+# v0.16: rmcp rename + improved error handling
 # ═══════════════════════════════════════════════════════════════════════════════
-rmcp = { version = "0.15", features = ["server", "transport-io"] }
+rmcp = { version = "0.16", features = ["server", "transport-io"] }
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Async Runtime
 # ═══════════════════════════════════════════════════════════════════════════════
-tokio = { version = "1.43", features = ["full"] }
+tokio = { version = "1.49", features = ["full"] }
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Neo4j Driver

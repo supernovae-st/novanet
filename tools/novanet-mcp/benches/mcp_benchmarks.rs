@@ -15,9 +15,9 @@
 //! - Generate (block): < 500ms
 //! - Generate (page): < 2s
 
-use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion, Throughput};
-use std::hint::black_box;
+use criterion::{BenchmarkId, Criterion, Throughput, criterion_group, criterion_main};
 use novanet_mcp::tokens::TokenCounter;
+use std::hint::black_box;
 use std::time::Duration;
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -29,9 +29,18 @@ fn bench_token_estimate(c: &mut Criterion) {
 
     let texts = [
         ("short", "Hello, world!"),
-        ("medium", "The quick brown fox jumps over the lazy dog. NovaNet is a knowledge graph for content generation across 200+ locales. This is a typical evidence packet."),
-        ("long", &"Lorem ipsum dolor sit amet, consectetur adipiscing elit. ".repeat(100)),
-        ("cjk", "你好世界。これは日本語のテキストです。한국어 텍스트입니다。"),
+        (
+            "medium",
+            "The quick brown fox jumps over the lazy dog. NovaNet is a knowledge graph for content generation across 200+ locales. This is a typical evidence packet.",
+        ),
+        (
+            "long",
+            &"Lorem ipsum dolor sit amet, consectetur adipiscing elit. ".repeat(100),
+        ),
+        (
+            "cjk",
+            "你好世界。これは日本語のテキストです。한국어 텍스트입니다。",
+        ),
     ];
 
     let mut group = c.benchmark_group("token_estimate");
@@ -52,8 +61,14 @@ fn bench_token_count_exact(c: &mut Criterion) {
 
     let texts = [
         ("short", "Hello, world!"),
-        ("medium", "The quick brown fox jumps over the lazy dog. NovaNet is a knowledge graph for content generation across 200+ locales."),
-        ("long", &"Lorem ipsum dolor sit amet, consectetur adipiscing elit. ".repeat(50)[..]),
+        (
+            "medium",
+            "The quick brown fox jumps over the lazy dog. NovaNet is a knowledge graph for content generation across 200+ locales.",
+        ),
+        (
+            "long",
+            &"Lorem ipsum dolor sit amet, consectetur adipiscing elit. ".repeat(50)[..],
+        ),
     ];
 
     let mut group = c.benchmark_group("token_count_exact");
@@ -82,7 +97,9 @@ fn bench_token_within_budget(c: &mut Criterion) {
         group.bench_with_input(
             BenchmarkId::new("budget", budget),
             &(text.as_str(), budget),
-            |b, (text, budget)| b.iter(|| counter.within_budget(black_box(text), black_box(*budget))),
+            |b, (text, budget)| {
+                b.iter(|| counter.within_budget(black_box(text), black_box(*budget)))
+            },
         );
     }
 
@@ -166,7 +183,10 @@ fn bench_prompt_rendering(c: &mut Criterion) {
     let prompts_with_args: Vec<(&str, serde_json::Map<String, serde_json::Value>)> = vec![
         ("cypher_query", {
             let mut args = serde_json::Map::new();
-            args.insert("intent".to_string(), serde_json::json!("Find all Entity nodes in org realm"));
+            args.insert(
+                "intent".to_string(),
+                serde_json::json!("Find all Entity nodes in org realm"),
+            );
             args
         }),
         ("block_generation", {
@@ -263,20 +283,10 @@ criterion_group!(
     bench_token_truncate
 );
 
-criterion_group!(
-    cache_benches,
-    bench_cache_key_generation
-);
+criterion_group!(cache_benches, bench_cache_key_generation);
 
-criterion_group!(
-    prompt_benches,
-    bench_prompt_rendering,
-    bench_prompt_list
-);
+criterion_group!(prompt_benches, bench_prompt_rendering, bench_prompt_list);
 
-criterion_group!(
-    json_benches,
-    bench_json_serialization
-);
+criterion_group!(json_benches, bench_json_serialization);
 
 criterion_main!(token_benches, cache_benches, prompt_benches, json_benches);
