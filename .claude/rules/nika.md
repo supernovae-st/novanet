@@ -19,14 +19,22 @@ Nika is the MCP CLIENT that consumes NovaNet (MCP SERVER) knowledge.
 
 ## Current Version
 
-**v0.4.1** | rig-core v0.31 | RigAgentLoop | RigProvider | 683+ tests | MVP 8 Phase 2 complete
+**v0.5.0** | rig-core v0.31 | RigAgentLoop | RigProvider | 683+ tests | MVP 8 100% complete
 
-### v0.4.1 Changes (Token Tracking Fix)
+### v0.5.0 Features (MVP 8 RLM Enhancements)
 
-Token tracking in streaming mode now works correctly:
-- `run_claude_with_thinking()` extracts tokens from `StreamedAssistantContent::Final`
-- `AgentTurnMetadata.input_tokens` and `output_tokens` are now populated
-- Uses rig's `GetTokenUsage` trait for extraction
+| Feature | Status | Description |
+|---------|--------|-------------|
+| Reasoning capture | ✅ | `thinking` field in AgentTurn events |
+| spawn_agent | ✅ | Nested agents with depth protection (rig::ToolDyn) |
+| novanet_introspect | ✅ | 8th MCP tool for schema queries |
+| decompose: | ✅ | Runtime DAG expansion via MCP traversal |
+| lazy: bindings | ✅ | Deferred binding resolution until access |
+
+### Known Limitations
+
+- **spawn_agent production path**: Uses `run_mock()` for testing; production requires API key config
+- **Token tracking (non-thinking)**: `run_claude()` returns `total_tokens: 0`; use `extended_thinking: true` for accurate counts
 
 ### v0.4 Changes (rig-core Migration)
 
@@ -169,8 +177,8 @@ Nika workflows NEVER use raw Cypher:
 
 ## References
 
-- Roadmap: `../../ROADMAP.md` (MVP 7 complete, MVP 8 next: RLM enhancements)
+- Roadmap: `../../ROADMAP.md` (MVP 8 complete, v0.5 ready for release)
 - Error codes: `src/error.rs` (NikaError 40+ variants)
 - Examples: `tools/nika/examples/`
-- CLAUDE.md: `tools/nika/CLAUDE.md` (detailed v0.4 migration guide)
+- CLAUDE.md: `tools/nika/CLAUDE.md` (v0.5 spawn_agent + decompose guide)
 - rig-core: https://github.com/0xPlaygrounds/rig (20+ LLM providers)
