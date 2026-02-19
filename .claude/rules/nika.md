@@ -31,10 +31,25 @@ Nika is the MCP CLIENT that consumes NovaNet (MCP SERVER) knowledge.
 | decompose: | ✅ | Runtime DAG expansion via MCP traversal |
 | lazy: bindings | ✅ | Deferred binding resolution until access |
 
+### Production Mode (v0.5.0+)
+
+**spawn_agent** now uses `run_auto()` for automatic provider selection:
+
+1. If `AgentParams.provider` is set → use specified provider
+2. If `ANTHROPIC_API_KEY` env var exists → use Claude
+3. If `OPENAI_API_KEY` env var exists → use OpenAI
+4. Otherwise → error with clear message
+
+```bash
+# Set your API key for production
+export OPENAI_API_KEY=sk-proj-...
+# OR
+export ANTHROPIC_API_KEY=sk-ant-...
+```
+
 ### Known Limitations
 
-- **spawn_agent production path**: Uses `run_mock()` for testing; production requires API key config
-- **Token tracking (non-thinking)**: `run_claude()` returns `total_tokens: 0`; use `extended_thinking: true` for accurate counts
+- **Token tracking (non-thinking)**: `run_claude()` and `run_openai()` return `total_tokens: 0`; use `extended_thinking: true` for accurate Claude counts
 
 ### v0.4 Changes (rig-core Migration)
 
