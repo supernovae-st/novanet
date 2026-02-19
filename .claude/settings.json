@@ -14,6 +14,17 @@
     "NEO4J_USERNAME": "neo4j"
   },
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/secrets-check.sh"
+          }
+        ]
+      }
+    ],
     "SessionStart": [
       {
         "hooks": [
