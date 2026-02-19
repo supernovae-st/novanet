@@ -3,6 +3,8 @@
 //! Complete generation context assembly for block or page content.
 //! Orchestrates traverse, assemble, and atoms for AI agents.
 //! Implements full RLM-on-KG pipeline with context anchors.
+//!
+//! ADR-033: Returns denomination_forms for prescriptive canonical entity references.
 
 use crate::error::Result;
 use crate::server::State;
@@ -13,6 +15,7 @@ use crate::tools::atoms::{self, AtomsParams};
 use crate::tools::traverse::{self, TraversalDirection, TraverseParams};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 /// Generation mode
 #[derive(Debug, Clone, Default, Deserialize, JsonSchema)]
@@ -103,6 +106,47 @@ pub struct GenerateMetadata {
     pub execution_time_ms: u64,
 }
 
+/// Context build log for debugging and transparency (DX-11)
+///
+/// Shows step-by-step what was discovered during context assembly.
+/// Useful for debugging generation issues and understanding token usage.
+#[derive(Debug, Clone, Default, Serialize, JsonSchema)]
+pub struct ContextBuildLog {
+    /// Phase 1: Structure discovery log
+    pub structure_phase: Vec<String>,
+    /// Phase 2: Entity assembly log
+    pub entities_phase: Vec<String>,
+    /// Phase 3: Knowledge atoms log
+    pub atoms_phase: Vec<String>,
+    /// Phase 4: Context anchors log
+    pub anchors_phase: Vec<String>,
+    /// Phase 5: Token budgeting decisions
+    pub token_decisions: Vec<String>,
+}
+
+/// Denomination forms for entity references (ADR-033)
+///
+/// Prescriptive canonical forms that the LLM MUST use when referring to entities.
+/// The LLM must NOT invent, paraphrase, or use unlisted variations.
+#[derive(Debug, Clone, Default, Serialize, JsonSchema)]
+pub struct DenominationForm {
+    /// Prose/body content form (e.g., "código qr")
+    pub text: String,
+    /// Heading/title form (e.g., "Código QR")
+    pub title: String,
+    /// Abbreviated form after first mention (e.g., "qr")
+    pub abbrev: String,
+    /// URL-safe slug form (e.g., "crear-codigo-qr"), post-SEO pipeline
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    /// Tech/brand hybrid for native_script locales (e.g., "QR码" for zh-CN)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mixed: Option<String>,
+    /// International reference form for native_script locales (e.g., "QR Code" in ja-JP)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub base: Option<String>,
+}
+
 /// Result from novanet_generate tool
 #[derive(Debug, Clone, Serialize, JsonSchema)]
 pub struct GenerateResult {
@@ -114,10 +158,19 @@ pub struct GenerateResult {
     pub locale_context: LocaleContext,
     /// Context anchors for cross-page linking
     pub context_anchors: Vec<ContextAnchor>,
+    /// Denomination forms keyed by entity_key (ADR-033)
+    ///
+    /// Prescriptive canonical forms for LLM entity references.
+    /// The LLM MUST use ONLY these forms - no invention, no paraphrase.
+    pub denomination_forms: HashMap<String, DenominationForm>,
     /// Token usage breakdown
     pub token_usage: TokenUsage,
     /// Generation metadata
     pub metadata: GenerateMetadata,
+    /// Context build log for debugging (DX-11)
+    ///
+    /// Step-by-step log of what was discovered during context assembly.
+    pub context_build_log: ContextBuildLog,
 }
 
 /// Execute the novanet_generate tool
@@ -129,9 +182,29 @@ pub async fn execute(state: &State, params: GenerateParams) -> Result<GenerateRe
     // Note: include_examples param exists for future enhancement (example injection)
     let _ = params.include_examples;
 
+    // Initialize context build log (DX-11)
+    let mut build_log = ContextBuildLog::default();
+
     // Phase 1: Get focus node and structure
     let structure_result =
         get_structure(state, &params.focus_key, &params.mode, spreading_depth).await?;
+
+    // Log Phase 1
+    build_log.structure_phase.push(format!(
+        "Focus: {} ({})",
+        params.focus_key, structure_result.focus_kind
+    ));
+    build_log.structure_phase.push(format!(
+        "Mode: {:?}, Spreading depth: {}",
+        params.mode, spreading_depth
+    ));
+    if structure_result.blocks_count > 0 {
+        build_log.structure_phase.push(format!(
+            "Discovered {} block(s): [{}]",
+            structure_result.blocks_count,
+            structure_result.block_keys.join(", ")
+        ));
+    }
 
     // Phase 2: Assemble semantic context (entities)
     let assemble_params = AssembleParams {
@@ -147,6 +220,23 @@ pub async fn execute(state: &State, params: GenerateParams) -> Result<GenerateRe
     };
     let assemble_result = assemble::execute(state, assemble_params).await?;
 
+    // Log Phase 2
+    build_log.entities_phase.push(format!(
+        "Visited {} nodes, collected {} evidence packets",
+        assemble_result.nodes_visited,
+        assemble_result.evidence.len()
+    ));
+    build_log.entities_phase.push(format!(
+        "Entity tokens: {} (budget: {})",
+        assemble_result.total_tokens,
+        token_budget / 2
+    ));
+    if assemble_result.truncated {
+        build_log
+            .entities_phase
+            .push("WARNING: Evidence was truncated due to token budget".to_string());
+    }
+
     // Phase 3: Get knowledge atoms
     let atoms_params = AtomsParams {
         locale: params.locale.clone(),
@@ -159,8 +249,58 @@ pub async fn execute(state: &State, params: GenerateParams) -> Result<GenerateRe
     };
     let atoms_result = atoms::execute(state, atoms_params).await?;
 
+    // Log Phase 3
+    build_log.atoms_phase.push(format!(
+        "Locale: {}, retrieved {} atoms",
+        params.locale,
+        atoms_result.atoms.len()
+    ));
+    build_log.atoms_phase.push(format!(
+        "Atom tokens: {} (from {} total available)",
+        atoms_result.token_estimate, atoms_result.total_count
+    ));
+
     // Phase 4: Get context anchors (cross-page references)
     let context_anchors = get_context_anchors(state, &params.focus_key, &params.locale).await?;
+
+    // Log Phase 4
+    build_log.anchors_phase.push(format!(
+        "Found {} context anchor(s) for cross-page linking",
+        context_anchors.len()
+    ));
+    for anchor in &context_anchors {
+        build_log
+            .anchors_phase
+            .push(format!("  → {} ({})", anchor.page_key, anchor.slug));
+    }
+
+    // Phase 4b: Get denomination forms (ADR-033)
+    let entity_keys: Vec<String> = assemble_result
+        .evidence
+        .iter()
+        .filter(|e| e.source_kind == "Entity" || e.source_kind == "EntityNative")
+        .map(|e| {
+            // For EntityNative, extract the base entity key (before @locale)
+            if e.source_key.contains('@') {
+                e.source_key
+                    .split('@')
+                    .next()
+                    .unwrap_or(&e.source_key)
+                    .to_string()
+            } else {
+                e.source_key.clone()
+            }
+        })
+        .collect();
+    let denomination_forms = fetch_denomination_forms(state, &entity_keys, &params.locale).await?;
+
+    // Log denomination forms
+    if !denomination_forms.is_empty() {
+        build_log.entities_phase.push(format!(
+            "ADR-033: Loaded {} denomination form(s)",
+            denomination_forms.len()
+        ));
+    }
 
     // Phase 5: Calculate token usage
     let structure_tokens = structure_result.token_estimate;
@@ -168,6 +308,24 @@ pub async fn execute(state: &State, params: GenerateParams) -> Result<GenerateRe
     let knowledge_tokens = atoms_result.token_estimate;
     let locale_tokens = estimate_locale_tokens(&assemble_result.locale_context);
     let total_tokens = structure_tokens + entity_tokens + knowledge_tokens + locale_tokens;
+
+    // Log Phase 5
+    build_log.token_decisions.push(format!(
+        "Token breakdown: structure={}, entities={}, knowledge={}, locale={}",
+        structure_tokens, entity_tokens, knowledge_tokens, locale_tokens
+    ));
+    build_log.token_decisions.push(format!(
+        "Total: {}/{} tokens ({:.1}% of budget)",
+        total_tokens,
+        token_budget,
+        (total_tokens as f64 / token_budget as f64) * 100.0
+    ));
+    if total_tokens > token_budget {
+        build_log.token_decisions.push(format!(
+            "WARNING: Over budget by {} tokens",
+            total_tokens - token_budget
+        ));
+    }
 
     let token_usage = TokenUsage {
         structure: structure_tokens,
@@ -229,8 +387,10 @@ pub async fn execute(state: &State, params: GenerateParams) -> Result<GenerateRe
         evidence_summary,
         locale_context: assemble_result.locale_context,
         context_anchors,
+        denomination_forms,
         token_usage,
         metadata,
+        context_build_log: build_log,
     })
 }
 
@@ -316,6 +476,101 @@ async fn get_structure(
             })
         }
     }
+}
+
+/// Fetch denomination forms for entities (ADR-033)
+///
+/// Queries EntityNative nodes to get prescriptive canonical forms for LLM references.
+async fn fetch_denomination_forms(
+    state: &State,
+    entity_keys: &[String],
+    locale: &str,
+) -> Result<HashMap<String, DenominationForm>> {
+    if entity_keys.is_empty() {
+        return Ok(HashMap::new());
+    }
+
+    // Build composite keys for EntityNative nodes: entity:{key}@{locale}
+    let native_keys: Vec<String> = entity_keys
+        .iter()
+        .map(|k| {
+            // Handle keys that already have "entity:" prefix
+            let base_key = k.strip_prefix("entity:").unwrap_or(k);
+            format!("entity:{}@{}", base_key, locale)
+        })
+        .collect();
+
+    let query = r#"
+        UNWIND $keys AS native_key
+        MATCH (en:EntityNative {key: native_key})
+        RETURN en.key AS key, en.denomination_forms AS forms
+    "#;
+
+    let mut params = serde_json::Map::new();
+    params.insert("keys".to_string(), serde_json::json!(native_keys));
+
+    let rows = state.pool().execute_query(query, Some(params)).await?;
+
+    let mut result = HashMap::new();
+    for row in rows {
+        let key = match row["key"].as_str() {
+            Some(k) => k,
+            None => continue,
+        };
+
+        // Extract entity key from composite key (entity:qr-code@fr-FR -> qr-code)
+        let entity_key = key
+            .strip_prefix("entity:")
+            .and_then(|s| s.split('@').next())
+            .unwrap_or(key)
+            .to_string();
+
+        // Parse denomination_forms array
+        let forms = match row["forms"].as_array() {
+            Some(arr) => arr,
+            None => continue,
+        };
+
+        // Extract each form type
+        let mut text = String::new();
+        let mut title = String::new();
+        let mut abbrev = String::new();
+        let mut url: Option<String> = None;
+        let mut mixed: Option<String> = None;
+        let mut base: Option<String> = None;
+
+        for form in forms {
+            let form_type = form["type"].as_str().unwrap_or("");
+            let value = form["value"].as_str().unwrap_or("").to_string();
+
+            match form_type {
+                "text" => text = value,
+                "title" => title = value,
+                "abbrev" => abbrev = value,
+                "url" => url = Some(value),
+                "mixed" => mixed = Some(value),
+                "base" => base = Some(value),
+                _ => {}
+            }
+        }
+
+        // Only include if we have the required fields
+        if !text.is_empty() && !title.is_empty() && !abbrev.is_empty() {
+            result.insert(
+                entity_key,
+                DenominationForm {
+                    text,
+                    title,
+                    abbrev,
+                    url,
+                    mixed,
+                    base,
+                },
+            );
+        }
+    }
+
+    Ok(result)
 }
 
 /// Get context anchors for cross-page references
@@ -550,5 +805,133 @@ mod tests {
         assert!(prompt.contains("fr-FR"));
         assert!(prompt.contains("## Locale Context"));
         assert!(prompt.contains("## Instructions"));
+    }
+
+    // =========================================================================
+    // DenominationForm Tests (ADR-033)
+    // =========================================================================
+
+    #[test]
+    fn test_denomination_form_required_fields() {
+        let form = DenominationForm {
+            text: "código qr".to_string(),
+            title: "Código QR".to_string(),
+            abbrev: "qr".to_string(),
+            url: None,
+            mixed: None,
+            base: None,
+        };
+
+        assert_eq!(form.text, "código qr");
+        assert_eq!(form.title, "Código QR");
+        assert_eq!(form.abbrev, "qr");
+        assert!(form.url.is_none());
+        assert!(form.mixed.is_none());
+        assert!(form.base.is_none());
+    }
+
+    #[test]
+    fn test_denomination_form_with_optional_fields() {
+        let form = DenominationForm {
+            text: "QRコード".to_string(),
+            title: "QRコード作成".to_string(),
+            abbrev: "QR".to_string(),
+            url: Some("qr-code-sakusei".to_string()),
+            mixed: Some("QR码".to_string()),
+            base: Some("QR Code".to_string()),
+        };
+
+        assert_eq!(form.text, "QRコード");
+        assert_eq!(form.title, "QRコード作成");
+        assert_eq!(form.abbrev, "QR");
+        assert_eq!(form.url, Some("qr-code-sakusei".to_string()));
+        assert_eq!(form.mixed, Some("QR码".to_string()));
+        assert_eq!(form.base, Some("QR Code".to_string()));
+    }
+
+    #[test]
+    fn test_composite_key_building() {
+        // Test the logic used in fetch_denomination_forms for building composite keys
+        let entity_keys = vec!["qr-code".to_string(), "wifi".to_string()];
+        let locale = "fr-FR";
+
+        let native_keys: Vec<String> = entity_keys
+            .iter()
+            .map(|k| {
+                let base_key = k.strip_prefix("entity:").unwrap_or(k);
+                format!("entity:{}@{}", base_key, locale)
+            })
+            .collect();
+
+        assert_eq!(native_keys.len(), 2);
+        assert_eq!(native_keys[0], "entity:qr-code@fr-FR");
+        assert_eq!(native_keys[1], "entity:wifi@fr-FR");
+    }
+
+    #[test]
+    fn test_composite_key_with_prefix_handling() {
+        // Keys that already have "entity:" prefix should not duplicate it
+        let entity_keys = vec!["entity:qr-code".to_string(), "wifi".to_string()];
+        let locale = "es-MX";
+
+        let native_keys: Vec<String> = entity_keys
+            .iter()
+            .map(|k| {
+                let base_key = k.strip_prefix("entity:").unwrap_or(k);
+                format!("entity:{}@{}", base_key, locale)
+            })
+            .collect();
+
+        assert_eq!(native_keys[0], "entity:qr-code@es-MX");
+        assert_eq!(native_keys[1], "entity:wifi@es-MX");
+    }
+
+    #[test]
+    fn test_entity_key_extraction_from_composite() {
+        // Test the logic used in fetch_denomination_forms for extracting entity key
+        let composite_key = "entity:qr-code@fr-FR";
+
+        let entity_key = composite_key
+            .strip_prefix("entity:")
+            .and_then(|s| s.split('@').next())
+            .unwrap_or(composite_key)
+            .to_string();
+
+        assert_eq!(entity_key, "qr-code");
+    }
+
+    #[test]
+    fn test_entity_key_extraction_various_formats() {
+        let test_cases = vec![
+            ("entity:qr-code@fr-FR", "qr-code"),
+            ("entity:wifi-qr@es-MX", "wifi-qr"),
+            ("entity:test-entity@ja-JP", "test-entity"),
+        ];
+
+        for (composite, expected) in test_cases {
+            let entity_key = composite
+                .strip_prefix("entity:")
+                .and_then(|s| s.split('@').next())
+                .unwrap_or(composite)
+                .to_string();
+
+            assert_eq!(
+                entity_key, expected,
+                "Failed for composite key: {}",
+                composite
+            );
+        }
+    }
+
+    #[test]
+    fn test_denomination_form_default() {
+        let form: DenominationForm = Default::default();
+
+        assert!(form.text.is_empty());
+        assert!(form.title.is_empty());
+        assert!(form.abbrev.is_empty());
+        assert!(form.url.is_none());
+        assert!(form.mixed.is_none());
+        assert!(form.base.is_none());
     }
 }
