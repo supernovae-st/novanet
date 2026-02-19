@@ -6,6 +6,7 @@ use crate::error::Result;
 use crate::server::State;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+use tracing::instrument;
 
 /// Search mode
 #[derive(Debug, Clone, Default, Deserialize, JsonSchema)]
@@ -85,6 +86,7 @@ pub struct SearchResult {
 }
 
 /// Execute the novanet_search tool
+#[instrument(name = "novanet_search", skip(state), fields(query = %params.query, mode = ?params.mode))]
 pub async fn execute(state: &State, params: SearchParams) -> Result<SearchResult> {
     let start = std::time::Instant::now();
     let limit = params.limit.unwrap_or(20).min(100);

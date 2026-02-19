@@ -6,6 +6,7 @@ use crate::error::Result;
 use crate::server::State;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+use tracing::instrument;
 
 /// What to describe
 #[derive(Debug, Clone, Deserialize, JsonSchema)]
@@ -50,6 +51,7 @@ pub struct DescribeResult {
 }
 
 /// Execute the novanet_describe tool
+#[instrument(name = "novanet_describe", skip(state), fields(target = ?params.describe))]
 pub async fn execute(state: &State, params: DescribeParams) -> Result<DescribeResult> {
     match params.describe {
         DescribeTarget::Schema => describe_schema(state).await,
