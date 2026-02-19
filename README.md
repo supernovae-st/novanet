@@ -47,7 +47,7 @@ NovaNet (brain) + Nika (body) — Generate culturally-native content across 200+
 │  ┌─────────────────────┐         MCP Protocol        ┌─────────────────┐   │
 │  │     NOVANET         │◄──────────────────────────►│      NIKA       │   │
 │  │     (Brain)         │                             │     (Body)      │   │
-│  │     v0.14.0         │                             │     v0.4.0      │   │
+│  │     v0.14.0         │                             │     v0.4.1      │   │
 │  ├─────────────────────┤                             ├─────────────────┤   │
 │  │ • Knowledge Graph   │    novanet_generate         │ • YAML Workflows│   │
 │  │ • 61 NodeClasses    │    novanet_describe         │ • 5 Verbs       │   │
@@ -68,7 +68,7 @@ NovaNet (brain) + Nika (body) — Generate culturally-native content across 200+
 | Project | Version | Description | Tests |
 |---------|---------|-------------|-------|
 | **NovaNet** | v0.14.0 | Knowledge graph + MCP Server | 1194 |
-| **Nika** | v0.4.0 | YAML workflow engine + MCP Client | 617 |
+| **Nika** | v0.4.1 | YAML workflow engine + MCP Client | 679 |
 
 ---
 
@@ -139,13 +139,13 @@ supernovae-agi/
 | **@novanet/db** | `0.14.0` | Docker Compose for Neo4j, Cypher seeds, migrations |
 | **@novanet/studio** | `0.14.0` | Interactive graph visualization with AI chat |
 | **tools/novanet** | `0.14.0` | Rust CLI + TUI for schema generation, validation, queries |
-| **tools/novanet-mcp** | `0.4.0` | MCP Server (7 tools) |
+| **tools/novanet-mcp** | `0.5.0` | MCP Server (8 tools) |
 
 ### Nika
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| **tools/nika** | `0.4.0` | Rust CLI + TUI for YAML workflow execution |
+| **tools/nika** | `0.4.1` | Rust CLI + TUI for YAML workflow execution |
 
 ---
 

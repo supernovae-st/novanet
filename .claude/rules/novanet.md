@@ -17,7 +17,7 @@ Entity (defined) → Generate natively → EntityNative (authored)
 
 ## Current Version
 
-**v0.13.1** | 61 nodes | 182 arcs | 10 layers | 6 arc families | 5 traits
+**v0.14.0** | 61 nodes | 182 arcs | 10 layers | 6 arc families | 5 traits
 
 ## Architecture
 
@@ -71,10 +71,10 @@ pnpm dev                          # Studio at :3000
 /schema:add-node → YAML created → schema generate → schema validate → db seed
 ```
 
-## MCP Server (7 tools)
+## MCP Server (8 tools)
 
-`novanet_generate`, `novanet_describe`, `novanet_query`, `novanet_search`,
-`novanet_locale`, `novanet_schema`, `novanet_stats`
+`novanet_query`, `novanet_describe`, `novanet_search`, `novanet_traverse`,
+`novanet_assemble`, `novanet_atoms`, `novanet_generate`, `novanet_introspect`
 
 ## References
 

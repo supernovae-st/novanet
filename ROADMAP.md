@@ -16,7 +16,7 @@ Ce document est le "plan des plans" - il orchestre tous les plans de développem
 │                                                                                 │
 │  ✅ FOUNDATION (DONE)                                                           │
 │  ├── NovaNet Schema v0.13.1 (61 nodes, 182 arcs, 1191 tests)                   │
-│  ├── NovaNet MCP Server (7 tools)                                               │
+│  ├── NovaNet MCP Server (8 tools)                                               │
 │  └── Nika v0.1 (infer, exec, fetch)                                             │
 │                                                                                 │
 │  ✅ MVP 0: DX SETUP CORE                                           ✓ DONE      │
@@ -102,7 +102,7 @@ Ces éléments sont déjà implémentés et fonctionnels.
 |------|--------|----------|
 | Schema v0.13.1 (61 nodes) | ✅ Done | `novanet-dev/.claude/rules/schema-standard.md` |
 | Neo4j + Seed data | ✅ Done | `novanet-dev/packages/db/` |
-| MCP Server (7 tools) | ✅ Done | `novanet-dev/tools/novanet-mcp/` |
+| MCP Server (8 tools) | ✅ Done | `novanet-dev/tools/novanet-mcp/` |
 | TUI (novanet tui) | ✅ Done | `novanet-dev/tools/novanet/src/tui/` |
 
 ### Nika v0.1

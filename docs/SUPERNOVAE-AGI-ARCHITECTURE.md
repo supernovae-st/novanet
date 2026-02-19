@@ -1,6 +1,6 @@
 # SuperNovae-AGI Architecture Documentation
 
-**Version**: v0.13.1 | **Last Updated**: 2026-02-19
+**Version**: v0.14.0 | **Last Updated**: 2026-02-19
 
 > This document provides a comprehensive overview of the SuperNovae-AGI system architecture for use with NotebookLM and other AI-assisted learning tools.
 
@@ -105,7 +105,7 @@ novanet-dev/
 │       └── seed/              # 45 Cypher seed scripts
 ├── tools/
 │   ├── novanet/               # Rust CLI + TUI (1,139 tests)
-│   └── novanet-mcp/           # MCP Server (7 tools)
+│   └── novanet-mcp/           # MCP Server (8 tools)
 └── apps/
     └── studio/                # Next.js 16 web visualization
 ```

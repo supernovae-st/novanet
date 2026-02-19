@@ -12,8 +12,9 @@ This document tracks version compatibility between supernovae-agi components.
 | Component | Version | Status | Notes |
 |-----------|---------|--------|-------|
 | **supernovae-agi** | 0.14.0 | Active | Monorepo coordinator |
-| **NovaNet** | 0.13.1 | Active | Knowledge graph + MCP server |
-| **Nika** | 0.2.0 | Active | Workflow engine + MCP client |
+| **NovaNet** | 0.14.0 | Active | Knowledge graph + MCP server |
+| **NovaNet MCP** | 0.5.0 | Active | 8 MCP tools |
+| **Nika** | 0.4.1 | Active | Workflow engine + MCP client |
 
 ---
 
@@ -23,9 +24,8 @@ This document tracks version compatibility between supernovae-agi components.
 
 | supernovae-agi | NovaNet | Nika | MCP Protocol | Status |
 |----------------|---------|------|--------------|--------|
-| 0.14.x | 0.13.x | 0.2.x | v1 | ✅ Current |
-| 0.14.x | 0.13.x | 0.3.x | v1 | 🔜 Planned |
-| 0.15.x | 0.14.x | 0.3.x | v1 | 🔜 Planned |
+| 0.14.x | 0.14.x | 0.4.x | v1 | ✅ Current |
+| 0.15.x | 0.15.x | 0.5.x | v1 | 🔜 Planned |
 
 ### MCP Tool Compatibility
 
@@ -37,9 +37,10 @@ NovaNet MCP Server exposes these tools. Nika workflows depend on specific versio
 | `novanet_describe` | 0.13.0+ | 0.2.0+ | `contracts/novanet_describe.json` |
 | `novanet_traverse` | 0.13.0+ | 0.2.0+ | `contracts/novanet_traverse.json` |
 | `novanet_search` | 0.13.0+ | 0.2.0+ | `contracts/novanet_search.json` |
-| `novanet_list` | 0.13.0+ | 0.2.0+ | `contracts/novanet_list.json` |
-| `novanet_stats` | 0.13.0+ | 0.2.0+ | `contracts/novanet_stats.json` |
-| `novanet_validate` | 0.13.0+ | 0.2.0+ | `contracts/novanet_validate.json` |
+| `novanet_assemble` | 0.13.0+ | 0.2.0+ | `contracts/novanet_assemble.json` |
+| `novanet_atoms` | 0.13.0+ | 0.2.0+ | `contracts/novanet_atoms.json` |
+| `novanet_query` | 0.13.0+ | 0.2.0+ | `contracts/novanet_query.json` |
+| `novanet_introspect` | 0.14.0+ | 0.4.0+ | `contracts/novanet_introspect.json` |
 
 ---
 
@@ -58,6 +59,9 @@ NovaNet MCP Server exposes these tools. Nika workflows depend on specific versio
 
 | Version | Change | Migration |
 |---------|--------|-----------|
+| 0.4.0 | rig-core migration | Use RigProvider, RigAgentLoop |
+| 0.4.0 | Removed ClaudeProvider, OpenAIProvider | Use RigProvider::claude(), RigProvider::openai() |
+| 0.3.0 | `for_each:` parallelism | Use tokio::spawn JoinSet |
 | 0.2.0 | `invoke:` verb added | Use for MCP tool calls |
 | 0.2.0 | `agent:` verb added | Use for agentic loops |
 | 0.2.0 | EventLog v2 (16 variants) | Update event handlers |
