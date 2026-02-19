@@ -545,7 +545,10 @@ mod prompts {
     #[test]
     fn test_render_cypher_query_prompt() {
         let mut args = serde_json::Map::new();
-        args.insert("intent".to_string(), serde_json::json!("Find all Entity nodes"));
+        args.insert(
+            "intent".to_string(),
+            serde_json::json!("Find all Entity nodes"),
+        );
 
         let rendered = prompts::render_prompt("cypher_query", &args);
         assert!(rendered.is_some(), "cypher_query should render");
@@ -605,7 +608,10 @@ mod prompts {
     #[test]
     fn test_render_entity_analysis_prompt() {
         let mut args = serde_json::Map::new();
-        args.insert("entity_key".to_string(), serde_json::json!("qr-code-generator"));
+        args.insert(
+            "entity_key".to_string(),
+            serde_json::json!("qr-code-generator"),
+        );
         args.insert("locale".to_string(), serde_json::json!("de-DE"));
 
         let rendered = prompts::render_prompt("entity_analysis", &args);
@@ -854,9 +860,7 @@ mod security_extended {
             params.insert("key".to_string(), serde_json::json!(key));
 
             // Query should execute safely (key is just a string value)
-            let result = pool
-                .execute_query("RETURN $key AS key", Some(params))
-                .await;
+            let result = pool.execute_query("RETURN $key AS key", Some(params)).await;
 
             // Should succeed and return the literal string, not traverse
             assert!(result.is_ok(), "Path traversal test failed for: {}", key);
@@ -923,16 +927,16 @@ mod security_extended {
         // Unicode normalization edge cases
         let unicode_strings = [
             // Combining characters
-            "café",                      // NFC form
-            "cafe\u{0301}",              // NFD form (e + combining acute)
+            "café",         // NFC form
+            "cafe\u{0301}", // NFD form (e + combining acute)
             // Zero-width characters
             "test\u{200B}value",         // Zero-width space
             "test\u{FEFF}value",         // BOM
             "test\u{200C}\u{200D}value", // ZWNJ + ZWJ
             // Right-to-left override
-            "test\u{202E}evil\u{202C}",  // RLO attack
+            "test\u{202E}evil\u{202C}", // RLO attack
             // Homoglyphs
-            "ᎻᎾᎷᎬ",                       // Cherokee letters look like HOME
+            "ᎻᎾᎷᎬ", // Cherokee letters look like HOME
         ];
 
         for text in unicode_strings {
@@ -1030,7 +1034,7 @@ mod security_extended {
             "MATCH (n) cReAtE (m:Evil) RETURN n",
             "MATCH (n) DeLeTe n",
             "MATCH (n) MeRgE (m:Evil) RETURN m",
-            "match (n) CREATE (m:Evil) return n", // lowercase
+            "match (n) CREATE (m:Evil) return n",  // lowercase
             "MATCH (n) RETURN n; CREATE (m:Evil)", // statement injection
         ];
 
@@ -1058,7 +1062,10 @@ mod security_extended {
 
         // Template injection attempts
         let mut params = serde_json::Map::new();
-        params.insert("key".to_string(), serde_json::json!("test'} CREATE (m:Evil) WITH m MATCH (n {key: 'x"));
+        params.insert(
+            "key".to_string(),
+            serde_json::json!("test'} CREATE (m:Evil) WITH m MATCH (n {key: 'x"),
+        );
 
         let result = pool
             .execute_query("MATCH (n {key: $key}) RETURN n.key AS key", Some(params))
@@ -1182,9 +1189,7 @@ mod edge_cases {
             .expect("Pool creation failed");
 
         // LIMIT 0 should return empty results
-        let result = pool
-            .execute_query("RETURN 1 AS num LIMIT 0", None)
-            .await;
+        let result = pool.execute_query("RETURN 1 AS num LIMIT 0", None).await;
 
         assert!(result.is_ok(), "LIMIT 0 query should succeed");
         let rows = result.unwrap();
@@ -1205,16 +1210,16 @@ mod edge_cases {
 
         // Special characters that might cause issues
         let special_values = [
-            "test'value",          // Single quote
-            "test\"value",         // Double quote
-            "test\\value",         // Backslash
-            "test\nvalue",         // Newline
-            "test\tvalue",         // Tab
-            "test\r\nvalue",       // CRLF
-            r"test`value",         // Backtick
-            "test{value}",         // Braces
-            "test[value]",         // Brackets
-            "test$value",          // Dollar sign
+            "test'value",    // Single quote
+            "test\"value",   // Double quote
+            "test\\value",   // Backslash
+            "test\nvalue",   // Newline
+            "test\tvalue",   // Tab
+            "test\r\nvalue", // CRLF
+            r"test`value",   // Backtick
+            "test{value}",   // Braces
+            "test[value]",   // Brackets
+            "test$value",    // Dollar sign
         ];
 
         for value in special_values {
@@ -1306,7 +1311,9 @@ mod cache_extended {
             .collect();
 
         let key = "large_value".to_string();
-        cache.insert(key.clone(), serde_json::json!(large_array)).await;
+        cache
+            .insert(key.clone(), serde_json::json!(large_array))
+            .await;
 
         let retrieved = cache.get(&key).await;
         assert!(retrieved.is_some(), "Large value should be cached");
@@ -1386,7 +1393,9 @@ mod cache_extended {
 
         // Insert 5 items (exceeds max capacity of 3)
         for i in 0..5 {
-            cache.insert(format!("key_{}", i), serde_json::json!(i)).await;
+            cache
+                .insert(format!("key_{}", i), serde_json::json!(i))
+                .await;
             // Give moka time to process
             tokio::time::sleep(Duration::from_millis(1)).await;
         }
@@ -1394,7 +1403,10 @@ mod cache_extended {
         // After insertions, some should be evicted
         // (moka's eviction is async, so we need to be flexible)
         let stats = cache.stats();
-        assert!(stats.entry_count <= 5, "Some entries may still be pending eviction");
+        assert!(
+            stats.entry_count <= 5,
+            "Some entries may still be pending eviction"
+        );
 
         // The most recent entries should be more likely to exist
         let recent = cache.get("key_4").await;
@@ -1443,7 +1455,10 @@ mod prompts_extended {
 
         let result = rendered.unwrap();
         let all_content: String = result.messages.iter().map(|m| m.content.clone()).collect();
-        assert!(all_content.contains("'"), "Single quote should be preserved");
+        assert!(
+            all_content.contains("'"),
+            "Single quote should be preserved"
+        );
     }
 
     #[test]
@@ -1508,7 +1523,11 @@ mod prompts_extended {
 
             // Verify structure
             let result = rendered.unwrap();
-            assert!(!result.messages.is_empty(), "'{}' should have messages", name);
+            assert!(
+                !result.messages.is_empty(),
+                "'{}' should have messages",
+                name
+            );
         }
     }
 }
@@ -1522,11 +1541,11 @@ mod resource_uris {
     fn test_entity_uri_special_chars() {
         // URIs with special characters should be parsed correctly
         let special_keys = [
-            "qr-code-generator",   // Normal
+            "qr-code-generator", // Normal
             "entity_with_underscore",
             "entity.with.dots",
-            "entity:with:colons", // Might conflict with URI scheme
-            "entity/with/slashes", // Path-like
+            "entity:with:colons",       // Might conflict with URI scheme
+            "entity/with/slashes",      // Path-like
             "entity?with&query=params", // Query-string like
             "entity#with#hashes",
             "entity%20encoded",
@@ -1754,7 +1773,10 @@ mod protocol_compliance {
         });
 
         let result: Result<QueryParams, _> = serde_json::from_value(params_json);
-        assert!(result.is_ok(), "Unknown fields should be ignored by default");
+        assert!(
+            result.is_ok(),
+            "Unknown fields should be ignored by default"
+        );
 
         let params = result.unwrap();
         assert_eq!(params.cypher, "RETURN 1");
@@ -2386,10 +2408,7 @@ mod security_critical {
             if result.is_ok() {
                 // If it somehow succeeded, verify no side effects occurred
                 // This is a defense-in-depth check
-                panic!(
-                    "CRITICAL: Dangerous APOC call was not blocked: {}",
-                    query
-                );
+                panic!("CRITICAL: Dangerous APOC call was not blocked: {}", query);
             }
         }
     }
@@ -2538,8 +2557,7 @@ mod security_critical {
                         || rows.iter().all(|r| {
                             // Ensure returned nodes don't have compromised labels
                             let labels = r.get("n").and_then(|n| n.get("labels"));
-                            labels.is_none()
-                                || !labels.unwrap().to_string().contains("Admin")
+                            labels.is_none() || !labels.unwrap().to_string().contains("Admin")
                         }),
                     "Label injection may have succeeded for: {}",
                     label
@@ -2617,9 +2635,7 @@ mod security_critical {
             let mut params = serde_json::Map::new();
             params.insert("num".to_string(), serde_json::json!(value));
 
-            let result = pool
-                .execute_query("RETURN $num AS num", Some(params))
-                .await;
+            let result = pool.execute_query("RETURN $num AS num", Some(params)).await;
 
             assert!(
                 result.is_ok(),

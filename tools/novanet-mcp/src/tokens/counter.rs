@@ -61,8 +61,12 @@ impl TokenCounter {
 
         // Calculate margins properly to avoid integer division issues with small budgets
         // Use at least 1 token margin to handle small budgets correctly
-        let low_threshold = budget.saturating_sub(budget / 10).max(budget.saturating_sub(1));
-        let high_threshold = budget.saturating_add(budget / 10).max(budget.saturating_add(1));
+        let low_threshold = budget
+            .saturating_sub(budget / 10)
+            .max(budget.saturating_sub(1));
+        let high_threshold = budget
+            .saturating_add(budget / 10)
+            .max(budget.saturating_add(1));
 
         // Fast path: clearly within budget (estimate is well below)
         if estimate < low_threshold {
@@ -250,7 +254,10 @@ mod tests {
         let estimate = counter.estimate("");
         assert_eq!(estimate, 0, "Empty string estimate should be 0");
 
-        assert!(counter.within_budget("", 0), "Empty string should fit 0 budget");
+        assert!(
+            counter.within_budget("", 0),
+            "Empty string should fit 0 budget"
+        );
     }
 
     #[test]
@@ -318,7 +325,7 @@ mod tests {
         let counter = TokenCounter::new();
 
         // Zero-width characters
-        let zwj = "test\u{200D}value";  // ZWJ
+        let zwj = "test\u{200D}value"; // ZWJ
         let count = counter.count(zwj);
         assert!(count > 0);
 
@@ -350,7 +357,11 @@ mod tests {
 
         let estimate = counter.estimate(&long);
         // Estimate uses chars/4 rule
-        assert!(estimate > 2000 && estimate < 3000, "10K chars estimate: {}", estimate);
+        assert!(
+            estimate > 2000 && estimate < 3000,
+            "10K chars estimate: {}",
+            estimate
+        );
     }
 
     #[test]
@@ -515,10 +526,10 @@ mod tests {
 
         // More normalization examples
         let normalization_pairs = [
-            ("ñ", "n\u{0303}"),           // ñ vs n + combining tilde
-            ("ü", "u\u{0308}"),           // ü vs u + combining diaeresis
-            ("à", "a\u{0300}"),           // à vs a + combining grave
-            ("ç", "c\u{0327}"),           // ç vs c + combining cedilla
+            ("ñ", "n\u{0303}"), // ñ vs n + combining tilde
+            ("ü", "u\u{0308}"), // ü vs u + combining diaeresis
+            ("à", "a\u{0300}"), // à vs a + combining grave
+            ("ç", "c\u{0327}"), // ç vs c + combining cedilla
         ];
 
         for (nfc, nfd) in normalization_pairs {
@@ -569,7 +580,12 @@ mod tests {
 
         // Should be valid UTF-8 (Rust strings guarantee this)
         assert!(truncated.is_char_boundary(truncated.len()));
-        assert!(count <= budget, "Count {} should be <= budget {}", count, budget);
+        assert!(
+            count <= budget,
+            "Count {} should be <= budget {}",
+            count,
+            budget
+        );
 
         // Truncated text should be valid
         let _recount = counter.count(&truncated);
@@ -603,13 +619,13 @@ mod tests {
 
         // Various control characters
         let control_chars = [
-            "\x00",         // NUL
-            "\x07",         // BEL
-            "\x08",         // BS
-            "\x0B",         // VT
-            "\x0C",         // FF
-            "\x1B",         // ESC
-            "\x7F",         // DEL
+            "\x00", // NUL
+            "\x07", // BEL
+            "\x08", // BS
+            "\x0B", // VT
+            "\x0C", // FF
+            "\x1B", // ESC
+            "\x7F", // DEL
         ];
 
         for ctrl in control_chars {
@@ -629,8 +645,11 @@ mod tests {
         let exact_count = counter.count(text);
 
         // Should pass at exact budget
-        assert!(counter.within_budget(text, exact_count),
-            "Should pass at exact budget. exact_count={}", exact_count);
+        assert!(
+            counter.within_budget(text, exact_count),
+            "Should pass at exact budget. exact_count={}",
+            exact_count
+        );
 
         // Should fail at one less
         if exact_count > 0 {

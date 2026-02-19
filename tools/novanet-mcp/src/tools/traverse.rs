@@ -101,7 +101,10 @@ pub struct TraverseResult {
 pub async fn execute(state: &State, params: TraverseParams) -> Result<TraverseResult> {
     let start = std::time::Instant::now();
 
-    let max_depth = params.max_depth.unwrap_or(2).min(state.config().max_hops as usize);
+    let max_depth = params
+        .max_depth
+        .unwrap_or(2)
+        .min(state.config().max_hops as usize);
     let limit = params.limit.unwrap_or(50).min(200);
     let include_props = params.include_properties.unwrap_or(true);
 
