@@ -44,6 +44,22 @@ const COLOR_VALUE_ARRAY: Color = Color::Rgb(137, 180, 250); // Blue
 const COLOR_VALUE_OBJECT: Color = Color::Rgb(245, 194, 231); // Pink
 
 // =============================================================================
+// v0.13.1 SECTION HEADER COLORS
+// =============================================================================
+
+/// STANDARD section header - teal (same as shared realm color #2aa198).
+/// Standard properties are common/boring - stable teal conveys "foundational".
+const COLOR_HEADER_STANDARD: Color = Color::Rgb(42, 161, 152);
+
+/// SPECIFIC section header - orange (same as semantic layer color #f97316).
+/// Specific properties are unique/interesting - vibrant orange conveys "differentiation".
+const COLOR_HEADER_SPECIFIC: Color = Color::Rgb(249, 115, 22);
+
+/// Focused property background - subtle highlight for j/k navigation.
+/// Dark blue background that works well with all text colors.
+const COLOR_PROPERTY_FOCUSED_BG: Color = Color::Rgb(30, 50, 80);
+
+// =============================================================================
 // v0.13.1 STANDARD PROPERTIES (schema-standard.md)
 // =============================================================================
 
@@ -569,8 +585,19 @@ fn build_class_content(
         content.coverage.add_empty();
     }
 
-    // PROPERTIES - v0.13.1: YAML-style with cyan keys, type badges, and aligned colons
+    // PROPERTIES - v0.13.1: YAML-style with cyan keys, type badges, section headers
+    // Split into STANDARD and SPECIFIC sections (same as Instance view)
     if let Some(validated) = &app.validated_class_properties {
+        // Split into standard vs specific
+        let standard_props: Vec<_> = validated
+            .iter()
+            .filter(|p| is_standard_property(&p.name))
+            .collect();
+        let specific_props: Vec<_> = validated
+            .iter()
+            .filter(|p| !is_standard_property(&p.name))
+            .collect();
+
         // Calculate max property name length for colon alignment
         let max_name_len = validated
             .iter()
@@ -579,37 +606,98 @@ fn build_class_content(
             .unwrap_or(0)
             .min(18); // Cap at 18 chars for readability
 
-        for prop in validated {
-            let (status_icon, status_style) = match prop.status {
-                ValidationStatus::Sync => ("✓", Style::default().fg(Color::Rgb(133, 153, 0))), // green
-                ValidationStatus::Missing => ("⚠", Style::default().fg(Color::Rgb(203, 75, 22))), // orange
-                ValidationStatus::Extra => ("?", STYLE_DIM),
-            };
-            let required_marker = if prop.required { "*" } else { " " };
-            let badge = type_badge(&prop.prop_type);
-            let badge_color = type_color(&prop.prop_type);
+        // STANDARD section header (teal)
+        if !standard_props.is_empty() {
+            content.properties.add_line(Line::from(vec![Span::styled(
+                format!("── STANDARD ({}) ──", standard_props.len()),
+                Style::default().fg(COLOR_HEADER_STANDARD),
+            )]));
 
-            // v0.13.1: YAML-style with aligned colons
-            // Format: `✓* property_name: [type]`
-            content.properties.add_line(Line::from(vec![
-                Span::styled(status_icon, status_style),
-                Span::styled(
-                    required_marker,
-                    Style::default().fg(Color::Rgb(220, 50, 47)), // red asterisk
-                ),
-                Span::styled(
-                    format!("{:width$}", prop.name, width = max_name_len),
-                    STYLE_PROP_KEY,
-                ),
-                Span::styled(": ", STYLE_PROP_COLON),
-                Span::styled(
-                    format!("[{}]", badge.trim()),
-                    Style::default().fg(badge_color),
-                ),
-            ]));
+            for prop in &standard_props {
+                let (status_icon, status_style) = match prop.status {
+                    ValidationStatus::Sync => {
+                        ("✓", Style::default().fg(Color::Rgb(133, 153, 0)))
+                    }
+                    ValidationStatus::Missing => {
+                        ("⚠", Style::default().fg(Color::Rgb(203, 75, 22)))
+                    }
+                    ValidationStatus::Extra => ("?", STYLE_DIM),
+                };
+                let required_marker = if prop.required { "*" } else { " " };
+                let badge = type_badge(&prop.prop_type);
+                let badge_color = type_color(&prop.prop_type);
+
+                content.properties.add_line(Line::from(vec![
+                    Span::styled(status_icon, status_style),
+                    Span::styled(
+                        required_marker,
+                        Style::default().fg(Color::Rgb(220, 50, 47)),
+                    ),
+                    Span::styled(
+                        format!("{:width$}", prop.name, width = max_name_len),
+                        STYLE_PROP_KEY,
+                    ),
+                    Span::styled(": ", STYLE_PROP_COLON),
+                    Span::styled(
+                        format!("[{}]", badge.trim()),
+                        Style::default().fg(badge_color),
+                    ),
+                ]));
+            }
+        }
+
+        // SPECIFIC section header (orange)
+        if !specific_props.is_empty() {
+            content.properties.add_line(Line::from(vec![Span::styled(
+                format!("── SPECIFIC ({}) ──", specific_props.len()),
+                Style::default().fg(COLOR_HEADER_SPECIFIC),
+            )]));
+
+            for prop in &specific_props {
+                let (status_icon, status_style) = match prop.status {
+                    ValidationStatus::Sync => {
+                        ("✓", Style::default().fg(Color::Rgb(133, 153, 0)))
+                    }
+                    ValidationStatus::Missing => {
+                        ("⚠", Style::default().fg(Color::Rgb(203, 75, 22)))
+                    }
+                    ValidationStatus::Extra => ("?", STYLE_DIM),
+                };
+                let required_marker = if prop.required { "*" } else { " " };
+                let badge = type_badge(&prop.prop_type);
+                let badge_color = type_color(&prop.prop_type);
+
+                content.properties.add_line(Line::from(vec![
+                    Span::styled(status_icon, status_style),
+                    Span::styled(
+                        required_marker,
+                        Style::default().fg(Color::Rgb(220, 50, 47)),
+                    ),
+                    Span::styled(
+                        format!("{:width$}", prop.name, width = max_name_len),
+                        STYLE_PROP_KEY,
+                    ),
+                    Span::styled(": ", STYLE_PROP_COLON),
+                    Span::styled(
+                        format!("[{}]", badge.trim()),
+                        Style::default().fg(badge_color),
+                    ),
+                ]));
+            }
         }
     } else if !class.properties.is_empty() {
-        // Fallback: simple property list without type info (YAML-style)
+        // Fallback: simple property list with section headers
+        let standard_props: Vec<_> = class
+            .properties
+            .iter()
+            .filter(|p| is_standard_property(p))
+            .collect();
+        let specific_props: Vec<_> = class
+            .properties
+            .iter()
+            .filter(|p| !is_standard_property(p))
+            .collect();
+
         let max_name_len = class
             .properties
             .iter()
@@ -618,28 +706,66 @@ fn build_class_content(
             .unwrap_or(0)
             .min(18);
 
-        for prop in &class.properties {
-            let is_required = class.required_properties.contains(prop);
-            let marker = if is_required { "*" } else { " " };
+        // STANDARD section header (teal)
+        if !standard_props.is_empty() {
+            content.properties.add_line(Line::from(vec![Span::styled(
+                format!("── STANDARD ({}) ──", standard_props.len()),
+                Style::default().fg(COLOR_HEADER_STANDARD),
+            )]));
 
-            // v0.13.1: YAML-style with aligned colons
-            content.properties.add_line(Line::from(vec![
-                Span::styled("  ", STYLE_DIM),
-                Span::styled(marker, Style::default().fg(Color::Rgb(220, 50, 47))),
-                Span::styled(
-                    format!("{:width$}", prop, width = max_name_len),
-                    STYLE_PROP_KEY,
-                ),
-                Span::styled(": ", STYLE_PROP_COLON),
-                Span::styled(
-                    if is_required { "[req]" } else { "[opt]" },
-                    if is_required {
-                        Style::default().fg(Color::Rgb(181, 137, 0)) // yellow for required
-                    } else {
-                        STYLE_DIM
-                    },
-                ),
-            ]));
+            for prop in &standard_props {
+                let is_required = class.required_properties.contains(*prop);
+                let marker = if is_required { "*" } else { " " };
+
+                content.properties.add_line(Line::from(vec![
+                    Span::styled("  ", STYLE_DIM),
+                    Span::styled(marker, Style::default().fg(Color::Rgb(220, 50, 47))),
+                    Span::styled(
+                        format!("{:width$}", prop, width = max_name_len),
+                        STYLE_PROP_KEY,
+                    ),
+                    Span::styled(": ", STYLE_PROP_COLON),
+                    Span::styled(
+                        if is_required { "[req]" } else { "[opt]" },
+                        if is_required {
+                            Style::default().fg(Color::Rgb(181, 137, 0))
+                        } else {
+                            STYLE_DIM
+                        },
+                    ),
+                ]));
+            }
+        }
+
+        // SPECIFIC section header (orange)
+        if !specific_props.is_empty() {
+            content.properties.add_line(Line::from(vec![Span::styled(
+                format!("── SPECIFIC ({}) ──", specific_props.len()),
+                Style::default().fg(COLOR_HEADER_SPECIFIC),
+            )]));
+
+            for prop in &specific_props {
+                let is_required = class.required_properties.contains(*prop);
+                let marker = if is_required { "*" } else { " " };
+
+                content.properties.add_line(Line::from(vec![
+                    Span::styled("  ", STYLE_DIM),
+                    Span::styled(marker, Style::default().fg(Color::Rgb(220, 50, 47))),
+                    Span::styled(
+                        format!("{:width$}", prop, width = max_name_len),
+                        STYLE_PROP_KEY,
+                    ),
+                    Span::styled(": ", STYLE_PROP_COLON),
+                    Span::styled(
+                        if is_required { "[req]" } else { "[opt]" },
+                        if is_required {
+                            Style::default().fg(Color::Rgb(181, 137, 0))
+                        } else {
+                            STYLE_DIM
+                        },
+                    ),
+                ]));
+            }
         }
     } else {
         content.properties.add_empty();
@@ -1123,11 +1249,15 @@ fn build_instance_content(
             .unwrap_or(0)
             .min(18); // Same cap as Class for visual alignment
 
-        // STANDARD section (dim styling)
+        // Check if properties box is focused for highlighting
+        let is_props_focused = app.focus == Focus::Info && app.selected_box == InfoBox::Properties;
+        let mut property_idx: usize = 0;
+
+        // STANDARD section (teal header)
         if !standard_keys.is_empty() {
             content.properties.add_line(Line::from(vec![Span::styled(
                 format!("── STANDARD ({}) ──", standard_keys.len()),
-                STYLE_DIM,
+                Style::default().fg(COLOR_HEADER_STANDARD),
             )]));
             for key in &standard_keys {
                 let is_required = class.required_properties.contains(*key);
@@ -1146,14 +1276,13 @@ fn build_instance_content(
                 };
                 let required_marker = if is_required { "*" } else { " " };
 
-                let (value_str, _value_color) = if let Some(value) = instance.properties.get(*key) {
+                let (value_str, value_color) = if let Some(value) = instance.properties.get(*key) {
                     (json_value_to_display(value), json_value_color(value))
                 } else {
                     ("~".to_string(), COLOR_VALUE_NULL)
                 };
-                let truncated = truncate_str(&value_str, 24);
 
-                // Standard properties use dim styling for key and value
+                // Standard properties now use same styling as specific for consistency
                 // Look up type from validated_class_properties
                 let prop_type = app
                     .validated_class_properties
@@ -1164,28 +1293,47 @@ fn build_instance_content(
                 let badge = type_badge(prop_type);
                 let badge_color = type_color(prop_type);
 
+                // Apply background highlight if this property is focused
+                let is_focused = is_props_focused && property_idx == app.focused_property_idx;
+                let bg_style = if is_focused {
+                    Style::default().bg(COLOR_PROPERTY_FOCUSED_BG)
+                } else {
+                    Style::default()
+                };
+
+                // v0.13.1 Feature 4: Show full value when focused + expanded
+                let display_value = if is_focused && app.expanded_property {
+                    value_str.clone()
+                } else {
+                    truncate_str(&value_str, 24)
+                };
+
                 content.properties.add_line(Line::from(vec![
-                    Span::styled(status_icon, status_style),
+                    Span::styled(status_icon, status_style.patch(bg_style)),
                     Span::styled(
                         required_marker,
-                        Style::default().fg(Color::Rgb(220, 50, 47)),
+                        Style::default().fg(Color::Rgb(220, 50, 47)).patch(bg_style),
                     ),
-                    Span::styled(format!("{:width$}", key, width = max_key_len), STYLE_DIM),
-                    Span::styled(": ", STYLE_PROP_COLON),
+                    Span::styled(
+                        format!("{:width$}", key, width = max_key_len),
+                        STYLE_PROP_KEY.patch(bg_style),
+                    ),
+                    Span::styled(": ", STYLE_PROP_COLON.patch(bg_style)),
                     Span::styled(
                         format!("[{}] ", badge.trim()),
-                        Style::default().fg(badge_color),
+                        Style::default().fg(badge_color).patch(bg_style),
                     ),
-                    Span::styled(truncated, STYLE_DIM),
+                    Span::styled(display_value, Style::default().fg(value_color).patch(bg_style)),
                 ]));
+                property_idx += 1;
             }
         }
 
-        // SPECIFIC section (full color)
+        // SPECIFIC section (gold/orange header)
         if !specific_keys.is_empty() {
             content.properties.add_line(Line::from(vec![Span::styled(
                 format!("── SPECIFIC ({}) ──", specific_keys.len()),
-                STYLE_MUTED,
+                Style::default().fg(COLOR_HEADER_SPECIFIC),
             )]));
             for key in &specific_keys {
                 let is_required = class.required_properties.contains(*key);
@@ -1209,7 +1357,6 @@ fn build_instance_content(
                 } else {
                     ("~".to_string(), COLOR_VALUE_NULL)
                 };
-                let truncated = truncate_str(&value_str, 24);
 
                 // Look up type from validated_class_properties
                 let prop_type = app
@@ -1221,23 +1368,39 @@ fn build_instance_content(
                 let badge = type_badge(prop_type);
                 let badge_color = type_color(prop_type);
 
+                // Apply background highlight if this property is focused
+                let is_focused = is_props_focused && property_idx == app.focused_property_idx;
+                let bg_style = if is_focused {
+                    Style::default().bg(COLOR_PROPERTY_FOCUSED_BG)
+                } else {
+                    Style::default()
+                };
+
+                // v0.13.1 Feature 4: Show full value when focused + expanded
+                let display_value = if is_focused && app.expanded_property {
+                    value_str.clone()
+                } else {
+                    truncate_str(&value_str, 24)
+                };
+
                 content.properties.add_line(Line::from(vec![
-                    Span::styled(status_icon, status_style),
+                    Span::styled(status_icon, status_style.patch(bg_style)),
                     Span::styled(
                         required_marker,
-                        Style::default().fg(Color::Rgb(220, 50, 47)),
+                        Style::default().fg(Color::Rgb(220, 50, 47)).patch(bg_style),
                     ),
                     Span::styled(
                         format!("{:width$}", key, width = max_key_len),
-                        STYLE_PROP_KEY,
+                        STYLE_PROP_KEY.patch(bg_style),
                     ),
-                    Span::styled(": ", STYLE_PROP_COLON),
+                    Span::styled(": ", STYLE_PROP_COLON.patch(bg_style)),
                     Span::styled(
                         format!("[{}] ", badge.trim()),
-                        Style::default().fg(badge_color),
+                        Style::default().fg(badge_color).patch(bg_style),
                     ),
-                    Span::styled(truncated, Style::default().fg(value_color)),
+                    Span::styled(display_value, Style::default().fg(value_color).patch(bg_style)),
                 ]));
+                property_idx += 1;
             }
         }
 
@@ -1246,18 +1409,33 @@ fn build_instance_content(
             if let Some(value) = instance.properties.get(*key) {
                 let value_str = json_value_to_display(value);
                 let value_color = json_value_color(value);
-                let truncated = truncate_str(&value_str, 24);
+
+                // Apply background highlight if this property is focused
+                let is_focused = is_props_focused && property_idx == app.focused_property_idx;
+                let bg_style = if is_focused {
+                    Style::default().bg(COLOR_PROPERTY_FOCUSED_BG)
+                } else {
+                    Style::default()
+                };
+
+                // v0.13.1 Feature 4: Show full value when focused + expanded
+                let display_value = if is_focused && app.expanded_property {
+                    value_str.clone()
+                } else {
+                    truncate_str(&value_str, 24)
+                };
 
                 content.properties.add_line(Line::from(vec![
-                    Span::styled("?", STYLE_DIM), // Unknown/extra property
-                    Span::styled(" ", STYLE_DIM),
+                    Span::styled("?", STYLE_DIM.patch(bg_style)), // Unknown/extra property
+                    Span::styled(" ", STYLE_DIM.patch(bg_style)),
                     Span::styled(
                         format!("{:width$}", key, width = max_key_len),
-                        STYLE_PROP_KEY,
+                        STYLE_PROP_KEY.patch(bg_style),
                     ),
-                    Span::styled(": ", STYLE_PROP_COLON),
-                    Span::styled(truncated, Style::default().fg(value_color)),
+                    Span::styled(": ", STYLE_PROP_COLON.patch(bg_style)),
+                    Span::styled(display_value, Style::default().fg(value_color).patch(bg_style)),
                 ]));
+                property_idx += 1;
             }
         }
     } else {

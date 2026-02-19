@@ -183,6 +183,138 @@ fn get_source_content(app: &App) -> Option<(String, &'static str)> {
 
 // v0.13.1: get_diagram_content and get_architecture_content removed (panel simplification)
 
+/// Standard properties that ALL nodes have (from standard_properties in YAML).
+/// NOTE: Must match STANDARD_PROPERTY_NAMES in ui/info.rs for consistent ordering.
+const STANDARD_PROPERTY_NAMES: &[&str] = &[
+    "key",
+    "entity_key",
+    "page_key",
+    "block_key",
+    "locale_key",
+    "display_name",
+    "description",
+    "created_at",
+    "updated_at",
+];
+
+/// Check if a property name is a standard property.
+fn is_standard_property(name: &str) -> bool {
+    STANDARD_PROPERTY_NAMES.contains(&name)
+}
+
+/// Get the focused property (key, value) at the current `focused_property_idx`.
+/// Returns None if no property at that index or not viewing properties.
+/// Order matches info.rs rendering: STANDARD → SPECIFIC → extra (instance-only).
+pub fn get_focused_property(app: &App) -> Option<(String, String)> {
+    let item = app.current_item()?;
+    let idx = app.focused_property_idx;
+
+    match item {
+        TreeItem::Class(_, _, class) => {
+            // For Class: property names only (no values)
+            // Order: standard → specific
+            let standard_keys: Vec<&String> = class
+                .properties
+                .iter()
+                .filter(|k| is_standard_property(k.as_str()))
+                .collect();
+            let specific_keys: Vec<&String> = class
+                .properties
+                .iter()
+                .filter(|k| !is_standard_property(k.as_str()))
+                .collect();
+
+            // Find property at index
+            if idx < standard_keys.len() {
+                let key = standard_keys[idx].clone();
+                let is_required = class.required_properties.contains(&key);
+                let value = if is_required { "required" } else { "optional" };
+                Some((key, value.to_string()))
+            } else {
+                let specific_idx = idx - standard_keys.len();
+                if specific_idx < specific_keys.len() {
+                    let key = specific_keys[specific_idx].clone();
+                    let is_required = class.required_properties.contains(&key);
+                    let value = if is_required { "required" } else { "optional" };
+                    Some((key, value.to_string()))
+                } else {
+                    None
+                }
+            }
+        }
+        TreeItem::Instance(_, _, class, instance) => {
+            // For Instance: actual property values
+            // Order: standard → specific → extra (instance-only)
+            let all_schema_keys: Vec<&String> = class.properties.iter().collect();
+
+            let standard_keys: Vec<&String> = all_schema_keys
+                .iter()
+                .filter(|k| is_standard_property(k.as_str()))
+                .copied()
+                .collect();
+            let specific_keys: Vec<&String> = all_schema_keys
+                .iter()
+                .filter(|k| !is_standard_property(k.as_str()))
+                .copied()
+                .collect();
+            let extra_keys: Vec<&String> = instance
+                .properties
+                .keys()
+                .filter(|k| !k.starts_with('_') && !all_schema_keys.contains(k))
+                .collect();
+
+            // Find property at index
+            let standard_len = standard_keys.len();
+            let specific_len = specific_keys.len();
+
+            if idx < standard_len {
+                let key = standard_keys[idx].clone();
+                let value = instance
+                    .properties
+                    .get(&key)
+                    .map(format_json_value)
+                    .unwrap_or_else(|| "—".to_string());
+                Some((key, value))
+            } else if idx < standard_len + specific_len {
+                let specific_idx = idx - standard_len;
+                let key = specific_keys[specific_idx].clone();
+                let value = instance
+                    .properties
+                    .get(&key)
+                    .map(format_json_value)
+                    .unwrap_or_else(|| "—".to_string());
+                Some((key, value))
+            } else {
+                let extra_idx = idx - standard_len - specific_len;
+                if extra_idx < extra_keys.len() {
+                    let key = extra_keys[extra_idx].clone();
+                    let value = instance
+                        .properties
+                        .get(&key)
+                        .map(format_json_value)
+                        .unwrap_or_else(|| "—".to_string());
+                    Some((key, value))
+                } else {
+                    None
+                }
+            }
+        }
+        _ => None,
+    }
+}
+
+/// Format a JSON value for display (compact string representation).
+fn format_json_value(value: &serde_json::Value) -> String {
+    match value {
+        serde_json::Value::String(s) => s.clone(),
+        serde_json::Value::Null => "null".to_string(),
+        serde_json::Value::Bool(b) => b.to_string(),
+        serde_json::Value::Number(n) => n.to_string(),
+        serde_json::Value::Array(arr) => serde_json::to_string(arr).unwrap_or_default(),
+        serde_json::Value::Object(obj) => serde_json::to_string(obj).unwrap_or_default(),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
