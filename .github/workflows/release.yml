@@ -106,6 +106,13 @@ jobs:
             echo "is_prerelease=false" >> $GITHUB_OUTPUT
           fi
 
+      - name: Generate SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          path: ./
+          artifact-name: sbom-${{ needs.changelog.outputs.version }}.spdx.json
+          output-file: sbom.spdx.json
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -114,6 +121,8 @@ jobs:
           body_path: CHANGELOG_RELEASE.md
           prerelease: ${{ steps.prerelease.outputs.is_prerelease }}
           generate_release_notes: false
+          files: |
+            sbom.spdx.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

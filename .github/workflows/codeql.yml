@@ -39,3 +39,32 @@ jobs:
         uses: github/codeql-action/analyze@v3
         with:
           category: "/language:${{ matrix.language }}"
+
+  # =============================================================================
+  # Rust Security Audit (cargo-audit for Rust-specific vulnerabilities)
+  # =============================================================================
+  rust-audit:
+    name: Rust Security Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install cargo-audit
+        uses: taiki-e/install-action@cargo-audit
+
+      - name: Audit NovaNet Rust CLI
+        working-directory: novanet-dev/tools/novanet
+        run: cargo audit
+        continue-on-error: true
+
+      - name: Audit Nika Rust CLI
+        working-directory: nika-dev/tools/nika
+        run: cargo audit
+        continue-on-error: true

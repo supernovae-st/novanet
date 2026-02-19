@@ -1,14 +1,185 @@
 # Gap Correction Plan — 2026-02-19
 
-**Status:** Active — Quick Wins Execution
-**Source:** Multi-agent analysis of 24 plans from 2026-02-18
-**Priority:** P0 blockers first, then P1 important, then P2 nice-to-have
+**Status:** Active — CRITICAL compilation error + comprehensive gaps
+**Source:** 6 parallel explorer agents + 24 planning documents
+**Priority:** CRITICAL > HIGH > MEDIUM > LOW
 
 ---
 
 ## Executive Summary
 
-Analysis of 24 planning documents revealed **30 gaps** across Nika MVPs, NovaNet schema, integration, and DX. This plan prioritizes quick wins (< 1 hour each) that unblock development.
+**UPDATE 12:10:** Comprehensive multi-agent analysis expanded scope significantly:
+
+| Category | Gaps Found | Source Agent |
+|----------|------------|--------------|
+| CRITICAL | 1 (Nika compilation) | ad6730a |
+| HIGH | 8 (MCP tests, API tests, CI) | acd65ac, a7bff50 |
+| MEDIUM | 12 (benchmarks, fuzz, workflows) | a4dd765, aeef144 |
+| LOW | 6 (Windows CI, MSRV, stale) | a7bff50 |
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  CRITICAL: Nika tui/state.rs:542 — `tokens` field mismatch                   ║
+║  Impact: ALL 406 Nika tests BLOCKED                                          ║
+║  Fix: Update EventKind::AgentTurn destructuring                              ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## CRITICAL: Fix Immediately
+
+### C.1 Nika Compilation Error (15 min)
+
+**File:** `nika-dev/tools/nika/src/tui/state.rs:542`
+**Error:** `EventKind::AgentTurn` variant does not have field `tokens`
+
+```rust
+// Current (BROKEN):
+EventKind::AgentTurn {
+    turn_index,
+    kind,
+    tokens,  // ← Field doesn't exist in v0.4.1
+    ..
+}
+
+// Fix: Check log.rs for AgentTurnMetadata structure
+```
+
+**Impact:** 406 tests cannot run
+**Action:** Check `event/log.rs` and update destructuring pattern
+
+---
+
+## HIGH Priority: Sprint 1 Additions
+
+### H.1 NovaNet MCP Test Coverage (2-3 days) — FROM acd65ac
+
+**Current:** 23 files, 14 with tests (61%)
+
+| Critical Gap | File | Tests |
+|--------------|------|-------|
+| Request routing | `handler.rs` | 0 |
+| Server lifecycle | `state.rs` | 0 |
+| Error mapping | `error.rs` | 0 |
+| Generation logic | `tools/generate.rs` | 0 |
+
+**Target:** Add ~40 tests, reach 85% coverage
+
+### H.2 Studio API Route Tests (2-3 days) — FROM acd65ac
+
+**Current:** 13 API endpoints with ZERO tests
+
+```
+app/api/graph/route.ts         # 0 tests
+app/api/schema/route.ts        # 0 tests
+app/api/tree/[id]/children/    # 0 tests
+... (10 more)
+```
+
+**Target:** 2 tests per route = 26 new tests
+
+### H.3 GitHub Dependency Review (30 min) — FROM a7bff50
+
+Create `.github/workflows/dependency-review.yml`:
+```yaml
+name: Dependency Review
+on: [pull_request]
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
+```
+
+### H.4 Nika: Activate proptest/insta (2-4h) — FROM aeef144
+
+**Gap:** Dependencies declared but never used
+- `proptest = "1.4"` → No `proptest!` macros
+- `insta = "1.34"` → No `.snap` files
+
+**Action:** Add property-based tests for binding module
+
+---
+
+## MEDIUM Priority: Sprint 2 Additions
+
+### M.1 NovaNet Benchmark Harness — FROM a4dd765
+
+Add to `novanet-dev/tools/novanet/Cargo.toml`:
+```toml
+[[bench]]
+name = "benchmarks"
+harness = false
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+```
+
+### M.2 Nika Deprecated Provider Cleanup — FROM aeef144
+
+**Location:** `resilience/provider.rs:527-528`
+```rust
+stop_reason: StopReason::EndTurn,  // deprecated
+usage: Usage::new(10, 10),          // deprecated
+```
+**Action:** Migrate to rig-core types
+
+### M.3 CodeQL Rust Support — FROM a7bff50
+
+Update `.github/workflows/codeql.yml`:
+```yaml
+strategy:
+  matrix:
+    language: ['typescript', 'rust']  # Add 'rust'
+```
+
+### M.4 SBOM Generation — FROM a7bff50
+
+Add to release workflow:
+```yaml
+- uses: anchore/sbom-action@v0
+```
+
+### M.5 Reusable Workflows — FROM a7bff50
+
+Create `.github/workflows/reusable-rust-setup.yml` to DRY CI
+
+### M.6 Fuzz Testing — FROM a4dd765, aeef144
+
+Add `cargo-fuzz` targets for:
+- YAML parsers (both projects)
+- Binding expressions (Nika)
+- Template substitution (Nika)
+
+---
+
+## LOW Priority: Sprint 3 Additions
+
+### L.1 Nika Windows CI — FROM aeef144
+### L.2 Nika MSRV Check — FROM aeef144
+### L.3 PR Title Linting — FROM a7bff50
+### L.4 Stale Issue Management — FROM a7bff50
+
+---
+
+## Agent Sources
+
+| Agent | Focus | Status | Key Finding |
+|-------|-------|--------|-------------|
+| a7bff50 | GitHub CI/CD | ✅ | 6 workflow improvements |
+| a1b276c | Main Project | ✅ | Integration test gaps |
+| a4dd765 | NovaNet Rust | ✅ | 86% coverage, need benchmarks |
+| aeef144 | Nika Rust | ✅ | Unused deps, deprecated types |
+| acd65ac | NovaNet Tests | ✅ | MCP 61%, Studio 11% |
+| ad6730a | Nika Tests | ⏳ | Found compilation error |
+
+---
+
+## Original Phase 1 (Previous Analysis)
 
 ---
 

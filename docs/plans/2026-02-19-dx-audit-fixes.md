@@ -1,50 +1,61 @@
-# DX Audit Fixes - Implementation Plan
+# DX Audit Fixes - Implementation Plan (v2)
+
+> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
 **Date:** 2026-02-19
 **Status:** Ready for Execution
-**Source:** 14 Sniper Agent Audit Results (v2)
+**Source:** 6 Explorer Agents (Rust architecture, CI/CD, test coverage)
+
+**Goal:** Fix all gaps identified by 6 parallel explorer agents - CI/CD security, test coverage, code quality.
+
+**Architecture:** Add GitHub workflows for security scanning, clean deprecated code, add benchmarks.
+
+**Tech Stack:** GitHub Actions, Rust (cargo test, criterion), TypeScript (Jest)
 
 ---
 
 ## Executive Summary
 
-L'audit complet par 14 agents explorateurs parallèles a identifié **12 issues** à corriger:
-- **5 critiques** (tests failing, MCP gaps, CI)
-- **5 medium** (documentation desync)
-- **2 low** (typo, examples)
+L'audit complet par 6 agents explorateurs parallèles a identifié **27 items** à corriger:
+- **8 HIGH** (CI security, MCP tests, deprecated code)
+- **12 MEDIUM** (benchmarks, fuzz, cleanup)
+- **7 LOW** (Windows CI, MSRV, stale management)
 
-**Temps estimé total:** ~45-60 minutes
+**Temps estimé total:** ~8-10 heures
 
 ---
 
-## Issues Consolidées
+## Issues Consolidées (6-Agent Analysis)
 
-### 🔴 CRITIQUES (P0)
+### 🔴 HIGH PRIORITY
 
-| # | Issue | Location | Impact |
+| # | Issue | Location | Effort |
 |---|-------|----------|--------|
-| C1 | 3 TypeScript tests fail (arc family 5→6) | `novanet-dev/packages/core/` | CI broken |
-| C2 | 1 Rust test fail (missing file) | `novanet-dev/tools/novanet/` | CI broken |
-| C3 | denomination_forms NOT in MCP response | `novanet-dev/tools/novanet-mcp/` | ADR-033 violation |
-| C4 | context_build_log NOT implemented | `novanet-dev/tools/novanet-mcp/` | No debug trace |
-| C5 | McpClient mock mode default | `nika-dev/tools/nika/src/mcp/client.rs` | Integration blocked |
+| H1 | Missing dependency-review.yml | `.github/workflows/` | 30 min |
+| H2 | CodeQL missing Rust support | `.github/workflows/codeql.yml` | 15 min |
+| H3 | No SBOM in releases | `.github/workflows/release.yml` | 30 min |
+| H4 | 70 deprecation warnings in Nika | `nika-dev/tools/nika/src/resilience/` | 1h |
+| H5 | proptest/insta unused in Nika | `nika-dev/tools/nika/Cargo.toml` | 30 min |
+| H6 | NovaNet MCP handler.rs 0 tests | `novanet-dev/tools/novanet-mcp/` | DEFERRED |
+| H7 | Studio API 13 routes 0 tests | `novanet-dev/packages/studio/` | DEFERRED |
 
-### 🟡 MEDIUM (P1)
+### 🟡 MEDIUM PRIORITY
 
-| # | Issue | Location | Impact |
+| # | Issue | Location | Effort |
 |---|-------|----------|--------|
-| M1 | Nika CLAUDE.md missing resilience patterns | `nika-dev/tools/nika/CLAUDE.md` | DX incomplete |
-| M2 | Nika CLAUDE.md missing for_each docs | `nika-dev/tools/nika/CLAUDE.md` | DX incomplete |
-| M3 | NovaNet CLAUDE.md missing MCP tools | `novanet-dev/CLAUDE.md` | DX incomplete |
-| M4 | supernovae-agi README wrong clone URL | `supernovae-agi/README.md` | Onboarding broken |
-| M5 | nika-dev README version badge mismatch | `nika-dev/README.md` | Confusing |
+| M1 | No benchmark harness | `novanet-dev/tools/novanet/` | 2h |
+| M2 | No fuzz testing | Both projects | DEFERRED |
+| M3 | denomination_forms gap | `novanet-dev/tools/novanet-mcp/` | DONE in v0.14 |
+| M4 | context_build_log gap | `novanet-dev/tools/novanet-mcp/` | DONE in v0.14 |
 
-### 🟢 LOW (P2)
+### 🟢 LOW PRIORITY
 
-| # | Issue | Location | Impact |
+| # | Issue | Location | Effort |
 |---|-------|----------|--------|
-| L1 | ROADMAP.md "62 nodes" typo (should be 61) | `supernovae-agi/ROADMAP.md` | Minor confusion |
-| L2 | v0.3 showcase examples missing | `nika-dev/tools/nika/examples/` | Onboarding incomplete |
+| L1 | Missing PR title linting | `.github/workflows/` | 15 min |
+| L2 | Missing stale management | `.github/workflows/` | 15 min |
+| L3 | Nika missing MSRV | `nika-dev/tools/nika/Cargo.toml` | 10 min |
+| L4 | Nika missing Windows CI | CI config | DEFERRED |
 
 ---
 
@@ -178,9 +189,92 @@ Replace: mock: bool only in test cfg, production uses real MCP
 Verify: cargo test mcp_client
 ```
 
-### Phase 4: v0.3 Examples (15-20 min)
+### Phase 4: GitHub CI/CD Security (HIGH - 45 min)
 
-#### Task 4.1: Create for_each + invoke showcase (10 min)
+#### Task 4.1: Create dependency-review.yml (15 min)
+```
+File: .github/workflows/dependency-review.yml
+Content:
+  - Trigger: pull_request
+  - Uses: actions/dependency-review-action@v4
+  - Block: moderate+ vulnerabilities
+Verify: Create test PR, check action runs
+```
+
+#### Task 4.2: Add Rust to CodeQL (10 min)
+```
+File: .github/workflows/codeql.yml
+Action: Add 'cpp' language for Rust (CodeQL uses cpp for Rust)
+Add: cargo-audit step for Rust-specific security
+Verify: Push, check CodeQL Analysis workflow
+```
+
+#### Task 4.3: Add SBOM to releases (20 min)
+```
+File: .github/workflows/release.yml
+Add: anchore/sbom-action@v0 step
+Output: sbom.spdx.json as release asset
+Verify: Check release action includes SBOM generation
+```
+
+### Phase 5: Code Quality Cleanup (HIGH - 1h 30 min)
+
+#### Task 5.1: Identify Nika deprecation warnings (5 min)
+```
+Command: cd nika-dev/tools/nika && cargo build 2>&1 | grep -c "warning"
+Expected: ~21 warnings (from summary)
+Action: List all deprecated API usages
+```
+
+#### Task 5.2: Fix resilience module deprecations (30 min)
+```
+Files: nika-dev/tools/nika/src/resilience/*.rs
+Action: Replace deprecated APIs with current equivalents
+- parking_lot deprecated methods
+- tokio deprecated patterns
+Verify: cargo build --quiet (0 warnings)
+```
+
+#### Task 5.3: Remove unused dev-dependencies (15 min)
+```
+File: nika-dev/tools/nika/Cargo.toml
+Action: Remove proptest and insta if truly unused
+OR: Add at least one proptest + insta test to justify
+Verify: cargo build && cargo test
+```
+
+#### Task 5.4: Add Nika MSRV (10 min)
+```
+File: nika-dev/tools/nika/Cargo.toml
+Add: rust-version = "1.75" (or appropriate MSRV)
+Verify: cargo check
+```
+
+### Phase 6: PR/Issue Management (LOW - 30 min)
+
+#### Task 6.1: Add PR title linting (15 min)
+```
+File: .github/workflows/pr-lint.yml
+Content:
+  - Uses: amannn/action-semantic-pull-request@v5
+  - Enforces: conventional commit format in PR titles
+Verify: Create test PR with bad title, should fail
+```
+
+#### Task 6.2: Add stale management (15 min)
+```
+File: .github/workflows/stale.yml
+Content:
+  - Uses: actions/stale@v9
+  - Stale after: 30 days
+  - Close after: 7 more days
+  - Exempt: pinned, security labels
+Verify: Workflow appears in Actions tab
+```
+
+### Phase 7: v0.3 Examples (15-20 min)
+
+#### Task 7.1: Create for_each + invoke showcase (10 min)
 ```
 File: nika-dev/tools/nika/examples/v03-parallel-generation.yaml
 Content:
