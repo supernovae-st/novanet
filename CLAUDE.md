@@ -4,7 +4,7 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 
 ## Auto-Imported Context
 
-@README.md @ROADMAP.md @CHANGELOG.md
+@README.md @ROADMAP.md @CHANGELOG-LATEST.md
 
 ---
 
@@ -29,7 +29,7 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
-**Current Version**: v0.13.1 "*Native Pattern" (ADR-029 + ADR-030)
+**Current Version**: v0.14.0 "context_build_log" (ADR-029 + ADR-030 + DX-11)
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
 **Related docs**:
@@ -79,7 +79,7 @@ v0.13.0 introduces the *Native pattern with unified arcs:
 - ***Native Pattern** (ADR-029): EntityContent→EntityNative, ProjectContent→ProjectNative, PageGenerated→PageNative, BlockGenerated→BlockNative
 - **Unified Arcs** (ADR-029): HAS_CONTENT/HAS_GENERATED→HAS_NATIVE, CONTENT_OF/GENERATED_FOR→NATIVE_OF
 - **Slug Ownership** (ADR-030): URL properties moved from EntityNative to PageNative
-- **61 nodes** total: 40 shared + 21 org, **179 arcs** (5 families)
+- **61 nodes** total: 40 shared + 21 org, **182 arcs** (6 families)
 
 **Architecture (v0.13.0):**
 - 2 realms: SHARED + ORG
@@ -92,7 +92,7 @@ schema generate/validate, doc generate, filter build. Galaxy-themed TUI with uni
 
 **YAML-first architecture:** Each Class YAML has explicit `realm:` and `layer:` fields (source of truth).
 Path validation ensures `models/node-classes/{realm}/{layer}/{name}.yaml` matches YAML content.
-v0.13.1: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 61 nodes, 179 arcs.
+v0.13.1: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 61 nodes, 182 arcs.
 
 **Icons source of truth (v11.5):** `visual-encoding.yaml` → `icons:` section provides dual-format icons:
 - `web`: Lucide icon name for Studio
@@ -306,6 +306,100 @@ pnpm test --filter=@novanet/studio      # Test only studio
 | @novanet/db | Neo4j Docker, seeds, migrations |
 | @novanet/studio | Web-based graph visualization |
 | tools/novanet | Rust CLI + TUI — all runtime commands (1082 tests) |
+
+---
+
+## MCP Server (v0.13.1)
+
+NovaNet exposes an MCP (Model Context Protocol) server for workflow automation and AI agent integration.
+
+**Location:** `tools/novanet-mcp/`
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  MCP TOOLS (7 tools)                                                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  novanet_query       Execute read-only Cypher against Neo4j                 │
+│                      params: cypher, params, limit, timeout_ms              │
+│                      returns: rows, row_count, token_estimate, cached       │
+│                                                                             │
+│  novanet_describe    Bootstrap agent understanding of the knowledge graph   │
+│                      params: describe (schema|entity|category|relations|    │
+│                              locales|stats), entity_key, category_key       │
+│                      returns: target, data, token_estimate                  │
+│                                                                             │
+│  novanet_search      Fulltext + property search with hybrid mode            │
+│                      params: query, mode (fulltext|property|hybrid),        │
+│                              kinds, realm, limit                            │
+│                      returns: hits, total_hits, mode, token_estimate        │
+│                                                                             │
+│  novanet_traverse    Graph traversal with configurable depth and filters    │
+│                      params: start_key, max_depth, direction (outgoing|     │
+│                              incoming|both), arc_families, target_kinds     │
+│                      returns: start, nodes, arcs, max_depth_reached         │
+│                                                                             │
+│  novanet_assemble    Assemble context for LLM generation (token-aware)      │
+│                      params: focus_key, locale, token_budget, strategy      │
+│                              (breadth|depth|relevance|custom)               │
+│                      returns: focus, evidence[], locale_context, truncated  │
+│                                                                             │
+│  novanet_atoms       Retrieve knowledge atoms for a specific locale         │
+│                      params: locale, atom_type (term|expression|pattern|    │
+│                              cultureref|taboo|audiencetrait|all), domain    │
+│                      returns: locale, atoms[], containers[], total_count    │
+│                                                                             │
+│  novanet_generate    Full RLM-on-KG context assembly for generation         │
+│                      params: focus_key, locale, mode (block|page),          │
+│                              token_budget, spreading_depth                  │
+│                      returns: prompt, evidence_summary, locale_context,     │
+│                               context_anchors, denomination_forms (ADR-033) │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Integration with Nika:**
+
+```yaml
+# Nika workflow using NovaNet MCP
+workflow: generate-page
+mcp:
+  servers:
+    novanet:
+      command: "cargo run --manifest-path ../novanet-dev/tools/novanet-mcp/Cargo.toml"
+
+tasks:
+  - id: load_context
+    invoke: novanet_generate
+    params:
+      entity: "qr-code"
+      locale: "fr-FR"
+      forms: ["text", "title", "abbrev"]
+    use.ctx: entity_context
+
+  - id: generate_page
+    infer: "Generate landing page content"
+    context: $entity_context
+```
+
+**ADR-033 Denomination Forms:**
+
+The `novanet_generate` tool returns `denomination_forms` — prescriptive canonical forms for LLM entity references:
+
+| Form | Usage | Example (es-MX) |
+|------|-------|-----------------|
+| `text` | Prose, body content | "código qr" |
+| `title` | H1, H2, meta_title | "Código QR" |
+| `abbrev` | After first mention | "qr" |
+| `url` | URL-safe slug | "crear-código-qr" |
+
+**Running the MCP Server:**
+
+```bash
+cd tools/novanet-mcp
+cargo run                    # Start MCP server (stdio transport)
+cargo test                   # Run MCP tests
+```
 
 ---
 
