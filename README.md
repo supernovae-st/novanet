@@ -89,8 +89,8 @@ flowchart TB
 
 ```bash
 # 1. Clone the repository
-git clone git@github.com:supernovae-st/novanet-hq.git
-cd novanet-hq
+git clone git@github.com:supernovae-st/supernovae-agi.git
+cd supernovae-agi/novanet-dev
 
 # 2. Install dependencies
 pnpm install
@@ -112,7 +112,7 @@ Open [http://localhost:3000](http://localhost:3000) — Neo4j Browser at [http:/
 ## Monorepo Structure
 
 ```
-novanet-hq/
+novanet-dev/
 ├── turbo.json                 # Turborepo pipeline config
 ├── pnpm-workspace.yaml        # Workspace definitions
 ├── packages/
