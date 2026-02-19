@@ -1,7 +1,22 @@
 # supernovae-agi Master Roadmap
 
-**Last Updated:** 2026-02-19
-**Status:** Active - MVP 0-8 Complete, Nika v0.5.0 Released
+**Last Updated:** 2026-02-19 (Audit Refresh)
+**Status:** Active - MVP 0-8 Complete, Nika v0.5.0 + NovaNet v0.14.0 Released
+
+---
+
+## Current State Summary
+
+| Project | Version | Tests | Status |
+|---------|---------|-------|--------|
+| **NovaNet** | v0.14.0 | 1,226 | ✅ Stable |
+| **NovaNet MCP** | v0.5.0 | 8 tools | ✅ Complete |
+| **Nika** | v0.5.0 | 703 | ✅ RLM-on-KG |
+
+### Known Issues (Non-Blocking)
+- `npm` packages at 0.13.0 (should be 0.14.0) - cosmetic
+- Pre-commit hook not installed in `.git/hooks/`
+- Dead code: `novanet-dev/tools/novanet/src/coherence/` (~1500 lines orphaned)
 
 ---
 
@@ -15,9 +30,10 @@ Ce document est le "plan des plans" - il orchestre tous les plans de développem
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                 │
 │  ✅ FOUNDATION (DONE)                                                           │
-│  ├── NovaNet Schema v0.13.1 (61 nodes, 182 arcs, 1191 tests)                   │
-│  ├── NovaNet MCP Server (8 tools)                                               │
-│  └── Nika v0.1 (infer, exec, fetch)                                             │
+│  ├── NovaNet Schema v0.14.0 (61 nodes, 182 arcs, 1226 tests)                   │
+│  ├── NovaNet MCP Server (8 tools: query, describe, search, traverse,           │
+│  │                       assemble, atoms, generate, introspect)                 │
+│  └── Nika v0.5.0 (infer, exec, fetch, invoke, agent - 703 tests)               │
 │                                                                                 │
 │  ✅ MVP 0: DX SETUP CORE                                           ✓ DONE      │
 │  ├── Cargo.toml dependencies                                                    │
@@ -73,7 +89,7 @@ Ce document est le "plan des plans" - il orchestre tous les plans de développem
 │  ├── ✅ Deleted ClaudeProvider, OpenAIProvider, old AgentLoop                │
 │  ├── ✅ RigProvider wrapper (provider/rig.rs)                                │
 │  ├── ✅ NikaMcpTool implements rig::ToolDyn                                  │
-│  └── ✅ 683+ tests passing, v0.4 complete                                    │
+│  └── ✅ 703 tests passing, v0.5 complete                                     │
 │                                                                                 │
 │  🎯 MILESTONE: Nika v0.4 ✅ ACHIEVED (pure rig-core)                          │
 │                                                                                 │
@@ -87,6 +103,31 @@ Ce document est le "plan des plans" - il orchestre tous les plans de développem
 │  └─────────────────────────────────────────────────────────────────────────┘   │
 │                                                                                 │
 │  🎯 RESULT: Nika v0.5 with full RLM-on-KG capabilities                        │
+│                                                                                 │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  ═══════════════════════════════════════════════════════════════════════════   │
+│  WHAT'S NEXT? (Ideas, no timeline)                                              │
+│  ═══════════════════════════════════════════════════════════════════════════   │
+│                                                                                 │
+│  📋 PLAN A: MVP 8 Reasoning Capture Polish                                      │
+│      └── Token tracking returns 0 in executor.rs:380 — need fix                │
+│                                                                                 │
+│  📋 PLAN B: Test Coverage Gaps                                                  │
+│      ├── store module (7 tests) — expand                                        │
+│      ├── provider module (8 tests) — expand                                     │
+│      └── MCP describe/atoms tools (1 test each) — add integration tests        │
+│                                                                                 │
+│  📋 PLAN C: QR Code AI Production                                               │
+│      └── Deploy workflows for qrcode-ai.com                                     │
+│                                                                                 │
+│  📋 PLAN D: Nika TUI Verification                                               │
+│      └── 92% complete — verify all panels work                                  │
+│                                                                                 │
+│  🧹 CLEANUP:                                                                    │
+│      ├── Delete coherence/ orphan module (~1500 lines)                          │
+│      ├── Bump npm packages 0.13.0 → 0.14.0                                      │
+│      └── Install pre-commit hook in .git/hooks/                                 │
 │                                                                                 │
 └─────────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -364,10 +405,10 @@ Replace custom LLM provider implementations with `rig-core` v0.31.0 for:
 
 ### Success Criteria
 - [x] `cargo build` succeeds
-- [x] All 679 tests pass
+- [x] All 703 tests pass
 - [x] Agent workflows work with RigAgentLoop
 - [x] MCP integration works via NikaMcpTool
-- [x] CLAUDE.md updated with v0.4 changes
+- [x] CLAUDE.md updated with v0.5 changes
 
 ---
 
@@ -549,7 +590,7 @@ use:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│  NIKA v0.4 ARCHITECTURE                                                 │
+│  NIKA v0.5 ARCHITECTURE (RLM-on-KG)                                     │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                         │
 │  tools/nika/src/                                                        │
@@ -561,17 +602,24 @@ use:
 │  │   ├── workflow.rs      # Workflow + MCP config                      │
 │  │   ├── action.rs        # TaskAction (5 variants + for_each)         │
 │  │   ├── invoke.rs        # InvokeParams                               │
-│  │   └── agent.rs         # AgentParams                                │
+│  │   ├── agent.rs         # AgentParams + depth_limit                  │
+│  │   └── decompose.rs     # DecomposeSpec (NEW v0.5)                   │
 │  │                                                                      │
 │  ├── mcp/                 # MCP Client (rmcp 0.16)                     │
 │  │   ├── types.rs         # McpConfig, ToolResult                      │
 │  │   ├── client.rs        # McpClient                                  │
 │  │   └── rmcp_adapter.rs  # rmcp conversion layer (NEW v0.3)           │
 │  │                                                                      │
+│  ├── binding/             # Binding resolution (NEW v0.5)              │
+│  │   ├── entry.rs         # UseEntry with lazy: bool                   │
+│  │   └── resolve.rs       # LazyBinding enum                           │
+│  │                                                                      │
 │  ├── runtime/             # Execution engine                           │
 │  │   ├── executor.rs      # Task dispatch (5 verbs + for_each)         │
 │  │   ├── runner.rs        # Workflow orchestration                     │
-│  │   └── agent_loop.rs    # Agentic execution                          │
+│  │   ├── rig_agent_loop.rs# Agentic execution (rig-core)               │
+│  │   ├── spawn.rs         # SpawnAgentTool (NEW v0.5)                  │
+│  │   └── decomposer.rs    # Runtime DAG expansion (NEW v0.5)           │
 │  │                                                                      │
 │  ├── provider/            # LLM providers (v0.4 - rig-core only)       │
 │  │   ├── mod.rs           # Provider trait + factory                   │
@@ -663,7 +711,7 @@ cd nika-dev/tools/nika
 ### MVP 7 Done When: ✅ ACHIEVED
 - ✅ RigAgentLoop with rig::AgentBuilder
 - ✅ Old providers deleted (claude.rs, openai.rs, types.rs)
-- ✅ 683+ tests passing
+- ✅ 703 tests passing
 
 ### MVP 8 Done When: ✅ ACHIEVED
 - [x] Phase 1: `thinking` field captured in AgentTurn events ✅
@@ -676,11 +724,28 @@ cd nika-dev/tools/nika
 
 ## Notes
 
-- **MVP 4-8 Complete:** NovaNet MCP v0.14.0 + Nika v0.5.0 (full RLM-on-KG)
-- **MVP 6 Complete:** 4 v0.3 showcase examples + README quick-start guide
-- **MVP 7 Complete:** v0.4 achieved - pure rig-core, 683+ tests passing
-- **MVP 8 Complete:** v0.5.0 with spawn_agent, novanet_introspect, decompose:, lazy:
-- **RLM Insight:** NovaNet + Nika is ALREADY RLM-on-KG with better safety/observability than rig-rlm
-- **Resilience Module Removed:** Deleted in v0.4 cleanup (was never wired into runtime)
+### Status (2026-02-19 Audit)
+- **MVP 0-8 COMPLETE:** All foundational work done
+- **NovaNet:** v0.14.0, 1,226 tests, 8 MCP tools
+- **Nika:** v0.5.0, 703 tests, full RLM-on-KG
+- **RLM Insight:** NovaNet + Nika is RLM-on-KG with better safety/observability than rig-rlm
+
+### Architecture
+- **Nika TUI:** 92% complete (4,661 lines), sparklines/BigText deferred
+- **MCP Integration:** 8/8 tools complete with tests
+- **Resilience Module:** Removed in v0.4 (never wired into runtime)
+
+### Methodology
 - **Testing:** TDD for all MVPs - write failing test first
 - **Commits:** Atomic commits per task, conventional commit format
+
+### Plans Organization (docs/plans/)
+```
+├── mvp-8-active/     (7 files)  - Current MVP work
+├── infrastructure/   (8 files)  - CI/CD, security, DX
+├── schema/           (3 files)  - NovaNet schema work
+├── features/         (6 files)  - Feature implementations
+├── research/         (11 files) - Research and analysis
+├── completed-legacy/ (84 files) - Archived completed plans
+└── future/           (3 files)  - Future ideas
+```
