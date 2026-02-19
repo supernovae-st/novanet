@@ -740,7 +740,7 @@ cargo test test_validate_read_only
 cargo test --test integration
 ```
 
-**Current test count:** 29 unit tests + 24 integration tests
+**Current test count:** 335 tests (unit + edge cases, integration tests require Neo4j)
 
 ---
 
