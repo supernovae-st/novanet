@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
 
     // Build Cypher query
     // Using UNION for multiple types to ensure we get nodes of each type
-    const typeQueries = types.map((type, i) => {
+    const typeQueries = types.map((type) => {
       const searchClause = searchParam
         ? `WHERE n.key CONTAINS $search OR n.display_name CONTAINS $search`
         : '';

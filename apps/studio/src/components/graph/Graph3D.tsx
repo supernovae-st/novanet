@@ -1282,7 +1282,7 @@ export const Graph3D = memo(function Graph3D({
   return (
     <div ref={containerRef} className={cn('relative', className)}>
       <ForceGraph3D
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         ref={fgRef as any}
         graphData={graphData as any}
         nodeThreeObject={renderNode as any}
