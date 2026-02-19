@@ -50,13 +50,14 @@ pub const TRAITS_IMPORTED: IconDef = IconDef::new("download", "◊", "External d
 pub const TRAITS_RETRIEVED: IconDef = IconDef::new("cloud-download", "▪", "Fetched from EXTERNAL APIs");
 
 // =============================================================================
-// ARC_FAMILIES ICONS (5)
+// ARC_FAMILIES ICONS (6)
 // =============================================================================
 
 pub const ARC_FAMILIES_GENERATION: IconDef = IconDef::new("sparkles", "⇒", "LLM pipeline flow");
 pub const ARC_FAMILIES_LOCALIZATION: IconDef = IconDef::new("languages", "⇢", "Locale content links");
 pub const ARC_FAMILIES_MINING: IconDef = IconDef::new("pickaxe", "⇝", "SEO data extraction");
 pub const ARC_FAMILIES_OWNERSHIP: IconDef = IconDef::new("arrow-right", "→", "Parent-child structural");
+pub const ARC_FAMILIES_SCHEMA: IconDef = IconDef::new("git-branch", "◇", "Meta-schema relationships");
 pub const ARC_FAMILIES_SEMANTIC: IconDef = IconDef::new("link", "~", "Meaning connections");
 
 // =============================================================================
@@ -160,6 +161,7 @@ pub fn arc_family_icons() -> HashMap<&'static str, IconDef> {
         "localization" => ARC_FAMILIES_LOCALIZATION,
         "mining" => ARC_FAMILIES_MINING,
         "ownership" => ARC_FAMILIES_OWNERSHIP,
+        "schema" => ARC_FAMILIES_SCHEMA,
         "semantic" => ARC_FAMILIES_SEMANTIC,
     }
 }
