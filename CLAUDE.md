@@ -40,10 +40,10 @@ Entity (defined) → Generate natively → Native  ✅ RIGHT
 
 | Project | Version | Key Changes |
 |---------|---------|-------------|
-| NovaNet | v0.14.0 | 7 MCP tools, denomination_forms, context_build_log, 335+ tests |
-| Nika | v0.4.1 | rig-core v0.31, RigAgentLoop, token tracking fix, 621+ tests |
+| NovaNet | v0.14.0 | 8 MCP tools, novanet_introspect, context_build_log, 1082 tests |
+| Nika | v0.5.0 | spawn_agent, decompose:, lazy bindings, 683+ tests |
 
-**MVP Status:** MVP 7 complete (rig-core) | MVP 8 in progress (RLM enhancements, Phase 1 done)
+**MVP Status:** MVP 8 complete (RLM enhancements) | v0.5 release ready
 
 ## Commands
 

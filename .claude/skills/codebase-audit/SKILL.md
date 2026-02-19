@@ -168,6 +168,76 @@ Verify ALL index.ts barrel files:
 Report broken/dead exports with file:line.
 ```
 
+### Agent 7: Rust Clippy Deep (for Rust projects)
+
+**Description**: `Rust clippy analysis`
+
+**Prompt**:
+```
+Run cargo clippy on ALL Rust projects with strict warnings:
+1. novanet-dev/tools/novanet
+2. novanet-dev/tools/novanet-mcp
+3. nika-dev/tools/nika
+
+Report:
+- Warnings by category (pedantic, style, complexity)
+- Dead code (#[allow(dead_code)] usage)
+- Unused imports
+- Complexity issues (cyclomatic > 10)
+
+Command: cargo clippy --all-features -- -D warnings
+```
+
+### Agent 8: Version Consistency (monorepo)
+
+**Description**: `Version consistency check`
+
+**Prompt**:
+```
+Check version alignment across:
+1. VERSION files (root, novanet-dev, nika-dev)
+2. Cargo.toml versions in all tools/
+3. CLAUDE.md version references
+4. Package.json versions
+5. CHANGELOG.md latest version
+
+Report mismatches: expected vs actual for each.
+```
+
+### Agent 9: Security Audit (Rust deps)
+
+**Description**: `Rust security audit`
+
+**Prompt**:
+```
+Run security checks on Rust projects:
+1. cargo audit - RustSec vulnerabilities
+2. cargo deny check - license/security policy
+
+For each vulnerability found:
+- Crate name + version
+- Severity (critical/high/medium/low)
+- Direct vs transitive dependency
+- Fix available?
+
+Focus on: novanet-mcp, nika (production binaries)
+```
+
+### Agent 10: Changelog/Roadmap Sync
+
+**Description**: `Changelog/roadmap audit`
+
+**Prompt**:
+```
+Cross-reference CHANGELOG.md and ROADMAP.md:
+1. Features marked "DONE" in roadmap have changelog entry?
+2. Version numbers match between files?
+3. MVP status accurate (completed vs in-progress)?
+4. Statistics consistent (test counts, node/arc counts)?
+
+Report inconsistencies with file:line evidence.
+```
+
 ## Phase 2: SYNTHESIZE
 
 After all agents complete, combine findings:
