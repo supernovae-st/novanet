@@ -40,8 +40,10 @@ Entity (defined) → Generate natively → Native  ✅ RIGHT
 
 | Project | Version | Key Changes |
 |---------|---------|-------------|
-| NovaNet | v0.14.0 | 7 MCP tools, denomination_forms, context_build_log, 1082 tests |
-| Nika | v0.4.0 | rig-core v0.31, RigAgentLoop, RigProvider, 621+ tests, pure rig-core |
+| NovaNet | v0.14.0 | 7 MCP tools, denomination_forms, context_build_log, 335+ tests |
+| Nika | v0.4.1 | rig-core v0.31, RigAgentLoop, token tracking fix, 621+ tests |
+
+**MVP Status:** MVP 7 complete (rig-core) | MVP 8 in progress (RLM enhancements, Phase 1 done)
 
 ## Commands
 
@@ -81,6 +83,8 @@ cargo run -- tui workflow.yaml  # TUI observer
 | `.claude/rules/adr/CHEAT-SHEET.md` | Quick ADR reference |
 | `.claude/rules/schema-standard.md` | YAML node structure |
 | `.claude/rules/architecture.md` | Monorepo rules |
+| `docs/technical/INTEGRATION-GUIDE.md` | NovaNet + Nika integration |
+| `docs/technical/NIKA-ENGINE.md` | Workflow engine deep-dive |
 | `novanet-dev/CLAUDE.md` | NovaNet details |
 | `nika-dev/CLAUDE.md` | Nika details |
 
