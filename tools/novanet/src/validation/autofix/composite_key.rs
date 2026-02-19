@@ -2,10 +2,10 @@
 //!
 //! Handles COMPOSITE_KEY_FORMAT rule violations for EntityNative, PageNative, BlockNative.
 
-use super::{AutoFix, FixAction, Change};
+use super::{AutoFix, Change, FixAction};
+use crate::Result;
 use crate::parsers::schema_rules::SchemaIssue;
 use crate::parsers::yaml_node::ParsedNode;
-use crate::Result;
 use serde_yaml::Value;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -177,8 +177,8 @@ impl CompositeKeyFixer {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::parsers::schema_rules::{SchemaIssue, IssueSeverity};
-    use crate::parsers::yaml_node::{ParsedNode, NodeDef, PropertyDef, NodeTrait};
+    use crate::parsers::schema_rules::{IssueSeverity, SchemaIssue};
+    use crate::parsers::yaml_node::{NodeDef, NodeTrait, ParsedNode, PropertyDef};
     use indexmap::IndexMap;
     use std::collections::BTreeMap;
     use std::path::PathBuf;
@@ -270,7 +270,9 @@ mod tests {
             node_name: "EntityNative".into(),
             severity: IssueSeverity::Warning,
             rule: "COMPOSITE_KEY_FORMAT",
-            message: "Composite key node should have 'pattern' regex: ^entity:[^@]+@[a-z]{2}-[A-Z]{2}$".into(),
+            message:
+                "Composite key node should have 'pattern' regex: ^entity:[^@]+@[a-z]{2}-[A-Z]{2}$"
+                    .into(),
         };
 
         let fixer = CompositeKeyFixer; // ← This doesn't exist yet (RED)
@@ -400,10 +402,7 @@ mod tests {
                 );
 
                 // Second example should be corrected: "entity:pricing" → "entity:pricing@en-US"
-                assert_eq!(
-                    examples[1].as_str().unwrap(),
-                    "entity:pricing@en-US"
-                );
+                assert_eq!(examples[1].as_str().unwrap(), "entity:pricing@en-US");
             }
             _ => panic!("Expected Modified for invalid examples"),
         }

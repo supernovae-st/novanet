@@ -743,10 +743,7 @@ mod tests {
             .collect();
 
         let total = node_classes.len();
-        let shared_count = node_classes
-            .iter()
-            .filter(|n| n.realm == "shared")
-            .count();
+        let shared_count = node_classes.iter().filter(|n| n.realm == "shared").count();
         let org_count = node_classes.iter().filter(|n| n.realm == "org").count();
 
         assert_eq!(
@@ -951,10 +948,7 @@ mod tests {
             .collect();
 
         // Count by realm (the reliable way)
-        let shared_count = node_classes
-            .iter()
-            .filter(|n| n.realm == "shared")
-            .count();
+        let shared_count = node_classes.iter().filter(|n| n.realm == "shared").count();
         let org_count = node_classes.iter().filter(|n| n.realm == "org").count();
 
         // v0.12.5: 40 shared, 21 org (Brand Architecture: +4 -1)

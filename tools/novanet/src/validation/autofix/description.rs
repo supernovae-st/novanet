@@ -3,10 +3,10 @@
 //! Handles DESCRIPTION_REQUIRED rule violations by adding missing
 //! description field to node definitions.
 
-use super::{AutoFix, FixAction, Change};
+use super::{AutoFix, Change, FixAction};
+use crate::Result;
 use crate::parsers::schema_rules::SchemaIssue;
 use crate::parsers::yaml_node::ParsedNode;
-use crate::Result;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // DescriptionFixer Implementation (GREEN Phase)
@@ -33,9 +33,7 @@ impl AutoFix for DescriptionFixer {
         // Generate a reasonable default description
         let generated_desc = format!(
             "{} node in the {} layer (realm: {})",
-            node.def.name,
-            node.def.layer,
-            node.realm
+            node.def.name, node.def.layer, node.realm
         );
 
         let old_value = if node.def.description.is_empty() {
@@ -69,7 +67,7 @@ impl AutoFix for DescriptionFixer {
 mod tests {
     use super::*;
     use crate::parsers::schema_rules::IssueSeverity;
-    use crate::parsers::yaml_node::{ParsedNode, NodeDef, PropertyDef, NodeTrait};
+    use crate::parsers::yaml_node::{NodeDef, NodeTrait, ParsedNode, PropertyDef};
     use indexmap::IndexMap;
     use std::collections::BTreeMap;
     use std::path::PathBuf;
@@ -137,12 +135,15 @@ mod tests {
     #[test]
     fn test_skips_if_description_present() {
         let mut props = IndexMap::new();
-        props.insert("key".to_string(), PropertyDef {
-            prop_type: "string".to_string(),
-            required: Some(true),
-            description: Some("Key".to_string()),
-            extra: BTreeMap::new(),
-        });
+        props.insert(
+            "key".to_string(),
+            PropertyDef {
+                prop_type: "string".to_string(),
+                required: Some(true),
+                description: Some("Key".to_string()),
+                extra: BTreeMap::new(),
+            },
+        );
 
         let mut node = ParsedNode {
             def: NodeDef {
@@ -196,8 +197,10 @@ mod tests {
         let _ = fixer.fix(&mut node, &issue).unwrap();
 
         // Generated description should mention the node name
-        assert!(node.def.description.contains("TestNode") ||
-                node.def.description.to_lowercase().contains("test node"));
+        assert!(
+            node.def.description.contains("TestNode")
+                || node.def.description.to_lowercase().contains("test node")
+        );
     }
 
     #[test]
@@ -216,8 +219,10 @@ mod tests {
 
         // Generated description should provide some context
         // (could include layer, realm, or node name)
-        assert!(node.def.description.len() >= 10,
-                "Description should be reasonably informative");
+        assert!(
+            node.def.description.len() >= 10,
+            "Description should be reasonably informative"
+        );
     }
 
     #[test]

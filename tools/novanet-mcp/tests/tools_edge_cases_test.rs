@@ -106,7 +106,14 @@ fn test_denomination_form_serialization() {
 
 #[test]
 fn test_describe_target_all_variants() {
-    let targets = ["schema", "entity", "category", "relations", "locales", "stats"];
+    let targets = [
+        "schema",
+        "entity",
+        "category",
+        "relations",
+        "locales",
+        "stats",
+    ];
     for target_str in targets {
         let json = format!(r#"{{"describe": "{}"}}"#, target_str);
         let params: DescribeParams = serde_json::from_str(&json).unwrap();
@@ -202,8 +209,14 @@ fn test_traverse_params_with_filters() {
     assert_eq!(params.start_key, "homepage");
     assert_eq!(params.max_depth, Some(3));
     assert!(matches!(params.direction, TraversalDirection::Both));
-    assert_eq!(params.arc_families, Some(vec!["ownership".to_string(), "semantic".to_string()]));
-    assert_eq!(params.target_kinds, Some(vec!["Entity".to_string(), "Block".to_string()]));
+    assert_eq!(
+        params.arc_families,
+        Some(vec!["ownership".to_string(), "semantic".to_string()])
+    );
+    assert_eq!(
+        params.target_kinds,
+        Some(vec!["Entity".to_string(), "Block".to_string()])
+    );
     assert_eq!(params.limit, Some(50));
 }
 

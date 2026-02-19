@@ -3,16 +3,16 @@
 //! Handles EXAMPLE_DATA rule violations by adding minimal example
 //! data to node definitions that lack it.
 
-use super::{AutoFix, FixAction, Change};
+use super::{AutoFix, Change, FixAction};
+use crate::Result;
 use crate::parsers::schema_rules::SchemaIssue;
 use crate::parsers::yaml_node::ParsedNode;
-use crate::Result;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ExampleDataFixer Implementation (GREEN Phase)
 // ─────────────────────────────────────────────────────────────────────────────
 
-use serde_yaml::{Value, Mapping};
+use serde_yaml::{Mapping, Value};
 
 /// Auto-fixer for example data violations.
 ///
@@ -53,10 +53,7 @@ impl AutoFix for ExampleDataFixer {
                     _ => Value::String(format!("example-{}", prop_name)),
                 };
 
-                example_data.insert(
-                    Value::String(prop_name.clone()),
-                    example_value,
-                );
+                example_data.insert(Value::String(prop_name.clone()), example_value);
             }
         }
 
@@ -92,11 +89,11 @@ impl AutoFix for ExampleDataFixer {
 mod tests {
     use super::*;
     use crate::parsers::schema_rules::IssueSeverity;
-    use crate::parsers::yaml_node::{ParsedNode, NodeDef, PropertyDef, NodeTrait};
+    use crate::parsers::yaml_node::{NodeDef, NodeTrait, ParsedNode, PropertyDef};
     use indexmap::IndexMap;
+    use serde_yaml::{Mapping, Value};
     use std::collections::BTreeMap;
     use std::path::PathBuf;
-    use serde_yaml::{Value, Mapping};
 
     /// Create a node without example data.
     fn create_node_without_example() -> ParsedNode {
@@ -172,12 +169,15 @@ mod tests {
     #[test]
     fn test_skips_if_example_present() {
         let mut props = IndexMap::new();
-        props.insert("key".to_string(), PropertyDef {
-            prop_type: "string".to_string(),
-            required: Some(true),
-            description: Some("Key".to_string()),
-            extra: BTreeMap::new(),
-        });
+        props.insert(
+            "key".to_string(),
+            PropertyDef {
+                prop_type: "string".to_string(),
+                required: Some(true),
+                description: Some("Key".to_string()),
+                extra: BTreeMap::new(),
+            },
+        );
 
         // Create example as serde_yaml::Value with data field
         let mut example_data = Mapping::new();

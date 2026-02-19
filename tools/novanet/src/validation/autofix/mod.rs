@@ -3,9 +3,9 @@
 //! This module provides the AutoFix trait and implementations for automatically
 //! correcting common validation issues.
 
+use crate::Result;
 use crate::parsers::schema_rules::SchemaIssue;
 use crate::parsers::yaml_node::ParsedNode;
-use crate::Result;
 use serde_yaml::Value;
 
 pub mod composite_key;
@@ -93,11 +93,7 @@ impl FixEngine {
     ///
     /// Iterates through registered fixers and applies the first one that can handle the issue.
     /// Returns `Skipped` if no fixer matches.
-    pub fn apply_fix(
-        &self,
-        node: &mut ParsedNode,
-        issue: &SchemaIssue,
-    ) -> Result<FixAction> {
+    pub fn apply_fix(&self, node: &mut ParsedNode, issue: &SchemaIssue) -> Result<FixAction> {
         for fixer in &self.fixers {
             if fixer.can_fix(issue) {
                 return fixer.fix(node, issue);
@@ -180,7 +176,9 @@ mod tests {
             new_value: Value::String("new_value".into()),
         }];
 
-        let action = FixAction::Modified { changes: changes.clone() };
+        let action = FixAction::Modified {
+            changes: changes.clone(),
+        };
 
         match action {
             FixAction::Modified { changes: c } => {
@@ -214,7 +212,7 @@ mod tests {
     // FixEngine Tests (RED Phase: FixEngine doesn't exist yet)
     // ─────────────────────────────────────────────────────────────────────────
 
-    use crate::parsers::yaml_node::{NodeDef, PropertyDef, NodeTrait};
+    use crate::parsers::yaml_node::{NodeDef, NodeTrait, PropertyDef};
     use indexmap::IndexMap;
     use std::collections::BTreeMap;
     use std::path::PathBuf;

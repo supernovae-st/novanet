@@ -119,20 +119,17 @@ pub fn parse_cypher_file(path: &Path) -> crate::Result<Vec<CypherPropertyUsage>>
 
     // Regex patterns for Cypher parsing
     // Match MERGE/CREATE (n:Label {key: 'value'}) or MERGE (n:Label {key: $param})
-    let merge_pattern = Regex::new(
-        r"(?i)(?:MERGE|CREATE)\s*\(\s*\w*\s*:\s*([A-Z][A-Za-z0-9]*)\s*\{([^}]*)\}\s*\)",
-    )
-    .expect("valid regex");
+    let merge_pattern =
+        Regex::new(r"(?i)(?:MERGE|CREATE)\s*\(\s*\w*\s*:\s*([A-Z][A-Za-z0-9]*)\s*\{([^}]*)\}\s*\)")
+            .expect("valid regex");
 
     // Match SET n.property = 'value' or SET n.property = expression
-    let set_pattern =
-        Regex::new(r"(?i)\b(\w+)\.(\w+)\s*=\s*([^,;\n]+)").expect("valid regex");
+    let set_pattern = Regex::new(r"(?i)\b(\w+)\.(\w+)\s*=\s*([^,;\n]+)").expect("valid regex");
 
     // Match ON CREATE SET / ON MATCH SET blocks
-    let on_set_pattern = Regex::new(
-        r"(?i)ON\s+(?:CREATE|MATCH)\s+SET\s+((?:\s*\w+\.\w+\s*=\s*[^,;\n]+,?\s*)+)",
-    )
-    .expect("valid regex");
+    let on_set_pattern =
+        Regex::new(r"(?i)ON\s+(?:CREATE|MATCH)\s+SET\s+((?:\s*\w+\.\w+\s*=\s*[^,;\n]+,?\s*)+)")
+            .expect("valid regex");
 
     for (line_idx, line) in content.lines().enumerate() {
         let line_num = line_idx + 1;
@@ -145,7 +142,10 @@ pub fn parse_cypher_file(path: &Path) -> crate::Result<Vec<CypherPropertyUsage>>
 
         // Parse MERGE/CREATE statements with inline properties
         for cap in merge_pattern.captures_iter(line) {
-            let label = cap.get(1).map(|m| m.as_str().to_string()).unwrap_or_default();
+            let label = cap
+                .get(1)
+                .map(|m| m.as_str().to_string())
+                .unwrap_or_default();
             let props_str = cap.get(2).map(|m| m.as_str()).unwrap_or_default();
 
             // Parse inline properties like {key: 'value', name: 'foo'}
@@ -158,7 +158,10 @@ pub fn parse_cypher_file(path: &Path) -> crate::Result<Vec<CypherPropertyUsage>>
         for cap in set_pattern.captures_iter(line) {
             // We need to infer the label from context, for now use empty string
             // The validator will match by property name patterns
-            let property = cap.get(2).map(|m| m.as_str().to_string()).unwrap_or_default();
+            let property = cap
+                .get(2)
+                .map(|m| m.as_str().to_string())
+                .unwrap_or_default();
             let value = cap.get(3).map(|m| m.as_str().trim().to_string());
 
             // Try to infer label from variable name or context
@@ -226,7 +229,10 @@ fn parse_inline_properties(
     let prop_pattern = Regex::new(r"(\w+)\s*:\s*([^,}]+)").expect("valid regex");
 
     for cap in prop_pattern.captures_iter(props_str) {
-        let property = cap.get(1).map(|m| m.as_str().to_string()).unwrap_or_default();
+        let property = cap
+            .get(1)
+            .map(|m| m.as_str().to_string())
+            .unwrap_or_default();
         let value = cap.get(2).map(|m| m.as_str().trim().to_string());
 
         if !property.is_empty() {
@@ -252,7 +258,10 @@ fn infer_label_from_context(content: &str, var_name: &str, _line_idx: usize) -> 
     );
     if let Ok(re) = Regex::new(&pattern) {
         if let Some(cap) = re.captures(content) {
-            return cap.get(1).map(|m| m.as_str().to_string()).unwrap_or_default();
+            return cap
+                .get(1)
+                .map(|m| m.as_str().to_string())
+                .unwrap_or_default();
         }
     }
 
@@ -329,9 +338,7 @@ fn infer_cypher_type(value: &str) -> &'static str {
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// Build a map of label -> properties from YAML definitions.
-fn build_yaml_property_map(
-    nodes: &[ParsedNode],
-) -> HashMap<String, IndexMap<String, PropertyDef>> {
+fn build_yaml_property_map(nodes: &[ParsedNode]) -> HashMap<String, IndexMap<String, PropertyDef>> {
     let mut map = HashMap::new();
 
     for node in nodes {
@@ -384,8 +391,7 @@ pub fn validate_cypher_files(
             .into_iter()
             .filter_map(|e| e.ok())
             .filter(|e| {
-                e.file_type().is_file()
-                    && e.path().extension().is_some_and(|ext| ext == "cypher")
+                e.file_type().is_file() && e.path().extension().is_some_and(|ext| ext == "cypher")
             })
             .map(|e| e.path().to_path_buf())
             .collect()
@@ -424,10 +430,7 @@ pub fn validate_cypher_files(
                     issues.push(CypherValidationIssue {
                         severity: IssueSeverity::Warning,
                         rule: CypherValidationRule::UnknownLabel,
-                        message: format!(
-                            "Label '{}' not found in YAML definitions",
-                            usage.label
-                        ),
+                        message: format!("Label '{}' not found in YAML definitions", usage.label),
                         file: usage.file.clone(),
                         line: Some(usage.line),
                         label: usage.label.clone(),
@@ -678,18 +681,9 @@ mod tests {
 
     #[test]
     fn test_infer_label_common_vars() {
-        assert_eq!(
-            infer_label_from_context("", "l", 0),
-            "Locale"
-        );
-        assert_eq!(
-            infer_label_from_context("", "kw", 0),
-            "SEOKeyword"
-        );
-        assert_eq!(
-            infer_label_from_context("", "bn", 0),
-            "BlockNative"
-        );
+        assert_eq!(infer_label_from_context("", "l", 0), "Locale");
+        assert_eq!(infer_label_from_context("", "kw", 0), "SEOKeyword");
+        assert_eq!(infer_label_from_context("", "bn", 0), "BlockNative");
     }
 
     fn test_root() -> Option<PathBuf> {
@@ -717,10 +711,7 @@ mod tests {
         let usages = parse_cypher_file(&seed_file).expect("should parse cypher file");
 
         // Should find Locale properties
-        let locale_usages: Vec<_> = usages
-            .iter()
-            .filter(|u| u.label == "Locale")
-            .collect();
+        let locale_usages: Vec<_> = usages.iter().filter(|u| u.label == "Locale").collect();
 
         assert!(!locale_usages.is_empty(), "should find Locale usages");
 

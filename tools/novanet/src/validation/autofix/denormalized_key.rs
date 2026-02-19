@@ -3,12 +3,12 @@
 //! Handles DENORM_REQUIRED rule violations by adding missing denormalized
 //! properties (entity_key, page_key, block_key, locale_key) to composite key nodes.
 
-use super::{AutoFix, FixAction, Change};
+use super::{AutoFix, Change, FixAction};
+use crate::Result;
 use crate::parsers::schema_rules::SchemaIssue;
 use crate::parsers::yaml_node::{ParsedNode, PropertyDef};
-use crate::Result;
-use std::collections::BTreeMap;
 use serde_yaml::Value;
+use std::collections::BTreeMap;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // DenormalizedKeyFixer Implementation (GREEN Phase - not yet implemented)
@@ -43,7 +43,10 @@ impl AutoFix for DenormalizedKeyFixer {
 
         let Some(required_props) = requirements else {
             return Ok(FixAction::Skipped {
-                reason: format!("No denormalized requirements for node type: {}", node.def.name),
+                reason: format!(
+                    "No denormalized requirements for node type: {}",
+                    node.def.name
+                ),
             });
         };
 
@@ -99,7 +102,7 @@ impl AutoFix for DenormalizedKeyFixer {
 mod tests {
     use super::*;
     use crate::parsers::schema_rules::IssueSeverity;
-    use crate::parsers::yaml_node::{ParsedNode, NodeDef, PropertyDef, NodeTrait};
+    use crate::parsers::yaml_node::{NodeDef, NodeTrait, ParsedNode, PropertyDef};
     use indexmap::IndexMap;
     use std::collections::BTreeMap;
     use std::path::PathBuf;
@@ -321,24 +324,33 @@ mod tests {
     #[test]
     fn test_skips_if_denorm_keys_present() {
         let mut props = IndexMap::new();
-        props.insert("key".to_string(), PropertyDef {
-            prop_type: "string".to_string(),
-            required: Some(true),
-            description: Some("Key".to_string()),
-            extra: BTreeMap::new(),
-        });
-        props.insert("entity_key".to_string(), PropertyDef {
-            prop_type: "string".to_string(),
-            required: Some(true),
-            description: Some("Entity key".to_string()),
-            extra: BTreeMap::new(),
-        });
-        props.insert("locale_key".to_string(), PropertyDef {
-            prop_type: "string".to_string(),
-            required: Some(true),
-            description: Some("Locale key".to_string()),
-            extra: BTreeMap::new(),
-        });
+        props.insert(
+            "key".to_string(),
+            PropertyDef {
+                prop_type: "string".to_string(),
+                required: Some(true),
+                description: Some("Key".to_string()),
+                extra: BTreeMap::new(),
+            },
+        );
+        props.insert(
+            "entity_key".to_string(),
+            PropertyDef {
+                prop_type: "string".to_string(),
+                required: Some(true),
+                description: Some("Entity key".to_string()),
+                extra: BTreeMap::new(),
+            },
+        );
+        props.insert(
+            "locale_key".to_string(),
+            PropertyDef {
+                prop_type: "string".to_string(),
+                required: Some(true),
+                description: Some("Locale key".to_string()),
+                extra: BTreeMap::new(),
+            },
+        );
 
         let mut node = ParsedNode {
             def: NodeDef {
@@ -380,12 +392,15 @@ mod tests {
     #[test]
     fn test_skips_non_composite_key_nodes() {
         let mut props = IndexMap::new();
-        props.insert("key".to_string(), PropertyDef {
-            prop_type: "string".to_string(),
-            required: Some(true),
-            description: Some("Key".to_string()),
-            extra: BTreeMap::new(),
-        });
+        props.insert(
+            "key".to_string(),
+            PropertyDef {
+                prop_type: "string".to_string(),
+                required: Some(true),
+                description: Some("Key".to_string()),
+                extra: BTreeMap::new(),
+            },
+        );
 
         let mut node = ParsedNode {
             def: NodeDef {
@@ -418,7 +433,10 @@ mod tests {
 
         match result {
             FixAction::Skipped { reason } => {
-                assert!(reason.contains("not a composite key node") || reason.contains("No denormalized"));
+                assert!(
+                    reason.contains("not a composite key node")
+                        || reason.contains("No denormalized")
+                );
             }
             _ => panic!("Expected Skipped for non-composite key node"),
         }

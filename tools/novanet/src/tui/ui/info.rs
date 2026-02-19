@@ -615,9 +615,7 @@ fn build_class_content(
 
             for prop in &standard_props {
                 let (status_icon, status_style) = match prop.status {
-                    ValidationStatus::Sync => {
-                        ("✓", Style::default().fg(Color::Rgb(133, 153, 0)))
-                    }
+                    ValidationStatus::Sync => ("✓", Style::default().fg(Color::Rgb(133, 153, 0))),
                     ValidationStatus::Missing => {
                         ("⚠", Style::default().fg(Color::Rgb(203, 75, 22)))
                     }
@@ -655,9 +653,7 @@ fn build_class_content(
 
             for prop in &specific_props {
                 let (status_icon, status_style) = match prop.status {
-                    ValidationStatus::Sync => {
-                        ("✓", Style::default().fg(Color::Rgb(133, 153, 0)))
-                    }
+                    ValidationStatus::Sync => ("✓", Style::default().fg(Color::Rgb(133, 153, 0))),
                     ValidationStatus::Missing => {
                         ("⚠", Style::default().fg(Color::Rgb(203, 75, 22)))
                     }
@@ -1323,7 +1319,10 @@ fn build_instance_content(
                         format!("[{}] ", badge.trim()),
                         Style::default().fg(badge_color).patch(bg_style),
                     ),
-                    Span::styled(display_value, Style::default().fg(value_color).patch(bg_style)),
+                    Span::styled(
+                        display_value,
+                        Style::default().fg(value_color).patch(bg_style),
+                    ),
                 ]));
                 property_idx += 1;
             }
@@ -1398,7 +1397,10 @@ fn build_instance_content(
                         format!("[{}] ", badge.trim()),
                         Style::default().fg(badge_color).patch(bg_style),
                     ),
-                    Span::styled(display_value, Style::default().fg(value_color).patch(bg_style)),
+                    Span::styled(
+                        display_value,
+                        Style::default().fg(value_color).patch(bg_style),
+                    ),
                 ]));
                 property_idx += 1;
             }
@@ -1433,7 +1435,10 @@ fn build_instance_content(
                         STYLE_PROP_KEY.patch(bg_style),
                     ),
                     Span::styled(": ", STYLE_PROP_COLON.patch(bg_style)),
-                    Span::styled(display_value, Style::default().fg(value_color).patch(bg_style)),
+                    Span::styled(
+                        display_value,
+                        Style::default().fg(value_color).patch(bg_style),
+                    ),
                 ]));
                 property_idx += 1;
             }
