@@ -59,7 +59,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 **Examples**:
 - `feat(tui): add Stats dashboard with heartbeat animation`
 - `fix(schema): validate realm/layer path consistency`
-- `docs(mdbook): update to v0.12.0`
+- `docs(mintlify): update novanet mcp reference`
 
 ## Testing
 
@@ -159,25 +159,28 @@ pnpm audit
 
 ## Documentation
 
-### Update mdBook
+### Update Docs
 
-When making significant changes, update documentation:
+When making significant changes, update documentation in `supernovae-docs/mintlify/novanet/`:
 
 ```
-docs/src/
-├── README.md              # Introduction
-├── architecture/          # System design
-├── guides/                # How-tos
-├── claude-dx/             # DX documentation
-└── reference/             # API reference
+mintlify/novanet/
+├── introduction.mdx   # Overview
+├── concepts.mdx       # Core concepts
+├── schema.mdx         # Schema system
+├── nodes.mdx          # Node classes
+├── arcs.mdx           # Arc classes
+├── traits.mdx         # Traits
+├── mcp*.mdx           # MCP tools reference
+└── tutorial-*.mdx     # Tutorials
 ```
 
-### Build Docs
+### Preview Docs
 
 ```bash
-cd docs
-mdbook build
-mdbook serve  # Preview at localhost:3000
+cd supernovae-docs/mintlify
+npx mintlify dev    # Preview at http://localhost:3000
+npx mintlify build  # Validate build
 ```
 
 ## Getting Help
