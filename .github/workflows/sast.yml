@@ -1,0 +1,87 @@
+name: SAST
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "0 4 * * 1"  # Weekly Monday 04:00 UTC (offset from nika)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # cargo-audit and cargo-deny already run in rust-ci.yml
+  # This workflow adds: cargo-geiger + Semgrep
+
+  cargo-geiger:
+    name: cargo-geiger (unsafe code)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust toolchain (nightly for geiger)
+        uses: dtolnay/rust-toolchain@nightly
+        with:
+          components: rust-src
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: |
+            tools/novanet -> target
+            tools/novanet-mcp -> target
+      - name: Install cargo-geiger
+        run: cargo install cargo-geiger --locked
+      - name: Run geiger on novanet CLI
+        working-directory: tools/novanet
+        run: cargo geiger --all-features 2>&1 | tee geiger-novanet.txt
+      - name: Run geiger on novanet-mcp
+        working-directory: tools/novanet-mcp
+        run: cargo geiger --all-features 2>&1 | tee geiger-mcp.txt
+      - name: Upload geiger reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: geiger-reports
+          path: |
+            tools/novanet/geiger-novanet.txt
+            tools/novanet-mcp/geiger-mcp.txt
+      - name: Warn on unsafe threshold
+        run: |
+          UNSAFE_COUNT=$(grep -r "unsafe" tools/novanet/src/ tools/novanet-mcp/src/ 2>/dev/null | grep -c "unsafe" || echo 0)
+          echo "Unsafe keyword count across novanet Rust sources: $UNSAFE_COUNT"
+          if [ "$UNSAFE_COUNT" -gt 10 ]; then
+            echo "::warning::$UNSAFE_COUNT unsafe blocks found — review geiger-reports artifact"
+          fi
+
+  semgrep:
+    name: Semgrep (patterns)
+    runs-on: ubuntu-latest
+    container:
+      image: semgrep/semgrep
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Semgrep on Rust sources
+        run: >
+          semgrep scan
+          --sarif
+          --output=semgrep-results.sarif
+          --config=auto
+          --severity=WARNING
+          tools/novanet/src/
+          tools/novanet-mcp/src/
+        env:
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+        continue-on-error: true
+      - name: Upload Semgrep SARIF to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: semgrep-results.sarif
+          category: semgrep
