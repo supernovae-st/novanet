@@ -275,6 +275,60 @@ pub fn schema_validate(root: &Path) -> crate::Result<Vec<ValidationIssue>> {
     Ok(issues)
 }
 
+/// Convert a PropertyDef to a serde_yaml::Value::Mapping, preserving field order.
+fn property_def_to_yaml(prop: &crate::parsers::yaml_node::PropertyDef) -> serde_yaml::Value {
+    use serde_yaml::{Mapping, Value};
+
+    let mut prop_map = Mapping::new();
+
+    // type is always first
+    prop_map.insert(
+        Value::String("type".to_string()),
+        Value::String(prop.prop_type.clone()),
+    );
+
+    // required
+    if let Some(required) = prop.required {
+        prop_map.insert(Value::String("required".to_string()), Value::Bool(required));
+    }
+
+    // description
+    if let Some(ref desc) = prop.description {
+        prop_map.insert(
+            Value::String("description".to_string()),
+            Value::String(desc.clone()),
+        );
+    }
+
+    // extra fields (pattern, examples, etc.) - preserve their order
+    for (key, val) in &prop.extra {
+        if let Ok(yaml_val) = serde_yaml::to_value(val) {
+            prop_map.insert(Value::String(key.clone()), yaml_val);
+        }
+    }
+
+    Value::Mapping(prop_map)
+}
+
+/// Convert an IndexMap of properties to a serde_yaml::Mapping, preserving key order.
+///
+/// This is necessary because `serde_yaml::to_value()` on IndexMap may not preserve
+/// insertion order when the resulting Value is serialized back to YAML.
+fn properties_to_yaml_ordered(
+    props: &indexmap::IndexMap<String, crate::parsers::yaml_node::PropertyDef>,
+) -> serde_yaml::Value {
+    use serde_yaml::{Mapping, Value};
+
+    let mut props_map = Mapping::new();
+
+    // Iterate in IndexMap order (which is insertion order, i.e., the fixed order from PropertyOrderFixer)
+    for (key, prop_def) in props {
+        props_map.insert(Value::String(key.clone()), property_def_to_yaml(prop_def));
+    }
+
+    Value::Mapping(props_map)
+}
+
 /// Convert a NodeDef back to YAML structure for writing.
 ///
 /// Manually builds a serde_yaml::Value that matches the expected YAML structure.
@@ -329,18 +383,18 @@ fn node_def_to_yaml(node: &crate::parsers::yaml_node::ParsedNode) -> serde_yaml:
         node_map.insert(Value::String("icon".to_string()), Value::Mapping(icon_map));
     }
 
-    // standard_properties
+    // standard_properties - use order-preserving conversion
     if let Some(ref props) = node.def.standard_properties {
-        let props_value = serde_yaml::to_value(props).unwrap_or(Value::Null);
+        let props_value = properties_to_yaml_ordered(props);
         node_map.insert(
             Value::String("standard_properties".to_string()),
             props_value,
         );
     }
 
-    // properties
+    // properties - use order-preserving conversion
     if let Some(ref props) = node.def.properties {
-        let props_value = serde_yaml::to_value(props).unwrap_or(Value::Null);
+        let props_value = properties_to_yaml_ordered(props);
         node_map.insert(Value::String("properties".to_string()), props_value);
     }
 
@@ -824,7 +878,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore = "Integration test needs YAML line detection fix - core PropertyOrderFixer is tested"]
     fn test_schema_validate_with_fix_safe_strategy() {
         use crate::validation::FixStrategy;
         use std::time::SystemTime;
@@ -842,11 +895,13 @@ mod tests {
         cleanup_test_files(&root);
 
         // Use timestamp to create unique filename for parallel test execution
+        // Note: Don't use patterns like "test-*", "__test__*", "_tmp-*" or "*-test*"
+        // as they are filtered out by load_all_nodes. Use "autofix_*" instead.
         let timestamp = SystemTime::now()
             .duration_since(SystemTime::UNIX_EPOCH)
             .unwrap()
             .as_nanos();
-        let test_node_path = test_dir.join(format!("__test__auto-fix-{}.yaml", timestamp));
+        let test_node_path = test_dir.join(format!("autofix_{}.yaml", timestamp));
         let yaml_content = r#"node:
   name: TestAutoFix
   realm: shared
