@@ -1,7 +1,0 @@
-# packages/core/models/realms/_index.yaml
-# Registry of all NodeRealm definitions
-# v0.12.5
-
-realms:
-  - shared
-  - org
