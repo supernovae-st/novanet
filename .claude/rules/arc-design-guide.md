@@ -12,7 +12,7 @@ This guide documents best practices for designing, naming, and documenting arcs 
 
 ## Arc Families
 
-NovaNet organizes arcs into 5 families based on their semantic purpose:
+NovaNet organizes arcs into 6 families based on their semantic purpose:
 
 | Family | Purpose | Key Arcs |
 |--------|---------|----------|
@@ -21,6 +21,7 @@ NovaNet organizes arcs into 5 families based on their semantic purpose:
 | **semantic** | Meaning relationships | USES_ENTITY, REFERENCES, MENTIONS |
 | **generation** | LLM pipeline | GENERATED, COMPILED_FROM, ASSEMBLES |
 | **mining** | SEO/GEO intelligence | TARGETS_KEYWORD, MONITORS_GEO |
+| **schema** | Meta-schema structure | OF_CLASS, FROM_CLASS, TO_CLASS |
 
 ## Naming Conventions
 
