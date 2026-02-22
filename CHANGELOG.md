@@ -129,7 +129,7 @@ MATCH (n:BlockGenerated) SET n:BlockNative REMOVE n:BlockGenerated;
 - **169 arcs** (5 families)
 - Schema validation: 0 errors, 0 warnings
 
-## [0.12.1] - 2026-02-13
+## [0.12.4] - 2026-02-13
 
 ### Added
 - **ADR-026: Inverse Arc Policy** - Tiered policy for bidirectional arc relationships
@@ -649,7 +649,12 @@ cargo run -- schema generate
 - Migrated from git submodules to true monorepo
 - Organization links updated to supernovae-st
 
-[Unreleased]: https://github.com/supernovae-st/novanet-dev/compare/v0.12.0...HEAD
+[Unreleased]: https://github.com/supernovae-st/novanet-dev/compare/v0.14.0...HEAD
+[0.14.0]: https://github.com/supernovae-st/novanet-dev/compare/v0.13.1...v0.14.0
+[0.13.1]: https://github.com/supernovae-st/novanet-dev/compare/v0.13.0...v0.13.1
+[0.13.0]: https://github.com/supernovae-st/novanet-dev/compare/v0.12.5...v0.13.0
+[0.12.5]: https://github.com/supernovae-st/novanet-dev/compare/v0.12.4...v0.12.5
+[0.12.4]: https://github.com/supernovae-st/novanet-dev/compare/v0.12.0...v0.12.4
 [0.12.0]: https://github.com/supernovae-st/novanet-dev/compare/v11.7.0...v0.12.0
 [11.7.0]: https://github.com/supernovae-st/novanet-dev/compare/v11.6.0...v11.7.0
 [11.6.0]: https://github.com/supernovae-st/novanet-dev/compare/v11.5.0...v11.6.0
