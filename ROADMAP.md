@@ -1,6 +1,6 @@
 # NovaNet Roadmap
 
-Current version: **v0.13.0** | Last release: v0.12.5 | Target: QR Code AI (https://qrcode-ai.com)
+Current version: **v0.14.0** | Last release: v0.13.1 | Target: QR Code AI (https://qrcode-ai.com)
 
 > **Versioning Note**: Starting with v0.12.0, NovaNet follows strict SemVer. Versions v8.x-v11.x were internal milestones.
 
@@ -39,8 +39,10 @@ v11.8 Class Act (legacy)               █████████████�
       Trait renames (ADR-024): defined/authored/imported/generated/retrieved
 v0.12 SemVer Transition                ████████████████████  100%  RELEASED
       Proper semantic versioning (0.x = pre-production)
-v0.13 *Native Pattern                  ████████████████████  100%  <- CURRENT
+v0.13 *Native Pattern                  ████████████████████  100%  RELEASED
       ADR-029 unified *Native suffix, ADR-030 Slug Ownership
+v0.14 MCP Introspect                   ████████████████████  100%  <- CURRENT
+      8 MCP tools, novanet_introspect, context_build_log (ADR-033)
 
 ═══════════════════════════════════════════════════════════════════════════════
 IDEAS (no timeline)
