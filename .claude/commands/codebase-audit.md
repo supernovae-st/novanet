@@ -392,9 +392,9 @@ Check semantic consistency:
    - Configuration patterns match
 
 4. NovaNet-specific:
-   - v11.5 architecture (2 realms, 10 layers)
-   - 60 node types, correct distribution
-   - Arc families correct (5 families)
+   - v0.14.0 architecture (2 realms, 10 layers)
+   - 61 node types, correct distribution
+   - Arc families correct (6 families)
 
 Report deviations with evidence.
 Paths: packages/core/, tools/novanet/, apps/studio/

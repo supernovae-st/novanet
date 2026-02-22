@@ -159,7 +159,7 @@
 # CHANGES v0.12.0 (SemVer transition from v11.x milestone versions)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-# Statistics: 61 nodes (40 shared + 21 org), 169 arcs (5 arc families)
+# Statistics: 61 nodes (40 shared + 21 org), 182 arcs (6 arc families)
 # v0.12.5: Added REFERENCES (Block→Entity), HAS_KEYWORD (Entity→SEOKeyword)
 #
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -383,7 +383,7 @@ nodes_by_trait:
 # By Realm (v0.12.5):
 #   🌍 SHARED:  40 nodes (config 3 + geography 7 + knowledge 24 + locale 6)
 #   📦 ORG:     21 nodes (config 1 + foundation 6 + structure 3 + semantic 4 + instruction 4 + output 3)
-#   TOTAL:      61 nodes, 169 arcs (5 arc families)
+#   TOTAL:      61 nodes, 182 arcs (6 arc families)
 #
 # By Trait (v0.12.0 ADR-024):
 #   🔵 DEFINED:   31 nodes (language-independent definitions)

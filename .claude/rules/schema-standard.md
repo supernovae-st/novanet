@@ -1,4 +1,4 @@
-# NovaNet Schema Standard v0.13.1
+# NovaNet Schema Standard v0.14.0
 
 ## Canonical YAML Structure
 

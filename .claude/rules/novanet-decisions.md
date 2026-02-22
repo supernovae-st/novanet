@@ -10,12 +10,12 @@ paths:
 description: ADR index - load when editing NovaNet code or planning
 ---
 
-# NovaNet Architecture Decisions (v0.13.1)
+# NovaNet Architecture Decisions (v0.14.0)
 
 This file is the **index** for NovaNet's Architecture Decision Records.
 Full ADR content is in `.claude/rules/adr/{domain}/adr-XXX-*.md`.
 
-> **Version**: v0.13.1 "Auto-Fix System" (ADR-033) + *Native Pattern (ADR-029 + ADR-030)
+> **Version**: v0.14.0 "8 MCP Tools" (ADR-033) + *Native Pattern (ADR-029 + ADR-030)
 
 ---
 
@@ -35,7 +35,7 @@ Full ADR content is in `.claude/rules/adr/{domain}/adr-XXX-*.md`.
 ```
 SHARED (4 layers, 40 nodes): config, locale, geography, knowledge — READ-ONLY
 ORG (6 layers, 21 nodes): config, foundation, structure, semantic, instruction, output
-Total: 61 nodes, 169 arcs, 10 layers, 5 arc families, 5 traits, 33 ADRs
+Total: 61 nodes, 182 arcs, 10 layers, 6 arc families, 5 traits, 33 ADRs
 ```
 
 ### v0.13.1 Key Changes
