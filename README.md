@@ -6,8 +6,8 @@
 
 Generate culturally-native content across 200+ locales — not translation, but true localization from semantic concepts.
 
-[![CI](https://img.shields.io/github/actions/workflow/status/supernovae-st/novanet-dev/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/supernovae-st/novanet-dev/actions)
-[![Tests](https://img.shields.io/badge/tests-1226_passing-success?style=flat-square)](https://github.com/supernovae-st/novanet-dev)
+[![CI](https://img.shields.io/github/actions/workflow/status/supernovae-st/novanet/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/supernovae-st/novanet/actions)
+[![Tests](https://img.shields.io/badge/tests-1226_passing-success?style=flat-square)](https://github.com/supernovae-st/novanet)
 [![Rust](https://img.shields.io/badge/Rust-1.84-DEA584?style=flat-square&logo=rust&logoColor=white)](https://rust-lang.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://typescriptlang.org)
 [![Neo4j](https://img.shields.io/badge/Neo4j-5.26-018bff?style=flat-square&logo=neo4j&logoColor=white)](https://neo4j.com)
@@ -90,7 +90,7 @@ flowchart TB
 ```bash
 # 1. Clone the repository
 git clone git@github.com:supernovae-st/supernovae-agi.git
-cd supernovae-agi/novanet-dev
+cd supernovae-agi/novanet
 
 # 2. Install dependencies
 pnpm install
@@ -112,7 +112,7 @@ Open [http://localhost:3000](http://localhost:3000) — Neo4j Browser at [http:/
 ## Monorepo Structure
 
 ```
-novanet-dev/
+novanet/
 ├── turbo.json                 # Turborepo pipeline config
 ├── pnpm-workspace.yaml        # Workspace definitions
 ├── packages/
@@ -144,10 +144,10 @@ novanet-dev/
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| **@novanet/core** | `0.13.0` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
-| **@novanet/db** | `0.13.0` | Docker Compose for Neo4j, Cypher seeds, migrations |
-| **@novanet/studio** | `0.13.0` | Interactive graph visualization with AI chat |
-| **tools/novanet** | `0.13.0` | Rust CLI + TUI for schema generation, validation, queries |
+| **@novanet/core** | `0.14.0` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
+| **@novanet/db** | `0.14.0` | Docker Compose for Neo4j, Cypher seeds, migrations |
+| **@novanet/studio** | `0.14.0` | Interactive graph visualization with AI chat |
+| **tools/novanet** | `0.14.0` | Rust CLI + TUI for schema generation, validation, queries |
 
 ---
 
