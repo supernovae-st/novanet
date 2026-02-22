@@ -64,6 +64,12 @@ cd tools/novanet-mcp && cargo clippy -- -D warnings
 |------|-------------|
 | `novanet_query` | Execute read-only Cypher queries |
 | `novanet_describe` | Bootstrap agent with schema knowledge |
+| `novanet_search` | Fulltext + property search with hybrid mode |
+| `novanet_traverse` | Graph traversal with depth/direction filters |
+| `novanet_assemble` | Assemble token-aware context for LLM |
+| `novanet_atoms` | Retrieve knowledge atoms for locale |
+| `novanet_generate` | Full RLM-on-KG context assembly |
+| `novanet_introspect` | Schema introspection for agents |
 
 | Env Variable | Default |
 |--------------|---------|

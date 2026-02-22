@@ -569,9 +569,9 @@ pub const QUESTIONS: &[QuizQuestion] = &[
     },
     QuizQuestion {
         question: "How many total arcs (ArcClass) in NovaNet?",
-        options: ["85", "114", "128", "146"],
+        options: ["114", "146", "182", "210"],
         correct: 2,
-        explanation: "169 arc types defined across 5 families, covering all node relationships.",
+        explanation: "182 arc types defined across 6 families, covering all node relationships.",
         category: QuizCategory::Arcs,
         question_type: QuizQuestionType::MultipleChoice,
     },

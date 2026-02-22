@@ -9,7 +9,7 @@ paths:
 description: NovaNet domain vocabulary - load when editing NovaNet code
 ---
 
-# NovaNet Terminology (v0.13.0)
+# NovaNet Terminology (v0.14.0)
 
 This file defines the **canonical terminology** for NovaNet. All code, documentation, and UI must use these terms consistently.
 
