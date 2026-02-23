@@ -70,7 +70,7 @@
     "jest-environment-jsdom": "^29.7.0",
     "monaco-editor": "^0.55.1",
     "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.17",
+    "tailwindcss": "^4.2.0",
     "ts-jest": "^29.4.6",
     "typescript": "catalog:"
   }
