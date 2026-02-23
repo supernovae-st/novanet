@@ -29,10 +29,10 @@
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.9.1",
     "@use-gesture/react": "^10.3.1",
-    "@xyflow/react": "^12.4.4",
+    "@xyflow/react": "^12.10.1",
     "clsx": "^2.1.1",
     "d3-force": "^3.0.0",
-    "framer-motion": "^12.34.2",
+    "framer-motion": "^12.34.3",
     "geist": "^1.5.1",
     "immer": "^10.1.1",
     "js-yaml": "^4.1.1",
@@ -48,7 +48,7 @@
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.182.0",
-    "zustand": "^5.0.3"
+    "zustand": "^5.0.11"
   },
   "devDependencies": {
     "@playwright/test": "^1.57.0",
@@ -59,7 +59,7 @@
     "@types/jest": "^30.0.0",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "catalog:",
-    "@types/react": "^19.0.2",
+    "@types/react": "^19.2.14",
     "@types/react-dom": "^19.0.2",
     "@types/three": "^0.182.0",
     "@types/w3c-web-hid": "^1.0.6",
