@@ -12,7 +12,7 @@ packages:
 catalog:
   # Core dependencies (shared across packages)
   typescript: ^5.9.3
-  zod: ^3.24.0
+  zod: ^4.3.6
   yaml: ^2.7.0
 
   # Database
