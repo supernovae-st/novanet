@@ -19,7 +19,7 @@ catalog:
   neo4j-driver: ^5.28.1
 
   # Testing
-  vitest: ^2.1.0
+  vitest: ^4.0.18
 
   # Build tools
   tsx: ^4.19.0
