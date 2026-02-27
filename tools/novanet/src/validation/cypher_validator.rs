@@ -435,7 +435,11 @@ pub fn validate_cypher_files(
                 static REPORTED: std::sync::OnceLock<std::sync::Mutex<HashSet<String>>> =
                     std::sync::OnceLock::new();
                 let reported = REPORTED.get_or_init(|| std::sync::Mutex::new(HashSet::new()));
-                let mut reported = reported.lock().unwrap();
+                // SAFETY: Recover from poisoned mutex - we don't care about inconsistent state
+                // since this is just deduplication tracking, not critical data
+                let mut reported = reported
+                    .lock()
+                    .unwrap_or_else(|poisoned| poisoned.into_inner());
                 if !reported.contains(&key) {
                     reported.insert(key);
                     issues.push(CypherValidationIssue {

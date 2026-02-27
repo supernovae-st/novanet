@@ -2,24 +2,25 @@
 
 Complete keyboard shortcuts reference for the NovaNet Terminal UI.
 
-> **v0.12.0**: Unified Tree Architecture - 2 modes (Graph, Nexus) with lazy instance loading.
-> Key `1` = Graph (unified tree), Key `2` = Nexus (hub). Search via `/` overlay.
-> Stats tab redesigned as "Matrix Control Tower" with schema stats and animations.
+> **v0.13.0**: Three navigation modes with lazy instance loading.
+> Key `1` = Graph (unified tree), Key `2` = Views (schema views explorer), Key `3` = Nexus (hub).
+> Search via `/` overlay. Stats tab redesigned as "Matrix Control Tower".
 > Source of truth: `src/tui/app.rs` (handle_key)
 
 ---
 
-## Navigation Modes (v0.12.0)
+## Navigation Modes (v0.13.0)
 
 | Key | Mode | Description |
 |-----|------|-------------|
 | `1` | Graph | Unified tree (Realm > Layer > Class > Instance + Arcs) |
-| `2` | Nexus | Hub (Quiz, Audit, Stats, Help) |
+| `2` | Views | Schema views explorer (queries, categories, Cypher) |
+| `3` | Nexus | Hub (Quiz, Audit, Stats, Help) |
 | `/` | Search | Overlay search (filter nodes/arcs) |
 
-**Mode indicator**: Header shows `[1]Graph [2]Nexus` with active mode highlighted.
+**Mode indicator**: Header shows `[1]Graph [2]Views [3]Nexus` with active mode highlighted.
 
-> **Deprecated (v11.6)**: Keys `3` (Audit) and `4` (Nexus) are no longer separate modes.
+> **Deprecated (v11.6)**: Keys `4` and beyond are no longer used for modes.
 > Audit and Stats are now accessible from Nexus hub via `A` and `S`.
 
 ---
@@ -77,7 +78,22 @@ Instances are loaded lazily when expanding a Class node.
 
 ---
 
-## Nexus Hub (v0.12.0)
+## Views Mode (v0.13.0)
+
+The Views mode provides a schema views explorer for browsing predefined Cypher queries.
+
+| Key | Action |
+|-----|--------|
+| `j` / `Down` | Move down in view list |
+| `k` / `Up` | Move up in view list |
+| `Enter` | Select view / expand details |
+| `y` | Yank view Cypher to clipboard |
+| `1` | Switch to Graph mode |
+| `3` | Switch to Nexus mode |
+
+---
+
+## Nexus Hub (v0.13.0)
 
 The Nexus hub provides gamified learning and system tools.
 
@@ -85,7 +101,7 @@ The Nexus hub provides gamified learning and system tools.
 
 | Key | Action |
 |-----|--------|
-| `2` | Enter Nexus hub |
+| `3` | Enter Nexus hub |
 | `Q` | Jump to Quiz mode |
 | `A` | Jump to Audit mode |
 | `S` | Jump to Stats dashboard |
@@ -95,7 +111,8 @@ The Nexus hub provides gamified learning and system tools.
 
 | Key | Action |
 |-----|--------|
-| `1` | Back to Graph mode |
+| `1` | Switch to Graph mode |
+| `2` | Switch to Views mode |
 | `[` | Previous tab |
 | `]` | Next tab |
 | `Tab` | Cycle to next tab |
@@ -231,23 +248,28 @@ Focus:       Tab (cycle panels)
 Filter:      fd/fa/fi/fg/fr (trait)  ff (clear)
 Search:      / (search)  ? (help)  F1 (legend)
 Actions:     r (refresh)  y/Y (yank key/JSON)  J (JSON toggle)  Ctrl+o/i (back/forward)
+Modes:       2 (Views)  3 (Nexus)
 Exit:        q or Esc
 
-NEXUS MODE (2):
+VIEWS MODE (2):
+Navigation:  j/k (up/down)  Enter (select/expand)
+Actions:     y (yank Cypher)
+Modes:       1 (Graph)  3 (Nexus)
+
+NEXUS MODE (3):
 Access:      Q (quiz)  A (audit)  S (stats)  ? (help)
 Tabs:        [ ] (prev/next)  Tab (cycle)
 i18n:        I (toggle En/Fr)
 Quiz:        j/k (select)  Enter (submit/next)  r (restart)
-Back:        1 (Graph mode)
+Modes:       1 (Graph)  2 (Views)
 ```
 
 ---
 
-## Deprecated Keybindings (v11.6 -> v0.12.0)
+## Deprecated Keybindings (v11.6 -> v0.13.0)
 
 | Old Key | Old Action | New Equivalent |
 |---------|------------|----------------|
-| `3` | Audit mode | `2` then `A` (Nexus > Audit) |
-| `4` | Nexus mode | `2` (Nexus) |
+| `4` | Old Nexus mode | `3` (Nexus) |
 | `0` | Hide empty (Graph mode) | Removed (unified tree shows all) |
 | `s` | Schema overlay | Removed (unified tree shows schema inline) |

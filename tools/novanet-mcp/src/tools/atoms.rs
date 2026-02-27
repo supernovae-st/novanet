@@ -282,20 +282,20 @@ async fn fetch_atoms(
     config: &AtomConfig,
     limit: usize,
 ) -> Result<Vec<Atom>> {
-    // Build filter for domain/register (if applicable)
-    let field_filter = match config.filter_field {
-        Some("domain") => params
-            .domain
-            .as_ref()
-            .map(|d| format!("AND a.domain = '{}'", d))
-            .unwrap_or_default(),
-        Some("register") => params
-            .register
-            .as_ref()
-            .map(|r| format!("AND a.register = '{}'", r))
-            .unwrap_or_default(),
-        _ => String::new(),
-    };
+    // Build filter for domain/register (if applicable) using parameterized queries
+    // SECURITY: Always use parameters, never string interpolation for user input
+    let (field_filter, field_param_name, field_param_value): (String, Option<&str>, Option<&str>) =
+        match config.filter_field {
+            Some("domain") => match &params.domain {
+                Some(d) => ("AND a.domain = $domain_filter".to_string(), Some("domain_filter"), Some(d.as_str())),
+                None => (String::new(), None, None),
+            },
+            Some("register") => match &params.register {
+                Some(r) => ("AND a.register = $register_filter".to_string(), Some("register_filter"), Some(r.as_str())),
+                None => (String::new(), None, None),
+            },
+            _ => (String::new(), None, None),
+        };
 
     // Build search query filter
     let query_filter = params
@@ -345,6 +345,10 @@ async fn fetch_atoms(
     query_params.insert("locale".to_string(), serde_json::json!(params.locale));
     if let Some(q) = &params.query {
         query_params.insert("query".to_string(), serde_json::json!(q));
+    }
+    // SECURITY: Add parameterized field filter value
+    if let (Some(param_name), Some(param_value)) = (field_param_name, field_param_value) {
+        query_params.insert(param_name.to_string(), serde_json::json!(param_value));
     }
 
     let rows = state

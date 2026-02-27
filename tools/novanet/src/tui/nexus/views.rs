@@ -10,10 +10,16 @@ use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, Borders, Paragraph, Wrap};
 use regex::Regex;
+use std::sync::LazyLock;
 
 use crate::parsers::views::{SimpleViewEntry, SimpleViewsFile, ViewCategoryDef, ViewIcon};
 use crate::tui::app::App;
 use crate::tui::ui::COLOR_UNFOCUSED_BORDER;
+
+/// Regex for extracting relation names from Cypher queries.
+/// PERF: Compile once at first use, not on every function call.
+static CYPHER_RELATION_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"\[r?\d*:([A-Z_]+)\]").expect("valid regex"));
 
 // =============================================================================
 // LOADED VIEWS DATA
@@ -272,11 +278,11 @@ struct ExtractedRelation {
 /// Extract relation names from a Cypher query.
 /// Matches patterns like `[:HAS_BLOCK]`, `[r:USES_ENTITY]`, `[r1:OF_TYPE]`
 fn extract_relations_from_cypher(cypher: &str) -> Vec<ExtractedRelation> {
-    let re = Regex::new(r"\[r?\d*:([A-Z_]+)\]").unwrap();
+    // PERF: Use static regex (compiled once, not per call)
     let mut relations: Vec<ExtractedRelation> = Vec::new();
     let mut seen = std::collections::HashSet::new();
 
-    for cap in re.captures_iter(cypher) {
+    for cap in CYPHER_RELATION_RE.captures_iter(cypher) {
         if let Some(m) = cap.get(1) {
             let name = m.as_str().to_string();
             if !seen.contains(&name) {

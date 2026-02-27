@@ -258,16 +258,37 @@ async fn hybrid_search(
     property_search(state, params, limit).await
 }
 
+/// Validate that a label name only contains safe characters.
+/// Neo4j labels cannot be parameterized, so we must validate them.
+///
+/// SECURITY: Prevents label injection attacks by only allowing alphanumeric + underscore.
+fn is_valid_label(label: &str) -> bool {
+    !label.is_empty()
+        && label.len() <= 100 // Reasonable max length
+        && label.chars().all(|c| c.is_ascii_alphanumeric() || c == '_')
+}
+
 /// Build kind filter clause
 ///
 /// # Arguments
 /// * `kinds` - Optional list of node kinds to filter by
 /// * `var` - Cypher variable name (e.g., "n" for MATCH, "node" for fulltext YIELD)
+///
+/// SECURITY: Labels are validated to prevent injection attacks.
 fn build_kind_filter(kinds: &Option<Vec<String>>, var: &str) -> String {
     match kinds {
         Some(k) if !k.is_empty() => {
-            let labels: Vec<String> = k.iter().map(|l| format!("{}:{}", var, l)).collect();
-            format!("AND ({})", labels.join(" OR "))
+            // SECURITY: Filter out any invalid labels to prevent injection
+            let valid_labels: Vec<String> = k
+                .iter()
+                .filter(|l| is_valid_label(l))
+                .map(|l| format!("{}:{}", var, l))
+                .collect();
+            if valid_labels.is_empty() {
+                String::new()
+            } else {
+                format!("AND ({})", valid_labels.join(" OR "))
+            }
         }
         _ => String::new(),
     }
@@ -313,6 +334,24 @@ mod tests {
     use super::*;
 
     #[test]
+    fn test_is_valid_label() {
+        // Valid labels
+        assert!(is_valid_label("Entity"));
+        assert!(is_valid_label("Page"));
+        assert!(is_valid_label("Entity_Native"));
+        assert!(is_valid_label("Test123"));
+
+        // Invalid labels (security tests)
+        assert!(!is_valid_label("")); // Empty
+        assert!(!is_valid_label("Entity:Foo")); // Contains colon
+        assert!(!is_valid_label("Entity OR n")); // Contains space and injection attempt
+        assert!(!is_valid_label("Entity})")); // Contains special chars
+        assert!(!is_valid_label("'; DROP DATABASE")); // SQL-style injection
+        assert!(!is_valid_label("Entity\n")); // Newline
+        assert!(!is_valid_label(&"A".repeat(101))); // Too long
+    }
+
+    #[test]
     fn test_build_kind_filter() {
         // Test with 'n' variable (property search)
         assert_eq!(build_kind_filter(&None, "n"), "");
@@ -337,6 +376,23 @@ mod tests {
                 "node"
             ),
             "AND (node:Entity OR node:Page)"
+        );
+    }
+
+    #[test]
+    fn test_build_kind_filter_rejects_injection() {
+        // SECURITY: Invalid labels should be filtered out
+        assert_eq!(
+            build_kind_filter(&Some(vec!["Entity:Foo".to_string()]), "n"),
+            "" // Invalid label filtered out, empty result
+        );
+        assert_eq!(
+            build_kind_filter(&Some(vec!["Entity".to_string(), "'; DROP DATABASE".to_string()]), "n"),
+            "AND (n:Entity)" // Only valid label kept
+        );
+        assert_eq!(
+            build_kind_filter(&Some(vec!["Entity OR 1=1".to_string()]), "n"),
+            "" // Invalid label filtered out
         );
     }
 
