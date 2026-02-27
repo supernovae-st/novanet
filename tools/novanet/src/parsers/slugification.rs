@@ -378,7 +378,11 @@ fn parse_frontmatter(content: &str) -> Result<Frontmatter> {
         .captures(content)
         .ok_or_else(|| NovaNetError::Validation("No YAML frontmatter found".to_string()))?;
 
-    let yaml_str = caps.get(1).unwrap().as_str();
+    // Group 1 is guaranteed to exist after successful regex match
+    let yaml_str = caps
+        .get(1)
+        .map(|m| m.as_str())
+        .ok_or_else(|| NovaNetError::Validation("Frontmatter capture group missing".to_string()))?;
     serde_yaml::from_str(yaml_str)
         .map_err(|e| NovaNetError::Validation(format!("Failed to parse frontmatter: {}", e)))
 }
@@ -397,8 +401,13 @@ fn extract_stopwords(content: &str) -> HashMap<String, Vec<String>> {
     let mut stopwords: HashMap<String, Vec<String>> = HashMap::new();
 
     for caps in RE_STOPWORD.captures_iter(content) {
-        let word = caps.get(1).unwrap().as_str().trim().to_string();
-        let category = caps.get(2).unwrap().as_str().trim().to_string();
+        // Groups guaranteed to exist after successful regex match, but use defensive pattern
+        let Some(word) = caps.get(1).map(|m| m.as_str().trim().to_string()) else {
+            continue;
+        };
+        let Some(category) = caps.get(2).map(|m| m.as_str().trim().to_string()) else {
+            continue;
+        };
 
         // Skip header rows
         if word == "Word" || word.contains("---") {
@@ -432,9 +441,16 @@ fn extract_regional_additions(content: &str) -> Vec<RegionalAddition> {
     let section = &section_content[..section_end];
 
     for caps in RE_REGIONAL_ADDITION.captures_iter(section) {
-        let word = caps.get(1).unwrap().as_str().trim().to_string();
-        let category = caps.get(2).unwrap().as_str().trim().to_string();
-        let reason = caps.get(3).unwrap().as_str().trim().to_string();
+        // Groups guaranteed to exist after successful regex match, but use defensive pattern
+        let Some(word) = caps.get(1).map(|m| m.as_str().trim().to_string()) else {
+            continue;
+        };
+        let Some(category) = caps.get(2).map(|m| m.as_str().trim().to_string()) else {
+            continue;
+        };
+        let Some(reason) = caps.get(3).map(|m| m.as_str().trim().to_string()) else {
+            continue;
+        };
 
         // Skip header rows
         if word == "Word" || word.contains("---") || category == "Category" {

@@ -43,6 +43,27 @@ static RE_CONTEXT_TYPE: LazyLock<Regex> =
 static RE_HIERARCHY: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"\*\*Level\*\*:\s*(\w+)").expect("valid hierarchy regex"));
 
+/// Table row with 4 columns: | text | word | text | text |
+static RE_TABLE_4COL: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"\|\s*([^|]+)\s*\|\s*(\w+)\s*\|\s*([^|]+)\s*\|\s*([^|]+)\s*\|")
+        .expect("valid 4-col table regex")
+});
+
+/// Table row with 3 columns: | text | word | text |
+static RE_TABLE_3COL: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"\|\s*([^|]+)\s*\|\s*(\w+)\s*\|\s*([^|]+)\s*\|").expect("valid 3-col table regex")
+});
+
+/// Work days extraction
+static RE_WORK_DAYS: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"Work days\s*\|\s*(\w+)").expect("valid work days regex"));
+
+/// Standard hours extraction
+static RE_STANDARD_HOURS: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"\|\s*Standard[^|]*\|\s*(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})")
+        .expect("valid standard hours regex")
+});
+
 // ============================================================================
 // Main Structs
 // ============================================================================
@@ -419,10 +440,7 @@ fn parse_values_section(content: &str) -> Vec<CoreValue> {
     let mut values = Vec::new();
 
     // Parse table rows: | Value | Importance | Expression | Marketing Angle |
-    let table_re =
-        Regex::new(r"\|\s*([^|]+)\s*\|\s*(\w+)\s*\|\s*([^|]+)\s*\|\s*([^|]+)\s*\|").unwrap();
-
-    for caps in table_re.captures_iter(content) {
+    for caps in RE_TABLE_4COL.captures_iter(content) {
         let value = caps.get(1).map(|m| m.as_str().trim()).unwrap_or("");
         let importance = caps.get(2).map(|m| m.as_str().trim()).unwrap_or("");
         let expression = caps.get(3).map(|m| m.as_str().trim()).unwrap_or("");
@@ -483,9 +501,7 @@ fn parse_taboos_section(content: &str) -> Vec<Taboo> {
     let mut taboos = Vec::new();
 
     // Parse table rows: | Topic | Severity | Notes |
-    let table_re = Regex::new(r"\|\s*([^|]+)\s*\|\s*(\w+)\s*\|\s*([^|]+)\s*\|").unwrap();
-
-    for caps in table_re.captures_iter(content) {
+    for caps in RE_TABLE_3COL.captures_iter(content) {
         let topic = caps.get(1).map(|m| m.as_str().trim()).unwrap_or("");
         let severity = caps.get(2).map(|m| m.as_str().trim()).unwrap_or("");
         let notes = caps.get(3).map(|m| m.as_str().trim()).unwrap_or("");
@@ -515,8 +531,7 @@ fn parse_time_section(content: &str) -> (String, serde_json::Value) {
 
     // Extract work week start from work week rows
     // Look for patterns like "| Work days | Sunday - Thursday |" or "Work days | Monday-Friday"
-    let work_days_re = Regex::new(r"Work days\s*\|\s*(\w+)").unwrap();
-    if let Some(caps) = work_days_re.captures(content) {
+    if let Some(caps) = RE_WORK_DAYS.captures(content) {
         let first_day = caps
             .get(1)
             .map(|m| m.as_str().to_lowercase())
@@ -530,10 +545,7 @@ fn parse_time_section(content: &str) -> (String, serde_json::Value) {
     }
 
     // Parse business hours table: | Type | Hours | Best Contact Time |
-    let hours_re =
-        Regex::new(r"\|\s*Standard[^|]*\|\s*(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})").unwrap();
-
-    if let Some(caps) = hours_re.captures(content) {
+    if let Some(caps) = RE_STANDARD_HOURS.captures(content) {
         if let Some(start) = caps.get(1) {
             business_start = start.as_str().to_string();
         }

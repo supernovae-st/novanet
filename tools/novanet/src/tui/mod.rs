@@ -330,9 +330,13 @@ async fn run_app(
                 // PHASE 2: Background arc loading for instances (deferred from key handler)
                 // This runs on timeout so the UI renders with "[...]" first, showing loading state
                 if let Some((class_key, keys)) = app.take_pending_instance_arcs_load() {
+                    let nav_gen = app.navigation_generation;
                     match TaxonomyTree::load_instance_arcs(db, &class_key, keys).await {
-                        Ok(arcs) => {
+                        Ok(arcs) if app.navigation_generation == nav_gen => {
                             app.tree.update_instance_arcs(&class_key, arcs);
+                        }
+                        Ok(_) => {
+                            // Stale result - user navigated away, discard
                         }
                         Err(e) => {
                             app.set_status_error(&format!("Load arcs: {}", e));

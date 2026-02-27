@@ -58,6 +58,17 @@ static RE_ROI_SCORE: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(r"\*\*Overall\*\*\s*\|\s*\*\*([\d.]+)\*\*").expect("valid roi regex")
 });
 
+/// Table row with 3 columns: | Name | Percent% | Text |
+static RE_TABLE_3COL: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"\|\s*([^|]+)\s*\|\s*(\d+)%\s*\|\s*([^|]+)\s*\|").expect("valid 3-col table regex")
+});
+
+/// Table row with 4 columns: | Name | Percent% | Text | Text |
+static RE_TABLE_4COL: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"\|\s*([^|]+)\s*\|\s*(\d+)%\s*\|\s*([^|]+)\s*\|\s*([^|]+)\s*\|")
+        .expect("valid 4-col table regex")
+});
+
 // ============================================================================
 // Main Structs
 // ============================================================================
@@ -419,9 +430,7 @@ fn parse_payment_methods(content: &str) -> serde_json::Value {
     let section = &content[start..section_end];
 
     // Parse table rows: | Method | Usage | Trend |
-    let table_re = Regex::new(r"\|\s*([^|]+)\s*\|\s*(\d+)%\s*\|\s*([^|]+)\s*\|").unwrap();
-
-    for caps in table_re.captures_iter(section) {
+    for caps in RE_TABLE_3COL.captures_iter(section) {
         let method = caps.get(1).map(|m| m.as_str().trim()).unwrap_or("");
         let usage = caps.get(2).map(|m| m.as_str().trim()).unwrap_or("0");
         let trend = caps.get(3).map(|m| m.as_str().trim()).unwrap_or("");
@@ -461,10 +470,7 @@ fn parse_social_networks(content: &str) -> serde_json::Value {
     let section = &content[start..section_end];
 
     // Parse table rows: | Platform | Penetration | Primary Audience | Best for |
-    let table_re =
-        Regex::new(r"\|\s*([^|]+)\s*\|\s*(\d+)%\s*\|\s*([^|]+)\s*\|\s*([^|]+)\s*\|").unwrap();
-
-    for caps in table_re.captures_iter(section) {
+    for caps in RE_TABLE_4COL.captures_iter(section) {
         let platform = caps.get(1).map(|m| m.as_str().trim()).unwrap_or("");
         let penetration = caps.get(2).map(|m| m.as_str().trim()).unwrap_or("0");
         let audience = caps.get(3).map(|m| m.as_str().trim()).unwrap_or("");
@@ -505,9 +511,7 @@ fn parse_popular_platforms(content: &str) -> serde_json::Value {
     let section = &content[start..section_end];
 
     // Parse table rows: | Company | Market Share | Strength |
-    let table_re = Regex::new(r"\|\s*([^|]+)\s*\|\s*(\d+)%\s*\|\s*([^|]+)\s*\|").unwrap();
-
-    for caps in table_re.captures_iter(section) {
+    for caps in RE_TABLE_3COL.captures_iter(section) {
         let company = caps.get(1).map(|m| m.as_str().trim()).unwrap_or("");
         let share = caps.get(2).map(|m| m.as_str().trim()).unwrap_or("0");
         let strength = caps.get(3).map(|m| m.as_str().trim()).unwrap_or("");
