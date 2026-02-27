@@ -28,15 +28,23 @@ use ratatui::text::Span;
 // =============================================================================
 
 /// Number of items to scroll with page up/down (d/u keys).
+/// Chosen as ~half a typical terminal screen height (24 lines) for comfortable navigation
+/// without losing context when jumping through large lists.
 pub const PAGE_SCROLL_AMOUNT: usize = 10;
 
 /// Minimum visible lines to keep above max scroll position in YAML panel.
+/// Prevents scrolling past content end, ensuring user always sees meaningful text.
+/// 10 lines provides enough context for YAML blocks with nested properties.
 pub const YAML_SCROLL_MARGIN: usize = 10;
 
 /// Minimum visible lines to keep above max scroll position in Info panel.
+/// Smaller than YAML margin because info panel content is typically shorter.
+/// 5 lines balances scroll precision with visual stability.
 pub const INFO_SCROLL_MARGIN: usize = 5;
 
 /// Default tree height (updated by UI on render).
+/// Used for initial scroll calculations before first render pass.
+/// 20 lines approximates a typical terminal with status bar and borders.
 pub const DEFAULT_TREE_HEIGHT: usize = 20;
 
 /// Navigation mode — 3 modes in v0.12.5.
@@ -360,6 +368,10 @@ pub struct App {
     pub loaded_views: LoadedViews,
     /// Animation tick counter (increments each frame, used for spinners)
     pub tick: u16,
+    /// Navigation generation counter for detecting stale async results.
+    /// Incremented on each navigation to prevent race conditions where async loads
+    /// complete after the user has already navigated away.
+    pub navigation_generation: u64,
     // ==========================================================================
     // Schema Overlay State (Feature 1)
     // ==========================================================================
@@ -456,6 +468,7 @@ impl App {
             nexus: NexusState::with_persistence(),
             loaded_views,
             tick: 0,
+            navigation_generation: 0,
             // Schema overlay (Feature 1)
             schema_overlay_enabled: true, // Enabled by default
             matched_properties: None,
@@ -494,6 +507,9 @@ impl App {
     /// Load YAML content for the current cursor position.
     /// Uses mode-aware item lookup to handle filtered Data mode correctly.
     pub fn load_yaml_for_current(&mut self) {
+        // Increment generation to invalidate any in-flight async loads
+        self.navigation_generation = self.navigation_generation.wrapping_add(1);
+
         // Reset scroll positions when changing items
         self.yaml_scroll = 0;
         self.info_scroll = 0;

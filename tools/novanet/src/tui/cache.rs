@@ -58,7 +58,8 @@ impl<T> RenderCache<T> {
             self.cached = Some(compute());
             self.change_key = key;
         }
-        self.cached.as_ref().unwrap()
+        // SAFETY: we just set cached = Some(...) above
+        self.cached.as_ref().expect("cache was just populated")
     }
 
     /// Invalidate the cache, forcing recomputation on next access.
@@ -80,7 +81,8 @@ impl<T: Clone> RenderCache<T> {
             self.cached = Some(compute());
             self.change_key = key;
         }
-        self.cached.clone().unwrap()
+        // SAFETY: we just set cached = Some(...) above
+        self.cached.clone().expect("cache was just populated")
     }
 }
 
