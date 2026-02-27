@@ -6,6 +6,7 @@ use crate::error::Result;
 use crate::server::State;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+use std::fmt::Write;
 use tracing::instrument;
 
 /// Search mode
@@ -184,11 +185,19 @@ async fn property_search(
     let kind_filter = build_kind_filter(&params.kinds, "n");
     let (realm_filter, realm_value) = build_realm_filter(&params.realm, "n", "realm_filter");
 
-    // Build property conditions
-    let prop_conditions: Vec<String> = properties
-        .iter()
-        .map(|p| format!("toLower(toString(n.{})) CONTAINS toLower($query)", p))
-        .collect();
+    // Build property conditions with pre-allocated buffer
+    // PERF: Avoids N allocations from map().collect() pattern
+    let mut conditions = String::with_capacity(properties.len() * 60);
+    for (i, p) in properties.iter().enumerate() {
+        if i > 0 {
+            conditions.push_str(" OR ");
+        }
+        let _ = write!(
+            conditions,
+            "toLower(toString(n.{})) CONTAINS toLower($query)",
+            p
+        );
+    }
 
     let cypher = format!(
         r#"
@@ -212,7 +221,7 @@ async fn property_search(
         ORDER BY score DESC
         LIMIT {limit}
         "#,
-        conditions = prop_conditions.join(" OR "),
+        conditions = conditions,
         kind_filter = kind_filter,
         realm_filter = realm_filter,
         limit = limit
@@ -303,9 +312,16 @@ fn build_kind_filter(kinds: &Option<Vec<String>>, var: &str) -> String {
 ///
 /// # Returns
 /// Tuple of (filter clause, optional parameter value)
-fn build_realm_filter(realm: &Option<String>, var: &str, param_name: &str) -> (String, Option<String>) {
+fn build_realm_filter(
+    realm: &Option<String>,
+    var: &str,
+    param_name: &str,
+) -> (String, Option<String>) {
     match realm {
-        Some(r) => (format!("AND {}.realm = ${}", var, param_name), Some(r.clone())),
+        Some(r) => (
+            format!("AND {}.realm = ${}", var, param_name),
+            Some(r.clone()),
+        ),
         None => (String::new(), None),
     }
 }
@@ -387,7 +403,10 @@ mod tests {
             "" // Invalid label filtered out, empty result
         );
         assert_eq!(
-            build_kind_filter(&Some(vec!["Entity".to_string(), "'; DROP DATABASE".to_string()]), "n"),
+            build_kind_filter(
+                &Some(vec!["Entity".to_string(), "'; DROP DATABASE".to_string()]),
+                "n"
+            ),
             "AND (n:Entity)" // Only valid label kept
         );
         assert_eq!(
@@ -399,16 +418,25 @@ mod tests {
     #[test]
     fn test_build_realm_filter() {
         // Test with 'n' variable (property search)
-        assert_eq!(build_realm_filter(&None, "n", "realm"), (String::new(), None));
+        assert_eq!(
+            build_realm_filter(&None, "n", "realm"),
+            (String::new(), None)
+        );
         assert_eq!(
             build_realm_filter(&Some("shared".to_string()), "n", "realm"),
-            ("AND n.realm = $realm".to_string(), Some("shared".to_string()))
+            (
+                "AND n.realm = $realm".to_string(),
+                Some("shared".to_string())
+            )
         );
 
         // Test with 'node' variable (fulltext search)
         assert_eq!(
             build_realm_filter(&Some("shared".to_string()), "node", "r"),
-            ("AND node.realm = $r".to_string(), Some("shared".to_string()))
+            (
+                "AND node.realm = $r".to_string(),
+                Some("shared".to_string())
+            )
         );
     }
 
