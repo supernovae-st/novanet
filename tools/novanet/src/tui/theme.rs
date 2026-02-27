@@ -12,6 +12,7 @@
 
 use ratatui::style::{Color, Modifier, Style};
 use rustc_hash::FxHashMap;
+use std::sync::LazyLock;
 
 // =============================================================================
 // COLOR MODE DETECTION
@@ -66,8 +67,38 @@ pub fn hex_to_rgb(hex: &str) -> Option<(u8, u8, u8)> {
     Some((r, g, b))
 }
 
+/// Pre-computed color cache for known hex values.
+/// PERF: Avoids repeated hex parsing (20+ calls per frame in tree rendering).
+static HEX_COLOR_CACHE: LazyLock<FxHashMap<&'static str, Color>> = LazyLock::new(|| {
+    let mut map = FxHashMap::default();
+    // Realm colors
+    map.insert("#2aa198", Color::Rgb(42, 161, 152)); // SHARED
+    map.insert("#6c71c4", Color::Rgb(108, 113, 196)); // ORG
+    // Layer colors (shared)
+    map.insert("#64748b", Color::Rgb(100, 116, 139)); // CONFIG, LOCALE
+    map.insert("#10b981", Color::Rgb(16, 185, 129)); // GEOGRAPHY
+    map.insert("#8b5cf6", Color::Rgb(139, 92, 246)); // KNOWLEDGE, GENERATION
+    // Layer colors (org)
+    map.insert("#3b82f6", Color::Rgb(59, 130, 246)); // FOUNDATION, OWNERSHIP, DEFINED
+    map.insert("#06b6d4", Color::Rgb(6, 182, 212)); // STRUCTURE
+    map.insert("#f97316", Color::Rgb(249, 115, 22)); // SEMANTIC
+    map.insert("#eab308", Color::Rgb(234, 179, 8)); // INSTRUCTION
+    map.insert("#22c55e", Color::Rgb(34, 197, 94)); // OUTPUT, LOCALIZATION, AUTHORED
+    // Trait colors
+    map.insert("#b58900", Color::Rgb(181, 137, 0)); // GENERATED
+    // Arc family colors
+    map.insert("#ec4899", Color::Rgb(236, 72, 153)); // MINING
+    map
+});
+
 /// Convert hex color string to ratatui Color.
+/// PERF: Uses cached lookup for known colors (O(1) vs O(n) parsing).
 pub fn hex_to_color(hex: &str) -> Color {
+    // Fast path: check cache first
+    if let Some(&color) = HEX_COLOR_CACHE.get(hex) {
+        return color;
+    }
+    // Slow path: parse unknown hex
     hex_to_rgb(hex).map_or(Color::White, |(r, g, b)| Color::Rgb(r, g, b))
 }
 

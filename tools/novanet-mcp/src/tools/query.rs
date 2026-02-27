@@ -94,9 +94,16 @@ pub async fn execute(state: &State, params: QueryParams) -> Result<QueryResult> 
 }
 
 /// Apply LIMIT clause if not present
+///
+/// PERF: Uses case-insensitive search without allocation (avoids to_uppercase()).
 fn apply_limit(cypher: &str, limit: usize) -> String {
-    let upper = cypher.to_uppercase();
-    if upper.contains("LIMIT") {
+    // Check for LIMIT without allocating uppercase copy
+    let has_limit = cypher
+        .as_bytes()
+        .windows(5)
+        .any(|w| w.eq_ignore_ascii_case(b"LIMIT"));
+
+    if has_limit {
         cypher.to_string()
     } else {
         format!("{} LIMIT {}", cypher.trim_end_matches(';'), limit)
