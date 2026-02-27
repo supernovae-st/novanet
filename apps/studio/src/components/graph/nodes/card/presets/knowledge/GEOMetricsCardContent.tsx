@@ -202,7 +202,7 @@ interface PositionIndicatorProps {
 
 const PositionIndicator = memo(function PositionIndicator({
   position,
-  color,
+  color: _color,
   selected,
 }: PositionIndicatorProps) {
   // Color coding: #1-3 green, #4-7 amber, #8+ red

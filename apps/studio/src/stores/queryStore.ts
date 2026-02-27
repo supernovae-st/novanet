@@ -86,7 +86,6 @@ export const useQueryStore = create<QueryState>((set) => ({
     let finalQuery = query;
     if (params) {
       for (const [key, value] of Object.entries(params)) {
-        const placeholder = `$${key}`;
         // Handle string values with quotes, numbers/booleans without
         const replacement = typeof value === 'string' ? `"${value}"` : String(value);
         finalQuery = finalQuery.replace(new RegExp(`\\$${key}\\b`, 'g'), replacement);

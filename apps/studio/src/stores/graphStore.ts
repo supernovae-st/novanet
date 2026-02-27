@@ -26,7 +26,7 @@ const requestIdleCallbackPolyfill: (cb: IdleRequestCallback) => number =
       : (cb: IdleRequestCallback) =>
           window.setTimeout(() => cb({ didTimeout: false, timeRemaining: () => 50 }), 1) as unknown as number;
 
-const cancelIdleCallbackPolyfill: (id: number) => void =
+const _cancelIdleCallbackPolyfill: (id: number) => void =
   IS_TEST_ENV
     ? () => {} // No-op in tests since execution is synchronous
     : typeof cancelIdleCallback !== 'undefined'
@@ -60,7 +60,7 @@ function buildIndexesProgressively(
   const adjacencyMap = new Map<string, Set<string>>();
   const counts: Record<string, number> = {};
 
-  let currentIdleHandle: number | null = null;
+  let _currentIdleHandle: number | null = null;
 
   // Phase 1: Build nodeMap (highest priority - enables getNodeById immediately)
   const buildNodeMap = (startIdx: number, deadline: IdleDeadline): void => {
@@ -80,7 +80,7 @@ function buildIndexesProgressively(
       set((state) => {
         state.indexProgress.percent = progress;
       });
-      currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildNodeMap(i, dl));
+      _currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildNodeMap(i, dl));
     } else {
       // Phase 1 complete - commit nodeMap and start phase 2
       set((state) => {
@@ -90,7 +90,7 @@ function buildIndexesProgressively(
         state.indexProgress.percent = 20;
         state.indexProgress.ready.nodeMap = true;
       });
-      currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildEdgeMap(0, dl));
+      _currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildEdgeMap(0, dl));
     }
   };
 
@@ -109,7 +109,7 @@ function buildIndexesProgressively(
       set((state) => {
         state.indexProgress.percent = progress;
       });
-      currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildEdgeMap(i, dl));
+      _currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildEdgeMap(i, dl));
     } else {
       set((state) => {
         state.edgeMap = edgeMap;
@@ -117,7 +117,7 @@ function buildIndexesProgressively(
         state.indexProgress.percent = 40;
         state.indexProgress.ready.edgeMap = true;
       });
-      currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildEdgesBySource(0, dl));
+      _currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildEdgesBySource(0, dl));
     }
   };
 
@@ -142,7 +142,7 @@ function buildIndexesProgressively(
       set((state) => {
         state.indexProgress.percent = progress;
       });
-      currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildEdgesBySource(i, dl));
+      _currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildEdgesBySource(i, dl));
     } else {
       set((state) => {
         state.edgesBySource = edgesBySource;
@@ -150,7 +150,7 @@ function buildIndexesProgressively(
         state.indexProgress.percent = 60;
         state.indexProgress.ready.edgesBySource = true;
       });
-      currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildEdgesByTarget(0, dl));
+      _currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildEdgesByTarget(0, dl));
     }
   };
 
@@ -175,7 +175,7 @@ function buildIndexesProgressively(
       set((state) => {
         state.indexProgress.percent = progress;
       });
-      currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildEdgesByTarget(i, dl));
+      _currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildEdgesByTarget(i, dl));
     } else {
       set((state) => {
         state.edgesByTarget = edgesByTarget;
@@ -183,7 +183,7 @@ function buildIndexesProgressively(
         state.indexProgress.percent = 80;
         state.indexProgress.ready.edgesByTarget = true;
       });
-      currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildAdjacencyMap(0, dl));
+      _currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildAdjacencyMap(0, dl));
     }
   };
 
@@ -215,7 +215,7 @@ function buildIndexesProgressively(
       set((state) => {
         state.indexProgress.percent = progress;
       });
-      currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildAdjacencyMap(i, dl));
+      _currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildAdjacencyMap(i, dl));
     } else {
       // All phases complete
       set((state) => {
@@ -224,17 +224,17 @@ function buildIndexesProgressively(
         state.indexProgress.percent = 100;
         state.indexProgress.ready.adjacencyMap = true;
       });
-      currentIdleHandle = null;
+      _currentIdleHandle = null;
     }
   };
 
   // Start the progressive build chain
-  currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildNodeMap(0, dl));
+  _currentIdleHandle = requestIdleCallbackPolyfill((dl) => buildNodeMap(0, dl));
 
   // Note: We don't return a cleanup function here because:
   // 1. Index building should complete even if component unmounts
   // 2. The store is global, so cleanup is not typically needed
-  // If needed, the caller can track currentIdleHandle and cancel via cancelIdleCallbackPolyfill
+  // If needed, the caller can track _currentIdleHandle and cancel via cancelIdleCallbackPolyfill
 }
 
 /** Index building progress phases */

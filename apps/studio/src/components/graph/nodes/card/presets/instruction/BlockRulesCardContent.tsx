@@ -27,8 +27,10 @@
 
 import { memo, useMemo } from 'react';
 import { motion, type Variants } from 'motion/react';
-import { cn } from '@/lib/utils';
-import { gapTokens } from '@/design/tokens';
+// cn reserved for future use
+// import { cn } from '@/lib/utils';
+// gapTokens reserved for future use
+// import { gapTokens } from '@/design/tokens';
 import type { CardContext } from '../../CardShell';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
 import { DURATIONS } from '../../animationPresets';
@@ -65,7 +67,7 @@ export interface BlockRulesCardContentProps extends CardContext {
 // Animation Variants
 // =============================================================================
 
-const scaleVariants: Variants = {
+const _scaleVariants: Variants = {
   idle: { rotate: 0 },
   hover: {
     rotate: [-3, 3, -3, 0],
@@ -123,7 +125,7 @@ export const BlockRulesCardContent = memo(function BlockRulesCardContent({
     [colors.primary, selected, isHovered]
   );
 
-  const ScaleIcon = animationsEnabled ? motion.span : 'span';
+  const _ScaleIcon = animationsEnabled ? motion.span : 'span';
   const RulesWrapper = animationsEnabled ? motion.div : 'div';
 
   // Get rules entries

@@ -41,7 +41,7 @@
  * └──────────────────────────────────────────────────────────────────────────┘
  */
 
-import { memo, useMemo } from 'react';
+import React, { memo, useMemo } from 'react';
 import { motion, type Variants } from 'motion/react';
 import { cn } from '@/lib/utils';
 import {
@@ -61,7 +61,8 @@ import {
   MousePointer,
   type LucideIcon,
 } from 'lucide-react';
-import { gapTokens } from '@/design/tokens';
+// gapTokens reserved for future use
+// import { gapTokens } from '@/design/tokens';
 import type { CardContext } from '../../CardShell';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
 import { SPRING_CONFIGS } from '../../animationPresets';
@@ -139,6 +140,15 @@ function getCategoryIcon(key: string): LucideIcon {
   return CATEGORY_ICONS[key.toUpperCase()] ?? Tag;
 }
 
+// Render category icon using createElement (avoids react-hooks/static-components rule)
+function renderCategoryIcon(
+  key: string,
+  props: React.ComponentProps<LucideIcon>
+): React.ReactElement {
+  const IconComponent = getCategoryIcon(key);
+  return React.createElement(IconComponent, props);
+}
+
 // =============================================================================
 // Animation Variants
 // =============================================================================
@@ -187,9 +197,6 @@ export const EntityCategoryCardContent = memo(function EntityCategoryCardContent
   const layerColor = LAYER_COLORS['config' as LayerKey]?.color ?? '#94a3b8';
   const realmColor = REALM_COLORS['shared' as RealmKey]?.color ?? '#2aa198';
   const primaryColor = colors.primary || realmColor;
-
-  // Get category icon
-  const CategoryIcon = useMemo(() => getCategoryIcon(data.key), [data.key]);
 
   // Background style with deep gradient
   const backgroundStyle = useMemo(
@@ -435,18 +442,18 @@ export const EntityCategoryCardContent = memo(function EntityCategoryCardContent
               }}
             />
           )}
-          <CategoryIcon
-            size={40}
-            strokeWidth={1.5}
-            style={{
+          {renderCategoryIcon(data.key, {
+            size: 40,
+            strokeWidth: 1.5,
+            style: {
               color: primaryColor,
               filter: selected
                 ? `drop-shadow(0 0 20px ${primaryColor}) drop-shadow(0 0 40px ${primaryColor}80)`
                 : isHovered
                   ? `drop-shadow(0 0 15px ${primaryColor})`
                   : `drop-shadow(0 0 10px ${primaryColor}80)`,
-            }}
-          />
+            },
+          })}
         </IconWrapper>
 
         {/* Text content aligned left */}

@@ -26,8 +26,10 @@
 
 import { memo, useMemo } from 'react';
 import { motion, type Variants } from 'motion/react';
-import { cn } from '@/lib/utils';
-import { gapTokens } from '@/design/tokens';
+// cn reserved for future use
+// import { cn } from '@/lib/utils';
+// gapTokens reserved for future use
+// import { gapTokens } from '@/design/tokens';
 import type { CardContext } from '../../CardShell';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
 import { DURATIONS } from '../../animationPresets';
@@ -72,7 +74,7 @@ export interface PromptArtifactCardContentProps extends CardContext {
 // Animation Variants
 // =============================================================================
 
-const hexVariants: Variants = {
+const _hexVariants: Variants = {
   idle: { rotate: 0, scale: 1 },
   hover: {
     rotate: 30,
@@ -118,7 +120,7 @@ export const PromptArtifactCardContent = memo(function PromptArtifactCardContent
     [colors.primary, selected, isHovered]
   );
 
-  const HexIcon = animationsEnabled ? motion.span : 'span';
+  const _HexIcon = animationsEnabled ? motion.span : 'span';
   const ContentWrapper = animationsEnabled ? motion.div : 'div';
 
   return (

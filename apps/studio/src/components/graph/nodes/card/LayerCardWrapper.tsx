@@ -34,7 +34,6 @@ import { TRAIT_TOKENS } from '@/design/tokens/traitTokens';
 import type { NodeLayer, NodeRealm, NodeTrait } from './taxonomyColors';
 import {
   getLayerCardClasses,
-  cn,
   getLayerIconGlowClass,
 } from './variants/layerCardVariants';
 
@@ -119,7 +118,7 @@ export const LayerCardWrapper = memo(function LayerCardWrapper({
 }: LayerCardWrapperProps) {
   // Get layer token for colors
   const layerToken = LAYER_TOKENS[layer];
-  const traitToken = TRAIT_TOKENS[trait];
+  const _traitToken = TRAIT_TOKENS[trait];
 
   // Derive colors from layer token
   const colors = useMemo(
@@ -134,7 +133,7 @@ export const LayerCardWrapper = memo(function LayerCardWrapper({
   const iconGlowClass = getLayerIconGlowClass(layer);
 
   // Layer card classes for inner styling
-  const layerCardClasses = useMemo(
+  const _layerCardClasses = useMemo(
     () =>
       getLayerCardClasses({
         layer,

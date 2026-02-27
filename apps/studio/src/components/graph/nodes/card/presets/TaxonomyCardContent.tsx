@@ -181,7 +181,7 @@ function getVariantColor(data: TaxonomyNodeData): string {
   }
 }
 
-function formatCount(count: number | undefined, singular: string, plural: string): string {
+function _formatCount(count: number | undefined, singular: string, plural: string): string {
   if (count === undefined) return '';
   return `${count} ${count === 1 ? singular : plural}`;
 }
@@ -192,7 +192,7 @@ function formatCount(count: number | undefined, singular: string, plural: string
 
 export const TaxonomyCardContent = memo(function TaxonomyCardContent({
   data,
-  colors,
+  colors: _colors,
   selected,
   isHovered,
   performanceConfig,

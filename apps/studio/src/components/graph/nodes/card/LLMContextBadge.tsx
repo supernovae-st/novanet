@@ -30,7 +30,7 @@
 import { memo, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '@/lib/utils';
-import { Zap, ChevronDown, ChevronUp, AlertTriangle, Link2 } from 'lucide-react';
+import { Zap, ChevronDown, AlertTriangle, Link2 } from 'lucide-react';
 import { gapTokens } from '@/design/tokens';
 
 // =============================================================================

@@ -27,7 +27,7 @@
  * ```
  */
 
-import { memo, useMemo, useContext, type ReactNode } from 'react';
+import { memo, useMemo, type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { useNodeInteractions } from '@/hooks';
 import { SelectionPulseRing, GlassmorphismEffects, NodeHandles } from '../effects';

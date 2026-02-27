@@ -282,7 +282,7 @@ export const TraitGlow = memo(function TraitGlow({
     medium: 1,
     high: 1.5,
   };
-  const multiplier = intensityMap[intensity];
+  const _multiplier = intensityMap[intensity];
 
   // Choose variants based on glow mode
   const variants = useMemo(() => {

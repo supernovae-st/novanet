@@ -246,7 +246,7 @@ export const PatternCardContent = memo(function PatternCardContent({
           className="text-sm font-medium text-white italic"
           style={glowStyle}
         >
-          "<HighlightedTemplate template={data.template} color={colors.primary} />"
+          &quot;<HighlightedTemplate template={data.template} color={colors.primary} />&quot;
         </p>
       </div>
 
@@ -273,7 +273,7 @@ export const PatternCardContent = memo(function PatternCardContent({
       {data.example && (
         <div className="mb-2">
           <span className="text-[8px] text-white/40 uppercase">Example:</span>
-          <p className="text-[10px] text-white/60 italic">"{data.example}"</p>
+          <p className="text-[10px] text-white/60 italic">&quot;{data.example}&quot;</p>
         </div>
       )}
 

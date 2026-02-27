@@ -17,9 +17,10 @@
  * - InclusionFlags: Shows include_concepts/voice/culture
  */
 
-import { memo, useMemo } from 'react';
-import { motion, type Variants } from 'motion/react';
-import { cn } from '@/lib/utils';
+import { memo } from 'react';
+import { motion } from 'motion/react';
+// cn reserved for future use
+// import { cn } from '@/lib/utils';
 import { DURATIONS } from '../../animationPresets';
 
 // =============================================================================
@@ -145,7 +146,7 @@ export interface VersionBadgeProps {
 export const VersionBadge = memo(function VersionBadge({
   version,
   isActive = true,
-  color = '#eab308',
+  color: _color = '#eab308',
 }: VersionBadgeProps) {
   const activeColor = isActive ? '#22c55e' : '#6b7280';
 
@@ -466,7 +467,7 @@ const statusConfig = {
 export const CompilationStatus = memo(function CompilationStatus({
   status,
   compiledAt,
-  color = '#eab308',
+  color: _color = '#eab308',
 }: CompilationStatusProps) {
   const config = statusConfig[status];
 

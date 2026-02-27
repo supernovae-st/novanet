@@ -152,7 +152,7 @@ export const MacropadVisualizer = memo(function MacropadVisualizer() {
   const [editingKey, setEditingKey] = useState<string | null>(null);
   const [editingEncoderAction, setEditingEncoderAction] = useState<'cw' | 'ccw' | null>(null);
   const [isCapturing, setIsCapturing] = useState(false);
-  const [previewLabel, setPreviewLabel] = useState<string | null>(null);
+  const [_previewLabel, setPreviewLabel] = useState<string | null>(null);
 
   // Check if selected key is an encoder
   const isEncoder = selectedKey === '0,0' || selectedKey === '0,3';

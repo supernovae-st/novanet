@@ -98,13 +98,13 @@ export const SelectionEffect = memo(function SelectionEffect({
   edgeId,
 }: SelectionEffectProps) {
   // Calculate direction angle for target arrow
-  const targetAngle = useMemo(
+  const _targetAngle = useMemo(
     () => getDirectionAngle(sourcePoint, targetPoint),
     [sourcePoint, targetPoint]
   );
 
   // Unique animation name suffix to prevent conflicts with other selected edges
-  const animId = useMemo(() => edgeId.replace(/[^a-zA-Z0-9]/g, '_'), [edgeId]);
+  const _animId = useMemo(() => edgeId.replace(/[^a-zA-Z0-9]/g, '_'), [edgeId]);
 
   // Generate matrix characters for this edge (memoized for stability)
   // More chars for dense Matrix effect

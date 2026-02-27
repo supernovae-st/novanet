@@ -245,7 +245,7 @@ export const CultureRefCardContent = memo(function CultureRefCardContent({
           className="text-sm font-medium text-white italic"
           style={glowStyle}
         >
-          "{data.reference}"
+          &quot;{data.reference}&quot;
         </p>
       </div>
 

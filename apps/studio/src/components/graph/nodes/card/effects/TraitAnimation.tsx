@@ -144,7 +144,7 @@ const TRAIT_ANIMATIONS: Record<AnimatableTrait, Variants> = {
 };
 
 // Selected state intensifiers
-const SELECTED_INTENSIFIERS: Record<AnimatableTrait, Partial<Variants['active']>> = {
+const _SELECTED_INTENSIFIERS: Record<AnimatableTrait, Partial<Variants['active']>> = {
   defined: {
     scale: [1, 1.04, 1],
     filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)'],
@@ -286,7 +286,7 @@ export const TraitBadgeAnimated = memo(function TraitBadgeAnimated({
   showLabel = true,
 }: TraitBadgeAnimatedProps) {
   const traitColor = TRAIT_COLORS[trait]?.color ?? '#ffffff';
-  const active = selected || isHovered;
+  const _active = selected || isHovered;
 
   return (
     <div

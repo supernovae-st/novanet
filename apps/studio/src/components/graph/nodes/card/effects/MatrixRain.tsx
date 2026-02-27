@@ -173,7 +173,7 @@ export const MatrixRain = memo(function MatrixRain({
   glowColor,
   columns = 12,
   characters = DEFAULT_CHARS,
-  speed = 1,
+  speed: _speed = 1,
   opacity = 0.6,
   selected = false,
   isHovered = false,
@@ -185,20 +185,22 @@ export const MatrixRain = memo(function MatrixRain({
   const animationsEnabled = performanceConfig?.animation?.enabled ?? true;
   const effectsEnabled = performanceConfig?.effects?.premiumEffects ?? true;
 
-  // Only show in ULTRA tier or when premium effects are enabled
-  if (!effectsEnabled) return null;
-
   const effectiveGlowColor = glowColor ?? color;
   const effectiveOpacity = selected ? opacity * 1.3 : isHovered ? opacity * 1.1 : opacity;
   const effectiveColumns = Math.min(columns, 20); // Cap for performance
 
   // Generate column positions
   const columnData = useMemo(() => {
-    return Array.from({ length: effectiveColumns }, (_, i) => ({
+    // Only show in ULTRA tier or when premium effects are enabled
+    if (!effectsEnabled) return [];
+
+    return Array.from({ length: effectiveColumns }, (_item, i) => ({
       x: (i / effectiveColumns) * 100 + Math.random() * 5,
       charCount: 8 + Math.floor(Math.random() * 8),
     }));
-  }, [effectiveColumns]);
+  }, [effectsEnabled, effectiveColumns]);
+
+  if (!effectsEnabled) return null;
 
   return (
     <div

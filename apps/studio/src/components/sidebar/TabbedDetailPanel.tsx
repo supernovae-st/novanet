@@ -26,7 +26,8 @@ import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
 import { getLayerPalette } from '@/design/colors/palette';
 import { useUIStore, type DetailPanelTab } from '@/stores/uiStore';
 import { useGraphStore } from '@/stores/graphStore';
-import { panelClasses, glass, glassClasses } from '@/design/tokens';
+// panelClasses, glassClasses reserved for future use
+import { /* panelClasses, */ glass /* , glassClasses */ } from '@/design/tokens';
 import { ElementIdentityCard } from '@/components/ui/detail-panel';
 import { OverviewTab } from './tabs/OverviewTab';
 import { DataTab } from './tabs/DataTab';
@@ -246,7 +247,7 @@ const PanelContainer = memo(function PanelContainer({
  */
 const ContentWrapper = memo(function ContentWrapper({
   children,
-  colors,
+  colors: _colors,
 }: {
   children: React.ReactNode;
   colors: { primary: string; secondary: string };

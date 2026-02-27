@@ -273,7 +273,7 @@ const ContextPreview = memo(function ContextPreview({
           color: `${color}99`,
         }}
       >
-        "{truncated}"
+        &quot;{truncated}&quot;
       </span>
     </div>
   );
@@ -470,7 +470,7 @@ export const GEOQueryCardContent = memo(function GEOQueryCardContent({
               border: `1px double ${colors.primary}40`,
             }}
           >
-            "{data.query}"
+            &quot;{data.query}&quot;
           </div>
         </QueryWrapper>
 

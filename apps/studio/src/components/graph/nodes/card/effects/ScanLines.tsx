@@ -95,11 +95,11 @@ export const ScanLines = memo(function ScanLines({
   opacity = 1,
   showScanBeam = true,
   scanBeamColor,
-  scanDuration = 3,
+  scanDuration: _scanDuration = 3,
   direction = 'down',
   flicker = true,
   selected = false,
-  isHovered = false,
+  isHovered: _isHovered = false,
   className,
   performanceConfig,
 }: ScanLinesProps) {

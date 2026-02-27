@@ -17,10 +17,10 @@
  * - ChecksumBadge: Shows integrity checksum
  */
 
-import { memo, useMemo } from 'react';
-import { motion, type Variants } from 'motion/react';
-import { cn } from '@/lib/utils';
-import { DURATIONS } from '../../animationPresets';
+import { memo } from 'react';
+import { motion } from 'motion/react';
+// import { cn } from '@/lib/utils';
+// import { DURATIONS } from '../../animationPresets';
 
 // =============================================================================
 // GeneratedBadge - Shows generated trait indicator

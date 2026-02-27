@@ -58,10 +58,11 @@ import {
   Zap,
   TrendingUp,
 } from 'lucide-react';
-import { gapTokens } from '@/design/tokens';
+// gapTokens reserved for future use
+// import { gapTokens } from '@/design/tokens';
 import type { CardContext } from '../CardShell';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
-import { SPRING_CONFIGS, DURATIONS } from '../animationPresets';
+import { SPRING_CONFIGS } from '../animationPresets';
 import type { NodeLayer, NodeRealm, NodeTrait } from '../taxonomyColors';
 import {
   LAYER_COLORS,
@@ -327,7 +328,7 @@ export const ProjectCardContent = memo(function ProjectCardContent({
   selected = false,
   isHovered = false,
   performanceConfig,
-  taxonomy,
+  taxonomy: _taxonomy,
 }: ProjectCardContentProps) {
   const [imageError, setImageError] = useState(false);
   const logoUrl = data.logoUrl || NOVANET_LOGO_URL;

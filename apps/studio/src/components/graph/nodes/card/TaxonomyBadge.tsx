@@ -37,7 +37,7 @@ import {
 } from './taxonomyColors';
 import { DURATIONS } from './animationPresets';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
-import { TraitIndicatorAnimated, getGlowMode } from './effects/TraitGlow';
+import { TraitIndicatorAnimated } from './effects/TraitGlow';
 
 // =============================================================================
 // Types
