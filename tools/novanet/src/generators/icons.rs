@@ -176,8 +176,10 @@ fn render_icons(nodes: &[ParsedNode]) -> crate::Result<String> {
 mod tests {
     use super::*;
     use crate::generators::Generator;
+    use serial_test::serial;
 
     #[test]
+    #[serial]
     fn generate_icons_integration() {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .parent()

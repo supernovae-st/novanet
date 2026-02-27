@@ -189,6 +189,7 @@ mod tests {
     use super::*;
     use crate::generators::Generator;
     use crate::generators::test_utils::make_node_simple as make_node;
+    use serial_test::serial;
 
     /// Clean up any test files left by other tests to avoid pollution.
     fn cleanup_test_files(root: &std::path::Path) {
@@ -293,6 +294,7 @@ mod tests {
     }
 
     #[test]
+    #[serial]
     fn generate_autowire_integration() {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .parent()

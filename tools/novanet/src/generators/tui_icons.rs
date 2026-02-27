@@ -296,8 +296,10 @@ pub fn mode_terminal_icon(key: &str) -> &'static str {
 mod tests {
     use super::*;
     use crate::generators::Generator;
+    use serial_test::serial;
 
     #[test]
+    #[serial]
     fn generate_tui_icons_integration() {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .parent()

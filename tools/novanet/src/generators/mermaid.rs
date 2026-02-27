@@ -455,6 +455,7 @@ mod tests {
     use crate::parsers::arcs::{Cardinality, NodeRef};
     use crate::parsers::organizing::{ArcFamilyDef, LayerDef, RealmDef, TraitDef};
     use crate::parsers::yaml_node::NodeTrait;
+    use serial_test::serial;
 
     fn make_org_doc() -> OrganizingDoc {
         OrganizingDoc {
@@ -658,6 +659,7 @@ mod tests {
     }
 
     #[test]
+    #[serial]
     fn generate_mermaid_integration() {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .parent()

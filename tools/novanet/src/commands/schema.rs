@@ -671,6 +671,7 @@ pub fn schema_stats(root: &Path, format: crate::output::OutputFormat) -> crate::
 #[cfg(test)]
 mod tests {
     use super::*;
+    use serial_test::serial;
 
     fn test_root() -> Option<std::path::PathBuf> {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
@@ -685,6 +686,7 @@ mod tests {
     }
 
     #[test]
+    #[serial]
     fn schema_generate_dry_run_integration() {
         let Some(root) = test_root() else { return };
 
@@ -730,6 +732,7 @@ mod tests {
     }
 
     #[test]
+    #[serial]
     fn schema_validate_integration() {
         // Acquire lock to serialize with other tests that create files in schema directory
         let _lock = SCHEMA_TEST_LOCK.lock().unwrap();
