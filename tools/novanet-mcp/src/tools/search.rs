@@ -120,7 +120,7 @@ async fn fulltext_search(
     // NovaNet uses fulltext indexes on key, name, description properties
     // Note: fulltext YIELD uses 'node' as variable name
     let kind_filter = build_kind_filter(&params.kinds, "node");
-    let realm_filter = build_realm_filter(&params.realm, "node");
+    let (realm_filter, realm_value) = build_realm_filter(&params.realm, "node", "realm_filter");
 
     let cypher = format!(
         r#"
@@ -145,6 +145,9 @@ async fn fulltext_search(
 
     let mut query_params = serde_json::Map::new();
     query_params.insert("query".to_string(), serde_json::json!(params.query));
+    if let Some(realm) = realm_value {
+        query_params.insert("realm_filter".to_string(), serde_json::json!(realm));
+    }
 
     let rows = state
         .pool()
@@ -179,7 +182,7 @@ async fn property_search(
 
     // Note: MATCH uses 'n' as variable name
     let kind_filter = build_kind_filter(&params.kinds, "n");
-    let realm_filter = build_realm_filter(&params.realm, "n");
+    let (realm_filter, realm_value) = build_realm_filter(&params.realm, "n", "realm_filter");
 
     // Build property conditions
     let prop_conditions: Vec<String> = properties
@@ -217,6 +220,9 @@ async fn property_search(
 
     let mut query_params = serde_json::Map::new();
     query_params.insert("query".to_string(), serde_json::json!(params.query));
+    if let Some(realm) = realm_value {
+        query_params.insert("realm_filter".to_string(), serde_json::json!(realm));
+    }
 
     let rows = state
         .pool()
@@ -267,15 +273,19 @@ fn build_kind_filter(kinds: &Option<Vec<String>>, var: &str) -> String {
     }
 }
 
-/// Build realm filter clause
+/// Build realm filter clause using parameterized query
 ///
 /// # Arguments
 /// * `realm` - Optional realm to filter by
 /// * `var` - Cypher variable name (e.g., "n" for MATCH, "node" for fulltext YIELD)
-fn build_realm_filter(realm: &Option<String>, var: &str) -> String {
+/// * `param_name` - Name for the Cypher parameter (e.g., "realm_filter")
+///
+/// # Returns
+/// Tuple of (filter clause, optional parameter value)
+fn build_realm_filter(realm: &Option<String>, var: &str, param_name: &str) -> (String, Option<String>) {
     match realm {
-        Some(r) => format!("AND {}.realm = '{}'", var, r),
-        None => String::new(),
+        Some(r) => (format!("AND {}.realm = ${}", var, param_name), Some(r.clone())),
+        None => (String::new(), None),
     }
 }
 
@@ -333,16 +343,16 @@ mod tests {
     #[test]
     fn test_build_realm_filter() {
         // Test with 'n' variable (property search)
-        assert_eq!(build_realm_filter(&None, "n"), "");
+        assert_eq!(build_realm_filter(&None, "n", "realm"), (String::new(), None));
         assert_eq!(
-            build_realm_filter(&Some("shared".to_string()), "n"),
-            "AND n.realm = 'shared'"
+            build_realm_filter(&Some("shared".to_string()), "n", "realm"),
+            ("AND n.realm = $realm".to_string(), Some("shared".to_string()))
         );
 
         // Test with 'node' variable (fulltext search)
         assert_eq!(
-            build_realm_filter(&Some("shared".to_string()), "node"),
-            "AND node.realm = 'shared'"
+            build_realm_filter(&Some("shared".to_string()), "node", "r"),
+            ("AND node.realm = $r".to_string(), Some("shared".to_string()))
         );
     }
 

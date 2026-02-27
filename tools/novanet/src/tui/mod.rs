@@ -184,6 +184,9 @@ async fn run_app(
 
                 // Handle other keys
                 if app.handle_key(key) {
+                    // Capture generation BEFORE any async work to detect stale results
+                    let nav_gen = app.navigation_generation;
+
                     // PHASE 1: Fast instance loading (no arcs) + Class arcs
                     let instance_key = app.take_pending_instance_load();
                     let arcs_key = app.take_pending_arcs_load();
@@ -204,6 +207,12 @@ async fn run_app(
                                 }
                             }
                         );
+
+                        // Check if navigation changed during async load (stale detection)
+                        if app.navigation_generation != nav_gen {
+                            // User navigated away - discard stale results
+                            continue;
+                        }
 
                         if let Some(k) = &instance_key {
                             match inst_result {
@@ -235,23 +244,33 @@ async fn run_app(
                     }
 
                     // Sequential loads for other details (typically only one fires at a time)
+                    // Each checks generation to avoid applying stale results
                     if let Some(arc_key) = app.take_pending_arc_class_load() {
                         match TaxonomyTree::load_arc_class_details(db, &arc_key).await {
-                            Ok(details) => app.set_arc_class_details(details),
+                            Ok(details) if app.navigation_generation == nav_gen => {
+                                app.set_arc_class_details(details);
+                            }
+                            Ok(_) => {} // Stale result, discard
                             Err(e) => app.set_status_error(&format!("Load arc: {}", e)),
                         }
                     }
 
                     if let Some(realm_key) = app.take_pending_realm_load() {
                         match TaxonomyTree::load_realm_details(db, &realm_key).await {
-                            Ok(details) => app.set_realm_details(details),
+                            Ok(details) if app.navigation_generation == nav_gen => {
+                                app.set_realm_details(details);
+                            }
+                            Ok(_) => {} // Stale result, discard
                             Err(e) => app.set_status_error(&format!("Load realm: {}", e)),
                         }
                     }
 
                     if let Some(layer_key) = app.take_pending_layer_load() {
                         match TaxonomyTree::load_layer_details(db, &layer_key).await {
-                            Ok(details) => app.set_layer_details(details),
+                            Ok(details) if app.navigation_generation == nav_gen => {
+                                app.set_layer_details(details);
+                            }
+                            Ok(_) => {} // Stale result, discard
                             Err(e) => app.set_status_error(&format!("Load layer: {}", e)),
                         }
                     }
@@ -259,9 +278,10 @@ async fn run_app(
                     // Entity category loading (triggered when Entity Class expanded in Data mode)
                     if app.take_pending_entity_categories_load() {
                         match TaxonomyTree::load_entity_categories(db).await {
-                            Ok(categories) => {
+                            Ok(categories) if app.navigation_generation == nav_gen => {
                                 app.tree.entity_categories = categories;
                             }
+                            Ok(_) => {} // Stale result, discard
                             Err(e) => app.set_status_error(&format!("Load categories: {}", e)),
                         }
                     }
@@ -269,11 +289,12 @@ async fn run_app(
                     // Category instances loading (triggered when EntityCategory expanded)
                     if let Some(category_key) = app.take_pending_category_instances_load() {
                         match TaxonomyTree::load_entities_by_category(db, &category_key).await {
-                            Ok((instances, _total)) => {
+                            Ok((instances, _total)) if app.navigation_generation == nav_gen => {
                                 app.tree
                                     .entity_category_instances
                                     .insert(category_key, instances);
                             }
+                            Ok(_) => {} // Stale result, discard
                             Err(e) => {
                                 app.set_status_error(&format!("Load category instances: {}", e))
                             }
@@ -291,8 +312,9 @@ async fn run_app(
                     .draw(|f| ui::render(f, &mut app))
                     .map_err(crate::NovaNetError::Io)?;
             }
-            Ok(Some(Err(_))) => {
-                // Event error, continue
+            Ok(Some(Err(e))) => {
+                // Log terminal event errors but don't crash - terminal corruption shouldn't stop TUI
+                tracing::warn!("Event stream error: {}", e);
             }
             Ok(None) => {
                 // Stream ended

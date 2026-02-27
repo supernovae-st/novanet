@@ -37,6 +37,13 @@ static RE_DATA_SOURCES: LazyLock<Regex> = LazyLock::new(|| {
 static RE_SECTION: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"##\s+\d+\.\s+(.+)").expect("valid section regex"));
 
+/// Field pattern: - **FieldName**: `value` or - **FieldName**: value
+/// Used by: parse_number_section, parse_date_section, parse_time_section,
+///          parse_currency_section, parse_measurement_section, parse_calendar_section
+static RE_FIELD: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"-\s+\*\*(\w+)\*\*:\s*`?([^`\n]+)`?").expect("valid field regex")
+});
+
 // ============================================================================
 // Main Structs
 // ============================================================================
@@ -597,10 +604,8 @@ fn normalize_section_name(name: &str) -> String {
 fn parse_number_section(content: &str) -> NumberFormatting {
     let mut number = NumberFormatting::default();
 
-    // Parse key-value pairs
-    let field_re = Regex::new(r"-\s+\*\*(\w+)\*\*:\s*`?([^`\n]+)`?").unwrap();
-
-    for caps in field_re.captures_iter(content) {
+    // Parse key-value pairs using module-level RE_FIELD (compiled once via LazyLock)
+    for caps in RE_FIELD.captures_iter(content) {
         let field = caps.get(1).map(|m: regex::Match| m.as_str()).unwrap_or("");
         let value = caps
             .get(2)
@@ -635,10 +640,8 @@ fn parse_number_section(content: &str) -> NumberFormatting {
 fn parse_date_section(content: &str) -> DateFormatting {
     let mut date = DateFormatting::default();
 
-    // Parse key-value pairs
-    let field_re = Regex::new(r"-\s+\*\*(\w+)\*\*:\s*`?([^`\n]+)`?").unwrap();
-
-    for caps in field_re.captures_iter(content) {
+    // Parse key-value pairs using module-level RE_FIELD (compiled once via LazyLock)
+    for caps in RE_FIELD.captures_iter(content) {
         let field = caps.get(1).map(|m: regex::Match| m.as_str()).unwrap_or("");
         let value = caps
             .get(2)
@@ -680,10 +683,8 @@ fn parse_date_section(content: &str) -> DateFormatting {
 fn parse_time_section(content: &str) -> TimeFormatting {
     let mut time = TimeFormatting::default();
 
-    // Parse key-value pairs
-    let field_re = Regex::new(r"-\s+\*\*(\w+)\*\*:\s*`?([^`\n]+)`?").unwrap();
-
-    for caps in field_re.captures_iter(content) {
+    // Parse key-value pairs using module-level RE_FIELD (compiled once via LazyLock)
+    for caps in RE_FIELD.captures_iter(content) {
         let field = caps.get(1).map(|m: regex::Match| m.as_str()).unwrap_or("");
         let value = caps
             .get(2)
@@ -727,10 +728,8 @@ fn parse_time_section(content: &str) -> TimeFormatting {
 fn parse_currency_section(content: &str) -> CurrencyFormatting {
     let mut currency = CurrencyFormatting::default();
 
-    // Parse key-value pairs
-    let field_re = Regex::new(r"-\s+\*\*(\w+)\*\*:\s*`?([^`\n]+)`?").unwrap();
-
-    for caps in field_re.captures_iter(content) {
+    // Parse key-value pairs using module-level RE_FIELD (compiled once via LazyLock)
+    for caps in RE_FIELD.captures_iter(content) {
         let field = caps.get(1).map(|m: regex::Match| m.as_str()).unwrap_or("");
         let value = caps
             .get(2)
@@ -773,10 +772,8 @@ fn parse_currency_section(content: &str) -> CurrencyFormatting {
 fn parse_phone_section(content: &str) -> PhoneFormatting {
     let mut phone = PhoneFormatting::default();
 
-    // Parse key-value pairs
-    let field_re = Regex::new(r"-\s+\*\*(\w+)\*\*:\s*`?([^`\n]+)`?").unwrap();
-
-    for caps in field_re.captures_iter(content) {
+    // Parse key-value pairs using module-level RE_FIELD (compiled once via LazyLock)
+    for caps in RE_FIELD.captures_iter(content) {
         let field = caps.get(1).map(|m: regex::Match| m.as_str()).unwrap_or("");
         let value = caps
             .get(2)
@@ -820,10 +817,8 @@ fn parse_phone_section(content: &str) -> PhoneFormatting {
 fn parse_address_section(content: &str) -> AddressFormatting {
     let mut address = AddressFormatting::default();
 
-    // Parse key-value pairs
-    let field_re = Regex::new(r"-\s+\*\*(\w+)\*\*:\s*`?([^`\n]+)`?").unwrap();
-
-    for caps in field_re.captures_iter(content) {
+    // Parse key-value pairs using module-level RE_FIELD (compiled once via LazyLock)
+    for caps in RE_FIELD.captures_iter(content) {
         let field = caps.get(1).map(|m: regex::Match| m.as_str()).unwrap_or("");
         let value = caps
             .get(2)
