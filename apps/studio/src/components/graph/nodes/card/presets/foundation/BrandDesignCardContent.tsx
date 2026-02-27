@@ -26,11 +26,14 @@
 
 import { memo, useMemo } from 'react';
 import { motion, type Variants } from 'motion/react';
-import { cn } from '@/lib/utils';
-import { gapTokens } from '@/design/tokens';
+// cn reserved for future use
+// import { cn } from '@/lib/utils';
+// gapTokens reserved for future use
+// import { gapTokens } from '@/design/tokens';
 import type { CardContext } from '../../CardShell';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
-import { DURATIONS } from '../../animationPresets';
+// DURATIONS reserved for future use
+// import { DURATIONS } from '../../animationPresets';
 import { ColorSwatch, TypographyPreview } from './FoundationHelpers';
 import { TaxonomyBadge } from '../../TaxonomyBadge';
 

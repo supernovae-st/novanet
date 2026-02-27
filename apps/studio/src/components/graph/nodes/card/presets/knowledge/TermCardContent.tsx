@@ -25,8 +25,8 @@
 
 import { memo, useMemo } from 'react';
 import { motion, type Variants } from 'motion/react';
-import { cn } from '@/lib/utils';
-import { gapTokens } from '@/design/tokens';
+// import { cn } from '@/lib/utils';
+// import { gapTokens } from '@/design/tokens';
 import type { CardContext } from '../../CardShell';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
 import { DURATIONS } from '../../animationPresets';
@@ -75,7 +75,7 @@ export interface TermCardContentProps extends CardContext {
 // Animation Variants
 // =============================================================================
 
-const editVariants: Variants = {
+const _editVariants: Variants = {
   idle: { rotate: 0 },
   hover: {
     rotate: [-5, 5, 0],
@@ -119,7 +119,7 @@ export const TermCardContent = memo(function TermCardContent({
     [colors.primary, selected, isHovered]
   );
 
-  const EditIcon = animationsEnabled ? motion.span : 'span';
+  const _EditIcon = animationsEnabled ? motion.span : 'span';
   const ValueWrapper = animationsEnabled ? motion.div : 'div';
 
   // Check if glow should be shown (MEDIUM+ tier)
@@ -177,7 +177,7 @@ export const TermCardContent = memo(function TermCardContent({
           className="text-sm font-medium text-white italic"
           style={glowStyle}
         >
-          "{data.value}"
+          &quot;{data.value}&quot;
         </p>
       </ValueWrapper>
 

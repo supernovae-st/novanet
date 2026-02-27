@@ -27,11 +27,14 @@
 
 import { memo, useMemo } from 'react';
 import { motion, type Variants } from 'motion/react';
-import { cn } from '@/lib/utils';
-import { gapTokens } from '@/design/tokens';
+// cn reserved for future use
+// import { cn } from '@/lib/utils';
+// gapTokens reserved for future use
+// import { gapTokens } from '@/design/tokens';
 import type { CardContext } from '../../CardShell';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
-import { SPRING_CONFIGS, DURATIONS } from '../../animationPresets';
+// SPRING_CONFIGS reserved for future use
+import { DURATIONS } from '../../animationPresets';
 import { TraitBadge, SectionLabel } from './FoundationHelpers';
 import { TaxonomyBadge } from '../../TaxonomyBadge';
 

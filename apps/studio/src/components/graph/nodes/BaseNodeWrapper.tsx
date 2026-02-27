@@ -16,7 +16,7 @@
 import { memo, useState, useCallback } from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { cn } from '@/lib/utils';
-import { glassClasses, radius, transitions, durations, easing } from '@/design/tokens';
+import { glassClasses, durations, easing } from '@/design/tokens';
 import { GlowingBorder } from '@/components/ui/GlowingBorder';
 import { SelectionHalo } from '../SelectionHalo';
 import { EdgeConnectionHalo, type EdgeConnectionRole } from '../EdgeConnectionHalo';

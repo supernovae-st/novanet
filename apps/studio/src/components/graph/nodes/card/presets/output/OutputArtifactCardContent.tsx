@@ -29,8 +29,8 @@
 
 import { memo, useMemo } from 'react';
 import { motion, type Variants } from 'motion/react';
-import { cn } from '@/lib/utils';
-import { gapTokens } from '@/design/tokens';
+// import { cn } from '@/lib/utils';
+// import { gapTokens } from '@/design/tokens';
 import type { CardContext } from '../../CardShell';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
 import { DURATIONS } from '../../animationPresets';
@@ -90,7 +90,7 @@ export interface OutputArtifactCardContentProps extends CardContext {
 // Animation Variants
 // =============================================================================
 
-const packageVariants: Variants = {
+const _packageVariants: Variants = {
   idle: { scale: 1 },
   hover: {
     scale: 1.1,
@@ -136,7 +136,7 @@ export const OutputArtifactCardContent = memo(function OutputArtifactCardContent
     [colors.primary, selected, isHovered]
   );
 
-  const PackageIcon = animationsEnabled ? motion.span : 'span';
+  const _PackageIcon = animationsEnabled ? motion.span : 'span';
   const ContentWrapper = animationsEnabled ? motion.div : 'div';
 
   return (

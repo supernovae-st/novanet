@@ -112,8 +112,8 @@ function parseHexColor(color: string, fallback: number = 0x60a5fa): number {
   return Number.isNaN(parsed) ? fallback : parsed;
 }
 
-// Layer Z-axis positions for visual separation
-const LAYER_Z_POSITIONS: Record<string, number> = {
+// Layer Z-axis positions for visual separation (reserved for future use)
+const _LAYER_Z_POSITIONS: Record<string, number> = {
   config: 0,
   locale: 30,
   geography: 60,
@@ -125,8 +125,8 @@ const LAYER_Z_POSITIONS: Record<string, number> = {
   output: 290,
 };
 
-// Realm X-axis offsets
-const REALM_X_OFFSETS: Record<string, number> = {
+// Realm X-axis offsets (reserved for future use)
+const _REALM_X_OFFSETS: Record<string, number> = {
   shared: -60,
   org: 60,
 };
@@ -207,7 +207,7 @@ export const Graph3D = memo(function Graph3D({
   const [showHelp, setShowHelp] = useState(false);
   const [isGraphReady, setIsGraphReady] = useState(false);
   const [neighborIds, setNeighborIds] = useState<Set<string>>(new Set());
-  const [highlightedLinks, setHighlightedLinks] = useState<Set<string>>(new Set());
+  const [_highlightedLinks, setHighlightedLinks] = useState<Set<string>>(new Set());
   const [bootPhase, setBootPhase] = useState<'loading' | 'spawning' | 'ready'>('loading');
   const [selectionBurst, setSelectionBurst] = useState<string | null>(null);
 
@@ -1159,8 +1159,8 @@ export const Graph3D = memo(function Graph3D({
     }
   }, [isGraphReady, graphData.links, graphData.nodes]);
 
-  // Link styling callbacks - ULTRA DEFENSIVE
-  const getLinkColor = useCallback((link: unknown) => {
+  // Link styling callbacks - ULTRA DEFENSIVE (reserved for future use)
+  const _getLinkColor = useCallback((link: unknown) => {
     try {
       const l = link as ForceGraphLink | undefined;
       if (!l || typeof l !== 'object' || !('type' in l)) return '#1e3a5f';
@@ -1171,7 +1171,7 @@ export const Graph3D = memo(function Graph3D({
     }
   }, []);
 
-  const getLinkWidth = useCallback((link: unknown) => {
+  const _getLinkWidth = useCallback((link: unknown) => {
     try {
       const l = link as ForceGraphLink | undefined;
       if (!l || typeof l !== 'object') return 0.3;
@@ -1182,7 +1182,7 @@ export const Graph3D = memo(function Graph3D({
     }
   }, []);
 
-  const getLinkOpacity = useCallback((link: unknown) => {
+  const _getLinkOpacity = useCallback((link: unknown) => {
     try {
       const l = link as ForceGraphLink | undefined;
       if (!l || typeof l !== 'object') return 0.15;
@@ -1193,20 +1193,20 @@ export const Graph3D = memo(function Graph3D({
     }
   }, []);
 
-  const getLinkParticles = useCallback((_link: unknown) => {
+  const _getLinkParticles = useCallback((_link: unknown) => {
     // Return fixed number of particles - simple and safe
     return 4;
   }, []);
 
-  const getLinkParticleSpeed = useCallback((_link: unknown) => {
+  const _getLinkParticleSpeed = useCallback((_link: unknown) => {
     return 0.003;  // Slow speed so particles are visible
   }, []);
 
-  const getLinkParticleWidth = useCallback((_link: unknown) => {
+  const _getLinkParticleWidth = useCallback((_link: unknown) => {
     return 3;  // Fixed width
   }, []);
 
-  const getLinkParticleColor = useCallback((link: unknown) => {
+  const _getLinkParticleColor = useCallback((link: unknown) => {
     try {
       const l = link as ForceGraphLink | undefined;
       if (!l || typeof l !== 'object') return '#60a5fa';
@@ -1217,7 +1217,7 @@ export const Graph3D = memo(function Graph3D({
     }
   }, []);
 
-  const getLinkCurvature = useCallback((link: unknown) => {
+  const _getLinkCurvature = useCallback((link: unknown) => {
     try {
       const l = link as ForceGraphLink | undefined;
       if (!l || typeof l !== 'object') return 0;
@@ -1228,8 +1228,8 @@ export const Graph3D = memo(function Graph3D({
     }
   }, []);
 
-  // Custom emissive particle object for bloom compatibility (with geometry caching)
-  const getParticleThreeObject = useCallback((link: unknown) => {
+  // Custom emissive particle object for bloom compatibility (with geometry caching, reserved for future use)
+  const _getParticleThreeObject = useCallback((link: unknown) => {
     try {
       const l = link as ForceGraphLink | undefined;
       const colorStr = l && typeof l === 'object' && 'type' in l

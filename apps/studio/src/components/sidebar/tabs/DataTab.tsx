@@ -17,7 +17,7 @@
 
 import { memo, useMemo, useState } from 'react';
 import { motion } from 'motion/react';
-import { ArrowDownLeft, ArrowUpRight, Braces, ChevronRight, LayoutGrid } from 'lucide-react';
+import { ArrowDownLeft, ArrowUpRight, Braces, LayoutGrid } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useCopyFieldFeedback } from '@/hooks';
 import { PropertyRow, formatValue } from '@/components/ui/detail-panel';

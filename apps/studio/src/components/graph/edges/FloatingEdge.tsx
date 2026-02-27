@@ -32,7 +32,7 @@ import { getSmartLabel, getNodeIntersection, generateCurvedPath, generateReverse
 import type { EdgeState } from './system/types';
 
 // Arc family detection from unified palette system (v11.7.0)
-import { getArcFamily, getArcStroke, type ArcFamilyKey } from '@/design/colors/palette';
+import { getArcFamily, getArcStroke } from '@/design/colors/palette';
 
 // Signature effects (v11.6.2 - Full Redesign)
 import { PowerConduit, DNAHelix, SynapticFiring, MatrixCodeRain, SonarPulse, SelectionEffect } from './effects';

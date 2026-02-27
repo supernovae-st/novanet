@@ -30,8 +30,8 @@
 
 import { memo, useMemo } from 'react';
 import { motion, type Variants } from 'motion/react';
-import { cn } from '@/lib/utils';
-import { gapTokens } from '@/design/tokens';
+// import { cn } from '@/lib/utils';
+// import { gapTokens } from '@/design/tokens';
 import type { CardContext } from '../../CardShell';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
 import { DURATIONS } from '../../animationPresets';
@@ -90,7 +90,7 @@ export interface BlockNativeCardContentProps extends CardContext {
 // Animation Variants
 // =============================================================================
 
-const sparkleVariants: Variants = {
+const _sparkleVariants: Variants = {
   idle: { scale: 1 },
   hover: {
     scale: [1, 1.2, 1],
@@ -134,7 +134,7 @@ export const BlockNativeCardContent = memo(function BlockNativeCardContent({
     [colors.primary, selected, isHovered]
   );
 
-  const SparkleIcon = animationsEnabled ? motion.span : 'span';
+  const _SparkleIcon = animationsEnabled ? motion.span : 'span';
   const ContentWrapper = animationsEnabled ? motion.div : 'div';
 
   return (

@@ -28,9 +28,7 @@ import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from
 import { cn } from '@/lib/utils';
 import type { CardContext } from '../CardShell';
 import {
-  REALM_COLORS,
   LAYER_COLORS,
-  type RealmKey,
   type LayerKey,
 } from '@/design/colors/generated';
 
@@ -98,7 +96,7 @@ const MATRIX_CHARS = 'アァカサタナハマヤャラワガザダバパイィ�
 // Helper Functions
 // =============================================================================
 
-const hexToRgb = (hex: string): string => {
+const _hexToRgb = (hex: string): string => {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`
@@ -131,7 +129,7 @@ const MatrixRain = memo(function MatrixRain({
     const columns = Math.floor(CARD_WIDTH / fontSize);
     columnsRef.current = Array(columns).fill(1);
 
-    const opacity = isActive ? 0.15 : 0.08;
+    const _opacity = isActive ? 0.15 : 0.08;
 
     const draw = () => {
       ctx.fillStyle = `rgba(0, 0, 0, 0.05)`;
@@ -866,7 +864,7 @@ const TechCornerBrackets = memo(function TechCornerBrackets({
 // Grid Icon in Rounded Square (Left side element)
 // =============================================================================
 
-const GridIcon = memo(function GridIcon({
+const _GridIcon = memo(function _GridIcon({
   palette,
   isActive,
 }: {
@@ -925,7 +923,7 @@ const GridIcon = memo(function GridIcon({
 // Badge Component (for REALM, LAYER style badges)
 // =============================================================================
 
-const TechBadge = memo(function TechBadge({
+const _TechBadge = memo(function _TechBadge({
   label,
   value,
   icon,
@@ -992,7 +990,7 @@ const TechBadge = memo(function TechBadge({
 
 export const RealmOrbitalCardContent = memo(function RealmOrbitalCardContent({
   data,
-  colors,
+  colors: _colors,
   selected,
   isHovered,
 }: RealmOrbitalCardProps) {

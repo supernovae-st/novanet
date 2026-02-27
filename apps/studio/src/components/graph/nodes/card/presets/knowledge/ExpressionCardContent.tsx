@@ -26,8 +26,10 @@
 
 import { memo, useMemo } from 'react';
 import { motion, type Variants } from 'motion/react';
-import { cn } from '@/lib/utils';
-import { gapTokens } from '@/design/tokens';
+// cn reserved for future use
+// import { cn } from '@/lib/utils';
+// gapTokens reserved for future use
+// import { gapTokens } from '@/design/tokens';
 import type { CardContext } from '../../CardShell';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
 import { DURATIONS } from '../../animationPresets';
@@ -76,7 +78,7 @@ export interface ExpressionCardContentProps extends CardContext {
 // Animation Variants
 // =============================================================================
 
-const diamondVariants: Variants = {
+const _diamondVariants: Variants = {
   idle: { scale: 1, rotate: 0 },
   hover: {
     scale: 1.1,
@@ -125,7 +127,7 @@ export const ExpressionCardContent = memo(function ExpressionCardContent({
     [colors.primary, selected, isHovered]
   );
 
-  const DiamondIcon = animationsEnabled ? motion.span : 'span';
+  const _DiamondIcon = animationsEnabled ? motion.span : 'span';
   const TextWrapper = animationsEnabled ? motion.div : 'div';
 
   // Check if glow should be shown (MEDIUM+ tier)
@@ -183,7 +185,7 @@ export const ExpressionCardContent = memo(function ExpressionCardContent({
           className="text-sm font-medium text-white italic leading-relaxed"
           style={glowStyle}
         >
-          "{data.text}"
+          &quot;{data.text}&quot;
         </p>
       </TextWrapper>
 

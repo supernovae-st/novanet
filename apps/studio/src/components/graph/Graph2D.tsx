@@ -436,7 +436,7 @@ function Graph2DInner({
   const [expandedBundles, setExpandedBundles] = useState<Set<string>>(new Set());
 
   // Callback for bundle hover
-  const handleBundleHover = useCallback((bundleKey: string, expanded: boolean) => {
+  const _handleBundleHover = useCallback((bundleKey: string, expanded: boolean) => {
     setExpandedBundles((prev) => {
       const next = new Set(prev);
       if (expanded) {

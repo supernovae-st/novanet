@@ -25,12 +25,12 @@
 
 import { memo, useMemo } from 'react';
 import { motion, type Variants } from 'motion/react';
-import { cn } from '@/lib/utils';
-import { gapTokens } from '@/design/tokens';
+// import { cn } from '@/lib/utils';
+// import { gapTokens } from '@/design/tokens';
 import type { CardContext } from '../../CardShell';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
 import { DURATIONS } from '../../animationPresets';
-import { BlockOrderIndicator, StatCounter } from './StructureHelpers';
+import { BlockOrderIndicator } from './StructureHelpers';
 import { TaxonomyBadge } from '../../TaxonomyBadge';
 import { Box, Layers } from 'lucide-react';
 

@@ -60,7 +60,7 @@ export const SchemaCardView = memo(function SchemaCardView({
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set());
 
   // Get realm groups from schema store
-  const { realmGroups, isSchemaLoaded } = useSchemaStore(
+  const { realmGroups, isSchemaLoaded: _isSchemaLoaded } = useSchemaStore(
     useShallow((state) => ({
       realmGroups: selectRealmGroups(state),
       isSchemaLoaded: selectIsSchemaLoaded(state),

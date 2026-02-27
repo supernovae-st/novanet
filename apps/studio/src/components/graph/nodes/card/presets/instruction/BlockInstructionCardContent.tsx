@@ -27,8 +27,10 @@
 
 import { memo, useMemo } from 'react';
 import { motion, type Variants } from 'motion/react';
-import { cn } from '@/lib/utils';
-import { gapTokens } from '@/design/tokens';
+// cn reserved for future use
+// import { cn } from '@/lib/utils';
+// gapTokens reserved for future use
+// import { gapTokens } from '@/design/tokens';
 import type { CardContext } from '../../CardShell';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
 import { DURATIONS } from '../../animationPresets';
@@ -78,7 +80,7 @@ export interface BlockInstructionCardContentProps extends CardContext {
 // Animation Variants
 // =============================================================================
 
-const boltVariants: Variants = {
+const _boltVariants: Variants = {
   idle: { scale: 1, rotate: 0 },
   hover: {
     scale: 1.1,
@@ -123,7 +125,7 @@ export const BlockInstructionCardContent = memo(function BlockInstructionCardCon
     [colors.primary, selected, isHovered]
   );
 
-  const BoltIcon = animationsEnabled ? motion.span : 'span';
+  const _BoltIcon = animationsEnabled ? motion.span : 'span';
   const ContentWrapper = animationsEnabled ? motion.div : 'div';
 
   return (

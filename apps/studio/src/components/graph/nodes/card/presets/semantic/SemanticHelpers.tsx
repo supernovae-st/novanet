@@ -17,9 +17,9 @@
 
 import { memo, useState } from 'react';
 import { motion, type Variants } from 'motion/react';
-import { cn } from '@/lib/utils';
+// import { cn } from '@/lib/utils';
 import { DURATIONS } from '../../animationPresets';
-import { Pencil, Bot, Brain, CheckCircle, FileText, Globe, Check } from 'lucide-react';
+import { Pencil, Bot, Brain, CheckCircle, FileText, Check } from 'lucide-react';
 
 // =============================================================================
 // Neo4j Integer Helper
@@ -59,7 +59,7 @@ export interface PillarBadgeProps {
 
 export const PillarBadge = memo(function PillarBadge({
   isPillar,
-  color = '#f97316',
+  color: _color = '#f97316',
 }: PillarBadgeProps) {
   if (!isPillar) return null;
 

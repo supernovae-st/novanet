@@ -76,9 +76,9 @@ function TouchSurface() {
 
 function SideGrooves() {
   const grooveCount = 3;
-  const grooveSpacing = 0.25;
+  const _grooveSpacing = 0.25;
   const grooveHeight = TRACKPAD_DEPTH * 0.7;
-  const startZ = -grooveHeight / 2;
+  const _startZ = -grooveHeight / 2;
 
   return (
     <group position={[-TRACKPAD_WIDTH / 2 + 0.08, 0, 0]}>

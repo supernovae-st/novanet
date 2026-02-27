@@ -75,7 +75,7 @@ function renderTreeStyle(
   lines.push({ text: nodeKey, indent: 0 });
 
   // Get arc types for this view
-  const arcEntries = Object.entries(arcsByType);
+  const _arcEntries = Object.entries(arcsByType);
   const nodeEntries = Object.entries(nodesByType);
 
   if (viewId === 'composition') {
@@ -260,7 +260,7 @@ function renderCompactStyle(
       const barWidth = 10;
       const filled = Math.round((loc.pct / 100) * barWidth);
       const bar = SYM.full.repeat(filled) + SYM.empty.repeat(barWidth - filled);
-      const status = loc.pct === 100 ? SYM.check : SYM.pending;
+      const _status = loc.pct === 100 ? SYM.check : SYM.pending;
       const sym = idx === locales.length - 1 ? SYM.lastBranch : SYM.branch;
       const color = loc.pct === 100 ? 'text-green-400' : loc.pct >= 60 ? 'text-amber-400' : 'text-red-400';
       lines.push({

@@ -80,7 +80,7 @@ function getCardWidth(type: string): number {
 /**
  * Get depth-based visual styles
  */
-function getDepthStyles(depth: number, primaryColor: string) {
+function getDepthStyles(depth: number, _primaryColor: string) {
   // Progressive opacity and scale reduction for deeper nodes
   const depthOpacity = Math.max(0.7, 1 - depth * 0.08);
   const depthScale = Math.max(0.92, 1 - depth * 0.02);

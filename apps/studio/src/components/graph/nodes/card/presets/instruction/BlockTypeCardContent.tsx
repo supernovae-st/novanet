@@ -27,8 +27,10 @@
 
 import { memo, useMemo } from 'react';
 import { motion, type Variants } from 'motion/react';
-import { cn } from '@/lib/utils';
-import { gapTokens } from '@/design/tokens';
+// cn reserved for future use
+// import { cn } from '@/lib/utils';
+// gapTokens reserved for future use
+// import { gapTokens } from '@/design/tokens';
 import type { CardContext } from '../../CardShell';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
 import { DURATIONS } from '../../animationPresets';
@@ -65,7 +67,7 @@ export interface BlockTypeCardContentProps extends CardContext {
 // Animation Variants
 // =============================================================================
 
-const gridVariants: Variants = {
+const _gridVariants: Variants = {
   idle: { scale: 1 },
   hover: {
     scale: 1.1,
@@ -109,7 +111,7 @@ export const BlockTypeCardContent = memo(function BlockTypeCardContent({
     [colors.primary, selected, isHovered]
   );
 
-  const GridIcon = animationsEnabled ? motion.span : 'span';
+  const _GridIcon = animationsEnabled ? motion.span : 'span';
   const SchemaWrapper = animationsEnabled ? motion.div : 'div';
 
   return (

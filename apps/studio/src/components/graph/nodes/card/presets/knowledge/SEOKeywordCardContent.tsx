@@ -29,8 +29,8 @@
 
 import { memo, useMemo } from 'react';
 import { motion, type Variants } from 'motion/react';
-import { cn } from '@/lib/utils';
-import { gapTokens } from '@/design/tokens';
+// import { cn } from '@/lib/utils';
+// import { gapTokens } from '@/design/tokens';
 import type { CardContext } from '../../CardShell';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
 import { DURATIONS } from '../../animationPresets';
@@ -95,7 +95,7 @@ export interface SEOKeywordCardContentProps extends CardContext {
 // Animation Variants
 // =============================================================================
 
-const searchVariants: Variants = {
+const _searchVariants: Variants = {
   idle: { scale: 1 },
   hover: {
     scale: 1.1,
@@ -140,7 +140,7 @@ export const SEOKeywordCardContent = memo(function SEOKeywordCardContent({
     [colors.primary, selected, isHovered]
   );
 
-  const SearchIcon = animationsEnabled ? motion.span : 'span';
+  const _SearchIcon = animationsEnabled ? motion.span : 'span';
   const MetricsWrapper = animationsEnabled ? motion.div : 'div';
 
   // Check if glow should be shown (MEDIUM+ tier)
@@ -186,7 +186,7 @@ export const SEOKeywordCardContent = memo(function SEOKeywordCardContent({
         className="text-base font-bold text-white mb-3"
         style={glowStyle}
       >
-        "{data.value}"
+        &quot;{data.value}&quot;
       </h4>
 
       {/* Metrics section */}

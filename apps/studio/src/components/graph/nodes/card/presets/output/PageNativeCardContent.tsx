@@ -29,8 +29,8 @@
 
 import { memo, useMemo } from 'react';
 import { motion, type Variants } from 'motion/react';
-import { cn } from '@/lib/utils';
-import { gapTokens } from '@/design/tokens';
+// import { cn } from '@/lib/utils';
+// import { gapTokens } from '@/design/tokens';
 import type { CardContext } from '../../CardShell';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
 import { DURATIONS } from '../../animationPresets';
@@ -84,7 +84,7 @@ export interface PageNativeCardContentProps extends CardContext {
 // Animation Variants
 // =============================================================================
 
-const starVariants: Variants = {
+const _starVariants: Variants = {
   idle: { rotate: 0, scale: 1 },
   hover: {
     rotate: 72,
@@ -131,7 +131,7 @@ export const PageNativeCardContent = memo(function PageNativeCardContent({
     [colors.primary, selected, isHovered]
   );
 
-  const StarIcon = animationsEnabled ? motion.span : 'span';
+  const _StarIcon = animationsEnabled ? motion.span : 'span';
   const ContentWrapper = animationsEnabled ? motion.div : 'div';
 
   return (

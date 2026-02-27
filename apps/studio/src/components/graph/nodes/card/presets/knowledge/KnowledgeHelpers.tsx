@@ -11,8 +11,9 @@
  */
 
 import { memo, useMemo } from 'react';
-import { motion, type Variants } from 'motion/react';
-import { cn } from '@/lib/utils';
+import { motion } from 'motion/react';
+// cn reserved for future use
+// import { cn } from '@/lib/utils';
 import { DURATIONS } from '../../animationPresets';
 
 // =============================================================================
@@ -297,7 +298,7 @@ export interface DifficultyBadgeProps {
 
 export const DifficultyBadge = memo(function DifficultyBadge({
   difficulty,
-  color,
+  color: _color,
 }: DifficultyBadgeProps) {
   // Color coding: green (easy) -> yellow (medium) -> red (hard)
   const diffColor =

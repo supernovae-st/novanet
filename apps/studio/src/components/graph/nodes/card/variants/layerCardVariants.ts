@@ -200,8 +200,8 @@ const BADGE_SIZES = {
  */
 export function getTaxonomyBadgeClasses({
   layer,
-  realm,
-  trait,
+  realm: _realm,
+  trait: _trait,
   size = 'md',
 }: TaxonomyBadgeVariants): string {
   return cn(

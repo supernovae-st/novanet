@@ -18,7 +18,7 @@
  * ```
  */
 
-import { memo, useMemo, useId } from 'react';
+import { memo, useId } from 'react';
 import { motion } from 'motion/react';
 import type { PerformanceConfig } from '@/contexts/PerformanceContext';
 
@@ -62,7 +62,7 @@ export const BorderBeam = memo(function BorderBeam({
   performanceConfig,
   beamLength = 0.15,
 }: BorderBeamProps) {
-  const id = useId();
+  const _id = useId();
   const animationsEnabled = performanceConfig?.animation?.enabled ?? true;
 
   const secondary = secondaryColor ?? color;

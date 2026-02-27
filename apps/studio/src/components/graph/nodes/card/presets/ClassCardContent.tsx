@@ -58,7 +58,8 @@ import {
   type ArcFamilyKey,
 } from '@/design/colors/generated';
 import type { NodeLayer, NodeRealm, NodeTrait } from '../taxonomyColors';
-import { TaxonomyBadge } from '../TaxonomyBadge';
+// TaxonomyBadge reserved for future use
+// import { TaxonomyBadge } from '../TaxonomyBadge';
 import { LEVEL_VISUALS } from '../variants/levelVariants';
 import { GlowEffect, BorderBeam } from '../effects';
 import { LLMContextBadge } from '../LLMContextBadge';
@@ -182,8 +183,8 @@ export const ClassCardContent = memo(function ClassCardContent({
   selected = false,
   isHovered = false,
   performanceConfig,
-  taxonomy,
-  showTaxonomyBadge = false,
+  taxonomy: _taxonomy,
+  showTaxonomyBadge: _showTaxonomyBadge = false,
 }: ClassCardContentProps) {
   // Performance flags
   const animationsEnabled = performanceConfig?.animation?.enabled ?? true;

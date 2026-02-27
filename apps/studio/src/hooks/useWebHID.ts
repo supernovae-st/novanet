@@ -47,7 +47,7 @@ export interface UseWebHIDReturn extends WebHIDState {
 // =============================================================================
 
 // VIA protocol uses these report IDs
-const VIA_REPORT_ID = 0x00;
+const _VIA_REPORT_ID = 0x00;
 
 // VIA command types
 export const VIA_COMMANDS = {

@@ -471,7 +471,7 @@ export const GEOAnswerCardContent = memo(function GEOAnswerCardContent({
               ...glowStyle,
             }}
           >
-            "{truncateAnswer(data.answer_text)}"
+            &quot;{truncateAnswer(data.answer_text)}&quot;
           </div>
 
           {/* Brand mention indicator */}

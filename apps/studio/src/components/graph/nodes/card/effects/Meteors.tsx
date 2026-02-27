@@ -66,7 +66,7 @@ interface SingleMeteorProps {
 }
 
 const SingleMeteor = memo(function SingleMeteor({
-  index,
+  index: _index,
   style,
   color,
   trailColor,
@@ -146,14 +146,14 @@ export const Meteors = memo(function Meteors({
   const animationsEnabled = performanceConfig?.animation?.enabled ?? true;
   const effectsEnabled = performanceConfig?.effects?.premiumEffects ?? true;
 
-  if (!effectsEnabled) return null;
-
   const effectiveTrailColor = trailColor ?? color;
   const effectiveCount = selected ? count + 4 : isHovered ? count + 2 : count;
 
   // Generate meteor data
   const meteors = useMemo(() => {
-    return Array.from({ length: effectiveCount }, (_, i) => ({
+    if (!effectsEnabled) return [];
+
+    return Array.from({ length: effectiveCount }, (_item, _i) => ({
       // Random starting position (top-right area)
       style: {
         top: `${Math.random() * 40 - 10}%`,
@@ -163,7 +163,9 @@ export const Meteors = memo(function Meteors({
       delay: minDelay + Math.random() * (maxDelay - minDelay),
       width: meteorWidth * (0.5 + Math.random() * 0.5),
     }));
-  }, [effectiveCount, minDuration, maxDuration, minDelay, maxDelay, meteorWidth]);
+  }, [effectsEnabled, effectiveCount, minDuration, maxDuration, minDelay, maxDelay, meteorWidth]);
+
+  if (!effectsEnabled) return null;
 
   return (
     <div

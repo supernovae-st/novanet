@@ -142,13 +142,14 @@ export const LightRays = memo(function LightRays({
   const animationsEnabled = performanceConfig?.animation?.enabled ?? true;
   const effectsEnabled = performanceConfig?.effects?.premiumEffects ?? true;
 
-  if (!effectsEnabled) return null;
-
   const effectiveOpacity = selected ? opacity * 1.5 : isHovered ? opacity * 1.2 : opacity;
   const effectiveCount = selected ? count + 2 : count;
 
   // Generate ray data with spread angles
   const rays = useMemo(() => {
+    if (!effectsEnabled) return [];
+
+
     const spreadAngle = 60; // Total spread angle
     const startAngle = -spreadAngle / 2;
 
@@ -160,7 +161,9 @@ export const LightRays = memo(function LightRays({
         opacity: effectiveOpacity * (0.5 + Math.random() * 0.5),
       };
     });
-  }, [effectiveCount, effectiveOpacity]);
+  }, [effectsEnabled, effectiveCount, effectiveOpacity]);
+
+  if (!effectsEnabled) return null;
 
   return (
     <div
