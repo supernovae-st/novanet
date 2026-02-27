@@ -1434,7 +1434,9 @@ impl App {
                     Focus::Info => {
                         // If Properties box is selected, navigate properties with j/k
                         if self.selected_box == InfoBox::Properties {
-                            if self.schema_overlay.matched_properties.is_some() && self.focused_property_idx > 0 {
+                            if self.schema_overlay.matched_properties.is_some()
+                                && self.focused_property_idx > 0
+                            {
                                 self.focused_property_idx -= 1;
                                 self.expanded_property = false;
                             }
@@ -2361,7 +2363,10 @@ impl App {
     /// Check if any overlay (help, legend, search, recent) is currently open.
     /// Used to prevent 'q' from quitting while overlays are active.
     pub fn has_overlay_open(&self) -> bool {
-        self.overlays.help_active || self.overlays.legend_active || self.search.active || self.overlays.recent_items_active
+        self.overlays.help_active
+            || self.overlays.legend_active
+            || self.search.active
+            || self.overlays.recent_items_active
     }
 
     /// Get the current spinner frame character (braille dots animation).

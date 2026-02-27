@@ -250,7 +250,12 @@ Content for dates.
         let sections = split_sections(content);
         assert!(sections.contains_key("number"));
         assert!(sections.contains_key("date"));
-        assert!(sections.get("number").unwrap().contains("Content for numbers"));
+        assert!(
+            sections
+                .get("number")
+                .unwrap()
+                .contains("Content for numbers")
+        );
     }
 
     #[test]

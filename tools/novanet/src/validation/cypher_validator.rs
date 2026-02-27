@@ -26,9 +26,8 @@ static RE_MERGE: LazyLock<Regex> = LazyLock::new(|| {
 });
 
 /// Match SET n.property = 'value' or SET n.property = expression
-static RE_SET: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"(?i)\b(\w+)\.(\w+)\s*=\s*([^,;\n]+)").expect("valid set regex")
-});
+static RE_SET: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"(?i)\b(\w+)\.(\w+)\s*=\s*([^,;\n]+)").expect("valid set regex"));
 
 /// Match ON CREATE SET / ON MATCH SET blocks
 static RE_ON_SET: LazyLock<Regex> = LazyLock::new(|| {

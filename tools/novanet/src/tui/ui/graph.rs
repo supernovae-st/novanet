@@ -50,17 +50,18 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
     };
 
     // Calculate arc counts for title (separate in/out)
-    let (incoming_count, outgoing_count, arcs_loading) = if let Some(ref arcs) = app.details.class_arcs {
-        (arcs.incoming.len(), arcs.outgoing.len(), false)
-    } else if let Some(TreeItem::Instance(_, _, _, inst)) = app.current_item() {
-        (
-            inst.incoming_arcs.len(),
-            inst.outgoing_arcs.len(),
-            inst.arcs_loading,
-        )
-    } else {
-        (0, 0, false)
-    };
+    let (incoming_count, outgoing_count, arcs_loading) =
+        if let Some(ref arcs) = app.details.class_arcs {
+            (arcs.incoming.len(), arcs.outgoing.len(), false)
+        } else if let Some(TreeItem::Instance(_, _, _, inst)) = app.current_item() {
+            (
+                inst.incoming_arcs.len(),
+                inst.outgoing_arcs.len(),
+                inst.arcs_loading,
+            )
+        } else {
+            (0, 0, false)
+        };
 
     // Build enhanced title with selection indicator (matches SOURCE/DIAGRAM/ARCHITECTURE pattern)
     // Order: Out first (→), then In (←) - more logical flow direction

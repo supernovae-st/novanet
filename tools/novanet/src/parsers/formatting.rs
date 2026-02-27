@@ -13,7 +13,7 @@ use serde::{Deserialize, Serialize};
 use walkdir::WalkDir;
 
 use super::markdown_utils::{
-    clean_value, normalize_section_name, parse_frontmatter_metadata, RE_SECTION,
+    RE_SECTION, clean_value, normalize_section_name, parse_frontmatter_metadata,
 };
 use crate::{NovaNetError, Result};
 
@@ -30,9 +30,8 @@ static RE_DATA_SOURCES: LazyLock<Regex> = LazyLock::new(|| {
 /// Field pattern: - **FieldName**: `value` or - **FieldName**: value
 /// Used by: parse_number_section, parse_date_section, parse_time_section,
 ///          parse_currency_section, parse_measurement_section, parse_calendar_section
-static RE_FIELD: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"-\s+\*\*(\w+)\*\*:\s*`?([^`\n]+)`?").expect("valid field regex")
-});
+static RE_FIELD: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"-\s+\*\*(\w+)\*\*:\s*`?([^`\n]+)`?").expect("valid field regex"));
 
 // ============================================================================
 // Main Structs
