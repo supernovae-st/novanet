@@ -258,6 +258,7 @@ mod tests {
     use crate::parsers::taxonomy::{
         ArcFamilyDef, NodeLayerDef, NodeRealmDef, NodeTraitDef, TaxonomyIcon,
     };
+    use serial_test::serial;
 
     #[test]
     fn generate_small_cypher() {
@@ -409,6 +410,7 @@ mod tests {
     }
 
     #[test]
+    #[serial]
     fn generate_taxonomy_integration() {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .parent()

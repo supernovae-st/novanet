@@ -555,6 +555,7 @@ mod tests {
     use super::*;
     use crate::generators::Generator;
     use crate::parsers::organizing::{ArcFamilyDef, LayerDef, OrganizingDoc, RealmDef, TraitDef};
+    use serial_test::serial;
 
     fn make_test_data() -> (OrganizingDoc, TerminalPalette) {
         let doc = OrganizingDoc {
@@ -694,6 +695,7 @@ mod tests {
     }
 
     #[test]
+    #[serial]
     fn generate_tui_colors_integration() {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .parent()

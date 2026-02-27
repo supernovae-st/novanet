@@ -74,6 +74,7 @@ tui = ["dep:ratatui", "dep:crossterm", "dep:arboard"]
 insta = { version = "1", features = ["yaml"] }  # Snapshot testing
 pretty_assertions = "1"       # Colorful diffs for assert_eq!
 proptest = "1"                # Property-based testing (edge cases)
+serial_test = "3"             # Run integration tests serially (shared YAML via symlink)
 tempfile = "3"                # Temporary files for parser tests
 tokio-test = "0.4"            # Async test utilities
 

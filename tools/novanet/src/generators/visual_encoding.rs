@@ -721,8 +721,10 @@ fn build_icon_categories(doc: &VisualEncodingDoc) -> Vec<TemplateIconCategory> {
 mod tests {
     use super::*;
     use crate::generators::Generator;
+    use serial_test::serial;
 
     #[test]
+    #[serial]
     fn generate_visual_encoding_integration() {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .parent()
