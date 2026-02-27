@@ -12,7 +12,33 @@ use indexmap::IndexMap;
 use regex::Regex;
 use std::collections::{HashMap, HashSet};
 use std::path::{Path, PathBuf};
+use std::sync::LazyLock;
 use walkdir::WalkDir;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Compiled Regex Patterns (LazyLock for one-time compilation)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Match MERGE/CREATE (n:Label {key: 'value'}) or MERGE (n:Label {key: $param})
+static RE_MERGE: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"(?i)(?:MERGE|CREATE)\s*\(\s*\w*\s*:\s*([A-Z][A-Za-z0-9]*)\s*\{([^}]*)\}\s*\)")
+        .expect("valid merge regex")
+});
+
+/// Match SET n.property = 'value' or SET n.property = expression
+static RE_SET: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"(?i)\b(\w+)\.(\w+)\s*=\s*([^,;\n]+)").expect("valid set regex")
+});
+
+/// Match ON CREATE SET / ON MATCH SET blocks
+static RE_ON_SET: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"(?i)ON\s+(?:CREATE|MATCH)\s+SET\s+((?:\s*\w+\.\w+\s*=\s*[^,;\n]+,?\s*)+)")
+        .expect("valid on_set regex")
+});
+
+/// Match inline property: value patterns
+static RE_PROP: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"(\w+)\s*:\s*([^,}]+)").expect("valid prop regex"));
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -117,19 +143,7 @@ pub fn parse_cypher_file(path: &Path) -> crate::Result<Vec<CypherPropertyUsage>>
     let content = std::fs::read_to_string(path)?;
     let mut usages = Vec::new();
 
-    // Regex patterns for Cypher parsing
-    // Match MERGE/CREATE (n:Label {key: 'value'}) or MERGE (n:Label {key: $param})
-    let merge_pattern =
-        Regex::new(r"(?i)(?:MERGE|CREATE)\s*\(\s*\w*\s*:\s*([A-Z][A-Za-z0-9]*)\s*\{([^}]*)\}\s*\)")
-            .expect("valid regex");
-
-    // Match SET n.property = 'value' or SET n.property = expression
-    let set_pattern = Regex::new(r"(?i)\b(\w+)\.(\w+)\s*=\s*([^,;\n]+)").expect("valid regex");
-
-    // Match ON CREATE SET / ON MATCH SET blocks
-    let on_set_pattern =
-        Regex::new(r"(?i)ON\s+(?:CREATE|MATCH)\s+SET\s+((?:\s*\w+\.\w+\s*=\s*[^,;\n]+,?\s*)+)")
-            .expect("valid regex");
+    // Use static LazyLock patterns (compiled once)
 
     for (line_idx, line) in content.lines().enumerate() {
         let line_num = line_idx + 1;
@@ -141,7 +155,7 @@ pub fn parse_cypher_file(path: &Path) -> crate::Result<Vec<CypherPropertyUsage>>
         }
 
         // Parse MERGE/CREATE statements with inline properties
-        for cap in merge_pattern.captures_iter(line) {
+        for cap in RE_MERGE.captures_iter(line) {
             let label = cap
                 .get(1)
                 .map(|m| m.as_str().to_string())
@@ -155,7 +169,7 @@ pub fn parse_cypher_file(path: &Path) -> crate::Result<Vec<CypherPropertyUsage>>
         }
 
         // Parse SET statements
-        for cap in set_pattern.captures_iter(line) {
+        for cap in RE_SET.captures_iter(line) {
             // We need to infer the label from context, for now use empty string
             // The validator will match by property name patterns
             let property = cap
@@ -181,9 +195,9 @@ pub fn parse_cypher_file(path: &Path) -> crate::Result<Vec<CypherPropertyUsage>>
     }
 
     // Also parse multi-line ON CREATE SET / ON MATCH SET blocks
-    for cap in on_set_pattern.captures_iter(&content) {
+    for cap in RE_ON_SET.captures_iter(&content) {
         let set_block = cap.get(1).map(|m| m.as_str()).unwrap_or_default();
-        for prop_cap in set_pattern.captures_iter(set_block) {
+        for prop_cap in RE_SET.captures_iter(set_block) {
             let var_name = prop_cap.get(1).map(|m| m.as_str()).unwrap_or_default();
             let property = prop_cap
                 .get(2)
@@ -225,10 +239,8 @@ fn parse_inline_properties(
 ) -> Vec<CypherPropertyUsage> {
     let mut usages = Vec::new();
 
-    // Pattern: property: value or property: 'value' or property: $param
-    let prop_pattern = Regex::new(r"(\w+)\s*:\s*([^,}]+)").expect("valid regex");
-
-    for cap in prop_pattern.captures_iter(props_str) {
+    // Use static LazyLock pattern (compiled once)
+    for cap in RE_PROP.captures_iter(props_str) {
         let property = cap
             .get(1)
             .map(|m| m.as_str().to_string())
@@ -749,7 +761,7 @@ mod tests {
             );
         }
 
-        // The validator should complete without panicking
-        assert!(true);
+        // Test passes if validation completes without panicking
+        // No assertion needed - reaching this point means success
     }
 }
