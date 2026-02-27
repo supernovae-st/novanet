@@ -223,7 +223,7 @@ async fn run_app(
                                     app.tree.set_instances(k, instances, total);
                                     // Schedule arc loading in background
                                     if !keys.is_empty() {
-                                        app.pending_instance_arcs_load = Some((k.clone(), keys));
+                                        app.pending.instance_arcs = Some((k.clone(), keys));
                                     }
                                 }
                                 Some(Err(e)) => {

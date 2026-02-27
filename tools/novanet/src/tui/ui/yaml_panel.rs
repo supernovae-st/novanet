@@ -113,8 +113,8 @@ fn render_source_box(f: &mut Frame, area: Rect, app: &App, selected: bool) {
     let current_tab = app.source_tab;
 
     // Build enhanced title with tab bar and yaml path
-    let line_count = app.yaml_content.lines().count();
-    let yaml_path = &app.yaml_path;
+    let line_count = app.yaml.content.lines().count();
+    let yaml_path = &app.yaml.path;
     let title = build_source_title(selected, current_tab, has_instances, line_count, yaml_path);
 
     render_yaml_content_in_box(f, area, app, visible_height, border_color, title);
@@ -575,11 +575,12 @@ fn render_yaml_content_in_box(
     }
 
     // v0.13.1: Show full YAML with scroll (no collapse/peek - PROPERTIES panel handles that)
-    if !app.yaml_content.is_empty() {
+    if !app.yaml.content.is_empty() {
         for yaml_line in app
-            .yaml_content
+            .yaml
+            .content
             .lines()
-            .skip(app.yaml_scroll)
+            .skip(app.yaml.scroll)
             .take(content_visible_height)
         {
             lines.push(highlight_yaml_line(yaml_line));
@@ -589,10 +590,10 @@ fn render_yaml_content_in_box(
     }
 
     // Total lines for scroll indicator
-    let total_lines = app.yaml_content.lines().count();
+    let total_lines = app.yaml.content.lines().count();
 
     // Build scroll indicator with directional arrows
-    let scroll_hint = scroll_indicator(app.yaml_scroll, total_lines, visible_height);
+    let scroll_hint = scroll_indicator(app.yaml.scroll, total_lines, visible_height);
 
     let block = Block::default()
         .title(title)
@@ -612,7 +613,7 @@ fn render_yaml_content_in_box(
             .thumb_symbol("#");
 
         let mut scrollbar_state = ScrollbarState::new(total_lines.saturating_sub(visible_height))
-            .position(app.yaml_scroll);
+            .position(app.yaml.scroll);
 
         // Render scrollbar in the inner area (inside border)
         let scrollbar_area = Rect {

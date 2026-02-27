@@ -281,9 +281,166 @@ impl SearchState {
     }
 }
 
+/// All pending async load requests (extracted sub-state).
+/// v0.14.0: Extracted from App struct for clarity.
+#[derive(Debug, Default)]
+pub struct PendingLoads {
+    /// Pending instance load request (Class label to load).
+    pub instance: Option<String>,
+    /// Pending Class arcs load request (Class label to load from Neo4j).
+    pub arcs: Option<String>,
+    /// Pending instance arc loading (Class label + instance keys for background arc loading).
+    pub instance_arcs: Option<(String, Vec<String>)>,
+    /// Pending entity categories load (triggered when Entity Class expanded).
+    pub entity_categories: bool,
+    /// Pending category instances load (category key to load).
+    pub category_instances: Option<String>,
+    /// Pending ArcClass details load request (Arc key to load from Neo4j).
+    pub arc_class: Option<String>,
+    /// Pending Realm details load request (Realm key to load from Neo4j).
+    pub realm: Option<String>,
+    /// Pending Layer details load request (Layer key to load from Neo4j).
+    pub layer: Option<String>,
+}
+
+impl PendingLoads {
+    /// Check if any load is pending.
+    pub fn has_pending(&self) -> bool {
+        self.instance.is_some()
+            || self.arcs.is_some()
+            || self.instance_arcs.is_some()
+            || self.entity_categories
+            || self.category_instances.is_some()
+            || self.arc_class.is_some()
+            || self.realm.is_some()
+            || self.layer.is_some()
+    }
+
+    /// Clear all pending loads.
+    pub fn clear(&mut self) {
+        *self = Self::default();
+    }
+}
+
+/// Neo4j details for current selection (extracted sub-state).
+/// Loaded async when user selects Realm/Layer/Class/Arc.
+#[derive(Debug, Default)]
+pub struct LoadedDetails {
+    /// Neo4j arc data for current Class.
+    pub class_arcs: Option<ClassArcsData>,
+    /// Neo4j arc class details (loaded async when ArcClass selected).
+    pub arc_class: Option<ArcClassDetails>,
+    /// Neo4j Realm details (loaded async when Realm selected).
+    pub realm: Option<RealmDetails>,
+    /// Neo4j Layer details (loaded async when Layer selected).
+    pub layer: Option<LayerDetails>,
+}
+
+impl LoadedDetails {
+    /// Clear all loaded details.
+    pub fn clear(&mut self) {
+        *self = Self::default();
+    }
+}
+
+/// Schema overlay state for Data mode (extracted sub-state).
+/// Shows YAML schema properties alongside Neo4j instance data.
+#[derive(Debug)]
+pub struct SchemaOverlayState {
+    /// Whether schema overlay is enabled (toggle with 's').
+    pub enabled: bool,
+    /// Matched properties for current instance.
+    pub matched_properties: Option<Vec<MatchedProperty>>,
+    /// Coverage stats for current instance.
+    pub coverage_stats: Option<CoverageStats>,
+    /// Validated properties for current Class (YAML schema vs Neo4j).
+    pub validated_class_properties: Option<Vec<ValidatedProperty>>,
+    /// Validation stats for current Class.
+    pub validation_stats: Option<ValidationStats>,
+}
+
+impl Default for SchemaOverlayState {
+    fn default() -> Self {
+        Self {
+            enabled: true, // Enabled by default
+            matched_properties: None,
+            coverage_stats: None,
+            validated_class_properties: None,
+            validation_stats: None,
+        }
+    }
+}
+
+impl SchemaOverlayState {
+    /// Clear all schema overlay state (except enabled flag).
+    pub fn clear_data(&mut self) {
+        self.matched_properties = None;
+        self.coverage_stats = None;
+        self.validated_class_properties = None;
+        self.validation_stats = None;
+    }
+}
+
+/// YAML panel state (extracted sub-state).
+/// Displays Class YAML or Instance data in the right panel.
+#[derive(Debug, Default)]
+pub struct YamlPreviewState {
+    /// YAML content to display.
+    pub content: String,
+    /// Path to the YAML file.
+    pub path: String,
+    /// Scroll position in the YAML panel.
+    pub scroll: usize,
+    /// Cached line count (avoids per-scroll recomputation).
+    pub line_count: usize,
+}
+
+impl YamlPreviewState {
+    /// Clear all YAML preview state.
+    pub fn clear(&mut self) {
+        self.content.clear();
+        self.path.clear();
+        self.scroll = 0;
+        self.line_count = 0;
+    }
+}
+
+/// Overlay visibility state (extracted sub-state).
+/// Overlays are modal panels that appear on top of the main UI.
+#[derive(Debug, Default)]
+pub struct OverlayState {
+    /// Whether help overlay is active.
+    pub help_active: bool,
+    /// Whether legend overlay is active.
+    pub legend_active: bool,
+    /// Whether recent items overlay is active.
+    pub recent_items_active: bool,
+    /// Cursor position in recent items overlay.
+    pub recent_items_cursor: usize,
+}
+
+impl OverlayState {
+    /// Check if any overlay is active.
+    pub fn is_active(&self) -> bool {
+        self.help_active || self.legend_active || self.recent_items_active
+    }
+
+    /// Close all overlays.
+    pub fn close_all(&mut self) {
+        self.help_active = false;
+        self.legend_active = false;
+        self.recent_items_active = false;
+    }
+}
+
 /// Main app state.
+/// v0.14.0: Refactored with sub-structs for better organization.
+/// 55 fields → 30 direct + 25 in sub-structs.
 #[allow(dead_code)]
 pub struct App {
+    // ==========================================================================
+    // Core State
+    // ==========================================================================
     /// Cached theme (color mode detected once at startup).
     pub theme: Theme,
     pub mode: NavMode,
@@ -293,122 +450,85 @@ pub struct App {
     pub tree_cursor: usize,
     /// Remember cursor position per mode (Graph, Nexus, Views).
     pub mode_cursors: [usize; 3],
-    pub tree_scroll: usize, // Scroll offset for tree
-    pub tree_height: usize, // Visible height (set by UI)
+    pub tree_scroll: usize,
+    pub tree_height: usize,
     pub tree: TaxonomyTree,
+    pub root_path: String,
+
+    // ==========================================================================
+    // Extracted Sub-States (v0.14.0)
+    // ==========================================================================
     /// Search state (extracted sub-state).
     pub search: SearchState,
-    // Help overlay
-    pub help_active: bool,
-    // Legend overlay (color meanings)
-    pub legend_active: bool,
-    // Recent items overlay (` key)
-    pub recent_items_active: bool,
-    pub recent_items_cursor: usize,
-    /// Navigation history for Ctrl+o (back) / Ctrl+i (forward)
-    pub nav_history: Vec<(NavMode, usize)>, // (mode, cursor)
-    pub nav_history_pos: usize, // Current position in history
-    /// Status message (e.g., "Copied to clipboard", "Refreshing...")
+    /// Overlay visibility state (help, legend, recent items).
+    pub overlays: OverlayState,
+    /// YAML panel state.
+    pub yaml: YamlPreviewState,
+    /// Pending async load requests.
+    pub pending: PendingLoads,
+    /// Neo4j details for current selection.
+    pub details: LoadedDetails,
+    /// Schema overlay state for Data mode.
+    pub schema_overlay: SchemaOverlayState,
+    /// Nexus mode state (gamified learning hub).
+    pub nexus: NexusState,
+
+    // ==========================================================================
+    // Navigation & History
+    // ==========================================================================
+    /// Navigation history for Ctrl+o (back) / Ctrl+i (forward).
+    pub nav_history: Vec<(NavMode, usize)>,
+    pub nav_history_pos: usize,
+    /// Navigation generation counter for detecting stale async results.
+    pub navigation_generation: u64,
+
+    // ==========================================================================
+    // UI State
+    // ==========================================================================
+    /// Status message (e.g., "Copied to clipboard", "Refreshing...").
     pub status_message: Option<(String, std::time::Instant)>,
-    /// Pending refresh request
+    /// Pending refresh request.
     pub pending_refresh: bool,
-    // YAML preview
-    pub yaml_content: String,
-    pub yaml_path: String,
-    pub yaml_scroll: usize,
-    pub yaml_line_count: usize, // Cached line count (avoids per-scroll recomputation)
-    // v0.13.1: yaml_sections and yaml_peek removed (collapse/peek eliminated)
     /// SOURCE panel tab selection (Schema = Class YAML, Instance = Node data).
-    /// v0.13: A' Tree Sync design - switching tabs syncs tree selection.
     pub source_tab: SourceTab,
     /// Cursor position of the Class when switching to Instance tab.
-    /// v0.13 A' Tree Sync: Used to navigate back to Class when switching to Schema tab.
     source_tab_class_cursor: Option<usize>,
-    // Info panel scroll (separate from yaml)
+    /// Info panel scroll (separate from yaml).
     pub info_scroll: usize,
-    pub info_line_count: usize, // Set by UI after building lines
-    pub root_path: String,
+    pub info_line_count: usize,
     /// Cache of YAML file contents (path -> content).
-    /// Avoids re-reading files on every scroll/navigation.
     pub yaml_cache: FxHashMap<String, String>,
-    /// Neo4j arc data for current Class (loaded async)
-    pub class_arcs: Option<ClassArcsData>,
-    /// Neo4j arc class details (loaded async when ArcClass selected)
-    pub arc_class_details: Option<ArcClassDetails>,
-    // Data view: pending instance load request (Class label to load)
-    pub pending_instance_load: Option<String>,
-    /// Pending Class arcs load request (Class label to load from Neo4j)
-    pub pending_arcs_load: Option<String>,
-    /// Pending instance arc loading (Class label + instance keys for background arc loading)
-    pub pending_instance_arcs_load: Option<(String, Vec<String>)>,
-    /// Pending entity categories load (triggered when Entity Class expanded)
-    pub pending_entity_categories_load: bool,
-    /// Pending category instances load (category key to load)
-    pub pending_category_instances_load: Option<String>,
-    /// Pending ArcClass details load request (Arc key to load from Neo4j)
-    pub pending_arc_class_load: Option<String>,
-    /// Pending Realm details load request (Realm key to load from Neo4j)
-    pub pending_realm_load: Option<String>,
-    /// Pending Layer details load request (Layer key to load from Neo4j)
-    pub pending_layer_load: Option<String>,
-    /// Neo4j Realm details (loaded async when Realm selected)
-    pub realm_details: Option<RealmDetails>,
-    /// Neo4j Layer details (loaded async when Layer selected)
-    pub layer_details: Option<LayerDetails>,
-    /// Data mode filter: when set, show only instances of this Class
-    /// None = show full tree, Some(class_key) = show only instances of that Class
-    pub data_filter_class: Option<String>,
-    /// Cursor position before entering filtered Data mode (for restoration)
-    pub data_cursor_before_filter: usize,
-    /// Hide empty: when true, hide classes/layers with 0 instances in Data mode
-    pub hide_empty: bool,
-    /// Nexus mode state (gamified learning hub)
-    pub nexus: NexusState,
-    /// Loaded views from views.yaml (single source of truth for TUI + Studio)
+    /// Loaded views from views.yaml (single source of truth for TUI + Studio).
     pub loaded_views: LoadedViews,
-    /// Animation tick counter (increments each frame, used for spinners)
+    /// Animation tick counter (increments each frame, used for spinners).
     pub tick: u16,
-    /// Navigation generation counter for detecting stale async results.
-    /// Incremented on each navigation to prevent race conditions where async loads
-    /// complete after the user has already navigated away.
-    pub navigation_generation: u64,
+
     // ==========================================================================
-    // Schema Overlay State (Feature 1)
+    // Filter State
     // ==========================================================================
-    /// Whether schema overlay is enabled in Data mode (toggle with 's')
-    pub schema_overlay_enabled: bool,
-    /// Matched properties for current instance (schema + values)
-    pub matched_properties: Option<Vec<MatchedProperty>>,
-    /// Coverage stats for current instance
-    pub coverage_stats: Option<CoverageStats>,
-    // ==========================================================================
-    // Class Validation State (Neo4j ↔ YAML)
-    // ==========================================================================
-    /// Validated properties for current Class (YAML schema vs Neo4j)
-    pub validated_class_properties: Option<Vec<ValidatedProperty>>,
-    /// Validation stats for current Class
-    pub validation_stats: Option<ValidationStats>,
+    /// Data mode filter: when set, show only instances of this Class.
+    pub data_filter_class: Option<String>,
+    /// Cursor position before entering filtered Data mode (for restoration).
+    pub data_cursor_before_filter: usize,
+    /// Hide empty: when true, hide classes/layers with 0 instances in Data mode.
+    pub hide_empty: bool,
+    /// Active trait filter (None = show all, Some("defined") = filter by trait).
+    pub trait_filter: Option<String>,
+    /// Pending filter key (true when 'f' was pressed, waiting for second key).
+    pub filter_pending: bool,
+
     // ==========================================================================
     // Property Focus State (Feature 3)
     // ==========================================================================
-    /// Index of focused property in Info panel (for truncate intelligent)
+    /// Index of focused property in Info panel (for truncate intelligent).
     pub focused_property_idx: usize,
-    /// Whether the focused property text is expanded (Enter toggle)
+    /// Whether the focused property text is expanded (Enter toggle).
     pub expanded_property: bool,
-    // ==========================================================================
-    // JSON Pretty-Print State (Feature 4)
-    // ==========================================================================
-    /// Whether to pretty-print JSON values (toggle with 'J')
+    /// Whether to pretty-print JSON values (toggle with 'J').
     pub json_pretty: bool,
+
     // ==========================================================================
-    // Trait Filter State (Quick Filter: fi/fl/fk/fg/fa/ff)
-    // ==========================================================================
-    /// Active trait filter (None = show all, Some("defined") = filter by trait)
-    pub trait_filter: Option<String>,
-    /// Pending filter key (true when 'f' was pressed, waiting for second key)
-    pub filter_pending: bool,
-    // ==========================================================================
-    // Render Caches (D: Performance Optimization)
+    // Render Caches (Performance Optimization)
     // ==========================================================================
     /// Cache for status bar realm mini-bar (avoids Vec allocation per frame).
     /// Uses RefCell for interior mutability during immutable render calls.
@@ -421,70 +541,56 @@ impl App {
         let loaded_views = LoadedViews::load(&root_path);
 
         let mut app = Self {
-            theme: Theme::with_root(&root_path), // Load colors + icons from YAML
+            // Core state
+            theme: Theme::with_root(&root_path),
             mode: NavMode::Graph,
             focus: Focus::Tree,
             selected_box: InfoBox::default(),
             tree_cursor: 0,
-            mode_cursors: [0; 3], // Init all modes at cursor 0 (Graph, Nexus, Views)
+            mode_cursors: [0; 3],
             tree_scroll: 0,
             tree_height: DEFAULT_TREE_HEIGHT,
             tree,
+            root_path,
+
+            // Extracted sub-states (v0.14.0)
             search: SearchState::default(),
-            help_active: false,
-            legend_active: false,
-            recent_items_active: false,
-            recent_items_cursor: 0,
+            overlays: OverlayState::default(),
+            yaml: YamlPreviewState::default(),
+            pending: PendingLoads::default(),
+            details: LoadedDetails::default(),
+            schema_overlay: SchemaOverlayState::default(),
+            nexus: NexusState::with_persistence(),
+
+            // Navigation & history
             nav_history: Vec::with_capacity(100),
             nav_history_pos: 0,
+            navigation_generation: 0,
+
+            // UI state
             status_message: None,
             pending_refresh: false,
-            yaml_content: String::new(),
-            yaml_path: String::new(),
-            yaml_scroll: 0,
-            yaml_line_count: 0,
-            // v0.13.1: yaml_sections and yaml_peek removed
             source_tab: SourceTab::default(),
             source_tab_class_cursor: None,
             info_scroll: 0,
             info_line_count: 0,
-            root_path,
             yaml_cache: FxHashMap::default(),
-            class_arcs: None,
-            arc_class_details: None,
-            pending_instance_load: None,
-            pending_arcs_load: None,
-            pending_instance_arcs_load: None,
-            pending_entity_categories_load: false,
-            pending_category_instances_load: None,
-            pending_arc_class_load: None,
-            pending_realm_load: None,
-            pending_layer_load: None,
-            realm_details: None,
-            layer_details: None,
+            loaded_views,
+            tick: 0,
+
+            // Filter state
             data_filter_class: None,
             data_cursor_before_filter: 0,
             hide_empty: false,
-            nexus: NexusState::with_persistence(),
-            loaded_views,
-            tick: 0,
-            navigation_generation: 0,
-            // Schema overlay (Feature 1)
-            schema_overlay_enabled: true, // Enabled by default
-            matched_properties: None,
-            coverage_stats: None,
-            // Class validation (Neo4j ↔ YAML)
-            validated_class_properties: None,
-            validation_stats: None,
-            // Property focus (Feature 3)
-            focused_property_idx: 0,
-            expanded_property: false,
-            // JSON pretty-print (Feature 4)
-            json_pretty: false,
-            // Trait filter (Quick Filter)
             trait_filter: None,
             filter_pending: false,
-            // Render caches (D: Performance Optimization)
+
+            // Property focus state
+            focused_property_idx: 0,
+            expanded_property: false,
+            json_pretty: false,
+
+            // Render caches
             mini_bar_cache: RefCell::new(RenderCache::new()),
         };
         app.load_yaml_for_current();
@@ -511,24 +617,24 @@ impl App {
         self.navigation_generation = self.navigation_generation.wrapping_add(1);
 
         // Reset scroll positions when changing items
-        self.yaml_scroll = 0;
+        self.yaml.scroll = 0;
         self.info_scroll = 0;
 
         // Clear Neo4j data AND pending loads when moving away
         // (prevents race condition where pending load completes after navigation)
-        self.class_arcs = None;
-        self.arc_class_details = None;
-        self.realm_details = None;
-        self.layer_details = None;
-        self.pending_arcs_load = None;
-        self.pending_arc_class_load = None;
-        self.pending_realm_load = None;
-        self.pending_layer_load = None;
-        self.pending_instance_load = None;
+        self.details.class_arcs = None;
+        self.details.arc_class = None;
+        self.details.realm = None;
+        self.details.layer = None;
+        self.pending.arcs = None;
+        self.pending.arc_class = None;
+        self.pending.realm = None;
+        self.pending.layer = None;
+        self.pending.instance = None;
 
         // Clear Class validation state (only populated for Class items)
-        self.validated_class_properties = None;
-        self.validation_stats = None;
+        self.schema_overlay.validated_class_properties = None;
+        self.schema_overlay.validation_stats = None;
 
         // Get current item using mode-aware method (handles filtered Data mode)
         // This is the same logic as current_item() but we extract data to avoid borrow issues
@@ -566,23 +672,23 @@ impl App {
                 properties,
             } => {
                 self.load_yaml_cached(&yaml_path);
-                self.pending_arcs_load = Some(key);
+                self.pending.arcs = Some(key);
                 // Load Class validation (Neo4j vs YAML)
                 self.load_validated_class_properties(&properties);
             }
             TreeItemData::ArcClass { yaml_path, key } => {
                 self.load_yaml_cached(&yaml_path);
-                self.pending_arc_class_load = Some(key);
+                self.pending.arc_class = Some(key);
             }
             TreeItemData::Realm { key } => {
                 let path = format!("packages/core/models/realms/{}.yaml", key);
                 self.load_yaml_cached(&path);
-                self.pending_realm_load = Some(key);
+                self.pending.realm = Some(key);
             }
             TreeItemData::Layer { key } => {
                 let path = format!("packages/core/models/layers/{}.yaml", key);
                 self.load_yaml_cached(&path);
-                self.pending_layer_load = Some(key);
+                self.pending.layer = Some(key);
             }
             TreeItemData::ArcFamily { key } => {
                 let path = format!("packages/core/models/arc-families/{}.yaml", key);
@@ -602,15 +708,15 @@ impl App {
                     // Load validated properties with types (same as Class view)
                     self.load_validated_class_properties(&class_properties);
                 } else {
-                    self.yaml_path.clear();
-                    self.yaml_content.clear();
-                    self.yaml_line_count = 0;
+                    self.yaml.path.clear();
+                    self.yaml.content.clear();
+                    self.yaml.line_count = 0;
                 }
             }
             TreeItemData::None => {
-                self.yaml_path.clear();
-                self.yaml_content.clear();
-                self.yaml_line_count = 0;
+                self.yaml.path.clear();
+                self.yaml.content.clear();
+                self.yaml.line_count = 0;
             }
         }
     }
@@ -691,13 +797,13 @@ impl App {
 
     /// Load YAML content with caching (avoids re-reading files on every navigation).
     fn load_yaml_cached(&mut self, relative_path: &str) {
-        self.yaml_path = relative_path.to_string();
+        self.yaml.path = relative_path.to_string();
         // v0.13.1: yaml_peek reset removed (collapse/peek eliminated)
 
         // Check cache first
         if let Some(cached) = self.yaml_cache.get(relative_path) {
-            self.yaml_content = cached.clone();
-            self.yaml_line_count = self.yaml_content.lines().count();
+            self.yaml.content = cached.clone();
+            self.yaml.line_count = self.yaml.content.lines().count();
             return;
         }
 
@@ -711,8 +817,8 @@ impl App {
             .insert(relative_path.to_string(), content.clone());
 
         // Update display
-        self.yaml_content = content;
-        self.yaml_line_count = self.yaml_content.lines().count();
+        self.yaml.content = content;
+        self.yaml.line_count = self.yaml.content.lines().count();
     }
 
     /// Ensure cursor is visible by adjusting scroll.
@@ -978,19 +1084,19 @@ impl App {
     /// Handle key input. Returns true if state changed (needs re-render).
     pub fn handle_key(&mut self, key: KeyEvent) -> bool {
         // Help overlay - any key closes it
-        if self.help_active {
-            self.help_active = false;
+        if self.overlays.help_active {
+            self.overlays.help_active = false;
             return true;
         }
 
         // Legend overlay - any key closes it
-        if self.legend_active {
-            self.legend_active = false;
+        if self.overlays.legend_active {
+            self.overlays.legend_active = false;
             return true;
         }
 
         // Recent items overlay - handles navigation and selection
-        if self.recent_items_active {
+        if self.overlays.recent_items_active {
             return self.handle_recent_items_key(key);
         }
 
@@ -1086,7 +1192,7 @@ impl App {
         match key.code {
             // Open help (? = vim-style help)
             KeyCode::Char('?') => {
-                self.help_active = true;
+                self.overlays.help_active = true;
                 true
             }
 
@@ -1107,15 +1213,15 @@ impl App {
 
             // Open color legend (F1 = accessible, out of flow)
             KeyCode::F(1) => {
-                self.legend_active = true;
+                self.overlays.legend_active = true;
                 true
             }
 
             // Open recent items popup (` = backtick)
             KeyCode::Char('`') => {
                 if !self.nav_history.is_empty() {
-                    self.recent_items_active = true;
-                    self.recent_items_cursor = 0;
+                    self.overlays.recent_items_active = true;
+                    self.overlays.recent_items_cursor = 0;
                 }
                 true
             }
@@ -1287,7 +1393,7 @@ impl App {
                     }
                     Focus::Graph => {} // Display-only
                     Focus::Yaml => {
-                        self.yaml_scroll = 0;
+                        self.yaml.scroll = 0;
                     }
                 }
                 true
@@ -1307,8 +1413,8 @@ impl App {
                     }
                     Focus::Graph => {} // Display-only
                     Focus::Yaml => {
-                        let max_scroll = self.yaml_line_count.saturating_sub(YAML_SCROLL_MARGIN);
-                        self.yaml_scroll = max_scroll;
+                        let max_scroll = self.yaml.line_count.saturating_sub(YAML_SCROLL_MARGIN);
+                        self.yaml.scroll = max_scroll;
                     }
                 }
                 true
@@ -1328,7 +1434,7 @@ impl App {
                     Focus::Info => {
                         // If Properties box is selected, navigate properties with j/k
                         if self.selected_box == InfoBox::Properties {
-                            if self.matched_properties.is_some() && self.focused_property_idx > 0 {
+                            if self.schema_overlay.matched_properties.is_some() && self.focused_property_idx > 0 {
                                 self.focused_property_idx -= 1;
                                 self.expanded_property = false;
                             }
@@ -1338,8 +1444,8 @@ impl App {
                     }
                     Focus::Graph => {} // Display-only panel, no navigation
                     Focus::Yaml => {
-                        if self.yaml_scroll > 0 {
-                            self.yaml_scroll -= 1;
+                        if self.yaml.scroll > 0 {
+                            self.yaml.scroll -= 1;
                         }
                     }
                 }
@@ -1359,7 +1465,7 @@ impl App {
                     Focus::Info => {
                         // If Properties box is selected, navigate properties with j/k
                         if self.selected_box == InfoBox::Properties {
-                            if let Some(matched) = &self.matched_properties {
+                            if let Some(matched) = &self.schema_overlay.matched_properties {
                                 let max_idx = matched.len().saturating_sub(1);
                                 if self.focused_property_idx < max_idx {
                                     self.focused_property_idx += 1;
@@ -1376,9 +1482,9 @@ impl App {
                     }
                     Focus::Graph => {} // Display-only panel, no navigation
                     Focus::Yaml => {
-                        let max_scroll = self.yaml_line_count.saturating_sub(YAML_SCROLL_MARGIN);
-                        if self.yaml_scroll < max_scroll {
-                            self.yaml_scroll += 1;
+                        let max_scroll = self.yaml.line_count.saturating_sub(YAML_SCROLL_MARGIN);
+                        if self.yaml.scroll < max_scroll {
+                            self.yaml.scroll += 1;
                         }
                     }
                 }
@@ -1401,8 +1507,8 @@ impl App {
                     }
                     Focus::Graph => {} // Display-only panel, no navigation
                     Focus::Yaml => {
-                        let max_scroll = self.yaml_line_count.saturating_sub(YAML_SCROLL_MARGIN);
-                        self.yaml_scroll = (self.yaml_scroll + PAGE_SCROLL_AMOUNT).min(max_scroll);
+                        let max_scroll = self.yaml.line_count.saturating_sub(YAML_SCROLL_MARGIN);
+                        self.yaml.scroll = (self.yaml.scroll + PAGE_SCROLL_AMOUNT).min(max_scroll);
                     }
                 }
                 true
@@ -1420,7 +1526,7 @@ impl App {
                     }
                     Focus::Graph => {} // Display-only panel, no navigation
                     Focus::Yaml => {
-                        self.yaml_scroll = self.yaml_scroll.saturating_sub(PAGE_SCROLL_AMOUNT);
+                        self.yaml.scroll = self.yaml.scroll.saturating_sub(PAGE_SCROLL_AMOUNT);
                     }
                 }
                 true
@@ -1476,10 +1582,10 @@ impl App {
             // Toggle schema overlay (s) - only in Data mode
             KeyCode::Char('s') => {
                 if self.is_graph_mode() {
-                    self.schema_overlay_enabled = !self.schema_overlay_enabled;
+                    self.schema_overlay.enabled = !self.schema_overlay.enabled;
                     // Load/clear matched properties based on new state
                     self.update_schema_match_for_current();
-                    self.set_status(if self.schema_overlay_enabled {
+                    self.set_status(if self.schema_overlay.enabled {
                         "Schema overlay ON"
                     } else {
                         "Schema overlay OFF"
@@ -1502,8 +1608,8 @@ impl App {
             // Property focus navigation (+/-) - Feature 3: Truncate Intelligent
             // Navigate focused property in schema overlay
             KeyCode::Char('+') | KeyCode::Char('=') => {
-                if self.is_graph_mode() && self.schema_overlay_enabled {
-                    if let Some(matched) = &self.matched_properties {
+                if self.is_graph_mode() && self.schema_overlay.enabled {
+                    if let Some(matched) = &self.schema_overlay.matched_properties {
                         let max_idx = matched.len().saturating_sub(1);
                         self.focused_property_idx = (self.focused_property_idx + 1).min(max_idx);
                         self.expanded_property = false; // Collapse when changing property
@@ -1512,7 +1618,7 @@ impl App {
                 true
             }
             KeyCode::Char('-') | KeyCode::Char('_') => {
-                if self.is_graph_mode() && self.schema_overlay_enabled {
+                if self.is_graph_mode() && self.schema_overlay.enabled {
                     self.focused_property_idx = self.focused_property_idx.saturating_sub(1);
                     self.expanded_property = false; // Collapse when changing property
                 }
@@ -1609,7 +1715,7 @@ impl App {
         match key.code {
             // Close popup
             KeyCode::Esc | KeyCode::Char('`') => {
-                self.recent_items_active = false;
+                self.overlays.recent_items_active = false;
                 true
             }
 
@@ -1621,8 +1727,8 @@ impl App {
 
             // Navigate up (arrows, vim j/k)
             KeyCode::Up | KeyCode::Char('k') => {
-                if self.recent_items_cursor > 0 {
-                    self.recent_items_cursor -= 1;
+                if self.overlays.recent_items_cursor > 0 {
+                    self.overlays.recent_items_cursor -= 1;
                 }
                 true
             }
@@ -1630,8 +1736,8 @@ impl App {
             // Navigate down
             KeyCode::Down | KeyCode::Char('j') => {
                 let max = self.nav_history.len().saturating_sub(1);
-                if self.recent_items_cursor < max {
-                    self.recent_items_cursor += 1;
+                if self.overlays.recent_items_cursor < max {
+                    self.overlays.recent_items_cursor += 1;
                 }
                 true
             }
@@ -1643,11 +1749,11 @@ impl App {
     /// Select and jump to the currently highlighted recent item.
     fn select_recent_item(&mut self) {
         // History is stored oldest→newest, but we display newest first
-        let display_idx = self.recent_items_cursor;
+        let display_idx = self.overlays.recent_items_cursor;
         let history_idx = self.nav_history.len().saturating_sub(1 + display_idx);
 
         if let Some(&(mode, cursor)) = self.nav_history.get(history_idx) {
-            self.recent_items_active = false;
+            self.overlays.recent_items_active = false;
             self.mode = mode;
             self.tree_cursor = cursor;
             self.ensure_cursor_visible();
@@ -1997,10 +2103,10 @@ impl App {
         self.tree_scroll = 0;
         // Reset other scroll states to avoid stale positions
         self.info_scroll = 0;
-        self.yaml_scroll = 0;
+        self.yaml.scroll = 0;
         // Request instance load if not already loaded
         if self.tree.get_instances(&class_key).is_none() {
-            self.pending_instance_load = Some(class_key);
+            self.pending.instance = Some(class_key);
         }
     }
 
@@ -2054,7 +2160,7 @@ impl App {
     pub fn exit_filtered_data_mode(&mut self) {
         if self.data_filter_class.is_some() {
             self.data_filter_class = None;
-            self.pending_instance_load = None; // Clear pending to prevent race condition
+            self.pending.instance = None; // Clear pending to prevent race condition
             // Clamp cursor to valid range before restoring
             let max_cursor = self.tree.item_count().saturating_sub(1);
             self.tree_cursor = self.data_cursor_before_filter.min(max_cursor);
@@ -2075,7 +2181,7 @@ impl App {
         {
             // Only request if not already loaded
             if self.tree.get_instances(&class_info.key).is_none() {
-                self.pending_instance_load = Some(class_info.key.clone());
+                self.pending.instance = Some(class_info.key.clone());
             }
         }
 
@@ -2097,9 +2203,9 @@ impl App {
                     if !instances_loaded {
                         // First click on unloaded Class: load instances AND ensure expanded
                         if class_key == "Entity" && self.tree.entity_categories.is_empty() {
-                            self.pending_entity_categories_load = true;
+                            self.pending.entity_categories = true;
                         }
-                        self.pending_instance_load = Some(class_key.to_string());
+                        self.pending.instance = Some(class_key.to_string());
                         // Ensure state is "expanded" so instances show when loaded
                         if self.tree.is_collapsed(&key) {
                             self.tree.toggle(&key);
@@ -2123,7 +2229,7 @@ impl App {
 
                     if !instances_loaded {
                         // First click: load category instances AND ensure expanded
-                        self.pending_category_instances_load = Some(category_key.to_string());
+                        self.pending.category_instances = Some(category_key.to_string());
                         if self.tree.is_collapsed(&key) {
                             self.tree.toggle(&key);
                         }
@@ -2150,9 +2256,9 @@ impl App {
         self.expanded_property = false;
 
         // Only relevant in Data mode with schema overlay enabled
-        if !self.is_graph_mode() || !self.schema_overlay_enabled {
-            self.matched_properties = None;
-            self.coverage_stats = None;
+        if !self.is_graph_mode() || !self.schema_overlay.enabled {
+            self.schema_overlay.matched_properties = None;
+            self.schema_overlay.coverage_stats = None;
             return;
         }
 
@@ -2170,92 +2276,92 @@ impl App {
         if let Some(properties) = props {
             self.load_matched_properties(&properties);
         } else {
-            self.matched_properties = None;
-            self.coverage_stats = None;
+            self.schema_overlay.matched_properties = None;
+            self.schema_overlay.coverage_stats = None;
         }
     }
 
     /// Check and clear pending instance load request.
     /// Returns the Class label to load, if any.
     pub fn take_pending_instance_load(&mut self) -> Option<String> {
-        self.pending_instance_load.take()
+        self.pending.instance.take()
     }
 
     /// Take the pending arcs load request (returns Class label if one was queued).
     pub fn take_pending_arcs_load(&mut self) -> Option<String> {
-        self.pending_arcs_load.take()
+        self.pending.arcs.take()
     }
 
     /// Take the pending instance arcs load request.
     /// Returns (Class label, instance keys) to load arcs for.
     pub fn take_pending_instance_arcs_load(&mut self) -> Option<(String, Vec<String>)> {
-        self.pending_instance_arcs_load.take()
+        self.pending.instance_arcs.take()
     }
 
     /// Take the pending entity categories load request.
     /// Returns true if categories need to be loaded.
     pub fn take_pending_entity_categories_load(&mut self) -> bool {
-        std::mem::take(&mut self.pending_entity_categories_load)
+        std::mem::take(&mut self.pending.entity_categories)
     }
 
     /// Take the pending category instances load request.
     /// Returns the category key if one was queued.
     pub fn take_pending_category_instances_load(&mut self) -> Option<String> {
-        self.pending_category_instances_load.take()
+        self.pending.category_instances.take()
     }
 
     /// Set the loaded Class arcs data from Neo4j.
     pub fn set_class_arcs(&mut self, arcs: ClassArcsData) {
-        self.class_arcs = Some(arcs);
+        self.details.class_arcs = Some(arcs);
     }
 
     /// Take the pending arc class details load request (returns Arc key if one was queued).
     pub fn take_pending_arc_class_load(&mut self) -> Option<String> {
-        self.pending_arc_class_load.take()
+        self.pending.arc_class.take()
     }
 
     /// Set the loaded ArcClass details from Neo4j.
     pub fn set_arc_class_details(&mut self, details: ArcClassDetails) {
-        self.arc_class_details = Some(details);
+        self.details.arc_class = Some(details);
     }
 
     /// Take the pending Realm details load request (returns Realm key if one was queued).
     pub fn take_pending_realm_load(&mut self) -> Option<String> {
-        self.pending_realm_load.take()
+        self.pending.realm.take()
     }
 
     /// Set the loaded Realm details from Neo4j.
     pub fn set_realm_details(&mut self, details: RealmDetails) {
-        self.realm_details = Some(details);
+        self.details.realm = Some(details);
     }
 
     /// Take the pending Layer details load request (returns Layer key if one was queued).
     pub fn take_pending_layer_load(&mut self) -> Option<String> {
-        self.pending_layer_load.take()
+        self.pending.layer.take()
     }
 
     /// Set the loaded Layer details from Neo4j.
     pub fn set_layer_details(&mut self, details: LayerDetails) {
-        self.layer_details = Some(details);
+        self.details.layer = Some(details);
     }
 
     /// Check if any data is currently being loaded from Neo4j.
     /// Used to trigger animation re-renders during loading.
     pub fn has_pending_load(&self) -> bool {
-        self.pending_instance_load.is_some()
-            || self.pending_arcs_load.is_some()
-            || self.pending_instance_arcs_load.is_some()
-            || self.pending_arc_class_load.is_some()
-            || self.pending_realm_load.is_some()
-            || self.pending_layer_load.is_some()
-            || self.pending_entity_categories_load
-            || self.pending_category_instances_load.is_some()
+        self.pending.instance.is_some()
+            || self.pending.arcs.is_some()
+            || self.pending.instance_arcs.is_some()
+            || self.pending.arc_class.is_some()
+            || self.pending.realm.is_some()
+            || self.pending.layer.is_some()
+            || self.pending.entity_categories
+            || self.pending.category_instances.is_some()
     }
 
     /// Check if any overlay (help, legend, search, recent) is currently open.
     /// Used to prevent 'q' from quitting while overlays are active.
     pub fn has_overlay_open(&self) -> bool {
-        self.help_active || self.legend_active || self.search.active || self.recent_items_active
+        self.overlays.help_active || self.overlays.legend_active || self.search.active || self.overlays.recent_items_active
     }
 
     /// Get the current spinner frame character (braille dots animation).
@@ -2278,24 +2384,24 @@ impl App {
         use super::schema::{CoverageStats, load_schema_properties, match_properties};
 
         // Only in Data mode with schema overlay enabled
-        if !self.is_graph_mode() || !self.schema_overlay_enabled {
-            self.matched_properties = None;
-            self.coverage_stats = None;
+        if !self.is_graph_mode() || !self.schema_overlay.enabled {
+            self.schema_overlay.matched_properties = None;
+            self.schema_overlay.coverage_stats = None;
             return;
         }
 
         // Need the Class's YAML path to load schema
-        if self.yaml_path.is_empty() {
-            self.matched_properties = None;
-            self.coverage_stats = None;
+        if self.yaml.path.is_empty() {
+            self.schema_overlay.matched_properties = None;
+            self.schema_overlay.coverage_stats = None;
             return;
         }
 
         // Load schema from YAML
-        let schema = load_schema_properties(&self.root_path, &self.yaml_path);
+        let schema = load_schema_properties(&self.root_path, &self.yaml.path);
         if schema.is_empty() {
-            self.matched_properties = None;
-            self.coverage_stats = None;
+            self.schema_overlay.matched_properties = None;
+            self.schema_overlay.coverage_stats = None;
             return;
         }
 
@@ -2303,8 +2409,8 @@ impl App {
         let matched = match_properties(&schema, instance_props);
         let stats = CoverageStats::from_matched(&matched);
 
-        self.matched_properties = Some(matched);
-        self.coverage_stats = Some(stats);
+        self.schema_overlay.matched_properties = Some(matched);
+        self.schema_overlay.coverage_stats = Some(stats);
     }
 
     // ==========================================================================
@@ -2318,15 +2424,15 @@ impl App {
         use super::schema::{ValidationStats, parse_schema_properties, validate_class_properties};
 
         // Need the Class's YAML path to load schema
-        if self.yaml_path.is_empty() {
+        if self.yaml.path.is_empty() {
             return; // State already cleared in load_yaml_for_current()
         }
 
         // Use cached YAML content (already loaded by load_yaml_cached)
-        let yaml_content = match self.yaml_cache.get(&self.yaml_path) {
+        let yaml_content = match self.yaml_cache.get(&self.yaml.path) {
             Some(content) => content,
             None => {
-                tracing::warn!(path = %self.yaml_path, "YAML not in cache for Class validation");
+                tracing::warn!(path = %self.yaml.path, "YAML not in cache for Class validation");
                 return;
             }
         };
@@ -2334,7 +2440,7 @@ impl App {
         // Parse schema from cached YAML content
         let schema = parse_schema_properties(yaml_content);
         if schema.is_empty() {
-            tracing::debug!(path = %self.yaml_path, "No schema properties found in YAML");
+            tracing::debug!(path = %self.yaml.path, "No schema properties found in YAML");
             return;
         }
 
@@ -2342,8 +2448,8 @@ impl App {
         let validated = validate_class_properties(&schema, class_properties);
         let stats = ValidationStats::from_validated(&validated);
 
-        self.validated_class_properties = Some(validated);
-        self.validation_stats = Some(stats);
+        self.schema_overlay.validated_class_properties = Some(validated);
+        self.schema_overlay.validation_stats = Some(stats);
     }
 }
 
@@ -2673,7 +2779,7 @@ mod tests {
         app.tree_cursor = 5; // Some position
         app.tree_scroll = 3;
         app.info_scroll = 2;
-        app.yaml_scroll = 1;
+        app.yaml.scroll = 1;
         app.mode = NavMode::Graph; // Graph mode shows instances
 
         app.enter_filtered_data_mode("Locale".to_string());
@@ -2682,7 +2788,7 @@ mod tests {
         assert_eq!(app.tree_cursor, 0);
         assert_eq!(app.tree_scroll, 0);
         assert_eq!(app.info_scroll, 0);
-        assert_eq!(app.yaml_scroll, 0);
+        assert_eq!(app.yaml.scroll, 0);
         // Previous cursor saved
         assert_eq!(app.data_cursor_before_filter, 5);
         assert!(app.is_filtered_graph_mode());
@@ -3677,13 +3783,13 @@ mod tests {
     #[test]
     fn test_yaml_scroll_at_zero() {
         let mut app = create_test_app();
-        app.yaml_scroll = 0;
+        app.yaml.scroll = 0;
 
         // Should not go negative
-        if app.yaml_scroll > 0 {
-            app.yaml_scroll -= 1;
+        if app.yaml.scroll > 0 {
+            app.yaml.scroll -= 1;
         }
-        assert_eq!(app.yaml_scroll, 0);
+        assert_eq!(app.yaml.scroll, 0);
     }
 
     #[test]

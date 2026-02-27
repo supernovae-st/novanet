@@ -587,7 +587,7 @@ fn build_class_content(
 
     // PROPERTIES - v0.13.1: YAML-style with cyan keys, type badges, section headers
     // Split into STANDARD and SPECIFIC sections (same as Instance view)
-    if let Some(validated) = &app.validated_class_properties {
+    if let Some(validated) = &app.schema_overlay.validated_class_properties {
         // Split into standard vs specific
         let standard_props: Vec<_> = validated
             .iter()
@@ -768,7 +768,7 @@ fn build_class_content(
     }
 
     // RELATIONSHIPS - v0.13: with arc family colors from Neo4j data
-    if let Some(arcs_data) = &app.class_arcs {
+    if let Some(arcs_data) = &app.details.class_arcs {
         // v0.13: Use Neo4j arc data with family-based colors
         let outgoing_count = arcs_data.outgoing.len();
         let incoming_count = arcs_data.incoming.len();
@@ -1281,6 +1281,7 @@ fn build_instance_content(
                 // Standard properties now use same styling as specific for consistency
                 // Look up type from validated_class_properties
                 let prop_type = app
+                    .schema_overlay
                     .validated_class_properties
                     .as_ref()
                     .and_then(|props| props.iter().find(|p| p.name.as_str() == *key))
@@ -1359,6 +1360,7 @@ fn build_instance_content(
 
                 // Look up type from validated_class_properties
                 let prop_type = app
+                    .schema_overlay
                     .validated_class_properties
                     .as_ref()
                     .and_then(|props| props.iter().find(|p| p.name.as_str() == *key))

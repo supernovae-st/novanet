@@ -12,19 +12,13 @@ use regex::Regex;
 use serde::{Deserialize, Serialize};
 use walkdir::WalkDir;
 
+use super::markdown_utils::parse_frontmatter_metadata;
 use crate::{NovaNetError, Result};
 
 // ============================================================================
 // Lazy-compiled Regex Patterns
 // ============================================================================
-
-/// Template version extraction
-static RE_VERSION: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"template_version:\s*(.+)").expect("valid version regex"));
-
-/// Last updated date extraction
-static RE_DATE: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"last_updated:\s*(.+)").expect("valid date regex"));
+// Note: RE_VERSION, RE_DATE moved to markdown_utils
 
 /// Semantic field header: ### N.N FIELD_NAME / LOCAL_NAME or ### N.N FIELD_NAME (local_name)
 static RE_SEMANTIC_FIELD: LazyLock<Regex> = LazyLock::new(|| {
@@ -278,20 +272,15 @@ pub fn parse_expression_markdown(
 // Parsing Functions
 // ============================================================================
 
-/// Parse YAML frontmatter.
+/// Parse YAML frontmatter (delegates to markdown_utils).
 fn parse_frontmatter(content: &str) -> (String, String) {
-    let version = RE_VERSION
-        .captures(content)
-        .and_then(|c| c.get(1))
-        .map(|m| m.as_str().trim().to_string())
-        .unwrap_or_else(|| "3.1".to_string());
-
-    let date = RE_DATE
-        .captures(content)
-        .and_then(|c| c.get(1))
-        .map(|m| m.as_str().trim().to_string())
-        .unwrap_or_else(|| "unknown".to_string());
-
+    let (version, date) = parse_frontmatter_metadata(content);
+    // Override default version from 2.0 to 3.1 for expression files
+    let version = if version == "2.0" {
+        "3.1".to_string()
+    } else {
+        version
+    };
     (version, date)
 }
 

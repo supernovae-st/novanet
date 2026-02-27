@@ -518,13 +518,13 @@ pub fn render(f: &mut Frame, app: &mut App) {
     if app.search.active {
         overlays::render_search(f, app);
     }
-    if app.help_active {
+    if app.overlays.help_active {
         overlays::render_help(f, app);
     }
-    if app.legend_active {
+    if app.overlays.legend_active {
         overlays::render_legend(f, app);
     }
-    if app.recent_items_active {
+    if app.overlays.recent_items_active {
         render_recent_items_overlay(f, app);
     }
 }
@@ -742,18 +742,18 @@ fn render_recent_items_overlay(f: &mut Frame, app: &App) {
     let visible_height = height.saturating_sub(4) as usize;
 
     // Calculate scroll window
-    let start = if max_items <= visible_height || app.recent_items_cursor < visible_height / 2 {
+    let start = if max_items <= visible_height || app.overlays.recent_items_cursor < visible_height / 2 {
         0
-    } else if app.recent_items_cursor > max_items - visible_height / 2 {
+    } else if app.overlays.recent_items_cursor > max_items - visible_height / 2 {
         max_items.saturating_sub(visible_height)
     } else {
-        app.recent_items_cursor.saturating_sub(visible_height / 2)
+        app.overlays.recent_items_cursor.saturating_sub(visible_height / 2)
     };
 
     for display_idx in start..start + visible_height.min(max_items - start) {
         // History is oldest→newest, we show newest first
         let history_idx = app.nav_history.len().saturating_sub(1 + display_idx);
-        let is_selected = display_idx == app.recent_items_cursor;
+        let is_selected = display_idx == app.overlays.recent_items_cursor;
 
         if let Some(&(mode, cursor)) = app.nav_history.get(history_idx) {
             // Get item name at that cursor position

@@ -24,6 +24,7 @@
 //! - `culture`: Parse ATH 4-culture-norms markdown files
 //! - `market`: Parse ATH 5-market markdown files
 //! - `utils`: Shared YAML loading utilities
+//! - `markdown_utils`: Shared markdown parsing utilities (frontmatter, sections)
 
 // v0.12.5: Individual taxonomy file parsers
 pub mod arc_family;
@@ -44,6 +45,7 @@ pub mod taxonomy;
 pub mod culture;
 pub mod expression;
 pub mod formatting;
+pub mod markdown_utils;
 pub mod market;
 pub mod slugification;
 pub mod utils;
