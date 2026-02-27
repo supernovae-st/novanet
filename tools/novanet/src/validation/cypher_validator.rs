@@ -110,18 +110,6 @@ impl std::fmt::Display for CypherValidationRule {
     }
 }
 
-/// A Cypher statement parsed from a seed file.
-#[allow(dead_code)]
-#[derive(Debug)]
-struct CypherStatement {
-    /// Node labels found in MERGE/CREATE clauses
-    labels: Vec<String>,
-    /// Properties set (property name -> value string)
-    properties: HashMap<String, String>,
-    /// Line number where statement starts
-    line: usize,
-}
-
 /// Aggregate info about a node label in Cypher files.
 #[derive(Debug, Default)]
 pub struct LabelUsageInfo {
