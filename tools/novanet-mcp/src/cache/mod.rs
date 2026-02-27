@@ -55,14 +55,16 @@ impl QueryCache {
     }
 
     /// Generate a cache key from query and parameters
+    ///
+    /// PERF: Uses AHash (~30% faster than SipHash for string keys).
     pub fn cache_key(
         cypher: &str,
         params: &Option<serde_json::Map<String, serde_json::Value>>,
     ) -> String {
-        use std::collections::hash_map::DefaultHasher;
+        use ahash::AHasher;
         use std::hash::{Hash, Hasher};
 
-        let mut hasher = DefaultHasher::new();
+        let mut hasher = AHasher::default();
         cypher.hash(&mut hasher);
         if let Some(p) = params {
             // Serialize params map once (vs. N per-value serializations)

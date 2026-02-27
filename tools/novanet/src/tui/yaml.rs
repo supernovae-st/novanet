@@ -10,7 +10,10 @@
 
 use std::ops::Range;
 
-/// Parsed YAML sections with line ranges.
+/// Parsed YAML sections with pre-computed byte ranges.
+///
+/// PERF: Stores byte offsets computed once at parse time, avoiding
+/// repeated `lines().collect()` allocations on each content access.
 #[derive(Debug, Clone, Default)]
 #[allow(dead_code)] // Fields reserved for future use
 pub struct YamlSections {
@@ -20,6 +23,10 @@ pub struct YamlSections {
     pub instance_lines: Range<usize>,
     /// Total line count
     pub total_lines: usize,
+    /// Pre-computed byte range for Class section (O(1) access)
+    class_byte_range: Range<usize>,
+    /// Pre-computed byte range for Instance section (O(1) access)
+    instance_byte_range: Range<usize>,
     /// Raw YAML content (owned for lifetime safety)
     raw_content: String,
 }
@@ -33,6 +40,8 @@ impl YamlSections {
     ///
     /// Returns `None` if the content doesn't look like a NodeClass YAML
     /// (i.e., doesn't have both class and instance sections).
+    ///
+    /// PERF: Computes byte offsets once at parse time for O(1) content access.
     pub fn parse(content: &str) -> Option<Self> {
         let lines: Vec<&str> = content.lines().collect();
         let total_lines = lines.len();
@@ -81,25 +90,48 @@ impl YamlSections {
             break;
         }
 
+        // PERF: Pre-compute byte offsets once (avoid repeated lines().collect())
+        let class_byte_start: usize = lines[..class_start].iter().map(|l| l.len() + 1).sum();
+        let class_byte_end: usize = class_byte_start
+            + lines[class_start..instance_start]
+                .iter()
+                .map(|l| l.len() + 1)
+                .sum::<usize>();
+        let instance_byte_end: usize = class_byte_end
+            + lines[instance_start..]
+                .iter()
+                .map(|l| l.len() + 1)
+                .sum::<usize>();
+
+        // Clamp to content length (handle missing trailing newline)
+        let class_byte_end = class_byte_end.min(content.len());
+        let instance_byte_end = instance_byte_end.min(content.len());
+
         Some(Self {
             class_lines: class_start..instance_start,
             instance_lines: instance_start..total_lines,
             total_lines,
+            class_byte_range: class_byte_start..class_byte_end,
+            instance_byte_range: class_byte_end..instance_byte_end,
             raw_content: content.to_string(),
         })
     }
 
     /// Get the Class section content (shown when Realm/Layer/Class selected).
+    ///
+    /// PERF: O(1) slice using pre-computed byte range.
     pub fn class_content(&self) -> &str {
-        self.get_section_content(&self.class_lines)
+        &self.raw_content[self.class_byte_range.clone()]
     }
 
     /// Get the Instance section content (shown when Instance selected).
+    ///
+    /// PERF: O(1) slice using pre-computed byte range.
     pub fn instance_content(&self) -> &str {
-        self.get_section_content(&self.instance_lines)
+        &self.raw_content[self.instance_byte_range.clone()]
     }
 
-    /// Get lines for a specific section.
+    /// Get lines for a specific section (legacy method for line-based access).
     fn get_section_content(&self, range: &Range<usize>) -> &str {
         let lines: Vec<&str> = self.raw_content.lines().collect();
         if range.start >= lines.len() {
