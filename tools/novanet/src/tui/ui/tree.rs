@@ -1663,7 +1663,8 @@ fn render_filtered_instances(
         .unwrap_or(instance_count);
     let is_truncated = total_count > instance_count;
     let is_loading = app
-        .pending_instance_load
+        .pending
+        .instance
         .as_ref()
         .is_some_and(|k| k == class_key);
 

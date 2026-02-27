@@ -12,30 +12,20 @@ use regex::Regex;
 use serde::{Deserialize, Serialize};
 use walkdir::WalkDir;
 
+use super::markdown_utils::{
+    clean_value, normalize_section_name, parse_frontmatter_metadata, RE_SECTION,
+};
 use crate::{NovaNetError, Result};
 
 // ============================================================================
 // Lazy-compiled Regex Patterns
 // ============================================================================
-// Note: High-priority patterns for file metadata and frequently-parsed sections.
-// Additional patterns can be migrated incrementally.
-
-/// Template version extraction
-static RE_VERSION: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"template_version:\s*(.+)").expect("valid version regex"));
-
-/// Last updated date extraction
-static RE_DATE: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"last_updated:\s*(.+)").expect("valid date regex"));
+// Note: RE_VERSION, RE_DATE, RE_SECTION now in markdown_utils.
 
 /// Data sources extraction: **Data Sources**: ...
 static RE_DATA_SOURCES: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(r"\*\*Data Sources\*\*:\s*(.+)").expect("valid data sources regex")
 });
-
-/// Section header: ## N. Title
-static RE_SECTION: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"##\s+\d+\.\s+(.+)").expect("valid section regex"));
 
 /// Field pattern: - **FieldName**: `value` or - **FieldName**: value
 /// Used by: parse_number_section, parse_date_section, parse_time_section,
@@ -499,21 +489,9 @@ pub fn parse_formatting_file(path: &Path) -> Result<Formatting> {
 // Parsing Functions
 // ============================================================================
 
-/// Parse YAML frontmatter.
+/// Parse YAML frontmatter (delegates to markdown_utils).
 fn parse_frontmatter(content: &str) -> Result<(String, String)> {
-    let version = RE_VERSION
-        .captures(content)
-        .and_then(|c: regex::Captures| c.get(1))
-        .map(|m: regex::Match| m.as_str().trim().to_string())
-        .unwrap_or_else(|| "2.0".to_string());
-
-    let date = RE_DATE
-        .captures(content)
-        .and_then(|c: regex::Captures| c.get(1))
-        .map(|m: regex::Match| m.as_str().trim().to_string())
-        .unwrap_or_else(|| "unknown".to_string());
-
-    Ok((version, date))
+    Ok(parse_frontmatter_metadata(content))
 }
 
 /// Parse data sources from content.
@@ -575,30 +553,7 @@ fn split_sections(content: &str) -> HashMap<String, String> {
     sections
 }
 
-/// Normalize section name to standard key.
-fn normalize_section_name(name: &str) -> String {
-    if name.contains("number") {
-        "number".to_string()
-    } else if name.contains("date") {
-        "date".to_string()
-    } else if name.contains("time") {
-        "time".to_string()
-    } else if name.contains("currency") {
-        "currency".to_string()
-    } else if name.contains("phone") {
-        "phone".to_string()
-    } else if name.contains("address") {
-        "address".to_string()
-    } else if name.contains("measurement") {
-        "measurement".to_string()
-    } else if name.contains("percentage") || name.contains("temperature") {
-        "percentage".to_string()
-    } else if name.contains("validation") {
-        "validation".to_string()
-    } else {
-        name.to_string()
-    }
-}
+// Note: normalize_section_name moved to markdown_utils
 
 /// Parse number formatting section.
 fn parse_number_section(content: &str) -> NumberFormatting {
@@ -1027,22 +982,7 @@ fn parse_validation_section(content: &str) -> HashMap<String, String> {
 // ============================================================================
 // Helper Functions
 // ============================================================================
-
-/// Clean value by removing comments and extra characters.
-fn clean_value(value: &str) -> String {
-    value
-        .split('#')
-        .next()
-        .unwrap_or(value)
-        .split("//")
-        .next()
-        .unwrap_or(value)
-        .trim()
-        .trim_matches('`')
-        .trim_matches('"')
-        .trim_matches('\'')
-        .to_string()
-}
+// Note: clean_value moved to markdown_utils
 
 /// Parse examples from content.
 fn parse_examples(content: &str, correct: bool) -> Vec<FormatExample> {

@@ -149,7 +149,7 @@ fn get_properties_content(app: &App) -> Option<(String, &'static str)> {
 
 /// ARCS box: JSON array of incoming/outgoing relationships.
 fn get_arcs_content(app: &App) -> Option<(String, &'static str)> {
-    let arcs = app.class_arcs.as_ref()?;
+    let arcs = app.details.class_arcs.as_ref()?;
     let json = serde_json::json!({
         "outgoing": arcs.outgoing.iter().map(|a| {
             serde_json::json!({
@@ -174,10 +174,10 @@ fn get_arcs_content(app: &App) -> Option<(String, &'static str)> {
 
 /// SOURCE box: Raw YAML content.
 fn get_source_content(app: &App) -> Option<(String, &'static str)> {
-    if app.yaml_content.is_empty() {
+    if app.yaml.content.is_empty() {
         None
     } else {
-        Some((app.yaml_content.clone(), "YAML"))
+        Some((app.yaml.content.clone(), "YAML"))
     }
 }
 

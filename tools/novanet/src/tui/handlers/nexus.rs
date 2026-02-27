@@ -31,7 +31,7 @@ pub fn handle_nexus_key(app: &mut App, key: KeyEvent) -> KeyResult {
     match key.code {
         // Help overlay
         KeyCode::Char('?') => {
-            app.help_active = true;
+            app.overlays.help_active = true;
             KeyResult::Handled
         }
 
@@ -43,7 +43,7 @@ pub fn handle_nexus_key(app: &mut App, key: KeyEvent) -> KeyResult {
 
         // Legend overlay
         KeyCode::F(1) => {
-            app.legend_active = true;
+            app.overlays.legend_active = true;
             KeyResult::Handled
         }
 
@@ -178,12 +178,12 @@ mod tests {
     fn test_nexus_help_key() {
         let mut app = test_app();
         app.mode = crate::tui::app::NavMode::Nexus;
-        app.help_active = false;
+        app.overlays.help_active = false;
 
         let result = handle_nexus_key(&mut app, key(KeyCode::Char('?')));
 
         assert_eq!(result, KeyResult::Handled);
-        assert!(app.help_active);
+        assert!(app.overlays.help_active);
     }
 
     #[test]
@@ -202,12 +202,12 @@ mod tests {
     fn test_nexus_legend_key() {
         let mut app = test_app();
         app.mode = crate::tui::app::NavMode::Nexus;
-        app.legend_active = false;
+        app.overlays.legend_active = false;
 
         let result = handle_nexus_key(&mut app, key(KeyCode::F(1)));
 
         assert_eq!(result, KeyResult::Handled);
-        assert!(app.legend_active);
+        assert!(app.overlays.legend_active);
     }
 
     #[test]
