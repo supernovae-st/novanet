@@ -33,6 +33,77 @@ static RE_DATA_SOURCES: LazyLock<Regex> = LazyLock::new(|| {
 static RE_FIELD: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"-\s+\*\*(\w+)\*\*:\s*`?([^`\n]+)`?").expect("valid field regex"));
 
+/// Code block extraction: ```text ... ```
+static RE_CODE_BLOCK: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"```text\n([\s\S]*?)```").expect("valid code block regex"));
+
+/// Street types extraction
+static RE_STREET_TYPES: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"Street Types.*?:\s*\n-\s*(.+)").expect("valid street types regex")
+});
+
+/// Postal code valid format
+static RE_POSTAL_VALID: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"Valid:\s*`([^`]+)`").expect("valid postal regex"));
+
+/// Table row: | word | word | text |
+static RE_TABLE_ROW: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"\|\s*(\w+)\s*\|\s*(\w+)\s*\|\s*([^\|]+)\s*\|").expect("valid table row regex")
+});
+
+/// Notes extraction: - text
+static RE_NOTES: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"-\s+([^-\n][^\n]+)").expect("valid notes regex"));
+
+/// Percentage example: `10%` or `10,5%` or `10 %`
+static RE_PCT_EXAMPLE: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"`(\d+(?:\.\d+)?)\s*%?`|`(\d+(?:,\d+)?)\s*[%٪]?`").expect("valid pct example regex")
+});
+
+/// Temperature example: `25°C` or `-10°C`
+static RE_TEMP_EXAMPLE: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"`(-?\d+(?:\.\d+)?)\s*°[Cم]?`").expect("valid temp example regex")
+});
+
+/// Unit table row: | Unit (abbrev) | `value` |
+static RE_UNIT_ROW: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"\|\s*(\w+(?:\s+\([^)]+\))?)\s*\|\s*`([^`]+)`\s*\|").expect("valid unit row regex")
+});
+
+/// Name example: - `input` → `output`
+static RE_NAME_EXAMPLE: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"-\s*`([^`]+)`\s*[→→-]\s*`([^`]+)`").expect("valid name example regex")
+});
+
+/// Name format: - Word: text
+static RE_NAME_FORMAT: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"-\s+\w+:\s*(.+)").expect("valid name format regex"));
+
+/// Name format variant: - Word text: text
+static RE_NAME_FORMAT_VAR: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"-\s+\w+[^:]*:\s*(.+)").expect("valid name format var regex"));
+
+/// Prayer time patterns (Islamic calendar)
+static RE_FAJR: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"-\s*(الفجر|Fajr).*?:\s*~?(\d{1,2}:\d{2})").expect("valid fajr regex")
+});
+static RE_DHUHR: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"-\s*(الظهر|Dhuhr).*?:\s*~?(\d{1,2}:\d{2})").expect("valid dhuhr regex")
+});
+static RE_ASR: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"-\s*(العصر|Asr).*?:\s*~?(\d{1,2}:\d{2})").expect("valid asr regex")
+});
+static RE_MAGHRIB: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"-\s*(المغرب|Maghrib).*?:\s*~?(\d{1,2}:\d{2})").expect("valid maghrib regex")
+});
+static RE_ISHA: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"-\s*(العشاء|Isha).*?:\s*~?(\d{1,2}:\d{2})").expect("valid isha regex")
+});
+
+/// Phone prefix: 33 (France)
+static RE_PHONE_PREFIX: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"(\d{2,4})\s*\(([^)]+)\)").expect("valid phone prefix regex"));
+
 // ============================================================================
 // Main Structs
 // ============================================================================
@@ -795,16 +866,14 @@ fn parse_address_section(content: &str) -> AddressFormatting {
     }
 
     // Parse address pattern from code block
-    let pattern_re = Regex::new(r"```text\n([\s\S]*?)```").unwrap();
-    if let Some(caps) = pattern_re.captures(content) {
+    if let Some(caps) = RE_CODE_BLOCK.captures(content) {
         if let Some(pattern) = caps.get(1) {
             address.pattern = pattern.as_str().trim().to_string();
         }
     }
 
     // Parse street types if present
-    let street_re = Regex::new(r"Street Types.*?:\s*\n-\s*(.+)").unwrap();
-    if let Some(caps) = street_re.captures(content) {
+    if let Some(caps) = RE_STREET_TYPES.captures(content) {
         if let Some(types) = caps.get(1) {
             address.street_types = Some(
                 types
@@ -818,16 +887,14 @@ fn parse_address_section(content: &str) -> AddressFormatting {
     }
 
     // Parse example addresses from code blocks
-    let example_re = Regex::new(r"```text\n([\s\S]*?)```").unwrap();
-    address.example_addresses = example_re
+    address.example_addresses = RE_CODE_BLOCK
         .captures_iter(content)
         .skip(1) // Skip the pattern block
         .filter_map(|c| c.get(1).map(|m| m.as_str().trim().to_string()))
         .collect();
 
     // Parse postal code examples
-    let postal_re = Regex::new(r"Valid:\s*`([^`]+)`").unwrap();
-    if let Some(caps) = postal_re.captures(content) {
+    if let Some(caps) = RE_POSTAL_VALID.captures(content) {
         if let Some(codes) = caps.get(1) {
             address.postal_code_examples = codes
                 .as_str()
@@ -858,8 +925,7 @@ fn parse_measurement_section(content: &str) -> MeasurementSystem {
     }
 
     // Parse units table
-    let table_re = Regex::new(r"\|\s*(\w+)\s*\|\s*(\w+)\s*\|\s*([^\|]+)\s*\|").unwrap();
-    for caps in table_re.captures_iter(content) {
+    for caps in RE_TABLE_ROW.captures_iter(content) {
         let category = caps
             .get(1)
             .map(|m: regex::Match| m.as_str().trim())
@@ -889,7 +955,6 @@ fn parse_measurement_section(content: &str) -> MeasurementSystem {
     }
 
     // Parse conversion notes
-    let notes_re = Regex::new(r"-\s+([^-\n][^\n]+)").unwrap();
     let mut in_notes = false;
     for line in content.lines() {
         if line.contains("Conversion Notes") || line.contains("Notes") {
@@ -900,7 +965,7 @@ fn parse_measurement_section(content: &str) -> MeasurementSystem {
             if line.starts_with("##") || line.starts_with("---") {
                 break;
             }
-            if let Some(caps) = notes_re.captures(line) {
+            if let Some(caps) = RE_NOTES.captures(line) {
                 if let Some(note) = caps.get(1) {
                     measurement.notes.push(note.as_str().trim().to_string());
                 }
@@ -928,8 +993,7 @@ fn parse_percentage_temperature_section(
     }
 
     // Parse percentage examples
-    let pct_ex_re = Regex::new(r"`(\d+(?:\.\d+)?)\s*%?`|`(\d+(?:,\d+)?)\s*[%٪]?`").unwrap();
-    for caps in pct_ex_re.captures_iter(content) {
+    for caps in RE_PCT_EXAMPLE.captures_iter(content) {
         if let Some(m) = caps.get(1).or(caps.get(2)) {
             percentage.examples.push(m.as_str().to_string());
         }
@@ -943,8 +1007,7 @@ fn parse_percentage_temperature_section(
     }
 
     // Parse temperature examples
-    let temp_ex_re = Regex::new(r"`(-?\d+(?:\.\d+)?)\s*°[Cم]?`").unwrap();
-    for caps in temp_ex_re.captures_iter(content) {
+    for caps in RE_TEMP_EXAMPLE.captures_iter(content) {
         if let Some(m) = caps.get(1) {
             temperature.examples.push(format!("{}°C", m.as_str()));
         }
@@ -958,9 +1021,7 @@ fn parse_validation_section(content: &str) -> HashMap<String, String> {
     let mut patterns = HashMap::new();
 
     // Parse table rows
-    let row_re = Regex::new(r"\|\s*(\w+(?:\s+\([^)]+\))?)\s*\|\s*`([^`]+)`\s*\|").unwrap();
-
-    for caps in row_re.captures_iter(content) {
+    for caps in RE_UNIT_ROW.captures_iter(content) {
         let type_name = caps
             .get(1)
             .map(|m: regex::Match| m.as_str().trim().to_lowercase())
@@ -997,7 +1058,6 @@ fn parse_examples(content: &str, correct: bool) -> Vec<FormatExample> {
     let end_markers = ["**CORRECT", "**NEVER", "**Incorrect", "---", "##"];
 
     let mut in_section = false;
-    let example_re = Regex::new(r"-\s*`([^`]+)`\s*[→→-]\s*`([^`]+)`").unwrap();
 
     for line in content.lines() {
         // Check for section start
@@ -1013,7 +1073,7 @@ fn parse_examples(content: &str, correct: bool) -> Vec<FormatExample> {
 
         // Parse examples
         if in_section {
-            if let Some(caps) = example_re.captures(line) {
+            if let Some(caps) = RE_NAME_EXAMPLE.captures(line) {
                 let input = caps.get(1).map(|m: regex::Match| m.as_str()).unwrap_or("");
                 let output = caps.get(2).map(|m: regex::Match| m.as_str()).unwrap_or("");
 
@@ -1041,7 +1101,6 @@ fn parse_month_names(content: &str, abbreviated: bool) -> Vec<String> {
     };
 
     let mut in_section = false;
-    let name_re = Regex::new(r"-\s+\w+:\s*(.+)").unwrap();
 
     for line in content.lines() {
         if line.contains(section) {
@@ -1052,7 +1111,7 @@ fn parse_month_names(content: &str, abbreviated: bool) -> Vec<String> {
             if line.starts_with("**") || line.starts_with("###") || line.starts_with("##") {
                 break;
             }
-            if let Some(caps) = name_re.captures(line) {
+            if let Some(caps) = RE_NAME_FORMAT.captures(line) {
                 if let Some(name) = caps.get(1) {
                     names.push(name.as_str().trim().to_string());
                 }
@@ -1082,7 +1141,6 @@ fn parse_day_names(content: &str, abbreviated: bool) -> Vec<String> {
     };
 
     let mut in_section = false;
-    let name_re = Regex::new(r"-\s+\w+:\s*(.+)").unwrap();
 
     for line in content.lines() {
         if line.contains(section) {
@@ -1093,7 +1151,7 @@ fn parse_day_names(content: &str, abbreviated: bool) -> Vec<String> {
             if line.starts_with("**") || line.starts_with("###") || line.starts_with("##") {
                 break;
             }
-            if let Some(caps) = name_re.captures(line) {
+            if let Some(caps) = RE_NAME_FORMAT.captures(line) {
                 if let Some(name) = caps.get(1) {
                     names.push(name.as_str().trim().to_string());
                 }
@@ -1117,7 +1175,6 @@ fn parse_hijri_months(content: &str) -> Vec<String> {
     let mut months = Vec::new();
 
     let mut in_section = false;
-    let name_re = Regex::new(r"-\s+\w+[^:]*:\s*(.+)").unwrap();
 
     for line in content.lines() {
         if line.contains("Hijri Month Names") {
@@ -1128,7 +1185,7 @@ fn parse_hijri_months(content: &str) -> Vec<String> {
             if line.starts_with("**") || line.starts_with("###") || line.starts_with("##") {
                 break;
             }
-            if let Some(caps) = name_re.captures(line) {
+            if let Some(caps) = RE_NAME_FORMAT_VAR.captures(line) {
                 if let Some(name) = caps.get(1) {
                     months.push(name.as_str().trim().to_string());
                 }
@@ -1149,36 +1206,31 @@ fn parse_prayer_times(content: &str) -> PrayerTimes {
         isha: "~19:30".to_string(),
     };
 
-    let prayer_re = Regex::new(r"-\s*(الفجر|Fajr).*?:\s*~?(\d{1,2}:\d{2})").unwrap();
-    if let Some(caps) = prayer_re.captures(content) {
+    if let Some(caps) = RE_FAJR.captures(content) {
         if let Some(t) = caps.get(2) {
             times.fajr = t.as_str().to_string();
         }
     }
 
-    let dhuhr_re = Regex::new(r"-\s*(الظهر|Dhuhr).*?:\s*~?(\d{1,2}:\d{2})").unwrap();
-    if let Some(caps) = dhuhr_re.captures(content) {
+    if let Some(caps) = RE_DHUHR.captures(content) {
         if let Some(t) = caps.get(2) {
             times.dhuhr = t.as_str().to_string();
         }
     }
 
-    let asr_re = Regex::new(r"-\s*(العصر|Asr).*?:\s*~?(\d{1,2}:\d{2})").unwrap();
-    if let Some(caps) = asr_re.captures(content) {
+    if let Some(caps) = RE_ASR.captures(content) {
         if let Some(t) = caps.get(2) {
             times.asr = t.as_str().to_string();
         }
     }
 
-    let maghrib_re = Regex::new(r"-\s*(المغرب|Maghrib).*?:\s*~?(\d{1,2}:\d{2})").unwrap();
-    if let Some(caps) = maghrib_re.captures(content) {
+    if let Some(caps) = RE_MAGHRIB.captures(content) {
         if let Some(t) = caps.get(2) {
             times.maghrib = t.as_str().to_string();
         }
     }
 
-    let isha_re = Regex::new(r"-\s*(العشاء|Isha).*?:\s*~?(\d{1,2}:\d{2})").unwrap();
-    if let Some(caps) = isha_re.captures(content) {
+    if let Some(caps) = RE_ISHA.captures(content) {
         if let Some(t) = caps.get(2) {
             times.isha = t.as_str().to_string();
         }
@@ -1191,9 +1243,7 @@ fn parse_prayer_times(content: &str) -> PrayerTimes {
 fn parse_landline_prefixes(content: &str) -> Vec<LandlinePrefix> {
     let mut prefixes = Vec::new();
 
-    let prefix_re = Regex::new(r"(\d{2,4})\s*\(([^)]+)\)").unwrap();
-
-    for caps in prefix_re.captures_iter(content) {
+    for caps in RE_PHONE_PREFIX.captures_iter(content) {
         let code = caps.get(1).map(|m: regex::Match| m.as_str()).unwrap_or("");
         let region = caps.get(2).map(|m: regex::Match| m.as_str()).unwrap_or("");
 
