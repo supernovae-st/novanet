@@ -742,13 +742,16 @@ fn render_recent_items_overlay(f: &mut Frame, app: &App) {
     let visible_height = height.saturating_sub(4) as usize;
 
     // Calculate scroll window
-    let start = if max_items <= visible_height || app.overlays.recent_items_cursor < visible_height / 2 {
-        0
-    } else if app.overlays.recent_items_cursor > max_items - visible_height / 2 {
-        max_items.saturating_sub(visible_height)
-    } else {
-        app.overlays.recent_items_cursor.saturating_sub(visible_height / 2)
-    };
+    let start =
+        if max_items <= visible_height || app.overlays.recent_items_cursor < visible_height / 2 {
+            0
+        } else if app.overlays.recent_items_cursor > max_items - visible_height / 2 {
+            max_items.saturating_sub(visible_height)
+        } else {
+            app.overlays
+                .recent_items_cursor
+                .saturating_sub(visible_height / 2)
+        };
 
     for display_idx in start..start + visible_height.min(max_items - start) {
         // History is oldest→newest, we show newest first
