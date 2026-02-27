@@ -222,7 +222,7 @@ jobs:
   # STATION 9-10: Process Checkpoints (Fast, parallel)
   # ═══════════════════════════════════════════════════════════════════════════
   station-9-commits:
-    name: "📝 Station 9: Conventional Commits"
+    name: "📝 Station 9: Ship's Log"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -306,7 +306,7 @@ jobs:
           echo "║   Station 6:  Security        CLEARED                         ║"
           echo "║   Station 7:  CodeRabbit      CLEARED                         ║"
           echo "║   Station 8:  Claude AI       CLEARED                         ║"
-          echo "║   Station 9:  Conventional    CLEARED                         ║"
+          echo "║   Station 9:  Ship's Log      CLEARED                         ║"
           echo "║   Station 10: Schema Sync     CLEARED                         ║"
           echo "║                                                               ║"
           echo "╚═══════════════════════════════════════════════════════════════╝"

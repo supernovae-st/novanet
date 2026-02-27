@@ -57,7 +57,7 @@ semver_check = true
 # Git tag format
 git_tag_name = "v{{ version }}"
 # Git tag message
-git_tag_message = "🌌 NovaNet {{ version }}"
+git_tag_message = "🌌 NovaNet {{ version }} - Fleet Release"
 
 # MCP Server package (if separate)
 [[package]]
