@@ -51,7 +51,7 @@ Use Conventional Commits:
 ```
 type(scope): description
 
-Co-Authored-By: Claude <noreply@anthropic.com>
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 **Types**: feat, fix, docs, style, refactor, test, chore

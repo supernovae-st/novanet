@@ -262,38 +262,37 @@ novanet/
 
 ## Commands
 
+### novanet CLI (tools/novanet)
+
 ```bash
-# Development
-pnpm dev                   # Start studio dev server
+# TUI (default when no command)
+novanet                              # Launch interactive TUI
+novanet tui --fresh                  # Regenerate + reset, then TUI
+
+# Schema (no Neo4j)
+novanet schema generate              # YAML → Cypher/TS/Mermaid
+novanet schema validate              # Validate coherence
+novanet blueprint                    # Schema visualization
+
+# Database (Neo4j)
+novanet db seed                      # Seed database
+novanet db reset                     # Reset database
+novanet search --query="page"        # Fulltext search
+
+# System
+novanet doctor                       # Health check
+```
+
+> **Dev mode**: Use `cargo run --` instead of `novanet` when developing.
+
+### Monorepo (pnpm)
+
+```bash
+pnpm dev                   # Start Studio at localhost:3000
 pnpm build                 # Build all packages
-pnpm lint                  # Lint all packages
-pnpm type-check            # Type check all packages
 pnpm test                  # Test all packages
-
-# Infrastructure (Neo4j)
 pnpm infra:up              # Start Neo4j
-pnpm infra:down            # Stop Neo4j
 pnpm infra:seed            # Seed database
-pnpm infra:reset           # Reset database
-
-# Rust binary (tools/novanet) — all commands
-cargo run -- schema generate               # Regenerate all artifacts (12 generators)
-cargo run -- schema validate               # Validate YAML coherence
-cargo run -- doc generate                  # Generate 12 view Mermaid diagrams
-cargo run -- doc generate --list           # List available views
-cargo run -- blueprint --format=json       # Schema-graph visualization
-cargo run -- data --format=table           # Mode 2: Data nodes
-cargo run -- overlay                       # Mode 3: Data + Schema
-cargo run -- query --realm=org             # Mode 4: Faceted query
-cargo run -- search --query="page"         # Fulltext + property search
-cargo run -- node create --class=Page --key=my-page  # CRUD
-cargo run -- db seed                       # Execute seed Cypher files
-cargo run -- locale list                   # Locale operations
-cargo run -- tui                           # Interactive TUI (unified tree + Nexus hub)
-
-# Turbo filters
-pnpm build --filter=@novanet/core       # Build only core
-pnpm test --filter=@novanet/studio      # Test only studio
 ```
 
 ---

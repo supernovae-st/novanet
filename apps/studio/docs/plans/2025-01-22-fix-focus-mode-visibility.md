@@ -449,7 +449,7 @@ via VISIBLE edges in the current filter are kept visible. Previously,
 the hook used the full adjacencyMap which included edges hidden by
 filters, causing all L10N nodes to stay visible when selecting a Concept.
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---

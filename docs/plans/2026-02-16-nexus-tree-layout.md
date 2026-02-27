@@ -166,7 +166,7 @@ git commit -m "feat(tui): add NexusSection enum and tree state to NexusState
 - Add tree navigation fields to NexusState
 - Prepare for tree layout refactor
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -215,7 +215,7 @@ git commit -m "feat(tui): add emoji() method to NexusTab
 - Each tab now has an emoji for tree display
 - Learn: 🌟📚🎓, Explore: 🏷️📊🔗🏛️, Practice: ⚡❓📈
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -365,7 +365,7 @@ git commit -m "feat(tui): add render_nexus_tree() function
 - Tab emojis and selection highlighting
 - Navigation hints at bottom
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -446,7 +446,7 @@ git commit -m "feat(tui): refactor render_nexus() to tree layout
 - Remove tab bar and breadcrumb (replaced by tree)
 - Keep cross-tab hints at bottom of content area
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -554,7 +554,7 @@ git commit -m "feat(tui): add tree navigation to Nexus key handler
 - Enter: select tab under cursor
 - Keep existing letter shortcuts (i/g/u/t/l/a/A/p/q/s)
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -627,7 +627,7 @@ git commit -m "feat(tui): sync tree state with tab shortcuts
 - Add sync_tree_to_tab() to keep tree and shortcuts in sync
 - Tree auto-expands when using letter shortcuts (i/g/u/t/l/a/A/p/q/s)
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -676,7 +676,7 @@ git commit -m "chore(tui): clean up dead code after Nexus refactor
 - All clippy warnings resolved
 - All tests passing
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---

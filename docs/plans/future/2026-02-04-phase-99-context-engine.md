@@ -92,7 +92,7 @@ Expected: PASS with 0 errors
 git add packages/core/models/taxonomy.yaml
 git commit -m "feat(schema): add v9.9 retrieval properties (traversal_depth, context_budget, default_traversal)
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -155,7 +155,7 @@ Expected: PASS
 git add packages/core/models/arc-classes/semantic/
 git commit -m "feat(schema): add temperature_threshold to semantic arcs (v9.9)
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -248,7 +248,7 @@ git commit -m "feat(rust): parse v9.9 retrieval properties in taxonomy
 - Add KindRetrievalDefaults struct
 - Add default_traversal to ArcFamily
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -292,7 +292,7 @@ cd tools/novanet && cargo test parsers::relations
 git add tools/novanet/src/parsers/
 git commit -m "feat(rust): parse temperature_threshold in arc-kind YAML
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -349,7 +349,7 @@ cd tools/novanet && cargo test generators::organizing
 git add tools/novanet/src/generators/organizing.rs
 git commit -m "feat(rust): generate default_traversal property in Neo4j
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -400,7 +400,7 @@ Expected: All 223+ tests pass
 git add tools/novanet/src/generators/
 git commit -m "feat(rust): generate temperature_threshold in ArcKind Neo4j nodes
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -452,7 +452,7 @@ Expected: Semantic arcs with threshold values
 git add packages/db/seed/
 git commit -m "chore(seed): regenerate Neo4j seeds with v9.9 retrieval properties
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -620,7 +620,7 @@ Expected: No errors (warnings OK at this stage)
 git add tools/novanet/src/retrieval/ tools/novanet/src/lib.rs
 git commit -m "feat(rust): add retrieval module structure with core types (v10)
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -828,7 +828,7 @@ cd tools/novanet && cargo check
 git add tools/novanet/src/retrieval/meta.rs
 git commit -m "feat(rust): implement MetaGraphReader for traversal rules (v10)
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -968,7 +968,7 @@ mod tests {
 git add tools/novanet/src/retrieval/planner.rs
 git commit -m "feat(rust): implement TraversalPlanner for v10 context assembly
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -1227,7 +1227,7 @@ git commit -m "feat(rust): implement ContextEngine for v10 context assembly
 - Depth limiting per Kind rules
 - Full provenance in traversal_log
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -1385,7 +1385,7 @@ git commit -m "feat(rust): add 'novanet context' command for v10 context assembl
 
 Usage: novanet context --block=hero-pricing --locale=fr-FR --budget=4000
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -1516,7 +1516,7 @@ cd tools/novanet && cargo test -- --ignored
 git add tools/novanet/tests/
 git commit -m "test(rust): add retrieval integration tests for v10 context engine
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -1574,7 +1574,7 @@ Phase C (v10 Context Assembly):
 - Add 'novanet context' CLI command
 - Add integration tests
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---

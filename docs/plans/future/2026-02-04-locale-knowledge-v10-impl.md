@@ -201,7 +201,7 @@ git commit -m "feat(schema): add Formatting node-kind (knowledge tier: technical
 Part of Locale Knowledge v10 refactor.
 Technical tier node for date/number/currency/phone/address/unit formatting.
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -350,7 +350,7 @@ git commit -m "feat(schema): add Slugification node-kind (knowledge tier: techni
 Part of Locale Knowledge v10 refactor.
 Technical tier node for URL slug transliteration, stop words, conventions.
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -503,7 +503,7 @@ git commit -m "feat(schema): add Adaptation node-kind (knowledge tier: technical
 Part of Locale Knowledge v10 refactor.
 Technical tier node for content length, structure, SEO adaptation rules.
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -736,7 +736,7 @@ git commit -m "feat(schema): add Style node-kind (merges voice + identity)
 Part of Locale Knowledge v10 refactor.
 Style tier node combining formality, directness, warmth, humor, identity.
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -873,7 +873,7 @@ git commit -m "feat(schema): add TermSet node-kind (6 domains: pricing/features/
 Part of Locale Knowledge v10 refactor.
 Semantic tier nodes for domain-specific vocabulary retrieval.
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -1007,7 +1007,7 @@ git commit -m "feat(schema): add ExpressionSet node-kind (3 registers: formal/ne
 Part of Locale Knowledge v10 refactor.
 Semantic tier nodes for register-appropriate expressions retrieval.
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -1137,7 +1137,7 @@ git commit -m "feat(schema): add PatternSet node-kind (4 usages: cta/headlines/b
 Part of Locale Knowledge v10 refactor.
 Semantic tier nodes for usage-specific content patterns retrieval.
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -1335,7 +1335,7 @@ git commit -m "feat(schema): add CultureSet node-kind (4 types: values/reference
 Part of Locale Knowledge v10 refactor.
 Semantic tier nodes for type-specific cultural knowledge retrieval.
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -1513,7 +1513,7 @@ git commit -m "feat(schema): add TabooSet node-kind (3 severities: avoid/careful
 Part of Locale Knowledge v10 refactor.
 Semantic tier nodes for severity-based constraint retrieval.
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -1682,7 +1682,7 @@ git commit -m "feat(schema): add AudienceSet node-kind (3 segments: b2b/b2c/gene
 Part of Locale Knowledge v10 refactor.
 Semantic tier nodes for segment-specific audience knowledge retrieval.
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -1879,7 +1879,7 @@ git commit -m "feat(schema): add 10 knowledge arc-classes for Locale Knowledge v
 HAS_FORMATTING, HAS_SLUGIFICATION, HAS_ADAPTATION, HAS_STYLE (1:1)
 HAS_TERMS, HAS_EXPRESSIONS, HAS_PATTERNS, HAS_CULTURE, HAS_TABOOS, HAS_AUDIENCE (1:N with properties)
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -1942,7 +1942,7 @@ Replaced by 10 new granular node-classes in Locale Knowledge v10:
 - locale-culture, locale-culture-references, locale-market → CultureSet, AudienceSet
 - constraint, pattern, reference → TabooSet, PatternSet
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -1980,7 +1980,7 @@ git add -A packages/core/models/arc-classes/
 git add packages/core/models/relations.yaml
 git commit -m "refactor(schema): remove old arc-classes for deleted locale knowledge nodes
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -2051,7 +2051,7 @@ git commit -m "feat(parser): add knowledge_tier field to NodeDef
 
 Supports technical/style/semantic tiers for Locale Knowledge v10.
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -2110,7 +2110,7 @@ git commit -m "feat(generator): emit knowledge_tier property in Kind Cypher
 
 Supports TUI grouping of knowledge nodes by tier.
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -2163,7 +2163,7 @@ let knowledge_tier: Option<String> = row.get("knowledge_tier").ok();
 git add tools/novanet/src/tui/data.rs
 git commit -m "feat(tui): add knowledge_tier to KindInfo for tier grouping
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -2223,7 +2223,7 @@ Shows Technical (Formatting, Slugification, Adaptation),
 Style (Style), and Semantic (TermSet, ExpressionSet, etc.)
 as collapsible sub-groups.
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -2251,7 +2251,7 @@ git commit -m "chore(generated): regenerate schema artifacts for Locale Knowledg
 
 10 new node-classes, 10 new arc-classes, 14 deleted node-classes.
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -2305,7 +2305,7 @@ git commit -m "feat(schema): complete Locale Knowledge v10 refactor
 
 Closes design: docs/plans/2026-02-04-locale-knowledge-v10-design.md
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---

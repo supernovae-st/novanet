@@ -237,7 +237,7 @@ docs(dx): update version to v9.8.0, correct schema counts
 - Update README.md graph schema section
 - Sync session-start hook version
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+Co-Authored-By: Nika <agent@nika.sh>
 EOF
 )"
 ```

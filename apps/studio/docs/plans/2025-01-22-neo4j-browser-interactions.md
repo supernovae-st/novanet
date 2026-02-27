@@ -871,5 +871,5 @@ git commit -m "feat: complete Neo4j Browser-like interactions
 - Neo4j Browser style label filters
 - NovaNet-specific quick views
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```

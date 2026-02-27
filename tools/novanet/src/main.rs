@@ -26,7 +26,7 @@ struct Cli {
     password: Option<String>,
 
     #[command(subcommand)]
-    command: Commands,
+    command: Option<Commands>,
 }
 
 #[derive(Subcommand)]
@@ -385,11 +385,34 @@ enum ViewsAction {
 async fn main() -> color_eyre::Result<()> {
     color_eyre::install()?;
 
-    let cli = Cli::parse();
+    let Cli {
+        root: cli_root,
+        uri,
+        user,
+        password,
+        command,
+    } = Cli::parse();
+
+    // Default to TUI when no command is provided
+    let command = match command {
+        Some(cmd) => cmd,
+        None => {
+            #[cfg(feature = "tui")]
+            {
+                Commands::Tui { fresh: false }
+            }
+            #[cfg(not(feature = "tui"))]
+            {
+                eprintln!("error: No command provided. Use --help for available commands.");
+                eprintln!("       TUI is not available (compile with --features tui).");
+                std::process::exit(1);
+            }
+        }
+    };
 
     // Initialize tracing (skip for TUI mode which has its own terminal handling)
     #[cfg(feature = "tui")]
-    let is_tui = matches!(cli.command, Commands::Tui { .. });
+    let is_tui = matches!(command, Commands::Tui { .. });
     #[cfg(not(feature = "tui"))]
     let is_tui = false;
 
@@ -402,9 +425,9 @@ async fn main() -> color_eyre::Result<()> {
     }
 
     // Resolve monorepo root for commands that need YAML access
-    let root = novanet::config::resolve_root(cli.root.as_deref());
+    let root = novanet::config::resolve_root(cli_root.as_deref());
 
-    match cli.command {
+    match command {
         // ── Blueprint (YAML + optional Neo4j) ────────────────────
         Commands::Blueprint {
             view,
@@ -413,8 +436,8 @@ async fn main() -> color_eyre::Result<()> {
         } => {
             let root = root?;
             // Try to connect to Neo4j for full validation, but work without it
-            let db = if cli.password.is_some() {
-                match connect_db(&cli).await {
+            let db = if password.is_some() {
+                match connect_db(&uri, &user, password.as_ref()).await {
                     Ok(db) => Some(db),
                     Err(_) => {
                         eprintln!("⚠  Could not connect to Neo4j, running YAML-only mode");
@@ -436,17 +459,17 @@ async fn main() -> color_eyre::Result<()> {
 
         // ── Read commands (Neo4j) ────────────────────────────────
         Commands::Data { format } => {
-            let db = connect_db(&cli).await?;
+            let db = connect_db(&uri, &user, password.as_ref()).await?;
             eprintln!("novanet data --format={format:?}");
             novanet::commands::read::run_data(&db, format).await?;
         }
         Commands::Overlay { format } => {
-            let db = connect_db(&cli).await?;
+            let db = connect_db(&uri, &user, password.as_ref()).await?;
             eprintln!("novanet overlay --format={format:?}");
             novanet::commands::read::run_overlay(&db, format).await?;
         }
         Commands::Query(ref args) => {
-            let db = connect_db(&cli).await?;
+            let db = connect_db(&uri, &user, password.as_ref()).await?;
             let filter = novanet::facets::FacetFilter::from_cli(
                 args.realm.as_deref(),
                 args.layer.as_deref(),
@@ -621,7 +644,7 @@ async fn main() -> color_eyre::Result<()> {
             limit,
             format,
         } => {
-            let db = connect_db(&cli).await?;
+            let db = connect_db(&uri, &user, password.as_ref()).await?;
             eprintln!("novanet search --query={query:?}");
             novanet::commands::search::run_search(&db, query, class.as_deref(), limit, format)
                 .await?;
@@ -637,7 +660,7 @@ async fn main() -> color_eyre::Result<()> {
 
         // ── Write commands (Neo4j) ──────────────────────────────
         Commands::Node { ref action } => {
-            let db = connect_db(&cli).await?;
+            let db = connect_db(&uri, &user, password.as_ref()).await?;
             match action {
                 NodeAction::Create { class, key, props } => {
                     eprintln!("novanet node create --class={class} --key={key}");
@@ -654,7 +677,7 @@ async fn main() -> color_eyre::Result<()> {
             }
         }
         Commands::Arc { ref action } => {
-            let db = connect_db(&cli).await?;
+            let db = connect_db(&uri, &user, password.as_ref()).await?;
             match action {
                 ArcAction::Create {
                     from,
@@ -673,12 +696,12 @@ async fn main() -> color_eyre::Result<()> {
         }
         Commands::Locale { ref action } => match action {
             LocaleAction::List { format } => {
-                let db = connect_db(&cli).await?;
+                let db = connect_db(&uri, &user, password.as_ref()).await?;
                 eprintln!("novanet locale list --format={format:?}");
                 novanet::commands::locale::run_list(&db, *format).await?;
             }
             LocaleAction::Import { file } => {
-                let db = connect_db(&cli).await?;
+                let db = connect_db(&uri, &user, password.as_ref()).await?;
                 eprintln!("novanet locale import --file={}", file.display());
                 novanet::commands::locale::run_import(&db, file).await?;
             }
@@ -703,7 +726,7 @@ async fn main() -> color_eyre::Result<()> {
             }
         },
         Commands::Db { ref action } => {
-            let db = connect_db(&cli).await?;
+            let db = connect_db(&uri, &user, password.as_ref()).await?;
             let root = root?;
             match action {
                 DbAction::Seed => {
@@ -942,7 +965,7 @@ async fn main() -> color_eyre::Result<()> {
                 eprintln!("   ✓ Generated {} artifact(s)", results.len());
 
                 eprintln!("⊞  Resetting database...");
-                let db = connect_db(&cli).await?;
+                let db = connect_db(&uri, &user, password.as_ref()).await?;
                 novanet::commands::db::run_reset(&db, &root).await?;
                 eprintln!("   ✓ Database reset complete");
 
@@ -974,7 +997,7 @@ async fn main() -> color_eyre::Result<()> {
                     eprintln!();
                 }
 
-                let db = connect_db(&cli).await?;
+                let db = connect_db(&uri, &user, password.as_ref()).await?;
                 novanet::tui::run(&db, &root).await?;
             }
         }
@@ -990,7 +1013,7 @@ async fn main() -> color_eyre::Result<()> {
             let db = if skip_db {
                 None
             } else {
-                match connect_db(&cli).await {
+                match connect_db(&uri, &user, password.as_ref()).await {
                     Ok(db) => Some(db),
                     Err(e) => {
                         eprintln!("⚠  Could not connect to Neo4j: {}", e);
@@ -1006,13 +1029,17 @@ async fn main() -> color_eyre::Result<()> {
 }
 
 /// Connect to Neo4j (shared by all commands that need database access).
-async fn connect_db(cli: &Cli) -> color_eyre::Result<novanet::db::Db> {
-    let password = cli.password.as_ref().ok_or_else(|| {
+async fn connect_db(
+    uri: &str,
+    user: &str,
+    password: Option<&String>,
+) -> color_eyre::Result<novanet::db::Db> {
+    let password = password.ok_or_else(|| {
         color_eyre::eyre::eyre!(
             "Neo4j password required. Set NEO4J_PASSWORD environment variable or use --password flag."
         )
     })?;
-    eprintln!("Connecting to Neo4j at {}...", cli.uri);
-    let db = novanet::db::Db::connect(&cli.uri, &cli.user, password).await?;
+    eprintln!("Connecting to Neo4j at {}...", uri);
+    let db = novanet::db::Db::connect(uri, user, password).await?;
     Ok(db)
 }

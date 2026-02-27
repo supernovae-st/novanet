@@ -21,6 +21,13 @@ Thumbs.db
 *.swp
 *.swo
 
+# Claude Code - PRIVATE DX (symlinked to dx/.claude/novanet/)
+# All DX content is in private supernovae-agi/dx/ repo
+.claude/
+
+# Only CLAUDE.md is public (project context for contributors)
+!CLAUDE.md
+
 # Logs
 *.log
 npm-debug.log*
