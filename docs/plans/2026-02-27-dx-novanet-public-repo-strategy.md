@@ -1,7 +1,7 @@
 # NovaNet DX Strategy: Public Repo Preparation
 
 **Date**: 2026-02-27
-**Status**: IN PROGRESS (Security fixes applied ✅)
+**Status**: ✅ COMPLETED (Phases 1-3 done)
 **Goal**: Match Nika's DX patterns (ARMADA, CI gates) while managing private/public separation
 
 ## Quick Status
@@ -11,9 +11,11 @@
 | Remove .claude from NovaNet git tracking | ✅ Done (69 files) |
 | Remove .claude from Nika git tracking | ✅ Done (29 files) |
 | Migrate Nika to symlinks pattern | ✅ Done |
-| Security rules documentation | ✅ Created (dx/.claude/rules/security-private-content.md) |
-| ARMADA workflow for NovaNet | ⏳ Pending |
-| release-plz + git-cliff | ⏳ Pending |
+| Security rules documentation | ✅ Created |
+| ARMADA workflow for NovaNet | ✅ Done (10 stations) |
+| release-plz + git-cliff | ✅ Done |
+| Clean up branches (both repos) | ✅ Done |
+| Merge dependabot PRs | ✅ Done (6 merged, 6 closed) |
 
 ---
 
@@ -303,28 +305,29 @@ body = """
 
 ## 7. Implementation Plan
 
-### Phase 1: CI Enhancement (Week 1)
+### Phase 1: CI Enhancement ✅ COMPLETED
 
-- [ ] Create `armada-checkpoints.yml`
-- [ ] Add coverage station (`cargo llvm-cov`)
-- [ ] Add docs station (`cargo doc`)
-- [ ] Integrate CodeRabbit
+- [x] Create `armada-checkpoints.yml` (10 stations)
+- [x] Add coverage station (`cargo llvm-cov`)
+- [x] Add docs station (`cargo doc`)
+- [x] Add security station (cargo deny + pnpm audit + TruffleHog)
 
-### Phase 2: Release Automation (Week 2)
+### Phase 2: Release Automation ✅ COMPLETED
 
-- [ ] Install release-plz
-- [ ] Configure git-cliff
-- [ ] Create `release-plz.yml` workflow
-- [ ] Test release pipeline
+- [x] Install release-plz
+- [x] Configure git-cliff (`tools/novanet/cliff.toml`)
+- [x] Create `release-plz.yml` workflow
+- [x] Update `release-plz.toml` with ARMADA styling
 
-### Phase 3: Fix Nika DX Pattern (Week 3)
+### Phase 3: Fix Nika DX Pattern ✅ COMPLETED
 
-- [ ] Sync Nika inline .claude/ back to dx/.claude/nika/
-- [ ] Replace Nika inline with symlinks → dx/.claude/nika/
-- [ ] Verify both projects use same pattern
-- [ ] Document symlink setup in CONTRIBUTING.md
+- [x] Sync Nika inline .claude/ back to dx/.claude/nika/
+- [x] Replace Nika inline with symlinks → dx/.claude/nika/
+- [x] Verify both projects use same pattern
+- [x] Clean up all branches (31 local + 7 remote in NovaNet)
+- [x] Merge/close all open PRs
 
-### Phase 4: Public Repo Prep (Week 4)
+### Phase 4: Public Repo Prep (FUTURE - when needed)
 
 - [ ] Create minimal public `.claude/` (no symlinks, sanitized)
 - [ ] Write public README.md (no private refs)
