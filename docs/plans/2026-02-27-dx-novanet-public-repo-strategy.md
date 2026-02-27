@@ -16,6 +16,8 @@
 | release-plz + git-cliff | ✅ Done |
 | Clean up branches (both repos) | ✅ Done |
 | Merge dependabot PRs | ✅ Done (6 merged, 6 closed) |
+| Station 9: Ship's Log naming | ✅ Done |
+| Align cliff.toml templates | ✅ Done (emojis, SuperNovae signature) |
 
 ---
 
