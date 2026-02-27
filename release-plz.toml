@@ -1,4 +1,6 @@
-# release-plz configuration for NovaNet
+# 🌌 ARMADA: Release-plz Configuration
+# Automated release management for NovaNet
+# Part of ARMADA quality checkpoints
 # https://release-plz.ieni.dev/docs/config
 
 [workspace]
@@ -9,13 +11,17 @@ changelog_path = "CHANGELOG.md"
 # Update dependencies in Cargo.toml (but don't publish to crates.io)
 dependencies_update = true
 # Generate changelog using git-cliff
-git_cliff_config = "../cliff.toml"
+git_cliff_config = "tools/novanet/cliff.toml"
+# Repo URL for links
+repo_url = "https://github.com/supernovae-st/novanet"
+# PR labels for release PRs
+pr_labels = ["release", "automated", "armada"]
 # Create GitHub releases
 git_release_enable = true
 # Draft releases for review before publishing
 git_release_draft = false
 # Use release type based on conventional commits
-release_commits = "^(feat|fix|docs|perf|refactor|style|test|chore)(\\([a-z-]+\\))?!?:"
+release_commits = "^(feat|fix|docs|perf|refactor|style|test|chore|security)(\\([a-z-]+\\))?!?:"
 
 [changelog]
 # Use Keep a Changelog format
@@ -36,7 +42,7 @@ body = """
 protect_breaking_commits = true
 # Link to commits
 commit_preprocessors = [
-    { pattern = "\\(#([0-9]+)\\)", replace = "([#$1](https://github.com/supernovae-st/novanet-dev/pull/$1))" },
+    { pattern = "\\(#([0-9]+)\\)", replace = "([#$1](https://github.com/supernovae-st/novanet/pull/$1))" },
 ]
 
 # Package-specific configuration
@@ -51,7 +57,7 @@ semver_check = true
 # Git tag format
 git_tag_name = "v{{ version }}"
 # Git tag message
-git_tag_message = "NovaNet {{ version }}"
+git_tag_message = "🌌 NovaNet {{ version }}"
 
 # MCP Server package (if separate)
 [[package]]
