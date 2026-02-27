@@ -309,7 +309,7 @@ git commit -m "feat(schema): ADR-029 *Native pattern - rename nodes and merge ar
 - HAS_CONTENT + HAS_GENERATED → HAS_NATIVE
 - CONTENT_OF + GENERATED_FOR → NATIVE_OF
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -436,7 +436,7 @@ git commit -m "feat(schema): ADR-030 slug ownership - move slug from EntityNativ
 - Add slug, slug_source, slug_rationale, full_path to PageNative
 - Fix Entity.yaml HAS_CHILD comment
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -908,7 +908,7 @@ git commit -m "feat(schema): taxonomy explosion - split into 26 files
 - Create 5 arc-family files
 - Update Rust parser for directory-based loading
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -962,7 +962,7 @@ git commit -m "docs: update documentation for v0.13 schema changes
 - Add *Native terminology to novanet-terminology.md
 - Update CHANGELOG with v0.13 changes
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -1021,7 +1021,7 @@ git commit -m "test: update test expectations for v0.13 schema
 - Update arc count: 171 → 169 (merged arcs)
 - Verify all 1031+ tests pass
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---

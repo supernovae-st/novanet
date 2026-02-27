@@ -5,57 +5,43 @@ This file provides guidance to Claude Code when working in the `tools/novanet/` 
 ## Overview
 
 `novanet` is a unified Rust CLI + TUI binary for managing the NovaNet context graph.
-It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 
-**Version**: v0.14.0 (*Native Pattern + LLM-First BLOC Schema + context_build_log + ADR-029/ADR-030 + ADR-024 Data Origin + ADR-025 Instruction Layer + ADR-028 Brand Architecture)
+**Version**: v0.14.0 | **Tests**: 1200 passing | **Clippy**: zero warnings
 
-## Current Status
+```bash
+novanet              # Launch TUI (default when no command)
+novanet --help       # Show all commands
+novanet <command>    # Run specific command
+```
 
-**v0.13.1 LLM-First BLOC Schema** — All 61 node-class YAML files standardized with canonical 6-BLOC property ordering for optimal AI comprehension: BLOC 1 (Identity), BLOC 2 (Semantic), BLOC 3 (Visual), BLOC 4 (Data), BLOC 5 (Graph), BLOC 6 (Reference). Includes v0.13.0 changes: ADR-029 *Native Pattern, ADR-030 Slug Ownership, ADR-024 Data Origin traits (defined/authored/imported/generated/retrieved), ADR-025 Instruction Layer, ADR-028 Brand Architecture. SHARED (4 layers: config, locale, geography, knowledge, 40 nodes), ORG (6 layers: config, foundation, structure, semantic, instruction, output, 21 nodes). 61 total nodes, 182 arcs, 10 layers, 6 arc families.
+## Quick Reference
 
-| Area | Commands | Status |
-|------|----------|--------|
-| Read | `blueprint`, `data`, `overlay`, `query` | Implemented (faceted Cypher) |
-| Write | `node create/edit/delete`, `arc create/delete` | Implemented (label validation) |
-| Schema | `schema generate`, `schema validate` | Implemented (12 artifacts) |
-| Auto-Fix | 6 fixers via FixEngine | Implemented (TDD + property-based tests) |
-| Docs | `doc generate`, `doc generate --list` | Implemented (40 views) |
-| Search | `search --query=... [--class=...]` | Implemented (fulltext + property) |
-| Locale | `locale list`, `locale import`, `locale generate` | Implemented |
-| Knowledge | `knowledge generate`, `knowledge list` | Implemented (ATH integration) |
-| Entity | `entity seed`, `entity list`, `entity validate` | Implemented (phase-based) |
-| DB | `db seed`, `db migrate`, `db reset` | Implemented |
-| Filter | `filter build` | Implemented (JSON stdin, Studio subprocess) |
-| Blueprint | `blueprint [--view=X]` | Implemented (11 views) |
-| TUI | `tui` | Unified tree (Graph/Nexus modes), lazy loading, async channels |
-| System | `completions`, `doctor` | Implemented |
+| Command | Description | Requires Neo4j |
+|---------|-------------|----------------|
+| `novanet` | Launch interactive TUI | Yes |
+| `novanet blueprint` | Schema visualization | No |
+| `novanet schema generate` | YAML → Cypher/TS/Mermaid | No |
+| `novanet schema validate` | Check YAML coherence | No |
+| `novanet db seed` | Seed Neo4j database | Yes |
+| `novanet search --query=X` | Fulltext search | Yes |
+| `novanet doctor` | System health check | Optional |
 
-**1194 tests pass** (`cargo test`). Zero clippy warnings.
+## Schema Stats
 
-**Testing stack:**
-- `insta` — Snapshot testing (5 generator outputs)
-- `proptest` — Property-based testing (auto-fix invariants + cypher_utils)
-- `pretty_assertions` — Colorful diffs
-- `cargo-nextest` — Fast parallel test runner (CI)
+- **61 nodes** (40 shared + 21 org)
+- **182 arcs** (6 families)
+- **10 layers** (4 shared + 6 org)
+- **5 traits** (defined/authored/imported/generated/retrieved)
 
-**Quality tools:**
-- `cargo-deny` — License/security policy (`deny.toml`)
-- `cargo-audit` — Vulnerability scanning
-- `cargo-machete` — Unused dependency detection
-- `cargo-llvm-cov` — Coverage reporting
-- `cargo-mutants` — Mutation testing
-- `cargo-bloat` — Binary size analysis
-- `bacon` — Live reload dev experience
+## Tooling
 
-**Performance optimizations:**
-- `rayon` — Parallel YAML loading (~4x speedup for node types)
-- `FxHashSet` — 30% faster string key lookups (TUI collapsed state)
-- `SmallVec` — Stack-allocated vectors for properties/labels (avoid heap)
-
-**Security toolchain:**
-- `cargo-deny` — License/security policy enforcement (`deny.toml`)
-- `cargo-audit` — RustSec vulnerability database scanning
-- `cargo-machete` — Unused dependency detection (reduce attack surface)
+| Tool | Purpose |
+|------|---------|
+| `cargo-nextest` | Fast parallel tests |
+| `cargo-deny` | License/security policy |
+| `cargo-audit` | Vulnerability scanning |
+| `insta` | Snapshot testing |
+| `proptest` | Property-based testing |
 
 ## Security Workflow
 
@@ -100,100 +86,133 @@ See `/.claude/rules/security.md` for full security guidelines.
 
 ## Commands
 
+### TUI (Default)
+
 ```bash
-# Build
-cargo build                                       # Debug build
-cargo build --features tui                        # Build with TUI (default)
-cargo build --no-default-features                 # CLI-only (no TUI deps)
+novanet                    # Launch TUI (default when no command)
+novanet tui                # Explicit TUI launch
+novanet tui --fresh        # Regenerate schema + reset DB, then launch TUI
+```
 
-# Read modes (Neo4j)
-cargo run -- blueprint                            # Mode 1: Schema-graph visualization
-cargo run -- data                                 # Mode 2: Data nodes only
-cargo run -- overlay                              # Mode 3: Data + Schema overlay
-cargo run -- query --realm=org --format=json      # Mode 4: Faceted query
+### Schema Operations (No Neo4j Required)
 
-# Write operations (Neo4j)
-cargo run -- node create --class=Page --key=my-page --props='{"display_name":"My Page"}'
-cargo run -- node edit --key=my-page --set='{"description":"Updated"}'
-cargo run -- node delete --key=my-page --confirm
-cargo run -- arc create --from=page1 --to=entity1 --class=USES_ENTITY
+```bash
+novanet schema generate              # Generate all artifacts from YAML
+novanet schema generate --dry-run    # Preview without writing
+novanet schema validate              # Validate YAML coherence
+novanet schema validate --strict     # Fail on warnings
+novanet schema cypher-validate       # Validate Cypher files against YAML
+novanet schema stats                 # Schema statistics (JSON/table)
+novanet schema stats --format=json   # JSON output for CI
+```
 
-# Search (Neo4j)
-cargo run -- search --query="page" --class=Page --limit=20
+### Blueprint (No Neo4j Required)
 
-# Locale (Neo4j)
-cargo run -- locale list --format=table
-cargo run -- locale import --file=path/to/locale.cypher
-cargo run -- locale generate --csv=... --output=...  # Generate 20-locales.cypher
+```bash
+novanet blueprint                    # Full schema visualization
+novanet blueprint --view=tree        # Realm > Layer > Class hierarchy
+novanet blueprint --view=arcs        # Arc families with relationships
+novanet blueprint --view=flow        # Data flow diagrams
+novanet blueprint --view=stats       # Raw counts
+novanet blueprint --view=glossary    # Term definitions
+novanet blueprint --view=cardinality # 1:1, 1:N, N:M constraints
+novanet blueprint --no-validate      # Skip validation (faster)
+```
 
-# Knowledge (ATH integration)
-cargo run -- knowledge generate --tier=all           # Generate from ATH data
-cargo run -- knowledge list                          # List knowledge tiers
+### Database Operations (Neo4j Required)
 
-# Entity (Phase-based seeding)
-cargo run -- entity seed --project=qrcode-ai         # Seed all phases
-cargo run -- entity seed --project=qrcode-ai --phase=1  # Seed specific phase
-cargo run -- entity list --project=qrcode-ai         # List available phases
-cargo run -- entity validate --project=qrcode-ai     # Validate phase data
+```bash
+novanet db seed            # Execute seed Cypher files
+novanet db migrate         # Run migrations
+novanet db reset           # Drop all + reseed
+novanet db verify          # Verify YAML↔Neo4j consistency
+```
 
-# Database (Neo4j)
-cargo run -- db seed                              # Execute seed Cypher files
-cargo run -- db migrate                           # Run migrations
-cargo run -- db reset                             # Drop + seed
+### Read Operations (Neo4j Required)
 
-# Schema (YAML, no Neo4j)
-cargo run -- schema generate                      # All 12 artifacts from YAML
-cargo run -- schema generate --dry-run            # Preview without writing
-cargo run -- schema validate                      # Validate YAML coherence
-cargo run -- schema validate --strict             # Fail on warnings
+```bash
+novanet data                         # Data nodes only
+novanet overlay                      # Data + Schema overlay
+novanet query --realm=org            # Faceted query
+novanet query --layer=semantic       # Filter by layer
+novanet query --class=Page           # Filter by class
+novanet search --query="page"        # Fulltext search
+novanet search --query="qr" --class=Entity --limit=20
+```
 
-# Documentation (YAML, no Neo4j)
-cargo run -- doc generate                         # All 11 view Mermaid diagrams
-cargo run -- doc generate --view=block-generation # Single view
-cargo run -- doc generate --dry-run               # Preview without writing
-cargo run -- doc generate --list                  # List available views
+### Write Operations (Neo4j Required)
 
-# Filter (Studio subprocess, no Neo4j)
-echo '{"realms":["project"]}' | cargo run -- filter build
+```bash
+novanet node create --class=Page --key=my-page --props='{"display_name":"My Page"}'
+novanet node edit --key=my-page --set='{"description":"Updated"}'
+novanet node delete --key=my-page --confirm
+novanet arc create --from=page1 --to=entity1 --class=USES_ENTITY
+novanet arc delete --from=page1 --to=entity1 --class=USES_ENTITY
+```
 
-# Blueprint (YAML, no Neo4j — rich ASCII visualization)
-cargo run -- blueprint                            # Default overview with all sections
-cargo run -- blueprint --view=tree                # Realm > Layer > Class hierarchy
-cargo run -- blueprint --view=flow                # 6 flow diagrams
-cargo run -- blueprint --view=arcs                # Arc families with relationships
-cargo run -- blueprint --view=stats               # Raw counts (supports --format=json)
-cargo run -- blueprint --view=glossary            # Term definitions
-cargo run -- blueprint --view=cardinality         # 1:1, 1:N, N:M constraints
-cargo run -- blueprint --no-validate              # Skip validation for faster output
+### Documentation (No Neo4j Required)
 
-# TUI (Neo4j)
-cargo run -- tui                                  # Interactive terminal UI
+```bash
+novanet doc generate                 # Generate all Mermaid diagrams
+novanet doc generate --list          # List available views
+novanet doc generate --view=X        # Generate specific view
+novanet doc generate --dry-run       # Preview without writing
+```
 
-# System utilities
-cargo run -- completions bash                     # Generate shell completions
-cargo run -- completions zsh                      # (also: fish, powershell, elvish)
-cargo run -- doctor                               # System health check
-cargo run -- doctor --skip-db                     # Skip Neo4j connectivity check
+### Locale Operations
 
-# Quality
-cargo clippy -- -D warnings    # Zero warnings policy
-cargo fmt --check              # Formatting check
-cargo nextest run              # 1082 tests (fast, parallel)
-cargo test -- --ignored        # Neo4j integration tests (requires running Neo4j)
+```bash
+novanet locale list                  # List locales (Neo4j)
+novanet locale import --file=X       # Import Cypher file (Neo4j)
+novanet locale generate --csv=X --identity-dir=Y  # Generate seed file
+```
 
-# Security & auditing
-cargo deny check               # License/security policy (deny.toml)
-cargo audit                    # Vulnerability scanning (RustSec)
-cargo machete                  # Unused dependencies
+### Entity Operations
 
-# Code quality analysis
-cargo llvm-cov                 # Coverage report
-cargo mutants                  # Mutation testing (long)
-cargo bloat --release          # Binary size analysis
-bacon clippy                   # Live reload clippy
+```bash
+novanet entity list --project=qrcode-ai       # List phases
+novanet entity validate --project=qrcode-ai   # Validate data
+novanet entity seed --project=qrcode-ai       # Seed all phases
+novanet entity seed --project=qrcode-ai --phase=1  # Seed specific phase
+```
 
-# Pre-commit
-cargo fmt && cargo clippy -- -D warnings && cargo nextest run && cargo deny check
+### Knowledge Operations
+
+```bash
+novanet knowledge list               # List knowledge tiers
+novanet knowledge generate --tier=all         # Generate from ATH data
+novanet knowledge generate --tier=technical   # Specific tier
+```
+
+### Views Operations
+
+```bash
+novanet views export                 # Export as JSON
+novanet views validate               # Validate Rust↔TS parity
+novanet views validate --verbose     # Detailed output
+```
+
+### System Utilities
+
+```bash
+novanet doctor                       # System health check
+novanet doctor --skip-db             # Skip Neo4j check
+novanet doctor --verbose             # Detailed output
+novanet completions bash             # Shell completions (bash/zsh/fish/powershell)
+novanet filter build                 # JSON stdin → Cypher stdout (Studio)
+```
+
+### Build & Quality
+
+```bash
+cargo build                          # Debug build
+cargo build --release                # Release build
+cargo build --no-default-features    # CLI-only (no TUI)
+cargo test                           # Run all tests
+cargo nextest run                    # Fast parallel tests
+cargo clippy -- -D warnings          # Lint (zero warnings policy)
+cargo fmt --check                    # Format check
+cargo deny check                     # Security/license audit
 ```
 
 ## Architecture

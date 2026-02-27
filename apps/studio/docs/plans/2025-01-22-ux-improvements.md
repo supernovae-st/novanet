@@ -124,7 +124,7 @@ Expected: PASS
 git add src/components/sidebar/ViewPresetSelector.tsx src/components/sidebar/__tests__/
 git commit -m "feat(sidebar): add ViewPresetSelector for quick view presets
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -292,7 +292,7 @@ Expected: PASS
 git add src/components/sidebar/PriorityFreshnessFilters.tsx src/components/sidebar/__tests__/
 git commit -m "feat(sidebar): add priority and freshness filter chips
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -376,7 +376,7 @@ Expected: PASS
 git add src/components/sidebar/FilterSidebar.tsx e2e/filter-presets.spec.ts
 git commit -m "feat(sidebar): integrate ViewPresetSelector and PriorityFreshnessFilters
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -468,7 +468,7 @@ Expected: PASS
 git add src/lib/keyboard.ts src/components/ui/KeyboardShortcuts.tsx src/lib/__tests__/
 git commit -m "fix(shortcuts): sync keyboard shortcuts with VIEW_PRESETS v7.2.1
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -609,7 +609,7 @@ git commit -m "feat(GlowingBorder): add state variants (error/running/pending/su
 
 Nika-inspired state management for contextual visual feedback.
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -672,7 +672,7 @@ Expected: ALL PASS
 git add e2e/app.spec.ts
 git commit -m "test(e2e): add comprehensive filter UI tests
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---

@@ -287,7 +287,7 @@ git commit -m "feat(viewport): add useViewportInsets hook with dynamic inset cal
 - Export pure function for testing
 - Add comprehensive unit tests
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -538,7 +538,7 @@ git commit -m "feat(viewport): add useCenterOnNode hook for node-focused navigat
 - Export pure function for testing
 - Add unit tests for offset calculations
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -613,7 +613,7 @@ git commit -m "feat(viewport): add useSmartFitView hook wrapping fitView with in
 - Configurable duration, zoom limits
 - Smooth 400ms default animation
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -658,7 +658,7 @@ git commit -m "feat(toolbar): use smartFitView with dynamic insets
 - Replace static padding with dynamic inset calculation
 - FitView now respects sidebar and panel states
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -732,7 +732,7 @@ git commit -m "feat(graph): double-click centers + zooms on node
 - Single-click no longer opens panel (drag only)
 - Smooth 400ms animation with 1.3x zoom
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -787,7 +787,7 @@ git commit -m "feat(graph): auto-fitView on sidebar/panel/focus changes
 - Trigger smooth fitView when focus mode changes
 - Trigger smooth fitView when panel closes
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -826,7 +826,7 @@ git commit -m "refactor(page): single-click no longer opens details panel
 - Double-click now handles panel opening + centering
 - Single-click reserved for drag & drop only
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -944,7 +944,7 @@ git commit -m "test(e2e): add Playwright tests for smart fitView
 - Test panel close triggers fitView
 - Test focus mode uses minimal insets
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -991,7 +991,7 @@ Summary:
 - Double-click centers + zooms on node
 - E2E tests for all scenarios
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---

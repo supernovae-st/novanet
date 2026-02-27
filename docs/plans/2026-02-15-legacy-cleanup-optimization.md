@@ -66,7 +66,7 @@ git commit -m "fix(studio): remove VIEW_ID_ALIASES backward compat
 BREAKING: Legacy view IDs no longer resolve to new names.
 Clients must use canonical view IDs from v0.12.5+.
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -112,7 +112,7 @@ git commit -m "chore(tui): remove dead InstanceInfo/InstanceArc/InstanceDetail s
 These were v10.6 Data View reserved structs, never implemented.
 Reduces binary size and removes #[allow(dead_code)] annotations.
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -155,7 +155,7 @@ git commit -m "chore(tui): remove 15 unused COLOR_* constants from yaml_panel
 These were placeholder constants for YAML syntax highlighting,
 feature was deferred. Reduces code noise.
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -195,7 +195,7 @@ git commit -m "chore(core): remove 27 unused exports from visual-encoding
 Cleanup: ICON_*, STATE_*, and unused accessor functions.
 Reduces bundle size and API surface.
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -227,7 +227,7 @@ git commit -m "chore(core): remove commented deprecated types
 
 Priority/Freshness were moved to presentation layer in v8.2.
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -268,7 +268,7 @@ git commit -m "chore(parsers): remove parse_taxonomy_compat wrapper
 
 Direct parse_taxonomy() usage only. No backward compat needed.
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -307,7 +307,7 @@ git commit -m "chore(studio): remove backward compat re-exports from nodeColors
 
 Direct imports from layerColors.ts and realmColors.ts now required.
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -368,7 +368,7 @@ git commit -m "perf(mcp): parallelize describe_stats with tokio::join!
 5 sequential Neo4j queries now run concurrently.
 Expected ~4-5x latency improvement for stats endpoint.
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -443,7 +443,7 @@ git commit -m "perf(mcp): parallelize assemble_* functions
 Entity, knowledge, and structure assembly now run concurrently.
 ~3x latency improvement for context assembly.
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -489,7 +489,7 @@ git commit -m "perf(mcp): eliminate double serialization in query cache
 Cache stores serialized JSON strings directly.
 Reduces allocations and CPU for cached responses.
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -536,7 +536,7 @@ git commit -m "perf(mcp): optimize cache key computation
 Use serde_json::to_string instead of manual param formatting.
 More efficient and consistent hashing.
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -588,7 +588,7 @@ git commit -m "perf(tui): replace .clone() with borrowed refs in tree rendering
 20+ string clones eliminated from hot render path.
 Reduces allocations per frame.
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -648,7 +648,7 @@ git commit -m "perf(tui): add RenderCache for realm/layer stats
 Caches computed stats across frames until data changes.
 Significant reduction in per-frame computation.
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -697,7 +697,7 @@ git commit -m "perf(tui): add prefix caching to fuzzy search
 Typing additional characters filters existing results instead of re-searching.
 Much faster incremental search UX.
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -746,7 +746,7 @@ git commit -m "perf(studio): memoize edge filtering in DataTab
 
 Prevents recomputation on unrelated state changes.
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -791,7 +791,7 @@ git commit -m "perf(studio): extract shared node lookup in page.tsx
 6 getNodeById calls reduced to 1 memoized lookup.
 Eliminates redundant store subscriptions.
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -841,7 +841,7 @@ git commit -m "perf(studio): throttle QueryPill matrix effects
 2 effects at 50ms -> 1 effect at 100ms.
 50% reduction in animation CPU usage.
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -881,7 +881,7 @@ git commit -m "perf(studio): add debounce to SchemaCardView search
 150ms debounce prevents filtering on every keystroke.
 Smoother search UX for large schema lists.
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---

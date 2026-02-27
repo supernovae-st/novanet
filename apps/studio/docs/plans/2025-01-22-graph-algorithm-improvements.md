@@ -279,7 +279,7 @@ git commit -m "feat(graph): add d3-force physics simulation for better layout
 - Add category clustering for visual grouping
 - Configure charge, link, collision forces
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -542,7 +542,7 @@ git commit -m "feat(graph): add edge labels showing relationship types
 - Add arrow markers to indicate direction
 - Labels respect dimming state
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -609,7 +609,7 @@ git commit -m "feat(graph): add toggle for edge labels (L key)
 - Pass showLabel prop to OrganicEdge
 - Add L keyboard shortcut for toggle
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -924,7 +924,7 @@ git commit -m "feat(graph): add interactive force simulation with drag support
 - Add simulation indicator in stats panel
 - Category-based clustering preserves visual grouping
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
 
 ---
@@ -961,5 +961,5 @@ npm run type-check
 git add -A
 git commit -m "chore: polish graph algorithm improvements
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Nika <agent@nika.sh>
 ```
