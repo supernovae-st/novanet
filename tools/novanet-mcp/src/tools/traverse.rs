@@ -387,12 +387,33 @@ fn build_arc_filter(families: &Option<Vec<String>>, kinds: &Option<Vec<String>>)
     }
 }
 
+/// Validate that a label name only contains safe characters.
+/// Neo4j labels cannot be parameterized, so we must validate them.
+///
+/// SECURITY: Prevents label injection attacks by only allowing alphanumeric + underscore.
+fn is_valid_label(label: &str) -> bool {
+    !label.is_empty()
+        && label.len() <= 100 // Reasonable max length
+        && label.chars().all(|c| c.is_ascii_alphanumeric() || c == '_')
+}
+
 /// Build target kind filter
+///
+/// SECURITY: Labels are validated to prevent injection attacks.
 fn build_target_filter(kinds: &Option<Vec<String>>) -> String {
     match kinds {
         Some(k) if !k.is_empty() => {
-            let labels: Vec<String> = k.iter().map(|l| format!("endNode:{}", l)).collect();
-            format!("WHERE ({})", labels.join(" OR "))
+            // SECURITY: Filter out any invalid labels to prevent injection
+            let valid_labels: Vec<String> = k
+                .iter()
+                .filter(|l| is_valid_label(l))
+                .map(|l| format!("endNode:{}", l))
+                .collect();
+            if valid_labels.is_empty() {
+                String::new()
+            } else {
+                format!("WHERE ({})", valid_labels.join(" OR "))
+            }
         }
         _ => String::new(),
     }
@@ -401,6 +422,22 @@ fn build_target_filter(kinds: &Option<Vec<String>>) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_is_valid_label() {
+        // Valid labels
+        assert!(is_valid_label("Entity"));
+        assert!(is_valid_label("Page"));
+        assert!(is_valid_label("Entity_Native"));
+        assert!(is_valid_label("Test123"));
+
+        // Invalid labels (security tests)
+        assert!(!is_valid_label("")); // Empty
+        assert!(!is_valid_label("Entity:Foo")); // Contains colon
+        assert!(!is_valid_label("Entity OR n")); // Contains space
+        assert!(!is_valid_label("Entity})")); // Contains special chars
+        assert!(!is_valid_label("'; DROP DATABASE")); // Injection attempt
+    }
 
     #[test]
     fn test_build_arc_filter() {
@@ -417,6 +454,19 @@ mod tests {
         assert_eq!(
             build_target_filter(&Some(vec!["Entity".to_string()])),
             "WHERE (endNode:Entity)"
+        );
+    }
+
+    #[test]
+    fn test_build_target_filter_rejects_injection() {
+        // SECURITY: Invalid labels should be filtered out
+        assert_eq!(
+            build_target_filter(&Some(vec!["Entity:Foo".to_string()])),
+            "" // Invalid label filtered out
+        );
+        assert_eq!(
+            build_target_filter(&Some(vec!["Entity".to_string(), "'; DROP DATABASE".to_string()])),
+            "WHERE (endNode:Entity)" // Only valid label kept
         );
     }
 }
