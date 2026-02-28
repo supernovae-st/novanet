@@ -18,8 +18,8 @@ git_release_draft = false
 # Package-specific configuration
 [[package]]
 name = "novanet"
-# Path to the crate changelog
-changelog_path = "tools/novanet/CHANGELOG.md"
+# Path to the crate changelog (relative to package directory)
+changelog_path = "CHANGELOG.md"
 # Publish to crates.io (disabled for now)
 publish = false
 # Semver check
