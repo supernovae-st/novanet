@@ -728,6 +728,7 @@ mod tests {
     /// ADR-028: Must have exactly 61 node classes (40 shared + 21 org)
     /// v0.12.5: PageStructure/PageInstruction deleted, Country added, Brand Architecture (+4 -1)
     #[test]
+    #[ignore = "requires private models (brain/)"]
     fn test_adr023_node_count() {
         let root = crate::config::resolve_root(None).expect("Failed to resolve root");
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
@@ -847,6 +848,7 @@ mod tests {
     /// that connect :Schema:Class nodes, created during db seed (not in arc-classes YAML).
     /// Instance→Class relationship is via Neo4j labels, not explicit arcs.
     #[test]
+    #[ignore = "requires private models (brain/)"]
     fn test_adr023_no_deprecated_kind_arcs() {
         let root = crate::config::resolve_root(None).expect("Failed to resolve root");
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
