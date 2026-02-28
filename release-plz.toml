@@ -27,10 +27,5 @@ semver_check = true
 # Git tag format
 git_tag_name = "v{{ version }}"
 
-# MCP Server package (if separate)
-[[package]]
-name = "novanet-mcp"
-changelog_path = "tools/novanet-mcp/CHANGELOG.md"
-publish = false
-semver_check = true
-git_tag_enable = false  # Use main novanet tag
+# NOTE: novanet-mcp is a STANDALONE CRATE (not in workspace)
+# It has independent versioning - do not include here
