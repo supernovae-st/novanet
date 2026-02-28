@@ -575,6 +575,7 @@ mod tests {
     use super::*;
 
     #[test]
+    #[ignore = "requires private brain/ YAML models (run locally)"]
     fn test_validation_result_from_yaml() {
         let root = crate::config::resolve_root(None).expect("Failed to resolve root");
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
