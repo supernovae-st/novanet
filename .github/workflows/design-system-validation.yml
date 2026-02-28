@@ -4,6 +4,9 @@
 # Validates taxonomy, visual encoding, and artifact consistency
 # Runs on PRs that touch design system files
 
+# NOTE: This workflow requires private brain/ YAML models (symlinked in packages/core/models).
+# It will only trigger when those files exist (local development or private CI).
+# In public CI, the symlink targets don't exist so paths won't match.
 name: Design System Validation
 
 on:
