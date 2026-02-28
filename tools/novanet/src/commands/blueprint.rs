@@ -49,6 +49,7 @@ mod tests {
     use crate::config::resolve_root;
 
     #[test]
+    #[ignore = "requires private brain/ YAML models (run locally)"]
     fn test_blueprint_yaml_only() {
         let root = resolve_root(None).expect("Failed to resolve root");
         let data = BlueprintData::from_yaml(&root).expect("Failed to load data");
@@ -63,6 +64,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "requires private brain/ YAML models (run locally)"]
     fn test_all_views_render() {
         let root = resolve_root(None).expect("Failed to resolve root");
         let data = BlueprintData::from_yaml(&root).expect("Failed to load data");

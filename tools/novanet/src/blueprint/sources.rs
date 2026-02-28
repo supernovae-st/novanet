@@ -181,6 +181,7 @@ mod tests {
     use super::*;
 
     #[test]
+    #[ignore = "requires private brain/ YAML models (run locally)"]
     fn test_blueprint_data_from_yaml() {
         let root = crate::config::resolve_root(None).expect("Failed to resolve root");
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
@@ -198,6 +199,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "requires private brain/ YAML models (run locally)"]
     fn test_nodes_by_realm() {
         let root = crate::config::resolve_root(None).expect("Failed to resolve root");
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
@@ -208,6 +210,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "requires private brain/ YAML models (run locally)"]
     fn test_arcs_by_family() {
         let root = crate::config::resolve_root(None).expect("Failed to resolve root");
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
