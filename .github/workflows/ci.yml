@@ -47,10 +47,15 @@ jobs:
   # =============================================================================
   # Schema Sync Validation
   # =============================================================================
+  # NOTE: This job requires private brain/ YAML models (symlinked in packages/core/models).
+  # Since the models are private, this job is skipped in public CI.
+  # Run locally with: cargo run -- schema validate
   schema-sync:
     name: Schema Sync Validation
     runs-on: ubuntu-latest
     needs: security
+    # Skip if models directory doesn't exist (private symlink target)
+    if: false  # Disabled in public CI - requires private brain/ models
 
     steps:
       - name: Checkout
@@ -124,7 +129,7 @@ jobs:
   build:
     name: Build and Test
     runs-on: ubuntu-latest
-    needs: [security, schema-sync, rust]
+    needs: [security, rust]  # schema-sync skipped (requires private models)
 
     steps:
       - name: Checkout
