@@ -624,6 +624,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "requires private models (brain/)"]
     fn test_validation_checks_all_categories() {
         let root = crate::config::resolve_root(None).expect("Failed to resolve root");
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
@@ -659,6 +660,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "requires private models (brain/)"]
     fn test_info_level_issues() {
         let root = crate::config::resolve_root(None).expect("Failed to resolve root");
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
@@ -700,6 +702,7 @@ mod tests {
 
     /// ADR-024: Trait values must be the new "Data Origin" names
     #[test]
+    #[ignore = "requires private models (brain/)"]
     fn test_adr024_trait_values_are_data_origin() {
         use crate::parsers::yaml_node::NodeTrait;
 
@@ -768,6 +771,7 @@ mod tests {
     /// ADR-028: Instruction layer nodes (v0.12.5: PageStructure/PageInstruction deleted)
     /// PageStructure and PageInstruction are now calculated at runtime from Block order
     #[test]
+    #[ignore = "requires private models (brain/)"]
     fn test_adr025_instruction_layer_nodes() {
         let root = crate::config::resolve_root(None).expect("Failed to resolve root");
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
@@ -812,6 +816,7 @@ mod tests {
 
     /// ADR-028: Arc types for instruction layer (v0.12.5: HAS_STRUCTURE deleted)
     #[test]
+    #[ignore = "requires private models (brain/)"]
     fn test_adr025_instruction_arcs() {
         let root = crate::config::resolve_root(None).expect("Failed to resolve root");
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
@@ -877,6 +882,7 @@ mod tests {
     /// Naming convention: *Native suffix for locale-specific nodes (ADR-029)
     /// Trait distinguishes between authored (EntityNative, ProjectNative) and generated (PageNative, BlockNative)
     #[test]
+    #[ignore = "requires private models (brain/)"]
     fn test_naming_convention_native_suffix() {
         use crate::parsers::yaml_node::NodeTrait;
 
@@ -935,6 +941,7 @@ mod tests {
 
     /// Layer distribution validation (v0.12.5)
     #[test]
+    #[ignore = "requires private models (brain/)"]
     fn test_layer_distribution() {
         let root = crate::config::resolve_root(None).expect("Failed to resolve root");
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
