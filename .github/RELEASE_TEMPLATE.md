@@ -1,57 +1,83 @@
-## What's New
+# NovaNet Release Template
 
-<!-- One-line summary of the release -->
+> Shared template: See `dx/.github/RELEASE_TEMPLATE.md` for full documentation.
 
-### Breaking Changes
+## Title Format
 
-<!-- Only for MAJOR versions. List all breaking changes with migration steps. -->
-<!-- Remove this section for MINOR/PATCH releases. -->
-
--
-
-### Added
-
-<!-- New features, commands, components -->
-
--
-
-### Changed
-
-<!-- Modifications to existing functionality -->
-
--
-
-### Fixed
-
-<!-- Bug fixes -->
-
--
-
-### Removed
-
-<!-- Removed features or deprecated code -->
-
--
-
-## Migration Guide
-
-<!-- Only for MAJOR versions. Step-by-step upgrade instructions. -->
-<!-- Remove this section for MINOR/PATCH releases. -->
-
-```bash
-# Steps to upgrade
+```
+{emoji} NovaNet v{version} — {Tagline}
 ```
 
-## Stats
+## Body Template
 
-| Metric | Value |
-|--------|-------|
-| Commits | <!-- `git log --oneline v<prev>..v<this> \| wc -l` --> |
-| Files changed | <!-- `git diff --stat v<prev>..v<this> \| tail -1` --> |
-| Tests | <!-- `pnpm test` result --> |
-| Rust tests | <!-- `cargo test` result --> |
+```markdown
+## ⚠️ Breaking Changes (if any)
 
-## Full Changelog
+### {Change Name}
+- Description of breaking change
+- Migration: `command or code`
 
-<!-- Link to compare view -->
-https://github.com/supernovae-st/novanet-dev/compare/v<prev>...v<this>
+## ✨ New Features
+
+### {Feature Name}
+- Feature description
+- Usage example if applicable
+
+## 🔄 Changed
+
+- **{Component}** - Description of change
+
+## 🐛 Fixed
+
+- **{Bug}** - Description of fix
+
+## 🔄 Migration (if breaking)
+
+\`\`\`bash
+# Migration commands
+cargo run -- schema generate
+cargo run -- db migrate
+\`\`\`
+
+## 📊 Stats
+
+- **{N} Rust tests passing**
+- **{N} nodes** ({N} shared + {N} org), **{N} layers**, **{N} traits**
+- **{N} arcs** ({N} families)
+- Schema validation: 0 errors, 0 warnings
+
+---
+**Full Changelog**: https://github.com/supernovae-st/novanet/compare/v{prev}...v{current}
+```
+
+## NovaNet-Specific Sections
+
+### For Schema Changes
+```markdown
+## 🔷 Schema Changes
+
+| Before | After | ADR |
+|--------|-------|-----|
+| `OldName` | `NewName` | ADR-XXX |
+```
+
+### For MCP Tool Additions
+```markdown
+## 🔍 MCP Tools
+
+### novanet_{tool_name}
+- **Purpose**: Description
+- **Params**: `param1`, `param2`
+- **Returns**: Description
+```
+
+## Emoji Quick Reference
+
+| Context | Emoji |
+|---------|-------|
+| SemVer/Migration | `🔄` |
+| Schema/Arc changes | `🔷` |
+| Architecture | `🏛️` |
+| MCP/Introspection | `🔍` |
+| Breaking changes | `⚠️` |
+| New features | `✨` |
