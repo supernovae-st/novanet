@@ -1,6 +1,6 @@
 # NovaNet Roadmap
 
-Current version: **v0.14.0** | Last release: v0.13.1 | Target: QR Code AI (https://qrcode-ai.com)
+Current version: **v0.14.0** | Last release: v0.14.0 | Target: QR Code AI (https://qrcode-ai.com)
 
 > **Versioning Note**: Starting with v0.12.0, NovaNet follows strict SemVer. Versions v8.x-v11.x were internal milestones.
 

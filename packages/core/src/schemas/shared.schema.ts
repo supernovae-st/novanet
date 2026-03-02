@@ -201,7 +201,7 @@ export const LocaleVoiceSchema = z.object({
   default_pronoun: z.string()
     .nullable()
     .describe('Default pronoun form (e.g., vous for French formal)'),
-  pronoun_rules: z.record(z.unknown())
+  pronoun_rules: z.record(z.string(), z.unknown())
     .describe('Pronoun usage rules by context'),
 
   directness_score: z.number()
@@ -209,19 +209,19 @@ export const LocaleVoiceSchema = z.object({
     .describe('Directness level from 0 (very indirect) to 100 (very direct)'),
   directness_style: z.enum(['direct', 'indirect', 'balanced'])
     .describe('Preferred communication directness'),
-  softening_patterns: z.record(z.string())
+  softening_patterns: z.record(z.string(), z.string())
     .describe('Patterns for softening direct statements'),
 
   warmth_score: z.number()
     .min(0).max(100)
     .describe('Warmth level from 0 (distant) to 100 (warm)'),
-  warmth_by_stage: z.record(z.number())
+  warmth_by_stage: z.record(z.string(), z.number())
     .describe('Warmth levels by customer journey stage'),
 
   humor_score: z.number()
     .min(0).max(100)
     .describe('Humor acceptance from 0 (no humor) to 100 (very humorous)'),
-  humor_types: z.record(z.string())
+  humor_types: z.record(z.string(), z.string())
     .describe('Appropriate humor types by context'),
 
   avg_sentence_length: z.number()
@@ -232,9 +232,9 @@ export const LocaleVoiceSchema = z.object({
   rhythm_style: z.string()
     .describe('Preferred sentence rhythm and pacing'),
 
-  punctuation_rules: z.record(z.string())
+  punctuation_rules: z.record(z.string(), z.string())
     .describe('Locale-specific punctuation conventions'),
-  honorific_system: z.record(z.unknown())
+  honorific_system: z.record(z.string(), z.unknown())
     .optional()
     .describe('Honorific system rules if applicable'),
 
@@ -340,11 +340,11 @@ export const LocaleCultureSchema = z.object({
     restriction: z.string().describe('Restriction details'),
   })).optional().describe('Imagery restrictions'),
 
-  gender_considerations: z.record(z.string())
+  gender_considerations: z.record(z.string(), z.string())
     .describe('Gender-related content considerations'),
-  age_norms: z.record(z.string())
+  age_norms: z.record(z.string(), z.string())
     .describe('Age-related norms and expectations'),
-  time_norms: z.record(z.string())
+  time_norms: z.record(z.string(), z.string())
     .describe('Time-related cultural norms'),
 
   cultural_phrases: z.array(z.object({
@@ -405,7 +405,7 @@ export const LocaleMarketSchema = z.object({
     percentage: z.number().describe('Percentage of population'),
     threshold: z.string().describe('Income threshold'),
   })).describe('Income distribution'),
-  urban_rural_split: z.record(z.number())
+  urban_rural_split: z.record(z.string(), z.number())
     .describe('Urban vs rural population percentages'),
 
   internet_penetration: z.number()
@@ -417,7 +417,7 @@ export const LocaleMarketSchema = z.object({
   mobile_first_users: z.number()
     .min(0).max(100)
     .describe('Percentage who primarily use mobile'),
-  dominant_os: z.record(z.number())
+  dominant_os: z.record(z.string(), z.number())
     .describe('Operating system market share'),
   ecommerce_adoption: z.number()
     .min(0).max(100)
@@ -434,7 +434,7 @@ export const LocaleMarketSchema = z.object({
   roi_score: z.number()
     .min(0).max(100)
     .describe('Overall ROI potential score'),
-  roi_factors: z.record(z.number())
+  roi_factors: z.record(z.string(), z.number())
     .describe('ROI factor breakdown'),
 
   social_platforms: z.array(z.object({
@@ -452,7 +452,7 @@ export const LocaleMarketSchema = z.object({
     share: z.number().describe('Market share percentage'),
   })).describe('Search engine market share'),
 
-  avg_order_value: z.record(z.number())
+  avg_order_value: z.record(z.string(), z.number())
     .describe('Average order value by category'),
   conversion_rate: z.number()
     .describe('Average e-commerce conversion rate'),
@@ -566,7 +566,7 @@ export const LocaleLexiconSchema = z.object({
     when: z.string().describe('When to use native form'),
   })).describe('Loanwords with preferred native alternatives'),
 
-  connectors: z.record(z.record(z.string()))
+  connectors: z.record(z.string(), z.record(z.string(), z.string()))
     .describe('Connector phrases by category and register'),
 
   unique_concepts: z.array(z.object({
