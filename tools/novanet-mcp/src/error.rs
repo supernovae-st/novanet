@@ -2,6 +2,7 @@
 //!
 //! Uses thiserror for ergonomic error handling.
 
+use crate::hints;
 use rmcp::ErrorData as McpError;
 use rmcp::model::ErrorCode;
 use std::borrow::Cow;
@@ -119,6 +120,11 @@ impl Error {
     /// Create an invalid tool error
     pub fn invalid_tool(tool: impl Into<String>) -> Self {
         Self::InvalidTool(tool.into())
+    }
+
+    /// Get error message with actionable hint
+    pub fn with_hint(&self) -> String {
+        hints::with_hint(&self.to_string())
     }
 }
 
