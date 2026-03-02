@@ -1,0 +1,396 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [0.14.1](https://github.com/supernovae-st/novanet/compare/v0.1.0...v0.14.1) - 2026-03-02
+
+### Added
+
+- *(cli)* TUI default when no command provided
+- *(tui)* add type badges to instance properties
+- add coherence module and enhance arc parsing
+- *(views)* add denomination-forms-context view for MCP agent naming authority (ADR-033)
+- *(novanet)* schema validation + auto-fix engine (GREEN phase)
+- *(schema)* add `novanet schema stats` command for automated arc/node counts
+- *(schema)* add Rule 5 for composite key format validation
+- *(v0.13.1)* LLM-First BLOC Schema + ADR updates
+- *(tui)* sync tree state with tab shortcuts
+- *(tui)* add tree navigation to Nexus key handler
+- *(tui)* refactor render_nexus() to tree layout
+- *(tui)* add render_nexus_tree() function
+- *(tui)* add emoji() method to NexusTab
+- *(tui)* add NexusSection enum and tree state to NexusState
+- *(tui)* add add_classification helper for explicit key:value format
+- *(tui)* v0.13.0 TUI enhancements + MCP pool + color generator
+- *(schema)* ADR-029 *Native pattern + ADR-030 slug ownership
+- *(schema)* add TIER 2 inverse arcs + PRODUCED audit trail (ADR-026)
+- *(schema)* Schema Completion v0.12.5 - Phase 1-4
+- *(schema)* ADR-026 REPRESENTED_BY inverse arc + stale reference fixes
+- *(schema)* ADR-026 geographic inverse arcs + Project.yaml fix
+- *(schema)* ADR-028 complete arc coverage - MENTIONS + inverse arcs
+- *(parsers)* v0.12.5 taxonomy migration - load_taxonomy_from_files
+- *(schema)* ADR-028 Brand Architecture + Geographic AI Prompts
+- *(parsers)* Phase 2 - individual taxonomy file parsers
+- *(tui)* complete architecture panel with cross-navigation
+- *(models)* Phase 1 - taxonomy explosion into individual YAML files
+- *(schema)* ADR-028 Page-Entity Architecture Phase 1
+- *(schema)* Phase 2-4 semantic coherence - ADR-026/027, generation arcs
+- *(dx)* v0.12.0 nomenclature DX tests and documentation updates
+- *(semver)* [**breaking**] transition to v0.12.0 with proper semantic versioning
+- *(schema)* [**breaking**] v0.12.0 "Class Act" - rename traits per ADR-024 Data Origin
+- *(db)* add RowExt trait for ergonomic Neo4j row extraction
+- *(nexus)* wire i18n to all Nexus modules (Tutorial, Glossary, Quiz, Intro)
+- *(nexus)* add i18n foundation with En/Fr toggle (Shift+L)
+- *(tui)* complete Nexus refactoring with 9-tab learning hub
+- *(v11.7)* implement Phase 4 - TUI NavMode + Studio tree
+- *(v11.7)* implement Phase 1-3 - YAML + types + generators
+- *(studio)* add Work Louder Creator Micro 3D visualizer
+- *(tui)* activate Atlas mode with key 5
+- *(dx)* improved testing and hook integration v3
+- *(dx)* enhanced semantic validation system v2
+- *(dx)* semantic coherence validation system
+- TUI tree enrichment + edge effects + context views
+- *(tui)* lazy instance loading and hierarchical position counters
+- *(tui)* improve mode indicator with icons in tree panel title
+- *(tui)* increase tree panel width from 28% to 38%
+- *(tui)* horizontal breadcrumb with fixed height header
+- *(tui)* add sticky breadcrumb and mini-map navigation (v11.6)
+- *(schema)* [**breaking**] v11.5 SEO/GEO Knowledge Atoms migration
+- *(schema)* v11.4 layer restructure and SEO/GEO migration
+- *(tui)* add colored trait icons to tree view
+- *(schema)* [**breaking**] v11.3 layer reorganization
+- *(schema)* v11.2 classification system refinement
+- *(schema)* add EntityCategory classification system (v11.1)
+- *(cli)* add blueprint command (WIP)
+- *(tui)* add TaxonomyTree::mock_for_testing() for unit tests
+- *(arc)* add 3 missing inverse arcs for bidirectional traversal
+- *(schema)* v10.9.1 semantic fixes from deep audit
+- *(schema)* [**breaking**] v10.9.0 naming convention refactor
+- *(tui)* add truncate_to_width and truncate_start_to_width
+- *(tui)* add unicode module with display_width function
+- *(tui)* add Guide mode with 4 educational tabs
+- *(schema)* v10.7 typed semantic arcs + arc quality fixes
+- *(tui)* increase tree view to 30% + fix node count tests
+- *(db)* recursive Cypher seed + Tenant Kind + entity fixes
+- *(entities)* add llm_context to all 281 QR Code AI entities
+- *(tui)* add instance badges, copy, and filter indicator
+- *(tui)* show (✗N!) badge for missing required properties
+- *(tui)* property text expansion with Enter toggle
+- *(entity)* implement entity seed command + Phase 1 data
+- *(schema)* v10.9 typed semantic arcs + GEO layer
+- *(tui)* unified Kind/Instance panel alignment + visual polish
+- *(schema)* v10.7 geographic taxonomy + data quality fixes
+- *(tui)* add schema overlay, audit mode, and UI quick wins
+- *(tui)* vim-standard keybindings + new features + UTF-8 fix
+- *(tui)* add 7 UI quick wins for improved UX
+- *(parsers)* add adaptation parser for FACTS/ILLUSTRATIONS classification
+- *(parser)* add Expression/Lexicon markdown parser
+- *(parser)* add Market markdown parser
+- *(parser)* add Culture markdown parser
+- *(tui)* add nucleo fuzzy search with match highlighting
+- *(generators)* add serialize_json helper for JSON serialization
+- *(tui)* polish UI with box-drawing, animations, and no-emoji icons
+- *(knowledge)* add formatting parser for ATH 2-rules-formatting
+- *(knowledge)* implement slugification parser and generator
+- *(tui)* Atlas Mode with 6 interactive architecture views
+- *(tui)* mode-aware right panel (YAML schema / JSON data)
+- *(tui)* mode-aware right panel (YAML schema vs JSON data)
+- *(v10.6)* TUI arc explorer, seed restructure, config node expansion
+- *(tui)* add Neo4j direct query for ArcKind details
+- *(schema)* add SEO Schema v2 with ATP support
+- *(v10.3)* Entity-Centric Architecture migration
+- *(schema)* v10.1 GEO removal + locale knowledge atoms
+- *(tui)* display knowledge_tier in tree and info panel
+- *(tui)* add knowledge_tier to KindInfo
+- *(kind)* add knowledge_tier output to Cypher generator
+- *(parser)* add KnowledgeTier enum and knowledge_tier field to NodeDef
+- *(schema)* v9.7 Intent Layer - AudiencePersona + ChannelSurface
+- *(logging)* add structured tracing to db commands
+- *(tui)* add theme module with visual encoding from taxonomy.yaml
+- *(v9.5)* complete nomenclature refactoring + visual encoding system
+- *(v9.5)* add visual encoding to taxonomy generator
+- *(core)* add taxonomy.yaml v9.5 structure
+- v9 schema compliance + a11y fixes + TUI skill
+- *(studio)* NavigationModeToggle redesign + Matrix effect improvements
+- *(novanet)* Phase 7B Batches 5-7 — boot animation, effects engine, onboarding
+- *(novanet)* Phase 7B Batches 2-4 — CRUD dialogs, dashboard, command palette, help overlay
+- *(novanet)* Phase 6 completion + Phase 7B TUI — v9.0.0 release candidate
+- *(novanet)* Phase 7A Rust CLI skeleton + audit cleanup
+- *(novanet)* add `novanet doc generate` — view-specific Mermaid diagrams
+- *(v9)* Phase 2 complete — Rust generators replace schema-tools
+- *(v9)* scaffold Rust crate + finalize design plan
+
+### Fixed
+
+- *(ci)* ignore all tests requiring private models
+- *(ci)* ignore tests requiring private models
+- *(tui)* race condition, error logging, and performance improvements
+- *(schema)* correct denomination_forms validation + meta-arc exceptions
+- *(novanet)* test race conditions + Cypher validation + ADR-017 migration
+- *(db,validation)* ADR-030 constraint cleanup + IssueSeverity test import
+- *(novanet)* remove unused IssueSeverity import in autofix module
+- *(tui)* remove needless borrow in build_instance_content
+- *(schema)* v0.13.0 deep verification - terminology & version cleanup
+- *(schema)* v0.13.0 deep verification - comprehensive legacy cleanup
+- *(docs)* v0.12.5 documentation alignment
+- *(schema)* v0.12.5 version alignment + arc count 169
+- *(schema)* v0.12.4 version alignment + arc count update (128→156)
+- *(schema)* update node/arc counts to v0.12.4 values
+- *(views)* remove obsolete views/ directory system (v0.12.5)
+- *(tooling)* update validate-design-system.mjs for minimal taxonomy.yaml
+- *(schema)* ADR-023 terminology fixes + Brand incoming_relations
+- *(tui)* correct class prefix in toggle_tree_item (kind: → class:)
+- *(parsers)* resolve clippy unnecessary_to_owned warning
+- *(tui)* update node counts to v0.12.4 (61 nodes: 40 shared + 21 org)
+- *(schema)* correct arc references and add missing POPULAR_IN arc
+- *(schema)* Phase 1 semantic coherence - create missing inverse arcs
+- *(schema)* correct arc/node references + stage v11.8 TUI changes
+- *(v0.12.0)* eliminate all legacy Global/Tenant terminology
+- *(v0.12.0)* deep verification fixes for nomenclature compliance
+- *(tests)* nomenclature sync tests use RelationRegistry
+- *(v0.12.0)* complete ADR-023 Meta→Schema label migration
+- *(v11.8)* [**breaking**] complete ADR-024 trait rename migration across codebase
+- *(tui)* single-click to load and expand Kind instances
+- *(tui+studio)* enrich meta panels with Schema/Data category + fix TS issues
+- *(tui)* show collapsed chevron when instances not yet loaded
+- *(tui)* fix cursor/chevron desync with EntityCategory support
+- *(tui)* improve loading UX with deferred arc loading and chevron fix
+- *(tui)* update v11.7 comments and suppress dead_code warnings
+- *(studio)* use comprehensive arc family detection for edge effects
+- *(tui,studio)* remove buggy arc graph + fix aside for schema groups
+- *(novanet)* update layer counts and cursor bounds to v11.5
+- *(novanet)* update outdated comments and counts to v11.5
+- *(novanet)* resolve clippy pedantic warnings
+- remove deprecated nomenclature (ADR-014)
+- *(tui)* equal column layout (33/34/33) and tree padding
+- *(tui)* remove chevrons from leaf nodes in Meta mode
+- *(tui)* update atlas.rs to use shared-layer view name
+- *(dx)* schema audit and layer mapping updates
+- *(schema)* v11.5 terminology alignment and documentation update
+- *(tui)* Phase 0 cleanup - Guide→Nexus, trait shortcuts, tests
+- *(docs)* Ralph Wiggum cleanup for v11.2.0 release
+- *(visual-encoding)* complete job trait removal from icons and guides
+- coherence fixes for v11.1 EntityCategory system
+- *(schema)* v10.9 type renames and SEO realm migration
+- *(cli)* remove hardcoded Neo4j password default
+- *(schema)* audit cleanup from 10-sniper agents
+- *(tui)* update v10.9 naming in guide and atlas
+- *(seed)* add EntityContent indexes for v10.9.0 Decision 11
+- *(schema)* complete v10.9.0 verification fixes
+- *(tui)* use display_width for box drawing alignment
+- *(tests)* update arc count assertions to 114
+- *(tui)* hide completeness badge when 100% complete
+- *(tui)* replace unwrap() with pattern matching
+- *(tui)* mode cursor memory now always restores saved position
+- *(tui)* apply code review recommendations (fixes 1-3)
+- *(tests)* update arc counts from 51/56 to 53/58 (v10.6)
+- *(tests)* update hardcoded node counts from 46/47 to 48
+- *(tui)* correct layer_instance_count type from usize to i64
+- *(tui)* clear pending_instance_load on navigation and mode exit
+- *(tui)* clear pending loads on navigation to prevent race condition
+- *(schema)* remove GEO/Thing arcs and update test expectations
+- *(novanet)* update TUI for meta/ YAML paths and fix test expectations
+- *(nomenclature)* sync v10 knowledge model across entire codebase
+- *(dx)* correct NavigationMode order to 1:Meta 2:Data 3:Overlay 4:Query
+- *(cli)* improve error display and add search limit bounds
+- *(visual-encoding)* escape apostrophes in JS string literals
+- *(audit)* address code review findings from v9.5 refactoring
+- *(novanet)* Cypher splitter handles double-quoted strings + regenerate artifacts
+
+### Other
+
+- *(release)* v0.14.1
+- *(ci)* ignore tests requiring private YAML models
+- *(armada)* rename Station 9 to Ship's Log and align templates
+- *(armada)* add ARMADA 10-station quality checkpoints
+- optimize search, cache, and YAML parsing
+- optimize hot paths and remove dead code
+- use LazyLock for regex compilation + fix async bug
+- apply cargo fmt formatting
+- *(validation)* use LazyLock for regex compilation
+- add serial_test for generator integration tests
+- *(tui)* extract App sub-structs and markdown_utils
+- *(dx)* update documentation to v0.14.0 stats
+- ✨ feat(schema): add ordered YAML property serialization helpers
+- cargo fmt for all novanet tools
+- *(cli)* improve schema validation and generators
+- bump version to v0.14.0
+- ✨ feat(tui): add PROPERTIES panel improvements
+- ✨ feat(tui): unify stats display between Class and Instance views
+- *(schema)* TDD Rule 14 DENOMINATION_FORMS_REQUIRED (ADR-033)
+- *(autofix)* add auto-fix system to DX documentation
+- update arc counts from 169 to 182 across all documentation
+- *(schema)* v0.13.1 LLM-First BLOC format for all 61 node-class YAMLs
+- *(db)* reorganize migration files for clean seed
+- *(schema)* standardize YAML property ordering across all models
+- *(tui)* clean up dead code after Nexus refactor
+- *(dx)* cleanup hooks, archive obsolete guides, slim README
+- *(tui)* arc family/class headers use explicit key:value format
+- *(tui)* instance header uses explicit key:value format
+- *(tui)* class header uses explicit key:value format
+- *(tui)* layer header uses explicit key:value format
+- *(tui)* realm header uses explicit key:value format
+- *(tui)* v0.13.0 deep cleanup - remove legacy code and fix docs
+- *(tui)* remove dead code from unified_types.rs
+- *(schema)* v0.13.0 deep verification cleanup
+- *(schema)* v0.13.0 cleanup - eliminate backward-compat aliases
+- *(generators)* fix version assertions for v0.12.5
+- *(dx)* v0.12.5 version alignment across all documentation
+- *(studio)* remove LocaleKnowledgeNode backward compat + semantic audit fixes
+- *(terminology)* Phase 2 exhaustive cleanup - 20-agent sweep
+- *(terminology)* ADR-023/024 exhaustive cleanup across monorepo
+- *(rust)* ADR-023 terminology - kind→class in facets, cypher, TUI
+- complete v0.12.0 legacy terminology cleanup
+- *(core)* clean up ADR-023 transitional comments and deprecated alias
+- *(schema)* rename node-kinds/arc-kinds to node-classes/arc-classes
+- *(schema)* remove legacy backward compat code
+- *(mcp)* complete Kind→Class terminology migration (ADR-023)
+- *(generators)* complete Kind→Class terminology migration (ADR-023)
+- *(tui)* complete v0.12.0 terminology migration (Kind→Class, Meta→Schema)
+- *(schema)* update error messages for taxonomy migration + views v2.0.0
+- *(error)* ADR-023 terminology - Kind→Class, Meta→Schema
+- *(v11.8)* complete Kind→Class terminology migration and field renames
+- *(v11.8)* complete Kind→Class terminology migration
+- *(tui)* complete v11.8 Kind→Class migration across all modules
+- *(v0.12.0)* complete terminology migration
+- *(quiz)* remove unused variables in review mode
+- *(v0.12.0)* V0 Philosophy - eliminate ALL legacy terminology
+- *(dx)* complete v0.12.0 skill updates + hooks
+- *(v0.12.0)* V0 Philosophy cleanup - remove all legacy code and terminology
+- *(novanet)* codebase audit fixes
+- *(generators)* consolidate test fixtures and section headers
+- *(tui)* remove dead code and optimize hashmap usage
+- *(tui)* cleanup legacy patterns and add icons.rs tests
+- *(tui)* clean up code duplication and legacy patterns
+- *(nexus)* optimize memory and I/O patterns
+- cleanup dead code and unused imports
+- *(tui)* adjust layout to 25% tree sidebar
+- *(tui)* implement progressive instance loading for instant UI
+- *(v11.7)* remove unimplemented blueprint views, update mode icons
+- *(tui)* remove atlas/audit dead code (v0 cleanup)
+- *(v11.7)* add implementation foundations
+- *(dx)* update all DX files for v11.7 Unified Tree Architecture
+- fix Ralph Wiggum audit issues (dead exports, doc drift)
+- *(tui)* update CLAUDE.md with Nexus Quiz and test count
+- *(tui)* extract mode-specific key handlers
+- v0 cleanup - remove BC code and deprecated schemas
+- *(novanet)* audit cleanup v11.6 - doc comments and dead code
+- *(novanet)* codebase audit cleanup (Ralph Wiggum v11.6)
+- codebase audit cleanup (Ralph Wiggum v11.6)
+- codebase audit cleanup (Ralph Wiggum v11.6)
+- *(dx)* execute DX improvements plan
+- *(dx)* synchronize all Claude files to v11.5.0
+- *(design)* add research-based improvements from Context7, Motion, Magic UI
+- *(tui)* [**breaking**] Phase 0 Mode Consolidation for Nexus gamification
+- *(nexus)* add gamified knowledge hub design
+- remove job trait and associated nodes (v11.1 schema simplification)
+- Phase 7 dead code cleanup (-325 lines)
+- v11.0 dead code cleanup phase 3
+- v11.0 dead code cleanup phase 2
+- v11.0 legacy cleanup - remove dead code, update naming
+- *(v0)* [**breaking**] remove legacy code, backward compat, and prune SEO keywords
+- *(tui)* add atlas.rs render tests
+- *(tui)* add status.rs tests
+- *(tui)* add tree.rs rendering tests
+- *(tui)* add yaml_panel.rs tests
+- *(tui)* apply cargo fmt to test files
+- *(tui)* add atlas state navigation tests
+- *(tui)* add graph.rs distribution and arc tests
+- *(tui)* add overlays.rs type detection and help content tests
+- *(tui)* add property-based tests for hex_to_rgb (Task 5.2)
+- *(tui)* add Cypher label validation tests (Task 6.1)
+- *(tui)* add PropertyStatus tests for schema matching (Task 4.1)
+- *(tui)* add highlight_matches tests for Task 5.1
+- *(tui)* add tree structure and collapse/expand tests (Task 3.2+3.3)
+- *(tui)* add layer color resolution tests (Task 2.2)
+- *(tui)* add realm color resolution tests (Task 2.1)
+- *(tui)* add render_to_snapshot convenience function
+- *(tui)* add buffer_to_string for snapshot output
+- *(tui)* create testing module with render_widget helper
+- sync node/arc counts to current YAML sources
+- *(v11)* rename ProjectL10n → ProjectContent for consistency
+- *(v11)* comprehensive documentation refactor for v11.0.0
+- *(schema)* move SEO layer from global to tenant (ADR-012)
+- v0 cleanup - remove legacy L10n references
+- *(v10.9.0)* update all DX documentation for naming convention refactor
+- *(v10.9.0)* update all DX documentation for naming convention refactor
+- *(data)* parallelize Neo4j queries with tokio::join!
+- update assertions for v10.9 schema (64 nodes, 115 arcs, trait changes)
+- *(tui)* extract info.rs from ui/mod.rs (v10.9 types)
+- *(tui)* extract tree.rs from ui/mod.rs (v10.9 types)
+- *(tui)* extract status.rs from ui/mod.rs
+- *(tui)* extract graph.rs from ui/mod.rs
+- *(tui)* extract yaml_panel.rs from ui/mod.rs
+- *(tui)* extract audit.rs from ui/mod.rs
+- *(tui)* extract atlas.rs from ui/mod.rs (~1,600 LOC)
+- *(tui)* 5 quick wins - better UX feedback
+- *(tui)* add unicode edge case tests for ZWJ, Devanagari, control chars
+- *(tui)* use unicode-aware width in guide/arcs.rs
+- *(tui)* use unicode-aware truncation in ui/mod.rs
+- add unicode-width + unicode-segmentation for proper display width
+- *(tui)* optimize HashMap + add security validations
+- *(tui)* extract layout constants + improve error handling
+- apply cargo fmt
+- *(tui)* optimize clones + complete keybindings docs
+- *(novanet)* cleanup dead code + fix hardcoded paths
+- cleanup legacy code and unused dependencies
+- *(novanet)* update realm refs from project to tenant (v10.6)
+- *(novanet)* remove dead code from codebase audit
+- *(tui)* standardize breadcrumb separator to →
+- *(tui)* update KEYBINDINGS.md with current shortcuts
+- *(tui)* architectural improvements from code review
+- *(tui)* add 20 edge case tests (Phase 6.4 TDD)
+- *(tui)* add 12 search ranking/scoring tests (Phase 6.3 TDD)
+- *(tui)* add 22 unit tests for EmptyStateKind (Phase 6.2 TDD)
+- *(tui)* add 15 unit tests for fuzzy search (Phase 6.1 TDD)
+- *(tui)* add expand/collapse and filter keybindings
+- *(commands)* migrate node/arc eprintln to tracing
+- *(schema)* add doc comments to Severity enum
+- *(search)* pre-allocate String and Vec capacity
+- *(tui)* add Vec::with_capacity for known-size collections
+- *(tui)* parallelize Neo4j queries with tokio::join!
+- *(parsers)* add LazyLock for regex compilation
+- *(tui)* Phase 1 audit cleanup - dead code removal and consolidation
+- *(tui)* add 7 more const styles for custom RGB colors
+- *(tui)* add const style constants, replace 206 Style::default() calls
+- *(tui)* use FxHashMap for yaml_cache
+- *(tui)* extract ATLAS_LOCALES to module-level const
+- *(tui)* add const YAML styles + Vec::with_capacity
+- *(tui)* extract repeated colors to named constants
+- *(tui)* cache Theme, use refs, add g/G nav, specific loading msgs
+- *(cli)* remove locale generate-rules command
+- *(tui)* replace ASCII meta-graph with Neo4j arc relationships
+- update all documentation to v10.5.0 (3-Realm Architecture)
+- complete v10.4 Entity-Centric Architecture terminology audit
+- *(v10.2)* simplify realms from 3 to 2 (SHARED merged into GLOBAL)
+- *(v10.1)* comprehensive cleanup after SEO architecture refactor
+- *(v10.1)* legacy cleanup after GEO/Thing removal
+- fix v10 nomenclature in all CLAUDE.md files
+- *(novanet)* v10 nomenclature cleanup
+- remove legacy backwards compat code (v9.5 cleanup)
+- [**breaking**] v9.5 nomenclature cleanup (Edge→Arc, Relations→Arcs)
+- *(rust)* add tracing instrumentation + TUI YAML caching
+- fix node/arc counts across codebase
+- *(security)* add comprehensive security DX documentation
+- *(novanet)* update CLAUDE.md with 44 nodes, 10 artifacts, perf optimizations
+- *(novanet)* add security audit toolchain + deny.toml config
+- *(novanet)* add snapshot + property-based testing stack
+- *(novanet)* update test count to 214
+- *(parsers)* extract shared load_yaml utility
+- *(cli)* rename relation command to arc
+- *(dx)* update Phase 0 for v9.5 nomenclature
+- *(schema)* rename Edge to Arc terminology (v9.5)
+- *(v9.5)* Edge → Arc nomenclature across codebase
+- gitignore docs/book + TUI detail panel layout
+- *(novanet)* TUI v2 — rebuild from scratch for stability
+- v9 audit cleanup — stale comment + test count
+- v9 audit cleanup — version bump, dead code, stale docs
+
+### Security
+
+- *(mcp)* fix Cypher and label injection vulnerabilities
