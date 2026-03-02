@@ -17,14 +17,17 @@ NovaNet MCP implements **RLM-on-KG** (Recursive Language Model on Knowledge Grap
 │                                                                             │
 │  Claude Code ──► stdio ──► NovaNet MCP Server ──► Neo4j (bolt://7687)      │
 │                    │              │                                         │
-│                    │              ├── novanet_query      (Cypher execution) │
-│                    │              ├── novanet_describe   (Schema bootstrap) │
-│                    │              ├── novanet_search     (Fulltext search)  │
-│                    │              ├── novanet_traverse   (Graph traversal)  │
-│                    │              ├── novanet_assemble   (Context assembly) │
-│                    │              ├── novanet_atoms      (Knowledge atoms)  │
-│                    │              ├── novanet_generate   (RLM-on-KG context)│
-│                    │              └── novanet_introspect (Schema queries)   │
+│                    │              ├── novanet_query           (Cypher exec) │
+│                    │              ├── novanet_describe        (Bootstrap)   │
+│                    │              ├── novanet_search          (Fulltext)    │
+│                    │              ├── novanet_traverse        (Traversal)   │
+│                    │              ├── novanet_assemble        (Context)     │
+│                    │              ├── novanet_atoms           (Knowledge)   │
+│                    │              ├── novanet_generate        (RLM-on-KG)   │
+│                    │              ├── novanet_introspect      (Schema)      │
+│                    │              ├── novanet_batch           (Bulk ops)    │
+│                    │              ├── novanet_cache_stats     (Cache info)  │
+│                    │              └── novanet_cache_invalidate (Cache ctrl) │
 │                    │                                                        │
 │               MCP Protocol                                                  │
 │               (JSON-RPC 2.0)                                                │
@@ -44,6 +47,12 @@ NovaNet MCP implements **RLM-on-KG** (Recursive Language Model on Knowledge Grap
 │  ├── Prompts: cypher_query, cypher_explain, block_generation,               │
 │  │            page_generation, entity_analysis, locale_briefing             │
 │  └── Context Anchors: Cross-page references via REFERENCES_PAGE arc         │
+│                                                                             │
+│  PHASE 4 (Complete)                                                         │
+│  ├── Tool: novanet_batch (bulk operations with parallel execution)          │
+│  ├── Tools: novanet_cache_stats, novanet_cache_invalidate (cache control)   │
+│  ├── Feature: Error hints system with actionable suggestions                │
+│  └── Total: 11 MCP tools                                                    │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -480,6 +489,112 @@ Introspect the NovaNet schema: query NodeClasses, ArcClasses, and their relation
 }
 ```
 
+### `novanet_batch`
+
+Execute multiple operations in a single request with parallel execution support.
+
+**Parameters:**
+```json
+{
+  "operations": [
+    {
+      "id": "op1",
+      "tool": "novanet_search",
+      "params": { "query": "qr code", "limit": 10 }
+    },
+    {
+      "id": "op2",
+      "tool": "novanet_traverse",
+      "params": { "start_key": "homepage", "max_depth": 2 }
+    }
+  ],
+  "parallel": true,
+  "stop_on_error": false
+}
+```
+
+**Returns:**
+```json
+{
+  "results": [
+    { "id": "op1", "success": true, "data": {...}, "execution_time_ms": 45 },
+    { "id": "op2", "success": true, "data": {...}, "execution_time_ms": 32 }
+  ],
+  "total_execution_time_ms": 52,
+  "operations_count": 2,
+  "success_count": 2,
+  "error_count": 0
+}
+```
+
+**Use cases:**
+- Batch context assembly for multiple entities
+- Parallel search across different filters
+- Bulk schema introspection
+
+### `novanet_cache_stats`
+
+Get statistics about the query cache.
+
+**Parameters:**
+```json
+{}
+```
+
+**Returns:**
+```json
+{
+  "entries": 1250,
+  "max_entries": 10000,
+  "hit_rate": 0.73,
+  "hits": 8500,
+  "misses": 3150,
+  "memory_estimate_bytes": 2500000,
+  "ttl_secs": 300
+}
+```
+
+### `novanet_cache_invalidate`
+
+Invalidate cache entries by pattern or completely clear the cache.
+
+**Parameters:**
+```json
+{
+  "pattern": "Entity:*",
+  "clear_all": false
+}
+```
+
+**Returns:**
+```json
+{
+  "invalidated_count": 45,
+  "pattern_used": "Entity:*",
+  "cleared_all": false
+}
+```
+
+**Use cases:**
+- Clear cache after schema changes
+- Invalidate specific entity caches during development
+- Force fresh data retrieval for time-sensitive operations
+
+---
+
+## Error Hints
+
+The MCP server provides actionable error hints for common issues:
+
+| Error | Hint |
+|-------|------|
+| Entity not found | "Check key spelling. Use novanet_search to find similar entities." |
+| Write operation blocked | "This server is read-only. Use the CLI for mutations." |
+| Token budget exceeded | "Reduce limit, narrow filters, or increase budget." |
+| Connection failed | "Verify Neo4j is running: docker ps | grep neo4j" |
+
+Hints appear in the `hint` field of error responses to guide agents toward resolution.
+
 ---
 
 ## Resources
@@ -721,7 +836,10 @@ src/
 │   ├── assemble.rs      # novanet_assemble implementation
 │   ├── atoms.rs         # novanet_atoms implementation
 │   ├── generate.rs      # novanet_generate implementation
-│   └── introspect.rs    # novanet_introspect implementation
+│   ├── introspect.rs    # novanet_introspect implementation
+│   ├── batch.rs         # novanet_batch implementation
+│   └── cache_stats.rs   # novanet_cache_stats/invalidate implementation
+├── hints.rs             # Error hints system
 ├── resources/
 │   └── mod.rs           # MCP resources (entity://, class://, locale://, view://)
 └── prompts/
@@ -923,7 +1041,13 @@ RETURN t.key, t.value LIMIT 50
 
 **Design document**: `docs/plans/2026-02-12-phase3-generate-prompts-design.md`
 
-### Phase 4 (Future)
+### Phase 4 (Complete)
+- [x] Tool: novanet_batch (bulk operations with parallel execution)
+- [x] Tools: novanet_cache_stats, novanet_cache_invalidate (cache management)
+- [x] Feature: Error hints system with actionable suggestions
+- [x] Total: 11 MCP tools
+
+### Phase 5 (Future)
 - [ ] Integration tests with real Neo4j + seed data
 - [ ] Claude Code integration testing (MCP protocol validation)
 - [ ] Performance benchmarks (latency, token efficiency)

@@ -308,7 +308,7 @@ pnpm infra:seed            # Seed database
 
 ---
 
-## MCP Server (v0.14.0)
+## MCP Server (v0.5.0)
 
 NovaNet exposes an MCP (Model Context Protocol) server for workflow automation and AI agent integration.
 
@@ -316,7 +316,7 @@ NovaNet exposes an MCP (Model Context Protocol) server for workflow automation a
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  MCP TOOLS (8 tools)                                                        │
+│  MCP TOOLS (11 tools)                                                       │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  novanet_query       Execute read-only Cypher against Neo4j                 │
@@ -359,6 +359,18 @@ NovaNet exposes an MCP (Model Context Protocol) server for workflow automation a
 │                      params: target (classes|class|arcs|arc), name,         │
 │                              realm, layer, family, include_arcs             │
 │                      returns: target, data, token_estimate                  │
+│                                                                             │
+│  novanet_batch       Bulk operations with parallel execution                │
+│                      params: operations[], parallel, stop_on_error          │
+│                      returns: results[], total_execution_time_ms            │
+│                                                                             │
+│  novanet_cache_stats Get cache statistics (entries, hit rate, memory)       │
+│                      params: (none)                                         │
+│                      returns: entries, hit_rate, hits, misses, ttl_secs     │
+│                                                                             │
+│  novanet_cache_invalidate  Invalidate cache by pattern or clear all         │
+│                      params: pattern, clear_all                             │
+│                      returns: invalidated_count, pattern_used               │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
