@@ -143,6 +143,18 @@ enum Commands {
         #[arg(long, short)]
         verbose: bool,
     },
+    /// Show graph statistics from schema YAML (offline, no Neo4j required)
+    Stats {
+        /// Output format
+        #[arg(long, value_enum, default_value_t = novanet::commands::stats::StatsFormat::Text)]
+        format: novanet::commands::stats::StatsFormat,
+        /// Show detailed breakdown by category
+        #[arg(long)]
+        detailed: bool,
+        /// Include arc statistics (default: nodes only)
+        #[arg(long)]
+        include_arcs: bool,
+    },
 }
 
 #[derive(clap::Args)]
@@ -1031,6 +1043,22 @@ async fn main() -> color_eyre::Result<()> {
                 }
             };
             novanet::commands::doctor::run_doctor(&root, db.as_ref(), verbose).await?;
+        }
+
+        // ── Stats (YAML only, no Neo4j) ──────────────────────────────
+        Commands::Stats {
+            format,
+            detailed,
+            include_arcs,
+        } => {
+            let root = root?;
+            eprintln!(
+                "novanet stats{}{} (root: {})",
+                if detailed { " --detailed" } else { "" },
+                if include_arcs { " --include-arcs" } else { "" },
+                root.display()
+            );
+            novanet::commands::stats::run_stats(&root, format, detailed, include_arcs)?;
         }
     }
 
