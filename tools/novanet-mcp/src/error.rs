@@ -74,6 +74,14 @@ pub enum Error {
     /// Invalid tool name in batch operation
     #[error("Invalid tool: {0}")]
     InvalidTool(String),
+
+    /// Invalid parameters provided
+    #[error("Invalid parameters: {0}")]
+    InvalidParams(String),
+
+    /// Feature not implemented
+    #[error("Not implemented: {0}")]
+    NotImplemented(String),
 }
 
 impl Error {
@@ -128,6 +136,9 @@ impl Error {
     }
 }
 
+// JSON-RPC 2.0 error code for not implemented
+const NOT_IMPLEMENTED: i32 = -32000; // Custom code for not implemented
+
 // Convert to MCP error format
 impl From<Error> for McpError {
     fn from(err: Error) -> Self {
@@ -137,6 +148,8 @@ impl From<Error> for McpError {
             Error::WriteNotAllowed { .. } => INVALID_PARAMS,
             Error::TokenBudgetExceeded { .. } => INVALID_PARAMS,
             Error::InvalidTool(_) => INVALID_PARAMS,
+            Error::InvalidParams(_) => INVALID_PARAMS,
+            Error::NotImplemented(_) => NOT_IMPLEMENTED,
             _ => INTERNAL_ERROR,
         };
         McpError {

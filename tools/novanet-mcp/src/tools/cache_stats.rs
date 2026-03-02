@@ -40,7 +40,8 @@ pub struct CacheStats {
 #[derive(Debug, Clone, Deserialize, Serialize, JsonSchema)]
 pub struct CacheInvalidateParams {
     /// Invalidate specific key pattern (optional)
-    /// Note: Pattern matching invalidates all entries containing this substring
+    /// Note: Pattern-based invalidation is NOT YET SUPPORTED.
+    /// If provided, an error will be returned. Use `all: true` instead.
     #[serde(default)]
     pub pattern: Option<String>,
     /// Invalidate all entries (default: false)
@@ -85,15 +86,30 @@ pub async fn get_stats(state: &State, _params: CacheStatsParams) -> Result<Cache
 
 /// Invalidate cache entries
 ///
-/// Supports full cache clear or pattern-based invalidation.
+/// Supports full cache clear only. Pattern-based invalidation is not supported.
 pub async fn invalidate(state: &State, params: CacheInvalidateParams) -> Result<CacheInvalidateResult> {
+    use crate::error::Error;
+
     let cache = state.cache();
     let before = cache.entry_count();
 
+    // Validate parameters: cannot specify both 'all' and 'pattern'
+    if params.all && params.pattern.is_some() {
+        return Err(Error::InvalidParams(
+            "Cannot specify both 'all' and 'pattern'".into(),
+        ));
+    }
+
+    // Pattern-based invalidation is not supported by moka
+    if let Some(ref pattern) = params.pattern {
+        return Err(Error::NotImplemented(format!(
+            "Pattern-based invalidation ('{}') is not yet supported. Use all=true instead.",
+            pattern
+        )));
+    }
+
     if params.all {
         cache.invalidate_all().await;
-    } else if let Some(pattern) = params.pattern {
-        cache.invalidate_matching(&pattern).await;
     }
 
     // Force sync to get accurate count
@@ -171,5 +187,22 @@ mod tests {
         let json = serde_json::to_string(&result).unwrap();
         assert!(json.contains("\"invalidated\":10"));
         assert!(json.contains("\"remaining\":15"));
+    }
+
+    #[test]
+    fn test_cache_invalidate_params_both_all_and_pattern() {
+        // It's valid to deserialize params with both, but invalidate() will reject them
+        let params: CacheInvalidateParams =
+            serde_json::from_str(r#"{"all": true, "pattern": "entity:*"}"#).unwrap();
+        assert!(params.all);
+        assert_eq!(params.pattern, Some("entity:*".to_string()));
+    }
+
+    #[test]
+    fn test_cache_invalidate_params_neither() {
+        // Valid params with neither all nor pattern (no-op)
+        let params: CacheInvalidateParams = serde_json::from_str(r#"{}"#).unwrap();
+        assert!(!params.all);
+        assert!(params.pattern.is_none());
     }
 }
