@@ -32,10 +32,10 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@turbo/gen": "^2.8.10",
+    "@turbo/gen": "^2.8.12",
     "husky": "^9.1.0",
     "tsx": "^4.19.0",
-    "turbo": "^2.8.10"
+    "turbo": "^2.8.12"
   },
   "engines": {
     "node": ">=20.0.0",
