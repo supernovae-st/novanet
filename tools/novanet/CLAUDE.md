@@ -25,6 +25,9 @@ novanet <command>    # Run specific command
 | `novanet db seed` | Seed Neo4j database | Yes |
 | `novanet search --query=X` | Fulltext search | Yes |
 | `novanet doctor` | System health check | Optional |
+| `novanet export` | Export graph to Cypher/JSON/GraphML/CSV | Yes |
+| `novanet stats` | Schema statistics from YAML | No |
+| `novanet diff` | Compare YAML schema with Neo4j | Yes |
 
 ## Schema Stats
 
@@ -192,6 +195,36 @@ novanet views validate               # Validate Rust↔TS parity
 novanet views validate --verbose     # Detailed output
 ```
 
+### Export Operations (Neo4j Required)
+
+```bash
+novanet export                       # Export entire graph to Cypher (default)
+novanet export --format=cypher       # Cypher CREATE statements
+novanet export --format=json         # JSON node/relationship arrays
+novanet export --format=graphml      # GraphML for Gephi/yEd
+novanet export --format=csv          # CSV files (nodes.csv, relationships.csv)
+novanet export --output=./backup/    # Custom output directory
+novanet export --filter="realm:org"  # Export only org realm
+```
+
+### Schema Statistics (No Neo4j Required)
+
+```bash
+novanet stats                        # Schema statistics from YAML
+novanet stats --format=table         # Human-readable table (default)
+novanet stats --format=json          # JSON output for CI/scripts
+novanet stats --verbose              # Include per-layer breakdown
+```
+
+### Schema Diff (Neo4j Required)
+
+```bash
+novanet diff                         # Compare YAML schema with Neo4j
+novanet diff --verbose               # Show detailed differences
+novanet diff --format=json           # JSON output for CI
+novanet diff --fix                   # Generate migration Cypher (dry-run)
+```
+
 ### System Utilities
 
 ```bash
@@ -240,6 +273,9 @@ src/
     schema.rs     schema generate/validate (YAML → artifacts)
     doc.rs        doc generate/list (YAML views → Mermaid)
     filter.rs     filter build (JSON stdin → Cypher stdout)
+    export.rs     export (Cypher/JSON/GraphML/CSV graph export)
+    stats.rs      stats (YAML schema statistics)
+    diff.rs       diff (YAML vs Neo4j comparison)
   parsers/        YAML parsers (yaml_node, relations, taxonomy, organizing, views)
   generators/     Code generators (organizing, kind, arc_schema, layer, mermaid, view_mermaid, autowire, hierarchy, colors, icons, visual_encoding, views, tui_icons)
   validation/     Schema validation + auto-fix system
