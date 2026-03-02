@@ -26,13 +26,13 @@ catalog:
   husky: ^9.1.0
 
   # Types
-  "@types/node": ^22.10.5
+  "@types/node": ^25.3.3
 
   # Linting
   eslint: ^9.39.2
-  "@eslint/js": ^10.0.1
-  "@typescript-eslint/eslint-plugin": ^8.53.1
-  "@typescript-eslint/parser": ^8.53.1
+  "@eslint/js": ^9.39.3
+  "@typescript-eslint/eslint-plugin": ^8.56.1
+  "@typescript-eslint/parser": ^8.56.1
 
 catalogs:
   # React 19 ecosystem (for apps/studio)
