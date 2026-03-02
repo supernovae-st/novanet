@@ -69,6 +69,10 @@ pub enum Error {
     /// Internal error
     #[error("Internal error: {0}")]
     Internal(String),
+
+    /// Invalid tool name in batch operation
+    #[error("Invalid tool: {0}")]
+    InvalidTool(String),
 }
 
 impl Error {
@@ -111,6 +115,11 @@ impl Error {
             reason: reason.into(),
         }
     }
+
+    /// Create an invalid tool error
+    pub fn invalid_tool(tool: impl Into<String>) -> Self {
+        Self::InvalidTool(tool.into())
+    }
 }
 
 // Convert to MCP error format
@@ -121,6 +130,7 @@ impl From<Error> for McpError {
             Error::InvalidCypher { .. } => INVALID_PARAMS,
             Error::WriteNotAllowed { .. } => INVALID_PARAMS,
             Error::TokenBudgetExceeded { .. } => INVALID_PARAMS,
+            Error::InvalidTool(_) => INVALID_PARAMS,
             _ => INTERNAL_ERROR,
         };
         McpError {

@@ -1052,6 +1052,7 @@ dependencies = [
  "anyhow",
  "criterion",
  "dotenvy",
+ "futures",
  "insta",
  "moka",
  "neo4rs",
