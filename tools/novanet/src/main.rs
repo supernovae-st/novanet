@@ -114,6 +114,8 @@ enum Commands {
         #[command(subcommand)]
         action: EntityAction,
     },
+    /// Export subgraph to various formats (Cypher, JSON, GraphML, CSV)
+    Export(novanet::commands::export::ExportArgs),
     /// Views validation and export for cross-validation (TUI/Studio)
     Views {
         #[command(subcommand)]
@@ -952,6 +954,13 @@ async fn main() -> color_eyre::Result<()> {
                     }
                 }
             }
+        }
+
+        // ── Export (Neo4j Required) ─────────────────────────────
+        Commands::Export(ref args) => {
+            let db = connect_db(&uri, &user, password.as_ref()).await?;
+            eprintln!("novanet export --format={:?}", args.format);
+            novanet::commands::export::run_export(&db, args.clone(), novanet::output::OutputFormat::Table).await?;
         }
 
         #[cfg(feature = "tui")]

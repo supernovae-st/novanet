@@ -7,6 +7,7 @@ pub mod db;
 pub mod doc;
 pub mod doctor;
 pub mod entity;
+pub mod export;
 pub mod filter;
 pub mod knowledge;
 pub mod locale;
