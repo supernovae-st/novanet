@@ -4,6 +4,7 @@ pub mod arc;
 pub mod blueprint;
 pub mod completions;
 pub mod db;
+pub mod diff;
 pub mod doc;
 pub mod doctor;
 pub mod entity;
