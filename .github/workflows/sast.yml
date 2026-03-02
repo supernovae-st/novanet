@@ -46,7 +46,7 @@ jobs:
         working-directory: tools/novanet-mcp
         run: cargo geiger --all-features 2>&1 | tee geiger-mcp.txt
       - name: Upload geiger reports
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: geiger-reports
           path: |
