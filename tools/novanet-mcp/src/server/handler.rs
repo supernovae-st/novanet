@@ -6,8 +6,8 @@
 use crate::prompts::{self, PromptDefinition, PromptMessage as InternalPromptMessage};
 use crate::server::State;
 use crate::tools::{
-    AssembleParams, AtomsParams, BatchParams, DescribeParams, GenerateParams, IntrospectParams,
-    QueryParams, SearchParams, TraverseParams,
+    AssembleParams, AtomsParams, BatchParams, CacheInvalidateParams, CacheStatsParams,
+    DescribeParams, GenerateParams, IntrospectParams, QueryParams, SearchParams, TraverseParams,
 };
 use rmcp::handler::server::tool::ToolRouter;
 use rmcp::handler::server::wrapper::Parameters;
@@ -283,6 +283,62 @@ impl NovaNetHandler {
         params: Parameters<BatchParams>,
     ) -> Result<CallToolResult, McpError> {
         let result = crate::tools::batch::execute(&self.state, params.0)
+            .await
+            .map_err(|e| McpError {
+                code: ErrorCode(-32000),
+                message: Cow::Owned(e.to_string()),
+                data: None,
+            })?;
+
+        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
+            code: ErrorCode(-32603),
+            message: Cow::Owned(format!("Serialization error: {}", e)),
+            data: None,
+        })?;
+
+        Ok(CallToolResult::success(vec![Content::text(json)]))
+    }
+
+    /// Get cache statistics including hit rate, entry count, and memory usage.
+    ///
+    /// Task A3: 10th MCP tool for cache monitoring.
+    #[tool(
+        name = "novanet_cache_stats",
+        description = "Get cache statistics including hit rate, entry count, and memory usage."
+    )]
+    async fn novanet_cache_stats(
+        &self,
+        params: Parameters<CacheStatsParams>,
+    ) -> Result<CallToolResult, McpError> {
+        let result = crate::tools::cache_stats::get_stats(&self.state, params.0)
+            .await
+            .map_err(|e| McpError {
+                code: ErrorCode(-32000),
+                message: Cow::Owned(e.to_string()),
+                data: None,
+            })?;
+
+        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
+            code: ErrorCode(-32603),
+            message: Cow::Owned(format!("Serialization error: {}", e)),
+            data: None,
+        })?;
+
+        Ok(CallToolResult::success(vec![Content::text(json)]))
+    }
+
+    /// Invalidate cache entries. Use pattern for selective invalidation or all=true for full clear.
+    ///
+    /// Task A3: 11th MCP tool for cache management.
+    #[tool(
+        name = "novanet_cache_invalidate",
+        description = "Invalidate cache entries. Use pattern for selective invalidation or all=true for full clear."
+    )]
+    async fn novanet_cache_invalidate(
+        &self,
+        params: Parameters<CacheInvalidateParams>,
+    ) -> Result<CallToolResult, McpError> {
+        let result = crate::tools::cache_stats::invalidate(&self.state, params.0)
             .await
             .map_err(|e| McpError {
                 code: ErrorCode(-32000),
