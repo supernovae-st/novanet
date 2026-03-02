@@ -155,6 +155,8 @@ enum Commands {
         #[arg(long)]
         include_arcs: bool,
     },
+    /// Compare schema YAML with Neo4j database state to detect drift
+    Diff(novanet::commands::diff::DiffArgs),
 }
 
 #[derive(clap::Args)]
@@ -1059,6 +1061,23 @@ async fn main() -> color_eyre::Result<()> {
                 root.display()
             );
             novanet::commands::stats::run_stats(&root, format, detailed, include_arcs)?;
+        }
+
+        // ── Diff (YAML + Neo4j) ──────────────────────────────────────
+        Commands::Diff(ref args) => {
+            let db = connect_db(&uri, &user, password.as_ref()).await?;
+            let root = root?;
+            eprintln!(
+                "novanet diff --format={:?}{}{} (root: {})",
+                args.format,
+                if args.nodes_only { " --nodes-only" } else { "" },
+                if args.arcs_only { " --arcs-only" } else { "" },
+                root.display()
+            );
+            let has_differences = novanet::commands::diff::run_diff(&db, &root, args).await?;
+            if args.exit_code && has_differences {
+                std::process::exit(1);
+            }
         }
     }
 
