@@ -6,8 +6,8 @@
 use crate::prompts::{self, PromptDefinition, PromptMessage as InternalPromptMessage};
 use crate::server::State;
 use crate::tools::{
-    AssembleParams, AtomsParams, DescribeParams, GenerateParams, IntrospectParams, QueryParams,
-    SearchParams, TraverseParams,
+    AssembleParams, AtomsParams, BatchParams, DescribeParams, GenerateParams, IntrospectParams,
+    QueryParams, SearchParams, TraverseParams,
 };
 use rmcp::handler::server::tool::ToolRouter;
 use rmcp::handler::server::wrapper::Parameters;
@@ -254,6 +254,35 @@ impl NovaNetHandler {
         params: Parameters<IntrospectParams>,
     ) -> Result<CallToolResult, McpError> {
         let result = crate::tools::introspect::execute(&self.state, params.0)
+            .await
+            .map_err(|e| McpError {
+                code: ErrorCode(-32000),
+                message: Cow::Owned(e.to_string()),
+                data: None,
+            })?;
+
+        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
+            code: ErrorCode(-32603),
+            message: Cow::Owned(format!("Serialization error: {}", e)),
+            data: None,
+        })?;
+
+        Ok(CallToolResult::success(vec![Content::text(json)]))
+    }
+
+    /// Execute multiple NovaNet tools in a single request.
+    ///
+    /// Supports sequential and parallel execution modes with fail-fast behavior.
+    /// Task A1: 9th MCP tool for bulk operations.
+    #[tool(
+        name = "novanet_batch",
+        description = "Execute multiple NovaNet tools in a single request. Supports parallel execution and fail-fast behavior."
+    )]
+    async fn novanet_batch(
+        &self,
+        params: Parameters<BatchParams>,
+    ) -> Result<CallToolResult, McpError> {
+        let result = crate::tools::batch::execute(&self.state, params.0)
             .await
             .map_err(|e| McpError {
                 code: ErrorCode(-32000),
