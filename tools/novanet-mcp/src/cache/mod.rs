@@ -101,25 +101,6 @@ impl QueryCache {
         self.cache.run_pending_tasks().await;
     }
 
-    /// Invalidate entries matching a pattern (substring match on keys)
-    ///
-    /// Note: This is an async operation that iterates through cache entries.
-    /// For large caches, consider using `invalidate_all()` instead.
-    pub async fn invalidate_matching(&self, pattern: &str) {
-        // moka's future cache doesn't expose key iteration directly,
-        // so we use invalidate_all for now when a pattern is provided.
-        // In practice, cache keys are hashes, so pattern matching on
-        // the original query would require maintaining a separate index.
-        //
-        // For now, any pattern invalidation clears the entire cache.
-        // This is safe but conservative - a future enhancement could
-        // maintain a query->hash mapping for selective invalidation.
-        if !pattern.is_empty() {
-            self.cache.invalidate_all();
-            self.cache.run_pending_tasks().await;
-        }
-    }
-
     /// Run pending maintenance tasks (eviction, expiration)
     pub async fn run_pending_tasks(&self) {
         self.cache.run_pending_tasks().await;
