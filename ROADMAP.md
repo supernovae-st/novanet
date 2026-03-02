@@ -1,6 +1,6 @@
 # NovaNet Roadmap
 
-Current version: **v0.14.0** | Last release: v0.14.0 | Target: QR Code AI (https://qrcode-ai.com)
+Current version: **v0.14.1** | Last release: v0.14.1 | Target: QR Code AI (https://qrcode-ai.com)
 
 > **Versioning Note**: Starting with v0.12.0, NovaNet follows strict SemVer. Versions v8.x-v11.x were internal milestones.
 
@@ -41,8 +41,10 @@ v0.12 SemVer Transition                █████████████�
       Proper semantic versioning (0.x = pre-production)
 v0.13 *Native Pattern                  ████████████████████  100%  RELEASED
       ADR-029 unified *Native suffix, ADR-030 Slug Ownership
-v0.14 MCP Introspect                   ████████████████████  100%  <- CURRENT
+v0.14 MCP Introspect                   ████████████████████  100%  RELEASED
       8 MCP tools, novanet_introspect, context_build_log (ADR-033)
+v0.14.1 Maintenance                    ████████████████████  100%  <- CURRENT
+      Zod 4 migration, dagre revert, dependency batch update
 
 ═══════════════════════════════════════════════════════════════════════════════
 IDEAS (no timeline)

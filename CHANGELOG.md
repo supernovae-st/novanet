@@ -7,6 +7,29 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.14.1] - 2026-03-02
+
+### Fixed
+- **Zod 4 Migration** - Fixed `z.record()` API breaking changes in `shared.schema.ts`
+  - Zod 4 requires explicit key schema: `z.record(z.string(), valueSchema)`
+  - Updated 14 instances across LocaleVoice, LocaleCulture, Adaptation schemas
+- **dagre Compatibility** - Reverted `@dagrejs/dagre` from 2.0.4 to 1.1.8
+  - dagre 2.0 breaking API changes caused test failures in `schemaLayoutELK.test.ts`
+  - Migration to dagre 2.0 documented as future work in `docs/plans/`
+
+### Changed
+- **Batch Dependency Updates** - Updated 13 dependencies via PR #55
+  - TypeScript ecosystem: `@types/node`, `@types/react`, `eslint-config-next`, `next`
+  - React ecosystem: `@testing-library/react`, `lucide-react`
+  - Runtime: `framer-motion`, `neo4j-driver`, `sonner`, `zustand`
+  - Testing: `@playwright/test`, `@types/jest`, `ts-jest`
+- **Zod 4** - Upgraded from Zod 3.24 to 4.3 with breaking API migration
+
+### Statistics
+- **610 tests passing** (Studio + Core)
+- **Type-check clean** (3/3 packages)
+- **Lint clean** (0 errors)
+
 ## [0.14.0] - 2026-02-19
 
 ### Added
@@ -649,7 +672,8 @@ cargo run -- schema generate
 - Migrated from git submodules to true monorepo
 - Organization links updated to supernovae-st
 
-[Unreleased]: https://github.com/supernovae-st/novanet-dev/compare/v0.14.0...HEAD
+[Unreleased]: https://github.com/supernovae-st/novanet-dev/compare/v0.14.1...HEAD
+[0.14.1]: https://github.com/supernovae-st/novanet-dev/compare/v0.14.0...v0.14.1
 [0.14.0]: https://github.com/supernovae-st/novanet-dev/compare/v0.13.1...v0.14.0
 [0.13.1]: https://github.com/supernovae-st/novanet-dev/compare/v0.13.0...v0.13.1
 [0.13.0]: https://github.com/supernovae-st/novanet-dev/compare/v0.12.5...v0.13.0
