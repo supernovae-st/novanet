@@ -32,7 +32,7 @@ catalog:
   eslint: ^9.39.2
   "@eslint/js": ^10.0.1
   "@typescript-eslint/eslint-plugin": ^8.53.1
-  "@typescript-eslint/parser": ^8.53.1
+  "@typescript-eslint/parser": ^8.56.1
 
 catalogs:
   # React 19 ecosystem (for apps/studio)
