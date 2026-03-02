@@ -4,6 +4,54 @@ For complete history, see [CHANGELOG.md](./CHANGELOG.md).
 
 ## [Unreleased]
 
+## [0.15.0] - 2026-03-02
+
+### Added
+- **MCP Tool: novanet_batch** - Bulk operations with parallel execution support
+  - Execute multiple MCP operations in a single call
+  - Configurable parallelism with `max_concurrent` parameter
+  - `fail_fast` option to stop on first error or continue
+  - Returns detailed results for each operation
+- **MCP Tool: novanet_cache_stats** - Cache statistics and monitoring
+  - Get cache hit/miss counts and hit rate percentage
+  - View entry count, memory usage, and TTL settings
+  - Useful for debugging and performance optimization
+- **MCP Tool: novanet_cache_invalidate** - Manual cache invalidation
+  - Clear all cached queries with `all=true`
+  - Pattern-based invalidation (returns error with guidance)
+  - Reports invalidation count and remaining entries
+- **Error Hints System** - Actionable suggestions for common errors
+  - Pattern-based error detection (10 categories)
+  - Hints for Cypher syntax, Neo4j connection, auth, timeouts, etc.
+  - `with_hint()` method on Error type for enhanced messages
+- **CLI Command: novanet export** - Export graph data to multiple formats
+  - Formats: Cypher, JSON, GraphML, CSV
+  - Filter by labels (`--labels`) and relationship types (`--relationships`)
+  - Custom Cypher query support (`--query`)
+  - Schema export option (`--include-schema`)
+- **CLI Command: novanet stats** - Schema statistics from YAML (offline)
+  - Node classes by realm, layer, and trait
+  - Arc classes by family and scope
+  - Output formats: text (default), JSON, YAML
+  - `--detailed` and `--include-arcs` flags
+- **CLI Command: novanet diff** - Compare YAML schema with Neo4j database
+  - Detect added/removed/modified node and arc classes
+  - Human-readable and JSON output formats
+  - `--exit-code` for CI integration (exits 1 if drift detected)
+  - `--nodes-only` and `--arcs-only` filters
+
+### Changed
+- MCP tool count: 8 → 11 (added batch, cache_stats, cache_invalidate)
+- NovaNet MCP version: 0.5.0 → 0.6.0
+- CLI command count updated with 3 new commands
+- Documentation updated with 11 tools references
+
+### Statistics
+- **11 MCP tools**: query, describe, search, traverse, assemble, atoms, generate, introspect, batch, cache_stats, cache_invalidate
+- **1279 tests passing** (39 MCP + 1240 CLI)
+- **Type-check clean** (all packages)
+- **Lint clean** (0 errors, 0 clippy warnings)
+
 ## [0.14.1] - 2026-03-02
 
 ### Fixed
