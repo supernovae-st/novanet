@@ -27,7 +27,8 @@ NovaNet MCP implements **RLM-on-KG** (Recursive Language Model on Knowledge Grap
 │                    │              ├── novanet_introspect      (Schema)      │
 │                    │              ├── novanet_batch           (Bulk ops)    │
 │                    │              ├── novanet_cache_stats     (Cache info)  │
-│                    │              └── novanet_cache_invalidate (Cache ctrl) │
+│                    │              ├── novanet_cache_invalidate (Cache ctrl) │
+│                    │              └── novanet_write           (Data writes) │
 │                    │                                                        │
 │               MCP Protocol                                                  │
 │               (JSON-RPC 2.0)                                                │
@@ -52,7 +53,14 @@ NovaNet MCP implements **RLM-on-KG** (Recursive Language Model on Knowledge Grap
 │  ├── Tool: novanet_batch (bulk operations with parallel execution)          │
 │  ├── Tools: novanet_cache_stats, novanet_cache_invalidate (cache control)   │
 │  ├── Feature: Error hints system with actionable suggestions                │
-│  └── Total: 11 MCP tools                                                    │
+│  └── Total: 11 read-only MCP tools                                          │
+│                                                                             │
+│  PHASE 5 (In Progress)                                                      │
+│  ├── Tool: novanet_write (intelligent data writes)                          │
+│  ├── Operations: upsert_node, create_arc, update_props                      │
+│  ├── Schema validation via introspect (no YAML parsing)                     │
+│  ├── MERGE pattern for idempotent writes                                    │
+│  └── Total: 12 MCP tools (11 read + 1 write)                                │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -580,6 +588,199 @@ Invalidate cache entries by pattern or completely clear the cache.
 - Invalidate specific entity caches during development
 - Force fresh data retrieval for time-sensitive operations
 
+### `novanet_write`
+
+Intelligent data writes to Neo4j with schema validation. This is the ONLY write tool - all mutations go through it.
+
+**Operations:**
+| Operation | Description | Use Case |
+|-----------|-------------|----------|
+| `upsert_node` | Create or update a node | SEOKeyword import, BlockNative generation |
+| `create_arc` | Create relationship between nodes | TARGETS, USES_TERM, FOR_LOCALE |
+| `update_props` | Update specific properties | EntityNative.denomination_forms |
+
+**Parameters:**
+```json
+{
+  "operation": "upsert_node",
+  "class": "SEOKeyword",
+  "key": "seo:qr-code@fr-FR",
+  "properties": {
+    "keyword": "qr code",
+    "slug_form": "qr-code",
+    "search_volume": 450000,
+    "difficulty": 45,
+    "intent": "informational",
+    "source": "ahrefs",
+    "retrieved_at": "2026-03-03T10:00:00Z"
+  },
+  "locale": "fr-FR"
+}
+```
+
+**Returns:**
+```json
+{
+  "success": true,
+  "operation": "upsert_node",
+  "key": "seo:qr-code@fr-FR",
+  "created": false,
+  "updated_properties": ["search_volume", "retrieved_at"],
+  "auto_arcs_created": ["FOR_LOCALE"],
+  "execution_time_ms": 12
+}
+```
+
+**Schema Validation:**
+
+The tool validates ALL writes against the schema stored in Neo4j (via introspect):
+
+1. **Class exists**: `SEOKeyword` must be a valid NodeClass
+2. **Properties match schema**: Only declared properties allowed
+3. **Required properties present**: Validation based on schema `required` fields
+4. **Trait allows writes**: Only `authored`, `imported`, `generated`, `retrieved` traits
+
+**Write Permissions by Trait:**
+
+| Trait | Writable | Example Classes | Who Controls |
+|-------|----------|-----------------|--------------|
+| `defined` | NO | Entity, Page, Block, Locale | Thibaut (YAML) |
+| `authored` | YES | EntityNative, PageNative | Nika (MCP) |
+| `imported` | YES | SEOKeyword, GeoTrend | Nika (MCP) |
+| `generated` | YES | BlockNative | Nika (MCP) |
+| `retrieved` | YES | Term, Expression | Nika (MCP) |
+
+**Arc Creation Example:**
+
+```json
+{
+  "operation": "create_arc",
+  "arc_class": "TARGETS",
+  "from_key": "seo:qr-code@fr-FR",
+  "to_key": "entity-native:qr-code@fr-FR",
+  "properties": {
+    "rank": "primary",
+    "is_slug_source": true
+  }
+}
+```
+
+**Update Properties Example:**
+
+```json
+{
+  "operation": "update_props",
+  "class": "EntityNative",
+  "key": "entity-native:qr-code@fr-FR",
+  "properties": {
+    "denomination_forms": [
+      {"type": "text", "value": "qr code", "priority": 1},
+      {"type": "title", "value": "QR Code", "priority": 1},
+      {"type": "url", "value": "qr-code", "priority": 1}
+    ]
+  }
+}
+```
+
+**Idempotency:**
+
+All writes use Cypher `MERGE` pattern - safe to retry without duplicates:
+
+```cypher
+MERGE (n:SEOKeyword {key: $key})
+ON CREATE SET n += $properties, n.created_at = timestamp()
+ON MATCH SET n += $properties, n.updated_at = timestamp()
+```
+
+**Cache Invalidation:**
+
+After successful writes, related cache entries are automatically invalidated to ensure fresh reads.
+
+---
+
+## Write Philosophy: Schema vs Data
+
+NovaNet separates concerns into two distinct layers:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  SCHEMA vs DATA                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  SCHEMA LAYER (Meta)                    DATA LAYER (Instances)              │
+│  ─────────────────────                  ──────────────────────              │
+│  WHO: Thibaut (human)                   WHO: Nika (AI workflows)            │
+│  HOW: YAML files                        HOW: novanet_write MCP              │
+│  WHAT: Class, ArcClass definitions      WHAT: Entity, SEOKeyword instances  │
+│                                                                             │
+│  ┌─────────────────────┐                ┌─────────────────────┐             │
+│  │  brain/models/*.yaml │───generates──►│  Neo4j :Schema:Class │            │
+│  │  (source of truth)   │               │  (runtime reference) │            │
+│  └─────────────────────┘                └─────────────────────┘             │
+│                                                   │                         │
+│                                                   │ validates               │
+│                                                   ▼                         │
+│                                         ┌─────────────────────┐             │
+│                                         │  novanet_write      │             │
+│                                         │  (data mutations)   │             │
+│                                         └─────────────────────┘             │
+│                                                   │                         │
+│                                                   │ creates/updates         │
+│                                                   ▼                         │
+│                                         ┌─────────────────────┐             │
+│                                         │  :Entity, :SEOKeyword│            │
+│                                         │  (data instances)    │            │
+│                                         └─────────────────────┘             │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  ANALOGY: SQL Database                                                      │
+│                                                                             │
+│  Thibaut = DBA         │  Defines tables, columns, constraints              │
+│  Nika = Application    │  INSERT, UPDATE, SELECT on existing tables         │
+│                                                                             │
+│  Nika CANNOT:          │  CREATE TABLE, ALTER TABLE, DROP TABLE             │
+│  Nika CAN:             │  INSERT INTO, UPDATE, SELECT FROM                  │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Key Principle**: Nika creates DATA instances within the SCHEMA that Thibaut defined.
+
+**Virtuous Cycle:**
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  THE VIRTUOUS CYCLE                                                         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  1. NIKA WRITES                                                             │
+│     └─ SEOKeyword from Ahrefs                                               │
+│     └─ EntityNative.denomination_forms with url form                        │
+│     └─ BlockNative with generated content                                   │
+│     └─ USES_TERM arcs for selective loading                                 │
+│                                                                             │
+│  2. NOVANET STORES                                                          │
+│     └─ Graph grows with real SEO data                                       │
+│     └─ Terms linked directly to EntityNatives                               │
+│     └─ Relationships capture keyword rankings                               │
+│                                                                             │
+│  3. NIKA READS (via novanet_generate)                                       │
+│     └─ Context assembly includes SEO insights                               │
+│     └─ USES_TERM enables 1-hop term loading (vs 4 hops)                     │
+│     └─ Keyword volumes inform content priorities                            │
+│                                                                             │
+│  4. LLM GENERATES                                                           │
+│     └─ Better content because better context                                │
+│     └─ SEO-optimized slugs from real search data                            │
+│     └─ Native-quality text with locale-specific terms                       │
+│                                                                             │
+│  5. LOOP CONTINUES                                                          │
+│     └─ Generated content triggers new SEO analysis                          │
+│     └─ Graph becomes smarter with each iteration                            │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
 ---
 
 ## Error Hints
@@ -838,7 +1039,8 @@ src/
 │   ├── generate.rs      # novanet_generate implementation
 │   ├── introspect.rs    # novanet_introspect implementation
 │   ├── batch.rs         # novanet_batch implementation
-│   └── cache_stats.rs   # novanet_cache_stats/invalidate implementation
+│   ├── cache_stats.rs   # novanet_cache_stats/invalidate implementation
+│   └── write.rs         # novanet_write implementation (Phase 5)
 ├── hints.rs             # Error hints system
 ├── resources/
 │   └── mod.rs           # MCP resources (entity://, class://, locale://, view://)
@@ -1045,9 +1247,21 @@ RETURN t.key, t.value LIMIT 50
 - [x] Tool: novanet_batch (bulk operations with parallel execution)
 - [x] Tools: novanet_cache_stats, novanet_cache_invalidate (cache management)
 - [x] Feature: Error hints system with actionable suggestions
-- [x] Total: 11 MCP tools
+- [x] Total: 11 read-only MCP tools
 
-### Phase 5 (Future)
+### Phase 5 (In Progress) - Write Operations
+- [ ] Tool: novanet_write (single write endpoint)
+- [ ] Operations: upsert_node, create_arc, update_props
+- [ ] Schema validation via introspect (runtime, no YAML parsing)
+- [ ] Write permissions by trait (authored, imported, generated, retrieved)
+- [ ] MERGE pattern for idempotent writes
+- [ ] Auto-arc creation for mandatory relationships (FOR_LOCALE, HAS_NATIVE)
+- [ ] Cache invalidation after writes
+- [ ] Total: 12 MCP tools (11 read + 1 write)
+
+**Design document**: `docs/sessions/2026-03-03-qrcode-seo-workflow/07-brainstorm-novanet-write.md`
+
+### Phase 6 (Future)
 - [ ] Integration tests with real Neo4j + seed data
 - [ ] Claude Code integration testing (MCP protocol validation)
 - [ ] Performance benchmarks (latency, token efficiency)
@@ -1068,3 +1282,7 @@ RETURN t.key, t.value LIMIT 50
 | `/.claude/rules/novanet-terminology.md` | Domain vocabulary |
 | `/.claude/rules/novanet-decisions.md` | Architecture decisions (ADRs) |
 | `docs/plans/2026-02-12-phase3-generate-prompts-design.md` | Phase 3 design document |
+| `docs/novanet-write.md` | novanet_write tool documentation (Phase 5) |
+| `.claude/rules/write-philosophy.md` | Schema vs Data separation philosophy |
+| `.claude/skills/seo-workflow.md` | SEO workflow patterns with novanet_write |
+| `docs/sessions/2026-03-03-qrcode-seo-workflow/` | Phase 5 design session |

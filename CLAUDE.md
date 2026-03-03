@@ -316,7 +316,7 @@ NovaNet exposes an MCP (Model Context Protocol) server for workflow automation a
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  MCP TOOLS (11 tools)                                                       │
+│  MCP TOOLS (12 tools)                                                       │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  novanet_query       Execute read-only Cypher against Neo4j                 │
@@ -371,6 +371,13 @@ NovaNet exposes an MCP (Model Context Protocol) server for workflow automation a
 │  novanet_cache_invalidate  Invalidate cache by pattern or clear all         │
 │                      params: pattern, clear_all                             │
 │                      returns: invalidated_count, pattern_used               │
+│                                                                             │
+│  novanet_write       Write data to Neo4j with schema validation             │
+│                      params: operation, class/arc_class, key/from_key/to_key│
+│                              properties, locale                             │
+│                      operations: upsert_node, create_arc, update_props      │
+│                      returns: success, created, updated_properties,         │
+│                               auto_arcs_created, cache_invalidated          │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
