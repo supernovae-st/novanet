@@ -55,7 +55,7 @@ export const REALM_HIERARCHY: Record<Realm, RealmDefinition> = {
       },
       'semantic': {
         label: 'Semantic',
-        description: 'USE: when working with semantic entities and their content.',
+        description: 'USE: when working with semantic entities and their localized content.',
         icon: '◆',
         nodeTypes: getNodeTypesByRealmAndLayer('org', 'semantic'),
       },
