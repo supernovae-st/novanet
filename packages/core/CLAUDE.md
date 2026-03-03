@@ -39,8 +39,8 @@ v0.13.0 introduces the *Native pattern (ADR-029) and Slug Ownership (ADR-030):
 - ADR-029: Unified arcs (HAS_CONTENT/HAS_GENERATED→HAS_NATIVE, CONTENT_OF/GENERATED_FOR→NATIVE_OF)
 - ADR-030: Slug Ownership (URL properties moved from EntityNative to PageNative)
 - SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (40 nodes)
-- ORG (6 layers): config, foundation, structure, semantic, instruction, output (21 nodes)
-- 61 node types, 182 arc types
+- ORG (6 layers): config, foundation, structure, semantic, instruction, output (19 nodes)
+- 59 node types, 178 arc types
 
 **Boundary rule:** TypeScript (this package) generates code artifacts. Rust (`tools/novanet/`) executes at runtime.
 

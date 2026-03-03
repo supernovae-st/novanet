@@ -65,14 +65,13 @@ export const RELATIONSHIP_CATEGORIES: Record<RelationshipCategory, RelationType[
     'HAS_PATTERN',
     'HAS_CONSTRAINT',
   ],
-  // Semantic: Entity usage (7 relations — v11.1: +BELONGS_TO, v0.12.4: +REFERENCES, +HAS_KEYWORD, +POPULAR_IN)
+  // Semantic: Entity usage (6 relations — v11.1: +BELONGS_TO, v0.12.4: +REFERENCES, +POPULAR_IN. v0.16: -HAS_KEYWORD per brainstorm decision)
   semantic: [
     'USES_ENTITY',
     'SEMANTIC_LINK',
     'USED_BY',
     'BELONGS_TO',
     'REFERENCES',
-    'HAS_KEYWORD',
     'POPULAR_IN',
   ],
   // Structure: Hierarchical structure (4 relations)
@@ -126,10 +125,11 @@ export interface RelationshipTypeConfig {
 }
 
 /**
- * All relationship type configurations (53 relations)
+ * All relationship type configurations (52 relations)
  * v10.3: HAS_CONCEPT removed — Entity in shared realm, use USES_ENTITY
  * v11.1: BELONGS_TO added — Entity → EntityCategory semantic classification
- * v0.12.4: REFERENCES, HAS_KEYWORD, POPULAR_IN added (ADR-028)
+ * v0.12.4: REFERENCES, POPULAR_IN added (ADR-028)
+ * v0.16: HAS_KEYWORD removed — use TARGETS on EntityNative instead
  */
 export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfig> = {
   // ==========================================================================
@@ -334,17 +334,11 @@ export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfi
     color: '#c2410c',  // orange-700
     category: 'semantic',
   },
-  // v0.12.4: REFERENCES and HAS_KEYWORD added per ADR-028
+  // v0.12.4: REFERENCES added per ADR-028. v0.16: HAS_KEYWORD removed (use TARGETS on EntityNative instead)
   REFERENCES: {
     type: 'REFERENCES',
     label: 'References',
     color: '#ea580c',  // orange-600
-    category: 'semantic',
-  },
-  HAS_KEYWORD: {
-    type: 'HAS_KEYWORD',
-    label: 'Has Keyword',
-    color: '#f97316',  // orange-500
     category: 'semantic',
   },
   // v0.12.4: POPULAR_IN added per ADR-028

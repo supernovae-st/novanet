@@ -101,8 +101,7 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   HAS_GEO_QUERIES: 'geoQueries',
   GEO_QUERIES_OF: 'geoQueriesParent',
   HAS_GEO_ANSWERS: 'geoAnswers',
-  HAS_KEYWORD: 'keyword',
-  KEYWORD_OF: 'keywordParent',
+  // v0.16: HAS_KEYWORD and KEYWORD_OF removed — use TARGETS on EntityNative instead
   // Geographic hierarchy
   IN_CONTINENT: 'continent',
   IN_REGION: 'region',

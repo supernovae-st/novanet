@@ -17,7 +17,7 @@
  * - Locale Knowledge: HAS_IDENTITY, HAS_VOICE, HAS_CULTURE, HAS_MARKET, HAS_LEXICON
  * - Native Content: HAS_NATIVE, NATIVE_OF (v0.13.0 ADR-029)
  * - Page Structure: HAS_BLOCK, OF_TYPE, LINKS_TO, SUBTOPIC_OF
- * - Entity Usage: USES_ENTITY, REFERENCES, SEMANTIC_LINK, BELONGS_TO, HAS_KEYWORD
+ * - Entity Usage: USES_ENTITY, REFERENCES, SEMANTIC_LINK, BELONGS_TO (v0.16: HAS_KEYWORD removed)
  * - Output: HAS_METRICS, ASSEMBLES
  * - SEO/GEO Targeting: HAS_SEO_TARGET, HAS_GEO_TARGET, TARGETS_SEO, TARGETS_GEO
  * - Provenance: INFLUENCED_BY, GENERATED_FROM, GENERATED
@@ -110,7 +110,7 @@ export const RelationType = {
   REFERENCES: 'REFERENCES',         // Block → Entity (v0.12.4: ADR-028 Page-Entity Architecture)
   SEMANTIC_LINK: 'SEMANTIC_LINK',   // Entity → Entity (v10.3: was Concept)
   BELONGS_TO: 'BELONGS_TO',         // Entity → EntityCategory (v11.1: semantic classification)
-  HAS_KEYWORD: 'HAS_KEYWORD',       // Entity → SEOKeyword (v0.12.4: ADR-028 Page-Entity Architecture)
+  // v0.16: HAS_KEYWORD removed — use TARGETS on EntityNative instead (per ontology brainstorm decision)
   POPULAR_IN: 'POPULAR_IN',         // Entity → Country|GeoRegion (v0.12.4: geographic popularity)
 
   // ─────────────────────────────────────────────────────────────────────────────
@@ -634,13 +634,7 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
     cardinality: 'N:1',
     description: 'Entity belongs to a semantic category (v11.1: cross-realm classification)',
   },
-  [RelationType.HAS_KEYWORD]: {
-    type: RelationType.HAS_KEYWORD,
-    from: 'Entity',
-    to: 'SEOKeyword',
-    cardinality: '1:N',
-    description: 'Entity has associated SEO keywords for targeting (v0.12.4: ADR-028)',
-  },
+  // v0.16: HAS_KEYWORD removed — use TARGETS on EntityNative instead
   [RelationType.POPULAR_IN]: {
     type: RelationType.POPULAR_IN,
     from: 'Entity',

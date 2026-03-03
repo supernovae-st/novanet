@@ -656,8 +656,8 @@ The tool validates ALL writes against the schema stored in Neo4j (via introspect
 {
   "operation": "create_arc",
   "arc_class": "TARGETS",
-  "from_key": "seo:qr-code@fr-FR",
-  "to_key": "entity-native:qr-code@fr-FR",
+  "from_key": "entity:qr-code@fr-FR",
+  "to_key": "seo:qr-code@fr-FR",
   "properties": {
     "rank": "primary",
     "is_slug_source": true
@@ -665,13 +665,16 @@ The tool validates ALL writes against the schema stored in Neo4j (via introspect
 }
 ```
 
+> **Note:** TARGETS arc direction is EntityNative → SEOKeyword.
+> EntityNative key pattern: `entity:{key}@{locale}` (NOT `entity-native:`)
+
 **Update Properties Example:**
 
 ```json
 {
   "operation": "update_props",
   "class": "EntityNative",
-  "key": "entity-native:qr-code@fr-FR",
+  "key": "entity:qr-code@fr-FR",
   "properties": {
     "denomination_forms": [
       {"type": "text", "value": "qr code", "priority": 1},
