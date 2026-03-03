@@ -1,6 +1,6 @@
 # NovaNet Roadmap
 
-Current version: **v0.15.0** | Last release: v0.15.0 | Target: QR Code AI (https://qrcode-ai.com)
+Current version: **v0.15.1** | Last release: v0.15.1 | Target: QR Code AI (https://qrcode-ai.com)
 
 > **Versioning Note**: Starting with v0.12.0, NovaNet follows strict SemVer. Versions v8.x-v11.x were internal milestones.
 
@@ -45,9 +45,12 @@ v0.14 MCP Introspect                   █████████████�
       8 MCP tools, novanet_introspect, context_build_log (ADR-033)
 v0.14.1 Maintenance                    ████████████████████  100%  RELEASED
       Zod 4 migration, dagre revert, dependency batch update
-v0.15 MCP + CLI Improvements           ████████████████████  100%  <- CURRENT
+v0.15 MCP + CLI Improvements           ████████████████████  100%  RELEASED
       11 MCP tools (+batch, cache_stats, cache_invalidate), error hints
       CLI: export, stats, diff commands, 1279 tests
+v0.15.1 Version Alignment              ████████████████████  100%  <- CURRENT
+      All packages aligned to 0.15.1 (TS + Rust CLI + MCP)
+      MCP versioning strategy: follows NovaNet version
 
 ═══════════════════════════════════════════════════════════════════════════════
 IDEAS (no timeline)
@@ -268,3 +271,8 @@ release/v*      Release preparation (optional, for complex releases)
 | v0.12.0 | 2026-02-13 | SemVer Transition — proper versioning (0.x = pre-production) |
 | v0.12.5 | 2026-02-14 | Brand Architecture (ADR-028), 61 nodes, 169 arcs |
 | v0.13.0 | 2026-02-15 | *Native Pattern (ADR-029/030): EntityNative, ProjectNative, PageNative, BlockNative, HAS_NATIVE |
+| v0.13.1 | 2026-02-17 | 6th Arc Family: Schema (OF_CLASS, FROM_CLASS, TO_CLASS), 182 arcs |
+| v0.14.0 | 2026-02-19 | MCP Introspect, context_build_log (ADR-033), 8 MCP tools |
+| v0.14.1 | 2026-03-02 | Zod 4 migration, dagre revert, batch dependency updates |
+| v0.15.0 | 2026-03-02 | MCP batch/cache tools, CLI export/stats/diff, 11 MCP tools, 1279 tests |
+| v0.15.1 | 2026-03-03 | Version alignment — all packages at 0.15.1, MCP versioning strategy |

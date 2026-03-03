@@ -1,6 +1,6 @@
 {
   "name": "@novanet/core",
-  "version": "0.14.1",
+  "version": "0.15.1",
   "description": "NovaNet Neo4j graph models and TypeScript layer",
   "type": "module",
   "main": "dist/index.js",
