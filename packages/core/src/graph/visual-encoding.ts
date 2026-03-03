@@ -250,12 +250,11 @@ export const CARDINALITY_ARROWS: Record<CardinalityKey, CardinalityArrowStyle> =
 };
 
 // =============================================================================
-// CLASS ICONS (34) — Lucide icon names
+// CLASS ICONS (32) — Lucide icon names
 // =============================================================================
 
 export const CLASS_ICONS: Record<string, string> = {
   Adaptation: 'sliders',
-  AudiencePersona: 'user',
   AudienceSet: 'users',
   Block: 'square',
   BlockInstruction: 'terminal',
@@ -265,7 +264,6 @@ export const CLASS_ICONS: Record<string, string> = {
   Brand: 'palette',
   BrandDesign: 'brush',
   BrandPrinciples: 'heart-handshake',
-  ChannelSurface: 'monitor',
   ContentSlot: 'inbox',
   CultureSet: 'heart',
   Entity: 'lightbulb',
