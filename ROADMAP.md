@@ -48,9 +48,12 @@ v0.14.1 Maintenance                    █████████████�
 v0.15 MCP + CLI Improvements           ████████████████████  100%  RELEASED
       11 MCP tools (+batch, cache_stats, cache_invalidate), error hints
       CLI: export, stats, diff commands, 1279 tests
-v0.15.1 Version Alignment              ████████████████████  100%  <- CURRENT
+v0.15.1 Version Alignment              ████████████████████  100%  RELEASED
       All packages aligned to 0.15.1 (TS + Rust CLI + MCP)
       MCP versioning strategy: follows NovaNet version
+v0.15.2 Documentation Cleanup          ████████████████████  100%  <- CURRENT
+      Fixed version/test count references, removed debug console.log
+      Rust code quality: .unwrap() → .expect() in diff.rs
 
 ═══════════════════════════════════════════════════════════════════════════════
 IDEAS (no timeline)
@@ -276,3 +279,4 @@ release/v*      Release preparation (optional, for complex releases)
 | v0.14.1 | 2026-03-02 | Zod 4 migration, dagre revert, batch dependency updates |
 | v0.15.0 | 2026-03-02 | MCP batch/cache tools, CLI export/stats/diff, 11 MCP tools, 1279 tests |
 | v0.15.1 | 2026-03-03 | Version alignment — all packages at 0.15.1, MCP versioning strategy |
+| v0.15.2 | 2026-03-03 | Documentation cleanup — test counts, version refs, debug console.log, diff.rs unwrap() |

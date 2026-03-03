@@ -88,7 +88,7 @@ v0.13.0 introduces the *Native pattern with unified arcs:
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
 All commands implemented: blueprint/data/overlay/query, node/arc CRUD, search, locale, db,
-schema generate/validate, doc generate, filter build. Galaxy-themed TUI with unified tree mode (v11.7), boot animation, effects engine, Nexus hub, and onboarding. 1226 tests pass.
+schema generate/validate, doc generate, filter build. Galaxy-themed TUI with unified tree mode (v11.7), boot animation, effects engine, Nexus hub, and onboarding. 1279 tests pass.
 
 **YAML-first architecture:** Each Class YAML has explicit `realm:` and `layer:` fields (source of truth).
 Path validation ensures `models/node-classes/{realm}/{layer}/{name}.yaml` matches YAML content.
@@ -304,11 +304,11 @@ pnpm infra:seed            # Seed database
 | @novanet/core | Types, schemas, filters, generators |
 | @novanet/db | Neo4j Docker, seeds, migrations |
 | @novanet/studio | Web-based graph visualization |
-| tools/novanet | Rust CLI + TUI — all runtime commands (1226 tests) |
+| tools/novanet | Rust CLI + TUI — all runtime commands (1279 tests) |
 
 ---
 
-## MCP Server (v0.5.0)
+## MCP Server (v0.15.1)
 
 NovaNet exposes an MCP (Model Context Protocol) server for workflow automation and AI agent integration.
 
