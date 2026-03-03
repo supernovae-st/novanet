@@ -69,7 +69,25 @@ pub fn get_hint(error_msg: &str) -> String {
             .to_string();
     }
 
-    // Entity not found
+    // Schema class not found (more specific, must come before generic "not found")
+    if lower.contains("schema") && lower.contains("not found") {
+        return "💡 Hint: Unknown class name.\n\
+             - Use novanet_introspect to list available classes\n\
+             - Check spelling and case (PascalCase)\n\
+             - Common classes: Entity, EntityNative, SEOKeyword, Term"
+            .to_string();
+    }
+
+    // Arc endpoint not found (more specific, must come before generic "not found")
+    if lower.contains("arc endpoint") && lower.contains("not found") {
+        return "💡 Hint: Arc source or target doesn't exist.\n\
+             - Create the node first with upsert_node operation\n\
+             - Verify the key spelling\n\
+             - Use novanet_search to find existing nodes"
+            .to_string();
+    }
+
+    // Entity not found (generic fallback)
     if lower.contains("not found") || lower.contains("no such") {
         return "💡 Hint: Entity not found.\n\
              - Verify entity key exists: MATCH (e:Entity {key: 'key'}) RETURN e\n\
@@ -93,6 +111,42 @@ pub fn get_hint(error_msg: &str) -> String {
              Valid tools: novanet_query, novanet_describe, novanet_search,\n\
              novanet_traverse, novanet_assemble, novanet_atoms,\n\
              novanet_generate, novanet_introspect"
+            .to_string();
+    }
+
+    // Write operation errors
+    if lower.contains("trait") && lower.contains("not writable") {
+        return "💡 Hint: Write permission denied.\n\
+             Only these traits allow writes:\n\
+             - authored: Human-written content (EntityNative, PageNative)\n\
+             - imported: External data (SEOKeyword, GeoTrend)\n\
+             - generated: LLM-generated (BlockNative)\n\
+             - retrieved: Discovered knowledge (Term, Expression)\n\
+             \n\
+             'defined' trait is READ-ONLY (Entity, Page, Block, Locale)."
+            .to_string();
+    }
+
+    if lower.contains("slug") && lower.contains("locked") {
+        return "💡 Hint: Slug is immutable after deployment.\n\
+             - Create a URL redirect instead of changing the slug\n\
+             - Or set slug_locked: false first (requires admin access)\n\
+             - ADR-030: BlockNative:head-seo-meta owns the slug"
+            .to_string();
+    }
+
+    if lower.contains("singleton") && lower.contains("is_slug_source") {
+        return "💡 Hint: Only one SEOKeyword can be the slug source.\n\
+             - The existing is_slug_source arc will be demoted\n\
+             - Use rank: 'primary' for the new slug source\n\
+             - Previous keyword becomes rank: 'secondary'"
+            .to_string();
+    }
+
+    if lower.contains("missing required property") {
+        return "💡 Hint: Required property missing.\n\
+             - Use novanet_introspect target='class' name='ClassName' to see required properties\n\
+             - Check property names are spelled correctly"
             .to_string();
     }
 
@@ -254,5 +308,31 @@ mod tests {
         assert!(hint1.contains("Cannot connect to Neo4j"));
         assert!(hint2.contains("Cannot connect to Neo4j"));
         assert!(hint3.contains("Cannot connect to Neo4j"));
+    }
+
+    // Write-specific hint tests (Task 1.2)
+    #[test]
+    fn test_hint_for_trait_not_writable() {
+        let hint = get_hint("Class 'Entity' has trait 'defined' which is not writable");
+        assert!(hint.contains("authored"));
+        assert!(hint.contains("imported"));
+    }
+
+    #[test]
+    fn test_hint_for_slug_locked() {
+        let hint = get_hint("Slug is locked on 'block:head-seo-meta@fr-FR'");
+        assert!(hint.contains("redirect"));
+    }
+
+    #[test]
+    fn test_hint_for_singleton_violation() {
+        let hint = get_hint("Singleton violation: Only one arc can have 'is_slug_source'");
+        assert!(hint.contains("is_slug_source"));
+    }
+
+    #[test]
+    fn test_hint_for_schema_not_found() {
+        let hint = get_hint("Schema class not found: 'FooBar'");
+        assert!(hint.contains("novanet_introspect"));
     }
 }
