@@ -318,7 +318,7 @@ static RELATIONSHIPS_CONCEPTS: [GlossaryConcept; 3] = [
                     - localization: Links to locale (FOR_LOCALE)\n\
                     - semantic: Meaning connections (SEMANTIC_LINK)\n\
                     - generation: LLM pipeline (HAS_NATIVE)\n\
-                    - mining: SEO/GEO intelligence (HAS_KEYWORD)",
+                    - mining: SEO/GEO intelligence (TARGETS)",
         classification: None,
         example_yaml: Some(
             "arc:\n  name: HAS_NATIVE\n  family: ownership\n  source: Entity\n  target: EntityNative",

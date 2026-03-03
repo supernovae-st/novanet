@@ -139,7 +139,7 @@ pub static STEPS: [TutorialStep; 5] = [
             "  localization  - Links to locale (FOR_LOCALE)",
             "  semantic      - Meaning connections (SEMANTIC_LINK)",
             "  generation    - LLM pipeline (GENERATED, ASSEMBLES)",
-            "  mining        - SEO/GEO intelligence (HAS_KEYWORD)",
+            "  mining        - SEO/GEO intelligence (TARGETS)",
             "",
             "ARC SCOPE indicates realm crossing:",
             "  intra_realm  - Both nodes in same realm",
