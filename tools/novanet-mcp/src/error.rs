@@ -82,6 +82,68 @@ pub enum Error {
     /// Feature not implemented
     #[error("Not implemented: {0}")]
     NotImplemented(String),
+
+    /// Trait does not allow writes
+    #[error("Class '{class}' has trait '{trait_type}' which is not writable. Only authored/imported/generated/retrieved allow writes.")]
+    TraitNotWritable { class: String, trait_type: String },
+
+    /// Slug is locked after deployment
+    #[error("Slug is locked on '{key}'. Current slug: '{current_slug}'. Create a redirect instead of modifying.")]
+    SlugLocked { key: String, current_slug: String },
+
+    /// Singleton property violation (e.g., is_slug_source)
+    #[error("Singleton violation: Only one arc can have '{property}' = true for target '{target_key}'.")]
+    SingletonViolation { property: String, target_key: String },
+
+    /// Schema class not found
+    #[error("Schema class not found: '{class}'. Use novanet_introspect to list available classes.")]
+    SchemaNotFound { class: String },
+
+    /// Missing required property
+    #[error("Missing required property '{property}' for class '{class}'.")]
+    MissingRequiredProperty { class: String, property: String },
+
+    /// Arc endpoints not found
+    #[error("Arc endpoint not found: {endpoint_type} '{key}' does not exist.")]
+    ArcEndpointNotFound { endpoint_type: String, key: String },
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_trait_not_writable_error() {
+        let err = Error::trait_not_writable("Entity", "defined");
+        assert!(err.to_string().contains("Entity"));
+        assert!(err.to_string().contains("defined"));
+    }
+
+    #[test]
+    fn test_slug_locked_error() {
+        let err = Error::slug_locked("block:head-seo-meta@fr-FR", "qr-code");
+        assert!(err.to_string().contains("slug_locked") || err.to_string().contains("locked"));
+        assert!(err.to_string().contains("qr-code"));
+    }
+
+    #[test]
+    fn test_singleton_violation_error() {
+        let err = Error::singleton_violation("is_slug_source", "entity-native:qr-code@fr-FR");
+        assert!(err.to_string().contains("is_slug_source"));
+    }
+
+    #[test]
+    fn test_schema_not_found_error() {
+        let err = Error::schema_not_found("UnknownClass");
+        assert!(err.to_string().contains("UnknownClass"));
+    }
+
+    #[test]
+    fn test_missing_required_property_error() {
+        let err = Error::missing_required_property("SEOKeyword", "keyword");
+        assert!(err.to_string().contains("SEOKeyword"));
+        assert!(err.to_string().contains("keyword"));
+    }
 }
 
 impl Error {
@@ -130,6 +192,53 @@ impl Error {
         Self::InvalidTool(tool.into())
     }
 
+    /// Create a trait not writable error
+    pub fn trait_not_writable(class: impl Into<String>, trait_type: impl Into<String>) -> Self {
+        Self::TraitNotWritable {
+            class: class.into(),
+            trait_type: trait_type.into(),
+        }
+    }
+
+    /// Create a slug locked error
+    pub fn slug_locked(key: impl Into<String>, current_slug: impl Into<String>) -> Self {
+        Self::SlugLocked {
+            key: key.into(),
+            current_slug: current_slug.into(),
+        }
+    }
+
+    /// Create a singleton violation error
+    pub fn singleton_violation(property: impl Into<String>, target_key: impl Into<String>) -> Self {
+        Self::SingletonViolation {
+            property: property.into(),
+            target_key: target_key.into(),
+        }
+    }
+
+    /// Create a schema not found error
+    pub fn schema_not_found(class: impl Into<String>) -> Self {
+        Self::SchemaNotFound {
+            class: class.into(),
+        }
+    }
+
+    /// Create a missing required property error
+    pub fn missing_required_property(class: impl Into<String>, property: impl Into<String>) -> Self {
+        Self::MissingRequiredProperty {
+            class: class.into(),
+            property: property.into(),
+        }
+    }
+
+    /// Create an arc endpoint not found error
+    pub fn arc_endpoint_not_found(endpoint_type: impl Into<String>, key: impl Into<String>) -> Self {
+        Self::ArcEndpointNotFound {
+            endpoint_type: endpoint_type.into(),
+            key: key.into(),
+        }
+    }
+
     /// Get error message with actionable hint
     pub fn with_hint(&self) -> String {
         hints::with_hint(&self.to_string())
@@ -150,6 +259,13 @@ impl From<Error> for McpError {
             Error::InvalidTool(_) => INVALID_PARAMS,
             Error::InvalidParams(_) => INVALID_PARAMS,
             Error::NotImplemented(_) => NOT_IMPLEMENTED,
+            // Write-specific error mappings
+            Error::TraitNotWritable { .. } => INVALID_PARAMS,
+            Error::SlugLocked { .. } => INVALID_PARAMS,
+            Error::SingletonViolation { .. } => INVALID_PARAMS,
+            Error::SchemaNotFound { .. } => RESOURCE_NOT_FOUND,
+            Error::MissingRequiredProperty { .. } => INVALID_PARAMS,
+            Error::ArcEndpointNotFound { .. } => RESOURCE_NOT_FOUND,
             _ => INTERNAL_ERROR,
         };
         McpError {
