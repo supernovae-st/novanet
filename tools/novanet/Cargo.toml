@@ -1,6 +1,6 @@
 [package]
 name = "novanet"
-version = "0.15.1"
+version = "0.16.0"
 edition = "2024"
 rust-version = "1.86"  # Minimum supported (ratatui 0.30 requires 1.86+)
 license = "LicenseRef-Proprietary"
@@ -27,6 +27,7 @@ neo4rs = { workspace = true }   # Pin minor: breaking changes between 0.x
 serde = { workspace = true }
 serde_json = { workspace = true }
 serde_yaml = "0.9"            # Maintained YAML library (serde_yml has soundness issues)
+toml = "0.8"                  # TOML config files (~/.novanet/config.toml)
 
 # Hashing
 sha2 = "0.10"                 # SHA-256 for cypher query hashing (cross-validation)

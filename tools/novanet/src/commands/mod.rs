@@ -10,6 +10,7 @@ pub mod doctor;
 pub mod entity;
 pub mod export;
 pub mod filter;
+pub mod init;
 pub mod knowledge;
 pub mod locale;
 pub mod node;

@@ -6,7 +6,7 @@ This file provides guidance to Claude Code when working in the `tools/novanet/` 
 
 `novanet` is a unified Rust CLI + TUI binary for managing the NovaNet context graph.
 
-**Version**: v0.15.1 | **Tests**: 1279 passing | **Clippy**: zero warnings
+**Version**: v0.16.0 | **Tests**: 1255 passing | **Clippy**: zero warnings
 
 ```bash
 novanet              # Launch TUI (default when no command)
@@ -19,12 +19,14 @@ novanet <command>    # Run specific command
 | Command | Description | Requires Neo4j |
 |---------|-------------|----------------|
 | `novanet` | Launch interactive TUI | Yes |
+| `novanet init` | Interactive setup for first-time users | No |
 | `novanet blueprint` | Schema visualization | No |
 | `novanet schema generate` | YAML → Cypher/TS/Mermaid | No |
 | `novanet schema validate` | Check YAML coherence | No |
 | `novanet db seed` | Seed Neo4j database | Yes |
 | `novanet search --query=X` | Fulltext search | Yes |
 | `novanet doctor` | System health check | Optional |
+| `novanet doctor --fix` | Auto-fix schema sync issues | No |
 | `novanet export` | Export graph to Cypher/JSON/GraphML/CSV | Yes |
 | `novanet stats` | Schema statistics from YAML | No |
 | `novanet diff` | Compare YAML schema with Neo4j | Yes |
@@ -96,6 +98,20 @@ novanet                    # Launch TUI (default when no command)
 novanet tui                # Explicit TUI launch
 novanet tui --fresh        # Regenerate schema + reset DB, then launch TUI
 ```
+
+### Init (First-Time Setup)
+
+```bash
+novanet init                        # Interactive setup wizard
+novanet init --non-interactive      # Use defaults or provided values
+novanet init --neo4j-uri=URI        # Custom Neo4j URI
+novanet init --neo4j-user=USER      # Custom Neo4j user
+novanet init --neo4j-password=PWD   # Set password
+novanet init --force                # Overwrite existing config
+novanet init --status               # Show current config status
+```
+
+Creates `~/.novanet/config.toml` with Neo4j credentials and CLI preferences.
 
 ### Schema Operations (No Neo4j Required)
 
@@ -231,6 +247,7 @@ novanet diff --fix                   # Generate migration Cypher (dry-run)
 novanet doctor                       # System health check
 novanet doctor --skip-db             # Skip Neo4j check
 novanet doctor --verbose             # Detailed output
+novanet doctor --fix                 # Auto-fix schema sync issues
 novanet completions bash             # Shell completions (bash/zsh/fish/powershell)
 novanet filter build                 # JSON stdin → Cypher stdout (Studio)
 ```

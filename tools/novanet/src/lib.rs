@@ -15,6 +15,7 @@ pub mod output;
 pub mod parsers;
 #[cfg(feature = "tui")]
 pub mod tui;
+pub mod user_config;
 pub mod validation;
 
-pub use error::{NovaNetError, Result};
+pub use error::{format_error_with_hint, ErrorHint, NovaNetError, Result};
