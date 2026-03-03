@@ -4,6 +4,8 @@
 //! Single tool with 3 operations: upsert_node, create_arc, update_props.
 
 use crate::error::{Error, Result};
+use crate::schema_cache::{ClassMetadata, SchemaCache};
+use crate::server::State;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -120,6 +122,73 @@ fn validate_params(params: &WriteParams) -> Result<()> {
         }
     }
     Ok(())
+}
+
+/// Fetch and validate class metadata for write permission
+async fn fetch_and_validate_class(state: &State, class_name: &str) -> Result<ClassMetadata> {
+    // Check cache first
+    if let Some(meta) = state.schema_cache().get_class(class_name) {
+        if !SchemaCache::is_writable_trait(&meta.trait_type) {
+            return Err(Error::trait_not_writable(class_name, &meta.trait_type));
+        }
+        return Ok(meta);
+    }
+
+    // Fetch from Neo4j
+    let query = r#"
+        MATCH (c:Schema:Class {name: $name})
+        RETURN c.name AS name,
+               c.realm AS realm,
+               c.layer AS layer,
+               c.trait AS trait_type,
+               c.required_properties AS required_properties,
+               c.optional_properties AS optional_properties
+    "#;
+
+    let mut params = serde_json::Map::new();
+    params.insert("name".to_string(), Value::String(class_name.to_string()));
+
+    let rows = state.pool().execute_query(query, Some(params)).await?;
+
+    if rows.is_empty() {
+        return Err(Error::schema_not_found(class_name));
+    }
+
+    let row = &rows[0];
+    let meta = ClassMetadata {
+        name: row["name"].as_str().unwrap_or_default().to_string(),
+        realm: row["realm"].as_str().unwrap_or_default().to_string(),
+        layer: row["layer"].as_str().unwrap_or_default().to_string(),
+        trait_type: row["trait_type"].as_str().unwrap_or_default().to_string(),
+        required_properties: row["required_properties"]
+            .as_array()
+            .map(|arr| {
+                arr.iter()
+                    .filter_map(|v| v.as_str().map(String::from))
+                    .collect()
+            })
+            .unwrap_or_default(),
+        optional_properties: row["optional_properties"]
+            .as_array()
+            .map(|arr| {
+                arr.iter()
+                    .filter_map(|v| v.as_str().map(String::from))
+                    .collect()
+            })
+            .unwrap_or_default(),
+    };
+
+    // Validate trait allows writes
+    if !SchemaCache::is_writable_trait(&meta.trait_type) {
+        return Err(Error::trait_not_writable(class_name, &meta.trait_type));
+    }
+
+    // Cache the metadata
+    state
+        .schema_cache()
+        .insert_class(class_name.to_string(), meta.clone());
+
+    Ok(meta)
 }
 
 #[cfg(test)]
