@@ -4,6 +4,25 @@ For complete history, see [CHANGELOG.md](./CHANGELOG.md).
 
 ## [Unreleased]
 
+## [0.15.2] - 2026-03-03
+
+### Fixed
+- **Documentation Accuracy** - Updated test counts and version references across all CLAUDE.md files
+  - Test badge: 1226 → 1279 in README.md
+  - CLI test count: 950 → 1279 in README.md
+  - Version references: v0.13.0 → v0.15.1 in packages/core/CLAUDE.md
+  - Arc count: 169 → 182 in packages/core/CLAUDE.md
+  - MCP Server version header: v0.5.0 → v0.15.1 in CLAUDE.md
+- **Debug console.log removed** - Removed debug logging from `/api/graph/query` route (production cleanup)
+- **Rust code quality** - Replaced `.unwrap()` with `.expect()` in diff.rs for better error messages
+  - Lines 170-177: node class intersection lookup
+  - Lines 269-276: arc class intersection lookup
+
+### Statistics
+- **1279 tests passing** (39 MCP + 1240 CLI)
+- **610 TypeScript tests passing** (Studio + Core)
+- **Zero clippy warnings**
+
 ## [0.15.1] - 2026-03-03
 
 ### Changed

@@ -167,8 +167,14 @@ pub fn diff_node_classes(
 
     // Find modified (in both, but different)
     for name in yaml_names.intersection(&neo4j_names) {
-        let yaml_node = yaml_nodes.iter().find(|(n, _, _, _, _)| n == *name).unwrap();
-        let neo4j_node = neo4j_nodes.iter().find(|n| n.name == *name).unwrap();
+        let yaml_node = yaml_nodes
+            .iter()
+            .find(|(n, _, _, _, _)| n == *name)
+            .expect("name guaranteed to exist from intersection");
+        let neo4j_node = neo4j_nodes
+            .iter()
+            .find(|n| n.name == *name)
+            .expect("name guaranteed to exist from intersection");
 
         let mut differences = Vec::new();
 
@@ -260,8 +266,14 @@ pub fn diff_arc_classes(
 
     // Find modified (in both, but different)
     for name in yaml_names.intersection(&neo4j_names) {
-        let yaml_arc = yaml_arcs.iter().find(|(n, _, _, _, _)| n == *name).unwrap();
-        let neo4j_arc = neo4j_arcs.iter().find(|a| a.name == *name).unwrap();
+        let yaml_arc = yaml_arcs
+            .iter()
+            .find(|(n, _, _, _, _)| n == *name)
+            .expect("name guaranteed to exist from intersection");
+        let neo4j_arc = neo4j_arcs
+            .iter()
+            .find(|a| a.name == *name)
+            .expect("name guaranteed to exist from intersection");
 
         let mut differences = Vec::new();
 

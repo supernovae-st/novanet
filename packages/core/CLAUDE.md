@@ -8,7 +8,7 @@ NovaNet is a **native content generation system** (NOT translation) using Neo4j 
 
 **Target Application**: QR Code AI (https://qrcode-ai.com) - a multilingual SaaS for QR code generation.
 **Supported Locales**: 200+ locales (fr-FR, en-US, es-MX, ja-JP, etc.)
-**Current Version**: v0.13.0
+**Current Version**: v0.15.1
 
 ## CRITICAL: Generation, NOT Translation
 
@@ -40,7 +40,7 @@ v0.13.0 introduces the *Native pattern (ADR-029) and Slug Ownership (ADR-030):
 - ADR-030: Slug Ownership (URL properties moved from EntityNative to PageNative)
 - SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (40 nodes)
 - ORG (6 layers): config, foundation, structure, semantic, instruction, output (21 nodes)
-- 61 node types, 169 arc types
+- 61 node types, 182 arc types
 
 **Boundary rule:** TypeScript (this package) generates code artifacts. Rust (`tools/novanet/`) executes at runtime.
 
