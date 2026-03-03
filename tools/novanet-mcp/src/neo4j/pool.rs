@@ -80,6 +80,48 @@ impl Neo4jPool {
         Ok(results.into_iter().next())
     }
 
+    /// Execute a write query (MERGE, SET, CREATE) and return results as JSON
+    ///
+    /// This method allows write operations (MERGE, SET) that are blocked by execute_query.
+    /// Use this ONLY for novanet_write tool operations.
+    ///
+    /// Security: Still validates against dangerous APOC procedures and LOAD CSV.
+    pub async fn execute_write(
+        &self,
+        cypher: &str,
+        params: Option<serde_json::Map<String, serde_json::Value>>,
+    ) -> Result<Vec<serde_json::Value>> {
+        // Validate against dangerous operations (APOC, LOAD CSV) but allow MERGE/SET
+        validate_write_safe(cypher)?;
+
+        // Build query with parameters
+        let mut query = Query::new(cypher.to_string());
+        if let Some(params) = params {
+            for (key, value) in params {
+                query = add_param(query, &key, value);
+            }
+        }
+
+        // Execute query
+        let mut result = self
+            .graph
+            .execute(query)
+            .await
+            .map_err(|e| Error::query(cypher, e))?;
+
+        // Collect results - deserialize each row to JSON
+        let mut rows = Vec::new();
+        while let Some(row) = result.next().await.map_err(|e| Error::query(cypher, e))? {
+            // Use row.to() to deserialize entire row to serde_json::Value
+            let json_row: serde_json::Value = row
+                .to()
+                .map_err(|e| Error::Internal(format!("Row deserialization failed: {}", e)))?;
+            rows.push(json_row);
+        }
+
+        Ok(rows)
+    }
+
     /// Test connection health
     pub async fn health_check(&self) -> Result<bool> {
         let result = self.execute_query("RETURN 1 AS health", None).await?;
@@ -259,6 +301,65 @@ fn validate_read_only(cypher: &str) -> Result<()> {
                 )));
             }
         }
+    }
+
+    Ok(())
+}
+
+/// Validate that a Cypher write query is safe
+///
+/// Security checks (less restrictive than read-only):
+/// 1. Block dangerous APOC procedures (apoc.cypher.run, apoc.periodic.*, etc.)
+/// 2. Block LOAD CSV (potential SSRF)
+/// 3. Block DROP (schema modification)
+/// 4. Allow MERGE, SET, CREATE, DELETE for novanet_write operations
+fn validate_write_safe(cypher: &str) -> Result<()> {
+    // Step 1: Strip comments to prevent bypass attacks
+    let cleaned = strip_cypher_comments(cypher);
+    let upper = cleaned.to_uppercase();
+
+    // Step 2: Block DROP (schema modification not allowed via MCP)
+    if contains_keyword_with_boundary(&upper, "DROP") {
+        return Err(Error::write_not_allowed("DROP"));
+    }
+
+    // Step 3: Block dangerous APOC procedures
+    let dangerous_apoc = [
+        // Dynamic Cypher execution
+        "APOC.CYPHER.RUN",
+        "APOC.CYPHER.DOIT",
+        "APOC.CYPHER.RUNMANY",
+        "APOC.CYPHER.PARALLEL",
+        // Periodic/scheduled execution
+        "APOC.PERIODIC.COMMIT",
+        "APOC.PERIODIC.ITERATE",
+        "APOC.PERIODIC.SUBMIT",
+        "APOC.PERIODIC.REPEAT",
+        // File system access
+        "APOC.EXPORT",
+        "APOC.IMPORT",
+        "APOC.LOAD.CSV",
+        "APOC.LOAD.JSON",
+        "APOC.LOAD.XML",
+        // Schema modifications
+        "APOC.SCHEMA.ASSERT",
+        "APOC.TRIGGER",
+        // Database operations
+        "APOC.SYSTEMDB",
+    ];
+
+    for proc in dangerous_apoc {
+        if upper.contains(proc) {
+            return Err(Error::invalid_cypher(format!(
+                "Dangerous APOC procedure not allowed: {}",
+                proc
+            )));
+        }
+    }
+
+    // Step 4: Block LOAD CSV (SSRF risk)
+    if upper.contains("LOAD CSV") || upper.contains("LOAD CSV FROM") {
+        return Err(Error::invalid_cypher("LOAD CSV not allowed"));
     }
 
     Ok(())
@@ -641,6 +742,52 @@ mod tests {
             validate_read_only("LOAD CSV WITH HEADERS FROM 'http://example.com' AS row RETURN row")
                 .is_err()
         );
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // Write-Safe Validation Tests
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    #[test]
+    fn test_validate_write_safe_allows_merge() {
+        // MERGE should be allowed for write operations
+        assert!(validate_write_safe("MERGE (n:Entity {key: $key})").is_ok());
+        assert!(validate_write_safe("MERGE (n)-[:HAS_NATIVE]->(m)").is_ok());
+    }
+
+    #[test]
+    fn test_validate_write_safe_allows_set() {
+        // SET should be allowed for write operations
+        assert!(validate_write_safe("MATCH (n) SET n.updated_at = timestamp()").is_ok());
+        assert!(validate_write_safe("MERGE (n) ON CREATE SET n.created = true").is_ok());
+    }
+
+    #[test]
+    fn test_validate_write_safe_allows_create() {
+        // CREATE should be allowed for write operations
+        assert!(validate_write_safe("CREATE (n:Entity)").is_ok());
+        assert!(validate_write_safe("CREATE (n)-[:TARGETS]->(m)").is_ok());
+    }
+
+    #[test]
+    fn test_validate_write_safe_blocks_drop() {
+        // DROP should still be blocked (schema modification)
+        assert!(validate_write_safe("DROP INDEX my_index").is_err());
+        assert!(validate_write_safe("DROP CONSTRAINT my_constraint").is_err());
+    }
+
+    #[test]
+    fn test_validate_write_safe_blocks_dangerous_apoc() {
+        // Dangerous APOC should still be blocked
+        assert!(validate_write_safe("CALL apoc.cypher.run('CREATE (n)', {})").is_err());
+        assert!(validate_write_safe("CALL apoc.periodic.iterate('MATCH', 'DELETE', {})").is_err());
+        assert!(validate_write_safe("CALL apoc.export.csv.all('/tmp/data.csv', {})").is_err());
+    }
+
+    #[test]
+    fn test_validate_write_safe_blocks_load_csv() {
+        // LOAD CSV should still be blocked (SSRF risk)
+        assert!(validate_write_safe("LOAD CSV FROM 'http://example.com' AS row").is_err());
     }
 
     #[test]

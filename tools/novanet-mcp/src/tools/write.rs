@@ -141,8 +141,8 @@ async fn fetch_and_validate_class(state: &State, class_name: &str) -> Result<Cla
 
     // Fetch from Neo4j
     let query = r#"
-        MATCH (c:Schema:Class {name: $name})
-        RETURN c.name AS name,
+        MATCH (c:Schema:Class {label: $name})
+        RETURN c.label AS name,
                c.realm AS realm,
                c.layer AS layer,
                c.trait AS trait_type,
@@ -259,7 +259,7 @@ async fn handle_slug_source_singleton(
     let mut params = serde_json::Map::new();
     params.insert("to_key".to_string(), Value::String(to_key.to_string()));
 
-    let rows = state.pool().execute_query(query, Some(params)).await?;
+    let rows = state.pool().execute_write(query, Some(params)).await?;
 
     if let Some(row) = rows.first() {
         let demoted = row["demoted_key"].as_str().unwrap_or("unknown");
@@ -297,10 +297,12 @@ async fn execute_upsert_node(
     }
 
     // Validate required properties are present
+    // Exclude system-managed properties: key (passed separately), created_at/updated_at (set by MERGE)
+    const SYSTEM_MANAGED: &[&str] = &["key", "created_at", "updated_at"];
     let missing: Vec<&String> = meta
         .required_properties
         .iter()
-        .filter(|prop| !props.contains_key(*prop))
+        .filter(|prop| !SYSTEM_MANAGED.contains(&prop.as_str()) && !props.contains_key(*prop))
         .collect();
 
     if !missing.is_empty() {
@@ -336,7 +338,7 @@ async fn execute_upsert_node(
 
     let rows = state
         .pool()
-        .execute_query(&query, Some(query_params))
+        .execute_write(&query, Some(query_params))
         .await?;
 
     let created = rows
@@ -373,7 +375,7 @@ async fn execute_upsert_node(
 
         state
             .pool()
-            .execute_query(&auto_arc_query, Some(arc_params))
+            .execute_write(&auto_arc_query, Some(arc_params))
             .await?;
         auto_arcs.push("FOR_LOCALE".to_string());
     }
@@ -405,7 +407,7 @@ async fn execute_upsert_node(
             // Only create if base entity exists (silent failure if not)
             let _ = state
                 .pool()
-                .execute_query(&has_native_query, Some(has_native_params))
+                .execute_write(&has_native_query, Some(has_native_params))
                 .await;
             auto_arcs.push("HAS_NATIVE".to_string());
         }
@@ -504,7 +506,7 @@ async fn execute_create_arc(state: &State, params: &WriteParams) -> Result<Write
 
     state
         .pool()
-        .execute_query(&query, Some(query_params))
+        .execute_write(&query, Some(query_params))
         .await?;
 
     // Invalidate cache
@@ -578,7 +580,7 @@ async fn execute_update_props(
 
     state
         .pool()
-        .execute_query(&query, Some(query_params))
+        .execute_write(&query, Some(query_params))
         .await?;
 
     let updated_properties: Vec<String> = props.keys().cloned().collect();
