@@ -8,6 +8,7 @@ use crate::server::State;
 use crate::tools::{
     AssembleParams, AtomsParams, BatchParams, CacheInvalidateParams, CacheStatsParams,
     DescribeParams, GenerateParams, IntrospectParams, QueryParams, SearchParams, TraverseParams,
+    WriteParams,
 };
 use rmcp::handler::server::tool::ToolRouter;
 use rmcp::handler::server::wrapper::Parameters;
@@ -354,6 +355,36 @@ impl NovaNetHandler {
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
+
+    /// Write data to Neo4j with schema validation.
+    ///
+    /// Operations: upsert_node, create_arc, update_props.
+    /// Validates against schema, checks trait permissions, uses MERGE for idempotency.
+    /// Task A4: 12th MCP tool for intelligent data writes.
+    #[tool(
+        name = "novanet_write",
+        description = "Write data to NovaNet with schema validation. Operations: upsert_node, create_arc, update_props. Enforces trait permissions and slug immutability."
+    )]
+    async fn novanet_write(
+        &self,
+        params: Parameters<WriteParams>,
+    ) -> Result<CallToolResult, McpError> {
+        let result = crate::tools::write::execute(&self.state, params.0)
+            .await
+            .map_err(|e| McpError {
+                code: ErrorCode(-32000),
+                message: Cow::Owned(e.with_hint()),
+                data: None,
+            })?;
+
+        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
+            code: ErrorCode(-32603),
+            message: Cow::Owned(format!("Serialization error: {}", e)),
+            data: None,
+        })?;
+
+        Ok(CallToolResult::success(vec![Content::text(json)]))
+    }
 }
 
 /// Implement ServerHandler for NovaNetHandler
@@ -363,10 +394,9 @@ impl ServerHandler for NovaNetHandler {
         ServerInfo {
             instructions: Some(
                 "NovaNet MCP Server v0.3.0 - Knowledge Graph for AI Agents. \
-                 Use novanet_describe to bootstrap your understanding of the schema, \
-                 novanet_query to explore specific data, and novanet_generate for \
-                 content generation context assembly. 6 prompts available for \
-                 guided workflows."
+                 12 tools available: novanet_describe (bootstrap), novanet_query (explore), \
+                 novanet_generate (context assembly), novanet_write (data writes with schema validation), \
+                 and more. 6 prompts available for guided workflows."
                     .into(),
             ),
             capabilities: ServerCapabilities::builder()
