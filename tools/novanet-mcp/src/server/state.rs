@@ -5,6 +5,7 @@
 use crate::cache::QueryCache;
 use crate::error::Result;
 use crate::neo4j::Neo4jPool;
+use crate::schema_cache::SchemaCache;
 use crate::server::Config;
 use crate::tokens::TokenCounter;
 use parking_lot::RwLock;
@@ -21,6 +22,7 @@ struct StateInner {
     pub pool: Neo4jPool,
     pub cache: QueryCache,
     pub counter: TokenCounter,
+    pub schema_cache: SchemaCache,
     /// Server statistics
     pub stats: RwLock<ServerStats>,
 }
@@ -51,12 +53,16 @@ impl State {
         // Create token counter
         let counter = TokenCounter::new();
 
+        // Create schema cache
+        let schema_cache = SchemaCache::new(config.cache_ttl.as_secs());
+
         Ok(Self {
             inner: Arc::new(StateInner {
                 config,
                 pool,
                 cache,
                 counter,
+                schema_cache,
                 stats: RwLock::new(ServerStats::default()),
             }),
         })
@@ -80,6 +86,11 @@ impl State {
     /// Get the token counter
     pub fn counter(&self) -> &TokenCounter {
         &self.inner.counter
+    }
+
+    /// Get schema cache reference
+    pub fn schema_cache(&self) -> &SchemaCache {
+        &self.inner.schema_cache
     }
 
     /// Increment query count
