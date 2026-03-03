@@ -4,6 +4,35 @@ For complete history, see [CHANGELOG.md](./CHANGELOG.md).
 
 ## [Unreleased]
 
+## [0.15.3] - 2026-03-03
+
+### Security
+- **CRITICAL: Cypher Injection Prevention** - Added `validation.rs` with regex validation for class/arc names
+  - Node classes: `^[A-Z][A-Za-z0-9]*$` (PascalCase)
+  - Arc classes: `^[A-Z][A-Z0-9_]*$` (SCREAMING_SNAKE_CASE)
+  - Rejects injection attempts like `Entity}DETACH DELETE n`
+- **CRITICAL: Memory Leak Fix** - Replaced hand-rolled SchemaCache with `moka::sync::Cache`
+  - Automatic TTL-based eviction (was: expired entries never evicted)
+  - Configurable max entries and TTL
+
+### Added
+- **HAS_NATIVE Auto-Arc** - Automatic arc creation for `*Native` classes
+  - When upserting `EntityNative`, `PageNative`, or `BlockNative` with key containing `@`
+  - Automatically creates `(Entity)-[:HAS_NATIVE]->(EntityNative)` arc
+- **Required Property Validation** - Schema-based validation before writes
+  - Checks `required_properties` from ClassMetadata
+  - Returns detailed error with missing property names
+
+### Changed
+- **Phase 5 Complete** - `novanet_write` tool fully implemented with security hardening
+- **Hints** - Removed emojis for terminal compatibility
+- **Documentation** - Updated CLAUDE.md with security features and Phase 5 status
+
+### Statistics
+- **12 MCP tools**: query, describe, search, traverse, assemble, atoms, generate, introspect, batch, cache_stats, cache_invalidate, write
+- **430 tests passing** (MCP server, was 348)
+- **Zero clippy warnings**
+
 ## [0.15.2] - 2026-03-03
 
 ### Fixed
