@@ -1,53 +1,145 @@
+# 🌌 ARMADA: Dependabot Configuration
+# Automated dependency updates for NovaNet
+# Part of ARMADA quality checkpoint system
+
 version: 2
 updates:
-  # npm dependencies
-  - package-ecosystem: "npm"
-    directory: "/"
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # npm dependencies (TypeScript packages)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  - package-ecosystem: npm
+    directory: /
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: weekly
+      day: monday
+      time: '09:00'
+      timezone: Europe/Paris
     open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "armada"
+      - "npm"
+    commit-message:
+      prefix: "chore(deps)"
     groups:
       dev-dependencies:
-        dependency-type: "development"
+        dependency-type: development
         update-types:
-          - "minor"
-          - "patch"
+          - minor
+          - patch
       production-dependencies:
-        dependency-type: "production"
+        dependency-type: production
         update-types:
-          - "patch"
-    labels:
-      - "dependencies"
-      - "npm"
+          - patch
+    ignore:
+      # Review major version bumps manually
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    reviewers:
+      - "ThibautMelen"
 
-  # Rust dependencies
-  - package-ecosystem: "cargo"
-    directory: "/tools/novanet"
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # Rust dependencies (novanet CLI/TUI)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  - package-ecosystem: cargo
+    directory: /tools/novanet
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: weekly
+      day: monday
+      time: '09:00'
+      timezone: Europe/Paris
     open-pull-requests-limit: 5
     labels:
       - "dependencies"
+      - "armada"
       - "rust"
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      rust-minor-patch:
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - "*"
+    ignore:
+      # Review major version bumps manually
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    reviewers:
+      - "ThibautMelen"
 
-  # GitHub Actions
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # Rust dependencies (novanet-mcp MCP Server)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  - package-ecosystem: cargo
+    directory: /tools/novanet-mcp
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: weekly
+      day: monday
+      time: '09:00'
+      timezone: Europe/Paris
     open-pull-requests-limit: 5
     labels:
       - "dependencies"
-      - "github-actions"
+      - "armada"
+      - "rust"
+      - "mcp"
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      rust-minor-patch:
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - "*"
+    ignore:
+      # Review major version bumps manually
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    reviewers:
+      - "ThibautMelen"
 
-  # Docker (Neo4j)
-  - package-ecosystem: "docker"
-    directory: "/packages/db"
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # GitHub Actions
+  # ═══════════════════════════════════════════════════════════════════════════════
+  - package-ecosystem: github-actions
+    directory: /
     schedule:
-      interval: "monthly"
+      interval: weekly
+      day: monday
+      time: '09:00'
+      timezone: Europe/Paris
+    open-pull-requests-limit: 3
     labels:
       - "dependencies"
+      - "armada"
+      - "ci"
+    commit-message:
+      prefix: "chore(ci)"
+    groups:
+      actions:
+        patterns:
+          - "*"
+    reviewers:
+      - "ThibautMelen"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # Docker (Neo4j)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  - package-ecosystem: docker
+    directory: /packages/db
+    schedule:
+      interval: monthly
+      day: monday
+      time: '09:00'
+      timezone: Europe/Paris
+    labels:
+      - "dependencies"
+      - "armada"
       - "docker"
+    commit-message:
+      prefix: "chore(docker)"
+    reviewers:
+      - "ThibautMelen"
