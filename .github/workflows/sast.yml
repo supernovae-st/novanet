@@ -18,40 +18,50 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-jobs:
-  # cargo-audit and cargo-deny already run in rust-ci.yml
-  # This workflow adds: cargo-geiger + Semgrep
+# NOTE: cargo-audit and cargo-deny already run in rust-ci.yml
+# This workflow adds: cargo-geiger + CodeQL + Semgrep
 
+jobs:
+  # =============================================================================
+  # cargo-geiger — Unsafe code inventory
+  # =============================================================================
   cargo-geiger:
     name: cargo-geiger (unsafe code)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+
       - name: Install Rust toolchain (nightly for geiger)
         uses: dtolnay/rust-toolchain@nightly
         with:
           components: rust-src
+
       - name: Cache cargo
         uses: Swatinem/rust-cache@v2
         with:
           workspaces: |
             tools/novanet -> target
             tools/novanet-mcp -> target
+
       - name: Install cargo-geiger
         run: cargo install cargo-geiger --locked
+
       - name: Run geiger on novanet CLI
         working-directory: tools/novanet
         run: cargo geiger --all-features 2>&1 | tee geiger-novanet.txt
+
       - name: Run geiger on novanet-mcp
         working-directory: tools/novanet-mcp
         run: cargo geiger --all-features 2>&1 | tee geiger-mcp.txt
+
       - name: Upload geiger reports
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: geiger-reports
           path: |
             tools/novanet/geiger-novanet.txt
             tools/novanet-mcp/geiger-mcp.txt
+
       - name: Warn on unsafe threshold
         run: |
           UNSAFE_COUNT=$(grep -r "unsafe" tools/novanet/src/ tools/novanet-mcp/src/ 2>/dev/null | grep -c "unsafe" || echo 0)
@@ -60,13 +70,56 @@ jobs:
             echo "::warning::$UNSAFE_COUNT unsafe blocks found — review geiger-reports artifact"
           fi
 
+  # =============================================================================
+  # CodeQL — Semantic SAST analysis
+  # =============================================================================
+  codeql:
+    name: CodeQL (Rust)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: rust
+          queries: security-extended
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: |
+            tools/novanet -> target
+            tools/novanet-mcp -> target
+
+      - name: Build for CodeQL (novanet)
+        working-directory: tools/novanet
+        run: cargo build --all-features
+
+      - name: Build for CodeQL (novanet-mcp)
+        working-directory: tools/novanet-mcp
+        run: cargo build --all-features
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:rust"
+          upload: true
+
+  # =============================================================================
+  # Semgrep — Pattern-based SAST (shell injection, path traversal, etc.)
+  # =============================================================================
   semgrep:
     name: Semgrep (patterns)
     runs-on: ubuntu-latest
     container:
       image: semgrep/semgrep
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+
       - name: Run Semgrep on Rust sources
         run: >
           semgrep scan
@@ -79,9 +132,40 @@ jobs:
         env:
           SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
         continue-on-error: true
+
       - name: Upload Semgrep SARIF to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         if: always()
         with:
           sarif_file: semgrep-results.sarif
           category: semgrep
+
+  # =============================================================================
+  # Summary — aggregate results
+  # =============================================================================
+  sast-summary:
+    name: SAST Summary
+    runs-on: ubuntu-latest
+    needs: [cargo-geiger, codeql, semgrep]
+    if: always()
+    steps:
+      - name: Check SAST job results
+        env:
+          GEIGER_RESULT: ${{ needs.cargo-geiger.result }}
+          CODEQL_RESULT: ${{ needs.codeql.result }}
+          SEMGREP_RESULT: ${{ needs.semgrep.result }}
+        run: |
+          echo "=== SAST Results ==="
+          echo "cargo-geiger: $GEIGER_RESULT"
+          echo "codeql      : $CODEQL_RESULT"
+          echo "semgrep     : $SEMGREP_RESULT"
+          echo ""
+          echo "Note: cargo-audit (RustSec) and cargo-deny (license) run in rust-ci.yml"
+
+          # Warn only on analysis tools (may have false positives)
+          if [ "$CODEQL_RESULT" = "failure" ]; then
+            echo "::warning::CodeQL analysis found issues — review Security tab"
+          fi
+          if [ "$SEMGREP_RESULT" = "failure" ]; then
+            echo "::warning::Semgrep found patterns — review Security tab"
+          fi
