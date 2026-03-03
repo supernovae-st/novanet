@@ -9,6 +9,7 @@ use crate::server::State;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use tracing::{info, warn};
 
 /// Write operation type
 #[derive(Debug, Clone, Deserialize, JsonSchema, PartialEq)]
@@ -189,6 +190,369 @@ async fn fetch_and_validate_class(state: &State, class_name: &str) -> Result<Cla
         .insert_class(class_name.to_string(), meta.clone());
 
     Ok(meta)
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// Special Validations (Phase 4)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+/// Check if slug is locked and reject modification
+async fn validate_slug_not_locked(
+    state: &State,
+    key: &str,
+    props: &serde_json::Map<String, Value>,
+) -> Result<()> {
+    // Only check if "slug" property is being modified
+    if !props.contains_key("slug") {
+        return Ok(());
+    }
+
+    let query = r#"
+        MATCH (n {key: $key})
+        RETURN n.slug_locked AS locked, n.slug AS current_slug
+    "#;
+
+    let mut params = serde_json::Map::new();
+    params.insert("key".to_string(), Value::String(key.to_string()));
+
+    let rows = state.pool().execute_query(query, Some(params)).await?;
+
+    if let Some(row) = rows.first() {
+        let locked = row["locked"].as_bool().unwrap_or(false);
+        let current_slug = row["current_slug"]
+            .as_str()
+            .unwrap_or_default()
+            .to_string();
+
+        if locked {
+            return Err(Error::slug_locked(key, current_slug));
+        }
+    }
+
+    Ok(())
+}
+
+/// Handle is_slug_source singleton - only one arc can have this property true
+async fn handle_slug_source_singleton(
+    state: &State,
+    to_key: &str,
+    props: &serde_json::Map<String, Value>,
+) -> Result<()> {
+    // Only check if is_slug_source is being set to true
+    let is_setting_slug_source = props
+        .get("is_slug_source")
+        .and_then(|v| v.as_bool())
+        .unwrap_or(false);
+
+    if !is_setting_slug_source {
+        return Ok(());
+    }
+
+    // Find existing is_slug_source arc and demote it
+    let query = r#"
+        MATCH (kw)-[r:TARGETS {is_slug_source: true}]->(en {key: $to_key})
+        SET r.is_slug_source = false, r.rank = 'secondary'
+        RETURN kw.key AS demoted_key
+    "#;
+
+    let mut params = serde_json::Map::new();
+    params.insert("to_key".to_string(), Value::String(to_key.to_string()));
+
+    let rows = state.pool().execute_query(query, Some(params)).await?;
+
+    if let Some(row) = rows.first() {
+        let demoted = row["demoted_key"].as_str().unwrap_or("unknown");
+        warn!(
+            demoted = %demoted,
+            new_source = %to_key,
+            "is_slug_source takeover: demoted previous source"
+        );
+    }
+
+    Ok(())
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// Operation Implementations
+// ═══════════════════════════════════════════════════════════════════════════════
+
+/// Execute upsert_node operation
+async fn execute_upsert_node(
+    state: &State,
+    params: &WriteParams,
+    _meta: &ClassMetadata,
+) -> Result<WriteResult> {
+    let start = std::time::Instant::now();
+    let key = params.key.as_ref().expect("key validated");
+    let class = params.class.as_ref().expect("class validated");
+    let props = params.properties.clone().unwrap_or_default();
+
+    // Build MERGE query
+    let props_json = serde_json::to_string(&props)
+        .map_err(|e| Error::Internal(format!("Props serialization: {}", e)))?;
+
+    let query = format!(
+        r#"
+        MERGE (n:{class} {{key: $key}})
+        ON CREATE SET n += $props, n.created_at = timestamp()
+        ON MATCH SET n += $props, n.updated_at = timestamp()
+        WITH n,
+             CASE WHEN n.created_at = timestamp() THEN true ELSE false END AS created
+        RETURN created, keys(n) AS all_keys
+        "#,
+        class = class
+    );
+
+    let mut query_params = serde_json::Map::new();
+    query_params.insert("key".to_string(), Value::String(key.clone()));
+    query_params.insert("props".to_string(), serde_json::from_str(&props_json)?);
+
+    let rows = state
+        .pool()
+        .execute_query(&query, Some(query_params))
+        .await?;
+
+    let created = rows
+        .first()
+        .and_then(|r| r["created"].as_bool())
+        .unwrap_or(false);
+
+    // Determine updated properties (diff with previous)
+    let updated_properties: Vec<String> = if created {
+        vec![]
+    } else {
+        props.keys().cloned().collect()
+    };
+
+    // Handle auto-arcs (FOR_LOCALE)
+    let mut auto_arcs = vec![];
+    if let Some(locale) = &params.locale {
+        let auto_arc_query = format!(
+            r#"
+            MATCH (n:{class} {{key: $key}})
+            MATCH (l:Locale {{key: $locale}})
+            MERGE (n)-[:FOR_LOCALE]->(l)
+            "#,
+            class = class
+        );
+
+        let mut arc_params = serde_json::Map::new();
+        arc_params.insert("key".to_string(), Value::String(key.clone()));
+        arc_params.insert("locale".to_string(), Value::String(locale.clone()));
+
+        state
+            .pool()
+            .execute_query(&auto_arc_query, Some(arc_params))
+            .await?;
+        auto_arcs.push("FOR_LOCALE".to_string());
+    }
+
+    // Invalidate cache
+    let cache_patterns = vec![format!("{}:*", class), key.clone()];
+    for pattern in &cache_patterns {
+        state.cache().invalidate_pattern(pattern).await;
+    }
+
+    info!(key = %key, class = %class, created = created, "upsert_node completed");
+
+    Ok(WriteResult {
+        success: true,
+        operation: "upsert_node".to_string(),
+        key: key.clone(),
+        created,
+        updated_properties,
+        auto_arcs_created: auto_arcs,
+        execution_time_ms: start.elapsed().as_millis() as u64,
+        cache_invalidated: cache_patterns,
+    })
+}
+
+/// Execute create_arc operation
+async fn execute_create_arc(state: &State, params: &WriteParams) -> Result<WriteResult> {
+    let start = std::time::Instant::now();
+    let arc_class = params.arc_class.as_ref().expect("arc_class validated");
+    let from_key = params.from_key.as_ref().expect("from_key validated");
+    let to_key = params.to_key.as_ref().expect("to_key validated");
+    let props = params.properties.clone().unwrap_or_default();
+
+    // Verify endpoints exist
+    let check_query = r#"
+        MATCH (from {key: $from_key})
+        MATCH (to {key: $to_key})
+        RETURN from.key AS from_exists, to.key AS to_exists
+    "#;
+
+    let mut check_params = serde_json::Map::new();
+    check_params.insert("from_key".to_string(), Value::String(from_key.clone()));
+    check_params.insert("to_key".to_string(), Value::String(to_key.clone()));
+
+    let check_rows = state
+        .pool()
+        .execute_query(check_query, Some(check_params))
+        .await?;
+
+    if check_rows.is_empty() {
+        // Determine which endpoint is missing
+        let from_exists_query = "MATCH (n {key: $key}) RETURN n.key AS exists";
+        let mut p = serde_json::Map::new();
+        p.insert("key".to_string(), Value::String(from_key.clone()));
+        let from_check = state
+            .pool()
+            .execute_query(from_exists_query, Some(p))
+            .await?;
+
+        if from_check.is_empty() {
+            return Err(Error::arc_endpoint_not_found("from", from_key));
+        }
+        return Err(Error::arc_endpoint_not_found("to", to_key));
+    }
+
+    // Handle is_slug_source singleton (takeover pattern)
+    handle_slug_source_singleton(state, to_key, &props).await?;
+
+    // Build MERGE query for arc
+    let props_json = serde_json::to_string(&props)
+        .map_err(|e| Error::Internal(format!("Props serialization: {}", e)))?;
+
+    let query = format!(
+        r#"
+        MATCH (from {{key: $from_key}})
+        MATCH (to {{key: $to_key}})
+        MERGE (from)-[r:{arc_class}]->(to)
+        SET r += $props
+        RETURN true AS created
+        "#,
+        arc_class = arc_class
+    );
+
+    let mut query_params = serde_json::Map::new();
+    query_params.insert("from_key".to_string(), Value::String(from_key.clone()));
+    query_params.insert("to_key".to_string(), Value::String(to_key.clone()));
+    query_params.insert("props".to_string(), serde_json::from_str(&props_json)?);
+
+    state
+        .pool()
+        .execute_query(&query, Some(query_params))
+        .await?;
+
+    // Invalidate cache
+    let cache_patterns = vec![from_key.clone(), to_key.clone()];
+    for pattern in &cache_patterns {
+        state.cache().invalidate_pattern(pattern).await;
+    }
+
+    let arc_key = format!("({})--[{}]-->({})", from_key, arc_class, to_key);
+    info!(arc = %arc_key, "create_arc completed");
+
+    Ok(WriteResult {
+        success: true,
+        operation: "create_arc".to_string(),
+        key: arc_key,
+        created: true, // MERGE always reports as created for arcs
+        updated_properties: vec![],
+        auto_arcs_created: vec![],
+        execution_time_ms: start.elapsed().as_millis() as u64,
+        cache_invalidated: cache_patterns,
+    })
+}
+
+/// Execute update_props operation
+async fn execute_update_props(
+    state: &State,
+    params: &WriteParams,
+    _meta: &ClassMetadata,
+) -> Result<WriteResult> {
+    let start = std::time::Instant::now();
+    let key = params.key.as_ref().expect("key validated");
+    let class = params.class.as_ref().expect("class validated");
+    let props = params.properties.as_ref().expect("properties validated");
+
+    // Verify node exists
+    let check_query = format!(
+        "MATCH (n:{class} {{key: $key}}) RETURN n.key AS exists",
+        class = class
+    );
+    let mut check_params = serde_json::Map::new();
+    check_params.insert("key".to_string(), Value::String(key.clone()));
+
+    let check_rows = state
+        .pool()
+        .execute_query(&check_query, Some(check_params))
+        .await?;
+
+    if check_rows.is_empty() {
+        return Err(Error::not_found(key));
+    }
+
+    // Check for slug_locked before update
+    validate_slug_not_locked(state, key, props).await?;
+
+    // Build SET query
+    let props_json = serde_json::to_string(&props)
+        .map_err(|e| Error::Internal(format!("Props serialization: {}", e)))?;
+
+    let query = format!(
+        r#"
+        MATCH (n:{class} {{key: $key}})
+        SET n += $props, n.updated_at = timestamp()
+        RETURN keys(n) AS all_keys
+        "#,
+        class = class
+    );
+
+    let mut query_params = serde_json::Map::new();
+    query_params.insert("key".to_string(), Value::String(key.clone()));
+    query_params.insert("props".to_string(), serde_json::from_str(&props_json)?);
+
+    state
+        .pool()
+        .execute_query(&query, Some(query_params))
+        .await?;
+
+    let updated_properties: Vec<String> = props.keys().cloned().collect();
+
+    // Invalidate cache
+    let cache_patterns = vec![format!("{}:*", class), key.clone()];
+    for pattern in &cache_patterns {
+        state.cache().invalidate_pattern(pattern).await;
+    }
+
+    info!(key = %key, class = %class, props = ?updated_properties, "update_props completed");
+
+    Ok(WriteResult {
+        success: true,
+        operation: "update_props".to_string(),
+        key: key.clone(),
+        created: false,
+        updated_properties,
+        auto_arcs_created: vec![],
+        execution_time_ms: start.elapsed().as_millis() as u64,
+        cache_invalidated: cache_patterns,
+    })
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// Main Execute Function
+// ═══════════════════════════════════════════════════════════════════════════════
+
+/// Execute the novanet_write tool
+pub async fn execute(state: &State, params: WriteParams) -> Result<WriteResult> {
+    // Validate parameters
+    validate_params(&params)?;
+
+    match params.operation {
+        WriteOperation::UpsertNode => {
+            let class = params.class.as_ref().expect("validated");
+            let meta = fetch_and_validate_class(state, class).await?;
+            execute_upsert_node(state, &params, &meta).await
+        }
+        WriteOperation::CreateArc => execute_create_arc(state, &params).await,
+        WriteOperation::UpdateProps => {
+            let class = params.class.as_ref().expect("validated");
+            let meta = fetch_and_validate_class(state, class).await?;
+            execute_update_props(state, &params, &meta).await
+        }
+    }
 }
 
 #[cfg(test)]
