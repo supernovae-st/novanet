@@ -33,8 +33,8 @@ novanet <command>    # Run specific command
 
 ## Schema Stats
 
-- **61 nodes** (40 shared + 21 org)
-- **182 arcs** (6 families)
+- **59 nodes** (40 shared + 19 org)
+- **178 arcs** (6 families)
 - **10 layers** (4 shared + 6 org)
 - **5 traits** (defined/authored/imported/generated/retrieved)
 
