@@ -4,6 +4,35 @@ For complete history, see [CHANGELOG.md](./CHANGELOG.md).
 
 ## [Unreleased]
 
+## [0.16.2] - 2026-03-03
+
+### Added
+- **Phase 3: Content Generation Workflow** - Complete 3-phase Nika pipeline
+  - `07-content-generation.nika.yaml` - Generate BlockNatives + PageNative
+  - `skills/content-generation.md` - Block generation rules (head-seo-meta, hero, features, faq, cta)
+  - Uses `novanet_generate` for context assembly
+  - Validates slug match with EntityNative.denomination_forms.url
+- **SESSION.md Complete** - Ontology brainstorm session finalized
+  - D1-D8 decisions documented
+  - 3-workflow architecture validated
+  - 8 workflows + 4 support files catalogued
+
+### Changed
+- **Dependencies** - Batch updates from dependabot
+  - autoprefixer: 10.4.24 → 10.4.27
+  - postcss: 8.5.6 → 8.5.8
+  - framer-motion: 12.34.3 → 12.34.5
+  - eslint: 9.39.2 → 9.39.3
+  - @eslint/js: 9.39.2 → 9.39.3
+  - lucide-react: 0.575.0 → 0.576.0
+  - GitHub Actions: Various updates
+  - Rust deps in novanet-mcp: 4 updates
+
+### Workflows
+- **Phase 1**: `00-entity-native-bootstrap.nika.yaml` - Create EntityNative
+- **Phase 2**: `06-seo-discovery-modular.nika.yaml` - SEO Discovery
+- **Phase 3**: `07-content-generation.nika.yaml` - Content Generation (NEW)
+
 ## [0.16.0] - 2026-03-03
 
 ### Added
