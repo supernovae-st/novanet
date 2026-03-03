@@ -1,0 +1,409 @@
+# ============================================================================
+# 04-seo-discovery-with-terms.nika.yaml
+# ============================================================================
+# NIVEAU 4: Découverte SEO + Extraction de Terms + USES_TERM
+#
+# But: Extraire du vocabulaire (Terms) depuis les keywords SEO
+# Pattern: LLM pour extraire les termes techniques, puis écriture
+# Structure: EntityNative -[USES_TERM]-> Term <-[CONTAINS_TERM]- TermSet <-[HAS_TERMS]- Locale
+# ============================================================================
+
+schema: "nika/workflow@0.9"
+provider: claude
+model: claude-sonnet-4-20250514
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# CONFIGURATION MCP
+# ═══════════════════════════════════════════════════════════════════════════════
+mcp:
+  novanet:
+    # Use pre-built binary to avoid compilation delay which causes connection timeout
+    command: /Users/thibaut/dev/supernovae/novanet/tools/novanet-mcp/target/debug/novanet-mcp
+    env:
+      NOVANET_MCP_NEO4J_PASSWORD: "novanetpassword"
+      NOVANET_MCP_NEO4J_URI: "bolt://localhost:7687"
+
+  dataforseo:
+    command: npx
+    args: ["-y", "dataforseo-mcp-server"]
+    env:
+      DATAFORSEO_USERNAME: "{{env.DATAFORSEO_USERNAME}}"
+      DATAFORSEO_PASSWORD: "{{env.DATAFORSEO_PASSWORD}}"
+
+  # Perplexity for term research
+  # Note: Using perplexity-mcp package
+  perplexity:
+    command: npx
+    args: ["-y", "perplexity-mcp"]
+    env:
+      PERPLEXITY_API_KEY: "{{env.PERPLEXITY_API_KEY}}"
+
+tasks:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 1: LOAD CONTEXT
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: load_entity
+    invoke:
+      mcp: novanet
+      tool: novanet_describe
+      params:
+        describe: entity
+        entity_key: "qr-code"
+    output:
+      format: json
+
+  - id: load_locale_terms
+    invoke:
+      mcp: novanet
+      tool: novanet_atoms
+      params:
+        locale: "fr-FR"
+        atom_type: "term"
+        domain: "technical"
+        limit: 50
+    output:
+      format: json
+
+  - id: load_existing_termset
+    invoke:
+      mcp: novanet
+      tool: novanet_query
+      params:
+        cypher: |
+          MATCH (l:Locale {key: $locale})-[:HAS_TERMS]->(ts:TermSet {domain: $domain})
+          RETURN ts.key AS termset_key, ts.domain, ts.display_name
+        params:
+          locale: "fr-FR"
+          domain: "technical"
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 2: DISCOVER SEO KEYWORDS
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: discover_keywords
+    use:
+      entity: load_entity
+    invoke:
+      mcp: dataforseo
+      # Correct tool name
+      tool: dataforseo_labs_google_keywords_for_site
+      params:
+        target: "qrcode-ai.com"
+        # CORRECT: location_name is a string, NOT location_code
+        location_name: "France"
+        language_code: "fr"
+        limit: 30
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 3: EXTRACT TERMS - LLM analyse les keywords pour extraire du vocabulaire
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: extract_terms_from_keywords
+    use:
+      entity: load_entity
+      keywords: discover_keywords
+      existing_terms: load_locale_terms
+    infer:
+      prompt: |
+        Tu es un linguiste expert en terminologie technique.
+
+        **Contexte Entity:** {{use.entity}}
+        **Locale:** fr-FR
+
+        **Keywords SEO découverts:**
+        {{use.keywords}}
+
+        **Terms existants dans NovaNet:**
+        {{use.existing_terms}}
+
+        **Mission:** Extraire les TERMES TECHNIQUES distincts des keywords SEO.
+
+        Un Term est:
+        - Un mot ou expression technique avec une définition précise
+        - Spécifique au domaine (QR codes, technologie)
+        - Réutilisable dans du contenu généré
+
+        Règles:
+        1. NE PAS dupliquer les terms existants
+        2. Extraire seulement les termes TECHNIQUES (pas les verbes d'action)
+        3. Chaque term doit avoir une définition claire
+        4. Classifier par domain: technical | features | marketing | general
+
+        Retourne un JSON array de nouveaux terms à créer:
+        [
+          {
+            "key": "qr_code",
+            "display_name": "QR Code",
+            "value": "code QR",
+            "domain": "technical",
+            "register": "neutral",
+            "part_of_speech": "noun",
+            "definition": "Code-barres bidimensionnel encodant des données numériques",
+            "synonyms": ["code QR", "QR"],
+            "usage_context": "Utilisé pour désigner le produit principal"
+          },
+          {
+            "key": "generateur",
+            "display_name": "Générateur",
+            "value": "générateur",
+            "domain": "features",
+            "register": "neutral",
+            "part_of_speech": "noun",
+            "definition": "Outil logiciel créant automatiquement un QR code",
+            "synonyms": ["créateur", "outil de création"],
+            "usage_context": "Fonctionnalité de l'application"
+          }
+        ]
+
+        Limite: 10 nouveaux terms maximum.
+      temperature: 0.2
+      max_tokens: 3000
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 4: RESEARCH TERMS - Utiliser Perplexity pour enrichir les définitions
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: enrich_term_definitions
+    use:
+      terms: extract_terms_from_keywords
+    for_each: "{{use.terms}}"
+    as: term
+    concurrency: 3
+    invoke:
+      mcp: perplexity
+      tool: search
+      params:
+        query: "définition technique {{use.term.value}} dans le contexte des QR codes et applications mobiles"
+        max_results: 3
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 5: VALIDATE TERMS - LLM valide et finalise les terms
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: validate_and_finalize_terms
+    use:
+      extracted_terms: extract_terms_from_keywords
+      research: enrich_term_definitions
+    infer:
+      prompt: |
+        Valide et finalise les terms extraits en intégrant la recherche.
+
+        **Terms extraits:**
+        {{use.extracted_terms}}
+
+        **Recherche Perplexity (définitions enrichies):**
+        {{use.research}}
+
+        Pour chaque term:
+        1. Améliore la définition si la recherche apporte du contexte
+        2. Vérifie que le domain est correct
+        3. Valide que c'est bien un terme technique distinct
+
+        Retourne le JSON array FINAL des terms validés (format identique à l'input).
+        Supprime les terms qui ne sont pas pertinents après validation.
+      temperature: 0.1
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 6: WRITE TERMS TO NOVANET
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: write_terms
+    use:
+      validated_terms: validate_and_finalize_terms
+      termset: load_existing_termset
+    for_each: "{{use.validated_terms}}"
+    as: term
+    concurrency: 5
+    invoke:
+      mcp: novanet
+      tool: novanet_write
+      params:
+        operation: upsert_node
+        class: Term
+        key: "{{use.term.key}}"
+        properties:
+          display_name: "{{use.term.display_name}}"
+          value: "{{use.term.value}}"
+          domain: "{{use.term.domain}}"
+          register: "{{use.term.register}}"
+          part_of_speech: "{{use.term.part_of_speech}}"
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 7: CREATE CONTAINS_TERM ARCS (TermSet -> Term)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: link_terms_to_termset
+    use:
+      terms: validate_and_finalize_terms
+      termset: load_existing_termset
+      written: write_terms
+    for_each: "{{use.terms}}"
+    as: term
+    concurrency: 5
+    invoke:
+      mcp: novanet
+      tool: novanet_write
+      params:
+        operation: create_arc
+        arc_class: CONTAINS_TERM
+        from_key: "{{use.termset.termset_key}}"
+        to_key: "{{use.term.key}}"
+        properties: {}
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 8: CREATE USES_TERM ARCS (EntityNative -> Term)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: link_entity_native_to_terms
+    use:
+      terms: validate_and_finalize_terms
+      termset_linked: link_terms_to_termset
+    for_each: "{{use.terms}}"
+    as: term
+    concurrency: 5
+    invoke:
+      mcp: novanet
+      tool: novanet_write
+      params:
+        operation: create_arc
+        arc_class: USES_TERM
+        # CORRECT: Key pattern is entity:{key}@{locale} (NOT entity-native:)
+        from_key: "entity:qr-code@fr-FR"
+        to_key: "{{use.term.key}}"
+        properties:
+          usage_context: "{{use.term.usage_context}}"
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 9: VERIFY THE GRAPH
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: verify_terms_graph
+    use:
+      linked: link_entity_native_to_terms
+    invoke:
+      mcp: novanet
+      tool: novanet_query
+      params:
+        # CORRECT: Key pattern is entity:{key}@{locale}
+        cypher: |
+          // Verify EntityNative -> Term links via USES_TERM
+          MATCH (en:EntityNative {key: $native_key})-[ut:USES_TERM]->(t:Term)
+          OPTIONAL MATCH (ts:TermSet)-[:CONTAINS_TERM]->(t)
+          RETURN en.key AS entity_native,
+                 t.key AS term_key,
+                 t.value AS term_value,
+                 t.domain,
+                 ts.key AS termset_key
+          ORDER BY t.domain, t.key
+        params:
+          native_key: "entity:qr-code@fr-FR"
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # RAPPORT FINAL
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: final_report
+    use:
+      entity: load_entity
+      keywords: discover_keywords
+      extracted: extract_terms_from_keywords
+      validated: validate_and_finalize_terms
+      written: write_terms
+      termset_linked: link_terms_to_termset
+      entity_linked: link_entity_native_to_terms
+      verification: verify_terms_graph
+    infer: |
+      ## Workflow SEO + Terms Discovery - Rapport
+
+      **Entity:** qr-code
+      **Locale:** fr-FR
+
+      ### 1. Keywords découverts (DataForSEO)
+      Total: {{use.keywords}}
+
+      ### 2. Terms extraits
+      {{use.extracted}}
+
+      ### 3. Terms validés et finalisés
+      {{use.validated}}
+
+      ### 4. Écriture dans NovaNet
+      Terms créés: {{use.written}}
+      Arcs CONTAINS_TERM: {{use.termset_linked}}
+      Arcs USES_TERM: {{use.entity_linked}}
+
+      ### 5. Vérification du graphe
+      {{use.verification}}
+
+      ### Structure finale du graphe
+
+      ```
+      Locale (fr-FR)
+          │
+          └─[:HAS_TERMS]─► TermSet (technical)
+                               │
+                               └─[:CONTAINS_TERM]─► Term (qr_code)
+                                                       ▲
+      Entity (qr-code)                                │
+          │                                           │
+          └─[:HAS_NATIVE]─► EntityNative (fr-FR) ────┘
+                               │              [:USES_TERM]
+                               │
+                               └─[:TARGETS]─► SEOKeyword
+      ```
+
+      ### Prochaines étapes
+      1. Répliquer pour 200 locales (workflow 05)
+      2. Ajouter les Expressions et Patterns
+      3. Générer le contenu avec novanet_generate
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# FLOW DAG
+# ═══════════════════════════════════════════════════════════════════════════════
+flows:
+  # Phase 1: Load context in parallel
+  - source: load_entity
+    target: [load_locale_terms, load_existing_termset, discover_keywords]
+
+  # Phase 3-4: Extract and enrich
+  - source: [load_locale_terms, discover_keywords]
+    target: extract_terms_from_keywords
+  - source: extract_terms_from_keywords
+    target: enrich_term_definitions
+  - source: enrich_term_definitions
+    target: validate_and_finalize_terms
+
+  # Phase 6-8: Write operations (sequential for safety)
+  - source: [validate_and_finalize_terms, load_existing_termset]
+    target: write_terms
+  - source: write_terms
+    target: link_terms_to_termset
+  - source: link_terms_to_termset
+    target: link_entity_native_to_terms
+
+  # Phase 9: Verify
+  - source: link_entity_native_to_terms
+    target: verify_terms_graph
+
+  # Final report
+  - source: verify_terms_graph
+    target: final_report

@@ -1,0 +1,420 @@
+# ============================================================================
+# 06-seo-discovery-modular.nika.yaml
+# ============================================================================
+# NIVEAU 6: Production SEO workflow using ALL Nika features
+#
+# Features used:
+# - include: DAG fusion (partials)
+# - context: file loading (brand, persona)
+# - skills: SEO scoring skill
+# - infer: with temperature, extended_thinking
+# - invoke: MCP tools (novanet, dataforseo)
+# - agent: multi-turn with MCP
+# - exec: shell commands (validation)
+# - fetch: HTTP requests (competitor analysis)
+# - for_each: parallel execution
+# - decompose: dynamic DAG expansion (future)
+# ============================================================================
+
+schema: "nika/workflow@0.9"
+provider: claude
+model: claude-sonnet-4-20250514
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# CONTEXT FILES - Loaded at workflow start
+# ═══════════════════════════════════════════════════════════════════════════════
+context:
+  files:
+    brand: ./context/brand.md
+    persona: ./context/seo-persona.md
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# SKILLS - SEO analysis skill (format: alias: path)
+# ═══════════════════════════════════════════════════════════════════════════════
+skills:
+  seo_scoring: ./skills/seo-scoring.md
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# INCLUDE - Reusable partials via DAG fusion
+# ═══════════════════════════════════════════════════════════════════════════════
+include:
+  - path: ./partials/setup-entity-locales.nika.yaml
+    prefix: setup_
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# MCP SERVERS
+# ═══════════════════════════════════════════════════════════════════════════════
+mcp:
+  novanet:
+    command: /Users/thibaut/dev/supernovae/novanet/tools/novanet-mcp/target/debug/novanet-mcp
+    env:
+      NOVANET_MCP_NEO4J_PASSWORD: "novanetpassword"
+      NOVANET_MCP_NEO4J_URI: "bolt://localhost:7687"
+
+  dataforseo:
+    command: npx
+    args: ["-y", "dataforseo-mcp-server"]
+    env:
+      DATAFORSEO_USERNAME: "{{env.DATAFORSEO_USERNAME}}"
+      DATAFORSEO_PASSWORD: "{{env.DATAFORSEO_PASSWORD}}"
+
+tasks:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 1: COMPETITOR ANALYSIS - Using fetch: verb
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: fetch_competitor_1
+    fetch:
+      url: "https://www.qr-code-generator.com/"
+      method: GET
+      headers:
+        User-Agent: "Mozilla/5.0 (compatible; SEOBot/1.0)"
+    output:
+      format: text
+
+  - id: fetch_competitor_2
+    fetch:
+      url: "https://www.qrstuff.com/"
+      method: GET
+      headers:
+        User-Agent: "Mozilla/5.0 (compatible; SEOBot/1.0)"
+    output:
+      format: text
+
+  - id: analyze_competitors
+    use:
+      competitor1: fetch_competitor_1
+      competitor2: fetch_competitor_2
+    infer:
+      prompt: |
+        Analyze these competitor pages for SEO insights.
+
+        **Brand Guidelines:**
+        {{context.files.brand}}
+
+        **Competitor 1 (qr-code-generator.com):**
+        {{use.competitor1}}
+
+        **Competitor 2 (qrstuff.com):**
+        {{use.competitor2}}
+
+        Extract:
+        1. H1/H2 structure
+        2. Key features highlighted
+        3. Call-to-action patterns
+        4. Keyword opportunities
+
+        Return JSON:
+        {
+          "competitive_keywords": [],
+          "unique_angles": {},
+          "content_gaps": [],
+          "recommended_focus": []
+        }
+      temperature: 0.2
+      extended_thinking: true
+      thinking_budget: 8192
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 2: KEYWORD DISCOVERY - Using for_each with DataForSEO
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: define_priority_locales
+    use:
+      locales: setup_load_locales  # From included partial
+    infer:
+      prompt: |
+        From these locales, select the top 5 priority locales for initial SEO discovery:
+        {{use.locales}}
+
+        Return JSON array with DataForSEO config:
+        [
+          {"locale_key": "fr-FR", "location_name": "France", "language_code": "fr"},
+          {"locale_key": "en-US", "location_name": "United States", "language_code": "en"},
+          ...
+        ]
+      temperature: 0
+    output:
+      format: json
+
+  - id: discover_keywords
+    use:
+      locales: define_priority_locales
+    for_each: "$locales"
+    as: locale
+    concurrency: 3
+    fail_fast: false
+    invoke:
+      mcp: dataforseo
+      tool: dataforseo_labs_google_keywords_for_site
+      params:
+        target: "qrcode-ai.com"
+        location_name: "{{use.locale.location_name}}"
+        language_code: "{{use.locale.language_code}}"
+        limit: 30
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 3: KEYWORD SCORING - Using skill and extended_thinking
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: score_keywords
+    use:
+      keywords: discover_keywords
+      entity: setup_load_entity
+      competitors: analyze_competitors
+    infer:
+      prompt: |
+        You are an SEO expert. Score these keywords using the methodology below.
+
+        **SEO Persona & Scoring Rules:**
+        {{context.files.persona}}
+
+        **Entity Context:**
+        {{use.entity}}
+
+        **Competitive Insights:**
+        {{use.competitors}}
+
+        **Keywords to Score:**
+        {{use.keywords}}
+
+        For EACH keyword:
+        1. Determine semantic_relation (same_as, action_for, produces, subtopic_of, related_to, attribute_of)
+        2. Calculate score using the formula
+        3. Mark is_primary (score > 1000)
+        4. Mark is_slug_source (best URL candidate)
+
+        Return JSON array grouped by locale.
+      temperature: 0.1
+      extended_thinking: true
+      thinking_budget: 16384
+      max_tokens: 8000
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 4: VALIDATION AGENT - Multi-turn with MCP tools
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: validation_agent
+    use:
+      scored: score_keywords
+      competitors: analyze_competitors
+    agent:
+      prompt: |
+        Tu es un AGENT VALIDATOR expert SEO. Valide les keywords scorés.
+
+        **Keywords scorés:**
+        {{use.scored}}
+
+        **Insights concurrentiels:**
+        {{use.competitors}}
+
+        **Mission:**
+        1. Utilise novanet_query pour vérifier si des keywords similaires existent déjà
+        2. Valide que les scores sont cohérents
+        3. Vérifie les slugs pour URL-safety
+        4. Identifie les doublons potentiels
+
+        Pour chaque keyword:
+        - APPROVE si valide
+        - REJECT si non pertinent (avec raison)
+        - ADJUST si score ou relation à corriger
+
+        Retourne la liste finale validée en JSON.
+
+      mcp: [novanet]
+      max_turns: 5
+      depth_limit: 2
+      stop_conditions:
+        - "VALIDATION_COMPLETE"
+        - "ALL_KEYWORDS_REVIEWED"
+      # v0.18.0: extended_thinking now works with auto-computed max_tokens
+      extended_thinking: true
+      thinking_budget: 8192
+      max_tokens: 16384
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 5: WRITE TO NOVANET - Using for_each
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: extract_approved
+    use:
+      validated: validation_agent
+    infer:
+      prompt: |
+        Extract the approved_keywords array from the validation result:
+        {{use.validated}}
+
+        Return ONLY the JSON array of approved keywords, nothing else.
+      temperature: 0
+    output:
+      format: json
+
+  - id: write_keywords
+    use:
+      keywords: extract_approved
+    for_each: "$keywords"
+    as: kw
+    concurrency: 5
+    fail_fast: false
+    invoke:
+      mcp: novanet
+      tool: novanet_write
+      params:
+        operation: upsert_node
+        class: SEOKeyword
+        key: "seo:{{use.kw.slug_form}}@{{use.kw.locale_key}}"
+        properties:
+          value: "{{use.kw.value}}"
+          slug_form: "{{use.kw.slug_form}}"
+          locale_key: "{{use.kw.locale_key}}"
+          display_name: "{{use.kw.value}} ({{use.kw.locale_key}})"
+          volume: "{{use.kw.volume}}"
+          difficulty: "{{use.kw.difficulty}}"
+          intent: "{{use.kw.intent}}"
+          source: "dataforseo"
+    output:
+      format: json
+
+  - id: create_targets_arcs
+    use:
+      keywords: extract_approved
+      written: write_keywords
+    for_each: "$keywords"
+    as: kw
+    concurrency: 5
+    invoke:
+      mcp: novanet
+      tool: novanet_write
+      params:
+        operation: create_arc
+        arc_class: TARGETS
+        # CORRECT: EntityNative -> SEOKeyword
+        from_key: "entity:qr-code@{{use.kw.locale_key}}"
+        to_key: "seo:{{use.kw.slug_form}}@{{use.kw.locale_key}}"
+        properties:
+          rank: "{{use.kw.rank}}"
+          is_slug_source: "{{use.kw.is_slug_source}}"
+          semantic_relation: "{{use.kw.semantic_relation}}"
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 6: VERIFICATION - Using exec: for validation
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: verify_neo4j_connection
+    exec:
+      command: "docker ps --filter name=neo4j --format '{{.Status}}'"
+      shell: true
+    output:
+      format: text
+
+  - id: verify_graph
+    use:
+      neo4j_status: verify_neo4j_connection
+      arcs_created: create_targets_arcs
+    invoke:
+      mcp: novanet
+      tool: novanet_traverse
+      params:
+        start_key: "qr-code"
+        max_depth: 2
+        direction: outgoing
+        arc_families: ["semantic", "mining"]
+        target_kinds: ["SEOKeyword"]
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # FINAL REPORT
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: final_report
+    use:
+      entity: setup_load_entity
+      competitors: analyze_competitors
+      scored: score_keywords
+      validated: validation_agent
+      written: write_keywords
+      arcs: create_targets_arcs
+      verification: verify_graph
+    infer:
+      prompt: |
+        Generate a comprehensive SEO Discovery report.
+
+        **Brand Context:**
+        {{context.files.brand}}
+
+        **Entity:** qr-code
+        **Date:** 2026-03-03
+
+        **Results:**
+        - Competitors analyzed: {{use.competitors}}
+        - Keywords scored: {{use.scored}}
+        - Keywords validated: {{use.validated}}
+        - Keywords written: {{use.written}}
+        - TARGETS arcs: {{use.arcs}}
+        - Verification: {{use.verification}}
+
+        Create a markdown report with:
+        1. Executive Summary
+        2. Competitive Analysis
+        3. Keyword Insights by Locale
+        4. Graph Statistics
+        5. Recommendations
+      temperature: 0.3
+      max_tokens: 4000
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# FLOWS - DAG definition
+# ═══════════════════════════════════════════════════════════════════════════════
+flows:
+  # Competitor analysis parallel with setup
+  - source: [fetch_competitor_1, fetch_competitor_2]
+    target: analyze_competitors
+
+  # Setup flows from included partial
+  - source: setup_load_entity
+    target: setup_load_entity_native
+  - source: setup_load_entity
+    target: define_priority_locales
+  - source: setup_load_locales
+    target: define_priority_locales
+
+  # Discovery
+  - source: [define_priority_locales, analyze_competitors]
+    target: discover_keywords
+
+  # Scoring
+  - source: [discover_keywords, setup_load_entity, analyze_competitors]
+    target: score_keywords
+
+  # Validation
+  - source: [score_keywords, analyze_competitors]
+    target: validation_agent
+
+  # Writing
+  - source: validation_agent
+    target: extract_approved
+  - source: extract_approved
+    target: write_keywords
+  - source: write_keywords
+    target: create_targets_arcs
+
+  # Verification
+  - source: create_targets_arcs
+    target: verify_neo4j_connection
+  - source: verify_neo4j_connection
+    target: verify_graph
+
+  # Final
+  - source: verify_graph
+    target: final_report

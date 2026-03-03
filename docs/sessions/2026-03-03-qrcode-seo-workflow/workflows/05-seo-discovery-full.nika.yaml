@@ -1,0 +1,587 @@
+# ============================================================================
+# 05-seo-discovery-full.nika.yaml
+# ============================================================================
+# NIVEAU 5: Pipeline SEO complet - 200 locales + Multi-Agent
+#
+# But: Pipeline production pour découvrir, analyser, écrire SEO data
+# Pattern: Multi-agent (researcher, validator, scorer), batching, rate limiting
+# Verbes: invoke, infer, agent, exec, for_each (tous utilisés)
+# MCP: novanet, dataforseo, perplexity, firecrawl
+# ============================================================================
+
+schema: "nika/workflow@0.9"
+provider: claude
+model: claude-sonnet-4-20250514
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# CONFIGURATION MCP - Tous les serveurs
+# ═══════════════════════════════════════════════════════════════════════════════
+mcp:
+  # NovaNet - Knowledge Graph (PRIMARY)
+  novanet:
+    # Use pre-built binary to avoid compilation delay which causes connection timeout
+    command: /Users/thibaut/dev/supernovae/novanet/tools/novanet-mcp/target/debug/novanet-mcp
+    env:
+      NOVANET_MCP_NEO4J_PASSWORD: "novanetpassword"
+      NOVANET_MCP_NEO4J_URI: "bolt://localhost:7687"
+
+  # DataForSEO - SEO Data (EXTERNAL API)
+  dataforseo:
+    command: npx
+    args: ["-y", "dataforseo-mcp-server"]
+    env:
+      DATAFORSEO_USERNAME: "{{env.DATAFORSEO_USERNAME}}"
+      DATAFORSEO_PASSWORD: "{{env.DATAFORSEO_PASSWORD}}"
+
+  # Perplexity - Research & Validation (AI)
+  perplexity:
+    command: npx
+    args: ["-y", "perplexity-mcp"]
+    env:
+      PERPLEXITY_API_KEY: "{{env.PERPLEXITY_API_KEY}}"
+
+  # Firecrawl - Web Scraping (COMPETITOR ANALYSIS)
+  firecrawl:
+    command: npx
+    args: ["-y", "firecrawl-mcp"]
+    env:
+      FIRECRAWL_API_KEY: "{{env.FIRECRAWL_API_KEY}}"
+
+tasks:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 0: INITIALIZATION - Load all locales from NovaNet
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: load_entity
+    invoke:
+      mcp: novanet
+      tool: novanet_describe
+      params:
+        describe: entity
+        entity_key: "qr-code"
+    output:
+      format: json
+
+  - id: load_all_locales
+    invoke:
+      mcp: novanet
+      tool: novanet_query
+      params:
+        cypher: |
+          // Get all locales with their DataForSEO config
+          // NOTE: DataForSEO uses location_name (string like "France"), NOT location_code
+          MATCH (l:Locale)
+          WHERE l.status = 'active'
+          RETURN l.key AS locale_key,
+                 l.language_code AS language_code,
+                 l.dataforseo_location_name AS location_name,
+                 l.region AS region,
+                 l.priority AS priority
+          ORDER BY l.priority DESC, l.key
+          LIMIT 200
+    output:
+      format: json
+
+  - id: create_batches
+    use:
+      locales: load_all_locales
+    infer:
+      prompt: |
+        Divise ces locales en batches de 10 pour le rate limiting:
+        {{use.locales}}
+
+        Retourne un JSON array de batches:
+        [
+          {
+            "batch_id": 1,
+            "locales": [
+              {"locale_key": "fr-FR", "location_name": "France", "language_code": "fr"},
+              ...
+            ]
+          },
+          ...
+        ]
+
+        Priorise par:
+        1. Tier 1: en-US, en-GB, fr-FR, de-DE, es-ES (premiers batches)
+        2. Tier 2: Europe, Americas
+        3. Tier 3: Asia, Africa, Oceania
+      temperature: 0
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 1: COMPETITOR RESEARCH - Agent autonome avec Firecrawl
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: research_competitors
+    use:
+      entity: load_entity
+    agent:
+      prompt: |
+        Tu es un AGENT RESEARCHER spécialisé en SEO.
+
+        **Mission:** Analyser les concurrents de QRCode-AI.com pour identifier:
+        1. Les keywords qu'ils ciblent
+        2. Les structures de contenu qu'ils utilisent
+        3. Les features qu'ils mettent en avant
+
+        **Outils disponibles:**
+        - Firecrawl: pour scraper les pages concurrentes
+        - Perplexity: pour rechercher des informations
+
+        **Concurrents à analyser:**
+        1. qr-code-generator.com
+        2. qrstuff.com
+        3. qr.io
+
+        **Workflow suggéré:**
+        1. Scrape la homepage de chaque concurrent
+        2. Identifie les H1/H2 et structure de contenu
+        3. Recherche leurs positions SEO sur Perplexity
+        4. Synthétise les insights
+
+        Retourne un rapport structuré avec:
+        - competitive_keywords: les keywords que tous utilisent
+        - unique_angles: ce qui différencie chacun
+        - content_gaps: opportunités non exploitées
+
+      mcp: [firecrawl, perplexity]
+      max_turns: 10
+      depth_limit: 2
+      stop_conditions:
+        - "RESEARCH_COMPLETE"
+        - "COMPETITORS_ANALYZED"
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 2: KEYWORD DISCOVERY - for_each batch avec rate limiting
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  # NOTE: novanet_batch can ONLY call novanet_* tools, NOT external MCP tools
+  # For DataForSEO, we use a separate for_each per locale within each batch
+
+  - id: discover_keywords_per_batch
+    use:
+      entity: load_entity
+      batches: create_batches
+      competitor_insights: research_competitors
+    for_each: "{{use.batches}}"
+    as: batch
+    concurrency: 2  # Only 2 batches in parallel (rate limiting)
+    fail_fast: false
+    infer:
+      prompt: |
+        Tu dois découvrir les keywords pour ce batch de locales.
+
+        **Batch ID:** {{use.batch.batch_id}}
+        **Locales dans ce batch:** {{use.batch.locales}}
+
+        Pour chaque locale, tu vas recevoir les données de DataForSEO.
+        Retourne un JSON structuré avec les keywords par locale.
+      temperature: 0
+    output:
+      format: json
+
+  # Separate task to actually call DataForSEO per locale
+  - id: fetch_dataforseo_per_locale
+    use:
+      entity: load_entity
+      batches: create_batches
+    for_each: "{{use.batches | flat_map: batch -> batch.locales}}"
+    as: locale
+    concurrency: 3  # Rate limit DataForSEO API
+    fail_fast: false
+    invoke:
+      mcp: dataforseo
+      # CORRECT: Tool name per DataForSEO MCP docs
+      tool: dataforseo_labs_google_keywords_for_site
+      params:
+        target: "qrcode-ai.com"
+        # CORRECT: location_name is a string (NOT location_code)
+        location_name: "{{use.locale.location_name}}"
+        language_code: "{{use.locale.language_code}}"
+        limit: 20
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 3: MULTI-AGENT VALIDATION - Débat entre agents
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: agent_scorer
+    use:
+      discoveries: fetch_dataforseo_per_locale
+      entity: load_entity
+    agent:
+      prompt: |
+        Tu es l'AGENT SCORER. Ta mission est d'évaluer la pertinence des keywords.
+
+        **Keywords découverts:**
+        {{use.discoveries}}
+
+        **Contexte Entity:**
+        {{use.entity}}
+
+        **Scoring Formula:**
+        score = volume × sem_coef × intent_boost × trend_factor
+
+        Où:
+        - sem_coef: same_as=1.0, action_for=0.95, produces=0.85, subtopic_of=0.70, related_to=0.50, attribute_of=0.30
+        - intent_boost: transactional=1.2, commercial=1.1, informational=1.0, navigational=0.8
+        - trend_factor: rising=1.2, stable=1.0, declining=0.7
+
+        Pour CHAQUE keyword de CHAQUE locale:
+        1. Détermine semantic_relation (même concept ou relation ?)
+        2. Calcule le score avec la formule
+        3. Identifie is_primary (score > 1000)
+        4. Identifie is_slug_source (meilleur pour URL)
+
+        Retourne le JSON structuré par locale avec les scores.
+
+      mcp: [novanet]  # Peut requêter NovaNet pour contexte
+      max_turns: 5
+      stop_conditions:
+        - "SCORING_COMPLETE"
+    output:
+      format: json
+
+  - id: agent_validator
+    use:
+      scored: agent_scorer
+      competitor_insights: research_competitors
+    agent:
+      prompt: |
+        Tu es l'AGENT VALIDATOR. Ta mission est de valider les keywords scorés.
+
+        **Keywords scorés:**
+        {{use.scored}}
+
+        **Insights concurrentiels:**
+        {{use.competitor_insights}}
+
+        **Critères de validation:**
+        1. Le keyword est-il vraiment pertinent pour QRCode-AI ?
+        2. Le score semble-t-il cohérent avec le volume et l'intent ?
+        3. Le slug proposé respecte-t-il les règles de slugification locale ?
+        4. Y a-t-il des doublons ou quasi-doublons ?
+
+        **Actions:**
+        - APPROVE: keyword validé
+        - REJECT: keyword non pertinent
+        - MERGE: fusionner avec un autre keyword
+        - ADJUST: modifier le score ou la relation sémantique
+
+        Retourne les keywords validés avec status et justification.
+
+      mcp: [perplexity]  # Peut rechercher pour valider
+      max_turns: 5
+      stop_conditions:
+        - "VALIDATION_COMPLETE"
+    output:
+      format: json
+
+  - id: agent_debate_resolution
+    use:
+      scored: agent_scorer
+      validated: agent_validator
+    infer:
+      prompt: |
+        Tu es le MODERATOR du débat entre SCORER et VALIDATOR.
+
+        **Résultats du SCORER:**
+        {{use.scored}}
+
+        **Résultats du VALIDATOR:**
+        {{use.validated}}
+
+        **Mission:** Résoudre les conflits et produire la liste finale.
+
+        Pour chaque désaccord:
+        1. Analyse les arguments des deux agents
+        2. Tranche en faveur de la position la plus cohérente
+        3. Documente la raison de la décision
+
+        Retourne la liste finale validée, prête pour l'écriture:
+        {
+          "locales": {
+            "fr-FR": {
+              "keywords": [...],
+              "primary_keyword": {...},
+              "slug_source_keyword": {...}
+            },
+            ...
+          },
+          "resolution_notes": [...]
+        }
+      temperature: 0.1
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 4: WRITE TO NOVANET - Batch writes
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: write_all_keywords
+    use:
+      final_data: agent_debate_resolution
+    exec:
+      command: |
+        echo "Writing {{use.final_data | json | jq '.locales | keys | length'}} locales to NovaNet..."
+      shell: true
+    output:
+      format: text
+
+  - id: write_keywords_batch
+    use:
+      final_data: agent_debate_resolution
+    invoke:
+      mcp: novanet
+      tool: novanet_batch
+      params:
+        operations:
+          # This would be dynamically built from final_data
+          # Simplified for readability - real impl uses template
+          - id: "batch_write_keywords"
+            tool: novanet_write
+            params:
+              operation: upsert_node
+              class: SEOKeyword
+              # ... properties from final_data
+        parallel: true
+        stop_on_error: false
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 5: CREATE ARCS
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: create_targets_arcs
+    use:
+      final_data: agent_debate_resolution
+      keywords_written: write_keywords_batch
+    invoke:
+      mcp: novanet
+      tool: novanet_batch
+      params:
+        operations:
+          # Dynamic arc creation per locale
+          # CORRECT: EntityNative -[TARGETS]-> SEOKeyword (outgoing from EntityNative)
+          # Key patterns:
+          #   - EntityNative: entity:{entity_key}@{locale} (e.g., entity:qr-code@fr-FR)
+          #   - SEOKeyword: seo:{slug}@{locale} (e.g., seo:qr-code@fr-FR)
+          - id: "batch_create_arcs"
+            tool: novanet_write
+            params:
+              operation: create_arc
+              arc_class: TARGETS
+              # CORRECT: from_key = EntityNative, to_key = SEOKeyword
+              from_key: "entity:qr-code@{{locale}}"
+              to_key: "seo:{{slug_form}}@{{locale}}"
+              properties:
+                rank: "primary"
+                is_slug_source: true
+        parallel: true
+        stop_on_error: false
+    output:
+      format: json
+
+  - id: update_denomination_forms
+    use:
+      final_data: agent_debate_resolution
+      arcs_created: create_targets_arcs
+    invoke:
+      mcp: novanet
+      tool: novanet_batch
+      params:
+        operations:
+          # Update EntityNative.denomination_forms[url] with slug from primary keyword
+          # CORRECT: EntityNative key pattern is entity:{key}@{locale} (NOT entity-native:)
+          - id: "batch_update_denomination"
+            tool: novanet_write
+            params:
+              operation: update_props
+              class: EntityNative
+              # CORRECT key pattern: entity:qr-code@{locale}
+              key: "entity:qr-code@{{locale}}"
+              properties:
+                denomination_forms:
+                  - type: "url"
+                    value: "{{slug_form}}"
+                    priority: 1
+        parallel: true
+        stop_on_error: false
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 6: VERIFICATION
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: verify_full_graph
+    use:
+      denomination_updated: update_denomination_forms
+    invoke:
+      mcp: novanet
+      tool: novanet_query
+      params:
+        cypher: |
+          // Comprehensive verification query
+          MATCH (e:Entity {key: $entity_key})
+          OPTIONAL MATCH (e)-[:HAS_NATIVE]->(en:EntityNative)
+          OPTIONAL MATCH (en)-[:TARGETS]->(kw:SEOKeyword)
+          OPTIONAL MATCH (en)-[:USES_TERM]->(t:Term)
+          WITH e.key AS entity,
+               count(DISTINCT en) AS native_count,
+               count(DISTINCT kw) AS keyword_count,
+               count(DISTINCT t) AS term_count,
+               collect(DISTINCT en.locale_key)[0..5] AS sample_locales
+          RETURN entity, native_count, keyword_count, term_count, sample_locales
+        params:
+          entity_key: "qr-code"
+    output:
+      format: json
+
+  - id: generate_stats
+    use:
+      verification: verify_full_graph
+    invoke:
+      mcp: novanet
+      tool: novanet_query
+      params:
+        cypher: |
+          // Statistics by locale
+          MATCH (en:EntityNative)-[:TARGETS]->(kw:SEOKeyword)
+          WHERE en.entity_key = $entity_key
+          WITH en.locale_key AS locale,
+               count(kw) AS keyword_count,
+               sum(kw.volume) AS total_volume,
+               max(kw.volume) AS max_volume,
+               avg(kw.difficulty) AS avg_difficulty
+          RETURN locale, keyword_count, total_volume, max_volume, round(avg_difficulty) AS avg_difficulty
+          ORDER BY total_volume DESC
+          LIMIT 20
+        params:
+          entity_key: "qr-code"
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # FINAL REPORT
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: final_report
+    use:
+      entity: load_entity
+      batches: create_batches
+      competitor_research: research_competitors
+      scored: agent_scorer
+      validated: agent_validator
+      final_data: agent_debate_resolution
+      keywords_written: write_keywords_batch
+      arcs_created: create_targets_arcs
+      verification: verify_full_graph
+      stats: generate_stats
+    infer: |
+      ## Pipeline SEO Discovery Full - Rapport Final
+
+      **Entity:** {{use.entity.key}}
+      **Date:** 2026-03-03
+      **Locales traitées:** {{use.batches | length * 10}}
+
+      ---
+
+      ### 1. Recherche Concurrentielle
+      {{use.competitor_research}}
+
+      ---
+
+      ### 2. Découverte & Scoring
+
+      **Agent SCORER:**
+      - Keywords analysés: (résumé)
+      - Formule: volume × sem_coef × intent_boost × trend_factor
+
+      **Agent VALIDATOR:**
+      - Keywords validés: (résumé)
+      - Rejets: (count et raisons)
+
+      **Résolution débat:**
+      {{use.final_data.resolution_notes}}
+
+      ---
+
+      ### 3. Écriture NovaNet
+
+      - Keywords écrits: {{use.keywords_written}}
+      - Arcs TARGETS créés: {{use.arcs_created}}
+      - denomination_forms mis à jour avec url
+
+      ---
+
+      ### 4. Vérification Finale
+
+      **Graph Status:**
+      {{use.verification}}
+
+      **Top 20 Locales par Volume:**
+      {{use.stats}}
+
+      ---
+
+      ### 5. Prochaines Étapes
+
+      1. [ ] Lancer workflow 06 pour génération de contenu
+      2. [ ] Vérifier les slugs générés
+      3. [ ] Valider avec équipe SEO
+      4. [ ] Planifier refresh mensuel des données
+
+      ---
+
+      **Pipeline Status:** ✅ COMPLETE
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# FLOW DAG - Pipeline complet
+# ═══════════════════════════════════════════════════════════════════════════════
+flows:
+  # Phase 0: Init
+  - source: load_entity
+    target: [load_all_locales, research_competitors]
+  - source: load_all_locales
+    target: create_batches
+
+  # Phase 1-2: Research + Discovery parallel
+  - source: [create_batches, research_competitors]
+    target: discover_keywords_per_batch
+  - source: create_batches
+    target: fetch_dataforseo_per_locale
+
+  # Phase 3: Multi-agent (uses fetch_dataforseo_per_locale, not discover_keywords_per_batch)
+  - source: fetch_dataforseo_per_locale
+    target: agent_scorer
+  - source: agent_scorer
+    target: agent_validator
+  - source: [agent_scorer, agent_validator]
+    target: agent_debate_resolution
+
+  # Phase 4-5: Writes
+  - source: agent_debate_resolution
+    target: write_all_keywords
+  - source: write_all_keywords
+    target: write_keywords_batch
+  - source: write_keywords_batch
+    target: create_targets_arcs
+  - source: create_targets_arcs
+    target: update_denomination_forms
+
+  # Phase 6: Verify
+  - source: update_denomination_forms
+    target: verify_full_graph
+  - source: verify_full_graph
+    target: generate_stats
+
+  # Final
+  - source: generate_stats
+    target: final_report

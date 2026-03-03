@@ -1,0 +1,125 @@
+# ============================================================================
+# 01-test-novanet-write.nika.yaml
+# ============================================================================
+# NIVEAU 1: Test basique de novanet_write
+#
+# But: Vérifier que novanet_write fonctionne correctement via MCP
+# Complexité: Minimale (1 seul invoke, pas de boucle)
+# ============================================================================
+
+schema: "nika/workflow@0.9"
+provider: claude
+model: claude-sonnet-4-20250514
+
+# Configuration MCP - NovaNet server
+mcp:
+  novanet:
+    # Use pre-built binary to avoid compilation delay which causes connection timeout
+    command: /Users/thibaut/dev/supernovae/novanet/tools/novanet-mcp/target/debug/novanet-mcp
+    env:
+      NOVANET_MCP_NEO4J_PASSWORD: "novanetpassword"
+      NOVANET_MCP_NEO4J_URI: "bolt://localhost:7687"
+
+tasks:
+  # -------------------------------------------------------------------------
+  # Test 1: Vérifier la connexion avec novanet_describe
+  # -------------------------------------------------------------------------
+  - id: test_connection
+    invoke:
+      mcp: novanet
+      tool: novanet_describe
+      params:
+        describe: stats
+    output:
+      format: json
+
+  # -------------------------------------------------------------------------
+  # Test 2: Upsert un SEOKeyword de test
+  # Pattern clé: seo:{slug}@{locale} (ADR-029)
+  # -------------------------------------------------------------------------
+  - id: upsert_test_keyword
+    invoke:
+      mcp: novanet
+      tool: novanet_write
+      params:
+        operation: upsert_node
+        class: SEOKeyword
+        key: "seo:test-keyword@en-US"
+        properties:
+          value: "test keyword"
+          slug_form: "test-keyword"
+          locale_key: "en-US"
+          display_name: "test keyword (en-US)"
+          volume: 1000
+          difficulty: 25
+          intent: "informational"
+          source: "test"
+          source_date: "2026-03-03"
+    output:
+      format: json
+
+  # -------------------------------------------------------------------------
+  # Test 3: Vérifier que le node existe avec une query
+  # -------------------------------------------------------------------------
+  - id: verify_keyword
+    use:
+      write_result: upsert_test_keyword
+    invoke:
+      mcp: novanet
+      tool: novanet_query
+      params:
+        # Use literal key in query to avoid Nika deprecated $alias warning
+        cypher: |
+          MATCH (k:SEOKeyword {key: "seo:test-keyword@en-US"})
+          RETURN k.key, k.value, k.volume, k.source, k.locale_key
+    output:
+      format: json
+
+  # -------------------------------------------------------------------------
+  # Test 4: Créer un arc TARGETS (SEOKeyword -> EntityNative)
+  # Note: Requires an existing EntityNative in the graph
+  # -------------------------------------------------------------------------
+  # - id: create_targets_arc
+  #   use:
+  #     keyword: upsert_test_keyword
+  #   invoke:
+  #     mcp: novanet
+  #     tool: novanet_write
+  #     params:
+  #       operation: create_arc
+  #       arc_class: TARGETS
+  #       from_key: "test:seo-keyword@en-US"
+  #       to_key: "entity-native:qr-code@en-US"  # Must exist!
+  #       properties:
+  #         rank: primary
+  #         is_slug_source: false
+  #   output:
+  #     format: json
+
+  # -------------------------------------------------------------------------
+  # Test 5: Rapport final
+  # -------------------------------------------------------------------------
+  - id: final_report
+    use:
+      stats: test_connection
+      write_result: upsert_test_keyword
+      verification: verify_keyword
+    infer: |
+      Summarize the test results:
+
+      1. Connection test: {{use.stats}}
+      2. Write operation: {{use.write_result}}
+      3. Verification: {{use.verification}}
+
+      Report:
+      - Did the write succeed?
+      - Was the keyword verified in the database?
+      - Any errors or warnings?
+
+flows:
+  - source: test_connection
+    target: upsert_test_keyword
+  - source: upsert_test_keyword
+    target: verify_keyword
+  - source: verify_keyword
+    target: final_report

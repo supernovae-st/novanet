@@ -1,0 +1,51 @@
+# ============================================================================
+# partials/setup-entity-locales.nika.yaml
+# ============================================================================
+# Reusable setup partial for loading entity and locale data from NovaNet
+# Uses HIGH-LEVEL MCP tools (no raw Cypher)
+# ============================================================================
+
+schema: "nika/workflow@0.9"
+workflow: setup-entity-locales
+
+tasks:
+  # Load entity details using novanet_describe
+  - id: load_entity
+    invoke:
+      mcp: novanet
+      tool: novanet_describe
+      params:
+        describe: entity
+        entity_key: "qr-code"
+    output:
+      format: json
+
+  # Load entity natives via graph traversal (no Cypher)
+  - id: load_entity_native
+    use:
+      entity: load_entity
+    invoke:
+      mcp: novanet
+      tool: novanet_traverse
+      params:
+        start_key: "qr-code"
+        max_depth: 1
+        direction: outgoing
+        arc_families: ["localization"]
+        target_kinds: ["EntityNative"]
+    output:
+      format: json
+
+  # Load all locales using novanet_describe (no Cypher)
+  - id: load_locales
+    invoke:
+      mcp: novanet
+      tool: novanet_describe
+      params:
+        describe: locales
+    output:
+      format: json
+
+flows:
+  - source: load_entity
+    target: load_entity_native

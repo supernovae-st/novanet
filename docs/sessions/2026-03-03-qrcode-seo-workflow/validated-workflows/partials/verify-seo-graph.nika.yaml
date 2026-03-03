@@ -1,0 +1,88 @@
+# ============================================================================
+# partials/verify-seo-graph.nika.yaml
+# ============================================================================
+# Reusable verification partial for SEO graph data
+# Validates that keywords and arcs were correctly written to NovaNet
+# ============================================================================
+
+schema: "nika/workflow@0.9"
+workflow: verify-seo-graph
+
+tasks:
+  # Verify EntityNative -> SEOKeyword TARGETS arcs
+  - id: verify_targets
+    invoke:
+      mcp: novanet
+      tool: novanet_query
+      params:
+        cypher: |
+          MATCH (en:EntityNative)-[t:TARGETS]->(kw:SEOKeyword)
+          WHERE en.entity_key = $entity_key
+          RETURN en.locale_key AS locale,
+                 count(kw) AS keyword_count,
+                 collect(kw.value)[0..3] AS sample_keywords,
+                 sum(kw.volume) AS total_volume
+          ORDER BY total_volume DESC
+          LIMIT 20
+        params:
+          entity_key: "qr-code"
+    output:
+      format: json
+
+  # Verify EntityNative -> Term USES_TERM arcs (if applicable)
+  - id: verify_terms
+    invoke:
+      mcp: novanet
+      tool: novanet_query
+      params:
+        cypher: |
+          MATCH (en:EntityNative)-[ut:USES_TERM]->(t:Term)
+          WHERE en.entity_key = $entity_key
+          RETURN en.locale_key AS locale,
+                 count(t) AS term_count,
+                 collect(t.value)[0..5] AS sample_terms
+          ORDER BY term_count DESC
+          LIMIT 20
+        params:
+          entity_key: "qr-code"
+    output:
+      format: json
+
+  # Generate statistics summary
+  - id: generate_stats
+    use:
+      targets: verify_targets
+      terms: verify_terms
+    infer:
+      prompt: |
+        Generate a verification report from:
+
+        **TARGETS arcs (EntityNative -> SEOKeyword):**
+        {{use.targets}}
+
+        **USES_TERM arcs (EntityNative -> Term):**
+        {{use.terms}}
+
+        Return a structured JSON summary:
+        {
+          "status": "success" | "partial" | "failed",
+          "targets_summary": {
+            "total_locales": ...,
+            "total_keywords": ...,
+            "top_locale": ...
+          },
+          "terms_summary": {
+            "total_locales": ...,
+            "total_terms": ...
+          },
+          "issues": []
+        }
+      temperature: 0
+    output:
+      format: json
+
+flows:
+  - source: verify_targets
+    target: generate_stats
+  - source: verify_terms
+    target: generate_stats

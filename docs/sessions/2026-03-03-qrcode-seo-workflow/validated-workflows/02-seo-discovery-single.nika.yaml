@@ -1,0 +1,312 @@
+# ============================================================================
+# 02-seo-discovery-single.nika.yaml
+# ============================================================================
+# NIVEAU 2: Découverte SEO pour 1 Entity + 1 Locale
+#
+# But: Découvrir des keywords SEO via DataForSEO et les écrire dans NovaNet
+# Flux: Entity → DataForSEO API → SEOKeyword nodes → TARGETS arcs
+# Complexité: Séquentielle (pas de for_each)
+# ============================================================================
+
+schema: "nika/workflow@0.9"
+provider: claude
+model: claude-sonnet-4-20250514
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# CONFIGURATION MCP
+# ═══════════════════════════════════════════════════════════════════════════════
+mcp:
+  # NovaNet - Knowledge Graph
+  novanet:
+    # Use pre-built binary to avoid compilation delay which causes connection timeout
+    command: /Users/thibaut/dev/supernovae/novanet/tools/novanet-mcp/target/debug/novanet-mcp
+    env:
+      NOVANET_MCP_NEO4J_PASSWORD: "novanetpassword"
+      NOVANET_MCP_NEO4J_URI: "bolt://localhost:7687"
+
+  # DataForSEO - SEO Data Provider
+  # Note: Requires DATAFORSEO_USERNAME and DATAFORSEO_PASSWORD env vars
+  dataforseo:
+    command: npx
+    args: ["-y", "dataforseo-mcp-server"]
+    env:
+      DATAFORSEO_USERNAME: "{{env.DATAFORSEO_USERNAME}}"
+      DATAFORSEO_PASSWORD: "{{env.DATAFORSEO_PASSWORD}}"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# INPUTS (paramètres du workflow)
+# ═══════════════════════════════════════════════════════════════════════════════
+# Ces valeurs seraient passées au runtime:
+# - entity_key: "qr-code" (l'entité à enrichir)
+# - locale: "fr-FR" (la locale cible)
+# - seed_keyword: "qr code" (le mot-clé de départ)
+
+tasks:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 1: DISCOVER - Charger le contexte de l'Entity depuis NovaNet
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: load_entity_context
+    invoke:
+      mcp: novanet
+      tool: novanet_describe
+      params:
+        describe: entity
+        entity_key: "qr-code"
+    output:
+      format: json
+
+  - id: load_entity_native
+    use:
+      entity: load_entity_context
+    invoke:
+      mcp: novanet
+      tool: novanet_query
+      params:
+        # Use literal values to avoid Nika deprecated $alias warning
+        cypher: |
+          MATCH (e:Entity {key: "qr-code"})-[:HAS_NATIVE]->(en:EntityNative {locale_key: "fr-FR"})
+          RETURN en.key AS native_key, en.display_name, en.denomination_forms
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 2: FETCH - Appeler DataForSEO pour découvrir des keywords
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: discover_keywords
+    use:
+      entity: load_entity_context
+    invoke:
+      mcp: dataforseo
+      tool: dataforseo_labs_google_keywords_for_site
+      params:
+        # DataForSEO keywords_for_site parameters
+        # See: https://github.com/dataforseo/mcp-server-typescript
+        target: "qrcode-ai.com"
+        location_name: "France"
+        language_code: "fr"
+        limit: 20
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 3: ANALYZE - LLM analyse et score les keywords
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: analyze_keywords
+    use:
+      entity: load_entity_context
+      native: load_entity_native
+      keywords: discover_keywords
+    infer:
+      prompt: |
+        Tu es un expert SEO. Analyse ces keywords pour l'entité "{{use.entity}}" en locale fr-FR.
+
+        EntityNative context: {{use.native}}
+
+        Keywords découverts:
+        {{use.keywords}}
+
+        Pour chaque keyword, détermine:
+        1. semantic_relation: same_as | action_for | produces | subtopic_of | related_to | attribute_of
+        2. score: volume × sem_coef × intent_boost (calcul selon notre formule)
+        3. is_primary: true si c'est un keyword principal (score > 1000)
+        4. is_slug_source: true si c'est le meilleur candidat pour le slug URL
+
+        FORMULE DE SCORING:
+        - sem_coef: same_as=1.0, action_for=0.95, produces=0.85, subtopic_of=0.70, related_to=0.50, attribute_of=0.30
+        - intent_boost: transactional=1.2, commercial=1.1, informational=1.0, navigational=0.8
+
+        Retourne un JSON array avec les 10 meilleurs keywords triés par score:
+        [
+          {
+            "value": "créer qr code",
+            "slug_form": "creer-qr-code",
+            "volume": 14000,
+            "difficulty": 31,
+            "intent": "transactional",
+            "semantic_relation": "action_for",
+            "score": 15960,
+            "is_primary": true,
+            "is_slug_source": true
+          }
+        ]
+      temperature: 0.1
+      max_tokens: 2000
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 4: WRITE - Écrire les SEOKeywords dans NovaNet
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  # NOTE: Dans une version plus avancée, on utiliserait for_each ici
+  # Pour niveau 2, on écrit le keyword principal seulement (pour tester)
+
+  - id: extract_primary_keyword
+    use:
+      analyzed: analyze_keywords
+    infer:
+      prompt: |
+        From this list of analyzed keywords:
+        {{use.analyzed}}
+
+        Extract ONLY the single best keyword (highest score with is_slug_source: true).
+        Return it as a single JSON object (not array):
+        {
+          "value": "...",
+          "slug_form": "...",
+          "volume": ...,
+          "difficulty": ...,
+          "intent": "...",
+          "semantic_relation": "...",
+          "is_slug_source": true
+        }
+      temperature: 0
+    output:
+      format: json
+
+  - id: write_primary_keyword
+    use:
+      kw: extract_primary_keyword
+    invoke:
+      mcp: novanet
+      tool: novanet_write
+      params:
+        operation: upsert_node
+        class: SEOKeyword
+        key: "seo:{{use.kw.slug_form}}@fr-FR"
+        properties:
+          value: "{{use.kw.value}}"
+          slug_form: "{{use.kw.slug_form}}"
+          locale_key: "fr-FR"
+          display_name: "{{use.kw.value}} (fr-FR)"
+          volume: "{{use.kw.volume}}"
+          difficulty: "{{use.kw.difficulty}}"
+          intent: "{{use.kw.intent}}"
+          source: "dataforseo"
+          source_date: "2026-03-03"
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 5: LINK - Créer l'arc TARGETS (EntityNative → SEOKeyword)
+  # Schema: EntityNative has outgoing TARGETS to SEOKeyword
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: create_targets_arc
+    use:
+      native: load_entity_native
+      kw: extract_primary_keyword
+      write_result: write_primary_keyword
+    invoke:
+      mcp: novanet
+      tool: novanet_write
+      params:
+        operation: create_arc
+        arc_class: TARGETS
+        # CORRECT: EntityNative -[TARGETS]-> SEOKeyword (per entity-native.yaml schema)
+        from_key: "entity:qr-code@fr-FR"
+        to_key: "seo:{{use.kw.slug_form}}@fr-FR"
+        properties:
+          rank: "primary"
+          is_slug_source: true
+          semantic_relation: "{{use.kw.semantic_relation}}"
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 6: VERIFY - Vérifier que tout est bien écrit
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: verify_graph
+    use:
+      targets_result: create_targets_arc
+    invoke:
+      mcp: novanet
+      tool: novanet_query
+      params:
+        # CORRECT: EntityNative -[TARGETS]-> SEOKeyword (per schema)
+        cypher: |
+          MATCH (en:EntityNative {key: "entity:qr-code@fr-FR"})-[t:TARGETS]->(kw:SEOKeyword)
+          RETURN en.key AS entity_native,
+                 kw.key AS keyword_key,
+                 kw.value AS keyword_value,
+                 kw.volume,
+                 t.rank,
+                 t.is_slug_source
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # RAPPORT FINAL
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: final_report
+    use:
+      entity: load_entity_context
+      keywords_discovered: discover_keywords
+      keywords_analyzed: analyze_keywords
+      primary_written: write_primary_keyword
+      arc_created: create_targets_arc
+      verification: verify_graph
+    infer: |
+      Génère un rapport de synthèse en français:
+
+      ## Workflow SEO Discovery - Rapport
+
+      **Entity:** {{use.entity}}
+      **Locale:** fr-FR
+
+      ### 1. Keywords découverts
+      {{use.keywords_discovered}}
+
+      ### 2. Analyse et scoring
+      {{use.keywords_analyzed}}
+
+      ### 3. Écriture dans NovaNet
+      {{use.primary_written}}
+
+      ### 4. Arc TARGETS créé
+      {{use.arc_created}}
+
+      ### 5. Vérification finale
+      {{use.verification}}
+
+      ### Statut
+      - [ ] Keywords découverts via DataForSEO
+      - [ ] Analyse sémantique effectuée
+      - [ ] SEOKeyword écrit dans le graphe
+      - [ ] Arc TARGETS créé
+      - [ ] Graphe vérifié
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# FLOW: Définition explicite du DAG
+# ═══════════════════════════════════════════════════════════════════════════════
+flows:
+  # Phase 1: Load context
+  - source: load_entity_context
+    target: [load_entity_native, discover_keywords]
+
+  # Phase 2-3: Fetch + Analyze (parallèle possible)
+  - source: [load_entity_native, discover_keywords]
+    target: analyze_keywords
+
+  # Phase 4: Extract then write
+  - source: analyze_keywords
+    target: extract_primary_keyword
+  - source: extract_primary_keyword
+    target: write_primary_keyword
+
+  # Phase 5: Create arc after write
+  - source: write_primary_keyword
+    target: create_targets_arc
+
+  # Phase 6: Verify after arc
+  - source: create_targets_arc
+    target: verify_graph
+
+  # Final report
+  - source: verify_graph
+    target: final_report

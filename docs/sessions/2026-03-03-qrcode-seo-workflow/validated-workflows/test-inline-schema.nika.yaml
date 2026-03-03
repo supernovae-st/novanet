@@ -1,0 +1,81 @@
+# Test workflow for inline schema validation
+schema: "nika/workflow@0.9"
+provider: claude
+model: claude-sonnet-4-20250514
+
+tasks:
+  - id: generate_keywords
+    infer:
+      prompt: |
+        Generate 3 SEO keywords for "QR code generator".
+
+        Return a JSON object with the following structure:
+        {
+          "keywords": [
+            {
+              "value": "the keyword phrase",
+              "slug_form": "url-safe-slug",
+              "volume": 1000,
+              "difficulty": 50,
+              "intent": "informational"
+            }
+          ]
+        }
+      temperature: 0
+    output:
+      format: json
+      max_retries: 2
+      schema:
+        type: object
+        properties:
+          keywords:
+            type: array
+            items:
+              type: object
+              properties:
+                value:
+                  type: string
+                  description: The keyword phrase
+                slug_form:
+                  type: string
+                  pattern: "^[a-z0-9-]+$"
+                  description: URL-safe slug form
+                volume:
+                  type: integer
+                  minimum: 0
+                difficulty:
+                  type: integer
+                  minimum: 0
+                  maximum: 100
+                intent:
+                  type: string
+                  enum: [informational, navigational, transactional, commercial]
+              required: [value, slug_form, volume, difficulty, intent]
+        required: [keywords]
+
+  - id: summarize
+    use:
+      keywords: generate_keywords
+    infer:
+      prompt: |
+        Summarize these keywords:
+        {{use.keywords}}
+
+        Return a simple summary object.
+      temperature: 0
+    output:
+      format: json
+      schema:
+        type: object
+        properties:
+          total_keywords:
+            type: integer
+          average_difficulty:
+            type: number
+          top_intent:
+            type: string
+        required: [total_keywords, average_difficulty, top_intent]
+
+flows:
+  - source: generate_keywords
+    target: summarize

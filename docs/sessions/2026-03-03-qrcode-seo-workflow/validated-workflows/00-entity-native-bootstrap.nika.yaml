@@ -1,0 +1,358 @@
+# ============================================================================
+# 00-entity-native-bootstrap.nika.yaml
+# ============================================================================
+# PHASE 1: Create EntityNative nodes BEFORE SEO research
+#
+# This workflow MUST run before 02-seo-discovery-*.nika.yaml
+#
+# Problem solved: Chicken-and-egg
+#   - Can't create TARGETS arc without EntityNative
+#   - Can't set denomination_forms[url] without SEO keywords
+#   - Solution: Create EntityNative with EMPTY url, fill it post-SEO
+#
+# Input: Entity (defined, invariant)
+# Output: EntityNative (authored, per locale) with:
+#   - denomination_forms: text, title, abbrev, mixed, base (adapted to locale)
+#   - denomination_forms.url: "" (EMPTY - filled by Phase 3)
+#   - HAS_NATIVE arc from Entity (auto-arc)
+#   - FOR_LOCALE arc to Locale
+#   - USES_* arcs to Knowledge Atoms (Terms, Expressions, Patterns)
+# ============================================================================
+
+schema: "nika/workflow@0.9"
+provider: claude
+model: claude-sonnet-4-20250514
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# CONTEXT FILES
+# ═══════════════════════════════════════════════════════════════════════════════
+context:
+  files:
+    brand: ./context/brand.md
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# MCP SERVERS
+# ═══════════════════════════════════════════════════════════════════════════════
+mcp:
+  novanet:
+    command: /Users/thibaut/dev/supernovae/novanet/tools/novanet-mcp/target/debug/novanet-mcp
+    env:
+      NOVANET_MCP_NEO4J_PASSWORD: "novanetpassword"
+      NOVANET_MCP_NEO4J_URI: "bolt://localhost:7687"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# WORKFLOW PARAMETERS
+# ═══════════════════════════════════════════════════════════════════════════════
+params:
+  entity_key:
+    type: string
+    default: "qr-code"
+    description: "Entity key to bootstrap"
+  locale:
+    type: string
+    default: "fr-FR"
+    description: "Target locale for EntityNative"
+
+tasks:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 1.1: LOAD ENTITY AND LOCALE CONTEXT
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: load_entity
+    invoke:
+      mcp: novanet
+      tool: novanet_describe
+      params:
+        describe: entity
+        entity_key: "{{params.entity_key}}"
+    output:
+      format: json
+
+  - id: load_locale
+    invoke:
+      mcp: novanet
+      tool: novanet_query
+      params:
+        cypher: |
+          MATCH (l:Locale {key: $locale_key})
+          RETURN l {
+            .key,
+            .language_code,
+            .language_name,
+            .region,
+            .formality,
+            .writing_system
+          } AS locale
+        params:
+          locale_key: "{{params.locale}}"
+    output:
+      format: json
+
+  # Load existing Knowledge Atoms for this locale
+  - id: load_knowledge_atoms
+    invoke:
+      mcp: novanet
+      tool: novanet_atoms
+      params:
+        locale: "{{params.locale}}"
+        atom_type: all
+    output:
+      format: json
+
+  # Check if EntityNative already exists
+  - id: check_existing
+    invoke:
+      mcp: novanet
+      tool: novanet_query
+      params:
+        cypher: |
+          MATCH (en:EntityNative {key: $native_key})
+          RETURN en IS NOT NULL AS exists,
+                 en.denomination_forms AS forms
+        params:
+          native_key: "entity:{{params.entity_key}}@{{params.locale}}"
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 1.2: ADAPT DENOMINATION FORMS TO LOCALE
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: adapt_denomination_forms
+    use:
+      entity: load_entity
+      locale: load_locale
+      atoms: load_knowledge_atoms
+      existing: check_existing
+    infer:
+      prompt: |
+        Tu es un expert en localisation. Adapte les denomination_forms de l'Entity
+        pour la locale cible.
+
+        **Entity (source, invariant):**
+        {{use.entity}}
+
+        **Locale cible:**
+        {{use.locale}}
+
+        **Knowledge Atoms disponibles (Terms, Expressions):**
+        {{use.atoms}}
+
+        **EntityNative existant:**
+        {{use.existing}}
+
+        **Regles ADR-033 (Denomination Forms):**
+        - text: Usage en prose, corps de texte (ex: "code QR")
+        - title: H1, H2, meta_title - capitalisation locale (ex: "Code QR")
+        - abbrev: Apres premiere mention, forme courte (ex: "QR")
+        - mixed: Variante avec accents/diacritiques (ex: "code QR")
+        - base: Forme sans accents pour recherche (ex: "code qr")
+        - url: LAISSE VIDE "" (sera rempli apres SEO)
+
+        **Instructions:**
+        1. Si EntityNative existe deja avec des forms, PRESERVE les valeurs existantes
+        2. Sinon, adapte depuis Entity.denomination_forms
+        3. Utilise les Terms/Expressions pour la forme naturelle dans la locale
+        4. Respecte la capitalisation locale (allemand: noms capitalises)
+        5. url DOIT etre "" (vide) - sera rempli par le workflow SEO
+
+        **Retourne JSON:**
+        {
+          "denomination_forms": {
+            "text": "...",
+            "title": "...",
+            "abbrev": "...",
+            "mixed": "...",
+            "base": "...",
+            "url": ""
+          },
+          "description": "Description locale de l'entity",
+          "tagline": "Tagline marketing locale",
+          "selected_terms": ["term_key_1", "term_key_2"],
+          "selected_expressions": ["expr_key_1"],
+          "should_create": true/false
+        }
+      temperature: 0.1
+      extended_thinking: true
+      thinking_budget: 8192
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 1.3: CREATE OR UPDATE EntityNative
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: upsert_entity_native
+    use:
+      adapted: adapt_denomination_forms
+      entity: load_entity
+    invoke:
+      mcp: novanet
+      tool: novanet_write
+      params:
+        operation: upsert_node
+        class: EntityNative
+        # Key pattern: entity:{entity_key}@{locale}
+        # HAS_NATIVE arc created automatically (auto-arc feature)
+        key: "entity:{{params.entity_key}}@{{params.locale}}"
+        locale: "{{params.locale}}"
+        properties:
+          entity_key: "{{params.entity_key}}"
+          locale_key: "{{params.locale}}"
+          display_name: "{{use.adapted.denomination_forms.title}} ({{params.locale}})"
+          denomination_forms: "{{use.adapted.denomination_forms | json}}"
+          description: "{{use.adapted.description}}"
+          tagline: "{{use.adapted.tagline}}"
+          status: "draft"
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 1.4: CREATE FOR_LOCALE ARC
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: create_for_locale_arc
+    use:
+      native_created: upsert_entity_native
+    invoke:
+      mcp: novanet
+      tool: novanet_write
+      params:
+        operation: create_arc
+        arc_class: FOR_LOCALE
+        from_key: "entity:{{params.entity_key}}@{{params.locale}}"
+        to_key: "{{params.locale}}"
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 1.5: CREATE USES_* ARCS TO KNOWLEDGE ATOMS
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: create_uses_term_arcs
+    use:
+      adapted: adapt_denomination_forms
+      native_created: upsert_entity_native
+    for_each: "{{use.adapted.selected_terms}}"
+    as: term_key
+    concurrency: 5
+    fail_fast: false
+    invoke:
+      mcp: novanet
+      tool: novanet_write
+      params:
+        operation: create_arc
+        arc_class: USES_TERM
+        from_key: "entity:{{params.entity_key}}@{{params.locale}}"
+        to_key: "{{use.term_key}}"
+        properties:
+          temperature: 0.8
+          context: "denomination"
+    output:
+      format: json
+
+  - id: create_uses_expression_arcs
+    use:
+      adapted: adapt_denomination_forms
+      native_created: upsert_entity_native
+    for_each: "{{use.adapted.selected_expressions}}"
+    as: expr_key
+    concurrency: 5
+    fail_fast: false
+    invoke:
+      mcp: novanet
+      tool: novanet_write
+      params:
+        operation: create_arc
+        arc_class: USES_EXPRESSION
+        from_key: "entity:{{params.entity_key}}@{{params.locale}}"
+        to_key: "{{use.expr_key}}"
+        properties:
+          temperature: 0.7
+          register: "standard"
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 1.6: VERIFICATION
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: verify_entity_native
+    use:
+      native_created: upsert_entity_native
+      locale_arc: create_for_locale_arc
+      term_arcs: create_uses_term_arcs
+      expr_arcs: create_uses_expression_arcs
+    invoke:
+      mcp: novanet
+      tool: novanet_traverse
+      params:
+        start_key: "entity:{{params.entity_key}}@{{params.locale}}"
+        max_depth: 1
+        direction: outgoing
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # FINAL REPORT
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: final_report
+    use:
+      entity: load_entity
+      locale: load_locale
+      adapted: adapt_denomination_forms
+      native: upsert_entity_native
+      verification: verify_entity_native
+    infer:
+      prompt: |
+        Generate a brief report for EntityNative bootstrap.
+
+        **Entity:** {{params.entity_key}}
+        **Locale:** {{params.locale}}
+
+        **Created EntityNative:**
+        - Key: entity:{{params.entity_key}}@{{params.locale}}
+        - Denomination Forms: {{use.adapted.denomination_forms}}
+        - Note: url form is EMPTY (will be filled by SEO workflow)
+
+        **Arcs Created:**
+        - HAS_NATIVE (auto-arc)
+        - FOR_LOCALE -> {{params.locale}}
+        - USES_TERM x {{use.adapted.selected_terms | length}}
+        - USES_EXPRESSION x {{use.adapted.selected_expressions | length}}
+
+        **Verification:**
+        {{use.verification}}
+
+        **Next Step:** Run 02-seo-discovery-single.nika.yaml to:
+        1. Discover SEO keywords
+        2. Create SEOKeyword nodes
+        3. Create TARGETS arcs
+        4. Fill denomination_forms[url]
+
+        Return a concise markdown report.
+      temperature: 0
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# FLOWS - DAG definition
+# ═══════════════════════════════════════════════════════════════════════════════
+flows:
+  # Load phase (parallel)
+  - source: [load_entity, load_locale, load_knowledge_atoms, check_existing]
+    target: adapt_denomination_forms
+
+  # Create phase
+  - source: adapt_denomination_forms
+    target: upsert_entity_native
+
+  - source: upsert_entity_native
+    target: [create_for_locale_arc, create_uses_term_arcs, create_uses_expression_arcs]
+
+  # Verify
+  - source: [create_for_locale_arc, create_uses_term_arcs, create_uses_expression_arcs]
+    target: verify_entity_native
+
+  # Report
+  - source: verify_entity_native
+    target: final_report

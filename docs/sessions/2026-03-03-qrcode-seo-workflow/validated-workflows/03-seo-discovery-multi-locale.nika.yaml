@@ -1,0 +1,329 @@
+# ============================================================================
+# 03-seo-discovery-multi-locale.nika.yaml
+# ============================================================================
+# NIVEAU 3: Découverte SEO pour 1 Entity + 5 Locales (for_each)
+#
+# But: Paralléliser la découverte SEO sur plusieurs locales
+# Pattern: for_each avec concurrency pour exécution parallèle
+# Complexité: Itération parallèle sur les locales
+# ============================================================================
+
+schema: "nika/workflow@0.9"
+provider: claude
+model: claude-sonnet-4-20250514
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# CONFIGURATION MCP
+# ═══════════════════════════════════════════════════════════════════════════════
+mcp:
+  novanet:
+    # Use pre-built binary to avoid compilation delay which causes connection timeout
+    command: /Users/thibaut/dev/supernovae/novanet/tools/novanet-mcp/target/debug/novanet-mcp
+    env:
+      NOVANET_MCP_NEO4J_PASSWORD: "novanetpassword"
+      NOVANET_MCP_NEO4J_URI: "bolt://localhost:7687"
+
+  dataforseo:
+    command: npx
+    args: ["-y", "dataforseo-mcp-server"]
+    env:
+      DATAFORSEO_USERNAME: "{{env.DATAFORSEO_USERNAME}}"
+      DATAFORSEO_PASSWORD: "{{env.DATAFORSEO_PASSWORD}}"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# CONFIGURATION DES LOCALES
+# ═══════════════════════════════════════════════════════════════════════════════
+# Chaque locale a un location_code DataForSEO et un language_code
+# https://docs.dataforseo.com/v3/keywords_data/google_ads/locations/
+
+tasks:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 1: SETUP - Charger l'Entity et définir les locales
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: load_entity
+    invoke:
+      mcp: novanet
+      tool: novanet_describe
+      params:
+        describe: entity
+        entity_key: "qr-code"
+    output:
+      format: json
+
+  - id: define_locales
+    infer:
+      prompt: |
+        Return a JSON array of 5 test locales with DataForSEO configuration.
+        NOTE: DataForSEO uses location_name (string) NOT location_code (number).
+
+        [
+          {
+            "locale_key": "fr-FR",
+            "location_name": "France",
+            "language_code": "fr",
+            "seed_keyword": "qr code"
+          },
+          {
+            "locale_key": "en-US",
+            "location_name": "United States",
+            "language_code": "en",
+            "seed_keyword": "qr code"
+          },
+          {
+            "locale_key": "de-DE",
+            "location_name": "Germany",
+            "language_code": "de",
+            "seed_keyword": "qr code"
+          },
+          {
+            "locale_key": "es-ES",
+            "location_name": "Spain",
+            "language_code": "es",
+            "seed_keyword": "código qr"
+          },
+          {
+            "locale_key": "ja-JP",
+            "location_name": "Japan",
+            "language_code": "ja",
+            "seed_keyword": "QRコード"
+          }
+        ]
+
+        Return ONLY the JSON array, no explanation.
+      temperature: 0
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 2: PARALLEL DISCOVERY - for_each locale
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: discover_per_locale
+    use:
+      entity: load_entity
+      locales: define_locales
+    for_each: "{{use.locales}}"
+    as: locale
+    concurrency: 3  # Max 3 parallel API calls to DataForSEO
+    fail_fast: false  # Continue even if one locale fails
+    invoke:
+      mcp: dataforseo
+      # Correct tool name: dataforseo_labs_google_keywords_for_site
+      tool: dataforseo_labs_google_keywords_for_site
+      params:
+        target: "qrcode-ai.com"
+        # CORRECT: location_name is a string (e.g., "France"), NOT location_code
+        location_name: "{{use.locale.location_name}}"
+        language_code: "{{use.locale.language_code}}"
+        limit: 10
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 3: ANALYZE - Score les keywords par locale
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: analyze_per_locale
+    use:
+      entity: load_entity
+      locales: define_locales
+      discoveries: discover_per_locale
+    for_each: "{{use.locales}}"
+    as: locale
+    concurrency: 5  # LLM calls can be more parallel
+    infer:
+      prompt: |
+        Analyse les keywords découverts pour {{use.locale.locale_key}}.
+
+        Entity: {{use.entity}}
+        Locale config: {{use.locale}}
+
+        Keywords from DataForSEO (filtered for this locale):
+        {{use.discoveries}}
+
+        Pour chaque keyword, calcule:
+        - semantic_relation: same_as | action_for | produces | subtopic_of | related_to | attribute_of
+        - score: volume × sem_coef × intent_boost
+        - is_primary: true si score > 1000
+        - is_slug_source: true pour le meilleur candidat URL
+
+        Retourne un JSON object:
+        {
+          "locale_key": "{{use.locale.locale_key}}",
+          "keywords": [
+            {
+              "value": "...",
+              "slug_form": "...",
+              "volume": ...,
+              "difficulty": ...,
+              "intent": "...",
+              "semantic_relation": "...",
+              "score": ...,
+              "is_primary": true/false,
+              "is_slug_source": true/false
+            }
+          ],
+          "primary_keyword": { /* the best one */ },
+          "total_count": ...
+        }
+      temperature: 0.1
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 4: WRITE - Écrire tous les keywords dans NovaNet
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: write_keywords_per_locale
+    use:
+      analyzed: analyze_per_locale
+    for_each: "{{use.analyzed}}"
+    as: analysis
+    concurrency: 5
+    invoke:
+      mcp: novanet
+      tool: novanet_batch
+      params:
+        operations:
+          # Upsert the primary keyword
+          - id: "upsert_primary_{{use.analysis.locale_key}}"
+            tool: novanet_write
+            params:
+              operation: upsert_node
+              class: SEOKeyword
+              key: "seo:{{use.analysis.primary_keyword.slug_form}}@{{use.analysis.locale_key}}"
+              properties:
+                value: "{{use.analysis.primary_keyword.value}}"
+                slug_form: "{{use.analysis.primary_keyword.slug_form}}"
+                locale_key: "{{use.analysis.locale_key}}"
+                display_name: "{{use.analysis.primary_keyword.value}} ({{use.analysis.locale_key}})"
+                volume: "{{use.analysis.primary_keyword.volume}}"
+                difficulty: "{{use.analysis.primary_keyword.difficulty}}"
+                intent: "{{use.analysis.primary_keyword.intent}}"
+                source: "dataforseo"
+        parallel: false  # Sequential within batch for safety
+        stop_on_error: true
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 5: LINK - Créer les arcs TARGETS
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: create_targets_per_locale
+    use:
+      analyzed: analyze_per_locale
+      written: write_keywords_per_locale
+    for_each: "{{use.analyzed}}"
+    as: analysis
+    concurrency: 5
+    invoke:
+      mcp: novanet
+      tool: novanet_write
+      params:
+        operation: create_arc
+        arc_class: TARGETS
+        # CORRECT: EntityNative -[TARGETS]-> SEOKeyword (per entity-native.yaml schema)
+        # Key pattern: entity:{key}@{locale} (NOT entity-native:)
+        from_key: "entity:qr-code@{{use.analysis.locale_key}}"
+        to_key: "seo:{{use.analysis.primary_keyword.slug_form}}@{{use.analysis.locale_key}}"
+        properties:
+          rank: "primary"
+          is_slug_source: true
+          semantic_relation: "{{use.analysis.primary_keyword.semantic_relation}}"
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # PHASE 6: VERIFY - Vérifier le graphe complet
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: verify_all_locales
+    use:
+      targets: create_targets_per_locale
+    invoke:
+      mcp: novanet
+      tool: novanet_query
+      params:
+        # CORRECT: EntityNative -[TARGETS]-> SEOKeyword (per schema)
+        cypher: |
+          MATCH (en:EntityNative)-[t:TARGETS]->(kw:SEOKeyword)
+          WHERE en.entity_key = $entity_key
+          RETURN en.locale_key AS locale,
+                 count(kw) AS keyword_count,
+                 collect(kw.value)[0..3] AS sample_keywords
+          ORDER BY locale
+        params:
+          entity_key: "qr-code"
+    output:
+      format: json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # RAPPORT FINAL
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: final_report
+    use:
+      entity: load_entity
+      locales: define_locales
+      discoveries: discover_per_locale
+      analyses: analyze_per_locale
+      writes: write_keywords_per_locale
+      targets: create_targets_per_locale
+      verification: verify_all_locales
+    infer: |
+      Génère un rapport de synthèse multi-locale en français:
+
+      ## Workflow SEO Discovery Multi-Locale - Rapport
+
+      **Entity:** qr-code
+      **Locales traitées:** 5
+
+      ### Résumé par locale
+
+      Vérification finale:
+      {{use.verification}}
+
+      ### Statistiques
+      - Locales définies: {{use.locales}}
+      - Keywords découverts par locale: (résumé)
+      - Keywords écrits: {{use.writes}}
+      - Arcs TARGETS créés: {{use.targets}}
+
+      ### Prochaines étapes
+      1. Ajouter les Terms via USES_TERM (workflow 04)
+      2. Scaler à 200 locales (workflow 05)
+      3. Générer le contenu (workflow 06)
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# FLOW DAG
+# ═══════════════════════════════════════════════════════════════════════════════
+flows:
+  # Setup
+  - source: load_entity
+    target: define_locales
+
+  # Parallel discovery
+  - source: define_locales
+    target: discover_per_locale
+
+  # Parallel analysis
+  - source: discover_per_locale
+    target: analyze_per_locale
+
+  # Parallel writes
+  - source: analyze_per_locale
+    target: write_keywords_per_locale
+
+  # Parallel arc creation
+  - source: write_keywords_per_locale
+    target: create_targets_per_locale
+
+  # Verification after all
+  - source: create_targets_per_locale
+    target: verify_all_locales
+
+  # Final report
+  - source: verify_all_locales
+    target: final_report
