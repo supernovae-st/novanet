@@ -2,6 +2,8 @@
 //!
 //! Tests ServerStats, State accessors, and concurrent access patterns.
 
+#![allow(unexpected_cfgs)]
+
 use novanet_mcp::server::ServerStats;
 
 // =============================================================================
@@ -18,10 +20,11 @@ fn test_server_stats_default() {
 
 #[test]
 fn test_server_stats_clone() {
-    let mut stats = ServerStats::default();
-    stats.queries_executed = 42;
-    stats.cache_hits = 10;
-    stats.cache_misses = 5;
+    let stats = ServerStats {
+        queries_executed: 42,
+        cache_hits: 10,
+        cache_misses: 5,
+    };
 
     let cloned = stats.clone();
     assert_eq!(cloned.queries_executed, 42);

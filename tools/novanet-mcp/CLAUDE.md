@@ -2,7 +2,7 @@
 
 MCP (Model Context Protocol) server exposing the NovaNet knowledge graph to AI agents.
 
-**Version**: 0.15.1 | **Rust**: 1.86 | **Edition**: 2024 | **rmcp**: 0.16
+**Version**: 0.15.3 | **Rust**: 1.86 | **Edition**: 2024 | **rmcp**: 0.16
 
 ---
 
@@ -53,12 +53,12 @@ NovaNet MCP implements **RLM-on-KG** (Recursive Language Model on Knowledge Grap
 │  ├── Tool: novanet_batch (bulk operations with parallel execution)          │
 │  ├── Tools: novanet_cache_stats, novanet_cache_invalidate (cache control)   │
 │  ├── Feature: Error hints system with actionable suggestions                │
-│  └── Total: 11 read-only MCP tools                                          │
+│  └── Total: 11 MCP tools                                                    │
 │                                                                             │
-│  PHASE 5 (In Progress)                                                      │
+│  PHASE 5 (Complete)                                                         │
 │  ├── Tool: novanet_write (intelligent data writes)                          │
 │  ├── Operations: upsert_node, create_arc, update_props                      │
-│  ├── Schema validation via introspect (no YAML parsing)                     │
+│  ├── Security: Cypher injection prevention, TTL cache, auto-arcs            │
 │  ├── MERGE pattern for idempotent writes                                    │
 │  └── Total: 12 MCP tools (11 read + 1 write)                                │
 │                                                                             │
@@ -696,6 +696,41 @@ ON MATCH SET n += $properties, n.updated_at = timestamp()
 
 After successful writes, related cache entries are automatically invalidated to ensure fresh reads.
 
+**Security Features:**
+
+The `novanet_write` tool includes multiple security layers:
+
+| Feature | Protection | Implementation |
+|---------|------------|----------------|
+| **Cypher Injection Prevention** | Regex validation of class/arc names | `validation.rs` - rejects non-alphanumeric characters |
+| **TTL Cache** | Memory leak prevention | `moka::sync::Cache` with automatic eviction |
+| **HAS_NATIVE Auto-Arc** | Consistency enforcement | Automatic arc creation for `*Native` classes |
+| **Required Property Validation** | Data integrity | Schema-based validation before writes |
+
+**Class Name Validation:**
+
+All class names are validated against strict regex patterns before use in Cypher:
+
+```
+Node classes: ^[A-Z][A-Za-z0-9]*$      (PascalCase, e.g., Entity, EntityNative)
+Arc classes:  ^[A-Z][A-Z0-9_]*$        (SCREAMING_SNAKE_CASE, e.g., HAS_NATIVE)
+```
+
+Invalid input examples (all rejected):
+- `Entity}DETACH DELETE n` - Cypher injection attempt
+- `123Entity` - Invalid start character
+- `entity` - Lowercase not allowed
+- `HAS-NATIVE` - Hyphen not allowed in arc names
+
+**HAS_NATIVE Auto-Arc:**
+
+When upserting a `*Native` class (e.g., `EntityNative`, `PageNative`, `BlockNative`) with a key containing `@` (locale separator), the tool automatically creates a `HAS_NATIVE` arc to the base entity:
+
+```
+Key: "qr-code@fr-FR" + Class: "EntityNative"
+  → Auto-creates: (Entity {key: "qr-code"})-[:HAS_NATIVE]->(EntityNative {key: "qr-code@fr-FR"})
+```
+
 ---
 
 ## Write Philosophy: Schema vs Data
@@ -1042,6 +1077,8 @@ src/
 │   ├── cache_stats.rs   # novanet_cache_stats/invalidate implementation
 │   └── write.rs         # novanet_write implementation (Phase 5)
 ├── hints.rs             # Error hints system
+├── validation.rs        # Cypher injection prevention (regex validation)
+├── schema_cache.rs      # Schema metadata cache (moka TTL)
 ├── resources/
 │   └── mod.rs           # MCP resources (entity://, class://, locale://, view://)
 └── prompts/
@@ -1139,7 +1176,7 @@ cargo test test_validate_read_only
 cargo test --test integration
 ```
 
-**Current test count:** 348 tests (unit + integration tests, Neo4j integration tests require `NOVANET_MCP_NEO4J_PASSWORD` env var)
+**Current test count:** 430 tests (unit + integration tests, Neo4j integration tests require `NOVANET_MCP_NEO4J_PASSWORD` env var)
 
 ---
 

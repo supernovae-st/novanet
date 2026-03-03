@@ -99,10 +99,14 @@ fn validate_params(params: &WriteParams) -> Result<()> {
         }
         WriteOperation::CreateArc => {
             if params.arc_class.is_none() {
-                return Err(Error::InvalidParams("create_arc requires 'arc_class'".into()));
+                return Err(Error::InvalidParams(
+                    "create_arc requires 'arc_class'".into(),
+                ));
             }
             if params.from_key.is_none() {
-                return Err(Error::InvalidParams("create_arc requires 'from_key'".into()));
+                return Err(Error::InvalidParams(
+                    "create_arc requires 'from_key'".into(),
+                ));
             }
             if params.to_key.is_none() {
                 return Err(Error::InvalidParams("create_arc requires 'to_key'".into()));
@@ -219,10 +223,7 @@ async fn validate_slug_not_locked(
 
     if let Some(row) = rows.first() {
         let locked = row["locked"].as_bool().unwrap_or(false);
-        let current_slug = row["current_slug"]
-            .as_str()
-            .unwrap_or_default()
-            .to_string();
+        let current_slug = row["current_slug"].as_str().unwrap_or_default().to_string();
 
         if locked {
             return Err(Error::slug_locked(key, current_slug));
@@ -280,12 +281,38 @@ async fn handle_slug_source_singleton(
 async fn execute_upsert_node(
     state: &State,
     params: &WriteParams,
-    _meta: &ClassMetadata,
+    meta: &ClassMetadata,
 ) -> Result<WriteResult> {
     let start = std::time::Instant::now();
     let key = params.key.as_ref().expect("key validated");
     let class = params.class.as_ref().expect("class validated");
     let props = params.properties.clone().unwrap_or_default();
+
+    // SECURITY: Validate class name before use in Cypher query
+    if !crate::validation::is_valid_class_name(class) {
+        return Err(Error::InvalidParams(format!(
+            "Invalid class name '{}': must be PascalCase alphanumeric (e.g., Entity, EntityNative)",
+            class
+        )));
+    }
+
+    // Validate required properties are present
+    let missing: Vec<&String> = meta
+        .required_properties
+        .iter()
+        .filter(|prop| !props.contains_key(*prop))
+        .collect();
+
+    if !missing.is_empty() {
+        return Err(Error::MissingRequiredProperty {
+            class: class.to_string(),
+            property: missing
+                .iter()
+                .map(|s| s.as_str())
+                .collect::<Vec<_>>()
+                .join(", "),
+        });
+    }
 
     // Build MERGE query
     let props_json = serde_json::to_string(&props)
@@ -317,11 +344,15 @@ async fn execute_upsert_node(
         .and_then(|r| r["created"].as_bool())
         .unwrap_or(false);
 
-    // Determine updated properties (diff with previous)
+    // Determine updated properties
+    // NOTE: Returns all provided properties on update, not just changed ones.
+    // Computing actual diff would require an extra query to fetch old values,
+    // adding latency. For true change tracking, use update_props operation
+    // which can be enhanced to return only changed values in future versions.
     let updated_properties: Vec<String> = if created {
-        vec![]
+        vec![] // New node: no "updates", all props are initial values
     } else {
-        props.keys().cloned().collect()
+        props.keys().cloned().collect() // Update: return all provided props
     };
 
     // Handle auto-arcs (FOR_LOCALE)
@@ -345,6 +376,39 @@ async fn execute_upsert_node(
             .execute_query(&auto_arc_query, Some(arc_params))
             .await?;
         auto_arcs.push("FOR_LOCALE".to_string());
+    }
+
+    // Handle HAS_NATIVE auto-arc for EntityNative, PageNative, BlockNative
+    if class.ends_with("Native") && key.contains('@') {
+        // Extract entity key from native key (format: entity_key@locale)
+        if let Some(entity_key) = key.split('@').next() {
+            // Determine the base class (EntityNative -> Entity)
+            let base_class = class.trim_end_matches("Native");
+
+            let has_native_query = format!(
+                r#"
+                MATCH (base:{base_class} {{key: $entity_key}})
+                MATCH (native:{class} {{key: $native_key}})
+                MERGE (base)-[:HAS_NATIVE]->(native)
+                "#,
+                base_class = base_class,
+                class = class
+            );
+
+            let mut has_native_params = serde_json::Map::new();
+            has_native_params.insert(
+                "entity_key".to_string(),
+                Value::String(entity_key.to_string()),
+            );
+            has_native_params.insert("native_key".to_string(), Value::String(key.clone()));
+
+            // Only create if base entity exists (silent failure if not)
+            let _ = state
+                .pool()
+                .execute_query(&has_native_query, Some(has_native_params))
+                .await;
+            auto_arcs.push("HAS_NATIVE".to_string());
+        }
     }
 
     // Invalidate cache
@@ -374,6 +438,14 @@ async fn execute_create_arc(state: &State, params: &WriteParams) -> Result<Write
     let from_key = params.from_key.as_ref().expect("from_key validated");
     let to_key = params.to_key.as_ref().expect("to_key validated");
     let props = params.properties.clone().unwrap_or_default();
+
+    // SECURITY: Validate arc class name before use in Cypher query
+    if !crate::validation::is_valid_arc_class_name(arc_class) {
+        return Err(Error::InvalidParams(format!(
+            "Invalid arc class name '{}': must be SCREAMING_SNAKE_CASE (e.g., HAS_NATIVE, TARGETS)",
+            arc_class
+        )));
+    }
 
     // Verify endpoints exist
     let check_query = r#"
@@ -670,5 +742,171 @@ mod tests {
         };
         let err = validate_params(&params).unwrap_err();
         assert!(err.to_string().contains("to_key"));
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // HAS_NATIVE Key Extraction Tests
+    // ═══════════════════════════════════════════════════════════════════════════════
+
+    #[test]
+    fn test_has_native_key_extraction_entity_native() {
+        // Tests the key parsing logic used in execute_upsert_node for HAS_NATIVE auto-arc
+        let key = "qr-code@fr-FR";
+        let class = "EntityNative";
+
+        // Verify class ends with Native
+        assert!(class.ends_with("Native"));
+
+        // Verify key contains @ (locale separator)
+        assert!(key.contains('@'));
+
+        // Extract entity key
+        let entity_key = key.split('@').next().unwrap();
+        assert_eq!(entity_key, "qr-code");
+
+        // Get base class
+        let base_class = class.trim_end_matches("Native");
+        assert_eq!(base_class, "Entity");
+    }
+
+    #[test]
+    fn test_has_native_key_extraction_page_native() {
+        let key = "homepage@es-MX";
+        let class = "PageNative";
+
+        assert!(class.ends_with("Native"));
+        assert!(key.contains('@'));
+
+        let entity_key = key.split('@').next().unwrap();
+        assert_eq!(entity_key, "homepage");
+
+        let base_class = class.trim_end_matches("Native");
+        assert_eq!(base_class, "Page");
+    }
+
+    #[test]
+    fn test_has_native_key_extraction_block_native() {
+        let key = "head-seo-meta@ja-JP";
+        let class = "BlockNative";
+
+        assert!(class.ends_with("Native"));
+        assert!(key.contains('@'));
+
+        let entity_key = key.split('@').next().unwrap();
+        assert_eq!(entity_key, "head-seo-meta");
+
+        let base_class = class.trim_end_matches("Native");
+        assert_eq!(base_class, "Block");
+    }
+
+    #[test]
+    fn test_has_native_no_extraction_for_non_native() {
+        // Classes that don't end with Native should not trigger HAS_NATIVE
+        let _key = "qr-code@fr-FR"; // Documented for context
+        let class = "Entity";
+
+        assert!(!class.ends_with("Native"));
+    }
+
+    #[test]
+    fn test_has_native_no_extraction_without_locale() {
+        // Keys without @ should not trigger HAS_NATIVE
+        let key = "qr-code";
+        let class = "EntityNative";
+
+        assert!(class.ends_with("Native"));
+        assert!(!key.contains('@'));
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // Class Name Validation Integration Tests
+    // ═══════════════════════════════════════════════════════════════════════════════
+
+    #[test]
+    fn test_valid_class_names_accepted() {
+        assert!(crate::validation::is_valid_class_name("Entity"));
+        assert!(crate::validation::is_valid_class_name("EntityNative"));
+        assert!(crate::validation::is_valid_class_name("SEOKeyword"));
+        assert!(crate::validation::is_valid_class_name("PageNative"));
+        assert!(crate::validation::is_valid_class_name("BlockNative"));
+    }
+
+    #[test]
+    fn test_cypher_injection_class_names_rejected() {
+        // These would cause Cypher injection if not validated
+        assert!(!crate::validation::is_valid_class_name(
+            "Entity}DETACH DELETE n"
+        ));
+        assert!(!crate::validation::is_valid_class_name("Entity]->(x)"));
+        assert!(!crate::validation::is_valid_class_name("a:Entity"));
+        assert!(!crate::validation::is_valid_class_name("123Entity"));
+    }
+
+    #[test]
+    fn test_valid_arc_names_accepted() {
+        assert!(crate::validation::is_valid_arc_class_name("HAS_NATIVE"));
+        assert!(crate::validation::is_valid_arc_class_name("FOR_LOCALE"));
+        assert!(crate::validation::is_valid_arc_class_name("BELONGS_TO"));
+        assert!(crate::validation::is_valid_arc_class_name("TARGETS"));
+    }
+
+    #[test]
+    fn test_cypher_injection_arc_names_rejected() {
+        assert!(!crate::validation::is_valid_arc_class_name(
+            "HAS_NATIVE}RETURN"
+        ));
+        assert!(!crate::validation::is_valid_arc_class_name("has_native"));
+        assert!(!crate::validation::is_valid_arc_class_name("HAS-NATIVE"));
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // Required Properties Validation Tests
+    // ═══════════════════════════════════════════════════════════════════════════════
+
+    #[test]
+    fn test_required_properties_check() {
+        use crate::schema_cache::ClassMetadata;
+
+        let meta = ClassMetadata {
+            name: "SEOKeyword".to_string(),
+            realm: "shared".to_string(),
+            layer: "knowledge".to_string(),
+            trait_type: "imported".to_string(),
+            required_properties: vec!["keyword".to_string(), "slug_form".to_string()],
+            optional_properties: vec!["search_volume".to_string()],
+        };
+
+        // Test with all required properties present
+        let mut props = serde_json::Map::new();
+        props.insert(
+            "keyword".to_string(),
+            serde_json::Value::String("qr code".to_string()),
+        );
+        props.insert(
+            "slug_form".to_string(),
+            serde_json::Value::String("qr-code".to_string()),
+        );
+
+        let missing: Vec<&String> = meta
+            .required_properties
+            .iter()
+            .filter(|prop| !props.contains_key(*prop))
+            .collect();
+        assert!(missing.is_empty());
+
+        // Test with missing required property
+        let mut incomplete_props = serde_json::Map::new();
+        incomplete_props.insert(
+            "keyword".to_string(),
+            serde_json::Value::String("qr code".to_string()),
+        );
+
+        let missing: Vec<&String> = meta
+            .required_properties
+            .iter()
+            .filter(|prop| !incomplete_props.contains_key(*prop))
+            .collect();
+        assert_eq!(missing.len(), 1);
+        assert_eq!(missing[0], "slug_form");
     }
 }

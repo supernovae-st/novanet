@@ -6,6 +6,7 @@
 //! MVP 8 Phase 3: novanet_introspect (schema introspection)
 //! A1: novanet_batch (bulk operations)
 //! A3: novanet_cache_stats, novanet_cache_invalidate (cache management)
+//! A4: novanet_write (intelligent data writes)
 
 pub mod assemble;
 pub mod atoms;
@@ -23,12 +24,11 @@ pub mod write;
 pub use assemble::{AssembleParams, AssembleResult};
 pub use atoms::{AtomsParams, AtomsResult};
 pub use batch::{BatchParams, BatchResult};
-pub use cache_stats::{
-    CacheInvalidateParams, CacheInvalidateResult, CacheStats, CacheStatsParams,
-};
+pub use cache_stats::{CacheInvalidateParams, CacheInvalidateResult, CacheStats, CacheStatsParams};
 pub use describe::{DescribeParams, DescribeResult, DescribeTarget};
 pub use generate::{GenerateParams, GenerateResult};
 pub use introspect::{IntrospectParams, IntrospectResult, IntrospectTarget};
 pub use query::{QueryParams, QueryResult};
 pub use search::{SearchParams, SearchResult};
 pub use traverse::{TraverseParams, TraverseResult};
+pub use write::{WriteParams, WriteResult};

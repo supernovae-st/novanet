@@ -34,6 +34,7 @@ fn neo4j_available() -> bool {
 }
 
 /// Skip test if Neo4j is not configured
+#[allow(unused_macros)]
 macro_rules! require_neo4j {
     () => {
         if !neo4j_available() {
@@ -54,6 +55,7 @@ macro_rules! get_test_state {
 }
 
 /// Create a Neo4j pool for testing
+#[allow(dead_code)]
 async fn create_test_pool() -> novanet_mcp::neo4j::Neo4jPool {
     let uri = env::var("NEO4J_URI").unwrap_or_else(|_| "bolt://localhost:7687".to_string());
     let user = env::var("NEO4J_USER").unwrap_or_else(|_| "neo4j".to_string());
@@ -1602,10 +1604,8 @@ mod concurrent_agent_operations {
         ];
 
         eprintln!("Mixed concurrent operations:");
-        for result in &results {
-            if let Ok((name, value)) = result {
-                eprintln!("  {}: {}", name, value);
-            }
+        for (name, value) in results.iter().flatten() {
+            eprintln!("  {}: {}", name, value);
         }
 
         // All should succeed

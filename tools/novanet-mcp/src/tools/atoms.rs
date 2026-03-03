@@ -287,11 +287,19 @@ async fn fetch_atoms(
     let (field_filter, field_param_name, field_param_value): (String, Option<&str>, Option<&str>) =
         match config.filter_field {
             Some("domain") => match &params.domain {
-                Some(d) => ("AND a.domain = $domain_filter".to_string(), Some("domain_filter"), Some(d.as_str())),
+                Some(d) => (
+                    "AND a.domain = $domain_filter".to_string(),
+                    Some("domain_filter"),
+                    Some(d.as_str()),
+                ),
                 None => (String::new(), None, None),
             },
             Some("register") => match &params.register {
-                Some(r) => ("AND a.register = $register_filter".to_string(), Some("register_filter"), Some(r.as_str())),
+                Some(r) => (
+                    "AND a.register = $register_filter".to_string(),
+                    Some("register_filter"),
+                    Some(r.as_str()),
+                ),
                 None => (String::new(), None, None),
             },
             _ => (String::new(), None, None),
