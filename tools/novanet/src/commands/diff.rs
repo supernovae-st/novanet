@@ -452,25 +452,27 @@ pub fn format_json(result: &DiffResult) -> String {
 // =============================================================================
 
 /// Query Cypher for Schema:Class nodes.
+/// Note: Class nodes store their name in the `label` property, not `name`.
 const QUERY_NODE_CLASSES: &str = r#"
 MATCH (c:Schema:Class)
-RETURN c.name AS name,
+RETURN c.label AS name,
        c.realm AS realm,
        c.layer AS layer,
        c.trait AS trait,
        COALESCE(c.properties, []) AS properties
-ORDER BY c.name
+ORDER BY c.label
 "#;
 
 /// Query Cypher for Schema:ArcClass nodes.
+/// Note: ArcClass nodes store their name in the `key` property, not `name`.
 const QUERY_ARC_CLASSES: &str = r#"
 MATCH (a:Schema:ArcClass)
-RETURN a.name AS name,
+RETURN a.key AS name,
        a.family AS family,
        COALESCE(a.source, []) AS source,
        COALESCE(a.target, []) AS target,
-       COALESCE(a.properties, []) AS properties
-ORDER BY a.name
+       COALESCE(a.arc_properties, []) AS properties
+ORDER BY a.key
 "#;
 
 /// Fetch node classes from Neo4j.

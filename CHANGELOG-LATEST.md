@@ -4,6 +4,22 @@ For complete history, see [CHANGELOG.md](./CHANGELOG.md).
 
 ## [Unreleased]
 
+## [0.15.1] - 2026-03-03
+
+### Changed
+- **Version Alignment** - All packages now at 0.15.1
+  - TypeScript packages: root, @novanet/core, @novanet/db, @novanet/studio
+  - Rust CLI: tools/novanet
+  - Rust MCP: tools/novanet-mcp (reset from 0.6.0 to align with NovaNet versioning)
+- **MCP Versioning Strategy** - MCP server now follows NovaNet version (was independent 0.x.x)
+  - Simplifies version tracking: "NovaNet 0.15.1" = all components at 0.15.1
+  - MCP protocol compatibility tracked via rmcp crate version (0.16)
+
+### Statistics
+- **11 MCP tools**: query, describe, search, traverse, assemble, atoms, generate, introspect, batch, cache_stats, cache_invalidate
+- **1279 tests passing** (39 MCP + 1240 CLI)
+- **All packages aligned** at 0.15.1
+
 ## [0.15.0] - 2026-03-02
 
 ### Added

@@ -5,16 +5,16 @@
 # patterns for efficient context assembly.
 #
 # Architecture:
-# - 7 Tools: search, traverse, assemble, atoms, describe, query, generate
-# - 4 Resources: entity://, kind://, locale://, view://
+# - 11 Tools: query, describe, search, traverse, assemble, atoms, generate, introspect, batch, cache_stats, cache_invalidate
+# - 4 Resources: entity://, class://, locale://, view://
 # - 6 Prompts: cypher_query, cypher_explain, block_generation, page_generation, entity_analysis, locale_briefing
 #
-# STANDALONE CRATE: Not part of workspace, allows independent versioning.
-# Context7 Verified: 2026-02-12
+# VERSIONING: Aligned with NovaNet monorepo (reset from 0.6.0 to 0.15.1)
+# Context7 Verified: 2026-03-03
 
 [package]
 name = "novanet-mcp"
-version = "0.6.0"
+version = "0.15.1"
 edition = "2024"
 license = "LicenseRef-Proprietary"
 rust-version = "1.86"
