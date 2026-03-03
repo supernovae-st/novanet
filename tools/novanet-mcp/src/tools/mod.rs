@@ -17,6 +17,7 @@ pub mod introspect;
 pub mod query;
 pub mod search;
 pub mod traverse;
+pub mod write;
 
 // Re-export tool params and results
 pub use assemble::{AssembleParams, AssembleResult};
