@@ -142,6 +142,30 @@ enum Commands {
         /// Show verbose output
         #[arg(long, short)]
         verbose: bool,
+        /// Automatically fix issues where possible
+        #[arg(long)]
+        fix: bool,
+    },
+    /// Initialize NovaNet configuration (~/.novanet/config.toml)
+    Init {
+        /// Non-interactive mode (use provided values or defaults)
+        #[arg(long)]
+        non_interactive: bool,
+        /// Neo4j URI (default: bolt://localhost:7687)
+        #[arg(long)]
+        neo4j_uri: Option<String>,
+        /// Neo4j user (default: neo4j)
+        #[arg(long)]
+        neo4j_user: Option<String>,
+        /// Neo4j password
+        #[arg(long)]
+        neo4j_password: Option<String>,
+        /// Force overwrite existing configuration
+        #[arg(long)]
+        force: bool,
+        /// Show current configuration status
+        #[arg(long)]
+        status: bool,
     },
     /// Show graph statistics from schema YAML (offline, no Neo4j required)
     Stats {
@@ -1031,7 +1055,7 @@ async fn main() -> color_eyre::Result<()> {
         }
 
         // ── Doctor (YAML + optional Neo4j) ───────────────────────────
-        Commands::Doctor { skip_db, verbose } => {
+        Commands::Doctor { skip_db, verbose, fix } => {
             let root = root?;
             let db = if skip_db {
                 None
@@ -1039,12 +1063,35 @@ async fn main() -> color_eyre::Result<()> {
                 match connect_db(&uri, &user, password.as_ref()).await {
                     Ok(db) => Some(db),
                     Err(e) => {
-                        eprintln!("⚠  Could not connect to Neo4j: {}", e);
+                        eprintln!("Could not connect to Neo4j: {}", e);
                         None
                     }
                 }
             };
-            novanet::commands::doctor::run_doctor(&root, db.as_ref(), verbose).await?;
+            novanet::commands::doctor::run_doctor(&root, db.as_ref(), verbose, fix).await?;
+        }
+
+        // ── Init (User config) ──────────────────────────────────────────
+        Commands::Init {
+            non_interactive,
+            neo4j_uri,
+            neo4j_user,
+            neo4j_password,
+            force,
+            status,
+        } => {
+            if status {
+                novanet::commands::init::show_config_status();
+            } else {
+                novanet::commands::init::run_init(
+                    non_interactive,
+                    neo4j_uri.as_deref(),
+                    neo4j_user.as_deref(),
+                    neo4j_password.as_deref(),
+                    force,
+                )
+                .await?;
+            }
         }
 
         // ── Stats (YAML only, no Neo4j) ──────────────────────────────

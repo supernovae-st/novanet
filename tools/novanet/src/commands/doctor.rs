@@ -65,6 +65,7 @@ pub async fn run_doctor(
     root: &Path,
     db: Option<&Db>,
     verbose: bool,
+    fix: bool,
 ) -> crate::Result<Vec<HealthCheck>> {
     let mut checks = Vec::new();
 
@@ -86,8 +87,33 @@ pub async fn run_doctor(
         ));
     }
 
-    // 4. Check schema sync
-    checks.push(check_schema_sync(root, verbose));
+    // 4. Check schema sync (with optional auto-fix)
+    let schema_check = check_schema_sync(root, verbose);
+    let needs_fix = fix && schema_check.status != HealthStatus::Ok;
+    checks.push(schema_check);
+
+    // 5. Auto-fix schema sync issues if --fix was passed
+    if needs_fix {
+        eprintln!();
+        eprintln!("Attempting to fix schema sync issues...");
+        match run_schema_generate(root) {
+            Ok(()) => {
+                eprintln!("  \x1b[32m✓\x1b[0m Schema regenerated successfully");
+                // Re-check schema sync after fix
+                let recheck = check_schema_sync(root, verbose);
+                if recheck.status == HealthStatus::Ok {
+                    eprintln!("  \x1b[32m✓\x1b[0m Schema now in sync");
+                } else {
+                    eprintln!(
+                        "  \x1b[33m⚠\x1b[0m Schema still has issues after regeneration"
+                    );
+                }
+            }
+            Err(e) => {
+                eprintln!("  \x1b[31m✗\x1b[0m Failed to regenerate schema: {}", e);
+            }
+        }
+    }
 
     // Print results
     for check in &checks {
@@ -224,6 +250,12 @@ fn check_schema_sync(root: &Path, verbose: bool) -> HealthCheck {
         }
         Err(e) => HealthCheck::error("Schema Sync", format!("Validation failed: {}", e)),
     }
+}
+
+/// Run schema generate to fix sync issues.
+fn run_schema_generate(root: &Path) -> crate::Result<()> {
+    crate::commands::schema::schema_generate(root, false)?;
+    Ok(())
 }
 
 #[cfg(test)]

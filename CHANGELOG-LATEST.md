@@ -4,6 +4,41 @@ For complete history, see [CHANGELOG.md](./CHANGELOG.md).
 
 ## [Unreleased]
 
+## [0.16.0] - 2026-03-03
+
+### Added
+- **novanet init** - Interactive setup wizard for first-time users
+  - Creates `~/.novanet/config.toml` with Neo4j credentials
+  - Interactive mode with prompts for URI, user, password
+  - Non-interactive mode with CLI flags (`--neo4j-uri`, `--neo4j-user`, `--neo4j-password`)
+  - `--status` flag to show current configuration
+  - `--force` flag to overwrite existing config
+  - Automatic Neo4j connection test on setup
+- **User Config System** - Persistent configuration via `~/.novanet/config.toml`
+  - Neo4j credentials (uri, user, password)
+  - CLI preferences (default_format, verbose)
+  - Environment variable fallback (NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD)
+- **doctor --fix** - Automatic schema sync repair
+  - Detects schema sync issues
+  - Runs `schema generate` automatically when `--fix` is passed
+  - Re-validates after fix to confirm resolution
+- **Error Hints System** - Actionable suggestions for common errors
+  - Connection errors: Suggests starting Neo4j or running init
+  - Authentication errors: Points to password configuration
+  - Schema errors: Suggests validation and regeneration commands
+  - I/O errors: Identifies file/permission issues
+  - `ErrorHint` trait with `format_error_with_hint()` helper
+
+### Changed
+- **doctor** now accepts `fix: bool` parameter
+- **Dependencies** - Added `toml = "0.8"` for config file parsing
+- **Test count** - 1255 tests passing (CLI + 10 new error hint tests)
+
+### Statistics
+- **CLI commands**: Added `init`, enhanced `doctor --fix`
+- **Test coverage**: 1255 tests passing
+- **Zero clippy warnings**
+
 ## [0.15.3] - 2026-03-03
 
 ### Security
