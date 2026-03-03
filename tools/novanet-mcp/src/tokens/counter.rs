@@ -267,15 +267,15 @@ mod tests {
         let spaces = "     ";
         let count = counter.count(spaces);
         // Whitespace should still have some tokens
-        assert!(count >= 0);
+        assert!(count >= 1, "5 spaces should have at least 1 token");
 
         let newlines = "\n\n\n";
         let count = counter.count(newlines);
-        assert!(count >= 0);
+        assert!(count >= 1, "3 newlines should have at least 1 token");
 
         let mixed = "  \t\n  ";
         let count = counter.count(mixed);
-        assert!(count >= 0);
+        assert!(count >= 1, "mixed whitespace should have at least 1 token");
     }
 
     #[test]

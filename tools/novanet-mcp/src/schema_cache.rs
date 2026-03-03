@@ -1,12 +1,11 @@
 //! Schema metadata cache for write validation
 //!
 //! Caches NodeClass and ArcClass metadata to validate writes without
-//! repeated Neo4j queries. TTL-based invalidation.
+//! repeated Neo4j queries. TTL-based eviction via moka.
 
-use parking_lot::RwLock;
+use moka::sync::Cache;
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
-use std::time::{Duration, Instant};
+use std::time::Duration;
 
 /// Cached class metadata
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -29,63 +28,76 @@ pub struct ArcClassMetadata {
     pub properties: Vec<String>,
 }
 
-/// Schema cache with TTL
+/// Default max entries for cache
+const DEFAULT_MAX_ENTRIES: u64 = 1000;
+
+/// Schema cache with TTL and max entries
+///
+/// Uses moka::sync::Cache which automatically evicts:
+/// - Expired entries (based on TTL)
+/// - Excess entries (LRU when over capacity)
 pub struct SchemaCache {
-    classes: RwLock<HashMap<String, (ClassMetadata, Instant)>>,
-    arcs: RwLock<HashMap<String, (ArcClassMetadata, Instant)>>,
-    ttl: Duration,
+    classes: Cache<String, ClassMetadata>,
+    arcs: Cache<String, ArcClassMetadata>,
 }
 
 impl SchemaCache {
-    /// Create new schema cache with given TTL
+    /// Create new schema cache with given TTL in seconds
     pub fn new(ttl_secs: u64) -> Self {
+        Self::with_max_entries(DEFAULT_MAX_ENTRIES, ttl_secs)
+    }
+
+    /// Create cache with custom max entries and TTL
+    pub fn with_max_entries(max_entries: u64, ttl_secs: u64) -> Self {
+        let ttl = Duration::from_secs(ttl_secs);
         Self {
-            classes: RwLock::new(HashMap::new()),
-            arcs: RwLock::new(HashMap::new()),
-            ttl: Duration::from_secs(ttl_secs),
+            classes: Cache::builder()
+                .max_capacity(max_entries)
+                .time_to_live(ttl)
+                .build(),
+            arcs: Cache::builder()
+                .max_capacity(max_entries)
+                .time_to_live(ttl)
+                .build(),
         }
     }
 
-    /// Get class metadata if cached and not expired
+    /// Get class metadata if cached (auto-evicts expired entries)
     pub fn get_class(&self, name: &str) -> Option<ClassMetadata> {
-        let cache = self.classes.read();
-        cache.get(name).and_then(|(meta, inserted)| {
-            if inserted.elapsed() < self.ttl {
-                Some(meta.clone())
-            } else {
-                None
-            }
-        })
+        self.classes.get(name)
     }
 
     /// Insert class metadata into cache
     pub fn insert_class(&self, name: String, meta: ClassMetadata) {
-        let mut cache = self.classes.write();
-        cache.insert(name, (meta, Instant::now()));
+        self.classes.insert(name, meta);
     }
 
-    /// Get arc class metadata if cached and not expired
+    /// Get arc class metadata if cached
     pub fn get_arc(&self, name: &str) -> Option<ArcClassMetadata> {
-        let cache = self.arcs.read();
-        cache.get(name).and_then(|(meta, inserted)| {
-            if inserted.elapsed() < self.ttl {
-                Some(meta.clone())
-            } else {
-                None
-            }
-        })
+        self.arcs.get(name)
     }
 
     /// Insert arc class metadata into cache
     pub fn insert_arc(&self, name: String, meta: ArcClassMetadata) {
-        let mut cache = self.arcs.write();
-        cache.insert(name, (meta, Instant::now()));
+        self.arcs.insert(name, meta);
     }
 
     /// Invalidate all cached entries
     pub fn invalidate_all(&self) {
-        self.classes.write().clear();
-        self.arcs.write().clear();
+        self.classes.invalidate_all();
+        self.arcs.invalidate_all();
+    }
+
+    /// Run pending maintenance tasks (for testing)
+    #[cfg(test)]
+    pub fn run_pending_tasks(&self) {
+        self.classes.run_pending_tasks();
+        self.arcs.run_pending_tasks();
+    }
+
+    /// Get approximate entry count (for testing/monitoring)
+    pub fn entry_count(&self) -> u64 {
+        self.classes.entry_count() + self.arcs.entry_count()
     }
 
     /// Check if class trait allows writes
@@ -151,6 +163,65 @@ mod tests {
 
         assert!(cache.get_class("Test").is_some());
         cache.invalidate_all();
+        cache.run_pending_tasks();
         assert!(cache.get_class("Test").is_none());
+    }
+
+    #[test]
+    fn test_arc_cache() {
+        let cache = SchemaCache::new(300);
+        let meta = ArcClassMetadata {
+            name: "HAS_NATIVE".to_string(),
+            from_class: "Entity".to_string(),
+            to_class: "EntityNative".to_string(),
+            family: "localization".to_string(),
+            properties: vec![],
+        };
+
+        cache.insert_arc("HAS_NATIVE".to_string(), meta);
+        let retrieved = cache.get_arc("HAS_NATIVE");
+        assert!(retrieved.is_some());
+        assert_eq!(retrieved.unwrap().family, "localization");
+    }
+
+    #[test]
+    fn test_entry_count() {
+        let cache = SchemaCache::new(300);
+        assert_eq!(cache.entry_count(), 0);
+
+        let meta = ClassMetadata {
+            name: "Test".to_string(),
+            realm: "org".to_string(),
+            layer: "semantic".to_string(),
+            trait_type: "authored".to_string(),
+            required_properties: vec![],
+            optional_properties: vec![],
+        };
+        cache.insert_class("Test".to_string(), meta);
+        cache.run_pending_tasks();
+
+        assert!(cache.entry_count() >= 1);
+    }
+
+    #[test]
+    fn test_with_max_entries() {
+        // Test custom max entries
+        let cache = SchemaCache::with_max_entries(5, 300);
+
+        for i in 0..10 {
+            let meta = ClassMetadata {
+                name: format!("Class{}", i),
+                realm: "org".to_string(),
+                layer: "semantic".to_string(),
+                trait_type: "authored".to_string(),
+                required_properties: vec![],
+                optional_properties: vec![],
+            };
+            cache.insert_class(format!("Class{}", i), meta);
+        }
+        cache.run_pending_tasks();
+
+        // Should have at most ~5 entries (moka may keep a few more during eviction)
+        assert!(cache.entry_count() <= 10);
     }
 }

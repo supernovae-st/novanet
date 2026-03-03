@@ -1046,7 +1046,7 @@ dependencies = [
 
 [[package]]
 name = "novanet-mcp"
-version = "0.6.0"
+version = "0.15.1"
 dependencies = [
  "ahash",
  "anyhow",
@@ -1056,8 +1056,10 @@ dependencies = [
  "insta",
  "moka",
  "neo4rs",
+ "once_cell",
  "parking_lot",
  "pretty_assertions",
+ "regex",
  "rmcp",
  "schemars",
  "serde",

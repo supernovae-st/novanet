@@ -14,7 +14,7 @@
 
 [package]
 name = "novanet-mcp"
-version = "0.15.1"
+version = "0.15.3"
 edition = "2024"
 license = "LicenseRef-Proprietary"
 rust-version = "1.86"
@@ -47,7 +47,7 @@ neo4rs = "0.8"
 # moka v0.12.13 provides high-performance concurrent cache with TTL
 # Pattern: Cache::builder().time_to_live(Duration::from_secs(300)).build()
 # ═══════════════════════════════════════════════════════════════════════════════
-moka = { version = "0.12", features = ["future"] }
+moka = { version = "0.12", features = ["future", "sync"] }
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Token Counting (Hybrid Strategy)
@@ -93,6 +93,14 @@ futures = "0.3"
 # ahash 0.8: ~30% faster than SipHash for string keys (cache key generation)
 # ═══════════════════════════════════════════════════════════════════════════════
 ahash = "0.8"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Validation
+# once_cell 1.19: Lazy static initialization for compiled regex
+# regex 1.10: Input validation to prevent Cypher injection
+# ═══════════════════════════════════════════════════════════════════════════════
+once_cell = "1.19"
+regex = "1.10"
 
 [dev-dependencies]
 tokio-test = "0.4"

@@ -84,16 +84,25 @@ pub enum Error {
     NotImplemented(String),
 
     /// Trait does not allow writes
-    #[error("Class '{class}' has trait '{trait_type}' which is not writable. Only authored/imported/generated/retrieved allow writes.")]
+    #[error(
+        "Class '{class}' has trait '{trait_type}' which is not writable. Only authored/imported/generated/retrieved allow writes."
+    )]
     TraitNotWritable { class: String, trait_type: String },
 
     /// Slug is locked after deployment
-    #[error("Slug is locked on '{key}'. Current slug: '{current_slug}'. Create a redirect instead of modifying.")]
+    #[error(
+        "Slug is locked on '{key}'. Current slug: '{current_slug}'. Create a redirect instead of modifying."
+    )]
     SlugLocked { key: String, current_slug: String },
 
     /// Singleton property violation (e.g., is_slug_source)
-    #[error("Singleton violation: Only one arc can have '{property}' = true for target '{target_key}'.")]
-    SingletonViolation { property: String, target_key: String },
+    #[error(
+        "Singleton violation: Only one arc can have '{property}' = true for target '{target_key}'."
+    )]
+    SingletonViolation {
+        property: String,
+        target_key: String,
+    },
 
     /// Schema class not found
     #[error("Schema class not found: '{class}'. Use novanet_introspect to list available classes.")]
@@ -106,44 +115,6 @@ pub enum Error {
     /// Arc endpoints not found
     #[error("Arc endpoint not found: {endpoint_type} '{key}' does not exist.")]
     ArcEndpointNotFound { endpoint_type: String, key: String },
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_trait_not_writable_error() {
-        let err = Error::trait_not_writable("Entity", "defined");
-        assert!(err.to_string().contains("Entity"));
-        assert!(err.to_string().contains("defined"));
-    }
-
-    #[test]
-    fn test_slug_locked_error() {
-        let err = Error::slug_locked("block:head-seo-meta@fr-FR", "qr-code");
-        assert!(err.to_string().contains("slug_locked") || err.to_string().contains("locked"));
-        assert!(err.to_string().contains("qr-code"));
-    }
-
-    #[test]
-    fn test_singleton_violation_error() {
-        let err = Error::singleton_violation("is_slug_source", "entity-native:qr-code@fr-FR");
-        assert!(err.to_string().contains("is_slug_source"));
-    }
-
-    #[test]
-    fn test_schema_not_found_error() {
-        let err = Error::schema_not_found("UnknownClass");
-        assert!(err.to_string().contains("UnknownClass"));
-    }
-
-    #[test]
-    fn test_missing_required_property_error() {
-        let err = Error::missing_required_property("SEOKeyword", "keyword");
-        assert!(err.to_string().contains("SEOKeyword"));
-        assert!(err.to_string().contains("keyword"));
-    }
 }
 
 impl Error {
@@ -224,7 +195,10 @@ impl Error {
     }
 
     /// Create a missing required property error
-    pub fn missing_required_property(class: impl Into<String>, property: impl Into<String>) -> Self {
+    pub fn missing_required_property(
+        class: impl Into<String>,
+        property: impl Into<String>,
+    ) -> Self {
         Self::MissingRequiredProperty {
             class: class.into(),
             property: property.into(),
@@ -232,7 +206,10 @@ impl Error {
     }
 
     /// Create an arc endpoint not found error
-    pub fn arc_endpoint_not_found(endpoint_type: impl Into<String>, key: impl Into<String>) -> Self {
+    pub fn arc_endpoint_not_found(
+        endpoint_type: impl Into<String>,
+        key: impl Into<String>,
+    ) -> Self {
         Self::ArcEndpointNotFound {
             endpoint_type: endpoint_type.into(),
             key: key.into(),
@@ -273,5 +250,43 @@ impl From<Error> for McpError {
             message: Cow::Owned(err.to_string()),
             data: None,
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_trait_not_writable_error() {
+        let err = Error::trait_not_writable("Entity", "defined");
+        assert!(err.to_string().contains("Entity"));
+        assert!(err.to_string().contains("defined"));
+    }
+
+    #[test]
+    fn test_slug_locked_error() {
+        let err = Error::slug_locked("block:head-seo-meta@fr-FR", "qr-code");
+        assert!(err.to_string().contains("slug_locked") || err.to_string().contains("locked"));
+        assert!(err.to_string().contains("qr-code"));
+    }
+
+    #[test]
+    fn test_singleton_violation_error() {
+        let err = Error::singleton_violation("is_slug_source", "entity-native:qr-code@fr-FR");
+        assert!(err.to_string().contains("is_slug_source"));
+    }
+
+    #[test]
+    fn test_schema_not_found_error() {
+        let err = Error::schema_not_found("UnknownClass");
+        assert!(err.to_string().contains("UnknownClass"));
+    }
+
+    #[test]
+    fn test_missing_required_property_error() {
+        let err = Error::missing_required_property("SEOKeyword", "keyword");
+        assert!(err.to_string().contains("SEOKeyword"));
+        assert!(err.to_string().contains("keyword"));
     }
 }

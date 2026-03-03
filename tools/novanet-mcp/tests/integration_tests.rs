@@ -246,7 +246,7 @@ mod token_counting {
         let text = "Hello, world!";
         let count = counter.count(text);
         assert!(
-            count >= 2 && count <= 6,
+            (2..=6).contains(&count),
             "English token count off: {}",
             count
         );
@@ -259,7 +259,7 @@ mod token_counting {
         // CJK characters typically have 1-2 tokens each
         let text = "你好世界";
         let count = counter.count(text);
-        assert!(count >= 2 && count <= 8, "CJK token count off: {}", count);
+        assert!((2..=8).contains(&count), "CJK token count off: {}", count);
     }
 
     #[test]
@@ -281,7 +281,7 @@ mod token_counting {
             // Estimate should be within 50% of exact for most texts
             let ratio = estimate as f64 / exact as f64;
             assert!(
-                ratio >= 0.5 && ratio <= 2.0,
+                (0.5..=2.0).contains(&ratio),
                 "Estimate too far from exact for '{}': {} vs {}",
                 text,
                 estimate,
@@ -344,7 +344,7 @@ mod caching {
     async fn test_cache_miss() {
         let cache = QueryCache::new(100, Duration::from_secs(60));
 
-        let retrieved = cache.get(&"nonexistent".to_string()).await;
+        let retrieved = cache.get("nonexistent").await;
         assert!(retrieved.is_none(), "Should not find nonexistent key");
     }
 
@@ -903,8 +903,7 @@ mod security_extended {
 
             // Should handle gracefully (either succeed with literal or reject)
             // Key point: should not cause security bypass
-            if result.is_ok() {
-                let rows = result.unwrap();
+            if let Ok(rows) = result {
                 // Verify the string is returned as-is or sanitized
                 assert!(rows[0].get("value").is_some());
             }

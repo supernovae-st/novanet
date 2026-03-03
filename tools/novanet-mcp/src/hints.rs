@@ -8,7 +8,7 @@ pub fn get_hint(error_msg: &str) -> String {
 
     // Cypher errors
     if lower.contains("syntaxerror") || lower.contains("syntax error") {
-        return "💡 Hint: Check your Cypher syntax.\n\
+        return "Hint: Check your Cypher syntax.\n\
              Common issues:\n\
              - Missing quotes around string values\n\
              - Incorrect relationship direction (use --> or <--)\n\
@@ -18,7 +18,7 @@ pub fn get_hint(error_msg: &str) -> String {
     }
 
     if lower.contains("unknown function") {
-        return "💡 Hint: Unknown Cypher function.\n\
+        return "Hint: Unknown Cypher function.\n\
              - Check APOC is installed: CALL apoc.help('function_name')\n\
              - Verify function spelling and case\n\
              - Some functions require APOC plugin"
@@ -26,7 +26,7 @@ pub fn get_hint(error_msg: &str) -> String {
     }
 
     if lower.contains("variable") && lower.contains("not defined") {
-        return "💡 Hint: Undefined variable in query.\n\
+        return "Hint: Undefined variable in query.\n\
              - Ensure variable is declared in MATCH/WITH clause\n\
              - Check variable spelling matches exactly\n\
              - Variables are case-sensitive"
@@ -35,7 +35,7 @@ pub fn get_hint(error_msg: &str) -> String {
 
     // Connection errors
     if lower.contains("connection refused") || lower.contains("connect error") {
-        return "💡 Hint: Cannot connect to Neo4j.\n\
+        return "Hint: Cannot connect to Neo4j.\n\
              1. Verify Neo4j is running: neo4j status\n\
              2. Check NEO4J_URI environment variable (default: bolt://localhost:7687)\n\
              3. Verify credentials: NEO4J_USER and NEO4J_PASSWORD\n\
@@ -44,7 +44,7 @@ pub fn get_hint(error_msg: &str) -> String {
     }
 
     if lower.contains("authentication") || lower.contains("unauthorized") {
-        return "💡 Hint: Authentication failed.\n\
+        return "Hint: Authentication failed.\n\
              - Check NEO4J_USER (default: neo4j)\n\
              - Check NEO4J_PASSWORD\n\
              - Reset password: neo4j-admin set-initial-password <password>"
@@ -53,7 +53,7 @@ pub fn get_hint(error_msg: &str) -> String {
 
     // Resource errors
     if lower.contains("timeout") || lower.contains("timed out") {
-        return "💡 Hint: Query timed out.\n\
+        return "Hint: Query timed out.\n\
              - Add LIMIT to reduce result set\n\
              - Use indexes: CREATE INDEX FOR (n:Label) ON (n.property)\n\
              - Profile query: PROFILE {your_query}\n\
@@ -62,7 +62,7 @@ pub fn get_hint(error_msg: &str) -> String {
     }
 
     if lower.contains("memory") || lower.contains("heap") {
-        return "💡 Hint: Memory limit exceeded.\n\
+        return "Hint: Memory limit exceeded.\n\
              - Reduce result set with LIMIT\n\
              - Use streaming: CALL { ... } IN TRANSACTIONS\n\
              - Increase Neo4j heap: dbms.memory.heap.max_size"
@@ -71,7 +71,7 @@ pub fn get_hint(error_msg: &str) -> String {
 
     // Schema class not found (more specific, must come before generic "not found")
     if lower.contains("schema") && lower.contains("not found") {
-        return "💡 Hint: Unknown class name.\n\
+        return "Hint: Unknown class name.\n\
              - Use novanet_introspect to list available classes\n\
              - Check spelling and case (PascalCase)\n\
              - Common classes: Entity, EntityNative, SEOKeyword, Term"
@@ -80,7 +80,7 @@ pub fn get_hint(error_msg: &str) -> String {
 
     // Arc endpoint not found (more specific, must come before generic "not found")
     if lower.contains("arc endpoint") && lower.contains("not found") {
-        return "💡 Hint: Arc source or target doesn't exist.\n\
+        return "Hint: Arc source or target doesn't exist.\n\
              - Create the node first with upsert_node operation\n\
              - Verify the key spelling\n\
              - Use novanet_search to find existing nodes"
@@ -89,7 +89,7 @@ pub fn get_hint(error_msg: &str) -> String {
 
     // Entity not found (generic fallback)
     if lower.contains("not found") || lower.contains("no such") {
-        return "💡 Hint: Entity not found.\n\
+        return "Hint: Entity not found.\n\
              - Verify entity key exists: MATCH (e:Entity {key: 'key'}) RETURN e\n\
              - Check for typos in key/label names\n\
              - Use novanet_search to find similar entities"
@@ -98,7 +98,7 @@ pub fn get_hint(error_msg: &str) -> String {
 
     // Schema errors
     if lower.contains("constraint") {
-        return "💡 Hint: Constraint violation.\n\
+        return "Hint: Constraint violation.\n\
              - Check unique constraints: SHOW CONSTRAINTS\n\
              - Verify property values don't duplicate existing data\n\
              - Use MERGE instead of CREATE for idempotent operations"
@@ -107,7 +107,7 @@ pub fn get_hint(error_msg: &str) -> String {
 
     // Invalid tool (for batch operations)
     if lower.contains("invalid tool") {
-        return "💡 Hint: Invalid tool name.\n\
+        return "Hint: Invalid tool name.\n\
              Valid tools: novanet_query, novanet_describe, novanet_search,\n\
              novanet_traverse, novanet_assemble, novanet_atoms,\n\
              novanet_generate, novanet_introspect"
@@ -116,7 +116,7 @@ pub fn get_hint(error_msg: &str) -> String {
 
     // Write operation errors
     if lower.contains("trait") && lower.contains("not writable") {
-        return "💡 Hint: Write permission denied.\n\
+        return "Hint: Write permission denied.\n\
              Only these traits allow writes:\n\
              - authored: Human-written content (EntityNative, PageNative)\n\
              - imported: External data (SEOKeyword, GeoTrend)\n\
@@ -128,7 +128,7 @@ pub fn get_hint(error_msg: &str) -> String {
     }
 
     if lower.contains("slug") && lower.contains("locked") {
-        return "💡 Hint: Slug is immutable after deployment.\n\
+        return "Hint: Slug is immutable after deployment.\n\
              - Create a URL redirect instead of changing the slug\n\
              - Or set slug_locked: false first (requires admin access)\n\
              - ADR-030: BlockNative:head-seo-meta owns the slug"
@@ -136,7 +136,7 @@ pub fn get_hint(error_msg: &str) -> String {
     }
 
     if lower.contains("singleton") && lower.contains("is_slug_source") {
-        return "💡 Hint: Only one SEOKeyword can be the slug source.\n\
+        return "Hint: Only one SEOKeyword can be the slug source.\n\
              - The existing is_slug_source arc will be demoted\n\
              - Use rank: 'primary' for the new slug source\n\
              - Previous keyword becomes rank: 'secondary'"
@@ -144,14 +144,14 @@ pub fn get_hint(error_msg: &str) -> String {
     }
 
     if lower.contains("missing required property") {
-        return "💡 Hint: Required property missing.\n\
+        return "Hint: Required property missing.\n\
              - Use novanet_introspect target='class' name='ClassName' to see required properties\n\
              - Check property names are spelled correctly"
             .to_string();
     }
 
     // Default hint
-    "💡 Hint: Unexpected error occurred.\n\
+    "Hint: Unexpected error occurred.\n\
          - Check NovaNet logs: tail -f ~/.novanet/logs/mcp.log\n\
          - Verify Neo4j health: novanet doctor\n\
          - Report issue: https://github.com/supernovae-st/novanet/issues"

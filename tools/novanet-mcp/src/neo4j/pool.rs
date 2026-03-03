@@ -545,7 +545,7 @@ mod tests {
         let small_float = json_to_bolt_type(serde_json::json!(0.0001));
         assert!(matches!(small_float, BoltType::Float(_)));
 
-        let negative_float = json_to_bolt_type(serde_json::json!(-3.14159));
+        let negative_float = json_to_bolt_type(serde_json::json!(-3.5));
         assert!(matches!(negative_float, BoltType::Float(_)));
     }
 

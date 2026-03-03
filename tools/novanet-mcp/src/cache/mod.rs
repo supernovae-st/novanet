@@ -105,6 +105,17 @@ impl QueryCache {
     pub async fn run_pending_tasks(&self) {
         self.cache.run_pending_tasks().await;
     }
+
+    /// Invalidate cache entries matching a pattern (simple: clears all for now)
+    ///
+    /// TODO: Implement proper prefix-based pattern matching when needed.
+    /// For now, this is a simple implementation that clears all entries.
+    pub async fn invalidate_pattern(&self, _pattern: &str) {
+        // Simple implementation: invalidate all
+        // A more sophisticated implementation would iterate and match prefixes
+        self.cache.invalidate_all();
+        self.cache.run_pending_tasks().await;
+    }
 }
 
 impl Default for QueryCache {

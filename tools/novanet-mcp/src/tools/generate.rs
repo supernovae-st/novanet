@@ -854,7 +854,7 @@ mod tests {
     #[test]
     fn test_composite_key_building() {
         // Test the logic used in fetch_denomination_forms for building composite keys
-        let entity_keys = vec!["qr-code".to_string(), "wifi".to_string()];
+        let entity_keys = ["qr-code".to_string(), "wifi".to_string()];
         let locale = "fr-FR";
 
         let native_keys: Vec<String> = entity_keys
@@ -873,7 +873,7 @@ mod tests {
     #[test]
     fn test_composite_key_with_prefix_handling() {
         // Keys that already have "entity:" prefix should not duplicate it
-        let entity_keys = vec!["entity:qr-code".to_string(), "wifi".to_string()];
+        let entity_keys = ["entity:qr-code".to_string(), "wifi".to_string()];
         let locale = "es-MX";
 
         let native_keys: Vec<String> = entity_keys

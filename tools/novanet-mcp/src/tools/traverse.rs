@@ -465,7 +465,10 @@ mod tests {
             "" // Invalid label filtered out
         );
         assert_eq!(
-            build_target_filter(&Some(vec!["Entity".to_string(), "'; DROP DATABASE".to_string()])),
+            build_target_filter(&Some(vec![
+                "Entity".to_string(),
+                "'; DROP DATABASE".to_string()
+            ])),
             "WHERE (endNode:Entity)" // Only valid label kept
         );
     }

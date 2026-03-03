@@ -87,7 +87,10 @@ pub async fn get_stats(state: &State, _params: CacheStatsParams) -> Result<Cache
 /// Invalidate cache entries
 ///
 /// Supports full cache clear only. Pattern-based invalidation is not supported.
-pub async fn invalidate(state: &State, params: CacheInvalidateParams) -> Result<CacheInvalidateResult> {
+pub async fn invalidate(
+    state: &State,
+    params: CacheInvalidateParams,
+) -> Result<CacheInvalidateResult> {
     use crate::error::Error;
 
     let cache = state.cache();

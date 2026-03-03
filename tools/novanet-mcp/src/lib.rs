@@ -35,6 +35,7 @@ pub mod schema_cache;
 pub mod server;
 pub mod tokens;
 pub mod tools;
+pub mod validation;
 
 // Re-export main types
 pub use error::{Error, Result};
