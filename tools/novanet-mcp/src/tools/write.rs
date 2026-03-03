@@ -3,6 +3,7 @@
 //! Intelligent data writes to Neo4j with schema validation.
 //! Single tool with 3 operations: upsert_node, create_arc, update_props.
 
+use crate::error::{Error, Result};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -82,6 +83,45 @@ pub struct WriteResult {
     pub cache_invalidated: Vec<String>,
 }
 
+/// Validate write operation has required params
+fn validate_params(params: &WriteParams) -> Result<()> {
+    match params.operation {
+        WriteOperation::UpsertNode => {
+            if params.class.is_none() {
+                return Err(Error::InvalidParams("upsert_node requires 'class'".into()));
+            }
+            if params.key.is_none() {
+                return Err(Error::InvalidParams("upsert_node requires 'key'".into()));
+            }
+        }
+        WriteOperation::CreateArc => {
+            if params.arc_class.is_none() {
+                return Err(Error::InvalidParams("create_arc requires 'arc_class'".into()));
+            }
+            if params.from_key.is_none() {
+                return Err(Error::InvalidParams("create_arc requires 'from_key'".into()));
+            }
+            if params.to_key.is_none() {
+                return Err(Error::InvalidParams("create_arc requires 'to_key'".into()));
+            }
+        }
+        WriteOperation::UpdateProps => {
+            if params.class.is_none() {
+                return Err(Error::InvalidParams("update_props requires 'class'".into()));
+            }
+            if params.key.is_none() {
+                return Err(Error::InvalidParams("update_props requires 'key'".into()));
+            }
+            if params.properties.is_none() {
+                return Err(Error::InvalidParams(
+                    "update_props requires 'properties'".into(),
+                ));
+            }
+        }
+    }
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -135,5 +175,67 @@ mod tests {
         let json = serde_json::to_string(&result).unwrap();
         assert!(json.contains("seo:qr-code@fr-FR"));
         assert!(json.contains("FOR_LOCALE"));
+    }
+
+    #[test]
+    fn test_validate_params_upsert_node_ok() {
+        let params = WriteParams {
+            operation: WriteOperation::UpsertNode,
+            class: Some("SEOKeyword".to_string()),
+            key: Some("seo:test@fr-FR".to_string()),
+            arc_class: None,
+            from_key: None,
+            to_key: None,
+            properties: Some(serde_json::Map::new()),
+            locale: None,
+        };
+        assert!(validate_params(&params).is_ok());
+    }
+
+    #[test]
+    fn test_validate_params_upsert_node_missing_class() {
+        let params = WriteParams {
+            operation: WriteOperation::UpsertNode,
+            class: None,
+            key: Some("seo:test@fr-FR".to_string()),
+            arc_class: None,
+            from_key: None,
+            to_key: None,
+            properties: None,
+            locale: None,
+        };
+        let err = validate_params(&params).unwrap_err();
+        assert!(err.to_string().contains("class"));
+    }
+
+    #[test]
+    fn test_validate_params_create_arc_ok() {
+        let params = WriteParams {
+            operation: WriteOperation::CreateArc,
+            class: None,
+            key: None,
+            arc_class: Some("TARGETS".to_string()),
+            from_key: Some("seo:qr-code@fr-FR".to_string()),
+            to_key: Some("entity-native:qr-code@fr-FR".to_string()),
+            properties: Some(serde_json::Map::new()),
+            locale: None,
+        };
+        assert!(validate_params(&params).is_ok());
+    }
+
+    #[test]
+    fn test_validate_params_create_arc_missing_to_key() {
+        let params = WriteParams {
+            operation: WriteOperation::CreateArc,
+            class: None,
+            key: None,
+            arc_class: Some("TARGETS".to_string()),
+            from_key: Some("seo:qr-code@fr-FR".to_string()),
+            to_key: None,
+            properties: None,
+            locale: None,
+        };
+        let err = validate_params(&params).unwrap_err();
+        assert!(err.to_string().contains("to_key"));
     }
 }
