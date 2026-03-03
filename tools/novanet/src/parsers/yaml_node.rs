@@ -502,13 +502,12 @@ node:
         // - v11.4: Added containers (+3), removed obsolete SEO types (-4)
         // - v11.5: Moved Locale to shared/config, consolidated SEO/GEO to shared/knowledge
         // - v0.12.0: ADR-024 trait rename (defined/authored/imported/generated/retrieved)
-        // v0.12.5: ADR-028 - PageStructure/PageInstruction deleted, Country added
-        // v0.12.5: ADR-028 Brand Architecture - BrandIdentity → Brand + BrandDesign + BrandPrinciples + PromptStyle
-        let nodes = load_all_nodes(root).expect("should parse all 61 nodes");
+        // v0.16: AudiencePersona/ChannelSurface removed (unclear concepts, deferred)
+        let nodes = load_all_nodes(root).expect("should parse all 59 nodes");
         assert_eq!(
             nodes.len(),
-            61,
-            "expected 61 YAML node files (v0.12.5: 40 shared + 21 org)"
+            59,
+            "expected 59 YAML node files (v0.16: 40 shared + 19 org)"
         );
 
         // Every node has a non-empty name, realm, and layer
@@ -531,12 +530,12 @@ node:
         }
 
         // Verify trait distribution (2 realms: shared + org)
-        // v0.12.5: 61 nodes (40 shared + 21 org) - ADR-028 Brand Architecture
+        // v0.16: 59 nodes (40 shared + 19 org) - removed AudiencePersona/ChannelSurface
         let count = |t: NodeTrait| nodes.iter().filter(|n| n.def.node_trait == t).count();
         assert_eq!(
             count(NodeTrait::Defined),
-            33,
-            "defined count (v0.12.5: 33 defined nodes incl. Brand, BrandDesign, BrandPrinciples, PromptStyle)"
+            31,
+            "defined count (v0.16: 31 defined nodes, -2 from AudiencePersona/ChannelSurface)"
         );
         assert_eq!(
             count(NodeTrait::Authored),
@@ -570,8 +569,8 @@ node:
         );
         assert_eq!(
             realm_count("org"),
-            21,
-            "org realm count (v0.12.5: 21 org nodes incl. Brand Architecture)"
+            19,
+            "org realm count (v0.16: 19 org nodes, -2 from AudiencePersona/ChannelSurface)"
         );
 
         // Spot-check known nodes

@@ -319,8 +319,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:OF_CLASS]"))
             .count();
         assert_eq!(
-            of_class, 61,
-            "expected 61 OF_CLASS statements (40 shared + 21 org)"
+            of_class, 59,
+            "expected 59 OF_CLASS statements (40 shared + 19 org, v0.16 cleanup)"
         );
 
         // 2 realms present (v11.3: shared + org)
@@ -338,7 +338,7 @@ mod tests {
         assert!(cypher.contains("Shared > Knowledge (24 types)")); // v11.4: +2 containers, -4 obsolete
 
         // v0.12.5 + Brand Architecture: Header
-        assert!(cypher.contains("Total: 61 node types"));
+        assert!(cypher.contains("Total: 59 node types"));
 
         // Verification query present
         assert!(cypher.contains("VERIFICATION QUERY"));

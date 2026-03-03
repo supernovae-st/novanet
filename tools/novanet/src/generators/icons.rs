@@ -198,7 +198,7 @@ mod tests {
         assert!(output.contains("SINGLE SOURCE OF TRUTH"));
 
         // v0.12.5: 61 nodes with dual format
-        assert!(output.contains("NODE ICONS (61 nodes)"));
+        assert!(output.contains("NODE ICONS (59 nodes)"));
 
         // Should have import statement
         assert!(output.contains("import type { NodeType } from '@novanet/core/types'"));
