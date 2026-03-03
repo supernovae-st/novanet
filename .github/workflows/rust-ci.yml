@@ -72,7 +72,7 @@ jobs:
         os: [ubuntu-latest, macos-latest]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
@@ -110,7 +110,7 @@ jobs:
         os: [ubuntu-latest, macos-latest]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install Rust toolchain (${{ matrix.rust }})
         uses: dtolnay/rust-toolchain@master
@@ -146,7 +146,7 @@ jobs:
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: test-results-${{ matrix.rust }}-${{ matrix.os }}
           path: tools/novanet/test-results.txt
@@ -163,7 +163,7 @@ jobs:
     needs: check
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
@@ -194,7 +194,7 @@ jobs:
           echo "Coverage: $COVERAGE%"
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           files: tools/novanet/lcov.info
           flags: rust
@@ -205,7 +205,7 @@ jobs:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload coverage artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: coverage-report
           path: |
@@ -237,7 +237,7 @@ jobs:
     if: always() && (needs.check.result == 'success' || needs.check.result == 'skipped')
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
@@ -270,7 +270,7 @@ jobs:
 
       - name: Upload security reports
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: security-reports
           path: |
@@ -281,7 +281,7 @@ jobs:
 
       - name: Create security issue on vulnerabilities (scheduled only)
         if: github.event_name == 'schedule' && steps.audit.outputs.vulnerabilities != '0'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const vulns = '${{ steps.audit.outputs.vulnerabilities }}';
@@ -335,7 +335,7 @@ jobs:
       arc_count: ${{ steps.arcs.outputs.count }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
@@ -457,7 +457,7 @@ jobs:
     needs: check
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
@@ -539,7 +539,7 @@ jobs:
             target: aarch64-apple-darwin
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
@@ -557,7 +557,7 @@ jobs:
         run: cargo build --release --target ${{ matrix.target }}
 
       - name: Upload binary artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.artifact }}
           path: tools/novanet/target/${{ matrix.target }}/release/novanet
@@ -575,7 +575,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Generate summary comment
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const checkResult = '${{ needs.check.result }}';
@@ -665,7 +665,7 @@ jobs:
       contents: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: main
 

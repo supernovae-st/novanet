@@ -26,7 +26,7 @@ jobs:
     name: cargo-geiger (unsafe code)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Install Rust toolchain (nightly for geiger)
         uses: dtolnay/rust-toolchain@nightly
         with:
@@ -46,7 +46,7 @@ jobs:
         working-directory: tools/novanet-mcp
         run: cargo geiger --all-features 2>&1 | tee geiger-mcp.txt
       - name: Upload geiger reports
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: geiger-reports
           path: |
@@ -66,7 +66,7 @@ jobs:
     container:
       image: semgrep/semgrep
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Run Semgrep on Rust sources
         run: >
           semgrep scan
@@ -80,7 +80,7 @@ jobs:
           SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
         continue-on-error: true
       - name: Upload Semgrep SARIF to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         if: always()
         with:
           sarif_file: semgrep-results.sarif

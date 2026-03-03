@@ -26,11 +26,11 @@ jobs:
     name: "🔧 Station 1: Format"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       # TypeScript formatting
       - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
@@ -49,11 +49,11 @@ jobs:
     name: "📎 Station 2: Lint"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       # TypeScript linting
       - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
@@ -78,11 +78,11 @@ jobs:
     name: "🧪 Station 3: Tests"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       # TypeScript tests
       - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
@@ -106,7 +106,7 @@ jobs:
     name: "📊 Station 4: Coverage"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       # Rust coverage
       - uses: dtolnay/rust-toolchain@master
@@ -136,11 +136,11 @@ jobs:
     name: "📖 Station 5: Docs"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       # TypeScript type-check (docs proxy)
       - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
@@ -163,11 +163,11 @@ jobs:
     name: "🔒 Station 6: Security"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       # TypeScript audit
       - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
@@ -198,7 +198,7 @@ jobs:
     name: "🤖 Station 7: CodeRabbit"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - run: |
           echo "CodeRabbit AI review"
           echo "If CodeRabbit GitHub App is installed, it reviews automatically."
@@ -209,7 +209,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Claude AI Review (placeholder)
@@ -225,7 +225,7 @@ jobs:
     name: "📝 Station 9: Ship's Log"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Check commit messages
@@ -250,11 +250,11 @@ jobs:
     name: "📐 Station 10: Schema Sync"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       # Schema validation via pnpm (runs Rust CLI internally)
       - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
@@ -291,7 +291,7 @@ jobs:
       - station-9-commits
       - station-10-schema
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - run: |
           echo ""
           echo "╔═══════════════════════════════════════════════════════════════╗"
