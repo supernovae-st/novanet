@@ -151,6 +151,9 @@ enum Commands {
         /// Non-interactive mode (use provided values or defaults)
         #[arg(long)]
         non_interactive: bool,
+        /// NovaNet monorepo root path (absolute path to directory containing pnpm-workspace.yaml)
+        #[arg(long)]
+        root: Option<String>,
         /// Neo4j URI (default: bolt://localhost:7687)
         #[arg(long)]
         neo4j_uri: Option<String>,
@@ -1074,6 +1077,7 @@ async fn main() -> color_eyre::Result<()> {
         // ── Init (User config) ──────────────────────────────────────────
         Commands::Init {
             non_interactive,
+            root,
             neo4j_uri,
             neo4j_user,
             neo4j_password,
@@ -1085,6 +1089,7 @@ async fn main() -> color_eyre::Result<()> {
             } else {
                 novanet::commands::init::run_init(
                     non_interactive,
+                    root.as_deref(),
                     neo4j_uri.as_deref(),
                     neo4j_user.as_deref(),
                     neo4j_password.as_deref(),

@@ -3,7 +3,7 @@
 use std::path::{Path, PathBuf};
 
 /// Resolve the monorepo root directory.
-/// Priority: 1) --root flag  2) NOVANET_ROOT env  3) walk up to pnpm-workspace.yaml
+/// Priority: 1) --root flag  2) NOVANET_ROOT env  3) ~/.novanet/config.toml  4) walk up to pnpm-workspace.yaml
 pub fn resolve_root(explicit: Option<&Path>) -> crate::Result<PathBuf> {
     if let Some(root) = explicit {
         return Ok(root.to_path_buf());
@@ -16,6 +16,16 @@ pub fn resolve_root(explicit: Option<&Path>) -> crate::Result<PathBuf> {
         }
     }
 
+    // Check user config for root path
+    if let Ok(config) = crate::user_config::UserConfig::load() {
+        if let Some(ref root_str) = config.cli.root {
+            let path = PathBuf::from(root_str);
+            if path.join("pnpm-workspace.yaml").exists() {
+                return Ok(path);
+            }
+        }
+    }
+
     // Walk up from current directory to find pnpm-workspace.yaml
     let mut dir = std::env::current_dir().map_err(crate::NovaNetError::Io)?;
     loop {
@@ -25,7 +35,7 @@ pub fn resolve_root(explicit: Option<&Path>) -> crate::Result<PathBuf> {
         if !dir.pop() {
             return Err(crate::NovaNetError::Validation(
                 "Could not find monorepo root (no pnpm-workspace.yaml in parent directories). \
-                 Use --root or set NOVANET_ROOT."
+                 Use --root, set NOVANET_ROOT, or run 'novanet init' to configure."
                     .to_string(),
             ));
         }

@@ -64,6 +64,10 @@ pub struct CliConfig {
     /// Show verbose output by default
     #[serde(default)]
     pub verbose: bool,
+
+    /// NovaNet monorepo root path (alternative to NOVANET_ROOT env var)
+    #[serde(default)]
+    pub root: Option<String>,
 }
 
 impl UserConfig {
@@ -208,6 +212,7 @@ mod tests {
             cli: CliConfig {
                 default_format: Some("json".to_string()),
                 verbose: true,
+                root: Some("/path/to/novanet".to_string()),
             },
         };
 
@@ -217,5 +222,6 @@ mod tests {
         assert_eq!(parsed.neo4j.uri, config.neo4j.uri);
         assert_eq!(parsed.neo4j.password, config.neo4j.password);
         assert_eq!(parsed.cli.verbose, config.cli.verbose);
+        assert_eq!(parsed.cli.root, config.cli.root);
     }
 }
