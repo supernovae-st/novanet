@@ -88,6 +88,7 @@ static HEX_COLOR_CACHE: LazyLock<FxHashMap<&'static str, Color>> = LazyLock::new
     map.insert("#b58900", Color::Rgb(181, 137, 0)); // GENERATED
     // Arc family colors
     map.insert("#ec4899", Color::Rgb(236, 72, 153)); // MINING
+    map.insert("#6366f1", Color::Rgb(99, 102, 241)); // SCHEMA (v0.13.1)
     map
 });
 
@@ -348,7 +349,7 @@ pub mod traits {
 // ARC FAMILY COLORS (from arc-families/*.yaml)
 // =============================================================================
 
-/// Arc family color definitions.
+/// Arc family color definitions (v0.13.1: 6 families including schema).
 pub mod arc_family {
     use super::*;
 
@@ -357,6 +358,7 @@ pub mod arc_family {
     pub const SEMANTIC_HEX: &str = "#f97316";
     pub const GENERATION_HEX: &str = "#8b5cf6";
     pub const MINING_HEX: &str = "#ec4899";
+    pub const SCHEMA_HEX: &str = "#6366f1"; // v0.13.1: indigo for meta-schema
 
     // 256-color palette
     pub const OWNERSHIP_256: u8 = 33;
@@ -364,6 +366,7 @@ pub mod arc_family {
     pub const SEMANTIC_256: u8 = 208;
     pub const GENERATION_256: u8 = 141;
     pub const MINING_256: u8 = 205;
+    pub const SCHEMA_256: u8 = 99; // v0.13.1: indigo
 
     // 16-color palette
     pub const OWNERSHIP_16: Color = Color::Blue;
@@ -371,6 +374,7 @@ pub mod arc_family {
     pub const SEMANTIC_16: Color = Color::Yellow;
     pub const GENERATION_16: Color = Color::Magenta;
     pub const MINING_16: Color = Color::LightMagenta;
+    pub const SCHEMA_16: Color = Color::Blue; // v0.13.1: blue fallback
 
     /// Get arc family color for a given color mode.
     pub fn color(family: &str, mode: ColorMode) -> Color {
@@ -381,6 +385,7 @@ pub mod arc_family {
                 "semantic" => hex_to_color(SEMANTIC_HEX),
                 "generation" => hex_to_color(GENERATION_HEX),
                 "mining" => hex_to_color(MINING_HEX),
+                "schema" => hex_to_color(SCHEMA_HEX),
                 _ => Color::White,
             },
             ColorMode::Color256 => match family {
@@ -389,6 +394,7 @@ pub mod arc_family {
                 "semantic" => Color::Indexed(SEMANTIC_256),
                 "generation" => Color::Indexed(GENERATION_256),
                 "mining" => Color::Indexed(MINING_256),
+                "schema" => Color::Indexed(SCHEMA_256),
                 _ => Color::White,
             },
             ColorMode::Color16 => match family {
@@ -397,6 +403,7 @@ pub mod arc_family {
                 "semantic" => SEMANTIC_16,
                 "generation" => GENERATION_16,
                 "mining" => MINING_16,
+                "schema" => SCHEMA_16,
                 _ => Color::White,
             },
         }
@@ -505,12 +512,13 @@ impl Icons {
         icons.traits.insert("generated".into(), "★".into()); // star for LLM-generated
         icons.traits.insert("retrieved".into(), "▪".into()); // was: aggregated
 
-        // Arc families
+        // Arc families (v0.13.1: 6 families including schema)
         icons.arc_families.insert("ownership".into(), "→".into());
         icons.arc_families.insert("localization".into(), "⇢".into());
         icons.arc_families.insert("semantic".into(), "~".into());
         icons.arc_families.insert("generation".into(), "⇒".into());
         icons.arc_families.insert("mining".into(), "⇝".into());
+        icons.arc_families.insert("schema".into(), "≡".into());
 
         // States
         icons.states.insert("no_connection".into(), "⚠".into());
@@ -1265,7 +1273,7 @@ mod tests {
 
     #[test]
     fn test_arc_family_color_all_families() {
-        // Test all 5 arc families return RGB colors in TrueColor mode
+        // Test all 6 arc families return RGB colors in TrueColor mode (v0.13.1)
         let mode = ColorMode::TrueColor;
 
         // ownership: #3b82f6 -> RGB(59, 130, 246)
@@ -1307,6 +1315,14 @@ mod tests {
             "mining should return RGB color"
         );
         assert_eq!(mining, Color::Rgb(236, 72, 153));
+
+        // schema: #6366f1 -> RGB(99, 102, 241) (v0.13.1)
+        let schema = arc_family::color("schema", mode);
+        assert!(
+            matches!(schema, Color::Rgb(..)),
+            "schema should return RGB color"
+        );
+        assert_eq!(schema, Color::Rgb(99, 102, 241));
     }
 
     #[test]

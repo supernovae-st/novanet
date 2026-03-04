@@ -26,13 +26,14 @@ use crate::tui::unicode::truncate_to_width;
 // ARC FAMILY DEFINITIONS
 // =============================================================================
 
-/// Canonical order for arc families.
-pub const ARC_FAMILY_ORDER: [&str; 5] = [
+/// Canonical order for arc families (v0.13.1: 6 families including schema).
+pub const ARC_FAMILY_ORDER: [&str; 6] = [
     "ownership",
     "localization",
     "semantic",
     "generation",
     "mining",
+    "schema",
 ];
 
 /// Arc family info for rendering.
@@ -60,6 +61,7 @@ fn arc_family_symbol(key: &str) -> &'static str {
         "semantic" => "\u{007e}",     // ~
         "generation" => "\u{21d2}",   // ⇒
         "mining" => "\u{21dd}",       // ⇝
+        "schema" => "\u{2261}",       // ≡ (v0.13.1: meta-schema relationships)
         _ => "\u{2192}",              // →
     }
 }
@@ -72,6 +74,7 @@ fn arc_family_display_name(key: &str) -> &str {
         "semantic" => "SEMANTIC",
         "generation" => "GENERATION",
         "mining" => "MINING",
+        "schema" => "SCHEMA",
         _ => key,
     }
 }
@@ -90,6 +93,9 @@ fn arc_family_description(key: &str) -> &str {
         }
         "generation" => "LLM generation flow. GENERATES, PRODUCES arcs tracking what creates what.",
         "mining" => "Data extraction and derivation. EXTRACTS, DERIVES arcs for computed content.",
+        "schema" => {
+            "Meta-schema relationships. OF_CLASS, FROM_CLASS, TO_CLASS for graph structure."
+        }
         _ => "Unknown arc family.",
     }
 }
@@ -102,6 +108,7 @@ fn arc_family_examples(key: &str) -> Vec<&'static str> {
         "semantic" => vec!["USES_TERM", "REFERENCES", "USES_EXPRESSION"],
         "generation" => vec!["GENERATES", "PRODUCES"],
         "mining" => vec!["EXTRACTS", "DERIVES"],
+        "schema" => vec!["OF_CLASS", "FROM_CLASS", "TO_CLASS"],
         _ => vec![],
     }
 }
@@ -186,7 +193,8 @@ fn render_arc_families(f: &mut Frame, app: &App, area: Rect) {
     let inner = block.inner(area);
     f.render_widget(block, area);
 
-    // Split into 2 rows: top row (3 families), bottom row (2 families)
+    // Split into 2 rows: top row (3 families), bottom row (3 families)
+    // v0.13.1: Now 6 families (added schema)
     let rows = Layout::default()
         .direction(Direction::Vertical)
         .constraints([Constraint::Percentage(50), Constraint::Percentage(50)])
@@ -207,20 +215,19 @@ fn render_arc_families(f: &mut Frame, app: &App, area: Rect) {
         render_family_card(f, card, top_cols[i], is_selected, theme);
     }
 
-    // Bottom row: generation, mining (centered)
+    // Bottom row: generation, mining, schema (3 families)
     let bottom_cols = Layout::default()
         .direction(Direction::Horizontal)
         .constraints([
-            Constraint::Percentage(17), // left margin
             Constraint::Percentage(33),
+            Constraint::Percentage(34),
             Constraint::Percentage(33),
-            Constraint::Percentage(17), // right margin
         ])
         .split(rows[1]);
 
-    for (i, card) in cards.iter().skip(3).take(2).enumerate() {
+    for (i, card) in cards.iter().skip(3).take(3).enumerate() {
         let is_selected = (i + 3) == selected_idx;
-        render_family_card(f, card, bottom_cols[i + 1], is_selected, theme);
+        render_family_card(f, card, bottom_cols[i], is_selected, theme);
     }
 }
 
@@ -395,12 +402,14 @@ mod tests {
 
     #[test]
     fn test_arc_family_order() {
-        assert_eq!(ARC_FAMILY_ORDER.len(), 5);
+        // v0.13.1: 6 families including schema
+        assert_eq!(ARC_FAMILY_ORDER.len(), 6);
         assert_eq!(ARC_FAMILY_ORDER[0], "ownership");
         assert_eq!(ARC_FAMILY_ORDER[1], "localization");
         assert_eq!(ARC_FAMILY_ORDER[2], "semantic");
         assert_eq!(ARC_FAMILY_ORDER[3], "generation");
         assert_eq!(ARC_FAMILY_ORDER[4], "mining");
+        assert_eq!(ARC_FAMILY_ORDER[5], "schema");
     }
 
     #[test]
@@ -410,6 +419,7 @@ mod tests {
         assert_eq!(arc_family_symbol("semantic"), "\u{007e}");
         assert_eq!(arc_family_symbol("generation"), "\u{21d2}");
         assert_eq!(arc_family_symbol("mining"), "\u{21dd}");
+        assert_eq!(arc_family_symbol("schema"), "\u{2261}"); // v0.13.1
         assert_eq!(arc_family_symbol("unknown"), "\u{2192}"); // fallback
     }
 
@@ -420,6 +430,7 @@ mod tests {
         assert_eq!(arc_family_display_name("semantic"), "SEMANTIC");
         assert_eq!(arc_family_display_name("generation"), "GENERATION");
         assert_eq!(arc_family_display_name("mining"), "MINING");
+        assert_eq!(arc_family_display_name("schema"), "SCHEMA"); // v0.13.1
     }
 
     #[test]
@@ -430,6 +441,12 @@ mod tests {
 
         let examples = arc_family_examples("semantic");
         assert!(examples.contains(&"USES_TERM"));
+
+        // v0.13.1: schema arc family
+        let examples = arc_family_examples("schema");
+        assert!(examples.contains(&"OF_CLASS"));
+        assert!(examples.contains(&"FROM_CLASS"));
+        assert!(examples.contains(&"TO_CLASS"));
     }
 
     #[test]
@@ -439,5 +456,9 @@ mod tests {
 
         let desc = arc_family_description("localization");
         assert!(desc.contains("Locale"));
+
+        // v0.13.1: schema arc family
+        let desc = arc_family_description("schema");
+        assert!(desc.contains("Meta-schema"));
     }
 }

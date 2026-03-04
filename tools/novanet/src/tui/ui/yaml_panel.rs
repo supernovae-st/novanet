@@ -16,7 +16,7 @@ use ratatui::widgets::{
 };
 
 use super::{COLOR_MUTED_TEXT, STYLE_DIM, scroll_indicator};
-use crate::tui::app::{App, InfoBox, SourceTab};
+use crate::tui::app::{App, SourceTab};
 
 // =============================================================================
 // BOX VISUAL STATES v0.13 (enhanced palette)
@@ -84,15 +84,16 @@ const STYLE_YAML_TEXT: Style = Style::new().fg(Color::White);
 // PUBLIC API
 // =============================================================================
 
-/// Render the YAML panel (SOURCE box only).
-/// v0.13.1: DIAGRAM removed (panel simplification). SOURCE takes full height.
+/// Render the YAML panel [2] (SOURCE box only).
+/// v0.16.3: Updated to use Focus::Yaml for panel selection.
 ///
 /// Visual states:
-/// - Selected (cyan): This specific box is active (Tab target)
-/// - Unfocused (dim): This box is NOT selected
+/// - Selected (cyan): This panel is focused (Focus::Yaml)
+/// - Unfocused (dim): This panel is NOT focused
 pub fn render_yaml_panel(f: &mut Frame, area: Rect, app: &App) {
-    // v0.13.1: SOURCE takes full height (DIAGRAM removed)
-    let source_selected = app.selected_box == InfoBox::Source;
+    // v0.16.3: Use Focus instead of selected_box for panel focus
+    use crate::tui::app::Focus;
+    let source_selected = app.focus == Focus::Yaml;
     render_source_box(f, area, app, source_selected);
 }
 
@@ -605,12 +606,13 @@ fn render_yaml_content_in_box(
     f.render_widget(paragraph, area);
 
     // Add scrollbar if content exceeds visible area
+    // v0.16.4: Use Unicode symbols for visual consistency with other panels
     if total_lines > visible_height {
         let scrollbar = Scrollbar::new(ScrollbarOrientation::VerticalRight)
-            .begin_symbol(Some("^"))
-            .end_symbol(Some("v"))
-            .track_symbol(Some("|"))
-            .thumb_symbol("#");
+            .begin_symbol(Some("▲"))
+            .end_symbol(Some("▼"))
+            .track_symbol(Some("│"))
+            .thumb_symbol("█");
 
         let mut scrollbar_state = ScrollbarState::new(total_lines.saturating_sub(visible_height))
             .position(app.yaml.scroll);

@@ -20,7 +20,7 @@ use super::{
     COLOR_ACTIVE_CLASS_BG, COLOR_ARC_FAMILY, COLOR_DESC_TEXT, COLOR_HIGHLIGHT_BG, COLOR_INSTANCE,
     COLOR_MUTED_TEXT, COLOR_UNFOCUSED_BORDER, EmptyStateClass, STYLE_DIM, STYLE_HIGHLIGHT,
     STYLE_PRIMARY, STYLE_UNFOCUSED, cardinality_abbrev, layer_badge_icon, realm_badge_icon,
-    render_empty_state, spinner, trait_abbrev, trait_icon,
+    render_empty_state, spinner, trait_icon,
 };
 use crate::tui::app::{App, Focus};
 use crate::tui::data::ArcDirection;
@@ -685,18 +685,13 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     // Calculate total instances in this layer
                     let layer_instance_count: i64 =
                         layer.classes.iter().map(|k| k.instance_count).sum();
-                    let layer_is_empty = layer_instance_count == 0;
 
                     // Show expand icon only if layer has content
                     let layer_icon = expand_icon(layer_collapsed);
 
-                    // In Data mode: gray out empty layers, show instance count
+                    // v0.16.4: All layers visible (no dimming for empty layers)
                     let layer_color = hex_to_color(&layer.color);
-                    let text_color = if is_data_mode && layer_is_empty {
-                        COLOR_MUTED_TEXT // Gray for empty layers
-                    } else {
-                        layer_color
-                    };
+                    let text_color = layer_color;
 
                     // v11.6.1: Custom Layer line with counts and right-aligned badge
                     // Format: [cursor][prefix][chevron] [icon] [name]  [◇classes]  │ [badge] │L│
@@ -833,10 +828,15 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             // v10.6: Add trait icon prefix
                             // v11.3: Colored trait icons (from visual-encoding.yaml + traits/*.yaml)
                             // v11.5: Enhanced display with all useful metrics
+                            // v0.16.3: Populated icon (● vs ○) for visual clarity
                             // Format: Name (instances) →out←in req/tot
                             let class_is_empty = class_info.instance_count == 0;
-                            let t_icon = trait_icon(&class_info.trait_name);
-                            let t_color = app.theme.trait_color(&class_info.trait_name);
+                            let instance_count = class_info.instance_count;
+
+                            // v0.16.3: Use populated icon (● filled = has data, ○ empty = no data)
+                            // This replaces trait icon for better "what has data?" visibility
+                            let populated_icon = if class_is_empty { "○" } else { "●" };
+                            let _t_color = app.theme.trait_color(&class_info.trait_name);
 
                             // Count arcs by direction
                             let outgoing = class_info
@@ -870,33 +870,57 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             };
 
                             // Build display text with all metrics
-                            let (display_text, class_text_color) = if is_data_mode {
+                            // v0.16.4: New format: ● 200 Name →out ←in ⊞req/tot
+                            // Count on left, no (def) abbreviation
+                            let (display_text, class_text_color, count_str, count_color) = if is_data_mode {
                                 // Data mode: instances + arcs + props + health
                                 let health_badge = format_health_badge(
                                     class_info.health_percent,
                                     class_info.issues_count,
                                 );
+
+                                // v0.16.4: Count string (right-aligned 5 chars): "  200" or "   - "
+                                let cnt_str = if class_is_empty {
+                                    "  - ".to_string()
+                                } else {
+                                    format!("{:>4}", instance_count)
+                                };
+
                                 let text = format!(
-                                    "{} ({}){}{}{}",
+                                    "{}{}{}{}",
                                     class_info.display_name,
-                                    class_info.instance_count,
                                     arc_suffix,
                                     props_suffix,
                                     health_badge
                                 );
-                                let color = if class_is_empty {
-                                    COLOR_MUTED_TEXT // Gray for empty classes
+
+                                // v0.16.4: Dim text for empty classes, white for populated
+                                let text_color = if class_is_empty {
+                                    Color::Rgb(140, 140, 150) // Slightly dimmed
                                 } else {
                                     Color::White
                                 };
-                                (text, color)
+
+                                // v0.16.4: Count color based on quantity
+                                // Green for 1-99, Cyan for 100+, Yellow for 1000+
+                                let cnt_color = if instance_count >= 1000 {
+                                    Color::Yellow
+                                } else if instance_count >= 100 {
+                                    Color::Cyan
+                                } else if instance_count > 0 {
+                                    Color::Green
+                                } else {
+                                    Color::Rgb(100, 100, 110) // Dim gray for empty
+                                };
+
+                                (text, text_color, cnt_str, cnt_color)
                             } else {
                                 // Meta mode: arcs + props (no instance count)
                                 let text = format!(
                                     "{}{}{}",
                                     class_info.display_name, arc_suffix, props_suffix
                                 );
-                                (text, Color::White)
+                                (text, Color::White, "    ".to_string(), Color::White)
                             };
 
                             let prefix = format!(
@@ -918,16 +942,15 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 None
                             };
 
-                            // v11.6: Custom Class line with right-aligned classification badges
-                            // Format: [cursor] [prefix] [chevron] [trait(abbrev)] [name (count)] │ [badges]
+                            // v0.16.4: New Class line format
+                            // Format: [cursor] [prefix] [icon] [●/○] [count] [name] [arcs] [props] │
                             let is_cursor = idx == app.tree_cursor;
                             let cursor_char = if is_cursor { ">" } else { " " };
-                            let t_abbrev = trait_abbrev(&class_info.trait_name);
 
-                            // Build left side content with trait icon + abbrev: ■(i)
+                            // Build left side content: ● 200 Name →out ←in ⊞req/tot
                             let left_content = format!(
-                                "{}{}{} {}({}) {}",
-                                cursor_char, prefix, class_icon, t_icon, t_abbrev, display_text
+                                "{}{}{} {} {} {}",
+                                cursor_char, prefix, class_icon, populated_icon, count_str, display_text
                             );
 
                             // v0.13.1: Simple color bar only (no repeated text badges)
@@ -960,6 +983,13 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                     Style::default()
                                 };
 
+                                // v0.16.4: New format: ● 200 Name (no trait abbrev)
+                                let icon_color = if class_is_empty {
+                                    Color::Rgb(100, 100, 110) // Dim gray
+                                } else {
+                                    Color::Green
+                                };
+
                                 let mut spans: Vec<Span> = vec![
                                     Span::styled(cursor_char, base_style),
                                     Span::styled(prefix.clone(), base_style.fg(layer_color)),
@@ -967,10 +997,15 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                         format!("{} ", class_icon),
                                         base_style.fg(class_text_color),
                                     ),
-                                    // v11.6: trait icon with abbrev in parens: ■(i)
+                                    // v0.16.4: populated icon (● vs ○)
                                     Span::styled(
-                                        format!("{}({}) ", t_icon, t_abbrev),
-                                        base_style.fg(t_color),
+                                        format!("{} ", populated_icon),
+                                        base_style.fg(icon_color),
+                                    ),
+                                    // v0.16.4: count with color coding
+                                    Span::styled(
+                                        format!("{} ", count_str),
+                                        base_style.fg(count_color),
                                     ),
                                 ];
 
@@ -992,170 +1027,119 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
                             // In Data mode, show instances under Class (if not collapsed)
                             if is_data_mode && !class_collapsed {
-                                // Special case: Entity Class shows categories instead of flat instances
+                                // v0.16.4: Entity shows flat instances with category suffix + native count
+                                // v0.16.5: Fallback to instances["Entity"] if entity_category_instances empty
+                                let has_category_instances = !app.tree.entity_category_instances.is_empty();
+
                                 if class_info.key == "Entity"
                                     && !app.tree.entity_categories.is_empty()
+                                    && has_category_instances
                                 {
-                                    let cat_count = app.tree.entity_categories.len();
-                                    for (ci, category) in
-                                        app.tree.entity_categories.iter().enumerate()
-                                    {
-                                        let cat_is_last = ci == cat_count - 1;
-                                        let cat_key = format!("category:{}", category.key);
-                                        let cat_collapsed = app.tree.is_collapsed(&cat_key);
-                                        let cat_icon = expand_icon(cat_collapsed);
-                                        let _is_cursor = idx == app.tree_cursor;
+                                    // Build reverse lookup: entity_key -> category_key
+                                    let mut entity_to_category: rustc_hash::FxHashMap<&str, &str> =
+                                        rustc_hash::FxHashMap::default();
+                                    for category in &app.tree.entity_categories {
+                                        if let Some(instances) =
+                                            app.tree.entity_category_instances.get(&category.key)
+                                        {
+                                            for inst in instances {
+                                                entity_to_category.insert(&inst.key, &category.key);
+                                            }
+                                        }
+                                    }
 
-                                        let cat_prefix = format!(
+                                    // Collect all Entity instances flat
+                                    let all_entities: Vec<_> = app
+                                        .tree
+                                        .entity_categories
+                                        .iter()
+                                        .flat_map(|cat| {
+                                            app.tree
+                                                .entity_category_instances
+                                                .get(&cat.key)
+                                                .map(|v| v.iter())
+                                                .into_iter()
+                                                .flatten()
+                                        })
+                                        .collect();
+
+                                    let inst_count = all_entities.len();
+                                    for (ii, instance) in all_entities.iter().enumerate() {
+                                        let inst_is_last = ii == inst_count - 1;
+                                        let is_cursor = idx == app.tree_cursor;
+
+                                        // Get category for this entity
+                                        let category_suffix = entity_to_category
+                                            .get(instance.key.as_str())
+                                            .map(|c| c.to_lowercase())
+                                            .unwrap_or_default();
+
+                                        // Count EntityNative (HAS_NATIVE outgoing arcs)
+                                        let native_count = instance
+                                            .outgoing_arcs
+                                            .iter()
+                                            .filter(|a| a.arc_type == "HAS_NATIVE")
+                                            .count();
+                                        let native_icon = if native_count > 0 { "◆" } else { "◇" };
+                                        let native_color = if native_count > 0 {
+                                            Color::Green
+                                        } else {
+                                            Color::Rgb(100, 100, 110)
+                                        };
+
+                                        let style = if is_cursor && focused {
+                                            Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White)
+                                        } else {
+                                            Style::default().fg(COLOR_INSTANCE)
+                                        };
+
+                                        let cursor_char = if is_cursor { ">" } else { " " };
+                                        let tree_prefix = format!(
                                             "{}{}{}{}",
                                             cont(realm_is_last),
                                             cont(layer_is_last),
                                             cont(class_is_last),
-                                            branch(cat_is_last)
+                                            branch(inst_is_last)
                                         );
 
-                                        // Category display: icon, name, and count
-                                        let cat_display = format!(
-                                            "{} {} ({})",
-                                            "◫", category.display_name, category.instance_count
-                                        );
-
-                                        all_lines.push(make_line(
-                                            idx,
-                                            app.tree_cursor,
-                                            focused,
-                                            &cat_prefix,
-                                            cat_icon,
-                                            cat_display,
-                                            layer_color, // line_color
-                                            Color::Cyan, // text_color for categories
-                                            app.search.matches.get(&idx).map(|v| v.as_slice()),
-                                            None, // bg_color
-                                            None, // trait_icon_opt (categories don't have traits)
-                                        ));
-                                        idx += 1;
-
-                                        // Show instances under category if not collapsed
-                                        if !cat_collapsed {
-                                            if let Some(instances) = app
-                                                .tree
-                                                .entity_category_instances
-                                                .get(&category.key)
-                                            {
-                                                let inst_count = instances.len();
-                                                for (ii, instance) in instances.iter().enumerate() {
-                                                    let inst_is_last = ii == inst_count - 1;
-                                                    let is_cursor = idx == app.tree_cursor;
-
-                                                    let style = if is_cursor && focused {
-                                                        Style::default()
-                                                            .bg(COLOR_HIGHLIGHT_BG)
-                                                            .fg(Color::White)
-                                                    } else {
-                                                        Style::default().fg(COLOR_INSTANCE)
-                                                    };
-
-                                                    let cursor_char =
-                                                        if is_cursor { ">" } else { " " };
-
-                                                    // Badge for missing required properties
-                                                    let missing_badge = format_missing_badge(
-                                                        instance.missing_required_count,
-                                                    );
-
-                                                    // Arc count badge (show "..." while loading)
-                                                    let arc_badge = if instance.arcs_loading {
-                                                        " [...]".to_string()
-                                                    } else {
-                                                        format_arc_badge(
-                                                            instance.outgoing_arcs.len(),
-                                                            instance.incoming_arcs.len(),
-                                                        )
-                                                    };
-
-                                                    // Completeness bar
-                                                    let completeness_badge =
-                                                        format_completeness_badge(
-                                                            instance.filled_properties,
-                                                            instance.total_properties,
-                                                        );
-
-                                                    let tree_prefix = format!(
-                                                        "{}{}{}{}{}",
-                                                        cont(realm_is_last),
-                                                        cont(layer_is_last),
-                                                        cont(class_is_last),
-                                                        cont(cat_is_last),
-                                                        branch(inst_is_last)
-                                                    );
-
-                                                    if is_cursor && focused {
-                                                        all_lines.push(Line::from(Span::styled(
-                                                            format!(
-                                                                "{}{}○ {}{}{}{}",
-                                                                cursor_char,
-                                                                tree_prefix,
-                                                                instance.display_name,
-                                                                completeness_badge,
-                                                                arc_badge,
-                                                                missing_badge
-                                                            ),
-                                                            style,
-                                                        )));
-                                                    } else {
-                                                        let mut spans = vec![
-                                                            Span::styled(
-                                                                cursor_char,
-                                                                Style::default(),
-                                                            ),
-                                                            Span::styled(
-                                                                tree_prefix,
-                                                                Style::default().fg(layer_color),
-                                                            ),
-                                                            Span::styled(
-                                                                format!(
-                                                                    "○ {}",
-                                                                    instance.display_name
-                                                                ),
-                                                                style,
-                                                            ),
-                                                        ];
-                                                        if !completeness_badge.is_empty() {
-                                                            let color = if instance
-                                                                .filled_properties
-                                                                == instance.total_properties
-                                                            {
-                                                                Color::Green
-                                                            } else if instance.filled_properties
-                                                                > instance.total_properties / 2
-                                                            {
-                                                                Color::Yellow
-                                                            } else {
-                                                                Color::Red
-                                                            };
-                                                            spans.push(Span::styled(
-                                                                completeness_badge,
-                                                                Style::default().fg(color),
-                                                            ));
-                                                        }
-                                                        if !arc_badge.is_empty() {
-                                                            spans.push(Span::styled(
-                                                                arc_badge,
-                                                                Style::default().fg(Color::Cyan),
-                                                            ));
-                                                        }
-                                                        if !missing_badge.is_empty() {
-                                                            spans.push(Span::styled(
-                                                                missing_badge,
-                                                                Style::default().fg(Color::Red),
-                                                            ));
-                                                        }
-                                                        all_lines.push(Line::from(spans));
-                                                    }
-                                                    idx += 1;
-                                                }
-                                            }
+                                        if is_cursor && focused {
+                                            all_lines.push(Line::from(Span::styled(
+                                                format!(
+                                                    "{}{}○ {}  {}{}  {}",
+                                                    cursor_char,
+                                                    tree_prefix,
+                                                    instance.display_name,
+                                                    native_icon,
+                                                    native_count,
+                                                    category_suffix
+                                                ),
+                                                style,
+                                            )));
+                                        } else {
+                                            let spans = vec![
+                                                Span::styled(cursor_char, Style::default()),
+                                                Span::styled(
+                                                    tree_prefix,
+                                                    Style::default().fg(layer_color),
+                                                ),
+                                                Span::styled(
+                                                    format!("○ {}  ", instance.display_name),
+                                                    style,
+                                                ),
+                                                // Native count
+                                                Span::styled(
+                                                    format!("{}{}", native_icon, native_count),
+                                                    Style::default().fg(native_color),
+                                                ),
+                                                // Category suffix (dim)
+                                                Span::styled(
+                                                    format!("  {}", category_suffix),
+                                                    Style::default().fg(COLOR_MUTED_TEXT),
+                                                ),
+                                            ];
+                                            all_lines.push(Line::from(spans));
                                         }
+                                        idx += 1;
                                     }
                                 } else if let Some(instances) =
                                     app.tree.get_instances(&class_info.key)
@@ -1861,7 +1845,8 @@ pub(super) fn format_completeness_badge(filled: usize, total: usize) -> String {
         return String::new();
     }
     let ratio = filled as f32 / total as f32;
-    let filled_chars = (ratio * 4.0).round() as usize;
+    // v0.16.5: Clamp to 0..=4 to prevent overflow from floating point rounding
+    let filled_chars = (ratio * 4.0).round().min(4.0) as usize;
     let empty_chars = 4 - filled_chars;
     format!(" [{}{}]", "=".repeat(filled_chars), "-".repeat(empty_chars))
 }

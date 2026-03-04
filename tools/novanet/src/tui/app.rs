@@ -87,33 +87,45 @@ impl NavMode {
 }
 
 /// Which panel has focus.
+/// v0.16.3: 4 scrollable panels: Tree [1], Yaml [2], Props [3], Arcs [4]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum Focus {
     #[default]
-    Tree,
-    Info,
-    Graph,
-    Yaml,
+    Tree,  // [1] Left panel - tree navigation
+    Yaml,  // [2] Center panel - source YAML
+    Props, // [3] Right top - properties
+    Arcs,  // [4] Right bottom - relationships
 }
 
 impl Focus {
-    /// Cycle to next focus panel.
+    /// Cycle to next focus panel (Tab).
+    /// Cycle: Tree [1] → Yaml [2] → Props [3] → Arcs [4] → Tree [1]
     pub fn next(self) -> Self {
         match self {
-            Focus::Tree => Focus::Info,
-            Focus::Info => Focus::Graph,
-            Focus::Graph => Focus::Yaml,
-            Focus::Yaml => Focus::Tree,
+            Focus::Tree => Focus::Yaml,
+            Focus::Yaml => Focus::Props,
+            Focus::Props => Focus::Arcs,
+            Focus::Arcs => Focus::Tree,
         }
     }
 
-    /// Cycle to previous focus panel.
+    /// Cycle to previous focus panel (Shift+Tab).
     pub fn prev(self) -> Self {
         match self {
-            Focus::Tree => Focus::Yaml,
-            Focus::Info => Focus::Tree,
-            Focus::Graph => Focus::Info,
-            Focus::Yaml => Focus::Graph,
+            Focus::Tree => Focus::Arcs,
+            Focus::Yaml => Focus::Tree,
+            Focus::Props => Focus::Yaml,
+            Focus::Arcs => Focus::Props,
+        }
+    }
+
+    /// Get panel number for display [1-4].
+    pub fn number(self) -> u8 {
+        match self {
+            Focus::Tree => 1,
+            Focus::Yaml => 2,
+            Focus::Props => 3,
+            Focus::Arcs => 4,
         }
     }
 }
@@ -493,9 +505,15 @@ pub struct App {
     pub source_tab: SourceTab,
     /// Cursor position of the Class when switching to Instance tab.
     source_tab_class_cursor: Option<usize>,
-    /// Info panel scroll (separate from yaml).
-    pub info_scroll: usize,
-    pub info_line_count: usize,
+    // v0.16.3: Separate scroll states for Props and Arcs panels
+    /// Properties panel scroll position.
+    pub props_scroll: usize,
+    /// Properties panel total line count.
+    pub props_line_count: usize,
+    /// Arcs panel scroll position.
+    pub arcs_scroll: usize,
+    /// Arcs panel total line count.
+    pub arcs_line_count: usize,
     /// Cache of YAML file contents (path -> content).
     pub yaml_cache: FxHashMap<String, String>,
     /// Loaded views from views.yaml (single source of truth for TUI + Studio).
@@ -572,8 +590,11 @@ impl App {
             pending_refresh: false,
             source_tab: SourceTab::default(),
             source_tab_class_cursor: None,
-            info_scroll: 0,
-            info_line_count: 0,
+            // v0.16.3: Separate scroll for Props and Arcs panels
+            props_scroll: 0,
+            props_line_count: 0,
+            arcs_scroll: 0,
+            arcs_line_count: 0,
             yaml_cache: FxHashMap::default(),
             loaded_views,
             tick: 0,
@@ -600,12 +621,12 @@ impl App {
     // v0.13.1: yaml_active_section() removed (collapse/peek eliminated)
 
     /// Map selected_box to the appropriate Focus panel.
-    /// Used to update panel focus when navigating between boxes.
+    /// v0.16.3: Updated for 4-panel layout (Tree/Yaml/Props/Arcs).
     pub fn focus_for_selected_box(&self) -> Focus {
         match self.selected_box {
             InfoBox::Tree => Focus::Tree,
-            InfoBox::Header | InfoBox::Properties => Focus::Info,
-            InfoBox::Arcs => Focus::Graph, // v0.13: Arcs panel uses Graph focus
+            InfoBox::Header | InfoBox::Properties => Focus::Props,
+            InfoBox::Arcs => Focus::Arcs,
             InfoBox::Source => Focus::Yaml,
         }
     }
@@ -618,7 +639,11 @@ impl App {
 
         // Reset scroll positions when changing items
         self.yaml.scroll = 0;
-        self.info_scroll = 0;
+        self.props_scroll = 0;
+        self.arcs_scroll = 0;
+        // v0.16.3: Reset property focus when changing tree items
+        self.focused_property_idx = 0;
+        self.expanded_property = false;
 
         // Clear Neo4j data AND pending loads when moving away
         // (prevents race condition where pending load completes after navigation)
@@ -1309,12 +1334,12 @@ impl App {
                     Focus::Yaml => {
                         // v0.13.1: peek mode removed (PROPERTIES panel shows instance data)
                     }
-                    Focus::Info => {
+                    Focus::Props => {
                         // Toggle expanded property text (word-wrap on multiple lines)
                         self.expanded_property = !self.expanded_property;
                     }
-                    Focus::Graph => {
-                        // No-op for Graph focus (future: could activate selected node)
+                    Focus::Arcs => {
+                        // No-op for Arcs focus (future: could navigate to selected arc)
                     }
                 }
                 true
@@ -1356,7 +1381,7 @@ impl App {
                     if let Some(key) = self.tree.collapse_key_at(self.tree_cursor, data_mode) {
                         self.tree.collapse_subtree(&key);
                     }
-                } else if self.focus == Focus::Info && self.selected_box == InfoBox::Properties {
+                } else if self.focus == Focus::Props && self.selected_box == InfoBox::Properties {
                     // v0.13.1: Feature 3 - copy focused property value
                     self.copy_focused_property();
                 }
@@ -1388,12 +1413,14 @@ impl App {
                         self.load_yaml_for_current();
                         // Note: Instance loading removed - use Space/Enter to expand
                     }
-                    Focus::Info => {
-                        self.info_scroll = 0;
-                    }
-                    Focus::Graph => {} // Display-only
                     Focus::Yaml => {
                         self.yaml.scroll = 0;
+                    }
+                    Focus::Props => {
+                        self.props_scroll = 0;
+                    }
+                    Focus::Arcs => {
+                        self.arcs_scroll = 0;
                     }
                 }
                 true
@@ -1407,20 +1434,23 @@ impl App {
                         self.load_yaml_for_current();
                         // Note: Instance loading removed - use Space/Enter to expand
                     }
-                    Focus::Info => {
-                        let max_scroll = self.info_line_count.saturating_sub(INFO_SCROLL_MARGIN);
-                        self.info_scroll = max_scroll;
-                    }
-                    Focus::Graph => {} // Display-only
                     Focus::Yaml => {
                         let max_scroll = self.yaml.line_count.saturating_sub(YAML_SCROLL_MARGIN);
                         self.yaml.scroll = max_scroll;
+                    }
+                    Focus::Props => {
+                        let max_scroll = self.props_line_count.saturating_sub(INFO_SCROLL_MARGIN);
+                        self.props_scroll = max_scroll;
+                    }
+                    Focus::Arcs => {
+                        let max_scroll = self.arcs_line_count.saturating_sub(INFO_SCROLL_MARGIN);
+                        self.arcs_scroll = max_scroll;
                     }
                 }
                 true
             }
 
-            // Navigation: ↑↓ and j/k scroll the focused panel (Graph is display-only)
+            // Navigation: ↑↓ and j/k scroll the focused panel
             KeyCode::Up | KeyCode::Char('k') => {
                 match self.focus {
                     Focus::Tree => {
@@ -1428,26 +1458,27 @@ impl App {
                             self.tree_cursor -= 1;
                             self.ensure_cursor_visible();
                             self.load_yaml_for_current();
-                            // Note: Instance loading removed - use Space/Enter to expand
                         }
                     }
-                    Focus::Info => {
-                        // If Properties box is selected, navigate properties with j/k
-                        if self.selected_box == InfoBox::Properties {
-                            if self.schema_overlay.matched_properties.is_some()
-                                && self.focused_property_idx > 0
-                            {
-                                self.focused_property_idx -= 1;
-                                self.expanded_property = false;
-                            }
-                        } else if self.info_scroll > 0 {
-                            self.info_scroll -= 1;
-                        }
-                    }
-                    Focus::Graph => {} // Display-only panel, no navigation
                     Focus::Yaml => {
                         if self.yaml.scroll > 0 {
                             self.yaml.scroll -= 1;
+                        }
+                    }
+                    Focus::Props => {
+                        // Navigate properties with j/k
+                        if self.schema_overlay.matched_properties.is_some()
+                            && self.focused_property_idx > 0
+                        {
+                            self.focused_property_idx -= 1;
+                            self.expanded_property = false;
+                        } else if self.props_scroll > 0 {
+                            self.props_scroll -= 1;
+                        }
+                    }
+                    Focus::Arcs => {
+                        if self.arcs_scroll > 0 {
+                            self.arcs_scroll -= 1;
                         }
                     }
                 }
@@ -1461,39 +1492,41 @@ impl App {
                             self.tree_cursor += 1;
                             self.ensure_cursor_visible();
                             self.load_yaml_for_current();
-                            // Note: Instance loading removed - use Space/Enter to expand
                         }
                     }
-                    Focus::Info => {
-                        // If Properties box is selected, navigate properties with j/k
-                        if self.selected_box == InfoBox::Properties {
-                            if let Some(matched) = &self.schema_overlay.matched_properties {
-                                let max_idx = matched.len().saturating_sub(1);
-                                if self.focused_property_idx < max_idx {
-                                    self.focused_property_idx += 1;
-                                    self.expanded_property = false;
-                                }
-                            }
-                        } else {
-                            let max_scroll =
-                                self.info_line_count.saturating_sub(INFO_SCROLL_MARGIN);
-                            if self.info_scroll < max_scroll {
-                                self.info_scroll += 1;
-                            }
-                        }
-                    }
-                    Focus::Graph => {} // Display-only panel, no navigation
                     Focus::Yaml => {
                         let max_scroll = self.yaml.line_count.saturating_sub(YAML_SCROLL_MARGIN);
                         if self.yaml.scroll < max_scroll {
                             self.yaml.scroll += 1;
                         }
                     }
+                    Focus::Props => {
+                        // Navigate properties with j/k
+                        if let Some(matched) = &self.schema_overlay.matched_properties {
+                            let max_idx = matched.len().saturating_sub(1);
+                            if self.focused_property_idx < max_idx {
+                                self.focused_property_idx += 1;
+                                self.expanded_property = false;
+                            }
+                        } else {
+                            let max_scroll =
+                                self.props_line_count.saturating_sub(INFO_SCROLL_MARGIN);
+                            if self.props_scroll < max_scroll {
+                                self.props_scroll += 1;
+                            }
+                        }
+                    }
+                    Focus::Arcs => {
+                        let max_scroll = self.arcs_line_count.saturating_sub(INFO_SCROLL_MARGIN);
+                        if self.arcs_scroll < max_scroll {
+                            self.arcs_scroll += 1;
+                        }
+                    }
                 }
                 true
             }
 
-            // Page scroll: d/u vim-style (Graph is display-only)
+            // Page scroll: d/u vim-style
             KeyCode::Char('d') => {
                 match self.focus {
                     Focus::Tree => {
@@ -1501,16 +1534,18 @@ impl App {
                         self.tree_cursor = (self.tree_cursor + PAGE_SCROLL_AMOUNT).min(max);
                         self.ensure_cursor_visible();
                         self.load_yaml_for_current();
-                        // Note: Instance loading removed - use Space/Enter to expand
                     }
-                    Focus::Info => {
-                        let max_scroll = self.info_line_count.saturating_sub(INFO_SCROLL_MARGIN);
-                        self.info_scroll = (self.info_scroll + PAGE_SCROLL_AMOUNT).min(max_scroll);
-                    }
-                    Focus::Graph => {} // Display-only panel, no navigation
                     Focus::Yaml => {
                         let max_scroll = self.yaml.line_count.saturating_sub(YAML_SCROLL_MARGIN);
                         self.yaml.scroll = (self.yaml.scroll + PAGE_SCROLL_AMOUNT).min(max_scroll);
+                    }
+                    Focus::Props => {
+                        let max_scroll = self.props_line_count.saturating_sub(INFO_SCROLL_MARGIN);
+                        self.props_scroll = (self.props_scroll + PAGE_SCROLL_AMOUNT).min(max_scroll);
+                    }
+                    Focus::Arcs => {
+                        let max_scroll = self.arcs_line_count.saturating_sub(INFO_SCROLL_MARGIN);
+                        self.arcs_scroll = (self.arcs_scroll + PAGE_SCROLL_AMOUNT).min(max_scroll);
                     }
                 }
                 true
@@ -1521,14 +1556,15 @@ impl App {
                         self.tree_cursor = self.tree_cursor.saturating_sub(PAGE_SCROLL_AMOUNT);
                         self.ensure_cursor_visible();
                         self.load_yaml_for_current();
-                        // Note: Instance loading removed - use Space/Enter to expand
                     }
-                    Focus::Info => {
-                        self.info_scroll = self.info_scroll.saturating_sub(PAGE_SCROLL_AMOUNT);
-                    }
-                    Focus::Graph => {} // Display-only panel, no navigation
                     Focus::Yaml => {
                         self.yaml.scroll = self.yaml.scroll.saturating_sub(PAGE_SCROLL_AMOUNT);
+                    }
+                    Focus::Props => {
+                        self.props_scroll = self.props_scroll.saturating_sub(PAGE_SCROLL_AMOUNT);
+                    }
+                    Focus::Arcs => {
+                        self.arcs_scroll = self.arcs_scroll.saturating_sub(PAGE_SCROLL_AMOUNT);
                     }
                 }
                 true
@@ -1777,7 +1813,10 @@ impl App {
 
     /// Restore cursor from mode_cursors for the new mode.
     fn restore_mode_cursor(&mut self, new_mode: NavMode) {
-        self.tree_cursor = self.mode_cursors[new_mode.index()];
+        // v0.16.5: Clamp restored cursor to valid bounds for the new mode
+        let restored = self.mode_cursors[new_mode.index()];
+        let max_cursor = self.current_item_count().saturating_sub(1);
+        self.tree_cursor = restored.min(max_cursor);
         self.ensure_cursor_visible();
     }
 
@@ -2104,7 +2143,8 @@ impl App {
         self.tree_cursor = 0;
         self.tree_scroll = 0;
         // Reset other scroll states to avoid stale positions
-        self.info_scroll = 0;
+        self.props_scroll = 0;
+        self.arcs_scroll = 0;
         self.yaml.scroll = 0;
         // Request instance load if not already loaded
         if self.tree.get_instances(&class_key).is_none() {
@@ -2124,15 +2164,24 @@ impl App {
                 format!("{} → {}", r.display_name, l.display_name)
             }
             Some(TreeItem::Class(r, l, k)) => {
+                // v0.16.4: Show trait in breadcrumb (moved from tree display)
+                let trait_abbrev = match k.trait_name.as_str() {
+                    "defined" => "def",
+                    "authored" => "auth",
+                    "imported" => "imp",
+                    "generated" => "gen",
+                    "retrieved" => "ret",
+                    _ => &k.trait_name,
+                };
                 if self.is_graph_mode() && k.instance_count > 0 {
                     format!(
-                        "{} → {} → {} ({})",
-                        r.display_name, l.display_name, k.display_name, k.instance_count
+                        "{} → {} → {} ({}) [{}]",
+                        r.display_name, l.display_name, k.display_name, k.instance_count, trait_abbrev
                     )
                 } else {
                     format!(
-                        "{} → {} → {}",
-                        r.display_name, l.display_name, k.display_name
+                        "{} → {} → {} [{}]",
+                        r.display_name, l.display_name, k.display_name, trait_abbrev
                     )
                 }
             }
@@ -2783,7 +2832,8 @@ mod tests {
         let mut app = create_test_app();
         app.tree_cursor = 5; // Some position
         app.tree_scroll = 3;
-        app.info_scroll = 2;
+        app.props_scroll = 2;
+        app.arcs_scroll = 2;
         app.yaml.scroll = 1;
         app.mode = NavMode::Graph; // Graph mode shows instances
 
@@ -2792,7 +2842,8 @@ mod tests {
         // All cursors/scrolls should be reset
         assert_eq!(app.tree_cursor, 0);
         assert_eq!(app.tree_scroll, 0);
-        assert_eq!(app.info_scroll, 0);
+        assert_eq!(app.props_scroll, 0);
+        assert_eq!(app.arcs_scroll, 0);
         assert_eq!(app.yaml.scroll, 0);
         // Previous cursor saved
         assert_eq!(app.data_cursor_before_filter, 5);
@@ -3811,15 +3862,15 @@ mod tests {
     }
 
     #[test]
-    fn test_info_scroll_at_zero() {
+    fn test_props_scroll_at_zero() {
         let mut app = create_test_app();
-        app.info_scroll = 0;
+        app.props_scroll = 0;
 
         // Should stay at 0
-        if app.info_scroll > 0 {
-            app.info_scroll -= 1;
+        if app.props_scroll > 0 {
+            app.props_scroll -= 1;
         }
-        assert_eq!(app.info_scroll, 0);
+        assert_eq!(app.props_scroll, 0);
     }
 
     #[test]
@@ -3927,7 +3978,7 @@ mod tests {
         assert_eq!(app.focus_for_selected_box(), Focus::Tree);
 
         app.selected_box = InfoBox::Header;
-        assert_eq!(app.focus_for_selected_box(), Focus::Info);
+        assert_eq!(app.focus_for_selected_box(), Focus::Props);
     }
 
     #[test]

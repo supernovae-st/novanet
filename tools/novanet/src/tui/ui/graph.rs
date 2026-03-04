@@ -8,9 +8,9 @@ use ratatui::Frame;
 use ratatui::layout::Rect;
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
-use ratatui::widgets::{Block, Borders, Paragraph};
+use ratatui::widgets::{Block, Borders, Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState};
 
-use super::super::app::{App, InfoBox};
+use super::super::app::App;
 use super::super::data::TreeItem;
 use super::super::theme;
 use super::{
@@ -29,6 +29,49 @@ const BOX_BORDER_UNFOCUSED: Color = Color::Rgb(59, 66, 82); // #3B4252
 const BOX_BORDER_SELECTED: Color = Color::Rgb(42, 161, 152); // #2AA198
 
 // =============================================================================
+// SCROLL HELPER
+// =============================================================================
+
+/// Render lines with scroll support and scrollbar.
+/// Returns the total number of lines for scroll calculation.
+fn render_with_scroll(
+    f: &mut Frame,
+    area: Rect,
+    lines: Vec<Line>,
+    scroll_offset: usize,
+) -> usize {
+    let total_lines = lines.len();
+    let visible_height = area.height as usize;
+    let max_scroll = total_lines.saturating_sub(visible_height);
+    let scroll = scroll_offset.min(max_scroll);
+
+    let paragraph = Paragraph::new(lines).scroll((scroll as u16, 0));
+    f.render_widget(paragraph, area);
+
+    // Render scrollbar if content exceeds visible area
+    if total_lines > visible_height {
+        let scrollbar = Scrollbar::new(ScrollbarOrientation::VerticalRight)
+            .begin_symbol(Some("▲"))
+            .end_symbol(Some("▼"))
+            .track_symbol(Some("│"))
+            .thumb_symbol("█");
+
+        let mut scrollbar_state = ScrollbarState::new(max_scroll).position(scroll);
+
+        let scrollbar_area = Rect {
+            x: area.x + area.width.saturating_sub(1),
+            y: area.y,
+            width: 1,
+            height: area.height,
+        };
+
+        f.render_stateful_widget(scrollbar, scrollbar_area, &mut scrollbar_state);
+    }
+
+    total_lines
+}
+
+// =============================================================================
 // GRAPH PANEL
 // =============================================================================
 
@@ -37,12 +80,13 @@ const BOX_BORDER_SELECTED: Color = Color::Rgb(42, 161, 152); // #2AA198
 /// Shows real arc data from Neo4j when a Class is selected,
 /// instance arcs in Data mode, or contextual messages for other selections.
 ///
-/// v0.13.0: Uses InfoBox::Arcs for consolidated arc relationships panel.
-pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
+/// v0.16.3: Arcs panel [4] using Focus::Arcs for panel selection.
+pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
+    use super::super::app::Focus;
     let theme = &app.theme; // Use cached theme from App
 
-    // Determine if this box is selected (v0.13: consolidated Arcs panel)
-    let selected = app.selected_box == InfoBox::Arcs;
+    // v0.16.3: Use Focus instead of selected_box for panel focus
+    let selected = app.focus == Focus::Arcs;
     let border_color = if selected {
         BOX_BORDER_SELECTED
     } else {
@@ -224,8 +268,8 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
             ]));
         }
 
-        let paragraph = Paragraph::new(lines);
-        f.render_widget(paragraph, inner);
+        // v0.16.4: Render with scroll support
+        app.arcs_line_count = render_with_scroll(f, inner, lines, app.arcs_scroll);
         return;
     }
 
@@ -309,8 +353,8 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
             }
         }
 
-        let paragraph = Paragraph::new(lines);
-        f.render_widget(paragraph, inner);
+        // v0.16.4: Render with scroll support
+        app.arcs_line_count = render_with_scroll(f, inner, lines, app.arcs_scroll);
         return;
     }
 
@@ -450,8 +494,8 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
             }
         }
 
-        let paragraph = Paragraph::new(lines);
-        f.render_widget(paragraph, inner);
+        // v0.16.4: Render with scroll support
+        app.arcs_line_count = render_with_scroll(f, inner, lines, app.arcs_scroll);
         return;
     }
 
@@ -489,8 +533,8 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
         // v0.13: Group arcs by direction with classification badges
         render_arcs_by_direction(&mut lines, arcs, app, theme, &dim);
 
-        let paragraph = Paragraph::new(lines);
-        f.render_widget(paragraph, inner);
+        // v0.16.4: Render with scroll support
+        app.arcs_line_count = render_with_scroll(f, inner, lines, app.arcs_scroll);
         return;
     }
 

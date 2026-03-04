@@ -4,7 +4,7 @@
 //! which displays details about the currently selected tree item.
 
 use ratatui::Frame;
-use ratatui::layout::{Constraint, Direction, Layout, Rect};
+use ratatui::layout::Rect;
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{
@@ -102,9 +102,10 @@ const BOX_BORDER_SELECTED: Color = Color::Cyan;
 /// Content for a single info section.
 /// Each section has a title and content lines.
 /// Empty sections display "—" as content.
+/// v0.16.4: Made public for render optimization
 #[derive(Default)]
-struct SectionContent<'a> {
-    lines: Vec<Line<'a>>,
+pub struct SectionContent<'a> {
+    pub lines: Vec<Line<'a>>,
 }
 
 impl<'a> SectionContent<'a> {
@@ -141,20 +142,21 @@ impl<'a> SectionContent<'a> {
 
 /// Unified info content with 6 fixed sections.
 /// All sections are always present; empty sections show "—".
+/// v0.16.4: Made public for render optimization
 #[derive(Default)]
-struct UnifiedContent<'a> {
+pub struct UnifiedContent<'a> {
     /// IDENTITY: type, category, key, class
-    identity: SectionContent<'a>,
+    pub identity: SectionContent<'a>,
     /// LOCATION: realm, layer, trait
-    location: SectionContent<'a>,
+    pub location: SectionContent<'a>,
     /// METRICS: counts, totals, budgets
-    metrics: SectionContent<'a>,
+    pub metrics: SectionContent<'a>,
     /// COVERAGE: property fill rates, health bars
-    coverage: SectionContent<'a>,
+    pub coverage: SectionContent<'a>,
     /// PROPERTIES: property list with values/schema
-    properties: SectionContent<'a>,
+    pub properties: SectionContent<'a>,
     /// RELATIONSHIPS: arcs, pipeline context
-    relationships: SectionContent<'a>,
+    pub relationships: SectionContent<'a>,
 }
 
 // =============================================================================
@@ -163,7 +165,8 @@ struct UnifiedContent<'a> {
 
 /// Build unified content for the current tree item.
 /// Returns all 6 sections populated with appropriate content.
-fn build_unified_content(app: &App) -> UnifiedContent<'static> {
+/// v0.16.4: Made public for single-build optimization in mod.rs
+pub fn build_unified_content(app: &App) -> UnifiedContent<'static> {
     match app.current_item() {
         Some(TreeItem::ClassesSection) => build_classes_section_content(app),
         Some(TreeItem::ArcsSection) => build_arcs_section_content(app),
@@ -1246,7 +1249,7 @@ fn build_instance_content(
             .min(18); // Same cap as Class for visual alignment
 
         // Check if properties box is focused for highlighting
-        let is_props_focused = app.focus == Focus::Info && app.selected_box == InfoBox::Properties;
+        let is_props_focused = app.focus == Focus::Props && app.selected_box == InfoBox::Properties;
         let mut property_idx: usize = 0;
 
         // STANDARD section (teal header)
@@ -1298,33 +1301,68 @@ fn build_instance_content(
                     Style::default()
                 };
 
-                // v0.13.1 Feature 4: Show full value when focused + expanded
-                let display_value = if is_focused && app.expanded_property {
-                    value_str.clone()
-                } else {
-                    truncate_str(&value_str, 24)
-                };
+                // v0.16.4: Wrap long values when expanded
+                if is_focused && app.expanded_property && value_str.len() > 24 {
+                    // Wrap value across multiple lines
+                    let prefix_len = 2 + max_key_len + 8;
+                    let wrap_width = 50;
+                    let wrapped = wrap_json_value(&value_str, wrap_width, prefix_len);
 
-                content.properties.add_line(Line::from(vec![
-                    Span::styled(status_icon, status_style.patch(bg_style)),
-                    Span::styled(
-                        required_marker,
-                        Style::default().fg(Color::Rgb(220, 50, 47)).patch(bg_style),
-                    ),
-                    Span::styled(
-                        format!("{:width$}", key, width = max_key_len),
-                        STYLE_PROP_KEY.patch(bg_style),
-                    ),
-                    Span::styled(": ", STYLE_PROP_COLON.patch(bg_style)),
-                    Span::styled(
-                        format!("[{}] ", badge.trim()),
-                        Style::default().fg(badge_color).patch(bg_style),
-                    ),
-                    Span::styled(
-                        display_value,
-                        Style::default().fg(value_color).patch(bg_style),
-                    ),
-                ]));
+                    // First line with full prefix
+                    content.properties.add_line(Line::from(vec![
+                        Span::styled(status_icon, status_style.patch(bg_style)),
+                        Span::styled(
+                            required_marker,
+                            Style::default().fg(Color::Rgb(220, 50, 47)).patch(bg_style),
+                        ),
+                        Span::styled(
+                            format!("{:width$}", key, width = max_key_len),
+                            STYLE_PROP_KEY.patch(bg_style),
+                        ),
+                        Span::styled(": ", STYLE_PROP_COLON.patch(bg_style)),
+                        Span::styled(
+                            format!("[{}] ", badge.trim()),
+                            Style::default().fg(badge_color).patch(bg_style),
+                        ),
+                        Span::styled(
+                            wrapped.first().cloned().unwrap_or_default(),
+                            Style::default().fg(value_color).patch(bg_style),
+                        ),
+                    ]));
+
+                    // Continuation lines
+                    for cont_line in wrapped.iter().skip(1) {
+                        content.properties.add_line(Line::from(vec![
+                            Span::styled(
+                                cont_line.clone(),
+                                Style::default().fg(value_color).patch(bg_style),
+                            ),
+                        ]));
+                    }
+                } else {
+                    // Single line (truncated or short value)
+                    let display_value = truncate_str(&value_str, 24);
+                    content.properties.add_line(Line::from(vec![
+                        Span::styled(status_icon, status_style.patch(bg_style)),
+                        Span::styled(
+                            required_marker,
+                            Style::default().fg(Color::Rgb(220, 50, 47)).patch(bg_style),
+                        ),
+                        Span::styled(
+                            format!("{:width$}", key, width = max_key_len),
+                            STYLE_PROP_KEY.patch(bg_style),
+                        ),
+                        Span::styled(": ", STYLE_PROP_COLON.patch(bg_style)),
+                        Span::styled(
+                            format!("[{}] ", badge.trim()),
+                            Style::default().fg(badge_color).patch(bg_style),
+                        ),
+                        Span::styled(
+                            display_value,
+                            Style::default().fg(value_color).patch(bg_style),
+                        ),
+                    ]));
+                }
                 property_idx += 1;
             }
         }
@@ -1377,33 +1415,64 @@ fn build_instance_content(
                     Style::default()
                 };
 
-                // v0.13.1 Feature 4: Show full value when focused + expanded
-                let display_value = if is_focused && app.expanded_property {
-                    value_str.clone()
-                } else {
-                    truncate_str(&value_str, 24)
-                };
+                // v0.16.4: Wrap long values when expanded
+                if is_focused && app.expanded_property && value_str.len() > 24 {
+                    let prefix_len = 2 + max_key_len + 8;
+                    let wrap_width = 50;
+                    let wrapped = wrap_json_value(&value_str, wrap_width, prefix_len);
 
-                content.properties.add_line(Line::from(vec![
-                    Span::styled(status_icon, status_style.patch(bg_style)),
-                    Span::styled(
-                        required_marker,
-                        Style::default().fg(Color::Rgb(220, 50, 47)).patch(bg_style),
-                    ),
-                    Span::styled(
-                        format!("{:width$}", key, width = max_key_len),
-                        STYLE_PROP_KEY.patch(bg_style),
-                    ),
-                    Span::styled(": ", STYLE_PROP_COLON.patch(bg_style)),
-                    Span::styled(
-                        format!("[{}] ", badge.trim()),
-                        Style::default().fg(badge_color).patch(bg_style),
-                    ),
-                    Span::styled(
-                        display_value,
-                        Style::default().fg(value_color).patch(bg_style),
-                    ),
-                ]));
+                    content.properties.add_line(Line::from(vec![
+                        Span::styled(status_icon, status_style.patch(bg_style)),
+                        Span::styled(
+                            required_marker,
+                            Style::default().fg(Color::Rgb(220, 50, 47)).patch(bg_style),
+                        ),
+                        Span::styled(
+                            format!("{:width$}", key, width = max_key_len),
+                            STYLE_PROP_KEY.patch(bg_style),
+                        ),
+                        Span::styled(": ", STYLE_PROP_COLON.patch(bg_style)),
+                        Span::styled(
+                            format!("[{}] ", badge.trim()),
+                            Style::default().fg(badge_color).patch(bg_style),
+                        ),
+                        Span::styled(
+                            wrapped.first().cloned().unwrap_or_default(),
+                            Style::default().fg(value_color).patch(bg_style),
+                        ),
+                    ]));
+
+                    for cont_line in wrapped.iter().skip(1) {
+                        content.properties.add_line(Line::from(vec![
+                            Span::styled(
+                                cont_line.clone(),
+                                Style::default().fg(value_color).patch(bg_style),
+                            ),
+                        ]));
+                    }
+                } else {
+                    let display_value = truncate_str(&value_str, 24);
+                    content.properties.add_line(Line::from(vec![
+                        Span::styled(status_icon, status_style.patch(bg_style)),
+                        Span::styled(
+                            required_marker,
+                            Style::default().fg(Color::Rgb(220, 50, 47)).patch(bg_style),
+                        ),
+                        Span::styled(
+                            format!("{:width$}", key, width = max_key_len),
+                            STYLE_PROP_KEY.patch(bg_style),
+                        ),
+                        Span::styled(": ", STYLE_PROP_COLON.patch(bg_style)),
+                        Span::styled(
+                            format!("[{}] ", badge.trim()),
+                            Style::default().fg(badge_color).patch(bg_style),
+                        ),
+                        Span::styled(
+                            display_value,
+                            Style::default().fg(value_color).patch(bg_style),
+                        ),
+                    ]));
+                }
                 property_idx += 1;
             }
         }
@@ -1422,26 +1491,50 @@ fn build_instance_content(
                     Style::default()
                 };
 
-                // v0.13.1 Feature 4: Show full value when focused + expanded
-                let display_value = if is_focused && app.expanded_property {
-                    value_str.clone()
-                } else {
-                    truncate_str(&value_str, 24)
-                };
+                // v0.16.4: Wrap long values when expanded
+                if is_focused && app.expanded_property && value_str.len() > 24 {
+                    let prefix_len = 2 + max_key_len + 2;
+                    let wrap_width = 50;
+                    let wrapped = wrap_json_value(&value_str, wrap_width, prefix_len);
 
-                content.properties.add_line(Line::from(vec![
-                    Span::styled("?", STYLE_DIM.patch(bg_style)), // Unknown/extra property
-                    Span::styled(" ", STYLE_DIM.patch(bg_style)),
-                    Span::styled(
-                        format!("{:width$}", key, width = max_key_len),
-                        STYLE_PROP_KEY.patch(bg_style),
-                    ),
-                    Span::styled(": ", STYLE_PROP_COLON.patch(bg_style)),
-                    Span::styled(
-                        display_value,
-                        Style::default().fg(value_color).patch(bg_style),
-                    ),
-                ]));
+                    content.properties.add_line(Line::from(vec![
+                        Span::styled("?", STYLE_DIM.patch(bg_style)),
+                        Span::styled(" ", STYLE_DIM.patch(bg_style)),
+                        Span::styled(
+                            format!("{:width$}", key, width = max_key_len),
+                            STYLE_PROP_KEY.patch(bg_style),
+                        ),
+                        Span::styled(": ", STYLE_PROP_COLON.patch(bg_style)),
+                        Span::styled(
+                            wrapped.first().cloned().unwrap_or_default(),
+                            Style::default().fg(value_color).patch(bg_style),
+                        ),
+                    ]));
+
+                    for cont_line in wrapped.iter().skip(1) {
+                        content.properties.add_line(Line::from(vec![
+                            Span::styled(
+                                cont_line.clone(),
+                                Style::default().fg(value_color).patch(bg_style),
+                            ),
+                        ]));
+                    }
+                } else {
+                    let display_value = truncate_str(&value_str, 24);
+                    content.properties.add_line(Line::from(vec![
+                        Span::styled("?", STYLE_DIM.patch(bg_style)),
+                        Span::styled(" ", STYLE_DIM.patch(bg_style)),
+                        Span::styled(
+                            format!("{:width$}", key, width = max_key_len),
+                            STYLE_PROP_KEY.patch(bg_style),
+                        ),
+                        Span::styled(": ", STYLE_PROP_COLON.patch(bg_style)),
+                        Span::styled(
+                            display_value,
+                            Style::default().fg(value_color).patch(bg_style),
+                        ),
+                    ]));
+                }
                 property_idx += 1;
             }
         }
@@ -1602,6 +1695,52 @@ fn type_color(prop_type: &str) -> Color {
 /// Appends "..." if truncated. Handles CJK, emoji, and combining characters.
 fn truncate_str(s: &str, max_width: usize) -> String {
     truncate_to_width(s, max_width)
+}
+
+/// Wrap a JSON value string across multiple lines.
+/// v0.16.4: For expanded property display.
+/// Returns lines with configurable indent for continuation.
+fn wrap_json_value(s: &str, max_width: usize, indent: usize) -> Vec<String> {
+    // Early return for empty or short strings (use char count, not byte count)
+    let char_count = s.chars().count();
+    if char_count <= max_width {
+        return vec![s.to_string()];
+    }
+
+    // Guard: if max_width is 0, return single line
+    if max_width == 0 {
+        return vec![s.to_string()];
+    }
+
+    let mut lines = Vec::new();
+    let indent_str = " ".repeat(indent);
+    let mut chars = s.chars().peekable();
+
+    // First line: take up to max_width characters
+    let first_line: String = chars.by_ref().take(max_width).collect();
+    lines.push(first_line);
+
+    // Subsequent lines: width reduced by indent
+    let cont_width = max_width.saturating_sub(indent);
+    if cont_width == 0 {
+        // Edge case: indent >= max_width, dump remaining as one line
+        let remaining: String = chars.collect();
+        if !remaining.is_empty() {
+            lines.push(format!("{}{}", indent_str, remaining));
+        }
+        return lines;
+    }
+
+    // Process remaining characters in chunks of cont_width
+    loop {
+        let chunk: String = chars.by_ref().take(cont_width).collect();
+        if chunk.is_empty() {
+            break;
+        }
+        lines.push(format!("{}{}", indent_str, chunk));
+    }
+
+    lines
 }
 
 /// Convert JSON value to display string.
@@ -1776,63 +1915,451 @@ fn render_scrollable_section_box(
     total_lines
 }
 
-/// Render the consolidated HEADER box (Identity + Location + Metrics + Coverage).
-fn render_header_box(f: &mut Frame, area: Rect, content: &UnifiedContent, state: BoxVisualState) {
-    let (border_color, title_style) = box_styles(state);
+// =============================================================================
+// v0.16.4 WOW EFFECT COLORS - GALAXY THEME
+// =============================================================================
 
-    // Selected box gets a ▶ indicator
-    let title_text = if state == BoxVisualState::Selected {
-        " ▶ HEADER "
-    } else {
-        " HEADER "
-    };
+/// Nova cyan/teal - primary accent for selection
+const COLOR_NOVA_CYAN: Color = Color::Rgb(34, 211, 238); // #22d3ee
 
-    let block = Block::default()
-        .title(Span::styled(title_text, title_style))
-        .borders(Borders::ALL)
-        .border_style(Style::default().fg(border_color));
+/// Nova purple/violet - secondary accent
+const COLOR_NOVA_PURPLE: Color = Color::Rgb(168, 85, 247); // #a855f7
 
-    let inner = block.inner(area);
-    f.render_widget(block, area);
+/// Nova gold/amber - metrics accent
+const COLOR_NOVA_GOLD: Color = Color::Rgb(251, 191, 36); // #fbbf24
 
-    // Split into 2 columns: left (identity + metrics), right (location + coverage)
-    let columns = Layout::default()
-        .direction(Direction::Horizontal)
-        .constraints([Constraint::Percentage(50), Constraint::Percentage(50)])
-        .split(inner);
+/// Nova pink - coverage accent
+const COLOR_NOVA_PINK: Color = Color::Rgb(236, 72, 153); // #ec4899
 
-    // Left column: Identity on top, Metrics below
-    let left_rows = Layout::default()
-        .direction(Direction::Vertical)
-        .constraints([Constraint::Percentage(60), Constraint::Percentage(40)])
-        .split(columns[0]);
+/// Border dim color
+const COLOR_BORDER_DIM: Color = Color::Rgb(71, 85, 105); // slate-600
 
-    // Right column: Location on top, Coverage below
-    let right_rows = Layout::default()
-        .direction(Direction::Vertical)
-        .constraints([Constraint::Percentage(60), Constraint::Percentage(40)])
-        .split(columns[1]);
+// =============================================================================
+// TYPE STYLING
+// =============================================================================
 
-    // Render sub-sections without borders (just content)
-    render_mini_section(f, left_rows[0], "Identity", &content.identity);
-    render_mini_section(f, left_rows[1], "Metrics", &content.metrics);
-    render_mini_section(f, right_rows[0], "Location", &content.location);
-    render_mini_section(f, right_rows[1], "Coverage", &content.coverage);
+/// Get icon, label and accent color for node type
+fn get_type_style(type_name: &str) -> (&'static str, &'static str, Color) {
+    match type_name.to_lowercase().as_str() {
+        "realm" => ("◉", "REALM", COLOR_NOVA_CYAN),
+        "layer" => ("≡", "LAYER", COLOR_NOVA_PURPLE),
+        "class" => ("◆", "CLASS", COLOR_NOVA_PINK),
+        "instance" => ("●", "INSTANCE", COLOR_NOVA_GOLD),
+        "arcfamily" => ("⟿", "ARC FAMILY", Color::Rgb(249, 115, 22)),
+        "arcclass" => ("→", "ARC", Color::Rgb(249, 115, 22)),
+        "section" => ("★", "SECTION", Color::Rgb(226, 232, 240)),
+        "entitycategory" => ("◈", "CATEGORY", COLOR_NOVA_CYAN),
+        _ => ("◇", "NODE", Color::Gray),
+    }
 }
 
-/// Render a mini-section within a box (content only, no title/border).
-/// v0.13: Removed mini-titles to avoid "boxes within boxes" visual.
-fn render_mini_section(f: &mut Frame, area: Rect, _title: &str, content: &SectionContent) {
-    if area.height < 1 {
-        return;
+// =============================================================================
+// ASCII ART BUILDERS - RESPONSIVE
+// =============================================================================
+
+/// Build the title banner row: ╔═══════ ◆ CLASS ◆ ═══════╗
+fn build_title_row(label: &str, icon: &str, width: usize, color: Color) -> Line<'static> {
+    if width < 10 {
+        return Line::from(Span::styled(format!("{} {}", icon, label), Style::default().fg(color)));
     }
 
-    let lines: Vec<Line> = if content.is_empty() {
-        vec![Line::from(Span::styled("—", STYLE_DIM))]
+    let title = format!(" {} {} {} ", icon, label, icon);
+    let title_len = title.chars().count();
+    let remaining = width.saturating_sub(title_len).saturating_sub(2); // -2 for ╔╗
+    let left_bars = remaining / 2;
+    let right_bars = remaining - left_bars;
+
+    Line::from(vec![
+        Span::styled("╔", Style::default().fg(color)),
+        Span::styled("═".repeat(left_bars), Style::default().fg(color)),
+        Span::styled(title, Style::default().fg(color).add_modifier(Modifier::BOLD)),
+        Span::styled("═".repeat(right_bars), Style::default().fg(color)),
+        Span::styled("╗", Style::default().fg(color)),
+    ])
+}
+
+/// Build a separator row: ╠═══════════════════════════════╣
+fn build_separator_row(width: usize, color: Color) -> Line<'static> {
+    if width < 4 {
+        return Line::from(Span::styled("═".repeat(width), Style::default().fg(color)));
+    }
+    let inner = width.saturating_sub(2);
+    Line::from(vec![
+        Span::styled("╠", Style::default().fg(color)),
+        Span::styled("═".repeat(inner), Style::default().fg(color)),
+        Span::styled("╣", Style::default().fg(color)),
+    ])
+}
+
+/// Build the bottom row: ╚═══════════════════════════════╝
+fn build_bottom_row(width: usize, color: Color) -> Line<'static> {
+    if width < 4 {
+        return Line::from(Span::styled("═".repeat(width), Style::default().fg(color)));
+    }
+    let inner = width.saturating_sub(2);
+    Line::from(vec![
+        Span::styled("╚", Style::default().fg(color)),
+        Span::styled("═".repeat(inner), Style::default().fg(color)),
+        Span::styled("╝", Style::default().fg(color)),
+    ])
+}
+
+/// Build a content row with side borders: ║  content  ║
+fn build_content_row(spans: Vec<Span<'static>>, width: usize, border_color: Color) -> Line<'static> {
+    // Calculate content width
+    let content_width: usize = spans.iter().map(|s| s.content.chars().count()).sum();
+    let inner_width = width.saturating_sub(4); // -2 for ║ on each side, -2 for padding
+    let padding = inner_width.saturating_sub(content_width);
+
+    let mut all_spans = vec![
+        Span::styled("║ ", Style::default().fg(border_color)),
+    ];
+    all_spans.extend(spans);
+    all_spans.push(Span::styled(format!("{} ║", " ".repeat(padding)), Style::default().fg(border_color)));
+
+    Line::from(all_spans)
+}
+
+/// Build location badges row: │ ◎ org │ ◎ config │ ■ defined │
+fn build_location_badges(
+    realm: Option<(&str, &str, Color)>,  // (icon, name, color)
+    layer: Option<(&str, &str, Color)>,
+    trait_info: Option<(&str, &str, Color)>,
+    width: usize,
+    border_color: Color,
+) -> Vec<Line<'static>> {
+    let mut badges: Vec<(String, Color)> = Vec::new();
+
+    if let Some((icon, name, color)) = realm {
+        badges.push((format!("{} {}", icon, name), color));
+    }
+    if let Some((icon, name, color)) = layer {
+        badges.push((format!("{} {}", icon, name), color));
+    }
+    if let Some((icon, name, color)) = trait_info {
+        badges.push((format!("{} {}", icon, name), color));
+    }
+
+    if badges.is_empty() {
+        return vec![];
+    }
+
+    // Build the badge boxes
+    let inner_width = width.saturating_sub(4);
+    let badge_count = badges.len();
+    let badge_width = if badge_count > 0 { inner_width / badge_count } else { 0 };
+
+    // Top of badges: ┌───────────┬───────────┬───────────┐
+    let mut top_parts = vec![Span::styled("║ ┌", Style::default().fg(border_color))];
+    for i in 0..badge_count {
+        let w = if i == badge_count - 1 {
+            inner_width - (badge_width * (badge_count - 1)) - 2
+        } else {
+            badge_width.saturating_sub(1)
+        };
+        top_parts.push(Span::styled("─".repeat(w), Style::default().fg(COLOR_BORDER_DIM)));
+        if i < badge_count - 1 {
+            top_parts.push(Span::styled("┬", Style::default().fg(COLOR_BORDER_DIM)));
+        }
+    }
+    top_parts.push(Span::styled("┐ ║", Style::default().fg(border_color)));
+
+    // Middle with content: │ ◎ org   │ ◎ config │ ■ defined │
+    let mut mid_parts = vec![Span::styled("║ │", Style::default().fg(border_color))];
+    for (i, (text, color)) in badges.iter().enumerate() {
+        let w = if i == badge_count - 1 {
+            inner_width - (badge_width * (badge_count - 1)) - 2
+        } else {
+            badge_width.saturating_sub(1)
+        };
+        let text_len = text.chars().count();
+        let pad = w.saturating_sub(text_len);
+        mid_parts.push(Span::styled(format!(" {}", text), Style::default().fg(*color)));
+        mid_parts.push(Span::styled(" ".repeat(pad.saturating_sub(1)), Style::default()));
+        mid_parts.push(Span::styled("│", Style::default().fg(COLOR_BORDER_DIM)));
+    }
+    mid_parts.push(Span::styled(" ║", Style::default().fg(border_color)));
+
+    // Bottom of badges: └───────────┴───────────┴───────────┘
+    let mut bot_parts = vec![Span::styled("║ └", Style::default().fg(border_color))];
+    for i in 0..badge_count {
+        let w = if i == badge_count - 1 {
+            inner_width - (badge_width * (badge_count - 1)) - 2
+        } else {
+            badge_width.saturating_sub(1)
+        };
+        bot_parts.push(Span::styled("─".repeat(w), Style::default().fg(COLOR_BORDER_DIM)));
+        if i < badge_count - 1 {
+            bot_parts.push(Span::styled("┴", Style::default().fg(COLOR_BORDER_DIM)));
+        }
+    }
+    bot_parts.push(Span::styled("┘ ║", Style::default().fg(border_color)));
+
+    vec![
+        Line::from(top_parts),
+        Line::from(mid_parts),
+        Line::from(bot_parts),
+    ]
+}
+
+/// Build metrics cards row: ┌────────┐ ┌────────┐ ┌────────┐
+fn build_metric_cards(
+    metrics: Vec<(&str, String, Color)>,  // (label, value, color)
+    width: usize,
+    border_color: Color,
+) -> Vec<Line<'static>> {
+    if metrics.is_empty() {
+        return vec![];
+    }
+
+    let inner_width = width.saturating_sub(4);
+    let card_count = metrics.len();
+    let card_width = if card_count > 0 {
+        (inner_width / card_count).min(14) // Max 14 chars per card
     } else {
-        content.lines.to_vec()
+        0
     };
 
+    // Top: ┌────────┐  ┌────────┐  ┌────────┐
+    let mut top_spans = vec![Span::styled("║ ", Style::default().fg(border_color))];
+    for i in 0..card_count {
+        top_spans.push(Span::styled("┌", Style::default().fg(COLOR_BORDER_DIM)));
+        top_spans.push(Span::styled("─".repeat(card_width.saturating_sub(2)), Style::default().fg(COLOR_BORDER_DIM)));
+        top_spans.push(Span::styled("┐", Style::default().fg(COLOR_BORDER_DIM)));
+        if i < card_count - 1 {
+            top_spans.push(Span::styled(" ", Style::default()));
+        }
+    }
+    // Padding to fill width
+    // v0.16.5: Use saturating_sub to prevent underflow if card_count somehow becomes 0
+    let used: usize = 2 + card_count * card_width + card_count.saturating_sub(1);
+    let remaining = width.saturating_sub(used).saturating_sub(2);
+    top_spans.push(Span::styled(format!("{} ║", " ".repeat(remaining)), Style::default().fg(border_color)));
+
+    // Middle: │ 5 inst │  │ 9 prop │  │ 500tok │
+    let mut mid_spans = vec![Span::styled("║ ", Style::default().fg(border_color))];
+    for (i, (label, value, color)) in metrics.iter().enumerate() {
+        let content = format!("{}{}", value, label);
+        let content_len = content.chars().count();
+        let inner = card_width.saturating_sub(2);
+        let pad = inner.saturating_sub(content_len);
+        mid_spans.push(Span::styled("│", Style::default().fg(COLOR_BORDER_DIM)));
+        mid_spans.push(Span::styled(value.to_string(), Style::default().fg(*color).add_modifier(Modifier::BOLD)));
+        mid_spans.push(Span::styled(label.to_string(), Style::default().fg(Color::Gray)));
+        mid_spans.push(Span::styled(" ".repeat(pad), Style::default()));
+        mid_spans.push(Span::styled("│", Style::default().fg(COLOR_BORDER_DIM)));
+        if i < card_count - 1 {
+            mid_spans.push(Span::styled(" ", Style::default()));
+        }
+    }
+    mid_spans.push(Span::styled(format!("{} ║", " ".repeat(remaining)), Style::default().fg(border_color)));
+
+    // Bottom: └────────┘  └────────┘  └────────┘
+    let mut bot_spans = vec![Span::styled("║ ", Style::default().fg(border_color))];
+    for i in 0..card_count {
+        bot_spans.push(Span::styled("└", Style::default().fg(COLOR_BORDER_DIM)));
+        bot_spans.push(Span::styled("─".repeat(card_width.saturating_sub(2)), Style::default().fg(COLOR_BORDER_DIM)));
+        bot_spans.push(Span::styled("┘", Style::default().fg(COLOR_BORDER_DIM)));
+        if i < card_count - 1 {
+            bot_spans.push(Span::styled(" ", Style::default()));
+        }
+    }
+    bot_spans.push(Span::styled(format!("{} ║", " ".repeat(remaining)), Style::default().fg(border_color)));
+
+    vec![
+        Line::from(top_spans),
+        Line::from(mid_spans),
+        Line::from(bot_spans),
+    ]
+}
+
+/// Render the consolidated HEADER box with WOW horizontal layout.
+/// v0.16.4: Mix of style A (big title) + C (card metrics)
+fn render_header_box(f: &mut Frame, area: Rect, content: &UnifiedContent, state: BoxVisualState) {
+    let (border_color, _title_style) = box_styles(state);
+
+    // Extract node type from identity for styling
+    let node_type = content
+        .identity
+        .lines
+        .first()
+        .and_then(|l| l.spans.get(1))
+        .map(|s| s.content.trim().to_lowercase())
+        .unwrap_or_default();
+
+    // Get icon, label and accent color for this type
+    let (type_icon, type_label, accent_color) = get_type_style(&node_type);
+
+    // Border style based on state with accent color when selected
+    let main_border_color = match state {
+        BoxVisualState::Selected => accent_color,
+        BoxVisualState::Focused => COLOR_NOVA_PURPLE,
+        BoxVisualState::Unfocused => border_color,
+    };
+
+    // We render WITHOUT the Block wrapper - we draw our own ASCII box
+    let available_width = area.width as usize;
+    let mut lines: Vec<Line> = Vec::new();
+
+    // ═══════════════════════════════════════════════════════════
+    // ROW 1: Title banner ╔═══════ ◆ CLASS ◆ ═══════╗
+    // ═══════════════════════════════════════════════════════════
+    lines.push(build_title_row(type_label, type_icon, available_width, accent_color));
+
+    // ═══════════════════════════════════════════════════════════
+    // ROW 2: Node name/key
+    // ═══════════════════════════════════════════════════════════
+    // v0.16.5: Extract key and display from identity - handle different structures
+    // Most types: [type, key, display?]
+    // EntityCategory: [type, category, key, name]
+    // Section types: [type, name]
+    let (key_idx, display_idx) = if node_type == "entitycategory" {
+        (2, Some(3)) // key at line 2, name at line 3
+    } else if node_type == "section" {
+        (1, None) // only name at line 1
+    } else {
+        (1, Some(2)) // key at line 1, display at line 2
+    };
+
+    let key = content.identity.lines.get(key_idx)
+        .and_then(|l| l.spans.get(1))
+        .map(|s| s.content.trim().to_string())
+        .unwrap_or_default();
+    let display = display_idx.and_then(|idx| {
+        content.identity.lines.get(idx)
+            .and_then(|l| l.spans.get(1))
+            .map(|s| s.content.trim().to_string())
+    });
+
+    let name_spans = if let Some(d) = display {
+        if d != key {
+            vec![
+                Span::styled(key, Style::default().fg(Color::White).add_modifier(Modifier::BOLD)),
+                Span::styled(" · ", Style::default().fg(Color::DarkGray)),
+                Span::styled(d, Style::default().fg(Color::Gray)),
+            ]
+        } else {
+            vec![Span::styled(key, Style::default().fg(Color::White).add_modifier(Modifier::BOLD))]
+        }
+    } else {
+        vec![Span::styled(key, Style::default().fg(Color::White).add_modifier(Modifier::BOLD))]
+    };
+    lines.push(build_content_row(name_spans, available_width, main_border_color));
+
+    // ═══════════════════════════════════════════════════════════
+    // ROW 3-5: Location badges (if present)
+    // ═══════════════════════════════════════════════════════════
+    if !content.location.is_empty() {
+        // Parse location from content
+        let mut realm_info: Option<(&str, &str, Color)> = None;
+        let mut layer_info: Option<(&str, &str, Color)> = None;
+        let mut trait_info: Option<(&str, &str, Color)> = None;
+
+        for line in &content.location.lines {
+            if line.spans.len() >= 3 {
+                let label = line.spans[0].content.trim().trim_end_matches(':');
+                let icon = line.spans[1].content.trim();
+                let value = line.spans[2].content.trim();
+                let color = line.spans[1].style.fg.unwrap_or(Color::White);
+
+                match label {
+                    "realm" => realm_info = Some((icon, value, color)),
+                    "layer" => layer_info = Some((icon, value, color)),
+                    "trait" => trait_info = Some((icon, value, color)),
+                    _ => {}
+                }
+            }
+        }
+
+        // Convert to owned strings for the badges
+        let realm_owned: Option<(String, String, Color)> = realm_info.map(|(i, n, c)| (i.to_string(), n.to_string(), c));
+        let layer_owned: Option<(String, String, Color)> = layer_info.map(|(i, n, c)| (i.to_string(), n.to_string(), c));
+        let trait_owned: Option<(String, String, Color)> = trait_info.map(|(i, n, c)| (i.to_string(), n.to_string(), c));
+
+        let badge_lines = build_location_badges(
+            realm_owned.as_ref().map(|(i, n, c)| (i.as_str(), n.as_str(), *c)),
+            layer_owned.as_ref().map(|(i, n, c)| (i.as_str(), n.as_str(), *c)),
+            trait_owned.as_ref().map(|(i, n, c)| (i.as_str(), n.as_str(), *c)),
+            available_width,
+            main_border_color,
+        );
+        lines.extend(badge_lines);
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // ROW 6: Separator before metrics
+    // ═══════════════════════════════════════════════════════════
+    if !content.metrics.is_empty() || !content.coverage.is_empty() {
+        lines.push(build_separator_row(available_width, main_border_color));
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // ROW 7-9: Metrics cards
+    // ═══════════════════════════════════════════════════════════
+    if !content.metrics.is_empty() {
+        let mut metrics: Vec<(&str, String, Color)> = Vec::new();
+
+        for line in &content.metrics.lines {
+            if line.spans.len() >= 2 {
+                let label = line.spans[0].content.trim();
+                let value = line.spans[1].content.trim();
+
+                // Shorten labels for cards
+                let short_label = match label {
+                    "instances" => " inst",
+                    "properties" => " prop",
+                    "budget" => " tok",
+                    "realms" => " rlm",
+                    "classes" => " cls",
+                    "layers" => " lyr",
+                    "families" => " fam",
+                    "arcs" => " arc",
+                    "entities" => " ent",
+                    "cardin." => "",
+                    _ => "",
+                };
+
+                // Extract just the number
+                let num: String = value.chars().take_while(|c| c.is_ascii_digit()).collect();
+                if !num.is_empty() {
+                    metrics.push((short_label, num, COLOR_NOVA_GOLD));
+                }
+            }
+        }
+
+        if !metrics.is_empty() {
+            let card_lines = build_metric_cards(metrics, available_width, main_border_color);
+            lines.extend(card_lines);
+        }
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // ROW 10: Coverage bar (if present)
+    // ═══════════════════════════════════════════════════════════
+    if !content.coverage.is_empty() {
+        // Build a compact coverage line - must create owned spans for 'static lifetime
+        let mut coverage_spans: Vec<Span<'static>> = Vec::new();
+        for (i, line) in content.coverage.lines.iter().enumerate() {
+            if i > 0 {
+                coverage_spans.push(Span::styled("  ", Style::default()));
+            }
+            for span in &line.spans {
+                // Convert to owned String to satisfy 'static lifetime
+                let owned_content: String = span.content.to_string();
+                coverage_spans.push(Span::styled(owned_content, span.style));
+            }
+        }
+        if !coverage_spans.is_empty() {
+            lines.push(build_content_row(coverage_spans, available_width, main_border_color));
+        }
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // BOTTOM ROW: ╚═══════════════════════════════════════════╝
+    // ═══════════════════════════════════════════════════════════
+    lines.push(build_bottom_row(available_width, accent_color));
+
+    // Render
     let paragraph = Paragraph::new(lines);
     f.render_widget(paragraph, area);
 }
@@ -1853,30 +2380,26 @@ fn detail_box_state(
     }
 }
 
-/// Unified info panel with 2 individual boxes: HEADER, PROPERTIES.
-/// v0.13: ARCS moved to dedicated consolidated panel (graph.rs).
-/// No outer panel border - each box is independently navigable via Tab.
+/// Render the unified info panel showing node metadata header.
 ///
-/// Layout:
-/// - HEADER: Combined Identity + Location + Metrics + Coverage (~45% height)
-/// - PROPERTIES: Scrollable property list (~55% height)
-pub fn render_unified_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
-    let panel_focused = app.focus == Focus::Info;
+/// v0.16.3: This now only renders the HEADER section (Identity, Location, Metrics, Coverage).
+/// Properties are rendered separately by `render_props_panel`.
+/// v0.16.4: Accepts pre-built content to avoid double-building.
+pub fn render_unified_info_panel(f: &mut Frame, area: Rect, app: &App, content: &UnifiedContent) {
+    // v0.16.3: YAML panel is [2], this is just the header info
+    let panel_focused = app.focus == Focus::Yaml;
     let selected_box = app.selected_box;
 
-    // Build unified content
-    let content = build_unified_content(app);
-
     // Check minimum height - fall back to simple layout if too small
-    if area.height < 12 {
+    if area.height < 6 {
         let all_lines: Vec<Line> = content
             .identity
             .lines
-            .into_iter()
-            .chain(content.location.lines)
-            .chain(content.metrics.lines)
-            .chain(content.coverage.lines)
-            .chain(content.properties.lines)
+            .iter()
+            .cloned()
+            .chain(content.location.lines.iter().cloned())
+            .chain(content.metrics.lines.iter().cloned())
+            .chain(content.coverage.lines.iter().cloned())
             .collect();
 
         let paragraph = Paragraph::new(all_lines);
@@ -1884,30 +2407,28 @@ pub fn render_unified_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
         return;
     }
 
-    // v0.13: 2 individual boxes (ARCS moved to dedicated panel)
-    // Each box navigable via Tab: [2]HEADER → [3]PROPERTIES
-    let main_chunks = Layout::default()
-        .direction(Direction::Vertical)
-        .constraints([
-            Constraint::Percentage(45), // HEADER (consolidated)
-            Constraint::Percentage(55), // PROPERTIES (scrollable)
-        ])
-        .split(area);
-
-    // === BOX 1: HEADER (consolidated) ===
-    // Combines: Identity, Location, Metrics, Coverage
+    // v0.16.3: Render only the HEADER box (consolidated Identity, Location, Metrics, Coverage)
     let header_state = detail_box_state(panel_focused, selected_box, InfoBox::Header);
-    render_header_box(f, main_chunks[0], &content, header_state);
+    render_header_box(f, area, content, header_state);
+}
 
-    // === BOX 2: PROPERTIES (scrollable) ===
+/// Render the properties panel [3] in the right column.
+/// v0.16.3: New function for the separated Properties panel.
+/// v0.16.4: Accepts pre-built content to avoid double-building.
+pub fn render_props_panel(f: &mut Frame, area: Rect, app: &mut App, content: &UnifiedContent) {
+    // v0.16.3: Props panel focused when Focus::Props
+    let panel_focused = app.focus == Focus::Props;
+    let selected_box = app.selected_box;
+
+    // Render the PROPERTIES section as a scrollable panel
     let props_state = detail_box_state(panel_focused, selected_box, InfoBox::Properties);
     let total_lines = render_scrollable_section_box(
         f,
-        main_chunks[1],
-        "PROPERTIES",
+        area,
+        "PROPERTIES [3]",
         &content.properties,
         props_state,
-        app.info_scroll,
+        app.props_scroll,
     );
-    app.info_line_count = total_lines;
+    app.props_line_count = total_lines;
 }

@@ -843,11 +843,12 @@ impl TaxonomyTree {
 
         // Query all Classes with their realm, layer, trait, and instance count
         // Note: Class uses 'label' property as identifier, not 'key'
+        // v0.16.4: Count by label match instead of OF_CLASS (which only exists for Locale)
         let cypher = r#"
 MATCH (k:Class:Schema)
 OPTIONAL MATCH (k)-[:IN_REALM]->(r:Realm)
 OPTIONAL MATCH (k)-[:IN_LAYER]->(l:Layer)
-OPTIONAL MATCH (n)-[:OF_CLASS]->(k)
+OPTIONAL MATCH (n) WHERE labels(n)[0] = k.label AND NOT n:Schema
 WITH k, r, l, count(n) AS instances
 RETURN
     k.label AS class_key,
@@ -2226,7 +2227,7 @@ RETURN total,
 
     /// Total number of visible items for a specific mode.
     /// In Data mode (data_mode=true), includes instances under expanded Classes.
-    /// For Entity Class, shows category hierarchy: Entity > Category > instances.
+    /// v0.16.4: Entity instances are flat (no category rows) with category suffix in display.
     pub fn item_count_for_mode(&self, data_mode: bool) -> usize {
         let mut count = 0;
 
@@ -2246,22 +2247,20 @@ RETURN total,
                                 if data_mode
                                     && !self.is_collapsed(&format!("class:{}", class_info.key))
                                 {
-                                    // Special case: Entity Class shows categories hierarchy
+                                    // v0.16.5: Entity shows flat instances (no category rows)
+                                    // BUT only if entity_category_instances has data
+                                    let has_category_instances =
+                                        !self.entity_category_instances.is_empty();
                                     if class_info.key == "Entity"
                                         && !self.entity_categories.is_empty()
+                                        && has_category_instances
                                     {
+                                        // Count all Entity instances across all categories
                                         for category in &self.entity_categories {
-                                            count += 1; // category node
-
-                                            // Count instances under category if not collapsed
-                                            let cat_key = format!("category:{}", category.key);
-                                            if !self.is_collapsed(&cat_key) {
-                                                if let Some(instances) = self
-                                                    .entity_category_instances
-                                                    .get(&category.key)
-                                                {
-                                                    count += instances.len();
-                                                }
+                                            if let Some(instances) =
+                                                self.entity_category_instances.get(&category.key)
+                                            {
+                                                count += instances.len();
                                             }
                                         }
                                     } else {
@@ -2295,7 +2294,7 @@ RETURN total,
 
     /// Get item at cursor position for a specific mode.
     /// In Data mode (data_mode=true), includes instances under expanded Classes.
-    /// For Entity Class, shows category hierarchy: Entity > Category > instances.
+    /// v0.16.4: Entity instances are flat (no category rows) with category suffix in display.
     pub fn item_at_for_mode(&self, cursor: usize, data_mode: bool) -> Option<TreeItem<'_>> {
         let mut idx = 0;
 
@@ -2326,37 +2325,30 @@ RETURN total,
                                 }
                                 idx += 1;
 
-                                // In Data mode, check for instances (or categories for Entity)
+                                // In Data mode, check for instances
                                 if data_mode
                                     && !self.is_collapsed(&format!("class:{}", class_info.key))
                                 {
-                                    // Special case: Entity Class shows categories hierarchy
+                                    // v0.16.5: Entity shows flat instances (no category rows)
+                                    // BUT only if entity_category_instances has data
+                                    let has_category_instances =
+                                        !self.entity_category_instances.is_empty();
                                     if class_info.key == "Entity"
                                         && !self.entity_categories.is_empty()
+                                        && has_category_instances
                                     {
+                                        // Iterate all Entity instances flat across categories
                                         for category in &self.entity_categories {
-                                            if idx == cursor {
-                                                return Some(TreeItem::EntityCategory(
-                                                    realm, layer, class_info, category,
-                                                ));
-                                            }
-                                            idx += 1;
-
-                                            // Show instances under category if not collapsed
-                                            let cat_key = format!("category:{}", category.key);
-                                            if !self.is_collapsed(&cat_key) {
-                                                if let Some(instances) = self
-                                                    .entity_category_instances
-                                                    .get(&category.key)
-                                                {
-                                                    for instance in instances {
-                                                        if idx == cursor {
-                                                            return Some(TreeItem::Instance(
-                                                                realm, layer, class_info, instance,
-                                                            ));
-                                                        }
-                                                        idx += 1;
+                                            if let Some(instances) =
+                                                self.entity_category_instances.get(&category.key)
+                                            {
+                                                for instance in instances {
+                                                    if idx == cursor {
+                                                        return Some(TreeItem::Instance(
+                                                            realm, layer, class_info, instance,
+                                                        ));
                                                     }
+                                                    idx += 1;
                                                 }
                                             }
                                         }
@@ -2683,8 +2675,9 @@ RETURN total,
 
     /// Find the cursor position of the parent item.
     /// Returns None if at root or no parent exists.
-    /// Hierarchy: Instance → EntityCategory → Class → Layer → Realm → ClassesSection
+    /// Hierarchy: Instance → Class → Layer → Realm → ClassesSection
     ///            ArcClass → ArcFamily → ArcsSection
+    /// v0.16.4: Entity instances are flat (no EntityCategory intermediate level)
     pub fn find_parent_cursor(&self, cursor: usize, data_mode: bool) -> Option<usize> {
         let current = if data_mode {
             self.item_at_for_mode(cursor, true)
@@ -2712,7 +2705,8 @@ RETURN total,
                 self.find_class_cursor_readonly(&realm.key, &layer.key, &class_info.key, data_mode)
             }
 
-            // Instance's parent is its Class (or EntityCategory for Entity class)
+            // Instance's parent is its Class
+            // v0.16.4: Entity instances now go directly to Entity class (no categories)
             Some(TreeItem::Instance(realm, layer, class_info, _)) => {
                 self.find_class_cursor_readonly(&realm.key, &layer.key, &class_info.key, data_mode)
             }
@@ -2812,7 +2806,23 @@ RETURN total,
                             // In data mode, count instances
                             if data_mode && !self.is_collapsed(&format!("class:{}", class_info.key))
                             {
-                                if let Some(instances) = self.instances.get(&class_info.key) {
+                                // v0.16.5: Entity instances fallback to regular instances map
+                                let has_category_instances =
+                                    !self.entity_category_instances.is_empty();
+                                if class_info.key == "Entity"
+                                    && !self.entity_categories.is_empty()
+                                    && has_category_instances
+                                {
+                                    for category in &self.entity_categories {
+                                        if let Some(instances) =
+                                            self.entity_category_instances.get(&category.key)
+                                        {
+                                            idx += instances.len();
+                                        }
+                                    }
+                                } else if let Some(instances) =
+                                    self.instances.get(&class_info.key)
+                                {
                                     idx += instances.len();
                                 }
                             }
@@ -2835,13 +2845,17 @@ RETURN total,
         layer_key: &str,
         class_key: &str,
     ) -> Option<usize> {
-        // First check if instances exist for this class
-        if self
-            .instances
-            .get(class_key)
-            .map(|v| v.is_empty())
-            .unwrap_or(true)
-        {
+        // v0.16.5: Check if instances exist - use Entity helper for dual storage
+        let has_instances = if class_key == "Entity" {
+            self.has_entity_instances()
+        } else {
+            self.instances
+                .get(class_key)
+                .map(|v| !v.is_empty())
+                .unwrap_or(false)
+        };
+
+        if !has_instances {
             return None;
         }
 
@@ -2895,20 +2909,105 @@ RETURN total,
     }
 
     // ========================================================================
+    // Entity Helpers — Centralized handling for Entity's dual storage pattern
+    // Entity instances can be in entity_category_instances (by category) OR
+    // in the regular instances map (fallback/legacy). These helpers abstract
+    // this complexity to reduce code duplication across the codebase.
+    // ========================================================================
+
+    /// Check if Entity class uses category-based instance storage.
+    /// Returns true if entity_category_instances has data.
+    #[inline]
+    pub fn has_entity_category_instances(&self) -> bool {
+        !self.entity_category_instances.is_empty()
+    }
+
+    /// Check if Entity class has any instances (category or fallback).
+    /// Used for quick "has instances" checks without counting.
+    pub fn has_entity_instances(&self) -> bool {
+        self.has_entity_category_instances()
+            || self
+                .instances
+                .get("Entity")
+                .map(|v| !v.is_empty())
+                .unwrap_or(false)
+    }
+
+    /// Count all Entity instances (category-based or fallback).
+    /// Returns total count across all categories if using category storage,
+    /// otherwise falls back to regular instance count.
+    pub fn entity_instance_count(&self) -> usize {
+        if self.has_entity_category_instances() {
+            self.entity_categories
+                .iter()
+                .filter_map(|cat| self.entity_category_instances.get(&cat.key))
+                .map(|v| v.len())
+                .sum()
+        } else {
+            self.instances.get("Entity").map(|v| v.len()).unwrap_or(0)
+        }
+    }
+
+    /// Get a flat iterator over all Entity instances (for cursor-based access).
+    /// Returns instances from category storage if available, otherwise fallback.
+    /// Used for item_at type indexing operations.
+    pub fn entity_instances_flat(&self) -> Vec<&InstanceInfo> {
+        if self.has_entity_category_instances() {
+            self.entity_categories
+                .iter()
+                .flat_map(|cat| {
+                    self.entity_category_instances
+                        .get(&cat.key)
+                        .map(|v| v.iter())
+                        .into_iter()
+                        .flatten()
+                })
+                .collect()
+        } else {
+            self.instances
+                .get("Entity")
+                .map(|v| v.iter().collect())
+                .unwrap_or_default()
+        }
+    }
+
+    // ========================================================================
     // Filtered Data mode: show only instances of a specific Class
     // ========================================================================
 
     /// Get item count when filtered to a specific Class (Data mode drill-down).
     /// Returns only instances of that Class.
+    /// v0.16.5: Entity uses helper for dual storage (entity_category_instances OR instances)
     pub fn filtered_item_count(&self, class_key: &str) -> usize {
-        self.instances.get(class_key).map(|v| v.len()).unwrap_or(0)
+        if class_key == "Entity" {
+            self.entity_instance_count()
+        } else {
+            self.instances.get(class_key).map(|v| v.len()).unwrap_or(0)
+        }
     }
 
     /// Get item at cursor when filtered to a specific Class.
     /// Returns Instance items only.
+    /// v0.16.5: Entity uses helper for dual storage (entity_category_instances OR instances)
     pub fn filtered_item_at<'a>(&'a self, cursor: usize, class_key: &str) -> Option<TreeItem<'a>> {
         // Find the Class info for context
         let class_tuple = self.find_class(class_key)?;
+
+        if class_key == "Entity" {
+            // Use helper for flat instance access
+            let all_entities = self.entity_instances_flat();
+            if let Some(&instance) = all_entities.get(cursor) {
+                return Some(TreeItem::Instance(
+                    class_tuple.0,
+                    class_tuple.1,
+                    class_tuple.2,
+                    instance,
+                ));
+            }
+            return None;
+        }
+
+        // Regular path for non-Entity classes
         let instances = self.instances.get(class_key)?;
         let instance = instances.get(cursor)?;
         Some(TreeItem::Instance(
@@ -3021,15 +3120,20 @@ RETURN total,
                     .map(|i| i + 1)
                     .unwrap_or(1);
                 // Calculate instance position within Class
-                let instances = self.instances.get(&class_info.key);
+                // v0.16.5: Entity uses helper for dual storage
+                let loaded_count = if class_info.key == "Entity"
+                    && self.has_entity_category_instances()
+                    && !self.entity_categories.is_empty()
+                {
+                    self.entity_instance_count()
+                } else {
+                    self.instances.get(&class_info.key).map(|v| v.len()).unwrap_or(0)
+                };
                 let total_instances = self
                     .instance_totals
                     .get(&class_info.key)
                     .copied()
-                    .unwrap_or(0);
-                // Find instance index by walking the visible items before cursor
-                // For simplicity, use the loaded count as position indicator
-                let loaded_count = instances.map(|v| v.len()).unwrap_or(0);
+                    .unwrap_or(loaded_count);
                 HierarchyPosition {
                     realm: Some((realm_idx, total_realms)),
                     layer: Some((layer_idx, realm.layers.len())),

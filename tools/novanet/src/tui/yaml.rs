@@ -131,22 +131,6 @@ impl YamlSections {
         &self.raw_content[self.instance_byte_range.clone()]
     }
 
-    /// Get lines for a specific section (legacy method for line-based access).
-    fn get_section_content(&self, range: &Range<usize>) -> &str {
-        let lines: Vec<&str> = self.raw_content.lines().collect();
-        if range.start >= lines.len() {
-            return "";
-        }
-
-        let end = range.end.min(lines.len());
-        let start_offset: usize = lines[..range.start].iter().map(|l| l.len() + 1).sum();
-        let section_len: usize = lines[range.start..end].iter().map(|l| l.len() + 1).sum();
-
-        // Handle edge case at end of file (no trailing newline)
-        let actual_end = (start_offset + section_len).min(self.raw_content.len());
-        &self.raw_content[start_offset..actual_end]
-    }
-
     /// Get lines iterator for Class section.
     pub fn class_lines_iter(&self) -> impl Iterator<Item = &str> {
         self.raw_content

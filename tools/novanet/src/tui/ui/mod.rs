@@ -11,7 +11,7 @@ mod tree;
 mod yaml_panel;
 
 pub use graph::render_graph_panel;
-pub use info::render_unified_info_panel;
+pub use info::{build_unified_content, render_props_panel, render_unified_info_panel};
 pub use status::render_status;
 pub use tree::render_tree;
 pub use yaml_panel::render_yaml_panel;
@@ -81,27 +81,27 @@ const COLOR_ACTIVE_CLASS_BG: Color = Color::Rgb(25, 35, 45);
 // Layout constants (percentages and sizes)
 // -----------------------------------------------------------------------------
 
-/// Wide layout: Tree panel percentage (compact sidebar).
-const LAYOUT_WIDE_TREE_PCT: u16 = 25;
-/// Wide layout: Detail+Arc panel percentage (center column).
-const LAYOUT_WIDE_DETAIL_PCT: u16 = 40;
-/// Wide layout: YAML+Arch panel percentage (right column).
-const LAYOUT_WIDE_YAML_PCT: u16 = 35;
-/// Wide layout: Top row percentage (Info/YAML panels).
-const LAYOUT_WIDE_TOP_PCT: u16 = 60;
-/// Wide layout: Bottom row percentage (Graph/Architecture panels).
-const LAYOUT_WIDE_BOTTOM_PCT: u16 = 40;
+// =============================================================================
+// LAYOUT CONSTANTS
+// =============================================================================
+
+/// Wide layout column percentages: Tree | Center | Right
+const LAYOUT_TREE_PCT: u16 = 25;
+const LAYOUT_CENTER_PCT: u16 = 40;
+const LAYOUT_RIGHT_PCT: u16 = 35;
+
+/// Center column split: Header | YAML
+const LAYOUT_HEADER_PCT: u16 = 25;
+const LAYOUT_YAML_PCT: u16 = 75;
+
+/// Right column split: Props | Arcs
+const LAYOUT_PROPS_PCT: u16 = 42;
+const LAYOUT_ARCS_PCT: u16 = 58;
 
 /// Narrow layout: Tree panel percentage (compact sidebar).
 const LAYOUT_NARROW_TREE_PCT: u16 = 25;
 /// Narrow layout: Detail panel percentage.
 const LAYOUT_NARROW_DETAIL_PCT: u16 = 75;
-/// Narrow layout: Info section percentage.
-const LAYOUT_NARROW_INFO_PCT: u16 = 35;
-/// Narrow layout: Graph section percentage.
-const LAYOUT_NARROW_GRAPH_PCT: u16 = 30;
-/// Narrow layout: YAML section percentage.
-const LAYOUT_NARROW_YAML_PCT: u16 = 35;
 
 /// Popup/overlay box dimensions.
 const POPUP_BOX_WIDTH: u16 = 50;
@@ -255,6 +255,8 @@ pub(super) fn layer_badge_icon(layer_key: &str) -> &'static str {
 
 /// Get short abbreviation for trait display in tree badges.
 /// v11.8: Renamed per ADR-024 Data Origin semantics
+/// v0.16.4: Kept for breadcrumb use (removed from tree)
+#[allow(dead_code)]
 pub(super) fn trait_abbrev(trait_name: &str) -> &'static str {
     match trait_name {
         "defined" => "def",  // was: invariant
@@ -625,38 +627,55 @@ fn render_main(f: &mut Frame, area: Rect, app: &mut App) {
     }
 }
 
-/// Wide layout: Tree | Info+Graph | YAML.
-/// v0.13.1: Architecture removed, YAML takes full right column.
+/// Wide layout: Tree [1] | Center (Header+YAML [2]) | Right (Props [3] + Arcs [4]).
 fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
-    let chunks = Layout::default()
+    // v0.16.4: Build unified content ONCE (was built twice before)
+    let content = build_unified_content(app);
+
+    // 3-column horizontal layout: Tree | Center | Right
+    let h_chunks = Layout::default()
         .direction(Direction::Horizontal)
         .constraints([
-            Constraint::Percentage(LAYOUT_WIDE_TREE_PCT),
-            Constraint::Percentage(LAYOUT_WIDE_DETAIL_PCT),
-            Constraint::Percentage(LAYOUT_WIDE_YAML_PCT),
+            Constraint::Percentage(LAYOUT_TREE_PCT),
+            Constraint::Percentage(LAYOUT_CENTER_PCT),
+            Constraint::Percentage(LAYOUT_RIGHT_PCT),
         ])
         .split(area);
 
-    render_tree(f, chunks[0], app);
+    // LEFT: Tree [1]
+    render_tree(f, h_chunks[0], app);
 
-    // Stack Info and Graph vertically in the middle panel
-    let middle_chunks = Layout::default()
+    // CENTER: Header (top) + YAML [2] (bottom)
+    let center_chunks = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
-            Constraint::Percentage(LAYOUT_WIDE_TOP_PCT),
-            Constraint::Percentage(LAYOUT_WIDE_BOTTOM_PCT),
+            Constraint::Percentage(LAYOUT_HEADER_PCT),
+            Constraint::Percentage(LAYOUT_YAML_PCT),
         ])
-        .split(chunks[1]);
+        .split(h_chunks[1]);
 
-    render_unified_info_panel(f, middle_chunks[0], app);
-    render_graph_panel(f, middle_chunks[1], app);
+    render_unified_info_panel(f, center_chunks[0], app, &content); // Header box
+    render_yaml_panel(f, center_chunks[1], app);                    // YAML [2]
 
-    // v0.13.1: YAML takes full right column (Architecture removed)
-    render_yaml_panel(f, chunks[2], app);
+    // RIGHT: Props [3] (top) + Arcs [4] (bottom)
+    let right_chunks = Layout::default()
+        .direction(Direction::Vertical)
+        .constraints([
+            Constraint::Percentage(LAYOUT_PROPS_PCT),
+            Constraint::Percentage(LAYOUT_ARCS_PCT),
+        ])
+        .split(h_chunks[2]);
+
+    render_props_panel(f, right_chunks[0], app, &content); // Props [3]
+    render_graph_panel(f, right_chunks[1], app);           // Arcs [4]
 }
 
-/// Narrow layout: Tree | Info+Graph+YAML stacked.
+/// Narrow layout: Tree [1] | Stacked (Header+YAML [2], Props [3], Arcs [4]).
+/// v0.16.3: Updated for 4-panel layout on smaller screens.
 fn render_main_narrow(f: &mut Frame, area: Rect, app: &mut App) {
+    // v0.16.4: Build unified content ONCE (was built twice before)
+    let content = build_unified_content(app);
+
     let h_chunks = Layout::default()
         .direction(Direction::Horizontal)
         .constraints([
@@ -667,19 +686,21 @@ fn render_main_narrow(f: &mut Frame, area: Rect, app: &mut App) {
 
     render_tree(f, h_chunks[0], app);
 
-    // Stack Info, Graph, YAML vertically
+    // Stack Header+YAML, Props, Arcs vertically
     let v_chunks = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
-            Constraint::Percentage(LAYOUT_NARROW_INFO_PCT),
-            Constraint::Percentage(LAYOUT_NARROW_GRAPH_PCT),
-            Constraint::Percentage(LAYOUT_NARROW_YAML_PCT),
+            Constraint::Percentage(15), // Header
+            Constraint::Percentage(30), // YAML [2]
+            Constraint::Percentage(30), // Props [3]
+            Constraint::Percentage(25), // Arcs [4]
         ])
         .split(h_chunks[1]);
 
-    render_unified_info_panel(f, v_chunks[0], app);
-    render_graph_panel(f, v_chunks[1], app);
-    render_yaml_panel(f, v_chunks[2], app);
+    render_unified_info_panel(f, v_chunks[0], app, &content); // Header
+    render_yaml_panel(f, v_chunks[1], app);                    // YAML [2]
+    render_props_panel(f, v_chunks[2], app, &content);         // Props [3]
+    render_graph_panel(f, v_chunks[3], app);                   // Arcs [4]
 }
 
 /// Colorize path inline for title.

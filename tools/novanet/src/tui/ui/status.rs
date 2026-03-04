@@ -62,8 +62,8 @@ pub(crate) fn get_contextual_shortcuts(
                     "↑/↓:nav ←/→:toggle y:copy"
                 }
             }
-            Focus::Yaml | Focus::Info => "↑/↓:scroll Enter:page y:copy",
-            Focus::Graph => "Tab:panel",
+            Focus::Yaml | Focus::Props => "↑/↓:scroll Enter:page y:copy",
+            Focus::Arcs => "↑/↓:scroll Tab:panel",
         },
         NavMode::Views => "↑/↓:nav Enter:select y:copy",
     }
@@ -369,14 +369,14 @@ mod tests {
     }
 
     #[test]
-    fn test_shortcuts_graph_mode_info_focus() {
-        let result = get_contextual_shortcuts(NavMode::Graph, Focus::Info, false, false);
+    fn test_shortcuts_graph_mode_props_focus() {
+        let result = get_contextual_shortcuts(NavMode::Graph, Focus::Props, false, false);
         assert!(result.contains("↑/↓:scroll"));
     }
 
     #[test]
-    fn test_shortcuts_graph_mode_graph_focus() {
-        let result = get_contextual_shortcuts(NavMode::Graph, Focus::Graph, false, false);
+    fn test_shortcuts_graph_mode_arcs_focus() {
+        let result = get_contextual_shortcuts(NavMode::Graph, Focus::Arcs, false, false);
         assert!(result.contains("Tab:panel"));
     }
 
@@ -520,18 +520,20 @@ mod tests {
 
     #[test]
     fn test_focus_next() {
-        assert_eq!(Focus::Tree.next(), Focus::Info);
-        assert_eq!(Focus::Info.next(), Focus::Graph);
-        assert_eq!(Focus::Graph.next(), Focus::Yaml);
-        assert_eq!(Focus::Yaml.next(), Focus::Tree);
+        // v0.16.3: 4-panel cycle: Tree → Yaml → Props → Arcs → Tree
+        assert_eq!(Focus::Tree.next(), Focus::Yaml);
+        assert_eq!(Focus::Yaml.next(), Focus::Props);
+        assert_eq!(Focus::Props.next(), Focus::Arcs);
+        assert_eq!(Focus::Arcs.next(), Focus::Tree);
     }
 
     #[test]
     fn test_focus_prev() {
-        assert_eq!(Focus::Tree.prev(), Focus::Yaml);
-        assert_eq!(Focus::Yaml.prev(), Focus::Graph);
-        assert_eq!(Focus::Graph.prev(), Focus::Info);
-        assert_eq!(Focus::Info.prev(), Focus::Tree);
+        // v0.16.3: 4-panel cycle reverse
+        assert_eq!(Focus::Tree.prev(), Focus::Arcs);
+        assert_eq!(Focus::Arcs.prev(), Focus::Props);
+        assert_eq!(Focus::Props.prev(), Focus::Yaml);
+        assert_eq!(Focus::Yaml.prev(), Focus::Tree);
     }
 
     // =========================================================================
@@ -541,7 +543,7 @@ mod tests {
     #[test]
     fn test_shortcuts_all_focus_panels_for_graph() {
         // Ensure all focus panels produce valid shortcuts for Graph mode
-        for focus in [Focus::Tree, Focus::Info, Focus::Graph, Focus::Yaml] {
+        for focus in [Focus::Tree, Focus::Yaml, Focus::Props, Focus::Arcs] {
             let result = get_contextual_shortcuts(NavMode::Graph, focus, false, false);
             assert!(
                 !result.is_empty(),
