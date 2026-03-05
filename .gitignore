@@ -76,6 +76,7 @@ packages/db/seed/migration-*
 # Private SEO/research data
 docs/assets/keywods/
 research/seo_*
+scripts/seo-import/output/
 
 # Private work sessions
 docs/sessions/
