@@ -2,30 +2,153 @@
 //!
 //! Caches NodeClass and ArcClass metadata to validate writes without
 //! repeated Neo4j queries. TTL-based eviction via moka.
+//!
+//! v0.17.0: Enhanced with ontology-driven fields for novanet_check/audit.
+//! Research: G-SPEC (KG validation = 68% safety), MMKG-RDS (CSR metric).
 
 use moka::sync::Cache;
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
 
-/// Cached class metadata
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ClassMetadata {
-    pub name: String,
-    pub realm: String,
-    pub layer: String,
-    pub trait_type: String,
-    pub required_properties: Vec<String>,
-    pub optional_properties: Vec<String>,
+/// Context budget levels for token estimation
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Default)]
+#[serde(rename_all = "snake_case")]
+pub enum ContextBudget {
+    /// ~500 tokens
+    Small,
+    /// ~2000 tokens
+    #[default]
+    Medium,
+    /// ~5000 tokens
+    Large,
 }
 
-/// Cached arc class metadata
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ArcClassMetadata {
+impl From<&str> for ContextBudget {
+    fn from(s: &str) -> Self {
+        match s.to_lowercase().as_str() {
+            "small" => Self::Small,
+            "large" => Self::Large,
+            _ => Self::Medium,
+        }
+    }
+}
+
+/// Arc cardinality for validation
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Default)]
+#[serde(rename_all = "snake_case")]
+pub enum ArcCardinality {
+    /// Exactly one target (e.g., FOR_LOCALE)
+    OneToOne,
+    /// One source, many targets (e.g., HAS_NATIVE)
+    #[default]
+    OneToMany,
+    /// Many sources, many targets (e.g., USES_ENTITY)
+    ManyToMany,
+}
+
+impl From<&str> for ArcCardinality {
+    fn from(s: &str) -> Self {
+        match s.to_lowercase().replace(':', "_").as_str() {
+            "one_to_one" | "1_1" | "1:1" => Self::OneToOne,
+            "many_to_many" | "n_m" | "n:m" => Self::ManyToMany,
+            _ => Self::OneToMany,
+        }
+    }
+}
+
+/// Arc scope (intra-realm or cross-realm)
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Default)]
+#[serde(rename_all = "snake_case")]
+pub enum ArcScope {
+    /// Within same realm (shared→shared or org→org)
+    #[default]
+    IntraRealm,
+    /// Across realms (shared↔org)
+    CrossRealm,
+}
+
+impl From<&str> for ArcScope {
+    fn from(s: &str) -> Self {
+        match s.to_lowercase().as_str() {
+            "cross_realm" | "crossrealm" | "cross" => Self::CrossRealm,
+            _ => Self::IntraRealm,
+        }
+    }
+}
+
+/// Cached class metadata with ontology-driven fields
+///
+/// Enhanced in v0.17.0 for neuro-symbolic validation:
+/// - `llm_context`: USE/TRIGGERS/NOT pattern for AI guidance
+/// - `description`: Human-readable purpose
+/// - `schema_hint`: Agent guidance for usage
+/// - `context_budget`: Token estimation hint
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct ClassMetadata {
+    /// Class name (e.g., "EntityNative")
     pub name: String,
+    /// Realm: "shared" or "org"
+    pub realm: String,
+    /// Layer within realm (e.g., "semantic", "knowledge")
+    pub layer: String,
+    /// Trait determines writability: defined (RO), authored/imported/generated/retrieved (RW)
+    pub trait_type: String,
+    /// Properties that MUST be present for valid writes
+    pub required_properties: Vec<String>,
+    /// Properties that MAY be present
+    pub optional_properties: Vec<String>,
+    // === Ontology-driven fields (v0.17.0) ===
+    /// Human-readable description of this class
+    #[serde(default)]
+    pub description: Option<String>,
+    /// AI-readable context: USE/TRIGGERS/NOT/RELATES pattern
+    #[serde(default)]
+    pub llm_context: Option<String>,
+    /// Agent guidance for when to use this class
+    #[serde(default)]
+    pub schema_hint: Option<String>,
+    /// Token estimation: small (~500), medium (~2000), large (~5000)
+    #[serde(default)]
+    pub context_budget: ContextBudget,
+    /// Visibility: internal, public, restricted
+    #[serde(default)]
+    pub visibility: Option<String>,
+}
+
+/// Cached arc class metadata with cardinality and scope
+///
+/// Enhanced in v0.17.0 for arc validation:
+/// - `cardinality`: 1:1, 1:N, N:M validation
+/// - `scope`: intra_realm vs cross_realm
+/// - `inverse_name`: For bidirectional consistency audit
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct ArcClassMetadata {
+    /// Arc class name (e.g., "HAS_NATIVE")
+    pub name: String,
+    /// Source class (e.g., "Entity")
     pub from_class: String,
+    /// Target class (e.g., "EntityNative")
     pub to_class: String,
+    /// Arc family: ownership, localization, semantic, generation, mining
     pub family: String,
+    /// Properties on the arc itself
     pub properties: Vec<String>,
+    // === Ontology-driven fields (v0.17.0) ===
+    /// Cardinality: one_to_one, one_to_many, many_to_many
+    #[serde(default)]
+    pub cardinality: ArcCardinality,
+    /// Scope: intra_realm or cross_realm
+    #[serde(default)]
+    pub scope: ArcScope,
+    /// AI-readable context: USE/TRIGGERS/NOT/RELATES pattern
+    #[serde(default)]
+    pub llm_context: Option<String>,
+    /// Human-readable description
+    #[serde(default)]
+    pub description: Option<String>,
+    /// Inverse arc name (e.g., "NATIVE_OF" for "HAS_NATIVE")
+    #[serde(default)]
+    pub inverse_name: Option<String>,
 }
 
 /// Default max entries for cache
@@ -123,6 +246,7 @@ mod tests {
             trait_type: "imported".to_string(),
             required_properties: vec!["keyword".to_string(), "slug_form".to_string()],
             optional_properties: vec!["search_volume".to_string()],
+            ..Default::default()
         };
 
         cache.insert_class("SEOKeyword".to_string(), meta.clone());
@@ -158,6 +282,7 @@ mod tests {
             trait_type: "authored".to_string(),
             required_properties: vec![],
             optional_properties: vec![],
+            ..Default::default()
         };
         cache.insert_class("Test".to_string(), meta);
 
@@ -176,6 +301,7 @@ mod tests {
             to_class: "EntityNative".to_string(),
             family: "localization".to_string(),
             properties: vec![],
+            ..Default::default()
         };
 
         cache.insert_arc("HAS_NATIVE".to_string(), meta);
@@ -196,6 +322,7 @@ mod tests {
             trait_type: "authored".to_string(),
             required_properties: vec![],
             optional_properties: vec![],
+            ..Default::default()
         };
         cache.insert_class("Test".to_string(), meta);
         cache.run_pending_tasks();
@@ -216,6 +343,7 @@ mod tests {
                 trait_type: "authored".to_string(),
                 required_properties: vec![],
                 optional_properties: vec![],
+                ..Default::default()
             };
             cache.insert_class(format!("Class{}", i), meta);
         }
@@ -223,5 +351,56 @@ mod tests {
 
         // Should have at most ~5 entries (moka may keep a few more during eviction)
         assert!(cache.entry_count() <= 10);
+    }
+
+    #[test]
+    fn test_ontology_fields() {
+        // Test that ontology-driven fields are preserved through cache
+        let cache = SchemaCache::new(300);
+        let meta = ClassMetadata {
+            name: "EntityNative".to_string(),
+            realm: "org".to_string(),
+            layer: "semantic".to_string(),
+            trait_type: "generated".to_string(),
+            required_properties: vec!["key".to_string()],
+            optional_properties: vec![],
+            description: Some("LLM-generated locale-native content".to_string()),
+            llm_context: Some("USE: when loading localized entity data".to_string()),
+            schema_hint: Some("Load via HAS_NATIVE from Entity".to_string()),
+            context_budget: ContextBudget::Medium,
+            visibility: Some("public".to_string()),
+        };
+
+        cache.insert_class("EntityNative".to_string(), meta);
+
+        let retrieved = cache.get_class("EntityNative").unwrap();
+        assert_eq!(retrieved.description, Some("LLM-generated locale-native content".to_string()));
+        assert!(retrieved.llm_context.as_ref().unwrap().contains("USE:"));
+        assert_eq!(retrieved.context_budget, ContextBudget::Medium);
+    }
+
+    #[test]
+    fn test_arc_ontology_fields() {
+        // Test that arc ontology-driven fields are preserved through cache
+        let cache = SchemaCache::new(300);
+        let meta = ArcClassMetadata {
+            name: "HAS_NATIVE".to_string(),
+            from_class: "Entity".to_string(),
+            to_class: "EntityNative".to_string(),
+            family: "localization".to_string(),
+            properties: vec![],
+            cardinality: ArcCardinality::OneToMany,
+            scope: ArcScope::IntraRealm,
+            llm_context: Some("USE: when loading locale-specific content".to_string()),
+            description: Some("Links entity to its native content".to_string()),
+            inverse_name: Some("NATIVE_OF".to_string()),
+        };
+
+        cache.insert_arc("HAS_NATIVE".to_string(), meta);
+
+        let retrieved = cache.get_arc("HAS_NATIVE").unwrap();
+        assert_eq!(retrieved.cardinality, ArcCardinality::OneToMany);
+        assert_eq!(retrieved.scope, ArcScope::IntraRealm);
+        assert_eq!(retrieved.inverse_name, Some("NATIVE_OF".to_string()));
     }
 }

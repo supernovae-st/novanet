@@ -4,7 +4,7 @@
 //! Single tool with 3 operations: upsert_node, create_arc, update_props.
 
 use crate::error::{Error, Result};
-use crate::schema_cache::{ClassMetadata, SchemaCache};
+use crate::schema_cache::{ClassMetadata, ContextBudget, SchemaCache};
 use crate::server::State;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -139,7 +139,7 @@ async fn fetch_and_validate_class(state: &State, class_name: &str) -> Result<Cla
         return Ok(meta);
     }
 
-    // Fetch from Neo4j
+    // Fetch from Neo4j (including ontology fields for v0.17.0)
     let query = r#"
         MATCH (c:Schema:Class {label: $name})
         RETURN c.label AS name,
@@ -147,7 +147,12 @@ async fn fetch_and_validate_class(state: &State, class_name: &str) -> Result<Cla
                c.layer AS layer,
                c.trait AS trait_type,
                c.required_properties AS required_properties,
-               c.optional_properties AS optional_properties
+               c.optional_properties AS optional_properties,
+               c.description AS description,
+               c.llm_context AS llm_context,
+               c.schema_hint AS schema_hint,
+               c.context_budget AS context_budget,
+               c.visibility AS visibility
     "#;
 
     let mut params = serde_json::Map::new();
@@ -181,6 +186,15 @@ async fn fetch_and_validate_class(state: &State, class_name: &str) -> Result<Cla
                     .collect()
             })
             .unwrap_or_default(),
+        // Ontology-driven fields (v0.17.0)
+        description: row["description"].as_str().map(String::from),
+        llm_context: row["llm_context"].as_str().map(String::from),
+        schema_hint: row["schema_hint"].as_str().map(String::from),
+        context_budget: row["context_budget"]
+            .as_str()
+            .map(ContextBudget::from)
+            .unwrap_or_default(),
+        visibility: row["visibility"].as_str().map(String::from),
     };
 
     // Validate trait allows writes
@@ -876,6 +890,7 @@ mod tests {
             trait_type: "imported".to_string(),
             required_properties: vec!["keyword".to_string(), "slug_form".to_string()],
             optional_properties: vec!["search_volume".to_string()],
+            ..Default::default()
         };
 
         // Test with all required properties present
