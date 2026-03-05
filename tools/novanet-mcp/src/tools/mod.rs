@@ -7,11 +7,13 @@
 //! A1: novanet_batch (bulk operations)
 //! A3: novanet_cache_stats, novanet_cache_invalidate (cache management)
 //! A4: novanet_write (intelligent data writes)
+//! v0.17.0: novanet_check (pre-write validation), novanet_audit (quality audit)
 
 pub mod assemble;
 pub mod atoms;
 pub mod batch;
 pub mod cache_stats;
+pub mod checker;
 pub mod describe;
 pub mod generate;
 pub mod introspect;
@@ -25,6 +27,7 @@ pub use assemble::{AssembleParams, AssembleResult};
 pub use atoms::{AtomsParams, AtomsResult};
 pub use batch::{BatchParams, BatchResult};
 pub use cache_stats::{CacheInvalidateParams, CacheInvalidateResult, CacheStats, CacheStatsParams};
+pub use checker::{CheckParams, CheckResult, CheckIssue, CheckSeverity, SchemaContext, OntologySuggestion};
 pub use describe::{DescribeParams, DescribeResult, DescribeTarget};
 pub use generate::{GenerateParams, GenerateResult};
 pub use introspect::{IntrospectParams, IntrospectResult, IntrospectTarget};
