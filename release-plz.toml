@@ -1,21 +1,44 @@
-# 🌌 ARMADA: Release-plz Configuration
-# Automated release management for NovaNet
-# Part of ARMADA quality checkpoints
+# release-plz configuration for NovaNet
 # https://release-plz.ieni.dev/docs/config
+#
+# This file configures automated release management:
+# - Version bumping based on conventional commits
+# - CHANGELOG generation via git-cliff
+# - GitHub release creation
 
 [workspace]
-# Allow release-plz to release new versions
+# Use git-cliff for CHANGELOG generation
+changelog_config = "cliff.toml"
+
+# Create GitHub releases for tagged versions
+git_release_enable = true
+
+# PR labels for automated release PRs
+pr_labels = ["release", "automated", "armada"]
+
+# Run cargo semver-checks before releasing
+semver_check = true
+
+# Timeout for cargo publish operations
+publish_timeout = "10m"
+
+# Don't allow dirty working directory
 allow_dirty = false
+
+# Git tag format (v prefix)
+git_tag_name = "v{{ version }}"
+
+# Release name format (GitHub release title)
+git_release_name = "v{{ version }}"
+
 # Repo URL for links
 repo_url = "https://github.com/supernovae-st/novanet"
-# PR labels for release PRs
-pr_labels = ["release", "automated", "armada"]
-# Create GitHub releases
-git_release_enable = true
-# Draft releases for review before publishing
-git_release_draft = false
 
-# Package-specific configuration
+# =============================================================================
+# Package Configurations
+# =============================================================================
+
+# Main NovaNet CLI package
 [[package]]
 name = "novanet"
 # Path to the crate changelog (relative to package directory)
@@ -26,6 +49,8 @@ publish = false
 semver_check = true
 # Git tag format
 git_tag_name = "v{{ version }}"
+# Create GitHub release
+git_release_enable = true
 
 # NOTE: novanet-mcp is a STANDALONE CRATE (not in workspace)
 # It has independent versioning - do not include here
