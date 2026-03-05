@@ -7,8 +7,8 @@ use crate::prompts::{self, PromptDefinition, PromptMessage as InternalPromptMess
 use crate::server::State;
 use crate::tools::{
     AssembleParams, AtomsParams, BatchParams, CacheInvalidateParams, CacheStatsParams,
-    DescribeParams, GenerateParams, IntrospectParams, QueryParams, SearchParams, TraverseParams,
-    WriteParams,
+    CheckParams, DescribeParams, GenerateParams, IntrospectParams, QueryParams, SearchParams,
+    TraverseParams, WriteParams,
 };
 use rmcp::handler::server::tool::ToolRouter;
 use rmcp::handler::server::wrapper::Parameters;
@@ -385,6 +385,36 @@ impl NovaNetHandler {
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
+
+    /// Validate a write operation without executing it.
+    ///
+    /// Pre-write validation with Cypher preview and ontology-driven suggestions.
+    /// Returns issues, schema context, and actionable hints.
+    /// v0.17.0: 13th MCP tool for pre-write validation.
+    #[tool(
+        name = "novanet_check",
+        description = "Validate a write operation without executing it. Returns issues, Cypher preview, schema context, and actionable suggestions."
+    )]
+    async fn novanet_check(
+        &self,
+        params: Parameters<CheckParams>,
+    ) -> Result<CallToolResult, McpError> {
+        let result = crate::tools::checker::execute(&self.state, params.0)
+            .await
+            .map_err(|e| McpError {
+                code: ErrorCode(-32000),
+                message: Cow::Owned(e.to_string()),
+                data: None,
+            })?;
+
+        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
+            code: ErrorCode(-32603),
+            message: Cow::Owned(format!("Serialization error: {}", e)),
+            data: None,
+        })?;
+
+        Ok(CallToolResult::success(vec![Content::text(json)]))
+    }
 }
 
 /// Implement ServerHandler for NovaNetHandler
@@ -393,10 +423,10 @@ impl ServerHandler for NovaNetHandler {
     fn get_info(&self) -> ServerInfo {
         ServerInfo {
             instructions: Some(
-                "NovaNet MCP Server v0.3.0 - Knowledge Graph for AI Agents. \
-                 12 tools available: novanet_describe (bootstrap), novanet_query (explore), \
-                 novanet_generate (context assembly), novanet_write (data writes with schema validation), \
-                 and more. 6 prompts available for guided workflows."
+                "NovaNet MCP Server v0.4.0 - Knowledge Graph for AI Agents. \
+                 13 tools available: novanet_describe (bootstrap), novanet_query (explore), \
+                 novanet_generate (context assembly), novanet_write (data writes), \
+                 novanet_check (pre-write validation), and more. 6 prompts available."
                     .into(),
             ),
             capabilities: ServerCapabilities::builder()

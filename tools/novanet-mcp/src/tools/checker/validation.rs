@@ -202,6 +202,13 @@ pub fn generate_suggestions(
     suggestions
 }
 
+/// Execute novanet_check - main entry point matching other tool patterns
+///
+/// Validates a write operation without executing it.
+pub async fn execute(state: &State, params: CheckParams) -> Result<CheckResult> {
+    validate_write(state, &params).await
+}
+
 /// Main validation function - validates write params without executing
 ///
 /// Returns a CheckResult with:
