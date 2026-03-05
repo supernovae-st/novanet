@@ -10,7 +10,7 @@ use std::path::Path;
 
 use crate::db::{Db, RowExt};
 use crate::parsers::arcs::load_arc_classes_from_files;
-use crate::parsers::yaml_node::{load_all_nodes, NodeTrait};
+use crate::parsers::yaml_node::{NodeTrait, load_all_nodes};
 
 // =============================================================================
 // TYPES
@@ -140,7 +140,10 @@ pub fn diff_node_classes(
     let mut diffs = Vec::new();
 
     // Build sets for comparison
-    let yaml_names: BTreeSet<&str> = yaml_nodes.iter().map(|(n, _, _, _, _)| n.as_str()).collect();
+    let yaml_names: BTreeSet<&str> = yaml_nodes
+        .iter()
+        .map(|(n, _, _, _, _)| n.as_str())
+        .collect();
     let neo4j_names: BTreeSet<&str> = neo4j_nodes.iter().map(|n| n.name.as_str()).collect();
 
     // Find added (in YAML, not in Neo4j)
@@ -205,7 +208,8 @@ pub fn diff_node_classes(
 
         // Check properties (simplified - just check if sets differ)
         let yaml_props: BTreeSet<&str> = yaml_node.4.iter().map(|s| s.as_str()).collect();
-        let neo4j_props: BTreeSet<&str> = neo4j_node.properties.iter().map(|s| s.as_str()).collect();
+        let neo4j_props: BTreeSet<&str> =
+            neo4j_node.properties.iter().map(|s| s.as_str()).collect();
         if yaml_props != neo4j_props {
             let added: Vec<_> = yaml_props.difference(&neo4j_props).collect();
             let removed: Vec<_> = neo4j_props.difference(&yaml_props).collect();
@@ -232,10 +236,7 @@ pub fn diff_node_classes(
 }
 
 /// Compare YAML arc classes with Neo4j Schema:ArcClass nodes.
-pub fn diff_arc_classes(
-    yaml_arcs: &[YamlArcClass],
-    neo4j_arcs: &[Neo4jArcClass],
-) -> Vec<DiffItem> {
+pub fn diff_arc_classes(yaml_arcs: &[YamlArcClass], neo4j_arcs: &[Neo4jArcClass]) -> Vec<DiffItem> {
     let mut diffs = Vec::new();
 
     // Build sets for comparison
@@ -405,7 +406,10 @@ pub fn format_human(result: &DiffResult) -> String {
                 DiffCategory::Removed => "-",
                 DiffCategory::Modified => "~",
             };
-            output.push_str(&format!("  {} {} ({})\n", symbol, diff.name, diff.description));
+            output.push_str(&format!(
+                "  {} {} ({})\n",
+                symbol, diff.name, diff.description
+            ));
             if let Some(details) = &diff.details {
                 for detail in details {
                     output.push_str(&format!("      {}\n", detail));
@@ -425,7 +429,10 @@ pub fn format_human(result: &DiffResult) -> String {
                 DiffCategory::Removed => "-",
                 DiffCategory::Modified => "~",
             };
-            output.push_str(&format!("  {} {} ({})\n", symbol, diff.name, diff.description));
+            output.push_str(&format!(
+                "  {} {} ({})\n",
+                symbol, diff.name, diff.description
+            ));
             if let Some(details) = &diff.details {
                 for detail in details {
                     output.push_str(&format!("      {}\n", detail));
@@ -440,15 +447,11 @@ pub fn format_human(result: &DiffResult) -> String {
     output.push_str("────────\n");
     output.push_str(&format!(
         "  Nodes: {} added, {} removed, {} modified\n",
-        result.summary.nodes_added,
-        result.summary.nodes_removed,
-        result.summary.nodes_modified
+        result.summary.nodes_added, result.summary.nodes_removed, result.summary.nodes_modified
     ));
     output.push_str(&format!(
         "  Arcs:  {} added, {} removed, {} modified\n",
-        result.summary.arcs_added,
-        result.summary.arcs_removed,
-        result.summary.arcs_modified
+        result.summary.arcs_added, result.summary.arcs_removed, result.summary.arcs_modified
     ));
 
     output
@@ -669,8 +672,20 @@ mod tests {
     #[test]
     fn test_diff_node_classes_no_differences() {
         let yaml_nodes = vec![
-            ("Page".to_string(), "org".to_string(), "structure".to_string(), NodeTrait::Defined, vec!["key".to_string()]),
-            ("Entity".to_string(), "org".to_string(), "semantic".to_string(), NodeTrait::Defined, vec!["key".to_string()]),
+            (
+                "Page".to_string(),
+                "org".to_string(),
+                "structure".to_string(),
+                NodeTrait::Defined,
+                vec!["key".to_string()],
+            ),
+            (
+                "Entity".to_string(),
+                "org".to_string(),
+                "semantic".to_string(),
+                NodeTrait::Defined,
+                vec!["key".to_string()],
+            ),
         ];
 
         let neo4j_nodes = vec![
@@ -697,19 +712,29 @@ mod tests {
     #[test]
     fn test_diff_node_classes_added() {
         let yaml_nodes = vec![
-            ("Page".to_string(), "org".to_string(), "structure".to_string(), NodeTrait::Defined, vec![]),
-            ("NewNode".to_string(), "org".to_string(), "foundation".to_string(), NodeTrait::Defined, vec![]),
+            (
+                "Page".to_string(),
+                "org".to_string(),
+                "structure".to_string(),
+                NodeTrait::Defined,
+                vec![],
+            ),
+            (
+                "NewNode".to_string(),
+                "org".to_string(),
+                "foundation".to_string(),
+                NodeTrait::Defined,
+                vec![],
+            ),
         ];
 
-        let neo4j_nodes = vec![
-            Neo4jNodeClass {
-                name: "Page".to_string(),
-                realm: "org".to_string(),
-                layer: "structure".to_string(),
-                node_trait: "defined".to_string(),
-                properties: vec![],
-            },
-        ];
+        let neo4j_nodes = vec![Neo4jNodeClass {
+            name: "Page".to_string(),
+            realm: "org".to_string(),
+            layer: "structure".to_string(),
+            node_trait: "defined".to_string(),
+            properties: vec![],
+        }];
 
         let diffs = diff_node_classes(&yaml_nodes, &neo4j_nodes);
         assert_eq!(diffs.len(), 1);
@@ -719,9 +744,13 @@ mod tests {
 
     #[test]
     fn test_diff_node_classes_removed() {
-        let yaml_nodes = vec![
-            ("Page".to_string(), "org".to_string(), "structure".to_string(), NodeTrait::Defined, vec![]),
-        ];
+        let yaml_nodes = vec![(
+            "Page".to_string(),
+            "org".to_string(),
+            "structure".to_string(),
+            NodeTrait::Defined,
+            vec![],
+        )];
 
         let neo4j_nodes = vec![
             Neo4jNodeClass {
@@ -748,63 +777,83 @@ mod tests {
 
     #[test]
     fn test_diff_node_classes_modified_realm() {
-        let yaml_nodes = vec![
-            ("Page".to_string(), "shared".to_string(), "structure".to_string(), NodeTrait::Defined, vec![]),
-        ];
+        let yaml_nodes = vec![(
+            "Page".to_string(),
+            "shared".to_string(),
+            "structure".to_string(),
+            NodeTrait::Defined,
+            vec![],
+        )];
 
-        let neo4j_nodes = vec![
-            Neo4jNodeClass {
-                name: "Page".to_string(),
-                realm: "org".to_string(),
-                layer: "structure".to_string(),
-                node_trait: "defined".to_string(),
-                properties: vec![],
-            },
-        ];
+        let neo4j_nodes = vec![Neo4jNodeClass {
+            name: "Page".to_string(),
+            realm: "org".to_string(),
+            layer: "structure".to_string(),
+            node_trait: "defined".to_string(),
+            properties: vec![],
+        }];
 
         let diffs = diff_node_classes(&yaml_nodes, &neo4j_nodes);
         assert_eq!(diffs.len(), 1);
         assert_eq!(diffs[0].category, DiffCategory::Modified);
-        assert!(diffs[0].details.as_ref().unwrap().iter().any(|d| d.contains("realm")));
+        assert!(
+            diffs[0]
+                .details
+                .as_ref()
+                .unwrap()
+                .iter()
+                .any(|d| d.contains("realm"))
+        );
     }
 
     #[test]
     fn test_diff_node_classes_modified_properties() {
-        let yaml_nodes = vec![
-            ("Page".to_string(), "org".to_string(), "structure".to_string(), NodeTrait::Defined, vec!["key".to_string(), "new_prop".to_string()]),
-        ];
+        let yaml_nodes = vec![(
+            "Page".to_string(),
+            "org".to_string(),
+            "structure".to_string(),
+            NodeTrait::Defined,
+            vec!["key".to_string(), "new_prop".to_string()],
+        )];
 
-        let neo4j_nodes = vec![
-            Neo4jNodeClass {
-                name: "Page".to_string(),
-                realm: "org".to_string(),
-                layer: "structure".to_string(),
-                node_trait: "defined".to_string(),
-                properties: vec!["key".to_string()],
-            },
-        ];
+        let neo4j_nodes = vec![Neo4jNodeClass {
+            name: "Page".to_string(),
+            realm: "org".to_string(),
+            layer: "structure".to_string(),
+            node_trait: "defined".to_string(),
+            properties: vec!["key".to_string()],
+        }];
 
         let diffs = diff_node_classes(&yaml_nodes, &neo4j_nodes);
         assert_eq!(diffs.len(), 1);
         assert_eq!(diffs[0].category, DiffCategory::Modified);
-        assert!(diffs[0].details.as_ref().unwrap().iter().any(|d| d.contains("new_prop")));
+        assert!(
+            diffs[0]
+                .details
+                .as_ref()
+                .unwrap()
+                .iter()
+                .any(|d| d.contains("new_prop"))
+        );
     }
 
     #[test]
     fn test_diff_arc_classes_no_differences() {
-        let yaml_arcs = vec![
-            ("HAS_PAGE".to_string(), "ownership".to_string(), vec!["Project".to_string()], vec!["Page".to_string()], vec![]),
-        ];
+        let yaml_arcs = vec![(
+            "HAS_PAGE".to_string(),
+            "ownership".to_string(),
+            vec!["Project".to_string()],
+            vec!["Page".to_string()],
+            vec![],
+        )];
 
-        let neo4j_arcs = vec![
-            Neo4jArcClass {
-                name: "HAS_PAGE".to_string(),
-                family: "ownership".to_string(),
-                source: vec!["Project".to_string()],
-                target: vec!["Page".to_string()],
-                properties: vec![],
-            },
-        ];
+        let neo4j_arcs = vec![Neo4jArcClass {
+            name: "HAS_PAGE".to_string(),
+            family: "ownership".to_string(),
+            source: vec!["Project".to_string()],
+            target: vec!["Page".to_string()],
+            properties: vec![],
+        }];
 
         let diffs = diff_arc_classes(&yaml_arcs, &neo4j_arcs);
         assert!(diffs.is_empty());
@@ -813,19 +862,29 @@ mod tests {
     #[test]
     fn test_diff_arc_classes_added() {
         let yaml_arcs = vec![
-            ("HAS_PAGE".to_string(), "ownership".to_string(), vec!["Project".to_string()], vec!["Page".to_string()], vec![]),
-            ("NEW_ARC".to_string(), "semantic".to_string(), vec!["Entity".to_string()], vec!["Page".to_string()], vec![]),
+            (
+                "HAS_PAGE".to_string(),
+                "ownership".to_string(),
+                vec!["Project".to_string()],
+                vec!["Page".to_string()],
+                vec![],
+            ),
+            (
+                "NEW_ARC".to_string(),
+                "semantic".to_string(),
+                vec!["Entity".to_string()],
+                vec!["Page".to_string()],
+                vec![],
+            ),
         ];
 
-        let neo4j_arcs = vec![
-            Neo4jArcClass {
-                name: "HAS_PAGE".to_string(),
-                family: "ownership".to_string(),
-                source: vec!["Project".to_string()],
-                target: vec!["Page".to_string()],
-                properties: vec![],
-            },
-        ];
+        let neo4j_arcs = vec![Neo4jArcClass {
+            name: "HAS_PAGE".to_string(),
+            family: "ownership".to_string(),
+            source: vec!["Project".to_string()],
+            target: vec!["Page".to_string()],
+            properties: vec![],
+        }];
 
         let diffs = diff_arc_classes(&yaml_arcs, &neo4j_arcs);
         assert_eq!(diffs.len(), 1);
@@ -835,24 +894,33 @@ mod tests {
 
     #[test]
     fn test_diff_arc_classes_modified_family() {
-        let yaml_arcs = vec![
-            ("HAS_PAGE".to_string(), "semantic".to_string(), vec!["Project".to_string()], vec!["Page".to_string()], vec![]),
-        ];
+        let yaml_arcs = vec![(
+            "HAS_PAGE".to_string(),
+            "semantic".to_string(),
+            vec!["Project".to_string()],
+            vec!["Page".to_string()],
+            vec![],
+        )];
 
-        let neo4j_arcs = vec![
-            Neo4jArcClass {
-                name: "HAS_PAGE".to_string(),
-                family: "ownership".to_string(),
-                source: vec!["Project".to_string()],
-                target: vec!["Page".to_string()],
-                properties: vec![],
-            },
-        ];
+        let neo4j_arcs = vec![Neo4jArcClass {
+            name: "HAS_PAGE".to_string(),
+            family: "ownership".to_string(),
+            source: vec!["Project".to_string()],
+            target: vec!["Page".to_string()],
+            properties: vec![],
+        }];
 
         let diffs = diff_arc_classes(&yaml_arcs, &neo4j_arcs);
         assert_eq!(diffs.len(), 1);
         assert_eq!(diffs[0].category, DiffCategory::Modified);
-        assert!(diffs[0].details.as_ref().unwrap().iter().any(|d| d.contains("family")));
+        assert!(
+            diffs[0]
+                .details
+                .as_ref()
+                .unwrap()
+                .iter()
+                .any(|d| d.contains("family"))
+        );
     }
 
     // -------------------------------------------------------------------------
@@ -889,15 +957,13 @@ mod tests {
                 details: None,
             },
         ];
-        let arc_diffs = vec![
-            DiffItem {
-                category: DiffCategory::Removed,
-                item_type: "arc_class".to_string(),
-                name: "OLD_ARC".to_string(),
-                description: "".to_string(),
-                details: None,
-            },
-        ];
+        let arc_diffs = vec![DiffItem {
+            category: DiffCategory::Removed,
+            item_type: "arc_class".to_string(),
+            name: "OLD_ARC".to_string(),
+            description: "".to_string(),
+            details: None,
+        }];
 
         let summary = build_summary(&node_diffs, &arc_diffs);
         assert!(summary.has_differences);
@@ -933,15 +999,13 @@ mod tests {
     #[test]
     fn test_format_human_with_differences() {
         let result = DiffResult {
-            node_classes: vec![
-                DiffItem {
-                    category: DiffCategory::Added,
-                    item_type: "node_class".to_string(),
-                    name: "NewNode".to_string(),
-                    description: "Present in YAML but not in Neo4j".to_string(),
-                    details: None,
-                },
-            ],
+            node_classes: vec![DiffItem {
+                category: DiffCategory::Added,
+                item_type: "node_class".to_string(),
+                name: "NewNode".to_string(),
+                description: "Present in YAML but not in Neo4j".to_string(),
+                details: None,
+            }],
             arc_classes: vec![],
             summary: DiffSummary {
                 nodes_added: 1,
@@ -962,15 +1026,13 @@ mod tests {
     #[test]
     fn test_format_json() {
         let result = DiffResult {
-            node_classes: vec![
-                DiffItem {
-                    category: DiffCategory::Added,
-                    item_type: "node_class".to_string(),
-                    name: "NewNode".to_string(),
-                    description: "test".to_string(),
-                    details: None,
-                },
-            ],
+            node_classes: vec![DiffItem {
+                category: DiffCategory::Added,
+                item_type: "node_class".to_string(),
+                name: "NewNode".to_string(),
+                description: "test".to_string(),
+                details: None,
+            }],
             arc_classes: vec![],
             summary: DiffSummary {
                 nodes_added: 1,

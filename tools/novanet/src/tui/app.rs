@@ -91,7 +91,7 @@ impl NavMode {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum Focus {
     #[default]
-    Tree,  // [1] Left panel - tree navigation
+    Tree, // [1] Left panel - tree navigation
     Yaml,  // [2] Center panel - source YAML
     Props, // [3] Right top - properties
     Arcs,  // [4] Right bottom - relationships
@@ -1541,7 +1541,8 @@ impl App {
                     }
                     Focus::Props => {
                         let max_scroll = self.props_line_count.saturating_sub(INFO_SCROLL_MARGIN);
-                        self.props_scroll = (self.props_scroll + PAGE_SCROLL_AMOUNT).min(max_scroll);
+                        self.props_scroll =
+                            (self.props_scroll + PAGE_SCROLL_AMOUNT).min(max_scroll);
                     }
                     Focus::Arcs => {
                         let max_scroll = self.arcs_line_count.saturating_sub(INFO_SCROLL_MARGIN);
@@ -2176,7 +2177,11 @@ impl App {
                 if self.is_graph_mode() && k.instance_count > 0 {
                     format!(
                         "{} → {} → {} ({}) [{}]",
-                        r.display_name, l.display_name, k.display_name, k.instance_count, trait_abbrev
+                        r.display_name,
+                        l.display_name,
+                        k.display_name,
+                        k.instance_count,
+                        trait_abbrev
                     )
                 } else {
                     format!(

@@ -104,9 +104,7 @@ pub async fn run_doctor(
                 if recheck.status == HealthStatus::Ok {
                     eprintln!("  \x1b[32m✓\x1b[0m Schema now in sync");
                 } else {
-                    eprintln!(
-                        "  \x1b[33m⚠\x1b[0m Schema still has issues after regeneration"
-                    );
+                    eprintln!("  \x1b[33m⚠\x1b[0m Schema still has issues after regeneration");
                 }
             }
             Err(e) => {

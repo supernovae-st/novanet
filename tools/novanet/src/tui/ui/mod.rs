@@ -655,7 +655,7 @@ fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
         .split(h_chunks[1]);
 
     render_unified_info_panel(f, center_chunks[0], app, &content); // Header box
-    render_yaml_panel(f, center_chunks[1], app);                    // YAML [2]
+    render_yaml_panel(f, center_chunks[1], app); // YAML [2]
 
     // RIGHT: Props [3] (top) + Arcs [4] (bottom)
     let right_chunks = Layout::default()
@@ -667,7 +667,7 @@ fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
         .split(h_chunks[2]);
 
     render_props_panel(f, right_chunks[0], app, &content); // Props [3]
-    render_graph_panel(f, right_chunks[1], app);           // Arcs [4]
+    render_graph_panel(f, right_chunks[1], app); // Arcs [4]
 }
 
 /// Narrow layout: Tree [1] | Stacked (Header+YAML [2], Props [3], Arcs [4]).
@@ -698,9 +698,9 @@ fn render_main_narrow(f: &mut Frame, area: Rect, app: &mut App) {
         .split(h_chunks[1]);
 
     render_unified_info_panel(f, v_chunks[0], app, &content); // Header
-    render_yaml_panel(f, v_chunks[1], app);                    // YAML [2]
-    render_props_panel(f, v_chunks[2], app, &content);         // Props [3]
-    render_graph_panel(f, v_chunks[3], app);                   // Arcs [4]
+    render_yaml_panel(f, v_chunks[1], app); // YAML [2]
+    render_props_panel(f, v_chunks[2], app, &content); // Props [3]
+    render_graph_panel(f, v_chunks[3], app); // Arcs [4]
 }
 
 /// Colorize path inline for title.

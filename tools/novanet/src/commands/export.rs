@@ -303,11 +303,7 @@ pub fn format_csv(graph: &GraphData) -> crate::Result<String> {
 // =============================================================================
 
 /// Run the export command.
-pub async fn run_export(
-    db: &Db,
-    args: ExportArgs,
-    _format: OutputFormat,
-) -> crate::Result<()> {
+pub async fn run_export(db: &Db, args: ExportArgs, _format: OutputFormat) -> crate::Result<()> {
     use crate::db::RowExt;
 
     // Build and execute node query
@@ -440,12 +436,9 @@ mod tests {
 
     #[test]
     fn test_export_args_with_relationships() {
-        let args = ExportArgs::try_parse_from([
-            "export",
-            "--relationships",
-            "HAS_NATIVE,FOR_LOCALE",
-        ])
-        .unwrap();
+        let args =
+            ExportArgs::try_parse_from(["export", "--relationships", "HAS_NATIVE,FOR_LOCALE"])
+                .unwrap();
         assert_eq!(
             args.relationships,
             Some(vec!["HAS_NATIVE".to_string(), "FOR_LOCALE".to_string()])
@@ -454,12 +447,9 @@ mod tests {
 
     #[test]
     fn test_export_args_with_custom_query() {
-        let args = ExportArgs::try_parse_from([
-            "export",
-            "--query",
-            "MATCH (n:Entity) RETURN n LIMIT 10",
-        ])
-        .unwrap();
+        let args =
+            ExportArgs::try_parse_from(["export", "--query", "MATCH (n:Entity) RETURN n LIMIT 10"])
+                .unwrap();
         assert_eq!(
             args.query,
             Some("MATCH (n:Entity) RETURN n LIMIT 10".to_string())

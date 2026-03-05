@@ -2820,8 +2820,7 @@ RETURN total,
                                             idx += instances.len();
                                         }
                                     }
-                                } else if let Some(instances) =
-                                    self.instances.get(&class_info.key)
+                                } else if let Some(instances) = self.instances.get(&class_info.key)
                                 {
                                     idx += instances.len();
                                 }
@@ -3127,7 +3126,10 @@ RETURN total,
                 {
                     self.entity_instance_count()
                 } else {
-                    self.instances.get(&class_info.key).map(|v| v.len()).unwrap_or(0)
+                    self.instances
+                        .get(&class_info.key)
+                        .map(|v| v.len())
+                        .unwrap_or(0)
                 };
                 let total_instances = self
                     .instance_totals

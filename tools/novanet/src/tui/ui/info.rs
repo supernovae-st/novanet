@@ -1332,12 +1332,10 @@ fn build_instance_content(
 
                     // Continuation lines
                     for cont_line in wrapped.iter().skip(1) {
-                        content.properties.add_line(Line::from(vec![
-                            Span::styled(
-                                cont_line.clone(),
-                                Style::default().fg(value_color).patch(bg_style),
-                            ),
-                        ]));
+                        content.properties.add_line(Line::from(vec![Span::styled(
+                            cont_line.clone(),
+                            Style::default().fg(value_color).patch(bg_style),
+                        )]));
                     }
                 } else {
                     // Single line (truncated or short value)
@@ -1443,12 +1441,10 @@ fn build_instance_content(
                     ]));
 
                     for cont_line in wrapped.iter().skip(1) {
-                        content.properties.add_line(Line::from(vec![
-                            Span::styled(
-                                cont_line.clone(),
-                                Style::default().fg(value_color).patch(bg_style),
-                            ),
-                        ]));
+                        content.properties.add_line(Line::from(vec![Span::styled(
+                            cont_line.clone(),
+                            Style::default().fg(value_color).patch(bg_style),
+                        )]));
                     }
                 } else {
                     let display_value = truncate_str(&value_str, 24);
@@ -1512,12 +1508,10 @@ fn build_instance_content(
                     ]));
 
                     for cont_line in wrapped.iter().skip(1) {
-                        content.properties.add_line(Line::from(vec![
-                            Span::styled(
-                                cont_line.clone(),
-                                Style::default().fg(value_color).patch(bg_style),
-                            ),
-                        ]));
+                        content.properties.add_line(Line::from(vec![Span::styled(
+                            cont_line.clone(),
+                            Style::default().fg(value_color).patch(bg_style),
+                        )]));
                     }
                 } else {
                     let display_value = truncate_str(&value_str, 24);
@@ -1960,7 +1954,10 @@ fn get_type_style(type_name: &str) -> (&'static str, &'static str, Color) {
 /// Build the title banner row: ╔═══════ ◆ CLASS ◆ ═══════╗
 fn build_title_row(label: &str, icon: &str, width: usize, color: Color) -> Line<'static> {
     if width < 10 {
-        return Line::from(Span::styled(format!("{} {}", icon, label), Style::default().fg(color)));
+        return Line::from(Span::styled(
+            format!("{} {}", icon, label),
+            Style::default().fg(color),
+        ));
     }
 
     let title = format!(" {} {} {} ", icon, label, icon);
@@ -1972,7 +1969,10 @@ fn build_title_row(label: &str, icon: &str, width: usize, color: Color) -> Line<
     Line::from(vec![
         Span::styled("╔", Style::default().fg(color)),
         Span::styled("═".repeat(left_bars), Style::default().fg(color)),
-        Span::styled(title, Style::default().fg(color).add_modifier(Modifier::BOLD)),
+        Span::styled(
+            title,
+            Style::default().fg(color).add_modifier(Modifier::BOLD),
+        ),
         Span::styled("═".repeat(right_bars), Style::default().fg(color)),
         Span::styled("╗", Style::default().fg(color)),
     ])
@@ -2005,24 +2005,29 @@ fn build_bottom_row(width: usize, color: Color) -> Line<'static> {
 }
 
 /// Build a content row with side borders: ║  content  ║
-fn build_content_row(spans: Vec<Span<'static>>, width: usize, border_color: Color) -> Line<'static> {
+fn build_content_row(
+    spans: Vec<Span<'static>>,
+    width: usize,
+    border_color: Color,
+) -> Line<'static> {
     // Calculate content width
     let content_width: usize = spans.iter().map(|s| s.content.chars().count()).sum();
     let inner_width = width.saturating_sub(4); // -2 for ║ on each side, -2 for padding
     let padding = inner_width.saturating_sub(content_width);
 
-    let mut all_spans = vec![
-        Span::styled("║ ", Style::default().fg(border_color)),
-    ];
+    let mut all_spans = vec![Span::styled("║ ", Style::default().fg(border_color))];
     all_spans.extend(spans);
-    all_spans.push(Span::styled(format!("{} ║", " ".repeat(padding)), Style::default().fg(border_color)));
+    all_spans.push(Span::styled(
+        format!("{} ║", " ".repeat(padding)),
+        Style::default().fg(border_color),
+    ));
 
     Line::from(all_spans)
 }
 
 /// Build location badges row: │ ◎ org │ ◎ config │ ■ defined │
 fn build_location_badges(
-    realm: Option<(&str, &str, Color)>,  // (icon, name, color)
+    realm: Option<(&str, &str, Color)>, // (icon, name, color)
     layer: Option<(&str, &str, Color)>,
     trait_info: Option<(&str, &str, Color)>,
     width: usize,
@@ -2047,7 +2052,11 @@ fn build_location_badges(
     // Build the badge boxes
     let inner_width = width.saturating_sub(4);
     let badge_count = badges.len();
-    let badge_width = if badge_count > 0 { inner_width / badge_count } else { 0 };
+    let badge_width = if badge_count > 0 {
+        inner_width / badge_count
+    } else {
+        0
+    };
 
     // Top of badges: ┌───────────┬───────────┬───────────┐
     let mut top_parts = vec![Span::styled("║ ┌", Style::default().fg(border_color))];
@@ -2057,7 +2066,10 @@ fn build_location_badges(
         } else {
             badge_width.saturating_sub(1)
         };
-        top_parts.push(Span::styled("─".repeat(w), Style::default().fg(COLOR_BORDER_DIM)));
+        top_parts.push(Span::styled(
+            "─".repeat(w),
+            Style::default().fg(COLOR_BORDER_DIM),
+        ));
         if i < badge_count - 1 {
             top_parts.push(Span::styled("┬", Style::default().fg(COLOR_BORDER_DIM)));
         }
@@ -2074,8 +2086,14 @@ fn build_location_badges(
         };
         let text_len = text.chars().count();
         let pad = w.saturating_sub(text_len);
-        mid_parts.push(Span::styled(format!(" {}", text), Style::default().fg(*color)));
-        mid_parts.push(Span::styled(" ".repeat(pad.saturating_sub(1)), Style::default()));
+        mid_parts.push(Span::styled(
+            format!(" {}", text),
+            Style::default().fg(*color),
+        ));
+        mid_parts.push(Span::styled(
+            " ".repeat(pad.saturating_sub(1)),
+            Style::default(),
+        ));
         mid_parts.push(Span::styled("│", Style::default().fg(COLOR_BORDER_DIM)));
     }
     mid_parts.push(Span::styled(" ║", Style::default().fg(border_color)));
@@ -2088,7 +2106,10 @@ fn build_location_badges(
         } else {
             badge_width.saturating_sub(1)
         };
-        bot_parts.push(Span::styled("─".repeat(w), Style::default().fg(COLOR_BORDER_DIM)));
+        bot_parts.push(Span::styled(
+            "─".repeat(w),
+            Style::default().fg(COLOR_BORDER_DIM),
+        ));
         if i < badge_count - 1 {
             bot_parts.push(Span::styled("┴", Style::default().fg(COLOR_BORDER_DIM)));
         }
@@ -2104,7 +2125,7 @@ fn build_location_badges(
 
 /// Build metrics cards row: ┌────────┐ ┌────────┐ ┌────────┐
 fn build_metric_cards(
-    metrics: Vec<(&str, String, Color)>,  // (label, value, color)
+    metrics: Vec<(&str, String, Color)>, // (label, value, color)
     width: usize,
     border_color: Color,
 ) -> Vec<Line<'static>> {
@@ -2124,7 +2145,10 @@ fn build_metric_cards(
     let mut top_spans = vec![Span::styled("║ ", Style::default().fg(border_color))];
     for i in 0..card_count {
         top_spans.push(Span::styled("┌", Style::default().fg(COLOR_BORDER_DIM)));
-        top_spans.push(Span::styled("─".repeat(card_width.saturating_sub(2)), Style::default().fg(COLOR_BORDER_DIM)));
+        top_spans.push(Span::styled(
+            "─".repeat(card_width.saturating_sub(2)),
+            Style::default().fg(COLOR_BORDER_DIM),
+        ));
         top_spans.push(Span::styled("┐", Style::default().fg(COLOR_BORDER_DIM)));
         if i < card_count - 1 {
             top_spans.push(Span::styled(" ", Style::default()));
@@ -2134,7 +2158,10 @@ fn build_metric_cards(
     // v0.16.5: Use saturating_sub to prevent underflow if card_count somehow becomes 0
     let used: usize = 2 + card_count * card_width + card_count.saturating_sub(1);
     let remaining = width.saturating_sub(used).saturating_sub(2);
-    top_spans.push(Span::styled(format!("{} ║", " ".repeat(remaining)), Style::default().fg(border_color)));
+    top_spans.push(Span::styled(
+        format!("{} ║", " ".repeat(remaining)),
+        Style::default().fg(border_color),
+    ));
 
     // Middle: │ 5 inst │  │ 9 prop │  │ 500tok │
     let mut mid_spans = vec![Span::styled("║ ", Style::default().fg(border_color))];
@@ -2144,27 +2171,42 @@ fn build_metric_cards(
         let inner = card_width.saturating_sub(2);
         let pad = inner.saturating_sub(content_len);
         mid_spans.push(Span::styled("│", Style::default().fg(COLOR_BORDER_DIM)));
-        mid_spans.push(Span::styled(value.to_string(), Style::default().fg(*color).add_modifier(Modifier::BOLD)));
-        mid_spans.push(Span::styled(label.to_string(), Style::default().fg(Color::Gray)));
+        mid_spans.push(Span::styled(
+            value.to_string(),
+            Style::default().fg(*color).add_modifier(Modifier::BOLD),
+        ));
+        mid_spans.push(Span::styled(
+            label.to_string(),
+            Style::default().fg(Color::Gray),
+        ));
         mid_spans.push(Span::styled(" ".repeat(pad), Style::default()));
         mid_spans.push(Span::styled("│", Style::default().fg(COLOR_BORDER_DIM)));
         if i < card_count - 1 {
             mid_spans.push(Span::styled(" ", Style::default()));
         }
     }
-    mid_spans.push(Span::styled(format!("{} ║", " ".repeat(remaining)), Style::default().fg(border_color)));
+    mid_spans.push(Span::styled(
+        format!("{} ║", " ".repeat(remaining)),
+        Style::default().fg(border_color),
+    ));
 
     // Bottom: └────────┘  └────────┘  └────────┘
     let mut bot_spans = vec![Span::styled("║ ", Style::default().fg(border_color))];
     for i in 0..card_count {
         bot_spans.push(Span::styled("└", Style::default().fg(COLOR_BORDER_DIM)));
-        bot_spans.push(Span::styled("─".repeat(card_width.saturating_sub(2)), Style::default().fg(COLOR_BORDER_DIM)));
+        bot_spans.push(Span::styled(
+            "─".repeat(card_width.saturating_sub(2)),
+            Style::default().fg(COLOR_BORDER_DIM),
+        ));
         bot_spans.push(Span::styled("┘", Style::default().fg(COLOR_BORDER_DIM)));
         if i < card_count - 1 {
             bot_spans.push(Span::styled(" ", Style::default()));
         }
     }
-    bot_spans.push(Span::styled(format!("{} ║", " ".repeat(remaining)), Style::default().fg(border_color)));
+    bot_spans.push(Span::styled(
+        format!("{} ║", " ".repeat(remaining)),
+        Style::default().fg(border_color),
+    ));
 
     vec![
         Line::from(top_spans),
@@ -2204,7 +2246,12 @@ fn render_header_box(f: &mut Frame, area: Rect, content: &UnifiedContent, state:
     // ═══════════════════════════════════════════════════════════
     // ROW 1: Title banner ╔═══════ ◆ CLASS ◆ ═══════╗
     // ═══════════════════════════════════════════════════════════
-    lines.push(build_title_row(type_label, type_icon, available_width, accent_color));
+    lines.push(build_title_row(
+        type_label,
+        type_icon,
+        available_width,
+        accent_color,
+    ));
 
     // ═══════════════════════════════════════════════════════════
     // ROW 2: Node name/key
@@ -2221,12 +2268,18 @@ fn render_header_box(f: &mut Frame, area: Rect, content: &UnifiedContent, state:
         (1, Some(2)) // key at line 1, display at line 2
     };
 
-    let key = content.identity.lines.get(key_idx)
+    let key = content
+        .identity
+        .lines
+        .get(key_idx)
         .and_then(|l| l.spans.get(1))
         .map(|s| s.content.trim().to_string())
         .unwrap_or_default();
     let display = display_idx.and_then(|idx| {
-        content.identity.lines.get(idx)
+        content
+            .identity
+            .lines
+            .get(idx)
             .and_then(|l| l.spans.get(1))
             .map(|s| s.content.trim().to_string())
     });
@@ -2234,17 +2287,36 @@ fn render_header_box(f: &mut Frame, area: Rect, content: &UnifiedContent, state:
     let name_spans = if let Some(d) = display {
         if d != key {
             vec![
-                Span::styled(key, Style::default().fg(Color::White).add_modifier(Modifier::BOLD)),
+                Span::styled(
+                    key,
+                    Style::default()
+                        .fg(Color::White)
+                        .add_modifier(Modifier::BOLD),
+                ),
                 Span::styled(" · ", Style::default().fg(Color::DarkGray)),
                 Span::styled(d, Style::default().fg(Color::Gray)),
             ]
         } else {
-            vec![Span::styled(key, Style::default().fg(Color::White).add_modifier(Modifier::BOLD))]
+            vec![Span::styled(
+                key,
+                Style::default()
+                    .fg(Color::White)
+                    .add_modifier(Modifier::BOLD),
+            )]
         }
     } else {
-        vec![Span::styled(key, Style::default().fg(Color::White).add_modifier(Modifier::BOLD))]
+        vec![Span::styled(
+            key,
+            Style::default()
+                .fg(Color::White)
+                .add_modifier(Modifier::BOLD),
+        )]
     };
-    lines.push(build_content_row(name_spans, available_width, main_border_color));
+    lines.push(build_content_row(
+        name_spans,
+        available_width,
+        main_border_color,
+    ));
 
     // ═══════════════════════════════════════════════════════════
     // ROW 3-5: Location badges (if present)
@@ -2272,14 +2344,23 @@ fn render_header_box(f: &mut Frame, area: Rect, content: &UnifiedContent, state:
         }
 
         // Convert to owned strings for the badges
-        let realm_owned: Option<(String, String, Color)> = realm_info.map(|(i, n, c)| (i.to_string(), n.to_string(), c));
-        let layer_owned: Option<(String, String, Color)> = layer_info.map(|(i, n, c)| (i.to_string(), n.to_string(), c));
-        let trait_owned: Option<(String, String, Color)> = trait_info.map(|(i, n, c)| (i.to_string(), n.to_string(), c));
+        let realm_owned: Option<(String, String, Color)> =
+            realm_info.map(|(i, n, c)| (i.to_string(), n.to_string(), c));
+        let layer_owned: Option<(String, String, Color)> =
+            layer_info.map(|(i, n, c)| (i.to_string(), n.to_string(), c));
+        let trait_owned: Option<(String, String, Color)> =
+            trait_info.map(|(i, n, c)| (i.to_string(), n.to_string(), c));
 
         let badge_lines = build_location_badges(
-            realm_owned.as_ref().map(|(i, n, c)| (i.as_str(), n.as_str(), *c)),
-            layer_owned.as_ref().map(|(i, n, c)| (i.as_str(), n.as_str(), *c)),
-            trait_owned.as_ref().map(|(i, n, c)| (i.as_str(), n.as_str(), *c)),
+            realm_owned
+                .as_ref()
+                .map(|(i, n, c)| (i.as_str(), n.as_str(), *c)),
+            layer_owned
+                .as_ref()
+                .map(|(i, n, c)| (i.as_str(), n.as_str(), *c)),
+            trait_owned
+                .as_ref()
+                .map(|(i, n, c)| (i.as_str(), n.as_str(), *c)),
             available_width,
             main_border_color,
         );
@@ -2350,7 +2431,11 @@ fn render_header_box(f: &mut Frame, area: Rect, content: &UnifiedContent, state:
             }
         }
         if !coverage_spans.is_empty() {
-            lines.push(build_content_row(coverage_spans, available_width, main_border_color));
+            lines.push(build_content_row(
+                coverage_spans,
+                available_width,
+                main_border_color,
+            ));
         }
     }
 

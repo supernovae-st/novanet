@@ -8,7 +8,9 @@ use ratatui::Frame;
 use ratatui::layout::Rect;
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
-use ratatui::widgets::{Block, Borders, Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState};
+use ratatui::widgets::{
+    Block, Borders, Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState,
+};
 
 use super::super::app::App;
 use super::super::data::TreeItem;
@@ -34,12 +36,7 @@ const BOX_BORDER_SELECTED: Color = Color::Rgb(42, 161, 152); // #2AA198
 
 /// Render lines with scroll support and scrollbar.
 /// Returns the total number of lines for scroll calculation.
-fn render_with_scroll(
-    f: &mut Frame,
-    area: Rect,
-    lines: Vec<Line>,
-    scroll_offset: usize,
-) -> usize {
+fn render_with_scroll(f: &mut Frame, area: Rect, lines: Vec<Line>, scroll_offset: usize) -> usize {
     let total_lines = lines.len();
     let visible_height = area.height as usize;
     let max_scroll = total_lines.saturating_sub(visible_height);

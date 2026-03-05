@@ -18,4 +18,4 @@ pub mod tui;
 pub mod user_config;
 pub mod validation;
 
-pub use error::{format_error_with_hint, ErrorHint, NovaNetError, Result};
+pub use error::{ErrorHint, NovaNetError, Result, format_error_with_hint};

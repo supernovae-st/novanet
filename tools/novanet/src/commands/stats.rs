@@ -381,10 +381,7 @@ mod tests {
         }
 
         // Should have scopes
-        assert!(
-            !stats.by_scope.is_empty(),
-            "should have at least one scope"
-        );
+        assert!(!stats.by_scope.is_empty(), "should have at least one scope");
 
         // Total should match sum of families
         let family_sum: usize = stats.by_family.values().sum();
@@ -439,12 +436,12 @@ mod tests {
 
     fn sample_stats() -> SchemaStats {
         let mut by_realm = HashMap::new();
-        by_realm.insert("shared".to_string(), 39);  // v0.17: -Market
+        by_realm.insert("shared".to_string(), 39); // v0.17: -Market
         by_realm.insert("org".to_string(), 19);
 
         let mut by_layer = HashMap::new();
         by_layer.insert("config".to_string(), 4);
-        by_layer.insert("locale".to_string(), 5);  // v0.17: -Market
+        by_layer.insert("locale".to_string(), 5); // v0.17: -Market
         by_layer.insert("knowledge".to_string(), 24);
         by_layer.insert("foundation".to_string(), 6);
 
@@ -469,13 +466,13 @@ mod tests {
 
         SchemaStats {
             nodes: NodeStats {
-                total: 58,  // v0.17: removed Market
+                total: 58, // v0.17: removed Market
                 by_realm,
                 by_layer,
                 by_trait,
             },
             arcs: Some(ArcStats {
-                total: 175,  // v0.17: removed Market arcs
+                total: 175, // v0.17: removed Market arcs
                 by_family,
                 by_scope,
             }),
@@ -488,8 +485,7 @@ mod tests {
         let json = format_json(&stats).expect("should format as JSON");
 
         // Should be valid JSON
-        let parsed: serde_json::Value =
-            serde_json::from_str(&json).expect("should parse as JSON");
+        let parsed: serde_json::Value = serde_json::from_str(&json).expect("should parse as JSON");
 
         // Should have expected structure
         assert!(parsed["nodes"]["total"].is_number());
@@ -503,8 +499,7 @@ mod tests {
         let yaml = format_yaml(&stats).expect("should format as YAML");
 
         // Should be valid YAML
-        let parsed: serde_yaml::Value =
-            serde_yaml::from_str(&yaml).expect("should parse as YAML");
+        let parsed: serde_yaml::Value = serde_yaml::from_str(&yaml).expect("should parse as YAML");
 
         // Should have expected structure
         assert!(parsed["nodes"]["total"].is_number());
@@ -577,7 +572,10 @@ mod tests {
 
         // Should NOT contain arcs key when None
         let parsed: serde_json::Value = serde_json::from_str(&json).unwrap();
-        assert!(parsed.get("arcs").is_none(), "arcs should be omitted when None");
+        assert!(
+            parsed.get("arcs").is_none(),
+            "arcs should be omitted when None"
+        );
     }
 
     // ─────────────────────────────────────────────────────────────────────────

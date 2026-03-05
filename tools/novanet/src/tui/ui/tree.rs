@@ -872,56 +872,57 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             // Build display text with all metrics
                             // v0.16.4: New format: ● 200 Name →out ←in ⊞req/tot
                             // Count on left, no (def) abbreviation
-                            let (display_text, class_text_color, count_str, count_color) = if is_data_mode {
-                                // Data mode: instances + arcs + props + health
-                                let health_badge = format_health_badge(
-                                    class_info.health_percent,
-                                    class_info.issues_count,
-                                );
+                            let (display_text, class_text_color, count_str, count_color) =
+                                if is_data_mode {
+                                    // Data mode: instances + arcs + props + health
+                                    let health_badge = format_health_badge(
+                                        class_info.health_percent,
+                                        class_info.issues_count,
+                                    );
 
-                                // v0.16.4: Count string (right-aligned 5 chars): "  200" or "   - "
-                                let cnt_str = if class_is_empty {
-                                    "  - ".to_string()
+                                    // v0.16.4: Count string (right-aligned 5 chars): "  200" or "   - "
+                                    let cnt_str = if class_is_empty {
+                                        "  - ".to_string()
+                                    } else {
+                                        format!("{:>4}", instance_count)
+                                    };
+
+                                    let text = format!(
+                                        "{}{}{}{}",
+                                        class_info.display_name,
+                                        arc_suffix,
+                                        props_suffix,
+                                        health_badge
+                                    );
+
+                                    // v0.16.4: Dim text for empty classes, white for populated
+                                    let text_color = if class_is_empty {
+                                        Color::Rgb(140, 140, 150) // Slightly dimmed
+                                    } else {
+                                        Color::White
+                                    };
+
+                                    // v0.16.4: Count color based on quantity
+                                    // Green for 1-99, Cyan for 100+, Yellow for 1000+
+                                    let cnt_color = if instance_count >= 1000 {
+                                        Color::Yellow
+                                    } else if instance_count >= 100 {
+                                        Color::Cyan
+                                    } else if instance_count > 0 {
+                                        Color::Green
+                                    } else {
+                                        Color::Rgb(100, 100, 110) // Dim gray for empty
+                                    };
+
+                                    (text, text_color, cnt_str, cnt_color)
                                 } else {
-                                    format!("{:>4}", instance_count)
+                                    // Meta mode: arcs + props (no instance count)
+                                    let text = format!(
+                                        "{}{}{}",
+                                        class_info.display_name, arc_suffix, props_suffix
+                                    );
+                                    (text, Color::White, "    ".to_string(), Color::White)
                                 };
-
-                                let text = format!(
-                                    "{}{}{}{}",
-                                    class_info.display_name,
-                                    arc_suffix,
-                                    props_suffix,
-                                    health_badge
-                                );
-
-                                // v0.16.4: Dim text for empty classes, white for populated
-                                let text_color = if class_is_empty {
-                                    Color::Rgb(140, 140, 150) // Slightly dimmed
-                                } else {
-                                    Color::White
-                                };
-
-                                // v0.16.4: Count color based on quantity
-                                // Green for 1-99, Cyan for 100+, Yellow for 1000+
-                                let cnt_color = if instance_count >= 1000 {
-                                    Color::Yellow
-                                } else if instance_count >= 100 {
-                                    Color::Cyan
-                                } else if instance_count > 0 {
-                                    Color::Green
-                                } else {
-                                    Color::Rgb(100, 100, 110) // Dim gray for empty
-                                };
-
-                                (text, text_color, cnt_str, cnt_color)
-                            } else {
-                                // Meta mode: arcs + props (no instance count)
-                                let text = format!(
-                                    "{}{}{}",
-                                    class_info.display_name, arc_suffix, props_suffix
-                                );
-                                (text, Color::White, "    ".to_string(), Color::White)
-                            };
 
                             let prefix = format!(
                                 "{}{}{}",
@@ -950,7 +951,12 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             // Build left side content: ● 200 Name →out ←in ⊞req/tot
                             let left_content = format!(
                                 "{}{}{} {} {} {}",
-                                cursor_char, prefix, class_icon, populated_icon, count_str, display_text
+                                cursor_char,
+                                prefix,
+                                class_icon,
+                                populated_icon,
+                                count_str,
+                                display_text
                             );
 
                             // v0.13.1: Simple color bar only (no repeated text badges)
@@ -1029,7 +1035,8 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             if is_data_mode && !class_collapsed {
                                 // v0.16.4: Entity shows flat instances with category suffix + native count
                                 // v0.16.5: Fallback to instances["Entity"] if entity_category_instances empty
-                                let has_category_instances = !app.tree.entity_category_instances.is_empty();
+                                let has_category_instances =
+                                    !app.tree.entity_category_instances.is_empty();
 
                                 if class_info.key == "Entity"
                                     && !app.tree.entity_categories.is_empty()
@@ -1080,7 +1087,8 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             .iter()
                                             .filter(|a| a.arc_type == "HAS_NATIVE")
                                             .count();
-                                        let native_icon = if native_count > 0 { "◆" } else { "◇" };
+                                        let native_icon =
+                                            if native_count > 0 { "◆" } else { "◇" };
                                         let native_color = if native_count > 0 {
                                             Color::Green
                                         } else {

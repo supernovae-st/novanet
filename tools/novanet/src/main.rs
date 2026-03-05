@@ -1001,7 +1001,12 @@ async fn main() -> color_eyre::Result<()> {
         Commands::Export(ref args) => {
             let db = connect_db(&uri, &user, password.as_ref()).await?;
             eprintln!("novanet export --format={:?}", args.format);
-            novanet::commands::export::run_export(&db, args.clone(), novanet::output::OutputFormat::Table).await?;
+            novanet::commands::export::run_export(
+                &db,
+                args.clone(),
+                novanet::output::OutputFormat::Table,
+            )
+            .await?;
         }
 
         #[cfg(feature = "tui")]
@@ -1058,7 +1063,11 @@ async fn main() -> color_eyre::Result<()> {
         }
 
         // ── Doctor (YAML + optional Neo4j) ───────────────────────────
-        Commands::Doctor { skip_db, verbose, fix } => {
+        Commands::Doctor {
+            skip_db,
+            verbose,
+            fix,
+        } => {
             let root = root?;
             let db = if skip_db {
                 None

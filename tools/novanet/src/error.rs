@@ -81,7 +81,12 @@ impl ErrorHint for NovaNetError {
                 }
             }
             NovaNetError::UnknownClass(label) => {
-                if label.chars().next().map(|c| c.is_lowercase()).unwrap_or(false) {
+                if label
+                    .chars()
+                    .next()
+                    .map(|c| c.is_lowercase())
+                    .unwrap_or(false)
+                {
                     Some("Class names use PascalCase (e.g., 'Page' not 'page').")
                 } else {
                     Some("Run 'novanet schema validate' to check class definitions.")
@@ -102,13 +107,11 @@ impl ErrorHint for NovaNetError {
                     None
                 }
             }
-            NovaNetError::Generator { generator, .. } => {
-                Some(match generator.as_str() {
-                    "mermaid" => "Check view definitions in models/views/.",
-                    "cypher" => "Validate YAML with 'novanet schema validate'.",
-                    _ => "Check YAML definitions and try again.",
-                })
-            }
+            NovaNetError::Generator { generator, .. } => Some(match generator.as_str() {
+                "mermaid" => "Check view definitions in models/views/.",
+                "cypher" => "Validate YAML with 'novanet schema validate'.",
+                _ => "Check YAML definitions and try again.",
+            }),
             NovaNetError::Io(err) => {
                 let kind = err.kind();
                 match kind {
@@ -242,7 +245,10 @@ mod tests {
     fn hint_io_permission_denied() {
         let io_err = std::io::Error::new(std::io::ErrorKind::PermissionDenied, "denied");
         let err: NovaNetError = io_err.into();
-        assert_eq!(err.hint(), Some("Permission denied. Check file permissions."));
+        assert_eq!(
+            err.hint(),
+            Some("Permission denied. Check file permissions.")
+        );
     }
 
     #[test]
