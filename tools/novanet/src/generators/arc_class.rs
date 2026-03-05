@@ -732,8 +732,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Schema:ArcClass"))
             .count();
         assert_eq!(
-            ac_merges, 175,
-            "expected 175 ArcClass MERGE statements (v0.17 -HAS_KEYWORD -KEYWORD_OF -TARGETS_PERSONA -FOR_CHANNEL -3 Market arcs)"
+            ac_merges, 143,
+            "expected 143 ArcClass MERGE statements (v0.17: 32 semantic arcs archived)"
         );
 
         // HAS_ARC_CLASS relationships match ArcClass count
@@ -742,8 +742,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_ARC_CLASS]"))
             .count();
         assert_eq!(
-            has_ac, 175,
-            "expected 175 HAS_ARC_CLASS relationships (v0.17 -HAS_KEYWORD -KEYWORD_OF -TARGETS_PERSONA -FOR_CHANNEL -3 Market arcs)"
+            has_ac, 143,
+            "expected 143 HAS_ARC_CLASS relationships (v0.17: 32 semantic arcs archived)"
         );
 
         // IN_FAMILY relationships match ArcClass count
@@ -752,8 +752,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_FAMILY]"))
             .count();
         assert_eq!(
-            in_family, 175,
-            "expected 175 IN_FAMILY relationships (v0.17 -HAS_KEYWORD -KEYWORD_OF -TARGETS_PERSONA -FOR_CHANNEL -3 Market arcs)"
+            in_family, 143,
+            "expected 143 IN_FAMILY relationships (v0.17: 32 semantic arcs archived)"
         );
 
         // Family distribution (non-inverse counts)
@@ -774,17 +774,17 @@ mod tests {
         let generation = count_family("generation");
         let mining = count_family("mining");
 
-        // v0.17 cleanup: Total arcs = 175
-        // ownership (incl schema family for meta-arcs)
+        // v0.17 cleanup: Total arcs = 143 (32 semantic arcs archived)
+        // ownership=76 (incl schema family for meta-arcs)
         // localization=20
-        // semantic (reduced due to Market removal)
+        // semantic=26 (reduced: 32 arcs archived)
         // generation=12 (PRODUCED, PRODUCED_BY, minus merged arcs)
         // mining=6 (SEO/GEO mining arcs)
         // Note: schema family (OF_CLASS, FROM_CLASS, TO_CLASS) also counted in ownership
         let total = ownership + localization + semantic + generation + mining;
         assert!(
-            total >= 172,
-            "family counts should sum to at least 172: o={ownership} l={localization} s={semantic} g={generation} m={mining} total={total}"
+            total >= 140,
+            "family counts should sum to at least 140: o={ownership} l={localization} s={semantic} g={generation} m={mining} total={total}"
         );
 
         // Spot checks — specific ArcClass nodes (v11.8: renamed from ArcClass)
@@ -814,8 +814,8 @@ mod tests {
             }
         }
 
-        // v0.17 cleanup: Header reflects count (175 total ArcClass nodes)
-        assert!(cypher.contains("175 ArcClass nodes"));
+        // v0.17 cleanup: Header reflects count (143 total ArcClass nodes)
+        assert!(cypher.contains("143 ArcClass nodes"));
     }
 
     /// Snapshot test for a minimal ArcSchema generator output.

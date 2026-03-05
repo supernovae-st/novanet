@@ -356,10 +356,10 @@ mod tests {
 
         let stats = compute_arc_stats(&root).expect("should compute arc stats");
 
-        // v0.17: 175 arc classes
+        // v0.17: 143 arc classes (32 semantic arcs archived)
         assert!(
-            stats.total >= 173,
-            "expected at least 173 arc classes, got {}",
+            stats.total >= 143,
+            "expected at least 143 arc classes, got {}",
             stats.total
         );
 
