@@ -6,262 +6,362 @@ For complete history, see [CHANGELOG.md](./CHANGELOG.md).
 
 ## [0.16.2] - 2026-03-03
 
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  🧠 NOVANET v0.16.2 — CONTENT GENERATION PIPELINE                             ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  📋 3-Phase Pipeline  │  🔧 12 MCP Tools  │  📊 1,279 tests  │  🚀 Production ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+### ✨ Highlights
+
+| Feature | Status | Impact |
+|---------|--------|--------|
+| **📋 3-Phase Pipeline** | ✅ Complete | Full content generation workflow |
+| **🔧 Content Generation Skill** | ✅ New | Block generation rules (hero, features, faq, cta) |
+| **📊 SESSION.md** | ✅ Complete | Ontology brainstorm D1-D8 decisions |
+
+### 🏗️ 3-Phase Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  CONTENT GENERATION PIPELINE                                                    │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  Phase 1: Entity Bootstrap                                                      │
+│  └── 00-entity-native-bootstrap.nika.yaml → Create EntityNative                │
+│                                                                                 │
+│  Phase 2: SEO Discovery                                                         │
+│  └── 06-seo-discovery-modular.nika.yaml → SEO Analysis                         │
+│                                                                                 │
+│  Phase 3: Content Generation (NEW)                                              │
+│  └── 07-content-generation.nika.yaml → Generate BlockNatives + PageNative      │
+│      ├── Uses novanet_generate for context assembly                            │
+│      └── Validates slug match with EntityNative.denomination_forms.url         │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
 ### Added
-- **Phase 3: Content Generation Workflow** - Complete 3-phase Nika pipeline
-  - `07-content-generation.nika.yaml` - Generate BlockNatives + PageNative
-  - `skills/content-generation.md` - Block generation rules (head-seo-meta, hero, features, faq, cta)
+
+- **📋 Phase 3: Content Generation Workflow** — Complete 3-phase Nika pipeline
+  - `07-content-generation.nika.yaml` — Generate BlockNatives + PageNative
+  - `skills/content-generation.md` — Block generation rules (head-seo-meta, hero, features, faq, cta)
   - Uses `novanet_generate` for context assembly
   - Validates slug match with EntityNative.denomination_forms.url
-- **SESSION.md Complete** - Ontology brainstorm session finalized
+
+- **📝 SESSION.md Complete** — Ontology brainstorm session finalized
   - D1-D8 decisions documented
   - 3-workflow architecture validated
   - 8 workflows + 4 support files catalogued
 
 ### Changed
-- **Dependencies** - Batch updates from dependabot
+
+- **📦 Dependencies** — Batch updates from dependabot
   - autoprefixer: 10.4.24 → 10.4.27
   - postcss: 8.5.6 → 8.5.8
   - framer-motion: 12.34.3 → 12.34.5
   - eslint: 9.39.2 → 9.39.3
-  - @eslint/js: 9.39.2 → 9.39.3
   - lucide-react: 0.575.0 → 0.576.0
-  - GitHub Actions: Various updates
-  - Rust deps in novanet-mcp: 4 updates
 
-### Workflows
-- **Phase 1**: `00-entity-native-bootstrap.nika.yaml` - Create EntityNative
-- **Phase 2**: `06-seo-discovery-modular.nika.yaml` - SEO Discovery
-- **Phase 3**: `07-content-generation.nika.yaml` - Content Generation (NEW)
+---
 
 ## [0.16.0] - 2026-03-03
 
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  🧠 NOVANET v0.16.0 — INIT + CONFIG + DOCTOR                                  ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  🚀 novanet init  │  ⚙️ User Config  │  🔧 doctor --fix  │  💡 Error Hints   ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+### ✨ Highlights
+
+| Feature | Status | Impact |
+|---------|--------|--------|
+| **🚀 novanet init** | ✅ New | Interactive setup wizard for first-time users |
+| **⚙️ User Config** | ✅ New | Persistent ~/.novanet/config.toml |
+| **🔧 doctor --fix** | ✅ New | Automatic schema sync repair |
+| **💡 Error Hints** | ✅ New | Actionable suggestions for common errors |
+
 ### Added
-- **novanet init** - Interactive setup wizard for first-time users
+
+- **🚀 novanet init** — Interactive setup wizard for first-time users
   - Creates `~/.novanet/config.toml` with Neo4j credentials
   - Interactive mode with prompts for URI, user, password
   - Non-interactive mode with CLI flags (`--neo4j-uri`, `--neo4j-user`, `--neo4j-password`)
   - `--status` flag to show current configuration
   - `--force` flag to overwrite existing config
   - Automatic Neo4j connection test on setup
-- **User Config System** - Persistent configuration via `~/.novanet/config.toml`
+
+- **⚙️ User Config System** — Persistent configuration via `~/.novanet/config.toml`
   - Neo4j credentials (uri, user, password)
   - CLI preferences (default_format, verbose)
   - Environment variable fallback (NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD)
-- **doctor --fix** - Automatic schema sync repair
+
+- **🔧 doctor --fix** — Automatic schema sync repair
   - Detects schema sync issues
   - Runs `schema generate` automatically when `--fix` is passed
   - Re-validates after fix to confirm resolution
-- **Error Hints System** - Actionable suggestions for common errors
+
+- **💡 Error Hints System** — Actionable suggestions for common errors
   - Connection errors: Suggests starting Neo4j or running init
   - Authentication errors: Points to password configuration
   - Schema errors: Suggests validation and regeneration commands
   - I/O errors: Identifies file/permission issues
   - `ErrorHint` trait with `format_error_with_hint()` helper
 
-### Changed
-- **doctor** now accepts `fix: bool` parameter
-- **Dependencies** - Added `toml = "0.8"` for config file parsing
-- **Test count** - 1255 tests passing (CLI + 10 new error hint tests)
+### 📊 Statistics
 
-### Statistics
-- **CLI commands**: Added `init`, enhanced `doctor --fix`
-- **Test coverage**: 1255 tests passing
-- **Zero clippy warnings**
+```
+╭─────────────────────────────────────────────────────────────────────────────────╮
+│  📊 v0.16.0 METRICS                                                             │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  🧪 Tests:        1,255 passing (CLI + 10 new error hint tests)                 │
+│  📏 Clippy:       Zero warnings                                                 │
+│  🔧 Commands:     Added init, enhanced doctor --fix                             │
+│                                                                                 │
+╰─────────────────────────────────────────────────────────────────────────────────╯
+```
+
+---
 
 ## [0.15.3] - 2026-03-03
 
-### Security
-- **CRITICAL: Cypher Injection Prevention** - Added `validation.rs` with regex validation for class/arc names
-  - Node classes: `^[A-Z][A-Za-z0-9]*$` (PascalCase)
-  - Arc classes: `^[A-Z][A-Z0-9_]*$` (SCREAMING_SNAKE_CASE)
-  - Rejects injection attempts like `Entity}DETACH DELETE n`
-- **CRITICAL: Memory Leak Fix** - Replaced hand-rolled SchemaCache with `moka::sync::Cache`
-  - Automatic TTL-based eviction (was: expired entries never evicted)
-  - Configurable max entries and TTL
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  🧠 NOVANET v0.15.3 — SECURITY HARDENING                                      ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  🔒 Cypher Injection  │  🧹 Memory Leak  │  🔗 HAS_NATIVE  │  ✅ Validation   ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+### ⚠️ Security
+
+| Issue | Severity | Fix |
+|-------|----------|-----|
+| **Cypher Injection** | 🔴 Critical | Regex validation for class/arc names |
+| **Memory Leak** | 🔴 Critical | moka::sync::Cache with TTL eviction |
+
+### 🔒 Security Details
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  CYPHER INJECTION PREVENTION                                                    │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  Added: validation.rs with regex validation                                     │
+│                                                                                 │
+│  Node classes: ^[A-Z][A-Za-z0-9]*$           (PascalCase)                      │
+│  Arc classes:  ^[A-Z][A-Z0-9_]*$             (SCREAMING_SNAKE_CASE)            │
+│                                                                                 │
+│  Rejects injection attempts like: "Entity}DETACH DELETE n"                      │
+│                                                                                 │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│  MEMORY LEAK FIX                                                                │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  Before: Hand-rolled SchemaCache (expired entries never evicted)                │
+│  After:  moka::sync::Cache (automatic TTL-based eviction)                       │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
 
 ### Added
-- **HAS_NATIVE Auto-Arc** - Automatic arc creation for `*Native` classes
+
+- **🔗 HAS_NATIVE Auto-Arc** — Automatic arc creation for `*Native` classes
   - When upserting `EntityNative`, `PageNative`, or `BlockNative` with key containing `@`
   - Automatically creates `(Entity)-[:HAS_NATIVE]->(EntityNative)` arc
-- **Required Property Validation** - Schema-based validation before writes
+
+- **✅ Required Property Validation** — Schema-based validation before writes
   - Checks `required_properties` from ClassMetadata
   - Returns detailed error with missing property names
 
-### Changed
-- **Phase 5 Complete** - `novanet_write` tool fully implemented with security hardening
-- **Hints** - Removed emojis for terminal compatibility
-- **Documentation** - Updated CLAUDE.md with security features and Phase 5 status
+### 📊 Statistics
 
-### Statistics
-- **12 MCP tools**: query, describe, search, traverse, assemble, atoms, generate, introspect, batch, cache_stats, cache_invalidate, write
-- **430 tests passing** (MCP server, was 348)
-- **Zero clippy warnings**
+```
+╭─────────────────────────────────────────────────────────────────────────────────╮
+│  📊 v0.15.3 METRICS                                                             │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  🔧 MCP Tools:    12 (query, describe, search, traverse, assemble, atoms,       │
+│                      generate, introspect, batch, cache_stats,                  │
+│                      cache_invalidate, write)                                   │
+│  🧪 Tests:        430 passing (MCP server, was 348)                             │
+│  📏 Clippy:       Zero warnings                                                 │
+│                                                                                 │
+╰─────────────────────────────────────────────────────────────────────────────────╯
+```
+
+---
 
 ## [0.15.2] - 2026-03-03
 
 ### Fixed
-- **Documentation Accuracy** - Updated test counts and version references across all CLAUDE.md files
+
+- **📝 Documentation Accuracy** — Updated test counts and version references
   - Test badge: 1226 → 1279 in README.md
   - CLI test count: 950 → 1279 in README.md
   - Version references: v0.13.0 → v0.15.1 in packages/core/CLAUDE.md
   - Arc count: 169 → 182 in packages/core/CLAUDE.md
   - MCP Server version header: v0.5.0 → v0.15.1 in CLAUDE.md
-- **Debug console.log removed** - Removed debug logging from `/api/graph/query` route (production cleanup)
-- **Rust code quality** - Replaced `.unwrap()` with `.expect()` in diff.rs for better error messages
-  - Lines 170-177: node class intersection lookup
-  - Lines 269-276: arc class intersection lookup
 
-### Statistics
-- **1279 tests passing** (39 MCP + 1240 CLI)
-- **610 TypeScript tests passing** (Studio + Core)
-- **Zero clippy warnings**
+- **🧹 Debug cleanup** — Removed debug console.log from `/api/graph/query` route
+
+- **🦀 Rust code quality** — Replaced `.unwrap()` with `.expect()` in diff.rs
+
+### 📊 Statistics
+
+```
+🧪 Tests:    1,279 passing (39 MCP + 1,240 CLI)
+📊 TS Tests: 610 passing (Studio + Core)
+📏 Clippy:   Zero warnings
+```
+
+---
 
 ## [0.15.1] - 2026-03-03
 
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  🧠 NOVANET v0.15.1 — VERSION ALIGNMENT                                       ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  📦 All Packages Aligned  │  🔧 11 MCP Tools  │  🔄 Unified Versioning        ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
 ### Changed
-- **Version Alignment** - All packages now at 0.15.1
+
+- **📦 Version Alignment** — All packages now at 0.15.1
   - TypeScript packages: root, @novanet/core, @novanet/db, @novanet/studio
   - Rust CLI: tools/novanet
   - Rust MCP: tools/novanet-mcp (reset from 0.6.0 to align with NovaNet versioning)
-- **MCP Versioning Strategy** - MCP server now follows NovaNet version (was independent 0.x.x)
+
+- **🔄 MCP Versioning Strategy** — MCP server now follows NovaNet version
   - Simplifies version tracking: "NovaNet 0.15.1" = all components at 0.15.1
   - MCP protocol compatibility tracked via rmcp crate version (0.16)
 
-### Statistics
-- **11 MCP tools**: query, describe, search, traverse, assemble, atoms, generate, introspect, batch, cache_stats, cache_invalidate
-- **1279 tests passing** (39 MCP + 1240 CLI)
-- **All packages aligned** at 0.15.1
+### 📊 Statistics
+
+```
+╭─────────────────────────────────────────────────────────────────────────────────╮
+│  📊 v0.15.1 METRICS                                                             │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  🔧 MCP Tools:    11 (query, describe, search, traverse, assemble, atoms,       │
+│                      generate, introspect, batch, cache_stats, cache_invalidate)│
+│  🧪 Tests:        1,279 passing (39 MCP + 1,240 CLI)                            │
+│  📦 Packages:     All aligned at 0.15.1                                         │
+│                                                                                 │
+╰─────────────────────────────────────────────────────────────────────────────────╯
+```
+
+---
 
 ## [0.15.0] - 2026-03-02
 
 ### Added
-- **MCP Tool: novanet_batch** - Bulk operations with parallel execution support
+
+- **🔧 MCP Tool: novanet_batch** — Bulk operations with parallel execution support
   - Execute multiple MCP operations in a single call
   - Configurable parallelism with `max_concurrent` parameter
   - `fail_fast` option to stop on first error or continue
-  - Returns detailed results for each operation
-- **MCP Tool: novanet_cache_stats** - Cache statistics and monitoring
+
+- **📊 MCP Tool: novanet_cache_stats** — Cache statistics and monitoring
   - Get cache hit/miss counts and hit rate percentage
   - View entry count, memory usage, and TTL settings
-  - Useful for debugging and performance optimization
-- **MCP Tool: novanet_cache_invalidate** - Manual cache invalidation
+
+- **🧹 MCP Tool: novanet_cache_invalidate** — Manual cache invalidation
   - Clear all cached queries with `all=true`
-  - Pattern-based invalidation (returns error with guidance)
-  - Reports invalidation count and remaining entries
-- **Error Hints System** - Actionable suggestions for common errors
-  - Pattern-based error detection (10 categories)
-  - Hints for Cypher syntax, Neo4j connection, auth, timeouts, etc.
-  - `with_hint()` method on Error type for enhanced messages
-- **CLI Command: novanet export** - Export graph data to multiple formats
-  - Formats: Cypher, JSON, GraphML, CSV
-  - Filter by labels (`--labels`) and relationship types (`--relationships`)
-  - Custom Cypher query support (`--query`)
-  - Schema export option (`--include-schema`)
-- **CLI Command: novanet stats** - Schema statistics from YAML (offline)
-  - Node classes by realm, layer, and trait
-  - Arc classes by family and scope
-  - Output formats: text (default), JSON, YAML
-  - `--detailed` and `--include-arcs` flags
-- **CLI Command: novanet diff** - Compare YAML schema with Neo4j database
-  - Detect added/removed/modified node and arc classes
-  - Human-readable and JSON output formats
-  - `--exit-code` for CI integration (exits 1 if drift detected)
-  - `--nodes-only` and `--arcs-only` filters
+  - Pattern-based invalidation
 
-### Changed
-- MCP tool count: 8 → 11 (added batch, cache_stats, cache_invalidate)
-- NovaNet MCP version: 0.5.0 → 0.6.0
-- CLI command count updated with 3 new commands
-- Documentation updated with 11 tools references
+- **💡 Error Hints System** — Actionable suggestions for common errors (10 categories)
 
-### Statistics
-- **11 MCP tools**: query, describe, search, traverse, assemble, atoms, generate, introspect, batch, cache_stats, cache_invalidate
-- **1279 tests passing** (39 MCP + 1240 CLI)
-- **Type-check clean** (all packages)
-- **Lint clean** (0 errors, 0 clippy warnings)
+- **📤 CLI Command: novanet export** — Export graph data (Cypher, JSON, GraphML, CSV)
 
-## [0.14.1] - 2026-03-02
+- **📊 CLI Command: novanet stats** — Schema statistics from YAML (offline)
 
-### Fixed
-- **Zod 4 Migration** - Fixed `z.record()` API breaking changes in `shared.schema.ts`
-  - Zod 4 requires explicit key schema: `z.record(z.string(), valueSchema)`
-  - Updated 14 instances across LocaleVoice, LocaleCulture, Adaptation schemas
-- **dagre Compatibility** - Reverted `@dagrejs/dagre` from 2.0.4 to 1.1.8
-  - dagre 2.0 breaking API changes caused test failures in `schemaLayoutELK.test.ts`
-  - Migration to dagre 2.0 documented as future work in `docs/plans/`
+- **🔍 CLI Command: novanet diff** — Compare YAML schema with Neo4j database
 
-### Changed
-- **Batch Dependency Updates** - Updated 13 dependencies via PR #55
-  - TypeScript ecosystem: `@types/node`, `@types/react`, `eslint-config-next`, `next`
-  - React ecosystem: `@testing-library/react`, `lucide-react`
-  - Runtime: `framer-motion`, `neo4j-driver`, `sonner`, `zustand`
-  - Testing: `@playwright/test`, `@types/jest`, `ts-jest`
-- **Zod 4** - Upgraded from Zod 3.24 to 4.3 with breaking API migration
+### 📊 Statistics
 
-### Statistics
-- **610 tests passing** (Studio + Core)
-- **Type-check clean** (3/3 packages)
-- **Lint clean** (0 errors)
+```
+🔧 MCP Tools:  11 (8 → 11: +batch, +cache_stats, +cache_invalidate)
+🧪 Tests:      1,279 passing (39 MCP + 1,240 CLI)
+📏 Clippy:     Zero warnings
+```
+
+---
 
 ## [0.14.0] - 2026-02-19
 
 ### Added
-- **MCP Tool: novanet_introspect** - 8th MCP tool for schema introspection
+
+- **🔍 MCP Tool: novanet_introspect** — 8th MCP tool for schema introspection
   - Query NodeClasses filtered by realm/layer
   - Query ArcClasses filtered by family
   - Get specific class/arc details with relationships
-  - Schema: IntrospectParams, IntrospectResult with JsonSchema derives
-- **MCP: context_build_log** - New debugging feature in `novanet_generate`
+
+- **📋 context_build_log** — New debugging feature in `novanet_generate`
   - 5 phases logged: structure_phase, entities_phase, atoms_phase, anchors_phase, token_decisions
-  - Helps debug and understand how context is assembled for LLM generation
-  - Schema: `ContextBuildLog` struct with `JsonSchema` derive for MCP clients
 
-### Changed
-- MCP tool count: 7 → 8 (added novanet_introspect)
-- NovaNet MCP version: 0.4.0 → 0.5.0
-- Documentation updated with 8 tools references
-
-### Statistics
-- **8 MCP tools**: query, describe, search, traverse, assemble, atoms, generate, introspect
+---
 
 ## [0.13.1] - 2026-02-17
 
 ### Added
-- **6th Arc Family: Schema** - Meta-schema relationships for graph structure
-  - `OF_CLASS` - Connects instance nodes to their Class definitions
-  - `FROM_CLASS` - ArcClass defines source node types
-  - `TO_CLASS` - ArcClass defines target node types
-  - Family properties: indigo color (#6366f1), dotted arrow style
-  - Terminal palette mappings: 256-color (99), 16-color (4 blue)
 
-### Changed
-- Arc count: 169 → 182 (+13 new arcs: 3 schema meta-arcs + 10 existing knowledge atom arcs now counted)
-- Arc family count: 5 → 6 (added schema family)
-- All documentation updated to reflect 182 arcs and 6 arc families
-- Test suite: 1082 tests passing (6 tests updated for new counts)
+- **📊 6th Arc Family: Schema** — Meta-schema relationships for graph structure
+  - `OF_CLASS` — Connects instance nodes to their Class definitions
+  - `FROM_CLASS` — ArcClass defines source node types
+  - `TO_CLASS` — ArcClass defines target node types
 
-### Statistics
-- **61 nodes** (40 shared + 21 org), **10 layers**, **5 traits**
-- **182 arcs** (6 families: ownership, localization, semantic, generation, mining, schema)
-- Schema validation: 0 errors, 0 warnings
-- Database reset: 22,189+ nodes seeded successfully
+### 📊 Statistics
+
+```
+📦 Nodes:  61 (40 shared + 21 org), 10 layers, 5 traits
+🔗 Arcs:   182 (6 families: ownership, localization, semantic, generation, mining, schema)
+```
+
+---
 
 ## [0.13.0] - 2026-02-15
 
-### Breaking Changes
-- **ADR-029: *Native Pattern** - All locale-specific nodes use `*Native` suffix
+### ⚠️ Breaking Changes
+
+- **ADR-029: *Native Pattern** — All locale-specific nodes use `*Native` suffix
   - `EntityContent` → `EntityNative` (trait: authored)
   - `ProjectContent` → `ProjectNative` (trait: authored)
   - `PageGenerated` → `PageNative` (trait: generated)
   - `BlockGenerated` → `BlockNative` (trait: generated)
-- **ADR-029: Arc Merges** - Unified arc pattern for native content
+
+- **ADR-029: Arc Merges** — Unified arc pattern for native content
   - `HAS_CONTENT` + `HAS_GENERATED` → `HAS_NATIVE`
   - `CONTENT_OF` + `GENERATED_FOR` → `NATIVE_OF`
-  - Arc count: 171 → 169 (merged 4 arcs into 2)
-- **ADR-030: Slug Ownership** - Slugs moved from Entity to Page
 
-### Statistics
-- **51 files changed** in commit
-- **1030 Rust tests passing**
-- **61 nodes** (40 shared + 21 org)
-- **169 arcs** (was 171, merged 4 → 2)
+- **ADR-030: Slug Ownership** — Slugs moved from Entity to Page
+
+### 📊 Statistics
+
+```
+📝 Files:   51 changed in commit
+🧪 Tests:   1,030 Rust tests passing
+📦 Nodes:   61 (40 shared + 21 org)
+🔗 Arcs:    169 (was 171, merged 4 → 2)
+```
+
+---
+
+[Unreleased]: https://github.com/supernovae-st/novanet/compare/v0.16.2...HEAD
+[0.16.2]: https://github.com/supernovae-st/novanet/compare/v0.16.0...v0.16.2
+[0.16.0]: https://github.com/supernovae-st/novanet/compare/v0.15.3...v0.16.0
+[0.15.3]: https://github.com/supernovae-st/novanet/compare/v0.15.2...v0.15.3
+[0.15.2]: https://github.com/supernovae-st/novanet/compare/v0.15.1...v0.15.2
+[0.15.1]: https://github.com/supernovae-st/novanet/compare/v0.15.0...v0.15.1
+[0.15.0]: https://github.com/supernovae-st/novanet/compare/v0.14.0...v0.15.0
+[0.14.0]: https://github.com/supernovae-st/novanet/compare/v0.13.1...v0.14.0
+[0.13.1]: https://github.com/supernovae-st/novanet/compare/v0.13.0...v0.13.1
+[0.13.0]: https://github.com/supernovae-st/novanet/releases/tag/v0.13.0
