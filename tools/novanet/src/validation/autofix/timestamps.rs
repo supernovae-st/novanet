@@ -159,7 +159,7 @@ mod tests {
 
         match result {
             FixAction::Modified { changes } => {
-                assert!(changes.len() >= 1);
+                assert!(!changes.is_empty());
 
                 let props = node.def.standard_properties.as_ref().unwrap();
                 assert!(props.contains_key("created_at"));

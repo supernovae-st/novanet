@@ -126,7 +126,7 @@ mod tests {
 
                 // Verify description was added
                 assert!(!node.def.description.is_empty());
-                assert!(node.def.description.len() > 0);
+                assert!(!node.def.description.is_empty());
             }
             _ => panic!("Expected Modified, got {:?}", result),
         }

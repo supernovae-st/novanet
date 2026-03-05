@@ -154,7 +154,7 @@ mod tests {
                 // Should have data field with key property
                 if let Value::Mapping(data) = example {
                     if let Some(Value::Mapping(example_data)) = data.get("data") {
-                        assert!(example_data.contains_key(&Value::String("key".to_string())));
+                        assert!(example_data.contains_key(Value::String("key".to_string())));
                     } else {
                         panic!("Example should have 'data' field");
                     }
@@ -284,8 +284,8 @@ mod tests {
         let example = node.def.example.as_ref().unwrap();
         if let Value::Mapping(map) = example {
             if let Some(Value::Mapping(data)) = map.get("data") {
-                assert!(data.contains_key(&Value::String("key".to_string())));
-                assert!(data.contains_key(&Value::String("display_name".to_string())));
+                assert!(data.contains_key(Value::String("key".to_string())));
+                assert!(data.contains_key(Value::String("display_name".to_string())));
             } else {
                 panic!("Example should have 'data' field");
             }
@@ -401,7 +401,7 @@ mod tests {
                 if let Some(Value::Mapping(data)) = map.get("data") {
                     for prop_name in required_props {
                         prop_assert!(
-                            data.contains_key(&Value::String(prop_name.clone())),
+                            data.contains_key(Value::String(prop_name.clone())),
                             "Example should contain required property: {}", prop_name
                         );
                     }

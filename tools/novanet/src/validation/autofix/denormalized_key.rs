@@ -235,7 +235,7 @@ mod tests {
 
         match result {
             FixAction::Modified { changes } => {
-                assert!(changes.len() >= 1);
+                assert!(!changes.is_empty());
 
                 let props = node.def.standard_properties.as_ref().unwrap();
                 assert!(props.contains_key("entity_key"), "Should have entity_key");
@@ -269,7 +269,7 @@ mod tests {
 
         match result {
             FixAction::Modified { changes } => {
-                assert!(changes.len() >= 1);
+                assert!(!changes.is_empty());
 
                 let props = node.def.standard_properties.as_ref().unwrap();
                 assert!(props.contains_key("page_key"), "Should have page_key");
@@ -303,7 +303,7 @@ mod tests {
 
         match result {
             FixAction::Modified { changes } => {
-                assert!(changes.len() >= 1);
+                assert!(!changes.is_empty());
 
                 let props = node.def.standard_properties.as_ref().unwrap();
                 assert!(props.contains_key("block_key"), "Should have block_key");
@@ -504,7 +504,7 @@ mod tests {
             let mut node = create_node_without_denorm_keys(node_name.clone());
 
             let issue = SchemaIssue {
-                node_name: node_name.clone().into(),
+                node_name: node_name.clone(),
                 severity: IssueSeverity::Error,
                 rule: "DENORM_REQUIRED",
                 message: "Test".into(),
@@ -537,7 +537,7 @@ mod tests {
             let mut node2 = create_node_without_denorm_keys(node_name.clone());
 
             let issue = SchemaIssue {
-                node_name: node_name.into(),
+                node_name,
                 severity: IssueSeverity::Error,
                 rule: "DENORM_REQUIRED",
                 message: "Test".into(),
@@ -573,7 +573,7 @@ mod tests {
             let trait_before = node.def.node_trait;
 
             let issue = SchemaIssue {
-                node_name: node_name.into(),
+                node_name,
                 severity: IssueSeverity::Error,
                 rule: "DENORM_REQUIRED",
                 message: "Test".into(),
@@ -595,7 +595,7 @@ mod tests {
             let mut node = create_node_without_denorm_keys(node_name.clone());
 
             let issue = SchemaIssue {
-                node_name: node_name.into(),
+                node_name,
                 severity: IssueSeverity::Error,
                 rule: "DENORM_REQUIRED",
                 message: "Test".into(),
