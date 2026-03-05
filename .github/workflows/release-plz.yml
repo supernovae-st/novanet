@@ -66,8 +66,8 @@ jobs:
       - name: Run clippy
         run: cargo clippy --all-targets --all-features --manifest-path tools/novanet/Cargo.toml -- -D warnings
 
-      - name: Run Rust tests (unit only)
-        run: cargo test --lib --all-features --manifest-path tools/novanet/Cargo.toml
+      # Note: Rust tests skipped here - they run in CI workflow with brain/ submodule
+      # Integration tests require schema files from private brain/ repo
 
       - name: Run TypeScript tests
         run: pnpm test
