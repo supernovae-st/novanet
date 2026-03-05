@@ -29,7 +29,7 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
-**Current Version**: v0.16.2 "Version Alignment" (all packages aligned)
+**Current Version**: v0.17.0 "Neuro-Symbolic Validation" (novanet_check + novanet_audit)
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
 **Related docs**:
@@ -308,7 +308,7 @@ pnpm infra:seed            # Seed database
 
 ---
 
-## MCP Server (v0.16.2)
+## MCP Server (v0.17.0)
 
 NovaNet exposes an MCP (Model Context Protocol) server for workflow automation and AI agent integration.
 
@@ -316,7 +316,7 @@ NovaNet exposes an MCP (Model Context Protocol) server for workflow automation a
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  MCP TOOLS (12 tools)                                                       │
+│  MCP TOOLS (14 tools)                                                       │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  novanet_query       Execute read-only Cypher against Neo4j                 │
@@ -379,6 +379,17 @@ NovaNet exposes an MCP (Model Context Protocol) server for workflow automation a
 │                      returns: success, created, updated_properties,         │
 │                               auto_arcs_created, cache_invalidated          │
 │                                                                             │
+│  novanet_check       Pre-write validation with intelligent feedback         │
+│                      params: operation, class, key, properties, locale      │
+│                      returns: valid, errors[], warnings[], suggestions[]    │
+│                      (v0.17.0: neuro-symbolic validation with llm_context)  │
+│                                                                             │
+│  novanet_audit       Post-write quality audit with CSR metrics              │
+│                      params: target (coverage|orphans|integrity|freshness|  │
+│                              all), scope, limit                             │
+│                      returns: issues[], summary, csr, recommendations[]     │
+│                      (v0.17.0: MMKG-RDS research-based quality scoring)     │
+│                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -406,10 +417,12 @@ tasks:
     context: $entity_context
 ```
 
-**v0.16.2 MCP Server:**
+**v0.17.0 MCP Server:**
 
 | Feature | Description | Reference |
 |---------|-------------|-----------|
+| `novanet_check` | Pre-write validation with llm_context suggestions | v0.17.0 |
+| `novanet_audit` | Post-write quality audit with CSR metrics | v0.17.0 |
 | `denomination_forms` | Prescriptive canonical forms for LLM entity references | ADR-033 |
 | `context_build_log` | Step-by-step context assembly debugging | DX-11 |
 
