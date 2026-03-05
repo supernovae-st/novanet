@@ -4,6 +4,95 @@ For complete history, see [CHANGELOG.md](./CHANGELOG.md).
 
 ## [Unreleased]
 
+## [0.17.0] - 2026-03-05
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  🧠 NOVANET v0.17.0 — NEURO-SYMBOLIC VALIDATION                               ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  🔍 novanet_check  │  📊 novanet_audit  │  📈 CSR Metrics  │  🔒 Security    ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+### ✨ Highlights
+
+| Feature | Status | Impact |
+|---------|--------|--------|
+| **🔍 novanet_check** | ✅ New | Pre-write validation with llm_context |
+| **📊 novanet_audit** | ✅ New | Post-write quality audit with CSR metrics |
+| **📈 CSR Metrics** | ✅ New | MMKG-RDS research-based quality scoring |
+| **🔒 Cypher Parameterization** | ✅ Fixed | Security hardening for audit queries |
+
+### 🏗️ Neuro-Symbolic Validation
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  VALIDATION PHILOSOPHY                                                          │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  novanet_check  → Pre-Write  → "Can I write this?"  → Validates before action  │
+│  novanet_audit  → Post-Write → "Did I write correctly?" → Validates after action│
+│                                                                                 │
+│  CSR (Constraint Satisfaction Rate) = satisfied / (satisfied + violated)        │
+│  ├── ≥0.95  → Healthy (green)                                                   │
+│  ├── 0.85-0.95 → Warning (yellow)                                               │
+│  └── <0.85  → Critical (red)                                                    │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Added
+
+- **🔍 MCP Tool: novanet_check** — Pre-write validation with intelligent feedback
+  - Validates node writes against schema before execution
+  - Combines symbolic rules (required props, trait permissions) with neural context (llm_context)
+  - Returns `valid: bool`, `errors[]`, `warnings[]`, `suggestions[]`
+  - Supports `upsert_node`, `create_arc`, `update_props` operations
+
+- **📊 MCP Tool: novanet_audit** — Post-write quality audit with CSR metrics
+  - 4 audit targets: `coverage`, `orphans`, `integrity`, `freshness`
+  - CSR (Constraint Satisfaction Rate) calculation based on MMKG-RDS research
+  - Returns issues by severity (critical, warning, info) with actionable messages
+  - Ontology insights: most violated constraint, healthiest/weakest layers
+
+- **📈 CSR Metrics Module** — Quality scoring based on academic research
+  - `ConstraintSatisfactionRate` struct with rate, satisfied/violated counts
+  - `CsrSeverity` enum: Healthy (≥0.95), Warning (0.85-0.95), Critical (<0.85)
+  - `LayerMetrics` for per-layer breakdown
+  - `AuditSummary` with aggregate statistics
+
+### Fixed
+
+- **🔒 Cypher Injection Prevention** — Parameterized audit queries
+  - All audit queries now use `$param` syntax instead of string interpolation
+  - Fixed `audit_coverage` locale filter (was using undefined variable)
+  - Removed deprecated `sanitize_string()` function
+
+### Changed
+
+- MCP tool count: 12 → 13 (added novanet_check, novanet_audit as "twin tools")
+- Documentation updated with neuro-symbolic validation patterns
+- All clippy warnings resolved (derivable_impls, field_reassign_with_default)
+
+### 📊 Statistics
+
+```
+╭─────────────────────────────────────────────────────────────────────────────────╮
+│  📊 v0.17.0 METRICS                                                             │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  🔧 MCP Tools:  13 (query, describe, search, traverse, assemble, atoms,        │
+│                     generate, introspect, batch, cache_stats, cache_invalidate,│
+│                     check, audit)                                               │
+│  🧪 Tests:      472 passing (MCP server)                                        │
+│  📏 Clippy:     Zero warnings                                                   │
+│  🔒 Security:   All audit queries parameterized                                 │
+│                                                                                 │
+╰─────────────────────────────────────────────────────────────────────────────────╯
+```
+
+---
+
 ## [0.16.2] - 2026-03-03
 
 ╔═══════════════════════════════════════════════════════════════════════════════╗

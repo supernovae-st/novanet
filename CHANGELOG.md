@@ -7,6 +7,34 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.17.0] - 2026-03-05
+
+### Added
+- **MCP Tool: novanet_check** - Pre-write validation with intelligent feedback
+  - Validates node writes against schema before execution
+  - Combines symbolic rules (required props, trait permissions) with neural context (llm_context)
+  - Returns `valid: bool`, `errors[]`, `warnings[]`, `suggestions[]`
+- **MCP Tool: novanet_audit** - Post-write quality audit with CSR metrics
+  - 4 audit targets: `coverage`, `orphans`, `integrity`, `freshness`
+  - CSR (Constraint Satisfaction Rate) based on MMKG-RDS research
+  - Returns issues by severity with actionable messages
+- **CSR Metrics Module** - Quality scoring from academic research
+  - `ConstraintSatisfactionRate` struct with rate, satisfied/violated counts
+  - `CsrSeverity` enum: Healthy (≥0.95), Warning (0.85-0.95), Critical (<0.85)
+
+### Fixed
+- **Security: Cypher Injection Prevention** - All audit queries now use parameterized queries
+- **Bug: audit_coverage locale filter** - Fixed undefined variable in Cypher query
+
+### Changed
+- MCP tool count: 12 → 13 (added novanet_check, novanet_audit)
+- Resolved clippy warnings (derivable_impls, field_reassign_with_default)
+
+### Statistics
+- **13 MCP tools**: query, describe, search, traverse, assemble, atoms, generate, introspect, batch, cache_stats, cache_invalidate, check, audit
+- **472 tests passing** (MCP server)
+- **Zero clippy warnings**
+
 ## [0.15.1] - 2026-03-03
 
 ### Changed

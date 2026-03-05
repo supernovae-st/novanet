@@ -1045,7 +1045,7 @@ dependencies = [
 
 [[package]]
 name = "novanet-mcp"
-version = "0.15.3"
+version = "0.16.2"
 dependencies = [
  "ahash",
  "anyhow",

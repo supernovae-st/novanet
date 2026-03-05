@@ -5,7 +5,7 @@
 # patterns for efficient context assembly.
 #
 # Architecture:
-# - 11 Tools: query, describe, search, traverse, assemble, atoms, generate, introspect, batch, cache_stats, cache_invalidate
+# - 13 Tools: query, describe, search, traverse, assemble, atoms, generate, introspect, batch, cache_stats, cache_invalidate, check, audit
 # - 4 Resources: entity://, class://, locale://, view://
 # - 6 Prompts: cypher_query, cypher_explain, block_generation, page_generation, entity_analysis, locale_briefing
 #
@@ -14,7 +14,7 @@
 
 [package]
 name = "novanet-mcp"
-version = "0.16.2"
+version = "0.17.0"
 edition = "2024"
 license = "LicenseRef-Proprietary"
 rust-version = "1.86"
