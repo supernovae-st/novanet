@@ -2,7 +2,7 @@
 
 MCP (Model Context Protocol) server exposing the NovaNet knowledge graph to AI agents.
 
-**Version**: 0.15.3 | **Rust**: 1.86 | **Edition**: 2024 | **rmcp**: 0.16
+**Version**: 0.17.0 | **Rust**: 1.86 | **Edition**: 2024 | **rmcp**: 0.16
 
 ---
 
@@ -28,7 +28,9 @@ NovaNet MCP implements **RLM-on-KG** (Recursive Language Model on Knowledge Grap
 │                    │              ├── novanet_batch           (Bulk ops)    │
 │                    │              ├── novanet_cache_stats     (Cache info)  │
 │                    │              ├── novanet_cache_invalidate (Cache ctrl) │
-│                    │              └── novanet_write           (Data writes) │
+│                    │              ├── novanet_write           (Data writes) │
+│                    │              ├── novanet_check           (Pre-write)   │
+│                    │              └── novanet_audit           (Quality)     │
 │                    │                                                        │
 │               MCP Protocol                                                  │
 │               (JSON-RPC 2.0)                                                │
@@ -61,6 +63,13 @@ NovaNet MCP implements **RLM-on-KG** (Recursive Language Model on Knowledge Grap
 │  ├── Security: Cypher injection prevention, TTL cache, auto-arcs            │
 │  ├── MERGE pattern for idempotent writes                                    │
 │  └── Total: 12 MCP tools (11 read + 1 write)                                │
+│                                                                             │
+│  PHASE 6 (Complete) - v0.17.0                                               │
+│  ├── Tool: novanet_check (pre-write validation with Cypher preview)         │
+│  ├── Tool: novanet_audit (quality audit with CSR metrics)                   │
+│  ├── Feature: Ontology-driven suggestions from llm_context                  │
+│  ├── Feature: Constraint Satisfaction Rate (CSR) from MMKG-RDS research     │
+│  └── Total: 14 MCP tools (12 read + 2 validation)                           │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -733,6 +742,140 @@ When upserting a `*Native` class (e.g., `EntityNative`, `PageNative`, `BlockNati
 Key: "qr-code@fr-FR" + Class: "EntityNative"
   → Auto-creates: (Entity {key: "qr-code"})-[:HAS_NATIVE]->(EntityNative {key: "qr-code@fr-FR"})
 ```
+
+### `novanet_check`
+
+Pre-write validation with Cypher preview and ontology-driven suggestions. Call this BEFORE `novanet_write` to validate operations.
+
+**Parameters:**
+```json
+{
+  "operation": "upsert_node",
+  "class": "EntityNative",
+  "key": "qr-code@fr-FR",
+  "properties": {
+    "name": "Code QR",
+    "description": "Générateur de codes QR"
+  },
+  "locale": "fr-FR"
+}
+```
+
+**Returns:**
+```json
+{
+  "valid": true,
+  "issues": [],
+  "cypher_preview": "MERGE (n:EntityNative {key: $key}) ON CREATE SET n += $props...",
+  "schema_context": {
+    "class_name": "EntityNative",
+    "realm": "org",
+    "layer": "semantic",
+    "trait_type": "authored",
+    "llm_context": "USE: for locale-specific entity content...",
+    "required_properties": ["name"],
+    "optional_properties": ["description", "denomination_forms"]
+  },
+  "suggestions": [
+    {
+      "field": "denomination_forms",
+      "suggestion": "Consider adding denomination_forms for LLM entity references",
+      "source": "llm_context"
+    }
+  ]
+}
+```
+
+**Validation Checks:**
+- Class exists in schema
+- Trait allows writes (`authored`, `imported`, `generated`, `retrieved`)
+- Required properties present
+- Property types match schema
+- Arc endpoints exist (for `create_arc` operations)
+
+**Use Cases:**
+- Validate before bulk imports
+- Preview Cypher for debugging
+- Get ontology-driven suggestions from `llm_context`
+
+### `novanet_audit`
+
+Post-write quality audit with CSR (Constraint Satisfaction Rate) metrics. Based on MMKG-RDS research.
+
+**Parameters:**
+```json
+{
+  "target": "all",
+  "scope": {
+    "class": "EntityNative",
+    "locale": "fr-FR"
+  },
+  "limit": 100
+}
+```
+
+**Targets:**
+| Target | Description |
+|--------|-------------|
+| `coverage` | Find Entities without EntityNative for a locale |
+| `orphans` | Find *Native nodes missing FOR_LOCALE or HAS_NATIVE arcs |
+| `integrity` | Find broken references (e.g., EntityNative without parent Entity) |
+| `freshness` | Find stale nodes (>30 days since last update) |
+| `all` | Run all audit checks |
+
+**Returns:**
+```json
+{
+  "target": "all",
+  "issues": [
+    {
+      "severity": "warning",
+      "category": "coverage",
+      "message": "Entity 'qr-code' missing EntityNative for locale 'de-DE'",
+      "node_key": "qr-code",
+      "node_class": "Entity"
+    }
+  ],
+  "summary": {
+    "total_issues": 5,
+    "critical_count": 0,
+    "warning_count": 3,
+    "info_count": 2,
+    "nodes_checked": 150,
+    "arcs_checked": 320
+  },
+  "csr": {
+    "rate": 0.92,
+    "satisfied_count": 276,
+    "violated_count": 24,
+    "total_checked": 300,
+    "constraints_checked": ["HAS_NATIVE mandatory", "FOR_LOCALE mandatory"]
+  },
+  "insights": {
+    "most_violated_constraint": "EntityNative:FOR_LOCALE (mandatory)",
+    "healthiest_layer": "knowledge",
+    "attention_needed": ["semantic layer: 8 missing FOR_LOCALE arcs"]
+  },
+  "recommendations": [
+    "Run EntityNative generation for de-DE locale",
+    "Create missing FOR_LOCALE arcs for 8 EntityNative nodes"
+  ],
+  "execution_time_ms": 245
+}
+```
+
+**CSR Severity Thresholds:**
+| CSR Range | Severity | Meaning |
+|-----------|----------|---------|
+| ≥ 0.95 | Healthy | Graph is in good shape |
+| 0.85 - 0.95 | Warning | Some issues need attention |
+| < 0.85 | Critical | Significant constraint violations |
+
+**Use Cases:**
+- Post-import quality checks
+- Scheduled graph health monitoring
+- Identify coverage gaps before content generation
+- Track CSR over time for quality metrics
 
 ---
 
