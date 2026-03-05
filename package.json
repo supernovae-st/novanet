@@ -1,6 +1,6 @@
 {
   "name": "novanet",
-  "version": "0.15.1",
+  "version": "0.16.2",
   "private": true,
   "description": "NovaNet - Knowledge graph localization orchestrator",
   "packageManager": "pnpm@9.15.0",

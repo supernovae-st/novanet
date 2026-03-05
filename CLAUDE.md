@@ -29,7 +29,7 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
-**Current Version**: v0.15.1 "Version Alignment" (all packages aligned)
+**Current Version**: v0.16.2 "Version Alignment" (all packages aligned)
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
 **Related docs**:
@@ -308,7 +308,7 @@ pnpm infra:seed            # Seed database
 
 ---
 
-## MCP Server (v0.15.1)
+## MCP Server (v0.16.2)
 
 NovaNet exposes an MCP (Model Context Protocol) server for workflow automation and AI agent integration.
 
@@ -406,7 +406,7 @@ tasks:
     context: $entity_context
 ```
 
-**v0.15.1 MCP Server:**
+**v0.16.2 MCP Server:**
 
 | Feature | Description | Reference |
 |---------|-------------|-----------|
