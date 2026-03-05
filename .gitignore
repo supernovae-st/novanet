@@ -23,7 +23,8 @@ Thumbs.db
 
 # Claude Code - PRIVATE DX (symlinked to dx/.claude/novanet/)
 # All DX content is in private supernovae-agi/dx/ repo
-.claude/
+# Note: No trailing slash to match symlinks
+.claude
 
 # Only CLAUDE.md is public (project context for contributors)
 !CLAUDE.md
@@ -59,7 +60,8 @@ __pycache__/
 # Proptest regressions
 proptest-regressions/
 tools/target/
-/dx/
+# DX symlink (no trailing slash to match symlink)
+/dx
 
 # === PRIVATE DATA (in supernovae-agi/brain/) ===
 # All QR Code AI specific content is in private brain/ repo
@@ -73,10 +75,12 @@ packages/db/seed/4*
 packages/db/seed/5*
 packages/db/seed/migration-*
 
-# Private SEO/research data
-docs/assets/keywods/
+# Private SEO/research data (symlinks to brain/)
+# No trailing slash to match symlinks
+docs/assets/keywords
+docs/assets/keywods
 research/seo_*
-scripts/seo-import/output/
+scripts/seo-import/output
 
-# Private work sessions
-docs/sessions/
+# Private work sessions (symlink to brain/)
+docs/sessions
