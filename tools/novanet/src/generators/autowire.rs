@@ -319,8 +319,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:OF_CLASS]"))
             .count();
         assert_eq!(
-            of_class, 59,
-            "expected 59 OF_CLASS statements (40 shared + 19 org, v0.16 cleanup)"
+            of_class, 58,
+            "expected 58 OF_CLASS statements (39 shared + 19 org, v0.17 cleanup)"
         );
 
         // 2 realms present (v11.3: shared + org)
@@ -331,14 +331,14 @@ mod tests {
         assert!(cypher.contains("MATCH (n:Style)"));
         assert!(cypher.contains("MATCH (c:Class {label: 'Style'})"));
 
-        // v0.12.5: Layer counts (4 shared + 6 org = 10 layers, updated for Country)
+        // v0.17: Layer counts (4 shared + 6 org = 10 layers)
         assert!(cypher.contains("Shared > Config (3 types)")); // EntityCategory + Locale + SEOKeywordFormat
-        assert!(cypher.contains("Shared > Locale (6 types)")); // Formatting, Style, etc.
+        assert!(cypher.contains("Shared > Locale (5 types)")); // v0.17: -Market (Formatting, Style, Culture, Adaptation, Slugification)
         assert!(cypher.contains("Shared > Geography (7 types)")); // Continent, Region, etc. + Country
-        assert!(cypher.contains("Shared > Knowledge (24 types)")); // v11.4: +2 containers, -4 obsolete
+        assert!(cypher.contains("Shared > Knowledge (24 types)")); // unchanged
 
-        // v0.12.5 + Brand Architecture: Header
-        assert!(cypher.contains("Total: 59 node types"));
+        // v0.17: Header
+        assert!(cypher.contains("Total: 58 node types"));
 
         // Verification query present
         assert!(cypher.contains("VERIFICATION QUERY"));

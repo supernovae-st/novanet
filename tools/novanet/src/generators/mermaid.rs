@@ -364,7 +364,7 @@ pub fn wrap_in_markdown(mermaid_code: &str) -> String {
     writeln!(out).unwrap();
     writeln!(
         out,
-        "This diagram shows the complete NovaNet graph schema with all 59 node types and their relationships."
+        "This diagram shows the complete NovaNet graph schema with all 58 node types and their relationships."
     )
     .unwrap();
     writeln!(out).unwrap();

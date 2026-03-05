@@ -396,15 +396,15 @@ mod tests {
         let generator = LayerGenerator;
         let output = generator.generate(root).expect("should generate layers.ts");
 
-        // v0.16: 59 nodes (40 shared + 19 org, removed AudiencePersona/ChannelSurface)
+        // v0.17: 58 nodes (39 shared + 19 org, removed Market)
         assert!(
-            output.contains("mapping all 59 node types"),
-            "should mention 59 node types"
+            output.contains("mapping all 58 node types"),
+            "should mention 58 node types"
         );
 
-        // v0.16 cleanup: Realm node counts
-        assert!(output.contains("SHARED REALM (40 nodes)")); // config (3) + locale (6) + geography (7) + knowledge (24)
-        assert!(output.contains("ORG REALM (19 nodes)")); // v0.16: semantic layer reduced by 2
+        // v0.17 cleanup: Realm node counts
+        assert!(output.contains("SHARED REALM (39 nodes)")); // config (3) + locale (5) + geography (7) + knowledge (24)
+        assert!(output.contains("ORG REALM (19 nodes)")); // v0.17: unchanged
 
         // 9 unique layer names (v11.5: 4 shared + 6 org = 10 total, config in both)
         for layer in [

@@ -638,8 +638,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Schema:Class"))
             .count();
         assert_eq!(
-            class_merges, 59,
-            "expected 59 Class MERGE statements (v0.16: 40 shared + 19 org)"
+            class_merges, 58,
+            "expected 58 Class MERGE statements (v0.17: 39 shared + 19 org)"
         );
 
         // 59 HAS_CLASS relationships (v0.12.0: renamed from HAS_KIND in v11.8)
@@ -647,28 +647,28 @@ mod tests {
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_CLASS]"))
             .count();
-        assert_eq!(has_class, 59, "expected 59 HAS_CLASS relationships");
+        assert_eq!(has_class, 58, "expected 58 HAS_CLASS relationships");
 
         // 59 IN_REALM relationships
         let in_realm = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_REALM]"))
             .count();
-        assert_eq!(in_realm, 59, "expected 59 IN_REALM relationships");
+        assert_eq!(in_realm, 58, "expected 58 IN_REALM relationships");
 
         // 59 IN_LAYER relationships
         let in_layer = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_LAYER]"))
             .count();
-        assert_eq!(in_layer, 59, "expected 59 IN_LAYER relationships");
+        assert_eq!(in_layer, 58, "expected 58 IN_LAYER relationships");
 
         // 59 EXHIBITS relationships
         let exhibits = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:EXHIBITS]"))
             .count();
-        assert_eq!(exhibits, 59, "expected 59 EXHIBITS relationships");
+        assert_eq!(exhibits, 58, "expected 58 EXHIBITS relationships");
 
         // Spot checks — specific Classes (v11.8: c_ prefix, :Schema:Class)
         assert!(cypher.contains("c_Project:Schema:Class {label: 'Project'}"));
@@ -699,8 +699,8 @@ mod tests {
             }
         }
 
-        // v0.16: Header mentions 59 Class nodes (removed AudiencePersona/ChannelSurface)
-        assert!(cypher.contains("59 Class nodes"));
+        // v0.17: Header mentions 58 Class nodes (removed Market)
+        assert!(cypher.contains("58 Class nodes"));
 
         // v10.1: knowledge_tier removed from all YAMLs (node type is sufficient)
         assert!(

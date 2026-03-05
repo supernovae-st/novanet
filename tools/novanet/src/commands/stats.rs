@@ -356,10 +356,10 @@ mod tests {
 
         let stats = compute_arc_stats(&root).expect("should compute arc stats");
 
-        // v0.16: 178 arc classes
+        // v0.17: 175 arc classes
         assert!(
-            stats.total >= 176,
-            "expected at least 176 arc classes, got {}",
+            stats.total >= 173,
+            "expected at least 173 arc classes, got {}",
             stats.total
         );
 
@@ -439,12 +439,12 @@ mod tests {
 
     fn sample_stats() -> SchemaStats {
         let mut by_realm = HashMap::new();
-        by_realm.insert("shared".to_string(), 40);
-        by_realm.insert("org".to_string(), 19);  // v0.16: removed AudiencePersona/ChannelSurface
+        by_realm.insert("shared".to_string(), 39);  // v0.17: -Market
+        by_realm.insert("org".to_string(), 19);
 
         let mut by_layer = HashMap::new();
         by_layer.insert("config".to_string(), 4);
-        by_layer.insert("locale".to_string(), 6);
+        by_layer.insert("locale".to_string(), 5);  // v0.17: -Market
         by_layer.insert("knowledge".to_string(), 24);
         by_layer.insert("foundation".to_string(), 6);
 
@@ -469,13 +469,13 @@ mod tests {
 
         SchemaStats {
             nodes: NodeStats {
-                total: 59,  // v0.16: removed AudiencePersona/ChannelSurface
+                total: 58,  // v0.17: removed Market
                 by_realm,
                 by_layer,
                 by_trait,
             },
             arcs: Some(ArcStats {
-                total: 178,  // v0.16: removed TARGETS_PERSONA/FOR_CHANNEL
+                total: 175,  // v0.17: removed Market arcs
                 by_family,
                 by_scope,
             }),
@@ -519,9 +519,9 @@ mod tests {
         // Should contain header
         assert!(text.contains("NovaNet Schema Statistics"));
 
-        // Should contain totals (v0.16: 59 nodes, 178 arcs)
-        assert!(text.contains("59 node classes"));
-        assert!(text.contains("178 arc classes"));
+        // Should contain totals (v0.17: 58 nodes, 175 arcs)
+        assert!(text.contains("58 node classes"));
+        assert!(text.contains("175 arc classes"));
 
         // Should contain realm breakdown (always shown)
         assert!(text.contains("By Realm:"));
