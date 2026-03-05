@@ -6,6 +6,7 @@
 //!
 //! v0.17.0: Added for novanet_check/audit tool support.
 
+use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
 /// Constraint Satisfaction Rate (CSR)
@@ -16,7 +17,7 @@ use serde::{Deserialize, Serialize};
 /// A CSR of 0.85 means 15% of checked triples violate constraints.
 ///
 /// Research basis: MMKG-RDS framework for multidimensional quality scoring.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
 pub struct ConstraintSatisfactionRate {
     /// CSR value between 0.0 and 1.0
     pub rate: f64,
@@ -102,7 +103,7 @@ impl Default for ConstraintSatisfactionRate {
 }
 
 /// Severity level based on CSR value
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum CsrSeverity {
     /// CSR >= 0.95 - Graph is in good shape

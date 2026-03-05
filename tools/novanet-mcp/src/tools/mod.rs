@@ -11,6 +11,7 @@
 
 pub mod assemble;
 pub mod atoms;
+pub mod auditor;
 pub mod batch;
 pub mod cache_stats;
 pub mod checker;
@@ -25,6 +26,7 @@ pub mod write;
 // Re-export tool params and results
 pub use assemble::{AssembleParams, AssembleResult};
 pub use atoms::{AtomsParams, AtomsResult};
+pub use auditor::{AuditParams, AuditResult, AuditIssue, AuditSeverity, AuditTarget, AuditSummary, OntologyInsights};
 pub use batch::{BatchParams, BatchResult};
 pub use cache_stats::{CacheInvalidateParams, CacheInvalidateResult, CacheStats, CacheStatsParams};
 pub use checker::{CheckParams, CheckResult, CheckIssue, CheckSeverity, SchemaContext, OntologySuggestion};
