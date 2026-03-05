@@ -374,7 +374,10 @@ mod tests {
         cache.insert_class("EntityNative".to_string(), meta);
 
         let retrieved = cache.get_class("EntityNative").unwrap();
-        assert_eq!(retrieved.description, Some("LLM-generated locale-native content".to_string()));
+        assert_eq!(
+            retrieved.description,
+            Some("LLM-generated locale-native content".to_string())
+        );
         assert!(retrieved.llm_context.as_ref().unwrap().contains("USE:"));
         assert_eq!(retrieved.context_budget, ContextBudget::Medium);
     }

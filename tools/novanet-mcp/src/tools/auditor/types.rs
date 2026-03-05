@@ -180,16 +180,25 @@ pub struct AuditSummary {
 impl AuditSummary {
     /// Create from a list of issues
     pub fn from_issues(issues: &[AuditIssue]) -> Self {
-        let mut summary = Self::default();
-        summary.total_issues = issues.len() as u32;
+        let mut critical_count = 0;
+        let mut warning_count = 0;
+        let mut info_count = 0;
+
         for issue in issues {
             match issue.severity {
-                AuditSeverity::Critical => summary.critical_count += 1,
-                AuditSeverity::Warning => summary.warning_count += 1,
-                AuditSeverity::Info => summary.info_count += 1,
+                AuditSeverity::Critical => critical_count += 1,
+                AuditSeverity::Warning => warning_count += 1,
+                AuditSeverity::Info => info_count += 1,
             }
         }
-        summary
+
+        Self {
+            total_issues: issues.len() as u32,
+            critical_count,
+            warning_count,
+            info_count,
+            ..Default::default()
+        }
     }
 
     /// Set nodes checked
@@ -206,7 +215,7 @@ impl AuditSummary {
 }
 
 /// Ontology-driven insights from audit
-#[derive(Debug, Clone, Serialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, JsonSchema, Default)]
 pub struct OntologyInsights {
     /// Most frequently violated constraint
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -220,17 +229,6 @@ pub struct OntologyInsights {
     /// Traversal paths with gaps
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub traversal_gaps: Vec<String>,
-}
-
-impl Default for OntologyInsights {
-    fn default() -> Self {
-        Self {
-            most_violated_constraint: None,
-            healthiest_layer: None,
-            attention_needed: None,
-            traversal_gaps: Vec::new(),
-        }
-    }
 }
 
 /// Result of novanet_audit
@@ -250,6 +248,8 @@ pub struct AuditResult {
     /// Actionable recommendations
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub recommendations: Vec<String>,
+    /// Estimated token cost of the response
+    pub token_estimate: u32,
     /// Execution time in milliseconds
     pub execution_time_ms: u64,
 }
@@ -264,6 +264,7 @@ impl AuditResult {
             csr: ConstraintSatisfactionRate::new(0, 0),
             ontology_insights: None,
             recommendations: Vec::new(),
+            token_estimate: 0,
             execution_time_ms: 0,
         }
     }
@@ -308,6 +309,12 @@ impl AuditResult {
     /// Builder: set arcs checked
     pub fn with_arcs_checked(mut self, count: u32) -> Self {
         self.summary.arcs_checked = count;
+        self
+    }
+
+    /// Builder: set token estimate
+    pub fn with_token_estimate(mut self, estimate: u32) -> Self {
+        self.token_estimate = estimate;
         self
     }
 }

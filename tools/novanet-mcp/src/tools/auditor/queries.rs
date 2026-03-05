@@ -2,7 +2,9 @@
 //!
 //! Provides audit queries for coverage, orphans, integrity, and freshness checks.
 
-use super::types::{AuditIssue, AuditParams, AuditResult, AuditScope, AuditTarget, OntologyInsights};
+use super::types::{
+    AuditIssue, AuditParams, AuditResult, AuditScope, AuditTarget, OntologyInsights,
+};
 use crate::error::Result;
 use crate::metrics::ConstraintSatisfactionRate;
 use crate::server::State;
@@ -63,6 +65,12 @@ pub async fn execute(state: &State, params: AuditParams) -> Result<AuditResult> 
     // Build insights
     let insights = build_insights(&issues, &csr);
 
+    // Estimate tokens (~4 chars per token for JSON output)
+    let issue_chars: usize = issues.iter().map(|i| i.message.len() + 100).sum(); // 100 for JSON overhead
+    let rec_chars: usize = recommendations.iter().map(|r| r.len()).sum();
+    let base_overhead = 500; // JSON structure overhead
+    let token_estimate = ((issue_chars + rec_chars + base_overhead) / 4) as u32;
+
     let result = AuditResult::new(params.target.to_string())
         .with_issues(issues)
         .with_csr(csr)
@@ -70,6 +78,7 @@ pub async fn execute(state: &State, params: AuditParams) -> Result<AuditResult> 
         .with_arcs_checked(arcs_checked)
         .with_insights(insights)
         .with_recommendations(recommendations)
+        .with_token_estimate(token_estimate)
         .with_execution_time(start.elapsed().as_millis() as u64);
 
     Ok(result)
@@ -82,39 +91,54 @@ pub async fn audit_coverage(
     limit: u32,
 ) -> Result<Vec<AuditIssue>> {
     let mut issues = Vec::new();
-
-    // Build locale filter
-    let locale_clause = scope
-        .as_ref()
-        .and_then(|s| s.locale.as_ref())
-        .map(|l| format!("AND l.key = '{}'", sanitize_string(l)))
-        .unwrap_or_default();
-
-    // Query: Find Entities that should have EntityNative but don't
-    let cypher = format!(
-        r#"
-        MATCH (e:Entity)
-        WHERE NOT EXISTS {{
-            MATCH (e)-[:HAS_NATIVE]->(:EntityNative)
-        }}
-        {}
-        RETURN e.key AS entity_key
-        LIMIT $limit
-        "#,
-        locale_clause
-    );
-
     let mut params = serde_json::Map::new();
     params.insert("limit".to_string(), serde_json::json!(limit));
 
+    // If locale is specified, find Entities without EntityNative for that specific locale
+    // Otherwise, find Entities with no EntityNative at all
+    let cypher = if let Some(locale) = scope.as_ref().and_then(|s| s.locale.as_ref()) {
+        params.insert("locale".to_string(), serde_json::json!(locale));
+        r#"
+        MATCH (e:Entity)
+        WHERE NOT EXISTS {
+            MATCH (e)-[:HAS_NATIVE]->(en:EntityNative)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        }
+        RETURN e.key AS entity_key
+        LIMIT $limit
+        "#
+        .to_string()
+    } else {
+        r#"
+        MATCH (e:Entity)
+        WHERE NOT EXISTS {
+            MATCH (e)-[:HAS_NATIVE]->(:EntityNative)
+        }
+        RETURN e.key AS entity_key
+        LIMIT $limit
+        "#
+        .to_string()
+    };
+
     let rows = state.pool().execute_query(&cypher, Some(params)).await?;
+
+    let locale_suffix = scope
+        .as_ref()
+        .and_then(|s| s.locale.as_ref())
+        .map(|l| format!(" for locale '{}'", l))
+        .unwrap_or_default();
 
     for row in rows {
         if let Some(entity_key) = row["entity_key"].as_str() {
             issues.push(
-                AuditIssue::warning("coverage", format!("Entity '{}' has no EntityNative", entity_key))
-                    .with_node_key(entity_key)
-                    .with_arc_class("HAS_NATIVE"),
+                AuditIssue::warning(
+                    "coverage",
+                    format!(
+                        "Entity '{}' has no EntityNative{}",
+                        entity_key, locale_suffix
+                    ),
+                )
+                .with_node_key(entity_key)
+                .with_arc_class("HAS_NATIVE"),
             );
         }
     }
@@ -129,33 +153,41 @@ pub async fn audit_orphans(
     limit: u32,
 ) -> Result<Vec<AuditIssue>> {
     let mut issues = Vec::new();
-
-    // Build class filter
-    let class_filter = scope
-        .as_ref()
-        .and_then(|s| s.class.as_ref())
-        .map(|c| format!("AND labels(n)[0] = '{}'", sanitize_string(c)))
-        .unwrap_or_default();
-
-    // Query: Find *Native nodes without FOR_LOCALE arc
-    let cypher = format!(
-        r#"
-        MATCH (n)
-        WHERE n.key CONTAINS '@'
-        AND NOT EXISTS {{
-            MATCH (n)-[:FOR_LOCALE]->(:Locale)
-        }}
-        {}
-        RETURN n.key AS node_key, labels(n)[0] AS node_class
-        LIMIT $limit
-        "#,
-        class_filter
-    );
-
     let mut params = serde_json::Map::new();
     params.insert("limit".to_string(), serde_json::json!(limit));
 
-    let rows = state.pool().execute_query(&cypher, Some(params.clone())).await?;
+    // Query: Find *Native nodes without FOR_LOCALE arc
+    // Use parameterized class filter if specified
+    let cypher = if let Some(class) = scope.as_ref().and_then(|s| s.class.as_ref()) {
+        params.insert("class_filter".to_string(), serde_json::json!(class));
+        r#"
+        MATCH (n)
+        WHERE n.key CONTAINS '@'
+        AND labels(n)[0] = $class_filter
+        AND NOT EXISTS {
+            MATCH (n)-[:FOR_LOCALE]->(:Locale)
+        }
+        RETURN n.key AS node_key, labels(n)[0] AS node_class
+        LIMIT $limit
+        "#
+        .to_string()
+    } else {
+        r#"
+        MATCH (n)
+        WHERE n.key CONTAINS '@'
+        AND NOT EXISTS {
+            MATCH (n)-[:FOR_LOCALE]->(:Locale)
+        }
+        RETURN n.key AS node_key, labels(n)[0] AS node_class
+        LIMIT $limit
+        "#
+        .to_string()
+    };
+
+    let rows = state
+        .pool()
+        .execute_query(&cypher, Some(params.clone()))
+        .await?;
 
     for row in rows {
         if let (Some(node_key), Some(node_class)) =
@@ -183,7 +215,10 @@ pub async fn audit_orphans(
         LIMIT $limit
     "#;
 
-    let rows2 = state.pool().execute_query(cypher2, Some(params.clone())).await?;
+    let rows2 = state
+        .pool()
+        .execute_query(cypher2, Some(params.clone()))
+        .await?;
 
     for row in rows2 {
         if let (Some(node_key), Some(node_class)) =
@@ -226,7 +261,10 @@ pub async fn audit_integrity(
     let mut params = serde_json::Map::new();
     params.insert("limit".to_string(), serde_json::json!(limit));
 
-    let rows = state.pool().execute_query(cypher, Some(params.clone())).await?;
+    let rows = state
+        .pool()
+        .execute_query(cypher, Some(params.clone()))
+        .await?;
 
     for row in rows {
         if let (Some(native_key), Some(base_key)) =
@@ -281,32 +319,37 @@ pub async fn audit_freshness(
     limit: u32,
 ) -> Result<Vec<AuditIssue>> {
     let mut issues = Vec::new();
-
-    // Build class filter
-    let class_filter = scope
-        .as_ref()
-        .and_then(|s| s.class.as_ref())
-        .map(|c| format!("AND labels(n)[0] = '{}'", sanitize_string(c)))
-        .unwrap_or_default();
+    let mut params = serde_json::Map::new();
+    params.insert("limit".to_string(), serde_json::json!(limit));
 
     // Query: Find nodes with stale updated_at (older than 30 days)
     // Note: Using 30 days as threshold for generated/retrieved content
-    let cypher = format!(
+    // Use parameterized class filter if specified
+    let cypher = if let Some(class) = scope.as_ref().and_then(|s| s.class.as_ref()) {
+        params.insert("class_filter".to_string(), serde_json::json!(class));
+        r#"
+        MATCH (n)
+        WHERE (n:BlockNative OR n:PageNative OR n:SEOKeywordMetrics)
+        AND labels(n)[0] = $class_filter
+        AND n.updated_at IS NOT NULL
+        AND n.updated_at < timestamp() - 30 * 24 * 60 * 60 * 1000
+        RETURN n.key AS node_key, labels(n)[0] AS node_class,
+               datetime({epochMillis: n.updated_at}) AS last_updated
+        LIMIT $limit
+        "#
+        .to_string()
+    } else {
         r#"
         MATCH (n)
         WHERE (n:BlockNative OR n:PageNative OR n:SEOKeywordMetrics)
         AND n.updated_at IS NOT NULL
         AND n.updated_at < timestamp() - 30 * 24 * 60 * 60 * 1000
-        {}
         RETURN n.key AS node_key, labels(n)[0] AS node_class,
-               datetime({{epochMillis: n.updated_at}}) AS last_updated
+               datetime({epochMillis: n.updated_at}) AS last_updated
         LIMIT $limit
-        "#,
-        class_filter
-    );
-
-    let mut params = serde_json::Map::new();
-    params.insert("limit".to_string(), serde_json::json!(limit));
+        "#
+        .to_string()
+    };
 
     let rows = state.pool().execute_query(&cypher, Some(params)).await?;
 
@@ -339,21 +382,11 @@ pub async fn audit_freshness(
 // HELPER FUNCTIONS
 // ══════════════════════════════════════════════════════════════
 
-/// Sanitize string for use in Cypher (basic injection prevention)
-fn sanitize_string(s: &str) -> String {
-    s.chars()
-        .filter(|c| c.is_alphanumeric() || *c == '-' || *c == '_')
-        .collect()
-}
-
 /// Count total entities
 async fn count_entities(state: &State) -> Result<u32> {
     let cypher = "MATCH (e:Entity) RETURN count(e) AS count";
     let rows = state.pool().execute_query(cypher, None).await?;
-    Ok(rows
-        .first()
-        .and_then(|r| r["count"].as_u64())
-        .unwrap_or(0) as u32)
+    Ok(rows.first().and_then(|r| r["count"].as_u64()).unwrap_or(0) as u32)
 }
 
 /// Count *Native nodes
@@ -364,10 +397,7 @@ async fn count_native_nodes(state: &State) -> Result<u32> {
         RETURN count(n) AS count
     "#;
     let rows = state.pool().execute_query(cypher, None).await?;
-    Ok(rows
-        .first()
-        .and_then(|r| r["count"].as_u64())
-        .unwrap_or(0) as u32)
+    Ok(rows.first().and_then(|r| r["count"].as_u64()).unwrap_or(0) as u32)
 }
 
 /// Count generated nodes
@@ -378,30 +408,21 @@ async fn count_generated_nodes(state: &State) -> Result<u32> {
         RETURN count(n) AS count
     "#;
     let rows = state.pool().execute_query(cypher, None).await?;
-    Ok(rows
-        .first()
-        .and_then(|r| r["count"].as_u64())
-        .unwrap_or(0) as u32)
+    Ok(rows.first().and_then(|r| r["count"].as_u64()).unwrap_or(0) as u32)
 }
 
 /// Count all nodes
 async fn count_all_nodes(state: &State) -> Result<u32> {
     let cypher = "MATCH (n) RETURN count(n) AS count";
     let rows = state.pool().execute_query(cypher, None).await?;
-    Ok(rows
-        .first()
-        .and_then(|r| r["count"].as_u64())
-        .unwrap_or(0) as u32)
+    Ok(rows.first().and_then(|r| r["count"].as_u64()).unwrap_or(0) as u32)
 }
 
 /// Count all arcs
 async fn count_arcs(state: &State) -> Result<u32> {
     let cypher = "MATCH ()-[r]->() RETURN count(r) AS count";
     let rows = state.pool().execute_query(cypher, None).await?;
-    Ok(rows
-        .first()
-        .and_then(|r| r["count"].as_u64())
-        .unwrap_or(0) as u32)
+    Ok(rows.first().and_then(|r| r["count"].as_u64()).unwrap_or(0) as u32)
 }
 
 /// Generate recommendations based on issues
@@ -448,7 +469,8 @@ fn generate_recommendations(issues: &[AuditIssue]) -> Vec<String> {
 /// Build ontology insights from issues and CSR
 fn build_insights(issues: &[AuditIssue], csr: &ConstraintSatisfactionRate) -> OntologyInsights {
     // Find most violated constraint (arc_class)
-    let mut constraint_counts: std::collections::HashMap<&str, u32> = std::collections::HashMap::new();
+    let mut constraint_counts: std::collections::HashMap<&str, u32> =
+        std::collections::HashMap::new();
     for issue in issues {
         if let Some(arc) = &issue.arc_class {
             *constraint_counts.entry(arc.as_str()).or_insert(0) += 1;
@@ -483,13 +505,6 @@ fn build_insights(issues: &[AuditIssue], csr: &ConstraintSatisfactionRate) -> On
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    fn test_sanitize_string() {
-        assert_eq!(sanitize_string("valid-key_123"), "valid-key_123");
-        assert_eq!(sanitize_string("invalid';DROP"), "invalidDROP");
-        assert_eq!(sanitize_string("test@locale"), "testlocale");
-    }
 
     #[test]
     fn test_generate_recommendations_coverage() {

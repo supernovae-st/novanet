@@ -92,7 +92,13 @@ pub fn validate_operation_params(params: &CheckParams) -> Vec<CheckIssue> {
                         .with_hint("Add key: target node key"),
                 );
             }
-            if params.properties.is_none() || params.properties.as_ref().map(|p| p.is_empty()).unwrap_or(true) {
+            if params.properties.is_none()
+                || params
+                    .properties
+                    .as_ref()
+                    .map(|p| p.is_empty())
+                    .unwrap_or(true)
+            {
                 issues.push(
                     CheckIssue::error("E010", "update_props requires non-empty 'properties'")
                         .with_field("properties")
@@ -115,7 +121,9 @@ pub fn validate_required_properties(
     let props = properties.as_ref();
 
     for required_prop in &meta.required_properties {
-        let has_prop = props.map(|p| p.contains_key(required_prop)).unwrap_or(false);
+        let has_prop = props
+            .map(|p| p.contains_key(required_prop))
+            .unwrap_or(false);
         if !has_prop {
             issues.push(
                 CheckIssue::error(
@@ -123,10 +131,7 @@ pub fn validate_required_properties(
                     format!("Missing required property: '{}'", required_prop),
                 )
                 .with_field(required_prop)
-                .with_hint(format!(
-                    "Add {}: <value> to properties",
-                    required_prop
-                )),
+                .with_hint(format!("Add {}: <value> to properties", required_prop)),
             );
         }
     }
@@ -251,9 +256,15 @@ pub async fn validate_write(state: &State, params: &CheckParams) -> Result<Check
                 "#;
 
                 let mut query_params = serde_json::Map::new();
-                query_params.insert("name".to_string(), serde_json::Value::String(class_name.clone()));
+                query_params.insert(
+                    "name".to_string(),
+                    serde_json::Value::String(class_name.clone()),
+                );
 
-                let rows = state.pool().execute_query(query, Some(query_params)).await?;
+                let rows = state
+                    .pool()
+                    .execute_query(query, Some(query_params))
+                    .await?;
 
                 if rows.is_empty() {
                     result.add_issue(
@@ -272,11 +283,19 @@ pub async fn validate_write(state: &State, params: &CheckParams) -> Result<Check
                     trait_type: row["trait_type"].as_str().unwrap_or_default().to_string(),
                     required_properties: row["required_properties"]
                         .as_array()
-                        .map(|arr| arr.iter().filter_map(|v| v.as_str().map(String::from)).collect())
+                        .map(|arr| {
+                            arr.iter()
+                                .filter_map(|v| v.as_str().map(String::from))
+                                .collect()
+                        })
                         .unwrap_or_default(),
                     optional_properties: row["optional_properties"]
                         .as_array()
-                        .map(|arr| arr.iter().filter_map(|v| v.as_str().map(String::from)).collect())
+                        .map(|arr| {
+                            arr.iter()
+                                .filter_map(|v| v.as_str().map(String::from))
+                                .collect()
+                        })
                         .unwrap_or_default(),
                     description: row["description"].as_str().map(String::from),
                     llm_context: row["llm_context"].as_str().map(String::from),
@@ -323,8 +342,13 @@ pub async fn validate_write(state: &State, params: &CheckParams) -> Result<Check
             let mut exists_params = serde_json::Map::new();
             exists_params.insert("key".to_string(), serde_json::Value::String(key.clone()));
 
-            if let Ok(rows) = state.pool().execute_query(&exists_query, Some(exists_params)).await {
-                let exists = rows.first()
+            if let Ok(rows) = state
+                .pool()
+                .execute_query(&exists_query, Some(exists_params))
+                .await
+            {
+                let exists = rows
+                    .first()
                     .and_then(|r| r["exists"].as_bool())
                     .unwrap_or(false);
                 result = result.with_would_create(!exists);
@@ -488,8 +512,16 @@ mod tests {
         let props = Some(serde_json::Map::new());
         let issues = validate_required_properties(&meta, &props);
         assert_eq!(issues.len(), 2);
-        assert!(issues.iter().any(|i| i.field == Some("keyword".to_string())));
-        assert!(issues.iter().any(|i| i.field == Some("slug_form".to_string())));
+        assert!(
+            issues
+                .iter()
+                .any(|i| i.field == Some("keyword".to_string()))
+        );
+        assert!(
+            issues
+                .iter()
+                .any(|i| i.field == Some("slug_form".to_string()))
+        );
     }
 
     #[test]

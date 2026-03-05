@@ -258,10 +258,10 @@ mod tests {
 
     #[test]
     fn test_csr_merge() {
-        let csr1 = ConstraintSatisfactionRate::new(50, 5)
-            .with_constraints(vec!["FOR_LOCALE".to_string()]);
-        let csr2 = ConstraintSatisfactionRate::new(40, 5)
-            .with_constraints(vec!["HAS_NATIVE".to_string()]);
+        let csr1 =
+            ConstraintSatisfactionRate::new(50, 5).with_constraints(vec!["FOR_LOCALE".to_string()]);
+        let csr2 =
+            ConstraintSatisfactionRate::new(40, 5).with_constraints(vec!["HAS_NATIVE".to_string()]);
         let merged = ConstraintSatisfactionRate::merge(&[csr1, csr2]);
         assert_eq!(merged.satisfied_count, 90);
         assert_eq!(merged.violated_count, 10);
