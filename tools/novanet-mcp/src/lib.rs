@@ -27,6 +27,7 @@
 pub mod cache;
 pub mod error;
 pub mod hints;
+pub mod metrics;
 pub mod neo4j;
 pub mod prompts;
 pub mod resources;
