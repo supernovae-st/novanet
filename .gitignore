@@ -59,7 +59,7 @@ __pycache__/
 # Proptest regressions
 proptest-regressions/
 tools/target/
-dx/
+/dx/
 
 # === PRIVATE DATA (in supernovae-agi/brain/) ===
 # All QR Code AI specific content is in private brain/ repo
