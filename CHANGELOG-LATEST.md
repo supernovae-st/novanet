@@ -81,9 +81,9 @@ For complete history, see [CHANGELOG.md](./CHANGELOG.md).
 │  📊 v0.17.0 METRICS                                                             │
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                 │
-│  🔧 MCP Tools:  13 (query, describe, search, traverse, assemble, atoms,        │
+│  🔧 MCP Tools:  14 (query, describe, search, traverse, assemble, atoms,        │
 │                     generate, introspect, batch, cache_stats, cache_invalidate,│
-│                     check, audit)                                               │
+│                     write, check, audit)                                        │
 │  🧪 Tests:      472 passing (MCP server)                                        │
 │  📏 Clippy:     Zero warnings                                                   │
 │  🔒 Security:   All audit queries parameterized                                 │

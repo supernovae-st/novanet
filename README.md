@@ -55,10 +55,10 @@ Generate culturally-native content across 200+ locales — not translation, but 
 flowchart TB
     subgraph MONO["NovaNet Monorepo"]
         direction TB
-        CORE["@novanet/core v0.16.2\nTypes · Schemas · Filters"]
-        DB["@novanet/db v0.16.2\nDocker · Seeds · Migrations"]
-        STUDIO["@novanet/studio v0.16.2\nNext.js 16 · React 19"]
-        RUST["novanet CLI v0.16.2\nRust · 16 commands · TUI"]
+        CORE["@novanet/core v0.17.0\nTypes · Schemas · Filters"]
+        DB["@novanet/db v0.17.0\nDocker · Seeds · Migrations"]
+        STUDIO["@novanet/studio v0.17.0\nNext.js 16 · React 19"]
+        RUST["novanet CLI v0.17.0\nRust · 16 commands · TUI"]
     end
 
     CORE --> STUDIO
@@ -144,11 +144,11 @@ novanet/
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| **@novanet/core** | `0.16.2` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
-| **@novanet/db** | `0.16.2` | Docker Compose for Neo4j, Cypher seeds, migrations |
-| **@novanet/studio** | `0.16.2` | Interactive graph visualization with AI chat |
-| **tools/novanet** | `0.16.2` | Rust CLI + TUI for schema generation, validation, queries |
-| **tools/novanet-mcp** | `0.16.2` | MCP Server for AI agent integration (11 tools) |
+| **@novanet/core** | `0.17.0` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
+| **@novanet/db** | `0.17.0` | Docker Compose for Neo4j, Cypher seeds, migrations |
+| **@novanet/studio** | `0.17.0` | Interactive graph visualization with AI chat |
+| **tools/novanet** | `0.17.0` | Rust CLI + TUI for schema generation, validation, queries |
+| **tools/novanet-mcp** | `0.17.0` | MCP Server for AI agent integration (14 tools) |
 
 ---
 
@@ -217,7 +217,7 @@ Password: (see NEO4J_PASSWORD env var)
 
 ## Graph Schema
 
-NovaNet models content as a knowledge graph with **2 Realms** and **10 Layers** (v0.16.2):
+NovaNet models content as a knowledge graph with **2 Realms** and **10 Layers** (v0.17.0):
 
 | Realm | Layers | Description |
 |-------|--------|-------------|
@@ -228,7 +228,7 @@ NovaNet models content as a knowledge graph with **2 Realms** and **10 Layers** 
 
 Each node type has a **Trait** (defined / authored / imported / generated / retrieved) and arcs are classified by **ArcFamily**.
 
-> **v0.16.2 ADR-024: Data Origin traits** — Trait now answers "WHERE does data come from?" (defined = human-created once, authored = human-written per locale, imported = external data brought in, generated = LLM output, retrieved = external API snapshots)
+> **v0.17.0 ADR-024: Data Origin traits** — Trait now answers "WHERE does data come from?" (defined = human-created once, authored = human-written per locale, imported = external data brought in, generated = LLM output, retrieved = external API snapshots)
 
 See [`packages/core/models/taxonomy.yaml`](packages/core/models/taxonomy.yaml) for complete schema.
 
