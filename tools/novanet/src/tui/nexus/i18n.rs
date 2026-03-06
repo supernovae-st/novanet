@@ -225,10 +225,10 @@ pub fn intro_page2(locale: NexusLocale) -> &'static [&'static str] {
 pub fn intro_page3(locale: NexusLocale) -> &'static [&'static str] {
     match locale {
         NexusLocale::En => &[
-            "THE GRAPH STRUCTURE (v0.17.0)",
+            "THE GRAPH STRUCTURE (v0.17.1)",
             "",
-            "58 node types organized by:",
-            "  • Realm (WHERE): shared (39) | org (19)",
+            "60 node types organized by:",
+            "  • Realm (WHERE): shared (39) | org (21)",
             "  • Layer (WHAT): 10 functional layers",
             "  • Trait (HOW): defined | authored | imported | generated | retrieved",
             "",

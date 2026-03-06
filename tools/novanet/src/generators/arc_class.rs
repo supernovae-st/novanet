@@ -732,8 +732,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Schema:ArcClass"))
             .count();
         assert_eq!(
-            ac_merges, 143,
-            "expected 143 ArcClass MERGE statements (v0.17: 32 semantic arcs archived)"
+            ac_merges, 145,
+            "expected 145 ArcClass MERGE statements (v0.17.1: SEO/GEO arc renames)"
         );
 
         // HAS_ARC_CLASS relationships match ArcClass count
@@ -742,8 +742,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_ARC_CLASS]"))
             .count();
         assert_eq!(
-            has_ac, 143,
-            "expected 143 HAS_ARC_CLASS relationships (v0.17: 32 semantic arcs archived)"
+            has_ac, 145,
+            "expected 145 HAS_ARC_CLASS relationships (v0.17.1: SEO/GEO arc renames)"
         );
 
         // IN_FAMILY relationships match ArcClass count
@@ -752,8 +752,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_FAMILY]"))
             .count();
         assert_eq!(
-            in_family, 143,
-            "expected 143 IN_FAMILY relationships (v0.17: 32 semantic arcs archived)"
+            in_family, 145,
+            "expected 145 IN_FAMILY relationships (v0.17.1: SEO/GEO arc renames)"
         );
 
         // Family distribution (non-inverse counts)
@@ -774,7 +774,7 @@ mod tests {
         let generation = count_family("generation");
         let mining = count_family("mining");
 
-        // v0.17 cleanup: Total arcs = 143 (32 semantic arcs archived)
+        // v0.17.1: Total arcs = 145 (SEO/GEO arc renames: CURATES_KEYWORD, MONITORS_QUERY, TARGETS_KEYWORD, TRACKS_QUERY)
         // ownership=76 (incl schema family for meta-arcs)
         // localization=20
         // semantic=26 (reduced: 32 arcs archived)
@@ -814,8 +814,8 @@ mod tests {
             }
         }
 
-        // v0.17 cleanup: Header reflects count (143 total ArcClass nodes)
-        assert!(cypher.contains("143 ArcClass nodes"));
+        // v0.17.1: Header reflects count (145 total ArcClass nodes)
+        assert!(cypher.contains("145 ArcClass nodes"));
     }
 
     /// Snapshot test for a minimal ArcSchema generator output.

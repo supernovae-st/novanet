@@ -503,11 +503,12 @@ node:
         // - v11.5: Moved Locale to shared/config, consolidated SEO/GEO to shared/knowledge
         // - v0.12.0: ADR-024 trait rename (defined/authored/imported/generated/retrieved)
         // v0.17: AudiencePersona/ChannelSurface/Market removed, EntityNative trait=generated
-        let nodes = load_all_nodes(root).expect("should parse all 58 nodes");
+        // v0.17.1: Added ProjectGEOScope (+1), added 2 more org nodes
+        let nodes = load_all_nodes(root).expect("should parse all 60 nodes");
         assert_eq!(
             nodes.len(),
-            58,
-            "expected 58 YAML node files (v0.17: 39 shared + 19 org)"
+            60,
+            "expected 60 YAML node files (v0.17.1: 39 shared + 21 org)"
         );
 
         // Every node has a non-empty name, realm, and layer
@@ -530,12 +531,12 @@ node:
         }
 
         // Verify trait distribution (2 realms: shared + org)
-        // v0.17: 58 nodes (39 shared + 19 org) - removed AudiencePersona/ChannelSurface/Market
+        // v0.17.1: 60 nodes (39 shared + 21 org)
         let count = |t: NodeTrait| nodes.iter().filter(|n| n.def.node_trait == t).count();
         assert_eq!(
             count(NodeTrait::Defined),
-            31,
-            "defined count (v0.17: 31 defined nodes)"
+            33,
+            "defined count (v0.17.1: 33 defined nodes)"
         );
         assert_eq!(
             count(NodeTrait::Authored),
@@ -569,8 +570,8 @@ node:
         );
         assert_eq!(
             realm_count("org"),
-            19,
-            "org realm count (v0.16: 19 org nodes, -2 from AudiencePersona/ChannelSurface)"
+            21,
+            "org realm count (v0.17.1: 21 org nodes, +ProjectGEOScope +2)"
         );
 
         // Spot-check known nodes

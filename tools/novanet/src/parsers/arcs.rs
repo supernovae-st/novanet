@@ -969,33 +969,34 @@ mod arc_yaml_cypher_alignment_tests {
         Some(root.to_path_buf())
     }
 
-    /// Parse the TARGETS arc YAML and verify rank + is_slug_source properties.
+    /// Parse the TARGETS_KEYWORD arc YAML and verify priority + is_slug_source properties.
     /// ADR-030: is_slug_source marks the keyword used for URL slug derivation.
     #[test]
-    fn targets_arc_has_rank_and_is_slug_source_properties() {
+    fn targets_keyword_arc_has_priority_and_is_slug_source_properties() {
         let Some(root) = test_root() else {
             eprintln!("Skipping: not in monorepo");
             return;
         };
 
-        let path = root.join("packages/core/models/arc-classes/semantic/targets.yaml");
-        let content = std::fs::read_to_string(&path).expect("should read TARGETS arc YAML");
+        let path = root.join("packages/core/models/arc-classes/mining/targets-keyword.yaml");
+        let content =
+            std::fs::read_to_string(&path).expect("should read TARGETS_KEYWORD arc YAML");
         let parsed: ArcClassYaml =
-            serde_yaml::from_str(&content).expect("should parse TARGETS arc YAML");
+            serde_yaml::from_str(&content).expect("should parse TARGETS_KEYWORD arc YAML");
 
-        assert_eq!(parsed.arc.name, "TARGETS", "arc name mismatch");
+        assert_eq!(parsed.arc.name, "TARGETS_KEYWORD", "arc name mismatch");
         assert_eq!(
             parsed.arc.family,
-            ArcFamily::Semantic,
-            "TARGETS must be semantic family"
+            ArcFamily::Mining,
+            "TARGETS_KEYWORD must be mining family"
         );
 
-        // Check properties contains rank and is_slug_source
+        // Check properties contains priority and is_slug_source
         let props = parsed
             .arc
             .properties
             .as_ref()
-            .expect("TARGETS must have properties");
+            .expect("TARGETS_KEYWORD must have properties");
 
         // Properties can be list of objects with name field
         if let serde_yaml::Value::Sequence(seq) = props {
@@ -1012,61 +1013,63 @@ mod arc_yaml_cypher_alignment_tests {
                 .collect();
 
             assert!(
-                prop_names.contains(&"rank".to_string()),
-                "TARGETS must have 'rank' property (primary/secondary/tertiary)"
+                prop_names.contains(&"priority".to_string()),
+                "TARGETS_KEYWORD must have 'priority' property (primary/secondary/tertiary)"
             );
             assert!(
                 prop_names.contains(&"is_slug_source".to_string()),
-                "TARGETS must have 'is_slug_source' property (ADR-030)"
+                "TARGETS_KEYWORD must have 'is_slug_source' property (ADR-030)"
             );
         }
     }
 
-    /// Parse the TARGETS arc YAML and verify the rank enum values.
+    /// Parse the TARGETS_KEYWORD arc YAML and verify the priority enum values.
     #[test]
-    fn targets_arc_rank_property_has_enum_values() {
+    fn targets_keyword_arc_priority_property_has_enum_values() {
         let Some(root) = test_root() else {
             eprintln!("Skipping: not in monorepo");
             return;
         };
 
-        let path = root.join("packages/core/models/arc-classes/semantic/targets.yaml");
-        let content = std::fs::read_to_string(&path).expect("should read TARGETS arc YAML");
+        let path = root.join("packages/core/models/arc-classes/mining/targets-keyword.yaml");
+        let content =
+            std::fs::read_to_string(&path).expect("should read TARGETS_KEYWORD arc YAML");
         let parsed: ArcClassYaml =
-            serde_yaml::from_str(&content).expect("should parse TARGETS arc YAML");
+            serde_yaml::from_str(&content).expect("should parse TARGETS_KEYWORD arc YAML");
 
         let props = parsed.arc.properties.as_ref().unwrap();
         if let serde_yaml::Value::Sequence(seq) = props {
-            // Find the rank property
-            let rank_prop = seq.iter().find(|item| {
+            // Find the priority property
+            let priority_prop = seq.iter().find(|item| {
                 if let serde_yaml::Value::Mapping(m) = item {
                     m.get(serde_yaml::Value::String("name".to_string()))
                         .and_then(|v| v.as_str())
-                        == Some("rank")
+                        == Some("priority")
                 } else {
                     false
                 }
             });
 
-            let rank_prop = rank_prop.expect("rank property must exist");
-            if let serde_yaml::Value::Mapping(m) = rank_prop {
+            let priority_prop = priority_prop.expect("priority property must exist");
+            if let serde_yaml::Value::Mapping(m) = priority_prop {
                 let enum_val = m
                     .get(serde_yaml::Value::String("enum".to_string()))
-                    .expect("rank property must have enum");
+                    .expect("priority property must have enum");
 
                 if let serde_yaml::Value::Sequence(enum_seq) = enum_val {
-                    let enum_strs: Vec<&str> = enum_seq.iter().filter_map(|v| v.as_str()).collect();
+                    let enum_strs: Vec<&str> =
+                        enum_seq.iter().filter_map(|v| v.as_str()).collect();
                     assert!(
                         enum_strs.contains(&"primary"),
-                        "rank enum must contain 'primary'"
+                        "priority enum must contain 'primary'"
                     );
                     assert!(
                         enum_strs.contains(&"secondary"),
-                        "rank enum must contain 'secondary'"
+                        "priority enum must contain 'secondary'"
                     );
                     assert!(
                         enum_strs.contains(&"tertiary"),
-                        "rank enum must contain 'tertiary'"
+                        "priority enum must contain 'tertiary'"
                     );
                 }
             }
@@ -1264,11 +1267,11 @@ arc:
 
         let doc = load_arc_classes_from_files(&root).expect("should load all arc classes");
 
-        // v0.13.1: Should have TARGETS and DERIVED_SLUG_FROM
-        let targets = doc.arcs.iter().find(|a| a.arc_type == "TARGETS");
-        assert!(targets.is_some(), "TARGETS arc must exist");
+        // v0.17.1: Should have TARGETS_KEYWORD and DERIVED_SLUG_FROM
+        let targets = doc.arcs.iter().find(|a| a.arc_type == "TARGETS_KEYWORD");
+        assert!(targets.is_some(), "TARGETS_KEYWORD arc must exist");
         let targets = targets.unwrap();
-        assert_eq!(targets.family, ArcFamily::Semantic);
+        assert_eq!(targets.family, ArcFamily::Mining);
 
         let derived = doc.arcs.iter().find(|a| a.arc_type == "DERIVED_SLUG_FROM");
         assert!(derived.is_some(), "DERIVED_SLUG_FROM arc must exist");
