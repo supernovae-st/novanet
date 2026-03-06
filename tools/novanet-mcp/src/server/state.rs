@@ -6,10 +6,14 @@
 //!
 //! On startup, the server pre-warms the cache with frequently-used schema queries
 //! to avoid cold-cache latency on first requests. See `warm_cache()` method.
+//!
+//! ## Phase 3 Performance Optimization
+//!
+//! Added circuit breaker pattern for Neo4j resilience under load.
 
 use crate::cache::QueryCache;
 use crate::error::Result;
-use crate::neo4j::Neo4jPool;
+use crate::neo4j::{CircuitBreaker, Neo4jPool};
 use crate::schema_cache::SchemaCache;
 use crate::server::Config;
 use crate::tokens::TokenCounter;
@@ -29,6 +33,8 @@ struct StateInner {
     pub cache: QueryCache,
     pub counter: TokenCounter,
     pub schema_cache: SchemaCache,
+    /// Circuit breaker for Neo4j resilience (Phase 3)
+    pub circuit_breaker: CircuitBreaker,
     /// Server statistics
     pub stats: RwLock<ServerStats>,
 }
@@ -44,12 +50,13 @@ pub struct ServerStats {
 impl State {
     /// Create new state with the given configuration
     pub async fn new(config: Config) -> Result<Self> {
-        // Create Neo4j pool
-        let pool = Neo4jPool::new(
+        // Create Neo4j pool with custom fetch_size (Phase 3)
+        let pool = Neo4jPool::with_fetch_size(
             &config.neo4j_uri,
             &config.neo4j_user,
             &config.neo4j_password,
             config.pool_size,
+            config.fetch_size,
         )
         .await?;
 
@@ -62,6 +69,12 @@ impl State {
         // Create schema cache
         let schema_cache = SchemaCache::new(config.cache_ttl.as_secs());
 
+        // Create circuit breaker (Phase 3)
+        let circuit_breaker = CircuitBreaker::new(
+            config.circuit_breaker_threshold,
+            config.circuit_breaker_reset_timeout,
+        );
+
         Ok(Self {
             inner: Arc::new(StateInner {
                 config,
@@ -69,6 +82,7 @@ impl State {
                 cache,
                 counter,
                 schema_cache,
+                circuit_breaker,
                 stats: RwLock::new(ServerStats::default()),
             }),
         })
@@ -97,6 +111,11 @@ impl State {
     /// Get schema cache reference
     pub fn schema_cache(&self) -> &SchemaCache {
         &self.inner.schema_cache
+    }
+
+    /// Get circuit breaker reference (Phase 3)
+    pub fn circuit_breaker(&self) -> &CircuitBreaker {
+        &self.inner.circuit_breaker
     }
 
     /// Increment query count

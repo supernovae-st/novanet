@@ -1,6 +1,11 @@
 //! Server configuration
 //!
 //! Configuration loaded from environment variables.
+//!
+//! ## Phase 3 Performance Optimization
+//!
+//! Added connection pool tuning and circuit breaker settings for improved
+//! resilience under load.
 
 use crate::error::{Error, Result};
 use std::time::Duration;
@@ -13,6 +18,14 @@ pub struct Config {
     pub neo4j_user: String,
     pub neo4j_password: String,
     pub pool_size: usize,
+
+    // Connection pool tuning (Phase 3)
+    pub connection_timeout: Duration,
+    pub fetch_size: usize,
+
+    // Circuit breaker settings (Phase 3)
+    pub circuit_breaker_threshold: u32,
+    pub circuit_breaker_reset_timeout: Duration,
 
     // Cache settings
     pub cache_max_entries: u64,
@@ -41,6 +54,30 @@ impl Config {
                 .ok()
                 .and_then(|s| s.parse().ok())
                 .unwrap_or(16),
+
+            // Connection pool tuning (Phase 3)
+            connection_timeout: Duration::from_secs(
+                std::env::var("NOVANET_MCP_CONNECTION_TIMEOUT_SECS")
+                    .ok()
+                    .and_then(|s| s.parse().ok())
+                    .unwrap_or(5),
+            ),
+            fetch_size: std::env::var("NOVANET_MCP_FETCH_SIZE")
+                .ok()
+                .and_then(|s| s.parse().ok())
+                .unwrap_or(500),
+
+            // Circuit breaker settings (Phase 3)
+            circuit_breaker_threshold: std::env::var("NOVANET_MCP_CIRCUIT_BREAKER_THRESHOLD")
+                .ok()
+                .and_then(|s| s.parse().ok())
+                .unwrap_or(5),
+            circuit_breaker_reset_timeout: Duration::from_secs(
+                std::env::var("NOVANET_MCP_CIRCUIT_BREAKER_RESET_SECS")
+                    .ok()
+                    .and_then(|s| s.parse().ok())
+                    .unwrap_or(30),
+            ),
 
             // Cache
             cache_max_entries: std::env::var("NOVANET_MCP_CACHE_MAX_ENTRIES")
@@ -78,8 +115,16 @@ impl Default for Config {
             neo4j_user: "neo4j".to_string(),
             neo4j_password: "novanetpassword".to_string(),
             pool_size: 16,
+            // Connection pool tuning (Phase 3)
+            connection_timeout: Duration::from_secs(5),
+            fetch_size: 500,
+            // Circuit breaker (Phase 3)
+            circuit_breaker_threshold: 5,
+            circuit_breaker_reset_timeout: Duration::from_secs(30),
+            // Cache
             cache_max_entries: 10000,
             cache_ttl: Duration::from_secs(300),
+            // Token settings
             default_token_budget: 100_000,
             max_hops: 5,
             evidence_packet_size: 200,

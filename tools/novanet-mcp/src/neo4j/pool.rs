@@ -2,6 +2,11 @@
 //!
 //! Uses neo4rs with Arc for connection sharing.
 //! Pattern from tools/novanet/src/db.rs but simplified for MCP.
+//!
+//! ## Phase 3 Performance Optimization
+//!
+//! Added streaming query support with early termination for token budget.
+//! This prevents buffering large result sets in memory.
 
 use crate::error::{Error, Result};
 use neo4rs::{BoltType, ConfigBuilder, Graph, Query};
@@ -13,16 +18,56 @@ pub struct Neo4jPool {
     graph: Arc<Graph>,
 }
 
+/// Result of streaming query execution
+#[derive(Debug)]
+pub struct StreamingResult {
+    /// Rows fetched before termination
+    pub rows: Vec<serde_json::Value>,
+    /// Whether execution terminated early due to budget
+    pub terminated_early: bool,
+    /// Total estimated tokens consumed
+    pub total_tokens: usize,
+}
+
 impl Neo4jPool {
     /// Create a new pool with the given configuration
+    ///
+    /// # Arguments
+    /// * `uri` - Neo4j connection URI (e.g., "bolt://localhost:7687")
+    /// * `user` - Neo4j username
+    /// * `password` - Neo4j password
+    /// * `pool_size` - Maximum number of connections
     pub async fn new(uri: &str, user: &str, password: &str, pool_size: usize) -> Result<Self> {
+        // Default fetch_size of 500 for better performance (Phase 3)
+        Self::with_fetch_size(uri, user, password, pool_size, 500).await
+    }
+
+    /// Create a new pool with custom fetch size (Phase 3)
+    ///
+    /// # Arguments
+    /// * `uri` - Neo4j connection URI
+    /// * `user` - Neo4j username
+    /// * `password` - Neo4j password
+    /// * `pool_size` - Maximum number of connections
+    /// * `fetch_size` - Number of rows to fetch per batch
+    ///
+    /// Note: Neo4rs ConfigBuilder doesn't support connect_timeout directly.
+    /// Use Tokio timeout wrapper for operation-level timeouts if needed.
+    pub async fn with_fetch_size(
+        uri: &str,
+        user: &str,
+        password: &str,
+        pool_size: usize,
+        fetch_size: usize,
+    ) -> Result<Self> {
         let config = ConfigBuilder::default()
             .uri(uri)
             .user(user)
             .password(password)
             .max_connections(pool_size)
+            .fetch_size(fetch_size)
             .build()
-            .map_err(|e| Error::Config(e.to_string()))?;
+            .map_err(|e: neo4rs::Error| Error::Config(e.to_string()))?;
 
         let graph = Graph::connect(config)
             .await
@@ -126,6 +171,87 @@ impl Neo4jPool {
     pub async fn health_check(&self) -> Result<bool> {
         let result = self.execute_query("RETURN 1 AS health", None).await?;
         Ok(!result.is_empty())
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // Streaming Queries (Phase 3 Performance Optimization)
+    // ═══════════════════════════════════════════════════════════════════════════════
+
+    /// Execute a read-only query with streaming and token budget termination
+    ///
+    /// Unlike `execute_query`, this method terminates early when the token budget
+    /// is exceeded. This prevents large queries from consuming excessive memory
+    /// by buffering all results.
+    ///
+    /// # Arguments
+    /// * `cypher` - The Cypher query to execute
+    /// * `params` - Optional query parameters
+    /// * `token_budget` - Maximum tokens to fetch before terminating
+    ///
+    /// # Returns
+    /// A `StreamingResult` containing:
+    /// - `rows`: The fetched rows (may be partial)
+    /// - `terminated_early`: True if budget was exceeded
+    /// - `total_tokens`: Estimated tokens consumed
+    ///
+    /// # Token Estimation
+    /// Uses a simple heuristic: `json_chars / 4` for token estimation.
+    /// This is fast but approximate.
+    pub async fn execute_streaming(
+        &self,
+        cypher: &str,
+        params: Option<serde_json::Map<String, serde_json::Value>>,
+        token_budget: usize,
+    ) -> Result<StreamingResult> {
+        // Validate read-only
+        validate_read_only(cypher)?;
+
+        // Build query with parameters
+        let mut query = Query::new(cypher.to_string());
+        if let Some(params) = params {
+            for (key, value) in params {
+                query = add_param(query, &key, value);
+            }
+        }
+
+        // Execute query
+        let mut result = self
+            .graph
+            .execute(query)
+            .await
+            .map_err(|e| Error::query(cypher, e))?;
+
+        // Stream results with token budget
+        let mut rows = Vec::new();
+        let mut total_tokens = 0;
+        let mut terminated_early = false;
+
+        while let Some(row) = result.next().await.map_err(|e| Error::query(cypher, e))? {
+            let json_row: serde_json::Value = row
+                .to()
+                .map_err(|e| Error::Internal(format!("Row deserialization failed: {}", e)))?;
+
+            // Estimate tokens for this row (chars / 4 heuristic)
+            let row_tokens = match serde_json::to_string(&json_row) {
+                Ok(s) => s.len() / 4,
+                Err(_) => 25, // Default estimate for failed serialization
+            };
+
+            // Check budget BEFORE adding row
+            if total_tokens + row_tokens > token_budget {
+                terminated_early = true;
+                break;
+            }
+
+            total_tokens += row_tokens;
+            rows.push(json_row);
+        }
+
+        Ok(StreamingResult {
+            rows,
+            terminated_early,
+            total_tokens,
+        })
     }
 }
 
