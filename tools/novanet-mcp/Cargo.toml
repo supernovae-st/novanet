@@ -5,7 +5,7 @@
 # patterns for efficient context assembly.
 #
 # Architecture:
-# - 13 Tools: query, describe, search, traverse, assemble, atoms, generate, introspect, batch, cache_stats, cache_invalidate, check, audit
+# - 14 Tools: query, describe, search, traverse, assemble, atoms, generate, introspect, batch, cache_stats, cache_invalidate, write, check, audit
 # - 4 Resources: entity://, class://, locale://, view://
 # - 6 Prompts: cypher_query, cypher_explain, block_generation, page_generation, entity_analysis, locale_briefing
 #

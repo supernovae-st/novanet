@@ -1322,7 +1322,7 @@ cargo test test_validate_read_only
 cargo test --test integration
 ```
 
-**Current test count:** 430 tests (unit + integration tests, Neo4j integration tests require `NOVANET_MCP_NEO4J_PASSWORD` env var)
+**Current test count:** 573 tests (unit + integration tests, Neo4j integration tests require `NOVANET_MCP_NEO4J_PASSWORD` env var)
 
 ---
 
