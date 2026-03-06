@@ -8,6 +8,15 @@
         "NEO4J_USERNAME": "neo4j",
         "NEO4J_PASSWORD": "novanetpassword"
       }
+    },
+    "novanet": {
+      "command": "/Users/thibaut/dev/supernovae/novanet/tools/novanet-mcp/target/release/novanet-mcp",
+      "env": {
+        "NOVANET_MCP_NEO4J_URI": "bolt://localhost:7687",
+        "NOVANET_MCP_NEO4J_USER": "neo4j",
+        "NOVANET_MCP_NEO4J_PASSWORD": "novanetpassword",
+        "RUST_LOG": "novanet_mcp=info"
+      }
     }
   }
 }
