@@ -109,11 +109,15 @@ pub enum Error {
     SchemaNotFound { class: String },
 
     /// NodeClass not found in schema
-    #[error("NodeClass '{name}' not found. Use novanet_introspect(target='classes') to list all 61 NodeClasses. Common classes: Entity, Page, Block, Locale.")]
+    #[error(
+        "NodeClass '{name}' not found. Use novanet_introspect(target='classes') to list all 61 NodeClasses. Common classes: Entity, Page, Block, Locale."
+    )]
     NodeClassNotFound { name: String },
 
     /// ArcClass not found in schema
-    #[error("ArcClass '{name}' not found. Use novanet_introspect(target='arcs') to list all ArcClasses. Common arcs: HAS_NATIVE, FOR_LOCALE, BELONGS_TO.")]
+    #[error(
+        "ArcClass '{name}' not found. Use novanet_introspect(target='arcs') to list all ArcClasses. Common arcs: HAS_NATIVE, FOR_LOCALE, BELONGS_TO."
+    )]
     ArcClassNotFound { name: String },
 
     /// Missing required property

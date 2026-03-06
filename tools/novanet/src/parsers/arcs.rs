@@ -979,8 +979,7 @@ mod arc_yaml_cypher_alignment_tests {
         };
 
         let path = root.join("packages/core/models/arc-classes/mining/targets-keyword.yaml");
-        let content =
-            std::fs::read_to_string(&path).expect("should read TARGETS_KEYWORD arc YAML");
+        let content = std::fs::read_to_string(&path).expect("should read TARGETS_KEYWORD arc YAML");
         let parsed: ArcClassYaml =
             serde_yaml::from_str(&content).expect("should parse TARGETS_KEYWORD arc YAML");
 
@@ -1032,8 +1031,7 @@ mod arc_yaml_cypher_alignment_tests {
         };
 
         let path = root.join("packages/core/models/arc-classes/mining/targets-keyword.yaml");
-        let content =
-            std::fs::read_to_string(&path).expect("should read TARGETS_KEYWORD arc YAML");
+        let content = std::fs::read_to_string(&path).expect("should read TARGETS_KEYWORD arc YAML");
         let parsed: ArcClassYaml =
             serde_yaml::from_str(&content).expect("should parse TARGETS_KEYWORD arc YAML");
 
@@ -1057,8 +1055,7 @@ mod arc_yaml_cypher_alignment_tests {
                     .expect("priority property must have enum");
 
                 if let serde_yaml::Value::Sequence(enum_seq) = enum_val {
-                    let enum_strs: Vec<&str> =
-                        enum_seq.iter().filter_map(|v| v.as_str()).collect();
+                    let enum_strs: Vec<&str> = enum_seq.iter().filter_map(|v| v.as_str()).collect();
                     assert!(
                         enum_strs.contains(&"primary"),
                         "priority enum must contain 'primary'"

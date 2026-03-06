@@ -435,8 +435,12 @@ mod tests {
         let cache = QueryCache::new(1000, Duration::from_secs(60));
 
         // Even empty/null values should have weight >= 1
-        cache.insert("null".to_string(), serde_json::json!(null)).await;
-        cache.insert("empty".to_string(), serde_json::json!({})).await;
+        cache
+            .insert("null".to_string(), serde_json::json!(null))
+            .await;
+        cache
+            .insert("empty".to_string(), serde_json::json!({}))
+            .await;
         cache.run_pending_tasks().await;
 
         // Both should be cached (weight >= 1 ensures they count)
@@ -461,9 +465,15 @@ mod tests {
         let cache = QueryCache::new(1000, Duration::from_secs(60));
 
         // Insert entries with different prefixes
-        cache.insert("query:abc".to_string(), serde_json::json!(1)).await;
-        cache.insert("query:def".to_string(), serde_json::json!(2)).await;
-        cache.insert("entity:abc".to_string(), serde_json::json!(3)).await;
+        cache
+            .insert("query:abc".to_string(), serde_json::json!(1))
+            .await;
+        cache
+            .insert("query:def".to_string(), serde_json::json!(2))
+            .await;
+        cache
+            .insert("entity:abc".to_string(), serde_json::json!(3))
+            .await;
         cache.run_pending_tasks().await;
 
         assert_eq!(cache.entry_count(), 3);
@@ -483,9 +493,15 @@ mod tests {
         let cache = QueryCache::new(1000, Duration::from_secs(60));
 
         // Insert entries with different suffixes
-        cache.insert("a_test".to_string(), serde_json::json!(1)).await;
-        cache.insert("b_test".to_string(), serde_json::json!(2)).await;
-        cache.insert("a_other".to_string(), serde_json::json!(3)).await;
+        cache
+            .insert("a_test".to_string(), serde_json::json!(1))
+            .await;
+        cache
+            .insert("b_test".to_string(), serde_json::json!(2))
+            .await;
+        cache
+            .insert("a_other".to_string(), serde_json::json!(3))
+            .await;
         cache.run_pending_tasks().await;
 
         // Invalidate with suffix pattern
@@ -503,9 +519,15 @@ mod tests {
         let cache = QueryCache::new(1000, Duration::from_secs(60));
 
         // Insert entries
-        cache.insert("foo_bar_baz".to_string(), serde_json::json!(1)).await;
-        cache.insert("qux_bar_quux".to_string(), serde_json::json!(2)).await;
-        cache.insert("foo_qux_baz".to_string(), serde_json::json!(3)).await;
+        cache
+            .insert("foo_bar_baz".to_string(), serde_json::json!(1))
+            .await;
+        cache
+            .insert("qux_bar_quux".to_string(), serde_json::json!(2))
+            .await;
+        cache
+            .insert("foo_qux_baz".to_string(), serde_json::json!(3))
+            .await;
         cache.run_pending_tasks().await;
 
         // Invalidate entries containing "bar"
@@ -523,8 +545,12 @@ mod tests {
         let cache = QueryCache::new(1000, Duration::from_secs(60));
 
         // Insert entries
-        cache.insert("exact_key".to_string(), serde_json::json!(1)).await;
-        cache.insert("exact_key_extra".to_string(), serde_json::json!(2)).await;
+        cache
+            .insert("exact_key".to_string(), serde_json::json!(1))
+            .await;
+        cache
+            .insert("exact_key_extra".to_string(), serde_json::json!(2))
+            .await;
         cache.run_pending_tasks().await;
 
         // Invalidate exact match only

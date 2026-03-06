@@ -811,11 +811,7 @@ mod tests {
         // Verify each matches sync version
         for (i, text) in texts.iter().enumerate() {
             let sync_count = counter.count(text);
-            assert_eq!(
-                counts[i], sync_count,
-                "Batch count {} should match sync",
-                i
-            );
+            assert_eq!(counts[i], sync_count, "Batch count {} should match sync", i);
         }
     }
 

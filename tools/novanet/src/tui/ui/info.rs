@@ -653,7 +653,10 @@ fn build_layer_content(
             ),
             Span::styled("HAS_CLASS", Style::default().fg(Color::Cyan)),
             Span::styled(" → ", STYLE_DIM),
-            Span::styled(class_info.display_name.clone(), Style::default().fg(trait_color)),
+            Span::styled(
+                class_info.display_name.clone(),
+                Style::default().fg(trait_color),
+            ),
             Span::styled(" [own]", STYLE_DIM),
         ]));
     }

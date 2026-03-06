@@ -334,7 +334,10 @@ fn test_config_struct_construction() {
     // Phase 3 assertions
     assert_eq!(config.fetch_size, 500);
     assert_eq!(config.circuit_breaker_threshold, 5);
-    assert_eq!(config.circuit_breaker_reset_timeout, Duration::from_secs(30));
+    assert_eq!(
+        config.circuit_breaker_reset_timeout,
+        Duration::from_secs(30)
+    );
 }
 
 #[test]

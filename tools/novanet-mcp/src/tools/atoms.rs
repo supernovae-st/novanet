@@ -760,25 +760,43 @@ mod tests {
 
     #[test]
     fn test_culture_ref_config_extra_properties() {
-        assert!(CULTURE_REF_CONFIG.extra_properties.contains(&("context", "context")));
-        assert!(CULTURE_REF_CONFIG
-            .extra_properties
-            .contains(&("appropriateness", "appropriateness")));
+        assert!(
+            CULTURE_REF_CONFIG
+                .extra_properties
+                .contains(&("context", "context"))
+        );
+        assert!(
+            CULTURE_REF_CONFIG
+                .extra_properties
+                .contains(&("appropriateness", "appropriateness"))
+        );
     }
 
     #[test]
     fn test_taboo_config_extra_properties() {
-        assert!(TABOO_CONFIG.extra_properties.contains(&("severity", "severity")));
-        assert!(TABOO_CONFIG.extra_properties.contains(&("category", "category")));
+        assert!(
+            TABOO_CONFIG
+                .extra_properties
+                .contains(&("severity", "severity"))
+        );
+        assert!(
+            TABOO_CONFIG
+                .extra_properties
+                .contains(&("category", "category"))
+        );
     }
 
     #[test]
     fn test_audience_trait_config_extra_properties() {
-        assert!(AUDIENCE_TRAIT_CONFIG
-            .extra_properties
-            .contains(&("demographic", "demographic")));
-        assert!(AUDIENCE_TRAIT_CONFIG
-            .extra_properties
-            .contains(&("behavior", "behavior")));
+        assert!(
+            AUDIENCE_TRAIT_CONFIG
+                .extra_properties
+                .contains(&("demographic", "demographic"))
+        );
+        assert!(
+            AUDIENCE_TRAIT_CONFIG
+                .extra_properties
+                .contains(&("behavior", "behavior"))
+        );
     }
 }
