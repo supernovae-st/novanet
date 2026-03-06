@@ -44,7 +44,7 @@ impl NovaNetHandler {
     /// All queries are validated for read-only operations (no CREATE, DELETE, MERGE, SET).
     #[tool(
         name = "novanet_query",
-        description = "Execute a read-only Cypher query against the NovaNet knowledge graph. Returns rows as JSON with token estimate. ⚠️ LAST RESORT: Use specialized tools first (novanet_search for finding nodes, novanet_traverse for relationships, novanet_introspect for schema). Only use novanet_query for custom analytics or aggregations."
+        description = "⚠️ DEBUG/ANALYTICS ONLY - Execute raw Cypher query. Returns rows as JSON. 🚫 DO NOT USE for: finding nodes (use novanet_search), exploring relationships (use novanet_traverse), schema info (use novanet_introspect), content generation (use novanet_generate). ✅ USE ONLY for: custom aggregations, complex analytics, debugging. Most workflows should NEVER need this tool."
     )]
     async fn novanet_query(
         &self,
@@ -69,7 +69,7 @@ impl NovaNetHandler {
     /// available relations (ArcKinds), locales, and graph statistics.
     #[tool(
         name = "novanet_describe",
-        description = "Get self-description of the NovaNet knowledge graph schema, statistics, or specific entities for agent bootstrap."
+        description = "🚀 START HERE - Bootstrap your understanding of NovaNet. Targets: 'schema' (overview of realms/layers/classes), 'entity' (specific entity details), 'category' (entity category members), 'relations' (arc families), 'locales' (available locales), 'stats' (graph statistics). Use this first to understand what's in the graph before using other tools."
     )]
     async fn novanet_describe(
         &self,
@@ -94,7 +94,7 @@ impl NovaNetHandler {
     /// Filter by node kinds, realm, and layer.
     #[tool(
         name = "novanet_search",
-        description = "Search the NovaNet knowledge graph using fulltext or property search. Filter by kinds, realm, layer."
+        description = "🔍 FIND NODES - Search the knowledge graph by text or properties. Modes: 'fulltext' (Neo4j fulltext index), 'property' (exact/partial match), 'hybrid' (both). Filter by: kinds (Entity, Page, Block...), realm (shared/org), layer. Returns matches with relevance scores. Use this to find nodes, then novanet_traverse to explore their relationships."
     )]
     async fn novanet_search(
         &self,
@@ -119,7 +119,7 @@ impl NovaNetHandler {
     /// Implements RLM-on-KG hop-by-hop pattern.
     #[tool(
         name = "novanet_traverse",
-        description = "Traverse the knowledge graph from a starting node with configurable depth, direction, and arc filters."
+        description = "🧭 EXPLORE RELATIONSHIPS - Traverse graph from a starting node. Configure: max_depth (1-5), direction (outgoing/incoming/both), arc_families (ownership/semantic/localization/generation/mining), target_kinds. Returns connected nodes with paths. Use after novanet_search to explore an entity's relationships."
     )]
     async fn novanet_traverse(
         &self,
@@ -144,7 +144,7 @@ impl NovaNetHandler {
     /// with token budget management and evidence packet compression.
     #[tool(
         name = "novanet_assemble",
-        description = "Assemble context for LLM generation with token budget management. Gathers entities, locale knowledge, and structure."
+        description = "🔧 ADVANCED - Low-level context assembly with token budget management. Gathers entities, locale knowledge, and structure. Strategies: breadth (default), depth, relevance, custom. ⚠️ Most users should use novanet_generate instead, which orchestrates assemble + atoms automatically. Use assemble only for custom context pipelines."
     )]
     async fn novanet_assemble(
         &self,
@@ -169,7 +169,7 @@ impl NovaNetHandler {
     /// Enables selective LLM context loading.
     #[tool(
         name = "novanet_atoms",
-        description = "Retrieve knowledge atoms (Terms, Expressions, Patterns, etc.) for a locale. Enables selective LLM context."
+        description = "🔤 LOCALE KNOWLEDGE - Retrieve knowledge atoms for a specific locale. Types: term (technical vocabulary), expression (idioms), pattern (templates), cultureref (cultural references), taboo (things to avoid), audiencetrait (audience characteristics), or 'all'. Filter by domain/register. Use for locale-specific content generation or exploring cultural nuances."
     )]
     async fn novanet_atoms(
         &self,
@@ -194,7 +194,7 @@ impl NovaNetHandler {
     /// Implements full RLM-on-KG pipeline with context anchors.
     #[tool(
         name = "novanet_generate",
-        description = "Assemble complete generation context for block or page content. Orchestrates traverse/assemble/atoms with context anchors."
+        description = "⭐ PRIMARY CONTENT TOOL - Assemble complete generation context for block or page content. Modes: 'block' (single block with entities + knowledge) or 'page' (full page with all blocks + cross-references). Automatically orchestrates traverse/assemble/atoms. Returns: prompt, evidence_summary, locale_context, context_anchors, denomination_forms. This is THE tool for Nika content generation workflows."
     )]
     async fn novanet_generate(
         &self,
@@ -220,7 +220,7 @@ impl NovaNetHandler {
     /// MVP 8 Phase 3: 8th MCP tool for schema introspection.
     #[tool(
         name = "novanet_introspect",
-        description = "Introspect NovaNet schema: query NodeClasses, ArcClasses, and their relationships. Filter by realm, layer, or arc family. 💡 Use this to discover required properties, trait permissions, and valid arc connections BEFORE calling novanet_write. Example: introspect(target='class', name='EntityNative', include_arcs=true) returns required_properties and valid arcs."
+        description = "📚 SCHEMA INFO - Query NodeClasses and ArcClasses with their relationships. Targets: 'classes' (list all, filter by realm/layer), 'class' (specific class with arcs), 'arcs' (list all, filter by family), 'arc' (specific arc). 💡 REQUIRED before novanet_write: use introspect(target='class', name='EntityNative', include_arcs=true) to discover required_properties and valid arc connections."
     )]
     async fn novanet_introspect(
         &self,
@@ -245,7 +245,7 @@ impl NovaNetHandler {
     /// Task A1: 9th MCP tool for bulk operations.
     #[tool(
         name = "novanet_batch",
-        description = "Execute multiple NovaNet tools in a single request. Supports parallel execution and fail-fast behavior."
+        description = "📦 BULK OPERATIONS - Execute multiple MCP tools in a single request. Set parallel=true for concurrent execution (faster), fail_fast=true to stop on first error. Use cases: batch context assembly, parallel search, bulk schema introspection. Each operation has an id for result mapping. Returns aggregated results with timing."
     )]
     async fn novanet_batch(
         &self,
@@ -269,7 +269,7 @@ impl NovaNetHandler {
     /// Task A3: 10th MCP tool for cache monitoring.
     #[tool(
         name = "novanet_cache_stats",
-        description = "Get cache statistics including hit rate, entry count, and memory usage."
+        description = "🔧 OPS/DEBUG - Get cache statistics: entries count, hit rate percentage, hits/misses, memory usage, TTL settings. Use for monitoring cache performance and debugging. Low hit rate may indicate need for cache tuning."
     )]
     async fn novanet_cache_stats(
         &self,
@@ -293,7 +293,7 @@ impl NovaNetHandler {
     /// Task A3: 11th MCP tool for cache management.
     #[tool(
         name = "novanet_cache_invalidate",
-        description = "Invalidate cache entries. Use pattern for selective invalidation or all=true for full clear."
+        description = "🔧 OPS/DEBUG - Invalidate cache entries. Use all=true to clear entire cache (after schema changes), or pattern for selective invalidation. ⚠️ Note: Pattern-based invalidation is NOT YET IMPLEMENTED - use all=true for now. Automatically called after novanet_write operations."
     )]
     async fn novanet_cache_invalidate(
         &self,
@@ -371,7 +371,7 @@ impl NovaNetHandler {
     /// v0.17.0: 14th MCP tool for quality audit.
     #[tool(
         name = "novanet_audit",
-        description = "Audit knowledge graph quality. Checks: coverage (missing natives), orphans (missing arcs), integrity (broken refs), freshness (stale data). Returns CSR metrics and recommendations."
+        description = "📊 QUALITY AUDIT - Post-write quality checks with CSR (Constraint Satisfaction Rate) metrics. Targets: coverage (missing *Native for locales), orphans (missing FOR_LOCALE/HAS_NATIVE arcs), integrity (broken refs), freshness (stale >30 days), or 'all'. Returns issues by severity + recommendations. CSR ≥0.95 = healthy, 0.85-0.95 = warning, <0.85 = critical."
     )]
     async fn novanet_audit(
         &self,
@@ -398,10 +398,12 @@ impl ServerHandler for NovaNetHandler {
         ServerInfo {
             instructions: Some(
                 "NovaNet MCP Server v0.17.0 - Knowledge Graph for AI Agents. \
-                 14 tools: novanet_search (find nodes), novanet_traverse (relationships), \
-                 novanet_introspect (schema), novanet_generate (context), novanet_atoms (locale). \
-                 Writes: ALWAYS call novanet_check BEFORE novanet_write. \
-                 novanet_query is LAST RESORT for custom analytics only. 6 prompts available."
+                 14 tools available. TOOL SELECTION: \
+                 🔍 novanet_search (find nodes) → 🧭 novanet_traverse (explore relationships) → \
+                 ⭐ novanet_generate (content context). \
+                 For writes: 📚 novanet_introspect (schema) → ✅ novanet_check (validate) → ✍️ novanet_write. \
+                 📊 novanet_audit for quality. ⚠️ novanet_query is LAST RESORT for custom analytics only. \
+                 6 prompts available."
                     .into(),
             ),
             capabilities: ServerCapabilities::builder()
