@@ -374,8 +374,44 @@ fn build_realm_content(app: &App, realm: &crate::tui::data::RealmInfo) -> Unifie
         content.properties.add_empty();
     }
 
-    // RELATIONSHIPS - not applicable for realm
-    content.relationships.add_empty();
+    // RELATIONSHIPS - v0.17: show HAS_LAYER arcs to layers
+    if !realm.layers.is_empty() {
+        let layer_count = realm.layers.len();
+        content.relationships.add_line(Line::from(vec![
+            Span::styled(
+                "→ ",
+                Style::default()
+                    .fg(Color::Cyan)
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::styled(format!("{} outgoing", layer_count), STYLE_MUTED),
+        ]));
+
+        // Show HAS_LAYER arcs to each layer
+        for layer in realm.layers.iter().take(6) {
+            let layer_color = hex_to_color(&layer.color);
+            content.relationships.add_line(Line::from(vec![
+                Span::styled(
+                    "  → ",
+                    Style::default()
+                        .fg(Color::Cyan)
+                        .add_modifier(Modifier::BOLD),
+                ),
+                Span::styled("HAS_LAYER", Style::default().fg(Color::Cyan)),
+                Span::styled(" → ", STYLE_DIM),
+                Span::styled(layer.display_name.clone(), Style::default().fg(layer_color)),
+                Span::styled(" [own]", STYLE_DIM),
+            ]));
+        }
+        if layer_count > 6 {
+            content.relationships.add_line(Line::from(vec![Span::styled(
+                format!("     ... +{} more", layer_count - 6),
+                STYLE_DIM,
+            )]));
+        }
+    } else {
+        content.relationships.add_empty();
+    }
 
     content
 }
@@ -474,8 +510,64 @@ fn build_layer_content(
         content.properties.add_empty();
     }
 
-    // RELATIONSHIPS - not applicable for layer
-    content.relationships.add_empty();
+    // RELATIONSHIPS - v0.17: show incoming HAS_LAYER + outgoing HAS_CLASS
+    let class_count = layer.classes.len();
+
+    // Summary line
+    content.relationships.add_line(Line::from(vec![
+        Span::styled(
+            "← ",
+            Style::default()
+                .fg(Color::Magenta)
+                .add_modifier(Modifier::BOLD),
+        ),
+        Span::styled("1 in  ", STYLE_MUTED),
+        Span::styled(
+            "→ ",
+            Style::default()
+                .fg(Color::Cyan)
+                .add_modifier(Modifier::BOLD),
+        ),
+        Span::styled(format!("{} out", class_count), STYLE_MUTED),
+    ]));
+
+    // Incoming: HAS_LAYER from Realm
+    let realm_color = hex_to_color(&realm.color);
+    content.relationships.add_line(Line::from(vec![
+        Span::styled(
+            "  ← ",
+            Style::default()
+                .fg(Color::Magenta)
+                .add_modifier(Modifier::BOLD),
+        ),
+        Span::styled("HAS_LAYER", Style::default().fg(Color::Magenta)),
+        Span::styled(" ← ", STYLE_DIM),
+        Span::styled(realm.display_name.clone(), Style::default().fg(realm_color)),
+        Span::styled(" [own]", STYLE_DIM),
+    ]));
+
+    // Outgoing: HAS_CLASS to each class
+    for class_info in layer.classes.iter().take(4) {
+        let trait_color = theme.trait_color(&class_info.trait_name);
+        content.relationships.add_line(Line::from(vec![
+            Span::styled(
+                "  → ",
+                Style::default()
+                    .fg(Color::Cyan)
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::styled("HAS_CLASS", Style::default().fg(Color::Cyan)),
+            Span::styled(" → ", STYLE_DIM),
+            Span::styled(class_info.display_name.clone(), Style::default().fg(trait_color)),
+            Span::styled(" [own]", STYLE_DIM),
+        ]));
+    }
+    if class_count > 4 {
+        content.relationships.add_line(Line::from(vec![Span::styled(
+            format!("     ... +{} more classes", class_count - 4),
+            STYLE_DIM,
+        )]));
+    }
 
     content
 }
