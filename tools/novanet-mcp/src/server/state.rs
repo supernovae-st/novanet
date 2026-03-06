@@ -1,6 +1,11 @@
 //! Server state
 //!
 //! Shared application state using parking_lot for faster locking.
+//!
+//! ## Cache Warming
+//!
+//! On startup, the server pre-warms the cache with frequently-used schema queries
+//! to avoid cold-cache latency on first requests. See `warm_cache()` method.
 
 use crate::cache::QueryCache;
 use crate::error::Result;
@@ -10,6 +15,7 @@ use crate::server::Config;
 use crate::tokens::TokenCounter;
 use parking_lot::RwLock;
 use std::sync::Arc;
+use tracing::{info, warn};
 
 /// Shared application state
 #[derive(Clone)]
@@ -111,6 +117,62 @@ impl State {
     /// Get current statistics
     pub fn stats(&self) -> ServerStats {
         self.inner.stats.read().clone()
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // Cache Warming (Phase 1 Performance Optimization)
+    // ═══════════════════════════════════════════════════════════════════════════════
+
+    /// Warm the cache with frequently-used schema queries
+    ///
+    /// Pre-loads schema metadata to avoid cold-cache latency on first requests.
+    /// Called automatically during server startup.
+    ///
+    /// **Queries warmed:**
+    /// - NodeClasses (realm, layer, trait)
+    /// - ArcClasses (family, scope)
+    /// - Locales (language, region)
+    pub async fn warm_cache(&self) -> Result<()> {
+        let queries = [
+            // Schema introspection - most common queries
+            (
+                "warm:classes",
+                "MATCH (c:Schema:Class) RETURN c.name AS name, c.realm AS realm, c.layer AS layer, c.trait_type AS trait LIMIT 100",
+            ),
+            // Arc classes
+            (
+                "warm:arcs",
+                "MATCH (a:Schema:ArcClass) RETURN a.name AS name, a.family AS family, a.scope AS scope LIMIT 200",
+            ),
+            // Locales
+            (
+                "warm:locales",
+                "MATCH (l:Locale) RETURN l.key AS key, l.language AS language, l.region AS region LIMIT 50",
+            ),
+        ];
+
+        let mut warmed = 0;
+        let mut failed = 0;
+
+        for (key, cypher) in queries {
+            match self.pool().execute_query(cypher, None).await {
+                Ok(rows) => {
+                    let value = serde_json::to_value(&rows).unwrap_or_default();
+                    self.cache().insert(key.to_string(), value).await;
+                    warmed += 1;
+                }
+                Err(e) => {
+                    warn!(query = key, error = %e, "Cache warming query failed");
+                    failed += 1;
+                }
+            }
+        }
+
+        if warmed > 0 {
+            info!(warmed = warmed, failed = failed, "Cache warmed");
+        }
+
+        Ok(())
     }
 }
 

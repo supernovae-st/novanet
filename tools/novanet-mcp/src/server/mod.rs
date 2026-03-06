@@ -22,8 +22,17 @@ pub struct Server {
 
 impl Server {
     /// Create a new server with the given configuration
+    ///
+    /// Initializes the Neo4j connection pool, cache, and warms the cache
+    /// with frequently-used schema queries.
     pub async fn new(config: Config) -> Result<Self> {
         let state = State::new(config).await?;
+
+        // Warm cache with frequently-used schema queries (Phase 1 optimization)
+        if let Err(e) = state.warm_cache().await {
+            tracing::warn!(error = %e, "Cache warming failed, continuing with cold cache");
+        }
+
         Ok(Self { state })
     }
 

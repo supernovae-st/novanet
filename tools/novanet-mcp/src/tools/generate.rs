@@ -208,7 +208,11 @@ pub async fn execute(state: &State, params: GenerateParams) -> Result<GenerateRe
         ));
     }
 
-    // Phase 2: Assemble semantic context (entities)
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // Phases 2, 3, 4 run in parallel (Phase 1 Performance Optimization)
+    // ═══════════════════════════════════════════════════════════════════════════════
+
+    // Prepare Phase 2 params: Assemble semantic context (entities)
     let assemble_params = AssembleParams {
         focus_key: params.focus_key.clone(),
         locale: params.locale.clone(),
@@ -220,7 +224,29 @@ pub async fn execute(state: &State, params: GenerateParams) -> Result<GenerateRe
         arc_families: None,
         max_depth: Some(spreading_depth),
     };
-    let assemble_result = assemble::execute(state, assemble_params).await?;
+
+    // Prepare Phase 3 params: Get knowledge atoms
+    let atoms_params = AtomsParams {
+        locale: params.locale.clone(),
+        atom_type: crate::tools::atoms::AtomType::All,
+        domain: None, // Get all domains
+        register: None,
+        query: None,
+        limit: Some(50),
+        include_containers: Some(false),
+    };
+
+    // Execute Phases 2, 3, 4 in parallel using tokio::join!
+    let (assemble_result, atoms_result, context_anchors) = tokio::join!(
+        assemble::execute(state, assemble_params),
+        atoms::execute(state, atoms_params),
+        get_context_anchors(state, &params.focus_key, &params.locale)
+    );
+
+    // Unwrap results (propagate errors)
+    let assemble_result = assemble_result?;
+    let atoms_result = atoms_result?;
+    let context_anchors = context_anchors?;
 
     // Log Phase 2
     build_log.entities_phase.push(format!(
@@ -239,18 +265,6 @@ pub async fn execute(state: &State, params: GenerateParams) -> Result<GenerateRe
             .push("WARNING: Evidence was truncated due to token budget".to_string());
     }
 
-    // Phase 3: Get knowledge atoms
-    let atoms_params = AtomsParams {
-        locale: params.locale.clone(),
-        atom_type: crate::tools::atoms::AtomType::All,
-        domain: None, // Get all domains
-        register: None,
-        query: None,
-        limit: Some(50),
-        include_containers: Some(false),
-    };
-    let atoms_result = atoms::execute(state, atoms_params).await?;
-
     // Log Phase 3
     build_log.atoms_phase.push(format!(
         "Locale: {}, retrieved {} atoms",
@@ -261,9 +275,6 @@ pub async fn execute(state: &State, params: GenerateParams) -> Result<GenerateRe
         "Atom tokens: {} (from {} total available)",
         atoms_result.token_estimate, atoms_result.total_count
     ));
-
-    // Phase 4: Get context anchors (cross-page references)
-    let context_anchors = get_context_anchors(state, &params.focus_key, &params.locale).await?;
 
     // Log Phase 4
     build_log.anchors_phase.push(format!(

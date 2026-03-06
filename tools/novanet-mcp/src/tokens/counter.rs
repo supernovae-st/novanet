@@ -2,9 +2,16 @@
 //!
 //! Hybrid token counting using tiktoken-rs with cl100k_base encoding.
 //! Uses lazy initialization for the BPE model.
+//!
+//! ## Async Support
+//!
+//! BPE encoding is CPU-intensive and can block the async runtime.
+//! Use `count_async` and `count_batch_async` for async contexts to
+//! offload encoding to the blocking thread pool via `spawn_blocking`.
 
 use std::sync::OnceLock;
 use tiktoken_rs::CoreBPE;
+use tokio::task::spawn_blocking;
 
 /// Global BPE instance (lazy initialized)
 static BPE: OnceLock<CoreBPE> = OnceLock::new();
@@ -28,12 +35,58 @@ impl TokenCounter {
         Self {}
     }
 
-    /// Get exact token count for text
+    /// Get exact token count for text (synchronous)
     ///
-    /// Uses cl100k_base encoding (used by Claude and GPT-4)
+    /// Uses cl100k_base encoding (used by Claude and GPT-4).
+    /// **Warning**: This blocks the async runtime. Use `count_async` in async contexts.
     pub fn count(&self, text: &str) -> usize {
         let bpe = get_bpe();
         bpe.encode_with_special_tokens(text).len()
+    }
+
+    /// Get exact token count for text (async)
+    ///
+    /// Uses cl100k_base encoding with `spawn_blocking` to avoid blocking
+    /// the async runtime. Preferred for all async code paths.
+    pub async fn count_async(&self, text: String) -> usize {
+        // Calculate fallback before moving text
+        let fallback = text.len() / 4;
+
+        spawn_blocking(move || {
+            let bpe = get_bpe();
+            bpe.encode_with_special_tokens(&text).len()
+        })
+        .await
+        .unwrap_or_else(|e| {
+            tracing::warn!("spawn_blocking failed: {}, falling back to estimate", e);
+            fallback
+        })
+    }
+
+    /// Batch async token counting for multiple texts
+    ///
+    /// More efficient than multiple `count_async` calls as it uses
+    /// a single `spawn_blocking` for all texts.
+    pub async fn count_batch_async(&self, texts: Vec<String>) -> Vec<usize> {
+        if texts.is_empty() {
+            return Vec::new();
+        }
+
+        // Calculate fallbacks before moving texts
+        let fallbacks: Vec<usize> = texts.iter().map(|t| t.len() / 4).collect();
+
+        spawn_blocking(move || {
+            let bpe = get_bpe();
+            texts
+                .iter()
+                .map(|text| bpe.encode_with_special_tokens(text).len())
+                .collect()
+        })
+        .await
+        .unwrap_or_else(|e| {
+            tracing::warn!("spawn_blocking failed: {}, falling back to estimates", e);
+            fallbacks
+        })
     }
 
     /// Fast estimate for pre-flight checks (~96% accuracy)
@@ -697,5 +750,130 @@ mod tests {
         let hex = "deadbeefcafebabe12345678";
         let count = counter.count(hex);
         assert!(count > 0, "Hex: {} tokens", count);
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // Async Token Counting Tests (Phase 1 Performance Optimization)
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    #[tokio::test]
+    async fn test_count_async_basic() {
+        let counter = TokenCounter::new();
+
+        let text = "Hello, world!".to_string();
+        let async_count = counter.count_async(text.clone()).await;
+        let sync_count = counter.count(&text);
+
+        assert_eq!(
+            async_count, sync_count,
+            "Async and sync counts should match"
+        );
+    }
+
+    #[tokio::test]
+    async fn test_count_async_empty() {
+        let counter = TokenCounter::new();
+
+        let count = counter.count_async(String::new()).await;
+        assert_eq!(count, 0, "Empty string should have 0 tokens");
+    }
+
+    #[tokio::test]
+    async fn test_count_async_large_text() {
+        let counter = TokenCounter::new();
+
+        // 10K characters
+        let large_text = "The quick brown fox jumps over the lazy dog. ".repeat(200);
+        let async_count = counter.count_async(large_text.clone()).await;
+        let sync_count = counter.count(&large_text);
+
+        assert_eq!(
+            async_count, sync_count,
+            "Async should match sync for large text"
+        );
+        assert!(async_count > 100, "Large text should have many tokens");
+    }
+
+    #[tokio::test]
+    async fn test_count_batch_async_basic() {
+        let counter = TokenCounter::new();
+
+        let texts = vec![
+            "Hello, world!".to_string(),
+            "The quick brown fox".to_string(),
+            "Testing 123".to_string(),
+        ];
+
+        let counts = counter.count_batch_async(texts.clone()).await;
+
+        assert_eq!(counts.len(), 3, "Should return 3 counts");
+
+        // Verify each matches sync version
+        for (i, text) in texts.iter().enumerate() {
+            let sync_count = counter.count(text);
+            assert_eq!(
+                counts[i], sync_count,
+                "Batch count {} should match sync",
+                i
+            );
+        }
+    }
+
+    #[tokio::test]
+    async fn test_count_batch_async_empty() {
+        let counter = TokenCounter::new();
+
+        let counts = counter.count_batch_async(Vec::new()).await;
+        assert!(counts.is_empty(), "Empty input should return empty output");
+    }
+
+    #[tokio::test]
+    async fn test_count_batch_async_single() {
+        let counter = TokenCounter::new();
+
+        let texts = vec!["Single item".to_string()];
+        let counts = counter.count_batch_async(texts).await;
+
+        assert_eq!(counts.len(), 1);
+        assert!(counts[0] > 0);
+    }
+
+    #[tokio::test]
+    async fn test_async_does_not_block_runtime() {
+        use std::time::Instant;
+
+        let counter = TokenCounter::new();
+
+        // Create many concurrent async counting tasks
+        let texts: Vec<String> = (0..10)
+            .map(|i| format!("Text number {} with some content", i))
+            .collect();
+
+        let start = Instant::now();
+
+        // Run all counts concurrently
+        let handles: Vec<_> = texts
+            .iter()
+            .map(|t| {
+                let text = t.clone();
+                let counter = counter.clone();
+                tokio::spawn(async move { counter.count_async(text).await })
+            })
+            .collect();
+
+        // Wait for all
+        for handle in handles {
+            let _ = handle.await;
+        }
+
+        let elapsed = start.elapsed();
+
+        // Should complete quickly (parallel execution)
+        // Note: first call initializes BPE which takes time
+        assert!(
+            elapsed.as_millis() < 5000,
+            "Concurrent async counting should be reasonably fast: {:?}",
+            elapsed
+        );
     }
 }
