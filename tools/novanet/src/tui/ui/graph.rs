@@ -229,40 +229,40 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
         ]));
         lines.push(Line::from(Span::raw("")));
 
-        // Layers with class counts (horizontal bar chart)
-        lines.push(Line::from(Span::styled(
-            "  LAYERS",
-            Style::default()
-                .fg(Color::White)
-                .add_modifier(Modifier::BOLD),
-        )));
-        lines.push(Line::from(Span::styled(
-            "  \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}",
-            dim,
-        )));
+        // === OUTGOING ARCS (HAS_LAYER) ===
+        if !details.layers.is_empty() {
+            lines.push(Line::from(Span::styled(
+                format!("  ━▶ OUTGOING ({}) ", details.layers.len()),
+                Style::default()
+                    .fg(Color::Cyan)
+                    .add_modifier(Modifier::BOLD),
+            )));
+            lines.push(Line::from(Span::styled(
+                "  ────────────────────────────────────────────",
+                dim,
+            )));
 
-        let max_classes = details
-            .layers
-            .iter()
-            .map(|l| l.class_count)
-            .max()
-            .unwrap_or(1)
-            .max(1);
-        let bar_max_width = 20usize;
-
-        for layer in &details.layers {
-            let bar_width = (layer.class_count * bar_max_width) / max_classes;
-            let bar = "\u{2588}".repeat(bar_width.max(1));
-
-            lines.push(Line::from(vec![
-                Span::styled("    ", dim),
-                Span::styled(
-                    format!("{:16}", layer.display_name),
-                    Style::default().fg(theme.layer_color(&layer.key)),
-                ),
-                Span::styled(format!("{:>3} ", layer.class_count), bright_dim),
-                Span::styled(bar, Style::default().fg(theme.layer_color(&layer.key))),
-            ]));
+            for layer in &details.layers {
+                let layer_color = theme.layer_color(&layer.key);
+                lines.push(Line::from(vec![
+                    Span::styled(
+                        "    → ",
+                        Style::default()
+                            .fg(Color::Cyan)
+                            .add_modifier(Modifier::BOLD),
+                    ),
+                    Span::styled("HAS_LAYER", Style::default().fg(Color::Cyan)),
+                    Span::styled(" → ", dim),
+                    Span::styled(&layer.display_name, Style::default().fg(layer_color)),
+                    Span::styled(format!(" ({} classes)", layer.class_count), bright_dim),
+                    Span::styled(" [own]", dim),
+                ]));
+            }
+        } else {
+            lines.push(Line::from(Span::styled(
+                "  No arc relationships defined for this Realm",
+                STYLE_DIM,
+            )));
         }
 
         // v0.16.4: Render with scroll support
@@ -313,41 +313,81 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
         ]));
         lines.push(Line::from(Span::raw("")));
 
-        // Node Classes grouped by trait
+        // === INCOMING ARCS (HAS_LAYER from Realm) ===
         lines.push(Line::from(Span::styled(
-            "  NODE CLASSES BY TRAIT",
+            "  ◀━ INCOMING (1) ",
             Style::default()
-                .fg(Color::White)
+                .fg(Color::Magenta)
                 .add_modifier(Modifier::BOLD),
         )));
         lines.push(Line::from(Span::styled(
-            "  \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}",
+            "  ────────────────────────────────────────────",
             dim,
         )));
+        lines.push(Line::from(vec![
+            Span::styled(
+                "    ← ",
+                Style::default()
+                    .fg(Color::Cyan)
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::styled(
+                &details.realm,
+                Style::default().fg(theme.realm_color(&details.realm)),
+            ),
+            Span::styled(" ← ", dim),
+            Span::styled("HAS_LAYER", Style::default().fg(Color::Cyan)),
+            Span::styled(" [own]", dim),
+        ]));
+        lines.push(Line::from(Span::raw("")));
 
-        for group in &details.classes_by_trait {
-            // Trait header with color
-            let trait_color = theme.trait_color(&group.trait_key);
-            lines.push(Line::from(vec![
-                Span::styled("    ", dim),
-                Span::styled(
-                    format!("{} ({})", group.trait_key, group.class_names.len()),
-                    Style::default()
-                        .fg(trait_color)
-                        .add_modifier(Modifier::BOLD),
-                ),
-            ]));
+        // === OUTGOING ARCS (Classes in this layer) ===
+        let total_classes: usize = details
+            .classes_by_trait
+            .iter()
+            .map(|g| g.class_names.len())
+            .sum();
 
-            // Class names
-            for class_name in &group.class_names {
-                lines.push(Line::from(vec![
-                    Span::styled("      \u{2022} ", dim),
-                    Span::styled(
-                        class_name,
-                        Style::default().fg(theme.layer_color(&details.key)),
-                    ),
-                ]));
+        if total_classes > 0 {
+            lines.push(Line::from(Span::styled(
+                format!("  ━▶ OUTGOING ({}) ", total_classes),
+                Style::default()
+                    .fg(Color::Cyan)
+                    .add_modifier(Modifier::BOLD),
+            )));
+            lines.push(Line::from(Span::styled(
+                "  ────────────────────────────────────────────",
+                dim,
+            )));
+
+            for group in &details.classes_by_trait {
+                let trait_color = theme.trait_color(&group.trait_key);
+                let trait_icon = theme.icons.trait_icon(&group.trait_key);
+
+                for class_name in &group.class_names {
+                    lines.push(Line::from(vec![
+                        Span::styled(
+                            "    → ",
+                            Style::default()
+                                .fg(Color::Cyan)
+                                .add_modifier(Modifier::BOLD),
+                        ),
+                        Span::styled("HAS_CLASS", Style::default().fg(Color::Cyan)),
+                        Span::styled(" → ", dim),
+                        Span::styled(format!("{} ", trait_icon), Style::default().fg(trait_color)),
+                        Span::styled(
+                            class_name,
+                            Style::default().fg(theme.layer_color(&details.key)),
+                        ),
+                        Span::styled(format!(" [{}]", group.trait_key), dim),
+                    ]));
+                }
             }
+        } else {
+            lines.push(Line::from(Span::styled(
+                "  No outgoing arcs for this Layer",
+                STYLE_DIM,
+            )));
         }
 
         // v0.16.4: Render with scroll support
