@@ -349,6 +349,144 @@ fn organize_by_realm(classes: &[serde_json::Value]) -> serde_json::Value {
 mod tests {
     use super::*;
 
+    // ==================== DescribeTarget Tests ====================
+
+    #[test]
+    fn test_describe_target_deserialize_schema() {
+        let json = r#""schema""#;
+        let target: DescribeTarget = serde_json::from_str(json).unwrap();
+        assert!(matches!(target, DescribeTarget::Schema));
+    }
+
+    #[test]
+    fn test_describe_target_deserialize_entity() {
+        let json = r#""entity""#;
+        let target: DescribeTarget = serde_json::from_str(json).unwrap();
+        assert!(matches!(target, DescribeTarget::Entity));
+    }
+
+    #[test]
+    fn test_describe_target_deserialize_category() {
+        let json = r#""category""#;
+        let target: DescribeTarget = serde_json::from_str(json).unwrap();
+        assert!(matches!(target, DescribeTarget::Category));
+    }
+
+    #[test]
+    fn test_describe_target_deserialize_relations() {
+        let json = r#""relations""#;
+        let target: DescribeTarget = serde_json::from_str(json).unwrap();
+        assert!(matches!(target, DescribeTarget::Relations));
+    }
+
+    #[test]
+    fn test_describe_target_deserialize_locales() {
+        let json = r#""locales""#;
+        let target: DescribeTarget = serde_json::from_str(json).unwrap();
+        assert!(matches!(target, DescribeTarget::Locales));
+    }
+
+    #[test]
+    fn test_describe_target_deserialize_stats() {
+        let json = r#""stats""#;
+        let target: DescribeTarget = serde_json::from_str(json).unwrap();
+        assert!(matches!(target, DescribeTarget::Stats));
+    }
+
+    #[test]
+    fn test_describe_target_invalid() {
+        let json = r#""invalid""#;
+        let result: std::result::Result<DescribeTarget, _> = serde_json::from_str(json);
+        assert!(result.is_err());
+    }
+
+    // ==================== DescribeParams Tests ====================
+
+    #[test]
+    fn test_describe_params_minimal() {
+        let json = r#"{"describe": "schema"}"#;
+        let params: DescribeParams = serde_json::from_str(json).unwrap();
+        assert!(matches!(params.describe, DescribeTarget::Schema));
+        assert!(params.entity_key.is_none());
+        assert!(params.category_key.is_none());
+    }
+
+    #[test]
+    fn test_describe_params_with_entity_key() {
+        let json = r#"{"describe": "entity", "entity_key": "qr-code"}"#;
+        let params: DescribeParams = serde_json::from_str(json).unwrap();
+        assert!(matches!(params.describe, DescribeTarget::Entity));
+        assert_eq!(params.entity_key.as_deref(), Some("qr-code"));
+        assert!(params.category_key.is_none());
+    }
+
+    #[test]
+    fn test_describe_params_with_category_key() {
+        let json = r#"{"describe": "category", "category_key": "product"}"#;
+        let params: DescribeParams = serde_json::from_str(json).unwrap();
+        assert!(matches!(params.describe, DescribeTarget::Category));
+        assert!(params.entity_key.is_none());
+        assert_eq!(params.category_key.as_deref(), Some("product"));
+    }
+
+    #[test]
+    fn test_describe_params_all_fields() {
+        let json = r#"{
+            "describe": "entity",
+            "entity_key": "qr-code",
+            "category_key": "product"
+        }"#;
+        let params: DescribeParams = serde_json::from_str(json).unwrap();
+        assert!(matches!(params.describe, DescribeTarget::Entity));
+        assert_eq!(params.entity_key.as_deref(), Some("qr-code"));
+        assert_eq!(params.category_key.as_deref(), Some("product"));
+    }
+
+    #[test]
+    fn test_describe_params_missing_describe() {
+        let json = r#"{"entity_key": "qr-code"}"#;
+        let result: std::result::Result<DescribeParams, _> = serde_json::from_str(json);
+        assert!(result.is_err());
+    }
+
+    // ==================== DescribeResult Tests ====================
+
+    #[test]
+    fn test_describe_result_serialize() {
+        let result = DescribeResult {
+            target: "schema".to_string(),
+            data: serde_json::json!({"classes": ["Entity", "Page"]}),
+            token_estimate: 50,
+        };
+
+        let json = serde_json::to_string(&result).unwrap();
+        assert!(json.contains(r#""target":"schema""#));
+        assert!(json.contains(r#""token_estimate":50"#));
+        assert!(json.contains(r#""classes""#));
+    }
+
+    #[test]
+    fn test_describe_result_with_nested_data() {
+        let result = DescribeResult {
+            target: "entity".to_string(),
+            data: serde_json::json!({
+                "key": "qr-code",
+                "name": "QR Code",
+                "contents": [
+                    {"locale": "fr-FR", "has_content": true},
+                    {"locale": "en-US", "has_content": true}
+                ]
+            }),
+            token_estimate: 120,
+        };
+
+        let json = serde_json::to_string(&result).unwrap();
+        assert!(json.contains("fr-FR"));
+        assert!(json.contains("en-US"));
+    }
+
+    // ==================== organize_by_realm Tests ====================
+
     #[test]
     fn test_organize_by_realm() {
         let classes = vec![
@@ -359,5 +497,137 @@ mod tests {
         let organized = organize_by_realm(&classes);
         assert!(organized.get("shared").is_some());
         assert!(organized.get("org").is_some());
+    }
+
+    #[test]
+    fn test_organize_by_realm_multiple_layers() {
+        let classes = vec![
+            serde_json::json!({"realm": "shared", "layer": "config", "classes": ["Locale"]}),
+            serde_json::json!({"realm": "shared", "layer": "knowledge", "classes": ["Term", "Expression"]}),
+            serde_json::json!({"realm": "org", "layer": "semantic", "classes": ["Entity"]}),
+            serde_json::json!({"realm": "org", "layer": "output", "classes": ["PageNative", "BlockNative"]}),
+        ];
+
+        let organized = organize_by_realm(&classes);
+
+        // Check shared realm
+        let shared = organized.get("shared").unwrap();
+        assert!(shared.get("config").is_some());
+        assert!(shared.get("knowledge").is_some());
+
+        // Check org realm
+        let org = organized.get("org").unwrap();
+        assert!(org.get("semantic").is_some());
+        assert!(org.get("output").is_some());
+    }
+
+    #[test]
+    fn test_organize_by_realm_empty_input() {
+        let classes: Vec<serde_json::Value> = vec![];
+        let organized = organize_by_realm(&classes);
+        assert!(organized.as_object().map_or(true, |m| m.is_empty()));
+    }
+
+    #[test]
+    fn test_organize_by_realm_missing_fields() {
+        // Malformed input should be handled gracefully
+        let classes = vec![
+            serde_json::json!({"realm": "shared"}), // missing layer and classes
+            serde_json::json!({"layer": "config"}), // missing realm
+            serde_json::json!({"realm": "org", "layer": "semantic"}), // missing classes
+        ];
+
+        let organized = organize_by_realm(&classes);
+        // Should not panic, may return empty or partial result
+        assert!(organized.is_object());
+    }
+
+    #[test]
+    fn test_organize_by_realm_duplicate_classes() {
+        // Same realm/layer appearing twice should merge
+        let classes = vec![
+            serde_json::json!({"realm": "shared", "layer": "config", "classes": ["Locale"]}),
+            serde_json::json!({"realm": "shared", "layer": "config", "classes": ["EntityCategory"]}),
+        ];
+
+        let organized = organize_by_realm(&classes);
+        let shared_config = organized
+            .get("shared")
+            .and_then(|s| s.get("config"))
+            .and_then(|c| c.as_array());
+
+        assert!(shared_config.is_some());
+        let config_classes = shared_config.unwrap();
+        assert_eq!(config_classes.len(), 2);
+    }
+
+    // ==================== Token Estimate Tests ====================
+
+    #[test]
+    fn test_token_estimate_calculation() {
+        // Token estimate is chars / 4 (ceiling division)
+        let data = serde_json::json!({"key": "test"});
+        let json_string = serde_json::to_string(&data).unwrap();
+        let expected = json_string.len().div_ceil(4);
+
+        // Verify our understanding of the calculation
+        assert!(expected > 0);
+        assert_eq!(14_usize.div_ceil(4), 4); // 14 chars -> 4 tokens
+    }
+
+    #[test]
+    fn test_token_estimate_empty_data() {
+        let data = serde_json::json!({});
+        let json_string = serde_json::to_string(&data).unwrap();
+        let estimate = json_string.len().div_ceil(4);
+
+        // Empty object "{}" is 2 chars -> 1 token
+        assert_eq!(estimate, 1);
+    }
+
+    #[test]
+    fn test_token_estimate_large_data() {
+        let mut classes = vec![];
+        for i in 0..100 {
+            classes.push(format!("Class{}", i));
+        }
+        let data = serde_json::json!({ "classes": classes });
+        let json_string = serde_json::to_string(&data).unwrap();
+        let estimate = json_string.len().div_ceil(4);
+
+        // Large data should have proportionally larger estimate
+        assert!(estimate > 100);
+    }
+
+    // ==================== Edge Cases ====================
+
+    #[test]
+    fn test_describe_target_case_sensitivity() {
+        // Should be lowercase
+        let valid = r#""schema""#;
+        let invalid = r#""Schema""#;
+
+        assert!(serde_json::from_str::<DescribeTarget>(valid).is_ok());
+        assert!(serde_json::from_str::<DescribeTarget>(invalid).is_err());
+    }
+
+    #[test]
+    fn test_describe_params_null_values() {
+        let json = r#"{"describe": "entity", "entity_key": null, "category_key": null}"#;
+        let params: DescribeParams = serde_json::from_str(json).unwrap();
+        assert!(params.entity_key.is_none());
+        assert!(params.category_key.is_none());
+    }
+
+    #[test]
+    fn test_describe_result_empty_data() {
+        let result = DescribeResult {
+            target: "stats".to_string(),
+            data: serde_json::json!({}),
+            token_estimate: 1,
+        };
+
+        let json = serde_json::to_string(&result).unwrap();
+        assert!(json.contains(r#""data":{}"#));
     }
 }

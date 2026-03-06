@@ -506,9 +506,279 @@ async fn get_containers(state: &State, locale: &str) -> Result<Vec<AtomContainer
 mod tests {
     use super::*;
 
+    // ══════════════════════════════════════════════════════════════
+    // ATOM TYPE TESTS
+    // ══════════════════════════════════════════════════════════════
+
     #[test]
     fn test_atom_type_default() {
         let atom_type: AtomType = Default::default();
         assert!(matches!(atom_type, AtomType::All));
+    }
+
+    #[test]
+    fn test_atom_type_deserialize_term() {
+        let json = r#""term""#;
+        let atom_type: AtomType = serde_json::from_str(json).unwrap();
+        assert!(matches!(atom_type, AtomType::Term));
+    }
+
+    #[test]
+    fn test_atom_type_deserialize_expression() {
+        let json = r#""expression""#;
+        let atom_type: AtomType = serde_json::from_str(json).unwrap();
+        assert!(matches!(atom_type, AtomType::Expression));
+    }
+
+    #[test]
+    fn test_atom_type_deserialize_pattern() {
+        let json = r#""pattern""#;
+        let atom_type: AtomType = serde_json::from_str(json).unwrap();
+        assert!(matches!(atom_type, AtomType::Pattern));
+    }
+
+    #[test]
+    fn test_atom_type_deserialize_cultureref() {
+        let json = r#""cultureref""#;
+        let atom_type: AtomType = serde_json::from_str(json).unwrap();
+        assert!(matches!(atom_type, AtomType::CultureRef));
+    }
+
+    #[test]
+    fn test_atom_type_deserialize_taboo() {
+        let json = r#""taboo""#;
+        let atom_type: AtomType = serde_json::from_str(json).unwrap();
+        assert!(matches!(atom_type, AtomType::Taboo));
+    }
+
+    #[test]
+    fn test_atom_type_deserialize_audiencetrait() {
+        let json = r#""audiencetrait""#;
+        let atom_type: AtomType = serde_json::from_str(json).unwrap();
+        assert!(matches!(atom_type, AtomType::AudienceTrait));
+    }
+
+    #[test]
+    fn test_atom_type_deserialize_all() {
+        let json = r#""all""#;
+        let atom_type: AtomType = serde_json::from_str(json).unwrap();
+        assert!(matches!(atom_type, AtomType::All));
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // ATOMS PARAMS TESTS
+    // ══════════════════════════════════════════════════════════════
+
+    #[test]
+    fn test_atoms_params_deserialize_minimal() {
+        let json = r#"{"locale": "fr-FR"}"#;
+        let params: AtomsParams = serde_json::from_str(json).unwrap();
+        assert_eq!(params.locale, "fr-FR");
+        assert!(matches!(params.atom_type, AtomType::All));
+        assert!(params.domain.is_none());
+        assert!(params.register.is_none());
+        assert!(params.query.is_none());
+        assert!(params.limit.is_none());
+        assert!(params.include_containers.is_none());
+    }
+
+    #[test]
+    fn test_atoms_params_deserialize_full() {
+        let json = r#"{
+            "locale": "es-MX",
+            "atom_type": "term",
+            "domain": "technical",
+            "register": "formal",
+            "query": "QR",
+            "limit": 100,
+            "include_containers": true
+        }"#;
+        let params: AtomsParams = serde_json::from_str(json).unwrap();
+        assert_eq!(params.locale, "es-MX");
+        assert!(matches!(params.atom_type, AtomType::Term));
+        assert_eq!(params.domain, Some("technical".to_string()));
+        assert_eq!(params.register, Some("formal".to_string()));
+        assert_eq!(params.query, Some("QR".to_string()));
+        assert_eq!(params.limit, Some(100));
+        assert_eq!(params.include_containers, Some(true));
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // ATOM STRUCT TESTS
+    // ══════════════════════════════════════════════════════════════
+
+    #[test]
+    fn test_atom_serialize_minimal() {
+        let atom = Atom {
+            key: "qr-code".to_string(),
+            atom_type: "Term".to_string(),
+            value: "code QR".to_string(),
+            domain: None,
+            register: None,
+            properties: None,
+            container_key: None,
+        };
+        let json = serde_json::to_value(&atom).unwrap();
+        assert_eq!(json["key"], "qr-code");
+        assert_eq!(json["atom_type"], "Term");
+        assert_eq!(json["value"], "code QR");
+        // Optional fields should be skipped
+        assert!(json.get("domain").is_none());
+        assert!(json.get("register").is_none());
+        assert!(json.get("properties").is_none());
+        assert!(json.get("container_key").is_none());
+    }
+
+    #[test]
+    fn test_atom_serialize_with_optional_fields() {
+        let atom = Atom {
+            key: "formal-greeting".to_string(),
+            atom_type: "Expression".to_string(),
+            value: "Bonjour".to_string(),
+            domain: Some("greeting".to_string()),
+            register: Some("formal".to_string()),
+            properties: Some(serde_json::json!({"context": "business"})),
+            container_key: Some("greetings-fr".to_string()),
+        };
+        let json = serde_json::to_value(&atom).unwrap();
+        assert_eq!(json["domain"], "greeting");
+        assert_eq!(json["register"], "formal");
+        assert_eq!(json["properties"]["context"], "business");
+        assert_eq!(json["container_key"], "greetings-fr");
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // ATOM CONTAINER TESTS
+    // ══════════════════════════════════════════════════════════════
+
+    #[test]
+    fn test_atom_container_serialize() {
+        let container = AtomContainer {
+            key: "tech-terms-fr".to_string(),
+            container_type: "TermSet".to_string(),
+            domain: Some("technical".to_string()),
+            atom_count: 150,
+        };
+        let json = serde_json::to_value(&container).unwrap();
+        assert_eq!(json["key"], "tech-terms-fr");
+        assert_eq!(json["container_type"], "TermSet");
+        assert_eq!(json["domain"], "technical");
+        assert_eq!(json["atom_count"], 150);
+    }
+
+    #[test]
+    fn test_atom_container_serialize_no_domain() {
+        let container = AtomContainer {
+            key: "patterns-fr".to_string(),
+            container_type: "PatternSet".to_string(),
+            domain: None,
+            atom_count: 25,
+        };
+        let json = serde_json::to_value(&container).unwrap();
+        assert!(json.get("domain").is_none());
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // ATOMS RESULT TESTS
+    // ══════════════════════════════════════════════════════════════
+
+    #[test]
+    fn test_atoms_result_serialize() {
+        let result = AtomsResult {
+            locale: "fr-FR".to_string(),
+            atoms: vec![Atom {
+                key: "test".to_string(),
+                atom_type: "Term".to_string(),
+                value: "test value".to_string(),
+                domain: None,
+                register: None,
+                properties: None,
+                container_key: None,
+            }],
+            containers: None,
+            total_count: 1,
+            token_estimate: 50,
+            execution_time_ms: 25,
+        };
+        let json = serde_json::to_value(&result).unwrap();
+        assert_eq!(json["locale"], "fr-FR");
+        assert_eq!(json["atoms"].as_array().unwrap().len(), 1);
+        assert_eq!(json["total_count"], 1);
+        assert_eq!(json["token_estimate"], 50);
+        assert_eq!(json["execution_time_ms"], 25);
+        assert!(json.get("containers").is_none()); // Skipped when None
+    }
+
+    #[test]
+    fn test_atoms_result_with_containers() {
+        let result = AtomsResult {
+            locale: "es-MX".to_string(),
+            atoms: vec![],
+            containers: Some(vec![AtomContainer {
+                key: "terms-es".to_string(),
+                container_type: "TermSet".to_string(),
+                domain: Some("general".to_string()),
+                atom_count: 100,
+            }]),
+            total_count: 0,
+            token_estimate: 20,
+            execution_time_ms: 10,
+        };
+        let json = serde_json::to_value(&result).unwrap();
+        let containers = json["containers"].as_array().unwrap();
+        assert_eq!(containers.len(), 1);
+        assert_eq!(containers[0]["key"], "terms-es");
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // CONFIG TESTS
+    // ══════════════════════════════════════════════════════════════
+
+    #[test]
+    fn test_term_config_values() {
+        assert_eq!(TERM_CONFIG.locale_arc, "HAS_TERMS");
+        assert_eq!(TERM_CONFIG.container_label, "TermSet");
+        assert_eq!(TERM_CONFIG.contains_arc, "CONTAINS_TERM");
+        assert_eq!(TERM_CONFIG.atom_label, "Term");
+        assert_eq!(TERM_CONFIG.atom_type_name, "Term");
+        assert_eq!(TERM_CONFIG.value_property, "value");
+        assert_eq!(TERM_CONFIG.filter_field, Some("domain"));
+    }
+
+    #[test]
+    fn test_expression_config_values() {
+        assert_eq!(EXPRESSION_CONFIG.locale_arc, "HAS_EXPRESSIONS");
+        assert_eq!(EXPRESSION_CONFIG.container_label, "ExpressionSet");
+        assert_eq!(EXPRESSION_CONFIG.filter_field, Some("register"));
+    }
+
+    #[test]
+    fn test_pattern_config_has_no_filter_field() {
+        assert_eq!(PATTERN_CONFIG.filter_field, None);
+        assert_eq!(PATTERN_CONFIG.value_property, "template");
+    }
+
+    #[test]
+    fn test_culture_ref_config_extra_properties() {
+        assert!(CULTURE_REF_CONFIG.extra_properties.contains(&("context", "context")));
+        assert!(CULTURE_REF_CONFIG
+            .extra_properties
+            .contains(&("appropriateness", "appropriateness")));
+    }
+
+    #[test]
+    fn test_taboo_config_extra_properties() {
+        assert!(TABOO_CONFIG.extra_properties.contains(&("severity", "severity")));
+        assert!(TABOO_CONFIG.extra_properties.contains(&("category", "category")));
+    }
+
+    #[test]
+    fn test_audience_trait_config_extra_properties() {
+        assert!(AUDIENCE_TRAIT_CONFIG
+            .extra_properties
+            .contains(&("demographic", "demographic")));
+        assert!(AUDIENCE_TRAIT_CONFIG
+            .extra_properties
+            .contains(&("behavior", "behavior")));
     }
 }

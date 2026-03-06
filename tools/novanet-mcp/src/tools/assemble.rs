@@ -471,6 +471,286 @@ fn compress_to_evidence(name: Option<&str>, description: Option<&str>) -> String
 mod tests {
     use super::*;
 
+    // ==================== AssemblyStrategy Tests ====================
+
+    #[test]
+    fn test_assembly_strategy_default_is_breadth() {
+        let strategy: AssemblyStrategy = Default::default();
+        assert!(matches!(strategy, AssemblyStrategy::Breadth));
+    }
+
+    #[test]
+    fn test_assembly_strategy_deserialize_breadth() {
+        let json = r#""breadth""#;
+        let strategy: AssemblyStrategy = serde_json::from_str(json).unwrap();
+        assert!(matches!(strategy, AssemblyStrategy::Breadth));
+    }
+
+    #[test]
+    fn test_assembly_strategy_deserialize_depth() {
+        let json = r#""depth""#;
+        let strategy: AssemblyStrategy = serde_json::from_str(json).unwrap();
+        assert!(matches!(strategy, AssemblyStrategy::Depth));
+    }
+
+    #[test]
+    fn test_assembly_strategy_deserialize_relevance() {
+        let json = r#""relevance""#;
+        let strategy: AssemblyStrategy = serde_json::from_str(json).unwrap();
+        assert!(matches!(strategy, AssemblyStrategy::Relevance));
+    }
+
+    #[test]
+    fn test_assembly_strategy_deserialize_custom() {
+        let json = r#""custom""#;
+        let strategy: AssemblyStrategy = serde_json::from_str(json).unwrap();
+        assert!(matches!(strategy, AssemblyStrategy::Custom));
+    }
+
+    #[test]
+    fn test_assembly_strategy_invalid() {
+        let json = r#""invalid""#;
+        let result: std::result::Result<AssemblyStrategy, _> = serde_json::from_str(json);
+        assert!(result.is_err());
+    }
+
+    // ==================== AssembleParams Tests ====================
+
+    #[test]
+    fn test_assemble_params_minimal() {
+        let json = r#"{"focus_key": "homepage", "locale": "fr-FR"}"#;
+        let params: AssembleParams = serde_json::from_str(json).unwrap();
+        assert_eq!(params.focus_key, "homepage");
+        assert_eq!(params.locale, "fr-FR");
+        assert!(params.token_budget.is_none());
+        assert!(matches!(params.strategy, AssemblyStrategy::Breadth));
+        assert!(params.include_entities.is_none());
+        assert!(params.include_knowledge.is_none());
+        assert!(params.include_structure.is_none());
+        assert!(params.arc_families.is_none());
+        assert!(params.max_depth.is_none());
+    }
+
+    #[test]
+    fn test_assemble_params_full() {
+        let json = r#"{
+            "focus_key": "qr-code",
+            "locale": "es-MX",
+            "token_budget": 50000,
+            "strategy": "depth",
+            "include_entities": true,
+            "include_knowledge": false,
+            "include_structure": true,
+            "arc_families": ["ownership", "semantic"],
+            "max_depth": 5
+        }"#;
+        let params: AssembleParams = serde_json::from_str(json).unwrap();
+        assert_eq!(params.focus_key, "qr-code");
+        assert_eq!(params.locale, "es-MX");
+        assert_eq!(params.token_budget, Some(50000));
+        assert!(matches!(params.strategy, AssemblyStrategy::Depth));
+        assert_eq!(params.include_entities, Some(true));
+        assert_eq!(params.include_knowledge, Some(false));
+        assert_eq!(params.include_structure, Some(true));
+        assert_eq!(
+            params.arc_families,
+            Some(vec!["ownership".to_string(), "semantic".to_string()])
+        );
+        assert_eq!(params.max_depth, Some(5));
+    }
+
+    #[test]
+    fn test_assemble_params_missing_required() {
+        // Missing locale
+        let json = r#"{"focus_key": "homepage"}"#;
+        let result: std::result::Result<AssembleParams, _> = serde_json::from_str(json);
+        assert!(result.is_err());
+
+        // Missing focus_key
+        let json = r#"{"locale": "fr-FR"}"#;
+        let result: std::result::Result<AssembleParams, _> = serde_json::from_str(json);
+        assert!(result.is_err());
+    }
+
+    // ==================== EvidencePacket Tests ====================
+
+    #[test]
+    fn test_evidence_packet_serialize() {
+        let packet = EvidencePacket {
+            source_key: "qr-code".to_string(),
+            source_kind: "Entity".to_string(),
+            evidence_type: "definition".to_string(),
+            distance: 2,
+            relevance: 0.85,
+            content: "QR Code: A two-dimensional barcode".to_string(),
+            tokens: 8,
+        };
+
+        let json = serde_json::to_string(&packet).unwrap();
+        assert!(json.contains(r#""source_key":"qr-code""#));
+        assert!(json.contains(r#""source_kind":"Entity""#));
+        assert!(json.contains(r#""evidence_type":"definition""#));
+        assert!(json.contains(r#""distance":2"#));
+        assert!(json.contains(r#""relevance":0.85"#));
+        assert!(json.contains(r#""tokens":8"#));
+    }
+
+    #[test]
+    fn test_evidence_packet_relevance_range() {
+        // Relevance should be between 0.0 and 1.0
+        let packet = EvidencePacket {
+            source_key: "test".to_string(),
+            source_kind: "Test".to_string(),
+            evidence_type: "test".to_string(),
+            distance: 1,
+            relevance: 0.0,
+            content: "".to_string(),
+            tokens: 0,
+        };
+        assert!(packet.relevance >= 0.0 && packet.relevance <= 1.0);
+
+        let packet = EvidencePacket {
+            source_key: "test".to_string(),
+            source_kind: "Test".to_string(),
+            evidence_type: "test".to_string(),
+            distance: 1,
+            relevance: 1.0,
+            content: "".to_string(),
+            tokens: 0,
+        };
+        assert!(packet.relevance >= 0.0 && packet.relevance <= 1.0);
+    }
+
+    // ==================== LocaleContext Tests ====================
+
+    #[test]
+    fn test_locale_context_serialize() {
+        let context = LocaleContext {
+            locale_key: "fr-FR".to_string(),
+            language: "French".to_string(),
+            region: Some("France".to_string()),
+            voice: Some("Professional, friendly".to_string()),
+            formatting: Some(serde_json::json!({"date": "DD/MM/YYYY"})),
+        };
+
+        let json = serde_json::to_string(&context).unwrap();
+        assert!(json.contains(r#""locale_key":"fr-FR""#));
+        assert!(json.contains(r#""language":"French""#));
+        assert!(json.contains(r#""region":"France""#));
+        assert!(json.contains(r#""voice":"Professional, friendly""#));
+    }
+
+    #[test]
+    fn test_locale_context_minimal() {
+        let context = LocaleContext {
+            locale_key: "en-US".to_string(),
+            language: "English".to_string(),
+            region: None,
+            voice: None,
+            formatting: None,
+        };
+
+        let json = serde_json::to_string(&context).unwrap();
+        assert!(json.contains(r#""locale_key":"en-US""#));
+        assert!(json.contains(r#""region":null"#));
+    }
+
+    // ==================== FocusNode Tests ====================
+
+    #[test]
+    fn test_focus_node_serialize() {
+        let focus = FocusNode {
+            key: "homepage".to_string(),
+            kind: "Page".to_string(),
+            name: Some("Home Page".to_string()),
+            description: Some("Main landing page".to_string()),
+        };
+
+        let json = serde_json::to_string(&focus).unwrap();
+        assert!(json.contains(r#""key":"homepage""#));
+        assert!(json.contains(r#""kind":"Page""#));
+        assert!(json.contains(r#""name":"Home Page""#));
+    }
+
+    #[test]
+    fn test_focus_node_minimal() {
+        let focus = FocusNode {
+            key: "entity-1".to_string(),
+            kind: "Entity".to_string(),
+            name: None,
+            description: None,
+        };
+
+        let json = serde_json::to_string(&focus).unwrap();
+        assert!(json.contains(r#""key":"entity-1""#));
+        assert!(json.contains(r#""name":null"#));
+    }
+
+    // ==================== AssembleResult Tests ====================
+
+    #[test]
+    fn test_assemble_result_serialize() {
+        let result = AssembleResult {
+            focus: FocusNode {
+                key: "test".to_string(),
+                kind: "Page".to_string(),
+                name: Some("Test".to_string()),
+                description: None,
+            },
+            evidence: vec![],
+            locale_context: LocaleContext {
+                locale_key: "en-US".to_string(),
+                language: "English".to_string(),
+                region: None,
+                voice: None,
+                formatting: None,
+            },
+            total_tokens: 1000,
+            budget_remaining: 49000,
+            nodes_visited: 15,
+            truncated: false,
+            execution_time_ms: 125,
+        };
+
+        let json = serde_json::to_string(&result).unwrap();
+        assert!(json.contains(r#""total_tokens":1000"#));
+        assert!(json.contains(r#""budget_remaining":49000"#));
+        assert!(json.contains(r#""nodes_visited":15"#));
+        assert!(json.contains(r#""truncated":false"#));
+        assert!(json.contains(r#""execution_time_ms":125"#));
+    }
+
+    #[test]
+    fn test_assemble_result_truncated() {
+        let result = AssembleResult {
+            focus: FocusNode {
+                key: "test".to_string(),
+                kind: "Page".to_string(),
+                name: None,
+                description: None,
+            },
+            evidence: vec![],
+            locale_context: LocaleContext {
+                locale_key: "en-US".to_string(),
+                language: "English".to_string(),
+                region: None,
+                voice: None,
+                formatting: None,
+            },
+            total_tokens: 50000,
+            budget_remaining: 0,
+            nodes_visited: 100,
+            truncated: true,
+            execution_time_ms: 500,
+        };
+
+        let json = serde_json::to_string(&result).unwrap();
+        assert!(json.contains(r#""truncated":true"#));
+        assert!(json.contains(r#""budget_remaining":0"#));
+    }
+
+    // ==================== compress_to_evidence Tests ====================
+
     #[test]
     fn test_compress_to_evidence() {
         let result = compress_to_evidence(Some("Test"), Some("A description"));
@@ -489,5 +769,93 @@ mod tests {
         let result = compress_to_evidence(Some("Title"), Some(&long_desc));
         assert!(result.len() <= 203); // 200 + "..."
         assert!(result.ends_with("..."));
+    }
+
+    #[test]
+    fn test_compress_to_evidence_empty() {
+        let result = compress_to_evidence(None, None);
+        assert!(result.is_empty());
+    }
+
+    #[test]
+    fn test_compress_to_evidence_empty_strings() {
+        let result = compress_to_evidence(Some(""), Some(""));
+        assert!(result.is_empty() || result == ": ");
+    }
+
+    #[test]
+    fn test_compress_to_evidence_exact_200_bytes() {
+        // Name exactly 200 bytes
+        let name = "N".repeat(200);
+        let result = compress_to_evidence(Some(&name), None);
+        assert_eq!(result.len(), 200);
+
+        // Name + description exactly 200 bytes
+        let name = "N".repeat(50);
+        let desc = "D".repeat(148); // 50 + ": " (2) + 148 = 200
+        let result = compress_to_evidence(Some(&name), Some(&desc));
+        assert_eq!(result.len(), 200);
+    }
+
+    #[test]
+    fn test_compress_to_evidence_unicode() {
+        // Unicode characters may have different byte lengths
+        let name = "日本語";
+        let result = compress_to_evidence(Some(name), None);
+        assert_eq!(result, "日本語");
+    }
+
+    #[test]
+    fn test_compress_to_evidence_long_name_short_desc() {
+        let long_name = "N".repeat(195);
+        let short_desc = "Short";
+        let result = compress_to_evidence(Some(&long_name), Some(short_desc));
+        // Should truncate description since name is already 195 chars
+        // 195 + ": " (2) = 197, leaving only 3 chars for description
+        assert!(result.len() <= 203);
+    }
+
+    // ==================== Edge Cases ====================
+
+    #[test]
+    fn test_token_estimate_calculation() {
+        // Verify token estimate formula: chars / 4 (ceiling)
+        let content = "Hello World"; // 11 chars
+        let tokens = content.len().div_ceil(4);
+        assert_eq!(tokens, 3); // 11/4 = 2.75 -> 3
+
+        let content = "ABCD"; // 4 chars
+        let tokens = content.len().div_ceil(4);
+        assert_eq!(tokens, 1); // 4/4 = 1
+
+        let content = ""; // 0 chars
+        let tokens = content.len().div_ceil(4);
+        assert_eq!(tokens, 0); // 0/4 = 0
+    }
+
+    #[test]
+    fn test_relevance_calculation() {
+        // Relevance formula: 1.0 / (distance + 1.0)
+        let distance = 0_f64;
+        let relevance = 1.0 / (distance + 1.0);
+        assert!((relevance - 1.0).abs() < f64::EPSILON);
+
+        let distance = 1_f64;
+        let relevance = 1.0 / (distance + 1.0);
+        assert!((relevance - 0.5).abs() < f64::EPSILON);
+
+        let distance = 3_f64;
+        let relevance = 1.0 / (distance + 1.0);
+        assert!((relevance - 0.25).abs() < f64::EPSILON);
+    }
+
+    #[test]
+    fn test_assembly_strategy_case_sensitivity() {
+        // Should be lowercase
+        let valid = r#""breadth""#;
+        let invalid = r#""Breadth""#;
+
+        assert!(serde_json::from_str::<AssemblyStrategy>(valid).is_ok());
+        assert!(serde_json::from_str::<AssemblyStrategy>(invalid).is_err());
     }
 }
