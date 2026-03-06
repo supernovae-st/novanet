@@ -110,7 +110,9 @@ pub fn get_hint(error_msg: &str) -> String {
         return "Hint: Invalid tool name.\n\
              Valid tools: novanet_query, novanet_describe, novanet_search,\n\
              novanet_traverse, novanet_assemble, novanet_atoms,\n\
-             novanet_generate, novanet_introspect"
+             novanet_generate, novanet_introspect, novanet_batch,\n\
+             novanet_cache_stats, novanet_cache_invalidate, novanet_write,\n\
+             novanet_check, novanet_audit"
             .to_string();
     }
 

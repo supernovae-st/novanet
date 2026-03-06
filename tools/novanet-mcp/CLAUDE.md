@@ -169,7 +169,7 @@ Bootstrap agent understanding of the knowledge graph.
 | `schema` | Full schema overview (realms, layers, kinds, arc families) |
 | `entity` | Specific entity details (requires `entity_key`) |
 | `category` | EntityCategory members (optional `category_key`) |
-| `relations` | All ArcKind definitions |
+| `relations` | All ArcClass definitions |
 | `locales` | Available locales |
 | `stats` | Graph statistics |
 

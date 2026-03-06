@@ -525,7 +525,7 @@ mod tests {
     fn test_organize_by_realm_empty_input() {
         let classes: Vec<serde_json::Value> = vec![];
         let organized = organize_by_realm(&classes);
-        assert!(organized.as_object().map_or(true, |m| m.is_empty()));
+        assert!(organized.as_object().is_none_or(|m| m.is_empty()));
     }
 
     #[test]
