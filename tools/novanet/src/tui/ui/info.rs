@@ -60,6 +60,22 @@ const COLOR_HEADER_SPECIFIC: Color = Color::Rgb(249, 115, 22);
 const COLOR_PROPERTY_FOCUSED_BG: Color = Color::Rgb(30, 50, 80);
 
 // =============================================================================
+// v0.17: PROPERTY INDICATOR COLORS (Solarized palette)
+// =============================================================================
+
+/// Green checkmark (✓) for properties that have values - Solarized Green #859900
+const COLOR_STATUS_OK: Color = Color::Rgb(133, 153, 0);
+
+/// Red asterisk (*) for required properties - Solarized Red #dc322f
+const COLOR_REQUIRED_MARKER: Color = Color::Rgb(220, 50, 47);
+
+/// Blue type badge [str] - Solarized Blue #268bd2
+const COLOR_TYPE_STRING: Color = Color::Rgb(38, 139, 210);
+
+/// Yellow type badge [obj] - Solarized Yellow #b58900
+const COLOR_TYPE_OBJECT: Color = Color::Rgb(181, 137, 0);
+
+// =============================================================================
 // v0.13.1 STANDARD PROPERTIES (schema-standard.md)
 // =============================================================================
 
@@ -80,6 +96,54 @@ const STANDARD_PROPERTY_NAMES: &[&str] = &[
 /// Check if a property name is a standard property.
 fn is_standard_property(name: &str) -> bool {
     STANDARD_PROPERTY_NAMES.contains(&name)
+}
+
+// =============================================================================
+// v0.17: PROPERTY RENDERING HELPERS
+// =============================================================================
+
+/// Property type for type badge rendering.
+#[derive(Clone, Copy)]
+enum PropType {
+    String,
+    Object,
+}
+
+impl PropType {
+    fn badge(&self) -> &'static str {
+        match self {
+            PropType::String => "[str]",
+            PropType::Object => "[obj]",
+        }
+    }
+
+    fn color(&self) -> Color {
+        match self {
+            PropType::String => COLOR_TYPE_STRING,
+            PropType::Object => COLOR_TYPE_OBJECT,
+        }
+    }
+}
+
+/// Render a property line with status indicator, required marker, name, and type.
+///
+/// Format: `✓*  name          : [type]`
+/// - ✓ = green checkmark (property has value)
+/// - * = red asterisk (required property) or space (optional)
+fn render_property_line(name: &str, is_required: bool, prop_type: PropType) -> Line<'static> {
+    let required_marker = if is_required {
+        Span::styled("*", Style::default().fg(COLOR_REQUIRED_MARKER))
+    } else {
+        Span::styled(" ", STYLE_DIM)
+    };
+
+    Line::from(vec![
+        Span::styled("✓", Style::default().fg(COLOR_STATUS_OK)),
+        required_marker,
+        Span::styled(format!("{:14}", name), STYLE_PROP_KEY),
+        Span::styled(": ", STYLE_PROP_COLON),
+        Span::styled(prop_type.badge(), Style::default().fg(prop_type.color())),
+    ])
 }
 
 // =============================================================================
@@ -369,57 +433,27 @@ fn build_realm_content(app: &App, realm: &crate::tui::data::RealmInfo) -> Unifie
         format!("── STANDARD ({}) ──", 4),
         Style::default().fg(COLOR_HEADER_STANDARD),
     )]));
-
-    // key property
-    content.properties.add_line(Line::from(vec![
-        Span::styled("✓", Style::default().fg(Color::Rgb(133, 153, 0))),
-        Span::styled("*", Style::default().fg(Color::Rgb(220, 50, 47))),
-        Span::styled(format!("{:14}", "key"), STYLE_PROP_KEY),
-        Span::styled(": ", STYLE_PROP_COLON),
-        Span::styled("[str]", Style::default().fg(Color::Rgb(38, 139, 210))),
-    ]));
-
-    // display_name property
-    content.properties.add_line(Line::from(vec![
-        Span::styled("✓", Style::default().fg(Color::Rgb(133, 153, 0))),
-        Span::styled("*", Style::default().fg(Color::Rgb(220, 50, 47))),
-        Span::styled(format!("{:14}", "display_name"), STYLE_PROP_KEY),
-        Span::styled(": ", STYLE_PROP_COLON),
-        Span::styled("[str]", Style::default().fg(Color::Rgb(38, 139, 210))),
-    ]));
-
-    // color property
-    content.properties.add_line(Line::from(vec![
-        Span::styled("✓", Style::default().fg(Color::Rgb(133, 153, 0))),
-        Span::styled(" ", STYLE_DIM),
-        Span::styled(format!("{:14}", "color"), STYLE_PROP_KEY),
-        Span::styled(": ", STYLE_PROP_COLON),
-        Span::styled("[str]", Style::default().fg(Color::Rgb(38, 139, 210))),
-    ]));
-
-    // icon property
-    content.properties.add_line(Line::from(vec![
-        Span::styled("✓", Style::default().fg(Color::Rgb(133, 153, 0))),
-        Span::styled(" ", STYLE_DIM),
-        Span::styled(format!("{:14}", "icon"), STYLE_PROP_KEY),
-        Span::styled(": ", STYLE_PROP_COLON),
-        Span::styled("[obj]", Style::default().fg(Color::Rgb(181, 137, 0))),
-    ]));
+    content
+        .properties
+        .add_line(render_property_line("key", true, PropType::String));
+    content
+        .properties
+        .add_line(render_property_line("display_name", true, PropType::String));
+    content
+        .properties
+        .add_line(render_property_line("color", false, PropType::String));
+    content
+        .properties
+        .add_line(render_property_line("icon", false, PropType::Object));
 
     // SPECIFIC section
     content.properties.add_line(Line::from(vec![Span::styled(
         format!("── SPECIFIC ({}) ──", 1),
         Style::default().fg(COLOR_HEADER_SPECIFIC),
     )]));
-
-    // llm_context property
-    content.properties.add_line(Line::from(vec![
-        Span::styled("✓", Style::default().fg(Color::Rgb(133, 153, 0))),
-        Span::styled(" ", STYLE_DIM),
-        Span::styled(format!("{:14}", "llm_context"), STYLE_PROP_KEY),
-        Span::styled(": ", STYLE_PROP_COLON),
-        Span::styled("[str]", Style::default().fg(Color::Rgb(38, 139, 210))),
-    ]));
+    content
+        .properties
+        .add_line(render_property_line("llm_context", false, PropType::String));
 
     // RELATIONSHIPS - v0.17: show HAS_LAYER arcs to layers
     if !realm.layers.is_empty() {
@@ -552,48 +586,24 @@ fn build_layer_content(
         format!("── STANDARD ({}) ──", 3),
         Style::default().fg(COLOR_HEADER_STANDARD),
     )]));
-
-    // key property
-    content.properties.add_line(Line::from(vec![
-        Span::styled("✓", Style::default().fg(Color::Rgb(133, 153, 0))),
-        Span::styled("*", Style::default().fg(Color::Rgb(220, 50, 47))),
-        Span::styled(format!("{:14}", "key"), STYLE_PROP_KEY),
-        Span::styled(": ", STYLE_PROP_COLON),
-        Span::styled("[str]", Style::default().fg(Color::Rgb(38, 139, 210))),
-    ]));
-
-    // display_name property
-    content.properties.add_line(Line::from(vec![
-        Span::styled("✓", Style::default().fg(Color::Rgb(133, 153, 0))),
-        Span::styled("*", Style::default().fg(Color::Rgb(220, 50, 47))),
-        Span::styled(format!("{:14}", "display_name"), STYLE_PROP_KEY),
-        Span::styled(": ", STYLE_PROP_COLON),
-        Span::styled("[str]", Style::default().fg(Color::Rgb(38, 139, 210))),
-    ]));
-
-    // color property
-    content.properties.add_line(Line::from(vec![
-        Span::styled("✓", Style::default().fg(Color::Rgb(133, 153, 0))),
-        Span::styled(" ", STYLE_DIM),
-        Span::styled(format!("{:14}", "color"), STYLE_PROP_KEY),
-        Span::styled(": ", STYLE_PROP_COLON),
-        Span::styled("[str]", Style::default().fg(Color::Rgb(38, 139, 210))),
-    ]));
+    content
+        .properties
+        .add_line(render_property_line("key", true, PropType::String));
+    content
+        .properties
+        .add_line(render_property_line("display_name", true, PropType::String));
+    content
+        .properties
+        .add_line(render_property_line("color", false, PropType::String));
 
     // SPECIFIC section
     content.properties.add_line(Line::from(vec![Span::styled(
         format!("── SPECIFIC ({}) ──", 1),
         Style::default().fg(COLOR_HEADER_SPECIFIC),
     )]));
-
-    // llm_context property
-    content.properties.add_line(Line::from(vec![
-        Span::styled("✓", Style::default().fg(Color::Rgb(133, 153, 0))),
-        Span::styled(" ", STYLE_DIM),
-        Span::styled(format!("{:14}", "llm_context"), STYLE_PROP_KEY),
-        Span::styled(": ", STYLE_PROP_COLON),
-        Span::styled("[str]", Style::default().fg(Color::Rgb(38, 139, 210))),
-    ]));
+    content
+        .properties
+        .add_line(render_property_line("llm_context", false, PropType::String));
 
     // RELATIONSHIPS - v0.17: show incoming HAS_LAYER + outgoing HAS_CLASS
     let class_count = layer.classes.len();

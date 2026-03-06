@@ -31,6 +31,13 @@ const BOX_BORDER_UNFOCUSED: Color = Color::Rgb(59, 66, 82); // #3B4252
 const BOX_BORDER_SELECTED: Color = Color::Rgb(42, 161, 152); // #2AA198
 
 // =============================================================================
+// ARC DISPLAY CONSTANTS
+// =============================================================================
+
+/// Separator line for arc sections (44 dashes with 2-space indent).
+const ARC_SEPARATOR: &str = "  ────────────────────────────────────────────";
+
+// =============================================================================
 // SCROLL HELPER
 // =============================================================================
 
@@ -230,17 +237,15 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
         lines.push(Line::from(Span::raw("")));
 
         // === OUTGOING ARCS (HAS_LAYER) ===
+        let ownership_color = theme.arc_family_color("ownership");
         if !details.layers.is_empty() {
             lines.push(Line::from(Span::styled(
                 format!("  ━▶ OUTGOING ({}) ", details.layers.len()),
                 Style::default()
-                    .fg(Color::Cyan)
+                    .fg(ownership_color)
                     .add_modifier(Modifier::BOLD),
             )));
-            lines.push(Line::from(Span::styled(
-                "  ────────────────────────────────────────────",
-                dim,
-            )));
+            lines.push(Line::from(Span::styled(ARC_SEPARATOR, dim)));
 
             for layer in &details.layers {
                 let layer_color = theme.layer_color(&layer.key);
@@ -248,10 +253,10 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
                     Span::styled(
                         "    → ",
                         Style::default()
-                            .fg(Color::Cyan)
+                            .fg(ownership_color)
                             .add_modifier(Modifier::BOLD),
                     ),
-                    Span::styled("HAS_LAYER", Style::default().fg(Color::Cyan)),
+                    Span::styled("HAS_LAYER", Style::default().fg(ownership_color)),
                     Span::styled(" → ", dim),
                     Span::styled(&layer.display_name, Style::default().fg(layer_color)),
                     Span::styled(format!(" ({} classes)", layer.class_count), bright_dim),
@@ -260,7 +265,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
             }
         } else {
             lines.push(Line::from(Span::styled(
-                "  No arc relationships defined for this Realm",
+                "  No outgoing arcs — this Realm has no layers",
                 STYLE_DIM,
             )));
         }
@@ -314,21 +319,21 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
         lines.push(Line::from(Span::raw("")));
 
         // === INCOMING ARCS (HAS_LAYER from Realm) ===
+        // Incoming count is always 1 (one realm owns this layer)
+        let incoming_count = 1;
+        let ownership_color = theme.arc_family_color("ownership");
         lines.push(Line::from(Span::styled(
-            "  ◀━ INCOMING (1) ",
+            format!("  ◀━ INCOMING ({}) ", incoming_count),
             Style::default()
                 .fg(Color::Magenta)
                 .add_modifier(Modifier::BOLD),
         )));
-        lines.push(Line::from(Span::styled(
-            "  ────────────────────────────────────────────",
-            dim,
-        )));
+        lines.push(Line::from(Span::styled(ARC_SEPARATOR, dim)));
         lines.push(Line::from(vec![
             Span::styled(
                 "    ← ",
                 Style::default()
-                    .fg(Color::Cyan)
+                    .fg(ownership_color)
                     .add_modifier(Modifier::BOLD),
             ),
             Span::styled(
@@ -336,7 +341,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
                 Style::default().fg(theme.realm_color(&details.realm)),
             ),
             Span::styled(" ← ", dim),
-            Span::styled("HAS_LAYER", Style::default().fg(Color::Cyan)),
+            Span::styled("HAS_LAYER", Style::default().fg(ownership_color)),
             Span::styled(" [own]", dim),
         ]));
         lines.push(Line::from(Span::raw("")));
@@ -352,13 +357,10 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
             lines.push(Line::from(Span::styled(
                 format!("  ━▶ OUTGOING ({}) ", total_classes),
                 Style::default()
-                    .fg(Color::Cyan)
+                    .fg(ownership_color)
                     .add_modifier(Modifier::BOLD),
             )));
-            lines.push(Line::from(Span::styled(
-                "  ────────────────────────────────────────────",
-                dim,
-            )));
+            lines.push(Line::from(Span::styled(ARC_SEPARATOR, dim)));
 
             for group in &details.classes_by_trait {
                 let trait_color = theme.trait_color(&group.trait_key);
@@ -369,10 +371,10 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
                         Span::styled(
                             "    → ",
                             Style::default()
-                                .fg(Color::Cyan)
+                                .fg(ownership_color)
                                 .add_modifier(Modifier::BOLD),
                         ),
-                        Span::styled("HAS_CLASS", Style::default().fg(Color::Cyan)),
+                        Span::styled("HAS_CLASS", Style::default().fg(ownership_color)),
                         Span::styled(" → ", dim),
                         Span::styled(format!("{} ", trait_icon), Style::default().fg(trait_color)),
                         Span::styled(
@@ -385,7 +387,7 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
             }
         } else {
             lines.push(Line::from(Span::styled(
-                "  No outgoing arcs for this Layer",
+                "  No outgoing arcs — this Layer has no classes",
                 STYLE_DIM,
             )));
         }
@@ -755,10 +757,7 @@ fn render_arcs_by_direction(
                 .fg(Color::Cyan)
                 .add_modifier(Modifier::BOLD),
         )));
-        lines.push(Line::from(Span::styled(
-            "  ────────────────────────────────────────────",
-            *dim,
-        )));
+        lines.push(Line::from(Span::styled(ARC_SEPARATOR, *dim)));
 
         for arc in &arcs.outgoing {
             let family_color = theme.arc_family_color(&arc.family);
@@ -792,10 +791,7 @@ fn render_arcs_by_direction(
                 .fg(Color::Magenta)
                 .add_modifier(Modifier::BOLD),
         )));
-        lines.push(Line::from(Span::styled(
-            "  ────────────────────────────────────────────",
-            *dim,
-        )));
+        lines.push(Line::from(Span::styled(ARC_SEPARATOR, *dim)));
 
         for arc in &arcs.incoming {
             let family_color = theme.arc_family_color(&arc.family);
