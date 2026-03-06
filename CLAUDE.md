@@ -79,11 +79,11 @@ v0.13.0 introduces the *Native pattern with unified arcs:
 - ***Native Pattern** (ADR-029): EntityContent→EntityNative, ProjectContent→ProjectNative, PageGenerated→PageNative, BlockGenerated→BlockNative
 - **Unified Arcs** (ADR-029): HAS_CONTENT/HAS_GENERATED→HAS_NATIVE, CONTENT_OF/GENERATED_FOR→NATIVE_OF
 - **Slug Ownership** (ADR-030): URL properties moved from EntityNative to PageNative
-- **57 nodes** total: 36 shared + 21 org, **171 arcs** (6 families)
+- **61 nodes** total: 40 shared + 21 org, **182 arcs** (6 families)
 
 **Architecture (v0.17.0):**
 - 2 realms: SHARED + ORG
-- SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (36 nodes)
+- SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (40 nodes)
 - ORG (6 layers): config, foundation, structure, semantic, instruction, output (21 nodes)
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
@@ -92,7 +92,7 @@ schema generate/validate, doc generate, filter build. Galaxy-themed TUI with uni
 
 **YAML-first architecture:** Each Class YAML has explicit `realm:` and `layer:` fields (source of truth).
 Path validation ensures `models/node-classes/{realm}/{layer}/{name}.yaml` matches YAML content.
-v0.17: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 57 nodes, 171 arcs.
+v0.17: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 61 nodes, 182 arcs.
 
 **Icons source of truth (v11.5):** `visual-encoding.yaml` → `icons:` section provides dual-format icons:
 - `web`: Lucide icon name for Studio
