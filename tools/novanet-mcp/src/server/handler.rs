@@ -54,11 +54,7 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
-            code: ErrorCode(-32603),
-            message: Cow::Owned(format!("Serialization error: {}", e)),
-            data: None,
-        })?;
+        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -79,11 +75,7 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
-            code: ErrorCode(-32603),
-            message: Cow::Owned(format!("Serialization error: {}", e)),
-            data: None,
-        })?;
+        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -104,11 +96,7 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
-            code: ErrorCode(-32603),
-            message: Cow::Owned(format!("Serialization error: {}", e)),
-            data: None,
-        })?;
+        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -129,11 +117,7 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
-            code: ErrorCode(-32603),
-            message: Cow::Owned(format!("Serialization error: {}", e)),
-            data: None,
-        })?;
+        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -154,11 +138,7 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
-            code: ErrorCode(-32603),
-            message: Cow::Owned(format!("Serialization error: {}", e)),
-            data: None,
-        })?;
+        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -179,11 +159,7 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
-            code: ErrorCode(-32603),
-            message: Cow::Owned(format!("Serialization error: {}", e)),
-            data: None,
-        })?;
+        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -204,11 +180,7 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
-            code: ErrorCode(-32603),
-            message: Cow::Owned(format!("Serialization error: {}", e)),
-            data: None,
-        })?;
+        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -230,11 +202,7 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
-            code: ErrorCode(-32603),
-            message: Cow::Owned(format!("Serialization error: {}", e)),
-            data: None,
-        })?;
+        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -255,11 +223,7 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
-            code: ErrorCode(-32603),
-            message: Cow::Owned(format!("Serialization error: {}", e)),
-            data: None,
-        })?;
+        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -279,11 +243,7 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
-            code: ErrorCode(-32603),
-            message: Cow::Owned(format!("Serialization error: {}", e)),
-            data: None,
-        })?;
+        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -303,11 +263,7 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
-            code: ErrorCode(-32603),
-            message: Cow::Owned(format!("Serialization error: {}", e)),
-            data: None,
-        })?;
+        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -329,11 +285,7 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
-            code: ErrorCode(-32603),
-            message: Cow::Owned(format!("Serialization error: {}", e)),
-            data: None,
-        })?;
+        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -355,11 +307,7 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
-            code: ErrorCode(-32603),
-            message: Cow::Owned(format!("Serialization error: {}", e)),
-            data: None,
-        })?;
+        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -381,11 +329,7 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
-            code: ErrorCode(-32603),
-            message: Cow::Owned(format!("Serialization error: {}", e)),
-            data: None,
-        })?;
+        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -395,23 +339,22 @@ impl NovaNetHandler {
 #[tool_handler]
 impl ServerHandler for NovaNetHandler {
     fn get_info(&self) -> ServerInfo {
-        ServerInfo {
-            instructions: Some(
-                "NovaNet MCP Server v0.17.0 - Knowledge Graph for AI Agents. \
-                 14 tools available. TOOL SELECTION: \
-                 🔍 novanet_search (find nodes) → 🧭 novanet_traverse (explore relationships) → \
-                 ⭐ novanet_generate (content context). \
-                 For writes: 📚 novanet_introspect (schema) → ✅ novanet_check (validate) → ✍️ novanet_write. \
-                 📊 novanet_audit for quality. ⚠️ novanet_query is LAST RESORT for custom analytics only. \
-                 6 prompts available."
-                    .into(),
-            ),
-            capabilities: ServerCapabilities::builder()
+        // rmcp 1.x: Use builder pattern instead of struct literals
+        ServerInfo::new(
+            ServerCapabilities::builder()
                 .enable_tools()
                 .enable_prompts()
                 .build(),
-            ..Default::default()
-        }
+        )
+        .with_instructions(
+            "NovaNet MCP Server v0.17.0 - Knowledge Graph for AI Agents. \
+             14 tools available. TOOL SELECTION: \
+             🔍 novanet_search (find nodes) → 🧭 novanet_traverse (explore relationships) → \
+             ⭐ novanet_generate (content context). \
+             For writes: 📚 novanet_introspect (schema) → ✅ novanet_check (validate) → ✍️ novanet_write. \
+             📊 novanet_audit for quality. ⚠️ novanet_query is LAST RESORT for custom analytics only. \
+             6 prompts available.",
+        )
     }
 
     /// List all available prompts
@@ -442,45 +385,40 @@ impl ServerHandler for NovaNetHandler {
         async move {
             let args = request.arguments.unwrap_or_default();
 
-            let rendered =
-                prompts::render_prompt(&request.name, &args).ok_or_else(|| McpError {
-                    code: ErrorCode(-32001),
-                    message: Cow::Owned(format!("Prompt not found: {}", request.name)),
-                    data: None,
-                })?;
+            // rmcp 1.x: Use builder pattern instead of struct literals
+            let rendered = prompts::render_prompt(&request.name, &args)
+                .ok_or_else(|| McpError::resource_not_found(format!("Prompt not found: {}", request.name), None))?;
 
-            Ok(GetPromptResult {
-                description: Some(rendered.description),
-                messages: rendered
+            // rmcp 1.x: Use builder pattern instead of struct literals
+            Ok(GetPromptResult::new(
+                rendered
                     .messages
                     .into_iter()
                     .map(convert_prompt_message)
                     .collect(),
-            })
+            )
+            .with_description(rendered.description))
         }
     }
 }
 
 /// Convert internal PromptDefinition to MCP Prompt
+/// rmcp 1.x: Use builder pattern instead of struct literals
 fn convert_prompt_definition(def: PromptDefinition) -> Prompt {
-    Prompt {
-        name: def.name,
-        title: None,
-        description: Some(def.description),
-        arguments: Some(
+    Prompt::new(
+        def.name,
+        Some(def.description),
+        Some(
             def.arguments
                 .into_iter()
-                .map(|arg| PromptArgument {
-                    name: arg.name,
-                    title: None,
-                    description: Some(arg.description),
-                    required: Some(arg.required),
+                .map(|arg| {
+                    PromptArgument::new(arg.name)
+                        .with_description(arg.description)
+                        .with_required(arg.required)
                 })
                 .collect(),
         ),
-        icons: None,
-        meta: None,
-    }
+    )
 }
 
 /// Convert internal PromptMessage to MCP PromptMessage
@@ -702,36 +640,24 @@ mod tests {
     #[test]
     fn test_tool_error_code_is_minus_32000() {
         // Verify the error code constant used for tool errors
-        let error = McpError {
-            code: ErrorCode(-32000),
-            message: std::borrow::Cow::Borrowed("Tool error"),
-            data: None,
-        };
-
+        // rmcp 1.x: Use new() constructor instead of struct literal
+        let error = McpError::new(ErrorCode(-32000), "Tool error", None);
         assert_eq!(error.code, ErrorCode(-32000));
     }
 
     #[test]
     fn test_serialization_error_code_is_minus_32603() {
         // Verify the error code constant used for serialization errors
-        let error = McpError {
-            code: ErrorCode(-32603),
-            message: std::borrow::Cow::Borrowed("Serialization error"),
-            data: None,
-        };
-
-        assert_eq!(error.code, ErrorCode(-32603));
+        // rmcp 1.x: Use internal_error() instead of struct literal
+        let error = McpError::internal_error("Serialization error", None);
+        assert_eq!(error.code, ErrorCode::INTERNAL_ERROR);
     }
 
     #[test]
     fn test_prompt_not_found_error_code_is_minus_32001() {
         // Verify the error code constant used for prompt not found
-        let error = McpError {
-            code: ErrorCode(-32001),
-            message: std::borrow::Cow::Borrowed("Prompt not found"),
-            data: None,
-        };
-
-        assert_eq!(error.code, ErrorCode(-32001));
+        // rmcp 1.x: Use resource_not_found() instead of struct literal
+        let error = McpError::resource_not_found("Prompt not found", None);
+        assert_eq!(error.code, ErrorCode::RESOURCE_NOT_FOUND);
     }
 }

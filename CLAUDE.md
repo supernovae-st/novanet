@@ -79,11 +79,11 @@ v0.13.0 introduces the *Native pattern with unified arcs:
 - ***Native Pattern** (ADR-029): EntityContent→EntityNative, ProjectContent→ProjectNative, PageGenerated→PageNative, BlockGenerated→BlockNative
 - **Unified Arcs** (ADR-029): HAS_CONTENT/HAS_GENERATED→HAS_NATIVE, CONTENT_OF/GENERATED_FOR→NATIVE_OF
 - **Slug Ownership** (ADR-030): URL properties moved from EntityNative to PageNative
-- **60 nodes** total: 39 shared + 21 org, **178 arcs** (6 families)
+- **57 nodes** total: 36 shared + 21 org, **171 arcs** (6 families)
 
 **Architecture (v0.17.0):**
 - 2 realms: SHARED + ORG
-- SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (39 nodes)
+- SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (36 nodes)
 - ORG (6 layers): config, foundation, structure, semantic, instruction, output (21 nodes)
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
@@ -92,7 +92,7 @@ schema generate/validate, doc generate, filter build. Galaxy-themed TUI with uni
 
 **YAML-first architecture:** Each Class YAML has explicit `realm:` and `layer:` fields (source of truth).
 Path validation ensures `models/node-classes/{realm}/{layer}/{name}.yaml` matches YAML content.
-v0.17: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 60 nodes, 178 arcs.
+v0.17: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 57 nodes, 171 arcs.
 
 **Icons source of truth (v11.5):** `visual-encoding.yaml` → `icons:` section provides dual-format icons:
 - `web`: Lucide icon name for Studio
@@ -162,8 +162,7 @@ v11.7 introduces the Unified Tree where Realm, Layer, ArcFamily, ArcClass are al
 │  KNOWLEDGE ARCHITECTURE                                                     │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│  Locale ──[:HAS_TERMS]──> TermSet ──[:CONTAINS_TERM]──> Term (atom)        │
-│          ──[:HAS_EXPRESSIONS]──> ExpressionSet ──[:CONTAINS_EXPRESSION]──> Expression  │
+│  Locale ──[:HAS_EXPRESSIONS]──> ExpressionSet ──[:CONTAINS_EXPRESSION]──> Expression  │
 │          ──[:HAS_PATTERNS]──> PatternSet ──[:CONTAINS_PATTERN]──> Pattern           │
 │          ──[:HAS_CULTURE]──> CultureSet ──[:CONTAINS_CULTURE_REF]──> CultureRef         │
 │          ──[:HAS_TABOOS]──> TabooSet ──[:CONTAINS_TABOO]──> Taboo                 │
@@ -181,22 +180,23 @@ v11.7 introduces the Unified Tree where Realm, Layer, ArcFamily, ArcClass are al
 │                                                                             │
 │  2. ATOMS ARE LOCALE-NATIVE                                                 │
 │     └─ Unlike Entities (defined + Content for ALL locales)                  │
-│     └─ Atoms exist only where needed: fr-FR may have 20K Terms              │
-│     └─ sw-KE may have 500 Terms - no translation, native generation         │
+│     └─ Atoms exist only where needed: fr-FR may have 20K Expressions        │
+│     └─ sw-KE may have 500 Expressions - no translation, native generation   │
 │                                                                             │
 │  3. SELECTIVE LLM LOADING                                                   │
-│     └─ Load 50 relevant Terms, not 20K JSON blob                            │
-│     └─ Graph queries: "Terms used by this Block"                            │
-│     └─ [:USES_TERM], [:USES_EXPRESSION] on Block nodes                      │
+│     └─ Load 50 relevant Expressions, not 20K JSON blob                      │
+│     └─ Graph queries: "Expressions used by this Block"                      │
+│     └─ [:USES_EXPRESSION] on Block nodes                                    │
+│                                                                             │
+│  NOTE: Terms deferred — EntityNative.denomination_forms covers terminology  │
 │                                                                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  STATISTICS (v0.13.0)                                                       │
+│  STATISTICS (v0.17.0)                                                       │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│  Containers (6): TermSet, ExpressionSet, PatternSet,                        │
-│                  CultureSet, TabooSet, AudienceSet                          │
-│  Atoms (6):      Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait│
-│  Total:          60 nodes (39 shared + 21 org)                              │
+│  Containers (5): ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet│
+│  Atoms (5):      Expression, Pattern, CultureRef, Taboo, AudienceTrait      │
+│  Total:          57 nodes (36 shared + 21 org)                              │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```

@@ -883,13 +883,15 @@ arc:
             "SEMANTIC_LINK should have threshold"
         );
         assert_eq!(temps.get("SEMANTIC_LINK"), Some(&0.3_f32));
-        assert!(
-            temps.contains_key("USES_ENTITY"),
-            "USES_ENTITY should have threshold"
-        );
-        assert_eq!(temps.get("USES_ENTITY"), Some(&0.0_f32));
 
-        // Should have multiple semantic arcs (v10.1: 10 after removing Thing arcs)
+        // v0.17.1: USES_ENTITY was archived, test with BELONGS_TO which has threshold
+        assert!(
+            temps.contains_key("BELONGS_TO"),
+            "BELONGS_TO should have threshold"
+        );
+        assert_eq!(temps.get("BELONGS_TO"), Some(&0.1_f32));
+
+        // Should have multiple semantic arcs (v0.17.1: 19 active semantic arcs)
         let semantic_count = temps.len();
         assert!(
             semantic_count >= 10,

@@ -27,9 +27,10 @@ categories = ["development-tools", "database"]
 [dependencies]
 # ═══════════════════════════════════════════════════════════════════════════════
 # MCP Protocol - Official Anthropic SDK
-# v0.16: rmcp rename + improved error handling
+# v1.1.0: Builder pattern for structs, #[non_exhaustive] enums
+# Migration guide: https://github.com/modelcontextprotocol/rust-sdk/discussions/716
 # ═══════════════════════════════════════════════════════════════════════════════
-rmcp = { version = "0.16", features = ["server", "transport-io"] }
+rmcp = { version = "1.1", features = ["server", "transport-io"] }
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Async Runtime
@@ -106,7 +107,7 @@ regex = "1.10"
 tokio-test = "0.4"
 pretty_assertions = "1"
 insta = { version = "1", features = ["yaml"] }
-criterion = { version = "0.6", features = ["html_reports"] }
+criterion = { version = "0.8", features = ["html_reports"] }
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Release Profile - Optimized for production
