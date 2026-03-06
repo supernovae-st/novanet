@@ -51,9 +51,23 @@ v0.15 MCP + CLI Improvements           █████████████�
 v0.15.1 Version Alignment              ████████████████████  100%  RELEASED
       All packages aligned to 0.15.1 (TS + Rust CLI + MCP)
       MCP versioning strategy: follows NovaNet version
-v0.15.2 Documentation Cleanup          ████████████████████  100%  <- CURRENT
+v0.15.2 Documentation Cleanup          ████████████████████  100%  RELEASED
       Fixed version/test count references, removed debug console.log
       Rust code quality: .unwrap() → .expect() in diff.rs
+v0.15.3 Security Hardening             ████████████████████  100%  RELEASED
+      Cypher injection prevention, memory leak fix (moka cache)
+      HAS_NATIVE auto-arc, required property validation
+v0.16.0 Init + Config + Doctor         ████████████████████  100%  RELEASED
+      novanet init wizard, ~/.novanet/config.toml, doctor --fix
+      Error hints system with actionable suggestions
+v0.16.1 Patch Release                  ████████████████████  100%  RELEASED
+      Minor fixes and dependency updates
+v0.16.2 Content Generation Pipeline    ████████████████████  100%  RELEASED
+      3-phase Nika pipeline, content-generation skill
+      novanet_generate for context assembly
+v0.17.0 Neuro-Symbolic Validation      ████████████████████  100%  <- CURRENT
+      novanet_check (pre-write validation), novanet_audit (CSR metrics)
+      14 MCP tools total, MMKG-RDS research-based quality scoring
 
 ═══════════════════════════════════════════════════════════════════════════════
 IDEAS (no timeline)
@@ -280,3 +294,8 @@ release/v*      Release preparation (optional, for complex releases)
 | v0.15.0 | 2026-03-02 | MCP batch/cache tools, CLI export/stats/diff, 11 MCP tools, 1279 tests |
 | v0.15.1 | 2026-03-03 | Version alignment — all packages at 0.15.1, MCP versioning strategy |
 | v0.15.2 | 2026-03-03 | Documentation cleanup — test counts, version refs, debug console.log, diff.rs unwrap() |
+| v0.15.3 | 2026-03-03 | Security hardening — Cypher injection prevention, moka cache, HAS_NATIVE auto-arc |
+| v0.16.0 | 2026-03-03 | Init + Config + Doctor — novanet init wizard, error hints system |
+| v0.16.1 | 2026-03-03 | Patch release — minor fixes and dependency updates |
+| v0.16.2 | 2026-03-03 | Content generation pipeline — 3-phase Nika workflow, content-generation skill |
+| v0.17.0 | 2026-03-05 | Neuro-symbolic validation — novanet_check, novanet_audit, CSR metrics, 14 MCP tools |

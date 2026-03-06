@@ -27,11 +27,11 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - **Bug: audit_coverage locale filter** - Fixed undefined variable in Cypher query
 
 ### Changed
-- MCP tool count: 12 → 13 (added novanet_check, novanet_audit)
+- MCP tool count: 12 → 14 (added novanet_write, novanet_check, novanet_audit)
 - Resolved clippy warnings (derivable_impls, field_reassign_with_default)
 
 ### Statistics
-- **13 MCP tools**: query, describe, search, traverse, assemble, atoms, generate, introspect, batch, cache_stats, cache_invalidate, check, audit
+- **14 MCP tools**: query, describe, search, traverse, assemble, atoms, generate, introspect, batch, cache_stats, cache_invalidate, write, check, audit
 - **472 tests passing** (MCP server)
 - **Zero clippy warnings**
 
@@ -763,9 +763,17 @@ cargo run -- schema generate
 - Migrated from git submodules to true monorepo
 - Organization links updated to supernovae-st
 
-[Unreleased]: https://github.com/supernovae-st/novanet-dev/compare/v0.14.1...HEAD
-[0.14.1]: https://github.com/supernovae-st/novanet-dev/compare/v0.14.0...v0.14.1
-[0.14.0]: https://github.com/supernovae-st/novanet-dev/compare/v0.13.1...v0.14.0
+[Unreleased]: https://github.com/supernovae-st/novanet/compare/v0.17.0...HEAD
+[0.17.0]: https://github.com/supernovae-st/novanet/compare/v0.16.2...v0.17.0
+[0.16.2]: https://github.com/supernovae-st/novanet/compare/v0.16.1...v0.16.2
+[0.16.1]: https://github.com/supernovae-st/novanet/compare/v0.16.0...v0.16.1
+[0.16.0]: https://github.com/supernovae-st/novanet/compare/v0.15.3...v0.16.0
+[0.15.3]: https://github.com/supernovae-st/novanet/compare/v0.15.2...v0.15.3
+[0.15.2]: https://github.com/supernovae-st/novanet/compare/v0.15.1...v0.15.2
+[0.15.1]: https://github.com/supernovae-st/novanet/compare/v0.15.0...v0.15.1
+[0.15.0]: https://github.com/supernovae-st/novanet/compare/v0.14.1...v0.15.0
+[0.14.1]: https://github.com/supernovae-st/novanet/compare/v0.14.0...v0.14.1
+[0.14.0]: https://github.com/supernovae-st/novanet/compare/v0.13.1...v0.14.0
 [0.13.1]: https://github.com/supernovae-st/novanet-dev/compare/v0.13.0...v0.13.1
 [0.13.0]: https://github.com/supernovae-st/novanet-dev/compare/v0.12.5...v0.13.0
 [0.12.5]: https://github.com/supernovae-st/novanet-dev/compare/v0.12.4...v0.12.5

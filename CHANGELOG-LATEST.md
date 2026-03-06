@@ -70,7 +70,7 @@ For complete history, see [CHANGELOG.md](./CHANGELOG.md).
 
 ### Changed
 
-- MCP tool count: 12 → 13 (added novanet_check, novanet_audit as "twin tools")
+- MCP tool count: 12 → 14 (added novanet_write, novanet_check, novanet_audit)
 - Documentation updated with neuro-symbolic validation patterns
 - All clippy warnings resolved (derivable_impls, field_reassign_with_default)
 
