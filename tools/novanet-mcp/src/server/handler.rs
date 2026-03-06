@@ -52,11 +52,7 @@ impl NovaNetHandler {
     ) -> Result<CallToolResult, McpError> {
         let result = crate::tools::query::execute(&self.state, params.0)
             .await
-            .map_err(|e| McpError {
-                code: ErrorCode(-32000),
-                message: Cow::Owned(e.to_string()),
-                data: None,
-            })?;
+            .map_err(McpError::from)?;
 
         let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
             code: ErrorCode(-32603),
@@ -81,11 +77,7 @@ impl NovaNetHandler {
     ) -> Result<CallToolResult, McpError> {
         let result = crate::tools::describe::execute(&self.state, params.0)
             .await
-            .map_err(|e| McpError {
-                code: ErrorCode(-32000),
-                message: Cow::Owned(e.to_string()),
-                data: None,
-            })?;
+            .map_err(McpError::from)?;
 
         let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
             code: ErrorCode(-32603),
@@ -110,11 +102,7 @@ impl NovaNetHandler {
     ) -> Result<CallToolResult, McpError> {
         let result = crate::tools::search::execute(&self.state, params.0)
             .await
-            .map_err(|e| McpError {
-                code: ErrorCode(-32000),
-                message: Cow::Owned(e.to_string()),
-                data: None,
-            })?;
+            .map_err(McpError::from)?;
 
         let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
             code: ErrorCode(-32603),
@@ -139,11 +127,7 @@ impl NovaNetHandler {
     ) -> Result<CallToolResult, McpError> {
         let result = crate::tools::traverse::execute(&self.state, params.0)
             .await
-            .map_err(|e| McpError {
-                code: ErrorCode(-32000),
-                message: Cow::Owned(e.to_string()),
-                data: None,
-            })?;
+            .map_err(McpError::from)?;
 
         let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
             code: ErrorCode(-32603),
@@ -168,11 +152,7 @@ impl NovaNetHandler {
     ) -> Result<CallToolResult, McpError> {
         let result = crate::tools::assemble::execute(&self.state, params.0)
             .await
-            .map_err(|e| McpError {
-                code: ErrorCode(-32000),
-                message: Cow::Owned(e.to_string()),
-                data: None,
-            })?;
+            .map_err(McpError::from)?;
 
         let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
             code: ErrorCode(-32603),
@@ -197,11 +177,7 @@ impl NovaNetHandler {
     ) -> Result<CallToolResult, McpError> {
         let result = crate::tools::atoms::execute(&self.state, params.0)
             .await
-            .map_err(|e| McpError {
-                code: ErrorCode(-32000),
-                message: Cow::Owned(e.to_string()),
-                data: None,
-            })?;
+            .map_err(McpError::from)?;
 
         let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
             code: ErrorCode(-32603),
@@ -226,11 +202,7 @@ impl NovaNetHandler {
     ) -> Result<CallToolResult, McpError> {
         let result = crate::tools::generate::execute(&self.state, params.0)
             .await
-            .map_err(|e| McpError {
-                code: ErrorCode(-32000),
-                message: Cow::Owned(e.to_string()),
-                data: None,
-            })?;
+            .map_err(McpError::from)?;
 
         let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
             code: ErrorCode(-32603),
@@ -256,11 +228,7 @@ impl NovaNetHandler {
     ) -> Result<CallToolResult, McpError> {
         let result = crate::tools::introspect::execute(&self.state, params.0)
             .await
-            .map_err(|e| McpError {
-                code: ErrorCode(-32000),
-                message: Cow::Owned(e.to_string()),
-                data: None,
-            })?;
+            .map_err(McpError::from)?;
 
         let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
             code: ErrorCode(-32603),
@@ -285,11 +253,7 @@ impl NovaNetHandler {
     ) -> Result<CallToolResult, McpError> {
         let result = crate::tools::batch::execute(&self.state, params.0)
             .await
-            .map_err(|e| McpError {
-                code: ErrorCode(-32000),
-                message: Cow::Owned(e.to_string()),
-                data: None,
-            })?;
+            .map_err(McpError::from)?;
 
         let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
             code: ErrorCode(-32603),
@@ -313,11 +277,7 @@ impl NovaNetHandler {
     ) -> Result<CallToolResult, McpError> {
         let result = crate::tools::cache_stats::get_stats(&self.state, params.0)
             .await
-            .map_err(|e| McpError {
-                code: ErrorCode(-32000),
-                message: Cow::Owned(e.to_string()),
-                data: None,
-            })?;
+            .map_err(McpError::from)?;
 
         let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
             code: ErrorCode(-32603),
@@ -341,11 +301,7 @@ impl NovaNetHandler {
     ) -> Result<CallToolResult, McpError> {
         let result = crate::tools::cache_stats::invalidate(&self.state, params.0)
             .await
-            .map_err(|e| McpError {
-                code: ErrorCode(-32000),
-                message: Cow::Owned(e.to_string()),
-                data: None,
-            })?;
+            .map_err(McpError::from)?;
 
         let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
             code: ErrorCode(-32603),
@@ -371,11 +327,7 @@ impl NovaNetHandler {
     ) -> Result<CallToolResult, McpError> {
         let result = crate::tools::write::execute(&self.state, params.0)
             .await
-            .map_err(|e| McpError {
-                code: ErrorCode(-32000),
-                message: Cow::Owned(e.with_hint()),
-                data: None,
-            })?;
+            .map_err(McpError::from)?;
 
         let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
             code: ErrorCode(-32603),
@@ -401,11 +353,7 @@ impl NovaNetHandler {
     ) -> Result<CallToolResult, McpError> {
         let result = crate::tools::checker::execute(&self.state, params.0)
             .await
-            .map_err(|e| McpError {
-                code: ErrorCode(-32000),
-                message: Cow::Owned(e.to_string()),
-                data: None,
-            })?;
+            .map_err(McpError::from)?;
 
         let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
             code: ErrorCode(-32603),
@@ -431,11 +379,7 @@ impl NovaNetHandler {
     ) -> Result<CallToolResult, McpError> {
         let result = crate::tools::auditor::execute(&self.state, params.0)
             .await
-            .map_err(|e| McpError {
-                code: ErrorCode(-32000),
-                message: Cow::Owned(e.to_string()),
-                data: None,
-            })?;
+            .map_err(McpError::from)?;
 
         let json = serde_json::to_string_pretty(&result).map_err(|e| McpError {
             code: ErrorCode(-32603),

@@ -104,9 +104,17 @@ pub enum Error {
         target_key: String,
     },
 
-    /// Schema class not found
+    /// Schema class not found (generic)
     #[error("Schema class not found: '{class}'. Use novanet_introspect to list available classes.")]
     SchemaNotFound { class: String },
+
+    /// NodeClass not found in schema
+    #[error("NodeClass '{name}' not found. Use novanet_introspect(target='classes') to list all 61 NodeClasses. Common classes: Entity, Page, Block, Locale.")]
+    NodeClassNotFound { name: String },
+
+    /// ArcClass not found in schema
+    #[error("ArcClass '{name}' not found. Use novanet_introspect(target='arcs') to list all ArcClasses. Common arcs: HAS_NATIVE, FOR_LOCALE, BELONGS_TO.")]
+    ArcClassNotFound { name: String },
 
     /// Missing required property
     #[error("Missing required property '{property}' for class '{class}'.")]
@@ -194,6 +202,16 @@ impl Error {
         }
     }
 
+    /// Create a NodeClass not found error
+    pub fn node_class_not_found(name: impl Into<String>) -> Self {
+        Self::NodeClassNotFound { name: name.into() }
+    }
+
+    /// Create an ArcClass not found error
+    pub fn arc_class_not_found(name: impl Into<String>) -> Self {
+        Self::ArcClassNotFound { name: name.into() }
+    }
+
     /// Create a missing required property error
     pub fn missing_required_property(
         class: impl Into<String>,
@@ -241,13 +259,16 @@ impl From<Error> for McpError {
             Error::SlugLocked { .. } => INVALID_PARAMS,
             Error::SingletonViolation { .. } => INVALID_PARAMS,
             Error::SchemaNotFound { .. } => RESOURCE_NOT_FOUND,
+            Error::NodeClassNotFound { .. } => RESOURCE_NOT_FOUND,
+            Error::ArcClassNotFound { .. } => RESOURCE_NOT_FOUND,
             Error::MissingRequiredProperty { .. } => INVALID_PARAMS,
             Error::ArcEndpointNotFound { .. } => RESOURCE_NOT_FOUND,
             _ => INTERNAL_ERROR,
         };
         McpError {
             code: ErrorCode(code),
-            message: Cow::Owned(err.to_string()),
+            // Use with_hint() for actionable error messages
+            message: Cow::Owned(err.with_hint()),
             data: None,
         }
     }
@@ -281,6 +302,24 @@ mod tests {
     fn test_schema_not_found_error() {
         let err = Error::schema_not_found("UnknownClass");
         assert!(err.to_string().contains("UnknownClass"));
+    }
+
+    #[test]
+    fn test_node_class_not_found_error() {
+        let err = Error::node_class_not_found("Entity");
+        let msg = err.to_string();
+        assert!(msg.contains("NodeClass"));
+        assert!(msg.contains("Entity"));
+        assert!(msg.contains("novanet_introspect"));
+    }
+
+    #[test]
+    fn test_arc_class_not_found_error() {
+        let err = Error::arc_class_not_found("HAS_NATIVE");
+        let msg = err.to_string();
+        assert!(msg.contains("ArcClass"));
+        assert!(msg.contains("HAS_NATIVE"));
+        assert!(msg.contains("novanet_introspect"));
     }
 
     #[test]
