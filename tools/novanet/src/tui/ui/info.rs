@@ -363,16 +363,63 @@ fn build_realm_content(app: &App, realm: &crate::tui::data::RealmInfo) -> Unifie
         content.coverage.add_empty();
     }
 
-    // PROPERTIES - LLM context
-    if !realm.llm_context.is_empty() {
-        for wrapped_line in wrap_text(&realm.llm_context, 38) {
-            content
-                .properties
-                .add_line(Line::from(Span::styled(wrapped_line, STYLE_DESC)));
-        }
-    } else {
-        content.properties.add_empty();
-    }
+    // PROPERTIES - v0.17: Show realm schema properties in formatted list
+    // Realm has structural properties: key, display_name, color, icon, llm_context
+    content.properties.add_line(Line::from(vec![Span::styled(
+        format!("── STANDARD ({}) ──", 4),
+        Style::default().fg(COLOR_HEADER_STANDARD),
+    )]));
+
+    // key property
+    content.properties.add_line(Line::from(vec![
+        Span::styled("✓", Style::default().fg(Color::Rgb(133, 153, 0))),
+        Span::styled("*", Style::default().fg(Color::Rgb(220, 50, 47))),
+        Span::styled(format!("{:14}", "key"), STYLE_PROP_KEY),
+        Span::styled(": ", STYLE_PROP_COLON),
+        Span::styled("[str]", Style::default().fg(Color::Rgb(38, 139, 210))),
+    ]));
+
+    // display_name property
+    content.properties.add_line(Line::from(vec![
+        Span::styled("✓", Style::default().fg(Color::Rgb(133, 153, 0))),
+        Span::styled("*", Style::default().fg(Color::Rgb(220, 50, 47))),
+        Span::styled(format!("{:14}", "display_name"), STYLE_PROP_KEY),
+        Span::styled(": ", STYLE_PROP_COLON),
+        Span::styled("[str]", Style::default().fg(Color::Rgb(38, 139, 210))),
+    ]));
+
+    // color property
+    content.properties.add_line(Line::from(vec![
+        Span::styled("✓", Style::default().fg(Color::Rgb(133, 153, 0))),
+        Span::styled(" ", STYLE_DIM),
+        Span::styled(format!("{:14}", "color"), STYLE_PROP_KEY),
+        Span::styled(": ", STYLE_PROP_COLON),
+        Span::styled("[str]", Style::default().fg(Color::Rgb(38, 139, 210))),
+    ]));
+
+    // icon property
+    content.properties.add_line(Line::from(vec![
+        Span::styled("✓", Style::default().fg(Color::Rgb(133, 153, 0))),
+        Span::styled(" ", STYLE_DIM),
+        Span::styled(format!("{:14}", "icon"), STYLE_PROP_KEY),
+        Span::styled(": ", STYLE_PROP_COLON),
+        Span::styled("[obj]", Style::default().fg(Color::Rgb(181, 137, 0))),
+    ]));
+
+    // SPECIFIC section
+    content.properties.add_line(Line::from(vec![Span::styled(
+        format!("── SPECIFIC ({}) ──", 1),
+        Style::default().fg(COLOR_HEADER_SPECIFIC),
+    )]));
+
+    // llm_context property
+    content.properties.add_line(Line::from(vec![
+        Span::styled("✓", Style::default().fg(Color::Rgb(133, 153, 0))),
+        Span::styled(" ", STYLE_DIM),
+        Span::styled(format!("{:14}", "llm_context"), STYLE_PROP_KEY),
+        Span::styled(": ", STYLE_PROP_COLON),
+        Span::styled("[str]", Style::default().fg(Color::Rgb(38, 139, 210))),
+    ]));
 
     // RELATIONSHIPS - v0.17: show HAS_LAYER arcs to layers
     if !realm.layers.is_empty() {
@@ -499,16 +546,54 @@ fn build_layer_content(
         content.coverage.add_empty();
     }
 
-    // PROPERTIES - LLM context
-    if !layer.llm_context.is_empty() {
-        for wrapped_line in wrap_text(&layer.llm_context, 38) {
-            content
-                .properties
-                .add_line(Line::from(Span::styled(wrapped_line, STYLE_DESC)));
-        }
-    } else {
-        content.properties.add_empty();
-    }
+    // PROPERTIES - v0.17: Show layer schema properties in formatted list
+    // Layer has structural properties: key, display_name, color, llm_context
+    content.properties.add_line(Line::from(vec![Span::styled(
+        format!("── STANDARD ({}) ──", 3),
+        Style::default().fg(COLOR_HEADER_STANDARD),
+    )]));
+
+    // key property
+    content.properties.add_line(Line::from(vec![
+        Span::styled("✓", Style::default().fg(Color::Rgb(133, 153, 0))),
+        Span::styled("*", Style::default().fg(Color::Rgb(220, 50, 47))),
+        Span::styled(format!("{:14}", "key"), STYLE_PROP_KEY),
+        Span::styled(": ", STYLE_PROP_COLON),
+        Span::styled("[str]", Style::default().fg(Color::Rgb(38, 139, 210))),
+    ]));
+
+    // display_name property
+    content.properties.add_line(Line::from(vec![
+        Span::styled("✓", Style::default().fg(Color::Rgb(133, 153, 0))),
+        Span::styled("*", Style::default().fg(Color::Rgb(220, 50, 47))),
+        Span::styled(format!("{:14}", "display_name"), STYLE_PROP_KEY),
+        Span::styled(": ", STYLE_PROP_COLON),
+        Span::styled("[str]", Style::default().fg(Color::Rgb(38, 139, 210))),
+    ]));
+
+    // color property
+    content.properties.add_line(Line::from(vec![
+        Span::styled("✓", Style::default().fg(Color::Rgb(133, 153, 0))),
+        Span::styled(" ", STYLE_DIM),
+        Span::styled(format!("{:14}", "color"), STYLE_PROP_KEY),
+        Span::styled(": ", STYLE_PROP_COLON),
+        Span::styled("[str]", Style::default().fg(Color::Rgb(38, 139, 210))),
+    ]));
+
+    // SPECIFIC section
+    content.properties.add_line(Line::from(vec![Span::styled(
+        format!("── SPECIFIC ({}) ──", 1),
+        Style::default().fg(COLOR_HEADER_SPECIFIC),
+    )]));
+
+    // llm_context property
+    content.properties.add_line(Line::from(vec![
+        Span::styled("✓", Style::default().fg(Color::Rgb(133, 153, 0))),
+        Span::styled(" ", STYLE_DIM),
+        Span::styled(format!("{:14}", "llm_context"), STYLE_PROP_KEY),
+        Span::styled(": ", STYLE_PROP_COLON),
+        Span::styled("[str]", Style::default().fg(Color::Rgb(38, 139, 210))),
+    ]));
 
     // RELATIONSHIPS - v0.17: show incoming HAS_LAYER + outgoing HAS_CLASS
     let class_count = layer.classes.len();
