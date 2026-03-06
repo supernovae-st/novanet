@@ -44,7 +44,7 @@ impl NovaNetHandler {
     /// All queries are validated for read-only operations (no CREATE, DELETE, MERGE, SET).
     #[tool(
         name = "novanet_query",
-        description = "Execute a read-only Cypher query against the NovaNet knowledge graph. Returns rows as JSON with token estimate."
+        description = "Execute a read-only Cypher query against the NovaNet knowledge graph. Returns rows as JSON with token estimate. ⚠️ LAST RESORT: Use specialized tools first (novanet_search for finding nodes, novanet_traverse for relationships, novanet_introspect for schema). Only use novanet_query for custom analytics or aggregations."
     )]
     async fn novanet_query(
         &self,
@@ -248,7 +248,7 @@ impl NovaNetHandler {
     /// MVP 8 Phase 3: 8th MCP tool for schema introspection.
     #[tool(
         name = "novanet_introspect",
-        description = "Introspect NovaNet schema: query NodeClasses, ArcClasses, and their relationships. Filter by realm, layer, or arc family."
+        description = "Introspect NovaNet schema: query NodeClasses, ArcClasses, and their relationships. Filter by realm, layer, or arc family. 💡 Use this to discover required properties, trait permissions, and valid arc connections BEFORE calling novanet_write. Example: introspect(target='class', name='EntityNative', include_arcs=true) returns required_properties and valid arcs."
     )]
     async fn novanet_introspect(
         &self,
@@ -363,7 +363,7 @@ impl NovaNetHandler {
     /// Task A4: 12th MCP tool for intelligent data writes.
     #[tool(
         name = "novanet_write",
-        description = "Write data to NovaNet with schema validation. Operations: upsert_node, create_arc, update_props. Enforces trait permissions and slug immutability."
+        description = "Write data to NovaNet with schema validation. ⚠️ ALWAYS call novanet_check FIRST to validate and discover required properties. Operations: upsert_node, create_arc, update_props. Enforces trait permissions (only authored/imported/generated/retrieved traits writable). Auto-creates FOR_LOCALE and HAS_NATIVE arcs for *Native classes."
     )]
     async fn novanet_write(
         &self,
@@ -393,7 +393,7 @@ impl NovaNetHandler {
     /// v0.17.0: 13th MCP tool for pre-write validation.
     #[tool(
         name = "novanet_check",
-        description = "Validate a write operation without executing it. Returns issues, Cypher preview, schema context, and actionable suggestions."
+        description = "⚠️ REQUIRED: Call this BEFORE novanet_write to validate operations. Returns: valid (bool), errors[], warnings[], suggestions[], cypher_preview, and schema_context with required_properties. Use the same parameters as novanet_write. If valid=false, fix issues before calling novanet_write."
     )]
     async fn novanet_check(
         &self,
@@ -453,10 +453,11 @@ impl ServerHandler for NovaNetHandler {
     fn get_info(&self) -> ServerInfo {
         ServerInfo {
             instructions: Some(
-                "NovaNet MCP Server v0.5.0 - Knowledge Graph for AI Agents. \
-                 14 tools available: novanet_describe (bootstrap), novanet_query (explore), \
-                 novanet_generate (context assembly), novanet_write (data writes), \
-                 novanet_check (pre-write validation), novanet_audit (quality audit). 6 prompts available."
+                "NovaNet MCP Server v0.17.0 - Knowledge Graph for AI Agents. \
+                 14 tools: novanet_search (find nodes), novanet_traverse (relationships), \
+                 novanet_introspect (schema), novanet_generate (context), novanet_atoms (locale). \
+                 Writes: ALWAYS call novanet_check BEFORE novanet_write. \
+                 novanet_query is LAST RESORT for custom analytics only. 6 prompts available."
                     .into(),
             ),
             capabilities: ServerCapabilities::builder()
