@@ -211,14 +211,16 @@ impl AuditSummary {
     pub fn weakest_layer(&self) -> Option<&LayerMetrics> {
         self.layer_metrics
             .iter()
-            .min_by(|a, b| a.csr.rate.partial_cmp(&b.csr.rate).unwrap())
+            // Use total_cmp for safe f64 comparison (handles NaN consistently)
+            .min_by(|a, b| a.csr.rate.total_cmp(&b.csr.rate))
     }
 
     /// Get the layer with highest CSR (healthiest)
     pub fn healthiest_layer(&self) -> Option<&LayerMetrics> {
         self.layer_metrics
             .iter()
-            .max_by(|a, b| a.csr.rate.partial_cmp(&b.csr.rate).unwrap())
+            // Use total_cmp for safe f64 comparison (handles NaN consistently)
+            .max_by(|a, b| a.csr.rate.total_cmp(&b.csr.rate))
     }
 }
 

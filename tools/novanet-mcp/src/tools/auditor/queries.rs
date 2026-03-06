@@ -5,13 +5,32 @@
 use super::types::{
     AuditIssue, AuditParams, AuditResult, AuditScope, AuditTarget, OntologyInsights,
 };
-use crate::error::Result;
+use crate::error::{Error, Result};
 use crate::metrics::ConstraintSatisfactionRate;
 use crate::server::State;
+use crate::validation::is_valid_class_name;
 use std::time::Instant;
+
+/// Validate scope parameters before use in queries
+fn validate_scope(scope: &Option<AuditScope>) -> Result<()> {
+    if let Some(s) = scope {
+        if let Some(class) = &s.class {
+            if !is_valid_class_name(class) {
+                return Err(Error::InvalidParams(format!(
+                    "Invalid class name '{}': must be PascalCase alphanumeric",
+                    class
+                )));
+            }
+        }
+    }
+    Ok(())
+}
 
 /// Execute novanet_audit - main entry point
 pub async fn execute(state: &State, params: AuditParams) -> Result<AuditResult> {
+    // Validate scope parameters before use in queries (security: prevent Cypher injection)
+    validate_scope(&params.scope)?;
+
     let start = Instant::now();
     let limit = params.limit.unwrap_or(100);
 
@@ -554,5 +573,43 @@ mod tests {
 
         assert!(insights.healthiest_layer.is_some());
         assert!(insights.attention_needed.is_none());
+    }
+
+    #[test]
+    fn test_validate_scope_valid_class() {
+        let scope = Some(AuditScope {
+            class: Some("EntityNative".to_string()),
+            locale: None,
+            project: None,
+        });
+        assert!(validate_scope(&scope).is_ok());
+    }
+
+    #[test]
+    fn test_validate_scope_invalid_class_injection() {
+        let scope = Some(AuditScope {
+            class: Some("Entity}DETACH DELETE n".to_string()),
+            locale: None,
+            project: None,
+        });
+        let result = validate_scope(&scope);
+        assert!(result.is_err());
+        let err = result.unwrap_err().to_string();
+        assert!(err.contains("Invalid class name"));
+    }
+
+    #[test]
+    fn test_validate_scope_none() {
+        assert!(validate_scope(&None).is_ok());
+    }
+
+    #[test]
+    fn test_validate_scope_no_class() {
+        let scope = Some(AuditScope {
+            class: None,
+            locale: Some("fr-FR".to_string()),
+            project: None,
+        });
+        assert!(validate_scope(&scope).is_ok());
     }
 }

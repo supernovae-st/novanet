@@ -225,7 +225,7 @@ fn bench_prompt_rendering(c: &mut Criterion) {
 fn bench_prompt_list(c: &mut Criterion) {
     use novanet_mcp::prompts;
 
-    c.bench_function("list_prompts", |b| b.iter(|| prompts::list_prompts()));
+    c.bench_function("list_prompts", |b| b.iter(prompts::list_prompts));
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════

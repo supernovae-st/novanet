@@ -172,15 +172,74 @@ impl QueryCache {
         self.cache.run_pending_tasks().await;
     }
 
-    /// Invalidate cache entries matching a pattern (simple: clears all for now)
+    /// Invalidate cache entries matching a pattern
     ///
-    /// TODO: Implement proper prefix-based pattern matching when needed.
-    /// For now, this is a simple implementation that clears all entries.
-    pub async fn invalidate_pattern(&self, _pattern: &str) {
-        // Simple implementation: invalidate all
-        // A more sophisticated implementation would iterate and match prefixes
-        self.cache.invalidate_all();
+    /// Supports glob-style patterns:
+    /// - `prefix*` - matches keys starting with prefix
+    /// - `*suffix` - matches keys ending with suffix
+    /// - `*contains*` - matches keys containing substring
+    /// - `exact` - matches exact key (no wildcards)
+    ///
+    /// Returns the number of invalidated entries.
+    pub async fn invalidate_pattern(&self, pattern: &str) -> usize {
+        // Handle clear-all patterns
+        if pattern == "*" || pattern.is_empty() {
+            let count = self.cache.entry_count() as usize;
+            self.cache.invalidate_all();
+            self.cache.run_pending_tasks().await;
+            return count;
+        }
+
+        // Determine pattern type and extract match string
+        let (match_type, match_str) = if let Some(rest) = pattern.strip_prefix('*') {
+            if let Some(inner) = rest.strip_suffix('*') {
+                // *contains* pattern
+                ("contains", inner)
+            } else {
+                // *suffix pattern
+                ("suffix", rest)
+            }
+        } else if let Some(prefix) = pattern.strip_suffix('*') {
+            // prefix* pattern
+            ("prefix", prefix)
+        } else {
+            // Exact match
+            ("exact", pattern)
+        };
+
+        // Collect matching keys (moka doesn't support remove_if, so collect then invalidate)
+        // Note: moka iter() returns (Arc<K>, V), so we dereference the Arc
+        let keys_to_invalidate: Vec<String> = self
+            .cache
+            .iter()
+            .filter_map(|(key, _)| {
+                let matches = match match_type {
+                    "prefix" => key.starts_with(match_str),
+                    "suffix" => key.ends_with(match_str),
+                    "contains" => key.contains(match_str),
+                    "exact" => key.as_str() == match_str,
+                    _ => false,
+                };
+                if matches {
+                    // Clone the string from the Arc
+                    Some((*key).clone())
+                } else {
+                    None
+                }
+            })
+            .collect();
+
+        let count = keys_to_invalidate.len();
+
+        // Invalidate each matching key
+        for key in keys_to_invalidate {
+            self.cache.invalidate(&key).await;
+        }
+
+        // Run pending tasks to ensure eviction completes
         self.cache.run_pending_tasks().await;
+
+        count
     }
 }
 
@@ -391,5 +450,134 @@ mod tests {
             "Expected weighted_size >= 2, got {}",
             stats.weighted_size
         );
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // Pattern Matching Tests (Task 2.2)
+    // ═══════════════════════════════════════════════════════════════════════════════
+
+    #[tokio::test]
+    async fn test_invalidate_pattern_prefix() {
+        let cache = QueryCache::new(1000, Duration::from_secs(60));
+
+        // Insert entries with different prefixes
+        cache.insert("query:abc".to_string(), serde_json::json!(1)).await;
+        cache.insert("query:def".to_string(), serde_json::json!(2)).await;
+        cache.insert("entity:abc".to_string(), serde_json::json!(3)).await;
+        cache.run_pending_tasks().await;
+
+        assert_eq!(cache.entry_count(), 3);
+
+        // Invalidate with prefix pattern
+        let count = cache.invalidate_pattern("query:*").await;
+        assert_eq!(count, 2, "Should invalidate 2 entries with query: prefix");
+
+        // Only entity:abc should remain
+        assert!(cache.get("query:abc").await.is_none());
+        assert!(cache.get("query:def").await.is_none());
+        assert!(cache.get("entity:abc").await.is_some());
+    }
+
+    #[tokio::test]
+    async fn test_invalidate_pattern_suffix() {
+        let cache = QueryCache::new(1000, Duration::from_secs(60));
+
+        // Insert entries with different suffixes
+        cache.insert("a_test".to_string(), serde_json::json!(1)).await;
+        cache.insert("b_test".to_string(), serde_json::json!(2)).await;
+        cache.insert("a_other".to_string(), serde_json::json!(3)).await;
+        cache.run_pending_tasks().await;
+
+        // Invalidate with suffix pattern
+        let count = cache.invalidate_pattern("*_test").await;
+        assert_eq!(count, 2, "Should invalidate 2 entries with _test suffix");
+
+        // Only a_other should remain
+        assert!(cache.get("a_test").await.is_none());
+        assert!(cache.get("b_test").await.is_none());
+        assert!(cache.get("a_other").await.is_some());
+    }
+
+    #[tokio::test]
+    async fn test_invalidate_pattern_contains() {
+        let cache = QueryCache::new(1000, Duration::from_secs(60));
+
+        // Insert entries
+        cache.insert("foo_bar_baz".to_string(), serde_json::json!(1)).await;
+        cache.insert("qux_bar_quux".to_string(), serde_json::json!(2)).await;
+        cache.insert("foo_qux_baz".to_string(), serde_json::json!(3)).await;
+        cache.run_pending_tasks().await;
+
+        // Invalidate entries containing "bar"
+        let count = cache.invalidate_pattern("*bar*").await;
+        assert_eq!(count, 2, "Should invalidate 2 entries containing bar");
+
+        // Only foo_qux_baz should remain
+        assert!(cache.get("foo_bar_baz").await.is_none());
+        assert!(cache.get("qux_bar_quux").await.is_none());
+        assert!(cache.get("foo_qux_baz").await.is_some());
+    }
+
+    #[tokio::test]
+    async fn test_invalidate_pattern_exact() {
+        let cache = QueryCache::new(1000, Duration::from_secs(60));
+
+        // Insert entries
+        cache.insert("exact_key".to_string(), serde_json::json!(1)).await;
+        cache.insert("exact_key_extra".to_string(), serde_json::json!(2)).await;
+        cache.run_pending_tasks().await;
+
+        // Invalidate exact match only
+        let count = cache.invalidate_pattern("exact_key").await;
+        assert_eq!(count, 1, "Should invalidate 1 exact entry");
+
+        assert!(cache.get("exact_key").await.is_none());
+        assert!(cache.get("exact_key_extra").await.is_some());
+    }
+
+    #[tokio::test]
+    async fn test_invalidate_pattern_wildcard_all() {
+        let cache = QueryCache::new(1000, Duration::from_secs(60));
+
+        // Insert entries
+        cache.insert("a".to_string(), serde_json::json!(1)).await;
+        cache.insert("b".to_string(), serde_json::json!(2)).await;
+        cache.insert("c".to_string(), serde_json::json!(3)).await;
+        cache.run_pending_tasks().await;
+
+        assert_eq!(cache.entry_count(), 3);
+
+        // Invalidate all with wildcard
+        let count = cache.invalidate_pattern("*").await;
+        assert_eq!(count, 3, "Should invalidate all 3 entries");
+        assert_eq!(cache.entry_count(), 0);
+    }
+
+    #[tokio::test]
+    async fn test_invalidate_pattern_empty_returns_all() {
+        let cache = QueryCache::new(1000, Duration::from_secs(60));
+
+        cache.insert("x".to_string(), serde_json::json!(1)).await;
+        cache.insert("y".to_string(), serde_json::json!(2)).await;
+        cache.run_pending_tasks().await;
+
+        // Empty pattern should clear all (defensive behavior)
+        let count = cache.invalidate_pattern("").await;
+        assert_eq!(count, 2, "Empty pattern should clear all");
+        assert_eq!(cache.entry_count(), 0);
+    }
+
+    #[tokio::test]
+    async fn test_invalidate_pattern_no_match() {
+        let cache = QueryCache::new(1000, Duration::from_secs(60));
+
+        cache.insert("foo".to_string(), serde_json::json!(1)).await;
+        cache.insert("bar".to_string(), serde_json::json!(2)).await;
+        cache.run_pending_tasks().await;
+
+        // Pattern that matches nothing
+        let count = cache.invalidate_pattern("baz*").await;
+        assert_eq!(count, 0, "Should invalidate 0 entries");
+        assert_eq!(cache.entry_count(), 2);
     }
 }

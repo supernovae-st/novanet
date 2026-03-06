@@ -9,7 +9,7 @@ use crate::server::State;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use tracing::{info, warn};
+use tracing::info;
 
 /// Write operation type
 #[derive(Debug, Clone, Deserialize, JsonSchema, PartialEq)]
@@ -247,44 +247,12 @@ async fn validate_slug_not_locked(
     Ok(())
 }
 
-/// Handle is_slug_source singleton - only one arc can have this property true
-async fn handle_slug_source_singleton(
-    state: &State,
-    to_key: &str,
-    props: &serde_json::Map<String, Value>,
-) -> Result<()> {
-    // Only check if is_slug_source is being set to true
-    let is_setting_slug_source = props
+/// Check if is_slug_source singleton handling is needed
+fn needs_slug_source_singleton(props: &serde_json::Map<String, Value>) -> bool {
+    props
         .get("is_slug_source")
         .and_then(|v| v.as_bool())
-        .unwrap_or(false);
-
-    if !is_setting_slug_source {
-        return Ok(());
-    }
-
-    // Find existing is_slug_source arc and demote it
-    let query = r#"
-        MATCH (kw)-[r:TARGETS {is_slug_source: true}]->(en {key: $to_key})
-        SET r.is_slug_source = false, r.rank = 'secondary'
-        RETURN kw.key AS demoted_key
-    "#;
-
-    let mut params = serde_json::Map::new();
-    params.insert("to_key".to_string(), Value::String(to_key.to_string()));
-
-    let rows = state.pool().execute_write(query, Some(params)).await?;
-
-    if let Some(row) = rows.first() {
-        let demoted = row["demoted_key"].as_str().unwrap_or("unknown");
-        warn!(
-            demoted = %demoted,
-            new_source = %to_key,
-            "is_slug_source takeover: demoted previous source"
-        );
-    }
-
-    Ok(())
+        .unwrap_or(false)
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -401,11 +369,15 @@ async fn execute_upsert_node(
             // Determine the base class (EntityNative -> Entity)
             let base_class = class.trim_end_matches("Native");
 
+            // Use OPTIONAL MATCH to not fail if base doesn't exist, but return whether arc was created
             let has_native_query = format!(
                 r#"
-                MATCH (base:{base_class} {{key: $entity_key}})
-                MATCH (native:{class} {{key: $native_key}})
+                OPTIONAL MATCH (base:{base_class} {{key: $entity_key}})
+                OPTIONAL MATCH (native:{class} {{key: $native_key}})
+                WITH base, native
+                WHERE base IS NOT NULL AND native IS NOT NULL
                 MERGE (base)-[:HAS_NATIVE]->(native)
+                RETURN true AS arc_created
                 "#,
                 base_class = base_class,
                 class = class
@@ -418,12 +390,29 @@ async fn execute_upsert_node(
             );
             has_native_params.insert("native_key".to_string(), Value::String(key.clone()));
 
-            // Only create if base entity exists (silent failure if not)
-            let _ = state
+            // Only report auto-arc if it was actually created
+            match state
                 .pool()
                 .execute_write(&has_native_query, Some(has_native_params))
-                .await;
-            auto_arcs.push("HAS_NATIVE".to_string());
+                .await
+            {
+                Ok(rows) if !rows.is_empty() => {
+                    auto_arcs.push("HAS_NATIVE".to_string());
+                }
+                Ok(_) => {
+                    // Base entity doesn't exist - this is expected for orphaned natives
+                    // Don't report HAS_NATIVE as created
+                }
+                Err(e) => {
+                    // Log error but don't fail the upsert - auto-arc is best-effort
+                    info!(
+                        key = %key,
+                        base_class = %base_class,
+                        error = %e,
+                        "HAS_NATIVE auto-arc creation failed"
+                    );
+                }
+            }
         }
     }
 
@@ -495,23 +484,42 @@ async fn execute_create_arc(state: &State, params: &WriteParams) -> Result<Write
         return Err(Error::arc_endpoint_not_found("to", to_key));
     }
 
-    // Handle is_slug_source singleton (takeover pattern)
-    handle_slug_source_singleton(state, to_key, &props).await?;
-
     // Build MERGE query for arc
     let props_json = serde_json::to_string(&props)
         .map_err(|e| Error::Internal(format!("Props serialization: {}", e)))?;
 
-    let query = format!(
-        r#"
-        MATCH (from {{key: $from_key}})
-        MATCH (to {{key: $to_key}})
-        MERGE (from)-[r:{arc_class}]->(to)
-        SET r += $props
-        RETURN true AS created
-        "#,
-        arc_class = arc_class
-    );
+    // ATOMIC: For TARGETS arc with is_slug_source: true, demote existing + create in ONE query
+    // This prevents TOCTOU race condition where two concurrent requests both set is_slug_source
+    let query = if arc_class == "TARGETS" && needs_slug_source_singleton(&props) {
+        format!(
+            r#"
+            // ATOMIC: Demote existing is_slug_source arcs pointing to same target
+            CALL {{
+                MATCH ()-[existing:TARGETS {{is_slug_source: true}}]->(target {{key: $to_key}})
+                SET existing.is_slug_source = false, existing.rank = 'secondary'
+                RETURN count(*) AS demoted
+            }}
+            // Create/update the new arc with is_slug_source
+            MATCH (from {{key: $from_key}})
+            MATCH (to {{key: $to_key}})
+            MERGE (from)-[r:{arc_class}]->(to)
+            SET r += $props
+            RETURN true AS created
+            "#,
+            arc_class = arc_class
+        )
+    } else {
+        format!(
+            r#"
+            MATCH (from {{key: $from_key}})
+            MATCH (to {{key: $to_key}})
+            MERGE (from)-[r:{arc_class}]->(to)
+            SET r += $props
+            RETURN true AS created
+            "#,
+            arc_class = arc_class
+        )
+    };
 
     let mut query_params = serde_json::Map::new();
     query_params.insert("from_key".to_string(), Value::String(from_key.clone()));
