@@ -13,13 +13,12 @@ use crate::tools::{
 use rmcp::handler::server::tool::ToolRouter;
 use rmcp::handler::server::wrapper::Parameters;
 use rmcp::model::{
-    CallToolResult, Content, ErrorCode, GetPromptRequestParams, GetPromptResult, ListPromptsResult,
+    CallToolResult, Content, GetPromptRequestParams, GetPromptResult, ListPromptsResult,
     PaginatedRequestParams, Prompt, PromptArgument, PromptMessage, PromptMessageRole,
     ServerCapabilities, ServerInfo,
 };
 use rmcp::service::{RequestContext, RoleServer};
 use rmcp::{ErrorData as McpError, ServerHandler, tool, tool_handler, tool_router};
-use std::borrow::Cow;
 
 /// NovaNet MCP Handler with tool routing
 #[derive(Clone)]
@@ -434,6 +433,7 @@ fn convert_prompt_message(msg: InternalPromptMessage) -> PromptMessage {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use rmcp::model::ErrorCode;
 
     // ══════════════════════════════════════════════════════════════
     // HELPER FUNCTION TESTS

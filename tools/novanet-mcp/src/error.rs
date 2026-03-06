@@ -5,7 +5,6 @@
 use crate::hints;
 use rmcp::ErrorData as McpError;
 use rmcp::model::ErrorCode;
-use std::borrow::Cow;
 use thiserror::Error;
 
 // JSON-RPC 2.0 error codes
@@ -269,12 +268,8 @@ impl From<Error> for McpError {
             Error::ArcEndpointNotFound { .. } => RESOURCE_NOT_FOUND,
             _ => INTERNAL_ERROR,
         };
-        McpError {
-            code: ErrorCode(code),
-            // Use with_hint() for actionable error messages
-            message: Cow::Owned(err.with_hint()),
-            data: None,
-        }
+        // rmcp 1.x: Use new() constructor instead of struct literal
+        McpError::new(ErrorCode(code), err.with_hint(), None)
     }
 }
 
