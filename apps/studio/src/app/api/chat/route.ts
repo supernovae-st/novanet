@@ -64,7 +64,7 @@ All nodes have: key, display_name, icon, description, llm_context, created_at, u
 - Taboo, TabooSet: Topics to avoid
 - AudienceTrait, AudienceSet: Audience characteristics
 - SEOKeyword, SEOKeywordMetrics: SEO data
-- GEOQuery, GEOAnswer, GEOMetrics: AI search data
+- GEOQuery, GEOAnswer: AI search data (GEO = Generative Engine Optimization)
 
 **Org/Config** — Organization setup
 - OrgConfig: Root organization configuration

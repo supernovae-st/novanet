@@ -462,7 +462,7 @@ static GLOSSARY_EN: [GlossaryCategoryI18n; 4] = [
             GlossaryConceptI18n {
                 name: "Retrieved",
                 short_desc: "Computed metrics (thin dotted)",
-                full_desc: "Nodes containing computed/retrieved data. GEOMetrics, SEOKeywordMetrics. Derived from mining operations, not LLM generation.",
+                full_desc: "Nodes containing data retrieved from external APIs. GEOAnswer, SEOKeywordMetrics. Derived from mining operations, not LLM generation.",
             },
         ],
     },
@@ -550,7 +550,7 @@ static GLOSSARY_FR: [GlossaryCategoryI18n; 4] = [
             GlossaryConceptI18n {
                 name: "Retrieved",
                 short_desc: "Métriques calculées (pointillé fin)",
-                full_desc: "Nœuds contenant des données calculées/récupérées. GEOMetrics, SEOKeywordMetrics. Dérivés des opérations de mining, pas de la génération LLM.",
+                full_desc: "Nœuds contenant des données récupérées d'APIs externes. GEOAnswer, SEOKeywordMetrics. Dérivés des opérations de mining, pas de la génération LLM.",
             },
         ],
     },
@@ -691,7 +691,7 @@ static QUIZ_EN: [QuizQuestionI18n; 15] = [
             "Locale content",
         ],
         correct: 2,
-        explanation: "Retrieved nodes contain computed data: GEOMetrics, SEOKeywordMetrics.",
+        explanation: "Retrieved nodes contain data from external APIs: GEOAnswer, SEOKeywordMetrics.",
     },
     QuizQuestionI18n {
         question: "How many layers does the Org realm have?",
@@ -834,7 +834,7 @@ static QUIZ_FR: [QuizQuestionI18n; 15] = [
             "Contenu de locale",
         ],
         correct: 2,
-        explanation: "Les nœuds retrieved contiennent des données calculées : GEOMetrics, SEOKeywordMetrics.",
+        explanation: "Les nœuds retrieved contiennent des données d'APIs externes : GEOAnswer, SEOKeywordMetrics.",
     },
     QuizQuestionI18n {
         question: "Combien de couches a le realm Org ?",

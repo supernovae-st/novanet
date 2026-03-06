@@ -153,7 +153,7 @@ core/
 :NATIVE_OF      = Inverse arc (replaces CONTENT_OF + GENERATED_FOR)
 :HAS_INSTRUCTION= Instruction arc (Page→PageInstruction, Block→BlockInstruction)
 Locale*         = Locale Knowledge nodes (LocaleVoice, LocaleCulture, etc.)
-*Metrics        = Time-series observations (SEOKeywordMetrics, GEOMetrics)
+*Metrics        = Time-series SEO observations (SEOKeywordMetrics)
 ```
 
 **v0.12.0 schema-graph terminology (ADR-023):**

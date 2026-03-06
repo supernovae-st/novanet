@@ -159,7 +159,6 @@ export const CLASS_ICONS: Record<string, string> = {
   SEOCluster: 'network',
   GEOQuery: 'map-pin',
   GEOAnswer: 'message-square',
-  GEOMetrics: 'bar-chart',
   // Semantic
   Entity: 'lightbulb',
   EntityNative: 'globe',

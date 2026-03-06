@@ -3,7 +3,7 @@
  * @module @novanet/core/types/nodes
  * @version 0.13.0
  *
- * Defines the complete taxonomy for all 61 NovaNet node types across 2 realms and 10 layers.
+ * Defines the complete taxonomy for all 62 NovaNet node types across 2 realms and 10 layers.
  * This is the **single source of truth** for node classification in the knowledge graph.
  *
  * ## v0.13.0 *Native Pattern (ADR-029)
@@ -27,22 +27,22 @@
  * ## Realm Distribution
  *
  * - **SHARED** (40 nodes): Universal locale knowledge, geography, SEO/GEO intelligence
- * - **ORG** (21 nodes): Organization-specific content, structure, generation pipeline
+ * - **ORG** (22 nodes): Organization-specific content, structure, generation pipeline
  *
  * @see {@link https://github.com/supernovae-st/novanet-hq/blob/main/.claude/rules/novanet-terminology.md | Terminology Reference}
  * @see {@link https://github.com/supernovae-st/novanet-hq/blob/main/.claude/rules/novanet-decisions.md | Architecture Decisions}
  */
 
 // =============================================================================
-// NODE TYPES (61 nodes across 2 realms, 10 layers)
+// NODE TYPES (62 nodes across 2 realms, 10 layers)
 // =============================================================================
 
 /**
- * Complete list of all 61 NovaNet node types.
+ * Complete list of all 62 NovaNet node types.
  *
  * Organized by realm and layer:
  * - **SHARED** (40 nodes): config (3) + locale (6) + geography (7) + knowledge (24)
- * - **ORG** (21 nodes): config (1) + foundation (6) + structure (3) + semantic (4) + instruction (4) + output (3)
+ * - **ORG** (22 nodes): config (1) + foundation (7) + structure (3) + semantic (4) + instruction (4) + output (3)
  *
  * @example
  * ```typescript
@@ -81,13 +81,13 @@ export const NODE_TYPES = [
   'GEOQuery', 'GEOQuerySet', 'GEOAnswer',
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // ORG REALM (21 nodes) — 6 layers: config, foundation, structure, semantic, instruction, output
+  // ORG REALM (22 nodes) — 6 layers: config, foundation, structure, semantic, instruction, output
   // v0.12.4: Brand Architecture (+4), PageStructure/PageInstruction deleted (-2)
   // ═══════════════════════════════════════════════════════════════════════════
   // config (1) — v11.3: Organization + Tenant merged into OrgConfig
   'OrgConfig',
-  // foundation (6) — v0.13.0: *Native pattern (ProjectNative → ProjectNative)
-  'Project', 'Brand', 'BrandDesign', 'BrandPrinciples', 'PromptStyle', 'ProjectNative',
+  // foundation (7) — v0.13.0: *Native pattern (ProjectNative → ProjectNative)
+  'Project', 'Brand', 'BrandDesign', 'BrandPrinciples', 'PromptStyle', 'ProjectNative', 'ProjectSEOScope',
   // structure (3)
   'Page', 'Block', 'ContentSlot',
   // semantic (4) — v0.13.0: *Native pattern (EntityNative → EntityNative)
@@ -147,7 +147,7 @@ export type Realm = 'shared' | 'org';
  * - **`knowledge`**: Knowledge atoms (Term, Expression, SEOKeyword, GEOQuery, etc.)
  *
  * ## Org Realm Layers (6)
- * - **`foundation`**: Project identity (Project, Brand, BrandDesign, BrandPrinciples, PromptStyle, ProjectNative)
+ * - **`foundation`**: Project identity (Project, Brand, BrandDesign, BrandPrinciples, PromptStyle, ProjectNative, ProjectSEOScope)
  * - **`structure`**: Page/Block hierarchy (Page, Block, ContentSlot)
  * - **`semantic`**: Business entities (Entity, EntityNative, AudiencePersona)
  * - **`instruction`**: Generation prompts (BlockType, BlockInstruction, BlockRules, PromptArtifact)
@@ -193,7 +193,7 @@ export type Layer =
 export type Trait = 'defined' | 'authored' | 'imported' | 'generated' | 'retrieved';
 
 // =============================================================================
-// CLASS_TAXONOMY — unified classification for all 61 node types
+// CLASS_TAXONOMY — unified classification for all 62 node types
 // =============================================================================
 
 /**
@@ -220,7 +220,7 @@ export interface Classification {
 }
 
 /**
- * Complete classification registry for all 61 NovaNet node types.
+ * Complete classification registry for all 62 NovaNet node types.
  *
  * This is the **single source of truth** for node classification. Use this to:
  * - Determine which realm/layer a node belongs to
@@ -296,13 +296,14 @@ export const CLASS_TAXONOMY: Record<NodeType, Classification> = {
   // ═══════════════════════════════════════════════════════════════════════════
   OrgConfig: { realm: 'org', layer: 'config', trait: 'defined' },
 
-  // ORG REALM — foundation (6) — v0.13.0: *Native pattern (ProjectNative → ProjectNative)
+  // ORG REALM — foundation (7) — v0.13.0: *Native pattern (ProjectNative → ProjectNative)
   Project:         { realm: 'org', layer: 'foundation',  trait: 'defined' },
   Brand:           { realm: 'org', layer: 'foundation',  trait: 'defined' },
   BrandDesign:     { realm: 'org', layer: 'foundation',  trait: 'defined' },
   BrandPrinciples: { realm: 'org', layer: 'foundation',  trait: 'defined' },
   PromptStyle:     { realm: 'org', layer: 'foundation',  trait: 'defined' },
   ProjectNative:   { realm: 'org', layer: 'foundation',  trait: 'authored' },
+  ProjectSEOScope: { realm: 'org', layer: 'foundation',  trait: 'defined' },
 
   // ORG REALM — structure (3)
   Page:         { realm: 'org', layer: 'structure',   trait: 'defined' },

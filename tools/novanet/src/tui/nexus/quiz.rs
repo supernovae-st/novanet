@@ -515,7 +515,7 @@ pub const QUESTIONS: &[QuizQuestion] = &[
         question: "Which trait is for external API data?",
         options: ["imported", "generated", "retrieved", "authored"],
         correct: 2,
-        explanation: "Retrieved trait is for data fetched from external APIs (SEOKeywordMetrics, GEOMetrics).",
+        explanation: "Retrieved trait is for data fetched from external APIs (GEOAnswer, SEOKeywordMetrics).",
         category: QuizCategory::Traits,
         question_type: QuizQuestionType::MultipleChoice,
     },

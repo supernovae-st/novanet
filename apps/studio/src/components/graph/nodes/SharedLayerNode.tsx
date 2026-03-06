@@ -98,7 +98,6 @@ function getTraitForType(type: string): NodeTrait {
     // Retrieved: fetched from external APIs
     case 'GEOAnswer':
     case 'SEOKeywordMetrics':
-    case 'GEOMetrics':
       return 'retrieved';
     // Locale settings: defined
     case 'Culture':
@@ -167,7 +166,6 @@ function getCardWidth(type: string): number {
     case 'GEOQuery':
     case 'GEOAnswer':
     case 'SEOKeywordMetrics':
-    case 'GEOMetrics':
       return 165;
     default:
       return 165;

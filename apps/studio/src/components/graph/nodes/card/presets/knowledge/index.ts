@@ -7,7 +7,7 @@
  * - Containers (6): TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet
  * - Atoms (6): Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait
  * - SEO (5): SEOKeyword, SEOKeywordMetrics, SEOCluster, SEOPillar, SEOKeywordFormat
- * - GEO (3): GEOQuery, GEOAnswer, GEOMetrics
+ * - GEO (2): GEOQuery, GEOAnswer
  *
  * Trait: imported (double borders) for most nodes
  *

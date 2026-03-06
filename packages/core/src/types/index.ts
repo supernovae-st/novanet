@@ -280,7 +280,8 @@ export interface SEOKeywordMetrics {
 // GEO — REINTRODUCED in v10.7
 // =============================================================================
 // v10.3: GEOSeedL10n, GEOSeedMetrics, GEOMiningRun removed (old GEO layer deprecated)
-// v10.7: New GEO schema: GEOQuery, GEOAnswer, GEOMetrics (AI visibility tracking)
+// v10.7: New GEO schema: GEOQuery, GEOAnswer (AI visibility tracking)
+// Note: GEOAnswer serves as time-series storage; metrics calculated on-demand
 
 // =============================================================================
 // RELATION PROPS

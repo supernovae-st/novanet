@@ -185,7 +185,7 @@ pnpm test            # Tests
 │  authored   : Human-written per locale (EntityNative, ProjectNative)          │
 │  imported   : External data brought in (Term, Expression, Pattern)              │
 │  generated  : LLM output (PageNative, BlockNative)                        │
-│  retrieved  : Fetched from external APIs (SEOKeywordMetrics, GEOMetrics)        │
+│  retrieved  : Fetched from external APIs (SEOKeywordMetrics, GEOAnswer)         │
 │                                                                                 │
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │  NATIVE GENERATION (not translation!)                                           │
