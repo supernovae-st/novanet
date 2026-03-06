@@ -172,7 +172,7 @@ async fn get_class(
         .pool()
         .execute_single(query, Some(params))
         .await?
-        .ok_or_else(|| crate::error::Error::not_found(name))?;
+        .ok_or_else(|| crate::error::Error::schema_not_found(name))?;
 
     let mut data = row;
     data["include_arcs"] = serde_json::Value::Bool(with_arcs);
@@ -250,7 +250,7 @@ async fn get_arc(state: &State, name: Option<&str>) -> Result<IntrospectResult> 
         .pool()
         .execute_single(query, Some(params))
         .await?
-        .ok_or_else(|| crate::error::Error::not_found(name))?;
+        .ok_or_else(|| crate::error::Error::schema_not_found(name))?;
 
     let json_str = serde_json::to_string(&row).unwrap_or_default();
     let token_estimate = json_str.len().div_ceil(4);
