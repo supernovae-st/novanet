@@ -12,12 +12,10 @@ MATCH (l:Locale {key: $locale})
 OPTIONAL MATCH (l)-[:HAS_IDENTITY]->(li:LocaleIdentity)
 OPTIONAL MATCH (l)-[:HAS_VOICE]->(lv:LocaleVoice)
 OPTIONAL MATCH (l)-[:HAS_CULTURE]->(lc:LocaleCulture)
-OPTIONAL MATCH (l)-[:HAS_MARKET]->(lm:LocaleMarket)
 RETURN l.key AS locale,
        li.display_name AS name,
        lv.formality_score AS formality,
-       lc.cultural_values AS values,
-       lm.currency_code AS currency
+       lc.cultural_values AS values
 
 // ======================================================================
 // Query: Load expressions by semantic field
