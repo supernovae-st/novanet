@@ -311,7 +311,6 @@ fn test_config_struct_construction() {
         neo4j_password: "testpass".to_string(),
         pool_size: 8,
         // Phase 3 fields
-        connection_timeout: Duration::from_secs(5),
         fetch_size: 500,
         circuit_breaker_threshold: 5,
         circuit_breaker_reset_timeout: Duration::from_secs(30),
@@ -333,7 +332,6 @@ fn test_config_struct_construction() {
     assert_eq!(config.max_hops, 3);
     assert_eq!(config.evidence_packet_size, 100);
     // Phase 3 assertions
-    assert_eq!(config.connection_timeout, Duration::from_secs(5));
     assert_eq!(config.fetch_size, 500);
     assert_eq!(config.circuit_breaker_threshold, 5);
     assert_eq!(config.circuit_breaker_reset_timeout, Duration::from_secs(30));

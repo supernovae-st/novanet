@@ -20,7 +20,6 @@ pub struct Config {
     pub pool_size: usize,
 
     // Connection pool tuning (Phase 3)
-    pub connection_timeout: Duration,
     pub fetch_size: usize,
 
     // Circuit breaker settings (Phase 3)
@@ -56,12 +55,6 @@ impl Config {
                 .unwrap_or(16),
 
             // Connection pool tuning (Phase 3)
-            connection_timeout: Duration::from_secs(
-                std::env::var("NOVANET_MCP_CONNECTION_TIMEOUT_SECS")
-                    .ok()
-                    .and_then(|s| s.parse().ok())
-                    .unwrap_or(5),
-            ),
             fetch_size: std::env::var("NOVANET_MCP_FETCH_SIZE")
                 .ok()
                 .and_then(|s| s.parse().ok())
@@ -116,7 +109,6 @@ impl Default for Config {
             neo4j_password: "novanetpassword".to_string(),
             pool_size: 16,
             // Connection pool tuning (Phase 3)
-            connection_timeout: Duration::from_secs(5),
             fetch_size: 500,
             // Circuit breaker (Phase 3)
             circuit_breaker_threshold: 5,

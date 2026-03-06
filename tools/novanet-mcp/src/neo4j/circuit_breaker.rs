@@ -68,8 +68,10 @@ impl CircuitBreaker {
     /// Returns `true` if the circuit is open and requests should be rejected.
     /// The circuit is open when consecutive failures exceed threshold AND
     /// the reset timeout hasn't elapsed.
+    ///
+    /// Uses Acquire ordering to ensure visibility of stores from other threads.
     pub fn is_open(&self) -> bool {
-        let failures = self.failure_count.load(Ordering::Relaxed);
+        let failures = self.failure_count.load(Ordering::Acquire);
 
         // Below threshold, circuit is closed
         if failures < self.threshold {
@@ -77,7 +79,7 @@ impl CircuitBreaker {
         }
 
         // Check if reset timeout has elapsed (half-open state)
-        let last_failure_ms = self.last_failure_ms.load(Ordering::Relaxed);
+        let last_failure_ms = self.last_failure_ms.load(Ordering::Acquire);
         let current_ms = self.start_time.elapsed().as_millis() as u64;
         let elapsed = Duration::from_millis(current_ms.saturating_sub(last_failure_ms));
 
@@ -88,35 +90,40 @@ impl CircuitBreaker {
     /// Record a successful request
     ///
     /// Resets the failure counter, closing the circuit.
+    /// Uses Release ordering to ensure visibility to other threads.
     pub fn record_success(&self) {
-        self.failure_count.store(0, Ordering::Relaxed);
+        self.failure_count.store(0, Ordering::Release);
     }
 
     /// Record a failed request
     ///
     /// Increments the failure counter and updates the last failure timestamp.
+    /// Uses AcqRel for fetch_add and Release for store to establish
+    /// happens-before relationship with readers.
     pub fn record_failure(&self) {
-        self.failure_count.fetch_add(1, Ordering::Relaxed);
+        self.failure_count.fetch_add(1, Ordering::AcqRel);
         let current_ms = self.start_time.elapsed().as_millis() as u64;
-        self.last_failure_ms.store(current_ms, Ordering::Relaxed);
+        self.last_failure_ms.store(current_ms, Ordering::Release);
     }
 
     /// Get the current failure count
     pub fn failure_count(&self) -> u32 {
-        self.failure_count.load(Ordering::Relaxed)
+        self.failure_count.load(Ordering::Acquire)
     }
 
     /// Check if the circuit is in half-open state
     ///
     /// Half-open means threshold was exceeded but reset timeout has elapsed,
     /// allowing one test request.
+    ///
+    /// Uses Acquire ordering to ensure visibility of stores from other threads.
     pub fn is_half_open(&self) -> bool {
-        let failures = self.failure_count.load(Ordering::Relaxed);
+        let failures = self.failure_count.load(Ordering::Acquire);
         if failures < self.threshold {
             return false;
         }
 
-        let last_failure_ms = self.last_failure_ms.load(Ordering::Relaxed);
+        let last_failure_ms = self.last_failure_ms.load(Ordering::Acquire);
         let current_ms = self.start_time.elapsed().as_millis() as u64;
         let elapsed = Duration::from_millis(current_ms.saturating_sub(last_failure_ms));
 

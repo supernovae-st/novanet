@@ -40,7 +40,7 @@ struct StateInner {
 }
 
 /// Server statistics
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Clone)]
 pub struct ServerStats {
     pub queries_executed: u64,
     pub cache_hits: u64,
@@ -195,12 +195,3 @@ impl State {
     }
 }
 
-impl Clone for ServerStats {
-    fn clone(&self) -> Self {
-        Self {
-            queries_executed: self.queries_executed,
-            cache_hits: self.cache_hits,
-            cache_misses: self.cache_misses,
-        }
-    }
-}
