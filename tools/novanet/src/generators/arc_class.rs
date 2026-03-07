@@ -732,8 +732,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Schema:ArcClass"))
             .count();
         assert_eq!(
-            ac_merges, 136,
-            "expected 136 ArcClass MERGE statements (v0.17.3: 136 arc classes)"
+            ac_merges, 140,
+            "expected 140 ArcClass MERGE statements (v0.18.0: 140 arc classes)"
         );
 
         // HAS_ARC_CLASS relationships match ArcClass count
@@ -742,8 +742,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_ARC_CLASS]"))
             .count();
         assert_eq!(
-            has_ac, 136,
-            "expected 136 HAS_ARC_CLASS relationships (v0.17.3: 136 arc classes)"
+            has_ac, 140,
+            "expected 140 HAS_ARC_CLASS relationships (v0.18.0: 140 arc classes)"
         );
 
         // IN_FAMILY relationships match ArcClass count
@@ -752,8 +752,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_FAMILY]"))
             .count();
         assert_eq!(
-            in_family, 136,
-            "expected 136 IN_FAMILY relationships (v0.17.3: 136 arc classes)"
+            in_family, 140,
+            "expected 140 IN_FAMILY relationships (v0.18.0: 140 arc classes)"
         );
 
         // Family distribution (non-inverse counts)
@@ -814,8 +814,8 @@ mod tests {
             }
         }
 
-        // v0.17.3: Header reflects count (136 total ArcClass nodes)
-        assert!(cypher.contains("136 ArcClass nodes"));
+        // v0.18.0: Header reflects count (140 total ArcClass nodes)
+        assert!(cypher.contains("140 ArcClass nodes"));
     }
 
     /// Snapshot test for a minimal ArcSchema generator output.

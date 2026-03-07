@@ -503,11 +503,12 @@ node:
         // - v11.5: Moved Locale to shared/config, consolidated SEO/GEO to shared/knowledge
         // - v0.12.0: ADR-024 trait rename (defined/authored/imported/generated/retrieved)
         // v0.17.0: AudiencePersona/ChannelSurface/Market removed, EntityNative trait=generated
-        let nodes = load_all_nodes(root).expect("should parse all 59 nodes");
+        // v0.17.2: YAGNI cleanup - removed Term, TermSet, SEOKeywordMetrics
+        let nodes = load_all_nodes(root).expect("should parse all 57 nodes");
         assert_eq!(
             nodes.len(),
-            59,
-            "expected 59 YAML node files (v0.17.3: 38 shared + 21 org)"
+            57,
+            "expected 57 YAML node files (v0.17.2: 36 shared + 21 org)"
         );
 
         // Every node has a non-empty name, realm, and layer
@@ -530,12 +531,12 @@ node:
         }
 
         // Verify trait distribution (2 realms: shared + org)
-        // v0.17.0: 57 nodes (36 shared + 21 org)
+        // v0.17.2: 57 nodes (36 shared + 21 org) - YAGNI cleanup removed Term, TermSet, SEOKeywordMetrics
         let count = |t: NodeTrait| nodes.iter().filter(|n| n.def.node_trait == t).count();
         assert_eq!(
             count(NodeTrait::Defined),
-            33,
-            "defined count (v0.17.3: 33 defined nodes)"
+            32,
+            "defined count (v0.17.2: 32 defined nodes)"
         );
         assert_eq!(
             count(NodeTrait::Authored),
@@ -544,8 +545,8 @@ node:
         );
         assert_eq!(
             count(NodeTrait::Imported),
-            19,
-            "imported count (v0.17.3: 19 imported nodes)"
+            18,
+            "imported count (v0.17.2: 18 imported nodes)"
         );
         assert_eq!(
             count(NodeTrait::Generated),
@@ -558,17 +559,17 @@ node:
             "retrieved count (v0.17.0: GEOAnswer)"
         );
 
-        // v0.17.3: Verify realm distribution
+        // v0.17.2: Verify realm distribution
         let realm_count = |r: &str| nodes.iter().filter(|n| n.realm == r).count();
         assert_eq!(
             realm_count("shared"),
-            38,
-            "shared realm count (v0.17.3: 38 shared nodes)"
+            36,
+            "shared realm count (v0.17.2: 36 shared nodes)"
         );
         assert_eq!(
             realm_count("org"),
             21,
-            "org realm count (v0.17.3: 21 org nodes)"
+            "org realm count (v0.17.2: 21 org nodes)"
         );
 
         // Spot-check known nodes

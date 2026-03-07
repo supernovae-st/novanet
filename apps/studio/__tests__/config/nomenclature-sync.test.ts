@@ -1,16 +1,20 @@
 /**
- * Nomenclature Sync Tests (v0.12.4)
+ * Nomenclature Sync Tests (v0.17.2)
  *
  * DX tests to validate terminology consistency across the codebase.
  * Ensures ADR-023 (Class/Instance), ADR-024 (Data Origin), ADR-025
  * (Instruction Layer), and ADR-028 (Page-Entity Architecture) are
  * properly implemented everywhere.
  *
+ * v0.17.2 Changes (YAGNI Cleanup):
+ * - Removed: Term, TermSet, SEOKeywordMetrics (unused)
+ * - Added: ProjectGEOScope, ProjectSEOScope (project-level scope config)
+ * - Net: 57 nodes (36 shared + 21 org)
+ *
  * v0.12.4 Changes:
- * - Country added to shared/geography (40 shared nodes)
- * - Brand Architecture added to org/foundation (Brand, BrandDesign, BrandPrinciples, PromptStyle)
+ * - Country added to shared/geography
+ * - Brand Architecture added to org/foundation
  * - PageStructure and PageInstruction REMOVED from org/instruction
- * - Net: 61 nodes (40 shared + 21 org)
  *
  * @see .claude/rules/novanet-terminology.md - Canonical terminology reference
  * @see .claude/rules/novanet-decisions.md - ADR documentation
@@ -19,7 +23,7 @@
 import { NODE_TYPES, NODE_REALMS, NODE_TRAITS, type Trait } from '@novanet/core/types';
 import { RelationRegistry } from '@novanet/core/schemas';
 
-describe('Nomenclature Sync (v0.12.4)', () => {
+describe('Nomenclature Sync (v0.17.2)', () => {
   describe('ADR-024: Data Origin Traits', () => {
     const VALID_TRAITS: Trait[] = ['defined', 'authored', 'imported', 'generated', 'retrieved'];
     const DEPRECATED_TRAITS = ['invariant', 'localized', 'knowledge', 'aggregated'];
@@ -44,8 +48,8 @@ describe('Nomenclature Sync (v0.12.4)', () => {
   });
 
   describe('ADR-023: Class/Instance Terminology', () => {
-    it('should have correct node count (61 total = 40 shared + 21 org)', () => {
-      expect(NODE_TYPES).toHaveLength(61);
+    it('should have correct node count (57 total = 36 shared + 21 org)', () => {
+      expect(NODE_TYPES).toHaveLength(57);
     });
 
     it('should have 2 realms (shared, org)', () => {
@@ -58,8 +62,8 @@ describe('Nomenclature Sync (v0.12.4)', () => {
     it('should have correct node distribution by realm', () => {
       const sharedCount = Object.values(NODE_REALMS).filter((r) => r === 'shared').length;
       const orgCount = Object.values(NODE_REALMS).filter((r) => r === 'org').length;
-      expect(sharedCount).toBe(40); // v0.12.4: Country added to geography
-      expect(orgCount).toBe(21); // v0.12.4: Brand Architecture (+4), PageStructure/PageInstruction removed (-2)
+      expect(sharedCount).toBe(36); // v0.17.2: YAGNI cleanup removed Term, TermSet, SEOKeywordMetrics
+      expect(orgCount).toBe(21); // v0.17.2: Added ProjectGEOScope, ProjectSEOScope
     });
 
     it('should not have deprecated node names', () => {
@@ -109,17 +113,17 @@ describe('Nomenclature Sync (v0.12.4)', () => {
   });
 
   describe('Node Distribution by Realm', () => {
-    it('should have 40 shared nodes (v0.12.4)', () => {
-      // Shared realm: config(3) + locale(6) + geography(7) + knowledge(24) = 40
-      // v0.12.4: Country added to geography (was 6, now 7)
+    it('should have 36 shared nodes (v0.17.2)', () => {
+      // Shared realm: config(3) + locale(6) + geography(7) + knowledge(20) = 36
+      // v0.17.2: YAGNI cleanup removed Term, TermSet, SEOKeywordMetrics from knowledge
       const sharedLayers = ['config', 'locale', 'geography', 'knowledge'];
       // This validates the architecture documented in CLAUDE.md
       expect(sharedLayers).toHaveLength(4);
     });
 
-    it('should have 21 org nodes (v0.12.4)', () => {
+    it('should have 21 org nodes (v0.17.2)', () => {
       // Org realm: config(1) + foundation(6) + structure(3) + semantic(4) + instruction(4) + output(3) = 21
-      // v0.12.4: Brand Architecture (+4 to foundation), PageStructure/PageInstruction removed (-2 from instruction)
+      // v0.17.2: Added ProjectGEOScope, ProjectSEOScope to foundation
       const orgLayers = ['config', 'foundation', 'structure', 'semantic', 'instruction', 'output'];
       expect(orgLayers).toHaveLength(6);
     });
@@ -145,9 +149,9 @@ describe('Nomenclature Sync (v0.12.4)', () => {
     });
 
     it('should use *Set suffix for container nodes', () => {
+      // v0.17.2: TermSet removed in YAGNI cleanup
       const setNodes = NODE_TYPES.filter((n) => n.endsWith('Set'));
-      expect(setNodes.length).toBeGreaterThanOrEqual(6);
-      expect(setNodes).toContain('TermSet');
+      expect(setNodes.length).toBeGreaterThanOrEqual(5);
       expect(setNodes).toContain('ExpressionSet');
     });
   });
