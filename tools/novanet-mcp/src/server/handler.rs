@@ -352,22 +352,23 @@ impl NovaNetHandler {
 #[tool_handler]
 impl ServerHandler for NovaNetHandler {
     fn get_info(&self) -> ServerInfo {
-        // rmcp 1.x: Use builder pattern instead of struct literals
-        ServerInfo::new(
-            ServerCapabilities::builder()
+        // rmcp 0.16: Use struct literals with ..Default::default()
+        ServerInfo {
+            instructions: Some(
+                "NovaNet MCP Server v0.17.0 - Knowledge Graph for AI Agents. \
+                 14 tools available. TOOL SELECTION: \
+                 🔍 novanet_search (find nodes) → 🧭 novanet_traverse (explore relationships) → \
+                 ⭐ novanet_generate (content context). \
+                 For writes: 📚 novanet_introspect (schema) → ✅ novanet_check (validate) → ✍️ novanet_write. \
+                 📊 novanet_audit for quality. ⚠️ novanet_query is LAST RESORT for custom analytics only. \
+                 6 prompts available.".into(),
+            ),
+            capabilities: ServerCapabilities::builder()
                 .enable_tools()
                 .enable_prompts()
                 .build(),
-        )
-        .with_instructions(
-            "NovaNet MCP Server v0.17.0 - Knowledge Graph for AI Agents. \
-             14 tools available. TOOL SELECTION: \
-             🔍 novanet_search (find nodes) → 🧭 novanet_traverse (explore relationships) → \
-             ⭐ novanet_generate (content context). \
-             For writes: 📚 novanet_introspect (schema) → ✅ novanet_check (validate) → ✍️ novanet_write. \
-             📊 novanet_audit for quality. ⚠️ novanet_query is LAST RESORT for custom analytics only. \
-             6 prompts available.",
-        )
+            ..Default::default()
+        }
     }
 
     /// List all available prompts
@@ -403,21 +404,21 @@ impl ServerHandler for NovaNetHandler {
                 McpError::resource_not_found(format!("Prompt not found: {}", request.name), None)
             })?;
 
-            // rmcp 1.x: Use builder pattern instead of struct literals
-            Ok(GetPromptResult::new(
-                rendered
+            // rmcp 0.16: Use struct literals
+            Ok(GetPromptResult {
+                description: Some(rendered.description),
+                messages: rendered
                     .messages
                     .into_iter()
                     .map(convert_prompt_message)
                     .collect(),
-            )
-            .with_description(rendered.description))
+            })
         }
     }
 }
 
 /// Convert internal PromptDefinition to MCP Prompt
-/// rmcp 1.x: Use builder pattern instead of struct literals
+/// rmcp 0.16: Use struct literals for PromptArgument (no builder pattern)
 fn convert_prompt_definition(def: PromptDefinition) -> Prompt {
     Prompt::new(
         def.name,
@@ -425,10 +426,11 @@ fn convert_prompt_definition(def: PromptDefinition) -> Prompt {
         Some(
             def.arguments
                 .into_iter()
-                .map(|arg| {
-                    PromptArgument::new(arg.name)
-                        .with_description(arg.description)
-                        .with_required(arg.required)
+                .map(|arg| PromptArgument {
+                    name: arg.name,
+                    title: None,
+                    description: Some(arg.description),
+                    required: Some(arg.required),
                 })
                 .collect(),
         ),
