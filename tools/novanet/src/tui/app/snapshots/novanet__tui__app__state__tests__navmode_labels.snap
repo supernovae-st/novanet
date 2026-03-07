@@ -1,0 +1,7 @@
+---
+source: novanet/src/tui/app/state.rs
+expression: "format!(\"Graph: {}\\nViews: {}\\nNexus: {}\", NavMode::Graph.label(),\nNavMode::Views.label(), NavMode::Nexus.label())"
+---
+Graph: Graph
+Views: Views
+Nexus: Nexus
