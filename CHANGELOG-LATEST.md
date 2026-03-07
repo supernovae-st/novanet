@@ -4,6 +4,66 @@ For complete history, see [CHANGELOG.md](./CHANGELOG.md).
 
 ## [Unreleased]
 
+## [0.17.2] - 2026-03-07
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  🧠 NOVANET v0.17.2 — KEY NORMALIZATION                                       ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  🔑 ADR-036 v2  │  📦 Migrations 048-050  │  📊 CSR 99.99%  │  ✅ Unified @  ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+### ✨ Highlights
+
+| Feature | Status | Impact |
+|---------|--------|--------|
+| **🔑 ADR-036 v0.17.1** | ✅ Complete | Unified @ = localized content convention |
+| **📦 Migrations 048-050** | ✅ Applied | 17,378 keys normalized |
+| **📊 CSR 99.99%** | ✅ Achieved | 78,415/78,424 constraints satisfied |
+| **✅ FOR_LOCALE Arcs** | ✅ Created | All knowledge atoms linked to locales |
+
+### 🔑 Key Normalization (ADR-036 v0.17.1)
+
+Unified convention: `@` = localized content (locale specifier, always last)
+
+| Pattern | Example | Count |
+|---------|---------|-------|
+| `term:slug@locale` | `term:bounce-rate@en-US` | 35 |
+| `expression:slug@locale` | `expression:affirmation-0@fr-FR` | 17,343 |
+| `entity-native:slug@locale` | `entity-native:qr-code@fr-FR` | 21 |
+| `page-native:slug@locale` | `page-native:create-qr-code@es-MX` | 6 |
+
+### Added
+
+- **Migration 048** — Normalize Term keys (`term:locale:slug` → `term:slug@locale`)
+- **Migration 049** — Normalize Expression keys (`locale/cat/n` → `expression:slug@locale`)
+- **Migration 050** — Create FOR_LOCALE arcs for all knowledge atoms
+- **Locales am-ET, or-IN** — Added Amharic (Ethiopia) and Odia (India)
+
+### Fixed
+
+- **Duplicate cleanup** — Removed 17,073 old pattern nodes after reseed
+- **FOR_LOCALE coverage** — All Terms and Expressions now linked to Locale nodes
+
+### 📊 Statistics
+
+```
+╭─────────────────────────────────────────────────────────────────────────────────╮
+│  📊 v0.17.2 METRICS                                                             │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  📦 Neo4j:      19,817 nodes, 58,607 arcs                                       │
+│  🌐 Locales:    204 (incl. am-ET, or-IN)                                        │
+│  📝 Expressions: 17,342 (unified @locale pattern)                               │
+│  📖 Terms:      35 (unified @locale pattern)                                    │
+│  📊 CSR:        99.99% (78,415/78,424)                                          │
+│                                                                                 │
+╰─────────────────────────────────────────────────────────────────────────────────╯
+```
+
+---
+
 ## [0.17.1] - 2026-03-07
 
 ╔═══════════════════════════════════════════════════════════════════════════════╗
