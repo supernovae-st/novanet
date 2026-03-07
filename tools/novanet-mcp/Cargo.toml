@@ -14,7 +14,7 @@
 
 [package]
 name = "novanet-mcp"
-version = "0.17.0"
+version = "0.17.1"
 edition = "2024"
 license = "LicenseRef-Proprietary"
 rust-version = "1.86"
