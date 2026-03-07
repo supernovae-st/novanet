@@ -53,7 +53,8 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
+        let json = serde_json::to_string_pretty(&result)
+            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -74,7 +75,8 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
+        let json = serde_json::to_string_pretty(&result)
+            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -95,7 +97,8 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
+        let json = serde_json::to_string_pretty(&result)
+            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -116,7 +119,8 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
+        let json = serde_json::to_string_pretty(&result)
+            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -137,7 +141,8 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
+        let json = serde_json::to_string_pretty(&result)
+            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -158,7 +163,8 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
+        let json = serde_json::to_string_pretty(&result)
+            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -179,7 +185,8 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
+        let json = serde_json::to_string_pretty(&result)
+            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -201,7 +208,8 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
+        let json = serde_json::to_string_pretty(&result)
+            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -222,7 +230,8 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
+        let json = serde_json::to_string_pretty(&result)
+            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -242,7 +251,8 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
+        let json = serde_json::to_string_pretty(&result)
+            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -262,7 +272,8 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
+        let json = serde_json::to_string_pretty(&result)
+            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -284,7 +295,8 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
+        let json = serde_json::to_string_pretty(&result)
+            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -306,7 +318,8 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
+        let json = serde_json::to_string_pretty(&result)
+            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -328,7 +341,8 @@ impl NovaNetHandler {
             .await
             .map_err(McpError::from)?;
 
-        let json = serde_json::to_string_pretty(&result).map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
+        let json = serde_json::to_string_pretty(&result)
+            .map_err(|e| McpError::internal_error(format!("Serialization error: {}", e), None))?;
 
         Ok(CallToolResult::success(vec![Content::text(json)]))
     }
@@ -385,8 +399,9 @@ impl ServerHandler for NovaNetHandler {
             let args = request.arguments.unwrap_or_default();
 
             // rmcp 1.x: Use builder pattern instead of struct literals
-            let rendered = prompts::render_prompt(&request.name, &args)
-                .ok_or_else(|| McpError::resource_not_found(format!("Prompt not found: {}", request.name), None))?;
+            let rendered = prompts::render_prompt(&request.name, &args).ok_or_else(|| {
+                McpError::resource_not_found(format!("Prompt not found: {}", request.name), None)
+            })?;
 
             // rmcp 1.x: Use builder pattern instead of struct literals
             Ok(GetPromptResult::new(
