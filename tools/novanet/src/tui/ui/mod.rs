@@ -503,6 +503,9 @@ fn spinner(tick: u16) -> &'static str {
 
 /// Main render function.
 pub fn render(f: &mut Frame, app: &mut App) {
+    // v0.17.3: Clear panel rects at render start to avoid stale hit-testing
+    app.panel_rects.clear();
+
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
@@ -668,6 +671,12 @@ fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
 
     render_props_panel(f, right_chunks[0], app, &content); // Props [3]
     render_graph_panel(f, right_chunks[1], app); // Arcs [4]
+
+    // v0.17.3: Capture panel rects for mouse hit-testing
+    app.panel_rects.tree = Some(h_chunks[0]);
+    app.panel_rects.yaml = Some(center_chunks[1]);
+    app.panel_rects.props = Some(right_chunks[0]);
+    app.panel_rects.arcs = Some(right_chunks[1]);
 }
 
 /// Narrow layout: Tree [1] | Stacked (Header+YAML [2], Props [3], Arcs [4]).
@@ -701,6 +710,12 @@ fn render_main_narrow(f: &mut Frame, area: Rect, app: &mut App) {
     render_yaml_panel(f, v_chunks[1], app); // YAML [2]
     render_props_panel(f, v_chunks[2], app, &content); // Props [3]
     render_graph_panel(f, v_chunks[3], app); // Arcs [4]
+
+    // v0.17.3: Capture panel rects for mouse hit-testing
+    app.panel_rects.tree = Some(h_chunks[0]);
+    app.panel_rects.yaml = Some(v_chunks[1]);
+    app.panel_rects.props = Some(v_chunks[2]);
+    app.panel_rects.arcs = Some(v_chunks[3]);
 }
 
 /// Colorize path inline for title.

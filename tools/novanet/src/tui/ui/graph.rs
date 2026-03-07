@@ -17,7 +17,7 @@ use super::super::data::TreeItem;
 use super::super::theme;
 use super::{
     STYLE_ACCENT, STYLE_BRIGHT_DIM, STYLE_DIM, STYLE_HIGHLIGHT, STYLE_INFO, STYLE_MUTED,
-    STYLE_PRIMARY, STYLE_SUCCESS, spinner, wrap_text,
+    STYLE_PRIMARY, STYLE_SUCCESS, scroll_indicator, spinner, wrap_text,
 };
 
 // =============================================================================
@@ -161,8 +161,13 @@ pub fn render_graph_panel(f: &mut Frame, area: Rect, app: &mut App) {
         spans
     };
 
+    // v0.17.3: Add scroll indicator using cached line count from previous frame
+    let visible_height = area.height.saturating_sub(2) as usize; // -2 for borders
+    let scroll_hint = scroll_indicator(app.arcs_scroll, app.arcs_line_count, visible_height);
+
     let block = Block::default()
         .title(Line::from(title_spans))
+        .title_bottom(Span::styled(scroll_hint, STYLE_DIM))
         .borders(Borders::ALL)
         .border_style(Style::default().fg(border_color));
 

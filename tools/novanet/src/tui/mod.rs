@@ -36,7 +36,9 @@ use std::io::{self, Write};
 use std::panic;
 use std::time::Duration;
 
-use crossterm::event::{Event, EventStream, KeyCode, KeyModifiers};
+use crossterm::event::{
+    DisableMouseCapture, EnableMouseCapture, Event, EventStream, KeyCode, KeyModifiers,
+};
 use crossterm::execute;
 use crossterm::terminal::{
     EnterAlternateScreen, LeaveAlternateScreen, disable_raw_mode, enable_raw_mode,
@@ -62,7 +64,7 @@ fn install_panic_hook() {
     panic::set_hook(Box::new(move |panic_info| {
         // 1. Restore terminal state first (critical for usability)
         let _ = disable_raw_mode();
-        let _ = execute!(io::stdout(), LeaveAlternateScreen);
+        let _ = execute!(io::stdout(), DisableMouseCapture, LeaveAlternateScreen);
 
         // 2. Log crash to file
         let crash_log_path = dirs::home_dir()
@@ -115,7 +117,7 @@ pub async fn run(db: &Db, root_path: &Path) -> crate::Result<()> {
     // Setup terminal
     enable_raw_mode().map_err(crate::NovaNetError::Io)?;
     let mut stdout = io::stdout();
-    execute!(stdout, EnterAlternateScreen).map_err(crate::NovaNetError::Io)?;
+    execute!(stdout, EnterAlternateScreen, EnableMouseCapture).map_err(crate::NovaNetError::Io)?;
     let backend = CrosstermBackend::new(stdout);
     let mut terminal = Terminal::new(backend).map_err(crate::NovaNetError::Io)?;
 
@@ -124,7 +126,12 @@ pub async fn run(db: &Db, root_path: &Path) -> crate::Result<()> {
 
     // Restore terminal (also done in panic hook, but needed for normal exit)
     disable_raw_mode().map_err(crate::NovaNetError::Io)?;
-    execute!(terminal.backend_mut(), LeaveAlternateScreen).map_err(crate::NovaNetError::Io)?;
+    execute!(
+        terminal.backend_mut(),
+        DisableMouseCapture,
+        LeaveAlternateScreen
+    )
+    .map_err(crate::NovaNetError::Io)?;
     terminal.show_cursor().map_err(crate::NovaNetError::Io)?;
 
     result
@@ -351,8 +358,16 @@ async fn run_app(
                         .map_err(crate::NovaNetError::Io)?;
                 }
             }
+            Ok(Some(Ok(Event::Mouse(event)))) => {
+                // Handle mouse scroll on panels
+                if app.handle_mouse(event) {
+                    terminal
+                        .draw(|f| ui::render(f, &mut app))
+                        .map_err(crate::NovaNetError::Io)?;
+                }
+            }
             _ => {
-                // Ignore other events (mouse, focus, paste)
+                // Ignore other events (focus, paste, resize handled by terminal)
             }
         }
     }

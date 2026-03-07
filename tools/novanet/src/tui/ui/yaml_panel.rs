@@ -16,7 +16,7 @@ use ratatui::widgets::{
 };
 
 use super::{COLOR_MUTED_TEXT, STYLE_DIM, scroll_indicator};
-use crate::tui::app::{App, SourceTab};
+use crate::tui::app::App;
 
 // =============================================================================
 // BOX VISUAL STATES v0.13 (enhanced palette)
@@ -97,8 +97,8 @@ pub fn render_yaml_panel(f: &mut Frame, area: Rect, app: &App) {
     render_source_box(f, area, app, source_selected);
 }
 
-/// Render the SOURCE box with YAML content and tab bar.
-/// v0.13: A' Tree Sync design - Schema/Instance tabs with tree sync.
+/// Render the SOURCE box with YAML content.
+/// v0.17.3: Simplified - no tab bar, context-aware content based on tree selection.
 fn render_source_box(f: &mut Frame, area: Rect, app: &App, selected: bool) {
     let visible_height = area.height.saturating_sub(2) as usize;
 
@@ -109,28 +109,18 @@ fn render_source_box(f: &mut Frame, area: Rect, app: &App, selected: bool) {
         BOX_BORDER_UNFOCUSED
     };
 
-    // Check if Instance tab should be available
-    let has_instances = app.has_instances_for_current_class();
-    let current_tab = app.source_tab;
-
-    // Build enhanced title with tab bar and yaml path
+    // Build title with line count and yaml path (no tab bar)
     let line_count = app.yaml.content.lines().count();
     let yaml_path = &app.yaml.path;
-    let title = build_source_title(selected, current_tab, has_instances, line_count, yaml_path);
+    let title = build_source_title(selected, line_count, yaml_path);
 
     render_yaml_content_in_box(f, area, app, visible_height, border_color, title);
 }
 
-/// Build the SOURCE panel title with tab bar and yaml path.
-/// Format: ` ▶ SOURCE ▶YAML◀ [Data] ⊞N │ path/file.yaml `
-/// v0.13: YAML = Class definition, Data = Instance values
-fn build_source_title(
-    selected: bool,
-    current_tab: SourceTab,
-    has_instances: bool,
-    line_count: usize,
-    yaml_path: &str,
-) -> Line<'static> {
+/// Build the SOURCE panel title with line count and yaml path.
+/// Format: ` ▶ SOURCE ⊞N │ path/file.yaml `
+/// v0.17.3: Simplified - no tab bar (toggle removed).
+fn build_source_title(selected: bool, line_count: usize, yaml_path: &str) -> Line<'static> {
     let mut spans = Vec::new();
 
     if selected {
@@ -153,55 +143,6 @@ fn build_source_title(
             " SOURCE ",
             Style::default().fg(COLOR_MUTED_TEXT),
         ));
-    }
-
-    // Tab bar: ▶YAML◀ [Data] — active tab uses arrows, inactive uses brackets
-    // YAML = Class definition, Data = Instance node values
-    let yaml_active = current_tab == SourceTab::Schema;
-    let data_active = current_tab == SourceTab::Instance;
-
-    // YAML tab (Class definition)
-    if yaml_active {
-        let style = if selected {
-            Style::default()
-                .fg(Color::Rgb(136, 192, 208)) // Nord Frost (active)
-                .add_modifier(Modifier::BOLD)
-        } else {
-            Style::default().fg(Color::Rgb(100, 140, 160))
-        };
-        spans.push(Span::styled("▶", style));
-        spans.push(Span::styled("YAML", style));
-        spans.push(Span::styled("◀ ", style));
-    } else {
-        spans.push(Span::styled("[", Style::default().fg(Color::DarkGray)));
-        spans.push(Span::styled("YAML", Style::default().fg(Color::DarkGray)));
-        spans.push(Span::styled("] ", Style::default().fg(Color::DarkGray)));
-    }
-
-    // Data tab (Instance values)
-    if data_active {
-        let style = if selected {
-            Style::default()
-                .fg(Color::Rgb(163, 190, 140)) // Nord Aurora Green (active)
-                .add_modifier(Modifier::BOLD)
-        } else {
-            Style::default().fg(Color::Rgb(100, 150, 110))
-        };
-        spans.push(Span::styled("▶", style));
-        spans.push(Span::styled("Data", style));
-        spans.push(Span::styled("◀ ", style));
-    } else if !has_instances {
-        // Grayed out when no instances available
-        let style = Style::default()
-            .fg(Color::Rgb(60, 60, 60))
-            .add_modifier(Modifier::DIM);
-        spans.push(Span::styled("[", style));
-        spans.push(Span::styled("Data", style));
-        spans.push(Span::styled("—] ", style)); // Dash indicates unavailable
-    } else {
-        spans.push(Span::styled("[", Style::default().fg(Color::DarkGray)));
-        spans.push(Span::styled("Data", Style::default().fg(Color::DarkGray)));
-        spans.push(Span::styled("] ", Style::default().fg(Color::DarkGray)));
     }
 
     // Line count badge
@@ -412,128 +353,6 @@ fn generate_arc_badge(app: &App) -> Vec<Line<'static>> {
     badge_lines
 }
 
-/// Generate formatted lines for instance properties.
-/// v0.13 A' Tree Sync: Shows instance data as JSON-like format in Instance tab.
-fn generate_instance_lines(app: &App, visible_height: usize) -> Vec<Line<'static>> {
-    use crate::tui::data::TreeItem;
-
-    let mut lines = Vec::new();
-
-    // Get current instance
-    let Some(item) = app.current_item() else {
-        lines.push(Line::from(Span::styled("No instance selected", STYLE_DIM)));
-        return lines;
-    };
-
-    let TreeItem::Instance(realm, layer, class, instance) = item else {
-        lines.push(Line::from(Span::styled(
-            "Select an instance to view data",
-            STYLE_DIM,
-        )));
-        return lines;
-    };
-
-    // Header: Instance info
-    lines.push(Line::from(vec![
-        Span::styled("# Instance: ", Style::default().fg(Color::DarkGray)),
-        Span::styled(
-            instance.key.clone(),
-            Style::default()
-                .fg(Color::Rgb(136, 192, 208))
-                .add_modifier(Modifier::BOLD),
-        ),
-    ]));
-    lines.push(Line::from(vec![
-        Span::styled("# Class: ", Style::default().fg(Color::DarkGray)),
-        Span::styled(class.key.clone(), Style::default().fg(Color::Yellow)),
-        Span::styled(" (", Style::default().fg(Color::DarkGray)),
-        Span::styled(
-            realm.key.clone(),
-            Style::default().fg(realm_color(&realm.key)),
-        ),
-        Span::styled("/", Style::default().fg(Color::DarkGray)),
-        Span::styled(
-            layer.key.clone(),
-            Style::default().fg(layer_color(&layer.key)),
-        ),
-        Span::styled(")", Style::default().fg(Color::DarkGray)),
-    ]));
-    lines.push(Line::from("")); // Separator
-
-    // Properties section header
-    lines.push(Line::from(vec![Span::styled(
-        "properties:",
-        Style::default().fg(Color::Rgb(139, 233, 253)), // Cyan for YAML keys
-    )]));
-
-    // Show properties
-    if instance.properties.is_empty() {
-        lines.push(Line::from(vec![
-            Span::styled("  ", Style::default()),
-            Span::styled("(no properties)", STYLE_DIM),
-        ]));
-    } else {
-        for (key, value) in &instance.properties {
-            let value_str = format_json_value(value);
-            let value_color = json_value_color(value);
-
-            lines.push(Line::from(vec![
-                Span::styled("  ", Style::default()),
-                Span::styled(
-                    format!("{}: ", key),
-                    Style::default().fg(Color::Rgb(139, 233, 253)), // Cyan for keys
-                ),
-                Span::styled(value_str, Style::default().fg(value_color)),
-            ]));
-        }
-    }
-
-    // Limit to visible height
-    if lines.len() > visible_height {
-        lines.truncate(visible_height);
-    }
-
-    lines
-}
-
-/// Format a JSON value for display.
-fn format_json_value(value: &serde_json::Value) -> String {
-    match value {
-        serde_json::Value::Null => "null".to_string(),
-        serde_json::Value::Bool(b) => b.to_string(),
-        serde_json::Value::Number(n) => n.to_string(),
-        serde_json::Value::String(s) => format!("\"{}\"", s),
-        serde_json::Value::Array(arr) => {
-            if arr.is_empty() {
-                "[]".to_string()
-            } else if arr.len() <= 3 {
-                format!("[{} items]", arr.len())
-            } else {
-                format!("[{} items...]", arr.len())
-            }
-        }
-        serde_json::Value::Object(obj) => {
-            if obj.is_empty() {
-                "{}".to_string()
-            } else {
-                format!("{{...{} keys}}", obj.len())
-            }
-        }
-    }
-}
-
-/// Get color for JSON value type.
-fn json_value_color(value: &serde_json::Value) -> Color {
-    match value {
-        serde_json::Value::Null => Color::DarkGray,
-        serde_json::Value::Bool(_) => Color::Rgb(189, 147, 249), // Purple
-        serde_json::Value::Number(_) => Color::Rgb(249, 226, 175), // Yellow
-        serde_json::Value::String(_) => Color::Rgb(166, 227, 161), // Green
-        serde_json::Value::Array(_) => Color::Rgb(137, 180, 250), // Blue
-        serde_json::Value::Object(_) => Color::Rgb(245, 194, 231), // Pink
-    }
-}
-
 /// Render YAML content in a box with given border color and title.
 /// v0.13.1: Simplified - shows full YAML with scroll, no collapse/peek.
 /// PROPERTIES panel already shows instance properties, so no need for contextual sections.
@@ -556,26 +375,7 @@ fn render_yaml_content_in_box(
     // Adjust visible height for badge
     let content_visible_height = visible_height.saturating_sub(badge_height);
 
-    // v0.13 A' Tree Sync: Instance tab shows instance data, not YAML
-    if app.source_tab == SourceTab::Instance {
-        let instance_lines = generate_instance_lines(app, content_visible_height);
-        lines.extend(instance_lines);
-
-        // Skip YAML rendering, go directly to block rendering
-        let block = Block::default()
-            .title(title)
-            .borders(Borders::ALL)
-            .border_style(Style::default().fg(border_color));
-
-        let inner = block.inner(area);
-        f.render_widget(block, area);
-
-        let paragraph = Paragraph::new(lines);
-        f.render_widget(paragraph, inner);
-        return;
-    }
-
-    // v0.13.1: Show full YAML with scroll (no collapse/peek - PROPERTIES panel handles that)
+    // v0.17.3: Always show YAML content (Instance tab removed, data is in PROPERTIES panel)
     if !app.yaml.content.is_empty() {
         for yaml_line in app
             .yaml

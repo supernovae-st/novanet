@@ -7,7 +7,8 @@ use std::cell::RefCell;
 use std::fs;
 use std::path::Path;
 
-use crossterm::event::{KeyCode, KeyEvent};
+use crossterm::event::{KeyCode, KeyEvent, MouseButton, MouseEvent, MouseEventKind};
+use ratatui::layout::Rect;
 
 use super::cache::RenderCache;
 use super::data::{
@@ -41,6 +42,11 @@ pub const YAML_SCROLL_MARGIN: usize = 10;
 /// Smaller than YAML margin because info panel content is typically shorter.
 /// 5 lines balances scroll precision with visual stability.
 pub const INFO_SCROLL_MARGIN: usize = 5;
+
+/// Number of lines to scroll per mouse wheel tick.
+/// Larger than keyboard (1 line) for comfortable rapid scrolling.
+/// 3 lines is the traditional mouse wheel increment in most applications.
+pub const MOUSE_SCROLL_LINES: usize = 3;
 
 /// Default tree height (updated by UI on render).
 /// Used for initial scroll calculations before first render pass.
@@ -196,36 +202,35 @@ impl InfoBox {
     }
 }
 
-/// SOURCE panel tab selection (A' Tree Sync design).
-/// Schema = Class YAML definition, Instance = Node instance data.
-/// Switching tabs syncs the tree selection.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
-pub enum SourceTab {
-    /// Schema tab: Shows Class YAML (node-classes/{realm}/{layer}/{name}.yaml)
-    /// Tree selects the Class node.
-    #[default]
-    Schema,
-    /// Instance tab: Shows Node instance data (properties from Neo4j)
-    /// Tree auto-selects an instance of the current Class.
-    Instance,
-}
-
-impl SourceTab {
-    /// Toggle between Schema and Instance tabs.
-    pub fn toggle(self) -> Self {
-        match self {
-            Self::Schema => Self::Instance,
-            Self::Instance => Self::Schema,
-        }
-    }
-
-    /// Display label for tab bar.
-    pub fn label(self) -> &'static str {
-        match self {
-            Self::Schema => "Schema",
-            Self::Instance => "Instance",
-        }
-    }
+/// Content panel mode - determines what the center panel shows.
+/// v0.17.3: Replaces SourceTab - no toggle, context-aware content.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum ContentPanelMode {
+    /// Show YAML schema definition (for Class, ArcClass).
+    Schema {
+        /// Path to the YAML file.
+        path: String,
+        /// Name of the class/arc.
+        name: String,
+    },
+    /// Show info message for instances (data is in PROPERTIES panel).
+    InstanceInfo {
+        /// Instance key (e.g., "barcode@en-US").
+        instance_key: String,
+        /// Parent class name.
+        class_name: String,
+        /// Realm of the class.
+        realm: String,
+        /// Layer of the class.
+        layer: String,
+    },
+    /// Show section info (for Realm, Layer, Section headers).
+    SectionInfo {
+        /// Section name.
+        name: String,
+        /// Description or stats.
+        description: String,
+    },
 }
 
 /// Extracted data from a TreeItem for use in load_yaml_for_current().
@@ -445,6 +450,87 @@ impl OverlayState {
     }
 }
 
+// =============================================================================
+// PANEL RECTS (Mouse Scroll Support v0.17.3)
+// =============================================================================
+
+/// Panel identifiers for mouse hit-testing.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Panel {
+    Tree,
+    Yaml,
+    Props,
+    Arcs,
+}
+
+impl Panel {
+    /// Convert Panel to corresponding Focus for click-to-focus.
+    pub const fn to_focus(self) -> Focus {
+        match self {
+            Panel::Tree => Focus::Tree,
+            Panel::Yaml => Focus::Yaml,
+            Panel::Props => Focus::Props,
+            Panel::Arcs => Focus::Arcs,
+        }
+    }
+}
+
+/// Stores panel rectangles for mouse hit-testing.
+/// Updated during each render pass with the actual panel areas.
+#[derive(Debug, Clone, Default)]
+pub struct PanelRects {
+    pub tree: Option<Rect>,
+    pub yaml: Option<Rect>,
+    pub props: Option<Rect>,
+    pub arcs: Option<Rect>,
+}
+
+impl PanelRects {
+    /// Hit-test: returns which panel contains the given (column, row) position.
+    pub fn hit_test(&self, column: u16, row: u16) -> Option<Panel> {
+        // Check panels in z-order (front to back)
+        // Note: Rect::contains takes a Position, but we can check manually
+        if let Some(rect) = &self.tree {
+            if Self::contains(rect, column, row) {
+                return Some(Panel::Tree);
+            }
+        }
+        if let Some(rect) = &self.yaml {
+            if Self::contains(rect, column, row) {
+                return Some(Panel::Yaml);
+            }
+        }
+        if let Some(rect) = &self.props {
+            if Self::contains(rect, column, row) {
+                return Some(Panel::Props);
+            }
+        }
+        if let Some(rect) = &self.arcs {
+            if Self::contains(rect, column, row) {
+                return Some(Panel::Arcs);
+            }
+        }
+        None
+    }
+
+    /// Check if a point (column, row) is within a Rect.
+    #[inline]
+    fn contains(rect: &Rect, column: u16, row: u16) -> bool {
+        column >= rect.x
+            && column < rect.x + rect.width
+            && row >= rect.y
+            && row < rect.y + rect.height
+    }
+
+    /// Clear all panel rects (called at start of render).
+    pub fn clear(&mut self) {
+        self.tree = None;
+        self.yaml = None;
+        self.props = None;
+        self.arcs = None;
+    }
+}
+
 /// Main app state.
 /// v0.14.0: Refactored with sub-structs for better organization.
 /// 55 fields → 30 direct + 25 in sub-structs.
@@ -501,10 +587,6 @@ pub struct App {
     pub status_message: Option<(String, std::time::Instant)>,
     /// Pending refresh request.
     pub pending_refresh: bool,
-    /// SOURCE panel tab selection (Schema = Class YAML, Instance = Node data).
-    pub source_tab: SourceTab,
-    /// Cursor position of the Class when switching to Instance tab.
-    source_tab_class_cursor: Option<usize>,
     // v0.16.3: Separate scroll states for Props and Arcs panels
     /// Properties panel scroll position.
     pub props_scroll: usize,
@@ -520,6 +602,8 @@ pub struct App {
     pub loaded_views: LoadedViews,
     /// Animation tick counter (increments each frame, used for spinners).
     pub tick: u16,
+    /// Panel rectangles for mouse hit-testing (updated each render).
+    pub panel_rects: PanelRects,
 
     // ==========================================================================
     // Filter State
@@ -588,8 +672,6 @@ impl App {
             // UI state
             status_message: None,
             pending_refresh: false,
-            source_tab: SourceTab::default(),
-            source_tab_class_cursor: None,
             // v0.16.3: Separate scroll for Props and Arcs panels
             props_scroll: 0,
             props_line_count: 0,
@@ -598,6 +680,7 @@ impl App {
             yaml_cache: FxHashMap::default(),
             loaded_views,
             tick: 0,
+            panel_rects: PanelRects::default(),
 
             // Filter state
             data_filter_class: None,
@@ -665,30 +748,7 @@ impl App {
         // This is the same logic as current_item() but we extract data to avoid borrow issues
         let current = self.get_current_tree_item_data();
 
-        // v0.13 A' Tree Sync: Bidirectional sync - update SourceTab based on item type
-        // When navigating to Class → Schema tab, Instance → Instance tab
-        match &current {
-            TreeItemData::Class { .. } => {
-                if self.source_tab != SourceTab::Schema {
-                    self.source_tab = SourceTab::Schema;
-                    // Clear saved class cursor since we're navigating directly
-                    self.source_tab_class_cursor = None;
-                }
-            }
-            TreeItemData::Instance { .. } => {
-                if self.source_tab != SourceTab::Instance {
-                    self.source_tab = SourceTab::Instance;
-                }
-            }
-            _ => {
-                // For other items (Realm, Layer, Arc, etc.), reset to Schema tab
-                if self.source_tab != SourceTab::Schema {
-                    self.source_tab = SourceTab::Schema;
-                    self.source_tab_class_cursor = None;
-                }
-            }
-        }
-
+        // v0.17.3: Content panel mode is determined by tree selection (no toggle)
         // Handle based on item type
         match current {
             TreeItemData::Class {
@@ -1106,6 +1166,105 @@ impl App {
         }
     }
 
+    /// Handle mouse input. Returns true if state changed (needs re-render).
+    /// Mouse scroll works on the panel under the cursor, regardless of focus.
+    pub fn handle_mouse(&mut self, event: MouseEvent) -> bool {
+        match event.kind {
+            MouseEventKind::ScrollUp => {
+                if let Some(panel) = self.panel_rects.hit_test(event.column, event.row) {
+                    match panel {
+                        Panel::Tree => {
+                            // Scroll up in tree (move cursor up)
+                            if self.tree_cursor > 0 {
+                                self.tree_cursor -= 1;
+                                self.ensure_cursor_visible();
+                                self.load_yaml_for_current();
+                                return true;
+                            }
+                        }
+                        Panel::Yaml => {
+                            if self.yaml.scroll > 0 {
+                                self.yaml.scroll =
+                                    self.yaml.scroll.saturating_sub(MOUSE_SCROLL_LINES);
+                                return true;
+                            }
+                        }
+                        Panel::Props => {
+                            if self.props_scroll > 0 {
+                                self.props_scroll =
+                                    self.props_scroll.saturating_sub(MOUSE_SCROLL_LINES);
+                                return true;
+                            }
+                        }
+                        Panel::Arcs => {
+                            if self.arcs_scroll > 0 {
+                                self.arcs_scroll =
+                                    self.arcs_scroll.saturating_sub(MOUSE_SCROLL_LINES);
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            MouseEventKind::ScrollDown => {
+                if let Some(panel) = self.panel_rects.hit_test(event.column, event.row) {
+                    match panel {
+                        Panel::Tree => {
+                            // Scroll down in tree (move cursor down)
+                            let max = self.current_item_count().saturating_sub(1);
+                            if self.tree_cursor < max {
+                                self.tree_cursor += 1;
+                                self.ensure_cursor_visible();
+                                self.load_yaml_for_current();
+                                return true;
+                            }
+                        }
+                        Panel::Yaml => {
+                            let max_scroll =
+                                self.yaml.line_count.saturating_sub(YAML_SCROLL_MARGIN);
+                            if self.yaml.scroll < max_scroll {
+                                self.yaml.scroll =
+                                    (self.yaml.scroll + MOUSE_SCROLL_LINES).min(max_scroll);
+                                return true;
+                            }
+                        }
+                        Panel::Props => {
+                            let max_scroll =
+                                self.props_line_count.saturating_sub(INFO_SCROLL_MARGIN);
+                            if self.props_scroll < max_scroll {
+                                self.props_scroll =
+                                    (self.props_scroll + MOUSE_SCROLL_LINES).min(max_scroll);
+                                return true;
+                            }
+                        }
+                        Panel::Arcs => {
+                            let max_scroll =
+                                self.arcs_line_count.saturating_sub(INFO_SCROLL_MARGIN);
+                            if self.arcs_scroll < max_scroll {
+                                self.arcs_scroll =
+                                    (self.arcs_scroll + MOUSE_SCROLL_LINES).min(max_scroll);
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            // Click to focus: change panel focus when clicking
+            MouseEventKind::Down(MouseButton::Left) => {
+                if let Some(panel) = self.panel_rects.hit_test(event.column, event.row) {
+                    let new_focus = panel.to_focus();
+                    if self.focus != new_focus {
+                        self.focus = new_focus;
+                        return true;
+                    }
+                }
+            }
+            // Ignore other mouse events (right-click, middle-click, drags, etc.)
+            _ => {}
+        }
+        false
+    }
+
     /// Handle key input. Returns true if state changed (needs re-render).
     pub fn handle_key(&mut self, key: KeyEvent) -> bool {
         // Help overlay - any key closes it
@@ -1311,19 +1470,8 @@ impl App {
                 true
             }
 
-            // SOURCE tab toggle: 't' switches between Schema and Instance tabs
-            // v0.13: A' Tree Sync design - syncs tree selection with tab
-            KeyCode::Char('t') => {
-                if self.selected_box == InfoBox::Source {
-                    if self.toggle_source_tab() {
-                        self.set_status(format!("SOURCE: {}", self.source_tab.label()).as_str());
-                    }
-                    true
-                } else {
-                    // 't' does nothing outside SOURCE box
-                    false
-                }
-            }
+            // v0.17.3: 't' keybinding removed (SourceTab toggle removed)
+            // Content panel now shows context-aware content based on tree selection
 
             // Enter: toggle collapse/expand (Tree), toggle peek (YAML), or expand property (Info)
             KeyCode::Enter => {
@@ -1838,90 +1986,6 @@ impl App {
             if instant.elapsed().as_secs() >= 5 {
                 self.status_message = None;
             }
-        }
-    }
-
-    /// Toggle SOURCE panel tab between Schema and Instance.
-    /// v0.13: A' Tree Sync design - switching tabs syncs tree selection.
-    ///
-    /// When switching to Instance tab:
-    /// - Saves current class cursor position
-    /// - Expands the class to show instances
-    /// - Navigates tree to first instance
-    ///
-    /// When switching to Schema tab:
-    /// - Navigates back to the saved class cursor position
-    ///
-    /// Returns true if the toggle was successful (Instance tab available).
-    pub fn toggle_source_tab(&mut self) -> bool {
-        match self.source_tab {
-            SourceTab::Schema => {
-                // Get current class info before switching
-                let class_info = match self.current_item() {
-                    Some(TreeItem::Class(realm, layer, class)) => {
-                        Some((realm.key.clone(), layer.key.clone(), class.key.clone()))
-                    }
-                    _ => None,
-                };
-
-                let Some((realm_key, layer_key, class_key)) = class_info else {
-                    self.set_status("Select a Class first");
-                    return false;
-                };
-
-                // Check if class has instances
-                if !self.has_instances_for_current_class() {
-                    self.set_status("No instances for this class");
-                    return false;
-                }
-
-                // Save current class cursor position for returning later
-                self.source_tab_class_cursor = Some(self.tree_cursor);
-
-                // Expand the class to make instances visible
-                self.tree.expand(&format!("class:{}", class_key));
-
-                // Find and navigate to first instance
-                if let Some(instance_cursor) = self
-                    .tree
-                    .find_first_instance_cursor(&realm_key, &layer_key, &class_key)
-                {
-                    self.tree_cursor = instance_cursor;
-                    self.ensure_cursor_visible();
-                    self.load_yaml_for_current();
-                }
-
-                self.source_tab = SourceTab::Instance;
-                true
-            }
-            SourceTab::Instance => {
-                // Navigate back to the saved class cursor position
-                if let Some(class_cursor) = self.source_tab_class_cursor.take() {
-                    self.tree_cursor = class_cursor;
-                    self.ensure_cursor_visible();
-                    self.load_yaml_for_current();
-                }
-
-                self.source_tab = SourceTab::Schema;
-                true
-            }
-        }
-    }
-
-    /// Check if the current Class has instances loaded.
-    /// Used to determine if Instance tab should be enabled.
-    pub fn has_instances_for_current_class(&self) -> bool {
-        if let Some(item) = self.current_item() {
-            match item {
-                TreeItem::Class(_, _, class) => {
-                    // Check if class has instances (count > 0)
-                    class.instance_count > 0
-                }
-                TreeItem::Instance(_, _, _, _) => true, // Already on instance
-                _ => false,
-            }
-        } else {
-            false
         }
     }
 
@@ -3997,156 +4061,119 @@ mod tests {
     }
 
     // ========================================================================
-    // v0.13 A' Tree Sync tests
+    // PanelRects and mouse interaction tests (v0.17.3)
     // ========================================================================
 
     #[test]
-    fn test_source_tab_default_is_schema() {
-        let app = App::new(create_test_tree(), "/test/root".to_string());
-        assert_eq!(app.source_tab, SourceTab::Schema);
-        assert!(app.source_tab_class_cursor.is_none());
+    fn test_panel_rects_hit_test_tree() {
+        let mut rects = PanelRects::default();
+        rects.tree = Some(Rect::new(0, 0, 30, 40));
+
+        // Inside tree panel
+        assert_eq!(rects.hit_test(15, 20), Some(Panel::Tree));
+        assert_eq!(rects.hit_test(0, 0), Some(Panel::Tree));
+        assert_eq!(rects.hit_test(29, 39), Some(Panel::Tree));
+
+        // Outside tree panel
+        assert_eq!(rects.hit_test(30, 20), None);
+        assert_eq!(rects.hit_test(15, 40), None);
     }
 
     #[test]
-    fn test_source_tab_label() {
-        assert_eq!(SourceTab::Schema.label(), "Schema");
-        assert_eq!(SourceTab::Instance.label(), "Instance");
+    fn test_panel_rects_hit_test_yaml() {
+        let mut rects = PanelRects::default();
+        rects.yaml = Some(Rect::new(30, 0, 50, 40));
+
+        // Inside yaml panel
+        assert_eq!(rects.hit_test(50, 20), Some(Panel::Yaml));
+        assert_eq!(rects.hit_test(30, 0), Some(Panel::Yaml));
+
+        // Outside yaml panel
+        assert_eq!(rects.hit_test(29, 20), None);
+        assert_eq!(rects.hit_test(80, 20), None);
     }
 
     #[test]
-    fn test_toggle_source_tab_requires_class_selection() {
-        let mut app = App::new(create_test_tree(), "/test/root".to_string());
+    fn test_panel_rects_hit_test_props_and_arcs() {
+        let mut rects = PanelRects::default();
+        rects.props = Some(Rect::new(80, 0, 40, 20));
+        rects.arcs = Some(Rect::new(80, 20, 40, 20));
 
-        // Without selecting a Class, toggle should fail
-        app.tree_cursor = 0; // ClassesSection header
-        let result = app.toggle_source_tab();
-        assert!(!result, "Toggle should fail without Class selection");
-        assert_eq!(app.source_tab, SourceTab::Schema);
+        // Inside props panel
+        assert_eq!(rects.hit_test(100, 10), Some(Panel::Props));
+
+        // Inside arcs panel
+        assert_eq!(rects.hit_test(100, 30), Some(Panel::Arcs));
+
+        // On boundary between props and arcs (row 20 is arcs)
+        assert_eq!(rects.hit_test(100, 20), Some(Panel::Arcs));
     }
 
     #[test]
-    fn test_toggle_source_tab_stores_class_cursor() {
-        use crate::tui::data::InstanceInfo;
-        use std::collections::BTreeMap;
+    fn test_panel_rects_hit_test_no_panels() {
+        let rects = PanelRects::default();
 
-        let mut app = App::new(create_test_tree(), "/test/root".to_string());
-
-        // First navigate to a Class
-        app.tree.expand("classes");
-        app.tree.expand("realm:shared");
-        app.tree.expand("layer:shared:config");
-
-        // Add an instance so toggle can succeed
-        app.tree.instances.insert(
-            "AppConfig".to_string(),
-            vec![InstanceInfo {
-                key: "instance1".to_string(),
-                display_name: "Instance 1".to_string(),
-                class_key: "AppConfig".to_string(),
-                properties: BTreeMap::new(),
-                outgoing_arcs: vec![],
-                incoming_arcs: vec![],
-                arcs_loading: false,
-                missing_required_count: 0,
-                filled_properties: 0,
-                total_properties: 0,
-            }],
-        );
-
-        // Navigate to Class (cursor 4 = ClassesSection(0), shared(1), config(2), AppConfig(3))
-        // Note: In mock tree, the class index depends on expanded state
-        if let Some(cursor) =
-            app.tree
-                .find_class_cursor_readonly("shared", "config", "AppConfig", true)
-        {
-            app.tree_cursor = cursor;
-
-            // Toggle to Instance tab
-            let result = app.toggle_source_tab();
-
-            if result {
-                // Should have stored the class cursor
-                assert_eq!(app.source_tab, SourceTab::Instance);
-                // Note: class cursor stored is cursor value before toggle expanded class
-            }
-        }
+        // No panels registered, should return None
+        assert_eq!(rects.hit_test(50, 50), None);
+        assert_eq!(rects.hit_test(0, 0), None);
     }
 
     #[test]
-    fn test_toggle_source_tab_back_restores_cursor() {
-        use crate::tui::data::InstanceInfo;
-        use std::collections::BTreeMap;
+    fn test_panel_rects_clear() {
+        let mut rects = PanelRects::default();
+        rects.tree = Some(Rect::new(0, 0, 30, 40));
+        rects.yaml = Some(Rect::new(30, 0, 50, 40));
+        rects.props = Some(Rect::new(80, 0, 40, 20));
+        rects.arcs = Some(Rect::new(80, 20, 40, 20));
 
-        let mut app = App::new(create_test_tree(), "/test/root".to_string());
+        // All panels should be set
+        assert!(rects.tree.is_some());
+        assert!(rects.yaml.is_some());
+        assert!(rects.props.is_some());
+        assert!(rects.arcs.is_some());
 
-        // Setup tree
-        app.tree.expand("classes");
-        app.tree.expand("realm:shared");
-        app.tree.expand("layer:shared:config");
+        // Clear all panels
+        rects.clear();
 
-        // Add instance
-        app.tree.instances.insert(
-            "AppConfig".to_string(),
-            vec![InstanceInfo {
-                key: "instance1".to_string(),
-                display_name: "Instance 1".to_string(),
-                class_key: "AppConfig".to_string(),
-                properties: BTreeMap::new(),
-                outgoing_arcs: vec![],
-                incoming_arcs: vec![],
-                arcs_loading: false,
-                missing_required_count: 0,
-                filled_properties: 0,
-                total_properties: 0,
-            }],
-        );
+        // All panels should be None
+        assert!(rects.tree.is_none());
+        assert!(rects.yaml.is_none());
+        assert!(rects.props.is_none());
+        assert!(rects.arcs.is_none());
 
-        // Find and navigate to class
-        if let Some(class_cursor) =
-            app.tree
-                .find_class_cursor_readonly("shared", "config", "AppConfig", true)
-        {
-            app.tree_cursor = class_cursor;
-            let original_cursor = class_cursor;
-
-            // Toggle to Instance
-            let _ = app.toggle_source_tab();
-
-            if app.source_tab == SourceTab::Instance {
-                // Toggle back to Schema
-                let _ = app.toggle_source_tab();
-
-                assert_eq!(app.source_tab, SourceTab::Schema);
-                assert_eq!(
-                    app.tree_cursor, original_cursor,
-                    "Should restore original cursor"
-                );
-            }
-        }
+        // hit_test should return None
+        assert_eq!(rects.hit_test(15, 20), None);
     }
 
     #[test]
-    fn test_bidirectional_sync_class_sets_schema_tab() {
-        let mut app = App::new(create_test_tree(), "/test/root".to_string());
+    fn test_panel_to_focus_conversion() {
+        assert_eq!(Panel::Tree.to_focus(), Focus::Tree);
+        assert_eq!(Panel::Yaml.to_focus(), Focus::Yaml);
+        assert_eq!(Panel::Props.to_focus(), Focus::Props);
+        assert_eq!(Panel::Arcs.to_focus(), Focus::Arcs);
+    }
 
-        // Setup tree
-        app.tree.expand("classes");
-        app.tree.expand("realm:shared");
-        app.tree.expand("layer:shared:config");
+    #[test]
+    fn test_panel_rects_edge_cases() {
+        let mut rects = PanelRects::default();
 
-        // Start with Instance tab
-        app.source_tab = SourceTab::Instance;
+        // Test overlapping panels (shouldn't happen in practice, but test priority)
+        rects.tree = Some(Rect::new(0, 0, 50, 40));
+        rects.yaml = Some(Rect::new(25, 0, 50, 40)); // Overlaps with tree
 
-        // Simulate navigation to Class (this is what load_yaml_for_current does)
-        if let Some(class_cursor) =
-            app.tree
-                .find_class_cursor_readonly("shared", "config", "AppConfig", true)
-        {
-            app.tree_cursor = class_cursor;
-            app.load_yaml_for_current();
+        // Tree should win (checked first in hit_test)
+        assert_eq!(rects.hit_test(30, 20), Some(Panel::Tree));
 
-            // Should have synced to Schema tab
-            assert_eq!(app.source_tab, SourceTab::Schema);
-        }
+        // Outside overlap region, yaml should match
+        assert_eq!(rects.hit_test(60, 20), Some(Panel::Yaml));
+    }
+
+    #[test]
+    fn test_mouse_scroll_lines_constant() {
+        // Verify the constant exists and has expected value
+        assert_eq!(MOUSE_SCROLL_LINES, 3);
+
+        // Verify it's different from keyboard scroll (implicit 1 line)
+        assert!(MOUSE_SCROLL_LINES > 1);
     }
 }
