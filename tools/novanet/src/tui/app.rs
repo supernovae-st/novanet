@@ -204,6 +204,8 @@ impl InfoBox {
 
 /// Content panel mode - determines what the center panel shows.
 /// v0.17.3: Replaces SourceTab - no toggle, context-aware content.
+/// NOTE: Currently unused - will be integrated in Phase 3 of source-panel-redesign.md
+#[allow(dead_code)]
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ContentPanelMode {
     /// Show YAML schema definition (for Class, ArcClass).
@@ -4066,8 +4068,10 @@ mod tests {
 
     #[test]
     fn test_panel_rects_hit_test_tree() {
-        let mut rects = PanelRects::default();
-        rects.tree = Some(Rect::new(0, 0, 30, 40));
+        let rects = PanelRects {
+            tree: Some(Rect::new(0, 0, 30, 40)),
+            ..Default::default()
+        };
 
         // Inside tree panel
         assert_eq!(rects.hit_test(15, 20), Some(Panel::Tree));
@@ -4081,8 +4085,10 @@ mod tests {
 
     #[test]
     fn test_panel_rects_hit_test_yaml() {
-        let mut rects = PanelRects::default();
-        rects.yaml = Some(Rect::new(30, 0, 50, 40));
+        let rects = PanelRects {
+            yaml: Some(Rect::new(30, 0, 50, 40)),
+            ..Default::default()
+        };
 
         // Inside yaml panel
         assert_eq!(rects.hit_test(50, 20), Some(Panel::Yaml));
@@ -4095,9 +4101,11 @@ mod tests {
 
     #[test]
     fn test_panel_rects_hit_test_props_and_arcs() {
-        let mut rects = PanelRects::default();
-        rects.props = Some(Rect::new(80, 0, 40, 20));
-        rects.arcs = Some(Rect::new(80, 20, 40, 20));
+        let rects = PanelRects {
+            props: Some(Rect::new(80, 0, 40, 20)),
+            arcs: Some(Rect::new(80, 20, 40, 20)),
+            ..Default::default()
+        };
 
         // Inside props panel
         assert_eq!(rects.hit_test(100, 10), Some(Panel::Props));
@@ -4120,11 +4128,12 @@ mod tests {
 
     #[test]
     fn test_panel_rects_clear() {
-        let mut rects = PanelRects::default();
-        rects.tree = Some(Rect::new(0, 0, 30, 40));
-        rects.yaml = Some(Rect::new(30, 0, 50, 40));
-        rects.props = Some(Rect::new(80, 0, 40, 20));
-        rects.arcs = Some(Rect::new(80, 20, 40, 20));
+        let mut rects = PanelRects {
+            tree: Some(Rect::new(0, 0, 30, 40)),
+            yaml: Some(Rect::new(30, 0, 50, 40)),
+            props: Some(Rect::new(80, 0, 40, 20)),
+            arcs: Some(Rect::new(80, 20, 40, 20)),
+        };
 
         // All panels should be set
         assert!(rects.tree.is_some());
@@ -4155,11 +4164,12 @@ mod tests {
 
     #[test]
     fn test_panel_rects_edge_cases() {
-        let mut rects = PanelRects::default();
-
         // Test overlapping panels (shouldn't happen in practice, but test priority)
-        rects.tree = Some(Rect::new(0, 0, 50, 40));
-        rects.yaml = Some(Rect::new(25, 0, 50, 40)); // Overlaps with tree
+        let rects = PanelRects {
+            tree: Some(Rect::new(0, 0, 50, 40)),
+            yaml: Some(Rect::new(25, 0, 50, 40)), // Overlaps with tree
+            ..Default::default()
+        };
 
         // Tree should win (checked first in hit_test)
         assert_eq!(rects.hit_test(30, 20), Some(Panel::Tree));
