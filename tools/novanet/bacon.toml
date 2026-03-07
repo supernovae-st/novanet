@@ -1,0 +1,95 @@
+# NovaNet Bacon Configuration
+# https://dystroy.org/bacon/
+#
+# Install: cargo install bacon
+# Usage: bacon              # Default job (check)
+#        bacon clippy       # Run clippy
+#        bacon test         # Run tests
+#        bacon watch-tui    # Hot-reload TUI development
+
+# Default job when running `bacon` without arguments
+default_job = "check"
+
+[jobs.check]
+command = ["cargo", "check", "--all-targets", "--all-features", "--color", "always"]
+need_stdout = false
+
+[jobs.clippy]
+command = ["cargo", "clippy", "--all-targets", "--all-features", "--color", "always", "--", "-D", "warnings"]
+need_stdout = false
+
+[jobs.test]
+command = ["cargo", "test", "--color", "always"]
+need_stdout = true
+
+[jobs.test-quiet]
+command = ["cargo", "test", "--lib", "--quiet", "--color", "always"]
+need_stdout = true
+
+[jobs.nextest]
+command = ["cargo", "nextest", "run", "--color", "always"]
+need_stdout = true
+
+[jobs.doc]
+command = ["cargo", "doc", "--no-deps", "--all-features", "--color", "always"]
+need_stdout = false
+
+[jobs.doc-open]
+command = ["cargo", "doc", "--no-deps", "--all-features", "--color", "always", "--open"]
+need_stdout = false
+on_success = "job:doc"
+background = true
+
+# TUI Development Jobs
+[jobs.watch-tui]
+command = ["cargo", "run", "--color", "always", "--"]
+need_stdout = true
+watch = ["src/tui/**"]
+allow_warnings = true
+
+[jobs.watch-tui-fresh]
+command = ["cargo", "run", "--color", "always", "--", "tui", "--fresh"]
+need_stdout = true
+watch = ["src/tui/**"]
+allow_warnings = true
+
+# CLI Development Jobs
+[jobs.watch-cli]
+command = ["cargo", "run", "--color", "always", "--", "blueprint"]
+need_stdout = true
+watch = ["src/commands/**", "src/*.rs"]
+allow_warnings = true
+
+[jobs.watch-schema]
+command = ["cargo", "run", "--color", "always", "--", "schema", "validate"]
+need_stdout = true
+watch = ["src/parsers/**", "src/generators/**", "src/validation/**"]
+allow_warnings = true
+
+# Security
+[jobs.deny]
+command = ["cargo", "deny", "check", "--color", "always"]
+need_stdout = true
+
+[jobs.audit]
+command = ["cargo", "audit", "--color", "always"]
+need_stdout = true
+
+# Formatting
+[jobs.fmt]
+command = ["cargo", "fmt"]
+need_stdout = false
+on_success = "job:check"
+
+[jobs.fmt-check]
+command = ["cargo", "fmt", "--check", "--color", "always"]
+need_stdout = false
+
+# Key bindings (optional, Bacon defaults work fine)
+[keybindings]
+q = "quit"
+r = "run"
+t = "job:test"
+c = "job:clippy"
+f = "job:fmt"
+d = "job:deny"

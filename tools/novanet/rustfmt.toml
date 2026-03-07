@@ -1,0 +1,45 @@
+# NovaNet Rust Formatting Configuration
+# https://rust-lang.github.io/rustfmt/
+
+# Edition (must match Cargo.toml)
+edition = "2024"
+
+# Line width (100 chars per project conventions)
+max_width = 100
+comment_width = 100
+wrap_comments = true
+
+# Imports
+imports_granularity = "Module"
+group_imports = "StdExternalCrate"
+reorder_imports = true
+reorder_modules = true
+
+# Formatting style
+use_small_heuristics = "Default"
+fn_params_layout = "Tall"
+trailing_comma = "Vertical"
+trailing_semicolon = true
+
+# Alignment (disabled for readability)
+# These require nightly, keep commented for stable
+# struct_field_align_threshold = 0
+# enum_discrim_align_threshold = 0
+
+# Match arms
+match_arm_blocks = true
+match_arm_leading_pipes = "Never"
+match_block_trailing_comma = true
+
+# Control flow
+control_brace_style = "AlwaysSameLine"
+brace_style = "SameLineWhere"
+
+# Misc
+newline_style = "Unix"
+normalize_comments = true
+normalize_doc_attributes = true
+format_strings = true
+format_macro_matchers = true
+format_macro_bodies = true
+hex_literal_case = "Upper"

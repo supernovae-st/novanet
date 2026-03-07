@@ -1,0 +1,72 @@
+#!/bin/bash
+# NovaNet Pre-Commit Hook
+# Install: cp scripts/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+NOVANET_DIR="$(dirname "$SCRIPT_DIR")"
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+echo -e "${YELLOW}🔍 NovaNet Pre-Commit Checks${NC}"
+echo "───────────────────────────────"
+
+# Check if we're in the novanet tools directory
+if [[ ! -f "$NOVANET_DIR/Cargo.toml" ]]; then
+    echo -e "${YELLOW}⚠ Not in novanet directory, skipping Rust checks${NC}"
+    exit 0
+fi
+
+cd "$NOVANET_DIR"
+
+# 1. Format check
+echo -n "1/4 Checking formatting... "
+if cargo fmt --check 2>/dev/null; then
+    echo -e "${GREEN}✓${NC}"
+else
+    echo -e "${RED}✗${NC}"
+    echo -e "${RED}Error: Code is not formatted. Run 'cargo fmt' first.${NC}"
+    exit 1
+fi
+
+# 2. Clippy (warnings as errors)
+echo -n "2/4 Running clippy... "
+if cargo clippy --all-targets --all-features -- -D warnings 2>/dev/null; then
+    echo -e "${GREEN}✓${NC}"
+else
+    echo -e "${RED}✗${NC}"
+    echo -e "${RED}Error: Clippy found issues. Fix them before committing.${NC}"
+    exit 1
+fi
+
+# 3. Tests (quick check)
+echo -n "3/4 Running tests... "
+if cargo test --lib --quiet 2>/dev/null; then
+    echo -e "${GREEN}✓${NC}"
+else
+    echo -e "${RED}✗${NC}"
+    echo -e "${RED}Error: Tests failed. Fix them before committing.${NC}"
+    exit 1
+fi
+
+# 4. Security audit (if cargo-deny is installed)
+echo -n "4/4 Security audit... "
+if command -v cargo-deny &> /dev/null; then
+    if cargo deny check 2>/dev/null; then
+        echo -e "${GREEN}✓${NC}"
+    else
+        echo -e "${YELLOW}⚠ (warnings)${NC}"
+        # Don't fail on deny warnings, just warn
+    fi
+else
+    echo -e "${YELLOW}⊘ (cargo-deny not installed)${NC}"
+fi
+
+echo "───────────────────────────────"
+echo -e "${GREEN}✓ All checks passed!${NC}"
+exit 0

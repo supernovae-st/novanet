@@ -1,0 +1,43 @@
+# NovaNet Cargo Configuration
+# https://doc.rust-lang.org/cargo/reference/config.html
+
+[alias]
+# Common development workflows
+b = "build"
+c = "check"
+t = "test"
+r = "run"
+nt = "nextest run"
+d = "doc --open"
+
+# Quality checks
+lint = "clippy --all-targets --all-features -- -D warnings"
+fmt-check = "fmt --check"
+audit-full = "deny check && audit"
+
+# TUI development
+tui = "run --"
+tui-fresh = "run -- tui --fresh"
+
+[build]
+# Incremental builds for faster iteration
+incremental = true
+
+# Use all available cores
+jobs = -1
+
+[target.x86_64-apple-darwin]
+# macOS linker optimization
+rustflags = ["-C", "link-arg=-fuse-ld=lld"]
+
+[target.aarch64-apple-darwin]
+# Apple Silicon linker optimization (use system linker)
+# lld not recommended on arm64 macOS
+
+[env]
+# Default Neo4j for development
+NEO4J_URI = { value = "bolt://localhost:7687", force = false }
+NEO4J_USER = { value = "neo4j", force = false }
+
+# Rust flags for development
+RUST_BACKTRACE = { value = "1", force = false }
