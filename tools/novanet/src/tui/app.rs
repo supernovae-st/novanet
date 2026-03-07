@@ -204,8 +204,9 @@ impl InfoBox {
 
 /// Content panel mode - determines what the center panel shows.
 /// v0.17.3: Replaces SourceTab - no toggle, context-aware content.
-/// NOTE: Currently unused - will be integrated in Phase 3 of source-panel-redesign.md
-#[allow(dead_code)]
+///
+/// Computed on-demand via `App::content_panel_mode()` - not stored in App.
+/// This avoids lifetime complexity while still providing context-aware rendering.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ContentPanelMode {
     /// Show YAML schema definition (for Class, ArcClass).
@@ -233,6 +234,8 @@ pub enum ContentPanelMode {
         /// Description or stats.
         description: String,
     },
+    /// No content available (empty tree or no selection).
+    Empty,
 }
 
 /// Extracted data from a TreeItem for use in load_yaml_for_current().
@@ -258,10 +261,20 @@ enum TreeItemData {
         key: String,
     },
     Section,
-    /// Instance with its parent Class's yaml_path (to show schema in YAML panel)
-    /// and class_properties for loading validated properties with types.
+    /// Instance with full metadata for content panel and YAML loading.
+    /// v0.17.3: Extended with instance_key, class_name, realm, layer for ContentPanelMode.
     Instance {
+        /// Instance key (e.g., "barcode@en-US")
+        instance_key: String,
+        /// Class name (e.g., "EntityNative")
+        class_name: String,
+        /// Realm (e.g., "org")
+        realm: String,
+        /// Layer (e.g., "semantic")
+        layer: String,
+        /// Class's yaml_path (to show schema in YAML panel)
         class_yaml_path: String,
+        /// Class properties for loading validated properties with types.
         class_properties: Vec<String>,
     },
     None,
@@ -788,6 +801,7 @@ impl App {
             TreeItemData::Instance {
                 class_yaml_path,
                 class_properties,
+                ..
             } => {
                 // Load the Class's YAML to show Instance schema (standard_properties)
                 if !class_yaml_path.is_empty() {
@@ -814,21 +828,16 @@ impl App {
         // In filtered Data mode, always return Instance (that's all we show)
         if self.is_graph_mode() && self.data_filter_class.is_some() {
             if let Some(class_key) = &self.data_filter_class {
-                if self
-                    .tree
-                    .filtered_item_at(self.tree_cursor, class_key)
-                    .is_some()
+                if let Some(TreeItem::Instance(realm, layer, class_info, instance)) =
+                    self.tree.filtered_item_at(self.tree_cursor, class_key)
                 {
-                    // Get the Class's yaml_path for showing schema in YAML panel
-                    if let Some((_, _, class_info)) = self.tree.find_class(class_key) {
-                        return TreeItemData::Instance {
-                            class_yaml_path: class_info.yaml_path.clone(),
-                            class_properties: class_info.properties.clone(),
-                        };
-                    }
                     return TreeItemData::Instance {
-                        class_yaml_path: String::new(),
-                        class_properties: Vec::new(),
+                        instance_key: instance.key.clone(),
+                        class_name: class_info.key.clone(),
+                        realm: realm.key.clone(),
+                        layer: layer.key.clone(),
+                        class_yaml_path: class_info.yaml_path.clone(),
+                        class_properties: class_info.properties.clone(),
                     };
                 }
             }
@@ -868,7 +877,11 @@ impl App {
                 key: family.key.clone(),
             },
             Some(TreeItem::ClassesSection) | Some(TreeItem::ArcsSection) => TreeItemData::Section,
-            Some(TreeItem::Instance(_, _, class_info, _)) => TreeItemData::Instance {
+            Some(TreeItem::Instance(realm, layer, class_info, instance)) => TreeItemData::Instance {
+                instance_key: instance.key.clone(),
+                class_name: class_info.key.clone(),
+                realm: realm.key.clone(),
+                layer: layer.key.clone(),
                 class_yaml_path: class_info.yaml_path.clone(),
                 class_properties: class_info.properties.clone(),
             },
@@ -879,6 +892,56 @@ impl App {
                 properties: class_info.properties.clone(),
             },
             None => TreeItemData::None,
+        }
+    }
+
+    /// Determine the content panel mode based on current tree selection.
+    /// v0.17.3: Phase 3 of source-panel-redesign.md
+    ///
+    /// Returns a `ContentPanelMode` indicating what the center panel should show:
+    /// - `Schema`: YAML definition for Class/ArcClass nodes
+    /// - `InstanceInfo`: Info message pointing to PROPERTIES for instances
+    /// - `SectionInfo`: Section overview for Realm/Layer/Section headers
+    /// - `Empty`: No content available
+    pub fn content_panel_mode(&self) -> ContentPanelMode {
+        match self.get_current_tree_item_data() {
+            TreeItemData::Class { yaml_path, key, .. } => ContentPanelMode::Schema {
+                path: yaml_path,
+                name: key,
+            },
+            TreeItemData::ArcClass { yaml_path, key } => ContentPanelMode::Schema {
+                path: yaml_path,
+                name: key,
+            },
+            TreeItemData::Instance {
+                instance_key,
+                class_name,
+                realm,
+                layer,
+                ..
+            } => ContentPanelMode::InstanceInfo {
+                instance_key,
+                class_name,
+                realm,
+                layer,
+            },
+            TreeItemData::Realm { key } => ContentPanelMode::SectionInfo {
+                name: format!("Realm: {}", key),
+                description: "Select a Layer to explore its classes.".to_string(),
+            },
+            TreeItemData::Layer { key } => ContentPanelMode::SectionInfo {
+                name: format!("Layer: {}", key),
+                description: "Select a Class to view its YAML schema.".to_string(),
+            },
+            TreeItemData::ArcFamily { key } => ContentPanelMode::SectionInfo {
+                name: format!("Arc Family: {}", key),
+                description: "Select an ArcClass to view its definition.".to_string(),
+            },
+            TreeItemData::Section => ContentPanelMode::SectionInfo {
+                name: "Section".to_string(),
+                description: "Navigate to view node or arc classes.".to_string(),
+            },
+            TreeItemData::None => ContentPanelMode::Empty,
         }
     }
 

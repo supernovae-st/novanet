@@ -2,10 +2,10 @@
 //!
 //! This module handles the YAML preview panel with:
 //! - Syntax highlighting for keys, values, comments, and punctuation
-//! - YAML/Data tab switching (Class definition vs Instance values)
 //! - Scrollbar for long content
 //! - v0.13.0: Split into SOURCE and DIAGRAM boxes with visual states
 //! - v0.13.1: Simplified - no collapse/peek (PROPERTIES panel shows instance data)
+//! - v0.17.3: Context-aware content via ContentPanelMode (Phase 3)
 
 use ratatui::Frame;
 use ratatui::layout::Rect;
@@ -16,7 +16,7 @@ use ratatui::widgets::{
 };
 
 use super::{COLOR_MUTED_TEXT, STYLE_DIM, scroll_indicator};
-use crate::tui::app::App;
+use crate::tui::app::{App, ContentPanelMode};
 
 // =============================================================================
 // BOX VISUAL STATES v0.13 (enhanced palette)
@@ -97,11 +97,9 @@ pub fn render_yaml_panel(f: &mut Frame, area: Rect, app: &App) {
     render_source_box(f, area, app, source_selected);
 }
 
-/// Render the SOURCE box with YAML content.
-/// v0.17.3: Simplified - no tab bar, context-aware content based on tree selection.
+/// Render the SOURCE box with context-aware content.
+/// v0.17.3: Phase 3 - uses ContentPanelMode to determine what to show.
 fn render_source_box(f: &mut Frame, area: Rect, app: &App, selected: bool) {
-    let visible_height = area.height.saturating_sub(2) as usize;
-
     // Determine border color: selected = cyan, otherwise = dim
     let border_color = if selected {
         BOX_BORDER_SELECTED
@@ -109,22 +107,86 @@ fn render_source_box(f: &mut Frame, area: Rect, app: &App, selected: bool) {
         BOX_BORDER_UNFOCUSED
     };
 
-    // Build title with line count and yaml path (no tab bar)
+    // Get the content mode based on current tree selection
+    let mode = app.content_panel_mode();
+
+    match mode {
+        ContentPanelMode::Schema { path, name } => {
+            render_schema_content(f, area, app, selected, border_color, &path, &name);
+        }
+        ContentPanelMode::InstanceInfo {
+            instance_key,
+            class_name,
+            realm,
+            layer,
+        } => {
+            render_instance_info(
+                f,
+                area,
+                selected,
+                border_color,
+                &instance_key,
+                &class_name,
+                &realm,
+                &layer,
+            );
+        }
+        ContentPanelMode::SectionInfo { name, description } => {
+            render_section_info(f, area, selected, border_color, &name, &description);
+        }
+        ContentPanelMode::Empty => {
+            render_empty_content(f, area, selected, border_color);
+        }
+    }
+}
+
+/// Abbreviate a YAML path to show only the last 3 segments.
+/// Example: "packages/core/models/node-classes/org/semantic/entity-native.yaml"
+///       -> "org/semantic/entity-native.yaml"
+fn abbreviate_yaml_path(path: &str) -> String {
+    let segments: Vec<&str> = path.split('/').collect();
+    if segments.len() <= 3 {
+        path.to_string()
+    } else {
+        segments[segments.len() - 3..].join("/")
+    }
+}
+
+// =============================================================================
+// CONTENT PANEL RENDER FUNCTIONS (v0.17.3 Phase 3)
+// =============================================================================
+
+/// Render SCHEMA content - shows YAML with syntax highlighting.
+/// v0.17.3: Used when a Class or ArcClass is selected in the tree.
+fn render_schema_content(
+    f: &mut Frame,
+    area: Rect,
+    app: &App,
+    selected: bool,
+    border_color: Color,
+    yaml_path: &str,
+    class_name: &str,
+) {
+    let visible_height = area.height.saturating_sub(2) as usize;
     let line_count = app.yaml.content.lines().count();
-    let yaml_path = &app.yaml.path;
-    let title = build_source_title(selected, line_count, yaml_path);
+
+    // Build title: ` ▶ SCHEMA ⊞N │ path/file.yaml `
+    let title = build_schema_title(selected, line_count, yaml_path, class_name);
 
     render_yaml_content_in_box(f, area, app, visible_height, border_color, title);
 }
 
-/// Build the SOURCE panel title with line count and yaml path.
-/// Format: ` ▶ SOURCE ⊞N │ path/file.yaml `
-/// v0.17.3: Simplified - no tab bar (toggle removed).
-fn build_source_title(selected: bool, line_count: usize, yaml_path: &str) -> Line<'static> {
+/// Build the SCHEMA panel title.
+/// Format: ` ▶ SCHEMA ⊞N │ path/file.yaml ` (when selected)
+fn build_schema_title(
+    selected: bool,
+    line_count: usize,
+    yaml_path: &str,
+    _class_name: &str,
+) -> Line<'static> {
     let mut spans = Vec::new();
 
     if selected {
-        // Selected: bright indicator
         spans.push(Span::styled(
             " ▶ ",
             Style::default()
@@ -132,15 +194,14 @@ fn build_source_title(selected: bool, line_count: usize, yaml_path: &str) -> Lin
                 .add_modifier(Modifier::BOLD),
         ));
         spans.push(Span::styled(
-            "SOURCE ",
+            "SCHEMA ",
             Style::default()
                 .fg(BOX_BORDER_SELECTED)
                 .add_modifier(Modifier::BOLD),
         ));
     } else {
-        // Unfocused: dim
         spans.push(Span::styled(
-            " SOURCE ",
+            " SCHEMA ",
             Style::default().fg(COLOR_MUTED_TEXT),
         ));
     }
@@ -153,12 +214,11 @@ fn build_source_title(selected: bool, line_count: usize, yaml_path: &str) -> Lin
     };
     spans.push(Span::styled(format!("⊞{}", line_count), badge_style));
 
-    // YAML path (abbreviated: show last 3 segments like "org/semantic/entity-native.yaml")
+    // YAML path (abbreviated)
     if !yaml_path.is_empty() {
-        // Extract short path: last 3 path segments
         let short_path = abbreviate_yaml_path(yaml_path);
         let path_style = if selected {
-            Style::default().fg(Color::Rgb(100, 120, 140)) // Dimmer than badge
+            Style::default().fg(Color::Rgb(100, 120, 140))
         } else {
             Style::default().fg(Color::Rgb(70, 70, 70))
         };
@@ -174,16 +234,212 @@ fn build_source_title(selected: bool, line_count: usize, yaml_path: &str) -> Lin
     Line::from(spans)
 }
 
-/// Abbreviate a YAML path to show only the last 3 segments.
-/// Example: "packages/core/models/node-classes/org/semantic/entity-native.yaml"
-///       -> "org/semantic/entity-native.yaml"
-fn abbreviate_yaml_path(path: &str) -> String {
-    let segments: Vec<&str> = path.split('/').collect();
-    if segments.len() <= 3 {
-        path.to_string()
+/// Render INFO content for instances - points to PROPERTIES panel.
+/// v0.17.3: Used when an Instance node is selected in the tree.
+#[allow(clippy::too_many_arguments)]
+fn render_instance_info(
+    f: &mut Frame,
+    area: Rect,
+    selected: bool,
+    border_color: Color,
+    instance_key: &str,
+    class_name: &str,
+    realm: &str,
+    layer: &str,
+) {
+    let mut lines: Vec<Line> = Vec::new();
+
+    // Add some vertical spacing
+    lines.push(Line::from(""));
+
+    // Instance header
+    lines.push(Line::from(vec![
+        Span::styled("   Instance: ", Style::default().fg(Color::DarkGray)),
+        Span::styled(
+            instance_key.to_string(),
+            Style::default()
+                .fg(Color::Rgb(136, 192, 208)) // Nord Frost
+                .add_modifier(Modifier::BOLD),
+        ),
+    ]));
+
+    // Class info
+    lines.push(Line::from(vec![
+        Span::styled("   Class: ", Style::default().fg(Color::DarkGray)),
+        Span::styled(
+            format!("{} ({}/{})", class_name, realm, layer),
+            Style::default().fg(Color::Rgb(163, 190, 140)), // Nord Aurora Green
+        ),
+    ]));
+
+    lines.push(Line::from(""));
+    lines.push(Line::from(Span::styled(
+        "   ─────────────────────────────────────────────",
+        Style::default().fg(Color::Rgb(70, 70, 70)),
+    )));
+    lines.push(Line::from(""));
+
+    // Info message
+    lines.push(Line::from(Span::styled(
+        "   Instances are stored in Neo4j, not YAML files.",
+        Style::default().fg(Color::DarkGray),
+    )));
+
+    lines.push(Line::from(vec![
+        Span::styled("   → See ", Style::default().fg(Color::DarkGray)),
+        Span::styled(
+            "PROPERTIES",
+            Style::default()
+                .fg(BOX_BORDER_SELECTED)
+                .add_modifier(Modifier::BOLD),
+        ),
+        Span::styled(" panel for instance data", Style::default().fg(Color::DarkGray)),
+    ]));
+
+    lines.push(Line::from(vec![
+        Span::styled("   → Press ", Style::default().fg(Color::DarkGray)),
+        Span::styled(
+            "Tab",
+            Style::default()
+                .fg(Color::Rgb(181, 137, 0)) // Gold
+                .add_modifier(Modifier::BOLD),
+        ),
+        Span::styled(" to navigate to PROPERTIES", Style::default().fg(Color::DarkGray)),
+    ]));
+
+    lines.push(Line::from(""));
+
+    // Hint for viewing parent class schema
+    lines.push(Line::from(vec![
+        Span::styled("   [", Style::default().fg(Color::DarkGray)),
+        Span::styled("s", Style::default().fg(Color::Rgb(181, 137, 0)).add_modifier(Modifier::BOLD)),
+        Span::styled("] View parent class schema", Style::default().fg(Color::DarkGray)),
+    ]));
+
+    // Build title
+    let title = build_info_title(selected, instance_key);
+
+    let block = Block::default()
+        .title(title)
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(border_color));
+
+    let paragraph = Paragraph::new(lines).block(block);
+    f.render_widget(paragraph, area);
+}
+
+/// Render INFO content for sections (Realm, Layer, ArcFamily).
+/// v0.17.3: Used when a navigation section is selected.
+fn render_section_info(
+    f: &mut Frame,
+    area: Rect,
+    selected: bool,
+    border_color: Color,
+    name: &str,
+    description: &str,
+) {
+    let mut lines: Vec<Line> = Vec::new();
+
+    lines.push(Line::from(""));
+    lines.push(Line::from(vec![
+        Span::styled("   ", Style::default()),
+        Span::styled(
+            name.to_string(),
+            Style::default()
+                .fg(Color::Rgb(136, 192, 208)) // Nord Frost
+                .add_modifier(Modifier::BOLD),
+        ),
+    ]));
+
+    lines.push(Line::from(""));
+    lines.push(Line::from(Span::styled(
+        format!("   {}", description),
+        Style::default().fg(Color::DarkGray),
+    )));
+
+    lines.push(Line::from(""));
+    lines.push(Line::from(Span::styled(
+        "   Select a Class to view its YAML schema.",
+        Style::default().fg(Color::Rgb(100, 100, 100)),
+    )));
+
+    // Build title
+    let title = build_info_title(selected, name);
+
+    let block = Block::default()
+        .title(title)
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(border_color));
+
+    let paragraph = Paragraph::new(lines).block(block);
+    f.render_widget(paragraph, area);
+}
+
+/// Render empty content state.
+/// v0.17.3: Used when nothing is selected.
+fn render_empty_content(f: &mut Frame, area: Rect, selected: bool, border_color: Color) {
+    let lines: Vec<Line> = vec![
+        Line::from(""),
+        Line::from(Span::styled(
+            "   No selection",
+            Style::default().fg(Color::DarkGray),
+        )),
+        Line::from(""),
+        Line::from(Span::styled(
+            "   Navigate to a node to view its content.",
+            Style::default().fg(Color::Rgb(100, 100, 100)),
+        )),
+    ];
+
+    // Build title
+    let title = build_info_title(selected, "INFO");
+
+    let block = Block::default()
+        .title(title)
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(border_color));
+
+    let paragraph = Paragraph::new(lines).block(block);
+    f.render_widget(paragraph, area);
+}
+
+/// Build the INFO panel title.
+/// Format: ` ▶ INFO │ name ` (when selected)
+fn build_info_title(selected: bool, name: &str) -> Line<'static> {
+    let mut spans = Vec::new();
+
+    if selected {
+        spans.push(Span::styled(
+            " ▶ ",
+            Style::default()
+                .fg(BOX_BORDER_SELECTED)
+                .add_modifier(Modifier::BOLD),
+        ));
+        spans.push(Span::styled(
+            "INFO ",
+            Style::default()
+                .fg(BOX_BORDER_SELECTED)
+                .add_modifier(Modifier::BOLD),
+        ));
     } else {
-        segments[segments.len() - 3..].join("/")
+        spans.push(Span::styled(
+            " INFO ",
+            Style::default().fg(COLOR_MUTED_TEXT),
+        ));
     }
+
+    // Name badge
+    let name_style = if selected {
+        Style::default().fg(Color::Rgb(136, 192, 208)) // Nord Frost
+    } else {
+        Style::default().fg(Color::DarkGray)
+    };
+
+    spans.push(Span::styled("│ ", Style::default().fg(Color::Rgb(60, 60, 60))));
+    spans.push(Span::styled(name.to_string(), name_style));
+    spans.push(Span::styled(" ", Style::default()));
+
+    Line::from(spans)
 }
 
 // v0.13.1: render_diagram_box, get_diagram_type, generate_diagram_content removed (panel simplification)
