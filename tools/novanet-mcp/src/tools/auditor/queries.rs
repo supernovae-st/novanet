@@ -265,13 +265,13 @@ pub async fn audit_integrity(
 ) -> Result<Vec<AuditIssue>> {
     let mut issues = Vec::new();
 
-    // Query: Find nodes with key containing @ but no matching base entity
-    // Note: Entity keys have 'entity:' prefix, EntityNative keys are like 'qr-code@fr-FR'
-    // So we need to add the prefix when looking up the parent Entity
+    // Query: Find EntityNative nodes with key containing @ but no matching parent Entity
+    // Keys are now normalized: EntityNative 'entity:qr-code@fr-FR' → Entity 'entity:qr-code'
+    // Split by '@' gives the exact Entity key (no prefix manipulation needed)
     let cypher = r#"
         MATCH (n:EntityNative)
         WHERE n.key CONTAINS '@'
-        WITH n, 'entity:' + split(n.key, '@')[0] AS entity_key
+        WITH n, split(n.key, '@')[0] AS entity_key
         WHERE NOT EXISTS {
             MATCH (e:Entity {key: entity_key})
         }
