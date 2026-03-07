@@ -1,6 +1,6 @@
 # NovaNet Roadmap
 
-Current version: **v0.17.1** | Last release: v0.17.1 | Target: QR Code AI (https://qrcode-ai.com)
+Current version: **v0.17.2** | Last release: v0.17.2 | Target: QR Code AI (https://qrcode-ai.com)
 
 > **Versioning Note**: Starting with v0.12.0, NovaNet follows strict SemVer. Versions v8.x-v11.x were internal milestones.
 
@@ -68,10 +68,13 @@ v0.16.2 Content Generation Pipeline    █████████████�
 v0.17.0 Neuro-Symbolic Validation      ████████████████████  100%  RELEASED
       novanet_check (pre-write validation), novanet_audit (CSR metrics)
       14 MCP tools total, MMKG-RDS research-based quality scoring
-v0.17.1 Key Normalization              ████████████████████  100%  <- CURRENT
+v0.17.1 Key Normalization              ████████████████████  100%  RELEASED
       ADR-036 v0.17.1: @ = localized content (unified pattern)
       Migrations 048-050: Term, Expression, FOR_LOCALE arcs
       CSR 100% achieved
+v0.17.2 Schema Cleanup Complete        ████████████████████  100%  <- CURRENT
+      YAGNI: Deleted orphaned Term/TermSet nodes and arcs
+      57 nodes (36 shared + 21 org), 133 arcs, 6 families
 
 ═══════════════════════════════════════════════════════════════════════════════
 IDEAS (no timeline)
@@ -303,4 +306,5 @@ release/v*      Release preparation (optional, for complex releases)
 | v0.16.1 | 2026-03-03 | Patch release — minor fixes and dependency updates |
 | v0.16.2 | 2026-03-03 | Content generation pipeline — 3-phase Nika workflow, content-generation skill |
 | v0.17.0 | 2026-03-05 | Neuro-symbolic validation — novanet_check, novanet_audit, CSR metrics, 14 MCP tools |
-| v0.17.1 | 2026-03-07 | Schema Cleanup — YAGNI removal of 6 unused nodes, 57 nodes (36+21), 131 arcs |
+| v0.17.1 | 2026-03-06 | Key normalization — ADR-036 @ pattern, migrations 048-050, CSR 100% |
+| v0.17.2 | 2026-03-07 | Schema cleanup complete — YAGNI Term/TermSet deletion, 57 nodes (36+21), 133 arcs |
