@@ -34,11 +34,11 @@ novanet <command>    # Run specific command
 ## Schema Stats
 
 - **57 nodes** (36 shared + 21 org)
-- **133 arcs** (6 families)
+- **140 arcs** (6 families)
 - **10 layers** (4 shared + 6 org)
 - **5 traits** (defined/authored/imported/generated/retrieved)
 
-> v0.17.2: YAGNI cleanup complete, 57 nodes, 133 arcs
+> v0.17.2: YAGNI cleanup complete, 57 nodes, 140 arcs
 
 ## Tooling
 
