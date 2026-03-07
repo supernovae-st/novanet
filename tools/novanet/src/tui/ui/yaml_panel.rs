@@ -293,7 +293,10 @@ fn render_instance_info(
                 .fg(BOX_BORDER_SELECTED)
                 .add_modifier(Modifier::BOLD),
         ),
-        Span::styled(" panel for instance data", Style::default().fg(Color::DarkGray)),
+        Span::styled(
+            " panel for instance data",
+            Style::default().fg(Color::DarkGray),
+        ),
     ]));
 
     lines.push(Line::from(vec![
@@ -304,7 +307,10 @@ fn render_instance_info(
                 .fg(Color::Rgb(181, 137, 0)) // Gold
                 .add_modifier(Modifier::BOLD),
         ),
-        Span::styled(" to navigate to PROPERTIES", Style::default().fg(Color::DarkGray)),
+        Span::styled(
+            " to navigate to PROPERTIES",
+            Style::default().fg(Color::DarkGray),
+        ),
     ]));
 
     lines.push(Line::from(""));
@@ -312,8 +318,16 @@ fn render_instance_info(
     // Hint for viewing parent class schema
     lines.push(Line::from(vec![
         Span::styled("   [", Style::default().fg(Color::DarkGray)),
-        Span::styled("s", Style::default().fg(Color::Rgb(181, 137, 0)).add_modifier(Modifier::BOLD)),
-        Span::styled("] View parent class schema", Style::default().fg(Color::DarkGray)),
+        Span::styled(
+            "s",
+            Style::default()
+                .fg(Color::Rgb(181, 137, 0))
+                .add_modifier(Modifier::BOLD),
+        ),
+        Span::styled(
+            "] View parent class schema",
+            Style::default().fg(Color::DarkGray),
+        ),
     ]));
 
     // Build title
@@ -435,7 +449,10 @@ fn build_info_title(selected: bool, name: &str) -> Line<'static> {
         Style::default().fg(Color::DarkGray)
     };
 
-    spans.push(Span::styled("│ ", Style::default().fg(Color::Rgb(60, 60, 60))));
+    spans.push(Span::styled(
+        "│ ",
+        Style::default().fg(Color::Rgb(60, 60, 60)),
+    ));
     spans.push(Span::styled(name.to_string(), name_style));
     spans.push(Span::styled(" ", Style::default()));
 

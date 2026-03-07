@@ -97,7 +97,7 @@ impl NavMode {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum Focus {
     #[default]
-    Tree,    // [1] Left panel - tree navigation
+    Tree, // [1] Left panel - tree navigation
     Content, // [2] Center panel - context-aware content (was Yaml)
     Props,   // [3] Right top - properties
     Arcs,    // [4] Right bottom - relationships
@@ -879,14 +879,16 @@ impl App {
                 key: family.key.clone(),
             },
             Some(TreeItem::ClassesSection) | Some(TreeItem::ArcsSection) => TreeItemData::Section,
-            Some(TreeItem::Instance(realm, layer, class_info, instance)) => TreeItemData::Instance {
-                instance_key: instance.key.clone(),
-                class_name: class_info.key.clone(),
-                realm: realm.key.clone(),
-                layer: layer.key.clone(),
-                class_yaml_path: class_info.yaml_path.clone(),
-                class_properties: class_info.properties.clone(),
-            },
+            Some(TreeItem::Instance(realm, layer, class_info, instance)) => {
+                TreeItemData::Instance {
+                    instance_key: instance.key.clone(),
+                    class_name: class_info.key.clone(),
+                    realm: realm.key.clone(),
+                    layer: layer.key.clone(),
+                    class_yaml_path: class_info.yaml_path.clone(),
+                    class_properties: class_info.properties.clone(),
+                }
+            }
             // EntityCategory shows parent Entity Class's YAML
             Some(TreeItem::EntityCategory(_, _, class_info, _)) => TreeItemData::Class {
                 yaml_path: class_info.yaml_path.clone(),
@@ -4269,7 +4271,10 @@ mod tests {
             realm: "org".to_string(),
             layer: "structure".to_string(),
         };
-        assert!(matches!(instance_mode, ContentPanelMode::InstanceInfo { .. }));
+        assert!(matches!(
+            instance_mode,
+            ContentPanelMode::InstanceInfo { .. }
+        ));
 
         let section_mode = ContentPanelMode::SectionInfo {
             name: "Realm: org".to_string(),
