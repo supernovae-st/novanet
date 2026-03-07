@@ -33,12 +33,12 @@ novanet <command>    # Run specific command
 
 ## Schema Stats
 
-- **57 nodes** (36 shared + 21 org)
-- **131 arcs** (6 families)
+- **59 nodes** (38 shared + 21 org)
+- **136 arcs** (6 families)
 - **10 layers** (4 shared + 6 org)
 - **5 traits** (defined/authored/imported/generated/retrieved)
 
-> v0.17.1 "Schema Cleanup": Removed Term, TermSet, SEOKeywordMetrics; Added ProjectGEOScope, ProjectSEOScope
+> v0.17.3: REPRESENTS arc direction inverted (Entity→Page), 59 nodes, 136 arcs
 
 ## Tooling
 
