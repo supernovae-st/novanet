@@ -7,7 +7,7 @@
 Generate culturally-native content across 200+ locales — not translation, but true localization from semantic concepts.
 
 [![CI](https://img.shields.io/github/actions/workflow/status/supernovae-st/novanet/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/supernovae-st/novanet/actions)
-[![Tests](https://img.shields.io/badge/tests-1279_passing-success?style=flat-square)](https://github.com/supernovae-st/novanet)
+[![Tests](https://img.shields.io/badge/tests-1255_passing-success?style=flat-square)](https://github.com/supernovae-st/novanet)
 [![Rust](https://img.shields.io/badge/Rust-1.84-DEA584?style=flat-square&logo=rust&logoColor=white)](https://rust-lang.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://typescriptlang.org)
 [![Neo4j](https://img.shields.io/badge/Neo4j-5.26-018bff?style=flat-square&logo=neo4j&logoColor=white)](https://neo4j.com)
@@ -36,7 +36,7 @@ Generate culturally-native content across 200+ locales — not translation, but 
 |  |  |  |  |
 |:---:|:---:|:---:|:---:|
 | **Knowledge Graph** | **200+ Locales** | **Graph Studio** | **AI-Powered** |
-| 59 node types, 178 arcs | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
+| 57 node types, 131 arcs | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
 | Neo4j with APOC | Locale knowledge layer | React Flow + ELK.js layouts | Cypher generation from text |
 
 ---
@@ -55,10 +55,10 @@ Generate culturally-native content across 200+ locales — not translation, but 
 flowchart TB
     subgraph MONO["NovaNet Monorepo"]
         direction TB
-        CORE["@novanet/core v0.17.0\nTypes · Schemas · Filters"]
-        DB["@novanet/db v0.17.0\nDocker · Seeds · Migrations"]
-        STUDIO["@novanet/studio v0.17.0\nNext.js 16 · React 19"]
-        RUST["novanet CLI v0.17.0\nRust · 16 commands · TUI"]
+        CORE["@novanet/core v0.17.1\nTypes · Schemas · Filters"]
+        DB["@novanet/db v0.17.1\nDocker · Seeds · Migrations"]
+        STUDIO["@novanet/studio v0.17.1\nNext.js 16 · React 19"]
+        RUST["novanet CLI v0.17.1\nRust · 16 commands · TUI"]
     end
 
     CORE --> STUDIO
@@ -129,7 +129,7 @@ novanet/
 ├── tools/
 │   └── novanet/               # Rust CLI + TUI binary
 │       ├── src/               # Rust source (16 commands, 8 generators)
-│       └── Cargo.toml         # 1279 tests, zero clippy warnings
+│       └── Cargo.toml         # 1255 tests, zero clippy warnings
 └── apps/
     └── studio/                # @novanet/studio — web visualization
         ├── src/app/           # Next.js App Router
@@ -144,11 +144,11 @@ novanet/
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| **@novanet/core** | `0.17.0` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
-| **@novanet/db** | `0.17.0` | Docker Compose for Neo4j, Cypher seeds, migrations |
-| **@novanet/studio** | `0.17.0` | Interactive graph visualization with AI chat |
-| **tools/novanet** | `0.17.0` | Rust CLI + TUI for schema generation, validation, queries |
-| **tools/novanet-mcp** | `0.17.0` | MCP Server for AI agent integration (14 tools) |
+| **@novanet/core** | `0.17.1` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
+| **@novanet/db** | `0.17.1` | Docker Compose for Neo4j, Cypher seeds, migrations |
+| **@novanet/studio** | `0.17.1` | Interactive graph visualization with AI chat |
+| **tools/novanet** | `0.17.1` | Rust CLI + TUI for schema generation, validation, queries |
+| **tools/novanet-mcp** | `0.17.1` | MCP Server for AI agent integration (14 tools) |
 
 ---
 
@@ -217,18 +217,18 @@ Password: (see NEO4J_PASSWORD env var)
 
 ## Graph Schema
 
-NovaNet models content as a knowledge graph with **2 Realms** and **10 Layers** (v0.17.0):
+NovaNet models content as a knowledge graph with **2 Realms** and **10 Layers** (v0.17.1):
 
 | Realm | Layers | Description |
 |-------|--------|-------------|
-| **Shared** | config, locale, geography, knowledge | Universal definitions + locale knowledge (READ-ONLY) — 40 nodes |
+| **Shared** | config, locale, geography, knowledge | Universal definitions + locale knowledge (READ-ONLY) — 36 nodes |
 | **Org** | config, foundation, structure, semantic, instruction, output | Organization-specific content — 21 nodes |
 
 **v11.5 changes:** Locale definition moved to shared/config. SEO/GEO nodes consolidated to shared/knowledge.
 
 Each node type has a **Trait** (defined / authored / imported / generated / retrieved) and arcs are classified by **ArcFamily**.
 
-> **v0.17.0 ADR-024: Data Origin traits** — Trait now answers "WHERE does data come from?" (defined = human-created once, authored = human-written per locale, imported = external data brought in, generated = LLM output, retrieved = external API snapshots)
+> **v0.17.1 ADR-024: Data Origin traits** — Trait now answers "WHERE does data come from?" (defined = human-created once, authored = human-written per locale, imported = external data brought in, generated = LLM output, retrieved = external API snapshots)
 
 See [`packages/core/models/taxonomy.yaml`](packages/core/models/taxonomy.yaml) for complete schema.
 
@@ -255,7 +255,7 @@ See [`packages/core/models/taxonomy.yaml`](packages/core/models/taxonomy.yaml) f
 │ │ ...            │  │   [BlockNative]                  │  │ [Copy JSON]  │ │
 │ └────────────────┘  └──────────────────────────────────┘  └──────────────┘ │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  Mode: Graph  │  59 nodes  │  178 arcs  │  Zoom: 100%  │  Locale: fr-FR │
+│  Mode: Graph  │  57 nodes  │  131 arcs  │  Zoom: 100%  │  Locale: fr-FR │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 *Interactive 2D graph visualization with AI-powered queries (⌘J)*

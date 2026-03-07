@@ -6,7 +6,7 @@ This file provides guidance to Claude Code when working in the `tools/novanet/` 
 
 `novanet` is a unified Rust CLI + TUI binary for managing the NovaNet context graph.
 
-**Version**: v0.17.0 | **Tests**: 1279 passing | **Clippy**: zero warnings
+**Version**: v0.17.1 | **Tests**: 1255 passing | **Clippy**: zero warnings
 
 ```bash
 novanet              # Launch TUI (default when no command)
@@ -33,10 +33,12 @@ novanet <command>    # Run specific command
 
 ## Schema Stats
 
-- **59 nodes** (40 shared + 19 org)
-- **178 arcs** (6 families)
+- **57 nodes** (36 shared + 21 org)
+- **131 arcs** (6 families)
 - **10 layers** (4 shared + 6 org)
 - **5 traits** (defined/authored/imported/generated/retrieved)
+
+> v0.17.1 "Schema Cleanup": Removed Term, TermSet, SEOKeywordMetrics; Added ProjectGEOScope, ProjectSEOScope
 
 ## Tooling
 
@@ -322,7 +324,7 @@ src/
 - **YAML-first architecture**: Each Class YAML has explicit `realm:` and `layer:` fields (source of truth)
   - Path validation: file must be at `models/node-classes/{realm}/{layer}/{name}.yaml`
   - Generators read realm/layer from YAML content, validate against path
-  - v0.13.1: 2 realms (shared, org), 10 layers (4 shared + 6 org), 61 node types, all with standardized BLOC ordering
+  - v0.17.1: 2 realms (shared, org), 10 layers (4 shared + 6 org), 57 node types, all with standardized BLOC ordering
 - **Query-First architecture (v11.6)**: Cypher is the single source of truth for graph display
   - Schema mode uses CLASSES_QUERY + ARCS_QUERY to build the schema graph
   - `cargo run -- blueprint` executes these foundational queries

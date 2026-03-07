@@ -8,7 +8,7 @@ NovaNet is a **native content generation system** (NOT translation) using Neo4j 
 
 **Target Application**: QR Code AI (https://qrcode-ai.com) - a multilingual SaaS for QR code generation.
 **Supported Locales**: 200+ locales (fr-FR, en-US, es-MX, ja-JP, etc.)
-**Current Version**: v0.15.1
+**Current Version**: v0.17.1
 
 ## CRITICAL: Generation, NOT Translation
 
@@ -38,9 +38,13 @@ v0.13.0 introduces the *Native pattern (ADR-029) and Slug Ownership (ADR-030):
 - ADR-029: *Native pattern (EntityContent→EntityNative, ProjectContent→ProjectNative, PageGenerated→PageNative, BlockGenerated→BlockNative)
 - ADR-029: Unified arcs (HAS_CONTENT/HAS_GENERATED→HAS_NATIVE, CONTENT_OF/GENERATED_FOR→NATIVE_OF)
 - ADR-030: Slug Ownership (URL properties moved from EntityNative to PageNative)
-- SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (40 nodes)
-- ORG (6 layers): config, foundation, structure, semantic, instruction, output (19 nodes)
-- 59 node types, 178 arc types
+- SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (36 nodes)
+- ORG (6 layers): config, foundation, structure, semantic, instruction, output (21 nodes)
+- 57 node types, 131 arc types
+
+**v0.17.1 Schema Cleanup:**
+- Removed: Term, TermSet, SEOKeywordMetrics (YAGNI)
+- Added: ProjectGEOScope, ProjectSEOScope (project-level scope config)
 
 **Boundary rule:** TypeScript (this package) generates code artifacts. Rust (`tools/novanet/`) executes at runtime.
 
@@ -118,21 +122,21 @@ RETURN ac.key, af.key AS family, target.label AS target_class;
 core/
 ├── models/                    # YAML schema definitions (SOURCE OF TRUTH)
 │   ├── _index.yaml            # MODEL INDEX (graph structure, node categories)
-│   ├── taxonomy.yaml          # v11.7: 2 Realms (shared/org), 10 Layers
+│   ├── taxonomy.yaml          # v0.17.1: 2 Realms (shared/org), 10 Layers
 │   ├── node-classes/            # ONE FILE PER NODE TYPE
-│   │   ├── shared/            # Realm: shared (40 nodes)
+│   │   ├── shared/            # Realm: shared (36 nodes)
 │   │   │   ├── config/        #   Layer: config (3 nodes: Locale, EntityCategory, SEOKeywordFormat)
-│   │   │   ├── locale/        #   Layer: locale (6 nodes)
-│   │   │   ├── geography/     #   Layer: geography (6 nodes)
-│   │   │   └── knowledge/     #   Layer: knowledge (24 nodes incl. SEO/GEO)
-│   │   └── org/               # Realm: org (20 nodes)
+│   │   │   ├── locale/        #   Layer: locale (5 nodes)
+│   │   │   ├── geography/     #   Layer: geography (7 nodes)
+│   │   │   └── knowledge/     #   Layer: knowledge (21 nodes incl. SEO/GEO)
+│   │   └── org/               # Realm: org (21 nodes)
 │   │       ├── config/        #   Layer: config (1 node: OrgConfig)
-│   │       ├── foundation/    #   Layer: foundation (Project, Brand, ProjectNative)
+│   │       ├── foundation/    #   Layer: foundation (8 nodes: Project, Brand, ProjectGEOScope, etc.)
 │   │       ├── structure/     #   Layer: structure (Page, Block, ContentSlot)
-│   │       ├── semantic/      #   Layer: semantic (Entity, EntityNative, etc.)
-│   │       ├── instruction/   #   Layer: instruction (PageInstruction, BlockInstruction, etc.)
-│   │       └── output/        #   Layer: output (PageNative, BlockNative)
-│   ├── arc-classes/             # ONE FILE PER ARC TYPE (116 files)
+│   │       ├── semantic/      #   Layer: semantic (Entity, EntityNative)
+│   │       ├── instruction/   #   Layer: instruction (BlockType, BlockRules, BlockInstruction, PromptArtifact)
+│   │       └── output/        #   Layer: output (PageNative, BlockNative, OutputArtifact)
+│   ├── arc-classes/             # ONE FILE PER ARC TYPE (131 arcs)
 │   └── views/                 # YAML view definitions
 ├── src/                       # TypeScript source
 │   ├── config/                # Locale codes configuration
@@ -153,7 +157,7 @@ core/
 :NATIVE_OF      = Inverse arc (replaces CONTENT_OF + GENERATED_FOR)
 :HAS_INSTRUCTION= Instruction arc (Page→PageInstruction, Block→BlockInstruction)
 Locale*         = Locale Knowledge nodes (LocaleVoice, LocaleCulture, etc.)
-*Metrics        = Time-series SEO observations (SEOKeywordMetrics)
+*Scope          = Project-level scope config (ProjectGEOScope, ProjectSEOScope) — v0.17.1
 ```
 
 **v0.12.0 schema-graph terminology (ADR-023):**
