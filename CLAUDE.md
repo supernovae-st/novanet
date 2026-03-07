@@ -103,6 +103,35 @@ Categories: realms, layers, traits, arc_families, states, navigation, quality, m
 
 ---
 
+## Required Properties by Node Class
+
+All nodes MUST have these 5 standard properties for data quality (CSR compliance):
+
+| Node Class | key | display_name | description | created_at | updated_at | Additional Required |
+|------------|:---:|:------------:|:-----------:|:----------:|:----------:|---------------------|
+| **Entity** | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| **EntityNative** | ✅ | ✅ | ✅ | ✅ | ✅ | `denomination_forms` (ADR-033), `locale` |
+| **Page** | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| **PageNative** | ✅ | ✅ | ✅ | ✅ | ✅ | `locale`, `slug` |
+| **Block** | ✅ | ✅ | ✅ | ✅ | ✅ | `block_type` |
+| **BlockNative** | ✅ | ✅ | ✅ | ✅ | ✅ | `locale`, `content` |
+| **SEOKeyword** | ✅ | ✅ | ✅ | ✅ | ✅ | `locale` |
+| **Expression** | ✅ | ⚠️ `text` | — | ✅ | ⚠️ | `locale`, `text` (uses `text` not `display_name`) |
+
+**Legend:** ✅ Required | ⚠️ Alternative field used
+
+**ADR-033 denomination_forms** (EntityNative only):
+```json
+[
+  {"type": "text", "value": "code QR", "priority": 1},
+  {"type": "title", "value": "Code QR", "priority": 1},
+  {"type": "abbrev", "value": "QR", "priority": 1},
+  {"type": "url", "value": "code-qr", "priority": 1}
+]
+```
+
+---
+
 ## v11.7 Unified Tree Architecture
 
 v11.7 introduces the Unified Tree where Realm, Layer, ArcFamily, ArcClass are all clickable nodes.

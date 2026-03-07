@@ -139,6 +139,126 @@ pub fn validate_required_properties(
     issues
 }
 
+/// ADR-033: Validate denomination_forms for EntityNative
+///
+/// EntityNative nodes MUST have denomination_forms with 4 canonical forms:
+/// - text: lowercase prose (e.g., "code QR")
+/// - title: title case for headings (e.g., "Code QR")
+/// - abbrev: abbreviation (e.g., "QR")
+/// - url: URL-safe slug (e.g., "code-qr")
+pub fn validate_denomination_forms(
+    class_name: &str,
+    properties: &Option<serde_json::Map<String, serde_json::Value>>,
+) -> Vec<CheckIssue> {
+    let mut issues = Vec::new();
+
+    // Only validate EntityNative
+    if class_name != "EntityNative" {
+        return issues;
+    }
+
+    let props = match properties.as_ref() {
+        Some(p) => p,
+        None => {
+            issues.push(
+                CheckIssue::warning(
+                    "W001",
+                    "ADR-033: EntityNative should have denomination_forms property",
+                )
+                .with_field("denomination_forms")
+                .with_hint("Add denomination_forms with text, title, abbrev, url forms"),
+            );
+            return issues;
+        }
+    };
+
+    let forms_value = match props.get("denomination_forms") {
+        Some(v) => v,
+        None => {
+            issues.push(
+                CheckIssue::warning(
+                    "W001",
+                    "ADR-033: EntityNative should have denomination_forms property",
+                )
+                .with_field("denomination_forms")
+                .with_hint("Add denomination_forms with text, title, abbrev, url forms"),
+            );
+            return issues;
+        }
+    };
+
+    // Parse denomination_forms - could be JSON string or array
+    let forms: Vec<serde_json::Value> = if let Some(arr) = forms_value.as_array() {
+        arr.clone()
+    } else if let Some(s) = forms_value.as_str() {
+        match serde_json::from_str(s) {
+            Ok(arr) => arr,
+            Err(_) => {
+                issues.push(
+                    CheckIssue::error("E014", "ADR-033: denomination_forms is not valid JSON")
+                        .with_field("denomination_forms")
+                        .with_hint("denomination_forms must be a JSON array of form objects"),
+                );
+                return issues;
+            }
+        }
+    } else {
+        issues.push(
+            CheckIssue::error("E014", "ADR-033: denomination_forms must be an array or JSON string")
+                .with_field("denomination_forms")
+                .with_hint("denomination_forms must be a JSON array of form objects"),
+        );
+        return issues;
+    };
+
+    // Required form types per ADR-033
+    let required_forms = ["text", "title", "abbrev", "url"];
+
+    for form_type in required_forms {
+        let form = forms.iter().find(|f| {
+            f.get("type")
+                .and_then(|t| t.as_str())
+                .map(|t| t == form_type)
+                .unwrap_or(false)
+        });
+
+        match form {
+            None => {
+                issues.push(
+                    CheckIssue::warning(
+                        "W002",
+                        format!("ADR-033: Missing '{}' form in denomination_forms", form_type),
+                    )
+                    .with_field("denomination_forms")
+                    .with_hint(format!(
+                        "Add {{\"type\": \"{}\", \"value\": \"...\", \"priority\": 1}}",
+                        form_type
+                    )),
+                );
+            }
+            Some(f) => {
+                // Check for empty value
+                let value = f.get("value").and_then(|v| v.as_str()).unwrap_or("");
+                if value.trim().is_empty() {
+                    issues.push(
+                        CheckIssue::error(
+                            "E015",
+                            format!("ADR-033: '{}' form has empty value", form_type),
+                        )
+                        .with_field("denomination_forms")
+                        .with_hint(format!(
+                            "Provide a non-empty value for the '{}' form",
+                            form_type
+                        )),
+                    );
+                }
+            }
+        }
+    }
+
+    issues
+}
+
 /// Build schema context from class metadata
 pub fn build_schema_context(meta: &ClassMetadata) -> SchemaContext {
     let mut ctx = SchemaContext::new();
@@ -322,6 +442,12 @@ pub async fn validate_write(state: &State, params: &CheckParams) -> Result<Check
         // Validate required properties
         let prop_issues = validate_required_properties(&meta, &params.properties);
         for issue in prop_issues {
+            result.add_issue(issue);
+        }
+
+        // ADR-033: Validate denomination_forms for EntityNative
+        let denom_issues = validate_denomination_forms(class_name, &params.properties);
+        for issue in denom_issues {
             result.add_issue(issue);
         }
 
@@ -566,5 +692,103 @@ mod tests {
         assert!(preview.contains("MERGE"));
         assert!(preview.contains("EntityNative"));
         assert!(preview.contains("qr-code@fr-FR"));
+    }
+
+    #[test]
+    fn test_validate_denomination_forms_missing_property() {
+        let props = Some(serde_json::Map::new());
+        let issues = validate_denomination_forms("EntityNative", &props);
+        assert_eq!(issues.len(), 1);
+        assert_eq!(issues[0].code, "W001");
+        assert!(issues[0].message.contains("denomination_forms"));
+    }
+
+    #[test]
+    fn test_validate_denomination_forms_non_entity_native() {
+        let props = Some(serde_json::Map::new());
+        // Should return no issues for non-EntityNative classes
+        let issues = validate_denomination_forms("SEOKeyword", &props);
+        assert!(issues.is_empty());
+    }
+
+    #[test]
+    fn test_validate_denomination_forms_missing_required_forms() {
+        let mut props = serde_json::Map::new();
+        // Only text form, missing title, abbrev, url
+        let forms = serde_json::json!([
+            {"type": "text", "value": "code QR", "priority": 1}
+        ]);
+        props.insert("denomination_forms".to_string(), forms);
+
+        let issues = validate_denomination_forms("EntityNative", &Some(props));
+        // Should have 3 warnings for missing title, abbrev, url
+        assert_eq!(issues.len(), 3);
+        assert!(issues.iter().all(|i| i.code == "W002"));
+        assert!(issues.iter().any(|i| i.message.contains("title")));
+        assert!(issues.iter().any(|i| i.message.contains("abbrev")));
+        assert!(issues.iter().any(|i| i.message.contains("url")));
+    }
+
+    #[test]
+    fn test_validate_denomination_forms_empty_value() {
+        let mut props = serde_json::Map::new();
+        let forms = serde_json::json!([
+            {"type": "text", "value": "", "priority": 1},
+            {"type": "title", "value": "Code QR", "priority": 1},
+            {"type": "abbrev", "value": "QR", "priority": 1},
+            {"type": "url", "value": "code-qr", "priority": 1}
+        ]);
+        props.insert("denomination_forms".to_string(), forms);
+
+        let issues = validate_denomination_forms("EntityNative", &Some(props));
+        // Should have 1 error for empty text value
+        assert_eq!(issues.len(), 1);
+        assert_eq!(issues[0].code, "E015");
+        assert!(issues[0].message.contains("text"));
+    }
+
+    #[test]
+    fn test_validate_denomination_forms_valid() {
+        let mut props = serde_json::Map::new();
+        let forms = serde_json::json!([
+            {"type": "text", "value": "code QR", "priority": 1},
+            {"type": "title", "value": "Code QR", "priority": 1},
+            {"type": "abbrev", "value": "QR", "priority": 1},
+            {"type": "url", "value": "code-qr", "priority": 1}
+        ]);
+        props.insert("denomination_forms".to_string(), forms);
+
+        let issues = validate_denomination_forms("EntityNative", &Some(props));
+        // Should be valid with no issues
+        assert!(issues.is_empty());
+    }
+
+    #[test]
+    fn test_validate_denomination_forms_json_string() {
+        let mut props = serde_json::Map::new();
+        // Test with JSON string format (as stored in Neo4j)
+        let forms_str = r#"[{"type": "text", "value": "code QR", "priority": 1}, {"type": "title", "value": "Code QR", "priority": 1}, {"type": "abbrev", "value": "QR", "priority": 1}, {"type": "url", "value": "code-qr", "priority": 1}]"#;
+        props.insert(
+            "denomination_forms".to_string(),
+            serde_json::Value::String(forms_str.to_string()),
+        );
+
+        let issues = validate_denomination_forms("EntityNative", &Some(props));
+        // Should be valid with no issues
+        assert!(issues.is_empty());
+    }
+
+    #[test]
+    fn test_validate_denomination_forms_invalid_json() {
+        let mut props = serde_json::Map::new();
+        // Invalid JSON string
+        props.insert(
+            "denomination_forms".to_string(),
+            serde_json::Value::String("not valid json".to_string()),
+        );
+
+        let issues = validate_denomination_forms("EntityNative", &Some(props));
+        assert_eq!(issues.len(), 1);
+        assert_eq!(issues[0].code, "E014");
     }
 }
