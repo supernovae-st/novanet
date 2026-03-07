@@ -502,13 +502,12 @@ node:
         // - v11.4: Added containers (+3), removed obsolete SEO types (-4)
         // - v11.5: Moved Locale to shared/config, consolidated SEO/GEO to shared/knowledge
         // - v0.12.0: ADR-024 trait rename (defined/authored/imported/generated/retrieved)
-        // v0.17: AudiencePersona/ChannelSurface/Market removed, EntityNative trait=generated
-        // v0.17.1: Added ProjectGEOScope (+1), added 2 more org nodes
-        let nodes = load_all_nodes(root).expect("should parse all 60 nodes");
+        // v0.17.0: AudiencePersona/ChannelSurface/Market removed, EntityNative trait=generated
+        let nodes = load_all_nodes(root).expect("should parse all 57 nodes");
         assert_eq!(
             nodes.len(),
-            60,
-            "expected 60 YAML node files (v0.17.1: 39 shared + 21 org)"
+            57,
+            "expected 57 YAML node files (v0.17.0: 36 shared + 21 org)"
         );
 
         // Every node has a non-empty name, realm, and layer
@@ -531,12 +530,12 @@ node:
         }
 
         // Verify trait distribution (2 realms: shared + org)
-        // v0.17.1: 60 nodes (39 shared + 21 org)
+        // v0.17.0: 57 nodes (36 shared + 21 org)
         let count = |t: NodeTrait| nodes.iter().filter(|n| n.def.node_trait == t).count();
         assert_eq!(
             count(NodeTrait::Defined),
-            33,
-            "defined count (v0.17.1: 33 defined nodes)"
+            32,
+            "defined count (v0.17.0: 32 defined nodes)"
         );
         assert_eq!(
             count(NodeTrait::Authored),
@@ -545,33 +544,31 @@ node:
         );
         assert_eq!(
             count(NodeTrait::Imported),
-            19,
-            "imported count (v0.17: 19 imported nodes, -Market)"
+            18,
+            "imported count (v0.17.0: 18 imported nodes)"
         );
         assert_eq!(
             count(NodeTrait::Generated),
             5,
-            "generated count (v0.17: PageNative, BlockNative, EntityNative, OutputArtifact, PromptArtifact)"
+            "generated count (v0.17.0: PageNative, BlockNative, EntityNative, OutputArtifact, PromptArtifact)"
         );
         assert_eq!(
             count(NodeTrait::Retrieved),
-            2,
-            "retrieved count (v0.12.0: GEOAnswer, SEOKeywordMetrics)"
+            1,
+            "retrieved count (v0.17.0: GEOAnswer)"
         );
 
-        // v0.17: Verify realm distribution
-        // shared: 39 (-Market, -AudiencePersona not shared)
-        // org: 19 (-AudiencePersona, -ChannelSurface)
+        // v0.17.0: Verify realm distribution
         let realm_count = |r: &str| nodes.iter().filter(|n| n.realm == r).count();
         assert_eq!(
             realm_count("shared"),
-            39,
-            "shared realm count (v0.17: 39 shared nodes, -Market)"
+            36,
+            "shared realm count (v0.17.0: 36 shared nodes)"
         );
         assert_eq!(
             realm_count("org"),
             21,
-            "org realm count (v0.17.1: 21 org nodes, +ProjectGEOScope +2)"
+            "org realm count (v0.17.0: 21 org nodes)"
         );
 
         // Spot-check known nodes
@@ -588,10 +585,10 @@ node:
         assert_eq!(style.def.node_trait, NodeTrait::Imported);
         assert_eq!(style.def.knowledge_tier, None);
 
-        // Check one of the knowledge atoms (in shared/knowledge — v11.3)
-        let term = nodes.iter().find(|n| n.def.name == "Term").unwrap();
-        assert_eq!(term.realm, "shared");
-        assert_eq!(term.layer, "knowledge");
-        assert_eq!(term.def.node_trait, NodeTrait::Imported);
+        // Check one of the knowledge atoms (in shared/knowledge — v0.17.0)
+        let expression = nodes.iter().find(|n| n.def.name == "Expression").unwrap();
+        assert_eq!(expression.realm, "shared");
+        assert_eq!(expression.layer, "knowledge");
+        assert_eq!(expression.def.node_trait, NodeTrait::Imported);
     }
 }

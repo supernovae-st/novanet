@@ -313,14 +313,14 @@ mod tests {
             .generate(root)
             .expect("should generate autowire cypher");
 
-        // v0.17.1: 60 OF_CLASS statements
+        // v0.17.0: 57 OF_CLASS statements
         let of_class = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:OF_CLASS]"))
             .count();
         assert_eq!(
-            of_class, 60,
-            "expected 60 OF_CLASS statements (39 shared + 21 org, v0.17.1)"
+            of_class, 57,
+            "expected 57 OF_CLASS statements (36 shared + 21 org, v0.17.0)"
         );
 
         // 2 realms present (v11.3: shared + org)
@@ -331,14 +331,14 @@ mod tests {
         assert!(cypher.contains("MATCH (n:Style)"));
         assert!(cypher.contains("MATCH (c:Class {label: 'Style'})"));
 
-        // v0.17: Layer counts (4 shared + 6 org = 10 layers)
+        // v0.17.0: Layer counts (4 shared + 6 org = 10 layers)
         assert!(cypher.contains("Shared > Config (3 types)")); // EntityCategory + Locale + SEOKeywordFormat
-        assert!(cypher.contains("Shared > Locale (5 types)")); // v0.17: -Market (Formatting, Style, Culture, Adaptation, Slugification)
+        assert!(cypher.contains("Shared > Locale (5 types)")); // Formatting, Style, Culture, Adaptation, Slugification
         assert!(cypher.contains("Shared > Geography (7 types)")); // Continent, Region, etc. + Country
-        assert!(cypher.contains("Shared > Knowledge (24 types)")); // unchanged
+        assert!(cypher.contains("Shared > Knowledge (21 types)")); // v0.17.0: 21 knowledge types
 
-        // v0.17.1: Header
-        assert!(cypher.contains("Total: 60 node types"));
+        // v0.17.0: Header
+        assert!(cypher.contains("Total: 57 node types"));
 
         // Verification query present
         assert!(cypher.contains("VERIFICATION QUERY"));

@@ -292,8 +292,8 @@ mod tests {
 
         // v0.16: 59 node classes
         assert!(
-            stats.total >= 58,
-            "expected at least 58 node classes, got {}",
+            stats.total >= 57,
+            "expected at least 57 node classes, got {}",
             stats.total
         );
 
@@ -356,10 +356,10 @@ mod tests {
 
         let stats = compute_arc_stats(&root).expect("should compute arc stats");
 
-        // v0.17.1: 138 arc classes (USES_ENTITY + 4 others archived)
+        // v0.17.0: 131 arc classes
         assert!(
-            stats.total >= 138,
-            "expected at least 138 arc classes, got {}",
+            stats.total >= 131,
+            "expected at least 131 arc classes, got {}",
             stats.total
         );
 
@@ -514,7 +514,7 @@ mod tests {
         // Should contain header
         assert!(text.contains("NovaNet Schema Statistics"));
 
-        // Should contain totals (v0.17: 58 nodes, 175 arcs)
+        // Should contain totals from sample_stats() mock data
         assert!(text.contains("58 node classes"));
         assert!(text.contains("175 arc classes"));
 

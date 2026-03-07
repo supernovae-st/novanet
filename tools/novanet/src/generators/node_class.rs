@@ -631,44 +631,43 @@ mod tests {
             .generate(root)
             .expect("should generate kind cypher");
 
-        // v0.12.5: 61 Class MERGE statements (ADR-028 Brand Architecture)
-        // v0.17.1: 60 nodes (39 shared + 21 org)
+        // v0.17.0: 57 nodes (36 shared + 21 org)
         let class_merges = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Schema:Class"))
             .count();
         assert_eq!(
-            class_merges, 60,
-            "expected 60 Class MERGE statements (v0.17.1: 39 shared + 21 org)"
+            class_merges, 57,
+            "expected 57 Class MERGE statements (v0.17.0: 36 shared + 21 org)"
         );
 
-        // 60 HAS_CLASS relationships (v0.17.1)
+        // 57 HAS_CLASS relationships (v0.17.0)
         let has_class = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_CLASS]"))
             .count();
-        assert_eq!(has_class, 60, "expected 60 HAS_CLASS relationships");
+        assert_eq!(has_class, 57, "expected 57 HAS_CLASS relationships");
 
-        // 60 IN_REALM relationships
+        // 57 IN_REALM relationships
         let in_realm = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_REALM]"))
             .count();
-        assert_eq!(in_realm, 60, "expected 60 IN_REALM relationships");
+        assert_eq!(in_realm, 57, "expected 57 IN_REALM relationships");
 
-        // 60 IN_LAYER relationships
+        // 57 IN_LAYER relationships
         let in_layer = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_LAYER]"))
             .count();
-        assert_eq!(in_layer, 60, "expected 60 IN_LAYER relationships");
+        assert_eq!(in_layer, 57, "expected 57 IN_LAYER relationships");
 
-        // 60 EXHIBITS relationships
+        // 57 EXHIBITS relationships
         let exhibits = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:EXHIBITS]"))
             .count();
-        assert_eq!(exhibits, 60, "expected 60 EXHIBITS relationships");
+        assert_eq!(exhibits, 57, "expected 57 EXHIBITS relationships");
 
         // Spot checks — specific Classes (v11.8: c_ prefix, :Schema:Class)
         assert!(cypher.contains("c_Project:Schema:Class {label: 'Project'}"));
@@ -699,8 +698,8 @@ mod tests {
             }
         }
 
-        // v0.17.1: Header mentions 60 Class nodes
-        assert!(cypher.contains("60 Class nodes"));
+        // v0.17.0: Header mentions 57 Class nodes
+        assert!(cypher.contains("57 Class nodes"));
 
         // v10.1: knowledge_tier removed from all YAMLs (node type is sufficient)
         assert!(

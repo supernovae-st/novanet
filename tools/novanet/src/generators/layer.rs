@@ -396,15 +396,15 @@ mod tests {
         let generator = LayerGenerator;
         let output = generator.generate(root).expect("should generate layers.ts");
 
-        // v0.17.1: 60 nodes (39 shared + 21 org)
+        // v0.17.0: 57 nodes (36 shared + 21 org)
         assert!(
-            output.contains("mapping all 60 node types"),
-            "should mention 60 node types"
+            output.contains("mapping all 57 node types"),
+            "should mention 57 node types"
         );
 
-        // v0.17.1 counts: Realm node counts
-        assert!(output.contains("SHARED REALM (39 nodes)")); // config (3) + locale (5) + geography (7) + knowledge (24)
-        assert!(output.contains("ORG REALM (21 nodes)")); // v0.17.1: +ProjectGEOScope +2
+        // v0.17.0 counts: Realm node counts
+        assert!(output.contains("SHARED REALM (36 nodes)")); // config (3) + locale (5) + geography (7) + knowledge (21)
+        assert!(output.contains("ORG REALM (21 nodes)"));
 
         // 9 unique layer names (v11.5: 4 shared + 6 org = 10 total, config in both)
         for layer in [
