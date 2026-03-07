@@ -18,7 +18,7 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 **Solution**: NovaNet generates content **natively** per locale from defined semantic entities.
 - LLM generates in target locale with cultural context (LocaleVoice, LocaleCulture)
 - Entity definitions are written once; content is generated 200×
-- Knowledge atoms (Terms, Expressions, Patterns) provide locale-specific vocabulary
+- Knowledge atoms (Expressions, Patterns) provide locale-specific vocabulary
 
 **Result**: Native-quality content at a fraction of translation cost, with consistent brand voice across all locales.
 
@@ -29,7 +29,7 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
-**Current Version**: v0.17.1 "Schema Cleanup" (YAGNI: removed 6 unused nodes, added ProjectGEOScope)
+**Current Version**: v0.17.2 "Schema Cleanup Complete" (YAGNI: removed Term/TermSet, 57 nodes, 133 arcs)
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
 **Related docs**:
@@ -79,11 +79,11 @@ v0.13.0 introduces the *Native pattern with unified arcs:
 - ***Native Pattern** (ADR-029): EntityContent→EntityNative, ProjectContent→ProjectNative, PageGenerated→PageNative, BlockGenerated→BlockNative
 - **Unified Arcs** (ADR-029): HAS_CONTENT/HAS_GENERATED→HAS_NATIVE, CONTENT_OF/GENERATED_FOR→NATIVE_OF
 - **Slug Ownership** (ADR-030): URL properties moved from EntityNative to PageNative
-- **59 nodes** total: 38 shared + 21 org, **136 arcs** (6 families)
+- **57 nodes** total: 36 shared + 21 org, **133 arcs** (6 families)
 
-**Architecture (v0.17.3):**
+**Architecture (v0.17.2):**
 - 2 realms: SHARED + ORG
-- SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (38 nodes)
+- SHARED (4 layers): config, locale, geography, knowledge — universal, READ-ONLY (36 nodes)
 - ORG (6 layers): config, foundation, structure, semantic, instruction, output (21 nodes)
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
@@ -92,7 +92,7 @@ schema generate/validate, doc generate, filter build. Galaxy-themed TUI with uni
 
 **YAML-first architecture:** Each Class YAML has explicit `realm:` and `layer:` fields (source of truth).
 Path validation ensures `models/node-classes/{realm}/{layer}/{name}.yaml` matches YAML content.
-v0.17.3: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 59 nodes, 136 arcs.
+v0.17.2: 2 realms (shared, org), 10 layers total (4 shared + 6 org), 57 nodes, 133 arcs.
 
 **Icons source of truth (v11.5):** `visual-encoding.yaml` → `icons:` section provides dual-format icons:
 - `web`: Lucide icon name for Studio
@@ -191,12 +191,14 @@ v11.7 introduces the Unified Tree where Realm, Layer, ArcFamily, ArcClass are al
 │  NOTE: Terms deferred — EntityNative.denomination_forms covers terminology  │
 │                                                                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  STATISTICS (v0.17.3)                                                       │
+│  STATISTICS (v0.17.2)                                                       │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│  Containers (5): ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet│
-│  Atoms (5):      Expression, Pattern, CultureRef, Taboo, AudienceTrait      │
-│  Total:          59 nodes (38 shared + 21 org)                              │
+│  Containers (7): ExpressionSet, PatternSet, CultureSet, TabooSet,           │
+│                  AudienceSet, SEOKeywordSet, GEOQuerySet                    │
+│  Atoms (8):      Expression, Pattern, CultureRef, Taboo, AudienceTrait,     │
+│                  SEOKeyword, GEOQuery, GEOAnswer                            │
+│  Total:          57 nodes (36 shared + 21 org)                              │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -308,7 +310,7 @@ pnpm infra:seed            # Seed database
 
 ---
 
-## MCP Server (v0.17.1)
+## MCP Server (v0.17.2)
 
 NovaNet exposes an MCP (Model Context Protocol) server for workflow automation and AI agent integration.
 
@@ -493,7 +495,7 @@ pnpm dev    # → http://localhost:3000
 
 1. **Read this file** — Understand the generation philosophy (not translation)
 2. **Explore TUI** — `cargo run -- tui` in `tools/novanet/` for unified tree exploration (v11.7)
-3. **Read `models/_index.yaml`** — Complete schema overview with all 59 nodes
+3. **Read `models/_index.yaml`** — Complete schema overview with all 57 nodes
 4. **Study `taxonomy.yaml`** — Realm/Layer/Trait definitions with visual encoding
 5. **Check ADRs** — Use `/adr <number>` command for quick lookup (full ADRs in parent `supernovae-agi` workspace)
 6. **Run Studio** — `pnpm dev` and explore the graph visually at http://localhost:3000
