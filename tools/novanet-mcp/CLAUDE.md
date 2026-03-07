@@ -2,7 +2,7 @@
 
 MCP (Model Context Protocol) server exposing the NovaNet knowledge graph to AI agents.
 
-**Version**: 0.17.0 | **Rust**: 1.86 | **Edition**: 2024 | **rmcp**: 1.1
+**Version**: 0.17.2 | **Rust**: 1.86 | **Edition**: 2024 | **rmcp**: 1.1
 
 ---
 
