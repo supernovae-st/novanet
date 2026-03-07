@@ -84,16 +84,16 @@ const STYLE_YAML_TEXT: Style = Style::new().fg(Color::White);
 // PUBLIC API
 // =============================================================================
 
-/// Render the YAML panel [2] (SOURCE box only).
-/// v0.16.3: Updated to use Focus::Yaml for panel selection.
+/// Render the Content panel [2] (SOURCE box only).
+/// v0.17.3: Renamed from render_yaml_panel to reflect context-aware content.
 ///
 /// Visual states:
-/// - Selected (cyan): This panel is focused (Focus::Yaml)
+/// - Selected (cyan): This panel is focused (Focus::Content)
 /// - Unfocused (dim): This panel is NOT focused
-pub fn render_yaml_panel(f: &mut Frame, area: Rect, app: &App) {
-    // v0.16.3: Use Focus instead of selected_box for panel focus
+pub fn render_content_panel(f: &mut Frame, area: Rect, app: &App) {
+    // v0.17.3: Use Focus::Content for panel focus
     use crate::tui::app::Focus;
-    let source_selected = app.focus == Focus::Yaml;
+    let source_selected = app.focus == Focus::Content;
     render_source_box(f, area, app, source_selected);
 }
 

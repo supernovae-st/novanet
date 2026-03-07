@@ -2661,8 +2661,8 @@ fn detail_box_state(
 /// Properties are rendered separately by `render_props_panel`.
 /// v0.16.4: Accepts pre-built content to avoid double-building.
 pub fn render_unified_info_panel(f: &mut Frame, area: Rect, app: &App, content: &UnifiedContent) {
-    // v0.16.3: YAML panel is [2], this is just the header info
-    let panel_focused = app.focus == Focus::Yaml;
+    // v0.16.3: Content panel is [2], this is just the header info
+    let panel_focused = app.focus == Focus::Content;
     let selected_box = app.selected_box;
 
     // Check minimum height - fall back to simple layout if too small

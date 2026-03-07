@@ -14,7 +14,7 @@ pub use graph::render_graph_panel;
 pub use info::{build_unified_content, render_props_panel, render_unified_info_panel};
 pub use status::render_status;
 pub use tree::render_tree;
-pub use yaml_panel::render_yaml_panel;
+pub use yaml_panel::render_content_panel;
 
 use ratatui::Frame;
 use ratatui::layout::{Constraint, Direction, Layout, Rect};
@@ -658,7 +658,7 @@ fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
         .split(h_chunks[1]);
 
     render_unified_info_panel(f, center_chunks[0], app, &content); // Header box
-    render_yaml_panel(f, center_chunks[1], app); // YAML [2]
+    render_content_panel(f, center_chunks[1], app); // Content [2]
 
     // RIGHT: Props [3] (top) + Arcs [4] (bottom)
     let right_chunks = Layout::default()
@@ -674,7 +674,7 @@ fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
 
     // v0.17.3: Capture panel rects for mouse hit-testing
     app.panel_rects.tree = Some(h_chunks[0]);
-    app.panel_rects.yaml = Some(center_chunks[1]);
+    app.panel_rects.content = Some(center_chunks[1]);
     app.panel_rects.props = Some(right_chunks[0]);
     app.panel_rects.arcs = Some(right_chunks[1]);
 }
@@ -707,13 +707,13 @@ fn render_main_narrow(f: &mut Frame, area: Rect, app: &mut App) {
         .split(h_chunks[1]);
 
     render_unified_info_panel(f, v_chunks[0], app, &content); // Header
-    render_yaml_panel(f, v_chunks[1], app); // YAML [2]
+    render_content_panel(f, v_chunks[1], app); // Content [2]
     render_props_panel(f, v_chunks[2], app, &content); // Props [3]
     render_graph_panel(f, v_chunks[3], app); // Arcs [4]
 
     // v0.17.3: Capture panel rects for mouse hit-testing
     app.panel_rects.tree = Some(h_chunks[0]);
-    app.panel_rects.yaml = Some(v_chunks[1]);
+    app.panel_rects.content = Some(v_chunks[1]);
     app.panel_rects.props = Some(v_chunks[2]);
     app.panel_rects.arcs = Some(v_chunks[3]);
 }

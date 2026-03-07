@@ -62,7 +62,7 @@ pub(crate) fn get_contextual_shortcuts(
                     "↑/↓:nav ←/→:toggle y:copy"
                 }
             }
-            Focus::Yaml | Focus::Props => "↑/↓:scroll Enter:page y:copy",
+            Focus::Content | Focus::Props => "↑/↓:scroll Enter:page y:copy",
             Focus::Arcs => "↑/↓:scroll Tab:panel",
         },
         NavMode::Views => "↑/↓:nav Enter:select y:copy",
@@ -364,7 +364,7 @@ mod tests {
 
     #[test]
     fn test_shortcuts_graph_mode_yaml_focus() {
-        let result = get_contextual_shortcuts(NavMode::Graph, Focus::Yaml, false, false);
+        let result = get_contextual_shortcuts(NavMode::Graph, Focus::Content, false, false);
         assert!(result.contains("↑/↓:scroll"));
     }
 
@@ -521,8 +521,8 @@ mod tests {
     #[test]
     fn test_focus_next() {
         // v0.16.3: 4-panel cycle: Tree → Yaml → Props → Arcs → Tree
-        assert_eq!(Focus::Tree.next(), Focus::Yaml);
-        assert_eq!(Focus::Yaml.next(), Focus::Props);
+        assert_eq!(Focus::Tree.next(), Focus::Content);
+        assert_eq!(Focus::Content.next(), Focus::Props);
         assert_eq!(Focus::Props.next(), Focus::Arcs);
         assert_eq!(Focus::Arcs.next(), Focus::Tree);
     }
@@ -532,8 +532,8 @@ mod tests {
         // v0.16.3: 4-panel cycle reverse
         assert_eq!(Focus::Tree.prev(), Focus::Arcs);
         assert_eq!(Focus::Arcs.prev(), Focus::Props);
-        assert_eq!(Focus::Props.prev(), Focus::Yaml);
-        assert_eq!(Focus::Yaml.prev(), Focus::Tree);
+        assert_eq!(Focus::Props.prev(), Focus::Content);
+        assert_eq!(Focus::Content.prev(), Focus::Tree);
     }
 
     // =========================================================================
@@ -543,7 +543,7 @@ mod tests {
     #[test]
     fn test_shortcuts_all_focus_panels_for_graph() {
         // Ensure all focus panels produce valid shortcuts for Graph mode
-        for focus in [Focus::Tree, Focus::Yaml, Focus::Props, Focus::Arcs] {
+        for focus in [Focus::Tree, Focus::Content, Focus::Props, Focus::Arcs] {
             let result = get_contextual_shortcuts(NavMode::Graph, focus, false, false);
             assert!(
                 !result.is_empty(),

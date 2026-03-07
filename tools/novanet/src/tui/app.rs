@@ -93,23 +93,23 @@ impl NavMode {
 }
 
 /// Which panel has focus.
-/// v0.16.3: 4 scrollable panels: Tree [1], Yaml [2], Props [3], Arcs [4]
+/// v0.17.3: 4 scrollable panels: Tree [1], Content [2], Props [3], Arcs [4]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum Focus {
     #[default]
-    Tree, // [1] Left panel - tree navigation
-    Yaml,  // [2] Center panel - source YAML
-    Props, // [3] Right top - properties
-    Arcs,  // [4] Right bottom - relationships
+    Tree,    // [1] Left panel - tree navigation
+    Content, // [2] Center panel - context-aware content (was Yaml)
+    Props,   // [3] Right top - properties
+    Arcs,    // [4] Right bottom - relationships
 }
 
 impl Focus {
     /// Cycle to next focus panel (Tab).
-    /// Cycle: Tree [1] → Yaml [2] → Props [3] → Arcs [4] → Tree [1]
+    /// Cycle: Tree [1] → Content [2] → Props [3] → Arcs [4] → Tree [1]
     pub fn next(self) -> Self {
         match self {
-            Focus::Tree => Focus::Yaml,
-            Focus::Yaml => Focus::Props,
+            Focus::Tree => Focus::Content,
+            Focus::Content => Focus::Props,
             Focus::Props => Focus::Arcs,
             Focus::Arcs => Focus::Tree,
         }
@@ -119,8 +119,8 @@ impl Focus {
     pub fn prev(self) -> Self {
         match self {
             Focus::Tree => Focus::Arcs,
-            Focus::Yaml => Focus::Tree,
-            Focus::Props => Focus::Yaml,
+            Focus::Content => Focus::Tree,
+            Focus::Props => Focus::Content,
             Focus::Arcs => Focus::Props,
         }
     }
@@ -129,7 +129,7 @@ impl Focus {
     pub fn number(self) -> u8 {
         match self {
             Focus::Tree => 1,
-            Focus::Yaml => 2,
+            Focus::Content => 2,
             Focus::Props => 3,
             Focus::Arcs => 4,
         }
@@ -470,10 +470,11 @@ impl OverlayState {
 // =============================================================================
 
 /// Panel identifiers for mouse hit-testing.
+/// v0.17.3: Renamed Yaml → Content to reflect context-aware content.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Panel {
     Tree,
-    Yaml,
+    Content, // was Yaml
     Props,
     Arcs,
 }
@@ -483,7 +484,7 @@ impl Panel {
     pub const fn to_focus(self) -> Focus {
         match self {
             Panel::Tree => Focus::Tree,
-            Panel::Yaml => Focus::Yaml,
+            Panel::Content => Focus::Content,
             Panel::Props => Focus::Props,
             Panel::Arcs => Focus::Arcs,
         }
@@ -492,10 +493,11 @@ impl Panel {
 
 /// Stores panel rectangles for mouse hit-testing.
 /// Updated during each render pass with the actual panel areas.
+/// v0.17.3: Renamed yaml → content to reflect context-aware content.
 #[derive(Debug, Clone, Default)]
 pub struct PanelRects {
     pub tree: Option<Rect>,
-    pub yaml: Option<Rect>,
+    pub content: Option<Rect>, // was yaml
     pub props: Option<Rect>,
     pub arcs: Option<Rect>,
 }
@@ -510,9 +512,9 @@ impl PanelRects {
                 return Some(Panel::Tree);
             }
         }
-        if let Some(rect) = &self.yaml {
+        if let Some(rect) = &self.content {
             if Self::contains(rect, column, row) {
-                return Some(Panel::Yaml);
+                return Some(Panel::Content);
             }
         }
         if let Some(rect) = &self.props {
@@ -540,7 +542,7 @@ impl PanelRects {
     /// Clear all panel rects (called at start of render).
     pub fn clear(&mut self) {
         self.tree = None;
-        self.yaml = None;
+        self.content = None;
         self.props = None;
         self.arcs = None;
     }
@@ -725,7 +727,7 @@ impl App {
             InfoBox::Tree => Focus::Tree,
             InfoBox::Header | InfoBox::Properties => Focus::Props,
             InfoBox::Arcs => Focus::Arcs,
-            InfoBox::Source => Focus::Yaml,
+            InfoBox::Source => Focus::Content,
         }
     }
 
@@ -1247,7 +1249,7 @@ impl App {
                                 return true;
                             }
                         }
-                        Panel::Yaml => {
+                        Panel::Content => {
                             if self.yaml.scroll > 0 {
                                 self.yaml.scroll =
                                     self.yaml.scroll.saturating_sub(MOUSE_SCROLL_LINES);
@@ -1284,7 +1286,7 @@ impl App {
                                 return true;
                             }
                         }
-                        Panel::Yaml => {
+                        Panel::Content => {
                             let max_scroll =
                                 self.yaml.line_count.saturating_sub(YAML_SCROLL_MARGIN);
                             if self.yaml.scroll < max_scroll {
@@ -1544,7 +1546,7 @@ impl App {
                     Focus::Tree => {
                         self.toggle_tree_item();
                     }
-                    Focus::Yaml => {
+                    Focus::Content => {
                         // v0.13.1: peek mode removed (PROPERTIES panel shows instance data)
                     }
                     Focus::Props => {
@@ -1626,7 +1628,7 @@ impl App {
                         self.load_yaml_for_current();
                         // Note: Instance loading removed - use Space/Enter to expand
                     }
-                    Focus::Yaml => {
+                    Focus::Content => {
                         self.yaml.scroll = 0;
                     }
                     Focus::Props => {
@@ -1647,7 +1649,7 @@ impl App {
                         self.load_yaml_for_current();
                         // Note: Instance loading removed - use Space/Enter to expand
                     }
-                    Focus::Yaml => {
+                    Focus::Content => {
                         let max_scroll = self.yaml.line_count.saturating_sub(YAML_SCROLL_MARGIN);
                         self.yaml.scroll = max_scroll;
                     }
@@ -1673,7 +1675,7 @@ impl App {
                             self.load_yaml_for_current();
                         }
                     }
-                    Focus::Yaml => {
+                    Focus::Content => {
                         if self.yaml.scroll > 0 {
                             self.yaml.scroll -= 1;
                         }
@@ -1707,7 +1709,7 @@ impl App {
                             self.load_yaml_for_current();
                         }
                     }
-                    Focus::Yaml => {
+                    Focus::Content => {
                         let max_scroll = self.yaml.line_count.saturating_sub(YAML_SCROLL_MARGIN);
                         if self.yaml.scroll < max_scroll {
                             self.yaml.scroll += 1;
@@ -1748,7 +1750,7 @@ impl App {
                         self.ensure_cursor_visible();
                         self.load_yaml_for_current();
                     }
-                    Focus::Yaml => {
+                    Focus::Content => {
                         let max_scroll = self.yaml.line_count.saturating_sub(YAML_SCROLL_MARGIN);
                         self.yaml.scroll = (self.yaml.scroll + PAGE_SCROLL_AMOUNT).min(max_scroll);
                     }
@@ -1771,7 +1773,7 @@ impl App {
                         self.ensure_cursor_visible();
                         self.load_yaml_for_current();
                     }
-                    Focus::Yaml => {
+                    Focus::Content => {
                         self.yaml.scroll = self.yaml.scroll.saturating_sub(PAGE_SCROLL_AMOUNT);
                     }
                     Focus::Props => {
@@ -3988,8 +3990,8 @@ mod tests {
         app.focus = Focus::Tree;
 
         // Cycle focus
-        app.focus = Focus::Yaml;
-        assert_eq!(app.focus, Focus::Yaml);
+        app.focus = Focus::Content;
+        assert_eq!(app.focus, Focus::Content);
 
         app.focus = Focus::Tree;
         assert_eq!(app.focus, Focus::Tree);
@@ -4105,7 +4107,7 @@ mod tests {
 
         // v0.13.1: Source is the only right-panel box (Diagram/Architecture removed)
         app.selected_box = InfoBox::Source;
-        assert_eq!(app.focus_for_selected_box(), Focus::Yaml);
+        assert_eq!(app.focus_for_selected_box(), Focus::Content);
 
         // Verify other boxes map to their panels
         app.selected_box = InfoBox::Tree;
@@ -4147,17 +4149,17 @@ mod tests {
     }
 
     #[test]
-    fn test_panel_rects_hit_test_yaml() {
+    fn test_panel_rects_hit_test_content() {
         let rects = PanelRects {
-            yaml: Some(Rect::new(30, 0, 50, 40)),
+            content: Some(Rect::new(30, 0, 50, 40)),
             ..Default::default()
         };
 
-        // Inside yaml panel
-        assert_eq!(rects.hit_test(50, 20), Some(Panel::Yaml));
-        assert_eq!(rects.hit_test(30, 0), Some(Panel::Yaml));
+        // Inside content panel
+        assert_eq!(rects.hit_test(50, 20), Some(Panel::Content));
+        assert_eq!(rects.hit_test(30, 0), Some(Panel::Content));
 
-        // Outside yaml panel
+        // Outside content panel
         assert_eq!(rects.hit_test(29, 20), None);
         assert_eq!(rects.hit_test(80, 20), None);
     }
@@ -4193,14 +4195,14 @@ mod tests {
     fn test_panel_rects_clear() {
         let mut rects = PanelRects {
             tree: Some(Rect::new(0, 0, 30, 40)),
-            yaml: Some(Rect::new(30, 0, 50, 40)),
+            content: Some(Rect::new(30, 0, 50, 40)),
             props: Some(Rect::new(80, 0, 40, 20)),
             arcs: Some(Rect::new(80, 20, 40, 20)),
         };
 
         // All panels should be set
         assert!(rects.tree.is_some());
-        assert!(rects.yaml.is_some());
+        assert!(rects.content.is_some());
         assert!(rects.props.is_some());
         assert!(rects.arcs.is_some());
 
@@ -4209,7 +4211,7 @@ mod tests {
 
         // All panels should be None
         assert!(rects.tree.is_none());
-        assert!(rects.yaml.is_none());
+        assert!(rects.content.is_none());
         assert!(rects.props.is_none());
         assert!(rects.arcs.is_none());
 
@@ -4220,7 +4222,7 @@ mod tests {
     #[test]
     fn test_panel_to_focus_conversion() {
         assert_eq!(Panel::Tree.to_focus(), Focus::Tree);
-        assert_eq!(Panel::Yaml.to_focus(), Focus::Yaml);
+        assert_eq!(Panel::Content.to_focus(), Focus::Content);
         assert_eq!(Panel::Props.to_focus(), Focus::Props);
         assert_eq!(Panel::Arcs.to_focus(), Focus::Arcs);
     }
@@ -4230,23 +4232,21 @@ mod tests {
         // Test overlapping panels (shouldn't happen in practice, but test priority)
         let rects = PanelRects {
             tree: Some(Rect::new(0, 0, 50, 40)),
-            yaml: Some(Rect::new(25, 0, 50, 40)), // Overlaps with tree
+            content: Some(Rect::new(25, 0, 50, 40)), // Overlaps with tree
             ..Default::default()
         };
 
         // Tree should win (checked first in hit_test)
         assert_eq!(rects.hit_test(30, 20), Some(Panel::Tree));
 
-        // Outside overlap region, yaml should match
-        assert_eq!(rects.hit_test(60, 20), Some(Panel::Yaml));
+        // Outside overlap region, content should match
+        assert_eq!(rects.hit_test(60, 20), Some(Panel::Content));
     }
 
     #[test]
     fn test_mouse_scroll_lines_constant() {
         // Verify the constant exists and has expected value
+        // (3 lines per scroll, different from keyboard's implicit 1 line)
         assert_eq!(MOUSE_SCROLL_LINES, 3);
-
-        // Verify it's different from keyboard scroll (implicit 1 line)
-        assert!(MOUSE_SCROLL_LINES > 1);
     }
 }

@@ -6,7 +6,7 @@
 import type { NodeType } from '@novanet/core/types';
 
 // =============================================================================
-// NODE ICONS (59 nodes) — DUAL FORMAT
+// NODE ICONS (57 nodes) — DUAL FORMAT
 // =============================================================================
 
 /**
@@ -18,7 +18,7 @@ export interface NodeIcon {
 }
 
 /**
- * Dual-format icons for all 59 node types.
+ * Dual-format icons for all 57 node types.
  *
  * Each icon is defined in the node's YAML file under `node.icon`.
  * Source: packages/core/models/node-classes/<realm>/<layer>/<name>.yaml
@@ -83,8 +83,6 @@ export const NODE_ICONS: Record<NodeType, NodeIcon> = {
   Style: { web: 'drama', terminal: '◎' },
   Taboo: { web: 'ban', terminal: '⊘' },
   TabooSet: { web: 'ban', terminal: '⊘' },
-  Term: { web: 'book-text', terminal: '◇' },
-  TermSet: { web: 'book-text', terminal: '◆' },
 };
 
 /**
