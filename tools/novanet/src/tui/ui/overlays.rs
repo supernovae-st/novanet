@@ -655,6 +655,8 @@ mod tests {
             missing_required_count: 0,
             filled_properties: 2,
             total_properties: 5,
+            entity_slug: None,
+            relationship_power: 0,
         }
     }
 

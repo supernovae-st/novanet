@@ -723,6 +723,72 @@ pub struct EntityCategory {
 }
 
 // ============================================================================
+// EntityNative Locale Grouping (Data mode)
+// ============================================================================
+
+/// LocaleGroup for grouping EntityNative instances by locale.
+/// Used in Data mode to show EntityNative instances organized by locale.
+#[derive(Debug, Clone)]
+pub struct LocaleGroup {
+    /// Locale code (e.g., "fr-FR")
+    pub locale_code: String,
+    /// Locale display name (e.g., "Français (France)")
+    pub locale_name: String,
+    /// Flag emoji (e.g., "🇫🇷")
+    pub flag: String,
+    /// Number of EntityNative instances for this locale
+    pub instance_count: i64,
+}
+
+/// EntityNative info with parent Entity reference.
+/// Used for displaying natives grouped by locale with invariant name.
+#[derive(Debug, Clone)]
+pub struct EntityNativeInfo {
+    /// EntityNative key (e.g., "qr-code@fr-FR")
+    pub key: String,
+    /// Native display name (e.g., "Créer un QR Code")
+    pub display_name: String,
+    /// Parent Entity key (e.g., "qr-code")
+    pub entity_key: String,
+    /// Parent Entity display name (invariant, e.g., "QR Code")
+    pub entity_display_name: String,
+    /// URL slug from denomination_forms
+    pub slug: Option<String>,
+}
+
+/// Convert a locale code to a flag emoji (e.g., "fr-FR" → "🇫🇷").
+///
+/// Extracts the country code from the locale (the part after the hyphen)
+/// and converts it to regional indicator symbols.
+pub fn locale_to_flag(locale: &str) -> String {
+    // Extract country code (e.g., "fr-FR" → "FR", "es-MX" → "MX")
+    let country = locale
+        .split('-')
+        .nth(1)
+        .unwrap_or(locale)
+        .to_uppercase();
+
+    if country.len() != 2 {
+        return "🏳️".to_string(); // Fallback for invalid codes
+    }
+
+    // Convert to regional indicator symbols (A = 🇦, B = 🇧, etc.)
+    // Regional indicators start at U+1F1E6 (🇦)
+    country
+        .chars()
+        .filter_map(|c| {
+            if c.is_ascii_uppercase() {
+                // 'A' is 65, regional indicator 🇦 is U+1F1E6 (127462)
+                let offset = c as u32 - 'A' as u32;
+                char::from_u32(0x1F1E6 + offset)
+            } else {
+                None
+            }
+        })
+        .collect()
+}
+
+// ============================================================================
 // Neo4j Arc Data (live query)
 // ============================================================================
 
@@ -829,6 +895,12 @@ pub struct TaxonomyTree {
     /// Loaded on-demand when Entity categories are expanded.
     /// Uses FxHashMap for ~30% faster lookups (no ordering needed).
     pub entity_category_instances: FxHashMap<String, Vec<InstanceInfo>>,
+    /// Locale groups for EntityNative display (sorted by locale code).
+    /// Loaded on-demand when viewing EntityNative class.
+    pub locale_groups: Vec<LocaleGroup>,
+    /// EntityNative instances grouped by locale (key = locale code like "fr-FR").
+    /// Loaded on-demand when locale groups are expanded.
+    pub entity_native_by_locale: FxHashMap<String, Vec<EntityNativeInfo>>,
 }
 
 impl TaxonomyTree {
@@ -1033,6 +1105,8 @@ ORDER BY realm_key, layer_key, class_key
             class_index,
             entity_categories: Vec::new(), // Loaded on-demand via load_entity_categories
             entity_category_instances: FxHashMap::default(), // Loaded on-demand when category expanded
+            locale_groups: Vec::new(), // Loaded on-demand via load_entity_natives_by_locale
+            entity_native_by_locale: FxHashMap::default(), // Loaded on-demand when locale expanded
         })
     }
 
@@ -1262,14 +1336,26 @@ WHERE NOT target:Schema
 WITH n, k, collect(DISTINCT {{
     arc_type: type(out),
     target_key: coalesce(target.key, target.label, id(target)),
-    target_class: head(labels(target))
+    target_class: head(labels(target)),
+    target_display_name: target.display_name,
+    target_slug: CASE
+        WHEN target.denomination_forms IS NOT NULL
+        THEN [form IN target.denomination_forms WHERE form.type = 'url' | form.value][0]
+        ELSE null
+    END
 }}) AS outgoing
 OPTIONAL MATCH (source)-[inc]->(n)
 WHERE NOT source:Schema
 WITH n, k, outgoing, collect(DISTINCT {{
     arc_type: type(inc),
     source_key: coalesce(source.key, source.label, id(source)),
-    source_class: head(labels(source))
+    source_class: head(labels(source)),
+    source_display_name: source.display_name,
+    source_slug: CASE
+        WHEN source.denomination_forms IS NOT NULL
+        THEN [form IN source.denomination_forms WHERE form.type = 'url' | form.value][0]
+        ELSE null
+    END
 }}) AS incoming
 RETURN
     coalesce(n.key, n.label, toString(id(n))) AS key,
@@ -1316,6 +1402,8 @@ ORDER BY key
                         target_key: m.get("target_key").unwrap_or_default(),
                         target_class: m.get("target_class").unwrap_or_default(),
                         exists: true,
+                        target_display_name: m.get("target_display_name").ok(),
+                        target_slug: m.get("target_slug").ok(),
                     })
                 })
                 .collect();
@@ -1335,9 +1423,30 @@ ORDER BY key
                         target_key: m.get("source_key").unwrap_or_default(),
                         target_class: m.get("source_class").unwrap_or_default(),
                         exists: true,
+                        target_display_name: m.get("source_display_name").ok(),
+                        target_slug: m.get("source_slug").ok(),
                     })
                 })
                 .collect();
+
+            // Calculate relationship_power from HAS_NATIVE arc count
+            let native_count = outgoing_arcs
+                .iter()
+                .filter(|a| a.arc_type == "HAS_NATIVE")
+                .count();
+            let max_natives = 10; // Expected max locales
+            let relationship_power = ((native_count * 100) / max_natives).min(100) as u8;
+
+            // Extract entity_slug from denomination_forms
+            let entity_slug = props
+                .get("denomination_forms")
+                .and_then(|df| df.as_array())
+                .and_then(|arr| {
+                    arr.iter()
+                        .find(|form| form.get("type").and_then(|t| t.as_str()) == Some("url"))
+                        .and_then(|form| form.get("value").and_then(|v| v.as_str()))
+                        .map(|s| s.to_string())
+                });
 
             instances.push(InstanceInfo {
                 key,
@@ -1350,6 +1459,8 @@ ORDER BY key
                 missing_required_count: 0, // Calculated later in set_instances
                 filled_properties: 0,      // Calculated later in set_instances
                 total_properties: 0,       // Calculated later in set_instances
+                entity_slug,
+                relationship_power,
             });
         }
 
@@ -1411,6 +1522,17 @@ RETURN
                 })
                 .unwrap_or_default();
 
+            // Extract entity_slug from denomination_forms
+            let entity_slug = props
+                .get("denomination_forms")
+                .and_then(|df| df.as_array())
+                .and_then(|arr| {
+                    arr.iter()
+                        .find(|form| form.get("type").and_then(|t| t.as_str()) == Some("url"))
+                        .and_then(|form| form.get("value").and_then(|v| v.as_str()))
+                        .map(|s| s.to_string())
+                });
+
             instances.push(InstanceInfo {
                 key,
                 display_name,
@@ -1422,6 +1544,8 @@ RETURN
                 missing_required_count: 0,
                 filled_properties: 0,
                 total_properties: 0,
+                entity_slug,
+                relationship_power: 0, // Will be calculated when arcs are loaded
             });
         }
 
@@ -1451,14 +1575,26 @@ WHERE NOT target:Schema
 WITH n, k, collect(DISTINCT {{
     arc_type: type(out),
     target_key: coalesce(target.key, target.label, id(target)),
-    target_class: head(labels(target))
+    target_class: head(labels(target)),
+    target_display_name: target.display_name,
+    target_slug: CASE
+        WHEN target.denomination_forms IS NOT NULL
+        THEN [form IN target.denomination_forms WHERE form.type = 'url' | form.value][0]
+        ELSE null
+    END
 }}) AS outgoing
 OPTIONAL MATCH (source)-[inc]->(n)
 WHERE NOT source:Schema
 WITH n, k, outgoing, collect(DISTINCT {{
     arc_type: type(inc),
     source_key: coalesce(source.key, source.label, id(source)),
-    source_class: head(labels(source))
+    source_class: head(labels(source)),
+    source_display_name: source.display_name,
+    source_slug: CASE
+        WHEN source.denomination_forms IS NOT NULL
+        THEN [form IN source.denomination_forms WHERE form.type = 'url' | form.value][0]
+        ELSE null
+    END
 }}) AS incoming
 RETURN k AS key, outgoing, incoming
 "#,
@@ -1486,6 +1622,8 @@ RETURN k AS key, outgoing, incoming
                         target_key: m.get("target_key").unwrap_or_default(),
                         target_class: m.get("target_class").unwrap_or_default(),
                         exists: true,
+                        target_display_name: m.get("target_display_name").ok(),
+                        target_slug: m.get("target_slug").ok(),
                     })
                 })
                 .collect();
@@ -1505,6 +1643,8 @@ RETURN k AS key, outgoing, incoming
                         target_key: m.get("source_key").unwrap_or_default(),
                         target_class: m.get("source_class").unwrap_or_default(),
                         exists: true,
+                        target_display_name: m.get("source_display_name").ok(),
+                        target_slug: m.get("source_slug").ok(),
                     })
                 })
                 .collect();
@@ -1879,14 +2019,26 @@ WHERE NOT target:Schema
 WITH total, e, collect(DISTINCT {
     arc_type: type(out),
     target_key: coalesce(target.key, target.label, toString(id(target))),
-    target_class: head(labels(target))
+    target_class: head(labels(target)),
+    target_display_name: target.display_name,
+    target_slug: CASE
+        WHEN target.denomination_forms IS NOT NULL
+        THEN [form IN target.denomination_forms WHERE form.type = 'url' | form.value][0]
+        ELSE null
+    END
 }) AS outgoing
 OPTIONAL MATCH (source)-[inc]->(e)
 WHERE NOT source:Schema
 WITH total, e, outgoing, collect(DISTINCT {
     arc_type: type(inc),
     source_key: coalesce(source.key, source.label, toString(id(source))),
-    source_class: head(labels(source))
+    source_class: head(labels(source)),
+    source_display_name: source.display_name,
+    source_slug: CASE
+        WHEN source.denomination_forms IS NOT NULL
+        THEN [form IN source.denomination_forms WHERE form.type = 'url' | form.value][0]
+        ELSE null
+    END
 }) AS incoming
 RETURN total,
        coalesce(e.key, toString(id(e))) AS key,
@@ -1935,6 +2087,8 @@ RETURN total,
                         target_key: m.get("target_key").unwrap_or_default(),
                         target_class: m.get("target_class").unwrap_or_default(),
                         exists: true,
+                        target_display_name: m.get("target_display_name").ok(),
+                        target_slug: m.get("target_slug").ok(),
                     })
                 })
                 .collect();
@@ -1954,9 +2108,30 @@ RETURN total,
                         target_key: m.get("source_key").unwrap_or_default(),
                         target_class: m.get("source_class").unwrap_or_default(),
                         exists: true,
+                        target_display_name: m.get("source_display_name").ok(),
+                        target_slug: m.get("source_slug").ok(),
                     })
                 })
                 .collect();
+
+            // Calculate relationship_power from HAS_NATIVE arc count
+            let native_count = outgoing_arcs
+                .iter()
+                .filter(|a| a.arc_type == "HAS_NATIVE")
+                .count();
+            let max_natives = 10; // Expected max locales
+            let relationship_power = ((native_count * 100) / max_natives).min(100) as u8;
+
+            // Extract entity_slug from denomination_forms
+            let entity_slug = props
+                .get("denomination_forms")
+                .and_then(|df| df.as_array())
+                .and_then(|arr| {
+                    arr.iter()
+                        .find(|form| form.get("type").and_then(|t| t.as_str()) == Some("url"))
+                        .and_then(|form| form.get("value").and_then(|v| v.as_str()))
+                        .map(|s| s.to_string())
+                });
 
             instances.push(InstanceInfo {
                 key,
@@ -1969,10 +2144,80 @@ RETURN total,
                 missing_required_count: 0, // Calculated later if needed
                 filled_properties: 0,      // Calculated later if needed
                 total_properties: 0,       // Calculated later if needed
+                entity_slug,
+                relationship_power,
             });
         }
 
         Ok((instances, total_count))
+    }
+
+    /// Load all EntityNative instances grouped by locale.
+    /// Returns locale groups sorted by locale code, with natives sorted A-Z by entity_display_name.
+    pub async fn load_entity_natives_by_locale(
+        db: &Db,
+    ) -> crate::Result<(Vec<LocaleGroup>, FxHashMap<String, Vec<EntityNativeInfo>>)> {
+        let cypher = r#"
+MATCH (en:EntityNative)-[:FOR_LOCALE]->(l:Locale)
+MATCH (e:Entity)-[:HAS_NATIVE]->(en)
+WITH l.key AS locale_code,
+     coalesce(l.display_name, l.key) AS locale_name,
+     en, e
+ORDER BY e.display_name, e.key
+WITH locale_code, locale_name,
+     collect({
+         key: en.key,
+         display_name: coalesce(en.display_name, en.key),
+         entity_key: e.key,
+         entity_display_name: coalesce(e.display_name, e.key),
+         slug: CASE
+             WHEN en.denomination_forms IS NOT NULL
+             THEN [form IN en.denomination_forms WHERE form.type = 'url' | form.value][0]
+             ELSE null
+         END
+     }) AS natives
+RETURN locale_code, locale_name, natives, size(natives) AS count
+ORDER BY locale_code
+"#;
+
+        let rows = db.execute(cypher).await?;
+        let mut locale_groups = Vec::with_capacity(rows.len());
+        let mut natives_by_locale: FxHashMap<String, Vec<EntityNativeInfo>> =
+            FxHashMap::default();
+
+        for row in rows {
+            let locale_code: String = row.get("locale_code").unwrap_or_default();
+            let locale_name: String = row.get("locale_name").unwrap_or_default();
+            let count: i64 = row.get("count").unwrap_or(0);
+
+            // Convert locale code to flag emoji
+            let flag = locale_to_flag(&locale_code);
+
+            locale_groups.push(LocaleGroup {
+                locale_code: locale_code.clone(),
+                locale_name,
+                flag,
+                instance_count: count,
+            });
+
+            // Parse natives
+            let natives: Vec<EntityNativeInfo> = row
+                .get::<Vec<neo4rs::BoltMap>>("natives")
+                .unwrap_or_default()
+                .into_iter()
+                .map(|m| EntityNativeInfo {
+                    key: m.get("key").unwrap_or_default(),
+                    display_name: m.get("display_name").unwrap_or_default(),
+                    entity_key: m.get("entity_key").unwrap_or_default(),
+                    entity_display_name: m.get("entity_display_name").unwrap_or_default(),
+                    slug: m.get("slug").ok(),
+                })
+                .collect();
+
+            natives_by_locale.insert(locale_code, natives);
+        }
+
+        Ok((locale_groups, natives_by_locale))
     }
 
     /// Check if a node is collapsed.
@@ -2668,7 +2913,11 @@ RETURN total,
             Some(TreeItem::Class(_, _, k)) => Some(format!("class:{}", k.key)),
             // EntityCategory can be collapsed to hide its instances
             Some(TreeItem::EntityCategory(_, _, _, cat)) => Some(format!("category:{}", cat.key)),
-            // Leaf nodes can't be collapsed
+            // Entity instances can be collapsed to hide EntityNatives
+            Some(TreeItem::Instance(_, _, class_info, instance)) if class_info.key == "Entity" => {
+                Some(format!("entity:{}", instance.key))
+            }
+            // Other leaf nodes can't be collapsed
             Some(TreeItem::ArcClass(_, _)) | Some(TreeItem::Instance(_, _, _, _)) | None => None,
         }
     }
@@ -3293,6 +3542,11 @@ pub struct InstanceInfo {
     pub filled_properties: usize,
     /// Total properties in schema for this Class.
     pub total_properties: usize,
+    /// URL slug from denomination_forms (for Entity instances).
+    pub entity_slug: Option<String>,
+    /// Relationship power score (0-100) based on HAS_NATIVE arc count.
+    /// Used for power bar visualization: ▰▰▰▰▰▰▰▰▱▱
+    pub relationship_power: u8,
 }
 
 /// An actual arc connection from/to an instance.
@@ -3304,6 +3558,10 @@ pub struct InstanceArc {
     pub target_class: String,
     /// True if this arc exists, false if it's from schema but not yet created.
     pub exists: bool,
+    /// Display name of target node (for HAS_NATIVE arcs, shows EntityNative name).
+    pub target_display_name: Option<String>,
+    /// URL slug from denomination_forms (for EntityNative nodes).
+    pub target_slug: Option<String>,
 }
 
 /// Comparison of schema arcs vs actual arcs for an instance.
@@ -3454,6 +3712,8 @@ impl TaxonomyTree {
             class_index,
             entity_categories: Vec::new(),
             entity_category_instances: FxHashMap::default(),
+            locale_groups: Vec::new(),
+            entity_native_by_locale: FxHashMap::default(),
         }
     }
 }
@@ -3594,6 +3854,8 @@ mod tests {
             class_index,
             entity_categories: Vec::new(),
             entity_category_instances: FxHashMap::default(),
+            locale_groups: Vec::new(),
+            entity_native_by_locale: FxHashMap::default(),
         }
     }
 
@@ -3617,6 +3879,8 @@ mod tests {
             missing_required_count: 0,
             filled_properties: 0,
             total_properties: 0,
+            entity_slug: None,
+            relationship_power: 0,
         };
 
         assert_eq!(instance.key, "fr-FR");
@@ -3639,12 +3903,16 @@ mod tests {
                 target_key: "fr-FR-terms".to_string(),
                 target_class: "TermSet".to_string(),
                 exists: true,
+                target_display_name: None,
+                target_slug: None,
             }],
             incoming_arcs: vec![],
             arcs_loading: false,
             missing_required_count: 0,
             filled_properties: 0,
             total_properties: 0,
+            entity_slug: None,
+            relationship_power: 0,
         };
 
         let schema_arcs = vec![
@@ -4001,6 +4269,8 @@ mod tests {
                 missing_required_count: 0,
                 filled_properties: 0,
                 total_properties: 0,
+                entity_slug: None,
+                relationship_power: 0,
             }],
         );
 
@@ -4030,6 +4300,8 @@ mod tests {
                 missing_required_count: 0,
                 filled_properties: 0,
                 total_properties: 0,
+                entity_slug: None,
+                relationship_power: 0,
             }],
         );
 

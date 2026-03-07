@@ -308,6 +308,20 @@ async fn run_app(
                         }
                     }
 
+                    // EntityNative locale groups loading (triggered when EntityNative Class expanded)
+                    if app.take_pending_entity_natives_load() {
+                        match TaxonomyTree::load_entity_natives_by_locale(db).await {
+                            Ok((groups, natives)) if app.navigation_generation == nav_gen => {
+                                app.tree.locale_groups = groups;
+                                app.tree.entity_native_by_locale = natives;
+                            }
+                            Ok(_) => {} // Stale result, discard
+                            Err(e) => {
+                                app.set_status_error(&format!("Load entity natives: {}", e))
+                            }
+                        }
+                    }
+
                     terminal
                         .draw(|f| ui::render(f, &mut app))
                         .map_err(crate::NovaNetError::Io)?;

@@ -291,6 +291,8 @@ pub struct PendingLoads {
     pub entity_categories: bool,
     /// Pending category instances load (category key to load).
     pub category_instances: Option<String>,
+    /// Pending EntityNative locale groups load (triggered when EntityNative Class expanded).
+    pub entity_natives: bool,
     /// Pending ArcClass details load request (Arc key to load from Neo4j).
     pub arc_class: Option<String>,
     /// Pending Realm details load request (Realm key to load from Neo4j).
@@ -307,6 +309,7 @@ impl PendingLoads {
             || self.instance_arcs.is_some()
             || self.entity_categories
             || self.category_instances.is_some()
+            || self.entity_natives
             || self.arc_class.is_some()
             || self.realm.is_some()
             || self.layer.is_some()

@@ -23,7 +23,7 @@ use super::{
     render_empty_state, spinner, trait_icon,
 };
 use crate::tui::app::{App, Focus};
-use crate::tui::data::ArcDirection;
+use crate::tui::data::{ArcDirection, locale_to_flag};
 use crate::tui::theme::hex_to_color;
 use crate::tui::unicode::display_width;
 
@@ -90,6 +90,49 @@ fn highlight_matches_with_bg(
 
 /// Horizontal padding inside tree panel (left side only, right has minimap).
 const TREE_PADDING_LEFT: u16 = 1;
+
+// =============================================================================
+// POWER BAR RENDERING (Entity relationship visualization)
+// =============================================================================
+
+/// Power bar characters
+const POWER_FILLED: char = '▰';
+const POWER_EMPTY: char = '▱';
+const POWER_BAR_WIDTH: usize = 10;
+
+/// Power bar color thresholds (Tailwind colors)
+const COLOR_POWER_HIGH: Color = Color::Rgb(34, 197, 94);   // green-500 (≥80%)
+const COLOR_POWER_MED: Color = Color::Rgb(249, 115, 22);   // orange-500 (50-79%)
+const COLOR_POWER_LOW: Color = Color::Rgb(239, 68, 68);    // red-500 (<50%)
+
+/// Render power bar with color based on percentage.
+/// Returns (bar_string, color) where bar looks like: ▰▰▰▰▰▰▰▰▱▱
+fn render_power_bar(power: u8) -> (String, Color) {
+    let filled = (power as usize * POWER_BAR_WIDTH / 100).min(POWER_BAR_WIDTH);
+    let empty = POWER_BAR_WIDTH - filled;
+
+    let bar = format!(
+        "{}{}",
+        std::iter::repeat_n(POWER_FILLED, filled).collect::<String>(),
+        std::iter::repeat_n(POWER_EMPTY, empty).collect::<String>()
+    );
+
+    let color = if power >= 80 {
+        COLOR_POWER_HIGH
+    } else if power >= 50 {
+        COLOR_POWER_MED
+    } else {
+        COLOR_POWER_LOW
+    };
+
+    (bar, color)
+}
+
+/// Entity/EntityNative text color (white, not yellow)
+const COLOR_ENTITY_TEXT: Color = Color::White;
+
+/// Entity slug color (slate-400, same as EntityNative slug)
+const COLOR_ENTITY_SLUG: Color = Color::Rgb(148, 163, 184);
 
 // =============================================================================
 // BREADCRUMB RENDERING (v11.6)
@@ -1075,30 +1118,44 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                         let inst_is_last = ii == inst_count - 1;
                                         let is_cursor = idx == app.tree_cursor;
 
-                                        // Get category for this entity
-                                        let category_suffix = entity_to_category
-                                            .get(instance.key.as_str())
-                                            .map(|c| c.to_lowercase())
-                                            .unwrap_or_default();
+                                        // Check if is_pillar from properties
+                                        let is_pillar = instance
+                                            .properties
+                                            .get("is_pillar")
+                                            .and_then(|v| v.as_bool())
+                                            .unwrap_or(false);
+                                        let pillar_marker = if is_pillar { " ★" } else { "" };
 
-                                        // Count EntityNative (HAS_NATIVE outgoing arcs)
-                                        let native_count = instance
+                                        // Collect EntityNative arcs (HAS_NATIVE)
+                                        let native_arcs: Vec<_> = instance
                                             .outgoing_arcs
                                             .iter()
                                             .filter(|a| a.arc_type == "HAS_NATIVE")
-                                            .count();
-                                        let native_icon =
-                                            if native_count > 0 { "◆" } else { "◇" };
-                                        let native_color = if native_count > 0 {
-                                            Color::Green
+                                            .collect();
+                                        let native_count = native_arcs.len();
+
+                                        // Expand/collapse state for this Entity
+                                        let entity_key = format!("entity:{}", instance.key);
+                                        let is_collapsed = app.tree.is_collapsed(&entity_key);
+                                        let expand_icon = if native_count > 0 {
+                                            if is_collapsed { "▶" } else { "▼" }
                                         } else {
-                                            Color::Rgb(100, 100, 110)
+                                            "○"
                                         };
 
+                                        // Power bar visualization based on relationship_power
+                                        let (power_bar, power_color) = render_power_bar(instance.relationship_power);
+
+                                        // Entity slug (right-aligned)
+                                        let slug_display = instance.entity_slug.as_ref()
+                                            .map(|s| format!("/{}", s))
+                                            .unwrap_or_default();
+
+                                        // Entity text style: white (not yellow)
                                         let style = if is_cursor && focused {
                                             Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White)
                                         } else {
-                                            Style::default().fg(COLOR_INSTANCE)
+                                            Style::default().fg(COLOR_ENTITY_TEXT)
                                         };
 
                                         let cursor_char = if is_cursor { ">" } else { " " };
@@ -1111,15 +1168,183 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                         );
 
                                         if is_cursor && focused {
+                                            // Focused cursor: single styled line
                                             all_lines.push(Line::from(Span::styled(
                                                 format!(
-                                                    "{}{}○ {}  {}{}  {}",
+                                                    "{}{}{} {} {} {}",
                                                     cursor_char,
                                                     tree_prefix,
+                                                    expand_icon,
                                                     instance.display_name,
-                                                    native_icon,
-                                                    native_count,
-                                                    category_suffix
+                                                    power_bar,
+                                                    slug_display,
+                                                ),
+                                                style,
+                                            )));
+                                        } else {
+                                            // Non-cursor: multi-span with separate colors
+                                            let mut spans = vec![
+                                                Span::styled(cursor_char, Style::default()),
+                                                Span::styled(
+                                                    tree_prefix,
+                                                    Style::default().fg(layer_color),
+                                                ),
+                                                Span::styled(
+                                                    format!("{} {}{}", expand_icon, instance.display_name, pillar_marker),
+                                                    style,
+                                                ),
+                                                Span::styled(
+                                                    format!(" {}", power_bar),
+                                                    Style::default().fg(power_color),
+                                                ),
+                                            ];
+                                            if !slug_display.is_empty() {
+                                                spans.push(Span::styled(
+                                                    format!(" {}", slug_display),
+                                                    Style::default().fg(COLOR_ENTITY_SLUG),
+                                                ));
+                                            }
+                                            all_lines.push(Line::from(spans));
+                                        }
+                                        idx += 1;
+
+                                        // Render EntityNatives when expanded
+                                        if native_count > 0 && !is_collapsed {
+                                            use unicode_width::UnicodeWidthStr;
+
+                                            // Pre-compute left parts and find max width for slug alignment
+                                            let native_parts: Vec<_> = native_arcs.iter().map(|arc| {
+                                                let locale = arc.target_key.split('@').nth(1).unwrap_or("??");
+                                                let flag = locale_to_flag(locale);
+                                                let left = match &arc.target_display_name {
+                                                    Some(name) => format!("{} {} - {}", flag, locale, name),
+                                                    None => format!("{} {}", flag, locale),
+                                                };
+                                                (left, arc.target_slug.clone())
+                                            }).collect();
+
+                                            // Calculate max width of left part (for slug alignment)
+                                            let max_left_width = native_parts.iter()
+                                                .map(|(left, _)| UnicodeWidthStr::width(left.as_str()))
+                                                .max()
+                                                .unwrap_or(0);
+
+                                            let native_count_inner = native_arcs.len();
+                                            for (ni, (left_part, slug_opt)) in native_parts.iter().enumerate() {
+                                                let native_is_last = ni == native_count_inner - 1;
+                                                let is_native_cursor = idx == app.tree_cursor;
+
+                                                // EntityNative text color: white (not green)
+                                                const COLOR_SLUG: Color = Color::Rgb(148, 163, 184); // slate-400
+
+                                                let native_style = if is_native_cursor && focused {
+                                                    Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White)
+                                                } else {
+                                                    Style::default().fg(COLOR_ENTITY_TEXT)
+                                                };
+
+                                                let slug_style = if is_native_cursor && focused {
+                                                    Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White)
+                                                } else {
+                                                    Style::default().fg(COLOR_SLUG)
+                                                };
+
+                                                let native_cursor = if is_native_cursor { ">" } else { " " };
+                                                let native_tree_prefix = format!(
+                                                    "{}{}{}{}{}",
+                                                    cont(realm_is_last),
+                                                    cont(layer_is_last),
+                                                    cont(class_is_last),
+                                                    cont(inst_is_last),
+                                                    branch(native_is_last)
+                                                );
+
+                                                // Calculate padding for slug alignment
+                                                let left_width = UnicodeWidthStr::width(left_part.as_str());
+                                                let padding = max_left_width.saturating_sub(left_width) + 2;
+                                                let slug_display = match slug_opt {
+                                                    Some(slug) => format!("{:>width$}/{}", "", slug, width = padding),
+                                                    None => String::new(),
+                                                };
+
+                                                if is_native_cursor && focused {
+                                                    all_lines.push(Line::from(Span::styled(
+                                                        format!(
+                                                            "{}{}{}{}",
+                                                            native_cursor,
+                                                            native_tree_prefix,
+                                                            left_part,
+                                                            slug_display,
+                                                        ),
+                                                        native_style,
+                                                    )));
+                                                } else {
+                                                    let mut spans = vec![
+                                                        Span::styled(native_cursor, Style::default()),
+                                                        Span::styled(
+                                                            native_tree_prefix.clone(),
+                                                            Style::default().fg(layer_color),
+                                                        ),
+                                                        Span::styled(
+                                                            left_part.clone(),
+                                                            native_style,
+                                                        ),
+                                                    ];
+                                                    if !slug_display.is_empty() {
+                                                        spans.push(Span::styled(slug_display, slug_style));
+                                                    }
+                                                    all_lines.push(Line::from(spans));
+                                                }
+                                                idx += 1;
+                                            }
+                                        }
+                                    }
+                                } else if class_info.key == "EntityNative" && !app.tree.locale_groups.is_empty() {
+                                    // EntityNative class: group by Locale
+                                    use unicode_width::UnicodeWidthStr;
+
+                                    let locale_count = app.tree.locale_groups.len();
+                                    for (li, locale_group) in app.tree.locale_groups.iter().enumerate() {
+                                        let locale_is_last = li == locale_count - 1;
+                                        let is_cursor = idx == app.tree_cursor;
+
+                                        // Expand/collapse state for this locale
+                                        let locale_key = format!("locale:{}", locale_group.locale_code);
+                                        let is_collapsed = app.tree.is_collapsed(&locale_key);
+                                        let expand_icon = if is_collapsed { "▶" } else { "▼" };
+
+                                        let style = if is_cursor && focused {
+                                            Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White)
+                                        } else {
+                                            Style::default().fg(COLOR_ENTITY_TEXT)
+                                        };
+
+                                        let cursor_char = if is_cursor { ">" } else { " " };
+                                        let tree_prefix = format!(
+                                            "{}{}{}{}",
+                                            cont(realm_is_last),
+                                            cont(layer_is_last),
+                                            cont(class_is_last),
+                                            branch(locale_is_last)
+                                        );
+
+                                        // Format: 🇫🇷 fr-FR (12)                 Français (France)
+                                        let left_part = format!(
+                                            "{} {} ({})",
+                                            locale_group.flag,
+                                            locale_group.locale_code,
+                                            locale_group.instance_count
+                                        );
+
+                                        if is_cursor && focused {
+                                            all_lines.push(Line::from(Span::styled(
+                                                format!(
+                                                    "{}{}{} {}        {}",
+                                                    cursor_char,
+                                                    tree_prefix,
+                                                    expand_icon,
+                                                    left_part,
+                                                    locale_group.locale_name,
                                                 ),
                                                 style,
                                             )));
@@ -1131,23 +1356,104 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                     Style::default().fg(layer_color),
                                                 ),
                                                 Span::styled(
-                                                    format!("○ {}  ", instance.display_name),
+                                                    format!("{} {}", expand_icon, left_part),
                                                     style,
                                                 ),
-                                                // Native count
                                                 Span::styled(
-                                                    format!("{}{}", native_icon, native_count),
-                                                    Style::default().fg(native_color),
-                                                ),
-                                                // Category suffix (dim)
-                                                Span::styled(
-                                                    format!("  {}", category_suffix),
+                                                    format!("        {}", locale_group.locale_name),
                                                     Style::default().fg(COLOR_MUTED_TEXT),
                                                 ),
                                             ];
                                             all_lines.push(Line::from(spans));
                                         }
                                         idx += 1;
+
+                                        // Render EntityNatives for this locale when expanded
+                                        if !is_collapsed {
+                                            if let Some(natives) = app.tree.entity_native_by_locale.get(&locale_group.locale_code) {
+                                                // Calculate max width for slug alignment
+                                                let native_parts: Vec<_> = natives.iter().map(|native| {
+                                                    // Format: Entity → Native /slug
+                                                    let left = format!(
+                                                        "{} → {}",
+                                                        native.entity_display_name,
+                                                        native.display_name
+                                                    );
+                                                    (left, native.slug.clone())
+                                                }).collect();
+
+                                                let max_left_width = native_parts.iter()
+                                                    .map(|(left, _)| UnicodeWidthStr::width(left.as_str()))
+                                                    .max()
+                                                    .unwrap_or(0);
+
+                                                let native_count_inner = native_parts.len();
+                                                for (ni, (left_part, slug_opt)) in native_parts.iter().enumerate() {
+                                                    let native_is_last = ni == native_count_inner - 1;
+                                                    let is_native_cursor = idx == app.tree_cursor;
+
+                                                    let native_style = if is_native_cursor && focused {
+                                                        Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White)
+                                                    } else {
+                                                        Style::default().fg(COLOR_ENTITY_TEXT)
+                                                    };
+
+                                                    let slug_style = if is_native_cursor && focused {
+                                                        Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White)
+                                                    } else {
+                                                        Style::default().fg(COLOR_ENTITY_SLUG)
+                                                    };
+
+                                                    let native_cursor = if is_native_cursor { ">" } else { " " };
+                                                    let native_tree_prefix = format!(
+                                                        "{}{}{}{}{}",
+                                                        cont(realm_is_last),
+                                                        cont(layer_is_last),
+                                                        cont(class_is_last),
+                                                        cont(locale_is_last),
+                                                        branch(native_is_last)
+                                                    );
+
+                                                    // Calculate padding for slug alignment
+                                                    let left_width = UnicodeWidthStr::width(left_part.as_str());
+                                                    let padding = max_left_width.saturating_sub(left_width) + 2;
+                                                    let slug_display = match slug_opt {
+                                                        Some(slug) => format!("{:>width$}/{}", "", slug, width = padding),
+                                                        None => String::new(),
+                                                    };
+
+                                                    if is_native_cursor && focused {
+                                                        all_lines.push(Line::from(Span::styled(
+                                                            format!(
+                                                                "{}{}{}{}",
+                                                                native_cursor,
+                                                                native_tree_prefix,
+                                                                left_part,
+                                                                slug_display,
+                                                            ),
+                                                            native_style,
+                                                        )));
+                                                    } else {
+                                                        let mut spans = vec![
+                                                            Span::styled(native_cursor, Style::default()),
+                                                            Span::styled(
+                                                                native_tree_prefix.clone(),
+                                                                Style::default().fg(layer_color),
+                                                            ),
+                                                            Span::styled(
+                                                                left_part.clone(),
+                                                                native_style,
+                                                            ),
+                                                        ];
+                                                        if !slug_display.is_empty() {
+                                                            spans.push(Span::styled(slug_display, slug_style));
+                                                        }
+                                                        all_lines.push(Line::from(spans));
+                                                    }
+                                                    idx += 1;
+                                                }
+                                            }
+                                        }
                                     }
                                 } else if let Some(instances) =
                                     app.tree.get_instances(&class_info.key)
@@ -1193,26 +1499,6 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             String::new()
                                         };
 
-                                        // Badge for missing required properties: (✗N!)
-                                        let missing_badge =
-                                            format_missing_badge(instance.missing_required_count);
-
-                                        // Arc count badge: [->N <-M] (only if has arcs, "..." while loading)
-                                        let arc_badge = if instance.arcs_loading {
-                                            " [...]".to_string()
-                                        } else {
-                                            format_arc_badge(
-                                                instance.outgoing_arcs.len(),
-                                                instance.incoming_arcs.len(),
-                                            )
-                                        };
-
-                                        // Completeness bar: [==--] only shown if incomplete
-                                        let completeness_badge = format_completeness_badge(
-                                            instance.filled_properties,
-                                            instance.total_properties,
-                                        );
-
                                         let tree_prefix = format!(
                                             "{}{}{}{}",
                                             cont(realm_is_last),
@@ -1225,21 +1511,18 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             // Selected: single span with highlight bg
                                             all_lines.push(Line::from(Span::styled(
                                                 format!(
-                                                    "{}{}{} {}{}{}{}{}",
+                                                    "{}{}{} {}{}",
                                                     cursor_char,
                                                     tree_prefix,
                                                     icon,
                                                     instance.display_name,
                                                     suffix,
-                                                    completeness_badge,
-                                                    arc_badge,
-                                                    missing_badge
                                                 ),
                                                 style,
                                             )));
                                         } else {
-                                            // Not selected: split into spans for colored badges
-                                            let mut spans = vec![
+                                            // Not selected: split into spans for colored prefix
+                                            let spans = vec![
                                                 Span::styled(cursor_char, Style::default()),
                                                 Span::styled(
                                                     tree_prefix,
@@ -1253,38 +1536,6 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                     style,
                                                 ),
                                             ];
-                                            // Completeness bar (green gradient based on fill)
-                                            if !completeness_badge.is_empty() {
-                                                let color = if instance.filled_properties
-                                                    == instance.total_properties
-                                                {
-                                                    Color::Green
-                                                } else if instance.filled_properties
-                                                    > instance.total_properties / 2
-                                                {
-                                                    Color::Yellow
-                                                } else {
-                                                    Color::Red
-                                                };
-                                                spans.push(Span::styled(
-                                                    completeness_badge,
-                                                    Style::default().fg(color),
-                                                ));
-                                            }
-                                            // Arc count (cyan)
-                                            if !arc_badge.is_empty() {
-                                                spans.push(Span::styled(
-                                                    arc_badge,
-                                                    Style::default().fg(Color::Cyan),
-                                                ));
-                                            }
-                                            // Missing required (red)
-                                            if !missing_badge.is_empty() {
-                                                spans.push(Span::styled(
-                                                    missing_badge,
-                                                    Style::default().fg(Color::Red),
-                                                ));
-                                            }
                                             all_lines.push(Line::from(spans));
                                         }
                                         idx += 1;
@@ -1842,43 +2093,6 @@ pub(super) fn format_health_badge(
     }
 }
 
-/// Format a completeness badge for an instance.
-/// Returns empty string if 100% complete, or "[==--]" style bar if incomplete.
-pub(super) fn format_completeness_badge(filled: usize, total: usize) -> String {
-    if total == 0 {
-        return String::new();
-    }
-    if filled >= total {
-        // 100% complete - hide badge
-        return String::new();
-    }
-    let ratio = filled as f32 / total as f32;
-    // v0.16.5: Clamp to 0..=4 to prevent overflow from floating point rounding
-    let filled_chars = (ratio * 4.0).round().min(4.0) as usize;
-    let empty_chars = 4 - filled_chars;
-    format!(" [{}{}]", "=".repeat(filled_chars), "-".repeat(empty_chars))
-}
-
-/// Format an arc count badge for an instance.
-/// Returns empty string if no arcs, or "[->N|<-M]" if has arcs.
-pub(super) fn format_arc_badge(outgoing: usize, incoming: usize) -> String {
-    if outgoing == 0 && incoming == 0 {
-        String::new()
-    } else {
-        format!(" [->{}|<-{}]", outgoing, incoming)
-    }
-}
-
-/// Format a missing required properties badge.
-/// Returns empty string if none missing, or " (✗N!)" if missing.
-pub(super) fn format_missing_badge(missing_count: usize) -> String {
-    if missing_count > 0 {
-        format!(" (✗{}!)", missing_count)
-    } else {
-        String::new()
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1915,6 +2129,48 @@ mod tests {
     #[test]
     fn test_expand_icon_expanded() {
         assert_eq!(expand_icon(false), "▼");
+    }
+
+    // =============================================================================
+    // Locale to flag tests
+    // =============================================================================
+
+    #[test]
+    fn test_locale_to_flag_france() {
+        assert_eq!(locale_to_flag("fr-FR"), "🇫🇷");
+    }
+
+    #[test]
+    fn test_locale_to_flag_mexico() {
+        assert_eq!(locale_to_flag("es-MX"), "🇲🇽");
+    }
+
+    #[test]
+    fn test_locale_to_flag_usa() {
+        assert_eq!(locale_to_flag("en-US"), "🇺🇸");
+    }
+
+    #[test]
+    fn test_locale_to_flag_germany() {
+        assert_eq!(locale_to_flag("de-DE"), "🇩🇪");
+    }
+
+    #[test]
+    fn test_locale_to_flag_japan() {
+        assert_eq!(locale_to_flag("ja-JP"), "🇯🇵");
+    }
+
+    #[test]
+    fn test_locale_to_flag_fallback_invalid() {
+        // Invalid format should return white flag
+        assert_eq!(locale_to_flag("invalid"), "🏳️");
+    }
+
+    #[test]
+    fn test_locale_to_flag_single_part() {
+        // Just language code, no country - uses the language as country
+        // "fr" → treats as country code → "FR" → 🇫🇷
+        assert_eq!(locale_to_flag("FR"), "🇫🇷");
     }
 
     // =============================================================================
@@ -2001,106 +2257,6 @@ mod tests {
         let badge = format_health_badge(Some(80), Some(0));
         assert!(badge.contains("80%"));
         assert!(!badge.contains("⚠"));
-    }
-
-    // =============================================================================
-    // Completeness badge tests
-    // =============================================================================
-
-    #[test]
-    fn test_format_completeness_badge_empty() {
-        assert_eq!(format_completeness_badge(0, 0), "");
-    }
-
-    #[test]
-    fn test_format_completeness_badge_complete() {
-        // 100% complete - should hide badge
-        assert_eq!(format_completeness_badge(10, 10), "");
-        assert_eq!(format_completeness_badge(5, 5), "");
-    }
-
-    #[test]
-    fn test_format_completeness_badge_zero_filled() {
-        let badge = format_completeness_badge(0, 8);
-        assert_eq!(badge, " [----]"); // 0/8 = 0%, rounds to 0 filled
-    }
-
-    #[test]
-    fn test_format_completeness_badge_half_filled() {
-        let badge = format_completeness_badge(4, 8);
-        assert_eq!(badge, " [==--]"); // 50% = 2 filled chars
-    }
-
-    #[test]
-    fn test_format_completeness_badge_three_quarters() {
-        let badge = format_completeness_badge(6, 8);
-        // 6/8 = 75% -> 0.75 * 4 = 3 filled chars
-        assert_eq!(badge, " [===-]");
-    }
-
-    #[test]
-    fn test_format_completeness_badge_almost_complete() {
-        // 7/8 = 87.5% rounds to 4 filled chars (but badge shown since not 100%)
-        let badge = format_completeness_badge(7, 8);
-        assert_eq!(badge, " [====]");
-
-        // 9/10 = 90% also rounds to 4 filled chars
-        let badge2 = format_completeness_badge(9, 10);
-        assert_eq!(badge2, " [====]");
-    }
-
-    #[test]
-    fn test_format_completeness_badge_low_fill() {
-        // 1/8 = 12.5% -> 0.5 rounds to 1
-        let badge = format_completeness_badge(1, 8);
-        assert_eq!(badge, " [=---]");
-
-        // 2/8 = 25% -> 1 filled char
-        let badge2 = format_completeness_badge(2, 8);
-        assert_eq!(badge2, " [=---]");
-    }
-
-    // =============================================================================
-    // Arc badge tests
-    // =============================================================================
-
-    #[test]
-    fn test_format_arc_badge_no_arcs() {
-        assert_eq!(format_arc_badge(0, 0), "");
-    }
-
-    #[test]
-    fn test_format_arc_badge_outgoing_only() {
-        assert_eq!(format_arc_badge(5, 0), " [->5|<-0]");
-    }
-
-    #[test]
-    fn test_format_arc_badge_incoming_only() {
-        assert_eq!(format_arc_badge(0, 3), " [->0|<-3]");
-    }
-
-    #[test]
-    fn test_format_arc_badge_both() {
-        assert_eq!(format_arc_badge(2, 7), " [->2|<-7]");
-    }
-
-    // =============================================================================
-    // Missing badge tests
-    // =============================================================================
-
-    #[test]
-    fn test_format_missing_badge_none() {
-        assert_eq!(format_missing_badge(0), "");
-    }
-
-    #[test]
-    fn test_format_missing_badge_one() {
-        assert_eq!(format_missing_badge(1), " (✗1!)");
-    }
-
-    #[test]
-    fn test_format_missing_badge_many() {
-        assert_eq!(format_missing_badge(5), " (✗5!)");
     }
 
     // =============================================================================

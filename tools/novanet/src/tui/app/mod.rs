@@ -1908,6 +1908,9 @@ impl App {
                         if class_key == "Entity" && self.tree.entity_categories.is_empty() {
                             self.pending.entity_categories = true;
                         }
+                        if class_key == "EntityNative" && self.tree.locale_groups.is_empty() {
+                            self.pending.entity_natives = true;
+                        }
                         self.pending.instance = Some(class_key.to_string());
                         // Ensure state is "expanded" so instances show when loaded
                         if self.tree.is_collapsed(&key) {
@@ -2015,6 +2018,12 @@ impl App {
     /// Returns the category key if one was queued.
     pub fn take_pending_category_instances_load(&mut self) -> Option<String> {
         self.pending.category_instances.take()
+    }
+
+    /// Take the pending entity natives load request.
+    /// Returns true if EntityNative locale groups need to be loaded.
+    pub fn take_pending_entity_natives_load(&mut self) -> bool {
+        std::mem::take(&mut self.pending.entity_natives)
     }
 
     /// Set the loaded Class arcs data from Neo4j.
