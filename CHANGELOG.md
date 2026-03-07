@@ -7,23 +7,28 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
-### Fixed
-- **TypeScript Schema Alignment** - Updated NODE_TYPES and CLASS_TAXONOMY to match v0.17.0 YAML (57 nodes)
-  - Removed: Market, AudiencePersona, ChannelSurface, Term, TermSet, SEOKeywordMetrics
-  - Added: ProjectGEOScope
-  - Updated layer counts: locale 6→5, knowledge 24→21, foundation 6→8, semantic 4→2
-- **Test Synchronization** - All test files updated for v0.17.0 schema counts
-  - layers.test.ts, hierarchy.test.ts, design-system-coherence.test.ts, generator.test.ts
+## [0.17.1] - 2026-03-07
 
 ### Changed
+- **Schema YAGNI Cleanup** - Removed 6 unused nodes for leaner schema
+  - Removed: Market, AudiencePersona, ChannelSurface, Term, TermSet, SEOKeywordMetrics
+  - Added: ProjectGEOScope
+  - New counts: 57 nodes (36 shared + 21 org), 131 arc classes
 - **DX: Skill Descriptions** - Added "Use when..." pattern to 11 skills for better discoverability
   - nika-run, workflow-validate, nika-binding, nika-debug, nika-diagnose
   - ship, nika-arch, armada, release-notes (2 files), spn
+- **MCP rmcp Migration** - Migrated to rmcp 1.1 builder pattern
+
+### Fixed
+- **TypeScript Schema Alignment** - Updated NODE_TYPES and CLASS_TAXONOMY to match v0.17.0 YAML
+  - Updated layer counts: locale 6→5, knowledge 24→21, foundation 6→8, semantic 4→2
+- **Rust Test Alignment** - Updated all test assertions for 57 nodes, 131 arcs
+  - stats.rs, node_class.rs, arc_class.rs, autowire.rs, icons.rs, layer.rs, yaml_node.rs
 
 ### Statistics
-- **1255 Rust tests passing** (CLI)
+- **1,255 Rust tests passing** (CLI)
 - **165 TypeScript tests passing** (core)
-- **Zero type errors**
+- **Zero clippy warnings**
 
 ## [0.17.0] - 2026-03-05
 

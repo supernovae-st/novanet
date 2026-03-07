@@ -4,6 +4,61 @@ For complete history, see [CHANGELOG.md](./CHANGELOG.md).
 
 ## [Unreleased]
 
+## [0.17.1] - 2026-03-07
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  🧠 NOVANET v0.17.1 — SCHEMA CLEANUP + TEST ALIGNMENT                         ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  🧹 YAGNI Cleanup  │  🔄 Test Sync  │  📚 DX Skills  │  ⚡ MCP Perf          ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+### ✨ Highlights
+
+| Feature | Status | Impact |
+|---------|--------|--------|
+| **🧹 Schema Cleanup (YAGNI)** | ✅ Complete | Removed 6 unused nodes |
+| **🔄 Test Alignment** | ✅ Complete | All tests sync with v0.17.0 schema |
+| **📚 DX Skill Improvements** | ✅ Complete | 11 skills with "Use when..." pattern |
+| **⚡ MCP Performance** | ✅ Complete | Phase 1-3 optimizations |
+
+### Changed
+
+- **Schema YAGNI Cleanup** — Removed 6 unused nodes for leaner schema
+  - Removed: Market, AudiencePersona, ChannelSurface, Term, TermSet, SEOKeywordMetrics
+  - Added: ProjectGEOScope
+  - New counts: 57 nodes (36 shared + 21 org), 131 arc classes
+- **DX: Skill Descriptions** — Added "Use when..." pattern to 11 skills
+  - nika-run, workflow-validate, nika-binding, nika-debug, nika-diagnose
+  - ship, nika-arch, armada, release-notes (2 files), spn
+- **MCP rmcp Migration** — Migrated to rmcp 1.1 builder pattern
+
+### Fixed
+
+- **TypeScript Schema Alignment** — Updated NODE_TYPES and CLASS_TAXONOMY to match v0.17.0 YAML
+  - Updated layer counts: locale 6→5, knowledge 24→21, foundation 6→8, semantic 4→2
+- **Rust Test Alignment** — Updated all test assertions for 57 nodes, 131 arcs
+  - stats.rs, node_class.rs, arc_class.rs, autowire.rs, icons.rs, layer.rs, yaml_node.rs
+
+### 📊 Statistics
+
+```
+╭─────────────────────────────────────────────────────────────────────────────────╮
+│  📊 v0.17.1 METRICS                                                             │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  📦 Schema:     57 nodes (36 shared + 21 org), 131 arcs                        │
+│  🔧 MCP Tools:  14 tools                                                        │
+│  🧪 Rust:       1,255 passing                                                   │
+│  📊 TypeScript: 165 passing                                                     │
+│  📏 Clippy:     Zero warnings                                                   │
+│                                                                                 │
+╰─────────────────────────────────────────────────────────────────────────────────╯
+```
+
+---
+
 ## [0.17.0] - 2026-03-05
 
 ╔═══════════════════════════════════════════════════════════════════════════════╗
