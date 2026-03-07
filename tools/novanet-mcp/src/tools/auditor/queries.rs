@@ -266,14 +266,16 @@ pub async fn audit_integrity(
     let mut issues = Vec::new();
 
     // Query: Find nodes with key containing @ but no matching base entity
+    // Note: Entity keys have 'entity:' prefix, EntityNative keys are like 'qr-code@fr-FR'
+    // So we need to add the prefix when looking up the parent Entity
     let cypher = r#"
         MATCH (n:EntityNative)
         WHERE n.key CONTAINS '@'
-        WITH n, split(n.key, '@')[0] AS base_key
+        WITH n, 'entity:' + split(n.key, '@')[0] AS entity_key
         WHERE NOT EXISTS {
-            MATCH (e:Entity {key: base_key})
+            MATCH (e:Entity {key: entity_key})
         }
-        RETURN n.key AS native_key, base_key
+        RETURN n.key AS native_key, entity_key AS expected_key
         LIMIT $limit
     "#;
 
@@ -286,20 +288,20 @@ pub async fn audit_integrity(
         .await?;
 
     for row in rows {
-        if let (Some(native_key), Some(base_key)) =
-            (row["native_key"].as_str(), row["base_key"].as_str())
+        if let (Some(native_key), Some(expected_key)) =
+            (row["native_key"].as_str(), row["expected_key"].as_str())
         {
             issues.push(
                 AuditIssue::critical(
                     "integrity",
                     format!(
                         "EntityNative '{}' references non-existent Entity '{}'",
-                        native_key, base_key
+                        native_key, expected_key
                     ),
                 )
                 .with_node_key(native_key)
                 .with_details(serde_json::json!({
-                    "expected_entity": base_key
+                    "expected_entity": expected_key
                 })),
             );
         }
