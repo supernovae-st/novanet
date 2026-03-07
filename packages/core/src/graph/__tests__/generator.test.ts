@@ -1,5 +1,5 @@
 // packages/core/src/graph/__tests__/generator.test.ts
-// Tests for schema graph generator — v0.12.4 (61 nodes, 2 realms, 10 layers)
+// Tests for schema graph generator — v0.17.0 (57 nodes, 2 realms, 10 layers)
 // TDD: Write tests first, then implementation
 
 import { describe, it, expect } from 'vitest';
@@ -8,9 +8,9 @@ import { NODE_TYPES } from '../../types/nodes.js';
 
 describe('graph/generator', () => {
   describe('generateSchemaGraph', () => {
-    it('should generate 61 schema nodes', () => {
+    it('should generate 57 schema nodes', () => {
       const result = generateSchemaGraph();
-      expect(result.nodes).toHaveLength(61);
+      expect(result.nodes).toHaveLength(57);
     });
 
     it('should generate schema arcs from RelationRegistry', () => {
@@ -44,7 +44,7 @@ describe('graph/generator', () => {
       expect(hasPageArc?.cardinality).toBeDefined();
     });
 
-    it('should map all 61 node types', () => {
+    it('should map all 57 node types', () => {
       const result = generateSchemaGraph();
       const nodeTypes = result.nodes.map(n => n.nodeType);
 
@@ -92,14 +92,14 @@ describe('graph/generator', () => {
 
     it('should include stats', () => {
       const result = getSchemaHierarchy();
-      expect(result.stats.totalNodes).toBe(61);
-      expect(result.stats.nodesByRealm.org).toBe(21);     // v0.12.4: 21 org nodes (Brand Architecture)
-      expect(result.stats.nodesByRealm.shared).toBe(40);  // v0.12.4: 40 shared nodes (Country added)
+      expect(result.stats.totalNodes).toBe(57);
+      expect(result.stats.nodesByRealm.org).toBe(21);     // v0.17.0: 21 org nodes
+      expect(result.stats.nodesByRealm.shared).toBe(36);  // v0.17.0: 36 shared nodes (Market, TermSet, Term, SEOKeywordMetrics removed)
     });
 
     it('should include all nodes', () => {
       const result = getSchemaHierarchy();
-      expect(result.nodes).toHaveLength(61);
+      expect(result.nodes).toHaveLength(57);
     });
 
     it('should include arcs', () => {

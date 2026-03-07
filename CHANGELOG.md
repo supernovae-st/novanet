@@ -7,6 +7,24 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+### Fixed
+- **TypeScript Schema Alignment** - Updated NODE_TYPES and CLASS_TAXONOMY to match v0.17.0 YAML (57 nodes)
+  - Removed: Market, AudiencePersona, ChannelSurface, Term, TermSet, SEOKeywordMetrics
+  - Added: ProjectGEOScope
+  - Updated layer counts: locale 6→5, knowledge 24→21, foundation 6→8, semantic 4→2
+- **Test Synchronization** - All test files updated for v0.17.0 schema counts
+  - layers.test.ts, hierarchy.test.ts, design-system-coherence.test.ts, generator.test.ts
+
+### Changed
+- **DX: Skill Descriptions** - Added "Use when..." pattern to 11 skills for better discoverability
+  - nika-run, workflow-validate, nika-binding, nika-debug, nika-diagnose
+  - ship, nika-arch, armada, release-notes (2 files), spn
+
+### Statistics
+- **1255 Rust tests passing** (CLI)
+- **165 TypeScript tests passing** (core)
+- **Zero type errors**
+
 ## [0.17.0] - 2026-03-05
 
 ### Added

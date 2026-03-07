@@ -1,9 +1,9 @@
 /**
  * @fileoverview NovaNet Node Type Taxonomy
  * @module @novanet/core/types/nodes
- * @version 0.13.0
+ * @version 0.17.0
  *
- * Defines the complete taxonomy for all 62 NovaNet node types across 2 realms and 10 layers.
+ * Defines the complete taxonomy for all 57 NovaNet node types across 2 realms and 10 layers.
  * This is the **single source of truth** for node classification in the knowledge graph.
  *
  * ## v0.13.0 *Native Pattern (ADR-029)
@@ -26,23 +26,23 @@
  *
  * ## Realm Distribution
  *
- * - **SHARED** (40 nodes): Universal locale knowledge, geography, SEO/GEO intelligence
- * - **ORG** (22 nodes): Organization-specific content, structure, generation pipeline
+ * - **SHARED** (36 nodes): Universal locale knowledge, geography, SEO/GEO intelligence
+ * - **ORG** (21 nodes): Organization-specific content, structure, generation pipeline
  *
  * @see {@link https://github.com/supernovae-st/novanet-hq/blob/main/.claude/rules/novanet-terminology.md | Terminology Reference}
  * @see {@link https://github.com/supernovae-st/novanet-hq/blob/main/.claude/rules/novanet-decisions.md | Architecture Decisions}
  */
 
 // =============================================================================
-// NODE TYPES (62 nodes across 2 realms, 10 layers)
+// NODE TYPES (57 nodes across 2 realms, 10 layers)
 // =============================================================================
 
 /**
- * Complete list of all 62 NovaNet node types.
+ * Complete list of all 57 NovaNet node types.
  *
  * Organized by realm and layer:
- * - **SHARED** (40 nodes): config (3) + locale (6) + geography (7) + knowledge (24)
- * - **ORG** (22 nodes): config (1) + foundation (7) + structure (3) + semantic (4) + instruction (4) + output (3)
+ * - **SHARED** (36 nodes): config (3) + locale (5) + geography (7) + knowledge (21)
+ * - **ORG** (21 nodes): config (1) + foundation (8) + structure (3) + semantic (2) + instruction (4) + output (3)
  *
  * @example
  * ```typescript
@@ -64,34 +64,34 @@
  */
 export const NODE_TYPES = [
   // ═══════════════════════════════════════════════════════════════════════════
-  // SHARED REALM (40 nodes) — 4 layers: config, locale, geography, knowledge
+  // SHARED REALM (36 nodes) — 4 layers: config, locale, geography, knowledge
   // ═══════════════════════════════════════════════════════════════════════════
   // config (3) — v11.5: classification nodes + Locale definition + SEO format
   'EntityCategory', 'Locale', 'SEOKeywordFormat',
-  // locale (6) — Locale SETTINGS (not the Locale definition itself)
-  'Formatting', 'Slugification', 'Adaptation', 'Style', 'Culture', 'Market',
+  // locale (5) — Locale SETTINGS (v0.17.0: Market removed)
+  'Formatting', 'Slugification', 'Adaptation', 'Style', 'Culture',
   // geography (7) — Geographic classifications (v0.12.4: Country added)
   'Continent', 'Country', 'GeoRegion', 'GeoSubRegion', 'IncomeGroup', 'LendingCategory', 'EconomicRegion',
-  // knowledge (24) — Sets + Atoms + Linguistic/Cultural taxonomy + SEO/GEO
-  'TermSet', 'ExpressionSet', 'PatternSet', 'CultureSet', 'TabooSet', 'AudienceSet',
-  'Term', 'Expression', 'Pattern', 'CultureRef', 'Taboo', 'AudienceTrait',
+  // knowledge (21) — Sets + Atoms + Linguistic/Cultural taxonomy + SEO/GEO (v0.17.0: Term, SEOKeywordMetrics removed)
+  'ExpressionSet', 'PatternSet', 'CultureSet', 'TabooSet', 'AudienceSet',
+  'Expression', 'Pattern', 'CultureRef', 'Taboo', 'AudienceTrait',
   'LanguageFamily', 'LanguageBranch', 'CulturalRealm', 'CulturalSubRealm', 'PopulationCluster', 'PopulationSubCluster',
-  // knowledge — SEO/GEO (6) — v11.5: moved from org to shared/knowledge
-  'SEOKeyword', 'SEOKeywordMetrics', 'SEOKeywordSet',
+  // knowledge — SEO/GEO (5) — v11.5: moved from org to shared/knowledge
+  'SEOKeyword', 'SEOKeywordSet',
   'GEOQuery', 'GEOQuerySet', 'GEOAnswer',
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // ORG REALM (22 nodes) — 6 layers: config, foundation, structure, semantic, instruction, output
-  // v0.12.4: Brand Architecture (+4), PageStructure/PageInstruction deleted (-2)
+  // ORG REALM (21 nodes) — 6 layers: config, foundation, structure, semantic, instruction, output
+  // v0.17.0: AudiencePersona, ChannelSurface removed; ProjectGEOScope added
   // ═══════════════════════════════════════════════════════════════════════════
   // config (1) — v11.3: Organization + Tenant merged into OrgConfig
   'OrgConfig',
-  // foundation (7) — v0.13.0: *Native pattern (ProjectNative → ProjectNative)
-  'Project', 'Brand', 'BrandDesign', 'BrandPrinciples', 'PromptStyle', 'ProjectNative', 'ProjectSEOScope',
+  // foundation (8) — v0.17.0: ProjectGEOScope added
+  'Project', 'Brand', 'BrandDesign', 'BrandPrinciples', 'PromptStyle', 'ProjectNative', 'ProjectSEOScope', 'ProjectGEOScope',
   // structure (3)
   'Page', 'Block', 'ContentSlot',
-  // semantic (4) — v0.13.0: *Native pattern (EntityNative → EntityNative)
-  'Entity', 'EntityNative', 'AudiencePersona', 'ChannelSurface',
+  // semantic (2) — v0.17.0: AudiencePersona, ChannelSurface removed
+  'Entity', 'EntityNative',
   // instruction (4) — v0.12.4: PageStructure, PageInstruction deleted
   'BlockType', 'BlockInstruction', 'BlockRules', 'PromptArtifact',
   // output (3) — v0.13.0: *Native pattern (PageNative → PageNative, BlockNative → BlockNative)
@@ -142,14 +142,14 @@ export type Realm = 'shared' | 'org';
  *
  * ## Shared Realm Layers (4)
  * - **`config`**: Classification definitions (EntityCategory, Locale, SEOKeywordFormat)
- * - **`locale`**: Locale settings (Formatting, Style, Culture, Market, etc.)
+ * - **`locale`**: Locale settings (Formatting, Style, Culture, etc.)
  * - **`geography`**: Geographic classifications (Continent, GeoRegion, IncomeGroup, etc.)
- * - **`knowledge`**: Knowledge atoms (Term, Expression, SEOKeyword, GEOQuery, etc.)
+ * - **`knowledge`**: Knowledge atoms (Expression, Pattern, SEOKeyword, GEOQuery, etc.)
  *
  * ## Org Realm Layers (6)
- * - **`foundation`**: Project identity (Project, Brand, BrandDesign, BrandPrinciples, PromptStyle, ProjectNative, ProjectSEOScope)
+ * - **`foundation`**: Project identity (Project, Brand, BrandDesign, BrandPrinciples, PromptStyle, ProjectNative, ProjectSEOScope, ProjectGEOScope)
  * - **`structure`**: Page/Block hierarchy (Page, Block, ContentSlot)
- * - **`semantic`**: Business entities (Entity, EntityNative, AudiencePersona)
+ * - **`semantic`**: Business entities (Entity, EntityNative)
  * - **`instruction`**: Generation prompts (BlockType, BlockInstruction, BlockRules, PromptArtifact)
  * - **`output`**: Native output per locale (PageNative, BlockNative)
  *
@@ -157,7 +157,7 @@ export type Realm = 'shared' | 'org';
  * ```typescript
  * // Get all semantic layer nodes
  * const semanticNodes = NODE_TYPES.filter(t => CLASS_TAXONOMY[t].layer === 'semantic');
- * // → ['Entity', 'EntityNative', 'AudiencePersona', 'ChannelSurface']
+ * // → ['Entity', 'EntityNative']
  * ```
  *
  * @see ADR-020 — Layer reorganization
@@ -193,7 +193,7 @@ export type Layer =
 export type Trait = 'defined' | 'authored' | 'imported' | 'generated' | 'retrieved';
 
 // =============================================================================
-// CLASS_TAXONOMY — unified classification for all 62 node types
+// CLASS_TAXONOMY — unified classification for all 57 node types
 // =============================================================================
 
 /**
@@ -220,7 +220,7 @@ export interface Classification {
 }
 
 /**
- * Complete classification registry for all 62 NovaNet node types.
+ * Complete classification registry for all 57 NovaNet node types.
  *
  * This is the **single source of truth** for node classification. Use this to:
  * - Determine which realm/layer a node belongs to
@@ -237,7 +237,7 @@ export interface Classification {
  *
  * // Count nodes by realm
  * const sharedCount = NODE_TYPES.filter(t => CLASS_TAXONOMY[t].realm === 'shared').length;
- * // → 39
+ * // → 36
  *
  * // Get all output layer nodes
  * const outputs = NODE_TYPES.filter(t => CLASS_TAXONOMY[t].layer === 'output');
@@ -254,13 +254,12 @@ export const CLASS_TAXONOMY: Record<NodeType, Classification> = {
   Locale:           { realm: 'shared', layer: 'config', trait: 'defined' },
   SEOKeywordFormat: { realm: 'shared', layer: 'config', trait: 'defined' },
 
-  // SHARED REALM — locale (6) — locale SETTINGS
+  // SHARED REALM — locale (5) — locale SETTINGS (v0.17.0: Market removed)
   Formatting:     { realm: 'shared', layer: 'locale', trait: 'imported' },
   Slugification:  { realm: 'shared', layer: 'locale', trait: 'imported' },
   Adaptation:     { realm: 'shared', layer: 'locale', trait: 'imported' },
   Style:          { realm: 'shared', layer: 'locale', trait: 'imported' },
   Culture:        { realm: 'shared', layer: 'locale', trait: 'imported' },
-  Market:         { realm: 'shared', layer: 'locale', trait: 'imported' },
 
   // SHARED REALM — geography (7) — v0.12.4: Country added
   Continent:      { realm: 'shared', layer: 'geography', trait: 'defined' },
@@ -271,14 +270,12 @@ export const CLASS_TAXONOMY: Record<NodeType, Classification> = {
   LendingCategory:{ realm: 'shared', layer: 'geography', trait: 'defined' },
   EconomicRegion: { realm: 'shared', layer: 'geography', trait: 'defined' },
 
-  // SHARED REALM — knowledge (24) — containers, atoms, SEO/GEO
-  TermSet:             { realm: 'shared', layer: 'knowledge', trait: 'defined' },
+  // SHARED REALM — knowledge (21) — containers, atoms, SEO/GEO (v0.17.0: TermSet, Term removed)
   ExpressionSet:       { realm: 'shared', layer: 'knowledge', trait: 'defined' },
   PatternSet:          { realm: 'shared', layer: 'knowledge', trait: 'defined' },
   CultureSet:          { realm: 'shared', layer: 'knowledge', trait: 'defined' },
   TabooSet:            { realm: 'shared', layer: 'knowledge', trait: 'defined' },
   AudienceSet:         { realm: 'shared', layer: 'knowledge', trait: 'defined' },
-  Term:                { realm: 'shared', layer: 'knowledge', trait: 'imported' },
   Expression:          { realm: 'shared', layer: 'knowledge', trait: 'imported' },
   Pattern:             { realm: 'shared', layer: 'knowledge', trait: 'imported' },
   CultureRef:          { realm: 'shared', layer: 'knowledge', trait: 'imported' },
@@ -296,7 +293,7 @@ export const CLASS_TAXONOMY: Record<NodeType, Classification> = {
   // ═══════════════════════════════════════════════════════════════════════════
   OrgConfig: { realm: 'org', layer: 'config', trait: 'defined' },
 
-  // ORG REALM — foundation (7) — v0.13.0: *Native pattern (ProjectNative → ProjectNative)
+  // ORG REALM — foundation (8) — v0.17.0: ProjectGEOScope added
   Project:         { realm: 'org', layer: 'foundation',  trait: 'defined' },
   Brand:           { realm: 'org', layer: 'foundation',  trait: 'defined' },
   BrandDesign:     { realm: 'org', layer: 'foundation',  trait: 'defined' },
@@ -304,17 +301,16 @@ export const CLASS_TAXONOMY: Record<NodeType, Classification> = {
   PromptStyle:     { realm: 'org', layer: 'foundation',  trait: 'defined' },
   ProjectNative:   { realm: 'org', layer: 'foundation',  trait: 'authored' },
   ProjectSEOScope: { realm: 'org', layer: 'foundation',  trait: 'defined' },
+  ProjectGEOScope: { realm: 'org', layer: 'foundation',  trait: 'defined' },
 
   // ORG REALM — structure (3)
   Page:         { realm: 'org', layer: 'structure',   trait: 'defined' },
   Block:        { realm: 'org', layer: 'structure',   trait: 'defined' },
   ContentSlot:  { realm: 'org', layer: 'structure',   trait: 'defined' },
 
-  // ORG REALM — semantic (4) — v0.13.0: *Native pattern (EntityNative → EntityNative)
+  // ORG REALM — semantic (2) — v0.17.0: AudiencePersona, ChannelSurface removed
   Entity:          { realm: 'org', layer: 'semantic', trait: 'defined' },
   EntityNative:    { realm: 'org', layer: 'semantic', trait: 'authored' },
-  AudiencePersona: { realm: 'org', layer: 'semantic', trait: 'defined' },
-  ChannelSurface:  { realm: 'org', layer: 'semantic', trait: 'defined' },
 
   // ORG REALM — instruction (4) — v0.12.4: PageStructure, PageInstruction deleted
   BlockType:         { realm: 'org', layer: 'instruction', trait: 'defined' },
@@ -322,9 +318,8 @@ export const CLASS_TAXONOMY: Record<NodeType, Classification> = {
   BlockRules:        { realm: 'org', layer: 'instruction', trait: 'defined' },
   PromptArtifact:    { realm: 'org', layer: 'instruction', trait: 'generated' },
 
-  // SHARED REALM — knowledge (SEO/GEO) — v11.5: moved from org to shared
+  // SHARED REALM — knowledge (SEO/GEO) — v11.5: moved from org to shared (v0.17.0: SEOKeywordMetrics removed)
   SEOKeyword:       { realm: 'shared', layer: 'knowledge', trait: 'imported' },
-  SEOKeywordMetrics:{ realm: 'shared', layer: 'knowledge', trait: 'retrieved' },
   SEOKeywordSet:    { realm: 'shared', layer: 'knowledge', trait: 'defined' },
   GEOQuery:         { realm: 'shared', layer: 'knowledge', trait: 'imported' },
   GEOQuerySet:      { realm: 'shared', layer: 'knowledge', trait: 'defined' },

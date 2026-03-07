@@ -1,5 +1,5 @@
 // packages/core/src/graph/__tests__/design-system-coherence.test.ts
-// Comprehensive tests for design system coherence — v0.12.5
+// Comprehensive tests for design system coherence — v0.17.0
 // Validates taxonomy, visual encoding, and TypeScript consistency
 //
 // v0.12.5: Updated to load from individual YAML files (realms/, layers/, traits/, arc-families/)
@@ -35,21 +35,21 @@ const V11_6_ARCHITECTURE = {
   // 6 arc families (v0.13.1: added schema family)
   arcFamilies: ['ownership', 'localization', 'semantic', 'generation', 'mining', 'schema'] as const,
 
-  // Node counts (v0.12.4)
+  // Node counts (v0.17.0)
   nodeCounts: {
-    total: 61,
-    shared: 40,
+    total: 57,
+    shared: 36,
     org: 21,
     byLayer: {
-      // shared layers — v0.12.4: Country added to geography
+      // shared layers — v0.17.0: Market, TermSet, Term, SEOKeywordMetrics removed
       'shared/config': 3,
-      'shared/locale': 6,
+      'shared/locale': 5,
       'shared/geography': 7,
-      'shared/knowledge': 24,
-      // org layers — v0.12.4: Brand Architecture (6 foundation), Instruction (4)
+      'shared/knowledge': 21,
+      // org layers — v0.17.0: ProjectGEOScope added, AudiencePersona+ChannelSurface removed
       'org/config': 1,
-      'org/semantic': 4,
-      'org/foundation': 6,
+      'org/semantic': 2,
+      'org/foundation': 8,
       'org/structure': 3,
       'org/instruction': 4,
       'org/output': 3,
@@ -243,7 +243,8 @@ describe('Design System Coherence: Layers', () => {
 
   it('should have SEO/GEO in shared/knowledge (not org)', () => {
     // v11.5: SEO/GEO moved from org to shared/knowledge (Knowledge Atoms pattern)
-    const seoGeoNodes = ['SEOKeyword', 'SEOKeywordMetrics', 'SEOKeywordSet', 'GEOQuery', 'GEOQuerySet', 'GEOAnswer'];
+    // v0.17.0: SEOKeywordMetrics removed
+    const seoGeoNodes = ['SEOKeyword', 'SEOKeywordSet', 'GEOQuery', 'GEOQuerySet', 'GEOAnswer'];
 
     for (const node of seoGeoNodes) {
       expect(NODE_LAYERS[node as keyof typeof NODE_LAYERS]).toBe('knowledge');
@@ -303,7 +304,8 @@ describe('Design System Coherence: Traits', () => {
   });
 
   it('should use retrieved trait for metrics nodes', () => {
-    const retrievedNodes = ['SEOKeywordMetrics', 'GEOAnswer'];
+    // v0.17.0: SEOKeywordMetrics removed, only GEOAnswer remains as retrieved
+    const retrievedNodes = ['GEOAnswer'];
 
     for (const node of retrievedNodes) {
       expect(CLASS_TAXONOMY[node as keyof typeof CLASS_TAXONOMY].trait).toBe('retrieved');
@@ -356,10 +358,10 @@ describe('Design System Coherence: Arc Families', () => {
 // =============================================================================
 
 describe('Design System Coherence: Node Counts', () => {
-  it('should have exactly 61 total nodes', () => {
-    expect(NODE_TYPES).toHaveLength(61);
-    expect(Object.keys(NODE_LAYERS)).toHaveLength(61);
-    expect(Object.keys(CLASS_TAXONOMY)).toHaveLength(61);
+  it('should have exactly 57 total nodes', () => {
+    expect(NODE_TYPES).toHaveLength(57);
+    expect(Object.keys(NODE_LAYERS)).toHaveLength(57);
+    expect(Object.keys(CLASS_TAXONOMY)).toHaveLength(57);
   });
 
   it('should have correct node distribution by realm', () => {
