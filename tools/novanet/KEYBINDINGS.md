@@ -191,7 +191,7 @@ When a filter is active, the title bar shows the active trait.
 
 ## Panel Scrolling
 
-When Detail or YAML panel is focused:
+When Info or Content panel is focused (v0.17.3: renamed from Detail/YAML):
 
 | Key | Action |
 |-----|--------|
@@ -266,10 +266,21 @@ Modes:       1 (Graph)  2 (Views)
 
 ---
 
-## Deprecated Keybindings (v11.6 -> v0.13.0)
+## Deprecated Keybindings (v11.6 -> v0.17.3)
 
 | Old Key | Old Action | New Equivalent |
 |---------|------------|----------------|
 | `4` | Old Nexus mode | `3` (Nexus) |
 | `0` | Hide empty (Graph mode) | Removed (unified tree shows all) |
 | `s` | Schema overlay | Removed (unified tree shows schema inline) |
+| `t` | Toggle YAML/Data in Source panel | Removed (v0.17.3: context-aware content) |
+
+### Content Panel Modes (v0.17.3)
+
+The Content panel (center) now automatically shows context-aware content:
+
+| Selection | Panel Title | Content |
+|-----------|-------------|---------|
+| Class/ArcClass | **SCHEMA** | YAML definition file |
+| Instance | **INFO** | Message pointing to PROPERTIES panel |
+| Realm/Layer | **INFO** | Section overview with navigation hints |
