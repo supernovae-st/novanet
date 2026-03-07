@@ -4249,4 +4249,155 @@ mod tests {
         // (3 lines per scroll, different from keyboard's implicit 1 line)
         assert_eq!(MOUSE_SCROLL_LINES, 3);
     }
+
+    // =========================================================================
+    // ContentPanelMode tests (Phase 5 of source-panel-redesign.md)
+    // =========================================================================
+
+    #[test]
+    fn test_content_panel_mode_variants() {
+        // Test ContentPanelMode enum variants can be created
+        let schema_mode = ContentPanelMode::Schema {
+            path: "models/node-classes/org/structure/page.yaml".to_string(),
+            name: "Page".to_string(),
+        };
+        assert!(matches!(schema_mode, ContentPanelMode::Schema { .. }));
+
+        let instance_mode = ContentPanelMode::InstanceInfo {
+            instance_key: "page:home".to_string(),
+            class_name: "Page".to_string(),
+            realm: "org".to_string(),
+            layer: "structure".to_string(),
+        };
+        assert!(matches!(instance_mode, ContentPanelMode::InstanceInfo { .. }));
+
+        let section_mode = ContentPanelMode::SectionInfo {
+            name: "Realm: org".to_string(),
+            description: "Select a Layer to explore.".to_string(),
+        };
+        assert!(matches!(section_mode, ContentPanelMode::SectionInfo { .. }));
+
+        let empty_mode = ContentPanelMode::Empty;
+        assert!(matches!(empty_mode, ContentPanelMode::Empty));
+    }
+
+    #[test]
+    fn test_tree_item_data_variants() {
+        // Test TreeItemData enum variants can be created
+        let class_data = TreeItemData::Class {
+            yaml_path: "models/node-classes/org/structure/page.yaml".to_string(),
+            key: "Page".to_string(),
+            properties: vec!["key".to_string(), "display_name".to_string()],
+        };
+        assert!(matches!(class_data, TreeItemData::Class { .. }));
+
+        let arc_data = TreeItemData::ArcClass {
+            yaml_path: "models/arc-classes/ownership/has-page.yaml".to_string(),
+            key: "HAS_PAGE".to_string(),
+        };
+        assert!(matches!(arc_data, TreeItemData::ArcClass { .. }));
+
+        let instance_data = TreeItemData::Instance {
+            instance_key: "page:home".to_string(),
+            class_name: "Page".to_string(),
+            realm: "org".to_string(),
+            layer: "structure".to_string(),
+            class_yaml_path: "models/node-classes/org/structure/page.yaml".to_string(),
+            class_properties: vec!["key".to_string()],
+        };
+        assert!(matches!(instance_data, TreeItemData::Instance { .. }));
+
+        let realm_data = TreeItemData::Realm {
+            key: "org".to_string(),
+        };
+        assert!(matches!(realm_data, TreeItemData::Realm { .. }));
+
+        let layer_data = TreeItemData::Layer {
+            key: "structure".to_string(),
+        };
+        assert!(matches!(layer_data, TreeItemData::Layer { .. }));
+
+        let arc_family_data = TreeItemData::ArcFamily {
+            key: "ownership".to_string(),
+        };
+        assert!(matches!(arc_family_data, TreeItemData::ArcFamily { .. }));
+
+        let section_data = TreeItemData::Section;
+        assert!(matches!(section_data, TreeItemData::Section));
+
+        let none_data = TreeItemData::None;
+        assert!(matches!(none_data, TreeItemData::None));
+    }
+
+    #[test]
+    fn test_content_panel_mode_schema_fields() {
+        // Verify Schema mode stores path and name correctly
+        let mode = ContentPanelMode::Schema {
+            path: "models/node-classes/shared/config/locale.yaml".to_string(),
+            name: "Locale".to_string(),
+        };
+
+        if let ContentPanelMode::Schema { path, name } = mode {
+            assert_eq!(path, "models/node-classes/shared/config/locale.yaml");
+            assert_eq!(name, "Locale");
+        } else {
+            panic!("Expected Schema mode");
+        }
+    }
+
+    #[test]
+    fn test_content_panel_mode_instance_info_fields() {
+        // Verify InstanceInfo mode stores all fields correctly
+        let mode = ContentPanelMode::InstanceInfo {
+            instance_key: "entity:qr-code".to_string(),
+            class_name: "Entity".to_string(),
+            realm: "org".to_string(),
+            layer: "semantic".to_string(),
+        };
+
+        if let ContentPanelMode::InstanceInfo {
+            instance_key,
+            class_name,
+            realm,
+            layer,
+        } = mode
+        {
+            assert_eq!(instance_key, "entity:qr-code");
+            assert_eq!(class_name, "Entity");
+            assert_eq!(realm, "org");
+            assert_eq!(layer, "semantic");
+        } else {
+            panic!("Expected InstanceInfo mode");
+        }
+    }
+
+    #[test]
+    fn test_content_panel_mode_section_info_fields() {
+        // Verify SectionInfo mode stores name and description
+        let mode = ContentPanelMode::SectionInfo {
+            name: "Layer: semantic".to_string(),
+            description: "Select a Class to view its YAML schema.".to_string(),
+        };
+
+        if let ContentPanelMode::SectionInfo { name, description } = mode {
+            assert_eq!(name, "Layer: semantic");
+            assert_eq!(description, "Select a Class to view its YAML schema.");
+        } else {
+            panic!("Expected SectionInfo mode");
+        }
+    }
+
+    #[test]
+    fn test_content_panel_mode_empty_is_fallback() {
+        // Empty is the fallback mode when no content is available
+        let mode = ContentPanelMode::Empty;
+        assert!(matches!(mode, ContentPanelMode::Empty));
+    }
+
+    #[test]
+    fn test_tree_item_data_none_is_fallback() {
+        // None is the fallback when no tree item is selected
+        let data = TreeItemData::None;
+        assert!(matches!(data, TreeItemData::None));
+    }
 }
