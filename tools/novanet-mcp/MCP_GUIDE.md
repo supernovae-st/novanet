@@ -15,7 +15,11 @@ Quick reference for integrating with NovaNet MCP Server (v0.17.2).
 | Validate before write | `novanet_check` | Check if operation is valid |
 | Quality audit | `novanet_audit` | Check coverage/integrity |
 
-**Rule**: Use specialized tools, NOT `novanet_query` for common tasks.
+**Critical Rule**:
+```
+⚠️ novanet_query is LAST RESORT — only for custom analytics/aggregations
+✅ Use specialized tools (search, traverse, introspect) for common tasks
+```
 
 ## Common Workflows
 
@@ -213,13 +217,22 @@ Add to `.claude/settings.json`:
 - **ADR-024**: Trait system explanation
 - **write-philosophy.md**: Schema vs Data separation
 
+## CSR Severity Thresholds (novanet_audit)
+
+| CSR Range | Severity | Meaning |
+|-----------|----------|---------|
+| ≥ 0.95 | ✅ Healthy | Graph is in good shape |
+| 0.85 - 0.95 | ⚠️ Warning | Some issues need attention |
+| < 0.85 | 🔴 Critical | Significant constraint violations |
+
 ## Quick Reference
 
 ```
-Find → novanet_search
+Find → novanet_search (NOT novanet_query)
 Explore → novanet_traverse
 Schema → novanet_introspect
 Generate → novanet_generate
 Write → novanet_check → novanet_write
 Audit → novanet_audit
+Query → LAST RESORT for custom analytics only
 ```
