@@ -1918,7 +1918,14 @@ impl App {
             // Handle Class toggle in Data mode
             if let Some(class_key) = key.strip_prefix("class:") {
                 if data_mode {
-                    let instances_loaded = self.tree.get_instances(class_key).is_some();
+                    // v0.17.3: Use helpers for Entity/EntityNative dual storage pattern
+                    let instances_loaded = if class_key == "Entity" {
+                        self.tree.has_entity_instances()
+                    } else if class_key == "EntityNative" {
+                        !self.tree.locale_groups.is_empty()
+                    } else {
+                        self.tree.get_instances(class_key).is_some()
+                    };
 
                     if !instances_loaded {
                         // First click on unloaded Class: load instances AND ensure expanded
