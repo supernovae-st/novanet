@@ -286,9 +286,14 @@ async fn run_app(
                     if app.take_pending_entity_categories_load() {
                         match TaxonomyTree::load_entity_categories(db).await {
                             Ok(categories) if app.navigation_generation == nav_gen => {
-                                // Auto-trigger loading of first category's instances
-                                if let Some(first_cat) = categories.first() {
-                                    app.pending.category_instances = Some(first_cat.key.clone());
+                                if categories.is_empty() {
+                                    // v0.17.3: No EntityCategory nodes in DB, fall back to flat Entity instances
+                                    app.pending.instance = Some("Entity".to_string());
+                                } else {
+                                    // Auto-trigger loading of first category's instances
+                                    if let Some(first_cat) = categories.first() {
+                                        app.pending.category_instances = Some(first_cat.key.clone());
+                                    }
                                 }
                                 app.tree.entity_categories = categories;
                             }
