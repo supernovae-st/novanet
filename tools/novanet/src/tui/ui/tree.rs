@@ -23,7 +23,7 @@ use super::{
     render_empty_state, spinner, trait_icon,
 };
 use crate::tui::app::{App, Focus};
-use crate::tui::data::{ArcDirection, locale_to_flag};
+use crate::tui::data::locale_to_flag;
 use crate::tui::theme::hex_to_color;
 use crate::tui::unicode::display_width;
 
@@ -236,6 +236,29 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 icon: "🌐",
                 label: format!("{} {} ({})", group.flag, group.locale_code, group.locale_name),
                 color: Color::Cyan,
+            });
+        }
+        // v0.17.3: EntityGroup breadcrumb (entity-grouped EntityNatives)
+        Some(TreeItem::EntityGroup(r, l, k, group)) => {
+            path.push(BreadcrumbLevel {
+                icon: realm_badge_icon(&r.key),
+                label: r.display_name.clone(),
+                color: hex_to_color(&r.color),
+            });
+            path.push(BreadcrumbLevel {
+                icon: layer_badge_icon(&l.key),
+                label: l.display_name.clone(),
+                color: hex_to_color(&l.color),
+            });
+            path.push(BreadcrumbLevel {
+                icon: trait_icon(&k.trait_name),
+                label: k.display_name.clone(),
+                color: app.theme.trait_color(&k.trait_name),
+            });
+            path.push(BreadcrumbLevel {
+                icon: "◈",
+                label: group.entity_display_name.clone(),
+                color: Color::Yellow,
             });
         }
         Some(TreeItem::Instance(r, l, k, inst)) => {
@@ -904,7 +927,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 let instances_loaded = if class_info.key == "Entity" {
                                     app.tree.has_entity_instances()
                                 } else if class_info.key == "EntityNative" {
-                                    !app.tree.locale_groups.is_empty()
+                                    !app.tree.entity_native_groups.is_empty()
                                 } else {
                                     app.tree.get_instances(&class_info.key).is_some()
                                 };
@@ -928,76 +951,28 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             let instance_count = class_info.instance_count;
 
                             // v0.16.3: Use populated icon (● filled = has data, ○ empty = no data)
-                            // This replaces trait icon for better "what has data?" visibility
                             let populated_icon = if class_is_empty { "○" } else { "●" };
-                            let _t_color = app.theme.trait_color(&class_info.trait_name);
 
-                            // Count arcs by direction
-                            let outgoing = class_info
-                                .arcs
-                                .iter()
-                                .filter(|a| a.direction == ArcDirection::Outgoing)
-                                .count();
-                            let incoming = class_info
-                                .arcs
-                                .iter()
-                                .filter(|a| a.direction == ArcDirection::Incoming)
-                                .count();
-
-                            // v11.6.1: Build arc direction suffix with spaces: →2 ←1
-                            let arc_suffix = match (outgoing, incoming) {
-                                (0, 0) => String::new(),
-                                (o, 0) => format!(" →{}", o),
-                                (0, i) => format!(" ←{}", i),
-                                (o, i) => format!(" →{} ←{}", o, i),
-                            };
-
-                            // v11.6.1: Properties count with ⊞ icon: ⊞6/9
-                            let props_suffix = if !class_info.properties.is_empty() {
-                                format!(
-                                    " ⊞{}/{}",
-                                    class_info.required_properties.len(),
-                                    class_info.properties.len()
-                                )
-                            } else {
-                                String::new()
-                            };
-
-                            // Build display text with all metrics
-                            // v0.16.4: New format: ● 200 Name →out ←in ⊞req/tot
-                            // Count on left, no (def) abbreviation
+                            // v0.17.3: Simplified format - just Name (count) - removed arc/prop noise
                             let (display_text, class_text_color, count_str, count_color) =
                                 if is_data_mode {
-                                    // Data mode: instances + arcs + props + health
-                                    let health_badge = format_health_badge(
-                                        class_info.health_percent,
-                                        class_info.issues_count,
-                                    );
-
-                                    // v0.16.4: Count string (right-aligned 5 chars): "  200" or "   - "
+                                    // Data mode: Name (count)
                                     let cnt_str = if class_is_empty {
-                                        "  - ".to_string()
+                                        String::new()
                                     } else {
-                                        format!("{:>4}", instance_count)
+                                        format!(" ({})", instance_count)
                                     };
 
-                                    let text = format!(
-                                        "{}{}{}{}",
-                                        class_info.display_name,
-                                        arc_suffix,
-                                        props_suffix,
-                                        health_badge
-                                    );
+                                    let text = class_info.display_name.clone();
 
-                                    // v0.16.4: Dim text for empty classes, white for populated
+                                    // Dim text for empty classes, white for populated
                                     let text_color = if class_is_empty {
-                                        Color::Rgb(140, 140, 150) // Slightly dimmed
+                                        Color::Rgb(140, 140, 150)
                                     } else {
                                         Color::White
                                     };
 
-                                    // v0.16.4: Count color based on quantity
-                                    // Green for 1-99, Cyan for 100+, Yellow for 1000+
+                                    // Count color based on quantity
                                     let cnt_color = if instance_count >= 1000 {
                                         Color::Yellow
                                     } else if instance_count >= 100 {
@@ -1005,17 +980,13 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                     } else if instance_count > 0 {
                                         Color::Green
                                     } else {
-                                        Color::Rgb(100, 100, 110) // Dim gray for empty
+                                        Color::Rgb(100, 100, 110)
                                     };
 
                                     (text, text_color, cnt_str, cnt_color)
                                 } else {
-                                    // Meta mode: arcs + props (no instance count)
-                                    let text = format!(
-                                        "{}{}{}",
-                                        class_info.display_name, arc_suffix, props_suffix
-                                    );
-                                    (text, Color::White, "    ".to_string(), Color::White)
+                                    // Meta mode: just name
+                                    (class_info.display_name.clone(), Color::White, String::new(), Color::White)
                                 };
 
                             let prefix = format!(
@@ -1029,7 +1000,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             let has_loaded_instances = if class_info.key == "Entity" {
                                 app.tree.has_entity_instances()
                             } else if class_info.key == "EntityNative" {
-                                !app.tree.locale_groups.is_empty()
+                                !app.tree.entity_native_groups.is_empty()
                             } else {
                                 app.tree
                                     .get_instances(&class_info.key)
@@ -1524,18 +1495,19 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             }
                                         }
                                     }
-                                } else if class_info.key == "EntityNative" && !app.tree.locale_groups.is_empty() {
-                                    // EntityNative class: group by Locale
+                                } else if class_info.key == "EntityNative" && !app.tree.entity_native_groups.is_empty() {
+                                    // EntityNative class: group by parent Entity
+                                    // v0.17.3: Show entity groups with power bar and expandable natives
                                     use unicode_width::UnicodeWidthStr;
 
-                                    let locale_count = app.tree.locale_groups.len();
-                                    for (li, locale_group) in app.tree.locale_groups.iter().enumerate() {
-                                        let locale_is_last = li == locale_count - 1;
+                                    let group_count = app.tree.entity_native_groups.len();
+                                    for (gi, entity_group) in app.tree.entity_native_groups.iter().enumerate() {
+                                        let group_is_last = gi == group_count - 1;
                                         let is_cursor = idx == app.tree_cursor;
 
-                                        // Expand/collapse state for this locale
-                                        let locale_key = format!("locale:{}", locale_group.locale_code);
-                                        let is_collapsed = app.tree.is_collapsed(&locale_key);
+                                        // Expand/collapse state for this entity group
+                                        let group_key = format!("entity_group:{}", entity_group.entity_key);
+                                        let is_collapsed = app.tree.is_collapsed(&group_key);
                                         let expand_icon = if is_collapsed { "▶" } else { "▼" };
 
                                         let style = if is_cursor && focused {
@@ -1550,26 +1522,33 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             cont(realm_is_last),
                                             cont(layer_is_last),
                                             cont(class_is_last),
-                                            branch(locale_is_last)
+                                            branch(group_is_last)
                                         );
 
-                                        // Format: 🇫🇷 fr-FR (12)                 Français (France)
-                                        let left_part = format!(
-                                            "{} {} ({})",
-                                            locale_group.flag,
-                                            locale_group.locale_code,
-                                            locale_group.instance_count
+                                        // Format: ▼ qr-code (5)      ▰▰▰▰▰▰▱▱ (power bar right-aligned)
+                                        let (power_bar, power_color) = render_power_bar(entity_group.relationship_power);
+
+                                        // Calculate widths for right-alignment
+                                        let tree_width = area.width.saturating_sub(4) as usize;
+                                        let left_content = format!(
+                                            "{}{}{} {} ({})",
+                                            cursor_char,
+                                            tree_prefix,
+                                            expand_icon,
+                                            entity_group.entity_key,
+                                            entity_group.native_count,
                                         );
+                                        let left_width = UnicodeWidthStr::width(left_content.as_str());
+                                        let power_bar_width = UnicodeWidthStr::width(power_bar.as_str());
+                                        let padding_width = tree_width.saturating_sub(left_width + power_bar_width + 1);
 
                                         if is_cursor && focused {
                                             all_lines.push(Line::from(Span::styled(
                                                 format!(
-                                                    "{}{}{} {}        {}",
-                                                    cursor_char,
-                                                    tree_prefix,
-                                                    expand_icon,
-                                                    left_part,
-                                                    locale_group.locale_name,
+                                                    "{}{}{}",
+                                                    left_content,
+                                                    " ".repeat(padding_width),
+                                                    power_bar,
                                                 ),
                                                 style,
                                             )));
@@ -1581,24 +1560,32 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                     Style::default().fg(layer_color),
                                                 ),
                                                 Span::styled(
-                                                    format!("{} {}", expand_icon, left_part),
+                                                    format!("{} {} ({})", expand_icon, entity_group.entity_key, entity_group.native_count),
                                                     style,
                                                 ),
                                                 Span::styled(
-                                                    format!("        {}", locale_group.locale_name),
-                                                    Style::default().fg(COLOR_MUTED_TEXT),
+                                                    " ".repeat(padding_width),
+                                                    Style::default(),
+                                                ),
+                                                Span::styled(
+                                                    power_bar.clone(),
+                                                    Style::default().fg(power_color),
                                                 ),
                                             ];
                                             all_lines.push(Line::from(spans));
                                         }
                                         idx += 1;
 
-                                        // Render EntityNatives for this locale when expanded
+                                        // Render EntityNatives for this entity when expanded
                                         if !is_collapsed {
-                                            if let Some(natives) = app.tree.entity_native_by_locale.get(&locale_group.locale_code) {
-                                                // Calculate max width for slug alignment
+                                            if let Some(natives) = app.tree.entity_native_by_entity.get(&entity_group.entity_key) {
+                                                // v0.17.3: Format "Invariant → Native Name    /slug" (no power bar)
+                                                // Calculate tree width for right-alignment
+                                                let tree_width = area.width.saturating_sub(4) as usize;
+
+                                                // Prepare native parts: left = "Invariant → Native", slug
                                                 let native_parts: Vec<_> = natives.iter().map(|native| {
-                                                    // Format: Entity → Native /slug
+                                                    // Format: Entity Name → Native Name /slug
                                                     let left = format!(
                                                         "{} → {}",
                                                         native.entity_display_name,
@@ -1606,11 +1593,6 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                     );
                                                     (left, native.slug.clone())
                                                 }).collect();
-
-                                                let max_left_width = native_parts.iter()
-                                                    .map(|(left, _)| UnicodeWidthStr::width(left.as_str()))
-                                                    .max()
-                                                    .unwrap_or(0);
 
                                                 let native_count_inner = native_parts.len();
                                                 for (ni, (left_part, slug_opt)) in native_parts.iter().enumerate() {
@@ -1635,31 +1617,37 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                         cont(realm_is_last),
                                                         cont(layer_is_last),
                                                         cont(class_is_last),
-                                                        cont(locale_is_last),
+                                                        cont(group_is_last),
                                                         branch(native_is_last)
                                                     );
 
-                                                    // Calculate padding for slug alignment
-                                                    let left_width = UnicodeWidthStr::width(left_part.as_str());
-                                                    let padding = max_left_width.saturating_sub(left_width) + 2;
+                                                    // Calculate slug display with right-alignment
                                                     let slug_display = match slug_opt {
-                                                        Some(slug) => format!("{:>width$}/{}", "", slug, width = padding),
+                                                        Some(slug) => format!("/{}", slug),
                                                         None => String::new(),
                                                     };
+
+                                                    // Calculate padding for right-alignment of slug
+                                                    let prefix_len = 1 + UnicodeWidthStr::width(native_tree_prefix.as_str()); // cursor + prefix
+                                                    let left_width = UnicodeWidthStr::width(left_part.as_str());
+                                                    let slug_width = UnicodeWidthStr::width(slug_display.as_str());
+                                                    let total_content = prefix_len + left_width + slug_width;
+                                                    let padding_width = tree_width.saturating_sub(total_content + 1);
 
                                                     if is_native_cursor && focused {
                                                         all_lines.push(Line::from(Span::styled(
                                                             format!(
-                                                                "{}{}{}{}",
+                                                                "{}{}{}{}{}",
                                                                 native_cursor,
                                                                 native_tree_prefix,
                                                                 left_part,
+                                                                " ".repeat(padding_width),
                                                                 slug_display,
                                                             ),
                                                             native_style,
                                                         )));
                                                     } else {
-                                                        let mut spans = vec![
+                                                        let spans = vec![
                                                             Span::styled(native_cursor, Style::default()),
                                                             Span::styled(
                                                                 native_tree_prefix.clone(),
@@ -1669,10 +1657,15 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                                 left_part.clone(),
                                                                 native_style,
                                                             ),
+                                                            Span::styled(
+                                                                " ".repeat(padding_width),
+                                                                Style::default(),
+                                                            ),
+                                                            Span::styled(
+                                                                slug_display.clone(),
+                                                                slug_style,
+                                                            ),
                                                         ];
-                                                        if !slug_display.is_empty() {
-                                                            spans.push(Span::styled(slug_display, slug_style));
-                                                        }
                                                         all_lines.push(Line::from(spans));
                                                     }
                                                     idx += 1;

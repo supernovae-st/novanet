@@ -86,10 +86,10 @@ const COLOR_ACTIVE_CLASS_BG: Color = Color::Rgb(25, 35, 45);
 // =============================================================================
 
 /// Wide layout column percentages: Tree | Center | Right
-/// v0.17.3: Increased tree from 25% to 35% for Entity/EntityNative with slugs
-const LAYOUT_TREE_PCT: u16 = 35;
-const LAYOUT_CENTER_PCT: u16 = 35;
-const LAYOUT_RIGHT_PCT: u16 = 30;
+/// v0.17.3: Reduced tree from 35% to 28% - keep display compact
+const LAYOUT_TREE_PCT: u16 = 28;
+const LAYOUT_CENTER_PCT: u16 = 38;
+const LAYOUT_RIGHT_PCT: u16 = 34;
 
 /// Center column split: Header | YAML
 const LAYOUT_HEADER_PCT: u16 = 25;
@@ -816,6 +816,10 @@ fn render_recent_items_overlay(f: &mut Frame, app: &App) {
                 }
                 Some(crate::tui::data::TreeItem::LocaleGroup(_, _, _, group)) => {
                     ("🌐", format!("{} {}", group.flag, group.locale_name))
+                }
+                // v0.17.3: EntityGroup history item
+                Some(crate::tui::data::TreeItem::EntityGroup(_, _, _, group)) => {
+                    ("◈", group.entity_display_name.clone())
                 }
                 Some(crate::tui::data::TreeItem::EntityNativeItem(_, _, _, native)) => {
                     ("◆", native.display_name.clone())

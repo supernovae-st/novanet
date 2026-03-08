@@ -324,12 +324,19 @@ async fn run_app(
                         }
                     }
 
-                    // EntityNative locale groups loading (triggered when EntityNative Class expanded)
+                    // EntityNative entity groups loading (triggered when EntityNative Class expanded)
+                    // v0.17.3: Group by parent Entity instead of locale
                     if app.take_pending_entity_natives_load() {
-                        match TaxonomyTree::load_entity_natives_by_locale(db).await {
+                        match TaxonomyTree::load_entity_natives_by_entity(db).await {
                             Ok((groups, natives)) if app.navigation_generation == nav_gen => {
-                                app.tree.locale_groups = groups;
-                                app.tree.entity_native_by_locale = natives;
+                                // v0.17.3: Default all entity groups to collapsed
+                                for group in &groups {
+                                    app.tree
+                                        .collapsed
+                                        .insert(format!("entity_group:{}", group.entity_key));
+                                }
+                                app.tree.entity_native_groups = groups;
+                                app.tree.entity_native_by_entity = natives;
                             }
                             Ok(_) => {
                                 // Stale result, discard

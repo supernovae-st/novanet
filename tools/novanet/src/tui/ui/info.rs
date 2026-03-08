@@ -244,6 +244,8 @@ pub fn build_unified_content(app: &App) -> UnifiedContent<'static> {
         }
         Some(TreeItem::EntityCategory(_, _, _, cat)) => build_category_content(cat),
         Some(TreeItem::LocaleGroup(_, _, _, group)) => build_locale_group_content(group),
+        // v0.17.3: EntityGroup shows entity info (grouped EntityNatives by parent Entity)
+        Some(TreeItem::EntityGroup(_, _, _, group)) => build_entity_group_content(group),
         Some(TreeItem::EntityNativeItem(realm, layer, class, native)) => {
             build_entity_native_item_content(realm, layer, class, native)
         }
@@ -1859,6 +1861,47 @@ fn build_locale_group_content(group: &crate::tui::data::LocaleGroup) -> UnifiedC
     content
 }
 
+/// Build content for EntityGroup (EntityNatives grouped by parent Entity).
+/// v0.17.3: New grouping system - groups natives by entity instead of locale.
+fn build_entity_group_content(
+    group: &crate::tui::data::EntityNativeGroup,
+) -> UnifiedContent<'static> {
+    let mut content = UnifiedContent::default();
+
+    // IDENTITY
+    content
+        .identity
+        .add_kv("type", Span::styled("EntityGroup", STYLE_ACCENT));
+    content.identity.add_kv(
+        "entity",
+        Span::styled(group.entity_key.clone(), Style::default().fg(Color::Cyan)),
+    );
+    content.identity.add_kv(
+        "name",
+        Span::styled(group.entity_display_name.clone(), STYLE_PRIMARY),
+    );
+
+    // LOCATION - not applicable
+    content.location.add_empty();
+
+    // METRICS
+    content.metrics.add_kv(
+        "natives",
+        Span::styled(group.native_count.to_string(), STYLE_PRIMARY),
+    );
+
+    // COVERAGE - not applicable
+    content.coverage.add_empty();
+
+    // PROPERTIES - not applicable
+    content.properties.add_empty();
+
+    // RELATIONSHIPS - not applicable
+    content.relationships.add_empty();
+
+    content
+}
+
 /// Build content for EntityNativeItem (locale-specific content).
 fn build_entity_native_item_content(
     realm: &crate::tui::data::RealmInfo,
@@ -2108,6 +2151,11 @@ fn get_detail_title(app: &App) -> String {
         Some(TreeItem::LocaleGroup(_, _, _, group)) => {
             // [L] badge for LocaleGroup
             format!("[L] {} {}", group.flag, group.locale_name)
+        }
+        // v0.17.3: EntityGroup badge
+        Some(TreeItem::EntityGroup(_, _, _, group)) => {
+            // [E] badge for EntityGroup
+            format!("[E] {}", group.entity_display_name)
         }
         Some(TreeItem::EntityNativeItem(_, _, _, native)) => {
             // [N] badge for Native - locale-specific content

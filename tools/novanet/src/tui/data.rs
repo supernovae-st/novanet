@@ -752,8 +752,25 @@ pub struct EntityNativeInfo {
     pub entity_key: String,
     /// Parent Entity display name (invariant, e.g., "QR Code")
     pub entity_display_name: String,
+    /// Locale code (e.g., "fr-FR")
+    pub locale_code: String,
     /// URL slug from denomination_forms
     pub slug: Option<String>,
+    /// Relationship power (0-100) based on completeness
+    pub relationship_power: u8,
+}
+
+/// Group of EntityNatives by parent Entity
+#[derive(Debug, Clone)]
+pub struct EntityNativeGroup {
+    /// Parent Entity key (e.g., "qr-code")
+    pub entity_key: String,
+    /// Parent Entity display name
+    pub entity_display_name: String,
+    /// Number of natives for this entity
+    pub native_count: usize,
+    /// Relationship power (based on native count)
+    pub relationship_power: u8,
 }
 
 /// Convert a locale code to a flag emoji (e.g., "fr-FR" → "🇫🇷").
@@ -901,6 +918,12 @@ pub struct TaxonomyTree {
     /// EntityNative instances grouped by locale (key = locale code like "fr-FR").
     /// Loaded on-demand when locale groups are expanded.
     pub entity_native_by_locale: FxHashMap<String, Vec<EntityNativeInfo>>,
+    /// EntityNative groups by parent Entity (sorted by entity key).
+    /// Loaded on-demand when viewing EntityNative class.
+    pub entity_native_groups: Vec<EntityNativeGroup>,
+    /// EntityNative instances grouped by parent entity (key = entity key like "qr-code").
+    /// Loaded on-demand when entity groups are expanded.
+    pub entity_native_by_entity: FxHashMap<String, Vec<EntityNativeInfo>>,
 }
 
 impl TaxonomyTree {
@@ -1107,6 +1130,8 @@ ORDER BY realm_key, layer_key, class_key
             entity_category_instances: FxHashMap::default(), // Loaded on-demand when category expanded
             locale_groups: Vec::new(), // Loaded on-demand via load_entity_natives_by_locale
             entity_native_by_locale: FxHashMap::default(), // Loaded on-demand when locale expanded
+            entity_native_groups: Vec::new(), // Loaded on-demand via load_entity_natives_by_entity
+            entity_native_by_entity: FxHashMap::default(), // Loaded on-demand when entity group expanded
         })
     }
 
@@ -1338,11 +1363,7 @@ WITH n, k, collect(DISTINCT {{
     target_key: coalesce(target.key, target.label, id(target)),
     target_class: head(labels(target)),
     target_display_name: target.display_name,
-    target_slug: CASE
-        WHEN target.denomination_forms IS NOT NULL
-        THEN [form IN target.denomination_forms WHERE form.type = 'url' | form.value][0]
-        ELSE null
-    END
+    target_slug: null
 }}) AS outgoing
 OPTIONAL MATCH (source)-[inc]->(n)
 WHERE NOT source:Schema
@@ -1351,11 +1372,7 @@ WITH n, k, outgoing, collect(DISTINCT {{
     source_key: coalesce(source.key, source.label, id(source)),
     source_class: head(labels(source)),
     source_display_name: source.display_name,
-    source_slug: CASE
-        WHEN source.denomination_forms IS NOT NULL
-        THEN [form IN source.denomination_forms WHERE form.type = 'url' | form.value][0]
-        ELSE null
-    END
+    source_slug: null
 }}) AS incoming
 RETURN
     coalesce(n.key, n.label, toString(id(n))) AS key,
@@ -1577,11 +1594,7 @@ WITH n, k, collect(DISTINCT {{
     target_key: coalesce(target.key, target.label, id(target)),
     target_class: head(labels(target)),
     target_display_name: target.display_name,
-    target_slug: CASE
-        WHEN target.denomination_forms IS NOT NULL
-        THEN [form IN target.denomination_forms WHERE form.type = 'url' | form.value][0]
-        ELSE null
-    END
+    target_slug: null
 }}) AS outgoing
 OPTIONAL MATCH (source)-[inc]->(n)
 WHERE NOT source:Schema
@@ -1590,11 +1603,7 @@ WITH n, k, outgoing, collect(DISTINCT {{
     source_key: coalesce(source.key, source.label, id(source)),
     source_class: head(labels(source)),
     source_display_name: source.display_name,
-    source_slug: CASE
-        WHEN source.denomination_forms IS NOT NULL
-        THEN [form IN source.denomination_forms WHERE form.type = 'url' | form.value][0]
-        ELSE null
-    END
+    source_slug: null
 }}) AS incoming
 RETURN k AS key, outgoing, incoming
 "#,
@@ -2150,8 +2159,7 @@ RETURN total,
     pub async fn load_entity_natives_by_locale(
         db: &Db,
     ) -> crate::Result<(Vec<LocaleGroup>, FxHashMap<String, Vec<EntityNativeInfo>>)> {
-        // v0.17.3: Simplified query - use OPTIONAL MATCH for relationships that may not exist
-        // and skip denomination_forms parsing (can fail if stored as JSON string)
+        // v0.17.3: Use APOC to parse denomination_forms JSON string at query time
         let cypher = r#"
 MATCH (en:EntityNative)
 OPTIONAL MATCH (en)-[:FOR_LOCALE]->(l:Locale)
@@ -2167,9 +2175,9 @@ WITH locale_code, locale_name,
          entity_key: coalesce(e.key, ''),
          entity_display_name: coalesce(e.display_name, e.key, ''),
          slug: CASE
-             WHEN en.denomination_forms IS NOT NULL
-             THEN [form IN en.denomination_forms WHERE form.type = 'url' | form.value][0]
-             ELSE null
+           WHEN en.denomination_forms IS NOT NULL
+           THEN [form IN apoc.convert.fromJsonList(en.denomination_forms) WHERE form.type = 'url' | form.value][0]
+           ELSE null
          END
      }) AS natives
 RETURN locale_code, locale_name, natives, size(natives) AS count
@@ -2201,19 +2209,100 @@ ORDER BY locale_code
                 .get::<Vec<neo4rs::BoltMap>>("natives")
                 .unwrap_or_default()
                 .into_iter()
-                .map(|m| EntityNativeInfo {
-                    key: m.get("key").unwrap_or_default(),
-                    display_name: m.get("display_name").unwrap_or_default(),
-                    entity_key: m.get("entity_key").unwrap_or_default(),
-                    entity_display_name: m.get("entity_display_name").unwrap_or_default(),
-                    slug: m.get("slug").ok(),
+                .map(|m| {
+                    let slug: Option<String> = m.get("slug").ok();
+                    // Power based on completeness: 100 if has slug, 50 otherwise
+                    let relationship_power = if slug.is_some() { 100 } else { 50 };
+                    EntityNativeInfo {
+                        key: m.get("key").unwrap_or_default(),
+                        display_name: m.get("display_name").unwrap_or_default(),
+                        entity_key: m.get("entity_key").unwrap_or_default(),
+                        entity_display_name: m.get("entity_display_name").unwrap_or_default(),
+                        locale_code: locale_code.clone(),
+                        slug,
+                        relationship_power,
+                    }
                 })
                 .collect();
 
-            natives_by_locale.insert(locale_code, natives);
+            natives_by_locale.insert(locale_code.clone(), natives);
         }
 
         Ok((locale_groups, natives_by_locale))
+    }
+
+    /// Load EntityNatives grouped by parent Entity.
+    /// Returns groups (for tree nodes) and a map of entity_key -> natives.
+    /// Each native includes locale_code and relationship_power for display.
+    pub async fn load_entity_natives_by_entity(
+        db: &Db,
+    ) -> crate::Result<(Vec<EntityNativeGroup>, FxHashMap<String, Vec<EntityNativeInfo>>)> {
+        // Query EntityNatives grouped by parent Entity
+        // v0.17.3: Use APOC to parse denomination_forms JSON string at query time
+        let cypher = r#"
+MATCH (e:Entity)-[:HAS_NATIVE]->(en:EntityNative)
+OPTIONAL MATCH (en)-[:FOR_LOCALE]->(l:Locale)
+WITH e, en, l
+ORDER BY coalesce(l.key, 'zzz'), coalesce(en.display_name, en.key)
+WITH e.key AS entity_key,
+     coalesce(e.display_name, e.key) AS entity_display_name,
+     collect({
+         key: en.key,
+         display_name: coalesce(en.display_name, en.key),
+         locale_code: coalesce(l.key, en.locale_key, 'unknown'),
+         slug: CASE
+           WHEN en.denomination_forms IS NOT NULL
+           THEN [form IN apoc.convert.fromJsonList(en.denomination_forms) WHERE form.type = 'url' | form.value][0]
+           ELSE null
+         END
+     }) AS natives
+RETURN entity_key, entity_display_name, natives, size(natives) AS count
+ORDER BY entity_key
+"#;
+
+        let rows = db.execute(cypher).await?;
+        let mut entity_groups = Vec::with_capacity(rows.len());
+        let mut natives_by_entity: FxHashMap<String, Vec<EntityNativeInfo>> =
+            FxHashMap::default();
+
+        for row in rows {
+            let entity_key: String = row.get("entity_key").unwrap_or_default();
+            let entity_display_name: String = row.get("entity_display_name").unwrap_or_default();
+            let count: i64 = row.get("count").unwrap_or(0);
+
+            // Power based on native count: full if 5+, proportional otherwise
+            let relationship_power = ((count.min(5) as f32 / 5.0) * 100.0) as u8;
+
+            entity_groups.push(EntityNativeGroup {
+                entity_key: entity_key.clone(),
+                entity_display_name: entity_display_name.clone(),
+                native_count: count as usize,
+                relationship_power,
+            });
+
+            // Parse natives with slug from denomination_forms
+            let natives: Vec<EntityNativeInfo> = row
+                .get::<Vec<neo4rs::BoltMap>>("natives")
+                .unwrap_or_default()
+                .into_iter()
+                .map(|m| {
+                    let slug: Option<String> = m.get("slug").ok();
+                    EntityNativeInfo {
+                        key: m.get("key").unwrap_or_default(),
+                        display_name: m.get("display_name").unwrap_or_default(),
+                        entity_key: entity_key.clone(),
+                        entity_display_name: entity_display_name.clone(),
+                        locale_code: m.get("locale_code").unwrap_or_default(),
+                        slug,
+                        relationship_power: 80, // Power for EntityNative item
+                    }
+                })
+                .collect();
+
+            natives_by_entity.insert(entity_key.clone(), natives);
+        }
+
+        Ok((entity_groups, natives_by_entity))
     }
 
     /// Check if a node is collapsed.
@@ -2243,6 +2332,54 @@ ORDER BY locale_code
         }
         for family in &self.arc_families {
             self.collapsed.insert(format!("family:{}", family.key));
+        }
+    }
+
+    /// Initialize with smart default collapsed state for good UX.
+    /// v0.17.3: Start with a clean, navigable tree:
+    /// - Classes section: open (shows realms)
+    /// - Arcs section: collapsed
+    /// - Realms: open (shows layers)
+    /// - Layers: collapsed (user expands what they need)
+    /// - Classes: collapsed (instances hidden until explicitly opened)
+    /// - Categories/Groups: collapsed
+    pub fn init_default_collapsed(&mut self) {
+        self.collapsed.clear();
+
+        // Arcs section collapsed
+        self.collapsed.insert("arcs".to_string());
+
+        // All layers collapsed (user opens what they need)
+        for realm in &self.realms {
+            for layer in &realm.layers {
+                self.collapsed
+                    .insert(format!("layer:{}:{}", realm.key, layer.key));
+            }
+        }
+
+        // All arc families collapsed
+        for family in &self.arc_families {
+            self.collapsed.insert(format!("family:{}", family.key));
+        }
+
+        // All classes collapsed (instances hidden)
+        for realm in &self.realms {
+            for layer in &realm.layers {
+                for class_info in &layer.classes {
+                    self.collapsed.insert(format!("class:{}", class_info.key));
+                }
+            }
+        }
+
+        // Entity categories collapsed
+        for cat in &self.entity_categories {
+            self.collapsed.insert(format!("category:{}", cat.key));
+        }
+
+        // EntityNative groups collapsed
+        for group in &self.entity_native_groups {
+            self.collapsed
+                .insert(format!("entity_group:{}", group.entity_key));
         }
     }
 
@@ -2469,7 +2606,8 @@ ORDER BY locale_code
     /// Total number of visible items for a specific mode.
     /// In Data mode (data_mode=true), includes instances under expanded Classes.
     /// v0.16.4: Entity instances are flat (no category rows) with category suffix in display.
-    pub fn item_count_for_mode(&self, data_mode: bool) -> usize {
+    /// v0.17.3: Added hide_empty parameter to match render_tree and item_at_for_mode filtering.
+    pub fn item_count_for_mode(&self, data_mode: bool, hide_empty: bool) -> usize {
         let mut count = 0;
 
         // Classs section
@@ -2478,10 +2616,36 @@ ORDER BY locale_code
             for realm in &self.realms {
                 count += 1; // realm header
                 if !self.is_collapsed(&format!("realm:{}", realm.key)) {
-                    for layer in &realm.layers {
+                    // v0.17.3: Filter layers like render_tree does
+                    let visible_layers: Vec<_> = realm
+                        .layers
+                        .iter()
+                        .filter(|l| {
+                            if hide_empty && data_mode {
+                                l.classes.iter().map(|k| k.instance_count).sum::<i64>() > 0
+                            } else {
+                                true
+                            }
+                        })
+                        .collect();
+
+                    for layer in visible_layers {
                         count += 1; // layer header
                         if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
-                            for class_info in &layer.classes {
+                            // v0.17.3: Filter classes like render_tree does
+                            let visible_classes: Vec<_> = layer
+                                .classes
+                                .iter()
+                                .filter(|k| {
+                                    if hide_empty && data_mode {
+                                        k.instance_count > 0
+                                    } else {
+                                        true
+                                    }
+                                })
+                                .collect();
+
+                            for class_info in visible_classes {
                                 count += 1; // class
 
                                 // In Data mode, add instances if not collapsed
@@ -2509,14 +2673,14 @@ ORDER BY locale_code
                                             count += self.entity_instance_count();
                                         }
                                     } else if class_info.key == "EntityNative" {
-                                        // EntityNative shows LocaleGroup nodes (like Entity shows EntityCategory)
-                                        for group in &self.locale_groups {
-                                            count += 1; // LocaleGroup node
-                                            // If locale group is expanded, add its EntityNativeItems
-                                            if !self.is_collapsed(&format!("locale:{}", group.locale_code))
+                                        // v0.17.3: EntityNative shows EntityGroup nodes (grouped by parent Entity)
+                                        for group in &self.entity_native_groups {
+                                            count += 1; // EntityGroup node
+                                            // If entity group is expanded, add its EntityNativeItems
+                                            if !self.is_collapsed(&format!("entity_group:{}", group.entity_key))
                                             {
                                                 if let Some(natives) =
-                                                    self.entity_native_by_locale.get(&group.locale_code)
+                                                    self.entity_native_by_entity.get(&group.entity_key)
                                                 {
                                                     count += natives.len();
                                                 }
@@ -2661,19 +2825,19 @@ ORDER BY locale_code
                                             }
                                         }
                                     } else if class_info.key == "EntityNative" {
-                                        // EntityNative shows LocaleGroup nodes (like Entity shows EntityCategory)
-                                        for group in &self.locale_groups {
+                                        // v0.17.3: EntityNative shows EntityGroup nodes (grouped by parent Entity)
+                                        for group in &self.entity_native_groups {
                                             if idx == cursor {
-                                                return Some(TreeItem::LocaleGroup(
+                                                return Some(TreeItem::EntityGroup(
                                                     realm, layer, class_info, group,
                                                 ));
                                             }
                                             idx += 1;
-                                            // If locale group is expanded, add its EntityNativeItems
-                                            if !self.is_collapsed(&format!("locale:{}", group.locale_code))
+                                            // If entity group is expanded, add its EntityNativeItems
+                                            if !self.is_collapsed(&format!("entity_group:{}", group.entity_key))
                                             {
                                                 if let Some(natives) =
-                                                    self.entity_native_by_locale.get(&group.locale_code)
+                                                    self.entity_native_by_entity.get(&group.entity_key)
                                                 {
                                                     for native in natives {
                                                         if idx == cursor {
@@ -3009,8 +3173,13 @@ ORDER BY locale_code
             // EntityCategory can be collapsed to hide its instances
             Some(TreeItem::EntityCategory(_, _, _, cat)) => Some(format!("category:{}", cat.key)),
             // LocaleGroup can be collapsed to hide its EntityNativeItems
+            // Note: Legacy, kept for backwards compatibility
             Some(TreeItem::LocaleGroup(_, _, _, group)) => {
                 Some(format!("locale:{}", group.locale_code))
+            }
+            // v0.17.3: EntityGroup can be collapsed to hide its EntityNativeItems
+            Some(TreeItem::EntityGroup(_, _, _, group)) => {
+                Some(format!("entity_group:{}", group.entity_key))
             }
             // Entity instances can be collapsed to hide EntityNatives
             Some(TreeItem::Instance(_, _, class_info, instance)) if class_info.key == "Entity" => {
@@ -3062,7 +3231,12 @@ ORDER BY locale_code
             }
 
             // LocaleGroup's parent is its Class (EntityNative)
+            // Note: Legacy, kept for backwards compatibility
             Some(TreeItem::LocaleGroup(realm, layer, class_info, _)) => {
+                self.find_class_cursor_readonly(&realm.key, &layer.key, &class_info.key, data_mode)
+            }
+            // v0.17.3: EntityGroup's parent is its Class (EntityNative)
+            Some(TreeItem::EntityGroup(realm, layer, class_info, _)) => {
                 self.find_class_cursor_readonly(&realm.key, &layer.key, &class_info.key, data_mode)
             }
 
@@ -3577,6 +3751,33 @@ ORDER BY locale_code
                     ..Default::default()
                 }
             }
+            // v0.17.3: EntityGroup hierarchy position (same as LocaleGroup)
+            Some(TreeItem::EntityGroup(realm, layer, class_info, _)) => {
+                let realm_idx = self
+                    .realms
+                    .iter()
+                    .position(|r| r.key == realm.key)
+                    .map(|i| i + 1)
+                    .unwrap_or(1);
+                let layer_idx = realm
+                    .layers
+                    .iter()
+                    .position(|l| l.key == layer.key)
+                    .map(|i| i + 1)
+                    .unwrap_or(1);
+                let class_idx = layer
+                    .classes
+                    .iter()
+                    .position(|k| k.key == class_info.key)
+                    .map(|i| i + 1)
+                    .unwrap_or(1);
+                HierarchyPosition {
+                    realm: Some((realm_idx, total_realms)),
+                    layer: Some((layer_idx, realm.layers.len())),
+                    class: Some((class_idx, layer.classes.len())),
+                    ..Default::default()
+                }
+            }
             Some(TreeItem::ArcFamily(_)) | Some(TreeItem::ArcClass(_, _)) => {
                 // Arcs section - no realm/layer/class hierarchy
                 HierarchyPosition::default()
@@ -3600,11 +3801,11 @@ ORDER BY locale_code
                     .position(|k| k.key == class_info.key)
                     .map(|i| i + 1)
                     .unwrap_or(1);
-                // Calculate EntityNative instance count across all locale groups
+                // v0.17.3: Calculate EntityNative instance count across all entity groups
                 let loaded_count: usize = self
-                    .locale_groups
+                    .entity_native_groups
                     .iter()
-                    .filter_map(|g| self.entity_native_by_locale.get(&g.locale_code))
+                    .filter_map(|g| self.entity_native_by_entity.get(&g.entity_key))
                     .map(|v| v.len())
                     .sum();
                 HierarchyPosition {
@@ -3639,11 +3840,20 @@ pub enum TreeItem<'a> {
         &'a EntityCategory,
     ),
     // Data view: Locale groups (between Class and instances for EntityNative only)
+    // Note: Legacy, kept for backwards compatibility but not used in v0.17.3+
     LocaleGroup(
         &'a RealmInfo,
         &'a LayerInfo,
         &'a ClassInfo,
         &'a LocaleGroup,
+    ),
+    // Data view: Entity groups (between Class and instances for EntityNative only)
+    // v0.17.3: Groups EntityNatives by parent Entity
+    EntityGroup(
+        &'a RealmInfo,
+        &'a LayerInfo,
+        &'a ClassInfo,
+        &'a EntityNativeGroup,
     ),
     // Data view: instances under Classes (or under EntityCategory for Entity)
     Instance(
@@ -3920,6 +4130,8 @@ impl TaxonomyTree {
             entity_category_instances: FxHashMap::default(),
             locale_groups: Vec::new(),
             entity_native_by_locale: FxHashMap::default(),
+            entity_native_groups: Vec::new(),
+            entity_native_by_entity: FxHashMap::default(),
         }
     }
 }
@@ -4062,6 +4274,8 @@ mod tests {
             entity_category_instances: FxHashMap::default(),
             locale_groups: Vec::new(),
             entity_native_by_locale: FxHashMap::default(),
+            entity_native_groups: Vec::new(),
+            entity_native_by_entity: FxHashMap::default(),
         }
     }
 

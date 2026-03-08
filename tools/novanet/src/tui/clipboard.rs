@@ -55,6 +55,13 @@ fn get_tree_content(app: &App) -> Option<(String, &'static str)> {
                 realm.key, layer.key, class.key, group.locale_code
             )
         }
+        // v0.17.3: EntityGroup path
+        TreeItem::EntityGroup(realm, layer, class, group) => {
+            format!(
+                "{}/{}/{}/{}",
+                realm.key, layer.key, class.key, group.entity_key
+            )
+        }
         TreeItem::EntityNativeItem(realm, layer, class, native) => {
             format!("{}/{}/{}/{}", realm.key, layer.key, class.key, native.key)
         }

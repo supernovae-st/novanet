@@ -212,6 +212,7 @@ When Info or Content panel is focused (v0.17.3: renamed from Detail/YAML):
 | `y` | Yank (copy current item's key to clipboard) |
 | `Y` | Yank JSON (copy current item's properties as JSON) |
 | `J` | Toggle JSON pretty-print / compact mode |
+| `O` | Open YAML in external editor ($EDITOR, falls back to code/vim/nano) |
 | `Ctrl+o` | Navigate back in history |
 | `Ctrl+i` | Navigate forward in history |
 | `` ` `` | Open recent items popup (navigation history) |
@@ -247,7 +248,7 @@ Instances:   Enter (load)   r (refresh count)
 Focus:       Tab (cycle panels)
 Filter:      fd/fa/fi/fg/fr (trait)  ff (clear)
 Search:      / (search)  ? (help)  F1 (legend)
-Actions:     r (refresh)  y/Y (yank key/JSON)  J (JSON toggle)  Ctrl+o/i (back/forward)
+Actions:     r (refresh)  y/Y (yank key/JSON)  J (JSON toggle)  O (open in editor)  Ctrl+o/i (back/forward)
 Modes:       2 (Views)  3 (Nexus)
 Exit:        q or Esc
 

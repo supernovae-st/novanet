@@ -1084,6 +1084,8 @@ mod tests {
             entity_category_instances: Default::default(),
             locale_groups: Vec::new(),
             entity_native_by_locale: Default::default(),
+            entity_native_groups: Vec::new(),
+            entity_native_by_entity: Default::default(),
         }
     }
 
@@ -1110,6 +1112,8 @@ mod tests {
             entity_category_instances: Default::default(),
             locale_groups: Vec::new(),
             entity_native_by_locale: Default::default(),
+            entity_native_groups: Vec::new(),
+            entity_native_by_entity: Default::default(),
         }
     }
 

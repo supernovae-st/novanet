@@ -208,6 +208,9 @@ impl App {
             // Render caches
             mini_bar_cache: RefCell::new(RenderCache::new()),
         };
+        // v0.17.3: Initialize with smart collapsed defaults for better UX
+        // (Classes section open with realms visible, but layers/classes collapsed)
+        app.tree.init_default_collapsed();
         app.load_yaml_for_current();
         app
     }
@@ -392,7 +395,14 @@ impl App {
                 properties: class_info.properties.clone(),
             },
             // LocaleGroup shows parent EntityNative Class's YAML
+            // Note: Legacy, kept for backwards compatibility
             Some(TreeItem::LocaleGroup(_, _, class_info, _)) => TreeItemData::Class {
+                yaml_path: class_info.yaml_path.clone(),
+                key: class_info.key.clone(),
+                properties: class_info.properties.clone(),
+            },
+            // v0.17.3: EntityGroup shows parent EntityNative Class's YAML
+            Some(TreeItem::EntityGroup(_, _, class_info, _)) => TreeItemData::Class {
                 yaml_path: class_info.yaml_path.clone(),
                 key: class_info.key.clone(),
                 properties: class_info.properties.clone(),
@@ -1843,6 +1853,7 @@ impl App {
     }
 
     /// Get total item count for the current mode.
+    /// v0.17.3: Pass hide_empty to match render_tree and item_at_for_mode filtering.
     pub fn current_item_count(&self) -> usize {
         // Filtered Data mode: count only instances of the filtered Class
         if let Some(class_key) = &self.data_filter_class {
@@ -1852,7 +1863,7 @@ impl App {
         }
         // Normal mode
         if self.is_graph_mode() {
-            self.tree.item_count_for_mode(true)
+            self.tree.item_count_for_mode(true, self.hide_empty)
         } else {
             // Meta mode: apply trait filter if active
             self.tree
@@ -1950,6 +1961,13 @@ impl App {
                     r.display_name, l.display_name, k.display_name, group.flag, group.locale_name
                 )
             }
+            // v0.17.3: EntityGroup breadcrumb shows entity name
+            Some(TreeItem::EntityGroup(r, l, k, group)) => {
+                format!(
+                    "{} → {} → {} → {}",
+                    r.display_name, l.display_name, k.display_name, group.entity_display_name
+                )
+            }
             Some(TreeItem::ArcFamily(f)) => format!("Arcs → {}", f.display_name),
             Some(TreeItem::ArcClass(f, ak)) => {
                 format!("Arcs → {} → {}", f.display_name, ak.display_name)
@@ -2017,7 +2035,7 @@ impl App {
                     let instances_loaded = if class_key == "Entity" {
                         self.tree.has_entity_instances()
                     } else if class_key == "EntityNative" {
-                        !self.tree.locale_groups.is_empty()
+                        !self.tree.entity_native_groups.is_empty()
                     } else {
                         self.tree.get_instances(class_key).is_some()
                     };
@@ -2040,10 +2058,10 @@ impl App {
                                 }
                             }
                         } else if class_key == "EntityNative" {
-                            if self.tree.locale_groups.is_empty() {
+                            if self.tree.entity_native_groups.is_empty() {
                                 self.pending.entity_natives = true;
                             }
-                            // EntityNative uses locale-grouped display, not flat instances
+                            // EntityNative uses entity-grouped display, not flat instances
                         } else {
                             // Regular classes: use flat instance loading
                             self.pending.instance = Some(class_key.to_string());

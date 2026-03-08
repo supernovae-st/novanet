@@ -546,6 +546,8 @@ pub fn get_type_label(item: Option<&TreeItem>) -> &'static str {
         Some(TreeItem::Instance(_, _, _, _)) => "Instance",
         Some(TreeItem::EntityCategory(_, _, _, _)) => "Category",
         Some(TreeItem::LocaleGroup(_, _, _, _)) => "LocaleGroup",
+        // v0.17.3: EntityGroup for entity-grouped EntityNatives
+        Some(TreeItem::EntityGroup(_, _, _, _)) => "EntityGroup",
         Some(TreeItem::EntityNativeItem(_, _, _, _)) => "EntityNative",
         None => "",
     }
@@ -565,6 +567,8 @@ pub fn get_item_display(item: Option<&TreeItem>) -> (&'static str, String) {
         Some(TreeItem::Instance(_, _, _, inst)) => ("      ", inst.display_name.clone()),
         Some(TreeItem::EntityCategory(_, _, _, cat)) => ("      ", cat.display_name.clone()),
         Some(TreeItem::LocaleGroup(_, _, _, group)) => ("      ", format!("{} {}", group.flag, group.locale_name)),
+        // v0.17.3: EntityGroup display
+        Some(TreeItem::EntityGroup(_, _, _, group)) => ("      ", group.entity_display_name.clone()),
         Some(TreeItem::EntityNativeItem(_, _, _, native)) => ("        ", native.display_name.clone()),
         None => ("?", "Unknown".to_string()),
     }
