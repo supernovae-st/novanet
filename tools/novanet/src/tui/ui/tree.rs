@@ -1312,32 +1312,23 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                     }
                                 } else if class_info.key == "Entity" {
                                     // Fallback: flat instances (before categories load)
+                                    use unicode_width::UnicodeWidthStr;
                                     let all_entities: Vec<_> =
                                         app.tree.entity_instances_flat().into_iter().collect();
 
-                                    let inst_count = all_entities.len();
-                                    for (ii, instance) in all_entities.iter().enumerate() {
-                                        let inst_is_last = ii == inst_count - 1;
-                                        let is_cursor = idx == app.tree_cursor;
-
-                                        // Check if is_pillar from properties
-                                        let is_pillar = instance
-                                            .properties
-                                            .get("is_pillar")
+                                    // Pre-calculate parts for slug right-alignment
+                                    let entity_parts: Vec<_> = all_entities.iter().map(|inst| {
+                                        let is_pillar = inst.properties.get("is_pillar")
                                             .and_then(|v| v.as_bool())
                                             .unwrap_or(false);
                                         let pillar_marker = if is_pillar { " ★" } else { "" };
 
-                                        // Collect EntityNative arcs (HAS_NATIVE)
-                                        let native_arcs: Vec<_> = instance
-                                            .outgoing_arcs
-                                            .iter()
+                                        let native_arcs: Vec<_> = inst.outgoing_arcs.iter()
                                             .filter(|a| a.arc_type == "HAS_NATIVE")
                                             .collect();
                                         let native_count = native_arcs.len();
 
-                                        // Expand/collapse state for this Entity
-                                        let entity_key = format!("entity:{}", instance.key);
+                                        let entity_key = format!("entity:{}", inst.key);
                                         let is_collapsed = app.tree.is_collapsed(&entity_key);
                                         let expand_icon = if native_count > 0 {
                                             if is_collapsed { "▶" } else { "▼" }
@@ -1345,19 +1336,42 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             "○"
                                         };
 
-                                        // Power bar visualization based on relationship_power
-                                        let (power_bar, power_color) = render_power_bar(instance.relationship_power);
+                                        let (power_bar, power_color) = render_power_bar(inst.relationship_power);
+                                        let left = format!("{} {}{} {}", expand_icon, inst.display_name, pillar_marker, power_bar);
 
-                                        // Entity slug (right-aligned)
-                                        let slug_display = instance.entity_slug.as_ref()
-                                            .map(|s| format!("/{}", s))
-                                            .unwrap_or_default();
+                                        (left, expand_icon, pillar_marker, power_bar, power_color, native_arcs, native_count, is_collapsed, inst)
+                                    }).collect();
+
+                                    // Calculate max left width for alignment
+                                    let max_left_width = entity_parts.iter()
+                                        .map(|(left, _, _, _, _, _, _, _, _)| UnicodeWidthStr::width(left.as_str()))
+                                        .max()
+                                        .unwrap_or(0);
+
+                                    let inst_count = entity_parts.len();
+                                    for (ii, (left_part, expand_icon, pillar_marker, power_bar, power_color, native_arcs, native_count, is_collapsed, instance)) in entity_parts.iter().enumerate() {
+                                        let inst_is_last = ii == inst_count - 1;
+                                        let is_cursor = idx == app.tree_cursor;
+
+                                        // Calculate slug with right-alignment padding
+                                        let left_width = UnicodeWidthStr::width(left_part.as_str());
+                                        let padding = max_left_width.saturating_sub(left_width) + 2;
+                                        let slug_display = match &instance.entity_slug {
+                                            Some(slug) => format!("{:>width$}/{}", "", slug, width = padding),
+                                            None => String::new(),
+                                        };
 
                                         // Entity text style: white (not yellow)
                                         let style = if is_cursor && focused {
                                             Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White)
                                         } else {
                                             Style::default().fg(COLOR_ENTITY_TEXT)
+                                        };
+
+                                        let slug_style = if is_cursor && focused {
+                                            Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White)
+                                        } else {
+                                            Style::default().fg(COLOR_ENTITY_SLUG)
                                         };
 
                                         let cursor_char = if is_cursor { ">" } else { " " };
@@ -1373,12 +1387,10 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             // Focused cursor: single styled line
                                             all_lines.push(Line::from(Span::styled(
                                                 format!(
-                                                    "{}{}{} {} {} {}",
+                                                    "{}{}{}{}",
                                                     cursor_char,
                                                     tree_prefix,
-                                                    expand_icon,
-                                                    instance.display_name,
-                                                    power_bar,
+                                                    left_part,
                                                     slug_display,
                                                 ),
                                                 style,
@@ -1388,7 +1400,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             let mut spans = vec![
                                                 Span::styled(cursor_char, Style::default()),
                                                 Span::styled(
-                                                    tree_prefix,
+                                                    tree_prefix.clone(),
                                                     Style::default().fg(layer_color),
                                                 ),
                                                 Span::styled(
@@ -1397,13 +1409,13 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                 ),
                                                 Span::styled(
                                                     format!(" {}", power_bar),
-                                                    Style::default().fg(power_color),
+                                                    Style::default().fg(*power_color),
                                                 ),
                                             ];
                                             if !slug_display.is_empty() {
                                                 spans.push(Span::styled(
-                                                    format!(" {}", slug_display),
-                                                    Style::default().fg(COLOR_ENTITY_SLUG),
+                                                    slug_display,
+                                                    slug_style,
                                                 ));
                                             }
                                             all_lines.push(Line::from(spans));
@@ -1411,7 +1423,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                         idx += 1;
 
                                         // Render EntityNatives when expanded
-                                        if native_count > 0 && !is_collapsed {
+                                        if *native_count > 0 && !is_collapsed {
                                             use unicode_width::UnicodeWidthStr;
 
                                             // Pre-compute left parts and find max width for slug alignment
