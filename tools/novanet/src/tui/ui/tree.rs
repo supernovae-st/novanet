@@ -877,8 +877,14 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             let class_icon = if is_data_mode && class_info.instance_count > 0 {
                                 // Show expanded (▼) only if instances are actually loaded
                                 // Otherwise show collapsed (▶) even if state says "expanded"
-                                let instances_loaded =
-                                    app.tree.get_instances(&class_info.key).is_some();
+                                // v0.17.3: Use helpers for Entity/EntityNative dual storage
+                                let instances_loaded = if class_info.key == "Entity" {
+                                    app.tree.has_entity_instances()
+                                } else if class_info.key == "EntityNative" {
+                                    !app.tree.locale_groups.is_empty()
+                                } else {
+                                    app.tree.get_instances(&class_info.key).is_some()
+                                };
                                 if instances_loaded {
                                     expand_icon(class_collapsed)
                                 } else {
@@ -996,12 +1002,18 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 branch(class_is_last)
                             );
                             // Highlight Class if it has expanded instances (active focus)
-                            let class_has_expanded_instances = is_data_mode
-                                && !class_collapsed
-                                && app
-                                    .tree
+                            // v0.17.3: Use helpers for Entity/EntityNative dual storage
+                            let has_loaded_instances = if class_info.key == "Entity" {
+                                app.tree.has_entity_instances()
+                            } else if class_info.key == "EntityNative" {
+                                !app.tree.locale_groups.is_empty()
+                            } else {
+                                app.tree
                                     .get_instances(&class_info.key)
-                                    .is_some_and(|i| !i.is_empty());
+                                    .is_some_and(|i| !i.is_empty())
+                            };
+                            let class_has_expanded_instances =
+                                is_data_mode && !class_collapsed && has_loaded_instances;
                             let class_bg = if class_has_expanded_instances {
                                 Some(COLOR_ACTIVE_CLASS_BG)
                             } else {

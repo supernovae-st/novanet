@@ -3193,14 +3193,17 @@ ORDER BY locale_code
     /// Count all Entity instances (category-based or fallback).
     /// Returns total count across all categories if using category storage,
     /// otherwise falls back to regular instance count.
+    /// v0.17.3: Check entity_categories to determine mode, not entity_category_instances
     pub fn entity_instance_count(&self) -> usize {
-        if self.has_entity_category_instances() {
+        if !self.entity_categories.is_empty() {
+            // Category mode: sum instances across all loaded categories
             self.entity_categories
                 .iter()
                 .filter_map(|cat| self.entity_category_instances.get(&cat.key))
                 .map(|v| v.len())
                 .sum()
         } else {
+            // Fallback mode: use flat instances storage
             self.instances.get("Entity").map(|v| v.len()).unwrap_or(0)
         }
     }
@@ -3208,8 +3211,10 @@ ORDER BY locale_code
     /// Get a flat iterator over all Entity instances (for cursor-based access).
     /// Returns instances from category storage if available, otherwise fallback.
     /// Used for item_at type indexing operations.
+    /// v0.17.3: Check entity_categories to determine mode, not entity_category_instances
     pub fn entity_instances_flat(&self) -> Vec<&InstanceInfo> {
-        if self.has_entity_category_instances() {
+        if !self.entity_categories.is_empty() {
+            // Category mode: flatten instances across all loaded categories
             self.entity_categories
                 .iter()
                 .flat_map(|cat| {
@@ -3221,6 +3226,7 @@ ORDER BY locale_code
                 })
                 .collect()
         } else {
+            // Fallback mode: use flat instances storage
             self.instances
                 .get("Entity")
                 .map(|v| v.iter().collect())
