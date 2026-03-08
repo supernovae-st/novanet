@@ -1242,9 +1242,11 @@ async fn connect_db(
 fn run_spn_backup() -> color_eyre::Result<()> {
     eprintln!("Creating backup before operation...");
 
-    // Try to run spn backup create
+    // Try to run spn backup create (inherit stdout/stderr to show progress)
     let status = std::process::Command::new("spn")
         .args(["backup", "create"])
+        .stdout(std::process::Stdio::inherit())
+        .stderr(std::process::Stdio::inherit())
         .status();
 
     match status {
