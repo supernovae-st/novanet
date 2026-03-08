@@ -25,6 +25,20 @@
 
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use std::sync::LazyLock;
+
+/// Static fallback DEFAULT task modifier
+/// Used when config doesn't contain a DEFAULT entry (prevents panic)
+static DEFAULT_TASK_MODIFIER: LazyLock<TaskModifier> = LazyLock::new(|| TaskModifier {
+    activation_threshold: Some(0.30),
+    propagation_steps: Some(2),
+    semantic_boosts: HashMap::new(),
+    priority_filter: vec![
+        "critical".to_string(),
+        "high".to_string(),
+        "medium".to_string(),
+    ],
+});
 
 /// Spreading activation configuration
 ///
@@ -178,11 +192,14 @@ impl SpreadingConfig {
     }
 
     /// Get task modifier for a block type, falling back to DEFAULT
+    ///
+    /// Falls back to static DEFAULT_TASK_MODIFIER if neither the requested
+    /// block_type nor DEFAULT exists in the config (prevents panic).
     pub fn get_task_modifier(&self, block_type: &str) -> &TaskModifier {
         self.task_modifiers
             .get(block_type.to_uppercase().as_str())
             .or_else(|| self.task_modifiers.get("DEFAULT"))
-            .expect("DEFAULT task modifier should always exist")
+            .unwrap_or(&DEFAULT_TASK_MODIFIER)
     }
 
     /// Get effective activation threshold for a task
