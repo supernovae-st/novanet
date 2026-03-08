@@ -184,6 +184,36 @@ enum Commands {
     },
     /// Compare schema YAML with Neo4j database state to detect drift
     Diff(novanet::commands::diff::DiffArgs),
+    /// Seed operations (YAML data → Cypher)
+    Seed {
+        #[command(subcommand)]
+        action: SeedAction,
+    },
+}
+
+#[derive(Subcommand)]
+enum SeedAction {
+    /// Generate Cypher from YAML data files
+    Generate {
+        /// Filter by class (e.g., Entity, EntityNative)
+        #[arg(long, name = "class")]
+        class: Option<String>,
+        /// Preview without writing files
+        #[arg(long)]
+        dry_run: bool,
+    },
+    /// Validate YAML data files against schema
+    Validate {
+        /// Automatically fix issues where possible
+        #[arg(long)]
+        fix: bool,
+    },
+    /// Compare YAML data with Neo4j database
+    Diff {
+        /// Filter by class
+        #[arg(long, name = "class")]
+        class: Option<String>,
+    },
 }
 
 #[derive(clap::Args)]
@@ -1140,6 +1170,39 @@ async fn main() -> color_eyre::Result<()> {
                 std::process::exit(1);
             }
         }
+
+        // ── Seed (YAML data → Cypher) ────────────────────────────────────
+        Commands::Seed { action } => match action {
+            SeedAction::Generate { class, dry_run } => {
+                let root = root?;
+                eprintln!(
+                    "novanet seed generate{}{} (root: {})",
+                    if dry_run { " --dry-run" } else { "" },
+                    class.as_ref().map_or(String::new(), |c| format!(" --class={}", c)),
+                    root.display()
+                );
+                novanet::commands::seed::generate(Some(root), class, dry_run)?;
+            }
+            SeedAction::Validate { fix } => {
+                let root = root?;
+                eprintln!(
+                    "novanet seed validate{} (root: {})",
+                    if fix { " --fix" } else { "" },
+                    root.display()
+                );
+                novanet::commands::seed::validate(Some(root), fix)?;
+            }
+            SeedAction::Diff { class } => {
+                let db = connect_db(&uri, &user, password.as_ref()).await?;
+                let root = root?;
+                eprintln!(
+                    "novanet seed diff{} (root: {})",
+                    class.as_ref().map_or(String::new(), |c| format!(" --class={}", c)),
+                    root.display()
+                );
+                novanet::commands::seed::diff(Some(root), db.graph(), class).await?;
+            }
+        },
     }
 
     Ok(())

@@ -1438,6 +1438,12 @@ impl App {
                 false
             }
 
+            // Open YAML in external editor (O = shift+o)
+            KeyCode::Char('O') => {
+                self.open_yaml_in_editor();
+                true
+            }
+
             _ => false,
         }
     }
@@ -1586,6 +1592,67 @@ impl App {
         if let Some((_, instant)) = &self.status_message {
             if instant.elapsed().as_secs() >= 5 {
                 self.status_message = None;
+            }
+        }
+    }
+
+    /// Open the current YAML file in external editor.
+    /// v0.17.3: Uses $EDITOR environment variable, falls back to 'code' then 'vim'.
+    /// Returns true if editor was launched, false if no YAML file is available.
+    pub fn open_yaml_in_editor(&mut self) -> bool {
+        if self.yaml.path.is_empty() {
+            self.set_status("No YAML file to open");
+            return false;
+        }
+
+        // Build full path
+        let full_path = format!("{}/{}", self.root_path, self.yaml.path);
+
+        // Check if file exists
+        if !Path::new(&full_path).exists() {
+            self.set_status(&format!("File not found: {}", self.yaml.path));
+            return false;
+        }
+
+        // Helper to check if command exists in PATH
+        fn command_exists(cmd: &str) -> bool {
+            std::process::Command::new("which")
+                .arg(cmd)
+                .stdout(std::process::Stdio::null())
+                .stderr(std::process::Stdio::null())
+                .status()
+                .map(|s| s.success())
+                .unwrap_or(false)
+        }
+
+        // Get editor from environment, with fallbacks
+        let editor = std::env::var("EDITOR")
+            .or_else(|_| std::env::var("VISUAL"))
+            .unwrap_or_else(|_| {
+                // Try common editors in order of preference
+                if command_exists("code") {
+                    "code".to_string()
+                } else if command_exists("vim") {
+                    "vim".to_string()
+                } else if command_exists("nano") {
+                    "nano".to_string()
+                } else {
+                    "vi".to_string()
+                }
+            });
+
+        // Launch editor in background
+        match std::process::Command::new(&editor)
+            .arg(&full_path)
+            .spawn()
+        {
+            Ok(_) => {
+                self.set_status(&format!("Opened in {}", editor));
+                true
+            }
+            Err(e) => {
+                self.set_status_error(&format!("Failed to open editor: {}", e));
+                false
             }
         }
     }
