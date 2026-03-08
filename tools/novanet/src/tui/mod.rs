@@ -284,11 +284,8 @@ async fn run_app(
 
                     // Entity category loading (triggered when Entity Class expanded in Data mode)
                     if app.take_pending_entity_categories_load() {
-                        app.set_status("DEBUG: Loading Entity categories...");
                         match TaxonomyTree::load_entity_categories(db).await {
                             Ok(categories) if app.navigation_generation == nav_gen => {
-                                let dbg = format!("DEBUG: Loaded {} Entity categories", categories.len());
-                                app.set_status(&dbg);
                                 if categories.is_empty() {
                                     // v0.17.3: No EntityCategory nodes in DB, fall back to flat Entity instances
                                     app.pending.instance = Some("Entity".to_string());
@@ -329,16 +326,13 @@ async fn run_app(
 
                     // EntityNative locale groups loading (triggered when EntityNative Class expanded)
                     if app.take_pending_entity_natives_load() {
-                        app.set_status("DEBUG: Loading EntityNative locale groups...");
                         match TaxonomyTree::load_entity_natives_by_locale(db).await {
                             Ok((groups, natives)) if app.navigation_generation == nav_gen => {
-                                let dbg = format!("DEBUG: Loaded {} locale groups, {} locales", groups.len(), natives.len());
-                                app.set_status(&dbg);
                                 app.tree.locale_groups = groups;
                                 app.tree.entity_native_by_locale = natives;
                             }
                             Ok(_) => {
-                                app.set_status("DEBUG: EntityNative load stale, discarded");
+                                // Stale result, discard
                             }
                             Err(e) => {
                                 app.set_status_error(&format!("Load entity natives: {}", e))

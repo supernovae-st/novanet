@@ -1937,28 +1937,11 @@ impl App {
     /// Single-click behavior: if instances not loaded, load them AND expand in one action.
     fn toggle_tree_item(&mut self) {
         let data_mode = self.is_graph_mode();
-        // DEBUG: Show what item is at cursor
-        // v0.17.3: Pass hide_empty to match render_tree filtering
-        let item_debug = self
-            .tree
-            .item_at_for_mode(self.tree_cursor, data_mode, self.hide_empty);
-        let item_type = match &item_debug {
-            Some(super::data::TreeItem::Class(_, _, c)) => format!("Class:{}", c.key),
-            Some(super::data::TreeItem::EntityCategory(_, _, _, cat)) => format!("Category:{}", cat.key),
-            Some(super::data::TreeItem::LocaleGroup(_, _, _, g)) => format!("LocaleGroup:{}", g.locale_code),
-            Some(other) => format!("{:?}", std::mem::discriminant(other)),
-            None => "None".to_string(),
-        };
-        let dbg1 = format!("DEBUG: cursor={} item={} data_mode={}", self.tree_cursor, item_type, data_mode);
-        self.set_status(&dbg1);
 
         if let Some(key) =
             self.tree
                 .collapse_key_at(self.tree_cursor, data_mode, self.hide_empty)
         {
-            // DEBUG: Show collapse key
-            let dbg2 = format!("DEBUG: key={}", key);
-            self.set_status(&dbg2);
 
             // Handle Class toggle in Data mode
             if let Some(class_key) = key.strip_prefix("class:") {
@@ -1990,13 +1973,10 @@ impl App {
                                 }
                             }
                         } else if class_key == "EntityNative" {
-                            // DEBUG: Check locale_groups status
-                            let dbg = format!("DEBUG: EntityNative - locale_groups.is_empty()={}", self.tree.locale_groups.is_empty());
-                            self.set_status(&dbg);
                             if self.tree.locale_groups.is_empty() {
                                 self.pending.entity_natives = true;
                             }
-                            // EntityNative also skips flat instance loading
+                            // EntityNative uses locale-grouped display, not flat instances
                         } else {
                             // Regular classes: use flat instance loading
                             self.pending.instance = Some(class_key.to_string());
