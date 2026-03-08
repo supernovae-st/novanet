@@ -2652,26 +2652,11 @@ ORDER BY entity_key
                                 if data_mode
                                     && !self.is_collapsed(&format!("class:{}", class_info.key))
                                 {
-                                    // v0.17.3: Entity shows EntityCategory nodes (not flat instances)
+                                    // v0.17.3: Entity shows flat alphabetical list (no categories)
                                     if class_info.key == "Entity" {
-                                        if !self.entity_categories.is_empty() {
-                                            // Category mode: show EntityCategory nodes
-                                            for cat in &self.entity_categories {
-                                                count += 1; // category node
-                                                // If category is expanded, add its instances
-                                                if !self.is_collapsed(&format!("category:{}", cat.key))
-                                                {
-                                                    if let Some(instances) =
-                                                        self.entity_category_instances.get(&cat.key)
-                                                    {
-                                                        count += instances.len();
-                                                    }
-                                                }
-                                            }
-                                        } else {
-                                            // Fallback: flat instances (before categories load)
-                                            count += self.entity_instance_count();
-                                        }
+                                        // v0.17.3: DISABLED EntityCategory grouping
+                                        // Always use flat instance count
+                                        count += self.entity_instance_count();
                                     } else if class_info.key == "EntityNative" {
                                         // v0.17.3: EntityNative shows EntityGroup nodes (grouped by parent Entity)
                                         for group in &self.entity_native_groups {
