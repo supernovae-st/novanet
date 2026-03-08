@@ -758,6 +758,9 @@ pub struct EntityNativeInfo {
     pub slug: Option<String>,
     /// Relationship power (0-100) based on completeness
     pub relationship_power: u8,
+    /// All properties from Neo4j for display in INSTANCE panel.
+    /// v0.17.3: Added to show full instance details like Entity instances.
+    pub properties: BTreeMap<String, JsonValue>,
 }
 
 /// Group of EntityNatives by parent Entity
@@ -2205,6 +2208,7 @@ ORDER BY locale_code
             });
 
             // Parse natives
+            // Note: This legacy function doesn't load full properties (use load_entity_natives_by_entity)
             let natives: Vec<EntityNativeInfo> = row
                 .get::<Vec<neo4rs::BoltMap>>("natives")
                 .unwrap_or_default()
@@ -2221,6 +2225,7 @@ ORDER BY locale_code
                         locale_code: locale_code.clone(),
                         slug,
                         relationship_power,
+                        properties: BTreeMap::new(), // Legacy: no full properties in this query
                     }
                 })
                 .collect();
@@ -2239,6 +2244,7 @@ ORDER BY locale_code
     ) -> crate::Result<(Vec<EntityNativeGroup>, FxHashMap<String, Vec<EntityNativeInfo>>)> {
         // Query EntityNatives grouped by parent Entity
         // v0.17.3: Use APOC to parse denomination_forms JSON string at query time
+        // v0.17.3: Also load all properties for INSTANCE panel display
         let cypher = r#"
 MATCH (e:Entity)-[:HAS_NATIVE]->(en:EntityNative)
 OPTIONAL MATCH (en)-[:FOR_LOCALE]->(l:Locale)
@@ -2254,7 +2260,8 @@ WITH e.key AS entity_key,
            WHEN en.denomination_forms IS NOT NULL
            THEN [form IN apoc.convert.fromJsonList(en.denomination_forms) WHERE form.type = 'url' | form.value][0]
            ELSE null
-         END
+         END,
+         props: properties(en)
      }) AS natives
 RETURN entity_key, entity_display_name, natives, size(natives) AS count
 ORDER BY entity_key
@@ -2280,13 +2287,27 @@ ORDER BY entity_key
                 relationship_power,
             });
 
-            // Parse natives with slug from denomination_forms
+            // Parse natives with slug from denomination_forms and full properties
+            // v0.17.3: Include all properties for INSTANCE panel display
             let natives: Vec<EntityNativeInfo> = row
                 .get::<Vec<neo4rs::BoltMap>>("natives")
                 .unwrap_or_default()
                 .into_iter()
                 .map(|m| {
                     let slug: Option<String> = m.get("slug").ok();
+
+                    // Extract nested properties map from the "props" field
+                    let properties: BTreeMap<String, JsonValue> = m
+                        .get::<neo4rs::BoltMap>("props")
+                        .map(|props_map| {
+                            props_map
+                                .value
+                                .iter()
+                                .map(|(k, v)| (k.value.clone(), bolt_to_json(v)))
+                                .collect()
+                        })
+                        .unwrap_or_default();
+
                     EntityNativeInfo {
                         key: m.get("key").unwrap_or_default(),
                         display_name: m.get("display_name").unwrap_or_default(),
@@ -2295,6 +2316,7 @@ ORDER BY entity_key
                         locale_code: m.get("locale_code").unwrap_or_default(),
                         slug,
                         relationship_power: 80, // Power for EntityNative item
+                        properties,
                     }
                 })
                 .collect();

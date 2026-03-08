@@ -410,8 +410,7 @@ impl App {
                 properties: class_info.properties.clone(),
             },
             // EntityNativeItem shows as Instance (same data structure)
-            // Note: EntityNativeInfo doesn't have full properties, so we return empty map
-            // Full properties are in InstanceInfo (shown for TreeItem::Instance)
+            // v0.17.3: Now includes full properties for INSTANCE panel display
             Some(TreeItem::EntityNativeItem(realm, layer, class_info, native)) => {
                 TreeItemData::Instance {
                     instance_key: native.key.clone(),
@@ -420,7 +419,7 @@ impl App {
                     layer: layer.key.clone(),
                     class_yaml_path: class_info.yaml_path.clone(),
                     class_properties: class_info.properties.clone(),
-                    properties: std::collections::BTreeMap::new(), // EntityNativeInfo has limited fields
+                    properties: native.properties.clone(),
                 }
             }
             None => TreeItemData::None,
