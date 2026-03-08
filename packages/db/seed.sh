@@ -29,14 +29,54 @@ echo -e "${YELLOW}  NovaNet Neo4j Seed${NC}"
 echo -e "${YELLOW}═══════════════════════════════════════════════════════════════${NC}"
 echo ""
 
+MONOREPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+PRIVATE_DATA="$MONOREPO_ROOT/../private-data"
+BACKUP_SCRIPT="$PRIVATE_DATA/scripts/backup.sh"
+DRIFT_SCRIPT="$PRIVATE_DATA/scripts/drift.sh"
+
 # ─────────────────────────────────────────────────────────────────────────────
-# [0] YAML Schema Validation (pre-flight, ADR-003: YAML is source of truth)
+# [0/5] Pre-Seed Backup (Production Safety)
+# Creates automatic backup before any seed operation
+# ─────────────────────────────────────────────────────────────────────────────
+if [ -x "$BACKUP_SCRIPT" ] && docker ps --format '{{.Names}}' | grep -q "^${CONTAINER}$"; then
+    echo -e "${YELLOW}[0/5] Backup automatique avant seed...${NC}"
+    if "$BACKUP_SCRIPT"; then
+        echo -e "${GREEN}✓ Backup créé${NC}"
+    else
+        echo -e "${RED}✗ Backup échoué — abandon du seed${NC}"
+        echo "  Corrige le problème ou lance avec SKIP_BACKUP=1"
+        if [ "${SKIP_BACKUP:-0}" != "1" ]; then
+            exit 1
+        fi
+    fi
+    echo ""
+
+    # Drift detection (warning only)
+    if [ -x "$DRIFT_SCRIPT" ]; then
+        echo -e "${YELLOW}[0.5/5] Détection de drift...${NC}"
+        if ! "$DRIFT_SCRIPT"; then
+            echo ""
+            read -p "Drift détecté. Continuer le seed? [y/N] " -n 1 -r
+            echo ""
+            if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+                echo -e "${YELLOW}Seed annulé${NC}"
+                exit 0
+            fi
+        fi
+        echo ""
+    fi
+else
+    echo -e "${YELLOW}[0/5] Backup ignoré (Neo4j pas lancé ou script absent)${NC}"
+    echo ""
+fi
+
+# ─────────────────────────────────────────────────────────────────────────────
+# [1/5] YAML Schema Validation (pre-flight, ADR-003: YAML is source of truth)
 # Blocks seed if YAML has errors; warns on warnings but does not block.
 # ─────────────────────────────────────────────────────────────────────────────
-MONOREPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 NOVANET_BINARY="$MONOREPO_ROOT/tools/target/debug/novanet"
 
-echo -e "${YELLOW}[0/3] Validation du schéma YAML (ADR-003)...${NC}"
+echo -e "${YELLOW}[1/5] Validation du schéma YAML (ADR-003)...${NC}"
 
 if [ -f "$NOVANET_BINARY" ]; then
     if (cd "$MONOREPO_ROOT" && "$NOVANET_BINARY" schema validate) 2>&1; then
@@ -59,7 +99,7 @@ fi
 echo ""
 
 # Vérifier que Neo4j est lancé
-echo -e "${YELLOW}[1/3] Vérification de Neo4j...${NC}"
+echo -e "${YELLOW}[2/5] Vérification de Neo4j...${NC}"
 if ! docker ps --format '{{.Names}}' | grep -q "^${CONTAINER}$"; then
     echo -e "${RED}✗ Neo4j n'est pas lancé. Lance 'pnpm infra:up' depuis la racine du monorepo.${NC}"
     exit 1
@@ -68,7 +108,7 @@ echo -e "${GREEN}✓ Neo4j est lancé${NC}"
 echo ""
 
 # Attendre que Neo4j soit prêt
-echo -e "${YELLOW}[2/3] Attente que Neo4j soit prêt...${NC}"
+echo -e "${YELLOW}[3/5] Attente que Neo4j soit prêt...${NC}"
 MAX_ATTEMPTS=30
 ATTEMPT=0
 while ! docker exec -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" "RETURN 1" > /dev/null 2>&1; do
@@ -84,7 +124,7 @@ echo -e "${GREEN}✓ Neo4j est prêt${NC}"
 echo ""
 
 # Exécuter les fichiers .cypher dans l'ordre
-echo -e "${YELLOW}[3/3] Exécution du seed...${NC}"
+echo -e "${YELLOW}[4/5] Exécution du seed...${NC}"
 echo ""
 
 for file in "$SEED_DIR"/*.cypher; do
@@ -115,7 +155,7 @@ if [ -d "$MIGRATION_DIR" ]; then
     migration_files=("$MIGRATION_DIR"/*.cypher)
     shopt -u nullglob
     if [ ${#migration_files[@]} -gt 0 ]; then
-        echo -e "${YELLOW}[4/4] Exécution des migrations...${NC}"
+        echo -e "${YELLOW}[5/5] Exécution des migrations...${NC}"
         echo ""
 
         for file in "${migration_files[@]}"; do

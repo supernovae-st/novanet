@@ -9,9 +9,9 @@
     "logs": "docker compose logs -f",
     "seed": "./seed.sh",
     "reset": "docker compose down -v && docker compose up -d && sleep 5 && ./seed.sh",
-    "backup": "./scripts/backup.sh backup",
-    "backup:list": "./scripts/backup.sh list",
-    "restore": "./scripts/backup.sh restore"
+    "backup": "../../../private-data/scripts/backup.sh",
+    "restore": "../../../private-data/scripts/restore.sh",
+    "drift": "../../../private-data/scripts/drift.sh"
   },
   "keywords": ["neo4j", "database", "novanet"]
 }
