@@ -245,7 +245,7 @@ pub fn build_unified_content(app: &App) -> UnifiedContent<'static> {
         Some(TreeItem::EntityCategory(_, _, _, cat)) => build_category_content(cat),
         Some(TreeItem::LocaleGroup(_, _, _, group)) => build_locale_group_content(group),
         // v0.17.3: EntityGroup shows entity info (grouped EntityNatives by parent Entity)
-        Some(TreeItem::EntityGroup(_, _, _, group)) => build_entity_group_content(group),
+        Some(TreeItem::EntityGroup(_, _, _, group)) => build_entity_group_content(app, group),
         Some(TreeItem::EntityNativeItem(realm, layer, class, native)) => {
             build_entity_native_item_content(realm, layer, class, native)
         }
@@ -1863,17 +1863,19 @@ fn build_locale_group_content(group: &crate::tui::data::LocaleGroup) -> UnifiedC
 
 /// Build content for EntityGroup (EntityNatives grouped by parent Entity).
 /// v0.17.3: New grouping system - groups natives by entity instead of locale.
+/// Shows the parent Entity's properties and relationships.
 fn build_entity_group_content(
+    app: &crate::tui::app::App,
     group: &crate::tui::data::EntityNativeGroup,
 ) -> UnifiedContent<'static> {
     let mut content = UnifiedContent::default();
 
-    // IDENTITY
+    // IDENTITY - show Entity info
     content
         .identity
-        .add_kv("type", Span::styled("EntityGroup", STYLE_ACCENT));
+        .add_kv("type", Span::styled("Entity", STYLE_ACCENT));
     content.identity.add_kv(
-        "entity",
+        "key",
         Span::styled(group.entity_key.clone(), Style::default().fg(Color::Cyan)),
     );
     content.identity.add_kv(
@@ -1881,8 +1883,23 @@ fn build_entity_group_content(
         Span::styled(group.entity_display_name.clone(), STYLE_PRIMARY),
     );
 
-    // LOCATION - not applicable
-    content.location.add_empty();
+    // Try to find the Entity class info for location
+    if let Some((realm, layer, _class)) = app.tree.find_class("Entity") {
+        // LOCATION
+        content.location.add_kv(
+            "realm",
+            Span::styled(realm.display_name.clone(), STYLE_ACCENT),
+        );
+        content.location.add_kv(
+            "layer",
+            Span::styled(layer.display_name.clone(), STYLE_ACCENT),
+        );
+        content
+            .location
+            .add_kv("class", Span::styled("Entity", STYLE_ACCENT));
+    } else {
+        content.location.add_empty();
+    }
 
     // METRICS
     content.metrics.add_kv(
@@ -1893,11 +1910,41 @@ fn build_entity_group_content(
     // COVERAGE - not applicable
     content.coverage.add_empty();
 
-    // PROPERTIES - not applicable
-    content.properties.add_empty();
+    // PROPERTIES - try to find the Entity instance and show its properties
+    if let Some(instances) = app.tree.instances.get("Entity") {
+        if let Some(entity_instance) = instances.iter().find(|i| i.key == group.entity_key) {
+            // Show all properties from the Entity instance
+            for (key, value) in &entity_instance.properties {
+                let value_str = format_json_value(value);
+                content.properties.add_line(Line::from(vec![
+                    Span::styled(format!("{}: ", key), STYLE_DIM),
+                    Span::styled(value_str, STYLE_MUTED),
+                ]));
+            }
+            if entity_instance.properties.is_empty() {
+                content.properties.add_line(Line::from(Span::styled(
+                    "(no properties)",
+                    STYLE_DIM,
+                )));
+            }
+        } else {
+            content.properties.add_line(Line::from(Span::styled(
+                "(Entity instance not loaded)",
+                STYLE_DIM,
+            )));
+        }
+    } else {
+        content.properties.add_line(Line::from(Span::styled(
+            "(Entity instances not loaded)",
+            STYLE_DIM,
+        )));
+    }
 
-    // RELATIONSHIPS - not applicable
-    content.relationships.add_empty();
+    // RELATIONSHIPS - show arcs to EntityNatives
+    content.relationships.add_line(Line::from(vec![
+        Span::styled("HAS_NATIVE → ", STYLE_DIM),
+        Span::styled(format!("{} EntityNatives", group.native_count), STYLE_PRIMARY),
+    ]));
 
     content
 }
@@ -1943,7 +1990,7 @@ fn build_entity_native_item_content(
     // COVERAGE - not applicable
     content.coverage.add_empty();
 
-    // PROPERTIES
+    // PROPERTIES - show context fields first, then all properties from native.properties
     content.properties.add_line(Line::from(vec![
         Span::styled("entity: ", STYLE_DIM),
         Span::styled(native.entity_key.clone(), STYLE_MUTED),
@@ -1957,6 +2004,19 @@ fn build_entity_native_item_content(
             Span::styled("slug: ", STYLE_DIM),
             Span::styled(slug.clone(), STYLE_MUTED),
         ]));
+    }
+
+    // v0.17.3: Loop through all properties from EntityNativeInfo.properties
+    // Skip keys already displayed above (entity_key, entity_display_name, slug)
+    let skip_keys = ["key", "display_name", "entity_key", "entity_display_name", "slug"];
+    for (key, value) in &native.properties {
+        if !skip_keys.contains(&key.as_str()) {
+            let value_str = format_json_value(value);
+            content.properties.add_line(Line::from(vec![
+                Span::styled(format!("{}: ", key), STYLE_DIM),
+                Span::styled(value_str, STYLE_MUTED),
+            ]));
+        }
     }
 
     // RELATIONSHIPS - parent entity
@@ -2034,6 +2094,31 @@ fn type_color(prop_type: &str) -> Color {
 /// Appends "..." if truncated. Handles CJK, emoji, and combining characters.
 fn truncate_str(s: &str, max_width: usize) -> String {
     truncate_to_width(s, max_width)
+}
+
+/// Format a JSON value for display in PROPERTIES panel.
+/// Returns a concise string representation.
+fn format_json_value(value: &JsonValue) -> String {
+    match value {
+        JsonValue::Null => "null".to_string(),
+        JsonValue::Bool(b) => b.to_string(),
+        JsonValue::Number(n) => n.to_string(),
+        JsonValue::String(s) => s.clone(),
+        JsonValue::Array(arr) => {
+            if arr.is_empty() {
+                "[]".to_string()
+            } else {
+                format!("[...{} items]", arr.len())
+            }
+        }
+        JsonValue::Object(obj) => {
+            if obj.is_empty() {
+                "{}".to_string()
+            } else {
+                format!("{{...{} keys}}", obj.len())
+            }
+        }
+    }
 }
 
 /// Wrap a JSON value string across multiple lines.
