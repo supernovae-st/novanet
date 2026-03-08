@@ -86,9 +86,10 @@ const COLOR_ACTIVE_CLASS_BG: Color = Color::Rgb(25, 35, 45);
 // =============================================================================
 
 /// Wide layout column percentages: Tree | Center | Right
-const LAYOUT_TREE_PCT: u16 = 25;
-const LAYOUT_CENTER_PCT: u16 = 40;
-const LAYOUT_RIGHT_PCT: u16 = 35;
+/// v0.17.3: Increased tree from 25% to 35% for Entity/EntityNative with slugs
+const LAYOUT_TREE_PCT: u16 = 35;
+const LAYOUT_CENTER_PCT: u16 = 35;
+const LAYOUT_RIGHT_PCT: u16 = 30;
 
 /// Center column split: Header | YAML
 const LAYOUT_HEADER_PCT: u16 = 25;
@@ -99,9 +100,9 @@ const LAYOUT_PROPS_PCT: u16 = 42;
 const LAYOUT_ARCS_PCT: u16 = 58;
 
 /// Narrow layout: Tree panel percentage (compact sidebar).
-const LAYOUT_NARROW_TREE_PCT: u16 = 25;
+const LAYOUT_NARROW_TREE_PCT: u16 = 35;
 /// Narrow layout: Detail panel percentage.
-const LAYOUT_NARROW_DETAIL_PCT: u16 = 75;
+const LAYOUT_NARROW_DETAIL_PCT: u16 = 65;
 
 /// Popup/overlay box dimensions.
 const POPUP_BOX_WIDTH: u16 = 50;
