@@ -84,3 +84,4 @@ scripts/seo-import/output
 
 # Private work sessions (symlink to brain/)
 docs/sessions
+backup-*.cypher
