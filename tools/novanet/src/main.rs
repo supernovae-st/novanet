@@ -383,11 +383,19 @@ enum LocaleAction {
 #[derive(Subcommand)]
 enum DbAction {
     /// Seed the database
-    Seed,
+    Seed {
+        /// Create a backup before seeding (requires spn CLI)
+        #[arg(long)]
+        backup: bool,
+    },
     /// Run migrations
     Migrate,
     /// Reset database (drop + seed)
-    Reset,
+    Reset {
+        /// Create a backup before reset (requires spn CLI)
+        #[arg(long)]
+        backup: bool,
+    },
     /// Verify YAML↔Neo4j arc consistency
     Verify,
 }
@@ -802,7 +810,10 @@ async fn main() -> color_eyre::Result<()> {
             let db = connect_db(&uri, &user, password.as_ref()).await?;
             let root = root?;
             match action {
-                DbAction::Seed => {
+                DbAction::Seed { backup } => {
+                    if *backup {
+                        run_spn_backup()?;
+                    }
                     eprintln!("novanet db seed (root: {})", root.display());
                     novanet::commands::db::run_seed(&db, &root).await?;
                 }
@@ -810,7 +821,10 @@ async fn main() -> color_eyre::Result<()> {
                     eprintln!("novanet db migrate (root: {})", root.display());
                     novanet::commands::db::run_migrate(&db, &root).await?;
                 }
-                DbAction::Reset => {
+                DbAction::Reset { backup } => {
+                    if *backup {
+                        run_spn_backup()?;
+                    }
                     eprintln!("novanet db reset (root: {})", root.display());
                     novanet::commands::db::run_reset(&db, &root).await?;
                 }
@@ -1222,4 +1236,38 @@ async fn connect_db(
     eprintln!("Connecting to Neo4j at {}...", uri);
     let db = novanet::db::Db::connect(uri, user, password).await?;
     Ok(db)
+}
+
+/// Run `spn backup create` to create a backup before destructive operations.
+fn run_spn_backup() -> color_eyre::Result<()> {
+    eprintln!("Creating backup before operation...");
+
+    // Try to run spn backup create
+    let status = std::process::Command::new("spn")
+        .args(["backup", "create"])
+        .status();
+
+    match status {
+        Ok(exit_status) => {
+            if exit_status.success() {
+                eprintln!("✓ Backup created successfully");
+                Ok(())
+            } else {
+                Err(color_eyre::eyre::eyre!(
+                    "spn backup create failed with exit code: {}",
+                    exit_status.code().unwrap_or(-1)
+                ))
+            }
+        }
+        Err(e) => {
+            if e.kind() == std::io::ErrorKind::NotFound {
+                Err(color_eyre::eyre::eyre!(
+                    "spn command not found. Install spn CLI or remove --backup flag.\n\
+                     Install: cargo install --path <supernovae-cli>/crates/spn"
+                ))
+            } else {
+                Err(color_eyre::eyre::eyre!("Failed to run spn backup: {}", e))
+            }
+        }
+    }
 }
