@@ -3,8 +3,11 @@
 //! This module contains all enums and state structs used by the App.
 //! Extracted from app.rs for better organization.
 
+use std::collections::BTreeMap;
+
 use ratatui::layout::Rect;
 use rustc_hash::FxHashMap;
+use serde_json::Value as JsonValue;
 
 use crate::tui::schema::{CoverageStats, MatchedProperty, ValidatedProperty, ValidationStats};
 use crate::tui::data::{ArcClassDetails, ClassArcsData, LayerDetails, RealmDetails};
@@ -180,7 +183,8 @@ pub enum ContentPanelMode {
         /// Name of the class/arc.
         name: String,
     },
-    /// Show info message for instances (data is in PROPERTIES panel).
+    /// Show instance data from Neo4j (symmetric with Schema for YAML).
+    /// v0.17.3: Now shows actual properties instead of redirect message.
     InstanceInfo {
         /// Instance key (e.g., "barcode@en-US").
         instance_key: String,
@@ -190,6 +194,8 @@ pub enum ContentPanelMode {
         realm: String,
         /// Layer of the class.
         layer: String,
+        /// Instance properties from Neo4j.
+        properties: BTreeMap<String, JsonValue>,
     },
     /// Show section info (for Realm, Layer, Section headers).
     SectionInfo {
@@ -226,7 +232,7 @@ pub enum TreeItemData {
     },
     Section,
     /// Instance with full metadata for content panel and YAML loading.
-    /// v0.17.3: Extended with instance_key, class_name, realm, layer for ContentPanelMode.
+    /// v0.17.3: Extended with instance_key, class_name, realm, layer, properties for ContentPanelMode.
     Instance {
         /// Instance key (e.g., "barcode@en-US")
         instance_key: String,
@@ -240,6 +246,8 @@ pub enum TreeItemData {
         class_yaml_path: String,
         /// Class properties for loading validated properties with types.
         class_properties: Vec<String>,
+        /// Instance properties from Neo4j.
+        properties: BTreeMap<String, JsonValue>,
     },
     None,
 }
