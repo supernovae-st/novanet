@@ -143,21 +143,31 @@ pub fn validate_node(node: &ParsedNode) -> Vec<SchemaIssue> {
     }
 
     // Rule 2: Composite key nodes must have denormalized properties
+    // v0.19.0: Check BOTH standard_properties AND properties (denorm keys moved to properties)
     for (composite_node, _prefix, _parent_key_name, required_props) in COMPOSITE_KEY_NODES {
         if node.def.name == *composite_node {
-            if let Some(ref sp) = node.def.standard_properties {
-                for prop in *required_props {
-                    if !sp.contains_key(*prop) {
-                        issues.push(SchemaIssue {
-                            node_name: node.def.name.clone(),
-                            severity: IssueSeverity::Error,
-                            rule: "DENORM_REQUIRED",
-                            message: format!(
-                                "Composite key node missing denormalized property: {}",
-                                prop
-                            ),
-                        });
-                    }
+            for prop in *required_props {
+                let in_standard = node
+                    .def
+                    .standard_properties
+                    .as_ref()
+                    .is_some_and(|sp| sp.contains_key(*prop));
+                let in_properties = node
+                    .def
+                    .properties
+                    .as_ref()
+                    .is_some_and(|p| p.contains_key(*prop));
+
+                if !in_standard && !in_properties {
+                    issues.push(SchemaIssue {
+                        node_name: node.def.name.clone(),
+                        severity: IssueSeverity::Error,
+                        rule: "DENORM_REQUIRED",
+                        message: format!(
+                            "Composite key node missing denormalized property: {}",
+                            prop
+                        ),
+                    });
                 }
             }
         }
@@ -1123,21 +1133,28 @@ mod tests {
         let nodes =
             crate::parsers::yaml_node::load_all_nodes(&root).expect("should load all nodes");
 
+        // v0.19.0: Denormalized keys can be in EITHER standard_properties OR properties
         for (node_name, _prefix, _parent_key_name, required_props) in COMPOSITE_KEY_NODES {
             let node = nodes.iter().find(|n| n.def.name == *node_name);
             assert!(node.is_some(), "Node {} not found", node_name);
 
             let node = node.unwrap();
-            let sp = node
-                .def
-                .standard_properties
-                .as_ref()
-                .unwrap_or_else(|| panic!("{} should have standard_properties", node_name));
 
             for prop in *required_props {
+                let in_standard = node
+                    .def
+                    .standard_properties
+                    .as_ref()
+                    .is_some_and(|sp| sp.contains_key(*prop));
+                let in_properties = node
+                    .def
+                    .properties
+                    .as_ref()
+                    .is_some_and(|p| p.contains_key(*prop));
+
                 assert!(
-                    sp.contains_key(*prop),
-                    "{} missing denormalized property: {}",
+                    in_standard || in_properties,
+                    "{} missing denormalized property: {} (not in standard_properties or properties)",
                     node_name,
                     prop
                 );
@@ -1528,7 +1545,7 @@ mod tests {
     }
 
     #[test]
-    fn seokeyword_has_locale_key_in_standard_properties() {
+    fn seokeyword_has_locale_key() {
         let Some(root) = test_root() else {
             eprintln!("Skipping: not in monorepo");
             return;
@@ -1542,18 +1559,21 @@ mod tests {
             .find(|n| n.def.name == "SEOKeyword")
             .expect("SEOKeyword node must exist");
 
-        let sp = seokeyword
+        // v0.19.0: locale_key can be in EITHER standard_properties OR properties
+        let locale_key = seokeyword
             .def
             .standard_properties
             .as_ref()
-            .expect("SEOKeyword must have standard_properties");
+            .and_then(|sp| sp.get("locale_key"))
+            .or_else(|| {
+                seokeyword
+                    .def
+                    .properties
+                    .as_ref()
+                    .and_then(|p| p.get("locale_key"))
+            })
+            .expect("SEOKeyword must have 'locale_key' (in standard_properties or properties)");
 
-        // v0.13.1: locale_key denormalized for fast lookups
-        assert!(
-            sp.contains_key("locale_key"),
-            "SEOKeyword.standard_properties must contain 'locale_key' (denormalized)"
-        );
-        let locale_key = &sp["locale_key"];
         assert_eq!(
             locale_key.prop_type, "string",
             "locale_key must be type string"
