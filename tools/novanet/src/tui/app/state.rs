@@ -784,12 +784,14 @@ mod tests {
             class_name: "EntityNative".to_string(),
             realm: "org".to_string(),
             layer: "semantic".to_string(),
+            properties: std::collections::BTreeMap::new(),
         };
         if let ContentPanelMode::InstanceInfo {
             instance_key,
             class_name,
             realm,
             layer,
+            ..
         } = mode
         {
             assert_eq!(instance_key, "barcode@en-US");
