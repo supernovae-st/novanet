@@ -390,25 +390,39 @@ impl App {
                     properties: instance.properties.clone(),
                 }
             }
-            // EntityCategory shows parent Entity Class's YAML
-            Some(TreeItem::EntityCategory(_, _, class_info, _)) => TreeItemData::Class {
-                yaml_path: class_info.yaml_path.clone(),
-                key: class_info.key.clone(),
-                properties: class_info.properties.clone(),
-            },
-            // LocaleGroup shows parent EntityNative Class's YAML
+            // EntityCategory is a grouper (THING, ACTION, etc.) - show as Section
+            // v0.17.3: Categories don't have YAML schema, they are navigational groupers
+            Some(TreeItem::EntityCategory(_, _, _, _)) => TreeItemData::Section,
+            // LocaleGroup is a grouper (locale code) - show as Section
             // Note: Legacy, kept for backwards compatibility
-            Some(TreeItem::LocaleGroup(_, _, class_info, _)) => TreeItemData::Class {
-                yaml_path: class_info.yaml_path.clone(),
-                key: class_info.key.clone(),
-                properties: class_info.properties.clone(),
-            },
-            // v0.17.3: EntityGroup shows parent EntityNative Class's YAML
-            Some(TreeItem::EntityGroup(_, _, class_info, _)) => TreeItemData::Class {
-                yaml_path: class_info.yaml_path.clone(),
-                key: class_info.key.clone(),
-                properties: class_info.properties.clone(),
-            },
+            Some(TreeItem::LocaleGroup(_, _, _, _)) => TreeItemData::Section,
+            // v0.17.3: EntityGroup shows parent Entity as INSTANCE panel
+            // Look up the Entity instance by key to show its properties
+            Some(TreeItem::EntityGroup(_, _, _, group)) => {
+                // Find Entity class info
+                if let Some((entity_realm, entity_layer, entity_class_info)) =
+                    self.tree.find_class("Entity")
+                {
+                    // Look up the Entity instance with matching key
+                    if let Some(instances) = self.tree.instances.get("Entity") {
+                        if let Some(entity_instance) =
+                            instances.iter().find(|i| i.key == group.entity_key)
+                        {
+                            return TreeItemData::Instance {
+                                instance_key: entity_instance.key.clone(),
+                                class_name: entity_class_info.key.clone(),
+                                realm: entity_realm.key.clone(),
+                                layer: entity_layer.key.clone(),
+                                class_yaml_path: entity_class_info.yaml_path.clone(),
+                                class_properties: entity_class_info.properties.clone(),
+                                properties: entity_instance.properties.clone(),
+                            };
+                        }
+                    }
+                }
+                // Fallback: show helpful message if Entity lookup fails
+                TreeItemData::None
+            }
             // EntityNativeItem shows as Instance (same data structure)
             // v0.17.3: Now includes full properties for INSTANCE panel display
             Some(TreeItem::EntityNativeItem(realm, layer, class_info, native)) => {
