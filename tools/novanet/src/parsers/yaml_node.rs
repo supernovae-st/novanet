@@ -255,15 +255,14 @@ pub fn load_all_nodes(root: &Path) -> crate::Result<Vec<ParsedNode>> {
             if e.path().extension().is_none_or(|ext| ext != "yaml") {
                 return false;
             }
-            // Exclude test files created during integration tests to avoid parallel test interference.
-            // Patterns excluded:
+            // Exclude non-node files:
+            // - _*.yaml: Template/partial files (e.g., _standard-properties-template.yaml, _index.yaml)
             // - test-*.yaml: Legacy test file naming
-            // - _tmp-*.yaml: Temporary test files
             // - __test__*.yaml: Current test file naming
             // - *-test*.yaml: Files containing "-test" in name
             if let Some(name) = e.path().file_name().and_then(|n| n.to_str()) {
-                if name.starts_with("test-")
-                    || name.starts_with("_tmp-")
+                if name.starts_with("_")
+                    || name.starts_with("test-")
                     || name.starts_with("__test__")
                     || name.contains("-test")
                 {
