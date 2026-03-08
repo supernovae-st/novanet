@@ -337,6 +337,7 @@ impl App {
                         layer: layer.key.clone(),
                         class_yaml_path: class_info.yaml_path.clone(),
                         class_properties: class_info.properties.clone(),
+                        properties: instance.properties.clone(),
                     };
                 }
             }
@@ -386,6 +387,7 @@ impl App {
                     layer: layer.key.clone(),
                     class_yaml_path: class_info.yaml_path.clone(),
                     class_properties: class_info.properties.clone(),
+                    properties: instance.properties.clone(),
                 }
             }
             // EntityCategory shows parent Entity Class's YAML
@@ -408,6 +410,8 @@ impl App {
                 properties: class_info.properties.clone(),
             },
             // EntityNativeItem shows as Instance (same data structure)
+            // Note: EntityNativeInfo doesn't have full properties, so we return empty map
+            // Full properties are in InstanceInfo (shown for TreeItem::Instance)
             Some(TreeItem::EntityNativeItem(realm, layer, class_info, native)) => {
                 TreeItemData::Instance {
                     instance_key: native.key.clone(),
@@ -416,6 +420,7 @@ impl App {
                     layer: layer.key.clone(),
                     class_yaml_path: class_info.yaml_path.clone(),
                     class_properties: class_info.properties.clone(),
+                    properties: std::collections::BTreeMap::new(), // EntityNativeInfo has limited fields
                 }
             }
             None => TreeItemData::None,
@@ -445,12 +450,14 @@ impl App {
                 class_name,
                 realm,
                 layer,
+                properties,
                 ..
             } => ContentPanelMode::InstanceInfo {
                 instance_key,
                 class_name,
                 realm,
                 layer,
+                properties,
             },
             TreeItemData::Realm { key } => ContentPanelMode::SectionInfo {
                 name: format!("Realm: {}", key),
