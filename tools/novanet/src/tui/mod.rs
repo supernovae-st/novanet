@@ -286,6 +286,10 @@ async fn run_app(
                     if app.take_pending_entity_categories_load() {
                         match TaxonomyTree::load_entity_categories(db).await {
                             Ok(categories) if app.navigation_generation == nav_gen => {
+                                // Auto-trigger loading of first category's instances
+                                if let Some(first_cat) = categories.first() {
+                                    app.pending.category_instances = Some(first_cat.key.clone());
+                                }
                                 app.tree.entity_categories = categories;
                             }
                             Ok(_) => {} // Stale result, discard
@@ -300,6 +304,13 @@ async fn run_app(
                                 app.tree
                                     .entity_category_instances
                                     .insert(category_key, instances);
+                                // Auto-load next category (chain loading for Entity expansion)
+                                for cat in &app.tree.entity_categories {
+                                    if !app.tree.entity_category_instances.contains_key(&cat.key) {
+                                        app.pending.category_instances = Some(cat.key.clone());
+                                        break;
+                                    }
+                                }
                             }
                             Ok(_) => {} // Stale result, discard
                             Err(e) => {

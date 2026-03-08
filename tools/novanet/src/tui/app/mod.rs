@@ -389,6 +389,17 @@ impl App {
                 key: class_info.key.clone(),
                 properties: class_info.properties.clone(),
             },
+            // EntityNativeItem shows as Instance (same data structure)
+            Some(TreeItem::EntityNativeItem(realm, layer, class_info, native)) => {
+                TreeItemData::Instance {
+                    instance_key: native.key.clone(),
+                    class_name: class_info.key.clone(),
+                    realm: realm.key.clone(),
+                    layer: layer.key.clone(),
+                    class_yaml_path: class_info.yaml_path.clone(),
+                    class_properties: class_info.properties.clone(),
+                }
+            }
             None => TreeItemData::None,
         }
     }
@@ -1853,6 +1864,12 @@ impl App {
             Some(TreeItem::ArcClass(f, ak)) => {
                 format!("Arcs → {} → {}", f.display_name, ak.display_name)
             }
+            Some(TreeItem::EntityNativeItem(r, l, k, native)) => {
+                format!(
+                    "{} → {} → {} → {}",
+                    r.display_name, l.display_name, k.display_name, native.display_name
+                )
+            }
             None => "NovaNet".to_string(),
         }
     }
@@ -1905,13 +1922,30 @@ impl App {
 
                     if !instances_loaded {
                         // First click on unloaded Class: load instances AND ensure expanded
-                        if class_key == "Entity" && self.tree.entity_categories.is_empty() {
-                            self.pending.entity_categories = true;
+                        // Entity uses category-based loading (not flat instances)
+                        if class_key == "Entity" {
+                            if self.tree.entity_categories.is_empty() {
+                                // First time: load categories, instances loaded per-category
+                                self.pending.entity_categories = true;
+                                // DON'T set pending.instance - avoids race condition
+                            } else if !self.tree.has_entity_category_instances() {
+                                // Categories exist but no instances: trigger first category load
+                                for cat in &self.tree.entity_categories {
+                                    if !self.tree.entity_category_instances.contains_key(&cat.key) {
+                                        self.pending.category_instances = Some(cat.key.clone());
+                                        break;
+                                    }
+                                }
+                            }
+                        } else if class_key == "EntityNative" {
+                            if self.tree.locale_groups.is_empty() {
+                                self.pending.entity_natives = true;
+                            }
+                            // EntityNative also skips flat instance loading
+                        } else {
+                            // Regular classes: use flat instance loading
+                            self.pending.instance = Some(class_key.to_string());
                         }
-                        if class_key == "EntityNative" && self.tree.locale_groups.is_empty() {
-                            self.pending.entity_natives = true;
-                        }
-                        self.pending.instance = Some(class_key.to_string());
                         // Ensure state is "expanded" so instances show when loaded
                         if self.tree.is_collapsed(&key) {
                             self.tree.toggle(&key);
