@@ -51,11 +51,47 @@ const SECRET_PATTERNS: &[&str] = &[
     r"(?i)(api[_-]?key|apikey)\s*[:=]",
     r"(?i)(password|passwd|pwd)\s*[:=]",
     r"(?i)(secret|token)\s*[:=]",
-    r"sk-[a-zA-Z0-9]{20,}",      // OpenAI
-    r"sk-ant-[a-zA-Z0-9-]{20,}", // Anthropic
-    r"ghp_[a-zA-Z0-9]{36}",      // GitHub PAT
-    r"gho_[a-zA-Z0-9]{36}",      // GitHub OAuth
+    r"sk-[a-zA-Z0-9]{20,}",           // OpenAI
+    r"sk-ant-[a-zA-Z0-9-]{20,}",      // Anthropic
+    r"ghp_[a-zA-Z0-9]{36}",           // GitHub PAT
+    r"gho_[a-zA-Z0-9]{36}",           // GitHub OAuth
+    r"xoxb-[a-zA-Z0-9-]{24,}",        // Slack Bot Token
+    r"xoxp-[a-zA-Z0-9-]{24,}",        // Slack User Token
+    r"AKIA[0-9A-Z]{16}",              // AWS Access Key ID
+    r"AIza[0-9A-Za-z_-]{35}",         // Google API Key
+    r"-----BEGIN (RSA |EC |DSA )?PRIVATE KEY-----", // Private keys
+    r"Bearer\s+[a-zA-Z0-9_-]{20,}",   // Bearer tokens
 ];
+
+/// Maximum YAML file size (1 MB) — prevents DoS via large files.
+const MAX_YAML_FILE_SIZE: u64 = 1024 * 1024;
+
+/// Validate a Neo4j node class name (PascalCase, no injection).
+/// Returns error if the class name could cause Cypher injection.
+pub fn validate_class_name(class: &str) -> Result<()> {
+    // Must be PascalCase: starts with uppercase, alphanumeric only
+    let re = Regex::new(r"^[A-Z][A-Za-z0-9]*$").expect("valid regex");
+    if !re.is_match(class) {
+        return Err(NovaNetError::Validation(format!(
+            "Invalid class name '{}': must be PascalCase (e.g., Entity, EntityNative)",
+            class
+        )));
+    }
+    Ok(())
+}
+
+/// Validate and sanitize a timestamp string.
+/// Returns a safe timestamp string or generates a new one if invalid.
+pub fn validate_timestamp(ts: Option<&str>) -> String {
+    // RFC 3339 timestamp pattern (strict validation)
+    let re = Regex::new(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})$")
+        .expect("valid regex");
+
+    match ts {
+        Some(timestamp) if re.is_match(timestamp) => timestamp.to_string(),
+        _ => chrono::Utc::now().to_rfc3339(),
+    }
+}
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // YAML TYPES — Data Manifest
@@ -295,6 +331,40 @@ pub fn validate_path(path: &Path, allowed_root: &Path) -> Result<PathBuf> {
     }
 }
 
+/// Safely read a YAML file with path validation and size limits.
+///
+/// Security features:
+/// - Validates path is within allowed_root (prevents traversal)
+/// - Checks file size is under MAX_YAML_FILE_SIZE (prevents DoS)
+/// - Detects secrets in content (prevents credential leaks)
+pub fn safe_read_yaml(file_path: &Path, allowed_root: &Path) -> Result<String> {
+    // 1. Validate path is within allowed directory
+    let validated_path = validate_path(file_path, allowed_root)?;
+
+    // 2. Check file size before reading
+    let metadata = fs::metadata(&validated_path)?;
+    if metadata.len() > MAX_YAML_FILE_SIZE {
+        return Err(NovaNetError::Validation(format!(
+            "File {:?} exceeds maximum size ({} bytes > {} bytes)",
+            file_path, metadata.len(), MAX_YAML_FILE_SIZE
+        )));
+    }
+
+    // 3. Read file content
+    let mut content = String::new();
+    File::open(&validated_path)?.read_to_string(&mut content)?;
+
+    // 4. Check for secrets
+    if let Some(reason) = detect_secrets(&content) {
+        return Err(NovaNetError::Validation(format!(
+            "File {:?} contains secrets: {}",
+            file_path, reason
+        )));
+    }
+
+    Ok(content)
+}
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // CYPHER GENERATION
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -329,16 +399,10 @@ pub fn generate_entity_cypher(entity: &EntityData) -> String {
         props.push(format!("llm_context: '{}'", cypher_escape(c)));
     }
 
-    // Timestamps
+    // Timestamps (with validation to prevent injection)
     let now = chrono::Utc::now().to_rfc3339();
-    if entity.created_at.is_some() {
-        props.push(format!(
-            "created_at: datetime('{}')",
-            entity.created_at.as_ref().unwrap()
-        ));
-    } else {
-        props.push(format!("created_at: datetime('{}')", now));
-    }
+    let created = validate_timestamp(entity.created_at.as_deref());
+    props.push(format!("created_at: datetime('{}')", created));
     props.push(format!("updated_at: datetime('{}')", now));
 
     format!(
@@ -365,16 +429,10 @@ pub fn generate_entity_native_cypher(native: &EntityNativeData, locale: &str) ->
         props.push(format!("denomination_forms: '{}'", cypher_escape(&forms_json)));
     }
 
-    // Timestamps
+    // Timestamps (with validation to prevent injection)
     let now = chrono::Utc::now().to_rfc3339();
-    if native.created_at.is_some() {
-        props.push(format!(
-            "created_at: datetime('{}')",
-            native.created_at.as_ref().unwrap()
-        ));
-    } else {
-        props.push(format!("created_at: datetime('{}')", now));
-    }
+    let created = validate_timestamp(native.created_at.as_deref());
+    props.push(format!("created_at: datetime('{}')", created));
     props.push(format!("updated_at: datetime('{}')", now));
 
     // MERGE node + create arcs
@@ -468,15 +526,14 @@ pub fn generate(root: Option<PathBuf>, class_filter: Option<String>, dry_run: bo
                     let locale_file = locale_file?;
                     let file_path = locale_file.path();
                     if file_path.extension().is_some_and(|e| e == "yaml" || e == "yml") {
-                        // Read and validate file
-                        let mut content = String::new();
-                        File::open(&file_path)?.read_to_string(&mut content)?;
-
-                        // Security: check for secrets
-                        if let Some(reason) = detect_secrets(&content) {
-                            warn!("⚠️ Skipping {:?}: {}", file_path, reason);
-                            continue;
-                        }
+                        // SECURITY: Use safe_read_yaml with path validation + size limits
+                        let content = match safe_read_yaml(&file_path, &data_dir) {
+                            Ok(c) => c,
+                            Err(e) => {
+                                warn!("⚠️ Skipping {:?}: {}", file_path, e);
+                                continue;
+                            }
+                        };
 
                         // Parse YAML
                         let data: EntityNativeDataFile = serde_yaml::from_str(&content)
@@ -520,15 +577,14 @@ pub fn generate(root: Option<PathBuf>, class_filter: Option<String>, dry_run: bo
                 let phase_file = phase_file?;
                 let file_path = phase_file.path();
                 if file_path.extension().is_some_and(|e| e == "yaml" || e == "yml") {
-                    // Read and validate file
-                    let mut content = String::new();
-                    File::open(&file_path)?.read_to_string(&mut content)?;
-
-                    // Security: check for secrets
-                    if let Some(reason) = detect_secrets(&content) {
-                        warn!("⚠️ Skipping {:?}: {}", file_path, reason);
-                        continue;
-                    }
+                    // SECURITY: Use safe_read_yaml with path validation + size limits
+                    let content = match safe_read_yaml(&file_path, &data_dir) {
+                        Ok(c) => c,
+                        Err(e) => {
+                            warn!("⚠️ Skipping {:?}: {}", file_path, e);
+                            continue;
+                        }
+                    };
 
                     // Parse YAML (try as EntityDataFile)
                     if let Ok(data) = serde_yaml::from_str::<EntityDataFile>(&content) {
@@ -596,9 +652,13 @@ pub fn validate(root: Option<PathBuf>, _fix: bool) -> Result<()> {
     // Validate manifest
     let manifest_path = data_dir.join("_index.yaml");
     if manifest_path.exists() {
-        let content = fs::read_to_string(&manifest_path)?;
-        match serde_yaml::from_str::<DataManifest>(&content) {
-            Ok(_manifest) => info!("✓ Manifest valid"),
+        match safe_read_yaml(&manifest_path, &data_dir) {
+            Ok(content) => {
+                match serde_yaml::from_str::<DataManifest>(&content) {
+                    Ok(_manifest) => info!("✓ Manifest valid"),
+                    Err(e) => errors.push(format!("_index.yaml: {}", e)),
+                }
+            }
             Err(e) => errors.push(format!("_index.yaml: {}", e)),
         }
         file_count += 1;
@@ -623,13 +683,15 @@ pub fn validate(root: Option<PathBuf>, _fix: bool) -> Result<()> {
                     let file_path = locale_file.path();
                     if file_path.extension().is_some_and(|e| e == "yaml" || e == "yml") {
                         file_count += 1;
-                        let content = fs::read_to_string(&file_path)?;
 
-                        // Check for secrets
-                        if let Some(reason) = detect_secrets(&content) {
-                            errors.push(format!("{:?}: {}", file_path, reason));
-                            continue;
-                        }
+                        // SECURITY: Use safe_read_yaml with path validation + size limits
+                        let content = match safe_read_yaml(&file_path, &data_dir) {
+                            Ok(c) => c,
+                            Err(e) => {
+                                errors.push(format!("{:?}: {}", file_path, e));
+                                continue;
+                            }
+                        };
 
                         // Parse and validate
                         match serde_yaml::from_str::<EntityNativeDataFile>(&content) {
@@ -726,8 +788,20 @@ pub async fn diff(
                     let locale_file = locale_file?;
                     let file_path = locale_file.path();
                     if file_path.extension().is_some_and(|e| e == "yaml" || e == "yml") {
-                        let content = fs::read_to_string(&file_path)?;
+                        // SECURITY: Use safe_read_yaml with path validation + size limits
+                        let content = match safe_read_yaml(&file_path, &data_dir) {
+                            Ok(c) => c,
+                            Err(e) => {
+                                warn!("⚠️ Skipping {:?}: {}", file_path, e);
+                                continue;
+                            }
+                        };
                         if let Ok(data) = serde_yaml::from_str::<EntityNativeDataFile>(&content) {
+                            // SECURITY: Validate class name before storing
+                            if validate_class_name(&data.class).is_err() {
+                                warn!("⚠️ Skipping {:?}: invalid class name", file_path);
+                                continue;
+                            }
                             let keys = yaml_keys.entry(data.class.clone()).or_default();
                             for native in &data.natives {
                                 keys.push(native.key.clone());
@@ -750,7 +824,10 @@ pub async fn diff(
             }
         }
 
-        // Query Neo4j
+        // SECURITY: Validate class name before using in Cypher query
+        validate_class_name(class)?;
+
+        // Query Neo4j (class name is now validated as safe PascalCase)
         let query = format!("MATCH (n:{}) RETURN n.key AS key", class);
         let mut result = pool.execute(neo4rs::query(&query)).await.map_err(|e| {
             NovaNetError::Query {
@@ -944,5 +1021,94 @@ mod tests {
         assert_eq!(data.class, "EntityNative");
         assert_eq!(data.natives.len(), 1);
         assert_eq!(data.natives[0].key, "qr-code@fr-FR");
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // SECURITY TESTS
+    // ═══════════════════════════════════════════════════════════════════════════════
+
+    #[test]
+    fn test_validate_class_name_valid() {
+        assert!(validate_class_name("Entity").is_ok());
+        assert!(validate_class_name("EntityNative").is_ok());
+        assert!(validate_class_name("Page").is_ok());
+        assert!(validate_class_name("SEOKeyword").is_ok());
+    }
+
+    #[test]
+    fn test_validate_class_name_injection() {
+        // Injection attempts should fail
+        assert!(validate_class_name("Entity}DETACH DELETE n//").is_err());
+        assert!(validate_class_name("Entity)-[:HACK]->(:Victim").is_err());
+        assert!(validate_class_name("Entity`DROP DATABASE`").is_err());
+        assert!(validate_class_name("Entity' OR '1'='1").is_err());
+    }
+
+    #[test]
+    fn test_validate_class_name_lowercase() {
+        // Must start with uppercase
+        assert!(validate_class_name("entity").is_err());
+        assert!(validate_class_name("entityNative").is_err());
+    }
+
+    #[test]
+    fn test_validate_class_name_special_chars() {
+        // No special characters allowed
+        assert!(validate_class_name("Entity_Native").is_err());
+        assert!(validate_class_name("Entity-Native").is_err());
+        assert!(validate_class_name("Entity.Native").is_err());
+    }
+
+    #[test]
+    fn test_validate_timestamp_valid() {
+        let ts = validate_timestamp(Some("2026-03-08T12:00:00Z"));
+        assert_eq!(ts, "2026-03-08T12:00:00Z");
+
+        let ts_offset = validate_timestamp(Some("2026-03-08T12:00:00+02:00"));
+        assert_eq!(ts_offset, "2026-03-08T12:00:00+02:00");
+
+        let ts_ms = validate_timestamp(Some("2026-03-08T12:00:00.123Z"));
+        assert_eq!(ts_ms, "2026-03-08T12:00:00.123Z");
+    }
+
+    #[test]
+    fn test_validate_timestamp_invalid() {
+        // Invalid timestamps should return current time (not crash)
+        let ts = validate_timestamp(Some("invalid"));
+        assert!(ts.contains("T")); // Should be a valid RFC 3339
+
+        // Injection attempt
+        let ts_inject = validate_timestamp(Some("2026-03-08')); DROP DATABASE;//"));
+        assert!(!ts_inject.contains("DROP"));
+    }
+
+    #[test]
+    fn test_validate_timestamp_none() {
+        let ts = validate_timestamp(None);
+        assert!(ts.contains("T")); // Should be a valid RFC 3339
+    }
+
+    #[test]
+    fn test_detect_secrets_slack() {
+        let content = "token: xoxb-12345678901234567890";
+        assert!(detect_secrets(content).is_some());
+    }
+
+    #[test]
+    fn test_detect_secrets_aws() {
+        let content = "AWS_ACCESS_KEY_ID: AKIA1234567890123456";
+        assert!(detect_secrets(content).is_some());
+    }
+
+    #[test]
+    fn test_detect_secrets_private_key() {
+        let content = "-----BEGIN RSA PRIVATE KEY-----\nMIIEow...";
+        assert!(detect_secrets(content).is_some());
+    }
+
+    #[test]
+    fn test_detect_secrets_bearer() {
+        let content = "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9";
+        assert!(detect_secrets(content).is_some());
     }
 }
