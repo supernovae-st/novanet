@@ -341,8 +341,10 @@ impl App {
         }
 
         // Use mode-aware item lookup
+        // v0.17.3: Pass hide_empty to match render_tree filtering
         let item = if self.is_graph_mode() {
-            self.tree.item_at_for_mode(self.tree_cursor, true)
+            self.tree
+                .item_at_for_mode(self.tree_cursor, true, self.hide_empty)
         } else {
             self.tree.item_at(self.tree_cursor)
         };
@@ -385,6 +387,12 @@ impl App {
             }
             // EntityCategory shows parent Entity Class's YAML
             Some(TreeItem::EntityCategory(_, _, class_info, _)) => TreeItemData::Class {
+                yaml_path: class_info.yaml_path.clone(),
+                key: class_info.key.clone(),
+                properties: class_info.properties.clone(),
+            },
+            // LocaleGroup shows parent EntityNative Class's YAML
+            Some(TreeItem::LocaleGroup(_, _, class_info, _)) => TreeItemData::Class {
                 yaml_path: class_info.yaml_path.clone(),
                 key: class_info.key.clone(),
                 properties: class_info.properties.clone(),
@@ -1098,7 +1106,10 @@ impl App {
                 // E = Expand subtree under cursor
                 if self.focus == Focus::Tree {
                     let data_mode = self.is_graph_mode();
-                    if let Some(key) = self.tree.collapse_key_at(self.tree_cursor, data_mode) {
+                    if let Some(key) =
+                        self.tree
+                            .collapse_key_at(self.tree_cursor, data_mode, self.hide_empty)
+                    {
                         self.tree.expand_subtree(&key);
                     }
                 }
@@ -1108,7 +1119,10 @@ impl App {
                 // c = Collapse subtree under cursor (Tree) OR copy property value (Info/Properties)
                 if self.focus == Focus::Tree {
                     let data_mode = self.is_graph_mode();
-                    if let Some(key) = self.tree.collapse_key_at(self.tree_cursor, data_mode) {
+                    if let Some(key) =
+                        self.tree
+                            .collapse_key_at(self.tree_cursor, data_mode, self.hide_empty)
+                    {
                         self.tree.collapse_subtree(&key);
                     }
                 } else if self.focus == Focus::Props && self.selected_box == InfoBox::Properties {
@@ -1337,10 +1351,11 @@ impl App {
 
             // Jump to parent [p]
             KeyCode::Char('p') => {
-                if let Some(parent_cursor) = self
-                    .tree
-                    .find_parent_cursor(self.tree_cursor, self.is_graph_mode())
-                {
+                if let Some(parent_cursor) = self.tree.find_parent_cursor(
+                    self.tree_cursor,
+                    self.is_graph_mode(),
+                    self.hide_empty,
+                ) {
                     self.tree_cursor = parent_cursor;
                     self.ensure_cursor_visible();
                     self.set_status("↑ Parent");
@@ -1749,8 +1764,10 @@ impl App {
             }
         }
         // Normal mode
+        // v0.17.3: Pass hide_empty to match render_tree filtering
         if self.is_graph_mode() {
-            self.tree.item_at_for_mode(self.tree_cursor, true)
+            self.tree
+                .item_at_for_mode(self.tree_cursor, true, self.hide_empty)
         } else {
             // Meta mode: apply trait filter if active
             self.tree
@@ -1860,6 +1877,12 @@ impl App {
                     r.display_name, l.display_name, k.display_name, cat.display_name
                 )
             }
+            Some(TreeItem::LocaleGroup(r, l, k, group)) => {
+                format!(
+                    "{} → {} → {} → {} {}",
+                    r.display_name, l.display_name, k.display_name, group.flag, group.locale_name
+                )
+            }
             Some(TreeItem::ArcFamily(f)) => format!("Arcs → {}", f.display_name),
             Some(TreeItem::ArcClass(f, ak)) => {
                 format!("Arcs → {} → {}", f.display_name, ak.display_name)
@@ -1914,7 +1937,29 @@ impl App {
     /// Single-click behavior: if instances not loaded, load them AND expand in one action.
     fn toggle_tree_item(&mut self) {
         let data_mode = self.is_graph_mode();
-        if let Some(key) = self.tree.collapse_key_at(self.tree_cursor, data_mode) {
+        // DEBUG: Show what item is at cursor
+        // v0.17.3: Pass hide_empty to match render_tree filtering
+        let item_debug = self
+            .tree
+            .item_at_for_mode(self.tree_cursor, data_mode, self.hide_empty);
+        let item_type = match &item_debug {
+            Some(super::data::TreeItem::Class(_, _, c)) => format!("Class:{}", c.key),
+            Some(super::data::TreeItem::EntityCategory(_, _, _, cat)) => format!("Category:{}", cat.key),
+            Some(super::data::TreeItem::LocaleGroup(_, _, _, g)) => format!("LocaleGroup:{}", g.locale_code),
+            Some(other) => format!("{:?}", std::mem::discriminant(other)),
+            None => "None".to_string(),
+        };
+        let dbg1 = format!("DEBUG: cursor={} item={} data_mode={}", self.tree_cursor, item_type, data_mode);
+        self.set_status(&dbg1);
+
+        if let Some(key) =
+            self.tree
+                .collapse_key_at(self.tree_cursor, data_mode, self.hide_empty)
+        {
+            // DEBUG: Show collapse key
+            let dbg2 = format!("DEBUG: key={}", key);
+            self.set_status(&dbg2);
+
             // Handle Class toggle in Data mode
             if let Some(class_key) = key.strip_prefix("class:") {
                 if data_mode {
@@ -1945,6 +1990,9 @@ impl App {
                                 }
                             }
                         } else if class_key == "EntityNative" {
+                            // DEBUG: Check locale_groups status
+                            let dbg = format!("DEBUG: EntityNative - locale_groups.is_empty()={}", self.tree.locale_groups.is_empty());
+                            self.set_status(&dbg);
                             if self.tree.locale_groups.is_empty() {
                                 self.pending.entity_natives = true;
                             }
@@ -1988,6 +2036,12 @@ impl App {
                     self.tree.toggle(&key);
                 }
             }
+            // Handle LocaleGroup toggle (EntityNative locale groups)
+            else if key.starts_with("locale:") {
+                // LocaleGroup items are already loaded when EntityNative class was expanded
+                // Just toggle expand/collapse
+                self.tree.toggle(&key);
+            }
             // Other items (Realm, Layer, ArcFamily, etc.): normal toggle
             else {
                 self.tree.toggle(&key);
@@ -2010,10 +2064,11 @@ impl App {
         }
 
         // Check if current item is an Instance
-        // Note: item_at_for_mode takes (cursor, data_mode: bool), data_mode=true shows instances
+        // v0.17.3: Pass hide_empty to match render_tree filtering
         // Clone properties to avoid borrow conflict
         let props = if let Some(super::data::TreeItem::Instance(_, _, _, instance)) =
-            self.tree.item_at_for_mode(self.tree_cursor, true)
+            self.tree
+                .item_at_for_mode(self.tree_cursor, true, self.hide_empty)
         {
             Some(instance.properties.clone())
         } else {

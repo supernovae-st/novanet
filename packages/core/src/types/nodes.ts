@@ -120,7 +120,7 @@ export type NodeType = typeof NODE_TYPES[number];
 /**
  * Node realm classification: WHERE the node lives in the graph.
  *
- * - **`shared`**: Universal locale knowledge (READ-ONLY). Examples: Locale, Term, SEOKeyword
+ * - **`shared`**: Universal locale knowledge (READ-ONLY). Examples: Locale, Expression, SEOKeyword
  * - **`org`**: Organization-specific content. Examples: Project, Entity, Page
  *
  * @example
@@ -173,9 +173,9 @@ export type Layer =
  * |-------|-------------|-----------------|---------|
  * | `defined` | Schema-defined, universal | Solid border | Entity, Page, Block |
  * | `authored` | Locale-specific authored content | Dashed border | EntityNative, ProjectNative |
- * | `imported` | Imported from external sources | Dotted border | Term, Expression, Pattern |
+ * | `imported` | Imported from external sources | Dotted border | Expression, Pattern, SEOKeyword |
  * | `generated` | LLM-generated output | Double border | PageNative, BlockNative |
- * | `retrieved` | Retrieved/computed metrics | Dotted thin | SEOKeywordMetrics, GEOAnswer |
+ * | `retrieved` | Retrieved/computed metrics | Dotted thin | GEOAnswer |
  *
  * @example
  * ```typescript

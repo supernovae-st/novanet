@@ -306,14 +306,13 @@ export const CLASS_ICONS: Record<string, string> = {
   PromptStyle: 'sparkles',
   SEOKeyword: 'search',
   SEOKeywordFormat: 'code',
-  SEOKeywordMetrics: 'bar-chart-2',
+  // v0.17.3: SEOKeywordMetrics removed - YAGNI (metrics stored on SEOKeyword node)
   SEOKeywordSet: 'hash',
   Slugification: 'link',
   Style: 'palette',
   Taboo: 'ban',
   TabooSet: 'alert-triangle',
-  Term: 'book-text',
-  TermSet: 'book-open',
+  // v0.17.3: Term, TermSet removed - YAGNI (EntityNative.denomination_forms covers terminology)
 };
 
 /**

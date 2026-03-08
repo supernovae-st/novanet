@@ -2004,15 +2004,16 @@ ORDER BY c.sort_order, c.key
         db: &Db,
         category_key: &str,
     ) -> crate::Result<(Vec<InstanceInfo>, i64)> {
-        // Query with parameterized category key (safe from injection)
+        // v0.17.3: Use OPTIONAL MATCH to handle categories with 0 entities
+        // Query returns empty result set if category has no entities (handled in Rust)
         let cypher = r#"
-MATCH (e:Entity)-[:BELONGS_TO]->(c:EntityCategory {key: $category})
-WITH count(e) AS total
-MATCH (e:Entity)-[:BELONGS_TO]->(c:EntityCategory {key: $category})
-WITH total, e
+MATCH (c:EntityCategory {key: $category})
+OPTIONAL MATCH (e:Entity)-[:BELONGS_TO]->(c)
+WITH c, e WHERE e IS NOT NULL
 ORDER BY e.display_name, e.key
 LIMIT 1000
-WITH total, collect(e) AS entities
+WITH collect(e) AS entities
+WITH entities, size(entities) AS total
 UNWIND entities AS e
 OPTIONAL MATCH (e)-[out]->(target)
 WHERE NOT target:Schema
@@ -2021,11 +2022,7 @@ WITH total, e, collect(DISTINCT {
     target_key: coalesce(target.key, target.label, toString(id(target))),
     target_class: head(labels(target)),
     target_display_name: target.display_name,
-    target_slug: CASE
-        WHEN target.denomination_forms IS NOT NULL
-        THEN [form IN target.denomination_forms WHERE form.type = 'url' | form.value][0]
-        ELSE null
-    END
+    target_slug: null
 }) AS outgoing
 OPTIONAL MATCH (source)-[inc]->(e)
 WHERE NOT source:Schema
@@ -2034,11 +2031,7 @@ WITH total, e, outgoing, collect(DISTINCT {
     source_key: coalesce(source.key, source.label, toString(id(source))),
     source_class: head(labels(source)),
     source_display_name: source.display_name,
-    source_slug: CASE
-        WHEN source.denomination_forms IS NOT NULL
-        THEN [form IN source.denomination_forms WHERE form.type = 'url' | form.value][0]
-        ELSE null
-    END
+    source_slug: null
 }) AS incoming
 RETURN total,
        coalesce(e.key, toString(id(e))) AS key,
@@ -2157,24 +2150,23 @@ RETURN total,
     pub async fn load_entity_natives_by_locale(
         db: &Db,
     ) -> crate::Result<(Vec<LocaleGroup>, FxHashMap<String, Vec<EntityNativeInfo>>)> {
+        // v0.17.3: Simplified query - use OPTIONAL MATCH for relationships that may not exist
+        // and skip denomination_forms parsing (can fail if stored as JSON string)
         let cypher = r#"
-MATCH (en:EntityNative)-[:FOR_LOCALE]->(l:Locale)
-MATCH (e:Entity)-[:HAS_NATIVE]->(en)
-WITH l.key AS locale_code,
-     coalesce(l.display_name, l.key) AS locale_name,
+MATCH (en:EntityNative)
+OPTIONAL MATCH (en)-[:FOR_LOCALE]->(l:Locale)
+OPTIONAL MATCH (e:Entity)-[:HAS_NATIVE]->(en)
+WITH coalesce(l.key, 'unknown') AS locale_code,
+     coalesce(l.display_name, l.key, 'Unknown Locale') AS locale_name,
      en, e
-ORDER BY e.display_name, e.key
+ORDER BY coalesce(e.display_name, e.key, en.key)
 WITH locale_code, locale_name,
      collect({
          key: en.key,
          display_name: coalesce(en.display_name, en.key),
-         entity_key: e.key,
-         entity_display_name: coalesce(e.display_name, e.key),
-         slug: CASE
-             WHEN en.denomination_forms IS NOT NULL
-             THEN [form IN en.denomination_forms WHERE form.type = 'url' | form.value][0]
-             ELSE null
-         END
+         entity_key: coalesce(e.key, ''),
+         entity_display_name: coalesce(e.display_name, e.key, ''),
+         slug: null
      }) AS natives
 RETURN locale_code, locale_name, natives, size(natives) AS count
 ORDER BY locale_code
@@ -2513,15 +2505,19 @@ ORDER BY locale_code
                                             count += self.entity_instance_count();
                                         }
                                     } else if class_info.key == "EntityNative" {
-                                        // EntityNative uses locale grouping
-                                        count += self
-                                            .locale_groups
-                                            .iter()
-                                            .filter_map(|g| {
-                                                self.entity_native_by_locale.get(&g.locale_code)
-                                            })
-                                            .map(|v| v.len())
-                                            .sum::<usize>();
+                                        // EntityNative shows LocaleGroup nodes (like Entity shows EntityCategory)
+                                        for group in &self.locale_groups {
+                                            count += 1; // LocaleGroup node
+                                            // If locale group is expanded, add its EntityNativeItems
+                                            if !self.is_collapsed(&format!("locale:{}", group.locale_code))
+                                            {
+                                                if let Some(natives) =
+                                                    self.entity_native_by_locale.get(&group.locale_code)
+                                                {
+                                                    count += natives.len();
+                                                }
+                                            }
+                                        }
                                     } else {
                                         // Regular class: flat instances
                                         if let Some(instances) = self.instances.get(&class_info.key)
@@ -2553,11 +2549,16 @@ ORDER BY locale_code
 
     /// Get item at cursor position for a specific mode.
     /// In Data mode (data_mode=true), includes instances under expanded Classes.
-    /// v0.16.4: Entity instances are flat (no category rows) with category suffix in display.
-    pub fn item_at_for_mode(&self, cursor: usize, data_mode: bool) -> Option<TreeItem<'_>> {
+    /// v0.17.3: Added hide_empty parameter to match render_tree filtering.
+    pub fn item_at_for_mode(
+        &self,
+        cursor: usize,
+        data_mode: bool,
+        hide_empty: bool,
+    ) -> Option<TreeItem<'_>> {
         let mut idx = 0;
 
-        // Classs section header
+        // Classes section header
         if idx == cursor {
             return Some(TreeItem::ClassesSection);
         }
@@ -2571,14 +2572,40 @@ ORDER BY locale_code
                 idx += 1;
 
                 if !self.is_collapsed(&format!("realm:{}", realm.key)) {
-                    for layer in &realm.layers {
+                    // v0.17.3: Filter layers like render_tree does
+                    let visible_layers: Vec<_> = realm
+                        .layers
+                        .iter()
+                        .filter(|l| {
+                            if hide_empty && data_mode {
+                                l.classes.iter().map(|k| k.instance_count).sum::<i64>() > 0
+                            } else {
+                                true
+                            }
+                        })
+                        .collect();
+
+                    for layer in visible_layers {
                         if idx == cursor {
                             return Some(TreeItem::Layer(realm, layer));
                         }
                         idx += 1;
 
                         if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
-                            for class_info in &layer.classes {
+                            // v0.17.3: Filter classes like render_tree does
+                            let visible_classes: Vec<_> = layer
+                                .classes
+                                .iter()
+                                .filter(|k| {
+                                    if hide_empty && data_mode {
+                                        k.instance_count > 0
+                                    } else {
+                                        true
+                                    }
+                                })
+                                .collect();
+
+                            for class_info in visible_classes {
                                 if idx == cursor {
                                     return Some(TreeItem::Class(realm, layer, class_info));
                                 }
@@ -2630,19 +2657,28 @@ ORDER BY locale_code
                                             }
                                         }
                                     } else if class_info.key == "EntityNative" {
-                                        // EntityNative uses locale grouping - iterate by locale
+                                        // EntityNative shows LocaleGroup nodes (like Entity shows EntityCategory)
                                         for group in &self.locale_groups {
-                                            if let Some(natives) =
-                                                self.entity_native_by_locale.get(&group.locale_code)
+                                            if idx == cursor {
+                                                return Some(TreeItem::LocaleGroup(
+                                                    realm, layer, class_info, group,
+                                                ));
+                                            }
+                                            idx += 1;
+                                            // If locale group is expanded, add its EntityNativeItems
+                                            if !self.is_collapsed(&format!("locale:{}", group.locale_code))
                                             {
-                                                for native in natives {
-                                                    if idx == cursor {
-                                                        // Return as EntityNativeItem for proper rendering
-                                                        return Some(TreeItem::EntityNativeItem(
-                                                            realm, layer, class_info, native,
-                                                        ));
+                                                if let Some(natives) =
+                                                    self.entity_native_by_locale.get(&group.locale_code)
+                                                {
+                                                    for native in natives {
+                                                        if idx == cursor {
+                                                            return Some(TreeItem::EntityNativeItem(
+                                                                realm, layer, class_info, native,
+                                                            ));
+                                                        }
+                                                        idx += 1;
                                                     }
-                                                    idx += 1;
                                                 }
                                             }
                                         }
@@ -2946,9 +2982,15 @@ ORDER BY locale_code
     }
 
     /// Get the collapse key for an item at cursor position.
-    pub fn collapse_key_at(&self, cursor: usize, data_mode: bool) -> Option<String> {
+    /// v0.17.3: Added hide_empty parameter to match render_tree filtering.
+    pub fn collapse_key_at(
+        &self,
+        cursor: usize,
+        data_mode: bool,
+        hide_empty: bool,
+    ) -> Option<String> {
         let item = if data_mode {
-            self.item_at_for_mode(cursor, true)
+            self.item_at_for_mode(cursor, true, hide_empty)
         } else {
             self.item_at(cursor)
         };
@@ -2962,6 +3004,10 @@ ORDER BY locale_code
             Some(TreeItem::Class(_, _, k)) => Some(format!("class:{}", k.key)),
             // EntityCategory can be collapsed to hide its instances
             Some(TreeItem::EntityCategory(_, _, _, cat)) => Some(format!("category:{}", cat.key)),
+            // LocaleGroup can be collapsed to hide its EntityNativeItems
+            Some(TreeItem::LocaleGroup(_, _, _, group)) => {
+                Some(format!("locale:{}", group.locale_code))
+            }
             // Entity instances can be collapsed to hide EntityNatives
             Some(TreeItem::Instance(_, _, class_info, instance)) if class_info.key == "Entity" => {
                 Some(format!("entity:{}", instance.key))
@@ -2978,10 +3024,15 @@ ORDER BY locale_code
     /// Returns None if at root or no parent exists.
     /// Hierarchy: Instance → Class → Layer → Realm → ClassesSection
     ///            ArcClass → ArcFamily → ArcsSection
-    /// v0.16.4: Entity instances are flat (no EntityCategory intermediate level)
-    pub fn find_parent_cursor(&self, cursor: usize, data_mode: bool) -> Option<usize> {
+    /// v0.17.3: Added hide_empty parameter to match render_tree filtering.
+    pub fn find_parent_cursor(
+        &self,
+        cursor: usize,
+        data_mode: bool,
+        hide_empty: bool,
+    ) -> Option<usize> {
         let current = if data_mode {
-            self.item_at_for_mode(cursor, true)
+            self.item_at_for_mode(cursor, true, hide_empty)
         } else {
             self.item_at(cursor)
         };
@@ -3003,6 +3054,11 @@ ORDER BY locale_code
 
             // EntityCategory's parent is its Class (Entity)
             Some(TreeItem::EntityCategory(realm, layer, class_info, _)) => {
+                self.find_class_cursor_readonly(&realm.key, &layer.key, &class_info.key, data_mode)
+            }
+
+            // LocaleGroup's parent is its Class (EntityNative)
+            Some(TreeItem::LocaleGroup(realm, layer, class_info, _)) => {
                 self.find_class_cursor_readonly(&realm.key, &layer.key, &class_info.key, data_mode)
             }
 
@@ -3346,9 +3402,14 @@ ORDER BY locale_code
 
     /// Calculate hierarchical position for the current tree item.
     /// Returns position info: R:realm L:layer C:class I:instance (all 1-based).
-    pub fn hierarchy_position(&self, cursor: usize, data_mode: bool) -> HierarchyPosition {
+    pub fn hierarchy_position(
+        &self,
+        cursor: usize,
+        data_mode: bool,
+        hide_empty: bool,
+    ) -> HierarchyPosition {
         let item = if data_mode {
-            self.item_at_for_mode(cursor, true)
+            self.item_at_for_mode(cursor, true, hide_empty)
         } else {
             self.item_at(cursor)
         };
@@ -3486,6 +3547,32 @@ ORDER BY locale_code
                     ..Default::default()
                 }
             }
+            Some(TreeItem::LocaleGroup(realm, layer, class_info, _)) => {
+                let realm_idx = self
+                    .realms
+                    .iter()
+                    .position(|r| r.key == realm.key)
+                    .map(|i| i + 1)
+                    .unwrap_or(1);
+                let layer_idx = realm
+                    .layers
+                    .iter()
+                    .position(|l| l.key == layer.key)
+                    .map(|i| i + 1)
+                    .unwrap_or(1);
+                let class_idx = layer
+                    .classes
+                    .iter()
+                    .position(|k| k.key == class_info.key)
+                    .map(|i| i + 1)
+                    .unwrap_or(1);
+                HierarchyPosition {
+                    realm: Some((realm_idx, total_realms)),
+                    layer: Some((layer_idx, realm.layers.len())),
+                    class: Some((class_idx, layer.classes.len())),
+                    ..Default::default()
+                }
+            }
             Some(TreeItem::ArcFamily(_)) | Some(TreeItem::ArcClass(_, _)) => {
                 // Arcs section - no realm/layer/class hierarchy
                 HierarchyPosition::default()
@@ -3546,6 +3633,13 @@ pub enum TreeItem<'a> {
         &'a LayerInfo,
         &'a ClassInfo,
         &'a EntityCategory,
+    ),
+    // Data view: Locale groups (between Class and instances for EntityNative only)
+    LocaleGroup(
+        &'a RealmInfo,
+        &'a LayerInfo,
+        &'a ClassInfo,
+        &'a LocaleGroup,
     ),
     // Data view: instances under Classes (or under EntityCategory for Entity)
     Instance(

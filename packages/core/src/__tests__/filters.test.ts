@@ -206,9 +206,10 @@ describe('NovaNetFilter', () => {
     });
 
     it('excludeTypes() sets excludeTypes filter', () => {
-      const filter = NovaNetFilter.create().excludeTypes('SEOKeyword', 'SEOKeywordMetrics');
+      // v0.17.3: SEOKeywordMetrics removed, using GEOQuery instead
+      const filter = NovaNetFilter.create().excludeTypes('SEOKeyword', 'GEOQuery');
       const criteria = filter.getCriteria();
-      expect(criteria.filters.excludeTypes).toEqual(['SEOKeyword', 'SEOKeywordMetrics']);
+      expect(criteria.filters.excludeTypes).toEqual(['SEOKeyword', 'GEOQuery']);
     });
 
     it('search() sets searchQuery filter', () => {
@@ -299,13 +300,14 @@ describe('CypherGenerator', () => {
     });
 
     it('generates WHERE for excludeTypes filter', () => {
+      // v0.17.3: SEOKeywordMetrics removed, using GEOQuery instead
       const filter = NovaNetFilter.create()
         .fromPage('page-pricing')
-        .excludeTypes('SEOKeyword', 'SEOKeywordMetrics');
+        .excludeTypes('SEOKeyword', 'GEOQuery');
       const result = CypherGenerator.generate(filter);
 
       expect(result.query).toContain('WHERE');
-      expect(result.query).toContain('(NOT root:SEOKeyword AND NOT root:SEOKeywordMetrics)');
+      expect(result.query).toContain('(NOT root:SEOKeyword AND NOT root:GEOQuery)');
     });
 
     it('generates WHERE for search filter with default fields', () => {

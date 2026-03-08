@@ -243,6 +243,7 @@ pub fn build_unified_content(app: &App) -> UnifiedContent<'static> {
             build_instance_content(app, realm, layer, class, instance)
         }
         Some(TreeItem::EntityCategory(_, _, _, cat)) => build_category_content(cat),
+        Some(TreeItem::LocaleGroup(_, _, _, group)) => build_locale_group_content(group),
         Some(TreeItem::EntityNativeItem(realm, layer, class, native)) => {
             build_entity_native_item_content(realm, layer, class, native)
         }
@@ -1817,6 +1818,47 @@ fn build_category_content(cat: &crate::tui::data::EntityCategory) -> UnifiedCont
     content
 }
 
+/// Build content for LocaleGroup (EntityNative grouping by locale).
+fn build_locale_group_content(group: &crate::tui::data::LocaleGroup) -> UnifiedContent<'static> {
+    let mut content = UnifiedContent::default();
+
+    // IDENTITY
+    content
+        .identity
+        .add_kv("type", Span::styled("LocaleGroup", STYLE_ACCENT));
+    content.identity.add_kv(
+        "locale",
+        Span::styled(
+            format!("{} {}", group.flag, group.locale_code),
+            Style::default().fg(Color::Cyan),
+        ),
+    );
+    content.identity.add_kv(
+        "name",
+        Span::styled(group.locale_name.clone(), STYLE_PRIMARY),
+    );
+
+    // LOCATION - not applicable
+    content.location.add_empty();
+
+    // METRICS
+    content.metrics.add_kv(
+        "natives",
+        Span::styled(group.instance_count.to_string(), STYLE_PRIMARY),
+    );
+
+    // COVERAGE - not applicable
+    content.coverage.add_empty();
+
+    // PROPERTIES - not applicable
+    content.properties.add_empty();
+
+    // RELATIONSHIPS - not applicable
+    content.relationships.add_empty();
+
+    content
+}
+
 /// Build content for EntityNativeItem (locale-specific content).
 fn build_entity_native_item_content(
     realm: &crate::tui::data::RealmInfo,
@@ -2062,6 +2104,10 @@ fn get_detail_title(app: &App) -> String {
         Some(TreeItem::EntityCategory(_, _, _, cat)) => {
             // [C] badge for Category
             format!("[C] {}", cat.display_name)
+        }
+        Some(TreeItem::LocaleGroup(_, _, _, group)) => {
+            // [L] badge for LocaleGroup
+            format!("[L] {} {}", group.flag, group.locale_name)
         }
         Some(TreeItem::EntityNativeItem(_, _, _, native)) => {
             // [N] badge for Native - locale-specific content

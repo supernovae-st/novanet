@@ -648,13 +648,12 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   // ─────────────────────────────────────────────────────────────────────────────
   [RelationType.HAS_METRICS]: {
     type: RelationType.HAS_METRICS,
-    from: ['SEOKeyword', 'GEOQuery'],
-    to: ['SEOKeywordMetrics', 'GEOAnswer'],
+    from: 'GEOQuery',
+    to: 'GEOAnswer',
     cardinality: '1:N',
-    description: 'Time-series observations (v7.11.0: PageMetrics removed, query GA/PostHog)',
-    // REMOVED v7.11.0: PageNative → PageMetrics (query GA/PostHog with published_at/replaced_at date ranges)
-    // SEOKeyword → SEOKeywordMetrics (keyword ranking/volume history)
-    // GEOQuery → GEOAnswer (AI citation observations)
+    description: 'GEO answer observations (v0.17.3: SEOKeywordMetrics removed, metrics on SEOKeyword node)',
+    // v0.17.3: SEOKeyword → SEOKeywordMetrics removed (metrics stored on SEOKeyword node itself)
+    // GEOQuery → GEOAnswer (AI citation observations) - kept
   },
   [RelationType.ASSEMBLES]: {
     type: RelationType.ASSEMBLES,

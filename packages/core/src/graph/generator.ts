@@ -26,13 +26,12 @@ const NODE_LABELS: Record<NodeType, string> = {
   Locale: 'Locale',
   SEOKeywordFormat: 'SEO Keyword Format',
 
-  // locale (6)
+  // locale (5) — v0.17.3: Market removed (YAGNI)
   Formatting: 'Formatting',
   Slugification: 'Slugification',
   Adaptation: 'Adaptation',
   Style: 'Style',
   Culture: 'Culture',
-  Market: 'Market',
 
   // geography (7) — v0.12.4: Country added
   Continent: 'Continent',
@@ -43,14 +42,12 @@ const NODE_LABELS: Record<NodeType, string> = {
   LendingCategory: 'Lending Category',
   EconomicRegion: 'Economic Region',
 
-  // knowledge (24) — includes SEO/GEO
-  TermSet: 'Term Set',
+  // knowledge (21) — includes SEO/GEO (v0.17.3: Term, TermSet, SEOKeywordMetrics removed)
   ExpressionSet: 'Expression Set',
   PatternSet: 'Pattern Set',
   CultureSet: 'Culture Set',
   TabooSet: 'Taboo Set',
   AudienceSet: 'Audience Set',
-  Term: 'Term',
   Expression: 'Expression',
   Pattern: 'Pattern',
   CultureRef: 'Culture Ref',
@@ -63,9 +60,8 @@ const NODE_LABELS: Record<NodeType, string> = {
   PopulationCluster: 'Population Cluster',
   PopulationSubCluster: 'Population Sub-Cluster',
 
-  // knowledge — SEO/GEO (6) — v11.5: moved from org
+  // knowledge — SEO/GEO (5) — v11.5: moved from org (v0.17.3: SEOKeywordMetrics removed)
   SEOKeyword: 'SEO Keyword',
-  SEOKeywordMetrics: 'SEO Metrics',
   SEOKeywordSet: 'SEO Keyword Set',
   GEOQuery: 'GEO Query',
   GEOQuerySet: 'GEO Query Set',
@@ -77,24 +73,24 @@ const NODE_LABELS: Record<NodeType, string> = {
   // config (1) — v11.3: Organization + Tenant merged
   OrgConfig: 'Org Config',
 
-  // foundation (6) — v0.12.4: Brand Architecture, v0.13.0: *Native Pattern (ADR-029)
+  // foundation (8) — v0.17.3: +ProjectSEOScope, +ProjectGEOScope
   Project: 'Project',
   Brand: 'Brand',
   BrandDesign: 'Brand Design',
   BrandPrinciples: 'Brand Principles',
   PromptStyle: 'Prompt Style',
   ProjectNative: 'Project Native',
+  ProjectSEOScope: 'Project SEO Scope',
+  ProjectGEOScope: 'Project GEO Scope',
 
   // structure (3)
   Page: 'Page',
   Block: 'Block',
   ContentSlot: 'Content Slot',
 
-  // semantic (4) — v0.13.0: *Native Pattern (ADR-029)
+  // semantic (2) — v0.17.3: AudiencePersona, ChannelSurface removed (YAGNI)
   Entity: 'Entity',
   EntityNative: 'Entity Native',
-  AudiencePersona: 'Audience Persona',
-  ChannelSurface: 'Channel Surface',
 
   // instruction (4) — v0.12.4: PageStructure, PageInstruction deleted
   BlockType: 'Block Type',

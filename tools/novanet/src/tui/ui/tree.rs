@@ -216,6 +216,28 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 color: Color::Gray,
             });
         }
+        Some(TreeItem::LocaleGroup(r, l, k, group)) => {
+            path.push(BreadcrumbLevel {
+                icon: realm_badge_icon(&r.key),
+                label: r.display_name.clone(),
+                color: hex_to_color(&r.color),
+            });
+            path.push(BreadcrumbLevel {
+                icon: layer_badge_icon(&l.key),
+                label: l.display_name.clone(),
+                color: hex_to_color(&l.color),
+            });
+            path.push(BreadcrumbLevel {
+                icon: trait_icon(&k.trait_name),
+                label: k.display_name.clone(),
+                color: app.theme.trait_color(&k.trait_name),
+            });
+            path.push(BreadcrumbLevel {
+                icon: "🌐",
+                label: format!("{} {} ({})", group.flag, group.locale_code, group.locale_name),
+                color: Color::Cyan,
+            });
+        }
         Some(TreeItem::Instance(r, l, k, inst)) => {
             path.push(BreadcrumbLevel {
                 icon: realm_badge_icon(&r.key),
@@ -432,6 +454,7 @@ fn build_minimap_info(app: &App, visible_height: usize) -> MiniMapInfo {
         Some(crate::tui::data::TreeItem::Layer(r, _)) => hex_to_color(&r.color),
         Some(crate::tui::data::TreeItem::Class(r, _, _)) => hex_to_color(&r.color),
         Some(crate::tui::data::TreeItem::EntityCategory(r, _, _, _)) => hex_to_color(&r.color),
+        Some(crate::tui::data::TreeItem::LocaleGroup(r, _, _, _)) => hex_to_color(&r.color),
         Some(crate::tui::data::TreeItem::Instance(r, _, _, _)) => hex_to_color(&r.color),
         _ => Color::Cyan, // Default for arc sections
     };
@@ -1133,15 +1156,8 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                         // Expand/collapse state
                                         let cat_key = format!("category:{}", category.key);
                                         let is_collapsed = app.tree.is_collapsed(&cat_key);
-                                        let expand_icon = if inst_count > 0 {
-                                            if is_collapsed {
-                                                "▶"
-                                            } else {
-                                                "▼"
-                                            }
-                                        } else {
-                                            "◌" // Empty - loading or no instances
-                                        };
+                                        // v0.17.3: Always use chevron icons (▶/▼) for consistency
+                                        let expand_icon = if is_collapsed { "▶" } else { "▼" };
 
                                         let style = if is_cursor && focused {
                                             Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White)
@@ -1903,7 +1919,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
     let hierarchy = app
         .tree
-        .hierarchy_position(app.tree_cursor, app.is_graph_mode());
+        .hierarchy_position(app.tree_cursor, app.is_graph_mode(), app.hide_empty);
     let hierarchy_str = hierarchy.to_compact_string();
     let title = if hierarchy_str.is_empty() {
         format!(" {}{} ", mode_prefix, filter_indicator)

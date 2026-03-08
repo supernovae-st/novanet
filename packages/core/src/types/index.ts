@@ -251,28 +251,9 @@ export interface SEOKeyword extends StandardNodeProperties {
   source: string;
 }
 
-/**
- * SEOKeywordMetrics - Historical metrics snapshot for an SEO keyword (v7.8.5)
- * Unified metrics pattern: SEOKeyword -[:HAS_METRICS]-> SEOKeywordMetrics
- */
-export interface SEOKeywordMetrics {
-  // Standard properties (v8.2.0 - no icon/priority/freshness)
-  key: string;             // "seometrics-creer-qr-code-fr-2024-01-15"
-  display_name: string;    // "créer qr code - 2024-01-15"
-  description: string;     // "Metrics snapshot for tracking"
-  llm_context: string;     // Not used in spreading activation
-
-  // SEOKeywordMetrics-specific (v7.8.5)
-  observed_at: Date;       // When these metrics were observed
-  volume?: number;         // Monthly search volume
-  difficulty?: number;     // Keyword difficulty (0-100)
-  cpc?: number;            // Cost per click
-  position?: number;       // Our ranking position
-  url?: string;            // Our ranking URL
-  source: string;          // Data source: semrush | ahrefs | google_search_console
-  created_at: Date;
-  updated_at: Date;
-}
+// v0.17.3: SEOKeywordMetrics removed (YAGNI)
+// Metrics (volume, difficulty, cpc, position) are now stored directly on SEOKeyword node.
+// See ADR-024 for trait semantics: SEOKeyword.trait = 'imported'
 
 // v11.2: SEOMiningRun removed (job concept deferred to v12+)
 
