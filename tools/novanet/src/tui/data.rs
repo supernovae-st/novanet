@@ -2492,22 +2492,19 @@ ORDER BY locale_code
                                 if data_mode
                                     && !self.is_collapsed(&format!("class:{}", class_info.key))
                                 {
-                                    // v0.16.5: Entity shows flat instances (no category rows)
-                                    // BUT only if entity_category_instances has data
-                                    let has_category_instances =
-                                        !self.entity_category_instances.is_empty();
-                                    if class_info.key == "Entity"
-                                        && !self.entity_categories.is_empty()
-                                        && has_category_instances
-                                    {
-                                        // Count all Entity instances across all categories
-                                        for category in &self.entity_categories {
-                                            if let Some(instances) =
-                                                self.entity_category_instances.get(&category.key)
-                                            {
-                                                count += instances.len();
-                                            }
-                                        }
+                                    // v0.17.3: Use helper methods for Entity dual storage
+                                    if class_info.key == "Entity" {
+                                        count += self.entity_instance_count();
+                                    } else if class_info.key == "EntityNative" {
+                                        // EntityNative uses locale grouping
+                                        count += self
+                                            .locale_groups
+                                            .iter()
+                                            .filter_map(|g| {
+                                                self.entity_native_by_locale.get(&g.locale_code)
+                                            })
+                                            .map(|v| v.len())
+                                            .sum::<usize>();
                                     } else {
                                         // Regular class: flat instances
                                         if let Some(instances) = self.instances.get(&class_info.key)
@@ -2574,23 +2571,27 @@ ORDER BY locale_code
                                 if data_mode
                                     && !self.is_collapsed(&format!("class:{}", class_info.key))
                                 {
-                                    // v0.16.5: Entity shows flat instances (no category rows)
-                                    // BUT only if entity_category_instances has data
-                                    let has_category_instances =
-                                        !self.entity_category_instances.is_empty();
-                                    if class_info.key == "Entity"
-                                        && !self.entity_categories.is_empty()
-                                        && has_category_instances
-                                    {
-                                        // Iterate all Entity instances flat across categories
-                                        for category in &self.entity_categories {
-                                            if let Some(instances) =
-                                                self.entity_category_instances.get(&category.key)
+                                    // v0.17.3: Use helper methods for Entity dual storage
+                                    if class_info.key == "Entity" {
+                                        for instance in self.entity_instances_flat() {
+                                            if idx == cursor {
+                                                return Some(TreeItem::Instance(
+                                                    realm, layer, class_info, instance,
+                                                ));
+                                            }
+                                            idx += 1;
+                                        }
+                                    } else if class_info.key == "EntityNative" {
+                                        // EntityNative uses locale grouping - iterate by locale
+                                        for group in &self.locale_groups {
+                                            if let Some(natives) =
+                                                self.entity_native_by_locale.get(&group.locale_code)
                                             {
-                                                for instance in instances {
+                                                for native in natives {
                                                     if idx == cursor {
-                                                        return Some(TreeItem::Instance(
-                                                            realm, layer, class_info, instance,
+                                                        // Return as EntityNativeItem for proper rendering
+                                                        return Some(TreeItem::EntityNativeItem(
+                                                            realm, layer, class_info, native,
                                                         ));
                                                     }
                                                     idx += 1;
@@ -2918,7 +2919,10 @@ ORDER BY locale_code
                 Some(format!("entity:{}", instance.key))
             }
             // Other leaf nodes can't be collapsed
-            Some(TreeItem::ArcClass(_, _)) | Some(TreeItem::Instance(_, _, _, _)) | None => None,
+            Some(TreeItem::ArcClass(_, _))
+            | Some(TreeItem::Instance(_, _, _, _))
+            | Some(TreeItem::EntityNativeItem(_, _, _, _))
+            | None => None,
         }
     }
 
@@ -2965,6 +2969,11 @@ ORDER BY locale_code
 
             // ArcClass's parent is its ArcFamily
             Some(TreeItem::ArcClass(family, _)) => self.find_family_cursor(&family.key),
+
+            // EntityNativeItem's parent is its Class (EntityNative)
+            Some(TreeItem::EntityNativeItem(realm, layer, class_info, _)) => {
+                self.find_class_cursor_readonly(&realm.key, &layer.key, &class_info.key, data_mode)
+            }
         }
     }
 
@@ -3422,6 +3431,39 @@ ORDER BY locale_code
                 // Arcs section - no realm/layer/class hierarchy
                 HierarchyPosition::default()
             }
+            Some(TreeItem::EntityNativeItem(realm, layer, class_info, _)) => {
+                let realm_idx = self
+                    .realms
+                    .iter()
+                    .position(|r| r.key == realm.key)
+                    .map(|i| i + 1)
+                    .unwrap_or(1);
+                let layer_idx = realm
+                    .layers
+                    .iter()
+                    .position(|l| l.key == layer.key)
+                    .map(|i| i + 1)
+                    .unwrap_or(1);
+                let class_idx = layer
+                    .classes
+                    .iter()
+                    .position(|k| k.key == class_info.key)
+                    .map(|i| i + 1)
+                    .unwrap_or(1);
+                // Calculate EntityNative instance count across all locale groups
+                let loaded_count: usize = self
+                    .locale_groups
+                    .iter()
+                    .filter_map(|g| self.entity_native_by_locale.get(&g.locale_code))
+                    .map(|v| v.len())
+                    .sum();
+                HierarchyPosition {
+                    realm: Some((realm_idx, total_realms)),
+                    layer: Some((layer_idx, realm.layers.len())),
+                    class: Some((class_idx, layer.classes.len())),
+                    instance: Some((loaded_count.min(INSTANCE_LIMIT), loaded_count)),
+                }
+            }
         }
     }
 }
@@ -3452,6 +3494,13 @@ pub enum TreeItem<'a> {
         &'a LayerInfo,
         &'a ClassInfo,
         &'a InstanceInfo,
+    ),
+    /// Data view: EntityNative items (locale-grouped, v0.17.3)
+    EntityNativeItem(
+        &'a RealmInfo,
+        &'a LayerInfo,
+        &'a ClassInfo,
+        &'a EntityNativeInfo,
     ),
 }
 
