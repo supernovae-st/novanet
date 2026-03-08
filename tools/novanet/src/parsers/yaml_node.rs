@@ -539,8 +539,8 @@ node:
         );
         assert_eq!(
             count(NodeTrait::Authored),
-            1,
-            "authored count (ProjectNative only - EntityNative now generated)"
+            2,
+            "authored count (v0.18.0: ProjectNative + EntityNative per ADR-024)"
         );
         assert_eq!(
             count(NodeTrait::Imported),
@@ -549,8 +549,8 @@ node:
         );
         assert_eq!(
             count(NodeTrait::Generated),
-            5,
-            "generated count (v0.17.0: PageNative, BlockNative, EntityNative, OutputArtifact, PromptArtifact)"
+            4,
+            "generated count (v0.18.0: PageNative, BlockNative, OutputArtifact, PromptArtifact)"
         );
         assert_eq!(
             count(NodeTrait::Retrieved),

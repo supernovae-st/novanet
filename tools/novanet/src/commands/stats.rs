@@ -282,6 +282,7 @@ mod tests {
     // ─────────────────────────────────────────────────────────────────────────
 
     #[test]
+    #[ignore = "requires monorepo with packages/core/models/ (run locally)"]
     fn compute_node_stats_integration() {
         let Some(root) = test_root() else {
             eprintln!("Skipping: not in monorepo");
@@ -348,6 +349,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "requires monorepo with packages/core/models/ (run locally)"]
     fn compute_arc_stats_integration() {
         let Some(root) = test_root() else {
             eprintln!("Skipping: not in monorepo");
@@ -401,6 +403,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "requires monorepo with packages/core/models/ (run locally)"]
     fn compute_stats_nodes_only() {
         let Some(root) = test_root() else {
             eprintln!("Skipping: not in monorepo");
@@ -414,6 +417,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "requires monorepo with packages/core/models/ (run locally)"]
     fn compute_stats_with_arcs() {
         let Some(root) = test_root() else {
             eprintln!("Skipping: not in monorepo");
