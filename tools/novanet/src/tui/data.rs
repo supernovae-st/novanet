@@ -2492,9 +2492,26 @@ ORDER BY locale_code
                                 if data_mode
                                     && !self.is_collapsed(&format!("class:{}", class_info.key))
                                 {
-                                    // v0.17.3: Use helper methods for Entity dual storage
+                                    // v0.17.3: Entity shows EntityCategory nodes (not flat instances)
                                     if class_info.key == "Entity" {
-                                        count += self.entity_instance_count();
+                                        if !self.entity_categories.is_empty() {
+                                            // Category mode: show EntityCategory nodes
+                                            for cat in &self.entity_categories {
+                                                count += 1; // category node
+                                                // If category is expanded, add its instances
+                                                if !self.is_collapsed(&format!("category:{}", cat.key))
+                                                {
+                                                    if let Some(instances) =
+                                                        self.entity_category_instances.get(&cat.key)
+                                                    {
+                                                        count += instances.len();
+                                                    }
+                                                }
+                                            }
+                                        } else {
+                                            // Fallback: flat instances (before categories load)
+                                            count += self.entity_instance_count();
+                                        }
                                     } else if class_info.key == "EntityNative" {
                                         // EntityNative uses locale grouping
                                         count += self
@@ -2571,15 +2588,46 @@ ORDER BY locale_code
                                 if data_mode
                                     && !self.is_collapsed(&format!("class:{}", class_info.key))
                                 {
-                                    // v0.17.3: Use helper methods for Entity dual storage
+                                    // v0.17.3: Entity shows EntityCategory nodes (not flat instances)
                                     if class_info.key == "Entity" {
-                                        for instance in self.entity_instances_flat() {
-                                            if idx == cursor {
-                                                return Some(TreeItem::Instance(
-                                                    realm, layer, class_info, instance,
-                                                ));
+                                        if !self.entity_categories.is_empty() {
+                                            // Category mode: return EntityCategory nodes
+                                            for cat in &self.entity_categories {
+                                                if idx == cursor {
+                                                    return Some(TreeItem::EntityCategory(
+                                                        realm, layer, class_info, cat,
+                                                    ));
+                                                }
+                                                idx += 1;
+                                                // If category is expanded, add its instances
+                                                if !self
+                                                    .is_collapsed(&format!("category:{}", cat.key))
+                                                {
+                                                    if let Some(instances) =
+                                                        self.entity_category_instances.get(&cat.key)
+                                                    {
+                                                        for instance in instances {
+                                                            if idx == cursor {
+                                                                return Some(TreeItem::Instance(
+                                                                    realm, layer, class_info,
+                                                                    instance,
+                                                                ));
+                                                            }
+                                                            idx += 1;
+                                                        }
+                                                    }
+                                                }
                                             }
-                                            idx += 1;
+                                        } else {
+                                            // Fallback: flat instances (before categories load)
+                                            for instance in self.entity_instances_flat() {
+                                                if idx == cursor {
+                                                    return Some(TreeItem::Instance(
+                                                        realm, layer, class_info, instance,
+                                                    ));
+                                                }
+                                                idx += 1;
+                                            }
                                         }
                                     } else if class_info.key == "EntityNative" {
                                         // EntityNative uses locale grouping - iterate by locale
@@ -3179,10 +3227,15 @@ ORDER BY locale_code
         !self.entity_category_instances.is_empty()
     }
 
-    /// Check if Entity class has any instances (category or fallback).
-    /// Used for quick "has instances" checks without counting.
+    /// Check if Entity class has any displayable content.
+    /// v0.17.3: Returns true when categories exist (they're displayable as EntityCategory nodes).
+    /// Used for quick "has content" checks to decide if toggle should load or expand.
     pub fn has_entity_instances(&self) -> bool {
-        self.has_entity_category_instances()
+        // Categories exist → we have EntityCategory nodes to display
+        !self.entity_categories.is_empty()
+            // OR we have actual instances loaded
+            || self.has_entity_category_instances()
+            // OR fallback flat instances
             || self
                 .instances
                 .get("Entity")

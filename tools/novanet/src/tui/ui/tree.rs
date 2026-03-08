@@ -1110,42 +1110,171 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
                             // In Data mode, show instances under Class (if not collapsed)
                             if is_data_mode && !class_collapsed {
-                                // v0.16.4: Entity shows flat instances with category suffix + native count
-                                // v0.16.5: Fallback to instances["Entity"] if entity_category_instances empty
-                                let has_category_instances =
-                                    !app.tree.entity_category_instances.is_empty();
-
+                                // v0.17.3: Entity shows EntityCategory nodes (not flat instances)
+                                // Categories are expandable, instances load per-category
                                 if class_info.key == "Entity"
                                     && !app.tree.entity_categories.is_empty()
-                                    && has_category_instances
                                 {
-                                    // Build reverse lookup: entity_key -> category_key
-                                    let mut entity_to_category: rustc_hash::FxHashMap<&str, &str> =
-                                        rustc_hash::FxHashMap::default();
-                                    for category in &app.tree.entity_categories {
-                                        if let Some(instances) =
-                                            app.tree.entity_category_instances.get(&category.key)
-                                        {
-                                            for inst in instances {
-                                                entity_to_category.insert(&inst.key, &category.key);
+                                    let cat_count = app.tree.entity_categories.len();
+                                    for (ci, category) in
+                                        app.tree.entity_categories.iter().enumerate()
+                                    {
+                                        let cat_is_last = ci == cat_count - 1;
+                                        let is_cursor = idx == app.tree_cursor;
+
+                                        // Check if category has loaded instances
+                                        let cat_instances = app
+                                            .tree
+                                            .entity_category_instances
+                                            .get(&category.key);
+                                        let inst_count =
+                                            cat_instances.map(|v| v.len()).unwrap_or(0);
+
+                                        // Expand/collapse state
+                                        let cat_key = format!("category:{}", category.key);
+                                        let is_collapsed = app.tree.is_collapsed(&cat_key);
+                                        let expand_icon = if inst_count > 0 {
+                                            if is_collapsed {
+                                                "▶"
+                                            } else {
+                                                "▼"
+                                            }
+                                        } else {
+                                            "◌" // Empty - loading or no instances
+                                        };
+
+                                        let style = if is_cursor && focused {
+                                            Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White)
+                                        } else {
+                                            Style::default().fg(COLOR_ENTITY_TEXT)
+                                        };
+
+                                        let cursor_char = if is_cursor { ">" } else { " " };
+                                        let tree_prefix = format!(
+                                            "{}{}{}{}",
+                                            cont(realm_is_last),
+                                            cont(layer_is_last),
+                                            cont(class_is_last),
+                                            branch(cat_is_last)
+                                        );
+
+                                        // Format: ▶ Technology (5)
+                                        let cat_display = format!(
+                                            "{} ({}) - {}",
+                                            category.display_name, inst_count, category.key
+                                        );
+
+                                        if is_cursor && focused {
+                                            all_lines.push(Line::from(Span::styled(
+                                                format!(
+                                                    "{}{}{} {}",
+                                                    cursor_char, tree_prefix, expand_icon, cat_display
+                                                ),
+                                                style,
+                                            )));
+                                        } else {
+                                            let spans = vec![
+                                                Span::styled(cursor_char, Style::default()),
+                                                Span::styled(
+                                                    tree_prefix,
+                                                    Style::default().fg(layer_color),
+                                                ),
+                                                Span::styled(
+                                                    format!("{} {}", expand_icon, cat_display),
+                                                    style,
+                                                ),
+                                            ];
+                                            all_lines.push(Line::from(spans));
+                                        }
+                                        idx += 1;
+
+                                        // Render instances under this category when expanded
+                                        if !is_collapsed {
+                                            if let Some(instances) = cat_instances {
+                                                let inst_total = instances.len();
+                                                for (ii, instance) in instances.iter().enumerate() {
+                                                    let inst_is_last = ii == inst_total - 1;
+                                                    let is_inst_cursor = idx == app.tree_cursor;
+
+                                                    // Power bar
+                                                    let (power_bar, power_color) =
+                                                        render_power_bar(instance.relationship_power);
+
+                                                    // Slug
+                                                    let slug_display = instance
+                                                        .entity_slug
+                                                        .as_ref()
+                                                        .map(|s| format!("/{}", s))
+                                                        .unwrap_or_default();
+
+                                                    let inst_style = if is_inst_cursor && focused {
+                                                        Style::default()
+                                                            .bg(COLOR_HIGHLIGHT_BG)
+                                                            .fg(Color::White)
+                                                    } else {
+                                                        Style::default().fg(COLOR_ENTITY_TEXT)
+                                                    };
+
+                                                    let inst_cursor =
+                                                        if is_inst_cursor { ">" } else { " " };
+                                                    let inst_prefix = format!(
+                                                        "{}{}{}{}{}",
+                                                        cont(realm_is_last),
+                                                        cont(layer_is_last),
+                                                        cont(class_is_last),
+                                                        cont(cat_is_last),
+                                                        branch(inst_is_last)
+                                                    );
+
+                                                    if is_inst_cursor && focused {
+                                                        all_lines.push(Line::from(Span::styled(
+                                                            format!(
+                                                                "{}{}{} {} {}",
+                                                                inst_cursor,
+                                                                inst_prefix,
+                                                                instance.display_name,
+                                                                power_bar,
+                                                                slug_display,
+                                                            ),
+                                                            inst_style,
+                                                        )));
+                                                    } else {
+                                                        let mut spans = vec![
+                                                            Span::styled(
+                                                                inst_cursor,
+                                                                Style::default(),
+                                                            ),
+                                                            Span::styled(
+                                                                inst_prefix,
+                                                                Style::default().fg(layer_color),
+                                                            ),
+                                                            Span::styled(
+                                                                instance.display_name.clone(),
+                                                                inst_style,
+                                                            ),
+                                                            Span::styled(
+                                                                format!(" {}", power_bar),
+                                                                Style::default().fg(power_color),
+                                                            ),
+                                                        ];
+                                                        if !slug_display.is_empty() {
+                                                            spans.push(Span::styled(
+                                                                format!(" {}", slug_display),
+                                                                Style::default()
+                                                                    .fg(COLOR_ENTITY_SLUG),
+                                                            ));
+                                                        }
+                                                        all_lines.push(Line::from(spans));
+                                                    }
+                                                    idx += 1;
+                                                }
                                             }
                                         }
                                     }
-
-                                    // Collect all Entity instances flat
-                                    let all_entities: Vec<_> = app
-                                        .tree
-                                        .entity_categories
-                                        .iter()
-                                        .flat_map(|cat| {
-                                            app.tree
-                                                .entity_category_instances
-                                                .get(&cat.key)
-                                                .map(|v| v.iter())
-                                                .into_iter()
-                                                .flatten()
-                                        })
-                                        .collect();
+                                } else if class_info.key == "Entity" {
+                                    // Fallback: flat instances (before categories load)
+                                    let all_entities: Vec<_> =
+                                        app.tree.entity_instances_flat().into_iter().collect();
 
                                     let inst_count = all_entities.len();
                                     for (ii, instance) in all_entities.iter().enumerate() {
