@@ -6,6 +6,9 @@
 //! - v0.13.0: Split into SOURCE and DIAGRAM boxes with visual states
 //! - v0.13.1: Simplified - no collapse/peek (PROPERTIES panel shows instance data)
 //! - v0.17.3: Context-aware content via ContentPanelMode (Phase 3)
+//! - v0.17.3: Unified panel - shows YAML for Schema, Neo4j properties for Instance
+
+use std::collections::BTreeMap;
 
 use ratatui::Frame;
 use ratatui::layout::Rect;
@@ -14,6 +17,7 @@ use ratatui::text::{Line, Span};
 use ratatui::widgets::{
     Block, Borders, Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState,
 };
+use serde_json::Value as JsonValue;
 
 use super::{COLOR_MUTED_TEXT, STYLE_DIM, scroll_indicator};
 use crate::tui::app::{App, ContentPanelMode};
@@ -119,6 +123,7 @@ fn render_source_box(f: &mut Frame, area: Rect, app: &App, selected: bool) {
             class_name,
             realm,
             layer,
+            ref properties,
         } => {
             render_instance_info(
                 f,
@@ -129,6 +134,7 @@ fn render_source_box(f: &mut Frame, area: Rect, app: &App, selected: bool) {
                 &class_name,
                 &realm,
                 &layer,
+                properties,
             );
         }
         ContentPanelMode::SectionInfo { name, description } => {
@@ -176,8 +182,9 @@ fn render_schema_content(
     render_yaml_content_in_box(f, area, app, visible_height, border_color, title);
 }
 
-/// Build the SCHEMA panel title.
-/// Format: ` ▶ SCHEMA ⊞N │ path/file.yaml ` (when selected)
+/// Build the SCHEMA panel title with YAML badge.
+/// v0.17.3: Added 📄 YAML badge for symmetry with 🔷 NEO4J badge on instances.
+/// Format: ` 📄 SCHEMA ⊞N │ path/file.yaml ` (when selected)
 fn build_schema_title(
     selected: bool,
     line_count: usize,
@@ -186,13 +193,12 @@ fn build_schema_title(
 ) -> Line<'static> {
     let mut spans = Vec::new();
 
+    // v0.17.3: Add 📄 YAML badge for data source indicator
+    spans.push(Span::styled(" ", Style::default()));
+    spans.push(Span::styled("📄", Style::default())); // YAML badge
+    spans.push(Span::styled(" ", Style::default()));
+
     if selected {
-        spans.push(Span::styled(
-            " ▶ ",
-            Style::default()
-                .fg(BOX_BORDER_SELECTED)
-                .add_modifier(Modifier::BOLD),
-        ));
         spans.push(Span::styled(
             "SCHEMA ",
             Style::default()
@@ -201,7 +207,7 @@ fn build_schema_title(
         ));
     } else {
         spans.push(Span::styled(
-            " SCHEMA ",
+            "SCHEMA ",
             Style::default().fg(COLOR_MUTED_TEXT),
         ));
     }
@@ -234,8 +240,8 @@ fn build_schema_title(
     Line::from(spans)
 }
 
-/// Render INFO content for instances - points to PROPERTIES panel.
-/// v0.17.3: Used when an Instance node is selected in the tree.
+/// Render content for instances - shows properties in YAML-like format.
+/// v0.17.3: Unified panel - symmetric with Schema (shows Neo4j data instead of YAML file).
 #[allow(clippy::too_many_arguments)]
 fn render_instance_info(
     f: &mut Frame,
@@ -246,92 +252,62 @@ fn render_instance_info(
     class_name: &str,
     realm: &str,
     layer: &str,
+    properties: &BTreeMap<String, JsonValue>,
 ) {
     let mut lines: Vec<Line> = Vec::new();
 
-    // Add some vertical spacing
+    // YAML-like header with class info
+    lines.push(Line::from(vec![
+        Span::styled("# ", Style::default().fg(Color::Rgb(108, 113, 196))), // Comment color
+        Span::styled(
+            format!("{} instance", class_name),
+            Style::default().fg(Color::Rgb(108, 113, 196)),
+        ),
+    ]));
+    lines.push(Line::from(vec![
+        Span::styled("# ", Style::default().fg(Color::Rgb(108, 113, 196))),
+        Span::styled(
+            format!("realm: {} | layer: {}", realm, layer),
+            Style::default().fg(Color::Rgb(108, 113, 196)),
+        ),
+    ]));
     lines.push(Line::from(""));
 
-    // Instance header
+    // Instance key as first property
     lines.push(Line::from(vec![
-        Span::styled("   Instance: ", Style::default().fg(Color::DarkGray)),
+        Span::styled("key", Style::default().fg(Color::Rgb(166, 226, 46))), // Green key
+        Span::styled(": ", Style::default().fg(Color::White)),
         Span::styled(
-            instance_key.to_string(),
-            Style::default()
-                .fg(Color::Rgb(136, 192, 208)) // Nord Frost
-                .add_modifier(Modifier::BOLD),
+            format!("\"{}\"", instance_key),
+            Style::default().fg(Color::Rgb(230, 219, 116)), // Yellow string
         ),
     ]));
 
-    // Class info
-    lines.push(Line::from(vec![
-        Span::styled("   Class: ", Style::default().fg(Color::DarkGray)),
-        Span::styled(
-            format!("{} ({}/{})", class_name, realm, layer),
-            Style::default().fg(Color::Rgb(163, 190, 140)), // Nord Aurora Green
-        ),
-    ]));
+    // Render properties in YAML format
+    for (key, value) in properties.iter() {
+        // Skip 'key' since we already displayed it
+        if key == "key" {
+            continue;
+        }
+        let value_span = format_json_value_as_yaml(value);
+        lines.push(Line::from(vec![
+            Span::styled(key.as_str(), Style::default().fg(Color::Rgb(166, 226, 46))), // Green key
+            Span::styled(": ", Style::default().fg(Color::White)),
+            value_span,
+        ]));
+    }
 
-    lines.push(Line::from(""));
-    lines.push(Line::from(Span::styled(
-        "   ─────────────────────────────────────────────",
-        Style::default().fg(Color::Rgb(70, 70, 70)),
-    )));
-    lines.push(Line::from(""));
+    // If no properties, show a hint
+    if properties.is_empty() {
+        lines.push(Line::from(""));
+        lines.push(Line::from(Span::styled(
+            "# No properties loaded",
+            Style::default().fg(Color::Rgb(108, 113, 196)),
+        )));
+    }
 
-    // Info message
-    lines.push(Line::from(Span::styled(
-        "   Instances are stored in Neo4j, not YAML files.",
-        Style::default().fg(Color::DarkGray),
-    )));
-
-    lines.push(Line::from(vec![
-        Span::styled("   → See ", Style::default().fg(Color::DarkGray)),
-        Span::styled(
-            "PROPERTIES",
-            Style::default()
-                .fg(BOX_BORDER_SELECTED)
-                .add_modifier(Modifier::BOLD),
-        ),
-        Span::styled(
-            " panel for instance data",
-            Style::default().fg(Color::DarkGray),
-        ),
-    ]));
-
-    lines.push(Line::from(vec![
-        Span::styled("   → Press ", Style::default().fg(Color::DarkGray)),
-        Span::styled(
-            "Tab",
-            Style::default()
-                .fg(Color::Rgb(181, 137, 0)) // Gold
-                .add_modifier(Modifier::BOLD),
-        ),
-        Span::styled(
-            " to navigate to PROPERTIES",
-            Style::default().fg(Color::DarkGray),
-        ),
-    ]));
-
-    lines.push(Line::from(""));
-
-    // Hint for viewing parent class schema
-    lines.push(Line::from(vec![
-        Span::styled("   [", Style::default().fg(Color::DarkGray)),
-        Span::styled(
-            "s",
-            Style::default()
-                .fg(Color::Rgb(181, 137, 0))
-                .add_modifier(Modifier::BOLD),
-        ),
-        Span::styled(
-            "] View parent class schema",
-            Style::default().fg(Color::DarkGray),
-        ),
-    ]));
-
-    // Build title
-    let title = build_info_title(selected, instance_key);
+    // Build title with NEO4J badge
+    let title = build_neo4j_title(selected, instance_key);
 
     let block = Block::default()
         .title(title)
@@ -340,6 +316,64 @@ fn render_instance_info(
 
     let paragraph = Paragraph::new(lines).block(block);
     f.render_widget(paragraph, area);
+}
+
+/// Format a JSON value as YAML-style colored span.
+fn format_json_value_as_yaml(value: &JsonValue) -> Span<'static> {
+    match value {
+        JsonValue::Null => Span::styled("null", Style::default().fg(Color::Rgb(198, 120, 221))), // Purple
+        JsonValue::Bool(b) => Span::styled(
+            b.to_string(),
+            Style::default().fg(Color::Rgb(198, 120, 221)), // Purple
+        ),
+        JsonValue::Number(n) => Span::styled(
+            n.to_string(),
+            Style::default().fg(Color::Rgb(209, 154, 102)), // Orange
+        ),
+        JsonValue::String(s) => {
+            // Truncate long strings
+            let display = if s.len() > 60 {
+                format!("\"{}...\"", &s[..57])
+            } else {
+                format!("\"{}\"", s)
+            };
+            Span::styled(display, Style::default().fg(Color::Rgb(230, 219, 116))) // Yellow
+        }
+        JsonValue::Array(arr) => {
+            let preview = format!("[{} items]", arr.len());
+            Span::styled(preview, Style::default().fg(Color::Rgb(97, 175, 239))) // Blue
+        }
+        JsonValue::Object(obj) => {
+            let preview = format!("{{{} keys}}", obj.len());
+            Span::styled(preview, Style::default().fg(Color::Rgb(97, 175, 239))) // Blue
+        }
+    }
+}
+
+/// Build title with NEO4J badge for instance panel.
+fn build_neo4j_title(selected: bool, instance_key: &str) -> Line<'static> {
+    let border_color = if selected {
+        BOX_BORDER_SELECTED
+    } else {
+        BOX_BORDER_UNFOCUSED
+    };
+
+    // Truncate instance key if too long
+    let display_key = if instance_key.len() > 30 {
+        format!("{}...", &instance_key[..27])
+    } else {
+        instance_key.to_string()
+    };
+
+    Line::from(vec![
+        Span::styled(" ", Style::default()),
+        Span::styled("🔷", Style::default()), // NEO4J badge
+        Span::styled(" ", Style::default()),
+        Span::styled("INSTANCE", Style::default().fg(border_color).add_modifier(Modifier::BOLD)),
+        Span::styled(" │ ", Style::default().fg(Color::DarkGray)),
+        Span::styled(display_key, Style::default().fg(Color::Rgb(136, 192, 208))),
+        Span::styled(" ", Style::default()),
+    ])
 }
 
 /// Render INFO content for sections (Realm, Layer, ArcFamily).
