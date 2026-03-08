@@ -422,22 +422,23 @@ fn render_empty_content(f: &mut Frame, area: Rect, selected: bool, border_color:
 fn build_info_title(selected: bool, name: &str) -> Line<'static> {
     let mut spans = Vec::new();
 
+    // v0.17.3: Replace generic "INFO" with "INSTANCE" for clarity
     if selected {
         spans.push(Span::styled(
-            " ▶ ",
+            " ◇ ",
             Style::default()
                 .fg(BOX_BORDER_SELECTED)
                 .add_modifier(Modifier::BOLD),
         ));
         spans.push(Span::styled(
-            "INFO ",
+            "INSTANCE ",
             Style::default()
                 .fg(BOX_BORDER_SELECTED)
                 .add_modifier(Modifier::BOLD),
         ));
     } else {
         spans.push(Span::styled(
-            " INFO ",
+            " INSTANCE ",
             Style::default().fg(COLOR_MUTED_TEXT),
         ));
     }
