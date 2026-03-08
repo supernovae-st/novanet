@@ -1174,17 +1174,18 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             branch(cat_is_last)
                                         );
 
-                                        // Format: ▶ Technology (5)
-                                        let cat_display = format!(
-                                            "{} ({}) - {}",
-                                            category.display_name, inst_count, category.key
+                                        // Format: ▶ Technology (5) - THING
+                                        // Display name + count in entity color, key in muted
+                                        let cat_main = format!(
+                                            "{} ({})",
+                                            category.display_name, inst_count
                                         );
 
                                         if is_cursor && focused {
                                             all_lines.push(Line::from(Span::styled(
                                                 format!(
-                                                    "{}{}{} {}",
-                                                    cursor_char, tree_prefix, expand_icon, cat_display
+                                                    "{}{}{} {} - {}",
+                                                    cursor_char, tree_prefix, expand_icon, cat_main, category.key
                                                 ),
                                                 style,
                                             )));
@@ -1196,8 +1197,12 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                     Style::default().fg(layer_color),
                                                 ),
                                                 Span::styled(
-                                                    format!("{} {}", expand_icon, cat_display),
+                                                    format!("{} {}", expand_icon, cat_main),
                                                     style,
+                                                ),
+                                                Span::styled(
+                                                    format!(" - {}", category.key),
+                                                    Style::default().fg(COLOR_MUTED_TEXT),
                                                 ),
                                             ];
                                             all_lines.push(Line::from(spans));

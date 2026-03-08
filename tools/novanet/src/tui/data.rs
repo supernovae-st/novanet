@@ -2166,7 +2166,11 @@ WITH locale_code, locale_name,
          display_name: coalesce(en.display_name, en.key),
          entity_key: coalesce(e.key, ''),
          entity_display_name: coalesce(e.display_name, e.key, ''),
-         slug: null
+         slug: CASE
+             WHEN en.denomination_forms IS NOT NULL
+             THEN [form IN en.denomination_forms WHERE form.type = 'url' | form.value][0]
+             ELSE null
+         END
      }) AS natives
 RETURN locale_code, locale_name, natives, size(natives) AS count
 ORDER BY locale_code
