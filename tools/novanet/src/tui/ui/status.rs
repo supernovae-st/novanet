@@ -348,9 +348,24 @@ pub fn render_status(f: &mut Frame, area: Rect, app: &App) {
         .get_clone_or_compute(cache_key, || build_realm_mini_bar(app, bar_width));
     spans.extend(cached_spans);
 
-    // 6. HELP indicator (always shown, both modes)
+    // 6. MINI-CHEATSHEET: Mode keys + help (v0.17.3)
     spans.push(Span::styled(" │ ", STYLE_SEPARATOR));
-    spans.push(Span::styled("[?]", STYLE_DIM));
+    // Show mode indicators with active mode highlighted
+    let graph_style = if app.mode == NavMode::Graph {
+        Style::default().fg(Color::Cyan)
+    } else {
+        STYLE_DIM
+    };
+    let nexus_style = if app.mode == NavMode::Nexus {
+        Style::default().fg(Color::Magenta)
+    } else {
+        STYLE_DIM
+    };
+    spans.push(Span::styled("[1]", graph_style));
+    spans.push(Span::styled("G ", STYLE_DIM));
+    spans.push(Span::styled("[2]", nexus_style));
+    spans.push(Span::styled("N", STYLE_DIM));
+    spans.push(Span::styled(" ?:help", STYLE_DIM));
 
     spans.push(Span::raw(" "));
 
