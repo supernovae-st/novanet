@@ -2301,7 +2301,9 @@ fn get_type_style(type_name: &str) -> (&'static str, &'static str, Color) {
         "arcclass" => ("→", "ARC", Color::Rgb(249, 115, 22)),
         "section" => ("★", "SECTION", Color::Rgb(226, 232, 240)),
         "entitycategory" => ("◈", "CATEGORY", COLOR_NOVA_CYAN),
-        _ => ("◇", "NODE", Color::Gray),
+        // v0.17.3: "NODE" terminology removed - use SCHEMA for definitions, INSTANCE for data
+        // This fallback should rarely hit if all types are properly matched above
+        _ => ("◇", "ITEM", Color::Gray),
     }
 }
 
