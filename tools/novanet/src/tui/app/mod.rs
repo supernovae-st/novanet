@@ -2061,21 +2061,10 @@ impl App {
 
                     if !instances_loaded {
                         // First click on unloaded Class: load instances AND ensure expanded
-                        // Entity uses category-based loading (not flat instances)
+                        // v0.17.3: Entity uses flat instances (same as regular classes)
                         if class_key == "Entity" {
-                            if self.tree.entity_categories.is_empty() {
-                                // First time: load categories, instances loaded per-category
-                                self.pending.entity_categories = true;
-                                // DON'T set pending.instance - avoids race condition
-                            } else if !self.tree.has_entity_category_instances() {
-                                // Categories exist but no instances: trigger first category load
-                                for cat in &self.tree.entity_categories {
-                                    if !self.tree.entity_category_instances.contains_key(&cat.key) {
-                                        self.pending.category_instances = Some(cat.key.clone());
-                                        break;
-                                    }
-                                }
-                            }
+                            // Load flat Entity instances
+                            self.pending.instance = Some("Entity".to_string());
                         } else if class_key == "EntityNative" {
                             if self.tree.entity_native_groups.is_empty() {
                                 self.pending.entity_natives = true;

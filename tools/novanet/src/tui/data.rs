@@ -2768,46 +2768,16 @@ ORDER BY entity_key
                                 if data_mode
                                     && !self.is_collapsed(&format!("class:{}", class_info.key))
                                 {
-                                    // v0.17.3: Entity shows EntityCategory nodes (not flat instances)
+                                    // v0.17.3: Entity shows simple flat list (matches tree.rs rendering)
+                                    // No categories, no expand - just instances
                                     if class_info.key == "Entity" {
-                                        if !self.entity_categories.is_empty() {
-                                            // Category mode: return EntityCategory nodes
-                                            for cat in &self.entity_categories {
-                                                if idx == cursor {
-                                                    return Some(TreeItem::EntityCategory(
-                                                        realm, layer, class_info, cat,
-                                                    ));
-                                                }
-                                                idx += 1;
-                                                // If category is expanded, add its instances
-                                                if !self
-                                                    .is_collapsed(&format!("category:{}", cat.key))
-                                                {
-                                                    if let Some(instances) =
-                                                        self.entity_category_instances.get(&cat.key)
-                                                    {
-                                                        for instance in instances {
-                                                            if idx == cursor {
-                                                                return Some(TreeItem::Instance(
-                                                                    realm, layer, class_info,
-                                                                    instance,
-                                                                ));
-                                                            }
-                                                            idx += 1;
-                                                        }
-                                                    }
-                                                }
+                                        for instance in self.entity_instances_flat() {
+                                            if idx == cursor {
+                                                return Some(TreeItem::Instance(
+                                                    realm, layer, class_info, instance,
+                                                ));
                                             }
-                                        } else {
-                                            // Fallback: flat instances (before categories load)
-                                            for instance in self.entity_instances_flat() {
-                                                if idx == cursor {
-                                                    return Some(TreeItem::Instance(
-                                                        realm, layer, class_info, instance,
-                                                    ));
-                                                }
-                                                idx += 1;
-                                            }
+                                            idx += 1;
                                         }
                                     } else if class_info.key == "EntityNative" {
                                         // v0.17.3: EntityNative shows EntityGroup nodes (grouped by parent Entity)
@@ -3331,22 +3301,20 @@ ORDER BY entity_key
                             // In data mode, count instances
                             if data_mode && !self.is_collapsed(&format!("class:{}", class_info.key))
                             {
-                                // v0.16.5: Entity instances fallback to regular instances map
-                                let has_category_instances =
-                                    !self.entity_category_instances.is_empty();
-                                if class_info.key == "Entity"
-                                    && !self.entity_categories.is_empty()
-                                    && has_category_instances
-                                {
-                                    for category in &self.entity_categories {
-                                        if let Some(instances) =
-                                            self.entity_category_instances.get(&category.key)
-                                        {
-                                            idx += instances.len();
+                                // v0.17.3: Entity uses flat instances (matches tree.rs rendering)
+                                if class_info.key == "Entity" {
+                                    idx += self.entity_instances_flat().count();
+                                } else if class_info.key == "EntityNative" {
+                                    // EntityNative: count groups + expanded natives
+                                    for group in &self.entity_native_groups {
+                                        idx += 1; // The group itself
+                                        if !self.is_collapsed(&format!("entity_group:{}", group.entity_key)) {
+                                            if let Some(natives) = self.entity_native_by_entity.get(&group.entity_key) {
+                                                idx += natives.len();
+                                            }
                                         }
                                     }
-                                } else if let Some(instances) = self.instances.get(&class_info.key)
-                                {
+                                } else if let Some(instances) = self.instances.get(&class_info.key) {
                                     idx += instances.len();
                                 }
                             }
@@ -3450,60 +3418,29 @@ ORDER BY entity_key
     /// v0.17.3: Returns true when categories exist (they're displayable as EntityCategory nodes).
     /// Used for quick "has content" checks to decide if toggle should load or expand.
     pub fn has_entity_instances(&self) -> bool {
-        // Categories exist → we have EntityCategory nodes to display
-        !self.entity_categories.is_empty()
-            // OR we have actual instances loaded
-            || self.has_entity_category_instances()
-            // OR fallback flat instances
-            || self
-                .instances
-                .get("Entity")
-                .map(|v| !v.is_empty())
-                .unwrap_or(false)
+        // v0.17.3: Entity uses flat instances (same as regular classes)
+        self.instances
+            .get("Entity")
+            .map(|v| !v.is_empty())
+            .unwrap_or(false)
     }
 
-    /// Count all Entity instances (category-based or fallback).
-    /// Returns total count across all categories if using category storage,
-    /// otherwise falls back to regular instance count.
-    /// v0.17.3: Check entity_categories to determine mode, not entity_category_instances
+    /// Count all Entity instances.
+    /// v0.17.3: Entity uses flat instances (same as regular classes)
     pub fn entity_instance_count(&self) -> usize {
-        if !self.entity_categories.is_empty() {
-            // Category mode: sum instances across all loaded categories
-            self.entity_categories
-                .iter()
-                .filter_map(|cat| self.entity_category_instances.get(&cat.key))
-                .map(|v| v.len())
-                .sum()
-        } else {
-            // Fallback mode: use flat instances storage
-            self.instances.get("Entity").map(|v| v.len()).unwrap_or(0)
-        }
+        self.instances
+            .get("Entity")
+            .map(|v| v.len())
+            .unwrap_or(0)
     }
 
-    /// Get a flat iterator over all Entity instances (for cursor-based access).
-    /// Returns instances from category storage if available, otherwise fallback.
-    /// Used for item_at type indexing operations.
-    /// v0.17.3: Check entity_categories to determine mode, not entity_category_instances
-    pub fn entity_instances_flat(&self) -> Vec<&InstanceInfo> {
-        if !self.entity_categories.is_empty() {
-            // Category mode: flatten instances across all loaded categories
-            self.entity_categories
-                .iter()
-                .flat_map(|cat| {
-                    self.entity_category_instances
-                        .get(&cat.key)
-                        .map(|v| v.iter())
-                        .into_iter()
-                        .flatten()
-                })
-                .collect()
-        } else {
-            // Fallback mode: use flat instances storage
-            self.instances
-                .get("Entity")
-                .map(|v| v.iter().collect())
-                .unwrap_or_default()
-        }
+    /// Get a flat iterator over all Entity instances.
+    /// v0.17.3: Entity uses flat instances (same as regular classes)
+    pub fn entity_instances_flat(&self) -> impl Iterator<Item = &InstanceInfo> {
+        self.instances
+            .get("Entity")
+            .into_iter()
+            .flat_map(|v| v.iter())
     }
 
     // ========================================================================
@@ -3529,9 +3466,8 @@ ORDER BY entity_key
         let class_tuple = self.find_class(class_key)?;
 
         if class_key == "Entity" {
-            // Use helper for flat instance access
-            let all_entities = self.entity_instances_flat();
-            if let Some(&instance) = all_entities.get(cursor) {
+            // v0.17.3: Use flat instance access via nth()
+            if let Some(instance) = self.entity_instances_flat().nth(cursor) {
                 return Some(TreeItem::Instance(
                     class_tuple.0,
                     class_tuple.1,
