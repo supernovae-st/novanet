@@ -472,6 +472,7 @@ mod generate_tool {
             token_budget: None,
             include_examples: None,
             spreading_depth: None,
+            block_type: None,
         };
 
         assert_eq!(params.focus_key, "test-page");
@@ -1593,6 +1594,7 @@ mod generate_extended {
             token_budget: Some(0),
             include_examples: Some(false),
             spreading_depth: Some(0),
+            block_type: None,
         };
 
         // Should construct without panic
@@ -1609,6 +1611,7 @@ mod generate_extended {
             token_budget: Some(1_000_000), // 1M tokens
             include_examples: Some(true),
             spreading_depth: Some(10),
+            block_type: None,
         };
 
         assert_eq!(params.token_budget, Some(1_000_000));
@@ -1626,6 +1629,7 @@ mod generate_extended {
                 token_budget: None,
                 include_examples: None,
                 spreading_depth: None,
+                block_type: None,
             };
 
             assert_eq!(params.locale, locale);

@@ -48,6 +48,11 @@ pub struct GenerateParams {
     /// Spreading activation depth (1-3)
     #[serde(default)]
     pub spreading_depth: Option<usize>,
+    /// Block type for task-specific spreading activation (CTA, FAQ, HERO, etc.)
+    /// Phase 5.1: Enables task-specific activation thresholds and semantic boosts
+    /// If not provided, will be auto-detected from Block's OF_TYPE relationship
+    #[serde(default)]
+    pub block_type: Option<String>,
 }
 
 /// Evidence summary in generation result
@@ -212,6 +217,13 @@ pub async fn execute(state: &State, params: GenerateParams) -> Result<GenerateRe
     // Phases 2, 3, 4 run in parallel (Phase 1 Performance Optimization)
     // ═══════════════════════════════════════════════════════════════════════════════
 
+    // Phase 5.1: Resolve block_type with priority: params > structure_result
+    // This enables task-specific spreading activation thresholds (CTA: 0.25, FAQ: 0.40, etc.)
+    let block_type = params
+        .block_type
+        .clone()
+        .or(structure_result.block_type.clone());
+
     // Prepare Phase 2 params: Assemble semantic context (entities)
     let assemble_params = AssembleParams {
         focus_key: params.focus_key.clone(),
@@ -223,6 +235,7 @@ pub async fn execute(state: &State, params: GenerateParams) -> Result<GenerateRe
         include_structure: Some(matches!(params.mode, GenerateMode::Page)),
         arc_families: None,
         max_depth: Some(spreading_depth),
+        block_type, // Phase 5.1: Task-specific spreading activation
     };
 
     // Prepare Phase 3 params: Get knowledge atoms
@@ -419,6 +432,9 @@ struct StructureResult {
     blocks_count: usize,
     /// Token estimate
     token_estimate: usize,
+    /// Block type for task-specific spreading activation (CTA, FAQ, HERO, etc.)
+    /// Phase 5.1: Auto-detected from Block's OF_TYPE relationship
+    block_type: Option<String>,
 }
 
 /// Get structure (blocks for page, single for block)
@@ -443,12 +459,16 @@ async fn get_structure(
             let rows = state.pool().execute_query(query, Some(params)).await?;
 
             if let Some(row) = rows.first() {
+                // Phase 5.1: Extract block_type for task-specific spreading activation
+                let block_type = row["block_type"].as_str().map(|s| s.to_string());
+
                 Ok(StructureResult {
                     focus_kind: row["kind"].as_str().unwrap_or("Block").to_string(),
                     focus_name: row["name"].as_str().map(|s| s.to_string()),
                     block_keys: vec![focus_key.to_string()],
                     blocks_count: 1,
                     token_estimate: 100, // Minimal structure for single block
+                    block_type,
                 })
             } else {
                 Err(crate::error::Error::not_found(focus_key))
@@ -486,6 +506,9 @@ async fn get_structure(
                 blocks_count: block_keys.len(),
                 block_keys,
                 token_estimate: traverse_result.token_estimate,
+                // Phase 5.1: Page mode doesn't have a single block_type
+                // Individual blocks will be processed with their own types
+                block_type: None,
             })
         }
     }
@@ -794,6 +817,7 @@ mod tests {
             token_budget: None,
             include_examples: None,
             spreading_depth: None,
+            block_type: None,
         };
 
         let structure = StructureResult {
@@ -802,6 +826,7 @@ mod tests {
             block_keys: vec!["test-block".to_string()],
             blocks_count: 1,
             token_estimate: 100,
+            block_type: Some("HERO".to_string()), // Phase 5.1 test
         };
 
         let locale = LocaleContext {

@@ -320,6 +320,8 @@ fn test_config_struct_construction() {
         default_token_budget: 50_000,
         max_hops: 3,
         evidence_packet_size: 100,
+        // Phase 2.2 spreading activation
+        spreading_config_path: None,
     };
 
     assert_eq!(config.neo4j_uri, "bolt://test:7687");

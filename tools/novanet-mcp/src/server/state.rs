@@ -10,8 +10,14 @@
 //! ## Phase 3 Performance Optimization
 //!
 //! Added circuit breaker pattern for Neo4j resilience under load.
+//!
+//! ## Phase 2.2 Spreading Activation
+//!
+//! Added SpreadingConfig for context assembly with exponential decay
+//! and task-specific modifiers.
 
 use crate::cache::QueryCache;
+use crate::context::SpreadingConfig;
 use crate::error::Result;
 use crate::neo4j::{CircuitBreaker, Neo4jPool};
 use crate::schema_cache::SchemaCache;
@@ -35,6 +41,8 @@ struct StateInner {
     pub schema_cache: SchemaCache,
     /// Circuit breaker for Neo4j resilience (Phase 3)
     pub circuit_breaker: CircuitBreaker,
+    /// Spreading activation config (Phase 2.2)
+    pub spreading_config: SpreadingConfig,
     /// Server statistics
     pub stats: RwLock<ServerStats>,
 }
@@ -75,6 +83,9 @@ impl State {
             config.circuit_breaker_reset_timeout,
         );
 
+        // Load spreading config (Phase 2.2)
+        let spreading_config = Self::load_spreading_config(&config);
+
         Ok(Self {
             inner: Arc::new(StateInner {
                 config,
@@ -83,9 +94,44 @@ impl State {
                 counter,
                 schema_cache,
                 circuit_breaker,
+                spreading_config,
                 stats: RwLock::new(ServerStats::default()),
             }),
         })
+    }
+
+    /// Load spreading activation config from YAML or use defaults
+    ///
+    /// If `NOVANET_MCP_SPREADING_CONFIG_PATH` is set, attempts to load from YAML.
+    /// Falls back to hardcoded defaults if file not found or parse error.
+    fn load_spreading_config(config: &Config) -> SpreadingConfig {
+        if let Some(ref path) = config.spreading_config_path {
+            match SpreadingConfig::load_from_yaml(path) {
+                Ok(cfg) => {
+                    info!(
+                        path = %path.display(),
+                        decay_factor = cfg.default.decay_factor,
+                        "Loaded spreading config from YAML"
+                    );
+                    return cfg;
+                }
+                Err(e) => {
+                    warn!(
+                        path = %path.display(),
+                        error = %e,
+                        "Failed to load spreading config, using defaults"
+                    );
+                }
+            }
+        }
+
+        let default = SpreadingConfig::default();
+        info!(
+            decay_factor = default.default.decay_factor,
+            activation_threshold = default.default.activation_threshold,
+            "Using default spreading config"
+        );
+        default
     }
 
     /// Get the configuration
@@ -116,6 +162,11 @@ impl State {
     /// Get circuit breaker reference (Phase 3)
     pub fn circuit_breaker(&self) -> &CircuitBreaker {
         &self.inner.circuit_breaker
+    }
+
+    /// Get spreading activation config (Phase 2.2)
+    pub fn spreading_config(&self) -> &SpreadingConfig {
+        &self.inner.spreading_config
     }
 
     /// Increment query count

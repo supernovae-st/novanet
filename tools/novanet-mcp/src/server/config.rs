@@ -6,8 +6,13 @@
 //!
 //! Added connection pool tuning and circuit breaker settings for improved
 //! resilience under load.
+//!
+//! ## Phase 2.2 Spreading Activation
+//!
+//! Added optional spreading-activation.yaml path for context assembly.
 
 use crate::error::{Error, Result};
+use std::path::PathBuf;
 use std::time::Duration;
 
 /// Server configuration
@@ -34,6 +39,10 @@ pub struct Config {
     pub default_token_budget: usize,
     pub max_hops: u8,
     pub evidence_packet_size: usize,
+
+    // Spreading activation config (Phase 2.2)
+    /// Path to spreading-activation.yaml (optional, defaults to hardcoded values)
+    pub spreading_config_path: Option<PathBuf>,
 }
 
 impl Config {
@@ -97,6 +106,11 @@ impl Config {
                 .ok()
                 .and_then(|s| s.parse().ok())
                 .unwrap_or(200),
+
+            // Spreading activation config (Phase 2.2)
+            spreading_config_path: std::env::var("NOVANET_MCP_SPREADING_CONFIG_PATH")
+                .ok()
+                .map(PathBuf::from),
         })
     }
 }
@@ -120,6 +134,8 @@ impl Default for Config {
             default_token_budget: 100_000,
             max_hops: 5,
             evidence_packet_size: 200,
+            // Spreading activation (Phase 2.2)
+            spreading_config_path: None,
         }
     }
 }

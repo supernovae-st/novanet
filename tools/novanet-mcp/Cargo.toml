@@ -62,6 +62,7 @@ tiktoken-rs = "0.9"
 # ═══════════════════════════════════════════════════════════════════════════════
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+serde_yml = "0.0.12"  # YAML parsing for spreading-activation.yaml
 schemars = "1"  # JSON Schema generation for MCP tool params (rmcp requires 1.x)
 
 # ═══════════════════════════════════════════════════════════════════════════════

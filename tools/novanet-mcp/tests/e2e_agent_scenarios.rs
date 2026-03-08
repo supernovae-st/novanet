@@ -190,6 +190,7 @@ mod content_generation_flow {
                 include_structure: Some(true),
                 arc_families: None,
                 max_depth: Some(3),
+                block_type: None,
             },
         )
         .await;
@@ -239,6 +240,7 @@ mod content_generation_flow {
                 token_budget: Some(50_000),
                 include_examples: Some(false),
                 spreading_depth: Some(2),
+                block_type: None,
             },
         )
         .await;
@@ -309,6 +311,7 @@ mod content_generation_flow {
                 token_budget: Some(10_000), // Smaller budget for single block
                 include_examples: Some(false),
                 spreading_depth: Some(2),
+                block_type: None,
             },
         )
         .await;
@@ -597,6 +600,7 @@ mod seo_optimization_flow {
                 include_structure: Some(false), // Focus on content, not structure
                 arc_families: Some(vec!["mining".to_string(), "semantic".to_string()]),
                 max_depth: Some(3),
+                block_type: None,
             },
         )
         .await;
@@ -832,6 +836,7 @@ mod budget_management_flow {
                     include_structure: Some(true),
                     arc_families: None,
                     max_depth: Some(3),
+                    block_type: None,
                 },
             )
             .await;
@@ -886,6 +891,7 @@ mod budget_management_flow {
                 token_budget: Some(2_000), // Very small
                 include_examples: Some(false),
                 spreading_depth: Some(1),
+                block_type: None,
             },
         )
         .await;
@@ -1185,6 +1191,7 @@ mod entity_analysis_flow {
                 include_structure: Some(true),
                 arc_families: None,
                 max_depth: Some(2),
+                block_type: None,
             },
         )
         .await;
@@ -1371,6 +1378,7 @@ mod context_anchor_resolution {
                 token_budget: Some(30_000),
                 include_examples: Some(false),
                 spreading_depth: Some(2),
+                block_type: None,
             },
         )
         .await;
@@ -1848,6 +1856,7 @@ mod complete_session {
                 include_structure: Some(true),
                 arc_families: None,
                 max_depth: Some(2),
+                block_type: None,
             },
         )
         .await
@@ -1892,6 +1901,7 @@ mod complete_session {
                 token_budget: Some(20_000),
                 include_examples: Some(false),
                 spreading_depth: Some(2),
+                block_type: None,
             },
         )
         .await

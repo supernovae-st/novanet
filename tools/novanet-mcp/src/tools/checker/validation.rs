@@ -204,9 +204,12 @@ pub fn validate_denomination_forms(
         }
     } else {
         issues.push(
-            CheckIssue::error("E014", "ADR-033: denomination_forms must be an array or JSON string")
-                .with_field("denomination_forms")
-                .with_hint("denomination_forms must be a JSON array of form objects"),
+            CheckIssue::error(
+                "E014",
+                "ADR-033: denomination_forms must be an array or JSON string",
+            )
+            .with_field("denomination_forms")
+            .with_hint("denomination_forms must be a JSON array of form objects"),
         );
         return issues;
     };
@@ -227,7 +230,10 @@ pub fn validate_denomination_forms(
                 issues.push(
                     CheckIssue::warning(
                         "W002",
-                        format!("ADR-033: Missing '{}' form in denomination_forms", form_type),
+                        format!(
+                            "ADR-033: Missing '{}' form in denomination_forms",
+                            form_type
+                        ),
                     )
                     .with_field("denomination_forms")
                     .with_hint(format!(

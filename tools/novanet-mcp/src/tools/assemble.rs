@@ -52,6 +52,10 @@ pub struct AssembleParams {
     /// Maximum traversal depth (default: 3)
     #[serde(default)]
     pub max_depth: Option<usize>,
+    /// Block type for task-specific spreading activation (CTA, FAQ, HERO, etc.)
+    /// Phase 5.1: Enables task-specific activation thresholds and semantic boosts
+    #[serde(default)]
+    pub block_type: Option<String>,
 }
 
 /// An evidence packet in the assembled context
@@ -134,9 +138,37 @@ pub async fn execute(state: &State, params: AssembleParams) -> Result<AssembleRe
         .max_depth
         .unwrap_or(3)
         .min(state.config().max_hops as usize);
-    let include_entities = params.include_entities.unwrap_or(true);
-    let include_knowledge = params.include_knowledge.unwrap_or(true);
-    let include_structure = params.include_structure.unwrap_or(true);
+
+    // Phase 4.1: arc_families parameter controls which evidence types to include
+    // If arc_families is provided, it overrides include_* flags
+    // Arc family mappings:
+    //   - "ownership" → include_structure (HAS_PAGE, HAS_BLOCK, BLOCK_OF)
+    //   - "semantic" → include_entities (USES_ENTITY, BELONGS_TO)
+    //   - "localization" → include_entities (HAS_NATIVE)
+    //   - "knowledge" → include_knowledge (USES_TERM, USES_EXPRESSION)
+    let (include_entities, include_knowledge, include_structure) =
+        if let Some(ref families) = params.arc_families {
+            let families_lower: Vec<String> = families.iter().map(|f| f.to_lowercase()).collect();
+            (
+                // Entities: semantic or localization families
+                families_lower
+                    .iter()
+                    .any(|f| f == "semantic" || f == "localization"),
+                // Knowledge: knowledge family (or semantic as fallback)
+                families_lower
+                    .iter()
+                    .any(|f| f == "knowledge" || f == "semantic"),
+                // Structure: ownership family
+                families_lower.iter().any(|f| f == "ownership"),
+            )
+        } else {
+            // No arc_families specified, use explicit include_* flags
+            (
+                params.include_entities.unwrap_or(true),
+                params.include_knowledge.unwrap_or(true),
+                params.include_structure.unwrap_or(true),
+            )
+        };
 
     // Get focus node
     let focus_query = r#"
@@ -200,17 +232,33 @@ pub async fn execute(state: &State, params: AssembleParams) -> Result<AssembleRe
     let knowledge_evidence = knowledge_evidence?;
     let structure_evidence = structure_evidence?;
 
-    // Aggregate evidence with token budget management
+    // Aggregate evidence with activation threshold and token budget management
+    let spreading_config = state.spreading_config();
     let mut evidence = Vec::new();
     let mut total_tokens = 0;
     let mut nodes_visited = 0;
 
+    // Phase 5.1: Use task-specific activation threshold based on block_type
+    // Different block types have different relevance thresholds:
+    //   - CTA: 0.25 (more lenient, wants action-oriented context)
+    //   - FAQ: 0.40 (stricter, wants precise definitions)
+    //   - HERO: 0.30 (balanced)
+    //   - DEFAULT: 0.30 (fallback)
+    let block_type = params.block_type.as_deref().unwrap_or("DEFAULT");
+
     // Process all evidence in order: entities, knowledge, structure
+    // Phase 3.2: Filter by activation threshold before token budget
     for packet in entity_evidence
         .into_iter()
         .chain(knowledge_evidence)
         .chain(structure_evidence)
     {
+        // Phase 5.1: Use task-specific threshold (replaces fixed output_threshold)
+        // This allows different block types to gather different amounts of context
+        if !spreading_config.should_continue_spreading(packet.relevance, block_type) {
+            continue;
+        }
+
         if total_tokens + packet.tokens <= token_budget {
             total_tokens += packet.tokens;
             nodes_visited += 1;
@@ -307,17 +355,22 @@ async fn assemble_entities(
 
     let rows = state.pool().execute_query(&query, Some(params)).await?;
 
+    // Use spreading config for exponential decay relevance
+    let spreading_config = state.spreading_config();
+
     let mut evidence = Vec::new();
     for row in rows {
         let content = compress_to_evidence(row["name"].as_str(), row["description"].as_str());
         let tokens = content.len().div_ceil(4); // Estimate
+        let distance = row["distance"].as_f64().unwrap_or(1.0);
 
         evidence.push(EvidencePacket {
             source_key: row["key"].as_str().unwrap_or_default().to_string(),
             source_kind: row["kind"].as_str().unwrap_or("Entity").to_string(),
             evidence_type: "definition".to_string(),
-            distance: row["distance"].as_u64().unwrap_or(1) as usize,
-            relevance: 1.0 / (row["distance"].as_f64().unwrap_or(1.0) + 1.0),
+            distance: distance as usize,
+            // Phase 3.1: Exponential decay replaces linear 1/(d+1)
+            relevance: spreading_config.calculate_relevance(distance),
             content,
             tokens,
         });
@@ -347,6 +400,16 @@ async fn assemble_knowledge(
 
     let rows = state.pool().execute_query(query, Some(params)).await?;
 
+    // Use spreading config for temperature-weighted relevance
+    let spreading_config = state.spreading_config();
+
+    // Knowledge atoms are at distance 1 from the focus via USES_TERM/USES_EXPRESSION
+    const KNOWLEDGE_DISTANCE: f64 = 1.0;
+
+    // Temperature weights for knowledge types (Terms > Expressions)
+    const TERM_TEMPERATURE: f64 = 0.85;
+    const EXPRESSION_TEMPERATURE: f64 = 0.75;
+
     let mut evidence = Vec::new();
 
     if let Some(row) = rows.first() {
@@ -362,7 +425,11 @@ async fn assemble_knowledge(
                         source_kind: "Term".to_string(),
                         evidence_type: "knowledge".to_string(),
                         distance: 1,
-                        relevance: 0.8,
+                        // Phase 3.1: Temperature-weighted exponential decay
+                        relevance: spreading_config.calculate_relevance_with_temperature(
+                            KNOWLEDGE_DISTANCE,
+                            TERM_TEMPERATURE,
+                        ),
                         content,
                         tokens,
                     });
@@ -382,7 +449,11 @@ async fn assemble_knowledge(
                         source_kind: "Expression".to_string(),
                         evidence_type: "knowledge".to_string(),
                         distance: 1,
-                        relevance: 0.7,
+                        // Phase 3.1: Temperature-weighted exponential decay
+                        relevance: spreading_config.calculate_relevance_with_temperature(
+                            KNOWLEDGE_DISTANCE,
+                            EXPRESSION_TEMPERATURE,
+                        ),
                         content,
                         tokens,
                     });
@@ -422,18 +493,28 @@ async fn assemble_structure(
 
     let rows = state.pool().execute_query(&query, Some(params)).await?;
 
+    // Use spreading config for temperature-weighted relevance
+    let spreading_config = state.spreading_config();
+
+    // Structure elements (Pages, Blocks) have lower temperature than entities
+    // They provide context but are less semantically critical
+    const STRUCTURE_TEMPERATURE: f64 = 0.6;
+
     let mut evidence = Vec::new();
     for row in rows {
         let name = row["name"].as_str().or(row["slug"].as_str());
         let content = compress_to_evidence(name, None);
         let tokens = content.len().div_ceil(4);
+        let distance = row["distance"].as_f64().unwrap_or(1.0);
 
         evidence.push(EvidencePacket {
             source_key: row["key"].as_str().unwrap_or_default().to_string(),
             source_kind: row["kind"].as_str().unwrap_or("Unknown").to_string(),
             evidence_type: "structure".to_string(),
-            distance: row["distance"].as_u64().unwrap_or(1) as usize,
-            relevance: 0.6 / (row["distance"].as_f64().unwrap_or(1.0) + 1.0),
+            distance: distance as usize,
+            // Phase 3.1: Temperature-weighted exponential decay
+            relevance: spreading_config
+                .calculate_relevance_with_temperature(distance, STRUCTURE_TEMPERATURE),
             content,
             tokens,
         });
