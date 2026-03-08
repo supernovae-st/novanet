@@ -500,6 +500,18 @@ impl App {
 
     /// Ensure cursor is visible by adjusting scroll.
     pub fn ensure_cursor_visible(&mut self) {
+        // v0.17.3: Debug assertion to catch cursor bounds bugs during development
+        #[cfg(debug_assertions)]
+        {
+            let max = self.current_item_count();
+            debug_assert!(
+                self.tree_cursor < max || max == 0,
+                "tree_cursor ({}) >= item_count ({})",
+                self.tree_cursor,
+                max
+            );
+        }
+
         // Scroll up if cursor is above viewport
         if self.tree_cursor < self.tree_scroll {
             self.tree_scroll = self.tree_cursor;

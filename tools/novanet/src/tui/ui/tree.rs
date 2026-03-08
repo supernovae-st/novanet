@@ -95,9 +95,7 @@ const TREE_PADDING_LEFT: u16 = 1;
 // POWER BAR RENDERING (Entity relationship visualization)
 // =============================================================================
 
-/// Power bar characters
-const POWER_FILLED: char = '▰';
-const POWER_EMPTY: char = '▱';
+/// Power bar width (10 filled/empty characters)
 const POWER_BAR_WIDTH: usize = 10;
 
 /// Power bar color thresholds (Tailwind colors)
@@ -105,17 +103,28 @@ const COLOR_POWER_HIGH: Color = Color::Rgb(34, 197, 94);   // green-500 (≥80%)
 const COLOR_POWER_MED: Color = Color::Rgb(249, 115, 22);   // orange-500 (50-79%)
 const COLOR_POWER_LOW: Color = Color::Rgb(239, 68, 68);    // red-500 (<50%)
 
-/// Render power bar with color based on percentage.
-/// Returns (bar_string, color) where bar looks like: ▰▰▰▰▰▰▰▰▱▱
-fn render_power_bar(power: u8) -> (String, Color) {
-    let filled = (power as usize * POWER_BAR_WIDTH / 100).min(POWER_BAR_WIDTH);
-    let empty = POWER_BAR_WIDTH - filled;
+/// Pre-computed power bar strings (v0.17.3: zero-allocation optimization)
+/// Index 0 = 0% filled, Index 10 = 100% filled
+const POWER_BARS: [&str; 11] = [
+    "▱▱▱▱▱▱▱▱▱▱", // 0/10
+    "▰▱▱▱▱▱▱▱▱▱", // 1/10
+    "▰▰▱▱▱▱▱▱▱▱", // 2/10
+    "▰▰▰▱▱▱▱▱▱▱", // 3/10
+    "▰▰▰▰▱▱▱▱▱▱", // 4/10
+    "▰▰▰▰▰▱▱▱▱▱", // 5/10
+    "▰▰▰▰▰▰▱▱▱▱", // 6/10
+    "▰▰▰▰▰▰▰▱▱▱", // 7/10
+    "▰▰▰▰▰▰▰▰▱▱", // 8/10
+    "▰▰▰▰▰▰▰▰▰▱", // 9/10
+    "▰▰▰▰▰▰▰▰▰▰", // 10/10
+];
 
-    let bar = format!(
-        "{}{}",
-        std::iter::repeat_n(POWER_FILLED, filled).collect::<String>(),
-        std::iter::repeat_n(POWER_EMPTY, empty).collect::<String>()
-    );
+/// Render power bar with color based on percentage.
+/// Returns (&'static bar_string, color) where bar looks like: ▰▰▰▰▰▰▰▰▱▱
+/// v0.17.3: Zero-allocation using lookup table instead of format!
+#[inline]
+fn render_power_bar(power: u8) -> (&'static str, Color) {
+    let filled = (power as usize * POWER_BAR_WIDTH / 100).min(POWER_BAR_WIDTH);
 
     let color = if power >= 80 {
         COLOR_POWER_HIGH
@@ -125,7 +134,7 @@ fn render_power_bar(power: u8) -> (String, Color) {
         COLOR_POWER_LOW
     };
 
-    (bar, color)
+    (POWER_BARS[filled], color)
 }
 
 /// Entity/EntityNative text color (white, not yellow)
@@ -1539,7 +1548,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             entity_group.native_count,
                                         );
                                         let left_width = UnicodeWidthStr::width(left_content.as_str());
-                                        let power_bar_width = UnicodeWidthStr::width(power_bar.as_str());
+                                        let power_bar_width = UnicodeWidthStr::width(power_bar);
                                         let padding_width = tree_width.saturating_sub(left_width + power_bar_width + 1);
 
                                         if is_cursor && focused {
@@ -1568,7 +1577,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                     Style::default(),
                                                 ),
                                                 Span::styled(
-                                                    power_bar.clone(),
+                                                    power_bar,
                                                     Style::default().fg(power_color),
                                                 ),
                                             ];
@@ -1584,6 +1593,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                 let tree_width = area.width.saturating_sub(4) as usize;
 
                                                 // Prepare native parts: left = "Invariant → Native", slug
+                                                // v0.17.3: Use as_deref() to avoid cloning Option<String>
                                                 let native_parts: Vec<_> = natives.iter().map(|native| {
                                                     // Format: Entity Name → Native Name /slug
                                                     let left = format!(
@@ -1591,7 +1601,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                         native.entity_display_name,
                                                         native.display_name
                                                     );
-                                                    (left, native.slug.clone())
+                                                    (left, native.slug.as_deref())
                                                 }).collect();
 
                                                 let native_count_inner = native_parts.len();
