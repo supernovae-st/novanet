@@ -1,6 +1,6 @@
 // packages/core/src/graph/generator.ts
 // Schema graph generator - Creates flat and hierarchical schema representations
-// v11.5.0 — SEO/GEO moved to shared/knowledge, Locale to shared/config
+// v0.17.3 — 57 nodes (36 shared + 21 org), YAGNI cleanup complete
 
 import { NODE_TYPES, NODE_REALMS, NODE_TRAITS, type NodeType, type Realm } from '../types/nodes.js';
 import { RelationRegistry } from '../schemas/relations.schema.js';
@@ -130,7 +130,7 @@ const TRAIT_DESCRIPTIONS: Record<string, string> = {
 // =============================================================================
 
 /**
- * Generate flat schema graph with all 61 node types and 146 arcs.
+ * Generate flat schema graph with all 57 node types and 140 arcs.
  * This is the canonical representation of the NovaNet ontology.
  *
  * @returns SchemaGraphResult with nodes and arcs
@@ -139,7 +139,7 @@ const TRAIT_DESCRIPTIONS: Record<string, string> = {
  * ```typescript
  * const { nodes, arcs } = generateSchemaGraph();
  * console.log(`${nodes.length} nodes, ${arcs.length} arcs`);
- * // Output: "61 nodes, 146 arcs"
+ * // Output: "57 nodes, 140 arcs"
  * ```
  */
 export function generateSchemaGraph(): SchemaGraphResult {
@@ -147,7 +147,7 @@ export function generateSchemaGraph(): SchemaGraphResult {
   const arcs: SchemaArc[] = [];
 
   // ==========================================================================
-  // GENERATE NODES - All 61 node types
+  // GENERATE NODES - All 57 node types
   // ==========================================================================
 
   for (const nodeType of NODE_TYPES) {

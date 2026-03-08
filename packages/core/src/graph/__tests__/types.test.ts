@@ -1,5 +1,5 @@
 // packages/core/src/graph/__tests__/types.test.ts
-// Tests for graph types (10 layers, 61 nodes)
+// Tests for graph types (10 layers, 57 nodes)
 import { describe, it, expect } from 'vitest';
 import type { SchemaNode, SchemaArc, RealmDefinition } from '../types';
 import type { Layer } from '../../types/nodes';
