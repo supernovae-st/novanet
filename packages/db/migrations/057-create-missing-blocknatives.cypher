@@ -33,10 +33,10 @@ MATCH (l:Locale {key: "fr-FR"})
 CREATE (bn:BlockNative {
   key: b.key + "@fr-FR",
   display_name: CASE b.key
-    WHEN "block:qr-code-hero" THEN "Hero Code QR (fr-FR)"
-    WHEN "block:qr-code-what-is" THEN "Qu'est-ce qu'un Code QR (fr-FR)"
-    WHEN "block:qr-code-use-cases" THEN "Cas d'utilisation Code QR (fr-FR)"
-    WHEN "block:qr-code-cta" THEN "CTA Code QR (fr-FR)"
+    WHEN "block:qr-code-hero" THEN "Hero QR Code (fr-FR)"
+    WHEN "block:qr-code-what-is" THEN "Qu'est-ce qu'un QR Code (fr-FR)"
+    WHEN "block:qr-code-use-cases" THEN "Cas d'utilisation QR Code (fr-FR)"
+    WHEN "block:qr-code-cta" THEN "CTA QR Code (fr-FR)"
     ELSE b.display_name + " (fr-FR)"
   END,
   description: b.description,
