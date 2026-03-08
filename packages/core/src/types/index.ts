@@ -1,5 +1,6 @@
-// NovaNet Core Types v0.13.0 - *Native Pattern
+// NovaNet Core Types v0.18.0 - *Native Pattern
 //
+// v0.18.0: Added llm_context to all LocaleRules* and LocaleCultureReferences interfaces
 // v0.13.0: ADR-029 *Native pattern (EntityNative→EntityNative, ProjectNative→ProjectNative, PageNative→PageNative, BlockNative→BlockNative)
 // v11.8.0: ADR-023 terminology (Kind→Class, ArcKind→ArcClass), ADR-024 trait renames (defined/authored/imported/generated/retrieved)
 // v11.7.0: Unified tree where Realm, Layer, Class, Instance, ArcFamily, ArcClass are all clickable nodes

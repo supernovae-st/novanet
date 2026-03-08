@@ -1,5 +1,5 @@
 // novanet-core/src/types/shared.ts
-// Shared realm types v8.2.0 (was locale-knowledge.ts, renamed v11.3)
+// Shared realm types v0.18.0 (was locale-knowledge.ts, renamed v11.3)
 //
 // v8.2.0 CHANGES:
 //   - REMOVED: icon, priority, freshness from all interfaces (YAML v7.11.0 alignment)
@@ -220,6 +220,11 @@ export interface Expression {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export interface LocaleRulesAdaptation {
+  // Standard properties (v0.18.0)
+  display_name: string;      // "French Adaptation Rules"
+  description: string;       // "Adaptation rules for fr-FR"
+  llm_context: string;       // "USE: content adaptation decisions."
+
   // Core framework
   facts_categories: Array<{
     category: string;
@@ -277,6 +282,11 @@ export interface LocaleRulesAdaptation {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export interface LocaleRulesFormatting {
+  // Standard properties (v0.18.0)
+  display_name: string;      // "French Formatting Rules"
+  description: string;       // "Formatting rules for fr-FR"
+  llm_context: string;       // "USE: number/date/currency formatting."
+
   // Number formatting
   decimal_separator: string;
   thousands_separator: string;
@@ -347,6 +357,11 @@ export interface LocaleRulesFormatting {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export interface LocaleRulesSlug {
+  // Standard properties (v0.18.0)
+  display_name: string;      // "French Slug Rules"
+  description: string;       // "URL slug generation rules for fr-FR"
+  llm_context: string;       // "USE: URL slug generation."
+
   // Base rule
   slug_rule: 'latin_preserve' | 'latin_strip' | 'transliterate' | 'script_specific';
   output_encoding: string;
@@ -389,6 +404,11 @@ export interface LocaleRulesSlug {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export interface LocaleCultureReferences {
+  // Standard properties (v0.18.0)
+  display_name: string;      // "French Culture References"
+  description: string;       // "Concrete cultural references for fr-FR"
+  llm_context: string;       // "USE: cultural reference selection."
+
   // Food & Cuisine
   emblematic_dishes: Array<{
     dish: string;
