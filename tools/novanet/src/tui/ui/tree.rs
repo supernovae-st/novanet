@@ -1218,7 +1218,11 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                 use unicode_width::UnicodeWidthStr;
                                                 let instance_parts: Vec<_> = instances.iter().map(|inst| {
                                                     let (power_bar, power_color) = render_power_bar(inst.relationship_power);
-                                                    (power_bar, power_color, inst.entity_slug.clone(), inst)
+                                                    let slug_display = match &inst.entity_slug {
+                                                        Some(slug) => format!("/{}", slug),
+                                                        None => String::new(),
+                                                    };
+                                                    (power_bar, power_color, slug_display, inst)
                                                 }).collect();
 
                                                 // Calculate max display_name width for alignment
@@ -1227,19 +1231,23 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                     .max()
                                                     .unwrap_or(0);
 
-                                                for (ii, (power_bar, _power_color, slug_opt, instance)) in instance_parts.iter().enumerate() {
+                                                // Calculate max slug width for right-alignment
+                                                let max_slug_width = instance_parts.iter()
+                                                    .map(|(_, _, slug, _)| UnicodeWidthStr::width(slug.as_str()))
+                                                    .max()
+                                                    .unwrap_or(0);
+
+                                                for (ii, (power_bar, _power_color, slug_display, instance)) in instance_parts.iter().enumerate() {
                                                     let inst_is_last = ii == inst_total - 1;
                                                     let is_inst_cursor = idx == app.tree_cursor;
 
                                                     // Calculate padding to right-align power_bar + slug
                                                     let name_width = UnicodeWidthStr::width(instance.display_name.as_str());
                                                     let padding = max_name_width.saturating_sub(name_width) + 2;
-                                                    let slug_display = match slug_opt {
-                                                        Some(slug) => format!("/{}", slug),
-                                                        None => String::new(),
-                                                    };
-                                                    // Right part: [padding] power_bar slug
-                                                    let right_part = format!("{:>width$}{} {}", "", power_bar, slug_display, width = padding);
+                                                    // Right-align slug within max_slug_width
+                                                    let slug_padded = format!("{:>width$}", slug_display, width = max_slug_width);
+                                                    // Right part: [padding] power_bar [slug_padded]
+                                                    let right_part = format!("{:>width$}{} {}", "", power_bar, slug_padded, width = padding);
 
                                                     let inst_style = if is_inst_cursor && focused {
                                                         Style::default()
@@ -1336,30 +1344,39 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                         let (power_bar, _power_color) = render_power_bar(inst.relationship_power);
                                         // Left part for width calculation (expand_icon + display_name + pillar_marker)
                                         let left_display = format!("{} {}{}", expand_icon, inst.display_name, pillar_marker);
+                                        // Pre-calculate slug_display
+                                        let slug_display = match &inst.entity_slug {
+                                            Some(slug) => format!("/{}", slug),
+                                            None => String::new(),
+                                        };
 
-                                        (left_display, expand_icon, pillar_marker, power_bar, native_arcs, native_count, is_collapsed, inst)
+                                        (left_display, expand_icon, pillar_marker, power_bar, native_arcs, native_count, is_collapsed, slug_display, inst)
                                     }).collect();
 
                                     // Calculate max left display width for alignment
                                     let max_name_width = entity_parts.iter()
-                                        .map(|(left_display, _, _, _, _, _, _, _)| UnicodeWidthStr::width(left_display.as_str()))
+                                        .map(|(left_display, _, _, _, _, _, _, _, _)| UnicodeWidthStr::width(left_display.as_str()))
+                                        .max()
+                                        .unwrap_or(0);
+
+                                    // Calculate max slug width for right-alignment
+                                    let max_slug_width = entity_parts.iter()
+                                        .map(|(_, _, _, _, _, _, _, slug, _)| UnicodeWidthStr::width(slug.as_str()))
                                         .max()
                                         .unwrap_or(0);
 
                                     let inst_count = entity_parts.len();
-                                    for (ii, (left_display, expand_icon, pillar_marker, power_bar, native_arcs, native_count, is_collapsed, instance)) in entity_parts.iter().enumerate() {
+                                    for (ii, (left_display, expand_icon, pillar_marker, power_bar, native_arcs, native_count, is_collapsed, slug_display, instance)) in entity_parts.iter().enumerate() {
                                         let inst_is_last = ii == inst_count - 1;
                                         let is_cursor = idx == app.tree_cursor;
 
                                         // Calculate padding to right-align power_bar + slug
                                         let name_width = UnicodeWidthStr::width(left_display.as_str());
                                         let padding = max_name_width.saturating_sub(name_width) + 2;
-                                        let slug_display = match &instance.entity_slug {
-                                            Some(slug) => format!("/{}", slug),
-                                            None => String::new(),
-                                        };
-                                        // Right part: [padding] power_bar slug
-                                        let right_part = format!("{:>width$}{} {}", "", power_bar, slug_display, width = padding);
+                                        // Right-align slug within max_slug_width
+                                        let slug_padded = format!("{:>width$}", slug_display, width = max_slug_width);
+                                        // Right part: [padding] power_bar [slug_padded]
+                                        let right_part = format!("{:>width$}{} {}", "", power_bar, slug_padded, width = padding);
 
                                         // Entity text style: white (not yellow)
                                         let style = if is_cursor && focused {

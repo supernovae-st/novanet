@@ -1,5 +1,5 @@
 /**
- * NodeConfig Tests (v0.12.4)
+ * NodeConfig Tests (v0.17.2)
  *
  * Tests for pre-computed node configuration lookup tables.
  * These tables provide O(1) access to node sizes and colors,
@@ -18,13 +18,13 @@ import {
 import type { NodeType } from '@novanet/core/types';
 import { NODE_TYPES } from '@novanet/core/types';
 
-// All 61 node types in v0.12.4 (from Core - Single Source of Truth)
+// All 57 node types in v0.17.2 (from Core - Single Source of Truth)
 const ALL_NODE_TYPES: NodeType[] = [...NODE_TYPES];
 
 describe('NodeConfig', () => {
   describe('NODE_SIZES lookup table', () => {
-    it('should have predefined sizes for all 61 node types', () => {
-      expect(Object.keys(NODE_SIZES)).toHaveLength(61);
+    it('should have predefined sizes for all 57 node types', () => {
+      expect(Object.keys(NODE_SIZES)).toHaveLength(57);
       ALL_NODE_TYPES.forEach((type) => {
         expect(NODE_SIZES[type]).toBeDefined();
         expect(NODE_SIZES[type].width).toBeGreaterThan(0);
@@ -46,15 +46,15 @@ describe('NodeConfig', () => {
       expect(NODE_SIZES.Entity.width).toBeGreaterThanOrEqual(200);
     });
 
-    it('should have smaller sizes for auxiliary nodes (ExpressionSet, SEOKeywordMetrics)', () => {
+    it('should have smaller sizes for auxiliary nodes (ExpressionSet, SEOKeywordSet)', () => {
       expect(NODE_SIZES.ExpressionSet.width).toBeLessThanOrEqual(160);
-      expect(NODE_SIZES.SEOKeywordMetrics.width).toBeLessThanOrEqual(180);
+      expect(NODE_SIZES.SEOKeywordSet.width).toBeLessThanOrEqual(180);
     });
   });
 
   describe('NODE_COLORS lookup table', () => {
-    it('should have predefined colors for all 61 node types', () => {
-      expect(Object.keys(NODE_COLORS)).toHaveLength(61);
+    it('should have predefined colors for all 57 node types', () => {
+      expect(Object.keys(NODE_COLORS)).toHaveLength(57);
       ALL_NODE_TYPES.forEach((type) => {
         expect(NODE_COLORS[type]).toBeDefined();
         expect(NODE_COLORS[type].primary).toBeDefined();
