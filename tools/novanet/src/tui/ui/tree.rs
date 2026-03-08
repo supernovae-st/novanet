@@ -1214,31 +1214,32 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             if let Some(instances) = cat_instances {
                                                 let inst_total = instances.len();
 
-                                                // Pre-calculate parts for slug right-alignment
+                                                // Pre-calculate parts for right-alignment (power_bar + slug aligned right)
                                                 use unicode_width::UnicodeWidthStr;
                                                 let instance_parts: Vec<_> = instances.iter().map(|inst| {
                                                     let (power_bar, power_color) = render_power_bar(inst.relationship_power);
-                                                    let left = format!("{} {}", inst.display_name, power_bar);
-                                                    (left, power_bar, power_color, inst.entity_slug.clone(), inst)
+                                                    (power_bar, power_color, inst.entity_slug.clone(), inst)
                                                 }).collect();
 
-                                                // Calculate max left width for alignment
-                                                let max_left_width = instance_parts.iter()
-                                                    .map(|(left, _, _, _, _)| UnicodeWidthStr::width(left.as_str()))
+                                                // Calculate max display_name width for alignment
+                                                let max_name_width = instance_parts.iter()
+                                                    .map(|(_, _, _, inst)| UnicodeWidthStr::width(inst.display_name.as_str()))
                                                     .max()
                                                     .unwrap_or(0);
 
-                                                for (ii, (left_part, power_bar, power_color, slug_opt, instance)) in instance_parts.iter().enumerate() {
+                                                for (ii, (power_bar, _power_color, slug_opt, instance)) in instance_parts.iter().enumerate() {
                                                     let inst_is_last = ii == inst_total - 1;
                                                     let is_inst_cursor = idx == app.tree_cursor;
 
-                                                    // Calculate slug with right-alignment padding
-                                                    let left_width = UnicodeWidthStr::width(left_part.as_str());
-                                                    let padding = max_left_width.saturating_sub(left_width) + 2;
+                                                    // Calculate padding to right-align power_bar + slug
+                                                    let name_width = UnicodeWidthStr::width(instance.display_name.as_str());
+                                                    let padding = max_name_width.saturating_sub(name_width) + 2;
                                                     let slug_display = match slug_opt {
-                                                        Some(slug) => format!("{:>width$}/{}", "", slug, width = padding),
+                                                        Some(slug) => format!("/{}", slug),
                                                         None => String::new(),
                                                     };
+                                                    // Right part: [padding] power_bar slug
+                                                    let right_part = format!("{:>width$}{} {}", "", power_bar, slug_display, width = padding);
 
                                                     let inst_style = if is_inst_cursor && focused {
                                                         Style::default()
@@ -1268,18 +1269,20 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                     );
 
                                                     if is_inst_cursor && focused {
+                                                        // Focused: single styled line
                                                         all_lines.push(Line::from(Span::styled(
                                                             format!(
                                                                 "{}{}{}{}",
                                                                 inst_cursor,
                                                                 inst_prefix,
-                                                                left_part,
-                                                                slug_display,
+                                                                instance.display_name,
+                                                                right_part,
                                                             ),
                                                             inst_style,
                                                         )));
                                                     } else {
-                                                        let mut spans = vec![
+                                                        // Non-focused: display_name in white, right_part (padding + power_bar + slug) in muted
+                                                        let spans = vec![
                                                             Span::styled(
                                                                 inst_cursor,
                                                                 Style::default(),
@@ -1293,16 +1296,10 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                                 inst_style,
                                                             ),
                                                             Span::styled(
-                                                                format!(" {}", power_bar),
-                                                                Style::default().fg(*power_color),
+                                                                right_part.clone(),
+                                                                slug_style,
                                                             ),
                                                         ];
-                                                        if !slug_display.is_empty() {
-                                                            spans.push(Span::styled(
-                                                                slug_display,
-                                                                slug_style,
-                                                            ));
-                                                        }
                                                         all_lines.push(Line::from(spans));
                                                     }
                                                     idx += 1;
@@ -1316,7 +1313,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                     let all_entities: Vec<_> =
                                         app.tree.entity_instances_flat().into_iter().collect();
 
-                                    // Pre-calculate parts for slug right-alignment
+                                    // Pre-calculate parts for right-alignment (power_bar + slug aligned right)
                                     let entity_parts: Vec<_> = all_entities.iter().map(|inst| {
                                         let is_pillar = inst.properties.get("is_pillar")
                                             .and_then(|v| v.as_bool())
@@ -1336,30 +1333,33 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             "○"
                                         };
 
-                                        let (power_bar, power_color) = render_power_bar(inst.relationship_power);
-                                        let left = format!("{} {}{} {}", expand_icon, inst.display_name, pillar_marker, power_bar);
+                                        let (power_bar, _power_color) = render_power_bar(inst.relationship_power);
+                                        // Left part for width calculation (expand_icon + display_name + pillar_marker)
+                                        let left_display = format!("{} {}{}", expand_icon, inst.display_name, pillar_marker);
 
-                                        (left, expand_icon, pillar_marker, power_bar, power_color, native_arcs, native_count, is_collapsed, inst)
+                                        (left_display, expand_icon, pillar_marker, power_bar, native_arcs, native_count, is_collapsed, inst)
                                     }).collect();
 
-                                    // Calculate max left width for alignment
-                                    let max_left_width = entity_parts.iter()
-                                        .map(|(left, _, _, _, _, _, _, _, _)| UnicodeWidthStr::width(left.as_str()))
+                                    // Calculate max left display width for alignment
+                                    let max_name_width = entity_parts.iter()
+                                        .map(|(left_display, _, _, _, _, _, _, _)| UnicodeWidthStr::width(left_display.as_str()))
                                         .max()
                                         .unwrap_or(0);
 
                                     let inst_count = entity_parts.len();
-                                    for (ii, (left_part, expand_icon, pillar_marker, power_bar, power_color, native_arcs, native_count, is_collapsed, instance)) in entity_parts.iter().enumerate() {
+                                    for (ii, (left_display, expand_icon, pillar_marker, power_bar, native_arcs, native_count, is_collapsed, instance)) in entity_parts.iter().enumerate() {
                                         let inst_is_last = ii == inst_count - 1;
                                         let is_cursor = idx == app.tree_cursor;
 
-                                        // Calculate slug with right-alignment padding
-                                        let left_width = UnicodeWidthStr::width(left_part.as_str());
-                                        let padding = max_left_width.saturating_sub(left_width) + 2;
+                                        // Calculate padding to right-align power_bar + slug
+                                        let name_width = UnicodeWidthStr::width(left_display.as_str());
+                                        let padding = max_name_width.saturating_sub(name_width) + 2;
                                         let slug_display = match &instance.entity_slug {
-                                            Some(slug) => format!("{:>width$}/{}", "", slug, width = padding),
+                                            Some(slug) => format!("/{}", slug),
                                             None => String::new(),
                                         };
+                                        // Right part: [padding] power_bar slug
+                                        let right_part = format!("{:>width$}{} {}", "", power_bar, slug_display, width = padding);
 
                                         // Entity text style: white (not yellow)
                                         let style = if is_cursor && focused {
@@ -1390,14 +1390,14 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                     "{}{}{}{}",
                                                     cursor_char,
                                                     tree_prefix,
-                                                    left_part,
-                                                    slug_display,
+                                                    left_display,
+                                                    right_part,
                                                 ),
                                                 style,
                                             )));
                                         } else {
-                                            // Non-cursor: multi-span with separate colors
-                                            let mut spans = vec![
+                                            // Non-cursor: display in white, right_part (padding + power_bar + slug) in muted
+                                            let spans = vec![
                                                 Span::styled(cursor_char, Style::default()),
                                                 Span::styled(
                                                     tree_prefix.clone(),
@@ -1408,16 +1408,10 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                     style,
                                                 ),
                                                 Span::styled(
-                                                    format!(" {}", power_bar),
-                                                    Style::default().fg(*power_color),
+                                                    right_part.clone(),
+                                                    slug_style,
                                                 ),
                                             ];
-                                            if !slug_display.is_empty() {
-                                                spans.push(Span::styled(
-                                                    slug_display,
-                                                    slug_style,
-                                                ));
-                                            }
                                             all_lines.push(Line::from(spans));
                                         }
                                         idx += 1;
