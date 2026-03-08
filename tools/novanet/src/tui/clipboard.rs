@@ -49,6 +49,9 @@ fn get_tree_content(app: &App) -> Option<(String, &'static str)> {
         TreeItem::EntityCategory(realm, layer, class, cat) => {
             format!("{}/{}/{}/{}", realm.key, layer.key, class.key, cat.key)
         }
+        TreeItem::EntityNativeItem(realm, layer, class, native) => {
+            format!("{}/{}/{}/{}", realm.key, layer.key, class.key, native.key)
+        }
     };
     Some((path, "path"))
 }

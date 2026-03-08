@@ -281,6 +281,28 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
                 color: Color::Magenta,
             });
         }
+        Some(TreeItem::EntityNativeItem(r, l, k, native)) => {
+            path.push(BreadcrumbLevel {
+                icon: realm_badge_icon(&r.key),
+                label: r.display_name.clone(),
+                color: hex_to_color(&r.color),
+            });
+            path.push(BreadcrumbLevel {
+                icon: layer_badge_icon(&l.key),
+                label: l.display_name.clone(),
+                color: hex_to_color(&l.color),
+            });
+            path.push(BreadcrumbLevel {
+                icon: trait_icon(&k.trait_name),
+                label: k.display_name.clone(),
+                color: app.theme.trait_color(&k.trait_name),
+            });
+            path.push(BreadcrumbLevel {
+                icon: "◆",
+                label: native.display_name.clone(),
+                color: COLOR_INSTANCE,
+            });
+        }
         None => {}
     }
 

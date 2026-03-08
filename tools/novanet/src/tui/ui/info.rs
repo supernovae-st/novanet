@@ -243,6 +243,9 @@ pub fn build_unified_content(app: &App) -> UnifiedContent<'static> {
             build_instance_content(app, realm, layer, class, instance)
         }
         Some(TreeItem::EntityCategory(_, _, _, cat)) => build_category_content(cat),
+        Some(TreeItem::EntityNativeItem(realm, layer, class, native)) => {
+            build_entity_native_item_content(realm, layer, class, native)
+        }
         None => build_empty_content(),
     }
 }
@@ -1814,6 +1817,73 @@ fn build_category_content(cat: &crate::tui::data::EntityCategory) -> UnifiedCont
     content
 }
 
+/// Build content for EntityNativeItem (locale-specific content).
+fn build_entity_native_item_content(
+    realm: &crate::tui::data::RealmInfo,
+    layer: &crate::tui::data::LayerInfo,
+    class: &crate::tui::data::ClassInfo,
+    native: &crate::tui::data::EntityNativeInfo,
+) -> UnifiedContent<'static> {
+    let mut content = UnifiedContent::default();
+
+    // IDENTITY
+    content
+        .identity
+        .add_kv("type", Span::styled("EntityNative", STYLE_ACCENT));
+    content
+        .identity
+        .add_kv("key", Span::styled(native.key.clone(), STYLE_PRIMARY));
+    content.identity.add_kv(
+        "name",
+        Span::styled(native.display_name.clone(), STYLE_PRIMARY),
+    );
+
+    // LOCATION
+    content.location.add_kv(
+        "realm",
+        Span::styled(realm.display_name.clone(), STYLE_ACCENT),
+    );
+    content.location.add_kv(
+        "layer",
+        Span::styled(layer.display_name.clone(), STYLE_ACCENT),
+    );
+    content.location.add_kv(
+        "class",
+        Span::styled(class.display_name.clone(), STYLE_ACCENT),
+    );
+
+    // METRICS - not applicable
+    content.metrics.add_empty();
+
+    // COVERAGE - not applicable
+    content.coverage.add_empty();
+
+    // PROPERTIES
+    content.properties.add_line(Line::from(vec![
+        Span::styled("entity: ", STYLE_DIM),
+        Span::styled(native.entity_key.clone(), STYLE_MUTED),
+    ]));
+    content.properties.add_line(Line::from(vec![
+        Span::styled("entity_name: ", STYLE_DIM),
+        Span::styled(native.entity_display_name.clone(), STYLE_MUTED),
+    ]));
+    if let Some(slug) = &native.slug {
+        content.properties.add_line(Line::from(vec![
+            Span::styled("slug: ", STYLE_DIM),
+            Span::styled(slug.clone(), STYLE_MUTED),
+        ]));
+    }
+
+    // RELATIONSHIPS - parent entity
+    content.relationships.add_line(Line::from(vec![
+        Span::styled("→ ", STYLE_DIM),
+        Span::styled("Entity: ", STYLE_ACCENT),
+        Span::styled(native.entity_display_name.clone(), STYLE_PRIMARY),
+    ]));
+
+    content
+}
+
 /// Build empty content for no selection.
 fn build_empty_content() -> UnifiedContent<'static> {
     let mut content = UnifiedContent::default();
@@ -1992,6 +2062,10 @@ fn get_detail_title(app: &App) -> String {
         Some(TreeItem::EntityCategory(_, _, _, cat)) => {
             // [C] badge for Category
             format!("[C] {}", cat.display_name)
+        }
+        Some(TreeItem::EntityNativeItem(_, _, _, native)) => {
+            // [N] badge for Native - locale-specific content
+            format!("[N] {}", native.display_name)
         }
         None => "Detail".to_string(),
     }

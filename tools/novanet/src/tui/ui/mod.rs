@@ -813,6 +813,9 @@ fn render_recent_items_overlay(f: &mut Frame, app: &App) {
                 Some(crate::tui::data::TreeItem::EntityCategory(_, _, _, cat)) => {
                     ("◫", cat.display_name.clone())
                 }
+                Some(crate::tui::data::TreeItem::EntityNativeItem(_, _, _, native)) => {
+                    ("◆", native.display_name.clone())
+                }
                 None => ("?", format!("(cursor {})", cursor)),
             };
 
