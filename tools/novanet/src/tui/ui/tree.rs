@@ -1113,10 +1113,10 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
                             // In Data mode, show instances under Class (if not collapsed)
                             if is_data_mode && !class_collapsed {
-                                // v0.17.3: Entity shows EntityCategory nodes (not flat instances)
-                                // Categories are expandable, instances load per-category
+                                // v0.17.3: Entity now shows flat alphabetical list (no categories)
+                                // DISABLED: EntityCategory grouping removed per user request
                                 if class_info.key == "Entity"
-                                    && !app.tree.entity_categories.is_empty()
+                                    && false // v0.17.3: Always use flat rendering, skip categories
                                 {
                                     let cat_count = app.tree.entity_categories.len();
                                     for (ci, category) in
@@ -1296,7 +1296,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                         }
                                     }
                                 } else if class_info.key == "Entity" {
-                                    // Fallback: flat instances (before categories load)
+                                    // v0.17.3: Flat alphabetical Entity list (no categories)
                                     use unicode_width::UnicodeWidthStr;
                                     let all_entities: Vec<_> =
                                         app.tree.entity_instances_flat().into_iter().collect();
