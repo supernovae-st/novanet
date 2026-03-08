@@ -1213,20 +1213,32 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                         if !is_collapsed {
                                             if let Some(instances) = cat_instances {
                                                 let inst_total = instances.len();
-                                                for (ii, instance) in instances.iter().enumerate() {
+
+                                                // Pre-calculate parts for slug right-alignment
+                                                use unicode_width::UnicodeWidthStr;
+                                                let instance_parts: Vec<_> = instances.iter().map(|inst| {
+                                                    let (power_bar, power_color) = render_power_bar(inst.relationship_power);
+                                                    let left = format!("{} {}", inst.display_name, power_bar);
+                                                    (left, power_bar, power_color, inst.entity_slug.clone(), inst)
+                                                }).collect();
+
+                                                // Calculate max left width for alignment
+                                                let max_left_width = instance_parts.iter()
+                                                    .map(|(left, _, _, _, _)| UnicodeWidthStr::width(left.as_str()))
+                                                    .max()
+                                                    .unwrap_or(0);
+
+                                                for (ii, (left_part, power_bar, power_color, slug_opt, instance)) in instance_parts.iter().enumerate() {
                                                     let inst_is_last = ii == inst_total - 1;
                                                     let is_inst_cursor = idx == app.tree_cursor;
 
-                                                    // Power bar
-                                                    let (power_bar, power_color) =
-                                                        render_power_bar(instance.relationship_power);
-
-                                                    // Slug
-                                                    let slug_display = instance
-                                                        .entity_slug
-                                                        .as_ref()
-                                                        .map(|s| format!("/{}", s))
-                                                        .unwrap_or_default();
+                                                    // Calculate slug with right-alignment padding
+                                                    let left_width = UnicodeWidthStr::width(left_part.as_str());
+                                                    let padding = max_left_width.saturating_sub(left_width) + 2;
+                                                    let slug_display = match slug_opt {
+                                                        Some(slug) => format!("{:>width$}/{}", "", slug, width = padding),
+                                                        None => String::new(),
+                                                    };
 
                                                     let inst_style = if is_inst_cursor && focused {
                                                         Style::default()
@@ -1234,6 +1246,14 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                             .fg(Color::White)
                                                     } else {
                                                         Style::default().fg(COLOR_ENTITY_TEXT)
+                                                    };
+
+                                                    let slug_style = if is_inst_cursor && focused {
+                                                        Style::default()
+                                                            .bg(COLOR_HIGHLIGHT_BG)
+                                                            .fg(Color::White)
+                                                    } else {
+                                                        Style::default().fg(COLOR_ENTITY_SLUG)
                                                     };
 
                                                     let inst_cursor =
@@ -1250,11 +1270,10 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                     if is_inst_cursor && focused {
                                                         all_lines.push(Line::from(Span::styled(
                                                             format!(
-                                                                "{}{}{} {} {}",
+                                                                "{}{}{}{}",
                                                                 inst_cursor,
                                                                 inst_prefix,
-                                                                instance.display_name,
-                                                                power_bar,
+                                                                left_part,
                                                                 slug_display,
                                                             ),
                                                             inst_style,
@@ -1266,7 +1285,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                                 Style::default(),
                                                             ),
                                                             Span::styled(
-                                                                inst_prefix,
+                                                                inst_prefix.clone(),
                                                                 Style::default().fg(layer_color),
                                                             ),
                                                             Span::styled(
@@ -1275,14 +1294,13 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                             ),
                                                             Span::styled(
                                                                 format!(" {}", power_bar),
-                                                                Style::default().fg(power_color),
+                                                                Style::default().fg(*power_color),
                                                             ),
                                                         ];
                                                         if !slug_display.is_empty() {
                                                             spans.push(Span::styled(
-                                                                format!(" {}", slug_display),
-                                                                Style::default()
-                                                                    .fg(COLOR_ENTITY_SLUG),
+                                                                slug_display,
+                                                                slug_style,
                                                             ));
                                                         }
                                                         all_lines.push(Line::from(spans));
