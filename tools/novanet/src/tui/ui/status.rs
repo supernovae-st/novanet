@@ -35,37 +35,52 @@ pub(crate) fn compute_mini_bar_cache_key(app: &App, bar_width: usize) -> u64 {
     combine_hashes(&keys)
 }
 
+/// Collapse state for contextual shortcuts.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum CollapseState {
+    /// Item cannot be collapsed (leaf nodes, instances)
+    NotCollapsible,
+    /// Item is currently collapsed (can expand)
+    Collapsed,
+    /// Item is currently expanded (can collapse)
+    Expanded,
+}
+
 /// Get contextual keyboard shortcuts based on mode, focus, and selection.
 ///
-/// Returns a static string with the most relevant keyboard hints for the current context.
+/// Returns a string with the most relevant keyboard hints for the current context.
 /// Note: Nexus hints are generated dynamically from context_actions() in render_status.
 /// Format: arrows for nav, Enter for action (silent alternatives: hjkl, Space)
+/// v0.17.3: Added collapse_state for dynamic expand/collapse hints.
 pub(crate) fn get_contextual_shortcuts(
     mode: NavMode,
     focus: Focus,
     is_instance: bool,
-    is_class: bool,
-) -> &'static str {
+    collapse_state: CollapseState,
+) -> String {
     // v11.7: 3 modes (Graph, Nexus, Views)
     // Display: ↑/↓=vertical, ←/→=horizontal, Enter=action
     // Silent alternatives: hjkl, Space (handled in key processing)
     match mode {
         // Nexus hints are handled separately via context_actions()
-        NavMode::Nexus => "",
+        NavMode::Nexus => String::new(),
         NavMode::Graph => match focus {
             Focus::Tree => {
                 if is_instance {
-                    "↑/↓:nav y:copy Esc:back"
-                } else if is_class {
-                    "↑/↓:nav ←/→:expand y:copy"
+                    "↑/↓:nav y:copy Esc:back".to_string()
                 } else {
-                    "↑/↓:nav ←/→:toggle y:copy"
+                    // v0.17.3: Show expand/collapse based on state (classes, layers, realms)
+                    match collapse_state {
+                        CollapseState::Collapsed => "↑/↓:nav →:expand y:copy".to_string(),
+                        CollapseState::Expanded => "↑/↓:nav ←:collapse y:copy".to_string(),
+                        CollapseState::NotCollapsible => "↑/↓:nav y:copy".to_string(),
+                    }
                 }
             }
-            Focus::Content | Focus::Props => "↑/↓:scroll Enter:page y:copy",
-            Focus::Arcs => "↑/↓:scroll Tab:panel",
+            Focus::Content | Focus::Props => "↑/↓:scroll Enter:page y:copy".to_string(),
+            Focus::Arcs => "↑/↓:scroll Tab:panel".to_string(),
         },
-        NavMode::Views => "↑/↓:nav Enter:select y:copy",
+        NavMode::Views => "↑/↓:nav Enter:select y:copy".to_string(),
     }
 }
 
@@ -217,10 +232,29 @@ pub fn render_status(f: &mut Frame, area: Rect, app: &App) {
     // Determine if current item is instance or class for contextual shortcuts
     let current_item = app.current_item();
     let is_instance = matches!(current_item, Some(TreeItem::Instance(..)));
-    let is_class = matches!(current_item, Some(TreeItem::Class(..)));
+
+    // v0.17.3: Determine collapse state for contextual hints
+    let collapse_state = if is_instance {
+        CollapseState::NotCollapsible
+    } else {
+        // Get the collapse key for the current item
+        let collapse_key = app
+            .tree
+            .collapse_key_at(app.tree_cursor, app.is_graph_mode(), app.hide_empty);
+        match collapse_key {
+            Some(key) => {
+                if app.tree.is_collapsed(&key) {
+                    CollapseState::Collapsed
+                } else {
+                    CollapseState::Expanded
+                }
+            }
+            None => CollapseState::NotCollapsible,
+        }
+    };
 
     // Get contextual shortcuts using extracted pure function
-    let shortcuts = get_contextual_shortcuts(app.mode, app.focus, is_instance, is_class);
+    let shortcuts = get_contextual_shortcuts(app.mode, app.focus, is_instance, collapse_state);
 
     // Build filter indicator using extracted pure function
     let filter_indicator = build_filter_indicator(
@@ -337,46 +371,65 @@ mod tests {
 
     // =========================================================================
     // get_contextual_shortcuts tests (v11.7: 2 modes - Graph, Nexus)
+    // v0.17.3: Added collapse_state parameter tests
     // =========================================================================
 
     #[test]
     fn test_shortcuts_nexus_mode() {
         // v11.7: Nexus has its own action bar - status bar returns empty to avoid duplication
-        let result = get_contextual_shortcuts(NavMode::Nexus, Focus::Tree, false, false);
+        let result = get_contextual_shortcuts(NavMode::Nexus, Focus::Tree, false, CollapseState::NotCollapsible);
         assert_eq!(result, "");
     }
 
     #[test]
-    fn test_shortcuts_graph_mode_tree_focus_on_kind() {
-        let result = get_contextual_shortcuts(NavMode::Graph, Focus::Tree, false, true);
+    fn test_shortcuts_graph_mode_tree_focus_on_class_collapsed() {
+        // v0.17.3: Show "expand" when collapsed
+        let result = get_contextual_shortcuts(NavMode::Graph, Focus::Tree, false, CollapseState::Collapsed);
         assert!(result.contains("↑/↓:nav"));
-        assert!(result.contains("←/→:expand"));
+        assert!(result.contains("→:expand"));
         assert!(result.contains("y:copy"));
     }
 
     #[test]
-    fn test_shortcuts_graph_mode_tree_focus_not_on_kind() {
-        let result = get_contextual_shortcuts(NavMode::Graph, Focus::Tree, false, false);
+    fn test_shortcuts_graph_mode_tree_focus_on_class_expanded() {
+        // v0.17.3: Show "collapse" when expanded
+        let result = get_contextual_shortcuts(NavMode::Graph, Focus::Tree, false, CollapseState::Expanded);
         assert!(result.contains("↑/↓:nav"));
-        assert!(result.contains("←/→:toggle"));
+        assert!(result.contains("←:collapse"));
+        assert!(result.contains("y:copy"));
+    }
+
+    #[test]
+    fn test_shortcuts_graph_mode_tree_focus_not_on_kind_collapsed() {
+        let result = get_contextual_shortcuts(NavMode::Graph, Focus::Tree, false, CollapseState::Collapsed);
+        assert!(result.contains("↑/↓:nav"));
+        assert!(result.contains("→:expand"));
+        assert!(result.contains("y:copy"));
+    }
+
+    #[test]
+    fn test_shortcuts_graph_mode_tree_focus_not_on_kind_expanded() {
+        let result = get_contextual_shortcuts(NavMode::Graph, Focus::Tree, false, CollapseState::Expanded);
+        assert!(result.contains("↑/↓:nav"));
+        assert!(result.contains("←:collapse"));
         assert!(result.contains("y:copy"));
     }
 
     #[test]
     fn test_shortcuts_graph_mode_yaml_focus() {
-        let result = get_contextual_shortcuts(NavMode::Graph, Focus::Content, false, false);
+        let result = get_contextual_shortcuts(NavMode::Graph, Focus::Content, false, CollapseState::NotCollapsible);
         assert!(result.contains("↑/↓:scroll"));
     }
 
     #[test]
     fn test_shortcuts_graph_mode_props_focus() {
-        let result = get_contextual_shortcuts(NavMode::Graph, Focus::Props, false, false);
+        let result = get_contextual_shortcuts(NavMode::Graph, Focus::Props, false, CollapseState::NotCollapsible);
         assert!(result.contains("↑/↓:scroll"));
     }
 
     #[test]
     fn test_shortcuts_graph_mode_arcs_focus() {
-        let result = get_contextual_shortcuts(NavMode::Graph, Focus::Arcs, false, false);
+        let result = get_contextual_shortcuts(NavMode::Graph, Focus::Arcs, false, CollapseState::NotCollapsible);
         assert!(result.contains("Tab:panel"));
     }
 
@@ -544,7 +597,7 @@ mod tests {
     fn test_shortcuts_all_focus_panels_for_graph() {
         // Ensure all focus panels produce valid shortcuts for Graph mode
         for focus in [Focus::Tree, Focus::Content, Focus::Props, Focus::Arcs] {
-            let result = get_contextual_shortcuts(NavMode::Graph, focus, false, false);
+            let result = get_contextual_shortcuts(NavMode::Graph, focus, false, CollapseState::Collapsed);
             assert!(
                 !result.is_empty(),
                 "Focus {:?} should have shortcuts",
@@ -556,14 +609,14 @@ mod tests {
     #[test]
     fn test_shortcuts_graph_mode_has_output() {
         // Graph mode should produce non-empty shortcuts
-        let result = get_contextual_shortcuts(NavMode::Graph, Focus::Tree, false, false);
+        let result = get_contextual_shortcuts(NavMode::Graph, Focus::Tree, false, CollapseState::Collapsed);
         assert!(!result.is_empty(), "Graph mode should have shortcuts");
     }
 
     #[test]
     fn test_shortcuts_nexus_mode_is_empty() {
         // Nexus has its own action bar, so status bar shortcuts are empty
-        let result = get_contextual_shortcuts(NavMode::Nexus, Focus::Tree, false, false);
+        let result = get_contextual_shortcuts(NavMode::Nexus, Focus::Tree, false, CollapseState::NotCollapsible);
         assert!(
             result.is_empty(),
             "Nexus mode should not have status bar shortcuts"
