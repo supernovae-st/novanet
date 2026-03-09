@@ -200,7 +200,7 @@ fn get_source_content(app: &App) -> Option<(String, &'static str)> {
 // v0.13.1: get_diagram_content and get_architecture_content removed (panel simplification)
 
 /// Standard properties that ALL nodes have (from standard_properties in YAML).
-/// NOTE: Must match STANDARD_PROPERTY_NAMES in ui/info.rs for consistent ordering.
+/// NOTE: Must match STANDARD_PROPERTY_NAMES in ui/info.rs for consistent ordering (ADR-035).
 const STANDARD_PROPERTY_NAMES: &[&str] = &[
     "key",
     "entity_key",
@@ -209,6 +209,9 @@ const STANDARD_PROPERTY_NAMES: &[&str] = &[
     "locale_key",
     "display_name",
     "description",
+    "llm_context",
+    "created_by",
+    "created_by_meta",
     "created_at",
     "updated_at",
 ];
