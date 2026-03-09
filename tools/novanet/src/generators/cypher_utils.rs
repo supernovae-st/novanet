@@ -93,7 +93,7 @@ pub fn cypher_list_owned(items: &[String]) -> String {
 /// Write a MERGE statement for a `:Schema:<Label>` node with ON CREATE/ON MATCH SET.
 ///
 /// Properties are formatted as `{var}.{name} = '{value}'`.
-/// Automatically adds `created_at` on CREATE and `updated_at` on MATCH.
+/// Automatically adds `created_by` (provenance), `created_at` on CREATE and `updated_at` on MATCH.
 pub fn write_merge_meta(
     out: &mut String,
     var: &str,
@@ -107,6 +107,8 @@ pub fn write_merge_meta(
     for (name, value) in props {
         writeln!(out, "  {var}.{name} = '{value}',").unwrap();
     }
+    // v0.17.3 (ADR-036): Add provenance tracking
+    writeln!(out, "  {var}.created_by = 'seed:schema',").unwrap();
     writeln!(out, "  {var}.created_at = datetime()").unwrap();
 
     writeln!(out, "ON MATCH SET").unwrap();
@@ -271,6 +273,8 @@ mod tests {
         assert!(out.contains("MERGE (r:Schema:Realm {key: 'shared'})"));
         assert!(out.contains("r.display_name = 'Shared'"));
         assert!(out.contains("r.emoji = 'globe'"));
+        // v0.17.3 (ADR-036): Provenance tracking
+        assert!(out.contains("r.created_by = 'seed:schema'"));
         assert!(out.contains("created_at = datetime()"));
         assert!(out.contains("updated_at = datetime()"));
     }

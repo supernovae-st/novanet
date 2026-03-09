@@ -140,6 +140,8 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
         // Start MERGE
         writeln!(out, "MERGE ({var}:Schema:ArcFamily {{key: '{}'}})", af.key).unwrap();
         writeln!(out, "ON CREATE SET").unwrap();
+        // v0.17.3 (ADR-036): Add provenance tracking
+        writeln!(out, "  {var}.created_by = 'seed:schema',").unwrap();
         writeln!(out, "  {var}.created_at = datetime(),").unwrap();
         writeln!(out, "  {var}.updated_at = datetime()").unwrap();
         writeln!(out, "ON MATCH SET").unwrap();

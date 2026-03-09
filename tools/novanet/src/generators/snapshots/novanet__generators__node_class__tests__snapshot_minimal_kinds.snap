@@ -31,6 +31,7 @@ ON CREATE SET
   c_Project.context_budget = 'high',
   c_Project.visibility = 'fragment',
   c_Project.generation_count = 0,
+  c_Project.created_by = 'seed:schema',
   c_Project.created_at = datetime()
 ON MATCH SET
   c_Project.key = 'project',
@@ -61,6 +62,7 @@ ON CREATE SET
   c_Page.context_budget = 'high',
   c_Page.visibility = 'fragment',
   c_Page.generation_count = 0,
+  c_Page.created_by = 'seed:schema',
   c_Page.created_at = datetime()
 ON MATCH SET
   c_Page.key = 'page',
@@ -91,6 +93,7 @@ ON CREATE SET
   c_PageNative.context_budget = 'low',
   c_PageNative.visibility = 'publishable',
   c_PageNative.generation_count = 0,
+  c_PageNative.created_by = 'seed:schema',
   c_PageNative.created_at = datetime()
 ON MATCH SET
   c_PageNative.key = 'page-native',
@@ -121,6 +124,7 @@ ON CREATE SET
   c_Concept.context_budget = 'high',
   c_Concept.visibility = 'publishable',
   c_Concept.generation_count = 0,
+  c_Concept.created_by = 'seed:schema',
   c_Concept.created_at = datetime()
 ON MATCH SET
   c_Concept.key = 'concept',

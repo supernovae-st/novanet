@@ -291,6 +291,8 @@ fn generate_class_cypher(nodes: &[ParsedNode]) -> crate::Result<String> {
             writeln!(out, "  {var}.knowledge_tier = '{tier}',").unwrap();
         }
         writeln!(out, "  {var}.generation_count = 0,").unwrap();
+        // v0.17.3 (ADR-036): Add provenance tracking
+        writeln!(out, "  {var}.created_by = 'seed:schema',").unwrap();
         writeln!(out, "  {var}.created_at = datetime()").unwrap();
         writeln!(out, "ON MATCH SET").unwrap();
         writeln!(out, "  {var}.key = '{key}',").unwrap();
@@ -591,7 +593,8 @@ mod tests {
         assert!(cypher.contains("Facet: Class -[:IN_REALM]-> Realm"));
         assert!(cypher.contains("Facet: Class -[:IN_LAYER]-> Layer"));
 
-        // Timestamps
+        // Timestamps + provenance (v0.17.3 ADR-036)
+        assert!(cypher.contains("created_by = 'seed:schema'"));
         assert!(cypher.contains("created_at = datetime()"));
         assert!(cypher.contains("updated_at = datetime()"));
     }
